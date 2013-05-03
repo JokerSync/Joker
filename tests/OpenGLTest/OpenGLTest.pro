@@ -25,7 +25,6 @@ HEADERS  += \
 FORMS    += mainwindow.ui
 OBJECTIVE_SOURCES +=
 
-INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers
 LIBS += -framework SDL
 
 INCLUDEPATH += /Library/Frameworks
