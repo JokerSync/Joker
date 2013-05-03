@@ -15,15 +15,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     myglwidget.cpp \
-    mywindow.cpp
+    mywindow.cpp \
+    SDLMain.cpp
 
 HEADERS  += \
     myglwidget.h \
-	mywindow.h \
-    SDLMain.h
+	mywindow.h
 
 FORMS    += mainwindow.ui
-OBJECTIVE_SOURCES += SDLMain.m
+OBJECTIVE_SOURCES +=
 
 INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers
 LIBS += -framework Cocoa -framework SDL
