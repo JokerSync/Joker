@@ -9,7 +9,7 @@ QT		 += opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = TestOpenGL
+TARGET = OpenGLTest
 TEMPLATE = app
 
 
@@ -26,7 +26,7 @@ FORMS    += mainwindow.ui
 OBJECTIVE_SOURCES +=
 
 INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers
-LIBS += -framework Cocoa -framework SDL
+LIBS += -framework SDL
 
 INCLUDEPATH += /Library/Frameworks
 DEPENDPATH += /Library/Frameworks
