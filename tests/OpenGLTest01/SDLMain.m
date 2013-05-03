@@ -17,8 +17,8 @@
 /* Portions of CPS.h */
 typedef struct CPSProcessSerNum
 {
-	UInt32		lo;
-	UInt32		hi;
+    UInt32		lo;
+    UInt32		hi;
 } CPSProcessSerNum;
 
 extern OSErr	CPSGetCurrentProcess( CPSProcessSerNum *psn);
@@ -50,6 +50,21 @@ static BOOL   gCalledAppMainline = FALSE;
 /* The main class of the application, the application's delegate */
 @implementation SDLMain
 
+/* Set the working directory to the .app's parent directory */
+- (void) setupWorkingDirectory:(BOOL)shouldChdir
+{
+    if (shouldChdir)
+    {
+        char parentdir[MAXPATHLEN];
+        CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+        CFURLRef url2 = CFURLCreateCopyDeletingLastPathComponent(0, url);
+        if (CFURLGetFileSystemRepresentation(url2, 1, (UInt8 *)parentdir, MAXPATHLEN)) {
+            chdir(parentdir);   /* chdir to the binary app's parent */
+        }
+        CFRelease(url);
+        CFRelease(url2);
+    }
+}
 
 /* Replacement for NSApplicationMain */
 static void CustomApplicationMain (int argc, char **argv)
@@ -59,7 +74,7 @@ static void CustomApplicationMain (int argc, char **argv)
 
     /* Ensure the application object is initialised */
     [NSApplication sharedApplication];
-    
+
 #ifdef SDL_USE_CPS
     {
         CPSProcessSerNum PSN;
@@ -74,10 +89,10 @@ static void CustomApplicationMain (int argc, char **argv)
     /* Create SDLMain and make it the app delegate */
     sdlMain = [[SDLMain alloc] init];
     [NSApp setDelegate:sdlMain];
-    
+
     /* Start the main event loop */
     [NSApp run];
-    
+
     [sdlMain release];
     [pool release];
 }

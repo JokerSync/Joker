@@ -28,8 +28,6 @@ OBJECTIVE_SOURCES += SDLMain.m
 INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers
 LIBS += -framework Cocoa -framework SDL
 
-LIBS += -/Library/Frameworks/ -framework FreeType
-
 INCLUDEPATH += /Library/Frameworks
 DEPENDPATH += /Library/Frameworks
 
