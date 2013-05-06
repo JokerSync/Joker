@@ -8,7 +8,7 @@ DWwindow::DWwindow()
     this->screen = new SDL_Surface();
     //setAttribute(Qt::WA_PaintOnScreen);
     setAttribute(Qt::WA_NoSystemBackground);
-    resize(640, 480);
+    resize(1280, 800);
     if(!windowInitialized)
     {
         // Here's the part where we put SDL in a Qt Widget
@@ -27,7 +27,8 @@ DWwindow::DWwindow()
 
         // Initialisation du système vidéo de SDL
         SDL_Init(SDL_INIT_VIDEO);
-        this->setScreen(SDL_SetVideoMode(this->width(), this->height(), 32, SDL_SWSURFACE));
+        int flags = SDL_SWSURFACE; //SDL_FULLSCREEN;
+        this->setScreen(SDL_SetVideoMode(this->width(), this->height(), 32, flags));
         windowInitialized = true;
     }
 }
@@ -85,10 +86,10 @@ void DWwindow::scroll(){
 
     TTF_Font *font;
     TTF_Init();
-    font = TTF_OpenFont( "/zoinks.ttf", 30 );
+    font = TTF_OpenFont( "../../data/zoinks.ttf", 30 );
     SDL_Surface *image = NULL;
 
-    image = IMG_Load( "/look.png" );
+    image = IMG_Load( "../../data/look.png" );
 
 
     // Scrolling a surface
@@ -99,11 +100,11 @@ void DWwindow::scroll(){
 
     while (i <= this->width() + txt->w) {
         // Writing on the screen
-        this->apply_surface(this->width() - i, 400, txt, this->getScreen());
+        this->apply_surface(this->width() - i, 600, txt, this->getScreen());
         // Updating the screen
         this->UpdateSurface();
         // Cleanning the screen
-        this->apply_surface( 0, 0, image,this->getScreen());
+        this->apply_surface((this->getScreen()->w - image->w )/2, (this->getScreen()->h - image->h )/2, image,this->getScreen());
         // nb of pixels between each scroll
         i+=facteur;
     }

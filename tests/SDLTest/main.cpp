@@ -94,7 +94,7 @@ int main( int argc, char* argv[] )
     DWwindow w;
 
 
-    w.show();
+    //w.show();
 
     if( init() == false )
         return 1;
@@ -103,7 +103,7 @@ int main( int argc, char* argv[] )
     if( load_files() == false )
         return 2;
 
-    w.apply_surface(0, 0, image, w.getScreen() );
+    w.apply_surface((w.getScreen()->w - image->w )/2, (w.getScreen()->h - image->h )/2, image, w.getScreen() );
     w.UpdateSurface();
 
     //clean_up();
