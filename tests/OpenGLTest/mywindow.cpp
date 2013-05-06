@@ -18,8 +18,7 @@ myWindow::myWindow(QWidget *parent)
     /* First, initialize SDL's video subsystem. */
     if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
         /* Failed, exit. */
-        fprintf( stderr, "Video initialization failed: %s\n",
-             SDL_GetError( ) );
+        fprintf( stderr, "Video initialization failed: %s\n", SDL_GetError( ) );
         close();
     }
 
@@ -38,8 +37,8 @@ myWindow::myWindow(QWidget *parent)
      * resolution, so this is probably being overly safe. Under Win32, ChangeDisplaySettings
      * can change the bpp.
      */
-    width = 100;
-    height = 800;
+    width = 300;
+    height = 300;
     bpp = info->vfmt->BitsPerPixel;
 
     /*
@@ -67,7 +66,7 @@ myWindow::myWindow(QWidget *parent)
      * Make starting windowed an option, and handle the resize events properly with
      * glViewport.
      */
-    flags = SDL_OPENGL;
+    flags = SDL_OPENGL; //| SDL_NOFRAME;
 
     /*
      * Set the video mode
