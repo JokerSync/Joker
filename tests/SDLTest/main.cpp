@@ -76,7 +76,7 @@ void clean_up()
 bool load_files()
 {
     //Load the image
-    image = load_image( "/look.png" );
+    image = load_image( "../../data/look.png" );
     //If there was an error in loading the image
     if( image == NULL )
         return false;
