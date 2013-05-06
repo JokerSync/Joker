@@ -81,7 +81,7 @@ bool load_files()
     if( image == NULL )
         return false;
     //Load the font
-    font = TTF_OpenFont( "/zoinks.ttf", 30 );
+    font = TTF_OpenFont( "../../data/zoinks.ttf", 30 );
     if (font == NULL)
         return false;
     //If everything loaded fine
