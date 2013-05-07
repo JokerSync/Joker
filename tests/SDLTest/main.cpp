@@ -94,7 +94,7 @@ int main( int argc, char* argv[] )
     DWwindow w;
 
 
-    //w.show();
+    w.show();
 
     if( init() == false )
         return 1;
