@@ -110,7 +110,8 @@ void myWindow::initializeGL()
      * EXERCISE:
      * Replace this with a call to glFrustum.
      */
-    gluPerspective( 100.0, ratio, 1.0, 5.0 );}
+    gluPerspective( 100.0, ratio, 1.0, 5.0 );
+}
 
 void myWindow::resizeGL(int width, int height)
 {
