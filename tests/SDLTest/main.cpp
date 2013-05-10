@@ -28,7 +28,7 @@ SDL_Surface *message = NULL;
 SDL_Event event;
 
 //The font
-TTF_Font *font;
+TTF_Font *font; // TODO : remove font related stuff
 
 //Font's color
 
