@@ -3,7 +3,6 @@
 
 #include <QtOpenGL>
 #include <QGLWidget>
-#include "SDL/SDL.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +24,7 @@ public:
 
 
 public slots:
-    virtual void timeOutSlot();
+    virtual void onRefresh();
 
 private:
     bool b_Fullscreen;

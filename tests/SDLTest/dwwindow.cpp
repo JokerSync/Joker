@@ -1,55 +1,27 @@
+#include <QDebug>
+
 #include "dwwindow.h"
 #include "ui_dwwindow.h"
 
 
-DWwindow::DWwindow()
+DWwindow::DWwindow(int width, int height)
 {
-    this->windowInitialized = false;
-    this->screen = new SDL_Surface();
-    //setAttribute(Qt::WA_PaintOnScreen);
-    setAttribute(Qt::WA_NoSystemBackground);
-    resize(1280, 800);
-    if(!windowInitialized)
-    {
-        // Here's the part where we put SDL in a Qt Widget
-        char windowid[64];
-        /*
+    resize(width, height);
+
+    setWindowTitle(QString::fromUtf8("SDL Test"));
+
+    this->testSDLWidget = new TestSDLWidget(300, 200, this);
+    this->testSDLWidget->move(10, 10);
+
+    char windowid[64];
+
 #ifdef Q_WS_WIN
-        sprintf(windowid, "SDL_WINDOWID=0x%lx", reinterpret_cast<qlonglong>(winId()));
-#elif defined Q_WS_X11
-        sprintf(windowid, "SDL_WINDOWID=0x%lx", winId());
+    sprintf(windowid, "SDL_WINDOWID=0x%lx", reinterpret_cast<qlonglong>(winId()));
 #else
-        printf("Fatal: cast du winId() inconnu pour votre plate-forme; toute information est la bienvenue!");
+    sprintf(windowid, "SDL_WINDOWID=0x%lx", winId());
 #endif
-*/
-        sprintf(windowid, "SDL_WINDOWID=0x%lx", winId());
-        SDL_putenv(windowid);
 
-        // Initialisation du système vidéo de SDL
-        SDL_Init(SDL_INIT_VIDEO);
-        int flags = SDL_SWSURFACE; //SDL_FULLSCREEN;
-        this->setScreen(SDL_SetVideoMode(this->width(), this->height(), 32, flags));
-        windowInitialized = true;
-    }
-}
-
-DWwindow::~DWwindow()
-{
-    SDL_Quit();
-}
-
-void DWwindow::setScreen(SDL_Surface *surface){
-    this->screen = surface;
-}
-
-SDL_Surface* DWwindow::getScreen(){
-    return this->screen;
-}
-
-bool DWwindow::UpdateSurface(){
-    if(SDL_Flip(this->screen) == -1) return false;
-    return true;
-
+    qDebug() << "DWwindow id :" << windowid;
 }
 
 void DWwindow::keyPressEvent(QKeyEvent *keyEvent)
@@ -65,47 +37,5 @@ void DWwindow::keyPressEvent(QKeyEvent *keyEvent)
     case Qt::Key_Q:
         close();
         break;
-    case Qt::Key_D:
-        scroll();
-        break;
-    }
-}
-void DWwindow::apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination )
-{
-    //Rectangle to hold the offsets
-    SDL_Rect offset;
-
-    //Get offsets
-    offset.x = x;
-    offset.y = y;
-
-    //Blit the surface
-    SDL_BlitSurface( source, NULL, destination, &offset );
-}
-void DWwindow::scroll(){
-
-    TTF_Font *font;
-    TTF_Init();
-    font = TTF_OpenFont( "../../data/zoinks.ttf", 30 );
-    SDL_Surface *image = NULL;
-
-    image = IMG_Load( "../../data/look.png" );
-
-
-    // Scrolling a surface
-    SDL_Color textColor={ 0, 0, 255 };
-    SDL_Surface *txt = TTF_RenderUTF8_Blended( font, "Les chaussettes de l'archi duchesse sont-elles sèches?", textColor );
-    int i = 0;
-    int facteur = 4;
-
-    while (i <= this->width() + txt->w) {
-        // Writing on the screen
-        this->apply_surface(this->width() - i, 600, txt, this->getScreen());
-        // Updating the screen
-        this->UpdateSurface();
-        // Cleanning the screen
-        this->apply_surface((this->getScreen()->w - image->w )/2, (this->getScreen()->h - image->h )/2, image,this->getScreen());
-        // nb of pixels between each scroll
-        i+=facteur;
     }
 }

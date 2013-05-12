@@ -15,17 +15,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
     myglwidget.cpp \
-    mywindow.cpp \
-    SDLMain.cpp
+    mywindow.cpp
 
 HEADERS  += \
     myglwidget.h \
 	mywindow.h
 
 FORMS    += mainwindow.ui
-OBJECTIVE_SOURCES +=
-
-LIBS += -framework SDL
 
 INCLUDEPATH += /Library/Frameworks
 DEPENDPATH += /Library/Frameworks

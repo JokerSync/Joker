@@ -1,7 +1,6 @@
 
 #include "myglwidget.h"
 #include "mywindow.h"
-#include "SDL/SDL.h"
 
 #include <stdio.h>
 #include <stdlib.h>

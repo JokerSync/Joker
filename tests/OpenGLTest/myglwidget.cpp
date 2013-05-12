@@ -7,7 +7,7 @@ myGLWidget::myGLWidget( QWidget *parent, char *name)
     b_Fullscreen = false ;
     setWindowTitle(QString::fromUtf8(name));
     t_Timer = new QTimer(this);
-    connect(t_Timer, SIGNAL(timeout()), this, SLOT(timeOutSlot()));
+    connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);
 }
 
@@ -22,13 +22,12 @@ void myGLWidget::keyPressEvent(QKeyEvent *keyEvent)
         toggleFullWindow();
         break;
     case Qt::Key_Q:
-        SDL_Quit( );
         close();
         break;
     }
 }
 
-void myGLWidget::timeOutSlot()
+void myGLWidget::onRefresh()
 {
     if(qApp->hasPendingEvents()) // qApp is a global pointer to the application
         return;

@@ -9,9 +9,13 @@ TEMPLATE = app
 SOURCES += \
     main.cpp \
     dwwindow.cpp \
-    SDLMain.cpp
+    SDLMain.cpp \
+    sdlwidget.cpp \
+    testsdlwidget.cpp
 
-HEADERS  += dwwindow.h
+HEADERS  += dwwindow.h \
+    sdlwidget.h \
+    testsdlwidget.h
 
 FORMS    += dwwindow.ui
 
