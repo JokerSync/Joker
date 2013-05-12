@@ -11,34 +11,7 @@ myWindow::myWindow(QWidget *parent)
 
 void myWindow::initializeGL()
 {
-    float ratio = this->width() / this->height();
-
-    /* Our shading model--Gouraud (smooth). */
-    glShadeModel( GL_SMOOTH );
-
-    /* Culling. */
-    glCullFace( GL_BACK );
-    glFrontFace( GL_CCW );
-    glEnable( GL_CULL_FACE );
-
-    /* Set the clear color. */
-    glClearColor( 0, 0, 0, 0 );
-
-    /* Setup our viewport. */
-    glViewport( 0, 0, this->width(), this->height() );
-
-    /*
-     * Change to the projection matrix and set
-     * our viewing volume.
-     */
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity( );
-    /*
-     * EXERCISE:
-     * Replace this with a call to glFrustum.
-     */
-    gluPerspective( 100.0, ratio, 1.0, 5.0 );
-
+    paintGL();
 }
 
 void myWindow::resizeGL(int width, int height)
@@ -67,9 +40,8 @@ void myWindow::paintGL()
         exit(1);
     }
 
-#define TUTO (1)
 
-#if TUTO
+#if 0
     GLuint texture_name;
     GLuint objet;
 
@@ -111,9 +83,8 @@ void myWindow::paintGL()
     glDisable(GL_TEXTURE_2D);
     // Fin de la liste d'affichage.
     glEndList();
-
-#else
-
+#endif
+#if 0
     GLuint texture;			// This is a handle to our texture object
     SDL_Surface *surface;	// This surface will tell us the details of the image
     GLenum texture_format;
@@ -169,18 +140,53 @@ void myWindow::paintGL()
 
 
 #endif
+#if 1
 
-}
+    GLuint TextureID = 0;
+    glEnable( GL_TEXTURE_2D );
 
-void myWindow::loadTexture(QString textureName)
-{
-    QImage qim_Texture;
-    QImage qim_TempTexture;
-    qim_TempTexture.load(textureName);
-    qim_Texture = QGLWidget::convertToGLFormat( qim_TempTexture );
-    glGenTextures( 1, &texture[0] );
-    glBindTexture( GL_TEXTURE_2D, texture[0] );
-    glTexImage2D( GL_TEXTURE_2D, 0, 3, qim_Texture.width(), qim_Texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, qim_Texture.bits() );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+    // You should probably use CSurface::OnLoad ... ;)
+    //-- and make sure the Surface pointer is good!
+    SDL_Surface* Surface = TTF_RenderUTF8_Blended( font, "Les chaussettes de l'archi duchesse sont-elles sèches?", textColor );
+
+    glGenTextures(1, &TextureID);
+    glBindTexture(GL_TEXTURE_2D, TextureID);
+
+    int Mode = GL_RGB;
+
+    if(Surface->format->BytesPerPixel == 4) {
+        Mode = GL_RGBA;
+    }
+
+    glTexImage2D(GL_TEXTURE_2D, 0, Mode, Surface->w, Surface->h, 0, Mode, GL_UNSIGNED_BYTE, Surface->pixels);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    //Any other glTex* stuff here
+    glBindTexture(GL_TEXTURE_2D, TextureID);
+
+    // For Ortho mode, of course
+    int X = 0;
+    int Y = 0;
+    int Width = 100;
+    int Height = 100;
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex3f(X, Y, 0);
+    glTexCoord2f(1, 0); glVertex3f(X + Width, Y, 0);
+    glTexCoord2f(1, 1); glVertex3f(X + Width, Y + Height, 0);
+    glTexCoord2f(0, 1); glVertex3f(X, Y + Height, 0);
+    glEnd();
+
+
+#endif
+
+#if 0
+
+
+
+#endif
+
 }

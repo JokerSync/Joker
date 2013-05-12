@@ -20,7 +20,6 @@ public:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
-    void loadTexture(QString textureName);
 
 private :
     QLabel test;
