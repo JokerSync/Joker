@@ -98,7 +98,7 @@ void myWindow::paintGL()
     SDL_Surface *surface;	// This surface will tell us the details of the image
     GLenum texture_format;
     GLint  nOfColors;
-    surface = IMG_Load("/brique.png");
+    surface = IMG_Load("../../../../../data/box.png");
 
     if ( surface ) {
 
@@ -133,7 +133,11 @@ void myWindow::paintGL()
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
         // Edit the texture object's image data using the information SDL_Surface gives us
-        glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0, texture_format, GL_UNSIGNED_BYTE, surface->pixels );
+        glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
+                      texture_format, GL_UNSIGNED_BYTE, surface->pixels );
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
     }
     else {
         printf("SDL could not load image.bmp: %s\n", SDL_GetError());
