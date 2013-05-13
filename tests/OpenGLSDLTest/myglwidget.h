@@ -31,7 +31,6 @@ public slots:
 private:
     bool b_Fullscreen;
     QTimer *t_Timer;
-
 };
 
 

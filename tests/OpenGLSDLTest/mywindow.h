@@ -24,7 +24,7 @@ public:
 private :
     QLabel test;
     GLuint texture[1];
-    float f_x;
+    float x;
 };
 
 #endif // MYWINDOW_H

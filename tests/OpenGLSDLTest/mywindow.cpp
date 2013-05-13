@@ -4,8 +4,9 @@
 
 
 myWindow::myWindow(QWidget *parent)
-    : myGLWidget( parent, "Premier affichage de texte avec OpenGL et Qt")
+    : myGLWidget( parent, "Premier affichage de dessin avec OpenGL et Qt")
 {
+    x = 0.0;
 }
 
 
@@ -140,7 +141,7 @@ void myWindow::paintGL()
 
 
 #endif
-#if 1
+#if 0
 
     GLuint TextureID = 0;
     glEnable( GL_TEXTURE_2D );
@@ -150,8 +151,8 @@ void myWindow::paintGL()
     //-- and make sure the Surface pointer is good!
     SDL_Surface* Surface = TTF_RenderUTF8_Blended( font, "Les chaussettes de l'archi duchesse sont-elles sèches?", textColor );
 
-    glGenTextures(1, &TextureID);
-    glBindTexture(GL_TEXTURE_2D, TextureID);
+    //glGenTextures(1, &TextureID);
+    //glBindTexture(GL_TEXTURE_2D, TextureID);
 
     int Mode = GL_RGB;
 
@@ -173,6 +174,7 @@ void myWindow::paintGL()
     int Width = 100;
     int Height = 100;
 
+
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0); glVertex3f(X, Y, 0);
     glTexCoord2f(1, 0); glVertex3f(X + Width, Y, 0);
@@ -181,6 +183,8 @@ void myWindow::paintGL()
     glEnd();
 
 
+    glDisable(GL_TEXTURE_2D );
+
 #endif
 
 #if 0
@@ -188,5 +192,22 @@ void myWindow::paintGL()
 
 
 #endif
+
+    x += 0.03;
+    if (x > 3.8){
+        x=-4;
+    }
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    glTranslatef(x, 0.0f, -6.0f);
+
+    glBegin(GL_TRIANGLES);
+    glVertex3f(0.0f, 1.0f, 0.0f);
+    glVertex3f(-1.0f, -1.0f, 0.0f);
+    glVertex3f(1.0f, -1.0f, 0.0f);
+    glEnd();
+
+
 
 }
