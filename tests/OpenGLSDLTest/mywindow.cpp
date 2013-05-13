@@ -1,6 +1,8 @@
 #include "myWindow.h"
 #include "glu.h"
-#include "SDL_ttf/SDL_ttf.h"
+//#include "SDL_ttf/SDL_ttf.h"
+#include "SDL_image/SDL_image.h"
+#include "SDL/SDL.h"
 
 
 myWindow::myWindow(QWidget *parent)
@@ -30,6 +32,10 @@ void myWindow::resizeGL(int width, int height)
 void myWindow::paintGL()
 {
 
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        fprintf(stderr, "Unable to init SDL: %s\n", SDL_GetError());
+        exit(1);
+    }
 
     SDL_Color textColor={ 0, 0, 255 };
     TTF_Init();
@@ -41,7 +47,7 @@ void myWindow::paintGL()
         exit(1);
     }
 
-
+// 1st displaying method with texture
 #if 0
     GLuint texture_name;
     GLuint objet;
@@ -85,12 +91,14 @@ void myWindow::paintGL()
     // Fin de la liste d'affichage.
     glEndList();
 #endif
-#if 0
+
+    // 2nd displaying method with texture
+#if 1
     GLuint texture;			// This is a handle to our texture object
     SDL_Surface *surface;	// This surface will tell us the details of the image
     GLenum texture_format;
     GLint  nOfColors;
-    surface = TTF_RenderUTF8_Blended( font, "Les chaussettes de l'archi duchesse sont-elles sèches?", textColor );
+    surface = IMG_Load("/brique.png");
 
     if ( surface ) {
 
@@ -125,8 +133,7 @@ void myWindow::paintGL()
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
         // Edit the texture object's image data using the information SDL_Surface gives us
-        glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0,
-                      texture_format, GL_UNSIGNED_BYTE, surface->pixels );
+        glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, surface->w, surface->h, 0, texture_format, GL_UNSIGNED_BYTE, surface->pixels );
     }
     else {
         printf("SDL could not load image.bmp: %s\n", SDL_GetError());
@@ -141,57 +148,48 @@ void myWindow::paintGL()
 
 
 #endif
+
+    // 3rd displaying method with texture
 #if 0
-
-    GLuint TextureID = 0;
-    glEnable( GL_TEXTURE_2D );
-
-
-    // You should probably use CSurface::OnLoad ... ;)
-    //-- and make sure the Surface pointer is good!
-    SDL_Surface* Surface = TTF_RenderUTF8_Blended( font, "Les chaussettes de l'archi duchesse sont-elles sèches?", textColor );
-
-    //glGenTextures(1, &TextureID);
-    //glBindTexture(GL_TEXTURE_2D, TextureID);
-
-    int Mode = GL_RGB;
-
-    if(Surface->format->BytesPerPixel == 4) {
-        Mode = GL_RGBA;
-    }
-
-    glTexImage2D(GL_TEXTURE_2D, 0, Mode, Surface->w, Surface->h, 0, Mode, GL_UNSIGNED_BYTE, Surface->pixels);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    //Any other glTex* stuff here
-    glBindTexture(GL_TEXTURE_2D, TextureID);
-
-    // For Ortho mode, of course
-    int X = 0;
-    int Y = 0;
-    int Width = 100;
-    int Height = 100;
-
-
-    glBegin(GL_QUADS);
-    glTexCoord2f(0, 0); glVertex3f(X, Y, 0);
-    glTexCoord2f(1, 0); glVertex3f(X + Width, Y, 0);
-    glTexCoord2f(1, 1); glVertex3f(X + Width, Y + Height, 0);
-    glTexCoord2f(0, 1); glVertex3f(X, Y + Height, 0);
-    glEnd();
-
-
-    glDisable(GL_TEXTURE_2D );
-
+    GLuint texture_name;
+    GLuint objet;
+    SDL_Surface * texture;
+    // ---- Création d'un objet de texture. ------------------------------------------------
+    glGenTextures (1, & texture_name);
+    glBindTexture (GL_TEXTURE_2D, texture_name);
+    // Paramétrage de la texture.
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    // Chargement du fichier.
+    texture = IMG_Load ("/brique.png" );
+    // Jonction entre OpenGL et SDL.
+    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, texture->w, texture->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture-> pixels);
+    // ---- Fin de création de l'objet de texture. -----------------------------------------
+    // ...
+    // Création d'un objet par l'utilisation d'une liste d'affichage.
+    objet = glGenLists (1);
+    glNewList (objet, GL_COMPILE);
+    // Avant d'appeler les fonction glVertex..., on indique quelle texture va être associée à l'objet.
+    // On active l'application de texture...
+    glEnable (GL_TEXTURE_2D);
+    // ... et on indique quelle texture utiliser (celle qui a été créée précédemment).
+    glBindTexture (GL_TEXTURE_2D, texture_name);
+    // On peut enfin créer un objet (ici un simple carré).
+    glBegin (GL_QUADS);
+    glTexCoord2f (0.0, 0.0); glNormal3f (1.0, 1.0, 0.0); glVertex3f (1.0, 1.0, -2.0);
+    glTexCoord2f (0.0, 5.0); glNormal3f (1.0, 1.0, 0.0); glVertex3f (-1.0, 1.0, -2.0);
+    glTexCoord2f (5.0, 5.0); glNormal3f (1.0, 1.0, 0.0); glVertex3f (-1.0, -1.0, -2.0);
+    glTexCoord2f (5.0, 0.0); glNormal3f (1.0, 1.0, 0.0); glVertex3f (1.0, -1.0, -2.0);
+    glEnd ();
+    // Fin de l'application de la texture.
+    glDisable (GL_TEXTURE_2D);
+    // Fin de la liste d'affichage.
+    glEndList ();
 #endif
 
+    // displaying method with shape
 #if 0
-
-
-
-#endif
 
     x += 0.03;
     if (x > 3.8){
@@ -207,6 +205,10 @@ void myWindow::paintGL()
     glVertex3f(-1.0f, -1.0f, 0.0f);
     glVertex3f(1.0f, -1.0f, 0.0f);
     glEnd();
+
+
+
+#endif
 
 
 
