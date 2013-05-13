@@ -9,20 +9,22 @@ TEMPLATE = app
 
 SOURCES += \
 	main.cpp\
-    myglwidget.cpp \
-    mywindow.cpp \
-    SDLMain.cpp
+    SDLMain.cpp \
+    TestSDLOpenGLWidget.cpp \
+    ../../libs/PhGraphic/phglwidget.cpp
 
 HEADERS  += \
-    myglwidget.h \
-	mywindow.h
+    TestSDLOpenGLWidget.h \
+    ../../libs/PhGraphic/phglwidget.h
 
 FORMS    += mainwindow.ui
 
 LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 
-INCLUDEPATH += /Library/Frameworks/
-DEPENDPATH += /Library/Frameworks/
+INCLUDEPATH += /Library/Frameworks/ \
+			../../libs/PhGraphic/
+DEPENDPATH += /Library/Frameworks/ \
+			../../libs/PhGraphic/
 
 
 

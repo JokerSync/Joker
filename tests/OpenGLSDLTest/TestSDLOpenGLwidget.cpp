@@ -1,23 +1,23 @@
-#include "myWindow.h"
+#include "TestSDLOpenGLWidget.h"
 #include "glu.h"
 //#include "SDL_ttf/SDL_ttf.h"
 #include "SDL_image/SDL_image.h"
 #include "SDL/SDL.h"
 
 
-myWindow::myWindow(QWidget *parent)
-    : myGLWidget( parent, "Premier affichage de dessin avec OpenGL et Qt")
+TestSDLOpenGLWidget::TestSDLOpenGLWidget(QWidget *parent)
+    : PhGLWidget( parent, "Premier affichage de dessin avec OpenGL et Qt")
 {
     x = 0.0;
 }
 
 
-void myWindow::initializeGL()
+void TestSDLOpenGLWidget::initializeGL()
 {
     paintGL();
 }
 
-void myWindow::resizeGL(int width, int height)
+void TestSDLOpenGLWidget::resizeGL(int width, int height)
 {
     if(height == 0)
         height = 1;
@@ -29,7 +29,7 @@ void myWindow::resizeGL(int width, int height)
     glLoadIdentity();
 }
 
-void myWindow::paintGL()
+void TestSDLOpenGLWidget::paintGL()
 {
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {

@@ -14,17 +14,22 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    phglwidget.cpp \
+	../../libs/PhGraphic/phglwidget.cpp \
     testphglwidget.cpp
 
 HEADERS  += \
-    phglwidget.h \
-    testphglwidget.h
+	../../libs/PhGraphic/phglwidget.h \
+	testphglwidget.h
+
 
 FORMS    += mainwindow.ui
 
-INCLUDEPATH += /Library/Frameworks
-DEPENDPATH += /Library/Frameworks
+INCLUDEPATH += /Library/Frameworks \
+			../../libs/PhGraphic/
+
+DEPENDPATH += /Library/Frameworks \
+			../../libs/PhGraphic/
+
 
 
 
