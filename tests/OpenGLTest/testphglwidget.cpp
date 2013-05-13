@@ -112,11 +112,14 @@ void TestPhGLWidget::paintGL()
     //    glTexCoord2f(0.0f, 1.0f); glVertex3f(-1.0f,  1.0f, -1.0f);
     //    glEnd();
 
+    if (f_x > 360){
+        f_x = 0;
+    }
     f_x += 1.6;
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	//Efface le framebuffer et le depthbuffer
     glMatrixMode(GL_MODELVIEW); 	//Un petit gluLookAt()...
     glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -15.0f);
+    glTranslatef(0.0f, 0.0f, -f_x/2);
     glRotatef(f_x, 1, 1, 0.1);
 
     gluLookAt(3,2,3,0,0,0,0,1,0);
