@@ -18,13 +18,12 @@ class TestSDLOpenGLWidget : public PhGLWidget
 public:
     explicit TestSDLOpenGLWidget(QWidget *parent = 0);
     void initializeGL();
-    void resizeGL(int width, int height);
     void paintGL();
 
 private :
-    QLabel test;
-    GLuint texture[1];
+    GLuint texture;			// This is a handle to our texture object
     float x;
+
 };
 
 #endif // MYWINDOW_H

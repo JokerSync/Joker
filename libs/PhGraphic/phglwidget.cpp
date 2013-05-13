@@ -11,6 +11,18 @@ PhGLWidget::PhGLWidget( QWidget *parent, char *name)
     t_Timer->start( 0);
 }
 
+void PhGLWidget::resizeGL(int width, int height)
+{
+    if(height == 0)
+        height = 1;
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(40.0f,(GLfloat)width/(GLfloat)height, 0.1f, 100.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+}
+
 void PhGLWidget::keyPressEvent(QKeyEvent *keyEvent)
 {
     switch(keyEvent->key())
