@@ -1,6 +1,5 @@
 
-#include "myglwidget.h"
-#include "mywindow.h"
+#include "testphglwidget.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +14,7 @@ int main( int argc, char* argv[] )
 {
     QApplication a(argc, argv);
 
-    myWindow w ;
+    TestPhGLWidget w ;
     w.show();
     return a.exec();
 

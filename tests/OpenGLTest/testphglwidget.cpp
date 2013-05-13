@@ -1,13 +1,13 @@
-#include "myWindow.h"
+#include "testphglwidget.h"
 #include "glu.h"
 
-myWindow::myWindow(QWidget *parent)
-    : myGLWidget( parent, "Premier Polygone avec OpenGL et Qt")
+TestPhGLWidget::TestPhGLWidget(QWidget *parent)
+    : PhGLWidget( parent, "Premier Polygone avec OpenGL et Qt")
 {
     shouldRotate = true;
 }
 
-void myWindow::initializeGL()
+void TestPhGLWidget::initializeGL()
 {
     float ratio = this->width() / this->height();
 
@@ -38,7 +38,7 @@ void myWindow::initializeGL()
     gluPerspective( 100.0, ratio, 1.0, 5.0 );
 }
 
-void myWindow::resizeGL(int width, int height)
+void TestPhGLWidget::resizeGL(int width, int height)
 {
     if(height == 0)
         height = 1;
@@ -50,7 +50,7 @@ void myWindow::resizeGL(int width, int height)
     glLoadIdentity();
 }
 
-void myWindow::paintGL()
+void TestPhGLWidget::paintGL()
 {
     /* Our angle of rotation. */
     static float angle = 0.0f;
@@ -210,7 +210,7 @@ void myWindow::paintGL()
 
 }
 
-void myWindow::loadTexture(QString textureName)
+void TestPhGLWidget::loadTexture(QString textureName)
 {
     QImage qim_Texture;
     QImage qim_TempTexture;

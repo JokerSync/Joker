@@ -10,11 +10,11 @@
 #include <gl.h>
 #include <glu.h>
 
-class myGLWidget : public QGLWidget
+class PhGLWidget : public QGLWidget
 {
     Q_OBJECT
 public:
-    explicit myGLWidget(QWidget *parent = 0, char *name = 0);
+    explicit PhGLWidget(QWidget *parent = 0, char *name = 0);
     virtual void initializeGL() = 0;
     virtual void resizeGL(int width, int height) = 0;
     virtual void paintGL() = 0;

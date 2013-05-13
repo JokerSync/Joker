@@ -1,7 +1,7 @@
-#include "myGLWidget.h"
+#include "PhGLWidget.h"
 
 
-myGLWidget::myGLWidget( QWidget *parent, char *name)
+PhGLWidget::PhGLWidget( QWidget *parent, char *name)
     : QGLWidget(parent)
 {
     b_Fullscreen = false ;
@@ -11,7 +11,7 @@ myGLWidget::myGLWidget( QWidget *parent, char *name)
     t_Timer->start( 0);
 }
 
-void myGLWidget::keyPressEvent(QKeyEvent *keyEvent)
+void PhGLWidget::keyPressEvent(QKeyEvent *keyEvent)
 {
     switch(keyEvent->key())
     {
@@ -27,14 +27,14 @@ void myGLWidget::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
-void myGLWidget::onRefresh()
+void PhGLWidget::onRefresh()
 {
     if(qApp->hasPendingEvents()) // qApp is a global pointer to the application
         return;
     updateGL();
 }
 
-void myGLWidget::toggleFullWindow()
+void PhGLWidget::toggleFullWindow()
 {
     if(b_Fullscreen)
     {

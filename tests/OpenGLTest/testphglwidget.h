@@ -2,16 +2,16 @@
 #define MYWINDOW_H
 
 #include <QImage>
-#include "myGLWidget.h"
+#include "PhGLWidget.h"
  #include <QFont>
 #include <QLabel>
 #include <QPainter>
 
-class myWindow : public myGLWidget
+class TestPhGLWidget : public PhGLWidget
 {
     Q_OBJECT
 public:
-    explicit myWindow(QWidget *parent = 0);
+    explicit TestPhGLWidget(QWidget *parent = 0);
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();

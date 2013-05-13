@@ -14,12 +14,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    myglwidget.cpp \
-    mywindow.cpp
+    phglwidget.cpp \
+    testphglwidget.cpp
 
 HEADERS  += \
-    myglwidget.h \
-	mywindow.h
+    phglwidget.h \
+    testphglwidget.h
 
 FORMS    += mainwindow.ui
 
