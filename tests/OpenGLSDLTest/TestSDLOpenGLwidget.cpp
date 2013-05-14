@@ -1,5 +1,7 @@
 #include "TestSDLOpenGLWidget.h"
+
 #include "glu.h"
+
 #include "SDL_ttf/SDL_ttf.h"
 #include "SDL_image/SDL_image.h"
 #include "SDL/SDL.h"
@@ -15,7 +17,7 @@ TestSDLOpenGLWidget::TestSDLOpenGLWidget(QWidget *parent)
 
 void TestSDLOpenGLWidget::initializeGL()
 {
-    int method = 2;
+    int method = 3;
 
     glClearColor(.5,.5,.5,0); 	//Background color RGB
     glEnable(GL_DEPTH_TEST); 	//Activate the depth test
@@ -69,12 +71,12 @@ void TestSDLOpenGLWidget::initializeGL()
                 break;
             case 3: // load a texture with SDL_TTF:
 
-                SDL_Color textColor={ 255, 255, 0, 0 };
+                SDL_Color textColor={ 255, 255, 0, 1 };
                 if (TTF_Init() == 0){;
                     TTF_Font *font;
-                    font = TTF_OpenFont("../../../../../data/Arial.ttf", 8);
+                    font = TTF_OpenFont("../../../../../data/Arial.ttf", 1);
                     if (font != NULL)
-                        surface = TTF_RenderUTF8_Blended(font, "Les chaussettes de l'archi duchesse sont-elles sèches?", textColor );
+                        surface = TTF_RenderUTF8_Blended(font, "L", textColor );
                     else
                         qDebug() << "Error (Font) : " << TTF_GetError();
                 }

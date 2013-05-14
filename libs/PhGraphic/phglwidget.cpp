@@ -46,7 +46,6 @@ void PhGLWidget::keyPressEvent(QKeyEvent *keyEvent)
         if (ydelta <= 0)
             ydelta = 0.05;
         xdelta = 0;
-
         break;
     case Qt::Key_Down:
         if (ydelta >= 0)

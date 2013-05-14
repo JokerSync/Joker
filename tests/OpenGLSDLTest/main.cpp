@@ -3,13 +3,9 @@
 #include "TestSDLOpenGLWidget.h"
 
 #include "SDL/SDL.h"
-#include "SDL_image/SDL_image.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <gl.h>
-#include <glu.h>
 
 
 
