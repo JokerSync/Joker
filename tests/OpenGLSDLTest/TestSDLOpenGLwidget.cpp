@@ -155,7 +155,6 @@ void TestSDLOpenGLWidget::paintGL()
         y += ydelta;
     }
 
-    qDebug() << QString::number(x) << QString::number(xdelta) << " --- " << QString::number(y) << QString::number(ydelta);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
