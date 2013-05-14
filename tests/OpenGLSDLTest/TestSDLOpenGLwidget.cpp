@@ -8,13 +8,14 @@
 TestSDLOpenGLWidget::TestSDLOpenGLWidget(QWidget *parent)
     : PhGLWidget( parent, "Premier affichage de dessin avec OpenGL et Qt")
 {
-    x = 0.0;
+    x = 5;
+    y = 0;
 }
 
 
 void TestSDLOpenGLWidget::initializeGL()
 {
-    int method = 3;
+    int method = 2;
 
     glClearColor(.5,.5,.5,0); 	//Background color RGB
     glEnable(GL_DEPTH_TEST); 	//Activate the depth test
@@ -71,10 +72,9 @@ void TestSDLOpenGLWidget::initializeGL()
                 SDL_Color textColor={ 255, 255, 0, 0 };
                 if (TTF_Init() == 0){;
                     TTF_Font *font;
-                    font = TTF_OpenFont("../../../../../data/Arial.ttf", 30);
-                    qDebug() << "font ok";
+                    font = TTF_OpenFont("../../../../../data/Arial.ttf", 8);
                     if (font != NULL)
-                        surface = TTF_RenderUTF8_Blended( font, "Les chaussettes de l'archi duchesse sont-elles sèches?", textColor );
+                        surface = TTF_RenderUTF8_Blended(font, "Les chaussettes de l'archi duchesse sont-elles sèches?", textColor );
                     else
                         qDebug() << "Error (Font) : " << TTF_GetError();
                 }
@@ -83,7 +83,6 @@ void TestSDLOpenGLWidget::initializeGL()
 
                 break;
             }
-
 
             GLint  nbOfColors;
             GLenum texture_format = 0;
@@ -130,9 +129,7 @@ void TestSDLOpenGLWidget::initializeGL()
             }
             else{
                 qDebug() << "Error (SDL) : " << SDL_GetError();
-
             }
-
         }
         else
             qDebug() << "Error (SDL) : " << SDL_GetError();
@@ -144,59 +141,78 @@ void TestSDLOpenGLWidget::initializeGL()
 
 void TestSDLOpenGLWidget::paintGL()
 {
-    if (x > 360){
-        x = 0;
+    if (x < -5)
+        x = 5;
+    if (x > 5)
+        x = -5;
+    if (y < -5)
+        y = 5;
+    if (y > 5)
+        y = -5;
+
+    if (move){
+        x += xdelta;
+        y += ydelta;
     }
-    x += 1.6;
+
+    qDebug() << QString::number(x) << QString::number(xdelta) << " --- " << QString::number(y) << QString::number(ydelta);
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(0.0f, 3.0f, -10);
+    glTranslatef(x,y,-5);
 
-    glRotatef(x, 0, 1, 1);
-    gluLookAt(3,2,3,0,0,0,0,1,0);
+    //  glRotatef(x, 0, 1, 1);
+    //  gluLookAt(10,0,0,   //eyeXYZ
+    //            0,0,0,    //centerXYZ
+    //            0,1,0);   //upXYZ
+
     glBegin(GL_QUADS); 	//Begining the cube's drawing
 
-    glTexCoord2i(0,0);glVertex3i(-1,-1,-1);
-    glTexCoord2i(1,0);glVertex3i(+1,-1,-1);
-    glTexCoord2i(1,1);glVertex3i(+1,+1,-1);
-    glTexCoord2i(0,1);glVertex3i(-1,+1,-1);
+    //int k = 50;
+    int i = 0;
+    //for (i = -k; i < k; i++)
+    {
+        glTexCoord2i(0,0);glVertex3i(-1+i,-1,-1);
+        glTexCoord2i(10,0);glVertex3i(+1+i,-1,-1);
+        glTexCoord2i(10,10);glVertex3i(+1+i,+1,-1);
+        glTexCoord2i(0,10);glVertex3i(-1+i,+1,-1);
+    }
 
-    //1st face done
+    //    //1st face done
 
-    glTexCoord2i(0,0);glVertex3i(-1,-1,+1);
-    glTexCoord2i(1,0);glVertex3i(+1,-1,+1);
-    glTexCoord2i(1,1);glVertex3i(+1,+1,+1);
-    glTexCoord2i(0,1);glVertex3i(-1,+1,+1);
+    //    glTexCoord2i(0,0);glVertex3i(-1,-1,+1);
+    //    glTexCoord2i(1,0);glVertex3i(+1,-1,+1);
+    //    glTexCoord2i(1,1);glVertex3i(+1,+1,+1);
+    //    glTexCoord2i(0,1);glVertex3i(-1,+1,+1);
 
-    //2nd face done
+    //    //2nd face done
 
-    glTexCoord2i(0,0);glVertex3i(+1,-1,-1);
-    glTexCoord2i(1,0);glVertex3i(+1,-1,+1);
-    glTexCoord2i(1,1);glVertex3i(+1,+1,+1);
-    glTexCoord2i(0,1);glVertex3i(+1,+1,-1);
+    //    glTexCoord2i(0,0);glVertex3i(+1,-1,-1);
+    //    glTexCoord2i(1,0);glVertex3i(+1,-1,+1);
+    //    glTexCoord2i(1,1);glVertex3i(+1,+1,+1);
+    //    glTexCoord2i(0,1);glVertex3i(+1,+1,-1);
 
-    //3rd face done
+    //    //3rd face done
 
-    glTexCoord2i(0,0);glVertex3i(-1,-1,-1);
-    glTexCoord2i(1,0);glVertex3i(-1,-1,+1);
-    glTexCoord2i(1,1);glVertex3i(-1,+1,+1);
-    glTexCoord2i(0,1);glVertex3i(-1,+1,-1);
+    //    glTexCoord2i(0,0);glVertex3i(-1,-1,-1);
+    //    glTexCoord2i(1,0);glVertex3i(-1,-1,+1);
+    //    glTexCoord2i(1,1);glVertex3i(-1,+1,+1);
+    //    glTexCoord2i(0,1);glVertex3i(-1,+1,-1);
 
-    //4th face done
+    //    //4th face done
 
-    glTexCoord2i(1,0);glVertex3i(-1,+1,-1);
-    glTexCoord2i(1,1);glVertex3i(+1,+1,-1);
-    glTexCoord2i(0,1);glVertex3i(+1,+1,+1);
-    glTexCoord2i(0,0);glVertex3i(-1,+1,+1);
+    //    glTexCoord2i(1,0);glVertex3i(-1,+1,-1);
+    //    glTexCoord2i(1,1);glVertex3i(+1,+1,-1);
+    //    glTexCoord2i(0,1);glVertex3i(+1,+1,+1);
+    //    glTexCoord2i(0,0);glVertex3i(-1,+1,+1);
 
-    //5th face done
+    //    //5th face done
 
-    glTexCoord2i(1,0);glVertex3i(-1,-1,+1);
-    glTexCoord2i(1,1);glVertex3i(+1,-1,+1);
-    glTexCoord2i(0,1);glVertex3i(+1,-1,-1);
-    glTexCoord2i(0,0);glVertex3i(-1,-1,-1);
+    //    glTexCoord2i(1,0);glVertex3i(-1,-1,+1);
+    //    glTexCoord2i(1,1);glVertex3i(+1,-1,+1);
+    //    glTexCoord2i(0,1);glVertex3i(+1,-1,-1);
+    //    glTexCoord2i(0,0);glVertex3i(-1,-1,-1);
 
     //6th face done
     glEnd();

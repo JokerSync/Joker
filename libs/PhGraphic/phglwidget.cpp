@@ -4,11 +4,14 @@
 PhGLWidget::PhGLWidget( QWidget *parent, QString name)
     : QGLWidget(parent)
 {
+    move = true;
     b_Fullscreen = false ;
     setWindowTitle(name);
     t_Timer = new QTimer(this);
     connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);
+    xdelta = 0.05;
+    ydelta = 0.05;
 }
 
 void PhGLWidget::resizeGL(int width, int height)
@@ -36,6 +39,30 @@ void PhGLWidget::keyPressEvent(QKeyEvent *keyEvent)
     case Qt::Key_Q:
         close();
         break;
+    case Qt::Key_S:
+        toggleMouvement();
+        break;
+    case Qt::Key_Up:
+        if (ydelta <= 0)
+            ydelta = 0.05;
+        xdelta = 0;
+
+        break;
+    case Qt::Key_Down:
+        if (ydelta >= 0)
+            ydelta = -0.05;
+        xdelta = 0;
+        break;
+    case Qt::Key_Left:
+        if (xdelta >= 0)
+            xdelta = -0.05;
+        ydelta = 0;
+        break;
+    case Qt::Key_Right:
+        if (xdelta <= 0)
+            xdelta = 0.05;
+        ydelta = 0;
+        break;
     }
 }
 
@@ -58,4 +85,12 @@ void PhGLWidget::toggleFullWindow()
         showFullScreen();
         b_Fullscreen = true;
     }
+}
+
+void PhGLWidget::toggleMouvement()
+{
+    if(move)
+        move = false;
+    else
+        move = true;
 }

@@ -23,6 +23,7 @@ public:
 private :
     GLuint texture;			// This is a handle to our texture object
     float x;
+    float y;
 
 };
 

@@ -20,6 +20,7 @@ public:
     virtual void paintGL() = 0;
     virtual void resizeGL(int width, int height);
     void toggleFullWindow();
+    void toggleMouvement();
 
 public slots:
     virtual void onRefresh();
@@ -28,6 +29,11 @@ public slots:
 private:
     bool b_Fullscreen;
     QTimer *t_Timer;
+protected:
+    float xdelta;
+    float ydelta;
+    bool move;
+
 
 };
 
