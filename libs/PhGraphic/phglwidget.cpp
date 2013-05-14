@@ -1,11 +1,11 @@
 #include "PhGLWidget.h"
 
 
-PhGLWidget::PhGLWidget( QWidget *parent, char *name)
+PhGLWidget::PhGLWidget( QWidget *parent, QString name)
     : QGLWidget(parent)
 {
     b_Fullscreen = false ;
-    setWindowTitle(QString::fromUtf8(name));
+    setWindowTitle(name);
     t_Timer = new QTimer(this);
     connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);

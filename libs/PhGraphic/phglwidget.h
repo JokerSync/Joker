@@ -14,7 +14,7 @@ class PhGLWidget : public QGLWidget
 {
     Q_OBJECT
 public:
-    explicit PhGLWidget(QWidget *parent = 0, char *name = 0);
+    explicit PhGLWidget(QWidget *parent = 0, QString name = "");
     virtual void keyPressEvent( QKeyEvent *keyEvent );
     virtual void initializeGL() = 0;
     virtual void paintGL() = 0;
