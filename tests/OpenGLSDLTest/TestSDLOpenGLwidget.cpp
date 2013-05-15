@@ -58,6 +58,7 @@ void TestSDLOpenGLWidget::initializeGL()
     }
     case 2:
     case 3:
+        // Using SDL library
 
         if (SDL_Init(SDL_INIT_VIDEO) == 0) {
             SDL_Surface *surface = NULL;	// This surface will tell us the details of the image
