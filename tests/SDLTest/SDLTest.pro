@@ -1,27 +1,16 @@
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-CONFIG   -= app_bundle
-
 TEMPLATE = app
+CONFIG -= app_bundle
+CONFIG -= qt
 
-SOURCES += \
-	main.cpp \
-	dwwindow.cpp \
-    SDLMain.cpp \
-	sdlwidget.cpp \
-	testsdlwidget.cpp
+SOURCES += main.cpp
 
-HEADERS  += \
-	dwwindow.h \
-	sdlwidget.h \
-	testsdlwidget.h
+HEADERS += \
+	SDLMain.h
 
-FORMS    += dwwindow.ui
+OBJECTIVE_SOURCES += \
+	SDLMain.m
 
+mac: INCLUDEPATH += /Library/Frameworks
+mac: DEPENDPATH += /Library/Frameworks
 
-INCLUDEPATH += /Library/Frameworks/
-LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
-
-
+mac: LIBS += -F/Library/Frameworks/ -framework SDL -framework Cocoa -framework SDL_image -framework SDL_ttf
