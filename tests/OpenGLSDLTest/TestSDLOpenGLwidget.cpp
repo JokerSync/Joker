@@ -90,10 +90,8 @@ void TestSDLOpenGLWidget::initializeGL()
             GLenum texture_format = 0;
 
             if (surface != NULL){
-                qDebug() << "info sur la surface";
-                qDebug() << surface->w;
-                qDebug() << surface->h;
-                qDebug() << surface->format->Rmask;
+                qDebug("surface : %dx%d / %dbpp / %x", surface->w, surface->h,
+                       surface->format->BytesPerPixel, surface->format->Rmask);
 
                 // get the number of channels in the SDL surface
                 nbOfColors = surface->format->BytesPerPixel;
@@ -175,20 +173,12 @@ void TestSDLOpenGLWidget::paintGL()
 
     glBegin(GL_QUADS); 	//Begining the cube's drawing
 
-    //int k = 50;
-    int i = 0;
-    //for (i = -k; i < k; i++)
-//    {
-//        glTexCoord2i(0,0);glVertex3i(-1 +i,-1,-1);
-//        glTexCoord2i(1,0);glVertex3i(+1 +i,-1,-1);
-//        glTexCoord2i(1,1);glVertex3i(+1 +i,+1,-1);
-//        glTexCoord2i(0,1);glVertex3i(-1 +i,+1,-1);
-//    }
-
-    glTexCoord2i(0,0);glVertex3i(-1 +i,-1,-1);
-    glTexCoord2i(1,0);glVertex3i(+1 +i + surface->w,-1,-1);
-    glTexCoord2i(1,1);glVertex3i(+1 +i + surface->w,+1 + surface->h,-1);
-    glTexCoord2i(0,1);glVertex3i(-1 +i,+1 + surface->h ,-1);
+    int w = 2;
+    int h = 2;
+    glTexCoord2i(0,0);glVertex3i(-1,-1,-1);
+    glTexCoord2i(1,0);glVertex3i(+1 + w,-1,-1);
+    glTexCoord2i(1,1);glVertex3i(+1 + w,+1 + h,-1);
+    glTexCoord2i(0,1);glVertex3i(-1,+1 + h ,-1);
 
 
     //    //1st face done
