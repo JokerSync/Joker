@@ -6,6 +6,8 @@
 #include "SDL_image/SDL_image.h"
 #include "SDL/SDL.h"
 
+#include "PhTools/memorytool.h"
+
 
 TestSDLOpenGLWidget::TestSDLOpenGLWidget(QWidget *parent)
     : PhGLWidget( parent, "Premier affichage de dessin avec OpenGL et Qt")
@@ -74,10 +76,11 @@ void TestSDLOpenGLWidget::initializeGL()
                 SDL_Color textColor={ 255, 255, 0, 1 };
                 if (TTF_Init() == 0){;
                     TTF_Font *font;
-                    font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 100);
+                    font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 20);
                     //font = TTF_OpenFont("../../../../../data/zoinks.ttf", 100);
                     if (font != NULL){
-                        surface = TTF_RenderText_Blended(font, "Les", textColor );
+                        qDebug() << TTF_FontFaceFamilyName(font);
+                        surface = TTF_RenderText_Solid(font, ".....", textColor );
                     }
                     else
                         qDebug() << "Error (Font) : " << TTF_GetError();
@@ -94,10 +97,15 @@ void TestSDLOpenGLWidget::initializeGL()
                 qDebug("surface : %dx%d / %dbpp / %x", surface->w, surface->h,
                        surface->format->BytesPerPixel, surface->format->Rmask);
 
+                MemoryDump(surface->pixels, surface->pitch, surface->h, surface->format->BytesPerPixel);
+
                 // get the number of channels in the SDL surface
                 nbOfColors = surface->format->BytesPerPixel;
 
                 switch (nbOfColors) {
+                case 1:
+                    texture_format = GL_ALPHA;
+                    break;
                 case 3:     // no alpha channel
                     if (surface->format->Rmask == 0x000000ff)
                         texture_format = GL_RGB;
@@ -169,8 +177,8 @@ void TestSDLOpenGLWidget::paintGL()
 
     glBegin(GL_QUADS); 	//Begining the cube's drawing
 
-    int w = 40;
-    int h = 240;
+    int w = 640;
+    int h = 480;
     glTexCoord2i(0,0);glVertex2i(0, 0);
     glTexCoord2i(1,0);glVertex2i(w, 0);
     glTexCoord2i(1,1);glVertex2i(w, h);

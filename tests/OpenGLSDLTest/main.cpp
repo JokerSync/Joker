@@ -1,5 +1,4 @@
 
-#include "phglwidget.h"
 #include "TestSDLOpenGLWidget.h"
 
 #include "SDL/SDL.h"

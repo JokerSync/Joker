@@ -11,20 +11,23 @@ SOURCES += \
 	main.cpp\
     SDLMain.cpp \
     TestSDLOpenGLWidget.cpp \
-    ../../libs/PhGraphic/phglwidget.cpp
+	../../libs/PhGraphic/phglwidget.cpp\
+	../../libs/PhTools/memorytool.cpp
 
 HEADERS  += \
     TestSDLOpenGLWidget.h \
-    ../../libs/PhGraphic/phglwidget.h
+	../../libs/PhGraphic/phglwidget.h \
+	../../libs/PhTools/memorytool.h
+
 
 FORMS    += mainwindow.ui
 
 LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 
 INCLUDEPATH += /Library/Frameworks/ \
-			../../libs/PhGraphic/
-DEPENDPATH += /Library/Frameworks/ \
-			../../libs/PhGraphic/
+			../../libs
+
+DEPENDPATH += /Library/Frameworks
 
 
 

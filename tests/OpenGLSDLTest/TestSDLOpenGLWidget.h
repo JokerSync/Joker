@@ -1,7 +1,7 @@
 #ifndef MYWINDOW_H
 #define MYWINDOW_H
 
-#include "phglwidget.h"
+#include "PhGraphic/phglwidget.h"
 #include "glu.h"
 #include "SDL_image/SDL_image.h"
 #include "SDL_ttf/SDL_ttf.h"
