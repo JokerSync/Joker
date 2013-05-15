@@ -74,7 +74,7 @@ void TestSDLOpenGLWidget::initializeGL()
                 SDL_Color textColor={ 255, 255, 0, 1 };
                 if (TTF_Init() == 0){;
                     TTF_Font *font;
-                    font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 10);
+                    font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 100);
                     //font = TTF_OpenFont("../../../../../data/zoinks.ttf", 100);
                     if (font != NULL){
                         surface = TTF_RenderText_Blended(font, "Les", textColor );
@@ -177,8 +177,8 @@ void TestSDLOpenGLWidget::paintGL()
     int w = 40;
     int h = 10;
     glTexCoord2i(0,0);glVertex2i(-1,-1);
-    glTexCoord2i(2,0);glVertex2i(+1 + w,-1);
-    glTexCoord2i(2,1);glVertex2i(+1 + w,+1 + h);
+    glTexCoord2i(1,0);glVertex2i(+1 + w,-1);
+    glTexCoord2i(1,1);glVertex2i(+1 + w,+1 + h);
     glTexCoord2i(0,1);glVertex2i(-1,+1 + h );
 
 
