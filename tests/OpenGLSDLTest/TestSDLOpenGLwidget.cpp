@@ -43,7 +43,7 @@ void TestSDLOpenGLWidget::initializeGL()
         glTexImage2D (
                     GL_TEXTURE_2D,      //Type : texture 2D
                     0,                  //Mipmap : none
-                    4,                  //Couleurs : 4
+                    4,                  //Bpp : 4
                     2,                  //height : 2
                     2,                  //width : 2
                     0,                  //border width : 0
@@ -74,9 +74,10 @@ void TestSDLOpenGLWidget::initializeGL()
                 SDL_Color textColor={ 255, 255, 0, 1 };
                 if (TTF_Init() == 0){;
                     TTF_Font *font;
-                    font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 1);
+                    font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 10);
+                    //font = TTF_OpenFont("../../../../../data/zoinks.ttf", 100);
                     if (font != NULL){
-                        surface = TTF_RenderText_Blended(font, "L", textColor );
+                        surface = TTF_RenderText_Blended(font, "Les", textColor );
                     }
                     else
                         qDebug() << "Error (Font) : " << TTF_GetError();
@@ -164,7 +165,7 @@ void TestSDLOpenGLWidget::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(x,y,-5);
+    glTranslatef(x,y,-99);
 
     //  glRotatef(x, 0, 1, 1);
     //  gluLookAt(10,0,0,   //eyeXYZ
@@ -173,12 +174,12 @@ void TestSDLOpenGLWidget::paintGL()
 
     glBegin(GL_QUADS); 	//Begining the cube's drawing
 
-    int w = 2;
-    int h = 2;
-    glTexCoord2i(0,0);glVertex3i(-1,-1,-1);
-    glTexCoord2i(1,0);glVertex3i(+1 + w,-1,-1);
-    glTexCoord2i(1,1);glVertex3i(+1 + w,+1 + h,-1);
-    glTexCoord2i(0,1);glVertex3i(-1,+1 + h ,-1);
+    int w = 40;
+    int h = 10;
+    glTexCoord2i(0,0);glVertex2i(-1,-1);
+    glTexCoord2i(2,0);glVertex2i(+1 + w,-1);
+    glTexCoord2i(2,1);glVertex2i(+1 + w,+1 + h);
+    glTexCoord2i(0,1);glVertex2i(-1,+1 + h );
 
 
     //    //1st face done
