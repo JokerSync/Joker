@@ -11,7 +11,7 @@ PhGLWidget::PhGLWidget( QWidget *parent, QString name)
     connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);
     xdelta = 0.05;
-    ydelta = 0.05;
+    ydelta = 0.0;
 }
 
 void PhGLWidget::resizeGL(int width, int height)

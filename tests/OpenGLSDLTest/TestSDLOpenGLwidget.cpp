@@ -75,8 +75,9 @@ void TestSDLOpenGLWidget::initializeGL()
                 if (TTF_Init() == 0){;
                     TTF_Font *font;
                     font = TTF_OpenFont("../../../../../data/Arial.ttf", 1);
-                    if (font != NULL)
-                        surface = TTF_RenderUTF8_Blended(font, "L", textColor );
+                    if (font != NULL){
+                        surface = TTF_RenderText_Blended(font, "L", textColor );
+                    }
                     else
                         qDebug() << "Error (Font) : " << TTF_GetError();
                 }
@@ -85,11 +86,15 @@ void TestSDLOpenGLWidget::initializeGL()
 
                 break;
             }
-
             GLint  nbOfColors;
             GLenum texture_format = 0;
 
             if (surface != NULL){
+                qDebug() << "info sur la surface";
+                qDebug() << surface->w;
+                qDebug() << surface->h;
+                qDebug() << surface->format->Rmask;
+
                 // get the number of channels in the SDL surface
                 nbOfColors = surface->format->BytesPerPixel;
 
@@ -173,12 +178,18 @@ void TestSDLOpenGLWidget::paintGL()
     //int k = 50;
     int i = 0;
     //for (i = -k; i < k; i++)
-    {
-        glTexCoord2i(0,0);glVertex3i(-1+i,-1,-1);
-        glTexCoord2i(10,0);glVertex3i(+1+i,-1,-1);
-        glTexCoord2i(10,10);glVertex3i(+1+i,+1,-1);
-        glTexCoord2i(0,10);glVertex3i(-1+i,+1,-1);
-    }
+//    {
+//        glTexCoord2i(0,0);glVertex3i(-1 +i,-1,-1);
+//        glTexCoord2i(1,0);glVertex3i(+1 +i,-1,-1);
+//        glTexCoord2i(1,1);glVertex3i(+1 +i,+1,-1);
+//        glTexCoord2i(0,1);glVertex3i(-1 +i,+1,-1);
+//    }
+
+    glTexCoord2i(0,0);glVertex3i(-1 +i,-1,-1);
+    glTexCoord2i(1,0);glVertex3i(+1 +i + surface->w,-1,-1);
+    glTexCoord2i(1,1);glVertex3i(+1 +i + surface->w,+1 + surface->h,-1);
+    glTexCoord2i(0,1);glVertex3i(-1 +i,+1 + surface->h ,-1);
+
 
     //    //1st face done
 

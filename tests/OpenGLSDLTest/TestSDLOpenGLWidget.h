@@ -18,6 +18,7 @@ public:
 
 private :
     GLuint texture;			// This is a handle to our texture object
+    SDL_Surface *surface;	// This surface will tell us the details of the image
     float x;
     float y;
 
