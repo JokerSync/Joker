@@ -165,59 +165,17 @@ void TestSDLOpenGLWidget::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glTranslatef(x,y,-99);
-
-    //  glRotatef(x, 0, 1, 1);
-    //  gluLookAt(10,0,0,   //eyeXYZ
-    //            0,0,0,    //centerXYZ
-    //            0,1,0);   //upXYZ
+   // glTranslatef(x,y,-99);
 
     glBegin(GL_QUADS); 	//Begining the cube's drawing
 
     int w = 40;
-    int h = 10;
-    glTexCoord2i(0,0);glVertex2i(-1,-1);
-    glTexCoord2i(1,0);glVertex2i(+1 + w,-1);
-    glTexCoord2i(1,1);glVertex2i(+1 + w,+1 + h);
-    glTexCoord2i(0,1);glVertex2i(-1,+1 + h );
+    int h = 240;
+    glTexCoord2i(0,0);glVertex2i(0, 0);
+    glTexCoord2i(1,0);glVertex2i(w, 0);
+    glTexCoord2i(1,1);glVertex2i(w, h);
+    glTexCoord2i(0,1);glVertex2i(0, h);
 
-
-    //    //1st face done
-
-    //    glTexCoord2i(0,0);glVertex3i(-1,-1,+1);
-    //    glTexCoord2i(1,0);glVertex3i(+1,-1,+1);
-    //    glTexCoord2i(1,1);glVertex3i(+1,+1,+1);
-    //    glTexCoord2i(0,1);glVertex3i(-1,+1,+1);
-
-    //    //2nd face done
-
-    //    glTexCoord2i(0,0);glVertex3i(+1,-1,-1);
-    //    glTexCoord2i(1,0);glVertex3i(+1,-1,+1);
-    //    glTexCoord2i(1,1);glVertex3i(+1,+1,+1);
-    //    glTexCoord2i(0,1);glVertex3i(+1,+1,-1);
-
-    //    //3rd face done
-
-    //    glTexCoord2i(0,0);glVertex3i(-1,-1,-1);
-    //    glTexCoord2i(1,0);glVertex3i(-1,-1,+1);
-    //    glTexCoord2i(1,1);glVertex3i(-1,+1,+1);
-    //    glTexCoord2i(0,1);glVertex3i(-1,+1,-1);
-
-    //    //4th face done
-
-    //    glTexCoord2i(1,0);glVertex3i(-1,+1,-1);
-    //    glTexCoord2i(1,1);glVertex3i(+1,+1,-1);
-    //    glTexCoord2i(0,1);glVertex3i(+1,+1,+1);
-    //    glTexCoord2i(0,0);glVertex3i(-1,+1,+1);
-
-    //    //5th face done
-
-    //    glTexCoord2i(1,0);glVertex3i(-1,-1,+1);
-    //    glTexCoord2i(1,1);glVertex3i(+1,-1,+1);
-    //    glTexCoord2i(0,1);glVertex3i(+1,-1,-1);
-    //    glTexCoord2i(0,0);glVertex3i(-1,-1,-1);
-
-    //6th face done
     glEnd();
 
 }
