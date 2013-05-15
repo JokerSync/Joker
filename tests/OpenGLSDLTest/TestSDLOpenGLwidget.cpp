@@ -74,7 +74,7 @@ void TestSDLOpenGLWidget::initializeGL()
                 SDL_Color textColor={ 255, 255, 0, 1 };
                 if (TTF_Init() == 0){;
                     TTF_Font *font;
-                    font = TTF_OpenFont("../../../../../data/Arial.ttf", 1);
+                    font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 1);
                     if (font != NULL){
                         surface = TTF_RenderText_Blended(font, "L", textColor );
                     }

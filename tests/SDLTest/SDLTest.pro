@@ -7,15 +7,16 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 SOURCES += \
-    main.cpp \
-    dwwindow.cpp \
+	main.cpp \
+	dwwindow.cpp \
     SDLMain.cpp \
-    sdlwidget.cpp \
-    testsdlwidget.cpp
+	sdlwidget.cpp \
+	testsdlwidget.cpp
 
-HEADERS  += dwwindow.h \
-    sdlwidget.h \
-    testsdlwidget.h
+HEADERS  += \
+	dwwindow.h \
+	sdlwidget.h \
+	testsdlwidget.h
 
 FORMS    += dwwindow.ui
 
