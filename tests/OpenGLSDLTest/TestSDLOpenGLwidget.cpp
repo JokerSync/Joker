@@ -68,7 +68,7 @@ void TestSDLOpenGLWidget::initializeGL()
             switch (method) {
             case 2: // load a texture with SDL_Image:
             {
-                surface = IMG_Load("../../../../../data/boxtest.png");
+                surface = IMG_Load("../../../../../data/smalll.png");
             }
                 break;
             case 3: // load a texture with SDL_TTF:
@@ -79,7 +79,7 @@ void TestSDLOpenGLWidget::initializeGL()
                     font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 10);
                     if (font != NULL){
                         qDebug() << TTF_FontFaceFamilyName(font);
-                        surface = TTF_RenderText_Solid(font, ".....", textColor);
+                        surface = TTF_RenderText_Blended(font, "Lo", textColor);
                     }
                     else
                         qDebug() << "Error (Font) : " << TTF_GetError();
@@ -97,7 +97,7 @@ void TestSDLOpenGLWidget::initializeGL()
                 qDebug("surface : %dx%d / %dbpp / %x", surface->w, surface->h,
                        surface->format->BytesPerPixel, surface->flags);
 
-                MemoryDump(surface->pixels, surface->pitch, surface->h, surface->format->BytesPerPixel);
+                MemoryDump(surface->pixels, surface->pitch/surface->format->BytesPerPixel, surface->h, surface->format->BytesPerPixel);
 
                 // get the number of channels in the SDL surface
                 nbOfColors = surface->format->BytesPerPixel;
