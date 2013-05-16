@@ -16,140 +16,122 @@ TestSDLOpenGLWidget::TestSDLOpenGLWidget(QWidget *parent)
     y = 0;
 }
 
+GLuint createTextureFromSurface(SDL_Surface * surface)
+{
+    qDebug("surface : %dx%d / %dbpp / %x", surface->w, surface->h,
+           surface->format->BytesPerPixel, surface->flags);
+
+    MemoryDump(surface->pixels, surface->pitch/surface->format->BytesPerPixel, surface->h, surface->format->BytesPerPixel);
+
+    // get the number of channels in the SDL surface
+    GLint  nbOfColors = surface->format->BytesPerPixel;
+    GLenum textureFormat = 0;
+
+    switch (nbOfColors) {
+    case 1:
+        textureFormat = GL_ALPHA;
+        break;
+    case 3:     // no alpha channel
+        if (surface->format->Rmask == 0x000000ff)
+            textureFormat = GL_RGB;
+        else
+            textureFormat = GL_BGR;
+        break;
+    case 4:     // contains an alpha channel
+        if (surface->format->Rmask == 0x000000ff)
+            textureFormat = GL_RGBA;
+        else
+            textureFormat = GL_BGRA;
+        break;
+    default:
+        qDebug() << "Warning: the image is not truecolor...";
+        break;
+    }
+
+    GLuint texture;
+
+    glEnable( GL_TEXTURE_2D );
+    // Have OpenGL generate a texture object handle for us
+    glGenTextures( 1, &texture );
+
+    // Bind the texture object
+    glBindTexture( GL_TEXTURE_2D, texture );
+
+
+    // Edit the texture object's image data using the information SDL_Surface gives us
+    glTexImage2D( GL_TEXTURE_2D, 0, nbOfColors, surface->w, surface->h, 0,
+                  textureFormat, GL_UNSIGNED_BYTE, surface->pixels );
+
+//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+  //  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    return texture;
+}
 
 void TestSDLOpenGLWidget::initializeGL()
 {
-    int method = 3;
-
     glClearColor(.5,.5,.5,0); 	//Background color RGBA
     glEnable(GL_DEPTH_TEST); 	//Activate the depth test
     glEnable(GL_TEXTURE_2D); 	//Activate the texturing
 
-    switch(method)
+
+    // Initialize with a simple buffer
+    GLubyte inlineBuffer[16] =
     {
-    case 0: // no texture is displayed
-        break;
+        0,0,0,0, 0xFF,0xFF,0xFF,0xFF,
+        0xFF,0xFF,0xFF,0xFF, 0,0,0,0
+    };
 
-    case 1: // initialize with a simple buffer
-    {
-        GLubyte Texture[16] =
-        {
-            0,0,0,0, 0xFF,0xFF,0xFF,0xFF,
-            0xFF,0xFF,0xFF,0xFF, 0,0,0,0
-        };
-        //Image (2x2)
-        GLuint Nom;
+    glGenTextures(1, &textures[0]); 	//Generate a texture at index 0
+    glBindTexture(GL_TEXTURE_2D, textures[0]); 	//Select this texture
+    glTexImage2D (
+                GL_TEXTURE_2D,      //Type : texture 2D
+                0,                  //Mipmap : none
+                4,                  //Bpp : 4
+                2,                  //height : 2
+                2,                  //width : 2
+                0,                  //border width : 0
+                GL_RGBA,            //Format : RGBA
+                GL_UNSIGNED_BYTE, 	//Colors type
+                inlineBuffer             //Picture's address
+                );
 
-        glGenTextures(1,&Nom); 	//Generate a texture @ 1
-        glBindTexture(GL_TEXTURE_2D,Nom); 	//Select this texture
-        glTexImage2D (
-                    GL_TEXTURE_2D,      //Type : texture 2D
-                    0,                  //Mipmap : none
-                    4,                  //Bpp : 4
-                    2,                  //height : 2
-                    2,                  //width : 2
-                    0,                  //border width : 0
-                    GL_RGBA,            //Format : RGBA
-                    GL_UNSIGNED_BYTE, 	//Colors type
-                    Texture             //Picture's address
-                    );
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    // Set the texture's stretching properties
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        break;
-    }
-    case 2:
-    case 3:
-        // Using SDL library
+    // Initializing SDL library
+    if (SDL_Init(SDL_INIT_VIDEO) == 0) {
+        //Create a surface from a file:
+        SDL_Surface *surface = IMG_Load("../../../../../data/smalll.png");
 
-        if (SDL_Init(SDL_INIT_VIDEO) == 0) {
+        // Create a texture from this surface
+        if(surface != NULL)
+            textures[1] = createTextureFromSurface(surface);
 
-            //Create a surface
-            switch (method) {
-            case 2: // load a texture with SDL_Image:
+        // Initialize SDL_TTF :
+        if (TTF_Init() == 0){;
+            SDL_Color textColor={ 255, 255, 0, 1 };
+            // Create a font:
+            TTF_Font *font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 10);
+            if (font != NULL)
             {
-                surface = IMG_Load("../../../../../data/smalll.png");
+                qDebug() << TTF_FontFaceFamilyName(font);
+
+                // Create a surface from a string:
+                surface = TTF_RenderText_Blended(font, "Lo", textColor);
+
+                // Create a texture from this surface
+                if(surface != NULL)
+                    textures[2] = createTextureFromSurface(surface);
             }
-                break;
-            case 3: // load a texture with SDL_TTF:
-
-                SDL_Color textColor={ 255, 255, 0, 1 };
-                if (TTF_Init() == 0){;
-                    TTF_Font *font;
-                    font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 10);
-                    if (font != NULL){
-                        qDebug() << TTF_FontFaceFamilyName(font);
-                        surface = TTF_RenderText_Blended(font, "Lo", textColor);
-                    }
-                    else
-                        qDebug() << "Error (Font) : " << TTF_GetError();
-                }
-                else
-                    qDebug() << "Error (Font) : " << TTF_GetError();
-
-                break;
-            }
-
-            if (surface != NULL){
-                GLint  nbOfColors;
-                GLenum texture_format = 0;
-
-                qDebug("surface : %dx%d / %dbpp / %x", surface->w, surface->h,
-                       surface->format->BytesPerPixel, surface->flags);
-
-                MemoryDump(surface->pixels, surface->pitch/surface->format->BytesPerPixel, surface->h, surface->format->BytesPerPixel);
-
-                // get the number of channels in the SDL surface
-                nbOfColors = surface->format->BytesPerPixel;
-
-                switch (nbOfColors) {
-                case 1:
-                    texture_format = GL_ALPHA;
-                    break;
-                case 3:     // no alpha channel
-                    if (surface->format->Rmask == 0x000000ff)
-                        texture_format = GL_RGB;
-                    else
-                        texture_format = GL_BGR;
-                    break;
-                case 4:     // contains an alpha channel
-                    if (surface->format->Rmask == 0x000000ff)
-                        texture_format = GL_RGBA;
-                    else
-                        texture_format = GL_BGRA;
-                    break;
-                default:
-                    qDebug() << "Warning: the image is not truecolor...";
-                    break;
-                }
-
-                glEnable( GL_TEXTURE_2D );
-                // Have OpenGL generate a texture object handle for us
-                glGenTextures( 1, &texture );
-
-                // Bind the texture object
-                glBindTexture( GL_TEXTURE_2D, texture );
-
-                // Set the texture's stretching properties
-                glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-                glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-                // Edit the texture object's image data using the information SDL_Surface gives us
-                glTexImage2D( GL_TEXTURE_2D, 0, nbOfColors, surface->w, surface->h, 0,
-                              texture_format, GL_UNSIGNED_BYTE, surface->pixels );
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-            }
-            else{
-                qDebug() << "Error (SDL) : " << SDL_GetError();
-            }
+            else
+                qDebug() << "Error (Font) : " << TTF_GetError();
         }
         else
-            qDebug() << "Error (SDL) : " << SDL_GetError();
-
-        break;
-
+            qDebug() << "Error (Font) : " << TTF_GetError();
     }
 }
 
@@ -181,11 +163,13 @@ void TestSDLOpenGLWidget::paintGL()
 
     for(int i=0;i<3;i++)
     {
+        glBindTexture(GL_TEXTURE_2D, textures[i]);
+
         glBegin(GL_QUADS); 	//Begining the cube's drawing
 
         glTexCoord2i(0, 0);glVertex2i(i * space, 0);
         glTexCoord2i(1, 0);glVertex2i(i * space + w, 0);
-        glTexCoord2i(1, 1);glVertex2i(i * space +w, h);
+        glTexCoord2i(1, 1);glVertex2i(i * space + w, h);
         glTexCoord2i(0, 1);glVertex2i(i * space, h);
 
         glEnd();
