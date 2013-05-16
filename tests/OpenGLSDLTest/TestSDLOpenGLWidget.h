@@ -17,8 +17,8 @@ public:
     void paintGL();
 
 private :
-    GLuint texture;			// This is a handle to our texture object
-    SDL_Surface *surface;	// This surface will tell us the details of the image
+    GLuint textures[3];			// This is a handle to a tab of textures
+    //GLuint texture;
     float x;
     float y;
 
