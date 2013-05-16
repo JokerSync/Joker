@@ -175,15 +175,19 @@ void TestSDLOpenGLWidget::paintGL()
 
    // glTranslatef(x,y,-99);
 
-    glBegin(GL_QUADS); 	//Begining the cube's drawing
+    int w = 200;
+    int h = 160;
+    int space = 220; // space between quad
 
-    int w = 640;
-    int h = 480;
-    glTexCoord2i(0,0);glVertex2i(0, 0);
-    glTexCoord2i(1,0);glVertex2i(w, 0);
-    glTexCoord2i(1,1);glVertex2i(w, h);
-    glTexCoord2i(0,1);glVertex2i(0, h);
+    for(int i=0;i<3;i++)
+    {
+        glBegin(GL_QUADS); 	//Begining the cube's drawing
 
-    glEnd();
+        glTexCoord2i(0, 0);glVertex2i(i * space, 0);
+        glTexCoord2i(1, 0);glVertex2i(i * space + w, 0);
+        glTexCoord2i(1, 1);glVertex2i(i * space +w, h);
+        glTexCoord2i(0, 1);glVertex2i(i * space, h);
 
+        glEnd();
+    }
 }
