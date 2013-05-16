@@ -21,7 +21,7 @@ void TestSDLOpenGLWidget::initializeGL()
 {
     int method = 3;
 
-    glClearColor(.5,.5,.5,0); 	//Background color RGB
+    glClearColor(.5,.5,.5,0); 	//Background color RGBA
     glEnable(GL_DEPTH_TEST); 	//Activate the depth test
     glEnable(GL_TEXTURE_2D); 	//Activate the texturing
 
@@ -68,7 +68,7 @@ void TestSDLOpenGLWidget::initializeGL()
             switch (method) {
             case 2: // load a texture with SDL_Image:
             {
-                surface = IMG_Load("../../../../../data/box.png");
+                surface = IMG_Load("../../../../../data/boxtest.png");
             }
                 break;
             case 3: // load a texture with SDL_TTF:
@@ -76,11 +76,10 @@ void TestSDLOpenGLWidget::initializeGL()
                 SDL_Color textColor={ 255, 255, 0, 1 };
                 if (TTF_Init() == 0){;
                     TTF_Font *font;
-                    font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 20);
-                    //font = TTF_OpenFont("../../../../../data/zoinks.ttf", 100);
+                    font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 10);
                     if (font != NULL){
                         qDebug() << TTF_FontFaceFamilyName(font);
-                        surface = TTF_RenderText_Solid(font, ".....", textColor );
+                        surface = TTF_RenderText_Solid(font, ".....", textColor);
                     }
                     else
                         qDebug() << "Error (Font) : " << TTF_GetError();
@@ -90,12 +89,13 @@ void TestSDLOpenGLWidget::initializeGL()
 
                 break;
             }
-            GLint  nbOfColors;
-            GLenum texture_format = 0;
 
             if (surface != NULL){
+                GLint  nbOfColors;
+                GLenum texture_format = 0;
+
                 qDebug("surface : %dx%d / %dbpp / %x", surface->w, surface->h,
-                       surface->format->BytesPerPixel, surface->format->Rmask);
+                       surface->format->BytesPerPixel, surface->flags);
 
                 MemoryDump(surface->pixels, surface->pitch, surface->h, surface->format->BytesPerPixel);
 

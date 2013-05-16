@@ -125,7 +125,7 @@ int main(int argc, char **argv)
     }
 
     //Create a font
-    TTF_Font *font = TTF_OpenFont( "/Users/thomas/Stage/Joker/data/Bedizen.ttf", 20 );
+    TTF_Font *font = TTF_OpenFont( "../../../../../data/Bedizen.ttf", 100 );
     if (font == NULL)
         return false;
 
@@ -133,13 +133,13 @@ int main(int argc, char **argv)
     SDL_Color textColor = { 255, 255, 0, 1 };
 
     // Create a text surface:
-    SDL_Surface *surface = TTF_RenderUTF8_Solid( font, "Martin", textColor );
+    SDL_Surface *surface = TTF_RenderUTF8_Blended( font, ".....", textColor );
 
     qDebug("surface : %dx%d / %dbpp / %d", surface->w, surface->h,
            surface->format->BytesPerPixel, surface->pitch);
 
     // Dump the text surface:
-    MemoryDump(surface->pixels, surface->pitch, surface->h, surface->format->BytesPerPixel);
+    //MemoryDump(surface->pixels, surface->pitch, surface->h, surface->format->BytesPerPixel);
 
     // Display the text surface:
     apply_surface( ( SCREEN_WIDTH - surface->w ) / 2, ( SCREEN_HEIGHT / 2 - surface->h ) / 2, surface, screen );
