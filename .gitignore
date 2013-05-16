@@ -21,3 +21,5 @@ Makefile
 build-*
 
 .DS_Store
+
+*.autosave
