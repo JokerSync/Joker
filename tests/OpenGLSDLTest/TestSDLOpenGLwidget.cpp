@@ -64,6 +64,7 @@ GLuint createTextureFromSurface(SDL_Surface * surface)
 
 //    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
   //  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -113,15 +114,15 @@ void TestSDLOpenGLWidget::initializeGL()
 
         // Initialize SDL_TTF :
         if (TTF_Init() == 0){;
-            SDL_Color textColor={ 255, 255, 0, 1 };
+            SDL_Color textColor={ 255, 0, 0, 1 };
             // Create a font:
-            TTF_Font *font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 10);
+            TTF_Font *font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 100);
             if (font != NULL)
             {
                 qDebug() << TTF_FontFaceFamilyName(font);
 
                 // Create a surface from a string:
-                surface = TTF_RenderText_Blended(font, "Lo", textColor);
+                surface = TTF_RenderText_Blended(font, "Cousin!", textColor);
 
                 // Create a texture from this surface
                 if(surface != NULL)
@@ -165,6 +166,10 @@ void TestSDLOpenGLWidget::paintGL()
     {
         glBindTexture(GL_TEXTURE_2D, textures[i]);
 
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+
+        glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS); 	//Begining the cube's drawing
 
         glTexCoord2i(0, 0);glVertex2i(i * space, 0);
@@ -173,5 +178,7 @@ void TestSDLOpenGLWidget::paintGL()
         glTexCoord2i(0, 1);glVertex2i(i * space, h);
 
         glEnd();
+        glDisable(GL_TEXTURE_2D);
+
     }
 }
