@@ -18,11 +18,12 @@ TestSDLOpenGLWidget::TestSDLOpenGLWidget(QWidget *parent)
 
 GLuint createTextureFromSurface(SDL_Surface * surface)
 {
-    qDebug("surface : %dx%d / %dbpp / %x", surface->w, surface->h,
+/*    qDebug("surface : %dx%d / %dbpp / %x", surface->w, surface->h,
            surface->format->BytesPerPixel, surface->flags);
 
-    MemoryDump(surface->pixels, surface->pitch/surface->format->BytesPerPixel, surface->h, surface->format->BytesPerPixel);
-
+    MemoryDump(surface->pixels, surface->pitch/surface->format->BytesPerPixel,
+               surface->h, surface->format->BytesPerPixel);
+*/
     // get the number of channels in the SDL surface
     GLint  nbOfColors = surface->format->BytesPerPixel;
     GLenum textureFormat = 0;
@@ -106,7 +107,7 @@ void TestSDLOpenGLWidget::initializeGL()
     // Initializing SDL library
     if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         //Create a surface from a file:
-        SDL_Surface *surface = IMG_Load("../../../../../data/smalll.png");
+        SDL_Surface *surface = IMG_Load("../../../../../../fond.jpg");
 
         // Create a texture from this surface
         if(surface != NULL)
@@ -114,15 +115,13 @@ void TestSDLOpenGLWidget::initializeGL()
 
         // Initialize SDL_TTF :
         if (TTF_Init() == 0){;
-            SDL_Color textColor={ 255, 0, 0, 1 };
+            SDL_Color textColor={ 255, 0, 0, 0 };
             // Create a font:
             TTF_Font *font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 100);
             if (font != NULL)
             {
-                qDebug() << TTF_FontFaceFamilyName(font);
-
                 // Create a surface from a string:
-                surface = TTF_RenderText_Blended(font, "Cousin!", textColor);
+                surface = TTF_RenderText_Blended(font, "Some random text", textColor);
 
                 // Create a texture from this surface
                 if(surface != NULL)
@@ -158,6 +157,46 @@ void TestSDLOpenGLWidget::paintGL()
 
    // glTranslatef(x,y,-99);
 
+    glBindTexture(GL_TEXTURE_2D, textures[2]);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_TEXTURE_2D);
+    glBegin(GL_QUADS); 	//Begining the cube's drawing
+
+    glTexCoord2i(0, 0);glVertex2i(0, this->height()-this->height()/4);
+    glTexCoord2i(1, 0);glVertex2i(this->width()/3, this->height()-this->height()/4);
+    glTexCoord2i(1, 1);glVertex2i(this->width()/3, this->height());
+    glTexCoord2i(0, 1);glVertex2i(0, this->height());
+
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+
+    for (int i = 1; i<=6; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, textures[1]);
+
+        glEnable(GL_BLEND);
+        //glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+        glEnable(GL_TEXTURE_2D);
+        glBegin(GL_QUADS); 	//Begining the cube's drawing
+
+        glTexCoord2i(0, 0);glVertex2i(0, this->height()-this->height()/4);
+        glTexCoord2i(1, 0);glVertex2i(i * this->width()/6, this->height()-this->height()/4);
+        glTexCoord2i(1, 1);glVertex2i(i * this->width()/6, this->height());
+        glTexCoord2i(0, 1);glVertex2i(0, this->height());
+
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
+
+    /*
+
     int w = 200;
     int h = 160;
     int space = 220; // space between quad
@@ -179,6 +218,6 @@ void TestSDLOpenGLWidget::paintGL()
 
         glEnd();
         glDisable(GL_TEXTURE_2D);
-
     }
+    */
 }
