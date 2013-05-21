@@ -1,11 +1,3 @@
-//
-//  main.cpp
-//  Test SDL
-//
-//  Created by Thomas on 15/04/13.
-//  Copyright 2013 __MyCompanyName__. All rights reserved.
-//
-
 #include "SDL/SDL.h"
 #include "SDL_image/SDL_image.h"
 #include "SDL_ttf/SDL_ttf.h"
