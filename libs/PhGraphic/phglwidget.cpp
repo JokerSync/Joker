@@ -10,7 +10,7 @@ PhGLWidget::PhGLWidget( QWidget *parent, QString name)
     t_Timer = new QTimer(this);
     connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);
-    xdelta = 0.05;
+    xdelta = 1;
     ydelta = 0.0;
 }
 
@@ -22,7 +22,7 @@ void PhGLWidget::resizeGL(int width, int height)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     //gluPerspective(40.0f,(GLfloat)width/(GLfloat)height, 0.1f, 100.0f);
-    gluOrtho2D(0, width, height, 0);
+    glOrtho(0, width, height, 0, 0, 10);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
