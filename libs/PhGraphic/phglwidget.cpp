@@ -54,14 +54,10 @@ void PhGLWidget::keyPressEvent(QKeyEvent *keyEvent)
         xdelta = 0;
         break;
     case Qt::Key_Left:
-        if (xdelta >= 0)
-            xdelta = -0.05;
-        ydelta = 0;
+        xdelta += 1;
         break;
     case Qt::Key_Right:
-        if (xdelta <= 0)
-            xdelta = 0.05;
-        ydelta = 0;
+        xdelta -= 1;
         break;
     }
 }

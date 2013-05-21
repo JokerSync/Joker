@@ -19,7 +19,7 @@ public:
 private :
     GLuint textures[3];			// This is a handle to a tab of textures
     //GLuint texture;
-    float x;
+    float xmove;
     float y;
 
 };
