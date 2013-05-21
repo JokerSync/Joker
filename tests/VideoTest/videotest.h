@@ -10,6 +10,8 @@ class videoTest : public PhGLWidget
     Q_OBJECT
 public:
     explicit videoTest(QWidget *parent = 0);
+    void initializeGL();
+    void paintGL();
 
 private :
 
