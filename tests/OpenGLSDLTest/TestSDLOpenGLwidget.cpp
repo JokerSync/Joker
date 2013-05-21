@@ -178,8 +178,7 @@ void TestSDLOpenGLWidget::paintGL()
         glBindTexture(GL_TEXTURE_2D, textures[1]);
 
         glEnable(GL_BLEND);
-        //glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
 
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS); 	//Begining the cube's drawing
