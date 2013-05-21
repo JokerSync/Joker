@@ -13,7 +13,7 @@ TestSDLOpenGLWidget::TestSDLOpenGLWidget(QWidget *parent)
     : PhGLWidget( parent, "Premier affichage de dessin avec OpenGL et Qt")
 {
 
-    x = this->width();
+    xmove = this->width() * 1.5;
 }
 
 GLuint createTextureFromSurface(SDL_Surface * surface)
@@ -136,12 +136,13 @@ void TestSDLOpenGLWidget::initializeGL()
 
 void TestSDLOpenGLWidget::paintGL()
 {
-    if (x > this->width())
-        x = 0;
-    qDebug() << QString::number(x);
+    int x = this->width();
+    int w = this->width() / 2;
+    if (xmove > x + w)
+        xmove = 0;
 
     if (move){
-        x += xdelta;
+        xmove += xdelta;
     }
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
@@ -177,10 +178,12 @@ void TestSDLOpenGLWidget::paintGL()
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS); 	//Begining the cube's drawing
 
-    glTexCoord3i(0, 0, 1);glVertex3i(0 - x, this->height()-this->height()/4, -1);
-    glTexCoord3i(1, 0, 1);glVertex3i(this->width()/2 - x, this->height()-this->height()/4, -1);
-    glTexCoord3i(1, 1, 1);glVertex3i(this->width()/2 - x, this->height(), -1);
-    glTexCoord3i(0, 1, 1);glVertex3i(0 - x, this->height(), -1);
+
+
+    glTexCoord3i(0, 0, 1);glVertex3i(x - xmove, this->height()-this->height()/4, -1);
+    glTexCoord3i(1, 0, 1);glVertex3i(x + w - xmove, this->height()-this->height()/4, -1);
+    glTexCoord3i(1, 1, 1);glVertex3i(x + w - xmove, this->height(), -1);
+    glTexCoord3i(0, 1, 1);glVertex3i(x - xmove, this->height(), -1);
 
     glEnd();
     glDisable(GL_TEXTURE_2D);
