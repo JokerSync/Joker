@@ -12,8 +12,8 @@
 TestSDLOpenGLWidget::TestSDLOpenGLWidget(QWidget *parent)
     : PhGLWidget( parent, "Premier affichage de dessin avec OpenGL et Qt")
 {
-    x = 5;
-    y = 0;
+
+    x = this->width();
 }
 
 GLuint createTextureFromSurface(SDL_Surface * surface)
@@ -64,7 +64,7 @@ GLuint createTextureFromSurface(SDL_Surface * surface)
                   textureFormat, GL_UNSIGNED_BYTE, surface->pixels );
 
 //    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-  //  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -74,10 +74,9 @@ GLuint createTextureFromSurface(SDL_Surface * surface)
 
 void TestSDLOpenGLWidget::initializeGL()
 {
-    glClearColor(.5,.5,.5,0); 	//Background color RGBA
+    glClearColor(.90,.90,.90,1.0); 	//Background color RGBA
     glEnable(GL_DEPTH_TEST); 	//Activate the depth test
     glEnable(GL_TEXTURE_2D); 	//Activate the texturing
-
 
     // Initialize with a simple buffer
     GLubyte inlineBuffer[16] =
@@ -115,13 +114,13 @@ void TestSDLOpenGLWidget::initializeGL()
 
         // Initialize SDL_TTF :
         if (TTF_Init() == 0){;
-            SDL_Color textColor={ 255, 0, 0, 0 };
+            SDL_Color textColor={ 0, 0, 0, 0 };
             // Create a font:
             TTF_Font *font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 100);
             if (font != NULL)
             {
                 // Create a surface from a string:
-                surface = TTF_RenderText_Blended(font, "Some random text", textColor);
+                surface = TTF_RenderText_Blended(font, "Once upon a time...", textColor);
 
                 // Create a texture from this surface
                 if(surface != NULL)
@@ -137,42 +136,19 @@ void TestSDLOpenGLWidget::initializeGL()
 
 void TestSDLOpenGLWidget::paintGL()
 {
-    if (x < -5)
-        x = 5;
-    if (x > 5)
-        x = -5;
-    if (y < -5)
-        y = 5;
-    if (y > 5)
-        y = -5;
+    if (x > this->width())
+        x = 0;
+    qDebug() << QString::number(x);
 
     if (move){
         x += xdelta;
-        y += ydelta;
     }
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-   // glTranslatef(x,y,-99);
-
-    glBindTexture(GL_TEXTURE_2D, textures[2]);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
-
-    glEnable(GL_TEXTURE_2D);
-    glBegin(GL_QUADS); 	//Begining the cube's drawing
-
-    glTexCoord2i(0, 0);glVertex2i(0, this->height()-this->height()/4);
-    glTexCoord2i(1, 0);glVertex2i(this->width()/3, this->height()-this->height()/4);
-    glTexCoord2i(1, 1);glVertex2i(this->width()/3, this->height());
-    glTexCoord2i(0, 1);glVertex2i(0, this->height());
-
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
-
+    // rythmo strip
     for (int i = 1; i<=6; i++)
     {
         glBindTexture(GL_TEXTURE_2D, textures[1]);
@@ -183,16 +159,31 @@ void TestSDLOpenGLWidget::paintGL()
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS); 	//Begining the cube's drawing
 
-        glTexCoord2i(0, 0);glVertex2i(0, this->height()-this->height()/4);
-        glTexCoord2i(1, 0);glVertex2i(i * this->width()/6, this->height()-this->height()/4);
-        glTexCoord2i(1, 1);glVertex2i(i * this->width()/6, this->height());
-        glTexCoord2i(0, 1);glVertex2i(0, this->height());
+        glTexCoord3i(0, 0, 1);glVertex3i(0, this->height()-this->height()/4, -2);
+        glTexCoord3i(1, 0, 1);glVertex3i(i * this->width()/6, this->height()-this->height()/4, -2);
+        glTexCoord3i(1, 1, 1);glVertex3i(i * this->width()/6, this->height(), -2);
+        glTexCoord3i(0, 1, 1);glVertex3i(0, this->height(), -2);
 
         glEnd();
         glDisable(GL_TEXTURE_2D);
     }
 
 
+    // Text texture
+    glBindTexture(GL_TEXTURE_2D, textures[2]);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_TEXTURE_2D);
+    glBegin(GL_QUADS); 	//Begining the cube's drawing
+
+    glTexCoord3i(0, 0, 1);glVertex3i(0 - x, this->height()-this->height()/4, -1);
+    glTexCoord3i(1, 0, 1);glVertex3i(this->width()/2 - x, this->height()-this->height()/4, -1);
+    glTexCoord3i(1, 1, 1);glVertex3i(this->width()/2 - x, this->height(), -1);
+    glTexCoord3i(0, 1, 1);glVertex3i(0 - x, this->height(), -1);
+
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
 
     /*
 
