@@ -8,7 +8,6 @@
 
 #include "PhTools/memorytool.h"
 
-
 TextTestWindow::TextTestWindow(QWidget *parent)
     : PhGraphicView( parent, "Premier affichage de dessin avec OpenGL et Qt")
 {
@@ -116,7 +115,7 @@ void TextTestWindow::initializeGL()
         if (TTF_Init() == 0){;
             SDL_Color textColor={ 230, 0, 0, 0 };
             // Create a font:
-            TTF_Font *font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 100);
+            TTF_Font *font = TTF_OpenFont(":/fonts/data/zoinks.ttf", 100);
             if (font != NULL)
             {
                 // Create a surface from a string:
