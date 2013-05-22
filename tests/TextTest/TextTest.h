@@ -8,11 +8,11 @@
 
 
 
-class TestSDLOpenGLWidget : public PhGLWidget
+class TextTest : public PhGLWidget
 {
     Q_OBJECT
 public:
-    explicit TestSDLOpenGLWidget(QWidget *parent = 0);
+    explicit TextTest(QWidget *parent = 0);
     void initializeGL();
     void paintGL();
 

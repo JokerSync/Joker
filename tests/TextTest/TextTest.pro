@@ -3,21 +3,21 @@ QT		 += opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = OpenGLTest
+TARGET = TextTest
 TEMPLATE = app
 
 
 SOURCES += \
 	main.cpp\
     SDLMain.cpp \
-    TestSDLOpenGLWidget.cpp \
 	../../libs/PhGraphic/phglwidget.cpp\
-	../../libs/PhTools/memorytool.cpp
+	../../libs/PhTools/memorytool.cpp \
+    TextTest.cpp
 
 HEADERS  += \
-    TestSDLOpenGLWidget.h \
 	../../libs/PhGraphic/phglwidget.h \
-	../../libs/PhTools/memorytool.h
+	../../libs/PhTools/memorytool.h \
+    TextTest.h
 
 
 FORMS    += mainwindow.ui
