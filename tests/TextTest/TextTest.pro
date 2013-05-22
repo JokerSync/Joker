@@ -11,13 +11,13 @@ SOURCES += \
 	main.cpp\
     SDLMain.cpp \
 	../../libs/PhTools/memorytool.cpp \
-    TextTest.cpp \
-    ../../libs/PhGraphic/PhGraphicView.cpp
+    ../../libs/PhGraphic/PhGraphicView.cpp \
+    TextTestWindow.cpp
 
 HEADERS  += \
 	../../libs/PhTools/memorytool.h \
-    TextTest.h \
-    ../../libs/PhGraphic/PhGraphicView.h
+    ../../libs/PhGraphic/PhGraphicView.h \
+    TextTestWindow.h
 
 
 FORMS    += mainwindow.ui

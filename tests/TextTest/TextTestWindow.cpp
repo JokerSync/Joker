@@ -1,4 +1,4 @@
-#include "TextTest.h"
+#include "TextTestWindow.h"
 
 #include "glu.h"
 
@@ -9,7 +9,7 @@
 #include "PhTools/memorytool.h"
 
 
-TextTest::TextTest(QWidget *parent)
+TextTestWindow::TextTestWindow(QWidget *parent)
     : PhGraphicView( parent, "Premier affichage de dessin avec OpenGL et Qt")
 {
 
@@ -72,7 +72,7 @@ GLuint createTextureFromSurface(SDL_Surface * surface)
     return texture;
 }
 
-void TextTest::initializeGL()
+void TextTestWindow::initializeGL()
 {
     glClearColor(.90,.90,.90,1.0); 	//Background color RGBA
     glEnable(GL_DEPTH_TEST); 	//Activate the depth test
@@ -134,7 +134,7 @@ void TextTest::initializeGL()
     }
 }
 
-void TextTest::paintGL()
+void TextTestWindow::paintGL()
 {
     int x = this->width();
     int w = this->width() / 2;

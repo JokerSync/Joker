@@ -8,11 +8,11 @@
 
 
 
-class TextTest : public PhGraphicView
+class TextTestWindow : public PhGraphicView
 {
     Q_OBJECT
 public:
-    explicit TextTest(QWidget *parent = 0);
+    explicit TextTestWindow(QWidget *parent = 0);
     void initializeGL();
     void paintGL();
 
