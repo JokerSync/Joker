@@ -19,15 +19,15 @@ HEADERS  += \
     ../../libs/PhGraphic/PhGraphicView.h \
     TextTestWindow.h
 
+RESOURCES += \
+	../../data.qrc
 
 FORMS    += mainwindow.ui
 
 LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 
 INCLUDEPATH += /Library/Frameworks/ \
-			../../libs
+			../../libs \
 
 DEPENDPATH += /Library/Frameworks
-
-
 
