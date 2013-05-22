@@ -114,7 +114,7 @@ void TextTestWindow::initializeGL()
 
         // Initialize SDL_TTF :
         if (TTF_Init() == 0){;
-            SDL_Color textColor={ 0, 0, 0, 0 };
+            SDL_Color textColor={ 230, 0, 0, 0 };
             // Create a font:
             TTF_Font *font = TTF_OpenFont("../../../../../data/Bedizen.ttf", 100);
             if (font != NULL)
