@@ -10,7 +10,7 @@
 
 
 TextTest::TextTest(QWidget *parent)
-    : PhGLWidget( parent, "Premier affichage de dessin avec OpenGL et Qt")
+    : PhGraphicView( parent, "Premier affichage de dessin avec OpenGL et Qt")
 {
 
     xmove = this->width() * 1.5;

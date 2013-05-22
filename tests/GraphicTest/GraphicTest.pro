@@ -14,12 +14,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-	../../libs/PhGraphic/phglwidget.cpp \
-    testphglwidget.cpp
+	../../libs/PhGraphic/PhGraphicView.cpp \
+    GraphicTestWindow.cpp
 
 HEADERS  += \
-	../../libs/PhGraphic/phglwidget.h \
-	testphglwidget.h
+	../../libs/PhGraphic/PhGraphicView.h \
+    GraphicTestWindow.h
 
 
 FORMS    += mainwindow.ui

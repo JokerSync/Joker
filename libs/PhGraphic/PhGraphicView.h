@@ -10,11 +10,11 @@
 #include <gl.h>
 #include <glu.h>
 
-class PhGLWidget : public QGLWidget
+class PhGraphicView : public QGLWidget
 {
     Q_OBJECT
 public:
-    explicit PhGLWidget(QWidget *parent = 0, QString name = "");
+    explicit PhGraphicView(QWidget *parent = 0, QString name = "");
     virtual void keyPressEvent( QKeyEvent *keyEvent );
     virtual void initializeGL() = 0;
     virtual void paintGL() = 0;

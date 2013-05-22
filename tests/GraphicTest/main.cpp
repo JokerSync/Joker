@@ -1,5 +1,5 @@
 
-#include "testphglwidget.h"
+#include "GraphicTestWindow.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +14,7 @@ int main( int argc, char* argv[] )
 {
     QApplication a(argc, argv);
 
-    TestPhGLWidget w ;
+    GraphicTestWindow w ;
     w.show();
     return a.exec();
 
