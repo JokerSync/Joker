@@ -10,14 +10,14 @@ TEMPLATE = app
 SOURCES += \
 	main.cpp\
     SDLMain.cpp \
-	../../libs/PhGraphic/phglwidget.cpp\
 	../../libs/PhTools/memorytool.cpp \
-    TextTest.cpp
+    TextTest.cpp \
+    ../../libs/PhGraphic/PhGraphicView.cpp
 
 HEADERS  += \
-	../../libs/PhGraphic/phglwidget.h \
 	../../libs/PhTools/memorytool.h \
-    TextTest.h
+    TextTest.h \
+    ../../libs/PhGraphic/PhGraphicView.h
 
 
 FORMS    += mainwindow.ui

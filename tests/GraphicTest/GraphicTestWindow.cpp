@@ -1,13 +1,13 @@
-#include "testphglwidget.h"
+#include "GraphicTestWindow.h"
 #include "glu.h"
 
-TestPhGLWidget::TestPhGLWidget(QWidget *parent)
-    : PhGLWidget( parent, "Premier Polygone avec OpenGL et Qt")
+GraphicTestWindow::GraphicTestWindow(QWidget *parent)
+    : PhGraphicView( parent, "Premier Polygone avec OpenGL et Qt")
 {
     shouldRotate = true;
 }
 
-void TestPhGLWidget::initializeGL()
+void GraphicTestWindow::initializeGL()
 {
     /*
     // Ma tambouille
@@ -57,7 +57,7 @@ void TestPhGLWidget::initializeGL()
 
 }
 
-void TestPhGLWidget::resizeGL(int width, int height)
+void GraphicTestWindow::resizeGL(int width, int height)
 {
     if(height == 0)
         height = 1;
@@ -69,7 +69,7 @@ void TestPhGLWidget::resizeGL(int width, int height)
     glLoadIdentity();
 }
 
-void TestPhGLWidget::paintGL()
+void GraphicTestWindow::paintGL()
 {
     //    f_x += 0.3;
     //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -171,7 +171,7 @@ void TestPhGLWidget::paintGL()
 
 }
 
-void TestPhGLWidget::loadTexture(QString textureName)
+void GraphicTestWindow::loadTexture(QString textureName)
 {
     QImage qim_Texture;
     QImage qim_TempTexture;

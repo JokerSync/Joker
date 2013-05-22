@@ -1,14 +1,14 @@
 #ifndef MYWINDOW_H
 #define MYWINDOW_H
 
-#include "PhGraphic/phglwidget.h"
+#include "PhGraphic/PhGraphicView.h"
 #include "glu.h"
 #include "SDL_image/SDL_image.h"
 #include "SDL_ttf/SDL_ttf.h"
 
 
 
-class TextTest : public PhGLWidget
+class TextTest : public PhGraphicView
 {
     Q_OBJECT
 public:

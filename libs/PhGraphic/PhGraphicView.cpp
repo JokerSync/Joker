@@ -1,7 +1,7 @@
-#include "PhGLWidget.h"
+#include "PhGraphicView.h"
 
 
-PhGLWidget::PhGLWidget( QWidget *parent, QString name)
+PhGraphicView::PhGraphicView( QWidget *parent, QString name)
     : QGLWidget(parent)
 {
     move = true;
@@ -14,7 +14,7 @@ PhGLWidget::PhGLWidget( QWidget *parent, QString name)
     ydelta = 0.0;
 }
 
-void PhGLWidget::resizeGL(int width, int height)
+void PhGraphicView::resizeGL(int width, int height)
 {
     if(height == 0)
         height = 1;
@@ -27,7 +27,7 @@ void PhGLWidget::resizeGL(int width, int height)
     glLoadIdentity();
 }
 
-void PhGLWidget::keyPressEvent(QKeyEvent *keyEvent)
+void PhGraphicView::keyPressEvent(QKeyEvent *keyEvent)
 {
     switch(keyEvent->key())
     {
@@ -62,14 +62,14 @@ void PhGLWidget::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
-void PhGLWidget::onRefresh()
+void PhGraphicView::onRefresh()
 {
     if(qApp->hasPendingEvents()) // qApp is a global pointer to the application
         return;
     updateGL();
 }
 
-void PhGLWidget::toggleFullWindow()
+void PhGraphicView::toggleFullWindow()
 {
     if(b_Fullscreen)
     {
@@ -83,7 +83,7 @@ void PhGLWidget::toggleFullWindow()
     }
 }
 
-void PhGLWidget::toggleMouvement()
+void PhGraphicView::toggleMouvement()
 {
     if(move)
         move = false;
