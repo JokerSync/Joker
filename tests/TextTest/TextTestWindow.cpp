@@ -105,7 +105,7 @@ void TextTestWindow::initializeGL()
     // Initializing SDL library
     if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         //Create a surface from a file:
-        SDL_Surface *surface = IMG_Load("../../../../../../fond.jpg");
+        SDL_Surface *surface = IMG_Load("../Resources/img/rythmo-bg.png");
 
         // Create a texture from this surface
         if(surface != NULL)
@@ -115,7 +115,7 @@ void TextTestWindow::initializeGL()
         if (TTF_Init() == 0){;
             SDL_Color textColor={ 230, 0, 0, 0 };
             // Create a font:
-            TTF_Font *font = TTF_OpenFont(":/fonts/data/zoinks.ttf", 100);
+            TTF_Font *font = TTF_OpenFont("../Resources/fonts/zoinks.ttf", 100);
             if (font != NULL)
             {
                 // Create a surface from a string:
