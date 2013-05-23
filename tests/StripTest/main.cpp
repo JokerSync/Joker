@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 #include "phstripdoc.h"
-#include "PhStrip/phstring.h"
+#include "PhTools/PhString.h"
 
 int main(int argc, char *argv[])
 {

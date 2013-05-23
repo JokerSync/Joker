@@ -1,11 +1,12 @@
 #include "phstring.h"
 
-PhString::PhString(QString str)
+PhString::PhString(QString str) : QString(str)
 {
-    return str;
 }
 
+/*
 PhString::PhString(std::string str)
 {
     return QString(str);
 }
+*/
