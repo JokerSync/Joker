@@ -1,6 +1,10 @@
 #ifndef PHSTRIPDOC_H
 #define PHSTRIPDOC_H
 
+#include "PhStrip/phstring.h"
+#include "PhGraphic/phcolor.h"
+#include "PhSync/phtime.h"
+
 class PhStripDoc {
 
 public:
@@ -140,10 +144,12 @@ public:
         void setTitle(int title);
         PhTimeCode getVideoTimestamp();
         void setVideoTimestamp(PhTimeCode videoTimestamp);
-        String getVideoPath();
+        PhString getVideoPath();
         void setVideoPath(PhString videoPath);
         int getTimeScale();
         void setTimeScale(int timeScale);
     };
+
+
 };
 #endif // PHSTRIPDOC_H
