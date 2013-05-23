@@ -16,7 +16,15 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    phstripdoc.cpp
+    phstripdoc.cpp \
+    ../../libs/PhStrip/phstring.cpp \
+    ../../libs/PhGraphic/phcolor.cpp \
+    ../../libs/PhSync/phtime.cpp
 
 HEADERS += \
-    phstripdoc.h
+    phstripdoc.h \
+    ../../libs/PhStrip/phstring.h \
+    ../../libs/PhGraphic/phcolor.h \
+    ../../libs/PhSync/phtime.h
+
+INCLUDEPATH += 	../../libs \

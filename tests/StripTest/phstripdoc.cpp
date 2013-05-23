@@ -13,6 +13,7 @@ ______ _     _____ _        _      ______
 
 PhStripDoc::PhStripDoc()
 {
+
 }
 
 void PhStripDoc::PhStripDoc::getTitle()
@@ -31,7 +32,7 @@ void PhStripDoc::PhStripDoc::setVideoTimestamp(PhTimeCode videoTimestamp)
 {
 }
 
-String PhStripDoc::PhStripDoc::getVideoPath()
+PhString PhStripDoc::PhStripDoc::getVideoPath()
 {
 }
 
