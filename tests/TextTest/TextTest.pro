@@ -4,6 +4,7 @@ QT		 += opengl
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = TextTest
+DESTDIR = ./
 TEMPLATE = app
 
 
@@ -19,9 +20,6 @@ HEADERS  += \
     ../../libs/PhGraphic/PhGraphicView.h \
     TextTestWindow.h
 
-RESOURCES += \
-	../../data.qrc
-
 FORMS    += mainwindow.ui
 
 LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
@@ -31,3 +29,9 @@ INCLUDEPATH += /Library/Frameworks/ \
 
 DEPENDPATH += /Library/Frameworks
 
+
+macx {
+	copyfiles.commands = cp -r ../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/
+}
+QMAKE_EXTRA_TARGETS += copyfiles
+POST_TARGETDEPS += copyfiles
