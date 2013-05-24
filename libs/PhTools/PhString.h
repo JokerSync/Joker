@@ -3,11 +3,12 @@
 
 #include <QString>
 
-class PhString : QString
-{
-public:
-    PhString(QString str);
-//    PhString(std::string str);
-};
+#define PhString QString
+
+//class PhString : QString
+//{
+//public:
+//    PhString(QString str);
+//};
 
 #endif // PHSTRING_H

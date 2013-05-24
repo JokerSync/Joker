@@ -9,15 +9,15 @@
 class PhStripCut : PhStripObject {
 
 public:
-
-    PhStripCut();
-    PhStripCut(PhStripCut::CrossFade type);
     /**
      * Describes the type of the cut.
      */
     enum PhCutType {
         Simple, FadeIn, FadeOut, CrossFade
     };
+
+    PhStripCut();
+    PhStripCut(PhStripCut::PhCutType type);
 
 
 private:

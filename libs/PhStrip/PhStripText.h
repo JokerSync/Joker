@@ -2,21 +2,25 @@
 #define PHSTRIPTEXT_H
 
 #include "phstripdoc.h"
-     /**
-     * Sentence or part of a sentence of a PhPeople with synchronization information.
-     */
+
+/**
+ * Sentence or part of a sentence of a PhPeople with synchronization information.
+ */
 class PhStripText : PhStripObject {
 
-private:
-    /**
-         * Indicate the end of the PhText. The text content is stretch between timeIn : PhTime and timeOut : PhTime
-         */
-    PhTime timeOut;
-    /**
-         * Text string of Sentence or part of a sentence.
-         */
-    PhString content;
-};
+public:
 
+    PhStripText();
+
+private:
+/**
+ * Indicate the end of the PhText. The text content is stretch between timeIn : PhTime and timeOut : PhTime
+ */
+    PhTime _timeOut;
+/**
+ * Text string of Sentence or part of a sentence.
+ */
+    PhString _content;
+};
 
 #endif // PHSTRIPTEXT_H
