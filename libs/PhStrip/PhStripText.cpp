@@ -1,5 +1,8 @@
 #include "PhStripText.h"
 
-PhStripText::PhStripText()
+
+PhStripText::PhStripText() : PhStripObject()
 {
+    _timeOut = 0;
+    _content = "";
 }

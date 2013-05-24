@@ -1,5 +1,5 @@
 #include "phtime.h"
 
-PhTime::PhTime()
-{
-}
+//PhTime::PhTime()
+//{
+//}

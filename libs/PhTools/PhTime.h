@@ -5,12 +5,14 @@
 /**
  * @brief The PhTime class represents a time value.
  */
-class PhTime
-{
-public:
-    /**
-     * @brief PhTime constructor
-     */
-    PhTime();
-};
+#define PhTime int
+
+//class PhTime
+//{
+//public:
+//    /**
+//     * @brief PhTime constructor
+//     */
+//    PhTime();
+//};
 #endif // PHTIME_H
