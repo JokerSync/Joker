@@ -1,6 +1,7 @@
 #include "PhPeople.h"
 
-PhPeople::PhPeople()
+PhPeople::PhPeople(PhString name, PhColor color)
 {
-
+    _name = name;
+    _color = color;
 }

@@ -1,10 +1,11 @@
 #ifndef PHTIMECODE_H
 #define PHTIMECODE_H
 
-class PhTimeCode
-{
-public:
-    PhTimeCode();
-};
+#define PhTimeCode float
+//class PhTimeCode
+//{
+//public:
+//    PhTimeCode();
+//};
 
 #endif // PHTIMECODE_H

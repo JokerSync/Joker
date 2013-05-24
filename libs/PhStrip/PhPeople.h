@@ -14,7 +14,7 @@ public:
     /**
      * @brief Default constructor
      */
-    PhPeople();
+    PhPeople(PhString name, PhColor color);
     /**
      * @brief Get the name
      * @return a PhString
@@ -40,11 +40,11 @@ private:
     /**
      * Name of the people
      */
-    PhString name;
+    PhString _name;
     /**
      * Color of the people's text on the strip.
      */
-    PhColor color;
+    PhColor _color;
 
 };
 
