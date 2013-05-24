@@ -1,5 +1,5 @@
 #include "PhTimeCode.h"
 
-PhTimeCode::PhTimeCode()
-{
-}
+//PhTimeCode::PhTimeCode()
+//{
+//}

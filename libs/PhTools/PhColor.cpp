@@ -1,5 +1,6 @@
-#include "phcolor.h"
-
+#include "PhColor.h"
+/*
 PhColor::PhColor()
 {
 }
+*/
