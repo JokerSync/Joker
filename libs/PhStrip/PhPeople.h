@@ -14,6 +14,12 @@ public:
     /**
      * @brief Default constructor
      */
+    PhPeople();
+    /**
+     * @brief PhPeople
+     * @param name
+     * @param color
+     */
     PhPeople(PhString name, PhColor color);
     /**
      * @brief Get the name
