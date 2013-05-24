@@ -97,13 +97,13 @@ int main(int argc, char **argv)
     SDL_WM_SetCaption( "TTF's just the best", NULL );
 
     // Create a surface from picture:
-    const char * imagePath = "../../../../../data/look.png";
+    const char * imagePath = "../../../../../data/img/look.png";
     image = load_image( imagePath );
 
     if( image == NULL )
     {
         qDebug("Error loading %s", imagePath);
-        return false;
+        return 1;
     }
 
     // Display the picture:
@@ -113,13 +113,13 @@ int main(int argc, char **argv)
     // Initialize TTF :
     if( TTF_Init() == -1 ) {
         qDebug() << "TTF error.";
-        return false;
+        return 2;
     }
 
     //Create a font
-    TTF_Font *font = TTF_OpenFont( "../../../../../data/Bedizen.ttf", 100 );
+    TTF_Font *font = TTF_OpenFont( "../../../../../data/fonts/Bedizen.ttf", 100 );
     if (font == NULL)
-        return false;
+        return 3;
 
     //Font's color
     SDL_Color textColor = { 255, 255, 0, 1 };
@@ -139,9 +139,9 @@ int main(int argc, char **argv)
 
     //Update the screen
     if( SDL_Flip(screen) == -1 )
-        return 1;
+        return -1;
 
-    bool quit = true;
+    bool quit = false;
 
     //While the user hasn't quit
     while(quit == false) {

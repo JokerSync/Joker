@@ -1,10 +1,3 @@
-/*   SDLMain.m - main entry point for our Cocoa-ized SDL app
-       Initial Version: Darrell Walisser <dwaliss1@purdue.edu>
-       Non-NIB-Code & other changes: Max Horn <max@quendi.de>
-
-    Feel free to customize this file to suit your needs
-*/
-
 #include "SDL/SDL.h"
 #include "SDLMain.h"
 #include <sys/param.h> /* for MAXPATHLEN */
@@ -13,9 +6,6 @@
 /* For some reaon, Apple removed setAppleMenu from the headers in 10.4,
  but the method still is there and works. To avoid warnings, we declare
  it ourselves here. */
-@interface NSApplication(SDL_Missing_Methods)
-- (void)setAppleMenu:(NSMenu *)menu;
-@end
 
 /* Use this flag to determine whether we use SDLMain.nib or not */
 #define		SDL_USE_NIB_FILE	0
@@ -50,19 +40,13 @@ static NSString *getApplicationName(void)
     dict = (const NSDictionary *)CFBundleGetInfoDictionary(CFBundleGetMainBundle());
     if (dict)
         appName = [dict objectForKey: @"CFBundleName"];
-    
+
     if (![appName length])
         appName = [[NSProcessInfo processInfo] processName];
 
     return appName;
 }
 
-#if SDL_USE_NIB_FILE
-/* A helper category for NSString */
-@interface NSString (ReplaceSubString)
-- (NSString *)stringByReplacingRange:(NSRange)aRange with:(NSString *)aString;
-@end
-#endif
 
 @interface NSApplication (SDLApplication)
 @end
@@ -97,31 +81,6 @@ static NSString *getApplicationName(void)
     }
 }
 
-#if SDL_USE_NIB_FILE
-
-/* Fix menu to contain the real app name instead of "SDL App" */
-- (void)fixMenu:(NSMenu *)aMenu withAppName:(NSString *)appName
-{
-    NSRange aRange;
-    NSEnumerator *enumerator;
-    NSMenuItem *menuItem;
-
-    aRange = [[aMenu title] rangeOfString:@"SDL App"];
-    if (aRange.length != 0)
-        [aMenu setTitle: [[aMenu title] stringByReplacingRange:aRange with:appName]];
-
-    enumerator = [[aMenu itemArray] objectEnumerator];
-    while ((menuItem = [enumerator nextObject]))
-    {
-        aRange = [[menuItem title] rangeOfString:@"SDL App"];
-        if (aRange.length != 0)
-            [menuItem setTitle: [[menuItem title] stringByReplacingRange:aRange with:appName]];
-        if ([menuItem hasSubmenu])
-            [self fixMenu:[menuItem submenu] withAppName:appName];
-    }
-}
-
-#else
 
 static void setApplicationMenu(void)
 {
@@ -230,56 +189,6 @@ static void CustomApplicationMain (int argc, char **argv)
     [pool release];
 }
 
-#endif
-
-
-/*
- * Catch document open requests...this lets us notice files when the app
- *  was launched by double-clicking a document, or when a document was
- *  dragged/dropped on the app's icon. You need to have a
- *  CFBundleDocumentsType section in your Info.plist to get this message,
- *  apparently.
- *
- * Files are added to gArgv, so to the app, they'll look like command line
- *  arguments. Previously, apps launched from the finder had nothing but
- *  an argv[0].
- *
- * This message may be received multiple times to open several docs on launch.
- *
- * This message is ignored once the app's mainline has been called.
- */
-- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename
-{
-    const char *temparg;
-    size_t arglen;
-    char *arg;
-    char **newargv;
-
-    if (!gFinderLaunch)  /* MacOS is passing command line args. */
-        return FALSE;
-
-    if (gCalledAppMainline)  /* app has started, ignore this document. */
-        return FALSE;
-
-    temparg = [filename UTF8String];
-    arglen = SDL_strlen(temparg) + 1;
-    arg = (char *) SDL_malloc(arglen);
-    if (arg == NULL)
-        return FALSE;
-
-    newargv = (char **) realloc(gArgv, sizeof (char *) * (gArgc + 2));
-    if (newargv == NULL)
-    {
-        SDL_free(arg);
-        return FALSE;
-    }
-    gArgv = newargv;
-
-    SDL_strlcpy(arg, temparg, arglen);
-    gArgv[gArgc++] = arg;
-    gArgv[gArgc] = NULL;
-    return TRUE;
-}
 
 
 /* Called when the internal event loop has just started running */
@@ -289,11 +198,6 @@ static void CustomApplicationMain (int argc, char **argv)
 
     /* Set the working directory to the .app's parent directory */
     [self setupWorkingDirectory:gFinderLaunch];
-
-#if SDL_USE_NIB_FILE
-    /* Set the main menu to contain the real app name instead of "SDL App" */
-    [self fixMenu:[NSApp mainMenu] withAppName:getApplicationName()];
-#endif
 
     /* Hand off to main application code */
     gCalledAppMainline = TRUE;
