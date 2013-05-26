@@ -60,19 +60,22 @@ bool PhStripDoc::openDetX(QString filename)
     //Find the actors
     QDomNodeList charList = DetX->elementsByTagName("role");
 
-    PhPeople *actorsTemp = new PhPeople[3];
+    PhPeople *_actors = new PhPeople[charList.length()];
     for (int i=0; i < charList.length(); i++){
-        //_actorsTemp[_actors]
-//        _actors.push_back(PhPeople(charList.at(i).toElement().attribute("name"),
-//                                   charList.at(i).toElement().attribute("color")));
-        //_actors.push_back();
+        _actors[i] = PhPeople(charList.at(i).toElement().attribute("name"),
+                              charList.at(i).toElement().attribute("color"));
     }
+
 
     qDebug() << "Title : " << _title;
     qDebug() << "VideoPath : " << _videoPath;
     qDebug() << "VideoTimeStamp : " << _videoTimestamp;
     qDebug() << "FrameRate : " << _fps;
     qDebug() << "DropFrame : " << _drop;
+    qDebug() << "characters list:";
+    for (int i=0; i < charList.length(); i++){
+        qDebug() << "name : " << _actors[i].getName() << " color: " << _actors[i].getColor() ;
+    }
     return true;
 }
 
