@@ -6,7 +6,6 @@
 PhStripDoc::PhStripDoc(QString filename)
 {
     openDetX(filename);
-    exit(0);
 }
 
 
@@ -55,28 +54,80 @@ bool PhStripDoc::openDetX(QString filename)
     /*
     _timeScale;
     */
-    //PhPeople *test = new PhPeople("Name","Color");
 
     //Find the actors
     QDomNodeList charList = DetX->elementsByTagName("role");
+    for (int i=0; i < charList.length(); i++)
+    {
+        QDomElement chara = charList.at(i).toElement();
+        PhPeople *people = new PhPeople(chara.attribute("name"), chara.attribute("color"));
 
-    PhPeople *_actors = new PhPeople[charList.length()];
-    for (int i=0; i < charList.length(); i++){
-        _actors[i] = PhPeople(charList.at(i).toElement().attribute("name"),
-                              charList.at(i).toElement().attribute("color"));
+        //Currently using id as key instead of name
+        _actors[chara.attribute("id")] = people;
+    }
+
+    //Find the cut list
+    QDomNodeList shotList = DetX->elementsByTagName("shot");
+    for (int i=0; i < shotList.length(); i++)
+    {
+        _cuts.push_front(new PhStripCut(PhStripCut::Simple , i));
+    }
+
+    //TODO
+    //Find the text list
+    QDomNodeList lineList = DetX->elementsByTagName("line");
+    for (int i=0; i < lineList.length(); i++)
+    {
+        QDomNode currentLine = lineList.at(i);
+        PhString id = currentLine.toElement().attribute("role");
+        for(int j = 0; j < lineList.at(0).childNodes().length(); j++){
+            if(currentLine.childNodes().at(j).nodeName() == "text"){
+                if (!currentLine.childNodes().at(j).nextSibling().isNull()){
+                    _texts.push_back(new PhStripText(_actors[id],
+                                                     currentLine.childNodes().at(j).toElement().text(),
+                                                     //currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
+                                                     //currentLine.childNodes().at(j+1).toElement().attribute("timecode")));
+                                                     0,1));
+                }
+                else
+                {
+                    _texts.push_back(new PhStripText(_actors[id],
+                                                     currentLine.childNodes().at(j).toElement().text(),
+                                                     //currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
+                                                     0,NULL));
+                }
+            }
+        }
     }
 
 
-    qDebug() << "Title : " << _title;
-    qDebug() << "VideoPath : " << _videoPath;
-    qDebug() << "VideoTimeStamp : " << _videoTimestamp;
-    qDebug() << "FrameRate : " << _fps;
-    qDebug() << "DropFrame : " << _drop;
-    qDebug() << "characters list:";
-    for (int i=0; i < charList.length(); i++){
-        qDebug() << "name : " << _actors[i].getName() << " color: " << _actors[i].getColor() ;
-    }
+
+
+
+
     return true;
+}
+
+PhString PhStripDoc::getVideoPath(){
+    return _videoPath;
+}
+PhString PhStripDoc::getTitle(){
+    return _title;
+}
+
+PhTimeCode PhStripDoc::getVideoTimestamp(){
+    return _videoTimestamp;
+}
+
+float PhStripDoc::getFps()
+{
+    return _fps;
+}
+
+
+bool PhStripDoc::getDrop()
+{
+    return _drop;
 }
 
 /*
@@ -115,3 +166,4 @@ void Xml_Dom::showScript(){
     }
 }
 */
+

@@ -1,16 +1,19 @@
 #ifndef PHSTRIPTEXT_H
 #define PHSTRIPTEXT_H
 
-#include "phstripdoc.h"
+#include "PhTools/PhString.h"
+
+#include "PhPeople.h"
+#include "PhStrip/PhStripObject.h"
 
 /**
  * Sentence or part of a sentence of a PhPeople with synchronization information.
  */
-class PhStripText : PhStripObject {
+class PhStripText : public PhStripObject {
 
 public:
 
-    PhStripText();
+    PhStripText(PhPeople * people, PhString content, PhTime timeIn, PhTime timeOut);
 
 private:
 /**
@@ -21,6 +24,11 @@ private:
  * Text string of Sentence or part of a sentence.
  */
     PhString _content;
+
+    /**
+     * Reference to the PhPeople who is affected to the PhStripText
+     */
+    PhPeople *_people;
 };
 
 #endif // PHSTRIPTEXT_H

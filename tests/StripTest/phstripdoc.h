@@ -1,6 +1,7 @@
 #ifndef PHSTRIPDOC_H
 #define PHSTRIPDOC_H
 
+
 #include <QDebug>
 #include <QtXml>
 
@@ -14,6 +15,8 @@
 #include "PhStrip/PhStripLoop.h"
 #include "PhStrip/PhStripObject.h"
 #include "PhStrip/PhStripText.h"
+
+
 
 class PhStripDoc {
 private:
@@ -47,21 +50,38 @@ private:
     bool _drop;
 
     /**
-     * List of PhPeople from the PhStripDoc
+     * List of PhPeople from the file
      */
-    PhPeople _actors[0];
+    QMap<PhString, PhPeople *> _actors;
+
+    /**
+     * List of PhStripText from the file
+     */
+    QList<PhStripText *> _texts;
+
+    /**
+     * List of PhStripCut form the file
+     */
+     QList<PhStripCut *> _cuts;
+
 
 public:
     PhStripDoc(PhString filename);
-    void getTitle();
-    void setTitle(PhString _title);
+
+    PhString getTitle();
     PhTimeCode getVideoTimestamp();
-    void setVideoTimestamp(PhTimeCode videoTimestamp);
     PhString getVideoPath();
-    void setVideoPath(PhString videoPath);
     int getTimeScale();
+    float getFps();
+    bool getDrop();
+
+    void setTitle(PhString _title);
+    void setVideoTimestamp(PhTimeCode videoTimestamp);
+    void setVideoPath(PhString videoPath);
     void setTimeScale(int timeScale);
+
     bool openDetX(PhString filename);
+
 
 
 };

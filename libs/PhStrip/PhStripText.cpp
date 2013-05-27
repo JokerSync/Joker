@@ -1,8 +1,9 @@
 #include "PhStripText.h"
 
 
-PhStripText::PhStripText() : PhStripObject()
+PhStripText::PhStripText(PhPeople *people, QString content, int timeIn, int timeOut) : PhStripObject(timeIn)
 {
-    _timeOut = 0;
-    _content = "";
+    _people = people;
+    _timeOut = timeOut;
+    _content = content ;
 }
