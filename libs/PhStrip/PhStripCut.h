@@ -6,7 +6,7 @@
 /**
  * A cut is a change in the video from one shot to another. It can be simple (one frame change) or progressive (fade).
  */
-class PhStripCut : PhStripObject {
+class PhStripCut : public PhStripObject {
 
 public:
     /**
@@ -17,10 +17,13 @@ public:
     };
 
     PhStripCut();
-    PhStripCut(PhStripCut::PhCutType type);
+    PhStripCut(PhStripCut::PhCutType type, PhTime time);
 
 
 private:
+    /**
+     * Type of cut.
+     */
     PhCutType _type;
 
 };
