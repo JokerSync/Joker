@@ -100,11 +100,6 @@ bool PhStripDoc::openDetX(QString filename)
         }
     }
 
-
-
-
-
-
     return true;
 }
 
@@ -128,6 +123,11 @@ float PhStripDoc::getFps()
 bool PhStripDoc::getDrop()
 {
     return _drop;
+}
+
+QMap<QString, PhPeople *> PhStripDoc::getActors()
+{
+    return _actors;
 }
 
 /*
