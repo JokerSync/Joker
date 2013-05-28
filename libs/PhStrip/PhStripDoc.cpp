@@ -1,6 +1,4 @@
-
-
-#include "phstripdoc.h"
+#include "PhStripDoc.h"
 
 
 PhStripDoc::PhStripDoc(QString filename)
@@ -23,7 +21,7 @@ bool PhStripDoc::openDetX(QString filename)
     {
         xml_doc.close();
         qDebug() << ("Le document XML n'a pas pu être attribué à l'objet QDomDocument.");
-        return true;
+        return false;
     }
     else{
         qDebug() << ("The file \"" + filename + "\" is now open.");
@@ -85,14 +83,16 @@ bool PhStripDoc::openDetX(QString filename)
                                                      currentLine.childNodes().at(j).toElement().text(),
                                                      //currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
                                                      //currentLine.childNodes().at(j+1).toElement().attribute("timecode")));
-                                                     0,1));
+                                                     0,1,
+                                                     currentLine.toElement().attribute("track").toInt()));
                 }
                 else
                 {
                     _texts.push_back(new PhStripText(_actors[id],
                                                      currentLine.childNodes().at(j).toElement().text(),
                                                      //currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
-                                                     0,NULL));
+                                                     0,NULL,
+                                                     currentLine.toElement().attribute("track").toInt()));
                 }
             }
         }
@@ -127,6 +127,14 @@ QMap<QString, PhPeople *> PhStripDoc::getActors()
 {
     return _actors;
 }
+
+
+
+QList<PhStripText *> PhStripDoc::getTexts()
+{
+    return _texts;
+}
+
 
 /*
 void Xml_Dom::statistics(){
@@ -164,4 +172,3 @@ void Xml_Dom::showScript(){
     }
 }
 */
-

@@ -13,8 +13,10 @@ class PhStripText : public PhStripObject {
 
 public:
 
-    PhStripText(PhPeople * people, PhString content, PhTime timeIn, PhTime timeOut);
+    PhStripText(PhPeople * people, PhString content, PhTime timeIn, PhTime timeOut, int track);
     PhString getContent();
+    PhPeople getPeople();
+    int getTrack();
 
 private:
 /**
@@ -30,6 +32,8 @@ private:
      * Reference to the PhPeople who is affected to the PhStripText
      */
     PhPeople *_people;
+
+    int _track;
 };
 
 #endif // PHSTRIPTEXT_H
