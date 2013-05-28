@@ -6,12 +6,17 @@
 
 int main(int argc, char *argv[])
 {
+    if (argc < 2){
+        qDebug() << "Please specify a file";
+        return -1;
+    }
     QTime *beg = new QTime();
     beg->start();
 
 
     QCoreApplication a(argc, argv);
-    PhStripDoc doc("/Users/thomas/Downloads/Tunnel_Rats.detx");
+    qDebug() << argv[1];
+    PhStripDoc doc(argv[1]);
 
 
     // Display infos about file

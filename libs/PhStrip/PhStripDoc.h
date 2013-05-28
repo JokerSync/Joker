@@ -75,6 +75,7 @@ public:
     float getFps();
     bool getDrop();
     QMap<PhString, PhPeople *> getActors();
+    QList<PhStripText *> getTexts();
 
     void setTitle(PhString _title);
     void setVideoTimestamp(PhTimeCode videoTimestamp);
