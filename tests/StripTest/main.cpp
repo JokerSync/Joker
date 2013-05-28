@@ -1,7 +1,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QTime>
-#include "phstripdoc.h"
+#include "PhStrip/PhStripDoc.h"
 #include "PhTools/PhString.h"
 
 int main(int argc, char *argv[])
