@@ -7,3 +7,8 @@ PhStripText::PhStripText(PhPeople *people, QString content, int timeIn, int time
     _timeOut = timeOut;
     _content = content ;
 }
+
+PhString PhStripText::getContent()
+{
+    return _content;
+}

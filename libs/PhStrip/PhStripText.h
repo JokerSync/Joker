@@ -14,6 +14,7 @@ class PhStripText : public PhStripObject {
 public:
 
     PhStripText(PhPeople * people, PhString content, PhTime timeIn, PhTime timeOut);
+    PhString getContent();
 
 private:
 /**
