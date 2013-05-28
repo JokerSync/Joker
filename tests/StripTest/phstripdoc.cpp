@@ -47,7 +47,7 @@ bool PhStripDoc::openDetX(QString filename)
     //while PhTime is just a float
     _videoTimestamp = 1.12768;
 
-    //With DetX files, fps is always 25
+    //With DetX files, fps is always 25 so drop is false
     _fps = 25.00;
     _drop = false;
 
@@ -82,7 +82,7 @@ bool PhStripDoc::openDetX(QString filename)
         PhString id = currentLine.toElement().attribute("role");
         for(int j = 0; j < lineList.at(0).childNodes().length(); j++){
             if(currentLine.childNodes().at(j).nodeName() == "text"){
-                if (!currentLine.childNodes().at(j).nextSibling().isNull()){
+                if (!currentLine.childNodes().at(j+1).isNull()){
                     _texts.push_back(new PhStripText(_actors[id],
                                                      currentLine.childNodes().at(j).toElement().text(),
                                                      //currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
