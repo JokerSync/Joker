@@ -17,10 +17,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    phstripdoc.cpp \
 	../../libs/PhTools/PhColor.cpp \
 	../../libs/PhTools/PhTime.cpp \
     ../../libs/PhTools/PhTimeCode.cpp \
+	../../libs/PhStrip/PhStripDoc.cpp \
     ../../libs/PhStrip/PhStripObject.cpp \
     ../../libs/PhStrip/PhStripCut.cpp \
     ../../libs/PhStrip/PhStripText.cpp \
@@ -29,7 +29,6 @@ SOURCES += main.cpp \
 	../../libs/PhTools/PhString.cpp
 
 HEADERS += \
-    phstripdoc.h \
 	../../libs/PhTools/PhColor.h \
 	../../libs/PhTools/PhTime.h \
     ../../libs/PhTools/PhTimeCode.h \
@@ -38,6 +37,7 @@ HEADERS += \
     ../../libs/PhStrip/PhStripText.h \
     ../../libs/PhStrip/PhStripLoop.h \
     ../../libs/PhStrip/PhPeople.h \
+	../../libs/PhStrip/PhStripDoc.cpp \
 	../../libs/PhTools/PhString.h
 
 INCLUDEPATH += 	../../libs \
