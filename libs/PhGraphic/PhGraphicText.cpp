@@ -56,7 +56,7 @@ GLuint createTextureFromSurface(SDL_Surface * surface)
 }
 
 GLuint createSurfaceFromText(PhString text){
-    GLuint texture;
+    GLuint texture = 0;
     SDL_Surface *surface = NULL;
     // Initialize SDL_TTF :
     if (TTF_Init() == 0){;
@@ -66,8 +66,8 @@ GLuint createSurfaceFromText(PhString text){
         if (font != NULL)
         {
             // Create a surface from a string:
-            char *string = &text.toStdString()[0];
-            surface = TTF_RenderText_Blended(font, string, textColor);
+            surface = TTF_RenderText_Blended(font, text.toStdString().c_str(), textColor);
+
 
             // Create a texture from this surface
             if(surface != NULL)
