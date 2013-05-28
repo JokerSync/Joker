@@ -50,10 +50,8 @@ bool PhStripDoc::openDetX(QString filename)
     //With DetX files, fps is always 25 so drop is false
     _fps = 25.00;
     _drop = false;
+    _timeScale = 25.00;
 
-    /*
-    _timeScale;
-    */
 
     //Find the actors
     QDomNodeList charList = DetX->elementsByTagName("role");
