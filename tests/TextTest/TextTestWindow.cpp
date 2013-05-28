@@ -1,5 +1,3 @@
-#include "TextTestWindow.h"
-
 #include "glu.h"
 
 #include "SDL_ttf/SDL_ttf.h"
@@ -8,68 +6,32 @@
 
 #include "PhTools/memorytool.h"
 
+
+#include "TextTestWindow.h"
+
 TextTestWindow::TextTestWindow(QWidget *parent)
     : PhGraphicView( parent, "Premier affichage de dessin avec OpenGL et Qt")
 {
-
+    _stripWidth = 0;
+    _stripHeight = 0;
+    _doc = NULL;
     xmove = this->width() * 1.5;
+    resize(1000,600);
 }
 
-//GLuint createTextureFromSurface(SDL_Surface * surface)
-//{
-///*    qDebug("surface : %dx%d / %dbpp / %x", surface->w, surface->h,
-//           surface->format->BytesPerPixel, surface->flags);
+void TextTestWindow::openFile(PhString filename){
+    _doc = new PhStripDoc(filename);
+}
 
-//    MemoryDump(surface->pixels, surface->pitch/surface->format->BytesPerPixel,
-//               surface->h, surface->format->BytesPerPixel);
-//*/
-//    // get the number of channels in the SDL surface
-//    GLint  nbOfColors = surface->format->BytesPerPixel;
-//    GLenum textureFormat = 0;
+int TextTestWindow::getStripWidth()
+{
+    return _stripWidth;
+}
 
-//    switch (nbOfColors) {
-//    case 1:
-//        textureFormat = GL_ALPHA;
-//        break;
-//    case 3:     // no alpha channel
-//        if (surface->format->Rmask == 0x000000ff)
-//            textureFormat = GL_RGB;
-//        else
-//            textureFormat = GL_BGR;
-//        break;
-//    case 4:     // contains an alpha channel
-//        if (surface->format->Rmask == 0x000000ff)
-//            textureFormat = GL_RGBA;
-//        else
-//            textureFormat = GL_BGRA;
-//        break;
-//    default:
-//        qDebug() << "Warning: the image is not truecolor...";
-//        break;
-//    }
-
-//    GLuint texture;
-
-//    glEnable( GL_TEXTURE_2D );
-//    // Have OpenGL generate a texture object handle for us
-//    glGenTextures( 1, &texture );
-
-//    // Bind the texture object
-//    glBindTexture( GL_TEXTURE_2D, texture );
-
-
-//    // Edit the texture object's image data using the information SDL_Surface gives us
-//    glTexImage2D( GL_TEXTURE_2D, 0, nbOfColors, surface->w, surface->h, 0,
-//                  textureFormat, GL_UNSIGNED_BYTE, surface->pixels );
-
-////    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-////    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-//    return texture;
-//}
+void TextTestWindow::setStripWidth(int w)
+{
+    _stripWidth = w;
+}
 
 void TextTestWindow::initializeGL()
 {
@@ -105,20 +67,26 @@ void TextTestWindow::initializeGL()
     // Initializing SDL library
     if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         //Create a surface from a file:
-        SDL_Surface *surface = IMG_Load("../Resources/img/rythmo-bg.png");
-
+        SDL_Surface *surface = IMG_Load("../../../../../../texture_temp.jpg");
+        this->setStripWidth(surface->w);
+        this->setStripHeight(surface->h);
+        qDebug() << this->_doc->getTexts().last()->getTrack();
         // Create a texture from this surface
         if(surface != NULL)
             textures[1] = createTextureFromSurface(surface);
 
-        textures[2] = createSurfaceFromText("Je suis en stage");
+        textures[2] = createSurfaceFromText(_doc->getTexts().last()->getPeople().getName() + " : " + _doc->getTexts().last()->getContent());
     }
 }
 
 void TextTestWindow::paintGL()
 {
+    // in order to start from the window's right border
+    // could have been 0 to start from left border
     int x = this->width();
-    int w = this->width() / 2;
+    // refers to window size
+    int w = this->width();
+    int h = this->height();
     if (xmove > x + w)
         xmove = 0;
 
@@ -131,24 +99,25 @@ void TextTestWindow::paintGL()
     glLoadIdentity();
 
     // rythmo strip
-    for (int i = 1; i<=6; i++)
-    {
-        glBindTexture(GL_TEXTURE_2D, textures[1]);
+    float tu = w / this->getStripWidth();
+    float tv = h / this->getStripHeight();
+            //qDebug() << n << " " << w;
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+    glBindTexture(GL_TEXTURE_2D, textures[1]);
 
-        glEnable(GL_TEXTURE_2D);
-        glBegin(GL_QUADS); 	//Begining the cube's drawing
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
 
-        glTexCoord3i(0, 0, 1);glVertex3i(0, this->height()-this->height()/4, -2);
-        glTexCoord3i(1, 0, 1);glVertex3i(i * this->width()/6, this->height()-this->height()/4, -2);
-        glTexCoord3i(1, 1, 1);glVertex3i(i * this->width()/6, this->height(), -2);
-        glTexCoord3i(0, 1, 1);glVertex3i(0, this->height(), -2);
+    glEnable(GL_TEXTURE_2D);
+    glBegin(GL_QUADS); 	//Begining the cube's drawing
 
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-    }
+    glTexCoord3i(0, 0, 1);glVertex3i(0, 0, -2);
+    glTexCoord3i(tu, 0, 1);glVertex3i(w, 0, -2);
+    glTexCoord3i(tu, tv, 1);glVertex3i(w, h, -2);
+    glTexCoord3i(0, tv, 1);glVertex3i(0, h, -2);
+
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
 
 
     // Text texture
@@ -159,8 +128,6 @@ void TextTestWindow::paintGL()
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS); 	//Begining the cube's drawing
 
-
-
     glTexCoord3i(0, 0, 1);glVertex3i(x - xmove, this->height()-this->height()/4, -1);
     glTexCoord3i(1, 0, 1);glVertex3i(x + w - xmove, this->height()-this->height()/4, -1);
     glTexCoord3i(1, 1, 1);glVertex3i(x + w - xmove, this->height(), -1);
@@ -169,29 +136,15 @@ void TextTestWindow::paintGL()
     glEnd();
     glDisable(GL_TEXTURE_2D);
 
-    /*
+}
 
-    int w = 200;
-    int h = 160;
-    int space = 220; // space between quad
 
-    for(int i=0;i<3;i++)
-    {
-        glBindTexture(GL_TEXTURE_2D, textures[i]);
+void TextTestWindow::setStripHeight(int h)
+{
+    _stripHeight = h;
+}
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
-
-        glEnable(GL_TEXTURE_2D);
-        glBegin(GL_QUADS); 	//Begining the cube's drawing
-
-        glTexCoord2i(0, 0);glVertex2i(i * space, 0);
-        glTexCoord2i(1, 0);glVertex2i(i * space + w, 0);
-        glTexCoord2i(1, 1);glVertex2i(i * space + w, h);
-        glTexCoord2i(0, 1);glVertex2i(i * space, h);
-
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-    }
-    */
+int TextTestWindow::getStripHeight()
+{
+    return _stripHeight;
 }

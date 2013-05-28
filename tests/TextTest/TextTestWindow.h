@@ -8,6 +8,8 @@
 #include "PhGraphic/PhGraphicView.h"
 #include "PhGraphic/PhGraphicText.h"
 
+#include "PhStrip/PhStripDoc.h"
+
 
 class TextTestWindow : public PhGraphicView
 {
@@ -16,12 +18,21 @@ public:
     explicit TextTestWindow(QWidget *parent = 0);
     void initializeGL();
     void paintGL();
+    void openFile(PhString filename);
+    int getStripWidth();
+    void setStripWidth(int w);
+
+    int getStripHeight();
+    void setStripHeight(int w);
 
 private :
     GLuint textures[3];			// This is a handle to a tab of textures
     //GLuint texture;
     float xmove;
     float y;
+    int _stripWidth;
+    int _stripHeight;
+    PhStripDoc *_doc;
 
 };
 
