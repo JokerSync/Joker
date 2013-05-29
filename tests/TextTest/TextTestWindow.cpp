@@ -1,3 +1,5 @@
+#include <QTime>
+
 #include "glu.h"
 
 #include "SDL_ttf/SDL_ttf.h"
@@ -70,12 +72,13 @@ void TextTestWindow::initializeGL()
         SDL_Surface *surface = IMG_Load("../../../../../../texture_temp.jpg");
         this->setStripWidth(surface->w);
         this->setStripHeight(surface->h);
-        qDebug() << this->_doc->getTexts().last()->getTrack();
         // Create a texture from this surface
         if(surface != NULL)
             textures[1] = createTextureFromSurface(surface);
 
-        textures[2] = createSurfaceFromText(_doc->getTexts().last()->getPeople().getName() + " : " + _doc->getTexts().last()->getContent());
+        textures[2] = createSurfaceFromText(_doc->getTexts().at(0)->getPeople().getName()
+                                            + " : "
+                                            + _doc->getTexts().at(0)->getContent());
     }
 }
 
@@ -101,7 +104,6 @@ void TextTestWindow::paintGL()
     // rythmo strip
     float tu = w / this->getStripWidth();
     float tv = h / this->getStripHeight();
-            //qDebug() << n << " " << w;
 
     glBindTexture(GL_TEXTURE_2D, textures[1]);
 
@@ -128,10 +130,11 @@ void TextTestWindow::paintGL()
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS); 	//Begining the cube's drawing
 
-    glTexCoord3i(0, 0, 1);glVertex3i(x - xmove, this->height()-this->height()/4, -1);
-    glTexCoord3i(1, 0, 1);glVertex3i(x + w - xmove, this->height()-this->height()/4, -1);
-    glTexCoord3i(1, 1, 1);glVertex3i(x + w - xmove, this->height(), -1);
-    glTexCoord3i(0, 1, 1);glVertex3i(x - xmove, this->height(), -1);
+    glTexCoord3i(0, 0, 1);glVertex3i(x - xmove, h-h/4, -1);
+    glTexCoord3i(1, 0, 1);glVertex3i(x + w - xmove, h-h/4, -1);
+
+    glTexCoord3i(1, 1, 1);glVertex3i(x + w - xmove, h, -1);
+    glTexCoord3i(0, 1, 1);glVertex3i(x - xmove, h, -1);
 
     glEnd();
     glDisable(GL_TEXTURE_2D);
