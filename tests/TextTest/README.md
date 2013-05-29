@@ -3,6 +3,15 @@ TextTest
 
 This test project use the basic functionality of *PhGraphics* library.
 
+It allows to draw text on screen with the following parameters:
+
+- content
+- x
+- y
+- width
+- height
+- font
+
 How to test:
 ------------
 
