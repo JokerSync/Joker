@@ -13,16 +13,16 @@ PhGraphicContext::PhGraphicContext()
 
 void PhGraphicContext::init(){
     if (SDL_Init(SDL_INIT_VIDEO) == 0)
-        qDebug() << "SDL Ok.";
+        qDebug() << "init SDL Ok.";
     else
         qDebug() << "SDL error:" << SDL_GetError();
     if (TTF_Init() == 0)
-        qDebug() << "TTF Ok.";
+        qDebug() << "init TTF Ok.";
     else
         qDebug() << "TTF error:" << TTF_GetError();
 
 
-    glClearColor(.90,.90,.90,1.0); 	//Background color RGBA
+    glClearColor(.90,.0,.0,1.0); 	//Background color RGBA
     glEnable(GL_DEPTH_TEST); 	//Activate the depth test
     glEnable(GL_TEXTURE_2D); 	//Activate the texturing
 

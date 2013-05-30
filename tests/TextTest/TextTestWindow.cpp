@@ -27,10 +27,8 @@ void TextTestWindow::setStripWidth(int w)
 void TextTestWindow::initializeGL()
 {
     _font = new PhFont("../Resources/fonts/zoinks.ttf", 1000);
-    _text = new PhGraphicText("Test", 100, 100, -2, 600, 100, _font, "vert");
-
+    _text = new PhGraphicText("Test", 100, 100, -2, 800, 100, _font, "vert");
     _img = new PhGraphicImage("../Resources/img/brique.png", 200, 10, -1, 256, 256, "rose");
-
 }
 
 void TextTestWindow::paintGL()

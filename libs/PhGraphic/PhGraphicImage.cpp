@@ -26,7 +26,6 @@ void PhGraphicImage::draw()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
     PhGraphicTexturedRect::draw();
-    qDebug() << "Hi, this is draw from img";
 
 }
 

@@ -64,17 +64,12 @@ void PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 //}
 
 void PhGraphicTexturedRect::draw(){
+
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // rythmo strip
-//    float tu = w / this->getStripWidth();
-//    float tv = h / this->getStripHeight();
-
     glBindTexture(GL_TEXTURE_2D, _texture);
-
-
 
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS); 	//Begining the cube's drawing
@@ -84,8 +79,8 @@ void PhGraphicTexturedRect::draw(){
     int w = this->getWidth();
     int h = this->getHeight();
     int z = this->getZ();
-    qDebug() << "Hi! Here's my size : " << h << w;
-    qDebug() << "And my position : " << x << y << z;
+    //qDebug() << "Hi! Here's my size : " << h << w;
+    //qDebug() << "And my position : " << x << y << z;
 
     /*
     (0,0) ------ (1,0)

@@ -40,7 +40,6 @@ void PhGraphicText::draw()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     PhGraphicTexturedRect::draw();
-    qDebug() << "Hi, this is draw for text";
 }
 void PhGraphicText::dispose()
 {
