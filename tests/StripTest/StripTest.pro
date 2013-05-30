@@ -37,7 +37,7 @@ HEADERS += \
     ../../libs/PhStrip/PhStripText.h \
     ../../libs/PhStrip/PhStripLoop.h \
     ../../libs/PhStrip/PhPeople.h \
-	../../libs/PhStrip/PhStripDoc.cpp \
+	../../libs/PhStrip/PhStripDoc.h \
 	../../libs/PhTools/PhString.h
 
 INCLUDEPATH += 	../../libs \

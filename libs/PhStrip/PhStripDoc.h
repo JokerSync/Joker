@@ -27,7 +27,7 @@ private:
     /**
      * Starting time of the video content refered by the videoPath : String
      */
-    PhTimeCode _videoTimestamp;
+    PhTime _videoTimestamp;
     /**
      * Path to the video content.
      */
@@ -69,7 +69,7 @@ public:
     PhStripDoc(PhString filename);
 
     PhString getTitle();
-    PhTimeCode getVideoTimestamp();
+    PhTime getVideoTimestamp();
     PhString getVideoPath();
     int getTimeScale();
     float getFps();
