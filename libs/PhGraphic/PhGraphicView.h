@@ -10,6 +10,8 @@
 #include <gl.h>
 #include <glu.h>
 
+#include "PhGraphicContext.h"
+
 class PhGraphicView : public QGLWidget
 {
     Q_OBJECT
@@ -31,8 +33,8 @@ private:
     QTimer *t_Timer;
 protected:
     float xdelta;
-    float ydelta;
     bool move;
+    PhGraphicContext *_context;
 
 
 };

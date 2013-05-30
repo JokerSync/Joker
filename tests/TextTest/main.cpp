@@ -10,7 +10,6 @@ int main( int argc, char* argv[] )
     }
     QApplication a(argc, argv);
     TextTestWindow w;
-    w.openFile(argv[1]);
     w.show();
 
 

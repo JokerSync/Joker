@@ -11,7 +11,7 @@ PhGraphicView::PhGraphicView( QWidget *parent, QString name)
     connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);
     xdelta = 1;
-    ydelta = 0.0;
+    this->_context = new PhGraphicContext();
 }
 
 void PhGraphicView::resizeGL(int width, int height)
@@ -42,16 +42,6 @@ void PhGraphicView::keyPressEvent(QKeyEvent *keyEvent)
         break;
     case Qt::Key_S:
         toggleMouvement();
-        break;
-    case Qt::Key_Up:
-        if (ydelta <= 0)
-            ydelta = 0.05;
-        xdelta = 0;
-        break;
-    case Qt::Key_Down:
-        if (ydelta >= 0)
-            ydelta = -0.05;
-        xdelta = 0;
         break;
     case Qt::Key_Left:
         xdelta += 1;
