@@ -10,7 +10,7 @@ TextTestWindow::TextTestWindow(QWidget *parent)
     _stripWidth = 0;
     _stripHeight = 0;
     xmove = this->width() * 1.5;
-    resize(1000,600);
+    resize(640,360);
 }
 
 
@@ -26,17 +26,28 @@ void TextTestWindow::setStripWidth(int w)
 
 void TextTestWindow::initializeGL()
 {
-    _font = new PhFont("../Resources/fonts/zoinks.ttf", 1000);
-    _text = new PhGraphicText("Test", 100, 100, -2, 800, 100, _font, "vert");
-    _img = new PhGraphicImage("../Resources/img/brique.png", 200, 10, -1, 256, 256, "rose");
+    _fonts.push_back( new PhFont("../Resources/fonts/zoinks.ttf", 100));
+    _fonts.push_back( new PhFont("../Resources/fonts/Arial.ttf", 100));
+    _texts.push_back(new PhGraphicText("New Police", 100, 100, -2, 100, 100, _fonts.first(), "vert"));
+    _texts.push_back(new PhGraphicText("Same Police new message", 100, 200, -3, 500, 100, _fonts.first(), "vert"));
+    _texts.push_back(new PhGraphicText("why Arial? ÁÁØØØ",
+                                       0, 0, -4, 500, 100, _fonts.last(), "vert"));
+    _imgs.push_back(new PhGraphicImage("../Resources/img/brique.png", 0,
+                                       this->height() - 90, -1, 90, 90, "rose"));
 }
 
 void TextTestWindow::paintGL()
 {
-    _img->draw();
 
-    _text->draw();
-
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    for(auto it : _texts)
+    {
+        it->draw();
+    }
+    for(auto it : _imgs)
+    {
+        it->draw();
+    }
 
 
 //    // in order to start from the window's right border
@@ -51,25 +62,6 @@ void TextTestWindow::paintGL()
 //    if (move){
 //        xmove += xdelta;
 //    }
-
-
-
-//    // Text texture
-//    glBindTexture(GL_TEXTURE_2D, textures[2]);
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-//    glEnable(GL_TEXTURE_2D);
-//    glBegin(GL_QUADS); 	//Begining the cube's drawing
-
-//    glTexCoord3i(0, 0, 1);glVertex3i(x - xmove, h-h/4, -1);
-//    glTexCoord3i(1, 0, 1);glVertex3i(x + w - xmove, h-h/4, -1);
-
-//    glTexCoord3i(1, 1, 1);glVertex3i(x + w - xmove, h, -1);
-//    glTexCoord3i(0, 1, 1);glVertex3i(x - xmove, h, -1);
-
-//    glEnd();
-//    glDisable(GL_TEXTURE_2D);
 
 }
 

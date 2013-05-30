@@ -13,7 +13,7 @@ PhGraphicText::PhGraphicText(PhString content, int x, int y, int z, int w, int h
     this->setFont(font);
 
     SDL_Color textColor={ 230, 230, 0, 0 };
-    SDL_Surface *surface = TTF_RenderText_Blended(font->getFont(),
+    SDL_Surface *surface = TTF_RenderUTF8_Blended(font->getFont(),
                                                   content.toStdString().c_str(),
                                                   textColor);
     if(surface != NULL)
@@ -39,6 +39,7 @@ void PhGraphicText::draw()
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     PhGraphicTexturedRect::draw();
 }
 void PhGraphicText::dispose()
