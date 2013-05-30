@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     qDebug() << "VideoTimeStamp : " << doc.getVideoTimestamp();
     qDebug() << "FrameRate : " << doc.getFps();
     qDebug() << "DropFrame : " << doc.getDrop();
-    /* disabled output for readability
+    //* disabled output for readability
     // Display characters list
     qDebug() << "characters list:";
     for(auto it : doc.getActors())
@@ -34,6 +34,15 @@ int main(int argc, char *argv[])
     }
     //*/
 
+    //* disabled output for readability
+    // Display characters list
+    qDebug() << "\n" <<"text list:";
+    for(auto it : doc.getTexts())
+    {
+        qDebug() << it->getPeople().getName() << ":" << it->getContent();
+    }
+    //*/
+    sleep(1);
     qDebug() << "It took " << beg->elapsed() << "ms";
 
 

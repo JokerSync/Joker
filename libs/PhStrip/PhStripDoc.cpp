@@ -41,9 +41,9 @@ bool PhStripDoc::openDetX(QString filename)
     _videoPath = DetX->elementsByTagName("videofile").at(0).toElement().text();
 
     //Find the videoTimeStamp
-    //_videoTimestamp = DetX->elementsByTagName("videofile").at(0).toElement().attribute("timestamp");
-    //while PhTime is just a float
-    _videoTimestamp = 1.12768;
+    _videoTimestamp = PhTimeCode::frameFromString(DetX->elementsByTagName("videofile").at(0).toElement().attribute("timestamp"),
+                                                  PhTimeCodeType25);
+
 
     //With DetX files, fps is always 25 so drop is false
     _fps = 25.00;
@@ -81,17 +81,19 @@ bool PhStripDoc::openDetX(QString filename)
                 if (!currentLine.childNodes().at(j+1).isNull()){
                     _texts.push_back(new PhStripText(_actors[id],
                                                      currentLine.childNodes().at(j).toElement().text(),
-                                                     //currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
-                                                     //currentLine.childNodes().at(j+1).toElement().attribute("timecode")));
-                                                     0,1,
+                                                     PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
+                                                                                 PhTimeCodeType25),
+                                                     PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"),
+                                                                                 PhTimeCodeType25),
                                                      currentLine.toElement().attribute("track").toInt()));
                 }
                 else
                 {
                     _texts.push_back(new PhStripText(_actors[id],
                                                      currentLine.childNodes().at(j).toElement().text(),
-                                                     //currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
-                                                     0,NULL,
+                                                     PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
+                                                                                 PhTimeCodeType25),
+                                                     NULL,
                                                      currentLine.toElement().attribute("track").toInt()));
                 }
             }
@@ -108,7 +110,7 @@ PhString PhStripDoc::getTitle(){
     return _title;
 }
 
-PhTimeCode PhStripDoc::getVideoTimestamp(){
+PhTime PhStripDoc::getVideoTimestamp(){
     return _videoTimestamp;
 }
 
