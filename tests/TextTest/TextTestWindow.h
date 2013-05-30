@@ -35,9 +35,9 @@ private :
     int _stripWidth;
     int _stripHeight;
 
-    PhFont *_font;
-    PhGraphicText *_text;
-    PhGraphicImage *_img;
+    QList<PhFont *> _fonts;
+    QList<PhGraphicText *> _texts;
+    QList<PhGraphicImage *> _imgs;
 
 
 };
