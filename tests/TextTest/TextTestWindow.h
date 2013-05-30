@@ -7,6 +7,8 @@
 
 #include "PhGraphic/PhGraphicView.h"
 #include "PhGraphic/PhGraphicText.h"
+#include "PhGraphic/PhGraphicImage.h"
+
 
 #include "PhStrip/PhStripDoc.h"
 
@@ -32,7 +34,11 @@ private :
     float y;
     int _stripWidth;
     int _stripHeight;
-    PhStripDoc *_doc;
+
+    PhFont *_font;
+    PhGraphicText *_text;
+    PhGraphicImage *_img;
+
 
 };
 
