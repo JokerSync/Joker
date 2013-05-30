@@ -15,7 +15,7 @@ PhGraphicRect::PhGraphicRect(int x, int y, int z, int w, int h, QString color) :
 
 void PhGraphicRect::draw()
 {
-    qDebug() << "I'm drawing";
+    qDebug() << "I'm drawing a rect";
 }
 
 void PhGraphicRect::setSize(int w, int h){
