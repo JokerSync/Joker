@@ -7,20 +7,26 @@
 #define PHGRAPHICCONTEXT_H
 
 #include <QDebug>
+#include <QImage>
 
 #include "glu.h"
 
 #include "SDL/SDL.h"
 #include "SDL_ttf/SDL_ttf.h"
 
+class PhGraphicView;
+
 class PhGraphicContext
 {
 public:
-    PhGraphicContext();
+    PhGraphicContext(PhGraphicView *view);
+    void saveToPNG();
 
 private:
     void init();
     void dispose();
+
+    PhGraphicView *_graphVeiw;
 
 };
 

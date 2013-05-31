@@ -20,7 +20,7 @@
 class PhGraphicTexturedRect : PhGraphicRect
 {
 public:
-    PhGraphicTexturedRect(int x, int y, int z, int w, int h, PhColor color);
+    PhGraphicTexturedRect(int x, int y, int z, int w, int h, PhColor color, int tv = 1, int tu = 1);
 
 
     void draw();
@@ -34,6 +34,8 @@ protected:
 
 private:
     GLuint _texture;
+    int _tv;
+    int _tu;
 //  SDL_Surface *_surface;
 };
 

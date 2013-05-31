@@ -5,8 +5,8 @@
 
 #include "PhGraphicImage.h"
 
-PhGraphicImage::PhGraphicImage(PhString filename, int x, int y, int z, int w, int h, PhColor color) :
-    PhGraphicTexturedRect(x, y, z, w, h, color)
+PhGraphicImage::PhGraphicImage(PhString filename, int x, int y, int z, int w, int h, PhColor color, int tv, int tu) :
+    PhGraphicTexturedRect(x, y, z, w, h, color, tv, tu)
 {
     //this->setFilename(filename);
     SDL_Surface * surface = IMG_Load(filename.toStdString().c_str());
@@ -26,7 +26,6 @@ void PhGraphicImage::draw()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
     PhGraphicTexturedRect::draw();
-
 }
 
 

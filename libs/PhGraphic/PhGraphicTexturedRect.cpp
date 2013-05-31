@@ -5,10 +5,11 @@
 
 #include "PhGraphicTexturedRect.h"
 
-PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int z, int w, int h, PhColor color) :
+PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int z, int w, int h, PhColor color, int tv, int tu) :
     PhGraphicRect(x, y, z, w, h, color)
 {
-
+    _tu = tu;
+    _tv = tv;
 }
 
 void PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
@@ -88,10 +89,11 @@ void PhGraphicTexturedRect::draw(){
       |            |
     (0,1) ------ (1,1)
     */
+    //qDebug() << _tu << _tv;
     glTexCoord3i(0, 0, 1);glVertex3i(x,         y,      z);
-    glTexCoord3i(1, 0, 1);glVertex3i(x + w,     y,      z);
-    glTexCoord3i(1, 1, 1);glVertex3i(x + w,     y + h,  z);
-    glTexCoord3i(0, 1, 1);glVertex3i(x,         y + h,  z);
+    glTexCoord3i(_tv, 0, 1);glVertex3i(x + w * _tv,     y,      z);
+    glTexCoord3i(_tv, _tu, 1);glVertex3i(x + w * _tv,     y + h * _tu,  z);
+    glTexCoord3i(0, _tu, 1);glVertex3i(x,         y + h * _tu,  z);
 
     glEnd();
     glDisable(GL_TEXTURE_2D);
