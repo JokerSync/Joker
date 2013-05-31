@@ -17,6 +17,7 @@
 #include "PhGraphicTexturedRect.h"
 #include "PhTools/PhString.h"
 
+
 class PhGraphicText : PhGraphicTexturedRect {
 public:
 //    GLuint createTextureFromSurface(SDL_Surface * surface);

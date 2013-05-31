@@ -3,11 +3,37 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-#include "PhGraphicContext.h"
+#include <QDateTime> // For screenshot name
 
-PhGraphicContext::PhGraphicContext()
+#include "PhGraphicContext.h"
+#include "PhGraphicView.h"
+
+PhGraphicContext::PhGraphicContext(PhGraphicView *view)
 {
+    _graphVeiw = view;
     init();
+}
+
+void PhGraphicContext::saveToPNG()
+{
+    //*
+    QImage *impr = new QImage(_graphVeiw->grabFrameBuffer());
+    QDateTime * now = new QDateTime(QDateTime::currentDateTime());
+    QString s = QDir::homePath()+"/Phonations-" + now->toString("dd-MM-yy-h-m-s")  + ".png";
+
+    qDebug() << impr->width() << impr->height();
+    //*
+    if(impr->save(s))
+        qDebug() << "Photo : " << s;
+    else{
+        qDebug() << "Pas Photo : " ;//<< getLastError();
+
+    }
+    impr->~QImage();
+
+    //now->~QDateTime();
+    //*/
+
 }
 
 

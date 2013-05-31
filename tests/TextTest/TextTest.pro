@@ -75,7 +75,6 @@ DEPENDPATH += /Library/Frameworks
 
 macx {
 	copyfiles.commands = cp -r ../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/
-
 }
 QMAKE_EXTRA_TARGETS += copyfiles
 POST_TARGETDEPS += copyfiles

@@ -12,7 +12,6 @@ int main( int argc, char* argv[] )
     TextTestWindow w;
     w.show();
 
-
     return a.exec();
 }
 

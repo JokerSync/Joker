@@ -11,8 +11,8 @@ PhGraphicView::PhGraphicView( QWidget *parent, QString name)
     connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);
     xdelta = 1;
-    this->_context = new PhGraphicContext();
-}
+    this->_context = new PhGraphicContext(this);
+    }
 
 void PhGraphicView::resizeGL(int width, int height)
 {
@@ -49,7 +49,11 @@ void PhGraphicView::keyPressEvent(QKeyEvent *keyEvent)
     case Qt::Key_Right:
         xdelta -= 1;
         break;
+    case Qt::Key_P:
+        this->_context->saveToPNG();
+        break;
     }
+
 }
 
 void PhGraphicView::onRefresh()
