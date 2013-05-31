@@ -16,24 +16,10 @@ PhGraphicContext::PhGraphicContext(PhGraphicView *view)
 
 void PhGraphicContext::saveToPNG()
 {
-    //*
-    QImage *impr = new QImage(_graphVeiw->grabFrameBuffer());
-    QDateTime * now = new QDateTime(QDateTime::currentDateTime());
-    QString s = QDir::homePath()+"/Phonations-" + now->toString("dd-MM-yy-h-m-s")  + ".png";
-
-    qDebug() << impr->width() << impr->height();
-    //*
-    if(impr->save(s))
-        qDebug() << "Photo : " << s;
-    else{
-        qDebug() << "Pas Photo : " ;//<< getLastError();
-
-    }
-    impr->~QImage();
-
-    //now->~QDateTime();
-    //*/
-
+    QImage impr(_graphVeiw->grabFrameBuffer());
+    QDateTime now(QDateTime::currentDateTime());
+    QString s = QDir::homePath()+"/Phonations-" + now.toString("dd-MM-yy-h-m-s")  + ".png";
+    impr.save(s);
 }
 
 
