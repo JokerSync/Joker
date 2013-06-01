@@ -13,7 +13,6 @@ StripWindow::StripWindow(QWidget *parent, char *file)
     : PhGraphicView( parent, "Phonations")
 {
     xmove = this->width() * 1.5;
-    setWindowState();
     resize(1280,360);
     _doc = new PhStripDoc(file);
 }
