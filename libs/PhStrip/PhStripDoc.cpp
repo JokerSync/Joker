@@ -69,7 +69,6 @@ bool PhStripDoc::openDetX(QString filename)
         _cuts.push_front(new PhStripCut(PhStripCut::Simple , i));
     }
 
-    //TODO
     //Find the text list
     QDomNodeList lineList = DetX->elementsByTagName("line");
     for (int i=0; i < lineList.length(); i++)

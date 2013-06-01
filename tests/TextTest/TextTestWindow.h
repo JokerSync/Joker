@@ -10,9 +10,6 @@
 #include "PhGraphic/PhGraphicImage.h"
 
 
-#include "PhStrip/PhStripDoc.h"
-
-
 class TextTestWindow : public PhGraphicView
 {
     Q_OBJECT

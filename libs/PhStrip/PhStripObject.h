@@ -16,6 +16,7 @@ private:
 public:
     PhStripObject();
     PhStripObject(PhTime time);
+    PhTime getTimeIn();
 };
 
 #endif // PHSTRIPOBJECT_H

@@ -17,6 +17,8 @@ public:
     PhString getContent();
     PhPeople getPeople();
     int getTrack();
+    int getTimeIn();
+    int getTimeOut();
 
 private:
 /**
