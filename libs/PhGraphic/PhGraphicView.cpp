@@ -25,6 +25,7 @@ void PhGraphicView::resizeGL(int width, int height)
     glOrtho(0, width, height, 0, 0, 10);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    qDebug() << width;
 }
 
 void PhGraphicView::keyPressEvent(QKeyEvent *keyEvent)

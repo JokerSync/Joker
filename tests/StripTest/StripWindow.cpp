@@ -33,15 +33,15 @@ void StripWindow::initializeGL()
                                            50, 30, _fonts.first(), "vert"));
 */
         _texts.push_back(new PhGraphicText(it->getContent(),
-                                           (it->getTimeIn() - 90000) * 3, this->height() - (90 - it->getTrack()*30), -1,
-                                           (it->getTimeOut() - 90000) * 3, 30, _fonts.last(), "vert"));
+                                           (it->getTimeIn() - 90000) * 5, this->height() - (90 - it->getTrack()*30), -1,
+                                            (it->getTimeOut() - it->getTimeIn()) * 5, 30, _fonts.last(), "vert"));
     }
 
-    _imgs.push_back(new PhGraphicImage("strip", 0,
+    _imgs.push_back(new PhGraphicImage("/Users/thomas/Stage/fond.jpg", 0,
                                        this->height() - 90, -2,
                                        90, 90, "rose",
-                                       (this->width() / 90 + 1), 1));
-    _imgs.push_back(new PhGraphicImage("videoscreenshoot",
+                                       1000, 1));
+    _imgs.push_back(new PhGraphicImage("/Users/thomas/Downloads/img.jpg",
                                        (this->width() - 480) / 2, 0, -2,
                                        480, 270, "rose",
                                        1, 1));
