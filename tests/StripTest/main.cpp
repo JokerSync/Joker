@@ -1,8 +1,13 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include <QTime>
+
+#include "SDL/SDL.h"
+
 #include "PhStrip/PhStripDoc.h"
 #include "PhTools/PhString.h"
+
+#include "StripWindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,17 +19,10 @@ int main(int argc, char *argv[])
     beg->start();
 
 
-    QCoreApplication a(argc, argv);
-    qDebug() << argv[1];
-    PhStripDoc doc(argv[1]);
+    QApplication a(argc, argv);
+    StripWindow mainwindow(NULL, argv[1]);
+    mainwindow.show();
 
-
-    // Display infos about file
-    qDebug() << "Title : " << doc.getTitle();
-    qDebug() << "VideoPath : " << doc.getVideoPath();
-    qDebug() << "VideoTimeStamp : " << doc.getVideoTimestamp();
-    qDebug() << "FrameRate : " << doc.getFps();
-    qDebug() << "DropFrame : " << doc.getDrop();
 
     /* disabled output for readability
     // Display characters list
@@ -46,6 +44,5 @@ int main(int argc, char *argv[])
     qDebug() << "It took " << beg->elapsed() << "ms";
 
 
-    exit(0);
     return a.exec();
 }

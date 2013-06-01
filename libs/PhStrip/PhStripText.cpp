@@ -23,3 +23,13 @@ int PhStripText::getTrack()
 {
     return _track;
 }
+
+int PhStripText::getTimeIn()
+{
+    return PhStripObject::getTimeIn();
+}
+
+int PhStripText::getTimeOut()
+{
+    return _timeOut;
+}
