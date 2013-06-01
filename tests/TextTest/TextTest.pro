@@ -9,10 +9,17 @@ DESTDIR = ./
 TEMPLATE = app
 
 
+#Main app
 SOURCES += \
 	main.cpp \
-	TextTestWindow.cpp \
+	TextTestWindow.cpp
+
+HEADERS  += \
+	TextTestWindow.h \
+
+
 #PhGraphics
+SOURCES += \
 	../../libs/PhGraphic/SDLMain.cpp \
     ../../libs/PhGraphic/PhGraphicView.cpp \
 	../../libs/PhGraphic/PhGraphicText.cpp \
@@ -20,47 +27,32 @@ SOURCES += \
 	../../libs/PhGraphic/PhGraphicImage.cpp \
 	../../libs/PhGraphic/PhGraphicRect.cpp \
 	../../libs/PhGraphic/PhGraphicTexturedRect.cpp \
-	../../libs/PhGraphic/PhGraphicContext.cpp \
-#PhTools
-	../../libs/PhTools/PhString.cpp \
-	../../libs/PhTools/memorytool.cpp \
-	../../libs/PhTools/PhColor.cpp \
-	../../libs/PhTools/PhTime.cpp \
-	../../libs/PhTools/PhTimeCode.cpp \
-	../../libs/PhTools/PhFont.cpp \
-#PhStrip
-#	../../libs/PhStrip/PhStripDoc.cpp \
-#	../../libs/PhStrip/PhStripObject.cpp \
-#	../../libs/PhStrip/PhStripCut.cpp \
-#	../../libs/PhStrip/PhStripText.cpp \
-#	../../libs/PhStrip/PhStripLoop.cpp \
-#	../../libs/PhStrip/PhPeople.cpp \
-
-
+	../../libs/PhGraphic/PhGraphicContext.cpp
 HEADERS  += \
-	TextTestWindow.h \
-#PhGraphics
 	../../libs/PhGraphic/PhGraphicView.h \
 	../../libs/PhGraphic/PhGraphicText.h \
 	../../libs/PhGraphic/PhGraphicObject.h \
 	../../libs/PhGraphic/PhGraphicImage.h \
 	../../libs/PhGraphic/PhGraphicRect.h \
 	../../libs/PhGraphic/PhGraphicTexturedRect.h \
-	../../libs/PhGraphic/PhGraphicContext.h \
+	../../libs/PhGraphic/PhGraphicContext.h
+
 #PhTools
+SOURCES += \
+	../../libs/PhTools/PhString.cpp \
+	../../libs/PhTools/memorytool.cpp \
+	../../libs/PhTools/PhColor.cpp \
+	../../libs/PhTools/PhTime.cpp \
+	../../libs/PhTools/PhTimeCode.cpp \
+	../../libs/PhTools/PhFont.cpp
+HEADERS  += \
 	../../libs/PhTools/PhString.h \
 	../../libs/PhTools/memorytool.h \
 	../../libs/PhTools/PhColor.h \
 	../../libs/PhTools/PhTime.h \
 	../../libs/PhTools/PhTimeCode.h \
-	../../libs/PhTools/PhFont.h \
-#PhStrip
-#	../../libs/PhStrip/PhStripDoc.h \
-#	../../libs/PhStrip/PhStripObject.h \
-#	../../libs/PhStrip/PhStripCut.h \
-#	../../libs/PhStrip/PhStripText.h \
-#	../../libs/PhStrip/PhStripLoop.h \
-#	../../libs/PhStrip/PhPeople.h \
+	../../libs/PhTools/PhFont.h
+
 
 
 FORMS    += mainwindow.ui
