@@ -68,7 +68,7 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
 {
     switch(keyEvent->key())
     {
-    case Qt::Key_S:
+    case Qt::Key_Space:
         _strip->changeScroll();
         break;
     case Qt::Key_Escape:
@@ -77,7 +77,7 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
     case Qt::Key_Q:
         close();
         break;
-    case Qt::Key_Space:
+    case Qt::Key_F12:
         toggleFullWindow();
         break;
         //Doesn't work yet.
