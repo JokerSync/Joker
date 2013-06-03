@@ -13,7 +13,7 @@
 
 
 StripWindow::StripWindow(QWidget *parent, PhString file)
-    : PhGraphicView( parent, "Phonations")
+    : PhGraphicView( parent, "StripTest")
 {
     xmove = this->width() * 1.5;
     resize(640,360);
@@ -38,11 +38,8 @@ void StripWindow::initializeGL()
 
     glClearColor(1,1,1,0);
     h = this->height();
-    qDebug() << h;
 
     int hstrip = h / 4;
-
-
     clearData();
 
     for(auto it : _doc->getTexts())
@@ -54,7 +51,7 @@ void StripWindow::initializeGL()
                                            50, 30, _fonts.first(), "vert"));
 */
         _texts.push_back(new PhGraphicText(it->getContent(),
-                                           (it->getTimeIn() - 90000) * 4, h - (hstrip - it->getTrack()*30), -1,
+                                           (it->getTimeIn() - _doc->getVideoTimestamp()) * 4, h - (hstrip - it->getTrack()*30), -1,
                                             (it->getTimeOut() - it->getTimeIn()) * 4, 30, _currentFont, "vert"));
     }
 
