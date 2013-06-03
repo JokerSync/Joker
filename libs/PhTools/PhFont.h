@@ -15,6 +15,7 @@ class PhFont
 public:
     PhFont(PhString filename, int size);
     TTF_Font * getFont();
+    PhString getFontName();
 
 private:
     TTF_Font * _font;

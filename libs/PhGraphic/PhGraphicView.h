@@ -13,7 +13,6 @@
 #include <glu.h>
 
 #include "PhGraphicContext.h"
-#include "PhMenu.h"
 
 class PhGraphicView : public QGLWidget
 {

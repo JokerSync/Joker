@@ -3,6 +3,7 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include <QStringList>
 #include "PhFont.h"
 
 PhFont::PhFont(PhString filename, int size)
@@ -15,4 +16,11 @@ PhFont::PhFont(PhString filename, int size)
 TTF_Font * PhFont::getFont()
 {
     return _font;
+}
+#include <QDebug>
+PhString PhFont::getFontName(){
+    QStringList list ;
+    list = _filename.split("/");
+    PhString name = list.last().split(".").first();
+    return name;
 }

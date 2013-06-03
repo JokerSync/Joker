@@ -26,11 +26,16 @@ public:
     void paintGL();
     void openFile(PhString filename);
     void clearData();
+
     int getStripWidth();
     void setStripWidth(int w);
 
     int getStripHeight();
     void setStripHeight(int w);
+
+    QList<PhFont *> getFonts();
+    void setCurrentFont(PhFont * font);
+
 
 private :
 
@@ -40,6 +45,7 @@ private :
     bool _firstload;
 
     QList<PhFont *> _fonts;
+    PhFont *_currentFont;
     QList<PhGraphicText *> _texts;
     QList<PhGraphicImage *> _imgs;
 
