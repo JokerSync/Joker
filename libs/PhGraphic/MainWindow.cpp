@@ -17,7 +17,7 @@ MainWindow::MainWindow(PhString file)
 {
     resize(640,360);
     createMenus();
-    setWindowTitle(tr("Phonation"));
+    setWindowTitle(tr("Striptest"));
     _strip = new StripWindow(this, file);
     _strip->show();
 
