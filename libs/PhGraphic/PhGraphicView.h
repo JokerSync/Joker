@@ -25,13 +25,14 @@ public:
     virtual void resizeGL(int width, int height);
     void toggleFullWindow();
     void toggleMouvement();
+    bool b_Fullscreen;
+
 
 public slots:
     virtual void onRefresh();
 
 
 private:
-    bool b_Fullscreen;
     QTimer *t_Timer;
 protected:
     float xdelta;

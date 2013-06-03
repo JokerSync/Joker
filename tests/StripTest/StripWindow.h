@@ -36,6 +36,8 @@ public:
     QList<PhFont *> getFonts();
     void setCurrentFont(PhFont * font);
 
+    void toggleFS(bool fs);
+
 
 private :
 
@@ -43,6 +45,7 @@ private :
     float xmove;
     float y;
     bool _firstload;
+    bool _isFS;
 
     QList<PhFont *> _fonts;
     PhFont *_currentFont;

@@ -27,6 +27,8 @@ PhGraphicView::PhGraphicView( QWidget *parent, QString name)
 
 void PhGraphicView::resizeGL(int width, int height)
 {
+
+    resize(width, height);
     if(height == 0)
         height = 1;
     glViewport(0, 0, width, height);
@@ -35,15 +37,13 @@ void PhGraphicView::resizeGL(int width, int height)
     glOrtho(0, width, height, 0, 0, 10);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    initializeGL();
 }
 
 void PhGraphicView::keyPressEvent(QKeyEvent *keyEvent)
 {
     switch(keyEvent->key())
     {
-    case Qt::Key_Space:
-        toggleFullWindow();
-        break;
     case Qt::Key_S:
         toggleMouvement();
         break;
@@ -67,19 +67,6 @@ void PhGraphicView::onRefresh()
     updateGL();
 }
 
-void PhGraphicView::toggleFullWindow()
-{
-    if(b_Fullscreen)
-    {
-        showNormal();
-        b_Fullscreen = false;
-    }
-    else
-    {
-        showFullScreen();
-        b_Fullscreen = true;
-    }
-}
 
 void PhGraphicView::toggleMouvement()
 {

@@ -15,7 +15,7 @@
 
 MainWindow::MainWindow(PhString file)
 {
-    resize(1280,360);
+    resize(640,360);
     createMenus();
     setWindowTitle(tr("Phonation"));
     _strip = new StripWindow(this, file);
@@ -27,7 +27,7 @@ void MainWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
     
-    openAct = new QAction(tr("&Open a script..."), this);
+    openAct = new QAction(tr("&Open"), this);
     fileMenu->addAction(openAct);
     connect(openAct, SIGNAL(triggered()), this, SLOT(openFile()));
 
@@ -73,8 +73,26 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
     case Qt::Key_Q:
         close();
         break;
+    case Qt::Key_Space:
+        toggleFullWindow();
+        break;
     default:
         _strip->keyPressEvent(keyEvent);
     }
+}
+
+void MainWindow::toggleFullWindow()
+{
+    if(this->isFullScreen())
+    {
+        showNormal();
+        _strip->toggleFS(false);
+    }
+    else
+    {
+        showFullScreen();
+        _strip->toggleFS(true);
+    }
+    _strip->resizeGL(this->width(), this->height());
 }
 
