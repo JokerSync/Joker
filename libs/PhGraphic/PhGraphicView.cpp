@@ -12,7 +12,18 @@ PhGraphicView::PhGraphicView( QWidget *parent, QString name)
     t_Timer->start( 0);
     xdelta = 1;
     this->_context = new PhGraphicContext(this);
-    }
+
+
+    QAction *quit = new QAction("&Quit", this);
+
+    _menu = new QMenu(parent);
+    _menu->addMenu("&File");
+    _menu->addAction(quit);
+
+    qDebug() << "Menu";
+
+    connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
+}
 
 void PhGraphicView::resizeGL(int width, int height)
 {
@@ -21,25 +32,17 @@ void PhGraphicView::resizeGL(int width, int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    //gluPerspective(40.0f,(GLfloat)width/(GLfloat)height, 0.1f, 100.0f);
     glOrtho(0, width, height, 0, 0, 10);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    qDebug() << width;
 }
 
 void PhGraphicView::keyPressEvent(QKeyEvent *keyEvent)
 {
     switch(keyEvent->key())
     {
-    case Qt::Key_Escape:
-        close();
-        break;
     case Qt::Key_Space:
         toggleFullWindow();
-        break;
-    case Qt::Key_Q:
-        close();
         break;
     case Qt::Key_S:
         toggleMouvement();
