@@ -44,9 +44,6 @@ void PhGraphicView::keyPressEvent(QKeyEvent *keyEvent)
 {
     switch(keyEvent->key())
     {
-    case Qt::Key_S:
-        toggleMouvement();
-        break;
     case Qt::Key_Left:
         xdelta += 1;
         break;
@@ -68,10 +65,3 @@ void PhGraphicView::onRefresh()
 }
 
 
-void PhGraphicView::toggleMouvement()
-{
-    if(move)
-        move = false;
-    else
-        move = true;
-}

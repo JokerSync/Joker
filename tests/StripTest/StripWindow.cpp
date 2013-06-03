@@ -15,7 +15,7 @@
 StripWindow::StripWindow(QWidget *parent, PhString file)
     : PhGraphicView( parent, "StripTest")
 {
-    xmove = this->width() * 1.5;
+    _xmove = 0;
     resize(640,360);
     _isFS = false;
 
@@ -42,6 +42,7 @@ void StripWindow::initializeGL()
     int hstrip = h / 4;
     clearData();
 
+
     for(auto it : _doc->getTexts())
     {
 //        qDebug() << it->getTimeIn() << it->getPeople().getName() << ":" << it->getContent() << it->getTrack() << this->height() - (90 - it->getTrack()*30);
@@ -50,9 +51,10 @@ void StripWindow::initializeGL()
                                            it->getTimeIn() - 50 - 90000, this->height() - (90 - it->getTrack()*30), -1,
                                            50, 30, _fonts.first(), "vert"));
 */
+         qDebug() << (hstrip - it->getTrack()*(hstrip/3));
         _texts.push_back(new PhGraphicText(it->getContent(),
-                                           (it->getTimeIn() - _doc->getVideoTimestamp()) * 4, h - (hstrip - it->getTrack()*30), -1,
-                                            (it->getTimeOut() - it->getTimeIn()) * 4, 30, _currentFont, "vert"));
+                                           (it->getTimeIn() - _doc->getVideoTimestamp()) * 4, h - (hstrip - it->getTrack()*(hstrip /3)), -1,
+                                            (it->getTimeOut() - it->getTimeIn()) * 4, hstrip / 3 , _currentFont, "vert"));
     }
 
 
@@ -66,20 +68,24 @@ void StripWindow::initializeGL()
                                        480, 270, "rose",
                                        1, 1));
     */
-    qDebug() << "It took " << beg->elapsed() << "ms";
+    qDebug() << "It took " << beg->elapsed() << "ms to load text on texture";
 
 }
 
 void StripWindow::paintGL()
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    if (_shouldmove)
+        _xmove -= 1;
+
     for(auto it : _imgs)
     {
-        it->draw();
+        it->draw(_xmove);
     }
     for(auto it : _texts)
     {
-        it->draw();
+        it->draw(_xmove);
     }
 
 
@@ -100,6 +106,7 @@ void StripWindow::paintGL()
 
 void StripWindow::openFile(QString filename)
 {
+    _xmove = 0;
     this->_doc = new PhStripDoc(filename);
     clearData();
     if (!_firstload)
@@ -126,5 +133,16 @@ void StripWindow::setCurrentFont(PhFont * font){
 
 void StripWindow::toggleFS(bool fs){
     _isFS = fs;
+}
+
+
+void StripWindow::changeScroll()
+{
+    _shouldmove = ! _shouldmove;
+}
+
+void StripWindow::setScroll(bool shouldScroll)
+{
+
 }
 

@@ -13,7 +13,8 @@ class PhGraphicObject
 {
 public:
     PhGraphicObject(PhColor color, int x, int y, int z);
-    virtual void draw() = 0;
+
+    virtual void draw(int px) = 0;
 
     void setPosition(int x, int y, int z);
     void setX(int x);

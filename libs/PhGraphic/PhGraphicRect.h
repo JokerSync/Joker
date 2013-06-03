@@ -13,7 +13,7 @@ class PhGraphicRect : public PhGraphicObject
 public:
     PhGraphicRect(int x, int y, int z, int w, int h, PhColor color);
 
-    void draw();
+    void draw(int px);
 
     void setSize(int w, int h);
     void setRect(int x, int y, int w, int h);

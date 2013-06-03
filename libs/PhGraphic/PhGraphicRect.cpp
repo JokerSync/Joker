@@ -13,7 +13,7 @@ PhGraphicRect::PhGraphicRect(int x, int y, int z, int w, int h, QString color) :
     this->setSize(w, h);
 }
 
-void PhGraphicRect::draw()
+void PhGraphicRect::draw(int px)
 {
     qDebug() << "I'm drawing a rect";
 }

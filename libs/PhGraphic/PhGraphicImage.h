@@ -18,7 +18,7 @@ public:
 //    PhString getFilename();
 
 
-    void draw();
+    void draw(int px);
 
 private:
     void init();

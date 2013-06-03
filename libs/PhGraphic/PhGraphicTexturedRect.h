@@ -23,7 +23,7 @@ public:
     PhGraphicTexturedRect(int x, int y, int z, int w, int h, PhColor color, int tv = 1, int tu = 1);
 
 
-    void draw();
+    void draw(int px);
 protected:
 
     void createTextureFromSurface(SDL_Surface * surface);
