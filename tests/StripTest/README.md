@@ -14,4 +14,6 @@ To check that this test program is running fine:
 - Launch the program. If a file is set as argument, the program will automatically load it, if not, it will prompt for a script file.
 - You can load a script file from the menu *File* *Open a script…*
 - You can see which fonts are currently loaded in the menu *Tools* *change font* but you're not able to load a new font for the moment (soon fixed).
+- You can toggle to full screen by pressing *F12* key
+- You can Play/Stop by pressing space
 - Check the rythmo content is displayed in the window.
