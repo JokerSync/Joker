@@ -3,23 +3,31 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include <QTime>
+
+
 #include "SDL/SDL.h"
 
 #include "StripWindow.h"
 
 
 
-StripWindow::StripWindow(QWidget *parent, char *file)
+StripWindow::StripWindow(QWidget *parent, PhString file)
     : PhGraphicView( parent, "Phonations")
 {
     xmove = this->width() * 1.5;
     resize(1280,360);
-    _doc = new PhStripDoc(file);
+    _firstload = true;
+    openFile(file);
+    _firstload = false;
 }
 
 
 void StripWindow::initializeGL()
 {
+    QTime *beg = new QTime();
+    beg->start();
+
 
     _fonts.push_back( new PhFont("../Resources/fonts/zoinks.ttf", 100));
     _fonts.push_back( new PhFont("../Resources/fonts/Arial.ttf", 100));
@@ -36,35 +44,23 @@ void StripWindow::initializeGL()
                                            (it->getTimeIn() - 90000) * 5, this->height() - (90 - it->getTrack()*30), -1,
                                             (it->getTimeOut() - it->getTimeIn()) * 5, 30, _fonts.last(), "vert"));
     }
-
-    _imgs.push_back(new PhGraphicImage("/Users/thomas/Stage/fond.jpg", 0,
+/*
+    _imgs.push_back(new PhGraphicImage("filename", 0,
                                        this->height() - 90, -2,
                                        90, 90, "rose",
                                        1000, 1));
-    _imgs.push_back(new PhGraphicImage("/Users/thomas/Downloads/img.jpg",
+    _imgs.push_back(new PhGraphicImage("rythmofile",
                                        (this->width() - 480) / 2, 0, -2,
                                        480, 270, "rose",
                                        1, 1));
+*/
+    qDebug() << "It took " << beg->elapsed() << "ms";
 
-    /*
-
-    _texts.push_back(new PhGraphicText("Molly :",
-                                       80, 310, -4,
-                                       60, 30, _fonts.last(), "vert"));
-
-    _texts.push_back(new PhGraphicText("Same Police new message", 100, 200, -3, 500, 100, _fonts.first(), "vert"));
-
-
-
-
-
-    //*/
 }
 
 void StripWindow::paintGL()
 {
-
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(auto it : _imgs)
     {
         it->draw();
@@ -88,4 +84,22 @@ void StripWindow::paintGL()
 //        xmove += xdelta;
 //    }
 
+}
+
+void StripWindow::openFile(QString filename)
+{
+    if(!filename.contains(".detx")){
+        filename = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
+    }
+    clearData();
+    this->_doc = new PhStripDoc(filename);
+    if (!_firstload)
+        initializeGL();
+
+}
+
+void StripWindow::clearData()
+{
+    _texts.clear();
+    _imgs.clear();
 }

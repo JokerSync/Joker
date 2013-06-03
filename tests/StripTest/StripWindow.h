@@ -21,10 +21,11 @@ class StripWindow : public PhGraphicView
 {Q_OBJECT
 
 public:
-    explicit StripWindow(QWidget *parent = 0, char * file = "");
+    explicit StripWindow(QWidget *parent = 0, PhString file = "");
     void initializeGL();
     void paintGL();
     void openFile(PhString filename);
+    void clearData();
     int getStripWidth();
     void setStripWidth(int w);
 
@@ -36,6 +37,7 @@ private :
     PhStripDoc *_doc;
     float xmove;
     float y;
+    bool _firstload;
 
     QList<PhFont *> _fonts;
     QList<PhGraphicText *> _texts;

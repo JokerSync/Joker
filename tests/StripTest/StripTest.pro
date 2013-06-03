@@ -52,6 +52,7 @@ SOURCES += \
 	../../libs/PhGraphic/PhGraphicRect.cpp \
 	../../libs/PhGraphic/PhGraphicTexturedRect.cpp \
 	../../libs/PhGraphic/PhGraphicContext.cpp \
+	../../libs/PhGraphic/MainWindow.cpp\
 
 HEADERS  += \
 	../../libs/PhGraphic/PhGraphicView.h \
@@ -61,6 +62,7 @@ HEADERS  += \
 	../../libs/PhGraphic/PhGraphicRect.h \
 	../../libs/PhGraphic/PhGraphicTexturedRect.h \
 	../../libs/PhGraphic/PhGraphicContext.h \
+	../../libs/PhGraphic/MainWindow.h\
 
 #PhTools
 SOURCES += \

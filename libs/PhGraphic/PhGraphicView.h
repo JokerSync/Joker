@@ -3,6 +3,8 @@
 
 #include <QtOpenGL>
 #include <QGLWidget>
+#include <QMenu>
+#include <QMenuBar>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,6 +13,7 @@
 #include <glu.h>
 
 #include "PhGraphicContext.h"
+#include "PhMenu.h"
 
 class PhGraphicView : public QGLWidget
 {
@@ -35,6 +38,7 @@ protected:
     float xdelta;
     bool move;
     PhGraphicContext *_context;
+    QMenu *_menu;
 
 
 };
