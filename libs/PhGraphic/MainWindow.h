@@ -25,9 +25,11 @@ private slots:
     void changeFont();
 
 private:
+    void toggleFullWindow();
     void createMenus();
 
     StripWindow *_strip;
+
 
     QMenu *fileMenu;
     QMenu *toolMenu;

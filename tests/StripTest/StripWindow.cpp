@@ -16,7 +16,8 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
     : PhGraphicView( parent, "Phonations")
 {
     xmove = this->width() * 1.5;
-    resize(1280,360);
+    resize(640,360);
+    _isFS = false;
 
     _fonts.push_back( new PhFont("../Resources/fonts/zoinks.ttf", 100));
     _fonts.push_back( new PhFont("../Resources/fonts/Arial.ttf", 100));
@@ -33,8 +34,16 @@ void StripWindow::initializeGL()
     QTime *beg = new QTime();
     beg->start();
 
+    int h = 0;
+
+    glClearColor(1,1,1,0);
+    h = this->height();
+    qDebug() << h;
+
+    int hstrip = h / 4;
 
 
+    clearData();
 
     for(auto it : _doc->getTexts())
     {
@@ -45,15 +54,15 @@ void StripWindow::initializeGL()
                                            50, 30, _fonts.first(), "vert"));
 */
         _texts.push_back(new PhGraphicText(it->getContent(),
-                                           (it->getTimeIn() - 90000) * 4, this->height() - (90 - it->getTrack()*30), -1,
+                                           (it->getTimeIn() - 90000) * 4, h - (hstrip - it->getTrack()*30), -1,
                                             (it->getTimeOut() - it->getTimeIn()) * 4, 30, _currentFont, "vert"));
     }
 
 
     _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png", 0,
-                                       this->height() - 90, -2,
-                                       90, 90, "rose",
-                                       1000, 1));
+                                       h - hstrip, -2,
+                                       90, hstrip, "rose",
+                                       100, 1));
     /*
     _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png",
                                        (this->width() - 480) / 2, 0, -2,
@@ -94,11 +103,8 @@ void StripWindow::paintGL()
 
 void StripWindow::openFile(QString filename)
 {
-    if(!filename.contains(".detx")){
-        filename = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
-    }
-    clearData();
     this->_doc = new PhStripDoc(filename);
+    clearData();
     if (!_firstload)
         initializeGL();
 
@@ -120,3 +126,8 @@ void StripWindow::setCurrentFont(PhFont * font){
     _currentFont = font;
     initializeGL();
 }
+
+void StripWindow::toggleFS(bool fs){
+    _isFS = fs;
+}
+
