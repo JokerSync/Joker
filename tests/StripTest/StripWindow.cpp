@@ -17,6 +17,11 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
 {
     xmove = this->width() * 1.5;
     resize(1280,360);
+
+    _fonts.push_back( new PhFont("../Resources/fonts/zoinks.ttf", 100));
+    _fonts.push_back( new PhFont("../Resources/fonts/Arial.ttf", 100));
+    _currentFont = _fonts.last();
+
     _firstload = true;
     openFile(file);
     _firstload = false;
@@ -29,31 +34,31 @@ void StripWindow::initializeGL()
     beg->start();
 
 
-    _fonts.push_back( new PhFont("../Resources/fonts/zoinks.ttf", 100));
-    _fonts.push_back( new PhFont("../Resources/fonts/Arial.ttf", 100));
+
 
     for(auto it : _doc->getTexts())
     {
-        qDebug() << it->getTimeIn() << it->getPeople().getName() << ":" << it->getContent() << it->getTrack() << this->height() - (90 - it->getTrack()*30);
+//        qDebug() << it->getTimeIn() << it->getPeople().getName() << ":" << it->getContent() << it->getTrack() << this->height() - (90 - it->getTrack()*30);
 /*
         _texts.push_back(new PhGraphicText(it->getPeople().getName() + ":",
                                            it->getTimeIn() - 50 - 90000, this->height() - (90 - it->getTrack()*30), -1,
                                            50, 30, _fonts.first(), "vert"));
 */
         _texts.push_back(new PhGraphicText(it->getContent(),
-                                           (it->getTimeIn() - 90000) * 5, this->height() - (90 - it->getTrack()*30), -1,
-                                            (it->getTimeOut() - it->getTimeIn()) * 5, 30, _fonts.last(), "vert"));
+                                           (it->getTimeIn() - 90000) * 3, this->height() - (90 - it->getTrack()*30), -1,
+                                            (it->getTimeOut() - it->getTimeIn()) * 3, 30, _currentFont, "vert"));
     }
-/*
+
+    /*
     _imgs.push_back(new PhGraphicImage("filename", 0,
                                        this->height() - 90, -2,
                                        90, 90, "rose",
                                        1000, 1));
-    _imgs.push_back(new PhGraphicImage("rythmofile",
+    */
+    _imgs.push_back(new PhGraphicImage("../Ressources/data/img/rythmo-bg.png",
                                        (this->width() - 480) / 2, 0, -2,
                                        480, 270, "rose",
                                        1, 1));
-*/
     qDebug() << "It took " << beg->elapsed() << "ms";
 
 }
@@ -102,4 +107,15 @@ void StripWindow::clearData()
 {
     _texts.clear();
     _imgs.clear();
+}
+
+
+QList<PhFont *> StripWindow::getFonts()
+{
+    return _fonts;
+}
+
+void StripWindow::setCurrentFont(PhFont * font){
+    _currentFont = font;
+    initializeGL();
 }
