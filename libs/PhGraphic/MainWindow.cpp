@@ -77,7 +77,7 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
     case Qt::Key_Q:
         close();
         break;
-    case Qt::Key_F12:
+    case Qt::Key_F10:
         toggleFullWindow();
         break;
         //Doesn't work yet.
