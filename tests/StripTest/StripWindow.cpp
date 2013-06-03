@@ -58,8 +58,8 @@ void StripWindow::initializeGL()
 
     _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png", 0,
                                        h - hstrip, -2,
-                                       90, hstrip, "rose",
-                                       100, 1));
+                                       640, hstrip, "rose",
+                                       2, 1));
     /*
     _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png",
                                        (this->width() - 480) / 2, 0, -2,
