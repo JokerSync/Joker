@@ -45,6 +45,7 @@ void MainWindow::createMenus()
 
 void MainWindow::openFile()
 {
+    _strip->setScroll(false);
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
     if (!fileName.isEmpty())
         _strip->openFile(fileName);
@@ -67,6 +68,9 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
 {
     switch(keyEvent->key())
     {
+    case Qt::Key_S:
+        _strip->changeScroll();
+        break;
     case Qt::Key_Escape:
         close();
         break;
@@ -75,6 +79,10 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
         break;
     case Qt::Key_Space:
         toggleFullWindow();
+        break;
+        //Doesn't work yet.
+    case QKeySequence::Open:
+        openFile();
         break;
     default:
         _strip->keyPressEvent(keyEvent);

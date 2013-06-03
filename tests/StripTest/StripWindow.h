@@ -33,6 +33,9 @@ public:
     int getStripHeight();
     void setStripHeight(int w);
 
+    void changeScroll();
+    void setScroll(bool shouldScroll);
+
     QList<PhFont *> getFonts();
     void setCurrentFont(PhFont * font);
 
@@ -42,10 +45,11 @@ public:
 private :
 
     PhStripDoc *_doc;
-    float xmove;
+    float _xmove;
     float y;
     bool _firstload;
     bool _isFS;
+    bool _shouldmove;
 
     QList<PhFont *> _fonts;
     PhFont *_currentFont;

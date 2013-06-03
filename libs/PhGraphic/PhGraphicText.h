@@ -27,7 +27,7 @@ public:
      * @brief Draw the text on screen
      *
      */
-    void draw();
+    void draw(int px);
     void init();
     void dispose();
 

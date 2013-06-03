@@ -21,11 +21,11 @@ void PhGraphicImage::dispose()
 {
 }
 
-void PhGraphicImage::draw()
+void PhGraphicImage::draw(int px)
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
-    PhGraphicTexturedRect::draw();
+    PhGraphicTexturedRect::draw(px);
 }
 
 

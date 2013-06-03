@@ -64,7 +64,8 @@ void PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 //    return *_surface;
 //}
 
-void PhGraphicTexturedRect::draw(){
+void PhGraphicTexturedRect::draw(int scroll){
+
 
     //glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
     glMatrixMode(GL_MODELVIEW);
@@ -80,8 +81,6 @@ void PhGraphicTexturedRect::draw(){
     int w = this->getWidth();
     int h = this->getHeight();
     int z = this->getZ();
-    //qDebug() << "Hi! Here's my size : " << h << w;
-    //qDebug() << "And my position : " << x << y << z;
 
     /*
     (0,0) ------ (1,0)
@@ -89,11 +88,10 @@ void PhGraphicTexturedRect::draw(){
       |            |
     (0,1) ------ (1,1)
     */
-    //qDebug() << _tu << _tv;
-    glTexCoord3i(0, 0, 1);glVertex3i(x,         y,      z);
-    glTexCoord3i(_tv, 0, 1);glVertex3i(x + w * _tv,     y,      z);
-    glTexCoord3i(_tv, _tu, 1);glVertex3i(x + w * _tv,     y + h * _tu,  z);
-    glTexCoord3i(0, _tu, 1);glVertex3i(x,         y + h * _tu,  z);
+    glTexCoord3i(0, 0, 1);glVertex3i(x + scroll,         y,      z);
+    glTexCoord3i(_tv, 0, 1);glVertex3i(x + w * _tv + scroll,     y,      z);
+    glTexCoord3i(_tv, _tu, 1);glVertex3i(x + w * _tv + scroll,     y + h * _tu,  z);
+    glTexCoord3i(0, _tu, 1);glVertex3i(x + scroll,         y + h * _tu,  z);
 
     glEnd();
     glDisable(GL_TEXTURE_2D);
