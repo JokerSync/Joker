@@ -45,20 +45,21 @@ void StripWindow::initializeGL()
                                            50, 30, _fonts.first(), "vert"));
 */
         _texts.push_back(new PhGraphicText(it->getContent(),
-                                           (it->getTimeIn() - 90000) * 3, this->height() - (90 - it->getTrack()*30), -1,
-                                            (it->getTimeOut() - it->getTimeIn()) * 3, 30, _currentFont, "vert"));
+                                           (it->getTimeIn() - 90000) * 4, this->height() - (90 - it->getTrack()*30), -1,
+                                            (it->getTimeOut() - it->getTimeIn()) * 4, 30, _currentFont, "vert"));
     }
 
-    /*
-    _imgs.push_back(new PhGraphicImage("filename", 0,
+
+    _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png", 0,
                                        this->height() - 90, -2,
                                        90, 90, "rose",
                                        1000, 1));
-    */
-    _imgs.push_back(new PhGraphicImage("../Ressources/data/img/rythmo-bg.png",
+    /*
+    _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png",
                                        (this->width() - 480) / 2, 0, -2,
                                        480, 270, "rose",
                                        1, 1));
+    */
     qDebug() << "It took " << beg->elapsed() << "ms";
 
 }
