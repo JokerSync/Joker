@@ -64,11 +64,15 @@ void MainWindow::changeFont()
     QStringList fonts;
     int i = 0;
     for (auto it : _strip->getFonts() ){
-        fonts << (QString::number(i) + " : " + it->getFontName());
-        i++;
+        fonts << it->getFontName();
     }
     bool ok;
     QString item = QInputDialog::getItem(this, tr("Font Selection"),tr("fonts loaded"), fonts, 0, false, &ok);
+    for (auto it : _strip->getFonts() ){
+        if (it->getFontName() == item)
+            _strip->setCurrentFont(it);
+    }
+    _strip->initializeGL();
 
 }
 
@@ -82,6 +86,8 @@ void MainWindow::exportRythomAsPNG()
         _strip->setXmove(this->width());
         _strip->paintGL();
     }
+    QMessageBox::about(this, "Info",
+                       tr("Export ended well! \n") + tr("file(s) saved here : ") + QDir::homePath() + "/") ;
 }
 
 void MainWindow::resizeEvent(QResizeEvent *)
