@@ -23,6 +23,8 @@ public:
 private slots:
     void openFile();
     void changeFont();
+    void exportRythomAsPNG();
+    void resizeEvent(QResizeEvent *);
 
 private:
     void toggleFullWindow();
@@ -34,8 +36,8 @@ private:
     QMenu *fileMenu;
     QMenu *toolMenu;
     QAction *openAct;
-    QAction *exitAct;
-    //QAction *changeFont;
+    QAction *changeFontAct;
+    QAction *exportRythmoAct;
    };
 
 #endif // MAINWINDOW_H

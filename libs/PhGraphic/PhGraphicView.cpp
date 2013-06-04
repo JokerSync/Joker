@@ -27,7 +27,6 @@ PhGraphicView::PhGraphicView( QWidget *parent, QString name)
 
 void PhGraphicView::resizeGL(int width, int height)
 {
-
     resize(width, height);
     if(height == 0)
         height = 1;
@@ -64,4 +63,9 @@ void PhGraphicView::onRefresh()
     updateGL();
 }
 
+
+PhGraphicContext *PhGraphicView::getContext()
+{
+    return _context;
+}
 

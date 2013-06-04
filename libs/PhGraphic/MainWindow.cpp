@@ -3,7 +3,7 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-#include "mainwindow.h"
+#include "MainWindow.h"
 
 #include <QAction>
 #include <QFileDialog>
@@ -28,6 +28,7 @@ void MainWindow::createMenus()
     fileMenu = menuBar()->addMenu(tr("&File"));
     
     openAct = new QAction(tr("&Open"), this);
+    openAct->setShortcut(QKeySequence::Open);
     fileMenu->addAction(openAct);
     connect(openAct, SIGNAL(triggered()), this, SLOT(openFile()));
 
@@ -36,10 +37,17 @@ void MainWindow::createMenus()
 
     toolMenu = menuBar()->addMenu(tr("Tools"));
 
-    exitAct = new QAction(tr("&Change font..."), this) ;
-    toolMenu->addAction(exitAct);
-    connect(exitAct, SIGNAL(triggered()), this, SLOT(changeFont()));
+    changeFontAct = new QAction(tr("&Change font..."), this) ;
+    toolMenu->addAction(changeFontAct);
+    connect(changeFontAct, SIGNAL(triggered()), this, SLOT(changeFont()));
     toolMenu->addSeparator();
+
+    exportRythmoAct = new QAction(tr("&Export next minute"), this) ;
+    toolMenu->addAction(exportRythmoAct);
+    exportRythmoAct->setShortcut(QKeySequence::Print);
+    connect(exportRythmoAct, SIGNAL(triggered()), this, SLOT(exportRythomAsPNG()));
+    toolMenu->addSeparator();
+
 
 }
 
@@ -60,12 +68,30 @@ void MainWindow::changeFont()
         i++;
     }
     bool ok;
-    QString item = QInputDialog::getItem(this, tr("Font Selection"),tr("fonts"), fonts, 0, false, &ok);
+    QString item = QInputDialog::getItem(this, tr("Font Selection"),tr("fonts loaded"), fonts, 0, false, &ok);
 
+}
+
+void MainWindow::exportRythomAsPNG()
+{
+    //_strip->setXmove(0);
+    // As 1920px is 4 sec, 1 min is 28800 px
+    int nbFrames = 28800 / this->width() + 1;
+    for(int i = 0; i < nbFrames ; i++){
+        _strip->getContext()->saveToPNG(QString::number(i));
+        _strip->setXmove(this->width());
+        _strip->paintGL();
+    }
+}
+
+void MainWindow::resizeEvent(QResizeEvent *)
+{
+    _strip->resizeGL(this->width(), this->height());
 }
 
 void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
 {
+
     switch(keyEvent->key())
     {
     case Qt::Key_Space:
@@ -78,12 +104,12 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
         close();
         break;
     case Qt::Key_F10:
+        qDebug() << "F10 hit!";
         toggleFullWindow();
         break;
-        //Doesn't work yet.
-    case QKeySequence::Open:
-        openFile();
-        break;
+    case Qt::Key_Left:
+        _strip->setScroll(false);
+        _strip->setXmove(this->width());
     default:
         _strip->keyPressEvent(keyEvent);
     }
@@ -92,15 +118,8 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
 void MainWindow::toggleFullWindow()
 {
     if(this->isFullScreen())
-    {
         showNormal();
-        _strip->toggleFS(false);
-    }
     else
-    {
         showFullScreen();
-        _strip->toggleFS(true);
-    }
-    _strip->resizeGL(this->width(), this->height());
 }
 

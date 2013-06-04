@@ -22,6 +22,13 @@ void PhGraphicContext::saveToPNG()
     impr.save(s);
 }
 
+void PhGraphicContext::saveToPNG(PhString number){
+    QImage impr(_graphVeiw->grabFrameBuffer());
+    QDateTime now(QDateTime::currentDateTime());
+    QString s = QDir::homePath()+"/Phonations-Serie-" + now.toString("h-m-s") + "-" + number  + ".png";
+    impr.save(s);
+}
+
 
 void PhGraphicContext::init(){
     if (SDL_Init(SDL_INIT_VIDEO) == 0)

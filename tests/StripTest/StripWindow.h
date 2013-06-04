@@ -39,7 +39,10 @@ public:
     QList<PhFont *> getFonts();
     void setCurrentFont(PhFont * font);
 
-    void toggleFS(bool fs);
+    void setXmove(int n);
+
+    PhStripDoc *getDoc();
+
 
 
 private :
@@ -48,13 +51,14 @@ private :
     float _xmove;
     float y;
     bool _firstload;
-    bool _isFS;
     bool _shouldmove;
 
     QList<PhFont *> _fonts;
     PhFont *_currentFont;
     QList<PhGraphicText *> _texts;
     QList<PhGraphicImage *> _imgs;
+
+    QTime *_test;
 
 };
 

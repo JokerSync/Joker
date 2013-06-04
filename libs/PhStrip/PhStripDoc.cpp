@@ -105,6 +105,11 @@ bool PhStripDoc::openDetX(QString filename)
 PhString PhStripDoc::getVideoPath(){
     return _videoPath;
 }
+
+int PhStripDoc::getDuration()
+{
+    return _texts.last()->getTimeOut() - _videoTimestamp;
+}
 PhString PhStripDoc::getTitle(){
     return _title;
 }

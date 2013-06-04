@@ -71,6 +71,7 @@ public:
     PhString getTitle();
     PhTime getVideoTimestamp();
     PhString getVideoPath();
+    int getDuration();
     int getTimeScale();
     float getFps();
     bool getDrop();
