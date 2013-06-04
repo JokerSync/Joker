@@ -52,7 +52,6 @@ void StripWindow::initializeGL()
                                            it->getTimeIn() - 50 - 90000, this->height() - (90 - it->getTrack()*30), -1,
                                            50, 30, _fonts.first(), "vert"));
 */
-         qDebug() << (hstrip - it->getTrack()*(hstrip/3));
         _texts.push_back(new PhGraphicText(it->getContent(),
                                            (it->getTimeIn() - _doc->getVideoTimestamp()) * 20, h - (hstrip - it->getTrack()*(hstrip /3)), -1,
                                             (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 3 , _currentFont, "vert"));
@@ -61,10 +60,9 @@ void StripWindow::initializeGL()
     int nbRythmo = 5;
 
     // 4 sec = 1920px => 1 sec = 640px
-    //
     if(_doc->getTitle() != NULL)
         nbRythmo = _doc->getDuration() * 640 / 240 + 2;
-    qDebug() << nbRythmo;
+
     _imgs.push_back(new PhGraphicImage("../Resources/img/motif-240.png", 0,
                                        h - hstrip, -2,
                                        240, hstrip, "rose",
