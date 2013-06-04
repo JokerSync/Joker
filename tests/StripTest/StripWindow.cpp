@@ -15,17 +15,19 @@
 StripWindow::StripWindow(QWidget *parent, PhString file)
     : PhGraphicView( parent, "StripTest")
 {
-    _xmove = 0;
+    _test = new QTime();
+    _test->start();
     resize(640,360);
-    _isFS = false;
 
+    _fonts.push_back( new PhFont("../Resources/fonts/LTE50198.ttf", 100));
     _fonts.push_back( new PhFont("../Resources/fonts/zoinks.ttf", 100));
     _fonts.push_back( new PhFont("../Resources/fonts/Arial.ttf", 100));
-    _currentFont = _fonts.last();
+    _fonts.push_back( new PhFont("../Resources/fonts/Bedizen.ttf", 100));
 
+    _currentFont = _fonts.last();
+    _shouldmove = false;
     _firstload = true;
     openFile(file);
-    _firstload = false;
 }
 
 
@@ -34,14 +36,13 @@ void StripWindow::initializeGL()
     QTime *beg = new QTime();
     beg->start();
 
-    int h = 0;
-
     glClearColor(1,1,1,0);
-    h = this->height();
 
+    int h = this->height();
     int hstrip = h / 4;
-    clearData();
 
+
+    clearData();
 
     for(auto it : _doc->getTexts())
     {
@@ -53,31 +54,34 @@ void StripWindow::initializeGL()
 */
          qDebug() << (hstrip - it->getTrack()*(hstrip/3));
         _texts.push_back(new PhGraphicText(it->getContent(),
-                                           (it->getTimeIn() - _doc->getVideoTimestamp()) * 4, h - (hstrip - it->getTrack()*(hstrip /3)), -1,
-                                            (it->getTimeOut() - it->getTimeIn()) * 4, hstrip / 3 , _currentFont, "vert"));
+                                           (it->getTimeIn() - _doc->getVideoTimestamp()) * 20, h - (hstrip - it->getTrack()*(hstrip /3)), -1,
+                                            (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 3 , _currentFont, "vert"));
     }
 
 
-    _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png", 0,
+    _imgs.push_back(new PhGraphicImage("../Resources/img/motif-240.png", 0,
                                        h - hstrip, -2,
-                                       640, hstrip, "rose",
-                                       4, 1));
+                                       240, hstrip, "rose",
+                                       200, 1));
     /*
     _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png",
                                        (this->width() - 480) / 2, 0, -2,
                                        480, 270, "rose",
                                        1, 1));
     */
-    qDebug() << "It took " << beg->elapsed() << "ms to load text on texture";
+    //qDebug() << "It tooks " << beg->elapsed() << "ms to load text on texture";
 
 }
 
 void StripWindow::paintGL()
 {
+
+    //qDebug() << _test->elapsed() << " : " << _xmove;
+
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (_shouldmove)
-        _xmove -= 1;
+        _xmove -= 8;
 
     for(auto it : _imgs)
     {
@@ -111,6 +115,7 @@ void StripWindow::openFile(QString filename)
     clearData();
     if (!_firstload)
         initializeGL();
+    _firstload = false;
 
 }
 
@@ -131,10 +136,6 @@ void StripWindow::setCurrentFont(PhFont * font){
     initializeGL();
 }
 
-void StripWindow::toggleFS(bool fs){
-    _isFS = fs;
-}
-
 
 void StripWindow::changeScroll()
 {
@@ -143,6 +144,14 @@ void StripWindow::changeScroll()
 
 void StripWindow::setScroll(bool shouldScroll)
 {
-
+    _shouldmove = shouldScroll;
 }
 
+void StripWindow::setXmove(int n){
+    _xmove += -n;
+}
+
+PhStripDoc *StripWindow::getDoc()
+{
+    return _doc;
+}

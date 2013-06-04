@@ -27,6 +27,8 @@ public:
     void toggleMouvement();
     bool b_Fullscreen;
 
+    PhGraphicContext * getContext();
+
 
 public slots:
     virtual void onRefresh();

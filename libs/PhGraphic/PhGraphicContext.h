@@ -14,6 +14,8 @@
 #include "SDL/SDL.h"
 #include "SDL_ttf/SDL_ttf.h"
 
+#include "PhTools/PhString.h"
+
 class PhGraphicView;
 
 class PhGraphicContext
@@ -21,6 +23,7 @@ class PhGraphicContext
 public:
     PhGraphicContext(PhGraphicView *view);
     void saveToPNG();
+    void saveToPNG(PhString number);
 
 private:
     void init();
