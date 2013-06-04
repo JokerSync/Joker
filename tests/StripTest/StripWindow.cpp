@@ -58,11 +58,17 @@ void StripWindow::initializeGL()
                                             (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 3 , _currentFont, "vert"));
     }
 
+    int nbRythmo = 5;
 
+    // 4 sec = 1920px => 1 sec = 640px
+    //
+    if(_doc->getTitle() != NULL)
+        nbRythmo = _doc->getDuration() * 640 / 240 + 2;
+    qDebug() << nbRythmo;
     _imgs.push_back(new PhGraphicImage("../Resources/img/motif-240.png", 0,
                                        h - hstrip, -2,
                                        240, hstrip, "rose",
-                                       200, 1));
+                                       nbRythmo, 1));
     /*
     _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png",
                                        (this->width() - 480) / 2, 0, -2,

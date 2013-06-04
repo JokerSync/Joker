@@ -66,7 +66,8 @@ bool PhStripDoc::openDetX(QString filename)
     QDomNodeList shotList = DetX->elementsByTagName("shot");
     for (int i=0; i < shotList.length(); i++)
     {
-        _cuts.push_front(new PhStripCut(PhStripCut::Simple , i));
+        _cuts.push_front(new PhStripCut(PhStripCut::Simple , PhTimeCode::frameFromString(shotList.at(i).toElement().attribute("timecode"),
+                                                                                         PhTimeCodeType25)));
     }
 
     //Find the text list
@@ -108,7 +109,7 @@ PhString PhStripDoc::getVideoPath(){
 
 int PhStripDoc::getDuration()
 {
-    return _texts.last()->getTimeOut() - _videoTimestamp;
+    return (_cuts.first()->getTimeIn() - _videoTimestamp) / _fps;
 }
 PhString PhStripDoc::getTitle(){
     return _title;
