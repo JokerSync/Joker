@@ -90,7 +90,7 @@ LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 $${DESTDIR}
 
 macx {
-	copyfiles.commands = cp -r ${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/
+	copyfiles.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/
 }
 QMAKE_EXTRA_TARGETS += copyfiles
 POST_TARGETDEPS += copyfiles
