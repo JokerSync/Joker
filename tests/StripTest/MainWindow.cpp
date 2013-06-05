@@ -15,7 +15,7 @@
 
 MainWindow::MainWindow(PhString file)
 {
-    resize(640,360);
+    resize(1280,360);
     createMenus();
     setWindowTitle(tr("Striptest"));
     _strip = new StripWindow(this, file);
