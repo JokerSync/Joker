@@ -12,7 +12,7 @@ PhGraphicText::PhGraphicText(PhString content, int x, int y, int z, int w, int h
     this->setContent(content);
     this->setFont(font);
 
-    SDL_Color textColor={255, 255, 255, 0 };
+    SDL_Color textColor={0, 0, 0, 0 };
     SDL_Surface *surface = TTF_RenderUTF8_Blended(font->getFont(),
                                                   content.toStdString().c_str(),
                                                   textColor);
