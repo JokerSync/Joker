@@ -46,7 +46,7 @@ void StripWindow::initializeGL()
 
     for(auto it : _doc->getTexts())
     {
-//        qDebug() << it->getTimeIn() << it->getPeople().getName() << ":" << it->getContent() << it->getTrack() << this->height() - (90 - it->getTrack()*30);
+        //qDebug() << it->getTimeIn() << it->getPeople().getName() << ":" << it->getContent() << it->getTrack();
 /*
         _texts.push_back(new PhGraphicText(it->getPeople().getName() + ":",
                                            it->getTimeIn() - 50 - 90000, this->height() - (90 - it->getTrack()*30), -1,

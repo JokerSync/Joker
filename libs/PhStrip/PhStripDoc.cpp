@@ -76,7 +76,7 @@ bool PhStripDoc::openDetX(QString filename)
     {
         QDomNode currentLine = lineList.at(i);
         PhString id = currentLine.toElement().attribute("role");
-        for(int j = 0; j < lineList.at(0).childNodes().length(); j++){
+        for(int j = 0; j < currentLine.childNodes().length(); j++){
             if(currentLine.childNodes().at(j).nodeName() == "text"){
                 if (!currentLine.childNodes().at(j+1).isNull()){
                     _texts.push_back(new PhStripText(_actors[id],
