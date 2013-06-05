@@ -53,7 +53,6 @@ void PhGraphicView::keyPressEvent(QKeyEvent *keyEvent)
         this->_context->saveToPNG();
         break;
     }
-
 }
 
 void PhGraphicView::onRefresh()
