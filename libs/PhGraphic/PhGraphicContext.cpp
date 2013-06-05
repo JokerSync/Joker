@@ -41,7 +41,7 @@ void PhGraphicContext::init(){
         qDebug() << "TTF error:" << TTF_GetError();
 
 
-    glClearColor(.90,.0,.0,1.0); 	//Background color RGBA
+    glClearColor(1,1,1,0); 	//Background color RGBA
     glEnable(GL_DEPTH_TEST); 	//Activate the depth test
     glEnable(GL_TEXTURE_2D); 	//Activate the texturing
 

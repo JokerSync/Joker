@@ -23,7 +23,7 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
     _fonts.push_back( new PhFont("../Resources/fonts/Arial.ttf", 200));
     _fonts.push_back( new PhFont("../Resources/fonts/Bedizen.ttf", 200));
 
-    _currentFont = _fonts.last();
+    _currentFont = _fonts.first();
     _shouldmove = false;
     _firstload = true;
     openFile(file);
@@ -35,28 +35,28 @@ void StripWindow::initializeGL()
     QTime *beg = new QTime();
     beg->start();
 
-    glClearColor(1,1,1,0);
+    glClearColor(1,1,0,0);
 
     int h = this->height();
     int hstrip = h;
-
 
     clearData();
 
     for(auto it : _doc->getTexts())
     {
-        //qDebug() << it->getTimeIn() << it->getPeople().getName() << ":" << it->getContent() << it->getTrack();
-/*
-        _texts.push_back(new PhGraphicText(it->getPeople().getName() + ":",
-                                           it->getTimeIn() - 50 - 90000, this->height() - (90 - it->getTrack()*30), -1,
-                                           50, 30, _fonts.first(), "vert"));
-*/
+        //qDebug() << it->getTimeIn() << it->getPeople().getName() << ":" << it->getContent() << it->getTimeIn() - _doc->getLastPosition();
+        if (it->isSimple()){
+            int nameWidth = (it->getPeople().getName().length() + 1) * 10;
+            _texts.push_back(new PhGraphicText(it->getPeople().getName(),
+                                               (it->getTimeIn() - _doc->getLastPosition()) * 20 - nameWidth - 10, h - (hstrip - it->getTrack()*(hstrip /3)) + 10, -1,
+                                               nameWidth, 30, _fonts.first(), it->getPeople().getColor()));
+        }
         _texts.push_back(new PhGraphicText(it->getContent(),
-                                           (it->getTimeIn() - _doc->getVideoTimestamp()) * 20, h - (hstrip - it->getTrack()*(hstrip /3)), -1,
-                                            (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 3 , _currentFont, "vert"));
+                                           (it->getTimeIn() - _doc->getLastPosition()) * 20, h - (hstrip - it->getTrack()*(hstrip /3)), -1,
+                                           (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 3 , _currentFont, PhColor("black")));
     }
 
-    int nbRythmo = 10;
+    int nbRythmo = 100;
 
     // 4 sec = 1920px => 1 sec = 640px
     if(_doc->getTitle() != NULL)
@@ -64,8 +64,9 @@ void StripWindow::initializeGL()
 
     _imgs.push_back(new PhGraphicImage("../Resources/img/motif-240.png", 0,
                                        h - hstrip, -2,
-                                       240, hstrip, "rose",
+                                       240, hstrip, PhColor("white"),
                                        nbRythmo, 1));
+
     /*
     _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png",
                                        (this->width() - 480) / 2, 0, -2,
@@ -82,6 +83,7 @@ void StripWindow::paintGL()
     //qDebug() << _test->elapsed() << " : " << _xmove;
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
     if (_shouldmove)
         _xmove -= 8;

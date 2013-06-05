@@ -114,12 +114,16 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
         close();
         break;
     case Qt::Key_F10:
-        qDebug() << "F10 hit!";
         toggleFullWindow();
         break;
     case Qt::Key_Left:
         _strip->setScroll(false);
         _strip->setXmove(this->width());
+        break;
+    case Qt::Key_Right:
+        _strip->setScroll(false);
+        _strip->setXmove(-this->width());
+        break;
     default:
         _strip->keyPressEvent(keyEvent);
     }

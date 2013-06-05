@@ -50,6 +50,10 @@ bool PhStripDoc::openDetX(QString filename)
     _videoTimestamp = PhTimeCode::frameFromString(DetX->elementsByTagName("videofile").at(0).toElement().attribute("timestamp"),
                                                   PhTimeCodeType25);
 
+    //Find the last position
+    _lastPosition = PhTimeCode::frameFromString(DetX->elementsByTagName("last_position").at(0).toElement().attribute("timecode"),
+                                                PhTimeCodeType25);
+
 
     //With DetX files, fps is always 25 so drop is false
     _fps = 25.00;
@@ -62,7 +66,7 @@ bool PhStripDoc::openDetX(QString filename)
     for (int i=0; i < charList.length(); i++)
     {
         QDomElement chara = charList.at(i).toElement();
-        PhPeople *people = new PhPeople(chara.attribute("name"), chara.attribute("color"));
+        PhPeople *people = new PhPeople(chara.attribute("name"), PhColor(chara.attribute("color")));
 
         //Currently using id as key instead of name
         _actors[chara.attribute("id")] = people;
@@ -83,6 +87,7 @@ bool PhStripDoc::openDetX(QString filename)
         QDomNode currentLine = lineList.at(i);
         PhString id = currentLine.toElement().attribute("role");
         for(int j = 0; j < currentLine.childNodes().length(); j++){
+
             if(currentLine.childNodes().at(j).nodeName() == "text"){
                 if (!currentLine.childNodes().at(j+1).isNull()){
                     _texts.push_back(new PhStripText(_actors[id],
@@ -91,7 +96,8 @@ bool PhStripDoc::openDetX(QString filename)
                                                                                  PhTimeCodeType25),
                                                      PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"),
                                                                                  PhTimeCodeType25),
-                                                     currentLine.toElement().attribute("track").toInt()));
+                                                     currentLine.toElement().attribute("track").toInt(),
+                                                     (j==1) ));
                 }
                 else
                 {
@@ -100,7 +106,8 @@ bool PhStripDoc::openDetX(QString filename)
                                                      PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
                                                                                  PhTimeCodeType25),
                                                      NULL,
-                                                     currentLine.toElement().attribute("track").toInt()));
+                                                     currentLine.toElement().attribute("track").toInt(),
+                                                     (j==1)));
                 }
             }
         }
@@ -115,7 +122,7 @@ PhString PhStripDoc::getVideoPath(){
 
 int PhStripDoc::getDuration()
 {
-    return (_cuts.first()->getTimeIn() - _videoTimestamp) / _fps;
+    return (_texts.last()->getTimeOut() - _videoTimestamp) / _fps;
 }
 PhString PhStripDoc::getTitle(){
     return _title;
@@ -123,6 +130,10 @@ PhString PhStripDoc::getTitle(){
 
 PhTime PhStripDoc::getVideoTimestamp(){
     return _videoTimestamp;
+}
+
+PhTime PhStripDoc::getLastPosition(){
+    return _lastPosition;
 }
 
 float PhStripDoc::getFps()

@@ -17,7 +17,7 @@ TTF_Font * PhFont::getFont()
 {
     return _font;
 }
-#include <QDebug>
+
 PhString PhFont::getFontName(){
     QStringList list ;
     list = _filename.split("/");
