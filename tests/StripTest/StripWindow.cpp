@@ -39,7 +39,7 @@ void StripWindow::initializeGL()
     glClearColor(1,1,1,0);
 
     int h = this->height();
-    int hstrip = h / 4;
+    int hstrip = h;
 
 
     clearData();
