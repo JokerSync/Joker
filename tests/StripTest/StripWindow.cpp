@@ -17,7 +17,6 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
 {
     _test = new QTime();
     _test->start();
-    resize(640,360);
 
     _fonts.push_back( new PhFont("../Resources/fonts/LTE50198.ttf", 100));
     _fonts.push_back( new PhFont("../Resources/fonts/zoinks.ttf", 100));
@@ -57,7 +56,7 @@ void StripWindow::initializeGL()
                                             (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 3 , _currentFont, "vert"));
     }
 
-    int nbRythmo = 5;
+    int nbRythmo = 10;
 
     // 4 sec = 1920px => 1 sec = 640px
     if(_doc->getTitle() != NULL)
