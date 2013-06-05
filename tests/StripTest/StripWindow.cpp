@@ -35,7 +35,7 @@ void StripWindow::initializeGL()
     QTime *beg = new QTime();
     beg->start();
 
-    glClearColor(1,1,0,0);
+    glClearColor(1,1,1,0);
 
     int h = this->height();
     int hstrip = h;
@@ -44,15 +44,21 @@ void StripWindow::initializeGL()
 
     for(auto it : _doc->getTexts())
     {
+        //h is the window height, hstrip is the strip height
+        //hstrip/16 correspond to the upper alpha line of the strip
+        //hstrip/8 correspond to the two alpha lines of the strip (up & down)
+        //it->getTrack() is the position on the strip (0 is the upper on)
+        //we split in 3 because we are using 3 tracks on the strip
+        int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/8)/3)*it->getTrack();
         //qDebug() << it->getTimeIn() << it->getPeople().getName() << ":" << it->getContent() << it->getTimeIn() - _doc->getLastPosition();
         if (it->isSimple()){
             int nameWidth = (it->getPeople().getName().length() + 1) * 10;
             _texts.push_back(new PhGraphicText(it->getPeople().getName(),
-                                               (it->getTimeIn() - _doc->getLastPosition()) * 20 - nameWidth - 10, h - (hstrip - it->getTrack()*(hstrip /3)) + 10, -1,
+                                               (it->getTimeIn() - _doc->getLastPosition()) * 20 - nameWidth - 10, y, -1,
                                                nameWidth, 30, _fonts.first(), it->getPeople().getColor()));
         }
         _texts.push_back(new PhGraphicText(it->getContent(),
-                                           (it->getTimeIn() - _doc->getLastPosition()) * 20, h - (hstrip - it->getTrack()*(hstrip /3)), -1,
+                                           (it->getTimeIn() - _doc->getLastPosition()) * 20, y , -1,
                                            (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 3 , _currentFont, PhColor("black")));
     }
 
