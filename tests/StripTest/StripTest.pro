@@ -20,9 +20,11 @@ TEMPLATE = app
 
 #Main app
 SOURCES += main.cpp \
-	StripWindow.cpp
+	StripWindow.cpp \
+	MainWindow.cpp
 
 HEADERS += StripWindow.h \
+	MainWindow.h\
 
 #PhStrip
 SOURCES += \
@@ -52,7 +54,7 @@ SOURCES += \
 	../../libs/PhGraphic/PhGraphicRect.cpp \
 	../../libs/PhGraphic/PhGraphicTexturedRect.cpp \
 	../../libs/PhGraphic/PhGraphicContext.cpp \
-	../../libs/PhGraphic/MainWindow.cpp\
+
 
 HEADERS  += \
 	../../libs/PhGraphic/PhGraphicView.h \
@@ -62,7 +64,7 @@ HEADERS  += \
 	../../libs/PhGraphic/PhGraphicRect.h \
 	../../libs/PhGraphic/PhGraphicTexturedRect.h \
 	../../libs/PhGraphic/PhGraphicContext.h \
-	../../libs/PhGraphic/MainWindow.h\
+
 
 #PhTools
 SOURCES += \
