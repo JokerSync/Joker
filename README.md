@@ -1,7 +1,7 @@
 Joker
 =====
 
-This depot hosts the Joker projet components:
+This depot hosts the *Joker* projet components:
 
 * applications
 * libraries
