@@ -140,6 +140,10 @@ void StripWindow::setCurrentFont(PhFont * font){
     initializeGL();
 }
 
+PhFont * StripWindow::getCurrentFont(){
+    return _currentFont;
+}
+
 
 void StripWindow::changeScroll()
 {

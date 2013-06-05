@@ -63,11 +63,15 @@ void MainWindow::changeFont()
 {
     QStringList fonts;
     int i = 0;
+    int j = 0;
     for (auto it : _strip->getFonts() ){
         fonts << it->getFontName();
+        if (it->getFontName() == _strip->getCurrentFont()->getFontName())
+            j = i;
+        i++;
     }
     bool ok;
-    QString item = QInputDialog::getItem(this, tr("Font Selection"),tr("fonts loaded"), fonts, 0, false, &ok);
+    QString item = QInputDialog::getItem(this, tr("Font Selection"),tr("fonts loaded"), fonts, j, false, &ok);
     for (auto it : _strip->getFonts() ){
         if (it->getFontName() == item)
             _strip->setCurrentFont(it);

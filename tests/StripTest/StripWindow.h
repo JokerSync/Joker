@@ -38,6 +38,7 @@ public:
 
     QList<PhFont *> getFonts();
     void setCurrentFont(PhFont * font);
+    PhFont * getCurrentFont();
 
     void setXmove(int n);
 
