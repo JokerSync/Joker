@@ -29,6 +29,10 @@ private:
      */
     PhTime _videoTimestamp;
     /**
+     * @brief _lastPosition
+     */
+    PhTime _lastPosition;
+    /**
      * Path to the video content.
      */
     PhString _videoPath;
@@ -71,6 +75,7 @@ public:
     PhString getTitle();
     PhTime getVideoTimestamp();
     PhString getVideoPath();
+    PhTime getLastPosition();
     int getDuration();
     int getTimeScale();
     float getFps();

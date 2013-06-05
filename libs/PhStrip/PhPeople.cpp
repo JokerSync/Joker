@@ -8,7 +8,7 @@
 PhPeople::PhPeople()
 {
     _name = "Default";
-    _color = "";
+    _color = PhColor();
 }
 
 PhPeople::PhPeople(PhString name, PhColor color)
