@@ -18,14 +18,18 @@ void PhGraphicContext::saveToPNG()
 {
     QImage impr(_graphVeiw->grabFrameBuffer());
     QDateTime now(QDateTime::currentDateTime());
-    QString s = QDir::homePath()+"/Phonations-" + now.toString("dd-MM-yy-h-m-s")  + ".png";
+    if(!QDir(QDir::homePath()+"/Phonations/").exists())
+        QDir().mkdir(QDir::homePath()+"/Phonations/");
+    QString s = QDir::homePath()+"/Phonations/" +"Phonations-" + now.toString("dd-MM-yy-h-m-s")  + ".png";
     impr.save(s);
 }
 
 void PhGraphicContext::saveToPNG(PhString number){
     QImage impr(_graphVeiw->grabFrameBuffer());
     QDateTime now(QDateTime::currentDateTime());
-    QString s = QDir::homePath()+"/Phonations-Serie-" + now.toString("h-m-s") + "-" + number  + ".png";
+    if(!QDir(QDir::homePath()+"/Phonations/").exists())
+        QDir().mkdir(QDir::homePath()+"/Phonations/");
+    QString s = QDir::homePath()+"/Phonations/"+"Phonations-serie" + now.toString("h-m-s") + "-" + number  + ".png";
     impr.save(s);
 }
 
