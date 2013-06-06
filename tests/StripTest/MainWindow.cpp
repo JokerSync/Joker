@@ -84,7 +84,8 @@ void MainWindow::exportRythomAsPNG()
 {
     //_strip->setXmove(0);
     // As 1920px is 4 sec, 1 min is 28800 px
-    int nbFrames = 28800 / this->width() + 1;
+    // This is for 5 minutes
+    int nbFrames = (28800 / this->width())* 5 + 1;
     for(int i = 0; i < nbFrames ; i++){
         _strip->getContext()->saveToPNG(QString::number(i));
         _strip->setXmove(this->width());
@@ -116,11 +117,11 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
     case Qt::Key_F10:
         toggleFullWindow();
         break;
-    case Qt::Key_Left:
+    case Qt::Key_Right:
         _strip->setScroll(false);
         _strip->setXmove(this->width());
         break;
-    case Qt::Key_Right:
+    case Qt::Key_Left:
         _strip->setScroll(false);
         _strip->setXmove(-this->width());
         break;

@@ -49,7 +49,8 @@ void StripWindow::initializeGL()
         //hstrip/8 correspond to the two alpha lines of the strip (up & down)
         //it->getTrack() is the position on the strip (0 is the upper on)
         //we split in 3 because we are using 3 tracks on the strip
-        int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/8)/3)*it->getTrack();
+        int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*it->getTrack() + 30;
+
         //qDebug() << it->getTimeIn() << it->getPeople().getName() << ":" << it->getContent() << it->getTimeIn() - _doc->getLastPosition();
         if (it->isSimple()){
             int nameWidth = (it->getPeople().getName().length() + 1) * 10;
@@ -59,7 +60,7 @@ void StripWindow::initializeGL()
         }
         _texts.push_back(new PhGraphicText(it->getContent(),
                                            (it->getTimeIn() - _doc->getLastPosition()) * 20, y , -1,
-                                           (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 3 , _currentFont, PhColor("black")));
+                                           (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , _currentFont, it->getPeople().getColor()));
     }
 
     int nbRythmo = 100;
@@ -72,6 +73,11 @@ void StripWindow::initializeGL()
                                        h - hstrip, -2,
                                        240, hstrip, PhColor("white"),
                                        nbRythmo, 1));
+
+    _imgs.push_back(new PhGraphicImage("../Resources/img/motif-240.png", 0,
+                                       h - hstrip, -2,
+                                       240, hstrip, PhColor("white"),
+                                       -20, 1));
 
     /*
     _imgs.push_back(new PhGraphicImage("../Resources/img/rythmo-bg.png",
