@@ -90,14 +90,40 @@ bool PhStripDoc::openDetX(QString filename)
 
             if(currentLine.childNodes().at(j).nodeName() == "text"){
                 if (!currentLine.childNodes().at(j+1).isNull()){
-                    _texts.push_back(new PhStripText(_actors[id],
-                                                     currentLine.childNodes().at(j).toElement().text(),
-                                                     PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
-                                                                                 PhTimeCodeType25),
-                                                     PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"),
-                                                                                 PhTimeCodeType25),
-                                                     currentLine.toElement().attribute("track").toInt(),
-                                                     (j==1) ));
+                    int start = PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"), PhTimeCodeType25);
+                    int end = PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"), PhTimeCodeType25);
+                    // if the sentence is short enough
+                    if( end - start < 150)
+                    {
+                        _texts.push_back(new PhStripText(_actors[id],
+                                                         currentLine.childNodes().at(j).toElement().text(),
+                                                         start,
+                                                         end,
+                                                         currentLine.toElement().attribute("track").toInt(),
+                                                         (j==1) ));
+                    }
+                    else // we split in half
+                    {
+                        int length = currentLine.childNodes().at(j).toElement().text().length();
+                        PhString firstHalf = currentLine.childNodes().at(j).toElement().text().left(length/2);
+                        PhString secondHalf = currentLine.childNodes().at(j).toElement().text().right(length/2);
+                        //first split
+                        _texts.push_back(new PhStripText(_actors[id],
+                                                         firstHalf,
+                                                         start,
+                                                         start + (end - start)/2,
+                                                         currentLine.toElement().attribute("track").toInt(),
+                                                         (j==1) ));
+                        //second split
+                        _texts.push_back(new PhStripText(_actors[id],
+                                                         secondHalf,
+                                                         start + (end - start)/2,
+                                                         end,
+                                                         currentLine.toElement().attribute("track").toInt(),
+                                                         false ));
+
+                    }
+
                 }
                 else
                 {
