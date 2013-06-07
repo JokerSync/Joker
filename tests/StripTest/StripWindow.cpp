@@ -18,10 +18,10 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
     _test = new QTime();
     _test->start();
 
-    _fonts.push_back( new PhFont("../Resources/fonts/LTE50198.ttf", 200));
-    _fonts.push_back( new PhFont("../Resources/fonts/zoinks.ttf", 200));
-    _fonts.push_back( new PhFont("../Resources/fonts/Arial.ttf", 200));
-    _fonts.push_back( new PhFont("../Resources/fonts/Bedizen.ttf", 200));
+    _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/LTE50198.ttf", 150));
+    _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/zoinks.ttf", 150));
+    _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/Arial.ttf", 150));
+    _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/Bedizen.ttf", 150));
 
     _currentFont = _fonts.first();
     _shouldmove = false;
@@ -41,6 +41,8 @@ void StripWindow::initializeGL()
     int hstrip = h;
 
     clearData();
+
+
 
     for(auto it : _doc->getTexts())
     {
@@ -69,12 +71,13 @@ void StripWindow::initializeGL()
     if(_doc->getTitle() != NULL)
         nbRythmo = _doc->getDuration() * 640 / 240 + 2;
 
-    _imgs.push_back(new PhGraphicImage("../Resources/img/motif-240.png", 0,
+
+    _imgs.push_back(new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/img/motif-240.png", 0,
                                        h - hstrip, -2,
                                        240, hstrip, PhColor("white"),
                                        nbRythmo, 1));
 
-    _imgs.push_back(new PhGraphicImage("../Resources/img/motif-240.png", 0,
+    _imgs.push_back(new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/img/motif-240.png", 0,
                                        h - hstrip, -2,
                                        240, hstrip, PhColor("white"),
                                        -20, 1));
@@ -95,7 +98,6 @@ void StripWindow::paintGL()
     //qDebug() << _test->elapsed() << " : " << _xmove;
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
     if (_shouldmove)
         _xmove -= 8;

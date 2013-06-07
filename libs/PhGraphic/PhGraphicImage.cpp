@@ -11,7 +11,7 @@ PhGraphicImage::PhGraphicImage(PhString filename, int x, int y, int z, int w, in
     //this->setFilename(filename);
     SDL_Surface * surface = IMG_Load(filename.toStdString().c_str());
     createTextureFromSurface(surface);
-    SDL_FreeSurface(surface);
+    //SDL_FreeSurface(surface);
 }
 
 void PhGraphicImage::init()
