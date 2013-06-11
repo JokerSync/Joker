@@ -16,7 +16,11 @@ public:
         Simple, FadeIn, FadeOut, CrossFade
     };
 
-    PhStripCut();
+    /**
+     * @brief PhStripCut
+     * @param type
+     * @param time
+     */
     PhStripCut(PhStripCut::PhCutType type, PhTime time);
 
 

@@ -76,6 +76,7 @@ void PhGraphicTexturedRect::draw(int scroll){
     glEnable(GL_TEXTURE_2D);
     glBegin(GL_QUADS); 	//Begining the cube's drawing
 
+    glColor4f(1.0, 1.0, 1.0, 1.0);
     int x = this->getX();
     int y = this->getY();
     int w = this->getWidth();

@@ -32,7 +32,7 @@ public:
      Create a timecode string representation from a frame number and a type
      @param frame A frame number.
      @param type A PhTimeCodeType value.
-     @return An NSString* timecode representation.
+     @return An PhString* timecode representation.
      */
     static PhString stringFromFrame(PhFrame frame, PhTimeCodeType type);
 
