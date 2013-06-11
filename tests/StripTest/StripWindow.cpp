@@ -120,11 +120,7 @@ void StripWindow::paintGL()
 
 }
 
-/**
- * @brief StripWindow::openFile
- * @param filename
- * Set the position to 0, load a new PhStripDoc, call initializeGL if another file was loaded
- */
+
 void StripWindow::openFile(QString filename)
 {
     _xmove = 0;
@@ -135,75 +131,48 @@ void StripWindow::openFile(QString filename)
 
 }
 
-/**
- * @brief StripWindow::clearData
- *Clear _texts and _imgs
- */
+
 void StripWindow::clearData()
 {
     _texts.clear();
     _imgs.clear();
 }
 
-/**
- * @brief StripWindow::getFonts
- * @return QList<PhFont *>
- */
+
 QList<PhFont *> StripWindow::getFonts()
 {
     return _fonts;
 }
 
-/**
- * @brief StripWindow::setCurrentFont
- * @param font
- * Set the current font with the font in param and re-initialize the OpenGL content
- */
+
 void StripWindow::setCurrentFont(PhFont * font){
     _currentFont = font;
     initializeGL();
 }
 
-/**
- * @brief StripWindow::getCurrentFont
- * @return PhFont
- */
+
 PhFont * StripWindow::getCurrentFont(){
     return _currentFont;
 }
 
-/**
- * @brief StripWindow::changeScroll
- * Toggle between Play and Pause
- */
+
 void StripWindow::changeScroll()
 {
     _shouldmove = ! _shouldmove;
 }
 
-/**
- * @brief StripWindow::setScroll
- * @param shouldScroll
- * Set the scroll information
- */
+
 void StripWindow::setScroll(bool shouldScroll)
 {
     _shouldmove = shouldScroll;
 }
 
-/**
- * @brief StripWindow::setXmove
- * @param n
- * Used to go to a precize position
- */
+
 void StripWindow::setXmove(int n){
     _xmove += -n;
 }
 
-/**
- * @brief StripWindow::getDoc
- * @return PhStripDoc
- */
+
 PhStripDoc *StripWindow::getDoc()
 {
     return _doc;

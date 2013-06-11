@@ -20,21 +20,60 @@
 class PhGraphicTexturedRect : PhGraphicRect
 {
 public:
+    /**
+     * @brief PhGraphicTexturedRect
+     * @param x
+     * @param y
+     * @param z
+     * @param w
+     * @param h
+     * @param color
+     * @param tv
+     * @param tu
+     * Constructor using PhGraphicRect::PhGraphicRect()
+     */
     PhGraphicTexturedRect(int x, int y, int z, int w, int h, PhColor color, int tv = 1, int tu = 1);
 
 
+    /**
+     * @brief draw
+     * @param px
+     * draw the textured rectangle
+     */
     void draw(int px);
 protected:
 
+    /**
+     * @brief createTextureFromSurface
+     * @param surface
+     * create an OpenGL texture form a SDL Surface
+     */
     void createTextureFromSurface(SDL_Surface * surface);
 //    void setTexture(GLuint texture);
 
 //    SDL_Surface * getSurface();
+    /**
+     * @brief getTexture
+     * @return _texture
+     * get the texture address(?)
+     */
     GLuint getTexture();
 
 private:
+    /**
+     * @brief _texture
+     * The texture address(?)
+     */
     GLuint _texture;
+    /**
+     * @brief _tv
+     * number of horizontal repetition
+     */
     int _tv;
+    /**
+     * @brief _tu
+     * number of vertical repetition
+     */
     int _tu;
 //  SDL_Surface *_surface;
 };

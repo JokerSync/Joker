@@ -13,13 +13,35 @@
 class PhFont
 {
 public:
+    /**
+     * @brief PhFont
+     * @param filename
+     * @param size
+     */
     PhFont(PhString filename, int size);
+    /**
+     * @brief getFont
+     * @return _font
+     */
     TTF_Font * getFont();
+    /**
+     * @brief getFontName
+     * @return _filename
+     */
     PhString getFontName();
 
 private:
+    /**
+     * @brief _font
+     */
     TTF_Font * _font;
+    /**
+     * @brief _filename
+     */
     PhString _filename;
+    /**
+     * @brief _size
+     */
     int _size;
 };
 
