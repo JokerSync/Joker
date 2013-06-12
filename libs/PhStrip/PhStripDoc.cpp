@@ -12,6 +12,11 @@ PhStripDoc::PhStripDoc(QString filename)
     openDetX(filename);
 }
 
+QList<PhStripCut *> PhStripDoc::getCuts()
+{
+    return _cuts;
+}
+
 
 bool PhStripDoc::openDetX(QString filename)
 {
@@ -184,41 +189,3 @@ QList<PhStripText *> PhStripDoc::getTexts()
 {
     return _texts;
 }
-
-
-/*
-void Xml_Dom::statistics(){
-    this->w->addMsg("-----Statistics-----------------");
-    this->w->addMsg("Nombre de changement de plan : " + QString::number(detxDoc.elementsByTagName("shot").length()));
-    this->w->addMsg("Nombre de roles : " + QString::number(detxDoc.elementsByTagName("role").length()));
-}
-
-void Xml_Dom::charList(){
-    // get character list
-    QDomNodeList charList = detxDoc.elementsByTagName("role");
-    this->w->addMsg("-----CharList----------------");
-    for (int i=0; i < 10; i++){
-        this->w->addMsg("Char name : " + (charList.at(i).toElement().attribute("name")));
-    }
-
-    // display all characters
-
-
-}
-void Xml_Dom::showScript(){
-    this->w->addMsg("----Script------------------");
-    QDomNodeList lines = detxDoc.elementsByTagName("line");
-    this->w->addMsg("Il y a " + QString::number(lines.length()) + " répliques");
-
-    for (int i = 0; i<20; i++){
-        QString txt = "";
-
-        QDomNodeList line = lines.at(i).toElement().elementsByTagName("text");
-        for (int j = 0; j < line.length(); j++){
-            txt += (line.at(j).toElement().text());
-
-        }
-        this->w->addMsg(lines.at(i).toElement().attribute("role") + ": " + txt);
-    }
-}
-*/

@@ -35,6 +35,7 @@ public:
     PhGraphicTexturedRect(int x, int y, int z, int w, int h, PhColor color, int tv = 1, int tu = 1);
 
 
+
     /**
      * @brief draw
      * @param px
@@ -60,6 +61,12 @@ protected:
     GLuint getTexture();
 
 private:
+    /**
+     * @brief createTextureFromColor
+     * @param color
+     */
+    void createTextureFromColor(PhColor color);
+
     /**
      * @brief _texture
      * The texture address(?)
