@@ -30,6 +30,9 @@ public:
      */
     void draw(int px);
 
+    void init(){};
+    void dispose(){};
+
     /**
      * @brief setSize
      * @param w

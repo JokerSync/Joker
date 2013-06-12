@@ -77,6 +77,8 @@ public:
      */
     PhStripDoc(PhString filename);
 
+    QList<PhStripCut *> getCuts();
+
     /**
      * @brief getTitle
      * @return _title

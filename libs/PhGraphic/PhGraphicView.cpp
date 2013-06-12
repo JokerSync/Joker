@@ -10,18 +10,6 @@ PhGraphicView::PhGraphicView( QWidget *parent, QString name)
     connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);
     this->_context = new PhGraphicContext(this);
-
-/*
-    QAction *quit = new QAction("&Quit", this);
-
-    _menu = new QMenu(parent);
-    _menu->addMenu("&File");
-    _menu->addAction(quit);
-
-    qDebug() << "Menu";
-
-    connect(quit, SIGNAL(triggered()), qApp, SLOT(quit()));
-    */
 }
 
 void PhGraphicView::resizeGL(int width, int height)

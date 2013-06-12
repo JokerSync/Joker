@@ -16,6 +16,8 @@
 #include "PhGraphic/PhGraphicText.h"
 #include "PhGraphic/PhGraphicImage.h"
 
+#include "PhTools/PhTimeCode.h"
+
 
 class StripWindow : public PhGraphicView
 {Q_OBJECT
@@ -111,6 +113,8 @@ private :
      */
     float _xmove;
 
+    float _xMoveStrip;
+
     /**
      * @brief _firstload
      * allow us to know if it's the first load or not.
@@ -145,6 +149,8 @@ private :
      * QList of images loaded
      */
     QList<PhGraphicImage *> _imgs;
+
+    QList<PhGraphicTexturedRect *> _cuts;
 
     /**
      * @brief _test
