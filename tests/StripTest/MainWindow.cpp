@@ -135,6 +135,15 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
     }
 }
 
+void MainWindow::wheelEvent(QWheelEvent *wheel)
+{
+    QPoint numPixels = wheel->pixelDelta();
+    _strip->setXmove(numPixels.x());
+    _strip->setXmove(numPixels.y());
+
+}
+
+
 void MainWindow::toggleFullWindow()
 {
     if(this->isFullScreen())
