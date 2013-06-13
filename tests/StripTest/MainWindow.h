@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(PhString file);
     virtual void keyPressEvent( QKeyEvent *keyEvent );
+    virtual void wheelEvent(QWheelEvent *wheel);
 
 
 private slots:
