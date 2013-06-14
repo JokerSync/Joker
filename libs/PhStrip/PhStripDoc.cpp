@@ -94,61 +94,52 @@ bool PhStripDoc::openDetX(QString filename)
         for(int j = 0; j < currentLine.childNodes().length(); j++){
 
             if(currentLine.childNodes().at(j).nodeName() == "text"){
+                int start = PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"), PhTimeCodeType25);
+                int end = 0;
                 if (!currentLine.childNodes().at(j+1).isNull()){
-                    int start = PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"), PhTimeCodeType25);
-                    int end = PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"), PhTimeCodeType25);
-                    // if the sentence is short enough
-                    if( end - start < 150)
-                    {
-                        _texts.push_back(new PhStripText(_actors[id],
-                                                         currentLine.childNodes().at(j).toElement().text(),
-                                                         start,
-                                                         end,
-                                                         currentLine.toElement().attribute("track").toInt(),
-                                                         (j==1) ));
-                    }
-                    else // we split in half
-                    {
-                        int length = currentLine.childNodes().at(j).toElement().text().length();
-                        PhString firstHalf = currentLine.childNodes().at(j).toElement().text().left(length/2);
-                        PhString secondHalf = currentLine.childNodes().at(j).toElement().text().right(length/2);
-                        //first split
-                        _texts.push_back(new PhStripText(_actors[id],
-                                                         firstHalf,
-                                                         start,
-                                                         start + (end - start)/2,
-                                                         currentLine.toElement().attribute("track").toInt(),
-                                                         (j==1) ));
-                        //second split
-                        _texts.push_back(new PhStripText(_actors[id],
-                                                         secondHalf,
-                                                         start + (end - start)/2,
-                                                         end,
-                                                         currentLine.toElement().attribute("track").toInt(),
-                                                         false ));
-
-                    }
-
+                    end = PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"), PhTimeCodeType25);
                 }
                 else
                 {
-                    _texts.push_back(new PhStripText(_actors[id],
-                                                     currentLine.childNodes().at(j).toElement().text(),
-                                                     PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
-                                                                                 PhTimeCodeType25),
-                                                     NULL,
-                                                     currentLine.toElement().attribute("track").toInt(),
-                                                     (j==1)));
+                    end = NULL;
                 }
+                splitText(_actors[id], start, end,
+                          currentLine.childNodes().at(j).toElement().text(), currentLine.toElement().attribute("track").toInt(),
+                          (j==1), 0 );
             }
         }
     }
-
     return true;
 }
 
 PhString PhStripDoc::getVideoPath(){
     return _videoPath;
+}
+
+
+void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, PhString sentence, int track, bool alone, int i){
+
+    if(sentence != " " && sentence != "" ){
+        // if the sentence is short enough
+        if( end - start < 150)
+        {
+            _texts.push_back(new PhStripText(actor, sentence,
+                                             start, end,
+                                             track, alone));
+        }
+        else // we split in half
+        {
+            int length = sentence.length();
+            splitText(actor, start, start + (end - start)/2, sentence.left(length/2), track, (i==0), i);
+            i++;
+            if (length % 2 == 0){
+                splitText(actor, start + (end - start)/2, end, sentence.right(length/2), track, (i==0), i);
+            }
+            else{
+                splitText(actor, start + (end - start)/2, end, sentence.right(length/2 + 1), track, (i==0), i);
+            }
+        }
+    }
 }
 
 int PhStripDoc::getDuration()
