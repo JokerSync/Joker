@@ -139,7 +139,7 @@ void MainWindow::wheelEvent(QWheelEvent *wheel)
 {
     QPoint numPixels = wheel->pixelDelta();
     _strip->setXmove(numPixels.x());
-    _strip->setXmove(numPixels.y());
+    _strip->setXmove(-numPixels.y());
 
 }
 
