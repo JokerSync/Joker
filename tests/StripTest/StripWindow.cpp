@@ -65,8 +65,8 @@ void StripWindow::initializeGL()
         //it->getTrack() is the position on the strip (0 is the upper on)
         //we split in 3 because we are using 3 tracks on the strip
         int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*it->getTrack() + 30;        
+
         //Display the name only if the setence is standalone
-        // Not very accurate
         if (it->isSimple()){
             int nameWidth = (it->getPeople().getName().length() + 1) * 10;
             _texts.push_back(new PhGraphicText(it->getPeople().getName(),
@@ -79,42 +79,36 @@ void StripWindow::initializeGL()
     }
 
     //Set a default number of strip repetition
-    int nbRythmo = this->width()/240 + 2;
+    int nbRythmo = this->width()/24;
 
     //Load the strip on the right
     _imgs.push_back(new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/img/motif-240.png",
-                                       0, h - hstrip, -3,
+                                       -1000, h - hstrip, -3,
                                        240, hstrip, PhColor("white"),
                                        nbRythmo, 1));
 
     for(auto it : _doc->getCuts())
     {
         _cuts.push_back(new PhGraphicTexturedRect((it->getTimeIn() - _doc->getLastPosition()) * 20, 0, -2,
-                                                  8, hstrip,
-                                                  PhColor("red")));
+                                                  2, hstrip,
+                                                  PhColor("black")));
     }
-
 }
 
 void StripWindow::paintGL()
 {
-
-
-
     //Time-based test
     //qDebug() << _test->elapsed() << " : " << _xmove;
 
     //Clear the buffer
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
     //Set the deplacement size of the strip
     if (_shouldmove){
         _xmove -= 8;
         _xMoveStrip -= 8;
         // if the strip moved of more than 1 X strip's width it came back
-        if(_xMoveStrip <= -240)
+        if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
             _xMoveStrip = 0;
     }
 
@@ -131,7 +125,6 @@ void StripWindow::paintGL()
     {
         it->draw(_xmove);
     }
-
 }
 
 
@@ -191,7 +184,10 @@ void StripWindow::setScroll(bool shouldScroll)
 
 
 void StripWindow::setXmove(int n){
-    _xmove += -n;
+    _xmove -= n;
+    _xMoveStrip -= n;
+    if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
+        _xMoveStrip = 0;
 }
 
 
