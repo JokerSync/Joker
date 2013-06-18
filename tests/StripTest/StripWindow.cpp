@@ -18,10 +18,10 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
     _test = new QTime();
     _test->start();
 
-    _fonts.push_back( new PhFont("../Resources/fonts/LTE50198.ttf", 200));
-    _fonts.push_back( new PhFont("../Resources/fonts/zoinks.ttf", 200));
-    _fonts.push_back( new PhFont("../Resources/fonts/Arial.ttf", 200));
-    _fonts.push_back( new PhFont("../Resources/fonts/Bedizen.ttf", 200));
+    _fonts.push_back( new PhFont("../Resources/fonts/LTE50198.ttf", 100));
+    _fonts.push_back( new PhFont("../Resources/fonts/zoinks.ttf", 100));
+    _fonts.push_back( new PhFont("../Resources/fonts/Arial.ttf", 100));
+    _fonts.push_back( new PhFont("../Resources/fonts/Bedizen.ttf", 100));
 
     _currentFont = _fonts.last();
     _shouldmove = false;
