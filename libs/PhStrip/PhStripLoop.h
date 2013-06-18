@@ -15,7 +15,15 @@ private:
     int _number;
 
 public:
+    /**
+     * @brief PhStripLoop
+     * default constructor
+     */
     PhStripLoop();
+    /**
+     * @brief PhStripLoop
+     * @param number
+     */
     PhStripLoop(int number);
 };
 

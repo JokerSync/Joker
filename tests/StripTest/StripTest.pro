@@ -21,10 +21,12 @@ TEMPLATE = app
 #Main app
 SOURCES += main.cpp \
 	StripWindow.cpp \
-	MainWindow.cpp
+	MainWindow.cpp \
+    ../../libs/PhTools/PhFileTools.cpp
 
 HEADERS += StripWindow.h \
 	MainWindow.h\
+    ../../libs/PhTools/PhFileTools.h
 
 #PhStrip
 SOURCES += \
@@ -90,8 +92,13 @@ INCLUDEPATH += 	../../libs \
 LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 
 macx {
-	copyfiles.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/
+	copyresources.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/
 }
-QMAKE_EXTRA_TARGETS += copyfiles
-POST_TARGETDEPS += copyfiles
+QMAKE_EXTRA_TARGETS += copyresources
+POST_TARGETDEPS += copyresources
+macx {
+	copylibs.commands = mkdir $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs ; cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/
+}
+QMAKE_EXTRA_TARGETS += copylibs
+POST_TARGETDEPS += copylibs
 

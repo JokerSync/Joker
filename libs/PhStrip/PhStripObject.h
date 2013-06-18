@@ -14,8 +14,21 @@ private:
      */
     PhTime _timeIn;
 public:
+    /**
+     * @brief PhStripObject
+     * default constructor
+     */
     PhStripObject();
+    /**
+     * @brief PhStripObject
+     * @param time
+     * contructor
+     */
     PhStripObject(PhTime time);
+    /**
+     * @brief getTimeIn
+     * @return _timeIn
+     */
     PhTime getTimeIn();
 };
 

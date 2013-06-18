@@ -12,6 +12,11 @@ PhStripDoc::PhStripDoc(QString filename)
     openDetX(filename);
 }
 
+QList<PhStripCut *> PhStripDoc::getCuts()
+{
+    return _cuts;
+}
+
 
 bool PhStripDoc::openDetX(QString filename)
 {
@@ -50,6 +55,10 @@ bool PhStripDoc::openDetX(QString filename)
     _videoTimestamp = PhTimeCode::frameFromString(DetX->elementsByTagName("videofile").at(0).toElement().attribute("timestamp"),
                                                   PhTimeCodeType25);
 
+    //Find the last position
+    _lastPosition = PhTimeCode::frameFromString(DetX->elementsByTagName("last_position").at(0).toElement().attribute("timecode"),
+                                                PhTimeCodeType25);
+
 
     //With DetX files, fps is always 25 so drop is false
     _fps = 25.00;
@@ -62,7 +71,7 @@ bool PhStripDoc::openDetX(QString filename)
     for (int i=0; i < charList.length(); i++)
     {
         QDomElement chara = charList.at(i).toElement();
-        PhPeople *people = new PhPeople(chara.attribute("name"), chara.attribute("color"));
+        PhPeople *people = new PhPeople(chara.attribute("name"), PhColor(chara.attribute("color")));
 
         //Currently using id as key instead of name
         _actors[chara.attribute("id")] = people;
@@ -83,29 +92,24 @@ bool PhStripDoc::openDetX(QString filename)
         QDomNode currentLine = lineList.at(i);
         PhString id = currentLine.toElement().attribute("role");
         for(int j = 0; j < currentLine.childNodes().length(); j++){
+
             if(currentLine.childNodes().at(j).nodeName() == "text"){
+                int start = PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"), PhTimeCodeType25);
+                int end = 0;
                 if (!currentLine.childNodes().at(j+1).isNull()){
-                    _texts.push_back(new PhStripText(_actors[id],
-                                                     currentLine.childNodes().at(j).toElement().text(),
-                                                     PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
-                                                                                 PhTimeCodeType25),
-                                                     PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"),
-                                                                                 PhTimeCodeType25),
-                                                     currentLine.toElement().attribute("track").toInt()));
+                    end = PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"), PhTimeCodeType25);
                 }
                 else
                 {
-                    _texts.push_back(new PhStripText(_actors[id],
-                                                     currentLine.childNodes().at(j).toElement().text(),
-                                                     PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"),
-                                                                                 PhTimeCodeType25),
-                                                     NULL,
-                                                     currentLine.toElement().attribute("track").toInt()));
+                    // One char is ~1.20588 frame
+                    end = start + currentLine.childNodes().at(j).toElement().text().length() * 1.20588 + 1;
                 }
+                splitText(_actors[id], start, end,
+                          currentLine.childNodes().at(j).toElement().text(), currentLine.toElement().attribute("track").toInt(),
+                          (j==1), 0 );
             }
         }
     }
-
     return true;
 }
 
@@ -113,9 +117,35 @@ PhString PhStripDoc::getVideoPath(){
     return _videoPath;
 }
 
+
+void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, PhString sentence, int track, bool alone, int i){
+
+    if(sentence != " " && sentence != "" ){
+        // if the sentence is short enough
+        if( end - start < 150)
+        {
+            _texts.push_back(new PhStripText(actor, sentence,
+                                             start, end,
+                                             track, alone));
+        }
+        else // we split in half
+        {
+            int length = sentence.length();
+            splitText(actor, start, start + (end - start)/2, sentence.left(length/2), track, (i==0), i);
+            i++;
+            if (length % 2 == 0){
+                splitText(actor, start + (end - start)/2, end, sentence.right(length/2), track, (i==0), i);
+            }
+            else{
+                splitText(actor, start + (end - start)/2, end, sentence.right(length/2 + 1), track, (i==0), i);
+            }
+        }
+    }
+}
+
 int PhStripDoc::getDuration()
 {
-    return (_cuts.first()->getTimeIn() - _videoTimestamp) / _fps;
+    return (_texts.last()->getTimeOut() - _videoTimestamp) / _fps;
 }
 PhString PhStripDoc::getTitle(){
     return _title;
@@ -123,6 +153,10 @@ PhString PhStripDoc::getTitle(){
 
 PhTime PhStripDoc::getVideoTimestamp(){
     return _videoTimestamp;
+}
+
+PhTime PhStripDoc::getLastPosition(){
+    return _lastPosition;
 }
 
 float PhStripDoc::getFps()
@@ -147,41 +181,3 @@ QList<PhStripText *> PhStripDoc::getTexts()
 {
     return _texts;
 }
-
-
-/*
-void Xml_Dom::statistics(){
-    this->w->addMsg("-----Statistics-----------------");
-    this->w->addMsg("Nombre de changement de plan : " + QString::number(detxDoc.elementsByTagName("shot").length()));
-    this->w->addMsg("Nombre de roles : " + QString::number(detxDoc.elementsByTagName("role").length()));
-}
-
-void Xml_Dom::charList(){
-    // get character list
-    QDomNodeList charList = detxDoc.elementsByTagName("role");
-    this->w->addMsg("-----CharList----------------");
-    for (int i=0; i < 10; i++){
-        this->w->addMsg("Char name : " + (charList.at(i).toElement().attribute("name")));
-    }
-
-    // display all characters
-
-
-}
-void Xml_Dom::showScript(){
-    this->w->addMsg("----Script------------------");
-    QDomNodeList lines = detxDoc.elementsByTagName("line");
-    this->w->addMsg("Il y a " + QString::number(lines.length()) + " répliques");
-
-    for (int i = 0; i<20; i++){
-        QString txt = "";
-
-        QDomNodeList line = lines.at(i).toElement().elementsByTagName("text");
-        for (int j = 0; j < line.length(); j++){
-            txt += (line.at(j).toElement().text());
-
-        }
-        this->w->addMsg(lines.at(i).toElement().attribute("role") + ": " + txt);
-    }
-}
-*/

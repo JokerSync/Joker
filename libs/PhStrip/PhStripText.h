@@ -13,12 +13,47 @@ class PhStripText : public PhStripObject {
 
 public:
 
-    PhStripText(PhPeople * people, PhString content, PhTime timeIn, PhTime timeOut, int track);
+    /**
+     * @brief PhStripText
+     * @param people
+     * @param content
+     * @param timeIn
+     * @param timeOut
+     * @param track
+     * @param simpleText
+     * Constructor
+     */
+    PhStripText(PhPeople * people, PhString content, PhTime timeIn, PhTime timeOut, int track, bool simpleText);
+    /**
+     * @brief getContent
+     * @return _content
+     */
     PhString getContent();
+    /**
+     * @brief getPeople
+     * @return _people
+     */
     PhPeople getPeople();
+    /**
+     * @brief getTrack
+     * @return _track
+     */
     int getTrack();
+    /**
+     * @brief getTimeIn
+     * @return _timeIn
+     */
     int getTimeIn();
+    /**
+     * @brief getTimeOut
+     * @return _timeOut
+     */
     int getTimeOut();
+    /**
+     * @brief isSimple
+     * @return _simpleText
+     */
+    bool isSimple();
 
 private:
 /**
@@ -35,7 +70,18 @@ private:
      */
     PhPeople *_people;
 
+    /**
+     * @brief _track
+     * Track of the text, 0 is on top of the strip
+     */
     int _track;
+
+    /**
+     * @brief _simpleText
+     * allow us to know if the text if a standalone sentence or a group of word making a sentence,
+     * very usefull to avoid repetitive display of the PhPeople name
+     */
+    bool _simpleText;
 };
 
 #endif // PHSTRIPTEXT_H

@@ -18,14 +18,18 @@ void PhGraphicContext::saveToPNG()
 {
     QImage impr(_graphVeiw->grabFrameBuffer());
     QDateTime now(QDateTime::currentDateTime());
-    QString s = QDir::homePath()+"/Phonations-" + now.toString("dd-MM-yy-h-m-s")  + ".png";
+    if(!QDir(QDir::homePath()+"/Phonations/").exists())
+        QDir().mkdir(QDir::homePath()+"/Phonations/");
+    QString s = QDir::homePath()+"/Phonations/" +"Phonations-" + now.toString("dd-MM-yy-h-m-s")  + ".png";
     impr.save(s);
 }
 
 void PhGraphicContext::saveToPNG(PhString number){
     QImage impr(_graphVeiw->grabFrameBuffer());
     QDateTime now(QDateTime::currentDateTime());
-    QString s = QDir::homePath()+"/Phonations-Serie-" + now.toString("h-m-s") + "-" + number  + ".png";
+    if(!QDir(QDir::homePath()+"/Phonations/").exists())
+        QDir().mkdir(QDir::homePath()+"/Phonations/");
+    QString s = QDir::homePath()+"/Phonations/"+"Phonations-serie" + now.toString("h-m-s") + "-" + number  + ".png";
     impr.save(s);
 }
 
@@ -41,7 +45,7 @@ void PhGraphicContext::init(){
         qDebug() << "TTF error:" << TTF_GetError();
 
 
-    glClearColor(.90,.0,.0,1.0); 	//Background color RGBA
+    glClearColor(1,1,1,0); 	//Background color RGBA
     glEnable(GL_DEPTH_TEST); 	//Activate the depth test
     glEnable(GL_TEXTURE_2D); 	//Activate the texturing
 

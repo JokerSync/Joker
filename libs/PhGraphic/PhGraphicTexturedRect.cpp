@@ -5,11 +5,58 @@
 
 #include "PhGraphicTexturedRect.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int z, int w, int h, PhColor color, int tv, int tu) :
     PhGraphicRect(x, y, z, w, h, color)
 {
     _tu = tu;
     _tv = tv;
+
+    //Witch will be overwrited by createTextureFromSurface if is an PhGraphicImage
+    createTextureFromColor(color);
+
+}
+
+
+void PhGraphicTexturedRect::createTextureFromColor(PhColor color){
+
+    GLubyte Texture[4] =
+    {
+        color.red(),
+        color.green(),
+        color.blue(),
+        255,
+    };
+
+    GLenum textureFormat = 0;
+
+    textureFormat = GL_RGBA;
+
+    glEnable( GL_TEXTURE_2D );
+    // Have OpenGL generate a texture object handle for us
+    glGenTextures( 1, &_texture );
+
+    // Bind the texture object
+    glBindTexture( GL_TEXTURE_2D, _texture );
+
+
+    // Edit the texture object's image data using the information SDL_Surface gives us
+    glTexImage2D (
+                GL_TEXTURE_2D, 	//Type : texture 2D
+                0, 	//Mipmap : aucun
+                4, 	//Couleurs : 4
+                1, 	//Largeur : 2
+                1, 	//Hauteur : 2
+                0, 	//Largeur du bord : 0
+                GL_RGBA, 	//Format : RGBA
+                GL_UNSIGNED_BYTE, 	//Type des couleurs
+                Texture 	//Addresse de l'image
+                );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
 }
 
 void PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
@@ -71,30 +118,40 @@ void PhGraphicTexturedRect::draw(int scroll){
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glBindTexture(GL_TEXTURE_2D, _texture);
-
-    glEnable(GL_TEXTURE_2D);
-    glBegin(GL_QUADS); 	//Begining the cube's drawing
-
     int x = this->getX();
-    int y = this->getY();
     int w = this->getWidth();
-    int h = this->getHeight();
-    int z = this->getZ();
 
-    /*
-    (0,0) ------ (1,0)
-      |            |
-      |            |
-    (0,1) ------ (1,1)
-    */
-    glTexCoord3i(0, 0, 1);glVertex3i(x + scroll,         y,      z);
-    glTexCoord3i(_tv, 0, 1);glVertex3i(x + w * _tv + scroll,     y,      z);
-    glTexCoord3i(_tv, _tu, 1);glVertex3i(x + w * _tv + scroll,     y + h * _tu,  z);
-    glTexCoord3i(0, _tu, 1);glVertex3i(x + scroll,         y + h * _tu,  z);
 
-    glEnd();
-    glDisable(GL_TEXTURE_2D);
+
+    // only draw object from 3000px before screen and 3000px after and rythmo
+    if(-scroll + 3000 > x && -scroll - 3000 - w < x){
+        glBindTexture(GL_TEXTURE_2D, _texture);
+        if (w == 240)
+            glDisable(GL_BLEND);
+
+        glEnable(GL_TEXTURE_2D);
+        glBegin(GL_QUADS); 	//Begining the cube's drawing
+
+
+
+        int y = this->getY();
+        int h = this->getHeight();
+        int z = this->getZ();
+
+        /*
+        (0,0) ------ (1,0)
+          |            |
+          |            |
+        (0,1) ------ (1,1)
+        */
+        glTexCoord3i(0, 0, 1);glVertex3i(x + scroll,         y,      z);
+        glTexCoord3i(_tv, 0, 1);glVertex3i(x + w * _tv + scroll,     y,      z);
+        glTexCoord3i(_tv, _tu, 1);glVertex3i(x + w * _tv + scroll,     y + h * _tu,  z);
+        glTexCoord3i(0, _tu, 1);glVertex3i(x + scroll,         y + h * _tu,  z);
+
+        glEnd();
+        glDisable(GL_TEXTURE_2D);
+    }
 }
 GLuint PhGraphicTexturedRect::getTexture(){
     return _texture;
