@@ -93,6 +93,7 @@ void StripWindow::initializeGL()
                                                   2, hstrip,
                                                   PhColor("black")));
     }
+
 }
 
 void StripWindow::paintGL()

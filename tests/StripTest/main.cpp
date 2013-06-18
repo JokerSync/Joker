@@ -11,6 +11,7 @@
 
 #include "PhStrip/PhStripDoc.h"
 #include "PhTools/PhString.h"
+#include "PhTools/PhFileTools.h"
 
 #include "MainWindow.h"
 
@@ -18,7 +19,6 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
     PhString file;
     if (argc < 2)
         file = "";

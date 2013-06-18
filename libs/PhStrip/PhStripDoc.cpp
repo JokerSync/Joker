@@ -101,7 +101,8 @@ bool PhStripDoc::openDetX(QString filename)
                 }
                 else
                 {
-                    end = NULL;
+                    // One char is ~1.20588 frame
+                    end = start + currentLine.childNodes().at(j).toElement().text().length() * 1.20588 + 1;
                 }
                 splitText(_actors[id], start, end,
                           currentLine.childNodes().at(j).toElement().text(), currentLine.toElement().attribute("track").toInt(),
