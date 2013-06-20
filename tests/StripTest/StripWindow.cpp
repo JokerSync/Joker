@@ -22,9 +22,19 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
     // This is a preload of default fonts
     _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/LTE50198.ttf", 150));
     _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/zoinks.ttf", 150));
-    _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/Arial.ttf", 150));
     _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/Bedizen.ttf", 150));
-    _fonts.push_back( new PhFont("/Library/Fonts/Apple Chancery.ttf", 150));
+
+    PhString sourceFolder = "/Library/Fonts/";
+    QDir sourceDir(sourceFolder);
+    QStringList files = sourceDir.entryList(QDir::Files);
+    for(int i = 0; i< files.count(); i++)
+    {
+        if(files[i].split(".").at(1) == "ttf")
+        {
+            _fonts.push_back(new PhFont("/Library/Fonts/" + files[i], 150));
+        }
+    }
+    files.clear();
 
     _currentFont = _fonts.first();
     _xmove = 0;
@@ -54,8 +64,6 @@ void StripWindow::initializeGL()
     //This clear the data stored
     clearData();
 
-    if(!_doc->getTitle().isNull())
-        _xmove = - _doc->getLastPosition();
     //Load the all text
     for(auto it : _doc->getTexts())
     {
@@ -136,6 +144,8 @@ void StripWindow::openFile(QString filename)
     if (!_firstload)
         initializeGL();
     _firstload = false;
+    _xmove = - _doc->getLastPosition();
+
 
 }
 

@@ -3,7 +3,6 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-#include "MainWindow.h"
 
 #include <QAction>
 #include <QFileDialog>
@@ -11,6 +10,7 @@
 
 #include <QInputDialog>
 
+#include "MainWindow.h"
 
 
 MainWindow::MainWindow(PhString file)
@@ -39,6 +39,7 @@ void MainWindow::createMenus()
     toolMenu->addAction(changeFontAct);
     connect(changeFontAct, SIGNAL(triggered()), this, SLOT(changeFont()));
     toolMenu->addSeparator();
+
 
     exportRythmoAct = new QAction(tr("&Export next minute"), this) ;
     toolMenu->addAction(exportRythmoAct);
