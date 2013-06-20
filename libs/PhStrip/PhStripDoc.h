@@ -68,6 +68,11 @@ private:
      */
      QList<PhStripCut *> _cuts;
 
+     /**
+      * List of PhStripLoop from the file
+      */
+     QList<PhStripLoop *> _loops;
+
      void splitText(PhPeople * actor, PhTime start, PhTime end, PhString sentence,int track, bool alone, int ite);
 
 

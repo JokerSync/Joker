@@ -1,7 +1,7 @@
 #ifndef PHSTRIPLOOP_H
 #define PHSTRIPLOOP_H
 
-#include "phstripdoc.h"
+#include "PhStripObject.h"
 
 /**
  * Indicate the start of a new loop. A loop is in fact a section of the rythmo strip. The detection process consists to cut the video content into loops to simplify the convocation of the dubbing actors for recording. It is generally between 30 seconds and 1 minute long: what the actor can record in one take.
@@ -24,7 +24,7 @@ public:
      * @brief PhStripLoop
      * @param number
      */
-    PhStripLoop(int number);
+    PhStripLoop(int number, PhTime TimeIn);
 };
 
 
