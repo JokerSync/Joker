@@ -34,7 +34,6 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
             _fonts.push_back(new PhFont("/Library/Fonts/" + files[i], 150));
         }
     }
-    files.clear();
 
     _currentFont = _fonts.first();
     _xmove = 0;
@@ -87,14 +86,15 @@ void StripWindow::initializeGL()
     }
 
     //Set a default number of strip repetition
-    int nbRythmo = this->width()/24;
+    int nbRythmo = this->width()/60;
 
-    //Load the strip on the right
-    _imgs.push_back(new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/img/motif-240.png",
+    //Load the strip
+    _strips.push_back(new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/img/motif-240.png",
                                        -1000, h - hstrip, -3,
                                        240, hstrip, PhColor("white"),
                                        nbRythmo, 1));
 
+    //Load the cuts
     for(auto it : _doc->getCuts())
     {
         _cuts.push_back(new PhGraphicTexturedRect((it->getTimeIn() - _doc->getLastPosition()) * 20, 0, -2,
@@ -122,7 +122,7 @@ void StripWindow::paintGL()
     }
 
     //Draw Objects
-    for(auto it : _imgs)
+    for(auto it : _strips)
     {
         it->draw(_xMoveStrip);
     }
@@ -145,14 +145,12 @@ void StripWindow::openFile(QString filename)
         initializeGL();
     _firstload = false;
     _xmove = - _doc->getLastPosition();
-
-
 }
 
 
 void StripWindow::clearData()
 {
-    for(auto it : _imgs)
+    for(auto it : _cuts)
     {
         delete it;
     }
@@ -160,7 +158,7 @@ void StripWindow::clearData()
     {
         delete it;
     }
-    _imgs.clear();
+    _cuts.clear();
     _texts.clear();
 }
 
