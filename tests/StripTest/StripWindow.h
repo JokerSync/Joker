@@ -148,7 +148,7 @@ private :
      * @brief _imgs
      * QList of images loaded
      */
-    QList<PhGraphicImage *> _imgs;
+    QList<PhGraphicImage *> _strips;
 
     QList<PhGraphicTexturedRect *> _cuts;
 
