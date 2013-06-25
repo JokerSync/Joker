@@ -4,29 +4,33 @@
 #
 #-------------------------------------------------
 
-QT       += core
+TARGET = StripTest
+TEMPLATE = app
+
+
+QT       += core gui
 QT		+= xml
 QT		+= opengl
 
-QT       += gui
-
-TARGET = StripTest
-CONFIG   += console
-
 DESTDIR = ./
 
-TEMPLATE = app
 
 
 #Main app
 SOURCES += main.cpp \
 	StripWindow.cpp \
 	MainWindow.cpp \
-    ../../libs/PhTools/PhFileTools.cpp
+    ../../libs/PhTools/PhFileTools.cpp \
+    ../../../TestLeap/SampleListener.cpp \
+    ../../../TestLeap/Leap.cpp
 
 HEADERS += StripWindow.h \
 	MainWindow.h\
-    ../../libs/PhTools/PhFileTools.h
+    ../../libs/PhTools/PhFileTools.h \
+    ../../../TestLeap/SampleListener.h \
+    ../../../TestLeap/LeapMath.h \
+    ../../../TestLeap/Leap.h
+
 
 #PhStrip
 SOURCES += \
@@ -87,18 +91,28 @@ HEADERS  += \
 
 INCLUDEPATH += 	../../libs \
 		/Library/Frameworks/ \
+		../../../TestLeap/ \
 
-
+LIBS += -L/Users/thomas/Stage/TestLeap/ -lLeap
 LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 
 macx {
-	copyresources.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/
+	copyresources.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/;
+	copyresources.commands += cp $${PWD}/StripTestDeploy.sh $${DESTDIR}
 }
 QMAKE_EXTRA_TARGETS += copyresources
 POST_TARGETDEPS += copyresources
 macx {
-	copylibs.commands = mkdir $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs ; cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/
+	copylibs.commands = mkdir $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs;
+	copylibs.commands += cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/;
 }
 QMAKE_EXTRA_TARGETS += copylibs
 POST_TARGETDEPS += copylibs
+
+macx {
+	leap.commands += cp -r /Users/thomas/Stage/TestLeap/libLeap.dylib $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;
+}
+QMAKE_EXTRA_TARGETS += leap
+POST_TARGETDEPS += leap
+
 
