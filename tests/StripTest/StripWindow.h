@@ -18,6 +18,8 @@
 
 #include "PhTools/PhTimeCode.h"
 
+#include "SampleListener.h"
+
 
 class StripWindow : public PhGraphicView
 {Q_OBJECT
@@ -97,6 +99,8 @@ public:
      */
     PhStripDoc *getDoc();
 
+    void toggleScrolling();
+
 
 
 private :
@@ -157,6 +161,13 @@ private :
      * QTime for testing performance
      */
     QTime *_test;
+
+
+    SampleListener listener;
+    Controller controller;
+    int lastLeapPosition;
+
+    bool _naturalScroll;
 
 };
 
