@@ -98,7 +98,6 @@ LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 
 macx {
 	copyresources.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/;
-	copyresources.commands += cp $${PWD}/StripTestDeploy.sh $${DESTDIR}
 }
 QMAKE_EXTRA_TARGETS += copyresources
 POST_TARGETDEPS += copyresources

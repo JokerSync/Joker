@@ -9,6 +9,7 @@
 
 PhStripDoc::PhStripDoc(QString filename)
 {
+    _nbTexts = 0;
     openDetX(filename);
 }
 
@@ -149,6 +150,12 @@ bool PhStripDoc::openDetX(QString filename)
     return true;
 }
 
+
+
+int PhStripDoc::getNbTexts()
+{
+    return _nbTexts;
+}
 PhString PhStripDoc::getVideoPath(){
     return _videoPath;
 }
@@ -163,6 +170,7 @@ void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, PhString 
             _texts.push_back(new PhStripText(actor, sentence,
                                              start, end,
                                              track, alone));
+            _nbTexts ++;
         }
         else // we split in half
         {

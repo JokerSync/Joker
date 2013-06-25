@@ -79,11 +79,6 @@ void MainWindow::switchScrolling()
 {
 
 
-    QMessageBox::Information(&this, tr("Scroll"),
-                                       tr("Choose a way :"),
-                                       QMessageBox::Save | QMessageBox::Button(),
-                                       QMessageBox::Save);
-
     _strip->toggleScrolling();
 
 }

@@ -72,7 +72,7 @@ private:
       * List of PhStripLoop from the file
       */
      QList<PhStripLoop *> _loops;
-
+     int _nbTexts;
      void splitText(PhPeople * actor, PhTime start, PhTime end, PhString sentence,int track, bool alone, int ite);
 
 
@@ -165,6 +165,8 @@ public:
      */
     bool openDetX(PhString filename);
 
+
+    int getNbTexts();
 };
 
 #endif // PHSTRIPDOC_H
