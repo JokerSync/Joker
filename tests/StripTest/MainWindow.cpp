@@ -67,20 +67,21 @@ void MainWindow::changeFont()
     // i & j are used to display the current font in the QInputDialog
     int i = 0;
     int j = 0;
+    PhString oldFont = _strip->getCurrentFont()->getFontName();
     for (auto it : _strip->getFonts() ){
         fonts << it->getFontName();
-        if (it->getFontName() == _strip->getCurrentFont()->getFontName())
+        if (it->getFontName() == oldFont)
             j = i;
         i++;
     }
     bool ok;
     QString item = QInputDialog::getItem(this, tr("Font Selection"),tr("fonts loaded"), fonts, j, false, &ok);
     for (auto it : _strip->getFonts() ){
-        if (it->getFontName() == item)
+        if (it->getFontName() == item && item != oldFont){
             _strip->setCurrentFont(it);
+            _strip->initializeGL();
+        }
     }
-    _strip->initializeGL();
-
 }
 
 void MainWindow::exportRythomAsPNG()
@@ -141,8 +142,8 @@ void MainWindow::wheelEvent(QWheelEvent *wheel)
     QPoint numPixels = wheel->pixelDelta();
     _strip->setXmove(numPixels.x());
     _strip->setXmove(-numPixels.y());
-
 }
+
 
 
 void MainWindow::toggleFullWindow()
