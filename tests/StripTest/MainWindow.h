@@ -28,6 +28,8 @@ private slots:
      * user selected file
      */
     void openFile();
+
+    void switchScrolling();
     /**
      * @brief changeFont
      * List all loaded PhFont and allow the user to set the PhFont
@@ -89,6 +91,8 @@ private:
      * @brief exportRythmoAct
      */
     QAction *exportRythmoAct;
+
+    QAction *switchScroll;
    };
 
 #endif // MAINWINDOW_H

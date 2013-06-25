@@ -10,11 +10,18 @@
 
 #include "StripWindow.h"
 
+#include "SampleListener.h"
+
+using namespace Leap;
 
 
 StripWindow::StripWindow(QWidget *parent, PhString file)
     : PhGraphicView( parent, "StripTest")
 {
+    controller.addListener(listener);
+    _naturalScroll = true;
+
+
     // This is used to make some time-based test
     _test = new QTime();
     _test->start();
@@ -24,9 +31,14 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
     _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/zoinks.ttf", 150));
     _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/Bedizen.ttf", 150));
 
+    // This is a routine witch load Apple system TTF fonts
+
+    // Set the location
     PhString sourceFolder = "/Library/Fonts/";
     QDir sourceDir(sourceFolder);
+    // List all files
     QStringList files = sourceDir.entryList(QDir::Files);
+    // browse files and select only TTF ones
     for(int i = 0; i< files.count(); i++)
     {
         if(files[i].split(".").at(1) == "ttf")
@@ -35,6 +47,7 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
         }
     }
 
+    // Set current font
     _currentFont = _fonts.first();
     _xmove = 0;
     _xMoveStrip = 0;
@@ -63,9 +76,19 @@ void StripWindow::initializeGL()
     //This clear the data stored
     clearData();
 
+    int max = _doc->getNbTexts();
+    QProgressDialog barTest("Création des textures","Ok", 0, max, this);
+
+    barTest.move(400,400);
+
+    //barTest.show();
+
+    int i = 0;
     //Load the all text
     for(auto it : _doc->getTexts())
     {
+        barTest.setValue(i);
+
         //h is the window height, hstrip is the strip height
         //hstrip/16 correspond to the upper alpha line of the strip
         //hstrip/8 correspond to the two alpha lines of the strip (up & down)
@@ -83,6 +106,10 @@ void StripWindow::initializeGL()
         _texts.push_back(new PhGraphicText(it->getContent(),
                                            (it->getTimeIn() - _doc->getLastPosition()) * 20, y , -1,
                                            (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , _currentFont, it->getPeople().getColor()));
+        if (i % (max / 10) == 0){
+            //QApplication::processEvents();
+        }
+        i++;
     }
 
     //Set a default number of strip repetition
@@ -106,8 +133,21 @@ void StripWindow::initializeGL()
 
 void StripWindow::paintGL()
 {
+
+    //Controller.
+
     //Time-based test
     //qDebug() << _test->elapsed() << " : " << _xmove;
+
+    if(controller.frame().fingers().count() == 1)
+    {
+        setXmove((controller.frame(1).fingers().leftmost().tipPosition().x - controller.frame().fingers().leftmost().tipPosition().x) * 4);
+    }
+    if(controller.frame().fingers().count() == 2)
+    {
+        setXmove(controller.frame().fingers().leftmost().tipPosition().x / 5);
+    }
+
 
     //Clear the buffer
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -191,12 +231,27 @@ void StripWindow::setScroll(bool shouldScroll)
     _shouldmove = shouldScroll;
 }
 
+void StripWindow::toggleScrolling()
+{
+    _naturalScroll = ! _naturalScroll;
+}
 
-void StripWindow::setXmove(int n){
-    _xmove -= n;
-    _xMoveStrip -= n;
-    if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
-        _xMoveStrip = 0;
+void StripWindow::setXmove(int n)
+{
+    if (_naturalScroll)
+    {
+        _xmove -= n;
+        _xMoveStrip -= n;
+        if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
+            _xMoveStrip = 0;
+    }
+    else
+    {
+        _xmove += n;
+        _xMoveStrip += n;
+        if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
+            _xMoveStrip = 0;
+    }
 }
 
 

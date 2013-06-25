@@ -24,28 +24,42 @@ MainWindow::MainWindow(PhString file)
 
 void MainWindow::createMenus()
 {
+    // The tr("&string") at the begining of a string is for translation tools
+
+    // Add a menu
     fileMenu = menuBar()->addMenu(tr("&File"));
     
+    // Create a new Open action
     openAct = new QAction(tr("&Open"), this);
+    // Set a shortcut to execute this action
     openAct->setShortcut(QKeySequence::Open);
+    // Add the action to the file menu
     fileMenu->addAction(openAct);
+    // Connect the action to a function
     connect(openAct, SIGNAL(triggered()), this, SLOT(openFile()));
 
-    fileMenu->addSeparator();
-
-    toolMenu = menuBar()->addMenu(tr("Tools"));
+    // Add a menu
+    toolMenu = menuBar()->addMenu(tr("&Tools"));
 
     changeFontAct = new QAction(tr("&Change font..."), this) ;
     toolMenu->addAction(changeFontAct);
     connect(changeFontAct, SIGNAL(triggered()), this, SLOT(changeFont()));
-    toolMenu->addSeparator();
 
+    //Separate 2 parts in the same menu list
+    toolMenu->addSeparator();
 
     exportRythmoAct = new QAction(tr("&Export next minute"), this) ;
     toolMenu->addAction(exportRythmoAct);
     exportRythmoAct->setShortcut(QKeySequence::Print);
     connect(exportRythmoAct, SIGNAL(triggered()), this, SLOT(exportRythomAsPNG()));
+
+    //Separate 2 parts in the same menu list
     toolMenu->addSeparator();
+
+    switchScroll = new QAction(tr("&Toggle scroll"), this) ;
+    toolMenu->addAction(switchScroll);
+    connect(switchScroll, SIGNAL(triggered()), this, SLOT(switchScrolling()));
+
 
 
 }
@@ -59,6 +73,19 @@ void MainWindow::openFile()
     // If the file name isn't empty we load it
     if (!fileName.isEmpty())
         _strip->openFile(fileName);
+}
+
+void MainWindow::switchScrolling()
+{
+
+
+    QMessageBox::Information(&this, tr("Scroll"),
+                                       tr("Choose a way :"),
+                                       QMessageBox::Save | QMessageBox::Button(),
+                                       QMessageBox::Save);
+
+    _strip->toggleScrolling();
+
 }
 
 void MainWindow::changeFont()
