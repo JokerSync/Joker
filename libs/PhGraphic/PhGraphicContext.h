@@ -38,6 +38,7 @@ public:
      * Save the current framebuffer and the (number - 1) nexts elements
      */
     void saveToPNG(PhString number);
+    void exportToPng();
 
 private:
     /**

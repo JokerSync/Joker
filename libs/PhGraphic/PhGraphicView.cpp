@@ -36,6 +36,7 @@ void PhGraphicView::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
+
 void PhGraphicView::onRefresh()
 {
     if(qApp->hasPendingEvents()) // qApp is a global pointer to the application
