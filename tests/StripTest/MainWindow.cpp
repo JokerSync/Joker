@@ -65,7 +65,6 @@ void MainWindow::createMenus()
 void MainWindow::openFile()
 {
     _strip->openFile("");
-
 }
 
 void MainWindow::switchScrolling()
@@ -133,9 +132,6 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
         _strip->changeScroll();
         break;
     case Qt::Key_Escape:
-        close();
-        break;
-    case Qt::Key_Q:
         close();
         break;
     case Qt::Key_F10:
