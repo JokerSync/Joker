@@ -18,7 +18,7 @@
 
 #include "PhTools/PhTimeCode.h"
 
-#include "SampleListener.h"
+#include "PhCommonUI/SampleListener.h"
 
 
 class StripWindow : public PhGraphicView
