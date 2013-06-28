@@ -33,6 +33,21 @@ void PhGraphicContext::saveToPNG(PhString number){
     impr.save(s);
 }
 
+void PhGraphicContext::exportToPng()
+{
+    //_strip->setXmove(0);
+    // As 1920px is 4 sec, 1 min is 28800 px
+    int nbFrames = (28800 / _graphVeiw->width()) + 1;
+    for(int i = 0; i < nbFrames ; i++){
+        // Save the current frame buffer
+        saveToPNG(QString::number(i));
+        // Scroll the strip of the window width
+        _graphVeiw->setXmove(_graphVeiw->width());
+        // Re paint
+        _graphVeiw->paintGL();
+    }
+}
+
 
 void PhGraphicContext::init(){
     if (SDL_Init(SDL_INIT_VIDEO) == 0)

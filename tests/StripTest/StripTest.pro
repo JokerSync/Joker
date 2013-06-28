@@ -22,7 +22,7 @@ SOURCES += main.cpp \
 	MainWindow.cpp \
     ../../libs/PhTools/PhFileTools.cpp \
     ../../../TestLeap/SampleListener.cpp \
-    ../../../TestLeap/Leap.cpp
+#    ../../../TestLeap/Leap.cpp
 
 HEADERS += StripWindow.h \
 	MainWindow.h\

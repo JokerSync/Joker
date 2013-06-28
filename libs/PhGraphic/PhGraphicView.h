@@ -41,6 +41,8 @@ public:
      * draw the content
      */
     virtual void paintGL() = 0;
+
+    virtual void setXmove(int px) = 0;
     /**
      * @brief resizeGL
      * @param width
