@@ -64,13 +64,8 @@ void MainWindow::createMenus()
 
 void MainWindow::openFile()
 {
-    // The strip should stop scrolling when during a file load
-    _strip->setScroll(false);
-    // Get the file name thanks to a QFileDialog
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
-    // If the file name isn't empty we load it
-    if (!fileName.isEmpty())
-        _strip->openFile(fileName);
+    _strip->openFile("");
+
 }
 
 void MainWindow::switchScrolling()
@@ -119,7 +114,6 @@ void MainWindow::changeFont()
 void MainWindow::exportRythomAsPNG()
 {
     _strip->getContext()->exportToPng();
-
     QMessageBox::about(this, "Info",
                        tr("Export ended well! \n") + tr("file(s) saved here : ") + QDir::homePath() + "/Phonations/") ;
 }

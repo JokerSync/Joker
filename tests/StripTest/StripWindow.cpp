@@ -161,6 +161,10 @@ void StripWindow::paintGL()
 
 void StripWindow::openFile(QString filename)
 {
+    // The strip should stop scrolling when during a file load
+    setScroll(false);
+    if(!QFile(filename).exists())
+        filename = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
     _xmove = 0;
     this->_doc = new PhStripDoc(filename);
     if (!_firstload)
