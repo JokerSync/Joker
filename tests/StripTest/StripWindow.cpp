@@ -167,7 +167,7 @@ void StripWindow::openFile(QString filename)
         filename = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
     _xmove = 0;
     this->_doc = new PhStripDoc(filename);
-    if (!_firstload)
+    if (!_firstload) //TODO : Fix me
         initializeGL();
     _firstload = false;
     _xmove = - _doc->getLastPosition();
