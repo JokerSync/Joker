@@ -25,15 +25,29 @@ int main(int argc, char *argv[])
     else
         file = argv[1];
 
-
     // Try to create a settings file (temp)
-    QSettings test("Phonations", "Joker");
-    qDebug() << test.value("Lastfile");
 
-    test.beginGroup("files");
-    test.setValue("Lastfile", file);
-    test.endGroup();
+    QSettings test(QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist", QSettings::NativeFormat);
 
+    //QSettings test("Phonations", "Joker");
+    //qDebug() << test.fileName();
+
+
+    qDebug() << "lastfile :" << test.value("Lastfile2").toString();
+
+    qDebug() << test.property("Lasfile2").toString();
+
+    QStringList keys = test.allKeys();
+
+    for(QString str : keys)
+    {
+       //qDebug() << str;
+    }
+
+    test.setValue("Lastfile2", file);
+
+
+    exit(0);
     MainWindow w(file);
 
     w.show();
