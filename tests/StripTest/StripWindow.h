@@ -18,7 +18,7 @@
 
 #include "PhTools/PhTimeCode.h"
 
-#include "SampleListener.h"
+#include "PhCommonUI/SampleListener.h"
 
 
 class StripWindow : public PhGraphicView
@@ -78,7 +78,7 @@ public:
      * @param font
      * Set the current font with the font in param and re-initialize the OpenGL content
      */
-    void setCurrentFont(PhFont * font);
+    void setCurrentFont(PhString fontfile);
     /**
      * @brief StripWindow::getCurrentFont
      * @return PhFont
@@ -112,7 +112,7 @@ private :
     PhStripDoc *_doc;
 
     /**
-     * @brief _xmove
+     * @brief _XMove
      * float which define the scroll
      */
     float _xmove;

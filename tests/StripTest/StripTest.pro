@@ -21,15 +21,14 @@ SOURCES += main.cpp \
 	StripWindow.cpp \
 	MainWindow.cpp \
     ../../libs/PhTools/PhFileTools.cpp \
-    ../../../TestLeap/SampleListener.cpp \
-    ../../../TestLeap/Leap.cpp
+	../../libs/PhCommonUI/SampleListener.cpp \
 
 HEADERS += StripWindow.h \
 	MainWindow.h\
     ../../libs/PhTools/PhFileTools.h \
-    ../../../TestLeap/SampleListener.h \
-    ../../../TestLeap/LeapMath.h \
-    ../../../TestLeap/Leap.h
+	../../libs/PhCommonUI/SampleListener.h \
+	../../libs/PhCommonUI/LeapMath.h \
+	../../libs/PhCommonUI/Leap.h
 
 
 #PhStrip
@@ -91,9 +90,8 @@ HEADERS  += \
 
 INCLUDEPATH += 	../../libs \
 		/Library/Frameworks/ \
-		../../../TestLeap/ \
 
-LIBS += -L/Users/thomas/Stage/TestLeap/ -lLeap
+LIBS += -L../../libs/PhCommonUI/ -lLeap
 LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 
 macx {
@@ -109,7 +107,7 @@ QMAKE_EXTRA_TARGETS += copylibs
 POST_TARGETDEPS += copylibs
 
 macx {
-	leap.commands += cp -r /Users/thomas/Stage/TestLeap/libLeap.dylib $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;
+	leap.commands += cp -r $${PWD}/../../libs/PhCommonUI/libLeap.dylib $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;
 }
 QMAKE_EXTRA_TARGETS += leap
 POST_TARGETDEPS += leap

@@ -25,6 +25,15 @@ int main(int argc, char *argv[])
     else
         file = argv[1];
 
+
+    // Try to create a settings file (temp)
+    QSettings test("Phonations", "Joker");
+    qDebug() << test.value("Lastfile");
+
+    test.beginGroup("files");
+    test.setValue("Lastfile", file);
+    test.endGroup();
+
     MainWindow w(file);
 
     w.show();

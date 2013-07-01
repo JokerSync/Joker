@@ -60,65 +60,59 @@ void MainWindow::createMenus()
     toolMenu->addAction(switchScroll);
     connect(switchScroll, SIGNAL(triggered()), this, SLOT(switchScrolling()));
 
-
-
 }
 
 void MainWindow::openFile()
 {
-    // The strip should stop scrolling when during a file load
-    _strip->setScroll(false);
-    // Get the file name thanks to a QFileDialog
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
-    // If the file name isn't empty we load it
-    if (!fileName.isEmpty())
-        _strip->openFile(fileName);
+    _strip->openFile("");
 }
 
 void MainWindow::switchScrolling()
 {
-
-
     _strip->toggleScrolling();
-
 }
 
 void MainWindow::changeFont()
 {
+
+    // This is a routine witch load Apple system TTF fonts
+
+    // Set the location
+    PhString sourceFolder = "/Library/Fonts/";
+    QDir sourceDir(sourceFolder);
+    // List all files
+    QStringList files = sourceDir.entryList(QDir::Files);
     QStringList fonts;
+    // browse files and select only TTF ones
+    for(int i = 0; i< files.count(); i++)
+    {
+        if(files[i].split(".").at(1) == "ttf")
+        {
+            fonts.push_back(files[i].split(".").at(0));
+        }
+    }
+
     // i & j are used to display the current font in the QInputDialog
     int i = 0;
     int j = 0;
     PhString oldFont = _strip->getCurrentFont()->getFontName();
-    for (auto it : _strip->getFonts() ){
-        fonts << it->getFontName();
-        if (it->getFontName() == oldFont)
+    for (auto it : fonts ){
+        if (it.contains(oldFont))
             j = i;
         i++;
     }
     bool ok;
     QString item = QInputDialog::getItem(this, tr("Font Selection"),tr("fonts loaded"), fonts, j, false, &ok);
-    for (auto it : _strip->getFonts() ){
-        if (it->getFontName() == item && item != oldFont){
-            _strip->setCurrentFont(it);
-            _strip->initializeGL();
-        }
+    if (true){
+        PhString file = sourceFolder + item + ".ttf";
+        _strip->setCurrentFont(file);
     }
+
 }
 
 void MainWindow::exportRythomAsPNG()
 {
-    //_strip->setXmove(0);
-    // As 1920px is 4 sec, 1 min is 28800 px
-    int nbFrames = (28800 / this->width()) + 1;
-    for(int i = 0; i < nbFrames ; i++){
-        // Save the current frame buffer
-        _strip->getContext()->saveToPNG(QString::number(i));
-        // Scroll the strip of the window width
-        _strip->setXmove(this->width());
-        // Re paint
-        _strip->paintGL();
-    }
+    _strip->getContext()->exportToPng();
     QMessageBox::about(this, "Info",
                        tr("Export ended well! \n") + tr("file(s) saved here : ") + QDir::homePath() + "/Phonations/") ;
 }
@@ -138,9 +132,6 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
         _strip->changeScroll();
         break;
     case Qt::Key_Escape:
-        close();
-        break;
-    case Qt::Key_Q:
         close();
         break;
     case Qt::Key_F10:

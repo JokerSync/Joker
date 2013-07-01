@@ -10,7 +10,6 @@
 
 #include "StripWindow.h"
 
-#include "SampleListener.h"
 
 using namespace Leap;
 
@@ -28,24 +27,7 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
 
     // This is a preload of default fonts
     _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/LTE50198.ttf", 150));
-    _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/zoinks.ttf", 150));
-    _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/Bedizen.ttf", 150));
 
-    // This is a routine witch load Apple system TTF fonts
-
-    // Set the location
-    PhString sourceFolder = "/Library/Fonts/";
-    QDir sourceDir(sourceFolder);
-    // List all files
-    QStringList files = sourceDir.entryList(QDir::Files);
-    // browse files and select only TTF ones
-    for(int i = 0; i< files.count(); i++)
-    {
-        if(files[i].split(".").at(1) == "ttf")
-        {
-            _fonts.push_back(new PhFont("/Library/Fonts/" + files[i], 150));
-        }
-    }
 
     // Set current font
     _currentFont = _fonts.first();
@@ -179,9 +161,13 @@ void StripWindow::paintGL()
 
 void StripWindow::openFile(QString filename)
 {
+    // The strip should stop scrolling when during a file load
+    setScroll(false);
+    if(!QFile(filename).exists())
+        filename = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
     _xmove = 0;
     this->_doc = new PhStripDoc(filename);
-    if (!_firstload)
+    if (!_firstload) //TODO : Fix me
         initializeGL();
     _firstload = false;
     _xmove = - _doc->getLastPosition();
@@ -209,8 +195,8 @@ QList<PhFont *> StripWindow::getFonts()
 }
 
 
-void StripWindow::setCurrentFont(PhFont * font){
-    _currentFont = font;
+void StripWindow::setCurrentFont(QString fontfile){
+    _currentFont = new PhFont(fontfile, 150);
     initializeGL();
 }
 
