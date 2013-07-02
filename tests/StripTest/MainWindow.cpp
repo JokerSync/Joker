@@ -19,7 +19,10 @@ MainWindow::MainWindow(PhString file)
     resize(1280,360);
     createMenus();
     setWindowTitle(tr("Striptest"));
-    _strip = new StripWindow(this, file);
+    if (file == "")
+        _strip = new StripWindow(this, _MController->getLastFile());
+    else
+        _strip = new StripWindow(this, file);
     _strip->show();
 }
 

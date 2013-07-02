@@ -6,6 +6,11 @@
 #ifndef MAINCONTROLLER_H
 #define MAINCONTROLLER_H
 
+#include <QSettings>
+#include <QDebug>
+#include <QDir>
+
+#include "PhTools/PhString.h"
 
 class MainWindow;
 
@@ -14,8 +19,12 @@ class MainController
 public:
     MainController(MainWindow * mw);
     MainController();
+    void loadSettings();
+    PhString getLastFile();
 private:
     MainWindow * _window;
+    QSettings * _settings;
+
 };
 
 #endif // MAINCONTROLLER_H
