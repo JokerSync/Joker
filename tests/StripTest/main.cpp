@@ -25,8 +25,6 @@ int main(int argc, char *argv[])
     else
         file = argv[1];
 
-
-
     MainWindow w(file);
 
     w.show();
