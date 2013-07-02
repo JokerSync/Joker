@@ -3,14 +3,13 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-
+#include <QFile>
 #include "PhStripDoc.h"
 
 
-PhStripDoc::PhStripDoc(QString filename)
+PhStripDoc::PhStripDoc()
 {
-    _nbTexts = 0;
-    openDetX(filename);
+    reset();
 }
 
 QList<PhStripCut *> PhStripDoc::getCuts()
@@ -21,6 +20,8 @@ QList<PhStripCut *> PhStripDoc::getCuts()
 
 bool PhStripDoc::openDetX(QString filename)
 {
+    if (!QFile(filename).exists())
+        return false;
 
     QDomDocument *DetX = new QDomDocument("/text.xml"); // Création de l'objet DOM
     QFile xml_doc(filename);// On choisit le fichier contenant les informations XML.
@@ -35,11 +36,14 @@ bool PhStripDoc::openDetX(QString filename)
         qDebug() << ("Le document XML n'a pas pu être attribué à l'objet QDomDocument.");
         return false;
     }
-    else{
+    else
+    {
         qDebug() << ("The file \"" + filename + "\" is now open.");
         qDebug("-----------------------------");
     }
 
+
+    reset();
     //Find the first title
     _title = DetX->elementsByTagName("title").at(0).toElement().text();
     //Find possible subtitles (start from title'num') with  2 <= num <= +∞
@@ -160,6 +164,22 @@ PhString PhStripDoc::getVideoPath(){
     return _videoPath;
 }
 
+
+void PhStripDoc::reset()
+{
+    _actors.clear();
+    _cuts.clear();
+    _drop = false;
+    _fps = 25.00;
+    _lastPosition = 0;
+    _loops.clear();
+    _nbTexts = 0;
+    _texts.clear();
+    _timeScale = 25; //TODO fix me
+    _title = PhString();
+    _videoPath = PhString();
+    _videoTimestamp = 0;
+}
 
 void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, PhString sentence, int track, bool alone, int i){
 
