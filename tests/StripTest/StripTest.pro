@@ -22,13 +22,15 @@ SOURCES += main.cpp \
 	MainWindow.cpp \
     ../../libs/PhTools/PhFileTools.cpp \
 	../../libs/PhCommonUI/SampleListener.cpp \
+    MainController.cpp
 
 HEADERS += StripWindow.h \
 	MainWindow.h\
     ../../libs/PhTools/PhFileTools.h \
 	../../libs/PhCommonUI/SampleListener.h \
 	../../libs/PhCommonUI/LeapMath.h \
-	../../libs/PhCommonUI/Leap.h
+	../../libs/PhCommonUI/Leap.h \
+    MainController.h
 
 
 #PhStrip
