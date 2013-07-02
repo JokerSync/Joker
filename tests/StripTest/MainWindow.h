@@ -10,6 +10,7 @@
 #include <QMainWindow>
 
 #include "StripWindow.h"
+#include "MainController.h"
 
 class MainWindow : public QMainWindow
 {
@@ -49,6 +50,8 @@ private slots:
     void resizeEvent(QResizeEvent *);
 
 private:
+
+    MainController * _MController;
 
     /**
      * @brief toggleFullWindow

@@ -15,6 +15,7 @@
 
 MainWindow::MainWindow(PhString file)
 {
+    _MController = new MainController(this);
     resize(1280,360);
     createMenus();
     setWindowTitle(tr("Striptest"));
