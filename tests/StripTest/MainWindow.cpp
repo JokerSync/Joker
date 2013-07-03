@@ -16,6 +16,8 @@
 MainWindow::MainWindow(PhString file)
 {
     _MController = new MainController();
+    if(_MController->openDoc(file))
+        _MController->setLastFile(file);
     resize(1280,360);
     setWindowTitle(tr("Striptest"));
     _strip = new StripWindow(this);
