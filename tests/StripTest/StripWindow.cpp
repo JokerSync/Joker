@@ -36,8 +36,6 @@ StripWindow::StripWindow(QWidget *parent)
 
     // The strip shouldn't move until a file is loaded
     _shouldmove = false;
-    _firstload = true;
-
 }
 
 
@@ -61,7 +59,6 @@ void StripWindow::initializeGL()
     QProgressDialog barTest("Création des textures","Ok", 0, max, this);
 
     barTest.move(400,400);
-
     barTest.show();
 
     int i = 0;
@@ -87,7 +84,7 @@ void StripWindow::initializeGL()
         _texts.push_back(new PhGraphicText(it->getContent(),
                                            (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
                                            (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , _currentFont, it->getPeople().getColor()));
-        if (i % (max / 10) == 0){
+        if (i % (max / 20) == 0){
             QApplication::processEvents();
         }
         i++;
@@ -155,19 +152,11 @@ void StripWindow::paintGL()
 }
 
 
-void StripWindow::openFile(QString filename)
+void StripWindow::stopScroll()
 {
-    // The strip should stop scrolling when during a file load
+    qDebug() << "Stop Scrolling";
     setScroll(false);
-    if(!QFile(filename).exists())
-        filename = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
-    _xmove = 0;
-    _controller->getDoc().openDetX(filename);
-    if (!_firstload) //TODO : Fix me
-        initializeGL();
-    _firstload = false;
 }
-
 
 void StripWindow::clearData()
 {
@@ -224,6 +213,7 @@ void StripWindow::setController(MainController * controller)
 
 void StripWindow::connectSlots(){
     connect(_controller, SIGNAL(docChanged()), this, SLOT(initializeGL()));
+    connect(_controller, SIGNAL(docChanged()), this, SLOT(stopScroll()));
 }
 
 void StripWindow::setXmove(int n)

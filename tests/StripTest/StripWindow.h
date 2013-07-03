@@ -94,7 +94,12 @@ public:
     void setController(MainController * controller);
     void connectSlots();
 
+public slots:
+    void stopScroll();
+
+
 private slots:
+
 
     /**
      * @brief initializeGL
@@ -102,12 +107,6 @@ private slots:
      */
     void initializeGL();
 
-    /**
-     * @brief StripWindow::openFile
-     * @param filename
-     * Set the position to 0, load a new PhStripDoc, call initializeGL if another file was loaded
-     */
-    void openFile(PhString filename);
 
 private :
     MainController * _controller;
@@ -125,11 +124,6 @@ private :
 
     float _xMoveStrip;
 
-    /**
-     * @brief _firstload
-     * allow us to know if it's the first load or not.
-     */
-    bool _firstload;
     /**
      * @brief _shouldmove
      * allow us to know if the strip should scroll or not.
@@ -171,7 +165,6 @@ private :
 
     SampleListener leapListener;
     Controller _leapController;
-
     bool _naturalScroll;
 
 };
