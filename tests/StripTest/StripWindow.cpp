@@ -17,6 +17,7 @@ using namespace Leap;
 StripWindow::StripWindow(QWidget *parent)
     : PhGraphicView( parent, "StripTest")
 {
+
     _leapController.addListener(leapListener);
 
     // This is used to make some time-based test
@@ -54,16 +55,16 @@ void StripWindow::initializeGL()
 
     _xmove = - _controller->getDoc().getLastPosition();
     int max = _controller->getDoc().getTexts().count();
-    QProgressDialog barTest("Création des textures","Ok", 0, max, this);
+    //QProgressDialog barTest("Création des textures","Ok", 0, max, this);
 
-    barTest.move(400,400);
-    barTest.show();
+    //barTest.move(400,400);
+    //barTest.show();
 
     int i = 0;
     //Load the all text
     for(auto it : _controller->getDoc().getTexts())
     {
-        barTest.setValue(i);
+        //barTest.setValue(i);
 
         //h is the window height, hstrip is the strip height
         //hstrip/16 correspond to the upper alpha line of the strip
@@ -83,7 +84,7 @@ void StripWindow::initializeGL()
                                            (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
                                            (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , _currentFont, it->getPeople().getColor()));
         if (i % (max / 20) == 0){
-            QApplication::processEvents();
+            //QApplication::processEvents();
         }
         i++;
     }
