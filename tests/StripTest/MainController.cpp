@@ -5,16 +5,13 @@
 
 #include "MainController.h"
 
-MainController::MainController(MainWindow * mw)
+
+MainController::MainController(QObject *parent) :
+    QObject(parent)
 {
-    _window = mw;
+    _doc = new PhStripDoc();
     loadSettings();
 }
-
-MainController::MainController()
-{
-}
-
 void MainController::loadSettings()
 {
     // Try to create a settings file (temp)
@@ -37,7 +34,20 @@ PhString MainController::getLastFile()
     return _settings->value("last_file").toString();
 }
 
-void MainController::setLastFile(QString filename)
+bool MainController::openDoc(PhString fileName)
+{
+    bool succeed = _doc->openDetX(fileName);
+    //if (succeed)
+        emit docChanged();
+    return succeed;
+}
+
+PhStripDoc MainController::getDoc()
+{
+    return *_doc;
+}
+
+void MainController::setLastFile(PhString filename)
 {
     _settings->setValue("last_file", filename);
 }
