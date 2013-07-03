@@ -14,18 +14,41 @@ MainController::MainController(QObject *parent) :
 }
 void MainController::loadSettings()
 {
-    // Try to create a settings file (temp)
+
+    if (QFile(QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist").exists()){
+        // Try to create a settings file (temp)
+#if defined(Q_OS_MAC)
+        _settings = new QSettings(QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist", QSettings::NativeFormat);
+#elif defined(Q_OS_UNIX)
+#elif defined(Q_OS_WIN)
+#else
+        qDebug() << "unknown OS please report informations";
+#endif
+        qDebug() << "Settings loaded fine";
+        getLastFile();
+    }
+    else
+    {
+        newSettings();
+    }
+}
+
+void MainController::newSettings()
+{
+    qDebug() << "Prefs file is missing, creating new pref file with default values :";
 #if defined(Q_OS_MAC)
     _settings = new QSettings(QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist", QSettings::NativeFormat);
-#elif defined(Q_OS_UNIX)
-    libvlc_media_player_set_xwindow(vlcPlayer, videoWidget->winId());
-#elif defined(Q_OS_WIN)
-    libvlc_media_player_set_hwnd(vlcPlayer, videoWidget->winId());
-#else
-    qDebug() << "unknown OS please report informations";
 #endif
-    qDebug() << "Settings loaded fine";
-    getLastFile();
+    _settings->setValue("last_file", "");
+    _settings->setValue("natural_scroll", true);
+
+    QStringList values = _settings->allKeys();
+
+    for (PhString value : values)
+    {
+        qDebug() << value << ":" <<  _settings->value(value).toString();
+    }
+
 }
 
 PhString MainController::getLastFile()
@@ -45,6 +68,11 @@ bool MainController::openDoc(PhString fileName)
 PhStripDoc MainController::getDoc()
 {
     return *_doc;
+}
+
+bool MainController::getNaturalScrollPref()
+{
+    return _settings->value("natural_scroll", "true").toBool();
 }
 
 void MainController::setLastFile(PhString filename)

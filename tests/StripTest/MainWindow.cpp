@@ -21,6 +21,7 @@ MainWindow::MainWindow(PhString file)
     _strip = new StripWindow(this);
     createMenus();
     _strip->setController(_MController);
+    _strip->setNaturalScroll(_MController->getNaturalScrollPref());
     _strip->connectSlots();
     _strip->show();
 }

@@ -24,7 +24,9 @@
 
 
 class StripWindow : public PhGraphicView
-{Q_OBJECT
+{
+
+    Q_OBJECT
 
 public:
     /**
@@ -93,6 +95,7 @@ public:
     void toggleScrolling();
     void setController(MainController * controller);
     void connectSlots();
+    void setNaturalScroll(bool naturalScroll);
 
 public slots:
     void stopScroll();
