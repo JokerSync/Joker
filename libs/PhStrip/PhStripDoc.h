@@ -20,6 +20,7 @@
 
 class PhStripDoc {
 private:
+    void reset();
     /**
      * Title of the corresponding audiovisual content.
      */
@@ -82,7 +83,7 @@ public:
      * @param filename
      * Constructor
      */
-    PhStripDoc(PhString filename);
+    PhStripDoc();
 
     QList<PhStripCut *> getCuts();
 
@@ -111,7 +112,7 @@ public:
      * @return duration
      * used to know the script lenght, not very accurate for the moment
      */
-    int getDuration();
+    int getDuration(); //TODO Delete me
     /**
      * @brief getTimeScale
      * @return

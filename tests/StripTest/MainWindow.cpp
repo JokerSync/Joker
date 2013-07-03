@@ -15,14 +15,13 @@
 
 MainWindow::MainWindow(PhString file)
 {
-    _MController = new MainController(this);
+    _MController = new MainController();
     resize(1280,360);
-    createMenus();
     setWindowTitle(tr("Striptest"));
-    if (file == "")
-        _strip = new StripWindow(this, _MController->getLastFile());
-    else
-        _strip = new StripWindow(this, file);
+    _strip = new StripWindow(this);
+    createMenus();
+    _strip->setController(_MController);
+    _strip->connectSlots();
     _strip->show();
 }
 
@@ -40,6 +39,7 @@ void MainWindow::createMenus()
     // Add the action to the file menu
     fileMenu->addAction(openAct);
     // Connect the action to a function
+    connect(openAct, SIGNAL(triggered()), _strip, SLOT(stopScroll()));
     connect(openAct, SIGNAL(triggered()), this, SLOT(openFile()));
 
     // Add a menu
@@ -68,7 +68,10 @@ void MainWindow::createMenus()
 
 void MainWindow::openFile()
 {
-    _strip->openFile("");
+    PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
+    if(!fileName.isNull())
+        _MController->openDoc(fileName);
+    //_strip->openFile("");
 }
 
 void MainWindow::switchScrolling()

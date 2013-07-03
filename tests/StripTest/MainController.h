@@ -9,21 +9,29 @@
 #include <QSettings>
 #include <QDebug>
 #include <QDir>
+#include <QObject>
 
 #include "PhTools/PhString.h"
+#include "PhStrip/PhStripDoc.h"
 
-class MainWindow;
-
-class MainController
+class MainController : public QObject
 {
+    Q_OBJECT
+
 public:
-    MainController(MainWindow * mw);
-    MainController();
+    explicit MainController(QObject *parent = 0);
     void loadSettings();
     PhString getLastFile();
+    void setLastFile(PhString fileName);
+    bool openDoc(PhString fileName);
+    PhStripDoc getDoc();
+
+signals:
+    void docChanged();
+
 private:
-    MainWindow * _window;
     QSettings * _settings;
+    PhStripDoc * _doc;
 
 };
 

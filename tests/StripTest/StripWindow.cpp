@@ -14,10 +14,10 @@
 using namespace Leap;
 
 
-StripWindow::StripWindow(QWidget *parent, PhString file)
+StripWindow::StripWindow(QWidget *parent)
     : PhGraphicView( parent, "StripTest")
 {
-    controller.addListener(listener);
+    _leapController.addListener(leapListener);
     _naturalScroll = true;
 
 
@@ -36,10 +36,6 @@ StripWindow::StripWindow(QWidget *parent, PhString file)
 
     // The strip shouldn't move until a file is loaded
     _shouldmove = false;
-    _firstload = true;
-
-    // This open a file
-    openFile(file);
 }
 
 
@@ -58,16 +54,16 @@ void StripWindow::initializeGL()
     //This clear the data stored
     clearData();
 
-    int max = _doc->getNbTexts();
+    _xmove = - _controller->getDoc().getLastPosition();
+    int max = _controller->getDoc().getTexts().count();
     QProgressDialog barTest("Création des textures","Ok", 0, max, this);
 
     barTest.move(400,400);
-
-    //barTest.show();
+    barTest.show();
 
     int i = 0;
     //Load the all text
-    for(auto it : _doc->getTexts())
+    for(auto it : _controller->getDoc().getTexts())
     {
         barTest.setValue(i);
 
@@ -82,14 +78,14 @@ void StripWindow::initializeGL()
         if (it->isSimple()){
             int nameWidth = (it->getPeople().getName().length() + 1) * 10;
             _texts.push_back(new PhGraphicText(it->getPeople().getName(),
-                                               (it->getTimeIn() - _doc->getLastPosition()) * 20 - nameWidth - 10, y, -1,
+                                               (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
                                                nameWidth, 30, _fonts.first(), it->getPeople().getColor()));
         }
         _texts.push_back(new PhGraphicText(it->getContent(),
-                                           (it->getTimeIn() - _doc->getLastPosition()) * 20, y , -1,
+                                           (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
                                            (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , _currentFont, it->getPeople().getColor()));
-        if (i % (max / 10) == 0){
-            //QApplication::processEvents();
+        if (i % (max / 20) == 0){
+            QApplication::processEvents();
         }
         i++;
     }
@@ -104,9 +100,9 @@ void StripWindow::initializeGL()
                                        nbRythmo, 1));
 
     //Load the cuts
-    for(auto it : _doc->getCuts())
+    for(auto it : _controller->getDoc().getCuts())
     {
-        _cuts.push_back(new PhGraphicTexturedRect((it->getTimeIn() - _doc->getLastPosition()) * 20, 0, -2,
+        _cuts.push_back(new PhGraphicTexturedRect((it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
                                                   2, hstrip,
                                                   PhColor("black")));
     }
@@ -116,20 +112,17 @@ void StripWindow::initializeGL()
 void StripWindow::paintGL()
 {
 
-    //Controller.
-
     //Time-based test
     //qDebug() << _test->elapsed() << " : " << _xmove;
 
-    if(controller.frame().fingers().count() == 1)
+    if(_leapController.frame().fingers().count() == 1)
     {
-        setXmove((controller.frame(1).fingers().leftmost().tipPosition().x - controller.frame().fingers().leftmost().tipPosition().x) * 4);
+        setXmove((_leapController.frame(1).fingers().leftmost().tipPosition().x - _leapController.frame().fingers().leftmost().tipPosition().x) * 4);
     }
-    if(controller.frame().fingers().count() == 2)
+    if(_leapController.frame().fingers().count() == 2)
     {
-        setXmove(controller.frame().fingers().leftmost().tipPosition().x / 5);
+        setXmove(_leapController.frame().fingers().leftmost().tipPosition().x / 5);
     }
-
 
     //Clear the buffer
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -159,20 +152,11 @@ void StripWindow::paintGL()
 }
 
 
-void StripWindow::openFile(QString filename)
+void StripWindow::stopScroll()
 {
-    // The strip should stop scrolling when during a file load
+    qDebug() << "Stop Scrolling";
     setScroll(false);
-    if(!QFile(filename).exists())
-        filename = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
-    _xmove = 0;
-    _doc = new PhStripDoc(filename);
-    if (!_firstload) //TODO : Fix me
-        initializeGL();
-    _firstload = false;
-    _xmove = - _doc->getLastPosition();
 }
-
 
 void StripWindow::clearData()
 {
@@ -220,6 +204,16 @@ void StripWindow::setScroll(bool shouldScroll)
 void StripWindow::toggleScrolling()
 {
     _naturalScroll = ! _naturalScroll;
+}
+
+void StripWindow::setController(MainController * controller)
+{
+    _controller = controller;
+}
+
+void StripWindow::connectSlots(){
+    connect(_controller, SIGNAL(docChanged()), this, SLOT(initializeGL()));
+    connect(_controller, SIGNAL(docChanged()), this, SLOT(stopScroll()));
 }
 
 void StripWindow::setXmove(int n)

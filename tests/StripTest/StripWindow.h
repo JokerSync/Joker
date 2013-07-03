@@ -18,6 +18,8 @@
 
 #include "PhTools/PhTimeCode.h"
 
+#include "MainController.h"
+
 #include "PhCommonUI/SampleListener.h"
 
 
@@ -31,25 +33,14 @@ public:
      * @param file
      * constructor
      */
-    explicit StripWindow(QWidget *parent = 0, PhString file = "");
-
-    /**
-     * @brief initializeGL
-     * initialize the objects to draw
-     */
-    void initializeGL();
+    explicit StripWindow(QWidget *parent = 0);
 
     /**
      * @brief paintGL
      * refresh the framebuffer
      */
     void paintGL();
-    /**
-     * @brief StripWindow::openFile
-     * @param filename
-     * Set the position to 0, load a new PhStripDoc, call initializeGL if another file was loaded
-     */
-    void openFile(PhString filename);
+
     /**
      * @brief StripWindow::clearData
      *Clear _texts and _imgs
@@ -100,11 +91,25 @@ public:
     PhStripDoc *getDoc();
 
     void toggleScrolling();
+    void setController(MainController * controller);
+    void connectSlots();
 
+public slots:
+    void stopScroll();
+
+
+private slots:
+
+
+    /**
+     * @brief initializeGL
+     * initialize the objects to draw
+     */
+    void initializeGL();
 
 
 private :
-
+    MainController * _controller;
     /**
      * @brief _doc
      * Reference to the current PhStripDoc
@@ -119,11 +124,6 @@ private :
 
     float _xMoveStrip;
 
-    /**
-     * @brief _firstload
-     * allow us to know if it's the first load or not.
-     */
-    bool _firstload;
     /**
      * @brief _shouldmove
      * allow us to know if the strip should scroll or not.
@@ -163,10 +163,8 @@ private :
     QTime *_test;
 
 
-    SampleListener listener;
-    Controller controller;
-    int lastLeapPosition;
-
+    SampleListener leapListener;
+    Controller _leapController;
     bool _naturalScroll;
 
 };
