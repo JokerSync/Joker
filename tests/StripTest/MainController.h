@@ -25,11 +25,13 @@ public:
     void setLastFile(PhString fileName);
     bool openDoc(PhString fileName);
     PhStripDoc getDoc();
+    bool getNaturalScrollPref();
 
 signals:
     void docChanged();
 
 private:
+    void newSettings();
     QSettings * _settings;
     PhStripDoc * _doc;
 

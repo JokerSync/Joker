@@ -18,8 +18,6 @@ StripWindow::StripWindow(QWidget *parent)
     : PhGraphicView( parent, "StripTest")
 {
     _leapController.addListener(leapListener);
-    _naturalScroll = true;
-
 
     // This is used to make some time-based test
     _test = new QTime();
@@ -199,6 +197,11 @@ void StripWindow::changeScroll()
 void StripWindow::setScroll(bool shouldScroll)
 {
     _shouldmove = shouldScroll;
+}
+
+void StripWindow::setNaturalScroll(bool naturalScroll)
+{
+    _naturalScroll = naturalScroll;
 }
 
 void StripWindow::toggleScrolling()
