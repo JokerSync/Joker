@@ -14,6 +14,7 @@
 #include "PhTools/PhString.h"
 #include "PhStrip/PhStripDoc.h"
 
+
 class MainController : public QObject
 {
     Q_OBJECT

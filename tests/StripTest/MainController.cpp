@@ -9,6 +9,7 @@
 MainController::MainController(QObject *parent) :
     QObject(parent)
 {
+
     _doc = new PhStripDoc();
     loadSettings();
 }

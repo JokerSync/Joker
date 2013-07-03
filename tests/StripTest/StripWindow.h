@@ -20,7 +20,10 @@
 
 #include "MainController.h"
 
-#include "PhCommonUI/SampleListener.h"
+#include "PhCommonUI/PhLeap.h"
+
+
+
 
 
 class StripWindow : public PhGraphicView
@@ -165,9 +168,10 @@ private :
      */
     QTime *_test;
 
-
-    SampleListener leapListener;
+    PhLeap leapListener;
     Controller _leapController;
+
+
     bool _naturalScroll;
 
 };
