@@ -24,7 +24,7 @@ public:
 
 signals:
     void setPosition(int move);
-    void setRate(int move);
+    void setRate(float move);
 
 
 };

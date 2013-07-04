@@ -16,6 +16,7 @@ using namespace Leap;
 
 MainWindow::MainWindow(PhString file)
 {
+
     _leapController.addListener(leapListener);
     _MController = new MainController();
     if(_MController->openDoc(file))
@@ -28,7 +29,11 @@ MainWindow::MainWindow(PhString file)
     _strip->setNaturalScroll(_MController->getNaturalScrollPref());
     _strip->connectSlots();
     _strip->show();
-    connect(&leapListener, SIGNAL(setPosition(int move)), _MController, SIGNAL(onPositionChanged(int move)));
+
+    qDebug() << leapListener.objectName();
+    connect(&leapListener, SIGNAL(setPosition(int move)), _MController, SLOT(onPositionChanged2(int move)));
+    connect(&leapListener, SIGNAL(setRate(float rate)), _MController, SLOT(onRateChanged2(float rate)));
+
 }
 
 void MainWindow::createMenus()

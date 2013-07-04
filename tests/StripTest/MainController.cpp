@@ -81,3 +81,11 @@ void MainController::setLastFile(PhString filename)
     _settings->setValue("last_file", filename);
 }
 
+
+void MainController::onRateChanged2(float rate)
+{
+}
+
+void MainController::onPositionChanged2(int move)
+{
+}

@@ -34,6 +34,10 @@ signals:
     void onPositionChanged(int move);
 
 public slots:
+    //Testing
+    void onRateChanged2(float rate);
+    void onPositionChanged2(int move);
+    //End-Testing
 
 private:
     void newSettings();
