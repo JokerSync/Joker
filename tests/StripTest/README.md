@@ -26,3 +26,28 @@ You can :
 - Export a print screen by pressing *P* key.
 - Export the next minute by pressing *ctrl + P* or *cmd + P* key sequence (depending on your OS).
 
+
+Compilation information :
+-------------------------
+
+In order to compile the test project you will need :
+
+### The SDL framework v1.2
+
+Available [here](http://www.libsdl.org/download-1.2.php).
+
+
+### The Leap SDK
+
+Available [here](https://developer.leapmotion.com).
+
+You must then define the following global variable in order to compile with the LEAP: 
+
+	launchctl setenv LEAP_SDK /path/to/sdk/root
+	
+
+	
+
+
+
+
