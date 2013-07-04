@@ -13,7 +13,7 @@
 using namespace Leap;
 
 
-class PhLeap : public Listener, public QObject
+class PhLeap : public QObject, public Listener
 {
 
     Q_OBJECT

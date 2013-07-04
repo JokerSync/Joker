@@ -17,7 +17,6 @@ using namespace Leap;
 MainWindow::MainWindow(PhString file)
 {
     _leapController.addListener(leapListener);
-
     _MController = new MainController();
     if(_MController->openDoc(file))
         _MController->setLastFile(file);
