@@ -32,6 +32,7 @@ signals:
     void docChanged();
     void onRateChanged(float rate);
     void onPositionChanged(int move);
+
 public slots:
 
 private:
