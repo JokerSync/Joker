@@ -7,14 +7,24 @@
 #define PHLEAP_H
 
 
+#include <QObject>
 #include "Leap.h"
 
 using namespace Leap;
 
-class PhLeap : public Listener
+
+class PhLeap : public Listener, public QObject
 {
+
+    Q_OBJECT
+
 public:
+    explicit PhLeap(QObject *parent = 0);
     virtual void onFrame(const Controller&);
+
+signals:
+    void setPosition(int move);
+    void setRate(int move);
 
 
 };

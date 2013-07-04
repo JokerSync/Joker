@@ -168,8 +168,6 @@ private :
      */
     QTime *_test;
 
-    PhLeap leapListener;
-    Controller _leapController;
 
 
     bool _naturalScroll;

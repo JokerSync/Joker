@@ -12,9 +12,12 @@
 
 #include "MainWindow.h"
 
+using namespace Leap;
 
 MainWindow::MainWindow(PhString file)
 {
+    _leapController.addListener(leapListener);
+
     _MController = new MainController();
     if(_MController->openDoc(file))
         _MController->setLastFile(file);
@@ -26,6 +29,7 @@ MainWindow::MainWindow(PhString file)
     _strip->setNaturalScroll(_MController->getNaturalScrollPref());
     _strip->connectSlots();
     _strip->show();
+    connect(&leapListener, SIGNAL(setPosition(int move)), _MController, SIGNAL(onPositionChanged(int move)));
 }
 
 void MainWindow::createMenus()
