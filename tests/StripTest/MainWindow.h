@@ -12,6 +12,9 @@
 #include "StripWindow.h"
 #include "MainController.h"
 
+#include "PhCommonUI/PhLeap.h"
+
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -96,6 +99,11 @@ private:
     QAction *exportRythmoAct;
 
     QAction *switchScroll;
-   };
+
+    PhLeap leapListener;
+    Controller _leapController;
+
+
+};
 
 #endif // MAINWINDOW_H

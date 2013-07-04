@@ -11,14 +11,12 @@
 #include "StripWindow.h"
 
 
-using namespace Leap;
 
 
 StripWindow::StripWindow(QWidget *parent)
     : PhGraphicView( parent, "StripTest")
 {
 
-    _leapController.addListener(leapListener);
 
     // This is used to make some time-based test
     _test = new QTime();
@@ -114,14 +112,7 @@ void StripWindow::paintGL()
     //Time-based test
     //qDebug() << _test->elapsed() << " : " << _xmove;
 
-    if(_leapController.frame().fingers().count() == 1)
-    {
-        setXmove((_leapController.frame(1).fingers().leftmost().tipPosition().x - _leapController.frame().fingers().leftmost().tipPosition().x) * 4);
-    }
-    if(_leapController.frame().fingers().count() == 2)
-    {
-        setXmove(_leapController.frame().fingers().leftmost().tipPosition().x / 5);
-    }
+
 
     //Clear the buffer
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -21,14 +21,14 @@ SOURCES += main.cpp \
 	StripWindow.cpp \
 	MainWindow.cpp \
     ../../libs/PhTools/PhFileTools.cpp \
-	../../libs/PhCommonUI/SampleListener.cpp \
+#	../../libs/PhCommonUI/SampleListener.cpp \
 	MainController.cpp \
 	../../libs/PhCommonUI/PhLeap.cpp
 
 HEADERS += StripWindow.h \
 	MainWindow.h\
     ../../libs/PhTools/PhFileTools.h \
-	../../libs/PhCommonUI/SampleListener.h \
+#	../../libs/PhCommonUI/SampleListener.h \
 	../../libs/PhCommonUI/LeapMath.h \
 	../../libs/PhCommonUI/Leap.h \
 	MainController.h \

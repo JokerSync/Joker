@@ -9,7 +9,17 @@
 
 using namespace Leap;
 
+PhLeap::PhLeap(QObject *parent) : QObject(parent){}
+
 void PhLeap::onFrame(const Controller& controller)
 {
-    qDebug() << "on frame";
+
+    if(controller.frame().fingers().count() == 1)
+    {
+        emit setPosition((controller.frame(1).fingers().leftmost().tipPosition().x - controller.frame().fingers().leftmost().tipPosition().x) * 4);
+    }
+    if(controller.frame().fingers().count() == 2)
+    {
+        emit setRate(controller.frame().fingers().leftmost().tipPosition().x / 5);
+    }
 }
