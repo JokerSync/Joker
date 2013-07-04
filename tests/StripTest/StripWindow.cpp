@@ -60,7 +60,7 @@ void StripWindow::initializeGL()
 
     int i = 0;
     //Load the all text
-    for(auto it : _controller->getDoc().getTexts())
+    foreach(PhStripText * it, _controller->getDoc().getTexts())
     {
         //barTest.setValue(i);
 
@@ -69,7 +69,7 @@ void StripWindow::initializeGL()
         //hstrip/8 correspond to the two alpha lines of the strip (up & down)
         //it->getTrack() is the position on the strip (0 is the upper on)
         //we split in 3 because we are using 3 tracks on the strip
-        int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*it->getTrack() + 30;        
+        int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*it->getTrack() + 30;
 
         //Display the name only if the setence is standalone
         if (it->isSimple()){
@@ -97,7 +97,7 @@ void StripWindow::initializeGL()
                                        nbRythmo, 1));
 
     //Load the cuts
-    for(auto it : _controller->getDoc().getCuts())
+    foreach(PhStripCut * it, _controller->getDoc().getCuts())
     {
         _cuts.push_back(new PhGraphicTexturedRect((it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
                                                   2, hstrip,
@@ -127,15 +127,15 @@ void StripWindow::paintGL()
     }
 
     //Draw Objects
-    for(auto it : _strips)
+    foreach(PhGraphicImage * it, _strips)
     {
         it->draw(_xMoveStrip);
     }
-    for(auto it : _texts)
+    foreach(PhGraphicText * it, _texts)
     {
         it->draw(_xmove);
     }
-    for(auto it : _cuts)
+    foreach(PhGraphicTexturedRect * it, _cuts)
     {
         it->draw(_xmove);
     }
@@ -150,11 +150,11 @@ void StripWindow::stopScroll()
 
 void StripWindow::clearData()
 {
-    for(auto it : _cuts)
+    foreach(PhGraphicTexturedRect * it, _cuts)
     {
         delete it;
     }
-    for(auto it : _texts)
+    for(PhGraphicText * it : _texts)
     {
         delete it;
     }

@@ -33,7 +33,6 @@ MainWindow::MainWindow(PhString file)
     qDebug() << leapListener.objectName();
     connect(&leapListener, SIGNAL(setPosition(int move)), _MController, SLOT(onPositionChanged2(int move)));
     connect(&leapListener, SIGNAL(setRate(float rate)), _MController, SLOT(onRateChanged2(float rate)));
-
 }
 
 void MainWindow::createMenus()
@@ -42,7 +41,7 @@ void MainWindow::createMenus()
 
     // Add a menu
     fileMenu = menuBar()->addMenu(tr("&File"));
-    
+
     // Create a new Open action
     openAct = new QAction(tr("&Open"), this);
     // Set a shortcut to execute this action
@@ -114,7 +113,7 @@ void MainWindow::changeFont()
     int i = 0;
     int j = 0;
     PhString oldFont = _strip->getCurrentFont()->getFontName();
-    for (auto it : fonts ){
+    foreach (QString it, fonts ){
         if (it.contains(oldFont))
             j = i;
         i++;

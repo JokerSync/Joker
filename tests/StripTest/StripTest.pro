@@ -27,8 +27,6 @@ SOURCES += main.cpp \
 HEADERS += StripWindow.h \
 	MainWindow.h\
     ../../libs/PhTools/PhFileTools.h \
-	../../libs/PhCommonUI/LeapMath.h \
-	../../libs/PhCommonUI/Leap.h \
 	MainController.h \
 	../../libs/PhCommonUI/PhLeap.h
 
@@ -92,8 +90,9 @@ HEADERS  += \
 
 INCLUDEPATH += 	../../libs \
 		/Library/Frameworks/ \
+    $$(LEAP_SDK)/include
 
-LIBS += -L../../libs/PhCommonUI/ -lLeap
+LIBS += -L$$(LEAP_SDK)/lib -lLeap
 LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 
 macx {
@@ -102,6 +101,7 @@ macx {
 QMAKE_EXTRA_TARGETS += copyresources
 POST_TARGETDEPS += copyresources
 macx {
+
 	copylibs.commands = mkdir $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs;
 	copylibs.commands += cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/;
 }
@@ -109,7 +109,7 @@ QMAKE_EXTRA_TARGETS += copylibs
 POST_TARGETDEPS += copylibs
 
 macx {
-	leap.commands += cp -r $${PWD}/../../libs/PhCommonUI/libLeap.dylib $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;
+	leap.commands += cp -r $$(LEAP_SDK)/lib/libLeap.dylib $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;
 }
 QMAKE_EXTRA_TARGETS += leap
 POST_TARGETDEPS += leap
