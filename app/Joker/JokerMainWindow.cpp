@@ -227,6 +227,8 @@ void JokerMainWindow::openVideoFile()
     if (!fileName.isEmpty()) {
         mediaPlayer.setMedia(QUrl::fromLocalFile(fileName));
     }
+
+    _strip->show();
 }
 
 void JokerMainWindow::play()
