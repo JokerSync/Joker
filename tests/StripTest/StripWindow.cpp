@@ -46,7 +46,7 @@ void StripWindow::initializeGL()
     int h = this->height();
 
     //Set the ratio between the strip's height and the OpenGL height
-    int hstrip = h;
+    int hstrip = h/3;
 
     //This clear the data stored
     clearData();
@@ -110,9 +110,10 @@ void StripWindow::paintGL()
 {
 
     //Time-based test
-    //qDebug() << _test->elapsed() << " : " << _xmove;
+    //qDebug() << _test->elapsed(); //<< " : " << _xmove;
 
 
+    //qDebug() << "PaintGL" <<;
 
     //Clear the buffer
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -188,6 +189,11 @@ void StripWindow::changeScroll()
 
 void StripWindow::setScroll(bool shouldScroll)
 {
+    if(shouldScroll)
+        qDebug() << "The strip should scroll";
+    else
+        qDebug() << "The strip should NOT scroll";
+
     _shouldmove = shouldScroll;
 }
 
@@ -196,7 +202,7 @@ void StripWindow::setNaturalScroll(bool naturalScroll)
     _naturalScroll = naturalScroll;
 }
 
-void StripWindow::toggleScrolling()
+void StripWindow::toggleNaturalScrolling()
 {
     _naturalScroll = ! _naturalScroll;
 }

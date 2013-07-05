@@ -95,7 +95,7 @@ public:
      */
     PhStripDoc *getDoc();
 
-    void toggleScrolling();
+    void toggleNaturalScrolling();
     void setController(MainController * controller);
     void connectSlots();
     void setNaturalScroll(bool naturalScroll);
