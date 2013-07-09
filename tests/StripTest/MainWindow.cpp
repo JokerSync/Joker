@@ -86,7 +86,7 @@ void MainWindow::openFile()
 
 void MainWindow::switchScrolling()
 {
-    _strip->toggleScrolling();
+//    _strip->toggleScroll();
 }
 
 void MainWindow::changeFont()
