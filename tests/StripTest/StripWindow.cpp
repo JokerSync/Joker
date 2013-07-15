@@ -155,7 +155,7 @@ void StripWindow::clearData()
     {
         delete it;
     }
-    for(PhGraphicText * it : _texts)
+    foreach(PhGraphicText * it, _texts)
     {
         delete it;
     }

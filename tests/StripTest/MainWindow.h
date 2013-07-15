@@ -12,8 +12,9 @@
 #include "StripWindow.h"
 #include "MainController.h"
 
+#if LEAP
 #include "PhCommonUI/PhLeap.h"
-
+#endif
 
 class MainWindow : public QMainWindow
 {
@@ -100,9 +101,10 @@ private:
 
     QAction *switchScroll;
 
+#if LEAP
     PhLeap leapListener;
     Controller _leapController;
-
+#endif
 
 };
 

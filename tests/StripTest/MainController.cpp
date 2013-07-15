@@ -45,7 +45,7 @@ void MainController::newSettings()
 
     QStringList values = _settings->allKeys();
 
-    for (PhString value : values)
+    foreach (PhString value, values)
     {
         qDebug() << value << ":" <<  _settings->value(value).toString();
     }

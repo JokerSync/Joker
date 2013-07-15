@@ -12,12 +12,16 @@
 
 #include "MainWindow.h"
 
+#if LEAP
 using namespace Leap;
+#endif
 
 MainWindow::MainWindow(PhString file)
 {
 
+#if LEAP
     _leapController.addListener(leapListener);
+#endif
     _MController = new MainController();
     if(_MController->openDoc(file))
         _MController->setLastFile(file);
@@ -30,9 +34,11 @@ MainWindow::MainWindow(PhString file)
     _strip->connectSlots();
     _strip->show();
 
+#if LEAP
     qDebug() << leapListener.objectName();
     connect(&leapListener, SIGNAL(setPosition(int move)), _MController, SLOT(onPositionChanged2(int move)));
     connect(&leapListener, SIGNAL(setRate(float rate)), _MController, SLOT(onRateChanged2(float rate)));
+#endif
 }
 
 void MainWindow::createMenus()

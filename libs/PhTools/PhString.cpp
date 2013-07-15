@@ -4,7 +4,7 @@
 */
 
 
-#include "phstring.h"
+#include "PhString.h"
 
 //PhString::PhString(QString str) : QString(str)
 //{
