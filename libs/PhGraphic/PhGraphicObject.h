@@ -69,11 +69,11 @@ protected:
     /**
      * @brief init
      */
-    virtual void init() = 0;
+   // virtual void init() = 0;
     /**
      * @brief dispose
      */
-    virtual void dispose() = 0;
+  //  virtual void dispose() = 0;
     /**
      * @brief getX
      * @return

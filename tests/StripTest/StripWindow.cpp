@@ -23,7 +23,7 @@ StripWindow::StripWindow(QWidget *parent)
     _test->start();
 
     // This is a preload of default fonts
-    _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/LTE50198.ttf", 150));
+    _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/data/fonts/Bedizen.ttf", 150));
 
 
     // Set current font
@@ -53,10 +53,10 @@ void StripWindow::initializeGL()
 
     _xmove = - _controller->getDoc().getLastPosition();
     int max = _controller->getDoc().getTexts().count();
-    //QProgressDialog barTest("Création des textures","Ok", 0, max, this);
+    QProgressDialog barTest("Création des textures","Ok", 0, max, this);
 
-    //barTest.move(400,400);
-    //barTest.show();
+    barTest.move(400,400);
+    // barTest.show();
 
     int i = 0;
     //Load the all text
@@ -68,7 +68,7 @@ void StripWindow::initializeGL()
         //hstrip/16 correspond to the upper alpha line of the strip
         //hstrip/8 correspond to the two alpha lines of the strip (up & down)
         //it->getTrack() is the position on the strip (0 is the upper on)
-        //we split in 3 because we are using 3 tracks on the strip
+        //we split   in 3 because we are using 3 tracks on the strip
         int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*it->getTrack() + 30;
 
         //Display the name only if the setence is standalone
@@ -82,7 +82,7 @@ void StripWindow::initializeGL()
                                            (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
                                            (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , _currentFont, it->getPeople().getColor()));
         if (i % (max / 20) == 0){
-            //QApplication::processEvents();
+            QApplication::processEvents();
         }
         i++;
     }
@@ -91,7 +91,7 @@ void StripWindow::initializeGL()
     int nbRythmo = this->width()/60;
 
     //Load the strip
-    _strips.push_back(new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/img/motif-240.png",
+    _strips.push_back(new PhGraphicImage(QCoreApplication::applicationDirPath() + "/data/img/motif-240.png",
                                        -1000, h - hstrip, -3,
                                        240, hstrip, PhColor("white"),
                                        nbRythmo, 1));
@@ -110,10 +110,10 @@ void StripWindow::paintGL()
 {
 
     //Time-based test
-    //qDebug() << _test->elapsed(); //<< " : " << _xmove;
+    qDebug() << _test->elapsed(); //<< " : " << _xmove;
 
 
-    //qDebug() << "PaintGL" <<;
+    qDebug() << "PaintGL";
 
     //Clear the buffer
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

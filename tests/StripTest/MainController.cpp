@@ -5,22 +5,24 @@
 
 #include "MainController.h"
 
+#include "iostream"
+using namespace std;
+
 
 MainController::MainController(QObject *parent) :
     QObject(parent)
 {
-
     _doc = new PhStripDoc();
     loadSettings();
 }
 void MainController::loadSettings()
 {
-
-    if (QFile(QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist").exists()){
+    if (QFile(QDir::homePath() + "StripTest.ini").exists()){
         // Try to create a settings file (temp)
 #if defined(Q_OS_MAC)
         _settings = new QSettings(QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist", QSettings::NativeFormat);
 #elif defined(Q_OS_UNIX)
+        _settings = new QSettings ("StripTest.ini",QSettings::IniFormat);
 #elif defined(Q_OS_WIN)
 #else
         qDebug() << "unknown OS please report informations";
@@ -39,6 +41,8 @@ void MainController::newSettings()
     qDebug() << "Prefs file is missing, creating new pref file with default values :";
 #if defined(Q_OS_MAC)
     _settings = new QSettings(QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist", QSettings::NativeFormat);
+#elif defined(Q_OS_UNIX)
+    _settings = new QSettings ("StripTest.ini",QSettings::IniFormat);
 #endif
     _settings->setValue("last_file", "");
     _settings->setValue("natural_scroll", true);

@@ -95,8 +95,10 @@ INCLUDEPATH += 	../../libs \
 
 unix {
 INCLUDEPATH += /usr/include/GL \
-                    /usr/include/SDL
-LIBS += -lSDL -lSDL_image -lSDL_ttf
+               /usr/include/SDL \
+
+INCLUDEPATH += ../../libs
+LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
 #LIBS += -L$$(LEAP_SDK)/lib/x64 -lLeap
 }
 
