@@ -100,6 +100,8 @@ public:
     void connectSlots();
     void setNaturalScroll(bool naturalScroll);
 
+  //  void openFile(char * file);
+
 public slots:
     void stopScroll();
 

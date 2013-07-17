@@ -5,52 +5,55 @@
 
 #include "MainController.h"
 
+#include "iostream"
+using namespace std;
+
 
 MainController::MainController(QObject *parent) :
     QObject(parent)
 {
-
     _doc = new PhStripDoc();
-    loadSettings();
+
+#if defined(Q_OS_MAC)
+       _settingsPath = QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist";
+        _settingsFormat = QSettings::NativeFormat;
+#elif defined(Q_OS_UNIX)
+        _settingsPath = QDir::homePath() + "StripTest.ini"; //TODO : change to specific setting folder
+        _settingsFormat = QSettings::IniFormat;
+#elif defined(Q_OS_WIN)//TODO handle settings under Windows and trigger compilation error
+#else
+    //TODO trigger compilation error cf rtm
+#endif
+        loadSettings();
 }
 void MainController::loadSettings()
 {
+        // Try to load a settings file (temp)
 
-    if (QFile(QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist").exists()){
-        // Try to create a settings file (temp)
-#if defined(Q_OS_MAC)
-        _settings = new QSettings(QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist", QSettings::NativeFormat);
-#elif defined(Q_OS_UNIX)
-#elif defined(Q_OS_WIN)
-#else
-        qDebug() << "unknown OS please report informations";
-#endif
-        qDebug() << "Settings loaded fine";
-        getLastFile();
+        if(QFile( _settingsPath).exists())
+        {
+            _settings = new QSettings(_settingsPath, _settingsFormat);
+            qDebug() << "Settings loaded fine";
+            getLastFile();
     }
     else
     {
-        newSettings();
-    }
-}
+            qDebug() << "Prefs file is missing, creating new pref file with default values :";
 
-void MainController::newSettings()
-{
-    qDebug() << "Prefs file is missing, creating new pref file with default values :";
-#if defined(Q_OS_MAC)
-    _settings = new QSettings(QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist", QSettings::NativeFormat);
-#endif
-    _settings->setValue("last_file", "");
-    _settings->setValue("natural_scroll", true);
+            _settings = new QSettings(_settingsPath, _settingsFormat);
 
-    QStringList values = _settings->allKeys();
-
-    foreach (PhString value, values)
-    {
-        qDebug() << value << ":" <<  _settings->value(value).toString();
+            _settings->setValue("last_file", "");
+            _settings->setValue("natural_scroll", true);
     }
 
+        QStringList values = _settings->allKeys();
+
+        foreach (PhString value, values)
+        {
+            qDebug() << value << ":" <<  _settings->value(value).toString();
+        }
 }
+
 
 PhString MainController::getLastFile()
 {

@@ -86,13 +86,14 @@ void MainWindow::openFile()
 {
     PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
     if(!fileName.isNull())
-        _MController->openDoc(fileName);
-    //_strip->openFile("");
+       { _MController->openDoc(fileName);
+       // _strip->openFile("");
+    }
 }
 
 void MainWindow::switchScrolling()
 {
-//    _strip->toggleScroll();
+    //_strip->toggleScroll();
 }
 
 void MainWindow::changeFont()
@@ -101,7 +102,11 @@ void MainWindow::changeFont()
     // This is a routine witch load Apple system TTF fonts
 
     // Set the location
+#if defined(Q_OS_MAC)
     PhString sourceFolder = "/Library/Fonts/";
+#elif defined(Q_OS_UNIX)
+    PhString sourceFolder = "/usr/share/fonts/truetype/freefont/";
+#endif
     QDir sourceDir(sourceFolder);
     // List all files
     QStringList files = sourceDir.entryList(QDir::Files);
@@ -143,7 +148,9 @@ void MainWindow::exportRythomAsPNG()
 void MainWindow::resizeEvent(QResizeEvent *)
 {
     // Call the resize of the OpenGL context
+
     _strip->resizeGL(this->width(), this->height());
+
 }
 
 void MainWindow::keyPressEvent( QKeyEvent *keyEvent )

@@ -40,9 +40,11 @@ public slots:
     //End-Testing
 
 private:
-    void newSettings();
+    PhString _settingsPath;
+    QSettings::Format _settingsFormat;
     QSettings * _settings;
     PhStripDoc * _doc;
+
 
 };
 
