@@ -20,15 +20,19 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         JokerMainWindow.cpp \
-    ../../tests/StripTest/StripWindow.cpp \
-	../../tests/StripTest/MainController.cpp \
-	../../libs/PhCommonUI/PhLeap.cpp
+        ../../tests/StripTest/StripWindow.cpp \
+        ../../tests/StripTest/MainController.cpp \
+        ../../libs/PhCommonUI/PhLeap.cpp
+#    ../../tests/StripTest/StripWindow.cpp \
+#	../../tests/StripTest/MainController.cppk
 
 
 HEADERS  += JokerMainWindow.h \
-    ../../tests/StripTest/StripWindow.h \
-	../../tests/StripTest/MainController.h \
-	../../libs/PhCommonUI/PhLeap.h
+        ../../tests/StripTest/StripWindow.h \
+            ../../tests/StripTest/MainController.h \
+        ../../libs/PhCommonUI/PhLeap.h
+#    ../../tests/StripTest/StripWindow.h \
+#	../../tests/StripTest/MainController.h
 
 
 FORMS    += JokerMainWindow.ui
@@ -93,14 +97,24 @@ HEADERS  += \
 
 INCLUDEPATH += 	../../libs \
 		/Library/Frameworks/ \
-		$$(LEAP_SDK)/include \
-		../../tests/StripTest/
+             ../../tests/StripTest/
+                #$$(LEAP_SDK)/include \
+             #   ../../tests/StripTest/
 
 
-LIBS += -L$$(LEAP_SDK)/lib -lLeap
-LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
+unix {
+INCLUDEPATH += /usr/include/GL \
+               /usr/include/SDL \
+
+INCLUDEPATH += ../../libs
+LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+#LIBS += -L$$(LEAP_SDK)/lib/x64 -lLeap
+}
+
 
 macx {
+LIBS += -L$$(LEAP_SDK)/lib -lLeap
+LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 	copyresources.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/;
 }
 QMAKE_EXTRA_TARGETS += copyresources

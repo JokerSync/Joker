@@ -63,7 +63,7 @@ void StripWindow::initializeGL()
     barTest.move(400,400);
     // barTest.show();
 
-    int i = 0;
+//    int i = 0;
     //Load the all text
     foreach(PhStripText * it, _controller->getDoc().getTexts())
     {
@@ -86,10 +86,10 @@ void StripWindow::initializeGL()
         _texts.push_back(new PhGraphicText(it->getContent(),
                                            (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
                                            (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , _currentFont, it->getPeople().getColor()));
-        if (i % (max / 20) == 0){
-            QApplication::processEvents();
-        }
-        i++;
+//        if (i % (max / 20) == 0){
+//            QApplication::processEvents();
+//        }
+ //       i++;
     }
 
     //Set a default number of strip repetition
@@ -120,10 +120,10 @@ void StripWindow::paintGL()
 {
 
     //Time-based test
-    qDebug() << _test->elapsed(); //<< " : " << _xmove;
+ //  qDebug() << _test->elapsed(); //<< " : " << _xmove;
 
 
-    qDebug() << "PaintGL";
+    //qDebug() << "PaintGL";
 
     //Clear the buffer
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

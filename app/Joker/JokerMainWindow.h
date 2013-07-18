@@ -116,9 +116,10 @@ private:
 
     QAction *switchScroll;
 
+#if LEAP
     PhLeap leapListener;
     Controller _leapController;
-
+#endif     //LEAP
 
 };
 
