@@ -10,24 +10,24 @@
 
 #include <QInputDialog>
 
-#include "MainWindow.h"
+#include "MainView.h"
 
 #if LEAP
 using namespace Leap;
 #endif
 
-MainWindow::MainWindow(PhString file)
+MainView::MainView(PhString file)
 {
 
 #if LEAP
     _leapController.addListener(leapListener);
 #endif
-    _MController = new MainController();
+    _MController = new PhGraphicStripController();
     if(_MController->openDoc(file))
         _MController->setLastFile(file);
     resize(1280,360);
     setWindowTitle(tr("Striptest"));
-    _strip = new StripWindow(this);
+    _strip = new PhGraphicStripView(this);
     createMenus();
     _strip->setController(_MController);
     _strip->setNaturalScroll(_MController->getNaturalScrollPref());
@@ -41,7 +41,7 @@ MainWindow::MainWindow(PhString file)
 #endif
 }
 
-void MainWindow::createMenus()
+void MainView::createMenus()
 {
     // The tr("&string") at the begining of a string is for translation tools
 
@@ -82,7 +82,7 @@ void MainWindow::createMenus()
 
 }
 
-void MainWindow::openFile()
+void MainView::openFile()
 {
     PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
     if(!fileName.isNull())
@@ -91,12 +91,12 @@ void MainWindow::openFile()
     }
 }
 
-void MainWindow::switchScrolling()
+void MainView::switchScrolling()
 {
     //_strip->toggleScroll();
 }
 
-void MainWindow::changeFont()
+void MainView::changeFont()
 {
 
     // This is a routine witch load Apple system TTF fonts
@@ -138,14 +138,14 @@ void MainWindow::changeFont()
 
 }
 
-void MainWindow::exportRythomAsPNG()
+void MainView::exportRythomAsPNG()
 {
     _strip->getContext()->exportToPng();
     QMessageBox::about(this, "Info",
                        tr("Export ended well! \n") + tr("file(s) saved here : ") + QDir::homePath() + "/Phonations/") ;
 }
 
-void MainWindow::resizeEvent(QResizeEvent *)
+void MainView::resizeEvent(QResizeEvent *)
 {
     // Call the resize of the OpenGL context
 
@@ -153,7 +153,7 @@ void MainWindow::resizeEvent(QResizeEvent *)
 
 }
 
-void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
+void MainView::keyPressEvent( QKeyEvent *keyEvent )
 {
 
     switch(keyEvent->key())
@@ -180,7 +180,7 @@ void MainWindow::keyPressEvent( QKeyEvent *keyEvent )
     }
 }
 
-void MainWindow::wheelEvent(QWheelEvent *wheel)
+void MainView::wheelEvent(QWheelEvent *wheel)
 {
     QPoint numPixels = wheel->pixelDelta();
     _strip->setXmove(numPixels.x());
@@ -189,7 +189,7 @@ void MainWindow::wheelEvent(QWheelEvent *wheel)
 
 
 
-void MainWindow::toggleFullWindow()
+void MainView::toggleFullWindow()
 {
     if(this->isFullScreen())
         showNormal();

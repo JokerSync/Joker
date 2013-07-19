@@ -93,4 +93,4 @@ protected:
 
 };
 
-#endif // MYGLWIDGET_H
+#endif // PhGraphicView

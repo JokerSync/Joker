@@ -3,25 +3,26 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MainView_H
+#define MainView_H
 
 
 #include <QMainWindow>
 
-#include "StripWindow.h"
-#include "MainController.h"
+#include "PhGraphicStrip/PhGraphicStripView.h"
+//#include "MainController.h"
+#include "PhGraphicStrip/PhGraphicStripController.h"
 
 #if LEAP
 #include "PhCommonUI/PhLeap.h"
 #endif
 
-class MainWindow : public QMainWindow
+class MainView : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(PhString file);
+    MainView(PhString file);
     virtual void keyPressEvent( QKeyEvent *keyEvent );
     virtual void wheelEvent(QWheelEvent *wheel);
 
@@ -55,7 +56,8 @@ private slots:
 
 private:
 
-    MainController * _MController;
+    //MainController * _MController;
+    PhGraphicStripController * _MController;
 
     /**
      * @brief toggleFullWindow
@@ -72,7 +74,7 @@ private:
      * @brief _strip
      * link to the StripWindow
      */
-    StripWindow *_strip;
+    PhGraphicStripView *_strip;
 
 
     /**
@@ -108,4 +110,4 @@ private:
 
 };
 
-#endif // MAINWINDOW_H
+#endif // MainView_H

@@ -18,18 +18,23 @@ DESTDIR = ./
 
 #Main app
 SOURCES += main.cpp \
-	StripWindow.cpp \
-	MainWindow.cpp \
     ../../libs/PhTools/PhFileTools.cpp \
 	MainController.cpp \
 	../../libs/PhCommonUI/PhLeap.cpp \
-    ../../libs/PhTools/PhTime.cpp
+    ../../libs/PhTools/PhTime.cpp \
+    ../../libs/PhGraphicStrip/PhGraphicStripController.cpp \
+    ../../libs/PhGraphicStrip/PhGraphicStripView.cpp \
+    MainView.cpp \
+    ../../libs/PhGraphic/PhGraphicController.cpp
 
-HEADERS += StripWindow.h \
-	MainWindow.h\
+HEADERS += \
     ../../libs/PhTools/PhFileTools.h \
 	MainController.h \
-	../../libs/PhCommonUI/PhLeap.h
+	../../libs/PhCommonUI/PhLeap.h \
+    ../../libs/PhGraphicStrip/PhGraphicStripController.h \
+    ../../libs/PhGraphicStrip/PhGraphicStripView.h \
+    MainView.h \
+    ../../libs/PhGraphic/PhGraphicController.h
 
 
 #PhStrip
