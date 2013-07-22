@@ -22,6 +22,8 @@
 
 #include "PhCommonUI/PhLeap.h"
 
+#include "PhGraphicStrip/PhGraphicStripController.h"
+
 
 
 
@@ -96,7 +98,7 @@ public:
     PhStripDoc *getDoc();
 
     void toggleNaturalScrolling();
-    void setController(MainController * controller);
+    void setController(PhGraphicStripController * controller);
     void connectSlots();
     void setNaturalScroll(bool naturalScroll);
 
@@ -117,7 +119,7 @@ private slots:
 
 
 private :
-    MainController * _controller;
+    PhGraphicStripController * _controller;
     /**
      * @brief _doc
      * Reference to the current PhStripDoc
