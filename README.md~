@@ -33,4 +33,4 @@ And add the following build steps:
 * Working directory : %{buildDir}/%{CurrentProject:Name}.app/Contents/MacOS/
 
 
-
+![mon logo](https://docs.google.com/a/dubware.net/drawings/d/1ZwZUHCi0iAC7hbjuWEEysiWYX0marVteAgkuh0vptjc/edit)
