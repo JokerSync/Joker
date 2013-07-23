@@ -27,7 +27,11 @@
 
 
 
-
+/**
+ * @brief The PhGraphicStripView class
+ *
+ *
+ */
 class PhGraphicStripView : public PhGraphicView
 {
 
@@ -72,9 +76,8 @@ public:
      */
     QList<PhFont *> getFonts();
     /**
-     * @brief PhGraphicStripView::setCurrentFont
-     * @param font
      * Set the current font with the font in param and re-initialize the OpenGL content
+     * @param fontfile Font file path
      */
     void setCurrentFont(PhString fontfile);
     /**
