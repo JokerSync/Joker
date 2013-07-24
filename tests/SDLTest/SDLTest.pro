@@ -19,23 +19,10 @@ INCLUDEPATH += ../../libs
 win32{
 INCLUDEPATH += C:/Users/Julien/Documents/SDL/SDL/include/
 
+LIBS += -LC:/Users/Julien/Documents/SDL/SDL/lib -llibSDL \
+-lSDL_image \
+-lSDL_ttf
 
-#C:/Users/Julien/Documents/SDL/SDL2-2.0.0/i686-w64-mingw32/include/SDL2 \
-#                C:/Users/Julien/Documents/SDL/SDL_ttf-2.0.10/include \
-#                C:/Users/Julien/Documents/SDL/SDL2_image-2.0.0/i686-w64-mingw32/include/SDL2
-
-LIBS += -LC:/Users/Julien/Documents/SDL/SDL/lib \
--llibSDL \
--llibSDL2_image \
--lSDL_ttf \
-#-llibSDLmain
-
-
-#-L/C:/Users/Julien/Documents/SDL/SDL2-2.0.0/i686-w64-mingw32/lib/libSDL2.dll.a \
-  #  C:/Users/Julien/Documents/SDL/SDL2-2.0.0/i686-w64-mingw32/lib/libSDL2.a \
-   # C:/Users/Julien/Documents/SDL/SDL2-2.0.0/i686-w64-mingw32/lib/libSDL2.la \
-#       -L/C:/Users/Julien/Documents/SDL/SDL_ttf-2.0.10/lib/SDL_ttf.lib \
-#       -L/C:/Users/Julien/Documents/SDL/SDL2_image-2.0.0/i686-w64-mingw32/lib/SDL2_image.dll.a
 }
 
 unix {
