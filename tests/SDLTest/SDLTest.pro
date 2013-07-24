@@ -10,9 +10,7 @@ TEMPLATE = app
 SOURCES += main.cpp \
     ../../libs/PhTools/memorytool.cpp
 
-HEADERS += \
-	SDLMain.h \
-    ../../libs/PhTools/memorytool.h
+HEADERS += ../../libs/PhTools/memorytool.h
 
 INCLUDEPATH += ../../libs
 
@@ -31,6 +29,7 @@ LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
 }
 
 mac {
+HEADERS += SDLMain.h
  OBJECTIVE_SOURCES += SDLMain.m
  INCLUDEPATH += /Library/Frameworks/SDL \
                /Library/Frameworks/SDL_image \
