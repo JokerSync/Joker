@@ -9,6 +9,8 @@
 *.so
 *.dll
 *.dylib
+*.Debug
+*.Release
 
 # Qt-es
 
