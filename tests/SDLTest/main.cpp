@@ -12,6 +12,8 @@
 
 #include "PhTools/memorytool.h"
 
+#undef main
+
 //Screen attributes
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -86,6 +88,7 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination 
 
 int main(int argc, char **argv)
 {
+    qDebug()<<"yo";
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
         return false;
