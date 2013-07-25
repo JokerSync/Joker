@@ -123,11 +123,7 @@ int main(int argc, char **argv)
     }
 
     //Create a font
-<<<<<<< HEAD
-    TTF_Font *font = TTF_OpenFont( "../../../../../data/fonts/Bedizen.ttf", 100 );
-=======
     TTF_Font *font = TTF_OpenFont( "Bedizen.ttf", 100 );
->>>>>>> philippe
     if (font == NULL)
         return 3;
 
