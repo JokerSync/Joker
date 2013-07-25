@@ -12,7 +12,11 @@
 
 #include "JokerMainWindow.h"
 
-using namespace Leap;
+
+#if LEAP
+ using namespace Leap;
+#endif    //LEAP
+
 
 JokerMainWindow::JokerMainWindow(PhString file) : mediaPlayer(0, QMediaPlayer::VideoSurface)
 
@@ -21,7 +25,9 @@ JokerMainWindow::JokerMainWindow(PhString file) : mediaPlayer(0, QMediaPlayer::V
     QVideoWidget *videoWidget = new QVideoWidget;
 
 
+#if LEAP
     _leapController.addListener(leapListener);
+#endif   //LEAP
     _MController = new MainController();
     if(_MController->openDoc(file))
         _MController->setLastFile(file);
@@ -51,10 +57,11 @@ JokerMainWindow::JokerMainWindow(PhString file) : mediaPlayer(0, QMediaPlayer::V
     //connect(&mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(handleError()));
 
 
-
+#if LEAP
     qDebug() << leapListener.objectName();
     connect(&leapListener, SIGNAL(setPosition(int move)), _MController, SLOT(onPositionChanged2(int move)));
     connect(&leapListener, SIGNAL(setRate(float rate)), _MController, SLOT(onRateChanged2(float rate)));
+#endif   //LEAP
 }
 
 void JokerMainWindow::createMenus()
