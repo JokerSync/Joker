@@ -30,8 +30,8 @@ public:
      */
     void draw(int px);
 
-    void init(){};
-    void dispose(){};
+    //bool init();
+    //void dispose();
 
     /**
      * @brief setSize

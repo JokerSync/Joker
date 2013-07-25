@@ -1,6 +1,6 @@
-#include "SDL/SDL.h"
-#include "SDL_image/SDL_image.h"
-#include "SDL_ttf/SDL_ttf.h"
+#include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
 #include <string>
 #include <cstring>
 #include "string.h"
@@ -60,6 +60,10 @@ SDL_Surface *load_image( std::string filename )
             SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, colorkey );
         }
     }
+    else
+    {
+           qDebug()<<"IMG_Load: "<<IMG_GetError();
+    }
 
     //Return the optimized image
     return optimizedImage;
@@ -97,7 +101,7 @@ int main(int argc, char **argv)
     SDL_WM_SetCaption( "TTF's just the best", NULL );
 
     // Create a surface from picture:
-    const char * imagePath = "../../../../../data/img/look.png";
+    const char * imagePath = "look.png";
     image = load_image( imagePath );
 
     if( image == NULL )
@@ -117,7 +121,11 @@ int main(int argc, char **argv)
     }
 
     //Create a font
+<<<<<<< HEAD
     TTF_Font *font = TTF_OpenFont( "../../../../../data/fonts/Bedizen.ttf", 100 );
+=======
+    TTF_Font *font = TTF_OpenFont( "Bedizen.ttf", 100 );
+>>>>>>> philippe
     if (font == NULL)
         return 3;
 
@@ -125,7 +133,7 @@ int main(int argc, char **argv)
     SDL_Color textColor = { 255, 255, 0, 1 };
 
     // Create a text surface:
-    SDL_Surface *surface = TTF_RenderUTF8_Blended( font, ".....", textColor );
+    SDL_Surface *surface = TTF_RenderUTF8_Blended( font, "SDL test OK", textColor );
 
     qDebug("surface : %dx%d / %dbpp / %d", surface->w, surface->h,
            surface->format->BytesPerPixel, surface->pitch);

@@ -8,17 +8,22 @@
 PhGraphicImage::PhGraphicImage(PhString filename, int x, int y, int z, int w, int h, PhColor color, int tv, int tu) :
     PhGraphicTexturedRect(x, y, z, w, h, color, tv, tu)
 {
-    //this->setFilename(filename);
-    SDL_Surface * surface = IMG_Load(filename.toStdString().c_str());
-    createTextureFromSurface(surface);
-    //SDL_FreeSurface(surface);
+    this->setFilename(filename);
+    init();
 }
 
 void PhGraphicImage::init()
 {
+    _surface = IMG_Load(_filename.toStdString().c_str());
+    if(_surface != NULL)
+        createTextureFromSurface(_surface);
+    else
+        qDebug()<<"Error loading:"<<_filename;
+
 }
 void PhGraphicImage::dispose()
 {
+    SDL_FreeSurface(_surface);
 }
 
 void PhGraphicImage::draw(int px)
@@ -28,12 +33,10 @@ void PhGraphicImage::draw(int px)
     PhGraphicTexturedRect::draw(px);
 }
 
+void PhGraphicImage::setFilename(PhString filename){
+    _filename = filename;
+}
 
-//void PhGraphicImage::setFilename(Phstring filename){
-//    _filename = filename;
-//}
-//PhString PhGraphicImage::getFilename(){
-//    return _filename;
-//}
-
-
+PhString PhGraphicImage::getFilename(){
+    return _filename;
+}

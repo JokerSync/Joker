@@ -12,12 +12,16 @@
 
 #include "MainWindow.h"
 
+#if LEAP
 using namespace Leap;
+#endif
 
 MainWindow::MainWindow(PhString file)
 {
-
     _leapController.addListener(leapListener);
+#if LEAP
+    _leapController.addListener(leapListener);
+#endif
     _MController = new MainController();
     if(_MController->openDoc(file))
         _MController->setLastFile(file);
@@ -30,9 +34,11 @@ MainWindow::MainWindow(PhString file)
     _strip->connectSlots();
     _strip->show();
 
+#if LEAP
     qDebug() << leapListener.objectName();
     connect(&leapListener, SIGNAL(setPosition(int move)), _MController, SLOT(onPositionChanged2(int move)));
     connect(&leapListener, SIGNAL(setRate(float rate)), _MController, SLOT(onRateChanged2(float rate)));
+#endif
 }
 
 void MainWindow::createMenus()
@@ -80,13 +86,14 @@ void MainWindow::openFile()
 {
     PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
     if(!fileName.isNull())
-        _MController->openDoc(fileName);
-    //_strip->openFile("");
+       { _MController->openDoc(fileName);
+       // _strip->openFile("");
+    }
 }
 
 void MainWindow::switchScrolling()
 {
-//    _strip->toggleScroll();
+    //_strip->toggleScroll();
 }
 
 void MainWindow::changeFont()
@@ -95,7 +102,8 @@ void MainWindow::changeFont()
     // This is a routine witch load Apple system TTF fonts
 
     // Set the location
-    PhString sourceFolder = "/Library/Fonts/";
+//    PhString sourceFolder = "/Library/Fonts/";
+    PhString sourceFolder = "";
     QDir sourceDir(sourceFolder);
     // List all files
     QStringList files = sourceDir.entryList(QDir::Files);
@@ -131,7 +139,7 @@ void MainWindow::exportRythomAsPNG()
 {
     _strip->getContext()->exportToPng();
     QMessageBox::about(this, "Info",
-                       tr("Export ended well! \n") + tr("file(s) saved here : ") + QDir::homePath() + "/Phonations/") ;
+                       tr("Export ended well! \n") + tr("file(s) saved here : ") + QDir::homePath() + "") ;
 }
 
 void MainWindow::resizeEvent(QResizeEvent *)

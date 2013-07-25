@@ -3,8 +3,7 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-
-#include "phstring.h"
+#include "PhString.h"
 
 //PhString::PhString(QString str) : QString(str)
 //{

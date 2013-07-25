@@ -15,11 +15,8 @@ DESTDIR = ./
 ##
 ##
 ##########################################################################################
-DEPENDPATH += . \
-			$$(VLC_QT_PATH)/include/
-INCLUDEPATH += . \
-			$$(VLC_QT_PATH)/include/
-
+DEPENDPATH += $$(VLC_QT_PATH)/include/
+INCLUDEPATH += $$(VLC_QT_PATH)/include/
 
 macx: LIBS += -L$$PWD/../../dyns/ -lvlc
 
@@ -33,7 +30,7 @@ SOURCES += main.cpp player.cpp
 
 
 macx {
-	libs.commands += cp -r $${PWD}/../../dyns $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;
+        libs.commands += cp -r $${PWD}/../../dyns $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;
 }
 QMAKE_EXTRA_TARGETS += libs
 POST_TARGETDEPS += libs

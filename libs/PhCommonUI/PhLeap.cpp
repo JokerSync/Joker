@@ -2,7 +2,7 @@
 * Copyright (C) 2012-2013 Phonations
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
-
+#if LEAP
 
 #include <QDebug>
 #include "PhLeap.h"
@@ -23,3 +23,5 @@ void PhLeap::onFrame(const Controller& controller)
         emit setRate(controller.frame().fingers().leftmost().tipPosition().x / 5);
     }
 }
+
+#endif

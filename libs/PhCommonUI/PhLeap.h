@@ -8,6 +8,9 @@
 
 
 #include <QObject>
+
+#if LEAP
+
 #include "Leap.h"
 
 using namespace Leap;
@@ -29,4 +32,5 @@ signals:
 
 };
 
+#endif
 #endif // PHLEAP_H

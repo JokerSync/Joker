@@ -6,7 +6,7 @@
 #ifndef PHGRAPHICIMAGE_H
 #define PHGRAPHICIMAGE_H
 
-#include "SDL_image/SDL_image.h"
+#include "SDL_image.h"
 
 #include "PhGraphicTexturedRect.h"
 
@@ -27,9 +27,8 @@ public:
      * Create a PhGraphicImage calling the PhGraphicTexturedRect constructor
      */
     PhGraphicImage(PhString filename, int x, int y, int z, int w, int h, PhColor color, int tv = 1, int tu = 1);
-//    void setFilename(PhString filename);
-//    PhString getFilename();
-
+    void setFilename(PhString filename);
+    PhString getFilename();
 
     /**
      * @brief draw
@@ -38,7 +37,6 @@ public:
      */
     void draw(int px);
 
-private:
     /**
      * @brief init
      * Currently unused
@@ -49,7 +47,12 @@ private:
      * Currently unused
      */
     void dispose();
-    //PhString _filename;
+
+private:
+
+    PhString _filename;
+
+    SDL_Surface * _surface;
 };
 
 #endif // PHGRAPHICIMAGE_H

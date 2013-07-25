@@ -4,7 +4,7 @@
 
     Feel free to customize this file to suit your needs
 */
-
+#if MACOSX
 #include "SDL/SDL.h"
 #include <sys/param.h> /* for MAXPATHLEN */
 #include <unistd.h>
@@ -39,3 +39,4 @@ int main (int argc, char **argv)
     return 0;
 }
 
+#endif

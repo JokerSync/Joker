@@ -7,8 +7,8 @@
 #define STRIPWINDOW_H
 
 #include "glu.h"
-#include "SDL_image/SDL_image.h"
-#include "SDL_ttf/SDL_ttf.h"
+#include "SDL_image.h"
+#include "SDL_ttf.h"
 
 #include "PhStrip/PhStripDoc.h"
 
@@ -99,6 +99,8 @@ public:
     void setController(MainController * controller);
     void connectSlots();
     void setNaturalScroll(bool naturalScroll);
+
+  //  void openFile(char * file);
 
 public slots:
     void stopScroll();

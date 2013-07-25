@@ -10,8 +10,8 @@
 
 #include "glu.h"
 
-#include "SDL_image/SDL_image.h"
-#include "SDL/SDL.h"
+#include "SDL_image.h"
+#include "SDL.h"
 
 #include "PhTools/PhString.h"
 
@@ -50,6 +50,8 @@ protected:
      * create an OpenGL texture form a SDL Surface
      */
     void createTextureFromSurface(SDL_Surface * surface);
+
+    void createTextureFromColor(PhColor color);
 //    void setTexture(GLuint texture);
 
 //    SDL_Surface * getSurface();
@@ -61,11 +63,6 @@ protected:
     GLuint getTexture();
 
 private:
-    /**
-     * @brief createTextureFromColor
-     * @param color
-     */
-    void createTextureFromColor(PhColor color);
 
     /**
      * @brief _texture
