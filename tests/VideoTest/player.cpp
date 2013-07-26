@@ -18,6 +18,7 @@
 #include <QVBoxLayout>
 #include <QFileDialog>
 
+
 Mwindow::Mwindow() {
     vlcPlayer = NULL;
 

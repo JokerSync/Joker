@@ -62,6 +62,8 @@ protected:
      */
     GLuint getTexture();
 
+
+
 private:
 
     /**

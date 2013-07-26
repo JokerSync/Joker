@@ -13,7 +13,7 @@
 #include "PhTools/PhString.h"
 #include "PhTools/PhFileTools.h"
 
-#include "MainWindow.h"
+#include "MainView.h"
 
 
 int main(int argc, char *argv[])
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     else
         file = argv[1];
 
-    MainWindow w(file);
+    MainView w(file);
 
     w.show();
 

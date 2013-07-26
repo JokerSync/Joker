@@ -70,7 +70,7 @@ private:
 
 
 
-    MainController * _MController;
+    PhGraphicStripController * _MController;
 
     /**
      * @brief toggleFullWindow
