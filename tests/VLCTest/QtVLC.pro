@@ -29,14 +29,7 @@ INCLUDEPATH += /usr/include/GL \
                 /usr/include/vlc \
                /usr/include/qt5
 
-INCLUDEPATH += ../../../libs
-
-DEPENDPATH += /usr/include/GL \
-               /usr/include/SDL \
-                /usr/include/vlc \
-                /usr/include/qt5
-
-LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf -lvlc
 #LIBS += -L$$(LEAP_SDK)/lib/x64 -lLeap
 
 }
