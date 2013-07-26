@@ -1,4 +1,6 @@
 /**
+* @brief This file contains the declaration of the PhGraphicStripView class.
+*
 * Copyright (C) 2012-2013 Phonations
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
@@ -27,7 +29,31 @@
 
 
 
-
+/**
+ * @brief The PhGraphicStripView class
+ *
+ * This class draw a segment of strip band. The length of the strip band portion
+ * is proportionnal to its width in pixel.
+ *
+ * The view is divided in several horizontal track.
+ *
+ * Each track can contains text element.
+ *
+ * Each text element can be preceeded by a people name using the following rule:
+ *
+ * If the text element is affected to a people and there is no text affected to the same
+ * people in the two second preceeding the start of the text, the people name is displayed.
+ *
+ * In all other case, no people name is displayed.
+ *
+ * The view display also the loop (vertical dash with cross) and the cut changes (vertical dash).
+ *
+ * The view display a portion of strip band according to the current time.
+ *
+ * The portion of strip band scroll smoothly according to the current rate.
+ *
+ * The font used by the text is customisable.
+ */
 class PhGraphicStripView : public PhGraphicView
 {
 
@@ -72,9 +98,8 @@ public:
      */
     QList<PhFont *> getFonts();
     /**
-     * @brief PhGraphicStripView::setCurrentFont
-     * @param font
      * Set the current font with the font in param and re-initialize the OpenGL content
+     * @param fontfile Font file path
      */
     void setCurrentFont(PhString fontfile);
     /**
