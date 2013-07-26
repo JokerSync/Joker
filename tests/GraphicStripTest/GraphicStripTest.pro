@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-TARGET = StripTest
+TARGET = GraphicStripTest
 TEMPLATE = app
 
 

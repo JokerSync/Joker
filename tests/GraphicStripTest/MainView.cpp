@@ -25,7 +25,7 @@ MainView::MainView(PhString file)
     if(_MController->openDoc(file))
         _MController->setLastFile(file);
     resize(1280,360);
-    setWindowTitle(tr("Striptest"));
+    setWindowTitle(tr("GraphicStripTest"));
     _strip = new PhGraphicStripView(this);
     createMenus();
     _strip->setController(_MController);
