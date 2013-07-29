@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = videowidget
+TARGET = VideoTest
 
 QT += multimedia multimediawidgets
 
