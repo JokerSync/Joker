@@ -11,24 +11,11 @@
 #include "PhTools/PhTimeCode.h"
 #include "PhTools/PhString.h"
 
-#include "PhStrip/PhPeople.h"
-#include "PhStrip/PhStripCut.h"
-#include "PhStrip/PhStripLoop.h"
-#include "PhStrip/PhStripObject.h"
-#include "PhStrip/PhStripText.h"
-
-#include "PhTools/PhColor.cpp"
-#include "PhTools/PhTime.cpp"
-#include "PhTools/PhTimeCode.cpp"
-#include "PhTools/PhString.cpp"
-
-#include "PhStrip/PhPeople.cpp"
-#include "PhStrip/PhStripCut.cpp"
-#include "PhStrip/PhStripLoop.cpp"
-#include "PhStrip/PhStripObject.cpp"
-#include "PhStrip/PhStripText.cpp"
-
-
+#include "PhPeople.h"
+#include "PhStripCut.h"
+#include "PhStripLoop.h"
+#include "PhStripObject.h"
+#include "PhStripText.h"
 
 class PhStripDoc {
 private:

@@ -1,7 +1,7 @@
 #include <QCoreApplication>
 #include <QDebug>
 
-#include "PhStripDoc.h"
+#include "PhStrip/PhStripDoc.h"
 
 #include <iostream>
 
@@ -106,37 +106,30 @@ int lg_detx(char * arg)
     return cpt;
 }
 
-void display_title(char * arg)
-{
-    char * p = arg;
-    int lg = lg_detx(arg);
-
-    cout<<"title: ";
-
-    for(int i=0; i<lg ; i++)
-    {
-        cout<<*p;
-        p++;
-    }
-    cout<<endl;
-
-}
-
 int main(int argc, char *argv[])
 {
     bool check = verif_arg(argc);
 
     if (check ==false)
+    {
+        cout << "Please provide a DetX file path as argument" << endl;
         return 0;
+    }
 
     check = verif_detx(argv[1]);
 
     if (check == false)
         return 0;
 
-    display_title(argv[1]);
+    // Creating a new doc:
+    PhStripDoc doc;
 
-    check = openDetX("test.detx");
+    // Open the DetX file in argument:
+    QString fileName(argv[1]);
+    check = doc.openDetX(fileName);
+
+    // Display the title:
+    qDebug() << doc.getTitle();
 
     return 0;
 }
