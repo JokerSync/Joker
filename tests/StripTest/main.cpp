@@ -1,7 +1,10 @@
 #include <QCoreApplication>
 #include <QDebug>
 
+#include "PhStripDoc.h"
+
 #include <iostream>
+
 using namespace std;
 
 bool verif_arg(int nb)
@@ -121,8 +124,6 @@ void display_title(char * arg)
 
 int main(int argc, char *argv[])
 {
- //   QCoreApplication a(argc, argv);
-
     bool check = verif_arg(argc);
 
     if (check ==false)
@@ -134,6 +135,8 @@ int main(int argc, char *argv[])
         return 0;
 
     display_title(argv[1]);
+
+    check = openDetX("test.detx");
 
     return 0;
 }
