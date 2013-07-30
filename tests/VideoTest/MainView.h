@@ -8,7 +8,7 @@
 #include <QtGui/QMovie>
 #include <QtWidgets/QWidget>
 
-#include "PhVideo/PhVideoView.h"
+#include "PhVideo/PhVideoController.h"
 
 QT_BEGIN_NAMESPACE
 class QAbstractButton;
@@ -25,18 +25,16 @@ public:
 
 public slots:
     void onOpenFile();
-    void playPause();
 
 private slots:
     void mediaStateChanged(QMediaPlayer::State state);
     void positionChanged(qint64 position);
     void durationChanged(qint64 duration);
-    void setPosition(int position);
+    void sliderChanged(int sliderPosition);
     void handleError();
 
 private:
-    PhVideoView * _videoView;
-    QMediaPlayer mediaPlayer;
+    PhVideoController _videoController;
     QAbstractButton *playButton;
     QSlider *positionSlider;
     QLabel *errorLabel;
