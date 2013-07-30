@@ -34,10 +34,8 @@ public:
     bool open(QString fileName);
 signals:
     /**
-     * Set the position according to the duration:
-     * 0 for the beginning
-     * 100 for the end
-     * @param percentage position in percentage.
+     * Signal that the media position percentage has changed.
+     * @param percentage Media position in percentage (0..100).
      */
     void positionPercentageChanged(int percentage);
 
@@ -47,6 +45,10 @@ public slots:
      */
     void playPause();
 
+    /**
+     * Update the current media position from a percentage value (0..100).
+     * @param percentage
+     */
     void updatePositionFromPercentage(int percentage);
 
 private:

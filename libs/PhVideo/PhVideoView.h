@@ -3,6 +3,9 @@
 
 #include <QVideoWidget>
 
+/**
+ * The PhVideoView class display video content.
+ */
 class PhVideoView : public QVideoWidget
 {
     Q_OBJECT

@@ -20,7 +20,15 @@ class MainView : public QWidget
 {
     Q_OBJECT
 public:
-    MainView(QWidget *parent = 0);
+    /**
+     * @brief MainView constructor
+     */
+    MainView();
+    /**
+     * Open a video file.
+     * @param fileName Path of the video file to open.
+     * @return True if succeeds, false otherwise.
+     */
     bool openFile(QString fileName);
 
 private slots:

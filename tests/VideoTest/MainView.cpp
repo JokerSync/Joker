@@ -4,8 +4,8 @@
 #include <qvideowidget.h>
 #include <qvideosurfaceformat.h>
 
-MainView::MainView(QWidget *parent)
-    : QWidget(parent)
+MainView::MainView()
+    : QWidget(0)
     , _playButton(0)
     , _positionSlider(0)
     , _errorLabel(0)
