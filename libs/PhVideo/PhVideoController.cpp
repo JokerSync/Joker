@@ -4,9 +4,10 @@ PhVideoController::PhVideoController(QObject *parent) :
     QMediaPlayer(parent, QMediaPlayer::VideoSurface)
 {
     this->setVideoOutput(&_videoView);
+    connect(this, SIGNAL(positionChanged(qint64)), this, SLOT(updatePercentageFromPosition(qint64)));
 }
 
-PhVideoView *PhVideoController::getView()
+PhVideoView *PhVideoController::view()
 {
     return &_videoView;
 }
@@ -14,6 +15,7 @@ PhVideoView *PhVideoController::getView()
 bool PhVideoController::open(QString fileName)
 {
     this->setMedia(QUrl::fromLocalFile(fileName));
+    return true;
 }
 
 void PhVideoController::playPause()
@@ -27,6 +29,17 @@ void PhVideoController::playPause()
         this->play();
         break;
     }
+}
+
+void PhVideoController::updatePositionFromPercentage(int percentage)
+{
+    this->setPosition(percentage * this->duration() / 100);
+}
+
+void PhVideoController::updatePercentageFromPosition(qint64 position)
+{
+    if(this->duration() > 0)
+        this->positionPercentageChanged(position * 100 / this->duration());
 }
 
 

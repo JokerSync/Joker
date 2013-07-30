@@ -24,7 +24,7 @@ public:
      * @brief Get the view associated with the controller
      * @return A PhVideoView instance
      */
-    PhVideoView * getView();
+    PhVideoView * view();
 
     /**
      * @brief Open a video file
@@ -33,12 +33,31 @@ public:
      */
     bool open(QString fileName);
 signals:
-    
+    /**
+     * Set the position according to the duration:
+     * 0 for the beginning
+     * 100 for the end
+     * @param percentage position in percentage.
+     */
+    void positionPercentageChanged(int percentage);
+
 public slots:
+    /**
+     * Play if the video is in pause and pause otherwise
+     */
     void playPause();
+
+    void updatePositionFromPercentage(int percentage);
 
 private:
     PhVideoView _videoView;
+
+private slots:
+    /**
+     * Update the percentage when the media position changes.
+     * @param position Position of the media.
+     */
+    void updatePercentageFromPosition(qint64 position);
 };
 
 #endif // PHVIDEOCONTROLLER_H

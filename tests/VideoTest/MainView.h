@@ -23,21 +23,16 @@ public:
     MainView(QWidget *parent = 0);
     bool openFile(QString fileName);
 
-public slots:
-    void onOpenFile();
-
 private slots:
-    void mediaStateChanged(QMediaPlayer::State state);
-    void positionChanged(qint64 position);
-    void durationChanged(qint64 duration);
-    void sliderChanged(int sliderPosition);
-    void handleError();
+    void onOpenFile();
+    void updatePlayButtonState(QMediaPlayer::State state);
+    void updateErrorLabelContent();
 
 private:
     PhVideoController _videoController;
-    QAbstractButton *playButton;
-    QSlider *positionSlider;
-    QLabel *errorLabel;
+    QAbstractButton *_playButton;
+    QSlider *_positionSlider;
+    QLabel *_errorLabel;
 };
 
 #endif
