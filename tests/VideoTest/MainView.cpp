@@ -1,10 +1,10 @@
-#include "PhVideo.h"
+#include "MainView.h"
 
 #include <QtWidgets>
 #include <qvideowidget.h>
 #include <qvideosurfaceformat.h>
 
-PhVideo::PhVideo(QWidget *parent)
+MainView::MainView(QWidget *parent)
     : QWidget(parent)
     , mediaPlayer(0, QMediaPlayer::VideoSurface)
     , playButton(0)
@@ -56,7 +56,7 @@ PhVideo::PhVideo(QWidget *parent)
     connect(&mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(handleError()));
 }
 
-void PhVideo::openFile()
+void MainView::openFile()
 {
     errorLabel->setText("");
 
@@ -68,7 +68,7 @@ void PhVideo::openFile()
     }
 }
 
-void PhVideo::playPause()
+void MainView::playPause()
 {
     switch(mediaPlayer.state()) {
     case QMediaPlayer::PlayingState:
@@ -80,7 +80,7 @@ void PhVideo::playPause()
     }
 }
 
-void PhVideo::mediaStateChanged(QMediaPlayer::State state)
+void MainView::mediaStateChanged(QMediaPlayer::State state)
 {
     switch(state) {
     case QMediaPlayer::PlayingState:
@@ -92,22 +92,22 @@ void PhVideo::mediaStateChanged(QMediaPlayer::State state)
     }
 }
 
-void PhVideo::positionChanged(qint64 position)
+void MainView::positionChanged(qint64 position)
 {
     positionSlider->setValue(position);
 }
 
-void PhVideo::durationChanged(qint64 duration)
+void MainView::durationChanged(qint64 duration)
 {
     positionSlider->setRange(0, duration);
 }
 
-void PhVideo::setPosition(int position)
+void MainView::setPosition(int position)
 {
     mediaPlayer.setPosition(position);
 }
 
-void PhVideo::handleError()
+void MainView::handleError()
 {
     playButton->setEnabled(false);
     errorLabel->setText("Error: " + mediaPlayer.errorString());

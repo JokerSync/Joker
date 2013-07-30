@@ -14,11 +14,11 @@ class QSlider;
 class QLabel;
 QT_END_NAMESPACE
 
-class PhVideo : public QWidget
+class MainView : public QWidget
 {
     Q_OBJECT
 public:
-    PhVideo(QWidget *parent = 0);
+    MainView(QWidget *parent = 0);
 
 public slots:
     void openFile();

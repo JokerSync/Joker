@@ -6,12 +6,12 @@ QT += multimedia multimediawidgets
 INCLUDEPATH += ../../libs
 
 HEADERS = \
-	PhVideo.h \
+        MainView.h \
     ../../libs/PhVideo/PhVideoView.h
 
 SOURCES = \
     main.cpp \
-	PhVideo.cpp \
+        MainView.cpp \
     ../../libs/PhVideo/PhVideoView.cpp
 
 QT+=widgets
