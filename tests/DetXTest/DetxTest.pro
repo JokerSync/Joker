@@ -17,7 +17,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-	../StripTest/phstripdoc.cpp \
+        ../../libs/PhStrip/PhStripDoc.cpp \
 	../../libs/PhTools/PhColor.cpp \
 	../../libs/PhTools/PhTime.cpp \
 	../../libs/PhTools/PhTimeCode.cpp \
@@ -29,7 +29,7 @@ SOURCES += main.cpp \
 	../../libs/PhTools/PhString.cpp
 
 HEADERS += \
-	../StripTest/phstripdoc.h \
+          ../../libs/PhStrip/PhStripDoc.h \
 	../../libs/PhTools/PhColor.h \
 	../../libs/PhTools/PhTime.h \
 	../../libs/PhTools/PhTimeCode.h \

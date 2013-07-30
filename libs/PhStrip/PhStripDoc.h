@@ -3,6 +3,7 @@
 
 
 #include <QDebug>
+
 #include <QtXml>
 
 #include "PhTools/PhColor.h"
@@ -10,13 +11,11 @@
 #include "PhTools/PhTimeCode.h"
 #include "PhTools/PhString.h"
 
-#include "PhStrip/PhPeople.h"
-#include "PhStrip/PhStripCut.h"
-#include "PhStrip/PhStripLoop.h"
-#include "PhStrip/PhStripObject.h"
-#include "PhStrip/PhStripText.h"
-
-
+#include "PhPeople.h"
+#include "PhStripCut.h"
+#include "PhStripLoop.h"
+#include "PhStripObject.h"
+#include "PhStripText.h"
 
 class PhStripDoc {
 private:
