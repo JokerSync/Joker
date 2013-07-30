@@ -12,7 +12,7 @@ PhVideo::PhVideo(QWidget *parent)
     , errorLabel(0)
 {
     // Create the video view
-    QVideoWidget *videoWidget = new QVideoWidget;
+    _videoView = new PhVideoView();
 
     // Adding buttons and slider
     QAbstractButton *openButton = new QPushButton(tr("Open..."));
@@ -41,7 +41,7 @@ PhVideo::PhVideo(QWidget *parent)
     // Create a second vertical layout for the video view and the first layout
     QBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
-    layout->addWidget(videoWidget);
+    layout->addWidget(_videoView);
     layout->addLayout(controlLayout);
     layout->addWidget(errorLabel);
 
@@ -49,7 +49,7 @@ PhVideo::PhVideo(QWidget *parent)
     this->setLayout(layout);
 
     // Associate the media player to the video view and set the slot
-    mediaPlayer.setVideoOutput(videoWidget);
+    mediaPlayer.setVideoOutput(_videoView);
     connect(&mediaPlayer, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(mediaStateChanged(QMediaPlayer::State)));
     connect(&mediaPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
     connect(&mediaPlayer, SIGNAL(durationChanged(qint64)), this, SLOT(durationChanged(qint64)));

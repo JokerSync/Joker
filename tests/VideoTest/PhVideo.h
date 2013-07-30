@@ -6,6 +6,7 @@
 
 #include <QtGui/QMovie>
 #include <QtWidgets/QWidget>
+#include "PhVideo/PhVideoView.h"
 
 QT_BEGIN_NAMESPACE
 class QAbstractButton;
@@ -31,6 +32,7 @@ private slots:
     void handleError();
 
 private:
+    PhVideoView * _videoView;
     QMediaPlayer mediaPlayer;
     QAbstractButton *playButton;
     QSlider *positionSlider;
