@@ -16,7 +16,7 @@ MainView::MainView(QWidget *parent)
 
     // Adding buttons and slider
     QAbstractButton *openButton = new QPushButton(tr("Open..."));
-    connect(openButton, SIGNAL(clicked()), this, SLOT(openFile()));
+    connect(openButton, SIGNAL(clicked()), this, SLOT(onOpenFile()));
 
     playButton = new QPushButton;
     playButton->setEnabled(false);
@@ -56,16 +56,24 @@ MainView::MainView(QWidget *parent)
     connect(&mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(handleError()));
 }
 
-void MainView::openFile()
+bool MainView::openFile(QString fileName)
+{
+    QFileInfo fileInfo(fileName);
+    if (fileInfo.exists())
+    {
+        mediaPlayer.setMedia(QUrl::fromLocalFile(fileName));
+        playButton->setEnabled(true);
+        return true;
+    }
+    return false;
+}
+
+void MainView::onOpenFile()
 {
     errorLabel->setText("");
 
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
-
-    if (!fileName.isEmpty()) {
-        mediaPlayer.setMedia(QUrl::fromLocalFile(fileName));
-        playButton->setEnabled(true);
-    }
+    openFile(fileName); // TODO: show error in case of error
 }
 
 void MainView::playPause()

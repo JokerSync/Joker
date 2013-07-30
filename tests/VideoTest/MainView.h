@@ -4,8 +4,10 @@
 
 #include <qmediaplayer.h>
 
+#include <QString>
 #include <QtGui/QMovie>
 #include <QtWidgets/QWidget>
+
 #include "PhVideo/PhVideoView.h"
 
 QT_BEGIN_NAMESPACE
@@ -19,9 +21,10 @@ class MainView : public QWidget
     Q_OBJECT
 public:
     MainView(QWidget *parent = 0);
+    bool openFile(QString fileName);
 
 public slots:
-    void openFile();
+    void onOpenFile();
     void playPause();
 
 private slots:
