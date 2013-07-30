@@ -1,6 +1,9 @@
 #include <QCoreApplication>
 #include <QDebug>
 
+#include "QMap"
+#include "QList"
+
 #include "PhStrip/PhStripDoc.h"
 
 #include <iostream>
@@ -125,11 +128,56 @@ int main(int argc, char *argv[])
     PhStripDoc doc;
 
     // Open the DetX file in argument:
-    QString fileName(argv[1]);
+    PhString fileName(argv[1]);
     check = doc.openDetX(fileName);
 
     // Display the title:
-    qDebug() << doc.getTitle();
 
+    qDebug() << "title : " ;
+    qDebug() <<doc.getTitle();
+    qDebug() <<"-----------------------------";
+
+    // Display actors
+
+    QMap<QString, PhPeople *> list_actors = doc.getActors();
+    qDebug() << "actors : ";
+    QMap<QString, PhPeople *>::iterator it;
+
+    for( it=list_actors.begin(); it!=list_actors.end() ; it++)
+    {
+        qDebug() << (*it)->getName();
+    }
+
+     qDebug() <<"-----------------------------";
+
+
+    // Display text
+
+    QList<PhStripText *>list_texts = doc.getTexts();
+    qDebug() << "texts : ";
+    QList<PhStripText *>::iterator it2;
+
+     QDebug deb = qDebug();
+
+
+    for( it2 = list_texts.begin(); it2 != list_texts.end() ; it2++)
+    {
+
+        if(it2 == list_texts.begin())
+        {
+            deb  << (*it2)->getPeople().getName() << (*it2)->getContent();
+        }
+        else
+        {
+
+            if(((*it2)->getPeople().getName()) != ((*(it2-1))->getPeople().getName()))
+            {
+                deb = qDebug();
+                deb  << (*it2)->getPeople().getName() << (*it2)->getContent();
+            }
+            else
+             deb << (*it2)->getContent();
+        }
+    }
     return 0;
 }

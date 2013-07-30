@@ -51,6 +51,7 @@ bool PhStripDoc::openDetX(QString filename)
     while(DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text() != ""){
         _title += " - " + DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text();
         i++;
+
     }
 
     //Find the videoPath
