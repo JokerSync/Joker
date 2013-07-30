@@ -18,11 +18,10 @@ class PhVideo : public QWidget
     Q_OBJECT
 public:
     PhVideo(QWidget *parent = 0);
-    ~PhVideo();
 
 public slots:
     void openFile();
-    void play();
+    void playPause();
 
 private slots:
     void mediaStateChanged(QMediaPlayer::State state);

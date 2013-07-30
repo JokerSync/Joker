@@ -11,50 +11,49 @@ PhVideo::PhVideo(QWidget *parent)
     , positionSlider(0)
     , errorLabel(0)
 {
+    // Create the video view
     QVideoWidget *videoWidget = new QVideoWidget;
 
+    // Adding buttons and slider
     QAbstractButton *openButton = new QPushButton(tr("Open..."));
     connect(openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 
     playButton = new QPushButton;
     playButton->setEnabled(false);
     playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-
-
-    connect(playButton, SIGNAL(clicked()), this, SLOT(play()));
+    connect(playButton, SIGNAL(clicked()), this, SLOT(playPause()));
 
     positionSlider = new QSlider(Qt::Horizontal);
     positionSlider->setRange(0, 0);
-
     connect(positionSlider, SIGNAL(sliderMoved(int)),
             this, SLOT(setPosition(int)));
 
     errorLabel = new QLabel;
     errorLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
 
+    // Create a first horizontal layout for buttons and slider
     QBoxLayout *controlLayout = new QHBoxLayout;
-    controlLayout->setMargin(0);
+    //controlLayout->setMargin(0);
     controlLayout->addWidget(openButton);
     controlLayout->addWidget(playButton);
     controlLayout->addWidget(positionSlider);
 
-
+    // Create a second vertical layout for the video view and the first layout
     QBoxLayout *layout = new QVBoxLayout;
+    layout->setMargin(0);
     layout->addWidget(videoWidget);
     layout->addLayout(controlLayout);
     layout->addWidget(errorLabel);
 
-    setLayout(layout);
+    // Add the layout to the main window
+    this->setLayout(layout);
 
+    // Associate the media player to the video view and set the slot
     mediaPlayer.setVideoOutput(videoWidget);
     connect(&mediaPlayer, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(mediaStateChanged(QMediaPlayer::State)));
     connect(&mediaPlayer, SIGNAL(positionChanged(qint64)), this, SLOT(positionChanged(qint64)));
     connect(&mediaPlayer, SIGNAL(durationChanged(qint64)), this, SLOT(durationChanged(qint64)));
     connect(&mediaPlayer, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(handleError()));
-}
-
-PhVideo::~PhVideo()
-{
 }
 
 void PhVideo::openFile()
@@ -69,7 +68,7 @@ void PhVideo::openFile()
     }
 }
 
-void PhVideo::play()
+void PhVideo::playPause()
 {
     switch(mediaPlayer.state()) {
     case QMediaPlayer::PlayingState:
