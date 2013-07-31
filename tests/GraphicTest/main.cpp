@@ -8,6 +8,7 @@
 //#include "SDLMain.h"
 
 #include <QString>
+#include <QFileInfo>
 #include <QDebug>
 
 #include "PhTools/memorytool.h"
@@ -32,7 +33,7 @@ using namespace std;
 
 // Synchronize buffer swaps with vertical refresh rate
 
-SDL_Surface *load_image( std::string filename )
+SDL_Surface *load_image( QString filename )
 {
     //The image that's loaded
     SDL_Surface* loadedImage = NULL;
@@ -40,8 +41,14 @@ SDL_Surface *load_image( std::string filename )
     //The optimized image that will be used
     SDL_Surface* optimizedImage = NULL;
 
+	QFileInfo info(filename);
+	if(!info.exists())
+	{
+		qDebug() << "file doesn't exists : " << filename;
+		return NULL;
+	}
     //Load the image
-    loadedImage = IMG_Load( filename.c_str() );
+    loadedImage = IMG_Load( filename.toLocal8Bit());
 
     //If the image loaded
     if( loadedImage != NULL )
@@ -102,15 +109,14 @@ int main(int argc, char **argv)
         return false;
 
     //Set the title
-    SDL_WM_SetCaption( "TTF's just the best", NULL );
+    SDL_WM_SetCaption( "Graphic Test", NULL );
 
     // Create a surface from picture:
-    const char * imagePath = "look.png";
+    QString imagePath = "look.png";
     image = load_image( imagePath );
 
     if( image == NULL )
     {
-        qDebug("Error loading %s", imagePath);
         return 1;
     }
 
