@@ -11,62 +11,6 @@
 
 using namespace std;
 
-
-bool verif_detx(char * arg)
-{
-      char * p = arg;
-
-      while (*p != '\0')
-      {
-          p++;
-      }
-
-      int i = 0;
-
-      for(i=0; i<5; i++)
-      {
-          p--;
-      }
-
-      if(*p != '.')
-      {
-          qDebug()<<"Not a detx file";
-          return false;
-      }
-      p++;
-
-      if(*p != 'd')
-      {
-          qDebug()<<"Not a detx file";
-          return false;
-      }
-      p++;
-
-      if(*p != 'e')
-      {
-          qDebug()<<"Not a detx file";
-          return false;
-      }
-      p++;
-
-      if(*p != 't')
-      {
-          qDebug()<<"Not a detx file";
-          return false;
-      }
-      p++;
-
-      if(*p != 'x')
-      {
-          qDebug()<<"Not a detx file";
-          return false;
-      }
-
-      qDebug()<<"Il s'agit bien d'un fichier detx";
-      return true;
-
-}
-
 int main(int argc, char *argv[])
 {
     //Check if DetX file path as argument
@@ -83,19 +27,24 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    //Check if
+    //Check if it's a DetX file
 
-    check = verif_detx(argv[1]);
+    QFileInfo file (argv[1]);
+    QString ext = file.suffix();
 
-    if (check == false)
+    if(ext != "detx")
+    {
+        qDebug() << "It's not a DetX file";
         return 0;
+    }
+
 
     // Creating a new doc:
     PhStripDoc doc;
 
     // Open the DetX file in argument:
     PhString fileName(argv[1]);
-    check = doc.openDetX(fileName);
+    doc.openDetX(fileName);
 
     // Display the title:
 
