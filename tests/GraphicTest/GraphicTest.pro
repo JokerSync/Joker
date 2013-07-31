@@ -29,8 +29,9 @@ linux {
 mac {
 	HEADERS += SDLMain.h
 	OBJECTIVE_SOURCES += SDLMain.m
-	INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers\
-				/Library/Frameworks/SDL_image.framework/Headers \
+        INCLUDEPATH += /Library/Frameworks \
+                                /Library/Frameworks/SDL.framework/Headers\
+                                /Library/Frameworks/SDL_image.framework/Headers \
 				/Library/Frameworks/SDL_ttf.framework/Headers
 	DEPENDPATH += /Library/Frameworks
 	LIBS += -F/Library/Frameworks \
