@@ -11,35 +11,6 @@
 
 using namespace std;
 
-bool verif_arg(int nb)
-{
-    if (nb == 1)
-    {
-        qDebug()<<"not enough arguments";
-        return false;
-    }
-
-    if (nb > 2)
-    {
-        qDebug()<<"too much arguments";
-        return false;
-    }
-
-    return true;
-}
-
-int lg_arg(char * arg)
-{
-    char *p = arg;
-    int cpt = 0;
-    while (*p != '\0')
-    {
-        p++;
-        cpt++;
-    }
-
-    return cpt;
-}
 
 bool verif_detx(char * arg)
 {
@@ -96,29 +67,23 @@ bool verif_detx(char * arg)
 
 }
 
-int lg_detx(char * arg)
-{
-    char *p = arg;
-    int cpt = 0;
-    while (*p != '\0')
-    {
-        p++;
-        cpt++;
-    }
-
-    cpt = cpt-5;
-    return cpt;
-}
-
 int main(int argc, char *argv[])
 {
-    bool check = verif_arg(argc);
+    //Check if DetX file path as argument
 
-    if (check ==false)
+    if (argc == 1)
     {
-        cout << "Please provide a DetX file path as argument" << endl;
+        qDebug()<<"Please provide a DetX file path as argument";
         return 0;
     }
+
+    if (argc > 2)
+    {
+        qDebug()<<"too much arguments";
+        return 0;
+    }
+
+    //Check if
 
     check = verif_detx(argv[1]);
 
@@ -154,57 +119,36 @@ int main(int argc, char *argv[])
 
     // Display text
 
-    QList<PhStripText *>list_texts = doc.getTexts();
+    QList<PhStripText *>textList = doc.getTexts();
     qDebug() << "texts : ";
-    QList<PhStripText *>::iterator it2;
-    PhString phrase;
+    QList<PhStripText *>::iterator text;
+    PhString line;
 
-    for( it2 = list_texts.begin(); it2 != list_texts.end() ; it2++)
+    for( text = textList.begin(); text != textList.end() ; text++)
     {
-          if(it2 == list_texts.begin())
+          if(text == textList.begin())
           {
-              phrase = (*it2)->getPeople().getName();
-              phrase += " : ";
-              phrase += (*it2)->getContent();
+              line = (*text)->getPeople().getName();
+              line += " : ";
+              line += (*text)->getContent();
           }
           else
           {
 
-             if(((*it2)->getPeople().getName()) != ((*(it2-1))->getPeople().getName()))
+             if(((*text)->getPeople().getName()) != ((*(text-1))->getPeople().getName()))
              {
-                 qDebug() << qPrintable( phrase );
-                 phrase = (*it2)->getPeople().getName();
-                 phrase += " : ";
-                 phrase += (*it2)->getContent();
+                 qDebug() << qPrintable( line );
+                 line = (*text)->getPeople().getName();
+                 line += " : ";
+                 line += (*text)->getContent();
              }
              else
              {
-                 phrase += (*it2)->getContent();
+                 line += (*text)->getContent();
              }
           }
     }
-     qDebug() << qPrintable( phrase );
-//     QDebug deb = qDebug();
+     qDebug() << qPrintable( line );
 
-
-//    for( it2 = list_texts.begin(); it2 != list_texts.end() ; it2++)
-//    {
-
-//        if(it2 == list_texts.begin())
-//        {
-//            deb  << (*it2)->getPeople().getName() << (*it2)->getContent();
-//        }
-//        else
-//        {
-
-//            if(((*it2)->getPeople().getName()) != ((*(it2-1))->getPeople().getName()))
-//            {
-//                deb = qDebug();
-//                deb  << (*it2)->getPeople().getName() << (*it2)->getContent();
-//            }
-//            else
-//             deb << (*it2)->getContent();
-//        }
-//    }
     return 0;
 }
