@@ -11,31 +11,37 @@ MainView::MainView()
     , _errorLabel(0)
 {
     // Add an open button
-    QAbstractButton *openButton = new QPushButton(tr("Open..."));
-    connect(openButton, SIGNAL(clicked()), this, SLOT(onOpenFile()));
+    _openButton = new QPushButton(tr("Open..."));
+    // Open a file dialog when user click the open button
+    connect(_openButton, SIGNAL(clicked()), this, SLOT(onOpenFile()));
 
     // Add a play button
     _playButton = new QPushButton;
     _playButton->setEnabled(false);
     _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    // Play/pause the video when user click the play button
     connect(_playButton, SIGNAL(clicked()), &_videoController, SLOT(playPause()));
+    // Update the play button appearance when the video state change
     connect(&_videoController, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(updatePlayButtonState(QMediaPlayer::State)));
 
     // Add a position slider
     _positionSlider = new QSlider(Qt::Horizontal);
     _positionSlider->setRange(0, 100);
+    // Update the video position when the user moves the slider
     connect(_positionSlider, SIGNAL(sliderMoved(int)), &_videoController, SLOT(updatePositionFromPercentage(int)));
+    // Update the slider position when the video position changes
     connect(&_videoController, SIGNAL(positionPercentageChanged(int)), _positionSlider, SLOT(setValue(int)));
 
     // Add an error label
     _errorLabel = new QLabel;
     _errorLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+    // Update error label in case of video error
     connect(&_videoController, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(updateErrorLabelContent()));
 
     // Create a first horizontal layout for buttons and slider
     QBoxLayout *controlLayout = new QHBoxLayout;
-    //controlLayout->setMargin(0);
-    controlLayout->addWidget(openButton);
+    controlLayout->setMargin(5);
+    controlLayout->addWidget(_openButton);
     controlLayout->addWidget(_playButton);
     controlLayout->addWidget(_positionSlider);
 
