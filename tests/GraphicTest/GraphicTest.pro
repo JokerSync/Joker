@@ -1,35 +1,39 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2013-04-25T11:26:46
-#
-#-------------------------------------------------
-
-QT       += core gui
-QT		 += opengl
+QT       += core
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = OpenGLTest
+
+
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-	../../libs/PhGraphic/PhGraphicView.cpp \
-    GraphicTestWindow.cpp
+SOURCES += main.cpp \
+	../../libs/PhTools/memorytool.cpp
 
-HEADERS  += \
-	../../libs/PhGraphic/PhGraphicView.h \
-    GraphicTestWindow.h
+#HEADERS += ../../libs/PhTools/memorytool.h
 
+INCLUDEPATH += ../../libs
 
-FORMS    += mainwindow.ui
+# Windows specific
+win32{
+#	INCLUDEPATH += $$(SDL_INCLUDE_PATH)
+}
 
-INCLUDEPATH += /Library/Frameworks \
-			../../libs/PhGraphic/
+# Ubuntu specific
+linux {
+	INCLUDEPATH += /usr/include/SDL
+	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+}
 
-DEPENDPATH += /Library/Frameworks \
-			../../libs/PhGraphic/
-
-
-
-
+# MacOS specific
+mac {
+	HEADERS += SDLMain.h
+	OBJECTIVE_SOURCES += SDLMain.m
+	INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers\
+				/Library/Frameworks/SDL_image.framework/Headers \
+				/Library/Frameworks/SDL_ttf.framework/Headers
+	DEPENDPATH += /Library/Frameworks
+	LIBS += -F/Library/Frameworks \
+      -framework Cocoa
+	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
+}
