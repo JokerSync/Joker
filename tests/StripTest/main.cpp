@@ -179,7 +179,6 @@ int main(int argc, char *argv[])
              }
              else
              {
-                 phrase += " ";
                  phrase += (*it2)->getContent();
              }
           }
