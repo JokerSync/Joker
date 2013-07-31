@@ -13,22 +13,14 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    //Check if DetX file path as argument
-
-    if (argc == 1)
+    //Check argument count
+    if (argc < 2)
     {
-        qDebug()<<"Please provide a DetX file path as argument";
-        return 0;
-    }
-
-    if (argc > 2)
-    {
-        qDebug()<<"too much arguments";
+        qDebug() << "Please provide a DetX file path as argument";
         return 0;
     }
 
     //Check if it's a DetX file
-
     QFileInfo file (argv[1]);
     QString ext = file.suffix();
 
@@ -37,7 +29,6 @@ int main(int argc, char *argv[])
         qDebug() << "It's not a DetX file";
         return 0;
     }
-
 
     // Creating a new doc:
     PhStripDoc doc;
