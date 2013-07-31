@@ -1,3 +1,4 @@
+
 #include <QCoreApplication>
 #include <QDebug>
 
@@ -156,28 +157,55 @@ int main(int argc, char *argv[])
     QList<PhStripText *>list_texts = doc.getTexts();
     qDebug() << "texts : ";
     QList<PhStripText *>::iterator it2;
-
-     QDebug deb = qDebug();
-
+    PhString phrase;
 
     for( it2 = list_texts.begin(); it2 != list_texts.end() ; it2++)
     {
+          if(it2 == list_texts.begin())
+          {
+              phrase = (*it2)->getPeople().getName();
+              phrase += " : ";
+              phrase += (*it2)->getContent();
+          }
+          else
+          {
 
-        if(it2 == list_texts.begin())
-        {
-            deb  << (*it2)->getPeople().getName() << (*it2)->getContent();
-        }
-        else
-        {
-
-            if(((*it2)->getPeople().getName()) != ((*(it2-1))->getPeople().getName()))
-            {
-                deb = qDebug();
-                deb  << (*it2)->getPeople().getName() << (*it2)->getContent();
-            }
-            else
-             deb << (*it2)->getContent();
-        }
+             if(((*it2)->getPeople().getName()) != ((*(it2-1))->getPeople().getName()))
+             {
+                 qDebug() << qPrintable( phrase );
+                 phrase = (*it2)->getPeople().getName();
+                 phrase += " : ";
+                 phrase += (*it2)->getContent();
+             }
+             else
+             {
+                 phrase += " ";
+                 phrase += (*it2)->getContent();
+             }
+          }
     }
+     qDebug() << qPrintable( phrase );
+//     QDebug deb = qDebug();
+
+
+//    for( it2 = list_texts.begin(); it2 != list_texts.end() ; it2++)
+//    {
+
+//        if(it2 == list_texts.begin())
+//        {
+//            deb  << (*it2)->getPeople().getName() << (*it2)->getContent();
+//        }
+//        else
+//        {
+
+//            if(((*it2)->getPeople().getName()) != ((*(it2-1))->getPeople().getName()))
+//            {
+//                deb = qDebug();
+//                deb  << (*it2)->getPeople().getName() << (*it2)->getContent();
+//            }
+//            else
+//             deb << (*it2)->getContent();
+//        }
+//    }
     return 0;
 }
