@@ -1,3 +1,4 @@
+
 #include <QCoreApplication>
 #include <QDebug>
 
@@ -10,126 +11,31 @@
 
 using namespace std;
 
-bool verif_arg(int nb)
-{
-    if (nb == 1)
-    {
-        qDebug()<<"not enough arguments";
-        return false;
-    }
-
-    if (nb > 2)
-    {
-        qDebug()<<"too much arguments";
-        return false;
-    }
-
-    return true;
-}
-
-int lg_arg(char * arg)
-{
-    char *p = arg;
-    int cpt = 0;
-    while (*p != '\0')
-    {
-        p++;
-        cpt++;
-    }
-
-    return cpt;
-}
-
-bool verif_detx(char * arg)
-{
-      char * p = arg;
-
-      while (*p != '\0')
-      {
-          p++;
-      }
-
-      int i = 0;
-
-      for(i=0; i<5; i++)
-      {
-          p--;
-      }
-
-      if(*p != '.')
-      {
-          qDebug()<<"Not a detx file";
-          return false;
-      }
-      p++;
-
-      if(*p != 'd')
-      {
-          qDebug()<<"Not a detx file";
-          return false;
-      }
-      p++;
-
-      if(*p != 'e')
-      {
-          qDebug()<<"Not a detx file";
-          return false;
-      }
-      p++;
-
-      if(*p != 't')
-      {
-          qDebug()<<"Not a detx file";
-          return false;
-      }
-      p++;
-
-      if(*p != 'x')
-      {
-          qDebug()<<"Not a detx file";
-          return false;
-      }
-
-      qDebug()<<"Il s'agit bien d'un fichier detx";
-      return true;
-
-}
-
-int lg_detx(char * arg)
-{
-    char *p = arg;
-    int cpt = 0;
-    while (*p != '\0')
-    {
-        p++;
-        cpt++;
-    }
-
-    cpt = cpt-5;
-    return cpt;
-}
-
 int main(int argc, char *argv[])
 {
-    bool check = verif_arg(argc);
-
-    if (check ==false)
+    //Check argument count
+    if (argc < 2)
     {
-        cout << "Please provide a DetX file path as argument" << endl;
+        qDebug() << "Please provide a DetX file path as argument";
         return 0;
     }
 
-    check = verif_detx(argv[1]);
+    //Check if it's a DetX file
+    QFileInfo file (argv[1]);
+    QString ext = file.suffix();
 
-    if (check == false)
+    if(ext != "detx")
+    {
+        qDebug() << "It's not a DetX file";
         return 0;
+    }
 
     // Creating a new doc:
     PhStripDoc doc;
 
     // Open the DetX file in argument:
     PhString fileName(argv[1]);
-    check = doc.openDetX(fileName);
+    doc.openDetX(fileName);
 
     // Display the title:
 
@@ -153,31 +59,36 @@ int main(int argc, char *argv[])
 
     // Display text
 
-    QList<PhStripText *>list_texts = doc.getTexts();
+    QList<PhStripText *>textList = doc.getTexts();
     qDebug() << "texts : ";
-    QList<PhStripText *>::iterator it2;
+    QList<PhStripText *>::iterator text;
+    PhString line;
 
-     QDebug deb = qDebug();
-
-
-    for( it2 = list_texts.begin(); it2 != list_texts.end() ; it2++)
+    for( text = textList.begin(); text != textList.end() ; text++)
     {
+          if(text == textList.begin())
+          {
+              line = (*text)->getPeople().getName();
+              line += " : ";
+              line += (*text)->getContent();
+          }
+          else
+          {
 
-        if(it2 == list_texts.begin())
-        {
-            deb  << (*it2)->getPeople().getName() << (*it2)->getContent();
-        }
-        else
-        {
-
-            if(((*it2)->getPeople().getName()) != ((*(it2-1))->getPeople().getName()))
-            {
-                deb = qDebug();
-                deb  << (*it2)->getPeople().getName() << (*it2)->getContent();
-            }
-            else
-             deb << (*it2)->getContent();
-        }
+             if(((*text)->getPeople().getName()) != ((*(text-1))->getPeople().getName()))
+             {
+                 qDebug() << qPrintable( line );
+                 line = (*text)->getPeople().getName();
+                 line += " : ";
+                 line += (*text)->getContent();
+             }
+             else
+             {
+                 line += (*text)->getContent();
+             }
+          }
     }
+     qDebug() << qPrintable( line );
+
     return 0;
 }
