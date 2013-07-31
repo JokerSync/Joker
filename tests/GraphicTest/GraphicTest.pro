@@ -38,3 +38,5 @@ mac {
       -framework Cocoa
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 }
+
+RESOURCES += GraphicTest.qrc

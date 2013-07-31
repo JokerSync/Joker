@@ -112,7 +112,7 @@ int main(int argc, char **argv)
     SDL_WM_SetCaption( "Graphic Test", NULL );
 
     // Create a surface from picture:
-    QString imagePath = "look.png";
+    QString imagePath = ":/img/look.png";
     image = load_image( imagePath );
 
     if( image == NULL )
