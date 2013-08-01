@@ -22,18 +22,18 @@ class MainView : public QMainWindow
     Q_OBJECT
 
 public:
-    MainView(PhString file);
+    MainView();
     virtual void keyPressEvent( QKeyEvent *keyEvent );
     virtual void wheelEvent(QWheelEvent *wheel);
-
-
-private slots:
     /**
      * @brief openFile
      * call StripWindow::openFile() to open a PhStripDoc with the
      * user selected file
      */
-    void openFile();
+    void openFile(PhString fileName);
+
+private slots:
+
 
     void switchScrolling();
     /**
