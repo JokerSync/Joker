@@ -14,7 +14,7 @@
 #include "PhTools/PhFileTools.h"
 
 #include "MainView.h"
-
+#undef main
 
 int main(int argc, char *argv[])
 {

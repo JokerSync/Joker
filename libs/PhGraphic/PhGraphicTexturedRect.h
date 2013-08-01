@@ -10,8 +10,8 @@
 
 #include "glu.h"
 
-#include "SDL_image.h"
-#include "SDL.h"
+#include "SDL_image/SDL_image.h"
+#include "SDL/SDL.h"
 
 #include "PhTools/PhString.h"
 

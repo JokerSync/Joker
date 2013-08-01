@@ -6,7 +6,7 @@
 #ifndef PHGRAPHICIMAGE_H
 #define PHGRAPHICIMAGE_H
 
-#include "SDL_image.h"
+#include "SDL_image/SDL_image.h"
 
 #include "PhGraphicTexturedRect.h"
 
