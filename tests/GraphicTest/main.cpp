@@ -1,6 +1,6 @@
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
+#include <SDL/SDL.h>
+#include <SDL_image/SDL_image.h>
+#include <SDL_ttf/SDL_ttf.h>
 #include <string>
 #include <cstring>
 #include "string.h"
@@ -91,11 +91,7 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination 
     SDL_BlitSurface( source, NULL, destination, &offset );
 }
 
-#if defined(Q_OS_MAC)
-int SDL_main(int argc, char **argv)
-#else
 int main(int argc, char **argv)
-#endif
 {
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )

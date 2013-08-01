@@ -8,7 +8,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-	../../libs/PhTools/memorytool.cpp
+	../../libs/PhTools/memorytool.cpp \
+    ../../libs/PhGraphic/SDLMain.cpp
 
 #HEADERS += ../../libs/PhTools/memorytool.h
 
@@ -27,15 +28,8 @@ linux {
 
 # MacOS specific
 mac {
-	HEADERS += SDLMain.h
-	OBJECTIVE_SOURCES += SDLMain.m
-        INCLUDEPATH += /Library/Frameworks \
-                                /Library/Frameworks/SDL.framework/Headers\
-                                /Library/Frameworks/SDL_image.framework/Headers \
-				/Library/Frameworks/SDL_ttf.framework/Headers
-	DEPENDPATH += /Library/Frameworks
-	LIBS += -F/Library/Frameworks \
-      -framework Cocoa
+        INCLUDEPATH += /Library/Frameworks/
+        LIBS += -F/Library/Frameworks
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 }
 
