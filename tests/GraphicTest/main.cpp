@@ -11,10 +11,6 @@
 #include <QFileInfo>
 #include <QDebug>
 
-#include "PhTools/memorytool.h"
-
-#undef main
-
 //Screen attributes
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -93,10 +89,12 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination 
 
 int main(int argc, char **argv)
 {
+	qDebug() << "SDL_Init()";
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
         return false;
 
+	qDebug() << "SDL_SetVideoMode";
     //Set up the screen
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
 
@@ -104,9 +102,11 @@ int main(int argc, char **argv)
     if( screen == NULL )
         return false;
 
+	qDebug() << "SDL_WM_SetCaption";
     //Set the title
     SDL_WM_SetCaption( "Graphic Test", NULL );
 
+	qDebug() << "load_image";
     // Create a surface from picture:
     QString imagePath = ":/img/look.png";
     image = load_image( imagePath );
