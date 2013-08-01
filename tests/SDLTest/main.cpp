@@ -1,6 +1,13 @@
 #include <SDL/SDL.h>
+#if defined(Q_OS_MAC)
 #include <SDL_image/SDL_image.h>
 #include <SDL_ttf/SDL_ttf.h>
+#else
+#include <SDL/SDL_image.h>
+#include <SDL/SDL_ttf.h>
+#endif
+
+
 #include <string>
 #include <cstring>
 #include "string.h"
