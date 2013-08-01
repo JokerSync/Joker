@@ -4,7 +4,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TEMPLATE = app
 
-
 SOURCES += main.cpp
 
 INCLUDEPATH += ../../libs
@@ -31,4 +30,4 @@ mac {
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
 }
 
-RESOURCES += GraphicTest.qrc
+RESOURCES += SDLTest.qrc
