@@ -8,6 +8,15 @@
 #include "PhGraphicContext.h"
 #include "PhGraphicView.h"
 
+#include <SDL/SDL.h>
+
+#if defined(Q_OS_MAC)
+#include <SDL_ttf/SDL_ttf.h>
+#else
+#include <SDL/SDL_ttf.h>
+#endif
+
+
 PhGraphicContext::PhGraphicContext(PhGraphicView *view)
 {
     _graphVeiw = view;

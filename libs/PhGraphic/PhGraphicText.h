@@ -8,10 +8,6 @@
 
 #include <QDebug>
 
-#include "glu.h"
-
-#include "SDL_ttf/SDL_ttf.h"
-#include "SDL_image/SDL_image.h"
 
 #include "PhGraphicTexturedRect.h"
 #include "PhTools/PhString.h"
