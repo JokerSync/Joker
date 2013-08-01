@@ -25,9 +25,12 @@ int main(int argc, char *argv[])
     else
         file = argv[1];
 
-    MainView w(file);
+    MainView w;
+    w.openFile(QString(argv[1]));
+
 
     w.show();
 
     return a.exec();
+
 }

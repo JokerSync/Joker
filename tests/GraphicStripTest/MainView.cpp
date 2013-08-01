@@ -16,14 +16,14 @@
 using namespace Leap;
 #endif
 
-MainView::MainView(PhString file)
+MainView::MainView()
 {
 #if LEAP
     _leapController.addListener(leapListener);
 #endif
     _MController = new PhGraphicStripController();
-    if(_MController->openDoc(file))
-        _MController->setLastFile(file);
+//    if(_MController->openDoc(file))
+//        _MController->setLastFile(file);
     resize(1280,360);
     setWindowTitle(tr("GraphicStripTest"));
     _strip = new PhGraphicStripView(this);
@@ -81,9 +81,9 @@ void MainView::createMenus()
 
 }
 
-void MainView::openFile()
+void MainView::openFile(PhString fileName)
 {
-    PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
+  //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
     if(!fileName.isNull())
        { _MController->openDoc(fileName);
        // _strip->openFile("");
