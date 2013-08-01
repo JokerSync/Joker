@@ -5,6 +5,13 @@
 
 #include "PhGraphicImage.h"
 
+#if defined(Q_OS_MAC)
+#include <SDL_image/SDL_image.h>
+#else
+#include <SDL/SDL_image.h>
+#endif
+
+
 PhGraphicImage::PhGraphicImage(PhString filename, int x, int y, int z, int w, int h, PhColor color, int tv, int tu) :
     PhGraphicTexturedRect(x, y, z, w, h, color, tv, tu)
 {
