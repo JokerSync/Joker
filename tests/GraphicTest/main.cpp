@@ -1,6 +1,6 @@
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
+#include <SDL/SDL.h>
+#include <SDL_image/SDL_image.h>
+#include <SDL_ttf/SDL_ttf.h>
 #include <string>
 #include <cstring>
 #include "string.h"
@@ -10,10 +10,6 @@
 #include <QString>
 #include <QFileInfo>
 #include <QDebug>
-
-#include "PhTools/memorytool.h"
-
-#undef main
 
 //Screen attributes
 const int SCREEN_WIDTH = 640;
@@ -91,16 +87,14 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination 
     SDL_BlitSurface( source, NULL, destination, &offset );
 }
 
-#if defined(Q_OS_MAC)
-int SDL_main(int argc, char **argv)
-#else
 int main(int argc, char **argv)
-#endif
 {
+	qDebug() << "SDL_Init()";
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
         return false;
 
+	qDebug() << "SDL_SetVideoMode";
     //Set up the screen
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
 
@@ -108,11 +102,13 @@ int main(int argc, char **argv)
     if( screen == NULL )
         return false;
 
+	qDebug() << "SDL_WM_SetCaption";
     //Set the title
     SDL_WM_SetCaption( "Graphic Test", NULL );
 
+	qDebug() << "load_image";
     // Create a surface from picture:
-    QString imagePath = "look.png";
+    QString imagePath = ":/img/look.png";
     image = load_image( imagePath );
 
     if( image == NULL )

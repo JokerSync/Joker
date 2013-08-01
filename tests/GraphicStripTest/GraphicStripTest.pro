@@ -98,7 +98,7 @@ INCLUDEPATH += 	../../libs \
 		/Library/Frameworks/ \
     #$$(LEAP_SDK)/include
 
-unix {
+linux {
 INCLUDEPATH += /usr/include/GL \
                /usr/include/SDL \
 
@@ -108,26 +108,24 @@ LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
 }
 
 macx {
-LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
-LIBS += -L$$(LEAP_SDK)/lib -lLeap
+        INCLUDEPATH += /Library/Frameworks/
+        LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
+#LIBS += -L$$(LEAP_SDK)/lib -lLeap
 
-	copyresources.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/;
+        copyresources.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/;
 }
-#QMAKE_EXTRA_TARGETS += copyresources
-#POST_TARGETDEPS += copyresources
-macx {
-
-	copylibs.commands = mkdir $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs;
-	copylibs.commands += cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/;
-}
+QMAKE_EXTRA_TARGETS += copyresources
+POST_TARGETDEPS += copyresources
+#macx {
+#	copylibs.commands = mkdir $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs;
+#	copylibs.commands += cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/;
+#}
 #QMAKE_EXTRA_TARGETS += copylibs
 #POST_TARGETDEPS += copylibs
 
-macx {
-	leap.commands += cp -r $$(LEAP_SDK)/lib/libLeap.dylib $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;
-}
+#macx {
+#	leap.commands += cp -r $$(LEAP_SDK)/lib/libLeap.dylib $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;
+#}
 
 #QMAKE_EXTRA_TARGETS += leap
 #POST_TARGETDEPS += leap
-
-

@@ -2,15 +2,10 @@ QT       += core
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-
-
 TEMPLATE = app
 
 
-SOURCES += main.cpp \
-	../../libs/PhTools/memorytool.cpp
-
-#HEADERS += ../../libs/PhTools/memorytool.h
+SOURCES += main.cpp
 
 INCLUDEPATH += ../../libs
 
@@ -27,13 +22,13 @@ linux {
 
 # MacOS specific
 mac {
-	HEADERS += SDLMain.h
+#	SOURCES += ../../libs/PhGraphic/SDLMain.cpp \
+	OBJECTIVE_HEADERS += SDLMain.h
 	OBJECTIVE_SOURCES += SDLMain.m
-	INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers\
-				/Library/Frameworks/SDL_image.framework/Headers \
-				/Library/Frameworks/SDL_ttf.framework/Headers
-	DEPENDPATH += /Library/Frameworks
-	LIBS += -F/Library/Frameworks \
-      -framework Cocoa
-	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
+
+	INCLUDEPATH += /Library/Frameworks/
+	LIBS += -F/Library/Frameworks
+	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
 }
+
+RESOURCES += GraphicTest.qrc

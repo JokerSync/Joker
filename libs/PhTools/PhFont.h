@@ -6,7 +6,7 @@
 #ifndef PHFONT_H
 #define PHFONT_H
 
-#include "SDL_ttf.h"
+#include "SDL_ttf/SDL_ttf.h"
 
 #include "PhString.h"
 
