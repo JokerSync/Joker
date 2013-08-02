@@ -7,11 +7,6 @@
 #include <QDebug>
 #include "PhGraphicRect.h"
 
-PhGraphicRect::PhGraphicRect(int x, int y, int z, int w, int h, PhColor color) :
-    PhGraphicObject(color, x, y, z)
-{
-    this->setSize(w, h);
-}
 
 void PhGraphicRect::draw(int px)
 {

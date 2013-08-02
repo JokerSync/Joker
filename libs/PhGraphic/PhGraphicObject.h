@@ -12,15 +12,6 @@
 class PhGraphicObject
 {
 public:
-    /**
-     * @brief PhGraphicObject
-     * @param color
-     * @param x
-     * @param y
-     * @param z
-     * Constructor of the PhGraphicObject
-     */
-    PhGraphicObject(PhColor color, int x, int y, int z);
 
     /**
      * @brief draw

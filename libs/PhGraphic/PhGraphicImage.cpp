@@ -12,13 +12,6 @@
 #endif
 
 
-PhGraphicImage::PhGraphicImage(PhString filename, int x, int y, int z, int w, int h, PhColor color, int tv, int tu) :
-    PhGraphicTexturedRect(x, y, z, w, h, color, tv, tu)
-{
-    this->setFilename(filename);
-    init();
-}
-
 void PhGraphicImage::init()
 {
     _surface = IMG_Load(_filename.toStdString().c_str());

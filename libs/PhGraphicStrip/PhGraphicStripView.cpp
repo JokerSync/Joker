@@ -41,7 +41,7 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent)
 }
 
 
-void PhGraphicStripView::initializeGL()
+bool PhGraphicStripView::init()
 {
     //Set the background color to white
     glClearColor(1,1,1,0);
