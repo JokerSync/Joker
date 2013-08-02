@@ -17,21 +17,6 @@
 class PhGraphicTexturedRect : PhGraphicRect
 {
 public:
-    /**
-     * @brief PhGraphicTexturedRect
-     * @param x
-     * @param y
-     * @param z
-     * @param w
-     * @param h
-     * @param color
-     * @param tv
-     * @param tu
-     * Constructor using PhGraphicRect::PhGraphicRect()
-     */
-    PhGraphicTexturedRect(int x, int y, int z, int w, int h, PhColor color, int tv = 1, int tu = 1);
-
-
 
     /**
      * @brief draw

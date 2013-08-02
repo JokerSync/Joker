@@ -31,16 +31,6 @@ public:
      * handle the key events
      */
     virtual void keyPressEvent( QKeyEvent *keyEvent );
-    /**
-     * @brief initializeGL
-     * initialize the content
-     */
-    virtual void initializeGL() = 0;
-    /**
-     * @brief paintGL
-     * draw the content
-     */
-    virtual void paintGL() = 0;
 
     virtual void setXmove(int px) = 0;
     /**
@@ -66,6 +56,15 @@ public:
      */
     PhGraphicContext * getContext();
 
+protected:
+
+	virtual bool init() = 0;
+
+	virtual void paint() = 0;
+
+	void initializeGL();
+
+	void paintGL();
 
 public slots:
     /**
@@ -75,6 +74,7 @@ public slots:
 
 
 private:
+
     /**
      * @brief t_Timer
      * used to draw

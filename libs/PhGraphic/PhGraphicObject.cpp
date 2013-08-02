@@ -5,12 +5,6 @@
 
 #include "PhGraphicObject.h"
 
-PhGraphicObject::PhGraphicObject(PhColor color, int x, int y, int z)
-{    
-    this->setPosition(x, y, z);
-    this->setColor(color);
-
-}
 
 void PhGraphicObject::setPosition(int x, int y, int z)
 {

@@ -11,21 +11,8 @@
 class PhGraphicImage : public PhGraphicTexturedRect
 {
 public:
-    /**
-     * @brief PhGraphicImage
-     * @param filename
-     * @param x
-     * @param y
-     * @param z
-     * @param w
-     * @param h
-     * @param color
-     * @param tv
-     * @param tu
-     * Create a PhGraphicImage calling the PhGraphicTexturedRect constructor
-     */
-    PhGraphicImage(PhString filename, int x, int y, int z, int w, int h, PhColor color, int tv = 1, int tu = 1);
-    void setFilename(PhString filename);
+
+	void setFilename(PhString filename);
     PhString getFilename();
 
     /**

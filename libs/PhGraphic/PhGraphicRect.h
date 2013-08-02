@@ -11,17 +11,6 @@
 class PhGraphicRect : public PhGraphicObject
 {
 public:
-    /**
-     * @brief PhGraphicRect
-     * @param x
-     * @param y
-     * @param z
-     * @param w
-     * @param h
-     * @param color
-     * Constructor calling PhGraphicObject::PhGraphicObject()
-     */
-    PhGraphicRect(int x, int y, int z, int w, int h, PhColor color);
 
     /**
      * @brief draw

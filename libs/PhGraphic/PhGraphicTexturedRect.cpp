@@ -8,16 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int z, int w, int h, PhColor color, int tv, int tu) :
-    PhGraphicRect(x, y, z, w, h, color)
-{
-    _tu = tu;
-    _tv = tv;
-
-    //Witch will be overwrited by createTextureFromSurface if is an PhGraphicImage
-    createTextureFromColor(color);
-
-}
 
 
 void PhGraphicTexturedRect::createTextureFromColor(PhColor color){

@@ -5,16 +5,11 @@
 
 #include "PhGraphicText.h"
 
-
-PhGraphicText::PhGraphicText(PhString content, int x, int y, int z, int w, int h, PhFont *font, PhColor color) :
-    PhGraphicTexturedRect(x, y, z, w, h, color)
+bool PhGraphicText::init()
 {
-    this->setContent(content);
-    this->setFont(font);
-
-    SDL_Surface *surface = TTF_RenderUTF8_Blended(font->getFont(),
-                                                  content.toStdString().c_str(),
-                                                  color.toSDL());
+	  SDL_Surface *surface = TTF_RenderUTF8_Blended(_font->getFont(),
+												  _content.toStdString().c_str(),
+												  getColor().toSDL());
     if(surface != NULL)
         this->createTextureFromSurface(surface);
     SDL_FreeSurface(surface);
@@ -46,8 +41,3 @@ void PhGraphicText::dispose()
     qDebug() << "Hi, this is dispose";
 }
 
-
-void PhGraphicText::init()
-{
-    qDebug() << "Hi, this is init";
-}

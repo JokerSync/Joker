@@ -10,26 +10,15 @@
 
 
 #include "PhGraphicTexturedRect.h"
-#include "PhTools/PhString.h"
+#include "PhString.h"
+#include "PhGraphicObject.h"
 
 
 class PhGraphicText : PhGraphicTexturedRect {
 public:
 //    GLuint createTextureFromSurface(SDL_Surface * surface);
 //    GLuint createSurfaceFromText(PhString text);
-    /**
-     * @brief PhGraphicText
-     * @param content
-     * @param x
-     * @param y
-     * @param z
-     * @param w
-     * @param h
-     * @param font
-     * @param color
-     * Constructor using PhGraphicTexturedRect::PhGraphicTexturedRect()
-     */
-    PhGraphicText(PhString content, int x, int y, int z, int w, int h, PhFont *font, PhColor color);
+
     /**
      * @brief Draw the text on screen
      *
@@ -39,7 +28,7 @@ public:
      * @brief init
      * currently unused
      */
-    void init();
+	bool init();
     /**
      * @brief dispose
      * currently unused
