@@ -26,9 +26,7 @@ void PhGraphicObject::setZ(int z)
 {
     _z = z;
 }
-void PhGraphicObject::setColor(PhColor color){
-    _color = color;
-}
+
 
 int PhGraphicObject::getX(){
     return _x;
@@ -42,6 +40,4 @@ int PhGraphicObject::getZ()
 {
     return _z;
 }
-PhColor PhGraphicObject::getColor(){
-    return _color;
-}
+

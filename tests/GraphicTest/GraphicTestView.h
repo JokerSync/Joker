@@ -16,6 +16,7 @@ class GraphicTestView : PhGraphicView
 public :
 	explicit GraphicTestView(QWidget *parent = 0, QString name = "");
 
+
 protected:
 	bool init();
 

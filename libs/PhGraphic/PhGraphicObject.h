@@ -43,18 +43,7 @@ public:
      * @param z
      */
     void setZ(int z);
-    /**
-     * @brief setColor
-     * @param color
-     * Set the PhColor of the PhGraphicObject
-     */
-    void setColor(PhColor color);
 
-    /**
-     * @brief getColor
-     * @return
-     */
-    PhColor getColor();
 
 protected:
     /**
@@ -82,11 +71,7 @@ protected:
     int getZ();
 
 private:
-    /**
-     * @brief _color
-     * The PhColor of the PhGraphicObject
-     */
-    PhColor _color;
+
     /**
      * @brief _x
      * is the PhGraphicObject horizontal position

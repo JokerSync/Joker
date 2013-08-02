@@ -5,14 +5,23 @@
 
 #include "PhGraphicText.h"
 
+
 bool PhGraphicText::init()
 {
 	  SDL_Surface *surface = TTF_RenderUTF8_Blended(_font->getFont(),
 												  _content.toStdString().c_str(),
-												  getColor().toSDL());
+												 _color.toSDL());
     if(surface != NULL)
         this->createTextureFromSurface(surface);
     SDL_FreeSurface(surface);
+}
+
+PhColor PhGraphicText::getColor(){
+	return _color;
+}
+
+void PhGraphicText::setColor(PhColor color){
+	_color = color;
 }
 
 void PhGraphicText::setContent(PhString content){
