@@ -6,13 +6,11 @@ GraphicTestView::GraphicTestView(QWidget *parent, QString name) : PhGraphicView(
 
 bool GraphicTestView::init()
 {
-	initializeGL();
 	_image.setFilename("look.png");
 	_image.init();
 }
 
 void GraphicTestView::paint()
 {
-	paintGL();
-
+	_image.draw(0);
 }

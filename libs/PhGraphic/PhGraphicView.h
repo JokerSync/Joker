@@ -25,31 +25,9 @@ public:
      * Constructor
      */
     explicit PhGraphicView(QWidget *parent = 0, QString name = "");
-    /**
-     * @brief keyPressEvent
-     * @param keyEvent
-     * handle the key events
-     */
-    virtual void keyPressEvent( QKeyEvent *keyEvent );
 
-    virtual void setXmove(int px) = 0;
-    /**
-     * @brief resizeGL
-     * @param width
-     * @param height
-     * handle the resize of the OpenGL context
-     */
-    virtual void resizeGL(int width, int height);
-    /**
-     * @brief toggleFullWindow
-     * switch from fullscreen to normal window and vice-versa
-     */
-    void toggleFullWindow();
-    /**
-     * @brief toggleMouvement
-     * switch from play to pause an vice-versa
-     */
-    void toggleScroll();
+
+
     /**
      * @brief b_Fullscreen
      * allow us to know if the application is fullScreen
@@ -64,9 +42,17 @@ protected:
 
 	void initializeGL();
 
+	/**
+	 * @brief resizeGL
+	 * @param width
+	 * @param height
+	 * handle the resize of the OpenGL context
+	 */
+	void resizeGL(int width, int height);
+
 	void paintGL();
 
-public slots:
+private slots:
     /**
      * @brief onRefresh
      */
@@ -81,11 +67,7 @@ private:
      */
     QTimer *t_Timer;
 protected:
-    /**
-     * @brief move
-     * allow us to know if the strip is scrolling or not
-     */
-    bool move;
+
     /**
      * @brief _context
      */

@@ -4,12 +4,15 @@
 PhGraphicView::PhGraphicView( QWidget *parent, QString name)
     : QGLWidget(parent)
 {
-    move = true;
-    setWindowTitle(name);
-    t_Timer = new QTimer(this);
+	t_Timer = new QTimer(this);
     connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);
     this->_context = new PhGraphicContext(this);
+}
+
+void PhGraphicView::initializeGL()
+{
+	init();
 }
 
 void PhGraphicView::resizeGL(int width, int height)
@@ -23,19 +26,13 @@ void PhGraphicView::resizeGL(int width, int height)
     glOrtho(0, width, height, 0, 0, 10);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    initializeGL();
+	initializeGL();
 }
 
-void PhGraphicView::keyPressEvent(QKeyEvent *keyEvent)
+void PhGraphicView::paintGL()
 {
-    switch(keyEvent->key())
-    {
-    case Qt::Key_P:
-        this->_context->saveToPNG();
-        break;
-    }
+	paint();
 }
-
 
 void PhGraphicView::onRefresh()
 {
@@ -47,6 +44,7 @@ void PhGraphicView::onRefresh()
 
 PhGraphicContext *PhGraphicView::getContext()
 {
-    return _context;
+	return _context;
 }
+
 
