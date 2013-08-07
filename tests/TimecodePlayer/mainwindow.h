@@ -5,19 +5,79 @@
 #include <QMainWindow>
 #include <QtWidgets>
 #include <QString>
-//#include <Qtimer>
+#include <Qtimer>
+#include <QDebug>
 
 
 namespace Ui {
 class MainWindow;
 }
-
+/**
+ * @brief Timecode
+ *
+ */
 typedef struct Timecode Timecode;
 struct Timecode{
     int hours;
     int minutes;
     int seconds;
-    int ms;
+    int hundredth;
+
+    /**
+     * @brief counter
+     * Provides the clock converstion (24h:60min:60sec:100cs)
+     */
+    void counter()
+    {
+        if(hundredth == 100)
+        {
+            hundredth = 0;
+            seconds += 1;
+        }
+        if(seconds == 60)
+        {
+            seconds = 0;
+            minutes += 1;
+        }
+        if(minutes == 60)
+        {
+            minutes = 0;
+            hours += 1;
+        }
+        if(hours == 24)
+            hours = 0;
+    }
+
+    /**
+     * @brief displayFormat
+     * @return QString with "00:00:00:00" format
+     */
+    QString displayFormat()
+    {
+        QString time;
+
+        if(hours < 10)
+            time = "0"+QString::number(hours)+":";
+        else
+            time = QString::number(hours)+":";
+
+        if(minutes < 10)
+            time = time+"0"+QString::number(minutes)+":";
+        else
+            time = time+QString::number(minutes)+":";
+
+        if(seconds < 10)
+            time = time+"0"+QString::number(seconds)+":";
+        else
+            time = time+QString::number(seconds)+":";
+
+        if(hundredth < 10)
+            time = time+"0"+QString::number(hundredth);
+        else
+            time = time+QString::number(hundredth);
+
+        return time;
+    }
 };
 
 class MainWindow : public QMainWindow
@@ -38,6 +98,7 @@ public:
     //Methods
 
 
+
     ~MainWindow();
 
 
@@ -47,6 +108,7 @@ public slots:
      * Change the state of _playButtonState when cliking on _plauButton
      */
     void changeValuePlayButton();
+    void increaseValueTimecode();
 
 
 private:
@@ -91,6 +153,10 @@ private:
      * Value of the rate (0=pause, 1=play)
      */
     double _rateValue;
+    /**
+     * @brief _timer
+     */
+    QTimer *_timer;
     /**
      * @brief _timecode
      */
