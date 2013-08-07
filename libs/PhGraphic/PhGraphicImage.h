@@ -20,7 +20,7 @@ public:
      * @param px
      * draw the PhGraphicImage using PhGraphicTexturedRect::draw()
      */
-    void draw(int px);
+	void draw();
 
     /**
      * @brief init

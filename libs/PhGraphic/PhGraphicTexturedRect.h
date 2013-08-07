@@ -23,7 +23,7 @@ public:
      * @param px
      * draw the textured rectangle
      */
-    void draw(int px);
+	void draw();
 protected:
 
     /**

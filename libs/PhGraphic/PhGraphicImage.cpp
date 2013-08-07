@@ -16,7 +16,10 @@ void PhGraphicImage::init()
 {
     _surface = IMG_Load(_filename.toStdString().c_str());
     if(_surface != NULL)
-        createTextureFromSurface(_surface);
+	{
+		createTextureFromSurface(_surface);
+		qDebug() << "Loading image";
+	}
     else
         qDebug()<<"Error loading:"<<_filename;
 
@@ -26,11 +29,11 @@ void PhGraphicImage::dispose()
     SDL_FreeSurface(_surface);
 }
 
-void PhGraphicImage::draw(int px)
+void PhGraphicImage::draw()
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
-    PhGraphicTexturedRect::draw(px);
+	PhGraphicTexturedRect::draw();
 }
 
 void PhGraphicImage::setFilename(PhString filename){
