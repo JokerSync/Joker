@@ -14,9 +14,11 @@
 
 #include "PhGraphicRect.h"
 
-class PhGraphicTexturedRect : PhGraphicRect
+class PhGraphicTexturedRect : public PhGraphicRect
 {
 public:
+
+	PhGraphicTexturedRect(int x = 0, int y =0, int w = 0, int h = 0, int z = 0, int tu = 1, int tv = 1);
 
     /**
      * @brief draw
@@ -31,7 +33,7 @@ protected:
      * @param surface
      * create an OpenGL texture form a SDL Surface
      */
-    void createTextureFromSurface(SDL_Surface * surface);
+	bool createTextureFromSurface(SDL_Surface * surface);
 
     void createTextureFromColor(PhColor color);
 //    void setTexture(GLuint texture);
@@ -57,12 +59,12 @@ private:
      * @brief _tv
      * number of horizontal repetition
      */
-    int _tv;
+	float _tv;
     /**
      * @brief _tu
      * number of vertical repetition
      */
-    int _tu;
+	float _tu;
 //  SDL_Surface *_surface;
 };
 

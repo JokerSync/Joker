@@ -12,6 +12,8 @@ class PhGraphicImage : public PhGraphicTexturedRect
 {
 public:
 
+	PhGraphicImage( PhString filename = NULL, int x = 0, int y =0, int w = 0, int h = 0, int z = 0, int tu = 1, int tv = 1);
+
 	void setFilename(PhString filename);
     PhString getFilename();
 
@@ -26,7 +28,7 @@ public:
      * @brief init
      * Currently unused
      */
-    void init();
+	bool init();
     /**
      * @brief dispose
      * Currently unused

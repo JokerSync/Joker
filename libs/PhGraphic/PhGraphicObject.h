@@ -13,12 +13,13 @@ class PhGraphicObject
 {
 public:
 
+	PhGraphicObject(int x = 0, int y = 0, int z = 0);
     /**
      * @brief draw
      * @param px
      * virtual method called to draw objects
      */
-    virtual void draw(int px) = 0;
+	virtual void draw() = 0;
 
     /**
      * @brief setPosition
@@ -49,11 +50,11 @@ protected:
     /**
      * @brief init
      */
-   // virtual void init() = 0;
+	virtual bool init() = 0;
     /**
      * @brief dispose
      */
-  //  virtual void dispose() = 0;
+	virtual void dispose() = 0;
     /**
      * @brief getX
      * @return

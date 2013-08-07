@@ -5,7 +5,7 @@ PhGraphicView::PhGraphicView( QWidget *parent, QString name)
     : QGLWidget(parent)
 {
 	t_Timer = new QTimer(this);
-    connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
+	//connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);
     this->_context = new PhGraphicContext(this);
 }
@@ -27,12 +27,13 @@ void PhGraphicView::resizeGL(int width, int height)
     glOrtho(0, width, height, 0, 0, 10);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-	initializeGL();
 }
 
 void PhGraphicView::paintGL()
 {
 	qDebug() << "PhGraphicView::paintGL" ;
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClearColor(1,0,0,1);
 	paint();
 }
 

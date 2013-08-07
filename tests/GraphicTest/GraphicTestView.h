@@ -27,7 +27,7 @@ public :
 	void paint();
 
 private:
-	PhGraphicImage _image;
+	PhGraphicImage *_image;
 };
 
 #endif // GraphicTestView_H

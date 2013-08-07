@@ -14,7 +14,7 @@
 #include "PhGraphicObject.h"
 
 
-class PhGraphicText : PhGraphicTexturedRect {
+class PhGraphicText : public PhGraphicTexturedRect {
 public:
 //    GLuint createTextureFromSurface(SDL_Surface * surface);
 //    GLuint createSurfaceFromText(PhString text);
