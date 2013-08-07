@@ -9,6 +9,7 @@
 #include <QDebug>
 
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -17,86 +18,86 @@ class MainWindow;
  * @brief Timecode
  *
  */
-typedef struct Timecode Timecode;
-struct Timecode{
-    int hours;
-    int minutes;
-    int seconds;
-    int hundredth;
+//typedef struct Timecode Timecode;
+//struct Timecode{
+//    int hours;
+//    int minutes;
+//    int seconds;
+//    int hundredth;
 
-    /**
-     * @brief counter
-     * Provides the clock conversion (24h:60min:60sec:100cs)
-     */
-    void counter()
-    {
-        if(hundredth >= 100)
-        {
-            hundredth = 0;
-            seconds += 1;
-        }
-        if(hundredth < 0)
-        {
-            hundredth = 99;
-            seconds -= 1;
-        }
-        if(seconds >= 60)
-        {
-            seconds = 0;
-            minutes += 1;
-        }
-        if(seconds < 0)
-        {
-            seconds = 59;
-            minutes -= 1;
-        }
-        if(minutes >= 60)
-        {
-            minutes = 0;
-            hours += 1;
-        }
-        if(minutes < 0)
-        {
-            minutes = 59;
-            hours -= 1;
-        }
-        if(hours >= 24)
-            hours = 0;
-        if(hours < 0)
-            hours = 23;
-    }
+//    /**
+//     * @brief counter
+//     * Provides the clock conversion (24h:60min:60sec:100cs)
+//     */
+//    void counter()
+//    {
+//        if(hundredth >= 100)
+//        {
+//            hundredth = 0;
+//            seconds += 1;
+//        }
+//        if(hundredth < 0)
+//        {
+//            hundredth = 99;
+//            seconds -= 1;
+//        }
+//        if(seconds >= 60)
+//        {
+//            seconds = 0;
+//            minutes += 1;
+//        }
+//        if(seconds < 0)
+//        {
+//            seconds = 59;
+//            minutes -= 1;
+//        }
+//        if(minutes >= 60)
+//        {
+//            minutes = 0;
+//            hours += 1;
+//        }
+//        if(minutes < 0)
+//        {
+//            minutes = 59;
+//            hours -= 1;
+//        }
+//        if(hours >= 24)
+//            hours = 0;
+//        if(hours < 0)
+//            hours = 23;
+//    }
 
-    /**
-     * @brief displayFormat
-     * @return QString with "00:00:00:00" format
-     */
-    QString displayFormat()
-    {
-        QString time;
+//    /**
+//     * @brief displayFormat
+//     * @return QString with "00:00:00:00" format
+//     */
+//    QString displayFormat()
+//    {
+//        QString time;
 
-        if(hours < 10)
-            time = "0"+QString::number(hours)+":";
-        else
-            time = QString::number(hours)+":";
+//        if(hours < 10)
+//            time = "0"+QString::number(hours)+":";
+//        else
+//            time = QString::number(hours)+":";
 
-        if(minutes < 10)
-            time = time+"0"+QString::number(minutes)+":";
-        else
-            time = time+QString::number(minutes)+":";
+//        if(minutes < 10)
+//            time = time+"0"+QString::number(minutes)+":";
+//        else
+//            time = time+QString::number(minutes)+":";
 
-        if(seconds < 10)
-            time = time+"0"+QString::number(seconds)+":";
-        else
-            time = time+QString::number(seconds)+":";
+//        if(seconds < 10)
+//            time = time+"0"+QString::number(seconds)+":";
+//        else
+//            time = time+QString::number(seconds)+":";
 
-        if(hundredth < 10)
-            time = time+"0"+QString::number(hundredth);
-        else
-            time = time+QString::number(hundredth);
+//        if(hundredth < 10)
+//            time = time+"0"+QString::number(hundredth);
+//        else
+//            time = time+QString::number(hundredth);
 
-        return time;
-    }
-};
+//        return time;
+//    }
+//};
 
 class MainWindow : public QMainWindow
 {

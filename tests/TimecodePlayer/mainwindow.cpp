@@ -37,8 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(_fastRewardButton, SIGNAL(clicked()), this, SLOT(changeStateFastRewardButton()));
 
     //Label Init
-    QString text = "rate :" + QString::number(_rateValue);
-    _rate = new QLabel(text, this);
+
+    _rate = new QLabel(QString::number(_rateValue), this);
     _rate->setGeometry(50+20,_heightWindow/2-25,100,50);
 
     _timecode = new QLabel(_timecodeValue.displayFormat(), this);

@@ -13,8 +13,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    ../../libs/PhTools/PhTimeCode.cpp \
+    ../../libs/PhTools/PhTime.cpp \
+    ../../libs/PhTools/PhString.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    ../../libs/PhTools/PhTimeCode.h \
+    ../../libs/PhTools/PhTime.h \
+    ../../libs/PhTools/PhString.h
 
 FORMS    += mainwindow.ui
