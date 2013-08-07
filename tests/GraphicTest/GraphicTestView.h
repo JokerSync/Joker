@@ -6,18 +6,22 @@
 #ifndef GraphicTestView_H
 #define GraphicTestView_H
 
+#include <QString>
+#include <QMediaPlayer>
+
 #include "PhGraphicView.h"
 #include "PhGraphicImage.h"
 #include "PhGraphicText.h"
 
 
-class GraphicTestView : PhGraphicView
+class GraphicTestView : public PhGraphicView
 {
 public :
 	explicit GraphicTestView(QWidget *parent = 0, QString name = "");
 
+	GraphicTestView *view();
 
-protected:
+//protected:
 	bool init();
 
 	void paint();

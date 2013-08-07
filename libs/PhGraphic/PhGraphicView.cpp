@@ -12,6 +12,7 @@ PhGraphicView::PhGraphicView( QWidget *parent, QString name)
 
 void PhGraphicView::initializeGL()
 {
+	qDebug() << "PhGraphicView::initializeGL" ;
 	init();
 }
 
@@ -31,6 +32,7 @@ void PhGraphicView::resizeGL(int width, int height)
 
 void PhGraphicView::paintGL()
 {
+	qDebug() << "PhGraphicView::paintGL" ;
 	paint();
 }
 

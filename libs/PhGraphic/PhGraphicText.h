@@ -23,7 +23,7 @@ public:
      * @brief Draw the text on screen
      *
      */
-    void draw(int px);
+	void draw();
     /**
      * @brief init
      * currently unused

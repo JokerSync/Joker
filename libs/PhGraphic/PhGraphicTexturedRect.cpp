@@ -101,10 +101,10 @@ void PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 //    return *_surface;
 //}
 
-void PhGraphicTexturedRect::draw(int scroll){
+void PhGraphicTexturedRect::draw(){
 
 
-    //glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
+	//glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -112,9 +112,6 @@ void PhGraphicTexturedRect::draw(int scroll){
     int w = this->getWidth();
 
 
-
-    // only draw object from 3000px before screen and 3000px after and rythmo
-    if(-scroll + 3000 > x && -scroll - 3000 - w < x){
         glBindTexture(GL_TEXTURE_2D, _texture);
         if (w == 240)
             glDisable(GL_BLEND);
@@ -134,14 +131,14 @@ void PhGraphicTexturedRect::draw(int scroll){
           |            |
         (0,1) ------ (1,1)
         */
-        glTexCoord3i(0, 0, 1);glVertex3i(x + scroll,         y,      z);
-        glTexCoord3i(_tv, 0, 1);glVertex3i(x + w * _tv + scroll,     y,      z);
-        glTexCoord3i(_tv, _tu, 1);glVertex3i(x + w * _tv + scroll,     y + h * _tu,  z);
-        glTexCoord3i(0, _tu, 1);glVertex3i(x + scroll,         y + h * _tu,  z);
+		glTexCoord3i(0, 0, 1);glVertex3i(x ,         y,      z);
+		glTexCoord3i(_tv, 0, 1);glVertex3i(x + w * _tv ,     y,      z);
+		glTexCoord3i(_tv, _tu, 1);glVertex3i(x + w * _tv ,     y + h * _tu,  z);
+		glTexCoord3i(0, _tu, 1);glVertex3i(x ,         y + h * _tu,  z);
 
         glEnd();
         glDisable(GL_TEXTURE_2D);
-    }
+
 }
 GLuint PhGraphicTexturedRect::getTexture(){
     return _texture;
