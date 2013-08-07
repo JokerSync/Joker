@@ -49,7 +49,7 @@ void PhGraphicTexturedRect::createTextureFromColor(PhColor color){
 
 }
 
-void PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
+bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 {
     // get the number of channels in the SDL surface
     GLint  nbOfColors = surface->format->BytesPerPixel;
@@ -73,7 +73,8 @@ void PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
         break;
     default:
         qDebug() << "Warning: the image is not truecolor...";
-        break;
+		return false;
+
     }
 
     glEnable( GL_TEXTURE_2D );
@@ -91,6 +92,7 @@ void PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+	return true;
 }
 
 //void PhGraphicTexturedRect::setTexture(GLuint texture){
@@ -100,6 +102,11 @@ void PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 //SDL_Surface * PhGraphicTexturedRect::getSurface(){
 //    return *_surface;
 //}
+
+PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, int tu, int tv)
+	: PhGraphicRect(x, y, w, h , z), _tu(tu), _tv(tv)
+{
+}
 
 void PhGraphicTexturedRect::draw(){
 
@@ -117,7 +124,6 @@ void PhGraphicTexturedRect::draw(){
             glDisable(GL_BLEND);
 
         glEnable(GL_TEXTURE_2D);
-        glBegin(GL_QUADS); 	//Begining the cube's drawing
 
 
 
@@ -131,11 +137,16 @@ void PhGraphicTexturedRect::draw(){
           |            |
         (0,1) ------ (1,1)
         */
-		glTexCoord3i(0, 0, 1);glVertex3i(x ,         y,      z);
-		glTexCoord3i(_tv, 0, 1);glVertex3i(x + w * _tv ,     y,      z);
-		glTexCoord3i(_tv, _tu, 1);glVertex3i(x + w * _tv ,     y + h * _tu,  z);
-		glTexCoord3i(0, _tu, 1);glVertex3i(x ,         y + h * _tu,  z);
 
+		qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
+
+		glBegin(GL_QUADS); 	//Begining the cube's drawing
+		{
+			glTexCoord3i(0, 0, 1);glVertex3i(x ,         y,      z);
+			glTexCoord3i(_tv, 0, 1);glVertex3i(x + w * _tv ,     y,      z);
+			glTexCoord3i(_tv, _tu, 1);glVertex3i(x + w * _tv ,     y + h * _tu,  z);
+			glTexCoord3i(0, _tu, 1);glVertex3i(x ,         y + h * _tu,  z);
+		}
         glEnd();
         glDisable(GL_TEXTURE_2D);
 

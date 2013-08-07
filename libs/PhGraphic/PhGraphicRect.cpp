@@ -8,9 +8,10 @@
 #include "PhGraphicRect.h"
 
 
-void PhGraphicRect::draw(int px)
+
+PhGraphicRect::PhGraphicRect(int x, int y, int w, int h, int z)
+	: PhGraphicObject(x , y , z), _w(w), _h(h)
 {
-    qDebug() << "I'm drawing a rect";
 }
 
 void PhGraphicRect::setSize(int w, int h){

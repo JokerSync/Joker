@@ -12,12 +12,7 @@ class PhGraphicRect : public PhGraphicObject
 {
 public:
 
-    /**
-     * @brief draw
-     * @param px
-     * draw the content to the frame buffer
-     */
-    void draw(int px);
+	PhGraphicRect(int x = 0, int y =0, int w = 0, int h = 0, int z = 0);
 
     //bool init();
     //void dispose();

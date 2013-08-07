@@ -5,6 +5,9 @@
 
 #include "PhGraphicObject.h"
 
+PhGraphicObject::PhGraphicObject(int x , int y, int z) : _x(x), _y(y), _z(z)
+{
+}
 
 void PhGraphicObject::setPosition(int x, int y, int z)
 {

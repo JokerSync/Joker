@@ -11,17 +11,25 @@
 #include <SDL/SDL_image.h>
 #endif
 
+PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h, int z, int tu, int tv)
+	: PhGraphicTexturedRect(x, y, w, h, z, tu, tv), _filename(filename), _surface(NULL)
+{
+}
 
-void PhGraphicImage::init()
+bool PhGraphicImage::init()
 {
     _surface = IMG_Load(_filename.toStdString().c_str());
     if(_surface != NULL)
 	{
-		createTextureFromSurface(_surface);
-		qDebug() << "Loading image";
+		if(createTextureFromSurface(_surface))
+		{
+			qDebug() << "Loading image";
+			return true;
+		}
 	}
-    else
-        qDebug()<<"Error loading:"<<_filename;
+
+	qDebug()<<"Error loading:"<<_filename;
+	return false;
 
 }
 void PhGraphicImage::dispose()
@@ -31,8 +39,8 @@ void PhGraphicImage::dispose()
 
 void PhGraphicImage::draw()
 {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
 	PhGraphicTexturedRect::draw();
 }
 
