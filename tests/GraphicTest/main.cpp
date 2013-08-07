@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 	MainWindow w;
 	w.resize(400,300);
 	GraphicTestView g(&w, "view");
-	g.resize(250,200);
+	g.resize(380,280);
 	w.show();
 	return a.exec();
 }

@@ -28,6 +28,8 @@ public :
 
 private:
 	PhGraphicImage *_image;
+
+	PhGraphicText *_text;
 };
 
 #endif // GraphicTestView_H
