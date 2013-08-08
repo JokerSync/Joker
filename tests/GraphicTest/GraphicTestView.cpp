@@ -14,7 +14,7 @@ bool GraphicTestView::init()
 		qDebug() << "Initialize _image";
 		_image = new PhGraphicImage;
 		_image->setFilename("look.png");
-		_image->setRect(0,0,200,150);
+		_image->setRect(50,0,250,125);
 		if (! _image->init())
 			qDebug() << "_image not initialize";
 	}
@@ -24,7 +24,7 @@ bool GraphicTestView::init()
 		qDebug() << "Initialize _text";
 		_text = new PhGraphicText;
 		_text->setContent("Test PhGraphicText");
-		_text->setRect(0,160,200,100);
+		_text->setRect(50,135,250,125);
 		if (! _text->init())
 			qDebug() << "_text not initialize";
 
