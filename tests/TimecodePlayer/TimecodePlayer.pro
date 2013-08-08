@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = TimecodePlayer
 TEMPLATE = app
 
+INCLUDEPATH = ../../libs
 
 SOURCES += main.cpp\
         mainwindow.cpp \

@@ -11,43 +11,50 @@ MainWindow::MainWindow(QWidget *parent) :
     resize(_widthWindow,_heightWindow);
 
     //Model Init
-    _playButtonState = false;
-    _fastForwardButtonState = false;
     _rateValue = 0;
-    _timecodeValue.hours = 0;
-    _timecodeValue.minutes = 0;
-    _timecodeValue.seconds = 0;
-    _timecodeValue.hundredth = 0;
+    _timecodeValue = PhTimeCodeType25;
 
     //Buttons Init
 
-    _playButton = new QPushButton("", this);
-    _playButton->setGeometry(_widthWindow/2-30,0.75*_heightWindow-30,60,60);
+    _playButton = new QPushButton("");
+
+    _playButton->resize(50,50);
     _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     QObject::connect(_playButton, SIGNAL(clicked()), this, SLOT(changeValuePlayButton()));
 
-    _fastForwardButton = new QPushButton("", this);
-    _fastForwardButton->setGeometry(_widthWindow/2+30,0.75*_heightWindow-20,40,40);
+    _fastForwardButton = new QPushButton("");
+    _fastForwardButton->resize(50,50);
     _fastForwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
     QObject::connect(_fastForwardButton, SIGNAL(clicked()), this, SLOT(changeStateFastForwardButton()));
 
-    _fastRewardButton = new QPushButton("", this);
-    _fastRewardButton->setGeometry(_widthWindow/2-30-40,0.75*_heightWindow-20,40,40);
+    _fastRewardButton = new QPushButton("");
+    _fastRewardButton->resize(50,50);
     _fastRewardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
     QObject::connect(_fastRewardButton, SIGNAL(clicked()), this, SLOT(changeStateFastRewardButton()));
 
     //Label Init
 
     _rate = new QLabel(QString::number(_rateValue), this);
-    _rate->setGeometry(50+20,_heightWindow/2-25,100,50);
 
-    _timecode = new QLabel(_timecodeValue.displayFormat(), this);
-    _timecode->setGeometry((1-1/5)*_widthWindow-100-20,_heightWindow/2-25,200,50);
+    _timecode = new QLabel(PhTimeCode::stringFromFrame(_timecodeValue,PhTimeCodeType25), this);
+
+    //Combobox Init
+    _rateSelectionBox = new QComboBox;
 
     //Timer Init
     _timer = new QTimer(this);
     connect(_timer, SIGNAL(timeout()), this, SLOT(increaseValueTimecode()));
     _timer->start(40);
+
+    _gLayout = new QGridLayout;
+    _gLayout->addWidget(_playButton,1,1);
+    _gLayout->addWidget(_fastForwardButton,1,2);
+    _gLayout->addWidget(_fastRewardButton,1,0);
+
+    _gLayout->addWidget(_timecode,0,0);
+    _gLayout->addWidget(_rate,0,1);
+
+
 }
 
 
@@ -56,17 +63,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::changeValuePlayButton()
 {
-    if(_playButtonState == false)//If state = pause
+    if(_rateValue == 0)//If state = pause
     {
         _rateValue = 1;
-        _playButtonState = true;
         _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
 
     }
     else //If state = play
     {
         _rateValue = 0;
-        _playButtonState = false;
         _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     }
     _rate->setNum(_rateValue);
@@ -75,58 +80,31 @@ void MainWindow::changeValuePlayButton()
 
 void MainWindow::increaseValueTimecode()
 {
-    {
-        _timecodeValue.hundredth += 4*_rateValue;
-        _timecodeValue.counter();
-        _timecode->setText(_timecodeValue.displayFormat());
-    }
+    /*_timecodeValue += 4*_rateValue;
+    _timecodeValue.counter();
+    _timecode->setText(_timecodeValue.displayFormat());*/
 }
 
 
 void MainWindow::changeStateFastForwardButton()
 {
-    if(_fastForwardButtonState == false)
-    {
-        _rateValue = 4;
-        _fastForwardButtonState = true;
-    }
-    else
-    {
-        if(_playButtonState)
-            _rateValue = 1;
-        else
-            _rateValue = 0;
-        _fastForwardButtonState = false;
-
-    }
-    _playButtonState = false;
+    _rateValue = 4;
     _rate->setNum(_rateValue);
 }
 
 
 void MainWindow::changeStateFastRewardButton()
 {
-    if(_fastRewardButtonState == false)
-    {
-        _rateValue = -4;
-        _fastRewardButtonState = true;
-    }
-    else
-    {
-        if(_playButtonState)
-            _rateValue = 1;
-        else
-            _rateValue = 0;
-        _fastRewardButtonState = false;
-
-    }
-    _playButtonState = false;
+    _rateValue = -4;
     _rate->setNum(_rateValue);
 }
 
 /****************************Methods****************************/
 
-
+QGridLayout *MainWindow::getLayout() const
+{
+    return _gLayout;
+}
 
 
 MainWindow::~MainWindow()
@@ -136,6 +114,8 @@ MainWindow::~MainWindow()
     delete _playButton;
     delete _fastForwardButton;
     delete _fastRewardButton;
+    delete _rateSelectionBox;
     delete _rate;
+    delete _gLayout;
     delete _ui;
 }
