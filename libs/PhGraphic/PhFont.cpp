@@ -10,7 +10,6 @@ PhFont::PhFont(PhString filename, int size)
 {
     _filename = filename;
     _size = size;
-    _font = TTF_OpenFont(_filename.toStdString().c_str(), size);
 }
 
 TTF_Font * PhFont::getFont()
@@ -22,5 +21,11 @@ PhString PhFont::getFontName(){
     QStringList list ;
     list = _filename.split("/");
     PhString name = list.last().split(".").first();
-    return name;
+	return name;
+}
+
+bool PhFont::init()
+{
+	_font = TTF_OpenFont(_filename.toStdString().c_str(), _size);
+	return(_font != NULL);
 }

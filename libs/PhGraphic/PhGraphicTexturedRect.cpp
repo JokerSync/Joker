@@ -138,7 +138,7 @@ void PhGraphicTexturedRect::draw(){
         (0,1) ------ (1,1)
         */
 
-		qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
+		//qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
 
 		glBegin(GL_QUADS); 	//Begining the cube's drawing
 		{

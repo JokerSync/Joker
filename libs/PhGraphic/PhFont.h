@@ -35,6 +35,7 @@ public:
      */
     PhString getFontName();
 
+	bool init();
 private:
     /**
      * @brief _font

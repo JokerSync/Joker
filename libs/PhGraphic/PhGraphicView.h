@@ -6,6 +6,8 @@
 #include <QMenu>
 #include <QMenuBar>
 
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -32,7 +34,7 @@ public:
      * @brief b_Fullscreen
      * allow us to know if the application is fullScreen
      */
-    PhGraphicContext * getContext();
+	//PhGraphicContext * getContext();
 
 protected:
 
@@ -71,7 +73,7 @@ protected:
     /**
      * @brief _context
      */
-    PhGraphicContext *_context;
+   // PhGraphicContext *_context;
 
 };
 

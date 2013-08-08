@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 
 	qDebug() << "load_image";
     // Create a surface from picture:
-    QString imagePath = ":/img/look.png";
+	QString imagePath = "look.png";
     image = load_image( imagePath );
 
     if( image == NULL )

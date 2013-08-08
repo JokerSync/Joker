@@ -24,7 +24,7 @@ SOURCES += main.cpp\
 	../../libs/PhGraphic/PhGraphicImage.cpp \
 	../../libs/PhGraphic/PhGraphicText.cpp \
     ../../libs/PhGraphic/PhGraphicTexturedRect.cpp \
-    ../../libs/PhTools/PhFont.cpp \
+	../../libs/PhGraphic/PhFont.cpp \
     ../../libs/PhTools/PhColor.cpp \
     ../../libs/PhGraphic/PhGraphicObject.cpp \
     ../../libs/PhGraphic/PhGraphicRect.cpp \
@@ -37,7 +37,7 @@ HEADERS  += MainWindow.h \
 	../../libs/PhGraphic/PhGraphicImage.h \
 	../../libs/PhGraphic/PhGraphicText.h \
     ../../libs/PhGraphic/PhGraphicTexturedRect.h \
-    ../../libs/PhTools/PhFont.h \
+	../../libs/PhGraphic/PhFont.h \
     ../../libs/PhTools/PhColor.h \
     ../../libs/PhGraphic/PhGraphicObject.h \
     ../../libs/PhGraphic/PhGraphicRect.h \

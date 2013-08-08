@@ -12,6 +12,7 @@
 #include "PhGraphicView.h"
 #include "PhGraphicImage.h"
 #include "PhGraphicText.h"
+#include "PhFont.h"
 
 
 class GraphicTestView : public PhGraphicView
@@ -30,6 +31,8 @@ private:
 	PhGraphicImage *_image;
 
 	PhGraphicText *_text;
+
+	PhFont *_font;
 };
 
 #endif // GraphicTestView_H

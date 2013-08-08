@@ -8,12 +8,11 @@
 
 bool PhGraphicText::init()
 {
-//	  SDL_Surface *surface = TTF_RenderUTF8_Blended(_font->getFont(),
-//												  _content.toStdString().c_str(),
-//												 _color.toSDL());
+	  SDL_Surface *surface = TTF_RenderUTF8_Blended(_font->getFont(),
+												  _content.toStdString().c_str(),
+												 _color.toSDL());
 
 	qDebug() << "PhGraphicText::init";
-	SDL_Surface *surface = NULL;
     if(surface != NULL)
         this->createTextureFromSurface(surface);
     SDL_FreeSurface(surface);
