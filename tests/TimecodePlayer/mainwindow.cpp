@@ -8,10 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
     _heightWindow = 200;
     resize(_widthWindow,_heightWindow);
 
-    //Model Init
-    _rateValue = 0;
-    _timecodeValue = 0;
-
     //Buttons Init
 
     _playButton = new QPushButton;
@@ -36,20 +32,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QSizePolicy size_policy;
     size_policy.setVerticalStretch(20);
     size_policy.setHorizontalStretch(10);
-    _rate = new QLabel;
-    _rate->setSizePolicy(size_policy);
-    _rate->setText("rate: "+QString::number(_rateValue));
+	_rateLabel = new QLabel;
+	_rateLabel->setSizePolicy(size_policy);
+	_rateLabel->setText("rate: "+QString::number(_clock.get_rate()));
 
-    _timecode = new QLabel(PhTimeCode::stringFromFrame(_timecodeValue,PhTimeCodeType25));
+	_timecodeLabel = new QLabel(PhTimeCode::stringFromFrame(_clock.get_timecode(),PhTimeCodeType25));
 
     //Combobox Init
     _rateSelectionBox = new QComboBox;
-
-    //Timer Init
-    _timer = new QTimer(this);
-    connect(_timer, SIGNAL(timeout()), this, SLOT(increaseValueTimecode()));
-    _timer->start(40);
-
     _gLayout = new QGridLayout;
     _gLayout->addWidget(_backButton,1,0);
     _gLayout->addWidget(_fastRewardButton,1,1);
@@ -58,8 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    _gLayout->addWidget(_timecode,0,0);
-    _gLayout->addWidget(_rate,0,1);
+	_gLayout->addWidget(_timecodeLabel,0,0);
+	_gLayout->addWidget(_rateLabel,0,1);
 
     this->setLayout(_gLayout);
 
@@ -73,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::changeValuePlayButton()
 {
-    if(_rateValue == 0)//If state = pause
+	if(_clock.get_rate() == 0)//If state = pause
     {
         _rateValue = 1;
         _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
@@ -84,28 +74,28 @@ void MainWindow::changeValuePlayButton()
         _rateValue = 0;
         _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     }
-    _rate->setText("rate: "+QString::number(_rateValue));
+	_rateLabel->setText("rate: "+QString::number(_rateValue));
 }
 
 
 void MainWindow::increaseValueTimecode()
 {
     _timecodeValue += _rateValue;
-    _timecode->setText(PhTimeCode::stringFromFrame(_timecodeValue,PhTimeCodeType25));
+	_timecodeLabel->setText(PhTimeCode::stringFromFrame(_timecodeValue,PhTimeCodeType25));
 }
 
 
 void MainWindow::changeStateFastForwardButton()
 {
     _rateValue = 4;
-    _rate->setText("rate: "+QString::number(_rateValue));
+	_rateLabel->setText("rate: "+QString::number(_rateValue));
 }
 
 
 void MainWindow::changeStateFastRewardButton()
 {
     _rateValue = -4;
-    _rate->setText("rate: "+QString::number(_rateValue));
+	_rateLabel->setText("rate: "+QString::number(_rateValue));
 }
 
 /****************************Methods****************************/
@@ -114,7 +104,7 @@ MainWindow::~MainWindow()
 {
 
     delete _timer;
-    delete _timecode;
+	delete _timecodeLabel;
 
     delete _playButton;
     delete _fastForwardButton;
@@ -122,6 +112,6 @@ MainWindow::~MainWindow()
     delete _backButton;
 
     delete _rateSelectionBox;
-    delete _rate;
+	delete _rateLabel;
     delete _gLayout;
 }

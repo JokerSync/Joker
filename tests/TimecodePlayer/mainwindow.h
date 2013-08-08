@@ -1,18 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+#include "PhTools/PhClock.h"
 
-#include <QMainWindow>
-#include <QtWidgets>
-#include <QString>
-#include <Qtimer>
-#include <QDebug>
-#include <QGridLayout>
-#include <QtGui>
-#include "PhTools/PhTimeCode.h"
-#include "PhTools/PhTime.h"
-#include "PhTools/PhString.h"
-
-using namespace std;
 
 /**
  * @brief Timecode
@@ -96,12 +85,12 @@ private:
     /**
      * @brief _timecode
      */
-    QLabel *_timecode;
+	QLabel *_timecodeLabel;
 
     /**
      * @brief _rate
      */
-    QLabel *_rate;
+	QLabel *_rateLabel;
 
 
     //Model Section
@@ -115,22 +104,7 @@ private:
      */
     int _widthWindow;
 
-    /**
-     * @brief _rateValue
-     * Value of the rate (0=pause, 1=play, 4=fastforward, -4=fastreward)
-     */
-    double _rateValue;
-
-    /**
-     * @brief _timer
-     */
-    QTimer *_timer;
-
-    /**
-     * @brief _timecode
-     * Standard timecode format "00:00:00:00"
-     */
-    PhFrame _timecodeValue;
+	PhClock _clock;
 
 };
 
