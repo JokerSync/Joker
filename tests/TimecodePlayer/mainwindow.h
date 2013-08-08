@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QMainWindow>
 #include <QtWidgets>
 #include <QString>
 #include <Qtimer>
@@ -15,32 +14,19 @@
 
 using namespace std;
 
-namespace Ui {
-class MainWindow;
-}
-
 /**
  * @brief Timecode
  *
  */
 
 
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
     Q_OBJECT
 
 public:
 
     explicit MainWindow(QWidget *parent = 0);
-
-    //Accessors
-    /**
-     * @brief get_rateValue
-     * @return _rateValue
-     */
-    //Methods
-    QGridLayout* getLayout() const;
-
 
 
     ~MainWindow();
@@ -70,7 +56,6 @@ public slots:
 
 
 private:
-    Ui::MainWindow *_ui;
 
     //Layout
     QGridLayout *_gLayout;
@@ -82,7 +67,11 @@ private:
      */
     QPushButton *_playButton;
 
-    //QPushButton *_stopButton;// stop button + back to the beginning
+    /**
+     * @brief _backButton
+     * Back to the beginning
+     */
+    QPushButton *_backButton;
 
     /**
      * @brief _fastForwardButton

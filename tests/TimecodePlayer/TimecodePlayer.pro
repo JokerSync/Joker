@@ -24,4 +24,4 @@ HEADERS  += mainwindow.h \
     ../../libs/PhTools/PhTime.h \
     ../../libs/PhTools/PhString.h
 
-FORMS    += mainwindow.ui
+FORMS    +=
