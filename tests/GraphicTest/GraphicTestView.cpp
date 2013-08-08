@@ -1,7 +1,7 @@
 #include "GraphicTestView.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent, QString name)
-	: PhGraphicView( parent , name ) , _image(NULL), _text(NULL)
+	: PhGraphicView( parent , name ) , _image(NULL), _font(NULL), _text(NULL)
 {
 
 }
@@ -19,11 +19,20 @@ bool GraphicTestView::init()
 			qDebug() << "_image not initialize";
 	}
 
+	if(_font == NULL)
+	{
+		qDebug() << "Initialize _font";
+		_font = new PhFont("Bedizen.ttf",50);
+		if (! _font->init())
+			qDebug() << "_font not initialize";
+	}
+
 	if(_text == NULL)
 	{
 		qDebug() << "Initialize _text";
 		_text = new PhGraphicText;
 		_text->setContent("Test PhGraphicText");
+		_text->setFont(_font);
 		_text->setRect(50,135,250,125);
 		if (! _text->init())
 			qDebug() << "_text not initialize";

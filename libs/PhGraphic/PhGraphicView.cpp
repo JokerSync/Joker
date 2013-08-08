@@ -1,5 +1,11 @@
 #include "PhGraphicView.h"
+#include <SDL/SDL.h>
 
+#if defined(Q_OS_MAC)
+#include <SDL_ttf/SDL_ttf.h>
+#else
+#include <SDL/SDL_ttf.h>
+#endif
 
 PhGraphicView::PhGraphicView( QWidget *parent, QString name)
     : QGLWidget(parent)
@@ -7,11 +13,20 @@ PhGraphicView::PhGraphicView( QWidget *parent, QString name)
 	t_Timer = new QTimer(this);
 	//connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
     t_Timer->start( 0);
-    this->_context = new PhGraphicContext(this);
+	//this->_context = new PhGraphicContext(this);
 }
 
 void PhGraphicView::initializeGL()
 {
+	if (SDL_Init(SDL_INIT_VIDEO) == 0)
+		qDebug() << "init SDL Ok.";
+	else
+		qDebug() << "SDL error:" << SDL_GetError();
+	if (TTF_Init() == 0)
+		qDebug() << "init TTF Ok.";
+	else
+		qDebug() << "TTF error:" << TTF_GetError();
+
 	qDebug() << "PhGraphicView::initializeGL" ;
 	init();
 }
@@ -45,9 +60,9 @@ void PhGraphicView::onRefresh()
 }
 
 
-PhGraphicContext *PhGraphicView::getContext()
-{
-	return _context;
-}
+//PhGraphicContext *PhGraphicView::getContext()
+//{
+//	return _context;
+//}
 
 

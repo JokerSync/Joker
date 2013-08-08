@@ -6,7 +6,7 @@
 #ifndef PHGRAPHICOBJECT_H
 #define PHGRAPHICOBJECT_H
 
-#include "PhTools/PhFont.h"
+#include "PhFont.h"
 #include "PhTools/PhColor.h"
 
 class PhGraphicObject
