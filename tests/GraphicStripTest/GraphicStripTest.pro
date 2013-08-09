@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     ../../libs/PhGraphicStrip/PhGraphicStripController.cpp \
     ../../libs/PhGraphicStrip/PhGraphicStripView.cpp \
     MainView.cpp \
-    ../../libs/PhGraphic/PhGraphicController.cpp
+    ../../libs/PhGraphic/PhGraphicController.cpp \
+    ../../../../libs/PhTools/PhString.cpp
 
 HEADERS += \
     ../../libs/PhTools/PhFileTools.h \
@@ -34,7 +35,8 @@ HEADERS += \
     ../../libs/PhGraphicStrip/PhGraphicStripController.h \
     ../../libs/PhGraphicStrip/PhGraphicStripView.h \
     MainView.h \
-    ../../libs/PhGraphic/PhGraphicController.h
+    ../../libs/PhGraphic/PhGraphicController.h \
+    ../../../../libs/PhTools/PhString.h
 
 
 #PhStrip
@@ -102,7 +104,8 @@ linux {
 INCLUDEPATH += /usr/include/GL \
                /usr/include/SDL \
 
-INCLUDEPATH += ../../libs
+INCLUDEPATH += ../../libs \
+			   ../../libs/PhTools
 LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
 #LIBS += -L$$(LEAP_SDK)/lib/x64 -lLeap
 }
