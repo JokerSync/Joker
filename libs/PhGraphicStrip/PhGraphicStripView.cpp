@@ -79,13 +79,13 @@ bool PhGraphicStripView::init()
         //Display the name only if the setence is standalone
         if (it->isSimple()){
             int nameWidth = (it->getPeople().getName().length() + 1) * 10;
-            _texts.push_back(new PhGraphicText(it->getPeople().getName(),
+			_texts.push_back(new PhGraphicText( _fonts.first(),it->getPeople().getName(),
                                                (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
-                                               nameWidth, 30, _fonts.first(), it->getPeople().getColor()));
+											   nameWidth, 30, it->getPeople().getColor()));
         }
-        _texts.push_back(new PhGraphicText(it->getContent(),
+		_texts.push_back(new PhGraphicText( _currentFont, it->getContent(),
                                            (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
-                                           (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , _currentFont, it->getPeople().getColor()));
+										   (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 ,it->getPeople().getColor()));
 //        if (i % (max / 20) == 0){
 //            QApplication::processEvents();
 //        }
@@ -110,7 +110,7 @@ bool PhGraphicStripView::init()
     foreach(PhStripCut * it, _controller->getDoc().getCuts())
     {
         _cuts.push_back(new PhGraphicTexturedRect((it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
-                                                  2, hstrip,
+											   getC   2, hstrip,
                                                   PhColor("black")));
     }
 

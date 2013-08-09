@@ -19,6 +19,8 @@ public:
 //    GLuint createTextureFromSurface(SDL_Surface * surface);
 //    GLuint createSurfaceFromText(PhString text);
 
+	PhGraphicText();
+	PhGraphicText(PhFont* font, QString content, int x, int y, int z, int w, int h, PhColor color);
     /**
      * @brief Draw the text on screen
      *
