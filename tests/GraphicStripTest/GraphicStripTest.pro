@@ -129,3 +129,10 @@ POST_TARGETDEPS += copyresources
 
 #QMAKE_EXTRA_TARGETS += leap
 #POST_TARGETDEPS += leap
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../libs/VLC/lib/release/ -lvlc
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../libs/VLC/lib/debug/ -lvlc
+else:unix: LIBS += -L$$PWD/../../../libs/VLC/lib/ -lvlc
+
+INCLUDEPATH += $$PWD/../../../libs/VLC/include
+DEPENDPATH += $$PWD/../../../libs/VLC/include

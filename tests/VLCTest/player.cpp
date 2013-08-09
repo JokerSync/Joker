@@ -8,16 +8,15 @@
 #include "player.h"
 #include <vlc/vlc.h>
 
-#define qtu( i ) ((i).toUtf8().constData())
-
-#include <QtGui>
 #include <QMessageBox>
 #include <QMenu>
 #include <QMenuBar>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QFileDialog>
 
+#define qtu( i ) ((i).toUtf8().constData())
+
+#include <QtGui>
 
 Mwindow::Mwindow() {
     vlcPlayer = NULL;
