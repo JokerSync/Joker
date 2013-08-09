@@ -6,6 +6,15 @@
 #include "PhGraphicText.h"
 
 
+PhGraphicText::PhGraphicText()
+{
+}
+
+PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int z, int w, int h, PhColor color) : _font(font), _content(content),
+	PhGraphicTexturedRect(x, y , z, w, h), _color(color)
+{
+}
+
 bool PhGraphicText::init()
 {
 	  SDL_Surface *surface = TTF_RenderUTF8_Blended(_font->getFont(),
