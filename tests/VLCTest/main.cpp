@@ -7,8 +7,6 @@
 
 #include <QApplication>
 #include "player.h"
-#include "vlc/vlc.h"
-#include "vlc/libvlc_structures.h"
 
 #ifdef Q_WS_X11
     #include <X11/Xlib.h>
