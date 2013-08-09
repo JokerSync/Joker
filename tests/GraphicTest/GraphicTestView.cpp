@@ -47,7 +47,12 @@ void GraphicTestView::paint()
 		_image->draw();
 
 	if(_text != NULL)
+	{
+		_text->setX(_text->getX()+4);
 		_text->draw();
+		if(_text->getX() > this->width())
+			_text->setX(0);
+	}
 }
 
 

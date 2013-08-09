@@ -58,7 +58,7 @@ private slots:
     /**
      * @brief onRefresh
      */
-    virtual void onRefresh();
+	void onRefresh();
 
 
 private:
