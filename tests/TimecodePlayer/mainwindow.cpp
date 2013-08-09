@@ -4,98 +4,152 @@
 MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent)
 {
-    _widthWindow = 600;
-    _heightWindow = 200;
-    resize(_widthWindow,_heightWindow);
+
+	_clock = new PhClock;
+	_timer = new QTimer(this);
+	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+	_timer->start(40);
 
     //Buttons Init
 
     _playButton = new QPushButton;
-    //_playButton->resize(50,50);
     _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-    QObject::connect(_playButton, SIGNAL(clicked()), this, SLOT(changeValuePlayButton()));
+	connect(_playButton, SIGNAL(clicked()), this, SLOT(pushPlayButton()));
 
     _fastForwardButton = new QPushButton;
-    //_fastForwardButton->resize(50,50);
     _fastForwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
-    QObject::connect(_fastForwardButton, SIGNAL(clicked()), this, SLOT(changeStateFastForwardButton()));
+	connect(_fastForwardButton, SIGNAL(clicked()), this, SLOT(pushForwardButton()));
 
     _fastRewardButton = new QPushButton;
-    //_fastRewardButton->resize(50,50);
     _fastRewardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
-    QObject::connect(_fastRewardButton, SIGNAL(clicked()), this, SLOT(changeStateFastRewardButton()));
+	connect(_fastRewardButton, SIGNAL(clicked()), this, SLOT(pushRewardButton()));
 
     _backButton = new QPushButton;
     _backButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
+	connect(_backButton, SIGNAL(clicked()), this, SLOT(pushBackwardButton()));
 
     //Label Init
-    QSizePolicy size_policy;
-    size_policy.setVerticalStretch(20);
-    size_policy.setHorizontalStretch(10);
+
 	_rateLabel = new QLabel;
-	_rateLabel->setSizePolicy(size_policy);
-	_rateLabel->setText("rate: "+QString::number(_clock.get_rate()));
+	_rateLabel->setStyleSheet("font:24pt");
+	_rateLabel->setText("rate: "+QString::number(_clock->getRate()));
 
-	_timecodeLabel = new QLabel(PhTimeCode::stringFromFrame(_clock.get_timecode(),PhTimeCodeType25));
+	_timecodeLabel = new QLabel(PhTimeCode::stringFromFrame(_clock->getFrame(),PhTimeCodeType25));
+	_timecodeLabel->setStyleSheet("font:50pt");
 
-    //Combobox Init
+
+
+	//Combobox Init
+
     _rateSelectionBox = new QComboBox;
-    _gLayout = new QGridLayout;
-    _gLayout->addWidget(_backButton,1,0);
-    _gLayout->addWidget(_fastRewardButton,1,1);
-    _gLayout->addWidget(_playButton,1,2);
-    _gLayout->addWidget(_fastForwardButton,1,3);
+	_rateSelectionBox->addItem("rate: 0");
+	_rateSelectionBox->addItem("rate: 1");
+	_rateSelectionBox->addItem("rate: 4");
+	_rateSelectionBox->addItem("rate:-4");
+	connect(_rateSelectionBox, SIGNAL(activated(int)), this, SLOT(selectRate()));
 
 
+	//Layout Init
+	_hLayoutTop = new QHBoxLayout;
+	_hLayoutBottom = new QHBoxLayout;
+	_vLayout = new QVBoxLayout;
 
-	_gLayout->addWidget(_timecodeLabel,0,0);
-	_gLayout->addWidget(_rateLabel,0,1);
+	_hLayoutTop->addWidget(_timecodeLabel,2);
+	_hLayoutTop->addWidget(_rateLabel);
 
-    this->setLayout(_gLayout);
+	_hLayoutBottom->addWidget(_backButton);
+	_hLayoutBottom->addWidget(_fastRewardButton);
+	_hLayoutBottom->addWidget(_playButton);
+	_hLayoutBottom->addWidget(_fastForwardButton);
+	_hLayoutBottom->addWidget(_rateSelectionBox);
 
+	_vLayout->addLayout(_hLayoutTop);
+	_vLayout->addLayout(_hLayoutBottom);
 
+	this->setLayout(_vLayout);
     this->resize(600, 200);
+
+	//Connections SIGNALS/SLOTS
+	connect(_clock, SIGNAL(rateChanged()), this, SLOT(updateRateLabel()));
+	connect(_clock, SIGNAL(frameChanged()), this, SLOT(updateFrameLabel()));
 }
 
 
 /****************************Slots****************************/
 
 
-void MainWindow::changeValuePlayButton()
+void MainWindow::pushPlayButton()
 {
-	if(_clock.get_rate() == 0)//If state = pause
+	if(_clock->getRate() == 0)//If state = pause
     {
-        _rateValue = 1;
+		_clock->setRate(1);
         _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
 
     }
     else //If state = play
     {
-        _rateValue = 0;
+		_clock->setRate(0);
         _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     }
-	_rateLabel->setText("rate: "+QString::number(_rateValue));
 }
 
 
-void MainWindow::increaseValueTimecode()
+void MainWindow::updateFrame()
 {
-    _timecodeValue += _rateValue;
-	_timecodeLabel->setText(PhTimeCode::stringFromFrame(_timecodeValue,PhTimeCodeType25));
+	_clock->tick();
 }
 
 
-void MainWindow::changeStateFastForwardButton()
+void MainWindow::pushForwardButton()
 {
-    _rateValue = 4;
-	_rateLabel->setText("rate: "+QString::number(_rateValue));
+	_clock->setRate(4);
+	_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
 }
 
 
-void MainWindow::changeStateFastRewardButton()
+void MainWindow::pushRewardButton()
 {
-    _rateValue = -4;
-	_rateLabel->setText("rate: "+QString::number(_rateValue));
+	_clock->setRate(-4);
+	_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+}
+
+void MainWindow::pushBackwardButton()
+{
+	_clock->setRate(0);
+	_clock->setFrame(0);
+}
+
+void MainWindow::updateRateLabel()
+{
+	_rateLabel->setText("rate: "+QString::number(_clock->getRate()));
+}
+
+
+void MainWindow::updateFrameLabel()
+{
+	_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),PhTimeCodeType25));
+}
+
+
+void MainWindow::selectRate()
+{
+	_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+
+	if(_rateSelectionBox->currentIndex() == 0)
+	{
+		_clock->setRate(0);
+		_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+	}
+
+	if(_rateSelectionBox->currentIndex() == 1)
+	_clock->setRate(1);
+
+	if(_rateSelectionBox->currentIndex() == 2)
+	_clock->setRate(4);
+
+	if(_rateSelectionBox->currentIndex() == 3)
+	_clock->setRate(-4);
+
 }
 
 /****************************Methods****************************/
@@ -103,8 +157,6 @@ void MainWindow::changeStateFastRewardButton()
 MainWindow::~MainWindow()
 {
 
-    delete _timer;
-	delete _timecodeLabel;
 
     delete _playButton;
     delete _fastForwardButton;
@@ -113,5 +165,12 @@ MainWindow::~MainWindow()
 
     delete _rateSelectionBox;
 	delete _rateLabel;
-    delete _gLayout;
+	delete _timecodeLabel;
+	delete _hLayoutTop;
+	delete _hLayoutBottom;
+	delete _vLayout;
+
+
+	delete _timer;
+	delete _clock;
 }

@@ -5,29 +5,54 @@ PhClock::PhClock(QObject *parent) :
 {
 	//Model Init
 	_rate = 0;
-	_timecode = 0;
+	_frame = 0;
 
-	//Timer Init
-	_timer = new QTimer(this);
-	connect(_timer, SIGNAL(timeout()), this, SLOT(increaseValueTimecode()));
-	_timer->start(40);
 }
+
+void PhClock::setRate(float rate)
+{
+	if(_rate != rate)
+	{
+		_rate = rate;
+		rateChanged();
+	}
+}
+
+void PhClock::setFrame(PhFrame frame)
+{
+	if(_frame != frame)
+	{
+		_frame = frame;
+		frameChanged();
+	}
+}
+
+
+/****************************Slots****************************/
+
+void PhClock::tick()
+{
+	_frame += _rate;
+	frameChanged();
+
+}
+
 
 /****************************Getters****************************/
 
-float PhClock::get_rate() const
+float PhClock::getRate() const
 {
 	return _rate;
 }
 
 
-PhFrame PhClock::get_timecode() const
+PhFrame PhClock::getFrame() const
 {
-	return _timecode;
+	return _frame;
 }
 
 
-QTimer *PhClock::get_timer() const
+PhClock::~PhClock()
 {
-	return _timer;
+
 }

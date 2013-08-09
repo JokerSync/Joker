@@ -22,89 +22,78 @@ public:
 
 
 public slots:
+
     /**
      * @brief changeValuePlayButton
      * Change the state of _playButtonState when cliking on _playButton
      */
-    void changeValuePlayButton();
-    /**
-     * @brief increaseValueTimecode
-     * Update the timecode every 40*rateValue ms when play button is enabled
-     */
-    void increaseValueTimecode();
+	void pushPlayButton();
+
     /**
      * @brief changeStateFastForwardButton
      * Change the state of _fastForwardButtonState when clicking on _fastForwardButton
      */
-    void changeStateFastForwardButton();
+	void pushForwardButton();
+
     /**
      * @brief changeStateFastRewardButton
      * Change the state of _fastForwardButtonState when clicking on _fastForwardButton
      */
-    void changeStateFastRewardButton();
+	void pushRewardButton();
+
+	/**
+	 * @brief pushBackwardButton
+	 */
+	void pushBackwardButton();
+
+	/**
+	 * @brief selectRate
+	 */
+	void selectRate();
+
+
+
+	/**
+	 * @brief increaseValueTimecode
+	 * Update the timecode every 40*rateValue ms when play button is enabled
+	 */
+	void updateFrame();
+
+
+	/**
+	 * @brief updateRateDisplay
+	 */
+	void updateRateLabel();
+
+	/**
+	 * @brief updateFrameLabel
+	 */
+	void updateFrameLabel();
 
 
 private:
 
     //Layout
-    QGridLayout *_gLayout;
+	QHBoxLayout *_hLayoutTop;
+	QHBoxLayout *_hLayoutBottom;
+	QVBoxLayout *_vLayout;
 
     //Controller section
-    /**
-     * @brief _playButton
-     * Activate the playing mode. Becomes a pause button when already playing
-     */
+
     QPushButton *_playButton;
-
-    /**
-     * @brief _backButton
-     * Back to the beginning
-     */
     QPushButton *_backButton;
-
-    /**
-     * @brief _fastForwardButton
-     * fast forward when activated
-     */
     QPushButton *_fastForwardButton;
-
-    /**
-     * @brief _fastRewardButton
-     * fast reward when activated
-     */
     QPushButton *_fastRewardButton;
-
-    /**
-     * @brief _rateSelectionBox
-     * Provides the selection of the rate
-     */
     QComboBox *_rateSelectionBox;
 
 
-    //View Section
-    /**
-     * @brief _timecode
-     */
+	//View Section
 	QLabel *_timecodeLabel;
-
-    /**
-     * @brief _rate
-     */
 	QLabel *_rateLabel;
 
-
-    //Model Section
-    /**
-     * @brief _heightWindow
-     */
-    int _heightWindow;
-
-    /**
-     * @brief _widthWindow
-     */
-    int _widthWindow;
-
-	PhClock _clock;
+	//Data
+	QTimer *_timer;
+	PhClock *_clock;
 
 };
 

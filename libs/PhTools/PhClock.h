@@ -19,44 +19,37 @@ using namespace std;
  * It can be synchronized through an external signal.
  * It fires a signal when its time and rate value changes.
  */
-class PhClock : QObject
+class PhClock : public QObject
 {
 	Q_OBJECT
 public:
 	explicit PhClock(QObject *parent = 0);
 
 	//setters
-	void set_rate(int rate);
-	void set_timecode(PhFrame timecode);
-	void set_timer(QTimer* timer);
+	void setRate(float rate);
+	void setFrame(PhFrame frame);
 
 	//getters
-	float get_rate() const;
-	PhFrame get_timecode() const;
-	QTimer* get_timer() const;
+	float getRate() const;
+	PhFrame getFrame() const;
+
+	~PhClock();
 
 
 signals:
 
+	void frameChanged();
+	void rateChanged();
+
 public slots:
 
+	void tick();
+
+
 private:
-	/**
-	 * @brief _rateValue
-	 * Value of the rate (0=pause, 1=play, 4=fastforward, -4=fastreward)
-	 */
 	float _rate;
 
-	/**
-	 * @brief _timer
-	 */
-	QTimer *_timer;
-
-	/**
-	 * @brief _timecode
-	 * Standard timecode format "00:00:00:00"
-	 */
-	PhFrame _timecode;
+	PhFrame _frame;
 
 };
 
