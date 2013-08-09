@@ -140,15 +140,18 @@ void PhGraphicStripView::paintGL()
     //Draw Objects
     foreach(PhGraphicImage * it, _strips)
     {
-        it->draw(_xMoveStrip);
+		//it->draw(_xMoveStrip);
+		it->draw();
     }
     foreach(PhGraphicText * it, _texts)
     {
-        it->draw(_xmove);
+		//it->draw(_xmove);
+		it->draw();
     }
     foreach(PhGraphicTexturedRect * it, _cuts)
     {
-        it->draw(_xmove);
+		//it->draw(_xmove);
+		it->draw();
     }
 }
 

@@ -123,6 +123,7 @@ public:
     void setController(PhGraphicStripController * controller);
     void connectSlots();
     void setNaturalScroll(bool naturalScroll);
+	bool init();
 
   //  void openFile(char * file);
 

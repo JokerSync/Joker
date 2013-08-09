@@ -6,10 +6,10 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QMainWindow w;
-	w.resize(400,300);
+	QWidget w;
+	//w.resize(400,300);
 	GraphicTestView g(&w);
-	g.resize(350,250);
+	//g.resize(350,250);
 
 //	QGridLayout *gLayout = new QGridLayout;
 //	gLayout->setMargin(0);
