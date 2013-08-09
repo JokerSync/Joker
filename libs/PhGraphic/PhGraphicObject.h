@@ -14,7 +14,17 @@ class PhGraphicObject
 public:
 
 	PhGraphicObject(int x = 0, int y = 0, int z = 0);
-    /**
+
+	/**
+	 * @brief init
+	 */
+	virtual bool init() = 0;
+	/**
+	 * @brief dispose
+	 */
+	virtual void dispose() = 0;
+
+	/**
      * @brief draw
      * @param px
      * virtual method called to draw objects
@@ -34,37 +44,29 @@ public:
      * @param x
      */
     void setX(int x);
-    /**
+	/**
+	 * @brief getX
+	 * @return
+	 */
+	int getX();
+
+	/**
      * @brief setY
      * @param y
      */
     void setY(int y);
-    /**
+	/**
+	 * @brief getY
+	 * @return
+	 */
+	int getY();
+
+	/**
      * @brief setZ
      * @param z
      */
     void setZ(int z);
 
-
-protected:
-    /**
-     * @brief init
-     */
-	virtual bool init() = 0;
-    /**
-     * @brief dispose
-     */
-	virtual void dispose() = 0;
-    /**
-     * @brief getX
-     * @return
-     */
-    int getX();
-    /**
-     * @brief getY
-     * @return
-     */
-    int getY();
     /**
      * @brief getZ
      * @return
