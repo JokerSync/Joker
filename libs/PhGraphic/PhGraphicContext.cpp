@@ -33,7 +33,7 @@ void PhGraphicContext::saveToPNG()
     impr.save(s);
 }
 
-void PhGraphicContext::saveToPNG(PhString number){
+void PhGraphicContext::saveToPNG(QString number){
     QImage impr(_graphVeiw->grabFrameBuffer());
     QDateTime now(QDateTime::currentDateTime());
     if(!QDir(QDir::homePath()+"/Phonations/").exists())

@@ -20,7 +20,7 @@ public:
 //    GLuint createSurfaceFromText(PhString text);
 
 	PhGraphicText();
-	PhGraphicText(PhFont* font, QString content, int x, int y, int z, int w, int h, PhColor color);
+	PhGraphicText(PhFont* font, QString content, int x, int y, int z, int w, int h, int tu, int tv, PhColor* color);
     /**
      * @brief Draw the text on screen
      *

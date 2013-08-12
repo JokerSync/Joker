@@ -10,8 +10,8 @@ PhGraphicText::PhGraphicText()
 {
 }
 
-PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int z, int w, int h, PhColor color) : _font(font), _content(content),
-	PhGraphicTexturedRect(x, y , z, w, h), _color(color)
+PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int z, int w, int h, int tu, int tv, PhColor *color)
+	: _font(font), _content(content), PhGraphicTexturedRect(x, y , z, w, h, tu, tv, color)
 {
 }
 
@@ -19,7 +19,7 @@ bool PhGraphicText::init()
 {
 	  SDL_Surface *surface = TTF_RenderUTF8_Blended(_font->getFont(),
 												  _content.toStdString().c_str(),
-												 _color.toSDL());
+												 this->getColor()->toSDL());
 
 	qDebug() << "PhGraphicText::init";
     if(surface != NULL)
@@ -28,14 +28,14 @@ bool PhGraphicText::init()
 	return true;
 }
 
-void PhGraphicText::setContent(PhString content){
+void PhGraphicText::setContent(QString content){
     _content = content;
 }
 void PhGraphicText::setFont(PhFont * font){
     _font = font;
 }
 
-PhString PhGraphicText::getContent(){
+QString PhGraphicText::getContent(){
     return _content;
 }
 PhFont * PhGraphicText::getFont(){

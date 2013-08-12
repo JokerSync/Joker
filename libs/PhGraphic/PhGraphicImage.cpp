@@ -44,10 +44,10 @@ void PhGraphicImage::draw()
 	PhGraphicTexturedRect::draw();
 }
 
-void PhGraphicImage::setFilename(PhString filename){
+void PhGraphicImage::setFilename(QString filename){
     _filename = filename;
 }
 
-PhString PhGraphicImage::getFilename(){
+QString PhGraphicImage::getFilename(){
     return _filename;
 }

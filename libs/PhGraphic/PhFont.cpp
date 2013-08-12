@@ -6,7 +6,7 @@
 #include <QStringList>
 #include "PhFont.h"
 
-PhFont::PhFont(PhString filename, int size)
+PhFont::PhFont(QString filename, int size)
 {
     _filename = filename;
     _size = size;
@@ -17,10 +17,10 @@ TTF_Font * PhFont::getFont()
     return _font;
 }
 
-PhString PhFont::getFontName(){
+QString PhFont::getFontName(){
     QStringList list ;
     list = _filename.split("/");
-    PhString name = list.last().split(".").first();
+	QString name = list.last().split(".").first();
 	return name;
 }
 

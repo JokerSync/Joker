@@ -103,8 +103,8 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 //    return *_surface;
 //}
 
-PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, int tu, int tv)
-	: PhGraphicRect(x, y, w, h , z), _tu(tu), _tv(tv)
+PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, int tu, int tv, PhColor *color)
+	: PhGraphicRect(x, y, w, h , z, color), _tu(tu), _tv(tv)
 {
 }
 
