@@ -39,7 +39,7 @@ private:
 
     PhString _filename;
 
-    SDL_Surface * _surface;
+	SDL_Surface * _surface;
 };
 
 #endif // PHGRAPHICIMAGE_H
