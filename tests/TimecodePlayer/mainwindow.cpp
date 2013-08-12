@@ -20,13 +20,13 @@ MainWindow::MainWindow(QWidget *parent) :
     _fastForwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
 	connect(_fastForwardButton, SIGNAL(clicked()), this, SLOT(pushForwardButton()));
 
-    _fastRewardButton = new QPushButton;
-    _fastRewardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
-	connect(_fastRewardButton, SIGNAL(clicked()), this, SLOT(pushRewardButton()));
+    _fastRewindButton = new QPushButton;
+    _fastRewindButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
+	connect(_fastRewindButton, SIGNAL(clicked()), this, SLOT(pushRewindButton()));
 
     _backButton = new QPushButton;
     _backButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
-	connect(_backButton, SIGNAL(clicked()), this, SLOT(pushBackwardButton()));
+	connect(_backButton, SIGNAL(clicked()), this, SLOT(pushBackButton()));
 
     //Label Init
 
@@ -58,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	_hLayoutTop->addWidget(_rateLabel);
 
 	_hLayoutBottom->addWidget(_backButton);
-	_hLayoutBottom->addWidget(_fastRewardButton);
+	_hLayoutBottom->addWidget(_fastRewindButton);
 	_hLayoutBottom->addWidget(_playButton);
 	_hLayoutBottom->addWidget(_fastForwardButton);
 	_hLayoutBottom->addWidget(_rateSelectionBox);
@@ -107,13 +107,13 @@ void MainWindow::pushForwardButton()
 }
 
 
-void MainWindow::pushRewardButton()
+void MainWindow::pushRewindButton()
 {
 	_clock->setRate(-4);
 	_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
 }
 
-void MainWindow::pushBackwardButton()
+void MainWindow::pushBackButton()
 {
 	_clock->setRate(0);
 	_clock->setFrame(0);
@@ -160,7 +160,7 @@ MainWindow::~MainWindow()
 
     delete _playButton;
     delete _fastForwardButton;
-    delete _fastRewardButton;
+    delete _fastRewindButton;
     delete _backButton;
 
     delete _rateSelectionBox;

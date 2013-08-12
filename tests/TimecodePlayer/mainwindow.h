@@ -36,15 +36,15 @@ public slots:
 	void pushForwardButton();
 
     /**
-     * @brief changeStateFastRewardButton
+	 * @brief changeStateFastRewindButton
      * Change the state of _fastForwardButtonState when clicking on _fastForwardButton
      */
-	void pushRewardButton();
+	void pushRewindButton();
 
 	/**
-	 * @brief pushBackwardButton
+	 * @brief pushBacButton
 	 */
-	void pushBackwardButton();
+	void pushBackButton();
 
 	/**
 	 * @brief selectRate
@@ -83,7 +83,7 @@ private:
     QPushButton *_playButton;
     QPushButton *_backButton;
     QPushButton *_fastForwardButton;
-    QPushButton *_fastRewardButton;
+	QPushButton *_fastRewindButton;
     QComboBox *_rateSelectionBox;
 
 
