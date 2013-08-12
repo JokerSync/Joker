@@ -103,15 +103,16 @@ bool PhGraphicStripView::init()
 #endif
         _strips.push_back(new PhGraphicImage(QCoreApplication::applicationDirPath() + filePath,
                                            -1000, h - hstrip, -3,
-                                           240, hstrip, PhColor("white"),
+										   240, hstrip,
                                            nbRythmo, 1));
 
     //Load the cuts
     foreach(PhStripCut * it, _controller->getDoc().getCuts())
-    {
-        _cuts.push_back(new PhGraphicTexturedRect((it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
-											   getC   2, hstrip,
-                                                  PhColor("black")));
+	{
+		PhGraphicText text("Bedizen.ttf","",(it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
+						   2, hstrip,
+							  PhColor("black"));
+		_cuts.push_back(text);
     }
 
 }
