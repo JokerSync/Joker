@@ -18,7 +18,7 @@ class PhGraphicTexturedRect : public PhGraphicRect
 {
 public:
 
-	PhGraphicTexturedRect(int x = 0, int y =0, int w = 0, int h = 0, int z = 0, int tu = 1, int tv = 1);
+	PhGraphicTexturedRect(int x = 0, int y =0, int w = 0, int h = 0, int z = 0, int tu = 1, int tv = 1, PhColor *color = new PhColor());
 
     /**
      * @brief draw

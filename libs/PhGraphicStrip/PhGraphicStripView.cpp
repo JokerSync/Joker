@@ -109,10 +109,10 @@ bool PhGraphicStripView::init()
     //Load the cuts
     foreach(PhStripCut * it, _controller->getDoc().getCuts())
 	{
-		PhGraphicText text("Bedizen.ttf","",(it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
-						   2, hstrip,
-							  PhColor("black"));
-		_cuts.push_back(text);
+		PhColor *color = new PhColor();
+		PhGraphicRect *rect = new PhGraphicRect((it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
+						   2, hstrip, color);
+		_cuts.push_back(rect);
     }
 
 }
@@ -149,7 +149,7 @@ void PhGraphicStripView::paintGL()
 		//it->draw(_xmove);
 		it->draw();
     }
-    foreach(PhGraphicTexturedRect * it, _cuts)
+	foreach(PhGraphicRect * it, _cuts)
     {
 		//it->draw(_xmove);
 		it->draw();
@@ -165,7 +165,7 @@ void PhGraphicStripView::stopScroll()
 
 void PhGraphicStripView::clearData()
 {
-    foreach(PhGraphicTexturedRect * it, _cuts)
+	foreach(PhGraphicRect * it, _cuts)
     {
         delete it;
     }

@@ -61,18 +61,7 @@ public:
      */
     PhFont * getFont();
 
-	/**
-	 * @brief setColor
-	 * @param color
-	 * Set the PhColor of the PhGraphicObject
-	 */
-	void setColor(PhColor color);
 
-	/**
-	 * @brief getColor
-	 * @return
-	 */
-	PhColor getColor();
 
 private:
     /**
@@ -84,11 +73,6 @@ private:
      */
     PhFont *_font;
 
-	/**
-	 * @brief _color
-	 * The PhColor of the PhGraphicObject
-	 */
-	PhColor _color;
 
 };
 
