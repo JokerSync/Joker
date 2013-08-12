@@ -47,8 +47,8 @@ public slots:
 
 
 private:
-	float _rate;
 
+	float _rate;
 	PhFrame _frame;
 
 };

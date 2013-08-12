@@ -7,8 +7,11 @@
 #include <QString>
 #include <QtGui/QMovie>
 #include <QtWidgets/QWidget>
+#include <QTimer>
 
 #include "PhVideo/PhVideoController.h"
+#include "PhCommonUI/PhMediaControllerView.h"
+#include "PhTools/PhClock.h"
 
 QT_BEGIN_NAMESPACE
 class QAbstractButton;
@@ -31,6 +34,8 @@ public:
      */
     bool openFile(QString fileName);
 
+	PhClock *get_clock();
+
 private slots:
     void onOpenFile();
     void updatePlayButtonState(QMediaPlayer::State state);
@@ -42,6 +47,10 @@ private:
     QAbstractButton *_playButton;
     QSlider *_positionSlider;
     QLabel *_errorLabel;
+	PhMediaControllerView *_controllerView;
+	PhClock *_clock;
+	QTimer *_timer;
+
 };
 
 #endif

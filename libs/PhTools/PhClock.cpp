@@ -23,7 +23,7 @@ void PhClock::setFrame(PhFrame frame)
 	if(_frame != frame)
 	{
 		_frame = frame;
-		frameChanged();
+
 	}
 }
 

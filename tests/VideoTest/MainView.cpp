@@ -10,6 +10,11 @@ MainView::MainView()
     , _positionSlider(0)
     , _errorLabel(0)
 {
+	_clock = new PhClock;
+	_timer = new QTimer;
+	_timer->start(40);
+
+	_controllerView = new PhMediaControllerView;
     // Add an open button
     _openButton = new QPushButton(tr("Open..."));
     // Open a file dialog when user click the open button
@@ -51,6 +56,7 @@ MainView::MainView()
     layout->addWidget(_videoController.view());
     layout->addLayout(controlLayout);
     layout->addWidget(_errorLabel);
+	layout->addWidget(_controllerView);
 
     // Add the layout to the main window
     this->setLayout(layout);
@@ -66,7 +72,12 @@ bool MainView::openFile(QString fileName)
         _videoController.play();
         return true;
     }
-    return false;
+	return false;
+}
+
+PhClock* MainView::get_clock()
+{
+	return _clock;
 }
 
 void MainView::onOpenFile()
