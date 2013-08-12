@@ -97,9 +97,9 @@ bool PhGraphicStripView::init()
 
     //Load the strip
 #if defined(Q_OS_MAC)
-        PhString filePath = "/../Resources/img/motif-240.png";
+		QString filePath = "/../Resources/img/motif-240.png";
 #elif defined(Q_OS_UNIX)
-        PhString filePath = "/data/img/motif-240.png";
+		QString filePath = "/data/img/motif-240.png";
 #endif
         _strips.push_back(new PhGraphicImage(QCoreApplication::applicationDirPath() + filePath,
                                            -1000, h - hstrip, -3,

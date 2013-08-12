@@ -42,7 +42,7 @@ public:
      * @param content
      * Set the PhGraphicText content
      */
-    void setContent(PhString content);
+	void setContent(QString content);
     /**
      * @brief setFont
      * @param font
@@ -54,7 +54,7 @@ public:
      * @brief getContent
      * @return _content
      */
-    PhString getContent();
+	QString getContent();
     /**
      * @brief getFont
      * @return _font
@@ -67,7 +67,7 @@ private:
     /**
      * @brief _content
      */
-    PhString _content;
+	QString _content;
     /**
      * @brief _font
      */

@@ -19,7 +19,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    PhString file;
+	QString file;
     if (argc < 2)
         file = "";
     else

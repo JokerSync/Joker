@@ -11,5 +11,5 @@
 
 #include "PhString.h"
 
-void copyFolder(PhString sourceFolder, PhString destFolder);
+void copyFolder(QString sourceFolder, QString destFolder);
 #endif // PHFILETOOLS_H

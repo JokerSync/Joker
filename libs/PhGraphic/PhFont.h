@@ -23,7 +23,7 @@ public:
      * @param filename
      * @param size
      */
-    PhFont(PhString filename, int size);
+	PhFont(QString filename, int size);
     /**
      * @brief getFont
      * @return _font
@@ -33,7 +33,7 @@ public:
      * @brief getFontName
      * @return _filename
      */
-    PhString getFontName();
+	QString getFontName();
 
 	bool init();
 private:
@@ -44,7 +44,7 @@ private:
     /**
      * @brief _filename
      */
-    PhString _filename;
+	QString _filename;
     /**
      * @brief _size
      */

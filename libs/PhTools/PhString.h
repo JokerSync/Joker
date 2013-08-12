@@ -3,7 +3,7 @@
 
 #include <QString>
 
-#define PhString QString
+//#define PhString QString
 
 //class PhString : QString
 //{
