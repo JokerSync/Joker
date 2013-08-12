@@ -13,7 +13,7 @@ class PhGraphicObject
 {
 public:
 
-	PhGraphicObject(int x = 0, int y = 0, int z = 0);
+	PhGraphicObject(int x = 0, int y = 0, int z = 0, PhColor * color = new PhColor());
 
 	/**
 	 * @brief init
@@ -38,7 +38,7 @@ public:
      * @param z
      * set the position of the PhGraphicObject using setX() setY() setZ()
      */
-	void setPosition(int x, int y, int z, PhColor color);
+	void setPosition(int x, int y, int z);
     /**
      * @brief setX
      * @param x
@@ -78,13 +78,13 @@ public:
 	 * @param color
 	 * Set the PhColor of the PhGraphicObject
 	 */
-	void setColor(PhColor color);
+	void setColor(PhColor *color);
 
 	/**
 	 * @brief getColor
 	 * @return
 	 */
-	PhColor getColor();
+	PhColor *getColor();
 
 private:
 
@@ -108,7 +108,7 @@ private:
 	 * @brief _color
 	 * The PhColor of the PhGraphicObject
 	 */
-	PhColor _color;
+	PhColor* _color;
 };
 
 #endif // PHGRAPHICOBJECT_H

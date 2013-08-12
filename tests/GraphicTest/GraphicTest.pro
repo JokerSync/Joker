@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     ../../libs/PhTools/PhColor.cpp \
     ../../libs/PhGraphic/PhGraphicObject.cpp \
     ../../libs/PhGraphic/PhGraphicRect.cpp \
-    ../../libs/PhTools/PhString.cpp
+    ../../libs/PhTools/PhString.cpp \
+    ../../libs/PhGraphic/PhGraphicSolidRect.cpp
 
 HEADERS  += MainWindow.h \
 	GraphicTestView.h \
@@ -41,7 +42,8 @@ HEADERS  += MainWindow.h \
     ../../libs/PhTools/PhColor.h \
     ../../libs/PhGraphic/PhGraphicObject.h \
     ../../libs/PhGraphic/PhGraphicRect.h \
-    ../../libs/PhTools/PhString.h
+    ../../libs/PhTools/PhString.h \
+    ../../libs/PhGraphic/PhGraphicSolidRect.h
 
 INCLUDEPATH += ../../libs/PhGraphic \
 				../../libs/PhTools \

@@ -13,7 +13,6 @@ class PhGraphicRect : public PhGraphicObject
 public:
 
 	PhGraphicRect(int x = 0, int y =0, int w = 0, int h = 0, int z = 0, PhColor *color = new PhColor());
-
     //bool init();
     //void dispose();
 
@@ -26,7 +25,7 @@ public:
     void setSize(int w, int h);
     /**
      * @brief setRect
-     * @param x
+	 * @param x
      * @param y
      * @param w
      * @param h
