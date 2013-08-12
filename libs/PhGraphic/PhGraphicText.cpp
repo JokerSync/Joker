@@ -28,14 +28,6 @@ bool PhGraphicText::init()
 	return true;
 }
 
-PhColor PhGraphicText::getColor(){
-	return _color;
-}
-
-void PhGraphicText::setColor(PhColor color){
-	_color = color;
-}
-
 void PhGraphicText::setContent(PhString content){
     _content = content;
 }

@@ -34,7 +34,7 @@ public:
      @param type A PhTimeCodeType value.
      @return An PhString* timecode representation.
      */
-    static PhString stringFromFrame(PhFrame frame, PhTimeCodeType type);
+	static QString stringFromFrame(PhFrame frame, PhTimeCodeType type);
 
     /**
      Compute the frame number from a timecode string representation and a type

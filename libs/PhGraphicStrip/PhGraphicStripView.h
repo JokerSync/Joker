@@ -188,7 +188,7 @@ private :
      */
     QList<PhGraphicImage *> _strips;
 
-    QList<PhGraphicTexturedRect *> _cuts;
+	QList<PhGraphicRect *> _cuts;
 
     /**
      * @brief _test

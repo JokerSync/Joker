@@ -12,7 +12,7 @@ class PhGraphicImage : public PhGraphicTexturedRect
 {
 public:
 
-	PhGraphicImage( PhString filename = NULL, int x = 0, int y =0, int w = 0, int h = 0, int z = 0, int tu = 1, int tv = 1);
+	PhGraphicImage( PhString filename = NULL, int x = 0, int y =0, int w = 0, int h = 0, int z = 0, int tu = 1, int tv = 1, PhColor *color = new PhColor);
 
 	void setFilename(PhString filename);
     PhString getFilename();
