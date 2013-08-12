@@ -42,7 +42,7 @@ public:
      @param type A PhTimeCodeType value.
      @return The corresponding frame number.
      */
-    static PhFrame frameFromString(PhString string, PhTimeCodeType type);
+	static PhFrame frameFromString(QString string, PhTimeCodeType type);
 
     /**
      Compute the frame number from a timecode binary coded decimal (BCD) representation and a type

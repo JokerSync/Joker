@@ -14,7 +14,7 @@ public:
      * @brief PhColor
      * @param color
      */
-    PhColor(PhString color);
+	PhColor(QString color);
     /**
      * @brief PhColor
      * @param r

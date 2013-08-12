@@ -97,7 +97,7 @@ public:
      * Set the current font with the font in param and re-initialize the OpenGL content
      * @param fontfile Font file path
      */
-    void setCurrentFont(PhString fontfile);
+	void setCurrentFont(QString fontfile);
     /**
      * @brief PhGraphicStripView::getCurrentFont
      * @return PhFont

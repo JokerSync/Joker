@@ -30,7 +30,7 @@ public:
      * call StripWindow::openFile() to open a PhStripDoc with the
      * user selected file
      */
-    void openFile(PhString fileName);
+	void openFile(QString fileName);
 
 private slots:
 

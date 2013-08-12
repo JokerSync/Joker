@@ -12,10 +12,10 @@ class PhGraphicImage : public PhGraphicTexturedRect
 {
 public:
 
-	PhGraphicImage( PhString filename = NULL, int x = 0, int y =0, int w = 0, int h = 0, int z = 0, int tu = 1, int tv = 1, PhColor *color = new PhColor);
+	PhGraphicImage( QString filename = NULL, int x = 0, int y =0, int w = 0, int h = 0, int z = 0, int tu = 1, int tv = 1, PhColor *color = new PhColor);
 
-	void setFilename(PhString filename);
-    PhString getFilename();
+	void setFilename(QString filename);
+	QString getFilename();
 
     /**
      * @brief draw
@@ -37,7 +37,7 @@ public:
 
 private:
 
-    PhString _filename;
+	QString _filename;
 
 	SDL_Surface * _surface;
 };

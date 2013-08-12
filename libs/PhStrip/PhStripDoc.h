@@ -23,7 +23,7 @@ private:
     /**
      * Title of the corresponding audiovisual content.
      */
-    PhString _title;
+	QString _title;
     /**
      * Starting time of the video content refered by the videoPath : String
      */
@@ -35,7 +35,7 @@ private:
     /**
      * Path to the video content.
      */
-    PhString _videoPath;
+	QString _videoPath;
     /**
      * Amount of time units per second.
      */
@@ -56,7 +56,7 @@ private:
     /**
      * List of PhPeople from the file
      */
-    QMap<PhString, PhPeople *> _actors;
+	QMap<QString, PhPeople *> _actors;
 
     /**
      * List of PhStripText from the file
@@ -73,7 +73,7 @@ private:
       */
      QList<PhStripLoop *> _loops;
      int _nbTexts;
-     void splitText(PhPeople * actor, PhTime start, PhTime end, PhString sentence,int track, bool alone, int ite);
+	 void splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track, bool alone, int ite);
 
 
 public:
@@ -90,7 +90,7 @@ public:
      * @brief getTitle
      * @return _title
      */
-    PhString getTitle();
+	QString getTitle();
     /**
      * @brief getVideoTimestamp
      * @return _videoTimestamp
@@ -100,7 +100,7 @@ public:
      * @brief getVideoPath
      * @return _videoPath
      */
-    PhString getVideoPath();
+	QString getVideoPath();
     /**
      * @brief getLastPosition
      * @return _lastPosition
@@ -131,7 +131,7 @@ public:
      * @brief getActors
      * @return _actors
      */
-    QMap<PhString, PhPeople *> getActors();
+	QMap<QString, PhPeople *> getActors();
     /**
      * @brief getTexts
      * @return _texts
@@ -142,7 +142,7 @@ public:
      * @brief setTitle
      * @param _title
      */
-    void setTitle(PhString _title);
+	void setTitle(QString _title);
     /**
      * @brief setVideoTimestamp
      * @param videoTimestamp
@@ -152,7 +152,7 @@ public:
      * @brief setVideoPath
      * @param videoPath
      */
-    void setVideoPath(PhString videoPath);
+	void setVideoPath(QString videoPath);
     /**
      * @brief setTimeScale
      * @param timeScale
@@ -163,7 +163,7 @@ public:
      * @param filename
      * @return
      */
-    bool openDetX(PhString filename);
+	bool openDetX(QString filename);
 
 
     int getNbTexts();

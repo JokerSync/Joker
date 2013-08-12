@@ -12,9 +12,9 @@ public:
     PhGraphicStripController();
     PhStripDoc getDoc();
     void loadSettings();
-    PhString getLastFile();
-    void setLastFile(PhString fileName);
-    bool openDoc(PhString fileName);
+	QString getLastFile();
+	void setLastFile(QString fileName);
+	bool openDoc(QString fileName);
     bool getNaturalScrollPref();
 
 signals:
@@ -29,7 +29,7 @@ public slots:
     //End-Testing
 
 private:
-    PhString _settingsPath;
+	QString _settingsPath;
     QSettings::Format _settingsFormat;
     QSettings * _settings;
     PhStripDoc * _doc;
