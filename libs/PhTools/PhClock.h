@@ -26,8 +26,7 @@ public:
 	explicit PhClock(QObject *parent = 0);
 
 	//setters
-	void setRate(float rate);
-	void setFrame(PhFrame frame);
+
 
 	//getters
 	float getRate() const;
@@ -44,6 +43,8 @@ signals:
 public slots:
 
 	void tick();
+	void setRate(float rate);
+	void setFrame(PhFrame frame);
 
 
 private:

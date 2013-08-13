@@ -11,21 +11,23 @@ MainView::MainView()
     , _errorLabel(0)
 {
 	_clock = new PhClock;
-	_timer = new QTimer;
+	_timer = new QTimer();
+	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
 	_timer->start(40);
 
-	_controllerView = new PhMediaControllerView;
+
+	_mediaControllerView = new PhMediaControllerView(_clock);
     // Add an open button
     _openButton = new QPushButton(tr("Open..."));
     // Open a file dialog when user click the open button
     connect(_openButton, SIGNAL(clicked()), this, SLOT(onOpenFile()));
 
     // Add a play button
-    _playButton = new QPushButton;
+	_playButton = new QPushButton;
     _playButton->setEnabled(false);
     _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     // Play/pause the video when user click the play button
-    connect(_playButton, SIGNAL(clicked()), &_videoController, SLOT(playPause()));
+	connect(_playButton, SIGNAL(clicked()), &_videoController, SLOT(playPause()));
     // Update the play button appearance when the video state change
     connect(&_videoController, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(updatePlayButtonState(QMediaPlayer::State)));
 
@@ -56,7 +58,7 @@ MainView::MainView()
     layout->addWidget(_videoController.view());
     layout->addLayout(controlLayout);
     layout->addWidget(_errorLabel);
-	layout->addWidget(_controllerView);
+	layout->addWidget(_mediaControllerView);
 
     // Add the layout to the main window
     this->setLayout(layout);
@@ -78,6 +80,11 @@ bool MainView::openFile(QString fileName)
 PhClock* MainView::get_clock()
 {
 	return _clock;
+}
+
+void MainView::updateFrame()
+{
+	_clock->tick();
 }
 
 void MainView::onOpenFile()

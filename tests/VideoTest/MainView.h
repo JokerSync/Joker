@@ -13,6 +13,8 @@
 #include "PhCommonUI/PhMediaControllerView.h"
 #include "PhTools/PhClock.h"
 
+using namespace std;
+
 QT_BEGIN_NAMESPACE
 class QAbstractButton;
 class QSlider;
@@ -36,6 +38,9 @@ public:
 
 	PhClock *get_clock();
 
+public slots:
+	void updateFrame();
+
 private slots:
     void onOpenFile();
     void updatePlayButtonState(QMediaPlayer::State state);
@@ -47,7 +52,7 @@ private:
     QAbstractButton *_playButton;
     QSlider *_positionSlider;
     QLabel *_errorLabel;
-	PhMediaControllerView *_controllerView;
+	PhMediaControllerView *_mediaControllerView;
 	PhClock *_clock;
 	QTimer *_timer;
 
