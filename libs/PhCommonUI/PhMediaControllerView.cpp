@@ -77,6 +77,7 @@ void PhMediaControllerView::pushPlayButton()
 		_clock->setRate(0);
 		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
 	}
+	playButtonSignal();
 }
 
 
@@ -90,6 +91,7 @@ void PhMediaControllerView::pushForwardButton()
 {
 	_clock->setRate(4);
 	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+	forwardButtonSignal();
 }
 
 
@@ -97,12 +99,14 @@ void PhMediaControllerView::pushRewindButton()
 {
 	_clock->setRate(-4);
 	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+	rewindButtonSignal();
 }
 
 void PhMediaControllerView::pushBackButton()
 {
 	_clock->setRate(0);
 	_clock->setFrame(0);
+	backButtonSignal();
 }
 
 void PhMediaControllerView::updateRateLabel()

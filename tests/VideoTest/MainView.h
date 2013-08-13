@@ -43,7 +43,7 @@ public slots:
 
 private slots:
     void onOpenFile();
-    void updatePlayButtonState(QMediaPlayer::State state);
+	//void updatePlayButtonState(QMediaPlayer::State state);
     void updateErrorLabelContent();
 
 private:

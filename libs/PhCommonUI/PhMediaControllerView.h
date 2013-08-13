@@ -18,6 +18,12 @@ public:
 
 	~PhMediaControllerView();
 
+signals:
+
+	void playButtonSignal();
+	void forwardButtonSignal();
+	void rewindButtonSignal();
+	void backButtonSignal();
 
 public slots:
 	/**

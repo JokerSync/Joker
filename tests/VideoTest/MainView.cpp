@@ -22,14 +22,11 @@ MainView::MainView()
     // Open a file dialog when user click the open button
     connect(_openButton, SIGNAL(clicked()), this, SLOT(onOpenFile()));
 
-    // Add a play button
-	_playButton = new QPushButton;
-    _playButton->setEnabled(false);
-    _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+
     // Play/pause the video when user click the play button
-	connect(_playButton, SIGNAL(clicked()), &_videoController, SLOT(playPause()));
+	//connect(_mediaControllerView, SIGNAL(playButtonSignal()), &_videoController, SLOT(playPause()));
     // Update the play button appearance when the video state change
-    connect(&_videoController, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(updatePlayButtonState(QMediaPlayer::State)));
+	//connect(&_videoController, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(updatePlayButtonState(QMediaPlayer::State)));
 
     // Add a position slider
     _positionSlider = new QSlider(Qt::Horizontal);
@@ -95,7 +92,7 @@ void MainView::onOpenFile()
     openFile(fileName); // TODO: show error in case of error
 }
 
-void MainView::updatePlayButtonState(QMediaPlayer::State state)
+/*void MainView::updatePlayButtonState(QMediaPlayer::State state)
 {
     switch(state) {
     case QMediaPlayer::PlayingState:
@@ -105,7 +102,7 @@ void MainView::updatePlayButtonState(QMediaPlayer::State state)
         _playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
         break;
     }
-}
+}*/
 
 void MainView::updateErrorLabelContent()
 {
