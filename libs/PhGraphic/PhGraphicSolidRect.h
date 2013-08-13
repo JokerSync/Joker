@@ -7,6 +7,7 @@
 #define PHGRAPHICSOLIDSQUARE_H
 
 #include "PhGraphicRect.h"
+#include <glu.h>
 
 class PhGraphicSolidRect : public PhGraphicRect
 {
