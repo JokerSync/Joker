@@ -1,13 +1,13 @@
 #include "GraphicTestView.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent, QString name)
-	: PhGraphicView( parent , name ) , _image(NULL), _font(NULL), _text(NULL)
+	: PhGraphicView( parent , name ) , _image(NULL), _font(NULL), _text(NULL), _rect(NULL)
 {
 
 }
 
 bool GraphicTestView::init()
-{
+{/*
 	qDebug() << "GraphicTestView::init";
 	if(_image == NULL)
 	{
@@ -37,22 +37,29 @@ bool GraphicTestView::init()
 		if (! _text->init())
 			qDebug() << "_text not initialize";
 
+	}*/
+	if(_rect == NULL)
+	{
+		qDebug() << "Initialize _text";
+		_rect = new PhGraphicSolidRect(0, 0, 200, 200, 1, new PhColor());
 	}
 }
 
 void GraphicTestView::paint()
 {
-	qDebug() << "GraphicTestView::paint";
-	if(_image != NULL)
-		_image->draw();
+//	qDebug() << "GraphicTestView::paint";
+//	if(_image != NULL)
+//		_image->draw();
 
-	if(_text != NULL)
-	{
-		_text->setX(_text->getX()+4);
-		_text->draw();
-		if(_text->getX() > this->width())
-			_text->setX(0);
-	}
+//	if(_text != NULL)
+//	{
+//		_text->setX(_text->getX()+4);
+//		_text->draw();
+//		if(_text->getX() > this->width())
+//			_text->setX(0);
+//	}
+
+	_rect->draw();
 }
 
 

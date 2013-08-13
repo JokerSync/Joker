@@ -13,7 +13,7 @@
 #include "PhGraphicImage.h"
 #include "PhGraphicText.h"
 #include "PhFont.h"
-
+#include "PhGraphicSolidRect.h"
 
 class GraphicTestView : public PhGraphicView
 {
@@ -33,6 +33,8 @@ private:
 	PhGraphicText *_text;
 
 	PhFont *_font;
+
+	PhGraphicSolidRect *_rect;
 };
 
 #endif // GraphicTestView_H
