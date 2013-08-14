@@ -44,14 +44,13 @@ public slots:
 private slots:
     void onOpenFile();
 	//void updatePlayButtonState(QMediaPlayer::State state);
-    void updateErrorLabelContent();
+	//void updateErrorLabelContent();
 
 private:
     PhVideoController _videoController;
     QAbstractButton *_openButton;
     QAbstractButton *_playButton;
     QSlider *_positionSlider;
-    QLabel *_errorLabel;
 	PhMediaControllerView *_mediaControllerView;
 	PhClock *_clock;
 	QTimer *_timer;

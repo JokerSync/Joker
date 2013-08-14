@@ -8,7 +8,6 @@ MainView::MainView()
     : QWidget(0)
     , _playButton(0)
     , _positionSlider(0)
-    , _errorLabel(0)
 {
 	_clock = new PhClock;
 	_timer = new QTimer();
@@ -31,16 +30,17 @@ MainView::MainView()
     // Add a position slider
     _positionSlider = new QSlider(Qt::Horizontal);
     _positionSlider->setRange(0, 100);
+
     // Update the video position when the user moves the slider
     connect(_positionSlider, SIGNAL(sliderMoved(int)), &_videoController, SLOT(updatePositionFromPercentage(int)));
+	//Update the frame when user move the slider
+	//connect(&_videoController, SIGNAL(positionPercentageChanged()),_clock, SLOT(_clock->setFrame(PhFrame)));
     // Update the slider position when the video position changes
     connect(&_videoController, SIGNAL(positionPercentageChanged(int)), _positionSlider, SLOT(setValue(int)));
 
     // Add an error label
-    _errorLabel = new QLabel;
-    _errorLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
     // Update error label in case of video error
-    connect(&_videoController, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(updateErrorLabelContent()));
+	//connect(&_videoController, SIGNAL(error(QMediaPlayer::Error)), this, SLOT(updateErrorLabelContent()));
 
     // Create a first horizontal layout for buttons and slider
     QBoxLayout *controlLayout = new QHBoxLayout;
@@ -54,7 +54,6 @@ MainView::MainView()
     layout->setMargin(0);
     layout->addWidget(_videoController.view());
     layout->addLayout(controlLayout);
-    layout->addWidget(_errorLabel);
 	layout->addWidget(_mediaControllerView);
 
     // Add the layout to the main window
@@ -86,8 +85,6 @@ void MainView::updateFrame()
 
 void MainView::onOpenFile()
 {
-    _errorLabel->setText("");
-
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
     openFile(fileName); // TODO: show error in case of error
 }
@@ -104,8 +101,4 @@ void MainView::onOpenFile()
     }
 }*/
 
-void MainView::updateErrorLabelContent()
-{
-    _playButton->setEnabled(false);
-    _errorLabel->setText("Error: " + _videoController.errorString());
-}
+
