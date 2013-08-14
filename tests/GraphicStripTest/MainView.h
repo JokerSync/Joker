@@ -11,11 +11,11 @@
 
 #include "PhGraphicStrip/PhGraphicStripView.h"
 //#include "MainController.h"
-#include "PhGraphicStrip/PhGraphicStripController.h"
+//#include "PhGraphicStrip/PhGraphicStripController.h"
 
-#if LEAP
-#include "PhCommonUI/PhLeap.h"
-#endif
+//#if LEAP
+//#include "PhCommonUI/PhLeap.h"
+//#endif
 
 class MainView : public QMainWindow
 {
@@ -23,52 +23,52 @@ class MainView : public QMainWindow
 
 public:
     MainView();
-    virtual void keyPressEvent( QKeyEvent *keyEvent );
-    virtual void wheelEvent(QWheelEvent *wheel);
+   // virtual void keyPressEvent( QKeyEvent *keyEvent );
+	//virtual void wheelEvent(QWheelEvent *wheel);
     /**
      * @brief openFile
      * call StripWindow::openFile() to open a PhStripDoc with the
      * user selected file
      */
-	void openFile(QString fileName);
+	//void openFile(QString fileName);
 
-private slots:
+//private slots:
 
 
-    void switchScrolling();
-    /**
-     * @brief changeFont
-     * List all loaded PhFont and allow the user to set the PhFont
-     * currently used
-     */
-    void changeFont();
-    /**
-     * @brief exportRythomAsPNG
-     * export the next minute of the rythmo strip to a bundle of PNG
-     * files
-     */
-    void exportRythomAsPNG();
-    /**
-     * @brief resizeEvent
-     * handle the window resize
-     */
-    void resizeEvent(QResizeEvent *);
+	//void switchScrolling();
+//    /**
+//     * @brief changeFont
+//     * List all loaded PhFont and allow the user to set the PhFont
+//     * currently used
+//     */
+//    void changeFont();
+//    /**
+//     * @brief exportRythomAsPNG
+//     * export the next minute of the rythmo strip to a bundle of PNG
+//     * files
+//     */
+	//void exportRythomAsPNG();
+//    /**
+//     * @brief resizeEvent
+//     * handle the window resize
+//     */
+//    void resizeEvent(QResizeEvent *);
 
 private:
 
     //MainController * _MController;
-    PhGraphicStripController * _MController;
+   // PhGraphicStripController * _MController;
 
-    /**
-     * @brief toggleFullWindow
-     * toogle from fullScreen to normal and vice-versa
-     */
-    void toggleFullWindow();
-    /**
-     * @brief createMenus
-     * create the menu bar of the program
-     */
-    void createMenus();
+//    /**
+//     * @brief toggleFullWindow
+//     * toogle from fullScreen to normal and vice-versa
+//     */
+//    void toggleFullWindow();
+//    /**
+//     * @brief createMenus
+//     * create the menu bar of the program
+//     */
+//    void createMenus();
 
     /**
      * @brief _strip
@@ -77,36 +77,36 @@ private:
     PhGraphicStripView *_strip;
 
 
-    /**
-     * @brief fileMenu
-     * QMenu for files related actions
-     */
-    QMenu *fileMenu;
-    /**
-     * @brief toolMenu
-     * QMenu for tools related actions
-     */
-    QMenu *toolMenu;
+//    /**
+//     * @brief fileMenu
+//     * QMenu for files related actions
+//     */
+//    QMenu *fileMenu;
+//    /**
+//     * @brief toolMenu
+//     * QMenu for tools related actions
+//     */
+//    QMenu *toolMenu;
 
-    /**
-     * @brief openAct
-     */
-    QAction *openAct;
-    /**
-     * @brief changeFontAct
-     */
-    QAction *changeFontAct;
-    /**
-     * @brief exportRythmoAct
-     */
-    QAction *exportRythmoAct;
+//    /**
+//     * @brief openAct
+//     */
+//    QAction *openAct;
+//    /**
+//     * @brief changeFontAct
+//     */
+//    QAction *changeFontAct;
+//    /**
+//     * @brief exportRythmoAct
+//     */
+//    QAction *exportRythmoAct;
 
-    QAction *switchScroll;
+//    QAction *switchScroll;
 
-#if LEAP
-    PhLeap leapListener;
-    Controller _leapController;
-#endif
+//#if LEAP
+//    PhLeap leapListener;
+//    Controller _leapController;
+//#endif
 };
 
 #endif // MainView_H

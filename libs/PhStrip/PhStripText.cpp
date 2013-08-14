@@ -15,7 +15,7 @@ PhStripText::PhStripText(PhPeople *people, QString content, int timeIn, int time
     _simpleText = simpleText;
 }
 
-PhString PhStripText::getContent()
+QString PhStripText::getContent()
 {
     return _content;
 }

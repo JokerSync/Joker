@@ -10,7 +10,7 @@ class PhGraphicStripController : public PhGraphicController
 {
 public:
     PhGraphicStripController();
-    PhStripDoc getDoc();
+	PhStripDoc getDoc();
     void loadSettings();
 	QString getLastFile();
 	void setLastFile(QString fileName);
