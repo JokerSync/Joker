@@ -11,7 +11,7 @@
 #include <SDL/SDL_image.h>
 #endif
 
-PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h, int z, int tu, int tv, PhColor *color)
+PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h, int z, float tu, float tv, PhColor *color)
 	: PhGraphicTexturedRect(x, y, w, h, z, tu, tv, color), _filename(filename), _surface(NULL)
 {
 }

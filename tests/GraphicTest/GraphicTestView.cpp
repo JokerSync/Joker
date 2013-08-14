@@ -7,18 +7,22 @@ GraphicTestView::GraphicTestView(QWidget *parent, QString name)
 }
 
 bool GraphicTestView::init()
-{/*
+{
+#ifdef IMAGE
 	qDebug() << "GraphicTestView::init";
 	if(_image == NULL)
 	{
 		qDebug() << "Initialize _image";
 		_image = new PhGraphicImage;
 		_image->setFilename("look.png");
+		_image->setTextureCoordinate(1, 0.5f);
 		_image->setRect(50,0,250,125);
 		if (! _image->init())
 			qDebug() << "_image not initialize";
 	}
+#endif
 
+#ifdef TEXT
 	if(_font == NULL)
 	{
 		qDebug() << "Initialize _font";
@@ -37,29 +41,39 @@ bool GraphicTestView::init()
 		if (! _text->init())
 			qDebug() << "_text not initialize";
 
-	}*/
+	}
+#endif
+
+#ifdef RECT
 	if(_rect == NULL)
 	{
 		qDebug() << "Initialize _text";
 		_rect = new PhGraphicSolidRect(0, 0, 200, 200, 1, new PhColor());
 	}
+#endif
 }
 
 void GraphicTestView::paint()
 {
-//	qDebug() << "GraphicTestView::paint";
-//	if(_image != NULL)
-//		_image->draw();
+#ifdef IMAGE
+	qDebug() << "GraphicTestView::paint";
+	if(_image != NULL)
+		_image->draw();
+#endif
 
-//	if(_text != NULL)
-//	{
-//		_text->setX(_text->getX()+4);
-//		_text->draw();
-//		if(_text->getX() > this->width())
-//			_text->setX(0);
-//	}
+#ifdef TEXT
+	if(_text != NULL)
+	{
+		_text->setX(_text->getX()+4);
+		_text->draw();
+		if(_text->getX() > this->width())
+			_text->setX(0);
+	}
+#endif
 
+#ifdef RECT
 	_rect->draw();
+#endif
 }
 
 
