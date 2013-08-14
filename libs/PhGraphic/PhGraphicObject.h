@@ -13,7 +13,7 @@ class PhGraphicObject
 {
 public:
 
-	PhGraphicObject(int x = 0, int y = 0, int z = 0, PhColor * color = new PhColor());
+	PhGraphicObject(int x = 0, int y = 0, int z = 0, PhColor * color = new PhColor(1,1,1,1));
 
 	/**
 	 * @brief init

@@ -44,6 +44,8 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent)
 
 bool PhGraphicStripView::init()
 {
+
+	qDebug() << "PhGraphicStripView::init()";
     //This clear the data stored
    // clearData();
 
@@ -97,6 +99,7 @@ bool PhGraphicStripView::init()
 		qDebug() << "filePath : " << filePath ;
 #endif
 		_stripBackgroundImage = new PhGraphicImage(filePath);
+		_stripBackgroundImage->init();
 
 //    //Load the cuts
 //    foreach(PhStripCut * it, _controller->getDoc().getCuts())

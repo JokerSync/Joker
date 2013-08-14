@@ -111,9 +111,9 @@ PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, 
 void PhGraphicTexturedRect::draw(){
 
 
-	//glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+	glLoadIdentity();
 
     int x = this->getX();
     int w = this->getWidth();
@@ -138,7 +138,7 @@ void PhGraphicTexturedRect::draw(){
         (0,1) ------ (1,1)
         */
 
-		//qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
+		qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
 
 		glBegin(GL_QUADS); 	//Begining the cube's drawing
 		{
