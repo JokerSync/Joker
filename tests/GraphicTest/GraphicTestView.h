@@ -15,6 +15,10 @@
 #include "PhFont.h"
 #include "PhGraphicSolidRect.h"
 
+#define TEXT
+#define IMAGE
+#define RECT
+
 class GraphicTestView : public PhGraphicView
 {
 public :
@@ -22,19 +26,24 @@ public :
 
 	GraphicTestView *view();
 
-//protected:
+protected:
 	bool init();
 
 	void paint();
 
 private:
+#ifdef IMAGE
 	PhGraphicImage *_image;
+#endif
 
+#ifdef TEXT
 	PhGraphicText *_text;
-
 	PhFont *_font;
+#endif
 
+#ifdef RECT
 	PhGraphicSolidRect *_rect;
+#endif
 };
 
 #endif // GraphicTestView_H

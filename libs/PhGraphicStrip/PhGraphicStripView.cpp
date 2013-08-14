@@ -98,7 +98,10 @@ bool PhGraphicStripView::init()
 		QString filePath = "data/img/motif-240.png";
 		qDebug() << "filePath : " << filePath ;
 #endif
-		_stripBackgroundImage = new PhGraphicImage(filePath);
+		int h = this->height();
+		int w = this->width();
+		int tu = w/h;
+		_stripBackgroundImage = new PhGraphicImage(filePath, 0, 0, 0, 0, 0, tu, 1);
 		_stripBackgroundImage->init();
 
 //    //Load the cuts
@@ -122,7 +125,7 @@ void PhGraphicStripView::paint()
 	//Store the OpenGL context height in a variable in order to
 	//limit functions call
 	int h = this->height();
-
+	int w = this->width();
     //Time-based test
  //  qDebug() << _test->elapsed(); //<< " : " << _xmove;
 
@@ -137,7 +140,7 @@ void PhGraphicStripView::paint()
 
 //    //Draw Backgroung Picture
 
-	_stripBackgroundImage->setSize(h, h);
+	_stripBackgroundImage->setSize(w, h);
 	_stripBackgroundImage->draw();
 
 //    foreach(PhGraphicImage * it, _strips)
