@@ -5,9 +5,8 @@
 #include <qvideosurfaceformat.h>
 
 MainView::MainView()
-    : QWidget(0)
-    , _playButton(0)
-    , _positionSlider(0)
+	: QWidget(0),
+	_positionSlider(0)
 {
 	_clock = new PhClock;
 	_timer = new QTimer();
@@ -46,7 +45,6 @@ MainView::MainView()
     QBoxLayout *controlLayout = new QHBoxLayout;
     controlLayout->setMargin(5);
     controlLayout->addWidget(_openButton);
-    controlLayout->addWidget(_playButton);
     controlLayout->addWidget(_positionSlider);
 
     // Create a second vertical layout for the video view and the first layout
@@ -66,7 +64,6 @@ bool MainView::openFile(QString fileName)
     if (fileInfo.exists())
     {
         _videoController.open(fileName);
-        _playButton->setEnabled(true);
         _videoController.play();
         return true;
     }

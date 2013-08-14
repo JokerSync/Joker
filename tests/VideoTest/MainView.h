@@ -49,7 +49,6 @@ private slots:
 private:
     PhVideoController _videoController;
     QAbstractButton *_openButton;
-    QAbstractButton *_playButton;
     QSlider *_positionSlider;
 	PhMediaControllerView *_mediaControllerView;
 	PhClock *_clock;
