@@ -56,7 +56,7 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
 	connect(ui->_rateSelectionBox, SIGNAL(activated(int)), this, SLOT(selectRate()));
 
 	//this->setLayout(ui->_vLayout);
-	this->resize(600, 200);
+	this->resize(320, 80);
 
 	//Connections SIGNALS/SLOTS
 	connect(_clock, SIGNAL(rateChanged()), this, SLOT(updateRateLabel()));
