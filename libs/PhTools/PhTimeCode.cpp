@@ -10,7 +10,7 @@
 
 #include "PhTimeCode.h"
 
-PhString PhTimeCode::stringFromFrame(PhFrame frame, PhTimeCodeType type) {
+QString PhTimeCode::stringFromFrame(PhFrame frame, PhTimeCodeType type) {
     unsigned int hhmmssff[4];
     ComputeHhMmSsFf(hhmmssff, frame, type);
     return QString("%1%2:%3:%4:%5").arg((frame<0)?"-":"",
@@ -20,7 +20,7 @@ PhString PhTimeCode::stringFromFrame(PhFrame frame, PhTimeCodeType type) {
             QString::number(hhmmssff[3]).rightJustified(2, '0'));
 }
 
-PhFrame PhTimeCode::frameFromString(PhString string, PhTimeCodeType type) {
+PhFrame PhTimeCode::frameFromString(QString string, PhTimeCodeType type) {
     long sign = 1;
     if ((string.length() > 0) && string.at(0) == '-') {
         sign = -1;
@@ -144,15 +144,15 @@ PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int *hhmmssff, PhTimeCodeType typ
     PhFrame fps = getFps(type);
 
     if (hhmmssff[1] >= 60) {
-        qDebug() << "Bad minute value: %u", PhString::number(hhmmssff[1]);
+		qDebug() << "Bad minute value: %u", QString::number(hhmmssff[1]);
         hhmmssff[1] = 0;
     }
     if (hhmmssff[2] >= 60) {
-        qDebug() << "Bad second value: %u", PhString::number(hhmmssff[2]);
+		qDebug() << "Bad second value: %u", QString::number(hhmmssff[2]);
         hhmmssff[2] = 0;
     }
     if (hhmmssff[3] >= fps) {
-        qDebug() << "Bad frame value: %u", PhString::number(hhmmssff[3]);
+		qDebug() << "Bad frame value: %u", QString::number(hhmmssff[3]);
         hhmmssff[3] = 0;
     }
     PhFrame dropframe = 0;

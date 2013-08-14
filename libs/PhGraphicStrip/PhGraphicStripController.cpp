@@ -3,8 +3,9 @@
 
 PhGraphicStripController::PhGraphicStripController() : PhGraphicController()
 {
-     _doc = new PhStripDoc();
 
+	qDebug() << "PhGraphicStripController::PhGraphicStripController()";
+	 _doc = new PhStripDoc();
  #if defined(Q_OS_MAC)
         _settingsPath = QDir::homePath() + "/Library/Preferences/com.phonations.Joker.plist";
          _settingsFormat = QSettings::NativeFormat;
@@ -21,7 +22,8 @@ PhGraphicStripController::PhGraphicStripController() : PhGraphicController()
 
 PhStripDoc PhGraphicStripController::getDoc()
 {
-    return * _doc;
+	qDebug() <<  "PhGraphicStripController::getDoc()";
+	return * _doc;
 }
 
 void PhGraphicStripController::loadSettings()

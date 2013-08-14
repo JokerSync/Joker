@@ -20,7 +20,7 @@ public:
      * @param name
      * @param color
      */
-	PhPeople(QString name, PhColor color);
+	PhPeople(QString name, PhColor *color);
     /**
      * @brief Get the name
      * @return a PhString
@@ -35,12 +35,12 @@ public:
      * @brief Get the color
      * @return a PhColor
      */
-    PhColor getColor();
+	PhColor* getColor();
     /**
      * @brief Set the color
      * @param color a PhColor
      */
-    void setColor(PhColor color);
+	void setColor(PhColor* color);
 
 private:
     /**
@@ -50,7 +50,7 @@ private:
     /**
      * Color of the people's text on the strip.
      */
-    PhColor _color;
+	PhColor *_color;
 
 };
 

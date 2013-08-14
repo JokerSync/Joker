@@ -16,6 +16,13 @@
 
 #include "PhGraphicContext.h"
 
+/**
+ * The PhGraphicView class is a canvas to create your custom graphic view.
+ * Create your PhGraphicView child, initialize your graphic object with init(),
+ * paint them with paint(), and clear them with dispose().
+ * These methods are called automatically after the view creation and during all
+ * its lifetime.
+ */
 class PhGraphicView : public QGLWidget
 {
     Q_OBJECT
@@ -34,15 +41,7 @@ public:
      * @brief b_Fullscreen
      * allow us to know if the application is fullScreen
      */
-	//PhGraphicContext * getContext();
-
-protected:
-
-	virtual bool init() = 0;
-
-	virtual void paint() = 0;
-
-	void initializeGL();
+	PhGraphicContext * getContext();
 
 	/**
 	 * @brief resizeGL
@@ -51,6 +50,16 @@ protected:
 	 * handle the resize of the OpenGL context
 	 */
 	void resizeGL(int width, int height);
+
+
+protected:
+
+
+	virtual bool init() = 0;
+
+	virtual void paint() = 0;
+
+	void initializeGL();
 
 	void paintGL();
 
@@ -73,7 +82,7 @@ protected:
     /**
      * @brief _context
      */
-   // PhGraphicContext *_context;
+	PhGraphicContext *_context;
 
 };
 

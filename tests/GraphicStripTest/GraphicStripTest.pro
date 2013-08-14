@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     ../../libs/PhGraphicStrip/PhGraphicStripView.cpp \
     MainView.cpp \
     ../../libs/PhGraphic/PhGraphicController.cpp \
-    ../../../../libs/PhTools/PhString.cpp
+    ../../../../libs/PhTools/PhString.cpp \
+    ../../libs/PhGraphic/PhGraphicSolidRect.cpp
 
 HEADERS += \
     ../../libs/PhTools/PhFileTools.h \
@@ -36,7 +37,8 @@ HEADERS += \
     ../../libs/PhGraphicStrip/PhGraphicStripView.h \
     MainView.h \
     ../../libs/PhGraphic/PhGraphicController.h \
-    ../../../../libs/PhTools/PhString.h
+    ../../../../libs/PhTools/PhString.h \
+    ../../libs/PhGraphic/PhGraphicSolidRect.h
 
 
 #PhStrip
@@ -115,10 +117,14 @@ macx {
         LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 #LIBS += -L$$(LEAP_SDK)/lib -lLeap
 
-        copyresources.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/;
+copyresources.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/$${TARGET}.app/Contents/Resources/
+
 }
 QMAKE_EXTRA_TARGETS += copyresources
 POST_TARGETDEPS += copyresources
+
+copyresources.commands = cp -r $${PWD}/../../data/ $${DESTDIR}/;
+
 #macx {
 #	copylibs.commands = mkdir $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs;
 #	copylibs.commands += cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/;

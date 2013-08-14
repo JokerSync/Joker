@@ -21,7 +21,10 @@ QList<PhStripCut *> PhStripDoc::getCuts()
 bool PhStripDoc::openDetX(QString filename)
 {
     if (!QFile(filename).exists())
+	{
+		qDebug() << "this file doesn't exist" ;
         return false;
+	}
 
     QDomDocument *DetX = new QDomDocument("/text.xml"); // Création de l'objet DOM
     QFile xml_doc(filename);// On choisit le fichier contenant les informations XML.
@@ -77,7 +80,7 @@ bool PhStripDoc::openDetX(QString filename)
     for (int i=0; i < charList.length(); i++)
     {
         QDomElement chara = charList.at(i).toElement();
-        PhPeople *people = new PhPeople(chara.attribute("name"), PhColor(chara.attribute("color")));
+		PhPeople *people = new PhPeople(chara.attribute("name"), new PhColor(chara.attribute("color")));
 
         //Currently using id as key instead of name
         _actors[chara.attribute("id")] = people;
@@ -132,7 +135,7 @@ bool PhStripDoc::openDetX(QString filename)
     for (int i=0; i < lineList.length(); i++)
     {
         QDomNode currentLine = lineList.at(i);
-        PhString id = currentLine.toElement().attribute("role");
+		QString id = currentLine.toElement().attribute("role");
         for(int j = 0; j < currentLine.childNodes().length(); j++){
 
             if(currentLine.childNodes().at(j).nodeName() == "text"){
@@ -151,7 +154,7 @@ bool PhStripDoc::openDetX(QString filename)
                           (j==1), 0 );
             }
         }
-    }
+	}
     return true;
 }
 
@@ -161,7 +164,7 @@ int PhStripDoc::getNbTexts()
 {
     return _nbTexts;
 }
-PhString PhStripDoc::getVideoPath(){
+QString PhStripDoc::getVideoPath(){
     return _videoPath;
 }
 
@@ -177,12 +180,12 @@ void PhStripDoc::reset()
     _nbTexts = 0;
     _texts.clear();
     _timeScale = 25; //TODO fix me
-    _title = PhString();
-    _videoPath = PhString();
+	_title = QString();
+	_videoPath = QString();
     _videoTimestamp = 0;
 }
 
-void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, PhString sentence, int track, bool alone, int i){
+void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, bool alone, int i){
 
     if(sentence != " " && sentence != "" ){
         // if the sentence is short enough
@@ -212,7 +215,7 @@ int PhStripDoc::getDuration()
 {
     return (_texts.last()->getTimeOut() - _videoTimestamp) / _fps;
 }
-PhString PhStripDoc::getTitle(){
+QString PhStripDoc::getTitle(){
     return _title;
 }
 
