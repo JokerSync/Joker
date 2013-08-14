@@ -23,6 +23,11 @@ bool PhSonyController::open()
 		if(name.startsWith("usbserial-") && name.endsWith(_comSuffix))
 		{
 			_serial.setPort(info);
+			_serial.setBaudRate(QSerialPort::Baud38400);
+			_serial.setDataBits(QSerialPort::Data8);
+			_serial.setStopBits(QSerialPort::OneStop);
+			_serial.setParity(QSerialPort::OddParity);
+			// TODO : check no more parameters are needed.
 			qDebug() << "Opening " << name;
 			return _serial.open(QSerialPort::ReadWrite);
 		}
