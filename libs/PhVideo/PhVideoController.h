@@ -6,6 +6,7 @@
 
 #include "PhVideoView.h"
 
+
 /**
  * This class allow to handle the video media.
  * It also create the view to display it.
