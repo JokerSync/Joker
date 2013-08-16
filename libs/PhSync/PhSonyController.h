@@ -27,6 +27,9 @@ public slots:
 private:
 	QString _comSuffix;
 	QSerialPort _serial;
+
+private slots:
+	void handleError(QSerialPort::SerialPortError error);
 };
 
 #endif // PHSONYCONTROLLER_H

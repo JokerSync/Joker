@@ -6,6 +6,9 @@
 PhSonyController::PhSonyController(QString comSuffix, QObject *parent) :
 	QObject(parent), _comSuffix(comSuffix)
 {
+	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
+            SLOT(handleError(QSerialPort::SerialPortError)));
+
 }
 
 PhSonyController::~PhSonyController()
@@ -53,4 +56,10 @@ void PhSonyController::test()
 	{
 		qDebug() << "writing " << _serial.write("pouet") << " bytes.";
 	}
+}
+
+void PhSonyController::handleError(QSerialPort::SerialPortError error)
+{
+	qDebug() << "Serial port error : " << error;
+	//_serial.clearError();
 }
