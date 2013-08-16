@@ -16,7 +16,10 @@ MainWindow::MainWindow(QWidget *parent) :
 		qDebug() << "master open ok";
 
 		if(_sonySlave.start())
+		{
 			qDebug() << "slave open ok";
+			_sonyMaster.test();
+		}
 		else
 			qDebug() << "error opening master";
 	}

@@ -2,21 +2,17 @@
 
 #include <QDebug>
 #include <QSerialPortInfo>
+#include <qmath.h>
 
 PhSonyController::PhSonyController(QString comSuffix, QObject *parent) :
 	QObject(parent), _comSuffix(comSuffix)
 {
 	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
             SLOT(handleError(QSerialPort::SerialPortError)));
-	// TODO : handle onRead
+	connect(&_serial, SIGNAL(readyRead()), this, SLOT(onData()));
 	// TODO : handle CTS
+	//connect(&_serial, SIGNAL(flowControlChanged(QSerialPort::FlowControl)), this, SLOT(onCTS(QSerialPort::FlowControl)));
 }
-
-PhSonyController::~PhSonyController()
-{
-	stop();
-}
-
 
 bool PhSonyController::start()
 {
@@ -62,29 +58,32 @@ void PhSonyController::test()
 PhRate PhSonyController::computeRate(unsigned char data1)
 {
 	PhRate n1 = data1;
-	return pow(10, n1/32 - 2);
+	return qPow(10, n1/32 - 2);
 }
 
 PhRate PhSonyController::computeRate(unsigned char data1, unsigned char data2)
 {
 	PhRate n1 = data1;
 	PhRate n2 = data2;
-	PhRate rate = [self computeRateWithData1:data1];
-	return rate + n2/256 * pow(10, (n1+1)/32 - 2 - rate);
+	PhRate rate = this->computeRate(data1);
+	return rate + n2/256 * qPow(10, (n1+1)/32 - 2 - rate);
 }
 
 unsigned char PhSonyController::computeData1(PhRate rate)
 {
-	return (unsigned char)(32*(2+log10(rate)));
+	return (unsigned char)(32 * (2 + qLn(rate) / qLn(10)));
 }
 
 unsigned char PhSonyController::status(int index)
 {
-	return status[index];
+	return _status[index];
 }
 
 void PhSonyController::onData()
 {
+	char data[256];
+	_serial.read(data, 256);
+	qDebug() << "PhSonyController::onData() => " << data;
 	// TODO : read the serial data and process it;
 	//processCommand(cmd1, cmd2, data);
 }

@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QSerialPort>
 
-#include <PhTime>
+#include <../../libs/PhTools/PhTime.h>
 
 /**
  * PhSonyController is an abstract class handle sony 9 pin communication
@@ -23,12 +23,6 @@ public:
 	 * @param parent Parent for the QObject (mandatory)
 	 */
 	explicit PhSonyController(QString comSuffix, QObject *parent);
-
-	/** @brief PhSonyController destructor
-	 *
-	 * Closing the port if open.
-	 * /
-	~PhSonyController();
 
 	/**
 	 Start the thread handling the communication.
@@ -89,6 +83,13 @@ protected:
 	virtual void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* data) = 0;
 
 private:
+	/** @brief PhSonyController destructor
+	 *
+	 * Closing the port if open.
+	 * /
+	~PhSonyController();
+
+
 	/** Serial port connected to the controller */
 	QSerialPort _serial;
 
@@ -99,7 +100,7 @@ private:
 	//PhClock * clock;	TODO: get julien implementation
 
 	/** Sony controller status */
-	unsigned char status[8];
+	unsigned char _status[8];
 
 private slots:
 	void onData();

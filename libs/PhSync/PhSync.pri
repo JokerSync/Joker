@@ -11,3 +11,4 @@ SOURCES += \
     ../../libs/PhSync/PhSonySlaveController.cpp
 
 INCLUDEPATH += ../../libs/PhSync
+INCLUDEPATH += ../../libs/PhTools
