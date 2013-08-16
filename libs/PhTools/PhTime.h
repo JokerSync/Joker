@@ -3,9 +3,14 @@
 
 
 /**
- * @brief The PhTime class represents a time value.
+ * @brief PhTime is a type used for time value.
  */
 #define PhTime int
+
+/**
+  * @brief PhRate is a type used for rate value.
+  */
+#define PhRate double
 
 //class PhTime
 //{
