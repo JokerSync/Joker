@@ -77,12 +77,13 @@ bool PhTimeCode::isDrop(PhTimeCodeType type) {
 
 PhFrame PhTimeCode::getFps(PhTimeCodeType type) {
     switch (type) {
-        case PhTimeCodeType2398:
-        case PhTimeCodeType24:
-            return 24;
-        case PhTimeCodeType25:
-            return 25;
-        case PhTimeCodeType2997:
+	case PhTimeCodeType2398:
+	case PhTimeCodeType24:
+		return 24;
+	case PhTimeCodeType25:
+        return 25;
+	case PhTimeCodeType2997:
+	default:
             return 30;
     }
 }
