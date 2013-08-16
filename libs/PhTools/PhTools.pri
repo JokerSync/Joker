@@ -5,3 +5,5 @@ HEADERS += \
 SOURCES += \
     ../../libs/PhTools/PhTimeCode.cpp \
     ../../libs/PhTools/PhTime.cpp
+
+INCLUDEPATH += ../../libs/PhTools

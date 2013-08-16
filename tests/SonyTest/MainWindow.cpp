@@ -11,11 +11,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	if(_sonyMaster.open())
+	if(_sonyMaster.start())
 	{
 		qDebug() << "master open ok";
 
-		if(_sonySlave.open())
+		if(_sonySlave.start())
 			qDebug() << "slave open ok";
 		else
 			qDebug() << "error opening master";

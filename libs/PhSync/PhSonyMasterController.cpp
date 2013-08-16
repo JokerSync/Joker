@@ -5,3 +5,8 @@ PhSonyMasterController::PhSonyMasterController(QObject *parent)
 {
 
 }
+
+void PhSonySlaveController::processComdmand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
+{
+	// TODO
+}
