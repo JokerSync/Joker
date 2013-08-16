@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
 		if(_sonySlave.start())
 		{
 			qDebug() << "slave open ok";
-			_sonyMaster.test();
+			_sonyMaster.deviceTypeRequest();
 		}
 		else
 			qDebug() << "error opening master";
@@ -30,5 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+	_sonyMaster.stop();
+	_sonySlave.stop();
 	delete ui;
 }

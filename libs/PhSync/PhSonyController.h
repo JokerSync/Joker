@@ -17,12 +17,29 @@ class PhSonyController : public QObject
 {
 	Q_OBJECT
 public:
+	enum PhSonyError {
+		UndefinedCommand,
+		UnusedError1,
+		ChecksumError,
+		UnusedError3,
+		ParityError,
+		OverrunError,
+		FramingError,
+		TimeOut
+	};
+
 	/**
 	 * @brief PhSonyController constructor
 	 * @param comSuffix Serial port name suffix
 	 * @param parent Parent for the QObject (mandatory)
 	 */
 	explicit PhSonyController(QString comSuffix, QObject *parent);
+
+	/** @brief PhSonyController destructor
+	 *
+	 * Closing the port if open.
+	 * /
+	~PhSonyController();
 
 	/**
 	 Start the thread handling the communication.
@@ -33,8 +50,6 @@ public:
 	 Stop the thread handling the communication.
 	 */
 	void stop();
-
-	void test();
 
 protected:
 	/**
@@ -82,14 +97,42 @@ protected:
 	 */
 	virtual void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* data) = 0;
 
+	/**
+	 * Extract the data size from the first command descriptor.
+	 * @param cmd1 First command descriptor.
+	 * @return Data size in byte.
+	 */
+	unsigned char getDataSize(unsigned char cmd1);
+
+	/**
+	 * Send a sony protocol command.
+	 * @param cmd1 First command descriptor.
+	 * @param cmd2 Second command descriptor.
+	 * @param data Data for the command.
+	 */
+	void sendCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* data);
+
+	void sendCommand(unsigned char cmd1, unsigned char cmd2, ...);
+	/**
+	 * @brief Send a command acknolegment.
+	 */
+	void sendAck();
+
+	/**
+	 * @brief Send an error to the command emiter.
+	 * @param error Error type.
+	 */
+	void sendNak(PhSonyError error);
+
+	/**
+	 * @brief stringFromCommand
+	 * @param cmd1 First command descriptor.
+	 * @param cmd2 Second command descriptor.
+	 * @return The name of the command.
+	 */
+	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data = 0);
+
 private:
-	/** @brief PhSonyController destructor
-	 *
-	 * Closing the port if open.
-	 * /
-	~PhSonyController();
-
-
 	/** Serial port connected to the controller */
 	QSerialPort _serial;
 
