@@ -3,12 +3,13 @@
 MainWindow::MainWindow(QWidget *parent) :
     QWidget(parent)
 {
-	PhFrame lenghtFile = 37500;
 	PhTimeCodeType timecodeType = PhTimeCodeType25;
+	PhFrame lenghtFile = 7500;
 	_clock = new PhClock;
 	_clock->setFrame(PhTimeCode::frameFromString("01:00:00:00",timecodeType));
+	PhFrame firstFrame = _clock->getFrame();
 
-	_mediaControllerView = new PhMediaControllerView(_clock, timecodeType, lenghtFile);
+	_mediaControllerView = new PhMediaControllerView(_clock, timecodeType, lenghtFile, firstFrame);
 	_fps = new PhFrame;
 	_fps = _mediaControllerView->get_framePerSecond();
 
