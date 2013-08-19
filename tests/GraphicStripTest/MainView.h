@@ -11,7 +11,7 @@
 
 #include "PhGraphicStrip/PhGraphicStripView.h"
 //#include "MainController.h"
-//#include "PhGraphicStrip/PhGraphicStripController.h"
+#include "PhGraphicStrip/PhGraphicStripController.h"
 
 //#if LEAP
 //#include "PhCommonUI/PhLeap.h"
@@ -30,7 +30,7 @@ public:
      * call StripWindow::openFile() to open a PhStripDoc with the
      * user selected file
      */
-	//void openFile(QString fileName);
+	void openFile(QString fileName);
 
 //private slots:
 
@@ -56,8 +56,8 @@ public:
 
 private:
 
-    //MainController * _MController;
-   // PhGraphicStripController * _MController;
+	//MainController * _MController;
+	PhGraphicStripController * _MController;
 
 //    /**
 //     * @brief toggleFullWindow
