@@ -5,6 +5,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
 	_clock = new PhClock;
+
+	_clock->setFrame(PhTimeCode::frameFromString("01:00:00:00",PhTimeCodeType25));
 	_timer = new QTimer();
 	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
 	_timer->start(40);

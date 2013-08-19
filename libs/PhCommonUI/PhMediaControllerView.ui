@@ -278,6 +278,13 @@
     </layout>
    </item>
    <item>
+    <widget class="QSlider" name="_slider">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="_hLayoutBottom">
      <item>
       <widget class="QPushButton" name="_backButton">
@@ -294,9 +301,23 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="_previousFrameButton">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="_playButton">
        <property name="text">
         <string>Play</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="_nextFrameButton">
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </item>

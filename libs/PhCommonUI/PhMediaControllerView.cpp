@@ -23,6 +23,12 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
 	ui->_backButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
 	connect(ui->_backButton, SIGNAL(clicked()), this, SLOT(pushBackButton()));
 
+	ui->_nextFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowForward));
+	connect(ui->_nextFrameButton, SIGNAL(clicked()), this, SLOT(pushNextFrameButton()));
+
+	ui->_previousFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowBack));
+	connect(ui->_previousFrameButton, SIGNAL(clicked()), this, SLOT(pushPreviousFrameButton()));
+
 	//Label Init
 
 	ui->_rateLabel->setStyleSheet("font:24pt");
@@ -41,18 +47,6 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
 	ui->_rateSelectionBox->addItem("rate:-4");
 	//connect(ui->_rateSelectionBox, SIGNAL(activated(int)), this, SLOT(selectRate()));
 
-
-	//Layout Init
-
-
-	ui->_hLayoutTop->addWidget(ui->_timecodeLabel,2);
-	ui->_hLayoutTop->addWidget(ui->_rateLabel);
-
-	ui->_hLayoutBottom->addWidget(ui->_backButton);
-	ui->_hLayoutBottom->addWidget(ui->_fastRewindButton);
-	ui->_hLayoutBottom->addWidget(ui->_playButton);
-	ui->_hLayoutBottom->addWidget(ui->_fastForwardButton);
-	ui->_hLayoutBottom->addWidget(ui->_rateSelectionBox);
 	connect(ui->_rateSelectionBox, SIGNAL(activated(int)), this, SLOT(selectRate()));
 
 	//this->setLayout(ui->_vLayout);
@@ -108,6 +102,19 @@ void PhMediaControllerView::pushBackButton()
 	_clock->setFrame(0);
 	backButtonSignal();
 }
+
+void PhMediaControllerView::pushNextFrameButton()
+{
+	PhFrame f = _clock->getFrame();
+	_clock->setFrame(f+1);
+}
+
+void PhMediaControllerView::pushPreviousFrameButton()
+{
+	PhFrame f = _clock->getFrame();
+	_clock->setFrame(f-1);
+}
+
 
 void PhMediaControllerView::updateRateLabel()
 {

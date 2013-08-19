@@ -16,14 +16,12 @@ INCLUDEPATH = ../../libs
 SOURCES += main.cpp\
         mainwindow.cpp \
     ../../libs/PhTools/PhTimeCode.cpp \
-    ../../libs/PhTools/PhTime.cpp \
     ../../libs/PhTools/PhString.cpp \
     ../../libs/PhTools/PhClock.cpp \
     ../../libs/PhCommonUI/PhMediaControllerView.cpp
 
 HEADERS  += mainwindow.h \
     ../../libs/PhTools/PhTimeCode.h \
-    ../../libs/PhTools/PhTime.h \
     ../../libs/PhTools/PhString.h \
     ../../libs/PhTools/PhClock.h \
     ../../libs/PhCommonUI/PhMediaControllerView.h
