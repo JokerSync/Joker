@@ -1,13 +1,17 @@
 #include "PhMediaControllerView.h"
 #include "ui_PhMediaControllerView.h"
 
-PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
+PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType timecodeType, PhFrame lengthFile, QWidget *parent) :
 	QWidget(parent),
-	ui(new Ui::PhMediaControllerView)
+	ui(new Ui::PhMediaControllerView),
+	_timecodeType(timecodeType),
+	_lengthFile(lengthFile)
 {
 	ui->setupUi(this);
 	_clock = new PhClock;
 	_clock = clock;
+	_framePerSecond = new PhFrame;
+	*_framePerSecond = PhTimeCode::getFps(_timecodeType);
 
 	//Buttons Init
 
@@ -29,6 +33,7 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
 	ui->_previousFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowBack));
 	connect(ui->_previousFrameButton, SIGNAL(clicked()), this, SLOT(pushPreviousFrameButton()));
 
+
 	//Label Init
 
 	ui->_rateLabel->setStyleSheet("font:24pt");
@@ -41,21 +46,31 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
 
 	//Combobox Init
 
-	ui->_rateSelectionBox->addItem("rate: 0");
-	ui->_rateSelectionBox->addItem("rate: 1");
-	ui->_rateSelectionBox->addItem("rate: 4");
-	ui->_rateSelectionBox->addItem("rate:-4");
-	//connect(ui->_rateSelectionBox, SIGNAL(activated(int)), this, SLOT(selectRate()));
+	ui->_rateSelectionBox->addItem("23.98 fps");
+	ui->_rateSelectionBox->addItem("24 fps");
+	ui->_rateSelectionBox->addItem("25 fps");
+	ui->_rateSelectionBox->addItem("29.97 fps");
+
 
 	connect(ui->_rateSelectionBox, SIGNAL(activated(int)), this, SLOT(selectRate()));
 
 	//this->setLayout(ui->_vLayout);
+
+	this->setFixedHeight(100);
 	this->resize(320, 80);
 
 	//Connections SIGNALS/SLOTS
 	connect(_clock, SIGNAL(rateChanged()), this, SLOT(updateRateLabel()));
 	connect(_clock, SIGNAL(frameChanged()), this, SLOT(updateFrameLabel()));
+
+
 }
+
+PhFrame *PhMediaControllerView::get_framePerSecond() const
+{
+	return _framePerSecond;
+}
+
 
 
 void PhMediaControllerView::pushPlayButton()
@@ -124,28 +139,31 @@ void PhMediaControllerView::updateRateLabel()
 
 void PhMediaControllerView::updateFrameLabel()
 {
-	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),PhTimeCodeType25));
+	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),_timecodeType));
+
 }
 
 
 void PhMediaControllerView::selectRate()
 {
-	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-
-	if(ui->_rateSelectionBox->currentIndex() == 0)
+	switch(ui->_rateSelectionBox->currentIndex())
 	{
-		_clock->setRate(0);
-		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+	case 0:
+		_timecodeType = PhTimeCodeType2398;
+		break;
+	case 1:
+		_timecodeType =	PhTimeCodeType24;
+		break;
+	case 2:
+		_timecodeType = PhTimeCodeType25;
+		break;
+	case 3:
+		_timecodeType = PhTimeCodeType2997;
+		break;
+
 	}
+	*_framePerSecond = PhTimeCode::getFps(_timecodeType);
 
-	if(ui->_rateSelectionBox->currentIndex() == 1)
-	_clock->setRate(1);
-
-	if(ui->_rateSelectionBox->currentIndex() == 2)
-	_clock->setRate(4);
-
-	if(ui->_rateSelectionBox->currentIndex() == 3)
-	_clock->setRate(-4);
 
 }
 
