@@ -1,17 +1,20 @@
 #include "PhMediaControllerView.h"
 #include "ui_PhMediaControllerView.h"
 
-PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType timecodeType, PhFrame lengthFile, QWidget *parent) :
+PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType timecodeType, PhFrame lengthFile, PhFrame firstFrame, QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::PhMediaControllerView),
 	_timecodeType(timecodeType),
-	_lengthFile(lengthFile)
+	_lengthFile(lengthFile),
+	_firstFrame(firstFrame)
+
 {
 	ui->setupUi(this);
 	_clock = new PhClock;
 	_clock = clock;
 	_framePerSecond = new PhFrame;
 	*_framePerSecond = PhTimeCode::getFps(_timecodeType);
+	_fileProgress = 0;
 
 	//Buttons Init
 
@@ -32,6 +35,8 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType time
 
 	ui->_previousFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowBack));
 	connect(ui->_previousFrameButton, SIGNAL(clicked()), this, SLOT(pushPreviousFrameButton()));
+
+	connect(ui->_slider, SIGNAL(valueChanged(int)), this, SLOT(useSliderCursor(int)));
 
 
 	//Label Init
@@ -130,6 +135,12 @@ void PhMediaControllerView::pushPreviousFrameButton()
 	_clock->setFrame(f-1);
 }
 
+void PhMediaControllerView::useSliderCursor(int position)
+{
+	int t = position*_lengthFile/100 + _firstFrame;
+	_clock->setFrame(t);
+}
+
 
 void PhMediaControllerView::updateRateLabel()
 {
@@ -140,7 +151,22 @@ void PhMediaControllerView::updateRateLabel()
 void PhMediaControllerView::updateFrameLabel()
 {
 	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),_timecodeType));
+	updateSliderPosition();
 
+}
+
+void PhMediaControllerView::updateSliderPosition()
+{
+	int t = _clock->getFrame();
+	_fileProgress = (t - _firstFrame)*100/_lengthFile;
+	//qDebug() << t <<"  "<< _fileProgress <<"  "<<_lengthFile;
+	ui->_slider->setSliderPosition(_fileProgress);
+
+	if(_fileProgress == 100)
+	{
+		_clock->setRate(0);
+		_clock->setFrame(0);
+	}
 }
 
 
