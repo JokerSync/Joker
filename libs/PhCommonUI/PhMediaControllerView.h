@@ -14,7 +14,8 @@ class PhMediaControllerView : public QWidget
 	Q_OBJECT
 	
 public:
-	explicit PhMediaControllerView(PhClock *clock, QWidget *parent = 0);
+	explicit PhMediaControllerView(PhClock *clock, PhTimeCodeType timecodeType, PhFrame lenghtFile, QWidget *parent = 0);
+	PhFrame* get_framePerSecond() const;
 
 	~PhMediaControllerView();
 
@@ -77,8 +78,12 @@ public slots:
 
 	
 private:
+
+	PhFrame _lengthFile;
 	Ui::PhMediaControllerView *ui;
 	PhClock *_clock;
+	PhTimeCodeType _timecodeType;
+	PhFrame *_framePerSecond;
 };
 
 #endif // PHMEDIACONTROLLERVIEW_H

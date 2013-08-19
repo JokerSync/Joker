@@ -26,6 +26,7 @@ private:
 	PhMediaControllerView *_mediaControllerView;
 	PhClock *_clock;
 	QTimer *_timer;
+	PhFrame *_fps;
 
 };
 
