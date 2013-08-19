@@ -21,13 +21,13 @@ MainView::MainView()
 //#if LEAP
 //    _leapController.addListener(leapListener);
 //#endif
- //   _MController = new PhGraphicStripController();
-//-    if(_MController->openDoc(file))
-//        _MController->setLastFile(file);
+	_MController = new PhGraphicStripController();
+   //if(_MController->openDoc(file))
+		//_MController->setLastFile(file);
     resize(1280,360);
     setWindowTitle(tr("GraphicStripTest"));
     _strip = new PhGraphicStripView(this);
-	_strip->resize(1000, 300);
+	_strip->resize(1280, 360);
 	//createMenus();
 	//_strip->setController(_MController);
 	//_strip->setNaturalScroll(_MController->getNaturalScrollPref());
@@ -80,14 +80,14 @@ MainView::MainView()
 	toolMenu->addAction(switchScroll);
 	connect(switchScroll, SIGNAL(triggered()), this, SLOT(switchScrolling()));
 
-}
+}*/
 
 void MainView::openFile(QString fileName)
 {
   //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 	if(!fileName.isNull())
 	   { _MController->openDoc(fileName);
-	//	qDebug() << "filename : " << fileName;
+		qDebug() << "filename : " << fileName;
 	//	_strip->openFile("");
 	}
 }
@@ -97,7 +97,7 @@ void MainView::openFile(QString fileName)
 //	_strip->toggleScroll();
 //}
 
-void MainView::changeFont()
+/*void MainView::changeFont()
 {
 
 	// This is a routine witch load Apple system TTF fonts

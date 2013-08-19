@@ -18,15 +18,18 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-//	QString file;
-//    if (argc < 2)
-//		file = "Tunnel Rats.detx";
-//    else
-//        file = argv[1];
+	QApplication a(argc, argv);
+	MainView w;
 
-    MainView w;
+	//	QString file;
+	//    if (argc < 2)
+	//		file = "Tunnel Rats.detx";
+	//    else
+	//        file = argv[1];
 	//w.openFile(QString(file));
+
+	w.openFile(QString("Tunnel Rats.detx"));
+
     w.show();
 
     return a.exec();
