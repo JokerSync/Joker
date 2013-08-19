@@ -49,6 +49,10 @@ public slots:
 	 */
 	void pushBackButton();
 
+	void pushNextFrameButton();
+
+	void pushPreviousFrameButton();
+
 	/**
 	 * @brief selectRate
 	 */
@@ -70,6 +74,7 @@ public slots:
 	 * @brief updateFrameLabel
 	 */
 	void updateFrameLabel();
+
 	
 private:
 	Ui::PhMediaControllerView *ui;
