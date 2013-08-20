@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
 	//        file = argv[1];
 	//w.openFile(QString(file));
 
-	w.openFile(QString("Tunnel Rats.detx"));
+	w.openFile(QString("test.detx"));
 
     w.show();
 

@@ -32,6 +32,8 @@ public:
      */
 	void openFile(QString fileName);
 
+	PhGraphicStripController* getController(){return _MController;};
+
 //private slots:
 
 
@@ -53,6 +55,7 @@ public:
 //     * handle the window resize
 //     */
 //    void resizeEvent(QResizeEvent *);
+
 
 private:
 

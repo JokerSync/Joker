@@ -95,40 +95,40 @@ bool PhStripDoc::openDetX(QString filename)
     }
 
 
-//    QDomNodeList loops = DetX->elementsByTagName("loop");
+//	QDomNodeList loops = DetX->elementsByTagName("loop");
 
-//    for(int i = 0; i < loops.length(); i++)
-//    {
-//        _loops.push_back(new PhStripLoop(i + 1), PhTimeCode::frameFromString(loops.at(i).toElement().attribute("timecode"),
-//                                                                             PhTimeCodeType25));
-//    }
+//	for(int i = 0; i < loops.length(); i++)
+//	{
+//		_loops.push_back(new PhStripLoop(i + 1), PhTimeCode::frameFromString(loops.at(i).toElement().attribute("timecode"),
+//																			 PhTimeCodeType25));
+//	}
 
-//    QDomNodeList lineList = DetX->elementsByTagName("line");
+//	QDomNodeList lineList = DetX->elementsByTagName("line");
 
-//    for(int i = 0; i < lineList.length(); i++)
-//    {
-//        PhString id = lineList.at(i).toElement().attribute("role");
-//        PhString type = lineList.at(i).toElement().attribute("voice");
-//        PhString text = "";
+//	for(int i = 0; i < lineList.length(); i++)
+//	{
+//		QString id = lineList.at(i).toElement().attribute("role");
+//		QString type = lineList.at(i).toElement().attribute("voice");
+//		QString text = "";
 
-//        bool voiceOff = type.compare("off");
+//		bool voiceOff = type.compare("off");
 
-//        int track = lineList.at(i).toElement().attribute("track").toInt();
+//		int track = lineList.at(i).toElement().attribute("track").toInt();
 
-//        QDomNodeList lineElemts = lineList.at(i);
-
-
-//        for (int j = 0; j < lineElemts.length(); j++)
-//        {
-//            if(lineElemts.at(j).nodeValue().compare("lipsync"))
-//            {
-//                int TimeIn = PhTimeCode::frameFromString(lineElemts.at(j).toElement().attribute("timecode"),
-//                                                         PhTimeCodeType25);
+//		QDomNodeList lineElemts = lineList.at(i);
 
 
-//            }
-//        }
-//    }
+//		for (int j = 0; j < lineElemts.length(); j++)
+//		{
+//			if(lineElemts.at(j).nodeValue().compare("lipsync"))
+//			{
+//				int TimeIn = PhTimeCode::frameFromString(lineElemts.at(j).toElement().attribute("timecode"),
+//														 PhTimeCodeType25);
+
+
+//			}
+//		}
+//	}
 
     //Find the text list
     QDomNodeList lineList = DetX->elementsByTagName("line");
