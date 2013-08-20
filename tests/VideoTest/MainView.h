@@ -40,6 +40,7 @@ public:
 
 public slots:
 	void updateFrame();
+	void changePlayerState();
 
 private slots:
     void onOpenFile();
@@ -47,7 +48,7 @@ private slots:
 	//void updateErrorLabelContent();
 
 private:
-    PhVideoController _videoController;
+	PhVideoController *_videoController;
     QAbstractButton *_openButton;
     QSlider *_positionSlider;
 	PhMediaControllerView *_mediaControllerView;

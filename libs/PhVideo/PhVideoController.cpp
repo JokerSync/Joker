@@ -20,7 +20,7 @@ bool PhVideoController::open(QString fileName)
 
 void PhVideoController::playPause()
 {
-    switch(this->state())
+	switch(this->state())
     {
     case QMediaPlayer::PlayingState:
         this->pause();
@@ -28,7 +28,8 @@ void PhVideoController::playPause()
     default:
         this->play();
         break;
-    }
+	}
+
 }
 
 void PhVideoController::updatePositionFromPercentage(int percentage)
