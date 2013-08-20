@@ -43,11 +43,11 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType time
 
 	ui->_rateLabel->setStyleSheet("font:24pt");
 
-	//ui->_rateLabel->setText("rate: "+QString::number(_clock->getRate()));
-	ui->_rateLabel->setText("rate: 0");
+	ui->_rateLabel->setText("rate: "+QString::number(_clock->getRate()));
+	//ui->_rateLabel->setText("rate: 0");
 
-	//ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),PhTimeCodeType25));
-	ui->_timecodeLabel->setText("00:00:00:00");
+	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),PhTimeCodeType25));
+	//ui->_timecodeLabel->setText("00:00:00:00");
 
 	//Combobox Init
 
