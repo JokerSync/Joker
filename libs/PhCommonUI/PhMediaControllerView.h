@@ -25,6 +25,8 @@ signals:
 	void forwardButtonSignal();
 	void rewindButtonSignal();
 	void backButtonSignal();
+	void pushNextFrameButtonSignal();
+	void pushPreviousFrameButtonSignal();
 
 public slots:
 	/**

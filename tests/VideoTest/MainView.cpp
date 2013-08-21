@@ -16,7 +16,8 @@ MainView::MainView()
 
 
 
-	_mediaControllerView = new PhMediaControllerView(_clock,PhTimeCodeType25, 3500, 555);
+
+	_mediaControllerView = new PhMediaControllerView(_clock,PhTimeCodeType25, 2000, 850);
 	qDebug() << "filesize"<<filesize;
 
 
@@ -83,7 +84,11 @@ bool MainView::openFile(QString fileName)
 
 void MainView::updateFrame()
 {
+	//int f;
 	_clock->tick();
+	//f = _clock->getFrame();
+	//_videoController.setPosition(f);
+	//qDebug()<<"frame"<< f <<"position"<< _videoController.position();
 }
 
 void MainView::changePlayerState()

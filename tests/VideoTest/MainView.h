@@ -12,6 +12,7 @@
 #include "PhVideo/PhVideoController.h"
 #include "PhCommonUI/PhMediaControllerView.h"
 #include "PhTools/PhClock.h"
+#include <QMediaMetaData>
 
 using namespace std;
 

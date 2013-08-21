@@ -16,6 +16,8 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType time
 	*_framePerSecond = PhTimeCode::getFps(_timecodeType);
 	_fileProgress = 0;
 
+	_clock->setFrame(_firstFrame);
+
 	//Buttons Init
 
 	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
@@ -42,12 +44,8 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType time
 	//Label Init
 
 	ui->_rateLabel->setStyleSheet("font:24pt");
-
 	ui->_rateLabel->setText("rate: "+QString::number(_clock->getRate()));
-	//ui->_rateLabel->setText("rate: 0");
-
 	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),PhTimeCodeType25));
-	//ui->_timecodeLabel->setText("00:00:00:00");
 
 	//Combobox Init
 
@@ -119,7 +117,7 @@ void PhMediaControllerView::pushRewindButton()
 void PhMediaControllerView::pushBackButton()
 {
 	_clock->setRate(0);
-	_clock->setFrame(0);
+	_clock->setFrame(_firstFrame);
 	backButtonSignal();
 }
 
@@ -127,12 +125,14 @@ void PhMediaControllerView::pushNextFrameButton()
 {
 	PhFrame f = _clock->getFrame();
 	_clock->setFrame(f+1);
+	pushNextFrameButtonSignal();
 }
 
 void PhMediaControllerView::pushPreviousFrameButton()
 {
 	PhFrame f = _clock->getFrame();
 	_clock->setFrame(f-1);
+	pushPreviousFrameButtonSignal();
 }
 
 void PhMediaControllerView::useSliderCursor(int position)
