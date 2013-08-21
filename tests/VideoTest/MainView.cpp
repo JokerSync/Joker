@@ -10,12 +10,17 @@ MainView::MainView()
 {
 	_clock = new PhClock;
 	_timer = new QTimer();
-	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
 	_timer->start(40);
-	_videoController = new PhVideoController;
+	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+	qint64 filesize = _videoController.duration();
 
 
-	_mediaControllerView = new PhMediaControllerView(_clock,PhTimeCodeType25,3700,8000);
+
+	_mediaControllerView = new PhMediaControllerView(_clock,PhTimeCodeType25, 3500, 555);
+	qDebug() << "filesize"<<filesize;
+
+
+
     // Add an open button
     _openButton = new QPushButton(tr("Open..."));
     // Open a file dialog when user click the open button
@@ -29,10 +34,12 @@ MainView::MainView()
 
     // Add a position slider
     _positionSlider = new QSlider(Qt::Horizontal);
-    _positionSlider->setRange(0, 100);
+	_positionSlider->setRange(0, 100);
 
     // Update the video position when the user moves the slider
-	connect(_positionSlider, SIGNAL(sliderMoved(int)), _videoController, SLOT(updatePositionFromPercentage(int)));
+	//connect(_positionSlider, SIGNAL(sliderMoved(int)), &_videoController, SLOT(updatePositionFromPercentage(int)));
+	connect(_clock, SIGNAL(rateChanged()), this, SLOT(changePlayerState()));
+
 	//Update the frame when user move the slider
 	//connect(&_videoController, SIGNAL(positionPercentageChanged()),_clock, SLOT(_clock->setFrame(PhFrame)));
     // Update the slider position when the video position changes
@@ -53,7 +60,7 @@ MainView::MainView()
     // Create a second vertical layout for the video view and the first layout
     QBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
-	layout->addWidget(_videoController->view());
+	layout->addWidget(_videoController.view());
     layout->addLayout(controlLayout);
 	layout->addWidget(_mediaControllerView);
 
@@ -66,17 +73,13 @@ bool MainView::openFile(QString fileName)
     QFileInfo fileInfo(fileName);
     if (fileInfo.exists())
     {
-		_videoController->open(fileName);
-		_videoController->pause();
+		_videoController.open(fileName);
+		_videoController.setPlaybackRate(_clock->getRate());
         return true;
     }
 	return false;
 }
 
-PhClock* MainView::get_clock()
-{
-	return _clock;
-}
 
 void MainView::updateFrame()
 {
@@ -86,16 +89,26 @@ void MainView::updateFrame()
 void MainView::changePlayerState()
 {
 	int r = _clock->getRate();
-
 	switch(r)
 	{
 	case 0:
-		_videoController->pause();
+		_videoController.pause();
 		break;
 	case 1:
-		_videoController->play();
+		_videoController.play();
 		break;
+	case 4:
+		_videoController.play();
+		break;
+	case -4:
+		_videoController.play();
+		break;
+
 	}
+
+	_videoController.setPlaybackRate(r);
+
+	qDebug ()<<"rate"<<_videoController.playbackRate();
 }
 
 void MainView::onOpenFile()
