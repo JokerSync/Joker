@@ -36,19 +36,19 @@ public:
      */
     bool openFile(QString fileName);
 
-	PhClock *get_clock();
 
 public slots:
-	void updateFrame();
-	void changePlayerState();
+
 
 private slots:
     void onOpenFile();
+	void updateFrame();
+	void changePlayerState();
 	//void updatePlayButtonState(QMediaPlayer::State state);
 	//void updateErrorLabelContent();
 
 private:
-	PhVideoController *_videoController;
+	PhVideoController _videoController;
     QAbstractButton *_openButton;
     QSlider *_positionSlider;
 	PhMediaControllerView *_mediaControllerView;
