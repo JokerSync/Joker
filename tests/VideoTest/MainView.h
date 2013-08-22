@@ -45,6 +45,7 @@ private slots:
     void onOpenFile();
 	void updateFrame();
 	void changePlayerState();
+	void positionChanged();
 	//void updatePlayButtonState(QMediaPlayer::State state);
 	//void updateErrorLabelContent();
 

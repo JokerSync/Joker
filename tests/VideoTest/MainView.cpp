@@ -17,8 +17,10 @@ MainView::MainView()
 
 
 
-	_mediaControllerView = new PhMediaControllerView(_clock,PhTimeCodeType25, 2000, 850);
-	qDebug() << "filesize"<<filesize;
+
+	_mediaControllerView = new PhMediaControllerView(_clock,PhTimeCodeType2398, 2000, 0);
+	qDebug() << "filesize:"<<_videoController.duration();
+	qDebug() << "metadata:"<<_videoController.isMetaDataAvailable();
 
 
 
@@ -27,23 +29,11 @@ MainView::MainView()
     // Open a file dialog when user click the open button
     connect(_openButton, SIGNAL(clicked()), this, SLOT(onOpenFile()));
 
-
-    // Play/pause the video when user click the play button
-	//connect(_mediaControllerView, SIGNAL(playButtonSignal()), &_videoController, SLOT(playPause()));
-    // Update the play button appearance when the video state change
-	//connect(&_videoController, SIGNAL(stateChanged(QMediaPlayer::State)), this, SLOT(updatePlayButtonState(QMediaPlayer::State)));
-
-    // Add a position slider
-    _positionSlider = new QSlider(Qt::Horizontal);
-	_positionSlider->setRange(0, 100);
+	//connect(_mediaControllerView, SIGNAL(useSliderCursorSignal()), this, SLOT(positionChanged()));
 
     // Update the video position when the user moves the slider
 	//connect(_positionSlider, SIGNAL(sliderMoved(int)), &_videoController, SLOT(updatePositionFromPercentage(int)));
 	connect(_clock, SIGNAL(rateChanged()), this, SLOT(changePlayerState()));
-
-	//Update the frame when user move the slider
-	//connect(&_videoController, SIGNAL(positionPercentageChanged()),_clock, SLOT(_clock->setFrame(PhFrame)));
-    // Update the slider position when the video position changes
 
 
     // Add an error label
@@ -56,7 +46,6 @@ MainView::MainView()
     QBoxLayout *controlLayout = new QHBoxLayout;
     controlLayout->setMargin(5);
     controlLayout->addWidget(_openButton);
-	//controlLayout->addWidget(_positionSlider);
 
     // Create a second vertical layout for the video view and the first layout
     QBoxLayout *layout = new QVBoxLayout;
@@ -67,6 +56,7 @@ MainView::MainView()
 
     // Add the layout to the main window
     this->setLayout(layout);
+	_videoController.play();
 }
 
 bool MainView::openFile(QString fileName)
@@ -76,6 +66,7 @@ bool MainView::openFile(QString fileName)
     {
 		_videoController.open(fileName);
 		_videoController.setPlaybackRate(_clock->getRate());
+		qDebug()<<"duration:"<<_videoController.duration();
         return true;
     }
 	return false;
@@ -84,36 +75,35 @@ bool MainView::openFile(QString fileName)
 
 void MainView::updateFrame()
 {
-	//int f;
+	int f;
 	_clock->tick();
-	//f = _clock->getFrame();
+	f = _clock->getFrame();
 	//_videoController.setPosition(f);
-	//qDebug()<<"frame"<< f <<"position"<< _videoController.position();
+	qDebug()<<"frame"<< 1000*f/24 <<"position"<< _videoController.position();
+
 }
 
 void MainView::changePlayerState()
 {
 	int r = _clock->getRate();
-	switch(r)
-	{
-	case 0:
-		_videoController.pause();
-		break;
-	case 1:
-		_videoController.play();
-		break;
-	case 4:
-		_videoController.play();
-		break;
-	case -4:
-		_videoController.play();
-		break;
 
+	if(r == 0)
+	{
+		_videoController.pause();
 	}
+	else
+		_videoController.play();
 
 	_videoController.setPlaybackRate(r);
 
 	qDebug ()<<"rate"<<_videoController.playbackRate();
+}
+
+void MainView::positionChanged()
+{
+	qint64 f = _clock->getFrame();
+	qint64 p = f*1000/_mediaControllerView->get_framePerSecond();
+	_videoController.setPosition(p);
 }
 
 void MainView::onOpenFile()
