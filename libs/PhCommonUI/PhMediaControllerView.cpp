@@ -12,8 +12,7 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType time
 	ui->setupUi(this);
 	_clock = new PhClock;
 	_clock = clock;
-	_framePerSecond = new PhFrame;
-	*_framePerSecond = PhTimeCode::getFps(_timecodeType);
+	_framePerSecond = PhTimeCode::getFps(_timecodeType);
 	_fileProgress = 0;
 
 	_clock->setFrame(_firstFrame);
@@ -69,7 +68,7 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType time
 
 }
 
-PhFrame *PhMediaControllerView::get_framePerSecond() const
+int PhMediaControllerView::get_framePerSecond() const
 {
 	return _framePerSecond;
 }
@@ -139,6 +138,7 @@ void PhMediaControllerView::useSliderCursor(int position)
 {
 	int t = position*_lengthFile/100 + _firstFrame;
 	_clock->setFrame(t);
+	useSliderCursorSignal();
 }
 
 
@@ -188,7 +188,7 @@ void PhMediaControllerView::selectRate()
 		break;
 
 	}
-	*_framePerSecond = PhTimeCode::getFps(_timecodeType);
+	_framePerSecond = PhTimeCode::getFps(_timecodeType);
 
 
 }

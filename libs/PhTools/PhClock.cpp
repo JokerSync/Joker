@@ -34,6 +34,11 @@ void PhClock::tick()
 {
 	_frame += _rate;
 	frameChanged();
+	if(_frame < 0)
+	{
+		_frame = 0;
+		_rate = 0;
+	}
 
 }
 
