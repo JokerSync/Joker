@@ -8,6 +8,8 @@ GraphicTestView::GraphicTestView(QWidget *parent, QString name)
 
 bool GraphicTestView::init()
 {
+	playEnable = false;
+
 #ifdef IMAGE
 	qDebug() << "GraphicTestView::init";
 	if(_image == NULL)
@@ -15,7 +17,7 @@ bool GraphicTestView::init()
 		qDebug() << "Initialize _image";
 		_image = new PhGraphicImage;
 		_image->setFilename("look.png");
-		_image->setTextureCoordinate(1, 0.5f);
+		_image->setTextureCoordinate(1,1);
 		_image->setRect(50,0,250,125);
 		if (! _image->init())
 			qDebug() << "_image not initialize";
@@ -41,6 +43,7 @@ bool GraphicTestView::init()
 		if (! _text->init())
 			qDebug() << "_text not initialize";
 
+		_text->setX(280);
 	}
 #endif
 
@@ -62,12 +65,28 @@ void GraphicTestView::paint()
 #endif
 
 #ifdef TEXT
-	if(_text != NULL)
+	if (playEnable == false)
 	{
-		_text->setX(_text->getX()+4);
-		_text->draw();
-		if(_text->getX() > this->width())
-			_text->setX(0);
+		if(_text != NULL)
+		{
+			//_text->setX(_text->getX()+4);
+			_text->draw();
+			if(_text->getX() > this->width())
+				_text->setX(0);
+
+		}
+	}
+	else
+	{
+		if(_text != NULL)
+		{
+			qDebug() <<"text pas null";
+			_text->setX(_text->getX()+4);
+			_text->draw();
+			if(_text->getX() > this->width())
+				_text->setX(0);
+
+		}
 	}
 #endif
 
@@ -77,3 +96,10 @@ void GraphicTestView::paint()
 }
 
 
+void GraphicTestView::play()
+{
+	if (playEnable == true)
+		playEnable = false;
+	else
+		playEnable = true;
+}

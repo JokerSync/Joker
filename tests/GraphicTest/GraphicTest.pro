@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     ../../libs/PhGraphic/PhGraphicObject.cpp \
     ../../libs/PhGraphic/PhGraphicRect.cpp \
     ../../libs/PhTools/PhString.cpp \
-    ../../libs/PhGraphic/PhGraphicSolidRect.cpp
+    ../../libs/PhGraphic/PhGraphicSolidRect.cpp \
+    QtDesigner.cpp
 
 HEADERS  += MainWindow.h \
 	GraphicTestView.h \
@@ -43,7 +44,8 @@ HEADERS  += MainWindow.h \
     ../../libs/PhGraphic/PhGraphicObject.h \
     ../../libs/PhGraphic/PhGraphicRect.h \
     ../../libs/PhTools/PhString.h \
-    ../../libs/PhGraphic/PhGraphicSolidRect.h
+    ../../libs/PhGraphic/PhGraphicSolidRect.h \
+    QtDesigner.h
 
 INCLUDEPATH += ../../libs/PhGraphic \
 				../../libs/PhTools \
@@ -58,3 +60,6 @@ DEPENDPATH +=  ../../libs/PhGraphic \
 				../../libs
 
 LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+
+FORMS += \
+    QtDesigner.ui
