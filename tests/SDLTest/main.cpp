@@ -1,3 +1,5 @@
+#include <QtGlobal>
+
 #include <SDL/SDL.h>
 #if defined(Q_OS_MAC)
 #include <SDL_image/SDL_image.h>
@@ -17,6 +19,7 @@
 #include <QString>
 #include <QFileInfo>
 #include <QDebug>
+#include <QDir>
 
 //Screen attributes
 const int SCREEN_WIDTH = 640;
@@ -113,6 +116,7 @@ int main(int argc, char **argv)
     //Set the title
     SDL_WM_SetCaption( "Graphic Test", NULL );
 
+	qDebug() << "current path : " << QDir::currentPath();
 	qDebug() << "load_image";
     // Create a surface from picture:
 	QString imagePath = "look.png";
