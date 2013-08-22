@@ -88,7 +88,7 @@ bool PhGraphicStripView::init()
 		}
 		_texts.push_back(new PhGraphicText( _currentFont, it->getContent(),
 										   (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
-										   (it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , 1, 1, it->getPeople().getColor()));
+											(it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , 1, 1, it->getPeople().getColor()));
 	  //        if (i % (max / 20) == 0){
 	  //            QApplication::processEvents();
 	  //        }
@@ -155,10 +155,15 @@ void PhGraphicStripView::paint()
 //		//it->draw(_xMoveStrip);
 //		it->draw();
 //    }
+	int x = 0;
+	int y = 0;
 	foreach(PhGraphicText * it, _texts)
 	{
 		//it->draw(_xmove);
 		qDebug() << "Draw PhGraphicText" ;
+//		it->setX(x);
+//		it->setY(y);
+//		it->setWidht(w);
 		it->draw();
 	}
 //	foreach(PhGraphicRect * it, _cuts)
