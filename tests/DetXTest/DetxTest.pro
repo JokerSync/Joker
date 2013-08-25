@@ -5,42 +5,21 @@
 #-------------------------------------------------
 
 QT      += core
-QT		+= xml
 
 QT       -= gui
 
-TARGET = DetxTest
+TARGET = DetXTest
 CONFIG   += console
 CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
-SOURCES += main.cpp \
-        ../../libs/PhStrip/PhStripDoc.cpp \
-	../../libs/PhTools/PhColor.cpp \
-	../../libs/PhTools/PhTime.cpp \
-	../../libs/PhTools/PhTimeCode.cpp \
-	../../libs/PhStrip/PhStripObject.cpp \
-	../../libs/PhStrip/PhStripCut.cpp \
-	../../libs/PhStrip/PhStripText.cpp \
-	../../libs/PhStrip/PhStripLoop.cpp \
-	../../libs/PhStrip/PhPeople.cpp \
-	../../libs/PhTools/PhString.cpp
+INCLUDEPATH += $${JOKER_ROOT}/libs
 
-HEADERS += \
-          ../../libs/PhStrip/PhStripDoc.h \
-	../../libs/PhTools/PhColor.h \
-	../../libs/PhTools/PhTime.h \
-	../../libs/PhTools/PhTimeCode.h \
-	../../libs/PhStrip/PhStripObject.h \
-	../../libs/PhStrip/PhStripCut.h \
-	../../libs/PhStrip/PhStripText.h \
-	../../libs/PhStrip/PhStripLoop.h \
-	../../libs/PhStrip/PhPeople.h \
-	../../libs/PhTools/PhString.h
+include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
+include($${JOKER_ROOT}/libs/PhStrip/PhStrip.pri)
 
-INCLUDEPATH += \
-	../StripTest/ \
-	../../libs/
+SOURCES += main.cpp
 
