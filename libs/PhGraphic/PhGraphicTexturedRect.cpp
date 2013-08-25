@@ -10,7 +10,7 @@
 
 
 
-void PhGraphicTexturedRect::createTextureFromColor(PhColor color){
+void PhGraphicTexturedRect::createTextureFromColor(QColor color){
 
     GLubyte Texture[4] =
     {
@@ -103,7 +103,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 //    return *_surface;
 //}
 
-PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, float tu, float tv, PhColor *color)
+PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, float tu, float tv, QColor *color)
 	: PhGraphicRect(x, y, w, h , z, color), _tu(tu), _tv(tv)
 {
 }

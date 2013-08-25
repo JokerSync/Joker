@@ -44,10 +44,9 @@ bool GraphicTestView::init()
 	if(_text == NULL)
 	{
 		qDebug() << "Initialize _text";
-		_text = new PhGraphicText;
-		_text->setContent("Test PhGraphicText");
-		_text->setFont(_font);
+		_text = new PhGraphicText(_font, "Test PhGraphicText");
 		_text->setRect(50,135,250,125);
+		_text->setColor(new QColor(100, 254, 0));
 		if (! _text->init())
 			qDebug() << "_text not initialize";
 
@@ -58,7 +57,7 @@ bool GraphicTestView::init()
 	if(_rect == NULL)
 	{
 		qDebug() << "Initialize _text";
-		_rect = new PhGraphicSolidRect(100, 100, 75, 40, 1, new PhColor());
+		_rect = new PhGraphicSolidRect(100, 100, 75, 40, 1, new QColor(200, 128, 0));
 	}
 #endif
 

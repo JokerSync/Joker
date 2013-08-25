@@ -1,6 +1,6 @@
 #include "PhGraphicSolidRect.h"
 
-PhGraphicSolidRect::PhGraphicSolidRect(int x, int y, int w, int h, int z, PhColor *color) :
+PhGraphicSolidRect::PhGraphicSolidRect(int x, int y, int w, int h, int z, QColor *color) :
 	PhGraphicRect(x, y, w, h, z, color)
 {
 }
@@ -33,7 +33,6 @@ void PhGraphicSolidRect::draw()
 //		*/
 
 //qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h ;
-glColor3d(1, 0, 0);
-glRectd( x, y, x+w, y+h);
-
+	glColor3d(this->getColor()->redF(), this->getColor()->greenF(), this->getColor()->blueF());
+	glRectd( x, y, x+w, y+h);
 }

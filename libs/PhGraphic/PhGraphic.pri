@@ -47,6 +47,7 @@ mac {
 	INCLUDEPATH += /Library/Frameworks/
 	LIBS += -F/Library/Frameworks
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
+#	copylibs.commands += cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/;
 }
 
 
