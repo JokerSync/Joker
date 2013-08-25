@@ -1,8 +1,6 @@
 #ifndef PHTIMECODE_H
 #define PHTIMECODE_H
 
-#include "PhString.h"
-
 /**
  Type for the timecode frame.
  */
@@ -32,7 +30,7 @@ public:
      Create a timecode string representation from a frame number and a type
      @param frame A frame number.
      @param type A PhTimeCodeType value.
-     @return An PhString* timecode representation.
+     @return An string* timecode representation.
      */
 	static QString stringFromFrame(PhFrame frame, PhTimeCodeType type);
 

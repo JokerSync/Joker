@@ -10,7 +10,6 @@
 #include "SDL/SDL.h"
 
 #include "PhStrip/PhStripDoc.h"
-#include "PhTools/PhString.h"
 #include "PhTools/PhFileTools.h"
 
 #include "MainView.h"

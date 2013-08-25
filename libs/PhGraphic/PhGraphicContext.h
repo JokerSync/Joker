@@ -9,8 +9,6 @@
 #include <QDebug>
 #include <QImage>
 
-#include "PhTools/PhString.h"
-
 class PhGraphicView;
 
 class PhGraphicContext

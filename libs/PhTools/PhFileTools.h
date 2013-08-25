@@ -9,7 +9,5 @@
 #include <QDir>
 #include <QFile>
 
-#include "PhString.h"
-
 void copyFolder(QString sourceFolder, QString destFolder);
 #endif // PHFILETOOLS_H
