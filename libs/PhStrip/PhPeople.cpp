@@ -8,22 +8,22 @@
 PhPeople::PhPeople()
 {
     _name = "Default";
-    _color = PhColor();
+	_color = new PhColor();
 }
 
-PhPeople::PhPeople(PhString name, PhColor color)
+PhPeople::PhPeople(QString name, PhColor *color)
 {
     _name = name;
     _color = color;
 }
 
-PhString PhPeople::getName()
+QString PhPeople::getName()
 {
     return _name;
 }
 
 
-PhColor PhPeople::getColor()
+PhColor *PhPeople::getColor()
 {
     return _color;
 }

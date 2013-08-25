@@ -103,17 +103,17 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 //    return *_surface;
 //}
 
-PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, int tu, int tv)
-	: PhGraphicRect(x, y, w, h , z), _tu(tu), _tv(tv)
+PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, float tu, float tv, PhColor *color)
+	: PhGraphicRect(x, y, w, h , z, color), _tu(tu), _tv(tv)
 {
 }
 
 void PhGraphicTexturedRect::draw(){
 
-
-	//glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
+	qDebug() << "PhGraphicTexturedRect::draw()";
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+	glLoadIdentity();
 
     int x = this->getX();
     int w = this->getWidth();
@@ -138,18 +138,24 @@ void PhGraphicTexturedRect::draw(){
         (0,1) ------ (1,1)
         */
 
-		//qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
+		qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
 
 		glBegin(GL_QUADS); 	//Begining the cube's drawing
 		{
-			glTexCoord3i(0, 0, 1);glVertex3i(x ,         y,      z);
-			glTexCoord3i(_tv, 0, 1);glVertex3i(x + w * _tv ,     y,      z);
-			glTexCoord3i(_tv, _tu, 1);glVertex3i(x + w * _tv ,     y + h * _tu,  z);
-			glTexCoord3i(0, _tu, 1);glVertex3i(x ,         y + h * _tu,  z);
+			glTexCoord3f(0, 0, 1);glVertex3f(x ,         y,      z);
+			glTexCoord3f(_tu, 0, 1);glVertex3f(x + w * _tu ,     y,      z);
+			glTexCoord3f(_tu, _tv, 1);glVertex3f(x + w * _tu ,     y + h * _tv,  z);
+			glTexCoord3f(0, _tv, 1);glVertex3f(x ,         y + h * _tv,  z);
 		}
         glEnd();
         glDisable(GL_TEXTURE_2D);
 
+}
+
+void PhGraphicTexturedRect::setTextureCoordinate(float tu, float tv)
+{
+	_tu = tu;
+	_tv = tv;
 }
 GLuint PhGraphicTexturedRect::getTexture(){
     return _texture;

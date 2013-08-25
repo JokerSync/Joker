@@ -9,8 +9,6 @@
 #include <QDebug>
 #include <QImage>
 
-#include "PhTools/PhString.h"
-
 class PhGraphicView;
 
 class PhGraphicContext
@@ -26,14 +24,14 @@ public:
      * @brief saveToPNG
      * Save the current framebuffer to a PNG file
      */
-    void saveToPNG();
+   // void saveToPNG();
     /**
      * @brief saveToPNG
      * @param number
      * Save the current framebuffer and the (number - 1) nexts elements
      */
-    void saveToPNG(PhString number);
-    void exportToPng();
+	//void saveToPNG(QString number);
+	//void exportToPng();
 
 private:
     /**

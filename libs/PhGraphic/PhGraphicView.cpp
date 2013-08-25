@@ -63,9 +63,9 @@ void PhGraphicView::onRefresh()
 }
 
 
-//PhGraphicContext *PhGraphicView::getContext()
-//{
-//	return _context;
-//}
+PhGraphicContext *PhGraphicView::getContext()
+{
+	return _context;
+}
 
 

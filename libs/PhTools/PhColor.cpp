@@ -7,7 +7,7 @@
 #include "PhColor.h"
 
 
-PhColor::PhColor(PhString color) : QColor(color)
+PhColor::PhColor(QString color) : QColor(color)
 {
 }
 

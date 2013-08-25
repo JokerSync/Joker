@@ -6,7 +6,6 @@
 #include <QDir>
 #include <QObject>
 
-#include "PhTools/PhString.h"
 #include "PhStrip/PhStripDoc.h"
 
 class PhGraphicController : public QObject

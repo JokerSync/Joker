@@ -10,15 +10,13 @@
 
 #include <glu.h>
 
-#include "PhTools/PhString.h"
-
 #include "PhGraphicRect.h"
 
 class PhGraphicTexturedRect : public PhGraphicRect
 {
 public:
 
-	PhGraphicTexturedRect(int x = 0, int y =0, int w = 0, int h = 0, int z = 0, int tu = 1, int tv = 1);
+	PhGraphicTexturedRect(int x = 0, int y =0, int w = 0, int h = 0, int z = 0, float tu = 1, float tv = 1, PhColor *color = new PhColor());
 
     /**
      * @brief draw
@@ -26,6 +24,8 @@ public:
      * draw the textured rectangle
      */
 	void draw();
+
+	void setTextureCoordinate(float tu, float tv);
 protected:
 
     /**
@@ -57,12 +57,12 @@ private:
     GLuint _texture;
     /**
      * @brief _tv
-     * number of horizontal repetition
+	 * number of vertical repetition
      */
 	float _tv;
     /**
      * @brief _tu
-     * number of vertical repetition
+	 * number of horizontal repetition
      */
 	float _tu;
 //  SDL_Surface *_surface;

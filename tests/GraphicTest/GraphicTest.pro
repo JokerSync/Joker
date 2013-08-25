@@ -15,6 +15,7 @@ greaterThan(QT_MAJOR_VERSION, 4):
 TARGET = GraphicTest
 TEMPLATE = app
 
+JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 SOURCES += main.cpp\
         MainWindow.cpp \
@@ -28,7 +29,7 @@ SOURCES += main.cpp\
     ../../libs/PhTools/PhColor.cpp \
     ../../libs/PhGraphic/PhGraphicObject.cpp \
     ../../libs/PhGraphic/PhGraphicRect.cpp \
-    ../../libs/PhTools/PhString.cpp
+    ../../libs/PhGraphic/PhGraphicSolidRect.cpp
 
 HEADERS  += MainWindow.h \
 	GraphicTestView.h \
@@ -41,7 +42,7 @@ HEADERS  += MainWindow.h \
     ../../libs/PhTools/PhColor.h \
     ../../libs/PhGraphic/PhGraphicObject.h \
     ../../libs/PhGraphic/PhGraphicRect.h \
-    ../../libs/PhTools/PhString.h
+    ../../libs/PhGraphic/PhGraphicSolidRect.h
 
 INCLUDEPATH += ../../libs/PhGraphic \
 				../../libs/PhTools \
@@ -55,4 +56,33 @@ DEPENDPATH +=  ../../libs/PhGraphic \
 			   /usr/include/SDL \
 				../../libs
 
-LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+# Windows specific
+win32 {
+#TODO
+	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+	RESOURCES_PATH = $${DESTDIR}
+}
+
+# Ubuntu specific
+linux {
+	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+	RESOURCES_PATH = .
+}
+
+
+# MacOS specific
+mac {
+	OBJECTIVE_SOURCES += ../../libs/PhGraphic/SDLMain.m
+	OBJECTIVE_HEADERS += ../../libs/PhGraphic/SDLMain.h
+	INCLUDEPATH += /Library/Frameworks/
+	LIBS += -F/Library/Frameworks
+	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
+	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS
+}
+
+QMAKE_POST_LINK += echo $${RESOURCES_PATH}
+QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/img/look.png $${RESOURCES_PATH}
+QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/fonts/Bedizen.ttf $${RESOURCES_PATH}
+
+
+
