@@ -30,7 +30,7 @@ SOURCES += \
 	../../libs/PhTools/PhTime.cpp \
 	../../libs/PhTools/PhTimeCode.cpp
 
-RESOURCES_PATH = data
+RESOURCES_PATH = .
 
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/look.png $${RESOURCES_PATH}
-#QMAKE_POST_LINK += echo $${_PRO_FILE_PWD_}
+#QMAKE_POST_LINK += echo $${_PRO_FILE_PWD_} && echo test

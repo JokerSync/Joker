@@ -15,6 +15,7 @@ greaterThan(QT_MAJOR_VERSION, 4):
 TARGET = GraphicTest
 TEMPLATE = app
 
+JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 SOURCES += main.cpp\
         MainWindow.cpp \
@@ -58,11 +59,14 @@ DEPENDPATH +=  ../../libs/PhGraphic \
 # Windows specific
 win32 {
 #TODO
+	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+	RESOURCES_PATH = $${DESTDIR}
 }
 
 # Ubuntu specific
 linux {
 	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+	RESOURCES_PATH = .
 }
 
 
@@ -73,7 +77,12 @@ mac {
 	INCLUDEPATH += /Library/Frameworks/
 	LIBS += -F/Library/Frameworks
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
+	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS
 }
 
-QMAKE_POST_LINK += echo pouet
+QMAKE_POST_LINK += echo $${RESOURCES_PATH}
+QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/img/look.png $${RESOURCES_PATH}
+QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/fonts/Bedizen.ttf $${RESOURCES_PATH}
+
+
 
