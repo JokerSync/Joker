@@ -16,19 +16,11 @@ TEMPLATE = app
 
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
+include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
+
 SOURCES += main.cpp
 
 INCLUDEPATH += 	$${JOKER_ROOT}/libs
-
-# PhTools
-
-HEADERS += \
-	../../libs/PhTools/PhTime.h \
-    ../../libs/PhTools/PhTimeCode.h
-
-SOURCES += \
-	../../libs/PhTools/PhTime.cpp \
-	../../libs/PhTools/PhTimeCode.cpp
 
 RESOURCES_PATH = .
 
