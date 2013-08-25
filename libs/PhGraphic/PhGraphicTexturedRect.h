@@ -16,7 +16,7 @@ class PhGraphicTexturedRect : public PhGraphicRect
 {
 public:
 
-	PhGraphicTexturedRect(int x = 0, int y =0, int w = 0, int h = 0, int z = 0, float tu = 1, float tv = 1, PhColor *color = new PhColor());
+	PhGraphicTexturedRect(int x = 0, int y =0, int w = 0, int h = 0, int z = 0, float tu = 1, float tv = 1, QColor *color = new QColor());
 
     /**
      * @brief draw
@@ -35,7 +35,7 @@ protected:
      */
 	bool createTextureFromSurface(SDL_Surface * surface);
 
-    void createTextureFromColor(PhColor color);
+    void createTextureFromColor(QColor color);
 //    void setTexture(GLuint texture);
 
 //    SDL_Surface * getSurface();

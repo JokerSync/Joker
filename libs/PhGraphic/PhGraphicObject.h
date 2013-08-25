@@ -6,14 +6,15 @@
 #ifndef PHGRAPHICOBJECT_H
 #define PHGRAPHICOBJECT_H
 
+#include <QColor>
+
 #include "PhFont.h"
-#include "PhTools/PhColor.h"
 
 class PhGraphicObject
 {
 public:
 
-	PhGraphicObject(int x = 0, int y = 0, int z = 0, PhColor * color = new PhColor(1,1,1,1));
+	PhGraphicObject(int x = 0, int y = 0, int z = 0, QColor * color = new QColor(1,1,1,1));
 
 	/**
 	 * @brief init
@@ -73,18 +74,9 @@ public:
      */
     int getZ();
 
-	/**
-	 * @brief setColor
-	 * @param color
-	 * Set the PhColor of the PhGraphicObject
-	 */
-	void setColor(PhColor *color);
+	void setColor(QColor *color);
 
-	/**
-	 * @brief getColor
-	 * @return
-	 */
-	PhColor *getColor();
+	QColor *getColor();
 
 private:
 
@@ -108,7 +100,7 @@ private:
 	 * @brief _color
 	 * The PhColor of the PhGraphicObject
 	 */
-	PhColor* _color;
+	QColor* _color;
 };
 
 #endif // PHGRAPHICOBJECT_H

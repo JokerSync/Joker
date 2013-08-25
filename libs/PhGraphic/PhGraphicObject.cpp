@@ -5,7 +5,7 @@
 
 #include "PhGraphicObject.h"
 
-PhGraphicObject::PhGraphicObject(int x , int y, int z, PhColor* color) : _x(x), _y(y), _z(z), _color(color)
+PhGraphicObject::PhGraphicObject(int x , int y, int z, QColor* color) : _x(x), _y(y), _z(z), _color(color)
 {
 }
 
@@ -45,11 +45,11 @@ int PhGraphicObject::getZ()
 }
 
 
-PhColor * PhGraphicObject::getColor(){
+QColor * PhGraphicObject::getColor(){
 	return _color;
 }
 
-void PhGraphicObject::setColor(PhColor* color){
+void PhGraphicObject::setColor(QColor* color){
 	_color = color;
 }
 

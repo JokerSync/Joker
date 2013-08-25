@@ -9,7 +9,7 @@
 
 
 
-PhGraphicRect::PhGraphicRect(int x, int y, int w, int h, int z, PhColor *color)
+PhGraphicRect::PhGraphicRect(int x, int y, int w, int h, int z, QColor *color)
 	: PhGraphicObject(x , y , z, color), _w(w), _h(h)
 {
 }
