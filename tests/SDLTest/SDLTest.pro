@@ -29,5 +29,3 @@ mac {
 	LIBS += -F/Library/Frameworks
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
 }
-
-RESOURCES += SDLTest.qrc
