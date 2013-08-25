@@ -67,7 +67,7 @@ bool PhGraphicStripView::init()
 	int i = 0;
 	qDebug() << "load the text" ;
 	//Load the all text
-	foreach(PhStripText * it, _controller->getDoc().getTexts())
+	foreach(PhStripText * text, _controller->getDoc().getTexts())
 	{
 		qDebug() << "on rentre" ;
 		//barTest.setValue(i);
@@ -77,18 +77,18 @@ bool PhGraphicStripView::init()
 		//hstrip/8 correspond to the two alpha lines of the strip (up & down)
 		//it->getTrack() is the position on the strip (0 is the upper on)
 		//we split   in 3 because we are using 3 tracks on the strip
-		int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*it->getTrack() + 30;
+		int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*text->getTrack() + 30;
 
 		//Display the name only if the setence is standalone
-		if (it->isSimple()){
-			int nameWidth = (it->getPeople().getName().length() + 1) * 10;
-			_texts.push_back(new PhGraphicText( _fonts.first(),it->getPeople().getName(),
-											   (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
-											   nameWidth, 30, 1, 1, it->getPeople().getColor()));
+		if (text->isSimple()){
+			int nameWidth = (text->getPeople().getName().length() + 1) * 10;
+			_texts.push_back(new PhGraphicText( _fonts.first(),text->getPeople().getName(),
+											   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
+											   nameWidth, 30, 1, 1, new QColor(text->getPeople().getColor())));
 		}
-		_texts.push_back(new PhGraphicText( _currentFont, it->getContent(),
-										   (it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
-											(it->getTimeOut() - it->getTimeIn()) * 20, hstrip / 5 , 1, 1, it->getPeople().getColor()));
+		_texts.push_back(new PhGraphicText( _currentFont, text->getContent(),
+										   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
+											(text->getTimeOut() - text->getTimeIn()) * 20, hstrip / 5 , 1, 1, new QColor(text->getPeople().getColor())));
 	  //        if (i % (max / 20) == 0){
 	  //            QApplication::processEvents();
 	  //        }
@@ -98,28 +98,20 @@ bool PhGraphicStripView::init()
     //Set a default number of strip repetition
 	int nbRythmo = this->width()/60;
 
-    //Load the strip
-#if defined(Q_OS_MAC)
-		QString filePath = QCoreApplication::applicationDirPath()+"/../Resources/img/motif-240.png";
-
-#elif defined(Q_OS_UNIX)
-		QString filePath = "data/img/motif-240.png";
-		qDebug() << "filePath : " << filePath ;
-#endif
-
-		_stripBackgroundImage = new PhGraphicImage(filePath);
-		_stripBackgroundImage->setTextureCoordinate(tu, 1);
-		_stripBackgroundImage->init();
+    //Load the strip background
+	_stripBackgroundImage = new PhGraphicImage("motif-240.png");
+	_stripBackgroundImage->setTextureCoordinate(tu, 1);
+	_stripBackgroundImage->init();
 
 	//Load the cuts
-	foreach(PhStripCut * it, _controller->getDoc().getCuts())
+	foreach(PhStripCut * cut, _controller->getDoc().getCuts())
 	{
-		PhColor *color = new PhColor();
-		PhGraphicSolidRect *rect = new PhGraphicSolidRect((it->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
-						   2, hstrip, color);
+		PhGraphicSolidRect *rect = new PhGraphicSolidRect((cut->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
+														  2, hstrip, new QColor(0, 0, 0));
 		_cuts.push_back(rect);
 	}
 
+	return true;
 }
 
 void PhGraphicStripView::paint()

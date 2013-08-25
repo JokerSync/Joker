@@ -66,6 +66,12 @@ public:
      */
     explicit PhGraphicStripView(QWidget *parent = 0);
 
+	/**
+	 * @brief PhGraphicStripView::getDoc
+	 * @return PhStripDoc
+	 */
+	PhStripDoc *getDoc();
+
 protected:
 
 	bool init();
@@ -114,20 +120,11 @@ protected:
 	 */
 	void setXmove(int n);
 
-	/**
-	 * @brief PhGraphicStripView::getDoc
-	 * @return PhStripDoc
-	 */
-	PhStripDoc *getDoc();
-
 	void toggleNaturalScrolling();
 	//void setController(MainController * controller);
 	void setController(PhGraphicStripController * controller);
 	void connectSlots();
 	void setNaturalScroll(bool naturalScroll);
-
-
-	void openFile(char * file);
 
 public slots:
 	void stopScroll();

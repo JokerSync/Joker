@@ -32,7 +32,6 @@ void PhGraphicSolidRect::draw()
 //		(0,1) ------ (1,1)
 //		*/
 
-//qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h ;
 	glColor3d(this->getColor()->redF(), this->getColor()->greenF(), this->getColor()->blueF());
 	glRectd( x, y, x+w, y+h);
 }
