@@ -238,7 +238,7 @@ bool PhStripDoc::getDrop()
     return _drop;
 }
 
-QMap<QString, PhPeople *> PhStripDoc::getActors()
+QMap<QString, PhPeople *> PhStripDoc::getPeoples()
 {
     return _actors;
 }
