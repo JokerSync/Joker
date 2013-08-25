@@ -23,38 +23,38 @@ PhGraphicContext::PhGraphicContext(PhGraphicView *view)
     init();
 }
 
-void PhGraphicContext::saveToPNG()
-{
-    QImage impr(_graphVeiw->grabFrameBuffer());
-    QDateTime now(QDateTime::currentDateTime());
-    if(!QDir(QDir::homePath()+"/Phonations/").exists())
-        QDir().mkdir(QDir::homePath()+"/Phonations/");
-    QString s = QDir::homePath()+"/Phonations/" +"Phonations-" + now.toString("dd-MM-yy-h-m-s")  + ".png";
-    impr.save(s);
-}
+//void PhGraphicContext::saveToPNG()
+//{
+//    QImage impr(_graphVeiw->grabFrameBuffer());
+//    QDateTime now(QDateTime::currentDateTime());
+//    if(!QDir(QDir::homePath()+"/Phonations/").exists())
+//        QDir().mkdir(QDir::homePath()+"/Phonations/");
+//    QString s = QDir::homePath()+"/Phonations/" +"Phonations-" + now.toString("dd-MM-yy-h-m-s")  + ".png";
+//    impr.save(s);
+//}
 
-void PhGraphicContext::saveToPNG(PhString number){
-    QImage impr(_graphVeiw->grabFrameBuffer());
-    QDateTime now(QDateTime::currentDateTime());
-    if(!QDir(QDir::homePath()+"/Phonations/").exists())
-        QDir().mkdir(QDir::homePath()+"/Phonations/");
-    QString s = QDir::homePath()+"/Phonations/"+"Phonations-serie" + now.toString("h-m-s") + "-" + number  + ".png";
-    impr.save(s);
-}
+//void PhGraphicContext::saveToPNG(QString number){
+//    QImage impr(_graphVeiw->grabFrameBuffer());
+//    QDateTime now(QDateTime::currentDateTime());
+//    if(!QDir(QDir::homePath()+"/Phonations/").exists())
+//        QDir().mkdir(QDir::homePath()+"/Phonations/");
+//    QString s = QDir::homePath()+"/Phonations/"+"Phonations-serie" + now.toString("h-m-s") + "-" + number  + ".png";
+//    impr.save(s);
+//}
 
 //void PhGraphicContext::exportToPng()
 //{
-//    //_strip->setXmove(0);
-//    // As 1920px is 4 sec, 1 min is 28800 px
-//    int nbFrames = (28800 / _graphVeiw->width()) + 1;
-//    for(int i = 0; i < nbFrames ; i++){
-//        // Save the current frame buffer
-//        saveToPNG(QString::number(i));
-//        // Scroll the strip of the window width
-//        _graphVeiw->setXmove(_graphVeiw->width());
-//        // Re paint
-//        _graphVeiw->paintGL();
-//    }
+//	//_strip->setXmove(0);
+//	// As 1920px is 4 sec, 1 min is 28800 px
+//	int nbFrames = (28800 / _graphVeiw->width()) + 1;
+//	for(int i = 0; i < nbFrames ; i++){
+//		// Save the current frame buffer
+//		saveToPNG(QString::number(i));
+//		// Scroll the strip of the window width
+//		//_graphVeiw->setXmove(_graphVeiw->width());
+//		// Re paint
+//		_graphVeiw->paintGL();
+//	}
 //}
 
 

@@ -1,8 +1,6 @@
 #ifndef PHSTRIPTEXT_H
 #define PHSTRIPTEXT_H
 
-#include "PhTools/PhString.h"
-
 #include "PhPeople.h"
 #include "PhStrip/PhStripObject.h"
 
@@ -23,12 +21,12 @@ public:
      * @param simpleText
      * Constructor
      */
-    PhStripText(PhPeople * people, PhString content, PhTime timeIn, PhTime timeOut, int track, bool simpleText);
+	PhStripText(PhPeople * people, QString content, PhTime timeIn, PhTime timeOut, int track, bool simpleText);
     /**
      * @brief getContent
      * @return _content
      */
-    PhString getContent();
+	QString getContent();
     /**
      * @brief getPeople
      * @return _people
@@ -63,7 +61,7 @@ private:
 /**
  * Text string of Sentence or part of a sentence.
  */
-    PhString _content;
+	QString _content;
 
     /**
      * Reference to the PhPeople who is affected to the PhStripText

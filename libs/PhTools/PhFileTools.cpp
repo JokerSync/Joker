@@ -6,7 +6,7 @@
 #include "QDebug"
 #include "PhFileTools.h"
 
-void copyFolder(PhString sourceFolder, PhString destFolder)
+void copyFolder(QString sourceFolder, QString destFolder)
 {
     QDir sourceDir(sourceFolder);
     if(!sourceDir.exists())
@@ -19,16 +19,16 @@ void copyFolder(PhString sourceFolder, PhString destFolder)
             QStringList files = sourceDir.entryList(QDir::Files);
             for(int i = 0; i< files.count(); i++)
             {
-                PhString srcName = sourceFolder + "/" + files[i];
-                PhString destName = destFolder + "/" + files[i];
+				QString srcName = sourceFolder + "/" + files[i];
+				QString destName = destFolder + "/" + files[i];
                 QFile::copy(srcName, destName);
             }
             files.clear();
             files = sourceDir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
             for(int i = 0; i< files.count(); i++)
             {
-                PhString srcName = sourceFolder + "/" + files[i];
-                PhString destName = destFolder + "/" + files[i];
+				QString srcName = sourceFolder + "/" + files[i];
+				QString destName = destFolder + "/" + files[i];
                 copyFolder(srcName, destName);
             }
         }

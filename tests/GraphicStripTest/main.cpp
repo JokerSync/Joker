@@ -10,7 +10,6 @@
 #include "SDL/SDL.h"
 
 #include "PhStrip/PhStripDoc.h"
-#include "PhTools/PhString.h"
 #include "PhTools/PhFileTools.h"
 
 #include "MainView.h"
@@ -18,16 +17,17 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    PhString file;
-    if (argc < 2)
-        file = "";
-    else
-        file = argv[1];
+	QApplication a(argc, argv);
+	MainView w;
 
-    MainView w;
-    w.openFile(QString(argv[1]));
+	//	QString file;
+	//    if (argc < 2)
+	//		file = "Tunnel Rats.detx";
+	//    else
+	//        file = argv[1];
+	//w.openFile(QString(file));
 
+	w.openFile(QString("test.detx"));
 
     w.show();
 

@@ -2,7 +2,6 @@
 #define PHPEOPLE_H
 
 #include "PhTools/PhColor.h"
-#include "PhTools/PhString.h"
 
 
 /**
@@ -20,37 +19,37 @@ public:
      * @param name
      * @param color
      */
-    PhPeople(PhString name, PhColor color);
+	PhPeople(QString name, PhColor *color);
     /**
      * @brief Get the name
-     * @return a PhString
+     * @return a string
      */
-    PhString getName();
+	QString getName();
     /**
      * @brief Set the name
-     * @param name a PhString
+     * @param name a string
      */
-    void setName(PhString name);
+	void setName(QString name);
     /**
      * @brief Get the color
      * @return a PhColor
      */
-    PhColor getColor();
+	PhColor* getColor();
     /**
      * @brief Set the color
      * @param color a PhColor
      */
-    void setColor(PhColor color);
+	void setColor(PhColor* color);
 
 private:
     /**
      * Name of the people
      */
-    PhString _name;
+	QString _name;
     /**
      * Color of the people's text on the strip.
      */
-    PhColor _color;
+	PhColor *_color;
 
 };
 

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     PhStripDoc doc;
 
     // Open the DetX file in argument:
-    PhString fileName(argv[1]);
+	QString fileName(argv[1]);
     doc.openDetX(fileName);
 
     // Display the title:
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     QList<PhStripText *>textList = doc.getTexts();
     qDebug() << "texts : ";
     QList<PhStripText *>::iterator text;
-    PhString line;
+	QString line;
 
     for( text = textList.begin(); text != textList.end() ; text++)
     {

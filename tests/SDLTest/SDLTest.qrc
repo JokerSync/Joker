@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/img">
-        <file>look.png</file>
-    </qresource>
-    <qresource prefix="/fonts">
-        <file>Bedizen.ttf</file>
-    </qresource>
-</RCC>

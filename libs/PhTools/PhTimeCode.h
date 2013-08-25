@@ -1,8 +1,6 @@
 #ifndef PHTIMECODE_H
 #define PHTIMECODE_H
 
-#include "PhString.h"
-
 /**
  Type for the timecode frame.
  */
@@ -32,9 +30,9 @@ public:
      Create a timecode string representation from a frame number and a type
      @param frame A frame number.
      @param type A PhTimeCodeType value.
-     @return An PhString* timecode representation.
+     @return An string* timecode representation.
      */
-    static PhString stringFromFrame(PhFrame frame, PhTimeCodeType type);
+	static QString stringFromFrame(PhFrame frame, PhTimeCodeType type);
 
     /**
      Compute the frame number from a timecode string representation and a type
@@ -42,7 +40,7 @@ public:
      @param type A PhTimeCodeType value.
      @return The corresponding frame number.
      */
-    static PhFrame frameFromString(PhString string, PhTimeCodeType type);
+	static PhFrame frameFromString(QString string, PhTimeCodeType type);
 
     /**
      Compute the frame number from a timecode binary coded decimal (BCD) representation and a type
