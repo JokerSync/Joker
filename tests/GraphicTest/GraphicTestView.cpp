@@ -61,6 +61,8 @@ bool GraphicTestView::init()
 		_rect = new PhGraphicSolidRect(100, 100, 75, 40, 1, new PhColor());
 	}
 #endif
+
+	return true;
 }
 
 void GraphicTestView::paint()

@@ -2,7 +2,6 @@
 #include <QApplication>
 #include <QtGui>
 #include <QtCore>
-#include "PhGraphicSolidRect.h"
 
 int main(int argc, char *argv[])
 {
