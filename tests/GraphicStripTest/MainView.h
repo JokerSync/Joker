@@ -32,7 +32,7 @@ public:
      */
 	void openFile(QString fileName);
 
-	PhGraphicStripController* getController(){return _MController;};
+//	PhGraphicStripController* getController(){return _MController;};
 
 //private slots:
 
@@ -60,7 +60,7 @@ public:
 private:
 
 	//MainController * _MController;
-	PhGraphicStripController * _MController;
+	//PhGraphicStripView* _MController;
 
 //    /**
 //     * @brief toggleFullWindow
@@ -77,7 +77,7 @@ private:
      * @brief _strip
      * link to the StripWindow
      */
-    PhGraphicStripView *_strip;
+    PhGraphicStripView *_stripView;
 
 
 //    /**
