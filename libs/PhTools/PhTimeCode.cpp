@@ -83,8 +83,7 @@ PhFrame PhTimeCode::getFps(PhTimeCodeType type) {
 	case PhTimeCodeType25:
         return 25;
 	case PhTimeCodeType2997:
-	default:
-            return 30;
+		return 30;
 	default:
 		return 0;
     }

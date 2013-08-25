@@ -9,11 +9,11 @@
 #include <QString>
 #include <QMediaPlayer>
 
-#include "PhGraphicView.h"
-#include "PhGraphicImage.h"
-#include "PhGraphicText.h"
-#include "PhFont.h"
-#include "PhGraphicSolidRect.h"
+#include "PhGraphic/PhGraphicView.h"
+#include "PhGraphic/PhGraphicImage.h"
+#include "PhGraphic/PhGraphicText.h"
+#include "PhGraphic/PhFont.h"
+#include "PhGraphic/PhGraphicSolidRect.h"
 
 #define TEXT
 #define IMAGE
