@@ -26,7 +26,6 @@ SOURCES += \
 win32 {
 #TODO
 	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
-	RESOURCES_PATH = $${DESTDIR}
 }
 
 # Ubuntu specific
@@ -38,7 +37,6 @@ linux {
 			   /usr/include/SDL
 
 	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
-	RESOURCES_PATH = .
 }
 
 
@@ -49,7 +47,6 @@ mac {
 	INCLUDEPATH += /Library/Frameworks/
 	LIBS += -F/Library/Frameworks
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
-	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS
 }
 
 

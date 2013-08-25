@@ -31,25 +31,17 @@ SOURCES += main.cpp\
 
 # Windows specific
 win32 {
-#TODO
-	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
 	RESOURCES_PATH = .
 }
 
 # Ubuntu specific
 linux {
-	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
 	RESOURCES_PATH = .
 }
 
 
 # MacOS specific
 mac {
-	OBJECTIVE_SOURCES += ../../libs/PhGraphic/SDLMain.m
-	OBJECTIVE_HEADERS += ../../libs/PhGraphic/SDLMain.h
-	INCLUDEPATH += /Library/Frameworks/
-	LIBS += -F/Library/Frameworks
-	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
 	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS
 }
 
