@@ -129,7 +129,7 @@ public:
      * @brief getActors
      * @return _actors
      */
-	QMap<QString, PhPeople *> getActors();
+	QMap<QString, PhPeople *> getPeoples();
     /**
      * @brief getTexts
      * @return _texts
