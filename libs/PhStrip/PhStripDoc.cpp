@@ -80,7 +80,7 @@ bool PhStripDoc::openDetX(QString filename)
     for (int i=0; i < charList.length(); i++)
     {
         QDomElement chara = charList.at(i).toElement();
-		PhPeople *people = new PhPeople(chara.attribute("name"), new PhColor(chara.attribute("color")));
+		PhPeople *people = new PhPeople(chara.attribute("name"), chara.attribute("color"));
 
         //Currently using id as key instead of name
         _actors[chara.attribute("id")] = people;
