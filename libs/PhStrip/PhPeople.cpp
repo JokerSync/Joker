@@ -7,11 +7,11 @@
 
 PhPeople::PhPeople()
 {
-    _name = "Default";
-	_color = new PhColor();
+    _name = "???";
+	_color = "#000000";
 }
 
-PhPeople::PhPeople(QString name, PhColor *color)
+PhPeople::PhPeople(QString name, QString color)
 {
     _name = name;
     _color = color;
@@ -23,7 +23,7 @@ QString PhPeople::getName()
 }
 
 
-PhColor *PhPeople::getColor()
+QString PhPeople::getColor()
 {
     return _color;
 }

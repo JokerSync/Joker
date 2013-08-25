@@ -1,8 +1,7 @@
 #ifndef PHPEOPLE_H
 #define PHPEOPLE_H
 
-#include "PhTools/PhColor.h"
-
+#include <QString>
 
 /**
  * Represents a character or a group of character from the video content. It can also be use to write notes or comments on the strip. For example : NDA (note de l'adaptateur).
@@ -19,7 +18,7 @@ public:
      * @param name
      * @param color
      */
-	PhPeople(QString name, PhColor *color);
+	PhPeople(QString name, QString color);
     /**
      * @brief Get the name
      * @return a string
@@ -34,12 +33,12 @@ public:
      * @brief Get the color
      * @return a PhColor
      */
-	PhColor* getColor();
+	QString getColor();
     /**
      * @brief Set the color
      * @param color a PhColor
      */
-	void setColor(PhColor* color);
+	void setColor(QString color);
 
 private:
     /**
@@ -49,7 +48,7 @@ private:
     /**
      * Color of the people's text on the strip.
      */
-	PhColor *_color;
+	QString _color;
 
 };
 
