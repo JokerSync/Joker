@@ -3,13 +3,15 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-#include <QCoreApplication>
+#include "PhStrip/PhStripDoc.h"
 
-
-#include "phstripdoc.h"
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
-    PhStripDoc *doc = new PhStripDoc(QString(""));
-    return a.exec();
+    PhStripDoc doc;
+
+	if(argc > 1)
+		doc.openDetX(argv[1]);
+
+	qDebug() << "Title : " << doc.getTitle();
+    return 0;
 }
