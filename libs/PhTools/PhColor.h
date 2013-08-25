@@ -5,8 +5,6 @@
 
 #include "SDL/SDL.h"
 
-#include "PhString.h"
-
 class PhColor : public QColor
 {
 public:

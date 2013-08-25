@@ -1,8 +1,6 @@
 #ifndef PHSTRIPTEXT_H
 #define PHSTRIPTEXT_H
 
-#include "PhTools/PhString.h"
-
 #include "PhPeople.h"
 #include "PhStrip/PhStripObject.h"
 

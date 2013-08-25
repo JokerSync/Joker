@@ -11,7 +11,6 @@
 //#include <QDir>
 //#include <QObject>
 
-//#include "PhTools/PhString.h"
 //#include "PhStrip/PhStripDoc.h"
 //#include "PhGraphicStrip/PhGraphicStripController.h"
 

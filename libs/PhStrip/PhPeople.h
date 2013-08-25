@@ -2,7 +2,6 @@
 #define PHPEOPLE_H
 
 #include "PhTools/PhColor.h"
-#include "PhTools/PhString.h"
 
 
 /**
@@ -23,12 +22,12 @@ public:
 	PhPeople(QString name, PhColor *color);
     /**
      * @brief Get the name
-     * @return a PhString
+     * @return a string
      */
 	QString getName();
     /**
      * @brief Set the name
-     * @param name a PhString
+     * @param name a string
      */
 	void setName(QString name);
     /**

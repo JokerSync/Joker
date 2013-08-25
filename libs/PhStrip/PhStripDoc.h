@@ -9,7 +9,6 @@
 #include "PhTools/PhColor.h"
 #include "PhTools/PhTime.h"
 #include "PhTools/PhTimeCode.h"
-#include "PhTools/PhString.h"
 
 #include "PhPeople.h"
 #include "PhStripCut.h"

@@ -26,7 +26,6 @@ SOURCES += main.cpp \
     ../../libs/PhGraphicStrip/PhGraphicStripView.cpp \
     MainView.cpp \
     ../../libs/PhGraphic/PhGraphicController.cpp \
-    ../../../../libs/PhTools/PhString.cpp \
     ../../libs/PhGraphic/PhGraphicSolidRect.cpp
 
 HEADERS += \
@@ -37,7 +36,6 @@ HEADERS += \
     ../../libs/PhGraphicStrip/PhGraphicStripView.h \
     MainView.h \
     ../../libs/PhGraphic/PhGraphicController.h \
-    ../../../../libs/PhTools/PhString.h \
     ../../libs/PhGraphic/PhGraphicSolidRect.h
 
 
@@ -83,7 +81,6 @@ HEADERS  += \
 
 #PhTools
 SOURCES += \
-	../../libs/PhTools/PhString.cpp \
 	../../libs/PhTools/memorytool.cpp \
 	../../libs/PhTools/PhColor.cpp \
 	../../libs/PhTools/PhTime.cpp \
@@ -91,7 +88,6 @@ SOURCES += \
 	../../libs/PhTools/PhFont.cpp \
 
 HEADERS  += \
-	../../libs/PhTools/PhString.h \
 	../../libs/PhTools/memorytool.h \
 	../../libs/PhTools/PhColor.h \
 	../../libs/PhTools/PhTime.h \

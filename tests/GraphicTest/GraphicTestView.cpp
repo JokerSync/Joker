@@ -1,7 +1,17 @@
 #include "GraphicTestView.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent, QString name)
-	: PhGraphicView( parent , name ) , _image(NULL), _font(NULL), _text(NULL), _rect(NULL)
+	: PhGraphicView( parent , name )
+#ifdef IMAGE
+	, _image(NULL)
+#endif
+#ifdef TEXT
+	, _font(NULL)
+	, _text(NULL)
+#endif
+#ifdef RECT
+	, _rect(NULL)
+#endif
 {
 
 }
@@ -13,7 +23,7 @@ bool GraphicTestView::init()
 	if(_image == NULL)
 	{
 		qDebug() << "Initialize _image";
-		_image = new PhGraphicImage;
+		_image = new PhGraphicImage();
 		_image->setFilename("look.png");
 		_image->setTextureCoordinate(1, 0.5f);
 		_image->setRect(50,0,250,125);
@@ -48,7 +58,7 @@ bool GraphicTestView::init()
 	if(_rect == NULL)
 	{
 		qDebug() << "Initialize _text";
-		_rect = new PhGraphicSolidRect(0, 0, 200, 200, 1, new PhColor());
+		_rect = new PhGraphicSolidRect(100, 100, 75, 40, 1, new PhColor());
 	}
 #endif
 }

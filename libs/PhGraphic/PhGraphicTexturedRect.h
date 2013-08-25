@@ -10,8 +10,6 @@
 
 #include <glu.h>
 
-#include "PhTools/PhString.h"
-
 #include "PhGraphicRect.h"
 
 class PhGraphicTexturedRect : public PhGraphicRect
