@@ -1,9 +1,7 @@
 HEADERS += \
-    ../../libs/PhTools/PhTimeCode.h \
-    ../../libs/PhTools/PhTime.h
+    $${JOKER_ROOT}/libs/PhTools/PhTimeCode.h \
+    $${JOKER_ROOT}/libs/PhTools/PhTime.h
 
 SOURCES += \
-    ../../libs/PhTools/PhTimeCode.cpp \
-    ../../libs/PhTools/PhTime.cpp
-
-INCLUDEPATH += ../../libs/PhTools
+    $${JOKER_ROOT}/libs/PhTools/PhTimeCode.cpp \
+    $${JOKER_ROOT}/libs/PhTools/PhTime.cpp
