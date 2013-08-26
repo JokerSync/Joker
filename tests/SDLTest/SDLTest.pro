@@ -24,8 +24,8 @@ linux {
 # MacOS specific
 mac {
 #	SOURCES += ../../libs/PhGraphic/SDLMain.cpp \
-	OBJECTIVE_HEADERS += SDLMain.h
-	OBJECTIVE_SOURCES += SDLMain.m
+	OBJECTIVE_HEADERS += ../../libs/PhGraphic/SDLMain.h
+	OBJECTIVE_SOURCES += ../../libs/PhGraphic/SDLMain.m
 
 	INCLUDEPATH += /Library/Frameworks/
 	LIBS += -F/Library/Frameworks
