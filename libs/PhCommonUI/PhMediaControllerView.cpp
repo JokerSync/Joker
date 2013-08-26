@@ -3,10 +3,11 @@
 
 PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
 	QWidget(parent),
-	ui(new Ui::PhMediaControllerView)
+	ui(new Ui::PhMediaControllerView),
+	_mediaLength(2000)
 {
 	ui->setupUi(this);
-	_clock = new PhClock;
+
 	_clock = clock;
 
 
