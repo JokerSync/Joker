@@ -18,9 +18,14 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent)
 	_clock.setRate(1);
 }
 
-PhStripDoc *PhGraphicStripView::getDoc()
+PhStripDoc *PhGraphicStripView::doc()
 {
 	return &_doc;
+}
+
+PhClock *PhGraphicStripView::clock()
+{
+	return &_clock;
 }
 
 bool PhGraphicStripView::init()
@@ -138,7 +143,6 @@ void PhGraphicStripView::updateView()
 
 void PhGraphicStripView::paint()
 {
-	qDebug() << "paint";
 	_clock.tick(60);
 
 	float pixelPerFrame = 8;
@@ -148,8 +152,8 @@ void PhGraphicStripView::paint()
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(t, t + length, _trackNumber, 0, 0, 10);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 //	qDebug() << "PhGraphicStripView::paint()";
 
@@ -158,7 +162,6 @@ void PhGraphicStripView::paint()
 
 	//Time-based test
 //	qDebug() << _test->elapsed(); //<< " : " << _xmove;
-
 
 //    //Draw backgroung picture
 	float aspectRatio = 1.2f * this->width() / this->height();

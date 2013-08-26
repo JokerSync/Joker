@@ -48,7 +48,7 @@ public:
      * @brief getLastPosition
      * @return _lastPosition
      */
-    PhTime getLastPosition();
+    PhTime getLastFrame();
     /**
      * @brief getDuration
      * @return duration
@@ -60,17 +60,10 @@ public:
      * @return
      */
     int getTimeScale();
-    /**
-     * @brief getFps
-     * @return _fps
-     */
-    float getFps();
-    /**
-     * @brief getDrop
-     * @return _drop
-     */
-    bool getDrop();
-    /**
+
+    PhTimeCodeType getTCType();
+
+	/**
      * @brief getActors
      * @return _actors
      */
@@ -126,7 +119,7 @@ private:
     /**
      * @brief _lastPosition
      */
-    PhTime _lastPosition;
+    PhTime _lastFrame;
     /**
      * Path to the video content.
      */
@@ -135,18 +128,8 @@ private:
      * Amount of time units per second.
      */
     int _timeScale;
-    /**
-     * Number of video frame per second. In fact, this attribute can take 4 differents values:
-     * 23.98
-     * 24
-     * 25
-     * 29.97
-     */
-    float _fps;
-    /**
-     * Specify if the timecode use dropframe or not. In fact, only 29.97 video framerate use dropframe.
-     */
-    bool _drop;
+
+	PhTimeCodeType _tcType;
 
     /**
      * List of PhPeople from the file

@@ -48,20 +48,23 @@ class PhGraphicStripView : public PhGraphicView
     Q_OBJECT
 
 public:
-    /**
-     * @brief PhGraphicStripView
-     * @param parent
-     * @param file
-     * constructor
-     */
+	/**
+	 * PhGraphicStripView constructor
+	 * @param parent Parent object
+	 */
     explicit PhGraphicStripView(QWidget *parent = 0);
 
 	/**
-	 * @brief PhGraphicStripView::getDoc
-	 * @return PhStripDoc
+	 * Get the PhStripDoc attached to the view.
+	 * @return A PhStripDoc instance.
 	 */
-	PhStripDoc *getDoc();
+	PhStripDoc *doc();
 
+	/**
+	 * Get the PhClock attached to the view.
+	 * @return A PhClock instance.
+	 */
+	PhClock * clock();
 protected:
 
 	bool init();

@@ -67,13 +67,12 @@ bool PhStripDoc::openDetX(QString fileName)
                                                   PhTimeCodeType25);
 
     //Find the last position
-    _lastPosition = PhTimeCode::frameFromString(DetX->elementsByTagName("last_position").at(0).toElement().attribute("timecode"),
+    _lastFrame = PhTimeCode::frameFromString(DetX->elementsByTagName("last_position").at(0).toElement().attribute("timecode"),
                                                 PhTimeCodeType25);
 
 
-    //With DetX files, fps is always 25 so drop is false
-    _fps = 25.00;
-    _drop = false;
+    //With DetX files, fps is always 25 no drop
+    _tcType = PhTimeCodeType25;
     _timeScale = 25.00;
 
 
@@ -177,9 +176,8 @@ void PhStripDoc::reset()
 {
     _actors.clear();
     _cuts.clear();
-    _drop = false;
-    _fps = 25.00;
-    _lastPosition = 0;
+    _tcType = PhTimeCodeType25;
+    _lastFrame = 0;
     _loops.clear();
     _nbTexts = 0;
     _texts.clear();
@@ -219,29 +217,27 @@ void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString s
 
 int PhStripDoc::getDuration()
 {
-    return (_texts.last()->getTimeOut() - _videoTimestamp) / _fps;
+	return _texts.last()->getTimeOut() - _videoTimestamp;
 }
-QString PhStripDoc::getTitle(){
+
+PhTimeCodeType PhStripDoc::getTCType()
+{
+	return _tcType;
+}
+
+QString PhStripDoc::getTitle()
+{
     return _title;
 }
 
-PhTime PhStripDoc::getVideoTimestamp(){
+PhTime PhStripDoc::getVideoTimestamp()
+{
     return _videoTimestamp;
 }
 
-PhTime PhStripDoc::getLastPosition(){
-    return _lastPosition;
-}
-
-float PhStripDoc::getFps()
+PhTime PhStripDoc::getLastFrame()
 {
-    return _fps;
-}
-
-
-bool PhStripDoc::getDrop()
-{
-    return _drop;
+    return _lastFrame;
 }
 
 QMap<QString, PhPeople *> PhStripDoc::getPeoples()

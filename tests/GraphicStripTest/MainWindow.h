@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <PhGraphicStrip/PhGraphicStripView.h>
 
 namespace Ui {
 class MainWindow;
@@ -19,6 +20,9 @@ public:
 
 private:
 	Ui::MainWindow *ui;
+	PhGraphicStripView *_stripView;
+	PhStripDoc *_doc;
+	PhClock *_clock;
 };
 
 #endif // MAINWINDOW_H

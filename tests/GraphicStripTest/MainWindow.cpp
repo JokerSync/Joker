@@ -6,6 +6,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+	_stripView = ui->stripView;
+	_doc = _stripView->doc();
+	_clock = _stripView->clock();
 }
 
 MainWindow::~MainWindow()
@@ -18,5 +21,10 @@ void MainWindow::openFile(QString fileName)
 	qDebug() << "openFile : " << fileName;
   //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 	if(QFile::exists(fileName))
-		ui->stripView->getDoc()->openDetX(fileName);
+	{
+		if(_doc->openDetX(fileName))
+		{
+			_clock->setFrame(_doc->getLastFrame(), _doc->getTCType());
+		}
+	}
 }
