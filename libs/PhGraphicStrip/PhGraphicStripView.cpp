@@ -5,8 +5,6 @@
 
 //#include <QTime>
 
-//#include "SDL/SDL.h"
-
 #include "PhGraphicStripView.h"
 
 
