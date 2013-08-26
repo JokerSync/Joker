@@ -3,12 +3,7 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-//#include <QTime>
-
 #include "PhGraphicStripView.h"
-
-
-
 
 PhGraphicStripView::PhGraphicStripView(QWidget *parent)
 	: PhGraphicView( parent ), _doc(this), _trackNumber(4), _currentFont(NULL)
@@ -23,6 +18,10 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent)
 	_clock.setRate(1);
 }
 
+PhStripDoc *PhGraphicStripView::getDoc()
+{
+	return &_doc;
+}
 
 bool PhGraphicStripView::init()
 {
@@ -42,70 +41,6 @@ bool PhGraphicStripView::init()
 	updateView();
 
 	return true;
-}
-
-void PhGraphicStripView::paint()
-{
-	qDebug() << "paint";
-	_clock.tick(60);
-
-	float pixelPerFrame = 12;
-	float length = this->width() / pixelPerFrame;
-	float t = _clock.time() / 25.0f;
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(t, t + length, _trackNumber, 0, 0, 10);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-//	qDebug() << "PhGraphicStripView::paint()";
-
-	//Set the background color to white
-	glClearColor(1,0,0,1);
-
-	//Time-based test
-//	qDebug() << _test->elapsed(); //<< " : " << _xmove;
-
-
-//    //Draw backgroung picture
-	_stripBackgroundImage->setTextureCoordinate(1.2f * this->width() / this->height(), 1);
-	_stripBackgroundImage->setSize(length, _trackNumber);
-	_stripBackgroundImage->draw();
-
-	int minSpaceBetweenPeople = 10;
-	int spaceBetweenPeopleAndText = 1;
-	PhStripText ** lastTextList = new PhStripText*[_trackNumber];
-	for(int i = 0; i < _trackNumber; i++)
-		lastTextList[i] = NULL;
-
-	foreach(PhStripText * text, _doc.getTexts())
-	{
-		PhGraphicText* gText = _graphicTexts[text];
-
-		int track = text->getTrack();
-
-		gText->draw();
-
-		PhStripText * lastText = lastTextList[track];
-		// Display the people name only if one of the following condition is true:
-		// - it is the first text
-		// - it is a different people
-		// - the distance between the latest text and the current is superior to a limit
-		if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))
-		{
-			PhGraphicText * gPeople = _graphicPeoples[text->getPeople()];
-			gPeople->setX(text->getTimeIn() - gPeople->getWidth() - spaceBetweenPeopleAndText);
-			gPeople->setY(track);
-
-			gPeople->draw();
-		}
-
-		lastTextList[track] = text;
-	}
-
-	foreach(PhStripCut * cut, _doc.getCuts())
-		_graphicCuts[cut]->draw();
 }
 
 void PhGraphicStripView::clearData()
@@ -201,7 +136,66 @@ void PhGraphicStripView::updateView()
 	qDebug() << "updateView ok";
 }
 
-PhStripDoc *PhGraphicStripView::getDoc()
+void PhGraphicStripView::paint()
 {
-	return &_doc;
+	qDebug() << "paint";
+	_clock.tick(60);
+
+	float pixelPerFrame = 8;
+	float length = this->width() / pixelPerFrame;
+	float t = _clock.time() / 25.0f;
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(t, t + length, _trackNumber, 0, 0, 10);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+//	qDebug() << "PhGraphicStripView::paint()";
+
+	//Set the background color to white
+	glClearColor(1,0,0,1);
+
+	//Time-based test
+//	qDebug() << _test->elapsed(); //<< " : " << _xmove;
+
+
+//    //Draw backgroung picture
+	_stripBackgroundImage->setTextureCoordinate(1.2f * this->width() / this->height(), 1);
+	_stripBackgroundImage->setSize(length, _trackNumber);
+	_stripBackgroundImage->draw();
+
+	int minSpaceBetweenPeople = 10;
+	int spaceBetweenPeopleAndText = 1;
+	PhStripText ** lastTextList = new PhStripText*[_trackNumber];
+	for(int i = 0; i < _trackNumber; i++)
+		lastTextList[i] = NULL;
+
+	foreach(PhStripText * text, _doc.getTexts())
+	{
+		PhGraphicText* gText = _graphicTexts[text];
+
+		int track = text->getTrack();
+
+		gText->draw();
+
+		PhStripText * lastText = lastTextList[track];
+		// Display the people name only if one of the following condition is true:
+		// - it is the first text
+		// - it is a different people
+		// - the distance between the latest text and the current is superior to a limit
+		if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))
+		{
+			PhGraphicText * gPeople = _graphicPeoples[text->getPeople()];
+			gPeople->setX(text->getTimeIn() - gPeople->getWidth() - spaceBetweenPeopleAndText);
+			gPeople->setY(track);
+
+			gPeople->draw();
+		}
+
+		lastTextList[track] = text;
+	}
+
+	foreach(PhStripCut * cut, _doc.getCuts())
+		_graphicCuts[cut]->draw();
 }
