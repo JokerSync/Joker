@@ -31,7 +31,7 @@ public:
      * @brief getPeople
      * @return _people
      */
-    PhPeople getPeople();
+    PhPeople * getPeople();
     /**
      * @brief getTrack
      * @return _track
