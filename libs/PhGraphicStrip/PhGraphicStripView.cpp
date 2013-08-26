@@ -39,14 +39,8 @@ bool PhGraphicStripView::init()
 //	barTest.move(400,400);
 //	 barTest.show();
 
-	float h = this->height();
-	float hstrip = this->height();
-	float w = this->width();
-	float tu = w/h;
-
-	int i = 0;
-	qDebug() << "load the text" ;
-	//Load the all text
+//	qDebug() << "load the text" ;
+//	//Load the all text
 //	foreach(PhStripText * text, _controller->getDoc().getTexts())
 //	{
 //		qDebug() << "on rentre" ;
@@ -75,12 +69,8 @@ bool PhGraphicStripView::init()
 //	   //       i++;
 //	}
 
-    //Set a default number of strip repetition
-	int nbRythmo = this->width()/60;
-
     //Load the strip background
 	_stripBackgroundImage = new PhGraphicImage("motif-240.png");
-	_stripBackgroundImage->setTextureCoordinate(tu, 1);
 	_stripBackgroundImage->init();
 
 	//Load the cuts
@@ -101,12 +91,8 @@ void PhGraphicStripView::paint()
 	//Set the background color to white
 	glClearColor(1,0,0,1);
 
-	//Store the OpenGL context height in a variable in order to
-	//limit functions call
-	float h = this->height();
-	float w = h*2/3;
 	//Time-based test
-	  qDebug() << _test->elapsed(); //<< " : " << _xmove;
+	qDebug() << _test->elapsed(); //<< " : " << _xmove;
 
 //	//Set the deplacement size of the strip
 //	if (_shouldmove){
@@ -117,8 +103,11 @@ void PhGraphicStripView::paint()
 //			_xMoveStrip = 0;
 //	}
 
-//    //Draw Backgroung Picture
+	float h = this->height();
+	float w = this->width();
 
+//    //Draw Backgroung Picture
+	_stripBackgroundImage->setTextureCoordinate(w / h, 1);
 	_stripBackgroundImage->setSize(w, h);
 	_stripBackgroundImage->draw();
 

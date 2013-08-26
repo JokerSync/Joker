@@ -15,9 +15,9 @@
 #include "PhGraphic/PhFont.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
 
-#define TEXT
+//#define TEXT
 #define IMAGE
-#define RECT
+//#define RECT
 
 class GraphicTestView : public PhGraphicView
 {

@@ -25,7 +25,6 @@ bool GraphicTestView::init()
 		qDebug() << "Initialize _image";
 		_image = new PhGraphicImage();
 		_image->setFilename("look.png");
-		_image->setTextureCoordinate(1, 0.5f);
 		_image->setRect(50,0,250,125);
 		if (! _image->init())
 			qDebug() << "_image not initialize";
@@ -69,7 +68,10 @@ void GraphicTestView::paint()
 #ifdef IMAGE
 	qDebug() << "GraphicTestView::paint";
 	if(_image != NULL)
+	{
+		_image->setTextureCoordinate(1, 3);
 		_image->draw();
+	}
 #endif
 
 #ifdef TEXT
