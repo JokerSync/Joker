@@ -38,12 +38,13 @@ void PhClock::setRate(float rate)
 
 int PhClock::frame(PhTimeCodeType tcType) const
 {
-	// TODO
-	return 0;
+	int fps = PhTimeCode::getFps(tcType);
+	return _time * fps / _timeScale;
 }
 
 void PhClock::setFrame(int frame, PhTimeCodeType tcType)
 {
-	// TODO
+	int fps = PhTimeCode::getFps(tcType);
+	this->setTime(frame * _timeScale / fps);
 }
 

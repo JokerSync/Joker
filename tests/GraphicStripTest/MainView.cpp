@@ -88,7 +88,7 @@ void MainView::openFile(QString fileName)
   //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 	if(QFile::exists(fileName))
 	{
-		_stripView->getDoc()->openDetX(fileName);
+		_stripView->doc()->openDetX(fileName);
 	}
 }
 
