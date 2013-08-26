@@ -46,7 +46,7 @@ void PhGraphicView::resizeGL(int width, int height)
 
 void PhGraphicView::paintGL()
 {
-	qDebug() << "PhGraphicView::paintGL" ;
+//	qDebug() << "PhGraphicView::paintGL" ;
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glClearColor(1,0,0,1);
 	paint();
