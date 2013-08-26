@@ -39,7 +39,7 @@ public:
      * @brief setWidht
      * @param w
      */
-    void setWidht(int w);
+    void setWidth(int w);
 
     /**
      * @brief getHeight
