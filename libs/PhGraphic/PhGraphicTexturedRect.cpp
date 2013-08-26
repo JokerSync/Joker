@@ -111,46 +111,36 @@ PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, 
 void PhGraphicTexturedRect::draw()
 {
 //	qDebug() << "PhGraphicTexturedRect::draw()";
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
-    glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-    int x = this->getX();
-    int w = this->getWidth();
+	int x = this->getX();
+	int w = this->getWidth();
+	int y = this->getY();
+	int h = this->getHeight();
+	int z = this->getZ();
 
+	glBindTexture(GL_TEXTURE_2D, _texture);
 
-        glBindTexture(GL_TEXTURE_2D, _texture);
-        if (w == 240)
-            glDisable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
 
-        glEnable(GL_TEXTURE_2D);
-
-
-
-        int y = this->getY();
-        int h = this->getHeight();
-        int z = this->getZ();
-
-        /*
-        (0,0) ------ (1,0)
-          |            |
-          |            |
-        (0,1) ------ (1,1)
-        */
+//        (0,0) ------ (1,0)
+//          |            |
+//          |            |
+//        (0,1) ------ (1,1)
 
 //		qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
 
-		glBegin(GL_QUADS); 	//Begining the cube's drawing
-		{
-			glTexCoord3f(0, 0, 1);		glVertex3f(x,		y,	z);
-			glTexCoord3f(_tu, 0, 1);	glVertex3f(x + w,	y,	z);
-			glTexCoord3f(_tu, _tv, 1);	glVertex3f(x + w,	y + h,  z);
-			glTexCoord3f(0, _tv, 1);	glVertex3f(x,		y + h,  z);
-		}
+	glBegin(GL_QUADS); 	//Begining the cube's drawing
+	{
+		glTexCoord3f(0, 0, 1);		glVertex3f(x,		y,	z);
+		glTexCoord3f(_tu, 0, 1);	glVertex3f(x + w,	y,	z);
+		glTexCoord3f(_tu, _tv, 1);	glVertex3f(x + w,	y + h,  z);
+		glTexCoord3f(0, _tv, 1);	glVertex3f(x,		y + h,  z);
+	}
+	glEnd();
 
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-
+	glDisable(GL_TEXTURE_2D);
 }
 
 void PhGraphicTexturedRect::setTextureCoordinate(float tu, float tv)
@@ -158,6 +148,8 @@ void PhGraphicTexturedRect::setTextureCoordinate(float tu, float tv)
 	_tu = tu;
 	_tv = tv;
 }
-GLuint PhGraphicTexturedRect::getTexture(){
+
+GLuint PhGraphicTexturedRect::getTexture()
+{
     return _texture;
 }

@@ -29,6 +29,7 @@ void PhGraphicRect::setHeight(int h)
 {
     _h = h;
 }
+
 void PhGraphicRect::setWidth(int w)
 {
     _w = w;

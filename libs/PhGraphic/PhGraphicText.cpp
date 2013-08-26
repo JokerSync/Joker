@@ -46,10 +46,14 @@ PhFont * PhGraphicText::getFont(){
 
 void PhGraphicText::draw()
 {
-   glEnable(GL_BLEND);
+	glColor3f(this->getColor()->redF(), this->getColor()->greenF(), this->getColor()->blueF());
+	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	PhGraphicTexturedRect::draw();
+
+	glDisable(GL_BLEND);
+
 }
 void PhGraphicText::dispose()
 {
