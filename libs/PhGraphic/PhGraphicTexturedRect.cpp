@@ -111,7 +111,7 @@ PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, 
 void PhGraphicTexturedRect::draw(){
 
 	qDebug() << "PhGraphicTexturedRect::draw()";
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
+	//glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
     glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 

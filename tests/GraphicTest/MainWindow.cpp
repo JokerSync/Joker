@@ -16,6 +16,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	_view = new GraphicTestView(this);
 	_view->resize(800,400);
 
+	QObject::connect(ui->Text, SIGNAL(toggled(bool)), _view, SLOT(displayText()));
+	QObject::connect(ui->Image, SIGNAL(toggled(bool)), _view, SLOT(displayImage()));
+	QObject::connect(ui->Rect, SIGNAL(toggled(bool)), _view, SLOT(displayRect()));
+
+
 	QObject::connect(ui->Play, SIGNAL(clicked()), _view, SLOT(play()));
 	QObject::connect(ui->FastBackward, SIGNAL(clicked()), _view, SLOT(fastBackward()));
 	QObject::connect(ui->FastForward, SIGNAL(clicked()), _view, SLOT(fastForward()));

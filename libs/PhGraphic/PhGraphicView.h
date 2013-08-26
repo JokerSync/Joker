@@ -55,6 +55,9 @@ public slots:
 	virtual void play() = 0;
 	virtual void fastBackward() = 0;
 	virtual void fastForward() = 0;
+	virtual void displayImage() = 0;
+	virtual void displayText() = 0;
+	virtual void displayRect() = 0;
 
 protected:
 
