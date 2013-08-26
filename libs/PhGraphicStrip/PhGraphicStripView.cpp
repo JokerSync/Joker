@@ -161,8 +161,10 @@ void PhGraphicStripView::paint()
 
 
 //    //Draw backgroung picture
-	_stripBackgroundImage->setTextureCoordinate(1.2f * this->width() / this->height(), 1);
-	_stripBackgroundImage->setSize(length, _trackNumber);
+	float aspectRatio = 1.2f * this->width() / this->height();
+	_stripBackgroundImage->setTextureCoordinate(aspectRatio, 1);
+	_stripBackgroundImage->setX(floorf(t / aspectRatio) * aspectRatio);
+	_stripBackgroundImage->setSize(length + aspectRatio, _trackNumber);
 	_stripBackgroundImage->draw();
 
 	int minSpaceBetweenPeople = 10;
