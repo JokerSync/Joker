@@ -10,15 +10,10 @@ MainView::MainView()
 {
 	_clock = new PhClock;
 	_timer = new QTimer();
+	_framePerSecond = 25;
+
 	_timer->start(40);
-	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-	qint64 filesize = _videoController.duration();
-
-
-
-
-
-	_mediaControllerView = new PhMediaControllerView(_clock,PhTimeCodeType2398, 2000, 0);
+	_mediaControllerView = new PhMediaControllerView(_clock,2000);
 	qDebug() << "filesize:"<<_videoController.duration();
 	qDebug() << "metadata:"<<_videoController.isMetaDataAvailable();
 
@@ -29,11 +24,15 @@ MainView::MainView()
     // Open a file dialog when user click the open button
     connect(_openButton, SIGNAL(clicked()), this, SLOT(onOpenFile()));
 
-	//connect(_mediaControllerView, SIGNAL(useSliderCursorSignal()), this, SLOT(positionChanged()));
+	connect(_mediaControllerView, SIGNAL(useSliderCursorSignal()), this, SLOT(positionChanged()));
 
     // Update the video position when the user moves the slider
 	//connect(_positionSlider, SIGNAL(sliderMoved(int)), &_videoController, SLOT(updatePositionFromPercentage(int)));
 	connect(_clock, SIGNAL(rateChanged()), this, SLOT(changePlayerState()));
+	connect(_mediaControllerView, SIGNAL(nextFrameButtonSignal()), this, SLOT(pushedNextFrameButton()));
+	connect(_mediaControllerView, SIGNAL(previousFrameButtonSignal()), this, SLOT(pushedPreviousFrameButton()));
+	connect(_mediaControllerView, SIGNAL(backButtonSignal()), this, SLOT(pushedBackButton()));
+
 
 
     // Add an error label
@@ -56,6 +55,7 @@ MainView::MainView()
 
     // Add the layout to the main window
     this->setLayout(layout);
+	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
 	_videoController.play();
 }
 
@@ -79,7 +79,7 @@ void MainView::updateFrame()
 	_clock->tick();
 	f = _clock->getFrame();
 	//_videoController.setPosition(f);
-	qDebug()<<"frame"<< 1000*f/24 <<"position"<< _videoController.position();
+	qDebug()<<"frame"<<f<<"clock"<< 1000*f/24 <<"position"<< _videoController.position();
 
 }
 
@@ -105,6 +105,26 @@ void MainView::positionChanged()
 	qint64 p = f*1000/_mediaControllerView->get_framePerSecond();
 	_videoController.setPosition(p);
 }
+
+void MainView::pushedNextFrameButton()
+{
+	qint64 position = _videoController.position() + 1000/_framePerSecond;
+	_videoController.setPosition(position);
+	qDebug() << "metadata:"<<_videoController.isMetaDataAvailable();
+}
+
+void MainView::pushedPreviousFrameButton()
+{
+	qint64 position = _videoController.position() - 1000/_framePerSecond;
+	_videoController.setPosition(position);
+}
+
+void MainView::pushedBackButton()
+{
+	_videoController.setPosition(0);
+}
+
+
 
 void MainView::onOpenFile()
 {

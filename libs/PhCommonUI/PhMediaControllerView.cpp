@@ -1,17 +1,18 @@
 #include "PhMediaControllerView.h"
 #include "ui_PhMediaControllerView.h"
 
-PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType timecodeType, PhFrame lengthFile, PhFrame firstFrame, QWidget *parent) :
+PhMediaControllerView::PhMediaControllerView(PhClock *clock, qint64 lengthFile, QWidget *parent) :
 	QWidget(parent),
-	ui(new Ui::PhMediaControllerView),
-	_timecodeType(timecodeType),
-	_lengthFile(lengthFile),
-	_firstFrame(firstFrame)
-
+	ui(new Ui::PhMediaControllerView)
 {
 	ui->setupUi(this);
 	_clock = new PhClock;
 	_clock = clock;
+
+
+	_lengthFile = lengthFile;
+	_firstFrame = 0;
+	_timecodeType = PhTimeCodeType25;
 	_framePerSecond = PhTimeCode::getFps(_timecodeType);
 	_fileProgress = 0;
 
@@ -37,7 +38,8 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType time
 	ui->_previousFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowBack));
 	connect(ui->_previousFrameButton, SIGNAL(clicked()), this, SLOT(pushPreviousFrameButton()));
 
-	connect(ui->_slider, SIGNAL(valueChanged(int)), this, SLOT(useSliderCursor(int)));
+	connect(ui->_slider, SIGNAL(sliderMoved(int)), this, SLOT(useSliderCursor(int)));
+
 
 
 	//Label Init
@@ -71,6 +73,14 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, PhTimeCodeType time
 int PhMediaControllerView::get_framePerSecond() const
 {
 	return _framePerSecond;
+}
+
+void PhMediaControllerView::set_fileInfo(qint64 lengthFile)
+{
+	_lengthFile = lengthFile;
+	_firstFrame = 0;
+	_timecodeType = PhTimeCodeType25;
+	_framePerSecond = 25;
 }
 
 
@@ -108,30 +118,31 @@ void PhMediaControllerView::pushForwardButton()
 
 void PhMediaControllerView::pushRewindButton()
 {
+	rewindButtonSignal();
 	_clock->setRate(-4);
 	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-	rewindButtonSignal();
 }
 
 void PhMediaControllerView::pushBackButton()
 {
 	_clock->setRate(0);
 	_clock->setFrame(_firstFrame);
+	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
 	backButtonSignal();
 }
 
 void PhMediaControllerView::pushNextFrameButton()
 {
-	PhFrame f = _clock->getFrame();
-	_clock->setFrame(f+1);
-	pushNextFrameButtonSignal();
+	PhFrame f = _clock->getFrame() + 1;
+	_clock->setFrame(f);
+	nextFrameButtonSignal();
 }
 
 void PhMediaControllerView::pushPreviousFrameButton()
 {
-	PhFrame f = _clock->getFrame();
-	_clock->setFrame(f-1);
-	pushPreviousFrameButtonSignal();
+	PhFrame f = _clock->getFrame() - 1;
+	_clock->setFrame(f);
+	previousFrameButtonSignal();
 }
 
 void PhMediaControllerView::useSliderCursor(int position)
