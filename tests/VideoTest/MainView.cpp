@@ -79,7 +79,7 @@ void MainView::updateFrame()
 	_clock->tick();
 	f = _clock->getFrame();
 	//_videoController.setPosition(f);
-	qDebug()<<"frame"<<f<<"clock"<< 1000*f/24 <<"position"<< _videoController.position();
+	//qDebug()<<"frame"<<f<<"clock"<< 1000*f/24 <<"position"<< _videoController.position();
 
 }
 
@@ -111,6 +111,8 @@ void MainView::pushedNextFrameButton()
 	qint64 position = _videoController.position() + 1000/_framePerSecond;
 	_videoController.setPosition(position);
 	qDebug() << "metadata:"<<_videoController.isMetaDataAvailable();
+	foreach(QString meta, _videoController.availableMetaData())
+		qDebug() << meta;
 }
 
 void MainView::pushedPreviousFrameButton()
