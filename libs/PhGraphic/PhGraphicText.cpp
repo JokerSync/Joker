@@ -23,10 +23,10 @@ bool PhGraphicText::init()
 												  _content.toStdString().c_str(),
 												 color);
 
-	qDebug() << "PhGraphicText::init";
     if(surface != NULL)
         this->createTextureFromSurface(surface);
     SDL_FreeSurface(surface);
+
 	return true;
 }
 
@@ -57,6 +57,5 @@ void PhGraphicText::draw()
 }
 void PhGraphicText::dispose()
 {
-    qDebug() << "Hi, this is dispose";
 }
 

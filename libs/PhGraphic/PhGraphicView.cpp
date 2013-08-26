@@ -7,7 +7,7 @@
 #include <SDL/SDL_ttf.h>
 #endif
 
-PhGraphicView::PhGraphicView( QWidget *parent, QString name)
+PhGraphicView::PhGraphicView( QWidget *parent)
     : QGLWidget(parent)
 {
 	t_Timer = new QTimer(this);

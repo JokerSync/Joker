@@ -76,11 +76,25 @@ void PhGraphicStripView::paint()
 	_stripBackgroundImage->setSize(w, h);
 	_stripBackgroundImage->draw();
 
-	foreach(PhGraphicText * text, _texts)
-		text->draw();
+	foreach(PhStripText * text, _doc.getTexts())
+	{
+		PhGraphicText* gText = _texts[text];
 
-	foreach(PhGraphicRect * cut, _cuts)
-		cut->draw();
+		gText->setY(text->getTrack() * h / 4);
+		gText->setZ(-1);
+		gText->setWidth(text->getTimeOut() - text->getTimeIn());
+		gText->setHeight(h / 4);
+
+		gText->draw();
+	}
+
+	foreach(PhStripCut * cut, _doc.getCuts())
+	{
+		PhGraphicRect * gCut = _cuts[cut];
+		gCut->setHeight(h);
+
+		gCut->draw();
+	}
 }
 
 
@@ -127,15 +141,9 @@ void PhGraphicStripView::updateView()
 
 	clearData();
 
-	int h = this->height();
-
-	qDebug() << "load the text" ;
 	//Load the all text
 	foreach(PhStripText * text, _doc.getTexts())
 	{
-		qDebug() << "on rentre" ;
-		//barTest.setValue(i);
-
 		//Display the name only if the setence is standalone
 //			if (text->isSimple()){
 //				int nameWidth = (text->getPeople().getName().length() + 1) * 10;
@@ -145,16 +153,14 @@ void PhGraphicStripView::updateView()
 //			}
 		PhGraphicText * gText = new PhGraphicText( _currentFont, text->getContent());
 		gText->setX(text->getTimeIn());
-		gText->setY(text->getTrack() * h / 4);
 		gText->setZ(-1);
 		gText->setWidth(text->getTimeOut() - text->getTimeIn());
-		gText->setHeight(h / 4);
 		gText->setColor(new QColor(text->getPeople().getColor()));
 		gText->setFont(_currentFont);
 
 		gText->init();
 
-		_texts.push_back(gText);
+		_texts[text] = gText;
 	}
 
 	//Load the cuts
@@ -164,11 +170,10 @@ void PhGraphicStripView::updateView()
 		gCut->setColor(new QColor(0, 0, 0));
 		gCut->setX(cut->getTimeIn());
 		gCut->setWidth(2);
-		gCut->setHeight(h);
 
 		gCut->setZ(-2);
 
-		_cuts.push_back(gCut);
+		_cuts[cut] = gCut;
 	}
 }
 
