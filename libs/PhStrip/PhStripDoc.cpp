@@ -7,7 +7,8 @@
 #include "PhStripDoc.h"
 
 
-PhStripDoc::PhStripDoc()
+PhStripDoc::PhStripDoc(QObject *parent) :
+	QObject(parent)
 {
     reset();
 }
@@ -18,16 +19,17 @@ QList<PhStripCut *> PhStripDoc::getCuts()
 }
 
 
-bool PhStripDoc::openDetX(QString filename)
+bool PhStripDoc::openDetX(QString fileName)
 {
-    if (!QFile(filename).exists())
+	qDebug() << "PhStripDoc::openDetX : " << fileName;
+    if (!QFile(fileName).exists())
 	{
 		qDebug() << "this file doesn't exist" ;
         return false;
 	}
 
     QDomDocument *DetX = new QDomDocument("/text.xml"); // Création de l'objet DOM
-    QFile xml_doc(filename);// On choisit le fichier contenant les informations XML.
+    QFile xml_doc(fileName);// On choisit le fichier contenant les informations XML.
     if(!xml_doc.open(QIODevice::ReadOnly))// Si l'on n'arrive pas à ouvrir le fichier XML.
     {
         qDebug() << ("Le document XML n'a pas pu être ouvert. Vérifiez que le nom est le bon et que le document est bien placé");
@@ -41,7 +43,7 @@ bool PhStripDoc::openDetX(QString filename)
     }
     else
     {
-        qDebug() << ("The file \"" + filename + "\" is now open.");
+        qDebug() << ("The file \"" + fileName + "\" is now open.");
         qDebug("-----------------------------");
     }
 
@@ -155,19 +157,21 @@ bool PhStripDoc::openDetX(QString filename)
             }
         }
 	}
+
+	emit this->changed();
+
     return true;
 }
-
-
 
 int PhStripDoc::getNbTexts()
 {
     return _nbTexts;
 }
-QString PhStripDoc::getVideoPath(){
+
+QString PhStripDoc::getVideoPath()
+{
     return _videoPath;
 }
-
 
 void PhStripDoc::reset()
 {
@@ -183,6 +187,8 @@ void PhStripDoc::reset()
 	_title = QString();
 	_videoPath = QString();
     _videoTimestamp = 0;
+
+	emit this->changed();
 }
 
 void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, bool alone, int i){

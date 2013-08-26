@@ -127,12 +127,15 @@ protected:
 //	void stopScroll();
 
 
+private slots:
+	void updateView();
+
 private :
  	/**
 	 * @brief _doc
 	 * Reference to the current PhStripDoc
 	 */
-	PhStripDoc *_doc;
+	PhStripDoc _doc;
 
 //	/**
 //	 * @brief _XMove
