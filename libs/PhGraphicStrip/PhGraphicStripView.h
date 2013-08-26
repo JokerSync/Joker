@@ -19,7 +19,7 @@
 
 //#include "MainController.h"
 //#include "PhGraphic/PhGraphicController.h"
-#include "PhGraphicStrip/PhGraphicStripController.h"
+//#include "PhGraphicStrip/PhGraphicStripController.h"
 
 //#include "PhCommonUI/PhLeap.h"
 
@@ -84,80 +84,75 @@ protected:
 	 */
 	void clearData();
 
-	/**
-	 * @brief PhGraphicStripView::changeScroll
-	 * Toggle between Play and Pause
-	 */
-	void changeScroll();
-	/**
-	 * @brief PhGraphicStripView::setScroll
-	 * @param shouldScroll
-	 * Set the scroll information
-	 */
-	void setScroll(bool shouldScroll);
+//	/**
+//	 * @brief PhGraphicStripView::changeScroll
+//	 * Toggle between Play and Pause
+//	 */
+//	void changeScroll();
+//	/**
+//	 * @brief PhGraphicStripView::setScroll
+//	 * @param shouldScroll
+//	 * Set the scroll information
+//	 */
+//	void setScroll(bool shouldScroll);
 
-	/**
-	 * @brief PhGraphicStripView::getFonts
-	 * @return QList<PhFont *>
-	 */
-	QList<PhFont *> getFonts();
 	/**
 	 * Set the current font with the font in param and re-initialize the OpenGL content
 	 * @param fontfile Font file path
+	 * @return true if the operation succeeds, false otherwise
 	 */
-	void setCurrentFont(QString fontfile);
-	/**
-	 * @brief PhGraphicStripView::getCurrentFont
-	 * @return PhFont
-	 */
-	PhFont * getCurrentFont();
+	bool setCurrentFont(QString fontFile);
 
-	/**
-	 * @brief PhGraphicStripView::setXmove
-	 * @param n
-	 * Scroll the strip of n pixels, if n>0 the strip will scroll to the left
-	 * and vice-versa.
-	 */
-	void setXmove(int n);
+//	/**
+//	 * @brief PhGraphicStripView::getCurrentFont
+//	 * @return PhFont
+//	 */
+//	PhFont * getCurrentFont();
 
-	void toggleNaturalScrolling();
+//	/**
+//	 * @brief PhGraphicStripView::setXmove
+//	 * @param n
+//	 * Scroll the strip of n pixels, if n>0 the strip will scroll to the left
+//	 * and vice-versa.
+//	 */
+//	void setXmove(int n);
+
+//	void toggleNaturalScrolling();
 	//void setController(MainController * controller);
-	void setController(PhGraphicStripController * controller);
-	void connectSlots();
-	void setNaturalScroll(bool naturalScroll);
+//	void setController(PhGraphicStripController * controller);
+//	void connectSlots();
+//	void setNaturalScroll(bool naturalScroll);
 
-public slots:
-	void stopScroll();
+//public slots:
+//	void stopScroll();
 
 
 private :
-    //MainController * _controller;
- PhGraphicStripController * _controller;
-	/**
+ 	/**
 	 * @brief _doc
 	 * Reference to the current PhStripDoc
 	 */
 	PhStripDoc *_doc;
 
-	/**
-	 * @brief _XMove
-	 * float which define the scroll
-	 */
-	float _xmove;
+//	/**
+//	 * @brief _XMove
+//	 * float which define the scroll
+//	 */
+//	float _xmove;
 
-	float _xMoveStrip;
+//	float _xMoveStrip;
 
-	/**
-	 * @brief _shouldmove
-	 * allow us to know if the strip should scroll or not.
-	 */
-	bool _shouldmove;
+//	/**
+//	 * @brief _shouldmove
+//	 * allow us to know if the strip should scroll or not.
+//	 */
+//	bool _shouldmove;
 
-	/**
-	 * @brief _fonts
-	 * QList of loaded PhFonts.
-	 */
-	QList<PhFont *> _fonts;
+//	/**
+//	 * @brief _fonts
+//	 * QList of loaded PhFonts.
+//	 */
+//	QList<PhFont *> _fonts;
 
 	/**
 	 * @brief _currentFont
@@ -186,7 +181,7 @@ private :
 
 
 
-	bool _naturalScroll;
+//	bool _naturalScroll;
 
 };
 

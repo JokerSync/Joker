@@ -15,49 +15,29 @@
 PhGraphicStripView::PhGraphicStripView(QWidget *parent)
 	: PhGraphicView( parent )
 {
-
-
     // This is used to make some time-based test
 	_test = new QTime();
 	_test->start();
-
-	// This is a preload of default fonts
-#if defined(Q_OS_MAC)
-	_fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/LTE50198.ttf", 150));
-
-#elif defined(Q_OS_UNIX)
-  _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "Bedizen.ttf", 150));
-#endif
-
-
-    // Set current font
-	_currentFont = _fonts.first();
-	_xmove = 0;
-	_xMoveStrip = 0;
-
-	 //The strip shouldn't move until a file is loaded
-	_shouldmove = false;
-
-	_controller = new PhGraphicStripController();
-	_controller->openDoc("test.detx");
 }
 
 
 bool PhGraphicStripView::init()
 {
-
+	QString fontFile = "Bedizen.ttf";
+	// Load font
+	_currentFont = new PhFont(fontFile, 150);
 
 	qDebug() << "PhGraphicStripView::init()";
-    //This clear the data stored
+
+	//This clear the data stored
 	clearData();
 
-	_xmove = - _controller->getDoc().getLastPosition();
-	int max = _controller->getDoc().getTexts().count();
-	QProgressDialog barTest("Création des textures","Ok", 0, max, this);
+//	int max = _controller->getDoc().getTexts().count();
+//	QProgressDialog barTest("Création des textures","Ok", 0, max, this);
 
 
-	barTest.move(400,400);
-	 barTest.show();
+//	barTest.move(400,400);
+//	 barTest.show();
 
 	float h = this->height();
 	float hstrip = this->height();
@@ -67,33 +47,33 @@ bool PhGraphicStripView::init()
 	int i = 0;
 	qDebug() << "load the text" ;
 	//Load the all text
-	foreach(PhStripText * text, _controller->getDoc().getTexts())
-	{
-		qDebug() << "on rentre" ;
-		//barTest.setValue(i);
+//	foreach(PhStripText * text, _controller->getDoc().getTexts())
+//	{
+//		qDebug() << "on rentre" ;
+//		//barTest.setValue(i);
 
-		//h is the window height, hstrip is the strip height
-		//hstrip/16 correspond to the upper alpha line of the strip
-		//hstrip/8 correspond to the two alpha lines of the strip (up & down)
-		//it->getTrack() is the position on the strip (0 is the upper on)
-		//we split   in 3 because we are using 3 tracks on the strip
-		int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*text->getTrack() + 30;
+//		//h is the window height, hstrip is the strip height
+//		//hstrip/16 correspond to the upper alpha line of the strip
+//		//hstrip/8 correspond to the two alpha lines of the strip (up & down)
+//		//it->getTrack() is the position on the strip (0 is the upper on)
+//		//we split   in 3 because we are using 3 tracks on the strip
+//		int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*text->getTrack() + 30;
 
-		//Display the name only if the setence is standalone
-		if (text->isSimple()){
-			int nameWidth = (text->getPeople().getName().length() + 1) * 10;
-			_texts.push_back(new PhGraphicText( _fonts.first(),text->getPeople().getName(),
-											   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
-											   nameWidth, 30, 1, 1, new QColor(text->getPeople().getColor())));
-		}
-		_texts.push_back(new PhGraphicText( _currentFont, text->getContent(),
-										   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
-											(text->getTimeOut() - text->getTimeIn()) * 20, hstrip / 5 , 1, 1, new QColor(text->getPeople().getColor())));
-	  //        if (i % (max / 20) == 0){
-	  //            QApplication::processEvents();
-	  //        }
-	   //       i++;
-	}
+//		//Display the name only if the setence is standalone
+//		if (text->isSimple()){
+//			int nameWidth = (text->getPeople().getName().length() + 1) * 10;
+//			_texts.push_back(new PhGraphicText( _fonts.first(),text->getPeople().getName(),
+//											   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
+//											   nameWidth, 30, 1, 1, new QColor(text->getPeople().getColor())));
+//		}
+//		_texts.push_back(new PhGraphicText( _currentFont, text->getContent(),
+//										   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
+//											(text->getTimeOut() - text->getTimeIn()) * 20, hstrip / 5 , 1, 1, new QColor(text->getPeople().getColor())));
+//	  //        if (i % (max / 20) == 0){
+//	  //            QApplication::processEvents();
+//	  //        }
+//	   //       i++;
+//	}
 
     //Set a default number of strip repetition
 	int nbRythmo = this->width()/60;
@@ -104,12 +84,12 @@ bool PhGraphicStripView::init()
 	_stripBackgroundImage->init();
 
 	//Load the cuts
-	foreach(PhStripCut * cut, _controller->getDoc().getCuts())
-	{
-		PhGraphicSolidRect *rect = new PhGraphicSolidRect((cut->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
-														  2, hstrip, new QColor(0, 0, 0));
-		_cuts.push_back(rect);
-	}
+//	foreach(PhStripCut * cut, _controller->getDoc().getCuts())
+//	{
+//		PhGraphicSolidRect *rect = new PhGraphicSolidRect((cut->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
+//														  2, hstrip, new QColor(0, 0, 0));
+//		_cuts.push_back(rect);
+//	}
 
 	return true;
 }
@@ -128,14 +108,14 @@ void PhGraphicStripView::paint()
 	//Time-based test
 	  qDebug() << _test->elapsed(); //<< " : " << _xmove;
 
-	//Set the deplacement size of the strip
-	if (_shouldmove){
-		_xmove -= 8;
-		_xMoveStrip -= 8;
-		// if the strip moved of more than 1 X strip's width it came back
-		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
-			_xMoveStrip = 0;
-	}
+//	//Set the deplacement size of the strip
+//	if (_shouldmove){
+//		_xmove -= 8;
+//		_xMoveStrip -= 8;
+//		// if the strip moved of more than 1 X strip's width it came back
+//		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
+//			_xMoveStrip = 0;
+//	}
 
 //    //Draw Backgroung Picture
 
@@ -147,17 +127,17 @@ void PhGraphicStripView::paint()
 //		//it->draw(_xMoveStrip);
 //		it->draw();
 //    }
-	int x = 0;
-	int y = 0;
-	foreach(PhGraphicText * it, _texts)
-	{
-		//it->draw(_xmove);
-		qDebug() << "Draw PhGraphicText" ;
-//		it->setX(x);
-//		it->setY(y);
-//		it->setWidht(w);
-		it->draw();
-	}
+//	int x = 0;
+//	int y = 0;
+//	foreach(PhGraphicText * it, _texts)
+//	{
+//		//it->draw(_xmove);
+//		qDebug() << "Draw PhGraphicText" ;
+////		it->setX(x);
+////		it->setY(y);
+////		it->setWidht(w);
+//		it->draw();
+//	}
 //	foreach(PhGraphicRect * it, _cuts)
 //	{
 //		//it->draw(_xmove);
@@ -166,11 +146,11 @@ void PhGraphicStripView::paint()
 }
 
 
-void PhGraphicStripView::stopScroll()
-{
-	qDebug() << "Stop Scrolling";
-	setScroll(false);
-}
+//void PhGraphicStripView::stopScroll()
+//{
+//	qDebug() << "Stop Scrolling";
+//	setScroll(false);
+//}
 
 void PhGraphicStripView::clearData()
 {
@@ -187,76 +167,76 @@ void PhGraphicStripView::clearData()
 }
 
 
-QList<PhFont *> PhGraphicStripView::getFonts()
+bool PhGraphicStripView::setCurrentFont(QString fontFile)
 {
-	return _fonts;
-}
-
-
-void PhGraphicStripView::setCurrentFont(QString fontfile){
-	_currentFont = new PhFont(fontfile, 150);
-	initializeGL();
-}
-
-
-PhFont * PhGraphicStripView::getCurrentFont(){
-	return _currentFont;
-}
-
-
-void PhGraphicStripView::changeScroll()
-{
-	_shouldmove = ! _shouldmove;
-}
-
-
-void PhGraphicStripView::setScroll(bool shouldScroll)
-{
-	if(shouldScroll)
-		qDebug() << "The strip should scroll";
-	else
-		qDebug() << "The strip should NOT scroll";
-
-	_shouldmove = shouldScroll;
-}
-
-void PhGraphicStripView::setNaturalScroll(bool naturalScroll)
-{
-	_naturalScroll = naturalScroll;
-}
-
-void PhGraphicStripView::toggleNaturalScrolling()
-{
-	_naturalScroll = ! _naturalScroll;
-}
-
-void PhGraphicStripView::setController(PhGraphicStripController * controller)
-{
-	_controller = controller;
-}
-
-void PhGraphicStripView::connectSlots(){
-	connect(_controller, SIGNAL(docChanged()), this, SLOT(initializeGL()));
-	connect(_controller, SIGNAL(docChanged()), this, SLOT(stopScroll()));
-}
-
-void PhGraphicStripView::setXmove(int n)
-{
-	if (_naturalScroll)
+	if(!QFile::exists(fontFile))
 	{
-		_xmove -= n;
-		_xMoveStrip -= n;
-		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
-			_xMoveStrip = 0;
+		qDebug() << "File does'nt exists : " << fontFile;
+		return false;
 	}
-	else
-	{
-		_xmove += n;
-		_xMoveStrip += n;
-		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
-			_xMoveStrip = 0;
-	}
+	_currentFont = new PhFont(fontFile, 150);
+
+	return true;
 }
+
+//PhFont * PhGraphicStripView::getCurrentFont(){
+//	return _currentFont;
+//}
+
+
+//void PhGraphicStripView::changeScroll()
+//{
+//	_shouldmove = ! _shouldmove;
+//}
+
+
+//void PhGraphicStripView::setScroll(bool shouldScroll)
+//{
+//	if(shouldScroll)
+//		qDebug() << "The strip should scroll";
+//	else
+//		qDebug() << "The strip should NOT scroll";
+
+//	_shouldmove = shouldScroll;
+//}
+
+//void PhGraphicStripView::setNaturalScroll(bool naturalScroll)
+//{
+//	_naturalScroll = naturalScroll;
+//}
+
+//void PhGraphicStripView::toggleNaturalScrolling()
+//{
+//	_naturalScroll = ! _naturalScroll;
+//}
+
+//void PhGraphicStripView::setController(PhGraphicStripController * controller)
+//{
+//	_controller = controller;
+//}
+
+//void PhGraphicStripView::connectSlots(){
+//	connect(_controller, SIGNAL(docChanged()), this, SLOT(initializeGL()));
+//	connect(_controller, SIGNAL(docChanged()), this, SLOT(stopScroll()));
+//}
+
+//void PhGraphicStripView::setXmove(int n)
+//{
+//	if (_naturalScroll)
+//	{
+//		_xmove -= n;
+//		_xMoveStrip -= n;
+//		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
+//			_xMoveStrip = 0;
+//	}
+//	else
+//	{
+//		_xmove += n;
+//		_xMoveStrip += n;
+//		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
+//			_xMoveStrip = 0;
+//	}
+//}
 
 
 PhStripDoc *PhGraphicStripView::getDoc()
