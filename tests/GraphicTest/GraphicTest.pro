@@ -20,16 +20,17 @@ INCLUDEPATH += $${JOKER_ROOT}/libs
 include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
 include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
 
-HEADERS  += MainWindow.h \
+HEADERS  += \
 	GraphicTestView.h \
+	MainWindow.h \
 
 SOURCES += main.cpp \
-	MainWindow.cpp \
 	GraphicTestView.cpp \
+    MainWindow.cpp
+
+FORMS += \
+	MainWindow.ui
 
 QMAKE_POST_LINK += echo $${RESOURCES_PATH}
 QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/img/look.png $${RESOURCES_PATH}
 QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/fonts/Bedizen.ttf $${RESOURCES_PATH}
-
-
-

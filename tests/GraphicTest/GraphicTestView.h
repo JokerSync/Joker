@@ -16,8 +16,8 @@
 #include "PhGraphic/PhGraphicSolidRect.h"
 
 #define TEXT
-#define IMAGE
-#define RECT
+//#define IMAGE
+//#define RECT
 
 class GraphicTestView : public PhGraphicView
 {
@@ -26,24 +26,26 @@ public :
 
 	GraphicTestView *view();
 
+public slots:
+	void play();
+	void fastBackward();
+	void fastForward();
+
 protected:
 	bool init();
 
 	void paint();
 
 private:
-#ifdef IMAGE
-	PhGraphicImage *_image;
-#endif
 
-#ifdef TEXT
+	int playEnable;
+	int textSpeed;
+
+	PhGraphicImage *_image;
 	PhGraphicText *_text;
 	PhFont *_font;
-#endif
-
-#ifdef RECT
 	PhGraphicSolidRect *_rect;
-#endif
+
 };
 
 #endif // GraphicTestView_H

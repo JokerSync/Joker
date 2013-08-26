@@ -1,4 +1,5 @@
 #include "GraphicTestView.h"
+#include "math.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent, QString name)
 	: PhGraphicView( parent , name )
@@ -18,6 +19,9 @@ GraphicTestView::GraphicTestView(QWidget *parent, QString name)
 
 bool GraphicTestView::init()
 {
+	playEnable = 0;
+	textSpeed = 0;
+
 #ifdef IMAGE
 	qDebug() << "GraphicTestView::init";
 	if(_image == NULL)
@@ -25,7 +29,7 @@ bool GraphicTestView::init()
 		qDebug() << "Initialize _image";
 		_image = new PhGraphicImage();
 		_image->setFilename("look.png");
-		_image->setTextureCoordinate(1, 0.5f);
+		_image->setTextureCoordinate(1,1);
 		_image->setRect(50,0,250,125);
 		if (! _image->init())
 			qDebug() << "_image not initialize";
@@ -50,6 +54,7 @@ bool GraphicTestView::init()
 		if (! _text->init())
 			qDebug() << "_text not initialize";
 
+		_text->setX(280);
 	}
 #endif
 
@@ -73,12 +78,26 @@ void GraphicTestView::paint()
 #endif
 
 #ifdef TEXT
-	if(_text != NULL)
+	if (textSpeed == 0)
 	{
-		_text->setX(_text->getX()+4);
-		_text->draw();
-		if(_text->getX() > this->width())
-			_text->setX(0);
+		if(_text != NULL)
+		{
+				_text->draw();
+		}
+	}
+	else
+	{
+		if(_text != NULL)
+		{
+			qDebug() <<"text pas null";
+			_text->setX(_text->getX()+(2*textSpeed));
+			_text->draw();
+			if(_text->getX() > this->width())
+				_text->setX(0);
+			if((_text->getX()+_text->getWidth()) < 0)
+				_text->setX(this->width());
+
+		}
 	}
 #endif
 
@@ -88,3 +107,30 @@ void GraphicTestView::paint()
 }
 
 
+void GraphicTestView::play()
+{
+	if (playEnable == 1)
+	{
+		playEnable = 0;
+		textSpeed = 0;
+	}
+	else
+	{
+		playEnable = 1;
+		textSpeed = 1;
+	}
+}
+
+void GraphicTestView::fastBackward()
+{
+	textSpeed = fabs(textSpeed) * (-2);
+	if(fabs(textSpeed) > 8)
+		textSpeed = -8;
+}
+
+void GraphicTestView::fastForward()
+{
+	textSpeed = fabs(textSpeed) * 2;
+	if(fabs(textSpeed) > 8)
+		textSpeed = 8;
+}
