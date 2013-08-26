@@ -40,8 +40,9 @@ void PhGraphicImage::dispose()
 
 void PhGraphicImage::draw()
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+//	glEnable(GL_BLEND);
+//	glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+	glColor3f(1, 1, 1);
 	PhGraphicTexturedRect::draw();
 }
 

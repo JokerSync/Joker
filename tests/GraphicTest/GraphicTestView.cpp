@@ -65,8 +65,9 @@ bool GraphicTestView::init()
 
 void GraphicTestView::paint()
 {
+//	qDebug() << "GraphicTestView::paint";
+
 #ifdef IMAGE
-	qDebug() << "GraphicTestView::paint";
 	if(_image != NULL)
 	{
 		_image->setTextureCoordinate(1, 3);

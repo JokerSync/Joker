@@ -24,7 +24,6 @@ win32 {
 linux {
 }
 
-
 # MacOS specific
 mac {
 }
