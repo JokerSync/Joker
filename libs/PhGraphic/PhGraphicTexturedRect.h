@@ -55,17 +55,18 @@ private:
      * The texture address(?)
      */
     GLuint _texture;
-    /**
-     * @brief _tv
-	 * number of vertical repetition
-     */
-	float _tv;
-    /**
+
+	/**
      * @brief _tu
 	 * number of horizontal repetition
      */
 	float _tu;
-//  SDL_Surface *_surface;
+
+	/**
+     * @brief _tv
+	 * number of vertical repetition
+     */
+	float _tv;
 };
 
 #endif // PHGRAPHICTEXTUREDSQUARE_H

@@ -14,7 +14,7 @@ class PhGraphicObject
 {
 public:
 
-	PhGraphicObject(int x = 0, int y = 0, int z = 0, QColor * color = new QColor(1,1,1,1));
+	PhGraphicObject(float x = 0, float y = 0, float z = 0, QColor * color = new QColor(1,1,1,1));
 
 	/**
 	 * @brief init
@@ -23,7 +23,7 @@ public:
 	/**
 	 * @brief dispose
 	 */
-	virtual void dispose() = 0;
+	virtual void dispose();
 
 	/**
      * @brief draw
@@ -39,62 +39,62 @@ public:
      * @param z
      * set the position of the PhGraphicObject using setX() setY() setZ()
      */
-	void setPosition(int x, int y, int z);
+	void setPosition(float x, float y, float z);
     /**
      * @brief setX
      * @param x
      */
-    void setX(int x);
+    void setX(float x);
 	/**
 	 * @brief getX
 	 * @return
 	 */
-	int getX();
+	float getX();
 
 	/**
      * @brief setY
      * @param y
      */
-    void setY(int y);
+    void setY(float y);
 	/**
 	 * @brief getY
 	 * @return
 	 */
-	int getY();
+	float getY();
 
 	/**
      * @brief setZ
      * @param z
      */
-    void setZ(int z);
+    void setZ(float z);
 
     /**
      * @brief getZ
      * @return
      */
-    int getZ();
+    float getZ();
 
 	void setColor(QColor *color);
 
 	QColor *getColor();
 
-private:
+protected:
 
     /**
      * @brief _x
      * is the PhGraphicObject horizontal position
      */
-    int _x;
+    float _x;
     /**
      * @brief _y
      * is the PhGraphicObject vertical position
      */
-    int _y;
+    float _y;
     /**
      * @brief _z
      * is the PhGrapicObject depth
      */
-    int _z;
+    float _z;
 
 	/**
 	 * @brief _color
