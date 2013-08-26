@@ -153,7 +153,7 @@ bool PhStripDoc::openDetX(QString fileName)
                 }
                 splitText(_actors[id], start, end,
                           currentLine.childNodes().at(j).toElement().text(), currentLine.toElement().attribute("track").toInt(),
-                          (j==1), 0 );
+                          0 );
             }
         }
 	}
@@ -191,7 +191,7 @@ void PhStripDoc::reset()
 	emit this->changed();
 }
 
-void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, bool alone, int i){
+void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, int i){
 
     if(sentence != " " && sentence != "" ){
         // if the sentence is short enough
@@ -199,19 +199,19 @@ void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString s
         {
             _texts.push_back(new PhStripText(actor, sentence,
                                              start, end,
-                                             track, alone));
+                                             track));
             _nbTexts ++;
         }
         else // we split in half
         {
             int length = sentence.length();
-            splitText(actor, start, start + (end - start)/2, sentence.left(length/2), track, (i==0), i);
+            splitText(actor, start, start + (end - start)/2, sentence.left(length/2), track, i);
             i++;
             if (length % 2 == 0){
-                splitText(actor, start + (end - start)/2, end, sentence.right(length/2), track, (i==0), i);
+                splitText(actor, start + (end - start)/2, end, sentence.right(length/2), track, i);
             }
             else{
-                splitText(actor, start + (end - start)/2, end, sentence.right(length/2 + 1), track, (i==0), i);
+                splitText(actor, start + (end - start)/2, end, sentence.right(length/2 + 1), track, i);
             }
         }
     }
