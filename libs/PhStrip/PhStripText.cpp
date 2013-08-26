@@ -19,9 +19,9 @@ QString PhStripText::getContent()
     return _content;
 }
 
-PhPeople PhStripText::getPeople()
+PhPeople * PhStripText::getPeople()
 {
-    return *_people;
+    return _people;
 }
 
 int PhStripText::getTrack()

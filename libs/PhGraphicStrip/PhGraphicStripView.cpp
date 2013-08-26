@@ -76,21 +76,44 @@ void PhGraphicStripView::paint()
 	_stripBackgroundImage->setSize(w, h);
 	_stripBackgroundImage->draw();
 
+	int trackNumber = 4;
+	int minSpaceBetweenPeople = 10;
+	int spaceBetweenPeopleAndText = 1;
+	PhStripText ** lastTextList = new PhStripText*[trackNumber];
+	for(int i = 0; i < trackNumber; i++)
+		lastTextList[i] = NULL;
+
 	foreach(PhStripText * text, _doc.getTexts())
 	{
-		PhGraphicText* gText = _texts[text];
+		PhGraphicText* gText = _graphicTexts[text];
 
-		gText->setY(text->getTrack() * h / 4);
-		gText->setZ(-1);
-		gText->setWidth(text->getTimeOut() - text->getTimeIn());
-		gText->setHeight(h / 4);
+		int track = text->getTrack();
+		gText->setY(track * h / trackNumber);
+		gText->setHeight(h / trackNumber);
 
 		gText->draw();
+
+		PhStripText * lastText = lastTextList[track];
+		// Display the people name only if one of the following condition is true:
+		// - it is the first text
+		// - it is a different people
+		// - the distance between the latest text and the current is superior to a limit
+		if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))
+		{
+			PhGraphicText * gPeople = _graphicPeoples[text->getPeople()];
+			gPeople->setX(text->getTimeIn() - gPeople->getWidth() - spaceBetweenPeopleAndText);
+			gPeople->setY(track * h / trackNumber);
+			gPeople->setHeight(h / trackNumber / 2);
+
+			gPeople->draw();
+		}
+
+		lastTextList[track] = text;
 	}
 
 	foreach(PhStripCut * cut, _doc.getCuts())
 	{
-		PhGraphicRect * gCut = _cuts[cut];
+		PhGraphicRect * gCut = _graphicCuts[cut];
 		gCut->setHeight(h);
 
 		gCut->draw();
@@ -106,16 +129,16 @@ void PhGraphicStripView::paint()
 
 void PhGraphicStripView::clearData()
 {
-	foreach(PhGraphicRect * it, _cuts)
+	foreach(PhGraphicRect * it, _graphicCuts)
 	{
 		delete it;
 	}
-	foreach(PhGraphicText * it, _texts)
+	foreach(PhGraphicText * it, _graphicTexts)
 	{
 		delete it;
 	}
-	_cuts.clear();
-	_texts.clear();
+	_graphicCuts.clear();
+	_graphicTexts.clear();
 }
 
 
@@ -141,7 +164,20 @@ void PhGraphicStripView::updateView()
 
 	clearData();
 
-	//Load the all text
+	// Load the peoples
+	foreach(PhPeople * people, _doc.getPeoples())
+	{
+		PhGraphicText * gPeople = new PhGraphicText(_currentFont, people->getName());
+		gPeople->setColor(new QColor(people->getColor()));
+		gPeople->setWidth(people->getName().length() * 16);
+		gPeople->setFont(_currentFont);
+
+		gPeople->init();
+
+		_graphicPeoples[people] = gPeople;
+	}
+
+	//Load the texts
 	foreach(PhStripText * text, _doc.getTexts())
 	{
 		//Display the name only if the setence is standalone
@@ -155,12 +191,13 @@ void PhGraphicStripView::updateView()
 		gText->setX(text->getTimeIn());
 		gText->setZ(-1);
 		gText->setWidth(text->getTimeOut() - text->getTimeIn());
-		gText->setColor(new QColor(text->getPeople().getColor()));
+		if(text->getPeople())
+			gText->setColor(new QColor(text->getPeople()->getColor()));
 		gText->setFont(_currentFont);
 
 		gText->init();
 
-		_texts[text] = gText;
+		_graphicTexts[text] = gText;
 	}
 
 	//Load the cuts
@@ -173,7 +210,7 @@ void PhGraphicStripView::updateView()
 
 		gCut->setZ(-2);
 
-		_cuts[cut] = gCut;
+		_graphicCuts[cut] = gCut;
 	}
 }
 

@@ -168,13 +168,11 @@ private :
      */
 	PhGraphicImage * _stripBackgroundImage;
 
-	/**
-	 * @brief _texts
-	 * QList of texts loaded
-	 */
-	QMap<PhStripText*, PhGraphicText*> _texts;
+	QMap<PhPeople*, PhGraphicText*> _graphicPeoples;
 
-	QMap<PhStripCut*, PhGraphicRect*> _cuts;
+	QMap<PhStripText*, PhGraphicText*> _graphicTexts;
+
+	QMap<PhStripCut*, PhGraphicRect*> _graphicCuts;
 
 	/**
 	 * @brief _test
