@@ -14,7 +14,6 @@
 #include "PhGraphicText.h"
 #include "PhFont.h"
 #include "PhGraphicSolidRect.h"
-#include "QtDesigner.h"
 
 #define TEXT
 //#define IMAGE

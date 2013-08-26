@@ -17,7 +17,6 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp \
 	GraphicTestView.cpp \
 	../../libs/PhGraphic/PhGraphicView.cpp \
 	../../libs/PhGraphic/PhGraphicContext.cpp \
@@ -30,9 +29,9 @@ SOURCES += main.cpp\
     ../../libs/PhGraphic/PhGraphicRect.cpp \
     ../../libs/PhTools/PhString.cpp \
     ../../libs/PhGraphic/PhGraphicSolidRect.cpp \
-    QtDesigner.cpp
+    MainWindow.cpp
 
-HEADERS  += MainWindow.h \
+HEADERS  += \
 	GraphicTestView.h \
 	../../libs/PhGraphic/PhGraphicView.h \
 	../../libs/PhGraphic/PhGraphicContext.h \
@@ -45,7 +44,7 @@ HEADERS  += MainWindow.h \
     ../../libs/PhGraphic/PhGraphicRect.h \
     ../../libs/PhTools/PhString.h \
     ../../libs/PhGraphic/PhGraphicSolidRect.h \
-    QtDesigner.h
+    MainWindow.h
 
 INCLUDEPATH += ../../libs/PhGraphic \
 				../../libs/PhTools \
@@ -62,4 +61,4 @@ DEPENDPATH +=  ../../libs/PhGraphic \
 LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
 
 FORMS += \
-    QtDesigner.ui
+    MainWindow.ui
