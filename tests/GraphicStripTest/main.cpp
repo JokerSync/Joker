@@ -7,13 +7,9 @@
 #include <QApplication>
 #include <QDebug>
 
-#include "SDL/SDL.h"
-
 #include "PhStrip/PhStripDoc.h"
-#include "PhTools/PhFileTools.h"
 
 #include "MainView.h"
-#undef main
 
 int main(int argc, char *argv[])
 {

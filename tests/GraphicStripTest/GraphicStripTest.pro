@@ -7,10 +7,7 @@
 TARGET = GraphicStripTest
 TEMPLATE = app
 
-
-QT       += core gui
-QT		+= xml
-QT		+= opengl
+QT += core gui
 
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
