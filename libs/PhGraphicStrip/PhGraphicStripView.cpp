@@ -11,8 +11,11 @@
 
 
 PhGraphicStripView::PhGraphicStripView(QWidget *parent)
-	: PhGraphicView( parent )
+	: PhGraphicView( parent ), _doc(this)
 {
+	// update the view content when the doc changes :
+	this->connect(&_doc, SIGNAL(changed()), this, SLOT(updateView()));
+
     // This is used to make some time-based test
 	_test = new QTime();
 	_test->start();
@@ -37,60 +40,24 @@ bool PhGraphicStripView::init()
 //	barTest.move(400,400);
 //	 barTest.show();
 
-//	qDebug() << "load the text" ;
-//	//Load the all text
-//	foreach(PhStripText * text, _controller->getDoc().getTexts())
-//	{
-//		qDebug() << "on rentre" ;
-//		//barTest.setValue(i);
-
-//		//h is the window height, hstrip is the strip height
-//		//hstrip/16 correspond to the upper alpha line of the strip
-//		//hstrip/8 correspond to the two alpha lines of the strip (up & down)
-//		//it->getTrack() is the position on the strip (0 is the upper on)
-//		//we split   in 3 because we are using 3 tracks on the strip
-//		int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*text->getTrack() + 30;
-
-//		//Display the name only if the setence is standalone
-//		if (text->isSimple()){
-//			int nameWidth = (text->getPeople().getName().length() + 1) * 10;
-//			_texts.push_back(new PhGraphicText( _fonts.first(),text->getPeople().getName(),
-//											   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
-//											   nameWidth, 30, 1, 1, new QColor(text->getPeople().getColor())));
-//		}
-//		_texts.push_back(new PhGraphicText( _currentFont, text->getContent(),
-//										   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
-//											(text->getTimeOut() - text->getTimeIn()) * 20, hstrip / 5 , 1, 1, new QColor(text->getPeople().getColor())));
-//	  //        if (i % (max / 20) == 0){
-//	  //            QApplication::processEvents();
-//	  //        }
-//	   //       i++;
-//	}
-
     //Load the strip background
 	_stripBackgroundImage = new PhGraphicImage("motif-240.png");
 	_stripBackgroundImage->init();
 
-	//Load the cuts
-//	foreach(PhStripCut * cut, _controller->getDoc().getCuts())
-//	{
-//		PhGraphicSolidRect *rect = new PhGraphicSolidRect((cut->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
-//														  2, hstrip, new QColor(0, 0, 0));
-//		_cuts.push_back(rect);
-//	}
+	updateView();
 
 	return true;
 }
 
 void PhGraphicStripView::paint()
 {
-	qDebug() << "PhGraphicStripView::paint()";
+//	qDebug() << "PhGraphicStripView::paint()";
 
 	//Set the background color to white
 	glClearColor(1,0,0,1);
 
 	//Time-based test
-	qDebug() << _test->elapsed(); //<< " : " << _xmove;
+//	qDebug() << _test->elapsed(); //<< " : " << _xmove;
 
 //	//Set the deplacement size of the strip
 //	if (_shouldmove){
@@ -125,11 +92,11 @@ void PhGraphicStripView::paint()
 ////		it->setWidht(w);
 //		it->draw();
 //	}
-//	foreach(PhGraphicRect * it, _cuts)
-//	{
-//		//it->draw(_xmove);
-//		it->draw();
-//	}
+	foreach(PhGraphicRect * cut, _cuts)
+	{
+		cut->setHeight(h);
+		cut->draw();
+	}
 }
 
 
@@ -164,6 +131,52 @@ bool PhGraphicStripView::setCurrentFont(QString fontFile)
 	_currentFont = new PhFont(fontFile, 150);
 
 	return true;
+}
+
+void PhGraphicStripView::updateView()
+{
+	clearData();
+
+	//	qDebug() << "load the text" ;
+	//	//Load the all text
+	//	foreach(PhStripText * text, _controller->getDoc().getTexts())
+	//	{
+	//		qDebug() << "on rentre" ;
+	//		//barTest.setValue(i);
+
+	//		//h is the window height, hstrip is the strip height
+	//		//hstrip/16 correspond to the upper alpha line of the strip
+	//		//hstrip/8 correspond to the two alpha lines of the strip (up & down)
+	//		//it->getTrack() is the position on the strip (0 is the upper on)
+	//		//we split   in 3 because we are using 3 tracks on the strip
+	//		int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*text->getTrack() + 30;
+
+	//		//Display the name only if the setence is standalone
+	//		if (text->isSimple()){
+	//			int nameWidth = (text->getPeople().getName().length() + 1) * 10;
+	//			_texts.push_back(new PhGraphicText( _fonts.first(),text->getPeople().getName(),
+	//											   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
+	//											   nameWidth, 30, 1, 1, new QColor(text->getPeople().getColor())));
+	//		}
+	//		_texts.push_back(new PhGraphicText( _currentFont, text->getContent(),
+	//										   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
+	//											(text->getTimeOut() - text->getTimeIn()) * 20, hstrip / 5 , 1, 1, new QColor(text->getPeople().getColor())));
+	//	  //        if (i % (max / 20) == 0){
+	//	  //            QApplication::processEvents();
+	//	  //        }
+	//	   //       i++;
+	//	}
+	//Load the cuts
+	foreach(PhStripCut * cut, _doc.getCuts())
+	{
+		PhGraphicSolidRect *rect = new PhGraphicSolidRect();
+		rect->setColor(new QColor(0, 0, 0));
+		rect->setX(cut->getTimeIn());
+		rect->setWidth(2);
+		rect->setZ(-2);
+
+		_cuts.push_back(rect);
+	}
 }
 
 //PhFont * PhGraphicStripView::getCurrentFont(){
@@ -228,5 +241,5 @@ bool PhGraphicStripView::setCurrentFont(QString fontFile)
 
 PhStripDoc *PhGraphicStripView::getDoc()
 {
-	return _doc;
+	return &_doc;
 }

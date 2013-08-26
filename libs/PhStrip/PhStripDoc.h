@@ -15,64 +15,9 @@
 #include "PhStripObject.h"
 #include "PhStripText.h"
 
-class PhStripDoc {
-private:
-    void reset();
-    /**
-     * Title of the corresponding audiovisual content.
-     */
-	QString _title;
-    /**
-     * Starting time of the video content refered by the videoPath : String
-     */
-    PhTime _videoTimestamp;
-    /**
-     * @brief _lastPosition
-     */
-    PhTime _lastPosition;
-    /**
-     * Path to the video content.
-     */
-	QString _videoPath;
-    /**
-     * Amount of time units per second.
-     */
-    int _timeScale;
-    /**
-     * Number of video frame per second. In fact, this attribute can take 4 differents values:
-     * 23.98
-     * 24
-     * 25
-     * 29.97
-     */
-    float _fps;
-    /**
-     * Specify if the timecode use dropframe or not. In fact, only 29.97 video framerate use dropframe.
-     */
-    bool _drop;
-
-    /**
-     * List of PhPeople from the file
-     */
-	QMap<QString, PhPeople *> _actors;
-
-    /**
-     * List of PhStripText from the file
-     */
-    QList<PhStripText *> _texts;
-
-    /**
-     * List of PhStripCut form the file
-     */
-     QList<PhStripCut *> _cuts;
-
-     /**
-      * List of PhStripLoop from the file
-      */
-     QList<PhStripLoop *> _loops;
-     int _nbTexts;
-	 void splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track, bool alone, int ite);
-
+class PhStripDoc : public QObject
+{
+	Q_OBJECT
 
 public:
      /**
@@ -80,7 +25,7 @@ public:
      * @param filename
      * Constructor
      */
-    PhStripDoc();
+    explicit PhStripDoc(QObject *parent = 0);
 
     QList<PhStripCut *> getCuts();
 
@@ -163,8 +108,67 @@ public:
      */
 	bool openDetX(QString filename);
 
-
     int getNbTexts();
+
+signals:
+	void changed();
+
+private:
+    void reset();
+    /**
+     * Title of the corresponding audiovisual content.
+     */
+	QString _title;
+    /**
+     * Starting time of the video content refered by the videoPath : String
+     */
+    PhTime _videoTimestamp;
+    /**
+     * @brief _lastPosition
+     */
+    PhTime _lastPosition;
+    /**
+     * Path to the video content.
+     */
+	QString _videoPath;
+    /**
+     * Amount of time units per second.
+     */
+    int _timeScale;
+    /**
+     * Number of video frame per second. In fact, this attribute can take 4 differents values:
+     * 23.98
+     * 24
+     * 25
+     * 29.97
+     */
+    float _fps;
+    /**
+     * Specify if the timecode use dropframe or not. In fact, only 29.97 video framerate use dropframe.
+     */
+    bool _drop;
+
+    /**
+     * List of PhPeople from the file
+     */
+	QMap<QString, PhPeople *> _actors;
+
+    /**
+     * List of PhStripText from the file
+     */
+    QList<PhStripText *> _texts;
+
+    /**
+     * List of PhStripCut form the file
+     */
+     QList<PhStripCut *> _cuts;
+
+     /**
+      * List of PhStripLoop from the file
+      */
+     QList<PhStripLoop *> _loops;
+     int _nbTexts;
+	 void splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track, bool alone, int ite);
 };
 
 #endif // PHSTRIPDOC_H
