@@ -9,37 +9,37 @@
 
 
 
-PhGraphicRect::PhGraphicRect(int x, int y, int w, int h, int z, QColor *color)
+PhGraphicRect::PhGraphicRect(float x, float y, float w, float h, float z, QColor *color)
 	: PhGraphicObject(x , y , z, color), _w(w), _h(h)
 {
 }
 
-void PhGraphicRect::setSize(int w, int h)
+void PhGraphicRect::setSize(float w, float h)
 {
     this->setHeight(h);
     this->setWidth(w);
 }
-void PhGraphicRect::setRect(int x, int y, int w, int h)
+void PhGraphicRect::setRect(float x, float y, float w, float h)
 {
     this->setSize(w,h);
     this->setPosition(x,y,this->getZ());
 }
 
-void PhGraphicRect::setHeight(int h)
+void PhGraphicRect::setHeight(float h)
 {
     _h = h;
 }
 
-void PhGraphicRect::setWidth(int w)
+void PhGraphicRect::setWidth(float w)
 {
     _w = w;
 }
 
-int PhGraphicRect::getHeight()
+float PhGraphicRect::getHeight()
 {
     return _h;
 }
-int PhGraphicRect::getWidth()
+float PhGraphicRect::getWidth()
 {
     return _w;
 }
