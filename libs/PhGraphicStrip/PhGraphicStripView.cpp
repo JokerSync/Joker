@@ -59,19 +59,10 @@ void PhGraphicStripView::paint()
 	//Time-based test
 //	qDebug() << _test->elapsed(); //<< " : " << _xmove;
 
-//	//Set the deplacement size of the strip
-//	if (_shouldmove){
-//		_xmove -= 8;
-//		_xMoveStrip -= 8;
-//		// if the strip moved of more than 1 X strip's width it came back
-//		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
-//			_xMoveStrip = 0;
-//	}
-
 	float h = this->height();
 	float w = this->width();
 
-//    //Draw Backgroung Picture
+//    //Draw backgroung picture
 	_stripBackgroundImage->setTextureCoordinate(1.2f * w / h, 1);
 	_stripBackgroundImage->setSize(w, h);
 	_stripBackgroundImage->draw();
@@ -119,13 +110,6 @@ void PhGraphicStripView::paint()
 		gCut->draw();
 	}
 }
-
-
-//void PhGraphicStripView::stopScroll()
-//{
-//	qDebug() << "Stop Scrolling";
-//	setScroll(false);
-//}
 
 void PhGraphicStripView::clearData()
 {
@@ -180,13 +164,6 @@ void PhGraphicStripView::updateView()
 	//Load the texts
 	foreach(PhStripText * text, _doc.getTexts())
 	{
-		//Display the name only if the setence is standalone
-//			if (text->isSimple()){
-//				int nameWidth = (text->getPeople().getName().length() + 1) * 10;
-//				_texts.push_back(new PhGraphicText( _fonts.first(),text->getPeople().getName(),
-//												   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
-//												   nameWidth, 30, 1, 1, new QColor(text->getPeople().getColor())));
-//			}
 		PhGraphicText * gText = new PhGraphicText( _currentFont, text->getContent());
 		gText->setX(text->getTimeIn());
 		gText->setZ(-1);
@@ -213,66 +190,6 @@ void PhGraphicStripView::updateView()
 		_graphicCuts[cut] = gCut;
 	}
 }
-
-//PhFont * PhGraphicStripView::getCurrentFont(){
-//	return _currentFont;
-//}
-
-
-//void PhGraphicStripView::changeScroll()
-//{
-//	_shouldmove = ! _shouldmove;
-//}
-
-
-//void PhGraphicStripView::setScroll(bool shouldScroll)
-//{
-//	if(shouldScroll)
-//		qDebug() << "The strip should scroll";
-//	else
-//		qDebug() << "The strip should NOT scroll";
-
-//	_shouldmove = shouldScroll;
-//}
-
-//void PhGraphicStripView::setNaturalScroll(bool naturalScroll)
-//{
-//	_naturalScroll = naturalScroll;
-//}
-
-//void PhGraphicStripView::toggleNaturalScrolling()
-//{
-//	_naturalScroll = ! _naturalScroll;
-//}
-
-//void PhGraphicStripView::setController(PhGraphicStripController * controller)
-//{
-//	_controller = controller;
-//}
-
-//void PhGraphicStripView::connectSlots(){
-//	connect(_controller, SIGNAL(docChanged()), this, SLOT(initializeGL()));
-//	connect(_controller, SIGNAL(docChanged()), this, SLOT(stopScroll()));
-//}
-
-//void PhGraphicStripView::setXmove(int n)
-//{
-//	if (_naturalScroll)
-//	{
-//		_xmove -= n;
-//		_xMoveStrip -= n;
-//		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
-//			_xMoveStrip = 0;
-//	}
-//	else
-//	{
-//		_xmove += n;
-//		_xMoveStrip += n;
-//		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
-//			_xMoveStrip = 0;
-//	}
-//}
-
 
 PhStripDoc *PhGraphicStripView::getDoc()
 {
