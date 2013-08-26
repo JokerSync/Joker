@@ -32,6 +32,7 @@ bool PhGraphicImage::init()
 	return false;
 
 }
+
 void PhGraphicImage::dispose()
 {
     SDL_FreeSurface(_surface);

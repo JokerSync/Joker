@@ -142,11 +142,12 @@ void PhGraphicTexturedRect::draw(){
 
 		glBegin(GL_QUADS); 	//Begining the cube's drawing
 		{
-			glTexCoord3f(0, 0, 1);glVertex3f(x ,         y,      z);
-			glTexCoord3f(_tu, 0, 1);glVertex3f(x + w * _tu ,     y,      z);
-			glTexCoord3f(_tu, _tv, 1);glVertex3f(x + w * _tu ,     y + h * _tv,  z);
-			glTexCoord3f(0, _tv, 1);glVertex3f(x ,         y + h * _tv,  z);
+			glTexCoord3f(0, 0, 1);		glVertex3f(x,		y,	z);
+			glTexCoord3f(_tu, 0, 1);	glVertex3f(x + w,	y,	z);
+			glTexCoord3f(_tu, _tv, 1);	glVertex3f(x + w,	y + h,  z);
+			glTexCoord3f(0, _tv, 1);	glVertex3f(x,		y + h,  z);
 		}
+
         glEnd();
         glDisable(GL_TEXTURE_2D);
 
