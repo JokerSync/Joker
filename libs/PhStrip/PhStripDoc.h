@@ -168,7 +168,7 @@ private:
       */
      QList<PhStripLoop *> _loops;
      int _nbTexts;
-	 void splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track, bool alone, int ite);
+	 void splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track, int ite);
 };
 
 #endif // PHSTRIPDOC_H

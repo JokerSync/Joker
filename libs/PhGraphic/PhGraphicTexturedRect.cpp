@@ -5,11 +5,6 @@
 
 #include "PhGraphicTexturedRect.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
-
-
 void PhGraphicTexturedRect::createTextureFromColor(QColor color){
 
     GLubyte Texture[4] =

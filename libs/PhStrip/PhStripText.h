@@ -21,7 +21,7 @@ public:
      * @param simpleText
      * Constructor
      */
-	PhStripText(PhPeople * people, QString content, PhTime timeIn, PhTime timeOut, int track, bool simpleText);
+	PhStripText(PhPeople * people, QString content, PhTime timeIn, PhTime timeOut, int track);
     /**
      * @brief getContent
      * @return _content
@@ -73,13 +73,6 @@ private:
      * Track of the text, 0 is on top of the strip
      */
     int _track;
-
-    /**
-     * @brief _simpleText
-     * allow us to know if the text if a standalone sentence or a group of word making a sentence,
-     * very usefull to avoid repetitive display of the PhPeople name
-     */
-    bool _simpleText;
 };
 
 #endif // PHSTRIPTEXT_H

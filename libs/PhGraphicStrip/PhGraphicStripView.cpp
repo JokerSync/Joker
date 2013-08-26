@@ -24,11 +24,11 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent)
 
 bool PhGraphicStripView::init()
 {
-	QString fontFile = "Bedizen.ttf";
-	// Load font
-	_currentFont = new PhFont(fontFile, 150);
-
 	qDebug() << "PhGraphicStripView::init()";
+
+	// Load font
+	if(!setCurrentFont("Bedizen.ttf"))
+		return false;
 
 	//This clear the data stored
 	clearData();
@@ -76,27 +76,11 @@ void PhGraphicStripView::paint()
 	_stripBackgroundImage->setSize(w, h);
 	_stripBackgroundImage->draw();
 
-//    foreach(PhGraphicImage * it, _strips)
-//    {
-//		//it->draw(_xMoveStrip);
-//		it->draw();
-//    }
-//	int x = 0;
-//	int y = 0;
-//	foreach(PhGraphicText * it, _texts)
-//	{
-//		//it->draw(_xmove);
-//		qDebug() << "Draw PhGraphicText" ;
-////		it->setX(x);
-////		it->setY(y);
-////		it->setWidht(w);
-//		it->draw();
-//	}
+	foreach(PhGraphicText * text, _texts)
+		text->draw();
+
 	foreach(PhGraphicRect * cut, _cuts)
-	{
-		cut->setHeight(h);
 		cut->draw();
-	}
 }
 
 
@@ -130,52 +114,61 @@ bool PhGraphicStripView::setCurrentFont(QString fontFile)
 	}
 	_currentFont = new PhFont(fontFile, 150);
 
+	if(!_currentFont->init())
+		return false;
+
 	return true;
 }
 
 void PhGraphicStripView::updateView()
 {
+	if(!_currentFont)
+		return;
+
 	clearData();
 
-	//	qDebug() << "load the text" ;
-	//	//Load the all text
-	//	foreach(PhStripText * text, _controller->getDoc().getTexts())
-	//	{
-	//		qDebug() << "on rentre" ;
-	//		//barTest.setValue(i);
+	int h = this->height();
 
-	//		//h is the window height, hstrip is the strip height
-	//		//hstrip/16 correspond to the upper alpha line of the strip
-	//		//hstrip/8 correspond to the two alpha lines of the strip (up & down)
-	//		//it->getTrack() is the position on the strip (0 is the upper on)
-	//		//we split   in 3 because we are using 3 tracks on the strip
-	//		int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*text->getTrack() + 30;
+	qDebug() << "load the text" ;
+	//Load the all text
+	foreach(PhStripText * text, _doc.getTexts())
+	{
+		qDebug() << "on rentre" ;
+		//barTest.setValue(i);
 
-	//		//Display the name only if the setence is standalone
-	//		if (text->isSimple()){
-	//			int nameWidth = (text->getPeople().getName().length() + 1) * 10;
-	//			_texts.push_back(new PhGraphicText( _fonts.first(),text->getPeople().getName(),
-	//											   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
-	//											   nameWidth, 30, 1, 1, new QColor(text->getPeople().getColor())));
-	//		}
-	//		_texts.push_back(new PhGraphicText( _currentFont, text->getContent(),
-	//										   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
-	//											(text->getTimeOut() - text->getTimeIn()) * 20, hstrip / 5 , 1, 1, new QColor(text->getPeople().getColor())));
-	//	  //        if (i % (max / 20) == 0){
-	//	  //            QApplication::processEvents();
-	//	  //        }
-	//	   //       i++;
-	//	}
+		//Display the name only if the setence is standalone
+//			if (text->isSimple()){
+//				int nameWidth = (text->getPeople().getName().length() + 1) * 10;
+//				_texts.push_back(new PhGraphicText( _fonts.first(),text->getPeople().getName(),
+//												   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
+//												   nameWidth, 30, 1, 1, new QColor(text->getPeople().getColor())));
+//			}
+		PhGraphicText * gText = new PhGraphicText( _currentFont, text->getContent());
+		gText->setX(text->getTimeIn());
+		gText->setY(text->getTrack() * h / 4);
+		gText->setZ(-1);
+		gText->setWidth(text->getTimeOut() - text->getTimeIn());
+		gText->setHeight(h / 4);
+		gText->setColor(new QColor(text->getPeople().getColor()));
+		gText->setFont(_currentFont);
+
+		gText->init();
+
+		_texts.push_back(gText);
+	}
+
 	//Load the cuts
 	foreach(PhStripCut * cut, _doc.getCuts())
 	{
-		PhGraphicSolidRect *rect = new PhGraphicSolidRect();
-		rect->setColor(new QColor(0, 0, 0));
-		rect->setX(cut->getTimeIn());
-		rect->setWidth(2);
-		rect->setZ(-2);
+		PhGraphicSolidRect *gCut = new PhGraphicSolidRect();
+		gCut->setColor(new QColor(0, 0, 0));
+		gCut->setX(cut->getTimeIn());
+		gCut->setWidth(2);
+		gCut->setHeight(h);
 
-		_cuts.push_back(rect);
+		gCut->setZ(-2);
+
+		_cuts.push_back(gCut);
 	}
 }
 
