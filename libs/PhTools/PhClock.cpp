@@ -1,58 +1,49 @@
 #include "PhClock.h"
 
 PhClock::PhClock(QObject *parent) :
-	QObject(parent)
+	QObject(parent), _time(0), _timeScale(600), _rate(0.0f)
 {
-	//Model Init
-	_rate = 0;
-	_frame = 0;
+}
 
+/****************************Slots****************************/
+
+void PhClock::tick(int frequence)
+{
+	int elapsed = _timeScale / frequence;
+	this->setTime(static_cast<int>(_time + elapsed * _rate));
+}
+
+/****************************Getters****************************/
+
+void PhClock::setTime(qint64 time)
+{
+	if (_time != time) {
+		_time = time;
+		emit timeChanged(time);
+	}
+}
+
+void PhClock::setTimeScale(int timeScale)
+{
+	_timeScale = timeScale;
 }
 
 void PhClock::setRate(float rate)
 {
-	if(_rate != rate)
-	{
+	if (_rate != rate) {
 		_rate = rate;
-		rateChanged();
+		emit rateChanged(rate);
 	}
 }
 
-void PhClock::setFrame(PhFrame frame)
+int PhClock::frame(PhTimeCodeType tcType) const
 {
-	if(_frame != frame)
-	{
-		_frame = frame;
-
-	}
+	// TODO
+	return 0;
 }
 
-
-/****************************Slots****************************/
-
-void PhClock::tick()
+void PhClock::setFrame(int frame, PhTimeCodeType tcType)
 {
-	_frame += _rate;
-	frameChanged();
-
+	// TODO
 }
 
-
-/****************************Getters****************************/
-
-float PhClock::getRate() const
-{
-	return _rate;
-}
-
-
-PhFrame PhClock::getFrame() const
-{
-	return _frame;
-}
-
-
-PhClock::~PhClock()
-{
-
-}

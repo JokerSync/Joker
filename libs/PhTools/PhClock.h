@@ -2,15 +2,8 @@
 #define PHCLOCK_H
 
 #include <QObject>
-#include <QtWidgets>
-#include <QString>
-#include <Qtimer>
-#include <QDebug>
-#include <QGridLayout>
-#include <QtGui>
-#include "PhTools/PhTimeCode.h"
-#include "PhTools/PhTime.h"
-#include "PhTools/PhString.h"
+#include "PhTimeCode.h"
+#include "PhTime.h"
 
 using namespace std;
 
@@ -22,35 +15,52 @@ using namespace std;
 class PhClock : public QObject
 {
 	Q_OBJECT
+
+	// Properties
+	Q_PROPERTY(qint64 time READ time WRITE setTime NOTIFY timeChanged);
+	Q_PROPERTY(int timeScale READ timeScale WRITE setTimeScale);
+	Q_PROPERTY(float rate READ rate WRITE setRate NOTIFY rateChanged);
+
 public:
 	explicit PhClock(QObject *parent = 0);
 
-	//setters
+	void setFrame(int frame, PhTimeCodeType tcType);
+	int frame(PhTimeCodeType tcType) const;
 
+	qint64 time() const	{ return _time; }
 
-	//getters
-	float getRate() const;
-	PhFrame getFrame() const;
+	int timeScale() const { return _timeScale; }
 
-	~PhClock();
+	float rate() const { return _rate; }
 
+	void setTime(qint64 time);
+
+	void setTimeScale(int timeScale);
+
+	void setRate(float rate);
 
 signals:
-
 	void frameChanged();
-	void rateChanged();
+
+	void timeChanged(qint64 arg);
+
+	void rateChanged(float arg);
 
 public slots:
 
-	void tick();
-	void setRate(float rate);
-	void setFrame(PhFrame frame);
-
+	/**
+	 * Sync the clock to a signal at a given frequence.
+	 * The clock time value is then updated accordingly to the clock rate.
+	 * @param frequence Frequence of the signal
+	 */
+	void tick(int frequence);
 
 private:
+	qint64 _time;
+
+	int _timeScale;
 
 	float _rate;
-	PhFrame _frame;
 
 };
 
