@@ -53,7 +53,8 @@ public:
 
 public slots:
 	virtual void play() = 0;
-
+	virtual void fastBackward() = 0;
+	virtual void fastForward() = 0;
 
 protected:
 

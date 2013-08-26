@@ -20,8 +20,12 @@ public:
 	explicit QtDesigner(QWidget *parent = 0);
 	~QtDesigner();
 
+public slots:
+	void pushPlayButton();
+
 private:
 	Ui::QtDesigner *ui;
+	bool playButtonState;
 
 };
 
