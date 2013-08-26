@@ -11,12 +11,14 @@ INCLUDEPATH += ../../libs
 # Windows specific
 win32{
 #	INCLUDEPATH += $$(SDL_INCLUDE_PATH)
+	RESOURCES_PATH = .
 }
 
 # Ubuntu specific
 linux {
 	INCLUDEPATH += /usr/include/SDL
 	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+	RESOURCES_PATH = .
 }
 
 # MacOS specific
@@ -28,4 +30,9 @@ mac {
 	INCLUDEPATH += /Library/Frameworks/
 	LIBS += -F/Library/Frameworks
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
+	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS
 }
+
+QMAKE_POST_LINK += echo $${RESOURCES_PATH}
+QMAKE_POST_LINK += && cp $${_PRO_FILE_PWD_}/../../data/img/look.png $${RESOURCES_PATH}
+QMAKE_POST_LINK += && cp $${_PRO_FILE_PWD_}/../../data/fonts/Bedizen.ttf $${RESOURCES_PATH}
