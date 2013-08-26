@@ -107,7 +107,7 @@ void PhGraphicStripView::paint()
 	float w = this->width();
 
 //    //Draw Backgroung Picture
-	_stripBackgroundImage->setTextureCoordinate(w / h, 1);
+	_stripBackgroundImage->setTextureCoordinate(1.2f * w / h, 1);
 	_stripBackgroundImage->setSize(w, h);
 	_stripBackgroundImage->draw();
 
