@@ -1,7 +1,7 @@
 #include "GraphicTestView.h"
 
-GraphicTestView::GraphicTestView(QWidget *parent, QString name)
-	: PhGraphicView( parent , name )
+GraphicTestView::GraphicTestView(QWidget *parent)
+	: PhGraphicView( parent)
 #ifdef IMAGE
 	, _image(NULL)
 #endif

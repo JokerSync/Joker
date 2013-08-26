@@ -63,13 +63,6 @@ protected:
 
 	void paintGL();
 
-private slots:
-    /**
-     * @brief onRefresh
-     */
-	void onRefresh();
-
-
 private:
 
     /**

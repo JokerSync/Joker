@@ -15,6 +15,7 @@
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
 
+#include "PhTools/PhClock.h"
 
 /**
  * @brief The PhGraphicStripView class
@@ -90,6 +91,7 @@ private :
 	 */
 	PhStripDoc _doc;
 
+	PhClock _clock;
 
 	/**
 	 * @brief _currentFont
@@ -113,6 +115,8 @@ private :
 	 * QTime for testing performance
 	 */
 	QTime *_test;
+
+	int _trackNumber;
 };
 
 #endif // PhGraphicStripView_H

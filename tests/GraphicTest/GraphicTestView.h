@@ -22,7 +22,7 @@
 class GraphicTestView : public PhGraphicView
 {
 public :
-	explicit GraphicTestView(QWidget *parent = 0, QString name = "");
+	explicit GraphicTestView(QWidget *parent = 0);
 
 	GraphicTestView *view();
 
@@ -37,8 +37,8 @@ private:
 #endif
 
 #ifdef TEXT
-	PhGraphicText *_text;
 	PhFont *_font;
+	PhGraphicText *_text;
 #endif
 
 #ifdef RECT
