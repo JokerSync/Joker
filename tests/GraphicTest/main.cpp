@@ -15,6 +15,8 @@ int main(int argc, char *argv[])
 	g.resize(800,400);
 
 	QObject::connect(w.getUi()->Play, SIGNAL(clicked()), &g, SLOT(play()));
+	QObject::connect(w.getUi()->FastBackward, SIGNAL(clicked()), &g, SLOT(fastBackward()));
+	QObject::connect(w.getUi()->FastForward, SIGNAL(clicked()), &g, SLOT(fastForward()));
 
 	w.show();
 

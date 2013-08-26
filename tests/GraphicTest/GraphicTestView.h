@@ -29,6 +29,8 @@ public :
 
 public slots:
 	void play();
+	void fastBackward();
+	void fastForward();
 
 protected:
 	bool init();
@@ -37,7 +39,8 @@ protected:
 
 private:
 
-	bool playEnable;
+	int playEnable;
+	int textSpeed;
 
 	PhGraphicImage *_image;
 	PhGraphicText *_text;

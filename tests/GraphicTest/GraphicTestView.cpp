@@ -1,4 +1,5 @@
 #include "GraphicTestView.h"
+#include "math.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent, QString name)
 	: PhGraphicView( parent , name ) , _image(NULL), _font(NULL), _text(NULL), _rect(NULL)
@@ -8,7 +9,8 @@ GraphicTestView::GraphicTestView(QWidget *parent, QString name)
 
 bool GraphicTestView::init()
 {
-	playEnable = false;
+	playEnable = 0;
+	textSpeed = 0;
 
 #ifdef IMAGE
 	qDebug() << "GraphicTestView::init";
@@ -65,15 +67,11 @@ void GraphicTestView::paint()
 #endif
 
 #ifdef TEXT
-	if (playEnable == false)
+	if (textSpeed == 0)
 	{
 		if(_text != NULL)
 		{
-			//_text->setX(_text->getX()+4);
-			_text->draw();
-			if(_text->getX() > this->width())
-				_text->setX(0);
-
+				_text->draw();
 		}
 	}
 	else
@@ -81,10 +79,12 @@ void GraphicTestView::paint()
 		if(_text != NULL)
 		{
 			qDebug() <<"text pas null";
-			_text->setX(_text->getX()+4);
+			_text->setX(_text->getX()+(2*textSpeed));
 			_text->draw();
 			if(_text->getX() > this->width())
 				_text->setX(0);
+			if((_text->getX()+_text->getWidth()) < 0)
+				_text->setX(this->width());
 
 		}
 	}
@@ -98,8 +98,28 @@ void GraphicTestView::paint()
 
 void GraphicTestView::play()
 {
-	if (playEnable == true)
-		playEnable = false;
+	if (playEnable == 1)
+	{
+		playEnable = 0;
+		textSpeed = 0;
+	}
 	else
-		playEnable = true;
+	{
+		playEnable = 1;
+		textSpeed = 1;
+	}
+}
+
+void GraphicTestView::fastBackward()
+{
+	textSpeed = fabs(textSpeed) * (-2);
+	if(fabs(textSpeed) > 8)
+		textSpeed = -8;
+}
+
+void GraphicTestView::fastForward()
+{
+	textSpeed = fabs(textSpeed) * 2;
+	if(fabs(textSpeed) > 8)
+		textSpeed = 8;
 }

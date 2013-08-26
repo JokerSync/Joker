@@ -14,18 +14,38 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="Play">
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>480</y>
-      <width>80</width>
-      <height>23</height>
+      <x>10</x>
+      <y>390</y>
+      <width>781</width>
+      <height>80</height>
      </rect>
     </property>
-    <property name="text">
-     <string/>
-    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="FastBackward">
+       <property name="text">
+        <string>FastBackward</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="Play">
+       <property name="text">
+        <string>Play/pause</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="FastForward">
+       <property name="text">
+        <string>FastForward</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
