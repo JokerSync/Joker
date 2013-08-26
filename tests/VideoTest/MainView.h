@@ -46,6 +46,9 @@ private slots:
 	void updateFrame();
 	void changePlayerState();
 	void positionChanged();
+	void pushedNextFrameButton();
+	void pushedPreviousFrameButton();
+	void pushedBackButton();
 	//void updatePlayButtonState(QMediaPlayer::State state);
 	//void updateErrorLabelContent();
 
@@ -56,6 +59,7 @@ private:
 	PhMediaControllerView *_mediaControllerView;
 	PhClock *_clock;
 	QTimer *_timer;
+	int _framePerSecond;
 };
 
 #endif

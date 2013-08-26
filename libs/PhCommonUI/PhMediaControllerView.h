@@ -14,8 +14,9 @@ class PhMediaControllerView : public QWidget
 	Q_OBJECT
 	
 public:
-	explicit PhMediaControllerView(PhClock *clock, PhTimeCodeType timecodeType, PhFrame lenghtFile, PhFrame firstFrame, QWidget *parent = 0);
+	explicit PhMediaControllerView(PhClock *clock, qint64 lengthFile, QWidget *parent = 0);
 	int get_framePerSecond() const;
+	void set_fileInfo(qint64 lengthFile);
 
 	~PhMediaControllerView();
 
@@ -25,8 +26,8 @@ signals:
 	void forwardButtonSignal();
 	void rewindButtonSignal();
 	void backButtonSignal();
-	void pushNextFrameButtonSignal();
-	void pushPreviousFrameButtonSignal();
+	void nextFrameButtonSignal();
+	void previousFrameButtonSignal();
 	void useSliderCursorSignal();
 
 public slots:
