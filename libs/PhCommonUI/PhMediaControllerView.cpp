@@ -1,7 +1,7 @@
 #include "PhMediaControllerView.h"
 #include "ui_PhMediaControllerView.h"
 
-PhMediaControllerView::PhMediaControllerView(PhClock *clock, qint64 lengthFile, QWidget *parent) :
+PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::PhMediaControllerView)
 {
@@ -10,7 +10,6 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, qint64 lengthFile, 
 	_clock = clock;
 
 
-	_lengthFile = lengthFile;
 	_firstFrame = 0;
 	_timecodeType = PhTimeCodeType25;
 	_framePerSecond = PhTimeCode::getFps(_timecodeType);
@@ -70,14 +69,14 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, qint64 lengthFile, 
 
 }
 
-int PhMediaControllerView::get_framePerSecond() const
+int PhMediaControllerView::getFramePerSecond() const
 {
 	return _framePerSecond;
 }
 
-void PhMediaControllerView::set_fileInfo(qint64 lengthFile)
+void PhMediaControllerView::setMediaLength(qint64 lengthFile)
 {
-	_lengthFile = lengthFile;
+	_mediaLength = lengthFile;
 	_firstFrame = 0;
 	_timecodeType = PhTimeCodeType25;
 	_framePerSecond = 25;
@@ -147,7 +146,7 @@ void PhMediaControllerView::pushPreviousFrameButton()
 
 void PhMediaControllerView::useSliderCursor(int position)
 {
-	int t = position*_lengthFile/100 + _firstFrame;
+	int t = position*_mediaLength/100 + _firstFrame;
 	_clock->setFrame(t);
 	useSliderCursorSignal();
 }
@@ -169,7 +168,7 @@ void PhMediaControllerView::updateFrameLabel()
 void PhMediaControllerView::updateSliderPosition()
 {
 	int t = _clock->getFrame();
-	_fileProgress = (t - _firstFrame)*100/_lengthFile;
+	_fileProgress = (t - _firstFrame)*100/_mediaLength;
 	//qDebug() << t <<"  "<< _fileProgress <<"  "<<_lengthFile;
 	ui->_slider->setSliderPosition(_fileProgress);
 

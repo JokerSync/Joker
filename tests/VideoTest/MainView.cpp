@@ -13,7 +13,7 @@ MainView::MainView()
 	_framePerSecond = 25;
 
 	_timer->start(40);
-	_mediaControllerView = new PhMediaControllerView(_clock,2000);
+	_mediaControllerView = new PhMediaControllerView(_clock);
 	qDebug() << "filesize:"<<_videoController.duration();
 	qDebug() << "metadata:"<<_videoController.isMetaDataAvailable();
 
@@ -102,7 +102,7 @@ void MainView::changePlayerState()
 void MainView::positionChanged()
 {
 	qint64 f = _clock->getFrame();
-	qint64 p = f*1000/_mediaControllerView->get_framePerSecond();
+	qint64 p = f*1000/_mediaControllerView->getFramePerSecond();
 	_videoController.setPosition(p);
 }
 
