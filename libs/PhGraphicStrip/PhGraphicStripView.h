@@ -164,17 +164,17 @@ private :
 	PhFont *_currentFont;
 
 	/**
-	 * @brief _texts
-	 * QList of texts loaded
-	 */
-	QList<PhGraphicText *> _texts;
-
-    /**
 	 *Background Image used for the strip band
      */
 	PhGraphicImage * _stripBackgroundImage;
 
-	QList<PhGraphicRect *> _cuts;
+	/**
+	 * @brief _texts
+	 * QList of texts loaded
+	 */
+	QMap<PhStripText*, PhGraphicText*> _texts;
+
+	QMap<PhStripCut*, PhGraphicRect*> _cuts;
 
 	/**
 	 * @brief _test
