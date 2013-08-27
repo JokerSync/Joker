@@ -10,8 +10,8 @@
 #include <QTimer>
 
 #include "PhVideo/PhVideoController.h"
-#include "PhCommonUI/PhMediaControllerView.h"
 #include "PhTools/PhClock.h"
+#include <QMediaMetaData>
 
 using namespace std;
 
@@ -36,24 +36,17 @@ public:
      */
     bool openFile(QString fileName);
 
-	PhClock *get_clock();
-
 public slots:
-	void updateFrame();
+
 
 private slots:
-    void onOpenFile();
-	//void updatePlayButtonState(QMediaPlayer::State state);
-	//void updateErrorLabelContent();
+
+	void onOpenFile();
 
 private:
-    PhVideoController _videoController;
+	PhVideoView _videoView;
     QAbstractButton *_openButton;
-    QSlider *_positionSlider;
-	PhMediaControllerView *_mediaControllerView;
-	PhClock *_clock;
-	QTimer *_timer;
-
+	PhClock _clock;
 };
 
 #endif

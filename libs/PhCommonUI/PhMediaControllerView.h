@@ -14,9 +14,15 @@ class PhMediaControllerView : public QWidget
 	Q_OBJECT
 	
 public:
-	explicit PhMediaControllerView(PhClock *clock, QWidget *parent = 0);
-
+	explicit PhMediaControllerView(QWidget *parent = 0);
 	~PhMediaControllerView();
+	void setTCType(PhTimeCodeType tcType);
+	PhTimeCodeType getTCType() const;
+	void setClock(PhClock *clock);
+	PhClock* getClock() const;
+	void setFirstFrame(PhFrame firstFrame);
+	PhFrame getFirstFrame() const;
+	void setMediaLength(qint64 mediaLength);
 
 signals:
 
@@ -24,6 +30,9 @@ signals:
 	void forwardButtonSignal();
 	void rewindButtonSignal();
 	void backButtonSignal();
+	void nextFrameButtonSignal();
+	void previousFrameButtonSignal();
+	void useSliderCursorSignal();
 
 public slots:
 	/**
@@ -44,36 +53,29 @@ public slots:
 	 */
 	void pushRewindButton();
 
-	/**
-	 * @brief pushBacButton
-	 */
 	void pushBackButton();
 
-	/**
-	 * @brief selectRate
-	 */
+	void pushNextFrameButton();
+
+	void pushPreviousFrameButton();
+
+	void useSliderCursor(int position);
+
 	void selectRate();
 
-	/**
-	 * @brief increaseValueTimecode
-	 * Update the timecode every 40*rateValue ms when play button is enabled
-	 */
-	void updateFrame();
+	void onRateChanged();
+
+	void onFrameChanged();
 
 
-	/**
-	 * @brief updateRateDisplay
-	 */
-	void updateRateLabel();
-
-	/**
-	 * @brief updateFrameLabel
-	 */
-	void updateFrameLabel();
-	
 private:
+
 	Ui::PhMediaControllerView *ui;
+	PhTimeCodeType _tcType;
 	PhClock *_clock;
+	PhFrame _firstFrame;
+	PhFrame _mediaLength;//number of frames of the file
+
 };
 
 #endif // PHMEDIACONTROLLERVIEW_H
