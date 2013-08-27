@@ -11,7 +11,14 @@
 #include <QTimer>
 
 #include "PhTools/PhClock.h"
+
+//#define VLC
+
+#ifdef VLC
+#include "PhVideo/PhVLCVideoView.h"
+#else
 #include "PhVideo/PhVideoView.h"
+#endif
 
 using namespace std;
 
@@ -44,7 +51,11 @@ private slots:
 	void onOpenFile();
 
 private:
+#ifdef VLC
+	PhVLCVideoView _videoView;
+#else
 	PhVideoView _videoView;
+#endif
     QAbstractButton *_openButton;
 	PhClock _clock;
 };
