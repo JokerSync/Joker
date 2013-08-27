@@ -3,10 +3,6 @@
 
 #include <QtOpenGL>
 #include <QGLWidget>
-#include <QMenu>
-#include <QMenuBar>
-
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +30,6 @@ public:
      * Constructor
      */
     explicit PhGraphicView(QWidget *parent = 0);
-
 
 
     /**

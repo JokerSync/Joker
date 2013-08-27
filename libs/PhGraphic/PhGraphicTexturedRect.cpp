@@ -96,10 +96,12 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 	return true;
 }
 
-void PhGraphicTexturedRect::draw()
-{
-//	qDebug() << "PhGraphicTexturedRect::draw()";
-	glMatrixMode(GL_MODELVIEW);
+
+void PhGraphicTexturedRect::draw(){
+
+	//qDebug() << "PhGraphicTexturedRect::draw()";
+    glMatrixMode(GL_MODELVIEW);
+
 	glLoadIdentity();
 
 	glBindTexture(GL_TEXTURE_2D, _texture);
@@ -121,6 +123,7 @@ void PhGraphicTexturedRect::draw()
 		glTexCoord3f(0, _tv, 1);	glVertex3f(_x,		_y + _h,  _z);
 	}
 	glEnd();
+
 
 	glDisable(GL_TEXTURE_2D);
 }
