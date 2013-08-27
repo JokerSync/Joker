@@ -2,20 +2,18 @@
 #define MAINWINDOW_H
 #include "PhCommonUI/PhMediaControllerView.h"
 
+namespace Ui {
+	class MainWindow;
+}
 
-/**
- * @brief Timecode
- *
- */
-
-
-class MainWindow : public QWidget
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
 
 	explicit MainWindow(QWidget *parent = 0);
+	~MainWindow();
 
 public slots:
 
@@ -23,10 +21,9 @@ public slots:
 
 private:
 
-	PhMediaControllerView *_mediaControllerView;
+	Ui::MainWindow *ui;
 	PhClock *_clock;
 	QTimer *_timer;
-	PhFrame _fps;
 
 };
 

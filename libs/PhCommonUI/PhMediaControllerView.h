@@ -14,11 +14,15 @@ class PhMediaControllerView : public QWidget
 	Q_OBJECT
 	
 public:
-	explicit PhMediaControllerView(PhClock *clock, QWidget *parent = 0);
-	int getFramePerSecond() const;
-	void setMediaLength(qint64 lengthFile);
-
+	explicit PhMediaControllerView(QWidget *parent = 0);
 	~PhMediaControllerView();
+	void setTCType(PhTimeCodeType tcType);
+	PhTimeCodeType getTCType() const;
+	void setClock(PhClock *clock);
+	PhClock* getClock() const;
+	void setFirstFrame(PhFrame firstFrame);
+	PhFrame getFirstFrame() const;
+	void setMediaLength(qint64 mediaLength);
 
 signals:
 
@@ -89,13 +93,12 @@ public slots:
 	
 private:
 
-	PhFrame _mediaLength;//number of frames of the file
-	PhFrame _firstFrame;
-	int _fileProgress;
 	Ui::PhMediaControllerView *ui;
+	PhTimeCodeType _tcType;
 	PhClock *_clock;
-	PhTimeCodeType _timecodeType;
-	int _framePerSecond;
+	PhFrame _firstFrame;
+	PhFrame _mediaLength;//number of frames of the file
+
 };
 
 #endif // PHMEDIACONTROLLERVIEW_H
