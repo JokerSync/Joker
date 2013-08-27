@@ -192,6 +192,7 @@ void PhMediaControllerView::onFrameChanged()
 	if(t >= _firstFrame + _mediaLength)
 	{
 		_clock->setRate(0);
+		_clock->setFrame(_mediaLength);
 	}
 
 }
