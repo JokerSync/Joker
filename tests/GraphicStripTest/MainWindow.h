@@ -18,6 +18,9 @@ public:
 
 	void openFile(QString fileName);
 
+private slots:
+	void onOpenFile();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStripView *_stripView;

@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include <QFileDialog>
+
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
@@ -9,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	_stripView = ui->stripView;
 	_doc = _stripView->doc();
 	_clock = _stripView->clock();
+
+	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 }
 
 MainWindow::~MainWindow()
@@ -26,5 +30,15 @@ void MainWindow::openFile(QString fileName)
 		{
 			_clock->setFrame(_doc->getLastFrame(), _doc->getTCType());
 		}
+	}
+}
+
+void MainWindow::onOpenFile()
+{
+	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
+	if(dlg.exec())
+	{
+		QString fileName = dlg.selectedFiles()[0];
+		openFile(fileName);
 	}
 }
