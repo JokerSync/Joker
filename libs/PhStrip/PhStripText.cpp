@@ -6,13 +6,12 @@
 #include "PhStripText.h"
 
 
-PhStripText::PhStripText(PhPeople *people, QString content, int timeIn, int timeOut, int track, bool simpleText) : PhStripObject(timeIn)
+PhStripText::PhStripText(PhPeople *people, QString content, PhTime timeIn, PhTime timeOut, int track) : PhStripObject(timeIn)
 {
     _people = people;
     _timeOut = timeOut;
     _content = content ;
     _track = track;
-    _simpleText = simpleText;
 }
 
 QString PhStripText::getContent()
@@ -20,9 +19,9 @@ QString PhStripText::getContent()
     return _content;
 }
 
-PhPeople PhStripText::getPeople()
+PhPeople * PhStripText::getPeople()
 {
-    return *_people;
+    return _people;
 }
 
 int PhStripText::getTrack()
@@ -40,6 +39,3 @@ int PhStripText::getTimeOut()
     return _timeOut;
 }
 
-bool PhStripText::isSimple(){
-    return _simpleText;
-}

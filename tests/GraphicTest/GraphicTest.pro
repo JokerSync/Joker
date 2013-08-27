@@ -4,14 +4,11 @@
 #
 #-------------------------------------------------
 
-QT	+= core gui
-QT	+= xml
-QT	+=multimedia multimediawidgets
-
-greaterThan(QT_MAJOR_VERSION, 4):
-
 TARGET = GraphicTest
 TEMPLATE = app
+
+QT	+= core gui
+QT	+= multimedia multimediawidgets
 
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 

@@ -33,7 +33,7 @@ public:
      * @param name
      * Constructor
      */
-    explicit PhGraphicView(QWidget *parent = 0, QString name = "");
+    explicit PhGraphicView(QWidget *parent = 0);
 
 
 
@@ -66,13 +66,6 @@ protected:
 	void initializeGL();
 
 	void paintGL();
-
-private slots:
-    /**
-     * @brief onRefresh
-     */
-	void onRefresh();
-
 
 private:
 

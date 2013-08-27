@@ -7,11 +7,11 @@
 #include <SDL/SDL_ttf.h>
 #endif
 
-PhGraphicView::PhGraphicView( QWidget *parent, QString name)
+PhGraphicView::PhGraphicView( QWidget *parent)
     : QGLWidget(parent)
 {
 	t_Timer = new QTimer(this);
-	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
+	connect(t_Timer, SIGNAL(timeout()), this, SLOT(updateGL()));
 	t_Timer->start(0);
 	//this->_context = new PhGraphicContext(this);
 }
@@ -46,22 +46,11 @@ void PhGraphicView::resizeGL(int width, int height)
 
 void PhGraphicView::paintGL()
 {
-	qDebug() << "PhGraphicView::paintGL" ;
+//	qDebug() << "PhGraphicView::paintGL" ;
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//glClearColor(1,0,0,1);
 	paint();
 }
-
-void PhGraphicView::onRefresh()
-{
-//	qDebug() << "PhGraphicView::onRefresh()";
-#if defined(Q_OS_MAC)
-	if(qApp->hasPendingEvents()) // qApp is a global pointer to the application
-		return;
-#endif
-	updateGL();
-}
-
 
 PhGraphicContext *PhGraphicView::getContext()
 {

@@ -1,13 +1,10 @@
 HEADERS += \
     $${JOKER_ROOT}/libs/PhTools/PhTimeCode.h \
-    $${JOKER_ROOT}/libs/PhTools/PhTime.h
-#    $${JOKER_ROOT}/libs/PhTools/PhFileTools.h \
+    $${JOKER_ROOT}/libs/PhTools/PhClock.h
 
 SOURCES += \
     $${JOKER_ROOT}/libs/PhTools/PhTimeCode.cpp \
-    $${JOKER_ROOT}/libs/PhTools/PhTime.cpp
-#    $${JOKER_ROOT}/libs/PhTools/PhFileTools.cpp \
-
+    $${JOKER_ROOT}/libs/PhTools/PhClock.cpp
 
 # Windows specific
 win32 {

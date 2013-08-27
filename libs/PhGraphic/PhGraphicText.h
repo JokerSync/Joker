@@ -18,7 +18,7 @@ public:
 //    GLuint createTextureFromSurface(SDL_Surface * surface);
 
 	PhGraphicText();
-	PhGraphicText(PhFont* font, QString content, int x = 0, int y = 0, int z = 0, int w = 0, int h = 0, int tu = 1, int tv = 1, QColor* color = new QColor());
+	PhGraphicText(PhFont* font, QString content, float x = 0, float y = 0, float z = 0, float w = 0, float h = 0, float tu = 1, float tv = 1, QColor* color = new QColor());
     /**
      * @brief Draw the text on screen
      *
@@ -26,8 +26,6 @@ public:
 	void draw();
 
 	bool init();
-
-	void dispose();
 
     /**
      * @brief setContent
@@ -56,16 +54,15 @@ public:
 
 
 private:
-    /**
-     * @brief _content
-     */
-	QString _content;
-    /**
+	/**
      * @brief _font
      */
     PhFont *_font;
 
-
+	/**
+     * @brief _content
+     */
+	QString _content;
 };
 
 #endif // PHGRAPHICTEXT_H

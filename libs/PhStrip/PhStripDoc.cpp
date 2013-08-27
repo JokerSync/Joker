@@ -7,7 +7,8 @@
 #include "PhStripDoc.h"
 
 
-PhStripDoc::PhStripDoc()
+PhStripDoc::PhStripDoc(QObject *parent) :
+	QObject(parent)
 {
     reset();
 }
@@ -18,16 +19,17 @@ QList<PhStripCut *> PhStripDoc::getCuts()
 }
 
 
-bool PhStripDoc::openDetX(QString filename)
+bool PhStripDoc::openDetX(QString fileName)
 {
-    if (!QFile(filename).exists())
+	qDebug() << "PhStripDoc::openDetX : " << fileName;
+    if (!QFile(fileName).exists())
 	{
 		qDebug() << "this file doesn't exist" ;
         return false;
 	}
 
     QDomDocument *DetX = new QDomDocument("/text.xml"); // Création de l'objet DOM
-    QFile xml_doc(filename);// On choisit le fichier contenant les informations XML.
+    QFile xml_doc(fileName);// On choisit le fichier contenant les informations XML.
     if(!xml_doc.open(QIODevice::ReadOnly))// Si l'on n'arrive pas à ouvrir le fichier XML.
     {
         qDebug() << ("Le document XML n'a pas pu être ouvert. Vérifiez que le nom est le bon et que le document est bien placé");
@@ -41,7 +43,7 @@ bool PhStripDoc::openDetX(QString filename)
     }
     else
     {
-        qDebug() << ("The file \"" + filename + "\" is now open.");
+        qDebug() << ("The file \"" + fileName + "\" is now open.");
         qDebug("-----------------------------");
     }
 
@@ -65,13 +67,12 @@ bool PhStripDoc::openDetX(QString filename)
                                                   PhTimeCodeType25);
 
     //Find the last position
-    _lastPosition = PhTimeCode::frameFromString(DetX->elementsByTagName("last_position").at(0).toElement().attribute("timecode"),
+    _lastFrame = PhTimeCode::frameFromString(DetX->elementsByTagName("last_position").at(0).toElement().attribute("timecode"),
                                                 PhTimeCodeType25);
 
 
-    //With DetX files, fps is always 25 so drop is false
-    _fps = 25.00;
-    _drop = false;
+    //With DetX files, fps is always 25 no drop
+    _tcType = PhTimeCodeType25;
     _timeScale = 25.00;
 
 
@@ -151,31 +152,32 @@ bool PhStripDoc::openDetX(QString filename)
                 }
                 splitText(_actors[id], start, end,
                           currentLine.childNodes().at(j).toElement().text(), currentLine.toElement().attribute("track").toInt(),
-                          (j==1), 0 );
+                          0 );
             }
         }
 	}
+
+	emit this->changed();
+
     return true;
 }
-
-
 
 int PhStripDoc::getNbTexts()
 {
     return _nbTexts;
 }
-QString PhStripDoc::getVideoPath(){
+
+QString PhStripDoc::getVideoPath()
+{
     return _videoPath;
 }
-
 
 void PhStripDoc::reset()
 {
     _actors.clear();
     _cuts.clear();
-    _drop = false;
-    _fps = 25.00;
-    _lastPosition = 0;
+    _tcType = PhTimeCodeType25;
+    _lastFrame = 0;
     _loops.clear();
     _nbTexts = 0;
     _texts.clear();
@@ -183,9 +185,11 @@ void PhStripDoc::reset()
 	_title = QString();
 	_videoPath = QString();
     _videoTimestamp = 0;
+
+	emit this->changed();
 }
 
-void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, bool alone, int i){
+void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, int i){
 
     if(sentence != " " && sentence != "" ){
         // if the sentence is short enough
@@ -193,19 +197,19 @@ void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString s
         {
             _texts.push_back(new PhStripText(actor, sentence,
                                              start, end,
-                                             track, alone));
+                                             track));
             _nbTexts ++;
         }
         else // we split in half
         {
             int length = sentence.length();
-            splitText(actor, start, start + (end - start)/2, sentence.left(length/2), track, (i==0), i);
+            splitText(actor, start, start + (end - start)/2, sentence.left(length/2), track, i);
             i++;
             if (length % 2 == 0){
-                splitText(actor, start + (end - start)/2, end, sentence.right(length/2), track, (i==0), i);
+                splitText(actor, start + (end - start)/2, end, sentence.right(length/2), track, i);
             }
             else{
-                splitText(actor, start + (end - start)/2, end, sentence.right(length/2 + 1), track, (i==0), i);
+                splitText(actor, start + (end - start)/2, end, sentence.right(length/2 + 1), track, i);
             }
         }
     }
@@ -213,29 +217,27 @@ void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString s
 
 int PhStripDoc::getDuration()
 {
-    return (_texts.last()->getTimeOut() - _videoTimestamp) / _fps;
+	return _texts.last()->getTimeOut() - _videoTimestamp;
 }
-QString PhStripDoc::getTitle(){
+
+PhTimeCodeType PhStripDoc::getTCType()
+{
+	return _tcType;
+}
+
+QString PhStripDoc::getTitle()
+{
     return _title;
 }
 
-PhTime PhStripDoc::getVideoTimestamp(){
+PhTime PhStripDoc::getVideoTimestamp()
+{
     return _videoTimestamp;
 }
 
-PhTime PhStripDoc::getLastPosition(){
-    return _lastPosition;
-}
-
-float PhStripDoc::getFps()
+PhTime PhStripDoc::getLastFrame()
 {
-    return _fps;
-}
-
-
-bool PhStripDoc::getDrop()
-{
-    return _drop;
+    return _lastFrame;
 }
 
 QMap<QString, PhPeople *> PhStripDoc::getPeoples()

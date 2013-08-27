@@ -12,7 +12,7 @@ class PhGraphicImage : public PhGraphicTexturedRect
 {
 public:
 
-	PhGraphicImage( QString filename = "", int x = 0, int y =0, int w = 0, int h = 0, int z = 0, float tu = 1, float tv = 1, QColor *color = new QColor());
+	PhGraphicImage( QString filename = "", float x = 0, float y =0, float w = 0, float h = 0, float z = 0, float tu = 1, float tv = 1, QColor *color = new QColor());
 
 	void setFilename(QString filename);
 	QString getFilename();

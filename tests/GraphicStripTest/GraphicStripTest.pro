@@ -7,10 +7,7 @@
 TARGET = GraphicStripTest
 TEMPLATE = app
 
-
-QT       += core gui
-QT		+= xml
-QT		+= opengl
+QT += core gui
 
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
@@ -23,9 +20,17 @@ include($${JOKER_ROOT}/libs/PhGraphicStrip/PhGraphicStrip.pri)
 
 #Main app
 SOURCES += main.cpp \
-	MainController.cpp \
     MainView.cpp \
+    MainWindow.cpp
 
 HEADERS += \
-	MainController.h \
     MainView.h \
+    MainWindow.h
+
+FORMS += \
+    MainWindow.ui
+
+QMAKE_POST_LINK += echo $${RESOURCES_PATH}
+QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH}
+QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/fonts/Bedizen.ttf $${RESOURCES_PATH}
+
