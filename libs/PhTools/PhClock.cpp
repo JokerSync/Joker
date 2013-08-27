@@ -1,34 +1,35 @@
 #include "PhClock.h"
 
 PhClock::PhClock(QObject *parent) :
-	QObject(parent), _time(0), _timeScale(600), _rate(0.0f)
+	QObject(parent), _tcType(PhTimeCodeType25), _time(0), _timeScale(600), _rate(0.0)
 {
 }
 
-/****************************Slots****************************/
+/****************************Properties****************************/
 
-void PhClock::tick(int frequence)
+void PhClock::setTCType(PhTimeCodeType tcType)
 {
-	int elapsed = _timeScale / frequence;
-	this->setTime(static_cast<int>(_time + elapsed * _rate));
+	_tcType = tcType;
 }
-
-/****************************Getters****************************/
 
 void PhClock::setTime(qint64 time)
 {
+	PhFrame lastFrame = frame();
 	if (_time != time) {
 		_time = time;
 		emit timeChanged(time);
 	}
+	PhFrame newFrame = frame();
+	if(lastFrame != newFrame)
+		emit frameChanged();
 }
 
-void PhClock::setTimeScale(int timeScale)
+void PhClock::setTimeScale(PhTimeScale timeScale)
 {
 	_timeScale = timeScale;
 }
 
-void PhClock::setRate(float rate)
+void PhClock::setRate(PhRate rate)
 {
 	if (_rate != rate) {
 		_rate = rate;
@@ -36,15 +37,24 @@ void PhClock::setRate(float rate)
 	}
 }
 
-int PhClock::frame(PhTimeCodeType tcType) const
+int PhClock::frame() const
 {
-	int fps = PhTimeCode::getFps(tcType);
+	int fps = PhTimeCode::getFps(_tcType);
 	return _time * fps / _timeScale;
 }
 
-void PhClock::setFrame(int frame, PhTimeCodeType tcType)
+void PhClock::setFrame(PhFrame frame)
 {
-	int fps = PhTimeCode::getFps(tcType);
+	int fps = PhTimeCode::getFps(_tcType);
 	this->setTime(frame * _timeScale / fps);
 }
+
+/****************************Slots****************************/
+
+void PhClock::tick(PhTimeScale frequence)
+{
+	int elapsed = _timeScale / frequence;
+	this->setTime(static_cast<int>(_time + elapsed * _rate));
+}
+
 

@@ -6,7 +6,7 @@
 #include "PhGraphicStripView.h"
 
 PhGraphicStripView::PhGraphicStripView(QWidget *parent)
-	: PhGraphicView( parent ), _doc(this), _trackNumber(4), _currentFont(NULL)
+	: PhGraphicView( parent ), _doc(this), _currentFont(NULL), _trackNumber(4)
 {
 	// update the view content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(updateView()));

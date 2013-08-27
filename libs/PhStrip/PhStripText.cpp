@@ -6,7 +6,7 @@
 #include "PhStripText.h"
 
 
-PhStripText::PhStripText(PhPeople *people, QString content, int timeIn, int timeOut, int track) : PhStripObject(timeIn)
+PhStripText::PhStripText(PhPeople *people, QString content, PhTime timeIn, PhTime timeOut, int track) : PhStripObject(timeIn)
 {
     _people = people;
     _timeOut = timeOut;
