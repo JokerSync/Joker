@@ -23,13 +23,14 @@ linux {
 
 # MacOS specific
 mac {
-#	SOURCES += ../../libs/PhGraphic/SDLMain.cpp \
+#	SOURCES += ../../libs/PhGraphic/SDLMain.cpp
 	OBJECTIVE_HEADERS += ../../libs/PhGraphic/SDLMain.h
 	OBJECTIVE_SOURCES += ../../libs/PhGraphic/SDLMain.m
+	LIBS += -framework Cocoa
 
 	INCLUDEPATH += /Library/Frameworks/
 	LIBS += -F/Library/Frameworks
-	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
+	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS
 }
 

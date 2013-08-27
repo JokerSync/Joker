@@ -4,15 +4,12 @@
 
     Feel free to customize this file to suit your needs
 */
-#if MACOSX
+
 #include "SDL/SDL.h"
-#include <sys/param.h> /* for MAXPATHLEN */
-#include <unistd.h>
 
 #ifdef main
 #  undef main
 #endif
-
 
 /* Main entry point to executable - should *not* be SDL_main! */
 int main (int argc, char **argv)
@@ -39,4 +36,3 @@ int main (int argc, char **argv)
 	return SDL_main(argc, argv);
 }
 
-#endif
