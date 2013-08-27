@@ -44,7 +44,6 @@ bool MainView::openFile(QString fileName)
 	return false;
 }
 
-
 void MainView::onOpenFile()
 {
 	 QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());

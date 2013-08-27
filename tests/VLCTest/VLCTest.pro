@@ -20,12 +20,12 @@ win32{
 
 # Ubuntu specific
 linux {
-
+	VLC_PATH = /usr/lib/vlc
 }
 
 # MacOS specific
 mac {
-VLC_PATH = /Applications/VLC.app/Contents/MacOS/
+	VLC_PATH = /Applications/VLC.app/Contents/MacOS/
 }
 
 QMAKE_POST_LINK += mkdir -p ./$${TARGET}.app/Contents/MacOS/lib
