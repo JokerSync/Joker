@@ -5,10 +5,11 @@
 #include <qvideosurfaceformat.h>
 
 MainView::MainView()
-	: QWidget(0)
+	: QWidget(0),
+	  _videoView(this),
+	_clock(this)
 {
-	_clock = new PhClock;
-
+	_videoView.setClock(&_clock);
     // Add an open button
     _openButton = new QPushButton(tr("Open..."));
     // Open a file dialog when user click the open button
@@ -23,12 +24,11 @@ MainView::MainView()
     // Create a second vertical layout for the video view and the first layout
     QBoxLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
-	layout->addWidget(_videoController.view());
+	layout->addWidget(&_videoView);
     layout->addLayout(controlLayout);
 
     // Add the layout to the main window
     this->setLayout(layout);
-	_videoController.play();
 }
 
 
@@ -37,8 +37,8 @@ bool MainView::openFile(QString fileName)
     QFileInfo fileInfo(fileName);
     if (fileInfo.exists())
     {
-		_videoController.open(fileName);
-		_videoController.play();
+		_videoView.open(fileName);
+		_clock.setRate(1);
         return true;
     }
 	return false;
