@@ -80,6 +80,7 @@ void PhMediaControllerView::setFirstFrame(PhFrame firstFrame)
 {
 	_firstFrame = firstFrame;
 	ui->_slider->setMinimum(firstFrame);
+	ui->_slider->setMaximum(_firstFrame + _mediaLength);
 }
 
 PhFrame PhMediaControllerView::getFirstFrame() const
@@ -149,8 +150,7 @@ void PhMediaControllerView::pushPreviousFrameButton()
 
 void PhMediaControllerView::useSliderCursor(int position)
 {
-	int t = position*_mediaLength/100 + _firstFrame;
-	_clock->setFrame(t);
+	_clock->setFrame(position);
 	useSliderCursorSignal();
 }
 
@@ -181,7 +181,6 @@ void PhMediaControllerView::updateSliderPosition()
 	if(t >= _firstFrame + _mediaLength)
 	{
 		_clock->setRate(0);
-		_clock->setFrame(_firstFrame);
 	}
 }
 
