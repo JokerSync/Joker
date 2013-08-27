@@ -14,8 +14,6 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent)
     // This is used to make some time-based test
 	_test = new QTime();
 	_test->start();
-
-	_clock.setRate(1);
 }
 
 PhStripDoc *PhGraphicStripView::doc()
@@ -147,7 +145,8 @@ void PhGraphicStripView::paint()
 
 	float pixelPerFrame = 8;
 	float length = this->width() / pixelPerFrame;
-	float t = _clock.time() / 25.0f;
+	float fps = PhTimeCode::getFps(_clock.getTCType());
+	float t = _clock.time() * fps / _clock.timeScale();
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -157,7 +156,7 @@ void PhGraphicStripView::paint()
 
 //	qDebug() << "PhGraphicStripView::paint()";
 
-	//Set the background color to white
+	//Set the background color to red
 	glClearColor(1,0,0,1);
 
 	//Time-based test
@@ -170,8 +169,8 @@ void PhGraphicStripView::paint()
 	_stripBackgroundImage->setSize(length + aspectRatio, _trackNumber);
 	_stripBackgroundImage->draw();
 
-	int minSpaceBetweenPeople = 10;
-	int spaceBetweenPeopleAndText = 1;
+	int minSpaceBetweenPeople = 50;
+	int spaceBetweenPeopleAndText = 4;
 	PhStripText ** lastTextList = new PhStripText*[_trackNumber];
 	for(int i = 0; i < _trackNumber; i++)
 		lastTextList[i] = NULL;
