@@ -53,9 +53,6 @@ public slots:
 	 */
 	void pushRewindButton();
 
-	/**
-	 * @brief pushBacButton
-	 */
 	void pushBackButton();
 
 	void pushNextFrameButton();
@@ -64,9 +61,6 @@ public slots:
 
 	void useSliderCursor(int position);
 
-	/**
-	 * @brief selectRate
-	 */
 	void selectRate();
 
 	/**
@@ -75,22 +69,11 @@ public slots:
 	 */
 	void updateFrame();
 
+	void onRateChanged();
 
-	/**
-	 * @brief updateRateDisplay
-	 */
-	void updateRateLabel();
+	void onFrameChanged();
 
-	/**
-	 * @brief updateFrameLabel
-	 */
-	void updateFrameLabel();
-	/**
-	 * @brief updateSliderPosition
-	 */
-	void updateSliderPosition();
 
-	
 private:
 
 	Ui::PhMediaControllerView *ui;

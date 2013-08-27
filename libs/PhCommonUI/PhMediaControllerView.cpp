@@ -56,6 +56,22 @@ PhMediaControllerView::~PhMediaControllerView()
 void PhMediaControllerView::setTCType(PhTimeCodeType tcType)
 {
 	_tcType = tcType;
+
+	switch(tcType)
+	{
+	case PhTimeCodeType2398:
+		ui->_rateSelectionBox->setCurrentIndex(0);
+		break;
+	case PhTimeCodeType24:
+		ui->_rateSelectionBox->setCurrentIndex(1);
+		break;
+	case PhTimeCodeType25:
+		ui->_rateSelectionBox->setCurrentIndex(2);
+		break;
+	case PhTimeCodeType2997:
+		ui->_rateSelectionBox->setCurrentIndex(3);
+		break;
+	}
 }
 
 PhTimeCodeType PhMediaControllerView::getTCType() const
@@ -66,8 +82,8 @@ PhTimeCodeType PhMediaControllerView::getTCType() const
 void PhMediaControllerView::setClock(PhClock *clock)
 {
 	_clock = clock;
-	connect(_clock, SIGNAL(rateChanged()), this, SLOT(updateRateLabel()));
-	connect(_clock, SIGNAL(frameChanged()), this, SLOT(updateFrameLabel()));
+	connect(_clock, SIGNAL(rateChanged()), this, SLOT(onRateChanged()));
+	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
 }
 
 PhClock *PhMediaControllerView::getClock() const
@@ -155,9 +171,9 @@ void PhMediaControllerView::useSliderCursor(int position)
 }
 
 
-void PhMediaControllerView::updateRateLabel()
+void PhMediaControllerView::onRateChanged()
 {
-	ui->_rateLabel->setText("rate: "+QString::number(_clock->getRate()));
+	ui->_rateLabel->setText("x"+QString::number(_clock->getRate()));
 	if(_clock->getRate() != 0)
 		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
 
@@ -166,15 +182,10 @@ void PhMediaControllerView::updateRateLabel()
 }
 
 
-void PhMediaControllerView::updateFrameLabel()
+void PhMediaControllerView::onFrameChanged()
 {
 	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),_tcType));
-	updateSliderPosition();
 
-}
-
-void PhMediaControllerView::updateSliderPosition()
-{
 	int t = _clock->getFrame();
 	ui->_slider->setSliderPosition(t);
 
@@ -182,6 +193,7 @@ void PhMediaControllerView::updateSliderPosition()
 	{
 		_clock->setRate(0);
 	}
+
 }
 
 
@@ -205,9 +217,4 @@ void PhMediaControllerView::selectRate()
 	}
 
 }
-
-
-
-
-
 
