@@ -1,25 +1,16 @@
 TEMPLATE = app
 TARGET = VideoTest
 
-QT += multimedia multimediawidgets
+JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
-INCLUDEPATH += ../../libs
+INCLUDEPATH += $${JOKER_ROOT}/libs
 
-HEADERS = \
-        MainView.h \
-    ../../libs/PhVideo/PhVideoView.h \
-    ../../libs/PhTools/PhTimeCode.h \
-    ../../libs/PhTools/PhClock.h
+include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
+include($${JOKER_ROOT}/libs/PhVideo/PhVideo.pri)
 
-SOURCES = \
+HEADERS += MainView.h
+
+SOURCES += \
     main.cpp \
-        MainView.cpp \
-    ../../libs/PhVideo/PhVideoView.cpp \
-    ../../libs/PhTools/PhTimeCode.cpp \
-    ../../libs/PhTools/PhTime.cpp \
-    ../../libs/PhTools/PhClock.cpp
+    MainView.cpp \
 
-QT+=widgets
-
-FORMS += \
-    ../../libs/PhCommonUI/PhMediaControllerView.ui
