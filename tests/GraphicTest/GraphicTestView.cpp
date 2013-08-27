@@ -65,13 +65,14 @@ void GraphicTestView::paint()
 	{
 		if(_image != NULL)
 		{
-			qDebug() << "GraphicTestView::draw";
 			_image->draw();
 		}
 	}
 
 	if  (enableDisplayText == true)
 	{
+		//qDebug() << "text content : " << _text->getContent();
+
 		if (textSpeed == 0)
 		{
 			if(_text != NULL)
@@ -83,7 +84,6 @@ void GraphicTestView::paint()
 		{
 			if(_text != NULL)
 			{
-				qDebug() <<"text pas null";
 				_text->setX(_text->getX()+(2*textSpeed));
 				_text->draw();
 				if(_text->getX() > this->width())
@@ -154,4 +154,6 @@ void GraphicTestView::displayRect()
 	else
 		enableDisplayRect = false;
 }
+
+
 
