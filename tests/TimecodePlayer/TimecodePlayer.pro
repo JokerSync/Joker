@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,17 +16,14 @@ INCLUDEPATH = ../../libs
 SOURCES += main.cpp\
         mainwindow.cpp \
     ../../libs/PhTools/PhTimeCode.cpp \
-    ../../libs/PhTools/PhTime.cpp \
-    ../../libs/PhTools/PhString.cpp \
     ../../libs/PhTools/PhClock.cpp \
     ../../libs/PhCommonUI/PhMediaControllerView.cpp
 
 HEADERS  += mainwindow.h \
-    ../../libs/PhTools/PhTimeCode.h \
-    ../../libs/PhTools/PhTime.h \
-    ../../libs/PhTools/PhString.h \
+    ../../libs/PhTools/PhTimeCode.h \\
     ../../libs/PhTools/PhClock.h \
     ../../libs/PhCommonUI/PhMediaControllerView.h
 
 FORMS += \
-    ../../libs/PhCommonUI/PhMediaControllerView.ui
+    ../../libs/PhCommonUI/PhMediaControllerView.ui \
+    MainWindow.ui

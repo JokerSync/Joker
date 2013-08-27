@@ -29,6 +29,7 @@ void PhClock::setTimeScale(PhTimeScale timeScale)
 	_timeScale = timeScale;
 }
 
+
 void PhClock::setRate(PhRate rate)
 {
 	if (_rate != rate) {
