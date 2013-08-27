@@ -13,17 +13,16 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->FastBackward->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
 	ui->FastForward->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
 
-	_view = new GraphicTestView(this);
-	_view->resize(800,400);
-
-	QObject::connect(ui->Text, SIGNAL(toggled(bool)), _view, SLOT(displayText()));
-	QObject::connect(ui->Image, SIGNAL(toggled(bool)), _view, SLOT(displayImage()));
-	QObject::connect(ui->Rect, SIGNAL(toggled(bool)), _view, SLOT(displayRect()));
+	QObject::connect(ui->Text, SIGNAL(toggled(bool)),  ui->view, SLOT(displayText()));
+	QObject::connect(ui->Image, SIGNAL(toggled(bool)), ui->view, SLOT(displayImage()));
+	QObject::connect(ui->Rect, SIGNAL(toggled(bool)), ui->view, SLOT(displayRect()));
 
 
-	QObject::connect(ui->Play, SIGNAL(clicked()), _view, SLOT(play()));
-	QObject::connect(ui->FastBackward, SIGNAL(clicked()), _view, SLOT(fastBackward()));
-	QObject::connect(ui->FastForward, SIGNAL(clicked()), _view, SLOT(fastForward()));
+	QObject::connect(ui->Play, SIGNAL(clicked()), ui->view, SLOT(play()));
+	QObject::connect(ui->FastBackward, SIGNAL(clicked()), ui->view, SLOT(fastBackward()));
+	QObject::connect(ui->FastForward, SIGNAL(clicked()), ui->view, SLOT(fastForward()));
+
+	QObject::connect(ui->TextBox, SIGNAL(textEdited(QString)), this, SLOT(changeText(QString)));
 
 }
 
@@ -47,3 +46,8 @@ void MainWindow::pushPlayButton()
 
 }
 
+void MainWindow::changeText(QString)
+{
+	ui->view->getText()->init();
+	ui->view->getText()->setContent(ui->TextBox->text());
+}
