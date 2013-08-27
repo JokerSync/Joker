@@ -20,6 +20,7 @@ public:
 
 private slots:
 	void onOpenFile();
+	void onFrameOrRateChanged();
 
 private:
 	Ui::MainWindow *ui;

@@ -6,7 +6,6 @@
 
 #include <QtXml>
 
-#include "PhTools/PhTime.h"
 #include "PhTools/PhTimeCode.h"
 
 #include "PhPeople.h"

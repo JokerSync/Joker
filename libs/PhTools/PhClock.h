@@ -3,9 +3,21 @@
 
 #include <QObject>
 #include "PhTimeCode.h"
-#include "PhTime.h"
 
-using namespace std;
+/**
+  * @brief PhTime is a type used for time value.
+  */
+typedef qint64 PhTime;
+
+/**
+  * @brief PhTimeScale is a type used for time scale value.
+  */
+typedef int PhTimeScale;
+
+/**
+  * @brief PhRate is a type used for rate value.
+  */
+typedef double PhRate;
 
 /**
  * The PhClock class modelize a clock with its current time and rate value.
@@ -15,36 +27,31 @@ using namespace std;
 class PhClock : public QObject
 {
 	Q_OBJECT
-
-	// Properties
-	Q_PROPERTY(qint64 time READ time WRITE setTime NOTIFY timeChanged);
-	Q_PROPERTY(int timeScale READ timeScale WRITE setTimeScale);
-	Q_PROPERTY(float rate READ rate WRITE setRate NOTIFY rateChanged);
-
 public:
 	explicit PhClock(QObject *parent = 0);
 
-	void setFrame(int frame, PhTimeCodeType tcType);
-	int frame(PhTimeCodeType tcType) const;
+	void setTCType(PhTimeCodeType tcType);
+	PhTimeCodeType getTCType() { return _tcType;}
 
-	qint64 time() const	{ return _time; }
+	void setTime(PhTime time);
+	PhTime time() const	{ return _time; }
 
-	int timeScale() const { return _timeScale; }
+	void setTimeScale(PhTimeScale timeScale);
+	PhTimeScale timeScale() const { return _timeScale; }
 
-	float rate() const { return _rate; }
+	void setRate(PhRate rate);
+	PhRate rate() const { return _rate; }
 
-	void setTime(qint64 time);
+	void setFrame(PhFrame frame);
+	int frame() const;
 
-	void setTimeScale(int timeScale);
-
-	void setRate(float rate);
 
 signals:
+	void timeChanged(PhTime time);
+
+	void rateChanged(PhRate rate);
+
 	void frameChanged();
-
-	void timeChanged(qint64 arg);
-
-	void rateChanged(float arg);
 
 public slots:
 
@@ -53,14 +60,14 @@ public slots:
 	 * The clock time value is then updated accordingly to the clock rate.
 	 * @param frequence Frequence of the signal
 	 */
-	void tick(int frequence);
+	void tick(PhTimeScale frequence);
 
 private:
-	qint64 _time;
+	PhTimeCodeType _tcType;
+	PhTime _time;
+	PhTimeScale _timeScale;
 
-	int _timeScale;
-
-	float _rate;
+	PhRate _rate;
 
 };
 
