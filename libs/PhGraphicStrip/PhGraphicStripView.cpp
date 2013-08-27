@@ -3,263 +3,204 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-//#include <QTime>
-
-//#include "SDL/SDL.h"
-
 #include "PhGraphicStripView.h"
 
-
-
-
 PhGraphicStripView::PhGraphicStripView(QWidget *parent)
-	: PhGraphicView( parent )
+	: PhGraphicView( parent ), _doc(this), _currentFont(NULL), _trackNumber(4)
 {
-
+	// update the view content when the doc changes :
+	this->connect(&_doc, SIGNAL(changed()), this, SLOT(updateView()));
 
     // This is used to make some time-based test
 	_test = new QTime();
 	_test->start();
 
-	// This is a preload of default fonts
-#if defined(Q_OS_MAC)
-	_fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/fonts/LTE50198.ttf", 150));
-
-#elif defined(Q_OS_UNIX)
-  _fonts.push_back( new PhFont(QCoreApplication::applicationDirPath() + "Bedizen.ttf", 150));
-#endif
-
-
-    // Set current font
-	_currentFont = _fonts.first();
-	_xmove = 0;
-	_xMoveStrip = 0;
-
-	 //The strip shouldn't move until a file is loaded
-	_shouldmove = false;
-
-	_controller = new PhGraphicStripController();
-	_controller->openDoc("test.detx");
+	_clock.setRate(1);
 }
 
+PhStripDoc *PhGraphicStripView::doc()
+{
+	return &_doc;
+}
+
+PhClock *PhGraphicStripView::clock()
+{
+	return &_clock;
+}
 
 bool PhGraphicStripView::init()
 {
-
-
 	qDebug() << "PhGraphicStripView::init()";
-    //This clear the data stored
+
+	// Load font
+	if(!setCurrentFont("Bedizen.ttf"))
+		return false;
+
+	//This clear the data stored
 	clearData();
-
-	_xmove = - _controller->getDoc().getLastPosition();
-	int max = _controller->getDoc().getTexts().count();
-	QProgressDialog barTest("Création des textures","Ok", 0, max, this);
-
-
-	barTest.move(400,400);
-	 barTest.show();
-
-	float h = this->height();
-	float hstrip = this->height();
-	float w = this->width();
-	float tu = w/h;
-
-	int i = 0;
-	qDebug() << "load the text" ;
-	//Load the all text
-	foreach(PhStripText * text, _controller->getDoc().getTexts())
-	{
-		qDebug() << "on rentre" ;
-		//barTest.setValue(i);
-
-		//h is the window height, hstrip is the strip height
-		//hstrip/16 correspond to the upper alpha line of the strip
-		//hstrip/8 correspond to the two alpha lines of the strip (up & down)
-		//it->getTrack() is the position on the strip (0 is the upper on)
-		//we split   in 3 because we are using 3 tracks on the strip
-		int y = h - (hstrip - hstrip/16) + ((hstrip - hstrip/4)/3)*text->getTrack() + 30;
-
-		//Display the name only if the setence is standalone
-		if (text->isSimple()){
-			int nameWidth = (text->getPeople().getName().length() + 1) * 10;
-			_texts.push_back(new PhGraphicText( _fonts.first(),text->getPeople().getName(),
-											   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20 - nameWidth - 10, y, -1,
-											   nameWidth, 30, 1, 1, new QColor(text->getPeople().getColor())));
-		}
-		_texts.push_back(new PhGraphicText( _currentFont, text->getContent(),
-										   (text->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, y , -1,
-											(text->getTimeOut() - text->getTimeIn()) * 20, hstrip / 5 , 1, 1, new QColor(text->getPeople().getColor())));
-	  //        if (i % (max / 20) == 0){
-	  //            QApplication::processEvents();
-	  //        }
-	   //       i++;
-	}
-
-    //Set a default number of strip repetition
-	int nbRythmo = this->width()/60;
 
     //Load the strip background
 	_stripBackgroundImage = new PhGraphicImage("motif-240.png");
-	_stripBackgroundImage->setTextureCoordinate(tu, 1);
 	_stripBackgroundImage->init();
 
-	//Load the cuts
-	foreach(PhStripCut * cut, _controller->getDoc().getCuts())
-	{
-		PhGraphicSolidRect *rect = new PhGraphicSolidRect((cut->getTimeIn() - _controller->getDoc().getLastPosition()) * 20, 0, -2,
-														  2, hstrip, new QColor(0, 0, 0));
-		_cuts.push_back(rect);
-	}
+	updateView();
 
 	return true;
 }
 
+void PhGraphicStripView::clearData()
+{
+	foreach(PhGraphicRect * gCut, _graphicCuts.values())
+	{
+		delete gCut;
+	}
+	foreach(PhGraphicText * gText, _graphicTexts.values())
+	{
+		delete gText;
+	}
+	_graphicCuts.clear();
+	_graphicTexts.clear();
+}
+
+
+bool PhGraphicStripView::setCurrentFont(QString fontFile)
+{
+	qDebug() << "setCurrentFont : " << fontFile;
+
+	if(!QFile::exists(fontFile))
+	{
+		qDebug() << "File does'nt exists : " << fontFile;
+		return false;
+	}
+	_currentFont = new PhFont(fontFile, 150);
+
+	if(!_currentFont->init())
+		return false;
+
+	return true;
+}
+
+void PhGraphicStripView::updateView()
+{
+	qDebug() << "updateView";
+	if(!_currentFont)
+	{
+		qDebug() << "updateView not ready";
+		return;
+	}
+
+	clearData();
+
+	// Load the peoples
+	foreach(PhPeople * people, _doc.getPeoples())
+	{
+		PhGraphicText * gPeople = new PhGraphicText(_currentFont, people->getName());
+		gPeople->setColor(new QColor(people->getColor()));
+		gPeople->setWidth(people->getName().length() * 4);
+		gPeople->setHeight(0.5f);
+		gPeople->setFont(_currentFont);
+
+		gPeople->init();
+
+		_graphicPeoples[people] = gPeople;
+	}
+
+	//Load the texts
+	foreach(PhStripText * text, _doc.getTexts())
+	{
+		PhGraphicText * gText = new PhGraphicText( _currentFont, text->getContent());
+		float track = text->getTrack();
+
+		gText->setX(text->getTimeIn());
+		gText->setY(track);
+		gText->setZ(-1);
+		gText->setWidth(text->getTimeOut() - text->getTimeIn());
+		gText->setHeight(1.0f);
+		if(text->getPeople())
+			gText->setColor(new QColor(text->getPeople()->getColor()));
+		gText->setFont(_currentFont);
+
+		gText->init();
+
+		_graphicTexts[text] = gText;
+	}
+
+	//Load the cuts
+	foreach(PhStripCut * cut, _doc.getCuts())
+	{
+		PhGraphicSolidRect *gCut = new PhGraphicSolidRect();
+		gCut->setColor(new QColor(0, 0, 0));
+		gCut->setX(cut->getTimeIn());
+		gCut->setWidth(0.5f);
+		gCut->setHeight(_trackNumber);
+		gCut->setZ(-2);
+
+		_graphicCuts[cut] = gCut;
+	}
+
+	qDebug() << "updateView ok";
+}
+
 void PhGraphicStripView::paint()
 {
-	qDebug() << "PhGraphicStripView::paint()";
+	_clock.tick(60);
+
+	float pixelPerFrame = 8;
+	float length = this->width() / pixelPerFrame;
+	float t = _clock.time() / 25.0f;
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(t, t + length, _trackNumber, 0, 0, 10);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+//	qDebug() << "PhGraphicStripView::paint()";
 
 	//Set the background color to white
 	glClearColor(1,0,0,1);
 
-	//Store the OpenGL context height in a variable in order to
-	//limit functions call
-	float h = this->height();
-	float w = h*2/3;
 	//Time-based test
-	  qDebug() << _test->elapsed(); //<< " : " << _xmove;
+//	qDebug() << _test->elapsed(); //<< " : " << _xmove;
 
-	//Set the deplacement size of the strip
-	if (_shouldmove){
-		_xmove -= 8;
-		_xMoveStrip -= 8;
-		// if the strip moved of more than 1 X strip's width it came back
-		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
-			_xMoveStrip = 0;
-	}
-
-//    //Draw Backgroung Picture
-
-	_stripBackgroundImage->setSize(w, h);
+//    //Draw backgroung picture
+	float aspectRatio = 1.2f * this->width() / this->height();
+	_stripBackgroundImage->setTextureCoordinate(aspectRatio, 1);
+	_stripBackgroundImage->setX(floorf(t / aspectRatio) * aspectRatio);
+	_stripBackgroundImage->setSize(length + aspectRatio, _trackNumber);
 	_stripBackgroundImage->draw();
 
-//    foreach(PhGraphicImage * it, _strips)
-//    {
-//		//it->draw(_xMoveStrip);
-//		it->draw();
-//    }
-	int x = 0;
-	int y = 0;
-	foreach(PhGraphicText * it, _texts)
+	int minSpaceBetweenPeople = 10;
+	int spaceBetweenPeopleAndText = 1;
+	PhStripText ** lastTextList = new PhStripText*[_trackNumber];
+	for(int i = 0; i < _trackNumber; i++)
+		lastTextList[i] = NULL;
+
+	foreach(PhStripText * text, _doc.getTexts())
 	{
-		//it->draw(_xmove);
-		qDebug() << "Draw PhGraphicText" ;
-//		it->setX(x);
-//		it->setY(y);
-//		it->setWidht(w);
-		it->draw();
+		PhGraphicText* gText = _graphicTexts[text];
+
+		int track = text->getTrack();
+
+		gText->draw();
+
+		PhStripText * lastText = lastTextList[track];
+		// Display the people name only if one of the following condition is true:
+		// - it is the first text
+		// - it is a different people
+		// - the distance between the latest text and the current is superior to a limit
+		if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))
+		{
+			PhGraphicText * gPeople = _graphicPeoples[text->getPeople()];
+			gPeople->setX(text->getTimeIn() - gPeople->getWidth() - spaceBetweenPeopleAndText);
+			gPeople->setY(track);
+
+			gPeople->draw();
+		}
+
+		lastTextList[track] = text;
 	}
-//	foreach(PhGraphicRect * it, _cuts)
-//	{
-//		//it->draw(_xmove);
-//		it->draw();
-//	}
-}
 
-
-void PhGraphicStripView::stopScroll()
-{
-	qDebug() << "Stop Scrolling";
-	setScroll(false);
-}
-
-void PhGraphicStripView::clearData()
-{
-	foreach(PhGraphicRect * it, _cuts)
-	{
-		delete it;
-	}
-	foreach(PhGraphicText * it, _texts)
-	{
-		delete it;
-	}
-	_cuts.clear();
-	_texts.clear();
-}
-
-
-QList<PhFont *> PhGraphicStripView::getFonts()
-{
-	return _fonts;
-}
-
-
-void PhGraphicStripView::setCurrentFont(QString fontfile){
-	_currentFont = new PhFont(fontfile, 150);
-	initializeGL();
-}
-
-
-PhFont * PhGraphicStripView::getCurrentFont(){
-	return _currentFont;
-}
-
-
-void PhGraphicStripView::changeScroll()
-{
-	_shouldmove = ! _shouldmove;
-}
-
-
-void PhGraphicStripView::setScroll(bool shouldScroll)
-{
-	if(shouldScroll)
-		qDebug() << "The strip should scroll";
-	else
-		qDebug() << "The strip should NOT scroll";
-
-	_shouldmove = shouldScroll;
-}
-
-void PhGraphicStripView::setNaturalScroll(bool naturalScroll)
-{
-	_naturalScroll = naturalScroll;
-}
-
-void PhGraphicStripView::toggleNaturalScrolling()
-{
-	_naturalScroll = ! _naturalScroll;
-}
-
-void PhGraphicStripView::setController(PhGraphicStripController * controller)
-{
-	_controller = controller;
-}
-
-void PhGraphicStripView::connectSlots(){
-	connect(_controller, SIGNAL(docChanged()), this, SLOT(initializeGL()));
-	connect(_controller, SIGNAL(docChanged()), this, SLOT(stopScroll()));
-}
-
-void PhGraphicStripView::setXmove(int n)
-{
-	if (_naturalScroll)
-	{
-		_xmove -= n;
-		_xMoveStrip -= n;
-		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
-			_xMoveStrip = 0;
-	}
-	else
-	{
-		_xmove += n;
-		_xMoveStrip += n;
-		if(_xMoveStrip <= -240 || _xMoveStrip >= 240)
-			_xMoveStrip = 0;
-	}
-}
-
-
-PhStripDoc *PhGraphicStripView::getDoc()
-{
-	return _doc;
+	foreach(PhStripCut * cut, _doc.getCuts())
+		_graphicCuts[cut]->draw();
 }

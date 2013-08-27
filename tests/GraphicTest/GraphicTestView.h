@@ -15,14 +15,10 @@
 #include "PhGraphic/PhFont.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
 
-#define TEXT
-//#define IMAGE
-//#define RECT
-
 class GraphicTestView : public PhGraphicView
 {
 public :
-	explicit GraphicTestView(QWidget *parent = 0, QString name = "");
+	explicit GraphicTestView(QWidget *parent = 0);
 
 	GraphicTestView *view();
 

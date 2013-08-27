@@ -42,11 +42,15 @@ linux {
 
 # MacOS specific
 mac {
-	OBJECTIVE_SOURCES += $${JOKER_ROOT}/libs/PhGraphic/SDLMain.m
-	OBJECTIVE_HEADERS += $${JOKER_ROOT}/libs/PhGraphic/SDLMain.h
+	SOURCES += $${JOKER_ROOT}/libs/PhGraphic/SDLMain.cpp
 	INCLUDEPATH += /Library/Frameworks/
 	LIBS += -F/Library/Frameworks
-	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf -framework Cocoa
+	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
+
+#	OBJECTIVE_SOURCES += $${JOKER_ROOT}/libs/PhGraphic/SDLMain.m
+#	OBJECTIVE_HEADERS += $${JOKER_ROOT}/libs/PhGraphic/SDLMain.h
+#	LIBS += -framework Cocoa
+
 #	copylibs.commands += cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/;
 }
 

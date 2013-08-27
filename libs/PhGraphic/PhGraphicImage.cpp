@@ -11,7 +11,7 @@
 #include <SDL/SDL_image.h>
 #endif
 
-PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h, int z, float tu, float tv, QColor *color)
+PhGraphicImage::PhGraphicImage(QString filename, float x, float y, float w, float h, float z, float tu, float tv, QColor *color)
 	: PhGraphicTexturedRect(x, y, w, h, z, tu, tv, color), _filename(filename), _surface(NULL)
 {
 }
@@ -32,6 +32,7 @@ bool PhGraphicImage::init()
 	return false;
 
 }
+
 void PhGraphicImage::dispose()
 {
     SDL_FreeSurface(_surface);
@@ -39,8 +40,9 @@ void PhGraphicImage::dispose()
 
 void PhGraphicImage::draw()
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+//	glEnable(GL_BLEND);
+//	glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+	glColor3f(1, 1, 1);
 	PhGraphicTexturedRect::draw();
 }
 

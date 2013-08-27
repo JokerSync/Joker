@@ -7,27 +7,20 @@
 #include <QApplication>
 #include <QDebug>
 
-#include "SDL/SDL.h"
-
 #include "PhStrip/PhStripDoc.h"
-#include "PhTools/PhFileTools.h"
 
-#include "MainView.h"
-#undef main
+#include "MainWindow.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	MainView w;
+	MainWindow w;
 
-	//	QString file;
-	//    if (argc < 2)
-	//		file = "Tunnel Rats.detx";
-	//    else
-	//        file = argv[1];
-	//w.openFile(QString(file));
-
-	w.openFile(QString("test.detx"));
+	if (argc > 1)
+	{
+		QString fileName = argv[1];
+		w.openFile(fileName);
+	}
 
     w.show();
 

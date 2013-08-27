@@ -5,9 +5,10 @@
 
 #include "PhGraphicTexturedRect.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
+PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, float tu, float tv, QColor *color)
+	: PhGraphicRect(x, y, w, h , z, color), _tu(tu), _tv(tv)
+{
+}
 
 
 void PhGraphicTexturedRect::createTextureFromColor(QColor color){
@@ -95,61 +96,33 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 	return true;
 }
 
-//void PhGraphicTexturedRect::setTexture(GLuint texture){
-//    _texture = texture;
-//}
-
-//SDL_Surface * PhGraphicTexturedRect::getSurface(){
-//    return *_surface;
-//}
-
-PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, float tu, float tv, QColor *color)
-	: PhGraphicRect(x, y, w, h , z, color), _tu(tu), _tv(tv)
+void PhGraphicTexturedRect::draw()
 {
-}
-
-void PhGraphicTexturedRect::draw(){
-
-	qDebug() << "PhGraphicTexturedRect::draw()";
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); 	// Clear the  framebuffer & the depthbuffer
-    glMatrixMode(GL_MODELVIEW);
+//	qDebug() << "PhGraphicTexturedRect::draw()";
+	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-    int x = this->getX();
-    int w = this->getWidth();
+	glBindTexture(GL_TEXTURE_2D, _texture);
 
+	glEnable(GL_TEXTURE_2D);
 
-        glBindTexture(GL_TEXTURE_2D, _texture);
-        if (w == 240)
-            glDisable(GL_BLEND);
+//        (0,0) ------ (1,0)
+//          |            |
+//          |            |
+//        (0,1) ------ (1,1)
 
-        glEnable(GL_TEXTURE_2D);
+//		qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
 
+	glBegin(GL_QUADS); 	//Begining the cube's drawing
+	{
+		glTexCoord3f(0, 0, 1);		glVertex3f(_x,		_y,	_z);
+		glTexCoord3f(_tu, 0, 1);	glVertex3f(_x + _w,	_y,	_z);
+		glTexCoord3f(_tu, _tv, 1);	glVertex3f(_x + _w,	_y + _h,  _z);
+		glTexCoord3f(0, _tv, 1);	glVertex3f(_x,		_y + _h,  _z);
+	}
+	glEnd();
 
-
-        int y = this->getY();
-        int h = this->getHeight();
-        int z = this->getZ();
-
-        /*
-        (0,0) ------ (1,0)
-          |            |
-          |            |
-        (0,1) ------ (1,1)
-        */
-
-		qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
-
-		glBegin(GL_QUADS); 	//Begining the cube's drawing
-		{
-			glTexCoord3f(0, 0, 1);glVertex3f(x ,         y,      z);
-			glTexCoord3f(_tu, 0, 1);glVertex3f(x + w * _tu ,     y,      z);
-			glTexCoord3f(_tu, _tv, 1);glVertex3f(x + w * _tu ,     y + h * _tv,  z);
-			glTexCoord3f(0, _tv, 1);glVertex3f(x ,         y + h * _tv,  z);
-		}
-        glEnd();
-        glDisable(GL_TEXTURE_2D);
-
+	glDisable(GL_TEXTURE_2D);
 }
 
 void PhGraphicTexturedRect::setTextureCoordinate(float tu, float tv)
@@ -157,6 +130,8 @@ void PhGraphicTexturedRect::setTextureCoordinate(float tu, float tv)
 	_tu = tu;
 	_tv = tv;
 }
-GLuint PhGraphicTexturedRect::getTexture(){
+
+GLuint PhGraphicTexturedRect::getTexture()
+{
     return _texture;
 }
