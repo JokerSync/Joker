@@ -10,8 +10,7 @@ HEADERS = \
     ../../libs/PhVideo/PhVideoView.h \
     ../../libs/PhVideo/PhVideoController.h \
     ../../libs/PhTools/PhTimeCode.h \
-    ../../libs/PhTools/PhClock.h \
-    ../../libs/PhCommonUI/PhMediaControllerView.h
+    ../../libs/PhTools/PhClock.h
 
 SOURCES = \
     main.cpp \
@@ -20,8 +19,7 @@ SOURCES = \
     ../../libs/PhVideo/PhVideoController.cpp \
     ../../libs/PhTools/PhTimeCode.cpp \
     ../../libs/PhTools/PhTime.cpp \
-    ../../libs/PhTools/PhClock.cpp \
-    ../../libs/PhCommonUI/PhMediaControllerView.cpp
+    ../../libs/PhTools/PhClock.cpp
 
 QT+=widgets
 
