@@ -11,19 +11,16 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = TimecodePlayer
 TEMPLATE = app
 
-INCLUDEPATH = ../../libs
+JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
+
+INCLUDEPATH += $${JOKER_ROOT}/libs
+
+include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
+include($${JOKER_ROOT}/libs/PhCommonUI/PhCommonUI.pri)
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    ../../libs/PhTools/PhTimeCode.cpp \
-    ../../libs/PhTools/PhClock.cpp \
-    ../../libs/PhCommonUI/PhMediaControllerView.cpp
+		mainwindow.cpp
 
-HEADERS  += mainwindow.h \
-    ../../libs/PhTools/PhTimeCode.h \\
-    ../../libs/PhTools/PhClock.h \
-    ../../libs/PhCommonUI/PhMediaControllerView.h
+HEADERS  += mainwindow.h
 
-FORMS += \
-    ../../libs/PhCommonUI/PhMediaControllerView.ui \
-    MainWindow.ui
+FORMS +=  MainWindow.ui

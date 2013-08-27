@@ -1,8 +1,12 @@
 HEADERS += \
     $${JOKER_ROOT}/libs/PhCommonUI/PhLeap.h \
+	$${JOKER_ROOT}/libs/PhCommonUI/PhMediaControllerView.h
 
 SOURCES += \
     $${JOKER_ROOT}/libs/PhCommonUI/PhLeap.cpp \
+	$${JOKER_ROOT}/libs/PhCommonUI/PhMediaControllerView.cpp\
+
+FORMS += $${JOKER_ROOT}/libs/PhCommonUI/PhMediaControllerView.ui
 
 #INCLUDEPATH += $$(LEAP_SDK)/include
 
