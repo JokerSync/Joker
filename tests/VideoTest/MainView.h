@@ -7,11 +7,11 @@
 #include <QString>
 #include <QtGui/QMovie>
 #include <QtWidgets/QWidget>
+
 #include <QTimer>
 
-#include "PhVideo/PhVideoController.h"
 #include "PhTools/PhClock.h"
-#include <QMediaMetaData>
+#include "PhVideo/PhVideoView.h"
 
 using namespace std;
 

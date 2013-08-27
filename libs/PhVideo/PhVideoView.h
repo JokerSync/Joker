@@ -25,14 +25,14 @@ public:
 	 */
 	bool open(QString fileName);
 	void setClock(PhClock *clock);
-    
+
 signals:
-    
+
 public slots:
 
-	void onRateChanged();
+	void onRateChanged(PhRate rate);
 	void onFrameChanged();
-    
+
 private:
 	QMediaPlayer _player;
 	PhClock *_clock;

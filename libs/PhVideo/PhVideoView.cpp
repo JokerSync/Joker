@@ -1,5 +1,7 @@
 #include "PhVideoView.h"
 
+#include <QFile>
+
 PhVideoView::PhVideoView(QObject *parent)
 	: QVideoWidget(),
 	_player(this,QMediaPlayer::VideoSurface),
@@ -27,17 +29,17 @@ void PhVideoView::setClock(PhClock *clock)
 {
 	_clock = clock;
 	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
-	connect(_clock, SIGNAL(rateChanged()), this, SLOT(onRateChanged()));
+	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
-void PhVideoView::onRateChanged()
+void PhVideoView::onRateChanged(PhRate rate)
 {
-	if(_clock->getRate() == 0)
+	if(rate == 0)
 		_player.pause();
 	else
 	{
 		_player.play();
-		_player.setPlaybackRate(_clock->getRate());
+		_player.setPlaybackRate(rate);
 	}
 
 }
