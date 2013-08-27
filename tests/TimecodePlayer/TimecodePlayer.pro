@@ -27,4 +27,5 @@ HEADERS  += mainwindow.h \
     ../../libs/PhCommonUI/PhMediaControllerView.h
 
 FORMS += \
-    ../../libs/PhCommonUI/PhMediaControllerView.ui
+    ../../libs/PhCommonUI/PhMediaControllerView.ui \
+    MainWindow.ui

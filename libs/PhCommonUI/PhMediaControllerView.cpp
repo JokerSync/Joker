@@ -1,22 +1,15 @@
 #include "PhMediaControllerView.h"
 #include "ui_PhMediaControllerView.h"
 
-PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
+PhMediaControllerView::PhMediaControllerView(QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::PhMediaControllerView),
-	_mediaLength(2000)
+	_tcType(PhTimeCodeType25),
+	_clock(NULL),
+	_firstFrame(0),
+	_mediaLength(0)
 {
 	ui->setupUi(this);
-
-	_clock = clock;
-
-
-	_firstFrame = 0;
-	_timecodeType = PhTimeCodeType25;
-	_framePerSecond = PhTimeCode::getFps(_timecodeType);
-	_fileProgress = 0;
-
-	_clock->setFrame(_firstFrame);
 
 	//Buttons Init
 
@@ -40,14 +33,6 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
 
 	connect(ui->_slider, SIGNAL(sliderMoved(int)), this, SLOT(useSliderCursor(int)));
 
-
-
-	//Label Init
-
-	ui->_rateLabel->setStyleSheet("font:24pt");
-	ui->_rateLabel->setText("rate: "+QString::number(_clock->getRate()));
-	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),PhTimeCodeType25));
-
 	//Combobox Init
 
 	ui->_rateSelectionBox->addItem("23.98 fps");
@@ -55,32 +40,57 @@ PhMediaControllerView::PhMediaControllerView(PhClock *clock, QWidget *parent) :
 	ui->_rateSelectionBox->addItem("25 fps");
 	ui->_rateSelectionBox->addItem("29.97 fps");
 
-
 	connect(ui->_rateSelectionBox, SIGNAL(activated(int)), this, SLOT(selectRate()));
 
-	//this->setLayout(ui->_vLayout);
-
-	this->setFixedHeight(100);
-	this->resize(320, 80);
-
 	//Connections SIGNALS/SLOTS
+
+
+
+}
+
+PhMediaControllerView::~PhMediaControllerView()
+{
+	delete ui;
+}
+
+void PhMediaControllerView::setTCType(PhTimeCodeType tcType)
+{
+	_tcType = tcType;
+}
+
+PhTimeCodeType PhMediaControllerView::getTCType() const
+{
+	return _tcType;
+}
+
+void PhMediaControllerView::setClock(PhClock *clock)
+{
+	_clock = clock;
 	connect(_clock, SIGNAL(rateChanged()), this, SLOT(updateRateLabel()));
 	connect(_clock, SIGNAL(frameChanged()), this, SLOT(updateFrameLabel()));
-
-
 }
 
-int PhMediaControllerView::getFramePerSecond() const
+PhClock *PhMediaControllerView::getClock() const
 {
-	return _framePerSecond;
+	return _clock;
 }
 
-void PhMediaControllerView::setMediaLength(qint64 lengthFile)
+
+void PhMediaControllerView::setFirstFrame(PhFrame firstFrame)
 {
-	_mediaLength = lengthFile;
-	_firstFrame = 0;
-	_timecodeType = PhTimeCodeType25;
-	_framePerSecond = 25;
+	_firstFrame = firstFrame;
+	ui->_slider->setMinimum(firstFrame);
+}
+
+PhFrame PhMediaControllerView::getFirstFrame() const
+{
+	return _firstFrame;
+}
+
+void PhMediaControllerView::setMediaLength(qint64 mediaLength)
+{
+	_mediaLength = mediaLength;
+	ui->_slider->setMaximum(_firstFrame + mediaLength);
 }
 
 
@@ -88,16 +98,10 @@ void PhMediaControllerView::setMediaLength(qint64 lengthFile)
 void PhMediaControllerView::pushPlayButton()
 {
 	if(_clock->getRate() == 0)//If state = pause
-	{
 		_clock->setRate(1);
-		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-
-	}
 	else //If state = play
-	{
 		_clock->setRate(0);
-		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-	}
+
 	playButtonSignal();
 }
 
@@ -111,23 +115,21 @@ void PhMediaControllerView::updateFrame()
 void PhMediaControllerView::pushForwardButton()
 {
 	_clock->setRate(4);
-	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
 	forwardButtonSignal();
 }
 
 
 void PhMediaControllerView::pushRewindButton()
 {
-	rewindButtonSignal();
 	_clock->setRate(-4);
-	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+	rewindButtonSignal();
 }
 
 void PhMediaControllerView::pushBackButton()
 {
 	_clock->setRate(0);
 	_clock->setFrame(_firstFrame);
-	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+
 	backButtonSignal();
 }
 
@@ -156,12 +158,17 @@ void PhMediaControllerView::useSliderCursor(int position)
 void PhMediaControllerView::updateRateLabel()
 {
 	ui->_rateLabel->setText("rate: "+QString::number(_clock->getRate()));
+	if(_clock->getRate() != 0)
+		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+
+	else
+		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
 }
 
 
 void PhMediaControllerView::updateFrameLabel()
 {
-	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),_timecodeType));
+	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->getFrame(),_tcType));
 	updateSliderPosition();
 
 }
@@ -169,14 +176,12 @@ void PhMediaControllerView::updateFrameLabel()
 void PhMediaControllerView::updateSliderPosition()
 {
 	int t = _clock->getFrame();
-	_fileProgress = (t - _firstFrame)*100/_mediaLength;
-	//qDebug() << t <<"  "<< _fileProgress <<"  "<<_lengthFile;
-	ui->_slider->setSliderPosition(_fileProgress);
+	ui->_slider->setSliderPosition(t);
 
-	if(_fileProgress == 100)
+	if(t >= _firstFrame + _mediaLength)
 	{
 		_clock->setRate(0);
-		_clock->setFrame(0);
+		_clock->setFrame(_firstFrame);
 	}
 }
 
@@ -186,21 +191,19 @@ void PhMediaControllerView::selectRate()
 	switch(ui->_rateSelectionBox->currentIndex())
 	{
 	case 0:
-		_timecodeType = PhTimeCodeType2398;
+		_tcType = PhTimeCodeType2398;
 		break;
 	case 1:
-		_timecodeType =	PhTimeCodeType24;
+		_tcType =	PhTimeCodeType24;
 		break;
 	case 2:
-		_timecodeType = PhTimeCodeType25;
+		_tcType = PhTimeCodeType25;
 		break;
 	case 3:
-		_timecodeType = PhTimeCodeType2997;
+		_tcType = PhTimeCodeType2997;
 		break;
 
 	}
-	_framePerSecond = PhTimeCode::getFps(_timecodeType);
-
 
 }
 
@@ -208,7 +211,4 @@ void PhMediaControllerView::selectRate()
 
 
 
-PhMediaControllerView::~PhMediaControllerView()
-{
-	delete ui;
-}
+
