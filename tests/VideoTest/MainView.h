@@ -44,9 +44,9 @@ private slots:
 	void onOpenFile();
 
 private:
-	PhVideoController _videoController;
+	PhVideoView _videoView;
     QAbstractButton *_openButton;
-	PhClock *_clock;
+	PhClock _clock;
 };
 
 #endif
