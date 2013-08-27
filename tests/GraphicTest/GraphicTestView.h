@@ -23,10 +23,16 @@ public :
 
 	GraphicTestView *view();
 
+	PhGraphicText * getText(){return _text;};
+
 public slots:
 	void play();
 	void fastBackward();
 	void fastForward();
+	void displayText();
+	void displayImage();
+	void displayRect();
+
 
 protected:
 	bool init();
@@ -37,6 +43,10 @@ private:
 
 	int playEnable;
 	int textSpeed;
+	bool enableDisplayImage;
+	bool enableDisplayRect;
+	bool enableDisplayText;
+
 
 	PhGraphicImage *_image;
 	PhGraphicText *_text;

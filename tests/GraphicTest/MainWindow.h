@@ -18,11 +18,11 @@ public:
 
 public slots:
 	void pushPlayButton();
+	void changeText(QString);
 
 private:
 	Ui::MainWindow *ui;
 	bool playButtonState;
-	GraphicTestView * _view;
 
 };
 
