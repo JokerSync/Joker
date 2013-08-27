@@ -13,10 +13,24 @@ SOURCES += main.cpp player.cpp
 
 DESTDIR = ./
 
-#copylibs.commands += echo "copying to target $${TARGET}"
-#copylibs.commands += && echo "copying to target $${TARGET}"
-copylibs.commands += mkdir ./$${TARGET}.app/Contents/Frameworks && cp -r /Users/martindelille/dev/libs/VLC/lib/* ./$${TARGET}.app/Contents/Frameworks/ &&
-QMAKE_EXTRA_TARGETS += copylibs
-POST_TARGETDEPS += copylibs
+
+# Windows specific
+win32{
+}
+
+# Ubuntu specific
+linux {
+
+}
+
+# MacOS specific
+mac {
+VLC_PATH = /Applications/VLC.app/Contents/MacOS/
+}
+
+QMAKE_POST_LINK += mkdir -p ./$${TARGET}.app/Contents/MacOS/lib
+QMAKE_POST_LINK += && mkdir -p ./$${TARGET}.app/Contents/MacOS/plugins
+QMAKE_POST_LINK += && cp -r $${VLC_PATH}/lib/* ./$${TARGET}.app/Contents/MacOS/lib
+QMAKE_POST_LINK += && cp -r $${VLC_PATH}/plugins/* ./$${TARGET}.app/Contents/MacOS/plugins
 
 
