@@ -1,12 +1,9 @@
-QT += multimedia multimediawidgets
+#CONFIG += use_qtvideo
+CONFIG += use_vlc
 
-HEADERS += \
-    $${JOKER_ROOT}/libs/PhVideo/PhVideoView.h \
-    ../../libs/PhVideo/PhVLCVideoView.h
-
-SOURCES += \
-    $${JOKER_ROOT}/libs/PhVideo/PhVideoView.cpp \
-    ../../libs/PhVideo/PhVLCVideoView.cpp
+#HEADERS += ../../libs/PhVideo/PhVideoObject.h
+HEADERS += ../../libs/PhVideo/PhVideoView.h
+#SOURCES += ../../libs/PhVideo/PhVideoObject.cpp
 
 # Windows specific
 win32{
@@ -19,16 +16,32 @@ linux {
 
 # MacOS specific
 mac {
+	QT += widgets
 	VLC_PATH = /Applications/VLC.app/Contents/MacOS/
 }
 
-INCLUDEPATH += $${VLC_PATH}/include
-DEPENDPATH += $${VLC_PATH}/include
-LIBS += -L$${VLC_PATH}/lib/ -lvlc
+use_qtvideo {
+	QT += multimedia multimediawidgets
+
+	HEADERS += $${JOKER_ROOT}/libs/PhVideo/PhQTVideoView.h
+	SOURCES += $${JOKER_ROOT}/libs/PhVideo/PhQTVideoView.cpp
+}
+
+use_vlc {
+	INCLUDEPATH += $${VLC_PATH}/include
+	DEPENDPATH += $${VLC_PATH}/include
+	LIBS += -L$${VLC_PATH}/lib/ -lvlc
+
+	HEADERS += $${JOKER_ROOT}/libs/PhVideo/PhVLCVideoView.h
+	SOURCES += $${JOKER_ROOT}/libs/PhVideo/PhVLCVideoView.cpp
+
+	# Copy vlc dynamic libraries and plugins to output:
+	QMAKE_POST_LINK += mkdir -p ./$${TARGET}.app/Contents/MacOS/lib
+	QMAKE_POST_LINK += && mkdir -p ./$${TARGET}.app/Contents/MacOS/plugins
+	QMAKE_POST_LINK += && cp -r $${VLC_PATH}/lib/* ./$${TARGET}.app/Contents/MacOS/lib
+	QMAKE_POST_LINK += && cp -r $${VLC_PATH}/plugins/* ./$${TARGET}.app/Contents/MacOS/plugins
+}
 
 
-QMAKE_POST_LINK += mkdir -p ./$${TARGET}.app/Contents/MacOS/lib
-QMAKE_POST_LINK += && mkdir -p ./$${TARGET}.app/Contents/MacOS/plugins
-QMAKE_POST_LINK += && cp -r $${VLC_PATH}/lib/* ./$${TARGET}.app/Contents/MacOS/lib
-QMAKE_POST_LINK += && cp -r $${VLC_PATH}/plugins/* ./$${TARGET}.app/Contents/MacOS/plugins
+
 

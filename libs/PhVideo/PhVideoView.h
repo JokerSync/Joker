@@ -1,41 +1,14 @@
 #ifndef PHVIDEOVIEW_H
 #define PHVIDEOVIEW_H
 
-#include <QVideoWidget>
-#include <QMediaPlayer>
+#define USE_VLC
 
-#include "PhTools/PhClock.h"
-
-/**
- * The PhVideoView class display video content.
- */
-class PhVideoView : public QVideoWidget
-{
-    Q_OBJECT
-public:
-	/**
-	 * @brief PhVideoView constructor
-	 * @param parent widget for the view
-	 */
-	explicit PhVideoView(QObject *parent = 0);
-	/**
-	 * @brief Open a video file
-	 * @param fileName A video file path
-	 * @return True if the file was opened successfully, false otherwise
-	 */
-	bool open(QString fileName);
-	void setClock(PhClock *clock);
-
-signals:
-
-public slots:
-
-	void onRateChanged(PhRate rate);
-	void onFrameChanged();
-
-private:
-	QMediaPlayer _player;
-	PhClock *_clock;
-};
+#ifdef USE_VLC
+#define PhVideoView PhVLCVideoView
+#include "PhVLCVideoView.h"
+#else
+#define PhVideoView PhQTVideoView
+#include "PhQTVideoView.h"
+#endif
 
 #endif // PHVIDEOVIEW_H

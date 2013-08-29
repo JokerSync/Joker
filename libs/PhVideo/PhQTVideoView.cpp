@@ -1,16 +1,17 @@
-#include "PhVideoView.h"
+#include "PhQTVideoView.h"
 
 #include <QFile>
 
-PhVideoView::PhVideoView(QObject *parent)
+PhQTVideoView::PhQTVideoView(QObject *parent)
 	: QVideoWidget(),
 	_player(this,QMediaPlayer::VideoSurface),
 	_clock(NULL)
 {
+	qDebug() << "Using QTVideo widget for video playback.";
 	_player.setVideoOutput(this);
 }
 
-bool PhVideoView::open(QString fileName)
+bool PhQTVideoView::open(QString fileName)
 {
 	if(QFile::exists(fileName))
 	{
@@ -25,14 +26,14 @@ bool PhVideoView::open(QString fileName)
 	}
 }
 
-void PhVideoView::setClock(PhClock *clock)
+void PhQTVideoView::setClock(PhClock *clock)
 {
 	_clock = clock;
 	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
-void PhVideoView::onRateChanged(PhRate rate)
+void PhQTVideoView::onRateChanged(PhRate rate)
 {
 	if(rate == 0)
 		_player.pause();
@@ -44,7 +45,7 @@ void PhVideoView::onRateChanged(PhRate rate)
 
 }
 
-void PhVideoView::onFrameChanged()
+void PhQTVideoView::onFrameChanged()
 {
-	qDebug() << "PhVideoView::onFrameChanged() TODO";
+	qDebug() << "PhQTVideoView::onFrameChanged() TODO";
 }
