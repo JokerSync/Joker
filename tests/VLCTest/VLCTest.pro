@@ -1,15 +1,10 @@
 TEMPLATE = app
 TARGET = VLCTest
-DEPENDPATH += .
 QT += widgets core gui
-INCLUDEPATH += .
 
 # Input
 HEADERS += player.h
 SOURCES += main.cpp player.cpp
-
-DESTDIR = ./
-
 
 # Windows specific
 win32{
