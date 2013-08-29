@@ -1,21 +1,22 @@
-#ifndef PHMEDIACONTROLLERVIEW_H
-#define PHMEDIACONTROLLERVIEW_H
+#ifndef PHMEDIAPANEL_H
+#define PHMEDIAPANEL_H
 
 #include <QWidget>
 #include <PhTools/PhClock.h>
+#include <QDebug>
 
 
 namespace Ui {
-class PhMediaControllerView;
+class PhMediaPanel;
 }
 
-class PhMediaControllerView : public QWidget
+class PhMediaPanel : public QWidget
 {
 	Q_OBJECT
 	
 public:
-	explicit PhMediaControllerView(QWidget *parent = 0);
-	~PhMediaControllerView();
+	explicit PhMediaPanel(QWidget *parent = 0);
+	~PhMediaPanel();
 	void setTCType(PhTimeCodeType tcType);
 	PhTimeCodeType getTCType() const;
 	void setClock(PhClock *clock);
@@ -63,14 +64,14 @@ public slots:
 
 	void selectRate();
 
-	void onRateChanged();
+	void onRateChanged(PhRate rate);
 
 	void onFrameChanged();
 
 
 private:
 
-	Ui::PhMediaControllerView *ui;
+	Ui::PhMediaPanel *ui;
 	PhTimeCodeType _tcType;
 	PhClock *_clock;
 	PhFrame _firstFrame;
@@ -78,4 +79,4 @@ private:
 
 };
 
-#endif // PHMEDIACONTROLLERVIEW_H
+#endif // PHMEDIAPANEL_H

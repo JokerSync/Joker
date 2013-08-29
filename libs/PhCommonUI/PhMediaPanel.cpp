@@ -1,9 +1,9 @@
-#include "PhMediaControllerView.h"
-#include "ui_PhMediaControllerView.h"
+#include "PhMediaPanel.h"
+#include "ui_PhMediaPanel.h"
 
-PhMediaControllerView::PhMediaControllerView(QWidget *parent) :
+PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	QWidget(parent),
-	ui(new Ui::PhMediaControllerView),
+	ui(new Ui::PhMediaPanel),
 	_tcType(PhTimeCodeType25),
 	_clock(NULL),
 	_firstFrame(0),
@@ -48,12 +48,12 @@ PhMediaControllerView::PhMediaControllerView(QWidget *parent) :
 
 }
 
-PhMediaControllerView::~PhMediaControllerView()
+PhMediaPanel::~PhMediaPanel()
 {
 	delete ui;
 }
 
-void PhMediaControllerView::setTCType(PhTimeCodeType tcType)
+void PhMediaPanel::setTCType(PhTimeCodeType tcType)
 {
 	_tcType = tcType;
 
@@ -74,37 +74,37 @@ void PhMediaControllerView::setTCType(PhTimeCodeType tcType)
 	}
 }
 
-PhTimeCodeType PhMediaControllerView::getTCType() const
+PhTimeCodeType PhMediaPanel::getTCType() const
 {
 	return _tcType;
 }
 
-void PhMediaControllerView::setClock(PhClock *clock)
+void PhMediaPanel::setClock(PhClock *clock)
 {
 	_clock = clock;
-	connect(_clock, SIGNAL(rateChanged()), this, SLOT(onRateChanged()));
+	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
 }
 
-PhClock *PhMediaControllerView::getClock() const
+PhClock *PhMediaPanel::getClock() const
 {
 	return _clock;
 }
 
 
-void PhMediaControllerView::setFirstFrame(PhFrame firstFrame)
+void PhMediaPanel::setFirstFrame(PhFrame firstFrame)
 {
 	_firstFrame = firstFrame;
 	ui->_slider->setMinimum(firstFrame);
 	ui->_slider->setMaximum(_firstFrame + _mediaLength);
 }
 
-PhFrame PhMediaControllerView::getFirstFrame() const
+PhFrame PhMediaPanel::getFirstFrame() const
 {
 	return _firstFrame;
 }
 
-void PhMediaControllerView::setMediaLength(qint64 mediaLength)
+void PhMediaPanel::setMediaLength(qint64 mediaLength)
 {
 	_mediaLength = mediaLength;
 	ui->_slider->setMaximum(_firstFrame + mediaLength);
@@ -112,7 +112,7 @@ void PhMediaControllerView::setMediaLength(qint64 mediaLength)
 
 
 
-void PhMediaControllerView::pushPlayButton()
+void PhMediaPanel::pushPlayButton()
 {
 	if(_clock->rate() == 0)//If state = pause
 		_clock->setRate(1);
@@ -123,20 +123,20 @@ void PhMediaControllerView::pushPlayButton()
 }
 
 
-void PhMediaControllerView::pushForwardButton()
+void PhMediaPanel::pushForwardButton()
 {
 	_clock->setRate(4);
 	forwardButtonSignal();
 }
 
 
-void PhMediaControllerView::pushRewindButton()
+void PhMediaPanel::pushRewindButton()
 {
 	_clock->setRate(-4);
 	rewindButtonSignal();
 }
 
-void PhMediaControllerView::pushBackButton()
+void PhMediaPanel::pushBackButton()
 {
 	_clock->setRate(0);
 	_clock->setFrame(_firstFrame);
@@ -144,31 +144,31 @@ void PhMediaControllerView::pushBackButton()
 	backButtonSignal();
 }
 
-void PhMediaControllerView::pushNextFrameButton()
+void PhMediaPanel::pushNextFrameButton()
 {
 	PhFrame f = _clock->frame() + 1;
 	_clock->setFrame(f);
 	nextFrameButtonSignal();
 }
 
-void PhMediaControllerView::pushPreviousFrameButton()
+void PhMediaPanel::pushPreviousFrameButton()
 {
 	PhFrame f = _clock->frame() - 1;
 	_clock->setFrame(f);
 	previousFrameButtonSignal();
 }
 
-void PhMediaControllerView::useSliderCursor(int position)
+void PhMediaPanel::useSliderCursor(int position)
 {
 	_clock->setFrame(position);
 	useSliderCursorSignal();
 }
 
 
-void PhMediaControllerView::onRateChanged()
+void PhMediaPanel::onRateChanged(PhRate rate)
 {
-	ui->_rateLabel->setText("x"+QString::number(_clock->rate()));
-	if(_clock->rate() != 0)
+	ui->_rateLabel->setText("x"+QString::number(rate));
+	if(rate != 0)
 		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
 
 	else
@@ -176,7 +176,7 @@ void PhMediaControllerView::onRateChanged()
 }
 
 
-void PhMediaControllerView::onFrameChanged()
+void PhMediaPanel::onFrameChanged()
 {
 	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->frame(),_tcType));
 
@@ -189,10 +189,11 @@ void PhMediaControllerView::onFrameChanged()
 		_clock->setFrame(_mediaLength);
 	}
 
+
 }
 
 
-void PhMediaControllerView::selectRate()
+void PhMediaPanel::selectRate()
 {
 	switch(ui->_rateSelectionBox->currentIndex())
 	{
