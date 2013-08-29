@@ -2,7 +2,7 @@
 #include "math.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent)
-	: PhGraphicView( parent), _image(NULL), _font(NULL), _text(NULL), _rect(NULL)
+	: PhGraphicView( parent), _image(NULL), _font(NULL), _text(NULL), _rect(NULL), _loop(NULL)
 {
 
 }
@@ -51,8 +51,16 @@ bool GraphicTestView::init()
 
 	if(_rect == NULL)
 	{
-		qDebug() << "Initialize _text";
-		_rect = new PhGraphicSolidRect(100, 100, 75, 40, 1, new QColor(200, 128, 0));
+		qDebug() << "Initialize _rect";
+		_rect = new PhGraphicSolidRect(100, 100, 75, 40, 0, new QColor(150, 28, 0));
+	}
+
+	if(_loop == NULL)
+	{
+		qDebug() << "Initialize _loop";
+		_loop = new PhGraphicLoop(100, 100, 40, 200, 2, 0, new QColor(150, 28, 150));
+		if (! _loop->init())
+			qDebug() << "_loop not initialize";
 	}
 
 	return true;
@@ -98,6 +106,11 @@ void GraphicTestView::paint()
 	if  (enableDisplayRect == true)
 	{
 		_rect->draw();
+	}
+
+	if (enableDisplayLoop == true)
+	{
+		_loop->draw();
 	}
 }
 
@@ -154,6 +167,15 @@ void GraphicTestView::displayRect()
 	else
 		enableDisplayRect = false;
 }
+
+void GraphicTestView::displayLoop()
+{
+	if (enableDisplayLoop == false)
+		enableDisplayLoop = true;
+	else
+		enableDisplayLoop = false;
+}
+
 
 
 

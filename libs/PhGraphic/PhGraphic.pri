@@ -9,7 +9,8 @@ HEADERS += \
 	$${JOKER_ROOT}/libs/PhGraphic/PhFont.h \
     $${JOKER_ROOT}/libs/PhGraphic/PhGraphicObject.h \
     $${JOKER_ROOT}/libs/PhGraphic/PhGraphicRect.h \
-    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicSolidRect.h
+    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicSolidRect.h \
+    ../../libs/PhGraphic/PhGraphicLoop.h
 
 SOURCES += \
 	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicView.cpp \
@@ -20,7 +21,8 @@ SOURCES += \
 	$${JOKER_ROOT}/libs/PhGraphic/PhFont.cpp \
     $${JOKER_ROOT}/libs/PhGraphic/PhGraphicObject.cpp \
     $${JOKER_ROOT}/libs/PhGraphic/PhGraphicRect.cpp \
-    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicSolidRect.cpp
+    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicSolidRect.cpp \
+    ../../libs/PhGraphic/PhGraphicLoop.cpp
 
 # Windows specific
 win32 {
