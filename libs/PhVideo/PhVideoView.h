@@ -1,8 +1,6 @@
 #ifndef PHVIDEOVIEW_H
 #define PHVIDEOVIEW_H
 
-#define USE_VLC
-
 #ifdef USE_VLC
 #define PhVideoView PhVLCVideoView
 #include "PhVLCVideoView.h"
