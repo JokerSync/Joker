@@ -1,9 +1,9 @@
 #CONFIG += use_qtvideo
 CONFIG += use_vlc
 
-#HEADERS += ../../libs/PhVideo/PhVideoObject.h
+HEADERS += ../../libs/PhVideo/PhVideoObject.h
 HEADERS += ../../libs/PhVideo/PhVideoView.h
-#SOURCES += ../../libs/PhVideo/PhVideoObject.cpp
+SOURCES += ../../libs/PhVideo/PhVideoObject.cpp
 
 # Windows specific
 win32{
