@@ -6,6 +6,8 @@
 PhVLCVideoView::PhVLCVideoView(QWidget *parent) :
 	QWidget(parent)
 {
+	qDebug() << "Using VLC for video playback.";
+
 	vlcPlayer = NULL;
 
     /* Initialize libVLC */

@@ -1,8 +1,9 @@
 #include "MainView.h"
 
-#include <QtWidgets>
-#include <qvideowidget.h>
-#include <qvideosurfaceformat.h>
+#include <QPushButton>
+#include <QBoxLayout>
+#include <QFileInfo>
+#include <QFileDialog>
 
 MainView::MainView()
 	: QWidget(0),
