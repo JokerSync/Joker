@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 
-#include "PhCommonUI/PhMediaControllerView.h"
+#include "PhCommonUI/PhMediaPanel.h"
 
 namespace Ui {
 	class MainWindow;

@@ -5,12 +5,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+	_clock = new PhClock;
 	PhTimeCodeType timecodeType = PhTimeCodeType25;
 	PhFrame lengthFile = 7500;
-	_clock = new PhClock;
-	_clock->setFrame(PhTimeCode::frameFromString("01:00:00:00",timecodeType));
-	PhFrame firstFrame = _clock->frame();
 	ui->mediaController->setClock(_clock);
+	PhFrame firstFrame = _clock->frame();
 	ui->mediaController->setMediaLength(lengthFile);
 	ui->mediaController->setTCType(timecodeType);
 	ui->mediaController->setFirstFrame(firstFrame);
