@@ -3,9 +3,6 @@ TARGET = VLCTest
 DEPENDPATH += .
 QT += widgets core gui
 INCLUDEPATH += .
-INCLUDEPATH += /Users/martindelille/dev/libs/VLC/include
-DEPENDPATH += /Users/martindelille/dev/libs/VLC/include
-LIBS += -L/Users/martindelille/dev/libs/VLC/lib/ -lvlc
 
 # Input
 HEADERS += player.h
@@ -27,6 +24,10 @@ linux {
 mac {
 	VLC_PATH = /Applications/VLC.app/Contents/MacOS/
 }
+
+INCLUDEPATH += $${VLC_PATH}/include
+DEPENDPATH += $${VLC_PATH}/include
+LIBS += -L$${VLC_PATH}/lib/ -lvlc
 
 QMAKE_POST_LINK += mkdir -p ./$${TARGET}.app/Contents/MacOS/lib
 QMAKE_POST_LINK += && mkdir -p ./$${TARGET}.app/Contents/MacOS/plugins
