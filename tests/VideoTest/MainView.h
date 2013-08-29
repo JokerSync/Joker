@@ -3,7 +3,6 @@
 #define VIDEOPLAYER_H
 
 #include <QString>
-#include <QTimer>
 
 #include "PhTools/PhClock.h"
 
