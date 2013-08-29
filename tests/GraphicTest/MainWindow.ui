@@ -46,6 +46,13 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
+       <widget class="QCheckBox" name="Loop">
+        <property name="text">
+         <string>Display Loop</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="Rect">
         <property name="text">
          <string>Display Rect</string>

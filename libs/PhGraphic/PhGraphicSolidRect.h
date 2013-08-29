@@ -8,6 +8,7 @@
 
 #include "PhGraphicRect.h"
 #include <glu.h>
+#include <QDebug>
 
 class PhGraphicSolidRect : public PhGraphicRect
 {
