@@ -4,9 +4,9 @@
 #include <QWidget>
 #include <vlc/vlc.h>
 
-#include "PhTools/PhClock.h"
+#include "PhVideoObject.h"
 
-class PhVLCVideoView : public QWidget
+class PhVLCVideoView : public QWidget, public PhVideoObject
 {
 	Q_OBJECT
 public:
@@ -36,8 +36,6 @@ public slots:
 private:
 	libvlc_instance_t *vlcInstance;
     libvlc_media_player_t *vlcPlayer;
-
-	PhClock *_clock;
 };
 
 #endif // PHVLCVIDEOVIEW_H

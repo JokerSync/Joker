@@ -4,12 +4,12 @@
 #include <QVideoWidget>
 #include <QMediaPlayer>
 
-#include "PhTools/PhClock.h"
+#include "PhVideoObject.h"
 
 /**
  * The PhQTVideoView class display video content.
  */
-class PhQTVideoView : public QVideoWidget
+class PhQTVideoView : public QVideoWidget, public PhVideoObject
 {
     Q_OBJECT
 public:
@@ -24,6 +24,7 @@ public:
 	 * @return True if the file was opened successfully, false otherwise
 	 */
 	bool open(QString fileName);
+
 	void setClock(PhClock *clock);
 
 signals:
@@ -35,7 +36,6 @@ public slots:
 
 private:
 	QMediaPlayer _player;
-	PhClock *_clock;
 };
 
 #endif // PHQTVIDEOVIEW_H

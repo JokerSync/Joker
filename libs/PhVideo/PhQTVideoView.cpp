@@ -4,8 +4,7 @@
 
 PhQTVideoView::PhQTVideoView(QObject *parent)
 	: QVideoWidget(),
-	_player(this,QMediaPlayer::VideoSurface),
-	_clock(NULL)
+	_player(this,QMediaPlayer::VideoSurface)
 {
 	qDebug() << "Using QTVideo widget for video playback.";
 	_player.setVideoOutput(this);
@@ -28,7 +27,7 @@ bool PhQTVideoView::open(QString fileName)
 
 void PhQTVideoView::setClock(PhClock *clock)
 {
-	_clock = clock;
+	PhVideoObject::setClock(clock);
 	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }

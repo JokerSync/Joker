@@ -75,7 +75,7 @@ bool PhVLCVideoView::open(QString fileName)
 
 void PhVLCVideoView::setClock(PhClock *clock)
 {
-	_clock = clock;
+	PhVideoObject::setClock(clock);
 	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
