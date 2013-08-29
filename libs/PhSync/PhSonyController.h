@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QSerialPort>
 
-#include <../../libs/PhTools/PhTime.h>
+#include <PhTools/PhClock.h>
 
 /**
  * PhSonyController is an abstract class handle sony 9 pin communication
