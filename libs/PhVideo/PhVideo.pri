@@ -28,6 +28,7 @@ use_qtvideo {
 }
 
 use_vlc {
+	DEFINES += USE_VLC
 	INCLUDEPATH += $${VLC_PATH}/include
 	DEPENDPATH += $${VLC_PATH}/include
 	LIBS += -L$${VLC_PATH}/lib/ -lvlc
