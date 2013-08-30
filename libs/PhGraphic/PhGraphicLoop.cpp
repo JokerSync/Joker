@@ -1,8 +1,8 @@
 #include "math.h"
 #include "PhGraphicLoop.h"
 
-PhGraphicLoop::PhGraphicLoop(float x, float y, float w, float h, float th, float z, QColor *color) :
-	PhGraphicRect(x, y, w, h, z, color), th(th)
+PhGraphicLoop::PhGraphicLoop(float x, float y, float w, float h, float crossHeight, float hThick, float z, QColor *color) :
+	PhGraphicRect(x, y, w, h, z, color), _crossHeight(crossHeight), _hThick(hThick)
 {
 }
 
@@ -16,49 +16,55 @@ void PhGraphicLoop::draw()
 {
 	//draw rect
 
-	x = this->getX()-th/2;
-	y = this->getY();
-	w = this->getTh();
-	h = this->getHeight();
+	float x = _x - _hThick/2;
+	float y = _y;
+	float w = _hThick;
+	float h = _h;
 
 	glBegin(GL_QUADS); 	//Begining the cube's drawing
 	{
-		glVertex3f(x,		y,	z);
-		glVertex3f(x + w,	y,	z);
-		glVertex3f(x + w,	y + h,  z);
-		glVertex3f(x,		y + h,  z);
+		glVertex3f(x,		y,	_z);
+		glVertex3f(x + w,	y,	_z);
+		glVertex3f(x + w,	y + h,  _z);
+		glVertex3f(x,		y + h,  _z);
 	}
 	glEnd();
 
 	//draw cross
 
-	x = this->getX()-this->getWidth()/2;
-	y = this->getY()+this->getHeight()/2-this->getWidth()/2;
-	w = this->getTh();
-	h = this->getWidth();
+	x = _x - _w/2;
+	y = _y + _h/2 - _crossHeight/2;
+	w = _hThick;
+	h = _crossHeight;
 
 	glBegin(GL_QUADS); 	//Begining the cube's drawing
 	{
-		glVertex3f(x,		y,	z);
-		glVertex3f(x + w,	y,	z);
-		glVertex3f(x + h,	y + h,  z);
-		glVertex3f(x +h -w,		y + h,  z);
+		glVertex3f(x,		y,	_z);
+		glVertex3f(x + w,	y,	_z);
+		glVertex3f(x + _w,	y + h,  _z);
+		glVertex3f(x + _w - w,		y + h,  _z);
 	}
 	glEnd();
 
-	y = this->getY()+this->getHeight()/2+this->getWidth()/2;
+	y = _y + _h/2 + _crossHeight/2;
 
 	glBegin(GL_QUADS); 	//Begining the cube's drawing
 	{
-		glVertex3f(x,		y,	z);
-		glVertex3f(x + w,	y,	z);
-		glVertex3f(x + h,	y - h,  z);
-		glVertex3f(x +h -w,		y - h,  z);
+		glVertex3f(x,		y,	_z);
+		glVertex3f(x + w,	y,	_z);
+		glVertex3f(x + _w,	y - h,  _z);
+		glVertex3f(x + _w -w,		y - h,  _z);
 	}
 	glEnd();
 }
 
-void PhGraphicLoop::setTh(float newTh)
+void PhGraphicLoop::setHThick(float hThick)
 {
-	th = newTh;
+	_hThick = hThick;
 }
+
+void PhGraphicLoop::setCrossHeight(float crossHeight)
+{
+	_crossHeight = crossHeight;
+}
+

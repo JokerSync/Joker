@@ -195,9 +195,9 @@ void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString s
         // if the sentence is short enough
         if( end - start < 150)
         {
-            _texts.push_back(new PhStripText(actor, sentence,
-                                             start, end,
-                                             track));
+			_texts.push_back(new PhStripText(start, actor,
+											  end,
+											 track, sentence));
             _nbTexts ++;
         }
         else // we split in half
