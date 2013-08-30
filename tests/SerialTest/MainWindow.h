@@ -18,6 +18,7 @@ public:
 
 private slots:
 	void sendText();
+	void readText();
 
 private:
 	Ui::MainWindow *ui;
