@@ -20,6 +20,9 @@ MainWindow::MainWindow(QWidget *parent) :
 			_serial.setPort(info);
 			qDebug() << "Opening " << name;
 			_serial.open(QSerialPort::ReadWrite);
+
+			connect(&_serial, SIGNAL(readyRead()), this, SLOT(readText()));
+
 			_serial.write("Grand contrôle de mes tétons");
 		}
 	}
@@ -38,4 +41,13 @@ MainWindow::~MainWindow()
 void MainWindow::sendText()
 {
 	_serial.write(ui->lineEdit->text().toUtf8().constData());
+}
+
+void MainWindow::readText()
+{
+	char buffer[256];
+	qint64 n = _serial.read(buffer, 256);
+	buffer[n] = 0;
+	QString s(buffer);
+	ui->textEdit->setText(ui->textEdit->toPlainText() + s);
 }
