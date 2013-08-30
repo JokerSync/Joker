@@ -24,25 +24,18 @@ class PhGraphicView : public QGLWidget
     Q_OBJECT
 public:
     /**
-     * @brief PhGraphicView
-     * @param parent
-     * @param name
-     * Constructor
+     * PhGraphicView constructor.
+     * @param parent Parent object.
      */
     explicit PhGraphicView(QWidget *parent = 0);
 
-
-    /**
-     * @brief b_Fullscreen
-     * allow us to know if the application is fullScreen
-     */
 	PhGraphicContext * getContext();
 
 	/**
-	 * @brief resizeGL
+	 * Handle the resizing of the view.
+	 *
 	 * @param width
 	 * @param height
-	 * handle the resize of the OpenGL context
 	 */
 	void resizeGL(int width, int height);
 
@@ -56,6 +49,9 @@ protected:
 	void initializeGL();
 
 	void paintGL();
+
+private slots:
+	void onRefresh();
 
 private:
 

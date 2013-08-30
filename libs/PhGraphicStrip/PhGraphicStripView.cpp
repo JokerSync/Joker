@@ -34,7 +34,7 @@ bool PhGraphicStripView::init()
 	if(!setCurrentFont("Bedizen.ttf"))
 		return false;
 
-	//This clear the data stored
+	// Clear the data stored
 	clearData();
 
     //Load the strip background
@@ -48,6 +48,11 @@ bool PhGraphicStripView::init()
 
 void PhGraphicStripView::clearData()
 {
+	foreach(PhGraphicText * gPeople, _graphicPeoples.values())
+	{
+		delete gPeople;
+	}
+
 	foreach(PhGraphicRect * gCut, _graphicCuts.values())
 	{
 		delete gCut;
@@ -56,6 +61,7 @@ void PhGraphicStripView::clearData()
 	{
 		delete gText;
 	}
+	_graphicPeoples.clear();
 	_graphicCuts.clear();
 	_graphicTexts.clear();
 }
@@ -67,15 +73,14 @@ bool PhGraphicStripView::setCurrentFont(QString fontFile)
 
 	if(!QFile::exists(fontFile))
 	{
-		qDebug() << "File does'nt exists : " << fontFile;
+		qDebug() << "File doesn't exists : " << fontFile;
 		return false;
 	}
 	_currentFont = new PhFont(fontFile, 150);
 
-	if(!_currentFont->init())
-		return false;
+	// TODO : redraw all texts
 
-	return true;
+	return _currentFont->init();
 }
 
 void PhGraphicStripView::updateView()
@@ -83,7 +88,7 @@ void PhGraphicStripView::updateView()
 	qDebug() << "updateView";
 	if(!_currentFont)
 	{
-		qDebug() << "updateView not ready";
+		qDebug() << "The font has not been initialised";
 		return;
 	}
 
@@ -96,7 +101,6 @@ void PhGraphicStripView::updateView()
 		gPeople->setColor(new QColor(people->getColor()));
 		gPeople->setWidth(people->getName().length() * 4);
 		gPeople->setHeight(0.5f);
-		gPeople->setFont(_currentFont);
 
 		gPeople->init();
 
