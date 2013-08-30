@@ -14,23 +14,21 @@ class PhGraphicLoop : public PhGraphicRect
 {
 public:
 
-	PhGraphicLoop(float x = 0, float y =0, float w = 0, float h = 0, float th = 0, float z = 0, QColor *color = new QColor());
+	PhGraphicLoop(float x = 0, float y =0, float w = 0, float h = 0, float crossHeight = 0, float hThick = 0, float z = 0, QColor *color = new QColor());
 
 	bool init();
 
 	void draw();
 
-	void setTh(float newTh);
+	void setHThick(float hThick);
+	float getHThick(){return _hThick;};
 
-	float getTh(){return th;};
+	void setCrossHeight(float crossHeight);
+	float getCrossHeight(){return _crossHeight;};
 private:
 
-	float x;
-	float y;
-	float z;
-	float w;
-	float h;
-	float th;
-};
+	float _hThick;
+	float _crossHeight;
 
+};
 #endif // PHGRAPHICLOOP_H

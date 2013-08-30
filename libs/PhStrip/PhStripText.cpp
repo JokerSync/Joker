@@ -6,36 +6,19 @@
 #include "PhStripText.h"
 
 
-PhStripText::PhStripText(PhPeople *people, QString content, PhTime timeIn, PhTime timeOut, int track) : PhStripObject(timeIn)
+
+PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, int track, QString content):
+	PhStripPeopleObject(timeIn, people, timeOut, track), _content(content)
 {
-    _people = people;
-    _timeOut = timeOut;
-    _content = content ;
-    _track = track;
 }
 
 QString PhStripText::getContent()
 {
-    return _content;
+	return _content;
 }
 
-PhPeople * PhStripText::getPeople()
+void PhStripText::setContent(QString content)
 {
-    return _people;
-}
-
-int PhStripText::getTrack()
-{
-    return _track;
-}
-
-int PhStripText::getTimeIn()
-{
-    return PhStripObject::getTimeIn();
-}
-
-int PhStripText::getTimeOut()
-{
-    return _timeOut;
+	_content = content;
 }
 

@@ -14,6 +14,7 @@ bool GraphicTestView::init()
 	enableDisplayImage = false;
 	enableDisplayRect = false;
 	enableDisplayText = false;
+	enableDisplayLoop = true;
 
 	qDebug() << "GraphicTestView::init";
 	if(_image == NULL)
@@ -60,10 +61,11 @@ bool GraphicTestView::init()
 		qDebug() << "Initialize _loop";
 		_loop = new PhGraphicLoop();
 		_loop->setX(100);
-		_loop->setY(100);
-		_loop->setWidth(80);
-		_loop->setHeight(150);
-		_loop->setTh(5);
+		_loop->setY(50);
+		_loop->setWidth(120);
+		_loop->setHeight(100);
+		_loop->setHThick(5);
+		_loop->setCrossHeight(60);
 		_loop->setColor(new QColor(13, 150, 12));
 		if (! _loop->init())
 			qDebug() << "_loop not initialize";
@@ -74,6 +76,12 @@ bool GraphicTestView::init()
 
 void GraphicTestView::paint()
 {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, this->width(), this->height()/2, 0, 0, 10);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	if  (enableDisplayImage == true)
 	{
 		if(_image != NULL)

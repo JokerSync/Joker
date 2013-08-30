@@ -136,18 +136,16 @@ void PhGraphicStripView::updateView()
 		_graphicCuts[cut] = gCut;
 	}
 
-	qDebug() << "ici quand meme ";
 	//Load the loops
 	foreach(PhStripLoop * loop, _doc.getLoops())
 	{
-		qDebug() << "passage loop";
 		PhGraphicLoop *gLoop = new PhGraphicLoop();
 		gLoop->setColor(new QColor(13, 150, 12));
 		gLoop->setX(loop->getTimeIn());
 		gLoop->setY(_trackNumber/2);
-		gLoop->setTh(0.2f);
-		gLoop->setWidth(3);
-		gLoop->setHeight(0.00000001f);
+		gLoop->setHThick(0.7f);
+		gLoop->setCrossHeight(_trackNumber/4);
+		gLoop->setWidth(_trackNumber*2);
 		_graphicLoops[loop] = gLoop;
 
 	}

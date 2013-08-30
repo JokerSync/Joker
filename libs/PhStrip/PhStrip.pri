@@ -7,6 +7,8 @@ SOURCES += \
 	$${JOKER_ROOT}/libs/PhStrip/PhStripText.cpp \
 	$${JOKER_ROOT}/libs/PhStrip/PhStripLoop.cpp \
 	$${JOKER_ROOT}/libs/PhStrip/PhPeople.cpp \
+    ../../libs/PhStrip/PhStripPeopleObject.cpp \
+    ../../libs/PhStrip/PhStripOff.cpp
 
 HEADERS += \
 	../../libs/PhStrip/PhStripDoc.h \
@@ -15,6 +17,8 @@ HEADERS += \
 	../../libs/PhStrip/PhStripText.h \
 	../../libs/PhStrip/PhStripLoop.h \
 	../../libs/PhStrip/PhPeople.h \
+    ../../libs/PhStrip/PhStripPeopleObject.h \
+    ../../libs/PhStrip/PhStripOff.h
 
 # Windows specific
 win32 {
