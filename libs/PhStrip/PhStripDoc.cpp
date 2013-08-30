@@ -96,13 +96,13 @@ bool PhStripDoc::openDetX(QString fileName)
     }
 
 
-//	QDomNodeList loops = DetX->elementsByTagName("loop");
+	QDomNodeList loops = DetX->elementsByTagName("loop");
 
-//	for(int i = 0; i < loops.length(); i++)
-//	{
-//		_loops.push_back(new PhStripLoop(i + 1), PhTimeCode::frameFromString(loops.at(i).toElement().attribute("timecode"),
-//																			 PhTimeCodeType25));
-//	}
+	for(int i = 0; i < loops.length(); i++)
+	{
+		_loops.push_back(new PhStripLoop((i + 1), PhTimeCode::frameFromString(loops.at(i).toElement().attribute("timecode"),
+																			 PhTimeCodeType25)));
+	}
 
 //	QDomNodeList lineList = DetX->elementsByTagName("line");
 
@@ -249,5 +249,10 @@ QMap<QString, PhPeople *> PhStripDoc::getPeoples()
 
 QList<PhStripText *> PhStripDoc::getTexts()
 {
-    return _texts;
+	return _texts;
+}
+
+QList<PhStripLoop *> PhStripDoc::getLoops()
+{
+	return _loops;
 }

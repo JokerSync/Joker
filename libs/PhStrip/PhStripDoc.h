@@ -73,6 +73,12 @@ public:
      */
     QList<PhStripText *> getTexts();
 
+	/**
+	 * @brief getLoops
+	 * @return _loops
+	 */
+	QList<PhStripLoop *> getLoops();
+
     /**
      * @brief setTitle
      * @param _title

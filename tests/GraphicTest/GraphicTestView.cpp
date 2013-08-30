@@ -58,7 +58,13 @@ bool GraphicTestView::init()
 	if(_loop == NULL)
 	{
 		qDebug() << "Initialize _loop";
-		_loop = new PhGraphicLoop(100, 100, 40, 200, 2, 0, new QColor(150, 28, 150));
+		_loop = new PhGraphicLoop();
+		_loop->setX(100);
+		_loop->setY(100);
+		_loop->setWidth(80);
+		_loop->setHeight(150);
+		_loop->setTh(5);
+		_loop->setColor(new QColor(13, 150, 12));
 		if (! _loop->init())
 			qDebug() << "_loop not initialize";
 	}
