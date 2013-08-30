@@ -11,7 +11,7 @@ PhGraphicView::PhGraphicView( QWidget *parent)
     : QGLWidget(parent)
 {
 	t_Timer = new QTimer(this);
-	connect(t_Timer, SIGNAL(timeout()), this, SLOT(updateGL()));
+	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 	t_Timer->start(0);
 	//this->_context = new PhGraphicContext(this);
 }
@@ -49,6 +49,16 @@ void PhGraphicView::paintGL()
 	//qDebug() << "PhGraphicView::paintGL" ;
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	paint();
+}
+
+void PhGraphicView::onRefresh()
+{
+//#if defined(Q_OS_MAC)
+//	if(qApp->hasPendingEvents()) // qApp is a global pointer to the application
+//		return;
+//#endif
+
+	updateGL();
 }
 
 PhGraphicContext *PhGraphicView::getContext()

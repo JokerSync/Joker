@@ -20,7 +20,7 @@ bool PhQTVideoView::open(QString fileName)
 	}
 	else
 	{
-		qDebug() << "File does not exist: "<< fileName;
+		qDebug() << "File does not exist: " << fileName;
 		return false;
 	}
 }

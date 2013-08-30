@@ -23,7 +23,7 @@ public :
 
 	GraphicTestView *view();
 
-	PhGraphicText * getText(){return _text;};
+	PhGraphicText * getText(){return _text;}
 
 public slots:
 	void play();
