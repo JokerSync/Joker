@@ -39,7 +39,7 @@ bool MainView::openFile(QString fileName)
     if (fileInfo.exists())
     {
 		_videoView.open(fileName);
-		_clock.setRate(1);
+		_clock.setRate(1.0);
         return true;
     }
 	return false;

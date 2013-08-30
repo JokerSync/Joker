@@ -31,28 +31,31 @@ bool PhVLCVideoView::open(QString fileName)
 {
 	if(QFile::exists(fileName))
 	{
-	    /* Stop if something is playing */
+	    // Stop if something is playing
 	    if (vlcPlayer && libvlc_media_player_is_playing(vlcPlayer))
 		{
-			/* release the media player */
+			// release the media player
 	        libvlc_media_player_release(vlcPlayer);
 
-	        /* Reset application values */
+	        // Reset application values
 	        vlcPlayer = NULL;
 		}
 
-	    /* Create a new Media */
+	    // Create a new Media
 	    libvlc_media_t *vlcMedia = libvlc_media_new_path(vlcInstance, fileName.toUtf8().constData());
 	    if (!vlcMedia)
+		{
+			qDebug() << "Unable to open : "<< fileName;
 	        return false;
+		}
 
-	    /* Create a new libvlc player */
-	    vlcPlayer = libvlc_media_player_new_from_media (vlcMedia);
+	    // Create a new libvlc player
+	    vlcPlayer = libvlc_media_player_new_from_media(vlcMedia);
 
-	    /* Release the media */
+	    // Release the media
 	    libvlc_media_release(vlcMedia);
 
-	    /* Integrate the video in the interface */
+	    // Integrate the video in the interface
 #if defined(Q_OS_MAC)
 	    libvlc_media_player_set_nsobject(vlcPlayer, (void *)this->winId());
 #elif defined(Q_OS_UNIX)
@@ -61,7 +64,7 @@ bool PhVLCVideoView::open(QString fileName)
 	    libvlc_media_player_set_hwnd(vlcPlayer, this->winId());
 #endif
 
-	    /* And start playback */
+	    // put the media in pause mode in order to display the first frame
 	    libvlc_media_player_pause (vlcPlayer);
 
 		return true;
@@ -88,5 +91,5 @@ void PhVLCVideoView::onRateChanged(PhRate rate)
 
 void PhVLCVideoView::onFrameChanged()
 {
-
+	qDebug() << "PhVLCVideoView::onFrameChanged() : TODO";
 }
