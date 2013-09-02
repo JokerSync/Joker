@@ -115,11 +115,16 @@ void PhMediaControllerView::setMediaLength(qint64 mediaLength)
 void PhMediaControllerView::pushPlayButton()
 {
 	if(_clock->rate() == 0)//If state = pause
+	{
 		_clock->setRate(1);
+		playButtonSignal();
+	}
 	else //If state = play
+	{
 		_clock->setRate(0);
+		pauseButtonSignal();
+	}
 
-	playButtonSignal();
 }
 
 

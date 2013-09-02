@@ -27,6 +27,7 @@ public:
 signals:
 
 	void playButtonSignal();
+	void pauseButtonSignal();
 	void forwardButtonSignal();
 	void rewindButtonSignal();
 	void backButtonSignal();
