@@ -2,9 +2,10 @@
 #define PHMEDIAPANEL_H
 
 #include <QWidget>
-#include <PhTools/PhClock.h>
 #include <QDebug>
 
+#include "PhTools/PhTime.h"
+#include "PhTools/PhTimeCode.h"
 
 namespace Ui {
 class PhMediaPanel;
@@ -19,11 +20,10 @@ public:
 	~PhMediaPanel();
 	void setTCType(PhTimeCodeType tcType);
 	PhTimeCodeType getTCType() const;
-	void setClock(PhClock *clock);
-	PhClock* getClock() const;
 	void setFirstFrame(PhFrame firstFrame);
 	PhFrame getFirstFrame() const;
-	void setMediaLength(qint64 mediaLength);
+	void setMediaLength(PhFrame mediaLength);
+	PhFrame getMediaLength();
 
 signals:
 
@@ -33,9 +33,14 @@ signals:
 	void backButtonSignal();
 	void nextFrameButtonSignal();
 	void previousFrameButtonSignal();
-	void useSliderCursorSignal();
+	void useSliderCursorSignal(); // TODO add parameter
+	void tcTypeChanged(PhTimeCodeType tcType);
 
 public slots:
+	void onFrameChanged();
+	void onRateChanged(PhRate rate);
+
+private slots:
 	/**
 	 * @brief changeValuePlayButton
 	 * Change the state of _playButtonState when cliking on _playButton
@@ -64,16 +69,11 @@ public slots:
 
 	void selectRate();
 
-	void onRateChanged(PhRate rate);
-
-	void onFrameChanged();
-
 
 private:
 
 	Ui::PhMediaPanel *ui;
 	PhTimeCodeType _tcType;
-	PhClock *_clock;
 	PhFrame _firstFrame;
 	PhFrame _mediaLength;//number of frames of the file
 

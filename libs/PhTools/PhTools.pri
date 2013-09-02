@@ -1,5 +1,6 @@
 HEADERS += \
-    $${JOKER_ROOT}/libs/PhTools/PhTimeCode.h \
+	$${JOKER_ROOT}/libs/PhTools/PhTime.h \
+	$${JOKER_ROOT}/libs/PhTools/PhTimeCode.h \
     $${JOKER_ROOT}/libs/PhTools/PhClock.h
 
 SOURCES += \
