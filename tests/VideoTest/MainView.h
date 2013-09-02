@@ -1,11 +1,10 @@
+#ifndef MAINVIEW_H
+#define MAINVIEW_H
 
-#ifndef VIDEOPLAYER_H
-#define VIDEOPLAYER_H
-
+#include <QMainWindow>
 #include <QString>
 
 #include "PhTools/PhClock.h"
-
 #include "PhVideo/PhVideoView.h"
 
 using namespace std;
@@ -16,7 +15,11 @@ class QSlider;
 class QLabel;
 QT_END_NAMESPACE
 
-class MainView : public QWidget
+namespace Ui {
+	class MainView;
+}
+
+class MainView : public QMainWindow
 {
     Q_OBJECT
 public:
@@ -24,6 +27,7 @@ public:
      * @brief MainView constructor
      */
     MainView();
+	~MainView();
     /**
      * Open a video file.
      * @param fileName Path of the video file to open.
@@ -39,8 +43,8 @@ private slots:
 	void onOpenFile();
 
 private:
-	PhVideoView _videoView;
-    QAbstractButton *_openButton;
+
+	Ui::MainView *ui;
 	PhClock _clock;
 };
 

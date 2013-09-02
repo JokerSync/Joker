@@ -14,3 +14,6 @@ SOURCES += \
     main.cpp \
     MainView.cpp \
 
+FORMS += \
+    MainView.ui
+
