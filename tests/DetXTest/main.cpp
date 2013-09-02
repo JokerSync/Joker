@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
 	foreach(PhStripText * text, doc.getTexts())
 	{
-		qDebug() << text->getPeople().getName() << " : " << text->getContent();
+        qDebug() << text->getPeople()->getName() << " : " << text->getContent();
 	}
 
     return 0;
