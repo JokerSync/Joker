@@ -109,8 +109,13 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 			qDebug() << " => ACK";
 			break;
 		case 0x11:
-			qDebug() << " => connected to device id : " << QString::number(data[0], 16) << " " << QString::number(data[1], 16);
+		{
+			deviceIdAnswer(data[0], data[1]);
+			QString id;
+			id.sprintf("%02X %02X", data[0], data[1]);
+			qDebug() << " => Device ID answer : " << id;
 			break;
+		}
 		case 0x12:
 			qDebug() << " => NAK :" <<  QString::number(data[0], 16);
 			break;

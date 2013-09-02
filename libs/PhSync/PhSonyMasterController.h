@@ -12,6 +12,7 @@
  */
 class PhSonyMasterController : public PhSonyController
 {
+	Q_OBJECT
 public:
 	/** PhSonyMasterController constructor */
 	PhSonyMasterController(QObject *parent);
@@ -55,6 +56,9 @@ public slots:
 
 	/** Send a status sense command to the connected device. */
 	void statusSense();
+
+signals:
+	void deviceIdAnswer(unsigned char id1, unsigned char id2);
 
 protected:
 	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);

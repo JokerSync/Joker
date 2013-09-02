@@ -9,7 +9,6 @@ PhSonySlaveController::PhSonySlaveController(QObject *parent) : PhSonyController
 void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
 	qDebug() << "PhSonySlaveController::processCommand : " << stringFromCommand(cmd1, cmd2, data);
-	unsigned char dataOut[16];
 	switch (cmd1 >> 4)
 	{
 	case 0:
