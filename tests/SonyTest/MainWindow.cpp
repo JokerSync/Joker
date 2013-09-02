@@ -13,12 +13,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	// configure panels
 	ui->masterPanel->setMediaLength(1000);
+	ui->masterPanel->setClock(&_masterClock);
 
 	ui->slavePanel->setMediaLength(10000);
 	ui->slavePanel->setClock(&_slaveClock);
 
-//	connect(ui->masterPanel, SIGNAL(playButtonSignal()), &_sonyMaster, SLOT(play()));
+	connect(ui->masterPanel, SIGNAL(playButtonSignal()), &_sonyMaster, SLOT(play()));
 //	connect(ui->masterPanel, SIGNAL(pauseButtonSignal()), &_sonyMaster, SLOT(pause()));
+	connect(&_sonySlave, SIGNAL(rateChanged(PhRate)), &_slaveClock, SLOT(setRate(PhRate)));
 
 	connect(&_sonyMaster, SIGNAL(deviceIdAnswer(unsigned char,unsigned char)), this, SLOT(onDeviceIdAnswer(unsigned char,unsigned char)));
 
@@ -39,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //	connect(&_masterTimer, SIGNAL(timeout()), this, SLOT(tickMaster()));
 	connect(&_slaveTimer, SIGNAL(timeout()), this, SLOT(tickSlave()));
 
-//	_masterTimer.start(7000);
+//	_masterTimer.start(40);
 	_slaveTimer.start(40);
 
 //	_sonySlave.getClock()->setRate(1);

@@ -44,25 +44,25 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			sendAck();
 			break;
 		default:
-			qDebug() << " => Unknown subcommand : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16) << " => NAK";
+			qDebug() << " => Unknown subcommand => NAK";
 			sendNak(UndefinedCommand);
 			break;
 		}
 		break;
-//			case 2:
-//				switch (cmd2) {
-//					case 0x00:
-//						qDebug() << "Stop => ACK");
-//						state = kDWSonyStatePause;
-//						self.clock.rate = 0;
-//						[port sendAck];
-//						break;
-//					case 0x01:
-//						qDebug() << "Play => ACK");
-//						state = kDWSonyStatePlay;
-//						self.clock.rate = 1;
-//						[port sendAck];
-//						break;
+			case 2:
+				switch (cmd2) {
+					case 0x00:
+						qDebug() << "Stop => ACK";
+						//state = kDWSonyStatePause;
+						rateChanged(0);
+						sendAck();
+						break;
+					case 0x01:
+						qDebug() << "Play => ACK";
+						//state = kDWSonyStatePlay;
+						rateChanged(1);
+						sendAck();
+						break;
 //					case 0x10:
 //						qDebug() << "Fast forward => ACK");
 //						state = kDWSonyStateFastForward;
@@ -275,12 +275,12 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 //						[port sendCommand:0x70 + count cmd2:0x30 data:dataOut];
 //						break;
 //					}
-//					default:
-//						qDebug() << "Unknown subcommand : %x %x => NAK", cmd1, cmd2);
-//						[port sendNak:0x00];
-//						break;
-//				}
-//				break;
+					default:
+						qDebug() << "Unknown subcommand : => NAK";
+						sendNak(UndefinedCommand);
+						break;
+				}
+				break;
 			default:
 		qDebug() << " => Unknown command : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16) << " => NAK";
 		sendNak(UndefinedCommand);
