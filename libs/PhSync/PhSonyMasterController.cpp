@@ -99,6 +99,7 @@ void PhSonyMasterController::statusSense()
 
 void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
+	qDebug() << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, data);
 	switch (cmd1 >> 4)
 	{
 	case 1:

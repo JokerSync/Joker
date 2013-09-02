@@ -12,7 +12,7 @@ class PhMediaControllerView;
 class PhMediaControllerView : public QWidget
 {
 	Q_OBJECT
-	
+
 public:
 	explicit PhMediaControllerView(QWidget *parent = 0);
 	~PhMediaControllerView();
@@ -63,7 +63,7 @@ public slots:
 
 	void selectRate();
 
-	void onRateChanged();
+	void onRateChanged(PhRate rate);
 
 	void onFrameChanged();
 
