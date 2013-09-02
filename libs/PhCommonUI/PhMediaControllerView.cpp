@@ -82,7 +82,7 @@ PhTimeCodeType PhMediaControllerView::getTCType() const
 void PhMediaControllerView::setClock(PhClock *clock)
 {
 	_clock = clock;
-	connect(_clock, SIGNAL(rateChanged()), this, SLOT(onRateChanged()));
+	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
 }
 
@@ -165,10 +165,10 @@ void PhMediaControllerView::useSliderCursor(int position)
 }
 
 
-void PhMediaControllerView::onRateChanged()
+void PhMediaControllerView::onRateChanged(PhRate rate)
 {
-	ui->_rateLabel->setText("x"+QString::number(_clock->rate()));
-	if(_clock->rate() != 0)
+	ui->_rateLabel->setText("x"+QString::number(rate));
+	if(rate != 0)
 		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
 
 	else
