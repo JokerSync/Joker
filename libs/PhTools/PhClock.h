@@ -39,7 +39,6 @@ public:
 	void setTimeScale(PhTimeScale timeScale);
 	PhTimeScale timeScale() const { return _timeScale; }
 
-	void setRate(PhRate rate);
 	PhRate rate() const { return _rate; }
 
 	void setFrame(PhFrame frame);
@@ -54,6 +53,8 @@ signals:
 	void frameChanged();
 
 public slots:
+
+	void setRate(PhRate rate);
 
 	/**
 	 * Sync the clock to a signal at a given frequence.
