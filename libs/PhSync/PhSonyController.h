@@ -44,14 +44,14 @@ public:
 	~PhSonyController();
 
 	/**
-	 * Start the thread handling the communication.
+	 * Open the communication port.
 	 */
-	bool start();
+	bool open();
 
 	/**
-	 Stop the thread handling the communication.
+	 * Close the communication port.
 	 */
-	void stop();
+	void close();
 
 	void setTCType(PhTimeCodeType tcType);
 

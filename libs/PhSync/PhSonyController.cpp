@@ -16,10 +16,10 @@ PhSonyController::PhSonyController(QString comSuffix, QObject *parent) :
 
 PhSonyController::~PhSonyController()
 {
-	stop();
+	close();
 }
 
-bool PhSonyController::start()
+bool PhSonyController::open()
 {
 	qDebug() << "PhSonyController::open()";
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
@@ -45,7 +45,7 @@ bool PhSonyController::start()
 	return false;
 }
 
-void PhSonyController::stop()
+void PhSonyController::close()
 {
 	qDebug() << "PhSonyController::close()";
 	if(_serial.isOpen())

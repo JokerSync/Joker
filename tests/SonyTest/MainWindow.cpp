@@ -19,17 +19,17 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->slavePanel->setClock(&_slaveClock);
 
 	connect(ui->masterPanel, SIGNAL(playButtonSignal()), &_sonyMaster, SLOT(play()));
-//	connect(ui->masterPanel, SIGNAL(pauseButtonSignal()), &_sonyMaster, SLOT(pause()));
+	connect(ui->masterPanel, SIGNAL(pauseButtonSignal()), &_sonyMaster, SLOT(stop()));
 	connect(&_sonySlave, SIGNAL(rateChanged(PhRate)), &_slaveClock, SLOT(setRate(PhRate)));
 
 	connect(&_sonyMaster, SIGNAL(deviceIdAnswer(unsigned char,unsigned char)), this, SLOT(onDeviceIdAnswer(unsigned char,unsigned char)));
 
 	// start slave and master
-	if(_sonyMaster.start())
+	if(_sonyMaster.open())
 	{
 		qDebug() << "master open ok";
 
-		if(_sonySlave.start())
+		if(_sonySlave.open())
 			qDebug() << "slave open ok";
 		else
 			qDebug() << "error opening master";
@@ -49,8 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-	_sonyMaster.stop();
-	_sonySlave.stop();
+	_sonyMaster.close();
+	_sonySlave.close();
 	delete ui;
 }
 
