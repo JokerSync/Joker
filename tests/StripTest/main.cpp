@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
     // Display actors
 
-    QMap<QString, PhPeople *> list_actors = doc.getActors();
+    QMap<QString, PhPeople *> list_actors = doc.getPeoples();
     qDebug() << "actors : ";
     QMap<QString, PhPeople *>::iterator it;
 
@@ -68,17 +68,17 @@ int main(int argc, char *argv[])
     {
           if(text == textList.begin())
           {
-              line = (*text)->getPeople().getName();
+              line = (*text)->getPeople()->getName();
               line += " : ";
               line += (*text)->getContent();
           }
           else
           {
 
-             if(((*text)->getPeople().getName()) != ((*(text-1))->getPeople().getName()))
+             if(((*text)->getPeople()->getName()) != ((*(text-1))->getPeople()->getName()))
              {
                  qDebug() << qPrintable( line );
-                 line = (*text)->getPeople().getName();
+                 line = (*text)->getPeople()->getName();
                  line += " : ";
                  line += (*text)->getContent();
              }

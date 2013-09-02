@@ -17,7 +17,6 @@ TEMPLATE = app
 
 HEADERS +=    ../../libs/PhStrip/PhStripDoc.h \
     ../../libs/PhTools/PhTimeCode.h \
-    ../../libs/PhTools/PhColor.h \
     ../../libs/PhStrip/PhStripText.h \
     ../../libs/PhStrip/PhStripObject.h \
     ../../libs/PhStrip/PhStripLoop.h \
@@ -27,7 +26,6 @@ HEADERS +=    ../../libs/PhStrip/PhStripDoc.h \
 SOURCES += main.cpp \
     ../../libs/PhStrip/PhStripDoc.cpp \
     ../../libs/PhTools/PhTimeCode.cpp \
-    ../../libs/PhTools/PhColor.cpp \
     ../../libs/PhStrip/PhStripText.cpp \
     ../../libs/PhStrip/PhStripObject.cpp \
     ../../libs/PhStrip/PhStripLoop.cpp \
