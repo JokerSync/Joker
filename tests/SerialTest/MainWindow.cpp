@@ -7,7 +7,8 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	_serial(this)
+	_serial1(this),
+	_serial2(this)
 {
 	ui->setupUi(this);
 
@@ -15,39 +16,68 @@ MainWindow::MainWindow(QWidget *parent) :
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
 	{
 		QString name = info.portName();
-		if(name.startsWith("usbserial-") && name.endsWith("A"))
+		if(name.startsWith("usbserial-"))
 		{
-			_serial.setPort(info);
-			qDebug() << "Opening " << name;
-			_serial.open(QSerialPort::ReadWrite);
+			if(name.endsWith("A"))
+			{
+				_serial1.setPort(info);
+				qDebug() << "Opening " << name;
+				_serial1.open(QSerialPort::ReadWrite);
 
-			connect(&_serial, SIGNAL(readyRead()), this, SLOT(readText()));
+				connect(ui->sendButton1, SIGNAL(clicked()), this, SLOT(sendText1()));
+				connect(&_serial1, SIGNAL(readyRead()), this, SLOT(readText1()));
 
-			_serial.write("Grand contrôle de mes tétons");
+				_serial1.write("Hello from serial 1!");
+			}
+			if(name.endsWith("B"))
+			{
+				_serial2.setPort(info);
+				qDebug() << "Opening " << name;
+				_serial2.open(QSerialPort::ReadWrite);
+
+				connect(ui->sendButton2, SIGNAL(clicked()), this, SLOT(sendText2()));
+				connect(&_serial2, SIGNAL(readyRead()), this, SLOT(readText2()));
+
+				_serial2.write("Hello from serial 2!");
+			}
 		}
 	}
 
-
-	connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendText()));
 }
 
 MainWindow::~MainWindow()
 {
-	qDebug() << "Closing " << _serial.objectName();
-	_serial.close();
+	qDebug() << "Closing " << _serial1.objectName();
+	_serial1.close();
+	qDebug() << "Closing " << _serial2.objectName();
+	_serial2.close();
 	delete ui;
 }
 
-void MainWindow::sendText()
+void MainWindow::sendText1()
 {
-	_serial.write(ui->lineEdit->text().toUtf8().constData());
+	_serial1.write(ui->input1->text().toUtf8().constData());
 }
 
-void MainWindow::readText()
+void MainWindow::sendText2()
+{
+	_serial2.write(ui->input2->text().toUtf8().constData());
+}
+
+void MainWindow::readText1()
 {
 	char buffer[256];
-	qint64 n = _serial.read(buffer, 256);
+	qint64 n = _serial1.read(buffer, 256);
 	buffer[n] = 0;
 	QString s(buffer);
-	ui->textEdit->setText(ui->textEdit->toPlainText() + s);
+	ui->textEdit1->setText(ui->textEdit1->toPlainText() + s);
+}
+
+void MainWindow::readText2()
+{
+	char buffer[256];
+	qint64 n = _serial2.read(buffer, 256);
+	buffer[n] = 0;
+	QString s(buffer);
+	ui->textEdit2->setText(ui->textEdit2->toPlainText() + s);
 }
