@@ -17,15 +17,24 @@ public:
 	~MainWindow();
 
 private slots:
-	void sendText1();
-	void readText1();
-	void sendText2();
-	void readText2();
+	void sendTextA();
+	void readTextA();
+	void sendTextB();
+	void readTextB();
+
+	void on_checkA_toggled(bool checked);
+
+	void on_checkB_toggled(bool checked);
 
 private:
+	bool openA();
+	void closeA();
+	bool openB();
+	void closeB();
+
 	Ui::MainWindow *ui;
 
-	QSerialPort _serial1, _serial2;
+	QSerialPort _serialA, _serialB;
 };
 
 #endif // MAINWINDOW_H

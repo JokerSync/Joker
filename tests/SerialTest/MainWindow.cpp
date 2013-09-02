@@ -7,12 +7,74 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	_serial1(this),
-	_serial2(this)
+	_serialA(this),
+	_serialB(this)
 {
 	ui->setupUi(this);
 
-	qDebug() << "PhSonyController::open()";
+	connect(ui->sendButton1, SIGNAL(clicked()), this, SLOT(sendTextA()));
+	connect(&_serialA, SIGNAL(readyRead()), this, SLOT(readTextA()));
+	openA();
+
+	connect(ui->sendButton2, SIGNAL(clicked()), this, SLOT(sendTextB()));
+	connect(&_serialB, SIGNAL(readyRead()), this, SLOT(readTextB()));
+	openB();
+}
+
+MainWindow::~MainWindow()
+{
+	closeA();
+	closeB();
+	delete ui;
+}
+
+void MainWindow::sendTextA()
+{
+	_serialA.write(ui->inputA->text().toUtf8().constData());
+}
+
+void MainWindow::sendTextB()
+{
+	_serialB.write(ui->inputB->text().toUtf8().constData());
+}
+
+void MainWindow::readTextA()
+{
+	char buffer[256];
+	qint64 n = _serialA.read(buffer, 256);
+	buffer[n] = 0;
+	QString s(buffer);
+	ui->receiveA->setText(ui->receiveA->toPlainText() + s);
+}
+
+void MainWindow::readTextB()
+{
+	char buffer[256];
+	qint64 n = _serialB.read(buffer, 256);
+	buffer[n] = 0;
+	QString s(buffer);
+	ui->receiveB->setText(ui->receiveB->toPlainText() + s);
+}
+
+void MainWindow::on_checkA_toggled(bool checked)
+{
+	if(checked)
+		openA();
+	else
+		closeA();
+}
+
+void MainWindow::on_checkB_toggled(bool checked)
+{
+	if(checked)
+		openB();
+	else
+		closeB();
+}
+
+bool MainWindow::openA()
+{
+	qDebug() << "openA";
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
 	{
 		QString name = info.portName();
@@ -20,64 +82,58 @@ MainWindow::MainWindow(QWidget *parent) :
 		{
 			if(name.endsWith("A"))
 			{
-				_serial1.setPort(info);
+				_serialA.setPort(info);
 				qDebug() << "Opening " << name;
-				_serial1.open(QSerialPort::ReadWrite);
+				_serialA.open(QSerialPort::ReadWrite);
 
-				connect(ui->sendButton1, SIGNAL(clicked()), this, SLOT(sendText1()));
-				connect(&_serial1, SIGNAL(readyRead()), this, SLOT(readText1()));
+				connect(ui->sendButton1, SIGNAL(clicked()), this, SLOT(sendTextA()));
+				connect(&_serialA, SIGNAL(readyRead()), this, SLOT(readTextA()));
 
-				_serial1.write("Hello from serial 1!");
-			}
-			if(name.endsWith("B"))
-			{
-				_serial2.setPort(info);
-				qDebug() << "Opening " << name;
-				_serial2.open(QSerialPort::ReadWrite);
+				_serialA.write("Hello from serial 1!");
 
-				connect(ui->sendButton2, SIGNAL(clicked()), this, SLOT(sendText2()));
-				connect(&_serial2, SIGNAL(readyRead()), this, SLOT(readText2()));
-
-				_serial2.write("Hello from serial 2!");
+				return true;
 			}
 		}
 	}
-
+	qDebug() << "not found";
+	return false;
 }
 
-MainWindow::~MainWindow()
+void MainWindow::closeA()
 {
-	qDebug() << "Closing " << _serial1.objectName();
-	_serial1.close();
-	qDebug() << "Closing " << _serial2.objectName();
-	_serial2.close();
-	delete ui;
+	qDebug() << "Closing " << _serialA.objectName();
+	_serialA.close();
 }
 
-void MainWindow::sendText1()
+bool MainWindow::openB()
 {
-	_serial1.write(ui->input1->text().toUtf8().constData());
+	qDebug() << "openB";
+	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
+	{
+		QString name = info.portName();
+		if(name.startsWith("usbserial-"))
+		{
+			if(name.endsWith("B"))
+			{
+				_serialB.setPort(info);
+				qDebug() << "Opening " << name;
+				_serialB.open(QSerialPort::ReadWrite);
+
+				connect(ui->sendButton2, SIGNAL(clicked()), this, SLOT(sendTextB()));
+				connect(&_serialB, SIGNAL(readyRead()), this, SLOT(readTextB()));
+
+				_serialB.write("Hello from serial 2!");
+
+				return true;
+			}
+		}
+	}
+	qDebug() << "not found";
+	return false;
 }
 
-void MainWindow::sendText2()
+void MainWindow::closeB()
 {
-	_serial2.write(ui->input2->text().toUtf8().constData());
-}
-
-void MainWindow::readText1()
-{
-	char buffer[256];
-	qint64 n = _serial1.read(buffer, 256);
-	buffer[n] = 0;
-	QString s(buffer);
-	ui->textEdit1->setText(ui->textEdit1->toPlainText() + s);
-}
-
-void MainWindow::readText2()
-{
-	char buffer[256];
-	qint64 n = _serial2.read(buffer, 256);
-	buffer[n] = 0;
-	QString s(buffer);
-	ui->textEdit2->setText(ui->textEdit2->toPlainText() + s);
+	qDebug() << "Closing " << _serialB.objectName();
+	_serialB.close();
 }
