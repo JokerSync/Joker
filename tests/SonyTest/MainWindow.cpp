@@ -11,6 +11,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
+	// configure panels
+	ui->masterPanel->setMediaLength(1000);
+
+	ui->slavePanel->setMediaLength(10000);
+	ui->slavePanel->setClock(&_slaveClock);
+
+//	connect(ui->masterPanel, SIGNAL(playButtonSignal()), &_sonyMaster, SLOT(play()));
+//	connect(ui->masterPanel, SIGNAL(pauseButtonSignal()), &_sonyMaster, SLOT(pause()));
+
+	// start slave and master
 	if(_sonyMaster.start())
 	{
 		qDebug() << "master open ok";
@@ -26,6 +36,14 @@ MainWindow::MainWindow(QWidget *parent) :
 	else
 		qDebug() << "error opening master";
 
+	// start timers
+//	connect(&_masterTimer, SIGNAL(timeout()), this, SLOT(tickMaster()));
+	connect(&_slaveTimer, SIGNAL(timeout()), this, SLOT(tickSlave()));
+
+//	_masterTimer.start(7000);
+	_slaveTimer.start(40);
+
+//	_sonySlave.getClock()->setRate(1);
 }
 
 MainWindow::~MainWindow()
@@ -33,4 +51,15 @@ MainWindow::~MainWindow()
 	_sonyMaster.stop();
 	_sonySlave.stop();
 	delete ui;
+}
+
+void MainWindow::tickMaster()
+{
+	_sonyMaster.timeSense();
+	_sonyMaster.statusSense();
+}
+
+void MainWindow::tickSlave()
+{
+	_slaveClock.tick(25);
 }
