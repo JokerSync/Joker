@@ -16,6 +16,7 @@ public:
 	/** PhSonyMasterController constructor */
 	PhSonyMasterController(QObject *parent);
 
+public slots:
 	/** Request the slave device id */
 	void deviceTypeRequest();
 

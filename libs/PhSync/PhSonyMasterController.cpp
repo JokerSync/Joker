@@ -99,5 +99,53 @@ void PhSonyMasterController::statusSense()
 
 void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
-	// TODO
+	switch (cmd1 >> 4)
+	{
+	case 1:
+		switch (cmd2)
+		{
+		case 0x01:
+			qDebug() << " => ACK";
+			break;
+		case 0x11:
+			qDebug() << " => connected to device id : " << QString::number(data[0], 16) << " " << QString::number(data[1], 16);
+			break;
+		case 0x12:
+			qDebug() << " => NAK :" <<  QString::number(data[0], 16);
+			break;
+		default:
+			qDebug() << " => Unknown answer : " << QString("%x %x").arg(cmd1, cmd2);
+			break;
+		}
+		break;
+	case 7:
+		switch (cmd2)
+		{
+		case 0x04:
+		{
+			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)data, _tcType);
+			qDebug() << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _tcType);
+			frameChanged(frame);
+			break;
+		}
+		case 0x20:
+		{
+			QString statusStr = "";
+			for (int i = 0; i < 4; i++)
+			{
+				_status[i] = data[i];
+				statusStr += QString::number(data[i], 16);
+			}
+			qDebug() << " => Status data : " << statusStr;
+			break;
+		}
+		default:
+			qDebug() << " => Unknown answer : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16);
+			break;
+		}
+		break;
+	default:
+		qDebug() << " => Unknown answer : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16);
+				break;
+		}
 }

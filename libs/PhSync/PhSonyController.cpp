@@ -187,7 +187,7 @@ void PhSonyController::onData()
 
 	if (checksum != buffer[datacount+2])
 	{
-		qDebug() << "Checksum error : ", cmdString;
+		qDebug() << "Checksum error : " << cmdString;
 		_serial.flush();
 		sendNak(PhSonyController::ChecksumError);
 		return;
