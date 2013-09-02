@@ -23,13 +23,17 @@ bool PhSonyController::start()
 		if(name.startsWith("usbserial-") && name.endsWith(_comSuffix))
 		{
 			_serial.setPort(info);
-			_serial.setBaudRate(QSerialPort::Baud38400);
-			_serial.setDataBits(QSerialPort::Data8);
-			_serial.setStopBits(QSerialPort::OneStop);
-			_serial.setParity(QSerialPort::OddParity);
 
 			qDebug() << "Opening " << name;
-			return _serial.open(QSerialPort::ReadWrite);
+			if( _serial.open(QSerialPort::ReadWrite))
+			{
+				_serial.setBaudRate(QSerialPort::Baud38400);
+				_serial.setDataBits(QSerialPort::Data8);
+				_serial.setStopBits(QSerialPort::OneStop);
+				_serial.setParity(QSerialPort::OddParity);
+
+				return true;
+			}
 		}
 	}
 	qDebug() << "Unable to find usbserial-XXX" << _comSuffix;
