@@ -20,16 +20,15 @@ MainWindow::MainWindow(QWidget *parent) :
 //	connect(ui->masterPanel, SIGNAL(playButtonSignal()), &_sonyMaster, SLOT(play()));
 //	connect(ui->masterPanel, SIGNAL(pauseButtonSignal()), &_sonyMaster, SLOT(pause()));
 
+	connect(&_sonyMaster, SIGNAL(deviceIdAnswer(unsigned char,unsigned char)), this, SLOT(onDeviceIdAnswer(unsigned char,unsigned char)));
+
 	// start slave and master
 	if(_sonyMaster.start())
 	{
 		qDebug() << "master open ok";
 
 		if(_sonySlave.start())
-		{
 			qDebug() << "slave open ok";
-			_sonyMaster.deviceTypeRequest();
-		}
 		else
 			qDebug() << "error opening master";
 	}
@@ -62,4 +61,16 @@ void MainWindow::tickMaster()
 void MainWindow::tickSlave()
 {
 	_slaveClock.tick(25);
+}
+
+void MainWindow::on_queryIdButton_clicked()
+{
+	_sonyMaster.deviceTypeRequest();
+}
+
+void MainWindow::onDeviceIdAnswer(unsigned char id1, unsigned char id2)
+{
+	QString id;
+	id.sprintf("%2X %2X", id1, id2);
+	ui->idLabel->setText(id);
 }

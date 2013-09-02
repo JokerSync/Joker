@@ -40,7 +40,7 @@ public:
 	/** @brief PhSonyController destructor
 	 *
 	 * Closing the port if open.
-	 * /
+	 */
 	~PhSonyController();
 
 	/**

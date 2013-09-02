@@ -23,6 +23,10 @@ private slots:
 	void tickMaster();
 	void tickSlave();
 
+	void on_queryIdButton_clicked();
+
+	void onDeviceIdAnswer(unsigned char id1, unsigned char id2);
+
 private:
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;

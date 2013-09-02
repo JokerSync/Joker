@@ -14,6 +14,11 @@ PhSonyController::PhSonyController(QString comSuffix, QObject *parent) :
 	//connect(&_serial, SIGNAL(flowControlChanged(QSerialPort::FlowControl)), this, SLOT(onCTS(QSerialPort::FlowControl)));
 }
 
+PhSonyController::~PhSonyController()
+{
+	stop();
+}
+
 bool PhSonyController::start()
 {
 	qDebug() << "PhSonyController::open()";
@@ -137,6 +142,7 @@ QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cm
 
 void PhSonyController::onData()
 {
+	qDebug() << "onData";
 	// read the serial data
 	unsigned char buffer[256];
 	int dataRead = 0;
