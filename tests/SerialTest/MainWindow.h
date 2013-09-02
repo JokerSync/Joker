@@ -27,9 +27,8 @@ private slots:
 	void on_checkB_toggled(bool checked);
 
 private:
-	bool openA();
+	bool open(QSerialPort * serial, QString suffix);
 	void closeA();
-	bool openB();
 	void closeB();
 
 	Ui::MainWindow *ui;

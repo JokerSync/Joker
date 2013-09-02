@@ -14,11 +14,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(ui->sendButton1, SIGNAL(clicked()), this, SLOT(sendTextA()));
 	connect(&_serialA, SIGNAL(readyRead()), this, SLOT(readTextA()));
-	openA();
+	if(open(&_serialA, "A"))
+		_serialA.write("Hello from serial A");
+
 
 	connect(ui->sendButton2, SIGNAL(clicked()), this, SLOT(sendTextB()));
 	connect(&_serialB, SIGNAL(readyRead()), this, SLOT(readTextB()));
-	openB();
+	if(open(&_serialB, "B"))
+		_serialB.write("Hello from serial B");
 }
 
 MainWindow::~MainWindow()
@@ -59,7 +62,7 @@ void MainWindow::readTextB()
 void MainWindow::on_checkA_toggled(bool checked)
 {
 	if(checked)
-		openA();
+		open(&_serialA, "A");
 	else
 		closeA();
 }
@@ -67,29 +70,30 @@ void MainWindow::on_checkA_toggled(bool checked)
 void MainWindow::on_checkB_toggled(bool checked)
 {
 	if(checked)
-		openB();
+		open(&_serialB, "B");
 	else
 		closeB();
 }
 
-bool MainWindow::openA()
+bool MainWindow::open(QSerialPort * serial, QString suffix)
 {
-	qDebug() << "openA";
+	qDebug() << "open" << suffix;
+
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
 	{
 		QString name = info.portName();
 		if(name.startsWith("usbserial-"))
 		{
-			if(name.endsWith("A"))
+			if(name.endsWith(suffix))
 			{
-				_serialA.setPort(info);
+				serial->setPort(info);
+				serial->setBaudRate(QSerialPort::Baud38400);
+				serial->setDataBits(QSerialPort::Data8);
+				serial->setStopBits(QSerialPort::OneStop);
+				serial->setParity(QSerialPort::OddParity);
+
 				qDebug() << "Opening " << name;
-				_serialA.open(QSerialPort::ReadWrite);
-
-				connect(ui->sendButton1, SIGNAL(clicked()), this, SLOT(sendTextA()));
-				connect(&_serialA, SIGNAL(readyRead()), this, SLOT(readTextA()));
-
-				_serialA.write("Hello from serial 1!");
+				serial->open(QSerialPort::ReadWrite);
 
 				return true;
 			}
@@ -103,33 +107,6 @@ void MainWindow::closeA()
 {
 	qDebug() << "Closing " << _serialA.objectName();
 	_serialA.close();
-}
-
-bool MainWindow::openB()
-{
-	qDebug() << "openB";
-	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
-	{
-		QString name = info.portName();
-		if(name.startsWith("usbserial-"))
-		{
-			if(name.endsWith("B"))
-			{
-				_serialB.setPort(info);
-				qDebug() << "Opening " << name;
-				_serialB.open(QSerialPort::ReadWrite);
-
-				connect(ui->sendButton2, SIGNAL(clicked()), this, SLOT(sendTextB()));
-				connect(&_serialB, SIGNAL(readyRead()), this, SLOT(readTextB()));
-
-				_serialB.write("Hello from serial 2!");
-
-				return true;
-			}
-		}
-	}
-	qDebug() << "not found";
-	return false;
 }
 
 void MainWindow::closeB()
