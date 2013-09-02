@@ -12,6 +12,8 @@
  * It provide a generic implementation for handlind sony master
  * and slave communication.
  * It can be connected to a clock to update it accordingly.
+ *
+ * Sony 9 pin specification : http://www.belle-nuit.com/archives/9pin.html
  */
 class PhSonyController : public QObject
 {
@@ -42,7 +44,7 @@ public:
 	~PhSonyController();
 
 	/**
-	 Start the thread handling the communication.
+	 * Start the thread handling the communication.
 	 */
 	bool start();
 
@@ -50,6 +52,14 @@ public:
 	 Stop the thread handling the communication.
 	 */
 	void stop();
+
+	void setTCType(PhTimeCodeType tcType);
+
+	PhTimeCodeType tcType() { return _tcType; }
+
+signals:
+	void frameChanged(PhFrame frame);
+	void rateChanged(PhRate rate);
 
 protected:
 	/**
@@ -132,18 +142,16 @@ protected:
 	 */
 	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data = 0);
 
-private:
-	/** Serial port connected to the controller */
-	QSerialPort _serial;
-
-	/** Serial port name suffix (A for slave and B for master) */
-	QString _comSuffix;
-
-	/** Clock linked to the controller */
-	//PhClock * clock;	TODO: get julien implementation
+	PhTimeCodeType _tcType;
 
 	/** Sony controller status */
 	unsigned char _status[8];
+private:
+	// Serial port connected to the controller
+	QSerialPort _serial;
+
+	// Serial port name suffix (A for slave and B for master)
+	QString _comSuffix;
 
 private slots:
 	void onData();
