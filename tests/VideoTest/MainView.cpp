@@ -14,10 +14,7 @@ MainView::MainView()
 	ui->setupUi(this);
 	ui->_videoView->setClock(&_clock);
 
-	QMenu *menuFile = ui->menubar->addMenu("File");
-	QAction *open = new QAction("&Open", this);
-	menuFile->addAction(open);
-	connect(open, SIGNAL(triggered()), this, SLOT(onOpenFile()));
+	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 
 }
 
