@@ -5,7 +5,6 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::PhMediaPanel),
 	_tcType(PhTimeCodeType25),
-	_clock(NULL),
 	_firstFrame(0),
 	_mediaLength(0)
 {
@@ -14,24 +13,24 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	//Buttons Init
 
 	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-	connect(ui->_playButton, SIGNAL(clicked()), this, SLOT(pushPlayButton()));
+	connect(ui->_playButton, SIGNAL(clicked()), this, SIGNAL(playButtonSignal()));
 
 	ui->_fastForwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
-	connect(ui->_fastForwardButton, SIGNAL(clicked()), this, SLOT(pushForwardButton()));
+	connect(ui->_fastForwardButton, SIGNAL(clicked()), this, SIGNAL(forwardButtonSignal()));
 
 	ui->_fastRewindButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
-	connect(ui->_fastRewindButton, SIGNAL(clicked()), this, SLOT(pushRewindButton()));
+	connect(ui->_fastRewindButton, SIGNAL(clicked()), this, SIGNAL(rewindButtonSignal()));
 
 	ui->_backButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
-	connect(ui->_backButton, SIGNAL(clicked()), this, SLOT(pushBackButton()));
+	connect(ui->_backButton, SIGNAL(clicked()), this, SIGNAL(backButtonSignal()));
 
 	ui->_nextFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowForward));
-	connect(ui->_nextFrameButton, SIGNAL(clicked()), this, SLOT(pushNextFrameButton()));
+	connect(ui->_nextFrameButton, SIGNAL(clicked()), this, SIGNAL(previousFrameButtonSignal()));
 
 	ui->_previousFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowBack));
-	connect(ui->_previousFrameButton, SIGNAL(clicked()), this, SLOT(pushPreviousFrameButton()));
+	connect(ui->_previousFrameButton, SIGNAL(clicked()), this, SIGNAL(useSliderCursorSignal()));
 
-	connect(ui->_slider, SIGNAL(sliderMoved(int)), this, SLOT(useSliderCursor(int)));
+	connect(ui->_slider, SIGNAL(sliderMoved(int)), this, SIGNAL(useSliderCursorSignal()));
 
 	//Combobox Init
 
@@ -48,10 +47,12 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 
 }
 
+
 PhMediaPanel::~PhMediaPanel()
 {
 	delete ui;
 }
+
 
 void PhMediaPanel::setTCType(PhTimeCodeType tcType)
 {
@@ -74,21 +75,10 @@ void PhMediaPanel::setTCType(PhTimeCodeType tcType)
 	}
 }
 
+
 PhTimeCodeType PhMediaPanel::getTCType() const
 {
 	return _tcType;
-}
-
-void PhMediaPanel::setClock(PhClock *clock)
-{
-	_clock = clock;
-	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
-	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
-}
-
-PhClock *PhMediaPanel::getClock() const
-{
-	return _clock;
 }
 
 
@@ -99,69 +89,17 @@ void PhMediaPanel::setFirstFrame(PhFrame firstFrame)
 	ui->_slider->setMaximum(_firstFrame + _mediaLength);
 }
 
+
 PhFrame PhMediaPanel::getFirstFrame() const
 {
 	return _firstFrame;
 }
 
-void PhMediaPanel::setMediaLength(qint64 mediaLength)
+
+void PhMediaPanel::setMediaLength(PhFrame mediaLength)
 {
 	_mediaLength = mediaLength;
 	ui->_slider->setMaximum(_firstFrame + mediaLength);
-}
-
-
-
-void PhMediaPanel::pushPlayButton()
-{
-	if(_clock->rate() == 0)//If state = pause
-		_clock->setRate(1);
-	else //If state = play
-		_clock->setRate(0);
-
-	playButtonSignal();
-}
-
-
-void PhMediaPanel::pushForwardButton()
-{
-	_clock->setRate(4);
-	forwardButtonSignal();
-}
-
-
-void PhMediaPanel::pushRewindButton()
-{
-	_clock->setRate(-4);
-	rewindButtonSignal();
-}
-
-void PhMediaPanel::pushBackButton()
-{
-	_clock->setRate(0);
-	_clock->setFrame(_firstFrame);
-
-	backButtonSignal();
-}
-
-void PhMediaPanel::pushNextFrameButton()
-{
-	PhFrame f = _clock->frame() + 1;
-	_clock->setFrame(f);
-	nextFrameButtonSignal();
-}
-
-void PhMediaPanel::pushPreviousFrameButton()
-{
-	PhFrame f = _clock->frame() - 1;
-	_clock->setFrame(f);
-	previousFrameButtonSignal();
-}
-
-void PhMediaPanel::useSliderCursor(int position)
-{
-	_clock->setFrame(position);
-	useSliderCursorSignal();
 }
 
 
@@ -176,18 +114,17 @@ void PhMediaPanel::onRateChanged(PhRate rate)
 }
 
 
-void PhMediaPanel::onFrameChanged()
+void PhMediaPanel::onFrameChanged(PhFrame frame)
 {
-	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->frame(),_tcType));
+	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(frame,_tcType));
 
-	int t = _clock->frame();
-	ui->_slider->setSliderPosition(t);
+	ui->_slider->setSliderPosition(frame);
 
-	if(t >= _firstFrame + _mediaLength)
+	/*if(frame >= _firstFrame + _mediaLength)
 	{
 		_clock->setRate(0);
 		_clock->setFrame(_mediaLength);
-	}
+	}*/
 
 
 }
