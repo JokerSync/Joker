@@ -4,11 +4,10 @@
 #include <QWidget>
 #include <QDebug>
 
-#include "PhTools/PhTime.h"
 #include "PhTools/PhTimeCode.h"
 
 namespace Ui {
-class PhMediaPanel;
+	class PhMediaPanel;
 }
 
 class PhMediaPanel : public QWidget
@@ -37,38 +36,11 @@ signals:
 	void tcTypeChanged(PhTimeCodeType tcType);
 
 public slots:
-	void onFrameChanged();
+	void onFrameChanged(PhFrame frame);
 	void onRateChanged(PhRate rate);
-
-private slots:
-	/**
-	 * @brief changeValuePlayButton
-	 * Change the state of _playButtonState when cliking on _playButton
-	 */
-	void pushPlayButton();
-
-	/**
-	 * @brief changeStateFastForwardButton
-	 * Change the state of _fastForwardButtonState when clicking on _fastForwardButton
-	 */
-	void pushForwardButton();
-
-	/**
-	 * @brief changeStateFastRewindButton
-	 * Change the state of _fastForwardButtonState when clicking on _fastForwardButton
-	 */
-	void pushRewindButton();
-
-	void pushBackButton();
-
-	void pushNextFrameButton();
-
-	void pushPreviousFrameButton();
-
-	void useSliderCursor(int position);
-
 	void selectRate();
 
+private slots:
 
 private:
 

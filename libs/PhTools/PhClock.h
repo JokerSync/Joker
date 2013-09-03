@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "PhTime.h"
+#include "PhTimeCode.h"
 
 /**
  * The PhClock class modelize a clock with its current time and rate value.
@@ -37,7 +37,7 @@ signals:
 
 	void rateChanged(PhRate rate);
 
-	void frameChanged();
+	void frameChanged(PhFrame frame);
 
 public slots:
 
