@@ -130,13 +130,12 @@ protected:
 
 	PhClock _clock;
 
-private:
-	// Serial port connected to the controller
-	QSerialPort _serial;
-
 	// Serial port name suffix (A for slave and B for master)
 	QString _comSuffix;
 
+private:
+	// Serial port connected to the controller
+	QSerialPort _serial;
 private slots:
 	void onData();
 	void onCTS();

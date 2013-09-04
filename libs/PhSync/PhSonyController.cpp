@@ -82,7 +82,7 @@ unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 
 void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
-	qDebug() << _comSuffix << " sendCommand: " << stringFromCommand(cmd1, cmd2, data);
+//	qDebug() << _comSuffix << " sendCommand: " << stringFromCommand(cmd1, cmd2, data);
 	QByteArray buffer;
 	unsigned char datacount = getDataSize(cmd1);
 	buffer[0] = cmd1;
@@ -138,7 +138,7 @@ QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cm
 
 void PhSonyController::onData()
 {
-	qDebug() << _comSuffix << "onData";
+//	qDebug() << _comSuffix << "onData";
 	// read the serial data
 	unsigned char buffer[256];
 	int dataRead = 0;
@@ -184,7 +184,7 @@ void PhSonyController::onData()
 	}
 
 	QString cmdString = stringFromCommand(cmd1, cmd2, buffer + 2);
-	qDebug() << _comSuffix << "reading : " << cmdString;
+//	qDebug() << _comSuffix << "reading : " << cmdString;
 
 	// Computing the checksum
 	unsigned char checksum = 0;
