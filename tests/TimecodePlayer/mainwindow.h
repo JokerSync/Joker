@@ -60,10 +60,6 @@ private:
 	Ui::MainWindow *ui;
 	QTimer *_timer;
 	PhClock *_clock;
-	PhTimeCodeType _tcType;
-	PhFrame _firstFrame;
-	PhFrame _lengthFile;
-	PhTimeScale _frequence;
 
 };
 

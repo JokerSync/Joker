@@ -39,7 +39,7 @@ signals:
 
 public slots:
 
-	void onFrameChanged(PhFrame frame);
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onRateChanged(PhRate rate);
 
 private slots:
