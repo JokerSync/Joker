@@ -51,10 +51,14 @@ public slots:
 	 */
 	void shuttle(PhRate rate);
 
-	/** Send a time sense command to the connected device. */
+	/** Send a time sense command to the connected device.
+	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#currentTimeSense
+	 */
 	void timeSense();
 
-	/** Send a status sense command to the connected device. */
+	/** Send a status sense command to the connected device.
+	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#statusSense
+	 */
 	void statusSense();
 
 signals:

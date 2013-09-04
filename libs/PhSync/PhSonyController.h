@@ -85,14 +85,6 @@ protected:
 	unsigned char computeData1(PhRate rate);
 
 	/**
-	 * Get an element of the device status.
-	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#statusData
-	 * @param index Index of the status array
-	 * @return A 8 bit status information
-	 */
-	unsigned char status(int index);
-
-	/**
 	 * Process a single command and respond to it, updating the clock if needed.
 	 * This method shall be implemented differently by the slave and the master.
 	 * @param cmd1 TODO
@@ -138,8 +130,6 @@ protected:
 
 	PhClock _clock;
 
-	/** Sony controller status */
-	unsigned char _status[8];
 private:
 	// Serial port connected to the controller
 	QSerialPort _serial;

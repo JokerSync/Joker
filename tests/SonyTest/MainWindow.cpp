@@ -67,7 +67,8 @@ void MainWindow::tickSlave()
 void MainWindow::on_queryIdButton_clicked()
 {
 	//_sonyMaster.deviceTypeRequest();
-	_sonyMaster.timeSense();
+	//_sonyMaster.timeSense();
+	_sonyMaster.statusSense();
 }
 
 void MainWindow::onDeviceIdAnswer(unsigned char id1, unsigned char id2)

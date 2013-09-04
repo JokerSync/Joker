@@ -2,12 +2,14 @@
 
 #include <QDebug>
 
-PhSonySlaveController::PhSonySlaveController(QObject *parent) : PhSonyController("A", parent)
+PhSonySlaveController::PhSonySlaveController(QObject *parent) : PhSonyController("A", parent),
+	_autoMode(false), _state(Pause)
 {
 }
 
 void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
 {
+	unsigned char dataOut[16];
 	qDebug() << "PhSonySlaveController::processCommand : " << stringFromCommand(cmd1, cmd2, dataIn);
 	switch (cmd1 >> 4)
 	{
@@ -54,26 +56,26 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		{
 		case 0x00:
 			qDebug() << "Stop => ACK";
-			//state = kDWSonyStatePause;
+			_state = Pause;
 			_clock.setRate(0);
 			sendAck();
 			break;
 		case 0x01:
 			qDebug() << "Play => ACK";
-			//state = kDWSonyStatePlay;
+			_state = Play;
 			_clock.setRate(1);
 			sendAck();
 			break;
 //					case 0x10:
 //						qDebug() << "Fast forward => ACK");
-//						state = kDWSonyStateFastForward;
-//						self.clock.rate = [[NSUserDefaults standardUserDefaults] doubleForKey:@"DWSonyRewindFastForwardSpeed"];
+//						state = FastForward;
+//						_clock.rate() = [[NSUserDefaults standardUserDefaults] doubleForKey:@"DWSonyRewindFastForwardSpeed"];
 //						[port sendAck];
 //						break;
 //					case 0x20:
 //						qDebug() << "Rewing => ACK");
-//						state = kDWSonyStateRewind;
-//						self.clock.rate = -[[NSUserDefaults standardUserDefaults] doubleForKey:@"DWSonyRewindFastForwardSpeed"];
+//						state = Rewind;
+//						_clock.rate() = -[[NSUserDefaults standardUserDefaults] doubleForKey:@"DWSonyRewindFastForwardSpeed"];
 //						[port sendAck];
 //						break;
 //					case 0x11:
@@ -94,34 +96,34 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 //						}
 //						switch (cmd1) {
 //							case 0x11:
-//								state = kDWSonyStateJog;
+//								state = Jog;
 //								qDebug() << "Jog Forward : %.2f => ACK", rate);
 //								break;
 //							case 0x12:
-//								state = kDWSonyStateVar;
+//								state = Var;
 //								qDebug() << "Var Forward : %.2f => ACK", rate);
 //								break;
 //							case 0x13:
-//								state = kDWSonyStateShuttle;
+//								state = Shuttle;
 //								qDebug() << "Shuttle Forward : %.2f => ACK", rate);
 //								break;
 //							case 0x21:
 //								rate = -rate;
-//								state = kDWSonyStateJog;
+//								state = Jog;
 //								qDebug() << "Jog rev : %.2f => ACK", rate);
 //								break;
 //							case 0x22:
 //								rate = -rate;
-//								state = kDWSonyStateVar;
+//								state = Var;
 //								qDebug() << "Var rev : %.2f => ACK", rate);
 //								break;
 //							case 0x23:
 //								rate = -rate;
-//								state = kDWSonyStateShuttle;
+//								state = Shuttle;
 //								qDebug() << "Shuttle rev : %.2f => ACK", rate);
 //								break;
 //						}
-//						self.clock.rate = rate;
+//						_clock.rate() = rate;
 //						[port sendAck];
 //						break;
 //					}
@@ -205,82 +207,72 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			sendCommand(0x74, cmd2, ff, ss, mm, hh);
 			break;
 		}
-
-			//					case 0x20:
-			//					{
-			//						// TODO : handle status sens properly
-			//						qDebug() << "Status Sense (%x) => Status Data", dataIn[0]);
-			//						memset(status, 0, 8);
-
-			//						switch (state) {
-			//							case kDWSonyStatePause:
-			//								status[1] = 0x80;
-			//								status[2] = 0x03;
-			//								break;
-			//							case kDWSonyStatePlay:
-			//								status[1] = 0x81;
-			//								status[2] = 0xc0;
-			//								break;
-			//							case kDWSonyStateFastForward:
-			//								status[1] = 0x84;
-			//								break;
-			//							case kDWSonyStateRewind:
-			//								status[1] = 0x88;
-			//								status[2] = 0x04;
-			//								break;
-			//							case kDWSonyStateJog:
-			//								status[1] = 0x80;
-			//								if (self.clock.rate < 0) {
-			//									status[2] = 0x14;
-			//								}
-			//								else {
-			//									status[2] = 0x10;
-			//								}
-			//								break;
-			//							case kDWSonyStateVar:
-			//								status[1] = 0x80;
-			//								if (self.clock.rate < 0) {
-			//									status[2] = 0xcc;
-			//								}
-			//								else {
-			//									status[2] = 0xc8;
-			//								}
-			//								break;
-			//							case kDWSonyStateShuttle:
-			//								status[1] = 0x80;
-			//								if (self.clock.rate < 0) {
-			//									status[2] = 0x20;
-			//								}
-			//								else {
-			//									status[2] = 0xa4;
-			//								}
-			//								break;
-			//						}
-
-			//						if (autoMode) {
-			//							status[3] = 0x80;
-			//						}
-
-			//						// TODO check status with usb422v test
-			//						unsigned char start = dataIn[0] >> 4;
-			//						unsigned char count = dataIn[0] & 0xf;
-			//						for (int i=0; i<count; i++) {
-			//							dataOut[i] = status[i+start];
-			//						}
-			//						[port sendCommand:(0x70+count) cmd2:0x20 data:dataOut];
-			//						break;
-			//					}
-			//					case 0x30:
-			//					{
-			//						// TODO : handle properly
-			//						qDebug() << "Edit Preset Sense => Edit Preset Status");
-			//						unsigned char count = dataIn[0];
-			//						for (int i=0; i<count; i++) {
-			//							dataOut[i] = 0;
-			//						}
-			//						[port sendCommand:0x70 + count cmd2:0x30 data:dataOut];
-			//						break;
-			//					}
+		case 0x20:
+		{
+			unsigned char status[16];
+			// TODO : handle status sens properly
+			qDebug() << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
+			memset(status, 0, 8);
+			switch (_state)
+			{
+			case Pause:
+				status[1] = 0x80;
+				status[2] = 0x03;
+				break;
+			case Play:
+				status[1] = 0x81;
+				status[2] = 0xc0;
+				break;
+			case FastForward:
+				status[1] = 0x84;
+				break;
+			case Rewind:
+				status[1] = 0x88;
+				status[2] = 0x04;
+				break;
+			case Jog:
+				status[1] = 0x80;
+				if (_clock.rate() < 0)
+					status[2] = 0x14;
+				else
+					status[2] = 0x10;
+				break;
+			case Varispeed:
+				status[1] = 0x80;
+				if (_clock.rate() < 0)
+					status[2] = 0xcc;
+				else
+					status[2] = 0xc8;
+				break;
+			case Shuttle:
+				status[1] = 0x80;
+				if (_clock.rate() < 0)
+					status[2] = 0x20;
+				else
+					status[2] = 0xa4;
+				break;
+			}
+			if (_autoMode)
+				status[3] = 0x80;
+			// TODO check status with usb422v test
+			unsigned char start = dataIn[0] >> 4;
+			unsigned char count = dataIn[0] & 0xf;
+			for (int i=0; i<count; i++)
+				dataOut[i] = status[i+start];
+			sendCommand(0x70+count, 0x20, status);
+			break;
+		}
+//								case 0x30:
+//								{
+//									// TODO : handle properly
+//									qDebug() << "Edit Preset Sense => Edit Preset Status");
+//									unsigned char count = dataIn[0];
+//									for (int i=0; i<count; i++) {
+//										dataOut[i] = 0;
+//									}
+//									[port sendCommand:0x70 + count cmd2:0x30 data:dataOut];
+//									break;
+//								}
 		default:
 				qDebug() << "Unknown subcommand : => NAK";
 				sendNak(UndefinedCommand);
