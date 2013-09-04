@@ -110,7 +110,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 			break;
 		case 0x11:
 		{
-			deviceIdAnswer(data[0], data[1]);
+			deviceIdData(data[0], data[1]);
 			QString id;
 			id.sprintf("%02X %02X", data[0], data[1]);
 			qDebug() << " => Device ID answer : " << id;
@@ -143,6 +143,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 				status[i] = data[i];
 				statusStr += QString::number(data[i], 16) + " ";
 			}
+			statusData(4, status);
 			qDebug() << " => Status data : " << statusStr;
 			break;
 		}

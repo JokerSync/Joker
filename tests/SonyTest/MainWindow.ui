@@ -16,14 +16,14 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Master</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>Master</string>
-        </property>
-       </widget>
-      </item>
       <item>
        <widget class="QPushButton" name="queryIdButton">
         <property name="text">
@@ -35,6 +35,35 @@
        <widget class="QLabel" name="idLabel">
         <property name="text">
          <string>Unknown ID</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QPushButton" name="statusSenseButton">
+        <property name="text">
+         <string>Status sense</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="statusLabel">
+        <property name="text">
+         <string>Unknown status</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QPushButton" name="timeSenseButton">
+        <property name="text">
+         <string>Time sense</string>
         </property>
        </widget>
       </item>

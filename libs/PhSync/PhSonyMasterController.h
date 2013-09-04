@@ -62,7 +62,8 @@ public slots:
 	void statusSense();
 
 signals:
-	void deviceIdAnswer(unsigned char id1, unsigned char id2);
+	void deviceIdData(unsigned char id1, unsigned char id2);
+	void statusData(int length, unsigned char * statusData);
 
 protected:
 	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
