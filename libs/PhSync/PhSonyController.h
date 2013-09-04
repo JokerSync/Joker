@@ -53,13 +53,7 @@ public:
 	 */
 	void close();
 
-	void setTCType(PhTimeCodeType tcType);
-
-	PhTimeCodeType tcType() { return _tcType; }
-
-signals:
-	void frameChanged(PhFrame frame);
-	void rateChanged(PhRate rate);
+	PhClock *clock() { return &_clock; }
 
 protected:
 	/**
@@ -142,7 +136,7 @@ protected:
 	 */
 	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data = 0);
 
-	PhTimeCodeType _tcType;
+	PhClock _clock;
 
 	/** Sony controller status */
 	unsigned char _status[8];
