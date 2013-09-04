@@ -32,13 +32,15 @@ signals:
 	void backButtonSignal();
 	void nextFrameButtonSignal();
 	void previousFrameButtonSignal();
-	void useSliderCursorSignal(); // TODO add parameter
-	void tcTypeChanged(PhTimeCodeType tcType);
+	void useSliderCursorSignal(int); // TODO add parameter
+	void tcTypeChangedSignal(PhTimeCodeType tcType);
+	void useComboBoxSignal(int);
+	void endOfMediaSignal();
 
 public slots:
+
 	void onFrameChanged(PhFrame frame);
 	void onRateChanged(PhRate rate);
-	void selectRate();
 
 private slots:
 

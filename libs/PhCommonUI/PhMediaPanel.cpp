@@ -25,12 +25,12 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	connect(ui->_backButton, SIGNAL(clicked()), this, SIGNAL(backButtonSignal()));
 
 	ui->_nextFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowForward));
-	connect(ui->_nextFrameButton, SIGNAL(clicked()), this, SIGNAL(previousFrameButtonSignal()));
+	connect(ui->_nextFrameButton, SIGNAL(clicked()), this, SIGNAL(nextFrameButtonSignal()));
 
 	ui->_previousFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowBack));
-	connect(ui->_previousFrameButton, SIGNAL(clicked()), this, SIGNAL(useSliderCursorSignal()));
+	connect(ui->_previousFrameButton, SIGNAL(clicked()), this, SIGNAL(previousFrameButtonSignal()));
 
-	connect(ui->_slider, SIGNAL(sliderMoved(int)), this, SIGNAL(useSliderCursorSignal()));
+	connect(ui->_slider, SIGNAL(sliderMoved(int)), this, SIGNAL(useSliderCursorSignal(int)));
 
 	//Combobox Init
 
@@ -39,12 +39,9 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	ui->_rateSelectionBox->addItem("25 fps");
 	ui->_rateSelectionBox->addItem("29.97 fps");
 
-	connect(ui->_rateSelectionBox, SIGNAL(activated(int)), this, SLOT(selectRate()));
+	connect(ui->_rateSelectionBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(useComboBoxSignal(int)));
 
-	//Connections SIGNALS/SLOTS
-
-
-
+	setFixedSize(600,100);
 }
 
 
@@ -120,34 +117,9 @@ void PhMediaPanel::onFrameChanged(PhFrame frame)
 
 	ui->_slider->setSliderPosition(frame);
 
-	/*if(frame >= _firstFrame + _mediaLength)
+	if(frame >= _firstFrame + _mediaLength)
 	{
-		_clock->setRate(0);
-		_clock->setFrame(_mediaLength);
-	}*/
-
-
-}
-
-
-void PhMediaPanel::selectRate()
-{
-	switch(ui->_rateSelectionBox->currentIndex())
-	{
-	case 0:
-		_tcType = PhTimeCodeType2398;
-		break;
-	case 1:
-		_tcType =	PhTimeCodeType24;
-		break;
-	case 2:
-		_tcType = PhTimeCodeType25;
-		break;
-	case 3:
-		_tcType = PhTimeCodeType2997;
-		break;
-
+		endOfMediaSignal();
 	}
-
 }
 
