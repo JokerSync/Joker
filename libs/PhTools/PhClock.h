@@ -38,7 +38,7 @@ signals:
 
 	void rateChanged(PhRate rate);
 
-	void frameChanged(PhFrame frame);
+	void frameChanged(PhFrame frame, PhTimeCodeType tcType);
 
 public slots:
 

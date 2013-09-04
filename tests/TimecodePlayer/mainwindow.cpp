@@ -6,13 +6,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 	_clock = new PhClock;
-	_tcType = PhTimeCodeType25;
-	_lengthFile = 7500;
-	_firstFrame = _clock->frame();
-	ui->mediaController->setMediaLength(_lengthFile);
-	ui->mediaController->setTCType(_tcType);
-	ui->mediaController->setFirstFrame(_firstFrame);
-	_frequence = PhTimeCode::getFps(_tcType);
+
+
+	_clock->setTCType(PhTimeCodeType25);
+	ui->mediaController->setMediaLength(7500);
+	ui->mediaController->setTCType(_clock->getTCType());
+	ui->mediaController->setFirstFrame(_clock->frame());
 
 	connect(ui->mediaController, SIGNAL(playButtonSignal()), this, SLOT(pushPlayButton()));
 	connect(ui->mediaController, SIGNAL(forwardButtonSignal()), this, SLOT(pushForwardButton()));
@@ -23,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->mediaController, SIGNAL(useSliderCursorSignal(int)), this, SLOT(useSliderCursor(int)));
 	connect(ui->mediaController, SIGNAL(useComboBoxSignal(int)), this, SLOT(selectRate(int)));
 
-	connect(_clock, SIGNAL(frameChanged(PhFrame)), ui->mediaController, SLOT(onFrameChanged(PhFrame)));
+	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), ui->mediaController, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), ui->mediaController, SLOT(onRateChanged(PhRate)));
 
 	connect(ui->mediaController, SIGNAL(endOfMediaSignal()), this, SLOT(backToBeginning()));
@@ -31,9 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	_timer = new QTimer();
 	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-	_timer->start(1000/_frequence);
-
-	resize(600,100);
+	_timer->start(600/PhTimeCode::getFps(_clock->getTCType()));
 }
 
 
@@ -44,7 +41,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateFrame()
 {
-	_clock->tick(_frequence);
+	_clock->tick(PhTimeCode::getFps(_clock->getTCType()));
 }
 
 
@@ -101,25 +98,23 @@ void MainWindow::selectRate(int index)
 	switch(index)
 	{
 	case 0:
-		_tcType = PhTimeCodeType2398;
+		_clock->setTCType(PhTimeCodeType2398);
 		break;
 	case 1:
-		_tcType =	PhTimeCodeType24;
+		_clock->setTCType(PhTimeCodeType24);
 		break;
 	case 2:
-		_tcType = PhTimeCodeType25;
+		_clock->setTCType(PhTimeCodeType25);
 		break;
 	case 3:
-		_tcType = PhTimeCodeType2997;
+		_clock->setTCType(PhTimeCodeType2997);
 		break;
 	}
-	_frequence = PhTimeCode::getFps(_tcType);
-	qDebug() << "frequence" << _frequence;
 }
 
 void MainWindow::backToBeginning()
 {
 	_clock->setRate(0);
-	_clock->setFrame(_lengthFile);
+	_clock->setFrame(ui->mediaController->getMediaLength());
 }
 

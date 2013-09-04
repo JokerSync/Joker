@@ -100,6 +100,12 @@ void PhMediaPanel::setMediaLength(PhFrame mediaLength)
 }
 
 
+PhFrame PhMediaPanel::getMediaLength()
+{
+	return _mediaLength;
+}
+
+
 void PhMediaPanel::onRateChanged(PhRate rate)
 {
 	ui->_rateLabel->setText("x"+QString::number(rate));
@@ -111,9 +117,9 @@ void PhMediaPanel::onRateChanged(PhRate rate)
 }
 
 
-void PhMediaPanel::onFrameChanged(PhFrame frame)
+void PhMediaPanel::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(frame,_tcType));
+	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(frame,tcType));
 
 	ui->_slider->setSliderPosition(frame);
 
