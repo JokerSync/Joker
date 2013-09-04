@@ -75,11 +75,6 @@ unsigned char PhSonyController::computeData1(PhRate rate)
 	return (unsigned char)(32 * (2 + qLn(rate) / qLn(10)));
 }
 
-unsigned char PhSonyController::status(int index)
-{
-	return _status[index];
-}
-
 unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 {
 	return cmd1 & 0x0f;
