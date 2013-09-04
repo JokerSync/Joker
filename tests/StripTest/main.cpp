@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
     // Display actors
 
-    QMap<QString, PhPeople *> list_actors = doc.getActors();
+    QMap<QString, PhPeople *> list_actors = doc.getPeoples();
     qDebug() << "actors : ";
     QMap<QString, PhPeople *>::iterator it;
 
@@ -59,34 +59,26 @@ int main(int argc, char *argv[])
 
     // Display text
 
-    QList<PhStripText *>textList = doc.getTexts();
     qDebug() << "texts : ";
-    QList<PhStripText *>::iterator text;
 	QString line;
+	PhPeople * lastPeople;
 
-    for( text = textList.begin(); text != textList.end() ; text++)
+	foreach(PhStripText* text, doc.getTexts())
     {
-          if(text == textList.begin())
-          {
-              line = (*text)->getPeople().getName();
-              line += " : ";
-              line += (*text)->getContent();
-          }
-          else
-          {
+		line = text->getPeople()->getName() + " : " + text->getContent();
+		qDebug() << line;
 
-             if(((*text)->getPeople().getName()) != ((*(text-1))->getPeople().getName()))
-             {
-                 qDebug() << qPrintable( line );
-                 line = (*text)->getPeople().getName();
-                 line += " : ";
-                 line += (*text)->getContent();
-             }
-             else
-             {
-                 line += (*text)->getContent();
-             }
-          }
+//             if(((*text)->getPeople().getName()) != ((*(text-1))->getPeople().getName()))
+//             {
+//                 qDebug() << qPrintable( line );
+//                 line = (*text)->getPeople().getName();
+//                 line += " : ";
+//                 line += (*text)->getContent();
+//             }
+//             else
+//             {
+//                 line += (*text)->getContent();
+//             }
     }
      qDebug() << qPrintable( line );
 
