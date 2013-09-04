@@ -2,6 +2,7 @@
 #define PHCLOCK_H
 
 #include <QObject>
+#include <QDebug>
 
 #include "PhTimeCode.h"
 

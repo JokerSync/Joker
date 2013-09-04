@@ -50,14 +50,20 @@ public slots:
 
 	void useSliderCursor(int position);
 
+	void selectRate(int index);
+
+	void backToBeginning();
+
 
 private:
 
 	Ui::MainWindow *ui;
 	QTimer *_timer;
 	PhClock *_clock;
-	PhFrame lengthFile;
-	PhFrame firstFrame;
+	PhTimeCodeType _tcType;
+	PhFrame _firstFrame;
+	PhFrame _lengthFile;
+	PhTimeScale _frequence;
 
 };
 
