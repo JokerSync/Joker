@@ -32,7 +32,6 @@ private:
 	PhSonyMasterController _sonyMaster;
 	PhSonySlaveController _sonySlave;
 	QTimer _slaveTimer, _masterTimer;
-	PhClock _slaveClock, _masterClock;
 };
 
 #endif // MAINWINDOW_H

@@ -129,9 +129,9 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		{
 		case 0x04:
 		{
-			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)data, _tcType);
-			qDebug() << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _tcType);
-			frameChanged(frame);
+			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)data, _clock.getTCType());
+			qDebug() << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _clock.getTCType());
+			_clock.setFrame(frame);
 			break;
 		}
 		case 0x20:
@@ -152,6 +152,8 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		break;
 	default:
 		qDebug() << " => Unknown answer : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16);
-				break;
-		}
+		break;
+	}
+	qDebug() << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, data) << " over";
+
 }

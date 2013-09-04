@@ -21,7 +21,7 @@ PhSonyController::~PhSonyController()
 
 bool PhSonyController::open()
 {
-	qDebug() << "PhSonyController::open()";
+	qDebug() << _comSuffix << "PhSonyController::open()";
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
 	{
 		QString name = info.portName();
@@ -29,7 +29,7 @@ bool PhSonyController::open()
 		{
 			_serial.setPort(info);
 
-			qDebug() << "Opening " << name;
+			qDebug() << _comSuffix << "Opening " << name;
 			if( _serial.open(QSerialPort::ReadWrite))
 			{
 				_serial.setBaudRate(QSerialPort::Baud38400);
@@ -41,19 +41,19 @@ bool PhSonyController::open()
 			}
 		}
 	}
-	qDebug() << "Unable to find usbserial-XXX" << _comSuffix;
+	qDebug() << _comSuffix << "Unable to find usbserial-XXX" << _comSuffix;
 	return false;
 }
 
 void PhSonyController::close()
 {
-	qDebug() << "PhSonyController::close()";
+	qDebug() << _comSuffix << "PhSonyController::close()";
 	if(_serial.isOpen())
 	{
 		_serial.close();
 	}
 	else
-		qDebug() << "port already closed.";
+		qDebug() << _comSuffix << "port already closed.";
 }
 
 PhRate PhSonyController::computeRate(unsigned char data1)
@@ -87,6 +87,7 @@ unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 
 void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
+	qDebug() << _comSuffix << " sendCommand: " << stringFromCommand(cmd1, cmd2, data);
 	QByteArray buffer;
 	unsigned char datacount = getDataSize(cmd1);
 	buffer[0] = cmd1;
@@ -117,13 +118,13 @@ void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
 
 void PhSonyController::sendAck()
 {
-	qDebug() << "sendAck";
+	qDebug() << _comSuffix << "sendAck";
 	sendCommand(0x10, 0x01);
 }
 
 void PhSonyController::sendNak(PhSonyController::PhSonyError error)
 {
-	qDebug() << "sendNak : " << error;
+	qDebug() << _comSuffix << "sendNak : " << error;
 	sendCommand(0x11, 0x12, error);
 }
 
@@ -142,7 +143,7 @@ QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cm
 
 void PhSonyController::onData()
 {
-	qDebug() << "onData";
+	qDebug() << _comSuffix << "onData";
 	// read the serial data
 	unsigned char buffer[256];
 	int dataRead = 0;
@@ -159,7 +160,7 @@ void PhSonyController::onData()
 		nbTry++;
 		if(nbTry > 200)
 		{
-			qDebug() << "Read time out";
+			qDebug() << _comSuffix << "Read time out";
 			sendNak(PhSonyController::TimeOut);
 			return;
 		}
@@ -181,14 +182,14 @@ void PhSonyController::onData()
 		nbTry++;
 		if(nbTry > 200)
 		{
-			qDebug() << "Read time out";
+			qDebug() << _comSuffix << "Read time out";
 			sendNak(PhSonyController::TimeOut);
 			return;
 		}
 	}
 
 	QString cmdString = stringFromCommand(cmd1, cmd2, buffer + 2);
-	qDebug() << "reading : " << cmdString;
+	qDebug() << _comSuffix << "reading : " << cmdString;
 
 	// Computing the checksum
 	unsigned char checksum = 0;
@@ -197,7 +198,7 @@ void PhSonyController::onData()
 
 	if (checksum != buffer[datacount+2])
 	{
-		qDebug() << "Checksum error : " << cmdString;
+		qDebug() << _comSuffix << "Checksum error : " << cmdString;
 		_serial.flush();
 		sendNak(PhSonyController::ChecksumError);
 		return;
@@ -214,5 +215,5 @@ void PhSonyController::onCTS()
 
 void PhSonyController::handleError(QSerialPort::SerialPortError error)
 {
-	qDebug() << "Serial port error : " << error;
+	qDebug() << _comSuffix << "Serial port error : " << error;
 }

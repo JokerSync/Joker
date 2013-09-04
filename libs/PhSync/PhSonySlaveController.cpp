@@ -6,9 +6,9 @@ PhSonySlaveController::PhSonySlaveController(QObject *parent) : PhSonyController
 {
 }
 
-void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
+void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
 {
-	qDebug() << "PhSonySlaveController::processCommand : " << stringFromCommand(cmd1, cmd2, data);
+	qDebug() << "PhSonySlaveController::processCommand : " << stringFromCommand(cmd1, cmd2, dataIn);
 	switch (cmd1 >> 4)
 	{
 	case 0:
@@ -24,7 +24,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			// TODO : Device ID as a parameter
 			unsigned char deviceID1 = 0xf0;
 			unsigned char deviceID2 = 0xc0;
-			switch (_tcType)
+			switch (_clock.getTCType())
 			{
 			case PhTimeCodeType2398:
 			case PhTimeCodeType24:
@@ -49,20 +49,21 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			break;
 		}
 		break;
-			case 2:
-				switch (cmd2) {
-					case 0x00:
-						qDebug() << "Stop => ACK";
-						//state = kDWSonyStatePause;
-						rateChanged(0);
-						sendAck();
-						break;
-					case 0x01:
-						qDebug() << "Play => ACK";
-						//state = kDWSonyStatePlay;
-						rateChanged(1);
-						sendAck();
-						break;
+	case 2:
+		switch (cmd2)
+		{
+		case 0x00:
+			qDebug() << "Stop => ACK";
+			//state = kDWSonyStatePause;
+			_clock.setRate(0);
+			sendAck();
+			break;
+		case 0x01:
+			qDebug() << "Play => ACK";
+			//state = kDWSonyStatePlay;
+			_clock.setRate(1);
+			sendAck();
+			break;
 //					case 0x10:
 //						qDebug() << "Fast forward => ACK");
 //						state = kDWSonyStateFastForward;
@@ -157,133 +158,140 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 //						qDebug() << "Auto Mode On => ACK");
 //						[port sendAck];
 //						break;
-//					default:
-//						qDebug() << "Unknown subcommand : %x %x => NAK", cmd1, cmd2);
-//						[port sendNak:0x00];
-//						break;
-//				}
-//			case 6:
-//				switch (cmd2) {
-//					case 0x0c:
-//					{
-//						qDebug() << "Current Time Sense => %@", self.clock.tcString);
-//						dataOut[0] = 0x74;
-//						switch (dataIn[0]) {
-//							case 0x01:
-//								cmd2 = 0x04;
-//								break;
-//							case 0x02:
-//								cmd2 = 0x06;
-//								break;
-//							case 0x04:
-//								cmd2 = 0x00;
-//								break;
-//							case 0x08:
-//								cmd2 = 0x01;
-//								break;
-//							case 0x10:
-//								cmd2 = 0x05;
-//								break;
-//							case 0x20:
-//								cmd2 = 0x07;
-//								break;
-//							default:
-//								cmd2 = 0x04;
-//								break;
-//						}
-//						unsigned int hh, mm, ss, ff;
-//						[DWTimeCode ComputeHh:&hh Mm:&mm Ss:&ss Ff:&ff fromFrame:self.clock.frame andType:self.clock.type];
-//						hh = [DWBCDTool bcdFromUInt:hh];
-//						mm = [DWBCDTool bcdFromUInt:mm];
-//						ss = [DWBCDTool bcdFromUInt:ss];
-//						ff = [DWBCDTool bcdFromUInt:ff];
-//						[port sendCommandWithArgument:0x74 cmd2:cmd2, ff, ss, mm, hh];
-//						break;
-//					}
-//					case 0x20:
-//					{
-//						// TODO : handle status sens properly
-//						qDebug() << "Status Sense (%x) => Status Data", dataIn[0]);
-//						memset(status, 0, 8);
-
-//						switch (state) {
-//							case kDWSonyStatePause:
-//								status[1] = 0x80;
-//								status[2] = 0x03;
-//								break;
-//							case kDWSonyStatePlay:
-//								status[1] = 0x81;
-//								status[2] = 0xc0;
-//								break;
-//							case kDWSonyStateFastForward:
-//								status[1] = 0x84;
-//								break;
-//							case kDWSonyStateRewind:
-//								status[1] = 0x88;
-//								status[2] = 0x04;
-//								break;
-//							case kDWSonyStateJog:
-//								status[1] = 0x80;
-//								if (self.clock.rate < 0) {
-//									status[2] = 0x14;
-//								}
-//								else {
-//									status[2] = 0x10;
-//								}
-//								break;
-//							case kDWSonyStateVar:
-//								status[1] = 0x80;
-//								if (self.clock.rate < 0) {
-//									status[2] = 0xcc;
-//								}
-//								else {
-//									status[2] = 0xc8;
-//								}
-//								break;
-//							case kDWSonyStateShuttle:
-//								status[1] = 0x80;
-//								if (self.clock.rate < 0) {
-//									status[2] = 0x20;
-//								}
-//								else {
-//									status[2] = 0xa4;
-//								}
-//								break;
-//						}
-
-//						if (autoMode) {
-//							status[3] = 0x80;
-//						}
-
-//						// TODO check status with usb422v test
-//						unsigned char start = dataIn[0] >> 4;
-//						unsigned char count = dataIn[0] & 0xf;
-//						for (int i=0; i<count; i++) {
-//							dataOut[i] = status[i+start];
-//						}
-//						[port sendCommand:(0x70+count) cmd2:0x20 data:dataOut];
-//						break;
-//					}
-//					case 0x30:
-//					{
-//						// TODO : handle properly
-//						qDebug() << "Edit Preset Sense => Edit Preset Status");
-//						unsigned char count = dataIn[0];
-//						for (int i=0; i<count; i++) {
-//							dataOut[i] = 0;
-//						}
-//						[port sendCommand:0x70 + count cmd2:0x30 data:dataOut];
-//						break;
-//					}
-					default:
-						qDebug() << "Unknown subcommand : => NAK";
-						sendNak(UndefinedCommand);
-						break;
-				}
+		default:
+			qDebug() << "Unknown subcommand => NAK";
+			sendNak(UndefinedCommand);
+			break;
+		}
+		break;
+	case 6:
+		switch (cmd2)
+		{
+		case 0x0c:
+		{
+			cmd1 = 0x74;
+			qDebug() << "Current Time Sense => " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType());
+			switch (dataIn[0])
+			{
+			case 0x01:
+				cmd2 = 0x04;
+				break;
+			case 0x02:
+				cmd2 = 0x06;
+				break;
+			case 0x04:
+				cmd2 = 0x00;
+				break;
+			case 0x08:
+				cmd2 = 0x01;
+				break;
+			case 0x10:
+				cmd2 = 0x05;
+				break;
+			case 0x20:
+				cmd2 = 0x07;
 				break;
 			default:
-		qDebug() << " => Unknown command : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16) << " => NAK";
+				cmd2 = 0x04;
+				break;
+			}
+			unsigned int hhmmssff[4];
+			PhTimeCodeType tcType = _clock.getTCType();
+			PhTimeCode::ComputeHhMmSsFf(hhmmssff, _clock.frame(), tcType);
+			unsigned char hh = PhTimeCode::bcdFromFrame(hhmmssff[0], tcType);
+			unsigned char mm = PhTimeCode::bcdFromFrame(hhmmssff[1], tcType);
+			unsigned char ss = PhTimeCode::bcdFromFrame(hhmmssff[2], tcType);
+			unsigned char ff = PhTimeCode::bcdFromFrame(hhmmssff[3], tcType);
+			sendCommand(0x74, cmd2, ff, ss, mm, hh);
+			break;
+		}
+
+			//					case 0x20:
+			//					{
+			//						// TODO : handle status sens properly
+			//						qDebug() << "Status Sense (%x) => Status Data", dataIn[0]);
+			//						memset(status, 0, 8);
+
+			//						switch (state) {
+			//							case kDWSonyStatePause:
+			//								status[1] = 0x80;
+			//								status[2] = 0x03;
+			//								break;
+			//							case kDWSonyStatePlay:
+			//								status[1] = 0x81;
+			//								status[2] = 0xc0;
+			//								break;
+			//							case kDWSonyStateFastForward:
+			//								status[1] = 0x84;
+			//								break;
+			//							case kDWSonyStateRewind:
+			//								status[1] = 0x88;
+			//								status[2] = 0x04;
+			//								break;
+			//							case kDWSonyStateJog:
+			//								status[1] = 0x80;
+			//								if (self.clock.rate < 0) {
+			//									status[2] = 0x14;
+			//								}
+			//								else {
+			//									status[2] = 0x10;
+			//								}
+			//								break;
+			//							case kDWSonyStateVar:
+			//								status[1] = 0x80;
+			//								if (self.clock.rate < 0) {
+			//									status[2] = 0xcc;
+			//								}
+			//								else {
+			//									status[2] = 0xc8;
+			//								}
+			//								break;
+			//							case kDWSonyStateShuttle:
+			//								status[1] = 0x80;
+			//								if (self.clock.rate < 0) {
+			//									status[2] = 0x20;
+			//								}
+			//								else {
+			//									status[2] = 0xa4;
+			//								}
+			//								break;
+			//						}
+
+			//						if (autoMode) {
+			//							status[3] = 0x80;
+			//						}
+
+			//						// TODO check status with usb422v test
+			//						unsigned char start = dataIn[0] >> 4;
+			//						unsigned char count = dataIn[0] & 0xf;
+			//						for (int i=0; i<count; i++) {
+			//							dataOut[i] = status[i+start];
+			//						}
+			//						[port sendCommand:(0x70+count) cmd2:0x20 data:dataOut];
+			//						break;
+			//					}
+			//					case 0x30:
+			//					{
+			//						// TODO : handle properly
+			//						qDebug() << "Edit Preset Sense => Edit Preset Status");
+			//						unsigned char count = dataIn[0];
+			//						for (int i=0; i<count; i++) {
+			//							dataOut[i] = 0;
+			//						}
+			//						[port sendCommand:0x70 + count cmd2:0x30 data:dataOut];
+			//						break;
+			//					}
+		default:
+				qDebug() << "Unknown subcommand : => NAK";
+				sendNak(UndefinedCommand);
+				break;
+			}
+			break;
+		default:
+			qDebug() << " => Unknown command : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16) << " => NAK";
 		sendNak(UndefinedCommand);
 		break;
 	}
+
+	qDebug() << "PhSonySlaveController::processCommand : " << stringFromCommand(cmd1, cmd2, dataIn) << " over";
 }
