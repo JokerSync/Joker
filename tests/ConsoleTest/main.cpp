@@ -6,16 +6,16 @@
 int main(int argc, char *argv[])
 {
     // Test of PhDebug tool
-    DEBUG << "Thomas est trop fort";
+    PHDEBUG << "Test of PhDebug tool";
 
     // Test of TimeCode
     for(int i=0; i<3;i++)
     {
         QString s = PhTimeCode::stringFromFrame(i, PhTimeCodeType25);
         int n = PhTimeCode::frameFromString(s, PhTimeCodeType25);
-        DEBUG << s;
-        if(false)
-            DEBUG << "problem with " << i;
+        PHDEBUG << s;
+        if(n != i)
+            PHDEBUG << "problem with " << i;
     }
 
     return 0;
