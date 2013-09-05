@@ -11,12 +11,12 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Timecode player</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="PhMediaControllerView" name="mediaController" native="true"/>
+     <widget class="PhMediaPanel" name="mediaController" native="true"/>
     </item>
    </layout>
   </widget>
@@ -34,9 +34,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PhMediaControllerView</class>
+   <class>PhMediaPanel</class>
    <extends>QWidget</extends>
-   <header>PhCommonUI/PhMediaControllerView.h</header>
+   <header>PhCommonUI/PhMediaPanel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
