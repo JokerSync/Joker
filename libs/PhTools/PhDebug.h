@@ -21,7 +21,7 @@ class PhDebug
 {
 public:
     // used to access to the only instance of the class
-    static PhDebug * instance();
+    static PhDebug instance();
 
     QDebug operator<<(QDebug dbg)
     {
