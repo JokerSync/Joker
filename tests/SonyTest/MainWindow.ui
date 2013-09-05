@@ -70,7 +70,7 @@
      </layout>
     </item>
     <item>
-     <widget class="PhMediaControllerView" name="masterPanel" native="true"/>
+     <widget class="PhMediaPanel" name="masterPanel" native="true"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -84,7 +84,7 @@
      </layout>
     </item>
     <item>
-     <widget class="PhMediaControllerView" name="slavePanel" native="true"/>
+     <widget class="PhMediaPanel" name="slavePanel" native="true"/>
     </item>
    </layout>
   </widget>
@@ -102,9 +102,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>PhMediaControllerView</class>
+   <class>PhMediaPanel</class>
    <extends>QWidget</extends>
-   <header>PhCommonUI/PhMediaControllerView.h</header>
+   <header>PhCommonUI/PhMediaPanel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

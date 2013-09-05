@@ -13,16 +13,22 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	// configure panels
 	ui->masterPanel->setMediaLength(1000);
-	ui->masterPanel->setClock(_sonyMaster.clock());
 
 	ui->slavePanel->setMediaLength(10000);
-	ui->slavePanel->setClock(_sonySlave.clock());
 
+	// Connect master panel to sony master
 	connect(ui->masterPanel, SIGNAL(playButtonSignal()), &_sonyMaster, SLOT(play()));
 	connect(ui->masterPanel, SIGNAL(pauseButtonSignal()), &_sonyMaster, SLOT(stop()));
+	connect(_sonyMaster.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->masterPanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_sonyMaster.clock(), SIGNAL(rateChanged(PhRate)), ui->masterPanel, SLOT(onRateChanged(PhRate)));
 
+	// Connect sony master to MainWindow
 	connect(&_sonyMaster, SIGNAL(deviceIdData(unsigned char,unsigned char)), this, SLOT(onDeviceIdData(unsigned char,unsigned char)));
 	connect(&_sonyMaster, SIGNAL(statusData(int,unsigned char*)), this, SLOT(onStatusData(int,unsigned char*)));
+
+	// Connect sony slave clock to slave panel
+	connect(_sonySlave.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->slavePanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_sonySlave.clock(), SIGNAL(rateChanged(PhRate)), ui->slavePanel, SLOT(onRateChanged(PhRate)));
 
 	// start slave and master
 	if(_sonyMaster.open())
