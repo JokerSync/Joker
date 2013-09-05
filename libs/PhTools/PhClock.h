@@ -2,22 +2,9 @@
 #define PHCLOCK_H
 
 #include <QObject>
+#include <QDebug>
+
 #include "PhTimeCode.h"
-
-/**
-  * @brief PhTime is a type used for time value.
-  */
-typedef qint64 PhTime;
-
-/**
-  * @brief PhTimeScale is a type used for time scale value.
-  */
-typedef int PhTimeScale;
-
-/**
-  * @brief PhRate is a type used for rate value.
-  */
-typedef double PhRate;
 
 /**
  * The PhClock class modelize a clock with its current time and rate value.
@@ -51,7 +38,7 @@ signals:
 
 	void rateChanged(PhRate rate);
 
-	void frameChanged();
+	void frameChanged(PhFrame frame, PhTimeCodeType tcType);
 
 public slots:
 

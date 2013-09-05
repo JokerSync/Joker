@@ -9,7 +9,11 @@ PhClock::PhClock(QObject *parent) :
 
 void PhClock::setTCType(PhTimeCodeType tcType)
 {
+	PhFrame lastFrame = frame();
 	_tcType = tcType;
+	PhFrame newFrame = frame();
+	if(lastFrame != newFrame)
+		emit frameChanged(newFrame, _tcType);
 }
 
 void PhClock::setTime(qint64 time)
@@ -21,7 +25,7 @@ void PhClock::setTime(qint64 time)
 	}
 	PhFrame newFrame = frame();
 	if(lastFrame != newFrame)
-		emit frameChanged();
+		emit frameChanged(newFrame, _tcType);
 }
 
 void PhClock::setTimeScale(PhTimeScale timeScale)
