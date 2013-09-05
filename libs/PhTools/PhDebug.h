@@ -10,9 +10,9 @@
 #include <QDate>
 #include <QRect>
 
-#define DEBUG PhDebug d; d <<  PHDEBUG
 
-#define PHDEBUG  qDebug() << __FUNCTION__ << ":"
+#define PHDEBUG PhDebug::instance() << qDebug() << __FUNCTION__ << ":"
+
 
 // In order to get rid of double quotes when displaying a variable
 #define Q(string) (string).toStdString().c_str()
@@ -20,17 +20,24 @@
 class PhDebug
 {
 public:
+    // used to access to the only instance of the class
+    static PhDebug * instance();
+
     QDebug operator<<(QDebug dbg)
     {
-        QString d;
-        d = QDate::currentDate().toString("dd.MM.yyyy");
-        d += " - ";
-        d += QTime::currentTime().toString("hh.mm.ss.zzz");
-        d += " in";
-        dbg << Q(d);
+        QString s;
+        s = QDate::currentDate().toString("dd.MM.yyyy");
+        s += " - ";
+        s += QTime::currentTime().toString("hh.mm.ss.zzz");
+        s += " in";
+        dbg << Q(s);
 
         return dbg;
     }
+
+private:
+    static PhDebug * d;
+    PhDebug(){}
 
 };
 
