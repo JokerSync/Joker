@@ -262,6 +262,13 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			sendCommand(0x70+count, 0x20, status);
 			break;
 		}
+		case 0x2e:
+		{
+			unsigned data1 = computeData1FromRate(_clock.rate());
+			qDebug() << "Speed sense";
+			sendCommand(0x71, 0x2e, data1);
+			break;
+		}
 //								case 0x30:
 //								{
 //									// TODO : handle properly

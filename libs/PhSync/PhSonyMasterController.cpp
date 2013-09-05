@@ -43,12 +43,12 @@ void PhSonyMasterController::jog(PhRate rate)
 	unsigned char data1;
 	if (rate < 0)
 	{
-		data1 = computeData1(-rate);
+		data1 = computeData1FromRate(-rate);
 		sendCommand(0x21, 0x21, data1);
 	}
 	else
 	{
-		data1 = computeData1(rate);
+		data1 = computeData1FromRate(rate);
 		sendCommand(0x21, 0x11, data1);
 	}
 }
@@ -59,12 +59,12 @@ void PhSonyMasterController::varispeed(PhRate rate)
 	unsigned char data1;
 	if (rate < 0)
 	{
-		data1 = computeData1(-rate);
+		data1 = computeData1FromRate(-rate);
 		sendCommand(0x21, 0x22, data1);
 	}
 	else
 	{
-		data1 = computeData1(rate);
+		data1 = computeData1FromRate(rate);
 		sendCommand(0x21, 0x12, data1);
 	}
 }
@@ -75,12 +75,12 @@ void PhSonyMasterController::shuttle(PhRate rate)
 	unsigned char data1;
 	if (rate < 0)
 	{
-		data1 = computeData1(-rate);
+		data1 = computeData1FromRate(-rate);
 		sendCommand(0x21, 0x23, data1);
 	}
 	else
 	{
-		data1 = computeData1(rate);
+		data1 = computeData1FromRate(rate);
 		sendCommand(0x21, 0x13, data1);
 	}
 }
@@ -95,6 +95,12 @@ void PhSonyMasterController::statusSense()
 {
 	qDebug() << _comSuffix << "Status sense";
 	sendCommand(0x61, 0x20, 4);
+}
+
+void PhSonyMasterController::speedSense()
+{
+	qDebug() << _comSuffix << "Speed sense";
+	sendCommand(0x60, 0x2E);
 }
 
 void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
@@ -145,6 +151,28 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 			}
 			statusData(4, status);
 			qDebug() << _comSuffix << " => Status data : " << statusStr;
+			break;
+		}
+		case 0x2e:
+		{
+			unsigned dataCount = getDataSize(cmd1);
+			PhRate rate = 0;
+			switch(dataCount)
+			{
+			case 1:
+				rate = computeRate(data[0]);
+				break;
+			case 2:
+				rate = computeRate(data[0], data[1]);
+				break;
+			default:
+				qDebug() << _comSuffix << " bad command";
+				break;
+			}
+
+			qDebug() << _comSuffix << " => Speed data : " << rate;
+			_clock.setRate(rate);
+
 			break;
 		}
 		default:
