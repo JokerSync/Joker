@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	_timer = new QTimer();
 	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-	_timer->start(600/PhTimeCode::getFps(_clock->getTCType()));
+	_timer->start(1000/PhTimeCode::getFps(_clock->getTCType()));
 }
 
 
@@ -56,13 +56,13 @@ void MainWindow::pushPlayButton()
 
 void MainWindow::pushForwardButton()
 {
-	_clock->setRate(4);
+	_clock->setRate(3);
 }
 
 
 void MainWindow::pushRewindButton()
 {
-	_clock->setRate(-4);
+	_clock->setRate(-3);
 }
 
 
