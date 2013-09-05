@@ -12,9 +12,9 @@ PhDebug* PhDebug::d = NULL;
 // is private and is only called by this Instance function.
 
 
-PhDebug* PhDebug::instance()
+PhDebug PhDebug::instance()
 {
    if (!d)   // Only allow one instance of class to be generated.
       d = new PhDebug;
-   return d;
+   return * d;
 }
