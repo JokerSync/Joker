@@ -1,10 +1,7 @@
 #ifndef PHTIMECODE_H
 #define PHTIMECODE_H
 
-/**
- Type for the timecode frame.
- */
-typedef long PhFrame;
+#include "PhTime.h"
 
 /** Different type of timecode
 
