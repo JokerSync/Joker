@@ -61,6 +61,11 @@ public slots:
 	 */
 	void statusSense();
 
+	/** Send a speed sense command to the connected device.
+	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#cmdSpeedSense
+	 */
+	void speedSense();
+
 signals:
 	void deviceIdData(unsigned char id1, unsigned char id2);
 	void statusData(int length, unsigned char * statusData);

@@ -24,15 +24,8 @@ private slots:
 	void tickMaster();
 	void tickSlave();
 
-	void on_queryIdButton_clicked();
-
 	void onDeviceIdData(unsigned char id1, unsigned char id2);
 	void onStatusData(int length, unsigned char * statusData);
-
-	void on_statusSenseButton_clicked();
-
-	void on_timeSenseButton_clicked();
-
 private:
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;

@@ -58,6 +58,8 @@ void PhSonyController::close()
 
 PhRate PhSonyController::computeRate(unsigned char data1)
 {
+	if(data1 == 0)
+		return 0;
 	PhRate n1 = data1;
 	return qPow(10, n1/32 - 2);
 }
@@ -70,8 +72,10 @@ PhRate PhSonyController::computeRate(unsigned char data1, unsigned char data2)
 	return rate + n2/256 * qPow(10, (n1+1)/32 - 2 - rate);
 }
 
-unsigned char PhSonyController::computeData1(PhRate rate)
+unsigned char PhSonyController::computeData1FromRate(PhRate rate)
 {
+	if(rate == 0)
+		return 0;
 	return (unsigned char)(32 * (2 + qLn(rate) / qLn(10)));
 }
 
@@ -80,7 +84,7 @@ unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 	return cmd1 & 0x0f;
 }
 
-void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
+void PhSonyController::sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
 //	qDebug() << _comSuffix << " sendCommand: " << stringFromCommand(cmd1, cmd2, data);
 	QByteArray buffer;
@@ -108,7 +112,7 @@ void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
 
 	va_end(argumentList);
 
-	sendCommand(cmd1, cmd2, data);
+	sendCommandWithData(cmd1, cmd2, data);
 }
 
 void PhSonyController::sendAck()

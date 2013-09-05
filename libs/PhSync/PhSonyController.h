@@ -82,7 +82,7 @@ protected:
 	 * @param rate The float value rate.
 	 * @return A one byte coded version of the rate.
 	 */
-	unsigned char computeData1(PhRate rate);
+	unsigned char computeData1FromRate(PhRate rate);
 
 	/**
 	 * Process a single command and respond to it, updating the clock if needed.
@@ -106,7 +106,7 @@ protected:
 	 * @param cmd2 Second command descriptor.
 	 * @param data Data for the command.
 	 */
-	void sendCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* data);
+	void sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
 
 	void sendCommand(unsigned char cmd1, unsigned char cmd2, ...);
 	/**

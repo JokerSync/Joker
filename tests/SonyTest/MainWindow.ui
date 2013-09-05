@@ -67,6 +67,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="speedSenseButton">
+        <property name="text">
+         <string>Speed sense</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item>

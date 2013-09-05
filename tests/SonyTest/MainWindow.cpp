@@ -23,6 +23,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(_sonyMaster.clock(), SIGNAL(rateChanged(PhRate)), ui->masterPanel, SLOT(onRateChanged(PhRate)));
 
 	// Connect sony master to MainWindow
+	connect(ui->queryIdButton, SIGNAL(clicked()), &_sonyMaster, SLOT(deviceTypeRequest()));
+	connect(ui->statusSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(statusSense()));
+	connect(ui->timeSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(timeSense()));
+	connect(ui->speedSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(speedSense()));
+
+
 	connect(&_sonyMaster, SIGNAL(deviceIdData(unsigned char,unsigned char)), this, SLOT(onDeviceIdData(unsigned char,unsigned char)));
 	connect(&_sonyMaster, SIGNAL(statusData(int,unsigned char*)), this, SLOT(onStatusData(int,unsigned char*)));
 
@@ -71,11 +77,6 @@ void MainWindow::tickSlave()
 	_sonySlave.clock()->tick(25);
 }
 
-void MainWindow::on_queryIdButton_clicked()
-{
-	_sonyMaster.deviceTypeRequest();
-}
-
 void MainWindow::onDeviceIdData(unsigned char id1, unsigned char id2)
 {
 	QString id;
@@ -89,14 +90,4 @@ void MainWindow::onStatusData(int length, unsigned char *statusData)
 	for (int i = 0; i < length; i++)
 		statusStr += QString::number(statusData[i], 16) + " ";
 	ui->statusLabel->setText(statusStr);
-}
-
-void MainWindow::on_statusSenseButton_clicked()
-{
-	_sonyMaster.statusSense();
-}
-
-void MainWindow::on_timeSenseButton_clicked()
-{
-	_sonyMaster.timeSense();
 }
