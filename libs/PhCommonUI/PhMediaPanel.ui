@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PhMediaControllerView</class>
- <widget class="QWidget" name="PhMediaControllerView">
+ <class>PhMediaPanel</class>
+ <widget class="QWidget" name="PhMediaPanel">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
+    <width>600</width>
     <height>120</height>
    </rect>
   </property>

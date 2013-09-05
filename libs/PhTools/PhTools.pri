@@ -1,4 +1,5 @@
 HEADERS += \
+	../../libs/PhTools/PhTime.h \
     ../../libs/PhTools/PhTimeCode.h \
     ../../libs/PhTools/PhClock.h
 
