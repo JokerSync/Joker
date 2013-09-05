@@ -15,6 +15,7 @@
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicLoop.h"
+#include "PhStrip/PhStripOff.h"
 
 #include "PhTools/PhClock.h"
 
@@ -115,6 +116,8 @@ private :
 	QMap<PhStripCut*, PhGraphicRect*> _graphicCuts;
 
 	QMap<PhStripLoop*, PhGraphicLoop*> _graphicLoops;
+
+	QMap<PhStripOff*, PhGraphicRect*> _graphicOffs;
 
 	/**
 	 * @brief _test

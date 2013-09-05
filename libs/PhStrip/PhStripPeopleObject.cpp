@@ -6,3 +6,4 @@ PhStripPeopleObject::PhStripPeopleObject(PhTime timeIn, PhPeople *people, PhTime
 {
 }
 
+

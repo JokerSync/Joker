@@ -56,8 +56,18 @@ void PhGraphicStripView::clearData()
 	{
 		delete gText;
 	}
+	foreach(PhGraphicLoop * gLoop, _graphicLoops.values())
+	{
+		delete gLoop;
+	}
+	foreach(PhGraphicRect * gOff, _graphicOffs.values())
+	{
+		delete gOff;
+	}
 	_graphicCuts.clear();
 	_graphicTexts.clear();
+	_graphicLoops.clear();
+	_graphicOffs.clear();
 }
 
 
@@ -150,6 +160,18 @@ void PhGraphicStripView::updateView()
 
 	}
 
+	//Load the offs
+	foreach(PhStripOff * off, _doc.getOffs())
+	{
+		PhGraphicSolidRect *gOff = new PhGraphicSolidRect();
+		gOff->setColor(new QColor(0, 0, 0));
+		gOff->setX(off->getTimeIn());
+		gOff->setWidth(2);
+		gOff->setHeight(_trackNumber);
+		gOff->setZ(-2);
+
+		_graphicOffs[off] = gOff;
+	}
 
 	qDebug() << "updateView ok";
 }

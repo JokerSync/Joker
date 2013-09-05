@@ -96,12 +96,50 @@ bool PhStripDoc::openDetX(QString fileName)
     }
 
 
+	//Find the loop list
 	QDomNodeList loops = DetX->elementsByTagName("loop");
 
 	for(int i = 0; i < loops.length(); i++)
 	{
 		_loops.push_back(new PhStripLoop((i + 1), PhTimeCode::frameFromString(loops.at(i).toElement().attribute("timecode"),
 																			 PhTimeCodeType25)));
+	}
+
+	//Find the off list
+	QDomNodeList line = DetX->elementsByTagName("line");
+
+	for(int i = 0; i < line.length(); i++)
+	{
+		QString type = line.at(i).toElement().attribute("voice");
+
+		if(type.compare("off"))
+		{
+			QDomElement chara = line.at(i).toElement();
+
+			PhPeople *people = new PhPeople(chara.attribute("role"), chara.attribute("color"));
+
+			int track = line.at(i).toElement().attribute("track").toInt();
+			QDomNode currentLine = line.at(i);
+			for(int j = 0; j < currentLine.childNodes().length(); j++)
+			{
+
+				if(currentLine.childNodes().at(j).nodeName() == "text")
+				{
+					int start = PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"), PhTimeCodeType25);
+					int end = 0;
+					if (!currentLine.childNodes().at(j+1).isNull())
+					{
+						end = PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"), PhTimeCodeType25);
+					}
+//					else
+//					{
+//						// One char is ~1.20588 frame
+//						end = start + currentLine.childNodes().at(j).toElement().text().length() * 1.20588 + 1;
+//					}
+					_offs.push_back(new PhStripOff(start, people, end, track));
+				}
+			}
+		}
 	}
 
 //	QDomNodeList lineList = DetX->elementsByTagName("line");
@@ -139,7 +177,7 @@ bool PhStripDoc::openDetX(QString fileName)
 		QString id = currentLine.toElement().attribute("role");
         for(int j = 0; j < currentLine.childNodes().length(); j++){
 
-            if(currentLine.childNodes().at(j).nodeName() == "text"){
+			if(currentLine.childNodes().at(j).nodeName() == "text"){
                 int start = PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"), PhTimeCodeType25);
                 int end = 0;
                 if (!currentLine.childNodes().at(j+1).isNull()){
@@ -255,4 +293,9 @@ QList<PhStripText *> PhStripDoc::getTexts()
 QList<PhStripLoop *> PhStripDoc::getLoops()
 {
 	return _loops;
+}
+
+QList<PhStripOff *> PhStripDoc::getOffs()
+{
+	return _offs;
 }
