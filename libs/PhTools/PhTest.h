@@ -3,7 +3,9 @@
 
 #define PH_TEST_START bool phTestResult = true
 #define PH_TEST_IS_EQUAL(expected, value, error) phTestResult += testIsEqual(__FUNCTION__, __LINE__, expected, value, error)
-#define PH_TEST_END qDebug() << __FUNCTION__ << " : " << (phTestResult?"Success":"Failed"); return phTestResult
+#define PH_TEST_END PHDEBUG << __FUNCTION__ << " : " << (phTestResult?"Success":"Failed"); return phTestResult
+
+#include "PhDebug.h"
 
 class PhTest
 {

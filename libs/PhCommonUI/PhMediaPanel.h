@@ -2,7 +2,6 @@
 #define PHMEDIAPANEL_H
 
 #include <QWidget>
-#include <QDebug>
 
 #include "PhTools/PhTimeCode.h"
 
