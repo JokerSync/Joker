@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>339</height>
+    <width>488</width>
+    <height>481</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,82 +16,80 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Master</string>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Serial A</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkA">
+        <property name="text">
+         <string>Activate</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QPushButton" name="queryIdButton">
-        <property name="text">
-         <string>Query ID</string>
-        </property>
-       </widget>
+       <widget class="QLineEdit" name="inputA"/>
       </item>
       <item>
-       <widget class="QLabel" name="idLabel">
+       <widget class="QPushButton" name="sendButton1">
         <property name="text">
-         <string>Unknown ID</string>
+         <string>Send</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QPushButton" name="statusSenseButton">
-        <property name="text">
-         <string>Status sense</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="statusLabel">
-        <property name="text">
-         <string>Unknown status</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QTextEdit" name="receiveA"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QPushButton" name="timeSenseButton">
+       <widget class="QLabel" name="label">
         <property name="text">
-         <string>Time sense</string>
+         <string>Serial B</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="speedSenseButton">
+       <widget class="QCheckBox" name="checkB">
         <property name="text">
-         <string>Speed sense</string>
+         <string>Activate</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <widget class="PhMediaPanel" name="masterPanel" native="true"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QLabel" name="label_4">
+       <widget class="QLineEdit" name="inputB"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="sendButton2">
         <property name="text">
-         <string>Slave</string>
+         <string>Send</string>
         </property>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <widget class="PhMediaPanel" name="slavePanel" native="true"/>
+     <widget class="QTextEdit" name="receiveB"/>
     </item>
    </layout>
   </widget>
@@ -100,21 +98,23 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>488</width>
      <height>22</height>
     </rect>
    </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>PhMediaPanel</class>
-   <extends>QWidget</extends>
-   <header>PhCommonUI/PhMediaPanel.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
+ <tabstops>
+  <tabstop>inputA</tabstop>
+  <tabstop>sendButton1</tabstop>
+  <tabstop>inputB</tabstop>
+  <tabstop>sendButton2</tabstop>
+  <tabstop>checkA</tabstop>
+  <tabstop>checkB</tabstop>
+  <tabstop>receiveA</tabstop>
+  <tabstop>receiveB</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

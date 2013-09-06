@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QSerialPort>
 
-#include <../../libs/PhTools/PhTime.h>
+#include <PhTools/PhClock.h>
 
 /**
  * PhSonyController is an abstract class handle sony 9 pin communication
@@ -12,6 +12,8 @@
  * It provide a generic implementation for handlind sony master
  * and slave communication.
  * It can be connected to a clock to update it accordingly.
+ *
+ * Sony 9 pin specification : http://www.belle-nuit.com/archives/9pin.html
  */
 class PhSonyController : public QObject
 {
@@ -38,18 +40,20 @@ public:
 	/** @brief PhSonyController destructor
 	 *
 	 * Closing the port if open.
-	 * /
+	 */
 	~PhSonyController();
 
 	/**
-	 Start the thread handling the communication.
+	 * Open the communication port.
 	 */
-	bool start();
+	bool open();
 
 	/**
-	 Stop the thread handling the communication.
+	 * Close the communication port.
 	 */
-	void stop();
+	void close();
+
+	PhClock *clock() { return &_clock; }
 
 protected:
 	/**
@@ -78,15 +82,7 @@ protected:
 	 * @param rate The float value rate.
 	 * @return A one byte coded version of the rate.
 	 */
-	unsigned char computeData1(PhRate rate);
-
-	/**
-	 * Get an element of the device status.
-	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#statusData
-	 * @param index Index of the status array
-	 * @return A 8 bit status information
-	 */
-	unsigned char status(int index);
+	unsigned char computeData1FromRate(PhRate rate);
 
 	/**
 	 * Process a single command and respond to it, updating the clock if needed.
@@ -110,7 +106,7 @@ protected:
 	 * @param cmd2 Second command descriptor.
 	 * @param data Data for the command.
 	 */
-	void sendCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* data);
+	void sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
 
 	void sendCommand(unsigned char cmd1, unsigned char cmd2, ...);
 	/**
@@ -132,19 +128,14 @@ protected:
 	 */
 	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data = 0);
 
-private:
-	/** Serial port connected to the controller */
-	QSerialPort _serial;
+	PhClock _clock;
 
-	/** Serial port name suffix (A for slave and B for master) */
+	// Serial port name suffix (A for slave and B for master)
 	QString _comSuffix;
 
-	/** Clock linked to the controller */
-	//PhClock * clock;	TODO: get julien implementation
-
-	/** Sony controller status */
-	unsigned char _status[8];
-
+private:
+	// Serial port connected to the controller
+	QSerialPort _serial;
 private slots:
 	void onData();
 	void onCTS();

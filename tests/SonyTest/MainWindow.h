@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
+
+#include "PhClock.h"
 #include "PhSonyMasterController.h"
 #include "PhSonySlaveController.h"
 
@@ -17,10 +20,17 @@ public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
+private slots:
+	void tickMaster();
+	void tickSlave();
+
+	void onDeviceIdData(unsigned char id1, unsigned char id2);
+	void onStatusData(int length, unsigned char * statusData);
 private:
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;
 	PhSonySlaveController _sonySlave;
+	QTimer _slaveTimer, _masterTimer;
 };
 
 #endif // MAINWINDOW_H
