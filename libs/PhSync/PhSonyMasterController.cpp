@@ -1,6 +1,6 @@
 #include "PhSonyMasterController.h"
 
-#include <QDebug>
+#include "PhTools/PhDebug.h"
 
 PhSonyMasterController::PhSonyMasterController(QObject *parent)
 	: PhSonyController("B", parent )
@@ -9,37 +9,37 @@ PhSonyMasterController::PhSonyMasterController(QObject *parent)
 
 void PhSonyMasterController::deviceTypeRequest()
 {
-	qDebug() << _comSuffix << "Device type request";
+	PHDEBUG << _comSuffix << "Device type request";
 	sendCommand(0x00, 0x11);
 }
 
 void PhSonyMasterController::play()
 {
-	qDebug() << _comSuffix << "Play";
+	PHDEBUG << _comSuffix << "Play";
 	sendCommand(0x20, 0x01);
 }
 
 void PhSonyMasterController::stop()
 {
-	qDebug() << _comSuffix << "Stop";
+	PHDEBUG << _comSuffix << "Stop";
 	sendCommand(0x20, 0x00);
 }
 
 void PhSonyMasterController::fastForward()
 {
-	qDebug() << _comSuffix << "Fast forward";
+	PHDEBUG << _comSuffix << "Fast forward";
 	sendCommand(0x20, 0x10);
 }
 
 void PhSonyMasterController::rewind()
 {
-	qDebug() << _comSuffix << "Rewind";
+	PHDEBUG << _comSuffix << "Rewind";
 	sendCommand(0x20, 0x20);
 }
 
 void PhSonyMasterController::jog(PhRate rate)
 {
-	qDebug() << _comSuffix << "Jog " << rate;
+	PHDEBUG << _comSuffix << "Jog " << rate;
 	unsigned char data1;
 	if (rate < 0)
 	{
@@ -55,7 +55,7 @@ void PhSonyMasterController::jog(PhRate rate)
 
 void PhSonyMasterController::varispeed(PhRate rate)
 {
-	qDebug() << _comSuffix << "Varispeed " << rate;
+	PHDEBUG << _comSuffix << "Varispeed " << rate;
 	unsigned char data1;
 	if (rate < 0)
 	{
@@ -71,7 +71,7 @@ void PhSonyMasterController::varispeed(PhRate rate)
 
 void PhSonyMasterController::shuttle(PhRate rate)
 {
-	qDebug() << _comSuffix << "Shuttle " << rate;
+	PHDEBUG << _comSuffix << "Shuttle " << rate;
 	unsigned char data1;
 	if (rate < 0)
 	{
@@ -87,46 +87,46 @@ void PhSonyMasterController::shuttle(PhRate rate)
 
 void PhSonyMasterController::timeSense()
 {
-	qDebug() << _comSuffix << "Time sense";
+	PHDEBUG << _comSuffix << "Time sense";
 	sendCommand(0x61, 0x0c, 1);
 }
 
 void PhSonyMasterController::statusSense()
 {
-	qDebug() << _comSuffix << "Status sense";
+	PHDEBUG << _comSuffix << "Status sense";
 	sendCommand(0x61, 0x20, 4);
 }
 
 void PhSonyMasterController::speedSense()
 {
-	qDebug() << _comSuffix << "Speed sense";
+	PHDEBUG << _comSuffix << "Speed sense";
 	sendCommand(0x60, 0x2E);
 }
 
 void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
-	qDebug() << _comSuffix << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, data);
+	PHDEBUG << _comSuffix << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, data);
 	switch (cmd1 >> 4)
 	{
 	case 1:
 		switch (cmd2)
 		{
 		case 0x01:
-			qDebug() << _comSuffix << " => ACK";
+			PHDEBUG << _comSuffix << " => ACK";
 			break;
 		case 0x11:
 		{
 			deviceIdData(data[0], data[1]);
 			QString id;
 			id.sprintf("%02X %02X", data[0], data[1]);
-			qDebug() << _comSuffix << " => Device ID answer : " << id;
+			PHDEBUG << _comSuffix << " => Device ID answer : " << id;
 			break;
 		}
 		case 0x12:
-			qDebug() << _comSuffix << " => NAK :" <<  QString::number(data[0], 16);
+			PHDEBUG << _comSuffix << " => NAK :" <<  QString::number(data[0], 16);
 			break;
 		default:
-			qDebug() << _comSuffix << " => Unknown answer : " << QString("%x %x").arg(cmd1, cmd2);
+			PHDEBUG << _comSuffix << " => Unknown answer : " << QString("%x %x").arg(cmd1, cmd2);
 			break;
 		}
 		break;
@@ -136,7 +136,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		case 0x04:
 		{
 			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)data, _clock.getTCType());
-			qDebug() << _comSuffix << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _clock.getTCType());
+			PHDEBUG << _comSuffix << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _clock.getTCType());
 			_clock.setFrame(frame);
 			break;
 		}
@@ -150,7 +150,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 				statusStr += QString::number(data[i], 16) + " ";
 			}
 			statusData(4, status);
-			qDebug() << _comSuffix << " => Status data : " << statusStr;
+			PHDEBUG << _comSuffix << " => Status data : " << statusStr;
 			break;
 		}
 		case 0x2e:
@@ -166,24 +166,24 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 				rate = computeRate(data[0], data[1]);
 				break;
 			default:
-				qDebug() << _comSuffix << " bad command";
+				PHDEBUG << _comSuffix << " bad command";
 				break;
 			}
 
-			qDebug() << _comSuffix << " => Speed data : " << rate;
+			PHDEBUG << _comSuffix << " => Speed data : " << rate;
 			_clock.setRate(rate);
 
 			break;
 		}
 		default:
-			qDebug() << _comSuffix << " => Unknown answer : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16);
+			PHDEBUG << _comSuffix << " => Unknown answer : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16);
 			break;
 		}
 		break;
 	default:
-		qDebug() << _comSuffix << " => Unknown answer : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16);
+		PHDEBUG << _comSuffix << " => Unknown answer : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16);
 		break;
 	}
-	qDebug() << _comSuffix << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, data) << " over";
+	PHDEBUG << _comSuffix << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, data) << " over";
 
 }
