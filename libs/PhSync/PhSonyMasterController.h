@@ -12,10 +12,12 @@
  */
 class PhSonyMasterController : public PhSonyController
 {
+	Q_OBJECT
 public:
 	/** PhSonyMasterController constructor */
 	PhSonyMasterController(QObject *parent);
 
+public slots:
 	/** Request the slave device id */
 	void deviceTypeRequest();
 
@@ -49,11 +51,24 @@ public:
 	 */
 	void shuttle(PhRate rate);
 
-	/** Send a time sense command to the connected device. */
+	/** Send a time sense command to the connected device.
+	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#currentTimeSense
+	 */
 	void timeSense();
 
-	/** Send a status sense command to the connected device. */
+	/** Send a status sense command to the connected device.
+	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#statusSense
+	 */
 	void statusSense();
+
+	/** Send a speed sense command to the connected device.
+	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#cmdSpeedSense
+	 */
+	void speedSense();
+
+signals:
+	void deviceIdData(unsigned char id1, unsigned char id2);
+	void statusData(int length, unsigned char * statusData);
 
 protected:
 	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);

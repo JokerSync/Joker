@@ -1,21 +1,17 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2013-08-14T20:05:01
+# Project created by QtCreator 2013-08-29T12:28:34
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = SonyTest
+TARGET = SerialTest
 TEMPLATE = app
 
-INCLUDEPATH += ../../libs
-
 include(../../libs/PhTools/PhTools.pri)
-include(../../libs//PhCommonUI/PhCommonUI.pri)
-include(../../libs/PhSync/PhSync.pri)
 
 SOURCES += main.cpp\
         MainWindow.cpp

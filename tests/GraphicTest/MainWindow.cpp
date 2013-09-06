@@ -48,6 +48,6 @@ void MainWindow::pushPlayButton()
 
 void MainWindow::changeText(QString)
 {
-	ui->view->getText()->init();
 	ui->view->getText()->setContent(ui->TextBox->text());
+	ui->view->getText()->init();
 }
