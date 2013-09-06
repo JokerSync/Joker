@@ -8,6 +8,8 @@ PhQTVideoView::PhQTVideoView(QObject *parent)
 {
 	qDebug() << "Using QTVideo widget for video playback.";
 	_player.setVideoOutput(this);
+
+	connect(&_player, SIGNAL(positionChanged(qint64)), this, SIGNAL(positionChangedSignal(qint64)));
 }
 
 bool PhQTVideoView::open(QString fileName)
@@ -28,7 +30,7 @@ bool PhQTVideoView::open(QString fileName)
 void PhQTVideoView::setClock(PhClock *clock)
 {
 	PhVideoObject::setClock(clock);
-	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
+	connect(_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
@@ -44,7 +46,8 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 
 }
 
-void PhQTVideoView::onFrameChanged()
+void PhQTVideoView::onFrameChanged(PhFrame frame,PhTimeCodeType tcType)
 {
-	qDebug() << "PhQTVideoView::onFrameChanged() TODO";
+	//qint64 p = frame*1000/PhTimeCode::getFps(tcType);
+	//_player.setPosition(p);
 }

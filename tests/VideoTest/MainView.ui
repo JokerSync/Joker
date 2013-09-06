@@ -14,16 +14,15 @@
    <string>VideoTest</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1">
     <item>
-     <widget class="PhVideoView" name="_videoView" native="true"/>
+     <widget class="PhVideoView" name="_videoView" native="true">
+      <zorder>widget</zorder>
+      <zorder>widget</zorder>
+     </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="_openButton">
-      <property name="text">
-       <string>Open</string>
-      </property>
-     </widget>
+     <widget class="PhMediaPanel" name="mediaController" native="true"/>
     </item>
    </layout>
   </widget>
@@ -59,6 +58,12 @@
    <class>PhVideoView</class>
    <extends>QWidget</extends>
    <header>PhVideo/PhVideoView.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PhMediaPanel</class>
+   <extends>QWidget</extends>
+   <header>PhCommonUI/PhMediaPanel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
