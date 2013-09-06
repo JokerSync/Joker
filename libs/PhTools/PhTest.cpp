@@ -1,7 +1,7 @@
 #include "PhTest.h"
 
 #include <QDebug>
-#include <QtMath>
+#include <qmath.h>
 
 PhTest::PhTest()
 {

@@ -13,7 +13,7 @@ namespace Ui {
 class PhMediaPanel : public QWidget
 {
 	Q_OBJECT
-	
+
 public:
 	explicit PhMediaPanel(QWidget *parent = 0);
 	~PhMediaPanel();
