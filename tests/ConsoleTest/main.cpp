@@ -1,23 +1,22 @@
 #include <QCoreApplication>
 
-#include <QDebug>
-
 #include "PhTools/PhTimeCode.h"
+#include "PhTools/PhDebug.h"
 
 int main(int argc, char *argv[])
 {
-	qDebug() << "ConsoleTest";
-	qDebug() << "pouet";
-    //QCoreApplication a(argc, argv);
+    // Test of PhDebug tool
+    PHDEBUG << "Test of PhDebug tool";
 
-    for(int i=0; i<20;i++)
+    // Test of TimeCode
+    for(int i=0; i<3;i++)
     {
         QString s = PhTimeCode::stringFromFrame(i, PhTimeCodeType25);
         int n = PhTimeCode::frameFromString(s, PhTimeCodeType25);
-		qDebug() << s;
+        PHDEBUG << s;
         if(n != i)
-            qDebug() << "problem with " << i;
+            PHDEBUG << "problem with " << i;
     }
-    //return a.exec();
+
     return 0;
 }
