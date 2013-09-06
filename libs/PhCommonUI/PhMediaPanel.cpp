@@ -125,7 +125,7 @@ void PhMediaPanel::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 
 	if(frame >= _firstFrame + _mediaLength)
 	{
-		endOfMediaSignal();
+		emit endOfMediaSignal();
 	}
 }
 

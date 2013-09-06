@@ -6,6 +6,7 @@
 
 #include "PhTools/PhClock.h"
 #include "PhVideo/PhVideoView.h"
+#include "PhCommonUI/PhMediaPanel.h"
 
 using namespace std;
 
@@ -42,10 +43,42 @@ private slots:
 
 	void onOpenFile();
 
+	void updateFrame(qint64 position);
+
+	/**
+	 * @brief changeValuePlayButton
+	 * Change the state of _playButtonState when cliking on _playButton
+	 */
+	void pushPlayButton();
+
+	/**
+	 * @brief changeStateFastForwardButton
+	 * Change the state of _fastForwardButtonState when clicking on _fastForwardButton
+	 */
+	void pushForwardButton();
+
+	/**
+	 * @brief changeStateFastRewindButton
+	 * Change the state of _fastForwardButtonState when clicking on _fastForwardButton
+	 */
+	void pushRewindButton();
+
+	void pushBackButton();
+
+	void pushNextFrameButton();
+
+	void pushPreviousFrameButton();
+
+	void useSliderCursor(int position);
+
+	void selectRate(int index);
+
+	void backToBeginning();
+
 private:
 
 	Ui::MainView *ui;
-	PhClock _clock;
+	PhClock *_clock;
 };
 
 #endif

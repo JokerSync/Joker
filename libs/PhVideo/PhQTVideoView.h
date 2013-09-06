@@ -29,10 +29,12 @@ public:
 
 signals:
 
+	void positionChangedSignal(qint64);
+
 public slots:
 
 	void onRateChanged(PhRate rate);
-	void onFrameChanged();
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 
 private:
 	QMediaPlayer _player;
