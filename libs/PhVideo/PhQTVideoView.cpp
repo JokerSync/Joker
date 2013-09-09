@@ -39,10 +39,9 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 	if(rate == 0)
 		_player.pause();
 	else
-	{
 		_player.play();
-		_player.setPlaybackRate(rate);
-	}
+
+	_player.setPlaybackRate(rate);
 
 }
 
