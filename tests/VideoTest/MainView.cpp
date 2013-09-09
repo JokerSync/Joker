@@ -19,6 +19,8 @@ MainView::MainView()
 	ui->mediaController->setTCType(_clock->getTCType());
 	ui->mediaController->setFirstFrame(_clock->frame());
 
+	ui->_videoView->setIntervalUpdate(1000/PhTimeCode::getFps(PhTimeCodeType25));
+
 	connect(ui->mediaController, SIGNAL(playButtonSignal()), this, SLOT(pushPlayButton()));
 	connect(ui->mediaController, SIGNAL(forwardButtonSignal()), this, SLOT(pushForwardButton()));
 	connect(ui->mediaController, SIGNAL(rewindButtonSignal()), this, SLOT(pushRewindButton()));
@@ -106,6 +108,7 @@ void MainView::pushNextFrameButton()
 {
 	PhFrame f = _clock->frame() + 1;
 	_clock->setFrame(f);
+	//ui->_videoView->setPosition(f);
 }
 
 
@@ -124,21 +127,24 @@ void MainView::useSliderCursor(int position)
 
 void MainView::selectTCType(int index)
 {
+	PhTimeCodeType tc;
 	switch(index)
 	{
 	case 0:
-		_clock->setTCType(PhTimeCodeType2398);
+		tc = PhTimeCodeType2398;
 		break;
 	case 1:
-		_clock->setTCType(PhTimeCodeType24);
+		tc = PhTimeCodeType24;
 		break;
 	case 2:
-		_clock->setTCType(PhTimeCodeType25);
+		tc = PhTimeCodeType25;
 		break;
 	case 3:
-		_clock->setTCType(PhTimeCodeType2997);
+		tc = PhTimeCodeType2997;
 		break;
 	}
+	_clock->setTCType(tc);
+	ui->_videoView->setIntervalUpdate(1000/PhTimeCode::getFps(tc));
 }
 
 void MainView::backToBeginning()

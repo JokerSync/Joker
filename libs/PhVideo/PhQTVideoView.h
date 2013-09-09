@@ -27,6 +27,10 @@ public:
 
 	void setClock(PhClock *clock);
 
+	void setIntervalUpdate(int interval);
+
+	void setPosition(qint64 position);
+
 signals:
 
 	void positionChangedSignal(qint64);
