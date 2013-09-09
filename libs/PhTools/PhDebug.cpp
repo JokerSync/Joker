@@ -15,6 +15,22 @@ PhDebug* PhDebug::d = NULL;
 PhDebug PhDebug::instance()
 {
    if (!d)   // Only allow one instance of class to be generated.
-      d = new PhDebug;
+       d = new PhDebug(true, true);
    return * d;
+}
+
+PhDebug PhDebug::init(bool DispTime, bool DispFuncName)
+{
+    if (!d)   // Only allow one instance of class to be generated.
+        d = new PhDebug(DispTime, DispFuncName);
+    return * d;
+}
+
+PhDebug::PhDebug(bool DispTime, bool DispFuncName)
+{
+
+    if (!d){
+        _time = DispTime;
+        _fname = DispFuncName;
+    }
 }
