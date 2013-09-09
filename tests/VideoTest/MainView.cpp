@@ -26,7 +26,7 @@ MainView::MainView()
 	connect(ui->mediaController, SIGNAL(nextFrameButtonSignal()), this, SLOT(pushNextFrameButton()));
 	connect(ui->mediaController, SIGNAL(previousFrameButtonSignal()), this, SLOT(pushPreviousFrameButton()));
 	connect(ui->mediaController, SIGNAL(useSliderCursorSignal(int)), this, SLOT(useSliderCursor(int)));
-	connect(ui->mediaController, SIGNAL(useComboBoxSignal(int)), this, SLOT(selectRate(int)));
+	connect(ui->mediaController, SIGNAL(useComboBoxSignal(int)), this, SLOT(selectTCType(int)));
 
 	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), ui->mediaController, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), ui->mediaController, SLOT(onRateChanged(PhRate)));
@@ -79,6 +79,7 @@ void MainView::pushPlayButton()
 		_clock->setRate(1.0);
 	else //If state = play
 		_clock->setRate(0.0);
+	qDebug()<<"rate(play):"<<_clock->rate();
 }
 
 
@@ -121,7 +122,7 @@ void MainView::useSliderCursor(int position)
 }
 
 
-void MainView::selectRate(int index)
+void MainView::selectTCType(int index)
 {
 	switch(index)
 	{

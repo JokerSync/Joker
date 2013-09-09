@@ -71,7 +71,7 @@ private slots:
 
 	void useSliderCursor(int position);
 
-	void selectRate(int index);
+	void selectTCType(int index);
 
 	void backToBeginning();
 
