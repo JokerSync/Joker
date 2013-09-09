@@ -10,6 +10,7 @@
 #include <QDate>
 #include <QRect>
 
+#include "iostream"
 
 #define PHDEBUG PhDebug::instance() << qDebug() << __FUNCTION__ << ":"
 
@@ -22,22 +23,36 @@ class PhDebug
 public:
     // used to access to the only instance of the class
     static PhDebug instance();
+    static PhDebug init(bool DispTime, bool DispFuncName);
 
     QDebug operator<<(QDebug dbg)
     {
         QString s;
-        s = QDate::currentDate().toString("dd.MM.yyyy");
-        s += " - ";
-        s += QTime::currentTime().toString("hh.mm.ss.zzz");
-        s += " in";
+
+        if (_time){
+            s = QDate::currentDate().toString("dd.MM.yyyy");
+            s += " - ";
+            s += QTime::currentTime().toString("hh.mm.ss.zzz");
+            s += " ";
+        }
+        if (_fname && !_time){
+            s += "In";
+        }
+        if(_fname && _time){
+            s += "in";
+        }
         dbg << Q(s);
 
         return dbg;
     }
 
+    PhDebug(bool DispTime, bool DispFuncName);
+
+
 private:
     static PhDebug * d;
-    PhDebug(){}
+    bool _fname;
+    bool _time;
 
 };
 
