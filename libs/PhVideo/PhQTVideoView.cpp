@@ -34,6 +34,16 @@ void PhQTVideoView::setClock(PhClock *clock)
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
+void PhQTVideoView::setIntervalUpdate(int interval)
+{
+	_player.setNotifyInterval(interval);
+}
+
+void PhQTVideoView::setPosition(qint64 position)
+{
+	_player.setPosition(position);
+}
+
 void PhQTVideoView::onRateChanged(PhRate rate)
 {
 	if(rate == 0)
@@ -47,6 +57,9 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 
 void PhQTVideoView::onFrameChanged(PhFrame frame,PhTimeCodeType tcType)
 {
-	//qint64 p = frame*1000/PhTimeCode::getFps(tcType);
-	//_player.setPosition(p);
+	if(_player.playbackRate() == 0)
+	{
+		qint64 p = frame*1000/PhTimeCode::getFps(tcType);
+		_player.setPosition(p);
+	}
 }
