@@ -66,13 +66,12 @@ void MainView::onOpenFile()
 	 openFile(fileName); // TODO: show error in case of error
 }
 
+
 void MainView::updateFrame(qint64 position)
 {
 	PhFrame f = position*PhTimeCode::getFps(_clock->getTCType())/1000;
-	qDebug() << "position:"<<position<<"frame"<<f;//_clock->frame();
 	_clock->setFrame(f);
 }
-
 
 
 void MainView::pushPlayButton()
@@ -81,7 +80,6 @@ void MainView::pushPlayButton()
 		_clock->setRate(1.0);
 	else //If state = play
 		_clock->setRate(0.0);
-	qDebug()<<"rate(play):"<<_clock->rate();
 }
 
 
