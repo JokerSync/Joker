@@ -8,7 +8,6 @@ PhQTVideoView::PhQTVideoView(QObject *parent)
 {
 	qDebug() << "Using QTVideo widget for video playback.";
 	_player.setVideoOutput(this);
-
 	connect(&_player, SIGNAL(positionChanged(qint64)), this, SIGNAL(positionChangedSignal(qint64)));
 }
 
@@ -63,3 +62,4 @@ void PhQTVideoView::onFrameChanged(PhFrame frame,PhTimeCodeType tcType)
 		_player.setPosition(p);
 	}
 }
+
