@@ -20,7 +20,7 @@ public:
 
 private slots:
 	void onOpenFile();
-	void onFrameOrRateChanged();
+	void onFrameOrRateChanged(PhFrame frame, PhTimeCodeType tcType);
 
 private:
 	Ui::MainWindow *ui;
