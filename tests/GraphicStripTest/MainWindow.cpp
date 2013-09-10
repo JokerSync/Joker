@@ -14,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 
-	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameOrRateChanged()));
-	connect(_clock, SIGNAL(rateChanged()), this, SLOT(onFrameOrRateChanged()));
+	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameOrRateChanged(PhFrame, PhTimeCodeType)));
+//	connect(_clock, SIGNAL(rateChanged()), this, SLOT(onFrameOrRateChanged()));
 }
 
 MainWindow::~MainWindow()
@@ -48,9 +48,9 @@ void MainWindow::onOpenFile()
 	}
 }
 
-void MainWindow::onFrameOrRateChanged()
+void MainWindow::onFrameOrRateChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(_clock->frame(), _clock->getTCType()), QString::number(_clock->rate()));
+	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(frame, tcType), QString::number(_clock->rate()));
 	ui->statusbar->showMessage(message);
 }
 
