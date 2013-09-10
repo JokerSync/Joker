@@ -1,7 +1,9 @@
+#include <QMessageBox>
+
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include <QDebug>
+#include "PhTools/PhDebug.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -12,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 
 	// configure panels
-	ui->masterPanel->setMediaLength(1000);
+	ui->masterPanel->setMediaLength(10000);
 
 	ui->slavePanel->setMediaLength(10000);
 
@@ -36,18 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(_sonySlave.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->slavePanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_sonySlave.clock(), SIGNAL(rateChanged(PhRate)), ui->slavePanel, SLOT(onRateChanged(PhRate)));
 
-	// start slave and master
-	if(_sonyMaster.open())
-	{
-		qDebug() << "master open ok";
-
-		if(_sonySlave.open())
-			qDebug() << "slave open ok";
-		else
-			qDebug() << "error opening master";
-	}
-	else
-		qDebug() << "error opening master";
+	// start master and slave
+	on_masterActiveCheck_clicked(true);
+	on_slaveActiveCheck_clicked(true);
 
 	// start timers
 	connect(&_masterTimer, SIGNAL(timeout()), this, SLOT(tickMaster()));
@@ -91,3 +84,66 @@ void MainWindow::onStatusData(int length, unsigned char *statusData)
 		statusStr += QString::number(statusData[i], 16) + " ";
 	ui->statusLabel->setText(statusStr);
 }
+
+void MainWindow::on_masterActiveCheck_clicked(bool checked)
+{
+	if(checked)
+	{
+		PHDEBUG << "opening master";
+
+		if(_sonyMaster.open())
+		{
+			PHDEBUG << "master open ok";
+
+			_sonyMaster.deviceTypeRequest();
+	//		_sonyMaster.statusSense();
+		//	_sonyMaster.timeSense();
+			//_sonyMaster.speedSense();
+		}
+		else
+		{
+			PHDEBUG << "error opening master";
+			checked = false;
+			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony master");
+		}
+	}
+	else
+	{
+		PHDEBUG << "closing sony master";
+		_sonyMaster.close();
+	}
+
+	ui->masterActiveCheck->setChecked(checked);
+
+	ui->queryIdButton->setEnabled(checked);
+	ui->statusSenseButton->setEnabled(checked);
+	ui->timeSenseButton->setEnabled(checked);
+	ui->speedSenseButton->setEnabled(checked);
+
+	ui->masterPanel->setEnabled(checked);
+}
+
+void MainWindow::on_slaveActiveCheck_clicked(bool checked)
+{
+	if(checked)
+	{
+		if(_sonySlave.open())
+			PHDEBUG << "slave open ok";
+		else
+		{
+			PHDEBUG << "error opening slave";
+			checked = false;
+			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
+		}
+	}
+	else
+	{
+		PHDEBUG << "closing sony slave";
+		_sonySlave.clock()->setRate(0);
+		_sonySlave.close();
+	}
+
+	ui->slaveActiveCheck->setChecked(checked);
+	ui->slavePanel->setEnabled(checked);
+}
+

@@ -11,6 +11,20 @@ public:
 protected:
 	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
 private:
+	/**
+	 * @brief Send a command acknolegment.
+	 */
+	void sendAck();
+
+	/**
+	 * @brief Send an error to the command emiter.
+	 * @param error Error type.
+	 */
+	void sendNak(PhSonyError error);
+
+	void checkSumError();
+
+	void timeOut();
 public:
 	enum PhSonyState {
 		Pause,
