@@ -109,16 +109,9 @@ protected:
 	void sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
 
 	void sendCommand(unsigned char cmd1, unsigned char cmd2, ...);
-	/**
-	 * @brief Send a command acknolegment.
-	 */
-	void sendAck();
 
-	/**
-	 * @brief Send an error to the command emiter.
-	 * @param error Error type.
-	 */
-	void sendNak(PhSonyError error);
+	virtual void timeOut();
+	virtual void checkSumError();
 
 	/**
 	 * @brief stringFromCommand
