@@ -62,3 +62,20 @@ void MainWindow::on_actionPlay_pause_triggered()
 	else
 		_clock->setRate(0.0);
 }
+
+void MainWindow::on_actionPlay_backward_triggered()
+{
+    _clock->setRate(-1.0);
+}
+
+void MainWindow::on_actionStep_forward_triggered()
+{
+    _clock->setRate(0.0);
+	_clock->setFrame(_clock->frame() + 1);
+}
+
+void MainWindow::on_actionStep_backward_triggered()
+{
+	_clock->setRate(0.0);
+	_clock->setFrame(_clock->frame() - 1);
+}
