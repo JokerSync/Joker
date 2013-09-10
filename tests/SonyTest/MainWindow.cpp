@@ -95,7 +95,7 @@ void MainWindow::on_masterActiveCheck_clicked(bool checked)
 		{
 			PHDEBUG << "master open ok";
 
-//			_sonyMaster.deviceTypeRequest();
+			_sonyMaster.deviceTypeRequest();
 	//		_sonyMaster.statusSense();
 		//	_sonyMaster.timeSense();
 			//_sonyMaster.speedSense();

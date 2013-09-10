@@ -116,16 +116,14 @@ void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
 	sendCommandWithData(cmd1, cmd2, data);
 }
 
-void PhSonyController::sendAck()
+void PhSonyController::timeOut()
 {
 	PHDEBUG << _comSuffix;
-	sendCommand(0x10, 0x01);
 }
 
-void PhSonyController::sendNak(PhSonyController::PhSonyError error)
+void PhSonyController::checkSumError()
 {
-	PHDEBUG << _comSuffix << error;
-	sendCommand(0x11, 0x12, error);
+	PHDEBUG << _comSuffix;
 }
 
 QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data)
@@ -161,7 +159,7 @@ void PhSonyController::onData()
 		if(nbTry > 200)
 		{
 			PHDEBUG << _comSuffix << "Read time out";
-			sendNak(PhSonyController::TimeOut);
+			timeOut();
 			return;
 		}
 	}
@@ -183,7 +181,7 @@ void PhSonyController::onData()
 		if(nbTry > 200)
 		{
 			PHDEBUG << _comSuffix << "Read time out";
-			sendNak(PhSonyController::TimeOut);
+			timeOut();
 			return;
 		}
 	}
@@ -200,7 +198,7 @@ void PhSonyController::onData()
 	{
 		PHDEBUG << _comSuffix << "Checksum error : " << cmdString;
 		_serial.flush();
-		sendNak(PhSonyController::ChecksumError);
+		checkSumError();
 		return;
 	}
 

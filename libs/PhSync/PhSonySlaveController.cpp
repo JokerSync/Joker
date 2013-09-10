@@ -294,3 +294,27 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 
 	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn) << " over";
 }
+
+void PhSonySlaveController::sendAck()
+{
+	PHDEBUG << _comSuffix;
+	sendCommand(0x10, 0x01);
+}
+
+void PhSonySlaveController::sendNak(PhSonyController::PhSonyError error)
+{
+	PHDEBUG << _comSuffix << error;
+	sendCommand(0x11, 0x12, error);
+}
+
+void PhSonySlaveController::checkSumError()
+{
+	PhSonyController::checkSumError();
+	sendNak(ChecksumError);
+}
+
+void PhSonySlaveController::timeOut()
+{
+	PhSonyController::timeOut();
+	sendNak(TimeOut);
+}
