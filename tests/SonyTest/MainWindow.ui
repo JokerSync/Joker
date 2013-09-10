@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>339</height>
+    <height>447</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,63 +16,67 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="label_2">
+     <widget class="QCheckBox" name="masterActiveCheck">
       <property name="text">
        <string>Master</string>
       </property>
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QPushButton" name="queryIdButton">
-        <property name="text">
-         <string>Query ID</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QPushButton" name="queryIdButton">
+          <property name="text">
+           <string>Query ID</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="idLabel">
+          <property name="text">
+           <string>Unknown ID</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QLabel" name="idLabel">
-        <property name="text">
-         <string>Unknown ID</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QPushButton" name="statusSenseButton">
-        <property name="text">
-         <string>Status sense</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="statusLabel">
-        <property name="text">
-         <string>Unknown status</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
-      <item>
-       <widget class="QPushButton" name="timeSenseButton">
-        <property name="text">
-         <string>Time sense</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QPushButton" name="statusSenseButton">
+          <property name="text">
+           <string>Status sense</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="statusLabel">
+          <property name="text">
+           <string>Unknown status</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="speedSenseButton">
-        <property name="text">
-         <string>Speed sense</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QPushButton" name="timeSenseButton">
+          <property name="text">
+           <string>Time sense</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="speedSenseButton">
+          <property name="text">
+           <string>Speed sense</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -80,15 +84,11 @@
      <widget class="PhMediaPanel" name="masterPanel" native="true"/>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>Slave</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QCheckBox" name="slaveActiveCheck">
+      <property name="text">
+       <string>Slave</string>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="PhMediaPanel" name="slavePanel" native="true"/>

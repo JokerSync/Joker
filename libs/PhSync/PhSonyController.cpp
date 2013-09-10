@@ -1,8 +1,9 @@
 #include "PhSonyController.h"
 
-#include <QDebug>
 #include <QSerialPortInfo>
 #include <qmath.h>
+
+#include "PhTools/PhDebug.h"
 
 PhSonyController::PhSonyController(QString comSuffix, QObject *parent) :
 	QObject(parent), _comSuffix(comSuffix)
@@ -21,7 +22,7 @@ PhSonyController::~PhSonyController()
 
 bool PhSonyController::open()
 {
-	qDebug() << _comSuffix << "PhSonyController::open()";
+	PHDEBUG << _comSuffix;
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
 	{
 		QString name = info.portName();
@@ -29,7 +30,7 @@ bool PhSonyController::open()
 		{
 			_serial.setPort(info);
 
-			qDebug() << _comSuffix << "Opening " << name;
+			PHDEBUG << _comSuffix << "Opening " << name;
 			if( _serial.open(QSerialPort::ReadWrite))
 			{
 				_serial.setBaudRate(QSerialPort::Baud38400);
@@ -41,19 +42,19 @@ bool PhSonyController::open()
 			}
 		}
 	}
-	qDebug() << _comSuffix << "Unable to find usbserial-XXX" << _comSuffix;
+	PHDEBUG << _comSuffix << "Unable to find usbserial-XXX" << _comSuffix;
 	return false;
 }
 
 void PhSonyController::close()
 {
-	qDebug() << _comSuffix << "PhSonyController::close()";
+	PHDEBUG << _comSuffix << "PhSonyController::close()";
 	if(_serial.isOpen())
 	{
 		_serial.close();
 	}
 	else
-		qDebug() << _comSuffix << "port already closed.";
+		PHDEBUG << _comSuffix << "port already closed.";
 }
 
 PhRate PhSonyController::computeRate(unsigned char data1)
@@ -86,7 +87,7 @@ unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 
 void PhSonyController::sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
-//	qDebug() << _comSuffix << " sendCommand: " << stringFromCommand(cmd1, cmd2, data);
+//	PHDEBUG << _comSuffix << " sendCommand: " << stringFromCommand(cmd1, cmd2, data);
 	QByteArray buffer;
 	unsigned char datacount = getDataSize(cmd1);
 	buffer[0] = cmd1;
@@ -115,16 +116,14 @@ void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
 	sendCommandWithData(cmd1, cmd2, data);
 }
 
-void PhSonyController::sendAck()
+void PhSonyController::timeOut()
 {
-	qDebug() << _comSuffix << "sendAck";
-	sendCommand(0x10, 0x01);
+	PHDEBUG << _comSuffix;
 }
 
-void PhSonyController::sendNak(PhSonyController::PhSonyError error)
+void PhSonyController::checkSumError()
 {
-	qDebug() << _comSuffix << "sendNak : " << error;
-	sendCommand(0x11, 0x12, error);
+	PHDEBUG << _comSuffix;
 }
 
 QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data)
@@ -142,7 +141,7 @@ QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cm
 
 void PhSonyController::onData()
 {
-//	qDebug() << _comSuffix << "onData";
+//	PHDEBUG << _comSuffix;
 	// read the serial data
 	unsigned char buffer[256];
 	int dataRead = 0;
@@ -159,8 +158,8 @@ void PhSonyController::onData()
 		nbTry++;
 		if(nbTry > 200)
 		{
-			qDebug() << _comSuffix << "Read time out";
-			sendNak(PhSonyController::TimeOut);
+			PHDEBUG << _comSuffix << "Read time out";
+			timeOut();
 			return;
 		}
 	}
@@ -181,14 +180,14 @@ void PhSonyController::onData()
 		nbTry++;
 		if(nbTry > 200)
 		{
-			qDebug() << _comSuffix << "Read time out";
-			sendNak(PhSonyController::TimeOut);
+			PHDEBUG << _comSuffix << "Read time out";
+			timeOut();
 			return;
 		}
 	}
 
 	QString cmdString = stringFromCommand(cmd1, cmd2, buffer + 2);
-//	qDebug() << _comSuffix << "reading : " << cmdString;
+//	PHDEBUG << _comSuffix << "reading : " << cmdString;
 
 	// Computing the checksum
 	unsigned char checksum = 0;
@@ -197,9 +196,9 @@ void PhSonyController::onData()
 
 	if (checksum != buffer[datacount+2])
 	{
-		qDebug() << _comSuffix << "Checksum error : " << cmdString;
+		PHDEBUG << _comSuffix << "Checksum error : " << cmdString;
 		_serial.flush();
-		sendNak(PhSonyController::ChecksumError);
+		checkSumError();
 		return;
 	}
 
@@ -214,5 +213,5 @@ void PhSonyController::onCTS()
 
 void PhSonyController::handleError(QSerialPort::SerialPortError error)
 {
-	qDebug() << _comSuffix << "Serial port error : " << error;
+	PHDEBUG << _comSuffix << error;
 }

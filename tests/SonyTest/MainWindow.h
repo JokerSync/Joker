@@ -26,6 +26,10 @@ private slots:
 
 	void onDeviceIdData(unsigned char id1, unsigned char id2);
 	void onStatusData(int length, unsigned char * statusData);
+	void on_masterActiveCheck_clicked(bool checked);
+	void on_slaveActiveCheck_clicked(bool checked);
+
+
 private:
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;

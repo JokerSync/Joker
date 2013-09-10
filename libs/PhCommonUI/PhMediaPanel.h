@@ -2,7 +2,6 @@
 #define PHMEDIAPANEL_H
 
 #include <QWidget>
-#include <QDebug>
 
 #include "PhTools/PhTimeCode.h"
 
@@ -13,7 +12,7 @@ namespace Ui {
 class PhMediaPanel : public QWidget
 {
 	Q_OBJECT
-	
+
 public:
 	explicit PhMediaPanel(QWidget *parent = 0);
 	~PhMediaPanel();

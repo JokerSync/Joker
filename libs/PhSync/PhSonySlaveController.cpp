@@ -1,6 +1,6 @@
 #include "PhSonySlaveController.h"
 
-#include <QDebug>
+#include "PhTools/PhDebug.h"
 
 PhSonySlaveController::PhSonySlaveController(QObject *parent) : PhSonyController("A", parent),
 	_autoMode(false), _state(Pause)
@@ -10,19 +10,19 @@ PhSonySlaveController::PhSonySlaveController(QObject *parent) : PhSonyController
 void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
 {
 	unsigned char dataOut[16];
-	qDebug() << _comSuffix << "PhSonySlaveController::processCommand : " << stringFromCommand(cmd1, cmd2, dataIn);
+	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn);
 	switch (cmd1 >> 4)
 	{
 	case 0:
 		switch (cmd2)
 		{
 		case 0x0c:
-			qDebug() << _comSuffix << "Local disable => ACK";
+			PHDEBUG << _comSuffix << "Local disable => ACK";
 			sendAck();
 			break;
 		case 0x11:
 		{
-			qDebug() << _comSuffix << "Device Type Request => F1C0";
+			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
 			// TODO : Device ID as a parameter
 			unsigned char deviceID1 = 0xf0;
 			unsigned char deviceID2 = 0xc0;
@@ -42,11 +42,11 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			break;
 		}
 		case 0x1d:
-			qDebug() << _comSuffix << "Local enable => ACK";
+			PHDEBUG << _comSuffix << "Local enable => ACK";
 			sendAck();
 			break;
 		default:
-			qDebug() << _comSuffix << " => Unknown subcommand => NAK";
+			PHDEBUG << _comSuffix << " => Unknown subcommand => NAK";
 			sendNak(UndefinedCommand);
 			break;
 		}
@@ -55,25 +55,25 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		switch (cmd2)
 		{
 		case 0x00:
-			qDebug() << _comSuffix << "Stop => ACK";
+			PHDEBUG << _comSuffix << "Stop => ACK";
 			_state = Pause;
 			_clock.setRate(0);
 			sendAck();
 			break;
 		case 0x01:
-			qDebug() << _comSuffix << "Play => ACK";
+			PHDEBUG << _comSuffix << "Play => ACK";
 			_state = Play;
 			_clock.setRate(1);
 			sendAck();
 			break;
 //					case 0x10:
-//						qDebug() << _comSuffix << "Fast forward => ACK");
+//						PHDEBUG << _comSuffix << "Fast forward => ACK");
 //						state = FastForward;
 //						_clock.rate() = [[NSUserDefaults standardUserDefaults] doubleForKey:@"DWSonyRewindFastForwardSpeed"];
 //						[port sendAck];
 //						break;
 //					case 0x20:
-//						qDebug() << _comSuffix << "Rewing => ACK");
+//						PHDEBUG << _comSuffix << "Rewing => ACK");
 //						state = Rewind;
 //						_clock.rate() = -[[NSUserDefaults standardUserDefaults] doubleForKey:@"DWSonyRewindFastForwardSpeed"];
 //						[port sendAck];
@@ -97,30 +97,30 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 //						switch (cmd1) {
 //							case 0x11:
 //								state = Jog;
-//								qDebug() << _comSuffix << "Jog Forward : %.2f => ACK", rate);
+//								PHDEBUG << _comSuffix << "Jog Forward : %.2f => ACK", rate);
 //								break;
 //							case 0x12:
 //								state = Var;
-//								qDebug() << _comSuffix << "Var Forward : %.2f => ACK", rate);
+//								PHDEBUG << _comSuffix << "Var Forward : %.2f => ACK", rate);
 //								break;
 //							case 0x13:
 //								state = Shuttle;
-//								qDebug() << _comSuffix << "Shuttle Forward : %.2f => ACK", rate);
+//								PHDEBUG << _comSuffix << "Shuttle Forward : %.2f => ACK", rate);
 //								break;
 //							case 0x21:
 //								rate = -rate;
 //								state = Jog;
-//								qDebug() << _comSuffix << "Jog rev : %.2f => ACK", rate);
+//								PHDEBUG << _comSuffix << "Jog rev : %.2f => ACK", rate);
 //								break;
 //							case 0x22:
 //								rate = -rate;
 //								state = Var;
-//								qDebug() << _comSuffix << "Var rev : %.2f => ACK", rate);
+//								PHDEBUG << _comSuffix << "Var rev : %.2f => ACK", rate);
 //								break;
 //							case 0x23:
 //								rate = -rate;
 //								state = Shuttle;
-//								qDebug() << _comSuffix << "Shuttle rev : %.2f => ACK", rate);
+//								PHDEBUG << _comSuffix << "Shuttle rev : %.2f => ACK", rate);
 //								break;
 //						}
 //						_clock.rate() = rate;
@@ -134,12 +134,12 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 //						unsigned char ss = [DWBCDTool uintFromBcd:dataIn[1]];
 //						unsigned char ff = [DWBCDTool uintFromBcd:dataIn[0]];
 //						self.clock.frame = [DWTimeCode frameFromHh:hh Mm:mm Ss:ss Ff:ff andType:self.clock.type];
-//						qDebug() << _comSuffix << "Cue at %@ => ACK", self.clock.tcString);
+//						PHDEBUG << _comSuffix << "Cue at %@ => ACK", self.clock.tcString);
 //						[port sendAck];
 //						break;
 //					}
 //					default:
-//						qDebug() << _comSuffix << "Unknown subcommand : %x %x => NAK", cmd1, cmd2);
+//						PHDEBUG << _comSuffix << "Unknown subcommand : %x %x => NAK", cmd1, cmd2);
 //						[port sendNak:0x00];
 //						break;
 //				}
@@ -147,21 +147,21 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 //			case 4:
 //				switch (cmd2) {
 //					case 0x30:
-//						qDebug() << _comSuffix << "Edit preset : %@", [DWString stringWithBuffer:dataIn andLength:[port getDataCount:cmd1]]);
+//						PHDEBUG << _comSuffix << "Edit preset : %@", [DWString stringWithBuffer:dataIn andLength:[port getDataCount:cmd1]]);
 //						[port sendAck];
 //						break;
 //					case 0x40:
 //						autoMode = NO;
-//						qDebug() << _comSuffix << "Auto Mode Off => ACK");
+//						PHDEBUG << _comSuffix << "Auto Mode Off => ACK");
 //						[port sendAck];
 //						break;
 //					case 0x41:
 //						autoMode = YES;
-//						qDebug() << _comSuffix << "Auto Mode On => ACK");
+//						PHDEBUG << _comSuffix << "Auto Mode On => ACK");
 //						[port sendAck];
 //						break;
 		default:
-			qDebug() << _comSuffix << "Unknown subcommand => NAK";
+			PHDEBUG << _comSuffix << "Unknown subcommand => NAK";
 			sendNak(UndefinedCommand);
 			break;
 		}
@@ -172,7 +172,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x0c:
 		{
 			cmd1 = 0x74;
-			qDebug() << _comSuffix << "Current Time Sense => " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType());
+			PHDEBUG << _comSuffix << "Current Time Sense => " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType());
 			switch (dataIn[0])
 			{
 			case 0x01:
@@ -211,7 +211,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		{
 			unsigned char status[16];
 			// TODO : handle status sens properly
-			qDebug() << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
+			PHDEBUG << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
 			memset(status, 0, 8);
 			switch (_state)
 			{
@@ -265,14 +265,14 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x2e:
 		{
 			unsigned data1 = computeData1FromRate(_clock.rate());
-			qDebug() << "Speed sense";
+			PHDEBUG << "Speed sense";
 			sendCommand(0x71, 0x2e, data1);
 			break;
 		}
 //								case 0x30:
 //								{
 //									// TODO : handle properly
-//									qDebug() << _comSuffix << "Edit Preset Sense => Edit Preset Status");
+//									PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status");
 //									unsigned char count = dataIn[0];
 //									for (int i=0; i<count; i++) {
 //										dataOut[i] = 0;
@@ -281,16 +281,40 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 //									break;
 //								}
 		default:
-				qDebug() << _comSuffix << "Unknown subcommand : => NAK";
+				PHDEBUG << _comSuffix << "Unknown subcommand : => NAK";
 				sendNak(UndefinedCommand);
 				break;
 			}
 			break;
 		default:
-			qDebug() << _comSuffix << " => Unknown command : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16) << " => NAK";
+			PHDEBUG << _comSuffix << " => Unknown command : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16) << " => NAK";
 		sendNak(UndefinedCommand);
 		break;
 	}
 
-	qDebug() << _comSuffix << "PhSonySlaveController::processCommand : " << stringFromCommand(cmd1, cmd2, dataIn) << " over";
+	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn) << " over";
+}
+
+void PhSonySlaveController::sendAck()
+{
+	PHDEBUG << _comSuffix;
+	sendCommand(0x10, 0x01);
+}
+
+void PhSonySlaveController::sendNak(PhSonyController::PhSonyError error)
+{
+	PHDEBUG << _comSuffix << error;
+	sendCommand(0x11, 0x12, error);
+}
+
+void PhSonySlaveController::checkSumError()
+{
+	PhSonyController::checkSumError();
+	sendNak(ChecksumError);
+}
+
+void PhSonySlaveController::timeOut()
+{
+	PhSonyController::timeOut();
+	sendNak(TimeOut);
 }
