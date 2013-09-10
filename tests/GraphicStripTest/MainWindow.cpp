@@ -33,7 +33,6 @@ void MainWindow::openFile(QString fileName)
 		{
 			_clock->setTCType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
-			_clock->setRate(1);
 		}
 	}
 }
