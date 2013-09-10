@@ -99,8 +99,7 @@ void PhGraphicStripView::updateView()
 	{
 		PhGraphicText * gPeople = new PhGraphicText(_currentFont, people->getName());
 		gPeople->setColor(new QColor(people->getColor()));
-		gPeople->setWidth(people->getName().length() * 4);
-		gPeople->setHeight(0.5f);
+		gPeople->setWidth(people->getName().length() * 16);
 
 		gPeople->init();
 
@@ -113,11 +112,7 @@ void PhGraphicStripView::updateView()
 		PhGraphicText * gText = new PhGraphicText( _currentFont, text->getContent());
 		float track = text->getTrack();
 
-		gText->setX(text->getTimeIn());
-		gText->setY(track);
 		gText->setZ(-1);
-		gText->setWidth(text->getTimeOut() - text->getTimeIn());
-		gText->setHeight(1.0f);
 		if(text->getPeople())
 			gText->setColor(new QColor(text->getPeople()->getColor()));
 		gText->setFont(_currentFont);
@@ -132,9 +127,6 @@ void PhGraphicStripView::updateView()
 	{
 		PhGraphicSolidRect *gCut = new PhGraphicSolidRect();
 		gCut->setColor(new QColor(0, 0, 0));
-		gCut->setX(cut->getTimeIn());
-		gCut->setWidth(0.5f);
-		gCut->setHeight(_trackNumber);
 		gCut->setZ(-2);
 
 		_graphicCuts[cut] = gCut;
@@ -147,18 +139,20 @@ void PhGraphicStripView::paint()
 {
 	_clock.tick(60);
 
-	float pixelPerFrame = 8;
-	float length = this->width() / pixelPerFrame;
+	float pixelPerFrame = 16;
+//	float length = this->width() / pixelPerFrame;
 	float fps = PhTimeCode::getFps(_clock.getTCType());
-	float t = _clock.time() * fps / _clock.timeScale();
+//	float t = _clock.time() * fps / _clock.timeScale();
+	long left = _clock.time() * pixelPerFrame * fps / _clock.timeScale();
+	long width = this->width();
+	long height = this->height();
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(t, t + length, _trackNumber, 0, 0, 10);
+//	glOrtho(t, t + length, _trackNumber, 0, 0, 10);
+	glOrtho(left, left + width, height, 0, 0, 10);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
-//	qDebug() << "PhGraphicStripView::paint()";
 
 	//Set the background color to red
 	glClearColor(1,0,0,1);
@@ -169,8 +163,8 @@ void PhGraphicStripView::paint()
 //    //Draw backgroung picture
 	float aspectRatio = 1.2f * this->width() / this->height();
 	_stripBackgroundImage->setTextureCoordinate(aspectRatio, 1);
-	_stripBackgroundImage->setX(floorf(t / aspectRatio) * aspectRatio);
-	_stripBackgroundImage->setSize(length + aspectRatio, _trackNumber);
+	_stripBackgroundImage->setX(left);
+	_stripBackgroundImage->setSize(width + aspectRatio, height);
 	_stripBackgroundImage->draw();
 
 	int minSpaceBetweenPeople = 50;
@@ -179,11 +173,17 @@ void PhGraphicStripView::paint()
 	for(int i = 0; i < _trackNumber; i++)
 		lastTextList[i] = NULL;
 
+	int trackHeight = height / _trackNumber;
+
 	foreach(PhStripText * text, _doc.getTexts())
 	{
 		PhGraphicText* gText = _graphicTexts[text];
 
 		int track = text->getTrack();
+		gText->setX(text->getTimeIn() * pixelPerFrame);
+		gText->setWidth((text->getTimeOut() - text->getTimeIn()) * pixelPerFrame);
+		gText->setY(track * trackHeight);
+		gText->setHeight(trackHeight);
 
 		gText->draw();
 
@@ -195,8 +195,9 @@ void PhGraphicStripView::paint()
 		if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))
 		{
 			PhGraphicText * gPeople = _graphicPeoples[text->getPeople()];
-			gPeople->setX(text->getTimeIn() - gPeople->getWidth() - spaceBetweenPeopleAndText);
-			gPeople->setY(track);
+			gPeople->setX(text->getTimeIn() * pixelPerFrame - gPeople->getWidth() - spaceBetweenPeopleAndText);
+			gPeople->setY(track * trackHeight);
+			gPeople->setHeight(trackHeight / 2);
 
 			gPeople->draw();
 		}
@@ -205,5 +206,11 @@ void PhGraphicStripView::paint()
 	}
 
 	foreach(PhStripCut * cut, _doc.getCuts())
-		_graphicCuts[cut]->draw();
+	{
+		PhGraphicRect *gCut = _graphicCuts[cut];
+		gCut->setHeight(height);
+		gCut->setX(cut->getTimeIn() * pixelPerFrame);
+		gCut->setWidth(pixelPerFrame / 4);
+		gCut->draw();
+	}
 }
