@@ -98,7 +98,7 @@ void PhGraphicStripView::updateView()
 	foreach(PhPeople * people, _doc.getPeoples())
 	{
 		PhGraphicText * gPeople = new PhGraphicText(_currentFont, people->getName());
-		gPeople->setColor(new QColor(people->getColor()));
+		gPeople->setColor(QColor(people->getColor()));
 		gPeople->setWidth(people->getName().length() * 16);
 
 		gPeople->init();
@@ -114,7 +114,7 @@ void PhGraphicStripView::updateView()
 
 		gText->setZ(-1);
 		if(text->getPeople())
-			gText->setColor(new QColor(text->getPeople()->getColor()));
+			gText->setColor(QColor(text->getPeople()->getColor()));
 		gText->setFont(_currentFont);
 
 		gText->init();
@@ -126,7 +126,7 @@ void PhGraphicStripView::updateView()
 	foreach(PhStripCut * cut, _doc.getCuts())
 	{
 		PhGraphicSolidRect *gCut = new PhGraphicSolidRect();
-		gCut->setColor(new QColor(0, 0, 0));
+		gCut->setColor(QColor(0, 0, 0));
 		gCut->setZ(-2);
 
 		_graphicCuts[cut] = gCut;
