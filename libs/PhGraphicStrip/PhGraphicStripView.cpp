@@ -111,7 +111,6 @@ void PhGraphicStripView::updateView()
 	foreach(PhStripText * text, _doc.getTexts())
 	{
 		PhGraphicText * gText = new PhGraphicText( _currentFont, text->getContent());
-		int track = text->getTrack();
 
 		gText->setZ(-1);
 		if(text->getPeople())
