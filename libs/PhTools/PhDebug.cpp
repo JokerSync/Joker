@@ -14,23 +14,62 @@ PhDebug* PhDebug::d = NULL;
 
 PhDebug PhDebug::instance()
 {
-   if (!d)   // Only allow one instance of class to be generated.
-       d = new PhDebug(true, true);
-   return * d;
-}
-
-PhDebug PhDebug::init(bool DispTime, bool DispFuncName)
-{
     if (!d)   // Only allow one instance of class to be generated.
-        d = new PhDebug(DispTime, DispFuncName);
+        d = new PhDebug(true, true, true);
     return * d;
 }
 
-PhDebug::PhDebug(bool DispTime, bool DispFuncName)
+PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFuncName)
+{
+    if (!d)   // Only allow one instance of class to be generated.
+        d = new PhDebug(DispDate, DispTime, DispFuncName);
+    return * d;
+}
+
+QDebug PhDebug::operator<<(QDebug dbg)
+{
+
+    QString s;
+
+    // Display the date
+    if (_dispDate)
+        s = QDate::currentDate().toString("dd.MM.yyyy");
+
+    // Display a separator if both date & time are displayed
+    if (_dispDate && _dispTime)
+        s += " - ";
+
+    // Display timestamp
+    if (_dispTime)
+        s += QTime::currentTime().toString("hh.mm.ss.zzz");
+
+    // If the Function name is displayed but
+    if (_dispFuncName && !_dispTime && !_dispDate)
+        s += "In";
+
+    if(_dispFuncName && (_dispTime || _dispDate))
+        s += " in";
+
+    dbg << Q(s);
+
+    return dbg;
+
+}
+
+PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFuncName)
 {
 
     if (!d){
-        _time = DispTime;
-        _fname = DispFuncName;
+        _dispDate = DispDate;
+        _dispTime = DispTime;
+        _dispFuncName = DispFuncName;
     }
+}
+
+QString PhDebug::getFuncName(QString name)
+{
+    if(PhDebug::instance()._dispFuncName)
+        return name + ":";
+    else
+        return ":";
 }

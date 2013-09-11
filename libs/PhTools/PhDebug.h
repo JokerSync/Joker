@@ -12,7 +12,7 @@
 
 #include "iostream"
 
-#define PHDEBUG PhDebug::instance() << qDebug() << __FUNCTION__ << ":"
+#define PHDEBUG PhDebug::instance() << qDebug() << Q(PhDebug::getFuncName(__FUNCTION__))
 
 
 // In order to get rid of double quotes when displaying a variable
@@ -23,36 +23,20 @@ class PhDebug
 public:
     // used to access to the only instance of the class
     static PhDebug instance();
-    static PhDebug init(bool DispTime, bool DispFuncName);
+    static PhDebug init(bool DispDate, bool DispTime,  bool DispFuncName);
 
-    QDebug operator<<(QDebug dbg)
-    {
-        QString s;
+    QDebug operator<<(QDebug dbg);
 
-        if (_time){
-            s = QDate::currentDate().toString("dd.MM.yyyy");
-            s += " - ";
-            s += QTime::currentTime().toString("hh.mm.ss.zzz");
-            s += " ";
-        }
-        if (_fname && !_time){
-            s += "In";
-        }
-        if(_fname && _time){
-            s += "in";
-        }
-        dbg << Q(s);
 
-        return dbg;
-    }
-
-    PhDebug(bool DispTime, bool DispFuncName);
+    PhDebug(bool DispDate, bool DispTime, bool DispFuncName);
+    static QString getFuncName(QString name);
 
 
 private:
     static PhDebug * d;
-    bool _fname;
-    bool _time;
+    bool _dispFuncName;
+    bool _dispTime;
+    bool _dispDate;
 
 };
 
