@@ -3,6 +3,7 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include "PhTools/PhDebug.h"
 #include "PhGraphicStripView.h"
 
 PhGraphicStripView::PhGraphicStripView(QWidget *parent)
@@ -28,7 +29,7 @@ PhClock *PhGraphicStripView::clock()
 
 bool PhGraphicStripView::init()
 {
-	qDebug() << "PhGraphicStripView::init()";
+	PHDEBUG << "PhGraphicStripView::init()";
 
 	// Load font
 	if(!setCurrentFont("Bedizen.ttf"))
@@ -69,11 +70,11 @@ void PhGraphicStripView::clearData()
 
 bool PhGraphicStripView::setCurrentFont(QString fontFile)
 {
-	qDebug() << "setCurrentFont : " << fontFile;
+	PHDEBUG << "setCurrentFont : " << fontFile;
 
 	if(!QFile::exists(fontFile))
 	{
-		qDebug() << "File doesn't exists : " << fontFile;
+		PHDEBUG << "File doesn't exists : " << fontFile;
 		return false;
 	}
 	_currentFont = new PhFont(fontFile, 150);
@@ -85,10 +86,10 @@ bool PhGraphicStripView::setCurrentFont(QString fontFile)
 
 void PhGraphicStripView::updateView()
 {
-	qDebug() << "updateView";
+	PHDEBUG << "updateView";
 	if(!_currentFont)
 	{
-		qDebug() << "The font has not been initialised";
+		PHDEBUG << "The font has not been initialised";
 		return;
 	}
 
@@ -132,7 +133,7 @@ void PhGraphicStripView::updateView()
 		_graphicCuts[cut] = gCut;
 	}
 
-	qDebug() << "updateView ok";
+	PHDEBUG << "updateView ok";
 }
 
 PhTime lastTime = -1;
