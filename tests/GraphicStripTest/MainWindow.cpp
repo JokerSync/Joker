@@ -78,3 +78,15 @@ void MainWindow::on_actionStep_backward_triggered()
 	_clock->setRate(0.0);
 	_clock->setFrame(_clock->frame() - 1);
 }
+
+void MainWindow::on_actionStep_time_forward_triggered()
+{
+	_clock->setRate(0.0);
+	_clock->setTime(_clock->time() + 1);
+}
+
+void MainWindow::on_actionStep_time_backward_triggered()
+{
+	_clock->setRate(0.0);
+	_clock->setTime(_clock->time() - 1);
+}
