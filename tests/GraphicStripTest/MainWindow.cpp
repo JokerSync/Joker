@@ -33,6 +33,7 @@ void MainWindow::openFile(QString fileName)
 		{
 			_clock->setTCType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
+			this->setWindowTitle(fileName);
 		}
 	}
 }
