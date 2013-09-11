@@ -3,6 +3,7 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include "PhTools/PhDebug.h"
 #include "PhGraphicImage.h"
 
 #if defined(Q_OS_MAC)
@@ -23,12 +24,12 @@ bool PhGraphicImage::init()
 	{
 		if(createTextureFromSurface(_surface))
 		{
-			qDebug() << "Loading image";
+			PHDEBUG << "Loading image";
 			return true;
 		}
 	}
 
-	qDebug()<<"Error loading:"<<_filename;
+	PHDEBUG<<"Error loading:"<< _filename;
 	return false;
 
 }

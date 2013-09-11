@@ -3,6 +3,7 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include "PhTools/PhDebug.h"
 #include "PhGraphicTexturedRect.h"
 
 PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z)
@@ -73,7 +74,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
             textureFormat = GL_BGRA;
         break;
     default:
-        qDebug() << "Warning: the image is not truecolor...";
+        PHDEBUG << "Warning: the image is not truecolor...";
 		return false;
 
     }
@@ -99,7 +100,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 
 void PhGraphicTexturedRect::draw(){
 
-	//qDebug() << "PhGraphicTexturedRect::draw()";
+	//PHDEBUG << "PhGraphicTexturedRect::draw()";
     glMatrixMode(GL_MODELVIEW);
 
 	glLoadIdentity();
@@ -113,7 +114,7 @@ void PhGraphicTexturedRect::draw(){
 //          |            |
 //        (0,1) ------ (1,1)
 
-//		qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
+//		PHDEBUG << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
 
 	glBegin(GL_QUADS); 	//Begining the cube's drawing
 	{

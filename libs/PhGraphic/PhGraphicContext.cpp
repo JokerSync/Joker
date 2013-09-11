@@ -5,17 +5,15 @@
 
 #include <QDateTime> // For screenshot name
 
+#include "PhTools/PhDebug.h"
 #include "PhGraphicContext.h"
 #include "PhGraphicView.h"
-
-#include <SDL/SDL.h>
 
 #if defined(Q_OS_MAC)
 #include <SDL_ttf/SDL_ttf.h>
 #else
 #include <SDL/SDL_ttf.h>
 #endif
-
 
 PhGraphicContext::PhGraphicContext(PhGraphicView *view)
 {
@@ -60,13 +58,13 @@ PhGraphicContext::PhGraphicContext(PhGraphicView *view)
 
 void PhGraphicContext::init(){
     if (SDL_Init(SDL_INIT_VIDEO) == 0)
-        qDebug() << "init SDL Ok.";
+        PHDEBUG << "init SDL Ok.";
     else
-        qDebug() << "SDL error:" << SDL_GetError();
+        PHDEBUG << "SDL error:" << SDL_GetError();
     if (TTF_Init() == 0)
-        qDebug() << "init TTF Ok.";
+        PHDEBUG << "init TTF Ok.";
     else
-        qDebug() << "TTF error:" << TTF_GetError();
+        PHDEBUG << "TTF error:" << TTF_GetError();
 
 
     glClearColor(1,1,1,0); 	//Background color RGBA

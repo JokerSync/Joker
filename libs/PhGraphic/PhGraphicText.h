@@ -6,12 +6,8 @@
 #ifndef PHGRAPHICTEXT_H
 #define PHGRAPHICTEXT_H
 
-#include <QDebug>
-
-
 #include "PhGraphicTexturedRect.h"
 #include "PhGraphicObject.h"
-
 
 class PhGraphicText : public PhGraphicTexturedRect {
 public:
