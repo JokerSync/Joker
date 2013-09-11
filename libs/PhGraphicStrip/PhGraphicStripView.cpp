@@ -150,10 +150,10 @@ void PhGraphicStripView::updateView()
 	foreach(PhStripLoop * loop, _doc.getLoops())
 	{
 		PhGraphicLoop *gLoop = new PhGraphicLoop();
-		gLoop->setColor(new QColor(13, 150, 12));
+		gLoop->setColor(new QColor(0, 0, 0, 1));
 		gLoop->setX(loop->getTimeIn());
-		gLoop->setY(_trackNumber/2);
 		gLoop->setHThick(0.7f);
+		gLoop->setHeight(_trackNumber);
 		gLoop->setCrossHeight(_trackNumber/4);
 		gLoop->setWidth(_trackNumber*2);
 		_graphicLoops[loop] = gLoop;
