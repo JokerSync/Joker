@@ -2,7 +2,6 @@ QT		+= opengl
 
 HEADERS += \
 	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicView.h \
-	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicContext.h \
 	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicImage.h \
 	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicText.h \
     $${JOKER_ROOT}/libs/PhGraphic/PhGraphicTexturedRect.h \
@@ -13,7 +12,6 @@ HEADERS += \
 
 SOURCES += \
 	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicView.cpp \
-	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicContext.cpp \
 	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicImage.cpp \
 	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicText.cpp \
     $${JOKER_ROOT}/libs/PhGraphic/PhGraphicTexturedRect.cpp \

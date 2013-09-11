@@ -1,4 +1,3 @@
-
 #include "PhTools/PhDebug.h"
 #include "PhGraphicView.h"
 #include <SDL/SDL.h>
@@ -15,11 +14,12 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	t_Timer = new QTimer(this);
 	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 	t_Timer->start(0);
-	//this->_context = new PhGraphicContext(this);
 }
 
 void PhGraphicView::initializeGL()
 {
+	PHDEBUG;
+
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";
 	else
@@ -29,7 +29,6 @@ void PhGraphicView::initializeGL()
 	else
 		PHDEBUG << "TTF error:" << TTF_GetError();
 
-	PHDEBUG << "PhGraphicView::initializeGL" ;
 	init();
 }
 
@@ -61,11 +60,6 @@ void PhGraphicView::onRefresh()
 //#endif
 
 	updateGL();
-}
-
-PhGraphicContext *PhGraphicView::getContext()
-{
-	return _context;
 }
 
 

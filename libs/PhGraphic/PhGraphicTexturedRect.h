@@ -7,6 +7,7 @@
 #define PHGRAPHICTEXTUREDSQUARE_H
 
 #include <glu.h>
+#include <SDL/SDL.h>
 
 #include "PhGraphicRect.h"
 
@@ -32,15 +33,6 @@ protected:
      * create an OpenGL texture form a SDL Surface
      */
 	bool createTextureFromSurface(SDL_Surface * surface);
-
-    /**
-     * @brief getTexture
-     * @return _texture
-     * get the texture address(?)
-     */
-    GLuint getTexture();
-
-
 
 private:
 

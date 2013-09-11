@@ -1,3 +1,5 @@
+#include <qmath.h>
+
 #include "PhTools/PhDebug.h"
 #include "GraphicTestView.h"
 
