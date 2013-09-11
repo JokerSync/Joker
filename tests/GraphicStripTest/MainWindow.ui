@@ -46,6 +46,8 @@
     <addaction name="actionPlay_backward"/>
     <addaction name="actionStep_forward"/>
     <addaction name="actionStep_backward"/>
+    <addaction name="actionStep_time_forward"/>
+    <addaction name="actionStep_time_backward"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -89,6 +91,22 @@
    </property>
    <property name="shortcut">
     <string>Left</string>
+   </property>
+  </action>
+  <action name="actionStep_time_forward">
+   <property name="text">
+    <string>Step time forward</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Right</string>
+   </property>
+  </action>
+  <action name="actionStep_time_backward">
+   <property name="text">
+    <string>Step time backward</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Left</string>
    </property>
   </action>
  </widget>

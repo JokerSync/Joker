@@ -30,6 +30,10 @@ private slots:
 
 	void on_actionStep_backward_triggered();
 
+	void on_actionStep_time_forward_triggered();
+
+	void on_actionStep_time_backward_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStripView *_stripView;
