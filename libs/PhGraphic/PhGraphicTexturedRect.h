@@ -6,8 +6,6 @@
 #ifndef PHGRAPHICTEXTUREDSQUARE_H
 #define PHGRAPHICTEXTUREDSQUARE_H
 
-#include <QDebug>
-
 #include <glu.h>
 
 #include "PhGraphicRect.h"

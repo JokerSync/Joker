@@ -1,5 +1,5 @@
+#include "PhTools/PhDebug.h"
 #include "GraphicTestView.h"
-#include "math.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent)
 	: PhGraphicView( parent), _image(NULL), _font(NULL), _text(NULL), _rect(NULL)
@@ -15,44 +15,45 @@ bool GraphicTestView::init()
 	enableDisplayRect = false;
 	enableDisplayText = false;
 
-	qDebug() << "GraphicTestView::init";
+	PHDEBUG << "GraphicTestView::init";
 	if(_image == NULL)
 	{
-		qDebug() << "Initialize _image";
+		PHDEBUG << "Initialize _image";
 		_image = new PhGraphicImage();
 		_image->setFilename("look.png");
 		_image->setTextureCoordinate(1,1);
 		_image->setRect(50,0,250,125);
 		if (! _image->init())
-			qDebug() << "_image not initialize";
+			PHDEBUG << "_image not initialize";
 	}
 
 
 
 	if(_font == NULL)
 	{
-		qDebug() << "Initialize _font";
+		PHDEBUG << "Initialize _font";
 		_font = new PhFont("Bedizen.ttf",50);
 		if (! _font->init())
-			qDebug() << "_font not initialize";
+			PHDEBUG << "_font not initialize";
 	}
 
 	if(_text == NULL)
 	{
-		qDebug() << "Initialize _text";
+		PHDEBUG << "Initialize _text";
 		_text = new PhGraphicText(_font, "Test PhGraphicText");
 		_text->setRect(50,135,250,125);
-		_text->setColor(new QColor(100, 254, 0));
+		_text->setColor(QColor(100, 254, 0));
 		if (! _text->init())
-			qDebug() << "_text not initialize";
+			PHDEBUG << "_text not initialize";
 
 		_text->setX(280);
 	}
 
 	if(_rect == NULL)
 	{
-		qDebug() << "Initialize _text";
-		_rect = new PhGraphicSolidRect(100, 100, 75, 40, 1, new QColor(200, 128, 0));
+		PHDEBUG << "Initialize _text";
+		_rect = new PhGraphicSolidRect(100, 100, 75, 40);
+		_rect->setColor(QColor(200, 128, 0));
 	}
 
 	return true;
@@ -71,7 +72,7 @@ void GraphicTestView::paint()
 
 	if  (enableDisplayText == true)
 	{
-		//qDebug() << "text content : " << _text->getContent();
+		//PHDEBUG << "text content : " << _text->getContent();
 
 		if (textSpeed == 0)
 		{

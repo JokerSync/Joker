@@ -6,7 +6,6 @@
 #ifndef PHGRAPHICCONTEXT_H
 #define PHGRAPHICCONTEXT_H
 
-#include <QDebug>
 #include <QImage>
 
 class PhGraphicView;

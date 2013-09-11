@@ -1,3 +1,5 @@
+
+#include "PhTools/PhDebug.h"
 #include "PhGraphicView.h"
 #include <SDL/SDL.h>
 
@@ -19,15 +21,15 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 void PhGraphicView::initializeGL()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
-		qDebug() << "init SDL Ok.";
+		PHDEBUG << "init SDL Ok.";
 	else
-		qDebug() << "SDL error:" << SDL_GetError();
+		PHDEBUG << "SDL error:" << SDL_GetError();
 	if (TTF_Init() == 0)
-		qDebug() << "init TTF Ok.";
+		PHDEBUG << "init TTF Ok.";
 	else
-		qDebug() << "TTF error:" << TTF_GetError();
+		PHDEBUG << "TTF error:" << TTF_GetError();
 
-	qDebug() << "PhGraphicView::initializeGL" ;
+	PHDEBUG << "PhGraphicView::initializeGL" ;
 	init();
 }
 
@@ -46,7 +48,7 @@ void PhGraphicView::resizeGL(int width, int height)
 
 void PhGraphicView::paintGL()
 {
-	//qDebug() << "PhGraphicView::paintGL" ;
+	//PHDEBUG << "PhGraphicView::paintGL" ;
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	paint();
 }
