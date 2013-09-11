@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 	foreach(PhStripOff * off, offList)
 	{
 		qDebug() << off->getPeople()->getName();
-		qDebug() << off->getTimeIn() << "-->" << off->getTimeOut();
+		qDebug() << PhTimeCode::stringFromFrame(off->getTimeIn(), doc.getTCType()) << "-->" << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
 	}
 
 

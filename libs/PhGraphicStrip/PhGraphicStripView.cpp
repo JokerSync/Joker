@@ -161,17 +161,18 @@ void PhGraphicStripView::updateView()
 	}
 
 	//Load the offs
-	foreach(PhStripOff * off, _doc.getOffs())
-	{
-		PhGraphicSolidRect *gOff = new PhGraphicSolidRect();
-		gOff->setColor(new QColor(0, 0, 0));
-		gOff->setX(off->getTimeIn());
-		gOff->setWidth(2);
-		gOff->setHeight(_trackNumber);
-		gOff->setZ(-2);
+		foreach(PhStripOff * off, _doc.getOffs())
+		{
+			PhGraphicSolidRect *gOff = new PhGraphicSolidRect();
+			gOff->setColor(new QColor(0, 0, 0));
+			gOff->setX(off->getTimeIn());
+			gOff->setY(off->getTrack() +1);
+			gOff->setHeight(0.1f);
+			gOff->setWidth(off->getTimeOut() - off->getTimeIn());
+			gOff->setZ(-2);
 
-		_graphicOffs[off] = gOff;
-	}
+			_graphicOffs[off] = gOff;
+		}
 
 	qDebug() << "updateView ok";
 }
@@ -242,4 +243,7 @@ void PhGraphicStripView::paint()
 
 	foreach(PhStripLoop * loop, _doc.getLoops())
 		_graphicLoops[loop]->draw();
+
+	foreach(PhStripOff * off, _doc.getOffs())
+		_graphicOffs[off]->draw();
 }
