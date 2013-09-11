@@ -161,10 +161,15 @@ void PhGraphicStripView::paint()
 //	qDebug() << _test->elapsed(); //<< " : " << _xmove;
 
 //    //Draw backgroung picture
-	float aspectRatio = 1.2f * this->width() / this->height();
-	_stripBackgroundImage->setTextureCoordinate(aspectRatio, 1);
-	_stripBackgroundImage->setX(left);
-	_stripBackgroundImage->setSize(width + aspectRatio, height);
+	int n = width / height + 2; // compute how much background repetition do we need
+	_stripBackgroundImage->setTextureCoordinate(n, 1);
+	long leftBG = left;
+	if(left >= 0)
+		leftBG -= left % height;
+	else
+		leftBG -= height - ((-left) % height);
+	_stripBackgroundImage->setX(leftBG);
+	_stripBackgroundImage->setSize(height * n, height);
 	_stripBackgroundImage->draw();
 
 	int minSpaceBetweenPeople = 50;
