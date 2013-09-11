@@ -7,7 +7,7 @@
 #define PHGRAPHICTEXT_H
 
 #include "PhGraphicTexturedRect.h"
-#include "PhGraphicObject.h"
+#include "PhFont.h"
 
 class PhGraphicText : public PhGraphicTexturedRect {
 public:

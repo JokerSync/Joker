@@ -5,7 +5,6 @@
 
 #include "PhGraphicText.h"
 
-
 PhGraphicText::PhGraphicText()
 {
 }
@@ -46,7 +45,6 @@ PhFont * PhGraphicText::getFont(){
 
 void PhGraphicText::draw()
 {
-
 	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
 
 	glEnable(GL_BLEND);

@@ -8,8 +8,6 @@
 
 #include <QColor>
 
-#include "PhFont.h"
-
 class PhGraphicObject
 {
 public:
