@@ -6,7 +6,7 @@
 #include "PhTools/PhDebug.h"
 #include "PhGraphicTexturedRect.h"
 
-PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z)
+PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
 	: PhGraphicRect(x, y, w, h), _tu(1.0f), _tv(1.0f)
 {
 }
