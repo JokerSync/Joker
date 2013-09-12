@@ -5,7 +5,7 @@
 
 #include "PhGraphicObject.h"
 
-PhGraphicObject::PhGraphicObject(float x , float y, float z, QColor* color) : _x(x), _y(y), _z(z), _color(color)
+PhGraphicObject::PhGraphicObject(int x , int y) : _x(x), _y(y), _z(0), _color(1, 1, 1)
 {
 }
 
@@ -13,7 +13,7 @@ void PhGraphicObject::dispose()
 {
 }
 
-void PhGraphicObject::setPosition(float x, float y, float z)
+void PhGraphicObject::setPosition(int x, int y, int z)
 {
     this->setX(x);
     this->setY(y);
@@ -21,39 +21,39 @@ void PhGraphicObject::setPosition(float x, float y, float z)
 }
 
 
-void PhGraphicObject::setX(float x){
+void PhGraphicObject::setX(int x){
     _x = x;
 }
 
-void PhGraphicObject::setY(float y){
+void PhGraphicObject::setY(int y){
     _y = y;
 }
 
-void PhGraphicObject::setZ(float z)
+void PhGraphicObject::setZ(int z)
 {
     _z = z;
 }
 
 
-float PhGraphicObject::getX(){
+int PhGraphicObject::getX(){
     return _x;
 }
 
-float PhGraphicObject::getY(){
+int PhGraphicObject::getY(){
     return _y;
 }
 
-float PhGraphicObject::getZ()
+int PhGraphicObject::getZ()
 {
     return _z;
 }
 
 
-QColor * PhGraphicObject::getColor(){
+QColor PhGraphicObject::getColor(){
 	return _color;
 }
 
-void PhGraphicObject::setColor(QColor* color){
+void PhGraphicObject::setColor(QColor color){
 	_color = color;
 }
 

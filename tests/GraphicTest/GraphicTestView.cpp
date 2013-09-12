@@ -1,8 +1,10 @@
+#include <qmath.h>
+
+#include "PhTools/PhDebug.h"
 #include "GraphicTestView.h"
-#include "math.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent)
-	: PhGraphicView( parent), _image(NULL), _font(NULL), _text(NULL), _rect(NULL)
+	: PhGraphicView( parent), _image(NULL), _font(NULL), _text(NULL), _rect(NULL), _loop(NULL)
 {
 
 }
@@ -14,45 +16,62 @@ bool GraphicTestView::init()
 	enableDisplayImage = false;
 	enableDisplayRect = false;
 	enableDisplayText = false;
+	enableDisplayLoop = true;
 
-	qDebug() << "GraphicTestView::init";
+	PHDEBUG << "GraphicTestView::init";
 	if(_image == NULL)
 	{
-		qDebug() << "Initialize _image";
+		PHDEBUG << "Initialize _image";
 		_image = new PhGraphicImage();
 		_image->setFilename("look.png");
 		_image->setTextureCoordinate(1,1);
 		_image->setRect(50,0,250,125);
 		if (! _image->init())
-			qDebug() << "_image not initialize";
+			PHDEBUG << "_image not initialize";
 	}
 
 
 
 	if(_font == NULL)
 	{
-		qDebug() << "Initialize _font";
+		PHDEBUG << "Initialize _font";
 		_font = new PhFont("Bedizen.ttf",50);
 		if (! _font->init())
-			qDebug() << "_font not initialize";
+			PHDEBUG << "_font not initialize";
 	}
 
 	if(_text == NULL)
 	{
-		qDebug() << "Initialize _text";
+		PHDEBUG << "Initialize _text";
 		_text = new PhGraphicText(_font, "Test PhGraphicText");
 		_text->setRect(50,135,250,125);
-		_text->setColor(new QColor(100, 254, 0));
+		_text->setColor(QColor(100, 254, 0));
 		if (! _text->init())
-			qDebug() << "_text not initialize";
+			PHDEBUG << "_text not initialize";
 
 		_text->setX(280);
 	}
 
 	if(_rect == NULL)
 	{
-		qDebug() << "Initialize _text";
-		_rect = new PhGraphicSolidRect(100, 100, 75, 40, 1, new QColor(200, 128, 0));
+		PHDEBUG << "Initialize _text";
+		_rect = new PhGraphicSolidRect(100, 100, 75, 40);
+		_rect->setColor(QColor(200, 128, 0));
+	}
+
+	if(_loop == NULL)
+	{
+		PHDEBUG << "Initialize _loop";
+		_loop = new PhGraphicLoop();
+		_loop->setX(100);
+		_loop->setY(50);
+		_loop->setWidth(120);
+		_loop->setHeight(100);
+		_loop->setHThick(5);
+		_loop->setCrossHeight(60);
+		_loop->setColor(QColor(13, 150, 12));
+		if (! _loop->init())
+			PHDEBUG << "_loop not initialize";
 	}
 
 	return true;
@@ -60,6 +79,12 @@ bool GraphicTestView::init()
 
 void GraphicTestView::paint()
 {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, this->width(), this->height()/2, 0, 0, 10);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	if  (enableDisplayImage == true)
 	{
 		if(_image != NULL)
@@ -71,7 +96,7 @@ void GraphicTestView::paint()
 
 	if  (enableDisplayText == true)
 	{
-		//qDebug() << "text content : " << _text->getContent();
+		//PHDEBUG << "text content : " << _text->getContent();
 
 		if (textSpeed == 0)
 		{
@@ -98,6 +123,11 @@ void GraphicTestView::paint()
 	if  (enableDisplayRect == true)
 	{
 		_rect->draw();
+	}
+
+	if (enableDisplayLoop == true)
+	{
+		_loop->draw();
 	}
 }
 
@@ -154,6 +184,15 @@ void GraphicTestView::displayRect()
 	else
 		enableDisplayRect = false;
 }
+
+void GraphicTestView::displayLoop()
+{
+	if (enableDisplayLoop == false)
+		enableDisplayLoop = true;
+	else
+		enableDisplayLoop = false;
+}
+
 
 
 

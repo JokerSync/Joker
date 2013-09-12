@@ -38,7 +38,19 @@
     </property>
     <addaction name="actionOpen"/>
    </widget>
+   <widget class="QMenu" name="menuControl">
+    <property name="title">
+     <string>Control</string>
+    </property>
+    <addaction name="actionPlay_pause"/>
+    <addaction name="actionPlay_backward"/>
+    <addaction name="actionStep_forward"/>
+    <addaction name="actionStep_backward"/>
+    <addaction name="actionStep_time_forward"/>
+    <addaction name="actionStep_time_backward"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuControl"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
@@ -47,6 +59,54 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionPlay_pause">
+   <property name="text">
+    <string>Play/pause</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
+   </property>
+  </action>
+  <action name="actionPlay_backward">
+   <property name="text">
+    <string>Play backward</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
+   </property>
+  </action>
+  <action name="actionStep_forward">
+   <property name="text">
+    <string>Step forward</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actionStep_backward">
+   <property name="text">
+    <string>Step backward</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="actionStep_time_forward">
+   <property name="text">
+    <string>Step time forward</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Right</string>
+   </property>
+  </action>
+  <action name="actionStep_time_backward">
+   <property name="text">
+    <string>Step time backward</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Left</string>
    </property>
   </action>
  </widget>

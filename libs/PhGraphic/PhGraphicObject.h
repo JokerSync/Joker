@@ -8,13 +8,11 @@
 
 #include <QColor>
 
-#include "PhFont.h"
-
 class PhGraphicObject
 {
 public:
 
-	PhGraphicObject(float x = 0, float y = 0, float z = 0, QColor * color = new QColor(1,1,1,1));
+	PhGraphicObject(int x = 0, int y = 0);
 
 	/**
 	 * @brief init
@@ -39,44 +37,44 @@ public:
      * @param z
      * set the position of the PhGraphicObject using setX() setY() setZ()
      */
-	void setPosition(float x, float y, float z);
+	void setPosition(int x, int y, int z);
     /**
      * @brief setX
      * @param x
      */
-    void setX(float x);
+    void setX(int x);
 	/**
 	 * @brief getX
 	 * @return
 	 */
-	float getX();
+	int getX();
 
 	/**
      * @brief setY
      * @param y
      */
-    void setY(float y);
+    void setY(int y);
 	/**
 	 * @brief getY
 	 * @return
 	 */
-	float getY();
+	int getY();
 
 	/**
      * @brief setZ
      * @param z
      */
-    void setZ(float z);
+    void setZ(int z);
 
     /**
      * @brief getZ
      * @return
      */
-    float getZ();
+    int getZ();
 
-	void setColor(QColor *color);
+	void setColor(QColor color);
 
-	QColor *getColor();
+	QColor getColor();
 
 protected:
 
@@ -84,23 +82,23 @@ protected:
      * @brief _x
      * is the PhGraphicObject horizontal position
      */
-    float _x;
+    int _x;
     /**
      * @brief _y
      * is the PhGraphicObject vertical position
      */
-    float _y;
+    int _y;
     /**
      * @brief _z
      * is the PhGrapicObject depth
      */
-    float _z;
+    int _z;
 
 	/**
 	 * @brief _color
 	 * The PhColor of the PhGraphicObject
 	 */
-	QColor* _color;
+	QColor _color;
 };
 
 #endif // PHGRAPHICOBJECT_H

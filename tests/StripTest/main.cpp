@@ -1,13 +1,8 @@
-
-#include <QCoreApplication>
 #include <QDebug>
 
-#include "QMap"
-#include "QList"
+#include <QFileInfo>
 
 #include "PhStrip/PhStripDoc.h"
-
-#include <iostream>
 
 using namespace std;
 
@@ -79,7 +74,13 @@ int main(int argc, char *argv[])
 //             {
 //                 line += (*text)->getContent();
 //             }
-    }
+	}
+
+	foreach (PhStripOff * off, doc.getOffs()) {
+		qDebug() << off->getPeople()->getName() << " : " << PhTimeCode::stringFromFrame(off->getTimeIn(), doc.getTCType())
+				 << " - " << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
+	}
+
      qDebug() << qPrintable( line );
 
     return 0;
