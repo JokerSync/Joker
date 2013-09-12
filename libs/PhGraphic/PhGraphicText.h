@@ -11,10 +11,7 @@
 
 class PhGraphicText : public PhGraphicTexturedRect {
 public:
-//    GLuint createTextureFromSurface(SDL_Surface * surface);
-
-	PhGraphicText();
-	PhGraphicText(PhFont* font, QString content, int x = 0, int y = 0, int z = 0, int w = 0, int h = 0);
+	PhGraphicText(PhFont* font, QString content, int x = 0, int y = 0, int w = 0, int h = 0);
     /**
      * @brief Draw the text on screen
      *

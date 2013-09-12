@@ -3,6 +3,8 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include <QtXml>
+
 #include <QFile>
 #include "PhStripDoc.h"
 
@@ -64,11 +66,11 @@ bool PhStripDoc::openDetX(QString fileName)
 
     //Find the videoTimeStamp
     _videoTimestamp = PhTimeCode::frameFromString(DetX->elementsByTagName("videofile").at(0).toElement().attribute("timestamp"),
-                                                  PhTimeCodeType25);
+												  _tcType);
 
     //Find the last position
     _lastFrame = PhTimeCode::frameFromString(DetX->elementsByTagName("last_position").at(0).toElement().attribute("timecode"),
-                                                PhTimeCodeType25);
+												_tcType);
 
 
     //With DetX files, fps is always 25 no drop
@@ -84,7 +86,7 @@ bool PhStripDoc::openDetX(QString fileName)
 		PhPeople *people = new PhPeople(chara.attribute("name"), chara.attribute("color"));
 
         //Currently using id as key instead of name
-        _actors[chara.attribute("id")] = people;
+        _peoples[chara.attribute("id")] = people;
     }
 
     //Find the cut list
@@ -92,17 +94,57 @@ bool PhStripDoc::openDetX(QString fileName)
     for (int i=0; i < shotList.length(); i++)
     {
         _cuts.push_back(new PhStripCut(PhStripCut::Simple , PhTimeCode::frameFromString(shotList.at(i).toElement().attribute("timecode"),
-                                                                                         PhTimeCodeType25)));
+																						 _tcType)));
     }
 
 
-//	QDomNodeList loops = DetX->elementsByTagName("loop");
+	//Find the loop list
+	QDomNodeList loops = DetX->elementsByTagName("loop");
 
-//	for(int i = 0; i < loops.length(); i++)
-//	{
-//		_loops.push_back(new PhStripLoop(i + 1), PhTimeCode::frameFromString(loops.at(i).toElement().attribute("timecode"),
-//																			 PhTimeCodeType25));
-//	}
+	for(int i = 0; i < loops.length(); i++)
+	{
+		_loops.push_back(new PhStripLoop((i + 1), PhTimeCode::frameFromString(loops.at(i).toElement().attribute("timecode"),
+																			 _tcType)));
+	}
+
+	//Find the off list
+	QDomNodeList lineList = DetX->elementsByTagName("line");
+
+	for(int i = 0; i < lineList.length(); i++)
+	{
+		QDomElement lineElem = lineList.at(i).toElement();
+		QString type = lineElem.attribute("voice");
+
+		if(type.compare("off") == 0)
+		{
+
+			PhPeople *people = new PhPeople(lineElem.attribute("role"), lineElem.attribute("color"));
+
+			int track = lineElem.attribute("track").toInt();
+
+			//lineElem.elementsByTagName("lipsync")
+			for(int j = 0; j < lineElem.childNodes().length(); j++)
+			{
+
+				if(lineElem.childNodes().at(j).nodeName() == "text")
+				{
+					int start = PhTimeCode::frameFromString(lineElem.childNodes().at(j-1).toElement().attribute("timecode"), _tcType);
+					int end = 0;
+					if (!lineElem.childNodes().at(j+1).isNull())
+					{
+						end = PhTimeCode::frameFromString(lineElem.childNodes().at(j+1).toElement().attribute("timecode"), _tcType);
+					}
+					// TODO : handles zero lenght text
+					else
+					{
+						// One char is ~1.20588 frame
+						end = start + lineElem.childNodes().at(j).toElement().text().length() * 1.20588 + 1;
+					}
+					_offs.push_back(new PhStripOff(start, people, end, track));
+				}
+			}
+		}
+	}
 
 //	QDomNodeList lineList = DetX->elementsByTagName("line");
 
@@ -132,25 +174,24 @@ bool PhStripDoc::openDetX(QString fileName)
 //	}
 
     //Find the text list
-    QDomNodeList lineList = DetX->elementsByTagName("line");
     for (int i=0; i < lineList.length(); i++)
     {
         QDomNode currentLine = lineList.at(i);
 		QString id = currentLine.toElement().attribute("role");
         for(int j = 0; j < currentLine.childNodes().length(); j++){
 
-            if(currentLine.childNodes().at(j).nodeName() == "text"){
-                int start = PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"), PhTimeCodeType25);
+			if(currentLine.childNodes().at(j).nodeName() == "text"){
+				int start = PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"), _tcType);
                 int end = 0;
                 if (!currentLine.childNodes().at(j+1).isNull()){
-                    end = PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"), PhTimeCodeType25);
+					end = PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"), _tcType);
                 }
                 else
                 {
                     // One char is ~1.20588 frame
                     end = start + currentLine.childNodes().at(j).toElement().text().length() * 1.20588 + 1;
                 }
-                splitText(_actors[id], start, end,
+                splitText(_peoples[id], start, end,
                           currentLine.childNodes().at(j).toElement().text(), currentLine.toElement().attribute("track").toInt(),
                           0 );
             }
@@ -174,7 +215,7 @@ QString PhStripDoc::getVideoPath()
 
 void PhStripDoc::reset()
 {
-    _actors.clear();
+    _peoples.clear();
     _cuts.clear();
     _tcType = PhTimeCodeType25;
     _lastFrame = 0;
@@ -195,9 +236,9 @@ void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString s
         // if the sentence is short enough
         if( end - start < 150)
         {
-            _texts.push_back(new PhStripText(actor, sentence,
-                                             start, end,
-                                             track));
+			_texts.push_back(new PhStripText(start, actor,
+											  end,
+											 track, sentence));
             _nbTexts ++;
         }
         else // we split in half
@@ -242,12 +283,20 @@ PhTime PhStripDoc::getLastFrame()
 
 QMap<QString, PhPeople *> PhStripDoc::getPeoples()
 {
-    return _actors;
+    return _peoples;
 }
-
-
 
 QList<PhStripText *> PhStripDoc::getTexts()
 {
-    return _texts;
+	return _texts;
+}
+
+QList<PhStripLoop *> PhStripDoc::getLoops()
+{
+	return _loops;
+}
+
+QList<PhStripOff *> PhStripDoc::getOffs()
+{
+	return _offs;
 }

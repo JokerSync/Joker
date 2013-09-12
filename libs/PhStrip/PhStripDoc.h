@@ -1,10 +1,8 @@
 #ifndef PHSTRIPDOC_H
 #define PHSTRIPDOC_H
 
-
-#include <QDebug>
-
-#include <QtXml>
+#include <QList>
+#include <QMap>
 
 #include "PhTools/PhTimeCode.h"
 
@@ -13,6 +11,7 @@
 #include "PhStripLoop.h"
 #include "PhStripObject.h"
 #include "PhStripText.h"
+#include "PhStripOff.h"
 
 class PhStripDoc : public QObject
 {
@@ -72,6 +71,18 @@ public:
      * @return _texts
      */
     QList<PhStripText *> getTexts();
+
+	/**
+	 * @brief getLoops
+	 * @return _loops
+	 */
+	QList<PhStripLoop *> getLoops();
+
+	/**
+	 * @brief getOffs
+	 * @return _offs
+	 */
+	QList<PhStripOff *> getOffs();
 
     /**
      * @brief setTitle
@@ -133,7 +144,7 @@ private:
     /**
      * List of PhPeople from the file
      */
-	QMap<QString, PhPeople *> _actors;
+	QMap<QString, PhPeople *> _peoples;
 
     /**
      * List of PhStripText from the file
@@ -149,6 +160,12 @@ private:
       * List of PhStripLoop from the file
       */
      QList<PhStripLoop *> _loops;
+
+	 /**
+	  * List of PhStripOff from the file
+	  */
+	 QList<PhStripOff *> _offs;
+
      int _nbTexts;
 	 void splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track, int ite);
 };
