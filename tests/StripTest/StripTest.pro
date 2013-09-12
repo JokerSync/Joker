@@ -18,9 +18,7 @@ TEMPLATE = app
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 
-SOURCES += main.cpp
-
 INCLUDEPATH += ../../libs
 
-
-
+#Main app
+SOURCES += main.cpp \

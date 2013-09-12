@@ -3,6 +3,8 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include <QFile>
+
 #include "PhTools/PhDebug.h"
 #include "PhGraphicStripView.h"
 
@@ -50,21 +52,24 @@ bool PhGraphicStripView::init()
 void PhGraphicStripView::clearData()
 {
 	foreach(PhGraphicText * gPeople, _graphicPeoples.values())
-	{
 		delete gPeople;
-	}
+	_graphicPeoples.clear();
 
 	foreach(PhGraphicRect * gCut, _graphicCuts.values())
-	{
 		delete gCut;
-	}
-	foreach(PhGraphicText * gText, _graphicTexts.values())
-	{
-		delete gText;
-	}
-	_graphicPeoples.clear();
 	_graphicCuts.clear();
+
+	foreach(PhGraphicText * gText, _graphicTexts.values())
+		delete gText;
 	_graphicTexts.clear();
+
+	foreach(PhGraphicLoop * gLoop, _graphicLoops.values())
+		delete gLoop;
+	_graphicLoops.clear();
+
+	foreach(PhGraphicRect * gOff, _graphicOffs.values())
+		delete gOff;
+	_graphicOffs.clear();
 }
 
 
@@ -132,7 +137,26 @@ void PhGraphicStripView::updateView()
 		_graphicCuts[cut] = gCut;
 	}
 
+	//Load the loops
+	foreach(PhStripLoop * loop, _doc.getLoops())
+	{
+		PhGraphicLoop *gLoop = new PhGraphicLoop();
+		gLoop->setColor(QColor(0, 0, 0, 1));
+		_graphicLoops[loop] = gLoop;
+	}
+
+	//Load the offs
+	foreach(PhStripOff * off, _doc.getOffs())
+	{
+		PhGraphicSolidRect *gOff = new PhGraphicSolidRect();
+		gOff->setColor(QColor(0, 0, 0));
+		gOff->setZ(-2);
+
+		_graphicOffs[off] = gOff;
+	}
+
 	PHDEBUG << "updateView ok";
+
 }
 
 PhTime lastTime = -1;
@@ -207,5 +231,28 @@ void PhGraphicStripView::paint()
 		gCut->setX(cut->getTimeIn() * pixelPerFrame - offset);
 		gCut->setWidth(2);
 		gCut->draw();
+	}
+
+	foreach(PhStripLoop * loop, _doc.getLoops())
+	{
+		PhGraphicLoop * gLoop = _graphicLoops[loop];
+		gLoop->setX(loop->getTimeIn() * pixelPerFrame - offset);
+		gLoop->setHThick(height/40);
+		gLoop->setHeight(height);
+		gLoop->setCrossHeight(height / 4);
+		gLoop->setWidth(height / 4);
+
+		gLoop->draw();
+	}
+
+	foreach(PhStripOff * off, _doc.getOffs())
+	{
+		PhGraphicRect *gOff = _graphicOffs[off];
+		gOff->setX(off->getTimeIn() * pixelPerFrame - offset);
+		gOff->setY(off->getTrack() * trackHeight + trackHeight);
+		gOff->setHeight( trackHeight / 10);
+		gOff->setWidth((off->getTimeOut() - off->getTimeIn()) * pixelPerFrame);
+
+		gOff->draw();
 	}
 }

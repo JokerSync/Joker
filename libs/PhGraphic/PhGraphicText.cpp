@@ -5,12 +5,8 @@
 
 #include "PhGraphicText.h"
 
-PhGraphicText::PhGraphicText()
-{
-}
-
-PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int z, int w, int h)
-	: PhGraphicTexturedRect(x, y , z, w, h), _font(font), _content(content)
+PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int w, int h)
+	: PhGraphicTexturedRect(x, y, w, h), _font(font), _content(content)
 {
 }
 

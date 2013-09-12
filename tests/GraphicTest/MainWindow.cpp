@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QObject::connect(ui->Text, SIGNAL(toggled(bool)),  ui->view, SLOT(displayText()));
 	QObject::connect(ui->Image, SIGNAL(toggled(bool)), ui->view, SLOT(displayImage()));
 	QObject::connect(ui->Rect, SIGNAL(toggled(bool)), ui->view, SLOT(displayRect()));
+	QObject::connect(ui->Loop, SIGNAL(toggled(bool)), ui->view, SLOT(displayLoop()));
 
 
 	QObject::connect(ui->Play, SIGNAL(clicked()), ui->view, SLOT(play()));

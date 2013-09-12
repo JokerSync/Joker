@@ -21,11 +21,12 @@ include($${JOKER_ROOT}/libs/PhGraphicStrip/PhGraphicStrip.pri)
 #Main app
 SOURCES += main.cpp \
     MainView.cpp \
-    MainWindow.cpp
+	MainWindow.cpp \
 
 HEADERS += \
     MainView.h \
-    MainWindow.h
+    MainWindow.h \
+    ../../libs/PhStrip/PhStripPeopleObject.h
 
 FORMS += \
     MainWindow.ui
