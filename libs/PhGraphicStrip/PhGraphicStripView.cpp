@@ -149,14 +149,14 @@ void PhGraphicStripView::updateView()
 	foreach(PhStripOff * off, _doc.getOffs())
 	{
 		PhGraphicSolidRect *gOff = new PhGraphicSolidRect();
-		gOff->setColor(QColor(0, 0, 0));
+		if(off->getPeople())
+			gOff->setColor(QColor(off->getPeople()->getColor()));
 		gOff->setZ(-2);
 
 		_graphicOffs[off] = gOff;
 	}
 
 	PHDEBUG << "updateView ok";
-
 }
 
 PhTime lastTime = -1;

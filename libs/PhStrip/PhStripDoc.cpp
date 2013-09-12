@@ -117,8 +117,7 @@ bool PhStripDoc::openDetX(QString fileName)
 
 		if(type.compare("off") == 0)
 		{
-
-			PhPeople *people = new PhPeople(lineElem.attribute("role"), lineElem.attribute("color"));
+			QString id = lineElem.toElement().attribute("role");
 
 			int track = lineElem.attribute("track").toInt();
 
@@ -140,7 +139,7 @@ bool PhStripDoc::openDetX(QString fileName)
 						// One char is ~1.20588 frame
 						end = start + lineElem.childNodes().at(j).toElement().text().length() * 1.20588 + 1;
 					}
-					_offs.push_back(new PhStripOff(start, people, end, track));
+					_offs.push_back(new PhStripOff(start, _peoples[id], end, track));
 				}
 			}
 		}
