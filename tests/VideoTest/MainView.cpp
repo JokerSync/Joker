@@ -19,7 +19,7 @@ MainView::MainView()
 	ui->mediaController->setTCType(_clock->getTCType());
 	ui->mediaController->setFirstFrame(_clock->frame());
 
-	ui->_videoView->setIntervalUpdate(1000/PhTimeCode::getFps(PhTimeCodeType25));
+	ui->_videoView->setIntervalUpdate(1000/PhTimeCode::getFps(PhTimeCodeType25)); // TODO : handle internally in PhVideoView
 
 	connect(ui->mediaController, SIGNAL(playButtonSignal()), this, SLOT(pushPlayButton()));
 	connect(ui->mediaController, SIGNAL(forwardButtonSignal()), this, SLOT(pushForwardButton()));
@@ -38,7 +38,6 @@ MainView::MainView()
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 	connect(ui->_videoView, SIGNAL(positionChangedSignal(qint64)), this, SLOT(updateFrame(qint64)));
-
 }
 
 
