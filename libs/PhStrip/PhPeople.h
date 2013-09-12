@@ -38,7 +38,7 @@ public:
      * @brief Set the color
      * @param color a PhColor
      */
-	void setColor(QString color);
+	void setColor(QString);
 
 private:
     /**

@@ -164,10 +164,10 @@ void PhGraphicStripView::updateView()
 		foreach(PhStripOff * off, _doc.getOffs())
 		{
 			PhGraphicSolidRect *gOff = new PhGraphicSolidRect();
-			gOff->setColor(new QColor(0, 0, 0));
+			gOff->setColor(new QColor(off->getPeople()->getColor()));
 			gOff->setX(off->getTimeIn());
 			gOff->setY(off->getTrack() +1);
-			gOff->setHeight(0.1f);
+			gOff->setHeight(0.05f);
 			gOff->setWidth(off->getTimeOut() - off->getTimeIn());
 			gOff->setZ(-2);
 
