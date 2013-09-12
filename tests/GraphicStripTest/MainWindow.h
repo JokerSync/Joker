@@ -22,6 +22,18 @@ private slots:
 	void onOpenFile();
 	void onFrameOrRateChanged(PhFrame frame, PhTimeCodeType tcType);
 
+	void on_actionPlay_pause_triggered();
+
+	void on_actionPlay_backward_triggered();
+
+	void on_actionStep_forward_triggered();
+
+	void on_actionStep_backward_triggered();
+
+	void on_actionStep_time_forward_triggered();
+
+	void on_actionStep_time_backward_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStripView *_stripView;

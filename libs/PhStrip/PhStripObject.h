@@ -30,6 +30,8 @@ public:
      * @return _timeIn
      */
     PhTime getTimeIn();
+
+	void setTimeIn(PhTime timeIn);
 };
 
 #endif // PHSTRIPOBJECT_H

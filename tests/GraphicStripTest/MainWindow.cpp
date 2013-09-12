@@ -33,7 +33,7 @@ void MainWindow::openFile(QString fileName)
 		{
 			_clock->setTCType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
-			_clock->setRate(1);
+			this->setWindowTitle(fileName);
 		}
 	}
 }
@@ -54,3 +54,40 @@ void MainWindow::onFrameOrRateChanged(PhFrame frame, PhTimeCodeType tcType)
 	ui->statusbar->showMessage(message);
 }
 
+
+void MainWindow::on_actionPlay_pause_triggered()
+{
+	if(_clock->rate() == 0.0)
+		_clock->setRate(1.0);
+	else
+		_clock->setRate(0.0);
+}
+
+void MainWindow::on_actionPlay_backward_triggered()
+{
+    _clock->setRate(-1.0);
+}
+
+void MainWindow::on_actionStep_forward_triggered()
+{
+    _clock->setRate(0.0);
+	_clock->setFrame(_clock->frame() + 1);
+}
+
+void MainWindow::on_actionStep_backward_triggered()
+{
+	_clock->setRate(0.0);
+	_clock->setFrame(_clock->frame() - 1);
+}
+
+void MainWindow::on_actionStep_time_forward_triggered()
+{
+	_clock->setRate(0.0);
+	_clock->setTime(_clock->time() + 1);
+}
+
+void MainWindow::on_actionStep_time_backward_triggered()
+{
+	_clock->setRate(0.0);
+	_clock->setTime(_clock->time() - 1);
+}

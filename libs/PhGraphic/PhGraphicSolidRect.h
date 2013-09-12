@@ -13,7 +13,7 @@ class PhGraphicSolidRect : public PhGraphicRect
 {
 public:
 
-	PhGraphicSolidRect(float x = 0, float y =0, float w = 0, float h = 0, float z = 0, QColor *color = new QColor());
+	PhGraphicSolidRect(int x = 0, int y =0, int w = 0, int h = 0);
 
 	bool init();
 

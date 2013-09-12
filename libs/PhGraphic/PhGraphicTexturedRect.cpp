@@ -3,51 +3,12 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include "PhTools/PhDebug.h"
 #include "PhGraphicTexturedRect.h"
 
-PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h, int z, float tu, float tv, QColor *color)
-	: PhGraphicRect(x, y, w, h , z, color), _tu(tu), _tv(tv)
+PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
+	: PhGraphicRect(x, y, w, h), _tu(1.0f), _tv(1.0f)
 {
-}
-
-
-void PhGraphicTexturedRect::createTextureFromColor(QColor color){
-
-    GLubyte Texture[4] =
-    {
-        color.red(),
-        color.green(),
-        color.blue(),
-        255,
-    };
-
-    GLenum textureFormat = 0;
-
-    textureFormat = GL_RGBA;
-
-    glEnable( GL_TEXTURE_2D );
-    // Have OpenGL generate a texture object handle for us
-    glGenTextures( 1, &_texture );
-
-    // Bind the texture object
-    glBindTexture( GL_TEXTURE_2D, _texture );
-
-
-    // Edit the texture object's image data using the information SDL_Surface gives us
-    glTexImage2D (
-                GL_TEXTURE_2D, 	//Type : texture 2D
-                0, 	//Mipmap : aucun
-                4, 	//Couleurs : 4
-                1, 	//Largeur : 2
-                1, 	//Hauteur : 2
-                0, 	//Largeur du bord : 0
-                GL_RGBA, 	//Format : RGBA
-                GL_UNSIGNED_BYTE, 	//Type des couleurs
-                Texture 	//Addresse de l'image
-                );
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
 }
 
 bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
@@ -73,7 +34,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
             textureFormat = GL_BGRA;
         break;
     default:
-        qDebug() << "Warning: the image is not truecolor...";
+        PHDEBUG << "Warning: the image is not truecolor...";
 		return false;
 
     }
@@ -99,7 +60,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 
 void PhGraphicTexturedRect::draw(){
 
-	//qDebug() << "PhGraphicTexturedRect::draw()";
+	//PHDEBUG << "PhGraphicTexturedRect::draw()";
     glMatrixMode(GL_MODELVIEW);
 
 	glLoadIdentity();
@@ -113,7 +74,7 @@ void PhGraphicTexturedRect::draw(){
 //          |            |
 //        (0,1) ------ (1,1)
 
-//		qDebug() << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
+//		PHDEBUG << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
 
 	glBegin(GL_QUADS); 	//Begining the cube's drawing
 	{
@@ -132,9 +93,4 @@ void PhGraphicTexturedRect::setTextureCoordinate(float tu, float tv)
 {
 	_tu = tu;
 	_tv = tv;
-}
-
-GLuint PhGraphicTexturedRect::getTexture()
-{
-    return _texture;
 }

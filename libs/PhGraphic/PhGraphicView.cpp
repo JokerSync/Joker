@@ -1,3 +1,4 @@
+#include "PhTools/PhDebug.h"
 #include "PhGraphicView.h"
 #include <SDL/SDL.h>
 
@@ -13,21 +14,21 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	t_Timer = new QTimer(this);
 	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 	t_Timer->start(0);
-	//this->_context = new PhGraphicContext(this);
 }
 
 void PhGraphicView::initializeGL()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) == 0)
-		qDebug() << "init SDL Ok.";
-	else
-		qDebug() << "SDL error:" << SDL_GetError();
-	if (TTF_Init() == 0)
-		qDebug() << "init TTF Ok.";
-	else
-		qDebug() << "TTF error:" << TTF_GetError();
+	PHDEBUG;
 
-	qDebug() << "PhGraphicView::initializeGL" ;
+	if (SDL_Init(SDL_INIT_VIDEO) == 0)
+		PHDEBUG << "init SDL Ok.";
+	else
+		PHDEBUG << "SDL error:" << SDL_GetError();
+	if (TTF_Init() == 0)
+		PHDEBUG << "init TTF Ok.";
+	else
+		PHDEBUG << "TTF error:" << TTF_GetError();
+
 	init();
 }
 
@@ -46,7 +47,7 @@ void PhGraphicView::resizeGL(int width, int height)
 
 void PhGraphicView::paintGL()
 {
-	//qDebug() << "PhGraphicView::paintGL" ;
+	//PHDEBUG << "PhGraphicView::paintGL" ;
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	paint();
 }
@@ -59,11 +60,6 @@ void PhGraphicView::onRefresh()
 //#endif
 
 	updateGL();
-}
-
-PhGraphicContext *PhGraphicView::getContext()
-{
-	return _context;
 }
 
 

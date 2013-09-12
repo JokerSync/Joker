@@ -4,6 +4,7 @@
 */
 
 #include <QStringList>
+
 #include "PhFont.h"
 
 PhFont::PhFont(QString filename, int size)
