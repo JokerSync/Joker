@@ -111,7 +111,6 @@ void PhMediaPanel::onRateChanged(PhRate rate)
 	ui->_rateLabel->setText("x"+QString::number(rate));
 	if(rate != 0)
 		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-
 	else
 		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
 }
