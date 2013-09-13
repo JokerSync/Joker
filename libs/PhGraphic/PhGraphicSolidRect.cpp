@@ -21,6 +21,16 @@ void PhGraphicSolidRect::draw()
 //		*/
 
 	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+
+	glEnable(GL_BLEND);
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glBindTexture(GL_TEXTURE_2D, NULL);
+	glEnable(GL_TEXTURE_2D);
+
 	glBegin(GL_QUADS); 	//Begining the cube's drawing
 	{
 		glVertex3i(_x,		_y,	_z);
@@ -29,4 +39,8 @@ void PhGraphicSolidRect::draw()
 		glVertex3i(_x,		_y + _h,  _z);
 	}
 	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+
+	glDisable(GL_BLEND);
 }

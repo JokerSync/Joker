@@ -21,6 +21,17 @@ void PhGraphicLoop::draw()
 	int w = _hThick;
 	int h = _h;
 
+	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+
+	glEnable(GL_BLEND);
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glBindTexture(GL_TEXTURE_2D, NULL);
+	glEnable(GL_TEXTURE_2D);
+
 	glBegin(GL_QUADS); 	// draw the vertical line
 	{
 		glVertex3f(x,		y,	_z);
@@ -56,6 +67,10 @@ void PhGraphicLoop::draw()
 		glVertex3f(x + _w -w,		y - h,  _z);
 	}
 	glEnd();
+
+	glDisable(GL_TEXTURE_2D);
+
+	glDisable(GL_BLEND);
 }
 
 void PhGraphicLoop::setHThick(int hThick)
