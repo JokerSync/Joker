@@ -27,8 +27,6 @@ public:
 
 	void setClock(PhClock *clock);
 
-	void setIntervalUpdate(int interval);
-
 	void setPosition(qint64 position);
 
 signals:
@@ -39,6 +37,7 @@ public slots:
 
 	void onRateChanged(PhRate rate);
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onTCTypeChanged(PhTimeCodeType tcType);
 
 private:
 	QMediaPlayer _player;
