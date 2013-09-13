@@ -31,11 +31,9 @@ void PhQTVideoView::setClock(PhClock *clock)
 	PhVideoObject::setClock(clock);
 	connect(_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
-}
+	connect(_clock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onTCTypeChanged(PhTimeCodeType)));
 
-void PhQTVideoView::setIntervalUpdate(int interval)
-{
-	_player.setNotifyInterval(interval);
+	emit onTCTypeChanged(clock->getTCType());
 }
 
 void PhQTVideoView::setPosition(qint64 position)
@@ -61,5 +59,10 @@ void PhQTVideoView::onFrameChanged(PhFrame frame,PhTimeCodeType tcType)
 		qint64 p = frame*1000/PhTimeCode::getFps(tcType);
 		_player.setPosition(p);
 	}
+}
+
+void PhQTVideoView::onTCTypeChanged(PhTimeCodeType tcType)
+{
+	_player.setNotifyInterval(1000/PhTimeCode::getFps(tcType));
 }
 

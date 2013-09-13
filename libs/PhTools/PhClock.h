@@ -40,6 +40,8 @@ signals:
 
 	void frameChanged(PhFrame frame, PhTimeCodeType tcType);
 
+	void tcTypeChanged(PhTimeCodeType tcType);
+
 public slots:
 
 	/**

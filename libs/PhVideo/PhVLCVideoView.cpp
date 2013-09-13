@@ -89,7 +89,7 @@ void PhVLCVideoView::onRateChanged(PhRate rate)
 	libvlc_media_player_set_rate(vlcPlayer, rate);
 }
 
-void PhVLCVideoView::onFrameChanged()
+void PhVLCVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
 	qDebug() << "PhVLCVideoView::onFrameChanged() : TODO";
 }

@@ -10,7 +10,11 @@ PhClock::PhClock(QObject *parent) :
 void PhClock::setTCType(PhTimeCodeType tcType)
 {
 	PhFrame lastFrame = frame();
-	_tcType = tcType;
+	if(_tcType != tcType)
+	{
+		_tcType = tcType;
+		emit tcTypeChanged(tcType);
+	}
 	PhFrame newFrame = frame();
 	if(lastFrame != newFrame)
 		emit frameChanged(newFrame, _tcType);
