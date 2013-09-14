@@ -21,6 +21,9 @@ public:
 	~MainWindow();
 
 private slots:
+	void masterPlayPause();
+	void masterNextFrame();
+	void masterPreviousFrame();
 	void tickMaster();
 	void tickSlave();
 

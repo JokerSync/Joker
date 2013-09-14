@@ -25,6 +25,13 @@ void PhSonyMasterController::stop()
 	sendCommand(0x20, 0x00);
 }
 
+void PhSonyMasterController::cue(PhFrame frame, PhTimeCodeType tcType)
+{
+	PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(frame, tcType);
+	unsigned int bcd = PhTimeCode::bcdFromFrame(frame, tcType);
+	sendCommandWithData(0x24, 0x31, (const unsigned char *)&bcd);
+}
+
 void PhSonyMasterController::fastForward()
 {
 	PHDEBUG << _comSuffix << "Fast forward";
@@ -40,7 +47,7 @@ void PhSonyMasterController::rewind()
 void PhSonyMasterController::jog(PhRate rate)
 {
 	PHDEBUG << _comSuffix << "Jog " << rate;
-	unsigned char data1;
+	char data1;
 	if (rate < 0)
 	{
 		data1 = computeData1FromRate(-rate);
@@ -56,7 +63,7 @@ void PhSonyMasterController::jog(PhRate rate)
 void PhSonyMasterController::varispeed(PhRate rate)
 {
 	PHDEBUG << _comSuffix << "Varispeed " << rate;
-	unsigned char data1;
+	char data1;
 	if (rate < 0)
 	{
 		data1 = computeData1FromRate(-rate);
@@ -72,7 +79,7 @@ void PhSonyMasterController::varispeed(PhRate rate)
 void PhSonyMasterController::shuttle(PhRate rate)
 {
 	PHDEBUG << _comSuffix << "Shuttle " << rate;
-	unsigned char data1;
+	char data1;
 	if (rate < 0)
 	{
 		data1 = computeData1FromRate(-rate);
