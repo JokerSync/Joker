@@ -6,7 +6,7 @@
 #include "PhTools/PhDebug.h"
 
 PhSonyController::PhSonyController(QString comSuffix, QObject *parent) : QObject(parent),
-	_comSuffix(comSuffix), _dataRead(0)
+	_comSuffix(comSuffix), _dataRead(0), _lastCTS(false)
 {
 	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
             SLOT(handleError(QSerialPort::SerialPortError)));
@@ -55,6 +55,14 @@ void PhSonyController::close()
 	}
 	else
 		PHDEBUG << _comSuffix << "port already closed.";
+}
+
+void PhSonyController::checkVideoSync()
+{
+	bool cts = _serial.pinoutSignals() & QSerialPort::ClearToSendSignal;
+	if(!_lastCTS && cts)
+		onCTS();
+	_lastCTS = cts;
 }
 
 PhRate PhSonyController::computeRate(unsigned char data1)
@@ -121,6 +129,11 @@ void PhSonyController::timeOut()
 }
 
 void PhSonyController::checkSumError()
+{
+	PHDEBUG << _comSuffix;
+}
+
+void PhSonyController::onCTS()
 {
 	PHDEBUG << _comSuffix;
 }

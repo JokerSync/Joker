@@ -196,7 +196,6 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				cmd2 = 0x04;
 				break;
 			}
-			PhTimeCodeType tcType = _clock.getTCType();
 			unsigned int bcd = PhTimeCode::bcdFromFrame(_clock.frame(), _clock.getTCType());
 			sendCommandWithData(0x74, cmd2, (unsigned char *)&bcd);
 			break;
@@ -286,6 +285,11 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 	}
 
 	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn) << " over";
+}
+
+void PhSonySlaveController::onCTS()
+{
+	_clock.tick(1000/PhTimeCode::getFps(_clock.getTCType()));
 }
 
 void PhSonySlaveController::sendAck()

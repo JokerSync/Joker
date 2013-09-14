@@ -8,8 +8,20 @@ class PhSonySlaveController : public PhSonyController
 public:
 	PhSonySlaveController(QObject *parent);
 
+	enum PhSonyState {
+		Pause,
+		Play,
+		FastForward,
+		Rewind,
+		Jog,
+		Varispeed,
+		Shuttle,
+	};
+
 protected:
 	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
+
+	void onCTS();
 private:
 	/**
 	 * @brief Send a command acknolegment.
@@ -25,17 +37,7 @@ private:
 	void checkSumError();
 
 	void timeOut();
-public:
-	enum PhSonyState {
-		Pause,
-		Play,
-		FastForward,
-		Rewind,
-		Jog,
-		Varispeed,
-		Shuttle,
-	};
-
+private:
 	bool _autoMode;
 	PhSonyState _state;
 };

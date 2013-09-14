@@ -46,11 +46,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	on_slaveActiveCheck_clicked(true);
 
 	// start timers
-	connect(&_masterTimer, SIGNAL(timeout()), this, SLOT(tickMaster()));
-	connect(&_slaveTimer, SIGNAL(timeout()), this, SLOT(tickSlave()));
+	connect(&_ctsTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
+	connect(&_ctsTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
 
 //	_masterTimer.start(1000);
-	_slaveTimer.start(40);
+	_ctsTimer.start(5);
 	//_sonySlave.clock()->setFrame(25 * 25);
 
 //	_sonySlave.getClock()->setRate(1);
@@ -79,17 +79,6 @@ void MainWindow::masterNextFrame()
 void MainWindow::masterPreviousFrame()
 {
 	_sonyMaster.cue(_sonyMaster.clock()->frame() - 1, _sonyMaster.clock()->getTCType());
-}
-
-void MainWindow::tickMaster()
-{
-	_sonyMaster.timeSense();
-//	_sonyMaster.statusSense();
-}
-
-void MainWindow::tickSlave()
-{
-	_sonySlave.clock()->tick(25);
 }
 
 void MainWindow::onDeviceIdData(unsigned char id1, unsigned char id2)

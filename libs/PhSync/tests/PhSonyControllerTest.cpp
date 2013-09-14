@@ -28,7 +28,7 @@ bool PhSonyControllerTest::testAll()
 	return result;
 }
 
-void PhSonyControllerTest::processCommand(char cmd1, char cmd2, const unsigned char *data)
+void PhSonyControllerTest::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
 	qDebug() << stringFromCommand(cmd1, cmd2, data);
 }
