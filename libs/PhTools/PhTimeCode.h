@@ -47,8 +47,6 @@ public:
      */
     static PhFrame frameFromBcd(unsigned int bcd, PhTimeCodeType type);
 
-	static unsigned int shortFromBcd(unsigned int bcd);
-
     /**
      Create a timecode BCD representation from a frame number and a type
      @param frame A frame number.
