@@ -22,6 +22,8 @@ public:
 
 private slots:
 	void masterPlayPause();
+	void masterNextFrame();
+	void masterPreviousFrame();
 	void tickMaster();
 	void tickSlave();
 
