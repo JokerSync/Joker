@@ -7,6 +7,11 @@ PhSonyMasterController::PhSonyMasterController(QObject *parent)
 {
 }
 
+void PhSonyMasterController::onCTS()
+{
+	timeSense();
+}
+
 void PhSonyMasterController::deviceTypeRequest()
 {
 	PHDEBUG << _comSuffix << "Device type request";

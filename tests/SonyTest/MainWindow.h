@@ -24,8 +24,6 @@ private slots:
 	void masterPlayPause();
 	void masterNextFrame();
 	void masterPreviousFrame();
-	void tickMaster();
-	void tickSlave();
 
 	void onDeviceIdData(unsigned char id1, unsigned char id2);
 	void onStatusData(int length, unsigned char * statusData);
@@ -37,7 +35,7 @@ private:
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;
 	PhSonySlaveController _sonySlave;
-	QTimer _slaveTimer, _masterTimer;
+	QTimer _ctsTimer;
 };
 
 #endif // MAINWINDOW_H

@@ -132,6 +132,7 @@ void MainWindow::checkCTS()
 		ui->ctsLabel->setText("CTS : " + QString::number(frequency));
 		_lastCTS = cts;
 	}
+
 	_timerCounter.tick();
 	PHDEBUG << _timerCounter.frequency() << frequency ;
 }

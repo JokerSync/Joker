@@ -55,6 +55,9 @@ public:
 
 	PhClock *clock() { return &_clock; }
 
+public slots:
+	void checkVideoSync();
+
 protected:
 	/**
 	 * Compute the rate from the jog, varispeed and shuttle sony protocole
@@ -112,6 +115,7 @@ protected:
 
 	virtual void timeOut();
 	virtual void checkSumError();
+	virtual void onCTS();
 
 	/**
 	 * @brief stringFromCommand
@@ -135,6 +139,7 @@ private:
 	unsigned char _dataIn[256];
 	int _dataRead;
 	unsigned char _dataOut[256];
+	bool _lastCTS;
 private slots:
 	void onData();
 	void handleError(QSerialPort::SerialPortError error);
