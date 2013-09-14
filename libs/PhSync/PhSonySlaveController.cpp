@@ -127,17 +127,14 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 //						[port sendAck];
 //						break;
 //					}
-//					case 0x31:
-//					{
-//						unsigned char hh = [DWBCDTool uintFromBcd:dataIn[3]];
-//						unsigned char mm = [DWBCDTool uintFromBcd:dataIn[2]];
-//						unsigned char ss = [DWBCDTool uintFromBcd:dataIn[1]];
-//						unsigned char ff = [DWBCDTool uintFromBcd:dataIn[0]];
-//						self.clock.frame = [DWTimeCode frameFromHh:hh Mm:mm Ss:ss Ff:ff andType:self.clock.type];
-//						PHDEBUG << _comSuffix << "Cue at %@ => ACK", self.clock.tcString);
-//						[port sendAck];
-//						break;
-//					}
+		case 0x31:
+		{
+			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.getTCType());
+			_clock.setFrame(frame);
+			PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType()) << "=> ACK";
+			sendAck();
+			break;
+		}
 //					default:
 //						PHDEBUG << _comSuffix << "Unknown subcommand : %x %x => NAK", cmd1, cmd2);
 //						[port sendNak:0x00];
