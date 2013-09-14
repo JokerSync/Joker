@@ -197,14 +197,9 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				cmd2 = 0x04;
 				break;
 			}
-			unsigned int hhmmssff[4];
 			PhTimeCodeType tcType = _clock.getTCType();
-			PhTimeCode::ComputeHhMmSsFf(hhmmssff, _clock.frame(), tcType);
-			unsigned char hh = PhTimeCode::bcdFromFrame(hhmmssff[0], tcType);
-			unsigned char mm = PhTimeCode::bcdFromFrame(hhmmssff[1], tcType);
-			unsigned char ss = PhTimeCode::bcdFromFrame(hhmmssff[2], tcType);
-			unsigned char ff = PhTimeCode::bcdFromFrame(hhmmssff[3], tcType);
-			sendCommand(0x74, cmd2, ff, ss, mm, hh);
+			unsigned int bcd = PhTimeCode::bcdFromFrame(_clock.frame(), _clock.getTCType());
+			sendCommandWithData(0x74, cmd2, (unsigned char *)&bcd);
 			break;
 		}
 		case 0x20:
