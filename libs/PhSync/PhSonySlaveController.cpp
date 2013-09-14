@@ -66,18 +66,18 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			_clock.setRate(1);
 			sendAck();
 			break;
-//					case 0x10:
-//						PHDEBUG << _comSuffix << "Fast forward => ACK");
-//						state = FastForward;
-//						_clock.rate() = [[NSUserDefaults standardUserDefaults] doubleForKey:@"DWSonyRewindFastForwardSpeed"];
-//						[port sendAck];
-//						break;
-//					case 0x20:
-//						PHDEBUG << _comSuffix << "Rewing => ACK");
-//						state = Rewind;
-//						_clock.rate() = -[[NSUserDefaults standardUserDefaults] doubleForKey:@"DWSonyRewindFastForwardSpeed"];
-//						[port sendAck];
-//						break;
+		case 0x10:
+			PHDEBUG << _comSuffix << "Fast forward => ACK";
+			_state = FastForward;
+			_clock.setRate(3);	// TODO : put in the settings
+			sendAck();
+			break;
+		case 0x20:
+			PHDEBUG << _comSuffix << "Rewing => ACK";
+			_state = Rewind;
+			_clock.setRate(-3); // TODO : put in the settings
+			sendAck();
+			break;
 //					case 0x11:
 //					case 0x12:
 //					case 0x13:
