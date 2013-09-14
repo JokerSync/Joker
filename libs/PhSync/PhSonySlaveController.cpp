@@ -137,28 +137,28 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			sendAck();
 			break;
 		}
-//					default:
-//						PHDEBUG << _comSuffix << "Unknown subcommand : %x %x => NAK", cmd1, cmd2);
-//						[port sendNak:0x00];
-//						break;
-//				}
-//				break;
-//			case 4:
-//				switch (cmd2) {
-//					case 0x30:
-//						PHDEBUG << _comSuffix << "Edit preset : %@", [DWString stringWithBuffer:dataIn andLength:[port getDataCount:cmd1]]);
-//						[port sendAck];
-//						break;
-//					case 0x40:
-//						autoMode = NO;
-//						PHDEBUG << _comSuffix << "Auto Mode Off => ACK");
-//						[port sendAck];
-//						break;
-//					case 0x41:
-//						autoMode = YES;
-//						PHDEBUG << _comSuffix << "Auto Mode On => ACK");
-//						[port sendAck];
-//						break;
+		default:
+			PHDEBUG << _comSuffix << "Unknown subcommand => NAK";
+			sendNak(UndefinedCommand);
+			break;
+		}
+		break;
+	case 4:
+		switch (cmd2) {
+		case 0x30:
+			PHDEBUG << _comSuffix << "Edit preset => ACK";
+			sendAck();
+			break;
+		case 0x40:
+			PHDEBUG << _comSuffix << "Auto Mode Off => ACK";
+			_autoMode = false;
+			sendAck();
+			break;
+		case 0x41:
+			_autoMode = true;
+			PHDEBUG << _comSuffix << "Auto Mode On => ACK";
+			sendAck();
+			break;	case 6:
 		default:
 			PHDEBUG << _comSuffix << "Unknown subcommand => NAK";
 			sendNak(UndefinedCommand);
@@ -263,17 +263,16 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			sendCommand(0x71, 0x2e, data1);
 			break;
 		}
-//								case 0x30:
-//								{
-//									// TODO : handle properly
-//									PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status");
-//									unsigned char count = dataIn[0];
-//									for (int i=0; i<count; i++) {
-//										dataOut[i] = 0;
-//									}
-//									[port sendCommand:0x70 + count cmd2:0x30 data:dataOut];
-//									break;
-//								}
+		case 0x30:
+		{
+			// TODO : handle properly
+			PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status";
+			unsigned char count = dataIn[0];
+			for (int i=0; i<count; i++)
+				dataOut[i] = 0;
+			sendCommandWithData(0x70 + count, 0x30, dataOut);
+			break;
+		}
 		default:
 				PHDEBUG << _comSuffix << "Unknown subcommand : => NAK";
 				sendNak(UndefinedCommand);
