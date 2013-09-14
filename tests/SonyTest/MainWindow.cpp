@@ -19,8 +19,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->slavePanel->setMediaLength(10000);
 
 	// Connect master panel to sony master
-	connect(ui->masterPanel, SIGNAL(playButtonSignal()), &_sonyMaster, SLOT(play()));
-	connect(ui->masterPanel, SIGNAL(pauseButtonSignal()), &_sonyMaster, SLOT(stop()));
+	connect(ui->masterPanel, SIGNAL(playButtonSignal()), this, SLOT(masterPlayPause()));
+	connect(ui->masterPanel, SIGNAL(nextFrameButtonSignal()), this, SLOT(masterNextFrame()));
+	connect(ui->masterPanel, SIGNAL(previousFrameButtonSignal()), this, SLOT(masterPreviousFrame()));
+	connect(ui->masterPanel, SIGNAL(forwardButtonSignal()), &_sonyMaster, SLOT(fastForward()));
+	connect(ui->masterPanel, SIGNAL(rewindButtonSignal()), &_sonyMaster, SLOT(rewind()));
+
 	connect(_sonyMaster.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->masterPanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_sonyMaster.clock(), SIGNAL(rateChanged(PhRate)), ui->masterPanel, SLOT(onRateChanged(PhRate)));
 
@@ -29,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->statusSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(statusSense()));
 	connect(ui->timeSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(timeSense()));
 	connect(ui->speedSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(speedSense()));
-
 
 	connect(&_sonyMaster, SIGNAL(deviceIdData(unsigned char,unsigned char)), this, SLOT(onDeviceIdData(unsigned char,unsigned char)));
 	connect(&_sonyMaster, SIGNAL(statusData(int,unsigned char*)), this, SLOT(onStatusData(int,unsigned char*)));
@@ -48,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //	_masterTimer.start(1000);
 	_slaveTimer.start(40);
+	//_sonySlave.clock()->setFrame(25 * 25);
 
 //	_sonySlave.getClock()->setRate(1);
 }
@@ -57,6 +61,24 @@ MainWindow::~MainWindow()
 	_sonyMaster.close();
 	_sonySlave.close();
 	delete ui;
+}
+
+void MainWindow::masterPlayPause()
+{
+	if(_sonyMaster.clock()->rate() != 0)
+		_sonyMaster.stop();
+	else
+		_sonyMaster.play();
+}
+
+void MainWindow::masterNextFrame()
+{
+	_sonyMaster.cue(_sonyMaster.clock()->frame() + 1, _sonyMaster.clock()->getTCType());
+}
+
+void MainWindow::masterPreviousFrame()
+{
+	_sonyMaster.cue(_sonyMaster.clock()->frame() - 1, _sonyMaster.clock()->getTCType());
 }
 
 void MainWindow::tickMaster()
@@ -96,8 +118,8 @@ void MainWindow::on_masterActiveCheck_clicked(bool checked)
 			PHDEBUG << "master open ok";
 
 			_sonyMaster.deviceTypeRequest();
-	//		_sonyMaster.statusSense();
-		//	_sonyMaster.timeSense();
+		//	_sonyMaster.statusSense();
+			//_sonyMaster.timeSense();
 			//_sonyMaster.speedSense();
 		}
 		else

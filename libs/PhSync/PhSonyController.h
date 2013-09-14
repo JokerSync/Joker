@@ -119,7 +119,7 @@ protected:
 	 * @param cmd2 Second command descriptor.
 	 * @return The name of the command.
 	 */
-	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data = 0);
+	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data = 0);
 
 	PhClock _clock;
 
@@ -127,11 +127,16 @@ protected:
 	QString _comSuffix;
 
 private:
+	void checkData();
+
 	// Serial port connected to the controller
 	QSerialPort _serial;
+	bool sonyRunning;
+	unsigned char _dataIn[256];
+	int _dataRead;
+	unsigned char _dataOut[256];
 private slots:
 	void onData();
-	void onCTS();
 	void handleError(QSerialPort::SerialPortError error);
 };
 

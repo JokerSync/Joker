@@ -27,6 +27,13 @@ public slots:
 	/** Send a stop command to the connected device. */
 	void stop();
 
+	/**
+	 * Send a cue command to the connected device
+	 * @param frame frame number
+	 * @param tcType type of the timecode
+	 */
+	void cue(PhFrame frame, PhTimeCodeType tcType);
+
 	/** Send a fast forward command to the connected device. */
 	void fastForward();
 

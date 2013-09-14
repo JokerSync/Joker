@@ -66,100 +66,99 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			_clock.setRate(1);
 			sendAck();
 			break;
-//					case 0x10:
-//						PHDEBUG << _comSuffix << "Fast forward => ACK");
-//						state = FastForward;
-//						_clock.rate() = [[NSUserDefaults standardUserDefaults] doubleForKey:@"DWSonyRewindFastForwardSpeed"];
-//						[port sendAck];
-//						break;
-//					case 0x20:
-//						PHDEBUG << _comSuffix << "Rewing => ACK");
-//						state = Rewind;
-//						_clock.rate() = -[[NSUserDefaults standardUserDefaults] doubleForKey:@"DWSonyRewindFastForwardSpeed"];
-//						[port sendAck];
-//						break;
-//					case 0x11:
-//					case 0x12:
-//					case 0x13:
-//					case 0x21:
-//					case 0x22:
-//					case 0x23:
-//					{
-//						double rate = 0;
-//						switch (cmd1 & 0xf) {
-//							case 1:
-//								rate = [self computeRateWithData1:dataIn[0]];
-//								break;
-//							case 2:
-//								rate = [self computeRateWithData1:dataIn[0] andData2:dataIn[1]];
-//								break;
-//						}
-//						switch (cmd1) {
-//							case 0x11:
-//								state = Jog;
-//								PHDEBUG << _comSuffix << "Jog Forward : %.2f => ACK", rate);
-//								break;
-//							case 0x12:
-//								state = Var;
-//								PHDEBUG << _comSuffix << "Var Forward : %.2f => ACK", rate);
-//								break;
-//							case 0x13:
-//								state = Shuttle;
-//								PHDEBUG << _comSuffix << "Shuttle Forward : %.2f => ACK", rate);
-//								break;
-//							case 0x21:
-//								rate = -rate;
-//								state = Jog;
-//								PHDEBUG << _comSuffix << "Jog rev : %.2f => ACK", rate);
-//								break;
-//							case 0x22:
-//								rate = -rate;
-//								state = Var;
-//								PHDEBUG << _comSuffix << "Var rev : %.2f => ACK", rate);
-//								break;
-//							case 0x23:
-//								rate = -rate;
-//								state = Shuttle;
-//								PHDEBUG << _comSuffix << "Shuttle rev : %.2f => ACK", rate);
-//								break;
-//						}
-//						_clock.rate() = rate;
-//						[port sendAck];
-//						break;
-//					}
-//					case 0x31:
-//					{
-//						unsigned char hh = [DWBCDTool uintFromBcd:dataIn[3]];
-//						unsigned char mm = [DWBCDTool uintFromBcd:dataIn[2]];
-//						unsigned char ss = [DWBCDTool uintFromBcd:dataIn[1]];
-//						unsigned char ff = [DWBCDTool uintFromBcd:dataIn[0]];
-//						self.clock.frame = [DWTimeCode frameFromHh:hh Mm:mm Ss:ss Ff:ff andType:self.clock.type];
-//						PHDEBUG << _comSuffix << "Cue at %@ => ACK", self.clock.tcString);
-//						[port sendAck];
-//						break;
-//					}
-//					default:
-//						PHDEBUG << _comSuffix << "Unknown subcommand : %x %x => NAK", cmd1, cmd2);
-//						[port sendNak:0x00];
-//						break;
-//				}
-//				break;
-//			case 4:
-//				switch (cmd2) {
-//					case 0x30:
-//						PHDEBUG << _comSuffix << "Edit preset : %@", [DWString stringWithBuffer:dataIn andLength:[port getDataCount:cmd1]]);
-//						[port sendAck];
-//						break;
-//					case 0x40:
-//						autoMode = NO;
-//						PHDEBUG << _comSuffix << "Auto Mode Off => ACK");
-//						[port sendAck];
-//						break;
-//					case 0x41:
-//						autoMode = YES;
-//						PHDEBUG << _comSuffix << "Auto Mode On => ACK");
-//						[port sendAck];
-//						break;
+		case 0x10:
+			PHDEBUG << _comSuffix << "Fast forward => ACK";
+			_state = FastForward;
+			_clock.setRate(3);	// TODO : put in the settings
+			sendAck();
+			break;
+		case 0x20:
+			PHDEBUG << _comSuffix << "Rewing => ACK";
+			_state = Rewind;
+			_clock.setRate(-3); // TODO : put in the settings
+			sendAck();
+			break;
+		case 0x11:
+		case 0x12:
+		case 0x13:
+		case 0x21:
+		case 0x22:
+		case 0x23:
+		{
+			PhRate rate = 0;
+			switch (cmd1 & 0xf)
+			{
+			case 1:
+				rate = computeRate(dataIn[0]);
+				break;
+			case 2:
+				rate =computeRate(dataIn[0], dataIn[1]);
+				break;
+			}
+			switch (cmd1)
+			{
+			case 0x11:
+				_state = Jog;
+				PHDEBUG << _comSuffix << "Jog Forward : "<< rate<<"=> ACK";
+				break;
+			case 0x12:
+				_state = Varispeed;
+				PHDEBUG << _comSuffix << "Var Forward : "<< rate<<"=> ACK";
+				break;
+			case 0x13:
+				_state = Shuttle;
+				PHDEBUG << _comSuffix << "Shuttle Forward : " << rate << "=> ACK";
+				break;
+			case 0x21:
+				rate = -rate;
+				_state = Jog;
+				PHDEBUG << _comSuffix << "Jog rev : " << rate << "=> ACK";
+				break;
+			case 0x22:
+				rate = -rate;
+				_state = Varispeed;
+				PHDEBUG << _comSuffix << "Var rev : " << rate << "=> ACK";
+				break;
+			case 0x23:
+				rate = -rate;
+				_state = Shuttle;
+				PHDEBUG << _comSuffix << "Shuttle rev : " << rate << "=> ACK";
+				break;
+			}
+			_clock.setRate(rate);
+			sendAck();
+			break;
+		}
+		case 0x31:
+		{
+			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.getTCType());
+			_clock.setFrame(frame);
+			PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType()) << "=> ACK";
+			sendAck();
+			break;
+		}
+		default:
+			PHDEBUG << _comSuffix << "Unknown subcommand => NAK";
+			sendNak(UndefinedCommand);
+			break;
+		}
+		break;
+	case 4:
+		switch (cmd2) {
+		case 0x30:
+			PHDEBUG << _comSuffix << "Edit preset => ACK";
+			sendAck();
+			break;
+		case 0x40:
+			PHDEBUG << _comSuffix << "Auto Mode Off => ACK";
+			_autoMode = false;
+			sendAck();
+			break;
+		case 0x41:
+			_autoMode = true;
+			PHDEBUG << _comSuffix << "Auto Mode On => ACK";
+			sendAck();
+			break;	case 6:
 		default:
 			PHDEBUG << _comSuffix << "Unknown subcommand => NAK";
 			sendNak(UndefinedCommand);
@@ -197,14 +196,9 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				cmd2 = 0x04;
 				break;
 			}
-			unsigned int hhmmssff[4];
 			PhTimeCodeType tcType = _clock.getTCType();
-			PhTimeCode::ComputeHhMmSsFf(hhmmssff, _clock.frame(), tcType);
-			unsigned char hh = PhTimeCode::bcdFromFrame(hhmmssff[0], tcType);
-			unsigned char mm = PhTimeCode::bcdFromFrame(hhmmssff[1], tcType);
-			unsigned char ss = PhTimeCode::bcdFromFrame(hhmmssff[2], tcType);
-			unsigned char ff = PhTimeCode::bcdFromFrame(hhmmssff[3], tcType);
-			sendCommand(0x74, cmd2, ff, ss, mm, hh);
+			unsigned int bcd = PhTimeCode::bcdFromFrame(_clock.frame(), _clock.getTCType());
+			sendCommandWithData(0x74, cmd2, (unsigned char *)&bcd);
 			break;
 		}
 		case 0x20:
@@ -269,17 +263,16 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			sendCommand(0x71, 0x2e, data1);
 			break;
 		}
-//								case 0x30:
-//								{
-//									// TODO : handle properly
-//									PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status");
-//									unsigned char count = dataIn[0];
-//									for (int i=0; i<count; i++) {
-//										dataOut[i] = 0;
-//									}
-//									[port sendCommand:0x70 + count cmd2:0x30 data:dataOut];
-//									break;
-//								}
+		case 0x30:
+		{
+			// TODO : handle properly
+			PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status";
+			unsigned char count = dataIn[0];
+			for (int i=0; i<count; i++)
+				dataOut[i] = 0;
+			sendCommandWithData(0x70 + count, 0x30, dataOut);
+			break;
+		}
 		default:
 				PHDEBUG << _comSuffix << "Unknown subcommand : => NAK";
 				sendNak(UndefinedCommand);
