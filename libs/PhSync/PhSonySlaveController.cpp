@@ -78,55 +78,57 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			_clock.setRate(-3); // TODO : put in the settings
 			sendAck();
 			break;
-//					case 0x11:
-//					case 0x12:
-//					case 0x13:
-//					case 0x21:
-//					case 0x22:
-//					case 0x23:
-//					{
-//						double rate = 0;
-//						switch (cmd1 & 0xf) {
-//							case 1:
-//								rate = [self computeRateWithData1:dataIn[0]];
-//								break;
-//							case 2:
-//								rate = [self computeRateWithData1:dataIn[0] andData2:dataIn[1]];
-//								break;
-//						}
-//						switch (cmd1) {
-//							case 0x11:
-//								state = Jog;
-//								PHDEBUG << _comSuffix << "Jog Forward : %.2f => ACK", rate);
-//								break;
-//							case 0x12:
-//								state = Var;
-//								PHDEBUG << _comSuffix << "Var Forward : %.2f => ACK", rate);
-//								break;
-//							case 0x13:
-//								state = Shuttle;
-//								PHDEBUG << _comSuffix << "Shuttle Forward : %.2f => ACK", rate);
-//								break;
-//							case 0x21:
-//								rate = -rate;
-//								state = Jog;
-//								PHDEBUG << _comSuffix << "Jog rev : %.2f => ACK", rate);
-//								break;
-//							case 0x22:
-//								rate = -rate;
-//								state = Var;
-//								PHDEBUG << _comSuffix << "Var rev : %.2f => ACK", rate);
-//								break;
-//							case 0x23:
-//								rate = -rate;
-//								state = Shuttle;
-//								PHDEBUG << _comSuffix << "Shuttle rev : %.2f => ACK", rate);
-//								break;
-//						}
-//						_clock.rate() = rate;
-//						[port sendAck];
-//						break;
-//					}
+		case 0x11:
+		case 0x12:
+		case 0x13:
+		case 0x21:
+		case 0x22:
+		case 0x23:
+		{
+			PhRate rate = 0;
+			switch (cmd1 & 0xf)
+			{
+			case 1:
+				rate = computeRate(dataIn[0]);
+				break;
+			case 2:
+				rate =computeRate(dataIn[0], dataIn[1]);
+				break;
+			}
+			switch (cmd1)
+			{
+			case 0x11:
+				_state = Jog;
+				PHDEBUG << _comSuffix << "Jog Forward : "<< rate<<"=> ACK";
+				break;
+			case 0x12:
+				_state = Varispeed;
+				PHDEBUG << _comSuffix << "Var Forward : "<< rate<<"=> ACK";
+				break;
+			case 0x13:
+				_state = Shuttle;
+				PHDEBUG << _comSuffix << "Shuttle Forward : " << rate << "=> ACK";
+				break;
+			case 0x21:
+				rate = -rate;
+				_state = Jog;
+				PHDEBUG << _comSuffix << "Jog rev : " << rate << "=> ACK";
+				break;
+			case 0x22:
+				rate = -rate;
+				_state = Varispeed;
+				PHDEBUG << _comSuffix << "Var rev : " << rate << "=> ACK";
+				break;
+			case 0x23:
+				rate = -rate;
+				_state = Shuttle;
+				PHDEBUG << _comSuffix << "Shuttle rev : " << rate << "=> ACK";
+				break;
+			}
+			_clock.setRate(rate);
+			sendAck();
+			break;
+		}
 		case 0x31:
 		{
 			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.getTCType());
