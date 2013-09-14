@@ -40,7 +40,7 @@ void PhSonyMasterController::rewind()
 void PhSonyMasterController::jog(PhRate rate)
 {
 	PHDEBUG << _comSuffix << "Jog " << rate;
-	unsigned char data1;
+	char data1;
 	if (rate < 0)
 	{
 		data1 = computeData1FromRate(-rate);
@@ -56,7 +56,7 @@ void PhSonyMasterController::jog(PhRate rate)
 void PhSonyMasterController::varispeed(PhRate rate)
 {
 	PHDEBUG << _comSuffix << "Varispeed " << rate;
-	unsigned char data1;
+	char data1;
 	if (rate < 0)
 	{
 		data1 = computeData1FromRate(-rate);
@@ -72,7 +72,7 @@ void PhSonyMasterController::varispeed(PhRate rate)
 void PhSonyMasterController::shuttle(PhRate rate)
 {
 	PHDEBUG << _comSuffix << "Shuttle " << rate;
-	unsigned char data1;
+	char data1;
 	if (rate < 0)
 	{
 		data1 = computeData1FromRate(-rate);
@@ -103,7 +103,7 @@ void PhSonyMasterController::speedSense()
 	sendCommand(0x60, 0x2E);
 }
 
-void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
+void PhSonyMasterController::processCommand(char cmd1, char cmd2, const char *data)
 {
 	PHDEBUG << _comSuffix << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, data);
 	switch (cmd1 >> 4)
@@ -142,7 +142,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		}
 		case 0x20:
 		{
-			unsigned char status[4];
+			char status[4];
 			QString statusStr = "";
 			for (int i = 0; i < 4; i++)
 			{

@@ -19,8 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->slavePanel->setMediaLength(10000);
 
 	// Connect master panel to sony master
-	connect(ui->masterPanel, SIGNAL(playButtonSignal()), &_sonyMaster, SLOT(play()));
-	connect(ui->masterPanel, SIGNAL(pauseButtonSignal()), &_sonyMaster, SLOT(stop()));
+	connect(ui->masterPanel, SIGNAL(playButtonSignal()), this, SLOT(masterPlayPause()));
 	connect(_sonyMaster.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->masterPanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_sonyMaster.clock(), SIGNAL(rateChanged(PhRate)), ui->masterPanel, SLOT(onRateChanged(PhRate)));
 
@@ -57,6 +56,14 @@ MainWindow::~MainWindow()
 	_sonyMaster.close();
 	_sonySlave.close();
 	delete ui;
+}
+
+void MainWindow::masterPlayPause()
+{
+	if(_sonyMaster.clock()->rate() != 0)
+		_sonyMaster.stop();
+	else
+		_sonyMaster.play();
 }
 
 void MainWindow::tickMaster()

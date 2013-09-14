@@ -9,7 +9,7 @@ public:
 	PhSonySlaveController(QObject *parent);
 
 protected:
-	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
+	void processCommand(char cmd1, char cmd2, const char *data);
 private:
 	/**
 	 * @brief Send a command acknolegment.

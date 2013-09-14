@@ -67,11 +67,11 @@ public slots:
 	void speedSense();
 
 signals:
-	void deviceIdData(unsigned char id1, unsigned char id2);
-	void statusData(int length, unsigned char * statusData);
+	void deviceIdData(char id1, char id2);
+	void statusData(int length, char * statusData);
 
 protected:
-	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
+	void processCommand(char cmd1, char cmd2, const char *data);
 };
 
 #endif // PHSONYMASTERCONTROLLER_H
