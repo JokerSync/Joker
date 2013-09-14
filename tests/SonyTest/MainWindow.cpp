@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	// Connect master panel to sony master
 	connect(ui->masterPanel, SIGNAL(playButtonSignal()), this, SLOT(masterPlayPause()));
 	connect(ui->masterPanel, SIGNAL(forwardButtonSignal()), &_sonyMaster, SLOT(fastForward()));
+	connect(ui->masterPanel, SIGNAL(rewindButtonSignal()), &_sonyMaster, SLOT(rewind()));
 	connect(_sonyMaster.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->masterPanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_sonyMaster.clock(), SIGNAL(rateChanged(PhRate)), ui->masterPanel, SLOT(onRateChanged(PhRate)));
 
@@ -48,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //	_masterTimer.start(1000);
 	_slaveTimer.start(40);
+	//_sonySlave.clock()->setFrame(25 * 25);
 
 //	_sonySlave.getClock()->setRate(1);
 }
@@ -105,7 +107,7 @@ void MainWindow::on_masterActiveCheck_clicked(bool checked)
 
 			_sonyMaster.deviceTypeRequest();
 	//		_sonyMaster.statusSense();
-		//	_sonyMaster.timeSense();
+//			_sonyMaster.timeSense();
 			//_sonyMaster.speedSense();
 		}
 		else
