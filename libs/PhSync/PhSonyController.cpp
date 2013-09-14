@@ -57,7 +57,7 @@ void PhSonyController::close()
 		PHDEBUG << _comSuffix << "port already closed.";
 }
 
-PhRate PhSonyController::computeRate(char data1)
+PhRate PhSonyController::computeRate(unsigned char data1)
 {
 	if(data1 == 0)
 		return 0;
@@ -65,7 +65,7 @@ PhRate PhSonyController::computeRate(char data1)
 	return qPow(10, n1/32 - 2);
 }
 
-PhRate PhSonyController::computeRate(char data1, char data2)
+PhRate PhSonyController::computeRate(unsigned char data1, unsigned char data2)
 {
 	PhRate n1 = data1;
 	PhRate n2 = data2;
@@ -73,23 +73,23 @@ PhRate PhSonyController::computeRate(char data1, char data2)
 	return rate + n2/256 * qPow(10, (n1+1)/32 - 2 - rate);
 }
 
-char PhSonyController::computeData1FromRate(PhRate rate)
+unsigned char PhSonyController::computeData1FromRate(PhRate rate)
 {
 	if(rate == 0)
 		return 0;
 	return (char)(32 * (2 + qLn(rate) / qLn(10)));
 }
 
-char PhSonyController::getDataSize(char cmd1)
+unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 {
 	return cmd1 & 0x0f;
 }
 
-void PhSonyController::sendCommandWithData(char cmd1, char cmd2, const char *data)
+void PhSonyController::sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
 	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, data);
-	char datacount = getDataSize(cmd1);
-	char checksum = cmd1 + cmd2;
+	unsigned char datacount = getDataSize(cmd1);
+	unsigned char checksum = cmd1 + cmd2;
 	for (int i=0; i<datacount; i++)
 	{
 		_dataOut[i + 2] = data[i];
@@ -98,13 +98,13 @@ void PhSonyController::sendCommandWithData(char cmd1, char cmd2, const char *dat
 	_dataOut[0] = cmd1;
 	_dataOut[1] = cmd2;
 	_dataOut[datacount+2] = checksum;
-	_serial.write(_dataOut, datacount + 3);
+	_serial.write((const char*)_dataOut, datacount + 3);
 }
 
-void PhSonyController::sendCommand(char cmd1, char cmd2, ...)
+void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
 {
-	char data[256];
-	char datacount = getDataSize(cmd1);
+	unsigned char data[256];
+	unsigned char datacount = getDataSize(cmd1);
 	va_list argumentList;
 	va_start(argumentList, cmd2);
 	for (int i=0; i<datacount; i++)
@@ -125,10 +125,10 @@ void PhSonyController::checkSumError()
 	PHDEBUG << _comSuffix;
 }
 
-QString PhSonyController::stringFromCommand(char cmd1, char cmd2, const char * data)
+QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data)
 {
 	QString dataString = "";
-	char dataCount = getDataSize(cmd1);
+	unsigned char dataCount = getDataSize(cmd1);
 	if(dataCount > 0)
 	{
 		dataString = " : ";
@@ -156,9 +156,9 @@ void PhSonyController::onData()
 	// if cmd1 and cmd2 are read, go on with data
 	if(_dataRead >= 2)
 	{
-		char cmd1 = _dataIn[0];
-		char cmd2 = _dataIn[1];
-		char datacount = getDataSize(cmd1);
+		unsigned char cmd1 = _dataIn[0];
+		unsigned char cmd2 = _dataIn[1];
+		unsigned char datacount = getDataSize(cmd1);
 
 		// Reading the data left
 		QByteArray array = _serial.read(datacount + 3 - _dataRead);
@@ -173,7 +173,7 @@ void PhSonyController::onData()
 //			PHDEBUG << _comSuffix << "reading : " << cmdString;
 
 			// Computing the checksum
-			char checksum = 0;
+			unsigned char checksum = 0;
 			for (int i=0; i < datacount + 2; i++)
 				checksum += _dataIn[i];
 

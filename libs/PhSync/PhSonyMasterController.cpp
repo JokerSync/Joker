@@ -103,7 +103,7 @@ void PhSonyMasterController::speedSense()
 	sendCommand(0x60, 0x2E);
 }
 
-void PhSonyMasterController::processCommand(char cmd1, char cmd2, const char *data)
+void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
 	PHDEBUG << _comSuffix << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, data);
 	switch (cmd1 >> 4)
@@ -142,7 +142,7 @@ void PhSonyMasterController::processCommand(char cmd1, char cmd2, const char *da
 		}
 		case 0x20:
 		{
-			char status[4];
+			unsigned char status[4];
 			QString statusStr = "";
 			for (int i = 0; i < 4; i++)
 			{

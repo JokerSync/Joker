@@ -13,7 +13,7 @@ public:
 	bool testAll();
 
 protected:
-	void processCommand(char cmd1, char cmd2, const char *data);
+	void processCommand(char cmd1, char cmd2, const unsigned char *data);
 };
 
 #endif // PHSONYCONTROLLERTEST_H
