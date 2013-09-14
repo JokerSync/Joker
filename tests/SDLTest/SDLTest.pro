@@ -1,12 +1,6 @@
-QT       += core
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 TEMPLATE = app
 
 SOURCES += main.cpp
-
-INCLUDEPATH += ../../libs
 
 # Windows specific
 win32{
@@ -28,8 +22,6 @@ mac {
 	OBJECTIVE_SOURCES += ../../libs/PhGraphic/SDLMain.m
 	LIBS += -framework Cocoa
 
-	INCLUDEPATH += /Library/Frameworks/
-	LIBS += -F/Library/Frameworks
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS
 }
