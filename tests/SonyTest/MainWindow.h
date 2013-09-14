@@ -21,6 +21,7 @@ public:
 	~MainWindow();
 
 private slots:
+	void masterPlayPause();
 	void tickMaster();
 	void tickSlave();
 

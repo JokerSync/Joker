@@ -63,7 +63,7 @@ protected:
 	 * @param data1 A one byte coded version of the rate.
 	 * @return The float value corresponding rate.
 	 */
-	PhRate computeRate(unsigned char data1);
+	PhRate computeRate(char data1);
 
 	/**
 	 * Compute the rate from the jog, varispeed and shuttle sony protocole
@@ -73,7 +73,7 @@ protected:
 	 * @param data2 The second byte of the two bytes coded version of the rate.
 	 * @return The float value corresponding rate.
 	 */
-	PhRate computeRate(unsigned char data1, unsigned char data2);
+	PhRate computeRate(char data1, char data2);
 
 	/**
 	 * Compute the jog, varispeed and shuttle sony protocole
@@ -82,7 +82,7 @@ protected:
 	 * @param rate The float value rate.
 	 * @return A one byte coded version of the rate.
 	 */
-	unsigned char computeData1FromRate(PhRate rate);
+	char computeData1FromRate(PhRate rate);
 
 	/**
 	 * Process a single command and respond to it, updating the clock if needed.
@@ -91,14 +91,14 @@ protected:
 	 * @param cmd2 TODO
 	 * @param dataIn Command data.
 	 */
-	virtual void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* data) = 0;
+	virtual void processCommand(char cmd1, char cmd2, const char* data) = 0;
 
 	/**
 	 * Extract the data size from the first command descriptor.
 	 * @param cmd1 First command descriptor.
 	 * @return Data size in byte.
 	 */
-	unsigned char getDataSize(unsigned char cmd1);
+	char getDataSize(char cmd1);
 
 	/**
 	 * Send a sony protocol command.
@@ -106,9 +106,9 @@ protected:
 	 * @param cmd2 Second command descriptor.
 	 * @param data Data for the command.
 	 */
-	void sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
+	void sendCommandWithData(char cmd1, char cmd2, const char *data);
 
-	void sendCommand(unsigned char cmd1, unsigned char cmd2, ...);
+	void sendCommand(char cmd1, char cmd2, ...);
 
 	virtual void timeOut();
 	virtual void checkSumError();
@@ -119,7 +119,7 @@ protected:
 	 * @param cmd2 Second command descriptor.
 	 * @return The name of the command.
 	 */
-	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data = 0);
+	QString stringFromCommand(char cmd1, char cmd2, const char *data = 0);
 
 	PhClock _clock;
 
@@ -127,11 +127,16 @@ protected:
 	QString _comSuffix;
 
 private:
+	void checkData();
+
 	// Serial port connected to the controller
 	QSerialPort _serial;
+	bool sonyRunning;
+	char _dataIn[256];
+	int _dataRead;
+	char _dataOut[256];
 private slots:
 	void onData();
-	void onCTS();
 	void handleError(QSerialPort::SerialPortError error);
 };
 
