@@ -1,34 +1,23 @@
+#include <QtMath>
+
 #include "PhSonyControllerTest.h"
+#include "PhTools/PhDebug.h"
 
 PhSonyControllerTest::PhSonyControllerTest(QObject *parent)
 	: PhSonyController("A", parent)
 {
 }
 
-bool PhSonyControllerTest::testComputeRate()
+void PhSonyControllerTest::testComputeRate()
 {
-	PH_TEST_START;
-
-	PH_TEST_IS_EQUAL(0.0, computeRate(0), 0.01);
-	PH_TEST_IS_EQUAL(0.1, computeRate(32), 0.01);
-	PH_TEST_IS_EQUAL(1.0, computeRate(64), 0.01);
-	PH_TEST_IS_EQUAL(2.94, computeRate(79), 0.01);
-	PH_TEST_IS_EQUAL(48.69, computeRate(118), 0.01);
-
-	PH_TEST_END;
-}
-
-bool PhSonyControllerTest::testAll()
-{
-	bool result = true;
-	result &= testComputeRate();
-
-	qDebug() << __FUNCTION__ << " result : " << result;
-
-	return result;
+	QVERIFY(qAbs(computeRate(0)) < 0.01);
+	QVERIFY(qAbs(computeRate(32) - 0.1) < 0.01);
+	QVERIFY(qAbs(computeRate(64) - 1.0) < 0.01);
+	QVERIFY(qAbs(computeRate(79) - 2.94) < 0.01);
+	QVERIFY(qAbs(computeRate(118) - 48.68) < 0.01);
 }
 
 void PhSonyControllerTest::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
-	qDebug() << stringFromCommand(cmd1, cmd2, data);
+	PHDEBUG << stringFromCommand(cmd1, cmd2, data);
 }

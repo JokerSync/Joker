@@ -1,16 +1,17 @@
 #ifndef PHSONYCONTROLLERTEST_H
 #define PHSONYCONTROLLERTEST_H
 
-#include "PhTools/PhTest.h"
+#include <QtTest>
+
 #include "PhSonyController.h"
 
-class PhSonyControllerTest : PhSonyController, PhTest
+class PhSonyControllerTest : public PhSonyController
 {
 public:
-	PhSonyControllerTest(QObject *parent);
+	PhSonyControllerTest(QObject *parent = 0);
 
-	bool testComputeRate();
-	bool testAll();
+public slots:
+	void testComputeRate();
 
 protected:
 	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);

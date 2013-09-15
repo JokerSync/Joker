@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include <QApplication>
+#include <QtTest>
 
 #include "PhTools/PhDebug.h"
 
@@ -12,9 +13,10 @@ int main(int argc, char *argv[])
 	MainWindow w;
 	w.show();
 
-//	PhSonyControllerTest sonyTest(NULL);
-//	bool result = sonyTest.testAll();
-//	qDebug() << "Run test : " << result;
+	a.exec();
 
-	return a.exec();
+	PhSonyControllerTest sonyTest;
+	//	bool result = sonyTest.testAll();
+	//	qDebug() << "Run test : " << result;
+	return QTest::qExec(&sonyTest);
 }
