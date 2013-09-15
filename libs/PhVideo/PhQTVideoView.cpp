@@ -36,11 +36,6 @@ void PhQTVideoView::setClock(PhClock *clock)
 	emit onTCTypeChanged(clock->getTCType());
 }
 
-void PhQTVideoView::setPosition(qint64 position)
-{
-	_player.setPosition(position);
-}
-
 void PhQTVideoView::onRateChanged(PhRate rate)
 {
 	if(rate == 0)
