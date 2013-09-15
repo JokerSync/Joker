@@ -90,8 +90,8 @@ protected:
 	/**
 	 * Process a single command and respond to it, updating the clock if needed.
 	 * This method shall be implemented differently by the slave and the master.
-	 * @param cmd1 TODO
-	 * @param cmd2 TODO
+	 * @param cmd1 First command descriptor.
+	 * @param cmd2 Second command descriptor.
 	 * @param dataIn Command data.
 	 */
 	virtual void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* data) = 0;

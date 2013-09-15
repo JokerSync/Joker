@@ -11,8 +11,6 @@ PhSonyController::PhSonyController(QString comSuffix, QObject *parent) : QObject
 	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
             SLOT(handleError(QSerialPort::SerialPortError)));
 	connect(&_serial, SIGNAL(readyRead()), this, SLOT(onData()));
-
-	// TODO : handle CTS
 }
 
 PhSonyController::~PhSonyController()
@@ -154,8 +152,6 @@ QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cm
 void PhSonyController::onData()
 {
 //	PHDEBUG << _comSuffix;
-	// TODO : check CTS
-
 	// reading the cmd1 and cmd2
 	if(_dataRead < 2)
 	{
