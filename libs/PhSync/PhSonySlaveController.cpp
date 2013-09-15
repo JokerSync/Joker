@@ -205,7 +205,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			unsigned char status[16];
 			// TODO : handle status sens properly
 			PHDEBUG << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
-			memset(status, 0, 8);
+			memset(status, 0, 16);
 			switch (_state)
 			{
 			case Pause:
@@ -252,7 +252,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			unsigned char count = dataIn[0] & 0xf;
 			for (int i=0; i<count; i++)
 				dataOut[i] = status[i+start];
-			sendCommand(0x70+count, 0x20, status);
+			sendCommandWithData(0x70+count, 0x20, status);
 			break;
 		}
 		case 0x2e:
