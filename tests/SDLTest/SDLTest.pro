@@ -22,6 +22,10 @@ mac {
 	OBJECTIVE_SOURCES += ../../libs/PhGraphic/SDLMain.m
 	LIBS += -framework Cocoa
 
+	QMAKE_CXXFLAGS += -F/Library/Frameworks
+	QMAKE_OBJECTIVE_CFLAGS += -F/Library/Frameworks
+	LIBS += -F/Library/Frameworks
+
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS
 }
