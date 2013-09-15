@@ -57,10 +57,13 @@ void PhSonyController::close()
 
 void PhSonyController::checkVideoSync()
 {
-	bool cts = _serial.pinoutSignals() & QSerialPort::ClearToSendSignal;
-	if(!_lastCTS && cts)
-		onVideoSync();
-	_lastCTS = cts;
+	if(_serial.isOpen())
+	{
+		bool cts = _serial.pinoutSignals() & QSerialPort::ClearToSendSignal;
+		if(!_lastCTS && cts)
+			onVideoSync();
+		_lastCTS = cts;
+	}
 }
 
 PhRate PhSonyController::computeRate(unsigned char data1)
