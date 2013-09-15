@@ -5,10 +5,11 @@
 
 
 #include <algorithm>
-#include <QDebug>
 #include <QStringList>
 
 #include "PhTimeCode.h"
+
+#include "PhDebug.h"
 
 QString PhTimeCode::stringFromFrame(PhFrame frame, PhTimeCodeType type) {
     unsigned int hhmmssff[4];
@@ -68,7 +69,7 @@ PhFrame PhTimeCode::frameFromBcd(unsigned int bcd, PhTimeCodeType type) {
     hhmmssff[3] = ((bcd >> 4) & 0x0f) * 10;
     hhmmssff[3] += bcd & 0x0f;
 
-    return frameFromHhMmSsFf(hhmmssff, type);
+	return frameFromHhMmSsFf(hhmmssff, type);
 }
 
 bool PhTimeCode::isDrop(PhTimeCodeType type) {
@@ -146,15 +147,15 @@ PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int *hhmmssff, PhTimeCodeType typ
     PhFrame fps = getFps(type);
 
     if (hhmmssff[1] >= 60) {
-		qDebug() << "Bad minute value: %u", QString::number(hhmmssff[1]);
+		PHDEBUG << "Bad minute value: %u", QString::number(hhmmssff[1]);
         hhmmssff[1] = 0;
     }
     if (hhmmssff[2] >= 60) {
-		qDebug() << "Bad second value: %u", QString::number(hhmmssff[2]);
+		PHDEBUG << "Bad second value: %u", QString::number(hhmmssff[2]);
         hhmmssff[2] = 0;
     }
     if (hhmmssff[3] >= fps) {
-		qDebug() << "Bad frame value: %u", QString::number(hhmmssff[3]);
+		PHDEBUG << "Bad frame value: %u", QString::number(hhmmssff[3]);
         hhmmssff[3] = 0;
     }
     PhFrame dropframe = 0;

@@ -1,23 +1,31 @@
 #include <QCoreApplication>
-
-#include <QDebug>
+#include <QTest>
 
 #include "PhTools/PhTimeCode.h"
+#include "PhTools/PhDebug.h"
+
+#include "PhTools/tests/PhTimeCodeTest.h"
 
 int main(int argc, char *argv[])
 {
-	qDebug() << "ConsoleTest";
-	qDebug() << "pouet";
-    //QCoreApplication a(argc, argv);
+    // Initialize the Debug module, only work with
+    // time for the moment.
+    PhDebug::init(true, true, true);
 
-    for(int i=0; i<20;i++)
+    // Test of PhDebug tool
+    PHDEBUG << "Test of PhDebug tool";
+
+    // Test of TimeCode
+    for(int i=0; i<3;i++)
     {
         QString s = PhTimeCode::stringFromFrame(i, PhTimeCodeType25);
         int n = PhTimeCode::frameFromString(s, PhTimeCodeType25);
-		qDebug() << s;
+        PHDEBUG << s;
         if(n != i)
-            qDebug() << "problem with " << i;
+            PHDEBUG << "problem with " << i;
     }
-    //return a.exec();
-    return 0;
+
+	PhTimeCodeTest tcTest;
+
+	return QTest::qExec(&tcTest);
 }

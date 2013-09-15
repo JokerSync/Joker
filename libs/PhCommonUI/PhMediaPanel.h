@@ -2,7 +2,6 @@
 #define PHMEDIAPANEL_H
 
 #include <QWidget>
-#include <QDebug>
 
 #include "PhTools/PhTimeCode.h"
 
@@ -13,7 +12,7 @@ namespace Ui {
 class PhMediaPanel : public QWidget
 {
 	Q_OBJECT
-	
+
 public:
 	explicit PhMediaPanel(QWidget *parent = 0);
 	~PhMediaPanel();
@@ -32,7 +31,8 @@ signals:
 	void backButtonSignal();
 	void nextFrameButtonSignal();
 	void previousFrameButtonSignal();
-	void useSliderCursorSignal(int); // TODO add parameter
+#warning TODO add parameter to useSliderCursorSignal
+	void useSliderCursorSignal(int);
 	void tcTypeChangedSignal(PhTimeCodeType tcType);
 	void useComboBoxSignal(int);
 	void endOfMediaSignal();

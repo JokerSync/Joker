@@ -1,16 +1,8 @@
-#ifndef MYGLWIDGET_H
-#define MYGLWIDGET_H
+#ifndef PHGRAPHICVIEW_H
+#define PHGRAPHICVIEW_H
 
-#include <QtOpenGL>
 #include <QGLWidget>
-
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <gl.h>
-#include <glu.h>
-
-#include "PhGraphicContext.h"
+#include <QTimer>
 
 /**
  * The PhGraphicView class is a canvas to create your custom graphic view.
@@ -28,8 +20,6 @@ public:
      * @param parent Parent object.
      */
     explicit PhGraphicView(QWidget *parent = 0);
-
-	PhGraphicContext * getContext();
 
 	/**
 	 * Handle the resizing of the view.
@@ -60,13 +50,6 @@ private:
      * used to draw
      */
     QTimer *t_Timer;
-protected:
-
-    /**
-     * @brief _context
-     */
-	PhGraphicContext *_context;
-
 };
 
-#endif // PhGraphicView
+#endif // PHGRAPHICVIEW

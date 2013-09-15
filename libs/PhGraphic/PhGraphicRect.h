@@ -12,7 +12,7 @@ class PhGraphicRect : public PhGraphicObject
 {
 public:
 
-	PhGraphicRect(float x = 0, float y =0, float w = 0, float h = 0, float z = 0, QColor *color = new QColor());
+	PhGraphicRect(int x = 0, int y =0, int w = 0, int h = 0);
 
     /**
      * @brief setSize
@@ -20,7 +20,7 @@ public:
      * @param h
      * set the PhGraphicRect size using setHeight() and setWidht()
      */
-    void setSize(float w, float h);
+    void setSize(int w, int h);
     /**
      * @brief setRect
 	 * @param x
@@ -29,28 +29,28 @@ public:
      * @param h
      * set the PhGraphicRect size and position usgin setSize() and setPosition()
      */
-	void setRect(float x, float y, float w, float h);
+	void setRect(int x, int y, int w, int h);
     /**
      * @brief setHeight
      * @param h
      */
-    void setHeight(float h);
+    void setHeight(int h);
     /**
      * @brief setWidht
      * @param w
      */
-    void setWidth(float w);
+    void setWidth(int w);
 
     /**
      * @brief getHeight
      * @return _h
      */
-    float getHeight();
+    int getHeight();
     /**
      * @brief getWidth
      * @return _w
      */
-    float getWidth();
+    int getWidth();
 
 
 protected:
@@ -58,12 +58,12 @@ protected:
      * @brief _w
      * is the PhGraphicRect width
      */
-    float _w;
+    int _w;
     /**
      * @brief _h
      * is the PhGraphicRect height
      */
-    float _h;
+    int _h;
 };
 
 #endif // PHGRAPHICSQUARE_H

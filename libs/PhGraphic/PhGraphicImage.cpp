@@ -3,6 +3,7 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include "PhTools/PhDebug.h"
 #include "PhGraphicImage.h"
 
 #if defined(Q_OS_MAC)
@@ -11,8 +12,8 @@
 #include <SDL/SDL_image.h>
 #endif
 
-PhGraphicImage::PhGraphicImage(QString filename, float x, float y, float w, float h, float z, float tu, float tv, QColor *color)
-	: PhGraphicTexturedRect(x, y, w, h, z, tu, tv, color), _filename(filename), _surface(NULL)
+PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h)
+	: PhGraphicTexturedRect(x, y, w, h), _filename(filename), _surface(NULL)
 {
 }
 
@@ -23,12 +24,12 @@ bool PhGraphicImage::init()
 	{
 		if(createTextureFromSurface(_surface))
 		{
-			qDebug() << "Loading image";
+			PHDEBUG << "Loading image";
 			return true;
 		}
 	}
 
-	qDebug()<<"Error loading:"<<_filename;
+	PHDEBUG<<"Error loading:"<< _filename;
 	return false;
 
 }
@@ -40,8 +41,6 @@ void PhGraphicImage::dispose()
 
 void PhGraphicImage::draw()
 {
-//	glEnable(GL_BLEND);
-//	glBlendFunc(GL_SRC_COLOR, GL_ONE_MINUS_SRC_ALPHA);
 	glColor3f(1, 1, 1);
 	PhGraphicTexturedRect::draw();
 }

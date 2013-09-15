@@ -2,7 +2,6 @@
 #define PHCLOCK_H
 
 #include <QObject>
-#include <QDebug>
 
 #include "PhTimeCode.h"
 
@@ -26,7 +25,6 @@ public:
 	void setTimeScale(PhTimeScale timeScale);
 	PhTimeScale timeScale() const { return _timeScale; }
 
-	void setRate(PhRate rate);
 	PhRate rate() const { return _rate; }
 
 	void setFrame(PhFrame frame);
@@ -43,6 +41,8 @@ signals:
 	void tcTypeChanged(PhTimeCodeType tcType);
 
 public slots:
+
+	void setRate(PhRate rate);
 
 	/**
 	 * Sync the clock to a signal at a given frequence.

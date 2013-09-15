@@ -1,26 +1,26 @@
 QT		+= opengl
 
 HEADERS += \
-	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicView.h \
-	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicContext.h \
-	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicImage.h \
-	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicText.h \
-    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicTexturedRect.h \
-	$${JOKER_ROOT}/libs/PhGraphic/PhFont.h \
-    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicObject.h \
-    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicRect.h \
-    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicSolidRect.h
+	../../libs/PhGraphic/PhGraphicView.h \
+	../../libs/PhGraphic/PhGraphicImage.h \
+	../../libs/PhGraphic/PhGraphicText.h \
+    ../../libs/PhGraphic/PhGraphicTexturedRect.h \
+	../../libs/PhGraphic/PhFont.h \
+    ../../libs/PhGraphic/PhGraphicObject.h \
+    ../../libs/PhGraphic/PhGraphicRect.h \
+    ../../libs/PhGraphic/PhGraphicSolidRect.h \
+    ../../libs/PhGraphic/PhGraphicLoop.h
 
 SOURCES += \
-	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicView.cpp \
-	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicContext.cpp \
-	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicImage.cpp \
-	$${JOKER_ROOT}/libs/PhGraphic/PhGraphicText.cpp \
-    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicTexturedRect.cpp \
-	$${JOKER_ROOT}/libs/PhGraphic/PhFont.cpp \
-    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicObject.cpp \
-    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicRect.cpp \
-    $${JOKER_ROOT}/libs/PhGraphic/PhGraphicSolidRect.cpp
+	../../libs/PhGraphic/PhGraphicView.cpp \
+	../../libs/PhGraphic/PhGraphicImage.cpp \
+	../../libs/PhGraphic/PhGraphicText.cpp \
+    ../../libs/PhGraphic/PhGraphicTexturedRect.cpp \
+	../../libs/PhGraphic/PhFont.cpp \
+    ../../libs/PhGraphic/PhGraphicObject.cpp \
+    ../../libs/PhGraphic/PhGraphicRect.cpp \
+    ../../libs/PhGraphic/PhGraphicSolidRect.cpp \
+    ../../libs/PhGraphic/PhGraphicLoop.cpp
 
 # Windows specific
 win32 {
@@ -42,13 +42,16 @@ linux {
 
 # MacOS specific
 mac {
-	SOURCES += $${JOKER_ROOT}/libs/PhGraphic/SDLMain.cpp
-	INCLUDEPATH += /Library/Frameworks/
+	SOURCES += ../../libs/PhGraphic/SDLMain.cpp
+
+	QMAKE_CXXFLAGS += -F/Library/Frameworks
+	QMAKE_OBJECTIVE_CFLAGS += -F/Library/Frameworks
+
 	LIBS += -F/Library/Frameworks
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 
-#	OBJECTIVE_SOURCES += $${JOKER_ROOT}/libs/PhGraphic/SDLMain.m
-#	OBJECTIVE_HEADERS += $${JOKER_ROOT}/libs/PhGraphic/SDLMain.h
+#	OBJECTIVE_SOURCES += ../../libs/PhGraphic/SDLMain.m
+#	OBJECTIVE_HEADERS += ../../libs/PhGraphic/SDLMain.h
 #	LIBS += -framework Cocoa
 
 #	copylibs.commands += cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/;
