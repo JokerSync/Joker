@@ -22,5 +22,8 @@ int main(int argc, char *argv[]) {
     Mwindow player;
     player.show();
 
+	if(argc>1)
+		player.openFile(argv[1]);
+
     return app.exec();
 }

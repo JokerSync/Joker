@@ -1,12 +1,14 @@
 QT		+= xml
 
 SOURCES += \
-    $${JOKER_ROOT}/libs/PhStrip/PhStripDoc.cpp \
-	$${JOKER_ROOT}/libs/PhStrip/PhStripObject.cpp \
-	$${JOKER_ROOT}/libs/PhStrip/PhStripCut.cpp \
-	$${JOKER_ROOT}/libs/PhStrip/PhStripText.cpp \
-	$${JOKER_ROOT}/libs/PhStrip/PhStripLoop.cpp \
-	$${JOKER_ROOT}/libs/PhStrip/PhPeople.cpp \
+    ../../libs/PhStrip/PhStripDoc.cpp \
+	../../libs/PhStrip/PhStripObject.cpp \
+	../../libs/PhStrip/PhStripCut.cpp \
+	../../libs/PhStrip/PhStripText.cpp \
+	../../libs/PhStrip/PhStripLoop.cpp \
+	../../libs/PhStrip/PhPeople.cpp \
+    ../../libs/PhStrip/PhStripPeopleObject.cpp \
+    ../../libs/PhStrip/PhStripOff.cpp
 
 HEADERS += \
 	../../libs/PhStrip/PhStripDoc.h \
@@ -15,6 +17,8 @@ HEADERS += \
 	../../libs/PhStrip/PhStripText.h \
 	../../libs/PhStrip/PhStripLoop.h \
 	../../libs/PhStrip/PhPeople.h \
+    ../../libs/PhStrip/PhStripPeopleObject.h \
+    ../../libs/PhStrip/PhStripOff.h
 
 # Windows specific
 win32 {

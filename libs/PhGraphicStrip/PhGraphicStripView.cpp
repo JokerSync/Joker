@@ -3,6 +3,9 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include <QFile>
+
+#include "PhTools/PhDebug.h"
 #include "PhGraphicStripView.h"
 
 PhGraphicStripView::PhGraphicStripView(QWidget *parent)
@@ -28,7 +31,7 @@ PhClock *PhGraphicStripView::clock()
 
 bool PhGraphicStripView::init()
 {
-	qDebug() << "PhGraphicStripView::init()";
+	PHDEBUG << "PhGraphicStripView::init()";
 
 	// Load font
 	if(!setCurrentFont("Bedizen.ttf"))
@@ -49,31 +52,34 @@ bool PhGraphicStripView::init()
 void PhGraphicStripView::clearData()
 {
 	foreach(PhGraphicText * gPeople, _graphicPeoples.values())
-	{
 		delete gPeople;
-	}
+	_graphicPeoples.clear();
 
 	foreach(PhGraphicRect * gCut, _graphicCuts.values())
-	{
 		delete gCut;
-	}
-	foreach(PhGraphicText * gText, _graphicTexts.values())
-	{
-		delete gText;
-	}
-	_graphicPeoples.clear();
 	_graphicCuts.clear();
+
+	foreach(PhGraphicText * gText, _graphicTexts.values())
+		delete gText;
 	_graphicTexts.clear();
+
+	foreach(PhGraphicLoop * gLoop, _graphicLoops.values())
+		delete gLoop;
+	_graphicLoops.clear();
+
+	foreach(PhGraphicRect * gOff, _graphicOffs.values())
+		delete gOff;
+	_graphicOffs.clear();
 }
 
 
 bool PhGraphicStripView::setCurrentFont(QString fontFile)
 {
-	qDebug() << "setCurrentFont : " << fontFile;
+	PHDEBUG << "setCurrentFont : " << fontFile;
 
 	if(!QFile::exists(fontFile))
 	{
-		qDebug() << "File doesn't exists : " << fontFile;
+		PHDEBUG << "File doesn't exists : " << fontFile;
 		return false;
 	}
 	_currentFont = new PhFont(fontFile, 150);
@@ -85,10 +91,10 @@ bool PhGraphicStripView::setCurrentFont(QString fontFile)
 
 void PhGraphicStripView::updateView()
 {
-	qDebug() << "updateView";
+	PHDEBUG << "updateView";
 	if(!_currentFont)
 	{
-		qDebug() << "The font has not been initialised";
+		PHDEBUG << "The font has not been initialised";
 		return;
 	}
 
@@ -98,9 +104,8 @@ void PhGraphicStripView::updateView()
 	foreach(PhPeople * people, _doc.getPeoples())
 	{
 		PhGraphicText * gPeople = new PhGraphicText(_currentFont, people->getName());
-		gPeople->setColor(new QColor(people->getColor()));
-		gPeople->setWidth(people->getName().length() * 4);
-		gPeople->setHeight(0.5f);
+		gPeople->setColor(QColor(people->getColor()));
+		gPeople->setWidth(people->getName().length() * 16);
 
 		gPeople->init();
 
@@ -111,15 +116,10 @@ void PhGraphicStripView::updateView()
 	foreach(PhStripText * text, _doc.getTexts())
 	{
 		PhGraphicText * gText = new PhGraphicText( _currentFont, text->getContent());
-		float track = text->getTrack();
 
-		gText->setX(text->getTimeIn());
-		gText->setY(track);
 		gText->setZ(-1);
-		gText->setWidth(text->getTimeOut() - text->getTimeIn());
-		gText->setHeight(1.0f);
 		if(text->getPeople())
-			gText->setColor(new QColor(text->getPeople()->getColor()));
+			gText->setColor(QColor(text->getPeople()->getColor()));
 		gText->setFont(_currentFont);
 
 		gText->init();
@@ -131,46 +131,58 @@ void PhGraphicStripView::updateView()
 	foreach(PhStripCut * cut, _doc.getCuts())
 	{
 		PhGraphicSolidRect *gCut = new PhGraphicSolidRect();
-		gCut->setColor(new QColor(0, 0, 0));
-		gCut->setX(cut->getTimeIn());
-		gCut->setWidth(0.5f);
-		gCut->setHeight(_trackNumber);
+		gCut->setColor(QColor(0, 0, 0));
 		gCut->setZ(-2);
 
 		_graphicCuts[cut] = gCut;
 	}
 
-	qDebug() << "updateView ok";
+	//Load the loops
+	foreach(PhStripLoop * loop, _doc.getLoops())
+	{
+		PhGraphicLoop *gLoop = new PhGraphicLoop();
+		gLoop->setColor(QColor(0, 0, 0, 1));
+		_graphicLoops[loop] = gLoop;
+	}
+
+	//Load the offs
+	foreach(PhStripOff * off, _doc.getOffs())
+	{
+		PhGraphicSolidRect *gOff = new PhGraphicSolidRect();
+		if(off->getPeople())
+			gOff->setColor(QColor(off->getPeople()->getColor()));
+		gOff->setZ(-2);
+
+		_graphicOffs[off] = gOff;
+	}
+
+	PHDEBUG << "updateView ok";
 }
 
+PhTime lastTime = -1;
 void PhGraphicStripView::paint()
 {
 	_clock.tick(60);
 
-	float pixelPerFrame = 8;
-	float length = this->width() / pixelPerFrame;
-	float fps = PhTimeCode::getFps(_clock.getTCType());
-	float t = _clock.time() * fps / _clock.timeScale();
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(t, t + length, _trackNumber, 0, 0, 10);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-//	qDebug() << "PhGraphicStripView::paint()";
+	long pixelPerFrame = 12;
+	int fps = PhTimeCode::getFps(_clock.getTCType());
+	long offset = _clock.time() * pixelPerFrame * fps / _clock.timeScale();
+	long width = this->width();
+	long height = this->height();
 
 	//Set the background color to red
 	glClearColor(1,0,0,1);
 
-	//Time-based test
-//	qDebug() << _test->elapsed(); //<< " : " << _xmove;
-
-//    //Draw backgroung picture
-	float aspectRatio = 1.2f * this->width() / this->height();
-	_stripBackgroundImage->setTextureCoordinate(aspectRatio, 1);
-	_stripBackgroundImage->setX(floorf(t / aspectRatio) * aspectRatio);
-	_stripBackgroundImage->setSize(length + aspectRatio, _trackNumber);
+    //Draw backgroung picture
+	int n = width / height + 2; // compute how much background repetition do we need
+	_stripBackgroundImage->setTextureCoordinate(n, 1);
+	long leftBG = 0;
+	if(left >= 0)
+		leftBG -= offset % height;
+	else
+		leftBG -= height - ((-offset) % height);
+	_stripBackgroundImage->setX(leftBG);
+	_stripBackgroundImage->setSize(height * n, height);
 	_stripBackgroundImage->draw();
 
 	int minSpaceBetweenPeople = 50;
@@ -179,11 +191,17 @@ void PhGraphicStripView::paint()
 	for(int i = 0; i < _trackNumber; i++)
 		lastTextList[i] = NULL;
 
+	int trackHeight = height / _trackNumber;
+
 	foreach(PhStripText * text, _doc.getTexts())
 	{
 		PhGraphicText* gText = _graphicTexts[text];
 
 		int track = text->getTrack();
+		gText->setX(text->getTimeIn() * pixelPerFrame - offset);
+		gText->setWidth((text->getTimeOut() - text->getTimeIn()) * pixelPerFrame);
+		gText->setY(track * trackHeight);
+		gText->setHeight(trackHeight);
 
 		gText->draw();
 
@@ -195,15 +213,46 @@ void PhGraphicStripView::paint()
 		if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))
 		{
 			PhGraphicText * gPeople = _graphicPeoples[text->getPeople()];
-			gPeople->setX(text->getTimeIn() - gPeople->getWidth() - spaceBetweenPeopleAndText);
-			gPeople->setY(track);
+			gPeople->setX(text->getTimeIn() * pixelPerFrame - offset - gPeople->getWidth() - spaceBetweenPeopleAndText);
+			gPeople->setY(track * trackHeight);
+			gPeople->setHeight(trackHeight / 2);
 
 			gPeople->draw();
 		}
 
 		lastTextList[track] = text;
+
 	}
 
 	foreach(PhStripCut * cut, _doc.getCuts())
-		_graphicCuts[cut]->draw();
+	{
+		PhGraphicRect *gCut = _graphicCuts[cut];
+		gCut->setHeight(height);
+		gCut->setX(cut->getTimeIn() * pixelPerFrame - offset);
+		gCut->setWidth(2);
+		gCut->draw();
+	}
+
+	foreach(PhStripLoop * loop, _doc.getLoops())
+	{
+		PhGraphicLoop * gLoop = _graphicLoops[loop];
+		gLoop->setX(loop->getTimeIn() * pixelPerFrame - offset);
+		gLoop->setHThick(height/40);
+		gLoop->setHeight(height);
+		gLoop->setCrossHeight(height / 4);
+		gLoop->setWidth(height / 4);
+
+		gLoop->draw();
+	}
+
+	foreach(PhStripOff * off, _doc.getOffs())
+	{
+		PhGraphicRect *gOff = _graphicOffs[off];
+		gOff->setX(off->getTimeIn() * pixelPerFrame - offset);
+		gOff->setY(off->getTrack() * trackHeight + trackHeight);
+		gOff->setHeight( trackHeight / 10);
+		gOff->setWidth((off->getTimeOut() - off->getTimeIn()) * pixelPerFrame);
+
+		gOff->draw();
+	}
 }

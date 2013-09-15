@@ -14,6 +14,7 @@
 #include "PhGraphic/PhGraphicText.h"
 #include "PhGraphic/PhFont.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
+#include "PhGraphic/PhGraphicLoop.h"
 
 class GraphicTestView : public PhGraphicView
 {
@@ -32,6 +33,7 @@ public slots:
 	void displayText();
 	void displayImage();
 	void displayRect();
+	void displayLoop();
 
 
 protected:
@@ -46,12 +48,14 @@ private:
 	bool enableDisplayImage;
 	bool enableDisplayRect;
 	bool enableDisplayText;
+	bool enableDisplayLoop;
 
 
 	PhGraphicImage *_image;
-	PhGraphicText *_text;
 	PhFont *_font;
+	PhGraphicText *_text;
 	PhGraphicSolidRect *_rect;
+	PhGraphicLoop * _loop;
 
 };
 

@@ -5,23 +5,18 @@
 
 #include "PhGraphicText.h"
 
-
-PhGraphicText::PhGraphicText()
-{
-}
-
-PhGraphicText::PhGraphicText(PhFont* font, QString content, float x, float y, float z, float w, float h, float tu, float tv, QColor *color)
-	: PhGraphicTexturedRect(x, y , z, w, h, tu, tv, color), _font(font), _content(content)
+PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int w, int h)
+	: PhGraphicTexturedRect(x, y, w, h), _font(font), _content(content)
 {
 }
 
 bool PhGraphicText::init()
 {
-	SDL_Color color = {_color->red(), _color->green(), _color->blue(), _color->alpha()};
+	SDL_Color color = {_color.red(), _color.green(), _color.blue(), _color.alpha() };
 
-	  SDL_Surface *surface = TTF_RenderUTF8_Blended(_font->getFont(),
+	SDL_Surface *surface = TTF_RenderUTF8_Blended(_font->getFont(),
 												  _content.toStdString().c_str(),
-												 color);
+												  color);
 
     if(surface != NULL)
         this->createTextureFromSurface(surface);
@@ -46,8 +41,7 @@ PhFont * PhGraphicText::getFont(){
 
 void PhGraphicText::draw()
 {
-
-	glColor3f(this->getColor()->redF(), this->getColor()->greenF(), this->getColor()->blueF());
+	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
