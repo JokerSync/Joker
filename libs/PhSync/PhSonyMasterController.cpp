@@ -156,7 +156,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		}
 		case 0x20:
 		{
-			// TODO : check more than 4 byte data.
+#warning TODO : check more than 4 byte data.
 			unsigned char status[4];
 			QString statusStr = "";
 			for (int i = 0; i < 4; i++)

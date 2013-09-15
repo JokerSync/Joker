@@ -23,7 +23,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x11:
 		{
 			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
-			// TODO : Device ID as a parameter
+#warning TODO : Device ID as a parameter
 			unsigned char deviceID1 = 0xf0;
 			unsigned char deviceID2 = 0xc0;
 			switch (_clock.getTCType())
@@ -69,13 +69,15 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x10:
 			PHDEBUG << _comSuffix << "Fast forward => ACK";
 			_state = FastForward;
-			_clock.setRate(3);	// TODO : put in the settings
+#warning TODO : put fast forward rate in the settings
+			_clock.setRate(3);
 			sendAck();
 			break;
 		case 0x20:
 			PHDEBUG << _comSuffix << "Rewing => ACK";
 			_state = Rewind;
-			_clock.setRate(-3); // TODO : put in the settings
+#warning TODO : put rewind rate in the settings
+			_clock.setRate(-3);
 			sendAck();
 			break;
 		case 0x11:
@@ -203,7 +205,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x20:
 		{
 			unsigned char status[16];
-			// TODO : handle status sens properly
+#warning TODO : handle status sens properly
 			PHDEBUG << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
 			memset(status, 0, 16);
 			switch (_state)
@@ -247,7 +249,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			}
 			if (_autoMode)
 				status[3] = 0x80;
-			// TODO check status with usb422v test
+#warning TODO check status with usb422v test
 			unsigned char start = dataIn[0] >> 4;
 			unsigned char count = dataIn[0] & 0xf;
 			for (int i=0; i<count; i++)
@@ -264,7 +266,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		}
 		case 0x30:
 		{
-			// TODO : handle properly
+#warning TODO : handle edit preset sense properly
 			PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status";
 			unsigned char count = dataIn[0];
 			for (int i=0; i<count; i++)
