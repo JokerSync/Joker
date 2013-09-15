@@ -31,7 +31,7 @@ signals:
 	void backButtonSignal();
 	void nextFrameButtonSignal();
 	void previousFrameButtonSignal();
-#warning // \TODO add parameter to useSliderCursorSignal
+#warning TODO add parameter to useSliderCursorSignal
 	void useSliderCursorSignal(int);
 	void tcTypeChangedSignal(PhTimeCodeType tcType);
 	void useComboBoxSignal(int);
