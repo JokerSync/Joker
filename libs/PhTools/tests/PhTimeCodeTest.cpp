@@ -10,6 +10,7 @@ void PhTimeCodeTest::testStringFromFrameForTC2398()
 {
 	PhTimeCodeType type = PhTimeCodeType2398;
 
+	// Check various value of frame
 	PhFrame frame = 0;
 	QCOMPARE(PhTimeCode::stringFromFrame(frame, type), QString("00:00:00:00"));
 	frame = 1;
@@ -49,6 +50,7 @@ void PhTimeCodeTest::testStringFromFrameForTC2398()
 void PhTimeCodeTest::testStringFromFrameForTC24() {
 	PhTimeCodeType type = PhTimeCodeType24;
 
+	// Check various value of frame
 	PhFrame frame = 0;
 	QCOMPARE(PhTimeCode::stringFromFrame(frame, type), QString("00:00:00:00"));
 	frame = 1;
@@ -87,9 +89,10 @@ void PhTimeCodeTest::testStringFromFrameForTC24() {
 
 void PhTimeCodeTest::testStringFromFrameForTC25() {
 	PhTimeCodeType type = PhTimeCodeType25;
+
+	// Check various value of frame
 	PhFrame frame = 0;
 	QCOMPARE(PhTimeCode::stringFromFrame(frame, type), QString("00:00:00:00"));
-
 	frame = 1;
 	QCOMPARE(PhTimeCode::stringFromFrame(frame, type), QString("00:00:00:01"));
 	frame = 24;
@@ -126,6 +129,8 @@ void PhTimeCodeTest::testStringFromFrameForTC25() {
 
 void PhTimeCodeTest::testStringFromFrameForTC2997() {
 	PhTimeCodeType type = PhTimeCodeType2997;
+
+	// Check various value of frame
 	PhFrame frame = 0;
 	QCOMPARE(PhTimeCode::stringFromFrame(frame, type), QString("00:00:00:00"));
 	frame = 1;
@@ -171,6 +176,8 @@ void PhTimeCodeTest::testStringFromFrameForTC2997() {
 void PhTimeCodeTest::testFrameFromStringForTC2398()
 {
 	PhTimeCodeType type = PhTimeCodeType2398;
+
+	// Check various value of string
 	QString string = "00:00:00:00";
 	QCOMPARE((int)PhTimeCode::frameFromString(string, type), 0);
 	string = "00:00:00:01";
@@ -209,6 +216,8 @@ void PhTimeCodeTest::testFrameFromStringForTC2398()
 
 void PhTimeCodeTest::testFrameFromStringForTC24() {
 	PhTimeCodeType type = PhTimeCodeType24;
+
+	// Check various value of string
 	QString string = "00:00:00:00";
 	QCOMPARE((int)PhTimeCode::frameFromString(string, type), 0);
 	string = "00:00:00:01";
@@ -247,6 +256,8 @@ void PhTimeCodeTest::testFrameFromStringForTC24() {
 
 void PhTimeCodeTest::testFrameFromStringForTC25() {
 	PhTimeCodeType type = PhTimeCodeType25;
+
+	// Check various value of string
 	QString string = "00:00:00:00";
 	QCOMPARE((int)PhTimeCode::frameFromString(string, type), 0);
 	string = "00:00:00:01";
@@ -285,6 +296,8 @@ void PhTimeCodeTest::testFrameFromStringForTC25() {
 
 void PhTimeCodeTest::testFrameFromStringForTC2997() {
 	PhTimeCodeType type = PhTimeCodeType2997;
+
+	// Check various value of string
 	QString string = "00:00:00:00";
 	QCOMPARE((int)PhTimeCode::frameFromString(string, type), 0);
 	string = "00:00:00:01";
@@ -329,6 +342,7 @@ void PhTimeCodeTest::testBcdFromFrameForTC2398() {
 	PhTimeCodeType type = PhTimeCodeType2398;
 	PhFrame frame = 0;
 
+	// Check various value of frame
 	QCOMPARE((int)PhTimeCode::bcdFromFrame(frame, type), 0x00000000);
 	frame = 1;
 	QCOMPARE((int)PhTimeCode::bcdFromFrame(frame, type), 0x00000001);
@@ -368,6 +382,7 @@ void PhTimeCodeTest::testBcdFromFrameForTC24() {
 	PhTimeCodeType type = PhTimeCodeType24;
 	PhFrame frame = 0;
 
+	// Check various value of frame
 	QCOMPARE((int)PhTimeCode::bcdFromFrame(frame, type), 0x00000000);
 	frame = 1;
 	QCOMPARE((int)PhTimeCode::bcdFromFrame(frame, type), 0x00000001);
@@ -405,8 +420,9 @@ void PhTimeCodeTest::testBcdFromFrameForTC24() {
 
 void PhTimeCodeTest::testBcdFromFrameForTC25() {
 	PhTimeCodeType type = PhTimeCodeType25;
-	PhFrame frame = 0;
 
+	// Check various value of frame
+	PhFrame frame = 0;
 	QCOMPARE((int)PhTimeCode::bcdFromFrame(frame, type), 0x00000000);
 	frame = 1;
 	QCOMPARE((int)PhTimeCode::bcdFromFrame(frame, type), 0x00000001);
@@ -444,8 +460,9 @@ void PhTimeCodeTest::testBcdFromFrameForTC25() {
 
 void PhTimeCodeTest::testBcdFromFrameForTC2997() {
 	PhTimeCodeType type = PhTimeCodeType2997;
-	PhFrame frame = 0;
 
+	// Check various value of frame
+	PhFrame frame = 0;
 	QCOMPARE((int)PhTimeCode::bcdFromFrame(frame, type), 0x000000);
 	frame = 1;
 	QCOMPARE((int)PhTimeCode::bcdFromFrame(frame, type), 0x00000001);
@@ -489,6 +506,8 @@ void PhTimeCodeTest::testBcdFromFrameForTC2997() {
 
 void PhTimeCodeTest::testFrameFromBcdForTC2398() {
 	PhTimeCodeType type = PhTimeCodeType2398;
+
+	// Check various value of binary coded decimal (bcd)
 	unsigned int bcd = 0x00000000;
 	QCOMPARE((int)PhTimeCode::frameFromBcd(bcd, type), 0);
 	bcd = 0x00000001;
@@ -527,6 +546,8 @@ void PhTimeCodeTest::testFrameFromBcdForTC2398() {
 
 void PhTimeCodeTest::testFrameFromBcdForTC24() {
 	PhTimeCodeType type = PhTimeCodeType24;
+
+	// Check various value of binary coded decimal (bcd)
 	unsigned int bcd = 0x00000000;
 	QCOMPARE((int)PhTimeCode::frameFromBcd(bcd, type), 0);
 	bcd = 0x00000001;
@@ -566,6 +587,7 @@ void PhTimeCodeTest::testFrameFromBcdForTC24() {
 void PhTimeCodeTest::testFrameFromBcdForTC25() {
 	PhTimeCodeType type = PhTimeCodeType25;
 
+	// Check various value of binary coded decimal (bcd)
 	unsigned int bcd = 0x00000000;
 	QCOMPARE((int)PhTimeCode::frameFromBcd(bcd, type), 0);
 	bcd = 0x00000001;
@@ -605,6 +627,7 @@ void PhTimeCodeTest::testFrameFromBcdForTC25() {
 void PhTimeCodeTest::testFrameFromBcdForTC2997() {
 	PhTimeCodeType type = PhTimeCodeType2997;
 
+	// Check various value of binary coded decimal (bcd)
 	unsigned int bcd = 0x00000000;
 	QCOMPARE((int)PhTimeCode::frameFromBcd(bcd, type), 0);
 	bcd = 0x00000001;
@@ -649,11 +672,13 @@ void PhTimeCodeTest::testFrameFromBcdForTC2997() {
 void PhTimeCodeTest::testStringFromFrameWithExtremeValue() {
 	PhTimeCodeType type = PhTimeCodeType25;
 
+	// Test frame values around 24h
 	QCOMPARE(PhTimeCode::stringFromFrame(2159999, type), QString("23:59:59:24"));
 	QCOMPARE(PhTimeCode::stringFromFrame(2160000, type), QString("24:00:00:00"));
 	QCOMPARE(PhTimeCode::stringFromFrame(2160001, type), QString("24:00:00:01"));
 	QCOMPARE(PhTimeCode::stringFromFrame(2176499, type), QString("24:10:59:24"));
 
+	// Test frame values around -24h
 	QCOMPARE(PhTimeCode::stringFromFrame(-1, type), QString("-00:00:00:01"));
 	QCOMPARE(PhTimeCode::stringFromFrame(-2159999, type), QString("-23:59:59:24"));
 	QCOMPARE(PhTimeCode::stringFromFrame(-2160000, type), QString("-24:00:00:00"));
@@ -664,7 +689,7 @@ void PhTimeCodeTest::testStringFromFrameWithExtremeValue() {
 void PhTimeCodeTest::testTCWithSpecialString() {
 	PhTimeCodeType type = PhTimeCodeType25;
 
-	// bad value for hh, mm, ss and ff
+	// Test bad value for hh, mm, ss and ff
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("12:23:34:30", type), type), QString("12:23:34:00"));
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("12:23:34:ff", type), type), QString("12:23:34:00"));
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("12:23:60:19", type), type), QString("12:23:00:19"));
@@ -673,14 +698,16 @@ void PhTimeCodeTest::testTCWithSpecialString() {
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("12:mm:34:19", type), type), QString("12:00:34:19"));
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("hh:23:34:19", type), type), QString("00:23:34:19"));
 
-	// extreme value for hh
+	// Test extreme value for hh
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("24:23:34:19", type), type), QString("24:23:34:19"));
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("-1:23:34:19", type), type), QString("-01:23:34:19"));
 
-	// bad digit count
+	// Test bad digit count : if there is not enough digit, frame are considered first, then seconds, minutes and hours
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("19"            , type), type), QString("00:00:00:19"));
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("34:19"         , type), type), QString("00:00:34:19"));
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("23:34:19"      , type), type), QString("00:23:34:19"));
+
+	// Test bad digit count : if there is to much digit, only the first four are taken in account
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("12:23:34:19:12", type), type), QString("12:23:34:19"));
 }
 
