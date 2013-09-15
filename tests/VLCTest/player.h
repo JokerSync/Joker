@@ -21,6 +21,7 @@ class Mwindow : public QMainWindow {
         public:
                Mwindow();
                virtual ~Mwindow();
+			   void openFile(QString fileName);
 
         private slots:
                void openFile();
@@ -46,8 +47,9 @@ class Mwindow : public QMainWindow {
                libvlc_instance_t *vlcInstance;
                libvlc_media_player_t *vlcPlayer;
 
-               void initUI();
+			   void initUI();
 };
+
 
 
 #endif
