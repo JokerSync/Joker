@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->speedSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(speedSense()));
 
 	connect(&_sonyMaster, SIGNAL(deviceIdData(unsigned char,unsigned char)), this, SLOT(onDeviceIdData(unsigned char,unsigned char)));
-	connect(&_sonyMaster, SIGNAL(statusData(int,unsigned char*)), this, SLOT(onStatusData(int,unsigned char*)));
+	connect(&_sonyMaster, SIGNAL(statusData(unsigned char*, int, int)), this, SLOT(onStatusData(unsigned char*, int, int)));
 
 	// Connect sony slave clock to slave panel
 	connect(_sonySlave.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->slavePanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
@@ -88,7 +88,7 @@ void MainWindow::onDeviceIdData(unsigned char id1, unsigned char id2)
 	ui->idLabel->setText(id);
 }
 
-void MainWindow::onStatusData(int length, unsigned char *statusData)
+void MainWindow::onStatusData(unsigned char *statusData, int offset, int length)
 {
 	QString statusStr = "";
 	for (int i = 0; i < length; i++)

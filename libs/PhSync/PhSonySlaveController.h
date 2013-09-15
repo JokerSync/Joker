@@ -4,7 +4,8 @@
 #include "PhSonyController.h"
 
 /**
- * @brief Master controller for sony communication
+ * @brief Master controller for sony communication.
+ *
  * Send command to a connected sony slave device
  * and update a clock component and the status accordingly.
  * The controller connect automatically with the first
@@ -18,8 +19,17 @@
 class PhSonySlaveController : public PhSonyController
 {
 public:
+	/**
+	 * @brief PhSonySlaveController constructor.
+	 * @param parent The object owner.
+	 */
 	PhSonySlaveController(QObject *parent);
 
+	/**
+	 * @brief Various state in which the controller can be.
+	 *
+	 * This state is used to answer to the master status command.
+	 */
 	enum PhSonyState {
 		Pause,
 		Play,
@@ -31,7 +41,16 @@ public:
 	};
 
 protected:
-	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
+	/**
+	 * @brief Process a single command from the sony master and respond to it.
+	 *
+	 * The clock and controller state are updated if needed.
+	 *
+	 * @param cmd1 First command descriptor.
+	 * @param cmd2 Second command descriptor.
+	 * @param dataIn Command data.
+	 */
+	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn);
 
 	void onVideoSync();
 private:
