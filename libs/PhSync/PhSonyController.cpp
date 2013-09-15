@@ -151,52 +151,55 @@ QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cm
 
 void PhSonyController::onData()
 {
-//	PHDEBUG << _comSuffix;
-	// reading the cmd1 and cmd2
-	if(_dataRead < 2)
+	while(_serial.bytesAvailable())
 	{
-		QByteArray array = _serial.read(2 - _dataRead);
-//		PHDEBUG << "reading : " << array.length();
-		for (int i = 0; i< array.length(); i++)
-			_dataIn[i + _dataRead] = array[i];
-		_dataRead += array.length();
-	}
-
-	// if cmd1 and cmd2 are read, go on with data
-	if(_dataRead >= 2)
-	{
-		unsigned char cmd1 = _dataIn[0];
-		unsigned char cmd2 = _dataIn[1];
-		unsigned char datacount = getDataSize(cmd1);
-
-		// Reading the data left
-		QByteArray array = _serial.read(datacount + 3 - _dataRead);
-//		PHDEBUG << "reading : " << array.length();
-		for (int i = 0; i< array.length(); i++)
-			_dataIn[i + _dataRead] = array[i];
-		_dataRead += array.length();
-
-		if(_dataRead == datacount + 3) // A whole command has been read
+	//	PHDEBUG << _comSuffix;
+		// reading the cmd1 and cmd2
+		if(_dataRead < 2)
 		{
-			QString cmdString = stringFromCommand(cmd1, cmd2, _dataIn + 2);
-//			PHDEBUG << _comSuffix << "reading : " << cmdString;
+			QByteArray array = _serial.read(2 - _dataRead);
+	//		PHDEBUG << "reading : " << array.length();
+			for (int i = 0; i< array.length(); i++)
+				_dataIn[i + _dataRead] = array[i];
+			_dataRead += array.length();
+		}
 
-			// Computing the checksum
-			unsigned char checksum = 0;
-			for (int i=0; i < datacount + 2; i++)
-				checksum += _dataIn[i];
+		// if cmd1 and cmd2 are read, go on with data
+		if(_dataRead >= 2)
+		{
+			unsigned char cmd1 = _dataIn[0];
+			unsigned char cmd2 = _dataIn[1];
+			unsigned char datacount = getDataSize(cmd1);
 
-			if (checksum != _dataIn[datacount+2])
+			// Reading the data left
+			QByteArray array = _serial.read(datacount + 3 - _dataRead);
+	//		PHDEBUG << "reading : " << array.length();
+			for (int i = 0; i< array.length(); i++)
+				_dataIn[i + _dataRead] = array[i];
+			_dataRead += array.length();
+
+			if(_dataRead == datacount + 3) // A whole command has been read
 			{
-				PHDEBUG << _comSuffix << "Checksum error : " << cmdString;
-				_serial.flush();
-				checkSumError();
-			}
-			else // Process the data
-				processCommand(cmd1, cmd2, _dataIn + 2);
+				QString cmdString = stringFromCommand(cmd1, cmd2, _dataIn + 2);
+	//			PHDEBUG << _comSuffix << "reading : " << cmdString;
 
-			// Reset the data counter to read another command
-			_dataRead = 0;
+				// Computing the checksum
+				unsigned char checksum = 0;
+				for (int i=0; i < datacount + 2; i++)
+					checksum += _dataIn[i];
+
+				if (checksum != _dataIn[datacount+2])
+				{
+					PHDEBUG << _comSuffix << "Checksum error : " << cmdString;
+					_serial.flush();
+					checkSumError();
+				}
+				else // Process the data
+					processCommand(cmd1, cmd2, _dataIn + 2);
+
+				// Reset the data counter to read another command
+				_dataRead = 0;
+			}
 		}
 	}
 }

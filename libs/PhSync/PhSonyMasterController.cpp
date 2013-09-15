@@ -10,6 +10,8 @@ PhSonyMasterController::PhSonyMasterController(QObject *parent)
 void PhSonyMasterController::onCTS()
 {
 	timeSense();
+	speedSense();
+	statusSense();
 }
 
 void PhSonyMasterController::deviceTypeRequest()

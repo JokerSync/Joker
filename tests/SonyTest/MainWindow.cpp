@@ -51,7 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //	_masterTimer.start(1000);
 	_ctsTimer.start(5);
-	//_sonySlave.clock()->setFrame(25 * 25);
+	_sonySlave.clock()->setFrame(25 * 25);
 
 //	_sonySlave.getClock()->setRate(1);
 }
@@ -107,9 +107,9 @@ void MainWindow::on_masterActiveCheck_clicked(bool checked)
 			PHDEBUG << "master open ok";
 
 			_sonyMaster.deviceTypeRequest();
-		//	_sonyMaster.statusSense();
-			//_sonyMaster.timeSense();
-			//_sonyMaster.speedSense();
+			_sonyMaster.statusSense();
+			_sonyMaster.timeSense();
+			_sonyMaster.speedSense();
 		}
 		else
 		{
