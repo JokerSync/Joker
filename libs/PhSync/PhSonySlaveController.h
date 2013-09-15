@@ -4,7 +4,7 @@
 #include "PhSonyController.h"
 
 /**
- * @brief Master controller for sony communication.
+ * @brief Slave controller for sony 9 pin communication through the serial port.
  *
  * Send command to a connected sony slave device
  * and update a clock component and the status accordingly.

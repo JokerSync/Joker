@@ -7,8 +7,7 @@
 #include <PhTools/PhClock.h>
 
 /**
- * @brief PhSonyController is an abstract class handle sony 9 pin communication
- * through the serial port.
+ * @brief Sony abstract controller for  sony 9 pin communication through the serial port.
  *
  * It provide a generic implementation for handlind sony master
  * and slave communication.
