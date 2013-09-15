@@ -287,7 +287,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn) << " over";
 }
 
-void PhSonySlaveController::onCTS()
+void PhSonySlaveController::onVideoSync()
 {
 	_clock.tick(1000/PhTimeCode::getFps(_clock.getTCType()));
 }

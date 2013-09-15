@@ -7,7 +7,7 @@ PhSonyMasterController::PhSonyMasterController(QObject *parent)
 {
 }
 
-void PhSonyMasterController::onCTS()
+void PhSonyMasterController::onVideoSync()
 {
 	timeSense();
 	speedSense();

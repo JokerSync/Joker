@@ -8,7 +8,12 @@
  * Send command to a connected sony slave device
  * and update a clock component and the status accordingly.
  * The controller connect automatically with the first
- * usb serial connected port referenced as "B"
+ * usb serial connected port referenced as "B".
+ *
+ * Upon a video sync event, the master controller perform three actions:
+ * - status sense
+ * - time sense
+ * - speed sense
  */
 class PhSonyMasterController : public PhSonyController
 {
@@ -17,7 +22,7 @@ public:
 	/** PhSonyMasterController constructor */
 	PhSonyMasterController(QObject *parent);
 
-	void onCTS();
+	void onVideoSync();
 
 public slots:
 	/** Request the slave device id */

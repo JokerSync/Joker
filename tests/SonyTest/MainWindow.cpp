@@ -46,11 +46,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	on_slaveActiveCheck_clicked(true);
 
 	// start timers
-	connect(&_ctsTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
-	connect(&_ctsTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
+	connect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
+	connect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
 
 //	_masterTimer.start(1000);
-	_ctsTimer.start(5);
+	_videosyncCheckTimer.start(5);
 	_sonySlave.clock()->setFrame(25 * 25);
 
 //	_sonySlave.getClock()->setRate(1);

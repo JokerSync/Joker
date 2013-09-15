@@ -59,7 +59,7 @@ void PhSonyController::checkVideoSync()
 {
 	bool cts = _serial.pinoutSignals() & QSerialPort::ClearToSendSignal;
 	if(!_lastCTS && cts)
-		onCTS();
+		onVideoSync();
 	_lastCTS = cts;
 }
 
@@ -131,7 +131,7 @@ void PhSonyController::checkSumError()
 	PHDEBUG << _comSuffix;
 }
 
-void PhSonyController::onCTS()
+void PhSonyController::onVideoSync()
 {
 	PHDEBUG << _comSuffix;
 }

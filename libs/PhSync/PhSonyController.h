@@ -11,7 +11,8 @@
  * through the serial port.
  * It provide a generic implementation for handlind sony master
  * and slave communication.
- * It can be connected to a clock to update it accordingly.
+ * It contains an internal clock which behave differently if it is a sony
+ * master or slave.
  *
  * Sony 9 pin specification : http://www.belle-nuit.com/archives/9pin.html
  */
@@ -56,6 +57,10 @@ public:
 	PhClock *clock() { return &_clock; }
 
 public slots:
+	/**
+	 * This slot trigger a check of the video sync check. If this slot is not trigger
+	 * regulary, no video sync event occurs.
+	 */
 	void checkVideoSync();
 
 protected:
@@ -111,11 +116,30 @@ protected:
 	 */
 	void sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
 
+	/**
+	 * Send a sony protocol command with an argument list of unsigned char for the data.
+	 * @param cmd1 First command descriptor.
+	 * @param cmd2 Second command descriptor.
+	 */
 	void sendCommand(unsigned char cmd1, unsigned char cmd2, ...);
 
+	/**
+	 * This method is called whenever a timeout happens when reading the data.
+	 * It allows distinct implementation for slave and master.
+	 */
 	virtual void timeOut();
+
+	/**
+	 * This method is called whenever a check sum error happens when reading the data.
+	 * It allows distinct implementation for slave and master.
+	 */
 	virtual void checkSumError();
-	virtual void onCTS();
+
+	/**
+	 * This method is called whenever a video sync signal is triggered.
+	 * It allows distinct implementation for slave and master.
+	 */
+	virtual void onVideoSync();
 
 	/**
 	 * @brief stringFromCommand
@@ -125,9 +149,10 @@ protected:
 	 */
 	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data = 0);
 
+	/** The internal clock of the sony controller */
 	PhClock _clock;
 
-	// Serial port name suffix (A for slave and B for master)
+	/** Serial port name suffix (A for slave and B for master) */
 	QString _comSuffix;
 
 private:
