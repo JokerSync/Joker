@@ -46,13 +46,11 @@ bool PhSonyController::open()
 
 void PhSonyController::close()
 {
-	PHDEBUG << _comSuffix << "PhSonyController::close()";
 	if(_serial.isOpen())
 	{
+		PHDEBUG << _comSuffix;
 		_serial.close();
 	}
-	else
-		PHDEBUG << _comSuffix << "port already closed.";
 }
 
 void PhSonyController::checkVideoSync()
