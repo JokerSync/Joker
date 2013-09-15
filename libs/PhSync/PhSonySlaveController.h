@@ -3,6 +3,18 @@
 
 #include "PhSonyController.h"
 
+/**
+ * @brief Master controller for sony communication
+ * Send command to a connected sony slave device
+ * and update a clock component and the status accordingly.
+ * The controller connect automatically with the first
+ * usb serial connected port referenced as "B".
+ *
+ * Upon a video sync event, the master controller perform three actions:
+ * - status sense
+ * - time sense
+ * - speed sense
+ */
 class PhSonySlaveController : public PhSonyController
 {
 public:
@@ -21,7 +33,7 @@ public:
 protected:
 	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
 
-	void onCTS();
+	void onVideoSync();
 private:
 	/**
 	 * @brief Send a command acknolegment.

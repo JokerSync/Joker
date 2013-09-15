@@ -35,7 +35,7 @@ private:
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;
 	PhSonySlaveController _sonySlave;
-	QTimer _ctsTimer;
+	QTimer _videosyncCheckTimer;
 };
 
 #endif // MAINWINDOW_H
