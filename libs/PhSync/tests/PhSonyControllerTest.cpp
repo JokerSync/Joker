@@ -17,7 +17,7 @@ void PhSonyControllerTest::testComputeRate()
 	QVERIFY(qAbs(computeRate(118) - 48.68) < 0.01);
 }
 
-void PhSonyControllerTest::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
+void PhSonyControllerTest::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
 {
-	PHDEBUG << stringFromCommand(cmd1, cmd2, data);
+	PHDEBUG << stringFromCommand(cmd1, cmd2, dataIn);
 }

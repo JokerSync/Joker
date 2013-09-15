@@ -26,7 +26,7 @@ private slots:
 	void masterPreviousFrame();
 
 	void onDeviceIdData(unsigned char id1, unsigned char id2);
-	void onStatusData(int length, unsigned char * statusData);
+	void onStatusData(unsigned char * statusData, int offset, int length);
 	void on_masterActiveCheck_clicked(bool checked);
 	void on_slaveActiveCheck_clicked(bool checked);
 
