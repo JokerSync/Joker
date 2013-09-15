@@ -43,7 +43,10 @@ linux {
 # MacOS specific
 mac {
 	SOURCES += ../../libs/PhGraphic/SDLMain.cpp
-	INCLUDEPATH += /Library/Frameworks/
+
+	QMAKE_CXXFLAGS += -F/Library/Frameworks
+	QMAKE_OBJECTIVE_CFLAGS += -F/Library/Frameworks
+
 	LIBS += -F/Library/Frameworks
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
 
