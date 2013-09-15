@@ -6,7 +6,7 @@
 #include "PhSonyController.h"
 
 /**
- * Test for the PhSonyController class.
+ * @brief Test for the PhSonyController class.
  */
 class PhSonyControllerTest : public PhSonyController
 {
