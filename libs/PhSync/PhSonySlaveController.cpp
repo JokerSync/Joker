@@ -22,7 +22,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			break;
 		case 0x11:
 		{
-			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
+//			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
 #warning TODO : Device ID as a parameter
 			unsigned char deviceID1 = 0xf0;
 			unsigned char deviceID2 = 0xc0;
@@ -46,7 +46,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			sendAck();
 			break;
 		default:
-			PHDEBUG << _comSuffix << " => Unknown subcommand => NAK";
+			PHDEBUG << _comSuffix << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 			sendNak(UndefinedCommand);
 			break;
 		}
@@ -140,7 +140,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			break;
 		}
 		default:
-			PHDEBUG << _comSuffix << "Unknown subcommand => NAK";
+			PHDEBUG << _comSuffix << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 			sendNak(UndefinedCommand);
 			break;
 		}
@@ -162,7 +162,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			sendAck();
 			break;	case 6:
 		default:
-			PHDEBUG << _comSuffix << "Unknown subcommand => NAK";
+			PHDEBUG << _comSuffix << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 			sendNak(UndefinedCommand);
 			break;
 		}
@@ -267,7 +267,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x30:
 		{
 #warning TODO : handle edit preset sense properly
-			PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status";
+//			PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status";
 			unsigned char count = dataIn[0];
 			for (int i=0; i<count; i++)
 				dataOut[i] = 0;
@@ -275,13 +275,13 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			break;
 		}
 		default:
-				PHDEBUG << _comSuffix << "Unknown subcommand : => NAK";
-				sendNak(UndefinedCommand);
-				break;
+			PHDEBUG << _comSuffix << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
+			sendNak(UndefinedCommand);
+			break;
 			}
 			break;
 		default:
-			PHDEBUG << _comSuffix << " => Unknown command : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16) << " => NAK";
+		PHDEBUG << _comSuffix << " => Unknown command " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 		sendNak(UndefinedCommand);
 		break;
 	}
