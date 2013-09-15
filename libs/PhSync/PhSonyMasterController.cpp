@@ -41,19 +41,19 @@ void PhSonyMasterController::cue(PhFrame frame, PhTimeCodeType tcType)
 
 void PhSonyMasterController::fastForward()
 {
-	PHDEBUG << _comSuffix << "Fast forward";
+	PHDEBUG << _comSuffix;
 	sendCommand(0x20, 0x10);
 }
 
 void PhSonyMasterController::rewind()
 {
-	PHDEBUG << _comSuffix << "Rewind";
+	PHDEBUG << _comSuffix;
 	sendCommand(0x20, 0x20);
 }
 
 void PhSonyMasterController::jog(PhRate rate)
 {
-	PHDEBUG << _comSuffix << "Jog " << rate;
+	PHDEBUG << _comSuffix;
 	char data1;
 	if (rate < 0)
 	{
@@ -69,7 +69,7 @@ void PhSonyMasterController::jog(PhRate rate)
 
 void PhSonyMasterController::varispeed(PhRate rate)
 {
-	PHDEBUG << _comSuffix << "Varispeed " << rate;
+	PHDEBUG << _comSuffix << rate;
 	char data1;
 	if (rate < 0)
 	{
@@ -85,7 +85,7 @@ void PhSonyMasterController::varispeed(PhRate rate)
 
 void PhSonyMasterController::shuttle(PhRate rate)
 {
-	PHDEBUG << _comSuffix << "Shuttle " << rate;
+	PHDEBUG << _comSuffix << rate;
 	char data1;
 	if (rate < 0)
 	{
@@ -101,25 +101,25 @@ void PhSonyMasterController::shuttle(PhRate rate)
 
 void PhSonyMasterController::timeSense()
 {
-	PHDEBUG << _comSuffix << "Time sense";
+//	PHDEBUG << _comSuffix;
 	sendCommand(0x61, 0x0c, 1);
 }
 
 void PhSonyMasterController::statusSense()
 {
-	PHDEBUG << _comSuffix << "Status sense";
+//	PHDEBUG << _comSuffix;
 	sendCommand(0x61, 0x20, 4);
 }
 
 void PhSonyMasterController::speedSense()
 {
-	PHDEBUG << _comSuffix << "Speed sense";
+//	PHDEBUG << _comSuffix;
 	sendCommand(0x60, 0x2E);
 }
 
 void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
 {
-	PHDEBUG << _comSuffix << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, dataIn);
+//	PHDEBUG << _comSuffix << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, dataIn);
 	switch (cmd1 >> 4)
 	{
 	case 1:
@@ -150,7 +150,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		case 0x04:
 		{
 			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.getTCType());
-			PHDEBUG << _comSuffix << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _clock.getTCType());
+//			PHDEBUG << _comSuffix << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _clock.getTCType());
 			_clock.setFrame(frame);
 			break;
 		}
@@ -165,7 +165,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 				statusStr += QString::number(dataIn[i], 16) + " ";
 			}
 			statusData(status, 0, 4);
-			PHDEBUG << _comSuffix << " => Status data : " << statusStr;
+//			PHDEBUG << _comSuffix << " => Status data : " << statusStr;
 			break;
 		}
 		case 0x2e:
@@ -185,7 +185,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 				break;
 			}
 
-			PHDEBUG << _comSuffix << " => Speed data : " << rate;
+//			PHDEBUG << _comSuffix << " => Speed data : " << rate;
 			_clock.setRate(rate);
 
 			break;
@@ -199,6 +199,6 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		PHDEBUG << _comSuffix << " => Unknown answer : " << QString::number(cmd1, 16) << " " << QString::number(cmd2, 16);
 		break;
 	}
-	PHDEBUG << _comSuffix << "PhSonyMasterController::processCommand : " << stringFromCommand(cmd1, cmd2, dataIn) << " over";
+//	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn) << " over";
 
 }

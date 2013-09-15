@@ -10,7 +10,7 @@ PhSonySlaveController::PhSonySlaveController(QObject *parent) : PhSonyController
 void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
 {
 	unsigned char dataOut[16];
-	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn);
+//	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn);
 	switch (cmd1 >> 4)
 	{
 	case 0:
@@ -173,7 +173,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x0c:
 		{
 			cmd1 = 0x74;
-			PHDEBUG << _comSuffix << "Current Time Sense => " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType());
+//			PHDEBUG << _comSuffix << "Current Time Sense => " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType());
 			switch (dataIn[0])
 			{
 			case 0x01:
@@ -206,7 +206,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		{
 			unsigned char status[16];
 #warning TODO : handle status sens properly
-			PHDEBUG << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
+//			PHDEBUG << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
 			memset(status, 0, 16);
 			switch (_state)
 			{
@@ -260,7 +260,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x2e:
 		{
 			unsigned data1 = computeData1FromRate(_clock.rate());
-			PHDEBUG << "Speed sense";
+//			PHDEBUG << "Speed sense";
 			sendCommand(0x71, 0x2e, data1);
 			break;
 		}
@@ -286,7 +286,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		break;
 	}
 
-	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn) << " over";
+//	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn) << " over";
 }
 
 void PhSonySlaveController::onVideoSync()
@@ -296,7 +296,7 @@ void PhSonySlaveController::onVideoSync()
 
 void PhSonySlaveController::sendAck()
 {
-	PHDEBUG << _comSuffix;
+//	PHDEBUG << _comSuffix;
 	sendCommand(0x10, 0x01);
 }
 

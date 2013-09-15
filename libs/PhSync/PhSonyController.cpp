@@ -94,7 +94,7 @@ unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 
 void PhSonyController::sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
-	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, data);
+//	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, data);
 	unsigned char datacount = getDataSize(cmd1);
 	unsigned char checksum = cmd1 + cmd2;
 	for (int i=0; i<datacount; i++)
@@ -134,7 +134,7 @@ void PhSonyController::checkSumError()
 
 void PhSonyController::onVideoSync()
 {
-	PHDEBUG << _comSuffix;
+//	PHDEBUG << _comSuffix;
 }
 
 QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data)
