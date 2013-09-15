@@ -103,7 +103,6 @@ void MainView::pushNextFrameButton()
 {
 	PhFrame f = _clock->frame() + 1;
 	_clock->setFrame(f);
-	//ui->_videoView->setPosition(f);
 }
 
 

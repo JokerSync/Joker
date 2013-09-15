@@ -26,9 +26,6 @@ public:
 	bool open(QString fileName);
 
 	void setClock(PhClock *clock);
-
-	void setPosition(qint64 position);
-
 signals:
 
 	void positionChangedSignal(qint64);
