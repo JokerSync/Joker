@@ -16,7 +16,14 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="TimeCodeInput" name="widget" native="true"/>
+     <widget class="QLabel" name="timeCodeLabel">
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="TimeCodeInput" name="timeCodeInput" native="true"/>
     </item>
    </layout>
   </widget>

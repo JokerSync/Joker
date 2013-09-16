@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "PhTools/PhTimeCode.h"
+
 namespace Ui {
 class TimeCodeInput;
 }
@@ -15,8 +17,24 @@ public:
     explicit TimeCodeInput(QWidget *parent = 0);
     ~TimeCodeInput();
 
+    void setTCType(PhTimeCodeType tcType);
+
+public slots:
+
+    void isTimeCode(const QString &text);
+
+
+signals:
+
+    void frameChanged(PhFrame frame);
+
 private:
+
     Ui::TimeCodeInput *ui;
+    PhFrame _frame;
+    PhTimeCodeType _tcType;
+
+
 };
 
 #endif // TIMECODEINPUT_H

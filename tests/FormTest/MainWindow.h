@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include "PhTools/PhTimeCode.h"
+#include "TimeCodeInput.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -15,8 +18,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+
+    void updateText(PhFrame frame);
+
 private:
     Ui::MainWindow *ui;
+    PhFrame _frame;
+    PhTimeCodeType _tcType;
+
 };
 
 #endif // MAINWINDOW_H

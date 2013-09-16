@@ -11,6 +11,12 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = FormTest
 TEMPLATE = app
 
+JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
+
+INCLUDEPATH += $${JOKER_ROOT}/libs
+
+include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
+
 
 SOURCES += main.cpp\
         MainWindow.cpp \
@@ -21,3 +27,5 @@ HEADERS  += MainWindow.h \
 
 FORMS    += MainWindow.ui \
     TimeCodeInput.ui
+
+OTHER_FILES +=
