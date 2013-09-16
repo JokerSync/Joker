@@ -11,7 +11,7 @@ class Dialog : public QDialog
 public:
 	Dialog(QWidget *parent=0);
 	QPushButton * getGoToBtn(){return goToBtn;};
-	QLineEdit * getTextLineEdit(){return textLineEdit;};
+	QString getTextLineEdit(){return textLineEdit->text();};
 
 private:
 	QPushButton *goToBtn;

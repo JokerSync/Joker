@@ -151,5 +151,5 @@ void MainWindow::on_actionGo_To_triggered()
 
 void MainWindow::goTo()
 {
-	_clock->setFrame(PhTimeCode::frameFromString(_dlg->getTextLineEdit()->text(), _clock->getTCType()));
+	_clock->setFrame(PhTimeCode::frameFromString(_dlg->getTextLineEdit(), _clock->getTCType()));
 }

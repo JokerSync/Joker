@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <PhGraphicStrip/PhGraphicStripView.h>
-#include "MainDialog.h"
+#include "Dialog.h"
 #include <QMessageBox>
 
 namespace Ui {
