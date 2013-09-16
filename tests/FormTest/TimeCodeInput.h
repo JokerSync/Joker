@@ -2,8 +2,10 @@
 #define TIMECODEINPUT_H
 
 #include <QWidget>
+#include <QDebug>
 
 #include "PhTools/PhTimeCode.h"
+
 
 namespace Ui {
 class TimeCodeInput;
@@ -21,7 +23,7 @@ public:
 
 public slots:
 
-    void isTimeCode(const QString &text);
+    void isTimeCode();
 
 
 signals:

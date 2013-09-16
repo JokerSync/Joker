@@ -9,7 +9,7 @@ TimeCodeInput::TimeCodeInput(QWidget *parent) :
     _frame = 0;
     _tcType = PhTimeCodeType25;
 
-    connect(ui->input, SIGNAL(textEdited(QString)), this, SLOT(isTimeCode(QString)));
+    connect(ui->input, SIGNAL(editingFinished()), this, SLOT(isTimeCode()));
 
 }
 
@@ -23,10 +23,10 @@ void TimeCodeInput::setTCType(PhTimeCodeType tcType)
     _tcType = tcType;
 }
 
-void TimeCodeInput::isTimeCode(const QString &text)
+void TimeCodeInput::isTimeCode()
 {
+    QString text = ui->input->text();
     _frame = PhTimeCode::frameFromString(text, _tcType);
-
 
 
     emit frameChanged(_frame);
