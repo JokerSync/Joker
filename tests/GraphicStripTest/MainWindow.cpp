@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
+	_dlg = new Dialog(this);
 	ui->setupUi(this);
 	_stripView = ui->stripView;
 	_doc = _stripView->doc();
@@ -14,8 +15,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 
-	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameOrRateChanged(PhFrame, PhTimeCodeType)));
-//	connect(_clock, SIGNAL(rateChanged()), this, SLOT(onFrameOrRateChanged()));
+	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
+	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
+
+	connect(_dlg->getGoToBtn(), SIGNAL(clicked()), this, SLOT(goTo()));
 }
 
 MainWindow::~MainWindow()
@@ -48,17 +51,23 @@ void MainWindow::onOpenFile()
 	}
 }
 
-void MainWindow::onFrameOrRateChanged(PhFrame frame, PhTimeCodeType tcType)
+void MainWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
 	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(frame, tcType), QString::number(_clock->rate()));
 	ui->statusbar->showMessage(message);
 }
 
+void MainWindow::onRateChanged(PhRate rate)
+{
+	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(_clock->frame(), _clock->getTCType()), QString::number(rate));
+	ui->statusbar->showMessage(message);
+}
 
 void MainWindow::on_actionPlay_pause_triggered()
 {
 	if(_clock->rate() == 0.0)
 		_clock->setRate(1.0);
+
 	else
 		_clock->setRate(0.0);
 }
@@ -90,4 +99,57 @@ void MainWindow::on_actionStep_time_backward_triggered()
 {
 	_clock->setRate(0.0);
 	_clock->setTime(_clock->time() - 1);
+}
+
+void MainWindow::on_action_3_triggered()
+{
+	_clock->setRate(-3.0);
+}
+
+void MainWindow::on_action_1_triggered()
+{
+	_clock->setRate(-1.0);
+}
+
+void MainWindow::on_action_0_5_triggered()
+{
+	_clock->setRate(-0.5);
+}
+
+void MainWindow::on_action0_triggered()
+{
+	_clock->setRate(0.0);
+}
+
+void MainWindow::on_action0_5_triggered()
+{
+	_clock->setRate(0.5);
+}
+
+void MainWindow::on_action1_triggered()
+{
+	_clock->setRate(1.0);
+}
+
+void MainWindow::on_action3_triggered()
+{
+	_clock->setRate(3.0);
+}
+
+void MainWindow::on_actionGo_To_triggered()
+{
+	// On s'assure que notre boite de dialogue n'est pas déjà affichée de façon non modale
+	if(_dlg->isVisible())
+	{
+		QMessageBox::critical(this, "Erreur", "La boite de dialogue est déjà ouverte. Veuillez la fermer pour l'ouvrir à nouveau.");
+	}
+	else
+	{
+		_dlg->exec();
+	}
+}
+
+void MainWindow::goTo()
+{
+	_clock->setFrame(PhTimeCode::frameFromString(_dlg->getTextLineEdit()->text(), _clock->getTCType()));
 }

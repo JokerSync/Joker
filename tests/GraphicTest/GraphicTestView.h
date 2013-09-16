@@ -30,10 +30,10 @@ public slots:
 	void play();
 	void fastBackward();
 	void fastForward();
-	void displayText();
-	void displayImage();
-	void displayRect();
-	void displayLoop();
+	void displayText(bool display);
+	void displayImage(bool display);
+	void displayRect(bool display);
+	void displayLoop(bool display);
 
 
 protected:
