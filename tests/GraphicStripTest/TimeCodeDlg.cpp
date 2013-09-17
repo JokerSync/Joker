@@ -1,6 +1,6 @@
-#include "Dialog.h"
+#include "TimeCodeDlg.h"
 
-Dialog::Dialog(QWidget *parent)
+TimeCodeDlg::TimeCodeDlg(QWidget *parent)
 :QDialog(parent)
 {
 	QHBoxLayout *layout = new QHBoxLayout;

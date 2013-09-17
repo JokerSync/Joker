@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
-	_dlg = new Dialog(this);
+	_dlg = new TimeCodeDlg(this);
 	ui->setupUi(this);
 	_stripView = ui->stripView;
 	_doc = _stripView->doc();

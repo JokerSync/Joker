@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 #include <PhGraphicStrip/PhGraphicStripView.h>
-#include "Dialog.h"
 #include <QMessageBox>
+
+#include "TimeCodeDlg.h"
 
 namespace Ui {
 class MainWindow;
@@ -60,7 +61,7 @@ private:
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
 	PhClock *_clock;
-	Dialog *_dlg;
+	TimeCodeDlg *_dlg;
 };
 
 #endif // MAINWINDOW_H
