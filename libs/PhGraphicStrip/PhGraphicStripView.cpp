@@ -209,16 +209,17 @@ void PhGraphicStripView::paint()
 	foreach(PhStripText * text, _doc.getTexts())
 	{
 		PhGraphicText* gText = _graphicTexts[text];
-
 		int track = text->getTrack();
-		gText->setX(text->getTimeIn() * pixelPerFrame - offset);
-		gText->setWidth((text->getTimeOut() - text->getTimeIn()) * pixelPerFrame);
-		gText->setY(track * trackHeight);
-		gText->setHeight(trackHeight);
 
 		if( ! (((text->getTimeIn() < frameIn) && (text->getTimeOut() < frameIn)) || ((text->getTimeIn() > frameOut) && (text->getTimeOut() > frameOut))) )
-			gText->draw();
+		{
+			gText->setX(text->getTimeIn() * pixelPerFrame - offset);
+			gText->setWidth((text->getTimeOut() - text->getTimeIn()) * pixelPerFrame);
+			gText->setY(track * trackHeight);
+			gText->setHeight(trackHeight);
 
+			gText->draw();
+		}
 
 		PhStripText * lastText = lastTextList[track];
 		// Display the people name only if one of the following condition is true:
