@@ -6,10 +6,10 @@
 #ifndef DIALOG_H
 #define DIALOG_H
 
-class Dialog : public QDialog
+class TimeCodeDlg : public QDialog
 {
 public:
-	Dialog(QWidget *parent=0);
+	TimeCodeDlg(QWidget *parent=0);
 	QPushButton * getGoToBtn(){return goToBtn;};
 	QString getTextLineEdit(){return textLineEdit->text();};
 

@@ -22,13 +22,12 @@ include($${JOKER_ROOT}/libs/PhGraphicStrip/PhGraphicStrip.pri)
 SOURCES += main.cpp \
     MainView.cpp \
 	MainWindow.cpp \
-	Dialog.cpp \
+	TimeCodeDlg.cpp \
 
 HEADERS += \
     MainView.h \
     MainWindow.h \
-    ../../libs/PhStrip/PhStripPeopleObject.h \
-	Dialog.h \
+	TimeCodeDlg.h \
 
 FORMS += \
     MainWindow.ui
