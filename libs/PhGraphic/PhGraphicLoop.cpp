@@ -21,6 +21,8 @@ void PhGraphicLoop::draw()
 	int w = _hThick;
 	int h = _h;
 
+	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+
 	glBegin(GL_QUADS); 	// draw the vertical line
 	{
 		glVertex3f(x,		y,	_z);
