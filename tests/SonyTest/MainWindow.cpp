@@ -19,8 +19,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->slavePanel->setMediaLength(10000);
 
 	// Connect master panel to sony master
-	connect(ui->masterPanel, SIGNAL(playButtonSignal()), &_sonyMaster, SLOT(play()));
-	connect(ui->masterPanel, SIGNAL(pauseButtonSignal()), &_sonyMaster, SLOT(stop()));
+	connect(ui->masterPanel, SIGNAL(playButtonSignal()), this, SLOT(masterPlayPause()));
+	connect(ui->masterPanel, SIGNAL(nextFrameButtonSignal()), this, SLOT(masterNextFrame()));
+	connect(ui->masterPanel, SIGNAL(previousFrameButtonSignal()), this, SLOT(masterPreviousFrame()));
+	connect(ui->masterPanel, SIGNAL(forwardButtonSignal()), &_sonyMaster, SLOT(fastForward()));
+	connect(ui->masterPanel, SIGNAL(rewindButtonSignal()), &_sonyMaster, SLOT(rewind()));
+
 	connect(_sonyMaster.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->masterPanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_sonyMaster.clock(), SIGNAL(rateChanged(PhRate)), ui->masterPanel, SLOT(onRateChanged(PhRate)));
 
@@ -30,9 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->timeSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(timeSense()));
 	connect(ui->speedSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(speedSense()));
 
-
 	connect(&_sonyMaster, SIGNAL(deviceIdData(unsigned char,unsigned char)), this, SLOT(onDeviceIdData(unsigned char,unsigned char)));
-	connect(&_sonyMaster, SIGNAL(statusData(int,unsigned char*)), this, SLOT(onStatusData(int,unsigned char*)));
+	connect(&_sonyMaster, SIGNAL(statusData(unsigned char*, int, int)), this, SLOT(onStatusData(unsigned char*, int, int)));
 
 	// Connect sony slave clock to slave panel
 	connect(_sonySlave.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->slavePanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
@@ -43,11 +46,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	on_slaveActiveCheck_clicked(true);
 
 	// start timers
-	connect(&_masterTimer, SIGNAL(timeout()), this, SLOT(tickMaster()));
-	connect(&_slaveTimer, SIGNAL(timeout()), this, SLOT(tickSlave()));
+	connect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
+	connect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
 
 //	_masterTimer.start(1000);
-	_slaveTimer.start(40);
+	_videosyncCheckTimer.start(5);
+	_sonySlave.clock()->setFrame(25 * 25);
 
 //	_sonySlave.getClock()->setRate(1);
 }
@@ -59,15 +63,22 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::tickMaster()
+void MainWindow::masterPlayPause()
 {
-	_sonyMaster.timeSense();
-//	_sonyMaster.statusSense();
+	if(_sonyMaster.clock()->rate() != 0)
+		_sonyMaster.stop();
+	else
+		_sonyMaster.play();
 }
 
-void MainWindow::tickSlave()
+void MainWindow::masterNextFrame()
 {
-	_sonySlave.clock()->tick(25);
+	_sonyMaster.cue(_sonyMaster.clock()->frame() + 1, _sonyMaster.clock()->getTCType());
+}
+
+void MainWindow::masterPreviousFrame()
+{
+	_sonyMaster.cue(_sonyMaster.clock()->frame() - 1, _sonyMaster.clock()->getTCType());
 }
 
 void MainWindow::onDeviceIdData(unsigned char id1, unsigned char id2)
@@ -77,7 +88,7 @@ void MainWindow::onDeviceIdData(unsigned char id1, unsigned char id2)
 	ui->idLabel->setText(id);
 }
 
-void MainWindow::onStatusData(int length, unsigned char *statusData)
+void MainWindow::onStatusData(unsigned char *statusData, int offset, int length)
 {
 	QString statusStr = "";
 	for (int i = 0; i < length; i++)
@@ -96,9 +107,9 @@ void MainWindow::on_masterActiveCheck_clicked(bool checked)
 			PHDEBUG << "master open ok";
 
 			_sonyMaster.deviceTypeRequest();
-	//		_sonyMaster.statusSense();
-		//	_sonyMaster.timeSense();
-			//_sonyMaster.speedSense();
+			_sonyMaster.statusSense();
+			_sonyMaster.timeSense();
+			_sonyMaster.speedSense();
 		}
 		else
 		{

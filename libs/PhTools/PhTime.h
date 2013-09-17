@@ -1,6 +1,8 @@
 #ifndef PHTIME_H
 #define PHTIME_H
 
+#include <QtGlobal>
+
 /**
   * @brief PhTime is a type used for time value.
   */

@@ -21,11 +21,12 @@ public:
 	~MainWindow();
 
 private slots:
-	void tickMaster();
-	void tickSlave();
+	void masterPlayPause();
+	void masterNextFrame();
+	void masterPreviousFrame();
 
 	void onDeviceIdData(unsigned char id1, unsigned char id2);
-	void onStatusData(int length, unsigned char * statusData);
+	void onStatusData(unsigned char * statusData, int offset, int length);
 	void on_masterActiveCheck_clicked(bool checked);
 	void on_slaveActiveCheck_clicked(bool checked);
 
@@ -34,7 +35,7 @@ private:
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;
 	PhSonySlaveController _sonySlave;
-	QTimer _slaveTimer, _masterTimer;
+	QTimer _videosyncCheckTimer;
 };
 
 #endif // MAINWINDOW_H

@@ -34,6 +34,9 @@ bool PhVLCVideoView::open(QString fileName)
 	    // Stop if something is playing
 	    if (vlcPlayer && libvlc_media_player_is_playing(vlcPlayer))
 		{
+			/* stop the media player */
+	        libvlc_media_player_stop(vlcPlayer);
+
 			// release the media player
 	        libvlc_media_player_release(vlcPlayer);
 

@@ -7,11 +7,12 @@
 #include <PhTools/PhClock.h>
 
 /**
- * PhSonyController is an abstract class handle sony 9 pin communication
- * through the serial port.
+ * @brief Sony abstract controller for  sony 9 pin communication through the serial port.
+ *
  * It provide a generic implementation for handlind sony master
  * and slave communication.
- * It can be connected to a clock to update it accordingly.
+ * It contains an internal clock which behave differently if it is a sony
+ * master or slave.
  *
  * Sony 9 pin specification : http://www.belle-nuit.com/archives/9pin.html
  */
@@ -19,6 +20,12 @@ class PhSonyController : public QObject
 {
 	Q_OBJECT
 public:
+
+	/**
+	 * @brief Various error code sent with the NAK command.
+	 *
+	 * See : http://www.belle-nuit.com/archives/9pin.html#nak
+	 */
 	enum PhSonyError {
 		UndefinedCommand,
 		UnusedError1,
@@ -37,28 +44,43 @@ public:
 	 */
 	explicit PhSonyController(QString comSuffix, QObject *parent);
 
-	/** @brief PhSonyController destructor
+	/**
+	 * @brief PhSonyController destructor
 	 *
 	 * Closing the port if open.
 	 */
 	~PhSonyController();
 
 	/**
-	 * Open the communication port.
+	 * @brief Open the communication port.
 	 */
 	bool open();
 
 	/**
-	 * Close the communication port.
+	 * @brief Close the communication port.
 	 */
 	void close();
 
+	/**
+	 * @brief Get the sony controller internal clock.
+	 * @return A clock reference.
+	 */
 	PhClock *clock() { return &_clock; }
+
+public slots:
+	/**
+	 * @brief This slot trigger a check of the video sync check.
+	 *
+	 * If this slot is not trigger
+	 * regulary, no video sync event occurs.
+	 */
+	void checkVideoSync();
 
 protected:
 	/**
-	 * Compute the rate from the jog, varispeed and shuttle sony protocole
+	 * @brief Compute the rate from the jog, varispeed and shuttle sony protocole
 	 * order data.
+	 *
 	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#jogFwd
 	 * @param data1 A one byte coded version of the rate.
 	 * @return The float value corresponding rate.
@@ -85,13 +107,16 @@ protected:
 	unsigned char computeData1FromRate(PhRate rate);
 
 	/**
-	 * Process a single command and respond to it, updating the clock if needed.
+	 * @brief Process a single sony command.
+	 *
+	 * The clock and controller state are updated if needed.
 	 * This method shall be implemented differently by the slave and the master.
-	 * @param cmd1 TODO
-	 * @param cmd2 TODO
+	 *
+	 * @param cmd1 First command descriptor.
+	 * @param cmd2 Second command descriptor.
 	 * @param dataIn Command data.
 	 */
-	virtual void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* data) = 0;
+	virtual void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* dataIn) = 0;
 
 	/**
 	 * Extract the data size from the first command descriptor.
@@ -108,30 +133,71 @@ protected:
 	 */
 	void sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
 
+	/**
+	 * @brief Send a sony protocol command with an argument list of unsigned char for the data.
+	 * @param cmd1 First command descriptor.
+	 * @param cmd2 Second command descriptor.
+	 */
 	void sendCommand(unsigned char cmd1, unsigned char cmd2, ...);
 
+	/**
+	 * @brief This method is called whenever a timeout happens when reading the data.
+	 *
+	 * It allows distinct implementation for slave and master.
+	 */
 	virtual void timeOut();
+
+	/**
+	 * @brief This method is called whenever a check sum error happens when reading the data.
+	 *
+	 * It allows distinct implementation for slave and master.
+	 */
 	virtual void checkSumError();
 
 	/**
-	 * @brief stringFromCommand
+	 * @brief This method is called whenever a video sync signal is triggered.
+	 *
+	 * It allows distinct implementation for slave and master.
+	 */
+	virtual void onVideoSync();
+
+	/**
+	 * @brief Convert a sony command and data to a readable string.
+	 *
 	 * @param cmd1 First command descriptor.
 	 * @param cmd2 Second command descriptor.
+	 * @param data Command data.
 	 * @return The name of the command.
 	 */
-	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data = 0);
+	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data = 0);
 
+	/** @brief The internal clock of the sony controller. */
 	PhClock _clock;
 
-	// Serial port name suffix (A for slave and B for master)
+	/** @brief Serial port name suffix (A for slave and B for master). */
 	QString _comSuffix;
 
 private:
-	// Serial port connected to the controller
+	/** @brief Serial port connected to the controller. */
 	QSerialPort _serial;
+
+	/** @brief Buffer used for serial data reception. */
+	unsigned char _dataIn[256];
+
+	/** @brief Amount of serial data read for the current command/data */
+	int _dataRead;
+
+	/** @brief Buffer used for serial data emission. */
+	unsigned char _dataOut[256];
+
+	/** @brief Last value of the serial CTS state. */
+	bool _lastCTS;
+
 private slots:
+	/** @brief Slot triggered when data are available on the serial port */
 	void onData();
-	void onCTS();
+
+	/** @brief Slot triggered when a serial error occurs */
 	void handleError(QSerialPort::SerialPortError error);
 };
 

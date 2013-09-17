@@ -11,12 +11,12 @@ GraphicTestView::GraphicTestView(QWidget *parent)
 
 bool GraphicTestView::init()
 {
-	playEnable = 0;
-	textSpeed = 0;
-	enableDisplayImage = false;
-	enableDisplayRect = false;
-	enableDisplayText = false;
-	enableDisplayLoop = true;
+	playEnable = 1;
+	textSpeed = 1;
+//	enableDisplayImage = false;
+//	enableDisplayRect = false;
+//	enableDisplayText = false;
+//	enableDisplayLoop = false;
 
 	PHDEBUG << "GraphicTestView::init";
 	if(_image == NULL)
@@ -45,7 +45,7 @@ bool GraphicTestView::init()
 		PHDEBUG << "Initialize _text";
 		_text = new PhGraphicText(_font, "Test PhGraphicText");
 		_text->setRect(50,135,250,125);
-		_text->setColor(QColor(100, 254, 0));
+		_text->setColor(QColor(1, 1, 255));
 		if (! _text->init())
 			PHDEBUG << "_text not initialize";
 
@@ -54,9 +54,9 @@ bool GraphicTestView::init()
 
 	if(_rect == NULL)
 	{
-		PHDEBUG << "Initialize _text";
+		PHDEBUG << "Initialize _rect";
 		_rect = new PhGraphicSolidRect(100, 100, 75, 40);
-		_rect->setColor(QColor(200, 128, 0));
+		_rect->setColor(QColor(255, 1, 1));
 	}
 
 	if(_loop == NULL)
@@ -69,7 +69,7 @@ bool GraphicTestView::init()
 		_loop->setHeight(100);
 		_loop->setHThick(5);
 		_loop->setCrossHeight(60);
-		_loop->setColor(QColor(13, 150, 12));
+		_loop->setColor(QColor(1, 255, 1));
 		if (! _loop->init())
 			PHDEBUG << "_loop not initialize";
 	}
@@ -79,11 +79,11 @@ bool GraphicTestView::init()
 
 void GraphicTestView::paint()
 {
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, this->width(), this->height()/2, 0, 0, 10);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	//glOrtho(0, this->width(), this->height()/2, 0, 0, 10);
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
 
 	if  (enableDisplayImage == true)
 	{
@@ -160,37 +160,25 @@ void GraphicTestView::fastForward()
 		textSpeed = 8;
 }
 
-void GraphicTestView::displayText()
+void GraphicTestView::displayText(bool display)
 {
-	if (enableDisplayText == false)
-		enableDisplayText = true;
-	else
-		enableDisplayText = false;
+	enableDisplayText = display;
 }
 
 
-void GraphicTestView::displayImage()
+void GraphicTestView::displayImage(bool display)
 {
-	if (enableDisplayImage == false)
-		enableDisplayImage = true;
-	else
-		enableDisplayImage = false;
+	enableDisplayImage = display;
 }
 
-void GraphicTestView::displayRect()
+void GraphicTestView::displayRect(bool display)
 {
-	if (enableDisplayRect == false)
-		enableDisplayRect = true;
-	else
-		enableDisplayRect = false;
+	enableDisplayRect = display;
 }
 
-void GraphicTestView::displayLoop()
+void GraphicTestView::displayLoop(bool display)
 {
-	if (enableDisplayLoop == false)
-		enableDisplayLoop = true;
-	else
-		enableDisplayLoop = false;
+	enableDisplayLoop = display;
 }
 
 

@@ -21,6 +21,7 @@ void PhGraphicSolidRect::draw()
 //		*/
 
 	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+
 	glBegin(GL_QUADS); 	//Begining the cube's drawing
 	{
 		glVertex3i(_x,		_y,	_z);

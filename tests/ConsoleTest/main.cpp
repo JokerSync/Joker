@@ -1,7 +1,10 @@
 #include <QCoreApplication>
+#include <QTest>
 
 #include "PhTools/PhTimeCode.h"
 #include "PhTools/PhDebug.h"
+
+#include "PhTools/tests/PhTimeCodeTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,5 +25,7 @@ int main(int argc, char *argv[])
             PHDEBUG << "problem with " << i;
     }
 
-    return 0;
+	PhTimeCodeTest tcTest;
+
+	return QTest::qExec(&tcTest);
 }
