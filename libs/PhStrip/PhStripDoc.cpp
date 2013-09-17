@@ -122,25 +122,30 @@ bool PhStripDoc::openDetX(QString fileName)
 			int track = lineElem.attribute("track").toInt();
 
 			//lineElem.elementsByTagName("lipsync")
+
 			for(int j = 0; j < lineElem.childNodes().length(); j++)
 			{
+				int start = 0;
+				int end = 0;
 
 				if(lineElem.childNodes().at(j).nodeName() == "text")
+					start = PhTimeCode::frameFromString(lineElem.childNodes().at(j-1).toElement().attribute("timecode"), _tcType);
+
+				while(lineElem.childNodes().at(j+2).nodeName() == "text")
+					j=j+2;
+
+				if (!lineElem.childNodes().at(j+1).isNull())
 				{
-					int start = PhTimeCode::frameFromString(lineElem.childNodes().at(j-1).toElement().attribute("timecode"), _tcType);
-					int end = 0;
-					if (!lineElem.childNodes().at(j+1).isNull())
-					{
-						end = PhTimeCode::frameFromString(lineElem.childNodes().at(j+1).toElement().attribute("timecode"), _tcType);
-					}
-					// TODO : handles zero lenght text
-					else
-					{
-						// One char is ~1.20588 frame
-						end = start + lineElem.childNodes().at(j).toElement().text().length() * 1.20588 + 1;
-					}
-					_offs.push_back(new PhStripOff(start, _peoples[id], end, track));
+					end = PhTimeCode::frameFromString(lineElem.childNodes().at(j+1).toElement().attribute("timecode"), _tcType);
 				}
+				// TODO : handles zero lenght text
+				else
+				{
+					// One char is ~1.20588 frame
+					end = start + lineElem.childNodes().at(j).toElement().text().length() * 1.20588 + 1;
+				}
+
+				_offs.push_back(new PhStripOff(start, _peoples[id], end, track));
 			}
 		}
 	}

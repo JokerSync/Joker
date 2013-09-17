@@ -67,6 +67,7 @@ public:
 	 * @return A PhClock instance.
 	 */
 	PhClock * clock();
+
 protected:
 
 	bool init();
@@ -126,6 +127,7 @@ private :
 	QTime *_test;
 
 	int _trackNumber;
+
 };
 
 #endif // PhGraphicStripView_H
