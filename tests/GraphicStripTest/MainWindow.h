@@ -18,6 +18,8 @@ public:
 
 	void openFile(QString fileName);
 
+	PhGraphicStripView * getStripView(){return _stripView;};
+
 private slots:
 	void onOpenFile();
 	void onFrameOrRateChanged(PhFrame frame, PhTimeCodeType tcType);

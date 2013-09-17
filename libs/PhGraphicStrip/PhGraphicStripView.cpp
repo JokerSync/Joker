@@ -162,6 +162,10 @@ void PhGraphicStripView::updateView()
 PhTime lastTime = -1;
 void PhGraphicStripView::paint()
 {
+	int loopCounter = 0;
+	int offCounter = 0;
+	int cutCounter = 0;
+
 	_clock.tick(60);
 
 	long pixelPerFrame = 12;
@@ -169,6 +173,9 @@ void PhGraphicStripView::paint()
 	long offset = _clock.time() * pixelPerFrame * fps / _clock.timeScale();
 	long width = this->width();
 	long height = this->height();
+
+	PhFrame frameIn = _clock.frame();
+	PhFrame frameOut = _clock.frame() + (width / pixelPerFrame);
 
 	//Set the background color to red
 	glClearColor(1,0,0,1);
@@ -203,7 +210,9 @@ void PhGraphicStripView::paint()
 		gText->setY(track * trackHeight);
 		gText->setHeight(trackHeight);
 
-		gText->draw();
+		if( ! (((text->getTimeIn() < frameIn) && (text->getTimeOut() < frameIn)) || ((text->getTimeIn() > frameOut) && (text->getTimeOut() > frameOut))) )
+			gText->draw();
+
 
 		PhStripText * lastText = lastTextList[track];
 		// Display the people name only if one of the following condition is true:
@@ -226,33 +235,49 @@ void PhGraphicStripView::paint()
 
 	foreach(PhStripCut * cut, _doc.getCuts())
 	{
-		PhGraphicRect *gCut = _graphicCuts[cut];
-		gCut->setHeight(height);
-		gCut->setX(cut->getTimeIn() * pixelPerFrame - offset);
-		gCut->setWidth(2);
-		gCut->draw();
+		if( (cut->getTimeIn() > frameIn) && (cut->getTimeIn() < frameOut))
+		{
+			PhGraphicRect *gCut = _graphicCuts[cut];
+			gCut->setHeight(height);
+			gCut->setX(cut->getTimeIn() * pixelPerFrame - offset);
+			gCut->setWidth(2);
+
+			gCut->draw();
+			cutCounter++;
+		}
 	}
+
 
 	foreach(PhStripLoop * loop, _doc.getLoops())
 	{
-		PhGraphicLoop * gLoop = _graphicLoops[loop];
-		gLoop->setX(loop->getTimeIn() * pixelPerFrame - offset);
-		gLoop->setHThick(height/40);
-		gLoop->setHeight(height);
-		gLoop->setCrossHeight(height / 4);
-		gLoop->setWidth(height / 4);
+		if( ((loop->getTimeIn() + height / 8 /pixelPerFrame) > frameIn) && ((loop->getTimeIn() - height / 8 /pixelPerFrame ) < frameOut))
+		{
+			PhGraphicLoop * gLoop = _graphicLoops[loop];
+			gLoop->setX(loop->getTimeIn() * pixelPerFrame - offset);
+			gLoop->setHThick(height/40);
+			gLoop->setHeight(height);
+			gLoop->setCrossHeight(height / 4);
+			gLoop->setWidth(height / 4);
 
-		gLoop->draw();
+			gLoop->draw();
+			loopCounter++;
+		}
 	}
 
 	foreach(PhStripOff * off, _doc.getOffs())
 	{
-		PhGraphicRect *gOff = _graphicOffs[off];
-		gOff->setX(off->getTimeIn() * pixelPerFrame - offset);
-		gOff->setY(off->getTrack() * trackHeight + trackHeight);
-		gOff->setHeight( trackHeight / 10);
-		gOff->setWidth((off->getTimeOut() - off->getTimeIn()) * pixelPerFrame);
-
-		gOff->draw();
+		if( ! (((off->getTimeIn() < frameIn) && (off->getTimeOut() < frameIn)) || ((off->getTimeIn() > frameOut) && (off->getTimeOut() > frameOut))) )
+		{
+			PhGraphicRect *gOff = _graphicOffs[off];
+			gOff->setX(off->getTimeIn() * pixelPerFrame - offset);
+			gOff->setY(off->getTrack() * trackHeight + trackHeight);
+			gOff->setHeight( trackHeight / 10);
+			gOff->setWidth((off->getTimeOut() - off->getTimeIn()) * pixelPerFrame);
+			gOff->draw();
+			offCounter++;
+		}
 	}
+
+	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
+
 }
