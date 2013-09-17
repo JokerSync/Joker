@@ -13,11 +13,15 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->FastBackward->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
 	ui->FastForward->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
 
-	QObject::connect(ui->Text, SIGNAL(toggled(bool)),  ui->view, SLOT(displayText()));
-	QObject::connect(ui->Image, SIGNAL(toggled(bool)), ui->view, SLOT(displayImage()));
-	QObject::connect(ui->Rect, SIGNAL(toggled(bool)), ui->view, SLOT(displayRect()));
-	QObject::connect(ui->Loop, SIGNAL(toggled(bool)), ui->view, SLOT(displayLoop()));
+	QObject::connect(ui->Text, SIGNAL(toggled(bool)),  ui->view, SLOT(displayText(bool)));
+	QObject::connect(ui->Image, SIGNAL(toggled(bool)), ui->view, SLOT(displayImage(bool)));
+	QObject::connect(ui->Rect, SIGNAL(toggled(bool)), ui->view, SLOT(displayRect(bool)));
+	QObject::connect(ui->Loop, SIGNAL(toggled(bool)), ui->view, SLOT(displayLoop(bool)));
 
+	ui->Text->setChecked(true);
+	ui->Image->setChecked(true);
+	ui->Rect->setChecked(true);
+	ui->Loop->setChecked(true);
 
 	QObject::connect(ui->Play, SIGNAL(clicked()), ui->view, SLOT(play()));
 	QObject::connect(ui->FastBackward, SIGNAL(clicked()), ui->view, SLOT(fastBackward()));

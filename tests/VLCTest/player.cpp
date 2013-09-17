@@ -122,17 +122,22 @@ void Mwindow::initUI() {
     resize( 600, 400);
 }
 
-void Mwindow::openFile() {
+void Mwindow::openFile()
+{
+	/* The basic file-select box */
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load a file"), "~");
 
-    /* The basic file-select box */
-    QString fileOpen = QFileDialog::getOpenFileName(this, tr("Load a file"), "~");
+	openFile(fileName);
+}
 
+void Mwindow::openFile(QString fileName)
+{
     /* Stop if something is playing */
     if (vlcPlayer && libvlc_media_player_is_playing(vlcPlayer))
         stop();
 
     /* Create a new Media */
-    libvlc_media_t *vlcMedia = libvlc_media_new_path(vlcInstance, qtu(fileOpen));
+    libvlc_media_t *vlcMedia = libvlc_media_new_path(vlcInstance, qtu(fileName));
     if (!vlcMedia)
         return;
 

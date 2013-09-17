@@ -33,22 +33,11 @@ QDebug PhDebug::operator<<(QDebug dbg)
 
     // Display the date
     if (_dispDate)
-        s = QDate::currentDate().toString("dd.MM.yyyy");
-
-    // Display a separator if both date & time are displayed
-    if (_dispDate && _dispTime)
-        s += " - ";
+		s = QDate::currentDate().toString("dd/MM/yyyy");
 
     // Display timestamp
     if (_dispTime)
-        s += QTime::currentTime().toString("hh.mm.ss.zzz");
-
-    // If the Function name is displayed but
-    if (_dispFuncName && !_dispTime && !_dispDate)
-        s += "In";
-
-    if(_dispFuncName && (_dispTime || _dispDate))
-        s += " in";
+        s += QTime::currentTime().toString("hh:mm:ss.zzz");
 
     dbg << Q(s);
 

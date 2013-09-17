@@ -72,11 +72,6 @@ PhFrame PhTimeCode::frameFromBcd(unsigned int bcd, PhTimeCodeType type) {
 	return frameFromHhMmSsFf(hhmmssff, type);
 }
 
-unsigned int PhTimeCode::shortFromBcd(unsigned int bcd)
-{
-	return (bcd >> 4) * 10 + bcd & 0x0f;
-}
-
 bool PhTimeCode::isDrop(PhTimeCodeType type) {
     return type == PhTimeCodeType2997;
 }
