@@ -4,6 +4,7 @@
 #include <QFileDialog>
 
 #include "PhTools/PhDebug.h"
+#include "PhCommonUI/PhTimeCodeDlg.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -66,7 +67,6 @@ void MainWindow::on_actionPlay_pause_triggered()
 {
 	if(_clock->rate() == 0.0)
 		_clock->setRate(1.0);
-
 	else
 		_clock->setRate(0.0);
 }

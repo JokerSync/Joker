@@ -11,17 +11,17 @@ QT += core gui
 
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
-INCLUDEPATH += $${JOKER_ROOT}/libs
+INCLUDEPATH += ../../libs
 
-include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
-include($${JOKER_ROOT}/libs/PhStrip/PhStrip.pri)
-include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
-include($${JOKER_ROOT}/libs/PhGraphicStrip/PhGraphicStrip.pri)
+include(../../libs/PhTools/PhTools.pri)
+include(../../libs/PhCommonUI/PhCommonUI.pri)
+include(../../libs/PhStrip/PhStrip.pri)
+include(../../libs/PhGraphic/PhGraphic.pri)
+include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 
 #Main app
 SOURCES += main.cpp \
 	MainWindow.cpp \
-	TimeCodeDlg.cpp \
 
 HEADERS += \
     MainWindow.h \
