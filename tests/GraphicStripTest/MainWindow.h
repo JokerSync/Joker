@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <PhGraphicStrip/PhGraphicStripView.h>
+#include <QMessageBox>
+
+#include "TimeCodeDlg.h"
 
 namespace Ui {
 class MainWindow;
@@ -18,9 +21,12 @@ public:
 
 	void openFile(QString fileName);
 
+	PhGraphicStripView * getStripView(){return _stripView;};
+
 private slots:
 	void onOpenFile();
-	void onFrameOrRateChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onRateChanged(PhRate rate);
 
 	void on_actionPlay_pause_triggered();
 
@@ -33,6 +39,22 @@ private slots:
 	void on_actionStep_time_forward_triggered();
 
 	void on_actionStep_time_backward_triggered();
+
+	void on_action_3_triggered();
+
+	void on_action_1_triggered();
+
+	void on_action_0_5_triggered();
+
+	void on_action0_triggered();
+
+	void on_action0_5_triggered();
+
+	void on_action1_triggered();
+
+	void on_action3_triggered();
+
+	void on_actionGo_To_triggered();
 
 private:
 	Ui::MainWindow *ui;

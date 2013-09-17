@@ -74,8 +74,6 @@ void PhGraphicTexturedRect::draw(){
 //          |            |
 //        (0,1) ------ (1,1)
 
-//		PHDEBUG << " x:" << x << " y:" << y << " z:" << z << " w:" << w << " h:" << h << " tu:" << _tu << " tv:" << _tv;
-
 	glBegin(GL_QUADS); 	//Begining the cube's drawing
 	{
 		glTexCoord3f(0, 0, 1);		glVertex3f(_x,		_y,	_z);
