@@ -54,14 +54,11 @@ private slots:
 
 	void on_actionGo_To_triggered();
 
-	void goTo();
-
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
 	PhClock *_clock;
-	TimeCodeDlg *_dlg;
 };
 
 #endif // MAINWINDOW_H
