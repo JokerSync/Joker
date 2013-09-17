@@ -25,10 +25,18 @@ public:
 	void setTimeScale(PhTimeScale timeScale);
 	PhTimeScale timeScale() const { return _timeScale; }
 
+	/**
+	 * @brief Set the clock rate
+	 * @param rate A rate value.
+	 */
+	void setRate(PhRate rate);
 	PhRate rate() const { return _rate; }
 
+	void setMillisecond(PhTime ms);
+	PhTime milliSecond();
+
 	void setFrame(PhFrame frame);
-	int frame() const;
+	PhFrame frame() const;
 
 	void setTimeCode(QString tc);
 	QString timeCode();
@@ -43,12 +51,6 @@ signals:
 	void tcTypeChanged(PhTimeCodeType tcType);
 
 public slots:
-	/**
-	 * @brief Set the clock rate
-	 * @param rate A rate value.
-	 */
-	void setRate(PhRate rate);
-
 	/**
 	 * Sync the clock to a signal at a given frequence.
 	 * The clock time value is then updated accordingly to the clock rate.
