@@ -5,8 +5,6 @@
 #include <PhGraphicStrip/PhGraphicStripView.h>
 #include <QMessageBox>
 
-#include "TimeCodeDlg.h"
-
 namespace Ui {
 class MainWindow;
 }

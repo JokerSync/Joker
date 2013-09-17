@@ -4,6 +4,7 @@
 #include <QFileDialog>
 
 #include "PhTools/PhDebug.h"
+#include "PhCommonUI/PhTimeCodeDlg.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
