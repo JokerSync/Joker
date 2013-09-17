@@ -112,6 +112,8 @@ void PhGraphicStripView::updateView()
 		_graphicPeoples[people] = gPeople;
 	}
 
+	PHDEBUG << "people loaded" ;
+
 	//Load the texts
 	foreach(PhStripText * text, _doc.getTexts())
 	{
@@ -126,6 +128,8 @@ void PhGraphicStripView::updateView()
 
 		_graphicTexts[text] = gText;
 	}
+
+	PHDEBUG << "text loaded" ;
 
 	//Load the cuts
 	foreach(PhStripCut * cut, _doc.getCuts())
@@ -145,6 +149,8 @@ void PhGraphicStripView::updateView()
 		_graphicLoops[loop] = gLoop;
 	}
 
+	PHDEBUG << "loops loaded" ;
+
 	//Load the offs
 	foreach(PhStripOff * off, _doc.getOffs())
 	{
@@ -156,7 +162,7 @@ void PhGraphicStripView::updateView()
 		_graphicOffs[off] = gOff;
 	}
 
-	PHDEBUG << "updateView ok";
+	PHDEBUG << "offs loaded" ;
 }
 
 PhTime lastTime = -1;
@@ -278,6 +284,6 @@ void PhGraphicStripView::paint()
 		}
 	}
 
-	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
+//	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
 
 }
