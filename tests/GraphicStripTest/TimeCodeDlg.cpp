@@ -5,13 +5,15 @@ TimeCodeDlg::TimeCodeDlg(PhTimeCodeType tcType, PhFrame frame, QWidget *parent)
 {
 	QHBoxLayout *layout = new QHBoxLayout;
 
-	// Elle est simplement composé d'un bouton "Fermer"
 	QPushButton *backBtn = new QPushButton("Back", this);
 	QPushButton *goToBtn = new QPushButton("Go to", this);
 	textLineEdit = new QLineEdit(this);
 
+	// Initialize the timecode text
 	textLineEdit->setText(PhTimeCode::stringFromFrame(frame, _tcType));
+	// Select the whole texte
 	textLineEdit->selectAll();
+	// Put the focus on the text field
 	textLineEdit->setFocus();
 	goToBtn->setDefault(true);
 
@@ -19,8 +21,6 @@ TimeCodeDlg::TimeCodeDlg(PhTimeCodeType tcType, PhFrame frame, QWidget *parent)
 	layout->addWidget(backBtn);
 	layout->addWidget(goToBtn);
 
-
-	// lequel ferme la fenetre lorsqu'on clic dessus
 	connect(backBtn, SIGNAL(clicked()), this, SLOT(reject()));
 	connect(goToBtn, SIGNAL(clicked()), this, SLOT(accept()));
 
