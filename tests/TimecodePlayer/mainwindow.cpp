@@ -5,10 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
-	_clock = new PhClock;
-
-
-	_clock->setTCType(PhTimeCodeType25);
+	_clock = new PhClock(PhTimeCodeType25);
 	ui->mediaController->setMediaLength(7500);
 	ui->mediaController->setTCType(_clock->timeCodeType());
 	ui->mediaController->setFirstFrame(_clock->frame());

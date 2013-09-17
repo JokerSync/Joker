@@ -70,7 +70,7 @@ void PhMediaPanel::setTCType(PhTimeCodeType tcType)
 	}
 
 	if(_clock)
-		_clock->setTCType(tcType);
+		_clock->setTimeCodeType(tcType);
 }
 
 
@@ -121,6 +121,7 @@ void PhMediaPanel::setClock(PhClock *clock)
 	_clock = clock;
 	if(_clock)
 	{
+		setTCType(_clock->timeCodeType());
 		connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 		connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 	}
@@ -200,7 +201,7 @@ void PhMediaPanel::onSliderChanged(int position)
 void PhMediaPanel::onTCTypeComboChanged()
 {
 	if(_clock)
-		_clock->setTCType(timeCodeType());
+		_clock->setTimeCodeType(timeCodeType());
 	emit timeCodeTypeChanged(timeCodeType());
 }
 
