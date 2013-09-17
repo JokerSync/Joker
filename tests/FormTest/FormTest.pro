@@ -16,16 +16,14 @@ JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 INCLUDEPATH += $${JOKER_ROOT}/libs
 
 include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
+include($${JOKER_ROOT}/libs/PhCommonUI/PhCommonUI.pri)
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp \
-    TimeCodeInput.cpp
+        MainWindow.cpp
 
-HEADERS  += MainWindow.h \
-    TimeCodeInput.h
+HEADERS  += MainWindow.h
 
-FORMS    += MainWindow.ui \
-    TimeCodeInput.ui
+FORMS    += MainWindow.ui
 
 OTHER_FILES +=

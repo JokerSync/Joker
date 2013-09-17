@@ -4,7 +4,7 @@
 #include <QMainWindow>
 
 #include "PhTools/PhTimeCode.h"
-#include "TimeCodeInput.h"
+#include "PhCommonUI/TimeCodeEdit.h"
 
 namespace Ui {
 class MainWindow;

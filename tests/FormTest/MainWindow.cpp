@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _tcType = PhTimeCodeType25;
     ui->timeCodeLabel->setText(PhTimeCode::stringFromFrame(_frame, _tcType));
 
-    connect(ui->timeCodeInput, SIGNAL(frameChanged(PhFrame)), this, SLOT(updateText(PhFrame)));
+    //connect(ui->timeCodeInput, SIGNAL(frameChanged(PhFrame)), this, SLOT(updateText(PhFrame)));
 }
 
 MainWindow::~MainWindow()
