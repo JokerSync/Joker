@@ -1,6 +1,7 @@
-#include "PhQTVideoView.h"
-
 #include <QFile>
+
+#include "PhQTVideoView.h"
+#include "PhTools/PhDebug.h"
 
 PhQTVideoView::PhQTVideoView(QObject *parent)
 	: QVideoWidget(),
@@ -8,7 +9,6 @@ PhQTVideoView::PhQTVideoView(QObject *parent)
 {
 	qDebug() << "Using QTVideo widget for video playback.";
 	_player.setVideoOutput(this);
-	connect(&_player, SIGNAL(positionChanged(qint64)), this, SIGNAL(positionChangedSignal(qint64)));
 }
 
 bool PhQTVideoView::open(QString fileName)
@@ -33,7 +33,7 @@ void PhQTVideoView::setClock(PhClock *clock)
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 	connect(_clock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onTCTypeChanged(PhTimeCodeType)));
 
-	emit onTCTypeChanged(clock->getTCType());
+	emit onTCTypeChanged(clock->timeCodeType());
 }
 
 void PhQTVideoView::onRateChanged(PhRate rate)
@@ -50,14 +50,16 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 void PhQTVideoView::onFrameChanged(PhFrame frame,PhTimeCodeType tcType)
 {
 	if(_player.playbackRate() == 0)
-	{
-		qint64 p = frame*1000/PhTimeCode::getFps(tcType);
-		_player.setPosition(p);
-	}
+		_player.setPosition(_clock->milliSecond());
 }
 
 void PhQTVideoView::onTCTypeChanged(PhTimeCodeType tcType)
 {
 	_player.setNotifyInterval(1000/PhTimeCode::getFps(tcType));
+}
+
+void PhQTVideoView::checkVideoPosition()
+{
+	_clock->setMillisecond(_player.position());
 }
 

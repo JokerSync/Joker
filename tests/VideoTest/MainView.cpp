@@ -10,32 +10,16 @@ MainView::MainView()
 	: QMainWindow(0),
 	  ui(new Ui::MainView)
 {
-	_clock = new PhClock;
+	_clock = new PhClock(PhTimeCodeType25);
 	ui->setupUi(this);
 	ui->_videoView->setClock(_clock);
 
-	_clock->setTCType(PhTimeCodeType25);
-	ui->mediaController->setMediaLength(7500);
-	ui->mediaController->setTCType(_clock->getTCType());
-	ui->mediaController->setFirstFrame(_clock->frame());
-
-	connect(ui->mediaController, SIGNAL(playButtonSignal()), this, SLOT(pushPlayButton()));
-	connect(ui->mediaController, SIGNAL(forwardButtonSignal()), this, SLOT(pushForwardButton()));
-	connect(ui->mediaController, SIGNAL(rewindButtonSignal()), this, SLOT(pushRewindButton()));
-	connect(ui->mediaController, SIGNAL(backButtonSignal()), this, SLOT(pushBackButton()));
-	connect(ui->mediaController, SIGNAL(nextFrameButtonSignal()), this, SLOT(pushNextFrameButton()));
-	connect(ui->mediaController, SIGNAL(previousFrameButtonSignal()), this, SLOT(pushPreviousFrameButton()));
-	connect(ui->mediaController, SIGNAL(useSliderCursorSignal(int)), this, SLOT(useSliderCursor(int)));
-	connect(ui->mediaController, SIGNAL(useComboBoxSignal(int)), this, SLOT(selectTCType(int)));
-
-	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), ui->mediaController, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
-	connect(_clock, SIGNAL(rateChanged(PhRate)), ui->mediaController, SLOT(onRateChanged(PhRate)));
-
-	connect(ui->mediaController, SIGNAL(endOfMediaSignal()), this, SLOT(backToBeginning()));
-
+	ui->mediaController->setClock(_clock);
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
-	connect(ui->_videoView, SIGNAL(positionChangedSignal(qint64)), this, SLOT(updateFrame(qint64)));
+	connect(&timer, SIGNAL(timeout()), ui->_videoView, SLOT(checkVideoPosition()));
+
+	timer.start(10);
 }
 
 
@@ -50,6 +34,11 @@ bool MainView::openFile(QString fileName)
     if (fileInfo.exists())
     {
 		ui->_videoView->open(fileName);
+#warning TODO read media length from video file
+		ui->mediaController->setMediaLength(7500);
+#warning TODO read first frame from video file
+		ui->mediaController->setFirstFrame(0);
+
 		_clock->setRate(0.0);
 		return true;
     }
@@ -64,84 +53,3 @@ void MainView::onOpenFile()
 }
 
 
-void MainView::updateFrame(qint64 position)
-{
-	PhFrame f = position*PhTimeCode::getFps(_clock->getTCType())/1000;
-	_clock->setFrame(f);
-}
-
-
-void MainView::pushPlayButton()
-{
-	if(_clock->rate() == 0)//If state = pause
-		_clock->setRate(1.0);
-	else //If state = play
-		_clock->setRate(0.0);
-}
-
-
-void MainView::pushForwardButton()
-{
-	_clock->setRate(3.0);
-}
-
-
-void MainView::pushRewindButton()
-{
-	_clock->setRate(-3.0);
-}
-
-
-void MainView::pushBackButton()
-{
-	_clock->setRate(0);
-	_clock->setFrame(0);
-}
-
-
-void MainView::pushNextFrameButton()
-{
-	PhFrame f = _clock->frame() + 1;
-	_clock->setFrame(f);
-}
-
-
-void MainView::pushPreviousFrameButton()
-{
-	PhFrame f = _clock->frame() - 1;
-	_clock->setFrame(f);
-}
-
-
-void MainView::useSliderCursor(int position)
-{
-	_clock->setFrame(position);
-}
-
-
-void MainView::selectTCType(int index)
-{
-	PhTimeCodeType tc;
-	switch(index)
-	{
-	case 0:
-		tc = PhTimeCodeType2398;
-		break;
-	case 1:
-		tc = PhTimeCodeType24;
-		break;
-	case 2:
-		tc = PhTimeCodeType25;
-		break;
-	case 3:
-		tc = PhTimeCodeType2997;
-		break;
-	}
-	_clock->setTCType(tc);
-}
-
-void MainView::backToBeginning()
-{
-	_clock->setRate(0.0);
-	_clock->setFrame(ui->mediaController->getMediaLength());
-}

@@ -28,14 +28,11 @@ public:
 	void setClock(PhClock *clock);
 signals:
 
-	void positionChangedSignal(qint64);
-
 public slots:
-
 	void onRateChanged(PhRate rate);
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onTCTypeChanged(PhTimeCodeType tcType);
-
+	void checkVideoPosition();
 private:
 	QMediaPlayer _player;
 };

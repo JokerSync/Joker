@@ -21,6 +21,7 @@ protected slots:
 
 	virtual void onRateChanged(PhRate rate) = 0;
 	virtual void onFrameChanged(PhFrame frame,PhTimeCodeType tcType) = 0;
+	virtual void checkVideoPosition() = 0;
 
 protected:
 	PhClock *_clock;
