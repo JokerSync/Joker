@@ -16,10 +16,14 @@ void PhGraphicLoop::draw()
 {
 	//draw rect
 
+	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+
 	int x = _x - _hThick/2;
 	int y = _y;
 	int w = _hThick;
 	int h = _h;
+
+	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
 
 	glBegin(GL_QUADS); 	// draw the vertical line
 	{
