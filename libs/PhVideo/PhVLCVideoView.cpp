@@ -1,12 +1,12 @@
 #include "PhVLCVideoView.h"
 
 #include <QFile>
-#include <QDebug>
+#include "PhTools/PhDebug.h"
 
 PhVLCVideoView::PhVLCVideoView(QWidget *parent) :
 	QWidget(parent)
 {
-	qDebug() << "Using VLC for video playback.";
+	PHDEBUG << "Using VLC for video playback.";
 
 	vlcPlayer = NULL;
 
@@ -15,7 +15,7 @@ PhVLCVideoView::PhVLCVideoView(QWidget *parent) :
 
     /* Complain in case of broken installation */
     if (vlcInstance == NULL) {
-        qDebug() << "Qt libVLC player: Could not init libVLC";
+        PHDEBUG << "Qt libVLC player: Could not init libVLC";
         exit(1);
 	}
 }
@@ -48,7 +48,7 @@ bool PhVLCVideoView::open(QString fileName)
 	    libvlc_media_t *vlcMedia = libvlc_media_new_path(vlcInstance, fileName.toUtf8().constData());
 	    if (!vlcMedia)
 		{
-			qDebug() << "Unable to open : "<< fileName;
+			PHDEBUG << "Unable to open : "<< fileName;
 	        return false;
 		}
 
@@ -74,7 +74,7 @@ bool PhVLCVideoView::open(QString fileName)
 	}
 	else
 	{
-		qDebug() << "File does not exist: "<< fileName;
+		PHDEBUG << "File does not exist: "<< fileName;
 		return false;
 	}
 }
@@ -88,11 +88,23 @@ void PhVLCVideoView::setClock(PhClock *clock)
 
 void PhVLCVideoView::onRateChanged(PhRate rate)
 {
-	libvlc_media_player_play(vlcPlayer);
-	libvlc_media_player_set_rate(vlcPlayer, rate);
+	if(rate != 0)
+	{
+		libvlc_media_player_play(vlcPlayer);
+		libvlc_media_player_set_rate(vlcPlayer, rate);
+	}
+	else
+		libvlc_media_player_pause(vlcPlayer);
 }
 
-void PhVLCVideoView::onFrameChanged()
+void PhVLCVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	qDebug() << "PhVLCVideoView::onFrameChanged() : TODO";
+	libvlc_media_player_set_time(vlcPlayer, _clock->milliSecond());
+}
+
+void PhVLCVideoView::checkVideoPosition()
+{
+	PhTime ms = libvlc_media_player_get_time(vlcPlayer);
+	PHDEBUG << ms;
+	_clock->setMillisecond(ms);
 }
