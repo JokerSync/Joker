@@ -8,14 +8,18 @@
 
 MainView::MainView()
 	: QMainWindow(0),
-	  ui(new Ui::MainView),
-	_clock(this)
+	  ui(new Ui::MainView)
 {
+	_clock = new PhClock(PhTimeCodeType25);
 	ui->setupUi(this);
-	ui->_videoView->setClock(&_clock);
+	ui->_videoView->setClock(_clock);
+
+	ui->mediaController->setClock(_clock);
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
+	connect(&timer, SIGNAL(timeout()), ui->_videoView, SLOT(checkVideoPosition()));
 
+	timer.start(10);
 }
 
 
@@ -30,14 +34,22 @@ bool MainView::openFile(QString fileName)
     if (fileInfo.exists())
     {
 		ui->_videoView->open(fileName);
-		_clock.setRate(1.0);
+#warning TODO read media length from video file
+		ui->mediaController->setMediaLength(7500);
+#warning TODO read first frame from video file
+		ui->mediaController->setFirstFrame(0);
+
+		_clock->setRate(0.0);
 		return true;
     }
 	return false;
 }
+
 
 void MainView::onOpenFile()
 {
 	 QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
 	 openFile(fileName); // TODO: show error in case of error
 }
+
+

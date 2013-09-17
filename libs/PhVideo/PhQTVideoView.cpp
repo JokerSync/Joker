@@ -1,6 +1,7 @@
-#include "PhQTVideoView.h"
-
 #include <QFile>
+
+#include "PhQTVideoView.h"
+#include "PhTools/PhDebug.h"
 
 PhQTVideoView::PhQTVideoView(QObject *parent)
 	: QVideoWidget(),
@@ -28,8 +29,11 @@ bool PhQTVideoView::open(QString fileName)
 void PhQTVideoView::setClock(PhClock *clock)
 {
 	PhVideoObject::setClock(clock);
-	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
+	connect(_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
+	connect(_clock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onTCTypeChanged(PhTimeCodeType)));
+
+	emit onTCTypeChanged(clock->timeCodeType());
 }
 
 void PhQTVideoView::onRateChanged(PhRate rate)
@@ -37,14 +41,25 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 	if(rate == 0)
 		_player.pause();
 	else
-	{
 		_player.play();
-		_player.setPlaybackRate(rate);
-	}
+
+	_player.setPlaybackRate(rate);
 
 }
 
-void PhQTVideoView::onFrameChanged()
+void PhQTVideoView::onFrameChanged(PhFrame frame,PhTimeCodeType tcType)
 {
-	qDebug() << "PhQTVideoView::onFrameChanged() TODO";
+	if(_player.playbackRate() == 0)
+		_player.setPosition(_clock->milliSecond());
 }
+
+void PhQTVideoView::onTCTypeChanged(PhTimeCodeType tcType)
+{
+	_player.setNotifyInterval(1000/PhTimeCode::getFps(tcType));
+}
+
+void PhQTVideoView::checkVideoPosition()
+{
+	_clock->setMillisecond(_player.position());
+}
+
