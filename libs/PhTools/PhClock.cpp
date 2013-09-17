@@ -52,6 +52,16 @@ int PhClock::frame() const
 	return _time * fps / _timeScale;
 }
 
+void PhClock::setTimeCode(QString tc)
+{
+	setFrame(PhTimeCode::frameFromString(tc, _tcType));
+}
+
+QString PhClock::timeCode()
+{
+	return PhTimeCode::stringFromFrame(frame(), _tcType);
+}
+
 void PhClock::setFrame(PhFrame frame)
 {
 	int fps = PhTimeCode::getFps(_tcType);
