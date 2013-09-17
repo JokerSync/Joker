@@ -14,9 +14,9 @@ class PhClock : public QObject
 {
 	Q_OBJECT
 public:
-	explicit PhClock(QObject *parent = 0);
+	explicit PhClock(PhTimeCodeType tcType, QObject *parent = 0);
 
-	void setTCType(PhTimeCodeType tcType);
+	void setTimeCodeType(PhTimeCodeType tcType);
 	PhTimeCodeType timeCodeType() { return _tcType;}
 
 	void setTime(PhTime time);

@@ -1,13 +1,13 @@
 #include "PhClock.h"
 
-PhClock::PhClock(QObject *parent) :
-	QObject(parent), _tcType(PhTimeCodeType25), _time(0), _timeScale(600), _rate(0.0)
+PhClock::PhClock(PhTimeCodeType tcType, QObject *parent) :
+	QObject(parent), _tcType(tcType), _time(0), _timeScale(600), _rate(0.0)
 {
 }
 
 /****************************Properties****************************/
 
-void PhClock::setTCType(PhTimeCodeType tcType)
+void PhClock::setTimeCodeType(PhTimeCodeType tcType)
 {
 	PhFrame lastFrame = frame();
 	if(_tcType != tcType)
