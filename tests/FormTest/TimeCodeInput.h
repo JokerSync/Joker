@@ -20,6 +20,7 @@ public:
     ~TimeCodeInput();
 
     void setTCType(PhTimeCodeType tcType);
+    void setMediaLength(PhFrame length);
 
 public slots:
 
@@ -34,7 +35,9 @@ private:
 
     Ui::TimeCodeInput *ui;
     PhFrame _frame;
+    PhFrame _medialength;
     PhTimeCodeType _tcType;
+
 
 
 };
