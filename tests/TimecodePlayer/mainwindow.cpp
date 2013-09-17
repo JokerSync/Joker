@@ -13,9 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	_timer = new QTimer();
 	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-	_timer->start(1000/PhTimeCode::getFps(_clock->timeCodeType()));
+	_timer->start(10);
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -24,5 +23,5 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateFrame()
 {
-	_clock->tick(PhTimeCode::getFps(_clock->timeCodeType()));
+	_clock->tick(100);
 }
