@@ -43,7 +43,7 @@
      </widget>
     </item>
     <item>
-     <widget class="TimeCodeInput" name="timeCodeInput" native="true"/>
+     <widget class="QLineEdit" name="lineEdit"/>
     </item>
    </layout>
   </widget>
@@ -68,14 +68,6 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>TimeCodeInput</class>
-   <extends>QWidget</extends>
-   <header>TimeCodeInput.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
