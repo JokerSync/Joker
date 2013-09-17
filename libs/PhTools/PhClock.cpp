@@ -5,7 +5,7 @@ PhClock::PhClock(PhTimeCodeType tcType, QObject *parent) :
 {
 }
 
-/****************************Properties****************************/
+///****************************Properties****************************/
 
 void PhClock::setTimeCodeType(PhTimeCodeType tcType)
 {
@@ -37,7 +37,6 @@ void PhClock::setTimeScale(PhTimeScale timeScale)
 	_timeScale = timeScale;
 }
 
-
 void PhClock::setRate(PhRate rate)
 {
 	if (_rate != rate) {
@@ -46,7 +45,23 @@ void PhClock::setRate(PhRate rate)
 	}
 }
 
-int PhClock::frame() const
+void PhClock::setMillisecond(PhTime ms)
+{
+	this->setTime(ms * _timeScale / 1000);
+}
+
+PhTime PhClock::milliSecond()
+{
+	return _time * 1000 / _timeScale;
+}
+
+void PhClock::setFrame(PhFrame frame)
+{
+	int fps = PhTimeCode::getFps(_tcType);
+	this->setTime(frame * _timeScale / fps);
+}
+
+PhFrame PhClock::frame() const
 {
 	int fps = PhTimeCode::getFps(_tcType);
 	return _time * fps / _timeScale;
@@ -62,13 +77,7 @@ QString PhClock::timeCode()
 	return PhTimeCode::stringFromFrame(frame(), _tcType);
 }
 
-void PhClock::setFrame(PhFrame frame)
-{
-	int fps = PhTimeCode::getFps(_tcType);
-	this->setTime(frame * _timeScale / fps);
-}
-
-/****************************Slots****************************/
+///****************************Slots****************************/
 
 void PhClock::tick(PhTimeScale frequence)
 {
