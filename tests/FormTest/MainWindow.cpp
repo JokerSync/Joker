@@ -6,7 +6,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    _frame = 0;
+    _frame = 5882;
     _tcType = PhTimeCodeType25;
     ui->timeCodeLabel->setText(PhTimeCode::stringFromFrame(_frame, _tcType));
 
