@@ -17,7 +17,7 @@ public:
 	explicit PhClock(QObject *parent = 0);
 
 	void setTCType(PhTimeCodeType tcType);
-	PhTimeCodeType getTCType() { return _tcType;}
+	PhTimeCodeType timeCodeType() { return _tcType;}
 
 	void setTime(PhTime time);
 	PhTime time() const	{ return _time; }
@@ -30,6 +30,8 @@ public:
 	void setFrame(PhFrame frame);
 	int frame() const;
 
+	void setTimeCode(QString tc);
+	QString timeCode();
 
 signals:
 	void timeChanged(PhTime time);
@@ -41,7 +43,10 @@ signals:
 	void tcTypeChanged(PhTimeCodeType tcType);
 
 public slots:
-
+	/**
+	 * @brief Set the clock rate
+	 * @param rate A rate value.
+	 */
 	void setRate(PhRate rate);
 
 	/**
