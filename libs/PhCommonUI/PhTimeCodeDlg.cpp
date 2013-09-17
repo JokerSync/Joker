@@ -1,4 +1,4 @@
-#include "TimeCodeDlg.h"
+#include "PhTimeCodeDlg.h"
 
 TimeCodeDlg::TimeCodeDlg(PhTimeCodeType tcType, PhFrame frame, QWidget *parent)
 	:QDialog(parent), _tcType(tcType)
