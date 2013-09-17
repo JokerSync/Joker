@@ -3,11 +3,12 @@
 
 #include <QFileDialog>
 
+#include "PhTools/PhDebug.h"
+
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow)
 {
-	_dlg = new TimeCodeDlg(this);
 	ui->setupUi(this);
 	_stripView = ui->stripView;
 	_doc = _stripView->doc();
@@ -17,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
-
-	connect(_dlg->getGoToBtn(), SIGNAL(clicked()), this, SLOT(goTo()));
 }
 
 MainWindow::~MainWindow()
@@ -138,18 +137,8 @@ void MainWindow::on_action3_triggered()
 
 void MainWindow::on_actionGo_To_triggered()
 {
-	// On s'assure que notre boite de dialogue n'est pas déjà affichée de façon non modale
-	if(_dlg->isVisible())
-	{
-		QMessageBox::critical(this, "Erreur", "La boite de dialogue est déjà ouverte. Veuillez la fermer pour l'ouvrir à nouveau.");
-	}
-	else
-	{
-		_dlg->exec();
-	}
-}
+	TimeCodeDlg dlg(_clock->getTCType(), _clock->frame());
+	if(dlg.exec() == QDialog::Accepted)
+		_clock->setFrame(dlg.frame());
 
-void MainWindow::goTo()
-{
-	_clock->setFrame(PhTimeCode::frameFromString(_dlg->getTextLineEdit(), _clock->getTCType()));
 }

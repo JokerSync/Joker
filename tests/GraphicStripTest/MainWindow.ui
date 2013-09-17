@@ -15,16 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
@@ -36,10 +27,7 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="PhGraphicStripView" name="stripView" native="true">
-        <zorder>textEdit</zorder>
-        <zorder>horizontalLayoutWidget</zorder>
-       </widget>
+       <widget class="PhGraphicStripView" name="stripView" native="true"/>
       </item>
      </layout>
     </item>
@@ -182,7 +170,10 @@
   </action>
   <action name="actionGo_To">
    <property name="text">
-    <string>Go To</string>
+    <string>Go to...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
  </widget>
