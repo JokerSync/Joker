@@ -19,12 +19,10 @@ public:
     ~Dialog();
 
 signals:
-
     void frameChanged(PhFrame frame);
 
 private:
     Ui::Dialog *ui;
-    //TimecodeEdit _timecodeEdit;
 
 };
 

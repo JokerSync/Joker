@@ -7,12 +7,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    _goto = new QDialog(this);
+    _goto = new Dialog(this);
     _frame = 5882;
     _tcType = PhTimeCodeType25;
     ui->timeCodeLabel->setText(PhTimeCode::stringFromFrame(_frame, _tcType));
 
     connect(_goto, SIGNAL(frameChanged(PhFrame)), this, SLOT(updateText(PhFrame)));
+
 }
 
 MainWindow::~MainWindow()
