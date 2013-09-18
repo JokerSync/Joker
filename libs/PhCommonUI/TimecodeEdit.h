@@ -15,7 +15,7 @@ class TimecodeEdit : public QLineEdit
     Q_OBJECT
 
 public:
-    explicit TimecodeEdit(QLineEdit *parent = 0);
+    explicit TimecodeEdit(QWidget *parent = 0);
     ~TimecodeEdit();
 
     void setTCType(PhTimeCodeType tcType);

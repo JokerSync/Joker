@@ -26,6 +26,7 @@ SOURCES += main.cpp\
 HEADERS  += MainWindow.h \
     Dialog.h
 
-FORMS    += MainWindow.ui
+FORMS    += MainWindow.ui \
+    Dialog.ui
 
 OTHER_FILES +=
