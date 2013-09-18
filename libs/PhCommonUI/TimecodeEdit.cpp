@@ -26,5 +26,5 @@ void TimecodeEdit::isTimeCode()
     _frame = PhTimeCode::frameFromString(this->text(), _tcType);
     //PhTimeCode::ComputeHhMmSsFf(hhmmssff, _frame, _tcType);
 
-    emit frameChanged(_frame);
+    emit frameChanged(_frame, _tcType);
 }
