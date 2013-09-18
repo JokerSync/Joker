@@ -6,7 +6,7 @@ Dialog::Dialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    connect(ui->_timecodeEdit, SIGNAL(frameChanged(PhFrame)), this, SIGNAL(frameChanged(PhFrame)));
+    connect(ui->_timecodeEdit, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)));
 }
 
 Dialog::~Dialog()

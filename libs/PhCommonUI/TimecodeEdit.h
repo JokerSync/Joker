@@ -27,7 +27,7 @@ public slots:
 
 signals:
 
-    void frameChanged(PhFrame frame);
+    void frameChanged(PhFrame frame, PhTimeCodeType tcType);
 
 private:
 

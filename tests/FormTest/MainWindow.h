@@ -11,7 +11,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class QDialog;
+class Dialog;
 
 class MainWindow : public QMainWindow
 {
@@ -23,17 +23,19 @@ public:
 
 public slots:
 
-    void updateText(PhFrame frame);
+    void updateText(PhFrame frame, PhTimeCodeType tcType);
 
 private slots:
     void on_actionGoto_triggered();
 
+    void on_actionAbout_triggered();
+
 private:
     Ui::MainWindow *ui;
-    QDialog *_goto;
     PhFrame _frame;
     PhTimeCodeType _tcType;
-
+    Dialog *_goto;
+    Dialog *_about;
 };
 
 #endif // MAINWINDOW_H
