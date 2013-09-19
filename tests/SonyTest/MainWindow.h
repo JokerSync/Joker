@@ -35,7 +35,13 @@ private slots:
 
 	void on_actionSlave_GoTo_triggered();
 
+	void on_actionSlave_Use_video_sync_triggered();
+
+	void on_actionSlave_Use_internal_timer_triggered();
+
 private:
+	void switchVideoInternalSync(bool useVideo);
+
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;
 	PhSonySlaveController _sonySlave;

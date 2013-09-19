@@ -49,12 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	on_masterActiveCheck_clicked(true);
 	on_slaveActiveCheck_clicked(true);
 
-	// start timers
-	connect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
-	connect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
-
-//	_masterTimer.start(1000);
-	_videosyncCheckTimer.start(5);
+	switchVideoInternalSync(true);
 	_sonySlave.clock()->setFrame(25 * 25);
 
 //	_sonySlave.getClock()->setRate(1);
@@ -175,4 +170,40 @@ void MainWindow::on_actionSlave_GoTo_triggered()
 	PhTimeCodeDlg dlg(_sonySlave.clock()->timeCodeType(), _sonySlave.clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_sonySlave.clock()->setFrame(dlg.frame());
+}
+
+void MainWindow::on_actionSlave_Use_video_sync_triggered()
+{
+	if(ui->actionSlave_Use_internal_timer->isChecked())
+		switchVideoInternalSync(true);
+}
+
+void MainWindow::on_actionSlave_Use_internal_timer_triggered()
+{
+	if(ui->actionSlave_Use_video_sync->isChecked())
+		switchVideoInternalSync(false);
+}
+
+void MainWindow::switchVideoInternalSync(bool useVideo)
+{
+	ui->actionSlave_Use_video_sync->setChecked(useVideo);
+	ui->actionSlave_Use_internal_timer->setChecked(!useVideo);
+
+	_videosyncCheckTimer.stop();
+	if(useVideo)
+	{
+		// timer trigger the checkVideoSync on the serial port
+		disconnect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(onVideoSync()));
+		connect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
+
+		_videosyncCheckTimer.start(10);
+	}
+	else
+	{
+		// timer trigger the onVideoSync slot directly
+		disconnect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
+		connect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(onVideoSync()));
+
+		_videosyncCheckTimer.start(40);
+	}
 }
