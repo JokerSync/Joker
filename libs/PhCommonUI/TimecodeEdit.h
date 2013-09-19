@@ -20,14 +20,12 @@ public:
 
     void setTCType(PhTimeCodeType tcType);
 
-public slots:
-
-    void changeTimeStamp();
-
-
 signals:
 
     void frameChanged(PhFrame frame, PhTimeCodeType tcType);
+
+private slots:
+    void onTextChanged(QString text);
 
 private:
 
