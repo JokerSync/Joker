@@ -40,6 +40,12 @@ public:
 		Shuttle,
 	};
 
+public slots:
+	/**
+	 * @brief This slot update the clock accordingly.
+	 */
+	void onVideoSync();
+
 protected:
 	/**
 	 * @brief Process a single command from the sony master and respond to it.
@@ -52,7 +58,6 @@ protected:
 	 */
 	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn);
 
-	void onVideoSync();
 private:
 	/**
 	 * @brief Send a command acknolegment.

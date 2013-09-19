@@ -19,11 +19,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->slavePanel->setMediaLength(10000);
 
 	// Connect master panel to sony master
-	connect(ui->masterPanel, SIGNAL(playButtonSignal()), this, SLOT(masterPlayPause()));
-	connect(ui->masterPanel, SIGNAL(nextFrameButtonSignal()), this, SLOT(masterNextFrame()));
-	connect(ui->masterPanel, SIGNAL(previousFrameButtonSignal()), this, SLOT(masterPreviousFrame()));
-	connect(ui->masterPanel, SIGNAL(forwardButtonSignal()), &_sonyMaster, SLOT(fastForward()));
-	connect(ui->masterPanel, SIGNAL(rewindButtonSignal()), &_sonyMaster, SLOT(rewind()));
+	connect(ui->masterPanel, SIGNAL(playPause()), this, SLOT(masterPlayPause()));
+	connect(ui->masterPanel, SIGNAL(nextFrame()), this, SLOT(masterNextFrame()));
+	connect(ui->masterPanel, SIGNAL(previousFrame()), this, SLOT(masterPreviousFrame()));
+	connect(ui->masterPanel, SIGNAL(fastForward()), &_sonyMaster, SLOT(fastForward()));
+	connect(ui->masterPanel, SIGNAL(rewind()), &_sonyMaster, SLOT(rewind()));
 
 	connect(_sonyMaster.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->masterPanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_sonyMaster.clock(), SIGNAL(rateChanged(PhRate)), ui->masterPanel, SLOT(onRateChanged(PhRate)));
@@ -41,6 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(_sonySlave.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->slavePanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_sonySlave.clock(), SIGNAL(rateChanged(PhRate)), ui->slavePanel, SLOT(onRateChanged(PhRate)));
 
+	// Connect video sync signal
+	connect(&_sonyMaster, SIGNAL(videoSync()), &_sonyMaster, SLOT(onVideoSync()));
+	connect(&_sonySlave, SIGNAL(videoSync()), &_sonySlave, SLOT(onVideoSync()));
 	// start master and slave
 	on_masterActiveCheck_clicked(true);
 	on_slaveActiveCheck_clicked(true);

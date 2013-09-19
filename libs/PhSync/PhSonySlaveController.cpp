@@ -292,7 +292,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 
 void PhSonySlaveController::onVideoSync()
 {
-	_clock.tick(1000/PhTimeCode::getFps(_clock.timeCodeType()));
+	_clock.tick(PhTimeCode::getFps(_clock.timeCodeType()));
 }
 
 void PhSonySlaveController::sendAck()

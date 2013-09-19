@@ -67,6 +67,12 @@ public:
 	 */
 	PhClock *clock() { return &_clock; }
 
+signals:
+	/**
+	 * @brief This signal is triggered when a video sync event occurs on the serial port.
+	 */
+	void videoSync();
+
 public slots:
 	/**
 	 * @brief This slot trigger a check of the video sync check.
@@ -75,6 +81,13 @@ public slots:
 	 * regulary, no video sync event occurs.
 	 */
 	void checkVideoSync();
+
+	/**
+	 * @brief This slot handles the video sync signal.
+	 *
+	 * Its implementation differs between the master and the slave.
+	 */
+	virtual void onVideoSync() = 0;
 
 protected:
 	/**
@@ -153,13 +166,6 @@ protected:
 	 * It allows distinct implementation for slave and master.
 	 */
 	virtual void checkSumError();
-
-	/**
-	 * @brief This method is called whenever a video sync signal is triggered.
-	 *
-	 * It allows distinct implementation for slave and master.
-	 */
-	virtual void onVideoSync();
 
 	/**
 	 * @brief Convert a sony command and data to a readable string.
