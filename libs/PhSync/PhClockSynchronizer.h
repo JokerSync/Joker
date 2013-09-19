@@ -15,8 +15,10 @@ public:
 	void setSecondaryClock(PhClock *clock);
 
 private slots:
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
-	void onRateChanged(PhRate rate);
+	void onFrameChanged1(PhFrame frame, PhTimeCodeType tcType);
+	void onRateChanged1(PhRate rate);
+	void onFrameChanged2(PhFrame frame, PhTimeCodeType tcType);
+	void onRateChanged2(PhRate rate);
 private:
 	PhClock * _clock1;
 	PhClock * _clock2;
