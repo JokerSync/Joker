@@ -57,7 +57,7 @@ public slots:
 	 * @param frame frame number
 	 * @param tcType type of the timecode
 	 */
-	void cue(PhFrame frame, PhTimeCodeType tcType);
+	void cue(PhFrame frame);
 
 	/**
 	 * @brief Send a fast forward command to the connected device.

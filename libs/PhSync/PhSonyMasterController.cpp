@@ -32,8 +32,9 @@ void PhSonyMasterController::stop()
 	sendCommand(0x20, 0x00);
 }
 
-void PhSonyMasterController::cue(PhFrame frame, PhTimeCodeType tcType)
+void PhSonyMasterController::cue(PhFrame frame)
 {
+	PhTimeCodeType tcType = _clock.timeCodeType();
 	PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(frame, tcType);
 	unsigned int bcd = PhTimeCode::bcdFromFrame(frame, tcType);
 	sendCommandWithData(0x24, 0x31, (const unsigned char *)&bcd);

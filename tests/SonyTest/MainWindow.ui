@@ -104,7 +104,37 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuMaster">
+    <property name="title">
+     <string>Master</string>
+    </property>
+    <addaction name="actionMaster_GoTo"/>
+   </widget>
+   <widget class="QMenu" name="menuSlave">
+    <property name="title">
+     <string>Slave</string>
+    </property>
+    <addaction name="actionSlave_GoTo"/>
+   </widget>
+   <addaction name="menuMaster"/>
+   <addaction name="menuSlave"/>
   </widget>
+  <action name="actionMaster_GoTo">
+   <property name="text">
+    <string>Go to...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionSlave_GoTo">
+   <property name="text">
+    <string>Go to...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+K</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

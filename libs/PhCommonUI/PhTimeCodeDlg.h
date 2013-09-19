@@ -15,16 +15,16 @@
  * was input and validated.
  * Otherwise the user pressed cancel.
  */
-class TimeCodeDlg : public QDialog
+class PhTimeCodeDlg : public QDialog
 {
 public:
 	/**
-	 * @brief TimeCodeDlg constructor
+	 * @brief PhTimeCodeDlg constructor
 	 * @param tcType Timecode type to use for string to frame conversion.
 	 * @param frame The dialog initial frame.
 	 * @param parent The object owner.
 	 */
-	TimeCodeDlg(PhTimeCodeType tcType, PhFrame frame = 0, QWidget *parent=0);
+	PhTimeCodeDlg(PhTimeCodeType tcType, PhFrame frame = 0, QWidget *parent=0);
 
 	/**
 	 * @brief Current frame value entered in the text field

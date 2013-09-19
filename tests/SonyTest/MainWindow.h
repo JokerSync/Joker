@@ -31,6 +31,10 @@ private slots:
 	void on_slaveActiveCheck_clicked(bool checked);
 
 
+	void on_actionMaster_GoTo_triggered();
+
+	void on_actionSlave_GoTo_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;
