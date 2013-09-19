@@ -26,9 +26,12 @@ public:
 	 */
 	PhSonyMasterController(PhTimeCodeType tcType, QObject *parent);
 
+public slots:
+	/**
+	 * @brief This slot performs a status, time and speed sense.
+	 */
 	void onVideoSync();
 
-public slots:
 	/** @brief Request the slave device id. */
 	void deviceTypeRequest();
 
