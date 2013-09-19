@@ -31,6 +31,8 @@ private slots:
 
     void on_actionAbout_triggered();
 
+    void on_actionDocumentation_triggered();
+
 private:
     Ui::MainWindow *ui;
     PhFrame _frame;

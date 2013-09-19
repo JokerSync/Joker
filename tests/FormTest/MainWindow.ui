@@ -61,9 +61,10 @@
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
-     <string>About</string>
+     <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionDocumentation"/>
    </widget>
    <addaction name="menuVideo"/>
    <addaction name="menuAbout"/>
@@ -85,6 +86,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionDocumentation">
+   <property name="text">
+    <string>Documentation</string>
    </property>
   </action>
  </widget>
