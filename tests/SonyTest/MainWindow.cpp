@@ -4,6 +4,7 @@
 #include "ui_MainWindow.h"
 
 #include "PhTools/PhDebug.h"
+#include "PhCommonUI/PhTimeCodeDlg.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -76,12 +77,12 @@ void MainWindow::masterPlayPause()
 
 void MainWindow::masterNextFrame()
 {
-	_sonyMaster.cue(_sonyMaster.clock()->frame() + 1, _sonyMaster.clock()->timeCodeType());
+	_sonyMaster.cue(_sonyMaster.clock()->frame() + 1);
 }
 
 void MainWindow::masterPreviousFrame()
 {
-	_sonyMaster.cue(_sonyMaster.clock()->frame() - 1, _sonyMaster.clock()->timeCodeType());
+	_sonyMaster.cue(_sonyMaster.clock()->frame() - 1);
 }
 
 void MainWindow::onDeviceIdData(unsigned char id1, unsigned char id2)
@@ -161,3 +162,17 @@ void MainWindow::on_slaveActiveCheck_clicked(bool checked)
 	ui->slavePanel->setEnabled(checked);
 }
 
+
+void MainWindow::on_actionMaster_GoTo_triggered()
+{
+	PhTimeCodeDlg dlg(_sonyMaster.clock()->timeCodeType(), _sonyMaster.clock()->frame());
+	if(dlg.exec() == QDialog::Accepted)
+		_sonyMaster.cue(dlg.frame());
+}
+
+void MainWindow::on_actionSlave_GoTo_triggered()
+{
+	PhTimeCodeDlg dlg(_sonySlave.clock()->timeCodeType(), _sonySlave.clock()->frame());
+	if(dlg.exec() == QDialog::Accepted)
+		_sonySlave.clock()->setFrame(dlg.frame());
+}
