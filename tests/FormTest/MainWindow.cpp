@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "Dialog.h"
+#include "AboutMenu.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     _frame = 5882;
     _tcType = PhTimeCodeType25;
     _goto = new Dialog(this);
-    _about = new Dialog(this);
+    _about = new AboutMenu(this);
     ui->timeCodeLabel->setText(PhTimeCode::stringFromFrame(_frame, _tcType));
 
     connect(_goto, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(updateText(PhFrame, PhTimeCodeType)));

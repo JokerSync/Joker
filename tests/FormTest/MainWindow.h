@@ -12,6 +12,7 @@ class MainWindow;
 }
 
 class Dialog;
+class AboutMenu;
 
 class MainWindow : public QMainWindow
 {
@@ -35,7 +36,7 @@ private:
     PhFrame _frame;
     PhTimeCodeType _tcType;
     Dialog *_goto;
-    Dialog *_about;
+    AboutMenu *_about;
 };
 
 #endif // MAINWINDOW_H
