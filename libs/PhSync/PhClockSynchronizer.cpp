@@ -8,23 +8,35 @@ PhClockSynchronizer::PhClockSynchronizer()
 void PhClockSynchronizer::setPrimaryClock(PhClock *clock)
 {
 	_clock1 = clock;
+	connect(_clock1, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged1(PhFrame,PhTimeCodeType)));
+	connect(_clock1, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged1(PhRate)));
 }
 
 void PhClockSynchronizer::setSecondaryClock(PhClock *clock)
 {
 	_clock2 = clock;
-	connect(_clock2, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
-	connect(_clock2, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
+	connect(_clock2, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged2(PhFrame,PhTimeCodeType)));
+	connect(_clock2, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged2(PhRate)));
 }
 
-void PhClockSynchronizer::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void PhClockSynchronizer::onFrameChanged1(PhFrame frame, PhTimeCodeType tcType)
+{
+	_clock2->setFrame(frame);
+}
+
+void PhClockSynchronizer::onRateChanged1(PhRate rate)
+{
+	_clock2->setRate(rate);
+}
+
+void PhClockSynchronizer::onFrameChanged2(PhFrame frame, PhTimeCodeType tcType)
 {
 	if(_clock1->frame() != frame)
 		PHDEBUG << "error :" << _clock1->frame() << frame;
 #warning TODO handle frame difference error
 }
 
-void PhClockSynchronizer::onRateChanged(PhRate rate)
+void PhClockSynchronizer::onRateChanged2(PhRate rate)
 {
 	_clock1->setRate(rate);
 }
