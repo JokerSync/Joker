@@ -9,7 +9,7 @@
 #include "PhGraphicStripView.h"
 
 PhGraphicStripView::PhGraphicStripView(QWidget *parent)
-	: PhGraphicView( parent ), _doc(this), _currentFont(NULL), _trackNumber(4)
+	: PhGraphicView( parent ), _doc(this), _currentFont(NULL), _trackNumber(4), _clock(_doc.getTCType())
 {
 	// update the view content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(updateView()));
@@ -175,7 +175,7 @@ void PhGraphicStripView::paint()
 	_clock.tick(60);
 
 	long pixelPerFrame = 12;
-	int fps = PhTimeCode::getFps(_clock.getTCType());
+	int fps = PhTimeCode::getFps(_clock.timeCodeType());
 	long offset = _clock.time() * pixelPerFrame * fps / _clock.timeScale();
 	long width = this->width();
 	long height = this->height();

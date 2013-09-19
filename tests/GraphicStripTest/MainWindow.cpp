@@ -34,7 +34,7 @@ void MainWindow::openFile(QString fileName)
 	{
 		if(_doc->openDetX(fileName))
 		{
-			_clock->setTCType(_doc->getTCType());
+			_clock->setTimeCodeType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
 			this->setWindowTitle(fileName);
 		}
@@ -59,7 +59,7 @@ void MainWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 
 void MainWindow::onRateChanged(PhRate rate)
 {
-	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(_clock->frame(), _clock->getTCType()), QString::number(rate));
+	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(_clock->frame(), _clock->timeCodeType()), QString::number(rate));
 	ui->statusbar->showMessage(message);
 }
 
@@ -137,7 +137,7 @@ void MainWindow::on_action3_triggered()
 
 void MainWindow::on_actionGo_To_triggered()
 {
-	TimeCodeDlg dlg(_clock->getTCType(), _clock->frame());
+	TimeCodeDlg dlg(_clock->timeCodeType(), _clock->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_clock->setFrame(dlg.frame());
 
