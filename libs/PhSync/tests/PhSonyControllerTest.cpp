@@ -4,7 +4,7 @@
 #include "PhTools/PhDebug.h"
 
 PhSonyControllerTest::PhSonyControllerTest(QObject *parent)
-	: PhSonyController("A", parent)
+	: PhSonyController(PhTimeCodeType25, "A", parent)
 {
 }
 

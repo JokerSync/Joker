@@ -24,7 +24,7 @@ public:
 	 * @brief PhSonyMasterController constructor
 	 * @param parent The object owner.
 	 */
-	PhSonyMasterController(QObject *parent);
+	PhSonyMasterController(PhTimeCodeType tcType, QObject *parent);
 
 	void onVideoSync();
 
