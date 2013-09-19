@@ -13,8 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     _frame = 5882;
     _tcType = PhTimeCodeType25;
-    _goto = new GoTo(this);
-    _about = new AboutMenu(this);
+	_goto = new GoTo(this);
+	_about = new AboutMenu(this);
     ui->timeCodeLabel->setText(PhTimeCode::stringFromFrame(_frame, _tcType));
 
     connect(_goto, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(updateText(PhFrame, PhTimeCodeType)));
@@ -43,7 +43,6 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionDocumentation_triggered()
 {
-    if(QDesktopServices::openUrl(QUrl("http://www.doublage.org",QUrl::TolerantMode)))
-    qDebug()<<"openned url correctly";
-
+	if(QDesktopServices::openUrl(QUrl("http://www.doublage.org",QUrl::TolerantMode)))
+		qDebug()<<"openned url correctly";
 }
