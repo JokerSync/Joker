@@ -1,14 +1,17 @@
 HEADERS += \
 #    ../../libs/PhCommonUI/PhLeap.h \
-#	../../libs/PhCommonUI/PhMediaPanel.h \
-    ../../libs/PhCommonUI/TimecodeEdit.h
+	../../libs/PhCommonUI/PhTimeCodeDlg.h \
+	../../libs/PhCommonUI/PhMediaPanel.h \
+	../../libs/PhCommonUI/TimecodeEdit.h
 
 SOURCES += \
 #   ../../libs/PhCommonUI/PhLeap.cpp \
-#	../../libs/PhCommonUI/PhMediaPanel.cpp \
-    ../../libs/PhCommonUI/TimecodeEdit.cpp
+	../../libs/PhCommonUI/PhTimeCodeDlg.cpp \
+	../../libs/PhCommonUI/PhMediaPanel.cpp \
+	../../libs/PhCommonUI/TimecodeEdit.cpp
 
-FORMS +=
+
+FORMS += ../../libs/PhCommonUI/PhMediaPanel.ui
 
 #INCLUDEPATH += $$(LEAP_SDK)/include
 
