@@ -8,8 +8,8 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	_sonyMaster(this),
-	_sonySlave(this)
+	_sonyMaster(PhTimeCodeType25, this),
+	_sonySlave(PhTimeCodeType25, this)
 {
 	ui->setupUi(this);
 
@@ -73,12 +73,12 @@ void MainWindow::masterPlayPause()
 
 void MainWindow::masterNextFrame()
 {
-	_sonyMaster.cue(_sonyMaster.clock()->frame() + 1, _sonyMaster.clock()->getTCType());
+	_sonyMaster.cue(_sonyMaster.clock()->frame() + 1, _sonyMaster.clock()->timeCodeType());
 }
 
 void MainWindow::masterPreviousFrame()
 {
-	_sonyMaster.cue(_sonyMaster.clock()->frame() - 1, _sonyMaster.clock()->getTCType());
+	_sonyMaster.cue(_sonyMaster.clock()->frame() - 1, _sonyMaster.clock()->timeCodeType());
 }
 
 void MainWindow::onDeviceIdData(unsigned char id1, unsigned char id2)

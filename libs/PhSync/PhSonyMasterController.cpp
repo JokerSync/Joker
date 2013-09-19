@@ -2,8 +2,8 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyMasterController::PhSonyMasterController(QObject *parent)
-	: PhSonyController("B", parent )
+PhSonyMasterController::PhSonyMasterController(PhTimeCodeType tcType, QObject *parent)
+	: PhSonyController(tcType, "B", parent )
 {
 }
 
@@ -149,7 +149,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		{
 		case 0x04:
 		{
-			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.getTCType());
+			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.timeCodeType());
 //			PHDEBUG << _comSuffix << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _clock.getTCType());
 			_clock.setFrame(frame);
 			break;

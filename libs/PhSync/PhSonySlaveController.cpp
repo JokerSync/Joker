@@ -2,7 +2,8 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonySlaveController::PhSonySlaveController(QObject *parent) : PhSonyController("A", parent),
+PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, QObject *parent)
+	: PhSonyController(tcType, "A", parent),
 	_autoMode(false), _state(Pause)
 {
 }
@@ -26,7 +27,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 #warning TODO : Device ID as a parameter
 			unsigned char deviceID1 = 0xf0;
 			unsigned char deviceID2 = 0xc0;
-			switch (_clock.getTCType())
+			switch (_clock.timeCodeType())
 			{
 			case PhTimeCodeType2398:
 			case PhTimeCodeType24:
@@ -133,9 +134,9 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		}
 		case 0x31:
 		{
-			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.getTCType());
+			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.timeCodeType());
 			_clock.setFrame(frame);
-			PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType()) << "=> ACK";
+			PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.timeCodeType()) << "=> ACK";
 			sendAck();
 			break;
 		}
@@ -173,7 +174,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x0c:
 		{
 			cmd1 = 0x74;
-//			PHDEBUG << _comSuffix << "Current Time Sense => " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType());
+//			PHDEBUG << _comSuffix << "Current Time Sense => " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.timeCodeType());
 			switch (dataIn[0])
 			{
 			case 0x01:
@@ -198,7 +199,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				cmd2 = 0x04;
 				break;
 			}
-			unsigned int bcd = PhTimeCode::bcdFromFrame(_clock.frame(), _clock.getTCType());
+			unsigned int bcd = PhTimeCode::bcdFromFrame(_clock.frame(), _clock.timeCodeType());
 			sendCommandWithData(0x74, cmd2, (unsigned char *)&bcd);
 			break;
 		}
@@ -291,7 +292,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 
 void PhSonySlaveController::onVideoSync()
 {
-	_clock.tick(1000/PhTimeCode::getFps(_clock.getTCType()));
+	_clock.tick(1000/PhTimeCode::getFps(_clock.timeCodeType()));
 }
 
 void PhSonySlaveController::sendAck()

@@ -5,8 +5,8 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyController::PhSonyController(QString comSuffix, QObject *parent) : QObject(parent),
-	_comSuffix(comSuffix), _dataRead(0), _lastCTS(false)
+PhSonyController::PhSonyController(PhTimeCodeType tcType, QString comSuffix, QObject *parent) : QObject(parent),
+	_clock(tcType), _comSuffix(comSuffix), _dataRead(0), _lastCTS(false)
 {
 	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
             SLOT(handleError(QSerialPort::SerialPortError)));
