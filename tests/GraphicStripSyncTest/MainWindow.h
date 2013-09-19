@@ -2,8 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <PhGraphicStrip/PhGraphicStripView.h>
-#include <QMessageBox>
+
+#include "PhGraphicStrip/PhGraphicStripView.h"
+#include "PhSync/PhClockSynchronizer.h"
+#include "PhSync/PhSonySlaveController.h"
 
 namespace Ui {
 class MainWindow;
@@ -59,6 +61,8 @@ private:
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
 	PhClock *_clock;
+	PhSonySlaveController _sonySlave;
+	PhClockSynchronizer _clockSynchroniser;
 };
 
 #endif // MAINWINDOW_H
