@@ -1,5 +1,5 @@
-#ifndef DIALOG_H
-#define DIALOG_H
+#ifndef GOTO_H
+#define GOTO_H
 
 #include <QDialog>
 
@@ -7,23 +7,23 @@
 #include "PhTools/PhTimeCode.h"
 
 namespace Ui {
-class Dialog;
+class GoTo;
 }
 
-class Dialog : public QDialog
+class GoTo : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Dialog(QWidget *parent = 0);
-    ~Dialog();
+    explicit GoTo(QWidget *parent = 0);
+    ~GoTo();
 
 signals:
     void frameChanged(PhFrame frame, PhTimeCodeType tcType);
 
 private:
-    Ui::Dialog *ui;
+    Ui::GoTo *ui;
 
 };
 
-#endif // DIALOG_H
+#endif // GOTO_H

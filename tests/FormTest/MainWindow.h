@@ -11,7 +11,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class Dialog;
+class GoTo;
 class AboutMenu;
 
 class MainWindow : public QMainWindow
@@ -35,7 +35,7 @@ private:
     Ui::MainWindow *ui;
     PhFrame _frame;
     PhTimeCodeType _tcType;
-    Dialog *_goto;
+    GoTo *_goto;
     AboutMenu *_about;
 };
 

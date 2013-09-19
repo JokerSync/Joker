@@ -1,6 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include "Dialog.h"
+#include "GoTo.h"
 #include "AboutMenu.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     _frame = 5882;
     _tcType = PhTimeCodeType25;
-    _goto = new Dialog(this);
+    _goto = new GoTo(this);
     _about = new AboutMenu(this);
     ui->timeCodeLabel->setText(PhTimeCode::stringFromFrame(_frame, _tcType));
 
