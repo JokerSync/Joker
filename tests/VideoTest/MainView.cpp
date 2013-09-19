@@ -22,7 +22,6 @@ MainView::MainView()
 	timer.start(10);
 }
 
-
 MainView::~MainView()
 {
 	delete ui;
