@@ -22,7 +22,7 @@ public:
 
 public slots:
 
-    void isTimeCode();
+    void changeTimeStamp();
 
 
 signals:
