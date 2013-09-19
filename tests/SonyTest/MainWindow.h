@@ -39,13 +39,18 @@ private slots:
 
 	void on_actionSlave_Use_internal_timer_triggered();
 
+	void on_actionMaster_Use_video_sync_triggered();
+
+	void on_actionMaster_Use_internal_timer_triggered();
+
 private:
-	void switchVideoInternalSync(bool useVideo);
+	void switchSlaveVideoInternalSync(bool useVideo);
+	void switchMasterVideoInternalSync(bool useVideo);
 
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;
 	PhSonySlaveController _sonySlave;
-	QTimer _videosyncCheckTimer;
+	QTimer _masterTimer, _slaveTimer;
 };
 
 #endif // MAINWINDOW_H

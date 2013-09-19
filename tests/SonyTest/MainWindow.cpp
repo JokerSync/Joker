@@ -49,7 +49,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	on_masterActiveCheck_clicked(true);
 	on_slaveActiveCheck_clicked(true);
 
-	switchVideoInternalSync(true);
+	switchSlaveVideoInternalSync(true);
+	switchMasterVideoInternalSync(true);
+
 	_sonySlave.clock()->setFrame(25 * 25);
 
 //	_sonySlave.getClock()->setRate(1);
@@ -175,35 +177,73 @@ void MainWindow::on_actionSlave_GoTo_triggered()
 void MainWindow::on_actionSlave_Use_video_sync_triggered()
 {
 	if(ui->actionSlave_Use_internal_timer->isChecked())
-		switchVideoInternalSync(true);
+		switchSlaveVideoInternalSync(true);
 }
 
 void MainWindow::on_actionSlave_Use_internal_timer_triggered()
 {
 	if(ui->actionSlave_Use_video_sync->isChecked())
-		switchVideoInternalSync(false);
+		switchSlaveVideoInternalSync(false);
 }
 
-void MainWindow::switchVideoInternalSync(bool useVideo)
+void MainWindow::switchSlaveVideoInternalSync(bool useVideo)
 {
 	ui->actionSlave_Use_video_sync->setChecked(useVideo);
 	ui->actionSlave_Use_internal_timer->setChecked(!useVideo);
 
-	_videosyncCheckTimer.stop();
+	_slaveTimer.stop();
 	if(useVideo)
 	{
 		// timer trigger the checkVideoSync on the serial port
-		disconnect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(onVideoSync()));
-		connect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
+		disconnect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(onVideoSync()));
+		connect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
 
-		_videosyncCheckTimer.start(10);
+		_slaveTimer.start(10);
 	}
 	else
 	{
 		// timer trigger the onVideoSync slot directly
-		disconnect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
-		connect(&_videosyncCheckTimer, SIGNAL(timeout()), &_sonySlave, SLOT(onVideoSync()));
+		disconnect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
+		connect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(onVideoSync()));
 
-		_videosyncCheckTimer.start(40);
+		_slaveTimer.start(40);
 	}
 }
+
+void MainWindow::on_actionMaster_Use_video_sync_triggered()
+{
+	if(ui->actionMaster_Use_internal_timer->isChecked())
+		switchMasterVideoInternalSync(true);
+
+}
+
+void MainWindow::on_actionMaster_Use_internal_timer_triggered()
+{
+	if(ui->actionMaster_Use_video_sync->isChecked())
+		switchMasterVideoInternalSync(false);
+}
+
+void MainWindow::switchMasterVideoInternalSync(bool useVideo)
+{
+	ui->actionMaster_Use_video_sync->setChecked(useVideo);
+	ui->actionMaster_Use_internal_timer->setChecked(!useVideo);
+
+	_masterTimer.stop();
+	if(useVideo)
+	{
+		// timer trigger the checkVideoSync on the serial port
+		disconnect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(onVideoSync()));
+		connect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
+
+		_masterTimer.start(10);
+	}
+	else
+	{
+		// timer trigger the onVideoSync slot directly
+		disconnect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
+		connect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(onVideoSync()));
+
+		_masterTimer.start(40);
+	}
+}
+

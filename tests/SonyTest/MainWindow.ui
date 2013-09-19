@@ -109,6 +109,9 @@
      <string>Master</string>
     </property>
     <addaction name="actionMaster_GoTo"/>
+    <addaction name="separator"/>
+    <addaction name="actionMaster_Use_video_sync"/>
+    <addaction name="actionMaster_Use_internal_timer"/>
    </widget>
    <widget class="QMenu" name="menuSlave">
     <property name="title">
@@ -154,6 +157,28 @@
     <bool>true</bool>
    </property>
    <property name="text">
+    <string>Use internal timer</string>
+   </property>
+  </action>
+  <action name="actionMaster_Use_video_sync">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use video sync</string>
+   </property>
+  </action>
+  <action name="actionMaster_Use_internal_timer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use internal timer</string>
+   </property>
+   <property name="toolTip">
     <string>Use internal timer</string>
    </property>
   </action>
