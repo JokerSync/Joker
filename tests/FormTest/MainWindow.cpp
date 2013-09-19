@@ -1,3 +1,6 @@
+#include <QDesktopServices>
+#include <QUrl>
+
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "GoTo.h"
@@ -36,4 +39,11 @@ void MainWindow::on_actionGoto_triggered()
 void MainWindow::on_actionAbout_triggered()
 {
     _about->show();
+}
+
+void MainWindow::on_actionDocumentation_triggered()
+{
+    if(QDesktopServices::openUrl(QUrl("http://www.doublage.org",QUrl::TolerantMode)))
+    qDebug()<<"openned url correctly";
+
 }
