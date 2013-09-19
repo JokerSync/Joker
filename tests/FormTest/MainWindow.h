@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QDialog>
+#include <QSettings>
 
 #include "PhTools/PhTimeCode.h"
 #include "PhCommonUI/TimeCodeEdit.h"
