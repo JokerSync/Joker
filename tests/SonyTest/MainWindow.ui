@@ -115,6 +115,9 @@
      <string>Slave</string>
     </property>
     <addaction name="actionSlave_GoTo"/>
+    <addaction name="separator"/>
+    <addaction name="actionSlave_Use_video_sync"/>
+    <addaction name="actionSlave_Use_internal_timer"/>
    </widget>
    <addaction name="menuMaster"/>
    <addaction name="menuSlave"/>
@@ -133,6 +136,25 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+K</string>
+   </property>
+  </action>
+  <action name="actionSlave_Use_video_sync">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use video sync</string>
+   </property>
+  </action>
+  <action name="actionSlave_Use_internal_timer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use internal timer</string>
    </property>
   </action>
  </widget>
