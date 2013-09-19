@@ -1,15 +1,15 @@
-#include "Dialog.h"
-#include "ui_Dialog.h"
+#include "GoTo.h"
+#include "ui_GoTo.h"
 
-Dialog::Dialog(QWidget *parent) :
+GoTo::GoTo(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Dialog)
+    ui(new Ui::GoTo)
 {
     ui->setupUi(this);
     connect(ui->_timecodeEdit, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)));
 }
 
-Dialog::~Dialog()
+GoTo::~GoTo()
 {
     delete ui;
 }
