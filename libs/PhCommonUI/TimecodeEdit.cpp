@@ -6,7 +6,7 @@ TimecodeEdit::TimecodeEdit(QWidget *parent) :
     _tcType(PhTimeCodeType25)
 {
 
-    connect(this, SIGNAL(editingFinished()), this, SLOT(isTimeCode()));
+    connect(this, SIGNAL(editingFinished()), this, SLOT(changeTimeStamp()));
 
 }
 
@@ -21,7 +21,7 @@ void TimecodeEdit::setTCType(PhTimeCodeType tcType)
 }
 
 
-void TimecodeEdit::isTimeCode()
+void TimecodeEdit::changeTimeStamp()
 {
     _frame = PhTimeCode::frameFromString(this->text(), _tcType);
     //PhTimeCode::ComputeHhMmSsFf(hhmmssff, _frame, _tcType);
