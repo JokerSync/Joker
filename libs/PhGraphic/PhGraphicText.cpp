@@ -48,6 +48,5 @@ void PhGraphicText::draw()
 	PhGraphicTexturedRect::draw();
 
 	glDisable(GL_BLEND);
-
 }
 

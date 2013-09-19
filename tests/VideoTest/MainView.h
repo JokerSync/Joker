@@ -3,9 +3,11 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QTimer>
 
 #include "PhTools/PhClock.h"
 #include "PhVideo/PhVideoView.h"
+#include "PhCommonUI/PhMediaPanel.h"
 
 using namespace std;
 
@@ -35,17 +37,14 @@ public:
      */
     bool openFile(QString fileName);
 
-public slots:
-
-
 private slots:
 
 	void onOpenFile();
-
 private:
 
 	Ui::MainView *ui;
-	PhClock _clock;
+	PhClock *_clock;
+	QTimer timer;
 };
 
 #endif

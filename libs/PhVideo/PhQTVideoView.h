@@ -26,14 +26,13 @@ public:
 	bool open(QString fileName);
 
 	void setClock(PhClock *clock);
-
 signals:
 
 public slots:
-
 	void onRateChanged(PhRate rate);
-	void onFrameChanged();
-
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onTCTypeChanged(PhTimeCodeType tcType);
+	void checkVideoPosition();
 private:
 	QMediaPlayer _player;
 };
