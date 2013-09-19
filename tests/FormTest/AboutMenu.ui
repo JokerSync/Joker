@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>269</width>
+    <height>107</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,15 +17,39 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>About</string>
+      <string>FormTest v1.0.0</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>
+   <item>
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Close</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>AboutMenu</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>134</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>134</x>
+     <y>53</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

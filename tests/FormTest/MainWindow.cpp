@@ -38,7 +38,7 @@ void MainWindow::on_actionGoto_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-    _about->show();
+	_about->exec();
 }
 
 void MainWindow::on_actionDocumentation_triggered()
