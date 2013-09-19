@@ -137,7 +137,7 @@ void MainWindow::on_action3_triggered()
 
 void MainWindow::on_actionGo_To_triggered()
 {
-	TimeCodeDlg dlg(_clock->timeCodeType(), _clock->frame());
+	PhTimeCodeDlg dlg(_clock->timeCodeType(), _clock->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_clock->setFrame(dlg.frame());
 
