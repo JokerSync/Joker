@@ -31,5 +31,3 @@ HEADERS  += MainWindow.h \
 FORMS    += MainWindow.ui \
     Dialog.ui \
     AboutMenu.ui
-
-OTHER_FILES +=

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>421</width>
-    <height>154</height>
+    <width>402</width>
+    <height>139</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,7 +49,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>421</width>
+     <width>402</width>
      <height>22</height>
     </rect>
    </property>
@@ -59,13 +59,14 @@
     </property>
     <addaction name="actionGoto"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
+   <widget class="QMenu" name="menuAbout">
     <property name="title">
-     <string>Help</string>
+     <string>About</string>
     </property>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuVideo"/>
-   <addaction name="menuHelp"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
