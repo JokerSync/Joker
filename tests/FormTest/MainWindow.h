@@ -34,7 +34,16 @@ private slots:
 
     void on_actionDocumentation_triggered();
 
+	void on__saveButton_clicked();
+
+	void on__loadButton_clicked();
+
+
 private:
+
+	void saveSettings();
+	void loadSettings();
+
     Ui::MainWindow *ui;
     PhFrame _frame;
     PhTimeCodeType _tcType;
