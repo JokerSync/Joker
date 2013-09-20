@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->timeCodeLabel->setText(PhTimeCode::stringFromFrame(_frame, _tcType));
 
     connect(_goto, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(updateText(PhFrame, PhTimeCodeType)));
+	loadSettings();
 
 }
 
@@ -45,4 +46,30 @@ void MainWindow::on_actionDocumentation_triggered()
 {
 	if(QDesktopServices::openUrl(QUrl("http://www.doublage.org",QUrl::TolerantMode)))
 		qDebug()<<"openned url correctly";
+}
+
+void MainWindow::on__saveButton_clicked()
+{
+	saveSettings();
+}
+
+void MainWindow::on__loadButton_clicked()
+{
+	loadSettings();
+}
+
+void MainWindow::saveSettings()
+{
+	QSettings setting("Organisation","FormTest");
+	setting.setValue("LineEditContent",ui->lineEdit->text());
+
+	qDebug() << "Settings saved";
+}
+
+void MainWindow::loadSettings()
+{
+	QSettings setting("Organisation","FormTest");
+	ui->lineEdit->setText(setting.value("LineEditContent").toString());
+
+	qDebug() << "Settings loaded";
 }
