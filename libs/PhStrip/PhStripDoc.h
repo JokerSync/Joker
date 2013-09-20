@@ -113,6 +113,22 @@ public:
 
     int getNbTexts();
 
+	PhFrame getPreviousTextFrame(PhFrame frame);
+
+	PhFrame getPreviousLoopFrame(PhFrame frame);
+
+	PhFrame getPreviousCutFrame(PhFrame frame);
+
+	PhFrame getPreviousElementFrame(PhFrame frame);
+
+	PhFrame getNextTextFrame(PhFrame frame);
+
+	PhFrame getNextLoopFrame(PhFrame frame);
+
+	PhFrame getNextCutFrame(PhFrame frame);
+
+	PhFrame getNextElementFrame(PhFrame frame);
+
 signals:
 	void changed();
 
