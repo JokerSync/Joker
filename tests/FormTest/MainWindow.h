@@ -6,7 +6,7 @@
 #include <QSettings>
 
 #include "PhTools/PhTimeCode.h"
-#include "PhCommonUI/TimeCodeEdit.h"
+#include "PhCommonUI/PhTimeCodeDialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -47,7 +47,7 @@ private:
     Ui::MainWindow *ui;
     PhFrame _frame;
     PhTimeCodeType _tcType;
-    GoTo *_goto;
+	PhTimeCodeDialog *_goto;
     AboutMenu *_about;
 };
 

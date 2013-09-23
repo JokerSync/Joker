@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     _frame = 5882;
     _tcType = PhTimeCodeType25;
-	_goto = new GoTo(this);
+	_goto = new PhTimeCodeDialog(this);
 	_about = new AboutMenu(this);
     ui->timeCodeLabel->setText(PhTimeCode::stringFromFrame(_frame, _tcType));
 
