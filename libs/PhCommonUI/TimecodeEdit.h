@@ -19,6 +19,7 @@ public:
     ~TimecodeEdit();
 
     void setTCType(PhTimeCodeType tcType);
+	bool isTimeCode(QString timecode);
 
 signals:
 
