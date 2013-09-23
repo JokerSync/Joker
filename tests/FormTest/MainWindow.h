@@ -7,6 +7,7 @@
 
 #include "PhTools/PhTimeCode.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
+#include "AboutMenu.h"
 
 namespace Ui {
 class MainWindow;

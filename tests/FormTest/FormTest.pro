@@ -27,5 +27,4 @@ HEADERS  += MainWindow.h \
     AboutMenu.h
 
 FORMS    += MainWindow.ui \
-    AboutMenu.ui \
-	GoTo.ui
+    AboutMenu.ui
