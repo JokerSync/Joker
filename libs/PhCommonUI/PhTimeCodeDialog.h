@@ -18,6 +18,8 @@ public:
 	explicit PhTimeCodeDialog(QWidget *parent = 0);
 	~PhTimeCodeDialog();
 
+	void setFrame(QString frame);
+
 signals:
 	void frameChanged(PhFrame frame, PhTimeCodeType tcType);
 

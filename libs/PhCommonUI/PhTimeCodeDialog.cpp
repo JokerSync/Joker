@@ -13,3 +13,8 @@ PhTimeCodeDialog::~PhTimeCodeDialog()
 {
 	delete ui;
 }
+
+void PhTimeCodeDialog::setFrame(QString frame)
+{
+	ui->_timecodeEdit->setText(frame);
+}
