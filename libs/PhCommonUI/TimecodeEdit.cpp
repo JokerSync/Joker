@@ -17,9 +17,13 @@ TimecodeEdit::~TimecodeEdit()
 
 void TimecodeEdit::setTCType(PhTimeCodeType tcType)
 {
-    _tcType = tcType;
+	_tcType = tcType;
 }
 
+bool TimecodeEdit::isTimeCode(QString timecode)
+{
+
+}
 
 void TimecodeEdit::onTextChanged(QString text)
 {
