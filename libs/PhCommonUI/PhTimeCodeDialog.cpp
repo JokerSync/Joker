@@ -1,5 +1,7 @@
 #include "PhTimeCodeDialog.h"
 #include "ui_PhTimeCodeDialog.h"
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 PhTimeCodeDialog::PhTimeCodeDialog(QWidget *parent) :
 	QDialog(parent),
@@ -16,5 +18,15 @@ PhTimeCodeDialog::~PhTimeCodeDialog()
 
 void PhTimeCodeDialog::setFrame(QString frame)
 {
-	ui->_timecodeEdit->setText(frame);
+	if(ui->_timecodeEdit->isTimeCode(frame))
+	{
+		ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+		ui->_timecodeEdit->setText(frame);
+	}
+	else
+	{
+		ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+	}
+	qDebug() << "setframe";
+
 }
