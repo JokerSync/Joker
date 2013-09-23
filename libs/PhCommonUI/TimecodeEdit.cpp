@@ -27,8 +27,6 @@ bool TimecodeEdit::isTimeCode(QString timecode)
 	frame = PhTimeCode::frameFromString(timecode,_tcType);
 	text = PhTimeCode::stringFromFrame(frame, _tcType);
 
-	qDebug() << text <<"/"<< timecode;
-
 	if(text == timecode)
 		return true;
 	else
