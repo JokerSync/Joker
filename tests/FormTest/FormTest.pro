@@ -21,12 +21,10 @@ include($${JOKER_ROOT}/libs/PhCommonUI/PhCommonUI.pri)
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    AboutMenu.cpp \
-    GoTo.cpp
+    AboutMenu.cpp
 
 HEADERS  += MainWindow.h \
-    AboutMenu.h \
-    GoTo.h
+    AboutMenu.h
 
 FORMS    += MainWindow.ui \
     AboutMenu.ui \
