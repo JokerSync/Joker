@@ -29,8 +29,6 @@ private slots:
 
 private:
 
-	void isTimeCode(QString text);
-
     PhFrame _frame;
     PhTimeCodeType _tcType;
 
