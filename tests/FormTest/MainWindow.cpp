@@ -60,16 +60,16 @@ void MainWindow::on__loadButton_clicked()
 
 void MainWindow::saveSettings()
 {
-	QSettings setting("Organisation","FormTest");
-	setting.setValue("LineEditContent",ui->_lineEdit->text());
+	QSettings setting("Phonations","FormTest");
+	setting.setValue("qqwweerrttyy",ui->_lineEdit->text());
 
 	qDebug() << "Settings saved";
 }
 
 void MainWindow::loadSettings()
 {
-	QSettings setting("Organisation","FormTest");
-	ui->_lineEdit->setText(setting.value("LineEditContent").toString());
+	QSettings setting("Phonations","FormTest");
+	ui->_lineEdit->setText(setting.value("qqwweerrttyy", "julien").toString());
 
 	qDebug() << "Settings loaded";
 }
