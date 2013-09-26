@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	_settings("Phonations","SonyTest"),
 	ui(new Ui::MainWindow),
 	_sonyMaster(PhTimeCodeType25, this),
-	_sonySlave(PhTimeCodeType25, this)
+	_sonySlave(PhTimeCodeType25, &_settings, this)
 {
 	ui->setupUi(this);
 

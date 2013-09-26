@@ -1,5 +1,6 @@
 #ifndef PHSONYSLAVECONTROLLER_H
 #define PHSONYSLAVECONTROLLER_H
+#include <QSettings>
 
 #include "PhSonyController.h"
 
@@ -23,7 +24,7 @@ public:
 	 * @brief PhSonySlaveController constructor.
 	 * @param parent The object owner.
 	 */
-	PhSonySlaveController(PhTimeCodeType tcType, QObject *parent);
+	PhSonySlaveController(PhTimeCodeType tcType, QSettings *mainsettings, QObject *parent);
 
 	/**
 	 * @brief Various state in which the controller can be.
@@ -74,8 +75,11 @@ private:
 
 	void timeOut();
 private:
+	QSettings* _settings;
 	bool _autoMode;
 	PhSonyState _state;
+	PhRate _fastForwardRate;
+	PhRate _rewindRate;
 	unsigned char _id1;
 	unsigned char _id2;
 };

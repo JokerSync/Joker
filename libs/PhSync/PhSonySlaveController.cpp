@@ -2,10 +2,15 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, QObject *parent)
+PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, QSettings *mainsettings, QObject *parent)
 	: PhSonyController(tcType, "A", parent),
 	_autoMode(false), _state(Pause)
 {
+	_settings = mainsettings;
+	_rewindRate = _settings->value("PhSonySlaveControllerRewindRate",-3).toInt();
+	_fastForwardRate = _settings->value("PhSonySlaveControllerForwarddRate",3).toInt();
+
+
 }
 
 void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
@@ -71,14 +76,14 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			PHDEBUG << _comSuffix << "Fast forward => ACK";
 			_state = FastForward;
 #warning TODO : put fast forward rate in the settings
-			_clock.setRate(3);
+			_clock.setRate(_fastForwardRate);
 			sendAck();
 			break;
 		case 0x20:
 			PHDEBUG << _comSuffix << "Rewing => ACK";
 			_state = Rewind;
 #warning TODO : put rewind rate in the settings
-			_clock.setRate(-3);
+			_clock.setRate(_rewindRate);
 			sendAck();
 			break;
 		case 0x11:
