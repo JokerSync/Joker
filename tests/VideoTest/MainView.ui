@@ -14,12 +14,9 @@
    <string>VideoTest</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
     <item>
-     <widget class="PhVideoView" name="_videoView" native="true">
-      <zorder>widget</zorder>
-      <zorder>widget</zorder>
-     </widget>
+     <widget class="PhVideoView" name="_videoView" native="true"/>
     </item>
     <item>
      <widget class="PhMediaPanel" name="mediaController" native="true"/>

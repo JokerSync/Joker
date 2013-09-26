@@ -8,15 +8,15 @@ PhClockSynchronizer::PhClockSynchronizer()
 void PhClockSynchronizer::setPrimaryClock(PhClock *clock)
 {
 	_clock1 = clock;
-	connect(_clock1, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged1(PhFrame,PhTimeCodeType)));
-	connect(_clock1, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged1(PhRate)));
+	connect(_clock1, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onStripFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_clock1, SIGNAL(rateChanged(PhRate)), this, SLOT(onStripRateChanged(PhRate)));
 }
 
 void PhClockSynchronizer::setSecondaryClock(PhClock *clock)
 {
 	_clock2 = clock;
-	connect(_clock2, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged2(PhFrame,PhTimeCodeType)));
-	connect(_clock2, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged2(PhRate)));
+	connect(_clock2, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onVideoFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_clock2, SIGNAL(rateChanged(PhRate)), this, SLOT(onVideoRateChanged(PhRate)));
 }
 
 void PhClockSynchronizer::onFrameChanged1(PhFrame frame, PhTimeCodeType tcType)

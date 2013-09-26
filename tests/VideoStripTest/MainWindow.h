@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <PhGraphicStrip/PhGraphicStripView.h>
+#include <PhVideo/PhVideoView.h>
 #include <QMessageBox>
+#include "PhSync/PhStripVideoSynchronizer.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +22,8 @@ public:
 	void openFile(QString fileName);
 
 	PhGraphicStripView * getStripView(){return _stripView;};
+
+	bool openVideoFile(QString videoFileName);
 
 private slots:
 	void onOpenFile();
@@ -54,11 +58,17 @@ private slots:
 
 	void on_actionGo_To_triggered();
 
+	void on_actionOpen_Video_triggered();
+
+	void on_actionSet_Time_Code_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
-	PhClock *_clock;
+	PhClock *_stripClock;
+	PhStripVideoSynchronizer _stripVideoSynchronizer;
+
 };
 
 #endif // MAINWINDOW_H

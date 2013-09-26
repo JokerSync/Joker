@@ -4,11 +4,17 @@
 #include "PhTools/PhDebug.h"
 
 PhQTVideoView::PhQTVideoView(QObject *parent)
-	: QVideoWidget(),
+	: QVideoWidget() ,
 	_player(this,QMediaPlayer::VideoSurface)
 {
 	qDebug() << "Using QTVideo widget for video playback.";
 	_player.setVideoOutput(this);
+
+	connect(this->getClock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(this->getClock(), SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
+	connect(this->getClock(), SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onTCTypeChanged(PhTimeCodeType)));
+
+	emit onTCTypeChanged(this->getClock()->timeCodeType());
 }
 
 bool PhQTVideoView::open(QString fileName)
@@ -26,16 +32,6 @@ bool PhQTVideoView::open(QString fileName)
 	}
 }
 
-void PhQTVideoView::setClock(PhClock *clock)
-{
-	PhVideoObject::setClock(clock);
-	connect(_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
-	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
-	connect(_clock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onTCTypeChanged(PhTimeCodeType)));
-
-	emit onTCTypeChanged(clock->timeCodeType());
-}
-
 void PhQTVideoView::onRateChanged(PhRate rate)
 {
 	if(rate == 0)
@@ -49,8 +45,12 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 
 void PhQTVideoView::onFrameChanged(PhFrame frame,PhTimeCodeType tcType)
 {
+	qint64 ms = (_clock.frame() - this->getFrameStamp()) * 1000 / PhTimeCode::getFps(tcType);
+	qDebug() << "frame" << _clock.frame() << "frameStamp" << this->getFrameStamp();
 	if(_player.playbackRate() == 0)
-		_player.setPosition(_clock->milliSecond());
+		_player.setPosition(ms);
+
+	qDebug() << "ms : " << ms;
 }
 
 void PhQTVideoView::onTCTypeChanged(PhTimeCodeType tcType)
@@ -60,6 +60,5 @@ void PhQTVideoView::onTCTypeChanged(PhTimeCodeType tcType)
 
 void PhQTVideoView::checkVideoPosition()
 {
-	_clock->setMillisecond(_player.position());
+	this->getClock()->setMillisecond(_player.position());
 }
-
