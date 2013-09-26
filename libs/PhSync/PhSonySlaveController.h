@@ -24,7 +24,7 @@ public:
 	 * @brief PhSonySlaveController constructor.
 	 * @param parent The object owner.
 	 */
-	PhSonySlaveController(PhTimeCodeType tcType, QSettings *mainsettings, QObject *parent);
+	PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings, QObject *parent);
 
 	/**
 	 * @brief Various state in which the controller can be.
@@ -80,8 +80,6 @@ private:
 	PhSonyState _state;
 	PhRate _fastForwardRate;
 	PhRate _rewindRate;
-	unsigned char _deviceID1;
-	unsigned char _deviceID2;
 };
 
 #endif // PHSONYSLAVECONTROLLER_H
