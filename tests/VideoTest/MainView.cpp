@@ -10,10 +10,9 @@ MainView::MainView()
 	: QMainWindow(0),
 	  ui(new Ui::MainView)
 {
-	_clock = new PhClock(PhTimeCodeType25);
-	ui->setupUi(this);
-	ui->_videoView->setClock(_clock);
 
+	ui->setupUi(this);
+	_clock = ui->_videoView->getClock();
 	ui->mediaController->setClock(_clock);
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));

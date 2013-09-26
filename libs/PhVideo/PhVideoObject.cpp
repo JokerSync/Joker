@@ -1,12 +1,11 @@
 #include "PhVideoObject.h"
 
-PhVideoObject::PhVideoObject() : _clock(NULL)
+PhVideoObject::PhVideoObject() : _clock(PhTimeCodeType25)
 {
 }
 
-
-void PhVideoObject::setClock(PhClock *clock)
+void PhVideoObject::setFrameStamp(PhFrame frame)
 {
-	_clock = clock;
+	_frameStamp = frame;
 }
 

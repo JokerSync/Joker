@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "PhClock.h"
+#include "PhTools/PhClock.h"
 
 class PhClockSynchronizer : public QObject
 {
