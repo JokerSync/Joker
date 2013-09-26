@@ -49,8 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(&_sonySlave, SIGNAL(videoSync()), &_sonySlave, SLOT(onVideoSync()));
 	// start master and slave
 
-	on_masterActiveCheck_clicked(_settings.value("masterActiveState", true).toBool());
-	on_slaveActiveCheck_clicked(_settings.value("slaveActiveState", true).toBool());
+	on_masterActiveCheck_clicked(_settings.value("masterActiveState", false).toBool());
+	on_slaveActiveCheck_clicked(_settings.value("slaveActiveState", false).toBool());
 
 	switchSlaveVideoInternalSync(true);
 	switchMasterVideoInternalSync(true);
