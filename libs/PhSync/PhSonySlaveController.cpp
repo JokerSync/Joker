@@ -9,6 +9,8 @@ PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, QSettings *m
 	_settings = mainsettings;
 	_rewindRate = _settings->value("PhSonySlaveControllerRewindRate",-3).toInt();
 	_fastForwardRate = _settings->value("PhSonySlaveControllerForwarddRate",3).toInt();
+	_deviceID1 = (unsigned char)_settings->value("PhSonySlaveControllerDeviceID1", 0xf0).toInt();
+	_deviceID2 = (unsigned char)_settings->value("PhSonySlaveControllerDeviceID2", 0xc0).toInt();
 
 
 }
@@ -30,21 +32,23 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		{
 //			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
 #warning TODO : Device ID as a parameter
-			unsigned char deviceID1 = 0xf0;
-			unsigned char deviceID2 = 0xc0;
+			//_deviceID1 = 0xf0;
+			//_deviceID2 = 0xc0;
 			switch (_clock.timeCodeType())
 			{
 			case PhTimeCodeType2398:
 			case PhTimeCodeType24:
-				deviceID1 += 2;
+				_deviceID1 += 2;
 				break;
 			case PhTimeCodeType25:
-				deviceID1 += 1;
+				_deviceID1 += 1;
 				break;
 			case PhTimeCodeType2997:
 				break;
 			}
-			sendCommand(0x12, 0x11, deviceID1, deviceID2);
+			_settings->setValue("PhSonySlaveControllerDeviceID1", _deviceID1);
+			_settings->setValue("PhSonySlaveControllerDeviceID2", _deviceID2);
+			sendCommand(0x12, 0x11, _deviceID1, _deviceID2);
 			break;
 		}
 		case 0x1d:
