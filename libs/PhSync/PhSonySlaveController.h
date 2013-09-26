@@ -78,8 +78,7 @@ private:
 	QSettings* _settings;
 	bool _autoMode;
 	PhSonyState _state;
-	PhRate _fastForwardRate;
-	PhRate _rewindRate;
+
 };
 
 #endif // PHSONYSLAVECONTROLLER_H
