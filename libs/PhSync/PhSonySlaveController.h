@@ -80,8 +80,8 @@ private:
 	PhSonyState _state;
 	PhRate _fastForwardRate;
 	PhRate _rewindRate;
-	unsigned char _id1;
-	unsigned char _id2;
+	unsigned char _deviceID1;
+	unsigned char _deviceID2;
 };
 
 #endif // PHSONYSLAVECONTROLLER_H
