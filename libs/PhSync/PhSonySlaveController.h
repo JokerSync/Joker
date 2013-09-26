@@ -76,6 +76,8 @@ private:
 private:
 	bool _autoMode;
 	PhSonyState _state;
+	unsigned char _id1;
+	unsigned char _id2;
 };
 
 #endif // PHSONYSLAVECONTROLLER_H
