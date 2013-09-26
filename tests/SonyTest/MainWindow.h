@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QSettings>
 
 #include "PhClock.h"
 #include "PhSonyMasterController.h"
@@ -47,6 +48,7 @@ private:
 	void switchSlaveVideoInternalSync(bool useVideo);
 	void switchMasterVideoInternalSync(bool useVideo);
 
+	QSettings _settings;
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;
 	PhSonySlaveController _sonySlave;
