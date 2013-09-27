@@ -62,5 +62,5 @@ void PhQTVideoView::onTCTypeChanged(PhTimeCodeType tcType)
 
 void PhQTVideoView::checkVideoPosition()
 {
-	this->getClock()->setMillisecond(_player.position());
+	this->getClock()->setFrame(_player.position() * PhTimeCode::getFps(_clock.timeCodeType()) / 1000 + _frameStamp);
 }

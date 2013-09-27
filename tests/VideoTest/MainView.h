@@ -46,6 +46,8 @@ private slots:
 
 	void on_actionPrevious_frame_triggered();
 
+	void on_actionSet_timestamp_triggered();
+
 private:
 
 	Ui::MainView *ui;

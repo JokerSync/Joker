@@ -6,6 +6,8 @@
 #include <QFileInfo>
 #include <QFileDialog>
 
+#include "PhCommonUI/PhTimeCodeDlg.h"
+
 MainView::MainView()
 	: QMainWindow(0),
 	  ui(new Ui::MainView)
@@ -69,4 +71,17 @@ void MainView::on_actionNext_frame_triggered()
 void MainView::on_actionPrevious_frame_triggered()
 {
 	_clock->setFrame(_clock->frame() - 1);
+}
+
+void MainView::on_actionSet_timestamp_triggered()
+{
+	PhTimeCodeDlg dlg(_clock->timeCodeType(), _clock->frame());
+	if(dlg.exec() == QDialog::Accepted)
+	{
+		PhFrame frameStamp = ui->_videoView->getFrameStamp();
+		frameStamp += dlg.frame() - _clock->frame();
+		ui->_videoView->setFrameStamp(frameStamp);
+		ui->mediaController->setFirstFrame(frameStamp);
+		_clock->setFrame(dlg.frame());
+	}
 }
