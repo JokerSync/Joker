@@ -52,3 +52,21 @@ void MainView::onOpenFile()
 }
 
 
+
+void MainView::on_actionPlay_pause_triggered()
+{
+	if(_clock->rate()!=0)
+		_clock->setRate(0);
+	else
+		_clock->setRate(1);
+}
+
+void MainView::on_actionNext_frame_triggered()
+{
+    _clock->setFrame(_clock->frame() + 1);
+}
+
+void MainView::on_actionPrevious_frame_triggered()
+{
+	_clock->setFrame(_clock->frame() - 1);
+}

@@ -41,7 +41,16 @@
     </property>
     <addaction name="actionOpen"/>
    </widget>
+   <widget class="QMenu" name="menuControl">
+    <property name="title">
+     <string>Control</string>
+    </property>
+    <addaction name="actionPlay_pause"/>
+    <addaction name="actionNext_frame"/>
+    <addaction name="actionPrevious_frame"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuControl"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
@@ -50,6 +59,30 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionPlay_pause">
+   <property name="text">
+    <string>Play/pause</string>
+   </property>
+   <property name="shortcut">
+    <string>Up</string>
+   </property>
+  </action>
+  <action name="actionNext_frame">
+   <property name="text">
+    <string>Next frame</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actionPrevious_frame">
+   <property name="text">
+    <string>Previous frame</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
    </property>
   </action>
  </widget>

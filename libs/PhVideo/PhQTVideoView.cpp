@@ -44,7 +44,7 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 
 }
 
-void PhQTVideoView::onFrameChanged(PhFrame frame,PhTimeCodeType tcType)
+void PhQTVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
 	qint64 ms = (_clock.frame() - this->getFrameStamp()) * 1000 / PhTimeCode::getFps(tcType);
 	//qDebug() << "frame" << _clock.frame() << "frameStamp" << this->getFrameStamp();
