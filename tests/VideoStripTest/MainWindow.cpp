@@ -79,6 +79,7 @@ void MainWindow::on_actionPlay_pause_triggered()
 {
 	if(_stripClock->rate() == 0.0)
 		_stripClock->setRate(1.0);
+
 	else
 		_stripClock->setRate(0.0);
 }
