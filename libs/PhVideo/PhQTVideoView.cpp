@@ -23,6 +23,7 @@ bool PhQTVideoView::open(QString fileName)
 	{
 		_player.setMedia(QUrl::fromLocalFile(fileName));
 		_player.pause();
+		_player.setNotifyInterval(10);
 		return true;
 	}
 	else
@@ -46,11 +47,12 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 void PhQTVideoView::onFrameChanged(PhFrame frame,PhTimeCodeType tcType)
 {
 	qint64 ms = (_clock.frame() - this->getFrameStamp()) * 1000 / PhTimeCode::getFps(tcType);
-	qDebug() << "frame" << _clock.frame() << "frameStamp" << this->getFrameStamp();
-	if(_player.playbackRate() == 0)
+	//qDebug() << "frame" << _clock.frame() << "frameStamp" << this->getFrameStamp();
+	PHDEBUG << "ms : " << ms << "\trate : " << _clock.rate();
+	if(_clock.rate() == 0)
+	{
 		_player.setPosition(ms);
-
-	qDebug() << "ms : " << ms;
+	}
 }
 
 void PhQTVideoView::onTCTypeChanged(PhTimeCodeType tcType)

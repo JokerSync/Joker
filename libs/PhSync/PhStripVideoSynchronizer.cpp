@@ -26,7 +26,7 @@ void PhStripVideoSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType
 
 void PhStripVideoSynchronizer::onStripRateChanged(PhRate rate)
 {
-	_videoClock->setRate(rate);
+	//_videoClock->setRate(rate);
 }
 
 void PhStripVideoSynchronizer::onVideoFrameChanged(PhFrame frame, PhTimeCodeType tcType)
