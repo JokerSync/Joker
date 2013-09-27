@@ -87,6 +87,8 @@ protected:
 	 */
 	bool setCurrentFont(QString fontFile);
 
+	void setFont(QString fontFile);
+
 private slots:
 	void updateView();
 
