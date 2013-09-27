@@ -68,6 +68,8 @@ public:
 	 */
 	PhClock * clock();
 
+	void setFont(QString fontFile);
+
 protected:
 
 	bool init();
@@ -87,7 +89,6 @@ protected:
 	 */
 	bool setCurrentFont(QString fontFile);
 
-	void setFont(QString fontFile);
 
 private slots:
 	void updateView();
