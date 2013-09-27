@@ -1,6 +1,6 @@
 #include "PhVideoObject.h"
 
-PhVideoObject::PhVideoObject() : _clock(PhTimeCodeType25)
+PhVideoObject::PhVideoObject() : _clock(PhTimeCodeType25), _frameStamp(0)
 {
 }
 
