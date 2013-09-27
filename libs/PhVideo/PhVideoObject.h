@@ -15,7 +15,7 @@ public:
 	 */
 	virtual bool open(QString fileName) = 0;
 
-	PhClock* getClock(){return &_clock;};
+	PhClock* getClock(){ return &_clock; };
 
 	void setFrameStamp(PhFrame frame);
 

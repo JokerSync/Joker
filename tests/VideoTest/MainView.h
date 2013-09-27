@@ -40,6 +40,12 @@ public:
 private slots:
 
 	void onOpenFile();
+	void on_actionPlay_pause_triggered();
+
+	void on_actionNext_frame_triggered();
+
+	void on_actionPrevious_frame_triggered();
+
 private:
 
 	Ui::MainView *ui;
