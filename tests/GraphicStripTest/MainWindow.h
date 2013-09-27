@@ -54,6 +54,8 @@ private slots:
 
 	void on_actionGo_To_triggered();
 
+	void on_actionDisplay_Change_font_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStripView *_stripView;
