@@ -18,6 +18,9 @@ PhVLCVideoView::PhVLCVideoView(QWidget *parent) :
         PHDEBUG << "Qt libVLC player: Could not init libVLC";
         exit(1);
 	}
+
+	connect(&_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
+	connect(&_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
 PhVLCVideoView::~PhVLCVideoView()
@@ -79,13 +82,6 @@ bool PhVLCVideoView::open(QString fileName)
 	}
 }
 
-void PhVLCVideoView::setClock(PhClock *clock)
-{
-	PhVideoObject::setClock(clock);
-	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
-	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
-}
-
 void PhVLCVideoView::onRateChanged(PhRate rate)
 {
 	if(rate != 0)
@@ -99,12 +95,12 @@ void PhVLCVideoView::onRateChanged(PhRate rate)
 
 void PhVLCVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	libvlc_media_player_set_time(vlcPlayer, _clock->milliSecond());
+	libvlc_media_player_set_time(vlcPlayer, _clock.milliSecond());
 }
 
 void PhVLCVideoView::checkVideoPosition()
 {
 	PhTime ms = libvlc_media_player_get_time(vlcPlayer);
 	PHDEBUG << ms;
-	_clock->setMillisecond(ms);
+	//_clock.setMillisecond(ms);
 }

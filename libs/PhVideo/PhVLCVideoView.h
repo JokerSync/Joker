@@ -25,14 +25,11 @@ public:
 	 */
 	bool open(QString fileName);
 
-	void setClock(PhClock *clock);
-
 signals:
 
 public slots:
 	void onRateChanged(PhRate rate);
 	void onFrameChanged(PhFrame frame,PhTimeCodeType tcType);
-	void checkVideoPosition();
 
 private:
 	libvlc_instance_t *vlcInstance;
