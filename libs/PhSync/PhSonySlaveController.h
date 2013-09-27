@@ -16,6 +16,9 @@
  * - status sense
  * - time sense
  * - speed sense
+ *
+ * The device ID and the speed are loaded from the settings when the application is launched
+ * or set at a default value if nothing has been saved
  */
 class PhSonySlaveController : public PhSonyController
 {

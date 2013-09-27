@@ -13,6 +13,13 @@ namespace Ui {
 class MainWindow;
 }
 
+/**
+ * @brief The MainWindow class
+ *
+ * The status active/inactive of the ports are saved to the settings whenever they are changed
+ * and loaded when the application is launched
+ */
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
