@@ -248,7 +248,6 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			}
 			if (_autoMode)
 				status[3] = 0x80;
-#warning TODO check status with usb422v test
 			unsigned char start = dataIn[0] >> 4;
 			unsigned char count = dataIn[0] & 0xf;
 			for (int i=0; i<count; i++)
