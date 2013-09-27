@@ -151,3 +151,17 @@ void MainWindow::on_actionNext_Element_triggered()
 {
 	_clock->setFrame(_doc->getNextElementFrame(_clock->frame()));
 }
+
+
+void MainWindow::on_actionStrip_Properties_triggered()
+{
+	QString title = "Title : "+_doc->getTitle();
+
+	QString path = "Path : "+_doc->getVideoPath();
+
+	PhFrame Fps = PhTimeCode::getFps(_doc->getTCType());
+	QString ips = "Ips : "+QString::number(Fps);
+
+	dlg = new StripPropertiesDialog(title, path, ips, this);
+	dlg->show();
+}

@@ -55,12 +55,12 @@ bool PhStripDoc::openDetX(QString fileName)
     //Find the first title
     _title = DetX->elementsByTagName("title").at(0).toElement().text();
     //Find possible subtitles (start from title'num') with  2 <= num <= +∞
-    int i = 2;
-    while(DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text() != ""){
-        _title += " - " + DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text();
-        i++;
+	int i = 2;
+	while(DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text() != ""){
+		_title += " - " + DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text();
+		i++;
 
-    }
+	}
 
     //Find the videoPath
     _videoPath = DetX->elementsByTagName("videofile").at(0).toElement().text();
