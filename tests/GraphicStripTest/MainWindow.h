@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <PhGraphicStrip/PhGraphicStripView.h>
 #include <QMessageBox>
+#include <StripPropertiesDialog.h>
 
 namespace Ui {
 class MainWindow;
@@ -58,11 +59,14 @@ private slots:
 
 	void on_actionGo_to_triggered();
 
+	void on_actionStrip_Properties_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
 	PhClock *_clock;
+	StripPropertiesDialog *dlg;
 };
 
 #endif // MAINWINDOW_H
