@@ -48,6 +48,8 @@
     <addaction name="actionPlay_pause"/>
     <addaction name="actionNext_frame"/>
     <addaction name="actionPrevious_frame"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_timestamp"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -83,6 +85,11 @@
    </property>
    <property name="shortcut">
     <string>Left</string>
+   </property>
+  </action>
+  <action name="actionSet_timestamp">
+   <property name="text">
+    <string>Set timestamp...</string>
    </property>
   </action>
  </widget>
