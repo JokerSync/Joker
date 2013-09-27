@@ -147,5 +147,5 @@ void MainWindow::on_actionGo_To_triggered()
 void MainWindow::on_actionDisplay_Change_font_triggered()
 {
 	bool ok = true;
-	QFontDialog::getFont(&ok, this);
+	_stripView->setFont(QFontDialog::getFont(&ok, this).rawName());
 }

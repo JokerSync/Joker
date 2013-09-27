@@ -91,7 +91,8 @@ bool PhGraphicStripView::setCurrentFont(QString fontFile)
 
 void PhGraphicStripView::setFont(QString fontFile)
 {
-
+	setCurrentFont(fontFile);
+	updateView();
 }
 
 void PhGraphicStripView::updateView()
