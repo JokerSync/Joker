@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 
 #include <QFileDialog>
+#include <QFontDialog>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDlg.h"
@@ -141,4 +142,10 @@ void MainWindow::on_actionGo_To_triggered()
 	if(dlg.exec() == QDialog::Accepted)
 		_clock->setFrame(dlg.frame());
 
+}
+
+void MainWindow::on_actionDisplay_Change_font_triggered()
+{
+	bool ok = true;
+	QFontDialog::getFont(&ok, this);
 }
