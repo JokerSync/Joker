@@ -1,16 +1,18 @@
 #include "PhVideoSynchronizer.h"
 #include "PhTools/PhDebug.h"
 
-PhVideoSynchronizer::PhVideoSynchronizer() : _stripClock(NULL), _videoClock(NULL)
+PhVideoSynchronizer::PhVideoSynchronizer() : _internalClock(NULL), _videoClock(NULL)
 {
 }
 
+
 void PhVideoSynchronizer::setStripClock(PhClock *clock)
 {
-    _stripClock = clock;
-    connect(_stripClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onStripFrameChanged(PhFrame,PhTimeCodeType)));
-    connect(_stripClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onStripRateChanged(PhRate)));
+    _internalClock = clock;
+    connect(_internalClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onInternalFrameChanged(PhFrame,PhTimeCodeType)));
+    connect(_internalClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onInternalRateChanged(PhRate)));
 }
+
 
 void PhVideoSynchronizer::setVideoClock(PhClock *clock)
 {
@@ -19,19 +21,9 @@ void PhVideoSynchronizer::setVideoClock(PhClock *clock)
     connect(_videoClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onVideoRateChanged(PhRate)));
 }
 
-void PhVideoSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType)
-{
-    _videoClock->setFrame(frame);
-}
-
-void PhVideoSynchronizer::onStripRateChanged(PhRate rate)
-{
-    //_videoClock->setRate(rate);
-}
-
 void PhVideoSynchronizer::onVideoFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-    if(_stripClock->frame() != frame)
+    if(_internalClock->frame() != frame)
         PHDEBUG << "error :" << _stripClock->frame() << frame;
 #warning TODO handle frame difference error
 }
@@ -39,4 +31,14 @@ void PhVideoSynchronizer::onVideoFrameChanged(PhFrame frame, PhTimeCodeType tcTy
 void PhVideoSynchronizer::onVideoRateChanged(PhRate rate)
 {
     _stripClock->setRate(rate);
+}
+
+void PhVideoSynchronizer::onInternalFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+{
+    _videoClock->setFrame(frame);
+}
+
+void PhVideoSynchronizer::onInternalRateChanged(PhRate rate)
+{
+    //_videoClock->setRate(rate);
 }

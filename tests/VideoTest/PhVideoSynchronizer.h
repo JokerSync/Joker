@@ -17,11 +17,16 @@ public:
     PhVideoSynchronizer();
 
     void setVideoClock(PhClock *clock);
+    void setInternalClock(PhClock * clock);
 
 private slots:
     void onVideoFrameChanged(PhFrame frame, PhTimeCodeType tcType);
     void onVideoRateChanged(PhRate rate);
+    void onInternalFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+    void onInternalRateChanged(PhRate rate);
 private:
+
+    PhClock * _internalClock;
     PhClock * _videoClock;
 };
 #endif // PHVIDEOSYNCHRONIZER_H
