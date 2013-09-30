@@ -1,8 +1,8 @@
-#include <QDebug>
 #include <QSerialPortInfo>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include "PhTools/PhDebug.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(&_serialB, SIGNAL(readyRead()), this, SLOT(readTextB()));
 	if(open(&_serialB, "B"))
 		_serialB.write("Hello from serial B");
+
+	connect(&_ctsTimer, SIGNAL(timeout()), this, SLOT(checkCTS()));
+	_ctsTimer.start(5);
 }
 
 MainWindow::~MainWindow()
@@ -48,6 +51,8 @@ void MainWindow::readTextA()
 	buffer[n] = 0;
 	QString s(buffer);
 	ui->receiveA->setText(ui->receiveA->toPlainText() + s);
+
+	checkCTS();
 }
 
 void MainWindow::readTextB()
@@ -57,6 +62,8 @@ void MainWindow::readTextB()
 	buffer[n] = 0;
 	QString s(buffer);
 	ui->receiveB->setText(ui->receiveB->toPlainText() + s);
+
+	checkCTS();
 }
 
 void MainWindow::on_checkA_toggled(bool checked)
@@ -113,4 +120,19 @@ void MainWindow::closeB()
 {
 	qDebug() << "Closing " << _serialB.objectName();
 	_serialB.close();
+}
+
+void MainWindow::checkCTS()
+{
+	bool cts = _serialA.pinoutSignals() & QSerialPort::ClearToSendSignal;
+	float frequency = _ctsCounter.frequency();
+	if(cts != _lastCTS)
+	{
+		_ctsCounter.tick();
+		ui->ctsLabel->setText("CTS : " + QString::number(frequency));
+		_lastCTS = cts;
+	}
+
+	_timerCounter.tick();
+	PHDEBUG << _timerCounter.frequency() << frequency ;
 }
