@@ -12,7 +12,7 @@ class VideoPropertiesDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit VideoPropertiesDialog(QWidget *parent = 0);
+	explicit VideoPropertiesDialog(QString path, QWidget *parent = 0);
 	~VideoPropertiesDialog();
 
 private:

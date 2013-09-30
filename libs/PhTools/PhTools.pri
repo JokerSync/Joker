@@ -6,14 +6,16 @@ HEADERS += \
     ../../libs/PhTools/PhClock.h \
     ../../libs/PhTools/PhDebug.h \
     ../../libs/PhTools/tests/PhTimeCodeTest.h \
-    ../../libs/PhTools/PhTickCounter.h
+	../../libs/PhTools/PhTickCounter.h \
+	../../libs/PhTools/PhStringTools.h
 
 SOURCES += \
     ../../libs/PhTools/PhTimeCode.cpp \
     ../../libs/PhTools/PhClock.cpp \
     ../../libs/PhTools/PhDebug.cpp \
     ../../libs/PhTools/tests/PhTimeCodeTest.cpp \
-    ../../libs/PhTools/PhTickCounter.cpp
+	../../libs/PhTools/PhTickCounter.cpp \
+	../../libs/PhTools/PhStringTools.cpp
 
 # Windows specific
 win32 {
