@@ -67,6 +67,7 @@ private:
 	PhStripDoc *_doc;
 	PhClock *_clock;
 	StripPropertiesDialog *dlg;
+	QString _path;
 };
 
 #endif // MAINWINDOW_H

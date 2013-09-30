@@ -31,6 +31,8 @@ bool PhStripDoc::openDetX(QString fileName)
         return false;
 	}
 
+	_filePath = fileName;
+
     QDomDocument *DetX = new QDomDocument("/text.xml"); // Création de l'objet DOM
     QFile xml_doc(fileName);// On choisit le fichier contenant les informations XML.
     if(!xml_doc.open(QIODevice::ReadOnly))// Si l'on n'arrive pas à ouvrir le fichier XML.
@@ -315,6 +317,11 @@ PhFrame PhStripDoc::getNextElementFrame(PhFrame frame)
 			nextElementFrame = getNextTextFrame(frame);
 
 	return nextElementFrame;
+}
+
+QString PhStripDoc::getFilePath()
+{
+	return _filePath;
 }
 
 QString PhStripDoc::getVideoPath()

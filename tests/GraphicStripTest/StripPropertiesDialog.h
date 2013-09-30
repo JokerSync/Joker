@@ -2,6 +2,7 @@
 #define STRIPPROPERTIESDIALOG_H
 
 #include <QDialog>
+#include "PhStrip/PhStripDoc.h"
 
 namespace Ui {
 class StripPropertiesDialog;
@@ -12,7 +13,7 @@ class StripPropertiesDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit StripPropertiesDialog(QString title, QString path, QString ips, QWidget *parent = 0);
+	explicit StripPropertiesDialog(PhStripDoc * doc, QWidget *parent = 0);
 	~StripPropertiesDialog();
 
 private:
