@@ -37,6 +37,13 @@ public:
      * @return _videoTimestamp
      */
     PhTime getVideoTimestamp();
+
+	/**
+	 * @brief getFilePath
+	 * @return _filePath
+	 */
+	QString getFilePath();
+
     /**
      * @brief getVideoPath
      * @return _videoPath
@@ -146,6 +153,12 @@ private:
      * @brief _lastPosition
      */
     PhTime _lastFrame;
+
+	/**
+	 * Path to the file content.
+	 */
+	QString _filePath;
+
     /**
      * Path to the video content.
      */

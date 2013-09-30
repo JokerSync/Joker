@@ -32,6 +32,7 @@ void MainWindow::openFile(QString fileName)
   //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 	if(QFile::exists(fileName))
 	{
+		_path = fileName;
 		if(_doc->openDetX(fileName))
 		{
 			_clock->setTimeCodeType(_doc->getTCType());
@@ -155,13 +156,6 @@ void MainWindow::on_actionNext_Element_triggered()
 
 void MainWindow::on_actionStrip_Properties_triggered()
 {
-	QString title = "Title : "+_doc->getTitle();
-
-	QString path = "Path : "+_doc->getVideoPath();
-
-	PhFrame Fps = PhTimeCode::getFps(_doc->getTCType());
-	QString ips = "Ips : "+QString::number(Fps);
-
-	dlg = new StripPropertiesDialog(title, path, ips, this);
+	dlg = new StripPropertiesDialog(_doc, this);
 	dlg->show();
 }
