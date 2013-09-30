@@ -10,12 +10,12 @@ QString PhStringTools::sizeToString(int size)
 	QString stringSize;
 	float floatSize;
 
-	if(size < pow(10,3))
+	if(size < 1<<10)
 		stringSize = QString::number(size) + " b";
 
 	else
 	{
-		if(size < pow(10,6))
+		if(size < 1<<20)
 		{
 			floatSize = size;
 			floatSize /= pow(10,3);
@@ -24,7 +24,7 @@ QString PhStringTools::sizeToString(int size)
 		}
 		else
 		{
-			if(size < pow(10,9))
+			if(size < 1<<30)
 			{
 				floatSize = size;
 				floatSize /= pow(10,6);
