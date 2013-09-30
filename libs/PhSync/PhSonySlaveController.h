@@ -1,5 +1,6 @@
 #ifndef PHSONYSLAVECONTROLLER_H
 #define PHSONYSLAVECONTROLLER_H
+#include <QSettings>
 
 #include "PhSonyController.h"
 
@@ -15,6 +16,13 @@
  * - status sense
  * - time sense
  * - speed sense
+ *
+ * The device ID and the speed are loaded from the settings. If no settings are available,
+ * a default value is used. The default values are:
+ * - speed = 3
+ * - device ID1 = 0xf0
+ * - device ID2 = 0xc0
+ *
  */
 class PhSonySlaveController : public PhSonyController
 {
@@ -23,7 +31,7 @@ public:
 	 * @brief PhSonySlaveController constructor.
 	 * @param parent The object owner.
 	 */
-	PhSonySlaveController(PhTimeCodeType tcType, QObject *parent);
+	PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings, QObject *parent);
 
 	/**
 	 * @brief Various state in which the controller can be.
@@ -74,8 +82,10 @@ private:
 
 	void timeOut();
 private:
+	QSettings* _settings;
 	bool _autoMode;
 	PhSonyState _state;
+
 };
 
 #endif // PHSONYSLAVECONTROLLER_H
