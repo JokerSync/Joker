@@ -8,6 +8,14 @@ PhStringTools::PhStringTools()
 QString PhStringTools::sizeToString(int size)
 {
 	QString stringSize;
+	int oneKiloByte;
+
+#if defined(Q_OS_MAC)
+oneKiloByte = 1000;
+#else
+oneKiloByte = 1024;
+#endif
+
 	float floatSize;
 
 	if(size < 1<<10)
@@ -18,7 +26,7 @@ QString PhStringTools::sizeToString(int size)
 		if(size < 1<<20)
 		{
 			floatSize = size;
-			floatSize /= 1<<10;
+			floatSize /= oneKiloByte;
 			floatSize = round(floatSize * pow(10,2)) / pow(10,2);
 			stringSize = QString::number(floatSize) + " Kb";
 		}
@@ -27,14 +35,14 @@ QString PhStringTools::sizeToString(int size)
 			if(size < 1<<30)
 			{
 				floatSize = size;
-				floatSize /= 1<<20;
+				floatSize /= pow(oneKiloByte, 2);
 				floatSize = round(floatSize * pow(10,2)) / pow(10,2);
 				stringSize = QString::number(floatSize) + " Mb";
 			}
 			else
 			{
 				floatSize = size;
-				floatSize /= 1<<30;
+				floatSize /= pow(oneKiloByte, 3);
 				floatSize = round(floatSize * pow(10,2)) / pow(10,2);
 				stringSize = QString::number(floatSize) + " Gb";
 			}
