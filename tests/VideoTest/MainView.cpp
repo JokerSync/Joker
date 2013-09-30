@@ -30,6 +30,7 @@ MainView::~MainView()
 bool MainView::openFile(QString fileName)
 {
     QFileInfo fileInfo(fileName);
+	_fileName = fileName;
     if (fileInfo.exists())
     {
 		ui->_videoView->open(fileName);
@@ -52,3 +53,8 @@ void MainView::onOpenFile()
 }
 
 
+
+void MainView::on_actionVideo_Properties_triggered()
+{
+	dlg ;
+}

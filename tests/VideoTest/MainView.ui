@@ -16,10 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1">
     <item>
-     <widget class="PhVideoView" name="_videoView" native="true">
-      <zorder>widget</zorder>
-      <zorder>widget</zorder>
-     </widget>
+     <widget class="PhVideoView" name="_videoView" native="true"/>
     </item>
     <item>
      <widget class="PhMediaPanel" name="mediaController" native="true"/>
@@ -43,6 +40,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionVideo_Properties"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -53,6 +51,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionVideo_Properties">
+   <property name="text">
+    <string>Video Properties</string>
    </property>
   </action>
  </widget>

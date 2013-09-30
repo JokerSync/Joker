@@ -8,6 +8,7 @@
 #include "PhTools/PhClock.h"
 #include "PhVideo/PhVideoView.h"
 #include "PhCommonUI/PhMediaPanel.h"
+#include "VideoPropertiesDialog.h"
 
 using namespace std;
 
@@ -40,11 +41,15 @@ public:
 private slots:
 
 	void onOpenFile();
+	void on_actionVideo_Properties_triggered();
+
 private:
 
 	Ui::MainView *ui;
 	PhClock *_clock;
 	QTimer timer;
+	QString _fileName;
+	VideoPropertiesDialog * dlg;
 };
 
 #endif
