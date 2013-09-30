@@ -30,9 +30,10 @@ MainView::~MainView()
 bool MainView::openFile(QString fileName)
 {
     QFileInfo fileInfo(fileName);
-	_fileName = fileName;
+
     if (fileInfo.exists())
-    {
+	{
+		_path = fileName;
 		ui->_videoView->open(fileName);
 #warning TODO read media length from video file
 		ui->mediaController->setMediaLength(7500);
@@ -56,5 +57,6 @@ void MainView::onOpenFile()
 
 void MainView::on_actionVideo_Properties_triggered()
 {
-	dlg ;
+	dlg = new VideoPropertiesDialog(_path, this);
+	dlg->show();
 }

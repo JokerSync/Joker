@@ -9,6 +9,7 @@
 #include "PhVideo/PhVideoView.h"
 #include "PhCommonUI/PhMediaPanel.h"
 #include "VideoPropertiesDialog.h"
+#include "PhTools/PhStringTools.h"
 
 using namespace std;
 
@@ -48,7 +49,7 @@ private:
 	Ui::MainView *ui;
 	PhClock *_clock;
 	QTimer timer;
-	QString _fileName;
+	QString _path;
 	VideoPropertiesDialog * dlg;
 };
 
