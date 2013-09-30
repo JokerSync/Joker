@@ -23,8 +23,8 @@ mac {
 use_qtvideo {
 	QT += multimedia multimediawidgets
 
-	HEADERS += $${JOKER_ROOT}/libs/PhVideo/PhQTVideoView.h
-	SOURCES += $${JOKER_ROOT}/libs/PhVideo/PhQTVideoView.cpp
+	HEADERS += ../../libs/PhVideo/PhQTVideoView.h
+	SOURCES += ../../libs/PhVideo/PhQTVideoView.cpp
 }
 
 use_vlc {
@@ -33,8 +33,8 @@ use_vlc {
 	DEPENDPATH += $${VLC_PATH}/include
 	LIBS += -L$${VLC_PATH}/lib/ -lvlc
 
-	HEADERS += $${JOKER_ROOT}/libs/PhVideo/PhVLCVideoView.h
-	SOURCES += $${JOKER_ROOT}/libs/PhVideo/PhVLCVideoView.cpp
+	HEADERS += ../../libs/PhVideo/PhVLCVideoView.h
+	SOURCES += ../../libs/PhVideo/PhVLCVideoView.cpp
 
 	# Copy vlc dynamic libraries and plugins to output:
 	QMAKE_POST_LINK += mkdir -p ./$${TARGET}.app/Contents/MacOS/lib

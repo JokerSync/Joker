@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QSerialPort>
+#include <QTimer>
+
+#include "PhTools/PhTickCounter.h"
 
 namespace Ui {
 class MainWindow;
@@ -25,15 +28,20 @@ private slots:
 	void on_checkA_toggled(bool checked);
 
 	void on_checkB_toggled(bool checked);
+	void checkCTS();
 
 private:
 	bool open(QSerialPort * serial, QString suffix);
 	void closeA();
 	void closeB();
 
+
 	Ui::MainWindow *ui;
 
 	QSerialPort _serialA, _serialB;
+	QTimer _ctsTimer;
+	PhTickCounter _ctsCounter, _timerCounter;
+	bool _lastCTS;
 };
 
 #endif // MAINWINDOW_H
