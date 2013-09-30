@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QFont>
+#include <QSettings>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDlg.h"
@@ -16,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	_stripView = ui->stripView;
 	_doc = _stripView->doc();
 	_clock = _stripView->clock();
+
+	QSettings settings("Phonations","GraphicStripTest");
+	_stripView->setFont(settings.value("PhGraphicStripViewFontPath", "/Library/Fonts/Arial.ttf").toString());
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 
@@ -147,11 +151,13 @@ void MainWindow::on_actionGo_To_triggered()
 
 void MainWindow::on_actionDisplay_Change_font_triggered()
 {
+	QSettings settings("Phonations","GraphicStripTest");
 	bool ok = true;
 	QFont font = QFontDialog::getFont(&ok, this);
 	if(ok)
 	{
 		QString fontpath = "/Library/Fonts/" + font.family()+".ttf";
+		settings.setValue("PhGraphicStripViewFontPath",fontpath);
 		_stripView->setFont(fontpath);
 		PHDEBUG << "font:" << fontpath << " stylename" << font.styleName();
 	}
