@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include <QFontDialog>
+#include <QFont>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDlg.h"
@@ -147,5 +148,13 @@ void MainWindow::on_actionGo_To_triggered()
 void MainWindow::on_actionDisplay_Change_font_triggered()
 {
 	bool ok = true;
-	_stripView->setFont(QFontDialog::getFont(&ok, this).rawName());
+	QFont font = QFontDialog::getFont(&ok, this);
+	if(ok)
+	{
+		QString fontpath = "/Library/Fonts/" + font.family()+".ttf";
+		_stripView->setFont(fontpath);
+		PHDEBUG << "font:" << fontpath << " stylename" << font.styleName();
+	}
+	else
+		return;
 }
