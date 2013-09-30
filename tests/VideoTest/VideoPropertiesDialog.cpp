@@ -8,18 +8,15 @@ VideoPropertiesDialog::VideoPropertiesDialog(QString path, QWidget *parent) :
 	ui(new Ui::VideoPropertiesDialog)
 {
 	ui->setupUi(this);
-	ui->Title->setText("Title : ");
-	ui->Path->setText("path : ");
-	ui->Size->setText("size : ");
 
 	QFileInfo fileInfo(path);
 	QString title = fileInfo.fileName();
 	int size = fileInfo.size();
 	QString videoSize = PhStringTools::sizeToString(size);
 
-	ui->TitleContent->setText(title);
-	ui->PathContent->setText(path);
-	ui->SizeContent->setText(videoSize);
+	ui->titleContentLabel->setText(title);
+	ui->pathContentLabel->setText(path);
+	ui->sizeContentLabel->setText(videoSize);
 }
 
 VideoPropertiesDialog::~VideoPropertiesDialog()
