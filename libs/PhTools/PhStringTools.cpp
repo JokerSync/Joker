@@ -18,12 +18,12 @@ oneKiloByte = 1024;
 
 	float floatSize;
 
-	if(size < 1<<10)
+	if(size < oneKiloByte)
 		stringSize = QString::number(size) + " b";
 
 	else
 	{
-		if(size < 1<<20)
+		if(size < pow(oneKiloByte, 2))
 		{
 			floatSize = size;
 			floatSize /= oneKiloByte;
@@ -32,7 +32,7 @@ oneKiloByte = 1024;
 		}
 		else
 		{
-			if(size < 1<<30)
+			if(size < pow(oneKiloByte, 3))
 			{
 				floatSize = size;
 				floatSize /= pow(oneKiloByte, 2);
