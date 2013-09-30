@@ -100,7 +100,7 @@ void PhVLCVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 
 void PhVLCVideoView::checkVideoPosition()
 {
-	PhTime ms = libvlc_media_player_get_time(vlcPlayer);
-	PHDEBUG << ms;
+    //PhTime ms = libvlc_media_player_get_time(vlcPlayer);
+    //PHDEBUG << ms;
 	//_clock.setMillisecond(ms);
 }
