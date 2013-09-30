@@ -9,6 +9,8 @@
 #include "PhVideo/PhVideoView.h"
 #include "PhCommonUI/PhMediaPanel.h"
 
+#include "PhVideoSynchronizer.h"
+
 using namespace std;
 
 QT_BEGIN_NAMESPACE
@@ -51,8 +53,10 @@ private slots:
 private:
 
 	Ui::MainView *ui;
-	PhClock *_clock;
+    PhClock _clock;
 	QTimer timer;
+    PhVideoSynchronizer _VideoSynchronizer;
+
 };
 
 #endif
