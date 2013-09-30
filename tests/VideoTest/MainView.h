@@ -49,7 +49,7 @@ private:
 	Ui::MainView *ui;
 	PhClock *_clock;
 	QTimer timer;
-	QString _path;
+	QString _videoPath;
 	VideoPropertiesDialog * dlg;
 };
 
