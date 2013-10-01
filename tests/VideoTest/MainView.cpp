@@ -35,10 +35,8 @@ MainView::~MainView()
 bool MainView::openFile(QString fileName)
 {
     QFileInfo fileInfo(fileName);
-
     if (fileInfo.exists())
-	{
-		_videoPath = fileName;
+    {
 		ui->_videoView->open(fileName);
 #warning TODO read media length from video file
 		ui->mediaController->setMediaLength(7500);
@@ -78,7 +76,6 @@ void MainView::on_actionNext_frame_triggered()
     _internalClock.setFrame(_internalClock.frame() + 1);
 }
 
-<<<<<<< HEAD
 void MainView::on_actionPrevious_frame_triggered()
 {
     _internalClock.setFrame(_internalClock.frame() - 1);
@@ -95,11 +92,4 @@ void MainView::on_actionSet_timestamp_triggered()
 		ui->mediaController->setFirstFrame(frameStamp);
         _internalClock.setFrame(dlg.frame());
 	}
-=======
-
-void MainView::on_actionVideo_Properties_triggered()
-{
-	dlg = new VideoPropertiesDialog(_videoPath, this);
-	dlg->show();
->>>>>>> peVideoPropertiesDialog
 }
