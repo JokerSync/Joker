@@ -19,6 +19,11 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent)
 	_test->start();
 }
 
+void PhGraphicStripView::setSettings(QSettings *settings)
+{
+	_settings = settings;
+}
+
 PhStripDoc *PhGraphicStripView::doc()
 {
 	return &_doc;
@@ -41,7 +46,7 @@ bool PhGraphicStripView::init()
 	PHDEBUG << "PhGraphicStripView::init()";
 
 	// Load font
-	if(!setCurrentFont("/Library/Fonts/SWENSON.TTF"))//_settings->value("PhGraphicStripViewFontPath", "/Library/Fonts/SWENSON.TTF").toString()))
+	if(!setCurrentFont(_settings->value("PhGraphicStripViewFontPath", "/Library/Fonts/SWENSON.TTF").toString()))
 		return false;
 
 	// Clear the data stored

@@ -15,7 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 	_stripView = ui->stripView;
-	//_stripView->setFont(_settings.value("PhGraphicStripViewFontPath", "/Library/Fonts/Arial.ttf").toString());
+	_stripView->setSettings(&_settings);
+	_stripView->setFont(_settings.value("PhGraphicStripViewFontPath", "/Library/Fonts/SWENSON.TTF").toString());
 	_doc = _stripView->doc();
 	_clock = _stripView->clock();
 

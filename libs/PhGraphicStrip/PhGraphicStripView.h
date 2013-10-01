@@ -58,6 +58,8 @@ public:
 	 */
 	explicit PhGraphicStripView(QWidget *parent = 0);
 
+	void setSettings(QSettings *settings);
+
 	/**
 	 * Get the PhStripDoc attached to the view.
 	 * @return A PhStripDoc instance.
