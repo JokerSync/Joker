@@ -16,6 +16,8 @@ public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
+	bool openFile(QString fileName);
+
 private slots:
 	void on_actionOpen_triggered();
 

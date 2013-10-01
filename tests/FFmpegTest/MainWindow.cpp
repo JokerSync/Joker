@@ -3,6 +3,7 @@
 
 #include <VideoRendererTypes.h>
 #include <QFileDialog>
+#include <QMessageBox>
 
 using namespace QtAV;
 
@@ -24,12 +25,18 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
+bool MainWindow::openFile(QString fileName)
+{
+	return mpPlayer->play(fileName);
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, "Open...");
 	if(QFile::exists(fileName))
 	{
-		mpPlayer->play(fileName);
+		if(!openFile(fileName))
+			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
 }
 
