@@ -6,17 +6,26 @@ using namespace QtAV;
 PhFFMpegVideoView::PhFFMpegVideoView(QWidget *parent) :
 	QWidget(parent), _player(this)
 {
+	qDebug() << "Using FFMpeg widget for video playback.";
 	mpRenderer = VideoRendererFactory::create(VideoRendererId_Widget);
 
 	_player.setRenderer(mpRenderer);
 
 	QVBoxLayout * layout = new QVBoxLayout(this);
 	layout->addWidget(mpRenderer->widget());
+
+	connect(&_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(&_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
 bool PhFFMpegVideoView::open(QString fileName)
 {
-	return _player.play(fileName);
+	if(_player.load(fileName))
+	{
+		_player.pause(true);
+		return true;
+	}
+	return false;
 }
 
 void PhFFMpegVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
@@ -32,7 +41,13 @@ void PhFFMpegVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 
 void PhFFMpegVideoView::onRateChanged(PhRate rate)
 {
-	_player.setSpeed(rate);
+	if(_player.isPaused())
+	{
+		_player.play();
+		_player.setSpeed(rate);
+	}
+	else
+		_player.pause(true);
 }
 
 void PhFFMpegVideoView::checkVideoPosition()
