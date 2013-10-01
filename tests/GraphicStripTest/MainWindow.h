@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <PhGraphicStrip/PhGraphicStripView.h>
 #include <QMessageBox>
+#include <QSettings>
 
 namespace Ui {
 class MainWindow;
@@ -58,6 +59,7 @@ private slots:
 
 private:
 	Ui::MainWindow *ui;
+	QSettings _settings;
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
 	PhClock *_clock;
