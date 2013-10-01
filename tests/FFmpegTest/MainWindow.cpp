@@ -32,3 +32,15 @@ void MainWindow::on_actionOpen_triggered()
 		mpPlayer->play(fileName);
 	}
 }
+
+void MainWindow::on_actionPlay_pause_triggered()
+{
+	if(mpPlayer->isLoaded())
+	{
+		qreal speed = mpPlayer->speed();
+		if(speed == 0)
+			mpPlayer->play();
+		else
+			mpPlayer->pause(true);
+	}
+}
