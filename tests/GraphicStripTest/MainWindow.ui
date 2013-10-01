@@ -56,6 +56,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionStrip_Properties"/>
    </widget>
    <widget class="QMenu" name="menuControl">
     <property name="title">
@@ -207,6 +208,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Right</string>
+   </property>
+  </action>
+  <action name="actionStrip_Properties">
+   <property name="text">
+    <string>Properties...</string>
    </property>
   </action>
  </widget>
