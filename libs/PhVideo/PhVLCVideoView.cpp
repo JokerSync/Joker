@@ -67,7 +67,7 @@ bool PhVLCVideoView::open(QString fileName)
 #elif defined(Q_OS_UNIX)
 	    libvlc_media_player_set_xwindow(vlcPlayer, this->winId());
 #elif defined(Q_OS_WIN)
-	    libvlc_media_player_set_hwnd(vlcPlayer, this->winId());
+        libvlc_media_player_set_hwnd(vlcPlayer, (HWND)this->winId());
 #endif
 
 	    // put the media in pause mode in order to display the first frame
