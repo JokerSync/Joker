@@ -10,6 +10,8 @@
 
 #include "PhVideo/PhVideoView.h"
 #include "PhCommonUI/PhMediaPanel.h"
+#include "VideoPropertiesDialog.h"
+#include "PhTools/PhStringTools.h"
 
 #include "PhVideoSynchronizer.h"
 
@@ -44,6 +46,7 @@ public:
 private slots:
 
 	void onOpenFile();
+<<<<<<< HEAD
 	void on_actionPlay_pause_triggered();
 
 	void on_actionNext_frame_triggered();
@@ -53,14 +56,22 @@ private slots:
 	void on_actionSet_timestamp_triggered();
 
     void onTimeOut();
+=======
+	void on_actionVideo_Properties_triggered();
+>>>>>>> peVideoPropertiesDialog
 
 private:
 
 	Ui::MainView *ui;
     PhClock _internalClock;
 	QTimer timer;
+<<<<<<< HEAD
     PhVideoSynchronizer _VideoSynchronizer;
 
+=======
+	QString _videoPath;
+	VideoPropertiesDialog * dlg;
+>>>>>>> peVideoPropertiesDialog
 };
 
 #endif

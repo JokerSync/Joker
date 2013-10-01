@@ -40,6 +40,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionVideo_Properties"/>
    </widget>
    <widget class="QMenu" name="menuControl">
     <property name="title">
@@ -63,6 +64,7 @@
     <string>Ctrl+O</string>
    </property>
   </action>
+<<<<<<< HEAD
   <action name="actionPlay_pause">
    <property name="text">
     <string>Play/pause</string>
@@ -90,6 +92,11 @@
   <action name="actionSet_timestamp">
    <property name="text">
     <string>Set timestamp...</string>
+=======
+  <action name="actionVideo_Properties">
+   <property name="text">
+    <string>Properties...</string>
+>>>>>>> peVideoPropertiesDialog
    </property>
   </action>
  </widget>
