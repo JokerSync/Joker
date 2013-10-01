@@ -151,3 +151,12 @@ void MainWindow::on_actionNext_Element_triggered()
 {
 	_clock->setFrame(_doc->getNextElementFrame(_clock->frame()));
 }
+
+void MainWindow::on_actionFull_Screen_triggered()
+{
+	if(this->windowState() != Qt::WindowFullScreen)
+	this->setWindowState(Qt::WindowFullScreen);
+
+	else
+	this->setWindowState(Qt::WindowMinimized);
+}
