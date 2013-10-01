@@ -31,6 +31,8 @@ bool PhStripDoc::openDetX(QString fileName)
         return false;
 	}
 
+	_filePath = fileName;
+
     QDomDocument *DetX = new QDomDocument("/text.xml"); // Création de l'objet DOM
     QFile xml_doc(fileName);// On choisit le fichier contenant les informations XML.
     if(!xml_doc.open(QIODevice::ReadOnly))// Si l'on n'arrive pas à ouvrir le fichier XML.
@@ -55,12 +57,12 @@ bool PhStripDoc::openDetX(QString fileName)
     //Find the first title
     _title = DetX->elementsByTagName("title").at(0).toElement().text();
     //Find possible subtitles (start from title'num') with  2 <= num <= +∞
-    int i = 2;
-    while(DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text() != ""){
-        _title += " - " + DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text();
-        i++;
+	int i = 2;
+	while(DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text() != ""){
+		_title += " - " + DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text();
+		i++;
 
-    }
+	}
 
     //Find the videoPath
     _videoPath = DetX->elementsByTagName("videofile").at(0).toElement().text();
@@ -315,6 +317,11 @@ PhFrame PhStripDoc::getNextElementFrame(PhFrame frame)
 			nextElementFrame = getNextTextFrame(frame);
 
 	return nextElementFrame;
+}
+
+QString PhStripDoc::getFilePath()
+{
+	return _filePath;
 }
 
 QString PhStripDoc::getVideoPath()
