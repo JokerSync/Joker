@@ -58,6 +58,8 @@ private slots:
 
 	void on_actionGo_to_triggered();
 
+	void on_actionFull_Screen_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStripView *_stripView;
