@@ -34,10 +34,13 @@ void PhVideoSynchronizer::onVideoRateChanged(PhRate rate)
 
 void PhVideoSynchronizer::onInternalFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
+    //PHDEBUG << "Frame changed : " << frame;
     _videoClock->setFrame(frame);
 }
 
 void PhVideoSynchronizer::onInternalRateChanged(PhRate rate)
 {
     //_videoClock->setRate(rate);
+    //PHDEBUG << "Rate changed : " << rate;
+    _videoClock->setRate(rate);
 }

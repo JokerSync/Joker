@@ -84,6 +84,7 @@ bool PhVLCVideoView::open(QString fileName)
 
 void PhVLCVideoView::onRateChanged(PhRate rate)
 {
+    PHDEBUG ;
 	if(rate != 0)
 	{
 		libvlc_media_player_play(vlcPlayer);
@@ -95,6 +96,7 @@ void PhVLCVideoView::onRateChanged(PhRate rate)
 
 void PhVLCVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
+    //PHDEBUG << "Set time : " << _clock.milliSecond() << frame;
 	libvlc_media_player_set_time(vlcPlayer, _clock.milliSecond());
 }
 
