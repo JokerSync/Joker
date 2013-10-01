@@ -41,7 +41,6 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 		_player.play();
 
 	_player.setPlaybackRate(rate);
-
 }
 
 void PhQTVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
