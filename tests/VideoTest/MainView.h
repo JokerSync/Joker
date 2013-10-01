@@ -50,10 +50,12 @@ private slots:
 
 	void on_actionSet_timestamp_triggered();
 
+    void onTimeOut();
+
 private:
 
 	Ui::MainView *ui;
-    PhClock _clock;
+    PhClock _internalClock;
 	QTimer timer;
     PhVideoSynchronizer _VideoSynchronizer;
 
