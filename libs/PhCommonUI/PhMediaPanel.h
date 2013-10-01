@@ -65,9 +65,7 @@ private slots:
 	void onSliderChanged(int position);
 	void onTCTypeComboChanged();
 
-
 private:
-
 	Ui::PhMediaPanel *ui;
 	PhClock *_clock;
 	PhFrame _firstFrame;

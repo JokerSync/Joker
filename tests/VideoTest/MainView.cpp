@@ -12,7 +12,7 @@
 MainView::MainView()
 	: QMainWindow(0),
       ui(new Ui::MainView), _internalClock(PhTimeCodeType25)
-{   
+{
 	ui->setupUi(this);
     ui->mediaController->setClock(&_internalClock);
 
@@ -39,7 +39,7 @@ bool MainView::openFile(QString fileName)
     {
 		ui->_videoView->open(fileName);
 #warning TODO read media length from video file
-		ui->mediaController->setMediaLength(7500);
+		ui->mediaController->setMediaLength(1000);
 #warning TODO read first frame from video file
 		ui->mediaController->setFirstFrame(0);
 
