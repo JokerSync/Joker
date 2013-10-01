@@ -32,6 +32,7 @@ void MainWindow::openFile(QString fileName)
   //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 	if(QFile::exists(fileName))
 	{
+		_path = fileName;
 		if(_doc->openDetX(fileName))
 		{
 			_clock->setTimeCodeType(_doc->getTCType());
@@ -150,4 +151,11 @@ void MainWindow::on_actionPrevious_Element_triggered()
 void MainWindow::on_actionNext_Element_triggered()
 {
 	_clock->setFrame(_doc->getNextElementFrame(_clock->frame()));
+}
+
+
+void MainWindow::on_actionStrip_Properties_triggered()
+{
+	dlg = new StripPropertiesDialog(_doc, this);
+	dlg->show();
 }
