@@ -28,8 +28,9 @@ void PhClock::setTime(qint64 time)
 		emit timeChanged(time);
 	}
 	PhFrame newFrame = frame();
-	if(lastFrame != newFrame)
+    if(lastFrame != newFrame && _rate != 0){
 		emit frameChanged(newFrame, _tcType);
+    }
 }
 
 void PhClock::setTimeScale(PhTimeScale timeScale)
