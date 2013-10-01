@@ -8,6 +8,8 @@
 #ifndef PHGRAPHICSTRIPVIEW_H
 #define PHGRAPHICSTRIPVIEW_H
 
+#include <QSettings>
+
 #include "PhStrip/PhStripDoc.h"
 
 #include "PhGraphic/PhGraphicView.h"
@@ -54,7 +56,7 @@ public:
 	 * PhGraphicStripView constructor
 	 * @param parent Parent object
 	 */
-    explicit PhGraphicStripView(QWidget *parent = 0);
+	explicit PhGraphicStripView(QWidget *parent = 0);
 
 	/**
 	 * Get the PhStripDoc attached to the view.
@@ -69,6 +71,7 @@ public:
 	PhClock * clock();
 
 	void setFont(QString fontFile);
+
 
 protected:
 
@@ -94,6 +97,8 @@ private slots:
 	void updateView();
 
 private :
+
+	QSettings *_settings;
  	/**
 	 * @brief _doc
 	 * Reference to the current PhStripDoc

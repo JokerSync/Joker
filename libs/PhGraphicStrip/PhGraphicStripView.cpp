@@ -29,12 +29,19 @@ PhClock *PhGraphicStripView::clock()
 	return &_clock;
 }
 
+void PhGraphicStripView::setFont(QString fontFile)
+{
+	setCurrentFont(fontFile);
+	updateView();
+}
+
+
 bool PhGraphicStripView::init()
 {
 	PHDEBUG << "PhGraphicStripView::init()";
 
 	// Load font
-	if(!setCurrentFont("Bedizen.ttf"))
+	if(!setCurrentFont("/Library/Fonts/SWENSON.TTF"))//_settings->value("PhGraphicStripViewFontPath", "/Library/Fonts/SWENSON.TTF").toString()))
 		return false;
 
 	// Clear the data stored
@@ -72,10 +79,9 @@ void PhGraphicStripView::clearData()
 	_graphicOffs.clear();
 }
 
-
 bool PhGraphicStripView::setCurrentFont(QString fontFile)
 {
-	PHDEBUG << "setCurrentFont : " << fontFile;
+	PHDEBUG << "setFont : " << fontFile;
 
 	if(!QFile::exists(fontFile))
 	{
@@ -87,12 +93,6 @@ bool PhGraphicStripView::setCurrentFont(QString fontFile)
 	// TODO : redraw all texts
 
 	return _currentFont->init();
-}
-
-void PhGraphicStripView::setFont(QString fontFile)
-{
-	setCurrentFont(fontFile);
-	updateView();
 }
 
 void PhGraphicStripView::updateView()
@@ -170,6 +170,8 @@ void PhGraphicStripView::updateView()
 
 	PHDEBUG << "offs loaded" ;
 }
+
+
 
 PhTime lastTime = -1;
 void PhGraphicStripView::paint()
