@@ -4,6 +4,7 @@
 #include <VideoRendererTypes.h>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QDebug>
 
 using namespace QtAV;
 
@@ -50,4 +51,20 @@ void MainWindow::on_actionPlay_pause_triggered()
 		else
 			mpPlayer->pause(true);
 	}
+}
+
+void MainWindow::on_actionNext_frame_triggered()
+{
+	qreal t = mpPlayer->masterClock()->value();
+	qreal newT = t + 1.0 / 25;
+	qDebug() << t << "\t" << newT;
+	mpPlayer->seek(newT);
+}
+
+void MainWindow::on_actionPrevious_frame_triggered()
+{
+	qreal t = mpPlayer->masterClock()->value();
+	qreal newT = t - 1.0 / 25;
+	qDebug() << t << "\t" << newT;
+	mpPlayer->seek(newT);
 }
