@@ -41,8 +41,10 @@ use_vlc {
 	QMAKE_POST_LINK += && mkdir -p ./$${TARGET}.app/Contents/MacOS/plugins
 	QMAKE_POST_LINK += && cp -r $${VLC_PATH}/lib/libvlc.5.dylib ./$${TARGET}.app/Contents/MacOS/lib
 	QMAKE_POST_LINK += && cp -r $${VLC_PATH}/lib/libvlccore.7.dylib ./$${TARGET}.app/Contents/MacOS/lib
-	QMAKE_POST_LINK += && ln -s ./$${TARGET}.app/Contents/MacOS/lib/libvlc.5.dylib ./$${TARGET}.app/Contents/MacOS/lib/libvlc.dylib
-	QMAKE_POST_LINK += && ln -s ./$${TARGET}.app/Contents/MacOS/lib/libvlccore.7.dylib ./$${TARGET}.app/Contents/MacOS/lib/libvlccore.dylib
+#	QMAKE_POST_LINK += && rm ./$${TARGET}.app/Contents/MacOS/lib/libvlc.dylib
+#	QMAKE_POST_LINK += && rm ./$${TARGET}.app/Contents/MacOS/lib/libvlccore.dylib
+	QMAKE_POST_LINK += && ln -sf ./$${TARGET}.app/Contents/MacOS/lib/libvlc.5.dylib ./$${TARGET}.app/Contents/MacOS/lib/libvlc.dylib
+	QMAKE_POST_LINK += && ln -sf ./$${TARGET}.app/Contents/MacOS/lib/libvlccore.7.dylib ./$${TARGET}.app/Contents/MacOS/lib/libvlccore.dylib
 
 	QMAKE_POST_LINK += && cp -r $${VLC_PATH}/plugins/* ./$${TARGET}.app/Contents/MacOS/plugins
 	QMAKE_POST_LINK += && echo "all vlc lib and plugin copy ok"
