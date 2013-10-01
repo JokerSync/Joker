@@ -19,7 +19,7 @@ PhVLCVideoView::PhVLCVideoView(QWidget *parent) :
         exit(1);
 	}
 
-    connect(&_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged(frame, PhTimeCodeType25)));
+    connect(&_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(&_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
@@ -87,8 +87,8 @@ void PhVLCVideoView::onRateChanged(PhRate rate)
     PHDEBUG ;
 	if(rate != 0)
 	{
-		libvlc_media_player_play(vlcPlayer);
-		libvlc_media_player_set_rate(vlcPlayer, rate);
+        libvlc_media_player_play(vlcPlayer);
+        libvlc_media_player_set_rate(vlcPlayer, rate);
 	}
 	else
 		libvlc_media_player_pause(vlcPlayer);
@@ -97,12 +97,13 @@ void PhVLCVideoView::onRateChanged(PhRate rate)
 void PhVLCVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
     //PHDEBUG << "Set time : " << _clock.milliSecond() << frame;
-	libvlc_media_player_set_time(vlcPlayer, _clock.milliSecond());
+    if (this->_clock.rate() != 1)
+        libvlc_media_player_set_time(vlcPlayer, _clock.milliSecond());
 }
 
 void PhVLCVideoView::checkVideoPosition()
 {
-    //PhTime ms = libvlc_media_player_get_time(vlcPlayer);
+    PhTime ms = libvlc_media_player_get_time(vlcPlayer);
     //PHDEBUG << ms;
-	//_clock.setMillisecond(ms);
+    //_clock.setMillisecond(ms);
 }
