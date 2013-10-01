@@ -24,6 +24,8 @@ int main(int argc, char *argv[])
 
     w.show();
 
+	qDebug() << sizeof(PhFrame);
+
     return a.exec();
 
 }

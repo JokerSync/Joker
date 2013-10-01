@@ -153,7 +153,7 @@ void Mwindow::openFile(QString fileName)
 #elif defined(Q_OS_UNIX)
     libvlc_media_player_set_xwindow(vlcPlayer, videoWidget->winId());
 #elif defined(Q_OS_WIN)
-    libvlc_media_player_set_hwnd(vlcPlayer, videoWidget->winId());
+    libvlc_media_player_set_hwnd(vlcPlayer, (HWND)videoWidget->winId());
 #endif
 
     /* And start playback */
