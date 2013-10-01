@@ -28,7 +28,7 @@ void PhClock::setTime(qint64 time)
 		emit timeChanged(time);
 	}
 	PhFrame newFrame = frame();
-    if(lastFrame != newFrame && _rate != 0){
+    if(lastFrame != newFrame){
         PHDEBUG << "emit frame changed";
 		emit frameChanged(newFrame, _tcType);
     }
