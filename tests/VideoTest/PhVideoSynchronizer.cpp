@@ -1,5 +1,4 @@
 #include "PhVideoSynchronizer.h"
-#include "PhTools/PhDebug.h"
 
 PhVideoSynchronizer::PhVideoSynchronizer() : _internalClock(NULL), _videoClock(NULL)
 {

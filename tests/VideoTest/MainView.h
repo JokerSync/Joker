@@ -6,6 +6,8 @@
 #include <QTimer>
 
 #include "PhTools/PhClock.h"
+#include "PhTools/PhDebug.h"
+
 #include "PhVideo/PhVideoView.h"
 #include "PhCommonUI/PhMediaPanel.h"
 

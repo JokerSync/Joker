@@ -44,7 +44,7 @@ QDebug PhDebug::operator<<(QDebug dbg)
     if (_dispTime)
         s += QTime::currentTime().toString("hh:mm:ss.zzz");
 
-    dbg << Q(s + ":");
+    dbg << Q(s);
 
     return dbg;
 

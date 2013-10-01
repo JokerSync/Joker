@@ -9,6 +9,8 @@
 #include <QObject>
 
 #include "PhTools/PhClock.h"
+#include "PhTools/PhDebug.h"
+
 
 class PhVideoSynchronizer : public QObject
 {
