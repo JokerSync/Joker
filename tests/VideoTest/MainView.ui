@@ -55,7 +55,7 @@
   </action>
   <action name="actionVideo_Properties">
    <property name="text">
-    <string>Video Properties</string>
+    <string>Properties...</string>
    </property>
   </action>
  </widget>
