@@ -30,9 +30,8 @@ private slots:
 private:
 	Ui::MainWindow *ui;
 
-	QtAV::AVClock *mpClock;
     QtAV::AVPlayer *mpPlayer;
-    QtAV::VideoRenderer *mpRenderer, *mpTempRenderer;
+    QtAV::VideoRenderer *mpRenderer;
 };
 
 #endif // MAINWINDOW_H
