@@ -11,17 +11,12 @@ include($${JOKER_ROOT}/libs/PhCommonUI/PhCommonUI.pri)
 
 HEADERS += MainView.h \
     PhVideoSynchronizer.h
-	VideoPropertiesDialog.h \
-	peVideoPropertiesDialog
 
 SOURCES += \
     main.cpp \
     MainView.cpp \
     PhVideoSynchronizer.cpp
-	VideoPropertiesDialog.cpp \
-	peVideoPropertiesDialog
 
 FORMS += \
-    MainView.ui \
-    VideoPropertiesDialog.ui
+    MainView.ui
 
