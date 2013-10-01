@@ -19,7 +19,7 @@ MainView::MainView()
     _VideoSynchronizer.setVideoClock(ui->_videoView->getClock());
     _VideoSynchronizer.setInternalClock(&_internalClock);
 
-    connect(&timer, SIGNAL(timeout()), this, SLOT(_VideoSunchronizer.onInternalTimeChanged()));
+    connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 	connect(&timer, SIGNAL(timeout()), ui->_videoView, SLOT(checkVideoPosition()));

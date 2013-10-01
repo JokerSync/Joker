@@ -19,7 +19,7 @@ PhVLCVideoView::PhVLCVideoView(QWidget *parent) :
         exit(1);
 	}
 
-	connect(&_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
+    connect(&_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged(frame, PhTimeCodeType25)));
 	connect(&_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
