@@ -59,19 +59,12 @@ bool PhGraphicStripView::init()
 {
 	PHDEBUG << "PhGraphicStripView::init()";
 
-	// Load font
-	//if(!setFont("/Library/Fonts/" + _currentFont->getFontName() + ".ttf"))
-	if(!_currentFont->init())
-		return false;
-
 	// Clear the data stored
 	clearData();
 
     //Load the strip background
 	_stripBackgroundImage = new PhGraphicImage("motif-240.png");
 	_stripBackgroundImage->init();
-
-	updateView();
 
 	return true;
 }

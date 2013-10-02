@@ -21,7 +21,7 @@ public:
 	void openFile(QString fileName);
 
 	PhGraphicStripView * getStripView(){return _stripView;};
-
+	QString findFontFile(QString fontName);
 private slots:
 	void onOpenFile();
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);

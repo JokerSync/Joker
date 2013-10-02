@@ -9,6 +9,19 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDlg.h"
 
+
+QString MainWindow::findFontFile(QString fontName)
+{
+	PHDEBUG << fontName;
+	QString fontFile = "~/Library/Fonts/" + fontName + ".ttf";
+	if(QFile::exists(fontFile))
+		return fontFile;
+	fontFile = "/Library/Fonts/" + fontName + ".ttf";
+	if(QFile::exists(fontFile))
+		return fontFile;
+	return NULL;
+}
+
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
@@ -17,9 +30,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	_stripView = ui->stripView;
 
-	bool fontTest = _stripView->setFont(_settings.value("PhGraphicStripViewFontPath", "/Library/Fonts/SWENSON.TTF").toString());
-	if(!fontTest)
-		PHDEBUG << "The font has not been initialized" << fontTest;
+	QString fontFile = findFontFile(_settings.value("PhGraphicStripViewFontPath", "Arial").toString());
+
+	if(!_stripView->setFont(fontFile))
+		PHDEBUG << "The font has not been initialized";
 
 	_doc = _stripView->doc();
 	_clock = _stripView->clock();
@@ -159,12 +173,11 @@ void MainWindow::on_actionChange_font_triggered()
 	QFont font = QFontDialog::getFont(&ok, this);
 	if(ok)
 	{
-		QString fontpath = "/Library/Fonts/" + font.family()+".ttf";
-		_settings.setValue("PhGraphicStripViewFontPath",fontpath);
-
+		QString fontpath = findFontFile(font.family());
 		if(_stripView->setFont(fontpath))
+		{
 			PHDEBUG << "font:" << fontpath;
+			_settings.setValue("PhGraphicStripViewFontPath", font.family());
+		}
 	}
-	else
-		return;
 }
