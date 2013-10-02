@@ -7,7 +7,6 @@
 #define GraphicTestView_H
 
 #include <QString>
-#include <QMediaPlayer>
 
 #include "PhGraphic/PhGraphicView.h"
 #include "PhGraphic/PhGraphicImage.h"

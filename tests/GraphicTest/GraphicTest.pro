@@ -8,7 +8,6 @@ TARGET = GraphicTest
 TEMPLATE = app
 
 QT	+= core gui
-QT	+= multimedia multimediawidgets
 
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
