@@ -9,6 +9,10 @@
 #define PhVideoView PhQTVideoView
 #include "PhQTVideoView.h"
 #endif
+#ifdef USE_QTAV
+#define PhVideoView PhQtAVVideoView
+#include "PhQtAVVideoView.h"
+#endif
 #ifdef USE_FFMPEG
 #define PhVideoView PhFFMpegVideoView
 #include "PhFFMpegVideoView.h"
