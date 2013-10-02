@@ -3,10 +3,13 @@
 
 #include <QWidget>
 #include "PhVideoObject.h"
+#include "PhGraphic/PhGraphicView.h"
 
-#include <QtAV.h>
+extern "C" {
+#include <libavformat/avformat.h>
+}
 
-class PhFFMpegVideoView : public QWidget, public PhVideoObject
+class PhFFMpegVideoView : public PhGraphicView, public PhVideoObject
 {
 	Q_OBJECT
 public:
@@ -15,14 +18,17 @@ public:
 	bool open(QString fileName);
 signals:
 
+protected:
+	~PhFFMpegVideoView();
+	bool init();
+	void paint();
 protected slots:
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onRateChanged(PhRate rate);
 	void checkVideoPosition();
 
 private:
-	QtAV::AVPlayer _player;
-    QtAV::VideoRenderer *mpRenderer;
+	AVFormatContext * _formatContext;
 };
 
 #endif // PHFFMPEGVIDEOVIEW_H
