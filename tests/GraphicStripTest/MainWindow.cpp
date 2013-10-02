@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QFont>
+#include <QStandardPaths>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDlg.h"
@@ -15,8 +16,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 	_stripView = ui->stripView;
-	_stripView->setSettings(&_settings);
-	_stripView->setFont(_settings.value("PhGraphicStripViewFontPath", "/Library/Fonts/SWENSON.TTF").toString());
+
+	bool fontTest = _stripView->setFont(_settings.value("PhGraphicStripViewFontPath", "/Library/Fonts/SWENSON.TTF").toString());
+	if(!fontTest)
+		PHDEBUG << "The font has not been initialized" << fontTest;
+
 	_doc = _stripView->doc();
 	_clock = _stripView->clock();
 
@@ -157,8 +161,9 @@ void MainWindow::on_actionDisplay_Change_font_triggered()
 	{
 		QString fontpath = "/Library/Fonts/" + font.family()+".ttf";
 		_settings.setValue("PhGraphicStripViewFontPath",fontpath);
-		_stripView->setFont(fontpath);
-		PHDEBUG << "font:" << fontpath << " stylename" << font.styleName();
+
+		if(_stripView->setFont(fontpath))
+			PHDEBUG << "font:" << fontpath;
 	}
 	else
 		return;

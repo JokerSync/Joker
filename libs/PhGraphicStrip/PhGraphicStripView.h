@@ -8,8 +8,6 @@
 #ifndef PHGRAPHICSTRIPVIEW_H
 #define PHGRAPHICSTRIPVIEW_H
 
-#include <QSettings>
-
 #include "PhStrip/PhStripDoc.h"
 
 #include "PhGraphic/PhGraphicView.h"
@@ -58,8 +56,6 @@ public:
 	 */
 	explicit PhGraphicStripView(QWidget *parent = 0);
 
-	void setSettings(QSettings *settings);
-
 	/**
 	 * Get the PhStripDoc attached to the view.
 	 * @return A PhStripDoc instance.
@@ -72,7 +68,12 @@ public:
 	 */
 	PhClock * clock();
 
-	void setFont(QString fontFile);
+	/**
+	 * Set the current font with the font in param and re-initialize the OpenGL content
+	 * @param fontfile Font file path
+	 * @return true if the operation succeeds, false otherwise
+	 */
+	bool setFont(QString fontFile);
 
 
 protected:
@@ -87,20 +88,12 @@ protected:
 	 */
 	void clearData();
 
-	/**
-	 * Set the current font with the font in param and re-initialize the OpenGL content
-	 * @param fontfile Font file path
-	 * @return true if the operation succeeds, false otherwise
-	 */
-	bool setCurrentFont(QString fontFile);
-
 
 private slots:
 	void updateView();
 
 private :
 
-	QSettings *_settings;
  	/**
 	 * @brief _doc
 	 * Reference to the current PhStripDoc

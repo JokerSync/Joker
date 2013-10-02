@@ -19,11 +19,6 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent)
 	_test->start();
 }
 
-void PhGraphicStripView::setSettings(QSettings *settings)
-{
-	_settings = settings;
-}
-
 PhStripDoc *PhGraphicStripView::doc()
 {
 	return &_doc;
@@ -34,10 +29,29 @@ PhClock *PhGraphicStripView::clock()
 	return &_clock;
 }
 
-void PhGraphicStripView::setFont(QString fontFile)
+bool PhGraphicStripView::setFont(QString fontFile)
 {
-	setCurrentFont(fontFile);
-	updateView();
+	PHDEBUG << "setFont : " << fontFile;
+
+	if(!QFile::exists(fontFile))
+	{
+		PHDEBUG << "File doesn't exists : " << fontFile;
+		return false;
+	}
+	_currentFont = new PhFont(fontFile, 150);
+
+	PHDEBUG << "_currentFont value" << _currentFont;
+
+	// TODO : redraw all texts
+	PHDEBUG << "currentFont init" << _currentFont->init();
+
+	if(_currentFont->init())
+	{
+		updateView();
+		return true;
+	}
+	else
+		return false;
 }
 
 
@@ -46,7 +60,7 @@ bool PhGraphicStripView::init()
 	PHDEBUG << "PhGraphicStripView::init()";
 
 	// Load font
-	if(!setCurrentFont(_settings->value("PhGraphicStripViewFontPath", "/Library/Fonts/SWENSON.TTF").toString()))
+	if(!setFont("/Library/Fonts/" + _currentFont->getFontName() + ".ttf"))
 		return false;
 
 	// Clear the data stored
@@ -84,21 +98,6 @@ void PhGraphicStripView::clearData()
 	_graphicOffs.clear();
 }
 
-bool PhGraphicStripView::setCurrentFont(QString fontFile)
-{
-	PHDEBUG << "setFont : " << fontFile;
-
-	if(!QFile::exists(fontFile))
-	{
-		PHDEBUG << "File doesn't exists : " << fontFile;
-		return false;
-	}
-	_currentFont = new PhFont(fontFile, 150);
-
-	// TODO : redraw all texts
-
-	return _currentFont->init();
-}
 
 void PhGraphicStripView::updateView()
 {
