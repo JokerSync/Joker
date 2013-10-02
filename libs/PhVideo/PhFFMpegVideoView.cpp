@@ -1,18 +1,11 @@
 #include "PhFFMpegVideoView.h"
-#include <QVBoxLayout>
 
-using namespace QtAV;
 
 PhFFMpegVideoView::PhFFMpegVideoView(QWidget *parent) :
-	QWidget(parent), _player(this)
+	PhGraphicView(parent), _formatContext(NULL)
 {
 	qDebug() << "Using FFMpeg widget for video playback.";
-	mpRenderer = VideoRendererFactory::create(VideoRendererId_Widget);
-
-	_player.setRenderer(mpRenderer);
-
-	QVBoxLayout * layout = new QVBoxLayout(this);
-	layout->addWidget(mpRenderer->widget());
+	av_register_all();
 
 	connect(&_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(&_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
@@ -20,34 +13,35 @@ PhFFMpegVideoView::PhFFMpegVideoView(QWidget *parent) :
 
 bool PhFFMpegVideoView::open(QString fileName)
 {
-	if(_player.load(fileName))
+	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) == 0)
 	{
-		_player.pause(true);
-		return true;
+		av_dump_format(_formatContext, 0, fileName.toStdString().c_str(), 0);
 	}
 	return false;
 }
 
+PhFFMpegVideoView::~PhFFMpegVideoView()
+{
+	if(_formatContext != NULL)
+		avformat_close_input(&_formatContext);
+}
+
+bool PhFFMpegVideoView::init()
+{
+
+}
+
+void PhFFMpegVideoView::paint()
+{
+
+}
+
 void PhFFMpegVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	qint64 ms = (_clock.frame() - this->getFrameStamp()) * 1000 / PhTimeCode::getFps(tcType);
-	//qDebug() << "frame" << _clock.frame() << "frameStamp" << this->getFrameStamp();
-	PHDEBUG << "ms : " << ms << "\trate : " << _clock.rate();
-	if(_clock.rate() == 0)
-	{
-		_player.seek(ms / 1000.0);
-	}
 }
 
 void PhFFMpegVideoView::onRateChanged(PhRate rate)
 {
-	if(_player.isPaused())
-	{
-		_player.play();
-		_player.setSpeed(rate);
-	}
-	else
-		_player.pause(true);
 }
 
 void PhFFMpegVideoView::checkVideoPosition()

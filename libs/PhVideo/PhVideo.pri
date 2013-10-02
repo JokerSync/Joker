@@ -1,7 +1,7 @@
 #CONFIG += use_qtvideo
 #CONFIG += use_vlc
-CONFIG += use_qtav
-#CONFIG += use_ffmpeg
+#CONFIG += use_qtav
+CONFIG += use_ffmpeg
 
 HEADERS += ../../libs/PhVideo/PhVideoObject.h
 HEADERS += ../../libs/PhVideo/PhVideoView.h
@@ -66,7 +66,19 @@ use_qtav {
 
 use_ffmpeg {
 	DEFINES += USE_FFMPEG
-	INCLUDEPATH += /usr/local/include /usr/local/include/QtAV
+	INCLUDEPATH += /usr/local/include
+	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil
+
+	LIBS += -lxvidcore -lx264 -lvorbis -lvorbisenc -lvorbisfile -lvpx
+	LIBS += -ltheora -ltheoradec -ltheoraenc
+	LIBS += -lspeex -lspeexdsp
+	LIBS += -lschroedinger-1.0 -lopus -lvo-aacenc -lopenjpeg -lmp3lame -lfaac -lcelt0 -lfdk-aac
+	LIBS += -lswscale -laacplus
+	#to test
+	LIBS += -lass -ltiff -ltiffxx -lpng -ljpeg
+
+	LIBS += -lssl -lcrypto -lbz2 -lz
+	LIBS += -liconv
 
 	HEADERS += ../../libs/PhVideo/PhFFMpegVideoView.h
 	SOURCES += ../../libs/PhVideo/PhFFMpegVideoView.cpp
