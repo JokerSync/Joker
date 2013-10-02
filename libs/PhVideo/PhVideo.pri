@@ -1,6 +1,7 @@
 #CONFIG += use_qtvideo
 #CONFIG += use_vlc
-CONFIG += use_ffmpeg
+CONFIG += use_qtav
+#CONFIG += use_ffmpeg
 
 HEADERS += ../../libs/PhVideo/PhVideoObject.h
 HEADERS += ../../libs/PhVideo/PhVideoView.h
@@ -48,6 +49,19 @@ use_vlc {
 
 	QMAKE_POST_LINK += && cp -r $${VLC_PATH}/plugins/* ./$${TARGET}.app/Contents/MacOS/plugins
 	QMAKE_POST_LINK += && echo "all vlc lib and plugin copy ok"
+}
+
+use_qtav {
+	DEFINES += USE_QTAV
+	INCLUDEPATH += /usr/local/include /usr/local/include/QtAV
+
+	HEADERS += ../../libs/PhVideo/PhQtAVVideoView.h
+	SOURCES += ../../libs/PhVideo/PhQtAVVideoView.cpp
+
+	LIBS += -L/usr/local/lib
+	LIBS += -lQtAV
+
+	QMAKE_POST_LINK += cp /usr/local/lib/libQtA*.dylib $${TARGET}.app/Contents/MacOS;
 }
 
 use_ffmpeg {
