@@ -82,15 +82,15 @@
     <addaction name="menuVarial_Speed"/>
     <addaction name="actionGo_To"/>
    </widget>
-   <widget class="QMenu" name="menuTools">
+   <widget class="QMenu" name="menuDisplay">
     <property name="title">
-     <string>Tools</string>
+     <string>Display</string>
     </property>
-    <addaction name="actionDisplay_Change_font"/>
+    <addaction name="actionChange_font"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
-   <addaction name="menuTools"/>
+   <addaction name="menuDisplay"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
@@ -192,9 +192,9 @@
     <string>Ctrl+G</string>
    </property>
   </action>
-  <action name="actionDisplay_Change_font">
+  <action name="actionChange_font">
    <property name="text">
-    <string>Display/Change font</string>
+    <string>Change font</string>
    </property>
   </action>
  </widget>

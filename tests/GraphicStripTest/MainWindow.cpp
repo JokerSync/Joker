@@ -152,7 +152,7 @@ void MainWindow::on_actionGo_To_triggered()
 
 }
 
-void MainWindow::on_actionDisplay_Change_font_triggered()
+void MainWindow::on_actionChange_font_triggered()
 {
 	//_settings("Phonations","GraphicStripTest");
 	bool ok = true;
