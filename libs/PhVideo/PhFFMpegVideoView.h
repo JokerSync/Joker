@@ -5,9 +5,10 @@
 #include "PhVideoObject.h"
 #include "PhGraphic/PhGraphicView.h"
 
-extern "C" {
-#include <libavformat/avformat.h>
-}
+#include "PhGraphic/PhGraphicTexturedRect.h"
+
+struct AVFormatContext;
+struct AVFrame;
 
 class PhFFMpegVideoView : public PhGraphicView, public PhVideoObject
 {
@@ -28,7 +29,9 @@ protected slots:
 	void checkVideoPosition();
 
 private:
-	AVFormatContext * _formatContext;
+	AVFormatContext * _pFormatContext;
+	AVFrame * _pFrame;
+	PhGraphicTexturedRect _videoRect;
 };
 
 #endif // PHFFMPEGVIDEOVIEW_H
