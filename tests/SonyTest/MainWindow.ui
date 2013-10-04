@@ -104,7 +104,84 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuMaster">
+    <property name="title">
+     <string>Master</string>
+    </property>
+    <addaction name="actionMaster_GoTo"/>
+    <addaction name="separator"/>
+    <addaction name="actionMaster_Use_video_sync"/>
+    <addaction name="actionMaster_Use_internal_timer"/>
+   </widget>
+   <widget class="QMenu" name="menuSlave">
+    <property name="title">
+     <string>Slave</string>
+    </property>
+    <addaction name="actionSlave_GoTo"/>
+    <addaction name="separator"/>
+    <addaction name="actionSlave_Use_video_sync"/>
+    <addaction name="actionSlave_Use_internal_timer"/>
+   </widget>
+   <addaction name="menuMaster"/>
+   <addaction name="menuSlave"/>
   </widget>
+  <action name="actionMaster_GoTo">
+   <property name="text">
+    <string>Go to...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionSlave_GoTo">
+   <property name="text">
+    <string>Go to...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+K</string>
+   </property>
+  </action>
+  <action name="actionSlave_Use_video_sync">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use video sync</string>
+   </property>
+  </action>
+  <action name="actionSlave_Use_internal_timer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use internal timer</string>
+   </property>
+  </action>
+  <action name="actionMaster_Use_video_sync">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use video sync</string>
+   </property>
+  </action>
+  <action name="actionMaster_Use_internal_timer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use internal timer</string>
+   </property>
+   <property name="toolTip">
+    <string>Use internal timer</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>

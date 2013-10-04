@@ -2,8 +2,8 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyMasterController::PhSonyMasterController(QObject *parent)
-	: PhSonyController("B", parent )
+PhSonyMasterController::PhSonyMasterController(PhTimeCodeType tcType, QObject *parent)
+	: PhSonyController(tcType, "B", parent )
 {
 }
 
@@ -32,8 +32,9 @@ void PhSonyMasterController::stop()
 	sendCommand(0x20, 0x00);
 }
 
-void PhSonyMasterController::cue(PhFrame frame, PhTimeCodeType tcType)
+void PhSonyMasterController::cue(PhFrame frame)
 {
+	PhTimeCodeType tcType = _clock.timeCodeType();
 	PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(frame, tcType);
 	unsigned int bcd = PhTimeCode::bcdFromFrame(frame, tcType);
 	sendCommandWithData(0x24, 0x31, (const unsigned char *)&bcd);
@@ -149,7 +150,7 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		{
 		case 0x04:
 		{
-			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.getTCType());
+			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.timeCodeType());
 //			PHDEBUG << _comSuffix << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _clock.getTCType());
 			_clock.setFrame(frame);
 			break;

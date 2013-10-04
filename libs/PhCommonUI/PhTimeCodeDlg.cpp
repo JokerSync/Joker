@@ -1,6 +1,6 @@
 #include "PhTimeCodeDlg.h"
 
-TimeCodeDlg::TimeCodeDlg(PhTimeCodeType tcType, PhFrame frame, QWidget *parent)
+PhTimeCodeDlg::PhTimeCodeDlg(PhTimeCodeType tcType, PhFrame frame, QWidget *parent)
 	:QDialog(parent), _tcType(tcType)
 {
 	QHBoxLayout *layout = new QHBoxLayout;
@@ -27,7 +27,7 @@ TimeCodeDlg::TimeCodeDlg(PhTimeCodeType tcType, PhFrame frame, QWidget *parent)
 	this->setLayout(layout);
 }
 
-PhFrame TimeCodeDlg::frame()
+PhFrame PhTimeCodeDlg::frame()
 {
 	return PhTimeCode::frameFromString(textLineEdit->text(), _tcType);
 }

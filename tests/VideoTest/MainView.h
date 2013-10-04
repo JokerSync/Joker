@@ -6,8 +6,12 @@
 #include <QTimer>
 
 #include "PhTools/PhClock.h"
+#include "PhTools/PhDebug.h"
+
 #include "PhVideo/PhVideoView.h"
 #include "PhCommonUI/PhMediaPanel.h"
+
+#include "PhVideoSynchronizer.h"
 
 using namespace std;
 
@@ -40,11 +44,23 @@ public:
 private slots:
 
 	void onOpenFile();
+	void on_actionPlay_pause_triggered();
+
+	void on_actionNext_frame_triggered();
+
+	void on_actionPrevious_frame_triggered();
+
+	void on_actionSet_timestamp_triggered();
+
+    void onTimeOut();
+
 private:
 
 	Ui::MainView *ui;
-	PhClock *_clock;
+    PhClock _internalClock;
 	QTimer timer;
+    PhVideoSynchronizer _VideoSynchronizer;
+
 };
 
 #endif

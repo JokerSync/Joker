@@ -24,11 +24,14 @@ public:
 	 * @brief PhSonyMasterController constructor
 	 * @param parent The object owner.
 	 */
-	PhSonyMasterController(QObject *parent);
-
-	void onVideoSync();
+	PhSonyMasterController(PhTimeCodeType tcType, QObject *parent);
 
 public slots:
+	/**
+	 * @brief This slot performs a status, time and speed sense.
+	 */
+	void onVideoSync();
+
 	/** @brief Request the slave device id. */
 	void deviceTypeRequest();
 
@@ -54,7 +57,7 @@ public slots:
 	 * @param frame frame number
 	 * @param tcType type of the timecode
 	 */
-	void cue(PhFrame frame, PhTimeCodeType tcType);
+	void cue(PhFrame frame);
 
 	/**
 	 * @brief Send a fast forward command to the connected device.

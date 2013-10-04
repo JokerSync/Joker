@@ -26,9 +26,13 @@ public slots:
 	 */
 	void testComputeRate();
 
+	/**
+	 * @brief Empty implementation of the onVideoSync() abstract method.
+	 */
+	void onVideoSync();
 protected:
 	/**
-	 * @brief Empty implementation of the processCommand abstract method.
+	 * @brief Empty implementation of the processCommand() abstract method.
 	 *
 	 * @param cmd1 First command descriptor.
 	 * @param cmd2 Second command descriptor.
