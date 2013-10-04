@@ -2,9 +2,11 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonySlaveController::PhSonySlaveController(QObject *parent) : PhSonyController("A", parent),
+PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings, QObject *parent)
+	: PhSonyController(tcType, "A", parent),
 	_autoMode(false), _state(Pause)
 {
+	_settings = settings;
 }
 
 void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
@@ -23,10 +25,9 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x11:
 		{
 //			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
-#warning TODO : Device ID as a parameter
-			unsigned char deviceID1 = 0xf0;
-			unsigned char deviceID2 = 0xc0;
-			switch (_clock.getTCType())
+			unsigned char deviceID1 = (unsigned char)_settings->value("PhSonySlaveControllerDeviceID1", 0xf0).toInt();
+			unsigned char deviceID2 = (unsigned char)_settings->value("PhSonySlaveControllerDeviceID2", 0xc0).toInt();
+			switch (_clock.timeCodeType())
 			{
 			case PhTimeCodeType2398:
 			case PhTimeCodeType24:
@@ -69,15 +70,13 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x10:
 			PHDEBUG << _comSuffix << "Fast forward => ACK";
 			_state = FastForward;
-#warning TODO : put fast forward rate in the settings
-			_clock.setRate(3);
+			_clock.setRate(_settings->value("PhSonySlaveControllerAbsoluteFastRate",3).toInt());
 			sendAck();
 			break;
 		case 0x20:
 			PHDEBUG << _comSuffix << "Rewing => ACK";
 			_state = Rewind;
-#warning TODO : put rewind rate in the settings
-			_clock.setRate(-3);
+			_clock.setRate(-_settings->value("PhSonySlaveControllerAbsoluteFastRate",3).toInt());
 			sendAck();
 			break;
 		case 0x11:
@@ -133,9 +132,9 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		}
 		case 0x31:
 		{
-			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.getTCType());
+			PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.timeCodeType());
 			_clock.setFrame(frame);
-			PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType()) << "=> ACK";
+			PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.timeCodeType()) << "=> ACK";
 			sendAck();
 			break;
 		}
@@ -173,7 +172,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x0c:
 		{
 			cmd1 = 0x74;
-//			PHDEBUG << _comSuffix << "Current Time Sense => " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.getTCType());
+//			PHDEBUG << _comSuffix << "Current Time Sense => " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.timeCodeType());
 			switch (dataIn[0])
 			{
 			case 0x01:
@@ -198,7 +197,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				cmd2 = 0x04;
 				break;
 			}
-			unsigned int bcd = PhTimeCode::bcdFromFrame(_clock.frame(), _clock.getTCType());
+			unsigned int bcd = PhTimeCode::bcdFromFrame(_clock.frame(), _clock.timeCodeType());
 			sendCommandWithData(0x74, cmd2, (unsigned char *)&bcd);
 			break;
 		}
@@ -249,7 +248,6 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			}
 			if (_autoMode)
 				status[3] = 0x80;
-#warning TODO check status with usb422v test
 			unsigned char start = dataIn[0] >> 4;
 			unsigned char count = dataIn[0] & 0xf;
 			for (int i=0; i<count; i++)
@@ -291,7 +289,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 
 void PhSonySlaveController::onVideoSync()
 {
-	_clock.tick(1000/PhTimeCode::getFps(_clock.getTCType()));
+	_clock.tick(PhTimeCode::getFps(_clock.timeCodeType()));
 }
 
 void PhSonySlaveController::sendAck()

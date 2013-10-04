@@ -18,6 +18,9 @@ PhVLCVideoView::PhVLCVideoView(QWidget *parent) :
         PHDEBUG << "Qt libVLC player: Could not init libVLC";
         exit(1);
 	}
+
+    connect(&_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
+	connect(&_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
 PhVLCVideoView::~PhVLCVideoView()
@@ -64,7 +67,7 @@ bool PhVLCVideoView::open(QString fileName)
 #elif defined(Q_OS_UNIX)
 	    libvlc_media_player_set_xwindow(vlcPlayer, this->winId());
 #elif defined(Q_OS_WIN)
-	    libvlc_media_player_set_hwnd(vlcPlayer, this->winId());
+        libvlc_media_player_set_hwnd(vlcPlayer, (HWND)this->winId());
 #endif
 
 	    // put the media in pause mode in order to display the first frame
@@ -79,19 +82,13 @@ bool PhVLCVideoView::open(QString fileName)
 	}
 }
 
-void PhVLCVideoView::setClock(PhClock *clock)
-{
-	PhVideoObject::setClock(clock);
-	connect(_clock, SIGNAL(frameChanged()), this, SLOT(onFrameChanged()));
-	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
-}
-
 void PhVLCVideoView::onRateChanged(PhRate rate)
 {
+    PHDEBUG ;
 	if(rate != 0)
 	{
-		libvlc_media_player_play(vlcPlayer);
-		libvlc_media_player_set_rate(vlcPlayer, rate);
+        libvlc_media_player_play(vlcPlayer);
+        libvlc_media_player_set_rate(vlcPlayer, rate);
 	}
 	else
 		libvlc_media_player_pause(vlcPlayer);
@@ -99,12 +96,14 @@ void PhVLCVideoView::onRateChanged(PhRate rate)
 
 void PhVLCVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	libvlc_media_player_set_time(vlcPlayer, _clock->milliSecond());
+    //PHDEBUG << "Set time : " << _clock.milliSecond() << frame;
+    if (this->_clock.rate() != 1)
+        libvlc_media_player_set_time(vlcPlayer, _clock.milliSecond());
 }
 
 void PhVLCVideoView::checkVideoPosition()
 {
-	PhTime ms = libvlc_media_player_get_time(vlcPlayer);
-	PHDEBUG << ms;
-	_clock->setMillisecond(ms);
+    PhTime ms = libvlc_media_player_get_time(vlcPlayer);
+    //PHDEBUG << ms;
+    //_clock.setMillisecond(ms);
 }

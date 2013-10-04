@@ -5,8 +5,8 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyController::PhSonyController(QString comSuffix, QObject *parent) : QObject(parent),
-	_comSuffix(comSuffix), _dataRead(0), _lastCTS(false)
+PhSonyController::PhSonyController(PhTimeCodeType tcType, QString comSuffix, QObject *parent) : QObject(parent),
+	_clock(tcType), _comSuffix(comSuffix), _dataRead(0), _lastCTS(false)
 {
 	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
             SLOT(handleError(QSerialPort::SerialPortError)));
@@ -59,7 +59,7 @@ void PhSonyController::checkVideoSync()
 	{
 		bool cts = _serial.pinoutSignals() & QSerialPort::ClearToSendSignal;
 		if(!_lastCTS && cts)
-			onVideoSync();
+			emit onVideoSync();
 		_lastCTS = cts;
 	}
 }
@@ -130,11 +130,6 @@ void PhSonyController::timeOut()
 void PhSonyController::checkSumError()
 {
 	PHDEBUG << _comSuffix;
-}
-
-void PhSonyController::onVideoSync()
-{
-//	PHDEBUG << _comSuffix;
 }
 
 QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data)

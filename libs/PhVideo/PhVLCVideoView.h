@@ -25,8 +25,6 @@ public:
 	 */
 	bool open(QString fileName);
 
-	void setClock(PhClock *clock);
-
 signals:
 
 public slots:

@@ -14,8 +14,17 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="margin">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -47,6 +56,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionStrip_Properties"/>
    </widget>
    <widget class="QMenu" name="menuControl">
     <property name="title">
@@ -64,6 +74,14 @@
      <addaction name="action1"/>
      <addaction name="action3"/>
     </widget>
+    <widget class="QMenu" name="menuGo">
+     <property name="title">
+      <string>Go</string>
+     </property>
+     <addaction name="actionGo_to"/>
+     <addaction name="actionPrevious_Element"/>
+     <addaction name="actionNext_Element"/>
+    </widget>
     <addaction name="actionPlay_pause"/>
     <addaction name="actionPlay_backward"/>
     <addaction name="actionStep_forward"/>
@@ -71,7 +89,7 @@
     <addaction name="actionStep_time_forward"/>
     <addaction name="actionStep_time_backward"/>
     <addaction name="menuVarial_Speed"/>
-    <addaction name="actionGo_To"/>
+    <addaction name="menuGo"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -168,12 +186,33 @@
     <string>3</string>
    </property>
   </action>
-  <action name="actionGo_To">
+  <action name="actionGo_to">
    <property name="text">
-    <string>Go to...</string>
+    <string>Go to</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionPrevious_Element">
+   <property name="text">
+    <string>Previous Element</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Left</string>
+   </property>
+  </action>
+  <action name="actionNext_Element">
+   <property name="text">
+    <string>Next Element</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Right</string>
+   </property>
+  </action>
+  <action name="actionStrip_Properties">
+   <property name="text">
+    <string>Properties...</string>
    </property>
   </action>
  </widget>
