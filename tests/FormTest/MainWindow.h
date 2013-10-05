@@ -5,8 +5,6 @@
 #include <QDialog>
 #include <QSettings>
 
-#include "PhTools/PhTimeCode.h"
-#include "PhCommonUI/PhTimeCodeDialog.h"
 #include "AboutMenu.h"
 
 namespace Ui {
@@ -24,27 +22,19 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
-    void on_actionGoto_triggered();
+	bool openFile(QString fileName);
 
+private slots:
     void on_actionAbout_triggered();
 
     void on_actionDocumentation_triggered();
 
-	void on__saveButton_clicked();
-
-	void on__loadButton_clicked();
-
+	void on_actionOpen_triggered();
 
 private:
-
-	void saveSettings();
-	void loadSettings();
-
     Ui::MainWindow *ui;
-    PhFrame _frame;
-    PhTimeCodeType _tcType;
-    AboutMenu *_about;
+    AboutMenu _about;
+	QSettings _settings;
 };
 
 #endif // MAINWINDOW_H
