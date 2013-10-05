@@ -29,13 +29,35 @@ PhClock *PhGraphicStripView::clock()
 	return &_clock;
 }
 
+bool PhGraphicStripView::setFont(QString fontFile)
+{
+	PHDEBUG << "setFont : " << fontFile;
+
+	if(!QFile::exists(fontFile))
+	{
+		PHDEBUG << "File doesn't exists : " << fontFile;
+		return false;
+	}
+	_currentFont = new PhFont(fontFile, 150);
+
+	PHDEBUG << "_currentFont value" << _currentFont;
+
+	// TODO : redraw all texts
+	PHDEBUG << "currentFont init" << _currentFont->init();
+
+	if(_currentFont->init())
+	{
+		updateView();
+		return true;
+	}
+	else
+		return false;
+}
+
+
 bool PhGraphicStripView::init()
 {
 	PHDEBUG << "PhGraphicStripView::init()";
-
-	// Load font
-	if(!setCurrentFont("Bedizen.ttf"))
-		return false;
 
 	// Clear the data stored
 	clearData();
@@ -43,8 +65,6 @@ bool PhGraphicStripView::init()
     //Load the strip background
 	_stripBackgroundImage = new PhGraphicImage("motif-240.png");
 	_stripBackgroundImage->init();
-
-	updateView();
 
 	return true;
 }
@@ -72,22 +92,6 @@ void PhGraphicStripView::clearData()
 	_graphicOffs.clear();
 }
 
-
-bool PhGraphicStripView::setCurrentFont(QString fontFile)
-{
-	PHDEBUG << "setCurrentFont : " << fontFile;
-
-	if(!QFile::exists(fontFile))
-	{
-		PHDEBUG << "File doesn't exists : " << fontFile;
-		return false;
-	}
-	_currentFont = new PhFont(fontFile, 150);
-
-	// TODO : redraw all texts
-
-	return _currentFont->init();
-}
 
 void PhGraphicStripView::updateView()
 {
@@ -164,6 +168,8 @@ void PhGraphicStripView::updateView()
 
 	PHDEBUG << "offs loaded" ;
 }
+
+
 
 PhTime lastTime = -1;
 void PhGraphicStripView::paint()

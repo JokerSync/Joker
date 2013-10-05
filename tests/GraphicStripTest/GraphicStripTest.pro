@@ -26,7 +26,6 @@ SOURCES += main.cpp \
 
 HEADERS += \
     MainWindow.h \
-	TimeCodeDlg.h \
     StripPropertiesDialog.h
 
 FORMS += \
@@ -36,4 +35,3 @@ FORMS += \
 QMAKE_POST_LINK += echo $${RESOURCES_PATH}
 QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH}
 QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/fonts/Bedizen.ttf $${RESOURCES_PATH}
-
