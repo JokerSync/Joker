@@ -7,6 +7,7 @@
 
 #include <QFile>
 #include "PhStripDoc.h"
+#include <math.h>
 
 
 PhStripDoc::PhStripDoc(QObject *parent) :
@@ -29,6 +30,8 @@ bool PhStripDoc::openDetX(QString fileName)
 		qDebug() << "this file doesn't exist" ;
         return false;
 	}
+
+	_filePath = fileName;
 
     QDomDocument *DetX = new QDomDocument("/text.xml"); // Création de l'objet DOM
     QFile xml_doc(fileName);// On choisit le fichier contenant les informations XML.
@@ -54,12 +57,12 @@ bool PhStripDoc::openDetX(QString fileName)
     //Find the first title
     _title = DetX->elementsByTagName("title").at(0).toElement().text();
     //Find possible subtitles (start from title'num') with  2 <= num <= +∞
-    int i = 2;
-    while(DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text() != ""){
-        _title += " - " + DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text();
-        i++;
+	int i = 2;
+	while(DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text() != ""){
+		_title += " - " + DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text();
+		i++;
 
-    }
+	}
 
     //Find the videoPath
     _videoPath = DetX->elementsByTagName("videofile").at(0).toElement().text();
@@ -209,7 +212,116 @@ bool PhStripDoc::openDetX(QString fileName)
 
 int PhStripDoc::getNbTexts()
 {
-    return _nbTexts;
+	return _nbTexts;
+}
+
+PhFrame PhStripDoc::getPreviousTextFrame(PhFrame frame)
+{
+	PhFrame previousTextFrame = 0;
+
+	foreach(PhStripText* text, _texts)
+	{
+		if((text->getTimeIn() < frame) && (text->getTimeIn() > previousTextFrame) )
+			previousTextFrame = text->getTimeIn();
+	}
+
+	return previousTextFrame;
+}
+
+PhFrame PhStripDoc::getPreviousLoopFrame(PhFrame frame)
+{
+	PhFrame previousLoopFrame = 0;
+
+	foreach(PhStripLoop* loop, _loops)
+	{
+		if((loop->getTimeIn() < frame) && (loop->getTimeIn() > previousLoopFrame) )
+			previousLoopFrame = loop->getTimeIn();
+	}
+
+	return previousLoopFrame;
+}
+
+PhFrame PhStripDoc::getPreviousCutFrame(PhFrame frame)
+{
+	PhFrame previousCutFrame = 0;
+
+	foreach(PhStripCut* cut, _cuts)
+	{
+		if((cut->getTimeIn() < frame) && (cut->getTimeIn() > previousCutFrame) )
+			previousCutFrame = cut->getTimeIn();
+	}
+
+	return previousCutFrame;
+}
+
+PhFrame PhStripDoc::getPreviousElementFrame(PhFrame frame)
+{
+	PhFrame previousElementFrame = getPreviousCutFrame(frame);
+
+	if(getPreviousLoopFrame(frame) > previousElementFrame)
+			previousElementFrame = getPreviousLoopFrame(frame);
+
+	if(getPreviousTextFrame(frame) > previousElementFrame)
+			previousElementFrame = getPreviousTextFrame(frame);
+
+	return previousElementFrame;
+}
+
+PhFrame PhStripDoc::getNextTextFrame(PhFrame frame)
+{
+	PhFrame nextTextFrame = pow(2,32);
+
+	foreach(PhStripText* text, _texts)
+	{
+		if((text->getTimeIn() > frame) && (text->getTimeIn() < nextTextFrame) )
+			nextTextFrame = text->getTimeIn();
+	}
+
+	return nextTextFrame;
+}
+
+PhFrame PhStripDoc::getNextLoopFrame(PhFrame frame)
+{
+	PhFrame nextLoopFrame = pow(2,32);
+
+	foreach(PhStripLoop* loop, _loops)
+	{
+		if((loop->getTimeIn() > frame) && (loop->getTimeIn() < nextLoopFrame) )
+			nextLoopFrame = loop->getTimeIn();
+	}
+
+	return nextLoopFrame;
+}
+
+PhFrame PhStripDoc::getNextCutFrame(PhFrame frame)
+{
+	PhFrame nextCutFrame = pow(2,32);
+
+	foreach(PhStripCut* cut, _cuts)
+	{
+		if((cut->getTimeIn() > frame) && (cut->getTimeIn() < nextCutFrame) )
+			nextCutFrame = cut->getTimeIn();
+	}
+
+	return nextCutFrame;
+}
+
+PhFrame PhStripDoc::getNextElementFrame(PhFrame frame)
+{
+	PhFrame nextElementFrame = getNextCutFrame(frame);
+
+	if(getNextLoopFrame(frame) < nextElementFrame)
+			nextElementFrame = getNextLoopFrame(frame);
+
+	if(getNextTextFrame(frame) < nextElementFrame)
+			nextElementFrame = getNextTextFrame(frame);
+
+	return nextElementFrame;
+}
+
+QString PhStripDoc::getFilePath()
+{
+	return _filePath;
 }
 
 QString PhStripDoc::getVideoPath()

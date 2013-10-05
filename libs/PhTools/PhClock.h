@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "PhTimeCode.h"
+#include "PhDebug.h"
 
 /**
  * The PhClock class modelize a clock with its current time and rate value.
