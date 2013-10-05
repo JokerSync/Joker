@@ -174,6 +174,7 @@ void PhGraphicStripView::updateView()
 PhTime lastTime = -1;
 void PhGraphicStripView::paint()
 {
+	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 	int loopCounter = 0;
 	int offCounter = 0;
 	int cutCounter = 0;

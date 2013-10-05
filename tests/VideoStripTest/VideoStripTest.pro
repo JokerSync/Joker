@@ -18,14 +18,17 @@ include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
+include(../../libs/PhVideo/PhVideo.pri)
 
 #Main app
 SOURCES += main.cpp \
 	MainWindow.cpp \
+	../../libs/PhSync/PhStripVideoSynchronizer.cpp \
 
 HEADERS += \
     MainWindow.h \
 	TimeCodeDlg.h \
+	../../libs/PhSync/PhStripVideoSynchronizer.h \
 
 FORMS += \
     MainWindow.ui

@@ -25,8 +25,6 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x11:
 		{
 //			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
-#warning TODO : test Device ID in the settings
-
 			unsigned char deviceID1 = (unsigned char)_settings->value("PhSonySlaveControllerDeviceID1", 0xf0).toInt();
 			unsigned char deviceID2 = (unsigned char)_settings->value("PhSonySlaveControllerDeviceID2", 0xc0).toInt();
 			switch (_clock.timeCodeType())
@@ -72,14 +70,12 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x10:
 			PHDEBUG << _comSuffix << "Fast forward => ACK";
 			_state = FastForward;
-#warning TODO : test fast forward rate in the settings
 			_clock.setRate(_settings->value("PhSonySlaveControllerAbsoluteFastRate",3).toInt());
 			sendAck();
 			break;
 		case 0x20:
 			PHDEBUG << _comSuffix << "Rewing => ACK";
 			_state = Rewind;
-#warning TODO : put rewind rate in the settings
 			_clock.setRate(-_settings->value("PhSonySlaveControllerAbsoluteFastRate",3).toInt());
 			sendAck();
 			break;
@@ -252,7 +248,6 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			}
 			if (_autoMode)
 				status[3] = 0x80;
-#warning TODO check status with usb422v test
 			unsigned char start = dataIn[0] >> 4;
 			unsigned char count = dataIn[0] & 0xf;
 			for (int i=0; i<count; i++)

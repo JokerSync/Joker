@@ -37,6 +37,13 @@ public:
      * @return _videoTimestamp
      */
     PhTime getVideoTimestamp();
+
+	/**
+	 * @brief getFilePath
+	 * @return _filePath
+	 */
+	QString getFilePath();
+
     /**
      * @brief getVideoPath
      * @return _videoPath
@@ -113,6 +120,22 @@ public:
 
     int getNbTexts();
 
+	PhFrame getPreviousTextFrame(PhFrame frame);
+
+	PhFrame getPreviousLoopFrame(PhFrame frame);
+
+	PhFrame getPreviousCutFrame(PhFrame frame);
+
+	PhFrame getPreviousElementFrame(PhFrame frame);
+
+	PhFrame getNextTextFrame(PhFrame frame);
+
+	PhFrame getNextLoopFrame(PhFrame frame);
+
+	PhFrame getNextCutFrame(PhFrame frame);
+
+	PhFrame getNextElementFrame(PhFrame frame);
+
 signals:
 	void changed();
 
@@ -130,6 +153,12 @@ private:
      * @brief _lastPosition
      */
     PhTime _lastFrame;
+
+	/**
+	 * Path to the file content.
+	 */
+	QString _filePath;
+
     /**
      * Path to the video content.
      */

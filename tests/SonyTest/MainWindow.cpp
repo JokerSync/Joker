@@ -5,7 +5,7 @@
 #include "ui_MainWindow.h"
 
 #include "PhTools/PhDebug.h"
-#include "PhCommonUI/PhTimeCodeDlg.h"
+#include "PhCommonUI/PhTimeCodeDialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -167,14 +167,14 @@ void MainWindow::on_slaveActiveCheck_clicked(bool checked)
 
 void MainWindow::on_actionMaster_GoTo_triggered()
 {
-	PhTimeCodeDlg dlg(_sonyMaster.clock()->timeCodeType(), _sonyMaster.clock()->frame());
+	PhTimeCodeDialog dlg(_sonyMaster.clock()->timeCodeType(), _sonyMaster.clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_sonyMaster.cue(dlg.frame());
 }
 
 void MainWindow::on_actionSlave_GoTo_triggered()
 {
-	PhTimeCodeDlg dlg(_sonySlave.clock()->timeCodeType(), _sonySlave.clock()->frame());
+	PhTimeCodeDialog dlg(_sonySlave.clock()->timeCodeType(), _sonySlave.clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_sonySlave.clock()->setFrame(dlg.frame());
 }

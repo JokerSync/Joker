@@ -59,7 +59,7 @@ void PhGraphicView::onRefresh()
 //	if(qApp->hasPendingEvents()) // qApp is a global pointer to the application
 //		return;
 //#endif
-
+	//PHDEBUG ;
 	updateGL();
 }
 
