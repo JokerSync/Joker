@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <PhGraphicStrip/PhGraphicStripView.h>
 #include <QMessageBox>
+#include <QSettings>
 #include <StripPropertiesDialog.h>
 
 namespace Ui {
@@ -21,7 +22,7 @@ public:
 	void openFile(QString fileName);
 
 	PhGraphicStripView * getStripView(){return _stripView;};
-
+	QString findFontFile(QString fontName);
 private slots:
 	void onOpenFile();
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
@@ -59,10 +60,15 @@ private slots:
 
 	void on_actionGo_to_triggered();
 
+	void on_actionFull_Screen_triggered();
+
 	void on_actionStrip_Properties_triggered();
+
+	void on_actionChange_font_triggered();
 
 private:
 	Ui::MainWindow *ui;
+	QSettings _settings;
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
 	PhClock *_clock;

@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[])
 {
-	PhDebug::init(false, true, true);
+	PhDebug::init(false, true, true, false, false);
 	QApplication a(argc, argv);
 	MainWindow w;
 	w.show();

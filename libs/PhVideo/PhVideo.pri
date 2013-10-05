@@ -2,6 +2,7 @@
 #CONFIG += use_vlc
 #CONFIG += use_qtav
 CONFIG += use_ffmpeg
+#CONFIG += use_vlc
 
 HEADERS += ../../libs/PhVideo/PhVideoObject.h
 HEADERS += ../../libs/PhVideo/PhVideoView.h
