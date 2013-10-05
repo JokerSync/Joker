@@ -23,6 +23,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+	void generateRGB();
+
+	void generateYUV();
+
 	bool openFile(QString fileName);
 
 private slots:
@@ -31,6 +35,10 @@ private slots:
     void on_actionDocumentation_triggered();
 
 	void on_actionOpen_triggered();
+
+	void on_actionGenerate_YUV_pattern_triggered();
+
+	void on_actionGenerate_RGB_pattern_triggered();
 
 private:
     Ui::MainWindow *ui;
