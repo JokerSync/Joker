@@ -24,10 +24,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-public slots:
-
-    void updateText(PhFrame frame, PhTimeCodeType tcType);
-
 private slots:
     void on_actionGoto_triggered();
 
@@ -48,7 +44,6 @@ private:
     Ui::MainWindow *ui;
     PhFrame _frame;
     PhTimeCodeType _tcType;
-	PhTimeCodeDialog *_goto;
     AboutMenu *_about;
 };
 

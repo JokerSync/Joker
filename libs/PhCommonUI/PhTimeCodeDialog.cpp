@@ -3,12 +3,17 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 
-PhTimeCodeDialog::PhTimeCodeDialog(QWidget *parent) :
+PhTimeCodeDialog::PhTimeCodeDialog(PhTimeCodeType tcType, PhFrame frame, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::PhTimeCodeDialog)
 {
 	ui->setupUi(this);
-	connect(ui->_timecodeEdit, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)));
+	ui->_timecodeEdit->setFrame(frame, tcType);
+
+	connect(ui->cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+	connect(ui->okButton, SIGNAL(clicked()), this, SLOT(accept()));
+
+	ui->okButton->setDefault(true);
 }
 
 PhTimeCodeDialog::~PhTimeCodeDialog()
@@ -16,17 +21,15 @@ PhTimeCodeDialog::~PhTimeCodeDialog()
 	delete ui;
 }
 
-void PhTimeCodeDialog::setFrame(QString frame)
+PhFrame PhTimeCodeDialog::frame()
 {
-	if(ui->_timecodeEdit->isTimeCode(frame))
-	{
-		ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
-		ui->_timecodeEdit->setText(frame);
-	}
-	else
-	{
-		ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-	}
-	qDebug() << "setframe";
+	return ui->_timecodeEdit->frame();
+}
 
+void PhTimeCodeDialog::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+{
+	if(ui->_timecodeEdit->isTimeCode())
+		ui->okButton->setEnabled(true);
+	else
+		ui->okButton->setEnabled(false);
 }

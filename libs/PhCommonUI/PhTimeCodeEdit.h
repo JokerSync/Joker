@@ -10,16 +10,20 @@
 
 
 
-class TimecodeEdit : public QLineEdit
+class PhTimeCodeEdit : public QLineEdit
 {
     Q_OBJECT
 
 public:
-    explicit TimecodeEdit(QWidget *parent = 0);
-    ~TimecodeEdit();
+    explicit PhTimeCodeEdit(QWidget *parent = 0);
 
-    void setTCType(PhTimeCodeType tcType);
-	bool isTimeCode(QString timecode);
+    void setFrame(PhFrame frame, PhTimeCodeType tcType);
+	bool isTimeCode();
+	/**
+	 * @brief Current frame value entered in the text field
+	 * @return A frame value.
+	 */
+	PhFrame frame();
 
 signals:
 
@@ -29,12 +33,7 @@ private slots:
     void onTextChanged(QString text);
 
 private:
-
-    PhFrame _frame;
     PhTimeCodeType _tcType;
-
-
-
 };
 
 #endif // TIMECODEEDIT_H
