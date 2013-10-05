@@ -3,25 +3,44 @@
 
 #include <QDialog>
 
-#include "PhCommonUI/TimecodeEdit.h"
 #include "PhTools/PhTimeCode.h"
 
 namespace Ui {
 class PhTimeCodeDialog;
 }
 
+/**
+ * @brief A modal dialog box for entering timecode.
+ *
+ * Launch the dialog using the TimeCodeDlg::exec() method.
+ * If it return QDialog::Accepted, it means that a timecode value
+ * was input and validated.
+ * Otherwise the user pressed cancel.
+ */
 class PhTimeCodeDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	explicit PhTimeCodeDialog(QWidget *parent = 0);
+	/**
+	 * @brief PhTimeCodeDialog constructor
+	 * @param tcType Timecode type to use for string to frame conversion.
+	 * @param frame The dialog initial frame.
+	 * @param parent The object owner.
+	 */
+	explicit PhTimeCodeDialog(PhTimeCodeType tcType, PhFrame frame = 0, QWidget *parent = 0);
+
 	~PhTimeCodeDialog();
 
-	void setFrame(QString frame);
+	/**
+	 * @brief Current frame value entered in the text field
+	 * @return A frame value.
+	 */
+	PhFrame frame();
 
-signals:
-	void frameChanged(PhFrame frame, PhTimeCodeType tcType);
+
+private slots:
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 
 private:
 	Ui::PhTimeCodeDialog *ui;
