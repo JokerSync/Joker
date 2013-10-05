@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QDialog>
 #include <QSettings>
+#include <QGraphicsScene>
 
 #include "AboutMenu.h"
 
@@ -35,6 +36,7 @@ private:
     Ui::MainWindow *ui;
     AboutMenu _about;
 	QSettings _settings;
+	QGraphicsScene scene;
 };
 
 #endif // MAINWINDOW_H
