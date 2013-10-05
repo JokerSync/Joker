@@ -61,6 +61,7 @@ private:
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
 	PhClock *_clock;
+	QSettings _settings;
 	PhSonySlaveController _sonySlave;
 	PhClockSynchronizer _clockSynchroniser;
 };

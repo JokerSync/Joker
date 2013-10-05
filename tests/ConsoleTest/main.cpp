@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 {
     // Initialize the Debug module, only work with
     // time for the moment.
-    PhDebug::init(true, true, true);
+    PhDebug::init(true, true, true, true, true);
 
     // Test of PhDebug tool
     PHDEBUG << "Test of PhDebug tool";
@@ -20,12 +20,12 @@ int main(int argc, char *argv[])
     {
         QString s = PhTimeCode::stringFromFrame(i, PhTimeCodeType25);
         int n = PhTimeCode::frameFromString(s, PhTimeCodeType25);
-        PHDEBUG << s;
+        //PHDEBUG << s;
         if(n != i)
             PHDEBUG << "problem with " << i;
     }
 
-	PhTimeCodeTest tcTest;
+    PhTimeCodeTest tcTest;
 
 	return QTest::qExec(&tcTest);
 }

@@ -15,7 +15,12 @@ public:
 	 */
 	virtual bool open(QString fileName) = 0;
 
-	virtual void setClock(PhClock *clock);
+	PhClock* getClock(){ return &_clock; };
+
+	void setFrameStamp(PhFrame frame);
+
+	PhFrame getFrameStamp(){ return _frameStamp;};
+
 
 protected slots:
 
@@ -24,7 +29,8 @@ protected slots:
 	virtual void checkVideoPosition() = 0;
 
 protected:
-	PhClock *_clock;
+	PhClock _clock;
+	PhFrame _frameStamp;
 };
 
 #endif // PHVIDEOOBJECT_H

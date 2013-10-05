@@ -54,7 +54,7 @@ public:
 	 * PhGraphicStripView constructor
 	 * @param parent Parent object
 	 */
-    explicit PhGraphicStripView(QWidget *parent = 0);
+	explicit PhGraphicStripView(QWidget *parent = 0);
 
 	/**
 	 * Get the PhStripDoc attached to the view.
@@ -68,6 +68,14 @@ public:
 	 */
 	PhClock * clock();
 
+	/**
+	 * Set the current font with the font in param and re-initialize the OpenGL content
+	 * @param fontfile Font file path
+	 * @return true if the operation succeeds, false otherwise
+	 */
+	bool setFont(QString fontFile);
+
+
 protected:
 
 	bool init();
@@ -80,17 +88,12 @@ protected:
 	 */
 	void clearData();
 
-	/**
-	 * Set the current font with the font in param and re-initialize the OpenGL content
-	 * @param fontfile Font file path
-	 * @return true if the operation succeeds, false otherwise
-	 */
-	bool setCurrentFont(QString fontFile);
 
 private slots:
 	void updateView();
 
 private :
+
  	/**
 	 * @brief _doc
 	 * Reference to the current PhStripDoc

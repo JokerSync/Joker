@@ -15,16 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
@@ -36,12 +27,7 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="PhGraphicStripView" name="stripView" native="true">
-        <zorder>fullScreen</zorder>
-        <zorder>fullScreen</zorder>
-        <zorder>fullScreen</zorder>
-        <zorder>widget</zorder>
-       </widget>
+       <widget class="PhGraphicStripView" name="stripView" native="true"/>
       </item>
      </layout>
     </item>
@@ -61,6 +47,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionStrip_Properties"/>
    </widget>
    <widget class="QMenu" name="menuControl">
     <property name="title">
@@ -100,9 +87,17 @@
      <string>View</string>
     </property>
     <addaction name="actionFull_Screen"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <addaction name="actionChange_font"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
+   <addaction name="menuDisplay"/>
    <addaction name="menuView"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -119,7 +114,7 @@
     <string>Play/pause</string>
    </property>
    <property name="shortcut">
-    <string>Space</string>
+    <string>Up</string>
    </property>
   </action>
   <action name="actionPlay_backward">
@@ -205,6 +200,11 @@
     <string>Ctrl+G</string>
    </property>
   </action>
+  <action name="actionChange_font">
+   <property name="text">
+    <string>Change font...</string>
+   </property>
+  </action>
   <action name="actionPrevious_Element">
    <property name="text">
     <string>Previous Element</string>
@@ -227,6 +227,11 @@
    </property>
    <property name="text">
     <string>Full Screen</string>
+   </property>
+  </action>
+  <action name="actionStrip_Properties">
+   <property name="text">
+    <string>Properties...</string>
    </property>
   </action>
  </widget>

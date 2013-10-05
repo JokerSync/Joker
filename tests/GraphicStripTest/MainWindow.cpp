@@ -2,16 +2,39 @@
 #include "ui_MainWindow.h"
 
 #include <QFileDialog>
+#include <QFontDialog>
+#include <QFont>
+#include <QStandardPaths>
 
 #include "PhTools/PhDebug.h"
-#include "PhCommonUI/PhTimeCodeDlg.h"
+#include "PhCommonUI/PhTimeCodeDialog.h"
+
+
+QString MainWindow::findFontFile(QString fontName)
+{
+	PHDEBUG << fontName;
+	QString fontFile = "~/Library/Fonts/" + fontName + ".ttf";
+	if(QFile::exists(fontFile))
+		return fontFile;
+	fontFile = "/Library/Fonts/" + fontName + ".ttf";
+	if(QFile::exists(fontFile))
+		return fontFile;
+	return NULL;
+}
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow)
+	ui(new Ui::MainWindow),
+	_settings("Phonations","GraphicStripTest")
 {
 	ui->setupUi(this);
 	_stripView = ui->stripView;
+
+	QString fontFile = findFontFile(_settings.value("PhGraphicStripViewFontPath", "Arial").toString());
+
+	if(!_stripView->setFont(fontFile))
+		PHDEBUG << "The font has not been initialized";
+
 	_doc = _stripView->doc();
 	_clock = _stripView->clock();
 
@@ -32,6 +55,7 @@ void MainWindow::openFile(QString fileName)
   //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 	if(QFile::exists(fileName))
 	{
+		_path = fileName;
 		if(_doc->openDetX(fileName))
 		{
 			_clock->setTimeCodeType(_doc->getTCType());
@@ -137,7 +161,7 @@ void MainWindow::on_action3_triggered()
 
 void MainWindow::on_actionGo_to_triggered()
 {
-	PhTimeCodeDlg dlg(_clock->timeCodeType(), _clock->frame());
+	PhTimeCodeDialog dlg(_clock->timeCodeType(), _clock->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_clock->setFrame(dlg.frame());
 }
@@ -159,4 +183,26 @@ void MainWindow::on_actionFull_Screen_triggered()
 
 	else
 	this->setWindowState(Qt::WindowMinimized);
+}
+
+void MainWindow::on_actionStrip_Properties_triggered()
+{
+	dlg = new StripPropertiesDialog(_doc, this);
+	dlg->show();
+}
+
+void MainWindow::on_actionChange_font_triggered()
+{
+	//_settings("Phonations","GraphicStripTest");
+	bool ok = true;
+	QFont font = QFontDialog::getFont(&ok, this);
+	if(ok)
+	{
+		QString fontpath = findFontFile(font.family());
+		if(_stripView->setFont(fontpath))
+		{
+			PHDEBUG << "font:" << fontpath;
+			_settings.setValue("PhGraphicStripViewFontPath", font.family());
+		}
+	}
 }

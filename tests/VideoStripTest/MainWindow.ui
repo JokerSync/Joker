@@ -15,17 +15,29 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QVBoxLayout" name="verticalLayout_3" stretch="4,1">
       <property name="leftMargin">
        <number>5</number>
       </property>
       <property name="rightMargin">
        <number>5</number>
       </property>
+      <item>
+       <widget class="PhVideoView" name="videoView" native="true"/>
+      </item>
       <item>
        <widget class="PhGraphicStripView" name="stripView" native="true"/>
       </item>
@@ -47,6 +59,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionOpen_Video"/>
    </widget>
    <widget class="QMenu" name="menuControl">
     <property name="title">
@@ -72,6 +85,7 @@
     <addaction name="actionStep_time_backward"/>
     <addaction name="menuVarial_Speed"/>
     <addaction name="actionGo_To"/>
+    <addaction name="actionSet_Time_Code"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -176,12 +190,28 @@
     <string>Ctrl+G</string>
    </property>
   </action>
+  <action name="actionOpen_Video">
+   <property name="text">
+    <string>Open Video</string>
+   </property>
+  </action>
+  <action name="actionSet_Time_Code">
+   <property name="text">
+    <string>Set Time Code</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>PhGraphicStripView</class>
    <extends>QWidget</extends>
    <header>PhGraphicStrip/PhGraphicStripView.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PhVideoView</class>
+   <extends>QWidget</extends>
+   <header>PhVideo/PhVideoView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
