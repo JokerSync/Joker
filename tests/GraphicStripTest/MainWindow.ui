@@ -15,16 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
@@ -203,7 +194,7 @@
   </action>
   <action name="actionChange_font">
    <property name="text">
-    <string>Change font</string>
+    <string>Change font...</string>
    </property>
   </action>
   <action name="actionPrevious_Element">
