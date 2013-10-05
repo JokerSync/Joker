@@ -1,6 +1,9 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QFileDialog>
+#include <QPixmap>
+#include <QGraphicsPixmapItem>
+#include <QMessageBox>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -14,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	_settings("Phonations","FormTest")
 {
     ui->setupUi(this);
+	ui->graphicsView->setScene(&scene);
 
 	openFile(_settings.value("lastFile").toString());
 }
@@ -25,6 +29,13 @@ MainWindow::~MainWindow()
 
 bool MainWindow::openFile(QString fileName)
 {
+	QPixmap * pixmap = new QPixmap(fileName);
+	if(pixmap->isNull())
+		return false;
+	QGraphicsPixmapItem * item = new QGraphicsPixmapItem(*pixmap);
+
+	scene.clear();
+	scene.addItem((item));
 	ui->_lineEdit->setText(fileName);
 	return true;
 }
@@ -47,5 +58,7 @@ void MainWindow::on_actionOpen_triggered()
 	{
 		if(openFile(fileName))
 			_settings.setValue("lastFile", fileName);
+		else
+			QMessageBox::critical(this, "Error", "Unable to open file");
 	}
 }
