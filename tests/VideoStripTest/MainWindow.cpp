@@ -4,7 +4,7 @@
 #include <QFileDialog>
 
 #include "PhTools/PhDebug.h"
-#include "PhCommonUI/PhTimeCodeDlg.h"
+#include "PhCommonUI/PhTimeCodeDialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -150,10 +150,9 @@ void MainWindow::on_action3_triggered()
 
 void MainWindow::on_actionGo_To_triggered()
 {
-	PhTimeCodeDlg dlg(_stripClock->timeCodeType(), _stripClock->frame());
+	PhTimeCodeDialog dlg(_stripClock->timeCodeType(), _stripClock->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_stripClock->setFrame(dlg.frame());
-
 }
 
 void MainWindow::on_actionOpen_Video_triggered()
@@ -183,7 +182,7 @@ bool MainWindow::openVideoFile(QString videoFileName)
 
 void MainWindow::on_actionSet_Time_Code_triggered()
 {
-	PhTimeCodeDlg dlg(_stripClock->timeCodeType(), _stripClock->frame());
+	PhTimeCodeDialog dlg(_stripClock->timeCodeType(), _stripClock->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		ui->videoView->setFrameStamp(dlg.frame());
 

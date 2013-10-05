@@ -5,12 +5,13 @@
 #include <QFileDialog>
 
 #include "PhTools/PhDebug.h"
-#include "PhCommonUI/PhTimeCodeDlg.h"
+#include "PhCommonUI/PhTimeCodeDialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	_sonySlave(PhTimeCodeType25, this)
+	_settings("Phonations", "GraphicStripSyncTest"),
+	_sonySlave(PhTimeCodeType25, &_settings, this)
 {
 	ui->setupUi(this);
 	_stripView = ui->stripView;
@@ -145,7 +146,7 @@ void MainWindow::on_action3_triggered()
 
 void MainWindow::on_actionGo_To_triggered()
 {
-	PhTimeCodeDlg dlg(_clock->timeCodeType(), _clock->frame());
+	PhTimeCodeDialog dlg(_clock->timeCodeType(), _clock->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_clock->setFrame(dlg.frame());
 
