@@ -1,5 +1,6 @@
 #include <QDesktopServices>
 #include <QUrl>
+#include <QFileDialog>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -9,34 +10,28 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+	_settings("Phonations","FormTest")
 {
     ui->setupUi(this);
-    _frame = 5882;
-    _tcType = PhTimeCodeType25;
-	ui->_timeCodeLabel->setText(PhTimeCode::stringFromFrame(_frame, _tcType));
 
-	loadSettings();
+	openFile(_settings.value("lastFile").toString());
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+	delete ui;
 }
 
-void MainWindow::on_actionGoto_triggered()
+bool MainWindow::openFile(QString fileName)
 {
-	PhTimeCodeDialog dlg(_tcType, _frame);
-	if(dlg.exec() == QDialog::Accepted)
-	{
-		_frame = dlg.frame();
-		ui->_timeCodeLabel->setText(PhTimeCode::stringFromFrame(_frame, _tcType));
-	}
+	ui->_lineEdit->setText(fileName);
+	return true;
 }
 
 void MainWindow::on_actionAbout_triggered()
 {
-	_about->exec();
+	_about.exec();
 }
 
 void MainWindow::on_actionDocumentation_triggered()
@@ -45,28 +40,12 @@ void MainWindow::on_actionDocumentation_triggered()
 		PHDEBUG <<"openned url correctly";
 }
 
-void MainWindow::on__saveButton_clicked()
+void MainWindow::on_actionOpen_triggered()
 {
-	saveSettings();
-}
-
-void MainWindow::on__loadButton_clicked()
-{
-	loadSettings();
-}
-
-void MainWindow::saveSettings()
-{
-	QSettings setting("Phonations","FormTest");
-	setting.setValue("qqwweerrttyy",ui->_lineEdit->text());
-
-	PHDEBUG << "Settings saved";
-}
-
-void MainWindow::loadSettings()
-{
-	QSettings setting("Phonations","FormTest");
-	ui->_lineEdit->setText(setting.value("qqwweerrttyy", "julien").toString());
-
-	PHDEBUG << "Settings loaded";
+	QString fileName = QFileDialog::getOpenFileName(this);
+	if(QFile::exists(fileName))
+	{
+		if(openFile(fileName))
+			_settings.setValue("lastFile", fileName);
+	}
 }
