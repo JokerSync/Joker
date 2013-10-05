@@ -9,7 +9,7 @@
 #include "ui_MainWindow.h"
 
 #include "PhTools/PhDebug.h"
-
+#include "PhTools/PhPictureTools.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,12 +19,30 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 	ui->graphicsView->setScene(&scene);
 
-	openFile(_settings.value("lastFile").toString());
+	QString mode = _settings.value("mode", "rgb").toString();
+	if(mode == "rgb")
+		generateRGB();
+	else if(mode == "yuv")
+		generateYUV();
+	else
+		openFile(mode);
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
+}
+
+void MainWindow::generateRGB()
+{
+	unsigned char *rgb = PhPictureTools::generateRGBPattern(100, 100);
+
+}
+
+void MainWindow::generateYUV()
+{
+	unsigned char *yuv = PhPictureTools::generateYUVPattern(100, 100);
+
 }
 
 bool MainWindow::openFile(QString fileName)
@@ -57,8 +75,20 @@ void MainWindow::on_actionOpen_triggered()
 	if(QFile::exists(fileName))
 	{
 		if(openFile(fileName))
-			_settings.setValue("lastFile", fileName);
+			_settings.setValue("mode", fileName);
 		else
 			QMessageBox::critical(this, "Error", "Unable to open file");
 	}
+}
+
+void MainWindow::on_actionGenerate_YUV_pattern_triggered()
+{
+    generateYUV();
+	_settings.setValue("mode", "yuv");
+}
+
+void MainWindow::on_actionGenerate_RGB_pattern_triggered()
+{
+	generateRGB();
+	_settings.setValue("mode", "rgb");
 }
