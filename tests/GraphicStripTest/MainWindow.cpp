@@ -4,7 +4,7 @@
 #include <QFileDialog>
 
 #include "PhTools/PhDebug.h"
-#include "PhCommonUI/PhTimeCodeDlg.h"
+#include "PhCommonUI/PhTimeCodeDialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -138,7 +138,7 @@ void MainWindow::on_action3_triggered()
 
 void MainWindow::on_actionGo_to_triggered()
 {
-	PhTimeCodeDlg dlg(_clock->timeCodeType(), _clock->frame());
+	PhTimeCodeDialog dlg(_clock->timeCodeType(), _clock->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_clock->setFrame(dlg.frame());
 }
