@@ -16,16 +16,13 @@ int main(int argc, char *argv[])
 	QApplication a(argc, argv);
 	MainWindow w;
 
+    w.show();
+
 	if (argc > 1)
 	{
 		QString fileName = argv[1];
 		w.openFile(fileName);
 	}
 
-    w.show();
-
-	qDebug() << sizeof(PhFrame);
-
     return a.exec();
-
 }

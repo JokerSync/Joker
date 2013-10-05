@@ -11,6 +11,15 @@
 PhGraphicView::PhGraphicView( QWidget *parent)
     : QGLWidget(parent)
 {
+	if (SDL_Init(SDL_INIT_VIDEO) == 0)
+		PHDEBUG << "init SDL Ok.";
+	else
+		PHDEBUG << "SDL error:" << SDL_GetError();
+	if (TTF_Init() == 0)
+		PHDEBUG << "init TTF Ok.";
+	else
+		PHDEBUG << "TTF error:" << TTF_GetError();
+
 	t_Timer = new QTimer(this);
 	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 	t_Timer->start(0);
@@ -20,14 +29,6 @@ void PhGraphicView::initializeGL()
 {
 	PHDEBUG;
 
-	if (SDL_Init(SDL_INIT_VIDEO) == 0)
-		PHDEBUG << "init SDL Ok.";
-	else
-		PHDEBUG << "SDL error:" << SDL_GetError();
-	if (TTF_Init() == 0)
-		PHDEBUG << "init TTF Ok.";
-	else
-		PHDEBUG << "TTF error:" << TTF_GetError();
 
 	init();
 }
@@ -58,7 +59,7 @@ void PhGraphicView::onRefresh()
 //	if(qApp->hasPendingEvents()) // qApp is a global pointer to the application
 //		return;
 //#endif
-
+	//PHDEBUG ;
 	updateGL();
 }
 
