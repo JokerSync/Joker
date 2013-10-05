@@ -26,7 +26,6 @@ SOURCES += main.cpp \
 
 HEADERS += \
     MainWindow.h \
-	TimeCodeDlg.h \
     StripPropertiesDialog.h
 
 FORMS += \
