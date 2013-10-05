@@ -12,7 +12,7 @@ class PhTimeCodeDialog;
 /**
  * @brief A modal dialog box for entering timecode.
  *
- * Launch the dialog using the TimeCodeDlg::exec() method.
+ * Launch the dialog using the TimeCodeDialog::exec() method.
  * If it return QDialog::Accepted, it means that a timecode value
  * was input and validated.
  * Otherwise the user pressed cancel.
