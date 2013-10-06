@@ -178,8 +178,7 @@ void MainWindow::on_actionStrip_Properties_triggered()
 
 void MainWindow::on_actionChange_font_triggered()
 {
-	//_settings("Phonations","GraphicStripTest");
-	bool ok = true;
+	bool ok;
 	QFont font = QFontDialog::getFont(&ok, this);
 	if(ok)
 	{
