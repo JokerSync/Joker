@@ -6,7 +6,6 @@ HEADERS += \
     ../../libs/PhSync/PhSonySlaveController.h \
     ../../libs/PhSync/tests/PhSonyControllerTest.h \
 	../../libs/PhSync/PhClockSynchronizer.h \
-	../../libs/PhSync/PhStripVideoSynchronizer.h \
 
 SOURCES += \
     ../../libs/PhSync/PhSonyController.cpp \
@@ -14,7 +13,6 @@ SOURCES += \
     ../../libs/PhSync/PhSonySlaveController.cpp \
     ../../libs/PhSync/tests/PhSonyControllerTest.cpp \
 	../../libs/PhSync/PhClockSynchronizer.cpp \
-	../../libs/PhSync/PhStripVideoSynchronizer.cpp \
 
 INCLUDEPATH += ../../libs/PhSync
 INCLUDEPATH += ../../libs/PhTools

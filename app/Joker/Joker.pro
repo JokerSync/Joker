@@ -24,9 +24,11 @@ include(../../libs/PhSync/PhSync.pri)
 #Main app
 SOURCES += main.cpp \
 	MainWindow.cpp \
+	SonyVideoStripSynchronizer.cpp
 
 HEADERS += \
     MainWindow.h \
+	SonyVideoStripSynchronizer.h
 
 FORMS += \
     MainWindow.ui

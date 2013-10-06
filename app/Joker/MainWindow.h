@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
-#include "PhSync/PhStripVideoSynchronizer.h"
+#include "SonyVideoStripSynchronizer.h"
 
 namespace Ui {
 class MainWindow;
@@ -67,7 +67,7 @@ private:
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
 	PhClock *_stripClock;
-	PhStripVideoSynchronizer _stripVideoSynchronizer;
+	SonyVideoStripSynchronizer _synchronizer;
 	QSettings _settings;
 
 };
