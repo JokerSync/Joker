@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
 	_settings("Phonations","FormTest"),
-	_image(NULL)
+	_image(NULL),
+	_rgb(NULL)
 {
     ui->setupUi(this);
 
@@ -34,28 +35,30 @@ MainWindow::~MainWindow()
 
 void MainWindow::generateRGB()
 {
+	if(_rgb)
+		delete _rgb;
 	if(_image)
 		delete _image;
-	int w = 400;
-	int h = 300;
-	unsigned char *rgb = PhPictureTools::generateRGBPattern(w, h);
-	_image = new QImage(rgb, w, h, QImage::Format_RGB888);
+	int w = 100;
+	int h = 100;
+	_rgb = PhPictureTools::generateRGBPattern(w, h);
+	_image = new QImage(_rgb, w, h, QImage::Format_RGB888);
 	this->update();
-	delete rgb;
 }
 
 void MainWindow::generateYUV()
 {
+	if(_rgb)
+		delete _rgb;
 	if(_image)
 		delete _image;
-	int w = 400;
-	int h = 300;
+	int w = 100;
+	int h = 100;
 	unsigned char *yuv = PhPictureTools::generateYUVPattern(w, h);
-	unsigned char *rgb = new unsigned char[w * h * 3];
-	PhPictureTools::ConvertYV12toRGB(yuv, rgb, w, h);
-	_image = new QImage(rgb, w, h, QImage::Format_RGB888);
+	_rgb = new unsigned char[w * h * 3];
+	PhPictureTools::ConvertYV12toRGB(yuv, _rgb, w, h);
+	_image = new QImage(_rgb, w, h, QImage::Format_RGB888);
 	this->update();
-	delete rgb;
 	delete yuv;
 }
 
