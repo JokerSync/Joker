@@ -23,12 +23,12 @@ include(../../libs/PhVideo/PhVideo.pri)
 #Main app
 SOURCES += main.cpp \
 	MainWindow.cpp \
-	../../libs/PhSync/PhStripVideoSynchronizer.cpp \
+	StripVideoSynchronizer.cpp \
 
 HEADERS += \
     MainWindow.h \
 	TimeCodeDlg.h \
-	../../libs/PhSync/PhStripVideoSynchronizer.h \
+	StripVideoSynchronizer.h \
 
 FORMS += \
     MainWindow.ui
