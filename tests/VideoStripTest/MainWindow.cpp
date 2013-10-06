@@ -8,10 +8,15 @@
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow)
+	ui(new Ui::MainWindow),
+	_settings("Phonations", "VideoStripTest")
 {
 	ui->setupUi(this);
 	_stripView = ui->stripView;
+
+	if(!_stripView->setFont(_settings.value("StripFontName", "Arial").toString()))
+		PHDEBUG << "The font has not been initialized";
+
 	_doc = _stripView->doc();
 
 	_stripClock = _stripView->clock();

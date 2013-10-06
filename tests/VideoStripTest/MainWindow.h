@@ -5,6 +5,8 @@
 #include <PhGraphicStrip/PhGraphicStripView.h>
 #include <PhVideo/PhVideoView.h>
 #include <QMessageBox>
+#include <QSettings>
+
 #include "PhSync/PhStripVideoSynchronizer.h"
 
 namespace Ui {
@@ -68,6 +70,7 @@ private:
 	PhStripDoc *_doc;
 	PhClock *_stripClock;
 	PhStripVideoSynchronizer _stripVideoSynchronizer;
+	QSettings _settings;
 
 };
 
