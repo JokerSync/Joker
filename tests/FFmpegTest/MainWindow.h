@@ -25,6 +25,8 @@ public:
 
 	bool openFile(QString fileName);
 
+	bool setFrame(int frame);
+
 protected:
 	void paintEvent(QPaintEvent *);
 
@@ -41,6 +43,9 @@ private:
 	Ui::MainWindow *ui;
 
 	AVFormatContext * _pFormatContext;
+	int _videoStream;
+	AVCodecContext * _pCodecContext;
+	AVFrame * _pFrame;
 	struct SwsContext * _pSwsCtx;
 	QImage * _image;
 	uint8_t *_rgb;
