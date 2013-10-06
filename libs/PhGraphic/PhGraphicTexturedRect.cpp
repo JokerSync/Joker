@@ -50,7 +50,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 
 
     // Edit the texture object's image data using the information SDL_Surface gives us
-    glTexImage2D( GL_TEXTURE_2D, 0, textureFormat, surface->w, surface->h, 0,
+    glTexImage2D( GL_TEXTURE_2D, 0, surface->format->BytesPerPixel, surface->w, surface->h, 0,
                   textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
