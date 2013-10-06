@@ -24,9 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 
-	connect(_stripClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
-	connect(_stripClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
-
 	_stripVideoSynchronizer.setStripClock(_stripClock);
 
 	_stripVideoSynchronizer.setVideoClock(ui->videoView->getClock());
@@ -67,18 +64,6 @@ void MainWindow::onOpenFile()
 		QString fileName = dlg.selectedFiles()[0];
 		openFile(fileName);
 	}
-}
-
-void MainWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
-{
-	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(frame, tcType), QString::number(_stripClock->rate()));
-	ui->statusbar->showMessage(message);
-}
-
-void MainWindow::onRateChanged(PhRate rate)
-{
-	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(_stripClock->frame(), _stripClock->timeCodeType()), QString::number(rate));
-	ui->statusbar->showMessage(message);
 }
 
 void MainWindow::on_actionPlay_pause_triggered()
