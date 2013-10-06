@@ -59,7 +59,7 @@
     <string>Play/pause</string>
    </property>
    <property name="shortcut">
-    <string>Space</string>
+    <string>Up</string>
    </property>
   </action>
   <action name="actionNext_frame">

@@ -17,14 +17,15 @@ MainWindow::MainWindow(QWidget *parent) :
 	_pSwsCtx(NULL),
 	_image(NULL),
 	_rgb(NULL),
-	_currentFrame(0)
+	_currentFrame(0),
+	_rate(0)
 {
 	ui->setupUi(this);
 
 	av_register_all();
 
 	connect(&_timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
-	_timer.start(0);
+	_timer.start(40);
 }
 
 MainWindow::~MainWindow()
@@ -105,18 +106,17 @@ bool MainWindow::setFrame(int frame)
 		{
 			int ok;
 			avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
-			if(ok)
-			{
-				int linesize = _image->width() * 3;
-				// Convert the image into YUV format that SDL uses
-				if(sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
-						  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
-						  &linesize) < 0)
-					return false;
-			}
-			break;
+			if(!ok)
+				return false;
+
+			int linesize = _image->width() * 3;
+			// Convert the image into YUV format that SDL uses
+			return (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
+						 _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
+						 &linesize) >= 0);
 		}
 	}
+	return false;
 }
 
 void MainWindow::paintEvent(QPaintEvent *)
@@ -140,21 +140,25 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionPlay_pause_triggered()
 {
-	// TODO
+	if(_rate)
+		_rate = 0;
+	else
+		_rate = 1;
 }
 
 void MainWindow::on_actionNext_frame_triggered()
 {
-	// TODO
+	this->setFrame(++_currentFrame);
 }
 
 void MainWindow::on_actionPrevious_frame_triggered()
 {
-	// TODO
+	this->setFrame(--_currentFrame);
 }
 
 void MainWindow::onTimeOut()
 {
-	this->setFrame(_currentFrame++);
+	_currentFrame += _rate;
+	this->setFrame(_currentFrame);
 	this->update();
 }

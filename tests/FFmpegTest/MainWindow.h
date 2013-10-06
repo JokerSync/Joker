@@ -55,6 +55,7 @@ private:
 
 	QTimer _timer;
 	int _currentFrame;
+	int _rate;
 };
 
 #endif // MAINWINDOW_H
