@@ -75,7 +75,7 @@ bool MainWindow::openFile(QString fileName)
 			avcodec_decode_video2(pCodecContext, _pFrame, &ok, &packet);
 			if(ok)
 			{
-				int linesize = 720;
+				int linesize = pCodecContext->width * 3;
 				if(_rgb)
 					delete _rgb;
 				_rgb = new uint8_t[pCodecContext->width * pCodecContext->height * 3];
