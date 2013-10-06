@@ -91,7 +91,8 @@ void PhPictureTools::ConvertYV12toRGB(const unsigned char *yuvIn, unsigned char 
 			YUVtoRGB(yuv, rgbOut);
             rgbOut += 3;
 		}
-	}}
+	}
+}
 
 unsigned char *PhPictureTools::generateRGBPattern(int w, int h)
 {
@@ -123,7 +124,7 @@ unsigned char *PhPictureTools::generateYUVPattern(int w, int h)
 	{
         for (int x = 0; x < w; ++x)
 		{
-            *(op[0]++) = x;
+            *(op[0]++) = y * 256 / h;
             if (x % 2 == 0 && y % 2 == 0)
 			{
                 *(op[1]++) = 0;

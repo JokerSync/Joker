@@ -46,8 +46,17 @@ void MainWindow::generateRGB()
 
 void MainWindow::generateYUV()
 {
-	unsigned char *yuv = PhPictureTools::generateYUVPattern(100, 100);
-
+	if(_image)
+		delete _image;
+	int w = 400;
+	int h = 300;
+	unsigned char *yuv = PhPictureTools::generateYUVPattern(w, h);
+	unsigned char *rgb = new unsigned char[w * h * 3];
+	PhPictureTools::ConvertYV12toRGB(yuv, rgb, w, h);
+	_image = new QImage(rgb, w, h, QImage::Format_RGB888);
+	this->update();
+	delete rgb;
+	delete yuv;
 }
 
 bool MainWindow::openFile(QString fileName)
