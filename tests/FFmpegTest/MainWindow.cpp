@@ -60,9 +60,9 @@ bool MainWindow::openFile(QString fileName)
 	if(avcodec_open2(pCodecContext, pCodec, NULL) < 0)
 		return false;
 
-	_pFrame = avcodec_alloc_frame();
+	AVFrame * pFrame = avcodec_alloc_frame();
 
-	struct SwsContext * pSwsCtx = sws_getContext(pCodecContext->width, pCodecContext->height,
+	_pSwsCtx = sws_getContext(pCodecContext->width, pCodecContext->height,
 							pCodecContext->pix_fmt, pCodecContext->width, pCodecContext->height,
 							AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 
@@ -72,7 +72,7 @@ bool MainWindow::openFile(QString fileName)
 		if(packet.stream_index == videoStream)
 		{
 			int ok;
-			avcodec_decode_video2(pCodecContext, _pFrame, &ok, &packet);
+			avcodec_decode_video2(pCodecContext, pFrame, &ok, &packet);
 			if(ok)
 			{
 				int linesize = pCodecContext->width * 3;
@@ -80,8 +80,8 @@ bool MainWindow::openFile(QString fileName)
 					delete _rgb;
 				_rgb = new uint8_t[pCodecContext->width * pCodecContext->height * 3];
 				// Convert the image into YUV format that SDL uses
-				if(sws_scale(pSwsCtx, (const uint8_t * const *) _pFrame->data,
-						  _pFrame->linesize, 0, pCodecContext->height, &_rgb,
+				if(sws_scale(_pSwsCtx, (const uint8_t * const *) pFrame->data,
+						  pFrame->linesize, 0, pCodecContext->height, &_rgb,
 						  &linesize) < 0)
 					return false;
 

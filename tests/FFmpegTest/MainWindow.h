@@ -41,7 +41,7 @@ private:
 	Ui::MainWindow *ui;
 
 	AVFormatContext * _pFormatContext;
-	AVFrame * _pFrame;
+	struct SwsContext * _pSwsCtx;
 	QImage * _image;
 	uint8_t *_rgb;
 };
