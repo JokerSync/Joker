@@ -2,9 +2,10 @@
 
 #include "PhTools/PhDebug.h"
 #include "GraphicTestView.h"
+#include "PhTools/PhPictureTools.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent)
-	: PhGraphicView( parent), _image(NULL), _font(NULL), _text(NULL), _rect(NULL), _loop(NULL)
+	: PhGraphicView( parent), _image(NULL), _font(NULL), _text(NULL), _rect(NULL), _loop(NULL), _yuvRect(NULL)
 {
 
 }
@@ -60,6 +61,12 @@ bool GraphicTestView::init()
 		return false;
 	}
 
+	int w = 50;
+	int h = 50;
+	unsigned char * yuv = PhPictureTools::generateYUVPattern(w, h);
+	_yuvRect = new PhGraphicTexturedRect(20, 300, 150, 100);
+	_yuvRect->createTextureFromYUVBuffer(yuv, w, h);
+
 	return true;
 }
 
@@ -78,6 +85,8 @@ void GraphicTestView::paint()
 	_rect->draw();
 
 	_loop->draw();
+
+	_yuvRect->draw();
 }
 
 

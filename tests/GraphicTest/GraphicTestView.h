@@ -31,6 +31,7 @@ private:
 	PhGraphicText *_text;
 	PhGraphicSolidRect *_rect;
 	PhGraphicLoop * _loop;
+	PhGraphicTexturedRect * _yuvRect;
 };
 
 #endif // GraphicTestView_H
