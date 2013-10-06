@@ -5,11 +5,11 @@
 
 #include "PhTools/PhClock.h"
 
-class SonyVideoStripSynchronizer : public QObject
+class VideoStripSynchronizer : public QObject
 {
 	Q_OBJECT
 public:
-	SonyVideoStripSynchronizer();
+	VideoStripSynchronizer();
 
 	void setStripClock(PhClock *clock);
 	void setVideoClock(PhClock *clock);
