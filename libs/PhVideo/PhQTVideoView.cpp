@@ -10,9 +10,9 @@ PhQTVideoView::PhQTVideoView(QObject *parent)
 	qDebug() << "Using QTVideo widget for video playback.";
 	_player.setVideoOutput(this);
 
-	connect(this->getClock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
-	connect(this->getClock(), SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
-	connect(this->getClock(), SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onTCTypeChanged(PhTimeCodeType)));
+	connect(&_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(&_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
+	connect(&_clock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onTCTypeChanged(PhTimeCodeType)));
 
 	emit onTCTypeChanged(this->getClock()->timeCodeType());
 }
@@ -41,7 +41,6 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 		_player.play();
 
 	_player.setPlaybackRate(rate);
-
 }
 
 void PhQTVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)

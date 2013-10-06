@@ -9,10 +9,10 @@ int main(int argc, char *argv[])
     MainView mainView;
 	mainView.resize(800, 600);
 
-    if(argc>1)
-        mainView.openFile(QString(argv[1]));
-
     mainView.show();
+
+	if(argc>1)
+        mainView.openFile(QString(argv[1]));
 
     return app.exec();
 }

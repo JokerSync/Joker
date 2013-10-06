@@ -45,14 +45,9 @@ mac {
 	SOURCES += ../../libs/PhGraphic/SDLMain.cpp
 
 	QMAKE_CXXFLAGS += -F/Library/Frameworks
-	QMAKE_OBJECTIVE_CFLAGS += -F/Library/Frameworks
 
 	LIBS += -F/Library/Frameworks
 	LIBS += -framework SDL -framework SDL_image -framework SDL_ttf
-
-#	OBJECTIVE_SOURCES += ../../libs/PhGraphic/SDLMain.m
-#	OBJECTIVE_HEADERS += ../../libs/PhGraphic/SDLMain.h
-#	LIBS += -framework Cocoa
 
 #	copylibs.commands += cp -r /Library/Frameworks/SDL* $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/;
 }
