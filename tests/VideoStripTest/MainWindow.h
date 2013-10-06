@@ -23,14 +23,10 @@ public:
 
 	void openFile(QString fileName);
 
-	PhGraphicStripView * getStripView(){return _stripView;};
-
 	bool openVideoFile(QString videoFileName);
 
 private slots:
 	void onOpenFile();
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
-	void onRateChanged(PhRate rate);
 
 	void on_actionPlay_pause_triggered();
 
