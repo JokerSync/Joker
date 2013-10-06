@@ -14,25 +14,22 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1">
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <property name="margin">
      <number>0</number>
     </property>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_3" stretch="4,1">
-      <property name="leftMargin">
-       <number>5</number>
+     <widget class="PhVideoView" name="videoView" native="true">
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
-      <property name="rightMargin">
-       <number>5</number>
-      </property>
-      <item>
-       <widget class="PhVideoView" name="videoView" native="true"/>
-      </item>
-      <item>
-       <widget class="PhGraphicStripView" name="stripView" native="true"/>
-      </item>
-     </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="PhGraphicStripView" name="stripView" native="true"/>
     </item>
    </layout>
   </widget>
