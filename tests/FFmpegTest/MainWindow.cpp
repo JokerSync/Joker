@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	av_register_all();
 
 	connect(&_timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
-	//_timer.start(0);
+	_timer.start(0);
 }
 
 MainWindow::~MainWindow()
@@ -155,5 +155,6 @@ void MainWindow::on_actionPrevious_frame_triggered()
 
 void MainWindow::onTimeOut()
 {
-
+	this->setFrame(_currentFrame++);
+	this->update();
 }
