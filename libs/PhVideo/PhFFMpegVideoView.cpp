@@ -90,11 +90,11 @@ PhFFMpegVideoView::~PhFFMpegVideoView()
 
 void PhFFMpegVideoView::paintEvent(QPaintEvent *)
 {
+	QPainter painter(this);
+	painter.fillRect(0, 0, this->width(), this->height(), Qt::black);
+
 	if(_image)
-	{
-		QPainter painter(this);
 		painter.drawImage(0, 0, *_image);
-	}
 }
 
 void PhFFMpegVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
