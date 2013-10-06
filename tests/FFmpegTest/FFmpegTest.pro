@@ -8,9 +8,6 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-INCLUDEPATH += /usr/local/include
-INCLUDEPATH += /usr/local/include/QtAV
-
 TARGET = FFmpegTest
 TEMPLATE = app
 
@@ -21,7 +18,16 @@ HEADERS  += MainWindow.h
 
 FORMS    += MainWindow.ui
 
-LIBS += -L/usr/local/lib
-LIBS += -lQtAV
+INCLUDEPATH += /usr/local/include
+LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil
 
-QMAKE_POST_LINK += cp /usr/local/lib/libQtA*.dylib $${TARGET}.app/Contents/MacOS;
+LIBS += -lxvidcore -lx264 -lvorbis -lvorbisenc -lvorbisfile -lvpx
+LIBS += -ltheora -ltheoradec -ltheoraenc
+LIBS += -lspeex -lspeexdsp
+LIBS += -lschroedinger-1.0 -lopus -lvo-aacenc -lopenjpeg -lmp3lame -lfaac -lcelt0 -lfdk-aac
+LIBS += -lswscale -laacplus
+#to test
+LIBS += -lass -ltiff -ltiffxx -lpng -ljpeg
+
+LIBS += -lssl -lcrypto -lbz2 -lz
+LIBS += -liconv

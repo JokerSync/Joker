@@ -83,9 +83,4 @@ use_ffmpeg {
 
 	HEADERS += ../../libs/PhVideo/PhFFMpegVideoView.h
 	SOURCES += ../../libs/PhVideo/PhFFMpegVideoView.cpp
-
-	LIBS += -L/usr/local/lib
-	LIBS += -lQtAV
-
-	QMAKE_POST_LINK += cp /usr/local/lib/libQtA*.dylib $${TARGET}.app/Contents/MacOS;
 }
