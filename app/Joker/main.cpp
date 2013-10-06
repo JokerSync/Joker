@@ -3,22 +3,27 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-#include "JokerMainWindow.h"
+
 #include <QApplication>
-#include "PhTools/PhString.h"
+#include <QDebug>
+
+#include "PhStrip/PhStripDoc.h"
+
+#include "MainWindow.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+	QApplication a(argc, argv);
+	MainWindow w;
 
-    PhString file;
-    if (argc < 2)
-        file = "";
-    else
-        file = argv[1];
-
-    JokerMainWindow w(file);
     w.show();
-    
+
+	if (argc > 1)
+	{
+		QString fileName = argv[1];
+		w.openFile(fileName);
+	}
+
     return a.exec();
+
 }
