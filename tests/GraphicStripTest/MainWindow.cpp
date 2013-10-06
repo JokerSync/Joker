@@ -9,19 +9,6 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-
-QString MainWindow::findFontFile(QString fontName)
-{
-	PHDEBUG << fontName;
-	QString fontFile = "~/Library/Fonts/" + fontName + ".ttf";
-	if(QFile::exists(fontFile))
-		return fontFile;
-	fontFile = "/Library/Fonts/" + fontName + ".ttf";
-	if(QFile::exists(fontFile))
-		return fontFile;
-	return NULL;
-}
-
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
@@ -30,9 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	_stripView = ui->stripView;
 
-	QString fontFile = findFontFile(_settings.value("PhGraphicStripViewFontPath", "Arial").toString());
-
-	if(!_stripView->setFont(fontFile))
+	if(!_stripView->setFont(_settings.value("StripFontName", "Arial").toString()))
 		PHDEBUG << "The font has not been initialized";
 
 	_doc = _stripView->doc();
@@ -198,11 +183,9 @@ void MainWindow::on_actionChange_font_triggered()
 	QFont font = QFontDialog::getFont(&ok, this);
 	if(ok)
 	{
-		QString fontpath = findFontFile(font.family());
-		if(_stripView->setFont(fontpath))
-		{
-			PHDEBUG << "font:" << fontpath;
-			_settings.setValue("PhGraphicStripViewFontPath", font.family());
-		}
+		if(_stripView->setFont(font.family()))
+			_settings.setValue("StripFontName", font.family());
+		else
+			QMessageBox::critical(this, "Error", "Unable to open " + font.family());
 	}
 }

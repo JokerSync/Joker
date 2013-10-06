@@ -73,7 +73,7 @@ public:
 	 * @param fontfile Font file path
 	 * @return true if the operation succeeds, false otherwise
 	 */
-	bool setFont(QString fontFile);
+	bool setFont(QString fontName);
 
 
 protected:

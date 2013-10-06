@@ -29,15 +29,22 @@ PhClock *PhGraphicStripView::clock()
 	return &_clock;
 }
 
-bool PhGraphicStripView::setFont(QString fontFile)
+bool PhGraphicStripView::setFont(QString fontName)
 {
-	PHDEBUG << "setFont : " << fontFile;
-
+	PHDEBUG << fontName;
+	QString fontFile = "~/Library/Fonts/" + fontName + ".ttf";
 	if(!QFile::exists(fontFile))
 	{
-		PHDEBUG << "File doesn't exists : " << fontFile;
-		return false;
+		fontFile = "/Library/Fonts/" + fontName + ".ttf";
+		if(!QFile::exists(fontFile))
+		{
+			PHDEBUG << "Unable to find the font : " << fontName;
+			return false;
+		}
 	}
+
+	PHDEBUG << "file : " << fontFile;
+
 	_currentFont = new PhFont(fontFile, 150);
 
 	PHDEBUG << "_currentFont value" << _currentFont;
