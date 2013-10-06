@@ -69,8 +69,25 @@ bool MainWindow::openFile(QString fileName)
 
 	_pFrame = avcodec_alloc_frame();
 
+	int w = this->width();
+	int h = this->height();
+
+	// adjust width to a multiple of 4:
+	int pow = 4;
+	if(w % pow)
+		w += pow - (w % pow);
+
+	if(_rgb)
+		delete _rgb;
+	_rgb = new uint8_t[3 * w * h];
+
+	if(_image)
+		delete _image;
+
+	_image = new QImage(_rgb, w, h, QImage::Format_RGB888);
+
 	_pSwsCtx = sws_getContext(_pCodecContext->width, _pCodecContext->height,
-							_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
+							_pCodecContext->pix_fmt, w, h,
 							AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 
 	_currentFrame = 0;
@@ -90,20 +107,12 @@ bool MainWindow::setFrame(int frame)
 			avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
 			if(ok)
 			{
-				int linesize = _pCodecContext->width * 3;
-				if(_rgb)
-					delete _rgb;
-				_rgb = new uint8_t[_pCodecContext->width * _pCodecContext->height * 3];
+				int linesize = _image->width() * 3;
 				// Convert the image into YUV format that SDL uses
 				if(sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
 						  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
 						  &linesize) < 0)
 					return false;
-
-				if(_image)
-					delete _image;
-
-				_image = new QImage(_rgb, _pCodecContext->width, _pCodecContext->height, QImage::Format_RGB888);
 			}
 			break;
 		}
