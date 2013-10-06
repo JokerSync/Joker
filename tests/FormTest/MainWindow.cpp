@@ -52,11 +52,15 @@ void MainWindow::generateYUV()
 		delete _rgb;
 	if(_image)
 		delete _image;
-	int w = 100;
-	int h = 100;
+	int w = 1920;
+	int h = 1080;
 	unsigned char *yuv = PhPictureTools::generateYUVPattern(w, h);
 	_rgb = new unsigned char[w * h * 3];
-	PhPictureTools::ConvertYV12toRGB(yuv, _rgb, w, h);
+	QTime timer;
+	timer.start();
+	for(int i = 0; i < 10; i++)
+		PhPictureTools::ConvertYV12toRGB(yuv, _rgb, w, h);
+	PHDEBUG << "elapsed: " << timer.elapsed();
 	_image = new QImage(_rgb, w, h, QImage::Format_RGB888);
 	this->update();
 	delete yuv;
