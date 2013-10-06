@@ -11,13 +11,16 @@ PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
 {
 }
 
+bool PhGraphicTexturedRect::init()
+{
+
+}
+
 bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 {
-    // get the number of channels in the SDL surface
-    GLint  nbOfColors = surface->format->BytesPerPixel;
-    GLenum textureFormat = 0;
+	GLenum textureFormat = 0;
 
-    switch (nbOfColors) {
+    switch (surface->format->BytesPerPixel) {
     case 1:
         textureFormat = GL_ALPHA;
         break;
@@ -36,9 +39,28 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
     default:
         PHDEBUG << "Warning: the image is not truecolor...";
 		return false;
-
     }
 
+	glEnable( GL_TEXTURE_2D );
+    // Have OpenGL generate a texture object handle for us
+    glGenTextures( 1, &_texture );
+
+    // Bind the texture object
+    glBindTexture( GL_TEXTURE_2D, _texture );
+
+
+    // Edit the texture object's image data using the information SDL_Surface gives us
+    glTexImage2D( GL_TEXTURE_2D, 0, textureFormat, surface->w, surface->h, 0,
+                  textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	return true;
+}
+
+bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, int height)
+{
     glEnable( GL_TEXTURE_2D );
     // Have OpenGL generate a texture object handle for us
     glGenTextures( 1, &_texture );
@@ -48,8 +70,8 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 
 
     // Edit the texture object's image data using the information SDL_Surface gives us
-    glTexImage2D( GL_TEXTURE_2D, 0, nbOfColors, surface->w, surface->h, 0,
-                  textureFormat, GL_UNSIGNED_BYTE, surface->pixels );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+                  GL_YCBCR_422_APPLE, GL_UNSIGNED_SHORT_8_8_APPLE, data);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -92,3 +114,4 @@ void PhGraphicTexturedRect::setTextureCoordinate(float tu, float tv)
 	_tu = tu;
 	_tv = tv;
 }
+

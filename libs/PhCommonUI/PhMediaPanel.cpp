@@ -205,7 +205,6 @@ void PhMediaPanel::onTCTypeComboChanged()
 	emit timeCodeTypeChanged(timeCodeType());
 }
 
-
 void PhMediaPanel::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
 	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(frame, tcType));

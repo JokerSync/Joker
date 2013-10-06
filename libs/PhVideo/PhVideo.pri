@@ -1,4 +1,7 @@
-CONFIG += use_qtvideo
+#CONFIG += use_qtvideo
+#CONFIG += use_vlc
+#CONFIG += use_qtav
+CONFIG += use_ffmpeg
 #CONFIG += use_vlc
 
 HEADERS += ../../libs/PhVideo/PhVideoObject.h
@@ -21,6 +24,7 @@ mac {
 }
 
 use_qtvideo {
+	DEFINES += USE_QTVIDEO
 	QT += multimedia multimediawidgets
 
 	HEADERS += ../../libs/PhVideo/PhQTVideoView.h
@@ -46,9 +50,42 @@ use_vlc {
 
 	QMAKE_POST_LINK += && cp -r $${VLC_PATH}/plugins/* ./$${TARGET}.app/Contents/MacOS/plugins
 	QMAKE_POST_LINK += && echo "all vlc lib and plugin copy ok"
-
 }
 
+use_qtav {
+	DEFINES += USE_QTAV
+	INCLUDEPATH += /usr/local/include /usr/local/include/QtAV
 
+	HEADERS += ../../libs/PhVideo/PhQtAVVideoView.h
+	SOURCES += ../../libs/PhVideo/PhQtAVVideoView.cpp
 
+	LIBS += -L/usr/local/lib
+	LIBS += -lQtAV
 
+	QMAKE_POST_LINK += cp /usr/local/lib/libQtA*.dylib $${TARGET}.app/Contents/MacOS;
+}
+
+use_ffmpeg {
+	DEFINES += USE_FFMPEG
+	INCLUDEPATH += /usr/local/include
+	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil
+
+	LIBS += -lxvidcore -lx264 -lvorbis -lvorbisenc -lvorbisfile -lvpx
+	LIBS += -ltheora -ltheoradec -ltheoraenc
+	LIBS += -lspeex -lspeexdsp
+	LIBS += -lschroedinger-1.0 -lopus -lvo-aacenc -lopenjpeg -lmp3lame -lfaac -lcelt0 -lfdk-aac
+	LIBS += -lswscale -laacplus
+	#to test
+	LIBS += -lass -ltiff -ltiffxx -lpng -ljpeg
+
+	LIBS += -lssl -lcrypto -lbz2 -lz
+	LIBS += -liconv
+
+	HEADERS += ../../libs/PhVideo/PhFFMpegVideoView.h
+	SOURCES += ../../libs/PhVideo/PhFFMpegVideoView.cpp
+
+	LIBS += -L/usr/local/lib
+	LIBS += -lQtAV
+
+	QMAKE_POST_LINK += cp /usr/local/lib/libQtA*.dylib $${TARGET}.app/Contents/MacOS;
+}
