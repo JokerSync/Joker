@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QtAV/QtAV.h>
 
 namespace Ui {
 class MainWindow;
@@ -29,9 +28,6 @@ private slots:
 
 private:
 	Ui::MainWindow *ui;
-
-    QtAV::AVPlayer *mpPlayer;
-    QtAV::VideoRenderer *mpRenderer;
 };
 
 #endif // MAINWINDOW_H
