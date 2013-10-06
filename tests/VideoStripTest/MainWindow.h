@@ -67,7 +67,7 @@ private:
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
 	PhClock *_stripClock;
-	SonyVideoStripSynchronizer _synchronizer;
+	VideoStripSynchronizer _synchronizer;
 	QSettings _settings;
 };
 

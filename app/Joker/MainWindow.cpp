@@ -10,7 +10,9 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	_settings("Phonations", "VideoStripTest")
+	_settings("Phonations", "VideoStripTest"),
+	_sonySlave(PhTimeCodeType25, &_settings, this)
+#warning TODO check default speed
 {
 	ui->setupUi(this);
 	_stripView = ui->stripView;
@@ -27,6 +29,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	_synchronizer.setStripClock(_stripClock);
 
 	_synchronizer.setVideoClock(ui->videoView->getClock());
+
+	if(_sonySlave.open())
+		_synchronizer.setSonyClock(_sonySlave.clock());
+	else
+		QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
 }
 
 MainWindow::~MainWindow()
