@@ -95,7 +95,7 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionDocumentation_triggered()
 {
-	if(QDesktopServices::openUrl(QUrl("http://www.doublage.org",QUrl::TolerantMode)))
+	if(QDesktopServices::openUrl(QUrl("http://www.doublage.org", QUrl::TolerantMode)))
 		PHDEBUG <<"openned url correctly";
 }
 

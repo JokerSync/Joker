@@ -1,7 +1,5 @@
 #include "PhPictureTools.h"
 
-
-
 void PhPictureTools::RGBtoYUV(const unsigned char *rgb, int *yuv, int monochrome, int luminance)
 {
 	if (monochrome) {
@@ -35,9 +33,12 @@ void PhPictureTools::RGBtoYUV(const unsigned char *rgb, int *yuv, int monochrome
 
 void PhPictureTools::YUVtoRGB(const int *yuv, unsigned char *rgb)
 {
-	rgb[0] = (unsigned char)(yuv[0] + 701 * (yuv[2] - 128) / 500);
-	rgb[1] = (unsigned char)(yuv[0] - (34414 * (yuv[1] - 128) + 71414 * (yuv[2] - 128)) / 100000);
-	rgb[2] = (unsigned char)(yuv[0] + 1772 * (yuv[1] - 128) / 1000);
+	int r = (yuv[0] + 701 * (yuv[2] - 128) / 500);
+	rgb[0] = (r > 255) ? 255 : (r < 0 ? 0 : (unsigned char)r);
+	int g = (yuv[0] - (34414 * (yuv[1] - 128) + 71414 * (yuv[2] - 128)) / 100000);
+	rgb[1] = (g > 255) ? 255 : (g < 0 ? 0 : (unsigned char)g);
+	int b = (yuv[0] + 1772 * (yuv[1] - 128) / 1000);
+	rgb[2] = (b > 255) ? 255 : (g < 0 ? 0 : (unsigned char)b);
 }
 
 void PhPictureTools::ConvertRGBtoYV12(const unsigned char *rgbIn, unsigned char *yuvOut, int w, int h, int monochrome, int luminance)
@@ -127,8 +128,8 @@ unsigned char *PhPictureTools::generateYUVPattern(int w, int h)
             *(op[0]++) = y * 256 / h;
             if (x % 2 == 0 && y % 2 == 0)
 			{
-                *(op[1]++) = 128;
-                *(op[2]++) = 128;
+                *(op[1]++) = 160;
+                *(op[2]++) = 160;
             }
         }
 	}
