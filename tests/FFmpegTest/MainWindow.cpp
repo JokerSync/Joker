@@ -111,9 +111,11 @@ bool MainWindow::setFrame(int frame)
 
 			int linesize = _image->width() * 3;
 			// Convert the image into YUV format that SDL uses
-			return (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
+			if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
 						 _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
-						 &linesize) >= 0);
+						 &linesize) < 0)
+				return false;
+			return true;
 		}
 	}
 	return false;

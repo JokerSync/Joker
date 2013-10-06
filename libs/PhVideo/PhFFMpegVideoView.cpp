@@ -1,13 +1,17 @@
+#include <QPainter>
+
 #include "PhFFMpegVideoView.h"
 
-extern "C" {
-#include <libavformat/avformat.h>
-#include <libavutil/avutil.h>
-#include <libavcodec/avcodec.h>
-}
 
 PhFFMpegVideoView::PhFFMpegVideoView(QWidget *parent) :
-	PhGraphicView(parent), _pFormatContext(NULL)
+	QWidget(parent),
+	_pFormatContext(NULL),
+	_videoStream(-1),
+	_pCodecContext(NULL),
+	_pFrame(NULL),
+	_pSwsCtx(NULL),
+	_image(NULL),
+	_rgb(NULL)
 {
 	qDebug() << "Using FFMpeg widget for video playback.";
 	av_register_all();
@@ -18,52 +22,64 @@ PhFFMpegVideoView::PhFFMpegVideoView(QWidget *parent) :
 
 bool PhFFMpegVideoView::open(QString fileName)
 {
-	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) == 0)
+	qDebug() << fileName;
+	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
+		return false;
+
+	// Retrieve stream information
+	if (avformat_find_stream_info(_pFormatContext, NULL) < 0)
+		return -1; // Couldn't find stream information
+
+	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
+
+	// Find video stream :
+	for(int i = 0; i < _pFormatContext->nb_streams; i++)
 	{
-		av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
-
-		int videoStream = -1;
-		// Find video stream :
-		for(int i = 0; i < _pFormatContext->nb_streams; i++)
+		if(_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
 		{
-			if(_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
-			{
-				videoStream = i;
-				break;
-			}
-		}
-
-		if(videoStream != -1)
-		{
-			AVCodecContext * pCodecContext = _pFormatContext->streams[videoStream]->codec;
-
-			qDebug() << "size : " << pCodecContext->width << "x" << pCodecContext->height;
-			AVCodec * pCodec = avcodec_find_decoder(pCodecContext->codec_id);
-			if(pCodec != NULL)
-			{
-				if(avcodec_open2(pCodecContext, pCodec, NULL) >= 0)
-				{
-					_pFrame = avcodec_alloc_frame();
-					AVPacket packet;
-					while(av_read_frame(_pFormatContext, &packet) >= 0)
-					{
-						if(packet.stream_index == videoStream)
-						{
-							int ok;
-							avcodec_decode_video2(pCodecContext, _pFrame, &ok, &packet);
-							if(ok)
-							{
-								qDebug() << "pixel format" << (_pFrame->format == AV_PIX_FMT_YUVJ422P);
-								_videoRect.createTextureFromYUVBuffer(_pFrame->data[0], _pFrame->linesize[0], pCodecContext->height);
-							}
-							break;
-						}
-					}
-				}
-			}
+			_videoStream = i;
+			break;
 		}
 	}
-	return false;
+
+	if(_videoStream == -1)
+		return false;
+
+	_pCodecContext = _pFormatContext->streams[_videoStream]->codec;
+
+	qDebug() << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
+	AVCodec * pCodec = avcodec_find_decoder(_pCodecContext->codec_id);
+	if(pCodec == NULL)
+		return false;
+
+	if(avcodec_open2(_pCodecContext, pCodec, NULL) < 0)
+		return false;
+
+	_pFrame = avcodec_alloc_frame();
+
+	int w = this->width();
+	int h = this->height();
+
+	// adjust width to a multiple of 4:
+	int pow = 4;
+	if(w % pow)
+		w += pow - (w % pow);
+
+	if(_rgb)
+		delete _rgb;
+	_rgb = new uint8_t[3 * w * h];
+
+	if(_image)
+		delete _image;
+
+	_image = new QImage(_rgb, w, h, QImage::Format_RGB888);
+
+	_pSwsCtx = sws_getContext(_pCodecContext->width, _pCodecContext->height,
+							_pCodecContext->pix_fmt, w, h,
+							AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+
+	_clock.setFrame(0);
+	return goToFrame(0);
 }
 
 PhFFMpegVideoView::~PhFFMpegVideoView()
@@ -72,18 +88,18 @@ PhFFMpegVideoView::~PhFFMpegVideoView()
 		avformat_close_input(&_pFormatContext);
 }
 
-bool PhFFMpegVideoView::init()
+void PhFFMpegVideoView::paintEvent(QPaintEvent *)
 {
-	_videoRect.setSize(this->width(), this->height());
-}
-
-void PhFFMpegVideoView::paint()
-{
-	_videoRect.draw();
+	if(_image)
+	{
+		QPainter painter(this);
+		painter.drawImage(0, 0, *_image);
+	}
 }
 
 void PhFFMpegVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
+	goToFrame(frame);
 }
 
 void PhFFMpegVideoView::onRateChanged(PhRate rate)
@@ -93,4 +109,31 @@ void PhFFMpegVideoView::onRateChanged(PhRate rate)
 void PhFFMpegVideoView::checkVideoPosition()
 {
 
+}
+
+bool PhFFMpegVideoView::goToFrame(PhFrame frame)
+{
+	av_seek_frame(_pFormatContext, _videoStream, frame, 0);
+
+	AVPacket packet;
+	while(av_read_frame(_pFormatContext, &packet) >= 0)
+	{
+		if(packet.stream_index == _videoStream)
+		{
+			int ok;
+			avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
+			if(!ok)
+				return false;
+
+			int linesize = _image->width() * 3;
+			// Convert the image into YUV format that SDL uses
+			if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
+						 _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
+						 &linesize) < 0)
+				return false;
+			this->update();
+			return true;
+		}
+	}
+	return false;
 }
