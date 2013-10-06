@@ -47,6 +47,7 @@ private:
     AboutMenu _about;
 	QSettings _settings;
 	QImage *_image;
+	unsigned char * _rgb;
 };
 
 #endif // MAINWINDOW_H
