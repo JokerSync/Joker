@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 
 #include <QFileDialog>
+#include <QFontDialog>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -191,4 +192,17 @@ void MainWindow::on_actionSet_Time_Code_triggered()
 	if(dlg.exec() == QDialog::Accepted)
 		ui->videoView->setFrameStamp(dlg.frame());
 
+}
+
+void MainWindow::on_actionChange_font_triggered()
+{
+	bool ok;
+	QFont font = QFontDialog::getFont(&ok, this);
+	if(ok)
+	{
+		if(_stripView->setFont(font.family()))
+			_settings.setValue("StripFontName", font.family());
+		else
+			QMessageBox::critical(this, "Error", "Unable to open " + font.family());
+	}
 }
