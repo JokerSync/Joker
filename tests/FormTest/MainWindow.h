@@ -29,6 +29,8 @@ public:
 
 	bool openFile(QString fileName);
 
+protected:
+	void paintEvent(QPaintEvent *event);
 private slots:
     void on_actionAbout_triggered();
 
@@ -44,7 +46,7 @@ private:
     Ui::MainWindow *ui;
     AboutMenu _about;
 	QSettings _settings;
-	QGraphicsScene scene;
+	QImage *_image;
 };
 
 #endif // MAINWINDOW_H
