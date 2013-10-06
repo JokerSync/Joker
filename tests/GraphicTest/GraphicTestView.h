@@ -21,42 +21,17 @@ class GraphicTestView : public PhGraphicView
 	Q_OBJECT
 public :
 	explicit GraphicTestView(QWidget *parent = 0);
-
-	GraphicTestView *view();
-
-	PhGraphicText * getText(){return _text;}
-
-public slots:
-	void play();
-	void fastBackward();
-	void fastForward();
-	void displayText(bool display);
-	void displayImage(bool display);
-	void displayRect(bool display);
-	void displayLoop(bool display);
-
-
 protected:
 	bool init();
 
 	void paint();
 
 private:
-
-	int playEnable;
-	int textSpeed;
-	bool enableDisplayImage;
-	bool enableDisplayRect;
-	bool enableDisplayText;
-	bool enableDisplayLoop;
-
-
 	PhGraphicImage *_image;
 	PhFont *_font;
 	PhGraphicText *_text;
 	PhGraphicSolidRect *_rect;
 	PhGraphicLoop * _loop;
-
 };
 
 #endif // GraphicTestView_H
