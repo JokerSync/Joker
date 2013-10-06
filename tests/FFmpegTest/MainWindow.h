@@ -2,6 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QImage>
+
+extern "C" {
+#include <libavformat/avformat.h>
+#include <libavutil/avutil.h>
+#include <libavcodec/avcodec.h>
+#include <libswscale/swscale.h>
+}
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +25,9 @@ public:
 
 	bool openFile(QString fileName);
 
+protected:
+	void paintEvent(QPaintEvent *);
+
 private slots:
 	void on_actionOpen_triggered();
 
@@ -28,6 +39,11 @@ private slots:
 
 private:
 	Ui::MainWindow *ui;
+
+	AVFormatContext * _pFormatContext;
+	AVFrame * _pFrame;
+	QImage * _image;
+	uint8_t *_rgb;
 };
 
 #endif // MAINWINDOW_H
