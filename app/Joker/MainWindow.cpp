@@ -24,9 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 
-	_stripVideoSynchronizer.setStripClock(_stripClock);
+	_synchronizer.setStripClock(_stripClock);
 
-	_stripVideoSynchronizer.setVideoClock(ui->videoView->getClock());
+	_synchronizer.setVideoClock(ui->videoView->getClock());
 }
 
 MainWindow::~MainWindow()

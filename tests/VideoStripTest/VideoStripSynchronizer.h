@@ -1,15 +1,15 @@
-#ifndef STRIPVIDEOSYNCHRONIZER_H
-#define STRIPVIDEOSYNCHRONIZER_H
+#ifndef VIDEOSTRIPSYNCHRONIZER_H
+#define VIDEOSTRIPSYNCHRONIZER_H
 
 #include <QObject>
 
 #include "PhTools/PhClock.h"
 
-class StripVideoSynchronizer : public QObject
+class SonyVideoStripSynchronizer : public QObject
 {
 	Q_OBJECT
 public:
-	StripVideoSynchronizer();
+	SonyVideoStripSynchronizer();
 
 	void setStripClock(PhClock *clock);
 	void setVideoClock(PhClock *clock);
@@ -24,4 +24,4 @@ private:
 	PhClock * _videoClock;
 };
 
-#endif // STRIPVIDEOSYNCHRONIZER_H
+#endif // VIDEOSTRIPSYNCHRONIZER_H
