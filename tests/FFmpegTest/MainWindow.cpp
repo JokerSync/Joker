@@ -16,11 +16,15 @@ MainWindow::MainWindow(QWidget *parent) :
 	_pFrame(NULL),
 	_pSwsCtx(NULL),
 	_image(NULL),
-	_rgb(NULL)
+	_rgb(NULL),
+	_currentFrame(0)
 {
 	ui->setupUi(this);
 
 	av_register_all();
+
+	connect(&_timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
+	//_timer.start(0);
 }
 
 MainWindow::~MainWindow()
@@ -69,6 +73,7 @@ bool MainWindow::openFile(QString fileName)
 							_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
 							AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 
+	_currentFrame = 0;
 	return setFrame(0);
 }
 
@@ -137,4 +142,9 @@ void MainWindow::on_actionNext_frame_triggered()
 void MainWindow::on_actionPrevious_frame_triggered()
 {
 	// TODO
+}
+
+void MainWindow::onTimeOut()
+{
+
 }

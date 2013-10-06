@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QImage>
+#include <QTimer>
 
 extern "C" {
 #include <libavformat/avformat.h>
@@ -39,6 +40,8 @@ private slots:
 
 	void on_actionPrevious_frame_triggered();
 
+	void onTimeOut();
+
 private:
 	Ui::MainWindow *ui;
 
@@ -49,6 +52,9 @@ private:
 	struct SwsContext * _pSwsCtx;
 	QImage * _image;
 	uint8_t *_rgb;
+
+	QTimer _timer;
+	int _currentFrame;
 };
 
 #endif // MAINWINDOW_H
