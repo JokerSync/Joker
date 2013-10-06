@@ -113,7 +113,13 @@ void PhFFMpegVideoView::checkVideoPosition()
 
 bool PhFFMpegVideoView::goToFrame(PhFrame frame)
 {
-	av_seek_frame(_pFormatContext, _videoStream, frame, 0);
+	if(_videoStream < 0)
+		return false;
+	if(frame < this->_frameStamp)
+		frame = this->_frameStamp;
+	if (frame >= this->_frameStamp + _pFormatContext->streams[_videoStream]->duration)
+		frame = this->_frameStamp + _pFormatContext->streams[_videoStream]->duration;
+	av_seek_frame(_pFormatContext, _videoStream, frame - this->_frameStamp, 0);
 
 	AVPacket packet;
 	while(av_read_frame(_pFormatContext, &packet) >= 0)
