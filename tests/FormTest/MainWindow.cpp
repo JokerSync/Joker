@@ -1,8 +1,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QFileDialog>
-#include <QPixmap>
-#include <QGraphicsPixmapItem>
+#include <QPainter>
 #include <QMessageBox>
 
 #include "MainWindow.h"
@@ -14,10 +13,10 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-	_settings("Phonations","FormTest")
+	_settings("Phonations","FormTest"),
+	_image(NULL)
 {
     ui->setupUi(this);
-	ui->graphicsView->setScene(&scene);
 
 	QString mode = _settings.value("mode", "rgb").toString();
 	if(mode == "rgb")
@@ -35,8 +34,14 @@ MainWindow::~MainWindow()
 
 void MainWindow::generateRGB()
 {
-	unsigned char *rgb = PhPictureTools::generateRGBPattern(100, 100);
-
+	if(_image)
+		delete _image;
+	int w = 400;
+	int h = 300;
+	unsigned char *rgb = PhPictureTools::generateRGBPattern(w, h);
+	_image = new QImage(rgb, w, h, QImage::Format_RGB888);
+	this->update();
+	delete rgb;
 }
 
 void MainWindow::generateYUV()
@@ -47,15 +52,28 @@ void MainWindow::generateYUV()
 
 bool MainWindow::openFile(QString fileName)
 {
-	QPixmap * pixmap = new QPixmap(fileName);
-	if(pixmap->isNull())
+	if(_image)
+		delete _image;
+	_image = new QImage();
+	if(_image->load(fileName))
+	{
+		this->update();
+		return true;
+	}
+	else
+	{
+		delete _image;
 		return false;
-	QGraphicsPixmapItem * item = new QGraphicsPixmapItem(*pixmap);
+	}
+}
 
-	scene.clear();
-	scene.addItem((item));
-	ui->_lineEdit->setText(fileName);
-	return true;
+void MainWindow::paintEvent(QPaintEvent *event)
+{
+	if(_image)
+	{
+		QPainter painter(this);
+		painter.drawImage(0, 0, *_image);
+	}
 }
 
 void MainWindow::on_actionAbout_triggered()
