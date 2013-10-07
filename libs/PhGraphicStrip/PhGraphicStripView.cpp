@@ -74,6 +74,10 @@ bool PhGraphicStripView::init()
 	_stripBackgroundImage = new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
 	_stripBackgroundImage->init();
 
+	_stripSyncBar = new PhGraphicSolidRect(this->width()/6, this->height()/4, 4, 100);
+	_stripSyncBar->setColor(QColor(225, 86, 108));
+
+
 	return true;
 }
 
@@ -209,6 +213,10 @@ void PhGraphicStripView::paint()
 	_stripBackgroundImage->setX(leftBG);
 	_stripBackgroundImage->setSize(height * n, height);
 	_stripBackgroundImage->draw();
+
+	_stripSyncBar->setSize(4, height);
+	_stripSyncBar->setPosition(width/6, 0, -1);
+	_stripSyncBar->draw();
 
 	int minSpaceBetweenPeople = 50;
 	int spaceBetweenPeopleAndText = 4;
