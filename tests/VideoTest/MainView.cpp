@@ -86,7 +86,7 @@ void MainView::on_actionSet_timestamp_triggered()
     PhTimeCodeDialog dlg(_internalClock.timeCodeType(), _internalClock.frame());
 	if(dlg.exec() == QDialog::Accepted)
 	{
-		PhFrame frameStamp = ui->_videoView->getFrameStamp();
+		PhFrame frameStamp = ui->_videoView->frameStamp();
         frameStamp += dlg.frame() - _internalClock.frame();
 		ui->_videoView->setFrameStamp(frameStamp);
 		ui->mediaController->setFirstFrame(frameStamp);
