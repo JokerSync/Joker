@@ -26,6 +26,12 @@ private:
 	PhClock * _stripClock;
 	PhClock * _videoClock;
 	PhClock * _sonyClock;
+	bool _settingStripFrame;
+	bool _settingVideoFrame;
+	bool _settingSonyFrame;
+	bool _settingStripRate;
+	bool _settingVideoRate;
+	bool _settingSonyRate;
 };
 
 #endif // SONYVIDEOSTRIPSYNCHRONIZER_H
