@@ -97,6 +97,8 @@ bool MainWindow::openFile(QString fileName)
 
 bool MainWindow::setFrame(int frame)
 {
+	if(_videoStream < 0)
+		return false;
 	av_seek_frame(_pFormatContext, _videoStream, frame, 0);
 
 	AVPacket packet;
