@@ -19,15 +19,26 @@ HEADERS  += MainWindow.h
 FORMS    += MainWindow.ui
 
 INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil
+LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
 
-LIBS += -lxvidcore -lx264 -lvorbis -lvorbisenc -lvorbisfile -lvpx
-LIBS += -ltheora -ltheoradec -ltheoraenc
-LIBS += -lspeex -lspeexdsp
-LIBS += -lschroedinger-1.0 -lopus -lvo-aacenc -lopenjpeg -lmp3lame -lfaac -lcelt0 -lfdk-aac
-LIBS += -lswscale -laacplus
+#LIBS += -lxvidcore -lx264 -lvorbis -lvorbisenc -lvorbisfile -lvpx
+#LIBS += -ltheora -ltheoradec -ltheoraenc
+#LIBS += -lspeex -lspeexdsp
+#LIBS += -lschroedinger-1.0 -lopus -lvo-aacenc -lopenjpeg -lmp3lame -lfaac -lcelt0 -lfdk-aac
+#LIBS += -laacplus
 #to test
-LIBS += -lass -ltiff -ltiffxx -lpng -ljpeg
+#LIBS += -lass -ltiff -ltiffxx -lpng -ljpeg
 
-LIBS += -lssl -lcrypto -lbz2 -lz
+#LIBS += -lssl -lcrypto
+LIBS += -lbz2
+LIBS += -lz
 LIBS += -liconv
+
+
+CONFIG(release, debug|release) {
+
+	mac {
+		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
+	}
+
+}
