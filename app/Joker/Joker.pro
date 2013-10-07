@@ -6,7 +6,7 @@
 
 TARGET = Joker
 TEMPLATE = app
-ICON = $${_PRO_FILE_PWD_}/../../data/img/Joker.icns
+ICON = joker.icns
 
 QT += core gui
 
