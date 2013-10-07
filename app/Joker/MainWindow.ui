@@ -186,7 +186,7 @@
   </action>
   <action name="actionOpen_Video">
    <property name="text">
-    <string>Open Video</string>
+    <string>Open video...</string>
    </property>
   </action>
   <action name="actionSet_Time_Code">
