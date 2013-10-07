@@ -10,7 +10,7 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	_settings("Phonations", "VideoStripTest"),
+	_settings("Phonations", "Joker"),
 	_sonySlave(PhTimeCodeType25, &_settings, this)
 #warning TODO check default speed
 {
