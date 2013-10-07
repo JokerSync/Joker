@@ -4,6 +4,7 @@
 VideoStripSynchronizer::VideoStripSynchronizer()
 	: _stripClock(NULL),
 	  _videoClock(NULL),
+	  _sonyClock(NULL),
 	  _settingStripFrame(false),
 	  _settingVideoFrame(false),
 	  _settingSonyFrame(false),
@@ -41,15 +42,18 @@ void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType t
 		_settingVideoFrame = true;
 		_videoClock->setFrame(frame);
 		_settingVideoFrame = false;
-		_settingSonyFrame = true;
-		_sonyClock->setFrame(frame);
-		_settingSonyFrame = false;
+		if(_sonyClock)
+		{
+			_settingSonyFrame = true;
+			_sonyClock->setFrame(frame);
+			_settingSonyFrame = false;
+		}
 	}
 }
 
 void VideoStripSynchronizer::onStripRateChanged(PhRate rate)
 {
-	if(!_settingStripRate)
+	if(!_settingStripRate && _sonyClock)
 	{
 		_settingSonyRate = true;
 		_sonyClock->setRate(rate);
