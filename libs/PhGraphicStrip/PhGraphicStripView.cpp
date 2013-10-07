@@ -4,7 +4,6 @@
 */
 
 #include <QFile>
-#include <QDir>
 #include <QCoreApplication>
 
 #include "PhTools/PhDebug.h"
