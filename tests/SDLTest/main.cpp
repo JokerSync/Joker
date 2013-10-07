@@ -119,8 +119,7 @@ int main(int argc, char **argv)
 	qDebug() << "current path : " << QDir::currentPath();
 	qDebug() << "load_image";
     // Create a surface from picture:
-	QString imagePath = "look.png";
-    image = load_image( imagePath );
+    image = load_image( "SDLTest.app/Contents/Resources/look.png");
 
     if( image == NULL )
     {
@@ -138,7 +137,7 @@ int main(int argc, char **argv)
     }
 
     //Create a font
-    TTF_Font *font = TTF_OpenFont( "Bedizen.ttf", 100 );
+    TTF_Font *font = TTF_OpenFont("SDLTest.app/Contents/Resources/Bedizen.ttf", 100 );
     if (font == NULL)
         return 3;
 
