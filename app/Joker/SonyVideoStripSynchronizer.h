@@ -12,8 +12,11 @@ public:
 	VideoStripSynchronizer();
 
 	void setStripClock(PhClock *clock);
+	PhClock * stripClock() { return _stripClock; }
 	void setVideoClock(PhClock *clock);
+	PhClock * videoClock() { return _videoClock; }
 	void setSonyClock(PhClock *clock);
+	PhClock * sonyClock() { return _sonyClock; }
 
 private slots:
 	void onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType);

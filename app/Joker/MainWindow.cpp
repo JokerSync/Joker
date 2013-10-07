@@ -156,7 +156,10 @@ void MainWindow::on_actionGo_To_triggered()
 void MainWindow::on_actionOpen_Video_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
-	openVideoFile(fileName); // TODO: show error in case of error
+	if(openVideoFile(fileName))
+		on_actionChange_timestamp_triggered();
+	else
+		QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 }
 
 
@@ -177,15 +180,6 @@ bool MainWindow::openVideoFile(QString videoFileName)
 	return false;
 }
 
-
-void MainWindow::on_actionSet_Time_Code_triggered()
-{
-	PhTimeCodeDialog dlg(_stripClock->timeCodeType(), _stripClock->frame());
-	if(dlg.exec() == QDialog::Accepted)
-		ui->videoView->setFrameStamp(dlg.frame());
-
-}
-
 void MainWindow::on_actionChange_font_triggered()
 {
 	bool ok;
@@ -198,3 +192,17 @@ void MainWindow::on_actionChange_font_triggered()
 			QMessageBox::critical(this, "Error", "Unable to open " + font.family());
 	}
 }
+
+void MainWindow::on_actionChange_timestamp_triggered()
+{
+	PhTimeCodeDialog dlg(_stripClock->timeCodeType(), _synchronizer.videoClock()->frame());
+	if(dlg.exec() == QDialog::Accepted)
+	{
+		PhFrame frameStamp = ui->videoView->frameStamp();
+	    frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
+		ui->videoView->setFrameStamp(frameStamp);
+	    _stripClock->setFrame(dlg.frame());
+	}
+}
+
+
