@@ -7,10 +7,11 @@
 QT       += core gui
 QT += widgets
 
-#greaterThan(QT_MAJOR_VERSION, 4): 
+#greaterThan(QT_MAJOR_VERSION, 4):
 
 TARGET = SonyTest
 TEMPLATE = app
+ICON = sony.icns
 
 INCLUDEPATH += ../../libs
 
