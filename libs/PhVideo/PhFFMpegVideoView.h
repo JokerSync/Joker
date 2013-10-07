@@ -30,6 +30,7 @@ protected:
 	~PhFFMpegVideoView();
 
 	void paintEvent(QPaintEvent *);
+	void resizeEvent(QResizeEvent *event);
 
 protected slots:
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
