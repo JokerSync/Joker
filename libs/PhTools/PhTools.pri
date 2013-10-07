@@ -30,6 +30,6 @@ linux {
 
 # MacOS specific
 mac {
-	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS
+	RESOURCES_PATH = $${TARGET}.app/Contents/Resources
 }
 
