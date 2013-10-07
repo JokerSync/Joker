@@ -1,4 +1,5 @@
 #include <qmath.h>
+#include <QCoreApplication>
 
 #include "PhTools/PhDebug.h"
 #include "GraphicTestView.h"
@@ -14,7 +15,7 @@ bool GraphicTestView::init()
 {
 	PHDEBUG << "Initialize _image";
 	_image = new PhGraphicImage();
-	_image->setFilename("look.png");
+	_image->setFilename(QCoreApplication::applicationDirPath() + "/../Resources/look.png");
 	_image->setTextureCoordinate(1,1);
 	_image->setRect(50,0,250,125);
 	if (! _image->init())
@@ -24,7 +25,7 @@ bool GraphicTestView::init()
 	}
 
 	PHDEBUG << "Initialize _font";
-	_font = new PhFont("Bedizen.ttf",50);
+	_font = new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/Bedizen.ttf",50);
 	if (! _font->init())
 	{
 		PHDEBUG << "_font not initialize";
