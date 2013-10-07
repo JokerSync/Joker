@@ -74,6 +74,10 @@ bool PhGraphicStripView::init()
 	_stripBackgroundImage = new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
 	_stripBackgroundImage->init();
 
+	_stripSyncBar = new PhGraphicSolidRect(this->width()/6, this->height()/4, 4, 100);
+	_stripSyncBar->setColor(QColor(225, 86, 108));
+
+
 	return true;
 }
 
@@ -177,9 +181,6 @@ void PhGraphicStripView::updateView()
 	PHDEBUG << "offs loaded" ;
 }
 
-
-
-PhTime lastTime = -1;
 void PhGraphicStripView::paint()
 {
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
@@ -191,12 +192,16 @@ void PhGraphicStripView::paint()
 
 	long pixelPerFrame = 12;
 	int fps = PhTimeCode::getFps(_clock.timeCodeType());
-	long offset = _clock.time() * pixelPerFrame * fps / _clock.timeScale();
 	long width = this->width();
 	long height = this->height();
+	long syncBar_X_FromLeft = width / 6;
+	long offset = _clock.time() * pixelPerFrame * fps / _clock.timeScale() - syncBar_X_FromLeft;
+	//Compute the visible duration of the strip
+	PhFrame stripDuration = width / pixelPerFrame;
 
-	PhFrame frameIn = _clock.frame();
-	PhFrame frameOut = _clock.frame() + (width / pixelPerFrame);
+
+	PhFrame frameIn = _clock.frame() - syncBar_X_FromLeft;
+	PhFrame frameOut = _clock.frame() + stripDuration;
 
 	//Set the background color to red
 	glClearColor(1,0,0,1);
@@ -209,9 +214,13 @@ void PhGraphicStripView::paint()
 		leftBG -= offset % height;
 	else
 		leftBG -= height - ((-offset) % height);
-	_stripBackgroundImage->setX(leftBG);
+	_stripBackgroundImage->setX(leftBG - syncBar_X_FromLeft);
 	_stripBackgroundImage->setSize(height * n, height);
 	_stripBackgroundImage->draw();
+
+	_stripSyncBar->setSize(4, height);
+	_stripSyncBar->setPosition(width/6, 0, -1);
+	_stripSyncBar->draw();
 
 	int minSpaceBetweenPeople = 50;
 	int spaceBetweenPeopleAndText = 4;
@@ -225,11 +234,13 @@ void PhGraphicStripView::paint()
 	{
 		PhGraphicText* gText = _graphicTexts[text];
 		int track = text->getTrack();
+		PhTime timeIn = text->getTimeIn();
+		PhTime timeOut = text->getTimeOut();
 
-		if( ! (((text->getTimeIn() < frameIn) && (text->getTimeOut() < frameIn)) || ((text->getTimeIn() > frameOut) && (text->getTimeOut() > frameOut))) )
+		if( ! (((timeIn < frameIn) && (timeOut < frameIn)) || ((timeIn > frameOut) && (timeOut > frameOut))) )
 		{
 			gText->setX(text->getTimeIn() * pixelPerFrame - offset);
-			gText->setWidth((text->getTimeOut() - text->getTimeIn()) * pixelPerFrame);
+			gText->setWidth((timeOut - timeIn) * pixelPerFrame);
 			gText->setY(track * trackHeight);
 			gText->setHeight(trackHeight);
 
