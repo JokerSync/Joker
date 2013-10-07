@@ -68,18 +68,18 @@ use_qtav {
 use_ffmpeg {
 	DEFINES += USE_FFMPEG
 	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil
+	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
 
-	LIBS += -lxvidcore -lx264 -lvorbis -lvorbisenc -lvorbisfile -lvpx
-	LIBS += -ltheora -ltheoradec -ltheoraenc
-	LIBS += -lspeex -lspeexdsp
-	LIBS += -lschroedinger-1.0 -lopus -lvo-aacenc -lopenjpeg -lmp3lame -lfaac -lcelt0 -lfdk-aac
-	LIBS += -lswscale -laacplus
+#	LIBS += -lxvidcore -lx264 -lvorbis -lvorbisenc -lvorbisfile -lvpx
+#	LIBS += -ltheora -ltheoradec -ltheoraenc
+#	LIBS += -lspeex -lspeexdsp
+#	LIBS += -lschroedinger-1.0 -lopus -lvo-aacenc -lopenjpeg -lmp3lame -lfaac -lcelt0 -lfdk-aac
+#	LIBS += -laacplus
 	#to test
-	LIBS += -lass -ltiff -ltiffxx -lpng -ljpeg
+#	LIBS += -lass -ltiff -ltiffxx -lpng -ljpeg
 
-	LIBS += -lssl -lcrypto -lbz2 -lz
-	LIBS += -liconv
+#	LIBS += -lssl -lcrypto
+	LIBS += -liconv -lbz2 -lz
 
 	HEADERS += ../../libs/PhVideo/PhFFMpegVideoView.h
 	SOURCES += ../../libs/PhVideo/PhFFMpegVideoView.cpp
