@@ -113,6 +113,8 @@ private :
      */
 	PhGraphicImage * _stripBackgroundImage;
 
+	PhGraphicSolidRect * _stripSyncBar;
+
 	QMap<PhPeople*, PhGraphicText*> _graphicPeoples;
 
 	QMap<PhStripText*, PhGraphicText*> _graphicTexts;
