@@ -34,5 +34,5 @@ FORMS += \
     MainWindow.ui
 
 QMAKE_POST_LINK += echo $${RESOURCES_PATH};
-QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH};
+QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH}/../Resources/;
 

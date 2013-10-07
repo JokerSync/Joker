@@ -4,6 +4,8 @@
 */
 
 #include <QFile>
+#include <QDir>
+#include <QCoreApplication>
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphicStripView.h"
@@ -70,7 +72,7 @@ bool PhGraphicStripView::init()
 	clearData();
 
     //Load the strip background
-	_stripBackgroundImage = new PhGraphicImage("motif-240.png");
+	_stripBackgroundImage = new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
 	_stripBackgroundImage->init();
 
 	return true;
