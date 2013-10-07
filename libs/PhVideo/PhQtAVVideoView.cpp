@@ -30,7 +30,7 @@ bool PhQtAVVideoView::open(QString fileName)
 
 void PhQtAVVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	qint64 ms = (_clock.frame() - this->getFrameStamp()) * 1000 / PhTimeCode::getFps(tcType);
+	qint64 ms = (_clock.frame() - this->frameStamp()) * 1000 / PhTimeCode::getFps(tcType);
 	//qDebug() << "frame" << _clock.frame() << "frameStamp" << this->getFrameStamp();
 	PHDEBUG << "ms : " << ms << "\trate : " << _clock.rate();
 	if(_clock.rate() == 0)

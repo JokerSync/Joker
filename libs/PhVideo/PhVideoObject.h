@@ -19,7 +19,7 @@ public:
 
 	void setFrameStamp(PhFrame frame);
 
-	PhFrame getFrameStamp(){ return _frameStamp;};
+	PhFrame frameStamp() { return _frameStamp;};
 
 
 protected slots:

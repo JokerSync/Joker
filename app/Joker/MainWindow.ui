@@ -73,7 +73,7 @@
     <addaction name="actionStep_time_backward"/>
     <addaction name="menuVarial_Speed"/>
     <addaction name="actionGo_To"/>
-    <addaction name="actionSet_Time_Code"/>
+    <addaction name="actionChange_timestamp"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -188,10 +188,13 @@
    <property name="text">
     <string>Open video...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
+   </property>
   </action>
-  <action name="actionSet_Time_Code">
+  <action name="actionChange_timestamp">
    <property name="text">
-    <string>Set Time Code</string>
+    <string>Change timestamp...</string>
    </property>
   </action>
   <action name="actionChange_font">
