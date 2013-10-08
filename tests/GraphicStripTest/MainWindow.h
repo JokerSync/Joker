@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <StripPropertiesDialog.h>
+#include <GenerateDialog.h>
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +26,7 @@ public:
 
 private slots:
 	void onOpenFile();
+	void onGenerate();
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onRateChanged(PhRate rate);
 
