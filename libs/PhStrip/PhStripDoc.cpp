@@ -16,11 +16,6 @@ PhStripDoc::PhStripDoc(QObject *parent) :
     reset();
 }
 
-QList<PhStripCut *> PhStripDoc::getCuts()
-{
-    return _cuts;
-}
-
 
 bool PhStripDoc::openDetX(QString fileName)
 {
@@ -141,7 +136,7 @@ bool PhStripDoc::openDetX(QString fileName)
 				{
 					end = PhTimeCode::frameFromString(lineElem.childNodes().at(j+1).toElement().attribute("timecode"), _tcType);
 				}
-				// TODO : handles zero lenght text
+#warning TODO : handles zero lenght text
 				else
 				{
 					// One char is ~1.20588 frame
@@ -208,6 +203,50 @@ bool PhStripDoc::openDetX(QString fileName)
 	emit this->changed();
 
     return true;
+}
+
+void PhStripDoc::reset()
+{
+	_peoples.clear();
+	_cuts.clear();
+	_tcType = PhTimeCodeType25;
+	_lastFrame = 0;
+	_loops.clear();
+	_nbTexts = 0;
+	_texts.clear();
+	_timeScale = 25; //TODO fix me
+	_title = QString();
+	_videoPath = QString();
+	_videoTimestamp = 0;
+
+	emit this->changed();
+}
+
+void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, int i)
+{
+
+	if(sentence != " " && sentence != "" ){
+		// if the sentence is short enough
+		if( end - start < 150)
+		{
+			_texts.push_back(new PhStripText(start, actor,
+											  end,
+											 track, sentence));
+			_nbTexts ++;
+		}
+		else // we split in half
+		{
+			int length = sentence.length();
+			splitText(actor, start, start + (end - start)/2, sentence.left(length/2), track, i);
+			i++;
+			if (length % 2 == 0){
+				splitText(actor, start + (end - start)/2, end, sentence.right(length/2), track, i);
+			}
+			else{
+				splitText(actor, start + (end - start)/2, end, sentence.right(length/2 + 1), track, i);
+			}
+		}
+	}
 }
 
 int PhStripDoc::getNbTexts()
@@ -329,49 +368,6 @@ QString PhStripDoc::getVideoPath()
     return _videoPath;
 }
 
-void PhStripDoc::reset()
-{
-    _peoples.clear();
-    _cuts.clear();
-    _tcType = PhTimeCodeType25;
-    _lastFrame = 0;
-    _loops.clear();
-    _nbTexts = 0;
-    _texts.clear();
-    _timeScale = 25; //TODO fix me
-	_title = QString();
-	_videoPath = QString();
-    _videoTimestamp = 0;
-
-	emit this->changed();
-}
-
-void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, int i){
-
-    if(sentence != " " && sentence != "" ){
-        // if the sentence is short enough
-        if( end - start < 150)
-        {
-			_texts.push_back(new PhStripText(start, actor,
-											  end,
-											 track, sentence));
-            _nbTexts ++;
-        }
-        else // we split in half
-        {
-            int length = sentence.length();
-            splitText(actor, start, start + (end - start)/2, sentence.left(length/2), track, i);
-            i++;
-            if (length % 2 == 0){
-                splitText(actor, start + (end - start)/2, end, sentence.right(length/2), track, i);
-            }
-            else{
-                splitText(actor, start + (end - start)/2, end, sentence.right(length/2 + 1), track, i);
-            }
-        }
-    }
-}
-
 int PhStripDoc::getDuration()
 {
 	return _texts.last()->getTimeOut() - _videoTimestamp;
@@ -416,3 +412,9 @@ QList<PhStripOff *> PhStripDoc::getOffs()
 {
 	return _offs;
 }
+
+QList<PhStripCut *> PhStripDoc::getCuts()
+{
+	return _cuts;
+}
+
