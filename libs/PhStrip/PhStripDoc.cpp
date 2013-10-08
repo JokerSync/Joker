@@ -205,7 +205,7 @@ bool PhStripDoc::openDetX(QString fileName)
 	return true;
 }
 
-void PhStripDoc::createDoc(int nbPeople, int nbLoop, int nbText, int nbTrack)
+bool PhStripDoc::createDoc(int nbPeople, int nbLoop, int nbText, int nbTrack)
 {
 	_title = "Fake file";
 	_tcType = PhTimeCodeType25;
@@ -248,6 +248,8 @@ void PhStripDoc::createDoc(int nbPeople, int nbLoop, int nbText, int nbTrack)
 		// So the texts are all one after the other
 		position += end;
 	}
+
+	return true;
 }
 
 void PhStripDoc::reset()
