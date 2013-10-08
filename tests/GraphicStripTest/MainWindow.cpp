@@ -50,6 +50,20 @@ void MainWindow::openFile(QString fileName)
 	}
 }
 
+void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack)
+{
+	PHDEBUG << "Creating fake file";
+	_path = "null";
+	if(_doc->createDoc(nbPeople, nbLoop, nbText, nbTrack))
+	{
+		PHDEBUG << "Done";
+		_clock->setTimeCodeType(_doc->getTCType());
+		_clock->setFrame(_doc->getLastFrame());
+		this->setWindowTitle("Working with a made up Detx");
+		emit _doc->changed();
+	}
+}
+
 void MainWindow::onOpenFile()
 {
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
@@ -59,6 +73,7 @@ void MainWindow::onOpenFile()
 		openFile(fileName);
 	}
 }
+
 
 void MainWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {

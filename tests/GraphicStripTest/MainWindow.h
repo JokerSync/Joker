@@ -20,6 +20,8 @@ public:
 	~MainWindow();
 
 	void openFile(QString fileName);
+	void createFile(int nbPeople, int nbLoop, int nbText, int nbTrack);
+
 
 private slots:
 	void onOpenFile();

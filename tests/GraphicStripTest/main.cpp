@@ -8,6 +8,7 @@
 #include <QDebug>
 
 #include "PhStrip/PhStripDoc.h"
+#include "PhTools/PhDebug.h"
 
 #include "MainWindow.h"
 
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
 	QApplication a(argc, argv);
 	MainWindow w;
 
+	PhDebug::init(false, false, true, true, true);
     w.show();
 
 	if (argc > 1)
@@ -23,6 +25,8 @@ int main(int argc, char *argv[])
 		QString fileName = argv[1];
 		w.openFile(fileName);
 	}
+	else
+		w.createFile(10,3,30,3);
 
     return a.exec();
 }
