@@ -233,6 +233,11 @@ void PhGraphicStripView::paint()
 	foreach(PhStripText * text, _doc.getTexts())
 	{
 		PhGraphicText* gText = _graphicTexts[text];
+		if(gText == NULL)
+		{
+			PHDEBUG << "Error during initialization : call updateView().";
+			return;
+		}
 		int track = text->getTrack();
 		PhTime timeIn = text->getTimeIn();
 		PhTime timeOut = text->getTimeOut();
