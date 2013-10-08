@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	_clock = _stripView->clock();
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
+	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
 
 	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
@@ -60,7 +61,6 @@ void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack)
 		_clock->setTimeCodeType(_doc->getTCType());
 		_clock->setFrame(_doc->getLastFrame());
 		this->setWindowTitle("Working with a made up Detx");
-		emit _doc->changed();
 	}
 }
 
@@ -72,6 +72,13 @@ void MainWindow::onOpenFile()
 		QString fileName = dlg.selectedFiles()[0];
 		openFile(fileName);
 	}
+}
+
+void MainWindow::onGenerate()
+{
+	GenerateDialog * dlgGen;
+	dlgGen = new GenerateDialog(this);
+	dlgGen->show();
 }
 
 
