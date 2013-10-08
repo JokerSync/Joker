@@ -37,6 +37,7 @@ int main(int argc, char *argv[])
 	QString fileName(argv[1]);
 	doc.openDetX(fileName);
 
+#endif
 	// Display the title:
 
 	qDebug() << "title : " ;
@@ -86,8 +87,6 @@ int main(int argc, char *argv[])
 				 << " - " << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
 	}
 
-	qDebug() << qPrintable( line );
-#endif
 
 	return 0;
 }
