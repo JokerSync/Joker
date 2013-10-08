@@ -14,6 +14,8 @@ int main(int argc, char *argv[])
 
 	// This bloc is used to test with a virtual file
 #if 1
+	// FYI : int nbPeople, int nbLoop, int nbText, int nbTrack
+	doc.createDoc(10, 3, 5, 3);
 	// This bloc is used to test with a real Detx file
 #else
 	//Check argument count
@@ -36,7 +38,6 @@ int main(int argc, char *argv[])
 	// Open the DetX file in argument:
 	QString fileName(argv[1]);
 	doc.openDetX(fileName);
-
 #endif
 	// Display the title:
 
@@ -86,7 +87,6 @@ int main(int argc, char *argv[])
 		qDebug() << off->getPeople()->getName() << " : " << PhTimeCode::stringFromFrame(off->getTimeIn(), doc.getTCType())
 				 << " - " << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
 	}
-
 
 	return 0;
 }

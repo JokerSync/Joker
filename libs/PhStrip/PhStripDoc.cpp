@@ -202,7 +202,52 @@ bool PhStripDoc::openDetX(QString fileName)
 
 	emit this->changed();
 
-    return true;
+	return true;
+}
+
+void PhStripDoc::createDoc(int nbPeople, int nbLoop, int nbText, int nbTrack)
+{
+	_title = "Fake file";
+	_tcType = PhTimeCodeType25;
+	_timeScale = 25.00;
+	_videoTimestamp = PhTimeCode::frameFromString("00:00:00:00", _tcType);
+
+	if (nbTrack > 4 || nbTrack < 1)
+		nbTrack = 3;
+
+	QStringList names;
+	names.append("Actor");
+	names.append("Actress");
+	names.append("Jack");
+	names.append("Jane");
+
+	int nbNames = names.length();
+	QString randomText;
+	randomText = "Per hoc minui studium suum existimans Paulus, ut erat in conplicandis negotiis artifex dirus, unde ei Catenae inditum est cognomentum, vicarium ipsum eos quibus praeerat adhuc defensantem ad sortem periculorum communium traxit.";
+
+	// Creation of the Peoples
+	for (int i = 1; i <= nbPeople; i++)
+	{
+		PhPeople *people = new PhPeople(names.at(i % nbNames) + " " + QString::number(i), "black");
+		_peoples[people->getName()] = people;
+	}
+
+	int position = _videoTimestamp;
+	// Creation of the text
+	for (int i=1; i <= nbText; i++)
+	{
+		//Make people "talk" alternaly
+		QString id = _peoples[names.at(i % nbNames) + " " + QString::number(i)]->getName();
+
+		int start = position;
+		int end = start + randomText.length() * 1.20588 + 1;
+
+		splitText(_peoples[id], start, end,
+				  randomText, i % nbTrack, 0);
+
+		// So the texts are all one after the other
+		position += end;
+	}
 }
 
 void PhStripDoc::reset()
