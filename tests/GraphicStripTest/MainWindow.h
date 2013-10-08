@@ -21,7 +21,7 @@ public:
 	~MainWindow();
 
 	void openFile(QString fileName);
-	void createFile(int nbPeople, int nbLoop, int nbText, int nbTrack);
+	void createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text = "Default text.");
 
 
 private slots:

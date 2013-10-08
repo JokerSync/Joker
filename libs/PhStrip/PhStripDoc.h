@@ -119,7 +119,7 @@ public:
 	bool openDetX(QString filename);
 
 	// First version : Create StripDoc for testing purposes
-	bool createDoc(int nbPeople, int nbLoop, int nbText, int nbTrack);
+	bool createDoc(QString text, int nbPeople, int nbLoop, int nbText, int nbTrack);
 
     int getNbTexts();
 

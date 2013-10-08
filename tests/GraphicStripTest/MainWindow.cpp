@@ -51,11 +51,11 @@ void MainWindow::openFile(QString fileName)
 	}
 }
 
-void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack)
+void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text)
 {
 	PHDEBUG << "Creating fake file";
 	_path = "null";
-	if(_doc->createDoc(nbPeople, nbLoop, nbText, nbTrack))
+	if(_doc->createDoc(text, nbPeople, nbLoop, nbText, nbTrack))
 	{
 		PHDEBUG << "Done";
 		_clock->setTimeCodeType(_doc->getTCType());

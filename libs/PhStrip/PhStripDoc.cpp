@@ -205,7 +205,7 @@ bool PhStripDoc::openDetX(QString fileName)
 	return true;
 }
 
-bool PhStripDoc::createDoc(int nbPeople, int nbLoop, int nbText, int nbTrack)
+bool PhStripDoc::createDoc(QString text, int nbPeople, int nbLoop, int nbText, int nbTrack)
 {
 	_title = "Fake file";
 	_tcType = PhTimeCodeType25;
@@ -223,8 +223,6 @@ bool PhStripDoc::createDoc(int nbPeople, int nbLoop, int nbText, int nbTrack)
 	names.append("Jane");
 
 	int nbNames = names.length();
-	QString randomText;
-	randomText = "Per hoc minui studium suum existimans Paulus, ut erat in conplicandis negotiis artifex dirus, unde ei Catenae inditum est cognomentum, vicarium ipsum eos quibus praeerat adhuc defensantem ad sortem periculorum communium traxit.";
 	QStringList idList;
 	// Creation of the Peoples
 	for (int i = 1; i <= nbPeople; i++)
@@ -242,15 +240,16 @@ bool PhStripDoc::createDoc(int nbPeople, int nbLoop, int nbText, int nbTrack)
 		QString id = _peoples[idList.at(i % nbNames)]->getName();
 
 		int start = position;
-		int end = start + randomText.length() * 1.20588 + 1;
+		int end = start + text.length() * 1.20588 + 1;
 
 		splitText(_peoples[id], start, end,
-				  randomText, i % nbTrack, 0);
+				  text, i % nbTrack, 0);
 
 		// So the texts are all one after the other
 		position += end - start;
 	}
 
+	emit changed();
 	return true;
 }
 
