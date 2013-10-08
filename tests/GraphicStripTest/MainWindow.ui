@@ -15,7 +15,16 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -47,6 +56,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionGenerate"/>
     <addaction name="actionStrip_Properties"/>
    </widget>
    <widget class="QMenu" name="menuControl">
@@ -232,6 +242,11 @@
   <action name="actionStrip_Properties">
    <property name="text">
     <string>Properties...</string>
+   </property>
+  </action>
+  <action name="actionGenerate">
+   <property name="text">
+    <string>Generate...</string>
    </property>
   </action>
  </widget>
