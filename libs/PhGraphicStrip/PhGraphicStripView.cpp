@@ -225,11 +225,13 @@ void PhGraphicStripView::paint()
 	{
 		PhGraphicText* gText = _graphicTexts[text];
 		int track = text->getTrack();
+		PhTime timeIn = text->getTimeIn();
+		PhTime timeOut = text->getTimeOut();
 
-		if( ! (((text->getTimeIn() < frameIn) && (text->getTimeOut() < frameIn)) || ((text->getTimeIn() > frameOut) && (text->getTimeOut() > frameOut))) )
+		if( ! (((timeIn < frameIn) && (timeOut < frameIn)) || ((timeIn > frameOut) && (timeOut > frameOut))) )
 		{
-			gText->setX(text->getTimeIn() * pixelPerFrame - offset);
-			gText->setWidth((text->getTimeOut() - text->getTimeIn()) * pixelPerFrame);
+			gText->setX(timeIn * pixelPerFrame - offset);
+			gText->setWidth((timeOut - timeIn) * pixelPerFrame);
 			gText->setY(track * trackHeight);
 			gText->setHeight(trackHeight);
 
