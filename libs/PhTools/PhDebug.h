@@ -17,6 +17,7 @@
 
 
 
+
 // In order to get rid of double quotes when displaying a variable
 #define Q(string) (string).toStdString().c_str()
 
@@ -25,12 +26,12 @@ class PhDebug
 public:
 	// used to access to the only instance of the class
 	static PhDebug instance();
-	static PhDebug init(bool DispDate, bool DispTime,  bool DispFuncName, bool DispFileName, bool DispLine);
+	static PhDebug init(bool DispDate, bool DispTime,  bool DispFuncName, bool DispFileName, bool DispLine, char * name = "Default");
 
 	QDebug operator<<(QDebug dbg);
 
 
-	PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine);
+	PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine, char * name);
 	static QString getFuncName(QString name);
 	static QString getFileName(QString name);
 	static QString getLine(int line);
