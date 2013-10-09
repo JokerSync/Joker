@@ -6,6 +6,8 @@
 #include "PhDebug.h"
 
 #include <QStringList>
+#include <QFile>
+#include <QDir>
 
 // Global static pointer used to ensure a single instance of the class.
 PhDebug* PhDebug::d = NULL;
@@ -14,10 +16,32 @@ PhDebug* PhDebug::d = NULL;
 // is private and is only called by this Instance function.
 
 
+void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+	QByteArray localMsg = msg.toLocal8Bit();
+	switch (type) {
+	case QtDebugMsg:
+		fprintf(stderr, "Debug: %s \n", localMsg.constData());
+		break;
+	case QtWarningMsg:
+		fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		break;
+	case QtCriticalMsg:
+		fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		break;
+	case QtFatalMsg:
+		fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		abort();
+	}
+	PhDebug::writeLog(msg);
+}
+
+
 PhDebug PhDebug::instance()
 {
     if (!d)   // Only allow one instance of class to be generated.
         d = new PhDebug(true, true, true, true, true);
+
     return * d;
 }
 
@@ -44,7 +68,8 @@ QDebug PhDebug::operator<<(QDebug dbg)
     if (_dispTime)
         s += QTime::currentTime().toString("hh:mm:ss.zzz");
 
-    dbg << Q(s);
+
+	dbg << Q(s);
 
     return dbg;
 
@@ -52,6 +77,18 @@ QDebug PhDebug::operator<<(QDebug dbg)
 
 PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine)
 {
+
+	qInstallMessageHandler(myMessageOutput);
+
+	QString repo = QDir::homePath() + "/Library/Logs/Phonations/";
+	if(!QDir(repo).exists()){
+		PHDEBUG << repo << "doesn't exist";
+		QDir().mkdir(repo);
+	}
+	_log = new QFile(repo + "Joker.log");
+	_log->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+
+	 logger = new QDebug(_log);
     //qInstallMessageHandler(errorHandler);
     if (!d){
         _dispDate = DispDate;
@@ -81,25 +118,13 @@ QString PhDebug::getLine(int line)
 {
     if (PhDebug::instance()._dispLine)
         return "@L" + QString::number(line);
-    return "";
+	return "";
 }
 
-
-//Unused at this moment.
-void errorHandler(QtMsgType type, const char *msg)
+void PhDebug::writeLog(QString text)
 {
-    switch (type) {
-        case QtDebugMsg:
-            fprintf(stderr, "%s\n", msg);
-            break;
-        case QtWarningMsg:
-            fprintf(stderr, "\033[1;33mWarning\033[0m: %s\n", msg);
-            break;
-        case QtCriticalMsg:
-            fprintf(stderr, "\033[31mCritical\033[0m: %s\n", msg);
-            break;
-        case QtFatalMsg:
-            fprintf(stderr, "\033[31mFatal\033[0m: %s\n", msg);
-            abort();
-    }
+	QTextStream ts(PhDebug::instance()._log);
+	ts << text << endl;
+
 }
+
