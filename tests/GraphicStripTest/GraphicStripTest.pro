@@ -22,15 +22,18 @@ include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 #Main app
 SOURCES += main.cpp \
 	MainWindow.cpp \
-    StripPropertiesDialog.cpp
+    StripPropertiesDialog.cpp \
+    GenerateDialog.cpp
 
 HEADERS += \
     MainWindow.h \
-    StripPropertiesDialog.h
+    StripPropertiesDialog.h \
+    GenerateDialog.h
 
 FORMS += \
     MainWindow.ui \
-    StripPropertiesDialog.ui
+    StripPropertiesDialog.ui \
+    GenerateDialog.ui
 
 QMAKE_POST_LINK += echo $${RESOURCES_PATH}
 QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH}
