@@ -179,7 +179,6 @@ void PhGraphicStripView::updateView()
 
 
 
-PhTime lastTime = -1;
 void PhGraphicStripView::paint()
 {
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
