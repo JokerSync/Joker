@@ -13,7 +13,7 @@
 
 #include "iostream"
 
-#define PHDEBUG PhDebug::instance() << qDebug() << Q(PhDebug::getFileName(__FILE__)) << Q(PhDebug::getFuncName(__FUNCTION__)) << Q(PhDebug::getLine(__LINE__)) << "\t"
+#define PHDEBUG PhDebug::instance() << qDebug() << Q(PhDebug::getFileName(__FILE__) + "\t") << Q(PhDebug::getFuncName(__FUNCTION__) + "\t") << Q(PhDebug::getLine(__LINE__)) << "\t"
 
 
 

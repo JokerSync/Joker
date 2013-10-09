@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 	MainWindow w;
+	PhDebug::init(false, true, true, true, true, argv[0]);
 
     w.show();
 
