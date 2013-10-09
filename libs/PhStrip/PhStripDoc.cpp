@@ -205,12 +205,13 @@ bool PhStripDoc::openDetX(QString fileName)
 	return true;
 }
 
-bool PhStripDoc::createDoc(QString text, int nbPeople, int nbLoop, int nbText, int nbTrack)
+bool PhStripDoc::createDoc(QString text, int nbPeople, int nbLoop, int nbText, int nbTrack, PhTime videoTimeCode)
 {
+	this->reset();
 	_title = "Fake file";
 	_tcType = PhTimeCodeType25;
 	_timeScale = 25.00;
-	_videoTimestamp = PhTimeCode::frameFromString("00:00:01:00", _tcType);
+	_videoTimestamp = videoTimeCode;
 	_lastFrame = _videoTimestamp;
 
 	if (nbTrack > 4 || nbTrack < 1)
@@ -234,10 +235,10 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbLoop, int nbText, i
 
 	int position = _videoTimestamp;
 	// Creation of the text
-	for (int i=1; i <= nbText; i++)
+	for (int i=0; i < nbText; i++)
 	{
 		//Make people "talk" alternaly
-		QString id = _peoples[idList.at(i % nbNames)]->getName();
+		QString id = _peoples[idList.at(i % nbPeople)]->getName();
 
 		int start = position;
 		int end = start + text.length() * 1.20588 + 1;

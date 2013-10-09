@@ -51,11 +51,11 @@ void MainWindow::openFile(QString fileName)
 	}
 }
 
-void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text)
+void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text, int videoTimeStamp)
 {
 	PHDEBUG << "Creating fake file";
 	_path = "null";
-	if(_doc->createDoc(text, nbPeople, nbLoop, nbText, nbTrack))
+	if(_doc->createDoc(text, nbPeople, nbLoop, nbText, nbTrack, videoTimeStamp))
 	{
 		PHDEBUG << "Done";
 		_clock->setTimeCodeType(_doc->getTCType());
@@ -77,8 +77,9 @@ void MainWindow::onOpenFile()
 void MainWindow::onGenerate()
 {
 	GenerateDialog * dlgGen;
-	dlgGen = new GenerateDialog(this);
+	dlgGen = new GenerateDialog(_doc, this);
 	dlgGen->show();
+
 }
 
 

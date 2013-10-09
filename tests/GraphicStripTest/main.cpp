@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 		w.openFile(fileName);
 	}
 	else
-		w.createFile(10,3,30,3);
+		w.createFile(1,3,3,3);
 
     return a.exec();
 }
