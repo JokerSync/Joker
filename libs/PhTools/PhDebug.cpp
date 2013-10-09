@@ -40,16 +40,16 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 PhDebug PhDebug::instance()
 {
     if (!d)   // Only allow one instance of class to be generated.
-        d = new PhDebug(true, true, true, true, true);
+		d = new PhDebug(true, true, true, true, true, "Default");
 
     return * d;
 }
 
-PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine)
+PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine, char * name)
 {
     if (!d)   // Only allow one instance of class to be generated.
-        d = new PhDebug(DispDate, DispTime, DispFuncName, DispFileName, DispLine);
-    return * d;
+		d = new PhDebug(DispDate, DispTime, DispFuncName, DispFileName, DispLine, name);
+	return * d;
 }
 
 QDebug PhDebug::operator<<(QDebug dbg)
@@ -75,17 +75,19 @@ QDebug PhDebug::operator<<(QDebug dbg)
 
 }
 
-PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine)
+PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine, char * name)
 {
 
 	qInstallMessageHandler(myMessageOutput);
+	QString appName = name;
+	appName = appName.split("/").last();
 
 	QString repo = QDir::homePath() + "/Library/Logs/Phonations/";
 	if(!QDir(repo).exists()){
 		PHDEBUG << repo << "doesn't exist";
 		QDir().mkdir(repo);
 	}
-	_log = new QFile(repo + "Joker.log");
+	_log = new QFile(repo + appName + ".log");
 	_log->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
 
 	 logger = new QDebug(_log);

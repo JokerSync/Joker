@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 {
     // Initialize the Debug module, only work with
     // time for the moment.
-    PhDebug::init(true, true, true, true, true);
+	PhDebug::init(true, true, true, true, true, argv[0]);
 
     // Test of PhDebug tool
     PHDEBUG << "Test of PhDebug tool";
