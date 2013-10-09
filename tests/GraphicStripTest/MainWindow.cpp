@@ -9,16 +9,17 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	_settings("Phonations","GraphicStripTest")
+	_settings(settings)
 {
 	ui->setupUi(this);
 	_stripView = ui->stripView;
 
-	if(!_stripView->setFont(_settings.value("StripFontName", "Arial").toString()))
-		PHDEBUG << "The font has not been initialized";
+	QString fontName = _settings->value("StripFontName", "Arial").toString();
+	if(!_stripView->setFont(fontName))
+		PHDEBUG << "The font has not been initialized : " << fontName;
 
 	_doc = _stripView->doc();
 	_clock = _stripView->clock();
@@ -35,7 +36,7 @@ MainWindow::~MainWindow()
 	delete ui;
 }
 
-void MainWindow::openFile(QString fileName)
+bool MainWindow::openFile(QString fileName)
 {
 	qDebug() << "openFile : " << fileName;
   //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
@@ -47,8 +48,10 @@ void MainWindow::openFile(QString fileName)
 			_clock->setTimeCodeType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
 			this->setWindowTitle(fileName);
+			return true;
 		}
 	}
+	return false;
 }
 
 void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text, int videoTimeStamp)
@@ -70,17 +73,18 @@ void MainWindow::onOpenFile()
 	if(dlg.exec())
 	{
 		QString fileName = dlg.selectedFiles()[0];
-		openFile(fileName);
+		if(openFile(fileName))
+			_settings->setValue("lastFile", fileName);
 	}
 }
 
 void MainWindow::onGenerate()
 {
-	GenerateDialog * dlgGen;
-	dlgGen = new GenerateDialog(_doc, this);
-	if (dlgGen->exec())
+	GenerateDialog dlgGen(_settings, _doc);
+	if (dlgGen.exec())
 	{
 		_clock->setFrame(_doc->getLastFrame());
+		_settings->setValue("lastFile", "");
 	}
 }
 
@@ -208,7 +212,7 @@ void MainWindow::on_actionChange_font_triggered()
 	if(ok)
 	{
 		if(_stripView->setFont(font.family()))
-			_settings.setValue("StripFontName", font.family());
+			_settings->setValue("StripFontName", font.family());
 		else
 			QMessageBox::critical(this, "Error", "Unable to open " + font.family());
 	}

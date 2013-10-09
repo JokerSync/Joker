@@ -104,7 +104,6 @@ void PhGraphicStripView::clearData()
 	_graphicOffs.clear();
 }
 
-
 void PhGraphicStripView::updateView()
 {
 	PHDEBUG << "updateView";
@@ -116,7 +115,7 @@ void PhGraphicStripView::updateView()
 
 	clearData();
 
-	// Load the peoples
+/*	// Load the peoples
 	foreach(PhPeople * people, _doc.getPeoples())
 	{
 		PhGraphicText * gPeople = new PhGraphicText(_currentFont, people->getName());
@@ -178,7 +177,7 @@ void PhGraphicStripView::updateView()
 		_graphicOffs[off] = gOff;
 	}
 
-	PHDEBUG << "offs loaded" ;
+	PHDEBUG << "offs loaded" ;*/
 }
 
 void PhGraphicStripView::paint()
@@ -235,8 +234,16 @@ void PhGraphicStripView::paint()
 		PhGraphicText* gText = _graphicTexts[text];
 		if(gText == NULL)
 		{
-			PHDEBUG << "Error during initialization : call updateView().";
-			return;
+			gText = new PhGraphicText( _currentFont, text->getContent());
+
+			gText->setZ(-1);
+			if(text->getPeople())
+				gText->setColor(QColor(text->getPeople()->getColor()));
+			gText->setFont(_currentFont);
+
+			gText->init();
+
+			_graphicTexts[text] = gText;
 		}
 		int track = text->getTrack();
 		PhTime timeIn = text->getTimeIn();
@@ -259,7 +266,18 @@ void PhGraphicStripView::paint()
 		// - the distance between the latest text and the current is superior to a limit
 		if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))
 		{
-			PhGraphicText * gPeople = _graphicPeoples[text->getPeople()];
+			PhPeople * people = text->getPeople();
+			PhGraphicText * gPeople = _graphicPeoples[people];
+			if(gPeople == NULL)
+			{
+				gPeople = new PhGraphicText(_currentFont, people->getName());
+				gPeople->setColor(QColor(people->getColor()));
+				gPeople->setWidth(people->getName().length() * 16);
+
+				gPeople->init();
+
+				_graphicPeoples[people] = gPeople;
+			}
 			gPeople->setX(text->getTimeIn() * pixelPerFrame - offset - gPeople->getWidth() - spaceBetweenPeopleAndText);
 			gPeople->setY(track * trackHeight);
 			gPeople->setHeight(trackHeight / 2);
@@ -276,6 +294,14 @@ void PhGraphicStripView::paint()
 		if( (cut->getTimeIn() > frameIn) && (cut->getTimeIn() < frameOut))
 		{
 			PhGraphicRect *gCut = _graphicCuts[cut];
+			if(gCut == NULL)
+			{
+				gCut = new PhGraphicSolidRect();
+				gCut->setColor(QColor(0, 0, 0));
+				gCut->setZ(-2);
+
+				_graphicCuts[cut] = gCut;
+			}
 			gCut->setHeight(height);
 			gCut->setX(cut->getTimeIn() * pixelPerFrame - offset);
 			gCut->setWidth(2);
@@ -291,6 +317,12 @@ void PhGraphicStripView::paint()
 		if( ((loop->getTimeIn() + height / 8 /pixelPerFrame) > frameIn) && ((loop->getTimeIn() - height / 8 /pixelPerFrame ) < frameOut))
 		{
 			PhGraphicLoop * gLoop = _graphicLoops[loop];
+			if(gLoop == NULL)
+			{
+				gLoop = new PhGraphicLoop();
+				gLoop->setColor(QColor(0, 0, 0, 1));
+				_graphicLoops[loop] = gLoop;
+			}
 			gLoop->setX(loop->getTimeIn() * pixelPerFrame - offset);
 			gLoop->setHThick(height/40);
 			gLoop->setHeight(height);
@@ -307,6 +339,15 @@ void PhGraphicStripView::paint()
 		if( ! (((off->getTimeIn() < frameIn) && (off->getTimeOut() < frameIn)) || ((off->getTimeIn() > frameOut) && (off->getTimeOut() > frameOut))) )
 		{
 			PhGraphicRect *gOff = _graphicOffs[off];
+			if(gOff == NULL)
+			{
+				gOff = new PhGraphicSolidRect();
+				if(off->getPeople())
+					gOff->setColor(QColor(off->getPeople()->getColor()));
+				gOff->setZ(-2);
+
+				_graphicOffs[off] = gOff;
+			}
 			gOff->setX(off->getTimeIn() * pixelPerFrame - offset);
 			gOff->setY(off->getTrack() * trackHeight + trackHeight);
 			gOff->setHeight( trackHeight / 10);
