@@ -89,12 +89,12 @@ PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncN
 	QString appName = name;
 	appName = appName.split("/").last();
 
-	QString repo = QDir::homePath() + "/Library/Logs/Phonations/";
-	if(!QDir(repo).exists()){
-		PHDEBUG << repo << "doesn't exist";
-		QDir().mkdir(repo);
+	QString logDirPath = QDir::homePath() + "/Library/Logs/Phonations/";
+	QDir logDir(logDirPath);
+	if(!logDir.exists()) {
+		QDir().mkdir(logDirPath);
 	}
-	_log = new QFile(repo + appName + ".log");
+	_log = new QFile(logDirPath + appName + ".log");
 	_log->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
 
 	logger = new QDebug(_log);
