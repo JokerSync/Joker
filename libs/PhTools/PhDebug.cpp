@@ -37,11 +37,11 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 }
 
 
-// Usually called if init was forget
+// Called if init() was forget
 PhDebug PhDebug::instance()
 {
 	if (!d){   // Only allow one instance of class to be generated.
-		d = new PhDebug(true, true, true, true, true, "Default");
+		d = new PhDebug(false, true, true, true, true, "Default");
 		//Display two white lines at program start
 		PhDebug::writeLog("\n");
 	}
@@ -49,10 +49,10 @@ PhDebug PhDebug::instance()
 	return * d;
 }
 
-PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine, char * name)
+PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, char * name)
 {
 	if (!d){  // Only allow one instance of class to be generated.
-		d = new PhDebug(DispDate, DispTime, DispFuncName, DispFileName, DispLine, name);
+		d = new PhDebug(DispDate, DispTime, DispFileName, DispFuncName, DispLine, name);
 		//Display two white lines at program start
 		PhDebug::writeLog("\n");
 	}
@@ -82,7 +82,7 @@ QDebug PhDebug::operator<<(QDebug dbg)
 
 }
 
-PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine, char * name)
+PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, char * name)
 {
 
 	qInstallMessageHandler(myMessageOutput);
@@ -112,7 +112,7 @@ PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileN
 QString PhDebug::getFuncName(QString name)
 {
 	if(PhDebug::instance()._dispFuncName)
-		return "\"" + name + "\"";
+		return name;
 	else
 		return "";
 }
@@ -120,7 +120,7 @@ QString PhDebug::getFuncName(QString name)
 QString PhDebug::getFileName(QString name)
 {
 	if (PhDebug::instance()._dispFileName)
-		return "in " + name.split("/").last();
+		return  name.split("/").last();
 	return "";
 }
 
@@ -135,6 +135,5 @@ void PhDebug::writeLog(QString text)
 {
 	QTextStream ts(PhDebug::instance()._log);
 	ts << text << endl;
-
 }
 
