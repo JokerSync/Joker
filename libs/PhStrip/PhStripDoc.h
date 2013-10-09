@@ -118,6 +118,9 @@ public:
      */
 	bool openDetX(QString filename);
 
+	// First version : Create StripDoc for testing purposes
+	bool createDoc(QString text, int nbPeople, int nbLoop, int nbText, int nbTrack, PhTime videoTimeCode);
+
     int getNbTexts();
 
 	PhFrame getPreviousTextFrame(PhFrame frame);

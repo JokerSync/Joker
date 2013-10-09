@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	_clock = _stripView->clock();
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
+	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
 
 	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
@@ -50,6 +51,19 @@ void MainWindow::openFile(QString fileName)
 	}
 }
 
+void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text, int videoTimeStamp)
+{
+	PHDEBUG << "Creating fake file";
+	_path = "null";
+	if(_doc->createDoc(text, nbPeople, nbLoop, nbText, nbTrack, videoTimeStamp))
+	{
+		PHDEBUG << "Done";
+		_clock->setTimeCodeType(_doc->getTCType());
+		_clock->setFrame(_doc->getLastFrame());
+		this->setWindowTitle("Working with a made up Detx");
+	}
+}
+
 void MainWindow::onOpenFile()
 {
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
@@ -59,6 +73,17 @@ void MainWindow::onOpenFile()
 		openFile(fileName);
 	}
 }
+
+void MainWindow::onGenerate()
+{
+	GenerateDialog * dlgGen;
+	dlgGen = new GenerateDialog(_doc, this);
+	if (dlgGen->exec())
+	{
+		_clock->setFrame(_doc->getLastFrame());
+	}
+}
+
 
 void MainWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {

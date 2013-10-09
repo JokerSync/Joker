@@ -16,11 +16,6 @@ PhStripDoc::PhStripDoc(QObject *parent) :
     reset();
 }
 
-QList<PhStripCut *> PhStripDoc::getCuts()
-{
-    return _cuts;
-}
-
 
 bool PhStripDoc::openDetX(QString fileName)
 {
@@ -141,7 +136,7 @@ bool PhStripDoc::openDetX(QString fileName)
 				{
 					end = PhTimeCode::frameFromString(lineElem.childNodes().at(j+1).toElement().attribute("timecode"), _tcType);
 				}
-				// TODO : handles zero lenght text
+#warning TODO : handles zero lenght text
 				else
 				{
 					// One char is ~1.20588 frame
@@ -207,7 +202,100 @@ bool PhStripDoc::openDetX(QString fileName)
 
 	emit this->changed();
 
-    return true;
+	return true;
+}
+
+bool PhStripDoc::createDoc(QString text, int nbPeople, int nbLoop, int nbText, int nbTrack, PhTime videoTimeCode)
+{
+	this->reset();
+	_title = "Fake file";
+	_tcType = PhTimeCodeType25;
+	_timeScale = 25.00;
+	_videoTimestamp = videoTimeCode;
+	_lastFrame = _videoTimestamp;
+
+	if (nbTrack > 4 || nbTrack < 1)
+		nbTrack = 3;
+
+	QStringList names;
+	names.append("Actor");
+	names.append("Actress");
+	names.append("Jack");
+	names.append("Jane");
+
+	int nbNames = names.length();
+	QStringList idList;
+	// Creation of the Peoples
+	for (int i = 1; i <= nbPeople; i++)
+	{
+		PhPeople *people = new PhPeople(names.at(i % nbNames) + " " + QString::number(i), "black");
+		_peoples[people->getName()] = people;
+		idList.append(people->getName());
+	}
+
+	int position = _videoTimestamp;
+	// Creation of the text
+	for (int i=0; i < nbText; i++)
+	{
+		//Make people "talk" alternaly
+		QString id = _peoples[idList.at(i % nbPeople)]->getName();
+
+		int start = position;
+		int end = start + text.length() * 1.20588 + 1;
+
+		splitText(_peoples[id], start, end,
+				  text, i % nbTrack, 0);
+
+		// So the texts are all one after the other
+		position += end - start;
+	}
+
+	emit changed();
+	return true;
+}
+
+void PhStripDoc::reset()
+{
+	_peoples.clear();
+	_cuts.clear();
+	_tcType = PhTimeCodeType25;
+	_lastFrame = 0;
+	_loops.clear();
+	_nbTexts = 0;
+	_texts.clear();
+	_timeScale = 25; //TODO fix me
+	_title = QString();
+	_videoPath = QString();
+	_videoTimestamp = 0;
+
+	emit this->changed();
+}
+
+void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, int i)
+{
+
+	if(sentence != " " && sentence != "" ){
+		// if the sentence is short enough
+		if( end - start < 150)
+		{
+			_texts.push_back(new PhStripText(start, actor,
+											  end,
+											 track, sentence));
+			_nbTexts ++;
+		}
+		else // we split in half
+		{
+			int length = sentence.length();
+			splitText(actor, start, start + (end - start)/2, sentence.left(length/2), track, i);
+			i++;
+			if (length % 2 == 0){
+				splitText(actor, start + (end - start)/2, end, sentence.right(length/2), track, i);
+			}
+			else{
+				splitText(actor, start + (end - start)/2, end, sentence.right(length/2 + 1), track, i);
+			}
+		}
+	}
 }
 
 int PhStripDoc::getNbTexts()
@@ -329,49 +417,6 @@ QString PhStripDoc::getVideoPath()
     return _videoPath;
 }
 
-void PhStripDoc::reset()
-{
-    _peoples.clear();
-    _cuts.clear();
-    _tcType = PhTimeCodeType25;
-    _lastFrame = 0;
-    _loops.clear();
-    _nbTexts = 0;
-    _texts.clear();
-    _timeScale = 25; //TODO fix me
-	_title = QString();
-	_videoPath = QString();
-    _videoTimestamp = 0;
-
-	emit this->changed();
-}
-
-void PhStripDoc::splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, int i){
-
-    if(sentence != " " && sentence != "" ){
-        // if the sentence is short enough
-        if( end - start < 150)
-        {
-			_texts.push_back(new PhStripText(start, actor,
-											  end,
-											 track, sentence));
-            _nbTexts ++;
-        }
-        else // we split in half
-        {
-            int length = sentence.length();
-            splitText(actor, start, start + (end - start)/2, sentence.left(length/2), track, i);
-            i++;
-            if (length % 2 == 0){
-                splitText(actor, start + (end - start)/2, end, sentence.right(length/2), track, i);
-            }
-            else{
-                splitText(actor, start + (end - start)/2, end, sentence.right(length/2 + 1), track, i);
-            }
-        }
-    }
-}
-
 int PhStripDoc::getDuration()
 {
 	return _texts.last()->getTimeOut() - _videoTimestamp;
@@ -416,3 +461,9 @@ QList<PhStripOff *> PhStripDoc::getOffs()
 {
 	return _offs;
 }
+
+QList<PhStripCut *> PhStripDoc::getCuts()
+{
+	return _cuts;
+}
+

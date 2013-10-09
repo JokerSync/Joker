@@ -7,6 +7,7 @@
 #define PHGRAPHICOBJECT_H
 
 #include <QColor>
+#include "PhTools/PhDebug.h"
 
 class PhGraphicObject
 {

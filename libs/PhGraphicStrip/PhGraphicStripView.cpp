@@ -244,7 +244,7 @@ void PhGraphicStripView::paint()
 
 		if( ! (((timeIn < frameIn) && (timeOut < frameIn)) || ((timeIn > frameOut) && (timeOut > frameOut))) )
 		{
-			gText->setX(text->getTimeIn() * pixelPerFrame - offset);
+			gText->setX(timeIn * pixelPerFrame - offset);
 			gText->setWidth((timeOut - timeIn) * pixelPerFrame);
 			gText->setY(track * trackHeight);
 			gText->setHeight(trackHeight);
