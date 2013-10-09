@@ -9,6 +9,7 @@
 #include <QDialog>
 
 #include "PhStrip/PhStripDoc.h"
+#include "PhCommonUI/PhTimeCodeEdit.h"
 
 namespace Ui {
 class GenerateDialog;
@@ -19,8 +20,9 @@ class GenerateDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit GenerateDialog(PhStripDoc * doc, QWidget *parent = 0);
+	explicit GenerateDialog(PhStripDoc * _doc, QWidget *parent = 0);
 	~GenerateDialog();
+	PhTime getTC();
 
 private slots:
 	void onTextChanged();
@@ -28,7 +30,7 @@ private slots:
 
 private:
 	Ui::GenerateDialog *ui;
-	PhStripDoc * doc;
+	PhStripDoc * _doc;
 };
 
 #endif // GENERATEDIALOG_H

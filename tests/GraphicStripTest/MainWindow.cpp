@@ -78,8 +78,10 @@ void MainWindow::onGenerate()
 {
 	GenerateDialog * dlgGen;
 	dlgGen = new GenerateDialog(_doc, this);
-	dlgGen->show();
-
+	if (dlgGen->exec())
+	{
+		_clock->setFrame(_doc->getLastFrame());
+	}
 }
 
 
