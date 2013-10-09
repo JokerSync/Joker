@@ -6,6 +6,8 @@
 #include "PhDebug.h"
 
 #include <QStringList>
+#include <QFile>
+#include <QDir>
 
 // Global static pointer used to ensure a single instance of the class.
 PhDebug* PhDebug::d = NULL;
@@ -14,92 +16,124 @@ PhDebug* PhDebug::d = NULL;
 // is private and is only called by this Instance function.
 
 
-PhDebug PhDebug::instance()
+void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    if (!d)   // Only allow one instance of class to be generated.
-        d = new PhDebug(true, true, true, true, true);
-    return * d;
+	QByteArray localMsg = msg.toLocal8Bit();
+	switch (type) {
+	case QtDebugMsg:
+		fprintf(stderr, "%s \n", localMsg.constData());
+		break;
+	case QtWarningMsg:
+		fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		break;
+	case QtCriticalMsg:
+		fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		break;
+	case QtFatalMsg:
+		fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+		abort();
+	}
+	PhDebug::writeLog(msg);
 }
 
-PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine)
+
+// Called if init() was forget
+PhDebug PhDebug::instance()
 {
-    if (!d)   // Only allow one instance of class to be generated.
-        d = new PhDebug(DispDate, DispTime, DispFuncName, DispFileName, DispLine);
-    return * d;
+	if (!d){   // Only allow one instance of class to be generated.
+		d = new PhDebug(false, true, true, true, true, "Default");
+		//Display two white lines at program start
+		PhDebug::writeLog("\n");
+	}
+
+	return * d;
+}
+
+PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, char * name)
+{
+	if (!d){  // Only allow one instance of class to be generated.
+		d = new PhDebug(DispDate, DispTime, DispFileName, DispFuncName, DispLine, name);
+		//Display two white lines at program start
+		PhDebug::writeLog("\n");
+	}
+	return * d;
 }
 
 QDebug PhDebug::operator<<(QDebug dbg)
 {
 
-    QString s;
+	QString s;
 
-    // Display the date
-    if (_dispDate)
+	// Display the date
+	if (_dispDate)
 		s = QDate::currentDate().toString("dd/MM/yyyy");
 
-    if (_dispDate && _dispTime)
-        s += " ";
+	if (_dispDate && _dispTime)
+		s += " ";
 
-    // Display timestamp
-    if (_dispTime)
-        s += QTime::currentTime().toString("hh:mm:ss.zzz");
+	// Display timestamp
+	if (_dispTime)
+		s += QTime::currentTime().toString("hh:mm:ss.zzz");
 
-    dbg << Q(s);
 
-    return dbg;
+	dbg << Q(s);
+
+	return dbg;
 
 }
 
-PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine)
+PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, char * name)
 {
-    //qInstallMessageHandler(errorHandler);
-    if (!d){
-        _dispDate = DispDate;
-        _dispTime = DispTime;
-        _dispFuncName = DispFuncName;
-        _dispFileName = DispFileName;
-        _dispLine = DispLine;
-    }
+
+	qInstallMessageHandler(myMessageOutput);
+	QString appName = name;
+	appName = appName.split("/").last();
+
+	QString repo = QDir::homePath() + "/Library/Logs/Phonations/";
+	if(!QDir(repo).exists()){
+		PHDEBUG << repo << "doesn't exist";
+		QDir().mkdir(repo);
+	}
+	_log = new QFile(repo + appName + ".log");
+	_log->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+
+	logger = new QDebug(_log);
+	//qInstallMessageHandler(errorHandler);
+	if (!d){
+		_dispDate = DispDate;
+		_dispTime = DispTime;
+		_dispFuncName = DispFuncName;
+		_dispFileName = DispFileName;
+		_dispLine = DispLine;
+	}
+
 }
 
 QString PhDebug::getFuncName(QString name)
 {
-    if(PhDebug::instance()._dispFuncName)
-        return "\"" + name + "\"";
-    else
-        return "";
+	if(PhDebug::instance()._dispFuncName)
+		return name;
+	else
+		return "";
 }
 
 QString PhDebug::getFileName(QString name)
 {
-    if (PhDebug::instance()._dispFileName)
-        return "in " + name.split("/").last();
-    return "";
+	if (PhDebug::instance()._dispFileName)
+		return  name.split("/").last();
+	return "";
 }
 
 QString PhDebug::getLine(int line)
 {
-    if (PhDebug::instance()._dispLine)
-        return "@L" + QString::number(line);
-    return "";
+	if (PhDebug::instance()._dispLine)
+		return "@L" + QString::number(line);
+	return "";
 }
 
-
-//Unused at this moment.
-void errorHandler(QtMsgType type, const char *msg)
+void PhDebug::writeLog(QString text)
 {
-    switch (type) {
-        case QtDebugMsg:
-            fprintf(stderr, "%s\n", msg);
-            break;
-        case QtWarningMsg:
-            fprintf(stderr, "\033[1;33mWarning\033[0m: %s\n", msg);
-            break;
-        case QtCriticalMsg:
-            fprintf(stderr, "\033[31mCritical\033[0m: %s\n", msg);
-            break;
-        case QtFatalMsg:
-            fprintf(stderr, "\033[31mFatal\033[0m: %s\n", msg);
-            abort();
-    }
+	QTextStream ts(PhDebug::instance()._log);
+	ts << text << endl;
 }
+
