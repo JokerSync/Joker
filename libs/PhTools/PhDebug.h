@@ -9,10 +9,12 @@
 #include <QDebug>
 #include <QDate>
 #include <QRect>
+#include <QFile>
 
 #include "iostream"
 
 #define PHDEBUG PhDebug::instance() << qDebug() << Q(PhDebug::getFuncName(__FUNCTION__)) << Q(PhDebug::getFileName(__FILE__)) << Q(PhDebug::getLine(__LINE__)) << ":"
+
 
 
 // In order to get rid of double quotes when displaying a variable
@@ -21,27 +23,29 @@
 class PhDebug
 {
 public:
-    // used to access to the only instance of the class
-    static PhDebug instance();
-    static PhDebug init(bool DispDate, bool DispTime,  bool DispFuncName, bool DispFileName, bool DispLine);
+	// used to access to the only instance of the class
+	static PhDebug instance();
+	static PhDebug init(bool DispDate, bool DispTime,  bool DispFuncName, bool DispFileName, bool DispLine);
 
-    QDebug operator<<(QDebug dbg);
+	QDebug operator<<(QDebug dbg);
 
 
-    PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine);
-    static QString getFuncName(QString name);
-    static QString getFileName(QString name);
-    static QString getLine(int line);
-    static void errorHandler(QtMsgType type, const char *msg);
-
+	PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine);
+	static QString getFuncName(QString name);
+	static QString getFileName(QString name);
+	static QString getLine(int line);
+	static void writeLog(QString text);
 
 private:
-    static PhDebug * d;
-    bool _dispFuncName;
-    bool _dispTime;
-    bool _dispDate;
-    bool _dispFileName;
-    bool _dispLine;
+	static PhDebug * d;
+	QFile * _log;
+	QDebug * logger;
+	bool _dispFuncName;
+	bool _dispTime;
+	bool _dispDate;
+	bool _dispFileName;
+	bool _dispLine;
+	QString total;
 
 };
 
