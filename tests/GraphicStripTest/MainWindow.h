@@ -17,10 +17,10 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit MainWindow(QSettings *settings, QWidget *parent = 0);
 	~MainWindow();
 
-	void openFile(QString fileName);
+	bool openFile(QString fileName);
 	void createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text = "Default text.", int videoTimeStamp = 0);
 
 
@@ -70,7 +70,7 @@ private slots:
 
 private:
 	Ui::MainWindow *ui;
-	QSettings _settings;
+	QSettings *_settings;
 	PhGraphicStripView *_stripView;
 	PhStripDoc *_doc;
 	PhClock *_clock;
