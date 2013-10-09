@@ -37,41 +37,48 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 }
 
 
+// Usually called if init was forget
 PhDebug PhDebug::instance()
 {
-    if (!d)   // Only allow one instance of class to be generated.
+	if (!d){   // Only allow one instance of class to be generated.
 		d = new PhDebug(true, true, true, true, true, "Default");
+		//Display two white lines at program start
+		PhDebug::writeLog("\n");
+	}
 
-    return * d;
+	return * d;
 }
 
 PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileName, bool DispLine, char * name)
 {
-    if (!d)   // Only allow one instance of class to be generated.
+	if (!d){  // Only allow one instance of class to be generated.
 		d = new PhDebug(DispDate, DispTime, DispFuncName, DispFileName, DispLine, name);
+		//Display two white lines at program start
+		PhDebug::writeLog("\n");
+	}
 	return * d;
 }
 
 QDebug PhDebug::operator<<(QDebug dbg)
 {
 
-    QString s;
+	QString s;
 
-    // Display the date
-    if (_dispDate)
+	// Display the date
+	if (_dispDate)
 		s = QDate::currentDate().toString("dd/MM/yyyy");
 
-    if (_dispDate && _dispTime)
-        s += " ";
+	if (_dispDate && _dispTime)
+		s += " ";
 
-    // Display timestamp
-    if (_dispTime)
-        s += QTime::currentTime().toString("hh:mm:ss.zzz");
+	// Display timestamp
+	if (_dispTime)
+		s += QTime::currentTime().toString("hh:mm:ss.zzz");
 
 
 	dbg << Q(s);
 
-    return dbg;
+	return dbg;
 
 }
 
@@ -90,36 +97,37 @@ PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFuncName, bool DispFileN
 	_log = new QFile(repo + appName + ".log");
 	_log->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
 
-	 logger = new QDebug(_log);
-    //qInstallMessageHandler(errorHandler);
-    if (!d){
-        _dispDate = DispDate;
-        _dispTime = DispTime;
-        _dispFuncName = DispFuncName;
-        _dispFileName = DispFileName;
-        _dispLine = DispLine;
-    }
+	logger = new QDebug(_log);
+	//qInstallMessageHandler(errorHandler);
+	if (!d){
+		_dispDate = DispDate;
+		_dispTime = DispTime;
+		_dispFuncName = DispFuncName;
+		_dispFileName = DispFileName;
+		_dispLine = DispLine;
+	}
+
 }
 
 QString PhDebug::getFuncName(QString name)
 {
-    if(PhDebug::instance()._dispFuncName)
-        return "\"" + name + "\"";
-    else
-        return "";
+	if(PhDebug::instance()._dispFuncName)
+		return "\"" + name + "\"";
+	else
+		return "";
 }
 
 QString PhDebug::getFileName(QString name)
 {
-    if (PhDebug::instance()._dispFileName)
-        return "in " + name.split("/").last();
-    return "";
+	if (PhDebug::instance()._dispFileName)
+		return "in " + name.split("/").last();
+	return "";
 }
 
 QString PhDebug::getLine(int line)
 {
-    if (PhDebug::instance()._dispLine)
-        return "@L" + QString::number(line);
+	if (PhDebug::instance()._dispLine)
+		return "@L" + QString::number(line);
 	return "";
 }
 
