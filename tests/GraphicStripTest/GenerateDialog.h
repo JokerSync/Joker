@@ -8,6 +8,8 @@
 
 #include <QDialog>
 
+#include "PhStrip/PhStripDoc.h"
+
 namespace Ui {
 class GenerateDialog;
 }
@@ -17,14 +19,16 @@ class GenerateDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit GenerateDialog(QWidget *parent = 0);
+	explicit GenerateDialog(PhStripDoc * doc, QWidget *parent = 0);
 	~GenerateDialog();
 
 private slots:
 	void onTextChanged();
+	void onAccept();
 
 private:
 	Ui::GenerateDialog *ui;
+	PhStripDoc * doc;
 };
 
 #endif // GENERATEDIALOG_H
