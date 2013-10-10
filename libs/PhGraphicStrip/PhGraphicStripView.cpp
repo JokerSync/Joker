@@ -45,7 +45,7 @@ bool PhGraphicStripView::setFont(QString fontName)
 			fontFile = QCoreApplication::applicationDirPath() + "/../Resources/LTE50198.TTF";
 			PHDEBUG << "A default font will be taken : " << fontFile;
 
-			QMessageBox::information(this, "Error", "The font \"" + fontName + "\" seems missing, \"" + fontFile + "\" is set instead");
+			QMessageBox::information(this, "Error", "The font \"" + fontName + "\" seems missing or desn't support our alphabet', \"" + fontFile + "\" is set instead");
 		}
 	}
 
