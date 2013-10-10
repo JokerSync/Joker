@@ -27,6 +27,8 @@ public:
 
 	void setTextureCoordinate(float tu, float tv);
 
+	bool createTextureFromRGBBuffer(void *data, int width, int height);
+
 	bool createTextureFromYUVBuffer(void *data, int width, int height);
 protected:
 

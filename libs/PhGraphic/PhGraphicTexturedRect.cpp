@@ -59,6 +59,27 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 	return true;
 }
 
+bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, int height)
+{
+	glEnable( GL_TEXTURE_2D );
+    // Have OpenGL generate a texture object handle for us
+    glGenTextures( 1, &_texture );
+
+    // Bind the texture object
+    glBindTexture( GL_TEXTURE_2D, _texture );
+
+
+    // Edit the texture object's image data using the information SDL_Surface gives us
+	glTexImage2D( GL_TEXTURE_2D, 0, 3, width, height, 0,
+                  GL_RGB, GL_UNSIGNED_BYTE, data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	return true;
+}
+
+
 bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, int height)
 {
     glEnable( GL_TEXTURE_2D );

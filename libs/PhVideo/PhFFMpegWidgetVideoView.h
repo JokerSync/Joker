@@ -23,6 +23,8 @@ protected:
 private:
 	QImage * _image;
 	uint8_t *_rgb;
+	struct SwsContext * _pSwsCtx;
+
 };
 
 #endif // PHFFMPEGWIDGETVIDEOVIEW_H
