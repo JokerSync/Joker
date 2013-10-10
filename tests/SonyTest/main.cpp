@@ -17,6 +17,6 @@ int main(int argc, char *argv[])
 
 	PhSonyControllerTest sonyTest;
 	//	bool result = sonyTest.testAll();
-	//	qDebug() << "Run test : " << result;
+	//	PHDEBUG << "Run test : " << result;
 	return QTest::qExec(&sonyTest);
 }

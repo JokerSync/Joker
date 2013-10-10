@@ -84,7 +84,7 @@ void MainWindow::on_checkB_toggled(bool checked)
 
 bool MainWindow::open(QSerialPort * serial, QString suffix)
 {
-	qDebug() << "open" << suffix;
+	PHDEBUG << "open" << suffix;
 
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
 	{
@@ -99,26 +99,26 @@ bool MainWindow::open(QSerialPort * serial, QString suffix)
 				serial->setStopBits(QSerialPort::OneStop);
 				serial->setParity(QSerialPort::OddParity);
 
-				qDebug() << "Opening " << name;
+				PHDEBUG << "Opening " << name;
 				serial->open(QSerialPort::ReadWrite);
 
 				return true;
 			}
 		}
 	}
-	qDebug() << "not found";
+	PHDEBUG << "not found";
 	return false;
 }
 
 void MainWindow::closeA()
 {
-	qDebug() << "Closing " << _serialA.objectName();
+	PHDEBUG << "Closing " << _serialA.objectName();
 	_serialA.close();
 }
 
 void MainWindow::closeB()
 {
-	qDebug() << "Closing " << _serialB.objectName();
+	PHDEBUG << "Closing " << _serialB.objectName();
 	_serialB.close();
 }
 

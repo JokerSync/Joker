@@ -38,7 +38,7 @@ MainWindow::~MainWindow()
 
 bool MainWindow::openFile(QString fileName)
 {
-	qDebug() << "openFile : " << fileName;
+	PHDEBUG << "openFile : " << fileName;
   //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 	if(QFile::exists(fileName))
 	{

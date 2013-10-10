@@ -6,14 +6,14 @@ using namespace test;
 void PhDebug(QString msg)
 {
 
-    qDebug("%d", test::Audio);
-    qDebug("%d", test::DoCommand);
-    qDebug("%d", test::LTC);
-    qDebug("%d", test::LTC);
-    qDebug("%x", test::Clock);
-    qDebug("%#x", test::Sony);
+    PHDEBUG << test::Audio;
+    PHDEBUG <<  test::DoCommand;
+    PHDEBUG <<  test::LTC;
+    PHDEBUG <<  test::LTC;
+    PHDEBUG <<  test::Clock;
+    PHDEBUG <<  test::Sony;
 
-    qDebug() << "@" + QString::number(LTC) + ": " + msg;
+    PHDEBUG << "@" + QString::number(LTC) + ": " + msg;
     QtMsgType
 }
 

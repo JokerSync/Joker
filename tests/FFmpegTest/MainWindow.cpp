@@ -35,7 +35,7 @@ MainWindow::~MainWindow()
 
 bool MainWindow::openFile(QString fileName)
 {
-	qDebug() << fileName;
+	PHDEBUG << fileName;
 	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
 		return false;
 
@@ -60,7 +60,7 @@ bool MainWindow::openFile(QString fileName)
 
 	_pCodecContext = _pFormatContext->streams[_videoStream]->codec;
 
-	qDebug() << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
+	PHDEBUG << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
 	AVCodec * pCodec = avcodec_find_decoder(_pCodecContext->codec_id);
 	if(pCodec == NULL)
 		return false;

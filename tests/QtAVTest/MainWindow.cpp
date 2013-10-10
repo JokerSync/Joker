@@ -57,7 +57,7 @@ void MainWindow::on_actionNext_frame_triggered()
 {
 	qreal t = mpPlayer->masterClock()->value();
 	qreal newT = t + 1.0 / 25;
-	qDebug() << t << "\t" << newT;
+	PHDEBUG << t << "\t" << newT;
 	mpPlayer->seek(newT);
 }
 
@@ -65,6 +65,6 @@ void MainWindow::on_actionPrevious_frame_triggered()
 {
 	qreal t = mpPlayer->masterClock()->value();
 	qreal newT = t - 1.0 / 25;
-	qDebug() << t << "\t" << newT;
+	PHDEBUG << t << "\t" << newT;
 	mpPlayer->seek(newT);
 }

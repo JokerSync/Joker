@@ -35,7 +35,7 @@ MainView::MainView()
 	//_strip->show();
 
 //#if LEAP
-//    qDebug() << leapListener.objectName();
+//    PHDEBUG << leapListener.objectName();
 //    connect(&leapListener, SIGNAL(setPosition(int move)), _MController, SLOT(onPositionChanged2(int move)));
 //    connect(&leapListener, SIGNAL(setRate(float rate)), _MController, SLOT(onRateChanged2(float rate)));
 //#endif
@@ -84,7 +84,7 @@ MainView::MainView()
 
 void MainView::openFile(QString fileName)
 {
-	qDebug() << "openFile : " << fileName;
+	PHDEBUG << "openFile : " << fileName;
   //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 	if(QFile::exists(fileName))
 	{

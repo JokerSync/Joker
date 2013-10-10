@@ -34,7 +34,7 @@ void copyFolder(QString sourceFolder, QString destFolder)
         }
         else
         {
-            qDebug() << "There's a problem while creating : " + destFolder;
+            PHDEBUG << "There's a problem while creating : " + destFolder;
         }
     }
 
