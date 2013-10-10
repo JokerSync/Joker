@@ -26,7 +26,7 @@ void MemoryDump(void * pixels, int w, int h, int bpp)
             else
                 s += "_";
         }
-        qDebug() << s;
+        PHDEBUG << s;
     }
 }
 

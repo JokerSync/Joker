@@ -7,7 +7,7 @@ PhQTVideoView::PhQTVideoView(QObject *parent)
 	: QVideoWidget() ,
 	_player(this,QMediaPlayer::VideoSurface)
 {
-	qDebug() << "Using QTVideo widget for video playback.";
+	PHDEBUG << "Using QTVideo widget for video playback.";
 	_player.setVideoOutput(this);
 
 	connect(&_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
@@ -28,7 +28,7 @@ bool PhQTVideoView::open(QString fileName)
 	}
 	else
 	{
-		qDebug() << "File does not exist: " << fileName;
+		PHDEBUG << "File does not exist: " << fileName;
 		return false;
 	}
 }
@@ -46,7 +46,7 @@ void PhQTVideoView::onRateChanged(PhRate rate)
 void PhQTVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
 	qint64 ms = (_clock.frame() - this->frameStamp()) * 1000 / PhTimeCode::getFps(tcType);
-	//qDebug() << "frame" << _clock.frame() << "frameStamp" << this->getFrameStamp();
+	//PHDEBUG << "frame" << _clock.frame() << "frameStamp" << this->getFrameStamp();
 	PHDEBUG << "ms : " << ms << "\trate : " << _clock.rate();
 	if(_clock.rate() == 0)
 	{

@@ -50,7 +50,7 @@ SDL_Surface *load_image( QString filename )
 	QFileInfo info(filename);
 	if(!info.exists())
 	{
-		qDebug() << "file doesn't exists : " << filename;
+		PHDEBUG << "file doesn't exists : " << filename;
 		return NULL;
 	}
     //Load the image
@@ -77,7 +77,7 @@ SDL_Surface *load_image( QString filename )
     }
     else
     {
-           qDebug()<<"IMG_Load: "<<IMG_GetError();
+           PHDEBUG<<"IMG_Load: "<<IMG_GetError();
     }
 
     //Return the optimized image
@@ -99,12 +99,12 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination 
 
 int main(int argc, char **argv)
 {
-	qDebug() << "SDL_Init()";
+	PHDEBUG << "SDL_Init()";
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
         return false;
 
-	qDebug() << "SDL_SetVideoMode";
+	PHDEBUG << "SDL_SetVideoMode";
     //Set up the screen
     screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
 
@@ -112,12 +112,12 @@ int main(int argc, char **argv)
     if( screen == NULL )
         return false;
 
-	qDebug() << "SDL_WM_SetCaption";
+	PHDEBUG << "SDL_WM_SetCaption";
     //Set the title
     SDL_WM_SetCaption( "Graphic Test", NULL );
 
-	qDebug() << "current path : " << QDir::currentPath();
-	qDebug() << "load_image";
+	PHDEBUG << "current path : " << QDir::currentPath();
+	PHDEBUG << "load_image";
     // Create a surface from picture:
     image = load_image( "SDLTest.app/Contents/Resources/look.png");
 
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 
     // Initialize TTF :
     if( TTF_Init() == -1 ) {
-        qDebug() << "TTF error.";
+        PHDEBUG << "TTF error.";
         return 2;
     }
 
@@ -147,8 +147,7 @@ int main(int argc, char **argv)
     // Create a text surface:
     SDL_Surface *surface = TTF_RenderUTF8_Blended( font, "SDL test OK", textColor );
 
-    qDebug("surface : %dx%d / %dbpp / %d", surface->w, surface->h,
-           surface->format->BytesPerPixel, surface->pitch);
+    PHDEBUG << "surface :" << surface->w << "x" << surface->h << "/" << surface->format->BytesPerPixel << "/" << surface->pitch;
 
     // Dump the text surface:
     //MemoryDump(surface->pixels, surface->pitch, surface->h, surface->format->BytesPerPixel);

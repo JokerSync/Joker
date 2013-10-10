@@ -19,10 +19,10 @@ PhStripDoc::PhStripDoc(QObject *parent) :
 
 bool PhStripDoc::openDetX(QString fileName)
 {
-	qDebug() << "PhStripDoc::openDetX : " << fileName;
+	PHDEBUG << "PhStripDoc::openDetX : " << fileName;
     if (!QFile(fileName).exists())
 	{
-		qDebug() << "this file doesn't exist" ;
+		PHDEBUG << "this file doesn't exist" ;
         return false;
 	}
 
@@ -32,19 +32,19 @@ bool PhStripDoc::openDetX(QString fileName)
     QFile xml_doc(fileName);// On choisit le fichier contenant les informations XML.
     if(!xml_doc.open(QIODevice::ReadOnly))// Si l'on n'arrive pas à ouvrir le fichier XML.
     {
-        qDebug() << ("Le document XML n'a pas pu être ouvert. Vérifiez que le nom est le bon et que le document est bien placé");
+        PHDEBUG << ("Le document XML n'a pas pu être ouvert. Vérifiez que le nom est le bon et que le document est bien placé");
         return false;
     }
     if (!DetX->setContent(&xml_doc)) // Si l'on n'arrive pas à associer le fichier XML à l'objet DOM.
     {
         xml_doc.close();
-        qDebug() << ("Le document XML n'a pas pu être attribué à l'objet QDomDocument.");
+        PHDEBUG << ("Le document XML n'a pas pu être attribué à l'objet QDomDocument.");
         return false;
     }
     else
     {
-        qDebug() << ("The file \"" + fileName + "\" is now open.");
-        qDebug("-----------------------------");
+        PHDEBUG << ("The file \"" + fileName + "\" is now open.");
+        PHDEBUG << "-----------------------------";
     }
 
 

@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 	//Check argument count
 	if (argc < 2)
 	{
-		qDebug() << "Please provide a DetX file path as argument";
+		PHDEBUG << "Please provide a DetX file path as argument";
 		return 0;
 	}
 
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
 	if(ext != "detx")
 	{
-		qDebug() << "It's not a DetX file";
+		PHDEBUG << "It's not a DetX file";
 		return 0;
 	}
 
@@ -41,38 +41,38 @@ int main(int argc, char *argv[])
 #endif
 	// Display the title:
 
-	qDebug() << "title : " ;
-	qDebug() <<doc.getTitle();
-	qDebug() <<"-----------------------------";
+	PHDEBUG << "title : " ;
+	PHDEBUG <<doc.getTitle();
+	PHDEBUG <<"-----------------------------";
 
 	// Display actors
 
 	QMap<QString, PhPeople *> list_actors = doc.getPeoples();
-	qDebug() << "actors : ";
+	PHDEBUG << "actors : ";
 	QMap<QString, PhPeople *>::iterator it;
 
 	for( it=list_actors.begin(); it!=list_actors.end() ; it++)
 	{
-		qDebug() << (*it)->getName();
+		PHDEBUG << (*it)->getName();
 	}
 
-	qDebug() <<"-----------------------------";
+	PHDEBUG <<"-----------------------------";
 
 
 	// Display text
 
-	qDebug() << "texts : ";
+	PHDEBUG << "texts : ";
 	QString line;
 	PhPeople * lastPeople;
 
 	foreach(PhStripText* text, doc.getTexts())
 	{
 		line = text->getPeople()->getName() + " : " + text->getContent();
-		qDebug() << line;
+		PHDEBUG << line;
 
 		//             if(((*text)->getPeople().getName()) != ((*(text-1))->getPeople().getName()))
 		//             {
-		//                 qDebug() << qPrintable( line );
+		//                 PHDEBUG << qPrintable( line );
 		//                 line = (*text)->getPeople().getName();
 		//                 line += " : ";
 		//                 line += (*text)->getContent();
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 	}
 
 	foreach (PhStripOff * off, doc.getOffs()) {
-		qDebug() << off->getPeople()->getName() << " : " << PhTimeCode::stringFromFrame(off->getTimeIn(), doc.getTCType())
+		PHDEBUG << off->getPeople()->getName() << " : " << PhTimeCode::stringFromFrame(off->getTimeIn(), doc.getTCType())
 				 << " - " << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
 	}
 
