@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 TARGET = Joker
+VERSION = 1.0.2
 TEMPLATE = app
 ICON = joker.icns
 
