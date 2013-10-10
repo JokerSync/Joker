@@ -13,9 +13,10 @@
 
 int main(int argc, char *argv[])
 {
+	QString appName = QString(argv[0]).split("/").last();
+	PhDebug::init(false, true, true, true, true, appName);
 	QApplication a(argc, argv);
 	MainWindow w;
-	PhDebug::init(false, true, true, true, true, argv[0]);
 
     w.show();
 

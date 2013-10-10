@@ -49,10 +49,10 @@ PhDebug PhDebug::instance()
 	return * d;
 }
 
-PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, char * name)
+PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, QString appName)
 {
 	if (!d){  // Only allow one instance of class to be generated.
-		d = new PhDebug(DispDate, DispTime, DispFileName, DispFuncName, DispLine, name);
+		d = new PhDebug(DispDate, DispTime, DispFileName, DispFuncName, DispLine, appName);
 		//Display two white lines at program start
 		PhDebug::writeLog("\n");
 	}
@@ -82,12 +82,9 @@ QDebug PhDebug::operator<<(QDebug dbg)
 
 }
 
-PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, char * name)
+PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, QString appName)
 {
-
 	qInstallMessageHandler(myMessageOutput);
-	QString appName = name;
-	appName = appName.split("/").last();
 
 	QString logDirPath = QDir::homePath() + "/Library/Logs/Phonations/";
 	QDir logDir(logDirPath);
@@ -98,7 +95,7 @@ PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncN
 	_log->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
 
 	logger = new QDebug(_log);
-	//qInstallMessageHandler(errorHandler);
+
 	if (!d){
 		_dispDate = DispDate;
 		_dispTime = DispTime;
