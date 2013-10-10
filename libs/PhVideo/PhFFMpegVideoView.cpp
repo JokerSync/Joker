@@ -13,7 +13,7 @@ PhFFMpegVideoView::PhFFMpegVideoView(QWidget *parent) :
 	_image(NULL),
 	_rgb(NULL)
 {
-	qDebug() << "Using FFMpeg widget for video playback.";
+	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
 
 	connect(&_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
@@ -60,7 +60,9 @@ bool PhFFMpegVideoView::open(QString fileName)
 	resizeEvent(NULL);
 
 	_clock.setFrame(0);
-	return goToFrame(0);
+	bool result = goToFrame(0);
+	PHDEBUG << "over : " << result;
+	return result;
 }
 
 PhFFMpegVideoView::~PhFFMpegVideoView()
@@ -107,6 +109,7 @@ void PhFFMpegVideoView::resizeEvent(QResizeEvent *event)
 							_pCodecContext->pix_fmt, w, h,
 							AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 	goToFrame(_clock.frame());
+	PHDEBUG << "ok";
 }
 
 void PhFFMpegVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
