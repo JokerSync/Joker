@@ -6,6 +6,7 @@
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
+#include "AboutMenu.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -206,3 +207,9 @@ void MainWindow::on_actionChange_timestamp_triggered()
 }
 
 
+
+void MainWindow::on_actionAbout_triggered()
+{
+	AboutMenu menu;
+	menu.exec();
+}

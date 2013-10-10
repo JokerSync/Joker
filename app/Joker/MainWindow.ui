@@ -18,7 +18,16 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -48,6 +57,7 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionOpen_Video"/>
+    <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuControl">
     <property name="title">
@@ -200,6 +210,11 @@
   <action name="actionChange_font">
    <property name="text">
     <string>Change font...</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>
