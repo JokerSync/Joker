@@ -5,7 +5,6 @@
 #-------------------------------------------------
 
 TARGET = Joker
-VERSION = 1.0.2
 TEMPLATE = app
 ICON = joker.icns
 
@@ -15,7 +14,7 @@ JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 
 # The application version
-VERSION = 1.0.3
+VERSION = 1.0.4
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
