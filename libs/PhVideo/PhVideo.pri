@@ -5,12 +5,8 @@ CONFIG += use_ffmpeg
 #CONFIG += use_vlc
 
 HEADERS += ../../libs/PhVideo/PhVideoObject.h \
-    ../../libs/PhVideo/PhFFMpegWidgetVideoView.h \
-    ../../libs/PhVideo/PhFFMpegGLVideoView.h
 HEADERS += ../../libs/PhVideo/PhVideoView.h
 SOURCES += ../../libs/PhVideo/PhVideoObject.cpp \
-    ../../libs/PhVideo/PhFFMpegWidgetVideoView.cpp \
-    ../../libs/PhVideo/PhFFMpegGLVideoView.cpp
 
 # Windows specific
 win32{
@@ -70,7 +66,7 @@ use_qtav {
 }
 
 use_ffmpeg {
-	DEFINES += USE_FFMPEG_WIDGET
+	DEFINES += USE_FFMPEG_GL
 	INCLUDEPATH += /usr/local/include
 	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
 
@@ -85,6 +81,11 @@ use_ffmpeg {
 #	LIBS += -lssl -lcrypto
 	LIBS += -liconv -lbz2 -lz
 
-	HEADERS += ../../libs/PhVideo/PhFFMpegVideoView.h
-	SOURCES += ../../libs/PhVideo/PhFFMpegVideoView.cpp
+	HEADERS += ../../libs/PhVideo/PhFFMpegVideoView.h \
+        ../../libs/PhVideo/PhFFMpegWidgetVideoView.h \
+        ../../libs/PhVideo/PhFFMpegGLVideoView.h
+
+	SOURCES += ../../libs/PhVideo/PhFFMpegVideoView.cpp \
+        ../../libs/PhVideo/PhFFMpegWidgetVideoView.cpp \
+        ../../libs/PhVideo/PhFFMpegGLVideoView.cpp
 }

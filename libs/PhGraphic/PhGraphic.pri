@@ -42,7 +42,7 @@ linux {
 
 # MacOS specific
 mac {
-#	SOURCES += ../../libs/PhGraphic/SDLMain.cpp
+	SOURCES += ../../libs/PhGraphic/SDLMain.cpp
 
 	QMAKE_CXXFLAGS += -F/Library/Frameworks
 
