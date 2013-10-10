@@ -4,9 +4,13 @@
 CONFIG += use_ffmpeg
 #CONFIG += use_vlc
 
-HEADERS += ../../libs/PhVideo/PhVideoObject.h
+HEADERS += ../../libs/PhVideo/PhVideoObject.h \
+    ../../libs/PhVideo/PhFFMpegWidgetVideoView.h \
+    ../../libs/PhVideo/PhFFMpegGLVideoView.h
 HEADERS += ../../libs/PhVideo/PhVideoView.h
-SOURCES += ../../libs/PhVideo/PhVideoObject.cpp
+SOURCES += ../../libs/PhVideo/PhVideoObject.cpp \
+    ../../libs/PhVideo/PhFFMpegWidgetVideoView.cpp \
+    ../../libs/PhVideo/PhFFMpegGLVideoView.cpp
 
 # Windows specific
 win32{
@@ -66,7 +70,7 @@ use_qtav {
 }
 
 use_ffmpeg {
-	DEFINES += USE_FFMPEG
+	DEFINES += USE_FFMPEG_WIDGET
 	INCLUDEPATH += /usr/local/include
 	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
 
