@@ -5,10 +5,16 @@
 int main(int argc, char *argv[])
 {
 	PhDebug::init(false, true, true, false, false, APP_NAME);
-	qDebug() << APP_NAME << APP_VERSION;
+	qDebug() << ORG_NAME << APP_NAME << APP_VERSION;
 	QApplication a(argc, argv);
-    MainWindow window;
+	a.setApplicationVersion(APP_VERSION);
+	a.setOrganizationName(ORG_NAME);
+	a.setOrganizationDomain(ORG_NAME);
+	MainWindow window;
 	window.show();
+
+	QStringList list;
+	list.at(1);
 
     return a.exec();
 }
