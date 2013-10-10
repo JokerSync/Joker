@@ -6,6 +6,10 @@ AboutMenu::AboutMenu(QWidget *parent) :
     ui(new Ui::AboutMenu)
 {
     ui->setupUi(this);
+	QString version = APP_NAME;
+	version += " v";
+	version += APP_VERSION;
+	ui->label->setText(version);
 }
 
 AboutMenu::~AboutMenu()
