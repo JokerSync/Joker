@@ -4,8 +4,9 @@
 
 int main(int argc, char *argv[])
 {
-	PhDebug::init(false, true, true, false, false);
-    QApplication a(argc, argv);
+	PhDebug::init(false, true, true, false, false, APP_NAME);
+	qDebug() << APP_NAME << APP_VERSION;
+	QApplication a(argc, argv);
     MainWindow window;
 	window.show();
 
