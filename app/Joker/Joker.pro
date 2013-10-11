@@ -53,6 +53,7 @@ FORMS += \
 QMAKE_POST_LINK += echo $${RESOURCES_PATH};
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH}/../Resources/;
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
+QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/LTE50198.TTF $${RESOURCES_PATH}/../Resources/;
 
 
 CONFIG(release, debug|release) {
