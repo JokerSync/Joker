@@ -6,7 +6,7 @@
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
-#include "PhCommonUI/chooseFont.h"
+#include "PhCommonUI/PhFontDialog.h"
 #include "AboutMenu.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -184,14 +184,14 @@ bool MainWindow::openVideoFile(QString videoFileName)
 
 void MainWindow::on_actionChange_font_triggered()
 {
-	bool ok;
-	QFont font = QFontDialog::getFont(&ok, this);
-	if(ok)
+	PhFontDialog fontBox;
+	if(fontBox.exec())
 	{
-		if(_stripView->setFont(font.family()))
-			_settings.setValue("StripFontName", font.family());
+		QString font = fontBox.getFontSelected();
+		if(_stripView->setFont(font))
+			_settings.setValue("StripFontName", font);
 		else
-			QMessageBox::critical(this, "Error", "Unable to open " + font.family());
+			QMessageBox::critical(this, "Error", "Unable to open " + font);
 	}
 }
 
@@ -215,15 +215,3 @@ void MainWindow::on_actionAbout_triggered()
 	menu.exec();
 }
 
-void MainWindow::on_actionSelect_font_triggered()
-{
-	chooseFont fontBox;
-	if(fontBox.exec())
-	{
-		QString font = fontBox.getFontSelected();
-		if(_stripView->setFont(font))
-			_settings.setValue("StripFontName", font);
-		else
-			QMessageBox::critical(this, "Error", "Unable to open " + font);
-	}
-}
