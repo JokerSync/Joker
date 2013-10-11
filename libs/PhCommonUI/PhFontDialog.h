@@ -10,16 +10,16 @@
 #include <QListWidgetItem>
 
 namespace Ui {
-class chooseFont;
+class PhFontDialog;
 }
 
-class chooseFont : public QDialog
+class PhFontDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	explicit chooseFont(QWidget *parent = 0);
-	~chooseFont();
+	explicit PhFontDialog(QWidget *parent = 0);
+	~PhFontDialog();
 	QString getFontSelected();
 
 
@@ -32,7 +32,7 @@ private slots:
 	void on_buttonBox_accepted();
 
 private:
-	Ui::chooseFont *ui;
+	Ui::PhFontDialog *ui;
 };
 
 #endif // CHOOSEFONT_H
