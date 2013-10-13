@@ -1,12 +1,12 @@
 #include <QtGlobal>
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #if defined(Q_OS_MAC)
-#include <SDL_image/SDL_image.h>
-#include <SDL_ttf/SDL_ttf.h>
+#include <SDL2_image/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
 #else
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #endif
 
 
@@ -48,15 +48,12 @@ int main(int argc, char **argv)
 
 	PHDEBUG << "SDL_SetVideoMode";
     //Set up the screen
-    screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
 
-    //If there was an error in setting up the screen
-    if( screen == NULL )
-        return false;
+	SDL_Window * window = SDL_CreateWindow("SDLTest", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_SWSURFACE);
+
+	screen = SDL_GetWindowSurface(window);
 
 	PHDEBUG << "SDL_WM_SetCaption";
-    //Set the title
-    SDL_WM_SetCaption( "Graphic Test", NULL );
 
 	PHDEBUG << "current path : " << QDir::currentPath();
 	PHDEBUG << "load_image";
@@ -101,7 +98,7 @@ int main(int argc, char **argv)
 	SDL_BlitSurface( surface, NULL, screen, &textRect );
 
 	//Update the screen
-    if( SDL_Flip(screen) == -1 )
+	if( SDL_UpdateWindowSurface(window))
         return -1;
 
     bool quit = false;
