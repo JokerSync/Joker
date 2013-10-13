@@ -5,6 +5,8 @@
 
 #include <QFile>
 #include <QCoreApplication>
+#include <QDir>
+#include <QMessageBox>
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphicStripView.h"
@@ -40,15 +42,19 @@ bool PhGraphicStripView::setFont(QString fontName)
 		if(!QFile::exists(fontFile))
 		{
 			PHDEBUG << "Unable to find the font : " << fontName;
-			return false;
+			fontFile = QCoreApplication::applicationDirPath() + "/../Resources/LTE50198.TTF";
+			PHDEBUG << "A default font will be taken : " << fontFile;
+
+			QMessageBox::information(this, "Error", "The font \"" + fontName + "\" seems missing or desn't support our alphabet', \"" + fontFile + "\" is set instead");
 		}
 	}
+
 
 	PHDEBUG << "file : " << fontFile;
 
 	_currentFont = new PhFont(fontFile, 150);
 
-	PHDEBUG << "_currentFont value" << _currentFont;
+	PHDEBUG << "_currentFont value" << _currentFont->getFontName();
 
 	// TODO : redraw all texts
 	PHDEBUG << "currentFont init" << _currentFont->init();
