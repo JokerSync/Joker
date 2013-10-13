@@ -39,66 +39,6 @@ SDL_Event event;
 
 using namespace std;
 
-// Synchronize buffer swaps with vertical refresh rate
-
-SDL_Surface *load_image( QString filename )
-{
-    //The image that's loaded
-    SDL_Surface* loadedImage = NULL;
-
-    //The optimized image that will be used
-    SDL_Surface* optimizedImage = NULL;
-
-	QFileInfo info(filename);
-	if(!info.exists())
-	{
-		PHDEBUG << "file doesn't exists : " << filename;
-		return NULL;
-	}
-    //Load the image
-    loadedImage = IMG_Load( filename.toLocal8Bit());
-
-    //If the image loaded
-    if( loadedImage != NULL )
-    {
-        //Create an optimized image
-        optimizedImage = SDL_DisplayFormat( loadedImage );
-
-        //Free the old image
-        SDL_FreeSurface( loadedImage );
-
-        //If the image was optimized just fine
-        if( optimizedImage != NULL )
-        {
-            //Map the color key
-            Uint32 colorkey = SDL_MapRGB( optimizedImage->format, 0, 0xFF, 0xFF );
-
-            //Set all pixels of color R 0, G 0xFF, B 0xFF to be transparent
-            SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, colorkey );
-        }
-    }
-    else
-    {
-           PHDEBUG<<"IMG_Load: "<<IMG_GetError();
-    }
-
-    //Return the optimized image
-    return optimizedImage;
-}
-
-void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination )
-{
-    //Rectangle to hold the offsets
-    SDL_Rect offset;
-
-    //Get offsets
-    offset.x = x;
-    offset.y = y;
-
-    //Blit the surface
-    SDL_BlitSurface( source, NULL, destination, &offset );
-}
-
 int main(int argc, char **argv)
 {
 	PHDEBUG << "SDL_Init()";
@@ -121,7 +61,7 @@ int main(int argc, char **argv)
 	PHDEBUG << "current path : " << QDir::currentPath();
 	PHDEBUG << "load_image";
     // Create a surface from picture:
-    image = load_image( "SDLTest.app/Contents/Resources/look.png");
+    image = IMG_Load( "SDLTest.app/Contents/Resources/look.png");
 
     if( image == NULL )
     {
@@ -129,7 +69,9 @@ int main(int argc, char **argv)
     }
 
     // Display the picture:
-    apply_surface( 0, 0, image, screen );
+	SDL_Rect imageRect = {0, 0, image->w, image->h};
+
+	SDL_BlitSurface( image, NULL, screen, &imageRect );
 
 
     // Initialize TTF :
@@ -155,10 +97,10 @@ int main(int argc, char **argv)
     //MemoryDump(surface->pixels, surface->pitch, surface->h, surface->format->BytesPerPixel);
 
     // Display the text surface:
-    apply_surface( ( SCREEN_WIDTH - surface->w ) / 2, ( SCREEN_HEIGHT / 2 - surface->h ) / 2, surface, screen );
+	SDL_Rect textRect = {0, 0, surface->w, surface->h};
+	SDL_BlitSurface( surface, NULL, screen, &textRect );
 
-
-    //Update the screen
+	//Update the screen
     if( SDL_Flip(screen) == -1 )
         return -1;
 
