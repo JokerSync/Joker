@@ -2,6 +2,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp
 
+INCLUDEPATH += ../../libs
+include(../../libs/PhTools/PhTools.pri);
+
 # Windows specific
 win32{
 #	INCLUDEPATH += $$(SDL_INCLUDE_PATH)
