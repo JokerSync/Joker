@@ -7,7 +7,7 @@
 #define PHGRAPHICTEXTUREDSQUARE_H
 
 #include <glu.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 #include "PhGraphicRect.h"
 
