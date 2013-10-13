@@ -15,6 +15,8 @@ PhFont::PhFont(QString filename, int size)
 
 TTF_Font * PhFont::getFont()
 {
+	if (_font == NULL)
+		init();
     return _font;
 }
 
