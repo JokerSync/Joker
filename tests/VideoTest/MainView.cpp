@@ -22,9 +22,9 @@ MainView::MainView()
     connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
-	connect(&timer, SIGNAL(timeout()), ui->_videoView, SLOT(checkVideoPosition()));
+	//connect(&timer, SIGNAL(timeout()), ui->_videoView, SLOT(checkVideoPosition()));
 
-	timer.start(10);
+	timer.start(40);
 }
 
 MainView::~MainView()
@@ -58,7 +58,7 @@ void MainView::onOpenFile()
 
 void MainView::onTimeOut()
 {
-    _internalClock.tick(100);
+    _internalClock.tick(25);
 }
 
 
