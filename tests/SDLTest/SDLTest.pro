@@ -27,7 +27,7 @@ mac {
 	LIBS += -F/Library/Frameworks
 
 	LIBS += -framework SDL2 -framework SDL2_image -framework SDL2_ttf
-	RESOURCES_PATH = $${TARGET}.app/Contents/Resources
+	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS/
 }
 
 QMAKE_POST_LINK += echo $${RESOURCES_PATH};
