@@ -11,6 +11,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = FFmpegTest
 TEMPLATE = app
 
+INCLUDEPATH += ../../libs
+
+include(../../libs/PhTools/PhTools.pri)
+
 SOURCES += main.cpp\
         MainWindow.cpp
 
