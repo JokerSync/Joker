@@ -39,13 +39,13 @@ CONFIG(release, debug|release) {
 	mac {
 		QMAKE_POST_LINK += rm -rf $${TARGET}.app/Contents/Frameworks/;
 		QMAKE_POST_LINK += mkdir $${TARGET}.app/Contents/Frameworks;
-		QMAKE_POST_LINK += cp -R /Library/Frameworks/SDL.framework $${TARGET}.app/Contents/Frameworks/;
-		QMAKE_POST_LINK += cp -R /Library/Frameworks/SDL_image.framework $${TARGET}.app/Contents/Frameworks/;
-		QMAKE_POST_LINK += cp -R /Library/Frameworks/SDL_ttf.framework $${TARGET}.app/Contents/Frameworks/;
+		QMAKE_POST_LINK += cp -R /Library/Frameworks/SDL2.framework $${TARGET}.app/Contents/Frameworks/;
+		QMAKE_POST_LINK += cp -R /Library/Frameworks/SDL2_image.framework $${TARGET}.app/Contents/Frameworks/;
+		QMAKE_POST_LINK += cp -R /Library/Frameworks/SDL2_ttf.framework $${TARGET}.app/Contents/Frameworks/;
 
-		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL.framework/Versions/A/SDL  @executable_path/../Frameworks/SDL.framework/Versions/A/SDL $${TARGET}.app/Contents/MacOS/$${TARGET};
-		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL_image.framework/Versions/A/SDL_image  @executable_path/../Frameworks/SDL_image.framework/Versions/A/SDL_image $${TARGET}.app/Contents/MacOS/$${TARGET};
-		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL_ttf.framework/Versions/A/SDL_ttf @executable_path/../Frameworks/SDL_ttf.framework/Versions/A/SDL_ttf $${TARGET}.app/Contents/MacOS/$${TARGET};
+		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2.framework/Versions/A/SDL2  @executable_path/../Frameworks/SDL2.framework/Versions/A/SDL2 $${TARGET}.app/Contents/MacOS/$${TARGET};
+		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_image.framework/Versions/A/SDL2_image  @executable_path/../Frameworks/SDL2_image.framework/Versions/A/SDL2_image $${TARGET}.app/Contents/MacOS/$${TARGET};
+		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_ttf.framework/Versions/A/SDL2_ttf @executable_path/../Frameworks/SDL2_ttf.framework/Versions/A/SDL2_ttf $${TARGET}.app/Contents/MacOS/$${TARGET};
 
 		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
 	}
