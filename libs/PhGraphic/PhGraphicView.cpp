@@ -25,6 +25,11 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	t_Timer->start(0);
 }
 
+PhGraphicView::~PhGraphicView()
+{
+	t_Timer->stop();
+}
+
 void PhGraphicView::initializeGL()
 {
 	PHDEBUG;
