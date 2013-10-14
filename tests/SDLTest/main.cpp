@@ -59,10 +59,12 @@ int main(int argc, char **argv)
 
 	PHDEBUG << "SDL_WM_SetCaption";
 
-	PHDEBUG << "current path : " << QDir::currentPath();
+	PHDEBUG << "current path : " << QApplication::applicationDirPath();
+	string ressourcesPath = QApplication::applicationDirPath().toStdString();
 	PHDEBUG << "load_image";
     // Create a surface from picture:
-    image = IMG_Load( "SDLTest.app/Contents/Resources/look.png");
+	string lookPath = ressourcesPath + "/look.png";
+	image = IMG_Load( lookPath.c_str());
 
     if( image == NULL )
     {
@@ -81,7 +83,8 @@ int main(int argc, char **argv)
     }
 
     //Create a font
-    TTF_Font *font = TTF_OpenFont("SDLTest.app/Contents/Resources/Bedizen.ttf", 100 );
+	string fontPath = ressourcesPath + "/Bedizen.ttf";
+	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 100 );
     if (font == NULL)
         return 3;
 
