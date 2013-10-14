@@ -20,6 +20,8 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <QDir>
+#include <QApplication>
+
 
 #include "PhTools/PhDebug.h"
 
@@ -41,6 +43,8 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+	QApplication a(argc, argv);
+
 	PHDEBUG << "SDL_Init()";
     //Initialize all SDL subsystems
     if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
@@ -70,7 +74,6 @@ int main(int argc, char **argv)
 
 	SDL_BlitSurface( image, NULL, screen, &imageRect );
 
-
     // Initialize TTF :
     if( TTF_Init() == -1 ) {
         PHDEBUG << "TTF error.";
@@ -83,7 +86,7 @@ int main(int argc, char **argv)
         return 3;
 
     //Font's color
-    SDL_Color textColor = { 255, 255, 0, 1 };
+    SDL_Color textColor = { 0, 0, 255, 1 };
 
     // Create a text surface:
     SDL_Surface *surface = TTF_RenderUTF8_Blended( font, "SDL test OK", textColor );
@@ -101,17 +104,7 @@ int main(int argc, char **argv)
 	if( SDL_UpdateWindowSurface(window))
         return -1;
 
-    bool quit = false;
-
-    //While the user hasn't quit
-    while(quit == false) {
-        //While there's an event to handle
-        while( SDL_PollEvent(&event) ) {
-            //If the user has Xed out the window
-            if( event.type == SDL_QUIT ) { //Quit the program
-                quit = true; }
-        }
-    }
+    int ret = a.exec();
 
     //Free the surface and quit SDL
     SDL_FreeSurface( image );
@@ -123,7 +116,7 @@ int main(int argc, char **argv)
     TTF_Quit();
     SDL_Quit();
 
-    return 0;
+    return ret;
 }
 
 
