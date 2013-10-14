@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QPainter>
-#include <QDebug>
+#include "PhTools/PhDebug.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
