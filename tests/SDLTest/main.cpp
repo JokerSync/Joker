@@ -27,8 +27,8 @@
 #include "PhTools/PhDebug.h"
 
 //Screen attributes
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 780;
 const int SCREEN_BPP = 32;
 
 //The surfaces
@@ -86,7 +86,7 @@ int main(int argc, char **argv)
 
 	//Create a font
 	string fontPath = ressourcesPath + "/Bedizen.ttf";
-	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 100 );
+	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 150 );
 	if (font == NULL)
 		return 3;
 
@@ -122,44 +122,51 @@ int main(int argc, char **argv)
 
 #elif TEST == 2
 
-	int offsetX = 0;
-	int offsetY = 0;
+	// used to place the glyph on the surface
+	int nbPixelX = 0;
+	int nbPixelY = 0;
 
+	// used to set the base surface
 	Uint32 rmask, gmask, bmask, amask;
 	rmask = 0x000000ff;
 	gmask = 0x0000ff00;
 	bmask = 0x00ff0000;
 	amask = 0xff000000;
 
+	// Creation of the glyph surface
+	SDL_Surface * glyph = SDL_CreateRGBSurface(0,2048,2048,32,rmask,gmask,bmask,amask);
+	SDL_Rect glyphRect = {0, 0, 2048, 2048};
 
-	SDL_Surface * glyph = SDL_CreateRGBSurface(0,screen->w,screen->h,32,rmask,gmask,bmask,amask);
-	SDL_Rect glyphRect = {0, 0, screen->w, screen->h};
-	SDL_Rect carRect = {100, 0, 300, 300};
+	// store the widht of each glyph
+	int tab[255];
 
-	for(ch = 65; ch < 128; ++ch)
+	for(ch = 1; ch <= 256; ++ch)
 	{
 		SDL_Surface * car = TTF_RenderGlyph_Blended(font,ch,color);
-		SDL_Rect carRect = {offsetX, offsetY, car->w, car->h};
+		SDL_Rect carRect = {nbPixelX, nbPixelY, car->w, car->h};
 		if(SDL_BlitSurface( car, NULL, glyph, &carRect ))
 			PHDEBUG << SDL_GetError();
-		if (offsetX + car->w > screen->w)
+		if (ch % 16 == 0)
 		{
-			offsetX = 0;
-			offsetY += car->h;
+			nbPixelX = 0;
+			nbPixelY += 128;
 		}
 		else
-			offsetX += car->w;
-
+			nbPixelX += 128;
+		int minx, maxx;
+		if(TTF_GlyphIsProvided(font, ch)){
+			TTF_GlyphMetrics(font, ch, &minx,&maxx, NULL, NULL, NULL );
+			tab[ch - 1] = maxx-minx ;
+		}
+		else
+			tab[ch - 1] = 0;
 	}
-	SDL_Rect textRect = {0, 0, glyph->w, glyph->h};
-	PHDEBUG << SDL_BlitSurface(glyph, NULL, screen, &glyphRect);
 
-#elif TEST == 3
-	ch = 66;
-	SDL_Surface * car = TTF_RenderGlyph_Blended(font,ch,color);
-	SDL_Surface * glyph = SDL_ConvertSurface(car, car->format, car->flags);
-	SDL_Rect textRect = {0, 0, car->w, car->h};
-	qDebug() << SDL_BlitSurface(glyph, NULL, screen, &textRect);
+	//This draw the entire glyph
+	SDL_BlitSurface(glyph, NULL, screen, &glyphRect);
+
+
+
 #endif
 
 
