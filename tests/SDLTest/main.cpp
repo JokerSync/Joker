@@ -122,6 +122,8 @@ int main(int argc, char **argv)
 
 #elif TEST == 2
 
+	//t.start();
+
 	// used to place the glyph on the surface
 	int nbPixelX = 0;
 	int nbPixelY = 0;
@@ -163,9 +165,24 @@ int main(int argc, char **argv)
 	}
 
 	//This draw the entire glyph
-	SDL_BlitSurface(glyph, NULL, screen, &glyphRect);
+	//SDL_BlitSurface(glyph, NULL, screen, &glyphRect);
+	int miny, maxy;
+	TTF_GlyphMetrics(font, ch, NULL,NULL, &miny, &maxy, NULL );
+
+	int h = maxy - miny;
+	qsrand(QTime::currentTime().msec());
+	Uint16 randChar = qrand() % 256 + 1;
+	int line, column;
+	column = randChar % 16;
+	line = (randChar - column) / 16 + 1;
+	PHDEBUG << randChar << line << column;
+	SDL_Rect randCharRect = {line * 128, column * 128, tab[randChar - 1], h};
+	SDL_Rect draw ={0,0, 128, 128};
+	SDL_BlitSurface(glyph, &randCharRect, screen, &draw);
 
 
+
+	//PHDEBUG << t.elapsed();
 
 #endif
 
