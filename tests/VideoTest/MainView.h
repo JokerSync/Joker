@@ -9,6 +9,8 @@
 #include "PhTools/PhDebug.h"
 
 #include "PhVideo/PhVideoView.h"
+#include "PhVideo/PhVideoEngine.h"
+
 #include "PhCommonUI/PhMediaPanel.h"
 
 #include "PhVideoSynchronizer.h"
@@ -42,8 +44,6 @@ public:
     bool openFile(QString fileName);
 
 private slots:
-
-	void onOpenFile();
 	void on_actionPlay_pause_triggered();
 
 	void on_actionNext_frame_triggered();
@@ -54,13 +54,15 @@ private slots:
 
     void onTimeOut();
 
+	void on_actionOpen_triggered();
+
 private:
 
 	Ui::MainView *ui;
     PhClock _internalClock;
 	QTimer timer;
-    PhVideoSynchronizer _VideoSynchronizer;
-
+    PhVideoSynchronizer _synchronizer;
+	PhVideoEngine _videoEngine;
 };
 
 #endif
