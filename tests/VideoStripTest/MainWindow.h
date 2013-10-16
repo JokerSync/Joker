@@ -6,8 +6,8 @@
 #include <QSettings>
 
 #include "VideoStripSynchronizer.h"
-#include "PhGraphicStrip/PhGraphicStripView.h"
-#include "PhVideo/PhVideoView.h"
+#include "PhGraphicStrip/PhGraphicStrip.h"
+#include "PhVideo/PhVideoEngine.h"
 #include "PhStrip/PhStripDoc.h"
 
 namespace Ui {
@@ -27,7 +27,7 @@ public:
 	bool openVideoFile(QString videoFileName);
 
 private slots:
-	void onOpenFile();
+	void on_actionOpen_triggered();
 
 	void on_actionPlay_pause_triggered();
 
@@ -65,9 +65,9 @@ private slots:
 
 private:
 	Ui::MainWindow *ui;
-	PhGraphicStripView *_stripView;
+	PhGraphicStrip *_strip;
 	PhStripDoc *_doc;
-	PhClock *_stripClock;
+	PhVideoEngine * _videoEngine;
 	VideoStripSynchronizer _synchronizer;
 	QSettings _settings;
 };
