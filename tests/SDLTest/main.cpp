@@ -66,8 +66,7 @@ int main(int argc, char **argv)
 	}
 
 	//Create a font
-	string fontPath = ressourcesPath + "/Bedizen.ttf";
-	fontPath = "/Library/Fonts/Georgia.ttf";
+	string fontPath = ressourcesPath + "/SWENSON.TTF";
 	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 100 );
 	if (font == NULL)
 		return 3;
@@ -109,7 +108,7 @@ int main(int argc, char **argv)
 		{
 			int minx, maxx, miny, maxy, advance;
 			TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
-			PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance;
+			//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance;
 			if(advance != 0)
 			{
 				// Temporary surface of the character
@@ -134,6 +133,8 @@ int main(int argc, char **argv)
 				glyphAdvance[ch] = advance;
 				glyphWidth[ch] = maxx - minx;
 			}
+			else
+				PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
 		}
 		else{
 			glyphAdvance[ch] = 0;
@@ -158,7 +159,8 @@ int main(int argc, char **argv)
 			SDL_Rect glyphRect;
 			glyphRect.x = (ch % 16) * space;
 			glyphRect.y = (ch / 16) * space;
-			glyphRect.w = glyphWidth[ch];
+			//glyphRect.w = glyphWidth[ch];
+			glyphRect.w = space;
 			glyphRect.h = glyphHeight;
 
 
