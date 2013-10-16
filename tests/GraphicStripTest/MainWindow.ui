@@ -15,16 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
@@ -36,7 +27,7 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="PhGraphicStripView" name="stripView" native="true"/>
+       <widget class="GraphicStripView" name="stripView" native="true"/>
       </item>
      </layout>
     </item>
@@ -252,9 +243,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PhGraphicStripView</class>
+   <class>GraphicStripView</class>
    <extends>QWidget</extends>
-   <header>PhGraphicStrip/PhGraphicStripView.h</header>
+   <header>GraphicStripView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
