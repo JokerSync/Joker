@@ -28,7 +28,7 @@
 
 //Screen attributes
 const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 780;
+const int SCREEN_HEIGHT = 700;
 const int SCREEN_BPP = 32;
 
 //The surfaces
@@ -142,6 +142,8 @@ int main(int argc, char **argv)
 	// store the widht of each glyph
 	int tab[255];
 
+	int spaceSize = 128;
+
 	for(ch = 1; ch <= 256; ++ch)
 	{
 		SDL_Surface * car = TTF_RenderGlyph_Blended(font,ch,color);
@@ -151,10 +153,10 @@ int main(int argc, char **argv)
 		if (ch % 16 == 0)
 		{
 			nbPixelX = 0;
-			nbPixelY += 128;
+			nbPixelY += spaceSize;
 		}
 		else
-			nbPixelX += 128;
+			nbPixelX += spaceSize;
 		int minx, maxx;
 		if(TTF_GlyphIsProvided(font, ch)){
 			TTF_GlyphMetrics(font, ch, &minx,&maxx, NULL, NULL, NULL );
@@ -166,19 +168,27 @@ int main(int argc, char **argv)
 
 	//This draw the entire glyph
 	//SDL_BlitSurface(glyph, NULL, screen, &glyphRect);
-	int miny, maxy;
-	TTF_GlyphMetrics(font, ch, NULL,NULL, &miny, &maxy, NULL );
 
-	int h = maxy - miny;
 	qsrand(QTime::currentTime().msec());
-	Uint16 randChar = qrand() % 256 + 1;
-	int line, column;
-	column = randChar % 16;
-	line = (randChar - column) / 16 + 1;
-	PHDEBUG << randChar << line << column;
-	SDL_Rect randCharRect = {line * 128, column * 128, tab[randChar - 1], h};
-	SDL_Rect draw ={0,0, 128, 128};
-	SDL_BlitSurface(glyph, &randCharRect, screen, &draw);
+	Uint16 randChar = qrand() % 96 + 32;
+
+	for(int i = 1; i < 6; i++)
+	{
+		randChar ++;
+		if(TTF_GlyphIsProvided(font, randChar)){
+			int miny, maxy, minx, maxx;
+			TTF_GlyphMetrics(font, randChar, &minx,&maxx, &miny, &maxy, NULL );
+			int column, line;
+			int h = maxy - miny;
+			column = randChar % 16;
+			line = (randChar - column) / 16 + 1;
+			PHDEBUG << randChar << column<< line << h;
+			//SDL_Rect rext = {int x, int y, int w, int h};
+			SDL_Rect randCharRect = {(column - 1) * spaceSize, (line - 1) * spaceSize + 50, tab[randChar - 1] + 10, spaceSize};
+			SDL_Rect draw ={128 * i,100, 500, 500};
+			SDL_BlitSurface(glyph, &randCharRect, screen, &draw);
+		}
+	}
 
 
 
