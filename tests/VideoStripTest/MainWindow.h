@@ -2,12 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <PhGraphicStrip/PhGraphicStripView.h>
-#include <PhVideo/PhVideoView.h>
 #include <QMessageBox>
 #include <QSettings>
 
 #include "VideoStripSynchronizer.h"
+#include "PhGraphicStrip/PhGraphicStripView.h"
+#include "PhVideo/PhVideoView.h"
+#include "PhStrip/PhStripDoc.h"
 
 namespace Ui {
 class MainWindow;
