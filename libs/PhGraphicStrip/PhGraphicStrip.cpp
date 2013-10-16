@@ -221,12 +221,14 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		leftBG -= offset % height;
 	else
 		leftBG -= height - ((-offset) % height);
-	_stripBackgroundImage->setX(leftBG - syncBar_X_FromLeft);
+	_stripBackgroundImage->setX(x + leftBG - syncBar_X_FromLeft);
+	_stripBackgroundImage->setY(y);
 	_stripBackgroundImage->setSize(height * n, height);
 	_stripBackgroundImage->draw();
 
 	_stripSyncBar->setSize(4, height);
-	_stripSyncBar->setPosition(width/6, 0, -1);
+	_stripSyncBar->setPosition(x + width/6, y, -1);
+	_stripSyncBar->setSize(4, height);
 	_stripSyncBar->draw();
 
 	int minSpaceBetweenPeople = 50;
@@ -259,9 +261,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		if( ! (((timeIn < frameIn) && (timeOut < frameIn)) || ((timeIn > frameOut) && (timeOut > frameOut))) )
 		{
-			gText->setX(timeIn * pixelPerFrame - offset);
+			gText->setX(x + timeIn * pixelPerFrame - offset);
 			gText->setWidth((timeOut - timeIn) * pixelPerFrame);
-			gText->setY(track * trackHeight);
+			gText->setY(y + track * trackHeight);
 			gText->setHeight(trackHeight);
 
 			gText->draw();
@@ -286,8 +288,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 				_graphicPeoples[people] = gPeople;
 			}
-			gPeople->setX(text->getTimeIn() * pixelPerFrame - offset - gPeople->getWidth() - spaceBetweenPeopleAndText);
-			gPeople->setY(track * trackHeight);
+			gPeople->setX(x + text->getTimeIn() * pixelPerFrame - offset - gPeople->getWidth() - spaceBetweenPeopleAndText);
+			gPeople->setY(y + track * trackHeight);
 			gPeople->setHeight(trackHeight / 2);
 
 			gPeople->draw();
@@ -311,7 +313,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				_graphicCuts[cut] = gCut;
 			}
 			gCut->setHeight(height);
-			gCut->setX(cut->getTimeIn() * pixelPerFrame - offset);
+			gCut->setX(x + cut->getTimeIn() * pixelPerFrame - offset);
+			gCut->setY(y);
 			gCut->setWidth(2);
 
 			gCut->draw();
@@ -331,7 +334,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gLoop->setColor(QColor(0, 0, 0, 1));
 				_graphicLoops[loop] = gLoop;
 			}
-			gLoop->setX(loop->getTimeIn() * pixelPerFrame - offset);
+			gLoop->setX(x + loop->getTimeIn() * pixelPerFrame - offset);
+			gLoop->setY(y);
 			gLoop->setHThick(height/40);
 			gLoop->setHeight(height);
 			gLoop->setCrossHeight(height / 4);
@@ -356,8 +360,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 				_graphicOffs[off] = gOff;
 			}
-			gOff->setX(off->getTimeIn() * pixelPerFrame - offset);
-			gOff->setY(off->getTrack() * trackHeight + trackHeight);
+			gOff->setX(x + off->getTimeIn() * pixelPerFrame - offset);
+			gOff->setY(y + off->getTrack() * trackHeight + trackHeight);
 			gOff->setHeight( trackHeight / 10);
 			gOff->setWidth((off->getTimeOut() - off->getTimeIn()) * pixelPerFrame);
 			gOff->draw();
