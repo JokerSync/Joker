@@ -12,6 +12,9 @@ bool VideoStripView::init()
 
 void VideoStripView::paint()
 {
-	_strip.draw(0, 0, this->width(), this->height() / 2);
-	_videoEngine.drawVideo(0, this->height() / 2, this->width(), this->height() / 2);
+	int videoHeight = this->height() * 3 / 4;
+	int videoWidth = this->height();
+	int videoX = (this->width() - videoWidth) / 2;
+	_videoEngine.drawVideo(videoX, 0, videoWidth, videoHeight);
+	_strip.draw(0, videoHeight, this->width(), this->height() - videoHeight);
 }
