@@ -33,6 +33,7 @@ mac {
 QMAKE_POST_LINK += echo $${RESOURCES_PATH};
 QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/img/look.png $${RESOURCES_PATH};
 QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/fonts/Bedizen.ttf $${RESOURCES_PATH};
+QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/fonts/SWENSON.TTF $${RESOURCES_PATH};
 
 CONFIG(release, debug|release) {
 
