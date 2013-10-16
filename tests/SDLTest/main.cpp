@@ -1,12 +1,12 @@
 #include <QtGlobal>
 
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #if defined(Q_OS_MAC)
-#include <SDL_image/SDL_image.h>
-#include <SDL_ttf/SDL_ttf.h>
+#include <SDL2_image/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
 #else
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #endif
 
 
@@ -20,169 +20,185 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <QDir>
+#include <QApplication>
+#include <QTime>
 
-//Screen attributes
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-const int SCREEN_BPP = 32;
 
-//The surfaces
-SDL_Surface *image = NULL;
-SDL_Surface *foo = NULL;
-SDL_Surface *screen = NULL;
-SDL_Surface *message = NULL;
-
-//The event
-SDL_Event event;
+#include "PhTools/PhDebug.h"
 
 using namespace std;
 
-// Synchronize buffer swaps with vertical refresh rate
-
-SDL_Surface *load_image( QString filename )
-{
-    //The image that's loaded
-    SDL_Surface* loadedImage = NULL;
-
-    //The optimized image that will be used
-    SDL_Surface* optimizedImage = NULL;
-
-	QFileInfo info(filename);
-	if(!info.exists())
-	{
-		PHDEBUG << "file doesn't exists : " << filename;
-		return NULL;
-	}
-    //Load the image
-    loadedImage = IMG_Load( filename.toLocal8Bit());
-
-    //If the image loaded
-    if( loadedImage != NULL )
-    {
-        //Create an optimized image
-        optimizedImage = SDL_DisplayFormat( loadedImage );
-
-        //Free the old image
-        SDL_FreeSurface( loadedImage );
-
-        //If the image was optimized just fine
-        if( optimizedImage != NULL )
-        {
-            //Map the color key
-            Uint32 colorkey = SDL_MapRGB( optimizedImage->format, 0, 0xFF, 0xFF );
-
-            //Set all pixels of color R 0, G 0xFF, B 0xFF to be transparent
-            SDL_SetColorKey( optimizedImage, SDL_SRCCOLORKEY, colorkey );
-        }
-    }
-    else
-    {
-           PHDEBUG<<"IMG_Load: "<<IMG_GetError();
-    }
-
-    //Return the optimized image
-    return optimizedImage;
-}
-
-void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination )
-{
-    //Rectangle to hold the offsets
-    SDL_Rect offset;
-
-    //Get offsets
-    offset.x = x;
-    offset.y = y;
-
-    //Blit the surface
-    SDL_BlitSurface( source, NULL, destination, &offset );
-}
-
 int main(int argc, char **argv)
 {
-	PHDEBUG << "SDL_Init()";
-    //Initialize all SDL subsystems
-    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
-        return false;
+	QApplication a(argc, argv);
 
-	PHDEBUG << "SDL_SetVideoMode";
-    //Set up the screen
-    screen = SDL_SetVideoMode( SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_BPP, SDL_SWSURFACE );
+	PHDEBUG << "Initialize all SDL subsystems";
+	if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+		return false;
 
-    //If there was an error in setting up the screen
-    if( screen == NULL )
-        return false;
+	PHDEBUG << "Set up the window";
+	int screenWidth = 1280;
+	int screenHeight = 600;
+	SDL_Window * window = SDL_CreateWindow("SDLTest", 0, 0, screenWidth, screenHeight, SDL_SWSURFACE);
 
-	PHDEBUG << "SDL_WM_SetCaption";
-    //Set the title
-    SDL_WM_SetCaption( "Graphic Test", NULL );
+	SDL_Surface * screen = SDL_GetWindowSurface(window);
 
-	PHDEBUG << "current path : " << QDir::currentPath();
-	PHDEBUG << "load_image";
-    // Create a surface from picture:
-    image = load_image( "SDLTest.app/Contents/Resources/look.png");
+	string ressourcesPath = QApplication::applicationDirPath().toStdString();
+	// Create a surface from picture:
+	string lookPath = ressourcesPath + "/look.png";
 
-    if( image == NULL )
-    {
-        return 1;
-    }
+	SDL_Surface *image = IMG_Load( lookPath.c_str());
 
-    // Display the picture:
-    apply_surface( 0, 0, image, screen );
+	if( image == NULL )
+	{
+		return 1;
+	}
+
+	// Display the picture:
+	SDL_Rect imageRect = {0, 0, image->w, image->h};
+
+	//SDL_BlitSurface( image, NULL, screen, &imageRect );
+
+	// Initialize TTF :
+	if( TTF_Init() == -1 ) {
+		PHDEBUG << "TTF error.";
+		return 2;
+	}
+
+	//Create a font
+	string fontPath = ressourcesPath + "/SWENSON.TTF";
+	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 100 );
+	if (font == NULL)
+		return 3;
+
+	//Font's color
+	SDL_Color color={255,255,255};
+	Uint16 ch;
+#define TEST  2
+
+#if TEST == 0
+	// Displaying a simple string:
+	SDL_Surface *surface = TTF_RenderUTF8_Blended(font, "ABCDEFGHIJKL", textColor );
+	SDL_Rect textRect = {0, 100, surface->w, surface->h};
+	SDL_BlitSurface( surface, NULL, screen, &textRect);
+
+#elif TEST == 2
+	// used to set the base surface
+	Uint32 rmask, gmask, bmask, amask;
+	rmask = 0x000000ff;
+	gmask = 0x0000ff00;
+	bmask = 0x00ff0000;
+	amask = 0xff000000;
+
+	// Creation of the glyph surface
+	SDL_Surface * glyphMatrix = SDL_CreateRGBSurface(0,2048,2048,32,rmask,gmask,bmask,amask);
+	SDL_Rect glyphMatrixRect = {0, 0, 2048, 2048};
+
+	// store the width of each glyph
+	int glyphWidth[256];
+	int glyphAdvance[256];
+
+	// Space between glyph
+	int space = 128;
+	int glyphHeight = 0;
+
+	for(ch = 32; ch < 256; ++ch)
+	{
+		if(TTF_GlyphIsProvided(font, ch))
+		{
+			int minx, maxx, miny, maxy, advance;
+			TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
+			//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance;
+			if(advance != 0)
+			{
+				// Temporary surface of the character
+				SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
+				if (!glyphSurface)
+				{
+
+					PHDEBUG << SDL_GetError();
+					PHDEBUG << TTF_GetError();
+				}
+				SDL_Rect glyphRect;
+				glyphRect.x = (ch % 16) * space;
+				glyphRect.y = (ch / 16) * space;
+				glyphRect.w = glyphSurface->w;
+				glyphRect.h = glyphSurface->h;
+				if(glyphRect.h > glyphHeight)
+					glyphHeight = glyphRect.h;
+				if(SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect ))
+					PHDEBUG << SDL_GetError();
+
+				// Store information about the glyph
+				glyphAdvance[ch] = advance;
+				glyphWidth[ch] = maxx - minx;
+			}
+			else
+				PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
+		}
+		else{
+			glyphAdvance[ch] = 0;
+			glyphWidth[ch] = 0;
+		}
+	}
+
+	//This draw the entire glyph
+	//SDL_BlitSurface(glyph, NULL, screen, &glyphRect);
+
+	int x = 50;
+	int y = 100;
+	QString s = "Martin et ses chaussettes propres";
+
+	// Display a string
+	for(int i = 0; i < s.length(); i++)
+	{
+		int ch = (int)s.at(i).toLatin1();
+		if(glyphWidth[ch] > 0)
+		{
+			// Compute glyph rect in the matrix
+			SDL_Rect glyphRect;
+			glyphRect.x = (ch % 16) * space;
+			glyphRect.y = (ch / 16) * space;
+			//glyphRect.w = glyphWidth[ch];
+			glyphRect.w = space;
+			glyphRect.h = glyphHeight;
 
 
-    // Initialize TTF :
-    if( TTF_Init() == -1 ) {
-        PHDEBUG << "TTF error.";
-        return 2;
-    }
+			// Display the glyph on the screen
+			SDL_Rect draw ={x ,y, 500, 500};
+			SDL_BlitSurface(glyphMatrix, &glyphRect, screen, &draw);
 
-    //Create a font
-    TTF_Font *font = TTF_OpenFont("SDLTest.app/Contents/Resources/Bedizen.ttf", 100 );
-    if (font == NULL)
-        return 3;
-
-    //Font's color
-    SDL_Color textColor = { 255, 255, 0, 1 };
-
-    // Create a text surface:
-    SDL_Surface *surface = TTF_RenderUTF8_Blended( font, "SDL test OK", textColor );
-
-    PHDEBUG << "surface :" << surface->w << "x" << surface->h << "/" << surface->format->BytesPerPixel << "/" << surface->pitch;
-
-    // Dump the text surface:
-    //MemoryDump(surface->pixels, surface->pitch, surface->h, surface->format->BytesPerPixel);
-
-    // Display the text surface:
-    apply_surface( ( SCREEN_WIDTH - surface->w ) / 2, ( SCREEN_HEIGHT / 2 - surface->h ) / 2, surface, screen );
+		}
+		// Shift the offset
+		x += glyphAdvance[ch];
+	}
 
 
-    //Update the screen
-    if( SDL_Flip(screen) == -1 )
-        return -1;
 
-    bool quit = false;
+	//PHDEBUG << t.elapsed();
 
-    //While the user hasn't quit
-    while(quit == false) {
-        //While there's an event to handle
-        while( SDL_PollEvent(&event) ) {
-            //If the user has Xed out the window
-            if( event.type == SDL_QUIT ) { //Quit the program
-                quit = true; }
-        }
-    }
+#endif
 
-    //Free the surface and quit SDL
-    SDL_FreeSurface( image );
-    SDL_FreeSurface(message);
-    SDL_FreeSurface(screen);
 
-    //Quit SDL
-    TTF_CloseFont( font );
-    TTF_Quit();
-    SDL_Quit();
 
-    return 0;
+
+	//Update the screen
+	if( SDL_UpdateWindowSurface(window))
+		return -1;
+
+	int ret = a.exec();
+
+	//Free the surface and quit SDL
+	SDL_FreeSurface( image );
+//	SDL_FreeSurface(message);
+	SDL_FreeSurface(screen);
+
+	//Quit SDL
+	TTF_CloseFont( font );
+	TTF_Quit();
+	SDL_Quit();
+
+	return ret;
 }
 
 
