@@ -5,8 +5,10 @@ CONFIG += use_ffmpeg
 #CONFIG += use_vlc
 
 HEADERS += ../../libs/PhVideo/PhVideoObject.h \
-HEADERS += ../../libs/PhVideo/PhVideoView.h
+HEADERS += ../../libs/PhVideo/PhVideoView.h \
+    ../../libs/PhVideo/PhVideoEngine.h
 SOURCES += ../../libs/PhVideo/PhVideoObject.cpp \
+    ../../libs/PhVideo/PhVideoEngine.cpp
 
 # Windows specific
 win32{

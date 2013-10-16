@@ -2,29 +2,21 @@
 #define PHFFMPEGGLVIDEOVIEW_H
 
 #include "PhGraphic/PhGraphicView.h"
-#include "PhGraphic/PhGraphicTexturedRect.h"
-#include "PhFFMpegVideoView.h"
+#include "PhVideoEngine.h"
 
-class PhFFMpegGLVideoView : public PhGraphicView, public PhFFMpegVideoView
+class PhFFMpegGLVideoView : public PhGraphicView
 {
 	Q_OBJECT
 public:
 	explicit PhFFMpegGLVideoView(QWidget *parent = 0);
-
-protected slots:
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
-	void onRateChanged(PhRate rate);
-	void checkVideoPosition();
+	void setEngine(PhVideoEngine * videoEngine);
 
 protected:
-	bool drawFrame(AVFrame *avFrame);
 	bool init();
 	void paint();
 
 private:
-	struct SwsContext * _pSwsCtx;
-	PhGraphicTexturedRect videoRect;
-	uint8_t * _rgb;
+	PhVideoEngine *_videoEngine;
 };
 
 #endif // PHFFMPEGGLVIDEOVIEW_H
