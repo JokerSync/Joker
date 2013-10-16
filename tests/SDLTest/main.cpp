@@ -96,6 +96,7 @@ int main(int argc, char **argv)
 
 	// store the width of each glyph
 	int glyphWidth[256];
+	int glyphAdvance[256];
 
 	// Space between glyph
 	int space = 128;
@@ -118,12 +119,16 @@ int main(int argc, char **argv)
 				PHDEBUG << SDL_GetError();
 
 			// Store information about the glyph
-			int minx, maxx;
-			TTF_GlyphMetrics(font, ch, &minx,&maxx, NULL, NULL, NULL );
-			glyphWidth[ch] = maxx - minx ;
+			int minx, maxx, miny, maxy, advance;
+			TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
+			PHDEBUG << (char) ch << minx << maxx << miny << maxy << advance;
+			glyphAdvance[ch] = advance;
+			glyphWidth[ch] = maxx - minx;
 		}
-		else
+		else{
+			glyphAdvance[ch] = 0;
 			glyphWidth[ch] = 0;
+		}
 	}
 
 	//This draw the entire glyph
@@ -131,7 +136,7 @@ int main(int argc, char **argv)
 
 	int x = 50;
 	int y = 100;
-	QString s = "Martin";
+	QString s = "Martin et ses chaussettes propres";
 
 	// Display a string
 	for(int i = 0; i < s.length(); i++)
@@ -148,12 +153,12 @@ int main(int argc, char **argv)
 
 
 			// Display the glyph on the screen
-			SDL_Rect draw ={x,y, 500, 500};
+			SDL_Rect draw ={x ,y, 500, 500};
 			SDL_BlitSurface(glyphMatrix, &glyphRect, screen, &draw);
 
-			// Compute the offset
-			x += glyphRect.w;
 		}
+		// Shift the offset
+		x += glyphAdvance[ch];
 	}
 
 
