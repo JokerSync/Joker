@@ -13,9 +13,13 @@
 #define PhVideoView PhQtAVVideoView
 #include "PhQtAVVideoView.h"
 #endif
-#ifdef USE_FFMPEG
-#define PhVideoView PhFFMpegVideoView
-#include "PhFFMpegVideoView.h"
+#ifdef USE_FFMPEG_WIDGET
+#define PhVideoView PhFFMpegWidgetVideoView
+#include "PhFFMpegWidgetVideoView.h"
+#endif
+#ifdef USE_FFMPEG_GL
+#define PhVideoView PhFFMpegGLVideoView
+#include "PhFFMpegGLVideoView.h"
 #endif
 
 #endif // PHVIDEOVIEW_H

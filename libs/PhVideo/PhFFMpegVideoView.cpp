@@ -1,23 +1,16 @@
-#include <QPainter>
-
 #include "PhFFMpegVideoView.h"
 
 
-PhFFMpegVideoView::PhFFMpegVideoView(QWidget *parent) :
-	QWidget(parent),
+PhFFMpegVideoView::PhFFMpegVideoView() :
 	_pFormatContext(NULL),
 	_videoStream(-1),
 	_pCodecContext(NULL),
 	_pFrame(NULL),
-	_pSwsCtx(NULL),
-	_image(NULL),
-	_rgb(NULL)
+	_pSwsCtx(NULL)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
 
-	connect(&_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
-	connect(&_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
 bool PhFFMpegVideoView::open(QString fileName)
@@ -57,8 +50,6 @@ bool PhFFMpegVideoView::open(QString fileName)
 
 	_pFrame = avcodec_alloc_frame();
 
-	resizeEvent(NULL);
-
 	_clock.setFrame(0);
 	bool result = goToFrame(0);
 	PHDEBUG << "over : " << result;
@@ -69,61 +60,6 @@ PhFFMpegVideoView::~PhFFMpegVideoView()
 {
 	if(_pFormatContext != NULL)
 		avformat_close_input(&_pFormatContext);
-}
-
-void PhFFMpegVideoView::paintEvent(QPaintEvent *)
-{
-	QPainter painter(this);
-	painter.fillRect(0, 0, this->width(), this->height(), Qt::black);
-
-	if(_image)
-		painter.drawImage(0, 0, *_image);
-}
-
-void PhFFMpegVideoView::resizeEvent(QResizeEvent *event)
-{
-	PHDEBUG;
-	if(_videoStream < 0)
-		return;
-
-	int w = this->width();
-	int h = this->height();
-
-	// adjust width to a multiple of 4:
-	int pow = 4;
-	if(w % pow)
-		w += pow - (w % pow);
-
-	if(_rgb)
-		delete _rgb;
-	_rgb = new uint8_t[3 * w * h];
-
-	if(_image)
-		delete _image;
-
-	_image = new QImage(_rgb, w, h, QImage::Format_RGB888);
-
-	if(_pSwsCtx)
-		delete _pSwsCtx;
-	_pSwsCtx = sws_getContext(_pCodecContext->width, _pCodecContext->height,
-							_pCodecContext->pix_fmt, w, h,
-							AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
-	goToFrame(_clock.frame());
-	PHDEBUG << "ok";
-}
-
-void PhFFMpegVideoView::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
-{
-	goToFrame(frame);
-}
-
-void PhFFMpegVideoView::onRateChanged(PhRate rate)
-{
-}
-
-void PhFFMpegVideoView::checkVideoPosition()
-{
-
 }
 
 bool PhFFMpegVideoView::goToFrame(PhFrame frame)
@@ -146,13 +82,7 @@ bool PhFFMpegVideoView::goToFrame(PhFrame frame)
 			if(!ok)
 				return false;
 
-			int linesize = _image->width() * 3;
-			// Convert the image into YUV format that SDL uses
-			if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
-						 _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
-						 &linesize) < 0)
-				return false;
-			this->update();
+			drawFrame(_pFrame);
 			return true;
 		}
 	}
