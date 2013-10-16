@@ -9,30 +9,34 @@
 #include <QMessageBox>
 
 #include "PhTools/PhDebug.h"
-#include "PhGraphicStripView.h"
+#include "PhGraphicStrip.h"
 
-PhGraphicStripView::PhGraphicStripView(QWidget *parent)
-	: PhGraphicView( parent ), _doc(this), _currentFont(NULL), _trackNumber(4), _clock(_doc.getTCType())
+PhGraphicStrip::PhGraphicStrip(QObject *parent) :
+	QObject(parent),
+	_doc(this),
+	_currentFont(NULL),
+	_trackNumber(4),
+	_clock(_doc.getTCType())
 {
-	// update the view content when the doc changes :
-	this->connect(&_doc, SIGNAL(changed()), this, SLOT(updateView()));
+	// update the  content when the doc changes :
+	this->connect(&_doc, SIGNAL(changed()), this, SLOT(update()));
 
     // This is used to make some time-based test
 	_test = new QTime();
 	_test->start();
 }
 
-PhStripDoc *PhGraphicStripView::doc()
+PhStripDoc *PhGraphicStrip::doc()
 {
 	return &_doc;
 }
 
-PhClock *PhGraphicStripView::clock()
+PhClock *PhGraphicStrip::clock()
 {
 	return &_clock;
 }
 
-bool PhGraphicStripView::setFont(QString fontName)
+bool PhGraphicStrip::setFont(QString fontName)
 {
 	PHDEBUG << fontName;
 	QString fontFile = "~/Library/Fonts/" + fontName + ".ttf";
@@ -45,7 +49,7 @@ bool PhGraphicStripView::setFont(QString fontName)
 			fontFile = QCoreApplication::applicationDirPath() + "/../Resources/LTE50198.TTF";
 			PHDEBUG << "A default font will be taken : " << fontFile;
 
-			QMessageBox::information(this, "Error", "The font \"" + fontName + "\" seems missing or desn't support our alphabet', \"" + fontFile + "\" is set instead");
+			return false;
 		}
 	}
 
@@ -61,7 +65,7 @@ bool PhGraphicStripView::setFont(QString fontName)
 
 	if(_currentFont->init())
 	{
-		updateView();
+		update();
 		return true;
 	}
 	else
@@ -69,9 +73,9 @@ bool PhGraphicStripView::setFont(QString fontName)
 }
 
 
-bool PhGraphicStripView::init()
+bool PhGraphicStrip::init()
 {
-	PHDEBUG << "PhGraphicStripView::init()";
+	PHDEBUG << "PhGraphicStrip::init()";
 
 	// Clear the data stored
 	clearData();
@@ -80,14 +84,14 @@ bool PhGraphicStripView::init()
 	_stripBackgroundImage = new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
 	_stripBackgroundImage->init();
 
-	_stripSyncBar = new PhGraphicSolidRect(this->width()/6, this->height()/4, 4, 100);
+	_stripSyncBar = new PhGraphicSolidRect();
 	_stripSyncBar->setColor(QColor(225, 86, 108));
 
 
 	return true;
 }
 
-void PhGraphicStripView::clearData()
+void PhGraphicStrip::clearData()
 {
 	foreach(PhGraphicText * gPeople, _graphicPeoples.values())
 		delete gPeople;
@@ -110,9 +114,9 @@ void PhGraphicStripView::clearData()
 	_graphicOffs.clear();
 }
 
-void PhGraphicStripView::updateView()
+void PhGraphicStrip::update()
 {
-	PHDEBUG << "updateView";
+	PHDEBUG << "update";
 	if(!_currentFont)
 	{
 		PHDEBUG << "The font has not been initialised";
@@ -186,7 +190,7 @@ void PhGraphicStripView::updateView()
 	PHDEBUG << "offs loaded" ;*/
 }
 
-void PhGraphicStripView::paint()
+void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 	int loopCounter = 0;
@@ -197,8 +201,6 @@ void PhGraphicStripView::paint()
 
 	long pixelPerFrame = 12;
 	int fps = PhTimeCode::getFps(_clock.timeCodeType());
-	long width = this->width();
-	long height = this->height();
 	long syncBar_X_FromLeft = width / 6;
 	long offset = _clock.time() * pixelPerFrame * fps / _clock.timeScale() - syncBar_X_FromLeft;
 	//Compute the visible duration of the strip
