@@ -67,6 +67,7 @@ int main(int argc, char **argv)
 
 	//Create a font
 	string fontPath = ressourcesPath + "/Bedizen.ttf";
+	fontPath = "/Library/Fonts/Georgia.ttf";
 	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 100 );
 	if (font == NULL)
 		return 3;
@@ -106,24 +107,33 @@ int main(int argc, char **argv)
 	{
 		if(TTF_GlyphIsProvided(font, ch))
 		{
-			// Temporary surface of the character
-			SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
-			SDL_Rect glyphRect;
-			glyphRect.x = (ch % 16) * space;
-			glyphRect.y = (ch / 16) * space;
-			glyphRect.w = glyphSurface->w;
-			glyphRect.h = glyphSurface->h;
-			if(glyphRect.h > glyphHeight)
-				glyphHeight = glyphRect.h;
-			if(SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect ))
-				PHDEBUG << SDL_GetError();
-
-			// Store information about the glyph
 			int minx, maxx, miny, maxy, advance;
 			TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
-			PHDEBUG << (char) ch << minx << maxx << miny << maxy << advance;
-			glyphAdvance[ch] = advance;
-			glyphWidth[ch] = maxx - minx;
+			PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance;
+			if(advance != 0)
+			{
+				// Temporary surface of the character
+				SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
+				if (!glyphSurface)
+				{
+
+					PHDEBUG << SDL_GetError();
+					PHDEBUG << TTF_GetError();
+				}
+				SDL_Rect glyphRect;
+				glyphRect.x = (ch % 16) * space;
+				glyphRect.y = (ch / 16) * space;
+				glyphRect.w = glyphSurface->w;
+				glyphRect.h = glyphSurface->h;
+				if(glyphRect.h > glyphHeight)
+					glyphHeight = glyphRect.h;
+				if(SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect ))
+					PHDEBUG << SDL_GetError();
+
+				// Store information about the glyph
+				glyphAdvance[ch] = advance;
+				glyphWidth[ch] = maxx - minx;
+			}
 		}
 		else{
 			glyphAdvance[ch] = 0;
