@@ -1,19 +1,20 @@
-#include "PhFFMpegVideoView.h"
+#include "PhVideoEngine.h"
 
-
-PhFFMpegVideoView::PhFFMpegVideoView() :
+PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
+	_clock(PhTimeCodeType25),
+	_frameStamp(0),
 	_pFormatContext(NULL),
 	_videoStream(-1),
 	_pCodecContext(NULL),
 	_pFrame(NULL),
-	_pSwsCtx(NULL)
+	_pSwsCtx(NULL),
+	_rgb(NULL)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
-
 }
 
-bool PhFFMpegVideoView::open(QString fileName)
+bool PhVideoEngine::open(QString fileName)
 {
 	PHDEBUG << fileName;
 	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
@@ -56,13 +57,25 @@ bool PhFFMpegVideoView::open(QString fileName)
 	return result;
 }
 
-PhFFMpegVideoView::~PhFFMpegVideoView()
+void PhVideoEngine::drawVideo(int x, int y, int w, int h)
+{
+	goToFrame(_clock.frame());
+	videoRect.setRect(x, y, w, h);
+	videoRect.draw();
+}
+
+void PhVideoEngine::setFrameStamp(PhFrame frame)
+{
+	_frameStamp = frame;
+}
+
+PhVideoEngine::~PhVideoEngine()
 {
 	if(_pFormatContext != NULL)
 		avformat_close_input(&_pFormatContext);
 }
 
-bool PhFFMpegVideoView::goToFrame(PhFrame frame)
+bool PhVideoEngine::goToFrame(PhFrame frame)
 {
 	if(_videoStream < 0)
 		return false;
@@ -82,7 +95,20 @@ bool PhFFMpegVideoView::goToFrame(PhFrame frame)
 			if(!ok)
 				return false;
 
-			drawFrame(_pFrame);
+			_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
+										_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
+										AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+
+			if(_rgb == NULL)
+				_rgb = new uint8_t[_pFrame->width * _pFrame->height * 4];
+			int linesize = _pFrame->width * 4;
+			if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
+						  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
+						  &linesize) < 0)
+				return false;
+
+			videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
+
 			return true;
 		}
 	}
