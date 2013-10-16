@@ -27,7 +27,6 @@ SOURCES += main.cpp \
 
 HEADERS += \
     MainWindow.h \
-	TimeCodeDlg.h \
 	VideoStripSynchronizer.h \
 
 FORMS += \
