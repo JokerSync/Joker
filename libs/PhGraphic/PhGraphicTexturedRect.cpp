@@ -104,7 +104,10 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
 void PhGraphicTexturedRect::draw(){
 
 	//PHDEBUG << "PhGraphicTexturedRect::draw()";
-    glMatrixMode(GL_MODELVIEW);
+
+	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+
+	glMatrixMode(GL_MODELVIEW);
 
 	glLoadIdentity();
 
