@@ -7,9 +7,9 @@
 #include "PhGraphicImage.h"
 
 #if defined(Q_OS_MAC)
-#include <SDL_image/SDL_image.h>
+#include <SDL2_image/SDL_image.h>
 #else
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL_image.h>
 #endif
 
 PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h)

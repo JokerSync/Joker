@@ -1,11 +1,11 @@
 #include "PhTools/PhDebug.h"
 #include "PhGraphicView.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 #if defined(Q_OS_MAC)
-#include <SDL_ttf/SDL_ttf.h>
+#include <SDL2_ttf/SDL_ttf.h>
 #else
-#include <SDL/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 #endif
 
 PhGraphicView::PhGraphicView( QWidget *parent)
