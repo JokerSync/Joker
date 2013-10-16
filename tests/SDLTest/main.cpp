@@ -26,47 +26,28 @@
 
 #include "PhTools/PhDebug.h"
 
-//Screen attributes
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 700;
-const int SCREEN_BPP = 32;
-
-//The surfaces
-SDL_Surface *image = NULL;
-SDL_Surface *foo = NULL;
-SDL_Surface *screen = NULL;
-SDL_Surface *message = NULL;
-
-//The event
-SDL_Event event;
-
 using namespace std;
 
 int main(int argc, char **argv)
 {
 	QApplication a(argc, argv);
-	QTime t;
 
-	//PHDEBUG << "SDL_Init()";
-	//Initialize all SDL subsystems
+	PHDEBUG << "Initialize all SDL subsystems";
 	if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
 		return false;
 
-	//PHDEBUG << "SDL_SetVideoMode";
-	//Set up the screen
+	PHDEBUG << "Set up the window";
+	int screenWidth = 1280;
+	int screenHeight = 600;
+	SDL_Window * window = SDL_CreateWindow("SDLTest", 0, 0, screenWidth, screenHeight, SDL_SWSURFACE);
 
-	SDL_Window * window = SDL_CreateWindow("SDLTest", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_SWSURFACE);
+	SDL_Surface * screen = SDL_GetWindowSurface(window);
 
-	screen = SDL_GetWindowSurface(window);
-
-	//PHDEBUG << "SDL_WM_SetCaption";
-
-	//	PHDEBUG << "current path : " << QApplication::applicationDirPath();
 	string ressourcesPath = QApplication::applicationDirPath().toStdString();
-	//	PHDEBUG << "load_image";
 	// Create a surface from picture:
 	string lookPath = ressourcesPath + "/look.png";
-	image = IMG_Load( lookPath.c_str());
+
+	SDL_Surface *image = IMG_Load( lookPath.c_str());
 
 	if( image == NULL )
 	{
@@ -86,7 +67,7 @@ int main(int argc, char **argv)
 
 	//Create a font
 	string fontPath = ressourcesPath + "/Bedizen.ttf";
-	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 150 );
+	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 100 );
 	if (font == NULL)
 		return 3;
 
@@ -96,38 +77,12 @@ int main(int argc, char **argv)
 #define TEST  2
 
 #if TEST == 0
+	// Displaying a simple string:
 	SDL_Surface *surface = TTF_RenderUTF8_Blended(font, "ABCDEFGHIJKL", textColor );
 	SDL_Rect textRect = {0, 100, surface->w, surface->h};
 	SDL_BlitSurface( surface, NULL, screen, &textRect);
 
-#elif TEST == 1
-
-	Uint32 rmask, gmask, bmask, amask;
-	rmask = 0x000000ff;
-	gmask = 0x0000ff00;
-	bmask = 0x00ff0000;
-	amask = 0xff000000;
-
-
-	ch = 65;
-	SDL_Surface * glyph = SDL_CreateRGBSurface(0,screen->w,screen->h,32,rmask,gmask,bmask,amask);
-	SDL_Surface * car = TTF_RenderGlyph_Blended(font,ch,color);
-
-	SDL_Rect glyphRect = {0, 0, 100, 100};
-	SDL_Rect carRect = {100, 0, 300, 300};
-
-	PHDEBUG << SDL_BlitSurface(car, NULL, glyph, &glyphRect);
-	PHDEBUG << SDL_BlitSurface(glyph, NULL, screen, &glyphRect);
-
-
 #elif TEST == 2
-
-	//t.start();
-
-	// used to place the glyph on the surface
-	int nbPixelX = 0;
-	int nbPixelY = 0;
-
 	// used to set the base surface
 	Uint32 rmask, gmask, bmask, amask;
 	rmask = 0x000000ff;
@@ -136,57 +91,68 @@ int main(int argc, char **argv)
 	amask = 0xff000000;
 
 	// Creation of the glyph surface
-	SDL_Surface * glyph = SDL_CreateRGBSurface(0,2048,2048,32,rmask,gmask,bmask,amask);
-	SDL_Rect glyphRect = {0, 0, 2048, 2048};
+	SDL_Surface * glyphMatrix = SDL_CreateRGBSurface(0,2048,2048,32,rmask,gmask,bmask,amask);
+	SDL_Rect glyphMatrixRect = {0, 0, 2048, 2048};
 
-	// store the widht of each glyph
-	int tab[255];
+	// store the width of each glyph
+	int glyphWidth[256];
 
-	int spaceSize = 128;
+	// Space between glyph
+	int space = 128;
+	int glyphHeight = 0;
 
-	for(ch = 1; ch <= 256; ++ch)
+	for(ch = 32; ch < 256; ++ch)
 	{
-		SDL_Surface * car = TTF_RenderGlyph_Blended(font,ch,color);
-		SDL_Rect carRect = {nbPixelX, nbPixelY, car->w, car->h};
-		if(SDL_BlitSurface( car, NULL, glyph, &carRect ))
-			PHDEBUG << SDL_GetError();
-		if (ch % 16 == 0)
+		if(TTF_GlyphIsProvided(font, ch))
 		{
-			nbPixelX = 0;
-			nbPixelY += spaceSize;
-		}
-		else
-			nbPixelX += spaceSize;
-		int minx, maxx;
-		if(TTF_GlyphIsProvided(font, ch)){
+			// Temporary surface of the character
+			SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
+			SDL_Rect glyphRect;
+			glyphRect.x = (ch % 16) * space;
+			glyphRect.y = (ch / 16) * space;
+			glyphRect.w = glyphSurface->w;
+			glyphRect.h = glyphSurface->h;
+			if(glyphRect.h > glyphHeight)
+				glyphHeight = glyphRect.h;
+			if(SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect ))
+				PHDEBUG << SDL_GetError();
+
+			// Store information about the glyph
+			int minx, maxx;
 			TTF_GlyphMetrics(font, ch, &minx,&maxx, NULL, NULL, NULL );
-			tab[ch - 1] = maxx-minx ;
+			glyphWidth[ch] = maxx - minx ;
 		}
 		else
-			tab[ch - 1] = 0;
+			glyphWidth[ch] = 0;
 	}
 
 	//This draw the entire glyph
 	//SDL_BlitSurface(glyph, NULL, screen, &glyphRect);
 
-	qsrand(QTime::currentTime().msec());
-	Uint16 randChar = qrand() % 96 + 32;
+	int x = 50;
+	int y = 100;
+	QString s = "Martin";
 
-	for(int i = 1; i < 6; i++)
+	// Display a string
+	for(int i = 0; i < s.length(); i++)
 	{
-		randChar ++;
-		if(TTF_GlyphIsProvided(font, randChar)){
-			int miny, maxy, minx, maxx;
-			TTF_GlyphMetrics(font, randChar, &minx,&maxx, &miny, &maxy, NULL );
-			int column, line;
-			int h = maxy - miny;
-			column = randChar % 16;
-			line = (randChar - column) / 16 + 1;
-			PHDEBUG << randChar << column<< line << h;
-			//SDL_Rect rext = {int x, int y, int w, int h};
-			SDL_Rect randCharRect = {(column - 1) * spaceSize, (line - 1) * spaceSize + 50, tab[randChar - 1] + 10, spaceSize};
-			SDL_Rect draw ={128 * i,100, 500, 500};
-			SDL_BlitSurface(glyph, &randCharRect, screen, &draw);
+		int ch = (int)s.at(i).toLatin1();
+		if(glyphWidth[ch] > 0)
+		{
+			// Compute glyph rect in the matrix
+			SDL_Rect glyphRect;
+			glyphRect.x = (ch % 16) * space;
+			glyphRect.y = (ch / 16) * space;
+			glyphRect.w = glyphWidth[ch];
+			glyphRect.h = glyphHeight;
+
+
+			// Display the glyph on the screen
+			SDL_Rect draw ={x,y, 500, 500};
+			SDL_BlitSurface(glyphMatrix, &glyphRect, screen, &draw);
+
+			// Compute the offset
+			x += glyphRect.w;
 		}
 	}
 
@@ -207,7 +173,7 @@ int main(int argc, char **argv)
 
 	//Free the surface and quit SDL
 	SDL_FreeSurface( image );
-	SDL_FreeSurface(message);
+//	SDL_FreeSurface(message);
 	SDL_FreeSurface(screen);
 
 	//Quit SDL
