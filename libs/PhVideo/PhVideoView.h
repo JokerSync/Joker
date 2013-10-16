@@ -1,25 +1,22 @@
 #ifndef PHVIDEOVIEW_H
 #define PHVIDEOVIEW_H
 
-#ifdef USE_VLC
-#define PhVideoView PhVLCVideoView
-#include "PhVLCVideoView.h"
-#endif
-#ifdef USE_QTVIDEO
-#define PhVideoView PhQTVideoView
-#include "PhQTVideoView.h"
-#endif
-#ifdef USE_QTAV
-#define PhVideoView PhQtAVVideoView
-#include "PhQtAVVideoView.h"
-#endif
-#ifdef USE_FFMPEG_WIDGET
-#define PhVideoView PhFFMpegWidgetVideoView
-#include "PhFFMpegWidgetVideoView.h"
-#endif
-#ifdef USE_FFMPEG_GL
-#define PhVideoView PhFFMpegGLVideoView
-#include "PhFFMpegGLVideoView.h"
-#endif
+#include "PhGraphic/PhGraphicView.h"
+#include "PhVideoEngine.h"
+
+class PhVideoView : public PhGraphicView
+{
+	Q_OBJECT
+public:
+	explicit PhVideoView(QWidget *parent = 0);
+	void setEngine(PhVideoEngine * videoEngine);
+
+protected:
+	bool init();
+	void paint();
+
+private:
+	PhVideoEngine *_videoEngine;
+};
 
 #endif // PHVIDEOVIEW_H
