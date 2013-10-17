@@ -48,6 +48,7 @@ private:
 	AVFrame * _pFrame;
 	PhGraphicTexturedRect videoRect;
 	uint8_t * _rgb;
+	PhFrame _currentFrame;
 };
 
 #endif // PHVIDEOENGINE_H
