@@ -14,8 +14,14 @@ PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
 	av_register_all();
 }
 
+bool PhVideoEngine::ready()
+{
+	return (_pFormatContext && (_videoStream >=0) && _pCodecContext && _pFrame);
+}
+
 bool PhVideoEngine::open(QString fileName)
 {
+	close();
 	PHDEBUG << fileName;
 	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
 		return false;
@@ -57,6 +63,23 @@ bool PhVideoEngine::open(QString fileName)
 	return result;
 }
 
+void PhVideoEngine::close()
+{
+	PHDEBUG;
+	if(_rgb)
+	{
+		delete _rgb;
+		_rgb = NULL;
+	}
+	if(_pFormatContext)
+	{
+		avformat_close_input(&_pFormatContext);
+		_pFormatContext = NULL;
+		_pCodecContext = NULL;
+		_videoStream = -1;
+	}
+}
+
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	goToFrame(_clock.frame());
@@ -71,13 +94,12 @@ void PhVideoEngine::setFrameStamp(PhFrame frame)
 
 PhVideoEngine::~PhVideoEngine()
 {
-	if(_pFormatContext != NULL)
-		avformat_close_input(&_pFormatContext);
+	close();
 }
 
 bool PhVideoEngine::goToFrame(PhFrame frame)
 {
-	if(_videoStream < 0)
+	if(!ready())
 		return false;
 	if(frame < this->_frameStamp)
 		frame = this->_frameStamp;

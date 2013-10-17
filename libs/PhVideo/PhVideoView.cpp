@@ -13,6 +13,7 @@ void PhVideoView::setEngine(PhVideoEngine *videoEngine)
 
 bool PhVideoView::init()
 {
+	return true;
 }
 
 void PhVideoView::paint()
