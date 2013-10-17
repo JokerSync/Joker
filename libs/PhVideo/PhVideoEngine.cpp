@@ -8,7 +8,8 @@ PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
 	_pCodecContext(NULL),
 	_pFrame(NULL),
 	_pSwsCtx(NULL),
-	_rgb(NULL)
+	_rgb(NULL),
+	_currentFrame(-1)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
@@ -105,7 +106,20 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		frame = this->_frameStamp;
 	if (frame >= this->_frameStamp + _pFormatContext->streams[_videoStream]->duration)
 		frame = this->_frameStamp + _pFormatContext->streams[_videoStream]->duration;
-	av_seek_frame(_pFormatContext, _videoStream, frame - this->_frameStamp, 0);
+
+	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
+	if (frame == _currentFrame)
+		return true;
+
+	// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
+	if((_currentFrame < 0) || (_clock.rate() != 1) || (frame - _currentFrame != 1))
+	{
+		int flags = AVSEEK_FLAG_ANY;
+		if(_clock.rate() < 0)
+			flags |= AVSEEK_FLAG_BACKWARD;
+		av_seek_frame(_pFormatContext, _videoStream, frame - this->_frameStamp, flags);
+	}
+	_currentFrame = frame;
 
 	AVPacket packet;
 	while(av_read_frame(_pFormatContext, &packet) >= 0)
