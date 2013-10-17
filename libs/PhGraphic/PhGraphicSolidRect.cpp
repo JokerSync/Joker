@@ -6,11 +6,6 @@ PhGraphicSolidRect::PhGraphicSolidRect(int x, int y, int w, int h) :
 }
 
 
-bool PhGraphicSolidRect::init()
-{
-	return true;
-}
-
 void PhGraphicSolidRect::draw()
 {
 //		/*

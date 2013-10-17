@@ -6,12 +6,6 @@ PhGraphicLoop::PhGraphicLoop(int x, int y, int w, int h, int crossHeight, int hT
 {
 }
 
-
-bool PhGraphicLoop::init()
-{
-	return true;
-}
-
 void PhGraphicLoop::draw()
 {
 	//draw rect

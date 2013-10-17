@@ -18,7 +18,7 @@ public:
 	/**
 	 * @brief init
 	 */
-	virtual bool init() = 0;
+	virtual bool init();
 	/**
 	 * @brief dispose
 	 */
