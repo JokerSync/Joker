@@ -91,3 +91,8 @@ void MainView::on_actionOpen_triggered()
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
     openFile(fileName); // TODO: show error in case of error
 }
+
+void MainView::on_actionReverse_triggered()
+{
+    _internalClock.setRate(-1);
+}
