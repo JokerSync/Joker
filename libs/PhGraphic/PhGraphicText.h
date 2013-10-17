@@ -6,10 +6,10 @@
 #ifndef PHGRAPHICTEXT_H
 #define PHGRAPHICTEXT_H
 
-#include "PhGraphicTexturedRect.h"
+#include "PhGraphicRect.h"
 #include "PhFont.h"
 
-class PhGraphicText : public PhGraphicTexturedRect {
+class PhGraphicText : public PhGraphicRect {
 public:
 	PhGraphicText(PhFont* font, QString content, int x = 0, int y = 0, int w = 0, int h = 0);
     /**
@@ -17,8 +17,6 @@ public:
      *
      */
 	void draw();
-
-	bool init();
 
     /**
      * @brief setContent

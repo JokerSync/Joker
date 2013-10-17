@@ -28,8 +28,6 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 void PhGraphicView::initializeGL()
 {
 	PHDEBUG;
-
-
 	init();
 }
 

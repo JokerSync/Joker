@@ -6,47 +6,74 @@
 #include "PhGraphicText.h"
 
 PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int w, int h)
-	: PhGraphicTexturedRect(x, y, w, h), _font(font), _content(content)
+	: PhGraphicRect(x, y, w, h), _font(font), _content(content)
 {
 }
 
-bool PhGraphicText::init()
-{
-	SDL_Color color = {_color.red(), _color.green(), _color.blue(), _color.alpha() };
-
-	SDL_Surface *surface = TTF_RenderUTF8_Blended(_font->getFont(),
-												  _content.toStdString().c_str(),
-												  color);
-
-    if(surface != NULL)
-        this->createTextureFromSurface(surface);
-    SDL_FreeSurface(surface);
-
-	return true;
-}
 
 void PhGraphicText::setContent(QString content){
-    _content = content;
+	_content = content;
 }
 void PhGraphicText::setFont(PhFont * font){
-    _font = font;
+	_font = font;
 }
 
 QString PhGraphicText::getContent(){
-    return _content;
+	return _content;
 }
 PhFont * PhGraphicText::getFont(){
-    return _font;
+	return _font;
 }
 
 void PhGraphicText::draw()
 {
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glBindTexture(GL_TEXTURE_2D, _font->getMatrixTexture());
+	glEnable(GL_TEXTURE_2D);
+
+
+	int x = 0;
+	// Display a string
+	for(int i = 0; i < _content.length(); i++)
+	{
+		int ch = (int)_content.at(i).toLatin1();
+		if(_font->getWidth(ch) > 0)
+		{
+			float tu, tv;
+			tu = ((ch % 16) * _font->getSpace()) / 2048.0;
+			tv = ((ch / 16) * _font->getSpace()) / 2048.0;
+			int h, w;
+			h = _font->getHeight();
+			w = _font->getSpace();
+
+			//        (0,0) ------ (1,0)
+			//          |            |
+			//          |            |
+			//        (0,1) ------ (1,1)
+
+			glBegin(GL_QUADS); 	//Begining the cube's drawing
+			{
+				glTexCoord3f(0, 0, 1);		glVertex3f(_x,		_y,	_z);
+				glTexCoord3f(tu, 0, 1);	    glVertex3f(_x + w + x,	_y,	_z);
+				glTexCoord3f(tu, tv, 1);	glVertex3f(_x + w + x,	_y + h,  _z);
+				glTexCoord3f(0, tv, 1);	    glVertex3f(_x,		_y + h,  _z);
+			}
+			glEnd();
+
+		}
+		// Shift the offset
+		x += _font->getAdvance(ch);
+	}
+
+
 	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	PhGraphicTexturedRect::draw();
-
 	glDisable(GL_BLEND);
+
+	glDisable(GL_TEXTURE_2D);
 }
 

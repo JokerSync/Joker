@@ -16,15 +16,13 @@ public:
 
 	PhGraphicLoop(int x = 0, int y =0, int w = 0, int h = 0, int crossHeight = 0, int hThick = 0);
 
-	bool init();
-
 	void draw();
 
 	void setHThick(int hThick);
-	int getHThick(){return _hThick;};
+	int getHThick(){return _hThick;}
 
 	void setCrossHeight(int crossHeight);
-	int getCrossHeight(){return _crossHeight;};
+	int getCrossHeight(){return _crossHeight;}
 private:
 
 	int _crossHeight;

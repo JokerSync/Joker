@@ -71,8 +71,8 @@ int main(int argc, char **argv)
 	if (font == NULL)
 		return 3;
 
-	//Font's color
-	SDL_Color color={255,255,255};
+	//Font's color (black)
+	SDL_Color color={0,0,0};
 	Uint16 ch;
 #define TEST  2
 
@@ -90,8 +90,16 @@ int main(int argc, char **argv)
 	bmask = 0x00ff0000;
 	amask = 0xff000000;
 
+
+
 	// Creation of the glyph surface
 	SDL_Surface * glyphMatrix = SDL_CreateRGBSurface(0,2048,2048,32,rmask,gmask,bmask,amask);
+
+
+	// THIS IS ONLY FOR VISUAL PURPOSE, TOTALY USELESS ON A REAL SITUATION
+	Uint32 bgColor;
+	bgColor = 0xffffffff;
+	PHDEBUG << SDL_FillRect(screen, NULL, bgColor);
 	SDL_Rect glyphMatrixRect = {0, 0, 2048, 2048};
 
 	// store the width of each glyph

@@ -25,7 +25,7 @@ bool GraphicTestView::init()
 	}
 
 	PHDEBUG << "Initialize _font";
-	_font = new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/Bedizen.ttf",50);
+	_font = new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF",50);
 	if (! _font->init())
 	{
 		PHDEBUG << "_font not initialize";
@@ -33,9 +33,9 @@ bool GraphicTestView::init()
 	}
 
 	PHDEBUG << "Initialize _text";
-	_text = new PhGraphicText(_font, "Test PhGraphicText");
-	_text->setRect(50,135,250,125);
-	_text->setColor(QColor(1, 1, 255));
+	_text = new PhGraphicText(_font, "T");
+	_text->setRect(600,1,125,125);
+	_text->setColor(QColor(255, 255, 255));
 	if (! _text->init())
 	{
 		PHDEBUG << "_text not initialize";
@@ -76,8 +76,8 @@ void GraphicTestView::paint()
 	_image->setTextureCoordinate(1, 3);
 	_image->draw();
 
-	_text->setX(_text->getX() + 4);
 	_text->draw();
+	_text->setX(_text->getX() + 4);
 	if(_text->getX() > this->width())
 		_text->setX(0);
 	if((_text->getX()+_text->getWidth()) < 0)
