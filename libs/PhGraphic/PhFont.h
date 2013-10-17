@@ -15,6 +15,10 @@
 #include <SDL2/SDL_ttf.h>
 #endif
 
+#include <glu.h>
+
+#include "PhTools/PhDebug.h"
+
 class PhFont
 {
 public:
@@ -35,6 +39,14 @@ public:
      */
 	QString getFontName();
 
+	int getAdvance (int ch);
+	int getWidth (int ch);
+	int getSpace(){return _space;}
+	int getHeight(){return _glyphHeight;}
+	void select();
+	SDL_Surface * getMatrixSurface(){return _glyphMatrix;}
+	GLuint getMatrixTexture(){return _texture;}
+
 	bool init();
 private:
     /**
@@ -49,6 +61,21 @@ private:
      * @brief _size
      */
     int _size;
+
+	int _space = 128;
+
+	SDL_Surface * _glyphMatrix;
+	/**
+	 * @brief _texture
+	 * The texture address(?)
+	 */
+	GLuint _texture;
+
+
+	// store the width of each glyph
+	int _glyphWidth[256];
+	int _glyphAdvance[256];
+	int _glyphHeight;
 };
 
 #endif // PHFONT_H

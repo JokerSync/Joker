@@ -37,6 +37,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 		return false;
     }
 
+	PHDEBUG << textureFormat;
 	glEnable( GL_TEXTURE_2D );
     // Have OpenGL generate a texture object handle for us
     glGenTextures( 1, &_texture );

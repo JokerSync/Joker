@@ -6,6 +6,8 @@
 #ifndef PHGRAPHICSQUARE_H
 #define PHGRAPHICSQUARE_H
 
+#include <glu.h>
+#include <SDL2/SDL.h>
 #include "PhGraphicObject.h"
 
 class PhGraphicRect : public PhGraphicObject

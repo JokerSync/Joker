@@ -30,6 +30,7 @@ FORMS += \
 QMAKE_POST_LINK += echo $${RESOURCES_PATH};
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/look.png $${RESOURCES_PATH};
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/Bedizen.ttf $${RESOURCES_PATH};
+QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/SWENSON.TTF $${RESOURCES_PATH};
 
 CONFIG(release, debug|release) {
 	mac {

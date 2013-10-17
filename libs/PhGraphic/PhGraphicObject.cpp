@@ -13,6 +13,11 @@ void PhGraphicObject::dispose()
 {
 }
 
+bool PhGraphicObject::init()
+{
+	return true;
+}
+
 void PhGraphicObject::setPosition(int x, int y, int z)
 {
     this->setX(x);
