@@ -11,10 +11,6 @@ PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
 {
 }
 
-bool PhGraphicTexturedRect::init()
-{
-
-}
 
 bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 {
