@@ -121,6 +121,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	}
 	_currentFrame = frame;
 
+	bool result = false;
 	AVPacket packet;
 	while(av_read_frame(_pFormatContext, &packet) >= 0)
 	{
@@ -129,7 +130,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 			int ok;
 			avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
 			if(!ok)
-				return false;
+				break;
 
 			_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
 										_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
@@ -141,12 +142,14 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 			if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
 						  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
 						  &linesize) < 0)
-				return false;
+				break;
 
 			videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
 
-			return true;
+			result = true;
+			break;
 		}
+		av_free_packet(&packet); //important!
 	}
-	return false;
+	return result;
 }
