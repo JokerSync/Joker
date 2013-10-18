@@ -9,15 +9,13 @@ PhGraphicLoop::PhGraphicLoop(int x, int y, int w, int h, int crossHeight, int hT
 void PhGraphicLoop::draw()
 {
 	//draw rect
-
-	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
-
 	int x = _x - _hThick/2;
 	int y = _y;
 	int w = _hThick;
 	int h = _h;
 
 	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+
 
 	glBegin(GL_QUADS); 	// draw the vertical line
 	{
@@ -54,6 +52,9 @@ void PhGraphicLoop::draw()
 		glVertex3f(x + _w -w,		y - h,  _z);
 	}
 	glEnd();
+
+
+
 }
 
 void PhGraphicLoop::setHThick(int hThick)

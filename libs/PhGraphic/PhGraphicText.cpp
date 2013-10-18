@@ -28,10 +28,18 @@ PhFont * PhGraphicText::getFont(){
 void PhGraphicText::draw()
 {
 
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glBindTexture(GL_TEXTURE_2D, _font->getMatrixTexture());
 	glEnable(GL_TEXTURE_2D);
+
+	int widthContent = 0;
+	//Compute the natural width of the content to scale it later
+	for(int i = 0; i < _content.length(); i++)
+	{
+		widthContent += _font->getWidth((int)_content.at(i).toLatin1());
+	}
 
 
 	int x = 0;
@@ -44,9 +52,15 @@ void PhGraphicText::draw()
 			float tu, tv;
 			tu = ((ch % 16) * _font->getSpace()) / 2048.0;
 			tv = ((ch / 16) * _font->getSpace()) / 2048.0;
+
+
 			int h, w;
 			h = _font->getHeight();
-			w = _font->getSpace();
+			w = _font->getWidth(ch) * _w / widthContent;
+
+			float tuW, tvH;
+			tuW = tu + _font->getWidth(ch) / 2048.0;
+			tvH = tv + h / 2048.0;
 
 			//        (0,0) ------ (1,0)
 			//          |            |
@@ -55,10 +69,10 @@ void PhGraphicText::draw()
 
 			glBegin(GL_QUADS); 	//Begining the cube's drawing
 			{
-				glTexCoord3f(0, 0, 1);		glVertex3f(_x,		_y,	_z);
-				glTexCoord3f(tu, 0, 1);	    glVertex3f(_x + w + x,	_y,	_z);
-				glTexCoord3f(tu, tv, 1);	glVertex3f(_x + w + x,	_y + h,  _z);
-				glTexCoord3f(0, tv, 1);	    glVertex3f(_x,		_y + h,  _z);
+				glTexCoord3f(tu, tv, 1);		glVertex3f(_x + x,		_y,	_z);
+				glTexCoord3f(tuW, tv, 1);	    glVertex3f(_x + w + x,	_y,	_z);
+				glTexCoord3f(tuW, tvH, 1);		glVertex3f(_x + w + x,	_y + h,  _z);
+				glTexCoord3f(tu, tvH, 1);	    glVertex3f(_x + x,		_y + h,  _z);
 			}
 			glEnd();
 
