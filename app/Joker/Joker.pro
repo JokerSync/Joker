@@ -38,11 +38,13 @@ include(../../libs/PhSync/PhSync.pri)
 #Main app
 SOURCES += main.cpp \
 	MainWindow.cpp \
+	VideoStripView.cpp \
 	SonyVideoStripSynchronizer.cpp \
     AboutMenu.cpp
 
 HEADERS += \
     MainWindow.h \
+	VideoStripView.h \
 	SonyVideoStripSynchronizer.h \
     AboutMenu.h
 

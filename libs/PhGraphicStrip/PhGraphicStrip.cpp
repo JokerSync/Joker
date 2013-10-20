@@ -9,30 +9,34 @@
 #include <QMessageBox>
 
 #include "PhTools/PhDebug.h"
-#include "PhGraphicStripView.h"
+#include "PhGraphicStrip.h"
 
-PhGraphicStripView::PhGraphicStripView(QWidget *parent)
-	: PhGraphicView( parent ), _doc(this), _currentFont(NULL), _trackNumber(4), _clock(_doc.getTCType())
+PhGraphicStrip::PhGraphicStrip(QObject *parent) :
+	QObject(parent),
+	_doc(this),
+	_currentFont(NULL),
+	_trackNumber(4),
+	_clock(_doc.getTCType())
 {
-	// update the view content when the doc changes :
-	this->connect(&_doc, SIGNAL(changed()), this, SLOT(updateView()));
+	// update the  content when the doc changes :
+	this->connect(&_doc, SIGNAL(changed()), this, SLOT(update()));
 
     // This is used to make some time-based test
 	_test = new QTime();
 	_test->start();
 }
 
-PhStripDoc *PhGraphicStripView::doc()
+PhStripDoc *PhGraphicStrip::doc()
 {
 	return &_doc;
 }
 
-PhClock *PhGraphicStripView::clock()
+PhClock *PhGraphicStrip::clock()
 {
 	return &_clock;
 }
 
-bool PhGraphicStripView::setFont(QString fontName)
+bool PhGraphicStrip::setFont(QString fontName)
 {
 	PHDEBUG << fontName;
 	QString fontFile = "~/Library/Fonts/" + fontName + ".ttf";
@@ -45,7 +49,7 @@ bool PhGraphicStripView::setFont(QString fontName)
 			fontFile = QCoreApplication::applicationDirPath() + "/../Resources/LTE50198.TTF";
 			PHDEBUG << "A default font will be taken : " << fontFile;
 
-			QMessageBox::information(this, "Error", "The font \"" + fontName + "\" seems missing or desn't support our alphabet', \"" + fontFile + "\" is set instead");
+			return false;
 		}
 	}
 
@@ -61,7 +65,7 @@ bool PhGraphicStripView::setFont(QString fontName)
 
 	if(_currentFont->init())
 	{
-		updateView();
+		update();
 		return true;
 	}
 	else
@@ -69,9 +73,9 @@ bool PhGraphicStripView::setFont(QString fontName)
 }
 
 
-bool PhGraphicStripView::init()
+bool PhGraphicStrip::init()
 {
-	PHDEBUG << "PhGraphicStripView::init()";
+	PHDEBUG << "PhGraphicStrip::init()";
 
 	// Clear the data stored
 	clearData();
@@ -80,14 +84,14 @@ bool PhGraphicStripView::init()
 	_stripBackgroundImage = new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
 	_stripBackgroundImage->init();
 
-	_stripSyncBar = new PhGraphicSolidRect(this->width()/6, this->height()/4, 4, 100);
+	_stripSyncBar = new PhGraphicSolidRect();
 	_stripSyncBar->setColor(QColor(225, 86, 108));
 
 
 	return true;
 }
 
-void PhGraphicStripView::clearData()
+void PhGraphicStrip::clearData()
 {
 	foreach(PhGraphicText * gPeople, _graphicPeoples.values())
 		delete gPeople;
@@ -110,9 +114,9 @@ void PhGraphicStripView::clearData()
 	_graphicOffs.clear();
 }
 
-void PhGraphicStripView::updateView()
+void PhGraphicStrip::update()
 {
-	PHDEBUG << "updateView";
+	PHDEBUG << "update";
 	if(!_currentFont)
 	{
 		PHDEBUG << "The font has not been initialised";
@@ -186,7 +190,7 @@ void PhGraphicStripView::updateView()
 	PHDEBUG << "offs loaded" ;*/
 }
 
-void PhGraphicStripView::paint()
+void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 	int loopCounter = 0;
@@ -197,8 +201,6 @@ void PhGraphicStripView::paint()
 
 	long pixelPerFrame = 12;
 	int fps = PhTimeCode::getFps(_clock.timeCodeType());
-	long width = this->width();
-	long height = this->height();
 	long syncBar_X_FromLeft = width / 6;
 	long offset = _clock.time() * pixelPerFrame * fps / _clock.timeScale() - syncBar_X_FromLeft;
 	//Compute the visible duration of the strip
@@ -208,9 +210,6 @@ void PhGraphicStripView::paint()
 	PhFrame frameIn = _clock.frame() - syncBar_X_FromLeft;
 	PhFrame frameOut = _clock.frame() + stripDuration;
 
-	//Set the background color to red
-	glClearColor(1,0,0,1);
-
     //Draw backgroung picture
 	int n = width / height + 2; // compute how much background repetition do we need
 	_stripBackgroundImage->setTextureCoordinate(n, 1);
@@ -219,12 +218,14 @@ void PhGraphicStripView::paint()
 		leftBG -= offset % height;
 	else
 		leftBG -= height - ((-offset) % height);
-	_stripBackgroundImage->setX(leftBG - syncBar_X_FromLeft);
+	_stripBackgroundImage->setX(x + leftBG);
+	_stripBackgroundImage->setY(y);
 	_stripBackgroundImage->setSize(height * n, height);
 	_stripBackgroundImage->draw();
 
 	_stripSyncBar->setSize(4, height);
-	_stripSyncBar->setPosition(width/6, 0, -1);
+	_stripSyncBar->setPosition(x + width/6, y, -1);
+	_stripSyncBar->setSize(4, height);
 	_stripSyncBar->draw();
 
 	int minSpaceBetweenPeople = 50;
@@ -257,9 +258,9 @@ void PhGraphicStripView::paint()
 
 		if( ! (((timeIn < frameIn) && (timeOut < frameIn)) || ((timeIn > frameOut) && (timeOut > frameOut))) )
 		{
-			gText->setX(timeIn * pixelPerFrame - offset);
+			gText->setX(x + timeIn * pixelPerFrame - offset);
 			gText->setWidth((timeOut - timeIn) * pixelPerFrame);
-			gText->setY(track * trackHeight);
+			gText->setY(y + track * trackHeight);
 			gText->setHeight(trackHeight);
 
 			gText->draw();
@@ -284,8 +285,8 @@ void PhGraphicStripView::paint()
 
 				_graphicPeoples[people] = gPeople;
 			}
-			gPeople->setX(text->getTimeIn() * pixelPerFrame - offset - gPeople->getWidth() - spaceBetweenPeopleAndText);
-			gPeople->setY(track * trackHeight);
+			gPeople->setX(x + text->getTimeIn() * pixelPerFrame - offset - gPeople->getWidth() - spaceBetweenPeopleAndText);
+			gPeople->setY(y + track * trackHeight);
 			gPeople->setHeight(trackHeight / 2);
 
 			gPeople->draw();
@@ -309,7 +310,8 @@ void PhGraphicStripView::paint()
 				_graphicCuts[cut] = gCut;
 			}
 			gCut->setHeight(height);
-			gCut->setX(cut->getTimeIn() * pixelPerFrame - offset);
+			gCut->setX(x + cut->getTimeIn() * pixelPerFrame - offset);
+			gCut->setY(y);
 			gCut->setWidth(2);
 
 			gCut->draw();
@@ -329,7 +331,8 @@ void PhGraphicStripView::paint()
 				gLoop->setColor(QColor(0, 0, 0, 1));
 				_graphicLoops[loop] = gLoop;
 			}
-			gLoop->setX(loop->getTimeIn() * pixelPerFrame - offset);
+			gLoop->setX(x + loop->getTimeIn() * pixelPerFrame - offset);
+			gLoop->setY(y);
 			gLoop->setHThick(height/40);
 			gLoop->setHeight(height);
 			gLoop->setCrossHeight(height / 4);
@@ -354,8 +357,8 @@ void PhGraphicStripView::paint()
 
 				_graphicOffs[off] = gOff;
 			}
-			gOff->setX(off->getTimeIn() * pixelPerFrame - offset);
-			gOff->setY(off->getTrack() * trackHeight + trackHeight);
+			gOff->setX(x + off->getTimeIn() * pixelPerFrame - offset);
+			gOff->setY(y + off->getTrack() * trackHeight + trackHeight);
 			gOff->setHeight( trackHeight / 10);
 			gOff->setWidth((off->getTimeOut() - off->getTimeIn()) * pixelPerFrame);
 			gOff->draw();

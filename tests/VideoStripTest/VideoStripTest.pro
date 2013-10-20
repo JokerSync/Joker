@@ -24,10 +24,12 @@ include(../../libs/PhVideo/PhVideo.pri)
 SOURCES += main.cpp \
 	MainWindow.cpp \
 	VideoStripSynchronizer.cpp \
+    VideoStripView.cpp
 
 HEADERS += \
     MainWindow.h \
 	VideoStripSynchronizer.h \
+    VideoStripView.h
 
 FORMS += \
     MainWindow.ui

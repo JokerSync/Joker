@@ -46,6 +46,7 @@
      <string>Control</string>
     </property>
     <addaction name="actionPlay_pause"/>
+    <addaction name="actionReverse"/>
     <addaction name="actionNext_frame"/>
     <addaction name="actionPrevious_frame"/>
     <addaction name="separator"/>
@@ -90,6 +91,14 @@
   <action name="actionSet_timestamp">
    <property name="text">
     <string>Set timestamp...</string>
+   </property>
+  </action>
+  <action name="actionReverse">
+   <property name="text">
+    <string>Reverse</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
    </property>
   </action>
  </widget>
