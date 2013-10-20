@@ -8,14 +8,21 @@ PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
 	_pCodecContext(NULL),
 	_pFrame(NULL),
 	_pSwsCtx(NULL),
-	_rgb(NULL)
+	_rgb(NULL),
+	_currentFrame(-1)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
 }
 
+bool PhVideoEngine::ready()
+{
+	return (_pFormatContext && (_videoStream >=0) && _pCodecContext && _pFrame);
+}
+
 bool PhVideoEngine::open(QString fileName)
 {
+	close();
 	PHDEBUG << fileName;
 	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
 		return false;
@@ -57,6 +64,23 @@ bool PhVideoEngine::open(QString fileName)
 	return result;
 }
 
+void PhVideoEngine::close()
+{
+	PHDEBUG;
+	if(_rgb)
+	{
+		delete _rgb;
+		_rgb = NULL;
+	}
+	if(_pFormatContext)
+	{
+		avformat_close_input(&_pFormatContext);
+		_pFormatContext = NULL;
+		_pCodecContext = NULL;
+		_videoStream = -1;
+	}
+}
+
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	goToFrame(_clock.frame());
@@ -71,20 +95,33 @@ void PhVideoEngine::setFrameStamp(PhFrame frame)
 
 PhVideoEngine::~PhVideoEngine()
 {
-	if(_pFormatContext != NULL)
-		avformat_close_input(&_pFormatContext);
+	close();
 }
 
 bool PhVideoEngine::goToFrame(PhFrame frame)
 {
-	if(_videoStream < 0)
+	if(!ready())
 		return false;
 	if(frame < this->_frameStamp)
 		frame = this->_frameStamp;
 	if (frame >= this->_frameStamp + _pFormatContext->streams[_videoStream]->duration)
 		frame = this->_frameStamp + _pFormatContext->streams[_videoStream]->duration;
-	av_seek_frame(_pFormatContext, _videoStream, frame - this->_frameStamp, 0);
 
+	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
+	if (frame == _currentFrame)
+		return true;
+
+	// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
+	if((_currentFrame < 0) || (_clock.rate() != 1) || (frame - _currentFrame != 1))
+	{
+		int flags = AVSEEK_FLAG_ANY;
+		if(_clock.rate() < 0)
+			flags |= AVSEEK_FLAG_BACKWARD;
+		av_seek_frame(_pFormatContext, _videoStream, frame - this->_frameStamp, flags);
+	}
+	_currentFrame = frame;
+
+	bool result = false;
 	AVPacket packet;
 	while(av_read_frame(_pFormatContext, &packet) >= 0)
 	{
@@ -93,7 +130,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 			int ok;
 			avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
 			if(!ok)
-				return false;
+				break;
 
 			_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
 										_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
@@ -105,12 +142,14 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 			if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
 						  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
 						  &linesize) < 0)
-				return false;
+				break;
 
 			videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
 
-			return true;
+			result = true;
+			break;
 		}
+		av_free_packet(&packet); //important!
 	}
-	return false;
+	return result;
 }
