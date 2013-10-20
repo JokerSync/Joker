@@ -7,7 +7,10 @@
 #include "PhGraphicTexturedRect.h"
 
 PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
-	: PhGraphicRect(x, y, w, h), _tu(1.0f), _tv(1.0f)
+	: PhGraphicRect(x, y, w, h),
+	  _texture(-1),
+	  _tu(1.0f),
+	  _tv(1.0f)
 {
 }
 
@@ -63,7 +66,8 @@ bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, i
 {
 	glEnable( GL_TEXTURE_2D );
     // Have OpenGL generate a texture object handle for us
-    glGenTextures( 1, &_texture );
+	if(_texture < 0)
+		glGenTextures( 1, &_texture );
 
     // Bind the texture object
     glBindTexture( GL_TEXTURE_2D, _texture );
