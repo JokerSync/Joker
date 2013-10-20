@@ -218,7 +218,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		leftBG -= offset % height;
 	else
 		leftBG -= height - ((-offset) % height);
-	_stripBackgroundImage->setX(x + leftBG - syncBar_X_FromLeft);
+	_stripBackgroundImage->setX(x + leftBG);
 	_stripBackgroundImage->setY(y);
 	_stripBackgroundImage->setSize(height * n, height);
 	_stripBackgroundImage->draw();
