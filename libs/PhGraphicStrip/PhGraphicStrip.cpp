@@ -210,9 +210,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 	PhFrame frameIn = _clock.frame() - syncBar_X_FromLeft;
 	PhFrame frameOut = _clock.frame() + stripDuration;
 
-	//Set the background color to red
-	glClearColor(1,0,0,1);
-
     //Draw backgroung picture
 	int n = width / height + 2; // compute how much background repetition do we need
 	_stripBackgroundImage->setTextureCoordinate(n, 1);
