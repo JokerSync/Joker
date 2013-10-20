@@ -21,7 +21,8 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 	QByteArray localMsg = msg.toLocal8Bit();
 	switch (type) {
 	case QtDebugMsg:
-		fprintf(stderr, "%s \n", localMsg.constData());
+		if(PhDebug::isConsoleActived())
+			fprintf(stderr, "%s \n", localMsg.constData());
 		break;
 	case QtWarningMsg:
 		fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
@@ -42,7 +43,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 PhDebug PhDebug::instance()
 {
 	if (!d){   // Only allow one instance of class to be generated.
-		d = new PhDebug(false, true, true, true, true, "Default");
+		d = new PhDebug(false, true, true, true, true, true, "Default");
 		//Display two white lines at program start
 		PhDebug::writeLog("\n");
 	}
@@ -50,10 +51,10 @@ PhDebug PhDebug::instance()
 	return * d;
 }
 
-PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, QString appName)
+PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, QString appName)
 {
 	if (!d){  // Only allow one instance of class to be generated.
-		d = new PhDebug(DispDate, DispTime, DispFileName, DispFuncName, DispLine, appName);
+		d = new PhDebug(DispDate, DispTime, DispFileName, DispFuncName, DispLine, showConsole, appName);
 		//Display two white lines at program start
 		PhDebug::writeLog("\n");
 	}
@@ -83,7 +84,7 @@ QDebug PhDebug::operator<<(QDebug dbg)
 
 }
 
-PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, QString appName)
+PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, QString appName)
 {
 	qInstallMessageHandler(myMessageOutput);
 
@@ -103,6 +104,7 @@ PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncN
 		_dispFuncName = DispFuncName;
 		_dispFileName = DispFileName;
 		_dispLine = DispLine;
+		_showConsole = showConsole;
 	}
 
 }
@@ -127,6 +129,11 @@ QString PhDebug::getLine(int line)
 	if (PhDebug::instance()._dispLine)
 		return "@L" + QString::number(line);
 	return "";
+}
+
+bool PhDebug::isConsoleActived()
+{
+	return PhDebug::instance()._showConsole;
 }
 
 void PhDebug::writeLog(QString text)
