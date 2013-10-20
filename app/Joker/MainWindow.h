@@ -2,11 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <PhGraphicStrip/PhGraphicStripView.h>
-#include <PhVideo/PhVideoView.h>
 #include <QMessageBox>
 #include <QSettings>
 
+#include "VideoStripView.h"
 #include "PhSync/PhSonySlaveController.h"
 
 #include "SonyVideoStripSynchronizer.h"
@@ -68,9 +67,9 @@ private slots:
 
 private:
 	Ui::MainWindow *ui;
-	PhGraphicStripView *_stripView;
+	PhGraphicStrip * _strip;
+	PhVideoEngine * _videoEngine;
 	PhStripDoc *_doc;
-	PhClock *_stripClock;
 	QSettings _settings;
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;

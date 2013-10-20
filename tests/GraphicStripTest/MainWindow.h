@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <PhGraphicStrip/PhGraphicStripView.h>
+#include <PhGraphicStrip/PhGraphicStrip.h>
 #include <QMessageBox>
 #include <QSettings>
 #include <StripPropertiesDialog.h>
@@ -71,7 +71,7 @@ private slots:
 private:
 	Ui::MainWindow *ui;
 	QSettings *_settings;
-	PhGraphicStripView *_stripView;
+	PhGraphicStrip *_strip;
 	PhStripDoc *_doc;
 	PhClock *_clock;
 	StripPropertiesDialog *dlg;

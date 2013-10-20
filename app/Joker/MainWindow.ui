@@ -14,31 +14,15 @@
    <string>Joker</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="1">
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
-     <widget class="PhVideoView" name="videoView" native="true">
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="PhGraphicStripView" name="stripView" native="true"/>
+     <widget class="VideoStripView" name="videoStripView" native="true"/>
     </item>
    </layout>
   </widget>
@@ -220,15 +204,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PhGraphicStripView</class>
+   <class>VideoStripView</class>
    <extends>QWidget</extends>
-   <header>PhGraphicStrip/PhGraphicStripView.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PhVideoView</class>
-   <extends>QWidget</extends>
-   <header>PhVideo/PhVideoView.h</header>
+   <header>VideoStripView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

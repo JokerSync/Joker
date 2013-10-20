@@ -15,14 +15,14 @@ MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 	_settings(settings)
 {
 	ui->setupUi(this);
-	_stripView = ui->stripView;
+	_strip = ui->stripView->strip();
 
 	QString fontName = _settings->value("StripFontName", "Arial").toString();
-	if(!_stripView->setFont(fontName))
+	if(!_strip->setFont(fontName))
 		PHDEBUG << "The font has not been initialized : " << fontName;
 
-	_doc = _stripView->doc();
-	_clock = _stripView->clock();
+	_doc = _strip->doc();
+	_clock = _strip->clock();
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
@@ -211,7 +211,7 @@ void MainWindow::on_actionChange_font_triggered()
 	QFont font = QFontDialog::getFont(&ok, this);
 	if(ok)
 	{
-		if(_stripView->setFont(font.family()))
+		if(_strip->setFont(font.family()))
 			_settings->setValue("StripFontName", font.family());
 		else
 			QMessageBox::critical(this, "Error", "Unable to open " + font.family());
