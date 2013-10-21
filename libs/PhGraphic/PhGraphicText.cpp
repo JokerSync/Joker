@@ -60,7 +60,7 @@ void PhGraphicText::draw()
 			float tv2 = tv1 + space;
 
 			// computing quads coordinate;
-			int h = _h;
+			int h = _h * 128 / _font->getHeight();
 			int w = _w * 128 / widthContent;
 
 			//        (tu1, tv1) --- (tu2, tv1)
