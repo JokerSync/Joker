@@ -35,7 +35,6 @@ bool GraphicTestView::init()
 	PHDEBUG << "Initialize _text";
 	_text = new PhGraphicText(_font, "The end");
 	_text->setRect(50, 100, 500, 100);
-	_text->setWidth(400);
 	_text->setColor(QColor(255, 0, 0));
 	_text->setZ(-1);
 	if (! _text->init())
@@ -46,7 +45,7 @@ bool GraphicTestView::init()
 
 	PHDEBUG << "Initialize _rect";
 	_rect = new PhGraphicSolidRect(100, 100, 75, 40);
-	_rect->setColor(QColor(255, 1, 1));
+	_rect->setColor(QColor(0, 255, 0));
 	_rect->setZ(-2);
 
 	PHDEBUG << "Initialize _loop";
@@ -76,14 +75,22 @@ bool GraphicTestView::init()
 
 void GraphicTestView::paint()
 {
-	_image->setTextureCoordinate(1, 3);
-	//_image->draw();
-
-	//glEnable(GL_BLEND);
 	glClearColor(1.0f,1.0f,1.0f, 1.0f);
+
+//	_image->setTextureCoordinate(1, 3);
+	_image->draw();
+
+	_rect->setColor(QColor(0, 255, 0));
+	_rect->setRect(50, 100, 500, 50);
+	_rect->draw();
+
+	_rect->setColor(QColor(0, 0, 255));
+	_rect->setRect(50, 150, 500, 50);
+	_rect->draw();
+
+	_text->setRect(50, 100, 500, 100);
 	_text->draw();
-	//glDisable(GL_BLEND);
-//	_rect->draw();
+
 
 
 
