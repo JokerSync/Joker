@@ -22,8 +22,7 @@ void MainWindow::on_actionChange_font_triggered()
 	QString fileName = QFileDialog::getOpenFileName();
 	if(QFile(fileName).exists())
 	{
-		ui->graphicView->setFontFile(fileName);
+		if(!ui->graphicView->setFontFile(fileName))
+			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
-	else
-		QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 }
