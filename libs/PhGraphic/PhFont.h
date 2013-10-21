@@ -6,51 +6,62 @@
 #ifndef PHFONT_H
 #define PHFONT_H
 
-#include <QtGlobal>
 #include <QString>
-
-#warning TODO put SDL ttf include in the cpp
-#if defined(Q_OS_MAC)
-#include <SDL2_ttf/SDL_ttf.h>
-#else
-#include <SDL2/SDL_ttf.h>
-#endif
-
-#include <glu.h>
-
-#include "PhTools/PhDebug.h"
 
 class PhFont
 {
 public:
     /**
-     * @brief PhFont
-     * @param filename
+     * @brief PhFont constructor
      */
 	PhFont();
 
-	~PhFont();
-
+	/**
+	 * @brief Set the source font file.
+	 * @param fontFile Path to the new font file
+	 * @return true if the font was loaded successfully, false otherwise.
+	 */
 	bool setFontFile(QString fontFile);
 
+	/**
+	 * @brief Get the regular advance offset of a character.
+	 *
+	 * The returned value is correspond to the amount of pixel the character at a regular text size (100).
+	 * This value must be converted proportionaly if the text width is scaled.
+	 * @param ch ASCII index of the character.
+	 * @return A value in pixel.
+	 */
 	int getAdvance (int ch);
-	int getHeight(){return _glyphHeight;}
+
+	/**
+	 * @brief Get the regular height of the font.
+	 *
+	 * The returned value is correspond to the amount of pixel the character at a regular text size (100).
+	 * This value must be converted proportionaly if the text width is scaled.
+	 * @return A value in pixel.
+	 */
+	int getHeight() { return _glyphHeight; }
+
+	/**
+	 * @brief Select the font for the further rendering operation.
+	 */
 	void select();
-	GLuint getMatrixTexture(){return _texture;}
 
 private:
-    /**
-     * @brief _font
-     */
-    TTF_Font * _font;
 	/**
 	 * @brief _texture
-	 * The texture address(?)
+	 * The texture reference
 	 */
-	GLuint _texture;
+	unsigned int _texture;
 
-	// store the width of each glyph
+	/**
+	 * @brief Store the regular advance of each glyph.
+	 */
 	int _glyphAdvance[256];
+
+	/**
+	 * @brief Store the regular advance of the font.
+	 */
 	int _glyphHeight;
 };
 
