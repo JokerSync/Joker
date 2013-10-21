@@ -66,7 +66,7 @@ bool PhFont::setFontFile(QString fontFile)
 				glyphRect.h = glyphSurface->h;
 				if(glyphRect.h > _glyphHeight)
 					_glyphHeight = glyphRect.h;
-				PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
+				//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
 				// Then blit it to the matrix
 				SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
 
