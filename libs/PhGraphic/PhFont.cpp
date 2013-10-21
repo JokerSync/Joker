@@ -3,25 +3,29 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-#include <QStringList>
-
 #include "PhFont.h"
 
-PhFont::PhFont(): _font(NULL), _texture(-1)
-{
-}
+#include <QtGlobal>
 
-PhFont::~PhFont()
+#if defined(Q_OS_MAC)
+#include <SDL2_ttf/SDL_ttf.h>
+#else
+#include <SDL2/SDL_ttf.h>
+#endif
+
+#include <glu.h>
+
+#include "PhTools/PhDebug.h"
+
+PhFont::PhFont(): _texture(-1)
 {
-	if(_font)
-		TTF_CloseFont(_font);
 }
 
 bool PhFont::setFontFile(QString fontFile)
 {
 	PHDEBUG << fontFile;
-	_font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
-	if(_font == NULL)
+	TTF_Font * font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
+	if(font == NULL)
 		return false;
 
 	//Font foreground color is white
@@ -45,14 +49,14 @@ bool PhFont::setFontFile(QString fontFile)
 	// We get rid of the 32 first useless char
 	for(Uint16 ch = 0; ch < 256; ++ch)
 	{
-		if(TTF_GlyphIsProvided(_font, ch))
+		if(TTF_GlyphIsProvided(font, ch))
 		{
 			int minx, maxx, miny, maxy, advance;
-			TTF_GlyphMetrics(_font, ch, &minx,&maxx, &miny, &maxy, &advance);
+			TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
 			if(advance != 0)
 			{
 				// First render the glyph to a surface
-				SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(_font, ch, color);
+				SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
 				if (!glyphSurface)
 					PHDEBUG << "Error during the Render Glyph of " << (char) ch << SDL_GetError();
 				SDL_Rect glyphRect;
@@ -95,6 +99,7 @@ bool PhFont::setFontFile(QString fontFile)
 
 	// Once the texture is created, the surface is no longer needed.
 	SDL_FreeSurface(matrixSurface);
+	TTF_CloseFont(font);
 
 	return true;
 }
@@ -106,4 +111,9 @@ int PhFont::getAdvance(int ch)
 
 	PHDEBUG << "The" << ch << "code is not an ASCII character";
 	return 0;
+}
+
+void PhFont::select()
+{
+	glBindTexture(GL_TEXTURE_2D, (GLuint)_texture);
 }

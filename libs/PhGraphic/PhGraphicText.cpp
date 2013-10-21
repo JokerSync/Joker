@@ -29,7 +29,8 @@ void PhGraphicText::draw()
 {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glBindTexture(GL_TEXTURE_2D, _font->getMatrixTexture());
+	if(_font != NULL)
+		_font->select();
 	glEnable(GL_TEXTURE_2D);
 
 	glEnable(GL_BLEND);
