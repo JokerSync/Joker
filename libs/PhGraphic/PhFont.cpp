@@ -39,6 +39,8 @@ int PhFont::getAdvance(int ch)
 bool PhFont::init()
 {
 	_font = TTF_OpenFont(_filename.toStdString().c_str(), _size);
+	if(_font == NULL)
+		return true;
 
 	//Font foreground color is white
 	SDL_Color color = {255, 255, 255, 255};
@@ -112,5 +114,5 @@ bool PhFont::init()
 
 	SDL_FreeSurface(_glyphMatrix);
 
-	return(_font != NULL);
+	return true;
 }
