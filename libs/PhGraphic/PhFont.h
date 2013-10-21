@@ -25,14 +25,10 @@ public:
     /**
      * @brief PhFont
      * @param filename
-     * @param size
      */
-	PhFont(QString filename, int size);
-    /**
-     * @brief getFont
-     * @return _font
-     */
-    TTF_Font * getFont();
+	PhFont(QString filename);
+
+	~PhFont();
     /**
      * @brief getFontName
      * @return _filename
@@ -54,10 +50,6 @@ private:
      * @brief _filename
      */
 	QString _filename;
-    /**
-     * @brief _size
-     */
-    int _size;
 
 	/**
 	 * @brief _texture

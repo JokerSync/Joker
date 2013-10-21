@@ -27,8 +27,8 @@ protected:
 
 private:
 	PhGraphicImage *_image;
-	PhFont *_font;
-	PhGraphicText *_text;
+	PhFont *_font1, *_font2;
+	PhGraphicText *_text1, *_text2;
 	PhGraphicSolidRect *_rect;
 	PhGraphicLoop * _loop;
 	PhGraphicTexturedRect * _yuvRect;
