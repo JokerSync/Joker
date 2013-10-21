@@ -5,8 +5,8 @@
 
 
 #include <QApplication>
-#include <QDebug>
 
+#include "PhTools/PhDebug.h"
 #include "PhStrip/PhStripDoc.h"
 
 #include "MainWindow.h"
@@ -14,6 +14,9 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
+
+	PhDebug::init(false, true, true, true, true, true, "VideoStripTest");
+
 	MainWindow w;
 
     w.show();
