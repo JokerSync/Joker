@@ -116,7 +116,7 @@ private :
 	 * @brief _test
 	 * QTime for testing performance
 	 */
-	QTime _test;
+	QTime _testTimer;
 
 	int _trackNumber;
 	QSettings * _settings;

@@ -21,7 +21,7 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
 
     // This is used to make some time-based test
-	_test.start();
+	_testTimer.start();
 }
 
 PhStripDoc *PhGraphicStrip::doc()
@@ -100,6 +100,7 @@ void PhGraphicStrip::clearData()
 
 void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
+	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 	int loopCounter = 0;
 	int offCounter = 0;
@@ -275,4 +276,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 //	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
 
+	int currentDrawElapsed = _testTimer.elapsed() - lastDrawElapsed;
+//	if(_testTimer.elapsed() > 20)
+//		PHDEBUG << lastDrawElapsed << currentDrawElapsed;
+	_testTimer.restart();
 }
