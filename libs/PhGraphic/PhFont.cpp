@@ -50,11 +50,11 @@ bool PhFont::init()
 	Uint32 gmask = 0x0000ff00;
 	Uint32 bmask = 0x00ff0000;
 	Uint32 amask = 0xff000000;
-	SDL_Surface * glyphMatrix = SDL_CreateRGBSurface(0, 2048, 2048, 32, rmask, gmask, bmask, amask);
+	SDL_Surface * matrixSurface = SDL_CreateRGBSurface(0, 2048, 2048, 32, rmask, gmask, bmask, amask);
 
 	// Font background color is transparent
 	Uint32 backgroundColor = 0x00000000;
-	SDL_FillRect(glyphMatrix, NULL, backgroundColor);
+	SDL_FillRect(matrixSurface, NULL, backgroundColor);
 
 	// Space between glyph
 	int space = 128;
@@ -82,7 +82,7 @@ bool PhFont::init()
 					_glyphHeight = glyphRect.h;
 				PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
 				// Then blit it to the matrix
-				SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect );
+				SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
 
 				// Store information about the glyph
 				_glyphAdvance[ch] = advance;
@@ -105,14 +105,14 @@ bool PhFont::init()
 
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
-	glTexImage2D( GL_TEXTURE_2D, 0, glyphMatrix->format->BytesPerPixel, glyphMatrix->w, glyphMatrix->h, 0,
-				  GL_RGBA, GL_UNSIGNED_BYTE, glyphMatrix->pixels);
+	glTexImage2D( GL_TEXTURE_2D, 0, matrixSurface->format->BytesPerPixel, matrixSurface->w, matrixSurface->h, 0,
+				  GL_RGBA, GL_UNSIGNED_BYTE, matrixSurface->pixels);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Once the texture is created, the surface is no longer needed.
-	SDL_FreeSurface(glyphMatrix);
+	SDL_FreeSurface(matrixSurface);
 
 	return true;
 }
