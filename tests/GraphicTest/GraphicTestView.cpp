@@ -25,7 +25,7 @@ bool GraphicTestView::init()
 	}
 
 	PHDEBUG << "Initialize _font";
-	_font = new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF",100);
+	_font = new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF", 150);
 	if (! _font->init())
 	{
 		PHDEBUG << "_font not initialize";
@@ -34,9 +34,9 @@ bool GraphicTestView::init()
 
 	PHDEBUG << "Initialize _text";
 	_text = new PhGraphicText(_font, "The end");
-	_text->setRect(200,1,300,200);
+	_text->setRect(50, 100, 500, 100);
 	_text->setWidth(400);
-	_text->setColor(QColor(0, 0, 0));
+	_text->setColor(QColor(255, 0, 0));
 	_text->setZ(-1);
 	if (! _text->init())
 	{
