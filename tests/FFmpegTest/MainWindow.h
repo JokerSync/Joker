@@ -30,6 +30,7 @@ public:
 
 protected:
 	void paintEvent(QPaintEvent *);
+	void resizeEvent(QResizeEvent *);
 
 private slots:
 	void on_actionOpen_triggered();

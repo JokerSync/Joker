@@ -17,20 +17,19 @@ MainWindow::MainWindow(QWidget *parent) :
 #warning TODO check default speed
 {
 	ui->setupUi(this);
-	_stripView = ui->stripView;
+	_strip = ui->videoStripView->strip();
+	_videoEngine = ui->videoStripView->videoEngine();
 
-	if(!_stripView->setFont(_settings.value("StripFontName", "Arial").toString()))
-		PHDEBUG << "The font has not been initialized";
+	_strip->setSettings(&_settings);
 
-	_doc = _stripView->doc();
+	_doc = _strip->doc();
 
-	_stripClock = _stripView->clock();
-
+#warning TODO use qt designer to connect actionOpen
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 
-	_synchronizer.setStripClock(_stripClock);
+	_synchronizer.setStripClock(_strip->clock());
 
-	_synchronizer.setVideoClock(ui->videoView->getClock());
+	_synchronizer.setVideoClock(_videoEngine->clock());
 
 	if(_sonySlave.open())
 		_synchronizer.setSonyClock(_sonySlave.clock());
@@ -51,15 +50,15 @@ void MainWindow::openFile(QString fileName)
 	{
 		if(_doc->openDetX(fileName))
 		{
-			_stripClock->setTimeCodeType(_doc->getTCType());
-			_stripClock->setFrame(_doc->getLastFrame());
+			_strip->clock()->setTimeCodeType(_doc->getTCType());
+			_strip->clock()->setFrame(_doc->getLastFrame());
 			this->setWindowTitle(fileName);
 
 			QFileInfo fileInfo(_doc->getVideoPath());
 			if (fileInfo.exists())
 			{
-				ui->videoView->open(_doc->getVideoPath());
-				ui->videoView->setFrameStamp(_doc->getVideoTimestamp());
+				_videoEngine->open(_doc->getVideoPath());
+				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
 			}
 		}
 	}
@@ -77,82 +76,82 @@ void MainWindow::onOpenFile()
 
 void MainWindow::on_actionPlay_pause_triggered()
 {
-	if(_stripClock->rate() == 0.0)
-		_stripClock->setRate(1.0);
+	if(_strip->clock()->rate() == 0.0)
+		_strip->clock()->setRate(1.0);
 
 	else
-		_stripClock->setRate(0.0);
+		_strip->clock()->setRate(0.0);
 }
 
 void MainWindow::on_actionPlay_backward_triggered()
 {
-	_stripClock->setRate(-1.0);
+	_strip->clock()->setRate(-1.0);
 }
 
 void MainWindow::on_actionStep_forward_triggered()
 {
-	_stripClock->setRate(0.0);
-	_stripClock->setFrame(_stripClock->frame() + 1);
+	_strip->clock()->setRate(0.0);
+	_strip->clock()->setFrame(_strip->clock()->frame() + 1);
 }
 
 void MainWindow::on_actionStep_backward_triggered()
 {
-	_stripClock->setRate(0.0);
-	_stripClock->setFrame(_stripClock->frame() - 1);
+	_strip->clock()->setRate(0.0);
+	_strip->clock()->setFrame(_strip->clock()->frame() - 1);
 }
 
 void MainWindow::on_actionStep_time_forward_triggered()
 {
-	_stripClock->setRate(0.0);
-	_stripClock->setTime(_stripClock->time() + 1);
+	_strip->clock()->setRate(0.0);
+	_strip->clock()->setTime(_strip->clock()->time() + 1);
 }
 
 void MainWindow::on_actionStep_time_backward_triggered()
 {
-	_stripClock->setRate(0.0);
-	_stripClock->setTime(_stripClock->time() - 1);
+	_strip->clock()->setRate(0.0);
+	_strip->clock()->setTime(_strip->clock()->time() - 1);
 }
 
 void MainWindow::on_action_3_triggered()
 {
-	_stripClock->setRate(-3.0);
+	_strip->clock()->setRate(-3.0);
 }
 
 void MainWindow::on_action_1_triggered()
 {
-	_stripClock->setRate(-1.0);
+	_strip->clock()->setRate(-1.0);
 }
 
 void MainWindow::on_action_0_5_triggered()
 {
-	_stripClock->setRate(-0.5);
+	_strip->clock()->setRate(-0.5);
 }
 
 void MainWindow::on_action0_triggered()
 {
-	_stripClock->setRate(0.0);
+	_strip->clock()->setRate(0.0);
 }
 
 void MainWindow::on_action0_5_triggered()
 {
-	_stripClock->setRate(0.5);
+	_strip->clock()->setRate(0.5);
 }
 
 void MainWindow::on_action1_triggered()
 {
-	_stripClock->setRate(1.0);
+	_strip->clock()->setRate(1.0);
 }
 
 void MainWindow::on_action3_triggered()
 {
-	_stripClock->setRate(3.0);
+	_strip->clock()->setRate(3.0);
 }
 
 void MainWindow::on_actionGo_To_triggered()
 {
-	PhTimeCodeDialog dlg(_stripClock->timeCodeType(), _stripClock->frame());
+	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _strip->clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
-		_stripClock->setFrame(dlg.frame());
+		_strip->clock()->setFrame(dlg.frame());
 }
 
 void MainWindow::on_actionOpen_Video_triggered()
@@ -170,7 +169,7 @@ bool MainWindow::openVideoFile(QString videoFileName)
 	QFileInfo fileInfo(videoFileName);
 	if (fileInfo.exists())
 	{
-		ui->videoView->open(videoFileName);
+		_videoEngine->open(videoFileName);
 //#warning TODO read media length from video file
 //		ui->mediaController->setMediaLength(7500);
 //#warning TODO read first frame from video file
@@ -184,26 +183,23 @@ bool MainWindow::openVideoFile(QString videoFileName)
 
 void MainWindow::on_actionChange_font_triggered()
 {
-	PhFontDialog fontBox;
-	if(fontBox.exec())
+	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
+	if(QFile(fontFile).exists())
 	{
-		QString font = fontBox.getFontSelected();
-		if(_stripView->setFont(font))
-			_settings.setValue("StripFontName", font);
-		else
-			QMessageBox::critical(this, "Error", "Unable to open " + font);
+		if(!_strip->setFontFile(fontFile))
+			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
 	}
 }
 
 void MainWindow::on_actionChange_timestamp_triggered()
 {
-	PhTimeCodeDialog dlg(_stripClock->timeCodeType(), _synchronizer.videoClock()->frame());
+	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _synchronizer.videoClock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 	{
-		PhFrame frameStamp = ui->videoView->frameStamp();
+		PhFrame frameStamp = _videoEngine->frameStamp();
 	    frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
-		ui->videoView->setFrameStamp(frameStamp);
-	    _stripClock->setFrame(dlg.frame());
+		_videoEngine->setFrameStamp(frameStamp);
+	    _strip->clock()->setFrame(dlg.frame());
 	}
 }
 

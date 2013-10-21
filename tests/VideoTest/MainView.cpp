@@ -16,15 +16,14 @@ MainView::MainView()
 	ui->setupUi(this);
     ui->mediaController->setClock(&_internalClock);
 
-    _VideoSynchronizer.setVideoClock(ui->_videoView->getClock());
-    _VideoSynchronizer.setInternalClock(&_internalClock);
+	ui->_videoView->setEngine(&_videoEngine);
+
+    _synchronizer.setVideoClock(_videoEngine.clock());
+    _synchronizer.setInternalClock(&_internalClock);
 
     connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
 
-	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
-	connect(&timer, SIGNAL(timeout()), ui->_videoView, SLOT(checkVideoPosition()));
-
-	timer.start(10);
+	timer.start(40);
 }
 
 MainView::~MainView()
@@ -37,28 +36,23 @@ bool MainView::openFile(QString fileName)
     QFileInfo fileInfo(fileName);
     if (fileInfo.exists())
     {
-		ui->_videoView->open(fileName);
+		if(!_videoEngine.open(fileName))
+			return false;
 #warning TODO read media length from video file
 		ui->mediaController->setMediaLength(1000);
 #warning TODO read first frame from video file
 		ui->mediaController->setFirstFrame(0);
 
-        _internalClock.setRate(0.0);
+		_internalClock.setFrame(0);
+        _internalClock.setRate(1.0);
 		return true;
     }
 	return false;
 }
 
-
-void MainView::onOpenFile()
-{
-	 QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
-	 openFile(fileName); // TODO: show error in case of error
-}
-
 void MainView::onTimeOut()
 {
-    _internalClock.tick(100);
+    _internalClock.tick(25);
 }
 
 
@@ -86,10 +80,21 @@ void MainView::on_actionSet_timestamp_triggered()
     PhTimeCodeDialog dlg(_internalClock.timeCodeType(), _internalClock.frame());
 	if(dlg.exec() == QDialog::Accepted)
 	{
-		PhFrame frameStamp = ui->_videoView->frameStamp();
+		PhFrame frameStamp = _videoEngine.frameStamp();
         frameStamp += dlg.frame() - _internalClock.frame();
-		ui->_videoView->setFrameStamp(frameStamp);
+		_videoEngine.setFrameStamp(frameStamp);
 		ui->mediaController->setFirstFrame(frameStamp);
         _internalClock.setFrame(dlg.frame());
 	}
+}
+
+void MainView::on_actionOpen_triggered()
+{
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
+    openFile(fileName); // TODO: show error in case of error
+}
+
+void MainView::on_actionReverse_triggered()
+{
+    _internalClock.setRate(-1);
 }

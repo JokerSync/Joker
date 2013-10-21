@@ -26,15 +26,16 @@ class PhDebug
 public:
 	// used to access to the only instance of the class
 	static PhDebug instance();
-	static PhDebug init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, QString appName = "Default");
+	static PhDebug init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, QString appName);
 
 	QDebug operator<<(QDebug dbg);
 
 
-	PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, QString appName);
+	PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, QString appName);
 	static QString getFuncName(QString name);
 	static QString getFileName(QString name);
 	static QString getLine(int line);
+	static bool isConsoleActived();
 	static void writeLog(QString text);
 
 private:
@@ -46,6 +47,7 @@ private:
 	bool _dispDate;
 	bool _dispFileName;
 	bool _dispLine;
+	bool _showConsole;
 	QString total;
 
 };

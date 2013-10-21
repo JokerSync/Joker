@@ -20,9 +20,14 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	else
 		PHDEBUG << "TTF error:" << TTF_GetError();
 
-	t_Timer = new QTimer(this);
+ 	t_Timer = new QTimer(this);
 	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 	t_Timer->start(0);
+}
+
+PhGraphicView::~PhGraphicView()
+{
+	t_Timer->stop();
 }
 
 void PhGraphicView::initializeGL()

@@ -7,7 +7,10 @@
 #include "PhGraphicTexturedRect.h"
 
 PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
-	: PhGraphicRect(x, y, w, h), _tu(1.0f), _tv(1.0f)
+	: PhGraphicRect(x, y, w, h),
+	  _texture(-1),
+	  _tu(1.0f),
+	  _tv(1.0f)
 {
 }
 
@@ -55,6 +58,28 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 	return true;
 }
 
+bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, int height)
+{
+	glEnable( GL_TEXTURE_2D );
+    // Have OpenGL generate a texture object handle for us
+	if(_texture < 0)
+		glGenTextures( 1, &_texture );
+
+    // Bind the texture object
+    glBindTexture( GL_TEXTURE_2D, _texture );
+
+
+    // Edit the texture object's image data using the information SDL_Surface gives us
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
+                  GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	return true;
+}
+
+
 bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, int height)
 {
     glEnable( GL_TEXTURE_2D );
@@ -79,7 +104,10 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
 void PhGraphicTexturedRect::draw(){
 
 	//PHDEBUG << "PhGraphicTexturedRect::draw()";
-    glMatrixMode(GL_MODELVIEW);
+
+	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+
+	glMatrixMode(GL_MODELVIEW);
 
 	glLoadIdentity();
 

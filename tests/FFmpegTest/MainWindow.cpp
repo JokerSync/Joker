@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QPainter>
-#include <QDebug>
+#include "PhTools/PhDebug.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -70,26 +70,7 @@ bool MainWindow::openFile(QString fileName)
 
 	_pFrame = avcodec_alloc_frame();
 
-	int w = this->width();
-	int h = this->height();
-
-	// adjust width to a multiple of 4:
-	int pow = 4;
-	if(w % pow)
-		w += pow - (w % pow);
-
-	if(_rgb)
-		delete _rgb;
-	_rgb = new uint8_t[3 * w * h];
-
-	if(_image)
-		delete _image;
-
-	_image = new QImage(_rgb, w, h, QImage::Format_RGB888);
-
-	_pSwsCtx = sws_getContext(_pCodecContext->width, _pCodecContext->height,
-							_pCodecContext->pix_fmt, w, h,
-							AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+	resizeEvent(NULL);
 
 	_currentFrame = 0;
 	return setFrame(0);
@@ -130,6 +111,33 @@ void MainWindow::paintEvent(QPaintEvent *)
 		QPainter painter(this);
 		painter.drawImage(0, 0, *_image);
 	}
+}
+
+void MainWindow::resizeEvent(QResizeEvent *)
+{
+	if(_pCodecContext == NULL)
+		return;
+	int w = this->width();
+	int h = this->height();
+
+	// adjust width to a multiple of 4:
+	int pow = 4;
+	if(w % pow)
+		w += pow - (w % pow);
+
+	if(_rgb)
+		delete _rgb;
+	_rgb = new uint8_t[3 * w * h];
+
+	if(_image)
+		delete _image;
+
+	_image = new QImage(_rgb, w, h, QImage::Format_RGB888);
+
+
+	_pSwsCtx = sws_getContext(_pCodecContext->width, _pCodecContext->height,
+							_pCodecContext->pix_fmt, w, h,
+							AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 }
 
 void MainWindow::on_actionOpen_triggered()

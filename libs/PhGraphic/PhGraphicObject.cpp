@@ -5,7 +5,7 @@
 
 #include "PhGraphicObject.h"
 
-PhGraphicObject::PhGraphicObject(int x , int y) : _x(x), _y(y), _z(0), _color(1, 1, 1)
+PhGraphicObject::PhGraphicObject(int x , int y) : _x(x), _y(y), _z(0), _color(Qt::white)
 {
 }
 
