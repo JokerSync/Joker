@@ -9,6 +9,7 @@
 #include <QtGlobal>
 #include <QString>
 
+#warning TODO put SDL ttf include in the cpp
 #if defined(Q_OS_MAC)
 #include <SDL2_ttf/SDL_ttf.h>
 #else
@@ -26,31 +27,22 @@ public:
      * @brief PhFont
      * @param filename
      */
-	PhFont(QString filename);
+	PhFont();
 
 	~PhFont();
-    /**
-     * @brief getFontName
-     * @return _filename
-     */
-	QString getFontName();
+
+	bool setFontFile(QString fontFile);
 
 	int getAdvance (int ch);
 	int getHeight(){return _glyphHeight;}
 	void select();
 	GLuint getMatrixTexture(){return _texture;}
 
-	bool init();
 private:
     /**
      * @brief _font
      */
     TTF_Font * _font;
-    /**
-     * @brief _filename
-     */
-	QString _filename;
-
 	/**
 	 * @brief _texture
 	 * The texture address(?)

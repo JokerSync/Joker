@@ -7,9 +7,8 @@
 
 #include "PhFont.h"
 
-PhFont::PhFont(QString filename): _font(NULL), _texture(-1)
+PhFont::PhFont(): _font(NULL), _texture(-1)
 {
-	_filename = filename;
 }
 
 PhFont::~PhFont()
@@ -18,28 +17,12 @@ PhFont::~PhFont()
 		TTF_CloseFont(_font);
 }
 
-QString PhFont::getFontName(){
-	QStringList list ;
-	list = _filename.split("/");
-	QString name = list.last().split(".").first();
-	return name;
-}
-
-int PhFont::getAdvance(int ch)
+bool PhFont::setFontFile(QString fontFile)
 {
-	if (0 <= ch and ch < 256)
-		return _glyphAdvance[ch];
-
-	PHDEBUG << "The" << ch << "code is not an ASCII character";
-	return 0;
-}
-
-bool PhFont::init()
-{
-	PHDEBUG << _filename;
-	_font = TTF_OpenFont(_filename.toStdString().c_str(), 100);
+	PHDEBUG << fontFile;
+	_font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
 	if(_font == NULL)
-		return true;
+		return false;
 
 	//Font foreground color is white
 	SDL_Color color = {255, 255, 255, 255};
@@ -114,4 +97,13 @@ bool PhFont::init()
 	SDL_FreeSurface(matrixSurface);
 
 	return true;
+}
+
+int PhFont::getAdvance(int ch)
+{
+	if (0 <= ch and ch < 256)
+		return _glyphAdvance[ch];
+
+	PHDEBUG << "The" << ch << "code is not an ASCII character";
+	return 0;
 }
