@@ -279,6 +279,7 @@ void PhGraphicStripView::paint()
 				gPeople = new PhGraphicText(_currentFont, people->getName());
 				gPeople->setColor(QColor(people->getColor()));
 				gPeople->setWidth(people->getName().length() * 16);
+				gPeople->setZ(-1);
 
 				gPeople->init();
 

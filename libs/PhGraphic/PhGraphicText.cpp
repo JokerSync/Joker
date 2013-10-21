@@ -34,6 +34,7 @@ void PhGraphicText::draw()
 	glBindTexture(GL_TEXTURE_2D, _font->getMatrixTexture());
 	glEnable(GL_TEXTURE_2D);
 
+
 	int widthContent = 0;
 	//Compute the natural width of the content to scale it later
 	for(int i = 0; i < _content.length(); i++)
@@ -43,24 +44,25 @@ void PhGraphicText::draw()
 
 
 	int x = 0;
+	float space = _font->getSpace() / 2048.0f;
 	// Display a string
 	for(int i = 0; i < _content.length(); i++)
 	{
 		int ch = (int)_content.at(i).toLatin1();
 		if(_font->getWidth(ch) > 0)
 		{
-			float tu, tv;
-			tu = ((ch % 16) * _font->getSpace()) / 2048.0;
-			tv = ((ch / 16) * _font->getSpace()) / 2048.0;
+			// computing texture coordinates
+			float tu = (ch % 16) * space;
+			float tv = (ch / 16) * space;
+			float tw = 0.0625f;
+			float th = 0.0625f;
 
+			// computing quads coordinate;
+			int h = _h;
+			//int w = _font->getWidth(ch) * _w / widthContent;
+			int w = _w * 128 / widthContent;
+			//w = _font->getAdvance(ch);
 
-			int h, w;
-			h = _font->getHeight();
-			w = _font->getWidth(ch) * _w / widthContent;
-
-			float tuW, tvH;
-			tuW = tu + _font->getWidth(ch) / 2048.0;
-			tvH = tv + h / 2048.0;
 
 			//        (0,0) ------ (1,0)
 			//          |            |
@@ -70,22 +72,26 @@ void PhGraphicText::draw()
 			glBegin(GL_QUADS); 	//Begining the cube's drawing
 			{
 				glTexCoord3f(tu, tv, 1);		glVertex3f(_x + x,		_y,	_z);
-				glTexCoord3f(tuW, tv, 1);	    glVertex3f(_x + w + x,	_y,	_z);
-				glTexCoord3f(tuW, tvH, 1);		glVertex3f(_x + w + x,	_y + h,  _z);
-				glTexCoord3f(tu, tvH, 1);	    glVertex3f(_x + x,		_y + h,  _z);
+				glTexCoord3f(tu + tw, tv, 1);	    glVertex3f(_x + w + x,	_y,	_z);
+				glTexCoord3f(tu + tw, tv + th, 1);		glVertex3f(_x + w + x,	_y + h,  _z);
+				glTexCoord3f(tu, tv + th, 1);	    glVertex3f(_x + x,		_y + h,  _z);
 			}
 			glEnd();
 
 		}
 		// Shift the offset
-		x += _font->getAdvance(ch);
+		x += _font->getAdvance(ch) * _w / widthContent;
 	}
 
 
-	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+
+	PHDEBUG << _color.redF() << _color.greenF() << _color.blueF();
 
 	glEnable(GL_BLEND);
+
+	//glColor3f(_color.redF(), _color.greenF(), _color.blueF());
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glDisable(GL_BLEND);
 
 	glDisable(GL_TEXTURE_2D);

@@ -63,8 +63,9 @@ bool PhFont::init()
 	amask = 0xff000000;
 	_glyphMatrix = SDL_CreateRGBSurface(0,2048,2048,32,rmask,gmask,bmask,amask);
 
+
 	Uint32 bgColor;
-	bgColor = 0xffffffff;
+	bgColor = 0x000000ff;
 	PHDEBUG << SDL_FillRect(_glyphMatrix, NULL, bgColor);
 
 	// Space between glyph

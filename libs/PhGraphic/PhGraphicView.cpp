@@ -22,7 +22,7 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 
 	t_Timer = new QTimer(this);
 	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
-	t_Timer->start(0);
+	t_Timer->start(1000);
 }
 
 void PhGraphicView::initializeGL()
@@ -48,6 +48,7 @@ void PhGraphicView::paintGL()
 {
 	//PHDEBUG << "PhGraphicView::paintGL" ;
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glColor3f(1.0f, 1.0f, 1.0f);
 	paint();
 }
 
