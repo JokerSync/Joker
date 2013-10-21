@@ -16,8 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	_strip = ui->videoStripView->strip();
 	_videoEngine = ui->videoStripView->videoEngine();
 
-	if(!_strip->setFont(_settings.value("StripFontName", "Arial").toString()))
-		PHDEBUG << "The font has not been initialized";
+	_strip->setSettings(&_settings);
 
 	_doc = _strip->doc();
 
@@ -178,14 +177,11 @@ void MainWindow::on_actionSet_Time_Code_triggered()
 
 void MainWindow::on_actionChange_font_triggered()
 {
-	bool ok;
-	QFont font = QFontDialog::getFont(&ok, this);
-	if(ok)
+	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
+	if(QFile(fontFile).exists())
 	{
-		if(_strip->setFont(font.family()))
-			_settings.setValue("StripFontName", font.family());
-		else
-			QMessageBox::critical(this, "Error", "Unable to open " + font.family());
+		if(!_strip->setFontFile(fontFile))
+			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
 	}
 }
 
