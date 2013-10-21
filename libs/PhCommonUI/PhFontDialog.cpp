@@ -43,7 +43,7 @@ PhFontDialog::PhFontDialog(QWidget *parent) :
 QString PhFontDialog::getFontSelected()
 {
 	if(ui->listWidgetFont->selectedItems().empty())
-		return "NULL";
+		return "";
 	return ui->listWidgetFont->selectedItems().at(0)->text();
 }
 

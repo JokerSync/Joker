@@ -17,7 +17,7 @@
 
 #include "PhTools/PhDebug.h"
 
-PhFont::PhFont(): _texture(-1)
+PhFont::PhFont(): _texture(-1), _glyphHeight(0)
 {
 }
 

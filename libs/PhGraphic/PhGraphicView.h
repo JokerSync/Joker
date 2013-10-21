@@ -20,6 +20,7 @@ public:
      * @param parent Parent object.
      */
     explicit PhGraphicView(QWidget *parent = 0);
+	~PhGraphicView();
 
 	/**
 	 * Handle the resizing of the view.

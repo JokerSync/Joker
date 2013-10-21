@@ -15,11 +15,12 @@ MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 	_settings(settings)
 {
 	ui->setupUi(this);
-	_stripView = ui->stripView;
+	_strip = ui->stripView->strip();
 
-	_stripView->setSettings(_settings);
-	_doc = _stripView->doc();
-	_clock = _stripView->clock();
+	_strip->setSettings(_settings);
+
+	_doc = _strip->doc();
+	_clock = _strip->clock();
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
@@ -206,7 +207,7 @@ void MainWindow::on_actionChange_font_triggered()
 	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
 	if(QFile(fontFile).exists())
 	{
-		if(!_stripView->setFontFile(fontFile))
+		if(!_strip->setFontFile(fontFile))
 			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
 	}
 }
