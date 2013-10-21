@@ -6,7 +6,15 @@
 #include "PhTools/PhPictureTools.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent)
-	: PhGraphicView( parent), _image(NULL), _font(NULL), _text(NULL), _rect(NULL), _loop(NULL), _yuvRect(NULL)
+	: PhGraphicView( parent),
+	  _image(NULL),
+	  _font1(NULL),
+	  _font2(NULL),
+	  _text1(NULL),
+	  _text2(NULL),
+	  _rect(NULL),
+	  _loop(NULL),
+	  _yuvRect(NULL)
 {
 
 }
@@ -25,24 +33,29 @@ bool GraphicTestView::init()
 	}
 
 	PHDEBUG << "Initialize _font";
-	_font = new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF", 100);
-//	_font = new PhFont("/Library/Fonts/Arial.ttf", 100);
-	if (! _font->init())
+	_font1 = new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF");
+	if (! _font1->init())
+	{
+		PHDEBUG << "_font not initialize";
+		return false;
+	}
+	_font2 = new PhFont("/Library/Fonts/Arial.ttf");
+	if (! _font2->init())
 	{
 		PHDEBUG << "_font not initialize";
 		return false;
 	}
 
 	PHDEBUG << "Initialize _text";
-	_text = new PhGraphicText(_font, "The party is over!");
-	_text->setRect(50, 100, 500, 100);
-	_text->setColor(QColor(255, 0, 0));
-	_text->setZ(-1);
-	if (! _text->init())
-	{
-		PHDEBUG << "_text not initialize";
-		return false;
-	}
+	_text1 = new PhGraphicText(_font1, "The party is over!");
+	_text1->setRect(50, 100, 500, 100);
+	_text1->setColor(QColor(255, 0, 0));
+	_text1->setZ(-1);
+
+	_text2 = new PhGraphicText(_font2, "The party is over!");
+	_text2->setRect(50, 300, 500, 100);
+	_text2->setColor(QColor(255, 0, 0));
+	_text2->setZ(-1);
 
 	PHDEBUG << "Initialize _rect";
 	_rect = new PhGraphicSolidRect(100, 100, 75, 40);
@@ -89,8 +102,10 @@ void GraphicTestView::paint()
 	_rect->setRect(50, 175, 500, 25);
 	_rect->draw();
 
-	_text->setRect(50, 100, 500, 100);
-	_text->draw();
+	_text1->setRect(50, 100, 500, 100);
+	_text1->draw();
+
+	_text2->draw();
 
 
 

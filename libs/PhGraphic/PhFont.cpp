@@ -7,17 +7,15 @@
 
 #include "PhFont.h"
 
-PhFont::PhFont(QString filename, int size)
+PhFont::PhFont(QString filename): _font(NULL), _texture(-1)
 {
 	_filename = filename;
-	_size = size;
 }
 
-TTF_Font * PhFont::getFont()
+PhFont::~PhFont()
 {
-	if (_font == NULL)
-		init();
-	return _font;
+	if(_font)
+		TTF_CloseFont(_font);
 }
 
 QString PhFont::getFontName(){
@@ -38,7 +36,7 @@ int PhFont::getAdvance(int ch)
 
 bool PhFont::init()
 {
-	_font = TTF_OpenFont(_filename.toStdString().c_str(), _size);
+	_font = TTF_OpenFont(_filename.toStdString().c_str(), 100);
 	if(_font == NULL)
 		return true;
 
