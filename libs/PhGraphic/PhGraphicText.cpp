@@ -34,6 +34,11 @@ void PhGraphicText::draw()
 	glBindTexture(GL_TEXTURE_2D, _font->getMatrixTexture());
 	glEnable(GL_TEXTURE_2D);
 
+	glEnable(GL_BLEND);
+
+	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
 
 	int widthContent = 0;
 	//Compute the natural width of the content to scale it later
@@ -83,14 +88,6 @@ void PhGraphicText::draw()
 		x += _font->getAdvance(ch) * _w / widthContent;
 	}
 
-
-
-	PHDEBUG << _color.redF() << _color.greenF() << _color.blueF();
-
-	glEnable(GL_BLEND);
-
-	//glColor3f(_color.redF(), _color.greenF(), _color.blueF());
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glDisable(GL_BLEND);
 

@@ -22,7 +22,7 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 
 	t_Timer = new QTimer(this);
 	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
-	t_Timer->start(1000);
+	t_Timer->start(0);
 }
 
 void PhGraphicView::initializeGL()

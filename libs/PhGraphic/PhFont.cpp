@@ -50,23 +50,21 @@ bool PhFont::init()
 {
 	_font = TTF_OpenFont(_filename.toStdString().c_str(), _size);
 
-	//Font's color (black)
-	SDL_Color color={0,0,0};
+	//Font foreground color is white
+	SDL_Color color = {255, 255, 255, 255};
 	Uint16 ch;
 
 
 	// used to set the base surface
-	Uint32 rmask, gmask, bmask, amask;
-	rmask = 0x000000ff;
-	gmask = 0x0000ff00;
-	bmask = 0x00ff0000;
-	amask = 0xff000000;
-	_glyphMatrix = SDL_CreateRGBSurface(0,2048,2048,32,rmask,gmask,bmask,amask);
+	Uint32 rmask = 0x000000ff;
+	Uint32 gmask = 0x0000ff00;
+	Uint32 bmask = 0x00ff0000;
+	Uint32 amask = 0xff000000;
+	_glyphMatrix = SDL_CreateRGBSurface(0, 2048, 2048, 32, rmask, gmask, bmask, amask);
 
-
-	Uint32 bgColor;
-	bgColor = 0x000000ff;
-	PHDEBUG << SDL_FillRect(_glyphMatrix, NULL, bgColor);
+	// Font background color is transparent
+	Uint32 backgroundColor = 0x00000000;
+	SDL_FillRect(_glyphMatrix, NULL, backgroundColor);
 
 	// Space between glyph
 	int space = 128;
@@ -110,8 +108,7 @@ bool PhFont::init()
 	}
 
 	// This is possible without switch because we manually set it up
-	GLenum textureFormat;
-	textureFormat = GL_RGBA;
+	GLenum textureFormat = GL_RGBA;
 
 
 
