@@ -42,7 +42,7 @@ bool PhGraphicStripView::setFont(QString fontName)
 		if(!QFile::exists(fontFile))
 		{
 			PHDEBUG << "Unable to find the font : " << fontName;
-			fontFile = QCoreApplication::applicationDirPath() + "/../Resources/LTE50198.TTF";
+			fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
 			PHDEBUG << "A default font will be taken : " << fontFile;
 
 			QMessageBox::information(this, "Error", "The font \"" + fontName + "\" seems missing or desn't support our alphabet', \"" + fontFile + "\" is set instead");
@@ -52,7 +52,7 @@ bool PhGraphicStripView::setFont(QString fontName)
 
 	PHDEBUG << "file : " << fontFile;
 
-	_currentFont = new PhFont(fontFile, 150);
+	_currentFont = new PhFont(fontFile);
 
 	PHDEBUG << "_currentFont value" << _currentFont->getFontName();
 
