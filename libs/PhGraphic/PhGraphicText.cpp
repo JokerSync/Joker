@@ -27,8 +27,6 @@ PhFont * PhGraphicText::getFont(){
 
 void PhGraphicText::draw()
 {
-
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glBindTexture(GL_TEXTURE_2D, _font->getMatrixTexture());
@@ -39,53 +37,49 @@ void PhGraphicText::draw()
 	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-
 	int widthContent = 0;
 	//Compute the natural width of the content to scale it later
 	for(int i = 0; i < _content.length(); i++)
 	{
-		widthContent += _font->getWidth((int)_content.at(i).toLatin1());
+		widthContent += _font->getAdvance(_content.at(i).toLatin1());
 	}
 
-
-	int x = 0;
-	float space = _font->getSpace() / 2048.0f;
+	// Set the letter initial horizontal offset
+	int offset = _x;
+	float space = 0.0625f; // all glyph are in a 1/16 x 1/16 box
 	// Display a string
 	for(int i = 0; i < _content.length(); i++)
 	{
 		int ch = (int)_content.at(i).toLatin1();
-		if(_font->getWidth(ch) > 0)
+		if(_font->getAdvance(ch) > 0)
 		{
 			// computing texture coordinates
-			float tu = (ch % 16) * space;
-			float tv = (ch / 16) * space;
-			float tw = 0.0625f;
-			float th = 0.0625f;
+			float tu1 = (ch % 16) * space;
+			float tv1 = (ch / 16) * space;
+			float tu2 = tu1 + space;
+			float tv2 = tv1 + space;
 
 			// computing quads coordinate;
 			int h = _h;
-			//int w = _font->getWidth(ch) * _w / widthContent;
 			int w = _w * 128 / widthContent;
-			//w = _font->getAdvance(ch);
 
-
-			//        (0,0) ------ (1,0)
-			//          |            |
-			//          |            |
-			//        (0,1) ------ (1,1)
+			//        (tu1, tv1) --- (tu2, tv1)
+			//            |              |
+			//            |              |
+			//        (tu1, tv2) --- (tu2, tv2)
 
 			glBegin(GL_QUADS); 	//Begining the cube's drawing
 			{
-				glTexCoord3f(tu, tv, 1);		glVertex3f(_x + x,		_y,	_z);
-				glTexCoord3f(tu + tw, tv, 1);	    glVertex3f(_x + w + x,	_y,	_z);
-				glTexCoord3f(tu + tw, tv + th, 1);		glVertex3f(_x + w + x,	_y + h,  _z);
-				glTexCoord3f(tu, tv + th, 1);	    glVertex3f(_x + x,		_y + h,  _z);
+				glTexCoord3f(tu1, tv1, 1);	glVertex3f(offset,		_y,	_z);
+				glTexCoord3f(tu2, tv1, 1);	glVertex3f(offset + w,	_y,	_z);
+				glTexCoord3f(tu2, tv2, 1);	glVertex3f(offset + w,	_y + h,  _z);
+				glTexCoord3f(tu1, tv2, 1);	glVertex3f(offset,		_y + h,  _z);
 			}
 			glEnd();
 
 		}
 		// Shift the offset
-		x += _font->getAdvance(ch) * _w / widthContent;
+		offset += _font->getAdvance(ch) * _w / widthContent;
 	}
 
 
