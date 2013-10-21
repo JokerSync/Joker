@@ -13,6 +13,8 @@ PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
+
+	_testTimer.start();
 }
 
 bool PhVideoEngine::ready()
@@ -100,6 +102,13 @@ PhVideoEngine::~PhVideoEngine()
 
 bool PhVideoEngine::goToFrame(PhFrame frame)
 {
+	int lastGotoElapsed = _testTimer.elapsed();
+	int seekElapsed = -1;
+	int readElapsed = -1;
+	int decodeElapsed = -1;
+	int scaleElapsed = -1;
+	int textureElapsed = -1;
+
 	if(!ready())
 		return false;
 	if(frame < this->_frameStamp)
@@ -107,49 +116,67 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	if (frame >= this->_frameStamp + _pFormatContext->streams[_videoStream]->duration)
 		frame = this->_frameStamp + _pFormatContext->streams[_videoStream]->duration;
 
+	bool result = false;
 	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
 	if (frame == _currentFrame)
-		return true;
-
-	// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
-	if((_currentFrame < 0) || (_clock.rate() != 1) || (frame - _currentFrame != 1))
+		result = true;
+	else
 	{
-		int flags = AVSEEK_FLAG_ANY;
-		if(_clock.rate() < 0)
-			flags |= AVSEEK_FLAG_BACKWARD;
-		av_seek_frame(_pFormatContext, _videoStream, frame - this->_frameStamp, flags);
-	}
-	_currentFrame = frame;
-
-	bool result = false;
-	AVPacket packet;
-	while(av_read_frame(_pFormatContext, &packet) >= 0)
-	{
-		if(packet.stream_index == _videoStream)
+		// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
+		if((_currentFrame < 0) || (_clock.rate() != 1) || (frame - _currentFrame != 1))
 		{
-			int ok;
-			avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
-			if(!ok)
-				break;
-
-			_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
-										_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
-										AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
-
-			if(_rgb == NULL)
-				_rgb = new uint8_t[_pFrame->width * _pFrame->height * 4];
-			int linesize = _pFrame->width * 4;
-			if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
-						  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
-						  &linesize) < 0)
-				break;
-
-			videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
-
-			result = true;
-			break;
+			int flags = AVSEEK_FLAG_ANY;
+			if(_clock.rate() < 0)
+				flags |= AVSEEK_FLAG_BACKWARD;
+			av_seek_frame(_pFormatContext, _videoStream, frame - this->_frameStamp, flags);
 		}
-		av_free_packet(&packet); //important!
+		_currentFrame = frame;
+
+		seekElapsed = _testTimer.elapsed();
+
+		AVPacket packet;
+		while(av_read_frame(_pFormatContext, &packet) >= 0)
+		{
+			if(packet.stream_index == _videoStream)
+			{
+				readElapsed = _testTimer.elapsed();
+				int ok;
+				avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
+				if(!ok)
+					break;
+
+				decodeElapsed = _testTimer.elapsed();
+
+				_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
+												_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
+												AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+
+				if(_rgb == NULL)
+					_rgb = new uint8_t[_pFrame->width * _pFrame->height * 4];
+				int linesize = _pFrame->width * 4;
+				if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
+							  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
+							  &linesize) < 0)
+					break;
+
+				scaleElapsed = _testTimer.elapsed();
+
+				videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
+
+				textureElapsed = _testTimer.elapsed();
+
+				result = true;
+				break;
+			}
+			av_free_packet(&packet); //important!
+		}
 	}
+
+	int currentGotoElapsed = _testTimer.elapsed();
+	if(_testTimer.elapsed() > 25)
+		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
+				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
+	_testTimer.restart();
+
 	return result;
 }

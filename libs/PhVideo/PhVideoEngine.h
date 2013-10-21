@@ -9,6 +9,8 @@ extern "C" {
 }
 
 #include <QObject>
+#include <QElapsedTimer>
+
 #include "PhTools/PhClock.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
 
@@ -49,6 +51,8 @@ private:
 	PhGraphicTexturedRect videoRect;
 	uint8_t * _rgb;
 	PhFrame _currentFrame;
+
+	QElapsedTimer _testTimer;
 };
 
 #endif // PHVIDEOENGINE_H
