@@ -36,31 +36,19 @@ int PhFont::getAdvance(int ch)
 	return 0;
 }
 
-int PhFont::getWidth(int ch)
-{
-	if (0 <= ch and ch < 256)
-		return _glyphWidth[ch];
-
-	PHDEBUG << "The" << ch << "code is not an ASCII character";
-	return 0;
-}
-
-
 bool PhFont::init()
 {
 	_font = TTF_OpenFont(_filename.toStdString().c_str(), _size);
 
 	//Font foreground color is white
 	SDL_Color color = {255, 255, 255, 255};
-	Uint16 ch;
-
 
 	// used to set the base surface
 	Uint32 rmask = 0x000000ff;
 	Uint32 gmask = 0x0000ff00;
 	Uint32 bmask = 0x00ff0000;
 	Uint32 amask = 0xff000000;
-	_glyphMatrix = SDL_CreateRGBSurface(0, 2048, 2048, 32, rmask, gmask, bmask, amask);
+	SDL_Surface * _glyphMatrix = SDL_CreateRGBSurface(0, 2048, 2048, 32, rmask, gmask, bmask, amask);
 
 	// Font background color is transparent
 	Uint32 backgroundColor = 0x00000000;
@@ -71,7 +59,7 @@ bool PhFont::init()
 	_glyphHeight = 0;
 
 	// We get rid of the 32 first useless char
-	for(ch = 32; ch < 256; ++ch)
+	for(Uint16 ch = 32; ch < 256; ++ch)
 	{
 		if(TTF_GlyphIsProvided(_font, ch))
 		{
@@ -96,21 +84,16 @@ bool PhFont::init()
 
 				// Store information about the glyph
 				_glyphAdvance[ch] = advance;
-				_glyphWidth[ch] = maxx - minx;
 			}
 			else
 				PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
 		}
-		else{
+		else
 			_glyphAdvance[ch] = 0;
-			_glyphWidth[ch] = 0;
-		}
 	}
 
 	// This is possible without switch because we manually set it up
 	GLenum textureFormat = GL_RGBA;
-
-
 
 	glEnable( GL_TEXTURE_2D );
 	// Have OpenGL generate a texture object handle for us
@@ -127,7 +110,7 @@ bool PhFont::init()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-
+	SDL_FreeSurface(_glyphMatrix);
 
 	return(_font != NULL);
 }
