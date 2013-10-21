@@ -19,6 +19,18 @@ GraphicTestView::GraphicTestView(QWidget *parent)
 
 }
 
+bool GraphicTestView::setFontFile(QString fontFile)
+{
+	PhFont *font = new PhFont(fontFile);
+	if(font->init())
+	{
+		_font1 = font;
+		_text1->setFont(_font1);
+		return true;
+	}
+	return false;
+}
+
 bool GraphicTestView::init()
 {
 	PHDEBUG << "Initialize _image";

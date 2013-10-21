@@ -16,6 +16,9 @@ public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
 
+private slots:
+	void on_actionChange_font_triggered();
+
 private:
 	Ui::MainWindow *ui;
 };

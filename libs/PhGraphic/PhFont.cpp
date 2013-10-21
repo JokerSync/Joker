@@ -36,6 +36,7 @@ int PhFont::getAdvance(int ch)
 
 bool PhFont::init()
 {
+	PHDEBUG << _filename;
 	_font = TTF_OpenFont(_filename.toStdString().c_str(), 100);
 	if(_font == NULL)
 		return true;
