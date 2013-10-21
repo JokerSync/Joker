@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-TARGET = GraphicStripTest
+TARGET = VideoStripTest
 TEMPLATE = app
 
 QT += core gui
@@ -34,7 +34,6 @@ HEADERS += \
 FORMS += \
     MainWindow.ui
 
-QMAKE_POST_LINK += echo $${RESOURCES_PATH}
-QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH}
-QMAKE_POST_LINK += && cp $${JOKER_ROOT}/data/fonts/Bedizen.ttf $${RESOURCES_PATH}
-
+QMAKE_POST_LINK += echo $${RESOURCES_PATH};
+QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH}/../Resources/;
+QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/SWENSON.TTF $${RESOURCES_PATH}/../Resources/;
