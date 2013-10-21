@@ -19,7 +19,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit MainWindow(QSettings * settings, QWidget *parent = 0);
 	~MainWindow();
 
 	void openFile(QString fileName);
@@ -69,7 +69,7 @@ private:
 	PhStripDoc *_doc;
 	PhVideoEngine * _videoEngine;
 	VideoStripSynchronizer _synchronizer;
-	QSettings _settings;
+	QSettings * _settings;
 };
 
 #endif // MAINWINDOW_H
