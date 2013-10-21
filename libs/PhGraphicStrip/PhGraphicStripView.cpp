@@ -12,14 +12,13 @@
 #include "PhGraphicStripView.h"
 
 PhGraphicStripView::PhGraphicStripView(QWidget *parent)
-	: PhGraphicView( parent ), _doc(this), _currentFont(NULL), _trackNumber(4), _clock(_doc.getTCType())
+	: PhGraphicView( parent ), _doc(this), _clock(_doc.getTCType()), _trackNumber(4)
 {
 	// update the view content when the doc changes :
-	this->connect(&_doc, SIGNAL(changed()), this, SLOT(updateView()));
+	this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
 
     // This is used to make some time-based test
-	_test = new QTime();
-	_test->start();
+	_test.start();
 }
 
 PhStripDoc *PhGraphicStripView::doc()
@@ -32,40 +31,19 @@ PhClock *PhGraphicStripView::clock()
 	return &_clock;
 }
 
-bool PhGraphicStripView::setFont(QString fontName)
+void PhGraphicStripView::setSettings(QSettings *settings)
 {
-	PHDEBUG << fontName;
-	QString fontFile = "~/Library/Fonts/" + fontName + ".ttf";
-	if(!QFile::exists(fontFile))
+	_settings = settings;
+}
+
+bool PhGraphicStripView::setFontFile(QString fontFile)
+{
+	if(_font.setFontFile(fontFile))
 	{
-		fontFile = "/Library/Fonts/" + fontName + ".ttf";
-		if(!QFile::exists(fontFile))
-		{
-			PHDEBUG << "Unable to find the font : " << fontName;
-			fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
-			PHDEBUG << "A default font will be taken : " << fontFile;
-
-			QMessageBox::information(this, "Error", "The font \"" + fontName + "\" seems missing or desn't support our alphabet', \"" + fontFile + "\" is set instead");
-		}
-	}
-
-
-	PHDEBUG << "file : " << fontFile;
-
-	_currentFont = new PhFont(fontFile);
-
-	PHDEBUG << "_currentFont value" << _currentFont->getFontName();
-
-	// TODO : redraw all texts
-	PHDEBUG << "currentFont init" << _currentFont->init();
-
-	if(_currentFont->init())
-	{
-		updateView();
+		_settings->setValue("StripFontFile", fontFile);
 		return true;
 	}
-	else
-		return false;
+	return false;
 }
 
 
@@ -77,12 +55,18 @@ bool PhGraphicStripView::init()
 	clearData();
 
     //Load the strip background
-	_stripBackgroundImage = new PhGraphicImage(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
-	_stripBackgroundImage->init();
+	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
+	_stripBackgroundImage.init();
 
-	_stripSyncBar = new PhGraphicSolidRect(this->width()/6, this->height()/4, 4, 100);
-	_stripSyncBar->setColor(QColor(225, 86, 108));
+	// Init the sync bar
+	_stripSyncBar.setColor(QColor(225, 86, 108));
 
+	// Load the font file
+	QString fontFile= _settings->value("StripFontFile", "").toString();
+	if(QFile(fontFile).exists())
+		_font.setFontFile(fontFile);
+	else
+		_font.setFontFile(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON");
 
 	return true;
 }
@@ -93,7 +77,7 @@ void PhGraphicStripView::clearData()
 		delete gPeople;
 	_graphicPeoples.clear();
 
-	foreach(PhGraphicRect * gCut, _graphicCuts.values())
+	foreach(PhGraphicSolidRect * gCut, _graphicCuts.values())
 		delete gCut;
 	_graphicCuts.clear();
 
@@ -108,82 +92,6 @@ void PhGraphicStripView::clearData()
 	foreach(PhGraphicRect * gOff, _graphicOffs.values())
 		delete gOff;
 	_graphicOffs.clear();
-}
-
-void PhGraphicStripView::updateView()
-{
-	PHDEBUG << "updateView";
-	if(!_currentFont)
-	{
-		PHDEBUG << "The font has not been initialised";
-		return;
-	}
-
-	clearData();
-
-/*	// Load the peoples
-	foreach(PhPeople * people, _doc.getPeoples())
-	{
-		PhGraphicText * gPeople = new PhGraphicText(_currentFont, people->getName());
-		gPeople->setColor(QColor(people->getColor()));
-		gPeople->setWidth(people->getName().length() * 16);
-
-		gPeople->init();
-
-		_graphicPeoples[people] = gPeople;
-	}
-
-	PHDEBUG << "people loaded" ;
-
-	//Load the texts
-	foreach(PhStripText * text, _doc.getTexts())
-	{
-		PhGraphicText * gText = new PhGraphicText( _currentFont, text->getContent());
-
-		gText->setZ(-1);
-		if(text->getPeople())
-			gText->setColor(QColor(text->getPeople()->getColor()));
-		gText->setFont(_currentFont);
-
-		gText->init();
-
-		_graphicTexts[text] = gText;
-	}
-
-	PHDEBUG << "text loaded" ;
-
-	//Load the cuts
-	foreach(PhStripCut * cut, _doc.getCuts())
-	{
-		PhGraphicSolidRect *gCut = new PhGraphicSolidRect();
-		gCut->setColor(QColor(0, 0, 0));
-		gCut->setZ(-2);
-
-		_graphicCuts[cut] = gCut;
-	}
-
-	//Load the loops
-	foreach(PhStripLoop * loop, _doc.getLoops())
-	{
-		PhGraphicLoop *gLoop = new PhGraphicLoop();
-		gLoop->setColor(QColor(0, 0, 0, 1));
-		_graphicLoops[loop] = gLoop;
-	}
-
-	PHDEBUG << "loops loaded" ;
-
-	//Load the offs
-	foreach(PhStripOff * off, _doc.getOffs())
-	{
-		PhGraphicSolidRect *gOff = new PhGraphicSolidRect();
-		if(off->getPeople())
-			gOff->setColor(QColor(off->getPeople()->getColor()));
-		gOff->setZ(-2);
-
-		_graphicOffs[off] = gOff;
-	}
-
-	PHDEBUG << "offs loaded" ;*/
 }
 
 void PhGraphicStripView::paint()
@@ -213,19 +121,19 @@ void PhGraphicStripView::paint()
 
     //Draw backgroung picture
 	int n = width / height + 2; // compute how much background repetition do we need
-	_stripBackgroundImage->setTextureCoordinate(n, 1);
+	_stripBackgroundImage.setTextureCoordinate(n, 1);
 	long leftBG = 0;
 	if(left >= 0)
 		leftBG -= offset % height;
 	else
 		leftBG -= height - ((-offset) % height);
-	_stripBackgroundImage->setX(leftBG - syncBar_X_FromLeft);
-	_stripBackgroundImage->setSize(height * n, height);
-	_stripBackgroundImage->draw();
+	_stripBackgroundImage.setX(leftBG - syncBar_X_FromLeft);
+	_stripBackgroundImage.setSize(height * n, height);
+	_stripBackgroundImage.draw();
 
-	_stripSyncBar->setSize(4, height);
-	_stripSyncBar->setPosition(width/6, 0, -1);
-	_stripSyncBar->draw();
+	_stripSyncBar.setSize(4, height);
+	_stripSyncBar.setPosition(width/6, 0, -1);
+	_stripSyncBar.draw();
 
 	int minSpaceBetweenPeople = 50;
 	int spaceBetweenPeopleAndText = 4;
@@ -240,12 +148,11 @@ void PhGraphicStripView::paint()
 		PhGraphicText* gText = _graphicTexts[text];
 		if(gText == NULL)
 		{
-			gText = new PhGraphicText( _currentFont, text->getContent());
+			gText = new PhGraphicText( &_font, text->getContent());
 
 			gText->setZ(-1);
 			if(text->getPeople())
 				gText->setColor(QColor(text->getPeople()->getColor()));
-			gText->setFont(_currentFont);
 
 			gText->init();
 
@@ -276,7 +183,7 @@ void PhGraphicStripView::paint()
 			PhGraphicText * gPeople = _graphicPeoples[people];
 			if(gPeople == NULL)
 			{
-				gPeople = new PhGraphicText(_currentFont, people->getName());
+				gPeople = new PhGraphicText(&_font, people->getName());
 				gPeople->setColor(QColor(people->getColor()));
 				gPeople->setWidth(people->getName().length() * 16);
 				gPeople->setZ(-1);
@@ -300,7 +207,7 @@ void PhGraphicStripView::paint()
 	{
 		if( (cut->getTimeIn() > frameIn) && (cut->getTimeIn() < frameOut))
 		{
-			PhGraphicRect *gCut = _graphicCuts[cut];
+			PhGraphicSolidRect *gCut = _graphicCuts[cut];
 			if(gCut == NULL)
 			{
 				gCut = new PhGraphicSolidRect();
@@ -345,7 +252,7 @@ void PhGraphicStripView::paint()
 	{
 		if( ! (((off->getTimeIn() < frameIn) && (off->getTimeOut() < frameIn)) || ((off->getTimeIn() > frameOut) && (off->getTimeOut() > frameOut))) )
 		{
-			PhGraphicRect *gOff = _graphicOffs[off];
+			PhGraphicSolidRect *gOff = _graphicOffs[off];
 			if(gOff == NULL)
 			{
 				gOff = new PhGraphicSolidRect();

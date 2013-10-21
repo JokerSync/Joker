@@ -17,10 +17,7 @@ MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 	ui->setupUi(this);
 	_stripView = ui->stripView;
 
-	QString fontName = _settings->value("StripFontName", "Arial").toString();
-	if(!_stripView->setFont(fontName))
-		PHDEBUG << "The font has not been initialized : " << fontName;
-
+	_stripView->setSettings(_settings);
 	_doc = _stripView->doc();
 	_clock = _stripView->clock();
 
@@ -193,10 +190,9 @@ void MainWindow::on_actionNext_Element_triggered()
 void MainWindow::on_actionFull_Screen_triggered()
 {
 	if(this->windowState() != Qt::WindowFullScreen)
-	this->setWindowState(Qt::WindowFullScreen);
-
+		this->setWindowState(Qt::WindowFullScreen);
 	else
-	this->setWindowState(Qt::WindowMinimized);
+		this->setWindowState(Qt::WindowMinimized);
 }
 
 void MainWindow::on_actionStrip_Properties_triggered()
@@ -207,13 +203,10 @@ void MainWindow::on_actionStrip_Properties_triggered()
 
 void MainWindow::on_actionChange_font_triggered()
 {
-	bool ok;
-	QFont font = QFontDialog::getFont(&ok, this);
-	if(ok)
+	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
+	if(QFile(fontFile).exists())
 	{
-		if(_stripView->setFont(font.family()))
-			_settings->setValue("StripFontName", font.family());
-		else
-			QMessageBox::critical(this, "Error", "Unable to open " + font.family());
+		if(!_stripView->setFontFile(fontFile))
+			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
 	}
 }

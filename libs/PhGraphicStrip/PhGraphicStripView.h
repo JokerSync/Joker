@@ -8,6 +8,8 @@
 #ifndef PHGRAPHICSTRIPVIEW_H
 #define PHGRAPHICSTRIPVIEW_H
 
+#include <QSettings>
+
 #include "PhStrip/PhStripDoc.h"
 
 #include "PhGraphic/PhGraphicView.h"
@@ -68,12 +70,14 @@ public:
 	 */
 	PhClock * clock();
 
+	void setSettings(QSettings * settings);
+
 	/**
-	 * Set the current font with the font in param and re-initialize the OpenGL content
+	 * Set the font used to render text on the strip.
 	 * @param fontfile Font file path
-	 * @return true if the operation succeeds, false otherwise
+	 * @return true if the operation succeeds, false otherwise.
 	 */
-	bool setFont(QString fontName);
+	bool setFontFile(QString fontFile);
 
 
 protected:
@@ -82,15 +86,13 @@ protected:
 
 	void paint();
 
-	/**
-	 * @brief PhGraphicStripView::clearData
-	 *Clear _texts and _imgs
-	 */
-	void clearData();
 
 
 private slots:
-	void updateView();
+	/**
+	 * @brief Clear all the graphic strip object related to the PhStripDoc.
+	 */
+	void clearData();
 
 private :
 
@@ -103,36 +105,36 @@ private :
 	PhClock _clock;
 
 	/**
-	 * @brief _currentFont
-	 * The current PhFont used to draw text
+	 * @brief The PhFont used to draw text
 	 */
-	PhFont *_currentFont;
+	PhFont _font;
 
 	/**
 	 *Background Image used for the strip band
      */
-	PhGraphicImage * _stripBackgroundImage;
+	PhGraphicImage _stripBackgroundImage;
 
-	PhGraphicSolidRect * _stripSyncBar;
+	PhGraphicSolidRect _stripSyncBar;
 
 	QMap<PhPeople*, PhGraphicText*> _graphicPeoples;
 
 	QMap<PhStripText*, PhGraphicText*> _graphicTexts;
 
-	QMap<PhStripCut*, PhGraphicRect*> _graphicCuts;
+	QMap<PhStripCut*, PhGraphicSolidRect*> _graphicCuts;
 
 	QMap<PhStripLoop*, PhGraphicLoop*> _graphicLoops;
 
-	QMap<PhStripOff*, PhGraphicRect*> _graphicOffs;
+	QMap<PhStripOff*, PhGraphicSolidRect*> _graphicOffs;
 
 	/**
 	 * @brief _test
 	 * QTime for testing performance
 	 */
-	QTime *_test;
+	QTime _test;
 
 	int _trackNumber;
 
+	QSettings * _settings;
 };
 
 #endif // PhGraphicStripView_H
