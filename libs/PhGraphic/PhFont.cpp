@@ -67,10 +67,9 @@ bool PhFont::init()
 		{
 			int minx, maxx, miny, maxy, advance;
 			TTF_GlyphMetrics(_font, ch, &minx,&maxx, &miny, &maxy, &advance);
-			//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance;
 			if(advance != 0)
 			{
-				// Temporary surface of the character
+				// First render the glyph to a surface
 				SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(_font, ch, color);
 				if (!glyphSurface)
 					PHDEBUG << "Error during the Render Glyph of " << (char) ch << SDL_GetError();
@@ -81,8 +80,9 @@ bool PhFont::init()
 				glyphRect.h = glyphSurface->h;
 				if(glyphRect.h > _glyphHeight)
 					_glyphHeight = glyphRect.h;
-				if(SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect ))
-					PHDEBUG << "Error during the blit of the glyph of" << (char) ch << SDL_GetError();
+				PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
+				// Then blit it to the matrix
+				SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect );
 
 				// Store information about the glyph
 				_glyphAdvance[ch] = advance;

@@ -25,7 +25,8 @@ bool GraphicTestView::init()
 	}
 
 	PHDEBUG << "Initialize _font";
-	_font = new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF", 150);
+	_font = new PhFont(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF", 100);
+//	_font = new PhFont("/Library/Fonts/Arial.ttf", 100);
 	if (! _font->init())
 	{
 		PHDEBUG << "_font not initialize";
@@ -33,7 +34,7 @@ bool GraphicTestView::init()
 	}
 
 	PHDEBUG << "Initialize _text";
-	_text = new PhGraphicText(_font, "The end");
+	_text = new PhGraphicText(_font, "The party is over!");
 	_text->setRect(50, 100, 500, 100);
 	_text->setColor(QColor(255, 0, 0));
 	_text->setZ(-1);
@@ -81,11 +82,11 @@ void GraphicTestView::paint()
 	_image->draw();
 
 	_rect->setColor(QColor(0, 255, 0));
-	_rect->setRect(50, 100, 500, 50);
+	_rect->setRect(50, 100, 500, 75);
 	_rect->draw();
 
 	_rect->setColor(QColor(0, 0, 255));
-	_rect->setRect(50, 150, 500, 50);
+	_rect->setRect(50, 175, 500, 25);
 	_rect->draw();
 
 	_text->setRect(50, 100, 500, 100);
