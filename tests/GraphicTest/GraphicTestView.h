@@ -20,6 +20,7 @@ class GraphicTestView : public PhGraphicView
 	Q_OBJECT
 public :
 	explicit GraphicTestView(QWidget *parent = 0);
+	bool setFontFile(QString fontFile);
 protected:
 	bool init();
 
