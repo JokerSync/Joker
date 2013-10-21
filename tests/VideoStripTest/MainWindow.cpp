@@ -23,10 +23,17 @@ MainWindow::MainWindow(QSettings *settings, QWidget *parent) :
 	_synchronizer.setStripClock(_strip->clock());
 
 	_synchronizer.setVideoClock(_videoEngine->clock());
+
+	if(_settings->value("fullScreen", false).toBool())
+	{
+		this->connect(&_fullScreenTimer, SIGNAL(timeout()), this, SLOT(on_actionFull_screen_triggered()));
+		_fullScreenTimer.start(1000);
+	}
 }
 
 MainWindow::~MainWindow()
 {
+	_settings->setValue("fullScreen", this->windowState() == Qt::WindowFullScreen);
 	delete ui;
 }
 
@@ -168,7 +175,6 @@ bool MainWindow::openVideoFile(QString videoFileName)
 	return false;
 }
 
-
 void MainWindow::on_actionSet_Time_Code_triggered()
 {
 	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _strip->clock()->frame());
@@ -185,5 +191,12 @@ void MainWindow::on_actionChange_font_triggered()
 		if(!_strip->setFontFile(fontFile))
 			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
 	}
+}
+
+
+void MainWindow::on_actionFull_screen_triggered()
+{
+	_fullScreenTimer.stop();
+	this->setWindowState(Qt::WindowFullScreen);
 }
 

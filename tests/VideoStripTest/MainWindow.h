@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QSettings>
+#include <QTimer>
 
 #include "VideoStripSynchronizer.h"
 #include "PhGraphicStrip/PhGraphicStrip.h"
@@ -63,6 +64,7 @@ private slots:
 
 	void on_actionChange_font_triggered();
 
+	void on_actionFull_screen_triggered();
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip *_strip;
@@ -70,6 +72,7 @@ private:
 	PhVideoEngine * _videoEngine;
 	VideoStripSynchronizer _synchronizer;
 	QSettings * _settings;
+	QTimer _fullScreenTimer;
 };
 
 #endif // MAINWINDOW_H
