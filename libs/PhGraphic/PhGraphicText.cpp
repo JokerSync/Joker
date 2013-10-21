@@ -11,17 +11,21 @@ PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int w,
 }
 
 
-void PhGraphicText::setContent(QString content){
+void PhGraphicText::setContent(QString content)
+{
 	_content = content;
 }
-void PhGraphicText::setFont(PhFont * font){
+void PhGraphicText::setFont(PhFont * font)
+{
 	_font = font;
 }
 
-QString PhGraphicText::getContent(){
+QString PhGraphicText::getContent()
+{
 	return _content;
 }
-PhFont * PhGraphicText::getFont(){
+PhFont * PhGraphicText::getFont()
+{
 	return _font;
 }
 
@@ -66,7 +70,7 @@ void PhGraphicText::draw()
 	// Display a string
 	for(int i = 0; i < _content.length(); i++)
 	{
-		int ch = (int)_content.at(i).toLatin1();
+		unsigned char ch = (unsigned char)_content.at(i).toLatin1();
 		if(_font->getAdvance(ch) > 0)
 		{
 			// computing texture coordinates

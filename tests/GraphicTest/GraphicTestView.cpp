@@ -7,7 +7,7 @@
 
 GraphicTestView::GraphicTestView(QWidget *parent)
 	: PhGraphicView( parent),
-	  _text1(&_font1, "The party is over!"),
+	  _text1(&_font1, "eéaàiîoô"),
 	  _text2(&_font2, "The party is over!")
 {
 }
@@ -42,7 +42,7 @@ bool GraphicTestView::init()
 	}
 
 	PHDEBUG << "Initialize _text";
-	_text1.setRect(50, 100, 500, 100);
+	_text1.setRect(50, 100, 100, 100);
 	_text1.setColor(QColor(255, 0, 0));
 	_text1.setZ(-1);
 
@@ -90,17 +90,34 @@ void GraphicTestView::paint()
 	_rect.setRect(50, 100, 500, 75);
 	_rect.draw();
 
-	_rect.setColor(QColor(0, 0, 255));
+	_rect.setColor(QColor(0, 255, 255));
 	_rect.setRect(50, 175, 500, 25);
 	_rect.draw();
 
 	_text1.setRect(50, 100, 500, 100);
 	_text1.draw();
 
-	_text2.draw();
+//	_text2.draw();
 
 
 
+	_font1.select();
+
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glColor3f(0, 0, 1);
+
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+
+	glBegin(GL_QUADS); 	//Begining the cube's drawing
+	{
+		glTexCoord3f(0, 0, 1);	glVertex3f(0,				0,				0);
+		glTexCoord3f(1, 0, 1);	glVertex3f(this->width(),	0,				0);
+		glTexCoord3f(1, 1, 1);	glVertex3f(this->width(),	this->height(),	0);
+		glTexCoord3f(0, 1, 1);	glVertex3f(0,				this->height(), 0);
+	}
+	glEnd();
 
 //	_text.setX(_text.getX() + 4);
 //	if(_text.getX() > this.width())

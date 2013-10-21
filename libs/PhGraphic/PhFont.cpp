@@ -104,13 +104,9 @@ bool PhFont::setFontFile(QString fontFile)
 	return true;
 }
 
-int PhFont::getAdvance(int ch)
+int PhFont::getAdvance(unsigned char ch)
 {
-	if (0 <= ch and ch < 256)
-		return _glyphAdvance[ch];
-
-	PHDEBUG << "The" << ch << "code is not an ASCII character";
-	return 0;
+	return _glyphAdvance[ch];
 }
 
 void PhFont::select()
