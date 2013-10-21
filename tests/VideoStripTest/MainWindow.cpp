@@ -7,16 +7,16 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QSettings *settings, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	_settings("Phonations", "VideoStripTest")
+	_settings(settings)
 {
 	ui->setupUi(this);
 	_strip = ui->videoStripView->strip();
 	_videoEngine = ui->videoStripView->videoEngine();
 
-	_strip->setSettings(&_settings);
+	_strip->setSettings(_settings);
 
 	_doc = _strip->doc();
 
@@ -48,6 +48,8 @@ void MainWindow::openFile(QString fileName)
 				_videoEngine->open(_doc->getVideoPath());
 				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
 			}
+
+			_settings->setValue("lastFile", fileName);
 		}
 	}
 }
