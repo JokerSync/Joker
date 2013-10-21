@@ -50,18 +50,18 @@ bool PhFont::init()
 	Uint32 gmask = 0x0000ff00;
 	Uint32 bmask = 0x00ff0000;
 	Uint32 amask = 0xff000000;
-	SDL_Surface * _glyphMatrix = SDL_CreateRGBSurface(0, 2048, 2048, 32, rmask, gmask, bmask, amask);
+	SDL_Surface * glyphMatrix = SDL_CreateRGBSurface(0, 2048, 2048, 32, rmask, gmask, bmask, amask);
 
 	// Font background color is transparent
 	Uint32 backgroundColor = 0x00000000;
-	SDL_FillRect(_glyphMatrix, NULL, backgroundColor);
+	SDL_FillRect(glyphMatrix, NULL, backgroundColor);
 
 	// Space between glyph
 	int space = 128;
 	_glyphHeight = 0;
 
 	// We get rid of the 32 first useless char
-	for(Uint16 ch = 32; ch < 256; ++ch)
+	for(Uint16 ch = 0; ch < 256; ++ch)
 	{
 		if(TTF_GlyphIsProvided(_font, ch))
 		{
@@ -81,11 +81,13 @@ bool PhFont::init()
 				glyphRect.h = glyphSurface->h;
 				if(glyphRect.h > _glyphHeight)
 					_glyphHeight = glyphRect.h;
-				if(SDL_BlitSurface( glyphSurface, NULL, _glyphMatrix, &glyphRect ))
+				if(SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect ))
 					PHDEBUG << "Error during the blit of the glyph of" << (char) ch << SDL_GetError();
 
 				// Store information about the glyph
 				_glyphAdvance[ch] = advance;
+
+				SDL_FreeSurface(glyphSurface);
 			}
 			else
 				PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
@@ -93,9 +95,6 @@ bool PhFont::init()
 		else
 			_glyphAdvance[ch] = 0;
 	}
-
-	// This is possible without switch because we manually set it up
-	GLenum textureFormat = GL_RGBA;
 
 	glEnable( GL_TEXTURE_2D );
 	// Have OpenGL generate a texture object handle for us
@@ -106,13 +105,14 @@ bool PhFont::init()
 
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
-	glTexImage2D( GL_TEXTURE_2D, 0, _glyphMatrix->format->BytesPerPixel, _glyphMatrix->w, _glyphMatrix->h, 0,
-				  textureFormat, GL_UNSIGNED_BYTE, _glyphMatrix->pixels);
+	glTexImage2D( GL_TEXTURE_2D, 0, glyphMatrix->format->BytesPerPixel, glyphMatrix->w, glyphMatrix->h, 0,
+				  GL_RGBA, GL_UNSIGNED_BYTE, glyphMatrix->pixels);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	SDL_FreeSurface(_glyphMatrix);
+	// Once the texture is created, the surface is no longer needed.
+	SDL_FreeSurface(glyphMatrix);
 
 	return true;
 }
