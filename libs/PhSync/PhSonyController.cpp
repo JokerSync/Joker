@@ -76,7 +76,7 @@ PhRate PhSonyController::computeRate(unsigned char data1, unsigned char data2)
 {
 	PhRate n1 = data1;
 	PhRate n2 = data2;
-	PhRate rate = this->computeRate(data1);
+	PhRate rate = computeRate(data1);
 	return rate + n2/256 * qPow(10, (n1+1)/32 - 2 - rate);
 }
 

@@ -67,6 +67,35 @@ public:
 	 */
 	PhClock *clock() { return &_clock; }
 
+	/**
+	 * @brief Compute the rate from the jog, varispeed and shuttle sony protocole
+	 * order data.
+	 *
+	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#jogFwd
+	 * @param data1 A one byte coded version of the rate.
+	 * @return The float value corresponding rate.
+	 */
+	static PhRate computeRate(unsigned char data1);
+
+	/**
+	 * Compute the rate from the jog, varispeed and shuttle sony protocole
+	 * order data.
+	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#jogFwd
+	 * @param data1 The first byte of the two bytes coded version of the rate.
+	 * @param data2 The second byte of the two bytes coded version of the rate.
+	 * @return The float value corresponding rate.
+	 */
+	static PhRate computeRate(unsigned char data1, unsigned char data2);
+
+	/**
+	 * Compute the jog, varispeed and shuttle sony protocole
+	 * order data from a rate
+	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#jogFwd
+	 * @param rate The float value rate.
+	 * @return A one byte coded version of the rate.
+	 */
+	static unsigned char computeData1FromRate(PhRate rate);
+
 signals:
 	/**
 	 * @brief This signal is triggered when a video sync event occurs on the serial port.
@@ -90,35 +119,6 @@ public slots:
 	virtual void onVideoSync() = 0;
 
 protected:
-	/**
-	 * @brief Compute the rate from the jog, varispeed and shuttle sony protocole
-	 * order data.
-	 *
-	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#jogFwd
-	 * @param data1 A one byte coded version of the rate.
-	 * @return The float value corresponding rate.
-	 */
-	PhRate computeRate(unsigned char data1);
-
-	/**
-	 * Compute the rate from the jog, varispeed and shuttle sony protocole
-	 * order data.
-	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#jogFwd
-	 * @param data1 The first byte of the two bytes coded version of the rate.
-	 * @param data2 The second byte of the two bytes coded version of the rate.
-	 * @return The float value corresponding rate.
-	 */
-	PhRate computeRate(unsigned char data1, unsigned char data2);
-
-	/**
-	 * Compute the jog, varispeed and shuttle sony protocole
-	 * order data from a rate
-	 * For more detail see http://www.belle-nuit.com/archives/9pin.html#jogFwd
-	 * @param rate The float value rate.
-	 * @return A one byte coded version of the rate.
-	 */
-	unsigned char computeData1FromRate(PhRate rate);
-
 	/**
 	 * @brief Process a single sony command.
 	 *
