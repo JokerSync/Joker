@@ -23,14 +23,12 @@ include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 SOURCES += main.cpp \
 	MainWindow.cpp \
     StripPropertiesDialog.cpp \
-    GenerateDialog.cpp \
-    GraphicStripView.cpp
+    GenerateDialog.cpp
 
 HEADERS += \
     MainWindow.h \
     StripPropertiesDialog.h \
-    GenerateDialog.h \
-    GraphicStripView.h
+    GenerateDialog.h
 
 FORMS += \
     MainWindow.ui \
