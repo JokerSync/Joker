@@ -3,11 +3,17 @@
 #include <QFileInfo>
 
 #include "PhStrip/PhStripDoc.h"
+#include "PhStrip/tests/PhStripDocTest.h"
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+	PhStripDocTest docTest;
+	int test = QTest::qExec(&docTest);
+	if(test)
+		return test;
+
 	// Creating a new doc:
 	PhStripDoc doc;
 
