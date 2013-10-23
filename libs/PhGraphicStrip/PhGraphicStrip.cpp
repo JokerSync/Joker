@@ -115,12 +115,16 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 	int fps = PhTimeCode::getFps(_clock.timeCodeType());
 	long syncBar_X_FromLeft = width / 6;
 	long offset = _clock.time() * pixelPerFrame * fps / _clock.timeScale() - syncBar_X_FromLeft;
+	long delay = (int)(_settings->value("delay", 0).toInt() * _clock.rate()); // delay in ms
+	// add the delay to the offset
+	offset += delay * pixelPerFrame * fps / 1000;
 	//Compute the visible duration of the strip
 	PhFrame stripDuration = width / pixelPerFrame;
 
+	PhFrame clockFrame = _clock.frame() + delay * fps / 1000;
 
-	PhFrame frameIn = _clock.frame() - syncBar_X_FromLeft;
-	PhFrame frameOut = _clock.frame() + stripDuration;
+	PhFrame frameIn = clockFrame - syncBar_X_FromLeft / pixelPerFrame;
+	PhFrame frameOut = frameIn + stripDuration;
 
     //Draw backgroung picture
 	int n = width / height + 2; // compute how much background repetition do we need
