@@ -170,7 +170,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		PhTime timeIn = text->getTimeIn();
 		PhTime timeOut = text->getTimeOut();
 
-		if( ! (((timeIn < frameIn) && (timeOut < frameIn)) || ((timeIn > frameOut) && (timeOut > frameOut))) )
+		if( ! ((timeOut < frameIn) || (timeIn > frameOut)) )
 		{
 			gText->setX(x + timeIn * pixelPerFrame - offset);
 			gText->setWidth((timeOut - timeIn) * pixelPerFrame);
@@ -260,7 +260,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 	foreach(PhStripOff * off, _doc.getOffs())
 	{
-		if( ! (((off->getTimeIn() < frameIn) && (off->getTimeOut() < frameIn)) || ((off->getTimeIn() > frameOut) && (off->getTimeOut() > frameOut))) )
+		if( ! (off->getTimeOut() < frameIn) || (off->getTimeIn() > frameOut) )
 		{
 			PhGraphicSolidRect *gOff = _graphicOffs[off];
 			if(gOff == NULL)
