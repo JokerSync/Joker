@@ -24,9 +24,9 @@ MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 
-	_clockSynchroniser.setPrimaryClock(_clock);
+	_clockSynchroniser.setSonyClock(_clock);
 	if(_sonySlave.open())
-		_clockSynchroniser.setSecondaryClock(_sonySlave.clock());
+		_clockSynchroniser.setStripClock(_sonySlave.clock());
 	else
 		QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
 }

@@ -4,8 +4,8 @@
 #include <QMainWindow>
 
 #include "PhGraphicStrip/PhGraphicStrip.h"
-#include "PhSync/PhClockSynchronizer.h"
 #include "PhSync/PhSonySlaveController.h"
+#include "SonyStripSynchronizer.h"
 
 namespace Ui {
 class MainWindow;
@@ -61,7 +61,7 @@ private:
 	PhClock *_clock;
 	QSettings * _settings;
 	PhSonySlaveController _sonySlave;
-	PhClockSynchronizer _clockSynchroniser;
+	SonyStripSynchronizer _clockSynchroniser;
 };
 
 #endif // MAINWINDOW_H
