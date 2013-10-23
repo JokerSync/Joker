@@ -27,7 +27,7 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="GraphicStripView" name="stripView" native="true"/>
+       <widget class="PhGraphicStripView" name="stripView" native="true"/>
       </item>
      </layout>
     </item>
@@ -243,9 +243,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>GraphicStripView</class>
+   <class>PhGraphicStripView</class>
    <extends>QWidget</extends>
-   <header>GraphicStripView.h</header>
+   <header>PhGraphicStrip/PhGraphicStripView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

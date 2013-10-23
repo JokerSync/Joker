@@ -1,14 +1,14 @@
-#ifndef GRAPHICSTRIPVIEW_H
-#define GRAPHICSTRIPVIEW_H
+#ifndef PHGRAPHICSTRIPVIEW_H
+#define PHGRAPHICSTRIPVIEW_H
 
 #include "PhGraphic/PhGraphicView.h"
 #include "PhGraphicStrip/PhGraphicStrip.h"
 
-class GraphicStripView : public PhGraphicView
+class PhGraphicStripView : public PhGraphicView
 {
 	Q_OBJECT
 public:
-	explicit GraphicStripView(QWidget *parent = 0);
+	explicit PhGraphicStripView(QWidget *parent = 0);
 
 	PhGraphicStrip * strip() { return &_strip;}
 protected:
@@ -19,4 +19,4 @@ private:
 	PhGraphicStrip _strip;
 };
 
-#endif // GRAPHICSTRIPVIEW_H
+#endif // PHGRAPHICSTRIPVIEW_H
