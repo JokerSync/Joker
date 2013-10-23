@@ -4,6 +4,8 @@
 #include <QGLWidget>
 #include <QTimer>
 
+#include "PhTools/PhTickCounter.h"
+
 /**
  * The PhGraphicView class is a canvas to create your custom graphic view.
  * Create your PhGraphicView child, initialize your graphic object with init(),
@@ -30,6 +32,8 @@ public:
 	 */
 	void resizeGL(int width, int height);
 
+	int refreshRate() { return _frameTickCounter.frequency();}
+
 protected:
 
 
@@ -51,6 +55,7 @@ private:
      * used to draw
      */
     QTimer *t_Timer;
+	PhTickCounter _frameTickCounter;
 };
 
 #endif // PHGRAPHICVIEW
