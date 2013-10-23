@@ -85,6 +85,7 @@ void PhVideoEngine::close()
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
+	_clock.tick(60);
 	goToFrame(_clock.frame());
 	videoRect.setRect(x, y, w, h);
 	videoRect.draw();
@@ -165,6 +166,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 
 				textureElapsed = _testTimer.elapsed();
 
+				_videoFrameTickCounter.tick();
 				result = true;
 				break;
 			}
@@ -173,9 +175,9 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	}
 
 	int currentGotoElapsed = _testTimer.elapsed();
-	if(_testTimer.elapsed() > 25)
-		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
-				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
+//	if(_testTimer.elapsed() > 25)
+//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
+//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
 	_testTimer.restart();
 
 	return result;

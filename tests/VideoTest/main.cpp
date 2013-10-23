@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    PhDebug::init(false, true, true, true, true);
+	PhDebug::init(false, true, true, true, true, true, "VideoTest");
     MainView mainView;
 	mainView.resize(800, 600);
 

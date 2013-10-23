@@ -12,6 +12,7 @@ extern "C" {
 #include <QElapsedTimer>
 
 #include "PhTools/PhClock.h"
+#include "PhTools/PhTickCounter.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
 
 class PhVideoEngine : public QObject
@@ -37,6 +38,8 @@ public:
 	PhFrame frameStamp() { return _frameStamp;};
 
 	bool ready();
+
+	int refreshRate() { return _videoFrameTickCounter.frequency(); }
 private:
 	bool goToFrame(PhFrame frame);
 
@@ -53,6 +56,8 @@ private:
 	PhFrame _currentFrame;
 
 	QElapsedTimer _testTimer;
+	PhTickCounter _videoFrameTickCounter;
+
 };
 
 #endif // PHVIDEOENGINE_H

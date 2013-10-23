@@ -13,16 +13,6 @@
 
 #include "PhCommonUI/PhMediaPanel.h"
 
-#include "PhVideoSynchronizer.h"
-
-using namespace std;
-
-QT_BEGIN_NAMESPACE
-class QAbstractButton;
-class QSlider;
-class QLabel;
-QT_END_NAMESPACE
-
 namespace Ui {
 	class MainView;
 }
@@ -52,8 +42,6 @@ private slots:
 
 	void on_actionSet_timestamp_triggered();
 
-    void onTimeOut();
-
 	void on_actionOpen_triggered();
 
 	void on_actionReverse_triggered();
@@ -61,9 +49,6 @@ private slots:
 private:
 
 	Ui::MainView *ui;
-    PhClock _internalClock;
-	QTimer timer;
-    PhVideoSynchronizer _synchronizer;
 	PhVideoEngine _videoEngine;
 };
 
