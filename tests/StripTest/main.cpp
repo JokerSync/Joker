@@ -8,60 +8,36 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-
 	// Creating a new doc:
 	PhStripDoc doc;
 
-	// This bloc is used to test with a virtual file
-#if 1
-	// FYI : int nbPeople, int nbLoop, int nbText, int nbTrack
-	doc.createDoc(10, 3, 5, 3);
-	// This bloc is used to test with a real Detx file
-#else
 	//Check argument count
-	if (argc < 2)
+	if (argc > 1)
 	{
-		PHDEBUG << "Please provide a DetX file path as argument";
-		return 0;
+		// Open the DetX file in argument:
+		QString fileName(argv[1]);
+		doc.openDetX(fileName);
 	}
+	else
+		doc.createDoc("test", 3, 3, 9, 3, 0);
 
-	//Check if it's a DetX file
-	QFileInfo file (argv[1]);
-	QString ext = file.suffix();
-
-	if(ext != "detx")
-	{
-		PHDEBUG << "It's not a DetX file";
-		return 0;
-	}
-
-	// Open the DetX file in argument:
-	QString fileName(argv[1]);
-	doc.openDetX(fileName);
-#endif
 	// Display the title:
+	PHDEBUG << "title : " << doc.getTitle();
+	PHDEBUG << "video file : " << doc.getVideoPath();
+	PHDEBUG << "video timestamp" << PhTimeCode::stringFromFrame(doc.getVideoTimestamp(), doc.getTCType());
 
-	PHDEBUG << "title : " ;
-	PHDEBUG <<doc.getTitle();
-	PHDEBUG <<"-----------------------------";
-
-	// Display actors
-
+	// Display actors:
 	QMap<QString, PhPeople *> list_actors = doc.getPeoples();
-	PHDEBUG << "actors : ";
-	QMap<QString, PhPeople *>::iterator it;
-
-	for( it=list_actors.begin(); it!=list_actors.end() ; it++)
+	QMap<QString, PhPeople *>::iterator people;
+	PHDEBUG <<"--------- actors ---------";
+	for( people=list_actors.begin(); people!=list_actors.end() ; people++)
 	{
-		PHDEBUG << (*it)->getName();
+		PHDEBUG << (*people)->getName();
 	}
-
-	PHDEBUG <<"-----------------------------";
-
 
 	// Display text
 
-	PHDEBUG << "texts : ";
+	PHDEBUG <<"--------- texts ---------";
 	QString line;
 	PhPeople * lastPeople;
 
