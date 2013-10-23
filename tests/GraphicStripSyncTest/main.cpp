@@ -14,12 +14,19 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	MainWindow w;
+	QSettings settings("Phonations", "GraphicStripSyncTest");
+	MainWindow w(&settings);
 
 	if (argc > 1)
 	{
 		QString fileName = argv[1];
 		w.openFile(fileName);
+	}
+	else
+	{
+		QString lastFile = settings.value("lastFile", "").toString();
+		if(QFile(lastFile).exists())
+			w.openFile(lastFile);
 	}
 
     w.show();

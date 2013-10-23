@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "PhGraphicStrip/PhGraphicStripView.h"
+#include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhClockSynchronizer.h"
 #include "PhSync/PhSonySlaveController.h"
 
@@ -16,12 +16,10 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit MainWindow(QSettings *settings, QWidget *parent = 0);
 	~MainWindow();
 
 	void openFile(QString fileName);
-
-	PhGraphicStripView * getStripView(){return _stripView;};
 
 private slots:
 	void onOpenFile();
@@ -58,10 +56,10 @@ private slots:
 
 private:
 	Ui::MainWindow *ui;
-	PhGraphicStripView *_stripView;
+	PhGraphicStrip *_strip;
 	PhStripDoc *_doc;
 	PhClock *_clock;
-	QSettings _settings;
+	QSettings * _settings;
 	PhSonySlaveController _sonySlave;
 	PhClockSynchronizer _clockSynchroniser;
 };

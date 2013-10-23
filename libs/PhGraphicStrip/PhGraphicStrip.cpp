@@ -15,7 +15,8 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	QObject(parent),
 	_doc(this),
 	_clock(_doc.getTCType()),
-	_trackNumber(4)
+	_trackNumber(4),
+	_settings(NULL)
 {
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
@@ -44,7 +45,8 @@ bool PhGraphicStrip::setFontFile(QString fontFile)
 {
 	if(_font.setFontFile(fontFile))
 	{
-		_settings->setValue("StripFontFile", fontFile);
+		if(_settings)
+			_settings->setValue("StripFontFile", fontFile);
 		return true;
 	}
 	return false;
@@ -66,11 +68,12 @@ bool PhGraphicStrip::init()
 	_stripSyncBar.setColor(QColor(225, 86, 108));
 
 	// Load the font file
-	QString fontFile= _settings->value("StripFontFile", "").toString();
-	if(QFile(fontFile).exists())
-		_font.setFontFile(fontFile);
-	else
-		_font.setFontFile(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF");
+	QString fontFile = "";
+	if(_settings != NULL)
+		fontFile = _settings->value("StripFontFile", "").toString();
+	if(!QFile(fontFile).exists())
+		fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
+	_font.setFontFile(fontFile);
 
 	return true;
 }
