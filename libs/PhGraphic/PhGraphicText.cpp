@@ -57,15 +57,15 @@ void PhGraphicText::draw()
 
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-	int widthContent = 0;
+	int totalAdvance = 0;
 	//Compute the natural width of the content to scale it later
 	for(int i = 0; i < _content.length(); i++)
 	{
-		widthContent += _font->getAdvance(_content.at(i).toLatin1());
+		totalAdvance += _font->getAdvance(_content.at(i).toLatin1());
 	}
 
 	// Set the letter initial horizontal offset
-	int offset = _x;
+	int advance = 0;
 	float space = 0.0625f; // all glyph are in a 1/16 x 1/16 box
 	// Display a string
 	for(int i = 0; i < _content.length(); i++)
@@ -81,13 +81,14 @@ void PhGraphicText::draw()
 
 			// computing quads coordinate;
 			int h = _h * 128 / _font->getHeight();
-			int w = _w * 128 / widthContent;
+			int w = _w * 128 / totalAdvance;
 
 			//        (tu1, tv1) --- (tu2, tv1)
 			//            |              |
 			//            |              |
 			//        (tu1, tv2) --- (tu2, tv2)
 
+			int offset = _x + advance * _w / totalAdvance;
 			glBegin(GL_QUADS); 	//Begining the cube's drawing
 			{
 				glTexCoord3f(tu1, tv1, 1);	glVertex3f(offset,		_y,	_z);
@@ -98,10 +99,9 @@ void PhGraphicText::draw()
 			glEnd();
 
 		}
-		// Shift the offset
-		offset += _font->getAdvance(ch) * _w / widthContent;
+		// Inc the advance
+		advance += _font->getAdvance(ch);
 	}
-
 
 	glDisable(GL_BLEND);
 
