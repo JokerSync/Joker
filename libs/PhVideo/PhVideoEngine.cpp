@@ -1,6 +1,7 @@
 #include "PhVideoEngine.h"
 
 PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
+	_settings(NULL),
 	_clock(PhTimeCodeType25),
 	_frameStamp(0),
 	_pFormatContext(NULL),
@@ -83,10 +84,18 @@ void PhVideoEngine::close()
 	}
 }
 
+void PhVideoEngine::setSettings(QSettings *settings)
+{
+	_settings = settings;
+}
+
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	_clock.tick(60);
-	goToFrame(_clock.frame());
+	PhFrame delay = 0;
+	if(_settings)
+		delay = _settings->value("delay", 0).toInt() * PhTimeCode::getFps(_clock.timeCodeType()) / 1000 * _clock.rate();
+	goToFrame(_clock.frame() + delay);
 	videoRect.setRect(x, y, w, h);
 	videoRect.draw();
 }
@@ -112,6 +121,9 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 
 	if(!ready())
 		return false;
+
+	int delay = 0;
+
 	if(frame < this->_frameStamp)
 		frame = this->_frameStamp;
 	if (frame >= this->_frameStamp + _pFormatContext->streams[_videoStream]->duration)

@@ -10,6 +10,7 @@ extern "C" {
 
 #include <QObject>
 #include <QElapsedTimer>
+#include <QSettings>
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTickCounter.h"
@@ -29,6 +30,9 @@ public:
 	 */
 	bool open(QString fileName);
 	void close();
+
+	void setSettings(QSettings *settings);
+
 	void drawVideo(int x, int y, int w, int h);
 
 	PhClock* clock() { return &_clock; };
@@ -43,6 +47,7 @@ public:
 private:
 	bool goToFrame(PhFrame frame);
 
+	QSettings *_settings;
 	PhClock _clock;
 	PhFrame _frameStamp;
 

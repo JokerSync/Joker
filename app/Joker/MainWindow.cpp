@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	_videoEngine = ui->videoStripView->videoEngine();
 
 	_strip->setSettings(&_settings);
+	_videoEngine->setSettings(&_settings);
 
 	_doc = _strip->doc();
 
