@@ -6,3 +6,5 @@ SOURCES += \
     ../../libs/PhGraphicStrip/PhGraphicStrip.cpp \
     ../../libs/PhGraphicStrip/PhGraphicStripView.cpp
 
+QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH};
+QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/SWENSON.TTF $${RESOURCES_PATH};
