@@ -8,7 +8,8 @@ SOURCES += \
 	../../libs/PhStrip/PhStripLoop.cpp \
 	../../libs/PhStrip/PhPeople.cpp \
     ../../libs/PhStrip/PhStripPeopleObject.cpp \
-    ../../libs/PhStrip/PhStripOff.cpp
+    ../../libs/PhStrip/PhStripOff.cpp \
+    ../../libs/PhStrip/tests/PhStripDocTest.cpp
 
 HEADERS += \
 	../../libs/PhStrip/PhStripDoc.h \
@@ -18,7 +19,8 @@ HEADERS += \
 	../../libs/PhStrip/PhStripLoop.h \
 	../../libs/PhStrip/PhPeople.h \
     ../../libs/PhStrip/PhStripPeopleObject.h \
-    ../../libs/PhStrip/PhStripOff.h
+    ../../libs/PhStrip/PhStripOff.h \
+    ../../libs/PhStrip/tests/PhStripDocTest.h
 
 # Windows specific
 win32 {
@@ -32,4 +34,4 @@ linux {
 mac {
 }
 
-
+QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/strip/test01.detx .;
