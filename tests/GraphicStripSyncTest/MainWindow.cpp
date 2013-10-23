@@ -7,16 +7,17 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	_settings("Phonations", "GraphicStripSyncTest"),
-	_sonySlave(PhTimeCodeType25, &_settings, this)
+	_settings(settings),
+	_sonySlave(PhTimeCodeType25, _settings, this)
 {
 	ui->setupUi(this);
-	_stripView = ui->stripView;
-	_doc = _stripView->doc();
-	_clock = _stripView->clock();
+	_strip = ui->stripView->strip();
+	_strip->setSettings(_settings);
+	_doc = _strip->doc();
+	_clock = _strip->clock();
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 
@@ -38,7 +39,6 @@ MainWindow::~MainWindow()
 void MainWindow::openFile(QString fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
-  //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 	if(QFile::exists(fileName))
 	{
 		if(_doc->openDetX(fileName))
@@ -46,6 +46,8 @@ void MainWindow::openFile(QString fileName)
 			_clock->setTimeCodeType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
 			this->setWindowTitle(fileName);
+			if(_settings)
+				_settings->setValue("lastFile", fileName);
 		}
 	}
 }
