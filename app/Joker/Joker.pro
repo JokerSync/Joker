@@ -40,17 +40,20 @@ SOURCES += main.cpp \
 	MainWindow.cpp \
 	VideoStripView.cpp \
 	SonyVideoStripSynchronizer.cpp \
-    AboutMenu.cpp
+    AboutMenu.cpp \
+    PreferencesDialog.cpp
 
 HEADERS += \
     MainWindow.h \
 	VideoStripView.h \
 	SonyVideoStripSynchronizer.h \
-    AboutMenu.h
+    AboutMenu.h \
+    PreferencesDialog.h
 
 FORMS += \
     MainWindow.ui \
-    AboutMenu.ui
+    AboutMenu.ui \
+    PreferencesDialog.ui
 
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
 

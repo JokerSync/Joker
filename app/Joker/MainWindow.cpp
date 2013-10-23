@@ -8,6 +8,7 @@
 #include "PhCommonUI/PhTimeCodeDialog.h"
 #include "PhCommonUI/PhFontDialog.h"
 #include "AboutMenu.h"
+#include "PreferencesDialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -211,3 +212,9 @@ void MainWindow::on_actionAbout_triggered()
 	menu.exec();
 }
 
+
+void MainWindow::on_actionPreferences_triggered()
+{
+	PreferencesDialog dlg(&_settings);
+	dlg.exec();
+}

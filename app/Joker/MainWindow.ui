@@ -42,6 +42,7 @@
     <addaction name="actionOpen"/>
     <addaction name="actionOpen_Video"/>
     <addaction name="actionAbout"/>
+    <addaction name="actionPreferences"/>
    </widget>
    <widget class="QMenu" name="menuControl">
     <property name="title">
@@ -199,6 +200,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences...</string>
    </property>
   </action>
  </widget>
