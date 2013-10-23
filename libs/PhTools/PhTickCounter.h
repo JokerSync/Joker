@@ -12,14 +12,15 @@ class PhTickCounter
 public:
 	PhTickCounter();
 
-	float frequency() { return _frequency; }
+	int frequency() { return _frequency; }
 
 public slots:
 	void tick();
 
 private:
 	QTime _timer;
-	float _frequency;
+	int _frequency;
+	int _tickCount;
 };
 
 #endif // TICKCOUNTER_H
