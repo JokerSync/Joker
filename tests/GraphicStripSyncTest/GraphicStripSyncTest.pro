@@ -23,9 +23,11 @@ include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 #Main app
 SOURCES += main.cpp \
 	MainWindow.cpp \
+    SonyStripSynchronizer.cpp
 
 HEADERS += \
     MainWindow.h \
+    SonyStripSynchronizer.h
 
 FORMS += \
     MainWindow.ui
