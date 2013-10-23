@@ -19,185 +19,158 @@ PhStripDoc::PhStripDoc(QObject *parent) :
 
 bool PhStripDoc::openDetX(QString fileName)
 {
-	PHDEBUG << "PhStripDoc::openDetX : " << fileName;
+	PHDEBUG << fileName;
     if (!QFile(fileName).exists())
 	{
-		PHDEBUG << "this file doesn't exist" ;
+		PHDEBUG << "The file doesn't exists" << fileName;
         return false;
 	}
 
 	_filePath = fileName;
 
-    QDomDocument *DetX = new QDomDocument("/text.xml"); // Création de l'objet DOM
-    QFile xml_doc(fileName);// On choisit le fichier contenant les informations XML.
-    if(!xml_doc.open(QIODevice::ReadOnly))// Si l'on n'arrive pas à ouvrir le fichier XML.
+	// Opening the XML file
+    QFile xmlFile(fileName);
+    if(!xmlFile.open(QIODevice::ReadOnly))
     {
-        PHDEBUG << ("Le document XML n'a pas pu être ouvert. Vérifiez que le nom est le bon et que le document est bien placé");
+		PHDEBUG << "Unable to open" << fileName;
         return false;
-    }
-    if (!DetX->setContent(&xml_doc)) // Si l'on n'arrive pas à associer le fichier XML à l'objet DOM.
-    {
-        xml_doc.close();
-        PHDEBUG << ("Le document XML n'a pas pu être attribué à l'objet QDomDocument.");
-        return false;
-    }
-    else
-    {
-        PHDEBUG << ("The file \"" + fileName + "\" is now open.");
-        PHDEBUG << "-----------------------------";
     }
 
+	// Loading the DOM (document object model)
+	QDomDocument *domDoc = new QDomDocument();
+	if (!domDoc->setContent(&xmlFile))
+    {
+        xmlFile.close();
+		PHDEBUG << "The XML document seems to be bad formed " << fileName;
+        return false;
+    }
+
+	PHDEBUG << ("Start parsing " + fileName);
 
     reset();
-    //Find the first title
-    _title = DetX->elementsByTagName("title").at(0).toElement().text();
-    //Find possible subtitles (start from title'num') with  2 <= num <= +∞
-	int i = 2;
-	while(DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text() != ""){
-		_title += " - " + DetX->elementsByTagName("title" + QString::number(i)).at(0).toElement().text();
-		i++;
 
+	QDomElement detX = domDoc->documentElement();
+
+	if(detX.tagName() != "detx")
+	{
+		xmlFile.close();
+		PHDEBUG << "Bad root element :" << detX.tagName();
+		return false;
 	}
 
-    //Find the videoPath
-    _videoPath = DetX->elementsByTagName("videofile").at(0).toElement().text();
-
-    //Find the videoTimeStamp
-    _videoTimestamp = PhTimeCode::frameFromString(DetX->elementsByTagName("videofile").at(0).toElement().attribute("timestamp"),
-												  _tcType);
-
-    //Find the last position
-    _lastFrame = PhTimeCode::frameFromString(DetX->elementsByTagName("last_position").at(0).toElement().attribute("timecode"),
-												_tcType);
-
-
-    //With DetX files, fps is always 25 no drop
+	//With DetX files, fps is always 25 no drop
     _tcType = PhTimeCodeType25;
     _timeScale = 25.00;
 
-
-    //Find the actors
-    QDomNodeList charList = DetX->elementsByTagName("role");
-    for (int i=0; i < charList.length(); i++)
-    {
-        QDomElement chara = charList.at(i).toElement();
-		PhPeople *people = new PhPeople(chara.attribute("name"), chara.attribute("color"));
-
-        //Currently using id as key instead of name
-        _peoples[chara.attribute("id")] = people;
-    }
-
-    //Find the cut list
-    QDomNodeList shotList = DetX->elementsByTagName("shot");
-    for (int i=0; i < shotList.length(); i++)
-    {
-        _cuts.push_back(new PhStripCut(PhStripCut::Simple , PhTimeCode::frameFromString(shotList.at(i).toElement().attribute("timecode"),
-																						 _tcType)));
-    }
-
-
-	//Find the loop list
-	QDomNodeList loops = DetX->elementsByTagName("loop");
-
-	for(int i = 0; i < loops.length(); i++)
+	// Reading the header
+	if(detX.elementsByTagName("header").count())
 	{
-		_loops.push_back(new PhStripLoop((i + 1), PhTimeCode::frameFromString(loops.at(i).toElement().attribute("timecode"),
-																			 _tcType)));
-	}
+		QDomElement header = detX.elementsByTagName("header").at(0).toElement();
 
-	//Find the off list
-	QDomNodeList lineList = DetX->elementsByTagName("line");
+		// Reading Cappella version : TODO
 
-	for(int i = 0; i < lineList.length(); i++)
-	{
-		QDomElement lineElem = lineList.at(i).toElement();
-		QString type = lineElem.attribute("voice");
+		// Reading the title
+		if(header.elementsByTagName("title").count())
+			_title = detX.elementsByTagName("title").at(0).toElement().text();
 
-		if(type.compare("off") == 0)
+		// Reading the video path
+		if(header.elementsByTagName("videofile").count())
 		{
-			QString id = lineElem.toElement().attribute("role");
+			QDomElement videoFile = header.elementsByTagName("videofile").at(0).toElement();
+			_videoPath = videoFile.text();
+			// Reading the video framestamp
+			_videoFrameStamp = PhTimeCode::frameFromString(videoFile.attribute("timestamp"), _tcType);
+		}
 
-			int track = lineElem.attribute("track").toInt();
+		// Reading the last position
+		if(header.elementsByTagName("last_position").count())
+		{
+			QDomElement lastPosition = header.elementsByTagName("last_position").at(0).toElement();
+			_lastFrame = PhTimeCode::frameFromString(lastPosition.attribute("timecode"), _tcType);
 
-			//lineElem.elementsByTagName("lipsync")
-
-			for(int j = 0; j < lineElem.childNodes().length(); j++)
-			{
-				int start = 0;
-				int end = 0;
-
-				if(lineElem.childNodes().at(j).nodeName() == "text")
-					start = PhTimeCode::frameFromString(lineElem.childNodes().at(j-1).toElement().attribute("timecode"), _tcType);
-
-				while(lineElem.childNodes().at(j+2).nodeName() == "text")
-					j=j+2;
-
-				if (!lineElem.childNodes().at(j+1).isNull())
-				{
-					end = PhTimeCode::frameFromString(lineElem.childNodes().at(j+1).toElement().attribute("timecode"), _tcType);
-				}
-#warning TODO : handles zero lenght text
-				else
-				{
-					// One char is ~1.20588 frame
-					end = start + lineElem.childNodes().at(j).toElement().text().length() * 1.20588 + 1;
-				}
-
-				_offs.push_back(new PhStripOff(start, _peoples[id], end, track));
-			}
+			// Reading the last track : TODO
 		}
 	}
 
-//	QDomNodeList lineList = DetX->elementsByTagName("line");
+    // Reading the "role" lists
+	if(detX.elementsByTagName("roles").count())
+	{
+		QDomElement roles = detX.elementsByTagName("roles").at(0).toElement();
+		QDomNodeList roleList = roles.elementsByTagName("role");
+		for (int i = 0; i < roleList.length(); i++)
+		{
+			QDomElement role = roleList.at(i).toElement();
+			PhPeople *people = new PhPeople(role.attribute("name"), role.attribute("color"));
 
-//	for(int i = 0; i < lineList.length(); i++)
-//	{
-//		QString id = lineList.at(i).toElement().attribute("role");
-//		QString type = lineList.at(i).toElement().attribute("voice");
-//		QString text = "";
+			//Currently using id as key instead of name
+			_peoples[role.attribute("id")] = people;
+		}
+    }
 
-//		bool voiceOff = type.compare("off");
+#warning TODO try reading first loop number if possible
+	int loopNumber = 1;
 
-//		int track = lineList.at(i).toElement().attribute("track").toInt();
+	// Reading the strip body
+	if(detX.elementsByTagName("body").count())
+	{
+		QDomElement body = detX.elementsByTagName("body").at(0).toElement();
+		for(int i = 0; i < body.childNodes().length(); i++)
+		{
+			if(body.childNodes().at(i).isElement())
+			{
+				QDomElement elem = body.childNodes().at(i).toElement();
 
-//		QDomNodeList lineElemts = lineList.at(i);
-
-
-//		for (int j = 0; j < lineElemts.length(); j++)
-//		{
-//			if(lineElemts.at(j).nodeValue().compare("lipsync"))
-//			{
-//				int TimeIn = PhTimeCode::frameFromString(lineElemts.at(j).toElement().attribute("timecode"),
-//														 PhTimeCodeType25);
-
-
-//			}
-//		}
-//	}
-
-    //Find the text list
-    for (int i=0; i < lineList.length(); i++)
-    {
-        QDomNode currentLine = lineList.at(i);
-		QString id = currentLine.toElement().attribute("role");
-        for(int j = 0; j < currentLine.childNodes().length(); j++){
-
-			if(currentLine.childNodes().at(j).nodeName() == "text"){
-				int start = PhTimeCode::frameFromString(currentLine.childNodes().at(j-1).toElement().attribute("timecode"), _tcType);
-                int end = 0;
-                if (!currentLine.childNodes().at(j+1).isNull()){
-					end = PhTimeCode::frameFromString(currentLine.childNodes().at(j+1).toElement().attribute("timecode"), _tcType);
-                }
-                else
-                {
-                    // One char is ~1.20588 frame
-                    end = start + currentLine.childNodes().at(j).toElement().text().length() * 1.20588 + 1;
-                }
-                splitText(_peoples[id], start, end,
-                          currentLine.childNodes().at(j).toElement().text(), currentLine.toElement().attribute("track").toInt(),
-                          0 );
-            }
-        }
+				// Reading loops
+				if(elem.tagName() == "loop")
+					_loops.append(new PhStripLoop(loopNumber++,
+								PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
+				// Reading cuts
+				else if(elem.tagName() == "shot")
+					_cuts.append(new PhStripCut(PhStripCut::Simple,
+								PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
+				else if(elem.tagName() == "line")
+				{
+					PhFrame frameIn = -1;
+					PhFrame lastFrame = -1;
+					PhPeople *people = _peoples[elem.attribute("role")];
+					int track = elem.attribute("track").toInt();
+					QString currentText = "";
+					for(int j = 0; j < elem.childNodes().length(); j++)
+					{
+						if(elem.childNodes().at(j).isElement())
+						{
+							QDomElement lineElem = elem.childNodes().at(j).toElement();
+							if(lineElem.tagName() == "lipsync")
+							{
+								if(lineElem.attribute("link") != "off")
+								{
+									PhFrame frame = PhTimeCode::frameFromString(lineElem.attribute("timecode"), _tcType);
+									if(frameIn < 0)
+										frameIn = frame;
+									if(currentText.length())
+									{
+										_texts.append(new PhStripText(lastFrame, people, frame, track, currentText));
+										currentText = "";
+									}
+									lastFrame = frame;
+								}
+							}
+							else if(lineElem.tagName() == "text")
+								currentText += lineElem.text();
+						}
+					}
+					// Handling line with no lipsync out
+					if(currentText.length())
+					{
+						PhFrame frame = lastFrame + currentText.length();
+						_texts.append(new PhStripText(lastFrame, people, frame, track, currentText));
+						lastFrame = frame;
+					}
+					if(elem.attribute("voice") == "off")
+						_offs.append(new PhStripOff(frameIn, people, lastFrame, track));
+				}
+			}
+		}
 	}
 
 	emit this->changed();
@@ -211,8 +184,8 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbLoop, int nbText, i
 	_title = "Fake file";
 	_tcType = PhTimeCodeType25;
 	_timeScale = 25.00;
-	_videoTimestamp = videoTimeCode;
-	_lastFrame = _videoTimestamp;
+	_videoFrameStamp = videoTimeCode;
+	_lastFrame = _videoFrameStamp;
 
 	if (nbTrack > 4 || nbTrack < 1)
 		nbTrack = 3;
@@ -233,7 +206,7 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbLoop, int nbText, i
 		idList.append(people->getName());
 	}
 
-	int position = _videoTimestamp;
+	int position = _videoFrameStamp;
 	// Creation of the text
 	for (int i=0; i < nbText; i++)
 	{
@@ -266,7 +239,7 @@ void PhStripDoc::reset()
 	_timeScale = 25; //TODO fix me
 	_title = QString();
 	_videoPath = QString();
-	_videoTimestamp = 0;
+	_videoFrameStamp = 0;
 
 	emit this->changed();
 }
@@ -419,7 +392,7 @@ QString PhStripDoc::getVideoPath()
 
 int PhStripDoc::getDuration()
 {
-	return _texts.last()->getTimeOut() - _videoTimestamp;
+	return _texts.last()->getTimeOut() - _videoFrameStamp;
 }
 
 PhTimeCodeType PhStripDoc::getTCType()
@@ -434,7 +407,7 @@ QString PhStripDoc::getTitle()
 
 PhTime PhStripDoc::getVideoTimestamp()
 {
-    return _videoTimestamp;
+    return _videoFrameStamp;
 }
 
 PhTime PhStripDoc::getLastFrame()

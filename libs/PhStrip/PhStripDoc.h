@@ -151,7 +151,7 @@ private:
     /**
      * Starting time of the video content refered by the videoPath : String
      */
-    PhTime _videoTimestamp;
+    PhTime _videoFrameStamp;
     /**
      * @brief _lastPosition
      */
