@@ -28,6 +28,8 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 PhGraphicView::~PhGraphicView()
 {
 	t_Timer->stop();
+	TTF_Quit();
+	SDL_Quit();
 }
 
 void PhGraphicView::initializeGL()
