@@ -232,6 +232,11 @@
     <string>Generate...</string>
    </property>
   </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

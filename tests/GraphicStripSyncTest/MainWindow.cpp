@@ -6,6 +6,7 @@
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
+#include "PreferencesDialog.h"
 
 MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 	QMainWindow(parent),
@@ -152,4 +153,13 @@ void MainWindow::on_actionGo_To_triggered()
 	if(dlg.exec() == QDialog::Accepted)
 		_clock->setFrame(dlg.frame());
 
+}
+
+void MainWindow::on_actionPreferences_triggered()
+{
+	PreferencesDialog dlg(_settings);
+	if(dlg.exec() == QDialog::Accepted)
+		PHDEBUG << "accepted";
+	else
+		PHDEBUG << "canceled";
 }
