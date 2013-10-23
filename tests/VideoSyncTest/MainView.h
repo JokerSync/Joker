@@ -41,10 +41,8 @@ private slots:
 
 	void onOpenFile();
 private:
-
 	Ui::MainView *ui;
-	PhClock *_clock;
-	QTimer timer;
+	PhVideoEngine _videoEngine;
 };
 
 #endif
