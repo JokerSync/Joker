@@ -7,23 +7,15 @@
 #include <QFileDialog>
 
 #include "PhCommonUI/PhTimeCodeDialog.h"
-#include "PhVideoSynchronizer.h"
 
 MainView::MainView()
 	: QMainWindow(0),
-      ui(new Ui::MainView), _internalClock(PhTimeCodeType25)
+      ui(new Ui::MainView)//, _internalClock(PhTimeCodeType25)
 {
 	ui->setupUi(this);
-    ui->mediaController->setClock(&_internalClock);
+    ui->mediaController->setClock(_videoEngine.clock());
 
 	ui->_videoView->setEngine(&_videoEngine);
-
-    _synchronizer.setVideoClock(_videoEngine.clock());
-    _synchronizer.setInternalClock(&_internalClock);
-
-    connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
-
-	timer.start(40);
 }
 
 MainView::~MainView()
@@ -43,48 +35,41 @@ bool MainView::openFile(QString fileName)
 #warning TODO read first frame from video file
 		ui->mediaController->setFirstFrame(0);
 
-		_internalClock.setFrame(0);
-        _internalClock.setRate(1.0);
+		_videoEngine.clock()->setFrame(0);
+        _videoEngine.clock()->setRate(1.0);
 		return true;
     }
 	return false;
 }
 
-void MainView::onTimeOut()
-{
-    _internalClock.tick(25);
-}
-
-
-
 void MainView::on_actionPlay_pause_triggered()
 {
-    if(_internalClock.rate()!=0)
-        _internalClock.setRate(0);
+    if(_videoEngine.clock()->rate()!=0)
+        _videoEngine.clock()->setRate(0);
 	else
-        _internalClock.setRate(1);
+        _videoEngine.clock()->setRate(1);
 }
 
 void MainView::on_actionNext_frame_triggered()
 {
-    _internalClock.setFrame(_internalClock.frame() + 1);
+    _videoEngine.clock()->setFrame(_videoEngine.clock()->frame() + 1);
 }
 
 void MainView::on_actionPrevious_frame_triggered()
 {
-    _internalClock.setFrame(_internalClock.frame() - 1);
+    _videoEngine.clock()->setFrame(_videoEngine.clock()->frame() - 1);
 }
 
 void MainView::on_actionSet_timestamp_triggered()
 {
-    PhTimeCodeDialog dlg(_internalClock.timeCodeType(), _internalClock.frame());
+    PhTimeCodeDialog dlg(_videoEngine.clock()->timeCodeType(), _videoEngine.clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		PhFrame frameStamp = _videoEngine.frameStamp();
-        frameStamp += dlg.frame() - _internalClock.frame();
+        frameStamp += dlg.frame() - _videoEngine.clock()->frame();
 		_videoEngine.setFrameStamp(frameStamp);
 		ui->mediaController->setFirstFrame(frameStamp);
-        _internalClock.setFrame(dlg.frame());
+        _videoEngine.clock()->setFrame(dlg.frame());
 	}
 }
 
@@ -96,5 +81,5 @@ void MainView::on_actionOpen_triggered()
 
 void MainView::on_actionReverse_triggered()
 {
-    _internalClock.setRate(-1);
+    _videoEngine.clock()->setRate(-1);
 }
