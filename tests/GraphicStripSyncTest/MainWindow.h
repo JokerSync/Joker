@@ -54,6 +54,8 @@ private slots:
 
 	void on_actionGo_To_triggered();
 
+	void on_actionPreferences_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip *_strip;
