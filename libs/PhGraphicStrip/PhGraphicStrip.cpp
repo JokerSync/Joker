@@ -130,10 +130,11 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 	int n = width / height + 2; // compute how much background repetition do we need
 	_stripBackgroundImage.setTextureCoordinate(n, 1);
 	long leftBG = 0;
-	if(left >= 0)
+	if(offset >= 0)
 		leftBG -= offset % height;
 	else
 		leftBG -= height - ((-offset) % height);
+
 	_stripBackgroundImage.setX(x + leftBG);
 	_stripBackgroundImage.setY(y);
 	_stripBackgroundImage.setSize(height * n, height);
