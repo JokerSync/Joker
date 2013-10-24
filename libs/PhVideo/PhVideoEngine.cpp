@@ -122,8 +122,6 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	if(!ready())
 		return false;
 
-	int delay = 0;
-
 	if(frame < this->_frameStamp)
 		frame = this->_frameStamp;
 	if (frame >= this->_frameStamp + _pFormatContext->streams[_videoStream]->duration)
