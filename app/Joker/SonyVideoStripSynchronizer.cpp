@@ -85,10 +85,16 @@ void VideoStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType tc
 {
 	if(!_settingSonyFrame)
 	{
-#warning TODO handle frame difference error
-		_settingStripFrame = true;
-		_stripClock->setFrame(frame);
-		_settingStripFrame = false;
+#warning TODO test this
+		if(qAbs(frame - _stripClock->frame()) > 1)
+		{
+			_settingStripFrame = true;
+			_stripClock->setFrame(frame);
+			_settingStripFrame = false;
+			_settingVideoFrame = true;
+			_videoClock->setFrame(frame);
+			_settingVideoFrame = false;
+		}
 	}
 }
 
