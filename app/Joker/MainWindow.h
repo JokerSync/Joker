@@ -27,7 +27,7 @@ public:
 	bool openVideoFile(QString videoFileName);
 
 private slots:
-	void onOpenFile();
+	void on_actionOpen_triggered();
 
 	void on_actionPlay_pause_triggered();
 
