@@ -26,9 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	_doc = _strip->doc();
 
-#warning TODO use qt designer to connect actionOpen
-	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
-
 	_synchronizer.setStripClock(_strip->clock());
 
 	_synchronizer.setVideoClock(_videoEngine->clock());
@@ -66,7 +63,7 @@ void MainWindow::openFile(QString fileName)
 	}
 }
 
-void MainWindow::onOpenFile()
+void MainWindow::on_actionOpen_triggered()
 {
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
 	if(dlg.exec())
@@ -218,3 +215,4 @@ void MainWindow::on_actionPreferences_triggered()
 	PreferencesDialog dlg(&_settings);
 	dlg.exec();
 }
+
