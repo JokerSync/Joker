@@ -14,7 +14,7 @@ JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 
 # The application version
-VERSION = 1.0.5
+VERSION = 1.0.6
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
