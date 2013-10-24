@@ -61,7 +61,7 @@ void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, Q
 		PHDEBUG << "Done";
 		_clock->setTimeCodeType(_doc->getTCType());
 		_clock->setFrame(_doc->getLastFrame());
-		this->setWindowTitle("Working with a made up Detx");
+		this->setWindowTitle("GraphicStripTest");
 	}
 }
 
