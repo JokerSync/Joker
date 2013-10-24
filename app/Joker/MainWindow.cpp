@@ -165,7 +165,6 @@ void MainWindow::on_actionOpen_Video_triggered()
 		QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 }
 
-
 bool MainWindow::openVideoFile(QString videoFileName)
 {
 	QFileInfo fileInfo(videoFileName);
