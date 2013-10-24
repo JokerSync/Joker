@@ -53,11 +53,14 @@ void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType t
 
 void VideoStripSynchronizer::onStripRateChanged(PhRate rate)
 {
-	if(!_settingStripRate && _sonyClock)
+	if(!_settingStripRate)
 	{
-		_settingSonyRate = true;
-		_sonyClock->setRate(rate);
-		_settingSonyRate = false;
+		if(_sonyClock)
+		{
+			_settingSonyRate = true;
+			_sonyClock->setRate(rate);
+			_settingSonyRate = false;
+		}
 		_settingVideoRate = true;
 		_videoClock->setRate(rate);
 		_settingVideoRate = false;
@@ -66,12 +69,6 @@ void VideoStripSynchronizer::onStripRateChanged(PhRate rate)
 
 void VideoStripSynchronizer::onVideoFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-#warning TODO handle frame difference error
-	if(!_settingVideoFrame)
-	{
-		if(_stripClock->frame() != frame)
-			PHDEBUG << "error :" << _stripClock->frame() << frame;
-	}
 }
 
 void VideoStripSynchronizer::onVideoRateChanged(PhRate rate)
@@ -88,6 +85,7 @@ void VideoStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType tc
 {
 	if(!_settingSonyFrame)
 	{
+#warning TODO handle frame difference error
 		_settingStripFrame = true;
 		_stripClock->setFrame(frame);
 		_settingStripFrame = false;
