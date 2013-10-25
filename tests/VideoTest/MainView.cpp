@@ -13,7 +13,8 @@ MainView::MainView()
       ui(new Ui::MainView)//, _internalClock(PhTimeCodeType25)
 {
 	ui->setupUi(this);
-    ui->mediaController->setClock(_videoEngine.clock());
+	_mediaPanelDialog.setClock(_videoEngine.clock());
+	_mediaPanelDialog.show();
 
 	ui->_videoView->setEngine(&_videoEngine);
 }
@@ -31,15 +32,22 @@ bool MainView::openFile(QString fileName)
 		if(!_videoEngine.open(fileName))
 			return false;
 #warning TODO read media length from video file
-		ui->mediaController->setMediaLength(1000);
+		_mediaPanelDialog.setMediaLength(1000);
 #warning TODO read first frame from video file
-		ui->mediaController->setFirstFrame(0);
+		_mediaPanelDialog.setFirstFrame(0);
 
 		_videoEngine.clock()->setFrame(0);
         _videoEngine.clock()->setRate(1.0);
 		return true;
     }
 	return false;
+}
+
+void MainView::resizeEvent(QResizeEvent *)
+{
+	PHDEBUG << this->width() << this->height();
+	_mediaPanelDialog.move(this->x() + this->width() / 2 - _mediaPanelDialog.width() / 2,
+						   this->y() + this->height() * 0.95 - _mediaPanelDialog.height());
 }
 
 void MainView::on_actionPlay_pause_triggered()
@@ -68,7 +76,7 @@ void MainView::on_actionSet_timestamp_triggered()
 		PhFrame frameStamp = _videoEngine.frameStamp();
         frameStamp += dlg.frame() - _videoEngine.clock()->frame();
 		_videoEngine.setFrameStamp(frameStamp);
-		ui->mediaController->setFirstFrame(frameStamp);
+		_mediaPanelDialog.setFirstFrame(frameStamp);
         _videoEngine.clock()->setFrame(dlg.frame());
 	}
 }

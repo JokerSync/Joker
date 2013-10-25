@@ -11,7 +11,7 @@
 #include "PhVideo/PhVideoView.h"
 #include "PhVideo/PhVideoEngine.h"
 
-#include "PhCommonUI/PhMediaPanel.h"
+#include "PhCommonUI/PhMediaPanelDialog.h"
 
 namespace Ui {
 	class MainView;
@@ -33,6 +33,9 @@ public:
      */
     bool openFile(QString fileName);
 
+protected:
+	void resizeEvent(QResizeEvent *);
+
 private slots:
 	void on_actionPlay_pause_triggered();
 
@@ -50,6 +53,7 @@ private:
 
 	Ui::MainView *ui;
 	PhVideoEngine _videoEngine;
+	PhMediaPanelDialog _mediaPanelDialog;
 };
 
 #endif

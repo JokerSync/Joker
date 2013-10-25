@@ -35,7 +35,7 @@ public:
 	PhTimeCodeType timeCodeType() const;
 	void setFirstFrame(PhFrame firstFrame);
 	PhFrame getFirstFrame() const;
-	void setMediaLength(PhFrame mediaLength);
+	void setMediaLength(PhFrame length);
 	PhFrame getMediaLength();
 
 	void setClock(PhClock * clock);
@@ -69,8 +69,7 @@ private:
 	Ui::PhMediaPanel *ui;
 	PhClock *_clock;
 	PhFrame _firstFrame;
-	PhFrame _mediaLength;//number of frames of the file
-
+	PhFrame _mediaLength; //number of frames of the media
 };
 
 #endif // PHMEDIAPANEL_H
