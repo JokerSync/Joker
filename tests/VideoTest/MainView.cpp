@@ -30,16 +30,18 @@ bool MainView::openFile(QString fileName)
     QFileInfo fileInfo(fileName);
     if (fileInfo.exists())
     {
-		if(!_videoEngine.open(fileName))
-			return false;
+		if(_videoEngine.open(fileName))
+		{
+			this->setWindowTitle(fileName);
 #warning TODO read media length from video file
-		_mediaPanelDialog.setMediaLength(1000);
+			_mediaPanelDialog.setMediaLength(1000);
 #warning TODO read first frame from video file
-		_mediaPanelDialog.setFirstFrame(0);
+			_mediaPanelDialog.setFirstFrame(0);
 
-		_videoEngine.clock()->setFrame(0);
-        _videoEngine.clock()->setRate(1.0);
-		return true;
+			_videoEngine.clock()->setFrame(0);
+			_videoEngine.clock()->setRate(1.0);
+			return true;
+		}
     }
 	return false;
 }
