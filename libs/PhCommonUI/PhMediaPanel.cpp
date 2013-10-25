@@ -41,7 +41,7 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 
 	connect(ui->_rateSelectionBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onTCTypeComboChanged()));
 
-	setFixedSize(600,100);
+	ui->_playButton->setDefault(true);
 }
 
 
@@ -104,10 +104,10 @@ PhFrame PhMediaPanel::getFirstFrame() const
 }
 
 
-void PhMediaPanel::setMediaLength(PhFrame mediaLength)
+void PhMediaPanel::setMediaLength(PhFrame length)
 {
-	_mediaLength = mediaLength;
-	ui->_slider->setMaximum(_firstFrame + mediaLength);
+	_mediaLength = length;
+	ui->_slider->setMaximum(_firstFrame + length);
 }
 
 
