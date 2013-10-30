@@ -13,6 +13,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldUseQuarterFrame = _settings->value("useQuarterFrame", false).toBool();
 	_oldDelay = _settings->value("delay", 0).toInt();
 	_oldStripHeight = _settings->value("stripHeight", 0.25f).toFloat();
+	_oldSonyAutoConnect = _settings->value("sonyAutoConnect", true).toBool();
 	if(_oldUseQuarterFrame)
 	{
 		ui->useQuarterFrameRadioButton->setChecked(true);
@@ -24,6 +25,8 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	ui->delaySpinBox->setFocus();
 
 	ui->stripHeightSlider->setValue(ui->stripHeightSlider->maximum() * _oldStripHeight);
+
+	ui->sonyAutoConnectCheckBox->setChecked(_oldSonyAutoConnect);
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -36,6 +39,7 @@ void PreferencesDialog::reject()
 	_settings->setValue("useQuarterFrame", _oldUseQuarterFrame);
 	_settings->setValue("delay", _oldDelay);
 	_settings->setValue("stripHeight", _oldStripHeight);
+	_settings->setValue("sonyAutoConnect", _oldSonyAutoConnect);
 	QDialog::reject();
 }
 
@@ -59,6 +63,10 @@ void PreferencesDialog::on_useQuarterFrameRadioButton_toggled(bool checked)
 
 void PreferencesDialog::on_stripHeightSlider_sliderMoved(int position)
 {
-	PHDEBUG;
 	_settings->setValue("stripHeight", ((float)position / ui->stripHeightSlider->maximum()));
+}
+
+void PreferencesDialog::on_sonyAutoConnectCheckBox_toggled(bool checked)
+{
+	_settings->setValue("sonyAutoConnect", checked);
 }

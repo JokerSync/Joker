@@ -113,6 +113,22 @@
     <string>Strip height:</string>
    </property>
   </widget>
+  <widget class="QCheckBox" name="sonyAutoConnectCheckBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>231</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sony auto connect</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections>

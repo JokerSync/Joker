@@ -31,10 +31,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
-	if(_sonySlave.open())
-		_synchronizer.setSonyClock(_sonySlave.clock());
-	else
-		QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
+	if(_settings.value("sonyAutoConnect", true).toBool())
+	{
+		if(_sonySlave.open())
+			_synchronizer.setSonyClock(_sonySlave.clock());
+		else
+			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
+	}
 }
 
 MainWindow::~MainWindow()
