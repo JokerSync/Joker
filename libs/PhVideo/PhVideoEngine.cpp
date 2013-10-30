@@ -37,7 +37,7 @@ bool PhVideoEngine::open(QString fileName)
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
 
 	// Find video stream :
-	for(int i = 0; i < _pFormatContext->nb_streams; i++)
+	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++)
 	{
 		if(_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
 		{
@@ -98,6 +98,13 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	goToFrame(_clock.frame() + delay);
 	videoRect.setRect(x, y, w, h);
 	videoRect.draw();
+}
+
+PhFrame PhVideoEngine::length()
+{
+	if(_videoStream >= 0)
+		return (PhFrame)_pFormatContext->streams[_videoStream]->duration;
+	return 0;
 }
 
 void PhVideoEngine::setFrameStamp(PhFrame frame)
