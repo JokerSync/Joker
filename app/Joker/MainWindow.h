@@ -4,9 +4,11 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QSettings>
+#include <QPropertyAnimation>
 
 #include "VideoStripView.h"
 #include "PhSync/PhSonySlaveController.h"
+#include "PhCommonUI/PhMediaPanelDialog.h"
 
 #include "SonyVideoStripSynchronizer.h"
 
@@ -25,6 +27,15 @@ public:
 	void openFile(QString fileName);
 
 	bool openVideoFile(QString videoFileName);
+
+protected:
+	bool eventFilter(QObject *sender, QEvent *event);
+
+	enum MediaPanelState {
+		MediaPanelVisible,
+		MediaPanelHidding,
+		MediaPanelHidden
+	};
 
 private slots:
 	void on_actionOpen_triggered();
@@ -67,6 +78,7 @@ private slots:
 
 	void on_actionPreferences_triggered();
 
+	void on_mediaPanelTimer_timeout();
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip * _strip;
@@ -76,6 +88,10 @@ private:
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
 
+	PhMediaPanelDialog _mediaPanel;
+	QTimer _mediaPanelTimer;
+	MediaPanelState _mediaPanelState;
+	QPropertyAnimation _mediaPanelAnimation;
 };
 
 #endif // MAINWINDOW_H
