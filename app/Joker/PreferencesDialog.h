@@ -16,14 +16,21 @@ public:
 	explicit PreferencesDialog(QSettings *settings, QWidget *parent = 0);
 	~PreferencesDialog();
 
+protected:
+	void reject();
 private slots:
 	void on_delaySpinBox_valueChanged(int delay);
 
 	void on_useQuarterFrameRadioButton_toggled(bool checked);
 
+	void on_stripHeightSlider_sliderMoved(int position);
+
 private:
 	Ui::PreferencesDialog *ui;
 	QSettings *_settings;
+	bool _oldUseQuarterFrame;
+	int _oldDelay;
+	float _oldStripHeight;
 };
 
 #endif // PREFERENCESDIALOG_H

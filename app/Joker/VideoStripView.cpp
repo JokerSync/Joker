@@ -1,20 +1,33 @@
 #include "VideoStripView.h"
 
 VideoStripView::VideoStripView(QWidget *parent) :
-	PhGraphicView(parent)
+	PhGraphicView(parent),
+	_settings(NULL)
 {
+}
+
+void VideoStripView::setSettings(QSettings *settings)
+{
+	_settings = settings;
 }
 
 bool VideoStripView::init()
 {
-	_strip.init();
+	return _strip.init();
 }
 
 void VideoStripView::paint()
 {
-	int videoHeight = this->height() * 3 / 4;
-	int videoWidth = this->height();
-	int videoX = (this->width() - videoWidth) / 2;
-	_videoEngine.drawVideo(videoX, 0, videoWidth, videoHeight);
-	_strip.draw(0, videoHeight, this->width(), this->height() - videoHeight);
+	float stripHeightRatio = 0.25f;
+	if(_settings)
+		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
+	int videoHeight = this->height() * (1 - stripHeightRatio);
+	if(videoHeight > 0)
+	{
+		int videoWidth = this->height();
+		int videoX = (this->width() - videoWidth) / 2;
+		_videoEngine.drawVideo(videoX, 0, videoWidth, videoHeight);
+	}
+	if(stripHeightRatio > 0)
+		_strip.draw(0, videoHeight, this->width(), this->height() - videoHeight);
 }
