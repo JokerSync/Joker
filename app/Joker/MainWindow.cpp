@@ -14,8 +14,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
 	_settings("Phonations", "Joker"),
-	_sonySlave(PhTimeCodeType25, &_settings, this)
+	_sonySlave(PhTimeCodeType25, &_settings, this),
 #warning TODO check default speed
+	_mediaPanelAnimation(&_mediaPanel, "windowOpacity")
 {
 	ui->setupUi(this);
 	_strip = ui->videoStripView->strip();
@@ -38,6 +39,14 @@ MainWindow::MainWindow(QWidget *parent) :
 		else
 			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
 	}
+
+	_mediaPanel.setClock(_strip->clock());
+	_mediaPanel.show();
+	_mediaPanelState = MediaPanelVisible;
+
+	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(on_mediaPanelTimer_timeout()));
+	_mediaPanelTimer.start(3000);
+	qApp->installEventFilter(this);
 }
 
 MainWindow::~MainWindow()
@@ -62,9 +71,34 @@ void MainWindow::openFile(QString fileName)
 			{
 				_videoEngine->open(_doc->getVideoPath());
 				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
+				_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
+				_mediaPanel.setMediaLength(_videoEngine->length());
 			}
 		}
 	}
+}
+
+bool MainWindow::eventFilter(QObject *sender, QEvent *event)
+{
+	if(event->type() == QEvent::MouseMove)
+	{
+		switch(_mediaPanelState)
+		{
+		case MediaPanelHidden:
+			PHDEBUG << "show";
+			_mediaPanel.show();
+		case MediaPanelHidding:
+			_mediaPanelAnimation.stop();
+			_mediaPanelAnimation.setDuration(300);
+			_mediaPanelAnimation.setEndValue(1);
+			_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
+			_mediaPanelAnimation.start();
+			_mediaPanelState = MediaPanelVisible;
+			PHDEBUG << "move";
+		}
+		_mediaPanelTimer.start(3000);
+	}
+	return false;
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -218,5 +252,26 @@ void MainWindow::on_actionPreferences_triggered()
 {
 	PreferencesDialog dlg(&_settings);
 	dlg.exec();
+}
+
+void MainWindow::on_mediaPanelTimer_timeout()
+{
+	PHDEBUG << _mediaPanelState;
+	switch(_mediaPanelState)
+	{
+	case MediaPanelVisible:
+		_mediaPanelAnimation.setDuration(1000);
+		_mediaPanelAnimation.setEndValue(0);
+		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
+		_mediaPanelAnimation.start();
+		_mediaPanelTimer.start(1000);
+		_mediaPanelState = MediaPanelHidding;
+		break;
+	case MediaPanelHidding:
+		_mediaPanel.hide();
+		_mediaPanelState = MediaPanelHidden;
+		_mediaPanelTimer.stop();
+		break;
+	}
 }
 
