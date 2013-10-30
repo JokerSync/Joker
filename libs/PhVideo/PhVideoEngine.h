@@ -37,6 +37,8 @@ public:
 
 	PhClock* clock() { return &_clock; };
 
+	PhFrame length();
+
 	void setFrameStamp(PhFrame frame);
 
 	PhFrame frameStamp() { return _frameStamp;};
@@ -54,8 +56,8 @@ private:
 	AVFormatContext * _pFormatContext;
 	int _videoStream;
 	AVCodecContext * _pCodecContext;
-	struct SwsContext * _pSwsCtx;
 	AVFrame * _pFrame;
+	struct SwsContext * _pSwsCtx;
 	PhGraphicTexturedRect videoRect;
 	uint8_t * _rgb;
 	PhFrame _currentFrame;
