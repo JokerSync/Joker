@@ -25,12 +25,15 @@ private slots:
 
 	void on_stripHeightSlider_sliderMoved(int position);
 
+	void on_sonyAutoConnectCheckBox_toggled(bool checked);
+
 private:
 	Ui::PreferencesDialog *ui;
 	QSettings *_settings;
 	bool _oldUseQuarterFrame;
 	int _oldDelay;
 	float _oldStripHeight;
+	bool _oldSonyAutoConnect;
 };
 
 #endif // PREFERENCESDIALOG_H
