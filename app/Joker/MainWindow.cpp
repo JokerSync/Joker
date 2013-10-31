@@ -82,20 +82,13 @@ bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 {
 	if(event->type() == QEvent::MouseMove)
 	{
-		switch(_mediaPanelState)
-		{
-		case MediaPanelHidden:
-			PHDEBUG << "show";
-			_mediaPanel.show();
-		case MediaPanelHidding:
-			_mediaPanelAnimation.stop();
-			_mediaPanelAnimation.setDuration(300);
-			_mediaPanelAnimation.setEndValue(1);
-			_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
-			_mediaPanelAnimation.start();
-			_mediaPanelState = MediaPanelVisible;
-			PHDEBUG << "move";
-		}
+		_mediaPanel.show();
+		_mediaPanelAnimation.stop();
+		_mediaPanelAnimation.setDuration(300);
+		_mediaPanelAnimation.setEndValue(1);
+		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
+		_mediaPanelAnimation.start();
+		_mediaPanelState = MediaPanelVisible;
 		_mediaPanelTimer.start(3000);
 	}
 	return false;
