@@ -47,6 +47,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(on_mediaPanelTimer_timeout()));
 	_mediaPanelTimer.start(3000);
 	qApp->installEventFilter(this);
+	this->setFocusPolicy(Qt::StrongFocus);
+	this->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -80,8 +82,9 @@ void MainWindow::openFile(QString fileName)
 
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 {
-	if(event->type() == QEvent::MouseMove)
-	{
+	// Hide and show the mediaPanel
+	 if(event->type() == QEvent::MouseMove && this->hasFocus())
+	 {
 		_mediaPanel.show();
 		_mediaPanelAnimation.stop();
 		_mediaPanelAnimation.setDuration(300);
