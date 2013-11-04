@@ -21,23 +21,22 @@ MainWindow::MainWindow(QWidget *parent) :
 	// Setting up UI
 	ui->setupUi(this);
 
-	// Setting up Video objects
+	// Get the pointer to the differents objects :
+	// strip, video engine and doc
 	_strip = ui->videoStripView->strip();
 	_videoEngine = ui->videoStripView->videoEngine();
+	_doc = _strip->doc();
 
-	// Loading settings
+	// Pass the settings to the modules
 	_strip->setSettings(&_settings);
 	_videoEngine->setSettings(&_settings);
 	ui->videoStripView->setSettings(&_settings);
 
-	// Adding the strip document
-	_doc = _strip->doc();
-
-	// Loading synchro clocks
+	// Initialize the synchronizer
 	_synchronizer.setStripClock(_strip->clock());
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
-	//
+	// Initialize the sony module
 	if(_settings.value("sonyAutoConnect", true).toBool())
 	{
 		if(_sonySlave.open())
@@ -51,10 +50,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
+	// Trigger a timer that will fade off the media panel after 3 seconds
 	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(on_mediaPanelTimer_timeout()));
-	// trigger a timer that will fade off the media panel after 3 seconds
 	_mediaPanelTimer.start(3000);
-	// set up a filter for catching mouse move event (see eventFilter()) that will show the media panel back
+
+	// Set up a filter for catching mouse move event (see eventFilter())
+	// that will show the media panel back
 	qApp->installEventFilter(this);
 }
 
