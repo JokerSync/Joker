@@ -46,40 +46,46 @@ bool PhFont::setFontFile(QString fontFile)
 	int space = 128;
 	_glyphHeight = 0;
 
-	// We get rid of the 32 first useless char
-	for(Uint16 ch = 0; ch < 256; ++ch)
+	//set the boldness
+	int lim = 3;
+	for(int i = 0; i <= lim; i++)
 	{
-		if(TTF_GlyphIsProvided(font, ch))
+		TTF_SetFontOutline(font, i);
+		// We get rid of the 32 first useless char
+		for(Uint16 ch = 0; ch < 256; ++ch)
 		{
-			int minx, maxx, miny, maxy, advance;
-			TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
-			if(advance != 0)
+			if(TTF_GlyphIsProvided(font, ch))
 			{
-				// First render the glyph to a surface
-				SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
-				if (!glyphSurface)
-					PHDEBUG << "Error during the Render Glyph of " << (char) ch << SDL_GetError();
-				SDL_Rect glyphRect;
-				glyphRect.x = (ch % 16) * space;
-				glyphRect.y = (ch / 16) * space;
-				glyphRect.w = glyphSurface->w;
-				glyphRect.h = glyphSurface->h;
-				if(glyphRect.h > _glyphHeight)
-					_glyphHeight = glyphRect.h;
-				//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
-				// Then blit it to the matrix
-				SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
+				int minx, maxx, miny, maxy, advance;
+				TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
+				if(advance != 0)
+				{
+					// First render the glyph to a surface
+					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
+					if (!glyphSurface)
+						PHDEBUG << "Error during the Render Glyph of " << (char) ch << SDL_GetError();
+					SDL_Rect glyphRect;
+					glyphRect.x = (ch % 16) * space;
+					glyphRect.y = (ch / 16) * space;
+					glyphRect.w = glyphSurface->w;
+					glyphRect.h = glyphSurface->h;
+					if(glyphRect.h > _glyphHeight)
+						_glyphHeight = glyphRect.h;
+					//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
+					// Then blit it to the matrix
+					SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
 
-				// Store information about the glyph
-				_glyphAdvance[ch] = advance;
+					// Store information about the glyph
+					_glyphAdvance[ch] = advance;
 
-				SDL_FreeSurface(glyphSurface);
+					SDL_FreeSurface(glyphSurface);
+				}
+				else
+					PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
 			}
 			else
-				PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
+				_glyphAdvance[ch] = 0;
 		}
-		else
-			_glyphAdvance[ch] = 0;
 	}
 
 	glEnable( GL_TEXTURE_2D );
