@@ -44,8 +44,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
-	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(on_mediaPanelTimer_timeout()));
 	_mediaPanelTimer.start(3000);
+	connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(onMediaPanelTimerTimeout()));
 	qApp->installEventFilter(this);
 	//this->setFocusPolicy(Qt::StrongFocus);
 	this->setFocus();
@@ -250,7 +250,7 @@ void MainWindow::on_actionPreferences_triggered()
 	dlg.exec();
 }
 
-void MainWindow::on_mediaPanelTimer_timeout()
+void MainWindow::onMediaPanelTimerTimeout()
 {
 	PHDEBUG << _mediaPanelState;
 	switch(_mediaPanelState)

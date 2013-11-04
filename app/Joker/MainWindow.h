@@ -38,6 +38,7 @@ protected:
 	};
 
 private slots:
+		// Qt Designer slots
 	void on_actionOpen_triggered();
 
 	void on_actionPlay_pause_triggered();
@@ -78,7 +79,9 @@ private slots:
 
 	void on_actionPreferences_triggered();
 
-	void on_mediaPanelTimer_timeout();
+
+	// Custom slots
+	void onMediaPanelTimerTimeout();
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip * _strip;
