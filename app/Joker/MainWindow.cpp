@@ -15,23 +15,29 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow),
 	_settings("Phonations", "Joker"),
 	_sonySlave(PhTimeCodeType25, &_settings, this),
-#warning TODO check default speed
+	#warning TODO check default speed
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity")
 {
+	// Setting up UI
 	ui->setupUi(this);
+
+	// Setting up Video objects
 	_strip = ui->videoStripView->strip();
 	_videoEngine = ui->videoStripView->videoEngine();
 
+	// Loading settings
 	_strip->setSettings(&_settings);
 	_videoEngine->setSettings(&_settings);
 	ui->videoStripView->setSettings(&_settings);
 
+	// Adding the strip document
 	_doc = _strip->doc();
 
+	// Loading synchro clocks
 	_synchronizer.setStripClock(_strip->clock());
-
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
+	//
 	if(_settings.value("sonyAutoConnect", true).toBool())
 	{
 		if(_sonySlave.open())
@@ -40,12 +46,15 @@ MainWindow::MainWindow(QWidget *parent) :
 			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
 	}
 
+	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
 	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(on_mediaPanelTimer_timeout()));
+	// trigger a timer that will fade off the media panel after 3 seconds
 	_mediaPanelTimer.start(3000);
+	// set up a filter for catching mouse move event (see eventFilter()) that will show the media panel back
 	qApp->installEventFilter(this);
 }
 
@@ -57,15 +66,20 @@ MainWindow::~MainWindow()
 void MainWindow::openFile(QString fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
-  //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
+	//PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
+
+	// Checking if the file exists
 	if(QFile::exists(fileName))
 	{
+		// Try to open the document
 		if(_doc->openDetX(fileName))
 		{
+			// On succeed, synchronizing the clocks
 			_strip->clock()->setTimeCodeType(_doc->getTCType());
 			_strip->clock()->setFrame(_doc->getLastFrame());
 			this->setWindowTitle(fileName);
 
+			// Opening the corresponding video file if it exists
 			QFileInfo fileInfo(_doc->getVideoPath());
 			if (fileInfo.exists())
 			{
@@ -199,10 +213,10 @@ bool MainWindow::openVideoFile(QString videoFileName)
 	if (fileInfo.exists())
 	{
 		_videoEngine->open(videoFileName);
-//#warning TODO read media length from video file
-//		ui->mediaController->setMediaLength(7500);
-//#warning TODO read first frame from video file
-//		ui->mediaController->setFirstFrame(0);
+		//#warning TODO read media length from video file
+		//		ui->mediaController->setMediaLength(7500);
+		//#warning TODO read first frame from video file
+		//		ui->mediaController->setFirstFrame(0);
 
 		//_clock->setRate(0.0);
 		return true;
@@ -226,9 +240,9 @@ void MainWindow::on_actionChange_timestamp_triggered()
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		PhFrame frameStamp = _videoEngine->frameStamp();
-	    frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
+		frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
 		_videoEngine->setFrameStamp(frameStamp);
-	    _strip->clock()->setFrame(dlg.frame());
+		_strip->clock()->setFrame(dlg.frame());
 	}
 }
 
