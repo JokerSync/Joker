@@ -90,14 +90,11 @@ void MainWindow::openFile(QString fileName)
 			}
 		}
 	}
-	this->setFocusPolicy(Qt::StrongFocus);
-	this->setFocus();
 }
 
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 {
-	// Hide and show the mediaPanel
-	if(event->type() == QEvent::MouseMove && this->hasFocus())
+	if(event->type() == QEvent::MouseMove)
 	{
 		_mediaPanel.show();
 		_mediaPanelAnimation.stop();
