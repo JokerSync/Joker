@@ -44,10 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
+	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(onMediaPanelTimerTimeout()));
 	_mediaPanelTimer.start(3000);
-	connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(onMediaPanelTimerTimeout()));
 	qApp->installEventFilter(this);
-	//this->setFocusPolicy(Qt::StrongFocus);
+
 	this->setFocus();
 }
 
