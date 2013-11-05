@@ -33,6 +33,10 @@ private slots:
 
 	void on_buttonBox_rejected();
 
+	void on_cBoxLastFile_toggled(bool checked);
+
+	void on_cBoxFullscreen_toggled(bool checked);
+
 private:
 	Ui::PrefPanel *ui;
 	QSettings *_settings;
@@ -40,6 +44,8 @@ private:
 	int _oldDelay;
 	float _oldStripHeight;
 	bool _oldSonyAutoConnect;
+	bool _oldOpenLastFile;
+	bool _oldStartFullScreen;
 
 };
 
