@@ -11,6 +11,8 @@ PrefPanel::PrefPanel(QWidget *parent) :
 	ui(new Ui::PrefPanel)
 {
 	ui->setupUi(this);
+	this->setMaximumHeight(this->height());
+	this->setMaximumWidth(this->width());
 }
 
 PrefPanel::~PrefPanel()
