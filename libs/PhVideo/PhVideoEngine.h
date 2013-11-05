@@ -32,7 +32,7 @@ public:
 
 	int height();
 
-	int framePerSecond();
+	float framePerSecond();
 
 	QString codecName();
 
