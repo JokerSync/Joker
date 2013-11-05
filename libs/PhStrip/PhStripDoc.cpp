@@ -8,6 +8,7 @@
 #include <QFile>
 #include "PhStripDoc.h"
 #include <math.h>
+#include <limits>
 
 
 PhStripDoc::PhStripDoc(QObject *parent) :
@@ -378,6 +379,16 @@ PhFrame PhStripDoc::getNextElementFrame(PhFrame frame)
 			nextElementFrame = getNextTextFrame(frame);
 
 	return nextElementFrame;
+}
+
+PhFrame PhStripDoc::getFrameIn()
+{
+	return getNextElementFrame(0);
+}
+
+PhFrame PhStripDoc::getFrameOut()
+{
+	return getPreviousElementFrame(std::numeric_limits<PhFrame>::max());
 }
 
 QString PhStripDoc::getFilePath()
