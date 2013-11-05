@@ -58,6 +58,15 @@ MainWindow::MainWindow(QWidget *parent) :
 	// Set up a filter for catching mouse move event (see eventFilter())
 	// that will show the media panel back
 	qApp->installEventFilter(this);
+
+	// Load the last file if the setting si selected
+	if(_settings.value("openLastFile", false).toBool())
+	{
+		openFile(_settings.value("lastfile").toString());
+	}
+
+	if(_settings.value("startFullScreen", false).toBool())
+		this->showFullScreen();
 }
 
 MainWindow::~MainWindow()
@@ -117,6 +126,7 @@ void MainWindow::on_actionOpen_triggered()
 	{
 		QString fileName = dlg.selectedFiles()[0];
 		openFile(fileName);
+		_settings.setValue("lastfile", fileName);
 	}
 }
 
