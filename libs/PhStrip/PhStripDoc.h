@@ -139,6 +139,9 @@ public:
 
 	PhFrame getNextElementFrame(PhFrame frame);
 
+	PhFrame getFrameIn();
+
+	PhFrame getFrameOut();
 signals:
 	void changed();
 
