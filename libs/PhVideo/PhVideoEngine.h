@@ -35,7 +35,8 @@ public:
 
 	void drawVideo(int x, int y, int w, int h);
 
-	PhClock* clock() { return &_clock; };
+	QString fileName() { return _fileName;}
+	PhClock* clock() { return &_clock; }
 
 	PhFrame length();
 
@@ -50,6 +51,7 @@ private:
 	bool goToFrame(PhFrame frame);
 
 	QSettings *_settings;
+	QString _fileName;
 	PhClock _clock;
 	PhFrame _frameStamp;
 
