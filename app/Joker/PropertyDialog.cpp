@@ -32,13 +32,12 @@ void PropertyDialog::showEvent(QShowEvent *)
 	ui->authorLabel->setText("-");
 	ui->peopleNumberLabel->setText("-");
 	ui->charNumberLabel->setText("-");
+
 	ui->videoFileLabel->setText("-");
-	ui->timestampLabel->setText("-");
-
+	ui->videoTCInLabel->setText("-");
+	ui->videoTCOutLabel->setText("-");
 	ui->resolutionLabel->setText("-");
-
 	ui->fpsLabel->setText("-");
-
 	ui->codecNameLabel->setText("-");
 
 	if(_doc)
@@ -71,7 +70,10 @@ void PropertyDialog::showEvent(QShowEvent *)
 			ui->videoFileLabel->setText(_videoEngine->fileName());
 
 		if(_videoEngine->frameStamp())
-			ui->timestampLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->frameStamp(), _videoEngine->clock()->timeCodeType()));
+			ui->videoTCInLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->frameStamp(), _videoEngine->clock()->timeCodeType()));
+
+		if(_videoEngine->length())
+			ui->videoTCOutLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->frameStamp() + _videoEngine->length(), _videoEngine->clock()->timeCodeType()));
 
 		ui->resolutionLabel->setText(QString::number(_videoEngine->width()) + "x" + QString::number(_videoEngine->height()));
 
