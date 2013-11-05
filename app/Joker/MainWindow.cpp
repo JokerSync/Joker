@@ -51,12 +51,14 @@ MainWindow::MainWindow(QWidget *parent) :
 	_mediaPanelState = MediaPanelVisible;
 
 	// Trigger a timer that will fade off the media panel after 3 seconds
-	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(on_mediaPanelTimer_timeout()));
+	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(onMediaPanelTimerTimeout()));
 	_mediaPanelTimer.start(3000);
 
 	// Set up a filter for catching mouse move event (see eventFilter())
 	// that will show the media panel back
 	qApp->installEventFilter(this);
+
+	this->setFocus();
 }
 
 MainWindow::~MainWindow()
@@ -95,8 +97,9 @@ void MainWindow::openFile(QString fileName)
 
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 {
-	if(event->type() == QEvent::MouseMove)
-	{
+	// Hide and show the mediaPanel
+	 if(event->type() == QEvent::MouseMove && this->hasFocus())
+	 {
 		_mediaPanel.show();
 		_mediaPanelAnimation.stop();
 		_mediaPanelAnimation.setDuration(300);
@@ -262,7 +265,7 @@ void MainWindow::on_actionPreferences_triggered()
 	dlg.exec();
 }
 
-void MainWindow::on_mediaPanelTimer_timeout()
+void MainWindow::onMediaPanelTimerTimeout()
 {
 	PHDEBUG << _mediaPanelState;
 	switch(_mediaPanelState)
