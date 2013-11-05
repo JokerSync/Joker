@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow),
 	_settings("Phonations", "Joker"),
 	_sonySlave(PhTimeCodeType25, &_settings, this),
-	#warning TODO check default speed
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity")
 {
 	// Setting up UI
@@ -31,6 +30,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	_strip->setSettings(&_settings);
 	_videoEngine->setSettings(&_settings);
 	ui->videoStripView->setSettings(&_settings);
+
+	// Initialize the property dialog
+	_propertyDialog.setDoc(_doc);
 
 	// Initialize the synchronizer
 	_synchronizer.setStripClock(_strip->clock());
@@ -286,3 +288,8 @@ void MainWindow::onMediaPanelTimerTimeout()
 	}
 }
 
+
+void MainWindow::on_actionProperties_triggered()
+{
+    _propertyDialog.show();
+}
