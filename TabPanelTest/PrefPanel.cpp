@@ -3,6 +3,8 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+
+#include <QMessageBox>
 #include "PrefPanel.h"
 #include "ui_PrefPanel.h"
 
@@ -18,4 +20,15 @@ PrefPanel::PrefPanel(QWidget *parent) :
 PrefPanel::~PrefPanel()
 {
 	delete ui;
+}
+
+
+void PrefPanel::on_buttonBox_accepted()
+{
+	close();
+}
+
+void PrefPanel::on_buttonBox_rejected()
+{
+	close();
 }
