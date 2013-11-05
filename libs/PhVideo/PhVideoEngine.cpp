@@ -139,11 +139,16 @@ int PhVideoEngine::height()
 	return 0;
 }
 
-int PhVideoEngine::framePerSecond()
+float PhVideoEngine::framePerSecond()
 {
-//	if(_pCodecContext)
-//		return _pCodecContext->
-	return 0;
+	float result = 0;
+	if(_pFormatContext && (_videoStream >= 0))
+	{
+		result = _pFormatContext->streams[_videoStream]->avg_frame_rate.num;
+		result /= _pFormatContext->streams[_videoStream]->avg_frame_rate.den;
+	}
+
+	return result;
 }
 
 QString PhVideoEngine::codecName()
