@@ -14,7 +14,9 @@ void PhStripDocTest::openDetXHeaderTest()
 {
 	QCOMPARE(_doc.getTitle(), QString("Title test"));
 	QCOMPARE(_doc.getVideoPath(), QString("/Path/to/video.mov"));
-	QVERIFY(_doc.getVideoTimestamp() == PhTimeCode::frameFromString("01:00:00:00", _doc.getTCType()));
+	QVERIFY(_doc.getVideoTimestamp() == s2f("01:00:00:00"));
+	QCOMPARE(QString("Pierre Dupont"), _doc.getAuthorName());
+	QCOMPARE(s2f("01:00:10:00"), _doc.getLastFrame());
 }
 
 void PhStripDocTest::openDetXPeopleTest()

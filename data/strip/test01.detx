@@ -3,8 +3,12 @@
 
   <header>
 	<title>Title test</title>
+	<title2>Traducted title</title2>
+	<episode number="episode ref" season="season ref" title="episode title" title2="traducted episode title"/>
+	<author name="Dupont" firstname="Pierre"/>
+	<detector firstname="Dupond" name="Jean"/>
 	<videofile timestamp="01:00:00:00">/Path/to/video.mov</videofile>
-    <last_position timecode="01:00:00:00" track="1"/>
+    <last_position timecode="01:00:10:00" track="1"/>
   </header>
 
   <roles>
