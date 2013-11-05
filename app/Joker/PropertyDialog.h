@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "PhStrip/PhStripDoc.h"
+#include "PhVideo/PhVideoEngine.h"
 
 namespace Ui {
 class PropertyDialog;
@@ -17,6 +18,7 @@ public:
 	~PropertyDialog();
 
 	void setDoc(PhStripDoc * doc);
+	void setVideoEngine(PhVideoEngine *videoEngine);
 
 protected:
 	void showEvent(QShowEvent *);
@@ -24,6 +26,7 @@ protected:
 private:
 	Ui::PropertyDialog *ui;
 	PhStripDoc *_doc;
+	PhVideoEngine *_videoEngine;
 };
 
 #endif // PROPERTYDIALOG_H

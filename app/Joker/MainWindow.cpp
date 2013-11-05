@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	// Initialize the property dialog
 	_propertyDialog.setDoc(_doc);
+	_propertyDialog.setVideoEngine(_videoEngine);
 
 	// Initialize the synchronizer
 	_synchronizer.setStripClock(_strip->clock());

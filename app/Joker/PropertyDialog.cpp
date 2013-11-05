@@ -19,6 +19,11 @@ void PropertyDialog::setDoc(PhStripDoc *doc)
 	_doc = doc;
 }
 
+void PropertyDialog::setVideoEngine(PhVideoEngine *videoEngine)
+{
+	_videoEngine = videoEngine;
+}
+
 void PropertyDialog::showEvent(QShowEvent *)
 {
 	ui->titleLabel->setText("-");
@@ -27,14 +32,15 @@ void PropertyDialog::showEvent(QShowEvent *)
 	ui->authorLabel->setText("-");
 	ui->peopleNumberLabel->setText("-");
 	ui->charNumberLabel->setText("-");
+	ui->videoFileLabel->setText("-");
+	ui->timestampLabel->setText("-");
 
 	if(_doc)
 	{
 		ui->titleLabel->setText(_doc->getTitle());
 
-		QString authorName = _doc->getAuthorName();
-		if(authorName.length())
-			ui->authorLabel->setText(authorName);
+		if(_doc->getAuthorName().length())
+			ui->authorLabel->setText(_doc->getAuthorName());
 
 		PhFrame frameIn = _doc->getFrameIn();
 		if(frameIn > 0)
@@ -51,5 +57,14 @@ void PropertyDialog::showEvent(QShowEvent *)
 		foreach(PhStripText * text, _doc->getTexts())
 			charNumber += text->getContent().length();
 		ui->charNumberLabel->setText(QString::number(charNumber));
+	}
+
+	if(_videoEngine)
+	{
+		if(_videoEngine->fileName().length())
+			ui->videoFileLabel->setText(_videoEngine->fileName());
+
+		if(_videoEngine->frameStamp())
+			ui->timestampLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->frameStamp(), _videoEngine->clock()->timeCodeType()));
 	}
 }

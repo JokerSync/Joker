@@ -2,6 +2,7 @@
 
 PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
 	_settings(NULL),
+	_fileName(""),
 	_clock(PhTimeCodeType25),
 	_frameStamp(0),
 	_pFormatContext(NULL),
@@ -63,6 +64,10 @@ bool PhVideoEngine::open(QString fileName)
 
 	_clock.setFrame(0);
 	bool result = goToFrame(0);
+
+	if(result)
+		_fileName = fileName;
+
 	PHDEBUG << "over : " << result;
 	return result;
 }
