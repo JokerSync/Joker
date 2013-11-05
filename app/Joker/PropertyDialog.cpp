@@ -35,6 +35,12 @@ void PropertyDialog::showEvent(QShowEvent *)
 	ui->videoFileLabel->setText("-");
 	ui->timestampLabel->setText("-");
 
+	ui->resolutionLabel->setText("-");
+
+	ui->fpsLabel->setText("-");
+
+	ui->codecNameLabel->setText("-");
+
 	if(_doc)
 	{
 		ui->titleLabel->setText(_doc->getTitle());
@@ -66,5 +72,12 @@ void PropertyDialog::showEvent(QShowEvent *)
 
 		if(_videoEngine->frameStamp())
 			ui->timestampLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->frameStamp(), _videoEngine->clock()->timeCodeType()));
+
+		ui->resolutionLabel->setText(QString::number(_videoEngine->width()) + "x" + QString::number(_videoEngine->height()));
+
+		ui->fpsLabel->setText(QString::number(_videoEngine->framePerSecond()));
+
+		if(_videoEngine->codecName().length())
+			ui->codecNameLabel->setText(_videoEngine->codecName());
 	}
 }
