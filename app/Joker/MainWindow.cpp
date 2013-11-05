@@ -9,6 +9,7 @@
 #include "PhCommonUI/PhFontDialog.h"
 #include "AboutMenu.h"
 #include "PreferencesDialog.h"
+#include "PrefPanel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -258,7 +259,9 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionPreferences_triggered()
 {
-	PreferencesDialog dlg(&_settings);
+//	PreferencesDialog dlg(&_settings);
+//	dlg.exec();
+	PrefPanel dlg(&_settings);
 	dlg.exec();
 }
 
