@@ -60,3 +60,27 @@ void PhStripDocTest::openDetXOffTest()
 
 #warning TODO more test
 }
+
+void PhStripDocTest::getPreviousElementFrameTest()
+{
+	QCOMPARE(s2f("01:00:15:00"), _doc.getPreviousElementFrame(s2f("23:00:00:00")));
+	QCOMPARE(s2f("01:00:12:00"), _doc.getPreviousElementFrame(s2f("01:00:15:00")));
+}
+
+void PhStripDocTest::getNextElementFrameTest()
+{
+	QCOMPARE(s2f("01:00:00:00"), _doc.getNextElementFrame(s2f("00:00:00:00")));
+	QCOMPARE(s2f("01:00:01:00"), _doc.getNextElementFrame(s2f("01:00:00:00")));
+	QCOMPARE(s2f("01:00:02:00"), _doc.getNextElementFrame(s2f("01:00:01:00")));
+	QCOMPARE(s2f("01:00:05:00"), _doc.getNextElementFrame(s2f("01:00:02:00")));
+}
+
+QString PhStripDocTest::f2s(PhFrame frame)
+{
+	return PhTimeCode::stringFromFrame(frame, _doc.getTCType());
+}
+
+PhFrame PhStripDocTest::s2f(QString string)
+{
+	return PhTimeCode::frameFromString(string, _doc.getTCType());
+}
