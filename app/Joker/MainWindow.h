@@ -11,6 +11,7 @@
 #include "PhCommonUI/PhMediaPanelDialog.h"
 
 #include "SonyVideoStripSynchronizer.h"
+#include "PropertyDialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -82,6 +83,8 @@ private slots:
 
 	// Custom slots
 	void onMediaPanelTimerTimeout();
+	void on_actionProperties_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip * _strip;
@@ -95,6 +98,8 @@ private:
 	QTimer _mediaPanelTimer;
 	MediaPanelState _mediaPanelState;
 	QPropertyAnimation _mediaPanelAnimation;
+
+	PropertyDialog _propertyDialog;
 };
 
 #endif // MAINWINDOW_H
