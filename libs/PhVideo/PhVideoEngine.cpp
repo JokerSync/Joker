@@ -80,6 +80,7 @@ void PhVideoEngine::close()
 		delete _rgb;
 		_rgb = NULL;
 	}
+
 	if(_pFormatContext)
 	{
 		avformat_close_input(&_pFormatContext);
@@ -87,6 +88,8 @@ void PhVideoEngine::close()
 		_pCodecContext = NULL;
 		_videoStream = -1;
 	}
+
+	_fileName = "";
 }
 
 void PhVideoEngine::setSettings(QSettings *settings)
@@ -120,6 +123,34 @@ void PhVideoEngine::setFrameStamp(PhFrame frame)
 PhVideoEngine::~PhVideoEngine()
 {
 	close();
+}
+
+int PhVideoEngine::width()
+{
+	if(_pCodecContext)
+		return _pCodecContext->width;
+	return 0;
+}
+
+int PhVideoEngine::height()
+{
+	if(_pCodecContext)
+		return _pCodecContext->height;
+	return 0;
+}
+
+int PhVideoEngine::framePerSecond()
+{
+//	if(_pCodecContext)
+//		return _pCodecContext->
+	return 0;
+}
+
+QString PhVideoEngine::codecName()
+{
+	if(_pFormatContext && (_videoStream >= 0))
+		return _pFormatContext->streams[_videoStream]->codec->codec_name;
+	return "";
 }
 
 bool PhVideoEngine::goToFrame(PhFrame frame)

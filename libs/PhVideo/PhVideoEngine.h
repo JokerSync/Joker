@@ -23,6 +23,30 @@ public:
 	explicit PhVideoEngine(QObject *parent = 0);
 	~PhVideoEngine();
 
+	// Properties
+	QString fileName() { return _fileName;}
+
+	PhClock* clock() { return &_clock; }
+
+	int width();
+
+	int height();
+
+	int framePerSecond();
+
+	QString codecName();
+
+	void setFrameStamp(PhFrame frame);
+
+	PhFrame frameStamp() { return _frameStamp;};
+
+	PhFrame length();
+
+	int refreshRate() { return _videoFrameTickCounter.frequency(); }
+
+	bool ready();
+
+	// Methods
 	/**
 	 * @brief Open a video file
 	 * @param fileName A video file path
@@ -34,19 +58,6 @@ public:
 	void setSettings(QSettings *settings);
 
 	void drawVideo(int x, int y, int w, int h);
-
-	QString fileName() { return _fileName;}
-	PhClock* clock() { return &_clock; }
-
-	PhFrame length();
-
-	void setFrameStamp(PhFrame frame);
-
-	PhFrame frameStamp() { return _frameStamp;};
-
-	bool ready();
-
-	int refreshRate() { return _videoFrameTickCounter.frequency(); }
 private:
 	bool goToFrame(PhFrame frame);
 
