@@ -49,17 +49,15 @@ public:
      * @return _videoPath
      */
 	QString getVideoPath();
+
+	QString getAuthorName() { return _authorName;}
+
     /**
      * @brief getLastPosition
      * @return _lastPosition
      */
-    PhTime getLastFrame();
-    /**
-     * @brief getDuration
-     * @return duration
-     * used to know the script lenght, not very accurate for the moment
-     */
-    int getDuration(); //TODO Delete me
+    PhFrame getLastFrame();
+
     /**
      * @brief getTimeScale
      * @return
@@ -175,6 +173,8 @@ private:
     int _timeScale;
 
 	PhTimeCodeType _tcType;
+
+	QString _authorName;
 
     /**
      * List of PhPeople from the file

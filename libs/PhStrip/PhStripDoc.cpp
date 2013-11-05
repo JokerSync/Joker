@@ -91,6 +91,13 @@ bool PhStripDoc::openDetX(QString fileName)
 
 			// Reading the last track : TODO
 		}
+
+		// Reading the author name
+		if(header.elementsByTagName("author").count())
+		{
+			QDomElement author = header.elementsByTagName("author").at(0).toElement();
+			_authorName = author.attribute("firstname") + " " + author.attribute("name");
+		}
 	}
 
     // Reading the "role" lists
@@ -241,6 +248,7 @@ void PhStripDoc::reset()
 	_title = QString();
 	_videoPath = QString();
 	_videoFrameStamp = 0;
+	_authorName = "";
 
 	emit this->changed();
 }
@@ -401,11 +409,6 @@ QString PhStripDoc::getVideoPath()
     return _videoPath;
 }
 
-int PhStripDoc::getDuration()
-{
-	return _texts.last()->getTimeOut() - _videoFrameStamp;
-}
-
 PhTimeCodeType PhStripDoc::getTCType()
 {
 	return _tcType;
@@ -421,7 +424,7 @@ PhTime PhStripDoc::getVideoTimestamp()
     return _videoFrameStamp;
 }
 
-PhTime PhStripDoc::getLastFrame()
+PhFrame PhStripDoc::getLastFrame()
 {
     return _lastFrame;
 }
