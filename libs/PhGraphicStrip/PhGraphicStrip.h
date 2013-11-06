@@ -76,6 +76,8 @@ public:
 
 	void setPixelPerFrame(long value);
 
+	PhFont * getFont();
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.

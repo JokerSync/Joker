@@ -7,11 +7,7 @@
 
 #include <QtGlobal>
 
-#if defined(Q_OS_MAC)
-#include <SDL2_ttf/SDL_ttf.h>
-#else
-#include <SDL2/SDL_ttf.h>
-#endif
+
 
 #include <glu.h>
 
@@ -19,14 +15,29 @@
 
 PhFont::PhFont(): _texture(-1), _glyphHeight(0)
 {
+	font = NULL;
+	boldness = 0;
 }
 
 bool PhFont::setFontFile(QString fontFile)
 {
 	PHDEBUG << fontFile;
-	TTF_Font * font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
-	if(font == NULL)
-		return false;
+
+	if(fontFile != this->fontFile)
+	{
+		this->fontFile = fontFile;
+		init(this->fontFile);
+	}
+
+}
+
+// This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
+bool PhFont::init(QString fontFile)
+{
+	if(font != NULL){
+		TTF_CloseFont(font);
+	}
+	font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
 
 	//Font foreground color is white
 	SDL_Color color = {255, 255, 255, 255};
@@ -47,8 +58,8 @@ bool PhFont::setFontFile(QString fontFile)
 	_glyphHeight = 0;
 
 	//set the boldness
-	int lim = 3;
-	for(int i = 0; i <= lim; i++)
+	PHDEBUG << "Setting the font boldness to :" << boldness;
+	for(int i = 0; i <= boldness; i++)
 	{
 		TTF_SetFontOutline(font, i);
 		// We get rid of the 32 first useless char
@@ -105,7 +116,7 @@ bool PhFont::setFontFile(QString fontFile)
 
 	// Once the texture is created, the surface is no longer needed.
 	SDL_FreeSurface(matrixSurface);
-	TTF_CloseFont(font);
+//	TTF_CloseFont(font);
 
 	return true;
 }
@@ -119,3 +130,14 @@ void PhFont::select()
 {
 	glBindTexture(GL_TEXTURE_2D, (GLuint)_texture);
 }
+int PhFont::getBoldness() const
+{
+	return boldness;
+}
+
+void PhFont::setBoldness(int value)
+{
+	boldness = value;
+	init(fontFile);
+}
+
