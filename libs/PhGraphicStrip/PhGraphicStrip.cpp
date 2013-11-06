@@ -80,6 +80,7 @@ bool PhGraphicStrip::init()
 	if(!QFile(fontFile).exists())
 		fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
 	_font.setFontFile(fontFile);
+	_font.setBoldness(_settings->value("boldness", 0).toInt());
 
 	return true;
 }
@@ -106,6 +107,12 @@ void PhGraphicStrip::clearData()
 		delete gOff;
 	_graphicOffs.clear();
 }
+PhFont *PhGraphicStrip::getFont()
+{
+	return &_font;
+}
+
+
 
 void PhGraphicStrip::setPixelPerFrame(long value)
 {
