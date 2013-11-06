@@ -28,7 +28,9 @@ PrefPanel::PrefPanel(QSettings *settings, QWidget *parent) :
 	_oldOpenLastFile = _settings->value("openLastFile", true).toBool();
 	_oldStartFullScreen = _settings->value("startFullScreen", false).toBool();
 	_oldSpeed = _settings->value("speed", 12).toInt();
+	_oldBolness = _settings->value("boldness", 0).toInt();
 
+	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldSpeed);
 	if(_oldUseQuarterFrame)
 	{
@@ -65,6 +67,7 @@ void PrefPanel::on_buttonBox_rejected()
 	_settings->setValue("openLastFile", _oldOpenLastFile);
 	_settings->setValue("startFullScreen", _oldStartFullScreen);
 	_settings->setValue("speed", _oldSpeed);
+	_settings->setValue("boldness", _oldBolness);
 	close();
 }
 
@@ -110,4 +113,9 @@ void PrefPanel::on_cBoxLastFile_toggled(bool checked)
 void PrefPanel::on_cBoxFullscreen_toggled(bool checked)
 {
 	_settings->setValue("startFullScreen", checked);
+}
+
+void PrefPanel::on_sliderBoldness_sliderMoved(int position)
+{
+	_settings->setValue("boldness", position);
 }

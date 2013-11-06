@@ -38,12 +38,15 @@ private slots:
 
 	void on_cBoxFullscreen_toggled(bool checked);
 
+	void on_sliderBoldness_sliderMoved(int position);
+
 private:
 	Ui::PrefPanel *ui;
 	QSettings *_settings;
 	bool _oldUseQuarterFrame;
 	int _oldDelay;
 	int _oldSpeed;
+	int _oldBolness;
 	float _oldStripHeight;
 	bool _oldSonyAutoConnect;
 	bool _oldOpenLastFile;
