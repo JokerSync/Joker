@@ -68,6 +68,7 @@ int main(int argc, char **argv)
 	//Create a font
 	string fontPath = ressourcesPath + "/SWENSON.TTF";
 	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 100 );
+	PHDEBUG << "Outline :" << TTF_GetFontOutline(font);
 	if (font == NULL)
 		return 3;
 
@@ -110,43 +111,49 @@ int main(int argc, char **argv)
 	int space = 128;
 	int glyphHeight = 0;
 
-	for(ch = 32; ch < 256; ++ch)
+	// Nb pass for bold setting
+	int nbPass = 2;
+	for(int i = 0; i <= nbPass; i++)
 	{
-		if(TTF_GlyphIsProvided(font, ch))
+		TTF_SetFontOutline(font, i);
+		for(ch = 32; ch < 256; ++ch)
 		{
-			int minx, maxx, miny, maxy, advance;
-			TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
-			//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance;
-			if(advance != 0)
+			if(TTF_GlyphIsProvided(font, ch))
 			{
-				// Temporary surface of the character
-				SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
-				if (!glyphSurface)
+				int minx, maxx, miny, maxy, advance;
+				TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
+				//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance;
+				if(advance != 0)
 				{
+					// Temporary surface of the character
+					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
+					if (!glyphSurface)
+					{
 
-					PHDEBUG << SDL_GetError();
-					PHDEBUG << TTF_GetError();
+						PHDEBUG << SDL_GetError();
+						PHDEBUG << TTF_GetError();
+					}
+					SDL_Rect glyphRect;
+					glyphRect.x = (ch % 16) * space;
+					glyphRect.y = (ch / 16) * space;
+					glyphRect.w = glyphSurface->w;
+					glyphRect.h = glyphSurface->h;
+					if(glyphRect.h > glyphHeight)
+						glyphHeight = glyphRect.h;
+					if(SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect ))
+						PHDEBUG << SDL_GetError();
+
+					// Store information about the glyph
+					glyphAdvance[ch] = advance;
+					glyphWidth[ch] = maxx - minx;
 				}
-				SDL_Rect glyphRect;
-				glyphRect.x = (ch % 16) * space;
-				glyphRect.y = (ch / 16) * space;
-				glyphRect.w = glyphSurface->w;
-				glyphRect.h = glyphSurface->h;
-				if(glyphRect.h > glyphHeight)
-					glyphHeight = glyphRect.h;
-				if(SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect ))
-					PHDEBUG << SDL_GetError();
-
-				// Store information about the glyph
-				glyphAdvance[ch] = advance;
-				glyphWidth[ch] = maxx - minx;
+				else
+					PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
 			}
-			else
-				PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
-		}
-		else{
-			glyphAdvance[ch] = 0;
-			glyphWidth[ch] = 0;
+			else{
+				glyphAdvance[ch] = 0;
+				glyphWidth[ch] = 0;
+			}
 		}
 	}
 
