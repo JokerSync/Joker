@@ -25,7 +25,7 @@ private slots:
 
 	void on_spinBoxDelay_valueChanged(int delay);
 	void on_cBoxQuarterFram_toggled(bool checked);
-	void on_sliderStripHeight_sliderMoved(int position);
+	void on_sliderStripHeight_valueChanged(int position);
 	void on_cBoxSonyAutoconnect_toggled(bool checked);
 	void on_spinBoxSpeed_valueChanged(int speed);
 
@@ -38,7 +38,7 @@ private slots:
 
 	void on_cBoxFullscreen_toggled(bool checked);
 
-	void on_sliderBoldness_sliderMoved(int position);
+	void on_sliderBoldness_valueChanged(int value);
 
 private:
 	Ui::PrefPanel *ui;
