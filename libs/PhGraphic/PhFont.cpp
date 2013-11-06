@@ -97,7 +97,7 @@ bool PhFont::init(QString fontFile)
 					SDL_FreeSurface(glyphSurface);
 				}
 				else
-					PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
+					PHDEBUG <<" Error with Glyph of char:" << ch << (char) ch << minx << maxx << miny << maxy << advance;
 			}
 			else
 				_glyphAdvance[ch] = 0;
