@@ -4,7 +4,7 @@
 */
 
 
-#include <QMessageBox>
+#include <QDir>
 #include "PrefPanel.h"
 #include "PhDebug.h"
 #include "ui_PrefPanel.h"
@@ -29,6 +29,7 @@ PrefPanel::PrefPanel(QSettings *settings, QWidget *parent) :
 	_oldStartFullScreen = _settings->value("startFullScreen", false).toBool();
 	_oldSpeed = _settings->value("speed", 12).toInt();
 	_oldBolness = _settings->value("boldness", 0).toInt();
+	_oldFont = _settings->value("StripFontName", "").toString();
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldSpeed);
@@ -44,7 +45,36 @@ PrefPanel::PrefPanel(QSettings *settings, QWidget *parent) :
 	ui->cBoxLastFile->setChecked(_oldOpenLastFile);
 	ui->cBoxFullscreen->setChecked(_oldStartFullScreen);
 
-	PHDEBUG;
+
+
+	//Set the fonts
+	QStringList userFontList, systemFontList;
+	QDir systemFont("/Library/Fonts/");
+	QDir userFont("~/Library/Fonts/");
+
+
+
+	QStringList filters;
+	filters.append("*.ttf");
+	systemFont.setNameFilters(filters);
+	userFont.setNameFilters(filters);
+	userFontList = userFont.entryList();
+	systemFontList = systemFont.entryList();
+
+
+	foreach(QString fontName, systemFontList)
+	{
+		fontList[fontName.split(".").first()] = "/Library/Fonts/" + fontName;
+	}
+	foreach(QString fontName, userFontList)
+	{
+		fontList[fontName.split(".").first()] = "~/Library/Fonts/" + fontName;
+	}
+
+	foreach(QString fontName, fontList.keys())
+	{
+		ui->listWidgetFont->addItem(fontName);
+	}
 }
 
 PrefPanel::~PrefPanel()
@@ -68,6 +98,9 @@ void PrefPanel::on_buttonBox_rejected()
 	_settings->setValue("startFullScreen", _oldStartFullScreen);
 	_settings->setValue("speed", _oldSpeed);
 	_settings->setValue("boldness", _oldBolness);
+	_settings->setValue("StripFontName", _oldFont);
+
+
 	close();
 }
 
@@ -118,4 +151,25 @@ void PrefPanel::on_cBoxFullscreen_toggled(bool checked)
 void PrefPanel::on_sliderBoldness_valueChanged(int value)
 {
 	_settings->setValue("boldness", value);
+}
+
+void PrefPanel::on_lineEditFilter_textEdited(const QString &arg1)
+{
+	ui->listWidgetFont->clear();
+	foreach(QString fontName, fontList.keys())
+	{
+		if(fontName.contains(&arg1, Qt::CaseInsensitive))
+			ui->listWidgetFont->addItem(fontName);
+	}
+}
+
+
+void PrefPanel::on_listWidgetFont_itemClicked(QListWidgetItem *item)
+{
+	_settings->setValue("StripFontFile", fontList[item->text()]);
+}
+
+void PrefPanel::on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+	_settings->setValue("StripFontFile", fontList[current->text()]);
 }

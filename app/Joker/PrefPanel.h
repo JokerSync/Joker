@@ -8,6 +8,7 @@
 
 #include <QDialog>
 #include <QSettings>
+#include <QListWidgetItem>
 
 namespace Ui {
 class PrefPanel;
@@ -28,6 +29,8 @@ private slots:
 	void on_sliderStripHeight_valueChanged(int position);
 	void on_cBoxSonyAutoconnect_toggled(bool checked);
 	void on_spinBoxSpeed_valueChanged(int speed);
+	void on_listWidgetFont_itemClicked(QListWidgetItem *item);
+	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 
 	void on_buttonBox_accepted();
@@ -40,9 +43,12 @@ private slots:
 
 	void on_sliderBoldness_valueChanged(int value);
 
+	void on_lineEditFilter_textEdited(const QString &arg1);
+
 private:
 	Ui::PrefPanel *ui;
 	QSettings *_settings;
+	QString _oldFont;
 	bool _oldUseQuarterFrame;
 	int _oldDelay;
 	int _oldSpeed;
@@ -51,6 +57,7 @@ private:
 	bool _oldSonyAutoConnect;
 	bool _oldOpenLastFile;
 	bool _oldStartFullScreen;
+	QMap<QString, QString> fontList;
 
 };
 

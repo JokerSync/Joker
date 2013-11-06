@@ -29,6 +29,8 @@ public:
 	 */
 	bool setFontFile(QString fontFile);
 
+	QString getFontFile();
+
 	/**
 	 * @brief Get the regular advance offset of a character.
 	 *
