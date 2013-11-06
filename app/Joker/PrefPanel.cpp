@@ -27,6 +27,9 @@ PrefPanel::PrefPanel(QSettings *settings, QWidget *parent) :
 	_oldSonyAutoConnect = _settings->value("sonyAutoConnect", true).toBool();
 	_oldOpenLastFile = _settings->value("openLastFile", true).toBool();
 	_oldStartFullScreen = _settings->value("startFullScreen", false).toBool();
+	_oldSpeed = _settings->value("speed", 12).toInt();
+
+	ui->spinBoxSpeed->setValue(_oldSpeed);
 	if(_oldUseQuarterFrame)
 	{
 		ui->cBoxQuarterFram->setChecked(true);
@@ -37,6 +40,7 @@ PrefPanel::PrefPanel(QSettings *settings, QWidget *parent) :
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
 	ui->cBoxLastFile->setChecked(_oldOpenLastFile);
+	ui->cBoxFullscreen->setChecked(_oldStartFullScreen);
 
 	PHDEBUG;
 }
@@ -60,6 +64,7 @@ void PrefPanel::on_buttonBox_rejected()
 	_settings->setValue("sonyAutoConnect", _oldSonyAutoConnect);
 	_settings->setValue("openLastFile", _oldOpenLastFile);
 	_settings->setValue("startFullScreen", _oldStartFullScreen);
+	_settings->setValue("speed", _oldSpeed);
 	close();
 }
 
@@ -70,6 +75,11 @@ void PrefPanel::on_spinBoxDelay_valueChanged(int delay)
 		_settings->setValue("delay", delay * 20);
 	else
 		_settings->setValue("delay", delay);
+}
+
+void PrefPanel::on_spinBoxSpeed_valueChanged(int speed)
+{
+	_settings->setValue("speed", speed);
 }
 
 void PrefPanel::on_cBoxQuarterFram_toggled(bool checked)

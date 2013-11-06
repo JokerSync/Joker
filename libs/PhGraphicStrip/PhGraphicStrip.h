@@ -74,6 +74,8 @@ public:
 
 	void draw(int x, int y, int width, int height);
 
+	void setPixelPerFrame(long value);
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -120,6 +122,7 @@ private :
 
 	int _trackNumber;
 	QSettings * _settings;
+	long pixelPerFrame;
 };
 
 #endif // PHGRAPHICSTRIP_H
