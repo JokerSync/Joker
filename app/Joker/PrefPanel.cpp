@@ -95,7 +95,7 @@ void PrefPanel::on_cBoxQuarterFram_toggled(bool checked)
 	ui->spinBoxDelay->selectAll();
 }
 
-void PrefPanel::on_sliderStripHeight_sliderMoved(int position)
+void PrefPanel::on_sliderStripHeight_valueChanged(int position)
 {
 	_settings->setValue("stripHeight", ((float)position / ui->sliderStripHeight->maximum()));
 }
@@ -115,7 +115,7 @@ void PrefPanel::on_cBoxFullscreen_toggled(bool checked)
 	_settings->setValue("startFullScreen", checked);
 }
 
-void PrefPanel::on_sliderBoldness_sliderMoved(int position)
+void PrefPanel::on_sliderBoldness_valueChanged(int value)
 {
-	_settings->setValue("boldness", position);
+	_settings->setValue("boldness", value);
 }
