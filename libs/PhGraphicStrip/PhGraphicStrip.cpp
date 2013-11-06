@@ -78,7 +78,10 @@ bool PhGraphicStrip::init()
 	if(_settings != NULL)
 		fontFile = _settings->value("StripFontFile", "").toString();
 	if(!QFile(fontFile).exists())
+	{
 		fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
+		_settings->setValue("StripFontFile", fontFile);
+	}
 	_font.setFontFile(fontFile);
 	_font.setBoldness(_settings->value("boldness", 0).toInt());
 
@@ -127,6 +130,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		setPixelPerFrame(_settings->value("speed", 12).toInt());
 		if(getFont()->getBoldness() != _settings->value("boldness", 0).toInt())
 			getFont()->setBoldness(_settings->value("boldness", 0).toInt());
+		if(getFont()->getFontFile() != _settings->value("StripFontFile", "").toString())
+			getFont()->setFontFile(_settings->value("StripFontFile", "").toString());
 	}
 	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();

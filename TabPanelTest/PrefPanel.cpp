@@ -4,7 +4,7 @@
 */
 
 
-#include <QMessageBox>
+#include <QDir>
 #include "PrefPanel.h"
 #include "ui_PrefPanel.h"
 
@@ -16,6 +16,26 @@ PrefPanel::PrefPanel(QWidget *parent) :
 	this->setMaximumHeight(this->height());
 	this->setMaximumWidth(this->width());
 	ui->tabWidget->setCurrentIndex(0);
+	QStringList fontList;
+	QDir systemFont("/Library/Fonts/");
+	QDir userFont("~/Library/Fonts/");
+
+
+
+	QStringList filters;
+	filters.append("*.ttf");
+	systemFont.setNameFilters(filters);
+	fontList = systemFont.entryList();
+	fontList += userFont.entryList();
+	fontList.sort();
+	fontList.removeDuplicates();
+	foreach(QString fontFullName, fontList)
+	{
+		if(fontFullName.contains(" "))
+			fontList.removeOne(fontFullName);
+	}
+	foreach(QString fontName, fontList)
+		ui->listWidgetFont->addItem(fontName);
 }
 
 PrefPanel::~PrefPanel()

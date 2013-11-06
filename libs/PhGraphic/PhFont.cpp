@@ -31,6 +31,11 @@ bool PhFont::setFontFile(QString fontFile)
 
 }
 
+QString PhFont::getFontFile()
+{
+	return fontFile;
+}
+
 // This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
 bool PhFont::init(QString fontFile)
 {
