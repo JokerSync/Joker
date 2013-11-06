@@ -21,6 +21,12 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
 
+	if(_settings)
+		pixelPerFrame = _settings->value("speed", 12).toInt();
+	else
+		pixelPerFrame = 12;
+
+
     // This is used to make some time-based test
 	_testTimer.start();
 }
@@ -101,6 +107,12 @@ void PhGraphicStrip::clearData()
 	_graphicOffs.clear();
 }
 
+void PhGraphicStrip::setPixelPerFrame(long value)
+{
+	pixelPerFrame = value;
+}
+
+
 void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
 	int lastDrawElapsed = _testTimer.elapsed();
@@ -109,9 +121,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 	int offCounter = 0;
 	int cutCounter = 0;
 
+
+
 	_clock.tick(60);
 
-	long pixelPerFrame = 12;
 	int fps = PhTimeCode::getFps(_clock.timeCodeType());
 	long syncBar_X_FromLeft = width / 6;
 	long offset = _clock.time() * pixelPerFrame * fps / _clock.timeScale() - syncBar_X_FromLeft;

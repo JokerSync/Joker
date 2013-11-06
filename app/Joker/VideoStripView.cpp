@@ -9,6 +9,7 @@ VideoStripView::VideoStripView(QWidget *parent) :
 void VideoStripView::setSettings(QSettings *settings)
 {
 	_settings = settings;
+	_strip.setSettings(settings);
 }
 
 bool VideoStripView::init()
@@ -19,8 +20,10 @@ bool VideoStripView::init()
 void VideoStripView::paint()
 {
 	float stripHeightRatio = 0.25f;
-	if(_settings)
+	if(_settings){
 		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
+		this->strip()->setPixelPerFrame(_settings->value("speed", 12).toInt());
+	}
 	int videoHeight = this->height() * (1 - stripHeightRatio);
 	if(videoHeight > 0)
 	{

@@ -65,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
 		openFile(_settings.value("lastfile").toString());
 	}
 
+#warning TODO fix fullscreen on startup
 	if(_settings.value("startFullScreen", false).toBool())
 		this->showFullScreen();
 }

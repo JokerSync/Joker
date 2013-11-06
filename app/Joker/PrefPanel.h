@@ -27,6 +27,7 @@ private slots:
 	void on_cBoxQuarterFram_toggled(bool checked);
 	void on_sliderStripHeight_sliderMoved(int position);
 	void on_cBoxSonyAutoconnect_toggled(bool checked);
+	void on_spinBoxSpeed_valueChanged(int speed);
 
 
 	void on_buttonBox_accepted();
@@ -42,6 +43,7 @@ private:
 	QSettings *_settings;
 	bool _oldUseQuarterFrame;
 	int _oldDelay;
+	int _oldSpeed;
 	float _oldStripHeight;
 	bool _oldSonyAutoConnect;
 	bool _oldOpenLastFile;
