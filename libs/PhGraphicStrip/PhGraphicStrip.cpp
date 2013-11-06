@@ -122,6 +122,12 @@ void PhGraphicStrip::setPixelPerFrame(long value)
 
 void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
+
+	if(_settings){
+		setPixelPerFrame(_settings->value("speed", 12).toInt());
+		if(getFont()->getBoldness() != _settings->value("boldness", 0).toInt())
+			getFont()->setBoldness(_settings->value("boldness", 0).toInt());
+	}
 	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 	int loopCounter = 0;
