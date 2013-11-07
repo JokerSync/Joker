@@ -35,11 +35,14 @@ PrefPanel::PrefPanel(QSettings *settings, QWidget *parent) :
 	ui->spinBoxSpeed->setValue(_oldSpeed);
 	if(_oldUseQuarterFrame)
 	{
-		ui->cBoxQuarterFram->setChecked(true);
+		ui->radioButtonQF->setChecked(true);
 		ui->spinBoxDelay->setValue(_oldDelay / 10);
 	}
 	else
+	{
+		ui->radioButtonMS->setChecked(true);
 		ui->spinBoxDelay->setValue(_oldDelay);
+	}
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
 	ui->cBoxLastFile->setChecked(_oldOpenLastFile);
@@ -108,7 +111,7 @@ void PrefPanel::on_buttonBox_rejected()
 void PrefPanel::on_spinBoxDelay_valueChanged(int delay)
 {
 	if(_settings->value("useQuarterFrame", false).toBool())
-		_settings->setValue("delay", delay * 20);
+		_settings->setValue("delay", delay * 10);
 	else
 		_settings->setValue("delay", delay);
 }
@@ -118,7 +121,7 @@ void PrefPanel::on_spinBoxSpeed_valueChanged(int speed)
 	_settings->setValue("speed", speed);
 }
 
-void PrefPanel::on_cBoxQuarterFram_toggled(bool checked)
+void PrefPanel::on_radioButtonQF_toggled(bool checked)
 {
 	_settings->setValue("useQuarterFrame", checked);
 	if(checked)

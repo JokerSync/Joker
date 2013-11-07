@@ -25,7 +25,7 @@ public:
 private slots:
 
 	void on_spinBoxDelay_valueChanged(int delay);
-	void on_cBoxQuarterFram_toggled(bool checked);
+	void on_radioButtonQF_toggled(bool checked);
 	void on_sliderStripHeight_valueChanged(int position);
 	void on_cBoxSonyAutoconnect_toggled(bool checked);
 	void on_spinBoxSpeed_valueChanged(int speed);
