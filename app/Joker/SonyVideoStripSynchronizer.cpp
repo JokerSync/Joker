@@ -85,6 +85,7 @@ void VideoStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType tc
 {
 	if(!_settingSonyFrame)
 	{
+		PHDEBUG << PhTimeCode::stringFromFrame(frame, tcType);
 #warning TODO test this
 		if(qAbs(frame - _stripClock->frame()) > 1)
 		{
