@@ -111,22 +111,15 @@ void MainWindow::openFile(QString fileName)
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 {
 	// Hide and show the mediaPanel
-	 if(event->type() == QEvent::MouseMove && this->hasFocus())
-	 {
-		_mediaPanel.show();
-		_mediaPanelAnimation.stop();
-		_mediaPanelAnimation.setDuration(300);
-		_mediaPanelAnimation.setEndValue(1);
-		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
-		_mediaPanelAnimation.start();
-		_mediaPanelState = MediaPanelVisible;
-		_mediaPanelTimer.start(3000);
-	}
+	if(event->type() == QEvent::MouseMove && this->hasFocus())
+		fadeInMediaPanel();
 	return false;
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
+	hideMediaPanel();
+
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
 	if(dlg.exec())
 	{
@@ -134,6 +127,8 @@ void MainWindow::on_actionOpen_triggered()
 		openFile(fileName);
 		_settings.setValue("lastfile", fileName);
 	}
+
+	fadeInMediaPanel();
 }
 
 void MainWindow::on_actionPlay_pause_triggered()
@@ -211,18 +206,26 @@ void MainWindow::on_action3_triggered()
 
 void MainWindow::on_actionGo_To_triggered()
 {
+	hideMediaPanel();
+
 	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _strip->clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_strip->clock()->setFrame(dlg.frame());
+
+	fadeInMediaPanel();
 }
 
 void MainWindow::on_actionOpen_Video_triggered()
 {
+	hideMediaPanel();
+
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
 	if(openVideoFile(fileName))
 		on_actionChange_timestamp_triggered();
 	else
 		QMessageBox::critical(this, "Error", "Unable to open " + fileName);
+
+	fadeInMediaPanel();
 }
 
 bool MainWindow::openVideoFile(QString videoFileName)
@@ -254,6 +257,8 @@ void MainWindow::on_actionChange_font_triggered()
 
 void MainWindow::on_actionChange_timestamp_triggered()
 {
+	hideMediaPanel();
+
 	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _synchronizer.videoClock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 	{
@@ -262,23 +267,42 @@ void MainWindow::on_actionChange_timestamp_triggered()
 		_videoEngine->setFrameStamp(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
 	}
+
+	fadeInMediaPanel();
 }
 
 
 
 void MainWindow::on_actionAbout_triggered()
 {
+	hideMediaPanel();
+
 	AboutMenu menu;
 	menu.exec();
+
+	fadeInMediaPanel();
 }
 
 
 void MainWindow::on_actionPreferences_triggered()
 {
-//	PreferencesDialog dlg(&_settings);
-//	dlg.exec();
+	hideMediaPanel();
+
 	PreferencesDialog dlg(&_settings);
 	dlg.exec();
+	fadeInMediaPanel();
+}
+
+void MainWindow::fadeInMediaPanel()
+{
+	_mediaPanel.show();
+	_mediaPanelAnimation.stop();
+	_mediaPanelAnimation.setDuration(300);
+	_mediaPanelAnimation.setEndValue(1);
+	_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
+	_mediaPanelAnimation.start();
+	_mediaPanelState = MediaPanelVisible;
+	_mediaPanelTimer.start(3000);
 }
 
 void MainWindow::fadeOutMediaPanel()
@@ -295,11 +319,16 @@ void MainWindow::fadeOutMediaPanel()
 		_mediaPanelState = MediaPanelHidding;
 		break;
 	case MediaPanelHidding:
-		_mediaPanel.hide();
-		_mediaPanelState = MediaPanelHidden;
-		_mediaPanelTimer.stop();
+		hideMediaPanel();
 		break;
 	}
+}
+
+void MainWindow::hideMediaPanel()
+{
+	_mediaPanel.hide();
+	_mediaPanelState = MediaPanelHidden;
+	_mediaPanelTimer.stop();
 }
 
 
