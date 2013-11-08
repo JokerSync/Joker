@@ -149,15 +149,15 @@ PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int *hhmmssff, PhTimeCodeType typ
     PhFrame fps = getFps(type);
 
     if (hhmmssff[1] >= 60) {
-		PHDEBUG(TC) << "Bad minute value:" << QString::number(hhmmssff[1]);
+		PHDEBUG << "Bad minute value:" << QString::number(hhmmssff[1]);
         hhmmssff[1] = 0;
     }
     if (hhmmssff[2] >= 60) {
-		PHDEBUG(TC) << "Bad second value:" << QString::number(hhmmssff[2]);
+		PHDEBUG << "Bad second value:" << QString::number(hhmmssff[2]);
         hhmmssff[2] = 0;
     }
     if (hhmmssff[3] >= fps) {
-		PHDEBUG(TC) << "Bad frame value:" << QString::number(hhmmssff[3]);
+		PHDEBUG << "Bad frame value:" << QString::number(hhmmssff[3]);
         hhmmssff[3] = 0;
     }
     PhFrame dropframe = 0;
