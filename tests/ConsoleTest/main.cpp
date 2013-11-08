@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 {
 
 	// Initialize the Debug module.
-	PhDebug::init(false, true, true, true, true, true, 8, argv[0]);
+	PhDebug::init(false, true, true, true, true, true, 1, argv[0]);
     // Test of PhDebug tool
 	//PHDEBUG(0x01) << "Test of PhDebug tool";
 
@@ -23,13 +23,16 @@ int main(int argc, char *argv[])
         int n = PhTimeCode::frameFromString(s, PhTimeCodeType25);
         //PHDEBUG << s;
         if(n != i)
-			PHDEBUG(0x10) << "problem with " << i;
+			PHDBG(0x10) << "problem with " << i;
     }
 
-	for (int i = 0; i < 10; i++)
-		PHDEBUG(i) << i;
+	for (int i = 0; i < 16; i++)
+		PHDBG(i) << i;
 
-	PHDEBUG(LVL) << 0x100;
+
+	PHDEBUG;
+
+	//PHDEBUG(LVL) << 0x100;
 
 
 	//PhTimeCodeTest tcTest;

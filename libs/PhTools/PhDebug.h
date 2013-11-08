@@ -13,7 +13,8 @@
 
 #include "iostream"
 
-#define PHDEBUG(logLevelMessage) PhDebug::instance(logLevelMessage) <<  qDebug() << Q(PhDebug::getFileName(__FILE__) + "\t") << Q(PhDebug::getFuncName(__FUNCTION__) + "\t") << Q(PhDebug::getLine(__LINE__)) << "\t"
+#define PHDEBUG PhDebug::instance() <<  qDebug() << Q(PhDebug::getFileName(__FILE__) + "\t") << Q(PhDebug::getFuncName(__FUNCTION__) + "\t") << Q(PhDebug::getLine(__LINE__)) << "\t"
+#define PHDBG(logLevelMessage) PhDebug::instance(logLevelMessage) <<  qDebug() << Q(PhDebug::getFileName(__FILE__) + "\t") << Q(PhDebug::getFuncName(__FUNCTION__) + "\t") << Q(PhDebug::getLine(__LINE__)) << "\t"
 
 
 
