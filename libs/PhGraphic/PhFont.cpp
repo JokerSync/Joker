@@ -39,10 +39,14 @@ QString PhFont::getFontFile()
 // This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
 bool PhFont::init(QString fontFile)
 {
+	PHDEBUG << fontFile;
 	if(font != NULL){
 		TTF_CloseFont(font);
 	}
 	font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
+
+	if(!font)
+		return false;
 
 	//Font foreground color is white
 	SDL_Color color = {255, 255, 255, 255};
