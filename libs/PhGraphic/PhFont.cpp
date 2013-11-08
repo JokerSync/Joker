@@ -7,11 +7,7 @@
 
 #include <QtGlobal>
 
-#if defined(Q_OS_MAC)
-#include <SDL2_ttf/SDL_ttf.h>
-#else
-#include <SDL2/SDL_ttf.h>
-#endif
+
 
 #include <glu.h>
 
@@ -19,13 +15,37 @@
 
 PhFont::PhFont(): _texture(-1), _glyphHeight(0)
 {
+	font = NULL;
+	boldness = 0;
 }
 
 bool PhFont::setFontFile(QString fontFile)
 {
 	PHDEBUG << fontFile;
-	TTF_Font * font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
-	if(font == NULL)
+
+	if(fontFile != this->fontFile)
+	{
+		this->fontFile = fontFile;
+		init(this->fontFile);
+	}
+
+}
+
+QString PhFont::getFontFile()
+{
+	return fontFile;
+}
+
+// This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
+bool PhFont::init(QString fontFile)
+{
+	PHDEBUG << fontFile;
+	if(font != NULL){
+		TTF_CloseFont(font);
+	}
+	font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
+
+	if(!font)
 		return false;
 
 	//Font foreground color is white
@@ -46,40 +66,46 @@ bool PhFont::setFontFile(QString fontFile)
 	int space = 128;
 	_glyphHeight = 0;
 
-	// We get rid of the 32 first useless char
-	for(Uint16 ch = 0; ch < 256; ++ch)
+	//set the boldness
+	PHDEBUG << "Setting the font boldness to :" << boldness;
+	for(int i = 0; i <= boldness; i++)
 	{
-		if(TTF_GlyphIsProvided(font, ch))
+		TTF_SetFontOutline(font, i);
+		// We get rid of the 32 first useless char
+		for(Uint16 ch = 0; ch < 256; ++ch)
 		{
-			int minx, maxx, miny, maxy, advance;
-			TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
-			if(advance != 0)
+			if(TTF_GlyphIsProvided(font, ch))
 			{
-				// First render the glyph to a surface
-				SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
-				if (!glyphSurface)
-					PHDEBUG << "Error during the Render Glyph of " << (char) ch << SDL_GetError();
-				SDL_Rect glyphRect;
-				glyphRect.x = (ch % 16) * space;
-				glyphRect.y = (ch / 16) * space;
-				glyphRect.w = glyphSurface->w;
-				glyphRect.h = glyphSurface->h;
-				if(glyphRect.h > _glyphHeight)
-					_glyphHeight = glyphRect.h;
-				//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
-				// Then blit it to the matrix
-				SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
+				int minx, maxx, miny, maxy, advance;
+				TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
+				if(advance != 0)
+				{
+					// First render the glyph to a surface
+					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
+					if (!glyphSurface)
+						PHDEBUG << "Error during the Render Glyph of " << (char) ch << SDL_GetError();
+					SDL_Rect glyphRect;
+					glyphRect.x = (ch % 16) * space;
+					glyphRect.y = (ch / 16) * space;
+					glyphRect.w = glyphSurface->w;
+					glyphRect.h = glyphSurface->h;
+					if(glyphRect.h > _glyphHeight)
+						_glyphHeight = glyphRect.h;
+					//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
+					// Then blit it to the matrix
+					SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
 
-				// Store information about the glyph
-				_glyphAdvance[ch] = advance;
+					// Store information about the glyph
+					_glyphAdvance[ch] = advance;
 
-				SDL_FreeSurface(glyphSurface);
+					SDL_FreeSurface(glyphSurface);
+				}
+				else
+					PHDEBUG <<" Error with Glyph of char:" << ch << (char) ch << minx << maxx << miny << maxy << advance;
 			}
 			else
-				PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
+				_glyphAdvance[ch] = 0;
 		}
-		else
-			_glyphAdvance[ch] = 0;
 	}
 
 	glEnable( GL_TEXTURE_2D );
@@ -99,7 +125,7 @@ bool PhFont::setFontFile(QString fontFile)
 
 	// Once the texture is created, the surface is no longer needed.
 	SDL_FreeSurface(matrixSurface);
-	TTF_CloseFont(font);
+//	TTF_CloseFont(font);
 
 	return true;
 }
@@ -113,3 +139,14 @@ void PhFont::select()
 {
 	glBindTexture(GL_TEXTURE_2D, (GLuint)_texture);
 }
+int PhFont::getBoldness() const
+{
+	return boldness;
+}
+
+void PhFont::setBoldness(int value)
+{
+	boldness = value;
+	init(fontFile);
+}
+

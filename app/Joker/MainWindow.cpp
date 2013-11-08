@@ -9,6 +9,7 @@
 #include "PhCommonUI/PhFontDialog.h"
 #include "AboutMenu.h"
 #include "PreferencesDialog.h"
+#include "PrefPanel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -62,6 +63,16 @@ MainWindow::MainWindow(QWidget *parent) :
 	qApp->installEventFilter(this);
 
 	this->setFocus();
+
+	// Load the last file if the setting si selected
+	if(_settings.value("openLastFile", false).toBool())
+	{
+		openFile(_settings.value("lastfile").toString());
+	}
+
+#warning TODO fix fullscreen on startup
+	if(_settings.value("startFullScreen", false).toBool())
+		this->showFullScreen();
 }
 
 MainWindow::~MainWindow()
@@ -122,6 +133,7 @@ void MainWindow::on_actionOpen_triggered()
 	{
 		QString fileName = dlg.selectedFiles()[0];
 		openFile(fileName);
+		_settings.setValue("lastfile", fileName);
 	}
 }
 
@@ -264,7 +276,9 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionPreferences_triggered()
 {
-	PreferencesDialog dlg(&_settings);
+//	PreferencesDialog dlg(&_settings);
+//	dlg.exec();
+	PrefPanel dlg(&_settings);
 	dlg.exec();
 }
 

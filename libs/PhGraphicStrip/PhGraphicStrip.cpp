@@ -21,6 +21,12 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
 
+	if(_settings)
+		pixelPerFrame = _settings->value("speed", 12).toInt();
+	else
+		pixelPerFrame = 12;
+
+
     // This is used to make some time-based test
 	_testTimer.start();
 }
@@ -72,8 +78,12 @@ bool PhGraphicStrip::init()
 	if(_settings != NULL)
 		fontFile = _settings->value("StripFontFile", "").toString();
 	if(!QFile(fontFile).exists())
+	{
 		fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
+		_settings->setValue("StripFontFile", fontFile);
+	}
 	_font.setFontFile(fontFile);
+	_font.setBoldness(_settings->value("boldness", 0).toInt());
 
 	return true;
 }
@@ -100,18 +110,39 @@ void PhGraphicStrip::clearData()
 		delete gOff;
 	_graphicOffs.clear();
 }
+PhFont *PhGraphicStrip::getFont()
+{
+	return &_font;
+}
+
+
+
+void PhGraphicStrip::setPixelPerFrame(long value)
+{
+	pixelPerFrame = value;
+}
+
 
 void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
+
+	if(_settings){
+		setPixelPerFrame(_settings->value("speed", 12).toInt());
+		if(getFont()->getBoldness() != _settings->value("boldness", 0).toInt())
+			getFont()->setBoldness(_settings->value("boldness", 0).toInt());
+		if(getFont()->getFontFile() != _settings->value("StripFontFile", "").toString())
+			getFont()->setFontFile(_settings->value("StripFontFile", "").toString());
+	}
 	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 	int loopCounter = 0;
 	int offCounter = 0;
 	int cutCounter = 0;
 
+
+
 	_clock.tick(60);
 
-	long pixelPerFrame = 12;
 	int fps = PhTimeCode::getFps(_clock.timeCodeType());
 	long syncBar_X_FromLeft = width / 6;
 	long offset = _clock.time() * pixelPerFrame * fps / _clock.timeScale() - syncBar_X_FromLeft;
