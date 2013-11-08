@@ -8,6 +8,12 @@
 
 #include <QString>
 
+#if defined(Q_OS_MAC)
+#include <SDL2_ttf/SDL_ttf.h>
+#else
+#include <SDL2/SDL_ttf.h>
+#endif
+
 class PhFont
 {
 public:
@@ -22,6 +28,8 @@ public:
 	 * @return true if the font was loaded successfully, false otherwise.
 	 */
 	bool setFontFile(QString fontFile);
+
+	QString getFontFile();
 
 	/**
 	 * @brief Get the regular advance offset of a character.
@@ -47,12 +55,17 @@ public:
 	 */
 	void select();
 
+	int getBoldness() const;
+	void setBoldness(int value);
+
 private:
 	/**
 	 * @brief _texture
 	 * The texture reference
 	 */
 	unsigned int _texture;
+
+	bool init(QString fontFile);
 
 	/**
 	 * @brief Store the regular advance of each glyph.
@@ -63,6 +76,12 @@ private:
 	 * @brief Store the regular advance of the font.
 	 */
 	int _glyphHeight;
+
+	TTF_Font * font;
+
+	QString fontFile;
+
+	int boldness;
 };
 
 #endif // PHFONT_H
