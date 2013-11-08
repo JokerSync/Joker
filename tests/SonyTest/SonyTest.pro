@@ -25,3 +25,11 @@ SOURCES += main.cpp\
 HEADERS  += MainWindow.h
 
 FORMS    += MainWindow.ui
+
+CONFIG(release, debug|release) {
+
+	mac {
+		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
+	}
+
+}
