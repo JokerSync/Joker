@@ -58,7 +58,7 @@ FORMS += \
     MainWindow.ui \
     AboutMenu.ui \
     PreferencesDialog.ui \
-    PropertyDialog.ui
+	PropertyDialog.ui \
     PrefPanel.ui
 
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
