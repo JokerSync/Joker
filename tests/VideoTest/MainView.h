@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QString>
 #include <QTimer>
+#include <QSettings>
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhDebug.h"
@@ -24,7 +25,8 @@ public:
     /**
      * @brief MainView constructor
      */
-    MainView();
+    MainView(QSettings *settings);
+
 	~MainView();
     /**
      * Open a video file.
@@ -52,6 +54,7 @@ private slots:
 private:
 
 	Ui::MainView *ui;
+	QSettings *_settings;
 	PhVideoEngine _videoEngine;
 	PhMediaPanelDialog _mediaPanelDialog;
 };

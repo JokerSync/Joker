@@ -9,9 +9,10 @@
 
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-MainView::MainView()
+MainView::MainView(QSettings *settings)
 	: QMainWindow(0),
-      ui(new Ui::MainView)//, _internalClock(PhTimeCodeType25)
+      ui(new Ui::MainView),
+	  _settings(settings)
 {
 	ui->setupUi(this);
 	_mediaPanelDialog.setClock(_videoEngine.clock());
@@ -40,6 +41,7 @@ bool MainView::openFile(QString fileName)
 
 			_videoEngine.clock()->setFrame(0);
 			_videoEngine.clock()->setRate(1.0);
+			_settings->setValue("lastVideoFile", fileName);
 			return true;
 		}
     }
