@@ -187,7 +187,10 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 			int flags = AVSEEK_FLAG_ANY;
 			if(_clock.rate() < 0)
 				flags |= AVSEEK_FLAG_BACKWARD;
-			av_seek_frame(_pFormatContext, _videoStream->index, frame - this->_frameStamp, flags);
+#warning TODO handle other frame rate than 25
+			int64_t timestamp = (frame - this->_frameStamp) * _videoStream->time_base.den / _videoStream->time_base.num / 25;
+			PHDEBUG << timestamp << _videoStream->time_base.num << _videoStream->time_base.den;
+			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
 		}
 		_currentFrame = frame;
 
