@@ -82,7 +82,13 @@ private slots:
 
 
 	// Custom slots
+
+	void fadeInMediaPanel();
+
 	void fadeOutMediaPanel();
+
+	void hideMediaPanel();
+
 	void on_actionProperties_triggered();
 
 private:
