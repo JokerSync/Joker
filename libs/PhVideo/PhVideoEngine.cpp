@@ -6,7 +6,7 @@ PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
 	_clock(PhTimeCodeType25),
 	_frameStamp(0),
 	_pFormatContext(NULL),
-	_videoStream(-1),
+	_videoStream(NULL),
 	_pCodecContext(NULL),
 	_pFrame(NULL),
 	_pSwsCtx(NULL),
@@ -21,7 +21,7 @@ PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
 
 bool PhVideoEngine::ready()
 {
-	return (_pFormatContext && (_videoStream >=0) && _pCodecContext && _pFrame);
+	return (_pFormatContext && _videoStream && _pCodecContext && _pFrame);
 }
 
 bool PhVideoEngine::open(QString fileName)
@@ -42,15 +42,15 @@ bool PhVideoEngine::open(QString fileName)
 	{
 		if(_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
 		{
-			_videoStream = i;
+			_videoStream = _pFormatContext->streams[i];
 			break;
 		}
 	}
 
-	if(_videoStream == -1)
+	if(_videoStream == NULL)
 		return false;
 
-	_pCodecContext = _pFormatContext->streams[_videoStream]->codec;
+	_pCodecContext = _videoStream->codec;
 
 	PHDEBUG << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
 	AVCodec * pCodec = avcodec_find_decoder(_pCodecContext->codec_id);
@@ -86,7 +86,7 @@ void PhVideoEngine::close()
 		avformat_close_input(&_pFormatContext);
 		_pFormatContext = NULL;
 		_pCodecContext = NULL;
-		_videoStream = -1;
+		_videoStream = NULL;
 	}
 
 	_fileName = "";
@@ -110,8 +110,8 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 
 PhFrame PhVideoEngine::length()
 {
-	if(_videoStream >= 0)
-		return (PhFrame)_pFormatContext->streams[_videoStream]->duration;
+	if(_videoStream)
+		return (PhFrame)_videoStream->duration;
 	return 0;
 }
 
@@ -142,10 +142,10 @@ int PhVideoEngine::height()
 float PhVideoEngine::framePerSecond()
 {
 	float result = 0;
-	if(_pFormatContext && (_videoStream >= 0))
+	if(_videoStream)
 	{
-		result = _pFormatContext->streams[_videoStream]->avg_frame_rate.num;
-		result /= _pFormatContext->streams[_videoStream]->avg_frame_rate.den;
+		result = _videoStream->avg_frame_rate.num;
+		result /= _videoStream->avg_frame_rate.den;
 	}
 
 	return result;
@@ -153,8 +153,8 @@ float PhVideoEngine::framePerSecond()
 
 QString PhVideoEngine::codecName()
 {
-	if(_pFormatContext && (_videoStream >= 0))
-		return _pFormatContext->streams[_videoStream]->codec->codec_name;
+	if(_videoStream)
+		return _videoStream->codec->codec_name;
 	return "";
 }
 
@@ -172,8 +172,8 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 
 	if(frame < this->_frameStamp)
 		frame = this->_frameStamp;
-	if (frame >= this->_frameStamp + _pFormatContext->streams[_videoStream]->duration)
-		frame = this->_frameStamp + _pFormatContext->streams[_videoStream]->duration;
+	if (frame >= this->_frameStamp + _videoStream->duration)
+		frame = this->_frameStamp + _videoStream->duration;
 
 	bool result = false;
 	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
@@ -187,7 +187,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 			int flags = AVSEEK_FLAG_ANY;
 			if(_clock.rate() < 0)
 				flags |= AVSEEK_FLAG_BACKWARD;
-			av_seek_frame(_pFormatContext, _videoStream, frame - this->_frameStamp, flags);
+			av_seek_frame(_pFormatContext, _videoStream->index, frame - this->_frameStamp, flags);
 		}
 		_currentFrame = frame;
 
@@ -196,7 +196,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		AVPacket packet;
 		while(av_read_frame(_pFormatContext, &packet) >= 0)
 		{
-			if(packet.stream_index == _videoStream)
+			if(packet.stream_index == _videoStream->index)
 			{
 				readElapsed = _testTimer.elapsed();
 				int ok;

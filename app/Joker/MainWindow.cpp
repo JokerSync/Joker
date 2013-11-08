@@ -135,7 +135,6 @@ void MainWindow::on_actionPlay_pause_triggered()
 {
 	if(_strip->clock()->rate() == 0.0)
 		_strip->clock()->setRate(1.0);
-
 	else
 		_strip->clock()->setRate(0.0);
 }
