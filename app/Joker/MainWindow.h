@@ -82,7 +82,7 @@ private slots:
 
 
 	// Custom slots
-	void onMediaPanelTimerTimeout();
+	void fadeOutMediaPanel();
 	void on_actionProperties_triggered();
 
 private:

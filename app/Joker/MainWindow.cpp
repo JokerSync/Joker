@@ -9,7 +9,6 @@
 #include "PhCommonUI/PhFontDialog.h"
 #include "AboutMenu.h"
 #include "PreferencesDialog.h"
-#include "PrefPanel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -55,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	_mediaPanelState = MediaPanelVisible;
 
 	// Trigger a timer that will fade off the media panel after 3 seconds
-	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(onMediaPanelTimerTimeout()));
+	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
 	_mediaPanelTimer.start(3000);
 
 	// Set up a filter for catching mouse move event (see eventFilter())
@@ -278,11 +277,11 @@ void MainWindow::on_actionPreferences_triggered()
 {
 //	PreferencesDialog dlg(&_settings);
 //	dlg.exec();
-	PrefPanel dlg(&_settings);
+	PreferencesDialog dlg(&_settings);
 	dlg.exec();
 }
 
-void MainWindow::onMediaPanelTimerTimeout()
+void MainWindow::fadeOutMediaPanel()
 {
 	PHDEBUG << _mediaPanelState;
 	switch(_mediaPanelState)
