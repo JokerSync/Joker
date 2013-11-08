@@ -239,10 +239,57 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QGridLayout" name="gridLayout">
+          <item row="4" column="1" alignment="Qt::AlignLeft">
+           <widget class="QLineEdit" name="lineEditSonyID">
+            <property name="maximumSize">
+             <size>
+              <width>70</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="maxLength">
+             <number>20</number>
+            </property>
+            <property name="placeholderText">
+             <string>F0 C0</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" alignment="Qt::AlignLeft">
+           <widget class="QCheckBox" name="cBoxSonyAutoconnect">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" alignment="Qt::AlignLeft">
+           <widget class="QSpinBox" name="spinBoxDelay">
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="lblDelay">
             <property name="text">
-             <string>Delay (ms)</string>
+             <string>Delay</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="lblSonyID">
+            <property name="text">
+             <string>Sony ID</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="lblSonyHighSpeed">
+            <property name="text">
+             <string>Sony high speed</string>
             </property>
            </widget>
           </item>
@@ -250,6 +297,13 @@
            <widget class="QLabel" name="lblSonyAutoconnect">
             <property name="text">
              <string>Sony autoconnect</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QRadioButton" name="radioButtonMS">
+            <property name="text">
+             <string>millisecond</string>
             </property>
            </widget>
           </item>
@@ -272,64 +326,10 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="lblSonyHighSpeed">
-            <property name="text">
-             <string>Sony high speed</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="lblSonyID">
-            <property name="text">
-             <string>Sony ID</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QRadioButton" name="radioButtonMS">
-            <property name="text">
-             <string>millisecond</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="2">
            <widget class="QRadioButton" name="radioButtonQF">
             <property name="text">
              <string>quarter frame</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" alignment="Qt::AlignLeft">
-           <widget class="QSpinBox" name="spinBoxDelay">
-            <property name="maximum">
-             <number>10000</number>
-            </property>
-            <property name="singleStep">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1" alignment="Qt::AlignLeft">
-           <widget class="QLineEdit" name="lineEditSonyID">
-            <property name="maximumSize">
-             <size>
-              <width>70</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="maxLength">
-             <number>20</number>
-            </property>
-            <property name="placeholderText">
-             <string>F0 C0</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1" alignment="Qt::AlignLeft">
-           <widget class="QCheckBox" name="cBoxSonyAutoconnect">
-            <property name="text">
-             <string/>
             </property>
            </widget>
           </item>
