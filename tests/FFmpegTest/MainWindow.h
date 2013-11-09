@@ -47,7 +47,7 @@ private:
 	Ui::MainWindow *ui;
 
 	AVFormatContext * _pFormatContext;
-	int _videoStream;
+	AVStream *_videoStream;
 	AVCodecContext * _pCodecContext;
 	AVFrame * _pFrame;
 	struct SwsContext * _pSwsCtx;

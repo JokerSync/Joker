@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
 	_pFormatContext(NULL),
-	_videoStream(-1),
+	_videoStream(NULL),
 	_pCodecContext(NULL),
 	_pFrame(NULL),
 	_pSwsCtx(NULL),
@@ -50,15 +50,15 @@ bool MainWindow::openFile(QString fileName)
 	{
 		if(_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
 		{
-			_videoStream = i;
+			_videoStream = _pFormatContext->streams[i];
 			break;
 		}
 	}
 
-	if(_videoStream == -1)
+	if(_videoStream == NULL)
 		return false;
 
-	_pCodecContext = _pFormatContext->streams[_videoStream]->codec;
+	_pCodecContext = _videoStream->codec;
 
 	PHDEBUG << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
 	AVCodec * pCodec = avcodec_find_decoder(_pCodecContext->codec_id);
@@ -78,14 +78,14 @@ bool MainWindow::openFile(QString fileName)
 
 bool MainWindow::setFrame(int frame)
 {
-	if(_videoStream < 0)
+	if(!_videoStream)
 		return false;
-	av_seek_frame(_pFormatContext, _videoStream, frame, 0);
+	av_seek_frame(_pFormatContext, _videoStream->index, frame, 0);
 
 	AVPacket packet;
 	while(av_read_frame(_pFormatContext, &packet) >= 0)
 	{
-		if(packet.stream_index == _videoStream)
+		if(packet.stream_index == _videoStream->index)
 		{
 			int ok;
 			avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
