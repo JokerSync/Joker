@@ -63,13 +63,9 @@ bool PhVideoEngine::open(QString fileName)
 	_pFrame = avcodec_alloc_frame();
 
 	_clock.setFrame(0);
-	bool result = goToFrame(0);
+	goToFrame(0);
 
-	if(result)
-		_fileName = fileName;
-
-	PHDEBUG << "over : " << result;
-	return result;
+	return true;
 }
 
 void PhVideoEngine::close()
