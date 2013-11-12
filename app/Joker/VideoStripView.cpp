@@ -2,7 +2,8 @@
 
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
-	_settings(NULL)
+	_settings(NULL),
+	_sony(NULL)
 {
 }
 
@@ -10,6 +11,11 @@ void VideoStripView::setSettings(QSettings *settings)
 {
 	_settings = settings;
 	_strip.setSettings(settings);
+}
+
+void VideoStripView::setSony(PhSonyController *sony)
+{
+	_sony = sony;
 }
 
 bool VideoStripView::init()
@@ -32,4 +38,7 @@ void VideoStripView::paint()
 	}
 	if(stripHeightRatio > 0)
 		_strip.draw(0, videoHeight, this->width(), this->height() - videoHeight);
+
+	if(_sony)
+		_sony->checkVideoSync();
 }

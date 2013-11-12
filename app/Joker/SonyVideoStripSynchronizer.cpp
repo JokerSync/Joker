@@ -42,12 +42,12 @@ void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType t
 		_settingVideoFrame = true;
 		_videoClock->setFrame(frame);
 		_settingVideoFrame = false;
-		if(_sonyClock)
-		{
-			_settingSonyFrame = true;
-			_sonyClock->setFrame(frame);
-			_settingSonyFrame = false;
-		}
+//		if(_sonyClock)
+//		{
+//			_settingSonyFrame = true;
+//			_sonyClock->setFrame(frame);
+//			_settingSonyFrame = false;
+//		}
 	}
 }
 
@@ -85,10 +85,10 @@ void VideoStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType tc
 {
 	if(!_settingSonyFrame)
 	{
-		PHDEBUG << PhTimeCode::stringFromFrame(frame, tcType);
 #warning TODO test this
 		if(qAbs(frame - _stripClock->frame()) > 1)
 		{
+			PHDEBUG << "correct error:" << frame << _stripClock->frame();
 			_settingStripFrame = true;
 			_stripClock->setFrame(frame);
 			_settingStripFrame = false;
