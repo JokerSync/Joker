@@ -178,14 +178,12 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	else
 	{
 		// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
-		if((_currentFrame < 0) || (_clock.rate() != 1) || (frame - _currentFrame != 1))
+		if(frame - _currentFrame != 1)
 		{
 			int flags = AVSEEK_FLAG_ANY;
-			if(_clock.rate() < 0)
-				flags |= AVSEEK_FLAG_BACKWARD;
 #warning TODO handle other frame rate than 25
 			int64_t timestamp = (frame - this->_frameStamp) * _videoStream->time_base.den / _videoStream->time_base.num / 25;
-			PHDEBUG << timestamp << _videoStream->time_base.num << _videoStream->time_base.den;
+			PHDEBUG << "seek:" << timestamp << _videoStream->time_base.num << _videoStream->time_base.den;
 			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
 		}
 		_currentFrame = frame;
@@ -197,11 +195,14 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		{
 			if(packet.stream_index == _videoStream->index)
 			{
+
 				readElapsed = _testTimer.elapsed();
-				int ok;
-				avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
-				if(!ok)
-					break;
+				int frameFinished = 0;
+				avcodec_decode_video2(_pCodecContext, _pFrame, &frameFinished, &packet);
+				if(!frameFinished)
+					continue;
+
+				PHDEBUG << _videoStream->cur_dts;
 
 				decodeElapsed = _testTimer.elapsed();
 
