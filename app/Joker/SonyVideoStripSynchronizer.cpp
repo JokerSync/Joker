@@ -106,5 +106,8 @@ void VideoStripSynchronizer::onSonyRateChanged(PhRate rate)
 		_settingStripRate = true;
 		_stripClock->setRate(rate);
 		_settingStripRate = false;
+		_settingVideoRate = true;
+		_videoClock->setRate(rate);
+		_settingVideoFrame = false;
 	}
 }
