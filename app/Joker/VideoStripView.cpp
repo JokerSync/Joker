@@ -36,7 +36,7 @@ void VideoStripView::paint()
 		int videoX = (this->width() - videoWidth) / 2;
 		_videoEngine.drawVideo(videoX, 0, videoWidth, videoHeight);
 	}
-	if(stripHeightRatio > 0)
+	if(stripHeightRatio >= 0)
 		_strip.draw(0, videoHeight, this->width(), this->height() - videoHeight);
 
 	if(_sony)
