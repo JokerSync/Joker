@@ -223,7 +223,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 			// Set the track to full
 			//if(frameOut + pixelPerFrame > timeIn and frameIn < timeOut)
-			if( (timeOut > frameIn) and (timeIn - pixelPerFrame < frameOut) )
+			if( (frameIn < timeOut) and (timeIn - pixelPerFrame < frameOut) )
 			{
 				trackFull[track] = true;
 			}
