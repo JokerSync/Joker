@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QTimer>
+#include <QTime>
 
 #include "PhSync/PhSonySlaveController.h"
 
@@ -25,7 +27,8 @@ private:
 	Ui::GraphicSyncTestWindow *ui;
 	QSettings _settings;
 	PhSonySlaveController _sony;
-	QTime _timer;
+	QTime _time;
+	int _lastTime;
 	int _count;
 };
 
