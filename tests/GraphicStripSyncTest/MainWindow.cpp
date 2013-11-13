@@ -19,15 +19,19 @@ MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 	_strip->setSettings(_settings);
 	_doc = _strip->doc();
 	_clock = _strip->clock();
+	_clockSynchroniser.setStripClock(_clock);
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 
 	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 
-	_clockSynchroniser.setSonyClock(_clock);
 	if(_sonySlave.open())
-		_clockSynchroniser.setStripClock(_sonySlave.clock());
+	{
+		_clock = _sonySlave.clock();
+		_clockSynchroniser.setSonyClock(_clock);
+		connect(ui->stripView, SIGNAL(beforePaint(int)), &_sonySlave, SLOT(checkVideoSync(int)));
+	}
 	else
 		QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
 }

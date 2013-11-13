@@ -22,6 +22,11 @@ private slots:
 private:
 	PhClock * _sonyClock;
 	PhClock * _stripClock;
+	bool _settingStripFrame;
+	bool _settingSonyFrame;
+	bool _settingStripRate;
+	bool _settingSonyRate;
+
 };
 
 #endif // SONYSTRIPSYNCHRONIZER_H
