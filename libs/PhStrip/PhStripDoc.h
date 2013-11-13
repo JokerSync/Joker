@@ -202,7 +202,7 @@ private:
 	 QList<PhStripOff *> _offs;
 
      int _nbTexts;
-	 void splitText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track, int ite);
+	 void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track, int ite);
 };
 
 #endif // PHSTRIPDOC_H
