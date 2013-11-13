@@ -244,6 +244,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		}
 
+		delete lastTextList;
+
 		foreach(PhStripCut * cut, _doc.getCuts())
 		{
 			if( (cut->getTimeIn() > frameIn) && (cut->getTimeIn() < frameOut))
