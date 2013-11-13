@@ -25,6 +25,8 @@ private:
 	Ui::GraphicSyncTestWindow *ui;
 	QSettings _settings;
 	PhSonySlaveController _sony;
+	QTime _timer;
+	int _count;
 };
 
 #endif // GRAPHICSYNCTESTWINDOW_H
