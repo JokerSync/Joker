@@ -21,7 +21,14 @@ void SonyStripSynchronizer::setStripClock(PhClock *clock)
 
 void SonyStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	_stripClock->setFrame(frame);
+	if(qAbs(_stripClock->frame() - frame))
+	{
+		PHDEBUG << "error :" << frame << _stripClock->frame();
+		_settingStripFrame = true;
+		_stripClock->setFrame(frame);
+		_settingStripFrame = false;
+
+	}
 }
 
 void SonyStripSynchronizer::onSonyRateChanged(PhRate rate)
@@ -31,9 +38,15 @@ void SonyStripSynchronizer::onSonyRateChanged(PhRate rate)
 
 void SonyStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	if(_sonyClock->frame() != frame)
-		PHDEBUG << "error :" << _sonyClock->frame() << frame;
-#warning TODO handle frame difference error
+	if(!_settingStripFrame)
+	{
+		if(_sonyClock->frame() != frame)
+		{
+//			PHDEBUG << "error :" << _sonyClock->frame() << frame;
+	#warning TODO handle frame difference error
+//			_sonyClock->setFrame(frame);
+		}
+	}
 }
 
 void SonyStripSynchronizer::onStripRateChanged(PhRate rate)
