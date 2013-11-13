@@ -6,14 +6,17 @@ GraphicSyncTestWindow::GraphicSyncTestWindow(QWidget *parent) :
 	ui(new Ui::GraphicSyncTestWindow),
 	_settings("Phonations", "GraphicSyncTest"),
 	_sony(PhTimeCodeType25, &_settings),
+	_lastTime(0),
 	_count(0)
 {
 	ui->setupUi(this);
 
-	connect(ui->graphicView, SIGNAL(beforePaint(int)), this, SLOT(beforePaint(int)));
 	_sony.open();
 	_sony.clock()->setRate(1);
-	_timer.start();
+
+	connect(ui->graphicView, SIGNAL(beforePaint(int)), this, SLOT(beforePaint(int)));
+
+	_time.start();
 }
 
 GraphicSyncTestWindow::~GraphicSyncTestWindow()
@@ -23,9 +26,9 @@ GraphicSyncTestWindow::~GraphicSyncTestWindow()
 
 void GraphicSyncTestWindow::beforePaint(int frequency)
 {
-	int elapsed = _timer.elapsed();
+	int elapsed = _time.elapsed() - _lastTime;
+	_lastTime = _time.elapsed();
 	int refreshRate = ui->graphicView->refreshRate();
-	_timer.restart();
 	_sony.checkVideoSync();
 	float ratio = _count++;
 	if(_sony.clock()->frame() > 0)
@@ -38,5 +41,6 @@ void GraphicSyncTestWindow::beforePaint(int frequency)
 	else if (_count % 60)
 		return;
 
-	PHDEBUG << s << elapsed << refreshRate << _sony.clock()->frame() << _count << ratio;
+//	PHDEBUG << s << elapsed << refreshRate << _sony.clock()->frame() << _count << ratio;
+	PHDEBUG << s << _sony.clock()->frame() * 1000.0f / _time.elapsed();
 }
