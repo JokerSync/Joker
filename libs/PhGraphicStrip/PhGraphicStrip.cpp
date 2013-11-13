@@ -27,7 +27,7 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 		pixelPerFrame = 12;
 
 
-    // This is used to make some time-based test
+	// This is used to make some time-based test
 	_testTimer.start();
 }
 
@@ -66,7 +66,7 @@ bool PhGraphicStrip::init()
 	// Clear the data stored
 	clearData();
 
-    //Load the strip background
+	//Load the strip background
 	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
 	_stripBackgroundImage.init();
 
@@ -184,6 +184,14 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		int trackHeight = height / _trackNumber;
 
+
+#warning TODO change it for pointers
+		bool trackFull[_trackNumber];
+		for(int i = 0; i < _trackNumber; i++)
+		{
+			trackFull[i] = false;
+		}
+
 		foreach(PhStripText * text, _doc.getTexts())
 		{
 			PhGraphicText* gText = _graphicTexts[text];
@@ -213,6 +221,14 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gText->draw();
 			}
 
+			// Set the track to full
+			//if(frameOut + pixelPerFrame > timeIn and frameIn < timeOut)
+			if( (timeOut > frameIn) and (timeIn - pixelPerFrame < frameOut) )
+			{
+				trackFull[track] = true;
+			}
+			//PHDEBUG << track << timeOut << frameIn << ":" << (timeOut > frameIn) << timeIn - pixelPerFrame << frameOut << ":" << (timeIn - pixelPerFrame < frameOut);
+
 			PhStripText * lastText = lastTextList[track];
 			// Display the people name only if one of the following condition is true:
 			// - it is the first text
@@ -238,6 +254,40 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->setHeight(trackHeight / 2);
 
 				gPeople->draw();
+			}
+
+			// Displaying text prediction only if one of the following condition is true:
+			// - The track is empty...
+			if(trackFull[track] == false)
+			{
+				PhPeople * people = text->getPeople();
+				PhGraphicText * gPeople = _graphicPeoples[people];
+				if(gPeople == NULL)
+				{
+					gPeople = new PhGraphicText(&_font, people->getName());
+					gPeople->setColor(QColor(people->getColor()));
+					gPeople->setWidth(people->getName().length() * 16);
+					gPeople->setZ(-1);
+
+					gPeople->init();
+
+					_graphicPeoples[people] = gPeople;
+				}
+				//This line is used to see which text's name will be displayed
+				//gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(timeIn, PhTimeCodeType25));
+				gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(qAbs(clockFrame - timeIn), PhTimeCodeType25));
+				gPeople->setWidth(gPeople->getContent().length() * 16);
+				gPeople->setX(width - gPeople->getWidth() - 20);
+				gPeople->setY(y + track * trackHeight);
+				gPeople->setHeight(trackHeight / 2);
+
+				gPeople->draw();
+
+				//Rename gPeople with their real names
+				gPeople->setContent(people->getName());
+				gPeople->setWidth(gPeople->getContent().length() * 16);
+				trackFull[track] = true;
+				//PHDEBUG << people->getName();
 			}
 
 			lastTextList[track] = text;
@@ -317,10 +367,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		}
 	}
 
-//	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
+	//	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
 
 	int currentDrawElapsed = _testTimer.elapsed() - lastDrawElapsed;
-//	if(_testTimer.elapsed() > 20)
-//		PHDEBUG << lastDrawElapsed << currentDrawElapsed;
+	//	if(_testTimer.elapsed() > 20)
+	//		PHDEBUG << lastDrawElapsed << currentDrawElapsed;
 	_testTimer.restart();
 }
