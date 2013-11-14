@@ -25,6 +25,9 @@ bool VideoStripView::init()
 
 void VideoStripView::paint()
 {
+	if(_sony)
+		_sony->checkVideoSync();
+
 	float stripHeightRatio = 0.25f;
 	if(_settings){
 		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
@@ -38,7 +41,4 @@ void VideoStripView::paint()
 	}
 	if(stripHeightRatio >= 0)
 		_strip.draw(0, videoHeight, this->width(), this->height() - videoHeight);
-
-	if(_sony)
-		_sony->checkVideoSync();
 }
