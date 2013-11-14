@@ -38,9 +38,9 @@ void GraphicSyncTestWindow::beforePaint(int frequency)
 		s = "<";
 	else if(elapsed > 30)
 		s = ">";
-	else if (_count % 60)
-		return;
+//	else if (_count % 60)
+//		return;
 
-//	PHDEBUG << s << elapsed << refreshRate << _sony.clock()->frame() << _count << ratio;
-	PHDEBUG << s << _sony.clock()->frame() * 1000.0f / _time.elapsed();
+	PHDEBUG << s << elapsed << refreshRate << _sony.clock()->frame() << _count << ratio;
+//	PHDEBUG << s << _sony.clock()->frame() * 1000.0f / _time.elapsed();
 }
