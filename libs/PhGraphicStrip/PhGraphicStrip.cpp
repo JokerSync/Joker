@@ -255,9 +255,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->draw();
 			}
 
-			// Displaying text prediction only if one of the following condition is true:
-			// - The track is empty...
-			if(trackFull[track] == false)
+			// Displaying text prediction only if the following conditions are true:
+			// - The track is empty;
+			// - It refers to a texts about to be displayed
+			if(trackFull[track] == false and (frameIn < text->getTimeOut()))
 			{
 				PhPeople * people = text->getPeople();
 				PhGraphicText * gPeople = _graphicPeoples[people];
