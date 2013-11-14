@@ -222,11 +222,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 			// Set the track to full
 			//if(frameOut + pixelPerFrame > timeIn and frameIn < timeOut)
-			if( (frameIn < text->getTimeOut()) and (text->getTimeIn() - pixelPerFrame < frameOut) )
+			if( (frameIn < text->getTimeOut()) and (text->getTimeIn() < frameOut) )
 			{
 				trackFull[track] = true;
 			}
-			//PHDEBUG << track << timeOut << frameIn << ":" << (timeOut > frameIn) << timeIn - pixelPerFrame << frameOut << ":" << (timeIn - pixelPerFrame < frameOut);
 
 			PhStripText * lastText = lastTextList[track];
 			// Display the people name only if one of the following condition is true:
@@ -253,6 +252,13 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->setHeight(trackHeight / 2);
 
 				gPeople->draw();
+
+				//Check if the name is printed on the screen
+				if( (frameIn < text->getTimeOut()) and (text->getTimeIn() - gPeople->getWidth() / pixelPerFrame < frameOut) )
+				{
+					trackFull[track] = true;
+				}
+
 			}
 
 			// Displaying text prediction only if the following conditions are true:
