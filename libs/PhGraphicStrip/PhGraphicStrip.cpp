@@ -208,13 +208,12 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				_graphicTexts[text] = gText;
 			}
 			int track = text->getTrack();
-			PhTime timeIn = text->getTimeIn();
-			PhTime timeOut = text->getTimeOut();
 
-			if( ! ((timeOut < frameIn) || (timeIn > frameOut)) )
+
+			if( ! ((text->getTimeOut() < frameIn) || (text->getTimeIn() > frameOut)) )
 			{
-				gText->setX(x + timeIn * pixelPerFrame - offset);
-				gText->setWidth((timeOut - timeIn) * pixelPerFrame);
+				gText->setX(x + text->getTimeIn() * pixelPerFrame - offset);
+				gText->setWidth((text->getTimeOut() - text->getTimeIn()) * pixelPerFrame);
 				gText->setY(y + track * trackHeight);
 				gText->setHeight(trackHeight);
 
@@ -223,7 +222,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 			// Set the track to full
 			//if(frameOut + pixelPerFrame > timeIn and frameIn < timeOut)
-			if( (frameIn < timeOut) and (timeIn - pixelPerFrame < frameOut) )
+			if( (frameIn < text->getTimeOut()) and (text->getTimeIn() - pixelPerFrame < frameOut) )
 			{
 				trackFull[track] = true;
 			}
@@ -275,7 +274,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				}
 				//This line is used to see which text's name will be displayed
 				//gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(timeIn, PhTimeCodeType25));
-				gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(qAbs(clockFrame - timeIn), PhTimeCodeType25));
+				gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(qAbs(clockFrame - text->getTimeIn()), PhTimeCodeType25));
 				gPeople->setWidth(gPeople->getContent().length() * 16);
 				gPeople->setX(width - gPeople->getWidth() - 20);
 				gPeople->setY(y + track * trackHeight);
