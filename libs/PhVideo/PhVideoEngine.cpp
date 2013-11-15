@@ -191,51 +191,60 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		seekElapsed = _testTimer.elapsed();
 
 		AVPacket packet;
-		while(av_read_frame(_pFormatContext, &packet) >= 0)
+
+		bool lookingForVideoFrame = true;
+		while(lookingForVideoFrame)
 		{
-			if(packet.stream_index == _videoStream->index)
+			if(av_read_frame(_pFormatContext, &packet) >= 0)
 			{
+				if(packet.stream_index == _videoStream->index)
+				{
 
-				readElapsed = _testTimer.elapsed();
-				int frameFinished = 0;
-				avcodec_decode_video2(_pCodecContext, _pFrame, &frameFinished, &packet);
-				if(!frameFinished)
-					continue;
+					readElapsed = _testTimer.elapsed();
+					int frameFinished = 0;
+					avcodec_decode_video2(_pCodecContext, _pFrame, &frameFinished, &packet);
+					if(!frameFinished)
+						continue;
 
-				PHDEBUG << _videoStream->cur_dts;
+					//Commented this because it was flooding
+					//PHDEBUG << _videoStream->cur_dts;
 
-				decodeElapsed = _testTimer.elapsed();
+					decodeElapsed = _testTimer.elapsed();
 
-				_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
-												_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
-												AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+					_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
+													_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
+													AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
 
-				if(_rgb == NULL)
-					_rgb = new uint8_t[_pFrame->width * _pFrame->height * 4];
-				int linesize = _pFrame->width * 4;
-				if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
-							  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
-							  &linesize) < 0)
-					break;
+					if(_rgb == NULL)
+						_rgb = new uint8_t[_pFrame->width * _pFrame->height * 4];
+					int linesize = _pFrame->width * 4;
+					if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
+								  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
+								  &linesize) < 0)
+						break;
 
-				scaleElapsed = _testTimer.elapsed();
+					scaleElapsed = _testTimer.elapsed();
 
-				videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
+					videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
 
-				textureElapsed = _testTimer.elapsed();
+					textureElapsed = _testTimer.elapsed();
 
-				_videoFrameTickCounter.tick();
-				result = true;
-				break;
+					_videoFrameTickCounter.tick();
+					result = true;
+					lookingForVideoFrame = false;
+				}
+				//Avoid memory leak
+				av_free_packet(&packet);
 			}
-			av_free_packet(&packet); //important!
+			else
+				lookingForVideoFrame = false;
 		}
 	}
 
 	int currentGotoElapsed = _testTimer.elapsed();
-//	if(_testTimer.elapsed() > 25)
-//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
-//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
+	//	if(_testTimer.elapsed() > 25)
+	//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
+	//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
 	_testTimer.restart();
 
 	return result;
