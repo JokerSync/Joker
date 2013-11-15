@@ -27,7 +27,7 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 		pixelPerFrame = 12;
 
 
-    // This is used to make some time-based test
+	// This is used to make some time-based test
 	_testTimer.start();
 }
 
@@ -66,7 +66,7 @@ bool PhGraphicStrip::init()
 	// Clear the data stored
 	clearData();
 
-    //Load the strip background
+	//Load the strip background
 	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
 	_stripBackgroundImage.init();
 
@@ -184,6 +184,14 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		int trackHeight = height / _trackNumber;
 
+
+#warning TODO change it for pointers
+		bool trackFull[_trackNumber];
+		for(int i = 0; i < _trackNumber; i++)
+		{
+			trackFull[i] = false;
+		}
+
 		foreach(PhStripText * text, _doc.getTexts())
 		{
 			PhGraphicText* gText = _graphicTexts[text];
@@ -200,17 +208,23 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				_graphicTexts[text] = gText;
 			}
 			int track = text->getTrack();
-			PhTime timeIn = text->getTimeIn();
-			PhTime timeOut = text->getTimeOut();
 
-			if( ! ((timeOut < frameIn) || (timeIn > frameOut)) )
+
+			if( ! ((text->getTimeOut() < frameIn) || (text->getTimeIn() > frameOut)) )
 			{
-				gText->setX(x + timeIn * pixelPerFrame - offset);
-				gText->setWidth((timeOut - timeIn) * pixelPerFrame);
+				gText->setX(x + text->getTimeIn() * pixelPerFrame - offset);
+				gText->setWidth((text->getTimeOut() - text->getTimeIn()) * pixelPerFrame);
 				gText->setY(y + track * trackHeight);
 				gText->setHeight(trackHeight);
 
 				gText->draw();
+			}
+
+			// Set the track to full
+			//if(frameOut + pixelPerFrame > timeIn and frameIn < timeOut)
+			if( (frameIn < text->getTimeOut()) and (text->getTimeIn() < frameOut) )
+			{
+				trackFull[track] = true;
 			}
 
 			PhStripText * lastText = lastTextList[track];
@@ -238,6 +252,48 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->setHeight(trackHeight / 2);
 
 				gPeople->draw();
+
+				//Check if the name is printed on the screen
+				if( (frameIn < text->getTimeOut()) and (text->getTimeIn() - gPeople->getWidth() / pixelPerFrame < frameOut) )
+				{
+					trackFull[track] = true;
+				}
+
+			}
+
+			// Displaying text prediction only if the following conditions are true:
+			// - The track is empty;
+			// - It refers to a texts about to be displayed
+			if(trackFull[track] == false and (frameIn < text->getTimeOut()))
+			{
+				PhPeople * people = text->getPeople();
+				PhGraphicText * gPeople = _graphicPeoples[people];
+				if(gPeople == NULL)
+				{
+					gPeople = new PhGraphicText(&_font, people->getName());
+					gPeople->setColor(QColor(people->getColor()));
+					gPeople->setWidth(people->getName().length() * 16);
+					gPeople->setZ(-1);
+
+					gPeople->init();
+
+					_graphicPeoples[people] = gPeople;
+				}
+				//This line is used to see which text's name will be displayed
+				//gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(timeIn, PhTimeCodeType25));
+				gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(qAbs(clockFrame - text->getTimeIn()), PhTimeCodeType25));
+				gPeople->setWidth(gPeople->getContent().length() * 16);
+				gPeople->setX(width - gPeople->getWidth() - 20);
+				gPeople->setY(y + track * trackHeight);
+				gPeople->setHeight(trackHeight / 2);
+
+				gPeople->draw();
+
+				//Rename gPeople with their real names
+				gPeople->setContent(people->getName());
+				gPeople->setWidth(gPeople->getContent().length() * 16);
+				trackFull[track] = true;
+				//PHDEBUG << people->getName();
 			}
 
 			lastTextList[track] = text;
@@ -317,10 +373,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		}
 	}
 
-//	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
+	//	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
 
 	int currentDrawElapsed = _testTimer.elapsed() - lastDrawElapsed;
-//	if(_testTimer.elapsed() > 20)
-//		PHDEBUG << lastDrawElapsed << currentDrawElapsed;
+	//	if(_testTimer.elapsed() > 20)
+	//		PHDEBUG << lastDrawElapsed << currentDrawElapsed;
 	_testTimer.restart();
 }
