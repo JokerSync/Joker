@@ -203,35 +203,39 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 					readElapsed = _testTimer.elapsed();
 					int frameFinished = 0;
 					avcodec_decode_video2(_pCodecContext, _pFrame, &frameFinished, &packet);
-					if(!frameFinished)
-						continue;
+					if(frameFinished)
+					{
 
-					//Commented this because it was flooding
-					//PHDEBUG << _videoStream->cur_dts;
+						//Commented this because it was flooding
+						//PHDEBUG << _videoStream->cur_dts;
 
-					decodeElapsed = _testTimer.elapsed();
+						decodeElapsed = _testTimer.elapsed();
 
-					_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
-													_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
-													AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
+														_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
+														AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
 
-					if(_rgb == NULL)
-						_rgb = new uint8_t[_pFrame->width * _pFrame->height * 4];
-					int linesize = _pFrame->width * 4;
-					if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
-								  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
-								  &linesize) < 0)
-						break;
+						if(_rgb == NULL)
+							_rgb = new uint8_t[_pFrame->width * _pFrame->height * 4];
+						int linesize = _pFrame->width * 4;
+						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
+										   _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
+										   &linesize))
+						{
 
-					scaleElapsed = _testTimer.elapsed();
 
-					videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
+							scaleElapsed = _testTimer.elapsed();
 
-					textureElapsed = _testTimer.elapsed();
+							videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
 
-					_videoFrameTickCounter.tick();
-					result = true;
-					lookingForVideoFrame = false;
+							textureElapsed = _testTimer.elapsed();
+
+							_videoFrameTickCounter.tick();
+							result = true;
+						}
+						lookingForVideoFrame = false;
+					}
+
 				}
 				//Avoid memory leak
 				av_free_packet(&packet);
