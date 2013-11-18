@@ -281,7 +281,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				}
 				//This line is used to see which text's name will be displayed
 				//gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(timeIn, PhTimeCodeType25));
-				gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(qAbs(clockFrame - text->getTimeIn()), PhTimeCodeType25));
+				gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(text->getTimeIn(), PhTimeCodeType25));
 				gPeople->setWidth(gPeople->getContent().length() * 16);
 				gPeople->setX(width - gPeople->getWidth() - 20);
 				gPeople->setY(y + track * trackHeight);
