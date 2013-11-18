@@ -226,6 +226,12 @@
    <property name="text">
     <string>Test mode</string>
    </property>
+   <property name="toolTip">
+    <string>Set Joker on Test mode for synccheck</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+T</string>
+   </property>
   </action>
  </widget>
  <customwidgets>
