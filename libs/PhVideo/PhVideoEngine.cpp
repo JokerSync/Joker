@@ -63,13 +63,9 @@ bool PhVideoEngine::open(QString fileName)
 	_pFrame = avcodec_alloc_frame();
 
 	_clock.setFrame(0);
-	bool result = goToFrame(0);
+	goToFrame(0);
 
-	if(result)
-		_fileName = fileName;
-
-	PHDEBUG << "over : " << result;
-	return result;
+	return true;
 }
 
 void PhVideoEngine::close()
@@ -182,14 +178,12 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	else
 	{
 		// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
-		if((_currentFrame < 0) || (_clock.rate() != 1) || (frame - _currentFrame != 1))
+		if(frame - _currentFrame != 1)
 		{
 			int flags = AVSEEK_FLAG_ANY;
-			if(_clock.rate() < 0)
-				flags |= AVSEEK_FLAG_BACKWARD;
 #warning TODO handle other frame rate than 25
 			int64_t timestamp = (frame - this->_frameStamp) * _videoStream->time_base.den / _videoStream->time_base.num / 25;
-			PHDEBUG << timestamp << _videoStream->time_base.num << _videoStream->time_base.den;
+			PHDEBUG << "seek:" << timestamp << _videoStream->time_base.num << _videoStream->time_base.den;
 			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
 		}
 		_currentFrame = frame;
@@ -197,48 +191,64 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		seekElapsed = _testTimer.elapsed();
 
 		AVPacket packet;
-		while(av_read_frame(_pFormatContext, &packet) >= 0)
+
+		bool lookingForVideoFrame = true;
+		while(lookingForVideoFrame)
 		{
-			if(packet.stream_index == _videoStream->index)
+			if(av_read_frame(_pFormatContext, &packet) >= 0)
 			{
-				readElapsed = _testTimer.elapsed();
-				int ok;
-				avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
-				if(!ok)
-					break;
+				if(packet.stream_index == _videoStream->index)
+				{
 
-				decodeElapsed = _testTimer.elapsed();
+					readElapsed = _testTimer.elapsed();
+					int frameFinished = 0;
+					avcodec_decode_video2(_pCodecContext, _pFrame, &frameFinished, &packet);
+					if(frameFinished)
+					{
 
-				_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
-												_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
-												AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+						//Commented this because it was flooding
+						//PHDEBUG << _videoStream->cur_dts;
 
-				if(_rgb == NULL)
-					_rgb = new uint8_t[_pFrame->width * _pFrame->height * 4];
-				int linesize = _pFrame->width * 4;
-				if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
-							  _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
-							  &linesize) < 0)
-					break;
+						decodeElapsed = _testTimer.elapsed();
 
-				scaleElapsed = _testTimer.elapsed();
+						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
+														_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
+														AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
 
-				videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
+						if(_rgb == NULL)
+							_rgb = new uint8_t[_pFrame->width * _pFrame->height * 4];
+						int linesize = _pFrame->width * 4;
+						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
+										   _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
+										   &linesize))
+						{
 
-				textureElapsed = _testTimer.elapsed();
 
-				_videoFrameTickCounter.tick();
-				result = true;
-				break;
+							scaleElapsed = _testTimer.elapsed();
+
+							videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
+
+							textureElapsed = _testTimer.elapsed();
+
+							_videoFrameTickCounter.tick();
+							result = true;
+						}
+						lookingForVideoFrame = false;
+					}
+
+				}
+				//Avoid memory leak
+				av_free_packet(&packet);
 			}
-			av_free_packet(&packet); //important!
+			else
+				lookingForVideoFrame = false;
 		}
 	}
 
 	int currentGotoElapsed = _testTimer.elapsed();
-//	if(_testTimer.elapsed() > 25)
-//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
-//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
+	//	if(_testTimer.elapsed() > 25)
+	//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
+	//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
 	_testTimer.restart();
 
 	return result;
