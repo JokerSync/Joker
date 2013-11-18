@@ -20,3 +20,11 @@ SOURCES += \
 FORMS += \
     MainView.ui
 
+
+CONFIG(release, debug|release) {
+
+	mac {
+		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
+	}
+
+}
