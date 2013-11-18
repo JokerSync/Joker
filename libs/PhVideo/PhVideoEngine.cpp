@@ -110,7 +110,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		videoRect.draw();
 }
 
-void PhVideoEngine::toggleTestMode()
+void PhVideoEngine::onToggleTestMode()
 {
 	_testMode = ! _testMode;
 }
