@@ -329,3 +329,8 @@ void MainWindow::on_actionProperties_triggered()
 {
     _propertyDialog.show();
 }
+
+void MainWindow::on_actionTest_mode_triggered()
+{
+	_videoEngine->toggleTestMode();
+}

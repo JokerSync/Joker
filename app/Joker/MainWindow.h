@@ -89,6 +89,8 @@ private slots:
 
 	void on_actionProperties_triggered();
 
+	void on_actionTest_mode_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip * _strip;
