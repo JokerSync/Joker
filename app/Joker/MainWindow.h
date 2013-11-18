@@ -38,6 +38,10 @@ protected:
 		MediaPanelHidden
 	};
 
+
+signals:
+	void toggleTestMode();
+
 private slots:
 		// Qt Designer slots
 	void on_actionOpen_triggered();
@@ -72,8 +76,6 @@ private slots:
 
 	void on_actionOpen_Video_triggered();
 
-	void on_actionChange_font_triggered();
-
 	void on_actionChange_timestamp_triggered();
 
 	void on_actionAbout_triggered();
@@ -90,6 +92,8 @@ private slots:
 	void hideMediaPanel();
 
 	void on_actionProperties_triggered();
+
+	void on_actionTest_mode_triggered();
 
 private:
 	Ui::MainWindow *ui;
