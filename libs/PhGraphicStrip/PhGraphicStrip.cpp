@@ -16,7 +16,8 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	_doc(this),
 	_clock(_doc.getTCType()),
 	_trackNumber(4),
-	_settings(NULL)
+	_settings(NULL),
+	_testMode(false)
 {
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
@@ -113,6 +114,11 @@ void PhGraphicStrip::clearData()
 PhFont *PhGraphicStrip::getFont()
 {
 	return &_font;
+}
+
+void PhGraphicStrip::onToggleTestMode()
+{
+	_testMode = ! _testMode;
 }
 
 
@@ -306,6 +312,13 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		{
 			if( (cut->getTimeIn() > frameIn) && (cut->getTimeIn() < frameOut))
 			{
+				if(cut->getTimeIn() == _clock.frame() + delay and _testMode)
+				{
+					// Can't easely find the window height, 2000px is high enough
+					PhGraphicSolidRect white(0, 0, width, 2000);
+					white.setColor(QColor("white"));
+					white.draw();
+				}
 				PhGraphicSolidRect *gCut = _graphicCuts[cut];
 				if(gCut == NULL)
 				{

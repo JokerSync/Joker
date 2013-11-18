@@ -78,6 +78,10 @@ public:
 
 	PhFont * getFont();
 
+public slots:
+
+	void onToggleTestMode();
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -125,6 +129,7 @@ private :
 	int _trackNumber;
 	QSettings * _settings;
 	long pixelPerFrame;
+	bool _testMode;
 };
 
 #endif // PHGRAPHICSTRIP_H

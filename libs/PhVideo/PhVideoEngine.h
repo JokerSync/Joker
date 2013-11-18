@@ -38,7 +38,7 @@ public:
 
 	void setFrameStamp(PhFrame frame);
 
-	PhFrame frameStamp() { return _frameStamp;};
+	PhFrame frameStamp() { return _frameStamp;}
 
 	PhFrame length();
 
@@ -58,6 +58,11 @@ public:
 	void setSettings(QSettings *settings);
 
 	void drawVideo(int x, int y, int w, int h);
+
+public slots:
+
+	void onToggleTestMode();
+
 private:
 	bool goToFrame(PhFrame frame);
 
@@ -77,6 +82,8 @@ private:
 
 	QElapsedTimer _testTimer;
 	PhTickCounter _videoFrameTickCounter;
+
+	bool _testMode;
 
 };
 

@@ -60,6 +60,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
 	_mediaPanelTimer.start(3000);
 
+	// Connect the slots for test mode
+	connect(this, SIGNAL(toggleTestMode()), _strip, SLOT(onToggleTestMode()));
+	connect(this, SIGNAL(toggleTestMode()), _videoEngine, SLOT(onToggleTestMode()));
+
 	// Set up a filter for catching mouse move event (see eventFilter())
 	// that will show the media panel back
 	qApp->installEventFilter(this);
@@ -248,16 +252,6 @@ bool MainWindow::openVideoFile(QString videoFileName)
 	return false;
 }
 
-void MainWindow::on_actionChange_font_triggered()
-{
-	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
-	if(QFile(fontFile).exists())
-	{
-		if(!_strip->setFontFile(fontFile))
-			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
-	}
-}
-
 void MainWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();
@@ -338,4 +332,9 @@ void MainWindow::hideMediaPanel()
 void MainWindow::on_actionProperties_triggered()
 {
     _propertyDialog.show();
+}
+
+void MainWindow::on_actionTest_mode_triggered()
+{
+	emit toggleTestMode();
 }
