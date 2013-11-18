@@ -72,8 +72,6 @@ private slots:
 
 	void on_actionOpen_Video_triggered();
 
-	void on_actionChange_font_triggered();
-
 	void on_actionChange_timestamp_triggered();
 
 	void on_actionAbout_triggered();

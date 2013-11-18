@@ -248,16 +248,6 @@ bool MainWindow::openVideoFile(QString videoFileName)
 	return false;
 }
 
-void MainWindow::on_actionChange_font_triggered()
-{
-	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
-	if(QFile(fontFile).exists())
-	{
-		if(!_strip->setFontFile(fontFile))
-			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
-	}
-}
-
 void MainWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();

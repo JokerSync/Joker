@@ -18,7 +18,16 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -75,7 +84,7 @@
     <property name="title">
      <string>View</string>
     </property>
-    <addaction name="actionChange_font"/>
+    <addaction name="actionTest_mode"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -211,6 +220,11 @@
   <action name="actionProperties">
    <property name="text">
     <string>Properties...</string>
+   </property>
+  </action>
+  <action name="actionTest_mode">
+   <property name="text">
+    <string>Test mode</string>
    </property>
   </action>
  </widget>
