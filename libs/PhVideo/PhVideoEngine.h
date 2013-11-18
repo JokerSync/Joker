@@ -59,7 +59,10 @@ public:
 
 	void drawVideo(int x, int y, int w, int h);
 
-	void toggleTestMode();
+public slots:
+
+	void onToggleTestMode();
+
 private:
 	bool goToFrame(PhFrame frame);
 
