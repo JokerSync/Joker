@@ -34,6 +34,9 @@ public:
 
 	int refreshRate() { return _frameTickCounter.frequency();}
 
+signals:
+	void beforePaint(int frequency);
+
 protected:
 
 

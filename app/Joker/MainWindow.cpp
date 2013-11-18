@@ -43,7 +43,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	if(_settings.value("sonyAutoConnect", true).toBool())
 	{
 		if(_sonySlave.open())
+		{
 			_synchronizer.setSonyClock(_sonySlave.clock());
+			ui->videoStripView->setSony(&_sonySlave);
+		}
 		else
 			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
 	}
@@ -103,6 +106,7 @@ void MainWindow::openFile(QString fileName)
 				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
 				_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
 				_mediaPanel.setMediaLength(_videoEngine->length());
+				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
 			}
 		}
 	}
