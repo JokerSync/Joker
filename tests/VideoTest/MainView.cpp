@@ -34,13 +34,12 @@ bool MainView::openFile(QString fileName)
 		if(_videoEngine.open(fileName))
 		{
 			this->setWindowTitle(fileName);
-#warning TODO read media length from video file
-			_mediaPanelDialog.setMediaLength(1000);
+			_mediaPanelDialog.setMediaLength(_videoEngine.length());
 #warning TODO read first frame from video file
 			_mediaPanelDialog.setFirstFrame(0);
 
 			_videoEngine.clock()->setFrame(0);
-			_videoEngine.clock()->setRate(1.0);
+			//_videoEngine.clock()->setRate(1.0);
 			_settings->setValue("lastVideoFile", fileName);
 			return true;
 		}
