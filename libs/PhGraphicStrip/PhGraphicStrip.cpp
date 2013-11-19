@@ -129,26 +129,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
-	if(_settings->value("stripTestMode", false).toBool())
+	if(height > 0)
 	{
-		long delay = (int)(_settings->value("delay", 0).toInt() * _clock.rate()); // delay in ms
-		foreach(PhStripCut * cut, _doc.getCuts())
+		if(_settings)
 		{
-			if(cut->getTimeIn() == _clock.frame() + delay)
-			{
-				PhGraphicSolidRect white(x, y, width, height);
-				white.setColor(QColor("white"));
-				white.draw();
-
-				//This is useless to continue the foreach if the cut is displayed.
-				break;
-			}
-		}
-	}
-
-	else if(height > 0){
-
-		if(_settings){
 			setPixelPerFrame(_settings->value("speed", 12).toInt());
 			if(getFont()->getBoldness() != _settings->value("boldness", 0).toInt())
 				getFont()->setBoldness(_settings->value("boldness", 0).toInt());
@@ -170,6 +154,23 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		PhFrame stripDuration = width / pixelPerFrame;
 
 		PhFrame clockFrame = _clock.frame() + delay * fps / 1000;
+
+		if(_settings->value("stripTestMode", false).toBool())
+		{
+			foreach(PhStripCut * cut, _doc.getCuts())
+			{
+				if(cut->getTimeIn() == clockFrame)
+				{
+					PhGraphicSolidRect white(x, y, width, height);
+					white.setColor(QColor("white"));
+					white.draw();
+
+					//This is useless to continue the foreach if the cut is displayed.
+					break;
+				}
+			}
+			return;
+		}
 
 		PhFrame frameIn = clockFrame - syncBar_X_FromLeft / pixelPerFrame;
 		PhFrame frameOut = frameIn + stripDuration;
