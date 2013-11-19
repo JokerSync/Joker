@@ -39,9 +39,6 @@ protected:
 	};
 
 
-signals:
-	void toggleTestMode();
-
 private slots:
 		// Qt Designer slots
 	void on_actionOpen_triggered();
