@@ -33,8 +33,7 @@ void VideoStripView::paint()
 		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
 	}
 	int videoHeight = this->height() * (1 - stripHeightRatio);
-	if(_settings->value("stripTestMode", false).toBool())
-		videoHeight = 0;
+
 	if((_videoEngine.height() > 0) and (videoHeight > 0))
 	{
 		int videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();

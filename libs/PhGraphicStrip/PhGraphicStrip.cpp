@@ -136,10 +136,12 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		{
 			if(cut->getTimeIn() == _clock.frame() + delay)
 			{
-				// Can't easely find the window height, 2000px is high enough
-				PhGraphicSolidRect white(0, 0, width, 2000);
+				PhGraphicSolidRect white(x, y, width, height);
 				white.setColor(QColor("white"));
 				white.draw();
+
+				//This is useless to continue the foreach if the cut is displayed.
+				break;
 			}
 		}
 	}
