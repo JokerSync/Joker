@@ -2,8 +2,8 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings, QObject *parent)
-	: PhSonyController(tcType, "A", parent),
+PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings)
+	: PhSonyController(tcType, "A"),
 	_autoMode(false), _state(Pause)
 {
 	_settings = settings;

@@ -39,9 +39,6 @@ void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType t
 {
 	if(!_settingStripFrame)
 	{
-		_settingVideoFrame = true;
-		_videoClock->setFrame(frame);
-		_settingVideoFrame = false;
 		if(_sonyClock)
 		{
 			// Apply precise correction.
@@ -52,6 +49,12 @@ void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType t
 				_stripClock->setFrame(_sonyClock->frame());
 				_settingStripFrame = false;
 			}
+		}
+		else
+		{
+			_settingVideoFrame = true;
+			_videoClock->setFrame(frame);
+			_settingVideoFrame = false;
 		}
 	}
 }
@@ -66,9 +69,12 @@ void VideoStripSynchronizer::onStripRateChanged(PhRate rate)
 			_sonyClock->setRate(rate);
 			_settingSonyRate = false;
 		}
-		_settingVideoRate = true;
-		_videoClock->setRate(rate);
-		_settingVideoRate = false;
+		else
+		{
+			_settingVideoRate = true;
+			_videoClock->setRate(rate);
+			_settingVideoRate = false;
+		}
 	}
 }
 
@@ -78,12 +84,6 @@ void VideoStripSynchronizer::onVideoFrameChanged(PhFrame frame, PhTimeCodeType t
 
 void VideoStripSynchronizer::onVideoRateChanged(PhRate rate)
 {
-	if(!_settingVideoRate)
-	{
-		_settingStripRate = true;
-		_stripClock->setRate(rate);
-		_settingStripRate = false;
-	}
 }
 
 void VideoStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType tcType)

@@ -29,9 +29,9 @@ class PhSonySlaveController : public PhSonyController
 public:
 	/**
 	 * @brief PhSonySlaveController constructor.
-	 * @param parent The object owner.
+	 * @param tcType The initial timecode type.
 	 */
-	PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings, QObject *parent = NULL);
+	PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings);
 
 	/**
 	 * @brief Various state in which the controller can be.
