@@ -72,6 +72,12 @@ MainWindow::MainWindow(QWidget *parent) :
 		openFile(_settings.value("lastfile").toString());
 	}
 
+	if(_settings.value("stripTestMode").toBool())
+	{
+#warning TODO do we warn the user that test mode is on?
+		ui->actionTest_mode->setChecked(true);
+	}
+
 #warning TODO fix fullscreen on startup
 	if(_settings.value("startFullScreen", false).toBool())
 		this->showFullScreen();
