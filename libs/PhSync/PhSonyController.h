@@ -40,9 +40,8 @@ public:
 	/**
 	 * @brief PhSonyController constructor
 	 * @param comSuffix Serial port name suffix
-	 * @param parent Parent for the QObject (mandatory)
 	 */
-	explicit PhSonyController(PhTimeCodeType tcType, QString comSuffix, QObject *parent);
+	explicit PhSonyController(PhTimeCodeType tcType, QString comSuffix);
 
 	/**
 	 * @brief PhSonyController destructor

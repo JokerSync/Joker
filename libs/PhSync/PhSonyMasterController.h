@@ -22,9 +22,9 @@ class PhSonyMasterController : public PhSonyController
 public:
 	/**
 	 * @brief PhSonyMasterController constructor
-	 * @param parent The object owner.
+	 * @param tcType The initial timecode type.
 	 */
-	PhSonyMasterController(PhTimeCodeType tcType, QObject *parent);
+	PhSonyMasterController(PhTimeCodeType tcType);
 
 public slots:
 	/**
