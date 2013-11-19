@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
 	_settings("Phonations", "Joker"),
-	_sonySlave(PhTimeCodeType25, &_settings, this),
+	_sonySlave(PhTimeCodeType25, &_settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity")
 {
 	// Setting up UI
