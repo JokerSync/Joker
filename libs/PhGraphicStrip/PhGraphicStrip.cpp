@@ -16,8 +16,7 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	_doc(this),
 	_clock(_doc.getTCType()),
 	_trackNumber(4),
-	_settings(NULL),
-	_testMode(false)
+	_settings(NULL)
 {
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
@@ -116,12 +115,6 @@ PhFont *PhGraphicStrip::getFont()
 	return &_font;
 }
 
-void PhGraphicStrip::onToggleTestMode()
-{
-	_testMode = ! _testMode;
-}
-
-
 
 void PhGraphicStrip::setPixelPerFrame(long value)
 {
@@ -136,7 +129,22 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
-	if(height > 0){
+	if(_settings->value("stripTestMode", false).toBool())
+	{
+		long delay = (int)(_settings->value("delay", 0).toInt() * _clock.rate()); // delay in ms
+		foreach(PhStripCut * cut, _doc.getCuts())
+		{
+			if(cut->getTimeIn() == _clock.frame() + delay)
+			{
+				// Can't easely find the window height, 2000px is high enough
+				PhGraphicSolidRect white(0, 0, width, 2000);
+				white.setColor(QColor("white"));
+				white.draw();
+			}
+		}
+	}
+
+	else if(height > 0){
 
 		if(_settings){
 			setPixelPerFrame(_settings->value("speed", 12).toInt());
@@ -312,13 +320,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		{
 			if( (cut->getTimeIn() > frameIn) && (cut->getTimeIn() < frameOut))
 			{
-				if(cut->getTimeIn() == _clock.frame() + delay and _testMode)
-				{
-					// Can't easely find the window height, 2000px is high enough
-					PhGraphicSolidRect white(0, 0, width, 2000);
-					white.setColor(QColor("white"));
-					white.draw();
-				}
 				PhGraphicSolidRect *gCut = _graphicCuts[cut];
 				if(gCut == NULL)
 				{
@@ -335,6 +336,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 				gCut->draw();
 				cutCounter++;
+
 			}
 		}
 

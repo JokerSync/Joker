@@ -60,10 +60,6 @@ MainWindow::MainWindow(QWidget *parent) :
 	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
 	_mediaPanelTimer.start(3000);
 
-	// Connect the slots for test mode
-	connect(this, SIGNAL(toggleTestMode()), _strip, SLOT(onToggleTestMode()));
-	connect(this, SIGNAL(toggleTestMode()), _videoEngine, SLOT(onToggleTestMode()));
-
 	// Set up a filter for catching mouse move event (see eventFilter())
 	// that will show the media panel back
 	qApp->installEventFilter(this);
@@ -336,5 +332,8 @@ void MainWindow::on_actionProperties_triggered()
 
 void MainWindow::on_actionTest_mode_triggered()
 {
-	emit toggleTestMode();
+	if(_settings.value("stripTestMode", false).toBool())
+		_settings.setValue("stripTestMode", false);
+	else
+		_settings.setValue("stripTestMode", true);
 }
