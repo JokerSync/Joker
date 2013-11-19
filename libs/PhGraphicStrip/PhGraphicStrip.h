@@ -78,9 +78,6 @@ public:
 
 	PhFont * getFont();
 
-public slots:
-
-	void onToggleTestMode();
 
 private slots:
 	/**
@@ -129,7 +126,6 @@ private :
 	int _trackNumber;
 	QSettings * _settings;
 	long pixelPerFrame;
-	bool _testMode;
 };
 
 #endif // PHGRAPHICSTRIP_H

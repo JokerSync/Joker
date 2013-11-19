@@ -59,9 +59,7 @@ public:
 
 	void drawVideo(int x, int y, int w, int h);
 
-public slots:
 
-	void onToggleTestMode();
 
 private:
 	bool goToFrame(PhFrame frame);
@@ -83,7 +81,6 @@ private:
 	QElapsedTimer _testTimer;
 	PhTickCounter _videoFrameTickCounter;
 
-	bool _testMode;
 
 };
 

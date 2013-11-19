@@ -11,8 +11,7 @@ PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
 	_pFrame(NULL),
 	_pSwsCtx(NULL),
 	_rgb(NULL),
-	_currentFrame(-1),
-	_testMode(false)
+	_currentFrame(-1)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
@@ -102,13 +101,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		delay = _settings->value("delay", 0).toInt() * PhTimeCode::getFps(_clock.timeCodeType()) / 1000 * _clock.rate();
 	goToFrame(_clock.frame() + delay);
 	videoRect.setRect(x, y, w, h);
-	if(!_testMode)
-		videoRect.draw();
-}
-
-void PhVideoEngine::onToggleTestMode()
-{
-	_testMode = ! _testMode;
+	videoRect.draw();
 }
 
 PhFrame PhVideoEngine::length()
