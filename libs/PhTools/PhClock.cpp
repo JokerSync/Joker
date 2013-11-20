@@ -3,6 +3,9 @@
 PhClock::PhClock(PhTimeCodeType tcType, QObject *parent) :
 	QObject(parent), _tcType(tcType), _time(0), _timeScale(600), _rate(0.0)
 {
+	qRegisterMetaType<PhTime>("PhTime");
+	qRegisterMetaType<PhFrame>("PhFrame");
+	qRegisterMetaType<PhRate>("PhRate");
 }
 
 ///****************************Properties****************************/
