@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSerialPort>
+#include <QSettings>
 
 #include <PhTools/PhClock.h>
 
@@ -41,7 +42,7 @@ public:
 	 * @brief PhSonyController constructor
 	 * @param comSuffix Serial port name suffix
 	 */
-	explicit PhSonyController(PhTimeCodeType tcType, QString comSuffix);
+	explicit PhSonyController(PhTimeCodeType tcType, QSettings *settings, QString comSuffix);
 
 	/**
 	 * @brief PhSonyController destructor
@@ -178,6 +179,8 @@ protected:
 
 	/** @brief The internal clock of the sony controller. */
 	PhClock _clock;
+
+	QSettings* _settings;
 
 	/** @brief Serial port name suffix (A for slave and B for master). */
 	QString _comSuffix;

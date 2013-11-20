@@ -3,10 +3,9 @@
 #include "PhTools/PhDebug.h"
 
 PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings)
-	: PhSonyController(tcType, "A"),
+	: PhSonyController(tcType, settings, "A"),
 	_autoMode(false), _state(Pause)
 {
-	_settings = settings;
 }
 
 void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)

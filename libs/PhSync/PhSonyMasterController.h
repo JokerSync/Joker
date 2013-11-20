@@ -24,7 +24,7 @@ public:
 	 * @brief PhSonyMasterController constructor
 	 * @param tcType The initial timecode type.
 	 */
-	PhSonyMasterController(PhTimeCodeType tcType);
+	PhSonyMasterController(PhTimeCodeType tcType, QSettings *settings);
 
 public slots:
 	/**
