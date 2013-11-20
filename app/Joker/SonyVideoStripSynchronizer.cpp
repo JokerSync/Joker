@@ -45,6 +45,7 @@ void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType t
 			// We don't change sony clock because this would desynchronize the sony master.
 			if(qAbs(frame - _sonyClock->frame()) > 1)
 			{
+				PHDEBUG << "correct :" << _stripClock->frame() << _sonyClock->frame();
 				_settingStripFrame = true;
 				_stripClock->setFrame(_sonyClock->frame());
 				_settingStripFrame = false;
