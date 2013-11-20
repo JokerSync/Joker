@@ -436,11 +436,15 @@ void MainWindow::on_actionClear_list_triggered()
 	_settings.endGroup();
 
 	//Remove the buttons of the UI, keep the separator and the Clear button
-
-	foreach(QAction * action, _recentFileButtons)
+	foreach(QAction * action, ui->menuOpen_recent->actions())
 	{
+		// Break if the separator is reached
+		if(action->isSeparator())
+			break;
 		// Remove it
 		ui->menuOpen_recent->removeAction(action);
+		delete action;
 	}
+
 	_recentFileButtons.clear();
 }
