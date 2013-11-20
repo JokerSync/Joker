@@ -171,7 +171,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x0c:
 		{
 			cmd1 = 0x74;
-//			PHDEBUG << _comSuffix << "Current Time Sense => " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.timeCodeType());
+			//PHDEBUG << _comSuffix << "Current Time Sense => " << _clock.timeCode();
 			switch (dataIn[0])
 			{
 			case 0x01:
@@ -289,6 +289,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 void PhSonySlaveController::onVideoSync()
 {
 	_clock.tick(PhTimeCode::getFps(_clock.timeCodeType()));
+	//PHDEBUG << _clock.timeCode();
 }
 
 void PhSonySlaveController::sendAck()
