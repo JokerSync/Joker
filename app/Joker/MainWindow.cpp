@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	// Setting up UI
 	ui->setupUi(this);
 
+	setupOpenRecentMenu();
+
 	// Get the pointer to the differents objects :
 	// strip, video engine and doc
 	_strip = ui->videoStripView->strip();
@@ -81,6 +83,82 @@ MainWindow::MainWindow(QWidget *parent) :
 #warning TODO fix fullscreen on startup
 	if(_settings.value("startFullScreen", false).toBool())
 		this->showFullScreen();
+
+
+}
+
+void MainWindow::openRecent()
+{
+	openFile(sender()->objectName());
+}
+
+void MainWindow::updateOpenRecent()
+{
+	// Open the settings group of recent files
+	_settings.beginGroup("openRecent");
+	// List them
+	QStringList recentListIndex = _settings.childKeys();
+
+	foreach(QString recentFileIndex, recentListIndex)
+	{
+		if(_settings.value(recentFileIndex, "").toString() == _doc->getFilePath())
+			recentListIndex.removeOne(recentFileIndex);
+	}
+
+
+
+	ui->menuOpen_recent->removeAction(QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly));
+	delete QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly);
+
+
+	int i = 1;
+	// Set the current file to last open file
+	_settings.setValue(QString::number(i), _doc->getFilePath());
+	PHDEBUG << _settings.value(QString::number(i), "").toString();
+	i++;
+	// Set the corresponding button
+	QAction * action = new QAction(_doc->getFilePath(), this);
+	action->setObjectName(_doc->getFilePath());
+	connect(action, SIGNAL(triggered()), this, SLOT(openRecent()));
+	_recentFileButtons.insert(0, action);
+	ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), action);
+
+
+	foreach(QString recentFileIndex, recentListIndex)
+	{
+
+		// Set the recent file to the next position
+		_settings.setValue(QString::number(i), _settings.value(recentFileIndex));
+				i++;
+
+		//Don't remember more than 10 files
+		if(i < 10)
+			break;
+
+	}
+
+	_settings.endGroup();
+}
+
+void MainWindow::setupOpenRecentMenu()
+{
+	// Open the settings group of recent files
+	_settings.beginGroup("openRecent");
+	// List them
+	QStringList recentList = _settings.childKeys();
+	foreach(QString recentFileIndex, recentList)
+	{
+		QString fileName = _settings.value(recentFileIndex, "empty").toString();
+		QAction * action = new QAction(fileName, this);
+		action->setObjectName(fileName);
+		connect(action, SIGNAL(triggered()), this, SLOT(openRecent()));
+		_recentFileButtons.append(action);
+	}
+
+	ui->menuOpen_recent->insertActions(ui->menuOpen_recent->actions().last(), _recentFileButtons.toList());
+	ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().last(), ui->menuOpen_recent->addSeparator());
+	_settings.endGroup();
+
 }
 
 MainWindow::~MainWindow()
@@ -115,6 +193,7 @@ void MainWindow::openFile(QString fileName)
 				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
 			}
 		}
+		updateOpenRecent();
 	}
 }
 
@@ -333,7 +412,7 @@ void MainWindow::hideMediaPanel()
 
 void MainWindow::on_actionProperties_triggered()
 {
-    _propertyDialog.show();
+	_propertyDialog.show();
 }
 
 void MainWindow::on_actionTest_mode_triggered()
@@ -342,4 +421,26 @@ void MainWindow::on_actionTest_mode_triggered()
 		_settings.setValue("stripTestMode", false);
 	else
 		_settings.setValue("stripTestMode", true);
+}
+
+void MainWindow::on_actionClear_list_triggered()
+{
+	//Open the recent group
+	_settings.beginGroup("openRecent");
+	//List all keys
+	QStringList indexes = _settings.allKeys();
+	//Remove them from
+	foreach(QString index, indexes)
+		_settings.remove(index);
+	//Close the group
+	_settings.endGroup();
+
+	//Remove the buttons of the UI, keep the separator and the Clear button
+
+	foreach(QAction * action, _recentFileButtons)
+	{
+		// Remove it
+		ui->menuOpen_recent->removeAction(action);
+	}
+	_recentFileButtons.clear();
 }

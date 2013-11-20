@@ -92,6 +92,11 @@ private slots:
 
 	void on_actionTest_mode_triggered();
 
+	void openRecent();
+
+
+	void on_actionClear_list_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip * _strip;
@@ -107,6 +112,11 @@ private:
 	QPropertyAnimation _mediaPanelAnimation;
 
 	PropertyDialog _propertyDialog;
+
+	QVector<QAction *> _recentFileButtons;
+
+	void updateOpenRecent();
+	void setupOpenRecentMenu();
 };
 
 #endif // MAINWINDOW_H
