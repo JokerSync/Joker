@@ -48,6 +48,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
 	ui->cBoxLastFile->setChecked(_oldOpenLastFile);
 	ui->cBoxFullscreen->setChecked(_oldStartFullScreen);
+	ui->cBoxSonyAutoconnect->setChecked(_oldSonyAutoConnect);
 
 
 
