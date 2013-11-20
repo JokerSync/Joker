@@ -2,8 +2,8 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyMasterController::PhSonyMasterController(PhTimeCodeType tcType)
-	: PhSonyController(tcType, "B")
+PhSonyMasterController::PhSonyMasterController(PhTimeCodeType tcType, QSettings *settings)
+	: PhSonyController(tcType, settings, "B")
 {
 }
 
