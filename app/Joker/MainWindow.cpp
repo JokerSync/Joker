@@ -85,10 +85,18 @@ MainWindow::MainWindow(QWidget *parent) :
 		this->showFullScreen();
 
 
+	PHDEBUG << _settings.fileName();
+
+}
+
+MainWindow::~MainWindow()
+{
+	delete ui;
 }
 
 void MainWindow::openRecent()
 {
+	// This slot is triggered by dynamic action
 	openFile(sender()->objectName());
 }
 
@@ -96,47 +104,39 @@ void MainWindow::updateOpenRecent()
 {
 	// Open the settings group of recent files
 	_settings.beginGroup("openRecent");
-	// List them
-	QStringList recentListIndex = _settings.childKeys();
 
-	foreach(QString recentFileIndex, recentListIndex)
+	// If the object already belong to the list, set it on top
+	if(QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly))
 	{
-		if(_settings.value(recentFileIndex, "").toString() == _doc->getFilePath())
-			recentListIndex.removeOne(recentFileIndex);
+		ui->menuOpen_recent->removeAction(QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly));
+		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly));
 	}
-
-
-
-	ui->menuOpen_recent->removeAction(QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly));
-	delete QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly);
-
+	// Else, add it
+	else
+	{
+		// Set the corresponding button
+		QAction * action = new QAction(_doc->getFilePath(), this);
+		// Set the ObjectName, very important for openRecent()
+		action->setObjectName(_doc->getFilePath());
+		connect(action, SIGNAL(triggered()), this, SLOT(openRecent()));
+		// Insert it in the button list
+		_recentFileButtons.insert(0, action);
+		// Insert it at the first place on the menu
+		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), action);
+	}
 
 	int i = 1;
-	// Set the current file to last open file
-	_settings.setValue(QString::number(i), _doc->getFilePath());
-	PHDEBUG << _settings.value(QString::number(i), "").toString();
-	i++;
-	// Set the corresponding button
-	QAction * action = new QAction(_doc->getFilePath(), this);
-	action->setObjectName(_doc->getFilePath());
-	connect(action, SIGNAL(triggered()), this, SLOT(openRecent()));
-	_recentFileButtons.insert(0, action);
-	ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), action);
-
-
-	foreach(QString recentFileIndex, recentListIndex)
+	// Rewrite the setting files from the menu items
+	foreach(QAction * action, ui->menuOpen_recent->actions())
 	{
-
-		// Set the recent file to the next position
-		_settings.setValue(QString::number(i), _settings.value(recentFileIndex));
-				i++;
-
-		//Don't remember more than 10 files
-		if(i < 10)
+		// Break if the separator or the max number is reached
+		if(action->isSeparator() or i > 10)
 			break;
-
+		// Write the setting
+		_settings.setValue(QString::number(i), action->objectName());
+		i++;
 	}
-
+	// Close the setting group
 	_settings.endGroup();
 }
 
@@ -155,15 +155,13 @@ void MainWindow::setupOpenRecentMenu()
 		_recentFileButtons.append(action);
 	}
 
+	// Add all the actions to the menu
 	ui->menuOpen_recent->insertActions(ui->menuOpen_recent->actions().last(), _recentFileButtons.toList());
+	// Add a separator just above the "clear list" menu
 	ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().last(), ui->menuOpen_recent->addSeparator());
+	// Close the group
 	_settings.endGroup();
 
-}
-
-MainWindow::~MainWindow()
-{
-	delete ui;
 }
 
 void MainWindow::openFile(QString fileName)
@@ -192,6 +190,7 @@ void MainWindow::openFile(QString fileName)
 				_mediaPanel.setMediaLength(_videoEngine->length());
 				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
 			}
+			_settings.setValue("lastfile", fileName);
 		}
 		updateOpenRecent();
 	}
@@ -214,7 +213,6 @@ void MainWindow::on_actionOpen_triggered()
 	{
 		QString fileName = dlg.selectedFiles()[0];
 		openFile(fileName);
-		_settings.setValue("lastfile", fileName);
 	}
 
 	fadeInMediaPanel();
@@ -432,6 +430,7 @@ void MainWindow::on_actionClear_list_triggered()
 	//Remove them from
 	foreach(QString index, indexes)
 		_settings.remove(index);
+
 	//Close the group
 	_settings.endGroup();
 
@@ -446,5 +445,6 @@ void MainWindow::on_actionClear_list_triggered()
 		delete action;
 	}
 
+	// Remove all the buttons
 	_recentFileButtons.clear();
 }
