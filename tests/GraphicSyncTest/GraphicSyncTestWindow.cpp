@@ -43,4 +43,5 @@ void GraphicSyncTestWindow::beforePaint(int frequency)
 
 	PHDEBUG << s << elapsed << refreshRate << _sony.clock()->frame() << _count << ratio;
 //	PHDEBUG << s << _sony.clock()->frame() * 1000.0f / _time.elapsed();
+	ui->graphicView->setText(_sony.clock()->timeCode());
 }
