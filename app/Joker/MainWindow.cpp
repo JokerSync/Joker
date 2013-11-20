@@ -83,10 +83,6 @@ MainWindow::MainWindow(QWidget *parent) :
 #warning TODO fix fullscreen on startup
 	if(_settings.value("startFullScreen", false).toBool())
 		this->showFullScreen();
-
-
-	PHDEBUG << _settings.fileName();
-
 }
 
 MainWindow::~MainWindow()

@@ -79,6 +79,8 @@ private slots:
 
 	void on_actionPreferences_triggered();
 
+	void on_actionClear_list_triggered();
+
 
 	// Custom slots
 
@@ -93,9 +95,6 @@ private slots:
 	void on_actionTest_mode_triggered();
 
 	void openRecent();
-
-
-	void on_actionClear_list_triggered();
 
 private:
 	Ui::MainWindow *ui;
