@@ -64,6 +64,7 @@ void VideoStripSynchronizer::onStripRateChanged(PhRate rate)
 {
 	if(!_settingStripRate)
 	{
+		PHDEBUG << rate;
 		if(_sonyClock)
 		{
 			_settingSonyRate = true;
@@ -111,6 +112,7 @@ void VideoStripSynchronizer::onSonyRateChanged(PhRate rate)
 {
 	if(!_settingSonyRate)
 	{
+		PHDEBUG << rate;
 		_settingStripRate = true;
 		_stripClock->setRate(rate);
 		_settingStripRate = false;
