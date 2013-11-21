@@ -63,6 +63,7 @@ PhDebug PhDebug::instance()
 
 		PhDebug::writeLog("\n");
 	}
+	d->_logLevelMessage = 0x11111111;
 	return * d;
 }
 
