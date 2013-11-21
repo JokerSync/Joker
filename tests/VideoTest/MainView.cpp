@@ -15,6 +15,7 @@ MainView::MainView(QSettings *settings)
 	  _settings(settings)
 {
 	ui->setupUi(this);
+	_videoEngine.setSettings(settings);
 	_mediaPanelDialog.setClock(_videoEngine.clock());
 	_mediaPanelDialog.show();
 
