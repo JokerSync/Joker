@@ -212,12 +212,18 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 					{
 						decodeElapsed = _testTimer.elapsed();
 
+						int frameHeight = _pFrame->height;
+						if(_settings)
+						{
+							if(_settings->value("videoDeinterlace", false).toBool())
+								frameHeight = _pFrame->height / 2;
+						}
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
-														_pCodecContext->pix_fmt, _pCodecContext->width, _pCodecContext->height,
+														_pCodecContext->pix_fmt, _pCodecContext->width, frameHeight,
 														AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
-							_rgb = new uint8_t[_pFrame->width * _pFrame->height * 4];
+							_rgb = new uint8_t[_pFrame->width * frameHeight * 4];
 						int linesize = _pFrame->width * 4;
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
 										   _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
@@ -225,7 +231,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 						{
 							scaleElapsed = _testTimer.elapsed();
 
-							videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
+							videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, frameHeight);
 
 							PHDEBUG << frame << _rgb[0] << packet.dts;
 							textureElapsed = _testTimer.elapsed();
