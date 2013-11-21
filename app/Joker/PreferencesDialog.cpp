@@ -31,6 +31,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldSpeed = _settings->value("speed", 12).toInt();
 	_oldBolness = _settings->value("boldness", 0).toInt();
 	_oldFont = _settings->value("StripFontName", "").toString();
+	_oldDeinterlace = _settings->value("videoDeinterlace", false).toBool();
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldSpeed);
@@ -49,8 +50,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	ui->cBoxLastFile->setChecked(_oldOpenLastFile);
 	ui->cBoxFullscreen->setChecked(_oldStartFullScreen);
 	ui->cBoxSonyAutoconnect->setChecked(_oldSonyAutoConnect);
-
-
+	ui->cBoxDeinterlace->setChecked(_oldDeinterlace);
 
 	//Set the fonts
 	QStringList userFontList, systemFontList;
@@ -177,4 +177,9 @@ void PreferencesDialog::on_listWidgetFont_itemClicked(QListWidgetItem *item)
 void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
 	_settings->setValue("StripFontFile", fontList[current->text()]);
+}
+
+void PreferencesDialog::on_cBoxDeinterlace_clicked()
+{
+	_settings->setValue("videoDeinterlace", ui->cBoxDeinterlace->isChecked());
 }
