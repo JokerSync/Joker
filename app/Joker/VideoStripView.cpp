@@ -32,7 +32,10 @@ void VideoStripView::paint()
 	if(_settings){
 		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
 	}
-	int videoHeight = this->height() * (1 - stripHeightRatio);
+	int stripHeight = this->height() * stripHeightRatio;
+	int videoHeight = this->height() - stripHeight;
+
+	_strip.draw(0, videoHeight, this->width(), stripHeight);
 
 	if((_videoEngine.height() > 0) and (videoHeight > 0))
 	{
@@ -40,6 +43,4 @@ void VideoStripView::paint()
 		int videoX = (this->width() - videoWidth) / 2;
 		_videoEngine.drawVideo(videoX, 0, videoWidth, videoHeight);
 	}
-	if(stripHeightRatio >= 0)
-		_strip.draw(0, videoHeight, this->width(), this->height() - videoHeight);
 }
