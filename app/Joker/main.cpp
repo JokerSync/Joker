@@ -6,6 +6,7 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QSettings>
 
 #include "PhStrip/PhStripDoc.h"
 
@@ -13,20 +14,25 @@
 
 int main(int argc, char *argv[])
 {
-
-	PhDebug::init(false, true, true, true, true, true, 0x01, APP_NAME);
+	QSettings settings("Phonations", "Joker");
+	int logLevel = settings.value("logLevel", 1).toInt();
+	PhDebug::init(false, true, true, true, true, true, logLevel, APP_NAME);
 	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
 
 	QApplication a(argc, argv);
-	MainWindow w;
+
+	MainWindow w(&settings);
 
     w.show();
 
+	QString fileName = "";
 	if (argc > 1)
-	{
-		QString fileName = argv[1];
+		fileName = argv[1];
+	else if(settings.value("openLastFile", false).toBool()) // Load the last file if the setting si selected
+		fileName = settings.value("lastfile").toString();
+
+	if(QFile(fileName).exists())
 		w.openFile(fileName);
-	}
 
     return a.exec();
 

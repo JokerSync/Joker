@@ -11,11 +11,11 @@
 #include "AboutMenu.h"
 #include "PreferencesDialog.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent),
+MainWindow::MainWindow(QSettings *settings) :
+	QMainWindow(NULL),
 	ui(new Ui::MainWindow),
-	_settings("Phonations", "Joker"),
-	_sonySlave(PhTimeCodeType25, &_settings),
+	_settings(settings),
+	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity")
 {
 	// Setting up UI
@@ -28,9 +28,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	_doc = _strip->doc();
 
 	// Pass the settings to the modules
-	_strip->setSettings(&_settings);
-	_videoEngine->setSettings(&_settings);
-	ui->videoStripView->setSettings(&_settings);
+	_strip->setSettings(_settings);
+	_videoEngine->setSettings(_settings);
+	ui->videoStripView->setSettings(_settings);
 
 	// Initialize the property dialog
 	_propertyDialog.setDoc(_doc);
@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
 	// Initialize the sony module
-	if(_settings.value("sonyAutoConnect", true).toBool())
+	if(_settings->value("sonyAutoConnect", true).toBool())
 	{
 		if(_sonySlave.open())
 		{
@@ -67,20 +67,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	this->setFocus();
 
-	// Load the last file if the setting si selected
-	if(_settings.value("openLastFile", false).toBool())
-	{
-		openFile(_settings.value("lastfile").toString());
-	}
-
-	if(_settings.value("stripTestMode").toBool())
+	if(_settings->value("stripTestMode").toBool())
 	{
 #warning TODO do we warn the user that test mode is on?
 		ui->actionTest_mode->setChecked(true);
 	}
 
 #warning TODO fix fullscreen on startup
-	if(_settings.value("startFullScreen", false).toBool())
+	if(_settings->value("startFullScreen", false).toBool())
 		this->showFullScreen();
 }
 
@@ -141,7 +135,7 @@ void MainWindow::on_actionOpen_triggered()
 	{
 		QString fileName = dlg.selectedFiles()[0];
 		openFile(fileName);
-		_settings.setValue("lastfile", fileName);
+		_settings->setValue("lastfile", fileName);
 	}
 
 	fadeInMediaPanel();
@@ -293,7 +287,7 @@ void MainWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
 
-	PreferencesDialog dlg(&_settings);
+	PreferencesDialog dlg(_settings);
 	dlg.exec();
 	fadeInMediaPanel();
 }
@@ -344,8 +338,8 @@ void MainWindow::on_actionProperties_triggered()
 
 void MainWindow::on_actionTest_mode_triggered()
 {
-	if(_settings.value("stripTestMode", false).toBool())
-		_settings.setValue("stripTestMode", false);
+	if(_settings->value("stripTestMode", false).toBool())
+		_settings->setValue("stripTestMode", false);
 	else
-		_settings.setValue("stripTestMode", true);
+		_settings->setValue("stripTestMode", true);
 }
