@@ -200,3 +200,9 @@ void MainWindow::on_actionFull_screen_triggered()
 	this->setWindowState(Qt::WindowFullScreen);
 }
 
+
+void MainWindow::on_actionTest_mode_triggered()
+{
+	bool testMode = _settings->value("stripTestMode", false).toBool();
+	_settings->setValue("stripTestMode", !testMode);
+}

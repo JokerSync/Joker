@@ -65,6 +65,8 @@ private slots:
 	void on_actionChange_font_triggered();
 
 	void on_actionFull_screen_triggered();
+	void on_actionTest_mode_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip *_strip;
