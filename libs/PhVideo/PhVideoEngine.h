@@ -63,6 +63,8 @@ public:
 
 private:
 	bool goToFrame(PhFrame frame);
+	int64_t frame2time(PhFrame f);
+	PhFrame time2frame(int64_t t);
 
 	QSettings *_settings;
 	QString _fileName;
