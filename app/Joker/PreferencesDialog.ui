@@ -24,7 +24,7 @@
      </property>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabGeneral">
        <attribute name="title">
@@ -64,6 +64,25 @@
         <property name="text">
          <string>Remember last open file</string>
         </property>
+       </widget>
+       <widget class="QCheckBox" name="cBoxDeinterlace">
+	<property name="geometry">
+	 <rect>
+	  <x>20</x>
+	  <y>60</y>
+	  <width>212</width>
+	  <height>20</height>
+	 </rect>
+	</property>
+	<property name="layoutDirection">
+	 <enum>Qt::RightToLeft</enum>
+	</property>
+	<property name="text">
+	 <string>Deinterlace video</string>
+	</property>
+	<property name="tristate">
+	 <bool>false</bool>
+	</property>
        </widget>
       </widget>
       <widget class="QWidget" name="tabStrip">
