@@ -14,7 +14,8 @@
 int main(int argc, char *argv[])
 {
 
-	PhDebug::init(false, true, true, true, true, true, APP_NAME);
+	PhDebug::init(false, true, true, true, true, true, 1, APP_NAME);
+	PHDBG(1);
 	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
 
 	QApplication a(argc, argv);
