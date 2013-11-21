@@ -3,6 +3,7 @@
 
 #include <QFileDialog>
 #include <QFontDialog>
+#include <QFileOpenEvent>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -120,6 +121,11 @@ void MainWindow::openFile(QString fileName)
 
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 {
+	if(event->type() == QEvent::FileOpen)
+	{
+		openFile(static_cast<QFileOpenEvent *>(event)->file());
+		return true;
+	}
 	// Hide and show the mediaPanel
 	if(event->type() == QEvent::MouseMove && this->hasFocus())
 		fadeInMediaPanel();
