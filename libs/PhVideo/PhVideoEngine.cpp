@@ -62,6 +62,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	_pFrame = avcodec_alloc_frame();
 
+	PHDEBUG << "length:" << this->length();
 	_clock.setFrame(0);
 	goToFrame(0);
 
@@ -107,7 +108,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 PhFrame PhVideoEngine::length()
 {
 	if(_videoStream)
-		return (PhFrame)_videoStream->duration;
+		return time2frame(_videoStream->duration);
 	return 0;
 }
 
@@ -164,12 +165,15 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	int textureElapsed = -1;
 
 	if(!ready())
+	{
+		PHDEBUG << "not ready";
 		return false;
+	}
 
 	if(frame < this->_frameStamp)
 		frame = this->_frameStamp;
-	if (frame >= this->_frameStamp + _videoStream->duration)
-		frame = this->_frameStamp + _videoStream->duration;
+	if (frame >= this->_frameStamp + this->length())
+		frame = this->_frameStamp + this->length() - 1;
 
 	bool result = false;
 	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
@@ -181,12 +185,10 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		if(frame - _currentFrame != 1)
 		{
 			int flags = AVSEEK_FLAG_ANY;
-#warning TODO handle other frame rate than 25
-			int64_t timestamp = (frame - this->_frameStamp) * _videoStream->time_base.den / _videoStream->time_base.num / 25;
+			int64_t timestamp = frame2time(frame - _frameStamp);
 			PHDEBUG << "seek:" << timestamp << _videoStream->time_base.num << _videoStream->time_base.den;
 			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
 		}
-		_currentFrame = frame;
 
 		seekElapsed = _testTimer.elapsed();
 
@@ -195,20 +197,19 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		bool lookingForVideoFrame = true;
 		while(lookingForVideoFrame)
 		{
-			if(av_read_frame(_pFormatContext, &packet) >= 0)
+			int error = av_read_frame(_pFormatContext, &packet);
+			switch(error)
 			{
+			case 0:
 				if(packet.stream_index == _videoStream->index)
 				{
+					_currentFrame = frame;
 
 					readElapsed = _testTimer.elapsed();
 					int frameFinished = 0;
 					avcodec_decode_video2(_pCodecContext, _pFrame, &frameFinished, &packet);
 					if(frameFinished)
 					{
-
-						//Commented this because it was flooding
-						//PHDEBUG << _videoStream->cur_dts;
-
 						decodeElapsed = _testTimer.elapsed();
 
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
@@ -237,11 +238,20 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 					}
 
 				}
-				//Avoid memory leak
-				av_free_packet(&packet);
-			}
-			else
+				break;
+			case AVERROR_INVALIDDATA:
+			case AVERROR_EOF:
+			default:
+			{
+				char errorStr[256];
+				av_strerror(error, errorStr, 256);
+				PHDEBUG << frame << "error:" << errorStr;
 				lookingForVideoFrame = false;
+				break;
+			}
+			}
+			//Avoid memory leak
+			av_free_packet(&packet);
 		}
 	}
 
@@ -252,4 +262,26 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	_testTimer.restart();
 
 	return result;
+}
+
+int64_t PhVideoEngine::frame2time(PhFrame f)
+{
+	int64_t t = 0;
+	if(_videoStream)
+	{
+		PhFrame fps = PhTimeCode::getFps(_clock.timeCodeType());
+		t = f * _videoStream->time_base.den / _videoStream->time_base.num / fps;
+	}
+	return t;
+}
+
+PhFrame PhVideoEngine::time2frame(int64_t t)
+{
+	PhFrame f = 0;
+	if(_videoStream)
+	{
+		PhFrame fps = PhTimeCode::getFps(_clock.timeCodeType());
+		f = t * _videoStream->time_base.num * fps / _videoStream->time_base.den;
+	}
+	return f;
 }
