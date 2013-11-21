@@ -6,7 +6,6 @@
 
 #include <QApplication>
 #include <QDebug>
-#include <QFileOpenEvent>
 
 #include "PhStrip/PhStripDoc.h"
 
