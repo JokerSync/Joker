@@ -163,7 +163,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 					PhGraphicSolidRect white(x, y, width, height);
 					white.setColor(QColor("white"));
 					white.draw();
-//					PHDEBUG << clockFrame << "cut";
+					PHDEBUG << clockFrame << "cut" << _clock.frame();
 
 					//This is useless to continue the foreach if the cut is displayed.
 					break;
