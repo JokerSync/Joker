@@ -239,6 +239,7 @@ void PhStripDoc::reset()
 {
 	_peoples.clear();
 	_cuts.clear();
+	_offs.clear();
 	_tcType = PhTimeCodeType25;
 	_lastFrame = 0;
 	_loops.clear();
