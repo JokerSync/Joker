@@ -22,7 +22,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
+	explicit MainWindow(QSettings *settings);
 	~MainWindow();
 
 	void openFile(QString fileName);
@@ -97,7 +97,7 @@ private:
 	PhGraphicStrip * _strip;
 	PhVideoEngine * _videoEngine;
 	PhStripDoc *_doc;
-	QSettings _settings;
+	QSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
 
