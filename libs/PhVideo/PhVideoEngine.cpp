@@ -99,7 +99,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 //	_clock.tick(60);
 	PhFrame delay = 0;
 	if(_settings)
-		delay = _settings->value("delay", 0).toInt() * PhTimeCode::getFps(_clock.timeCodeType()) / 1000 * _clock.rate();
+		delay = _settings->value("delay", 0).toInt() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
 	goToFrame(_clock.frame() + delay);
 	videoRect.setRect(x, y, w, h);
 	videoRect.draw();
@@ -227,7 +227,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 
 							videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, _pFrame->height);
 
-//							PHDEBUG << frame << _rgb[0] << packet.dts;
+							PHDEBUG << frame << _rgb[0] << packet.dts;
 							textureElapsed = _testTimer.elapsed();
 
 							_videoFrameTickCounter.tick();
