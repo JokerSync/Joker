@@ -84,8 +84,9 @@ MainWindow::MainWindow(QWidget *parent) :
 #warning TODO fix fullscreen on startup
 	if(_settings.value("startFullScreen", false).toBool())
 		this->showFullScreen();
+
+	// This is for the drag and drop feature
 	setAcceptDrops(true);
-	PHDEBUG << acceptDrops();
 
 }
 
@@ -126,6 +127,7 @@ void MainWindow::openFile(QString fileName)
 
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 {
+	// The used variable must be declared out of the switch
 	QString filePath;
 	const QMimeData* mimeData;
 

@@ -29,12 +29,8 @@ public:
 
 	bool openVideoFile(QString videoFileName);
 
-
-
 protected:
 	bool eventFilter(QObject *sender, QEvent *event);
-
-
 
 	enum MediaPanelState {
 		MediaPanelVisible,
