@@ -5,12 +5,16 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyController::PhSonyController(PhTimeCodeType tcType, QString comSuffix) :
-	_clock(tcType), _comSuffix(comSuffix), _dataRead(0), _lastCTS(false)
+PhSonyController::PhSonyController(PhTimeCodeType tcType, QSettings *settings, QString comSuffix) :
+	_clock(tcType),
+	_settings(settings),
+	_comSuffix(comSuffix),
+	_dataRead(0),
+	_lastCTS(false),
+	_threadRunning(false)
 {
-	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
-            SLOT(handleError(QSerialPort::SerialPortError)));
-	connect(&_serial, SIGNAL(readyRead()), this, SLOT(onData()));
+//	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
+//            SLOT(handleError(QSerialPort::SerialPortError)));
 }
 
 PhSonyController::~PhSonyController()
@@ -18,7 +22,7 @@ PhSonyController::~PhSonyController()
 	close();
 }
 
-bool PhSonyController::open()
+bool PhSonyController::open(bool inThread)
 {
 	PHDEBUG << _comSuffix;
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
@@ -28,7 +32,7 @@ bool PhSonyController::open()
 		{
 			_serial.setPort(info);
 
-			PHDEBUG << _comSuffix << "Opening " << name;
+			PHDEBUG << _comSuffix << "Opening " << name << _serial.parent();
 			if( _serial.open(QSerialPort::ReadWrite))
 			{
 				_serial.setBaudRate(QSerialPort::Baud38400);
@@ -36,6 +40,13 @@ bool PhSonyController::open()
 				_serial.setStopBits(QSerialPort::OneStop);
 				_serial.setParity(QSerialPort::OddParity);
 
+				if(inThread)
+				{
+					_serial.moveToThread(this);
+					this->start(QThread::HighPriority);
+				}
+				else
+					connect(&_serial, SIGNAL(readyRead()), this, SLOT(onData()));
 				return true;
 			}
 		}
@@ -46,6 +57,11 @@ bool PhSonyController::open()
 
 void PhSonyController::close()
 {
+	if(_threadRunning)
+	{
+		_threadRunning = false;
+		PHDEBUG << this->wait(1000);
+	}
 	if(_serial.isOpen())
 	{
 		PHDEBUG << _comSuffix;
@@ -57,10 +73,31 @@ void PhSonyController::checkVideoSync(int frequency)
 {
 	if(_serial.isOpen())
 	{
+		bool videoSyncUp = true;
+		if(_settings)
+			videoSyncUp = _settings->value("videoSyncUp", true).toBool();
 		bool cts = _serial.pinoutSignals() & QSerialPort::ClearToSendSignal;
-		if(!_lastCTS && cts)
-			emit onVideoSync();
+		if(videoSyncUp)
+		{
+			if(!_lastCTS && cts)
+				emit onVideoSync();
+		}
+		else
+		{
+			if(_lastCTS && !cts)
+				emit onVideoSync();
+		}
 		_lastCTS = cts;
+	}
+}
+
+void PhSonyController::run()
+{
+	_threadRunning = true;
+	while(_threadRunning)
+	{
+		if(_serial.waitForReadyRead(10))
+			onData();
 	}
 }
 

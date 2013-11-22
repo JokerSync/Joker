@@ -1,6 +1,5 @@
 #ifndef PHSONYSLAVECONTROLLER_H
 #define PHSONYSLAVECONTROLLER_H
-#include <QSettings>
 
 #include "PhSonyController.h"
 
@@ -82,7 +81,6 @@ private:
 
 	void timeOut();
 private:
-	QSettings* _settings;
 	bool _autoMode;
 	PhSonyState _state;
 

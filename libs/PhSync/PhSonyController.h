@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QSerialPort>
+#include <QSettings>
+#include <QThread>
 
 #include <PhTools/PhClock.h>
 
@@ -16,7 +18,7 @@
  *
  * Sony 9 pin specification : http://www.belle-nuit.com/archives/9pin.html
  */
-class PhSonyController : public QObject
+class PhSonyController : public QThread
 {
 	Q_OBJECT
 public:
@@ -41,7 +43,7 @@ public:
 	 * @brief PhSonyController constructor
 	 * @param comSuffix Serial port name suffix
 	 */
-	explicit PhSonyController(PhTimeCodeType tcType, QString comSuffix);
+	explicit PhSonyController(PhTimeCodeType tcType, QSettings *settings, QString comSuffix);
 
 	/**
 	 * @brief PhSonyController destructor
@@ -53,7 +55,7 @@ public:
 	/**
 	 * @brief Open the communication port.
 	 */
-	bool open();
+	bool open(bool inThread = true);
 
 	/**
 	 * @brief Close the communication port.
@@ -118,6 +120,8 @@ public slots:
 	virtual void onVideoSync() = 0;
 
 protected:
+	void run();
+
 	/**
 	 * @brief Process a single sony command.
 	 *
@@ -179,6 +183,8 @@ protected:
 	/** @brief The internal clock of the sony controller. */
 	PhClock _clock;
 
+	QSettings* _settings;
+
 	/** @brief Serial port name suffix (A for slave and B for master). */
 	QString _comSuffix;
 
@@ -197,6 +203,8 @@ private:
 
 	/** @brief Last value of the serial CTS state. */
 	bool _lastCTS;
+
+	bool _threadRunning;
 
 private slots:
 	/** @brief Slot triggered when data are available on the serial port */

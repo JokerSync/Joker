@@ -45,6 +45,8 @@ private slots:
 
 	void on_lineEditFilter_textEdited(const QString &arg1);
 
+	void on_cBoxDeinterlace_clicked();
+
 private:
 	Ui::PreferencesDialog *ui;
 	QSettings *_settings;
@@ -57,6 +59,7 @@ private:
 	bool _oldSonyAutoConnect;
 	bool _oldOpenLastFile;
 	bool _oldStartFullScreen;
+	bool _oldDeinterlace;
 	QMap<QString, QString> fontList;
 
 };

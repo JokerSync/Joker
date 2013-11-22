@@ -13,7 +13,8 @@
 
 #include "iostream"
 
-#define PHDEBUG PhDebug::instance() << qDebug() << Q(PhDebug::getFileName(__FILE__) + "\t") << Q(PhDebug::getFuncName(__FUNCTION__) + "\t") << Q(PhDebug::getLine(__LINE__)) << "\t"
+#define PHDEBUG PhDebug::instance() <<  qDebug() << Q(PhDebug::getFileName(__FILE__) + "\t") << Q(PhDebug::getFuncName(__FUNCTION__) + "\t") << Q(PhDebug::getLine(__LINE__)) << "\t"
+#define PHDBG(logLevelMessage) PhDebug::instance(logLevelMessage) <<  qDebug() << Q(PhDebug::getFileName(__FILE__) + "\t") << Q(PhDebug::getFuncName(__FUNCTION__) + "\t") << Q(PhDebug::getLine(__LINE__)) << "\t"
 
 
 
@@ -25,21 +26,29 @@ class PhDebug
 {
 public:
 	// used to access to the only instance of the class
+	static PhDebug instance(int logLevelMessage);
 	static PhDebug instance();
-	static PhDebug init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, QString appName);
+
+	static PhDebug init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, int logLevel, QString appName);
 
 	QDebug operator<<(QDebug dbg);
 
 
-	PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, QString appName);
+	PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, int logLevel, QString appName);
 	static QString getFuncName(QString name);
 	static QString getFileName(QString name);
 	static QString getLine(int line);
 	static bool isConsoleActived();
 	static void writeLog(QString text);
+	static void setLogLevel(int level);
+	static int getLogLevel();
+
+	static int logLevelMessage();
 
 private:
 	static PhDebug * d;
+	int _logLevel;
+	int _logLevelMessage;
 	QFile * _log;
 	QDebug * logger;
 	bool _dispFuncName;
