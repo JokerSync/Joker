@@ -4,6 +4,8 @@
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QFileOpenEvent>
+#include <QDragEnterEvent>
+#include <QMimeData>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -78,6 +80,10 @@ MainWindow::MainWindow(QSettings *settings) :
 #warning TODO fix fullscreen on startup
 	if(_settings->value("startFullScreen", false).toBool())
 		this->showFullScreen();
+
+	// This is for the drag and drop feature
+	setAcceptDrops(true);
+
 }
 
 MainWindow::~MainWindow()
@@ -192,14 +198,48 @@ void MainWindow::openFile(QString fileName)
 
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 {
-	if(event->type() == QEvent::FileOpen)
-	{
-		openFile(static_cast<QFileOpenEvent *>(event)->file());
-		return true;
+	// The used variable must be declared out of the switch
+	QString filePath;
+	const QMimeData* mimeData;
+
+	switch (event->type()) {
+	case QEvent::FileOpen:
+		filePath = static_cast<QFileOpenEvent *>(event)->file();
+		// As the plist file list all the supported format (which are .detx, .avi & .mov)
+		// if the file is not a detx file, it's a video file, we don't need any protection
+		if(filePath.split(".").last().toLower() == "detx")
+			openFile(filePath);
+		else
+			openVideoFile(filePath);
+		break;
+
+		// Hide and show the mediaPanel
+	case QEvent::MouseMove:
+		if(this->hasFocus())
+			fadeInMediaPanel();
+		break;
+
+	case QEvent::Drop:
+		mimeData = static_cast<QDropEvent *>(event)->mimeData();
+
+		// If there is one file (not more) we open it
+		if (mimeData->urls().length() == 1)
+		{
+			QString filePath = mimeData->urls().first().toLocalFile();
+			QString fileType = filePath.split(".").last().toLower();
+			if(fileType == "detx")
+				openFile(filePath);
+			else if (fileType == "avi" or fileType == "mov")
+				openVideoFile(filePath);
+		}
+		break;
+
+	case QEvent::DragEnter:
+		event->accept();
+
+	default:
+		break;
 	}
-	// Hide and show the mediaPanel
-	if(event->type() == QEvent::MouseMove && this->hasFocus())
-		fadeInMediaPanel();
 	return false;
 }
 
