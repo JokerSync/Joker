@@ -8,8 +8,6 @@
 #include <QFile>
 #include "PhStripDoc.h"
 #include <math.h>
-#include <limits>
-
 
 PhStripDoc::PhStripDoc(QObject *parent) :
 	QObject(parent)
@@ -274,7 +272,7 @@ int PhStripDoc::getNbTexts()
 
 PhFrame PhStripDoc::getPreviousTextFrame(PhFrame frame)
 {
-	PhFrame previousTextFrame = 0;
+	PhFrame previousTextFrame = PHFRAMEMIN;
 
 	foreach(PhStripText* text, _texts)
 	{
@@ -287,7 +285,7 @@ PhFrame PhStripDoc::getPreviousTextFrame(PhFrame frame)
 
 PhFrame PhStripDoc::getPreviousLoopFrame(PhFrame frame)
 {
-	PhFrame previousLoopFrame = 0;
+	PhFrame previousLoopFrame = PHFRAMEMIN;
 
 	foreach(PhStripLoop* loop, _loops)
 	{
@@ -300,7 +298,7 @@ PhFrame PhStripDoc::getPreviousLoopFrame(PhFrame frame)
 
 PhFrame PhStripDoc::getPreviousCutFrame(PhFrame frame)
 {
-	PhFrame previousCutFrame = 0;
+	PhFrame previousCutFrame = PHFRAMEMIN;
 
 	foreach(PhStripCut* cut, _cuts)
 	{
@@ -326,7 +324,7 @@ PhFrame PhStripDoc::getPreviousElementFrame(PhFrame frame)
 
 PhFrame PhStripDoc::getNextTextFrame(PhFrame frame)
 {
-	PhFrame nextTextFrame = pow(2,32);
+	PhFrame nextTextFrame = PHFRAMEMAX;
 
 	foreach(PhStripText* text, _texts)
 	{
@@ -339,7 +337,7 @@ PhFrame PhStripDoc::getNextTextFrame(PhFrame frame)
 
 PhFrame PhStripDoc::getNextLoopFrame(PhFrame frame)
 {
-	PhFrame nextLoopFrame = pow(2,32);
+	PhFrame nextLoopFrame = PHFRAMEMAX;
 
 	foreach(PhStripLoop* loop, _loops)
 	{
@@ -352,7 +350,7 @@ PhFrame PhStripDoc::getNextLoopFrame(PhFrame frame)
 
 PhFrame PhStripDoc::getNextCutFrame(PhFrame frame)
 {
-	PhFrame nextCutFrame = pow(2,32);
+	PhFrame nextCutFrame = PHFRAMEMAX;
 
 	foreach(PhStripCut* cut, _cuts)
 	{
@@ -383,7 +381,7 @@ PhFrame PhStripDoc::getFrameIn()
 
 PhFrame PhStripDoc::getFrameOut()
 {
-	return getPreviousElementFrame(std::numeric_limits<PhFrame>::max());
+	return getPreviousElementFrame(PHFRAMEMAX);
 }
 
 QString PhStripDoc::getFilePath()

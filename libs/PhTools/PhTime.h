@@ -2,6 +2,8 @@
 #define PHTIME_H
 
 #include <QtGlobal>
+#include <limits>
+
 
 /**
   * @brief PhTime is a type used for time value.
@@ -22,5 +24,8 @@ typedef double PhRate;
  Type for the timecode frame.
  */
 typedef long PhFrame;
+
+#define PHFRAMEMAX std::numeric_limits<PhFrame>::max()
+#define PHFRAMEMIN std::numeric_limits<PhFrame>::min()
 
 #endif // PHTIME_H
