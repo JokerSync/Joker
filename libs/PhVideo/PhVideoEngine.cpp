@@ -233,7 +233,6 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 
 							videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, frameHeight);
 
-							PHDEBUG << frame << _rgb[0] << packet.dts;
 							textureElapsed = _testTimer.elapsed();
 
 							_videoFrameTickCounter.tick();
