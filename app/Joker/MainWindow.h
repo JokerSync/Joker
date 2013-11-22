@@ -69,8 +69,6 @@ private slots:
 
 	void on_action3_triggered();
 
-	void on_actionGo_To_triggered();
-
 	void on_actionOpen_Video_triggered();
 
 	void on_actionChange_timestamp_triggered();
@@ -91,6 +89,8 @@ private slots:
 	void on_actionProperties_triggered();
 
 	void on_actionTest_mode_triggered();
+
+	void on_actionTimecode_triggered();
 
 private:
 	Ui::MainWindow *ui;

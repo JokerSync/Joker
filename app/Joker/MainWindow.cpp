@@ -213,17 +213,6 @@ void MainWindow::on_action3_triggered()
 	_strip->clock()->setRate(3.0);
 }
 
-void MainWindow::on_actionGo_To_triggered()
-{
-	hideMediaPanel();
-
-	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _strip->clock()->frame());
-	if(dlg.exec() == QDialog::Accepted)
-		_strip->clock()->setFrame(dlg.frame());
-
-	fadeInMediaPanel();
-}
-
 void MainWindow::on_actionOpen_Video_triggered()
 {
 	hideMediaPanel();
@@ -342,4 +331,15 @@ void MainWindow::on_actionTest_mode_triggered()
 		_settings->setValue("stripTestMode", false);
 	else
 		_settings->setValue("stripTestMode", true);
+}
+
+void MainWindow::on_actionTimecode_triggered()
+{
+	hideMediaPanel();
+
+	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _strip->clock()->frame());
+	if(dlg.exec() == QDialog::Accepted)
+		_strip->clock()->setFrame(dlg.frame());
+
+	fadeInMediaPanel();
 }
