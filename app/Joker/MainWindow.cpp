@@ -4,6 +4,8 @@
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QFileOpenEvent>
+#include <QDragEnterEvent>
+#include <QMimeData>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -82,6 +84,9 @@ MainWindow::MainWindow(QWidget *parent) :
 #warning TODO fix fullscreen on startup
 	if(_settings.value("startFullScreen", false).toBool())
 		this->showFullScreen();
+	setAcceptDrops(true);
+	PHDEBUG << acceptDrops();
+
 }
 
 MainWindow::~MainWindow()
@@ -122,6 +127,8 @@ void MainWindow::openFile(QString fileName)
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 {
 	QString filePath;
+	const QMimeData* mimeData;
+
 	switch (event->type()) {
 	case QEvent::FileOpen:
 		filePath = static_cast<QFileOpenEvent *>(event)->file();
@@ -139,10 +146,27 @@ bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 			fadeInMediaPanel();
 		break;
 
+	case QEvent::Drop:
+		mimeData = static_cast<QDropEvent *>(event)->mimeData();
+
+		// If there is one file (not more) we open it
+		if (mimeData->urls().length() == 1)
+		{
+			QString filePath = mimeData->urls().first().toLocalFile();
+			QString fileType = filePath.split(".").last().toLower();
+			if(fileType == "detx")
+				openFile(filePath);
+			else if (fileType == "avi" or fileType == "mov")
+				openVideoFile(filePath);
+		}
+		break;
+
+	case QEvent::DragEnter:
+		event->accept();
+
 	default:
 		break;
 	}
-
 	return false;
 }
 
