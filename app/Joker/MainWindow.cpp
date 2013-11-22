@@ -121,14 +121,28 @@ void MainWindow::openFile(QString fileName)
 
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 {
-	if(event->type() == QEvent::FileOpen)
-	{
-		openFile(static_cast<QFileOpenEvent *>(event)->file());
-		return true;
+	QString filePath;
+	switch (event->type()) {
+	case QEvent::FileOpen:
+		filePath = static_cast<QFileOpenEvent *>(event)->file();
+		// As the plist file list all the supported format (which are .detx, .avi & .mov)
+		// if the file is not a detx file, it's a video file, we don't need any protection
+		if(filePath.split(".").last().toLower() == "detx")
+			openFile(filePath);
+		else
+			openVideoFile(filePath);
+		break;
+
+		// Hide and show the mediaPanel
+	case QEvent::MouseMove:
+		if(this->hasFocus())
+			fadeInMediaPanel();
+		break;
+
+	default:
+		break;
 	}
-	// Hide and show the mediaPanel
-	if(event->type() == QEvent::MouseMove && this->hasFocus())
-		fadeInMediaPanel();
+
 	return false;
 }
 
@@ -339,7 +353,7 @@ void MainWindow::hideMediaPanel()
 
 void MainWindow::on_actionProperties_triggered()
 {
-    _propertyDialog.show();
+	_propertyDialog.show();
 }
 
 void MainWindow::on_actionTest_mode_triggered()
