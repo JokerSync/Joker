@@ -65,16 +65,18 @@ void PhStripDocTest::openDetXOffTest()
 
 void PhStripDocTest::getPreviousElementFrameTest()
 {
-	QCOMPARE(s2f("01:00:15:00"), _doc.getPreviousElementFrame(s2f("23:00:00:00")));
-	QCOMPARE(s2f("01:00:12:00"), _doc.getPreviousElementFrame(s2f("01:00:15:00")));
+	QCOMPARE(_doc.getPreviousElementFrame(s2f("23:00:00:00")), s2f("01:00:15:00"));
+	QCOMPARE(_doc.getPreviousElementFrame(s2f("01:00:15:00")), s2f("01:00:12:00"));
+	QCOMPARE(_doc.getPreviousElementFrame(s2f("01:00:00:00")), PHFRAMEMIN);
 }
 
 void PhStripDocTest::getNextElementFrameTest()
 {
-	QCOMPARE(s2f("01:00:00:00"), _doc.getNextElementFrame(s2f("00:00:00:00")));
-	QCOMPARE(s2f("01:00:01:00"), _doc.getNextElementFrame(s2f("01:00:00:00")));
-	QCOMPARE(s2f("01:00:02:00"), _doc.getNextElementFrame(s2f("01:00:01:00")));
-	QCOMPARE(s2f("01:00:05:00"), _doc.getNextElementFrame(s2f("01:00:02:00")));
+	QCOMPARE(_doc.getNextElementFrame(s2f("00:00:00:00")), s2f("01:00:00:00"));
+	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:00:00")), s2f("01:00:01:00"));
+	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:01:00")), s2f("01:00:02:00"));
+	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:02:00")), s2f("01:00:05:00"));
+	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:17:00")), PHFRAMEMAX);
 }
 
 QString PhStripDocTest::f2s(PhFrame frame)
