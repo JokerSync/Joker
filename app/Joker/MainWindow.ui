@@ -66,6 +66,8 @@
       <string>Go to</string>
      </property>
      <addaction name="actionTimecode"/>
+     <addaction name="actionNext_element"/>
+     <addaction name="actionPrevious_element"/>
     </widget>
     <addaction name="actionPlay_pause"/>
     <addaction name="actionPlay_backward"/>
@@ -231,6 +233,32 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionNext_text">
+   <property name="text">
+    <string>Next text</string>
+   </property>
+  </action>
+  <action name="actionPrevious_text">
+   <property name="text">
+    <string>Previous text</string>
+   </property>
+  </action>
+  <action name="actionNext_element">
+   <property name="text">
+    <string>Next element</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Right</string>
+   </property>
+  </action>
+  <action name="actionPrevious_element">
+   <property name="text">
+    <string>Previous element</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Left</string>
    </property>
   </action>
  </widget>
