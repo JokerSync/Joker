@@ -51,7 +51,7 @@
     </property>
     <widget class="QMenu" name="menuVarial_Speed">
      <property name="title">
-      <string>Varial Speed</string>
+      <string>Varispeed</string>
      </property>
      <addaction name="action_3"/>
      <addaction name="action_1"/>
@@ -61,6 +61,12 @@
      <addaction name="action1"/>
      <addaction name="action3"/>
     </widget>
+    <widget class="QMenu" name="menuGo_to">
+     <property name="title">
+      <string>Go to</string>
+     </property>
+     <addaction name="actionTimecode"/>
+    </widget>
     <addaction name="actionPlay_pause"/>
     <addaction name="actionPlay_backward"/>
     <addaction name="actionStep_forward"/>
@@ -68,8 +74,8 @@
     <addaction name="actionStep_time_forward"/>
     <addaction name="actionStep_time_backward"/>
     <addaction name="menuVarial_Speed"/>
-    <addaction name="actionGo_To"/>
     <addaction name="actionChange_timestamp"/>
+    <addaction name="menuGo_to"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -172,14 +178,6 @@
     <string>3</string>
    </property>
   </action>
-  <action name="actionGo_To">
-   <property name="text">
-    <string>Go to...</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+G</string>
-   </property>
-  </action>
   <action name="actionOpen_Video">
    <property name="text">
     <string>Open video...</string>
@@ -225,6 +223,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+T</string>
+   </property>
+  </action>
+  <action name="actionTimecode">
+   <property name="text">
+    <string>Timecode...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
  </widget>
