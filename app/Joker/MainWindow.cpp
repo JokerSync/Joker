@@ -98,14 +98,15 @@ void MainWindow::openRecent()
 
 void MainWindow::updateOpenRecent()
 {
-	// Open the settings group of recent files
-	_settings.beginGroup("openRecent");
+	if(!ui->menuOpen_recent->isEnabled())
+		ui->menuOpen_recent->setEnabled(true);
 
+	QAction * menu = QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly);
 	// If the object already belong to the list, set it on top
-	if(QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly))
+	if(menu)
 	{
-		ui->menuOpen_recent->removeAction(QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly));
-		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly));
+		ui->menuOpen_recent->removeAction(menu);
+		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), menu);
 	}
 	// Else, add it
 	else
@@ -121,6 +122,8 @@ void MainWindow::updateOpenRecent()
 		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), action);
 	}
 
+	// Open the settings group of recent files
+	_settings.beginGroup("openRecent");
 	int i = 1;
 	// Rewrite the setting files from the menu items
 	foreach(QAction * action, ui->menuOpen_recent->actions())
@@ -443,4 +446,5 @@ void MainWindow::on_actionClear_list_triggered()
 
 	// Remove all the buttons
 	_recentFileButtons.clear();
+	ui->menuOpen_recent->setEnabled(false);
 }
