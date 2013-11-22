@@ -343,3 +343,17 @@ void MainWindow::on_actionTimecode_triggered()
 
 	fadeInMediaPanel();
 }
+
+void MainWindow::on_actionNext_element_triggered()
+{
+	PhFrame frame = _doc->getNextElementFrame(_strip->clock()->frame());
+	if(frame < PHFRAMEMAX)
+		_strip->clock()->setFrame(frame);
+}
+
+void MainWindow::on_actionPrevious_element_triggered()
+{
+	PhFrame frame = _doc->getPreviousElementFrame(_strip->clock()->frame());
+	if(frame > PHFRAMEMIN)
+		_strip->clock()->setFrame(frame);
+}

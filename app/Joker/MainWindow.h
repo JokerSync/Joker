@@ -92,6 +92,10 @@ private slots:
 
 	void on_actionTimecode_triggered();
 
+	void on_actionNext_element_triggered();
+
+	void on_actionPrevious_element_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip * _strip;
