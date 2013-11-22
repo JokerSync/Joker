@@ -124,7 +124,6 @@ void PhGraphicStrip::setPixelPerFrame(long value)
 
 void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
-
 	_clock.tick(60);
 	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
@@ -164,6 +163,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 					PhGraphicSolidRect white(x, y, width, height);
 					white.setColor(QColor("white"));
 					white.draw();
+					PHDEBUG << clockFrame << "cut" << _clock.frame();
 
 					//This is useless to continue the foreach if the cut is displayed.
 					break;

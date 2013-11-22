@@ -18,43 +18,59 @@ PhDebug* PhDebug::d = NULL;
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-	QByteArray localMsg = msg.toLocal8Bit();
-	switch (type) {
-	case QtDebugMsg:
-		if(PhDebug::isConsoleActived())
-			fprintf(stderr, "%s \n", localMsg.constData());
-		break;
-	case QtWarningMsg:
-		fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-		break;
-	case QtCriticalMsg:
-		fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-		break;
-	case QtFatalMsg:
-		fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+
+	if(PhDebug::instance().getLogLevel() & PhDebug::instance().logLevelMessage() ){
+		QByteArray localMsg = msg.toLocal8Bit();
+		switch (type) {
+		case QtDebugMsg:
+			if(PhDebug::isConsoleActived())
+				fprintf(stderr, "%s \n", localMsg.constData());
+			break;
+		case QtWarningMsg:
+			fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+			break;
+		case QtCriticalMsg:
+			fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+			break;
+		case QtFatalMsg:
+			fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+			PhDebug::writeLog(msg);
+			abort();
+		}
 		PhDebug::writeLog(msg);
-		abort();
 	}
-	PhDebug::writeLog(msg);
 }
 
 
 // Called if init() was forget
-PhDebug PhDebug::instance()
+PhDebug PhDebug::instance(int logLevelMessage)
 {
 	if (!d){   // Only allow one instance of class to be generated.
-		d = new PhDebug(false, true, true, true, true, true, "Default");
+		d = new PhDebug(false, true, true, true, true, true, 16, "Default");
 		//Display two white lines at program start
+
 		PhDebug::writeLog("\n");
 	}
-
+	d->_logLevelMessage = logLevelMessage;
 	return * d;
 }
 
-PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, QString appName)
+PhDebug PhDebug::instance()
+{
+	if (!d){   // Only allow one instance of class to be generated.
+		d = new PhDebug(false, true, true, true, true, true, 16,  "Default");
+		//Display two white lines at program start
+
+		PhDebug::writeLog("\n");
+	}
+	d->_logLevelMessage = 0x11111111;
+	return * d;
+}
+
+PhDebug PhDebug::init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, int logLevel, QString appName)
 {
 	if (!d){  // Only allow one instance of class to be generated.
-		d = new PhDebug(DispDate, DispTime, DispFileName, DispFuncName, DispLine, showConsole, appName);
+		d = new PhDebug(DispDate, DispTime, DispFileName, DispFuncName, DispLine, showConsole, logLevel, appName);
 		//Display two white lines at program start
 		PhDebug::writeLog("\n");
 	}
@@ -84,7 +100,7 @@ QDebug PhDebug::operator<<(QDebug dbg)
 
 }
 
-PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, QString appName)
+PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, int logLevel, QString appName)
 {
 	qInstallMessageHandler(myMessageOutput);
 
@@ -105,6 +121,7 @@ PhDebug::PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncN
 		_dispFileName = DispFileName;
 		_dispLine = DispLine;
 		_showConsole = showConsole;
+		_logLevel = logLevel;
 	}
 
 }
@@ -141,4 +158,21 @@ void PhDebug::writeLog(QString text)
 	QTextStream ts(PhDebug::instance()._log);
 	ts << text << endl;
 }
+
+#warning TODO remove if useless
+void PhDebug::setLogLevel(int level)
+{
+	d->_logLevel = level;
+}
+
+int PhDebug::getLogLevel()
+{
+	return d->_logLevel;
+}
+int PhDebug::logLevelMessage()
+{
+	return d->_logLevelMessage;
+}
+
+
 

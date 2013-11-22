@@ -12,7 +12,7 @@ MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
 	_settings(settings),
-	_sonySlave(PhTimeCodeType25, _settings, this)
+	_sonySlave(PhTimeCodeType25, _settings)
 {
 	ui->setupUi(this);
 	_strip = ui->stripView->strip();

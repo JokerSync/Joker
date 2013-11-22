@@ -6,11 +6,13 @@
 #include <QFileInfo>
 #include <QFileDialog>
 
-MainView::MainView()
+MainView::MainView(QSettings *settings)
 	: QMainWindow(0),
-	  ui(new Ui::MainView)
+	  ui(new Ui::MainView),
+	  _settings(settings)
 {
 	ui->setupUi(this);
+	_videoEngine.setSettings(_settings);
 	ui->_videoView->setEngine(&_videoEngine);
 
 	ui->mediaController->setClock(_videoEngine.clock());
@@ -34,6 +36,8 @@ bool MainView::openFile(QString fileName)
 		ui->mediaController->setFirstFrame(0);
 
 		_videoEngine.clock()->setRate(0.0);
+
+		_settings->setValue("lastFile", fileName);
 		return true;
     }
 	return false;

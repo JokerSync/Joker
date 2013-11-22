@@ -11,6 +11,8 @@
 
 #include "PhDebug.h"
 
+#define TC 0x2000
+
 QString PhTimeCode::stringFromFrame(PhFrame frame, PhTimeCodeType type) {
     unsigned int hhmmssff[4];
     ComputeHhMmSsFf(hhmmssff, frame, type);

@@ -19,5 +19,8 @@ bool PhVideoView::init()
 void PhVideoView::paint()
 {
 	if(_videoEngine)
+	{
 		_videoEngine->drawVideo(0, 0, this->width(), this->height());
+		_videoEngine->clock()->tick(60);
+	}
 }
