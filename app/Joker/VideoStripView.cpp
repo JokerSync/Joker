@@ -58,8 +58,11 @@ void VideoStripView::paint()
 	int y = 0;
 	if(_settings && _settings->value("displayTC", true).toBool())
 	{
+		PhClock *clock = _videoEngine.clock();
+		long delay = (int)(_settings->value("delay", 0).toInt() * clock->rate()); // delay in ms
+		PhFrame clockFrame = clock->frame() + delay * PhTimeCode::getFps(clock->timeCodeType()) / 1000;
 		_tcText.setRect(0, 0, 200, 50);
-		_tcText.setContent(_strip.clock()->timeCode());
+		_tcText.setContent(PhTimeCode::stringFromFrame(clockFrame, clock->timeCodeType()));
 		_tcText.draw();
 	}
 
