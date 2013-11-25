@@ -30,7 +30,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldStartFullScreen = _settings->value("startFullScreen", false).toBool();
 	_oldSpeed = _settings->value("speed", 12).toInt();
 	_oldBolness = _settings->value("boldness", 0).toInt();
-	_oldFont = _settings->value("StripFontName", "").toString();
+	_oldFont = _settings->value("StripFontFile", "").toString();
 	_oldDeinterlace = _settings->value("videoDeinterlace", false).toBool();
 
 	ui->sliderBoldness->setValue(_oldBolness);
@@ -54,18 +54,19 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 
 	//Set the fonts
 	QStringList userFontList, systemFontList;
+	QString userDirectory = QDir::homePath();
 	QDir systemFont("/Library/Fonts/");
-	QDir userFont("~/Library/Fonts/");
+	QDir userFont(userDirectory + "/Library/Fonts/");
 
 
 
 	QStringList filters;
 	filters.append("*.ttf");
+	filters.append("*.TTF");
 	systemFont.setNameFilters(filters);
 	userFont.setNameFilters(filters);
 	userFontList = userFont.entryList();
 	systemFontList = systemFont.entryList();
-
 
 	foreach(QString fontName, systemFontList)
 	{
@@ -73,12 +74,21 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	}
 	foreach(QString fontName, userFontList)
 	{
-		fontList[fontName.split(".").first()] = "~/Library/Fonts/" + fontName;
+		fontList[fontName.split(".").first()] = userDirectory + "/Library/Fonts/" + fontName;
 	}
 
+	// _oldFont is : /Path/To/Font.ttf
+	// So split with "/" then take last gives Font.ttf
+	// Split with "." then take first, gives the name of the font
+	QString oldFontName = _oldFont.split("/").last().split(".").first();
 	foreach(QString fontName, fontList.keys())
 	{
 		ui->listWidgetFont->addItem(fontName);
+		if(fontName == oldFontName)
+		{
+			ui->listWidgetFont->item(ui->listWidgetFont->count() - 1)->setSelected(true);
+			ui->listWidgetFont->setCurrentRow(ui->listWidgetFont->count() - 1);
+		}
 	}
 }
 
