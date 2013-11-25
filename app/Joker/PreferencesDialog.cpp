@@ -54,18 +54,19 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 
 	//Set the fonts
 	QStringList userFontList, systemFontList;
+	QString userDirectory = QDir::homePath();
 	QDir systemFont("/Library/Fonts/");
-	QDir userFont("~/Library/Fonts/");
+	QDir userFont(userDirectory + "/Library/Fonts/");
 
 
 
 	QStringList filters;
 	filters.append("*.ttf");
+	filters.append("*.TTF");
 	systemFont.setNameFilters(filters);
 	userFont.setNameFilters(filters);
 	userFontList = userFont.entryList();
 	systemFontList = systemFont.entryList();
-
 
 	foreach(QString fontName, systemFontList)
 	{
@@ -73,7 +74,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	}
 	foreach(QString fontName, userFontList)
 	{
-		fontList[fontName.split(".").first()] = "~/Library/Fonts/" + fontName;
+		fontList[fontName.split(".").first()] = userDirectory + "/Library/Fonts/" + fontName;
 	}
 
 	// _oldFont is : /Path/To/Font.ttf
