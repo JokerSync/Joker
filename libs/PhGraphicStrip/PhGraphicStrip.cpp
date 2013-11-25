@@ -382,8 +382,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 					_graphicOffs[off] = gOff;
 				}
 				gOff->setX(x + off->getTimeIn() * pixelPerFrame - offset);
-				gOff->setY(y + off->getTrack() * trackHeight + trackHeight);
-				gOff->setHeight( trackHeight / 10);
+				gOff->setY(y + off->getTrack() * trackHeight + trackHeight * 0.8);
+				gOff->setHeight(trackHeight / 20);
 				gOff->setWidth((off->getTimeOut() - off->getTimeIn()) * pixelPerFrame);
 				gOff->draw();
 				offCounter++;
