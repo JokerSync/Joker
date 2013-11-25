@@ -72,7 +72,7 @@ bool PhFont::init(QString fontFile)
 	{
 		TTF_SetFontOutline(font, i);
 		// We get rid of the 32 first useless char
-		for(Uint16 ch = 0; ch < 256; ++ch)
+		for(Uint16 ch = 32; ch < 256; ++ch)
 		{
 			if(TTF_GlyphIsProvided(font, ch))
 			{
