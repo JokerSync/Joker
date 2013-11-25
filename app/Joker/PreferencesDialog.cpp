@@ -186,7 +186,8 @@ void PreferencesDialog::on_listWidgetFont_itemClicked(QListWidgetItem *item)
 
 void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
-	_settings->setValue("StripFontFile", fontList[current->text()]);
+	if(current)
+		_settings->setValue("StripFontFile", fontList[current->text()]);
 }
 
 void PreferencesDialog::on_cBoxDeinterlace_clicked()
