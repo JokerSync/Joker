@@ -27,6 +27,9 @@ private:
 	PhGraphicStrip _strip;
 	QSettings *_settings;
 	PhSonyController *_sony;
+
+	PhFont _hudFont;
+	PhGraphicText _tcText;
 };
 
 #endif // VIDEOSTRIPVIEW_H

@@ -3,7 +3,8 @@
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
 	_settings(NULL),
-	_sony(NULL)
+	_sony(NULL),
+	_tcText(&_hudFont, "00:00:00:00")
 {
 }
 
@@ -20,6 +21,9 @@ void VideoStripView::setSony(PhSonyController *sony)
 
 bool VideoStripView::init()
 {
+	_hudFont.setFontFile("/Library/Fonts/Arial.ttf");
+	_tcText.setColor(QColor(128, 128, 128));
+
 	return _strip.init();
 }
 
@@ -43,4 +47,8 @@ void VideoStripView::paint()
 		int videoX = (this->width() - videoWidth) / 2;
 		_videoEngine.drawVideo(videoX, 0, videoWidth, videoHeight);
 	}
+
+	_tcText.setRect(0, 0, 200, 50);
+	_tcText.setContent(_strip.clock()->timeCode());
+	_tcText.draw();
 }
