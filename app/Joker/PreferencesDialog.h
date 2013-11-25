@@ -47,6 +47,8 @@ private slots:
 
 	void on_cBoxDeinterlace_clicked();
 
+	void on_cBoxDisplayTC_clicked();
+
 private:
 	Ui::PreferencesDialog *ui;
 	QSettings *_settings;
@@ -60,6 +62,7 @@ private:
 	bool _oldOpenLastFile;
 	bool _oldStartFullScreen;
 	bool _oldDeinterlace;
+	bool _oldDisplayTC;
 	QMap<QString, QString> fontList;
 
 };

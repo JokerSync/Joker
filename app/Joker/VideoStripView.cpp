@@ -55,9 +55,13 @@ void VideoStripView::paint()
 		_videoEngine.drawVideo(videoX, 0, videoWidth, videoHeight);
 	}
 
-	_tcText.setRect(0, 0, 200, 50);
-	_tcText.setContent(_strip.clock()->timeCode());
-	_tcText.draw();
+	int y = 0;
+	if(_settings && _settings->value("displayTC", true).toBool())
+	{
+		_tcText.setRect(0, 0, 200, 50);
+		_tcText.setContent(_strip.clock()->timeCode());
+		_tcText.draw();
+	}
 
 	_noVideoSyncError.setRect(0, 50, 200, 50);
 	if(_lastVideoSyncElapsed.elapsed() > 1000)
