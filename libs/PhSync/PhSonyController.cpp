@@ -80,12 +80,18 @@ void PhSonyController::checkVideoSync(int frequency)
 		if(videoSyncUp)
 		{
 			if(!_lastCTS && cts)
-				emit onVideoSync();
+			{
+				onVideoSync();
+				emit videoSync();
+			}
 		}
 		else
 		{
 			if(_lastCTS && !cts)
-				emit onVideoSync();
+			{
+				onVideoSync();
+				emit videoSync();
+			}
 		}
 		_lastCTS = cts;
 	}
