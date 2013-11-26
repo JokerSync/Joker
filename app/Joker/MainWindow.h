@@ -29,6 +29,8 @@ public:
 
 	bool openVideoFile(QString videoFileName);
 
+	bool openStripFile(QString stripFileName);
+
 protected:
 	bool eventFilter(QObject *sender, QEvent *event);
 
