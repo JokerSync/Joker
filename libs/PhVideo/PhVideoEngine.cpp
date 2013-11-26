@@ -65,7 +65,7 @@ bool PhVideoEngine::open(QString fileName)
 	PHDEBUG << "length:" << this->length();
 	_clock.setFrame(0);
 	goToFrame(0);
-
+	_fileName = fileName;
 	return true;
 }
 
