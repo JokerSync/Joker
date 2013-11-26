@@ -6,6 +6,7 @@
 #include <QFileOpenEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QXmlStreamWriter>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -166,6 +167,8 @@ void MainWindow::setupOpenRecentMenu()
 
 void MainWindow::openFile(QString fileName)
 {
+	hideMediaPanel();
+
 	PHDEBUG << "openFile : " << fileName;
 	//PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 
@@ -190,6 +193,30 @@ void MainWindow::openFile(QString fileName)
 				_mediaPanel.setMediaLength(_videoEngine->length());
 				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
 			}
+			else
+			{
+				QString msg = "Joker is unable to find a video file corresponding to your script file\"";
+				msg +=  _doc->getVideoPath();
+				msg +=  " \", would you do it manually?";
+				QMessageBox box(QMessageBox::Question, "Open a video file ?", msg, QMessageBox::Yes | QMessageBox::No);
+				box.setDefaultButton(QMessageBox::Yes);
+				if(box.exec() == QMessageBox::Yes)
+				{
+					QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
+					QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
+					if(dlg.exec())
+					{
+						_settings->setValue("lastFolder", dlg.directory().absolutePath());
+						QString videoFile = dlg.selectedFiles()[0];
+						_videoEngine->open(videoFile);
+						_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
+						_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
+						_mediaPanel.setMediaLength(_videoEngine->length());
+						_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
+					}
+				}
+			}
+
 			_settings->setValue("lastfile", fileName);
 		}
 		updateOpenRecent();
@@ -241,6 +268,102 @@ bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 		break;
 	}
 	return false;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+ {
+	// Replace the bool with the state of the button.
+	if(ui->actionSave->isEnabled())
+	{
+		QString msg = "Joker is about to quit, would you save the session to a Strip file ?";
+		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
+		box.setDefaultButton(QMessageBox::Save);
+		int result = box.exec();
+		if(result == QMessageBox::Save)
+		{
+			if(saveStrip())
+				event->accept();
+			else
+				event->ignore();
+		}
+		else if(result == QMessageBox::Cancel)
+			event->ignore();
+		else
+			event->accept();
+	}
+	else
+		event->accept();
+
+}
+
+bool MainWindow::saveStrip()
+{
+	hideMediaPanel();
+	QString savedFile = QFileDialog::getSaveFileName(this, "Save...", _settings->value("lastFolder", QDir::homePath()).toString(),"*.strip");
+
+	if(savedFile != "")
+	{
+		QFile file(savedFile);
+
+			// open a file
+			if (!file.open(QIODevice::WriteOnly))
+			{
+				// show error message if not able to open file
+				QMessageBox::warning(0, "Read only", "The file is in read only mode");
+			}
+			else
+			{
+				//if file is successfully opened then create XML
+				QXmlStreamWriter* xmlWriter = new QXmlStreamWriter();
+				// set device (here file)to streamwriter
+				xmlWriter->setDevice(&file);
+				// Writes a document start with the XML version number version.
+
+				// Positive numbers indicate spaces, negative numbers tabs.
+				xmlWriter->setAutoFormattingIndent(-1);
+				xmlWriter->setAutoFormatting(true);
+
+				// Indent is just for keeping in mind XML structure
+				xmlWriter->writeStartDocument();
+				xmlWriter->writeStartElement("strip");
+					xmlWriter->writeStartElement("meta");
+
+						xmlWriter->writeStartElement("generator");
+						xmlWriter->writeAttribute("name", "Joker");
+						xmlWriter->writeAttribute("version", APP_VERSION);
+						xmlWriter->writeEndElement();
+
+						xmlWriter->writeStartElement("media");
+						xmlWriter->writeAttribute("type", "detx");
+						xmlWriter->writeCharacters(_doc->getFilePath());
+						xmlWriter->writeEndElement();
+
+						xmlWriter->writeStartElement("media");
+						xmlWriter->writeAttribute("type", "video");
+						xmlWriter->writeCharacters(_videoEngine->fileName());
+						xmlWriter->writeEndElement();
+
+						xmlWriter->writeStartElement("media");
+						xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoEngine->frameStamp(), PhTimeCodeType25));
+						xmlWriter->writeEndElement();
+
+						xmlWriter->writeStartElement("state");
+						xmlWriter->writeAttribute("lastTimeCode", _strip->clock()->timeCode());
+						xmlWriter->writeEndElement();
+
+					xmlWriter->writeEndElement();
+				xmlWriter->writeEndElement();
+
+				xmlWriter->writeEndDocument();
+				delete xmlWriter;
+			}
+
+		PHDEBUG << savedFile;
+
+		return true;
+	}
+	return false;
+
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -501,4 +624,23 @@ void MainWindow::on_actionClear_list_triggered()
 	// Remove all the buttons
 	_recentFileButtons.clear();
 	ui->menuOpen_recent->setEnabled(false);
+}
+
+void MainWindow::on_actionImport_triggered()
+{
+	hideMediaPanel();
+
+	QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
+
+	QString rythmoFileName;
+	QFileDialog dlg(this, "Open...", lastFolder, "Rythmo files (*.detx)");
+	if(dlg.exec())
+	{
+		_settings->setValue("lastFolder", dlg.directory().absolutePath());
+		rythmoFileName = dlg.selectedFiles()[0];
+		openFile(rythmoFileName);
+		ui->actionSave->setEnabled(true);
+	}
+
+	fadeInMediaPanel();
 }

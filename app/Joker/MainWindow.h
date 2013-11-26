@@ -100,6 +100,8 @@ private slots:
 
 	void openRecent();
 
+	void on_actionImport_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip * _strip;
@@ -120,6 +122,8 @@ private:
 
 	void updateOpenRecent();
 	void setupOpenRecentMenu();
+	void closeEvent(QCloseEvent *event);
+	bool saveStrip();
 };
 
 #endif // MAINWINDOW_H
