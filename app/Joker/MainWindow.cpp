@@ -7,6 +7,7 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QXmlStreamWriter>
+#include <QDomDocument>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -176,51 +177,93 @@ void MainWindow::openFile(QString fileName)
 	if(QFile::exists(fileName))
 	{
 		// Try to open the document
-		if(_doc->openDetX(fileName))
+		if(fileName.split(".").last() == "detx")
 		{
-			// On succeed, synchronizing the clocks
-			_strip->clock()->setTimeCodeType(_doc->getTCType());
-			_strip->clock()->setFrame(_doc->getLastFrame());
-			this->setWindowTitle(fileName);
-
-			// Opening the corresponding video file if it exists
-			QFileInfo fileInfo(_doc->getVideoPath());
-			if (fileInfo.exists())
+			if(_doc->openDetX(fileName))
 			{
-				_videoEngine->open(_doc->getVideoPath());
-				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
-				_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
-				_mediaPanel.setMediaLength(_videoEngine->length());
-				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
+				// On succeed, synchronizing the clocks
+				_strip->clock()->setTimeCodeType(_doc->getTCType());
+				_strip->clock()->setFrame(_doc->getLastFrame());
+				this->setWindowTitle(fileName);
+				if(openVideoFile(_doc->getVideoPath()))
+					ui->actionSave->setEnabled(true);
+				_settings->setValue("lastfile", fileName);
 			}
-			else
-			{
-				QString msg = "Joker is unable to find a video file corresponding to your script file\"";
-				msg +=  _doc->getVideoPath();
-				msg +=  " \", would you do it manually?";
-				QMessageBox box(QMessageBox::Question, "Open a video file ?", msg, QMessageBox::Yes | QMessageBox::No);
-				box.setDefaultButton(QMessageBox::Yes);
-				if(box.exec() == QMessageBox::Yes)
-				{
-					QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
-					QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
-					if(dlg.exec())
-					{
-						_settings->setValue("lastFolder", dlg.directory().absolutePath());
-						QString videoFile = dlg.selectedFiles()[0];
-						_videoEngine->open(videoFile);
-						_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
-						_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
-						_mediaPanel.setMediaLength(_videoEngine->length());
-						_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
-					}
-				}
-			}
-
+		}
+		else if(fileName.split(".").last() == "strip")
+		{
+			openStripFile(fileName);
+			ui->actionSave->setEnabled(true);
 			_settings->setValue("lastfile", fileName);
 		}
+
 		updateOpenRecent();
 	}
+}
+
+bool MainWindow::openStripFile(QString stripFileName)
+{
+	QFile xmlFile(stripFileName);
+	if(!xmlFile.open(QIODevice::ReadOnly))
+	{
+		PHDEBUG << "Unable to open" << stripFileName;
+		return false;
+	}
+
+	// Loading the DOM
+	QDomDocument *domDoc = new QDomDocument();
+	if (!domDoc->setContent(&xmlFile))
+	{
+		xmlFile.close();
+		PHDEBUG << "The XML document seems to be bad formed" << stripFileName;
+		return false;
+	}
+
+	PHDEBUG << ("Start parsing " + stripFileName);
+	QDomElement stripDocument = domDoc->documentElement();
+
+	if(stripDocument.tagName() != "strip")
+	{
+		xmlFile.close();
+		PHDEBUG << "Bad root element :" << stripDocument.tagName();
+		return false;
+	}
+
+	QDomElement metaInfo =	stripDocument.elementsByTagName("meta").at(0).toElement();
+	// Reading the header
+	if(stripDocument.elementsByTagName("meta").count())
+	{
+		for(int i = 0; i < stripDocument.elementsByTagName("media").count(); i++)
+		{
+			QDomElement line = metaInfo.elementsByTagName("media").at(i).toElement();
+			PHDEBUG << "line" << line.attribute("type");
+			if(line.attribute("type") == "detx")
+			{
+				if(_doc->openDetX(line.text()))
+				{
+					PHDEBUG << "On open detx";
+					// On succeed, synchronizing the clocks
+					_strip->clock()->setTimeCodeType(_doc->getTCType());
+					_strip->clock()->setFrame(_doc->getLastFrame());
+					this->setWindowTitle(line.text());
+				}
+			}
+			if(line.attribute("type")  == "video")
+			{
+				PHDEBUG << "On Video Open" << metaInfo.elementsByTagName("state").at(0).toElement().attribute("lastTimeCode");
+				openVideoFile(line.text());
+				_strip->clock()->setFrame(PhTimeCode::frameFromString(metaInfo.elementsByTagName("state").at(0).toElement().attribute("lastTimeCode"), _doc->getTCType()));
+
+			}
+//			else
+//			{
+//				PHDEBUG << "settimming";
+//				_strip->clock()->setFrame(PhTimeCode::frameFromString(line.attribute("lastTimeCode"), _doc->getTCType()));
+//			}
+		}
+		_settings->setValue("lastfile", stripFileName);
+	}
+
 }
 
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
@@ -254,7 +297,7 @@ bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 		{
 			QString filePath = mimeData->urls().first().toLocalFile();
 			QString fileType = filePath.split(".").last().toLower();
-			if(fileType == "detx")
+			if(fileType == "detx" or fileType == "strip")
 				openFile(filePath);
 			else if (fileType == "avi" or fileType == "mov")
 				openVideoFile(filePath);
@@ -271,7 +314,7 @@ bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
- {
+{
 	// Replace the bool with the state of the button.
 	if(ui->actionSave->isEnabled())
 	{
@@ -340,11 +383,8 @@ bool MainWindow::saveStrip()
 
 						xmlWriter->writeStartElement("media");
 						xmlWriter->writeAttribute("type", "video");
-						xmlWriter->writeCharacters(_videoEngine->fileName());
-						xmlWriter->writeEndElement();
-
-						xmlWriter->writeStartElement("media");
 						xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoEngine->frameStamp(), PhTimeCodeType25));
+						xmlWriter->writeCharacters(_videoEngine->fileName());
 						xmlWriter->writeEndElement();
 
 						xmlWriter->writeStartElement("state");
@@ -370,7 +410,8 @@ void MainWindow::on_actionOpen_triggered()
 {
 	hideMediaPanel();
 
-	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
+	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx *.strip)");
+	dlg.setFileMode(QFileDialog::ExistingFile);
 	if(dlg.exec())
 	{
 		QString fileName = dlg.selectedFiles()[0];
@@ -467,19 +508,40 @@ void MainWindow::on_actionOpen_Video_triggered()
 
 bool MainWindow::openVideoFile(QString videoFileName)
 {
+
+	// Opening the corresponding video file if it exists
 	QFileInfo fileInfo(videoFileName);
 	if (fileInfo.exists())
 	{
-		_videoEngine->open(videoFileName);
-		//#warning TODO read media length from video file
-		//		ui->mediaController->setMediaLength(7500);
-		//#warning TODO read first frame from video file
-		//		ui->mediaController->setFirstFrame(0);
-
-		//_clock->setRate(0.0);
-		return true;
+		_videoEngine->open(_doc->getVideoPath());
+		_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
+		_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
+		_mediaPanel.setMediaLength(_videoEngine->length());
+		_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
 	}
-	return false;
+	else
+	{
+		QString msg = "Joker is unable to find a video file corresponding to your script file\"";
+		msg +=  _doc->getVideoPath();
+		msg +=  " \", would you do it manually?";
+		QMessageBox box(QMessageBox::Question, "Open a video file ?", msg, QMessageBox::Yes | QMessageBox::No);
+		box.setDefaultButton(QMessageBox::Yes);
+		if(box.exec() == QMessageBox::Yes)
+		{
+			QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
+			QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
+			if(dlg.exec())
+			{
+				_settings->setValue("lastFolder", dlg.directory().absolutePath());
+				QString videoFile = dlg.selectedFiles()[0];
+				_videoEngine->open(videoFile);
+				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
+				_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
+				_mediaPanel.setMediaLength(_videoEngine->length());
+				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
+			}
+		}
+	}
 }
 
 void MainWindow::on_actionChange_timestamp_triggered()
@@ -643,4 +705,9 @@ void MainWindow::on_actionImport_triggered()
 	}
 
 	fadeInMediaPanel();
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+	saveStrip();
 }
