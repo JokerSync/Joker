@@ -7,35 +7,18 @@
 #include "PhTools/tests/PhTimeCodeTest.h"
 #define LVL 4
 
-
 int main(int argc, char *argv[])
 {
 
 	// Initialize the Debug module.
-	PhDebug::init(false, true, true, true, true, true, 1, argv[0]);
-    // Test of PhDebug tool
-	//PHDEBUG(0x01) << "Test of PhDebug tool";
+//	PhDebug::init(false, true, true, true, true, true, 1, argv[0]);
 
-    // Test of TimeCode
-    for(int i=0; i<3;i++)
-    {
-        QString s = PhTimeCode::stringFromFrame(i, PhTimeCodeType25);
-        int n = PhTimeCode::frameFromString(s, PhTimeCodeType25);
-        //PHDEBUG << s;
-        if(n != i)
-			PHDBG(0x10) << "problem with " << i;
-    }
+	PHDEBUG << "should always display.";
+//	PHDBG(1) << "1 should display";
+//	PHDBG(2) << "2 should not display";
 
-	for (int i = 0; i < 16; i++)
-		PHDBG(i) << i;
-
-
-	PHDEBUG;
-
-	//PHDEBUG(LVL) << 0x100;
-
-
-	//PhTimeCodeTest tcTest;
-
-	return 0;//QTest::qExec(&tcTest);
+	QString s = "s";
+	int i = 4;
+	qDebug() << "test" << "test" << "test" << s << i;
+	return 0;
 }
