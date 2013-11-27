@@ -24,7 +24,7 @@ class PhDebug
 {
 public:
 	// used to access to the only instance of the class
-	static PhDebug instance(int logLevelMessage = 1);
+	static PhDebug instance(int logLevelMessage = 0);
 
 	QDebug operator<<(QDebug dbg);
 
@@ -33,16 +33,14 @@ public:
 	static QString getFuncName(QString name);
 	static QString getFileName(QString name);
 	static QString getLine(int line);
-	static void setLogLevel(int level);
-	static int getLogLevel();
-
-	static int logLevelMessage();
+	static void setLogMask(int mask);
+	static int getLogMask();
 
 private:
 	static void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
 	static PhDebug * d;
-	int _logLevel;
+	int _logMask;
 	int _currentLogLevel;
 	QFile * _log;
 	bool _dispFuncName;
