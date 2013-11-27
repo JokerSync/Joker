@@ -411,12 +411,17 @@ void MainWindow::on_actionOpen_triggered()
 {
 	hideMediaPanel();
 
-	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx *.strip)");
+	QFileDialog dlg(this, "Open...", "", "Detx files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
+	dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
+
+	dlg.setOption(QFileDialog::HideNameFilterDetails, false);
+
 	dlg.setFileMode(QFileDialog::ExistingFile);
 	if(dlg.exec())
 	{
 		QString fileName = dlg.selectedFiles()[0];
 		openFile(fileName);
+		_settings->setValue("selectedFilter", dlg.selectedNameFilter());
 	}
 
 	fadeInMediaPanel();
