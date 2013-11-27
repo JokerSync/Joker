@@ -25,7 +25,7 @@ public:
 	explicit MainWindow(QSettings *settings);
 	~MainWindow();
 
-	void openFile(QString fileName);
+	void openFile(QString fileName, bool standAloneFile = true);
 
 	bool openVideoFile(QString videoFileName);
 
