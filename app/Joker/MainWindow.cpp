@@ -166,7 +166,7 @@ void MainWindow::setupOpenRecentMenu()
 
 }
 
-void MainWindow::openFile(QString fileName)
+void MainWindow::openFile(QString fileName, bool standAloneFile)
 {
 	hideMediaPanel();
 
@@ -185,8 +185,11 @@ void MainWindow::openFile(QString fileName)
 				_strip->clock()->setTimeCodeType(_doc->getTCType());
 				_strip->clock()->setFrame(_doc->getLastFrame());
 				this->setWindowTitle(fileName);
-				if(openVideoFile(_doc->getVideoPath()))
-					ui->actionSave->setEnabled(true);
+				if(standAloneFile)
+				{
+					if(openVideoFile(_doc->getVideoPath()))
+						ui->actionSave->setEnabled(true);
+				}
 				_settings->setValue("lastfile", fileName);
 			}
 		}
@@ -257,6 +260,7 @@ bool MainWindow::openStripFile(QString stripFileName)
 			}
 		}
 		_settings->setValue("lastfile", stripFileName);
+		_settings->setValue("currentStripFile", stripFileName);
 	}
 
 }
@@ -272,8 +276,10 @@ bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 		filePath = static_cast<QFileOpenEvent *>(event)->file();
 		// As the plist file list all the supported format (which are .detx, .avi & .mov)
 		// if the file is not a detx file, it's a video file, we don't need any protection
-		if(filePath.split(".").last().toLower() == "detx" or filePath.split(".").last().toLower() == "strip")
+		if(filePath.split(".").last().toLower() == "detx")
 			openFile(filePath);
+		else if (filePath.split(".").last().toLower() == "strip")
+			openStripFile(filePath);
 		else
 			openVideoFile(filePath);
 		break;
@@ -337,7 +343,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 bool MainWindow::saveStrip()
 {
 	hideMediaPanel();
-	QString savedFile = QFileDialog::getSaveFileName(this, "Save...", _settings->value("lastFolder", QDir::homePath()).toString(),"*.strip");
+	QString savedFile = QFileDialog::getSaveFileName(this, "Save...", _settings->value("currentStripFile", _settings->value("lastFolder", QDir::homePath()).toString()).toString(),"*.strip");
 
 	if(savedFile != "")
 	{
@@ -537,6 +543,7 @@ bool MainWindow::openVideoFile(QString videoFileName)
 			}
 		}
 	}
+	ui->actionSave->setEnabled(true);
 }
 
 void MainWindow::on_actionChange_timestamp_triggered()

@@ -15,6 +15,7 @@
 int main(int argc, char *argv[])
 {
 	QSettings settings("Phonations", "Joker");
+	QSettings::setDefaultFormat(QSettings::NativeFormat);
 	int logLevel = settings.value("logLevel", 1).toInt();
 	PhDebug::init(false, true, true, true, true, true, logLevel, APP_NAME);
 	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
