@@ -20,7 +20,7 @@ void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, c
 {
 	if(d)
 	{
-		if(d->_logLevel & d->_currentLogLevel)
+		if(d->_logMask & (1 << d->_currentLogLevel))
 		{
 			if(d->_showConsole)
 				fprintf(stderr, "%s \n", msg.toLocal8Bit().constData());
@@ -82,7 +82,7 @@ PhDebug::PhDebug()
 	_dispFileName = false;
 	_dispLine = false;
 	_showConsole = true;
-	_logLevel = 1;
+	_logMask = 1;
 }
 
 QString PhDebug::getFuncName(QString name)
@@ -107,19 +107,14 @@ QString PhDebug::getLine(int line)
 	return "";
 }
 
-void PhDebug::setLogLevel(int level)
+void PhDebug::setLogMask(int mask)
 {
-	d->_logLevel = level;
+	d->_logMask = mask;
 }
 
-int PhDebug::getLogLevel()
+int PhDebug::getLogMask()
 {
-	return d->_logLevel;
-}
-
-int PhDebug::logLevelMessage()
-{
-	return d->_currentLogLevel;
+	return d->_logMask;
 }
 
 
