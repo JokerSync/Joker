@@ -255,11 +255,6 @@ bool MainWindow::openStripFile(QString stripFileName)
 				_strip->clock()->setFrame(PhTimeCode::frameFromString(metaInfo.elementsByTagName("state").at(0).toElement().attribute("lastTimeCode"), _doc->getTCType()));
 
 			}
-//			else
-//			{
-//				PHDEBUG << "settimming";
-//				_strip->clock()->setFrame(PhTimeCode::frameFromString(line.attribute("lastTimeCode"), _doc->getTCType()));
-//			}
 		}
 		_settings->setValue("lastfile", stripFileName);
 	}
@@ -277,7 +272,7 @@ bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 		filePath = static_cast<QFileOpenEvent *>(event)->file();
 		// As the plist file list all the supported format (which are .detx, .avi & .mov)
 		// if the file is not a detx file, it's a video file, we don't need any protection
-		if(filePath.split(".").last().toLower() == "detx")
+		if(filePath.split(".").last().toLower() == "detx" or filePath.split(".").last().toLower() == "strip")
 			openFile(filePath);
 		else
 			openVideoFile(filePath);
@@ -513,7 +508,7 @@ bool MainWindow::openVideoFile(QString videoFileName)
 	QFileInfo fileInfo(videoFileName);
 	if (fileInfo.exists())
 	{
-		_videoEngine->open(_doc->getVideoPath());
+		_videoEngine->open(videoFileName);
 		_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
 		_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
 		_mediaPanel.setMediaLength(_videoEngine->length());
@@ -710,4 +705,5 @@ void MainWindow::on_actionImport_triggered()
 void MainWindow::on_actionSave_triggered()
 {
 	saveStrip();
+	ui->actionSave->setEnabled(false);
 }
