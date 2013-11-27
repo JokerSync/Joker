@@ -104,6 +104,8 @@ private slots:
 
 	void on_actionImport_triggered();
 
+	void on_actionSave_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip * _strip;
