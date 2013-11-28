@@ -25,11 +25,9 @@ public:
 	explicit MainWindow(QSettings *settings);
 	~MainWindow();
 
-	void openFile(QString fileName, bool standAloneFile = true);
+	void openFile(QString fileName);
 
 	bool openVideoFile(QString videoFileName);
-
-	bool openStripFile(QString stripFileName);
 
 protected:
 	bool eventFilter(QObject *sender, QEvent *event);
