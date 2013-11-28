@@ -7,7 +7,6 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 
-
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 #include "PhCommonUI/PhFontDialog.h"
@@ -171,8 +170,6 @@ void MainWindow::openFile(QString fileName)
 {
 	hideMediaPanel();
 
-	PHDEBUG << fileName;
-
 	// Checking if the file exists
 	if(QFile::exists(fileName))
 	{
@@ -260,7 +257,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 	}
 	else
 		event->accept();
-
 }
 
 bool MainWindow::saveStrip()
@@ -288,7 +284,6 @@ void MainWindow::on_actionOpen_triggered()
 
 	QFileDialog dlg(this, "Open...", "", "Detx files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
 	dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
-
 	dlg.setOption(QFileDialog::HideNameFilterDetails, false);
 
 	dlg.setFileMode(QFileDialog::ExistingFile);
@@ -401,7 +396,6 @@ void MainWindow::on_actionOpen_Video_triggered()
 
 bool MainWindow::openVideoFile(QString videoFileName)
 {
-
 	// Opening the corresponding video file if it exists
 	QFileInfo fileInfo(videoFileName);
 	if (fileInfo.exists())
