@@ -30,59 +30,56 @@
        <attribute name="title">
         <string>General</string>
        </attribute>
-       <widget class="QCheckBox" name="cBoxFullscreen">
+       <widget class="QSplitter" name="splitter_2">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>35</y>
+          <x>90</x>
+          <y>10</y>
           <width>212</width>
-          <height>20</height>
+          <height>80</height>
          </rect>
         </property>
-        <property name="layoutDirection">
-         <enum>Qt::RightToLeft</enum>
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
-        <property name="text">
-         <string>Start Joker in fullscreen mode</string>
-        </property>
-        <property name="tristate">
-         <bool>false</bool>
-        </property>
-       </widget>
-       <widget class="QCheckBox" name="cBoxLastFile">
-        <property name="geometry">
-         <rect>
-          <x>53</x>
-          <y>12</y>
-          <width>179</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="layoutDirection">
-         <enum>Qt::RightToLeft</enum>
-        </property>
-        <property name="text">
-         <string>Remember last open file</string>
-        </property>
-       </widget>
-       <widget class="QCheckBox" name="cBoxDeinterlace">
-	<property name="geometry">
-	 <rect>
-	  <x>20</x>
-	  <y>60</y>
-	  <width>212</width>
-	  <height>20</height>
-	 </rect>
-	</property>
-	<property name="layoutDirection">
-	 <enum>Qt::RightToLeft</enum>
-	</property>
-	<property name="text">
-	 <string>Deinterlace video</string>
-	</property>
-	<property name="tristate">
-	 <bool>false</bool>
-	</property>
+        <widget class="QCheckBox" name="cBoxLastFile">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Remember last open file</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="cBoxFullscreen">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Start Joker in fullscreen mode</string>
+         </property>
+         <property name="tristate">
+          <bool>false</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="cBoxDeinterlace">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Deinterlace video</string>
+         </property>
+         <property name="tristate">
+          <bool>false</bool>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="cBoxDisplayTC">
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Display TC</string>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="tabStrip">
