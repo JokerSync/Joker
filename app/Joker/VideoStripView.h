@@ -2,6 +2,7 @@
 #define VIDEOSTRIPVIEW_H
 
 #include <QSettings>
+#include <QTime>
 
 #include "PhGraphic/PhGraphicView.h"
 #include "PhVideo/PhVideoEngine.h"
@@ -22,11 +23,17 @@ protected:
 	bool init();
 	void paint();
 
+private slots:
+	void onVideoSync();
 private:
 	PhVideoEngine _videoEngine;
 	PhGraphicStrip _strip;
 	QSettings *_settings;
 	PhSonyController *_sony;
+	QTime _lastVideoSyncElapsed;
+
+	PhFont _hudFont;
+	PhGraphicText _tcText, _noVideoSyncError;
 };
 
 #endif // VIDEOSTRIPVIEW_H

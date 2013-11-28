@@ -13,11 +13,9 @@
 
 #include "iostream"
 
-#define PHDEBUG PhDebug::instance() <<  qDebug() << Q(PhDebug::getFileName(__FILE__) + "\t") << Q(PhDebug::getFuncName(__FUNCTION__) + "\t") << Q(PhDebug::getLine(__LINE__)) << "\t"
-#define PHDBG(logLevelMessage) PhDebug::instance(logLevelMessage) <<  qDebug() << Q(PhDebug::getFileName(__FILE__) + "\t") << Q(PhDebug::getFuncName(__FUNCTION__) + "\t") << Q(PhDebug::getLine(__LINE__)) << "\t"
 
-
-
+#define PHDBG(logLevelMessage) PhDebug::instance(logLevelMessage) <<  qDebug() << Q(PhDebug::getFileName(__FILE__)) << Q(PhDebug::getFuncName(__FUNCTION__)) << Q(PhDebug::getLine(__LINE__))
+#define PHDEBUG PHDBG()
 
 // In order to get rid of double quotes when displaying a variable
 #define Q(string) (string).toStdString().c_str()
@@ -26,31 +24,25 @@ class PhDebug
 {
 public:
 	// used to access to the only instance of the class
-	static PhDebug instance(int logLevelMessage);
-	static PhDebug instance();
-
-	static PhDebug init(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, int logLevel, QString appName);
+	static PhDebug instance(int logLevelMessage = 0);
 
 	QDebug operator<<(QDebug dbg);
 
 
-	PhDebug(bool DispDate, bool DispTime, bool DispFileName, bool DispFuncName, bool DispLine, bool showConsole, int logLevel, QString appName);
+	PhDebug();
 	static QString getFuncName(QString name);
 	static QString getFileName(QString name);
 	static QString getLine(int line);
-	static bool isConsoleActived();
-	static void writeLog(QString text);
-	static void setLogLevel(int level);
-	static int getLogLevel();
-
-	static int logLevelMessage();
+	static void setLogMask(int mask);
+	static int getLogMask();
 
 private:
+	static void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
 	static PhDebug * d;
-	int _logLevel;
-	int _logLevelMessage;
+	int _logMask;
+	int _currentLogLevel;
 	QFile * _log;
-	QDebug * logger;
 	bool _dispFuncName;
 	bool _dispTime;
 	bool _dispDate;
