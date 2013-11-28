@@ -343,11 +343,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
 bool MainWindow::saveStrip()
 {
 	hideMediaPanel();
-	QString savedFile = QFileDialog::getSaveFileName(this, "Save...", _settings->value("currentStripFile", _settings->value("lastFolder", QDir::homePath()).toString()).toString(),"*.strip");
+	QString initialDir = _settings->value("lastFolder", QDir::homePath()).toString();
+	QString currentStripFile = _settings->value("currentStripFile", initialDir).toString();
+	currentStripFile = QFileDialog::getSaveFileName(this, "Save...", currentStripFile,"*.strip");
 
-	if(savedFile != "")
+	if(currentStripFile != "")
 	{
-		QFile file(savedFile);
+		QFile file(currentStripFile);
 
 			// open a file
 			if (!file.open(QIODevice::WriteOnly))
@@ -399,7 +401,7 @@ bool MainWindow::saveStrip()
 				delete xmlWriter;
 			}
 
-		PHDEBUG << savedFile;
+		PHDEBUG << currentStripFile;
 
 		return true;
 	}
