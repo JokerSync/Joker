@@ -551,6 +551,11 @@ QList<PhStripOff *> PhStripDoc::getOffs()
 	return _offs;
 }
 
+void PhStripDoc::setVideoPath(QString videoPath)
+{
+	_videoPath = videoPath;
+}
+
 QList<PhStripCut *> PhStripDoc::getCuts()
 {
 	return _cuts;
