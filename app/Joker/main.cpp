@@ -16,14 +16,14 @@ int main(int argc, char *argv[])
 {
 	QSettings settings("Phonations", "Joker");
 	int logLevel = settings.value("logLevel", 1).toInt();
-	PhDebug::init(false, true, true, true, true, true, logLevel, APP_NAME);
 	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
+	PhDebug::setLogMask(logLevel);
 
 	QApplication a(argc, argv);
 
 	MainWindow w(&settings);
 
-    w.show();
+	w.show();
 
 	QString fileName = "";
 	if (argc > 1)
@@ -34,6 +34,6 @@ int main(int argc, char *argv[])
 	if(QFile(fileName).exists())
 		w.openFile(fileName);
 
-    return a.exec();
+	return a.exec();
 
 }
