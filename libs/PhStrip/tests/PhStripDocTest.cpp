@@ -7,7 +7,7 @@ void PhStripDocTest::initTestCase()
 {
 	QString fileName = "test01.detx";
 	QVERIFY(QFile(fileName).exists());
-	QVERIFY(_doc.openDetX(fileName));
+	QVERIFY(_doc.importDetX(fileName));
 }
 
 void PhStripDocTest::openDetXHeaderTest()
