@@ -77,10 +77,10 @@ PhDebug::PhDebug()
 	_log->write("\n\n");
 
 	_dispDate = false;
-	_dispTime = false;
-	_dispFuncName = false;
-	_dispFileName = false;
-	_dispLine = false;
+	_dispTime = true;
+	_dispFuncName = true;
+	_dispFileName = true;
+	_dispLine = true;
 	_showConsole = true;
 	_logMask = 1;
 }
@@ -109,7 +109,8 @@ QString PhDebug::getLine(int line)
 
 void PhDebug::setLogMask(int mask)
 {
-	d->_logMask = mask;
+	if (d)
+		d->_logMask = mask;
 }
 
 int PhDebug::getLogMask()
