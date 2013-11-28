@@ -6,8 +6,7 @@
 #include <QFileOpenEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
-#include <QXmlStreamWriter>
-#include <QDomDocument>
+
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -166,103 +165,26 @@ void MainWindow::setupOpenRecentMenu()
 
 }
 
-void MainWindow::openFile(QString fileName, bool standAloneFile)
+void MainWindow::openFile(QString fileName)
 {
 	hideMediaPanel();
 
-	PHDEBUG << "openFile : " << fileName;
-	//PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
+	PHDEBUG << fileName;
 
 	// Checking if the file exists
 	if(QFile::exists(fileName))
 	{
-		// Try to open the document
-		if(fileName.split(".").last() == "detx")
+		if(_doc->openStripFile(fileName))
 		{
-			if(_doc->openDetX(fileName))
-			{
-				// On succeed, synchronizing the clocks
-				_strip->clock()->setTimeCodeType(_doc->getTCType());
-				_strip->clock()->setFrame(_doc->getLastFrame());
-				this->setWindowTitle(fileName);
-				if(standAloneFile)
-				{
-					if(openVideoFile(_doc->getVideoPath()))
-						ui->actionSave->setEnabled(true);
-				}
-				_settings->setValue("lastfile", fileName);
-			}
-		}
-		else if(fileName.split(".").last() == "strip")
-		{
-			openStripFile(fileName);
-			ui->actionSave->setEnabled(true);
+			// On succeed, synchronizing the clocks
+			_strip->clock()->setTimeCodeType(_doc->getTCType());
+			_strip->clock()->setFrame(_doc->getLastFrame());
+			this->setWindowTitle(fileName);
+			updateOpenRecent();
 			_settings->setValue("lastfile", fileName);
+			openVideoFile(_doc->getVideoPath());
 		}
-
-		updateOpenRecent();
 	}
-}
-
-bool MainWindow::openStripFile(QString stripFileName)
-{
-	QFile xmlFile(stripFileName);
-	if(!xmlFile.open(QIODevice::ReadOnly))
-	{
-		PHDEBUG << "Unable to open" << stripFileName;
-		return false;
-	}
-
-	// Loading the DOM
-	QDomDocument *domDoc = new QDomDocument();
-	if (!domDoc->setContent(&xmlFile))
-	{
-		xmlFile.close();
-		PHDEBUG << "The XML document seems to be bad formed" << stripFileName;
-		return false;
-	}
-
-	PHDEBUG << ("Start parsing " + stripFileName);
-	QDomElement stripDocument = domDoc->documentElement();
-
-	if(stripDocument.tagName() != "strip")
-	{
-		xmlFile.close();
-		PHDEBUG << "Bad root element :" << stripDocument.tagName();
-		return false;
-	}
-
-	QDomElement metaInfo =	stripDocument.elementsByTagName("meta").at(0).toElement();
-	// Reading the header
-	if(stripDocument.elementsByTagName("meta").count())
-	{
-		for(int i = 0; i < stripDocument.elementsByTagName("media").count(); i++)
-		{
-			QDomElement line = metaInfo.elementsByTagName("media").at(i).toElement();
-			PHDEBUG << "line" << line.attribute("type");
-			if(line.attribute("type") == "detx")
-			{
-				if(_doc->openDetX(line.text()))
-				{
-					PHDEBUG << "On open detx";
-					// On succeed, synchronizing the clocks
-					_strip->clock()->setTimeCodeType(_doc->getTCType());
-					_strip->clock()->setFrame(_doc->getLastFrame());
-					this->setWindowTitle(line.text());
-				}
-			}
-			if(line.attribute("type")  == "video")
-			{
-				PHDEBUG << "On Video Open" << metaInfo.elementsByTagName("state").at(0).toElement().attribute("lastTimeCode");
-				openVideoFile(line.text());
-				_strip->clock()->setFrame(PhTimeCode::frameFromString(metaInfo.elementsByTagName("state").at(0).toElement().attribute("lastTimeCode"), _doc->getTCType()));
-
-			}
-		}
-		_settings->setValue("lastfile", stripFileName);
-		_settings->setValue("currentStripFile", stripFileName);
-	}
-
 }
 
 bool MainWindow::eventFilter(QObject *sender, QEvent *event)
@@ -274,12 +196,10 @@ bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 	switch (event->type()) {
 	case QEvent::FileOpen:
 		filePath = static_cast<QFileOpenEvent *>(event)->file();
-		// As the plist file list all the supported format (which are .detx, .avi & .mov)
-		// if the file is not a detx file, it's a video file, we don't need any protection
-		if(filePath.split(".").last().toLower() == "detx")
+		// As the plist file list all the supported format (which are .strip, .detx, .avi & .mov)
+		// if the file is not a strip or a detx file, it's a video file, we don't need any protection
+		if(filePath.split(".").last().toLower() == "detx" or filePath.split(".").last().toLower() == "strip")
 			openFile(filePath);
-		else if (filePath.split(".").last().toLower() == "strip")
-			openStripFile(filePath);
 		else
 			openVideoFile(filePath);
 		break;
@@ -349,61 +269,7 @@ bool MainWindow::saveStrip()
 
 	if(currentStripFile != "")
 	{
-		QFile file(currentStripFile);
-
-			// open a file
-			if (!file.open(QIODevice::WriteOnly))
-			{
-				// show error message if not able to open file
-				QMessageBox::warning(0, "Read only", "The file is in read only mode");
-			}
-			else
-			{
-				//if file is successfully opened then create XML
-				QXmlStreamWriter* xmlWriter = new QXmlStreamWriter();
-				// set device (here file)to streamwriter
-				xmlWriter->setDevice(&file);
-				// Writes a document start with the XML version number version.
-
-				// Positive numbers indicate spaces, negative numbers tabs.
-				xmlWriter->setAutoFormattingIndent(-1);
-				xmlWriter->setAutoFormatting(true);
-
-				// Indent is just for keeping in mind XML structure
-				xmlWriter->writeStartDocument();
-				xmlWriter->writeStartElement("strip");
-					xmlWriter->writeStartElement("meta");
-
-						xmlWriter->writeStartElement("generator");
-						xmlWriter->writeAttribute("name", "Joker");
-						xmlWriter->writeAttribute("version", APP_VERSION);
-						xmlWriter->writeEndElement();
-
-						xmlWriter->writeStartElement("media");
-						xmlWriter->writeAttribute("type", "detx");
-						xmlWriter->writeCharacters(_doc->getFilePath());
-						xmlWriter->writeEndElement();
-
-						xmlWriter->writeStartElement("media");
-						xmlWriter->writeAttribute("type", "video");
-						xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoEngine->frameStamp(), PhTimeCodeType25));
-						xmlWriter->writeCharacters(_videoEngine->fileName());
-						xmlWriter->writeEndElement();
-
-						xmlWriter->writeStartElement("state");
-						xmlWriter->writeAttribute("lastTimeCode", _strip->clock()->timeCode());
-						xmlWriter->writeEndElement();
-
-					xmlWriter->writeEndElement();
-				xmlWriter->writeEndElement();
-
-				xmlWriter->writeEndDocument();
-				delete xmlWriter;
-			}
-
-		PHDEBUG << currentStripFile;
-
-		return true;
+		return _doc->saveStrip(currentStripFile, _strip->clock()->timeCode());
 	}
 	return false;
 
@@ -547,6 +413,7 @@ bool MainWindow::openVideoFile(QString videoFileName)
 				_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
 				_mediaPanel.setMediaLength(_videoEngine->length());
 				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
+				_doc->setVideoPath(videoFile);
 			}
 		}
 	}
