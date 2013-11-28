@@ -100,9 +100,9 @@ private slots:
 
 	void openRecent();
 
-	void on_actionImport_triggered();
-
 	void on_actionSave_triggered();
+
+	void on_actionSave_as_triggered();
 
 private:
 	Ui::MainWindow *ui;
@@ -121,6 +121,8 @@ private:
 	PropertyDialog _propertyDialog;
 
 	QVector<QAction *> _recentFileButtons;
+
+	bool _needToSave;
 
 	void updateOpenRecent();
 	void setupOpenRecentMenu();

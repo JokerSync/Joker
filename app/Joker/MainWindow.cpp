@@ -19,7 +19,8 @@ MainWindow::MainWindow(QSettings *settings) :
 	ui(new Ui::MainWindow),
 	_settings(settings),
 	_sonySlave(PhTimeCodeType25, settings),
-	_mediaPanelAnimation(&_mediaPanel, "windowOpacity")
+	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
+	_needToSave(false)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -36,6 +37,7 @@ MainWindow::MainWindow(QSettings *settings) :
 	_strip->setSettings(_settings);
 	_videoEngine->setSettings(_settings);
 	ui->videoStripView->setSettings(_settings);
+	_settings->setValue("currentStripFile", "");
 
 	// Initialize the property dialog
 	_propertyDialog.setDoc(_doc);
@@ -176,6 +178,8 @@ void MainWindow::openFile(QString fileName)
 	{
 		if(_doc->openStripFile(fileName))
 		{
+			if(fileName.split(".").last() == "strip")
+				_settings->setValue("currentStripFile", fileName);
 			// On succeed, synchronizing the clocks
 			_strip->clock()->setTimeCodeType(_doc->getTCType());
 			_strip->clock()->setFrame(_doc->getLastFrame());
@@ -236,8 +240,7 @@ bool MainWindow::eventFilter(QObject *sender, QEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-	// Replace the bool with the state of the button.
-	if(ui->actionSave->isEnabled())
+	if(_needToSave)
 	{
 		QString msg = "Joker is about to quit, would you save the session to a Strip file ?";
 		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
@@ -265,14 +268,18 @@ bool MainWindow::saveStrip()
 	hideMediaPanel();
 	QString initialDir = _settings->value("lastFolder", QDir::homePath()).toString();
 	QString currentStripFile = _settings->value("currentStripFile", initialDir).toString();
-	currentStripFile = QFileDialog::getSaveFileName(this, "Save...", currentStripFile,"*.strip");
 
-	if(currentStripFile != "")
+	//If there is no current strip file, ask for a name
+	if(currentStripFile == initialDir or currentStripFile == "")
 	{
-		return _doc->saveStrip(currentStripFile, _strip->clock()->timeCode());
+		currentStripFile = QFileDialog::getSaveFileName(this, "Save...", currentStripFile,"*.strip");
+		if(currentStripFile != "")
+		{
+			return _doc->saveStrip(currentStripFile, _strip->clock()->timeCode());
+		}
 	}
-	return false;
-
+	else
+		return _doc->saveStrip(currentStripFile, _strip->clock()->timeCode());
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -371,11 +378,23 @@ void MainWindow::on_actionOpen_Video_triggered()
 {
 	hideMediaPanel();
 
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
-	if(openVideoFile(fileName))
-		on_actionChange_timestamp_triggered();
-	else
-		QMessageBox::critical(this, "Error", "Unable to open " + fileName);
+	QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
+	QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
+	if(dlg.exec())
+	{
+		_settings->setValue("lastFolder", dlg.directory().absolutePath());
+		QString videoFile = dlg.selectedFiles()[0];
+		_videoEngine->open(videoFile);
+		_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
+		_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
+		_mediaPanel.setMediaLength(_videoEngine->length());
+		_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
+		if(videoFile != _doc->getVideoPath())
+		{
+			_doc->setVideoPath(videoFile);
+			_needToSave = true;
+		}
+	}
 
 	fadeInMediaPanel();
 }
@@ -402,22 +421,9 @@ bool MainWindow::openVideoFile(QString videoFileName)
 		box.setDefaultButton(QMessageBox::Yes);
 		if(box.exec() == QMessageBox::Yes)
 		{
-			QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
-			QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
-			if(dlg.exec())
-			{
-				_settings->setValue("lastFolder", dlg.directory().absolutePath());
-				QString videoFile = dlg.selectedFiles()[0];
-				_videoEngine->open(videoFile);
-				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
-				_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
-				_mediaPanel.setMediaLength(_videoEngine->length());
-				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
-				_doc->setVideoPath(videoFile);
-			}
+			on_actionOpen_Video_triggered();
 		}
 	}
-	ui->actionSave->setEnabled(true);
 }
 
 void MainWindow::on_actionChange_timestamp_triggered()
@@ -431,6 +437,7 @@ void MainWindow::on_actionChange_timestamp_triggered()
 		frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
 		_videoEngine->setFrameStamp(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
+		_needToSave = true;
 	}
 
 	fadeInMediaPanel();
@@ -564,27 +571,26 @@ void MainWindow::on_actionClear_list_triggered()
 	ui->menuOpen_recent->setEnabled(false);
 }
 
-void MainWindow::on_actionImport_triggered()
-{
-	hideMediaPanel();
-
-	QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
-
-	QString rythmoFileName;
-	QFileDialog dlg(this, "Open...", lastFolder, "Rythmo files (*.detx)");
-	if(dlg.exec())
-	{
-		_settings->setValue("lastFolder", dlg.directory().absolutePath());
-		rythmoFileName = dlg.selectedFiles()[0];
-		openFile(rythmoFileName);
-		ui->actionSave->setEnabled(true);
-	}
-
-	fadeInMediaPanel();
-}
-
 void MainWindow::on_actionSave_triggered()
 {
 	saveStrip();
-	ui->actionSave->setEnabled(false);
+}
+
+void MainWindow::on_actionSave_as_triggered()
+{
+	hideMediaPanel();
+	QString initialDir = _settings->value("lastFolder", QDir::homePath()).toString();
+	QString currentStripFile = _settings->value("currentStripFile", initialDir).toString();
+
+	//If there is no current strip file, ask for a name
+	if(currentStripFile == initialDir)
+	{
+		currentStripFile = QFileDialog::getSaveFileName(this, "Save...", currentStripFile,"*.strip");
+		if(currentStripFile != "")
+		{
+			_doc->saveStrip(currentStripFile, _strip->clock()->timeCode());
+		}
+	}
+	else
+		_doc->saveStrip(currentStripFile, _strip->clock()->timeCode());
 }
