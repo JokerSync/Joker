@@ -102,7 +102,6 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 			ui->listWidgetFont->setCurrentRow(ui->listWidgetFont->count() - 1);
 		}
 	}
-
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -233,7 +232,6 @@ void PreferencesDialog::on_pButtonReset_clicked()
 		else
 			btn->setChecked(true);
 	}
-
 }
 
 void PreferencesDialog::on_lblPathToLogFile_linkActivated(const QString &link)
