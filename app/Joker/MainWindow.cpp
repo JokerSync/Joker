@@ -265,12 +265,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 bool MainWindow::saveStrip()
 {
 	hideMediaPanel();
-	QString initialDir = _settings->value("lastFolder", QDir::homePath()).toString();
+	QString stripName = _doc->getFilePath().split(".").first();
 
 	//If there is no current strip file, ask for a name
 	if(_currentStripFile == "")
 	{
-		_currentStripFile = QFileDialog::getSaveFileName(this, "Save...", initialDir,"*.strip");
+		_currentStripFile = QFileDialog::getSaveFileName(this, "Save...", stripName,"*.strip");
 		if(_currentStripFile != "")
 		{
 			return _doc->saveStrip(_currentStripFile, _strip->clock()->timeCode());
