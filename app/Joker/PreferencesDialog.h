@@ -49,6 +49,10 @@ private slots:
 
 	void on_cBoxDisplayTC_clicked();
 
+	void on_pButtonReset_clicked();
+
+	void on_lblPathToLogFile_linkActivated(const QString &link);
+
 private:
 	Ui::PreferencesDialog *ui;
 	QSettings *_settings;
@@ -63,6 +67,7 @@ private:
 	bool _oldStartFullScreen;
 	bool _oldDeinterlace;
 	bool _oldDisplayTC;
+	int _oldLogMask;
 	QMap<QString, QString> fontList;
 
 };

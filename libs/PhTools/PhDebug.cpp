@@ -31,12 +31,17 @@ void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, c
 	else
 		fprintf(stderr, "%s \n", msg.toLocal8Bit().constData());
 }
+QString PhDebug::logLocation()
+{
+	return d->_logLocation;
+}
+
 
 // Called if init() was forget
 PhDebug PhDebug::instance(int logLevelMessage)
 {
-	if (!d)   // Only allow one instance of class to be generated.
-		d = new PhDebug();
+    if (!d)   // Only allow one instance of class to be generated.
+        d = new PhDebug();
 
 	d->_currentLogLevel = logLevelMessage;
 	return * d;
@@ -72,7 +77,8 @@ PhDebug::PhDebug()
 	if(!logDir.exists()) {
 		QDir().mkdir(logDirPath);
 	}
-	_log = new QFile(logDirPath + "default.log");
+	_log = new QFile(logDirPath + APP_NAME + ".log");
+	_logLocation = _log->fileName();
 	_log->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
 	_log->write("\n\n");
 
