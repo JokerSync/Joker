@@ -249,6 +249,7 @@ void MainWindow::on_actionOpen_triggered()
 	hideMediaPanel();
 
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
+	dlg.setFileMode(QFileDialog::ExistingFile);
 	if(dlg.exec())
 	{
 		QString fileName = dlg.selectedFiles()[0];
