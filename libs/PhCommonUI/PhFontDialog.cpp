@@ -60,7 +60,7 @@ void PhFontDialog::on_listWidgetFont_itemClicked(QListWidgetItem *item)
 
 }
 
-void PhFontDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+void PhFontDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem)
 {
 	ui->plainTextEdit->setFont(QFont::QFont(current->text()));
 	ui->plainTextEdit->setPlainText(ui->plainTextEdit->toPlainText());

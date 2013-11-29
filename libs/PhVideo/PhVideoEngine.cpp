@@ -157,7 +157,7 @@ QString PhVideoEngine::codecName()
 
 bool PhVideoEngine::goToFrame(PhFrame frame)
 {
-	int lastGotoElapsed = _testTimer.elapsed();
+//	int lastGotoElapsed = _testTimer.elapsed();
 	int seekElapsed = -1;
 	int readElapsed = -1;
 	int decodeElapsed = -1;
@@ -258,7 +258,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		}
 	}
 
-	int currentGotoElapsed = _testTimer.elapsed();
+//	int currentGotoElapsed = _testTimer.elapsed();
 	//	if(_testTimer.elapsed() > 25)
 	//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
 	//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();

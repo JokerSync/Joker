@@ -18,6 +18,7 @@ PhDebug* PhDebug::d = NULL;
 
 void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
+	Q_UNUSED(type);Q_UNUSED(context);
 	if(d)
 	{
 		if(d->_logMask & (1 << d->_currentLogLevel))

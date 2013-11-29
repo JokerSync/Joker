@@ -55,7 +55,6 @@ void VideoStripView::paint()
 		_videoEngine.drawVideo(videoX, 0, videoWidth, videoHeight);
 	}
 
-	int y = 0;
 	if(_settings && _settings->value("displayTC", true).toBool())
 	{
 		PhClock *clock = _videoEngine.clock();

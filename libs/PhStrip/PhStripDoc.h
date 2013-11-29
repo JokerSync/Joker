@@ -117,7 +117,7 @@ public:
 	bool openDetX(QString filename);
 
 	// First version : Create StripDoc for testing purposes
-	bool createDoc(QString text, int nbPeople, int nbLoop, int nbText, int nbTrack, PhTime videoTimeCode);
+	bool createDoc(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeCode);
 
     int getNbTexts();
 
@@ -202,7 +202,7 @@ private:
 	 QList<PhStripOff *> _offs;
 
      int _nbTexts;
-	 void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track, int ite);
+	 void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
 };
 
 #endif // PHSTRIPDOC_H

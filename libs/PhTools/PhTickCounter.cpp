@@ -1,7 +1,7 @@
 #include "PhTickCounter.h"
 #include "PhDebug.h"
 
-PhTickCounter::PhTickCounter() : _tickCount(0), _frequency(0)
+PhTickCounter::PhTickCounter() : _frequency(0), _tickCount(0)
 {
 	_timer.start();
 }

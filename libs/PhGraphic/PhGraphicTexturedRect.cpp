@@ -12,6 +12,11 @@ PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
 	  _tu(1.0f),
 	  _tv(1.0f)
 {
+
+}
+
+PhGraphicTexturedRect::~PhGraphicTexturedRect()
+{
 }
 
 
@@ -42,7 +47,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 
 	glEnable( GL_TEXTURE_2D );
     // Have OpenGL generate a texture object handle for us
-    glGenTextures( 1, &_texture );
+	glGenTextures( 1, &_texture );
 
     // Bind the texture object
     glBindTexture( GL_TEXTURE_2D, _texture );
@@ -84,7 +89,7 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
 {
     glEnable( GL_TEXTURE_2D );
     // Have OpenGL generate a texture object handle for us
-    glGenTextures( 1, &_texture );
+	glGenTextures( 1, &_texture );
 
     // Bind the texture object
     glBindTexture( GL_TEXTURE_2D, _texture );

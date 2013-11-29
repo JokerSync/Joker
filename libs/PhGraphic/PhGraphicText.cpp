@@ -10,6 +10,11 @@ PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int w,
 {
 }
 
+PhGraphicText::~PhGraphicText()
+{
+
+}
+
 
 void PhGraphicText::setContent(QString content)
 {

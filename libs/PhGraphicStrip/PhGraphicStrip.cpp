@@ -125,7 +125,7 @@ void PhGraphicStrip::setPixelPerFrame(long value)
 void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
 	_clock.tick(60);
-	int lastDrawElapsed = _testTimer.elapsed();
+//	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
 	if(height > 0)
@@ -393,7 +393,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 	//	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
 
-	int currentDrawElapsed = _testTimer.elapsed() - lastDrawElapsed;
+//	int currentDrawElapsed = _testTimer.elapsed() - lastDrawElapsed;
 	//	if(_testTimer.elapsed() > 20)
 	//		PHDEBUG << lastDrawElapsed << currentDrawElapsed;
 	_testTimer.restart();
