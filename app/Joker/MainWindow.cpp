@@ -196,7 +196,7 @@ void MainWindow::openFile(QString fileName)
 	}
 }
 
-bool MainWindow::eventFilter(QObject *sender, QEvent *event)
+bool MainWindow::eventFilter(QObject *, QEvent *event)
 {
 	// The used variable must be declared out of the switch
 	QString filePath;
@@ -424,6 +424,8 @@ void MainWindow::fadeOutMediaPanel()
 		break;
 	case MediaPanelHidding:
 		hideMediaPanel();
+		break;
+	default:
 		break;
 	}
 }

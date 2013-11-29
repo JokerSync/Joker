@@ -184,7 +184,7 @@ bool PhStripDoc::openDetX(QString fileName)
 	return true;
 }
 
-bool PhStripDoc::createDoc(QString text, int nbPeople, int nbLoop, int nbText, int nbTrack, PhTime videoTimeCode)
+bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeCode)
 {
 	this->reset();
 	_title = "Fake file";
@@ -223,7 +223,7 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbLoop, int nbText, i
 		int end = start + text.length() * 1.20588 + 1;
 
 		addText(_peoples[id], start, end,
-						  text, i % nbTrack, 0);
+						  text, i % nbTrack);
 
 		// So the texts are all one after the other
 		position += end - start;
@@ -252,7 +252,7 @@ void PhStripDoc::reset()
 	emit this->changed();
 }
 
-void PhStripDoc::addText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track, int i)
+void PhStripDoc::addText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track)
 {
 
 	if(sentence != " " && sentence != "" )

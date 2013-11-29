@@ -10,6 +10,10 @@ PhGraphicRect::PhGraphicRect(int x, int y, int w, int h)
 {
 }
 
+PhGraphicRect::~PhGraphicRect()
+{
+}
+
 void PhGraphicRect::setSize(int w, int h)
 {
     this->setHeight(h);

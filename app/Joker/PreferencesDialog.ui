@@ -246,7 +246,6 @@
          </layout>
         </item>
        </layout>
-       <zorder></zorder>
       </widget>
       <widget class="QWidget" name="tabSynchro">
        <attribute name="title">

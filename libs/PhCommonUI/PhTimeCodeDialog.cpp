@@ -26,7 +26,7 @@ PhFrame PhTimeCodeDialog::frame()
 	return ui->_timecodeEdit->frame();
 }
 
-void PhTimeCodeDialog::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void PhTimeCodeDialog::onFrameChanged(PhFrame, PhTimeCodeType)
 {
 	if(ui->_timecodeEdit->isTimeCode())
 		ui->okButton->setEnabled(true);
