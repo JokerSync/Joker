@@ -8,7 +8,7 @@
 
 PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
 	: PhGraphicRect(x, y, w, h),
-	  _texture(-1),
+	  _texture(0),
 	  _tu(1.0f),
 	  _tv(1.0f)
 {
@@ -67,7 +67,7 @@ bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, i
 {
 	glEnable( GL_TEXTURE_2D );
     // Have OpenGL generate a texture object handle for us
-	if(_texture < 0)
+	if(_texture == 0)
 		glGenTextures( 1, &_texture );
 
     // Bind the texture object
