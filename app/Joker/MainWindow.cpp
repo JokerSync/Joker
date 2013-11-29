@@ -411,17 +411,7 @@ bool MainWindow::openVideoFile(QString videoFileName)
 		_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
 	}
 	else
-	{
-		QString msg = "Joker is unable to find a video file corresponding to your script file\"";
-		msg +=  _doc->getVideoPath();
-		msg +=  " \", would you do it manually?";
-		QMessageBox box(QMessageBox::Question, "Open a video file ?", msg, QMessageBox::Yes | QMessageBox::No);
-		box.setDefaultButton(QMessageBox::Yes);
-		if(box.exec() == QMessageBox::Yes)
-		{
-			on_actionOpen_Video_triggered();
-		}
-	}
+		return false;
 }
 
 void MainWindow::on_actionChange_timestamp_triggered()
