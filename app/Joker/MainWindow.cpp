@@ -404,11 +404,12 @@ bool MainWindow::openVideoFile(QString videoFileName)
 	QFileInfo fileInfo(videoFileName);
 	if (fileInfo.exists())
 	{
-		_videoEngine->open(videoFileName);
 		_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
 		_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
 		_mediaPanel.setMediaLength(_videoEngine->length());
 		_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
+		return _videoEngine->open(videoFileName);
+
 	}
 	else
 		return false;
