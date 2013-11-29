@@ -298,6 +298,9 @@
    </property>
   </action>
   <action name="actionSave_as">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save as...</string>
    </property>

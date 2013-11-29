@@ -123,6 +123,7 @@ private:
 	QVector<QAction *> _recentFileButtons;
 
 	bool _needToSave;
+	QString _currentStripFile;
 
 	void updateOpenRecent();
 	void setupOpenRecentMenu();

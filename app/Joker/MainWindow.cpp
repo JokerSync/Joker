@@ -19,7 +19,8 @@ MainWindow::MainWindow(QSettings *settings) :
 	_settings(settings),
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
-	_needToSave(false)
+	_needToSave(false),
+	_currentStripFile("")
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -36,7 +37,6 @@ MainWindow::MainWindow(QSettings *settings) :
 	_strip->setSettings(_settings);
 	_videoEngine->setSettings(_settings);
 	ui->videoStripView->setSettings(_settings);
-	_settings->setValue("currentStripFile", "");
 
 	// Initialize the property dialog
 	_propertyDialog.setDoc(_doc);
@@ -176,7 +176,10 @@ void MainWindow::openFile(QString fileName)
 		if(_doc->openStripFile(fileName))
 		{
 			if(fileName.split(".").last() == "strip")
-				_settings->setValue("currentStripFile", fileName);
+			{
+				_currentStripFile = fileName;
+				ui->actionSave_as->setEnabled(true);
+			}
 			// On succeed, synchronizing the clocks
 			_strip->clock()->setTimeCodeType(_doc->getTCType());
 			_strip->clock()->setFrame(_doc->getLastFrame());
@@ -263,19 +266,20 @@ bool MainWindow::saveStrip()
 {
 	hideMediaPanel();
 	QString initialDir = _settings->value("lastFolder", QDir::homePath()).toString();
-	QString currentStripFile = _settings->value("currentStripFile", initialDir).toString();
 
 	//If there is no current strip file, ask for a name
-	if(currentStripFile == initialDir or currentStripFile == "")
+	if(_currentStripFile == "")
 	{
-		currentStripFile = QFileDialog::getSaveFileName(this, "Save...", currentStripFile,"*.strip");
-		if(currentStripFile != "")
+		_currentStripFile = QFileDialog::getSaveFileName(this, "Save...", initialDir,"*.strip");
+		if(_currentStripFile != "")
 		{
-			return _doc->saveStrip(currentStripFile, _strip->clock()->timeCode());
+			return _doc->saveStrip(_currentStripFile, _strip->clock()->timeCode());
 		}
+		else
+			return false;
 	}
 	else
-		return _doc->saveStrip(currentStripFile, _strip->clock()->timeCode());
+		return _doc->saveStrip(_currentStripFile, _strip->clock()->timeCode());
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -567,24 +571,25 @@ void MainWindow::on_actionClear_list_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-	saveStrip();
+	if(saveStrip())
+		ui->actionSave_as->setEnabled(true);
 }
 
 void MainWindow::on_actionSave_as_triggered()
 {
 	hideMediaPanel();
-	QString initialDir = _settings->value("lastFolder", QDir::homePath()).toString();
-	QString currentStripFile = _settings->value("currentStripFile", initialDir).toString();
+
 
 	//If there is no current strip file, ask for a name
-	if(currentStripFile == initialDir)
+	if(_currentStripFile == "")
 	{
-		currentStripFile = QFileDialog::getSaveFileName(this, "Save...", currentStripFile,"*.strip");
+		QString currentStripFile = QFileDialog::getSaveFileName(this, "Save...", _settings->value("lastFolder", QDir::homePath()).toString(),"*.strip");
 		if(currentStripFile != "")
 		{
-			_doc->saveStrip(currentStripFile, _strip->clock()->timeCode());
+			_currentStripFile = currentStripFile;
+			_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode());
 		}
 	}
 	else
-		_doc->saveStrip(currentStripFile, _strip->clock()->timeCode());
+		_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode());
 }
