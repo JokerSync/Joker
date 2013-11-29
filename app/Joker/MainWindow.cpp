@@ -186,6 +186,7 @@ void MainWindow::openFile(QString fileName)
 			{
 				_videoEngine->open(_doc->getVideoPath());
 				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
+				_videoEngine->clock()->setFrame(_doc->getVideoTimestamp());
 				_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
 				_mediaPanel.setMediaLength(_videoEngine->length());
 				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
