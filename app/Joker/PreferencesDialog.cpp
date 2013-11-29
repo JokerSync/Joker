@@ -34,7 +34,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldFont = _settings->value("StripFontFile", "").toString();
 	_oldDeinterlace = _settings->value("videoDeinterlace", false).toBool();
 	_oldDisplayTC = _settings->value("displayTC", true).toBool();
-	_oldLogMask = _settings->value("logLevel", 1).toInt();
+	_oldLogMask = _settings->value("logMask", 1).toInt();
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldSpeed);
@@ -120,7 +120,7 @@ void PreferencesDialog::on_buttonBox_accepted()
 			logMask += 1 << btn->objectName().split("_").last().toInt();
 	}
 	PhDebug::setLogMask(logMask);
-	_settings->setValue("logLevel", logMask);
+	_settings->setValue("logMask", logMask);
 	close();
 }
 
