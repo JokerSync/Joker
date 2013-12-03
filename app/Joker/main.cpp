@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 {
 	QSettings settings("Phonations", "Joker");
 	QSettings::setDefaultFormat(QSettings::NativeFormat);
-	int logLevel = settings.value("logLevel", 1).toInt();
+	int logLevel = settings.value("logMask", 1).toInt();
 	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
 	PhDebug::setLogMask(logLevel);
 
