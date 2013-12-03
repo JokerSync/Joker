@@ -137,7 +137,7 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setValue("StripFontName", _oldFont);
 	_settings->setValue("videoDeinterlace", _oldDeinterlace);
 	_settings->setValue("displayTC", _oldDisplayTC);
-	_settings->setValue("logLevel", _oldLogMask);
+	_settings->setValue("logMask", _oldLogMask);
 
 	close();
 }
