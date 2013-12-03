@@ -5,6 +5,7 @@
 
 
 #include <QDir>
+#include <QProcess>
 #include "PreferencesDialog.h"
 #include "PhDebug.h"
 #include "ui_PreferencesDialog.h"
@@ -33,6 +34,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldFont = _settings->value("StripFontFile", "").toString();
 	_oldDeinterlace = _settings->value("videoDeinterlace", false).toBool();
 	_oldDisplayTC = _settings->value("displayTC", true).toBool();
+	_oldLogMask = _settings->value("logMask", 1).toInt();
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldSpeed);
@@ -53,6 +55,15 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	ui->cBoxSonyAutoconnect->setChecked(_oldSonyAutoConnect);
 	ui->cBoxDeinterlace->setChecked(_oldDeinterlace);
 	ui->cBoxDisplayTC->setChecked(_oldDisplayTC);
+	ui->lblPathToLogFile->setText("<a href=\""+ PhDebug::logLocation() +"\">" + PhDebug::logLocation() + "</a>");
+
+	//Set the checkboxes of log
+	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
+	{
+		connect(btn, SIGNAL(clicked()), this, SLOT(onLogMaskButtonClicked()));
+		if((1 << btn->objectName().split("_").last().toInt()) & _oldLogMask)
+			btn->setChecked(true);
+	}
 
 	//Set the fonts
 	QStringList userFontList, systemFontList;
@@ -118,6 +129,8 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setValue("StripFontName", _oldFont);
 	_settings->setValue("videoDeinterlace", _oldDeinterlace);
 	_settings->setValue("displayTC", _oldDisplayTC);
+	_settings->setValue("logMask", _oldLogMask);
+	PhDebug::setLogMask(_oldLogMask);
 
 	close();
 }
@@ -202,4 +215,44 @@ void PreferencesDialog::on_cBoxDeinterlace_clicked()
 void PreferencesDialog::on_cBoxDisplayTC_clicked()
 {
 	_settings->setValue("displayTC", ui->cBoxDisplayTC->isChecked());
+}
+
+void PreferencesDialog::on_pButtonReset_clicked()
+{
+	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
+	{
+		if(btn->objectName().split("_").last() != "0")
+			btn->setChecked(false);
+		else
+			btn->setChecked(true);
+	}
+}
+
+void PreferencesDialog::on_lblPathToLogFile_linkActivated(const QString &link)
+{
+#if defined(Q_OS_MAC)
+	QStringList args;
+	args << "-e";
+	args << "tell application \"Finder\"";
+	args << "-e";
+	args << "activate";
+	args << "-e";
+	args << "select POSIX file \""+ link +"\"";
+	args << "-e";
+	args << "end tell";
+	QProcess::startDetached("osascript", args);
+#endif
+}
+
+void PreferencesDialog::onLogMaskButtonClicked()
+{
+	int logMask = 0;
+	//Set the checkboxes of log
+	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
+	{
+		if(btn->isChecked())
+			logMask += 1 << btn->objectName().split("_").last().toInt();
+	}
+	PhDebug::setLogMask(logMask);
+	_settings->setValue("logMask", logMask);
 }
