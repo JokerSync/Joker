@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 
 
 	PHDEBUG << "should always display.";
-	PhDebug::setLogMask(0b10);
+	PhDebug::setLogMask(0b11);
 	PHDBG(1) << "1 should display";
 	PHDBG(2) << "2 should not display";
 

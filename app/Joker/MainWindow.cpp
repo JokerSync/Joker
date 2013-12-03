@@ -18,7 +18,9 @@ MainWindow::MainWindow(QSettings *settings) :
 	ui(new Ui::MainWindow),
 	_settings(settings),
 	_sonySlave(PhTimeCodeType25, settings),
-	_mediaPanelAnimation(&_mediaPanel, "windowOpacity")
+	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
+	_needToSave(false),
+	_currentStripFile("")
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -53,7 +55,7 @@ MainWindow::MainWindow(QSettings *settings) :
 			ui->videoStripView->setSony(&_sonySlave);
 		}
 		else
-			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
+			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
 	}
 
 	// Setting up the media panel
@@ -93,6 +95,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::openRecent()
 {
+	if(!checkSaveFile())
+		return;
+
 	// This slot is triggered by dynamic action
 	openFile(sender()->objectName());
 }
@@ -166,54 +171,53 @@ void MainWindow::setupOpenRecentMenu()
 
 void MainWindow::openFile(QString fileName)
 {
-	PHDEBUG << "openFile : " << fileName;
-	//PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
+	hideMediaPanel();
 
 	// Checking if the file exists
 	if(QFile::exists(fileName))
 	{
-		// Try to open the document
-		if(_doc->openDetX(fileName))
+		if(_doc->openStripFile(fileName))
 		{
+			setCurrentStripFile(fileName);
+
+			updateOpenRecent();
+
+			// Opening the corresponding video file if it exists
+			if(openVideoFile(_doc->getVideoPath()))
+			{
+				PhFrame frameStamp = _doc->getVideoTimestamp();
+				_videoEngine->setFrameStamp(frameStamp);
+				_mediaPanel.setFirstFrame(frameStamp);
+			}
+
 			// On succeed, synchronizing the clocks
 			_strip->clock()->setTimeCodeType(_doc->getTCType());
 			_strip->clock()->setFrame(_doc->getLastFrame());
-			this->setWindowTitle(fileName);
 
-			// Opening the corresponding video file if it exists
-			QFileInfo fileInfo(_doc->getVideoPath());
-			if (fileInfo.exists())
-			{
-				_videoEngine->open(_doc->getVideoPath());
-				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
-				_videoEngine->clock()->setFrame(_doc->getVideoTimestamp());
-				_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
-				_mediaPanel.setMediaLength(_videoEngine->length());
-				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
-			}
-			_settings->setValue("lastfile", fileName);
+			_needToSave = false;
 		}
-		updateOpenRecent();
 	}
 }
 
 bool MainWindow::eventFilter(QObject *, QEvent *event)
 {
-	// The used variable must be declared out of the switch
-	QString filePath;
-	const QMimeData* mimeData;
-
-	switch (event->type()) {
+	switch (event->type())
+	{
 	case QEvent::FileOpen:
-		filePath = static_cast<QFileOpenEvent *>(event)->file();
-		// As the plist file list all the supported format (which are .detx, .avi & .mov)
-		// if the file is not a detx file, it's a video file, we don't need any protection
-		if(filePath.split(".").last().toLower() == "detx")
-			openFile(filePath);
+	{
+		QString filePath = static_cast<QFileOpenEvent *>(event)->file();
+		QString fileType = filePath.split(".").last().toLower();
+		// As the plist file list all the supported format (which are .strip, .detx, .avi & .mov)
+		// if the file is not a strip or a detx file, it's a video file, we don't need any protection
+		if(fileType == "detx" or fileType == "strip")
+		{
+			if(checkSaveFile())
+				openFile(filePath);
+		}
 		else
 			openVideoFile(filePath);
 		break;
-
+	}
 		// Hide and show the mediaPanel
 	case QEvent::MouseMove:
 		if(this->hasFocus())
@@ -221,41 +225,65 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 		break;
 
 	case QEvent::Drop:
-		mimeData = static_cast<QDropEvent *>(event)->mimeData();
+	{
+		const QMimeData* mimeData = static_cast<QDropEvent *>(event)->mimeData();
 
 		// If there is one file (not more) we open it
 		if (mimeData->urls().length() == 1)
 		{
 			QString filePath = mimeData->urls().first().toLocalFile();
 			QString fileType = filePath.split(".").last().toLower();
-			if(fileType == "detx")
-				openFile(filePath);
+			if(fileType == "detx" or fileType == "strip")
+			{
+				if(checkSaveFile())
+					openFile(filePath);
+			}
 			else if (fileType == "avi" or fileType == "mov")
 				openVideoFile(filePath);
 		}
 		break;
-
+	}
 	case QEvent::DragEnter:
 		event->accept();
-
+		break;
 	default:
 		break;
 	}
 	return false;
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+	if(!checkSaveFile())
+		event->ignore();
+}
+
+void MainWindow::setCurrentStripFile(QString stripFile)
+{
+	_currentStripFile = stripFile;
+	this->setWindowTitle(stripFile);
+	_settings->setValue("lastFile", stripFile);
+	_settings->setValue("lastFolder", QFileInfo(stripFile).absolutePath());
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
 	hideMediaPanel();
 
-	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
-	dlg.setFileMode(QFileDialog::ExistingFile);
-	if(dlg.exec())
+	if(checkSaveFile())
 	{
-		QString fileName = dlg.selectedFiles()[0];
-		openFile(fileName);
-	}
+		QFileDialog dlg(this, "Open...", "", "DetX files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
+		dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
+		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
 
+		dlg.setFileMode(QFileDialog::ExistingFile);
+		if(dlg.exec())
+		{
+			QString fileName = dlg.selectedFiles()[0];
+			openFile(fileName);
+			_settings->setValue("selectedFilter", dlg.selectedNameFilter());
+		}
+	}
 	fadeInMediaPanel();
 }
 
@@ -335,27 +363,43 @@ void MainWindow::on_actionOpen_Video_triggered()
 {
 	hideMediaPanel();
 
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
-	if(openVideoFile(fileName))
-		on_actionChange_timestamp_triggered();
-	else
-		QMessageBox::critical(this, "Error", "Unable to open " + fileName);
+	QString lastFolder = _settings->value("lastVideoFolder", QDir::homePath()).toString();
+	QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
+	if(dlg.exec())
+	{
+		_settings->setValue("lastVideoFolder", dlg.directory().absolutePath());
+		QString videoFile = dlg.selectedFiles()[0];
+		if(openVideoFile(videoFile))
+			_strip->clock()->setFrame(_doc->getVideoTimestamp());
+	}
 
 	fadeInMediaPanel();
 }
 
-bool MainWindow::openVideoFile(QString videoFileName)
+bool MainWindow::openVideoFile(QString videoFile)
 {
-	QFileInfo fileInfo(videoFileName);
-	if (fileInfo.exists())
+	QFileInfo lastFileInfo(_doc->getVideoPath());
+	QFileInfo fileInfo(videoFile);
+	if (fileInfo.exists() && _videoEngine->open(videoFile))
 	{
-		_videoEngine->open(videoFileName);
-		//#warning TODO read media length from video file
-		//		ui->mediaController->setMediaLength(7500);
-		//#warning TODO read first frame from video file
-		//		ui->mediaController->setFirstFrame(0);
+		PhFrame frameStamp = _doc->getVideoTimestamp();
 
-		//_clock->setRate(0.0);
+		_videoEngine->setFrameStamp(frameStamp);
+		_mediaPanel.setFirstFrame(frameStamp);
+		_mediaPanel.setMediaLength(_videoEngine->length());
+
+		if(videoFile != _doc->getVideoPath())
+		{
+			_doc->setVideoPath(videoFile);
+			_needToSave = true;
+		}
+
+		_videoEngine->clock()->setFrame(frameStamp);
+
+		if(fileInfo.fileName() != lastFileInfo.fileName())
+			on_actionChange_timestamp_triggered();
+
+		_settings->setValue("lastVideoFolder", lastFileInfo.absolutePath());
 		return true;
 	}
 	return false;
@@ -372,6 +416,8 @@ void MainWindow::on_actionChange_timestamp_triggered()
 		frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
 		_videoEngine->setFrameStamp(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
+		_doc->setVideoTimestamp(frameStamp);
+		_needToSave = true;
 	}
 
 	fadeInMediaPanel();
@@ -505,4 +551,65 @@ void MainWindow::on_actionClear_list_triggered()
 	// Remove all the buttons
 	_recentFileButtons.clear();
 	ui->menuOpen_recent->setEnabled(false);
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+	QFileInfo info(_currentStripFile);
+	if(!info.exists() || (info.suffix() != "strip"))
+		on_actionSave_as_triggered();
+	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode()))
+		_needToSave = false;
+	else
+		QMessageBox::critical(this, "", "Unable to save " + _currentStripFile);
+}
+
+void MainWindow::on_actionSave_as_triggered()
+{
+	hideMediaPanel();
+
+	QString stripFile = _currentStripFile;
+	QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
+	// If there is no current strip file, ask for a name
+	if(stripFile == "")
+		stripFile = lastFolder;
+	else
+	{
+		QFileInfo info(stripFile);
+		if(info.suffix() != "strip")
+			stripFile = lastFolder + "/" + info.completeBaseName() + ".strip";
+	}
+
+	stripFile = QFileDialog::getSaveFileName(this, "Save...", stripFile,"*.strip");
+	if(stripFile != "")
+	{
+		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode()))
+		{
+			_needToSave = false;
+			setCurrentStripFile(stripFile);
+		}
+		else
+			QMessageBox::critical(this, "", "Unable to save " + stripFile);
+	}
+}
+
+bool MainWindow::checkSaveFile()
+{
+	if(_needToSave)
+	{
+		QString msg = "Joker is about to quit, would you save the modification ?";
+		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
+		box.setDefaultButton(QMessageBox::Save);
+		switch(box.exec())
+		{
+		case QMessageBox::Save:
+			on_actionSave_triggered();
+			if(_needToSave)
+				return false;
+			break;
+		case QMessageBox::Cancel:
+			return false;
+		}
+	}
+	return true;
 }
