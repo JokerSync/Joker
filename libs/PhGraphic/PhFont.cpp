@@ -26,9 +26,9 @@ bool PhFont::setFontFile(QString fontFile)
 	if(fontFile != this->fontFile)
 	{
 		this->fontFile = fontFile;
-		init(this->fontFile);
+		return init(this->fontFile);
 	}
-
+	return true;
 }
 
 QString PhFont::getFontFile()

@@ -14,6 +14,7 @@ class PhGraphicObject
 public:
 
 	PhGraphicObject(int x = 0, int y = 0);
+	virtual ~PhGraphicObject();
 
 	/**
 	 * @brief init

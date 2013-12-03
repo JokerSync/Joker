@@ -27,7 +27,7 @@ private slots:
 
 	void on_listWidgetFont_itemClicked(QListWidgetItem *item);
 
-	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem);
 
 	void on_buttonBox_accepted();
 

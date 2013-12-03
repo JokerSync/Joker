@@ -69,7 +69,7 @@ void PhSonyController::close()
 	}
 }
 
-void PhSonyController::checkVideoSync(int frequency)
+void PhSonyController::checkVideoSync(int)
 {
 	if(_serial.isOpen())
 	{

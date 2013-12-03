@@ -184,14 +184,28 @@ void MainWindow::openFile(QString fileName)
 			_strip->clock()->setTimeCodeType(_doc->getTCType());
 			_strip->clock()->setFrame(_doc->getLastFrame());
 			this->setWindowTitle(fileName);
+
 			updateOpenRecent();
+
+			// Opening the corresponding video file if it exists
+			QFileInfo fileInfo(_doc->getVideoPath());
+			if (fileInfo.exists())
+			{
+				_videoEngine->open(_doc->getVideoPath());
+				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
+				_videoEngine->clock()->setFrame(_doc->getVideoTimestamp());
+				_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
+				_mediaPanel.setMediaLength(_videoEngine->length());
+				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
+			}
+
 			_settings->setValue("lastfile", fileName);
 			openVideoFile(_doc->getVideoPath());
 		}
 	}
 }
 
-bool MainWindow::eventFilter(QObject *sender, QEvent *event)
+bool MainWindow::eventFilter(QObject *, QEvent *event)
 {
 	// The used variable must be declared out of the switch
 	QString filePath;
@@ -481,6 +495,8 @@ void MainWindow::fadeOutMediaPanel()
 		break;
 	case MediaPanelHidding:
 		hideMediaPanel();
+		break;
+	default:
 		break;
 	}
 }
