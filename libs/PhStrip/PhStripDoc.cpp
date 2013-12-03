@@ -184,7 +184,7 @@ bool PhStripDoc::importDetX(QString fileName)
 
 bool PhStripDoc::openStripFile(QString fileName)
 {
-	bool succed = false;
+	bool succeed = false;
 
 	// Try to open the document
 	if(fileName.split(".").last() == "detx")
@@ -228,18 +228,18 @@ bool PhStripDoc::openStripFile(QString fileName)
 				QDomElement line = metaInfo.elementsByTagName("media").at(i).toElement();
 				PHDEBUG << "line" << line.attribute("type");
 				if(line.attribute("type") == "detx")
-				{
-					succed = importDetX(line.text());
-				}
+					succeed = importDetX(line.text());
+
 				if(line.attribute("type")  == "video")
 				{
 					_videoPath = line.text();
-					_lastFrame = PhTimeCode::frameFromString(metaInfo.elementsByTagName("state").at(0).toElement().attribute("lastTimeCode"), getTCType());
+					_videoFrameStamp = PhTimeCode::frameFromString(line.attribute("tcStamp"), _tcType);
 				}
 			}
 		}
+		_lastFrame = PhTimeCode::frameFromString(metaInfo.elementsByTagName("state").at(0).toElement().attribute("lastTimeCode"), _tcType);
 	}
-	return succed;
+	return succeed;
 
 }
 
@@ -248,55 +248,57 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC)
 	PHDEBUG << fileName;
 	QFile file(fileName);
 
-		// open a file
-		if (!file.open(QIODevice::WriteOnly))
+	// open a file
+	if (!file.open(QIODevice::WriteOnly))
+	{
+		PHDEBUG << "an error occur while saving the strip document";
+		return false;
+	}
+	else
+	{
+		//if file is successfully opened then create XML
+		QXmlStreamWriter* xmlWriter = new QXmlStreamWriter();
+		// set device (here file)to streamwriter
+		xmlWriter->setDevice(&file);
+		// Writes a document start with the XML version number version.
+
+		// Positive numbers indicate spaces, negative numbers tabs.
+		xmlWriter->setAutoFormattingIndent(-1);
+		xmlWriter->setAutoFormatting(true);
+
+		// Indent is just for keeping in mind XML structure
+		xmlWriter->writeStartDocument();
+		xmlWriter->writeStartElement("strip");
 		{
-			PHDEBUG << "an error occur while saving the strip document";
-			return false;
-		}
-		else
-		{
-			//if file is successfully opened then create XML
-			QXmlStreamWriter* xmlWriter = new QXmlStreamWriter();
-			// set device (here file)to streamwriter
-			xmlWriter->setDevice(&file);
-			// Writes a document start with the XML version number version.
-
-			// Positive numbers indicate spaces, negative numbers tabs.
-			xmlWriter->setAutoFormattingIndent(-1);
-			xmlWriter->setAutoFormatting(true);
-
-			// Indent is just for keeping in mind XML structure
-			xmlWriter->writeStartDocument();
-			xmlWriter->writeStartElement("strip");
-				xmlWriter->writeStartElement("meta");
-
-					xmlWriter->writeStartElement("generator");
-					xmlWriter->writeAttribute("name", "Joker");
-					xmlWriter->writeAttribute("version", APP_VERSION);
-					xmlWriter->writeEndElement();
-
-					xmlWriter->writeStartElement("media");
-					xmlWriter->writeAttribute("type", "detx");
-					xmlWriter->writeCharacters(getFilePath());
-					xmlWriter->writeEndElement();
-
-					xmlWriter->writeStartElement("media");
-					xmlWriter->writeAttribute("type", "video");
-					xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoFrameStamp, PhTimeCodeType25));
-					xmlWriter->writeCharacters(_videoPath);
-					xmlWriter->writeEndElement();
-
-					xmlWriter->writeStartElement("state");
-					xmlWriter->writeAttribute("lastTimeCode", lastTC);
-					xmlWriter->writeEndElement();
-
+			xmlWriter->writeStartElement("meta");
+			{
+				xmlWriter->writeStartElement("generator");
+				xmlWriter->writeAttribute("name", "Joker");
+				xmlWriter->writeAttribute("version", APP_VERSION);
 				xmlWriter->writeEndElement();
-			xmlWriter->writeEndElement();
 
-			xmlWriter->writeEndDocument();
-			delete xmlWriter;
+				xmlWriter->writeStartElement("media");
+				xmlWriter->writeAttribute("type", "detx");
+				xmlWriter->writeCharacters(getFilePath());
+				xmlWriter->writeEndElement();
+
+				xmlWriter->writeStartElement("media");
+				xmlWriter->writeAttribute("type", "video");
+				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoFrameStamp, PhTimeCodeType25));
+				xmlWriter->writeCharacters(_videoPath);
+				xmlWriter->writeEndElement();
+
+				xmlWriter->writeStartElement("state");
+				xmlWriter->writeAttribute("lastTimeCode", lastTC);
+				xmlWriter->writeEndElement();
+			}
+			xmlWriter->writeEndElement();
 		}
+		xmlWriter->writeEndElement();
+
+		xmlWriter->writeEndDocument();
+		delete xmlWriter;
+	}
 
 	return true;
 }
@@ -340,7 +342,7 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, 
 		int end = start + text.length() * 1.20588 + 1;
 
 		addText(_peoples[id], start, end,
-						  text, i % nbTrack);
+				text, i % nbTrack);
 
 		// So the texts are all one after the other
 		position += end - start;
@@ -549,6 +551,11 @@ QList<PhStripLoop *> PhStripDoc::getLoops()
 QList<PhStripOff *> PhStripDoc::getOffs()
 {
 	return _offs;
+}
+
+void PhStripDoc::setVideoTimestamp(PhFrame videoFramestamp)
+{
+	_videoFrameStamp = videoFramestamp;
 }
 
 void PhStripDoc::setVideoPath(QString videoPath)

@@ -177,25 +177,19 @@ void MainWindow::openFile(QString fileName)
 		{
 			setCurrentStripFile(fileName);
 
-			// On succeed, synchronizing the clocks
-			_strip->clock()->setTimeCodeType(_doc->getTCType());
-			_strip->clock()->setFrame(_doc->getLastFrame());
-
 			updateOpenRecent();
 
 			// Opening the corresponding video file if it exists
-			QFileInfo fileInfo(_doc->getVideoPath());
-			if (fileInfo.exists())
+			if(openVideoFile(_doc->getVideoPath()))
 			{
-				_videoEngine->open(_doc->getVideoPath());
-				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
-				_videoEngine->clock()->setFrame(_doc->getVideoTimestamp());
-				_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
-				_mediaPanel.setMediaLength(_videoEngine->length());
-				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
+				PhFrame frameStamp = _doc->getVideoTimestamp();
+				_videoEngine->setFrameStamp(frameStamp);
+				_mediaPanel.setFirstFrame(frameStamp);
 			}
 
-			openVideoFile(_doc->getVideoPath());
+			// On succeed, synchronizing the clocks
+			_strip->clock()->setTimeCodeType(_doc->getTCType());
+			_strip->clock()->setFrame(_doc->getLastFrame());
 		}
 	}
 }
@@ -398,19 +392,15 @@ void MainWindow::on_actionOpen_Video_triggered()
 
 bool MainWindow::openVideoFile(QString videoFileName)
 {
-	// Opening the corresponding video file if it exists
 	QFileInfo fileInfo(videoFileName);
-	if (fileInfo.exists())
+	if (fileInfo.exists() && _videoEngine->open(videoFileName))
 	{
-		_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
-		_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
+		_videoEngine->setFrameStamp(0);
+		_mediaPanel.setFirstFrame(0);
 		_mediaPanel.setMediaLength(_videoEngine->length());
-		_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
-		return _videoEngine->open(videoFileName);
-
+		return true;
 	}
-	else
-		return false;
+	return false;
 }
 
 void MainWindow::on_actionChange_timestamp_triggered()
@@ -424,6 +414,7 @@ void MainWindow::on_actionChange_timestamp_triggered()
 		frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
 		_videoEngine->setFrameStamp(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
+		_doc->setVideoTimestamp(frameStamp);
 		_needToSave = true;
 	}
 
