@@ -370,7 +370,6 @@ void MainWindow::on_actionOpen_Video_triggered()
 	QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
 	if(dlg.exec())
 	{
-		_settings->setValue("lastVideoFolder", dlg.directory().absolutePath());
 		QString videoFile = dlg.selectedFiles()[0];
 		if(openVideoFile(videoFile))
 			_strip->clock()->setFrame(_doc->getVideoTimestamp());
@@ -402,7 +401,7 @@ bool MainWindow::openVideoFile(QString videoFile)
 		if(fileInfo.fileName() != lastFileInfo.fileName())
 			on_actionChange_timestamp_triggered();
 
-		_settings->setValue("lastVideoFolder", lastFileInfo.absolutePath());
+		_settings->setValue("lastVideoFolder", fileInfo.absolutePath());
 		return true;
 	}
 	return false;
