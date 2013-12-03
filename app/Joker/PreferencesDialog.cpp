@@ -60,6 +60,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	//Set the checkboxes of log
 	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
 	{
+		connect(btn, SIGNAL(clicked()), this, SLOT(onLogMaskButtonClicked()));
 		if((1 << btn->objectName().split("_").last().toInt()) & _oldLogMask)
 			btn->setChecked(true);
 	}
@@ -112,15 +113,6 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::on_buttonBox_accepted()
 {
-	int logMask = 0;
-	//Set the checkboxes of log
-	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
-	{
-		if(btn->isChecked())
-			logMask += 1 << btn->objectName().split("_").last().toInt();
-	}
-	PhDebug::setLogMask(logMask);
-	_settings->setValue("logMask", logMask);
 	close();
 }
 
@@ -138,6 +130,7 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setValue("videoDeinterlace", _oldDeinterlace);
 	_settings->setValue("displayTC", _oldDisplayTC);
 	_settings->setValue("logMask", _oldLogMask);
+	PhDebug::setLogMask(_oldLogMask);
 
 	close();
 }
@@ -248,4 +241,17 @@ void PreferencesDialog::on_lblPathToLogFile_linkActivated(const QString &link)
 	args << "end tell";
 	QProcess::startDetached("osascript", args);
 #endif
+}
+
+void PreferencesDialog::onLogMaskButtonClicked()
+{
+	int logMask = 0;
+	//Set the checkboxes of log
+	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
+	{
+		if(btn->isChecked())
+			logMask += 1 << btn->objectName().split("_").last().toInt();
+	}
+	PhDebug::setLogMask(logMask);
+	_settings->setValue("logMask", logMask);
 }
