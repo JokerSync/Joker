@@ -27,7 +27,7 @@ public:
 
 	void openFile(QString fileName);
 
-	bool openVideoFile(QString videoFileName);
+	bool openVideoFile(QString videoFile);
 
 protected:
 	bool eventFilter(QObject *, QEvent *event);
@@ -100,6 +100,10 @@ private slots:
 
 	void openRecent();
 
+	void on_actionSave_triggered();
+
+	void on_actionSave_as_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip * _strip;
@@ -118,8 +122,16 @@ private:
 
 	QVector<QAction *> _recentFileButtons;
 
+	bool _needToSave;
+	QString _currentStripFile;
+
 	void updateOpenRecent();
 	void setupOpenRecentMenu();
+	void closeEvent(QCloseEvent *event);
+
+	void setCurrentStripFile(QString stripFile);
+
+	bool checkSaveFile();
 };
 
 #endif // MAINWINDOW_H

@@ -15,6 +15,7 @@
 int main(int argc, char *argv[])
 {
 	QSettings settings("Phonations", "Joker");
+	QSettings::setDefaultFormat(QSettings::NativeFormat);
 	int logLevel = settings.value("logLevel", 1).toInt();
 	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
 	PhDebug::setLogMask(logLevel);
@@ -29,7 +30,7 @@ int main(int argc, char *argv[])
 	if (argc > 1)
 		fileName = argv[1];
 	else if(settings.value("openLastFile", false).toBool()) // Load the last file if the setting si selected
-		fileName = settings.value("lastfile").toString();
+		fileName = settings.value("lastFile").toString();
 
 	if(QFile(fileName).exists())
 		w.openFile(fileName);

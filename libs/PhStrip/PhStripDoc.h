@@ -3,6 +3,9 @@
 
 #include <QList>
 #include <QMap>
+#include <QtXml>
+#include <QXmlStreamWriter>
+#include <QDomDocument>
 
 #include "PhTools/PhTimeCode.h"
 
@@ -98,7 +101,7 @@ public:
      * @brief setVideoTimestamp
      * @param videoTimestamp
      */
-    void setVideoTimestamp(PhTimeCode videoTimestamp);
+    void setVideoTimestamp(PhFrame videoFramestamp);
     /**
      * @brief setVideoPath
      * @param videoPath
@@ -114,7 +117,9 @@ public:
      * @param filename
      * @return
      */
-	bool openDetX(QString filename);
+	bool importDetX(QString filename);
+	bool openStripFile(QString fileName);
+	bool saveStrip(QString fileName, QString lastTC);
 
 	// First version : Create StripDoc for testing purposes
 	bool createDoc(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeCode);
