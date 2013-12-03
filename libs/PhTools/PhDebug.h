@@ -36,6 +36,8 @@ public:
 	static void setLogMask(int mask);
 	static int getLogMask();
 
+	static QString logLocation();
+
 private:
 	static void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
@@ -43,6 +45,7 @@ private:
 	int _logMask;
 	int _currentLogLevel;
 	QFile * _log;
+	QString _logLocation;
 	bool _dispFuncName;
 	bool _dispTime;
 	bool _dispDate;
