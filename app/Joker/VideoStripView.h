@@ -32,7 +32,7 @@ private:
 	PhSonyController *_sony;
 	QTime _lastVideoSyncElapsed;
 
-	PhGraphicText _tcText, _noVideoSyncError;
+	PhGraphicText _tcText, _nextTCText, _noVideoSyncError;
 };
 
 #endif // VIDEOSTRIPVIEW_H
