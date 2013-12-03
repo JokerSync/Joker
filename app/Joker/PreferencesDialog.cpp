@@ -34,6 +34,11 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldFont = _settings->value("StripFontFile", "").toString();
 	_oldDeinterlace = _settings->value("videoDeinterlace", false).toBool();
 	_oldDisplayTC = _settings->value("displayTC", true).toBool();
+	_oldDisplayNextTC = _settings->value("displayNextTC", true).toBool();
+	_oldDisplayNextText = _settings->value("displayNextText", true).toBool();
+	_oldDisplayTitle = _settings->value("displayTitle", true).toBool();
+	_oldDisplayLoop = _settings->value("displayLoop", false).toBool();
+
 	_oldLogMask = _settings->value("logMask", 1).toInt();
 
 	ui->sliderBoldness->setValue(_oldBolness);
@@ -55,6 +60,10 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	ui->cBoxSonyAutoconnect->setChecked(_oldSonyAutoConnect);
 	ui->cBoxDeinterlace->setChecked(_oldDeinterlace);
 	ui->cBoxDisplayTC->setChecked(_oldDisplayTC);
+	ui->cBoxDisplayNextTC->setChecked(_oldDisplayNextTC);
+	ui->cBoxDisplayNextText->setChecked(_oldDisplayNextText);
+	ui->cBoxDisplayTitle->setChecked(_oldDisplayTitle);
+	ui->cBoxDisplayLoop->setChecked(_oldDisplayLoop);
 	ui->lblPathToLogFile->setText("<a href=\""+ PhDebug::logLocation() +"\">" + PhDebug::logLocation() + "</a>");
 
 	//Set the checkboxes of log
@@ -129,6 +138,10 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setValue("StripFontName", _oldFont);
 	_settings->setValue("videoDeinterlace", _oldDeinterlace);
 	_settings->setValue("displayTC", _oldDisplayTC);
+	_settings->setValue("displayNextTC", _oldDisplayNextTC);
+	_settings->setValue("displayNextText", _oldDisplayNextText);
+	_settings->setValue("displayTitle", _oldDisplayTitle);
+	_settings->setValue("displayLoop", _oldDisplayLoop);
 	_settings->setValue("logMask", _oldLogMask);
 	PhDebug::setLogMask(_oldLogMask);
 
@@ -217,6 +230,26 @@ void PreferencesDialog::on_cBoxDisplayTC_clicked()
 	_settings->setValue("displayTC", ui->cBoxDisplayTC->isChecked());
 }
 
+void PreferencesDialog::on_cBoxDisplayNextTC_clicked()
+{
+	_settings->setValue("displayNextTC", ui->cBoxDisplayNextTC->isChecked());
+}
+
+void PreferencesDialog::on_cBoxDisplayNextText_clicked()
+{
+	_settings->setValue("displayNextText", ui->cBoxDisplayNextText->isChecked());
+}
+
+void PreferencesDialog::on_cBoxDisplayTitle_clicked()
+{
+	_settings->setValue("displayTitle", ui->cBoxDisplayTitle->isChecked());
+}
+
+void PreferencesDialog::on_cBoxDisplayLoop_clicked()
+{
+	_settings->setValue("displayLoop", ui->cBoxDisplayLoop->isChecked());
+}
+
 void PreferencesDialog::on_pButtonReset_clicked()
 {
 	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
@@ -256,3 +289,4 @@ void PreferencesDialog::onLogMaskButtonClicked()
 	PhDebug::setLogMask(logMask);
 	_settings->setValue("logMask", logMask);
 }
+
