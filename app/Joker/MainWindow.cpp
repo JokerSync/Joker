@@ -369,7 +369,7 @@ void MainWindow::on_actionOpen_Video_triggered()
 {
 	hideMediaPanel();
 
-	QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
+	QString lastFolder = _settings->value("lastVideoFolder", QDir::homePath()).toString();
 	QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
 	if(dlg.exec())
 	{
@@ -384,11 +384,14 @@ void MainWindow::on_actionOpen_Video_triggered()
 
 bool MainWindow::openVideoFile(QString videoFile)
 {
+	QFileInfo lastFileInfo(_doc->getVideoPath());
 	QFileInfo fileInfo(videoFile);
 	if (fileInfo.exists() && _videoEngine->open(videoFile))
 	{
-		_videoEngine->setFrameStamp(0);
-		_mediaPanel.setFirstFrame(0);
+		PhFrame frameStamp = _doc->getVideoTimestamp();
+
+		_videoEngine->setFrameStamp(frameStamp);
+		_mediaPanel.setFirstFrame(frameStamp);
 		_mediaPanel.setMediaLength(_videoEngine->length());
 
 		if(videoFile != _doc->getVideoPath())
@@ -397,6 +400,12 @@ bool MainWindow::openVideoFile(QString videoFile)
 			_needToSave = true;
 		}
 
+		_videoEngine->clock()->setFrame(frameStamp);
+
+		if(fileInfo.fileName() != lastFileInfo.fileName())
+			on_actionChange_timestamp_triggered();
+
+		_settings->setValue("lastVideoFolder", lastFileInfo.absolutePath());
 		return true;
 	}
 	return false;
