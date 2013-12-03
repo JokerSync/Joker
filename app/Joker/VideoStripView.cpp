@@ -63,16 +63,20 @@ void VideoStripView::paint()
 		tcWidth = videoX;
 	}
 
-	if(_settings && _settings->value("displayTC", true).toBool())
+	PhClock *clock = _videoEngine.clock();
+	long delay = (int)(_settings->value("delay", 0).toInt() * clock->rate()); // delay in ms
+	PhFrame clockFrame = clock->frame() + delay * PhTimeCode::getFps(clock->timeCodeType()) / 1000;
+	int tcHeight = tcWidth / 5;
+
+	if(_settings->value("displayTC", true).toBool())
 	{
-		PhClock *clock = _videoEngine.clock();
-		long delay = (int)(_settings->value("delay", 0).toInt() * clock->rate()); // delay in ms
-		PhFrame clockFrame = clock->frame() + delay * PhTimeCode::getFps(clock->timeCodeType()) / 1000;
-		int tcHeight = tcWidth / 5;
 		_tcText.setRect(0, 0, tcWidth, tcHeight);
 		_tcText.setContent(PhTimeCode::stringFromFrame(clockFrame, clock->timeCodeType()));
 		_tcText.draw();
+	}
 
+	if(_settings->value("displayNextTC", true).toBool())
+	{
 		PhFrame nextTextFrame = _strip.doc()->getNextTextFrame(clockFrame);
 		if(nextTextFrame == PHFRAMEMAX)
 			nextTextFrame = _strip.doc()->getNextTextFrame(0);
