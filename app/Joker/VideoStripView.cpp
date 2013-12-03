@@ -5,6 +5,7 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	_settings(NULL),
 	_sony(NULL),
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
+	_nextTCText(_strip.getHUDFont(), "00:00:00:00"),
 	_noVideoSyncError(_strip.getHUDFont(), "No video sync")
 {
 }
@@ -28,6 +29,7 @@ void VideoStripView::setSony(PhSonyController *sony)
 bool VideoStripView::init()
 {
 	_tcText.setColor(QColor(128, 128, 128));
+	_nextTCText.setColor(QColor(128, 128, 128));
 	_noVideoSyncError.setColor(QColor(0, 0, 0));
 
 	return _strip.init();
@@ -66,9 +68,21 @@ void VideoStripView::paint()
 		PhClock *clock = _videoEngine.clock();
 		long delay = (int)(_settings->value("delay", 0).toInt() * clock->rate()); // delay in ms
 		PhFrame clockFrame = clock->frame() + delay * PhTimeCode::getFps(clock->timeCodeType()) / 1000;
-		_tcText.setRect(0, 0, tcWidth, tcWidth / 4);
+		int tcHeight = tcWidth / 5;
+		_tcText.setRect(0, 0, tcWidth, tcHeight);
 		_tcText.setContent(PhTimeCode::stringFromFrame(clockFrame, clock->timeCodeType()));
 		_tcText.draw();
+
+		PhFrame nextTextFrame = _strip.doc()->getNextTextFrame(clockFrame);
+		if(nextTextFrame == PHFRAMEMAX)
+			nextTextFrame = _strip.doc()->getNextTextFrame(0);
+
+		_nextTCText.setRect(this->width() - tcWidth, 0, tcWidth, tcHeight);
+		if(nextTextFrame < PHFRAMEMAX)
+		{
+			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextTextFrame, clock->timeCodeType()));
+			_nextTCText.draw();
+		}
 	}
 
 	_noVideoSyncError.setRect(0, 50, 200, 50);
