@@ -128,7 +128,8 @@ private:
 	void updateOpenRecent();
 	void setupOpenRecentMenu();
 	void closeEvent(QCloseEvent *event);
-	bool saveStrip();
+
+	void setCurrentStripFile(QString stripFile);
 };
 
 #endif // MAINWINDOW_H
