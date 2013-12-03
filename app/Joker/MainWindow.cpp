@@ -95,6 +95,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::openRecent()
 {
+	if(!checkSaveFile())
+		return;
+
 	// This slot is triggered by dynamic action
 	openFile(sender()->objectName());
 }
@@ -190,27 +193,31 @@ void MainWindow::openFile(QString fileName)
 			// On succeed, synchronizing the clocks
 			_strip->clock()->setTimeCodeType(_doc->getTCType());
 			_strip->clock()->setFrame(_doc->getLastFrame());
+
+			_needToSave = false;
 		}
 	}
 }
 
 bool MainWindow::eventFilter(QObject *, QEvent *event)
 {
-	// The used variable must be declared out of the switch
-	QString filePath;
-	const QMimeData* mimeData;
-
-	switch (event->type()) {
+	switch (event->type())
+	{
 	case QEvent::FileOpen:
-		filePath = static_cast<QFileOpenEvent *>(event)->file();
+	{
+		QString filePath = static_cast<QFileOpenEvent *>(event)->file();
+		QString fileType = filePath.split(".").last().toLower();
 		// As the plist file list all the supported format (which are .strip, .detx, .avi & .mov)
 		// if the file is not a strip or a detx file, it's a video file, we don't need any protection
-		if(filePath.split(".").last().toLower() == "detx" or filePath.split(".").last().toLower() == "strip")
-			openFile(filePath);
+		if(fileType == "detx" or fileType == "strip")
+		{
+			if(checkSaveFile())
+				openFile(filePath);
+		}
 		else
 			openVideoFile(filePath);
 		break;
-
+	}
 		// Hide and show the mediaPanel
 	case QEvent::MouseMove:
 		if(this->hasFocus())
@@ -218,7 +225,8 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 		break;
 
 	case QEvent::Drop:
-		mimeData = static_cast<QDropEvent *>(event)->mimeData();
+	{
+		const QMimeData* mimeData = static_cast<QDropEvent *>(event)->mimeData();
 
 		// If there is one file (not more) we open it
 		if (mimeData->urls().length() == 1)
@@ -226,15 +234,18 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 			QString filePath = mimeData->urls().first().toLocalFile();
 			QString fileType = filePath.split(".").last().toLower();
 			if(fileType == "detx" or fileType == "strip")
-				openFile(filePath);
+			{
+				if(checkSaveFile())
+					openFile(filePath);
+			}
 			else if (fileType == "avi" or fileType == "mov")
 				openVideoFile(filePath);
 		}
 		break;
-
+	}
 	case QEvent::DragEnter:
 		event->accept();
-
+		break;
 	default:
 		break;
 	}
@@ -243,27 +254,8 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-	if(_needToSave)
-	{
-		QString msg = "Joker is about to quit, would you save the session to a Strip file ?";
-		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
-		box.setDefaultButton(QMessageBox::Save);
-		int result = box.exec();
-		if(result == QMessageBox::Save)
-		{
-			on_actionSave_triggered();
-			if(_needToSave)
-				event->ignore();
-			else
-				event->accept();
-		}
-		else if(result == QMessageBox::Cancel)
-			event->ignore();
-		else
-			event->accept();
-	}
-	else
-		event->accept();
+	if(!checkSaveFile())
+		event->ignore();
 }
 
 void MainWindow::setCurrentStripFile(QString stripFile)
@@ -278,18 +270,20 @@ void MainWindow::on_actionOpen_triggered()
 {
 	hideMediaPanel();
 
-	QFileDialog dlg(this, "Open...", "", "Detx files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
-	dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
-	dlg.setOption(QFileDialog::HideNameFilterDetails, false);
-
-	dlg.setFileMode(QFileDialog::ExistingFile);
-	if(dlg.exec())
+	if(checkSaveFile())
 	{
-		QString fileName = dlg.selectedFiles()[0];
-		openFile(fileName);
-		_settings->setValue("selectedFilter", dlg.selectedNameFilter());
-	}
+		QFileDialog dlg(this, "Open...", "", "Detx files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
+		dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
+		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
 
+		dlg.setFileMode(QFileDialog::ExistingFile);
+		if(dlg.exec())
+		{
+			QString fileName = dlg.selectedFiles()[0];
+			openFile(fileName);
+			_settings->setValue("selectedFilter", dlg.selectedNameFilter());
+		}
+	}
 	fadeInMediaPanel();
 }
 
@@ -597,4 +591,25 @@ void MainWindow::on_actionSave_as_triggered()
 		else
 			QMessageBox::critical(this, "", "Unable to save " + stripFile);
 	}
+}
+
+bool MainWindow::checkSaveFile()
+{
+	if(_needToSave)
+	{
+		QString msg = "Joker is about to quit, would you save the session to a Strip file ?";
+		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
+		box.setDefaultButton(QMessageBox::Save);
+		switch(box.exec())
+		{
+		case QMessageBox::Save:
+			on_actionSave_triggered();
+			if(_needToSave)
+				return false;
+			break;
+		case QMessageBox::Cancel:
+			return false;
+		}
+	}
+	return true;
 }

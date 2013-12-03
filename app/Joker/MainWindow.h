@@ -130,6 +130,8 @@ private:
 	void closeEvent(QCloseEvent *event);
 
 	void setCurrentStripFile(QString stripFile);
+
+	bool checkSaveFile();
 };
 
 #endif // MAINWINDOW_H
