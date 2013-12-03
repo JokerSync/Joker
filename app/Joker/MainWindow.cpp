@@ -565,7 +565,9 @@ void MainWindow::on_actionSave_triggered()
 	QFileInfo info(_currentStripFile);
 	if(!info.exists() || (info.suffix() != "strip"))
 		on_actionSave_as_triggered();
-	else if(!_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode()))
+	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode()))
+		_needToSave = false;
+	else
 		QMessageBox::critical(this, "", "Unable to save " + _currentStripFile);
 }
 
@@ -589,7 +591,10 @@ void MainWindow::on_actionSave_as_triggered()
 	if(stripFile != "")
 	{
 		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode()))
+		{
+			_needToSave = false;
 			setCurrentStripFile(stripFile);
+		}
 		else
 			QMessageBox::critical(this, "", "Unable to save " + stripFile);
 	}
