@@ -189,6 +189,8 @@ void MainWindow::openFile(QString fileName)
 				_videoEngine->setFrameStamp(frameStamp);
 				_mediaPanel.setFirstFrame(frameStamp);
 			}
+			else
+				_videoEngine->close();
 
 			// On succeed, synchronizing the clocks
 			_strip->clock()->setTimeCodeType(_doc->getTCType());
