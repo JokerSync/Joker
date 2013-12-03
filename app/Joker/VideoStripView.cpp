@@ -36,7 +36,7 @@ bool VideoStripView::init()
 
 void VideoStripView::paint()
 {
-	PHDBG(2);
+	PHDBG(1);
 
 	if(_sony)
 		_sony->checkVideoSync();

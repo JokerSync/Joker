@@ -39,7 +39,7 @@ void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType)
 {
 	if(!_settingStripFrame)
 	{
-//		PHDEBUG << frame << _sonyClock->frame();
+		PHDBG(2) << frame;
 		if(_sonyClock)
 		{
 			// Apply precise correction.
@@ -92,7 +92,7 @@ void VideoStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType)
 {
 	if(!_settingSonyFrame)
 	{
-//		PHDEBUG << frame;
+		PHDBG(3) << frame;
 		_settingVideoFrame = true;
 		_videoClock->setFrame(frame);
 		_settingVideoFrame = false;
