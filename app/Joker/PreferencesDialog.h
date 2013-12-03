@@ -53,6 +53,8 @@ private slots:
 
 	void on_lblPathToLogFile_linkActivated(const QString &link);
 
+	void onLogMaskButtonClicked();
+
 private:
 	Ui::PreferencesDialog *ui;
 	QSettings *_settings;
