@@ -49,6 +49,14 @@ private slots:
 
 	void on_cBoxDisplayTC_clicked();
 
+	void on_cBoxDisplayNextTC_clicked();
+
+	void on_cBoxDisplayNextText_clicked();
+
+	void on_cBoxDisplayTitle_clicked();
+
+	void on_cBoxDisplayLoop_clicked();
+
 	void on_pButtonReset_clicked();
 
 	void on_lblPathToLogFile_linkActivated(const QString &link);
@@ -69,6 +77,10 @@ private:
 	bool _oldStartFullScreen;
 	bool _oldDeinterlace;
 	bool _oldDisplayTC;
+	bool _oldDisplayNextTC;
+	bool _oldDisplayNextText;
+	bool _oldDisplayTitle;
+	bool _oldDisplayLoop;
 	int _oldLogMask;
 	QMap<QString, QString> fontList;
 
