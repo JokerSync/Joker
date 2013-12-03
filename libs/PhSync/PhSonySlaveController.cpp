@@ -171,7 +171,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x0c:
 		{
 			cmd1 = 0x74;
-			//PHDEBUG << _comSuffix << "Current Time Sense => " << _clock.timeCode();
+			PHDBG(21) << _comSuffix << "Current Time Sense => " << _clock.timeCode();
 			switch (dataIn[0])
 			{
 			case 0x01:
@@ -204,7 +204,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		{
 			unsigned char status[16];
 #warning TODO : handle status sens properly
-//			PHDEBUG << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
+			PHDBG(22) << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
 			memset(status, 0, 16);
 			switch (_state)
 			{
@@ -289,7 +289,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 void PhSonySlaveController::onVideoSync()
 {
 	_clock.tick(PhTimeCode::getFps(_clock.timeCodeType()));
-	//PHDEBUG << _clock.timeCode();
+	PHDBG(20) << _clock.timeCode();
 }
 
 void PhSonySlaveController::sendAck()
