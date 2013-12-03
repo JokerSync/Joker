@@ -49,7 +49,7 @@ void PhGraphicStrip::setSettings(QSettings *settings)
 
 bool PhGraphicStrip::setFontFile(QString fontFile)
 {
-	if(_font.setFontFile(fontFile))
+	if(_textFont.setFontFile(fontFile))
 	{
 		if(_settings)
 			_settings->setValue("StripFontFile", fontFile);
@@ -82,8 +82,10 @@ bool PhGraphicStrip::init()
 		fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
 		_settings->setValue("StripFontFile", fontFile);
 	}
-	_font.setFontFile(fontFile);
-	_font.setBoldness(_settings->value("boldness", 0).toInt());
+	_textFont.setFontFile(fontFile);
+	_textFont.setBoldness(_settings->value("boldness", 0).toInt());
+
+	_hudFont.setFontFile(QCoreApplication::applicationDirPath() + "/../Resources/ARIAL.TTF");
 
 	return true;
 }
@@ -110,9 +112,14 @@ void PhGraphicStrip::clearData()
 		delete gOff;
 	_graphicOffs.clear();
 }
-PhFont *PhGraphicStrip::getFont()
+PhFont *PhGraphicStrip::getTextFont()
 {
-	return &_font;
+	return &_textFont;
+}
+
+PhFont *PhGraphicStrip::getHUDFont()
+{
+	return &_hudFont;
 }
 
 
@@ -133,10 +140,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		if(_settings)
 		{
 			setPixelPerFrame(_settings->value("speed", 12).toInt());
-			if(getFont()->getBoldness() != _settings->value("boldness", 0).toInt())
-				getFont()->setBoldness(_settings->value("boldness", 0).toInt());
-			if(getFont()->getFontFile() != _settings->value("StripFontFile", "").toString())
-				getFont()->setFontFile(_settings->value("StripFontFile", "").toString());
+			if(getTextFont()->getBoldness() != _settings->value("boldness", 0).toInt())
+				getTextFont()->setBoldness(_settings->value("boldness", 0).toInt());
+			if(getTextFont()->getFontFile() != _settings->value("StripFontFile", "").toString())
+				getTextFont()->setFontFile(_settings->value("StripFontFile", "").toString());
 		}
 		int loopCounter = 0;
 		int offCounter = 0;
@@ -214,7 +221,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			PhGraphicText* gText = _graphicTexts[text];
 			if(gText == NULL)
 			{
-				gText = new PhGraphicText( &_font, text->getContent());
+				gText = new PhGraphicText( &_textFont, text->getContent());
 
 				gText->setZ(-1);
 				if(text->getPeople())
@@ -255,7 +262,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				if(gPeople == NULL)
 				{
-					gPeople = new PhGraphicText(&_font, people->getName());
+					gPeople = new PhGraphicText(&_hudFont, people->getName());
 					gPeople->setColor(QColor(people->getColor()));
 					gPeople->setWidth(people->getName().length() * 16);
 					gPeople->setZ(-1);
@@ -287,7 +294,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				if(gPeople == NULL)
 				{
-					gPeople = new PhGraphicText(&_font, people->getName());
+					gPeople = new PhGraphicText(&_textFont, people->getName());
 					gPeople->setColor(QColor(people->getColor()));
 					gPeople->setWidth(people->getName().length() * 16);
 					gPeople->setZ(-1);
