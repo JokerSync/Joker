@@ -55,7 +55,7 @@ MainWindow::MainWindow(QSettings *settings) :
 			ui->videoStripView->setSony(&_sonySlave);
 		}
 		else
-			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
+			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
 	}
 
 	// Setting up the media panel
@@ -175,15 +175,11 @@ void MainWindow::openFile(QString fileName)
 	{
 		if(_doc->openStripFile(fileName))
 		{
-			if(fileName.split(".").last() == "strip")
-			{
-				_currentStripFile = fileName;
-				ui->actionSave_as->setEnabled(true);
-			}
+			setCurrentStripFile(fileName);
+
 			// On succeed, synchronizing the clocks
 			_strip->clock()->setTimeCodeType(_doc->getTCType());
 			_strip->clock()->setFrame(_doc->getLastFrame());
-			this->setWindowTitle(fileName);
 
 			updateOpenRecent();
 
@@ -199,7 +195,6 @@ void MainWindow::openFile(QString fileName)
 				_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
 			}
 
-			_settings->setValue("lastfile", fileName);
 			openVideoFile(_doc->getVideoPath());
 		}
 	}
@@ -262,10 +257,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
 		int result = box.exec();
 		if(result == QMessageBox::Save)
 		{
-			if(saveStrip())
-				event->accept();
-			else
+			on_actionSave_triggered();
+			if(_needToSave)
 				event->ignore();
+			else
+				event->accept();
 		}
 		else if(result == QMessageBox::Cancel)
 			event->ignore();
@@ -276,24 +272,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 		event->accept();
 }
 
-bool MainWindow::saveStrip()
+void MainWindow::setCurrentStripFile(QString stripFile)
 {
-	hideMediaPanel();
-	QString stripName = _doc->getFilePath().split(".").first();
-
-	//If there is no current strip file, ask for a name
-	if(_currentStripFile == "")
-	{
-		_currentStripFile = QFileDialog::getSaveFileName(this, "Save...", stripName,"*.strip");
-		if(_currentStripFile != "")
-		{
-			return _doc->saveStrip(_currentStripFile, _strip->clock()->timeCode());
-		}
-		else
-			return false;
-	}
-	else
-		return _doc->saveStrip(_currentStripFile, _strip->clock()->timeCode());
+	_currentStripFile = stripFile;
+	this->setWindowTitle(stripFile);
+	_settings->setValue("lastFile", stripFile);
+	_settings->setValue("lastFolder", QFileInfo(stripFile).absolutePath());
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -578,25 +562,35 @@ void MainWindow::on_actionClear_list_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-	if(saveStrip())
-		ui->actionSave_as->setEnabled(true);
+	QFileInfo info(_currentStripFile);
+	if(!info.exists() || (info.suffix() != "strip"))
+		on_actionSave_as_triggered();
+	else if(!_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode()))
+		QMessageBox::critical(this, "", "Unable to save " + _currentStripFile);
 }
 
 void MainWindow::on_actionSave_as_triggered()
 {
 	hideMediaPanel();
 
-
-	//If there is no current strip file, ask for a name
-	if(_currentStripFile == "")
-	{
-		QString currentStripFile = QFileDialog::getSaveFileName(this, "Save...", _settings->value("lastFolder", QDir::homePath()).toString(),"*.strip");
-		if(currentStripFile != "")
-		{
-			_currentStripFile = currentStripFile;
-			_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode());
-		}
-	}
+	QString stripFile = _currentStripFile;
+	QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
+	// If there is no current strip file, ask for a name
+	if(stripFile == "")
+		stripFile = lastFolder;
 	else
-		_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode());
+	{
+		QFileInfo info(stripFile);
+		if(info.suffix() != "strip")
+			stripFile = lastFolder + "/" + info.completeBaseName() + ".strip";
+	}
+
+	stripFile = QFileDialog::getSaveFileName(this, "Save...", stripFile,"*.strip");
+	if(stripFile != "")
+	{
+		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode()))
+			setCurrentStripFile(stripFile);
+		else
+			QMessageBox::critical(this, "", "Unable to save " + stripFile);
+	}
 }
