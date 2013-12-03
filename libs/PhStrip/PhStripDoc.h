@@ -101,7 +101,7 @@ public:
      * @brief setVideoTimestamp
      * @param videoTimestamp
      */
-    void setVideoTimestamp(PhTimeCode videoTimestamp);
+    void setVideoTimestamp(PhFrame videoFramestamp);
     /**
      * @brief setVideoPath
      * @param videoPath
