@@ -4,8 +4,8 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
 	_settings(NULL),
 	_sony(NULL),
-	_tcText(&_hudFont, "00:00:00:00"),
-	_noVideoSyncError(&_hudFont, "No video sync")
+	_tcText(_strip.getHUDFont(), "00:00:00:00"),
+	_noVideoSyncError(_strip.getHUDFont(), "No video sync")
 {
 }
 
@@ -27,7 +27,6 @@ void VideoStripView::setSony(PhSonyController *sony)
 
 bool VideoStripView::init()
 {
-	_hudFont.setFontFile("/Library/Fonts/Arial.ttf");
 	_tcText.setColor(QColor(128, 128, 128));
 	_noVideoSyncError.setColor(QColor(0, 0, 0));
 
@@ -42,9 +41,9 @@ void VideoStripView::paint()
 		_sony->checkVideoSync();
 
 	float stripHeightRatio = 0.25f;
-	if(_settings){
+	if(_settings)
 		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
-	}
+
 	int stripHeight = this->height() * stripHeightRatio;
 	int videoHeight = this->height() - stripHeight;
 

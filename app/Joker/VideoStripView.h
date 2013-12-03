@@ -32,7 +32,6 @@ private:
 	PhSonyController *_sony;
 	QTime _lastVideoSyncElapsed;
 
-	PhFont _hudFont;
 	PhGraphicText _tcText, _noVideoSyncError;
 };
 
