@@ -600,7 +600,7 @@ bool MainWindow::checkSaveFile()
 {
 	if(_needToSave)
 	{
-		QString msg = "Joker is about to quit, would you save the modification ?";
+		QString msg = "Do you want to save your changes ?";
 		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
 		box.setDefaultButton(QMessageBox::Save);
 		switch(box.exec())
