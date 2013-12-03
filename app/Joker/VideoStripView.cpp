@@ -4,6 +4,7 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
 	_settings(NULL),
 	_sony(NULL),
+	_titleText(_strip.getHUDFont(), ""),
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
 	_nextTCText(_strip.getHUDFont(), "00:00:00:00"),
 	_noVideoSyncError(_strip.getHUDFont(), "No video sync")
@@ -28,6 +29,8 @@ void VideoStripView::setSony(PhSonyController *sony)
 
 bool VideoStripView::init()
 {
+	_titleBackgroundRect.setColor(QColor(0, 0, 128));
+	_titleText.setColor(QColor(255, 255, 255));
 	_tcText.setColor(QColor(128, 128, 128));
 	_nextTCText.setColor(QColor(128, 128, 128));
 	_noVideoSyncError.setColor(QColor(0, 0, 0));
@@ -42,14 +45,30 @@ void VideoStripView::paint()
 	if(_sony)
 		_sony->checkVideoSync();
 
+	int y = 0;
+	QString title = _strip.doc()->getTitle();
+	if(_settings->value("displayTitle", true).toBool() && (title.length() > 0))
+	{
+		int titleHeight = this->height() / 40;
+		_titleBackgroundRect.setRect(0, y, this->width(), titleHeight);
+		int titleWidth = title.length() * titleHeight / 2;
+		int titleX = (this->width() - titleWidth) / 2;
+		_titleText.setRect(titleX, y, titleWidth, titleHeight);
+		y += titleHeight;
+
+		_titleBackgroundRect.draw();
+		_titleText.setContent(title);
+		_titleText.draw();
+	}
+
 	float stripHeightRatio = 0.25f;
 	if(_settings)
 		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
 
-	int stripHeight = this->height() * stripHeightRatio;
-	int videoHeight = this->height() - stripHeight;
+	int stripHeight = (this->height() - y) * stripHeightRatio;
+	int videoHeight = this->height() - y - stripHeight;
 
-	_strip.draw(0, videoHeight, this->width(), stripHeight);
+	_strip.draw(0, y + videoHeight, this->width(), stripHeight);
 
 	int tcWidth = 200;
 
@@ -57,7 +76,7 @@ void VideoStripView::paint()
 	{
 		int videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
 		int videoX = (this->width() - videoWidth) / 2;
-		_videoEngine.drawVideo(videoX, 0, videoWidth, videoHeight);
+		_videoEngine.drawVideo(videoX, y, videoWidth, videoHeight);
 
 		// adjust tc position
 		tcWidth = videoX;
@@ -70,7 +89,7 @@ void VideoStripView::paint()
 
 	if(_settings->value("displayTC", true).toBool())
 	{
-		_tcText.setRect(0, 0, tcWidth, tcHeight);
+		_tcText.setRect(0, y, tcWidth, tcHeight);
 		_tcText.setContent(PhTimeCode::stringFromFrame(clockFrame, clock->timeCodeType()));
 		_tcText.draw();
 	}
@@ -81,7 +100,7 @@ void VideoStripView::paint()
 		if(nextTextFrame == PHFRAMEMAX)
 			nextTextFrame = _strip.doc()->getNextTextFrame(0);
 
-		_nextTCText.setRect(this->width() - tcWidth, 0, tcWidth, tcHeight);
+		_nextTCText.setRect(this->width() - tcWidth, y, tcWidth, tcHeight);
 		if(nextTextFrame < PHFRAMEMAX)
 		{
 			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextTextFrame, clock->timeCodeType()));
@@ -89,7 +108,7 @@ void VideoStripView::paint()
 		}
 	}
 
-	_noVideoSyncError.setRect(0, 50, 200, 50);
+	_noVideoSyncError.setRect(this->width() / 2 - 100, this->height() / 2 - 25, 200, 50);
 	if(_lastVideoSyncElapsed.elapsed() > 1000)
 	{
 		int red = (_lastVideoSyncElapsed.elapsed() - 1000) / 4;
