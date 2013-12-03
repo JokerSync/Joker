@@ -27,7 +27,7 @@ public:
 
 	void openFile(QString fileName);
 
-	bool openVideoFile(QString videoFileName);
+	bool openVideoFile(QString videoFile);
 
 protected:
 	bool eventFilter(QObject *, QEvent *event);

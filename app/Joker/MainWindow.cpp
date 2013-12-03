@@ -375,29 +375,28 @@ void MainWindow::on_actionOpen_Video_triggered()
 	{
 		_settings->setValue("lastFolder", dlg.directory().absolutePath());
 		QString videoFile = dlg.selectedFiles()[0];
-		_videoEngine->open(videoFile);
-		_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
-		_mediaPanel.setFirstFrame(_doc->getVideoTimestamp());
-		_mediaPanel.setMediaLength(_videoEngine->length());
-		_sonySlave.clock()->setFrame(_doc->getVideoTimestamp());
-		if(videoFile != _doc->getVideoPath())
-		{
-			_doc->setVideoPath(videoFile);
-			_needToSave = true;
-		}
+		if(openVideoFile(videoFile))
+			_strip->clock()->setFrame(_doc->getVideoTimestamp());
 	}
 
 	fadeInMediaPanel();
 }
 
-bool MainWindow::openVideoFile(QString videoFileName)
+bool MainWindow::openVideoFile(QString videoFile)
 {
-	QFileInfo fileInfo(videoFileName);
-	if (fileInfo.exists() && _videoEngine->open(videoFileName))
+	QFileInfo fileInfo(videoFile);
+	if (fileInfo.exists() && _videoEngine->open(videoFile))
 	{
 		_videoEngine->setFrameStamp(0);
 		_mediaPanel.setFirstFrame(0);
 		_mediaPanel.setMediaLength(_videoEngine->length());
+
+		if(videoFile != _doc->getVideoPath())
+		{
+			_doc->setVideoPath(videoFile);
+			_needToSave = true;
+		}
+
 		return true;
 	}
 	return false;
