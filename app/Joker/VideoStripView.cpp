@@ -49,11 +49,16 @@ void VideoStripView::paint()
 
 	_strip.draw(0, videoHeight, this->width(), stripHeight);
 
+	int tcWidth = 200;
+
 	if((_videoEngine.height() > 0) and (videoHeight > 0))
 	{
 		int videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
 		int videoX = (this->width() - videoWidth) / 2;
 		_videoEngine.drawVideo(videoX, 0, videoWidth, videoHeight);
+
+		// adjust tc position
+		tcWidth = videoX;
 	}
 
 	if(_settings && _settings->value("displayTC", true).toBool())
@@ -61,7 +66,7 @@ void VideoStripView::paint()
 		PhClock *clock = _videoEngine.clock();
 		long delay = (int)(_settings->value("delay", 0).toInt() * clock->rate()); // delay in ms
 		PhFrame clockFrame = clock->frame() + delay * PhTimeCode::getFps(clock->timeCodeType()) / 1000;
-		_tcText.setRect(0, 0, 200, 50);
+		_tcText.setRect(0, 0, tcWidth, tcWidth / 4);
 		_tcText.setContent(PhTimeCode::stringFromFrame(clockFrame, clock->timeCodeType()));
 		_tcText.draw();
 	}
