@@ -272,7 +272,7 @@ void MainWindow::on_actionOpen_triggered()
 
 	if(checkSaveFile())
 	{
-		QFileDialog dlg(this, "Open...", "", "Detx files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
+		QFileDialog dlg(this, "Open...", "", "DetX files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
 		dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
 
@@ -597,7 +597,7 @@ bool MainWindow::checkSaveFile()
 {
 	if(_needToSave)
 	{
-		QString msg = "Joker is about to quit, would you save the session to a Strip file ?";
+		QString msg = "Joker is about to quit, would you save the modification ?";
 		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
 		box.setDefaultButton(QMessageBox::Save);
 		switch(box.exec())
