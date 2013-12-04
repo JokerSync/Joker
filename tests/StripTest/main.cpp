@@ -22,10 +22,10 @@ int main(int argc, char *argv[])
 	{
 		// Open the DetX file in argument:
 		QString fileName(argv[1]);
-		doc.openDetX(fileName);
+		doc.importDetX(fileName);
 	}
 	else
-		doc.createDoc("test", 3, 3, 9, 3, 0);
+		doc.createDoc("test", 3, 9, 3, 0);
 
 	// Display the title:
 	PHDEBUG << "title : " << doc.getTitle();

@@ -63,6 +63,13 @@ void PhStripDocTest::openDetXOffTest()
 #warning TODO more test
 }
 
+void PhStripDocTest::getPeopleByNameTest()
+{
+	QCOMPARE(_doc.getPeopleByName("Jeanne")->getName(), QString("Jeanne"));
+	QCOMPARE(_doc.getPeopleByName("Sue")->getName(), QString("Sue"));
+	QVERIFY(_doc.getPeopleByName("Bob") == NULL);
+}
+
 void PhStripDocTest::getPreviousElementFrameTest()
 {
 	QCOMPARE(_doc.getPreviousElementFrame(s2f("23:00:00:00")), s2f("01:00:15:00"));
@@ -77,6 +84,26 @@ void PhStripDocTest::getNextElementFrameTest()
 	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:01:00")), s2f("01:00:02:00"));
 	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:02:00")), s2f("01:00:05:00"));
 	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:17:00")), PHFRAMEMAX);
+}
+
+void PhStripDocTest::getNextTextTest()
+{
+	QVERIFY(_doc.getNextText(s2f("00:00:00:00"))->getTimeIn() == s2f("01:00:02:00"));
+	QVERIFY(_doc.getNextText(s2f("01:00:02:00"))->getTimeIn() == s2f("01:00:05:00"));
+	QVERIFY(_doc.getNextText(s2f("01:00:05:00"))->getTimeIn() == s2f("01:00:06:00"));
+	QVERIFY(_doc.getNextText(s2f("01:00:06:00"))->getTimeIn() == s2f("01:00:12:00"));
+	QVERIFY(_doc.getNextText(s2f("01:00:12:00"))->getTimeIn() == s2f("01:00:15:00"));
+	QVERIFY(_doc.getNextText(s2f("01:00:15:00")) == NULL);
+}
+
+void PhStripDocTest::getNextTextTestByPeople()
+{
+	PhPeople* sue = _doc.getPeopleByName("Sue");
+
+	QVERIFY(_doc.getNextText(s2f("00:00:00:00"), sue)->getTimeIn() == s2f("01:00:05:00"));
+	QVERIFY(_doc.getNextText(s2f("01:00:05:00"), sue)->getTimeIn() == s2f("01:00:06:00"));
+	QVERIFY(_doc.getNextText(s2f("01:00:06:00"), sue)->getTimeIn() == s2f("01:00:15:00"));
+	QVERIFY(_doc.getNextText(s2f("01:00:15:00"), sue) == NULL);
 }
 
 QString PhStripDocTest::f2s(PhFrame frame)

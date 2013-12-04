@@ -389,6 +389,44 @@ int PhStripDoc::getNbTexts()
 	return _nbTexts;
 }
 
+PhPeople *PhStripDoc::getPeopleByName(QString name)
+{
+	foreach(PhPeople* people, _peoples)
+	{
+		if(people->getName() == name)
+			return people;
+	}
+	return NULL;
+}
+
+PhStripText *PhStripDoc::getNextText(PhFrame frame)
+{
+	PhStripText * result = NULL;
+	foreach(PhStripText* text, _texts)
+	{
+		if(text->getTimeIn() > frame)
+		{
+			if(!result || (text->getTimeIn() < result->getTimeIn()) )
+				result = text;
+		}
+	}
+	return result;
+}
+
+PhStripText *PhStripDoc::getNextText(PhFrame frame, PhPeople *people)
+{
+	PhStripText * result = NULL;
+	foreach(PhStripText* text, _texts)
+	{
+		if((text->getPeople() == people) && (text->getTimeIn() > frame))
+		{
+			if(!result || (text->getTimeIn() < result->getTimeIn()) )
+				result = text;
+		}
+	}
+	return result;
+}
+
 PhFrame PhStripDoc::getPreviousTextFrame(PhFrame frame)
 {
 	PhFrame previousTextFrame = PHFRAMEMIN;
