@@ -39,6 +39,7 @@ private:
 	PhGraphicText _tcText;
 	PhGraphicText _nextTCText;
 	PhGraphicText _noVideoSyncError;
+	PhGraphicText _currentPeopleName;
 
 	PhPeople* _currentPeople;
 };
