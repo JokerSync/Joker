@@ -8,8 +8,7 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
 	_nextTCText(_strip.getHUDFont(), "00:00:00:00"),
 	_noVideoSyncError(_strip.getHUDFont(), "No video sync"),
-	_currentPeopleName(_strip.getHUDFont(), ""),
-	_currentPeople(NULL)
+	_currentPeopleName(_strip.getHUDFont(), "")
 {
 }
 
@@ -29,9 +28,9 @@ void VideoStripView::setSony(PhSonyController *sony)
 	}
 }
 
-void VideoStripView::setPeople(PhPeople *people)
+QList<PhPeople *> *VideoStripView::getSelectedPeoples()
 {
-	_currentPeople = people;
+	return &_selectedPeoples;
 }
 
 bool VideoStripView::init()
@@ -107,17 +106,21 @@ void VideoStripView::paint()
 		PhStripText *nextText = NULL;
 
 		_nextTCText.setRect(this->width() - tcWidth, y, tcWidth, tcHeight);
+		y += tcHeight;
 
-		if(_currentPeople)
+		if(_selectedPeoples.count())
 		{
-			nextText = _strip.doc()->getNextText(clockFrame, _currentPeople);
+			nextText = _strip.doc()->getNextText(clockFrame, _selectedPeoples);
 			if(nextText == NULL)
-				nextText = _strip.doc()->getNextText(0, _currentPeople);
+				nextText = _strip.doc()->getNextText(0, _selectedPeoples);
 
-			int peopleNameWidth = _currentPeople->getName().length() * tcHeight / 2;
-			_currentPeopleName.setRect(this->width() - peopleNameWidth, y + tcHeight, peopleNameWidth, tcHeight);
-			_currentPeopleName.setContent(_currentPeople->getName());
-			_currentPeopleName.draw();
+			foreach (PhPeople* people, _selectedPeoples) {
+				int peopleNameWidth = people->getName().length() * tcHeight / 2;
+				_currentPeopleName.setRect(this->width() - peopleNameWidth, y, peopleNameWidth, tcHeight);
+				_currentPeopleName.setContent(people->getName());
+				_currentPeopleName.draw();
+				y += tcHeight;
+			}
 		}
 		else
 		{
