@@ -13,16 +13,21 @@ class PeopleDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit PeopleDialog(QWidget *parent, PhStripDoc* doc);
-
-	PhPeople* selectedPeople();
+	explicit PeopleDialog(QWidget *parent, PhStripDoc* doc, QList<PhPeople*>* peopleList);
 
 	~PeopleDialog();
+
+private slots:
+	void on_peopleList_itemSelectionChanged();
+
+	void on_buttonBox_rejected();
 
 private:
 	Ui::PeopleDialog *ui;
 
 	PhStripDoc* _doc;
+	QList<PhPeople*> *_peopleList;
+	QList<PhPeople*> _oldPeopleList;
 };
 
 #endif // PEOPLEDIALOG_H

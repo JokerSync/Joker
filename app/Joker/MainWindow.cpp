@@ -621,8 +621,7 @@ void MainWindow::on_actionSelect_character_triggered()
 {
 	hideMediaPanel();
 
-	PeopleDialog dlg(this, _doc);
+	PeopleDialog dlg(this, _doc, ui->videoStripView->getSelectedPeoples());
 
-	if(dlg.exec() == QDialog::Accepted)
-		ui->videoStripView->setPeople(dlg.selectedPeople());
+	dlg.exec();
 }

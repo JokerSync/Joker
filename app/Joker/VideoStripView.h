@@ -19,7 +19,7 @@ public:
 	PhVideoEngine * videoEngine() { return &_videoEngine;}
 	PhGraphicStrip * strip() { return &_strip;}
 	void setSony(PhSonyController * sony);
-	void setPeople(PhPeople* people);
+	QList<PhPeople*>* getSelectedPeoples();
 
 protected:
 	bool init();
@@ -41,7 +41,7 @@ private:
 	PhGraphicText _noVideoSyncError;
 	PhGraphicText _currentPeopleName;
 
-	PhPeople* _currentPeople;
+	QList<PhPeople*> _selectedPeoples;
 };
 
 #endif // VIDEOSTRIPVIEW_H
