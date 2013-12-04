@@ -216,6 +216,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			trackFull[i] = false;
 		}
 
+		bool displayNextText = _settings->value("displayNextText", true).toBool();
+
 		foreach(PhStripText * text, _doc.getTexts())
 		{
 			PhGraphicText* gText = _graphicTexts[text];
@@ -288,7 +290,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			// Displaying text prediction only if the following conditions are true:
 			// - The track is empty;
 			// - It refers to a texts about to be displayed
-			if(_settings->value("displayNextText", true).toBool() && trackFull[track] == false && (frameIn < text->getTimeOut()))
+			if(displayNextText && trackFull[track] == false && (frameIn < text->getTimeOut()))
 			{
 				PhPeople * people = text->getPeople();
 				PhGraphicText * gPeople = _graphicPeoples[people];
