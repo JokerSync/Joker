@@ -8,6 +8,7 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
 	_nextTCText(_strip.getHUDFont(), "00:00:00:00"),
 	_noVideoSyncError(_strip.getHUDFont(), "No video sync"),
+	_currentPeopleName(_strip.getHUDFont(), ""),
 	_currentPeople(NULL)
 {
 }
@@ -40,6 +41,7 @@ bool VideoStripView::init()
 	_tcText.setColor(QColor(128, 128, 128));
 	_nextTCText.setColor(QColor(128, 128, 128));
 	_noVideoSyncError.setColor(QColor(0, 0, 0));
+	_currentPeopleName.setColor(QColor(128, 128, 128));
 
 	return _strip.init();
 }
@@ -104,11 +106,18 @@ void VideoStripView::paint()
 	{
 		PhStripText *nextText = NULL;
 
+		_nextTCText.setRect(this->width() - tcWidth, y, tcWidth, tcHeight);
+
 		if(_currentPeople)
 		{
 			nextText = _strip.doc()->getNextText(clockFrame, _currentPeople);
 			if(nextText == NULL)
 				nextText = _strip.doc()->getNextText(0, _currentPeople);
+
+			int peopleNameWidth = _currentPeople->getName().length() * tcHeight / 2;
+			_currentPeopleName.setRect(this->width() - peopleNameWidth, y + tcHeight, peopleNameWidth, tcHeight);
+			_currentPeopleName.setContent(_currentPeople->getName());
+			_currentPeopleName.draw();
 		}
 		else
 		{
@@ -117,7 +126,6 @@ void VideoStripView::paint()
 				nextText = _strip.doc()->getNextText(0);
 		}
 
-		_nextTCText.setRect(this->width() - tcWidth, y, tcWidth, tcHeight);
 		if(nextText != NULL)
 		{
 			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextText->getTimeIn(), clock->timeCodeType()));
