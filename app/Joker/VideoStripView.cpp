@@ -7,7 +7,8 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	_titleText(_strip.getHUDFont(), ""),
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
 	_nextTCText(_strip.getHUDFont(), "00:00:00:00"),
-	_noVideoSyncError(_strip.getHUDFont(), "No video sync")
+	_noVideoSyncError(_strip.getHUDFont(), "No video sync"),
+	_currentPeople(NULL)
 {
 }
 
@@ -25,6 +26,11 @@ void VideoStripView::setSony(PhSonyController *sony)
 		connect(_sony, SIGNAL(videoSync()), this, SLOT(onVideoSync()));
 		_lastVideoSyncElapsed.start();
 	}
+}
+
+void VideoStripView::setPeople(PhPeople *people)
+{
+	_currentPeople = people;
 }
 
 bool VideoStripView::init()
@@ -96,14 +102,25 @@ void VideoStripView::paint()
 
 	if(_settings->value("displayNextTC", true).toBool())
 	{
-		PhFrame nextTextFrame = _strip.doc()->getNextTextFrame(clockFrame);
-		if(nextTextFrame == PHFRAMEMAX)
-			nextTextFrame = _strip.doc()->getNextTextFrame(0);
+		PhStripText *nextText = NULL;
+
+		if(_currentPeople)
+		{
+			nextText = _strip.doc()->getNextText(clockFrame, _currentPeople);
+			if(nextText == NULL)
+				nextText = _strip.doc()->getNextText(0, _currentPeople);
+		}
+		else
+		{
+			nextText = _strip.doc()->getNextText(clockFrame);
+			if(nextText == NULL)
+				nextText = _strip.doc()->getNextText(0);
+		}
 
 		_nextTCText.setRect(this->width() - tcWidth, y, tcWidth, tcHeight);
-		if(nextTextFrame < PHFRAMEMAX)
+		if(nextText != NULL)
 		{
-			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextTextFrame, clock->timeCodeType()));
+			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextText->getTimeIn(), clock->timeCodeType()));
 			_nextTCText.draw();
 		}
 	}
