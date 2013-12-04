@@ -104,6 +104,8 @@ private slots:
 
 	void on_actionSave_as_triggered();
 
+	void on_actionSelect_character_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	PhGraphicStrip * _strip;

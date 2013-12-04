@@ -12,6 +12,7 @@
 #include "PhCommonUI/PhFontDialog.h"
 #include "AboutMenu.h"
 #include "PreferencesDialog.h"
+#include "PeopleDialog.h"
 
 MainWindow::MainWindow(QSettings *settings) :
 	QMainWindow(NULL),
@@ -614,4 +615,14 @@ bool MainWindow::checkSaveFile()
 		}
 	}
 	return true;
+}
+
+void MainWindow::on_actionSelect_character_triggered()
+{
+	hideMediaPanel();
+
+	PeopleDialog dlg(this, _doc);
+
+	if(dlg.exec() == QDialog::Accepted)
+		ui->videoStripView->setPeople(dlg.selectedPeople());
 }

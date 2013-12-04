@@ -19,6 +19,8 @@ public:
 	PhVideoEngine * videoEngine() { return &_videoEngine;}
 	PhGraphicStrip * strip() { return &_strip;}
 	void setSony(PhSonyController * sony);
+	void setPeople(PhPeople* people);
+
 protected:
 	bool init();
 	void paint();
@@ -37,6 +39,8 @@ private:
 	PhGraphicText _tcText;
 	PhGraphicText _nextTCText;
 	PhGraphicText _noVideoSyncError;
+
+	PhPeople* _currentPeople;
 };
 
 #endif // VIDEOSTRIPVIEW_H

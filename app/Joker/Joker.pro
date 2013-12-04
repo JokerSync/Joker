@@ -43,6 +43,7 @@ SOURCES += main.cpp \
     AboutMenu.cpp \
     PreferencesDialog.cpp \
 	PropertyDialog.cpp \
+    PeopleDialog.cpp
 
 
 HEADERS += \
@@ -52,12 +53,14 @@ HEADERS += \
     AboutMenu.h \
     PreferencesDialog.h \
 	PropertyDialog.h \
+    PeopleDialog.h
 
 FORMS += \
     MainWindow.ui \
     AboutMenu.ui \
     PreferencesDialog.ui \
 	PropertyDialog.ui \
+    PeopleDialog.ui
 
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
 
