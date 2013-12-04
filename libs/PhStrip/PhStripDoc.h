@@ -126,6 +126,12 @@ public:
 
     int getNbTexts();
 
+	PhPeople * getPeopleByName(QString name);
+
+	PhStripText * getNextText(PhFrame frame);
+
+	PhStripText * getNextText(PhFrame frame, PhPeople *people);
+
 	PhFrame getPreviousTextFrame(PhFrame frame);
 
 	PhFrame getPreviousLoopFrame(PhFrame frame);
