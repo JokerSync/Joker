@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
 	QMap<QString, PhPeople *> list_actors = doc.getPeoples();
 	QMap<QString, PhPeople *>::iterator people;
 	PHDEBUG <<"--------- actors ---------";
+	PHDEBUG << list_actors.count();
 	for( people=list_actors.begin(); people!=list_actors.end() ; people++)
 	{
 		PHDEBUG << (*people)->getName();

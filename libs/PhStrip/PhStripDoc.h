@@ -132,6 +132,8 @@ public:
 
 	PhStripText * getNextText(PhFrame frame, PhPeople *people);
 
+	PhStripText * getNextText(PhFrame frame, QList<PhPeople*> peopleList);
+
 	PhFrame getPreviousTextFrame(PhFrame frame);
 
 	PhFrame getPreviousLoopFrame(PhFrame frame);

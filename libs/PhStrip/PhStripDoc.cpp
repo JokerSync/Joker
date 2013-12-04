@@ -427,6 +427,20 @@ PhStripText *PhStripDoc::getNextText(PhFrame frame, PhPeople *people)
 	return result;
 }
 
+PhStripText *PhStripDoc::getNextText(PhFrame frame, QList<PhPeople *> peopleList)
+{
+	PhStripText * result = NULL;
+	foreach(PhStripText* text, _texts)
+	{
+		if(peopleList.contains(text->getPeople()) && (text->getTimeIn() > frame))
+		{
+			if(!result || (text->getTimeIn() < result->getTimeIn()) )
+				result = text;
+		}
+	}
+	return result;
+}
+
 PhFrame PhStripDoc::getPreviousTextFrame(PhFrame frame)
 {
 	PhFrame previousTextFrame = PHFRAMEMIN;
