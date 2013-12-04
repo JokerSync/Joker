@@ -27,6 +27,7 @@ private slots:
 	void getNextElementFrameTest();
 	void getNextTextTest();
 	void getNextTextTestByPeople();
+	void getNextTextTestByPeopleList();
 
 private:
 	QString f2s(PhFrame frame);
