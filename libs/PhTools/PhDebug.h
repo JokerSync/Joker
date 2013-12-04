@@ -38,6 +38,8 @@ public:
 
 	static QString logLocation();
 
+	static void showConsole(bool show);
+
 private:
 	static void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
