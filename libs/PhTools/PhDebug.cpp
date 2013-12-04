@@ -37,6 +37,11 @@ QString PhDebug::logLocation()
 	return d->_logLocation;
 }
 
+void PhDebug::showConsole(bool show)
+{
+	d->_showConsole = show;
+}
+
 
 // Called if init() was forget
 PhDebug PhDebug::instance(int logLevelMessage)
