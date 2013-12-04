@@ -49,8 +49,8 @@ void VideoStripView::paint()
 {
 	PHDBG(1);
 
-	if(_sony)
-		_sony->checkVideoSync();
+//	if(_sony)
+//		_sony->checkVideoSync();
 
 	int y = 0;
 	QString title = _strip.doc()->getTitle();
