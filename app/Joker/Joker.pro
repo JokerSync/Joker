@@ -37,7 +37,7 @@ include(../../libs/PhSync/PhSync.pri)
 
 #Main app
 SOURCES += main.cpp \
-	MainWindow.cpp \
+	JokerWindow.cpp \
 	VideoStripView.cpp \
 	SonyVideoStripSynchronizer.cpp \
     AboutMenu.cpp \
@@ -47,7 +47,7 @@ SOURCES += main.cpp \
 
 
 HEADERS += \
-    MainWindow.h \
+    JokerWindow.h \
 	VideoStripView.h \
 	SonyVideoStripSynchronizer.h \
     AboutMenu.h \
@@ -56,7 +56,7 @@ HEADERS += \
     PeopleDialog.h
 
 FORMS += \
-    MainWindow.ui \
+    JokerWindow.ui \
     AboutMenu.ui \
     PreferencesDialog.ui \
 	PropertyDialog.ui \

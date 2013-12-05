@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef JOKERWINDOW_H
+#define JOKERWINDOW_H
 
 #include <QMainWindow>
 #include <QMessageBox>
@@ -14,16 +14,16 @@
 #include "PropertyDialog.h"
 
 namespace Ui {
-class MainWindow;
+class JokerWindow;
 }
 
-class MainWindow : public QMainWindow
+class JokerWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QSettings *settings);
-	~MainWindow();
+	explicit JokerWindow(QSettings *settings);
+	~JokerWindow();
 
 	void openFile(QString fileName);
 
@@ -107,7 +107,7 @@ private slots:
 	void on_actionSelect_character_triggered();
 
 private:
-	Ui::MainWindow *ui;
+	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;
 	PhVideoEngine * _videoEngine;
 	PhStripDoc *_doc;

@@ -1,5 +1,5 @@
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "JokerWindow.h"
+#include "ui_JokerWindow.h"
 
 #include <QFileDialog>
 #include <QFontDialog>
@@ -14,9 +14,9 @@
 #include "PreferencesDialog.h"
 #include "PeopleDialog.h"
 
-MainWindow::MainWindow(QSettings *settings) :
+JokerWindow::JokerWindow(QSettings *settings) :
 	QMainWindow(NULL),
-	ui(new Ui::MainWindow),
+	ui(new Ui::JokerWindow),
 	_settings(settings),
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
@@ -89,12 +89,12 @@ MainWindow::MainWindow(QSettings *settings) :
 
 }
 
-MainWindow::~MainWindow()
+JokerWindow::~JokerWindow()
 {
 	delete ui;
 }
 
-void MainWindow::openRecent()
+void JokerWindow::openRecent()
 {
 	if(!checkSaveFile())
 		return;
@@ -103,7 +103,7 @@ void MainWindow::openRecent()
 	openFile(sender()->objectName());
 }
 
-void MainWindow::updateOpenRecent()
+void JokerWindow::updateOpenRecent()
 {
 	if(!ui->menuOpen_recent->isEnabled())
 		ui->menuOpen_recent->setEnabled(true);
@@ -146,7 +146,7 @@ void MainWindow::updateOpenRecent()
 	_settings->endGroup();
 }
 
-void MainWindow::setupOpenRecentMenu()
+void JokerWindow::setupOpenRecentMenu()
 {
 	// Open the settings group of recent files
 	_settings->beginGroup("openRecent");
@@ -170,7 +170,7 @@ void MainWindow::setupOpenRecentMenu()
 
 }
 
-void MainWindow::openFile(QString fileName)
+void JokerWindow::openFile(QString fileName)
 {
 	hideMediaPanel();
 
@@ -200,7 +200,7 @@ void MainWindow::openFile(QString fileName)
 	}
 }
 
-bool MainWindow::eventFilter(QObject *, QEvent *event)
+bool JokerWindow::eventFilter(QObject *, QEvent *event)
 {
 	switch (event->type())
 	{
@@ -253,13 +253,13 @@ bool MainWindow::eventFilter(QObject *, QEvent *event)
 	return false;
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void JokerWindow::closeEvent(QCloseEvent *event)
 {
 	if(!checkSaveFile())
 		event->ignore();
 }
 
-void MainWindow::setCurrentStripFile(QString stripFile)
+void JokerWindow::setCurrentStripFile(QString stripFile)
 {
 	_currentStripFile = stripFile;
 	this->setWindowTitle(stripFile);
@@ -269,7 +269,7 @@ void MainWindow::setCurrentStripFile(QString stripFile)
 	updateOpenRecent();
 }
 
-void MainWindow::on_actionOpen_triggered()
+void JokerWindow::on_actionOpen_triggered()
 {
 	hideMediaPanel();
 
@@ -291,7 +291,7 @@ void MainWindow::on_actionOpen_triggered()
 	fadeInMediaPanel();
 }
 
-void MainWindow::on_actionPlay_pause_triggered()
+void JokerWindow::on_actionPlay_pause_triggered()
 {
 	if(_strip->clock()->rate() == 0.0)
 		_strip->clock()->setRate(1.0);
@@ -299,71 +299,71 @@ void MainWindow::on_actionPlay_pause_triggered()
 		_strip->clock()->setRate(0.0);
 }
 
-void MainWindow::on_actionPlay_backward_triggered()
+void JokerWindow::on_actionPlay_backward_triggered()
 {
 	_strip->clock()->setRate(-1.0);
 }
 
-void MainWindow::on_actionStep_forward_triggered()
+void JokerWindow::on_actionStep_forward_triggered()
 {
 	_strip->clock()->setRate(0.0);
 	_strip->clock()->setFrame(_strip->clock()->frame() + 1);
 }
 
-void MainWindow::on_actionStep_backward_triggered()
+void JokerWindow::on_actionStep_backward_triggered()
 {
 	_strip->clock()->setRate(0.0);
 	_strip->clock()->setFrame(_strip->clock()->frame() - 1);
 }
 
-void MainWindow::on_actionStep_time_forward_triggered()
+void JokerWindow::on_actionStep_time_forward_triggered()
 {
 	_strip->clock()->setRate(0.0);
 	_strip->clock()->setTime(_strip->clock()->time() + 1);
 }
 
-void MainWindow::on_actionStep_time_backward_triggered()
+void JokerWindow::on_actionStep_time_backward_triggered()
 {
 	_strip->clock()->setRate(0.0);
 	_strip->clock()->setTime(_strip->clock()->time() - 1);
 }
 
-void MainWindow::on_action_3_triggered()
+void JokerWindow::on_action_3_triggered()
 {
 	_strip->clock()->setRate(-3.0);
 }
 
-void MainWindow::on_action_1_triggered()
+void JokerWindow::on_action_1_triggered()
 {
 	_strip->clock()->setRate(-1.0);
 }
 
-void MainWindow::on_action_0_5_triggered()
+void JokerWindow::on_action_0_5_triggered()
 {
 	_strip->clock()->setRate(-0.5);
 }
 
-void MainWindow::on_action0_triggered()
+void JokerWindow::on_action0_triggered()
 {
 	_strip->clock()->setRate(0.0);
 }
 
-void MainWindow::on_action0_5_triggered()
+void JokerWindow::on_action0_5_triggered()
 {
 	_strip->clock()->setRate(0.5);
 }
 
-void MainWindow::on_action1_triggered()
+void JokerWindow::on_action1_triggered()
 {
 	_strip->clock()->setRate(1.0);
 }
 
-void MainWindow::on_action3_triggered()
+void JokerWindow::on_action3_triggered()
 {
 	_strip->clock()->setRate(3.0);
 }
 
-void MainWindow::on_actionOpen_Video_triggered()
+void JokerWindow::on_actionOpen_Video_triggered()
 {
 	hideMediaPanel();
 
@@ -379,7 +379,7 @@ void MainWindow::on_actionOpen_Video_triggered()
 	fadeInMediaPanel();
 }
 
-bool MainWindow::openVideoFile(QString videoFile)
+bool JokerWindow::openVideoFile(QString videoFile)
 {
 	QFileInfo lastFileInfo(_doc->getVideoPath());
 	QFileInfo fileInfo(videoFile);
@@ -415,7 +415,7 @@ bool MainWindow::openVideoFile(QString videoFile)
 	return false;
 }
 
-void MainWindow::on_actionChange_timestamp_triggered()
+void JokerWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();
 
@@ -435,7 +435,7 @@ void MainWindow::on_actionChange_timestamp_triggered()
 
 
 
-void MainWindow::on_actionAbout_triggered()
+void JokerWindow::on_actionAbout_triggered()
 {
 	hideMediaPanel();
 
@@ -446,7 +446,7 @@ void MainWindow::on_actionAbout_triggered()
 }
 
 
-void MainWindow::on_actionPreferences_triggered()
+void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
 
@@ -455,7 +455,7 @@ void MainWindow::on_actionPreferences_triggered()
 	fadeInMediaPanel();
 }
 
-void MainWindow::fadeInMediaPanel()
+void JokerWindow::fadeInMediaPanel()
 {
 	_mediaPanel.show();
 	_mediaPanelAnimation.stop();
@@ -467,7 +467,7 @@ void MainWindow::fadeInMediaPanel()
 	_mediaPanelTimer.start(3000);
 }
 
-void MainWindow::fadeOutMediaPanel()
+void JokerWindow::fadeOutMediaPanel()
 {
 	PHDEBUG << _mediaPanelState;
 	switch(_mediaPanelState)
@@ -488,7 +488,7 @@ void MainWindow::fadeOutMediaPanel()
 	}
 }
 
-void MainWindow::hideMediaPanel()
+void JokerWindow::hideMediaPanel()
 {
 	_mediaPanel.hide();
 	_mediaPanelState = MediaPanelHidden;
@@ -496,12 +496,12 @@ void MainWindow::hideMediaPanel()
 }
 
 
-void MainWindow::on_actionProperties_triggered()
+void JokerWindow::on_actionProperties_triggered()
 {
 	_propertyDialog.show();
 }
 
-void MainWindow::on_actionTest_mode_triggered()
+void JokerWindow::on_actionTest_mode_triggered()
 {
 	if(_settings->value("stripTestMode", false).toBool())
 		_settings->setValue("stripTestMode", false);
@@ -509,7 +509,7 @@ void MainWindow::on_actionTest_mode_triggered()
 		_settings->setValue("stripTestMode", true);
 }
 
-void MainWindow::on_actionTimecode_triggered()
+void JokerWindow::on_actionTimecode_triggered()
 {
 	hideMediaPanel();
 
@@ -520,21 +520,21 @@ void MainWindow::on_actionTimecode_triggered()
 	fadeInMediaPanel();
 }
 
-void MainWindow::on_actionNext_element_triggered()
+void JokerWindow::on_actionNext_element_triggered()
 {
 	PhFrame frame = _doc->getNextElementFrame(_strip->clock()->frame());
 	if(frame < PHFRAMEMAX)
 		_strip->clock()->setFrame(frame);
 }
 
-void MainWindow::on_actionPrevious_element_triggered()
+void JokerWindow::on_actionPrevious_element_triggered()
 {
 	PhFrame frame = _doc->getPreviousElementFrame(_strip->clock()->frame());
 	if(frame > PHFRAMEMIN)
 		_strip->clock()->setFrame(frame);
 }
 
-void MainWindow::on_actionClear_list_triggered()
+void JokerWindow::on_actionClear_list_triggered()
 {
 	//Open the recent group
 	_settings->beginGroup("openRecent");
@@ -563,7 +563,7 @@ void MainWindow::on_actionClear_list_triggered()
 	ui->menuOpen_recent->setEnabled(false);
 }
 
-void MainWindow::on_actionSave_triggered()
+void JokerWindow::on_actionSave_triggered()
 {
 	QFileInfo info(_currentStripFile);
 	if(!info.exists() || (info.suffix() != "strip"))
@@ -574,7 +574,7 @@ void MainWindow::on_actionSave_triggered()
 		QMessageBox::critical(this, "", "Unable to save " + _currentStripFile);
 }
 
-void MainWindow::on_actionSave_as_triggered()
+void JokerWindow::on_actionSave_as_triggered()
 {
 	hideMediaPanel();
 
@@ -603,7 +603,7 @@ void MainWindow::on_actionSave_as_triggered()
 	}
 }
 
-bool MainWindow::checkSaveFile()
+bool JokerWindow::checkSaveFile()
 {
 	if(_needToSave)
 	{
@@ -624,7 +624,7 @@ bool MainWindow::checkSaveFile()
 	return true;
 }
 
-void MainWindow::on_actionSelect_character_triggered()
+void JokerWindow::on_actionSelect_character_triggered()
 {
 	hideMediaPanel();
 
