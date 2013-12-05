@@ -36,10 +36,11 @@ bool MainView::openFile(QString fileName)
 		{
 			this->setWindowTitle(fileName);
 			_mediaPanelDialog.setMediaLength(_videoEngine.length());
-#warning TODO read first frame from video file
-			_mediaPanelDialog.setFirstFrame(0);
 
-			_videoEngine.clock()->setFrame(0);
+			PhFrame frameStamp = _videoEngine.frameStamp();
+			_mediaPanelDialog.setFirstFrame(frameStamp);
+
+			_videoEngine.clock()->setFrame(frameStamp);
 			//_videoEngine.clock()->setRate(1.0);
 			_settings->setValue("lastVideoFile", fileName);
 			return true;

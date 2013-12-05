@@ -8,7 +8,6 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 	QSettings settings("Phonations", "VideoTest");
 
-	PhDebug::init(false, true, true, true, true, true, 1, "VideoTest");
 	MainView mainView(&settings);
 	mainView.resize(800, 600);
 

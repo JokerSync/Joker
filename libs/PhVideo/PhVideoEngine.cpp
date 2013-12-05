@@ -37,6 +37,9 @@ bool PhVideoEngine::open(QString fileName)
 
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
 
+	_frameStamp = 0;
+	_videoStream = NULL;
+
 	// Find video stream :
 	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++)
 	{
@@ -49,6 +52,14 @@ bool PhVideoEngine::open(QString fileName)
 
 	if(_videoStream == NULL)
 		return false;
+
+	// Reading timestamp :
+	AVDictionaryEntry *tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+	if(tag)
+	{
+		PHDEBUG << "Found timestamp:" << tag->value;
+		_frameStamp = PhTimeCode::frameFromString(tag->value, _clock.timeCodeType());
+	}
 
 	_pCodecContext = _videoStream->codec;
 
