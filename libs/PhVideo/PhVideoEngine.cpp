@@ -54,7 +54,10 @@ bool PhVideoEngine::open(QString fileName)
 		return false;
 
 	// Reading timestamp :
-	AVDictionaryEntry *tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+	AVDictionaryEntry *tag = av_dict_get(_pFormatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+	if(tag == NULL)
+		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+
 	if(tag)
 	{
 		PHDEBUG << "Found timestamp:" << tag->value;
