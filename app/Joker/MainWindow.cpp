@@ -181,8 +181,6 @@ void MainWindow::openFile(QString fileName)
 		{
 			setCurrentStripFile(fileName);
 
-			updateOpenRecent();
-
 			// Opening the corresponding video file if it exists
 			if(openVideoFile(_doc->getVideoPath()))
 			{
@@ -267,6 +265,8 @@ void MainWindow::setCurrentStripFile(QString stripFile)
 	this->setWindowTitle(stripFile);
 	_settings->setValue("lastFile", stripFile);
 	_settings->setValue("lastFolder", QFileInfo(stripFile).absolutePath());
+
+	updateOpenRecent();
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -385,22 +385,29 @@ bool MainWindow::openVideoFile(QString videoFile)
 	QFileInfo fileInfo(videoFile);
 	if (fileInfo.exists() && _videoEngine->open(videoFile))
 	{
-		PhFrame frameStamp = _doc->getVideoTimestamp();
+		PhFrame frameStamp = _videoEngine->frameStamp();
 
-		_videoEngine->setFrameStamp(frameStamp);
 		_mediaPanel.setFirstFrame(frameStamp);
 		_mediaPanel.setMediaLength(_videoEngine->length());
 
 		if(videoFile != _doc->getVideoPath())
 		{
 			_doc->setVideoPath(videoFile);
+			if(frameStamp > 0)
+				_doc->setVideoTimestamp(frameStamp);
 			_needToSave = true;
 		}
 
-		_videoEngine->clock()->setFrame(frameStamp);
+		if(frameStamp == 0)
+		{
+			frameStamp = _doc->getVideoTimestamp();
+			_videoEngine->setFrameStamp(frameStamp);
+			_videoEngine->clock()->setFrame(frameStamp);
+			if(fileInfo.fileName() != lastFileInfo.fileName())
+				on_actionChange_timestamp_triggered();
+		}
 
-		if(fileInfo.fileName() != lastFileInfo.fileName())
-			on_actionChange_timestamp_triggered();
+		_videoEngine->clock()->setFrame(frameStamp);
 
 		_settings->setValue("lastVideoFolder", fileInfo.absolutePath());
 		return true;
