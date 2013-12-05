@@ -10,7 +10,7 @@
 
 #include "PhStrip/PhStripDoc.h"
 
-#include "MainWindow.h"
+#include "JokerWindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
 	QApplication a(argc, argv);
 
-	MainWindow w(&settings);
+	JokerWindow w(&settings);
 
 	w.show();
 
