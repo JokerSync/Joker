@@ -64,6 +64,17 @@ bool PhVideoEngine::open(QString fileName)
 		_frameStamp = PhTimeCode::frameFromString(tag->value, _clock.timeCodeType());
 	}
 
+	// Looking for timecode type
+	float fps = this->framePerSecond();
+	if(fps < 24)
+		_clock.setTimeCodeType(PhTimeCodeType2398);
+	else if (fps < 24.5f)
+		_clock.setTimeCodeType(PhTimeCodeType24);
+	else if (fps < 26)
+		_clock.setTimeCodeType(PhTimeCodeType25);
+	else
+		_clock.setTimeCodeType(PhTimeCodeType2997);
+
 	_pCodecContext = _videoStream->codec;
 
 	PHDEBUG << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
