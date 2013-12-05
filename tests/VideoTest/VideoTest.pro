@@ -17,14 +17,14 @@ include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhVideo/PhVideo.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
-HEADERS += MainView.h
+HEADERS += VideoTestWindow.h
 
 SOURCES += \
     main.cpp \
-    MainView.cpp
+    VideoTestWindow.cpp
 
 FORMS += \
-    MainView.ui
+    VideoTestWindow.ui
 
 CONFIG(release, debug|release) {
 
