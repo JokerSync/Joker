@@ -47,7 +47,7 @@ bool VideoStripView::init()
 
 void VideoStripView::paint()
 {
-	PHDBG(1);
+	PHDBG(1) << _strip.clock()->time() - _sony->clock()->time();
 
 //	if(_sony)
 //		_sony->checkVideoSync();
