@@ -54,6 +54,7 @@ public slots:
 
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onRateChanged(PhRate rate);
+	void onTimeCodeTypeChanged(PhTimeCodeType tcType);
 
 private slots:
 	void onPlayPause();
