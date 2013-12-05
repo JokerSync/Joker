@@ -3,7 +3,7 @@
 
   <header>
 	<title>Title test</title>
-	<title2>Traducted title</title2>
+	<title2>Translated title</title2>
 	<episode number="episode ref" season="season ref" title="episode title" title2="traducted episode title"/>
 	<author name="Dupont" firstname="Pierre"/>
 	<detector firstname="Dupond" name="Jean"/>

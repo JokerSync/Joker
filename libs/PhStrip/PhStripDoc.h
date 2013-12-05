@@ -35,7 +35,12 @@ public:
      * @return _title
      */
 	QString getTitle();
-    /**
+
+	QString getTranslatedTitle();
+	QString getEpisode();
+	QString getSeason();
+
+	/**
      * @brief getVideoTimestamp
      * @return _videoTimestamp
      */
@@ -162,6 +167,10 @@ private:
      * Title of the corresponding audiovisual content.
      */
 	QString _title;
+	QString _translatedTitle;
+	QString _episode;
+	QString _season;
+
     /**
      * Starting time of the video content refered by the videoPath : String
      */
