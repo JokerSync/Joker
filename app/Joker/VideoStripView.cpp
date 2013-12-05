@@ -47,13 +47,14 @@ bool VideoStripView::init()
 
 void VideoStripView::paint()
 {
-	PHDBG(1) << _strip.clock()->time() - _sony->clock()->time();
 
-//	if(_sony)
-//		_sony->checkVideoSync();
+	PHDBG(1) << _strip.clock()->time() - (_sony?_sony->clock()->time():0);
 
 	int y = 0;
 	QString title = _strip.doc()->getTitle();
+	if(_strip.doc()->getEpisode().length() > 0)
+		title += " #" + _strip.doc()->getEpisode();
+
 	if(_settings->value("displayTitle", true).toBool() && (title.length() > 0))
 	{
 		int titleHeight = this->height() / 40;
