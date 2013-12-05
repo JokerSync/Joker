@@ -70,6 +70,18 @@ bool PhStripDoc::importDetX(QString fileName)
 		if(header.elementsByTagName("title").count())
 			_title = detX.elementsByTagName("title").at(0).toElement().text();
 
+		// Reading the translated title
+		if(header.elementsByTagName("title2").count())
+			_translatedTitle = detX.elementsByTagName("title2").at(0).toElement().text();
+
+		// Reading the episode info
+		if(header.elementsByTagName("episode").count())
+		{
+			QDomElement episodeElem = detX.elementsByTagName("episode").at(0).toElement();
+			_episode = episodeElem.attribute("number");
+			_season = episodeElem.attribute("season");
+		}
+
 		// Reading the video path
 		if(header.elementsByTagName("videofile").count())
 		{
@@ -306,7 +318,10 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC)
 bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeCode)
 {
 	this->reset();
-	_title = "Fake file";
+	_title = "Generate file";
+	_translatedTitle = "Fichier généré";
+	_episode = "1";
+	_season = "1";
 	_tcType = PhTimeCodeType25;
 	_timeScale = 25.00;
 	_videoFrameStamp = videoTimeCode;
@@ -363,8 +378,11 @@ void PhStripDoc::reset()
 	_nbTexts = 0;
 	_texts.clear();
 	_timeScale = 25; //TODO fix me
-	_title = QString();
-	_videoPath = QString();
+	_title = "";
+	_translatedTitle = "";
+	_episode = "";
+	_season = "";
+	_videoPath = "";
 	_videoFrameStamp = 0;
 	_authorName = "";
 
@@ -573,6 +591,21 @@ PhTimeCodeType PhStripDoc::getTCType()
 QString PhStripDoc::getTitle()
 {
 	return _title;
+}
+
+QString PhStripDoc::getTranslatedTitle()
+{
+	return _translatedTitle;
+}
+
+QString PhStripDoc::getEpisode()
+{
+	return _episode;
+}
+
+QString PhStripDoc::getSeason()
+{
+	return _season;
 }
 
 PhTime PhStripDoc::getVideoTimestamp()

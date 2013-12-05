@@ -13,6 +13,9 @@ void PhStripDocTest::initTestCase()
 void PhStripDocTest::openDetXHeaderTest()
 {
 	QCOMPARE(_doc.getTitle(), QString("Title test"));
+	QCOMPARE(_doc.getTranslatedTitle(), QString("Translated title"));
+	QCOMPARE(_doc.getEpisode(), QString("episode ref"));
+	QCOMPARE(_doc.getSeason(), QString("season ref"));
 	QCOMPARE(_doc.getVideoPath(), QString("/Path/to/video.mov"));
 	QVERIFY(_doc.getVideoTimestamp() == s2f("01:00:00:00"));
 	QCOMPARE(QString("Pierre Dupont"), _doc.getAuthorName());
