@@ -44,3 +44,8 @@ void PeopleDialog::on_buttonBox_rejected()
 		_peopleList->append(people);
 	}
 }
+
+void PeopleDialog::on_selectAllButton_clicked()
+{
+	ui->peopleList->selectAll();
+}

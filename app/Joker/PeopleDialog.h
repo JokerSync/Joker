@@ -22,6 +22,8 @@ private slots:
 
 	void on_buttonBox_rejected();
 
+	void on_selectAllButton_clicked();
+
 private:
 	Ui::PeopleDialog *ui;
 
