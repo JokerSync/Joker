@@ -116,12 +116,13 @@ void VideoStripView::paint()
 			if(nextText == NULL)
 				nextText = _strip.doc()->getNextText(0, _selectedPeoples);
 
+			int peopleHeight = this->height() / 30;
 			foreach (PhPeople* people, _selectedPeoples) {
-				int peopleNameWidth = people->getName().length() * tcHeight / 2;
-				_currentPeopleName.setRect(this->width() - peopleNameWidth, y, peopleNameWidth, tcHeight);
+				int peopleNameWidth = people->getName().length() * peopleHeight / 2;
+				_currentPeopleName.setRect(this->width() - peopleNameWidth, y, peopleNameWidth, peopleHeight);
 				_currentPeopleName.setContent(people->getName());
 				_currentPeopleName.draw();
-				y += tcHeight;
+				y += peopleHeight;
 			}
 		}
 		else
