@@ -404,7 +404,10 @@ bool JokerWindow::openVideoFile(QString videoFile)
 			_videoEngine->setFrameStamp(frameStamp);
 			_videoEngine->clock()->setFrame(frameStamp);
 			if(fileInfo.fileName() != lastFileInfo.fileName())
+			{
 				on_actionChange_timestamp_triggered();
+				frameStamp = _videoEngine->frameStamp();
+			}
 		}
 
 		_videoEngine->clock()->setFrame(frameStamp);
