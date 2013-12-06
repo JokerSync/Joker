@@ -23,6 +23,7 @@ private slots:
 	void onStripRateChanged(PhRate rate);
 	void onVideoFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onVideoRateChanged(PhRate rate);
+	void onVideoTCTypeChanged(PhTimeCodeType tcType);
 	void onSonyFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onSonyRateChanged(PhRate rate);
 private:

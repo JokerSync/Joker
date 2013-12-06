@@ -26,6 +26,7 @@ void VideoStripSynchronizer::setVideoClock(PhClock *clock)
 	_videoClock = clock;
 	connect(_videoClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onVideoFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_videoClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onVideoRateChanged(PhRate)));
+	connect(_videoClock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onVideoTCTypeChanged(PhTimeCodeType)));
 }
 
 void VideoStripSynchronizer::setSonyClock(PhClock *clock)
@@ -86,6 +87,14 @@ void VideoStripSynchronizer::onVideoFrameChanged(PhFrame, PhTimeCodeType)
 
 void VideoStripSynchronizer::onVideoRateChanged(PhRate)
 {
+}
+
+void VideoStripSynchronizer::onVideoTCTypeChanged(PhTimeCodeType tcType)
+{
+	PHDEBUG << tcType;
+	_stripClock->setTimeCodeType(tcType);
+	if(_sonyClock)
+		_sonyClock->setTimeCodeType(tcType);
 }
 
 void VideoStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType)
