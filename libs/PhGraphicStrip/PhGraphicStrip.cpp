@@ -112,6 +112,7 @@ void PhGraphicStrip::clearData()
 		delete gOff;
 	_graphicOffs.clear();
 }
+
 PhFont *PhGraphicStrip::getTextFont()
 {
 	return &_textFont;

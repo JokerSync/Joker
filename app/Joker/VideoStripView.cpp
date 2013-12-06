@@ -10,6 +10,7 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	_noVideoSyncError(_strip.getHUDFont(), "No video sync"),
 	_currentPeopleName(_strip.getHUDFont(), "")
 {
+	connect(_strip.doc(), SIGNAL(changed()), this, SLOT(onDocChanged()));
 }
 
 void VideoStripView::setSettings(QSettings *settings)
@@ -153,4 +154,9 @@ void VideoStripView::paint()
 void VideoStripView::onVideoSync()
 {
 	_lastVideoSyncElapsed.restart();
+}
+
+void VideoStripView::onDocChanged()
+{
+	_selectedPeoples.clear();
 }

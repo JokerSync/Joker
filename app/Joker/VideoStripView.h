@@ -27,6 +27,8 @@ protected:
 
 private slots:
 	void onVideoSync();
+	void onDocChanged();
+
 private:
 	PhVideoEngine _videoEngine;
 	PhGraphicStrip _strip;
