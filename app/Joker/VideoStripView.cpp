@@ -49,7 +49,7 @@ bool VideoStripView::init()
 void VideoStripView::paint()
 {
 
-	PHDBG(1) << _strip.clock()->time() - (_sony?_sony->clock()->time():0);
+    PHDBG(1) << _strip.clock()->time() - (_sony?_sony->clock()->time():0);
 
 	int y = 0;
 	QString title = _strip.doc()->getTitle();

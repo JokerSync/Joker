@@ -219,6 +219,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		bool displayNextText = _settings->value("displayNextText", true).toBool();
 
+        int appHeight = _settings->value("stripHeight", 0.25f).toFloat() * height;
+
+
 		foreach(PhStripText * text, _doc.getTexts())
 		{
 			PhGraphicText* gText = _graphicTexts[text];
@@ -322,6 +325,31 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				trackFull[track] = true;
 				//PHDEBUG << people->getName();
 			}
+            if(displayNextText && (frameOut < text->getTimeIn()))
+            {
+                PhPeople * people = text->getPeople();
+                PhGraphicText * gPeople = _graphicPeoples[people];
+                if(gPeople == NULL)
+                {
+                    gPeople = new PhGraphicText(&_textFont, people->getName());
+                    gPeople->setColor(QColor(people->getColor()));
+                    gPeople->setWidth(people->getName().length() * 16);
+                    gPeople->setZ(-1);
+
+                    gPeople->init();
+
+                    _graphicPeoples[people] = gPeople;
+                }
+                int howFarIsText = abs((frameOut - text->getTimeIn()) * pixelPerFrame);
+                //This line is used to see which text's name will be displayed
+                gPeople->setX(width - gPeople->getWidth() - 20);
+                gPeople->setY((appHeight - height) *(-200) / howFarIsText);
+                PHDBG(3) << ((appHeight - height) * (-200) / howFarIsText);
+
+                gPeople->setHeight(trackHeight / 2);
+
+                gPeople->draw();
+            }
 
 			lastTextList[track] = text;
 
