@@ -219,7 +219,11 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		bool displayNextText = _settings->value("displayNextText", true).toBool();
 
-        int appHeight = _settings->value("stripHeight", 0.25f).toFloat() * height;
+
+        int appHeight = 1;
+
+        if(_settings->value("stripHeight", 0.25f).toFloat() != 0)
+                appHeight = height / _settings->value("stripHeight", 0.25f).toFloat();
 
 
 		foreach(PhStripText * text, _doc.getTexts())
@@ -325,7 +329,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				trackFull[track] = true;
 				//PHDEBUG << people->getName();
 			}
-            if(displayNextText && (frameOut < text->getTimeIn()))
+            if(displayNextText and (frameOut < text->getTimeIn()) and ((lastText == NULL) or (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople)))
             {
                 PhPeople * people = text->getPeople();
                 PhGraphicText * gPeople = _graphicPeoples[people];
@@ -343,8 +347,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
                 int howFarIsText = abs((frameOut - text->getTimeIn()) * pixelPerFrame);
                 //This line is used to see which text's name will be displayed
                 gPeople->setX(width - gPeople->getWidth() - 20);
-                gPeople->setY((appHeight - height) *(-200) / howFarIsText);
-                PHDBG(3) << ((appHeight - height) * (-200) / howFarIsText);
+                gPeople->setY(appHeight - height + track * trackHeight - howFarIsText / 5);
 
                 gPeople->setHeight(trackHeight / 2);
 
