@@ -73,8 +73,6 @@ void PhGraphicText::draw()
 	int advance = 0;
 	float space = 0.0625f; // all glyph are in a 1/16 x 1/16 box
 	// Display a string
-//    PHDBG(3) << _content << _z;
-
 	for(int i = 0; i < _content.length(); i++)
 	{
 		unsigned char ch = (unsigned char)_content.at(i).toLatin1();
@@ -85,7 +83,6 @@ void PhGraphicText::draw()
 			float tv1 = (ch / 16) * space;
 			float tu2 = tu1 + space;
 			float tv2 = tv1 + space;
-
 
 			// computing quads coordinate;
 			int h = _h * 128 / _font->getHeight();
