@@ -56,9 +56,9 @@ void PhGraphicText::draw()
 
 	_font->select();
 
-	glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
 
-	glEnable(GL_BLEND);
+    glEnable(GL_BLEND);
 
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -100,7 +100,7 @@ void PhGraphicText::draw()
 				glTexCoord3f(tu2, tv1, 1);	glVertex3f(offset + w,	_y,	_z);
 				glTexCoord3f(tu2, tv2, 1);	glVertex3f(offset + w,	_y + h,  _z);
 				glTexCoord3f(tu1, tv2, 1);	glVertex3f(offset,		_y + h,  _z);
-			}
+            }
 			glEnd();
 
 		}
@@ -108,8 +108,8 @@ void PhGraphicText::draw()
 		advance += _font->getAdvance(ch);
 	}
 
-	glDisable(GL_BLEND);
+    glDisable(GL_BLEND);
 
-	glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);
 }
 
