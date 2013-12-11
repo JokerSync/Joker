@@ -9,7 +9,7 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
+MainWindow::MainWindow(GraphicStripTestSettings * settings, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
 	_settings(settings)
@@ -41,7 +41,7 @@ bool MainWindow::openFile(QString fileName)
 	if(QFile::exists(fileName))
 	{
 		_path = fileName;
-		if(_doc->openDetX(fileName))
+		if(_doc->openStripFile(fileName))
 		{
 			_clock->setTimeCodeType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
@@ -56,7 +56,7 @@ void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, Q
 {
 	PHDEBUG << "Creating fake file";
 	_path = "null";
-	if(_doc->createDoc(text, nbPeople, nbLoop, nbText, nbTrack, videoTimeStamp))
+	if(_doc->createDoc(text, nbPeople, nbText, nbTrack, videoTimeStamp))
 	{
 		PHDEBUG << "Done";
 		_clock->setTimeCodeType(_doc->getTCType());
@@ -72,7 +72,7 @@ void MainWindow::onOpenFile()
 	{
 		QString fileName = dlg.selectedFiles()[0];
 		if(openFile(fileName))
-			_settings->setValue("lastFile", fileName);
+			_settings->setLastFile(fileName);
 	}
 }
 
@@ -82,7 +82,7 @@ void MainWindow::onGenerate()
 	if (dlgGen.exec())
 	{
 		_clock->setFrame(_doc->getLastFrame());
-		_settings->setValue("lastFile", "");
+		_settings->setLastFile("");
 	}
 }
 
@@ -202,12 +202,3 @@ void MainWindow::on_actionStrip_Properties_triggered()
 	dlg->show();
 }
 
-void MainWindow::on_actionChange_font_triggered()
-{
-	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
-	if(QFile(fontFile).exists())
-	{
-		if(!_strip->setFontFile(fontFile))
-			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
-	}
-}

@@ -16,28 +16,27 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QSettings settings("Phonations","GraphicStripTest");
+	GraphicStripTestSettings settings;
 	MainWindow w(&settings);
 
-	PhDebug::init(false, false, true, true, true, true, 1, "GraphicStripTest");
     w.show();
 
 	if (argc > 1)
 		w.openFile(argv[1]);
 	else
 	{
-		QString lastFile = settings.value("lastFile", "").toString();
+		QString lastFile = settings.lastFile();
 		if(QFile::exists(lastFile))
 			w.openFile(lastFile);
 		else
 		{
 			w.createFile(
-						settings.value("peopleNumber", 0).toInt(),
-						settings.value("loopNumber", 0).toInt(),
-						settings.value("textNumber", 0).toInt(),
-						settings.value("trackNumber", 4).toInt(),
-						settings.value("textContent", "Per hoc minui studium suum existimans Paulus.").toString(),
-						settings.value("startFrame", 90000).toInt()
+						settings.peopleNumber(),
+						settings.loopNumber(),
+						settings.textNumber(),
+						settings.trackNumber(),
+						settings.textContent(),
+						settings.startFrame()
 						);
 		}
 	}

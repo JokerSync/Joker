@@ -9,6 +9,8 @@ TEMPLATE = app
 
 QT += core gui
 
+VERSION = 1.0.0
+
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 INCLUDEPATH += ../../libs
@@ -23,12 +25,14 @@ include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 SOURCES += main.cpp \
 	MainWindow.cpp \
     StripPropertiesDialog.cpp \
-    GenerateDialog.cpp
+    GenerateDialog.cpp \
+    GraphicStripTestSettings.cpp
 
 HEADERS += \
     MainWindow.h \
     StripPropertiesDialog.h \
-    GenerateDialog.h
+    GenerateDialog.h \
+    GraphicStripTestSettings.h
 
 FORMS += \
     MainWindow.ui \

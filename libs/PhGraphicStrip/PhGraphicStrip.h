@@ -2,7 +2,8 @@
 #define PHGRAPHICSTRIP_H
 
 #include <QObject>
-#include <QSettings>
+
+#include "PhGraphicSettings.h"
 
 #include "PhStrip/PhStripDoc.h"
 
@@ -61,20 +62,11 @@ public:
 	 */
 	PhClock * clock();
 
-	void setSettings(QSettings * settings);
-
-	/**
-	 * Set the font used to render text on the strip.
-	 * @param fontfile Font file path
-	 * @return true if the operation succeeds, false otherwise.
-	 */
-	bool setFontFile(QString fontFile);
+	void setSettings(PhGraphicSettings * settings);
 
 	bool init();
 
 	void draw(int x, int y, int width, int height);
-
-	void setPixelPerFrame(long value);
 
 	PhFont * getTextFont();
 
@@ -131,8 +123,7 @@ private :
 	QTime _testTimer;
 
 	int _trackNumber;
-	QSettings * _settings;
-	long pixelPerFrame;
+	PhGraphicSettings * _settings;
 };
 
 #endif // PHGRAPHICSTRIP_H

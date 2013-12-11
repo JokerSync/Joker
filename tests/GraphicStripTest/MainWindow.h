@@ -4,9 +4,10 @@
 #include <QMainWindow>
 #include <PhGraphicStrip/PhGraphicStrip.h>
 #include <QMessageBox>
-#include <QSettings>
 #include <StripPropertiesDialog.h>
 #include <GenerateDialog.h>
+
+#include "GraphicStripTestSettings.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,7 +18,7 @@ class MainWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QSettings *settings, QWidget *parent = 0);
+	explicit MainWindow(GraphicStripTestSettings *settings, QWidget *parent = 0);
 	~MainWindow();
 
 	bool openFile(QString fileName);
@@ -66,11 +67,9 @@ private slots:
 
 	void on_actionStrip_Properties_triggered();
 
-	void on_actionChange_font_triggered();
-
 private:
 	Ui::MainWindow *ui;
-	QSettings *_settings;
+	GraphicStripTestSettings *_settings;
 	PhGraphicStrip *_strip;
 	PhStripDoc *_doc;
 	PhClock *_clock;

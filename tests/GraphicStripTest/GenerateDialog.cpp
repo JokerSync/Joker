@@ -8,18 +8,18 @@
 #include "PhTools/PhTimeCode.h"
 #include "PhTools/PhDebug.h"
 
-GenerateDialog::GenerateDialog(QSettings * settings, PhStripDoc * doc, QWidget *parent) :
+GenerateDialog::GenerateDialog(GraphicStripTestSettings *settings, PhStripDoc * doc, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::GenerateDialog),
 	_settings(settings)
 {
 	this->_doc = doc;
 	ui->setupUi(this);
-	ui->lineEditText->setText(_settings->value("textContent", "Per hoc minui studium suum existimans Paulus.").toString());
-	ui->lineEditTimeCode->setFrame(_settings->value("startFrame", 90000).toInt(), _doc->getTCType());
-	ui->spinBoxNbPeople->setValue(_settings->value("peopleNumber", 0).toInt());
-	ui->spinBoxNbText->setValue(_settings->value("textNumber", 0).toInt());
-	ui->spinBoxNbTrack->setValue(_settings->value("trackNumber", 4).toInt());
+	ui->lineEditText->setText(_settings->textContent());
+	ui->lineEditTimeCode->setFrame(_settings->startFrame(), _doc->getTCType());
+	ui->spinBoxNbPeople->setValue(_settings->peopleNumber());
+	ui->spinBoxNbText->setValue(_settings->textNumber());
+	ui->spinBoxNbTrack->setValue(_settings->trackNumber());
 	connect(ui->lineEditText, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged()));
 	connect(ui->spinBoxNbText, SIGNAL(valueChanged(int)), this, SLOT(onTextChanged()));
 	connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onAccept()));
@@ -49,16 +49,16 @@ void GenerateDialog::onTextChanged()
 
 void GenerateDialog::onAccept()
 {
-	int nbLoop = this->ui->spinBoxNbLoop->value();
-	int nbPeople = this->ui->spinBoxNbPeople->value();
-	int nbText = this->ui->spinBoxNbText->value();
-	int nbTracks = this->ui->spinBoxNbTrack->value();
-	QString text = this->ui->lineEditText->text();
+	int loopNumber = this->ui->spinBoxNbLoop->value();
+	int peopleNumber = this->ui->spinBoxNbPeople->value();
+	int textNumber = this->ui->spinBoxNbText->value();
+	int trackNumber = this->ui->spinBoxNbTrack->value();
+	QString textContent = this->ui->lineEditText->text();
 	int startFrame = this->ui->lineEditTimeCode->frame();
-	_doc->createDoc(text, nbPeople, nbLoop, nbText, nbTracks, startFrame);
-	_settings->setValue("startFrame", startFrame);
-	_settings->setValue("peopleNumber", nbPeople);
-	_settings->setValue("textNumber", nbText);
-	_settings->setValue("trackNumber", nbTracks);
-	_settings->setValue("textContent", text);
+	_doc->createDoc(textContent, peopleNumber, textNumber, trackNumber, startFrame);
+	_settings->setStartFrame(startFrame);
+	_settings->setPeopleNumber(peopleNumber);
+	_settings->setTextNumber(textNumber);
+	_settings->setTrackNumber(trackNumber);
+	_settings->setTextContent(textContent);
 }
