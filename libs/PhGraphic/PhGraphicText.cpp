@@ -56,9 +56,9 @@ void PhGraphicText::draw()
 
 	_font->select();
 
-	glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
 
-	glEnable(GL_BLEND);
+    glEnable(GL_BLEND);
 
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -73,6 +73,8 @@ void PhGraphicText::draw()
 	int advance = 0;
 	float space = 0.0625f; // all glyph are in a 1/16 x 1/16 box
 	// Display a string
+//    PHDBG(3) << _content << _z;
+
 	for(int i = 0; i < _content.length(); i++)
 	{
 		unsigned char ch = (unsigned char)_content.at(i).toLatin1();
@@ -83,6 +85,7 @@ void PhGraphicText::draw()
 			float tv1 = (ch / 16) * space;
 			float tu2 = tu1 + space;
 			float tv2 = tv1 + space;
+
 
 			// computing quads coordinate;
 			int h = _h * 128 / _font->getHeight();
@@ -100,7 +103,7 @@ void PhGraphicText::draw()
 				glTexCoord3f(tu2, tv1, 1);	glVertex3f(offset + w,	_y,	_z);
 				glTexCoord3f(tu2, tv2, 1);	glVertex3f(offset + w,	_y + h,  _z);
 				glTexCoord3f(tu1, tv2, 1);	glVertex3f(offset,		_y + h,  _z);
-			}
+            }
 			glEnd();
 
 		}
@@ -108,8 +111,8 @@ void PhGraphicText::draw()
 		advance += _font->getAdvance(ch);
 	}
 
-	glDisable(GL_BLEND);
+    glDisable(GL_BLEND);
 
-	glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);
 }
 

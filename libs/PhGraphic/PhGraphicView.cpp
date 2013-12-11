@@ -46,8 +46,10 @@ void PhGraphicView::resizeGL(int width, int height)
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, width, height, 0, 0, 10);
+    glOrtho(0, width, height, 0, -10, 100);
     glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
     glLoadIdentity();
 }
 
