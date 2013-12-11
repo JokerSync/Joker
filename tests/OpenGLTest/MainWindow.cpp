@@ -9,12 +9,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::initializeGL()
 {
-	PHDEBUG << "initializeGL()";
+    qDebug() << "initializeGL()";
 }
 
 void MainWindow::paintGL()
 {
-	PHDEBUG << "paintGL";
+    qDebug() << "paintGL";
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
