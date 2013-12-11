@@ -385,12 +385,11 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
                 gCut->setHeight(height);
                 gCut->setX(x + cut->getTimeIn() * pixelPerFrame - offset);
                 gCut->setY(y);
-                gCut->setZ(-2);
+                gCut->setZ(-1);
                 gCut->setWidth(2);
 
                 gCut->draw();
                 cutCounter++;
-
             }
         }
 
