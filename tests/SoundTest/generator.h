@@ -23,7 +23,6 @@ public:
     qint64 writeData(const char *data, qint64 len);
     qint64 bytesAvailable() const;
 
-private:
     void generateData(const QAudioFormat &format, qint64 durationUs, int sampleRate);
 
 private:
