@@ -3,6 +3,7 @@
 #include <QIODevice>
 
 #include "PhTools/PhDebug.h"
+#include "PhTools/ltc.h"
 
 #include "generator.h"
 
@@ -35,7 +36,7 @@ int main(int argc, char *argv[])
     qsrand((uint)time.msec());
 
     int high = 10000;
-    int low = 100;
+    int low = 1000;
 
     m_generator->start();
     m_audioOutput->start(m_generator);
