@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     char* filename;
     LTCDecoder *decoder;
     LTCFrameExt frame;
+
     // fIXME
     if (argc > 1) {
         filename = argv[1];
@@ -41,20 +42,24 @@ int main(int argc, char *argv[])
     }
     fprintf(stderr, "* reading from: %s\n", filename);
     total = 0;
-    decoder = ltc_decoder_create(apv, 32);
+    decoder = ltc_decoder_create(apv, 3840);
+
     do {
         //PHDEBUG << "in da do";
         n = fread(sound, sizeof(ltcsnd_sample_t), BUFFER_SIZE, f);
+
+        //PHDEBUG << n;
         ltc_decoder_write(decoder, sound, n, total);
+        //PHDEBUG << "2";
+
         while (ltc_decoder_read(decoder, &frame)) {
-            //PHDEBUG << "in da while";
             SMPTETimecode stime;
             ltc_frame_to_time(&stime, &frame.ltc, 1);
             //PHDEBUG << stime.years + 1900 << stime.months << stime.days; // << stime.timezone;
-            //PHDEBUG << stime.hours << stime.mins << stime.secs << ":" << stime.frame << "\toffStart " << frame.off_start << "\toffEnd" << frame.off_end;
+            PHDEBUG << stime.hours << stime.mins << stime.secs << ":" << stime.frame << "\toffStart " << frame.off_start << "\toffEnd" << frame.off_end;
         }
         total += n;
-        PHDEBUG << n;
+        //PHDEBUG << n;
     } while (n);
     fclose(f);
     ltc_decoder_free(decoder);
