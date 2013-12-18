@@ -4,8 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core multimedia
-QT       -= gui
+QT       += core multimedia widgets
 
 TARGET = SoundTest
 CONFIG   += console
@@ -21,7 +20,8 @@ include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
 
 
 SOURCES += main.cpp \
-    generator.cpp
+	generator.cpp \
+	audioinput.cpp \
 
 
 CONFIG(release, debug|release) {
@@ -32,4 +32,5 @@ CONFIG(release, debug|release) {
 }
 
 HEADERS += \
-    generator.h
+	generator.h \
+	audioinput.h \

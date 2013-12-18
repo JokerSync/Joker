@@ -38,35 +38,44 @@
 **
 ****************************************************************************/
 
-#ifndef GENERATOR_H
-#define GENERATOR_H
+#ifndef AUDIOINPUT_H
+#define AUDIOINPUT_H
 
-
-#include <QAudioOutput>
+#include <QAudioInput>
 #include <QByteArray>
-#include <QIODevice>
+#include <QComboBox>
+#include <QMainWindow>
 #include <QObject>
+#include <QPixmap>
+#include <QPushButton>
+#include <QSlider>
+#include <QWidget>
 
-
-class Generator : public QIODevice
+class AudioInfo : public QIODevice
 {
     Q_OBJECT
 
 public:
-    Generator(const QAudioFormat &format, qint64 durationUs, int sampleRate, QObject *parent);
-    ~Generator();
+    AudioInfo(const QAudioFormat &format, QObject *parent);
+    ~AudioInfo();
 
     void start();
     void stop();
 
+    qreal level() const { return m_level; }
+
     qint64 readData(char *data, qint64 maxlen);
     qint64 writeData(const char *data, qint64 len);
-    qint64 bytesAvailable() const;
-
-    void generateData(const QAudioFormat &format, qint64 durationUs, int sampleRate);
 
 private:
-    qint64 m_pos;
-    QByteArray m_buffer;
+    const QAudioFormat m_format;
+    quint32 m_maxAmplitude;
+    qreal m_level; // 0.0 <= m_level <= 1.0
+
+signals:
+    void update();
 };
-#endif // GENERATOR_H
+
+
+
+#endif // AUDIOINPUT_H
