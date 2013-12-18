@@ -18,6 +18,9 @@ JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 INCLUDEPATH += $${JOKER_ROOT}/libs
 include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
 
+INCLUDEPATH += /usr/local/include
+LIBS += -L/usr/local/lib -lltc -lm
+
 
 SOURCES += main.cpp \
 	generator.cpp \
