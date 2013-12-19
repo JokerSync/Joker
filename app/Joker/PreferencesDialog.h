@@ -10,6 +10,10 @@
 #include <QSettings>
 #include <QListWidgetItem>
 
+#define SONY "Sony 9 pins"
+#define LTC "LTC"
+#define NO_SYNC "No synchro"
+
 namespace Ui {
 class PreferencesDialog;
 }
@@ -63,6 +67,10 @@ private slots:
 
 	void onLogMaskButtonClicked();
 
+    void on_listWidgetSync_itemClicked(QListWidgetItem *item);
+
+    void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+
 private:
 	Ui::PreferencesDialog *ui;
 	QSettings *_settings;
@@ -82,6 +90,8 @@ private:
 	bool _oldDisplayTitle;
 	bool _oldDisplayLoop;
 	int _oldLogMask;
+    QString _oldSyncProtocol;
+
 	QMap<QString, QString> fontList;
 
 };

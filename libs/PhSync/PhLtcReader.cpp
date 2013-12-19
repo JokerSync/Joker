@@ -6,7 +6,7 @@ PhLtcReader::PhLtcReader(QObject *parent) :
 {
     decoder = ltc_decoder_create(1920, 3840);
     init();
-    PHDEBUG << "Reader created";
+    PHDEBUG << "LTC Reader created";
 }
 
 void PhLtcReader::init(QString input)
