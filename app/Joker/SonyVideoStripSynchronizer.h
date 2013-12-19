@@ -15,8 +15,8 @@ public:
 	PhClock * stripClock() { return _stripClock; }
 	void setVideoClock(PhClock *clock);
 	PhClock * videoClock() { return _videoClock; }
-	void setSonyClock(PhClock *clock);
-	PhClock * sonyClock() { return _sonyClock; }
+    void setSyncClock(PhClock *clock);
+    PhClock * syncClock() { return _syncClock; }
 
 private slots:
 	void onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType);
@@ -29,7 +29,7 @@ private slots:
 private:
 	PhClock * _stripClock;
 	PhClock * _videoClock;
-	PhClock * _sonyClock;
+    PhClock * _syncClock;
 	bool _settingStripFrame;
 	bool _settingVideoFrame;
 	bool _settingSonyFrame;

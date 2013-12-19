@@ -47,17 +47,7 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_synchronizer.setStripClock(_strip->clock());
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
-	// Initialize the sony module
-	if(_settings->value("sonyAutoConnect", true).toBool())
-	{
-		if(_sonySlave.open())
-		{
-			_synchronizer.setSonyClock(_sonySlave.clock());
-			ui->videoStripView->setSony(&_sonySlave);
-		}
-		else
-			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
-	}
+    protocolChanged();
 
 	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
@@ -168,6 +158,22 @@ void JokerWindow::setupOpenRecentMenu()
 	// Close the group
 	_settings->endGroup();
 
+}
+
+void JokerWindow::protocolChanged()
+{
+    if(_settings->value("synchroProtocol", NO_SYNC).toString() == SONY)
+    {
+
+    }
+    else if (_settings->value("synchroProtocol", NO_SYNC).toString() == LTC)
+    {
+
+    }
+    else
+    {
+
+    }
 }
 
 void JokerWindow::openFile(QString fileName)
@@ -452,9 +458,13 @@ void JokerWindow::on_actionAbout_triggered()
 void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
-
+    QString syncProtocol = _settings->value("synchroProtocol", NO_SYNC).toString();
 	PreferencesDialog dlg(_settings);
-	dlg.exec();
+    if(dlg.exec())
+    {
+        if(syncProtocol != _settings->value("synchroProtocol", NO_SYNC).toString())
+            protocolChanged();
+    }
 	fadeInMediaPanel();
 }
 

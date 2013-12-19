@@ -2,7 +2,7 @@
 #define PHLTCREADER_H
 
 #include <QString>
-#include <QAudioInput>
+#include <QtMultimedia/QAudioInput>
 #include <QObject>
 
 

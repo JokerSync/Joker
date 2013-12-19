@@ -10,6 +10,7 @@
 #include "PhDebug.h"
 #include "ui_PreferencesDialog.h"
 
+
 PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::PreferencesDialog),
@@ -38,6 +39,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldDisplayNextText = _settings->value("displayNextText", true).toBool();
 	_oldDisplayTitle = _settings->value("displayTitle", true).toBool();
 	_oldDisplayLoop = _settings->value("displayLoop", false).toBool();
+    _oldSyncProtocol = _settings->value("synchroProtocol", NO_SYNC).toString();
 
 	_oldLogMask = _settings->value("logMask", 1).toInt();
 
@@ -112,6 +114,21 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 			ui->listWidgetFont->setCurrentRow(ui->listWidgetFont->count() - 1);
 		}
 	}
+
+    //Set up the ListView
+    ui->listWidgetSync->addItem(SONY);
+    ui->listWidgetSync->addItem(LTC);
+    ui->listWidgetSync->addItem(NO_SYNC);
+
+    ui->listWidgetSync->findItems(_oldSyncProtocol, Qt::MatchExactly).first()->setSelected(1);
+
+    if(_oldSyncProtocol != SONY)
+    {
+        ui->cBoxSonyAutoconnect->setEnabled(0);
+        ui->spinBoxSonyHighSpeed->setEnabled(0);
+        ui->lineEditSonyID->setEnabled(0);
+    }
+
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -290,3 +307,39 @@ void PreferencesDialog::onLogMaskButtonClicked()
 	_settings->setValue("logMask", logMask);
 }
 
+void PreferencesDialog::on_listWidgetSync_itemClicked(QListWidgetItem *item)
+{
+    PHDEBUG << item->text();
+    if(item->text() == SONY)
+    {
+        ui->cBoxSonyAutoconnect->setEnabled(1);
+        ui->spinBoxSonyHighSpeed->setEnabled(1);
+        ui->lineEditSonyID->setEnabled(1);
+    }
+    else
+    {
+        ui->cBoxSonyAutoconnect->setEnabled(0);
+        ui->spinBoxSonyHighSpeed->setEnabled(0);
+        ui->lineEditSonyID->setEnabled(0);
+    }
+    _settings->setValue("synchroProtocol", item->text());
+}
+
+void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    Q_UNUSED(previous);
+    PHDEBUG << current->text();
+    if(current->text() == SONY)
+    {
+        ui->cBoxSonyAutoconnect->setEnabled(1);
+        ui->spinBoxSonyHighSpeed->setEnabled(1);
+        ui->lineEditSonyID->setEnabled(1);
+    }
+    else
+    {
+        ui->cBoxSonyAutoconnect->setEnabled(0);
+        ui->spinBoxSonyHighSpeed->setEnabled(0);
+        ui->lineEditSonyID->setEnabled(0);
+    }
+    _settings->setValue("synchroProtocol", current->text());
+}
