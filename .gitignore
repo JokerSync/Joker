@@ -21,6 +21,7 @@ Makefile
 build-*
 
 .DS_Store
+Thumbs.db
 
 *.autosave
 
