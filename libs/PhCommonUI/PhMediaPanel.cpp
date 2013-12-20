@@ -99,7 +99,12 @@ void PhMediaPanel::setMediaLength(PhFrame length)
 
 PhFrame PhMediaPanel::getMediaLength()
 {
-	return _mediaLength;
+    return _mediaLength;
+}
+
+void PhMediaPanel::setSliderEnable(bool isEnabled)
+{
+    ui->_slider->setEnabled(isEnabled);
 }
 
 void PhMediaPanel::setClock(PhClock *clock)
