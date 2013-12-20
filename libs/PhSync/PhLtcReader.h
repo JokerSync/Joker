@@ -4,6 +4,7 @@
 #include <QString>
 #include <QtMultimedia/QAudioInput>
 #include <QObject>
+#include <QTime>
 
 
 
@@ -35,6 +36,7 @@ private:
     qint64 position;
     QIODevice * buffer2;
     LTCDecoder * decoder;
+    QTime pauseDetector;
 
 };
 
