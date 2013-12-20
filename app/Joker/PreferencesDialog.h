@@ -10,6 +10,8 @@
 #include <QSettings>
 #include <QListWidgetItem>
 
+#include "PhLtcReader.h"
+
 #define SONY "Sony 9 pins"
 #define LTC "LTC"
 #define NO_SYNC "No synchro"
@@ -71,6 +73,10 @@ private slots:
 
     void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
+    void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+
+    void on_listWidgetInputs_itemChanged(QListWidgetItem *item);
+
 private:
 	Ui::PreferencesDialog *ui;
 	QSettings *_settings;
@@ -91,8 +97,12 @@ private:
 	bool _oldDisplayLoop;
 	int _oldLogMask;
     QString _oldSyncProtocol;
+    QString _oldLTCInput;
 
 	QMap<QString, QString> fontList;
+
+    void showParamLTC(bool show);
+    void showParamSony(bool show);
 
 };
 

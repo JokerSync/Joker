@@ -22,7 +22,7 @@ public:
     explicit PhLtcReader(QObject *parent = 0);
 
     void init(QString _input="");
-    QList<QString> inputList();
+    static QList<QString> inputList();
     PhClock * clock();
 
 private slots:
