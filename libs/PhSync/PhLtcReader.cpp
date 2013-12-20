@@ -21,6 +21,8 @@ void PhLtcReader::init(QString input)
             info = device;
     }
 
+    PHDEBUG << "LTC input device :" << info.deviceName();
+
     QAudioFormat format;
     format.setCodec("audio/pcm");
     format.setByteOrder(QAudioFormat::LittleEndian);
@@ -31,7 +33,7 @@ void PhLtcReader::init(QString input)
 
     if(!info.isFormatSupported(format))
     {
-        qDebug() << "unsupported";
+        qDebug() << "unsupported format";
         return;
     }
 
@@ -60,6 +62,10 @@ PhClock *PhLtcReader::clock()
 
 void PhLtcReader::onNotify()
 {
+    // Pause if no frame have been received for more than 0.5 sec
+    if(pauseDetector.elapsed() > 500)
+        _clock.setRate(0);
+
     QByteArray array = buffer2->readAll();
     char max = 0;
     for(int i = 0; i < array.count(); i++)
@@ -80,13 +86,15 @@ void PhLtcReader::onNotify()
         hhmmssff[2] = frame.ltc.secs_tens * 10 + frame.ltc.secs_units;
         hhmmssff[3] = frame.ltc.frame_tens * 10 + frame.ltc.frame_units;
         _clock.setFrame(PhTimeCode::frameFromHhMmSsFf(hhmmssff, PhTimeCodeType25));
-#warning TODO : fix me
-        if(oldFrame < _clock.frame())
-            _clock.setRate(1);
-        else if(oldFrame == _clock.frame())
-            _clock.setRate(0);
-        else
-            _clock.setRate(-1);
+
+        if(oldFrame != _clock.frame())
+        {
+            pauseDetector.restart();
+            if(oldFrame < _clock.frame())
+                _clock.setRate(1);
+            else
+                _clock.setRate(-1);
+        }
 
     }
     delete hhmmssff;
