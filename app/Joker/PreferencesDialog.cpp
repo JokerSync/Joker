@@ -40,6 +40,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldDisplayTitle = _settings->value("displayTitle", true).toBool();
 	_oldDisplayLoop = _settings->value("displayLoop", false).toBool();
     _oldSyncProtocol = _settings->value("synchroProtocol", NO_SYNC).toString();
+    _oldLTCInput = _settings->value("ltcInputDevice", "").toString();
 
 	_oldLogMask = _settings->value("logMask", 1).toInt();
 
@@ -122,11 +123,14 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 
     ui->listWidgetSync->findItems(_oldSyncProtocol, Qt::MatchExactly).first()->setSelected(1);
 
-    if(_oldSyncProtocol != SONY)
+    if(_oldSyncProtocol == SONY)
+        showParamSony(true);
+    else if(_oldSyncProtocol == LTC)
+        showParamLTC(true);
+    else
     {
-        ui->cBoxSonyAutoconnect->setEnabled(0);
-        ui->spinBoxSonyHighSpeed->setEnabled(0);
-        ui->lineEditSonyID->setEnabled(0);
+        showParamLTC(false);
+        showParamSony(false);
     }
 
 }
@@ -160,6 +164,7 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setValue("displayTitle", _oldDisplayTitle);
 	_settings->setValue("displayLoop", _oldDisplayLoop);
 	_settings->setValue("logMask", _oldLogMask);
+    _settings->setValue("ltcInputDevice", _oldLTCInput);
 	PhDebug::setLogMask(_oldLogMask);
 
 	close();
@@ -309,18 +314,18 @@ void PreferencesDialog::onLogMaskButtonClicked()
 
 void PreferencesDialog::on_listWidgetSync_itemClicked(QListWidgetItem *item)
 {
-    PHDEBUG << item->text();
     if(item->text() == SONY)
     {
-        ui->cBoxSonyAutoconnect->setEnabled(1);
-        ui->spinBoxSonyHighSpeed->setEnabled(1);
-        ui->lineEditSonyID->setEnabled(1);
+        showParamSony(true);
+    }
+    else if(item->text() == LTC)
+    {
+        showParamLTC(true);
     }
     else
     {
-        ui->cBoxSonyAutoconnect->setEnabled(0);
-        ui->spinBoxSonyHighSpeed->setEnabled(0);
-        ui->lineEditSonyID->setEnabled(0);
+        showParamLTC(false);
+        showParamSony(false);
     }
     _settings->setValue("synchroProtocol", item->text());
 }
@@ -328,18 +333,72 @@ void PreferencesDialog::on_listWidgetSync_itemClicked(QListWidgetItem *item)
 void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
     Q_UNUSED(previous);
-    PHDEBUG << current->text();
     if(current->text() == SONY)
     {
-        ui->cBoxSonyAutoconnect->setEnabled(1);
-        ui->spinBoxSonyHighSpeed->setEnabled(1);
-        ui->lineEditSonyID->setEnabled(1);
+        showParamSony(true);
+    }
+    else if(current->text() == LTC)
+    {
+        showParamLTC(true);
     }
     else
     {
-        ui->cBoxSonyAutoconnect->setEnabled(0);
-        ui->spinBoxSonyHighSpeed->setEnabled(0);
-        ui->lineEditSonyID->setEnabled(0);
+        showParamLTC(false);
+        showParamSony(false);
     }
     _settings->setValue("synchroProtocol", current->text());
+}
+
+void PreferencesDialog::showParamLTC(bool show)
+{
+    if(show)
+    {
+        ui->listWidgetInputs->clear();
+        ui->listWidgetInputs->setVisible(1);
+        ui->lblInputs->setVisible(1);
+        showParamSony(false);
+        ui->listWidgetInputs->addItems(PhLtcReader::inputList());
+        if(ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).count() > 0)
+            ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).first()->setSelected(1);
+    }
+    else
+    {
+        ui->lblInputs->setVisible(0);
+        ui->listWidgetInputs->setVisible(0);
+    }
+}
+
+void PreferencesDialog::showParamSony(bool show)
+{
+    if(show)
+    {
+        ui->cBoxSonyAutoconnect->setVisible(1);
+        ui->spinBoxSonyHighSpeed->setVisible(1);
+        ui->lineEditSonyID->setVisible(1);
+        ui->lblSonyAutoconnect->setVisible(1);
+        ui->lblSonyHighSpeed->setVisible(1);
+        ui->lblSonyID->setVisible(1);
+        showParamLTC(false);
+    }
+    else
+    {
+        ui->cBoxSonyAutoconnect->setVisible(0);
+        ui->spinBoxSonyHighSpeed->setVisible(0);
+        ui->lineEditSonyID->setVisible(0);
+        ui->lblSonyAutoconnect->setVisible(0);
+        ui->lblSonyHighSpeed->setVisible(0);
+        ui->lblSonyID->setVisible(0);
+    }
+}
+
+
+void PreferencesDialog::on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    Q_UNUSED(previous);
+    _settings->setValue("ltcInputDevice", current->text());
+}
+
+void PreferencesDialog::on_listWidgetInputs_itemChanged(QListWidgetItem *item)
+{
+    _settings->setValue("ltcInputDevice", item->text());
 }

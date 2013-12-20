@@ -162,17 +162,31 @@ void JokerWindow::setupOpenRecentMenu()
 
 void JokerWindow::protocolChanged()
 {
+    _mediaPanel.setSliderEnable(false);
     if(_settings->value("synchroProtocol", NO_SYNC).toString() == SONY)
     {
-
+        // Initialize the sony module
+        if(_settings->value("sonyAutoConnect", true).toBool())
+        {
+            if(_sonySlave.open())
+            {
+                _synchronizer.setSyncClock(_sonySlave.clock());
+                ui->videoStripView->setSony(&_sonySlave);
+            }
+            else
+                QMessageBox::critical(this, "", "Unable to connect to USB422v module");
+        }
     }
-    else if (_settings->value("synchroProtocol", NO_SYNC).toString() == LTC)
+    else if(_settings->value("synchroProtocol", NO_SYNC).toString() == LTC)
     {
-
+            _ltcReader.init(_settings->value("ltcInputDevice", "").toString());
+            _synchronizer.setSyncClock(_ltcReader.clock());
     }
     else
     {
-
+#warning TODO FIX ME
+        _mediaPanel.setSliderEnable(true);
+        _synchronizer.setSyncClock(NULL);
     }
 }
 
@@ -459,12 +473,15 @@ void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
     QString syncProtocol = _settings->value("synchroProtocol", NO_SYNC).toString();
+    QString inputLTC = _settings->value("ltcInputDevice", "").toString();
 	PreferencesDialog dlg(_settings);
-    if(dlg.exec())
+    dlg.exec();
+    if(syncProtocol != _settings->value("synchroProtocol", NO_SYNC).toString() or inputLTC != _settings->value("ltcInputDevice", ""))
     {
-        if(syncProtocol != _settings->value("synchroProtocol", NO_SYNC).toString())
-            protocolChanged();
+        PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol", NO_SYNC).toString();
+        protocolChanged();
     }
+
 	fadeInMediaPanel();
 }
 
