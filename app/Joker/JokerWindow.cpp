@@ -26,6 +26,10 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	// Setting up UI
 	ui->setupUi(this);
 
+    // Due to translation, Qt might not be able to link automatically the menu
+    ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
+    ui->actionAbout->setMenuRole(QAction::AboutRole);
+
 	setupOpenRecentMenu();
 
 	// Get the pointer to the differents objects :
@@ -56,7 +60,7 @@ JokerWindow::JokerWindow(QSettings *settings) :
 			ui->videoStripView->setSony(&_sonySlave);
 		}
 		else
-			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
+            QMessageBox::critical(this, "", tr("Unable to connect to USB422v module"));
 	}
 
 	// Setting up the media panel
@@ -275,7 +279,7 @@ void JokerWindow::on_actionOpen_triggered()
 
 	if(checkSaveFile())
 	{
-		QFileDialog dlg(this, "Open...", _settings->value("lastFolder", QDir::homePath()).toString(), "DetX files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
+        QFileDialog dlg(this, tr("Open..."), _settings->value("lastFolder", QDir::homePath()).toString(), "DetX files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
 
 		dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
@@ -368,7 +372,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	hideMediaPanel();
 
 	QString lastFolder = _settings->value("lastVideoFolder", QDir::homePath()).toString();
-	QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
+    QFileDialog dlg(this, tr("Open..."), lastFolder, tr("Movie files") + " (*.avi *.mov)");
 	if(dlg.exec())
 	{
 		QString videoFile = dlg.selectedFiles()[0];
@@ -581,7 +585,7 @@ void JokerWindow::on_actionSave_triggered()
 	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode()))
 		_needToSave = false;
 	else
-		QMessageBox::critical(this, "", "Unable to save " + _currentStripFile);
+        QMessageBox::critical(this, "", tr("Unable to save ") + _currentStripFile);
 }
 
 void JokerWindow::on_actionSave_as_triggered()
@@ -600,7 +604,7 @@ void JokerWindow::on_actionSave_as_triggered()
 			stripFile = lastFolder + "/" + info.completeBaseName() + ".strip";
 	}
 
-	stripFile = QFileDialog::getSaveFileName(this, "Save...", stripFile,"*.strip");
+    stripFile = QFileDialog::getSaveFileName(this, tr("Save..."), stripFile,"*.strip");
 	if(stripFile != "")
 	{
 		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode()))
@@ -609,7 +613,7 @@ void JokerWindow::on_actionSave_as_triggered()
 			setCurrentStripFile(stripFile);
 		}
 		else
-			QMessageBox::critical(this, "", "Unable to save " + stripFile);
+            QMessageBox::critical(this, "", tr("Unable to save ") + stripFile);
 	}
 }
 
@@ -617,7 +621,7 @@ bool JokerWindow::checkSaveFile()
 {
 	if(_needToSave)
 	{
-		QString msg = "Do you want to save your changes ?";
+        QString msg = tr("Do you want to save your changes ?");
 		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
 		box.setDefaultButton(QMessageBox::Save);
 		switch(box.exec())
