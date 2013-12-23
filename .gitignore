@@ -28,3 +28,5 @@ build-*
 doc/html
 doxygen_error.log
 
+
+*.qm
