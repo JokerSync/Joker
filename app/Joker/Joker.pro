@@ -63,11 +63,12 @@ FORMS += \
 	PropertyDialog.ui \
     PeopleDialog.ui
 
-TRANSLATIONS =	tr_fr.ts \
-				tr_en.ts \
+TRANSLATIONS =	fr_FR.ts \
+				en_US.ts \
 
 
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
+QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/*.qm $${RESOURCES_PATH}/../Resources/;
 
 
 CONFIG(release, debug|release) {

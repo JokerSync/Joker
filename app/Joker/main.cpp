@@ -23,8 +23,9 @@ int main(int argc, char *argv[])
 
 	QApplication a(argc, argv);
     QTranslator translator;
-    translator.load("/Users/thomas/Joker/app/Joker/tr_fr.qm");
+    translator.load(QDir::currentPath() + "/../Resources/" + QLocale::system().name() + ".qm");
     a.installTranslator(&translator);
+
 
 	JokerWindow w(&settings);
 
