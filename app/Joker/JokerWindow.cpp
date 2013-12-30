@@ -473,8 +473,7 @@ void JokerWindow::fadeInMediaPanel()
 void JokerWindow::fadeOutMediaPanel()
 {
     // Don't fade out the media panel if the mouse is over it
-    if(QCursor::pos().x() > _mediaPanel.pos().x() and QCursor::pos().x() < _mediaPanel.pos().x() + _mediaPanel.size().width() and
-            QCursor::pos().y() > _mediaPanel.pos().y() and QCursor::pos().y() < _mediaPanel.pos().y() + _mediaPanel.size().height())
+	if(_mediaPanel.underMouse())
     {
         _mediaPanelTimer.start(3000);
         return;
