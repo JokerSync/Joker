@@ -473,7 +473,7 @@ void JokerWindow::fadeInMediaPanel()
 void JokerWindow::fadeOutMediaPanel()
 {
     // Don't fade out the media panel if the mouse is over it
-	if(_mediaPanel.underMouse())
+	if(_mediaPanel.underMouse() or _mediaPanel.isMousePressed())
     {
         _mediaPanelTimer.start(3000);
         return;

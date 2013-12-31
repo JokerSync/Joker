@@ -21,8 +21,19 @@ public:
 	void setFirstFrame(PhFrame frame);
 	void setMediaLength(PhFrame length);
 
+	bool isMousePressed();
+
 private:
 	Ui::PhMediaPanelDialog *ui;
+
+	// For moving with mouse
+	int _iXdeffarace;
+	int _iYdeffarance;
+	bool _mousePressed;
+
+	void mousePressEvent( QMouseEvent * event);
+	void mouseReleaseEvent( QMouseEvent * event );
+	void mouseMoveEvent( QMouseEvent * event );
 };
 
 #endif // PHMEDIAPANELDIALOG_H
