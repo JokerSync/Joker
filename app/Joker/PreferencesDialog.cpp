@@ -259,6 +259,7 @@ void PreferencesDialog::on_pButtonReset_clicked()
 		else
 			btn->setChecked(true);
 	}
+	onLogMaskButtonClicked();
 }
 
 void PreferencesDialog::on_lblPathToLogFile_linkActivated(const QString &link)
