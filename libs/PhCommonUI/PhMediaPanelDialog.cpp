@@ -3,13 +3,15 @@
 
 PhMediaPanelDialog::PhMediaPanelDialog(QWidget *parent) :
 	QDialog(parent),
-	ui(new Ui::PhMediaPanelDialog),_iXdeffarace(-1), _iYdeffarance(-1)
+	ui(new Ui::PhMediaPanelDialog),_iXdeffarance(-1), _iYdeffarance(-1)
 {
 	ui->setupUi(this);
-	this->setFixedSize(ui->mediaPanel->size());
+	// Set the size with the child's size
+	setFixedSize(ui->mediaPanel->size());
+	// Remove parent to make a top widget (flags compatibility)
 	setParent(0);
-	Qt::WindowFlags flags = Qt::Widget;
-	flags |= Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint;
+	// assign flags
+	Qt::WindowFlags flags = Qt::Widget | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint;
 	setWindowFlags(flags);
 }
 
@@ -33,28 +35,26 @@ void PhMediaPanelDialog::setMediaLength(PhFrame length)
 	ui->mediaPanel->setMediaLength(length);
 }
 
-void PhMediaPanelDialog::mousePressEvent ( QMouseEvent * event)
+void PhMediaPanelDialog::mousePressEvent ( QMouseEvent *)
 {
 	_mousePressed = true;
 	QPoint qpMousePressedPoint = QCursor::pos();
 	QPoint qpApploc = this->pos();
-	_iXdeffarace = qpMousePressedPoint.x() - qpApploc.x();
+	_iXdeffarance = qpMousePressedPoint.x() - qpApploc.x();
 	_iYdeffarance = qpMousePressedPoint.y() - qpApploc.y();
 }
 
-//************************************************** ******
-void PhMediaPanelDialog::mouseReleaseEvent ( QMouseEvent * event )
+void PhMediaPanelDialog::mouseReleaseEvent ( QMouseEvent * )
 {
 	_mousePressed = false;
 }
 
-//************************************************** ******
-void PhMediaPanelDialog::mouseMoveEvent ( QMouseEvent * event )
+void PhMediaPanelDialog::mouseMoveEvent ( QMouseEvent * )
 {
 	if(_mousePressed)
 	{
-		QPoint qpAppNewLoc( (QCursor::pos().x() - _iXdeffarace) , (QCursor::pos().y() - _iYdeffarance) );
-		this->setProperty("pos", qpAppNewLoc);
+		QPoint qpAppNewLoc( (QCursor::pos().x() - _iXdeffarance) , (QCursor::pos().y() - _iYdeffarance) );
+		setProperty("pos", qpAppNewLoc);
 	}
 }
 
