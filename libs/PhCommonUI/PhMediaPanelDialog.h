@@ -27,7 +27,7 @@ private:
 	Ui::PhMediaPanelDialog *ui;
 
 	// For moving with mouse
-	int _iXdeffarace;
+	int _iXdeffarance;
 	int _iYdeffarance;
 	bool _mousePressed;
 
