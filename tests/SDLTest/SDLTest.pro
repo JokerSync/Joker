@@ -9,6 +9,16 @@ include(../../libs/PhTools/PhTools.pri);
 
 # Windows specific
 win32 {
+	!exists($$(SDL_PATH)) {
+		error("You must define SDL_PATH")
+	}
+	!exists($$(SDL_IMAGE_PATH)) {
+		error("You must define SDL_IMAGE_PATH")
+	}
+	!exists($$(SDL_TTF_PATH)) {
+		error("You must define SDL_TTF_PATH")
+	}
+
 	INCLUDEPATH += $$(SDL_PATH)\include
 	INCLUDEPATH += $$(SDL_PATH)\include\SDL2 $$(SDL_IMAGE_PATH)\include $$(SDL_TTF_PATH)\include
 	LIBS += -L$$(SDL_PATH)\lib -lSDL2Main -lSDL2
