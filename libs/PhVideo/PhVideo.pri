@@ -1,3 +1,5 @@
+CONFIG += multimedia
+
 HEADERS += \
 	../../libs/PhVideo/PhVideoView.h \
     ../../libs/PhVideo/PhVideoEngine.h

@@ -12,7 +12,8 @@
 AVTestWindow::AVTestWindow(QSettings *settings)
 	: QMainWindow(0),
       ui(new Ui::AVTestWindow),
-	  _settings(settings)
+	  _settings(settings),
+	  _videoEngine(true)
 {
 	ui->setupUi(this);
 	_videoEngine.setSettings(settings);
