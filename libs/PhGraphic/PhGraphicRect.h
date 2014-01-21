@@ -6,6 +6,8 @@
 #ifndef PHGRAPHICSQUARE_H
 #define PHGRAPHICSQUARE_H
 
+#include <QtGlobal>
+
 #if defined(Q_OS_MAC)
 #include <glu.h>
 #else

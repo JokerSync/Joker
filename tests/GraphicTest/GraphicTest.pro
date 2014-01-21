@@ -36,7 +36,6 @@ mac{
 }
 win32{
 	RESOURCES_PATH = $$shell_path(./debug/)
-	CS = &
 	PATH = ""
 
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\img\look.png) $${RESOURCES_PATH} $${CS}
