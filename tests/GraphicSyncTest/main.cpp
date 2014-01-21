@@ -4,7 +4,7 @@
 int main(int argc, char *argv[])
 {
 
-	QSettings settings("Phonations", "Joker");
+	QSettings settings("Phonations", "GraphicSyncTestWindow");
 	int logLevel = settings.value("logLevel", 1).toInt();
 	PhDebug::setLogMask(logLevel);
 
