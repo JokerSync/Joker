@@ -27,10 +27,24 @@ SOURCES += main.cpp \
 FORMS += \
 	MainWindow.ui
 
-QMAKE_POST_LINK += echo $${RESOURCES_PATH};
-QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/look.png $${RESOURCES_PATH};
-QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/Bedizen.ttf $${RESOURCES_PATH};
-QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/SWENSON.TTF $${RESOURCES_PATH};
+mac{
+	PATH = "/../Resources/"
+	QMAKE_POST_LINK += echo $${RESOURCES_PATH};
+	QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/look.png $${RESOURCES_PATH}/../Resources/;
+	QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/Bedizen.ttf $${RESOURCES_PATH}/../Resources/;
+	QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/SWENSON.TTF $${RESOURCES_PATH}/../Resources/;
+}
+win32{
+	RESOURCES_PATH = $$shell_path(./debug/)
+	CS = &
+	PATH = ""
+
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\img\look.png) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\Bedizen.ttf) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\SWENSON.TTF) $${RESOURCES_PATH} $${CS}
+}
+
+DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
 
 CONFIG(release, debug|release) {
 	mac {
