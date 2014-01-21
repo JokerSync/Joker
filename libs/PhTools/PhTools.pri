@@ -19,17 +19,20 @@ SOURCES += \
 
 # Windows specific
 win32 {
+	CS = &
 	RESOURCES_PATH = .
 }
 
 # Ubuntu specific
 linux {
+	CS = ;
 	RESOURCES_PATH = .
 }
 
 
 # MacOS specific
 mac {
+	CS = ;
 	RESOURCES_PATH = $${TARGET}.app/Contents/Resources
 }
 
