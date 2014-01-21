@@ -6,7 +6,11 @@
 #ifndef PHGRAPHICSQUARE_H
 #define PHGRAPHICSQUARE_H
 
+#if defined(Q_OS_MAC)
 #include <glu.h>
+#else
+#include <PhGraphic/glu.h>
+#endif
 #include <SDL2/SDL.h>
 #include "PhGraphicObject.h"
 

@@ -89,10 +89,14 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
     // Bind the texture object
     glBindTexture( GL_TEXTURE_2D, _texture );
 
-
-    // Edit the texture object's image data using the information SDL_Surface gives us
+	// Edit the texture object's image data using the information SDL_Surface gives us
+#if defined(Q_OS_MAC)
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
                   GL_YCBCR_422_APPLE, GL_UNSIGNED_SHORT_8_8_APPLE, data);
+#else
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+				  0x85B9, 0x85BA, data);
+#endif
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

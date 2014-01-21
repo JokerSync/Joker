@@ -9,7 +9,11 @@
 
 
 
+#if defined(Q_OS_MAC)
 #include <glu.h>
+#else
+#include <PhGraphic/glu.h>
+#endif
 
 #include "PhTools/PhDebug.h"
 
@@ -26,7 +30,7 @@ bool PhFont::setFontFile(QString fontFile)
 	if(fontFile != this->fontFile)
 	{
 		this->fontFile = fontFile;
-		init(this->fontFile);
+		return init(this->fontFile);
 	}
 
 }
