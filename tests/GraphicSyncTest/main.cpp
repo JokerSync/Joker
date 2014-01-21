@@ -3,7 +3,10 @@
 
 int main(int argc, char *argv[])
 {
-	PhDebug::init(false, true, true, true, true, false, "GraphicSyncTest");
+
+	QSettings settings("Phonations", "Joker");
+	int logLevel = settings.value("logLevel", 1).toInt();
+	PhDebug::setLogMask(logLevel);
 
 	QApplication a(argc, argv);
 	GraphicSyncTestWindow w;
