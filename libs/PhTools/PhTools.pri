@@ -35,6 +35,3 @@ mac {
 	CS = ;
 	RESOURCES_PATH = $${TARGET}.app/Contents/Resources
 }
-
-DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
-

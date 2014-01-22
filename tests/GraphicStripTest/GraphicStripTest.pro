@@ -34,3 +34,14 @@ FORMS += \
     MainWindow.ui \
     StripPropertiesDialog.ui \
     GenerateDialog.ui
+
+
+mac{
+	PATH = "/../Resources/"
+}
+win32{
+	RESOURCES_PATH = $$shell_path(./debug/)
+}
+
+
+DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"

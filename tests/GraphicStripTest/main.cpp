@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
 	QSettings settings("Phonations","GraphicStripTest");
 	MainWindow w(&settings);
 
+	PHDEBUG << PATH_TO_RESSOURCES;
+
     w.show();
 
 	if (argc > 1)

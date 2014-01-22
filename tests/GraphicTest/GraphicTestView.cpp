@@ -19,14 +19,14 @@ bool GraphicTestView::setFontFile(QString fontFile)
 
 bool GraphicTestView::init()
 {
-	PHDEBUG << "Initialize _image";
+	PHDEBUG << "Initialize _image" ;
 
 	_image.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/look.png");
 	_image.setTextureCoordinate(1,1);
 	_image.setRect(50,0,250,125);
 	if (! _image.init())
 	{
-		PHDEBUG << "_image not initialize";
+		PHDEBUG << "_image not initialize : " << QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/look.png";
 		return false;
 	}
 
