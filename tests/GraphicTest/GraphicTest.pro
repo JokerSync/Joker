@@ -50,3 +50,6 @@ CONFIG(release, debug|release) {
 	}
 
 }
+
+DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
+
