@@ -20,7 +20,7 @@
 PhFont::PhFont(): _texture(-1), _glyphHeight(0)
 {
 	font = NULL;
-	boldness = 0;
+	boldness = 1;
 }
 
 bool PhFont::setFontFile(QString fontFile)

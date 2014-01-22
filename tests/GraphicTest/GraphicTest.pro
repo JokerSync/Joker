@@ -43,7 +43,6 @@ win32{
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\SWENSON.TTF) $${RESOURCES_PATH} $${CS}
 }
 
-DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
 
 CONFIG(release, debug|release) {
 	mac {

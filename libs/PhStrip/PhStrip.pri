@@ -23,15 +23,18 @@ HEADERS += \
     ../../libs/PhStrip/tests/PhStripDocTest.h
 
 # Windows specific
-win32 {
+win32{
+	RESOURCES_PATH = $$shell_path(./debug/)
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/test01.detx) $${RESOURCES_PATH} $${CS}
+
 }
 
 # Ubuntu specific
-linux {
+linux{
 }
 
 # MacOS specific
-mac {
+mac{
+	QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/strip/test01.detx .;
 }
 
-QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/strip/test01.detx .;

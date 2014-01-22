@@ -67,7 +67,7 @@ bool PhGraphicStrip::init()
 	clearData();
 
 	//Load the strip background
-	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
+	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png");
 	_stripBackgroundImage.init();
 
 	// Init the sync bar
@@ -79,7 +79,7 @@ bool PhGraphicStrip::init()
 		fontFile = _settings->value("StripFontFile", "").toString();
 	if(!QFile(fontFile).exists())
 	{
-		fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
+		fontFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES "/SWENSON.TTF";
 		_settings->setValue("StripFontFile", fontFile);
 	}
 	_font.setFontFile(fontFile);
