@@ -20,7 +20,14 @@ SOURCES += \
 # Windows specific
 win32 {
 	CS = &
-	RESOURCES_PATH = .
+	CONFIG(release, debug|release) {
+		RESOURCES_PATH = $$shell_path(./release/)
+		message(Release mode)
+	}
+	CONFIG(debug, debug|release) {
+		RESOURCES_PATH = $$shell_path(./debug/)
+		message(Debug mode)
+	}
 }
 
 # Ubuntu specific

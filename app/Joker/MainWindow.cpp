@@ -9,7 +9,6 @@
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
-#include "PhCommonUI/PhFontDialog.h"
 #include "AboutMenu.h"
 #include "PreferencesDialog.h"
 

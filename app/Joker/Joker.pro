@@ -20,11 +20,6 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
 
-# For the plist version
-QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
-QMAKE_POST_LINK += sed -i -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
-
-
 INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri)
@@ -59,7 +54,27 @@ FORMS += \
     PreferencesDialog.ui \
 	PropertyDialog.ui \
 
-QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
+
+mac{
+	PATH = "/../Resources/"
+	QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
+
+# For the plist version
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
+	QMAKE_POST_LINK += sed -i -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
+
+
+}
+win32 {
+
+	PATH = .
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
+
+}
+
+
+DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
+
 
 
 CONFIG(release, debug|release) {

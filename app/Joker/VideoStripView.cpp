@@ -1,4 +1,5 @@
 #include "VideoStripView.h"
+#include <QtGlobal>
 
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
@@ -27,7 +28,11 @@ void VideoStripView::setSony(PhSonyController *sony)
 
 bool VideoStripView::init()
 {
+#ifdef Q_OS_MAC
 	_hudFont.setFontFile("/Library/Fonts/Arial.ttf");
+#else
+	_hudFont.setFontFile(qgetenv("windir") + "/Fonts/Arial.ttf");
+#endif
 	_tcText.setColor(QColor(128, 128, 128));
 	_noVideoSyncError.setColor(QColor(0, 0, 0));
 

@@ -24,9 +24,6 @@ win32{
 	LIBS += -L$$(FFMPEG_PATH)\lib -lavformat -lavcodec -lavutil -lswscale -liconv -lz
 
 
-	RESOURCES_PATH = $$shell_path(./debug/)
-	CS = &
-
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_PATH)/bin/swscale-2.dll) $${RESOURCES_PATH} $${CS}
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_PATH)/bin/avcodec-55.dll) $${RESOURCES_PATH} $${CS}
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_PATH)/bin/avdevice-55.dll) $${RESOURCES_PATH} $${CS}
