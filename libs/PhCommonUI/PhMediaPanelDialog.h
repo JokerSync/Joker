@@ -20,6 +20,7 @@ public:
 	void setClock(PhClock *clock);
 	void setFirstFrame(PhFrame frame);
 	void setMediaLength(PhFrame length);
+    void setSliderEnable(bool isEnabled);
 
 private:
 	Ui::PhMediaPanelDialog *ui;
