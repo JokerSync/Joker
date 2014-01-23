@@ -41,8 +41,6 @@ win32 {
         LIBS += -L$$(SDL_PATH)\lib -lSDL2Main -lSDL2
         LIBS += -L$$(SDL_IMAGE_PATH)\lib -lSDL2_image
         LIBS += -L$$(SDL_TTF_PATH)\lib -lSDL2_ttf
-        RESOURCES_PATH = $$shell_path(./debug/)
-        CS = &
 
         QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_PATH)/bin/SDL2.dll) $${RESOURCES_PATH} $${CS}
         QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_IMAGE_PATH)/bin/SDL2_image.dll) $${RESOURCES_PATH} $${CS}

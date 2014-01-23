@@ -24,7 +24,6 @@ HEADERS += \
 
 # Windows specific
 win32{
-	RESOURCES_PATH = $$shell_path(./debug/)
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/test01.detx) $${RESOURCES_PATH} $${CS}
 
 }
