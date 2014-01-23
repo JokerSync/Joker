@@ -35,7 +35,6 @@ private slots:
 	void on_sliderStripHeight_valueChanged(int position);
 	void on_cBoxSonyAutoconnect_toggled(bool checked);
 	void on_spinBoxSpeed_valueChanged(int speed);
-	void on_listWidgetFont_itemClicked(QListWidgetItem *item);
 	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 
@@ -69,13 +68,9 @@ private slots:
 
 	void onLogMaskButtonClicked();
 
-    void on_listWidgetSync_itemClicked(QListWidgetItem *item);
-
     void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
     void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
-    void on_listWidgetInputs_itemChanged(QListWidgetItem *item);
 
 private:
 	Ui::PreferencesDialog *ui;

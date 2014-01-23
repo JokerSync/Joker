@@ -229,12 +229,6 @@ void PreferencesDialog::on_lineEditFilter_textEdited(const QString &arg1)
 	}
 }
 
-
-void PreferencesDialog::on_listWidgetFont_itemClicked(QListWidgetItem *item)
-{
-	_settings->setValue("StripFontFile", fontList[item->text()]);
-}
-
 void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
 	Q_UNUSED(previous);
@@ -312,24 +306,6 @@ void PreferencesDialog::onLogMaskButtonClicked()
 	_settings->setValue("logMask", logMask);
 }
 
-void PreferencesDialog::on_listWidgetSync_itemClicked(QListWidgetItem *item)
-{
-    if(item->text() == SONY)
-    {
-        showParamSony(true);
-    }
-    else if(item->text() == LTC)
-    {
-        showParamLTC(true);
-    }
-    else
-    {
-        showParamLTC(false);
-        showParamSony(false);
-    }
-    _settings->setValue("synchroProtocol", item->text());
-}
-
 void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
     Q_UNUSED(previous);
@@ -396,9 +372,4 @@ void PreferencesDialog::on_listWidgetInputs_currentItemChanged(QListWidgetItem *
 {
     Q_UNUSED(previous);
     _settings->setValue("ltcInputDevice", current->text());
-}
-
-void PreferencesDialog::on_listWidgetInputs_itemChanged(QListWidgetItem *item)
-{
-    _settings->setValue("ltcInputDevice", item->text());
 }
