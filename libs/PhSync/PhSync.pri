@@ -1,4 +1,4 @@
-QT += serialport
+QT += serialport multimedia
 
 HEADERS += \
     ../../libs/PhSync/PhSonyController.h \
