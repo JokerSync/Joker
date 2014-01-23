@@ -168,34 +168,36 @@ void JokerWindow::setupSyncProtocol()
 	_sonySlave.close();
 	_ltcReader.close();
 
-    if(_settings->value("synchroProtocol", NO_SYNC).toString() == SONY)
-    {
-        // Initialize the sony module
-#warning TODO : remove sonyAutoConnect
-        if(_settings->value("sonyAutoConnect", true).toBool())
-        {
-			if(_sonySlave.open())
-            {
-				clock = _sonySlave.clock();
-                ui->videoStripView->setSony(&_sonySlave);
-            }
-            else
-                QMessageBox::critical(this, "", "Unable to connect to USB422v module");
-        }
-    }
-    else if(_settings->value("synchroProtocol", NO_SYNC).toString() == LTC)
-    {
-		QString input = _settings->value("ltcInputDevice", "").toString();
-		if(_ltcReader.init(input))
-			clock = _ltcReader.clock();
+	switch(_settings->value("synchroProtocol", NO_SYNC).toInt())
+	{
+	case SONY:
+		// Initialize the sony module
+		if(_sonySlave.open())
+		{
+			clock = _sonySlave.clock();
+			ui->videoStripView->setSony(&_sonySlave);
+		}
 		else
-			QMessageBox::critical(this, "", "Unable to open " + input);
-    }
+			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
+		break;
+	case LTC:
+		{
+			QString input = _settings->value("ltcInputDevice", "").toString();
+			if(_ltcReader.init(input))
+				clock = _ltcReader.clock();
+			else
+				QMessageBox::critical(this, "", "Unable to open " + input);
+			break;
+		}
+	}
 
 	_synchronizer.setSyncClock(clock);
 
 	// Disable slide if Joker is sync to a protocol
 	_mediaPanel.setSliderEnable(clock == NULL);
+
+	if(clock == NULL)
+		_settings->setValue("synchroProtocol", NO_SYNC);
 }
 
 void JokerWindow::openFile(QString fileName)
