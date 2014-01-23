@@ -47,7 +47,7 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_synchronizer.setStripClock(_strip->clock());
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
-    protocolChanged();
+    setupSyncProtocol();
 
 	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
@@ -160,17 +160,23 @@ void JokerWindow::setupOpenRecentMenu()
 
 }
 
-void JokerWindow::protocolChanged()
+void JokerWindow::setupSyncProtocol()
 {
-    _mediaPanel.setSliderEnable(false);
+	PhClock* clock = NULL;
+
+	// Disable old protocol
+	_sonySlave.close();
+	_ltcReader.close();
+
     if(_settings->value("synchroProtocol", NO_SYNC).toString() == SONY)
     {
         // Initialize the sony module
+#warning TODO : remove sonyAutoConnect
         if(_settings->value("sonyAutoConnect", true).toBool())
         {
-            if(_sonySlave.open())
+			if(_sonySlave.open())
             {
-                _synchronizer.setSyncClock(_sonySlave.clock());
+				clock = _sonySlave.clock();
                 ui->videoStripView->setSony(&_sonySlave);
             }
             else
@@ -179,15 +185,17 @@ void JokerWindow::protocolChanged()
     }
     else if(_settings->value("synchroProtocol", NO_SYNC).toString() == LTC)
     {
-            _ltcReader.init(_settings->value("ltcInputDevice", "").toString());
-            _synchronizer.setSyncClock(_ltcReader.clock());
+		QString input = _settings->value("ltcInputDevice", "").toString();
+		if(_ltcReader.init(input))
+			clock = _ltcReader.clock();
+		else
+			QMessageBox::critical(this, "", "Unable to open " + input);
     }
-    else
-    {
-#warning TODO FIX ME
-        _mediaPanel.setSliderEnable(true);
-        _synchronizer.setSyncClock(NULL);
-    }
+
+	_synchronizer.setSyncClock(clock);
+
+	// Disable slide if Joker is sync to a protocol
+	_mediaPanel.setSliderEnable(clock == NULL);
 }
 
 void JokerWindow::openFile(QString fileName)
@@ -479,7 +487,7 @@ void JokerWindow::on_actionPreferences_triggered()
     if(syncProtocol != _settings->value("synchroProtocol", NO_SYNC).toString() or inputLTC != _settings->value("ltcInputDevice", ""))
     {
         PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol", NO_SYNC).toString();
-        protocolChanged();
+        setupSyncProtocol();
     }
 
 	fadeInMediaPanel();

@@ -21,7 +21,9 @@ class PhLtcReader : public QObject
 public:
     explicit PhLtcReader(QObject *parent = 0);
 
-    void init(QString _input="");
+    bool init(QString _input="");
+	void close();
+
     static QList<QString> inputList();
     PhClock * clock();
 
@@ -33,10 +35,10 @@ private:
 
     QAudioInput *_input;
 
-    qint64 position;
-    QIODevice * buffer2;
-    LTCDecoder * decoder;
-    QTime pauseDetector;
+    qint64 _position;
+    QIODevice * _buffer;
+    LTCDecoder * _decoder;
+    QTime _pauseDetector;
 
 };
 
