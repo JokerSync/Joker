@@ -36,7 +36,6 @@ private slots:
 	void on_spinBoxSpeed_valueChanged(int speed);
 	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
-
 	void on_buttonBox_accepted();
 
 	void on_buttonBox_rejected();

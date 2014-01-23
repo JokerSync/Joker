@@ -8,7 +8,7 @@ TARGET = Joker
 TEMPLATE = app
 ICON = joker.icns
 
-QT += core gui multimedia
+QT += core gui
 
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
