@@ -482,13 +482,13 @@ void JokerWindow::on_actionAbout_triggered()
 void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
-    QString syncProtocol = _settings->value("synchroProtocol", NO_SYNC).toString();
+    int syncProtocol = _settings->value("synchroProtocol", NO_SYNC).toInt();
     QString inputLTC = _settings->value("ltcInputDevice", "").toString();
 	PreferencesDialog dlg(_settings);
     dlg.exec();
-    if(syncProtocol != _settings->value("synchroProtocol", NO_SYNC).toString() or inputLTC != _settings->value("ltcInputDevice", ""))
+    if(syncProtocol != _settings->value("synchroProtocol", NO_SYNC).toInt() or inputLTC != _settings->value("ltcInputDevice", ""))
     {
-        PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol", NO_SYNC).toString();
+        PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol", NO_SYNC).toInt();
         setupSyncProtocol();
     }
 
