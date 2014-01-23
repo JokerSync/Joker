@@ -31,5 +31,10 @@ void PhMediaPanelDialog::setFirstFrame(PhFrame frame)
 
 void PhMediaPanelDialog::setMediaLength(PhFrame length)
 {
-	ui->mediaPanel->setMediaLength(length);
+    ui->mediaPanel->setMediaLength(length);
+}
+
+void PhMediaPanelDialog::setSliderEnable(bool isEnabled)
+{
+    ui->mediaPanel->setSliderEnable(isEnabled);
 }

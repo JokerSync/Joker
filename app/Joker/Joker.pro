@@ -62,6 +62,10 @@ FORMS += \
 	PropertyDialog.ui \
     PeopleDialog.ui
 
+
+INCLUDEPATH += /usr/local/include
+LIBS += -L/usr/local/lib -lltc -lm
+
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
 
 
@@ -73,3 +77,5 @@ CONFIG(release, debug|release) {
 	}
 
 }
+
+cache()
