@@ -131,7 +131,7 @@ private:
 
 	void updateOpenRecent();
 	void setupOpenRecentMenu();
-    void protocolChanged();
+    void setupSyncProtocol();
 	void closeEvent(QCloseEvent *event);
 
 	void setCurrentStripFile(QString stripFile);

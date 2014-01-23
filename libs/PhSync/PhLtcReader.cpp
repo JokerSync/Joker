@@ -2,18 +2,26 @@
 
 PhLtcReader::PhLtcReader(QObject *parent) :
     QObject(parent),
-    _clock(PhTimeCodeType25)
+    _clock(PhTimeCodeType25),
+	_input(NULL),
+	_position(0),
+	_buffer(NULL)
 {
-    decoder = ltc_decoder_create(1920, 3840);
-    init();
+    _decoder = ltc_decoder_create(1920, 3840);
     PHDEBUG << "LTC Reader created";
 }
 
-void PhLtcReader::init(QString input)
+bool PhLtcReader::init(QString input)
 {
-    QAudioDeviceInfo info = QAudioDeviceInfo::defaultInputDevice();
-
     QList<QAudioDeviceInfo> list = QAudioDeviceInfo::availableDevices(QAudio::AudioInput);
+
+	if(list.isEmpty())
+	{
+		PHDEBUG << "No audio input device";
+		return false;
+	}
+
+	QAudioDeviceInfo info = QAudioDeviceInfo::defaultInputDevice();
 
     foreach(QAudioDeviceInfo device, list)
     {
@@ -33,15 +41,32 @@ void PhLtcReader::init(QString input)
 
     if(!info.isFormatSupported(format))
     {
-        qDebug() << "unsupported format";
-        return;
+        PHDEBUG << "Unsupported audio format";
+        return false;
     }
 
+	_position = 0;
     _input = new QAudioInput(info, format);
 
     connect(_input, SIGNAL(notify()), this, SLOT(onNotify()));
-    buffer2 = _input->start();
+    _buffer = _input->start();
     _input->setNotifyInterval(10);
+
+	_pauseDetector.start();
+
+	return true;
+}
+
+void PhLtcReader::close()
+{
+	if(_input)
+	{
+		_input->stop();
+		delete _buffer;
+		_buffer = NULL;
+		delete _input;
+		_input = NULL;
+	}
 }
 
 QList<QString> PhLtcReader::inputList()
@@ -63,10 +88,10 @@ PhClock *PhLtcReader::clock()
 void PhLtcReader::onNotify()
 {
     // Pause if no frame have been received for more than 0.5 sec
-    if(pauseDetector.elapsed() > 500)
+    if(_pauseDetector.elapsed() > 500)
         _clock.setRate(0);
 
-    QByteArray array = buffer2->readAll();
+    QByteArray array = _buffer->readAll();
     char max = 0;
     for(int i = 0; i < array.count(); i++)
     {
@@ -74,11 +99,11 @@ void PhLtcReader::onNotify()
             max = array.at(i);
     }
 
-    ltc_decoder_write(decoder, (ltcsnd_sample_t*)array.data(), array.count(), position);
+    ltc_decoder_write(_decoder, (ltcsnd_sample_t*)array.data(), array.count(), _position);
 
     LTCFrameExt frame;
     unsigned int *hhmmssff = new unsigned int[4];
-    while(ltc_decoder_read(decoder, &frame))
+    while(ltc_decoder_read(_decoder, &frame))
     {
         PhFrame oldFrame = _clock.frame();
         hhmmssff[0] = frame.ltc.hours_tens * 10 + frame.ltc.hours_units;
@@ -89,7 +114,7 @@ void PhLtcReader::onNotify()
 
         if(oldFrame != _clock.frame())
         {
-            pauseDetector.restart();
+            _pauseDetector.restart();
             if(oldFrame < _clock.frame())
                 _clock.setRate(1);
             else
@@ -99,5 +124,5 @@ void PhLtcReader::onNotify()
     }
     delete hhmmssff;
 
-    position += array.count();
+    _position += array.count();
 }
