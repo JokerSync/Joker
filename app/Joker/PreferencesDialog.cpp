@@ -27,7 +27,6 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldUseQuarterFrame = _settings->value("useQuarterFrame", false).toBool();
 	_oldDelay = _settings->value("delay", 0).toInt();
 	_oldStripHeight = _settings->value("stripHeight", 0.25f).toFloat();
-	_oldSonyAutoConnect = _settings->value("sonyAutoConnect", true).toBool();
 	_oldOpenLastFile = _settings->value("openLastFile", true).toBool();
 	_oldStartFullScreen = _settings->value("startFullScreen", false).toBool();
 	_oldSpeed = _settings->value("speed", 12).toInt();
@@ -39,7 +38,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldDisplayNextText = _settings->value("displayNextText", true).toBool();
 	_oldDisplayTitle = _settings->value("displayTitle", true).toBool();
 	_oldDisplayLoop = _settings->value("displayLoop", false).toBool();
-    _oldSyncProtocol = _settings->value("synchroProtocol", NO_SYNC).toString();
+    _oldSyncProtocol = _settings->value("synchroProtocol", NO_SYNC).toInt();
     _oldLTCInput = _settings->value("ltcInputDevice", "").toString();
 
 	_oldLogMask = _settings->value("logMask", 1).toInt();
@@ -60,7 +59,6 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
 	ui->cBoxLastFile->setChecked(_oldOpenLastFile);
 	ui->cBoxFullscreen->setChecked(_oldStartFullScreen);
-	ui->cBoxSonyAutoconnect->setChecked(_oldSonyAutoConnect);
 	ui->cBoxDeinterlace->setChecked(_oldDeinterlace);
 	ui->cBoxDisplayTC->setChecked(_oldDisplayTC);
 	ui->cBoxDisplayNextTC->setChecked(_oldDisplayNextTC);
@@ -116,12 +114,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 		}
 	}
 
-    //Set up the ListView
-    ui->listWidgetSync->addItem(SONY);
-    ui->listWidgetSync->addItem(LTC);
-    ui->listWidgetSync->addItem(NO_SYNC);
-
-    ui->listWidgetSync->findItems(_oldSyncProtocol, Qt::MatchExactly).first()->setSelected(1);
+    ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
 
     if(_oldSyncProtocol == SONY)
         showParamSony(true);
@@ -151,7 +144,6 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setValue("useQuarterFrame", _oldUseQuarterFrame);
 	_settings->setValue("delay", _oldDelay);
 	_settings->setValue("stripHeight", _oldStripHeight);
-	_settings->setValue("sonyAutoConnect", _oldSonyAutoConnect);
 	_settings->setValue("openLastFile", _oldOpenLastFile);
 	_settings->setValue("startFullScreen", _oldStartFullScreen);
 	_settings->setValue("speed", _oldSpeed);
@@ -197,11 +189,6 @@ void PreferencesDialog::on_radioButtonQF_toggled(bool checked)
 void PreferencesDialog::on_sliderStripHeight_valueChanged(int position)
 {
 	_settings->setValue("stripHeight", ((float)position / ui->sliderStripHeight->maximum()));
-}
-
-void PreferencesDialog::on_cBoxSonyAutoconnect_toggled(bool checked)
-{
-	_settings->setValue("sonyAutoConnect", checked);
 }
 
 void PreferencesDialog::on_cBoxLastFile_toggled(bool checked)
@@ -309,20 +296,21 @@ void PreferencesDialog::onLogMaskButtonClicked()
 void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
     Q_UNUSED(previous);
-    if(current->text() == SONY)
-    {
+	int protocol = ui->listWidgetSync->currentRow();
+	switch(protocol)
+	{
+	case SONY:
         showParamSony(true);
-    }
-    else if(current->text() == LTC)
-    {
+		break;
+	case LTC:
         showParamLTC(true);
-    }
-    else
-    {
+		break;
+	default:
         showParamLTC(false);
         showParamSony(false);
+		break;
     }
-    _settings->setValue("synchroProtocol", current->text());
+    _settings->setValue("synchroProtocol", protocol);
 }
 
 void PreferencesDialog::showParamLTC(bool show)
@@ -348,20 +336,16 @@ void PreferencesDialog::showParamSony(bool show)
 {
     if(show)
     {
-        ui->cBoxSonyAutoconnect->setVisible(1);
         ui->spinBoxSonyHighSpeed->setVisible(1);
         ui->lineEditSonyID->setVisible(1);
-        ui->lblSonyAutoconnect->setVisible(1);
         ui->lblSonyHighSpeed->setVisible(1);
         ui->lblSonyID->setVisible(1);
         showParamLTC(false);
     }
     else
     {
-        ui->cBoxSonyAutoconnect->setVisible(0);
         ui->spinBoxSonyHighSpeed->setVisible(0);
         ui->lineEditSonyID->setVisible(0);
-        ui->lblSonyAutoconnect->setVisible(0);
         ui->lblSonyHighSpeed->setVisible(0);
         ui->lblSonyID->setVisible(0);
     }

@@ -12,9 +12,9 @@
 
 #include "PhLtcReader.h"
 
-#define SONY "Sony 9 pins"
-#define LTC "LTC"
-#define NO_SYNC "No synchro"
+#define NO_SYNC 0
+#define SONY 1
+#define LTC 2
 
 namespace Ui {
 class PreferencesDialog;
@@ -33,7 +33,6 @@ private slots:
 	void on_spinBoxDelay_valueChanged(int delay);
 	void on_radioButtonQF_toggled(bool checked);
 	void on_sliderStripHeight_valueChanged(int position);
-	void on_cBoxSonyAutoconnect_toggled(bool checked);
 	void on_spinBoxSpeed_valueChanged(int speed);
 	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
@@ -81,7 +80,6 @@ private:
 	int _oldSpeed;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldSonyAutoConnect;
 	bool _oldOpenLastFile;
 	bool _oldStartFullScreen;
 	bool _oldDeinterlace;
@@ -91,7 +89,7 @@ private:
 	bool _oldDisplayTitle;
 	bool _oldDisplayLoop;
 	int _oldLogMask;
-    QString _oldSyncProtocol;
+    int _oldSyncProtocol;
     QString _oldLTCInput;
 
 	QMap<QString, QString> fontList;
