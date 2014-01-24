@@ -10,8 +10,9 @@
     </message>
     <message>
         <location filename="AboutMenu.ui" line="26"/>
-        <source>Copyright 2013 Phonations, All rights reserved</source>
-        <translation>Copyright 2013 Phonations, All rights reserved.</translation>
+        <source>Copyright 2013-2014 Phonations, All rights reserved.</source>
+        <oldsource>Copyright 2013 Phonations, All rights reserved</oldsource>
+        <translation type="unfinished">Copyright 2013 Phonations, All rights reserved.</translation>
     </message>
     <message>
         <location filename="AboutMenu.ui" line="52"/>
@@ -58,8 +59,8 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="115"/>
-        <location filename="JokerWindow.cpp" line="278"/>
-        <location filename="JokerWindow.cpp" line="371"/>
+        <location filename="JokerWindow.cpp" line="286"/>
+        <location filename="JokerWindow.cpp" line="379"/>
         <source>Open...</source>
         <translation>Open...</translation>
     </message>
@@ -130,8 +131,9 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="206"/>
-        <source>Open video...</source>
-        <translation>Open video...</translation>
+        <source>Open video file...</source>
+        <oldsource>Open video...</oldsource>
+        <translation type="unfinished">Open video...</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="209"/>
@@ -170,8 +172,9 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="245"/>
-        <source>Set Joker on Test mode for synccheck</source>
-        <translation>Set Joker on Test mode for synccheck</translation>
+        <source>Set Joker on Test mode for syncheck</source>
+        <oldsource>Set Joker on Test mode for synccheck</oldsource>
+        <translation type="unfinished">Set Joker on Test mode for synccheck</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="248"/>
@@ -254,28 +257,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="59"/>
+        <location filename="JokerWindow.cpp" line="63"/>
         <source>Unable to connect to USB422v module</source>
         <translation>Unable to connect to USB422v module</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="371"/>
+        <location filename="JokerWindow.cpp" line="282"/>
+        <source>DetX files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="283"/>
+        <source>Joker files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="284"/>
+        <source>Rythmo files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="285"/>
+        <source>All files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="379"/>
         <source>Movie files</source>
         <translation>Movie files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="584"/>
-        <location filename="JokerWindow.cpp" line="612"/>
+        <location filename="JokerWindow.cpp" line="592"/>
+        <location filename="JokerWindow.cpp" line="620"/>
         <source>Unable to save </source>
         <translation>Unable to save </translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="603"/>
+        <location filename="JokerWindow.cpp" line="611"/>
         <source>Save...</source>
         <translation>Save...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="620"/>
+        <location filename="JokerWindow.cpp" line="628"/>
         <source>Do you want to save your changes ?</source>
         <translation>Do you want to save your changes ?</translation>
     </message>
@@ -296,6 +319,16 @@
         <location filename="PeopleDialog.ui" line="37"/>
         <source>Select all</source>
         <translation>Select all</translation>
+    </message>
+    <message>
+        <location filename="PeopleDialog.cpp" line="24"/>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
+    </message>
+    <message>
+        <location filename="PeopleDialog.cpp" line="25"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancel</translation>
     </message>
 </context>
 <context>
@@ -435,11 +468,6 @@
         <translation>Synchronisation</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="295"/>
-        <source>F0 C0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="PreferencesDialog.ui" line="319"/>
         <source>Delay</source>
         <translation>Delay</translation>
@@ -460,29 +488,39 @@
         <translation>Sony autoconnect</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="347"/>
+        <location filename="PreferencesDialog.ui" line="350"/>
         <source>millisecond</source>
         <translation>millisecond</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="373"/>
+        <location filename="PreferencesDialog.ui" line="376"/>
         <source>quarter frame</source>
         <translation>quarter frame</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="383"/>
+        <location filename="PreferencesDialog.ui" line="386"/>
         <source>Log</source>
         <translation>Log</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="395"/>
+        <location filename="PreferencesDialog.ui" line="398"/>
         <source>Log file :</source>
         <translation>Log file :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="445"/>
+        <location filename="PreferencesDialog.ui" line="454"/>
         <source>Reset</source>
         <translation>Reset</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="116"/>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="117"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancel</translation>
     </message>
 </context>
 <context>
