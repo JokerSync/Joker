@@ -219,7 +219,14 @@ bool JokerWindow::eventFilter(QObject *, QEvent *event)
 			openVideoFile(filePath);
 		break;
 	}
-		// Hide and show the mediaPanel
+
+	// Hide and show the mediaPanel
+	case QEvent::ApplicationActivate:
+		fadeInMediaPanel();
+		break;
+	case QEvent::ApplicationDeactivate:
+		hideMediaPanel();
+		break;
 	case QEvent::MouseMove:
 		if(this->hasFocus())
 			fadeInMediaPanel();
