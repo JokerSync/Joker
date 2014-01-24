@@ -10,6 +10,12 @@
 #include <QSettings>
 #include <QListWidgetItem>
 
+#include "PhLtcReader.h"
+
+#define NO_SYNC 0
+#define SONY 1
+#define LTC 2
+
 namespace Ui {
 class PreferencesDialog;
 }
@@ -27,11 +33,8 @@ private slots:
 	void on_spinBoxDelay_valueChanged(int delay);
 	void on_radioButtonQF_toggled(bool checked);
 	void on_sliderStripHeight_valueChanged(int position);
-	void on_cBoxSonyAutoconnect_toggled(bool checked);
 	void on_spinBoxSpeed_valueChanged(int speed);
-	void on_listWidgetFont_itemClicked(QListWidgetItem *item);
 	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
 
 	void on_buttonBox_accepted();
 
@@ -63,6 +66,10 @@ private slots:
 
 	void onLogMaskButtonClicked();
 
+    void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+
+    void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+
 private:
 	Ui::PreferencesDialog *ui;
 	QSettings *_settings;
@@ -72,7 +79,6 @@ private:
 	int _oldSpeed;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldSonyAutoConnect;
 	bool _oldOpenLastFile;
 	bool _oldStartFullScreen;
 	bool _oldDeinterlace;
@@ -82,7 +88,13 @@ private:
 	bool _oldDisplayTitle;
 	bool _oldDisplayLoop;
 	int _oldLogMask;
+    int _oldSyncProtocol;
+    QString _oldLTCInput;
+
 	QMap<QString, QString> fontList;
+
+    void showParamLTC(bool show);
+    void showParamSony(bool show);
 
 };
 

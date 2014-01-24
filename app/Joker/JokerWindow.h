@@ -9,6 +9,7 @@
 #include "VideoStripView.h"
 #include "PhSync/PhSonySlaveController.h"
 #include "PhCommonUI/PhFloatingMediaPanel.h"
+#include "PhSync/PhLtcReader.h"
 
 #include "SonyVideoStripSynchronizer.h"
 #include "PropertyDialog.h"
@@ -114,6 +115,7 @@ private:
 	QSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
+    PhLtcReader _ltcReader;
 
 	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;
@@ -129,6 +131,7 @@ private:
 
 	void updateOpenRecent();
 	void setupOpenRecentMenu();
+    void setupSyncProtocol();
 	void closeEvent(QCloseEvent *event);
 
 	void setCurrentStripFile(QString stripFile);
