@@ -279,7 +279,11 @@ void JokerWindow::on_actionOpen_triggered()
 
 	if(checkSaveFile())
 	{
-		QFileDialog dlg(this, tr("Open..."), _settings->value("lastFolder", QDir::homePath()).toString(), "DetX files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
+		QString filter = tr("DetX files") + " (*.detx);; "
+				+ tr("Joker files") + " (*.strip);; "
+				+ tr("Rythmo files") + " (*.detx *.strip);; "
+				+ tr("All files") + " (*.*)";
+		QFileDialog dlg(this, tr("Open..."), _settings->value("lastFolder", QDir::homePath()).toString(), filter);
 
 		dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
+    <width>363</width>
     <height>167</height>
    </rect>
   </property>
@@ -18,12 +18,12 @@
     <rect>
      <x>10</x>
      <y>100</y>
-     <width>321</width>
+     <width>351</width>
      <height>16</height>
     </rect>
    </property>
    <property name="text">
-    <string>Copyright 2013 Phonations, All rights reserved</string>
+    <string>Copyright 2013-2014 Phonations, All rights reserved.</string>
    </property>
   </widget>
   <widget class="QLabel" name="labelVersion">
@@ -36,13 +36,13 @@
     </rect>
    </property>
    <property name="text">
-    <string notr="true">TextLabel</string>
+    <string notr="true">Joker vX.X.X</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>130</x>
      <y>130</y>
      <width>114</width>
      <height>32</height>

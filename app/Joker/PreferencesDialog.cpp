@@ -112,6 +112,9 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 			ui->listWidgetFont->setCurrentRow(ui->listWidgetFont->count() - 1);
 		}
 	}
+
+	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
 }
 
 PreferencesDialog::~PreferencesDialog()
