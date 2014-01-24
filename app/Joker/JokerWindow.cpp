@@ -249,7 +249,14 @@ bool JokerWindow::eventFilter(QObject *, QEvent *event)
 			openVideoFile(filePath);
 		break;
 	}
-		// Hide and show the mediaPanel
+
+	// Hide and show the mediaPanel
+	case QEvent::ApplicationActivate:
+		fadeInMediaPanel();
+		break;
+	case QEvent::ApplicationDeactivate:
+		hideMediaPanel();
+		break;
 	case QEvent::MouseMove:
 		if(this->hasFocus())
 			fadeInMediaPanel();
@@ -510,8 +517,7 @@ void JokerWindow::fadeInMediaPanel()
 void JokerWindow::fadeOutMediaPanel()
 {
     // Don't fade out the media panel if the mouse is over it
-    if(QCursor::pos().x() > _mediaPanel.pos().x() and QCursor::pos().x() < _mediaPanel.pos().x() + _mediaPanel.size().width() and
-            QCursor::pos().y() > _mediaPanel.pos().y() and QCursor::pos().y() < _mediaPanel.pos().y() + _mediaPanel.size().height())
+	if(_mediaPanel.underMouse() or _mediaPanel.isMousePressed())
     {
         _mediaPanelTimer.start(3000);
         return;
