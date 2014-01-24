@@ -4,11 +4,8 @@ PhFloatingMediaPanel::PhFloatingMediaPanel(QWidget *parent) :
 	PhMediaPanel(parent),
 	_iXdeffarance(-1), _iYdeffarance(-1)
 {
-	// Remove parent to make a top widget (flags compatibility)
-	setParent(0);
 	// assign flags
-	Qt::WindowFlags flags = Qt::Widget | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint;
-	setWindowFlags(flags);
+	setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
 }
 
 void PhFloatingMediaPanel::mousePressEvent ( QMouseEvent *)
