@@ -40,7 +40,7 @@ protected:
 
 
 private slots:
-		// Qt Designer slots
+	// Qt Designer slots
 	void on_actionOpen_triggered();
 
 	void on_actionPlay_pause_triggered();
