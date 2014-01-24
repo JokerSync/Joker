@@ -16,9 +16,8 @@ public:
 
 private:
 	// For moving with mouse
-	int _iXdeffarance;
-	int _iYdeffarance;
 	bool _mousePressed;
+	QPoint _mousePressedLocation;
 
 	void mousePressEvent( QMouseEvent * event);
 	void mouseReleaseEvent( QMouseEvent * event );

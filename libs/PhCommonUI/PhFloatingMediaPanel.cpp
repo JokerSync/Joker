@@ -1,20 +1,20 @@
 #include "PhFloatingMediaPanel.h"
 
+#include <QMouseEvent>
+
 PhFloatingMediaPanel::PhFloatingMediaPanel(QWidget *parent) :
 	PhMediaPanel(parent),
-	_iXdeffarance(-1), _iYdeffarance(-1)
+	_mousePressed(false),
+	_mousePressedLocation(-1, -1)
 {
 	// assign flags
 	setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
 }
 
-void PhFloatingMediaPanel::mousePressEvent ( QMouseEvent *)
+void PhFloatingMediaPanel::mousePressEvent ( QMouseEvent *event)
 {
 	_mousePressed = true;
-	QPoint qpMousePressedPoint = QCursor::pos();
-	QPoint qpApploc = this->pos();
-	_iXdeffarance = qpMousePressedPoint.x() - qpApploc.x();
-	_iYdeffarance = qpMousePressedPoint.y() - qpApploc.y();
+	_mousePressedLocation = event->pos();
 }
 
 void PhFloatingMediaPanel::mouseReleaseEvent ( QMouseEvent * )
@@ -22,13 +22,10 @@ void PhFloatingMediaPanel::mouseReleaseEvent ( QMouseEvent * )
 	_mousePressed = false;
 }
 
-void PhFloatingMediaPanel::mouseMoveEvent ( QMouseEvent * )
+void PhFloatingMediaPanel::mouseMoveEvent ( QMouseEvent *event)
 {
 	if(_mousePressed)
-	{
-		QPoint qpAppNewLoc( (QCursor::pos().x() - _iXdeffarance) , (QCursor::pos().y() - _iYdeffarance) );
-		setProperty("pos", qpAppNewLoc);
-	}
+		this->move(event->globalPos() - _mousePressedLocation);
 }
 
 bool PhFloatingMediaPanel::isMousePressed()
