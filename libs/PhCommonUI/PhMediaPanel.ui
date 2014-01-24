@@ -18,7 +18,13 @@
 	color: white;
 }
 
-
+PhMediaPanel {
+	background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);
+     border-style: solid;
+     border-width: 4px;
+     border-radius: 3px;
+     border-color: white;
+}
 
 QPushButton, QComboBox{
 	 background: grey;
@@ -37,13 +43,13 @@ QLabel#_timecodeLabel{
     <number>0</number>
    </property>
    <property name="leftMargin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <property name="topMargin">
     <number>0</number>
    </property>
    <property name="rightMargin">
-    <number>0</number>
+    <number>5</number>
    </property>
    <property name="bottomMargin">
     <number>0</number>
