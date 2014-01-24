@@ -8,7 +8,7 @@
 
 #include "VideoStripView.h"
 #include "PhSync/PhSonySlaveController.h"
-#include "PhCommonUI/PhMediaPanelDialog.h"
+#include "PhCommonUI/PhFloatingMediaPanel.h"
 
 #include "SonyVideoStripSynchronizer.h"
 #include "PropertyDialog.h"
@@ -115,7 +115,7 @@ private:
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
 
-	PhMediaPanelDialog _mediaPanel;
+	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;
 	MediaPanelState _mediaPanelState;
 	QPropertyAnimation _mediaPanelAnimation;
