@@ -51,17 +51,7 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_synchronizer.setStripClock(_strip->clock());
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
-	// Initialize the sony module
-	if(_settings->value("sonyAutoConnect", true).toBool())
-	{
-		if(_sonySlave.open())
-		{
-			_synchronizer.setSonyClock(_sonySlave.clock());
-			ui->videoStripView->setSony(&_sonySlave);
-		}
-		else
-			QMessageBox::critical(this, "", tr("Unable to connect to USB422v module"));
-	}
+    setupSyncProtocol();
 
 	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
@@ -174,6 +164,46 @@ void JokerWindow::setupOpenRecentMenu()
 
 }
 
+void JokerWindow::setupSyncProtocol()
+{
+	PhClock* clock = NULL;
+
+	// Disable old protocol
+	_sonySlave.close();
+	_ltcReader.close();
+
+	switch(_settings->value("synchroProtocol", NO_SYNC).toInt())
+	{
+	case SONY:
+		// Initialize the sony module
+		if(_sonySlave.open())
+		{
+			clock = _sonySlave.clock();
+			ui->videoStripView->setSony(&_sonySlave);
+		}
+		else
+			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
+		break;
+	case LTC:
+		{
+			QString input = _settings->value("ltcInputDevice", "").toString();
+			if(_ltcReader.init(input))
+				clock = _ltcReader.clock();
+			else
+				QMessageBox::critical(this, "", "Unable to open " + input);
+			break;
+		}
+	}
+
+	_synchronizer.setSyncClock(clock);
+
+	// Disable slide if Joker is sync to a protocol
+	_mediaPanel.setSliderEnable(clock == NULL);
+
+	if(clock == NULL)
+		_settings->setValue("synchroProtocol", NO_SYNC);
+}
+
 void JokerWindow::openFile(QString fileName)
 {
 	hideMediaPanel();
@@ -223,7 +253,14 @@ bool JokerWindow::eventFilter(QObject *, QEvent *event)
 			openVideoFile(filePath);
 		break;
 	}
-		// Hide and show the mediaPanel
+
+	// Hide and show the mediaPanel
+	case QEvent::ApplicationActivate:
+		fadeInMediaPanel();
+		break;
+	case QEvent::ApplicationDeactivate:
+		hideMediaPanel();
+		break;
 	case QEvent::MouseMove:
 		if(this->hasFocus())
 			fadeInMediaPanel();
@@ -460,9 +497,16 @@ void JokerWindow::on_actionAbout_triggered()
 void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
-
+    int syncProtocol = _settings->value("synchroProtocol", NO_SYNC).toInt();
+    QString inputLTC = _settings->value("ltcInputDevice", "").toString();
 	PreferencesDialog dlg(_settings);
-	dlg.exec();
+    dlg.exec();
+    if(syncProtocol != _settings->value("synchroProtocol", NO_SYNC).toInt() or inputLTC != _settings->value("ltcInputDevice", ""))
+    {
+        PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol", NO_SYNC).toInt();
+        setupSyncProtocol();
+    }
+
 	fadeInMediaPanel();
 }
 
@@ -480,13 +524,13 @@ void JokerWindow::fadeInMediaPanel()
 
 void JokerWindow::fadeOutMediaPanel()
 {
-	// Don't fade out the media panel if the mouse is over it
-	if(QCursor::pos().x() > _mediaPanel.pos().x() and QCursor::pos().x() < _mediaPanel.pos().x() + _mediaPanel.size().width() and
-			QCursor::pos().y() > _mediaPanel.pos().y() and QCursor::pos().y() < _mediaPanel.pos().y() + _mediaPanel.size().height())
-	{
-		_mediaPanelTimer.start(3000);
-		return;
-	}
+    // Don't fade out the media panel if the mouse is over it
+	if(_mediaPanel.underMouse() or _mediaPanel.isMousePressed())
+    {
+        _mediaPanelTimer.start(3000);
+        return;
+    }
+
 	PHDEBUG << _mediaPanelState;
 	switch(_mediaPanelState)
 	{
