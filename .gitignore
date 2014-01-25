@@ -27,6 +27,4 @@ build-*
 #Doxygen
 doc/html
 doxygen_error.log
-
-
 *.qm

@@ -22,6 +22,10 @@ int main(int argc, char *argv[])
     PhDebug::showConsole(true);
 
 	QApplication a(argc, argv);
+    QTranslator translator;
+    translator.load(QDir::currentPath() + "/../Resources/" + QLocale::system().name() + ".qm");
+    a.installTranslator(&translator);
+
 
 	JokerWindow w(&settings);
 
