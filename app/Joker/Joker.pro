@@ -3,6 +3,7 @@
 # Project created by QtCreator 2013-05-23T14:09:50
 #
 #-------------------------------------------------
+cache()
 
 TARGET = Joker
 TEMPLATE = app
@@ -62,12 +63,14 @@ FORMS += \
 	PropertyDialog.ui \
     PeopleDialog.ui
 
+TRANSLATIONS =	fr_FR.ts \
+				en_US.ts \
 
 INCLUDEPATH += /usr/local/include
 LIBS += -L/usr/local/lib -lltc -lm
 
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
-
+QMAKE_POST_LINK += $$(QTDIR)/bin/lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/../Resources/fr_FR.qm;
 
 CONFIG(release, debug|release) {
 

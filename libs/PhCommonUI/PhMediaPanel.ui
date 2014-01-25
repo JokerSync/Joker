@@ -8,10 +8,11 @@
     <y>0</y>
     <width>535</width>
     <height>150</height>
+
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string notr="true">Form</string>
   </property>
   <property name="styleSheet">
    <string notr="true">* {
@@ -329,7 +330,7 @@ QLabel#_timecodeLabel{
         </font>
        </property>
        <property name="text">
-        <string>00:00:00:00</string>
+        <string notr="true">00:00:00:00</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -359,7 +360,7 @@ QLabel#_timecodeLabel{
         </font>
        </property>
        <property name="text">
-        <string>x0</string>
+        <string notr="true">x0</string>
        </property>
       </widget>
      </item>

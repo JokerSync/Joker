@@ -126,6 +126,8 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
         showParamSony(false);
     }
 
+	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
 }
 
 PreferencesDialog::~PreferencesDialog()
