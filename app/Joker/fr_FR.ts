@@ -77,7 +77,7 @@
     <message>
         <location filename="JokerWindow.ui" line="126"/>
         <source>Up</source>
-        <translation>Flèche haut</translation>
+        <translation>Up</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="131"/>
@@ -87,7 +87,7 @@
     <message>
         <location filename="JokerWindow.ui" line="134"/>
         <source>Down</source>
-        <translation>Flèche bas</translation>
+        <translation>Down</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="139"/>
@@ -97,7 +97,7 @@
     <message>
         <location filename="JokerWindow.ui" line="142"/>
         <source>Right</source>
-        <translation>Flèche droite</translation>
+        <translation>Right</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="147"/>
@@ -107,7 +107,7 @@
     <message>
         <location filename="JokerWindow.ui" line="150"/>
         <source>Left</source>
-        <translation>Flèche gauche</translation>
+        <translation>Left</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="155"/>
@@ -117,7 +117,7 @@
     <message>
         <location filename="JokerWindow.ui" line="158"/>
         <source>Alt+Right</source>
-        <translation>Alt+Droite</translation>
+        <translation>Alt+Right</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="163"/>
@@ -127,7 +127,7 @@
     <message>
         <location filename="JokerWindow.ui" line="166"/>
         <source>Alt+Left</source>
-        <translation>Alt+Gauche</translation>
+        <translation>Alt+Left</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="206"/>
@@ -138,7 +138,7 @@
     <message>
         <location filename="JokerWindow.ui" line="209"/>
         <source>Ctrl+Shift+O</source>
-        <translation>Ctrl+Maj+O</translation>
+        <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="214"/>

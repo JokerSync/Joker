@@ -254,10 +254,6 @@ bool JokerWindow::eventFilter(QObject *, QEvent *event)
 		break;
 	}
 
-	// Hide and show the mediaPanel
-	case QEvent::ApplicationActivate:
-		fadeInMediaPanel();
-		break;
 	case QEvent::ApplicationDeactivate:
 		hideMediaPanel();
 		break;
@@ -527,6 +523,7 @@ void JokerWindow::fadeOutMediaPanel()
     // Don't fade out the media panel if the mouse is over it
 	if(_mediaPanel.underMouse() or _mediaPanel.isMousePressed())
     {
+		PHDEBUG << "Don't hide";
         _mediaPanelTimer.start(3000);
         return;
     }
@@ -535,6 +532,7 @@ void JokerWindow::fadeOutMediaPanel()
 	switch(_mediaPanelState)
 	{
 	case MediaPanelVisible:
+		PHDEBUG << "Hiding";
 		_mediaPanelAnimation.setDuration(1000);
 		_mediaPanelAnimation.setEndValue(0);
 		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
