@@ -11,10 +11,7 @@
 #include <QListWidgetItem>
 
 #include "PhLtcReader.h"
-
-#define NO_SYNC 0
-#define SONY 1
-#define LTC 2
+#include "SonyVideoStripSynchronizer.h"
 
 namespace Ui {
 class PreferencesDialog;

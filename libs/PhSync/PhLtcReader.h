@@ -35,7 +35,7 @@ private:
 
     QAudioInput *_input;
 
-    qint64 _position;
+    ltc_off_t _position;
     QIODevice * _buffer;
     LTCDecoder * _decoder;
     QTime _pauseDetector;
