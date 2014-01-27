@@ -26,6 +26,10 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	// Setting up UI
 	ui->setupUi(this);
 
+	// Due to translation, Qt might not be able to link automatically the menu
+	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
+	ui->actionAbout->setMenuRole(QAction::AboutRole);
+
 	setupOpenRecentMenu();
 
 	// Get the pointer to the differents objects :
@@ -47,17 +51,7 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_synchronizer.setStripClock(_strip->clock());
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
-	// Initialize the sony module
-	if(_settings->value("sonyAutoConnect", true).toBool())
-	{
-		if(_sonySlave.open())
-		{
-			_synchronizer.setSonyClock(_sonySlave.clock());
-			ui->videoStripView->setSony(&_sonySlave);
-		}
-		else
-			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
-	}
+    setupSyncProtocol();
 
 	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
@@ -170,6 +164,46 @@ void JokerWindow::setupOpenRecentMenu()
 
 }
 
+void JokerWindow::setupSyncProtocol()
+{
+	PhClock* clock = NULL;
+
+	// Disable old protocol
+	_sonySlave.close();
+	_ltcReader.close();
+
+	switch(_settings->value("synchroProtocol", NO_SYNC).toInt())
+	{
+	case SONY:
+		// Initialize the sony module
+		if(_sonySlave.open())
+		{
+			clock = _sonySlave.clock();
+			ui->videoStripView->setSony(&_sonySlave);
+		}
+		else
+			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
+		break;
+	case LTC:
+		{
+			QString input = _settings->value("ltcInputDevice", "").toString();
+			if(_ltcReader.init(input))
+				clock = _ltcReader.clock();
+			else
+				QMessageBox::critical(this, "", "Unable to open " + input);
+			break;
+		}
+	}
+
+	_synchronizer.setSyncClock(clock);
+
+	// Disable slide if Joker is sync to a protocol
+	_mediaPanel.setSliderEnable(clock == NULL);
+
+	if(clock == NULL)
+		_settings->setValue("synchroProtocol", NO_SYNC);
+}
+
 void JokerWindow::openFile(QString fileName)
 {
 	hideMediaPanel();
@@ -219,7 +253,10 @@ bool JokerWindow::eventFilter(QObject *, QEvent *event)
 			openVideoFile(filePath);
 		break;
 	}
-		// Hide and show the mediaPanel
+
+	case QEvent::ApplicationDeactivate:
+		hideMediaPanel();
+		break;
 	case QEvent::MouseMove:
 		if(this->hasFocus())
 			fadeInMediaPanel();
@@ -275,7 +312,11 @@ void JokerWindow::on_actionOpen_triggered()
 
 	if(checkSaveFile())
 	{
-		QFileDialog dlg(this, "Open...", _settings->value("lastFolder", QDir::homePath()).toString(), "DetX files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
+		QString filter = tr("DetX files") + " (*.detx);; "
+				+ tr("Joker files") + " (*.strip);; "
+				+ tr("Rythmo files") + " (*.detx *.strip);; "
+				+ tr("All files") + " (*.*)";
+		QFileDialog dlg(this, tr("Open..."), _settings->value("lastFolder", QDir::homePath()).toString(), filter);
 
 		dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
@@ -368,7 +409,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	hideMediaPanel();
 
 	QString lastFolder = _settings->value("lastVideoFolder", QDir::homePath()).toString();
-	QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
+	QFileDialog dlg(this, tr("Open..."), lastFolder, tr("Movie files") + " (*.avi *.mov)");
 	if(dlg.exec())
 	{
 		QString videoFile = dlg.selectedFiles()[0];
@@ -452,9 +493,16 @@ void JokerWindow::on_actionAbout_triggered()
 void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
-
+    int syncProtocol = _settings->value("synchroProtocol", NO_SYNC).toInt();
+    QString inputLTC = _settings->value("ltcInputDevice", "").toString();
 	PreferencesDialog dlg(_settings);
-	dlg.exec();
+    dlg.exec();
+    if(syncProtocol != _settings->value("synchroProtocol", NO_SYNC).toInt() or inputLTC != _settings->value("ltcInputDevice", ""))
+    {
+        PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol", NO_SYNC).toInt();
+        setupSyncProtocol();
+    }
+
 	fadeInMediaPanel();
 }
 
@@ -472,10 +520,19 @@ void JokerWindow::fadeInMediaPanel()
 
 void JokerWindow::fadeOutMediaPanel()
 {
+    // Don't fade out the media panel if the mouse is over it
+	if(_mediaPanel.underMouse() or _mediaPanel.isMousePressed())
+    {
+		PHDEBUG << "Don't hide";
+        _mediaPanelTimer.start(3000);
+        return;
+    }
+
 	PHDEBUG << _mediaPanelState;
 	switch(_mediaPanelState)
 	{
 	case MediaPanelVisible:
+		PHDEBUG << "Hiding";
 		_mediaPanelAnimation.setDuration(1000);
 		_mediaPanelAnimation.setEndValue(0);
 		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
@@ -574,7 +631,7 @@ void JokerWindow::on_actionSave_triggered()
 	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode()))
 		_needToSave = false;
 	else
-		QMessageBox::critical(this, "", "Unable to save " + _currentStripFile);
+		QMessageBox::critical(this, "", tr("Unable to save ") + _currentStripFile);
 }
 
 void JokerWindow::on_actionSave_as_triggered()
@@ -593,7 +650,7 @@ void JokerWindow::on_actionSave_as_triggered()
 			stripFile = lastFolder + "/" + info.completeBaseName() + ".strip";
 	}
 
-	stripFile = QFileDialog::getSaveFileName(this, "Save...", stripFile,"*.strip");
+	stripFile = QFileDialog::getSaveFileName(this, tr("Save..."), stripFile,"*.strip");
 	if(stripFile != "")
 	{
 		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode()))
@@ -602,7 +659,7 @@ void JokerWindow::on_actionSave_as_triggered()
 			setCurrentStripFile(stripFile);
 		}
 		else
-			QMessageBox::critical(this, "", "Unable to save " + stripFile);
+			QMessageBox::critical(this, "", tr("Unable to save ") + stripFile);
 	}
 }
 
@@ -610,7 +667,7 @@ bool JokerWindow::checkSaveFile()
 {
 	if(_needToSave)
 	{
-		QString msg = "Do you want to save your changes ?";
+		QString msg = tr("Do you want to save your changes ?");
 		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
 		box.setDefaultButton(QMessageBox::Save);
 		switch(box.exec())

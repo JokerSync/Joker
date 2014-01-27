@@ -20,6 +20,9 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, QList<PhPeople*> *p
 		if(_oldPeopleList.contains(people))
 			ui->peopleList->item(ui->peopleList->count() - 1)->setSelected(true);
 	}
+
+	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
 }
 
 PeopleDialog::~PeopleDialog()
