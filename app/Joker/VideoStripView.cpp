@@ -2,6 +2,7 @@
 
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
+	_videoEngine(false),
 	_settings(NULL),
 	_sony(NULL),
 	_titleText(_strip.getHUDFont(), ""),

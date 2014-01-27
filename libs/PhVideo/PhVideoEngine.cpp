@@ -35,7 +35,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	// Retrieve stream information
 	if (avformat_find_stream_info(_pFormatContext, NULL) < 0)
-		return -1; // Couldn't find stream information
+		return false; // Couldn't find stream information
 
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
 
@@ -219,6 +219,8 @@ QString PhVideoEngine::codecName()
 
 bool PhVideoEngine::goToFrame(PhFrame frame)
 {
+	if(frame != _currentFrame)
+		PHDBG(24) << frame;
 //	int lastGotoElapsed = _testTimer.elapsed();
 	int seekElapsed = -1;
 	int readElapsed = -1;
@@ -248,7 +250,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		{
 			int flags = AVSEEK_FLAG_ANY;
 			int64_t timestamp = frame2time(frame - _frameStamp);
-			PHDEBUG << "seek:" << timestamp << _videoStream->time_base.num << _videoStream->time_base.den;
+			PHDEBUG << "seek:" << frame;
 			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
 		}
 
