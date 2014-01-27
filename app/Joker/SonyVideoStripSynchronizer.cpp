@@ -2,7 +2,8 @@
 #include "SonyVideoStripSynchronizer.h"
 
 VideoStripSynchronizer::VideoStripSynchronizer()
-	: _stripClock(NULL),
+	: _syncType(NoSync),
+	  _stripClock(NULL),
 	  _videoClock(NULL),
 	  _syncClock(NULL),
 	  _settingStripFrame(false),
@@ -29,13 +30,14 @@ void VideoStripSynchronizer::setVideoClock(PhClock *clock)
 	connect(_videoClock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onVideoTCTypeChanged(PhTimeCodeType)));
 }
 
-void VideoStripSynchronizer::setSyncClock(PhClock *clock)
+void VideoStripSynchronizer::setSyncClock(PhClock *clock, SyncType type)
 {
 	_syncClock = clock;
+	_syncType = type;
 	if(_syncClock)
 	{
-		connect(_syncClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onSonyFrameChanged(PhFrame,PhTimeCodeType)));
-		connect(_syncClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onSonyRateChanged(PhRate)));
+		connect(_syncClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onSyncFrameChanged(PhFrame,PhTimeCodeType)));
+		connect(_syncClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onSyncRateChanged(PhRate)));
 	}
 }
 
@@ -56,7 +58,8 @@ void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType)
 				_settingStripFrame = false;
 			}
 		}
-		else
+
+		if(_syncType != Sony)
 		{
 			_settingVideoFrame = true;
 			_videoClock->setFrame(frame);
@@ -100,14 +103,17 @@ void VideoStripSynchronizer::onVideoTCTypeChanged(PhTimeCodeType tcType)
 		_syncClock->setTimeCodeType(tcType);
 }
 
-void VideoStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType)
+void VideoStripSynchronizer::onSyncFrameChanged(PhFrame frame, PhTimeCodeType)
 {
 	if(!_settingSonyFrame)
 	{
 		PHDBG(3) << frame;
-		_settingVideoFrame = true;
-		_videoClock->setFrame(frame);
-		_settingVideoFrame = false;
+		if(_syncType == Sony)
+		{
+			_settingVideoFrame = true;
+			_videoClock->setFrame(frame);
+			_settingVideoFrame = false;
+		}
 		// We apply correction here only when there is a significant change of sony frame.
 		// Precise correction occurs in onStripFrameChanged() that is called after
 		// on SonyFrameChanged (see VideoStripView::paint()).
@@ -121,7 +127,7 @@ void VideoStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType)
 	}
 }
 
-void VideoStripSynchronizer::onSonyRateChanged(PhRate rate)
+void VideoStripSynchronizer::onSyncRateChanged(PhRate rate)
 {
 	if(!_settingSonyRate)
 	{

@@ -102,27 +102,42 @@ void PhLtcReader::onNotify()
     ltc_decoder_write(_decoder, (ltcsnd_sample_t*)array.data(), array.count(), _position);
 
     LTCFrameExt frame;
-    unsigned int *hhmmssff = new unsigned int[4];
+    unsigned int hhmmssff[4];
+	PhTime newT = 0;
+	PhFrame oldFrame = _clock.frame();
+	ltc_off_t lastOffset = -1;
     while(ltc_decoder_read(_decoder, &frame))
     {
-        PhFrame oldFrame = _clock.frame();
         hhmmssff[0] = frame.ltc.hours_tens * 10 + frame.ltc.hours_units;
         hhmmssff[1] = frame.ltc.mins_tens * 10 + frame.ltc.mins_units;
         hhmmssff[2] = frame.ltc.secs_tens * 10 + frame.ltc.secs_units;
         hhmmssff[3] = frame.ltc.frame_tens * 10 + frame.ltc.frame_units;
-        _clock.setFrame(PhTimeCode::frameFromHhMmSsFf(hhmmssff, PhTimeCodeType25));
 
-        if(oldFrame != _clock.frame())
+#warning TODO Handle other rate pouiem conversion (issue #43)
+        PhFrame newFrame = PhTimeCode::frameFromHhMmSsFf(hhmmssff, PhTimeCodeType25);
+		PHDBG(20) << newFrame;
+		// Compute the new time : 1 frame = 24 pouiem (at 25 fps)
+		newT = newFrame * 24;
+		lastOffset = frame.off_start;
+        if(oldFrame != newFrame)
         {
             _pauseDetector.restart();
-            if(oldFrame < _clock.frame())
+            if(oldFrame < newFrame)
                 _clock.setRate(1);
             else
                 _clock.setRate(-1);
         }
 
     }
-    delete hhmmssff;
 
     _position += array.count();
+
+	if(lastOffset > 0)
+	{
+		// 1s = 48000 samples
+		// 1s = 600 pouiem
+		// 1 pouiem = 80 samples
+		PhTime timeOffset = (_position - lastOffset) / 80;
+		_clock.setTime(newT + timeOffset);
+	}
 }
