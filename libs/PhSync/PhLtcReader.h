@@ -19,7 +19,7 @@ class PhLtcReader : public QObject
     Q_OBJECT
 
 public:
-    explicit PhLtcReader(QObject *parent = 0);
+    explicit PhLtcReader(PhTimeCodeType tcType, QObject *parent = 0);
 
     bool init(QString _input="");
 	void close();
