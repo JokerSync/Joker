@@ -78,8 +78,19 @@ bool PhLtcWriter::init(QString output)
 
 void PhLtcWriter::close()
 {
-	ltc_encoder_free(_encoder);
+	if(_output)
+		delete _output;
+}
 
+QList<QString> PhLtcWriter::outputList()
+{
+	QList<QString> names;
+	QList<QAudioDeviceInfo> list = QAudioDeviceInfo::availableDevices(QAudio::AudioOutput);
+
+	foreach(QAudioDeviceInfo device, list)
+		names.append(device.deviceName());
+
+	return names;
 }
 
 PhClock *PhLtcWriter::clock()
