@@ -18,6 +18,13 @@
     <item>
      <widget class="PhMediaPanel" name="widget" native="true"/>
     </item>
+    <item>
+     <widget class="QCheckBox" name="cBoxLoop">
+      <property name="text">
+       <string>Loop</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -29,7 +36,25 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuControls">
+    <property name="title">
+     <string>Controls</string>
+    </property>
+    <addaction name="actionSet_TC_In"/>
+    <addaction name="actionSet_TC_Out"/>
+   </widget>
+   <addaction name="menuControls"/>
   </widget>
+  <action name="actionSet_TC_In">
+   <property name="text">
+    <string>Set TC In</string>
+   </property>
+  </action>
+  <action name="actionSet_TC_Out">
+   <property name="text">
+    <string>Set TC Out</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
