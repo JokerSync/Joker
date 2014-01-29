@@ -20,8 +20,11 @@ include(../../libs/PhSync/PhSync.pri);
 include(../../libs/PhCommonUI/PhCommonUI.pri);
 
 SOURCES += main.cpp\
-        LTCToolWindow.cpp
+        LTCToolWindow.cpp \
+    PreferencesPanel.cpp
 
-HEADERS  += LTCToolWindow.h
+HEADERS  += LTCToolWindow.h \
+    PreferencesPanel.h
 
-FORMS    += LTCToolWindow.ui
+FORMS    += LTCToolWindow.ui \
+    PreferencesPanel.ui

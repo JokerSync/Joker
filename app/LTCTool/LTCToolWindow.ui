@@ -16,6 +16,19 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="QLabel" name="lblInfo">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>20</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>TextLabel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="PhMediaPanel" name="widget" native="true"/>
     </item>
     <item>
@@ -42,12 +55,13 @@
     </property>
     <addaction name="actionSet_TC_In"/>
     <addaction name="actionSet_TC_Out"/>
+    <addaction name="actionPreferences"/>
    </widget>
    <addaction name="menuControls"/>
   </widget>
   <action name="actionSet_TC_In">
    <property name="text">
-    <string>Set TC In</string>
+    <string>Set TC In...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+I</string>
@@ -55,10 +69,15 @@
   </action>
   <action name="actionSet_TC_Out">
    <property name="text">
-    <string>Set TC Out</string>
+    <string>Set TC Out...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+O</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences...</string>
    </property>
   </action>
  </widget>
