@@ -42,7 +42,7 @@ bool PhLtcWriter::init(QString output)
 
 	if(list.isEmpty())
 	{
-		PHDEBUG << "No audio output device";
+		PHDBG(21) << "No audio output device";
 		return false;
 	}
 
@@ -54,7 +54,7 @@ bool PhLtcWriter::init(QString output)
 			info = device;
 	}
 
-	PHDEBUG << "LTC output device :" << info.deviceName();
+	PHDBG(21) << "LTC output device :" << info.deviceName();
 
 	QAudioFormat format;
 	format.setCodec("audio/pcm");
@@ -66,7 +66,7 @@ bool PhLtcWriter::init(QString output)
 
 	if(!info.isFormatSupported(format))
 	{
-		PHDEBUG << "Unsupported audio format";
+		PHDBG(21) << "Unsupported audio format";
 		return false;
 	}
 
@@ -97,7 +97,7 @@ void PhLtcWriter::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 	_st.frame = hhmmssff[3];
 	ltc_encoder_set_timecode(_encoder, &_st);
 
-	PHDEBUG << _st.hours << _st.mins << _st.secs << _st.frame;
+	PHDBG(21) << _st.hours << _st.mins << _st.secs << _st.frame;
 
 	int len;
 	ltcsnd_sample_t *buf;
