@@ -49,10 +49,16 @@
    <property name="text">
     <string>Set TC In</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+I</string>
+   </property>
   </action>
   <action name="actionSet_TC_Out">
    <property name="text">
     <string>Set TC Out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
    </property>
   </action>
  </widget>

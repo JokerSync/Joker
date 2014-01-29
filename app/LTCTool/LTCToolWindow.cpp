@@ -1,5 +1,6 @@
 #include "LTCToolWindow.h"
 #include "ui_LTCToolWindow.h"
+#include "PhCommonUI/PhTimeCodeDialog.h"
 
 LTCToolWindow::LTCToolWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -10,7 +11,7 @@ LTCToolWindow::LTCToolWindow(QWidget *parent) :
 	_LTCWriter.init();
 
 	_clock = _LTCWriter.clock();
-	ui->widget->setMediaLength(1 * 6 * 25);
+	ui->widget->setMediaLength(1 * 60 * 25);
 	ui->widget->setTCType(_clock->timeCodeType());
 	ui->widget->setFirstFrame(_clock->frame());
 	ui->widget->setClock(_clock);
@@ -31,7 +32,7 @@ LTCToolWindow::~LTCToolWindow()
 
 void LTCToolWindow::updateFrame()
 {
-	if (_clock->frame() < ui->widget->getMediaLength())
+	if (_clock->frame() < ( ui->widget->getMediaLength() + ui->widget->getFirstFrame()))
 		_clock->tick(100);
 	else if(ui->cBoxLoop->isChecked())
 	{
@@ -44,4 +45,26 @@ void LTCToolWindow::updateFrame()
 		_clock->setFrame(ui->widget->getFirstFrame());
 	}
 
+}
+
+void LTCToolWindow::on_actionSet_TC_In_triggered()
+{
+	PhTimeCodeDialog dlg(_clock->timeCodeType());
+	if(dlg.exec())
+	{
+		ui->widget->setFirstFrame(dlg.frame());
+		_clock->setFrame(ui->widget->getFirstFrame());
+	}
+}
+
+void LTCToolWindow::on_actionSet_TC_Out_triggered()
+{
+	PhTimeCodeDialog dlg(_clock->timeCodeType());
+	if(dlg.exec())
+	{
+		if(dlg.frame() > ui->widget->getFirstFrame())
+			ui->widget->setMediaLength(dlg.frame() - ui->widget->getFirstFrame());
+		else
+			PHDEBUG << "Can't set a TC Out inferior to TC In";
+	}
 }

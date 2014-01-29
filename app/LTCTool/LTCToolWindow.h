@@ -23,6 +23,11 @@ public slots:
 
 	void updateFrame();
 
+private slots:
+	void on_actionSet_TC_In_triggered();
+
+	void on_actionSet_TC_Out_triggered();
+
 private:
 	Ui::LTCToolWindow *ui;
 	PhClock *_clock;
