@@ -21,7 +21,8 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_needToSave(false),
-	_currentStripFile("")
+	_currentStripFile(""),
+	_ltcReader()
 {
 	// Setting up UI
 	ui->setupUi(this);
