@@ -21,9 +21,21 @@ public:
 	static QList<QString> outputList();
 	PhClock *clock();
 
+public slots :
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+
+
 private:
     PhClock _clock;
 	LTCEncoder *_encoder;
+	SMPTETimecode _st;
+	double _sampleRate = 48000.0;
+
+	QAudioOutput * _output;
+	QIODevice * _buffer;
+
+
+
 };
 
 #endif // PHLTCWRITER_H
