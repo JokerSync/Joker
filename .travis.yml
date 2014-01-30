@@ -1,0 +1,5 @@
+script:
+ - qmake -project
+ - qmake tests/ConsoleTest/ConsoleTest.pro
+ - make
+ 
