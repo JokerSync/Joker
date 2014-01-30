@@ -19,24 +19,12 @@ LTCToolWindow::LTCToolWindow(QSettings *settings, QWidget *parent) :
 	ui->widget->setClock(_clock);
 	updateInfos();
 
-	_timer = new QTimer();
-	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
-
-	connect(_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), &_LTCWriter, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
-	_timer->start(10);
+	connect(_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 }
 
 LTCToolWindow::~LTCToolWindow()
 {
 	delete ui;
-}
-
-void LTCToolWindow::updateFrame()
-{
-	if(ui->cBoxLoop->isChecked() and _clock->frame() > ui->widget->getMediaLength())
-		_clock->setFrame(ui->widget->getFirstFrame());
-
-	_clock->tick(100);
 }
 
 void LTCToolWindow::on_actionSet_TC_In_triggered()
@@ -83,6 +71,12 @@ void LTCToolWindow::on_actionPreferences_triggered()
 		_settings->setValue("audioOutput", dlg.selectedAudioOutput());
 		setupOutput();
 	}
+}
+
+void LTCToolWindow::onFrameChanged(PhFrame, PhTimeCodeType)
+{
+	if(ui->cBoxLoop->isChecked() and _clock->frame() > ui->widget->getMediaLength())
+		_clock->setFrame(ui->widget->getFirstFrame());
 }
 
 void LTCToolWindow::setupOutput()

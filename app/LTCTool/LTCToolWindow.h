@@ -20,23 +20,22 @@ public:
 	explicit LTCToolWindow(QSettings *settings, QWidget *parent = 0);
 	~LTCToolWindow();
 
-public slots:
-
-	void updateFrame();
-
 private slots:
+	/* QT auto slots */
 	void on_actionSet_TC_In_triggered();
-
 	void on_actionSet_TC_Out_triggered();
-
 	void on_actionPreferences_triggered();
+
+	/** If the application loops the LTC,
+	 *  Reset clock to tcIn if tc > tcOut
+	 */
+	void onFrameChanged(PhFrame, PhTimeCodeType);
 
 private:
 	void setupOutput();
 	void updateInfos();
 	Ui::LTCToolWindow *ui;
 	PhClock *_clock;
-	QTimer *_timer;
 	QSettings *_settings;
 	PhLtcWriter _LTCWriter;
 

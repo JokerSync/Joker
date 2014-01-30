@@ -5,10 +5,14 @@
 
 #include <QAudioOutput>
 
-#include "ltc.h"
+#include <ltc.h>
+#include <portaudio.h>
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTimeCode.h"
+
+#define FRAME_PER_BUFFER 1920
+#define SAMPLE_RATE 48000
 
 class PhLtcWriter : public QObject
 {
@@ -26,13 +30,23 @@ public slots :
 
 
 private:
+
+	int processAudio(void *outputBuffer,
+							unsigned long framesPerBuffer);
+	static int audioCallback( const void *inputBuffer, void *outputBuffer,
+							   unsigned long framesPerBuffer,
+							   const PaStreamCallbackTimeInfo* timeInfo,
+							   PaStreamCallbackFlags statusFlags,
+							   void *userData );
+	PaStream *stream;
+	float data;
+
     PhClock _clock;
 	LTCEncoder *_encoder;
 	SMPTETimecode _st;
-	double _sampleRate = 48000.0;
 
-	QAudioOutput * _output;
-	QIODevice * _buffer;
+//	QAudioOutput * _output;
+//	QIODevice * _buffer;
 
 
 
