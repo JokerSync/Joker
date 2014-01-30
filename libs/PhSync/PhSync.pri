@@ -1,7 +1,7 @@
 QT += serialport multimedia
 
 INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib -lltc -lm
+LIBS += -L/usr/local/lib -lltc -lm -lportaudio
 
 HEADERS += \
     ../../libs/PhSync/PhSonyController.h \
