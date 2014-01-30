@@ -4,5 +4,6 @@ install:
  - sudo apt-get install -qq qt5-default qtdeclarative5-dev
 script:
  - qmake -project
- - qmake tests/ConsoleTest/ConsoleTest.pro
+# - qmake tests/ConsoleTest/ConsoleTest.pro
+ - qmake tests/SDLTest/SDLTest.pro
  - make
