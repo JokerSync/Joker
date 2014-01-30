@@ -7,19 +7,24 @@ LTCToolWindow::LTCToolWindow(QSettings *settings, QWidget *parent) :
 	QMainWindow(parent),
 	_settings(settings),
 	ui(new Ui::LTCToolWindow),
-	_LTCWriter(PhTimeCodeType25)
+	_LTCWriter(PhTimeCodeType25),
+	_LTCReader(PhTimeCodeType25)
 {
 	ui->setupUi(this);
+	_LTCReader.init();
 
 	setupOutput();
-	_clock = _LTCWriter.clock();
-	ui->widget->setMediaLength(1 * 60 * 25);
-	ui->widget->setTCType(_clock->timeCodeType());
-	ui->widget->setFirstFrame(_clock->frame());
-	ui->widget->setClock(_clock);
+	_LTCWriter.clock()->setFrame(_settings->value("firstFrame", 0).toInt());
+	ui->widgetMaster->setMediaLength(_settings->value("mediaLength",1 * 60 * 25).toInt());
+	ui->widgetMaster->setFirstFrame(_settings->value("firstFrame", 0).toInt());
+	ui->widgetMaster->setClock(_LTCWriter.clock());
+
+
+	connect(_LTCReader.clock(),  SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onSlaveFrameChanged(PhFrame,PhTimeCodeType)));
+
 	updateInfos();
 
-	connect(_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_LTCWriter.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 }
 
 LTCToolWindow::~LTCToolWindow()
@@ -29,22 +34,22 @@ LTCToolWindow::~LTCToolWindow()
 
 void LTCToolWindow::on_actionSet_TC_In_triggered()
 {
-	PhTimeCodeDialog dlg(_clock->timeCodeType());
+	PhTimeCodeDialog dlg(_LTCWriter.clock()->timeCodeType(), ui->widgetMaster->getFirstFrame());
 	if(dlg.exec())
 	{
-		ui->widget->setFirstFrame(dlg.frame());
-		_clock->setFrame(ui->widget->getFirstFrame());
+		ui->widgetMaster->setFirstFrame(dlg.frame());
+		_LTCWriter.clock()->setFrame(ui->widgetMaster->getFirstFrame());
 		updateInfos();
 	}
 }
 
 void LTCToolWindow::on_actionSet_TC_Out_triggered()
 {
-	PhTimeCodeDialog dlg(_clock->timeCodeType());
+	PhTimeCodeDialog dlg(_LTCWriter.clock()->timeCodeType(), ui->widgetMaster->getFirstFrame() + ui->widgetMaster->getMediaLength());
 	if(dlg.exec())
 	{
-		if(dlg.frame() > ui->widget->getFirstFrame())
-			ui->widget->setMediaLength(dlg.frame() - ui->widget->getFirstFrame());
+		if(dlg.frame() > ui->widgetMaster->getFirstFrame())
+			ui->widgetMaster->setMediaLength(dlg.frame() - ui->widgetMaster->getFirstFrame());
 		else
 			PHDEBUG << "Can't set a TC Out inferior to TC In";
 		updateInfos();
@@ -56,8 +61,12 @@ void LTCToolWindow::updateInfos()
 	QString tcIn;
 	QString tcOut;
 
-	tcIn = PhTimeCode::stringFromFrame(ui->widget->getFirstFrame(), _clock->timeCodeType());
-	tcOut = PhTimeCode::stringFromFrame(ui->widget->getFirstFrame() + ui->widget->getMediaLength(), _clock->timeCodeType());
+	_settings->setValue("firstFrame", (int) ui->widgetMaster->getFirstFrame());
+	_settings->setValue("mediaLength", (int) ui->widgetMaster->getMediaLength());
+
+
+	tcIn = PhTimeCode::stringFromFrame(ui->widgetMaster->getFirstFrame(), _LTCWriter.clock()->timeCodeType());
+	tcOut = PhTimeCode::stringFromFrame(ui->widgetMaster->getFirstFrame() + ui->widgetMaster->getMediaLength(), _LTCWriter.clock()->timeCodeType());
 
 	ui->lblInfo->setText(tcIn + " -> " + tcOut);
 }
@@ -73,10 +82,15 @@ void LTCToolWindow::on_actionPreferences_triggered()
 	}
 }
 
-void LTCToolWindow::onFrameChanged(PhFrame, PhTimeCodeType)
+void LTCToolWindow::onFrameChanged(PhFrame frame, PhTimeCodeType)
 {
-	if(ui->cBoxLoop->isChecked() and _clock->frame() > ui->widget->getMediaLength())
-		_clock->setFrame(ui->widget->getFirstFrame());
+	if(ui->cBoxLoop->isChecked() and frame > ui->widgetMaster->getMediaLength())
+		_LTCWriter.clock()->setFrame(ui->widgetMaster->getFirstFrame());
+}
+
+void LTCToolWindow::onSlaveFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+{
+	ui->lblSlave->setText(PhTimeCode::stringFromFrame(frame, tcType));
 }
 
 void LTCToolWindow::setupOutput()
