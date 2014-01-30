@@ -1,7 +1,7 @@
 #include "PreferencesPanel.h"
 #include "ui_PreferencesPanel.h"
 
-#include "PhLtcWriter.h"
+#include "PhSync/PhLtcWriter.h"
 
 PreferencesPanel::PreferencesPanel(QString audioOutput, QWidget *parent) :
 	QDialog(parent),

@@ -20,6 +20,4 @@ SOURCES += \
 	../../libs/PhSync/PhLtcReader.cpp \
     ../../libs/PhSync/PhLtcWriter.cpp
 
-INCLUDEPATH += ../../libs/PhSync
-INCLUDEPATH += ../../libs/PhTools
 

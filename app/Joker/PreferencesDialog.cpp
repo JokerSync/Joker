@@ -7,7 +7,7 @@
 #include <QDir>
 #include <QProcess>
 #include "PreferencesDialog.h"
-#include "PhDebug.h"
+#include "PhTools/PhDebug.h"
 #include "ui_PreferencesDialog.h"
 
 

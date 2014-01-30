@@ -10,7 +10,7 @@
 #include <QSettings>
 #include <QListWidgetItem>
 
-#include "PhLtcReader.h"
+#include "PhSync/PhLtcReader.h"
 #include "SonyVideoStripSynchronizer.h"
 
 namespace Ui {

@@ -6,9 +6,8 @@
 #include <QObject>
 #include <QTime>
 
-
-
-#include "ltc.h"
+#include <ltc.h>
+#include <portaudio.h>
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTimeCode.h"
