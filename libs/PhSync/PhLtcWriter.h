@@ -25,10 +25,6 @@ public:
 	static QList<QString> outputList();
 	PhClock *clock();
 
-public slots :
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
-
-
 private:
 
 	int processAudio(void *outputBuffer,

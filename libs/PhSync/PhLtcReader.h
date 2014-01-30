@@ -2,7 +2,6 @@
 #define PHLTCREADER_H
 
 #include <QString>
-#include <QtMultimedia/QAudioInput>
 #include <QObject>
 #include <QTime>
 
@@ -11,6 +10,9 @@
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTimeCode.h"
+
+#define FRAME_PER_BUFFER 256
+#define SAMPLE_RATE 48000
 
 class PhLtcReader : public QObject
 {
@@ -26,16 +28,25 @@ public:
     static QList<QString> inputList();
     PhClock * clock();
 
-private slots:
-    void onNotify();
+
 
 private:
+
+	int processAudio(const void *inputBuffer,
+							unsigned long framesPerBuffer);
+	static int audioCallback( const void *inputBuffer, void *outputBuffer,
+							   unsigned long framesPerBuffer,
+							   const PaStreamCallbackTimeInfo* timeInfo,
+							   PaStreamCallbackFlags statusFlags,
+							   void *userData );
+
     PhClock _clock;
 
-    QAudioInput *_input;
+	PaStream *stream;
+	float data;
+
 
     ltc_off_t _position;
-    QIODevice * _buffer;
     LTCDecoder * _decoder;
     QTime _pauseDetector;
 
