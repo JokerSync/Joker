@@ -8,9 +8,6 @@ PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
 	QObject(parent),
 	_clock(tcType),
 	_encoder(NULL)
-//  ,
-//	_output(NULL),
-//	_buffer(0)
 {
 
 	_encoder = ltc_encoder_create(1, 1, LTC_TV_625_50, LTC_USE_DATE);
@@ -35,58 +32,23 @@ PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
 
 	ltc_encoder_set_volume(_encoder, -18.0);
 
-
 }
 
 bool PhLtcWriter::init(QString)
 {
-//	QList<QAudioDeviceInfo> list = QAudioDeviceInfo::availableDevices(QAudio::AudioOutput);
-
-//	if(list.isEmpty())
-//	{
-//		PHDBG(21) << "No audio output device";
-//		return false;
-//	}
-
-//	QAudioDeviceInfo info = QAudioDeviceInfo::defaultOutputDevice();
-
-//	foreach(QAudioDeviceInfo device, list)
-//	{
-//		if(device.deviceName() == output)
-//			info = device;
-//	}
-
-//	PHDBG(21) << "LTC output device :" << info.deviceName();
-
-//	QAudioFormat format;
-//	format.setCodec("audio/pcm");
-//	format.setByteOrder(QAudioFormat::LittleEndian);
-//	format.setSampleRate(48000);
-//	format.setChannelCount(1);
-//	format.setSampleSize(8);
-//	format.setSampleType(QAudioFormat::SignedInt);
-
-//	if(!info.isFormatSupported(format))
-//	{
-//		PHDBG(21) << "Unsupported audio format";
-//		return false;
-//	}
-
-//	_output = new QAudioOutput(info, format);
-//	_buffer = _output->start();
 
 	PaError err = Pa_Initialize();
 	if( err != paNoError )
 		return false;
 
-	PHDBG(21) <<"Port audio succeed initialization !";
+	PHDBG(0) <<"Port audio succeed initialization !";
 
 	int numDevices;
 
 	numDevices = Pa_GetDeviceCount();
 	if( numDevices <= 0 )
 	{
-		PHDBG(21) << "ERROR: Pa_CountDevices returned " << numDevices;
+		PHDBG(0) << "ERROR: Pa_CountDevices returned " << numDevices;
 		return false;
 	}
 
@@ -100,7 +62,10 @@ bool PhLtcWriter::init(QString)
 		i++;
 	}
 	if(!isThereOutput)
+	{
+		PHDBG(0) << "No output device";
 		return false;
+	}
 
 	PaError errorOpening = Pa_OpenDefaultStream( &stream,
 						  0,			/* no input channels */
@@ -130,19 +95,10 @@ bool PhLtcWriter::init(QString)
 void PhLtcWriter::close()
 {
 	Pa_CloseStream( stream );
-//	if(_output)
-//		delete _output;
 }
 
 QList<QString> PhLtcWriter::outputList()
 {
-//	QList<QString> names;
-//	QList<QAudioDeviceInfo> list = QAudioDeviceInfo::availableDevices(QAudio::AudioOutput);
-
-//	foreach(QAudioDeviceInfo device, list)
-//		names.append(device.deviceName());
-
-//	return names;
 	QList<QString> names;
 	int numDevices = Pa_GetDeviceCount();
 	if( numDevices <= 0 )
@@ -168,30 +124,6 @@ PhClock *PhLtcWriter::clock()
 	return &_clock;
 }
 
-void PhLtcWriter::onFrameChanged(PhFrame, PhTimeCodeType)
-{
-//	unsigned int hhmmssff[4];
-//	PhTimeCode::ComputeHhMmSsFf(hhmmssff, frame, tcType);
-//	_st.hours = hhmmssff[0];
-//	_st.mins = hhmmssff[1];
-//	_st.secs = hhmmssff[2];
-//	_st.frame = hhmmssff[3];
-//	ltc_encoder_set_timecode(_encoder, &_st);
-
-//	PHDBG(21) << _st.hours << _st.mins << _st.secs << _st.frame;
-
-//	int len;
-//	ltcsnd_sample_t *buf;
-
-//	ltc_encoder_encode_frame(_encoder);
-
-//	buf = ltc_encoder_get_bufptr(_encoder, &len, 1);
-//	if (len > 0)
-//	{
-
-	//	}
-}
-
 int PhLtcWriter::processAudio(void *outputBuffer, unsigned long framesPerBuffer)
 {
 	unsigned int hhmmssff[4];
@@ -202,7 +134,7 @@ int PhLtcWriter::processAudio(void *outputBuffer, unsigned long framesPerBuffer)
 	_st.frame = hhmmssff[3];
 	ltc_encoder_set_timecode(_encoder, &_st);
 
-	PHDBG(0) << _st.hours << _st.mins << _st.secs << _st.frame;
+	PHDBG(21) << _st.hours << _st.mins << _st.secs << _st.frame;
 
 	int len;
 	ltcsnd_sample_t *buf;
@@ -211,8 +143,8 @@ int PhLtcWriter::processAudio(void *outputBuffer, unsigned long framesPerBuffer)
 
 	buf = ltc_encoder_get_bufptr(_encoder, &len, 1);
 	memcpy(outputBuffer, buf, len);
-
 	_clock.tick(PhTimeCode::getFps(_clock.timeCodeType()));
+
 
 	return len;
 }
