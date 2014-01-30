@@ -7,6 +7,7 @@
 
 #include "PhTools/PhClock.h"
 #include "PhSync/PhLtcWriter.h"
+#include "PhSync/PhLtcReader.h"
 
 namespace Ui {
 class LTCToolWindow;
@@ -30,16 +31,16 @@ private slots:
 	 *  Reset clock to tcIn if tc > tcOut
 	 */
 	void onFrameChanged(PhFrame, PhTimeCodeType);
+	void onSlaveFrameChanged(PhFrame,PhTimeCodeType);
 
 private:
 	void setupOutput();
 	void updateInfos();
 	Ui::LTCToolWindow *ui;
-	PhClock *_clock;
+	PhClock *_writingClock;
 	QSettings *_settings;
 	PhLtcWriter _LTCWriter;
-
-
+	PhLtcReader _LTCReader;
 
 };
 
