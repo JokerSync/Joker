@@ -34,8 +34,9 @@ PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
 
 }
 
-bool PhLtcWriter::init(QString)
+bool PhLtcWriter::init(QString deviceName)
 {
+	PHDBG(0) << deviceName;
 
 	PaError err = Pa_Initialize();
 	if( err != paNoError )
@@ -43,51 +44,65 @@ bool PhLtcWriter::init(QString)
 
 	PHDBG(0) <<"Port audio succeed initialization !";
 
-	int numDevices;
-
-	numDevices = Pa_GetDeviceCount();
-	if( numDevices <= 0 )
+	int deviceCount = Pa_GetDeviceCount();
+	if( deviceCount <= 0 )
 	{
-		PHDBG(0) << "ERROR: Pa_CountDevices returned " << numDevices;
+		PHDBG(0) << "ERROR: Pa_CountDevices returned " << deviceCount;
 		return false;
 	}
 
-	const PaDeviceInfo *deviceInfo;
+
+	PaStreamParameters outputDeviceInfo;
+	outputDeviceInfo.device = Pa_GetDefaultOutputDevice();
+	outputDeviceInfo.channelCount = 1;
+	outputDeviceInfo.sampleFormat = paInt8;
+	outputDeviceInfo.suggestedLatency = 0;
+	outputDeviceInfo.hostApiSpecificStreamInfo = NULL;
+
 	bool isThereOutput = false;
-	int i = 0;
-	while(i < numDevices and !isThereOutput)
+	bool deviceFound = false;
+
+	for(int i = 0; i < deviceCount; i++ )
 	{
+		const PaDeviceInfo *deviceInfo;
 		deviceInfo = Pa_GetDeviceInfo( i );
-		isThereOutput = (deviceInfo->maxOutputChannels > 0);
-		i++;
+		if(deviceInfo->maxOutputChannels > 0 )
+		{
+			isThereOutput = true;
+			if(deviceName == deviceInfo->name)
+			{
+				deviceFound = true;
+				outputDeviceInfo.device = i;
+				break;
+			}
+		}
 	}
 	if(!isThereOutput)
 	{
 		PHDBG(0) << "No output device";
 		return false;
 	}
-
-	PaError errorOpening = Pa_OpenDefaultStream( &stream,
-						  0,			/* no input channels */
-						  1,			/* mono output */
-						  paInt8,		/* 8 bits output */
-						  SAMPLE_RATE,
-						  FRAME_PER_BUFFER, /* frames per buffer, i.e. the number
-												  of sample frames that PortAudio will
-												  request from the callback. Many apps
-												  may want to use
-												  paFramesPerBufferUnspecified, which
-												  tells PortAudio to pick the best,
-												  possibly changing, buffer size.*/
-						  audioCallback, /* this is your callback function */
-						  this ); /*This is a pointer that will be passed to
-														   your callback*/
-
-	if(errorOpening != paNoError)
+	if(deviceName.length() and !deviceFound)
+	{
+		PHDBG(0) << "Desired output not found :" << deviceName;
 		return false;
+	}
 
-	if(Pa_StartStream( stream ) != paNoError)
+
+	err = Pa_OpenStream(&stream, NULL, &outputDeviceInfo, SAMPLE_RATE, FRAME_PER_BUFFER, paNoFlag, audioCallback, this);
+
+	if(err != paNoError)
+	{
+		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
 		return false;
+	}
+
+	err = Pa_StartStream( stream );
+	if(err != paNoError)
+	{
+		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
+		return false;
+	}
 
 	return true;
 }
@@ -102,7 +117,7 @@ QList<QString> PhLtcWriter::outputList()
 	QList<QString> names;
 	int numDevices = Pa_GetDeviceCount();
 	if( numDevices <= 0 )
-		PHDBG(21) << "ERROR: Pa_CountDevices returned " << numDevices;
+		PHDBG(0) << "ERROR: Pa_CountDevices returned " << numDevices;
 
 	else
 	{
@@ -111,8 +126,15 @@ QList<QString> PhLtcWriter::outputList()
 		{
 			deviceInfo = Pa_GetDeviceInfo( i );
 			if(deviceInfo->maxOutputChannels > 0)
+			{
+				//PHDEBUG << deviceInfo->name;
 				names.append(deviceInfo->name);
+			}
 		}
+	}
+
+	foreach (QString string, names) {
+		PHDEBUG << string;
 	}
 
 	return names;

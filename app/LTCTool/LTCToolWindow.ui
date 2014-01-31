@@ -74,7 +74,7 @@
        </font>
       </property>
       <property name="text">
-       <string notr="true">TextLabel</string>
+       <string notr="true">00:00:00:00</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>

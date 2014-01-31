@@ -9,7 +9,7 @@ PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
 	PHDBG(21) << "LTC Reader created";
 }
 
-bool PhLtcReader::init(QString)
+bool PhLtcReader::init(QString deviceName)
 {
 	PaError err = Pa_Initialize();
 	if( err != paNoError )
@@ -17,44 +17,59 @@ bool PhLtcReader::init(QString)
 
 	PHDBG(0) <<"Port audio succeed initialization !";
 
-	int numDevices;
-
-	numDevices = Pa_GetDeviceCount();
-	if( numDevices <= 0 )
+	int deviceCount = Pa_GetDeviceCount();
+	if( deviceCount <= 0 )
 	{
-		PHDBG(21) << "ERROR: Pa_CountDevices returned " << numDevices;
+		PHDBG(21) << "ERROR: Pa_CountDevices returned " << deviceCount;
 		return false;
 	}
 
-	const PaDeviceInfo *deviceInfo;
-	bool isThereOutput = false;
-	int i = 0;
-	while(i < numDevices and !isThereOutput)
+
+	PaStreamParameters streamParameters;
+	streamParameters.device = Pa_GetDefaultOutputDevice();
+	streamParameters.channelCount = 1;
+	streamParameters.sampleFormat = paInt8;
+	streamParameters.suggestedLatency = 0;
+	streamParameters.hostApiSpecificStreamInfo = NULL;
+
+	bool isThereInput = false;
+	bool deviceFound = false;
+
+	for(int i = 0; i < deviceCount; i++ )
 	{
+		const PaDeviceInfo *deviceInfo;
 		deviceInfo = Pa_GetDeviceInfo( i );
-		isThereOutput = (deviceInfo->maxInputChannels > 0);
-		i++;
+		if(deviceInfo->maxInputChannels > 0 )
+		{
+			isThereInput = true;
+			if(deviceName == deviceInfo->name)
+			{
+				deviceFound = true;
+				streamParameters.device = i;
+				break;
+			}
+		}
 	}
-	if(!isThereOutput)
+	if(!isThereInput)
+	{
+		PHDBG(0) << "No output device";
 		return false;
+	}
+	if(deviceName.length() and !deviceFound)
+	{
+		PHDBG(0) << "Desired input not found :" << deviceName;
+		return false;
+	}
 
-	PaError errorOpening = Pa_OpenDefaultStream( &stream,
-						  1,			/* mono input */
-						  0,			/* no output */
-						  paInt8,		/* 8 bits output */
-						  SAMPLE_RATE,
-						  FRAME_PER_BUFFER, /* frames per buffer, i.e. the number
-												  of sample frames that PortAudio will
-												  request from the callback. Many apps
-												  may want to use
-												  paFramesPerBufferUnspecified, which
-												  tells PortAudio to pick the best,
-												  possibly changing, buffer size.*/
-						  audioCallback, /* this is your callback function */
-						  this ); /*This is a pointer that will be passed to
-														   your callback*/
+	err = Pa_OpenStream(&stream, &streamParameters, NULL, SAMPLE_RATE, FRAME_PER_BUFFER, paNoFlag, audioCallback, this);
 
-	if(errorOpening != paNoError)
+	if(err != paNoError)
+	{
+		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
+		return false;
+	}
+
+	if(err != paNoError)
 		return false;
 
 	if(Pa_StartStream( stream ) != paNoError)

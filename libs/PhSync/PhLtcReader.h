@@ -22,13 +22,11 @@ class PhLtcReader : public QObject
 public:
 	explicit PhLtcReader(PhTimeCodeType tcType = PhTimeCodeType25, QObject *parent = 0);
 
-    bool init(QString _input="");
+	bool init(QString deviceName="");
 	void close();
 
     static QList<QString> inputList();
     PhClock * clock();
-
-
 
 private:
 
@@ -44,7 +42,6 @@ private:
 
 	PaStream *stream;
 	float data;
-
 
     ltc_off_t _position;
     LTCDecoder * _decoder;
