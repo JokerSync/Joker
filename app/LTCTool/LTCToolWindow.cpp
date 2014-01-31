@@ -11,11 +11,11 @@ LTCToolWindow::LTCToolWindow(QSettings *settings, QWidget *parent) :
 	_LTCReader(PhTimeCodeType25)
 {
 	ui->setupUi(this);
-	_LTCReader.init();
 
+	setupInput();
 	setupOutput();
 	_LTCWriter.clock()->setFrame(_settings->value("firstFrame", 0).toInt());
-	ui->widgetMaster->setMediaLength(_settings->value("mediaLength",1 * 60 * 25).toInt());
+	ui->widgetMaster->setMediaLength(_settings->value("mediaLength", 1 * 60 * 25).toInt());
 	ui->widgetMaster->setFirstFrame(_settings->value("firstFrame", 0).toInt());
 	ui->widgetMaster->setClock(_LTCWriter.clock());
 
@@ -73,12 +73,15 @@ void LTCToolWindow::updateInfos()
 
 void LTCToolWindow::on_actionPreferences_triggered()
 {
-	PreferencesPanel dlg(_settings->value("audioOutput").toString());
+	PreferencesPanel dlg(_settings->value("audioOutput").toString(), _settings->value("audioInput").toString());
 	if(dlg.exec())
 	{
 		PHDEBUG << dlg.selectedAudioOutput();
 		_settings->setValue("audioOutput", dlg.selectedAudioOutput());
+		_settings->setValue("audioInput", dlg.selectedAudioInput());
+
 		setupOutput();
+		setupInput();
 	}
 }
 
@@ -96,5 +99,19 @@ void LTCToolWindow::onSlaveFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 void LTCToolWindow::setupOutput()
 {
 	_LTCWriter.close();
-	_LTCWriter.init(_settings->value("audioOutput", "").toString());
+	if(!_LTCWriter.init(_settings->value("audioOutput", "").toString()))
+		QMessageBox::warning(this, tr("Error"),
+										tr("Error while loading the output device.\n"
+										   "See log for more informations"),
+										QMessageBox::Ok);
+}
+
+void LTCToolWindow::setupInput()
+{
+	_LTCReader.close();
+	if(!_LTCReader.init(_settings->value("audioInput", "").toString()))
+		QMessageBox::warning(this, tr("Error"),
+										tr("Error while loading the input device.\n"
+										   "See log for more informations"),
+										QMessageBox::Ok);
 }

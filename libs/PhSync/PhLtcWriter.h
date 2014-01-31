@@ -3,7 +3,6 @@
 
 #include <QObject>
 
-#include <QAudioOutput>
 
 #include <ltc.h>
 #include <portaudio.h>
@@ -20,7 +19,7 @@ class PhLtcWriter : public QObject
 public:
 	explicit PhLtcWriter(PhTimeCodeType tcType, QObject *parent = 0);
 
-	bool init(QString output = "");
+	bool init(QString deviceName = "");
 	void close();
 	static QList<QString> outputList();
 	PhClock *clock();
@@ -40,11 +39,6 @@ private:
     PhClock _clock;
 	LTCEncoder *_encoder;
 	SMPTETimecode _st;
-
-//	QAudioOutput * _output;
-//	QIODevice * _buffer;
-
-
 
 };
 

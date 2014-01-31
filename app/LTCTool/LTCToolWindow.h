@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QMessageBox>
 #include <QSettings>
 
 #include "PhTools/PhClock.h"
@@ -42,6 +43,7 @@ private:
 	PhLtcWriter _LTCWriter;
 	PhLtcReader _LTCReader;
 
+	void setupInput();
 };
 
 #endif // LTCTOOLWINDOW_H

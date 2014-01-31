@@ -12,9 +12,10 @@ class PreferencesPanel : public QDialog
 	Q_OBJECT
 
 public:
-	explicit PreferencesPanel(QString audioOutput, QWidget *parent = 0);
+	explicit PreferencesPanel(QString audioOutput, QString audioInput, QWidget *parent = 0);
 	~PreferencesPanel();
 	QString selectedAudioOutput();
+	QString selectedAudioInput();
 
 private:
 	Ui::PreferencesPanel *ui;
