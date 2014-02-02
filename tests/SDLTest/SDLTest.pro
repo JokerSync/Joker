@@ -22,8 +22,8 @@ win32{
 
 # Ubuntu specific
 linux {
-	INCLUDEPATH += /usr/include/SDL
-	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
+	INCLUDEPATH += /usr/include/SDL2
+	LIBS += -L/usr/local/lib -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
 	RESOURCES_PATH = .
 }
 
