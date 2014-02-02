@@ -32,3 +32,5 @@ script:
 # - qmake tests/ConsoleTest/ConsoleTest.pro
 - qmake tests/SDLTest/SDLTest.pro
 - make
+notifications:
+- email: false
