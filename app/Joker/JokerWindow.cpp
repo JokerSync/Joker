@@ -21,7 +21,8 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_needToSave(false),
-	_currentStripFile("")
+	_currentStripFile(""),
+	_ltcReader()
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -193,10 +194,11 @@ void JokerWindow::setupSyncProtocol()
 	// Disable old protocol
 	_sonySlave.close();
 	_ltcReader.close();
+	VideoStripSynchronizer::SyncType type = (VideoStripSynchronizer::SyncType)_settings->value("synchroProtocol").toInt();
 
-	switch(_settings->value("synchroProtocol", NO_SYNC).toInt())
+	switch(type)
 	{
-	case SONY:
+	case VideoStripSynchronizer::Sony:
 		// Initialize the sony module
 		if(_sonySlave.open())
 		{
@@ -204,26 +206,31 @@ void JokerWindow::setupSyncProtocol()
 			ui->videoStripView->setSony(&_sonySlave);
 		}
 		else
-			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
-		break;
-	case LTC:
 		{
-			QString input = _settings->value("ltcInputDevice", "").toString();
+			type = VideoStripSynchronizer::NoSync;
+			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
+		}
+		break;
+	case VideoStripSynchronizer::LTC:
+		{
+			QString input = _settings->value("ltcInputDevice").toString();
 			if(_ltcReader.init(input))
 				clock = _ltcReader.clock();
 			else
+			{
 				QMessageBox::critical(this, "", "Unable to open " + input);
+				type = VideoStripSynchronizer::NoSync;
+			}
 			break;
 		}
 	}
 
-	_synchronizer.setSyncClock(clock);
+	_synchronizer.setSyncClock(clock, type);
 
 	// Disable slide if Joker is sync to a protocol
 	_mediaPanel.setSliderEnable(clock == NULL);
 
-	if(clock == NULL)
-		_settings->setValue("synchroProtocol", NO_SYNC);
+	_settings->setValue("synchroProtocol", type);
 }
 
 void JokerWindow::openFile(QString fileName)
@@ -526,13 +533,13 @@ void JokerWindow::on_actionAbout_triggered()
 void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
-    int syncProtocol = _settings->value("synchroProtocol", NO_SYNC).toInt();
-    QString inputLTC = _settings->value("ltcInputDevice", "").toString();
+    int syncProtocol = _settings->value("synchroProtocol").toInt();
+    QString inputLTC = _settings->value("ltcInputDevice").toString();
 	PreferencesDialog dlg(_settings);
     dlg.exec();
-    if(syncProtocol != _settings->value("synchroProtocol", NO_SYNC).toInt() or inputLTC != _settings->value("ltcInputDevice", ""))
+    if(syncProtocol != _settings->value("synchroProtocol").toInt() or inputLTC != _settings->value("ltcInputDevice", ""))
     {
-        PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol", NO_SYNC).toInt();
+        PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol").toInt();
         setupSyncProtocol();
     }
 
