@@ -7,7 +7,7 @@
 #include <QDir>
 #include <QProcess>
 #include "PreferencesDialog.h"
-#include "PhDebug.h"
+#include "PhTools/PhDebug.h"
 #include "ui_PreferencesDialog.h"
 
 
@@ -38,8 +38,8 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldDisplayNextText = _settings->value("displayNextText", true).toBool();
 	_oldDisplayTitle = _settings->value("displayTitle", true).toBool();
 	_oldDisplayLoop = _settings->value("displayLoop", false).toBool();
-    _oldSyncProtocol = _settings->value("synchroProtocol", NO_SYNC).toInt();
-    _oldLTCInput = _settings->value("ltcInputDevice", "").toString();
+    _oldSyncProtocol = _settings->value("synchroProtocol").toInt();
+    _oldLTCInput = _settings->value("ltcInputDevice").toString();
 
 	_oldLogMask = _settings->value("logMask", 1).toInt();
 
@@ -116,9 +116,9 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 
     ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
 
-    if(_oldSyncProtocol == SONY)
+    if(_oldSyncProtocol == VideoStripSynchronizer::Sony)
         showParamSony(true);
-    else if(_oldSyncProtocol == LTC)
+    else if(_oldSyncProtocol == VideoStripSynchronizer::LTC)
         showParamLTC(true);
     else
     {
@@ -302,10 +302,10 @@ void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *cu
 	int protocol = ui->listWidgetSync->currentRow();
 	switch(protocol)
 	{
-	case SONY:
+	case VideoStripSynchronizer::Sony:
         showParamSony(true);
 		break;
-	case LTC:
+	case VideoStripSynchronizer::LTC:
         showParamLTC(true);
 		break;
 	default:

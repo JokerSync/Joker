@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
     QAudioFormat m_format;
 
-#if 0 /* This part is for output testing*/
+#if 1 /* This part is for output testing*/
     QAudioDeviceInfo m_device = QAudioDeviceInfo::defaultOutputDevice();
 
 
