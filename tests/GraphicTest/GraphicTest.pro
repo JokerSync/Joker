@@ -13,6 +13,8 @@ JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 INCLUDEPATH += $${JOKER_ROOT}/libs
 
+DEFINES += APP_NAME=\\\"$$TARGET\\\"
+
 include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
 include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
 

@@ -9,6 +9,10 @@ PhGraphicObject::PhGraphicObject(int x , int y) : _x(x), _y(y), _z(0), _color(Qt
 {
 }
 
+PhGraphicObject::~PhGraphicObject()
+{
+}
+
 void PhGraphicObject::dispose()
 {
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>455</width>
-    <height>365</height>
+    <width>464</width>
+    <height>449</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,7 +24,7 @@
      </property>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabGeneral">
        <attribute name="title">
@@ -33,10 +33,10 @@
        <widget class="QSplitter" name="splitter_2">
         <property name="geometry">
          <rect>
-          <x>90</x>
+          <x>70</x>
           <y>10</y>
-          <width>212</width>
-          <height>80</height>
+          <width>321</width>
+          <height>171</height>
          </rect>
         </property>
         <property name="orientation">
@@ -77,7 +77,30 @@
           <enum>Qt::LeftToRight</enum>
          </property>
          <property name="text">
-          <string>Display TC</string>
+          <string>Display timecode</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="cBoxDisplayNextTC">
+         <property name="text">
+          <string>Display next timecode</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="cBoxDisplayNextText">
+         <property name="text">
+          <string>Display next texts</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="cBoxDisplayTitle">
+         <property name="text">
+          <string>Display title</string>
+         </property>
+        </widget>
+        <widget class="QCheckBox" name="cBoxDisplayLoop">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Display loop number</string>
          </property>
         </widget>
        </widget>
@@ -246,7 +269,6 @@
          </layout>
         </item>
        </layout>
-       <zorder></zorder>
       </widget>
       <widget class="QWidget" name="tabSynchro">
        <attribute name="title">
@@ -255,26 +277,49 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="4" column="1" alignment="Qt::AlignLeft">
-           <widget class="QLineEdit" name="lineEditSonyID">
-            <property name="maximumSize">
-             <size>
-              <width>70</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="maxLength">
-             <number>20</number>
-            </property>
-            <property name="placeholderText">
-             <string>F0 C0</string>
+          <item row="0" column="2">
+           <widget class="QRadioButton" name="radioButtonMS">
+            <property name="text">
+             <string>millisecond</string>
             </property>
            </widget>
           </item>
-          <item row="3" column="1" alignment="Qt::AlignLeft">
-           <widget class="QCheckBox" name="cBoxSonyAutoconnect">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblDelay">
             <property name="text">
-             <string/>
+             <string>Delay</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QListWidget" name="listWidgetSync">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>75</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>No sync</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Sony 9 pin</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>LTC</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QRadioButton" name="radioButtonQF">
+            <property name="text">
+             <string>quarter frame</string>
             </property>
            </widget>
           </item>
@@ -286,34 +331,133 @@
             <property name="singleStep">
              <number>10</number>
             </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="lblDelay">
-            <property name="text">
-             <string>Delay</string>
+            <property name="wordWrap" stdset="0">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="lblSonyID">
-            <property name="text">
-             <string>Sony ID</string>
+          <item row="3" column="0" colspan="3">
+           <widget class="QGroupBox" name="groupBoxSony">
+            <property name="enabled">
+             <bool>true</bool>
             </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QLabel" name="lblSonyHighSpeed">
-            <property name="text">
-             <string>Sony high speed</string>
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>150</height>
+             </size>
             </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="lblSonyAutoconnect">
-            <property name="text">
-             <string>Sony autoconnect</string>
+            <property name="title">
+             <string>Parameters</string>
             </property>
+            <widget class="QLabel" name="lblSonyHighSpeed">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>61</y>
+               <width>114</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Sony high speed</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblSonyID">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>30</y>
+               <width>114</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Sony ID</string>
+             </property>
+            </widget>
+            <widget class="QSpinBox" name="spinBoxSonyHighSpeed">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>180</x>
+               <y>61</y>
+               <width>75</width>
+               <height>24</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>75</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="value">
+              <number>3</number>
+             </property>
+            </widget>
+            <widget class="QLabel" name="lblInputs">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>30</y>
+               <width>121</width>
+               <height>19</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Available inputs</string>
+             </property>
+            </widget>
+            <widget class="QListWidget" name="listWidgetInputs">
+             <property name="geometry">
+              <rect>
+               <x>150</x>
+               <y>30</y>
+               <width>200</width>
+               <height>100</height>
+              </rect>
+             </property>
+            </widget>
+            <widget class="QLineEdit" name="lineEditSonyID">
+             <property name="geometry">
+              <rect>
+               <x>180</x>
+               <y>30</y>
+               <width>70</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>70</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string notr="true">F0 C0</string>
+             </property>
+             <property name="maxLength">
+              <number>20</number>
+             </property>
+             <property name="placeholderText">
+              <string notr="true"/>
+             </property>
+            </widget>
            </widget>
           </item>
           <item row="0" column="2">
@@ -323,35 +467,442 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="1" alignment="Qt::AlignLeft">
-           <widget class="QSpinBox" name="spinBoxSonyHighSpeed">
-            <property name="minimumSize">
-             <size>
-              <width>75</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>100</number>
-            </property>
-            <property name="value">
-             <number>3</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QRadioButton" name="radioButtonQF">
-            <property name="text">
-             <string>quarter frame</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="tabLog">
+       <attribute name="title">
+        <string>Log</string>
+       </attribute>
+       <widget class="QLabel" name="lblLogFile">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>30</y>
+          <width>111</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Log file :</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLabel" name="lblPathToLogFile">
+        <property name="geometry">
+         <rect>
+          <x>140</x>
+          <y>20</y>
+          <width>281</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string notr="true">-logfile-</string>
+        </property>
+        <property name="scaledContents">
+         <bool>false</bool>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+        <property name="openExternalLinks">
+         <bool>false</bool>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+       <widget class="QWidget" name="layoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>83</y>
+          <width>168</width>
+          <height>206</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item alignment="Qt::AlignBottom">
+          <widget class="QPushButton" name="pButtonReset">
+           <property name="text">
+            <string>Reset</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string notr="true">0</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string notr="true">2</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string notr="true">3</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="4">
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="1" column="4">
+              <widget class="QCheckBox" name="checkBox_1">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="13" column="3">
+              <widget class="QCheckBox" name="checkBox_28">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="7" column="5">
+              <widget class="QCheckBox" name="checkBox_10">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="1" column="5">
+              <widget class="QCheckBox" name="checkBox_2">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="9" column="5">
+              <widget class="QCheckBox" name="checkBox_18">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="11" column="5">
+              <widget class="QCheckBox" name="checkBox_26">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="10" column="6">
+              <widget class="QCheckBox" name="checkBox_23">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="10" column="5">
+              <widget class="QCheckBox" name="checkBox_22">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="8" column="4">
+              <widget class="QCheckBox" name="checkBox_13">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="8" column="5">
+              <widget class="QCheckBox" name="checkBox_14">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="9" column="4">
+              <widget class="QCheckBox" name="checkBox_17">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="6" column="3">
+              <widget class="QCheckBox" name="checkBox_4">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="9" column="3">
+              <widget class="QCheckBox" name="checkBox_16">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="8" column="6">
+              <widget class="QCheckBox" name="checkBox_15">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="6" column="5">
+              <widget class="QCheckBox" name="checkBox_6">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="6" column="4">
+              <widget class="QCheckBox" name="checkBox_5">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="7" column="6">
+              <widget class="QCheckBox" name="checkBox_11">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="10" column="4">
+              <widget class="QCheckBox" name="checkBox_21">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="11" column="6">
+              <widget class="QCheckBox" name="checkBox_27">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="10" column="3">
+              <widget class="QCheckBox" name="checkBox_20">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QCheckBox" name="checkBox_0">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="11" column="4">
+              <widget class="QCheckBox" name="checkBox_25">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="8" column="3">
+              <widget class="QCheckBox" name="checkBox_12">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="9" column="6">
+              <widget class="QCheckBox" name="checkBox_19">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="13" column="5">
+              <widget class="QCheckBox" name="checkBox_30">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="11" column="3">
+              <widget class="QCheckBox" name="checkBox_24">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="7" column="4">
+              <widget class="QCheckBox" name="checkBox_9">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="1" column="6">
+              <widget class="QCheckBox" name="checkBox_3">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="6" column="6">
+              <widget class="QCheckBox" name="checkBox_7">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="13" column="4">
+              <widget class="QCheckBox" name="checkBox_29">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="13" column="6">
+              <widget class="QCheckBox" name="checkBox_31">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+             <item row="7" column="3">
+              <widget class="QCheckBox" name="checkBox_8">
+               <property name="text">
+                <string/>
+               </property>
+               <attribute name="buttonGroup">
+                <string notr="true">buttonGroup</string>
+               </attribute>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
      <widget class="QDialogButtonBox" name="buttonBox">
@@ -366,4 +917,11 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup">
+   <property name="exclusive">
+    <bool>false</bool>
+   </property>
+  </buttongroup>
+ </buttongroups>
 </ui>

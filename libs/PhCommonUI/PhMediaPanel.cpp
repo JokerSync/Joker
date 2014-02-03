@@ -53,21 +53,7 @@ PhMediaPanel::~PhMediaPanel()
 
 void PhMediaPanel::setTCType(PhTimeCodeType tcType)
 {
-	switch(tcType)
-	{
-	case PhTimeCodeType2398:
-		ui->_rateSelectionBox->setCurrentIndex(0);
-		break;
-	case PhTimeCodeType24:
-		ui->_rateSelectionBox->setCurrentIndex(1);
-		break;
-	case PhTimeCodeType25:
-		ui->_rateSelectionBox->setCurrentIndex(2);
-		break;
-	case PhTimeCodeType2997:
-		ui->_rateSelectionBox->setCurrentIndex(3);
-		break;
-	}
+	onTimeCodeTypeChanged(tcType);
 
 	if(_clock)
 		_clock->setTimeCodeType(tcType);
@@ -113,7 +99,12 @@ void PhMediaPanel::setMediaLength(PhFrame length)
 
 PhFrame PhMediaPanel::getMediaLength()
 {
-	return _mediaLength;
+    return _mediaLength;
+}
+
+void PhMediaPanel::setSliderEnable(bool isEnabled)
+{
+    ui->_slider->setEnabled(isEnabled);
 }
 
 void PhMediaPanel::setClock(PhClock *clock)
@@ -122,8 +113,10 @@ void PhMediaPanel::setClock(PhClock *clock)
 	if(_clock)
 	{
 		setTCType(_clock->timeCodeType());
+		ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->frame(), _clock->timeCodeType()));
 		connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 		connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
+		connect(_clock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onTimeCodeTypeChanged(PhTimeCodeType)));
 	}
 }
 
@@ -135,6 +128,25 @@ void PhMediaPanel::onRateChanged(PhRate rate)
 		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
 	else
 		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+}
+
+void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
+{
+	switch(tcType)
+	{
+	case PhTimeCodeType2398:
+		ui->_rateSelectionBox->setCurrentIndex(0);
+		break;
+	case PhTimeCodeType24:
+		ui->_rateSelectionBox->setCurrentIndex(1);
+		break;
+	case PhTimeCodeType25:
+		ui->_rateSelectionBox->setCurrentIndex(2);
+		break;
+	case PhTimeCodeType2997:
+		ui->_rateSelectionBox->setCurrentIndex(3);
+		break;
+	}
 }
 
 void PhMediaPanel::onPlayPause()

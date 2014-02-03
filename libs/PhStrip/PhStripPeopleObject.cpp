@@ -2,7 +2,7 @@
 
 
 PhStripPeopleObject::PhStripPeopleObject(PhTime timeIn, PhPeople *people, PhTime timeOut, int track): PhStripObject(timeIn),
-	_people(people), _timeOut(timeOut), _track(track)
+	_timeOut(timeOut), _people(people), _track(track)
 {
 }
 

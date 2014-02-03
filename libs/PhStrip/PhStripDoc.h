@@ -3,6 +3,9 @@
 
 #include <QList>
 #include <QMap>
+#include <QtXml>
+#include <QXmlStreamWriter>
+#include <QDomDocument>
 
 #include "PhTools/PhTimeCode.h"
 
@@ -32,7 +35,12 @@ public:
      * @return _title
      */
 	QString getTitle();
-    /**
+
+	QString getTranslatedTitle();
+	QString getEpisode();
+	QString getSeason();
+
+	/**
      * @brief getVideoTimestamp
      * @return _videoTimestamp
      */
@@ -98,7 +106,7 @@ public:
      * @brief setVideoTimestamp
      * @param videoTimestamp
      */
-    void setVideoTimestamp(PhTimeCode videoTimestamp);
+    void setVideoTimestamp(PhFrame videoFramestamp);
     /**
      * @brief setVideoPath
      * @param videoPath
@@ -114,12 +122,22 @@ public:
      * @param filename
      * @return
      */
-	bool openDetX(QString filename);
+	bool importDetX(QString filename);
+	bool openStripFile(QString fileName);
+	bool saveStrip(QString fileName, QString lastTC);
 
 	// First version : Create StripDoc for testing purposes
-	bool createDoc(QString text, int nbPeople, int nbLoop, int nbText, int nbTrack, PhTime videoTimeCode);
+	bool createDoc(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeCode);
 
     int getNbTexts();
+
+	PhPeople * getPeopleByName(QString name);
+
+	PhStripText * getNextText(PhFrame frame);
+
+	PhStripText * getNextText(PhFrame frame, PhPeople *people);
+
+	PhStripText * getNextText(PhFrame frame, QList<PhPeople*> peopleList);
 
 	PhFrame getPreviousTextFrame(PhFrame frame);
 
@@ -149,6 +167,10 @@ private:
      * Title of the corresponding audiovisual content.
      */
 	QString _title;
+	QString _translatedTitle;
+	QString _episode;
+	QString _season;
+
     /**
      * Starting time of the video content refered by the videoPath : String
      */
@@ -202,7 +224,7 @@ private:
 	 QList<PhStripOff *> _offs;
 
      int _nbTexts;
-	 void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track, int ite);
+	 void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
 };
 
 #endif // PHSTRIPDOC_H

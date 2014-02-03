@@ -41,10 +41,7 @@ bool PhSonyController::open(bool inThread)
 				_serial.setParity(QSerialPort::OddParity);
 
 				if(inThread)
-				{
-					_serial.moveToThread(this);
 					this->start(QThread::HighPriority);
-				}
 				else
 					connect(&_serial, SIGNAL(readyRead()), this, SLOT(onData()));
 				return true;
@@ -69,7 +66,7 @@ void PhSonyController::close()
 	}
 }
 
-void PhSonyController::checkVideoSync(int frequency)
+void PhSonyController::checkVideoSync(int)
 {
 	if(_serial.isOpen())
 	{
@@ -102,6 +99,7 @@ void PhSonyController::run()
 	_threadRunning = true;
 	while(_threadRunning)
 	{
+		this->checkVideoSync(100);
 		if(_serial.waitForReadyRead(10))
 			onData();
 	}

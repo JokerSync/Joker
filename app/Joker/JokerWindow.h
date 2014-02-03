@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef JOKERWINDOW_H
+#define JOKERWINDOW_H
 
 #include <QMainWindow>
 #include <QMessageBox>
@@ -8,29 +8,30 @@
 
 #include "VideoStripView.h"
 #include "PhSync/PhSonySlaveController.h"
-#include "PhCommonUI/PhMediaPanelDialog.h"
+#include "PhCommonUI/PhFloatingMediaPanel.h"
+#include "PhSync/PhLtcReader.h"
 
 #include "SonyVideoStripSynchronizer.h"
 #include "PropertyDialog.h"
 
 namespace Ui {
-class MainWindow;
+class JokerWindow;
 }
 
-class MainWindow : public QMainWindow
+class JokerWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QSettings *settings);
-	~MainWindow();
+	explicit JokerWindow(QSettings *settings);
+	~JokerWindow();
 
 	void openFile(QString fileName);
 
-	bool openVideoFile(QString videoFileName);
+	bool openVideoFile(QString videoFile);
 
 protected:
-	bool eventFilter(QObject *sender, QEvent *event);
+	bool eventFilter(QObject *, QEvent *event);
 
 	enum MediaPanelState {
 		MediaPanelVisible,
@@ -40,7 +41,7 @@ protected:
 
 
 private slots:
-		// Qt Designer slots
+	// Qt Designer slots
 	void on_actionOpen_triggered();
 
 	void on_actionPlay_pause_triggered();
@@ -100,16 +101,23 @@ private slots:
 
 	void openRecent();
 
+	void on_actionSave_triggered();
+
+	void on_actionSave_as_triggered();
+
+	void on_actionSelect_character_triggered();
+
 private:
-	Ui::MainWindow *ui;
+	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;
 	PhVideoEngine * _videoEngine;
 	PhStripDoc *_doc;
 	QSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
+    PhLtcReader _ltcReader;
 
-	PhMediaPanelDialog _mediaPanel;
+	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;
 	MediaPanelState _mediaPanelState;
 	QPropertyAnimation _mediaPanelAnimation;
@@ -118,8 +126,17 @@ private:
 
 	QVector<QAction *> _recentFileButtons;
 
+	bool _needToSave;
+	QString _currentStripFile;
+
 	void updateOpenRecent();
 	void setupOpenRecentMenu();
+    void setupSyncProtocol();
+	void closeEvent(QCloseEvent *event);
+
+	void setCurrentStripFile(QString stripFile);
+
+	bool checkSaveFile();
 };
 
 #endif // MAINWINDOW_H

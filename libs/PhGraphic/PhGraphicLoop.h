@@ -19,6 +19,7 @@ class PhGraphicLoop : public PhGraphicRect
 public:
 
 	PhGraphicLoop(int x = 0, int y =0, int w = 0, int h = 0, int crossHeight = 0, int hThick = 0);
+	~PhGraphicLoop();
 
 	void draw();
 

@@ -19,21 +19,30 @@ public:
 	PhVideoEngine * videoEngine() { return &_videoEngine;}
 	PhGraphicStrip * strip() { return &_strip;}
 	void setSony(PhSonyController * sony);
+	QList<PhPeople*>* getSelectedPeoples();
+
 protected:
 	bool init();
 	void paint();
 
 private slots:
 	void onVideoSync();
+	void onDocChanged();
+
 private:
 	PhVideoEngine _videoEngine;
 	PhGraphicStrip _strip;
-	QSettings *_settings;
 	PhSonyController *_sony;
 	QTime _lastVideoSyncElapsed;
 
-	PhFont _hudFont;
-	PhGraphicText _tcText, _noVideoSyncError;
+	PhGraphicText _titleText;
+	PhGraphicSolidRect _titleBackgroundRect;
+	PhGraphicText _tcText;
+	PhGraphicText _nextTCText;
+	PhGraphicText _noVideoSyncError;
+	PhGraphicText _currentPeopleName;
+
+	QList<PhPeople*> _selectedPeoples;
 };
 
 #endif // VIDEOSTRIPVIEW_H

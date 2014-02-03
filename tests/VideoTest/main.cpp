@@ -1,7 +1,7 @@
 #include <QtWidgets/QApplication>
 #include <QSettings>
 
-#include "MainView.h"
+#include "VideoTestWindow.h"
 
 #include "stdio.h"
 
@@ -10,16 +10,21 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 	QSettings settings("Phonations", "VideoTest");
 
+<<<<<<< HEAD
 	MainView mainView(&settings);
 	mainView.resize(800, 600);
+=======
+	VideoTestWindow w(&settings);
+	w.resize(800, 600);
+>>>>>>> origin/master
 
-    mainView.show();
+    w.show();
 
 	QString fileName = settings.value("lastVideoFile", "").toString();
 	if(argc > 1)
 		fileName = argv[1];
 	if(QFile(fileName).exists())
-		mainView.openFile(QString(fileName));
+		w.openFile(QString(fileName));
 
     return app.exec();
 }

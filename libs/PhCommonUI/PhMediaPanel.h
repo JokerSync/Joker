@@ -38,6 +38,8 @@ public:
 	void setMediaLength(PhFrame length);
 	PhFrame getMediaLength();
 
+    void setSliderEnable(bool isEnabled);
+    
 	void setClock(PhClock * clock);
 
 signals:
@@ -54,6 +56,7 @@ public slots:
 
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onRateChanged(PhRate rate);
+	void onTimeCodeTypeChanged(PhTimeCodeType tcType);
 
 private slots:
 	void onPlayPause();

@@ -14,6 +14,8 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+DEFINES += APP_NAME=\\\"$$TARGET\\\"
+
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)

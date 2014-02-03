@@ -28,4 +28,4 @@ Thumbs.db
 #Doxygen
 doc/html
 doxygen_error.log
-
+*.qm
