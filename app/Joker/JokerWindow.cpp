@@ -256,7 +256,7 @@ void JokerWindow::openFile(QString fileName)
 	}
 }
 
-bool JokerWindow::eventFilter(QObject *, QEvent *event)
+bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
 	switch (event->type())
 	{
@@ -306,6 +306,16 @@ bool JokerWindow::eventFilter(QObject *, QEvent *event)
 	}
 	case QEvent::DragEnter:
 		event->accept();
+		break;
+	case QEvent::MouseButtonDblClick:
+		// If the sender is "this" and no videofile is loaded
+		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length())
+		{
+			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
+			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->value("stripHeight", 0.25f).toFloat()))
+				on_actionOpen_Video_triggered();
+			return true;
+		}
 		break;
 	default:
 		break;
