@@ -2,7 +2,6 @@
 
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
-	_settings(NULL),
 	_sony(NULL),
 	_titleText(_strip.getHUDFont(), ""),
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
@@ -15,7 +14,7 @@ VideoStripView::VideoStripView(QWidget *parent) :
 
 void VideoStripView::setSettings(QSettings *settings)
 {
-	_settings = settings;
+	PhGraphicView::setSettings(settings);
 	_strip.setSettings(settings);
 }
 

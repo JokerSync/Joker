@@ -3,6 +3,7 @@
 
 #include <QGLWidget>
 #include <QTimer>
+#include <QSettings>
 
 #include "PhTools/PhTickCounter.h"
 
@@ -38,6 +39,9 @@ signals:
 	void beforePaint(int frequency);
 
 protected:
+
+	void setSettings(QSettings *settings);
+	QSettings * _settings;
 
 
 	virtual bool init() = 0;
