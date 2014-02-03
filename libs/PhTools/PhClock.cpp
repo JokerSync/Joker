@@ -6,6 +6,7 @@ PhClock::PhClock(PhTimeCodeType tcType, QObject *parent) :
 	qRegisterMetaType<PhTime>("PhTime");
 	qRegisterMetaType<PhFrame>("PhFrame");
 	qRegisterMetaType<PhRate>("PhRate");
+	qRegisterMetaType<PhTimeCodeType>("PhTimeCodeType");
 }
 
 ///****************************Properties****************************/

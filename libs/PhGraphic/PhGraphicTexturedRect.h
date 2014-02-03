@@ -20,6 +20,7 @@ class PhGraphicTexturedRect : public PhGraphicRect
 public:
 
 	PhGraphicTexturedRect(int x = 0, int y = 0, int w = 0, int h = 0);
+	~PhGraphicTexturedRect();
 
     /**
      * @brief draw
@@ -48,7 +49,7 @@ private:
      * @brief _texture
      * The texture address(?)
      */
-    GLuint _texture;
+	GLuint _texture;
 
 	/**
      * @brief _tu

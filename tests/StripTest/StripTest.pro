@@ -9,9 +9,14 @@ QT       += core
 QT       += gui
 QT       += xml
 
-TARGET = StripTest
 CONFIG   += console
 CONFIG   -= app_bundle
+
+TARGET = StripTest
+
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES += APP_NAME=\\\"$$TARGET\\\"
+DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 TEMPLATE = app
 

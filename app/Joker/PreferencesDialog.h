@@ -10,6 +10,9 @@
 #include <QSettings>
 #include <QListWidgetItem>
 
+#include "PhSync/PhLtcReader.h"
+#include "SonyVideoStripSynchronizer.h"
+
 namespace Ui {
 class PreferencesDialog;
 }
@@ -27,11 +30,8 @@ private slots:
 	void on_spinBoxDelay_valueChanged(int delay);
 	void on_radioButtonQF_toggled(bool checked);
 	void on_sliderStripHeight_valueChanged(int position);
-	void on_cBoxSonyAutoconnect_toggled(bool checked);
 	void on_spinBoxSpeed_valueChanged(int speed);
-	void on_listWidgetFont_itemClicked(QListWidgetItem *item);
 	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
 
 	void on_buttonBox_accepted();
 
@@ -49,6 +49,24 @@ private slots:
 
 	void on_cBoxDisplayTC_clicked();
 
+	void on_cBoxDisplayNextTC_clicked();
+
+	void on_cBoxDisplayNextText_clicked();
+
+	void on_cBoxDisplayTitle_clicked();
+
+	void on_cBoxDisplayLoop_clicked();
+
+	void on_pButtonReset_clicked();
+
+	void on_lblPathToLogFile_linkActivated(const QString &link);
+
+	void onLogMaskButtonClicked();
+
+    void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+
+    void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+
 private:
 	Ui::PreferencesDialog *ui;
 	QSettings *_settings;
@@ -58,12 +76,22 @@ private:
 	int _oldSpeed;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldSonyAutoConnect;
 	bool _oldOpenLastFile;
 	bool _oldStartFullScreen;
 	bool _oldDeinterlace;
 	bool _oldDisplayTC;
+	bool _oldDisplayNextTC;
+	bool _oldDisplayNextText;
+	bool _oldDisplayTitle;
+	bool _oldDisplayLoop;
+	int _oldLogMask;
+    int _oldSyncProtocol;
+    QString _oldLTCInput;
+
 	QMap<QString, QString> fontList;
+
+    void showParamLTC(bool show);
+    void showParamSony(bool show);
 
 };
 

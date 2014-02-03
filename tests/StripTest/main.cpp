@@ -22,10 +22,10 @@ int main(int argc, char *argv[])
 	{
 		// Open the DetX file in argument:
 		QString fileName(argv[1]);
-		doc.openDetX(fileName);
+		doc.importDetX(fileName);
 	}
 	else
-		doc.createDoc("test", 3, 3, 9, 3, 0);
+		doc.createDoc("test", 3, 9, 3, 0);
 
 	// Display the title:
 	PHDEBUG << "title : " << doc.getTitle();
@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
 	QMap<QString, PhPeople *> list_actors = doc.getPeoples();
 	QMap<QString, PhPeople *>::iterator people;
 	PHDEBUG <<"--------- actors ---------";
+	PHDEBUG << list_actors.count();
 	for( people=list_actors.begin(); people!=list_actors.end() ; people++)
 	{
 		PHDEBUG << (*people)->getName();

@@ -37,6 +37,9 @@ bool PhVideoEngine::open(QString fileName)
 
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
 
+	_frameStamp = 0;
+	_videoStream = NULL;
+
 	// Find video stream :
 	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++)
 	{
@@ -49,6 +52,28 @@ bool PhVideoEngine::open(QString fileName)
 
 	if(_videoStream == NULL)
 		return false;
+
+	// Reading timestamp :
+	AVDictionaryEntry *tag = av_dict_get(_pFormatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+	if(tag == NULL)
+		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+
+	if(tag)
+	{
+		PHDEBUG << "Found timestamp:" << tag->value;
+		_frameStamp = PhTimeCode::frameFromString(tag->value, _clock.timeCodeType());
+	}
+
+	// Looking for timecode type
+	float fps = this->framePerSecond();
+	if(fps < 24)
+		_clock.setTimeCodeType(PhTimeCodeType2398);
+	else if (fps < 24.5f)
+		_clock.setTimeCodeType(PhTimeCodeType24);
+	else if (fps < 26)
+		_clock.setTimeCodeType(PhTimeCodeType25);
+	else
+		_clock.setTimeCodeType(PhTimeCodeType2997);
 
 	_pCodecContext = _videoStream->codec;
 
@@ -63,9 +88,10 @@ bool PhVideoEngine::open(QString fileName)
 	_pFrame = avcodec_alloc_frame();
 
 	PHDEBUG << "length:" << this->length();
+	_currentFrame = -1;
 	_clock.setFrame(0);
 	goToFrame(0);
-
+	_fileName = fileName;
 	return true;
 }
 
@@ -157,7 +183,7 @@ QString PhVideoEngine::codecName()
 
 bool PhVideoEngine::goToFrame(PhFrame frame)
 {
-	int lastGotoElapsed = _testTimer.elapsed();
+//	int lastGotoElapsed = _testTimer.elapsed();
 	int seekElapsed = -1;
 	int readElapsed = -1;
 	int decodeElapsed = -1;
@@ -258,7 +284,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		}
 	}
 
-	int currentGotoElapsed = _testTimer.elapsed();
+//	int currentGotoElapsed = _testTimer.elapsed();
 	//	if(_testTimer.elapsed() > 25)
 	//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
 	//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();

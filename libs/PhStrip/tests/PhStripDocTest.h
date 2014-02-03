@@ -19,9 +19,15 @@ private slots:
 	void openDetXTextTest();
 	void openDetXOffTest();
 
+	// Get people
+	void getPeopleByNameTest();
+
 	// Get prev/next element tests
 	void getPreviousElementFrameTest();
 	void getNextElementFrameTest();
+	void getNextTextTest();
+	void getNextTextTestByPeople();
+	void getNextTextTestByPeopleList();
 
 private:
 	QString f2s(PhFrame frame);

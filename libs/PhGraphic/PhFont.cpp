@@ -32,7 +32,7 @@ bool PhFont::setFontFile(QString fontFile)
 		this->fontFile = fontFile;
 		return init(this->fontFile);
 	}
-
+	return true;
 }
 
 QString PhFont::getFontFile()

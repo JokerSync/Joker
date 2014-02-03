@@ -2,7 +2,7 @@
 
 #include "PhSonyControllerTest.h"
 
-#include "PhSonyController.h"
+#include "PhSync/PhSonyController.h"
 
 #include "PhTools/PhDebug.h"
 

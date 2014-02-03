@@ -25,6 +25,7 @@
                     <key>CFBundleTypeExtensions</key>
                     <array>
                         <string>detx</string>
+                        <string>strip</string>
                         <string>avi</string>
                         <string>mov</string>
                     </array>

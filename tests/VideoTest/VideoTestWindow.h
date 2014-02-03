@@ -1,5 +1,5 @@
-#ifndef MAINVIEW_H
-#define MAINVIEW_H
+#ifndef VIDEOTESTWINDOW_H
+#define VIDEOTESTWINDOW_H
 
 #include <QMainWindow>
 #include <QString>
@@ -15,19 +15,19 @@
 #include "PhCommonUI/PhMediaPanelDialog.h"
 
 namespace Ui {
-	class MainView;
+	class VideoTestWindow;
 }
 
-class MainView : public QMainWindow
+class VideoTestWindow : public QMainWindow
 {
     Q_OBJECT
 public:
     /**
      * @brief MainView constructor
      */
-    MainView(QSettings *settings);
+    VideoTestWindow(QSettings *settings);
 
-	~MainView();
+	~VideoTestWindow();
     /**
      * Open a video file.
      * @param fileName Path of the video file to open.
@@ -53,7 +53,7 @@ private slots:
 
 private:
 
-	Ui::MainView *ui;
+	Ui::VideoTestWindow *ui;
 	QSettings *_settings;
 	PhVideoEngine _videoEngine;
 	PhMediaPanelDialog _mediaPanelDialog;

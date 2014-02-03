@@ -76,7 +76,9 @@ public:
 
 	void setPixelPerFrame(long value);
 
-	PhFont * getFont();
+	PhFont * getTextFont();
+
+	PhFont * getHUDFont();
 
 
 private slots:
@@ -96,9 +98,14 @@ private :
 	PhClock _clock;
 
 	/**
-	 * @brief The PhFont used to draw text
+	 * @brief The font used to draw text
 	 */
-	PhFont _font;
+	PhFont _textFont;
+
+	/**
+	 * @brief The font used to draw the rest of the HUD
+	 */
+	PhFont _hudFont;
 
 	/**
 	 *Background Image used for the strip band
