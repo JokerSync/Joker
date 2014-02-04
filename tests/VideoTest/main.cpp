@@ -10,13 +10,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 	QSettings settings("Phonations", "VideoTest");
 
-<<<<<<< HEAD
-	MainView mainView(&settings);
-	mainView.resize(800, 600);
-=======
 	VideoTestWindow w(&settings);
 	w.resize(800, 600);
->>>>>>> origin/master
 
     w.show();
 
