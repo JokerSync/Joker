@@ -13,7 +13,9 @@ public:
 	enum SyncType {
 		NoSync = 0,
 		Sony = 1,
+#if USE_LTC
 		LTC = 2,
+#endif
 	} ;
 
 	VideoStripSynchronizer();
