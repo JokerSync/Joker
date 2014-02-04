@@ -36,16 +36,9 @@ QList<PhPeople *> *VideoStripView::getSelectedPeoples()
 
 bool VideoStripView::init()
 {
-<<<<<<< HEAD
-#ifdef Q_OS_MAC
-	_hudFont.setFontFile("/Library/Fonts/Arial.ttf");
-#else
-	_hudFont.setFontFile(qgetenv("windir") + "/Fonts/Arial.ttf");
-#endif
-=======
+
 	_titleBackgroundRect.setColor(QColor(0, 0, 128));
 	_titleText.setColor(QColor(255, 255, 255));
->>>>>>> origin/master
 	_tcText.setColor(QColor(128, 128, 128));
 	_nextTCText.setColor(QColor(128, 128, 128));
 	_noVideoSyncError.setColor(QColor(0, 0, 0));

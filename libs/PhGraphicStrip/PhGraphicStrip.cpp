@@ -61,7 +61,6 @@ bool PhGraphicStrip::setFontFile(QString fontFile)
 
 bool PhGraphicStrip::init()
 {
-<<<<<<< HEAD
 	PHDEBUG << "PhGraphicStrip::init()";
 
 	// Clear the data stored
@@ -83,39 +82,16 @@ bool PhGraphicStrip::init()
 		fontFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES "/SWENSON.TTF";
 		_settings->setValue("StripFontFile", fontFile);
 	}
-	_font.setFontFile(fontFile);
-	_font.setBoldness(_settings->value("boldness", 0).toInt());
+	_textFont.setFontFile(fontFile);
+	_textFont.setBoldness(_settings->value("boldness", 0).toInt());
+
+#ifdef Q_OS_MAC
+	_hudFont.setFontFile("/Library/Fonts/Arial.ttf");
+#else
+	_hudFont.setFontFile(qgetenv("windir") + "/Fonts/Arial.ttf");
+#endif
 
 	return true;
-=======
-    PHDEBUG << "PhGraphicStrip::init()";
-
-    // Clear the data stored
-    clearData();
-
-    //Load the strip background
-    _stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
-    _stripBackgroundImage.init();
-
-    // Init the sync bar
-    _stripSyncBar.setColor(QColor(225, 86, 108));
-
-    // Load the font file
-    QString fontFile = "";
-    if(_settings != NULL)
-        fontFile = _settings->value("StripFontFile", "").toString();
-    if(!QFile(fontFile).exists())
-    {
-        fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
-        _settings->setValue("StripFontFile", fontFile);
-    }
-    _textFont.setFontFile(fontFile);
-    _textFont.setBoldness(_settings->value("boldness", 0).toInt());
-
-    _hudFont.setFontFile(QCoreApplication::applicationDirPath() + "/../Resources/ARIAL.TTF");
-
-    return true;
->>>>>>> origin/master
 }
 
 void PhGraphicStrip::clearData()
