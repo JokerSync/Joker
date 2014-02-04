@@ -81,7 +81,7 @@ DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
 TRANSLATIONS =	fr_FR.ts \
 				en_US.ts \
 
-QMAKE_POST_LINK += $$(QTDIR)/bin/lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${PATH}/fr_FR.qm;
+QMAKE_POST_LINK += $$(QTDIR)/bin/lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${PATH}/fr_FR.qm $${CS}
 
 CONFIG(release, debug|release) {
 
