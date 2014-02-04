@@ -359,6 +359,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
                 gPeople->setY(appHeight - height - howFarIsText / 6);
                 gPeople->setZ(-3);
                 gPeople->setHeight(trackHeight / 2);
+				PhGraphicSolidRect background(gPeople->getX(), gPeople->getY(), gPeople->getWidth(), gPeople->getHeight());
+				background.setColor(QColor(180,180,180));
+				background.setZ(gPeople->getZ() - 1);
+				background.draw();
 
                 gPeople->draw();
             }
