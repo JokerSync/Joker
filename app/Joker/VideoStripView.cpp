@@ -122,6 +122,7 @@ void VideoStripView::paint()
 
 		if(_selectedPeoples.count())
 		{
+			_strip.setSelectedPeople(&_selectedPeoples);
 			nextText = _strip.doc()->getNextText(clockFrame, _selectedPeoples);
 			if(nextText == NULL)
 				nextText = _strip.doc()->getNextText(0, _selectedPeoples);
@@ -137,6 +138,7 @@ void VideoStripView::paint()
 		}
 		else
 		{
+			_strip.setSelectedPeople(NULL);
 			nextText = _strip.doc()->getNextText(clockFrame);
 			if(nextText == NULL)
 				nextText = _strip.doc()->getNextText(0);
