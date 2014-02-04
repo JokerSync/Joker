@@ -27,6 +27,9 @@ QMAKE_POST_LINK += sed -i -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Content
 
 INCLUDEPATH += ../../libs
 
+# Comment the following line if you don't want to use LTC:
+#CONFIG += ltc
+
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhStrip/PhStrip.pri)
