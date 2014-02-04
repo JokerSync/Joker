@@ -18,7 +18,6 @@ JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 VERSION = 1.0.10
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 # For the plist version

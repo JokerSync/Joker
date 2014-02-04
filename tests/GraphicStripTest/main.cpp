@@ -19,7 +19,6 @@ int main(int argc, char *argv[])
 	QSettings settings("Phonations","GraphicStripTest");
 	MainWindow w(&settings);
 
-	PhDebug::init(false, false, true, true, true, true, 1, "GraphicStripTest");
     w.show();
 
 	if (argc > 1)
