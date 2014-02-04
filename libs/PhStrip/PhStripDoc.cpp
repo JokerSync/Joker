@@ -286,7 +286,9 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC)
 			{
 				xmlWriter->writeStartElement("generator");
 				xmlWriter->writeAttribute("name", "Joker");
+#ifdef APP_VERSION
 				xmlWriter->writeAttribute("version", APP_VERSION);
+#endif
 				xmlWriter->writeEndElement();
 
 				xmlWriter->writeStartElement("media");

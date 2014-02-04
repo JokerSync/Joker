@@ -288,7 +288,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		break;
 	case QEvent::MouseMove:
 		// Show the mediaPanel only if Joker has focus and is not remote controlled.
-		if(this->hasFocus() and _settings->value("synchroProtocol", NO_SYNC).toInt() == 0)
+		if(this->hasFocus() and _settings->value("synchroProtocol", VideoStripSynchronizer::NoSync).toInt() == 0)
 			fadeInMediaPanel();
 		break;
 
