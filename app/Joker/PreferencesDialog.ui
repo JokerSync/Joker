@@ -277,13 +277,6 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="2">
-           <widget class="QRadioButton" name="radioButtonMS">
-            <property name="text">
-             <string>millisecond</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="lblDelay">
             <property name="text">
