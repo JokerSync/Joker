@@ -280,6 +280,9 @@ void PreferencesDialog::on_lblPathToLogFile_linkActivated(const QString &link)
 	args << "-e";
 	args << "end tell";
 	QProcess::startDetached("osascript", args);
+#else
+#warning TODO Fix me
+	Q_UNUSED(link);
 #endif
 }
 
@@ -324,7 +327,9 @@ void PreferencesDialog::showParamLTC(bool show)
         ui->listWidgetInputs->setVisible(1);
         ui->lblInputs->setVisible(1);
         showParamSony(false);
+#if USE_LTC
         ui->listWidgetInputs->addItems(PhLtcReader::inputList());
+#endif
         if(ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).count() > 0)
             ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).first()->setSelected(1);
     }

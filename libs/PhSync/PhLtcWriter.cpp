@@ -1,4 +1,4 @@
-
+#if USE_LTC
 #include <qendian.h>
 
 #include "PhLtcWriter.h"
@@ -178,3 +178,4 @@ int PhLtcWriter::audioCallback(const void *, void *outputBuffer, unsigned long ,
 	return 0;
 }
 
+#endif

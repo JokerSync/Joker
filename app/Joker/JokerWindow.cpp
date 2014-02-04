@@ -21,8 +21,10 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_needToSave(false),
-	_currentStripFile(""),
-	_ltcReader()
+	_currentStripFile("")
+  #if USE_LTC
+	,_ltcReader()
+  #endif
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -193,7 +195,9 @@ void JokerWindow::setupSyncProtocol()
 
 	// Disable old protocol
 	_sonySlave.close();
+#if USE_LTC
 	_ltcReader.close();
+#endif
 	VideoStripSynchronizer::SyncType type = (VideoStripSynchronizer::SyncType)_settings->value("synchroProtocol").toInt();
 
 	switch(type)
@@ -211,6 +215,7 @@ void JokerWindow::setupSyncProtocol()
 			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
 		}
 		break;
+#if USE_LTC
 	case VideoStripSynchronizer::LTC:
 		{
 			QString input = _settings->value("ltcInputDevice").toString();
@@ -223,6 +228,7 @@ void JokerWindow::setupSyncProtocol()
 			}
 			break;
 		}
+#endif
 	}
 
 	_synchronizer.setSyncClock(clock, type);
@@ -288,7 +294,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		break;
 	case QEvent::MouseMove:
 		// Show the mediaPanel only if Joker has focus and is not remote controlled.
-		if(this->hasFocus() and _settings->value("synchroProtocol", NO_SYNC).toInt() == 0)
+		if(this->hasFocus() and _settings->value("synchroProtocol", VideoStripSynchronizer::NoSync).toInt() == 0)
 			fadeInMediaPanel();
 		break;
 
@@ -534,7 +540,11 @@ void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
     int syncProtocol = _settings->value("synchroProtocol").toInt();
+#if USE_LTC
     QString inputLTC = _settings->value("ltcInputDevice").toString();
+#else
+	QString inputLTC = "";
+#endif
 	PreferencesDialog dlg(_settings);
     dlg.exec();
     if(syncProtocol != _settings->value("synchroProtocol").toInt() or inputLTC != _settings->value("ltcInputDevice", ""))

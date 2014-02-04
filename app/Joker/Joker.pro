@@ -58,8 +58,6 @@ FORMS += \
 	PropertyDialog.ui \
     PeopleDialog.ui
 
-<<<<<<< HEAD
-
 mac{
 	PATH = "/../Resources/"
 	QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
@@ -80,13 +78,10 @@ win32 {
 
 DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
 
-=======
 TRANSLATIONS =	fr_FR.ts \
 				en_US.ts \
->>>>>>> origin/master
 
-QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
-QMAKE_POST_LINK += $$(QTDIR)/bin/lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/../Resources/fr_FR.qm;
+QMAKE_POST_LINK += $$(QTDIR)/bin/lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${PATH}/fr_FR.qm;
 
 CONFIG(release, debug|release) {
 
