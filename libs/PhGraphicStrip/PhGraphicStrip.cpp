@@ -16,7 +16,8 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
     _doc(this),
     _clock(_doc.getTCType()),
     _trackNumber(4),
-    _settings(NULL)
+	_settings(NULL),
+	_selectedPeoples(NULL)
 {
     // update the  content when the doc changes :
     this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
@@ -359,8 +360,20 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
                 gPeople->setY(appHeight - height - howFarIsText / 6);
                 gPeople->setZ(-3);
                 gPeople->setHeight(trackHeight / 2);
+
 				PhGraphicSolidRect background(gPeople->getX(), gPeople->getY(), gPeople->getWidth(), gPeople->getHeight());
-				background.setColor(QColor(180,180,180));
+				if(_selectedPeoples)
+				{
+					if(_selectedPeoples->contains(people))
+						background.setColor(QColor(180, 180, 180));
+					else
+						background.setColor(QColor(90,90,90));
+				}
+				else
+				{
+					background.setColor(QColor(180, 180, 180));
+				}
+
 				background.setZ(gPeople->getZ() - 1);
 				background.draw();
 
