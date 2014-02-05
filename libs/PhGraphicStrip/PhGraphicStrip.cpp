@@ -348,7 +348,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				{
 					gPeople = new PhGraphicText(&_textFont, people->getName());
 					gPeople->setColor(QColor(people->getColor()));
-					gPeople->setWidth(people->getName().length() * 16);
+					gPeople->setWidth(people->getName().length() * 12);
 
 					gPeople->init();
 
@@ -361,7 +361,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->setZ(-3);
 				gPeople->setHeight(trackHeight / 2);
 
-				PhGraphicSolidRect background(gPeople->getX(), gPeople->getY(), gPeople->getWidth(), gPeople->getHeight());
+				PhGraphicSolidRect background(gPeople->getX(), gPeople->getY(), gPeople->getWidth(), gPeople->getHeight() + 2);
 				if(_selectedPeoples)
 				{
 					if(_selectedPeoples->contains(people))

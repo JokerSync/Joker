@@ -74,7 +74,7 @@ void VideoStripView::paint()
 		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
 
 	int stripHeight = (this->height() - y) * stripHeightRatio;
-	float videoHeight = this->height() - y - stripHeight;
+	int videoHeight = this->height() - y - stripHeight;
 
 	_strip.draw(0, y + videoHeight, this->width(), stripHeight);
 
@@ -82,24 +82,26 @@ void VideoStripView::paint()
 
 	if((_videoEngine.height() > 0) and (videoHeight > 0))
 	{
-		float videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+		int videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+		int blackStripHeight = 0; // Height of the upper black strip when video is too large
+		int realVideoHeight = videoHeight;
 		if(videoWidth > this->width())
 		{
-			float videoRatio = videoHeight / videoWidth;
 			videoWidth = this->width();
-			videoHeight = videoWidth  * videoRatio;
-			y = (this->height() - stripHeight - videoHeight) / 2;
+			realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
+			blackStripHeight = (this->height() - stripHeight - videoHeight) / 2;
 		}
 		int videoX = (this->width() - videoWidth) / 2;
-		_videoEngine.drawVideo(videoX, y, videoWidth, videoHeight);
+		_videoEngine.drawVideo(videoX, y + blackStripHeight, videoWidth, realVideoHeight);
 
 		// adjust tc size
 		if(videoX > tcWidth)
 			tcWidth = videoX;
 		else if( this->width() < 2 * tcWidth)
 			tcWidth = this->width() / 2;
-
 	}
+
+	y += videoHeight;
 
 	PhClock *clock = _videoEngine.clock();
 	long delay = (int)(_settings->value("delay", 0).toInt() * clock->rate()); // delay in ms
