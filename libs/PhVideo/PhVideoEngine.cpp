@@ -128,6 +128,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		delay = _settings->value("delay", 0).toInt() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
 	goToFrame(_clock.frame() + delay);
 	videoRect.setRect(x, y, w, h);
+	videoRect.setZ(-10);
 	videoRect.draw();
 }
 

@@ -32,7 +32,6 @@ private slots:
 private:
 	PhVideoEngine _videoEngine;
 	PhGraphicStrip _strip;
-	QSettings *_settings;
 	PhSonyController *_sony;
 	QTime _lastVideoSyncElapsed;
 

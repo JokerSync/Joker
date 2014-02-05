@@ -2,7 +2,6 @@
 
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
-	_settings(NULL),
 	_sony(NULL),
 	_titleText(_strip.getHUDFont(), ""),
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
@@ -15,7 +14,7 @@ VideoStripView::VideoStripView(QWidget *parent) :
 
 void VideoStripView::setSettings(QSettings *settings)
 {
-	_settings = settings;
+	PhGraphicView::setSettings(settings);
 	_strip.setSettings(settings);
 }
 
@@ -75,7 +74,7 @@ void VideoStripView::paint()
 		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
 
 	int stripHeight = (this->height() - y) * stripHeightRatio;
-	int videoHeight = this->height() - y - stripHeight;
+	float videoHeight = this->height() - y - stripHeight;
 
 	_strip.draw(0, y + videoHeight, this->width(), stripHeight);
 
@@ -83,12 +82,23 @@ void VideoStripView::paint()
 
 	if((_videoEngine.height() > 0) and (videoHeight > 0))
 	{
-		int videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+		float videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+		if(videoWidth > this->width())
+		{
+			float videoRatio = videoHeight / videoWidth;
+			videoWidth = this->width();
+			videoHeight = videoWidth  * videoRatio;
+			y = (this->height() - stripHeight - videoHeight) / 2;
+		}
 		int videoX = (this->width() - videoWidth) / 2;
 		_videoEngine.drawVideo(videoX, y, videoWidth, videoHeight);
 
-		// adjust tc position
-		tcWidth = videoX;
+		// adjust tc size
+		if(videoX > tcWidth)
+			tcWidth = videoX;
+		else if( this->width() < 2 * tcWidth)
+			tcWidth = this->width() / 2;
+
 	}
 
 	PhClock *clock = _videoEngine.clock();
@@ -112,6 +122,7 @@ void VideoStripView::paint()
 
 		if(_selectedPeoples.count())
 		{
+			_strip.setSelectedPeople(&_selectedPeoples);
 			nextText = _strip.doc()->getNextText(clockFrame, _selectedPeoples);
 			if(nextText == NULL)
 				nextText = _strip.doc()->getNextText(0, _selectedPeoples);
@@ -119,7 +130,7 @@ void VideoStripView::paint()
 			int peopleHeight = this->height() / 30;
 			foreach (PhPeople* people, _selectedPeoples) {
 				int peopleNameWidth = people->getName().length() * peopleHeight / 2;
-				_currentPeopleName.setRect(this->width() - peopleNameWidth, y, peopleNameWidth, peopleHeight);
+				_currentPeopleName.setRect(10, y, peopleNameWidth, peopleHeight);
 				_currentPeopleName.setContent(people->getName());
 				_currentPeopleName.draw();
 				y += peopleHeight;
@@ -127,6 +138,7 @@ void VideoStripView::paint()
 		}
 		else
 		{
+			_strip.setSelectedPeople(NULL);
 			nextText = _strip.doc()->getNextText(clockFrame);
 			if(nextText == NULL)
 				nextText = _strip.doc()->getNextText(0);

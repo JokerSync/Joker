@@ -41,7 +41,7 @@ bool MainWindow::openFile(QString fileName)
 	if(QFile::exists(fileName))
 	{
 		_path = fileName;
-		if(_doc->openDetX(fileName))
+		if(_doc->openStripFile(fileName))
 		{
 			_clock->setTimeCodeType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
@@ -56,7 +56,7 @@ void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, Q
 {
 	PHDEBUG << "Creating fake file";
 	_path = "null";
-	if(_doc->createDoc(text, nbPeople, nbLoop, nbText, nbTrack, videoTimeStamp))
+	if(_doc->createDoc(text, nbPeople, nbText, nbTrack, videoTimeStamp))
 	{
 		PHDEBUG << "Done";
 		_clock->setTimeCodeType(_doc->getTCType());
