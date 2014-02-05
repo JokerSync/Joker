@@ -356,7 +356,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				}
 				int howFarIsText = (text->getTimeIn() - frameOut) * verticalPixelPerFrame;
 				//This line is used to see which text's name will be displayed
-				gPeople->setX(width - gPeople->getWidth() - 20);
+				gPeople->setX(width - gPeople->getWidth());
 				gPeople->setY(appHeight - height - howFarIsText / 6);
 				gPeople->setZ(-3);
 				gPeople->setHeight(trackHeight / 2);
