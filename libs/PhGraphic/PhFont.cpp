@@ -7,8 +7,6 @@
 
 #include <QtGlobal>
 
-
-
 #if defined(Q_OS_MAC)
 #include <glu.h>
 #else
@@ -20,7 +18,7 @@
 PhFont::PhFont(): _texture(-1), _glyphHeight(0)
 {
 	font = NULL;
-	boldness = 1;
+	boldness = 0;
 }
 
 bool PhFont::setFontFile(QString fontFile)

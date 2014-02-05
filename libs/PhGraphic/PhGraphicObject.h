@@ -7,6 +7,14 @@
 #define PHGRAPHICOBJECT_H
 
 #include <QColor>
+#include <SDL2/SDL.h>
+
+#if defined(Q_OS_WIN)
+#include <PhGraphic/glu.h>
+#else
+#include <glu.h>
+#endif
+
 #include "PhTools/PhDebug.h"
 
 class PhGraphicObject

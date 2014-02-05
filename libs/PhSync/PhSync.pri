@@ -4,11 +4,9 @@ QT += serialport multimedia
 mac{
 	INCLUDEPATH += /usr/local/include
 	LIBS += -L/usr/local/lib -lltc -lm -lportaudio
-	DEFINES += USE_LTC=1
 
 }
 win32{
-	DEFINES += USE_LTC=0
 }
 HEADERS += \
     ../../libs/PhSync/PhSonyController.h \
