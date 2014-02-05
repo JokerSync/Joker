@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
 	QApplication a(argc, argv);
     QTranslator translator;
-    translator.load(QDir::currentPath() + "/../Resources/" + QLocale::system().name() + ".qm");
+	translator.load(QCoreApplication::applicationDirPath() + "/../Resources/" + QLocale::system().name() + ".qm");
     a.installTranslator(&translator);
 
 
