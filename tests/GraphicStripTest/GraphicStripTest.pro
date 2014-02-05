@@ -40,7 +40,7 @@ mac{
 	PATH = "/../Resources/"
 }
 win32{
-	RESOURCES_PATH = $$shell_path(./debug/)
+	PATH = $$shell_path(./debug/)
 }
 
 
