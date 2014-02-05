@@ -130,7 +130,7 @@ void VideoStripView::paint()
 			int peopleHeight = this->height() / 30;
 			foreach (PhPeople* people, _selectedPeoples) {
 				int peopleNameWidth = people->getName().length() * peopleHeight / 2;
-				_currentPeopleName.setRect(this->width() - peopleNameWidth, y, peopleNameWidth, peopleHeight);
+				_currentPeopleName.setRect(10, y, peopleNameWidth, peopleHeight);
 				_currentPeopleName.setContent(people->getName());
 				_currentPeopleName.draw();
 				y += peopleHeight;
