@@ -101,8 +101,6 @@ void VideoStripView::paint()
 			tcWidth = this->width() / 2;
 	}
 
-	y += videoHeight;
-
 	PhClock *clock = _videoEngine.clock();
 	long delay = (int)(_settings->value("delay", 0).toInt() * clock->rate()); // delay in ms
 	PhFrame clockFrame = clock->frame() + delay * PhTimeCode::getFps(clock->timeCodeType()) / 1000;
