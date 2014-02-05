@@ -21,6 +21,9 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_needToSave(false),
+#if USE_LTC
+	_ltcReader(),
+#endif
 	_currentStripFile("")
 {
 	// Setting up UI
@@ -55,6 +58,28 @@ JokerWindow::JokerWindow(QSettings *settings) :
 
 	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
+	_mediaPanel.setStyleSheet(
+							"* {"
+							"	  color: white;"
+							"  }"
+							"  PhMediaPanel { "
+							"	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
+							"	  border-style: solid;                                                                          "
+							"	  border-width: 4px;                                                                            "
+							"	  border-radius: 3px;                                                                           "
+							"	  border-color: white;                                                                          "
+							"  }                                                                                                "
+							"  QPushButton, QComboBox{                                                                          "
+							"	  background: grey;                                                                             "
+							"	  border-style: outset;                                                                         "
+							"	  border-width: 2px;                                                                            "
+							"	  border-radius: 5px;                                                                           "
+							"	  border-color: white;                                                                          "
+							"  }                                                                                                "
+							"  QLabel#_timecodeLabel{                                                                           "
+							"	  padding: 10px;                                                                                "
+							"  }                                                                                                "
+							);
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
@@ -170,7 +195,9 @@ void JokerWindow::setupSyncProtocol()
 
 	// Disable old protocol
 	_sonySlave.close();
+#if USE_LTC
 	_ltcReader.close();
+#endif
 	VideoStripSynchronizer::SyncType type = (VideoStripSynchronizer::SyncType)_settings->value("synchroProtocol").toInt();
 
 	switch(type)
@@ -188,6 +215,7 @@ void JokerWindow::setupSyncProtocol()
 			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
 		}
 		break;
+#if USE_LTC
 	case VideoStripSynchronizer::LTC:
 		{
 			QString input = _settings->value("ltcInputDevice").toString();
@@ -200,6 +228,7 @@ void JokerWindow::setupSyncProtocol()
 			}
 			break;
 		}
+#endif
 	}
 
 	_synchronizer.setSyncClock(clock, type);
@@ -240,7 +269,7 @@ void JokerWindow::openFile(QString fileName)
 	}
 }
 
-bool JokerWindow::eventFilter(QObject *, QEvent *event)
+bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
 	switch (event->type())
 	{
@@ -264,6 +293,7 @@ bool JokerWindow::eventFilter(QObject *, QEvent *event)
 		hideMediaPanel();
 		break;
 	case QEvent::MouseMove:
+		// Show the mediaPanel only if Joker has focus.
 		if(this->hasFocus())
 			fadeInMediaPanel();
 		break;
@@ -289,6 +319,16 @@ bool JokerWindow::eventFilter(QObject *, QEvent *event)
 	}
 	case QEvent::DragEnter:
 		event->accept();
+		break;
+	case QEvent::MouseButtonDblClick:
+		// If the sender is "this" and no videofile is loaded
+		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length())
+		{
+			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
+			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->value("stripHeight", 0.25f).toFloat()))
+				on_actionOpen_Video_triggered();
+			return true;
+		}
 		break;
 	default:
 		break;
@@ -514,6 +554,9 @@ void JokerWindow::on_actionPreferences_triggered()
 
 void JokerWindow::fadeInMediaPanel()
 {
+	// Don't show the mediaPanel if Joker is remote controled.
+	if(_settings->value("synchroProtocol", VideoStripSynchronizer::NoSync).toInt() == 0)
+		return;
 	_mediaPanel.show();
 	_mediaPanelAnimation.stop();
 	_mediaPanelAnimation.setDuration(300);

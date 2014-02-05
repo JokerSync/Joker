@@ -18,7 +18,6 @@ JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 VERSION = 1.0.10
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 # For the plist version
@@ -27,6 +26,9 @@ QMAKE_POST_LINK += sed -i -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Content
 
 
 INCLUDEPATH += ../../libs
+
+# Comment the following line if you don't want to use LTC:
+#CONFIG += ltc
 
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
@@ -65,9 +67,6 @@ FORMS += \
 
 TRANSLATIONS =	fr_FR.ts \
 				en_US.ts \
-
-INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib -lltc -lm
 
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
 QMAKE_POST_LINK += $$(QTDIR)/bin/lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/../Resources/fr_FR.qm;

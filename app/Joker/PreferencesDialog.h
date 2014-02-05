@@ -10,7 +10,6 @@
 #include <QSettings>
 #include <QListWidgetItem>
 
-#include "PhLtcReader.h"
 #include "SonyVideoStripSynchronizer.h"
 
 namespace Ui {
@@ -90,9 +89,8 @@ private:
 
 	QMap<QString, QString> fontList;
 
-    void showParamLTC(bool show);
+	void showParamLTC(bool show);
     void showParamSony(bool show);
-
 };
 
 #endif // PREFERENCESDIALOG_H

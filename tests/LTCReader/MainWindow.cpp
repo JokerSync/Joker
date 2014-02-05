@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mediaController->setTCType(_clock->timeCodeType());
     ui->mediaController->setFirstFrame(_clock->frame());
     ui->mediaController->setClock(_clock);
+	_reader.init();
 }
 
 MainWindow::~MainWindow()
