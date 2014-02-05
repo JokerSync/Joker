@@ -555,8 +555,9 @@ void JokerWindow::on_actionPreferences_triggered()
 void JokerWindow::fadeInMediaPanel()
 {
 	// Don't show the mediaPanel if Joker is remote controled.
-	if(_settings->value("synchroProtocol", VideoStripSynchronizer::NoSync).toInt() == 0)
+	if(_settings->value("synchroProtocol").toInt() != VideoStripSynchronizer::NoSync)
 		return;
+
 	_mediaPanel.show();
 	_mediaPanelAnimation.stop();
 	_mediaPanelAnimation.setDuration(300);
