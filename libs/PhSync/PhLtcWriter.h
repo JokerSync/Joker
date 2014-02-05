@@ -1,6 +1,6 @@
 #ifndef PHLTCWRITER_H
 #define PHLTCWRITER_H
-#if USE_LTC
+
 #include <QObject>
 
 
@@ -42,5 +42,4 @@ private:
 
 };
 
-#endif // USE_LTC
 #endif // PHLTCWRITER_H

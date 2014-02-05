@@ -6,13 +6,6 @@
 #ifndef PHGRAPHICTEXTUREDSQUARE_H
 #define PHGRAPHICTEXTUREDSQUARE_H
 
-#if defined(Q_OS_MAC)
-#include <glu.h>
-#else
-#include <PhGraphic/glu.h>
-#endif
-#include <SDL2/SDL.h>
-
 #include "PhGraphicRect.h"
 
 class PhGraphicTexturedRect : public PhGraphicRect

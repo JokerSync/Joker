@@ -1,5 +1,4 @@
 #include "PhLtcReader.h"
-#if USE_LTC
 PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
     QObject(parent),
     _clock(tcType),
@@ -151,4 +150,3 @@ int PhLtcReader::audioCallback(const void * inputBuffer, void *, unsigned long ,
 	LTCReader->processAudio(inputBuffer, FRAME_PER_BUFFER);
 	return 0;
 }
-#endif

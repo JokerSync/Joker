@@ -7,11 +7,7 @@
 #define PHGRAPHICLOOP_H
 
 #include "PhGraphicRect.h"
-#if defined(Q_OS_MAC)
-#include <glu.h>
-#else
-#include <PhGraphic/glu.h>
-#endif
+
 #include <QDebug>
 
 class PhGraphicLoop : public PhGraphicRect

@@ -1,6 +1,5 @@
 #ifndef PHLTCREADER_H
 #define PHLTCREADER_H
-#if USE_LTC
 
 #include <QString>
 #include <QObject>
@@ -49,5 +48,4 @@ private:
     QTime _pauseDetector;
 
 };
-#endif // USE_LTC
 #endif // PHLTCREADER_H

@@ -1,4 +1,3 @@
-#if USE_LTC
 #include <qendian.h>
 
 #include "PhLtcWriter.h"
@@ -177,5 +176,3 @@ int PhLtcWriter::audioCallback(const void *, void *outputBuffer, unsigned long ,
 	LTCWriter->processAudio(outputBuffer, FRAME_PER_BUFFER);
 	return 0;
 }
-
-#endif
