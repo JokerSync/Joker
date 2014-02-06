@@ -59,6 +59,8 @@ public:
 
 	void drawVideo(int x, int y, int w, int h);
 
+	PhFrame getEndOffset(){ return _endOffset;}
+
 
 
 private:
@@ -79,6 +81,7 @@ private:
 	PhGraphicTexturedRect videoRect;
 	uint8_t * _rgb;
 	PhFrame _currentFrame;
+	PhFrame _endOffset;
 
 	QElapsedTimer _testTimer;
 	PhTickCounter _videoFrameTickCounter;

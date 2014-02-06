@@ -512,8 +512,14 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _synchronizer.videoClock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 	{
-		PhFrame frameStamp = _videoEngine->frameStamp();
-		frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
+		PhFrame frameStamp;
+		if(_synchronizer.videoClock()->frame() > _videoEngine->frameStamp() + _videoEngine->length())
+			frameStamp = dlg.frame() - _videoEngine->length() + _videoEngine->getEndOffset();
+		else if (_synchronizer.videoClock()->frame() < _videoEngine->frameStamp())
+			frameStamp =  dlg.frame();
+		else
+			frameStamp = _videoEngine->frameStamp() + dlg.frame() - _synchronizer.videoClock()->frame();
+
 		_videoEngine->setFrameStamp(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
 		_doc->setVideoTimestamp(frameStamp);
