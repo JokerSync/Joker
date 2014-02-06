@@ -11,7 +11,8 @@ PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
 	_pFrame(NULL),
 	_pSwsCtx(NULL),
 	_rgb(NULL),
-	_currentFrame(-1)
+	_currentFrame(-1),
+	_endOffset(2)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
@@ -200,7 +201,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	if(frame < this->_frameStamp)
 		frame = this->_frameStamp;
 	if (frame >= this->_frameStamp + this->length())
-		frame = this->_frameStamp + this->length() - 1;
+		frame = this->_frameStamp + this->length() - _endOffset;
 
 	bool result = false;
 	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
