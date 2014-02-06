@@ -124,6 +124,7 @@ void VideoStripView::paint()
 
 		if(_selectedPeoples.count())
 		{
+			_strip.setSelectedPeople(&_selectedPeoples);
 			nextText = _strip.doc()->getNextText(clockFrame, _selectedPeoples);
 			if(nextText == NULL)
 				nextText = _strip.doc()->getNextText(0, _selectedPeoples);
@@ -131,7 +132,7 @@ void VideoStripView::paint()
 			int peopleHeight = this->height() / 30;
 			foreach (PhPeople* people, _selectedPeoples) {
 				int peopleNameWidth = people->getName().length() * peopleHeight / 2;
-				_currentPeopleName.setRect(this->width() - peopleNameWidth, y, peopleNameWidth, peopleHeight);
+				_currentPeopleName.setRect(10, y, peopleNameWidth, peopleHeight);
 				_currentPeopleName.setContent(people->getName());
 				_currentPeopleName.draw();
 				y += peopleHeight;
@@ -139,6 +140,7 @@ void VideoStripView::paint()
 		}
 		else
 		{
+			_strip.setSelectedPeople(NULL);
 			nextText = _strip.doc()->getNextText(clockFrame);
 			if(nextText == NULL)
 				nextText = _strip.doc()->getNextText(0);

@@ -18,10 +18,12 @@ JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 VERSION = 1.0.10
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 INCLUDEPATH += ../../libs
+
+# Comment the following line if you don't want to use LTC:
+#CONFIG += ltc
 
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
@@ -59,7 +61,7 @@ FORMS += \
     PeopleDialog.ui
 
 mac{
-	PATH = "/../Resources/"
+	PATH = "/../Resources"
 	QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
 
 # For the plist version
