@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>AboutMenu</name>
     <message>
@@ -179,7 +179,7 @@
     <message>
         <location filename="JokerWindow.ui" line="248"/>
         <source>Ctrl+Shift+T</source>
-        <translation>Ctrl+Maj+T</translation>
+        <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="253"/>
@@ -209,7 +209,7 @@
     <message>
         <location filename="JokerWindow.ui" line="274"/>
         <source>Ctrl+Right</source>
-        <translation>Ctrl+Flèche droite</translation>
+        <translation>Ctrl+Right</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="279"/>
@@ -219,7 +219,7 @@
     <message>
         <location filename="JokerWindow.ui" line="282"/>
         <source>Ctrl+Left</source>
-        <translation>Ctrl+Flèche gauche</translation>
+        <translation>Ctrl+Left</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="287"/>
@@ -244,7 +244,7 @@
     <message>
         <location filename="JokerWindow.ui" line="309"/>
         <source>Ctrl+Shift+S</source>
-        <translation>Ctrl+Maj+S</translation>
+        <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="314"/>
