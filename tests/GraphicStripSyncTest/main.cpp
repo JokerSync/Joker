@@ -13,8 +13,6 @@
 
 int main(int argc, char *argv[])
 {
-	PhDebug::init(false, true, true, true, true, false, "GraphicStripSyncTest");
-
 	QApplication a(argc, argv);
 	QSettings settings("Phonations", "GraphicStripSyncTest");
 	MainWindow w(&settings);

@@ -80,6 +80,7 @@ public:
 
 	PhFont * getHUDFont();
 
+	void setSelectedPeople(QList<PhPeople *> * list){ _selectedPeoples = list; }
 
 private slots:
 	/**
@@ -133,6 +134,8 @@ private :
 	int _trackNumber;
 	QSettings * _settings;
 	long pixelPerFrame;
+	QList<PhPeople*> *_selectedPeoples;
+
 };
 
 #endif // PHGRAPHICSTRIP_H

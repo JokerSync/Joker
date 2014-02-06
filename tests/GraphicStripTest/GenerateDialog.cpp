@@ -55,7 +55,7 @@ void GenerateDialog::onAccept()
 	int nbTracks = this->ui->spinBoxNbTrack->value();
 	QString text = this->ui->lineEditText->text();
 	int startFrame = this->ui->lineEditTimeCode->frame();
-	_doc->createDoc(text, nbPeople, nbLoop, nbText, nbTracks, startFrame);
+	_doc->createDoc(text, nbPeople, nbText, nbTracks, startFrame);
 	_settings->setValue("startFrame", startFrame);
 	_settings->setValue("peopleNumber", nbPeople);
 	_settings->setValue("textNumber", nbText);

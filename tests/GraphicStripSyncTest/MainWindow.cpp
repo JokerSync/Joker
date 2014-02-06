@@ -46,7 +46,7 @@ void MainWindow::openFile(QString fileName)
 	PHDEBUG << "openFile : " << fileName;
 	if(QFile::exists(fileName))
 	{
-		if(_doc->openDetX(fileName))
+		if(_doc->openStripFile(fileName))
 		{
 			_clock->setTimeCodeType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());

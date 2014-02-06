@@ -12,7 +12,7 @@
 #include "PhVideo/PhVideoView.h"
 #include "PhVideo/PhVideoEngine.h"
 
-#include "PhCommonUI/PhMediaPanelDialog.h"
+#include "PhCommonUI/PhFloatingMediaPanel.h"
 
 namespace Ui {
 	class VideoTestWindow;
@@ -56,7 +56,7 @@ private:
 	Ui::VideoTestWindow *ui;
 	QSettings *_settings;
 	PhVideoEngine _videoEngine;
-	PhMediaPanelDialog _mediaPanelDialog;
+	PhFloatingMediaPanel _mediaPanelDialog;
 };
 
 #endif

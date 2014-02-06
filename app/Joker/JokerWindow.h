@@ -9,7 +9,10 @@
 #include "VideoStripView.h"
 #include "PhSync/PhSonySlaveController.h"
 #include "PhCommonUI/PhFloatingMediaPanel.h"
+#if USE_LTC
 #include "PhSync/PhLtcReader.h"
+#endif
+
 #include "SonyVideoStripSynchronizer.h"
 #include "PropertyDialog.h"
 
@@ -114,7 +117,9 @@ private:
 	QSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
-	PhLtcReader _ltcReader;
+#if USE_LTC
+    PhLtcReader _ltcReader;
+#endif
 
 	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;
