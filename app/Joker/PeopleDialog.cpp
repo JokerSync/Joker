@@ -52,3 +52,8 @@ void PeopleDialog::on_selectAllButton_clicked()
 {
 	ui->peopleList->selectAll();
 }
+
+void PeopleDialog::on_pushButton_clicked()
+{
+	ui->peopleList->clearSelection();
+}
