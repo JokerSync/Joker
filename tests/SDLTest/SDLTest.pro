@@ -15,19 +15,17 @@ win32{
 
 # Ubuntu specific
 linux {
-	INCLUDEPATH += /usr/include/SDL
-	LIBS += -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf
 	RESOURCES_PATH = .
 }
 
 # MacOS specific
 mac {
-	QMAKE_CXXFLAGS += -F/Library/Frameworks
-	QMAKE_OBJECTIVE_CFLAGS += -F/Library/Frameworks
-	LIBS += -F/Library/Frameworks
-
-	LIBS += -framework SDL2 -framework SDL2_image -framework SDL2_ttf
 	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS/
+}
+
+unix {
+	INCLUDEPATH += /usr/local/include
+	LIBS += -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf
 }
 
 QMAKE_POST_LINK += echo $${RESOURCES_PATH};
