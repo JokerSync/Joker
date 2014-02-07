@@ -17,20 +17,17 @@
 #include <QApplication>
 #include <QTime>
 
-
-#include "PhTools/PhDebug.h"
-
 using namespace std;
 
 int main(int argc, char **argv)
 {
 	QApplication a(argc, argv);
 
-	PHDEBUG << "Initialize all SDL subsystems";
+	qDebug() << "Initialize all SDL subsystems";
 	if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
 		return false;
 
-	PHDEBUG << "Set up the window";
+	qDebug() << "Set up the window";
 	int screenWidth = 1280;
 	int screenHeight = 600;
 	SDL_Window * window = SDL_CreateWindow("SDLTest", 0, 0, screenWidth, screenHeight, SDL_SWSURFACE);
@@ -55,14 +52,14 @@ int main(int argc, char **argv)
 
 	// Initialize TTF :
 	if( TTF_Init() == -1 ) {
-		PHDEBUG << "TTF error.";
+		qDebug() << "TTF error.";
 		return 2;
 	}
 
 	//Create a font
 	string fontPath = ressourcesPath + "/SWENSON.TTF";
 	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 100 );
-	PHDEBUG << "Outline :" << TTF_GetFontOutline(font);
+	qDebug() << "Outline :" << TTF_GetFontOutline(font);
 	if (font == NULL)
 		return 3;
 
@@ -94,7 +91,7 @@ int main(int argc, char **argv)
 	// THIS IS ONLY FOR VISUAL PURPOSE, TOTALY USELESS ON A REAL SITUATION
 	Uint32 bgColor;
 	bgColor = 0xffffffff;
-	PHDEBUG << SDL_FillRect(screen, NULL, bgColor);
+	qDebug() << SDL_FillRect(screen, NULL, bgColor);
 	SDL_Rect glyphMatrixRect = {0, 0, 2048, 2048};
 
 	// store the width of each glyph
@@ -116,7 +113,7 @@ int main(int argc, char **argv)
 			{
 				int minx, maxx, miny, maxy, advance;
 				TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
-				//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance;
+				//qDebug() << ch << (char) ch << minx << maxx << miny << maxy << advance;
 				if(advance != 0)
 				{
 					// Temporary surface of the character
@@ -124,8 +121,8 @@ int main(int argc, char **argv)
 					if (!glyphSurface)
 					{
 
-						PHDEBUG << SDL_GetError();
-						PHDEBUG << TTF_GetError();
+						qDebug() << SDL_GetError();
+						qDebug() << TTF_GetError();
 					}
 					SDL_Rect glyphRect;
 					glyphRect.x = (ch % 16) * space;
@@ -135,14 +132,14 @@ int main(int argc, char **argv)
 					if(glyphRect.h > glyphHeight)
 						glyphHeight = glyphRect.h;
 					if(SDL_BlitSurface( glyphSurface, NULL, glyphMatrix, &glyphRect ))
-						PHDEBUG << SDL_GetError();
+						qDebug() << SDL_GetError();
 
 					// Store information about the glyph
 					glyphAdvance[ch] = advance;
 					glyphWidth[ch] = maxx - minx;
 				}
 				else
-					PHDEBUG <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
+					qDebug() <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
 			}
 			else{
 				glyphAdvance[ch] = 0;
@@ -184,7 +181,7 @@ int main(int argc, char **argv)
 
 
 
-	//PHDEBUG << t.elapsed();
+	//qDebug() << t.elapsed();
 
 #endif
 
