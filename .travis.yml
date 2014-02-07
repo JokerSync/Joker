@@ -9,7 +9,8 @@ script:
 #- qmake tests/ConsoleTest/ConsoleTest.pro
 #- qmake tests/SDLTest/SDLTest.pro
 #- qmake tests/FormTest/FormTest.pro
-- qmake tests/GraphicTest/GraphicTest.pro
+#- qmake tests/GraphicTest/GraphicTest.pro
+- qmake tests/GraphicStripTest/GraphicStripTest.pro
 - make
 notifications:
 - email: false
