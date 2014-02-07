@@ -53,7 +53,7 @@ void PeopleDialog::on_selectAllButton_clicked()
 	ui->peopleList->selectAll();
 }
 
-void PeopleDialog::on_pushButton_clicked()
+void PeopleDialog::on_deselectAllButton_clicked()
 {
 	ui->peopleList->clearSelection();
 }

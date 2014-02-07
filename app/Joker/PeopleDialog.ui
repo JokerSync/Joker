@@ -39,7 +39,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="deselectAllButton">
      <property name="text">
       <string>Unselect all</string>
      </property>
