@@ -12,7 +12,9 @@ script:
 #- qmake tests/GraphicTest/GraphicTest.pro
 #- qmake tests/GraphicStripTest/GraphicStripTest.pro
 #- qmake tests/GraphicSyncTest/GraphicSyncTest.pro
--qmake tests/VideoTest/VideoTest.pro
+#- qmake tests/VideoTest/VideoTest.pro
+#- qmake tests/GraphicStripSyncTest/GraphicStripSyncTest.pro
+- qmake app/Joker/Joker.pro
 - make
 notifications:
 - email: false
