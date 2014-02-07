@@ -508,8 +508,15 @@ bool JokerWindow::openVideoFile(QString videoFile)
 void JokerWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();
+	PhFrame frame;
+	if(_synchronizer.videoClock()->frame() < _videoEngine->frameStamp())
+		frame = _videoEngine->frameStamp();
+	else if(_synchronizer.videoClock()->frame() > _videoEngine->frameStamp() + _videoEngine->length())
+		frame = _videoEngine->frameStamp() + _videoEngine->length() - _videoEngine->getEndOffset();
+	else
+		frame = _synchronizer.videoClock()->frame();
 
-	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _synchronizer.videoClock()->frame());
+	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), frame);
 	if(dlg.exec() == QDialog::Accepted)
 	{
 		PhFrame frameStamp;
