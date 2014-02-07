@@ -24,7 +24,7 @@ private slots:
 
 	void on_selectAllButton_clicked();
 
-	void on_pushButton_clicked();
+	void on_deselectAllButton_clicked();
 
 private:
 	Ui::PeopleDialog *ui;
