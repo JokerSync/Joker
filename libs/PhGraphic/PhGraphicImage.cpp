@@ -3,14 +3,10 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
+#include <SDL2/SDL_image.h>
+
 #include "PhTools/PhDebug.h"
 #include "PhGraphicImage.h"
-
-#if defined(Q_OS_MAC)
-#include <SDL2_image/SDL_image.h>
-#else
-#include <SDL2/SDL_image.h>
-#endif
 
 PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h)
 	: PhGraphicTexturedRect(x, y, w, h), _filename(filename), _surface(NULL)
