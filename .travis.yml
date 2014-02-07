@@ -11,7 +11,8 @@ script:
 #- qmake tests/FormTest/FormTest.pro
 #- qmake tests/GraphicTest/GraphicTest.pro
 #- qmake tests/GraphicStripTest/GraphicStripTest.pro
-- qmake tests/GraphicSyncTest/GraphicSyncTest.pro
+#- qmake tests/GraphicSyncTest/GraphicSyncTest.pro
+-qmake tests/VideoTest/VideoTest.pro
 - make
 notifications:
 - email: false
