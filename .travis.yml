@@ -2,11 +2,13 @@ language: objective-c
 install:
 - brew update
 - brew install qt5 sdl2 sdl2_image sdl2_ttf
+- export PATH=$PATH:/usr/local/opt/qt5/bin/
+- find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
 script:
-- /usr/local/opt/qt5/bin/qmake -project
-#- /usr/local/opt/qt5/bin/qmake tests/ConsoleTest/ConsoleTest.pro
-- /usr/local/opt/qt5/bin/qmake tests/SDLTest/SDLTest.pro
-#- /usr/local/opt/qt5/bin/qmake tests/FormTest/FormTest.pro
+- qmake -project
+#- qmake tests/ConsoleTest/ConsoleTest.pro
+- qmake tests/SDLTest/SDLTest.pro
+#- qmake tests/FormTest/FormTest.pro
 - make
 notifications:
 - email: false
