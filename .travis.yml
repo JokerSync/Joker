@@ -7,8 +7,9 @@ install:
 script:
 - qmake -project
 #- qmake tests/ConsoleTest/ConsoleTest.pro
-- qmake tests/SDLTest/SDLTest.pro
+#- qmake tests/SDLTest/SDLTest.pro
 #- qmake tests/FormTest/FormTest.pro
+- qmake tests/GraphicTest/GraphicTest.pro
 - make
 notifications:
 - email: false
