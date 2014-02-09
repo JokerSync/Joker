@@ -69,11 +69,11 @@ void PropertyDialog::showEvent(QShowEvent *)
 		if(_videoEngine->fileName().length())
 			ui->videoFileLabel->setText(_videoEngine->fileName());
 
-		if(_videoEngine->frameStamp())
-			ui->videoTCInLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->frameStamp(), _videoEngine->clock()->timeCodeType()));
+		if(_videoEngine->firstFrame())
+			ui->videoTCInLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->firstFrame(), _videoEngine->clock()->timeCodeType()));
 
 		if(_videoEngine->length())
-			ui->videoTCOutLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->frameStamp() + _videoEngine->length(), _videoEngine->clock()->timeCodeType()));
+			ui->videoTCOutLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->firstFrame() + _videoEngine->length(), _videoEngine->clock()->timeCodeType()));
 
 		ui->resolutionLabel->setText(QString::number(_videoEngine->width()) + "x" + QString::number(_videoEngine->height()));
 
