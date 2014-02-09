@@ -3,7 +3,7 @@
 # Project created by QtCreator 2013-05-23T14:09:50
 #
 #-------------------------------------------------
-
+cache()
 TARGET = GraphicStripTest
 TEMPLATE = app
 
@@ -35,7 +35,6 @@ FORMS += \
     StripPropertiesDialog.ui \
     GenerateDialog.ui
 
-
 mac{
 	PATH = "/../Resources/"
 }
@@ -43,5 +42,10 @@ win32{
 	PATH = $$shell_path(./debug/)
 }
 
-
 DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
+
+CONFIG(release, debug|release) {
+	mac {
+		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
+	}
+}

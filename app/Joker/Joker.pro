@@ -83,7 +83,8 @@ DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
 TRANSLATIONS =	fr_FR.ts \
 				en_US.ts \
 
-QMAKE_POST_LINK += $$(QTDIR)/bin/lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/$${PATH}/fr_FR.qm $${CS}
+QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/$${PATH}/fr_FR.qm $${CS}
+QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH}/../Resources/;
 
 CONFIG(release, debug|release) {
 
