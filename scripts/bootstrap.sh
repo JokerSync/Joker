@@ -5,8 +5,6 @@ echo "Mac OS X detected"
 
 brew update
 brew install qt5 sdl2 sdl2_image sdl2_ttf ffmpeg libav
-p=$(launchctl getenv PATH)
-launchctl setenv PATH $p:/usr/local/opt/qt5/bin/
 find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
 
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
