@@ -1,16 +1,5 @@
 #!/bin/bash
 
-if [ "$(uname)" == "Darwin" ]; then
-echo "Mac OS X detected"
-
-brew update
-brew install qt5 sdl2 sdl2_image sdl2_ttf ffmpeg libav
-export PATH=$PATH:/usr/local/opt/qt5/bin/
-find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
-
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-echo "Linux detected"
-
 echo "Install SDL2"
 wget http://libsdl.org/release/SDL2-2.0.1.tar.gz
 tar -xvzf SDL2-2.0.1.tar.gz
@@ -55,12 +44,4 @@ sudo make install
 cd ..
 rm SDL2_ttf-2.0.12.tar.gz
 rm -rf SDL2_ttf-2.0.12
-
-echo "Install Qt5"
-yes | sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
-sudo apt-get update -qq
-sudo apt-get install build-essential g++
-sudo apt-get install -qq qt5-default qtdeclarative5-dev
-
-fi
 
