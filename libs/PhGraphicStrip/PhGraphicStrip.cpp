@@ -243,9 +243,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gText = new PhGraphicText( &_textFont, text->getContent());
 
 				gText->setZ(-1);
-				if(text->getPeople())
-					gText->setColor(QColor(text->getPeople()->getColor()));
-
 				gText->init();
 
 				_graphicTexts[text] = gText;
@@ -260,6 +257,15 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gText->setY(y + track * trackHeight);
 				gText->setHeight(trackHeight);
 				gText->setZ(-1);
+				if(_selectedPeoples and !_selectedPeoples->contains(text->getPeople()))
+				{
+					gText->setColor(Qt::gray);
+				}
+				else
+				{
+					if(text->getPeople())
+						gText->setColor(QColor(text->getPeople()->getColor()));
+				}
 
 				gText->draw();
 			}
@@ -295,7 +301,14 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->setY(y + track * trackHeight);
 				gPeople->setZ(-1);
 				gPeople->setHeight(trackHeight / 2);
-
+				if(_selectedPeoples and !_selectedPeoples->contains(people))
+				{
+					gPeople->setColor(Qt::gray);
+				}
+				else
+				{
+					gPeople->setColor(QColor(people->getColor()));
+				}
 				gPeople->draw();
 
 				//Check if the name is printed on the screen
@@ -360,6 +373,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->setY(appHeight - height - howFarIsText / 6);
 				gPeople->setZ(-3);
 				gPeople->setHeight(trackHeight / 2);
+				gPeople->setColor(QColor(people->getColor()));
 
 				PhGraphicSolidRect background(gPeople->getX(), gPeople->getY(), gPeople->getWidth(), gPeople->getHeight() + 2);
 				if(_selectedPeoples)
