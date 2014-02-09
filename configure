@@ -33,6 +33,18 @@ cd ..
 rm SDL2_image-2.0.0.tar.gz
 rm -rf SDL2_image-2.0.0
 
+echo "Install freetype2"
+sudo apt-get install libpng3 libpng++-dev
+wget http://skylink.dl.sourceforge.net/project/freetype/freetype2/2.5.2/freetype-2.5.2.tar.gz
+tar -xvzf freetype-2.5.2.tar.gz
+cd freetype-2.5.2
+./configure
+make
+sudo make install
+cd ..
+rm freetype-2.5.2.tar.gz
+rm -rf freetype-2.5.2
+
 echo "Install SDL2-ttf"
 wget http://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.12.tar.gz
 tar -xvzf SDL2_ttf-2.0.12.tar.gz
@@ -47,6 +59,7 @@ rm -rf SDL2_ttf-2.0.12
 echo "Install Qt5"
 yes | sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
 sudo apt-get update -qq
+sudo apt-get install build-essential g++
 sudo apt-get install -qq qt5-default qtdeclarative5-dev
 
 fi
