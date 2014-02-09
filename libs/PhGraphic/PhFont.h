@@ -7,12 +7,7 @@
 #define PHFONT_H
 
 #include <QString>
-
-#if defined(Q_OS_MAC)
-#include <SDL2_ttf/SDL_ttf.h>
-#else
 #include <SDL2/SDL_ttf.h>
-#endif
 
 class PhFont
 {
