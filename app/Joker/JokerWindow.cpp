@@ -530,6 +530,7 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 		_videoEngine->setFirstFrame(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
 		_doc->setVideoTimestamp(frameStamp);
+		_mediaPanel.setFirstFrame(frameStamp);
 		_needToSave = true;
 	}
 
