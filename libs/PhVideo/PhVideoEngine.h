@@ -36,9 +36,11 @@ public:
 
 	QString codecName();
 
-	void setFrameStamp(PhFrame frame);
+	void setFirstFrame(PhFrame frame);
 
-	PhFrame frameStamp() { return _frameStamp;}
+	PhFrame firstFrame() { return _firstFrame;}
+
+	PhFrame lastFrame() { return _firstFrame + length() - 1;}
 
 	PhFrame length();
 
@@ -59,8 +61,6 @@ public:
 
 	void drawVideo(int x, int y, int w, int h);
 
-
-
 private:
 	bool goToFrame(PhFrame frame);
 	int64_t frame2time(PhFrame f);
@@ -69,7 +69,7 @@ private:
 	QSettings *_settings;
 	QString _fileName;
 	PhClock _clock;
-	PhFrame _frameStamp;
+	PhFrame _firstFrame;
 
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;
