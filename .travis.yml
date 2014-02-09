@@ -1,6 +1,6 @@
 language: objective-c
 install:
-- ./configure
+- ./scripts/bootstrap.sh
 script:
 - qmake -project
 #- qmake tests/ConsoleTest/ConsoleTest.pro
