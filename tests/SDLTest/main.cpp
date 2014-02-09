@@ -23,9 +23,22 @@ int main(int argc, char **argv)
 {
 	QApplication a(argc, argv);
 
+	int numdrivers = SDL_GetNumRenderDrivers(); 
+	printf("Drivers count: %i\n", numdrivers); 
+	for (int i=0;i<numdrivers;i++) 
+	{ 
+		SDL_RendererInfo drinfo; 
+		SDL_GetRenderDriverInfo(i, &drinfo); 
+
+		printf("Driver name: %s\n", drinfo.name); 
+	}
+
 	qDebug() << "Initialize all SDL subsystems";
-	if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+	if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
+	{
+		qDebug() << "Error:" << SDL_GetError();
 		return false;
+	}
 
 	qDebug() << "Set up the window";
 	int screenWidth = 1280;
@@ -46,8 +59,7 @@ int main(int argc, char **argv)
 	}
 
 	// Display the picture:
-	SDL_Rect imageRect = {0, 0, image->w, image->h};
-
+	//SDL_Rect imageRect = {0, 0, image->w, image->h};
 	//SDL_BlitSurface( image, NULL, screen, &imageRect );
 
 	// Initialize TTF :
@@ -64,7 +76,7 @@ int main(int argc, char **argv)
 		return 3;
 
 	//Font's color (black)
-	SDL_Color color={0,0,0};
+	SDL_Color color={0, 0, 0, 255};
 	Uint16 ch;
 #define TEST  2
 
@@ -92,7 +104,6 @@ int main(int argc, char **argv)
 	Uint32 bgColor;
 	bgColor = 0xffffffff;
 	qDebug() << SDL_FillRect(screen, NULL, bgColor);
-	SDL_Rect glyphMatrixRect = {0, 0, 2048, 2048};
 
 	// store the width of each glyph
 	int glyphWidth[256];
