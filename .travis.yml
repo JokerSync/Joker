@@ -1,7 +1,7 @@
 language: objective-c
 install:
 - ./scripts/bootstrap.sh
-- export $PATH:/usr/local/opt/qt5/bin
+- export PATH=$PATH:/usr/local/opt/qt5/bin
 script:
 - qmake -project
 #- qmake tests/ConsoleTest/ConsoleTest.pro
