@@ -1,0 +1,20 @@
+language: objective-c
+install:
+- brew update
+- brew install qt5 sdl2 sdl2_image sdl2_ttf ffmpeg libav
+- export PATH=$PATH:/usr/local/opt/qt5/bin/
+- find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
+script:
+- qmake -project
+#- qmake tests/ConsoleTest/ConsoleTest.pro
+#- qmake tests/SDLTest/SDLTest.pro
+#- qmake tests/FormTest/FormTest.pro
+#- qmake tests/GraphicTest/GraphicTest.pro
+#- qmake tests/GraphicStripTest/GraphicStripTest.pro
+#- qmake tests/GraphicSyncTest/GraphicSyncTest.pro
+#- qmake tests/VideoTest/VideoTest.pro
+#- qmake tests/GraphicStripSyncTest/GraphicStripSyncTest.pro
+- qmake app/Joker/Joker.pro
+- make
+notifications:
+- email: false

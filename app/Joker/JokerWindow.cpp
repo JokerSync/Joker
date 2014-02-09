@@ -254,7 +254,7 @@ void JokerWindow::openFile(QString fileName)
 			if(openVideoFile(_doc->getVideoPath()))
 			{
 				PhFrame frameStamp = _doc->getVideoTimestamp();
-				_videoEngine->setFrameStamp(frameStamp);
+				_videoEngine->setFirstFrame(frameStamp);
 				_mediaPanel.setFirstFrame(frameStamp);
 			}
 			else
@@ -474,7 +474,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	QFileInfo fileInfo(videoFile);
 	if (fileInfo.exists() && _videoEngine->open(videoFile))
 	{
-		PhFrame frameStamp = _videoEngine->frameStamp();
+		PhFrame frameStamp = _videoEngine->firstFrame();
 
 		_mediaPanel.setFirstFrame(frameStamp);
 		_mediaPanel.setMediaLength(_videoEngine->length());
@@ -490,12 +490,12 @@ bool JokerWindow::openVideoFile(QString videoFile)
 		if(frameStamp == 0)
 		{
 			frameStamp = _doc->getVideoTimestamp();
-			_videoEngine->setFrameStamp(frameStamp);
+			_videoEngine->setFirstFrame(frameStamp);
 			_videoEngine->clock()->setFrame(frameStamp);
 			if(fileInfo.fileName() != lastFileInfo.fileName())
 			{
 				on_actionChange_timestamp_triggered();
-				frameStamp = _videoEngine->frameStamp();
+				frameStamp = _videoEngine->firstFrame();
 			}
 		}
 
@@ -510,15 +510,29 @@ bool JokerWindow::openVideoFile(QString videoFile)
 void JokerWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();
+	PhFrame frame;
+	if(_synchronizer.videoClock()->frame() < _videoEngine->firstFrame())
+		frame = _videoEngine->firstFrame();
+	else if(_synchronizer.videoClock()->frame() > _videoEngine->firstFrame() + _videoEngine->length())
+		frame = _videoEngine->lastFrame();
+	else
+		frame = _synchronizer.videoClock()->frame();
 
-	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _synchronizer.videoClock()->frame());
+	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), frame);
 	if(dlg.exec() == QDialog::Accepted)
 	{
-		PhFrame frameStamp = _videoEngine->frameStamp();
-		frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
-		_videoEngine->setFrameStamp(frameStamp);
+		PhFrame frameStamp;
+		if(_synchronizer.videoClock()->frame() > _videoEngine->firstFrame() + _videoEngine->length())
+			frameStamp = dlg.frame() - (_videoEngine->length() - 1);
+		else if (_synchronizer.videoClock()->frame() < _videoEngine->firstFrame())
+			frameStamp =  dlg.frame();
+		else
+			frameStamp = _videoEngine->firstFrame() + dlg.frame() - _synchronizer.videoClock()->frame();
+
+		_videoEngine->setFirstFrame(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
 		_doc->setVideoTimestamp(frameStamp);
+		_mediaPanel.setFirstFrame(frameStamp);
 		_needToSave = true;
 	}
 
@@ -558,8 +572,9 @@ void JokerWindow::on_actionPreferences_triggered()
 void JokerWindow::fadeInMediaPanel()
 {
 	// Don't show the mediaPanel if Joker is remote controled.
-	if(_settings->value("synchroProtocol", VideoStripSynchronizer::NoSync).toInt() == 0)
+	if(_settings->value("synchroProtocol").toInt() != VideoStripSynchronizer::NoSync)
 		return;
+
 	_mediaPanel.show();
 	_mediaPanelAnimation.stop();
 	_mediaPanelAnimation.setDuration(300);

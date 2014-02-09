@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.0" language="fr_FR">
 <context>
     <name>AboutMenu</name>
     <message>
@@ -59,8 +59,8 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="115"/>
-        <location filename="JokerWindow.cpp" line="286"/>
-        <location filename="JokerWindow.cpp" line="379"/>
+        <location filename="JokerWindow.cpp" line="365"/>
+        <location filename="JokerWindow.cpp" line="458"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -179,7 +179,7 @@
     <message>
         <location filename="JokerWindow.ui" line="248"/>
         <source>Ctrl+Shift+T</source>
-        <translation>Ctrl+Maj+T</translation>
+        <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="253"/>
@@ -209,7 +209,7 @@
     <message>
         <location filename="JokerWindow.ui" line="274"/>
         <source>Ctrl+Right</source>
-        <translation>Ctrl+Flèche droite</translation>
+        <translation>Ctrl+Right</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="279"/>
@@ -219,7 +219,7 @@
     <message>
         <location filename="JokerWindow.ui" line="282"/>
         <source>Ctrl+Left</source>
-        <translation>Ctrl+Flèche gauche</translation>
+        <translation>Ctrl+Left</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="287"/>
@@ -244,7 +244,7 @@
     <message>
         <location filename="JokerWindow.ui" line="309"/>
         <source>Ctrl+Shift+S</source>
-        <translation>Ctrl+Maj+S</translation>
+        <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="314"/>
@@ -257,48 +257,47 @@
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="63"/>
         <source>Unable to connect to USB422v module</source>
-        <translation>Impossible de se connecter au module USB422v</translation>
+        <translation type="obsolete">Impossible de se connecter au module USB422v</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="282"/>
+        <location filename="JokerWindow.cpp" line="361"/>
         <source>DetX files</source>
         <translation>Fichiers DetX</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="283"/>
+        <location filename="JokerWindow.cpp" line="362"/>
         <source>Joker files</source>
         <translation>Fichiers Joker</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="284"/>
+        <location filename="JokerWindow.cpp" line="363"/>
         <source>Rythmo files</source>
         <translation>Fichier rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="285"/>
+        <location filename="JokerWindow.cpp" line="364"/>
         <source>All files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="379"/>
+        <location filename="JokerWindow.cpp" line="458"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="592"/>
-        <location filename="JokerWindow.cpp" line="620"/>
+        <location filename="JokerWindow.cpp" line="684"/>
+        <location filename="JokerWindow.cpp" line="712"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="611"/>
+        <location filename="JokerWindow.cpp" line="703"/>
         <source>Save...</source>
         <translation>Enregistrer...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="628"/>
+        <location filename="JokerWindow.cpp" line="720"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
@@ -307,31 +306,31 @@
     <name>MAC_APPLICATION_MENU</name>
     <message>
         <source>Services</source>
-        <translation>Services</translation>
+        <translation type="obsolete">Services</translation>
     </message>
     <message>
         <source>Hide %1</source>
-        <translation>Masquer %1</translation>
+        <translation type="obsolete">Masquer %1</translation>
     </message>
     <message>
         <source>Hide Others</source>
-        <translation>Masquer les autres</translation>
+        <translation type="obsolete">Masquer les autres</translation>
     </message>
     <message>
         <source>Show All</source>
-        <translation>Tout afficher</translation>
+        <translation type="obsolete">Tout afficher</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation>Préférences...</translation>
+        <translation type="obsolete">Préférences...</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation>Quitter %1</translation>
+        <translation type="obsolete">Quitter %1</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation>À propos de %1</translation>
+        <translation type="obsolete">À propos de %1</translation>
     </message>
 </context>
 <context>
@@ -351,6 +350,21 @@
         <source>Select all</source>
         <translation>Tout sélectionner</translation>
     </message>
+    <message>
+        <location filename="PeopleDialog.ui" line="44"/>
+        <source>Unselect all</source>
+        <translation>Tout désélectionner</translation>
+    </message>
+    <message>
+        <location filename="PeopleDialog.cpp" line="24"/>
+        <source>Ok</source>
+        <translation>Ok</translation>
+    </message>
+    <message>
+        <location filename="PeopleDialog.cpp" line="25"/>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
 </context>
 <context>
     <name>PhFontDialog</name>
@@ -363,22 +377,22 @@
 <context>
     <name>PhMediaPanel</name>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="304"/>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="121"/>
         <source>Back</source>
         <translation>Retour</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="311"/>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="140"/>
         <source>FR</source>
         <translation>RR</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="325"/>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="178"/>
         <source>Play</source>
         <translation>Lecture</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="339"/>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="216"/>
         <source>FF</source>
         <translation>AR</translation>
     </message>
@@ -489,57 +503,76 @@
         <translation>Synchronisation</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="319"/>
+        <location filename="PreferencesDialog.ui" line="283"/>
         <source>Delay</source>
         <translation>Délai</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="326"/>
+        <location filename="PreferencesDialog.ui" line="297"/>
+        <source>No sync</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="302"/>
+        <source>Sony 9 pin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="339"/>
+        <source>Parameters</source>
+        <translation>Paramètres</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="370"/>
         <source>Sony ID</source>
         <translation>ID Sony</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="333"/>
+        <location filename="PreferencesDialog.ui" line="354"/>
         <source>Sony high speed</source>
         <translation>Vitesse rapide Sony</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="340"/>
         <source>Sony autoconnect</source>
-        <translation>Connecter automatiquement le module Sony</translation>
+        <translation type="obsolete">Connecter automatiquement le module Sony</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="350"/>
+        <location filename="PreferencesDialog.ui" line="454"/>
         <source>millisecond</source>
         <translation>millisecondes</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="376"/>
+        <location filename="PreferencesDialog.ui" line="310"/>
         <source>quarter frame</source>
         <translation>quart d&apos;image</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="386"/>
+        <location filename="PreferencesDialog.ui" line="411"/>
+        <source>Available inputs</source>
+        <translation>Entrée(s)</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="464"/>
         <source>Log</source>
         <translation>Journal</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="398"/>
+        <location filename="PreferencesDialog.ui" line="476"/>
         <source>Log file :</source>
         <translation>Fichier du jounal :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="454"/>
+        <location filename="PreferencesDialog.ui" line="532"/>
         <source>Reset</source>
         <translation>Réinitialiser</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="116"/>
+        <location filename="PreferencesDialog.cpp" line="138"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="117"/>
+        <location filename="PreferencesDialog.cpp" line="139"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
