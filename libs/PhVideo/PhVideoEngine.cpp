@@ -11,14 +11,100 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :	QObject(parent),
 	_pSwsCtx(NULL),
 	_rgb(NULL),
 	_currentFrame(-1),
-	_useAudio(useAudio),
+	_useAudio(true),
 	_audioStream(NULL),
 	_audioFrame(NULL)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
-
 	_testTimer.start();
+}
+
+bool PhVideoEngine::init(int nbChannels, AVSampleFormat sampleFormat, int sampleRate, int framePerBuffer, QString deviceName)
+{
+	PHDBG(0) << nbChannels << sampleFormat << sampleRate << framePerBuffer << deviceName;
+
+	PaError err = Pa_Initialize();
+	if( err != paNoError )
+		return false;
+
+	int deviceCount = Pa_GetDeviceCount();
+	if( deviceCount <= 0 )
+	{
+		PHDBG(0) << "ERROR: Pa_CountDevices returned " << deviceCount;
+		return false;
+	}
+
+
+	PaStreamParameters outputDeviceInfo;
+	outputDeviceInfo.device = Pa_GetDefaultOutputDevice();
+	outputDeviceInfo.channelCount = nbChannels;
+	outputDeviceInfo.suggestedLatency = 0;
+	outputDeviceInfo.hostApiSpecificStreamInfo = NULL;
+
+	switch (sampleFormat) {
+	case AV_SAMPLE_FMT_S16:
+		outputDeviceInfo.sampleFormat = paInt16;
+		break;
+	case AV_SAMPLE_FMT_S32:
+		outputDeviceInfo.sampleFormat = paInt32;
+		break;
+#warning TODO Handle more AVSampleFormat
+	case AV_SAMPLE_FMT_FLT:
+	case AV_SAMPLE_FMT_DBL:
+	case AV_SAMPLE_FMT_U8:
+	default:
+		PHDBG(0) << "Unsupported AVSampleFormat value : " << sampleFormat;
+		return false;
+	}
+
+	bool isThereOutput = false;
+	bool deviceFound = false;
+
+	for(int i = 0; i < deviceCount; i++ )
+	{
+		const PaDeviceInfo *deviceInfo;
+		deviceInfo = Pa_GetDeviceInfo( i );
+		if(deviceInfo->maxOutputChannels >= nbChannels )
+		{
+			isThereOutput = true;
+			if(deviceName == deviceInfo->name)
+			{
+				deviceFound = true;
+				outputDeviceInfo.device = i;
+				break;
+			}
+		}
+	}
+	if(!isThereOutput)
+	{
+		PHDBG(0) << "No output device";
+		return false;
+	}
+	if(deviceName.length() and !deviceFound)
+	{
+		PHDBG(0) << "Desired output not found :" << deviceName;
+		return false;
+	}
+
+
+	err = Pa_OpenStream(&stream, NULL, &outputDeviceInfo, sampleRate, framePerBuffer, paNoFlag, audioCallback, this);
+
+	if(err != paNoError)
+	{
+		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
+		return false;
+	}
+
+	err = Pa_StartStream( stream );
+	if(err != paNoError)
+	{
+		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
+		return false;
+	}
+
+	PHDBG(0) <<"Port audio succeed initialization !";
+	return true;
 }
 
 bool PhVideoEngine::ready()
@@ -42,6 +128,7 @@ bool PhVideoEngine::open(QString fileName)
 	_firstFrame = 0;
 	_videoStream = NULL;
 	_audioStream = NULL;
+
 
 	// Find video stream :
 	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++)
@@ -117,7 +204,7 @@ bool PhVideoEngine::open(QString fileName)
 			else
 			{
 				_audioFrame = avcodec_alloc_frame();
-				PHDEBUG << "Audio OK.";
+				init(_audioStream->codec->channels, _audioStream->codec->sample_fmt, _audioStream->codec->sample_rate, 1024);
 			}
 		}
 		else
@@ -127,7 +214,7 @@ bool PhVideoEngine::open(QString fileName)
 		}
 	}
 
-	goToFrame(0);
+	//goToFrame(0);
 	_fileName = fileName;
 	return true;
 }
@@ -149,6 +236,8 @@ void PhVideoEngine::close()
 	}
 
 	_fileName = "";
+
+	Pa_CloseStream(stream);
 }
 
 void PhVideoEngine::setSettings(QSettings *settings)
@@ -162,7 +251,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	PhFrame delay = 0;
 	if(_settings)
 		delay = _settings->value("delay", 0).toInt() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
-	goToFrame(_clock.frame() + delay);
+	//goToFrame(_clock.frame() + delay);
 	videoRect.setRect(x, y, w, h);
 	videoRect.setZ(-10);
 	videoRect.draw();
@@ -310,7 +399,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 					avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
 					if(ok)
 					{
-						PHDEBUG << "audio:" << _audioFrame->nb_samples;
+						PHDBG(26) << "audio:" << _audioFrame->nb_samples;
 					}
 				}
 				break;
@@ -359,4 +448,105 @@ PhFrame PhVideoEngine::time2frame(int64_t t)
 		f = t * _videoStream->time_base.num * fps / _videoStream->time_base.den;
 	}
 	return f;
+}
+
+PaStreamCallbackResult PhVideoEngine::processAudio(void *outputBuffer, unsigned long samplePerBuffer)
+{	
+	if(!ready())
+	{
+		PHDEBUG << "not ready";
+		return paAbort;
+	}
+//	PHDEBUG;
+//	memset(outputBuffer, 0, samplePerBuffer * 2);
+//	return paContinue;
+
+	AVPacket packet;
+	int sampleSize = (_audioStream->codec->channels * _audioStream->codec->bits_per_coded_sample) >> 3;
+
+	int nbSampleRead = 0;
+	while(nbSampleRead < samplePerBuffer)
+	{
+		int error = av_read_frame(_pFormatContext, &packet);
+		switch(error)
+		{
+		case 0:
+			if(packet.stream_index == _videoStream->index)
+			{
+				continue;
+				int frameFinished = 0;
+				avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
+				if(frameFinished)
+				{
+
+					int frameHeight = _videoFrame->height;
+					if(_settings)
+					{
+						if(_settings->value("videoDeinterlace", false).toBool())
+							frameHeight = _videoFrame->height / 2;
+					}
+					_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
+													_videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
+													AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+
+					if(_rgb == NULL)
+						_rgb = new uint8_t[_videoFrame->width * frameHeight * 4];
+					int linesize = _videoFrame->width * 4;
+					if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
+									   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
+									   &linesize))
+					{
+						videoRect.createTextureFromARGBBuffer(_rgb, _videoFrame->width, frameHeight);
+						_videoFrameTickCounter.tick();
+					}
+				}
+			}
+			else if(_audioStream && (packet.stream_index == _audioStream->index))
+			{
+				int ok = 0;
+				avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
+				if(ok)
+				{
+					PHDBG(0) << "audio:" << _audioFrame->nb_samples << _audioFrame->linesize[0] << sampleSize * nbSampleRead << sampleSize << nbSampleRead;
+					memcpy((qint8 *)outputBuffer + sampleSize * nbSampleRead, _audioFrame->data[0], _audioFrame->linesize[0]);
+					nbSampleRead += _audioFrame->nb_samples;
+					if(nbSampleRead + _audioFrame->nb_samples < samplePerBuffer)
+						return paContinue;
+				}
+			}
+			break;
+		case AVERROR_INVALIDDATA:
+		case AVERROR_EOF:
+		default:
+		{
+			char errorStr[256];
+			av_strerror(error, errorStr, 256);
+			PHDBG(0) << "Error" << errorStr;
+			return paAbort;
+		}
+		}
+		//Avoid memory leak
+		av_free_packet(&packet);
+	}
+
+		return paContinue;
+
+//	PHDBG(0) << _audioFrame->pkt_size;
+//	if(_clock.rate())
+//	{
+//		memcpy(outputBuffer, _audioFrame->data, _audioFrame->pkt_size);
+//	}
+//	else
+//	{
+//		memset(outputBuffer, 0, framesPerBuffer);
+//	}
+
+
+//	return framesPerBuffer;
+}
+
+int PhVideoEngine::audioCallback(const void *, void *outputBuffer, unsigned long FPB, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags , void *userData)
+{
+	PhVideoEngine * avEngine= (PhVideoEngine *) userData;
+	return avEngine->processAudio(outputBuffer, FPB);
 }

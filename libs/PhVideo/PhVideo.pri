@@ -19,5 +19,5 @@ linux {
 mac {
 	QT += widgets
 	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale -liconv -lbz2 -lz
+	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale -liconv -lbz2 -lz -lportaudio
 }

@@ -7,7 +7,8 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
 	_nextTCText(_strip.getHUDFont(), "00:00:00:00"),
 	_noVideoSyncError(_strip.getHUDFont(), "No video sync"),
-	_currentPeopleName(_strip.getHUDFont(), "")
+	_currentPeopleName(_strip.getHUDFont(), ""),
+	_videoEngine(NULL)
 {
 	connect(_strip.doc(), SIGNAL(changed()), this, SLOT(onDocChanged()));
 }

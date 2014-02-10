@@ -11,16 +11,18 @@ extern "C" {
 #include <QObject>
 #include <QElapsedTimer>
 #include <QSettings>
+#include <portaudio.h>
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTickCounter.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
 
+
 class PhVideoEngine : public QObject
 {
 	Q_OBJECT
 public:
-	explicit PhVideoEngine(bool useAudio, QObject *parent = 0);
+	explicit PhVideoEngine(bool useAudio = true, QObject *parent = 0);
 	~PhVideoEngine();
 
 	// Properties
@@ -61,6 +63,9 @@ public:
 
 	void drawVideo(int x, int y, int w, int h);
 
+	bool init(int nbChannels, AVSampleFormat sampleFormat, int sampleRate, int framePerBuffer, QString deviceName = "");
+
+
 private:
 	bool goToFrame(PhFrame frame);
 	int64_t frame2time(PhFrame f);
@@ -85,6 +90,17 @@ private:
 	bool _useAudio;
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
+
+	PaStreamCallbackResult processAudio(void *outputBuffer,
+							unsigned long framesPerBuffer);
+	static int audioCallback( const void *inputBuffer, void *outputBuffer,
+							   unsigned long framesPerBuffer,
+							   const PaStreamCallbackTimeInfo* timeInfo,
+							   PaStreamCallbackFlags statusFlags,
+							   void *userData );
+	PaStream *stream;
+	float data;
+
 };
 
 #endif // PHVIDEOENGINE_H
