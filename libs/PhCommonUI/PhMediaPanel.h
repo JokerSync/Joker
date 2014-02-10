@@ -38,6 +38,8 @@ public:
 	void setMediaLength(PhFrame length);
 	PhFrame getMediaLength();
 
+    void setSliderEnable(bool isEnabled);
+    
 	void setClock(PhClock * clock);
 
 signals:

@@ -7,8 +7,12 @@
 #include <QDir>
 #include <QProcess>
 #include "PreferencesDialog.h"
-#include "PhDebug.h"
+#include "PhTools/PhDebug.h"
 #include "ui_PreferencesDialog.h"
+
+#if USE_LTC
+#include "PhSync/PhLtcReader.h"
+#endif
 
 PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	QDialog(parent),
@@ -26,7 +30,6 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldUseQuarterFrame = _settings->value("useQuarterFrame", false).toBool();
 	_oldDelay = _settings->value("delay", 0).toInt();
 	_oldStripHeight = _settings->value("stripHeight", 0.25f).toFloat();
-	_oldSonyAutoConnect = _settings->value("sonyAutoConnect", true).toBool();
 	_oldOpenLastFile = _settings->value("openLastFile", true).toBool();
 	_oldStartFullScreen = _settings->value("startFullScreen", false).toBool();
 	_oldSpeed = _settings->value("speed", 12).toInt();
@@ -38,6 +41,8 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldDisplayNextText = _settings->value("displayNextText", true).toBool();
 	_oldDisplayTitle = _settings->value("displayTitle", true).toBool();
 	_oldDisplayLoop = _settings->value("displayLoop", false).toBool();
+    _oldSyncProtocol = _settings->value("synchroProtocol").toInt();
+    _oldLTCInput = _settings->value("ltcInputDevice").toString();
 
 	_oldLogMask = _settings->value("logMask", 1).toInt();
 
@@ -57,7 +62,6 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
 	ui->cBoxLastFile->setChecked(_oldOpenLastFile);
 	ui->cBoxFullscreen->setChecked(_oldStartFullScreen);
-	ui->cBoxSonyAutoconnect->setChecked(_oldSonyAutoConnect);
 	ui->cBoxDeinterlace->setChecked(_oldDeinterlace);
 	ui->cBoxDisplayTC->setChecked(_oldDisplayTC);
 	ui->cBoxDisplayNextTC->setChecked(_oldDisplayNextTC);
@@ -112,6 +116,27 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 			ui->listWidgetFont->setCurrentRow(ui->listWidgetFont->count() - 1);
 		}
 	}
+
+    ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
+
+#if USE_LTC
+	ui->listWidgetSync->addItem("LTC");
+#endif
+
+    if(_oldSyncProtocol == VideoStripSynchronizer::Sony)
+        showParamSony(true);
+#if USE_LTC
+    else if(_oldSyncProtocol == VideoStripSynchronizer::LTC)
+        showParamLTC(true);
+#endif
+	else
+    {
+        showParamLTC(false);
+        showParamSony(false);
+    }
+
+	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -130,7 +155,6 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setValue("useQuarterFrame", _oldUseQuarterFrame);
 	_settings->setValue("delay", _oldDelay);
 	_settings->setValue("stripHeight", _oldStripHeight);
-	_settings->setValue("sonyAutoConnect", _oldSonyAutoConnect);
 	_settings->setValue("openLastFile", _oldOpenLastFile);
 	_settings->setValue("startFullScreen", _oldStartFullScreen);
 	_settings->setValue("speed", _oldSpeed);
@@ -143,6 +167,7 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setValue("displayTitle", _oldDisplayTitle);
 	_settings->setValue("displayLoop", _oldDisplayLoop);
 	_settings->setValue("logMask", _oldLogMask);
+    _settings->setValue("ltcInputDevice", _oldLTCInput);
 	PhDebug::setLogMask(_oldLogMask);
 
 	close();
@@ -177,11 +202,6 @@ void PreferencesDialog::on_sliderStripHeight_valueChanged(int position)
 	_settings->setValue("stripHeight", ((float)position / ui->sliderStripHeight->maximum()));
 }
 
-void PreferencesDialog::on_cBoxSonyAutoconnect_toggled(bool checked)
-{
-	_settings->setValue("sonyAutoConnect", checked);
-}
-
 void PreferencesDialog::on_cBoxLastFile_toggled(bool checked)
 {
 	_settings->setValue("openLastFile", checked);
@@ -205,12 +225,6 @@ void PreferencesDialog::on_lineEditFilter_textEdited(const QString &arg1)
 		if(fontName.contains(&arg1, Qt::CaseInsensitive))
 			ui->listWidgetFont->addItem(fontName);
 	}
-}
-
-
-void PreferencesDialog::on_listWidgetFont_itemClicked(QListWidgetItem *item)
-{
-	_settings->setValue("StripFontFile", fontList[item->text()]);
 }
 
 void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
@@ -259,6 +273,7 @@ void PreferencesDialog::on_pButtonReset_clicked()
 		else
 			btn->setChecked(true);
 	}
+	onLogMaskButtonClicked();
 }
 
 void PreferencesDialog::on_lblPathToLogFile_linkActivated(const QString &link)
@@ -290,3 +305,71 @@ void PreferencesDialog::onLogMaskButtonClicked()
 	_settings->setValue("logMask", logMask);
 }
 
+void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    Q_UNUSED(previous);
+	int protocol = ui->listWidgetSync->currentRow();
+	switch(protocol)
+	{
+	case VideoStripSynchronizer::Sony:
+        showParamSony(true);
+		break;
+#if USE_LTC
+	case VideoStripSynchronizer::LTC:
+        showParamLTC(true);
+		break;
+#endif
+	default:
+        showParamLTC(false);
+        showParamSony(false);
+		break;
+    }
+    _settings->setValue("synchroProtocol", protocol);
+}
+
+void PreferencesDialog::showParamLTC(bool show)
+{
+    if(show)
+    {
+        ui->listWidgetInputs->clear();
+        ui->listWidgetInputs->setVisible(1);
+        ui->lblInputs->setVisible(1);
+        showParamSony(false);
+#if USE_LTC
+		ui->listWidgetInputs->addItems(PhLtcReader::inputList());
+#endif
+        if(ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).count() > 0)
+            ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).first()->setSelected(1);
+    }
+    else
+    {
+        ui->lblInputs->setVisible(0);
+        ui->listWidgetInputs->setVisible(0);
+    }
+}
+
+void PreferencesDialog::showParamSony(bool show)
+{
+    if(show)
+    {
+        ui->spinBoxSonyHighSpeed->setVisible(1);
+        ui->lineEditSonyID->setVisible(1);
+        ui->lblSonyHighSpeed->setVisible(1);
+        ui->lblSonyID->setVisible(1);
+        showParamLTC(false);
+    }
+    else
+    {
+        ui->spinBoxSonyHighSpeed->setVisible(0);
+        ui->lineEditSonyID->setVisible(0);
+        ui->lblSonyHighSpeed->setVisible(0);
+        ui->lblSonyID->setVisible(0);
+    }
+}
+
+
+void PreferencesDialog::on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    Q_UNUSED(previous);
+    _settings->setValue("ltcInputDevice", current->text());
+}

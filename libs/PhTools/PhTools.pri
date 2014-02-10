@@ -33,3 +33,6 @@ mac {
 	RESOURCES_PATH = $${TARGET}.app/Contents/Resources
 }
 
+DEFINES += APP_NAME=\\\"$$TARGET\\\"
+
+

@@ -4,7 +4,7 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :	QObject(parent),
 	_settings(NULL),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
-	_frameStamp(0),
+	_firstFrame(0),
 	_pFormatContext(NULL),
 	_videoStream(NULL),
 	_videoFrame(NULL),
@@ -39,7 +39,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
 
-	_frameStamp = 0;
+	_firstFrame = 0;
 	_videoStream = NULL;
 	_audioStream = NULL;
 
@@ -76,7 +76,7 @@ bool PhVideoEngine::open(QString fileName)
 	if(tag)
 	{
 		PHDEBUG << "Found timestamp:" << tag->value;
-		_frameStamp = PhTimeCode::frameFromString(tag->value, _clock.timeCodeType());
+		_firstFrame = PhTimeCode::frameFromString(tag->value, _clock.timeCodeType());
 	}
 
 	// Looking for timecode type
@@ -164,6 +164,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		delay = _settings->value("delay", 0).toInt() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
 	goToFrame(_clock.frame() + delay);
 	videoRect.setRect(x, y, w, h);
+	videoRect.setZ(-10);
 	videoRect.draw();
 }
 
@@ -174,9 +175,9 @@ PhFrame PhVideoEngine::length()
 	return 0;
 }
 
-void PhVideoEngine::setFrameStamp(PhFrame frame)
+void PhVideoEngine::setFirstFrame(PhFrame frame)
 {
-	_frameStamp = frame;
+	_firstFrame = frame;
 }
 
 PhVideoEngine::~PhVideoEngine()
@@ -232,10 +233,10 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		return false;
 	}
 
-	if(frame < this->_frameStamp)
-		frame = this->_frameStamp;
-	if (frame >= this->_frameStamp + this->length())
-		frame = this->_frameStamp + this->length() - 1;
+	if(frame < this->firstFrame())
+		frame = this->firstFrame();
+	if (frame >= this->lastFrame())
+		frame = this->lastFrame();
 
 	bool result = false;
 	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
@@ -247,7 +248,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		if(frame - _currentFrame != 1)
 		{
 			int flags = AVSEEK_FLAG_ANY;
-			int64_t timestamp = frame2time(frame - _frameStamp);
+			int64_t timestamp = frame2time(frame - _firstFrame);
 			PHDEBUG << "seek:" << timestamp << _videoStream->time_base.num << _videoStream->time_base.den;
 			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
 		}

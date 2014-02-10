@@ -21,10 +21,17 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_needToSave(false),
+#if USE_LTC
+	_ltcReader(),
+#endif
 	_currentStripFile("")
 {
 	// Setting up UI
 	ui->setupUi(this);
+
+	// Due to translation, Qt might not be able to link automatically the menu
+	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
+	ui->actionAbout->setMenuRole(QAction::AboutRole);
 
 	setupOpenRecentMenu();
 
@@ -47,20 +54,32 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_synchronizer.setStripClock(_strip->clock());
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
-	// Initialize the sony module
-	if(_settings->value("sonyAutoConnect", true).toBool())
-	{
-		if(_sonySlave.open())
-		{
-			_synchronizer.setSonyClock(_sonySlave.clock());
-			ui->videoStripView->setSony(&_sonySlave);
-		}
-		else
-			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
-	}
+    setupSyncProtocol();
 
 	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
+	_mediaPanel.setStyleSheet(
+							"* {"
+							"	  color: white;"
+							"  }"
+							"  PhMediaPanel { "
+							"	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
+							"	  border-style: solid;                                                                          "
+							"	  border-width: 4px;                                                                            "
+							"	  border-radius: 3px;                                                                           "
+							"	  border-color: white;                                                                          "
+							"  }                                                                                                "
+							"  QPushButton, QComboBox{                                                                          "
+							"	  background: grey;                                                                             "
+							"	  border-style: outset;                                                                         "
+							"	  border-width: 2px;                                                                            "
+							"	  border-radius: 5px;                                                                           "
+							"	  border-color: white;                                                                          "
+							"  }                                                                                                "
+							"  QLabel#_timecodeLabel{                                                                           "
+							"	  padding: 10px;                                                                                "
+							"  }                                                                                                "
+							);
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
@@ -170,6 +189,56 @@ void JokerWindow::setupOpenRecentMenu()
 
 }
 
+void JokerWindow::setupSyncProtocol()
+{
+	PhClock* clock = NULL;
+
+	// Disable old protocol
+	_sonySlave.close();
+#if USE_LTC
+	_ltcReader.close();
+#endif
+	VideoStripSynchronizer::SyncType type = (VideoStripSynchronizer::SyncType)_settings->value("synchroProtocol").toInt();
+
+	switch(type)
+	{
+	case VideoStripSynchronizer::Sony:
+		// Initialize the sony module
+		if(_sonySlave.open())
+		{
+			clock = _sonySlave.clock();
+			ui->videoStripView->setSony(&_sonySlave);
+		}
+		else
+		{
+			type = VideoStripSynchronizer::NoSync;
+			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
+		}
+		break;
+#if USE_LTC
+	case VideoStripSynchronizer::LTC:
+		{
+			QString input = _settings->value("ltcInputDevice").toString();
+			if(_ltcReader.init(input))
+				clock = _ltcReader.clock();
+			else
+			{
+				QMessageBox::critical(this, "", "Unable to open " + input);
+				type = VideoStripSynchronizer::NoSync;
+			}
+			break;
+		}
+#endif
+	}
+
+	_synchronizer.setSyncClock(clock, type);
+
+	// Disable slide if Joker is sync to a protocol
+	_mediaPanel.setSliderEnable(clock == NULL);
+
+	_settings->setValue("synchroProtocol", type);
+}
+
 void JokerWindow::openFile(QString fileName)
 {
 	hideMediaPanel();
@@ -185,7 +254,7 @@ void JokerWindow::openFile(QString fileName)
 			if(openVideoFile(_doc->getVideoPath()))
 			{
 				PhFrame frameStamp = _doc->getVideoTimestamp();
-				_videoEngine->setFrameStamp(frameStamp);
+				_videoEngine->setFirstFrame(frameStamp);
 				_mediaPanel.setFirstFrame(frameStamp);
 			}
 			else
@@ -200,7 +269,7 @@ void JokerWindow::openFile(QString fileName)
 	}
 }
 
-bool JokerWindow::eventFilter(QObject *, QEvent *event)
+bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
 	switch (event->type())
 	{
@@ -219,8 +288,12 @@ bool JokerWindow::eventFilter(QObject *, QEvent *event)
 			openVideoFile(filePath);
 		break;
 	}
-		// Hide and show the mediaPanel
+
+	case QEvent::ApplicationDeactivate:
+		hideMediaPanel();
+		break;
 	case QEvent::MouseMove:
+		// Show the mediaPanel only if Joker has focus.
 		if(this->hasFocus())
 			fadeInMediaPanel();
 		break;
@@ -246,6 +319,16 @@ bool JokerWindow::eventFilter(QObject *, QEvent *event)
 	}
 	case QEvent::DragEnter:
 		event->accept();
+		break;
+	case QEvent::MouseButtonDblClick:
+		// If the sender is "this" and no videofile is loaded
+		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length())
+		{
+			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
+			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->value("stripHeight", 0.25f).toFloat()))
+				on_actionOpen_Video_triggered();
+			return true;
+		}
 		break;
 	default:
 		break;
@@ -275,7 +358,11 @@ void JokerWindow::on_actionOpen_triggered()
 
 	if(checkSaveFile())
 	{
-		QFileDialog dlg(this, "Open...", _settings->value("lastFolder", QDir::homePath()).toString(), "DetX files (*.detx);; Joker files (*.strip);; Rythmo files (*.detx *.strip);; All files (*.*)");
+		QString filter = tr("DetX files") + " (*.detx);; "
+				+ tr("Joker files") + " (*.strip);; "
+				+ tr("Rythmo files") + " (*.detx *.strip);; "
+				+ tr("All files") + " (*.*)";
+		QFileDialog dlg(this, tr("Open..."), _settings->value("lastFolder", QDir::homePath()).toString(), filter);
 
 		dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
@@ -368,7 +455,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	hideMediaPanel();
 
 	QString lastFolder = _settings->value("lastVideoFolder", QDir::homePath()).toString();
-	QFileDialog dlg(this, "Open...", lastFolder, "Movie files (*.avi *.mov)");
+	QFileDialog dlg(this, tr("Open..."), lastFolder, tr("Movie files") + " (*.avi *.mov)");
 	if(dlg.exec())
 	{
 		QString videoFile = dlg.selectedFiles()[0];
@@ -385,7 +472,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	QFileInfo fileInfo(videoFile);
 	if (fileInfo.exists() && _videoEngine->open(videoFile))
 	{
-		PhFrame frameStamp = _videoEngine->frameStamp();
+		PhFrame frameStamp = _videoEngine->firstFrame();
 
 		_mediaPanel.setFirstFrame(frameStamp);
 		_mediaPanel.setMediaLength(_videoEngine->length());
@@ -401,12 +488,12 @@ bool JokerWindow::openVideoFile(QString videoFile)
 		if(frameStamp == 0)
 		{
 			frameStamp = _doc->getVideoTimestamp();
-			_videoEngine->setFrameStamp(frameStamp);
+			_videoEngine->setFirstFrame(frameStamp);
 			_videoEngine->clock()->setFrame(frameStamp);
 			if(fileInfo.fileName() != lastFileInfo.fileName())
 			{
 				on_actionChange_timestamp_triggered();
-				frameStamp = _videoEngine->frameStamp();
+				frameStamp = _videoEngine->firstFrame();
 			}
 		}
 
@@ -421,15 +508,29 @@ bool JokerWindow::openVideoFile(QString videoFile)
 void JokerWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();
+	PhFrame frame;
+	if(_synchronizer.videoClock()->frame() < _videoEngine->firstFrame())
+		frame = _videoEngine->firstFrame();
+	else if(_synchronizer.videoClock()->frame() > _videoEngine->firstFrame() + _videoEngine->length())
+		frame = _videoEngine->lastFrame();
+	else
+		frame = _synchronizer.videoClock()->frame();
 
-	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _synchronizer.videoClock()->frame());
+	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), frame);
 	if(dlg.exec() == QDialog::Accepted)
 	{
-		PhFrame frameStamp = _videoEngine->frameStamp();
-		frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
-		_videoEngine->setFrameStamp(frameStamp);
+		PhFrame frameStamp;
+		if(_synchronizer.videoClock()->frame() > _videoEngine->firstFrame() + _videoEngine->length())
+			frameStamp = dlg.frame() - (_videoEngine->length() - 1);
+		else if (_synchronizer.videoClock()->frame() < _videoEngine->firstFrame())
+			frameStamp =  dlg.frame();
+		else
+			frameStamp = _videoEngine->firstFrame() + dlg.frame() - _synchronizer.videoClock()->frame();
+
+		_videoEngine->setFirstFrame(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
 		_doc->setVideoTimestamp(frameStamp);
+		_mediaPanel.setFirstFrame(frameStamp);
 		_needToSave = true;
 	}
 
@@ -452,14 +553,25 @@ void JokerWindow::on_actionAbout_triggered()
 void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
-
+    int syncProtocol = _settings->value("synchroProtocol").toInt();
+    QString inputLTC = _settings->value("ltcInputDevice").toString();
 	PreferencesDialog dlg(_settings);
-	dlg.exec();
+    dlg.exec();
+    if(syncProtocol != _settings->value("synchroProtocol").toInt() or inputLTC != _settings->value("ltcInputDevice", ""))
+    {
+        PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol").toInt();
+        setupSyncProtocol();
+    }
+
 	fadeInMediaPanel();
 }
 
 void JokerWindow::fadeInMediaPanel()
 {
+	// Don't show the mediaPanel if Joker is remote controled.
+	if(_settings->value("synchroProtocol").toInt() != VideoStripSynchronizer::NoSync)
+		return;
+
 	_mediaPanel.show();
 	_mediaPanelAnimation.stop();
 	_mediaPanelAnimation.setDuration(300);
@@ -472,10 +584,19 @@ void JokerWindow::fadeInMediaPanel()
 
 void JokerWindow::fadeOutMediaPanel()
 {
+    // Don't fade out the media panel if the mouse is over it
+	if(_mediaPanel.underMouse() or _mediaPanel.isMousePressed())
+    {
+		PHDEBUG << "Don't hide";
+        _mediaPanelTimer.start(3000);
+        return;
+    }
+
 	PHDEBUG << _mediaPanelState;
 	switch(_mediaPanelState)
 	{
 	case MediaPanelVisible:
+		PHDEBUG << "Hiding";
 		_mediaPanelAnimation.setDuration(1000);
 		_mediaPanelAnimation.setEndValue(0);
 		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
@@ -574,7 +695,7 @@ void JokerWindow::on_actionSave_triggered()
 	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode()))
 		_needToSave = false;
 	else
-		QMessageBox::critical(this, "", "Unable to save " + _currentStripFile);
+		QMessageBox::critical(this, "", tr("Unable to save ") + _currentStripFile);
 }
 
 void JokerWindow::on_actionSave_as_triggered()
@@ -593,7 +714,7 @@ void JokerWindow::on_actionSave_as_triggered()
 			stripFile = lastFolder + "/" + info.completeBaseName() + ".strip";
 	}
 
-	stripFile = QFileDialog::getSaveFileName(this, "Save...", stripFile,"*.strip");
+	stripFile = QFileDialog::getSaveFileName(this, tr("Save..."), stripFile,"*.strip");
 	if(stripFile != "")
 	{
 		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode()))
@@ -602,7 +723,7 @@ void JokerWindow::on_actionSave_as_triggered()
 			setCurrentStripFile(stripFile);
 		}
 		else
-			QMessageBox::critical(this, "", "Unable to save " + stripFile);
+			QMessageBox::critical(this, "", tr("Unable to save ") + stripFile);
 	}
 }
 
@@ -610,7 +731,7 @@ bool JokerWindow::checkSaveFile()
 {
 	if(_needToSave)
 	{
-		QString msg = "Do you want to save your changes ?";
+		QString msg = tr("Do you want to save your changes ?");
 		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
 		box.setDefaultButton(QMessageBox::Save);
 		switch(box.exec())

@@ -8,7 +8,10 @@
 
 #include "VideoStripView.h"
 #include "PhSync/PhSonySlaveController.h"
-#include "PhCommonUI/PhMediaPanelDialog.h"
+#include "PhCommonUI/PhFloatingMediaPanel.h"
+#if USE_LTC
+#include "PhSync/PhLtcReader.h"
+#endif
 
 #include "SonyVideoStripSynchronizer.h"
 #include "PropertyDialog.h"
@@ -40,7 +43,7 @@ protected:
 
 
 private slots:
-		// Qt Designer slots
+	// Qt Designer slots
 	void on_actionOpen_triggered();
 
 	void on_actionPlay_pause_triggered();
@@ -114,8 +117,11 @@ private:
 	QSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
+#if USE_LTC
+    PhLtcReader _ltcReader;
+#endif
 
-	PhMediaPanelDialog _mediaPanel;
+	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;
 	MediaPanelState _mediaPanelState;
 	QPropertyAnimation _mediaPanelAnimation;
@@ -129,6 +135,7 @@ private:
 
 	void updateOpenRecent();
 	void setupOpenRecentMenu();
+    void setupSyncProtocol();
 	void closeEvent(QCloseEvent *event);
 
 	void setCurrentStripFile(QString stripFile);
