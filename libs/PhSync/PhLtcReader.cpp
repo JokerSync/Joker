@@ -1,7 +1,7 @@
 #include "PhLtcReader.h"
 
 PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
-    QObject(parent),
+    PhAudioReader(parent),
     _clock(tcType),
 	_position(0)
 {
@@ -11,11 +11,11 @@ PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
 
 bool PhLtcReader::init(QString deviceName)
 {
-	PaError err = Pa_Initialize();
-	if( err != paNoError )
-		return false;
+//	PHDEBUG << deviceName;
 
-	PHDBG(0) <<"Port audio succeed initialization !";
+	if(!PhAudioReader::init(deviceName)) {
+		return false;
+	}
 
 	int deviceCount = Pa_GetDeviceCount();
 	if( deviceCount <= 0 )
@@ -27,6 +27,7 @@ bool PhLtcReader::init(QString deviceName)
 
 	PaStreamParameters streamParameters;
 	streamParameters.device = Pa_GetDefaultOutputDevice();
+	const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(streamParameters.device);
 	streamParameters.channelCount = 1;
 	streamParameters.sampleFormat = paInt8;
 	streamParameters.suggestedLatency = 0;
@@ -37,7 +38,6 @@ bool PhLtcReader::init(QString deviceName)
 
 	for(int i = 0; i < deviceCount; i++ )
 	{
-		const PaDeviceInfo *deviceInfo;
 		deviceInfo = Pa_GetDeviceInfo( i );
 		if(deviceInfo->maxInputChannels > 0 )
 		{
@@ -46,6 +46,7 @@ bool PhLtcReader::init(QString deviceName)
 			{
 				deviceFound = true;
 				streamParameters.device = i;
+				deviceInfo = Pa_GetDeviceInfo(i);
 				break;
 			}
 		}
@@ -61,7 +62,9 @@ bool PhLtcReader::init(QString deviceName)
 		return false;
 	}
 
-	err = Pa_OpenStream(&stream, &streamParameters, NULL, SAMPLE_RATE, FRAME_PER_BUFFER, paNoFlag, audioCallback, this);
+	PHDBG(0) << "Opening " << deviceInfo->name;
+
+	PaError err = Pa_OpenStream(&_stream, &streamParameters, NULL, SAMPLE_RATE, FRAME_PER_BUFFER, paNoFlag, audioCallback, this);
 
 	if(err != paNoError)
 	{
@@ -72,15 +75,10 @@ bool PhLtcReader::init(QString deviceName)
 	if(err != paNoError)
 		return false;
 
-	if(Pa_StartStream( stream ) != paNoError)
+	if(Pa_StartStream( _stream ) != paNoError)
 		return false;
 
 	return true;
-}
-
-void PhLtcReader::close()
-{
-	Pa_CloseStream( stream );
 }
 
 QList<QString> PhLtcReader::inputList()
@@ -111,7 +109,6 @@ PhClock *PhLtcReader::clock()
 
 int PhLtcReader::processAudio(const void *outputBuffer, unsigned long framesPerBuffer)
 {
-
 	ltc_decoder_write(_decoder, (ltcsnd_sample_t*)outputBuffer, framesPerBuffer, _position);
 	LTCFrameExt frame;
 	unsigned int hhmmssff[4];

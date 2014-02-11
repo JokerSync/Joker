@@ -6,15 +6,16 @@
 #include <QTime>
 
 #include <ltc.h>
-#include <portaudio.h>
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTimeCode.h"
 
+#include "PhAudio/PhAudioReader.h"
+
 #define FRAME_PER_BUFFER 256
 #define SAMPLE_RATE 48000
 
-class PhLtcReader : public QObject
+class PhLtcReader : public PhAudioReader
 {
 
     Q_OBJECT
@@ -23,7 +24,6 @@ public:
 	explicit PhLtcReader(PhTimeCodeType tcType = PhTimeCodeType25, QObject *parent = 0);
 
 	bool init(QString deviceName="");
-	void close();
 
     static QList<QString> inputList();
     PhClock * clock();
@@ -40,7 +40,6 @@ private:
 
     PhClock _clock;
 
-	PaStream *stream;
 	float data;
 
     ltc_off_t _position;

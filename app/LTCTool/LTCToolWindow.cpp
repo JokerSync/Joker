@@ -99,19 +99,21 @@ void LTCToolWindow::onSlaveFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 void LTCToolWindow::setupOutput()
 {
 	_LTCWriter.close();
-	if(!_LTCWriter.init(_settings->value("audioOutput", "").toString()))
+	if(!_LTCWriter.init(_settings->value("audioOutput", "").toString())) {
 		QMessageBox::warning(this, tr("Error"),
 										tr("Error while loading the output device.\n"
 										   "See log for more informations"),
 										QMessageBox::Ok);
+	}
 }
 
 void LTCToolWindow::setupInput()
 {
 	_LTCReader.close();
-	if(!_LTCReader.init(_settings->value("audioInput", "").toString()))
+	if(!_LTCReader.init(_settings->value("audioInput", "").toString())) {
 		QMessageBox::warning(this, tr("Error"),
 										tr("Error while loading the input device.\n"
 										   "See log for more informations"),
 										QMessageBox::Ok);
+	}
 }

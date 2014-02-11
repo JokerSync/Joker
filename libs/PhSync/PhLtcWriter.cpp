@@ -5,7 +5,7 @@
 
 
 PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
-	QObject(parent),
+	PhAudioWriter(parent),
 	_clock(tcType),
 	_encoder(NULL)
 {
@@ -38,11 +38,9 @@ bool PhLtcWriter::init(QString deviceName)
 {
 	PHDBG(0) << deviceName;
 
-	PaError err = Pa_Initialize();
-	if( err != paNoError )
+	if(!PhAudioWriter::init(deviceName)) {
 		return false;
-
-	PHDBG(0) <<"Port audio succeed initialization !";
+	}
 
 	int deviceCount = Pa_GetDeviceCount();
 	if( deviceCount <= 0 )
@@ -50,7 +48,6 @@ bool PhLtcWriter::init(QString deviceName)
 		PHDBG(0) << "ERROR: Pa_CountDevices returned " << deviceCount;
 		return false;
 	}
-
 
 	PaStreamParameters outputDeviceInfo;
 	outputDeviceInfo.device = Pa_GetDefaultOutputDevice();
@@ -89,7 +86,7 @@ bool PhLtcWriter::init(QString deviceName)
 	}
 
 
-	err = Pa_OpenStream(&stream, NULL, &outputDeviceInfo, SAMPLE_RATE, FRAME_PER_BUFFER, paNoFlag, audioCallback, this);
+	PaError err = Pa_OpenStream(&_stream, NULL, &outputDeviceInfo, SAMPLE_RATE, FRAME_PER_BUFFER, paNoFlag, audioCallback, this);
 
 	if(err != paNoError)
 	{
@@ -97,7 +94,7 @@ bool PhLtcWriter::init(QString deviceName)
 		return false;
 	}
 
-	err = Pa_StartStream( stream );
+	err = Pa_StartStream( _stream );
 	if(err != paNoError)
 	{
 		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
@@ -105,11 +102,6 @@ bool PhLtcWriter::init(QString deviceName)
 	}
 
 	return true;
-}
-
-void PhLtcWriter::close()
-{
-	Pa_CloseStream( stream );
 }
 
 QList<QString> PhLtcWriter::outputList()
