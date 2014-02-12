@@ -13,12 +13,21 @@
 namespace Ui {
 class LTCToolWindow;
 }
-
+/*!
+ * \brief The LTCToolWindow class
+ *
+ * It displays the two timecodes, the upper one is the master and the lower one is the slave.
+ */
 class LTCToolWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
+	/*!
+	 * \brief LTCToolWindow constructor
+	 * \param settings The corresponding QSettings
+	 * \param parent
+	 */
 	explicit LTCToolWindow(QSettings *settings, QWidget *parent = 0);
 	~LTCToolWindow();
 
