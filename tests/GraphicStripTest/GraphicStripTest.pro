@@ -35,9 +35,17 @@ FORMS += \
     StripPropertiesDialog.ui \
     GenerateDialog.ui
 
+mac{
+	PATH = "/../Resources/"
+}
+win32{
+	PATH = $$shell_path(./debug/)
+}
+
+DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
+
 CONFIG(release, debug|release) {
 	mac {
 		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
 	}
-
 }

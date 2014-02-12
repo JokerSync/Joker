@@ -19,20 +19,28 @@ SOURCES += \
 
 # Windows specific
 win32 {
-	RESOURCES_PATH = .
+	CS = &
+	CONFIG(release, debug|release) {
+		RESOURCES_PATH = $$shell_path(./release/)
+		message(Release mode)
+	}
+	CONFIG(debug, debug|release) {
+		RESOURCES_PATH = $$shell_path(./debug/)
+		message(Debug mode)
+	}
 }
 
 # Ubuntu specific
 linux {
+	CS = ;
 	RESOURCES_PATH = .
 }
 
 
 # MacOS specific
 mac {
+	CS = ;
 	RESOURCES_PATH = $${TARGET}.app/Contents/Resources
 }
 
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
-
-

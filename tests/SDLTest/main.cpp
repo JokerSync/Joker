@@ -1,5 +1,3 @@
-#include <QtGlobal>
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
@@ -19,36 +17,48 @@
 
 using namespace std;
 
+#undef main
+
 int main(int argc, char **argv)
 {
 	QApplication a(argc, argv);
 
 	qDebug() << "Initialize all SDL subsystems";
 	if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+	{
+		qDebug() << "failed";
 		return false;
+	}
 
 	qDebug() << "Set up the window";
 	int screenWidth = 1280;
 	int screenHeight = 600;
-	SDL_Window * window = SDL_CreateWindow("SDLTest", 0, 0, screenWidth, screenHeight, SDL_SWSURFACE);
+	SDL_Window * window = SDL_CreateWindow("SDLTest", 100, 100, screenWidth, screenHeight, SDL_SWSURFACE);
 
 	SDL_Surface * screen = SDL_GetWindowSurface(window);
 
-	string ressourcesPath = QApplication::applicationDirPath().toStdString();
+	SDL_Rect rect = {600, 20, 200, 300};
+	SDL_FillRect(screen, &rect, 0xff0000ff);
+
+	QString ressourcesPath = QApplication::applicationDirPath();
 	// Create a surface from picture:
-	string lookPath = ressourcesPath + "/look.png";
+	QString lookPath = ressourcesPath + "/look.png";
 
-	SDL_Surface *image = IMG_Load( lookPath.c_str());
+	QFile file(lookPath);
+	qDebug() << "exists" << file.exists();
+	SDL_Surface *image = IMG_Load( lookPath.toStdString().c_str());
 
-	if( image == NULL )
+	if ( image == NULL )
 	{
+		qDebug() << "failed to load " << lookPath;
+		qDebug() << SDL_GetError();
 		return 1;
 	}
 
 	// Display the picture:
 	SDL_Rect imageRect = {0, 0, image->w, image->h};
 
-	//SDL_BlitSurface( image, NULL, screen, &imageRect );
+	SDL_BlitSurface( image, NULL, screen, &imageRect );
 
 	// Initialize TTF :
 	if( TTF_Init() == -1 ) {
@@ -57,11 +67,16 @@ int main(int argc, char **argv)
 	}
 
 	//Create a font
-	string fontPath = ressourcesPath + "/SWENSON.TTF";
-	TTF_Font *font = TTF_OpenFont(fontPath.c_str(), 100 );
+	QString fontPath = ressourcesPath + "/SWENSON.TTF";
+	TTF_Font *font = TTF_OpenFont(fontPath.toStdString().c_str(), 100 );
 	qDebug() << "Outline :" << TTF_GetFontOutline(font);
+
 	if (font == NULL)
+	{
+		qDebug() << "Error opening " << fontPath;
+		qDebug() << SDL_GetError();
 		return 3;
+	}
 
 	//Font's color (black)
 	SDL_Color color={0,0,0};
@@ -70,7 +85,7 @@ int main(int argc, char **argv)
 
 #if TEST == 0
 	// Displaying a simple string:
-	SDL_Surface *surface = TTF_RenderUTF8_Blended(font, "ABCDEFGHIJKL", textColor );
+	SDL_Surface *surface = TTF_RenderUTF8_Blended(font, "ABCDEFGHIJKL", color );
 	SDL_Rect textRect = {0, 100, surface->w, surface->h};
 	SDL_BlitSurface( surface, NULL, screen, &textRect);
 
@@ -187,24 +202,38 @@ int main(int argc, char **argv)
 
 
 
-
 	//Update the screen
 	if( SDL_UpdateWindowSurface(window))
+	{
+		qDebug() << "failed to update";
 		return -1;
+	}
 
-	int ret = a.exec();
+	bool quit = false;
 
-	//Free the surface and quit SDL
+	//While the user hasn't quit
+	while(quit == false)
+	{
+		SDL_Event event;
+		//While there's an event to handle
+		while( SDL_PollEvent(&event) ) {
+			//If the user has Xed out the window
+			if( event.type == SDL_QUIT ) { //Quit the program
+				quit = true; }
+		}
+	}
+
+//	//Free the surface and quit SDL
 	SDL_FreeSurface( image );
 //	SDL_FreeSurface(message);
 	SDL_FreeSurface(screen);
 
-	//Quit SDL
+//	//Quit SDL
 	TTF_CloseFont( font );
 	TTF_Quit();
 	SDL_Quit();
 
-	return ret;
+	return 0;
 }
 
 

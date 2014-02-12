@@ -19,27 +19,30 @@ bool GraphicTestView::setFontFile(QString fontFile)
 
 bool GraphicTestView::init()
 {
-	PHDEBUG << "Initialize _image";
-	_image.setFilename(QCoreApplication::applicationDirPath() + "/../Resources/look.png");
+	PHDEBUG << "Initialize _image" ;
+
+	_image.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/look.png");
 	_image.setTextureCoordinate(1,1);
 	_image.setRect(50,0,250,125);
 	if (! _image.init())
 	{
-		PHDEBUG << "_image not initialize";
+		PHDEBUG << "_image not initialize : " << QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/look.png";
 		return false;
 	}
 
 	PHDEBUG << "Initialize _font";
-	if (!_font1.setFontFile(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF"))
+	if (!_font1.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF"))
 	{
-		PHDEBUG << "SWENSON not initialize";
+		PHDEBUG << "SWENSON not initialize using path : " << QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF";
 		return false;
 	}
+#if defined(Q_OS_MAC)
 	if (! _font2.setFontFile("/Library/Fonts/Arial.ttf"))
 	{
 		PHDEBUG << "ARIAL not initialize";
 		return false;
 	}
+#endif
 
 	PHDEBUG << "Initialize _text";
 	_text1.setRect(50, 100, 100, 100);

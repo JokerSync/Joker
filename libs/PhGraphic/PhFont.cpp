@@ -7,9 +7,11 @@
 
 #include <QtGlobal>
 
-
-
+#if defined(Q_OS_WIN)
+#include <GL/glu.h>
+#else
 #include <glu.h>
+#endif
 
 #include "PhTools/PhDebug.h"
 

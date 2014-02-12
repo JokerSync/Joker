@@ -12,19 +12,46 @@ DEFINES += APP_NAME=\\\"$$TARGET\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 # Windows specific
-win32{
-#	INCLUDEPATH += $$(SDL_INCLUDE_PATH)
-	RESOURCES_PATH = .
+win32 {
+	!exists($$(SDL_PATH)) {
+		error("You must define SDL_PATH")
+	}
+	!exists($$(SDL_IMAGE_PATH)) {
+		error("You must define SDL_IMAGE_PATH")
+	}
+	!exists($$(SDL_TTF_PATH)) {
+		error("You must define SDL_TTF_PATH")
+	}
+
+	INCLUDEPATH += $$(SDL_PATH)\include
+	INCLUDEPATH += $$(SDL_PATH)\include\SDL2 $$(SDL_IMAGE_PATH)\include $$(SDL_TTF_PATH)\include
+	LIBS += -L$$(SDL_PATH)\lib -lSDL2Main -lSDL2
+	LIBS += -L$$(SDL_IMAGE_PATH)\lib -lSDL2_image
+	LIBS += -L$$(SDL_TTF_PATH)\lib -lSDL2_ttf
+	RESOURCES_PATH = $$shell_path(./debug/)
+	CS = &
+
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_PATH)/bin/SDL2.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_IMAGE_PATH)/bin/SDL2_image.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_IMAGE_PATH)/bin/libjpeg-9.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_IMAGE_PATH)/bin/libpng16-16.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_IMAGE_PATH)/bin/libtiff-5.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_IMAGE_PATH)/bin/libwebp-4.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_IMAGE_PATH)/bin/zlib1.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_TTF_PATH)/bin/SDL2_ttf.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(SDL_TTF_PATH)/bin/libfreetype-6.dll) $${RESOURCES_PATH} $${CS}
 }
 
 # Ubuntu specific
 linux {
 	RESOURCES_PATH = .
+	CS = ;
 }
 
 # MacOS specific
 mac {
 	RESOURCES_PATH = $${TARGET}.app/Contents/MacOS/
+	CS = ;
 }
 
 unix {
@@ -32,10 +59,10 @@ unix {
 	LIBS += -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf
 }
 
-QMAKE_POST_LINK += echo $${RESOURCES_PATH};
-QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/img/look.png $${RESOURCES_PATH};
-QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/fonts/Bedizen.ttf $${RESOURCES_PATH};
-QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/fonts/SWENSON.TTF $${RESOURCES_PATH};
+QMAKE_POST_LINK += echo $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/img/look.png $${RESOURCES_PATH}) $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/fonts/Bedizen.ttf $${RESOURCES_PATH}) $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/fonts/SWENSON.TTF $${RESOURCES_PATH}) $${CS}
 
 CONFIG(release, debug|release) {
 
