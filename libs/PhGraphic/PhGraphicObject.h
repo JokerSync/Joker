@@ -10,7 +10,7 @@
 #include <SDL2/SDL.h>
 
 #if defined(Q_OS_WIN)
-#include <PhGraphic/glu.h>
+#include <GL/glu.h>
 #else
 #include <glu.h>
 #endif

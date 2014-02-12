@@ -9,8 +9,7 @@ HEADERS += \
     ../../libs/PhGraphic/PhGraphicObject.h \
     ../../libs/PhGraphic/PhGraphicRect.h \
     ../../libs/PhGraphic/PhGraphicSolidRect.h \
-    ../../libs/PhGraphic/PhGraphicLoop.h \
-    ../../libs/PhGraphic/glu.h
+	../../libs/PhGraphic/PhGraphicLoop.h
 
 SOURCES += \
 	../../libs/PhGraphic/PhGraphicView.cpp \
