@@ -28,17 +28,11 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
     case 1:
         textureFormat = GL_ALPHA;
         break;
-    case 3:     // no alpha channel
-        if (surface->format->Rmask == 0x000000ff)
-            textureFormat = GL_RGB;
-        else
-            textureFormat = GL_BGR;
+	case 3:     // no alpha channel
+		textureFormat = GL_RGB;
         break;
-    case 4:     // contains an alpha channel
-        if (surface->format->Rmask == 0x000000ff)
-            textureFormat = GL_RGBA;
-        else
-            textureFormat = GL_BGRA;
+	case 4:     // contains an alpha channel
+		textureFormat = GL_RGBA;
         break;
     default:
         PHDEBUG << "Warning: the image is not truecolor...";
@@ -94,10 +88,14 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
     // Bind the texture object
     glBindTexture( GL_TEXTURE_2D, _texture );
 
-
-    // Edit the texture object's image data using the information SDL_Surface gives us
+	// Edit the texture object's image data using the information SDL_Surface gives us
+#if defined(Q_OS_MAC)
     glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
                   GL_YCBCR_422_APPLE, GL_UNSIGNED_SHORT_8_8_APPLE, data);
+#else
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+				  0x85B9, 0x85BA, data);
+#endif
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
