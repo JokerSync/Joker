@@ -1,8 +1,9 @@
-#-------------------------------------------------
 #
-# Project created by QtCreator 2013-05-23T14:09:50
+# Copyright (C) 2012-2014 Phonations
+# License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
-#-------------------------------------------------
+
+
 cache()
 
 TARGET = Joker
