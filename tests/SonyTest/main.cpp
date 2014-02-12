@@ -8,7 +8,6 @@
 
 int main(int argc, char *argv[])
 {
-	PhDebug::init(false, true, true, false, false, true, "SonyTest");
 	QApplication a(argc, argv);
 	MainWindow w;
 	w.show();
