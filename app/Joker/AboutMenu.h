@@ -11,7 +11,10 @@
 namespace Ui {
 class AboutMenu;
 }
-
+/*!
+ * \brief The AboutMenu class
+ * This little class allow Joker to show informations about himself
+ */
 class AboutMenu : public QDialog
 {
 	Q_OBJECT

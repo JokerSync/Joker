@@ -10,11 +10,18 @@
 
 #include "PhTools/PhClock.h"
 
-
+/*!
+ * \brief The VideoStripSynchronizer class
+ * Provide a synchronisation system between the strip and the video.
+ */
 class VideoStripSynchronizer : public QObject
 {
 	Q_OBJECT
 public:
+	/*!
+	 * \brief The SyncType enum
+	 * Allow Joker to know which synchronization mode is used
+	 */
 	enum SyncType {
 		NoSync = 0,
 		Sony = 1,
@@ -25,11 +32,41 @@ public:
 
 	VideoStripSynchronizer();
 
+	/*!
+	 * \brief Set the stripClock
+	 * \param clock The strip clock
+	 */
 	void setStripClock(PhClock *clock);
+
+	/*!
+	 * \brief stripClock
+	 * \return Return the strip clock
+	 */
 	PhClock * stripClock() { return _stripClock; }
+
+	/*!
+	 * \brief Set the videoClock
+	 * \param clock The video clock
+	 */
 	void setVideoClock(PhClock *clock);
+
+	/*!
+	 * \brief Get the video clock
+	 * \return Return the video clock
+	 */
 	PhClock * videoClock() { return _videoClock; }
+
+	/*!
+	 * \brief Set the synchronization clock
+	 * \param clock The synchronization clock
+	 * \param type The wanted PhTimeCodeType
+	 */
     void setSyncClock(PhClock *clock, SyncType type);
+
+	/*!
+	 * \brief Get the Synchronization clock
+	 * \return The Synchronization clock.
+	 */
     PhClock * syncClock() { return _syncClock; }
 
 private slots:
