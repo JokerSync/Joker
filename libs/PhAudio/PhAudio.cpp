@@ -9,7 +9,7 @@ PhAudio::PhAudio(QObject *parent) :
 {
 	PaError err = Pa_Initialize();
 	if(err == paNoError) {
-		PHDEBUG << "Port audio initialized.";
+		PHDEBUG << "Port audio initialized:" << Pa_GetVersionText();
 		_paInitOk = true;
 	}
 	else {
