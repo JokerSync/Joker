@@ -14,20 +14,74 @@
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSonyController.h"
 
+/*!
+ * \brief The VideoStripView class
+ * Process the video and strip displays
+ */
+
+
 class VideoStripView : public PhGraphicView
 {
 	Q_OBJECT
 public:
 	explicit VideoStripView(QWidget *parent = 0);
 
-	void setSettings(QSettings * settings);
+
+	/** \addtogroup Getters
+	 *  @{
+	 */
+	/*!
+	 * \brief videoEngine
+	 * \return
+	 * TODO
+	 */
 	PhVideoEngine * videoEngine() { return &_videoEngine;}
+	/*!
+	 * \brief strip
+	 * \return
+	 * TODO
+	 */
 	PhGraphicStrip * strip() { return &_strip;}
-	void setSony(PhSonyController * sony);
+	/*!
+	 * \brief getSelectedPeoples
+	 * \return
+	 * Return a QList of PhPeople* containing the selected PhPeople
+	 */
 	QList<PhPeople*>* getSelectedPeoples();
+	/** @}*/
+
+
+	/** \addtogroup Setters
+	 *  @{
+	 */
+
+	/*!
+	 * \brief setSettings
+	 * \param settings
+	 * Attach the given settings
+	 */
+	void setSettings(QSettings * settings);
+
+	/*!
+	 * \brief Set the PhSonyController
+	 * \param sony The controller
+	 */
+	void setSony(PhSonyController * sony);
+
+	/** @}*/
+
 
 protected:
+	/*!
+	 * \brief init
+	 * \return
+	 * initialize the VideoStripView
+	 */
 	bool init();
+	/*!
+	 * \brief paint
+	 * Automatic call, process media information and displays it on the screen.
+	 */
 	void paint();
 
 private slots:

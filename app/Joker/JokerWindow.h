@@ -24,7 +24,16 @@
 namespace Ui {
 class JokerWindow;
 }
+/*!
+ *\file JokerWindow.h
+ */
 
+/*!
+ * \brief The JokerWindow class
+ *
+ * The JokerWindow class is used to display the rythmo band and the video via the VideoStripView
+ *
+ */
 class JokerWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -33,13 +42,46 @@ public:
 	explicit JokerWindow(QSettings *settings);
 	~JokerWindow();
 
+	/*!
+	 * \brief Handle any given file
+	 *
+	 * First the file existance is checked then,
+	 * If the file is a supported rythmo file, it will call the PhStripDoc function openStripFile()
+	 * if it's a video file it'll call openVideoFile()
+	 *
+	 * \param fileName The file path
+	 */
 	void openFile(QString fileName);
 
+	/*!
+	 * \brief Open a video file
+	 * Open a videofile and set the framestamp to the videofile's value or the strip's value if the first one is not usable
+	 *
+	 * \param videoFile The videofile path
+	 *
+	 * \return True if the videoFile opened well, false otherwise.
+	 */
 	bool openVideoFile(QString videoFile);
 
 protected:
-	bool eventFilter(QObject *, QEvent *event);
+	/*!
+	 * \brief event Filter
+	 *
+	 * The event filter allow Joker to react with external controls like when the mouse mouve or when a
+	 * file is dropped on the application.
+	 * \param sender
+	 * \param event
+	 * \return
+	 * The return boolean is :
+	 *	- True if we totaly handle the event
+	 *  - False if we only want to do pre-treatment.
+	 */
+	bool eventFilter(QObject *sender, QEvent *event);
 
+	/*!
+	 * \brief The MediaPanelState enum
+	 * The enumeration is used to fade-in and fade-out the PhFloatingMediaPanel
+	 */
 	enum MediaPanelState {
 		MediaPanelVisible,
 		MediaPanelHidding,
