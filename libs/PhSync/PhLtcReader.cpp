@@ -1,4 +1,5 @@
 #include "PhLtcReader.h"
+
 PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
     QObject(parent),
     _clock(tcType),

@@ -48,4 +48,5 @@ private:
     QTime _pauseDetector;
 
 };
+
 #endif // PHLTCREADER_H

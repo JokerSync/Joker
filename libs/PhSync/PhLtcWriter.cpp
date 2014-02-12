@@ -1,7 +1,4 @@
-#include <qendian.h>
-
 #include "PhLtcWriter.h"
-
 
 PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
 	QObject(parent),

@@ -8,8 +8,6 @@
 
 #include "PhGraphicRect.h"
 
-#include <QDebug>
-
 class PhGraphicLoop : public PhGraphicRect
 {
 public:
