@@ -28,17 +28,11 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
     case 1:
         textureFormat = GL_ALPHA;
         break;
-    case 3:     // no alpha channel
-        if (surface->format->Rmask == 0x000000ff)
-            textureFormat = GL_RGB;
-        else
-            textureFormat = GL_BGR;
+	case 3:     // no alpha channel
+		textureFormat = GL_RGB;
         break;
-    case 4:     // contains an alpha channel
-        if (surface->format->Rmask == 0x000000ff)
-            textureFormat = GL_RGBA;
-        else
-            textureFormat = GL_BGRA;
+	case 4:     // contains an alpha channel
+		textureFormat = GL_RGBA;
         break;
     default:
         PHDEBUG << "Warning: the image is not truecolor...";
