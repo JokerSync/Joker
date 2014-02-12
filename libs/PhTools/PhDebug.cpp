@@ -3,11 +3,12 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-#include "PhDebug.h"
-
+#include <QtGlobal>
 #include <QStringList>
 #include <QFile>
 #include <QDir>
+
+#include "PhDebug.h"
 
 PhDebug* PhDebug::d = NULL;
 
@@ -78,7 +79,14 @@ PhDebug::PhDebug()
 {
 	qInstallMessageHandler(this->messageOutput);
 
+#if defined(Q_OS_MAC)
 	QString logDirPath = QDir::homePath() + "/Library/Logs/Phonations/";
+#elif defined(Q_OS_WIN)
+	QString logDirPath = QString(qgetenv("APPDATA")) + "/Phonations";
+#else
+#error Choose a folder for log
+#endif
+
 	QDir logDir(logDirPath);
 	if(!logDir.exists()) {
 		QDir().mkdir(logDirPath);
