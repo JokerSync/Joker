@@ -43,9 +43,12 @@ public:
 		FramingError,
 		TimeOut
 	};
-
+/
 	/**
 	 * @brief PhSonyController constructor
+	 *
+	 * @param tcType The initial timecode type
+	 * @param settings The application settings
 	 * @param comSuffix Serial port name suffix
 	 */
 	explicit PhSonyController(PhTimeCodeType tcType, QSettings *settings, QString comSuffix);
@@ -125,6 +128,13 @@ public slots:
 	virtual void onVideoSync() = 0;
 
 protected:
+	/**
+	 * @brief The thread starting point
+	 *
+	 * This method is called when the thread is created.
+	 * It constantly read the data on the serial port and pass
+	 * it to the child via the processCommand() virtual method.
+	 */
 	void run();
 
 	/**
@@ -140,7 +150,7 @@ protected:
 	virtual void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* dataIn) = 0;
 
 	/**
-	 * Extract the data size from the first command descriptor.
+	 * @brief Extract the data size from the first command descriptor.
 	 * @param cmd1 First command descriptor.
 	 * @return Data size in byte.
 	 */
@@ -148,6 +158,7 @@ protected:
 
 	/**
 	 * Send a sony protocol command.
+	 *
 	 * @param cmd1 First command descriptor.
 	 * @param cmd2 Second command descriptor.
 	 * @param data Data for the command.
@@ -156,6 +167,7 @@ protected:
 
 	/**
 	 * @brief Send a sony protocol command with an argument list of unsigned char for the data.
+	 *
 	 * @param cmd1 First command descriptor.
 	 * @param cmd2 Second command descriptor.
 	 */
@@ -188,6 +200,7 @@ protected:
 	/** @brief The internal clock of the sony controller. */
 	PhClock _clock;
 
+	/** @brief The application settings */
 	QSettings* _settings;
 
 	/** @brief Serial port name suffix (A for slave and B for master). */
@@ -209,6 +222,7 @@ private:
 	/** @brief Last value of the serial CTS state. */
 	bool _lastCTS;
 
+	/** @brief Indicate if the thread is currently running */
 	bool _threadRunning;
 
 private slots:

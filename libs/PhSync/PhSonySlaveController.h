@@ -34,6 +34,7 @@ public:
 	/**
 	 * @brief PhSonySlaveController constructor.
 	 * @param tcType The initial timecode type.
+	 * @param settings The application settings
 	 */
 	PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings);
 
