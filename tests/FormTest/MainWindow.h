@@ -6,14 +6,14 @@
 #include <QSettings>
 #include <QGraphicsScene>
 
-#include "AboutMenu.h"
+#include "AboutDialog.h"
 
 namespace Ui {
 class MainWindow;
 }
 
 class GoTo;
-class AboutMenu;
+class AboutDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -44,7 +44,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    AboutMenu _about;
+    AboutDialog _about;
 	QSettings _settings;
 	QImage *_image;
 	unsigned char * _rgb;

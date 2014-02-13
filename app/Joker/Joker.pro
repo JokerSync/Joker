@@ -41,7 +41,7 @@ SOURCES += main.cpp \
 	JokerWindow.cpp \
 	VideoStripView.cpp \
 	SonyVideoStripSynchronizer.cpp \
-    AboutMenu.cpp \
+    AboutDialog.cpp \
     PreferencesDialog.cpp \
 	PropertyDialog.cpp \
     PeopleDialog.cpp
@@ -51,14 +51,14 @@ HEADERS += \
     JokerWindow.h \
 	VideoStripView.h \
 	SonyVideoStripSynchronizer.h \
-    AboutMenu.h \
+    AboutDialog.h \
     PreferencesDialog.h \
 	PropertyDialog.h \
     PeopleDialog.h
 
 FORMS += \
     JokerWindow.ui \
-    AboutMenu.ui \
+    AboutDialog.ui \
     PreferencesDialog.ui \
 	PropertyDialog.ui \
     PeopleDialog.ui
