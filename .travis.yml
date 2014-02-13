@@ -5,6 +5,7 @@ install:
 - export PATH=$PATH:/usr/local/opt/qt5/bin/
 - find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
 script:
+-mkdir tmp && cd tmp
 - qmake -project
 #- qmake tests/ConsoleTest/ConsoleTest.pro
 #- qmake tests/SDLTest/SDLTest.pro
@@ -14,7 +15,9 @@ script:
 #- qmake tests/GraphicSyncTest/GraphicSyncTest.pro
 #- qmake tests/VideoTest/VideoTest.pro
 #- qmake tests/GraphicStripSyncTest/GraphicStripSyncTest.pro
-- qmake app/Joker/Joker.pro
+- qmake ../app/Joker/Joker.pro
 - make
+- cd ..
+- ./.scriptDoxy.sh
 notifications:
 - email: false
