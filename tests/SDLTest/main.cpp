@@ -23,10 +23,20 @@ int main(int argc, char **argv)
 {
 	QApplication a(argc, argv);
 
+	int numdrivers = SDL_GetNumRenderDrivers(); 
+	printf("Drivers count: %i\n", numdrivers); 
+	for (int i=0;i<numdrivers;i++) 
+	{ 
+		SDL_RendererInfo drinfo; 
+		SDL_GetRenderDriverInfo(i, &drinfo); 
+
+		printf("Driver name: %s\n", drinfo.name); 
+	}
+
 	qDebug() << "Initialize all SDL subsystems";
-	if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+	if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
 	{
-		qDebug() << "failed";
+		qDebug() << "Error:" << SDL_GetError();
 		return false;
 	}
 
@@ -79,7 +89,7 @@ int main(int argc, char **argv)
 	}
 
 	//Font's color (black)
-	SDL_Color color={0,0,0};
+	SDL_Color color={0, 0, 0, 255};
 	Uint16 ch;
 #define TEST  2
 
@@ -107,7 +117,6 @@ int main(int argc, char **argv)
 	Uint32 bgColor;
 	bgColor = 0xffffffff;
 	qDebug() << SDL_FillRect(screen, NULL, bgColor);
-	SDL_Rect glyphMatrixRect = {0, 0, 2048, 2048};
 
 	// store the width of each glyph
 	int glyphWidth[256];
