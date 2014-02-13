@@ -3,14 +3,10 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-#include "PhFont.h"
-
 #include <QtGlobal>
-
-
-
 #include <glu.h>
 
+#include "PhFont.h"
 #include "PhTools/PhDebug.h"
 
 PhFont::PhFont(): _texture(-1), _glyphHeight(0)

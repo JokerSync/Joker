@@ -9,6 +9,11 @@
 #include <QString>
 #include <SDL2/SDL_ttf.h>
 
+/*!
+ * \brief The PhFont class
+ *
+ * It provides a lot of tools which allow the users to compute texts
+ */
 class PhFont
 {
 public:
@@ -24,6 +29,10 @@ public:
 	 */
 	bool setFontFile(QString fontFile);
 
+	/*!
+	 * \brief Get the font file
+	 * \return the path to the font file
+	 */
 	QString getFontFile();
 
 	/**
@@ -50,8 +59,19 @@ public:
 	 */
 	void select();
 
-	int getBoldness() const;
+	/*!
+	 * \brief Set the font boldness
+	 * The boldness is created using <a href=http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf_24.html#SEC24>TTF_SetFontOutline</a>
+	 * multiple times from 0 to value
+	 * \param value the number of pass
+	 */
 	void setBoldness(int value);
+
+	/*!
+	 * \brief Get boldness
+	 * \return the number of outline pass
+	 */
+	int getBoldness() const;
 
 private:
 	/**
