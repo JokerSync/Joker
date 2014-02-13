@@ -7,6 +7,14 @@
 #define PHVIDEOENGINE_H
 
 extern "C" {
+// see http://code.google.com/p/ffmpegsource/issues/detail?id=11#c13
+// and http://code.google.com/p/ffmpegsource/issues/detail?id=11#c23
+
+#ifndef INT64_C
+#define INT64_C(c) (c ## LL)
+#define UINT64_C(c) (c ## ULL)
+#endif
+
 #include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
 #include <libavcodec/avcodec.h>

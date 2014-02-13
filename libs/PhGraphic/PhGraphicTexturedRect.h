@@ -6,9 +6,6 @@
 #ifndef PHGRAPHICTEXTUREDSQUARE_H
 #define PHGRAPHICTEXTUREDSQUARE_H
 
-#include <glu.h>
-#include <SDL2/SDL.h>
-
 #include "PhGraphicRect.h"
 
 /*!

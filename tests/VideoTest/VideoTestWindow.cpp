@@ -37,7 +37,7 @@ bool VideoTestWindow::openFile(QString fileName)
 			this->setWindowTitle(fileName);
 			_mediaPanelDialog.setMediaLength(_videoEngine.length());
 
-			PhFrame frameStamp = _videoEngine.frameStamp();
+			PhFrame frameStamp = _videoEngine.firstFrame();
 			_mediaPanelDialog.setFirstFrame(frameStamp);
 
 			_videoEngine.clock()->setFrame(frameStamp);
@@ -79,9 +79,9 @@ void VideoTestWindow::on_actionSet_timestamp_triggered()
     PhTimeCodeDialog dlg(_videoEngine.clock()->timeCodeType(), _videoEngine.clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 	{
-		PhFrame frameStamp = _videoEngine.frameStamp();
+		PhFrame frameStamp = _videoEngine.firstFrame();
         frameStamp += dlg.frame() - _videoEngine.clock()->frame();
-		_videoEngine.setFrameStamp(frameStamp);
+		_videoEngine.setFirstFrame(frameStamp);
 		_mediaPanelDialog.setFirstFrame(frameStamp);
         _videoEngine.clock()->setFrame(dlg.frame());
 	}

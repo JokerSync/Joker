@@ -3,11 +3,7 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-
-#include <qendian.h>
-
 #include "PhLtcWriter.h"
-
 
 PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
 	QObject(parent),
@@ -182,4 +178,3 @@ int PhLtcWriter::audioCallback(const void *, void *outputBuffer, unsigned long ,
 	LTCWriter->processAudio(outputBuffer, FRAME_PER_BUFFER);
 	return 0;
 }
-
