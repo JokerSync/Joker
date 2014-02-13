@@ -10,16 +10,25 @@
 
 /**
  * TickCounter is an utility that allow to meter the frequency of a signal
- * connected to the tick slot.
+ * connected to the tick slot. It takes 1 second to be accurate.
  */
 class PhTickCounter
 {
 public:
 	PhTickCounter();
 
+	/*!
+	 * \brief Get frequency
+	 * \return the measured frequency
+	 */
 	int frequency() { return _frequency; }
 
 public slots:
+	/*!
+	 * \brief Handle the tick
+	 *
+	 * This slot must be called every time the measured action occurs
+	 */
 	void tick();
 
 private:
