@@ -9,36 +9,51 @@
 #include "PhPeople.h"
 #include "PhStrip/PhStripObject.h"
 
-
+/*!
+ * \brief The PhStripPeopleObject class
+ */
 class PhStripPeopleObject : public PhStripObject {
 
 public:
 
-
+	/*!
+	 * \brief PhStripPeopleObject constructor
+	 * \param timeIn the beggining of the PhStripPeopleObject
+	 * \param people the corresponding PhPeople
+	 * \param timeOut the end of the PhStripPeopleObject
+	 * \param track the track of the PhStripPeopleObject
+	 */
 	PhStripPeopleObject(PhTime timeIn, PhPeople * people = NULL, PhTime timeOut = 0, int track = 0);
-
 	/**
-	 * @brief getPeople
-	 * @return _people
+	 * @brief Get the PhPeople
+	 * @return _people the corresponding PhPeople
 	 */
-	PhPeople * getPeople(){return _people;};
+	PhPeople * getPeople(){return _people;}
 	/**
-	 * @brief getTrack
-	 * @return _track
+	 * @brief Get the track
+	 * @return _track the corresponding track
 	 */
-	int getTrack(){return _track;};
-
+	int getTrack(){return _track;}
 	/**
 	 * @brief getTimeOut
 	 * @return _timeOut
 	 */
-	int getTimeOut(){return _timeOut;};
-
-	void setPeople(PhPeople * people){_people = people;};
-
-	void setTrack(int track){_track = track;};
-
-	void setTimeOut(int timeOut){_timeOut = timeOut;};
+	int getTimeOut(){return _timeOut;}
+	/*!
+	 * \brief Set the PhPeople
+	 * \param people
+	 */
+	void setPeople(PhPeople * people){_people = people;}
+	/*!
+	 * \brief Set the track
+	 * \param track
+	 */
+	void setTrack(int track){_track = track;}
+	/*!
+	 * \brief Set the time out
+	 * \param timeOut
+	 */
+	void setTimeOut(int timeOut){_timeOut = timeOut;}
 
 private:
 /**
