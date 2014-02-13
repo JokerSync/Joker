@@ -5,9 +5,9 @@
 #include <QTimer>
 #include <QSettings>
 
-#include "PhClock.h"
-#include "PhSonyMasterController.h"
-#include "PhSonySlaveController.h"
+#include "PhTools/PhClock.h"
+#include "PhSync/PhSonyMasterController.h"
+#include "PhSync/PhSonySlaveController.h"
 
 namespace Ui {
 class MainWindow;

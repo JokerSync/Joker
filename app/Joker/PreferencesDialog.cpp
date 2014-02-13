@@ -289,6 +289,9 @@ void PreferencesDialog::on_lblPathToLogFile_linkActivated(const QString &link)
 	args << "-e";
 	args << "end tell";
 	QProcess::startDetached("osascript", args);
+#else
+#warning TODO Fix me
+	Q_UNUSED(link);
 #endif
 }
 

@@ -22,7 +22,7 @@ AboutMenu::AboutMenu(QWidget *parent) :
 	scn->setSceneRect( ui->graphicsViewIcon->rect() );
 	ui->graphicsViewIcon->setScene( scn );
 	ui->graphicsViewIcon->setFixedSize(ui->graphicsViewIcon->width(), ui->graphicsViewIcon->height() );
-	QPixmap pix(QCoreApplication::applicationDirPath() + "/../Resources/joker.png");
+	QPixmap pix(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/joker.png");
 	scn->addPixmap( pix );
 }
 

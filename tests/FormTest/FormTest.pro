@@ -23,9 +23,10 @@ DEFINES += APP_NAME=\\\"$$TARGET\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 
-QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
-QMAKE_POST_LINK += sed -i -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
-
+mac {
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
+	QMAKE_POST_LINK += sed -i -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
+}
 
 
 INCLUDEPATH += $${JOKER_ROOT}/libs
