@@ -15,8 +15,13 @@
 class PhStripOff : public PhStripPeopleObject {
 
 public:
-
-
+	/*!
+	 * \brief PhStripOff constructor
+	 * \param timeIn the beggining of the PhStripOff
+	 * \param people the corresponding PhPeople
+	 * \param timeOut the end of the PhStripOff
+	 * \param track the track of the PhStripOff
+	 */
 	PhStripOff( PhTime timeIn, PhPeople * people, PhTime timeOut, int track);
 
 };

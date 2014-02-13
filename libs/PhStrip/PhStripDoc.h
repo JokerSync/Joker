@@ -21,6 +21,13 @@
 #include "PhStripText.h"
 #include "PhStripOff.h"
 
+/*!
+ * \brief The PhStripDoc class
+ *
+ * It contains the script file with all the informations
+ * such as the title, the authors, the characters (PhPeople), the lines,
+ * the attach video file...
+ */
 class PhStripDoc : public QObject
 {
 	Q_OBJECT
@@ -28,11 +35,14 @@ class PhStripDoc : public QObject
 public:
      /**
      * @brief PhStripDoc
-     * @param filename
      * Constructor
      */
     explicit PhStripDoc(QObject *parent = 0);
 
+	/*!
+	 * \brief Get the cuts
+	 * \return the cut's list
+	 */
     QList<PhStripCut *> getCuts();
 
     /**
@@ -41,8 +51,20 @@ public:
      */
 	QString getTitle();
 
+	/*!
+	 * \brief Get the translated title
+	 * \return The translated title
+	 */
 	QString getTranslatedTitle();
+	/*!
+	 * \brief Get the episode
+	 * \return the episode
+	 */
 	QString getEpisode();
+	/*!
+	 * \brief Get the season
+	 * \return the season
+	 */
 	QString getSeason();
 
 	/**
@@ -63,6 +85,10 @@ public:
      */
 	QString getVideoPath();
 
+	/*!
+	 * \brief Get the author name
+	 * \return
+	 */
 	QString getAuthorName() { return _authorName;}
 
     /**
@@ -77,6 +103,10 @@ public:
      */
     int getTimeScale();
 
+	/*!
+	 * \brief Get the timecode type
+	 * \return the corresponding PhTimeCodeType
+	 */
     PhTimeCodeType getTCType();
 
 	/**
@@ -107,10 +137,10 @@ public:
      * @param _title
      */
 	void setTitle(QString _title);
-    /**
-     * @brief setVideoTimestamp
-     * @param videoTimestamp
-     */
+	/*!
+	 * \brief setVideoTimestamp
+	 * \param videoFramestamp
+	 */
     void setVideoTimestamp(PhFrame videoFramestamp);
     /**
      * @brief setVideoPath
@@ -123,47 +153,134 @@ public:
      */
     void setTimeScale(int timeScale);
     /**
-     * @brief openDetX
-     * @param filename
-     * @return
+	 * @brief Open a DetX file
+	 * @param filename The path to the DetX file
+	 * @return True if the doc opened well, false otherwise
      */
 	bool importDetX(QString filename);
+	/*!
+	 * \brief Open a strip file
+	 * \param fileName The path to the DetX file
+	 * \return True if the strip opened well, false otherwise
+	 */
 	bool openStripFile(QString fileName);
+	/*!
+	 * \brief Save the PhStripDoc to a strip file
+	 * \param fileName Path to the stripfile
+	 * \param lastTC The last displayed timecode
+	 * \return True if the strip saved well, false otherwise
+	 */
 	bool saveStrip(QString fileName, QString lastTC);
-
-	// First version : Create StripDoc for testing purposes
+	/*!
+	 * \brief Create a made up strip using the parameters
+	 * \param text The desired text
+	 * \param nbPeople The desired number of actors
+	 * \param nbText The desired number of sentences
+	 * \param nbTrack The desired number of tracks
+	 * \param videoTimeCode The starting timecode
+	 * \return
+	 */
 	bool createDoc(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeCode);
 
+	/*!
+	 * \brief Get the number of texts
+	 * Useful for statistics
+	 * \return The number of texts from the doc
+	 */
     int getNbTexts();
 
+	/*!
+	 * \brief Get people by their name
+	 * \param name The desired people's name
+	 * \return The corresponding PhPeople
+	 */
 	PhPeople * getPeopleByName(QString name);
 
+	/*!
+	 * \brief Get the next text
+	 * \param frame The desired frame
+	 * \return The correponding text
+	 */
 	PhStripText * getNextText(PhFrame frame);
 
+	/*!
+	 * \brief Get the next text
+	 * \param frame The desired frame
+	 * \param people The desired PhPeople who speak the texts
+	 * \return The correponding text
+	 */
 	PhStripText * getNextText(PhFrame frame, PhPeople *people);
-
+	/*!
+	 * \brief Get the next text
+	 * \param frame The desired frame
+	 * \param peopleList The desired PhPeople list who speak the texts
+	 * \return The first corresponding text. If two (or more) texts
+	 * have the same timecode, the text attach to the first PhPeople of
+	 * the list will be returned
+	 */
 	PhStripText * getNextText(PhFrame frame, QList<PhPeople*> peopleList);
-
+	/*!
+	 * \brief Get the previous text frame
+	 * \param frame The given frame
+	 * \return The frame corresponding to the previous text starting
+	 */
 	PhFrame getPreviousTextFrame(PhFrame frame);
-
+	/*!
+	 * \brief Get the previous loop frame
+	 * \param frame The given frame
+	 * \return The frame corresponding to the previous loop
+	 */
 	PhFrame getPreviousLoopFrame(PhFrame frame);
-
+	/*!
+	 * \brief Get the previous cut frame
+	 * \param frame the given frame
+	 * \return The frame corresponding to the previous cut
+	 */
 	PhFrame getPreviousCutFrame(PhFrame frame);
-
+	/*!
+	 * \brief Get previous element frame
+	 * \param frame the given frame
+	 * \return The frame corresponding to the previous element (cut, loop, text...)
+	 */
 	PhFrame getPreviousElementFrame(PhFrame frame);
-
+	/*!
+	 * \brief Get the next text frame
+	 * \param frame the given frame
+	 * \return The frame corresponding to the next text
+	 */
 	PhFrame getNextTextFrame(PhFrame frame);
-
+	/*!
+	 * \brief Get the next loop frame
+	 * \param frame the given frame
+	 * \return The frame corresponding to the next loop
+	 */
 	PhFrame getNextLoopFrame(PhFrame frame);
-
+	/*!
+	 * \brief Get the next cut frame
+	 * \param frame the given frame
+	 * \return The frame corresponding to the next cut
+	 */
 	PhFrame getNextCutFrame(PhFrame frame);
-
+	/*!
+	 * \brief Get the next element frame
+	 * \param frame the given frame
+	 * \return The frame corresponding to the next element (cut, loop, text...)
+	 */
 	PhFrame getNextElementFrame(PhFrame frame);
-
+	/*!
+	 * \brief Get the first frame of the PhStripDoc
+	 * \return The frame in
+	 */
 	PhFrame getFrameIn();
-
+	/*!
+	 * \brief Get the last frame of the PhStripDoc
+	 * \return The frame out
+	 */
 	PhFrame getFrameOut();
 signals:
+	/*!
+	 * \brief Emit a signal when the PhStripDoc changed
+	 */
 	void changed();
 
 private:
