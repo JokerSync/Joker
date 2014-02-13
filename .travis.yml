@@ -5,7 +5,7 @@ install:
 - export PATH=$PATH:/usr/local/opt/qt5/bin/
 - find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
 script:
--mkdir tmp && cd tmp
+- mkdir tmp && cd tmp
 - qmake -project
 #- qmake tests/ConsoleTest/ConsoleTest.pro
 #- qmake tests/SDLTest/SDLTest.pro
