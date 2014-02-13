@@ -1,9 +1,7 @@
 language: objective-c
 install:
-- brew update
-- brew install qt5 sdl2 sdl2_image sdl2_ttf ffmpeg libav
-- export PATH=$PATH:/usr/local/opt/qt5/bin/
-- find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
+- ./scripts/bootstrap.sh
+- export PATH=$PATH:/usr/local/opt/qt5/bin
 script:
 - qmake -project
 #- qmake tests/ConsoleTest/ConsoleTest.pro
@@ -17,4 +15,5 @@ script:
 - qmake app/Joker/Joker.pro
 - make
 notifications:
-- email: false
+ irc: "irc.freenode.net#phonations"
+ email: false
