@@ -12,9 +12,9 @@ Compilation information :
 
 In order to compile the  project you will need to follow the instructions depending on your system :
 
-* ###[Mac OS](#mac)
-* ###[Linux](#linux) _(soon coming)_
-* ###[Windows](#windows) _(soon coming)_
+* [Mac OS](#mac)
+* [Linux](#linux) _(soon coming)_
+* [Windows](#windows) _(soon coming)_
 
 ***
 
@@ -23,17 +23,17 @@ In order to compile the  project you will need to follow the instructions depend
 
 You need to have Mac Os 10.8+ installed to make Joker work on your computer. We also recommand you the [5.2.x Qt version](http://download.qt-project.org/official_releases/online_installers/qt-opensource-mac-x64-1.5.0-1-online.dmg).
 
-* ### Xcode
+### Xcode
 
 You need to have [Xcode](https://developer.apple.com/xcode/) installed and the command line tools to compile on Mac Os using Qt.
 
-* ### Homebrew
+### Homebrew
 
-Homebrew is a very powerful package installer. Let's install it :
+[Homebrew](http://brew.sh/) is a very powerful package installer. Let's install it :
 
     ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
     
-* ### The dependencies :
+### The dependencies :
 
 You can install all the dependencies via __brew__ :
 
@@ -47,7 +47,7 @@ Then as __macdeployqt__ doesn't work well with brew, you'll have to change the l
     find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod 644 {} \;
    
    
-* #### LTC libs
+#### LTC libs
 
 Unfortunatly, the __ltc__ libs are not (yet) installable via brew but this is not a big deal.
 Clone the repo :
@@ -62,7 +62,7 @@ And finaly configure and install :
 
     ./configure && make
     
-* ### The Leap SDK _(optionnal)_
+### The Leap SDK _(optionnal)_
 
 Before any download or installation, you must know that the **leap** have been skipped for the moment.
 
