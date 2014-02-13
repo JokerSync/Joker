@@ -22,8 +22,10 @@ DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 INCLUDEPATH += ../../libs
 
-# Comment the following line if you don't want to use LTC:
-#CONFIG += ltc
+# Currently LTC works only on Unix system
+unix {
+	CONFIG += ltc
+}
 
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
