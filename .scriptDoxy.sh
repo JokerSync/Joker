@@ -16,6 +16,12 @@ echo "Done";
 
 if [`more doxygen_error.log | wc -l` -eq 0 ];
 then
+    echo ".__   __.  __    ______  _______     __  ";
+    echo "|  \ |  | |  |  /      ||   ____|   |  | ";
+    echo "|   \|  | |  | |  ,----'|  |__      |  | ";
+    echo "|  .    | |  | |  |     |   __|     |  | ";
+    echo "|  |\   | |  | |   ----.|  |____    |__| ";
+    echo "|__| \__| |__|  \______||_______|   (__) ";
     exit 0;
 else
     cat doxygen_error.log;

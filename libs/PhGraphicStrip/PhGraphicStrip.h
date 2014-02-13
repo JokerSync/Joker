@@ -66,11 +66,15 @@ public:
 	 */
 	PhClock * clock();
 
+	/*!
+	 * \brief Set the settings
+	 * \param settings desired settings
+	 */
 	void setSettings(QSettings * settings);
 
 	/**
 	 * Set the font used to render text on the strip.
-	 * @param fontfile Font file path
+	 * @param fontFile Font file path
 	 * @return true if the operation succeeds, false otherwise.
 	 */
 	bool setFontFile(QString fontFile);
