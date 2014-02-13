@@ -74,17 +74,66 @@ public:
 	 * @return true if the operation succeeds, false otherwise.
 	 */
 	bool setFontFile(QString fontFile);
-
+	/*!
+	 * \brief Initializisation of the PhGraphicStrip
+	 *
+	 * Call clearData() then :
+	 * - Load the strip background
+	 * - Set the synchronization bar
+	 * - Load the font file
+	 *
+	 * \return True if succeed, false otherwise
+	 */
 	bool init();
 
+	/*!
+	 * \brief draw the strip
+	 *
+	 * It compute all the necessary data for the current frame, skipped
+	 * if height = 0
+	 *
+	 * \param x upper left corner coordinates
+	 * \param y upper left corner coordinates
+	 * \param width width of the strip (usually the same as the parent window)
+	 * \param height height of the strip
+	 */
 	void draw(int x, int y, int width, int height);
 
+	/*!
+	 * \brief Set speed of the strip
+	 *
+	 * Allow the user to vary the speed of the strip (faster or slower)
+	 * The default value is 12ppf
+	 *
+	 * \param value desired number of pixel per frame
+	 */
 	void setPixelPerFrame(long value);
 
+	/*!
+	 * \brief Get the font of the strip objects
+	 * \return the font
+	 */
 	PhFont * getTextFont();
-
+	/*!
+	 * \brief Get the "head up display" Font
+	 *
+	 * The HUD font is used for all text printed on the screen which is not
+	 * a direct part of the strip :
+	 * - The current timecode
+	 * - The next element timecode
+	 * - The prediction
+	 * - The title of the document...
+	 * \return
+	 */
 	PhFont * getHUDFont();
 
+	/*!
+	 * \brief setSelectedPeople
+	 * Selected people will be displayed on the upper left corner, the others ones
+	 * will be shaded. The next time code - if displayed - will be the next element
+	 * of the people from the list.
+	 * \param list
+	 */
 	void setSelectedPeople(QList<PhPeople *> * list){ _selectedPeoples = list; }
 
 private slots:
