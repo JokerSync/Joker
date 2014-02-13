@@ -14,8 +14,6 @@ PhClock::PhClock(PhTimeCodeType tcType, QObject *parent) :
 	qRegisterMetaType<PhTimeCodeType>("PhTimeCodeType");
 }
 
-///****************************Properties****************************/
-
 void PhClock::setTimeCodeType(PhTimeCodeType tcType)
 {
 	PhFrame lastFrame = frame();
@@ -85,8 +83,6 @@ QString PhClock::timeCode()
 {
 	return PhTimeCode::stringFromFrame(frame(), _tcType);
 }
-
-///****************************Slots****************************/
 
 void PhClock::tick(PhTimeScale frequence)
 {
