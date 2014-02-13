@@ -12,6 +12,27 @@ SOURCES += \
 
 # Windows specific
 win32{
+	!exists($$(FFMPEG_DEV_PATH)) {
+		error("You must define a valid FFMPEG_DEV_PATH")
+	}
+
+	!exists($$(FFMPEG_SHARED_PATH)) {
+		error("You must define a valid FFMPEG_SHARED_PATH")
+	}
+
+	INCLUDEPATH += $$(FFMPEG_DEV_PATH)\include
+	LIBS += -L$$(FFMPEG_DEV_PATH)\lib -lavformat -lavcodec -lavutil -lswscale -liconv -lz
+
+
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/swscale-2.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avcodec-55.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avdevice-55.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avfilter-4.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avformat-55.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avutil-52.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/postproc-52.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/swresample-0.dll) $${RESOURCES_PATH} $${CS}
+
 }
 
 # Ubuntu specific

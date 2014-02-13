@@ -7,8 +7,6 @@
 #define PHGRAPHICLOOP_H
 
 #include "PhGraphicRect.h"
-#include <glu.h>
-#include <QDebug>
 
 /*!
  * \brief Draw the loop symbol (a cross)

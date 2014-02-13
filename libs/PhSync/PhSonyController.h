@@ -43,7 +43,7 @@ public:
 		FramingError,
 		TimeOut
 	};
-/
+
 	/**
 	 * @brief PhSonyController constructor
 	 *
