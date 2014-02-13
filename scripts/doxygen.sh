@@ -5,7 +5,7 @@
 #run the doxygen
 pwd
 echo "Running Doxygen...";
-doxygen .doxygen > /dev/null
+doxygen .doxygen &> /dev/null
 echo "Done";
 
 if [`more doxygen_error.log | wc -l` -eq 0 ];
