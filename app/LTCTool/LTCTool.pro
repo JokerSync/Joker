@@ -13,6 +13,8 @@ TEMPLATE = app
 
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 
+CONFIG += ltc
+
 INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri);

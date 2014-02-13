@@ -19,11 +19,11 @@ int main(int argc, char *argv[])
 	int logMask = settings.value("logMask", 1).toInt();
 	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
 	PhDebug::setLogMask(logMask);
-    PhDebug::showConsole(true);
+	PhDebug::showConsole(true);
 
 	QApplication a(argc, argv);
     QTranslator translator;
-	translator.load(QCoreApplication::applicationDirPath() + "/../Resources/" + QLocale::system().name() + ".qm");
+	translator.load(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + QLocale::system().name() + ".qm");
     a.installTranslator(&translator);
 
 

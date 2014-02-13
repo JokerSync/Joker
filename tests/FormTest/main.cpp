@@ -12,8 +12,5 @@ int main(int argc, char *argv[])
 	MainWindow window;
 	window.show();
 
-	QStringList list;
-	list.at(1);
-
     return a.exec();
 }
