@@ -16,7 +16,15 @@
 
 /*!
  * \brief The VideoStripView class
- * Process the video and strip displays
+ *
+ * This PhGraphicView display the following graphic elements:
+ * - the PhVideoEngine
+ * - the PhGraphicStrip
+ * - the current timecode
+ * - the next text timecode (if a people list is currently selected, the
+ * next text timecode display the one from the list)
+ * - An error message if no video sync is received in sony mode
+ * The view layout is configured via the settings.
  */
 
 
@@ -27,28 +35,30 @@ public:
 	explicit VideoStripView(QWidget *parent = 0);
 
 	/*!
-	 * \brief videoEngine
-	 * \return
-	 * TODO
+	 * \brief Get the view's video engine
+	 *
+	 * \return The PhVideoEngine used by the view.
 	 */
 	PhVideoEngine * videoEngine() { return &_videoEngine;}
+
 	/*!
-	 * \brief strip
-	 * \return
-	 * TODO
+	 * \brief Get the view's strip
+	 *
+	 * \return The PhGraphicStrip used by the view.
 	 */
 	PhGraphicStrip * strip() { return &_strip;}
+
 	/*!
 	 * \brief getSelectedPeoples
-	 * \return
-	 * Return a QList of PhPeople* containing the selected PhPeople
+	 *
+	 * \return A QList of PhPeople* containing the selected PhPeople
 	 */
 	QList<PhPeople*>* getSelectedPeoples();
 
 	/*!
-	 * \brief setSettings
-	 * \param settings
-	 * Attach the given settings
+	 * \brief Attach the given settings to the view
+	 *
+	 * \param The QSettings
 	 */
 	void setSettings(QSettings * settings);
 
