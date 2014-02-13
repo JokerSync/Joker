@@ -26,10 +26,6 @@ class VideoStripView : public PhGraphicView
 public:
 	explicit VideoStripView(QWidget *parent = 0);
 
-
-	/** \addtogroup Getters
-	 *  @{
-	 */
 	/*!
 	 * \brief videoEngine
 	 * \return
@@ -48,12 +44,6 @@ public:
 	 * Return a QList of PhPeople* containing the selected PhPeople
 	 */
 	QList<PhPeople*>* getSelectedPeoples();
-	/** @}*/
-
-
-	/** \addtogroup Setters
-	 *  @{
-	 */
 
 	/*!
 	 * \brief setSettings
@@ -64,22 +54,21 @@ public:
 
 	/*!
 	 * \brief Set the PhSonyController
+	 *
 	 * \param sony The controller
 	 */
 	void setSony(PhSonyController * sony);
 
-	/** @}*/
-
-
 protected:
 	/*!
-	 * \brief init
-	 * \return
-	 * initialize the VideoStripView
+	 * \brief Initialize the VideoStripView elements.
+	 *
+	 * \return True if success false otherwise
 	 */
 	bool init();
 	/*!
-	 * \brief paint
+	 * \brief Paint the VideoStripView elements.
+	 *
 	 * Automatic call, process media information and displays it on the screen.
 	 */
 	void paint();
