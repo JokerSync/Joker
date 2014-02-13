@@ -11,24 +11,51 @@
 
 #include "PhGraphicRect.h"
 
+/*!
+ * \brief Draw a tetragon filed with an OpenGL Texture
+ */
 class PhGraphicTexturedRect : public PhGraphicRect
 {
 public:
-
+	/*!
+	 * \brief PhGraphicTexturedRect constructor
+	 * \param x Upper left corner coordinate
+	 * \param y Upper left corner coordinate
+	 * \param w Desired width
+	 * \param h Desired heigth
+	 */
 	PhGraphicTexturedRect(int x = 0, int y = 0, int w = 0, int h = 0);
 	~PhGraphicTexturedRect();
 
     /**
      * @brief draw
-     * @param px
      * draw the textured rectangle
      */
 	void draw();
 
+	/*!
+	 * \brief setTextureCoordinate
+	 * \param tu
+	 * \param tv
+	 */
 	void setTextureCoordinate(float tu, float tv);
 
+	/*!
+	 * \brief Create a texture from a RGB Buffer
+	 * \param data the source buffer
+	 * \param width the dimensions
+	 * \param height the dimensions
+	 * \return True if succeed, false otherwise
+	 */
 	bool createTextureFromARGBBuffer(void *data, int width, int height);
 
+	/*!
+	 * \brief Create a texture from a YUV Buffer
+	 * \param data the source buffer
+	 * \param width the dimensions
+	 * \param height the dimensions
+	 * \return True if succeed, false otherwise
+	 */
 	bool createTextureFromYUVBuffer(void *data, int width, int height);
 protected:
 
