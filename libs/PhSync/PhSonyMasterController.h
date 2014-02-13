@@ -60,7 +60,6 @@ public slots:
 	 * See : http://www.belle-nuit.com/archives/9pin.html#cueUpWithData
 	 *
 	 * @param frame frame number
-	 * @param tcType type of the timecode
 	 */
 	void cue(PhFrame frame);
 
