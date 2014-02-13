@@ -9,7 +9,8 @@
 #include "PhStrip/PhStripObject.h"
 
 /**
- * A cut is a change in the video from one shot to another. It can be simple (one frame change) or progressive (fade).
+ * A cut is a change in the video from one shot to another.
+ * It can be simple (one frame change) or progressive (fade).
  */
 class PhStripCut : public PhStripObject {
 
