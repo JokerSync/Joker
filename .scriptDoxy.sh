@@ -22,9 +22,9 @@ else
     echo "";
     if [`more doxygen_error.log | wc -l` -lt 10 ]
     then
-        echo " ----------------";
-        echo "| Doxygen founds" `more doxygen_error.log | wc -l` "errors |";
-        echo " ----------------";
+        echo " ----------------------------------------------------------";
+        echo "| Doxygen founds" `more doxygen_error.log | wc -l` "errors (not bad, but you can do better !)|";
+        echo " ----------------------------------------------------------";
     elif [`more doxygen_error.log | wc -l` -lt 100 ]
     then
         echo " ---------------------------------------";
