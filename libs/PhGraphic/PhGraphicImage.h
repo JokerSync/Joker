@@ -20,7 +20,6 @@ public:
 	 * \param filename the source image url
 	 * \param x Upper left corner coordinates of the display rect
 	 * \param y Upper left corner coordinates of the display rect
-	 * \param w Desired width
 	 * \param h Desired height
 	 */
 	PhGraphicImage( QString filename = "", int x = 0, int y =0, int w = 0, int h = 0);

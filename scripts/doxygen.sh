@@ -2,16 +2,10 @@
 # This script runs Doxygen an throw an error if
 # Doxygen generate an error log
 
-echo "Suppress the old error log";
-if [ -f doxygen_error.log ];
-then
-   rm doxygen_error.log;
-fi
-echo "Done";
-
 #run the doxygen
+pwd
 echo "Running Doxygen...";
-doxygen &> /dev/null;
+doxygen .doxygen > /dev/null
 echo "Done";
 
 if [`more doxygen_error.log | wc -l` -eq 0 ];
