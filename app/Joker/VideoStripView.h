@@ -58,7 +58,7 @@ public:
 	/*!
 	 * \brief Attach the given settings to the view
 	 *
-	 * \param The QSettings
+	 * \param settings The QSettings
 	 */
 	void setSettings(QSettings * settings);
 

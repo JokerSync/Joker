@@ -25,7 +25,7 @@ class PropertyDialog : public QDialog
 public:
 	/*!
 	 * \brief The PropertyDialog constructor
-	 * \param The parent object
+	 * \param parent The parent object
 	 */
 	explicit PropertyDialog(QWidget *parent = 0);
 	~PropertyDialog();
