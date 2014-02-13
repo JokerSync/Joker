@@ -1,9 +1,9 @@
-#include "AboutMenu.h"
-#include "ui_AboutMenu.h"
+#include "AboutDialog.h"
+#include "ui_AboutDialog.h"
 
-AboutMenu::AboutMenu(QWidget *parent) :
+AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AboutMenu)
+    ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
 	QString version = APP_NAME;
@@ -12,7 +12,7 @@ AboutMenu::AboutMenu(QWidget *parent) :
 	ui->label->setText(version);
 }
 
-AboutMenu::~AboutMenu()
+AboutDialog::~AboutDialog()
 {
     delete ui;
 }

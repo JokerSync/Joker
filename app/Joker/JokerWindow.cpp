@@ -14,7 +14,7 @@
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
-#include "AboutMenu.h"
+#include "AboutDialog.h"
 #include "PreferencesDialog.h"
 #include "PeopleDialog.h"
 
@@ -549,7 +549,7 @@ void JokerWindow::on_actionAbout_triggered()
 {
 	hideMediaPanel();
 
-	AboutMenu menu;
+	AboutDialog menu;
 	menu.exec();
 
 	fadeInMediaPanel();

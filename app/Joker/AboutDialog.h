@@ -3,31 +3,31 @@
 * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 */
 
-#ifndef ABOUTMENU_H
-#define ABOUTMENU_H
+#ifndef ABOUTDIALOG_H
+#define ABOUTDIALOG_H
 
 #include <QDialog>
 
 namespace Ui {
-class AboutMenu;
+class AboutDialog;
 }
 /*!
- * \brief The AboutMenu class
+ * \brief The AboutDialog class
  * This little class allow Joker to show informations about himself
  */
-class AboutMenu : public QDialog
+class AboutDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	explicit AboutMenu(QWidget *parent = 0);
-	~AboutMenu();
+	explicit AboutDialog(QWidget *parent = 0);
+	~AboutDialog();
 
 private slots:
 	void on_pushButton_clicked();
 
 private:
-	Ui::AboutMenu *ui;
+	Ui::AboutDialog *ui;
 };
 
-#endif // ABOUTMENU_H
+#endif // ABOUTDIALOG_H
