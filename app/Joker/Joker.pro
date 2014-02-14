@@ -61,7 +61,7 @@ FORMS += \
     AboutDialog.ui \
     PreferencesDialog.ui \
 	PropertyDialog.ui \
-    PeopleDialog.ui
+	PeopleDialog.ui
 
 mac{
 	PATH = "/../Resources"
@@ -70,7 +70,7 @@ mac{
 # For the plist version
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
 	QMAKE_POST_LINK += sed -i -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
-
+	QMAKE_POST_LINK += cd $${JOKER_ROOT} && sed -E -i '' -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \".doxygen\" && ./scripts/doxygen.sh && cd $${OUT_PWD};
 
 }
 win32 {
