@@ -39,8 +39,8 @@ public:
 	void resizeGL(int width, int height);
 
 	/**
-	 * \brief Get the refresh rate of the view
-	 * \return The rate (in fps)
+	 * @brief Get the refresh rate of the view
+	 * @return The rate (in fps)
 	 */
 	int refreshRate() {
 		return _frameTickCounter.frequency();
@@ -48,36 +48,36 @@ public:
 
 signals:
 	/**
-	 * \brief emit a signal just before the paint
-	 * \param frequency the effective frequency
+	 * @brief emit a signal just before the paint
+	 * @param frequency the effective frequency
 	 */
 	void beforePaint(int frequency);
 
 protected:
 
 	/**
-	 * \brief Set the settings
-	 * \param settings the desired settings
+	 * @brief Set the settings
+	 * @param settings the desired settings
 	 */
 	void setSettings(QSettings *settings);
 	/**
-	 * \brief The member containing the settings
+	 * @brief The member containing the settings
 	 */
 	QSettings * _settings;
 
 	/**
-	 * \brief initialization, every class have to re-implement it.
-	 * \return true if everything went well, false otherwise.
+	 * @brief initialization, every class have to re-implement it.
+	 * @return true if everything went well, false otherwise.
 	 */
 	virtual bool init() = 0;
 	/**
-	 * \brief paint event, every class have to re-implement it.
-	 * \return true if everything went well, false otherwise.
+	 * @brief paint event, every class have to re-implement it.
+	 * @return true if everything went well, false otherwise.
 	 */
 	virtual void paint() = 0;
 
 	/**
-	 * \brief initializeGL
+	 * @brief initializeGL
 	 * This virtual function is called once before the first call to paintGL() or resizeGL(),
 	 * and then once whenever the widget has been assigned a new QGLContext.
 	 * Reimplement it in a subclass.
@@ -88,7 +88,7 @@ protected:
 	 */
 	void initializeGL();
 	/**
-	 * \brief paintGL
+	 * @brief paintGL
 	 * This virtual function is called whenever the widget needs to be painted.
 	 * Reimplement it in a subclass.
 	 */

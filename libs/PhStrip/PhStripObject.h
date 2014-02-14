@@ -36,8 +36,8 @@ public:
 	 */
 	PhTime getTimeIn();
 	/**
-	 * \brief Set the time in of the PhStripObject
-	 * \param timeIn
+	 * @brief Set the time in of the PhStripObject
+	 * @param timeIn
 	 */
 	void setTimeIn(PhTime timeIn);
 };

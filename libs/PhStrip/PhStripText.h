@@ -17,12 +17,12 @@ class PhStripText : public PhStripPeopleObject {
 public:
 
 	/**
-	 * \brief PhStripText constructor
-	 * \param timeIn the beggining of the text
-	 * \param people the text's speaker
-	 * \param timeOut the end of the text
-	 * \param track the track of the text
-	 * \param content the content of the text
+	 * @brief PhStripText constructor
+	 * @param timeIn the beggining of the text
+	 * @param people the text's speaker
+	 * @param timeOut the end of the text
+	 * @param track the track of the text
+	 * @param content the content of the text
 	 */
 	PhStripText( PhTime timeIn, PhPeople * people, PhTime timeOut, int track,  QString content);
 	/**
@@ -31,8 +31,8 @@ public:
 	 */
 	QString getContent();
 	/**
-	 * \brief Set the text content
-	 * \param content the desired content
+	 * @brief Set the text content
+	 * @param content the desired content
 	 */
 	void setContent(QString content);
 

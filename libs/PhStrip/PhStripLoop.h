@@ -30,9 +30,9 @@ public:
 	 */
 	PhStripLoop();
 	/**
-	 * \brief PhStripLoop constructor
-	 * \param number
-	 * \param TimeIn
+	 * @brief PhStripLoop constructor
+	 * @param number
+	 * @param TimeIn
 	 */
 	PhStripLoop(int number, PhTime TimeIn);
 };

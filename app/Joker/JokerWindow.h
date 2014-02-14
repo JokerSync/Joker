@@ -29,7 +29,7 @@ class JokerWindow;
  */
 
 /**
- * \brief Joker main application window
+ * @brief Joker main application window
  *
  * The JokerWindow class is used to display the rythmo band and the video via the VideoStripView.
  *
@@ -40,51 +40,51 @@ class JokerWindow : public QMainWindow
 
 public:
 	/**
-	 * \brief JokerWindow The JokerWindow constructor
+	 * @brief JokerWindow The JokerWindow constructor
 	 *
-	 * \param settings The application settings
+	 * @param settings The application settings
 	 */
 	explicit JokerWindow(QSettings *settings);
 	~JokerWindow();
 
 	/**
-	 * \brief Open all supported strip file
+	 * @brief Open all supported strip file
 	 *
 	 * First the file existance is checked then,
 	 * If the file is a supported rythmo file, it will call the PhStripDoc function openStripFile().
 	 *
-	 * \param filePath The file path
+	 * @param filePath The file path
 	 */
 	void openFile(QString filePath);
 
 	/**
-	 * \brief Open a video file
+	 * @brief Open a video file
 	 *
 	 * Open a videofile and set the framestamp to the videofile's value or the strip's value if the first one is not usable.
 	 *
-	 * \param videoFile The videofile path
+	 * @param videoFile The videofile path
 	 *
-	 * \return True if the videoFile opened well, false otherwise.
+	 * @return True if the videoFile opened well, false otherwise.
 	 */
 	bool openVideoFile(QString videoFile);
 
 protected:
 	/**
-	 * \brief event Filter
+	 * @brief event Filter
 	 *
 	 * The event filter allow Joker to react with external controls like when the mouse mouve or when a
 	 * file is dropped on the application.
 	 *
-	 * \param sender The object sending the event
-	 * \param event The event
-	 * \return The return boolean is :
+	 * @param sender The object sending the event
+	 * @param event The event
+	 * @return The return boolean is :
 	 *	- True if we totaly handle the event
 	 *  - False if we only want to do pre-treatment.
 	 */
 	bool eventFilter(QObject *sender, QEvent *event);
 
 	/**
-	 * \brief The PhFloatingMediaPanel state enumeration
+	 * @brief The PhFloatingMediaPanel state enumeration
 	 *
 	 * The enumeration is used to handle the different state of the PhFloatingMediaPanel:
 	 * visible, hidding and hidden for a best fade-in and fade-out effect.

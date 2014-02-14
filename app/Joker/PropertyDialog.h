@@ -15,7 +15,7 @@ class PropertyDialog;
 }
 
 /**
- * \brief The PropertyDialog class
+ * @brief The PropertyDialog class
  * Show some properties of the strip file and the matching video
  */
 class PropertyDialog : public QDialog
@@ -24,32 +24,32 @@ class PropertyDialog : public QDialog
 
 public:
 	/**
-	 * \brief The PropertyDialog constructor
-	 * \param parent The parent object
+	 * @brief The PropertyDialog constructor
+	 * @param parent The parent object
 	 */
 	explicit PropertyDialog(QWidget *parent = 0);
 	~PropertyDialog();
 
 	/**
-	 * \brief Set the document
+	 * @brief Set the document
 	 *
 	 * Attach the given doc to the window in order to access informations.
 	 *
-	 * \param doc The current PhStripDoc
+	 * @param doc The current PhStripDoc
 	 */
 	void setDoc(PhStripDoc * doc);
 	/**
-	 * \brief Set the video engine
+	 * @brief Set the video engine
 	 *
 	 * Attach the given video engine to the window in order to access informations.
 	 *
-	 * \param videoEngine
+	 * @param videoEngine
 	 */
 	void setVideoEngine(PhVideoEngine *videoEngine);
 
 protected:
 	/**
-	 * \brief Called when the dialog is shown
+	 * @brief Called when the dialog is shown
 	 *
 	 * Set up the dialog with the revelent informations.
 	 */

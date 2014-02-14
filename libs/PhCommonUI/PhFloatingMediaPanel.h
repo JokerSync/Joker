@@ -11,7 +11,7 @@
 #include "PhMediaPanel.h"
 
 /**
- * \brief The PhFloatingMediaPanel class
+ * @brief The PhFloatingMediaPanel class
  *
  * It provides a nice media panel which can control the desired slave (any player).
  *
@@ -23,11 +23,11 @@ class PhFloatingMediaPanel : public PhMediaPanel
 public:
 	explicit PhFloatingMediaPanel(QWidget *parent = 0);
 	/**
-	 * \brief Check if mouse button is pressed on PhFloatingMediaPanel
+	 * @brief Check if mouse button is pressed on PhFloatingMediaPanel
 	 *
 	 * Allow any PhFloatingMediaPanel user to know if the mouse is currently pressed over it.
 	 *
-	 * \return True if the mouse button is pressed, else otherwise
+	 * @return True if the mouse button is pressed, else otherwise
 	 */
 	bool isMousePressed();
 

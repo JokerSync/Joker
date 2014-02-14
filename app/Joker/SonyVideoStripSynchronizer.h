@@ -11,7 +11,7 @@
 #include "PhTools/PhClock.h"
 
 /**
- * \brief The VideoStripSynchronizer class
+ * @brief The VideoStripSynchronizer class
  *
  * Provide a synchronisation system between the strip and the video.
  */
@@ -20,7 +20,7 @@ class VideoStripSynchronizer : public QObject
 	Q_OBJECT
 public:
 	/**
-	 * \brief The different kind of synchronization enumeration used by Joker
+	 * @brief The different kind of synchronization enumeration used by Joker
 	 */
 	enum SyncType {
 		NoSync = 0,
@@ -33,44 +33,44 @@ public:
 	VideoStripSynchronizer();
 
 	/**
-	 * \brief Set the strip clock
+	 * @brief Set the strip clock
 	 *
-	 * \param clock The strip clock
+	 * @param clock The strip clock
 	 */
 	void setStripClock(PhClock *clock);
 
 	/**
-	 * \brief Get the strip clock
-	 * \return The strip clock
+	 * @brief Get the strip clock
+	 * @return The strip clock
 	 */
 	PhClock * stripClock() {
 		return _stripClock;
 	}
 
 	/**
-	 * \brief Set the videoClock
-	 * \param clock The video clock
+	 * @brief Set the videoClock
+	 * @param clock The video clock
 	 */
 	void setVideoClock(PhClock *clock);
 
 	/**
-	 * \brief Get the video clock
-	 * \return The video clock
+	 * @brief Get the video clock
+	 * @return The video clock
 	 */
 	PhClock * videoClock() {
 		return _videoClock;
 	}
 
 	/**
-	 * \brief Set the synchronization clock
-	 * \param clock The synchronization clock
-	 * \param type The desired PhTimeCodeType
+	 * @brief Set the synchronization clock
+	 * @param clock The synchronization clock
+	 * @param type The desired PhTimeCodeType
 	 */
 	void setSyncClock(PhClock *clock, SyncType type);
 
 	/**
-	 * \brief Get the Synchronization clock
-	 * \return The Synchronization clock.
+	 * @brief Get the Synchronization clock
+	 * @return The Synchronization clock.
 	 */
 	PhClock * syncClock() {
 		return _syncClock;

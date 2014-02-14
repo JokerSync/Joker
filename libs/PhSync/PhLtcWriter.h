@@ -19,7 +19,7 @@
 #define SAMPLE_RATE 48000
 
 /**
- * \brief Send master LTC signal
+ * @brief Send master LTC signal
  *
  */
 class PhLtcWriter : public QObject
@@ -27,32 +27,32 @@ class PhLtcWriter : public QObject
 	Q_OBJECT
 public:
 	/**
-	 * \brief PhLtcWriter constructor
-	 * \param tcType the timecode type
-	 * \param parent the reader's parent
+	 * @brief PhLtcWriter constructor
+	 * @param tcType the timecode type
+	 * @param parent the reader's parent
 	 */
 	explicit PhLtcWriter(PhTimeCodeType tcType, QObject *parent = 0);
 	/**
-	 * \brief Initialize the writer
+	 * @brief Initialize the writer
 	 *
 	 * It initialize the writer on the given input device if it's found,
 	 * or take the default output device if not.
-	 * \param deviceName The desired output device
-	 * \return True if succeed, false otherwise
+	 * @param deviceName The desired output device
+	 * @return True if succeed, false otherwise
 	 */
 	bool init(QString deviceName = "");
 	/**
-	 * \brief close the writer
+	 * @brief close the writer
 	 */
 	void close();
 	/**
-	 * \brief Get the output list
-	 * \return Return all the output devices
+	 * @brief Get the output list
+	 * @return Return all the output devices
 	 */
 	static QList<QString> outputList();
 	/**
-	 * \brief Get the writer clock
-	 * \return The writer clock
+	 * @brief Get the writer clock
+	 * @return The writer clock
 	 */
 	PhClock *clock();
 

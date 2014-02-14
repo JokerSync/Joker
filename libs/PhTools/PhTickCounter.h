@@ -18,8 +18,8 @@ public:
 	PhTickCounter();
 
 	/**
-	 * \brief Get frequency
-	 * \return the measured frequency
+	 * @brief Get frequency
+	 * @return the measured frequency
 	 */
 	int frequency() {
 		return _frequency;
@@ -27,7 +27,7 @@ public:
 
 public slots:
 	/**
-	 * \brief Handle the tick
+	 * @brief Handle the tick
 	 *
 	 * This slot must be called every time the measured action occurs
 	 */
