@@ -6,7 +6,7 @@
 #ifndef PHPICTURETOOLS_H
 #define PHPICTURETOOLS_H
 
-/*!
+/**
  * \brief The PhPictureTools class
  *
  * It provides a lot of useful picture tools.
@@ -15,7 +15,7 @@
 class PhPictureTools
 {
 public:
-	/*!
+	/**
 	 * \brief Convert from RGB to YUV
 	 * \param rgb pointer to the source frame
 	 * \param yuv pointer to the destination frame
@@ -23,13 +23,13 @@ public:
 	 * \param luminance desired luminance value
 	 */
 	static void RGBtoYUV(const unsigned char *rgb, int *yuv, int monochrome, int luminance);
-	/*!
+	/**
 	 * \brief Convert from YUV to RGB
 	 * \param yuv pointer to the source frame
 	 * \param rgb pointer to the destination frame
 	 */
 	static void YUVtoRGB(const int *yuv, unsigned char *rgb);
-	/*!
+	/**
 	 * \brief Convert from RGB to YV12
 	 * \param rgbIn pointer to the source frame
 	 * \param yuvOut pointer to the destination frame
@@ -39,7 +39,7 @@ public:
 	 * \param luminance desired luminance value
 	 */
 	static void ConvertRGBtoYV12(const unsigned char *rgbIn, unsigned char *yuvOut, int w, int h, int monochrome, int luminance);
-	/*!
+	/**
 	 * \brief Convert from YV12 to RGB
 	 * \param yuvIn pointer to the source frame
 	 * \param rgbOut pointer to the destination frame
@@ -47,7 +47,7 @@ public:
 	 * \param h source height
 	 */
 	static void ConvertYV12toRGB(const unsigned char *yuvIn, unsigned char *rgbOut, int w, int h);
-	/*!
+	/**
 	 * \brief generate a RGB pattern
 	 *
 	 * The pattern correspon to a red frame.
@@ -57,7 +57,7 @@ public:
 	 * \return a pointer to the RGB frame
 	 */
 	static unsigned char  * generateRGBPattern(int w, int h);
-	/*!
+	/**
 	 * \brief generate a YUV pattern
 	 * \param w desired width
 	 * \param h desired height

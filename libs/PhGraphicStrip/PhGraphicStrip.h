@@ -66,7 +66,7 @@ public:
 	 */
 	PhClock * clock();
 
-	/*!
+	/**
 	 * \brief Set the settings
 	 * \param settings desired settings
 	 */
@@ -78,7 +78,7 @@ public:
 	 * @return true if the operation succeeds, false otherwise.
 	 */
 	bool setFontFile(QString fontFile);
-	/*!
+	/**
 	 * \brief Initializisation of the PhGraphicStrip
 	 *
 	 * Call clearData() then :
@@ -90,7 +90,7 @@ public:
 	 */
 	bool init();
 
-	/*!
+	/**
 	 * \brief draw the strip
 	 *
 	 * It compute all the necessary data for the current frame, skipped
@@ -103,7 +103,7 @@ public:
 	 */
 	void draw(int x, int y, int width, int height);
 
-	/*!
+	/**
 	 * \brief Set speed of the strip
 	 *
 	 * Allow the user to vary the speed of the strip (faster or slower)
@@ -113,12 +113,12 @@ public:
 	 */
 	void setPixelPerFrame(long value);
 
-	/*!
+	/**
 	 * \brief Get the font of the strip objects
 	 * \return the font
 	 */
 	PhFont * getTextFont();
-	/*!
+	/**
 	 * \brief Get the "head up display" Font
 	 *
 	 * The HUD font is used for all text printed on the screen which is not
@@ -131,7 +131,7 @@ public:
 	 */
 	PhFont * getHUDFont();
 
-	/*!
+	/**
 	 * \brief setSelectedPeople
 	 * Selected people will be displayed on the upper left corner, the others ones
 	 * will be shaded. The next time code - if displayed - will be the next element

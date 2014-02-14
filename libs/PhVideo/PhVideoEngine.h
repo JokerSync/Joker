@@ -29,7 +29,7 @@ extern "C" {
 #include "PhTools/PhTickCounter.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
 
-/*!
+/**
  * \brief The PhVideoEngine class
  *
  * It provide engine which compute the video from a file to an openGL texture
@@ -42,60 +42,60 @@ public:
 	~PhVideoEngine();
 
 	// Properties
-	/*!
+	/**
 	 * \brief Get the video file name
 	 * \return the video file name
 	 */
 	QString fileName() {
 		return _fileName;
 	}
-	/*!
+	/**
 	 * \brief Get the clock
 	 * \return the clock
 	 */
 	PhClock* clock() {
 		return &_clock;
 	}
-	/*!
+	/**
 	 * \brief Get first frame
 	 * \return the first frame of the video file
 	 */
 	PhFrame firstFrame() {
 		return _firstFrame;
 	}
-	/*!
+	/**
 	 * \brief Get last frame
 	 * \return the last frame of the video file
 	 */
 	PhFrame lastFrame() {
 		return _firstFrame + length() - 1;
 	}
-	/*!
+	/**
 	 * \brief Get the length
 	 * \return the length of the video
 	 */
 	PhFrame length();
-	/*!
+	/**
 	 * \brief Get the codec name
 	 * \return the codec name
 	 */
 	QString codecName();
-	/*!
+	/**
 	 * \brief Get the width
 	 * \return the PhVideoEngine width (not necessary the video width)
 	 */
 	int width();
-	/*!
+	/**
 	 * \brief Get the height
 	 * \return the PhVideoEngine height (not necessary the video height)
 	 */
 	int height();
-	/*!
+	/**
 	 * \brief get frame per second
 	 * \return the FPS of the video file
 	 */
 	float framePerSecond();
-	/*!
+	/**
 	 * \brief Get refreshRate
 	 * \return Return the refresh rate of the PhVideoEngine
 	 */
@@ -103,12 +103,12 @@ public:
 		return _videoFrameTickCounter.frequency();
 	}
 
-	/*!
+	/**
 	 * \brief Set the settings
 	 * \param settings the desired QSettings
 	 */
 	void setSettings(QSettings *settings);
-	/*!
+	/**
 	 * \brief Set first frame
 	 * \param frame the new first frame
 	 */
@@ -121,18 +121,18 @@ public:
 	 * @return True if the file was opened successfully, false otherwise
 	 */
 	bool open(QString fileName);
-	/*!
+	/**
 	 * \brief Close
 	 *
 	 * Close the PhVideoEngine, freeing all objects
 	 */
 	void close();
-	/*!
+	/**
 	 * \brief Prompt if the PhVideoEngine is ready
 	 * \return True if the PhVideoEngine is ready, false otherwise
 	 */
 	bool ready();
-	/*!
+	/**
 	 * \brief draw the video depending on the parameters
 	 * \param x coordinates of the upperleft corner
 	 * \param y coordinates of the upperleft corner

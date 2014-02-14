@@ -9,7 +9,7 @@
 #include "PhGraphic/PhGraphicView.h"
 #include "PhGraphicStrip/PhGraphicStrip.h"
 
-/*!
+/**
  * \brief Provide a view of the PhGraphicStrip class
  */
 class PhGraphicStripView : public PhGraphicView
@@ -18,7 +18,7 @@ class PhGraphicStripView : public PhGraphicView
 public:
 	explicit PhGraphicStripView(QWidget *parent = 0);
 
-	/*!
+	/**
 	 * \brief Get the PhGraphicStrip attached to the view
 	 * \return
 	 */
@@ -26,12 +26,12 @@ public:
 		return &_strip;
 	}
 protected:
-	/*!
+	/**
 	 * \brief Initializisation of the PhGraphicStrip
 	 * \return
 	 */
 	bool init();
-	/*!
+	/**
 	 * \brief call the PhGraphicView's method paint()
 	 */
 	void paint();

@@ -16,7 +16,7 @@ class PhStripText : public PhStripPeopleObject {
 
 public:
 
-	/*!
+	/**
 	 * \brief PhStripText constructor
 	 * \param timeIn the beggining of the text
 	 * \param people the text's speaker
@@ -30,7 +30,7 @@ public:
 	 * @return _content
 	 */
 	QString getContent();
-	/*!
+	/**
 	 * \brief Set the text content
 	 * \param content the desired content
 	 */

@@ -8,14 +8,14 @@
 
 #include "PhGraphicTexturedRect.h"
 
-/*!
+/**
  * \brief Provide a way to display the images using OpenGL
  */
 class PhGraphicImage : public PhGraphicTexturedRect
 {
 public:
 
-	/*!
+	/**
 	 * \brief PhGraphicImage constructor
 	 * \param filename the source image url
 	 * \param x Upper left corner coordinates of the display rect
@@ -25,12 +25,12 @@ public:
 	 */
 	PhGraphicImage( QString filename = "", int x = 0, int y = 0, int w = 0, int h = 0);
 
-	/*!
+	/**
 	 * \brief Set the file name
 	 * \param filename
 	 */
 	void setFilename(QString filename);
-	/*!
+	/**
 	 * \brief Get the file name
 	 * \return the file name
 	 */

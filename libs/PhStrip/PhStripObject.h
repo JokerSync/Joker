@@ -35,7 +35,7 @@ public:
 	 * @return _timeIn
 	 */
 	PhTime getTimeIn();
-	/*!
+	/**
 	 * \brief Set the time in of the PhStripObject
 	 * \param timeIn
 	 */

@@ -15,7 +15,7 @@
 class PhStripOff : public PhStripPeopleObject {
 
 public:
-	/*!
+	/**
 	 * \brief PhStripOff constructor
 	 * \param timeIn the beggining of the PhStripOff
 	 * \param people the corresponding PhPeople

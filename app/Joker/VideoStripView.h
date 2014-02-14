@@ -14,7 +14,7 @@
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSonyController.h"
 
-/*!
+/**
  * \brief The VideoStripView class
  *
  * This PhGraphicView display the following graphic elements:
@@ -34,7 +34,7 @@ class VideoStripView : public PhGraphicView
 public:
 	explicit VideoStripView(QWidget *parent = 0);
 
-	/*!
+	/**
 	 * \brief Get the view's video engine
 	 *
 	 * \return The PhVideoEngine used by the view.
@@ -43,7 +43,7 @@ public:
 		return &_videoEngine;
 	}
 
-	/*!
+	/**
 	 * \brief Get the view's strip
 	 *
 	 * \return The PhGraphicStrip used by the view.
@@ -52,21 +52,21 @@ public:
 		return &_strip;
 	}
 
-	/*!
+	/**
 	 * \brief getSelectedPeoples
 	 *
 	 * \return A QList of PhPeople* containing the selected PhPeople
 	 */
 	QList<PhPeople*>* getSelectedPeoples();
 
-	/*!
+	/**
 	 * \brief Attach the given settings to the view
 	 *
 	 * \param settings The QSettings
 	 */
 	void setSettings(QSettings * settings);
 
-	/*!
+	/**
 	 * \brief Set the PhSonyController
 	 *
 	 * \param sony The controller
@@ -74,13 +74,13 @@ public:
 	void setSony(PhSonyController * sony);
 
 protected:
-	/*!
+	/**
 	 * \brief Initialize the VideoStripView elements.
 	 *
 	 * \return True if success false otherwise
 	 */
 	bool init();
-	/*!
+	/**
 	 * \brief Paint the VideoStripView elements.
 	 *
 	 * Automatic call, process media information and displays it on the screen.

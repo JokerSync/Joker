@@ -12,7 +12,7 @@
 namespace Ui {
 class PeopleDialog;
 }
-/*!
+/**
  * \brief PhPeople selection dialog.
  *
  * This modal dialog allow the final user to select or deselect any PhPeople coming from the PhStripDoc.
@@ -24,7 +24,7 @@ class PeopleDialog : public QDialog
 	Q_OBJECT
 
 public:
-	/*!
+	/**
 	 * \brief The PeopleDialog constructor
 	 * \param parent The parent object
 	 * \param doc The current PhStripDoc
