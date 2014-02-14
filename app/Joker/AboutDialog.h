@@ -12,7 +12,7 @@ namespace Ui {
 class AboutDialog;
 }
 /**
- * \brief The AboutDialog class
+ * @brief The AboutDialog class
  * This little class allow Joker to show informations about himself
  */
 class AboutDialog : public QDialog

@@ -13,7 +13,7 @@ namespace Ui {
 class PeopleDialog;
 }
 /**
- * \brief PhPeople selection dialog.
+ * @brief PhPeople selection dialog.
  *
  * This modal dialog allow the final user to select or deselect any PhPeople coming from the PhStripDoc.
  * Selected people will be displayed on the left. Other people will be grayed out on the strip.
@@ -25,10 +25,10 @@ class PeopleDialog : public QDialog
 
 public:
 	/**
-	 * \brief The PeopleDialog constructor
-	 * \param parent The parent object
-	 * \param doc The current PhStripDoc
-	 * \param peopleList The current selected people list
+	 * @brief The PeopleDialog constructor
+	 * @param parent The parent object
+	 * @param doc The current PhStripDoc
+	 * @param peopleList The current selected people list
 	 */
 	explicit PeopleDialog(QWidget *parent, PhStripDoc* doc, QList<PhPeople*>* peopleList);
 

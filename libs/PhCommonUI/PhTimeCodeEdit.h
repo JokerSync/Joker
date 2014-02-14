@@ -13,7 +13,7 @@
 #include "PhTools/PhTimeCode.h"
 
 /**
- * \brief The PhTimeCodeEdit class
+ * @brief The PhTimeCodeEdit class
  *
  * Provides an UI to edit a timecode, at this moment the verification
  * is done when the widget is quit.
@@ -26,19 +26,19 @@ public:
 	explicit PhTimeCodeEdit(QWidget *parent = 0);
 
 	/**
-	 * \brief set Frame
+	 * @brief set Frame
 	 *
 	 * The corresponding timecode will be displayed on the window.
 	 * For example, if frame = 32 and tcType = PhTimeCodeType24, the
 	 * window will display 00:00:01:12
-	 * \param frame the desired PhFrame
-	 * \param tcType the corresponding PhTimeCodeType
+	 * @param frame the desired PhFrame
+	 * @param tcType the corresponding PhTimeCodeType
 	 */
 	void setFrame(PhFrame frame, PhTimeCodeType tcType);
 
 	/**
-	 * \brief Check the timecode
-	 * \return true if the input is correct, false otherwise
+	 * @brief Check the timecode
+	 * @return true if the input is correct, false otherwise
 	 */
 	bool isTimeCode();
 	/**
@@ -50,9 +50,9 @@ public:
 signals:
 
 	/**
-	 * \brief Send a signal when the text box frame changed
-	 * \param frame the new frame
-	 * \param tcType the new PhTimeCodeType
+	 * @brief Send a signal when the text box frame changed
+	 * @param frame the new frame
+	 * @param tcType the new PhTimeCodeType
 	 */
 	void frameChanged(PhFrame frame, PhTimeCodeType tcType);
 

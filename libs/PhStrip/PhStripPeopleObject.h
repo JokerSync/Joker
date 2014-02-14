@@ -10,18 +10,18 @@
 #include "PhStrip/PhStripObject.h"
 
 /**
- * \brief The PhStripPeopleObject class
+ * @brief The PhStripPeopleObject class
  */
 class PhStripPeopleObject : public PhStripObject {
 
 public:
 
 	/**
-	 * \brief PhStripPeopleObject constructor
-	 * \param timeIn the beggining of the PhStripPeopleObject
-	 * \param people the corresponding PhPeople
-	 * \param timeOut the end of the PhStripPeopleObject
-	 * \param track the track of the PhStripPeopleObject
+	 * @brief PhStripPeopleObject constructor
+	 * @param timeIn the beggining of the PhStripPeopleObject
+	 * @param people the corresponding PhPeople
+	 * @param timeOut the end of the PhStripPeopleObject
+	 * @param track the track of the PhStripPeopleObject
 	 */
 	PhStripPeopleObject(PhTime timeIn, PhPeople * people = NULL, PhTime timeOut = 0, int track = 0);
 	/**
@@ -46,22 +46,22 @@ public:
 		return _timeOut;
 	}
 	/**
-	 * \brief Set the PhPeople
-	 * \param people
+	 * @brief Set the PhPeople
+	 * @param people
 	 */
 	void setPeople(PhPeople * people){
 		_people = people;
 	}
 	/**
-	 * \brief Set the track
-	 * \param track
+	 * @brief Set the track
+	 * @param track
 	 */
 	void setTrack(int track){
 		_track = track;
 	}
 	/**
-	 * \brief Set the time out
-	 * \param timeOut
+	 * @brief Set the time out
+	 * @param timeOut
 	 */
 	void setTimeOut(int timeOut){
 		_timeOut = timeOut;
