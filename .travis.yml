@@ -15,8 +15,7 @@ script:
 #- qmake tests/GraphicStripSyncTest/GraphicStripSyncTest.pro
 - qmake ../app/Joker/Joker.pro
 - make
-- cd ..
-- ./.scriptDoxy.sh
+- cd .. 
 notifications:
  irc: "irc.freenode.net#phonations"
  email: false
