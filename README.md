@@ -35,6 +35,16 @@ You need to have [Xcode](https://developer.apple.com/xcode/) installed and the c
     
 ### The dependencies :
 
+You can install the dependencies automatically or manually:
+
+#### Automatic installation
+
+Just run the //bootstrap// script:
+
+    ./scripts/bootstrap.sh
+    
+#### Manual install
+
 You can install all the dependencies via __brew__ :
 
     brew install sdl2 sdl2_ttf sdl2_image libav portaudio
@@ -45,14 +55,15 @@ You can install all the dependencies via __brew__ :
 Then as __macdeployqt__ doesn't work well with brew, you'll have to change the libs permissions
 
     find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod 644 {} \;
-   
-   
-#### LTC libs
 
 Unfortunatly, the __ltc__ libs are not (yet) installable via brew but this is not a big deal.
-Clone the repo :
+Get the latest release:
 
-    git clone https://github.com/x42/libltc.git
+    wget https://github.com/x42/libltc/releases/download/v1.1.3/libltc-1.1.3.tar.gz
+    
+Extract it:
+
+    tar -xvzf libltc-1.1.3.tar.gz
     
 Then configure the environment :
 
@@ -60,8 +71,8 @@ Then configure the environment :
     
 And finaly configure and install :
 
-    ./configure && make
-    
+    ./configure && make && sudo make install
+
 ### The Leap SDK _(optionnal)_
 
 Before any download or installation, you must know that the **leap** have been skipped for the moment.
