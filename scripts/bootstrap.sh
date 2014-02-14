@@ -18,3 +18,13 @@ sudo apt-get install -qq qt5-default qtdeclarative5-dev
 
 fi
 
+echo "Install libltc"
+wget https://github.com/x42/libltc/releases/download/v1.1.3/libltc-1.1.3.tar.gz
+tar -xvzf libltc-1.1.3.tar.gz
+cd libltc-1.1.3
+./configure
+make
+sudo make install
+cd ..
+rm libltc-1.1.3.tar.gz
+rm -rf libltc-1.1.3
