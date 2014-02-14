@@ -1,13 +1,13 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include "PhTimecodeEdit.h"
 
 PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
-    QLineEdit(parent),
-    _tcType(PhTimeCodeType25)
+	QLineEdit(parent),
+	_tcType(PhTimeCodeType25)
 {
 
 	connect(this, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged(QString)));
@@ -40,8 +40,7 @@ PhFrame PhTimeCodeEdit::frame()
 
 void PhTimeCodeEdit::onTextChanged(QString text)
 {
-	if(isTimeCode())
-	{
+	if(isTimeCode()) {
 		PhFrame frame = PhTimeCode::frameFromString(text, _tcType);
 		emit frameChanged(frame, _tcType);
 	}

@@ -2,10 +2,10 @@
 #include "ui_AboutDialog.h"
 
 AboutDialog::AboutDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::AboutDialog)
+	QDialog(parent),
+	ui(new Ui::AboutDialog)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
 	QString version = APP_NAME;
 	version += " v";
 	version += APP_VERSION;
@@ -14,5 +14,5 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
 AboutDialog::~AboutDialog()
 {
-    delete ui;
+	delete ui;
 }

@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef TICKCOUNTER_H
 #define TICKCOUNTER_H
@@ -21,7 +21,9 @@ public:
 	 * \brief Get frequency
 	 * \return the measured frequency
 	 */
-	int frequency() { return _frequency; }
+	int frequency() {
+		return _frequency;
+	}
 
 public slots:
 	/*!

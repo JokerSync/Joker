@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	MainView mainView(&settings);
 	mainView.resize(800, 600);
 
-    mainView.show();
+	mainView.show();
 
 	QString fileName = "";
 	if (argc > 1)
@@ -24,5 +24,5 @@ int main(int argc, char *argv[])
 	if(QFile(fileName).exists())
 		mainView.openFile(fileName);
 
-    return app.exec();
+	return app.exec();
 }

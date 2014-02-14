@@ -12,16 +12,14 @@ PreferencesPanel::PreferencesPanel(QString audioOutput, QString audioInput, QWid
 	foreach(QString output, PhLtcWriter::outputList())
 	{
 		ui->comboBoxOutput->addItem(output);
-		if(output == audioOutput)
-		{
+		if(output == audioOutput) {
 			ui->comboBoxOutput->setCurrentIndex(ui->comboBoxOutput->children().length());
 		}
 	}
 	foreach(QString input, PhLtcReader::inputList())
 	{
 		ui->comboBoxInput->addItem(input);
-		if(input == audioInput)
-		{
+		if(input == audioInput) {
 			ui->comboBoxInput->setCurrentIndex(ui->comboBoxInput->children().length());
 		}
 	}

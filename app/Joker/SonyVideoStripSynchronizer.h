@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef SONYVIDEOSTRIPSYNCHRONIZER_H
 #define SONYVIDEOSTRIPSYNCHRONIZER_H
@@ -28,7 +28,7 @@ public:
 #if USE_LTC
 		LTC = 2,
 #endif
-	} ;
+	};
 
 	VideoStripSynchronizer();
 
@@ -43,7 +43,9 @@ public:
 	 * \brief Get the strip clock
 	 * \return The strip clock
 	 */
-	PhClock * stripClock() { return _stripClock; }
+	PhClock * stripClock() {
+		return _stripClock;
+	}
 
 	/*!
 	 * \brief Set the videoClock
@@ -55,20 +57,24 @@ public:
 	 * \brief Get the video clock
 	 * \return The video clock
 	 */
-	PhClock * videoClock() { return _videoClock; }
+	PhClock * videoClock() {
+		return _videoClock;
+	}
 
 	/*!
 	 * \brief Set the synchronization clock
 	 * \param clock The synchronization clock
 	 * \param type The desired PhTimeCodeType
 	 */
-    void setSyncClock(PhClock *clock, SyncType type);
+	void setSyncClock(PhClock *clock, SyncType type);
 
 	/*!
 	 * \brief Get the Synchronization clock
 	 * \return The Synchronization clock.
 	 */
-    PhClock * syncClock() { return _syncClock; }
+	PhClock * syncClock() {
+		return _syncClock;
+	}
 
 private slots:
 	void onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType);
@@ -82,7 +88,7 @@ private:
 	int _syncType;
 	PhClock * _stripClock;
 	PhClock * _videoClock;
-    PhClock * _syncClock;
+	PhClock * _syncClock;
 	bool _settingStripFrame;
 	bool _settingVideoFrame;
 	bool _settingSonyFrame;

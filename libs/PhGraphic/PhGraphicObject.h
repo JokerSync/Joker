@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHGRAPHICOBJECT_H
 #define PHGRAPHICOBJECT_H
@@ -42,24 +42,24 @@ public:
 	virtual void dispose();
 
 	/**
-     * @brief draw
-     * virtual method called to draw objects
-     */
+	 * @brief draw
+	 * virtual method called to draw objects
+	 */
 	virtual void draw() = 0;
 
-    /**
-     * @brief setPosition
-     * @param x
-     * @param y
-     * @param z
-     * set the position of the PhGraphicObject using setX() setY() setZ()
-     */
+	/**
+	 * @brief setPosition
+	 * @param x
+	 * @param y
+	 * @param z
+	 * set the position of the PhGraphicObject using setX() setY() setZ()
+	 */
 	void setPosition(int x, int y, int z);
-    /**
-     * @brief setX
-     * @param x
-     */
-    void setX(int x);
+	/**
+	 * @brief setX
+	 * @param x
+	 */
+	void setX(int x);
 	/**
 	 * @brief getX
 	 * @return
@@ -67,10 +67,10 @@ public:
 	int getX();
 
 	/**
-     * @brief setY
-     * @param y
-     */
-    void setY(int y);
+	 * @brief setY
+	 * @param y
+	 */
+	void setY(int y);
 	/**
 	 * @brief getY
 	 * @return
@@ -78,16 +78,16 @@ public:
 	int getY();
 
 	/**
-     * @brief setZ
-     * @param z
-     */
-    void setZ(int z);
+	 * @brief setZ
+	 * @param z
+	 */
+	void setZ(int z);
 
-    /**
-     * @brief getZ
-     * @return
-     */
-    int getZ();
+	/**
+	 * @brief getZ
+	 * @return
+	 */
+	int getZ();
 
 	/*!
 	 * \brief Set the color of the object
@@ -103,21 +103,21 @@ public:
 
 protected:
 
-    /**
-     * @brief _x
-     * is the PhGraphicObject horizontal position
-     */
-    int _x;
-    /**
-     * @brief _y
-     * is the PhGraphicObject vertical position
-     */
-    int _y;
-    /**
-     * @brief _z
-     * is the PhGrapicObject depth
-     */
-    int _z;
+	/**
+	 * @brief _x
+	 * is the PhGraphicObject horizontal position
+	 */
+	int _x;
+	/**
+	 * @brief _y
+	 * is the PhGraphicObject vertical position
+	 */
+	int _y;
+	/**
+	 * @brief _z
+	 * is the PhGrapicObject depth
+	 */
+	int _z;
 
 	/**
 	 * @brief _color

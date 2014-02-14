@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHCLOCK_H
 #define PHCLOCK_H
@@ -67,22 +67,30 @@ public:
 	 * \brief Get the timecode type
 	 * \return The PhTimeCodeType of the clock
 	 */
-	PhTimeCodeType timeCodeType() { return _tcType;}
+	PhTimeCodeType timeCodeType() {
+		return _tcType;
+	}
 	/*!
 	 * \brief Get the time
 	 * \return The PhTime of the clock
 	 */
-	PhTime time() const	{ return _time; }
+	PhTime time() const {
+		return _time;
+	}
 	/*!
 	 * \brief Get the timescale
 	 * \return The PhTimeScale
 	 */
-	PhTimeScale timeScale() const { return _timeScale; }
+	PhTimeScale timeScale() const {
+		return _timeScale;
+	}
 	/*!
 	 * \brief Get the clock rate
 	 * \return The clock PhRate
 	 */
-	PhRate rate() const { return _rate; }
+	PhRate rate() const {
+		return _rate;
+	}
 	/*!
 	 * \brief Get the milliseconds of the clock
 	 * \return \f${\large \frac{time * 1000}{timeScale}}\f$

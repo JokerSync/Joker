@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHGRAPHICSTRIPVIEW_H
 #define PHGRAPHICSTRIPVIEW_H
@@ -22,7 +22,9 @@ public:
 	 * \brief Get the PhGraphicStrip attached to the view
 	 * \return
 	 */
-	PhGraphicStrip * strip() { return &_strip;}
+	PhGraphicStrip * strip() {
+		return &_strip;
+	}
 protected:
 	/*!
 	 * \brief Initializisation of the PhGraphicStrip

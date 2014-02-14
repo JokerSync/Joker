@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHGRAPHICVIEW_H
 #define PHGRAPHICVIEW_H
@@ -21,13 +21,13 @@
  */
 class PhGraphicView : public QGLWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    /**
-     * PhGraphicView constructor.
-     * @param parent Parent object.
-     */
-    explicit PhGraphicView(QWidget *parent = 0);
+	/**
+	 * PhGraphicView constructor.
+	 * @param parent Parent object.
+	 */
+	explicit PhGraphicView(QWidget *parent = 0);
 	~PhGraphicView();
 
 	/**
@@ -42,7 +42,9 @@ public:
 	 * \brief Get the refresh rate of the view
 	 * \return The rate (in fps)
 	 */
-	int refreshRate() { return _frameTickCounter.frequency();}
+	int refreshRate() {
+		return _frameTickCounter.frequency();
+	}
 
 signals:
 	/*!
@@ -97,11 +99,11 @@ private slots:
 
 private:
 
-    /**
-     * @brief t_Timer
-     * used to draw
-     */
-    QTimer *t_Timer;
+	/**
+	 * @brief t_Timer
+	 * used to draw
+	 */
+	QTimer *t_Timer;
 	PhTickCounter _frameTickCounter;
 };
 

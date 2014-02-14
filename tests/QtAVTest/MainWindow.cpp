@@ -34,8 +34,7 @@ bool MainWindow::openFile(QString fileName)
 void MainWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, "Open...");
-	if(QFile::exists(fileName))
-	{
+	if(QFile::exists(fileName)) {
 		if(!openFile(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
@@ -43,8 +42,7 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionPlay_pause_triggered()
 {
-	if(mpPlayer->isLoaded())
-	{
+	if(mpPlayer->isLoaded()) {
 		qreal speed = mpPlayer->speed();
 		if(speed == 0)
 			mpPlayer->play();

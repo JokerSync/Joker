@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHSTRIPTEXT_H
 #define PHSTRIPTEXT_H
@@ -25,10 +25,10 @@ public:
 	 * \param content the content of the text
 	 */
 	PhStripText( PhTime timeIn, PhPeople * people, PhTime timeOut, int track,  QString content);
-    /**
+	/**
 	 * @brief Get the text content
-     * @return _content
-     */
+	 * @return _content
+	 */
 	QString getContent();
 	/*!
 	 * \brief Set the text content

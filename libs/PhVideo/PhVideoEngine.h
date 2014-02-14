@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHVIDEOENGINE_H
 #define PHVIDEOENGINE_H
@@ -46,22 +46,30 @@ public:
 	 * \brief Get the video file name
 	 * \return the video file name
 	 */
-	QString fileName() { return _fileName;}
+	QString fileName() {
+		return _fileName;
+	}
 	/*!
 	 * \brief Get the clock
 	 * \return the clock
 	 */
-	PhClock* clock() { return &_clock; }
+	PhClock* clock() {
+		return &_clock;
+	}
 	/*!
 	 * \brief Get first frame
 	 * \return the first frame of the video file
 	 */
-	PhFrame firstFrame() { return _firstFrame;}
+	PhFrame firstFrame() {
+		return _firstFrame;
+	}
 	/*!
 	 * \brief Get last frame
 	 * \return the last frame of the video file
 	 */
-	PhFrame lastFrame() { return _firstFrame + length() - 1;}
+	PhFrame lastFrame() {
+		return _firstFrame + length() - 1;
+	}
 	/*!
 	 * \brief Get the length
 	 * \return the length of the video
@@ -91,7 +99,9 @@ public:
 	 * \brief Get refreshRate
 	 * \return Return the refresh rate of the PhVideoEngine
 	 */
-	int refreshRate() { return _videoFrameTickCounter.frequency(); }
+	int refreshRate() {
+		return _videoFrameTickCounter.frequency();
+	}
 
 	/*!
 	 * \brief Set the settings

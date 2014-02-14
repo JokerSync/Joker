@@ -1,29 +1,29 @@
 /******************************
- * Qt player using libVLC     *
- * By protonux                *
- *                            *
- * Under WTFPL                *
- ******************************/
+* Qt player using libVLC     *
+* By protonux                *
+*                            *
+* Under WTFPL                *
+******************************/
 
 #include <QApplication>
 #include "player.h"
 
 #ifdef Q_WS_X11
-    #include <X11/Xlib.h>
+	#include <X11/Xlib.h>
 #endif
 
 int main(int argc, char *argv[]) {
 #ifdef Q_WS_X11
-    XInitThreads();
+	XInitThreads();
 #endif
 
-    QApplication app(argc, argv);
+	QApplication app(argc, argv);
 
-    Mwindow player;
-    player.show();
+	Mwindow player;
+	player.show();
 
-	if(argc>1)
+	if(argc > 1)
 		player.openFile(argv[1]);
 
-    return app.exec();
+	return app.exec();
 }

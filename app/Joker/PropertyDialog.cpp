@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include "PropertyDialog.h"
 #include "ui_PropertyDialog.h"
@@ -45,8 +45,7 @@ void PropertyDialog::showEvent(QShowEvent *)
 	ui->fpsLabel->setText("-");
 	ui->codecNameLabel->setText("-");
 
-	if(_doc)
-	{
+	if(_doc) {
 		ui->titleLabel->setText(_doc->getTitle());
 
 		if(_doc->getAuthorName().length())
@@ -65,12 +64,11 @@ void PropertyDialog::showEvent(QShowEvent *)
 
 		int charNumber = 0;
 		foreach(PhStripText * text, _doc->getTexts())
-			charNumber += text->getContent().length();
+		charNumber += text->getContent().length();
 		ui->charNumberLabel->setText(QString::number(charNumber));
 	}
 
-	if(_videoEngine)
-	{
+	if(_videoEngine) {
 		if(_videoEngine->fileName().length())
 			ui->videoFileLabel->setText(_videoEngine->fileName());
 

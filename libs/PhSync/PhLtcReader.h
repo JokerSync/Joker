@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHLTCREADER_H
 #define PHLTCREADER_H
@@ -27,7 +27,7 @@
 class PhLtcReader : public QObject
 {
 
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 	/*!
@@ -45,7 +45,7 @@ public:
 	 * \param deviceName The desired input device
 	 * \return True if succeed, false otherwise
 	 */
-	bool init(QString deviceName="");
+	bool init(QString deviceName = "");
 	/*!
 	 * \brief close the reader
 	 */
@@ -55,31 +55,31 @@ public:
 	 * \brief Get the input list
 	 * \return Return all the input devices
 	 */
-    static QList<QString> inputList();
+	static QList<QString> inputList();
 	/*!
 	 * \brief Get the reader clock
 	 * \return The reader clock
 	 */
-    PhClock * clock();
+	PhClock * clock();
 
 private:
 
 	int processAudio(const void *inputBuffer,
-							unsigned long framesPerBuffer);
+	                 unsigned long framesPerBuffer);
 	static int audioCallback( const void *inputBuffer, void *outputBuffer,
-							   unsigned long framesPerBuffer,
-							   const PaStreamCallbackTimeInfo* timeInfo,
-							   PaStreamCallbackFlags statusFlags,
-							   void *userData );
+	                          unsigned long framesPerBuffer,
+	                          const PaStreamCallbackTimeInfo* timeInfo,
+	                          PaStreamCallbackFlags statusFlags,
+	                          void *userData );
 
-    PhClock _clock;
+	PhClock _clock;
 
 	PaStream *stream;
 	float data;
 
-    ltc_off_t _position;
-    LTCDecoder * _decoder;
-    QTime _pauseDetector;
+	ltc_off_t _position;
+	LTCDecoder * _decoder;
+	QTime _pauseDetector;
 
 };
 

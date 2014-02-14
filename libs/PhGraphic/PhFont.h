@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHFONT_H
 #define PHFONT_H
@@ -17,9 +17,9 @@
 class PhFont
 {
 public:
-    /**
-     * @brief PhFont constructor
-     */
+	/**
+	 * @brief PhFont constructor
+	 */
 	PhFont();
 
 	/**
@@ -52,7 +52,9 @@ public:
 	 * This value must be converted proportionaly if the text width is scaled.
 	 * @return A value in pixel.
 	 */
-	int getHeight() { return _glyphHeight; }
+	int getHeight() {
+		return _glyphHeight;
+	}
 
 	/**
 	 * @brief Select the font for the further rendering operation.

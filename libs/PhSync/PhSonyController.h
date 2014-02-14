@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHSONYCONTROLLER_H
 #define PHSONYCONTROLLER_H
@@ -74,7 +74,9 @@ public:
 	 * @brief Get the sony controller internal clock.
 	 * @return A clock reference.
 	 */
-	PhClock *clock() { return &_clock; }
+	PhClock *clock() {
+		return &_clock;
+	}
 
 	/**
 	 * @brief Compute the rate from the jog, varispeed and shuttle sony protocole

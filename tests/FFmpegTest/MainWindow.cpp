@@ -46,10 +46,8 @@ bool MainWindow::openFile(QString fileName)
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
 
 	// Find video stream :
-	for(int i = 0; i < _pFormatContext->nb_streams; i++)
-	{
-		if(_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
-		{
+	for(int i = 0; i < _pFormatContext->nb_streams; i++) {
+		if(_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO) {
 			_videoStream = _pFormatContext->streams[i];
 			break;
 		}
@@ -83,10 +81,8 @@ bool MainWindow::setFrame(int frame)
 	av_seek_frame(_pFormatContext, _videoStream->index, frame, 0);
 
 	AVPacket packet;
-	while(av_read_frame(_pFormatContext, &packet) >= 0)
-	{
-		if(packet.stream_index == _videoStream->index)
-		{
+	while(av_read_frame(_pFormatContext, &packet) >= 0) {
+		if(packet.stream_index == _videoStream->index) {
 			int ok;
 			avcodec_decode_video2(_pCodecContext, _pFrame, &ok, &packet);
 			if(!ok)
@@ -95,8 +91,8 @@ bool MainWindow::setFrame(int frame)
 			int linesize = _image->width() * 3;
 			// Convert the image into YUV format that SDL uses
 			if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
-						 _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
-						 &linesize) < 0)
+			              _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
+			              &linesize) < 0)
 				return false;
 			return true;
 		}
@@ -106,8 +102,7 @@ bool MainWindow::setFrame(int frame)
 
 void MainWindow::paintEvent(QPaintEvent *)
 {
-	if(_image)
-	{
+	if(_image) {
 		QPainter painter(this);
 		painter.drawImage(0, 0, *_image);
 	}
@@ -136,15 +131,14 @@ void MainWindow::resizeEvent(QResizeEvent *)
 
 
 	_pSwsCtx = sws_getContext(_pCodecContext->width, _pCodecContext->height,
-							_pCodecContext->pix_fmt, w, h,
-							AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
+	                          _pCodecContext->pix_fmt, w, h,
+	                          AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, "Open...");
-	if(QFile::exists(fileName))
-	{
+	if(QFile::exists(fileName)) {
 		if(!openFile(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}

@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef JOKERWINDOW_H
 #define JOKERWINDOW_H
@@ -25,7 +25,7 @@ namespace Ui {
 class JokerWindow;
 }
 /*!
- *\file JokerWindow.h
+   *\file JokerWindow.h
  */
 
 /*!
@@ -172,7 +172,7 @@ private:
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
 #if USE_LTC
-    PhLtcReader _ltcReader;
+	PhLtcReader _ltcReader;
 #endif
 
 	PhFloatingMediaPanel _mediaPanel;
@@ -189,7 +189,7 @@ private:
 
 	void updateOpenRecent();
 	void setupOpenRecentMenu();
-    void setupSyncProtocol();
+	void setupSyncProtocol();
 	void closeEvent(QCloseEvent *event);
 
 	void setCurrentStripFile(QString stripFile);

@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHGRAPHICTEXTUREDSQUARE_H
 #define PHGRAPHICTEXTUREDSQUARE_H
@@ -24,10 +24,10 @@ public:
 	PhGraphicTexturedRect(int x = 0, int y = 0, int w = 0, int h = 0);
 	~PhGraphicTexturedRect();
 
-    /**
-     * @brief draw
-     * draw the textured rectangle
-     */
+	/**
+	 * @brief draw
+	 * draw the textured rectangle
+	 */
 	void draw();
 
 	/*!
@@ -56,31 +56,31 @@ public:
 	bool createTextureFromYUVBuffer(void *data, int width, int height);
 protected:
 
-    /**
-     * @brief createTextureFromSurface
-     * @param surface
-     * create an OpenGL texture form a SDL Surface
-     */
+	/**
+	 * @brief createTextureFromSurface
+	 * @param surface
+	 * create an OpenGL texture form a SDL Surface
+	 */
 	bool createTextureFromSurface(SDL_Surface * surface);
 
 private:
 
-    /**
-     * @brief _texture
-     * The texture address(?)
-     */
+	/**
+	 * @brief _texture
+	 * The texture address(?)
+	 */
 	GLuint _texture;
 
 	/**
-     * @brief _tu
+	 * @brief _tu
 	 * number of horizontal repetition
-     */
+	 */
 	float _tu;
 
 	/**
-     * @brief _tv
+	 * @brief _tv
 	 * number of vertical repetition
-     */
+	 */
 	float _tv;
 };
 

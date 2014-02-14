@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include "PhVideoView.h"
 
@@ -23,8 +23,7 @@ bool PhVideoView::init()
 
 void PhVideoView::paint()
 {
-	if(_videoEngine)
-	{
+	if(_videoEngine) {
 		_videoEngine->drawVideo(0, 0, this->width(), this->height());
 		_videoEngine->clock()->tick(60);
 	}

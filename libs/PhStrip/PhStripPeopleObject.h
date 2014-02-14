@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHSTRIPPEOPLEOBJECT_H
 #define PHSTRIPPEOPLEOBJECT_H
@@ -28,32 +28,44 @@ public:
 	 * @brief Get the PhPeople
 	 * @return _people the corresponding PhPeople
 	 */
-	PhPeople * getPeople(){return _people;}
+	PhPeople * getPeople(){
+		return _people;
+	}
 	/**
 	 * @brief Get the track
 	 * @return _track the corresponding track
 	 */
-	int getTrack(){return _track;}
+	int getTrack(){
+		return _track;
+	}
 	/**
 	 * @brief getTimeOut
 	 * @return _timeOut
 	 */
-	int getTimeOut(){return _timeOut;}
+	int getTimeOut(){
+		return _timeOut;
+	}
 	/*!
 	 * \brief Set the PhPeople
 	 * \param people
 	 */
-	void setPeople(PhPeople * people){_people = people;}
+	void setPeople(PhPeople * people){
+		_people = people;
+	}
 	/*!
 	 * \brief Set the track
 	 * \param track
 	 */
-	void setTrack(int track){_track = track;}
+	void setTrack(int track){
+		_track = track;
+	}
 	/*!
 	 * \brief Set the time out
 	 * \param timeOut
 	 */
-	void setTimeOut(int timeOut){_timeOut = timeOut;}
+	void setTimeOut(int timeOut){
+		_timeOut = timeOut;
+	}
 
 private:
 /**

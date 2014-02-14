@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include "PhLtcWriter.h"
 
@@ -46,8 +46,7 @@ bool PhLtcWriter::init(QString deviceName)
 	PHDBG(0) <<"Port audio succeed initialization !";
 
 	int deviceCount = Pa_GetDeviceCount();
-	if( deviceCount <= 0 )
-	{
+	if( deviceCount <= 0 ) {
 		PHDBG(0) << "ERROR: Pa_CountDevices returned " << deviceCount;
 		return false;
 	}
@@ -63,28 +62,23 @@ bool PhLtcWriter::init(QString deviceName)
 	bool isThereOutput = false;
 	bool deviceFound = false;
 
-	for(int i = 0; i < deviceCount; i++ )
-	{
+	for(int i = 0; i < deviceCount; i++ ) {
 		const PaDeviceInfo *deviceInfo;
 		deviceInfo = Pa_GetDeviceInfo( i );
-		if(deviceInfo->maxOutputChannels > 0 )
-		{
+		if(deviceInfo->maxOutputChannels > 0 ) {
 			isThereOutput = true;
-			if(deviceName == deviceInfo->name)
-			{
+			if(deviceName == deviceInfo->name) {
 				deviceFound = true;
 				outputDeviceInfo.device = i;
 				break;
 			}
 		}
 	}
-	if(!isThereOutput)
-	{
+	if(!isThereOutput) {
 		PHDBG(0) << "No output device";
 		return false;
 	}
-	if(deviceName.length() and !deviceFound)
-	{
+	if(deviceName.length() and !deviceFound) {
 		PHDBG(0) << "Desired output not found :" << deviceName;
 		return false;
 	}
@@ -92,15 +86,13 @@ bool PhLtcWriter::init(QString deviceName)
 
 	err = Pa_OpenStream(&stream, NULL, &outputDeviceInfo, SAMPLE_RATE, FRAME_PER_BUFFER, paNoFlag, audioCallback, this);
 
-	if(err != paNoError)
-	{
+	if(err != paNoError) {
 		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
 		return false;
 	}
 
 	err = Pa_StartStream( stream );
-	if(err != paNoError)
-	{
+	if(err != paNoError) {
 		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
 		return false;
 	}
@@ -120,14 +112,11 @@ QList<QString> PhLtcWriter::outputList()
 	if( numDevices <= 0 )
 		PHDBG(0) << "ERROR: Pa_CountDevices returned " << numDevices;
 
-	else
-	{
-		const   PaDeviceInfo *deviceInfo;
-		for(int i = 0; i<numDevices; i++ )
-		{
+	else{
+		const PaDeviceInfo *deviceInfo;
+		for(int i = 0; i < numDevices; i++ ) {
 			deviceInfo = Pa_GetDeviceInfo( i );
-			if(deviceInfo->maxOutputChannels > 0)
-			{
+			if(deviceInfo->maxOutputChannels > 0) {
 				//PHDEBUG << deviceInfo->name;
 				names.append(deviceInfo->name);
 			}
@@ -172,7 +161,7 @@ int PhLtcWriter::processAudio(void *outputBuffer, unsigned long framesPerBuffer)
 	return len;
 }
 
-int PhLtcWriter::audioCallback(const void *, void *outputBuffer, unsigned long , const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags , void *userData)
+int PhLtcWriter::audioCallback(const void *, void *outputBuffer, unsigned long, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *userData)
 {
 	PhLtcWriter * LTCWriter = (PhLtcWriter *) userData;
 	LTCWriter->processAudio(outputBuffer, FRAME_PER_BUFFER);

@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include "PhMediaPanel.h"
 #include "ui_PhMediaPanel.h"
@@ -67,8 +67,7 @@ void PhMediaPanel::setTCType(PhTimeCodeType tcType)
 
 PhTimeCodeType PhMediaPanel::timeCodeType() const
 {
-	switch(ui->_rateSelectionBox->currentIndex())
-	{
+	switch(ui->_rateSelectionBox->currentIndex()) {
 	case 0:
 		return PhTimeCodeType2398;
 	case 1:
@@ -104,19 +103,18 @@ void PhMediaPanel::setMediaLength(PhFrame length)
 
 PhFrame PhMediaPanel::getMediaLength()
 {
-    return _mediaLength;
+	return _mediaLength;
 }
 
 void PhMediaPanel::setSliderEnable(bool isEnabled)
 {
-    ui->_slider->setEnabled(isEnabled);
+	ui->_slider->setEnabled(isEnabled);
 }
 
 void PhMediaPanel::setClock(PhClock *clock)
 {
 	_clock = clock;
-	if(_clock)
-	{
+	if(_clock) {
 		setTCType(_clock->timeCodeType());
 		ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->frame(), _clock->timeCodeType()));
 		connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
@@ -137,8 +135,7 @@ void PhMediaPanel::onRateChanged(PhRate rate)
 
 void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
 {
-	switch(tcType)
-	{
+	switch(tcType) {
 	case PhTimeCodeType2398:
 		ui->_rateSelectionBox->setCurrentIndex(0);
 		break;
@@ -156,8 +153,7 @@ void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
 
 void PhMediaPanel::onPlayPause()
 {
-	if(_clock)
-	{
+	if(_clock) {
 		if(_clock->rate())
 			_clock->setRate(0);
 		else
@@ -189,8 +185,7 @@ void PhMediaPanel::onBack()
 
 void PhMediaPanel::onNextFrame()
 {
-	if(_clock)
-	{
+	if(_clock) {
 		_clock->setRate(0);
 		_clock->setFrame(_clock->frame() + 1);
 	}
@@ -199,8 +194,7 @@ void PhMediaPanel::onNextFrame()
 
 void PhMediaPanel::onPreviousFrame()
 {
-	if(_clock)
-	{
+	if(_clock) {
 		_clock->setRate(0);
 		_clock->setFrame(_clock->frame() - 1);
 	}

@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHSTRIPDOC_H
 #define PHSTRIPDOC_H
@@ -33,22 +33,22 @@ class PhStripDoc : public QObject
 	Q_OBJECT
 
 public:
-     /**
-     * @brief PhStripDoc
-     * Constructor
-     */
-    explicit PhStripDoc(QObject *parent = 0);
+	/**
+	 * @brief PhStripDoc
+	 * Constructor
+	 */
+	explicit PhStripDoc(QObject *parent = 0);
 
 	/*!
 	 * \brief Get the cuts
 	 * \return the cut's list
 	 */
-    QList<PhStripCut *> getCuts();
+	QList<PhStripCut *> getCuts();
 
-    /**
-     * @brief getTitle
-     * @return _title
-     */
+	/**
+	 * @brief getTitle
+	 * @return _title
+	 */
 	QString getTitle();
 
 	/*!
@@ -68,10 +68,10 @@ public:
 	QString getSeason();
 
 	/**
-     * @brief getVideoTimestamp
-     * @return _videoTimestamp
-     */
-    PhTime getVideoTimestamp();
+	 * @brief getVideoTimestamp
+	 * @return _videoTimestamp
+	 */
+	PhTime getVideoTimestamp();
 
 	/**
 	 * @brief getFilePath
@@ -79,46 +79,48 @@ public:
 	 */
 	QString getFilePath();
 
-    /**
-     * @brief getVideoPath
-     * @return _videoPath
-     */
+	/**
+	 * @brief getVideoPath
+	 * @return _videoPath
+	 */
 	QString getVideoPath();
 
 	/*!
 	 * \brief Get the author name
 	 * \return
 	 */
-	QString getAuthorName() { return _authorName;}
+	QString getAuthorName() {
+		return _authorName;
+	}
 
-    /**
-     * @brief getLastPosition
-     * @return _lastPosition
-     */
-    PhFrame getLastFrame();
+	/**
+	 * @brief getLastPosition
+	 * @return _lastPosition
+	 */
+	PhFrame getLastFrame();
 
-    /**
-     * @brief getTimeScale
-     * @return
-     */
-    int getTimeScale();
+	/**
+	 * @brief getTimeScale
+	 * @return
+	 */
+	int getTimeScale();
 
 	/*!
 	 * \brief Get the timecode type
 	 * \return the corresponding PhTimeCodeType
 	 */
-    PhTimeCodeType getTCType();
+	PhTimeCodeType getTCType();
 
 	/**
-     * @brief getActors
-     * @return _actors
-     */
+	 * @brief getActors
+	 * @return _actors
+	 */
 	QMap<QString, PhPeople *> getPeoples();
-    /**
-     * @brief getTexts
-     * @return _texts
-     */
-    QList<PhStripText *> getTexts();
+	/**
+	 * @brief getTexts
+	 * @return _texts
+	 */
+	QList<PhStripText *> getTexts();
 
 	/**
 	 * @brief getLoops
@@ -132,31 +134,31 @@ public:
 	 */
 	QList<PhStripOff *> getOffs();
 
-    /**
-     * @brief setTitle
-     * @param _title
-     */
+	/**
+	 * @brief setTitle
+	 * @param _title
+	 */
 	void setTitle(QString _title);
 	/*!
 	 * \brief setVideoTimestamp
 	 * \param videoFramestamp
 	 */
-    void setVideoTimestamp(PhFrame videoFramestamp);
-    /**
-     * @brief setVideoPath
-     * @param videoPath
-     */
+	void setVideoTimestamp(PhFrame videoFramestamp);
+	/**
+	 * @brief setVideoPath
+	 * @param videoPath
+	 */
 	void setVideoPath(QString videoPath);
-    /**
-     * @brief setTimeScale
-     * @param timeScale
-     */
-    void setTimeScale(int timeScale);
-    /**
+	/**
+	 * @brief setTimeScale
+	 * @param timeScale
+	 */
+	void setTimeScale(int timeScale);
+	/**
 	 * @brief Open a DetX file
 	 * @param filename The path to the DetX file
 	 * @return True if the doc opened well, false otherwise
-     */
+	 */
 	bool importDetX(QString filename);
 	/*!
 	 * \brief Open a strip file
@@ -187,7 +189,7 @@ public:
 	 * Useful for statistics
 	 * \return The number of texts from the doc
 	 */
-    int getNbTexts();
+	int getNbTexts();
 
 	/*!
 	 * \brief Get people by their name
@@ -284,69 +286,69 @@ signals:
 	void changed();
 
 private:
-    void reset();
-    /**
-     * Title of the corresponding audiovisual content.
-     */
+	void reset();
+	/**
+	 * Title of the corresponding audiovisual content.
+	 */
 	QString _title;
 	QString _translatedTitle;
 	QString _episode;
 	QString _season;
 
-    /**
-     * Starting time of the video content refered by the videoPath : String
-     */
-    PhTime _videoFrameStamp;
-    /**
-     * @brief _lastPosition
-     */
-    PhTime _lastFrame;
+	/**
+	 * Starting time of the video content refered by the videoPath : String
+	 */
+	PhTime _videoFrameStamp;
+	/**
+	 * @brief _lastPosition
+	 */
+	PhTime _lastFrame;
 
 	/**
 	 * Path to the file content.
 	 */
 	QString _filePath;
 
-    /**
-     * Path to the video content.
-     */
+	/**
+	 * Path to the video content.
+	 */
 	QString _videoPath;
-    /**
-     * Amount of time units per second.
-     */
-    int _timeScale;
+	/**
+	 * Amount of time units per second.
+	 */
+	int _timeScale;
 
 	PhTimeCodeType _tcType;
 
 	QString _authorName;
 
-    /**
-     * List of PhPeople from the file
-     */
+	/**
+	 * List of PhPeople from the file
+	 */
 	QMap<QString, PhPeople *> _peoples;
 
-    /**
-     * List of PhStripText from the file
-     */
-    QList<PhStripText *> _texts;
+	/**
+	 * List of PhStripText from the file
+	 */
+	QList<PhStripText *> _texts;
 
-    /**
-     * List of PhStripCut form the file
-     */
-     QList<PhStripCut *> _cuts;
+	/**
+	 * List of PhStripCut form the file
+	 */
+	QList<PhStripCut *> _cuts;
 
-     /**
-      * List of PhStripLoop from the file
-      */
-     QList<PhStripLoop *> _loops;
+	/**
+	 * List of PhStripLoop from the file
+	 */
+	QList<PhStripLoop *> _loops;
 
-	 /**
-	  * List of PhStripOff from the file
-	  */
-	 QList<PhStripOff *> _offs;
+	/**
+	 * List of PhStripOff from the file
+	 */
+	QList<PhStripOff *> _offs;
 
-     int _nbTexts;
-	 void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
+	int _nbTexts;
+	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
 };
 
 #endif // PHSTRIPDOC_H

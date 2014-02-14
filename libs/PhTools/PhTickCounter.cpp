@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include "PhTickCounter.h"
 #include "PhDebug.h"
@@ -15,8 +15,7 @@ void PhTickCounter::tick()
 {
 	_tickCount++;
 	int elapsed = _timer.elapsed();
-	if(elapsed > 1000)
-	{
+	if(elapsed > 1000) {
 		_frequency = _tickCount;
 		_timer.restart();
 		_tickCount = 0;

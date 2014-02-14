@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHGRAPHICSTRIP_H
 #define PHGRAPHICSTRIP_H
@@ -138,7 +138,9 @@ public:
 	 * of the people from the list.
 	 * \param list
 	 */
-	void setSelectedPeople(QList<PhPeople *> * list){ _selectedPeoples = list; }
+	void setSelectedPeople(QList<PhPeople *> * list){
+		_selectedPeoples = list;
+	}
 
 private slots:
 	/**
@@ -146,9 +148,9 @@ private slots:
 	 */
 	void clearData();
 
-private :
+private:
 
- 	/**
+	/**
 	 * @brief _doc
 	 * Reference to the current PhStripDoc
 	 */
@@ -167,8 +169,8 @@ private :
 	PhFont _hudFont;
 
 	/**
-	 *Background Image used for the strip band
-     */
+	 * Background Image used for the strip band
+	 */
 	PhGraphicImage _stripBackgroundImage;
 
 	PhGraphicSolidRect _stripSyncBar;
