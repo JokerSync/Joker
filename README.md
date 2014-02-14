@@ -39,7 +39,7 @@ You can install the dependencies automatically or manually:
 
 #### Automatic installation
 
-Just run the //bootstrap// script:
+Just run the *bootstrap* script:
 
     ./scripts/bootstrap.sh
     
