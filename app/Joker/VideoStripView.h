@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef VIDEOSTRIPVIEW_H
 #define VIDEOSTRIPVIEW_H
@@ -39,14 +39,18 @@ public:
 	 *
 	 * \return The PhVideoEngine used by the view.
 	 */
-	PhVideoEngine * videoEngine() { return &_videoEngine;}
+	PhVideoEngine * videoEngine() {
+		return &_videoEngine;
+	}
 
 	/*!
 	 * \brief Get the view's strip
 	 *
 	 * \return The PhGraphicStrip used by the view.
 	 */
-	PhGraphicStrip * strip() { return &_strip;}
+	PhGraphicStrip * strip() {
+		return &_strip;
+	}
 
 	/*!
 	 * \brief getSelectedPeoples

@@ -15,16 +15,13 @@ enum {
 int main(int argc, char *argv[])
 {
 	bool a = true;
-	if(a)
-	{
+	if(a) {
 		a = false;
 	}
-	else
-		if(a)
-			a = true;
+	else if(a)
+		a = true;
 
-	if(a)
-	{
+	if(a) {
 		a = false;
 		a = false;
 	}
@@ -45,25 +42,22 @@ int main(int argc, char *argv[])
 	int total = 10000;
 	QTime t;
 	PHDEBUG << "starting";
-	t.start();int n = 0;
-	for(int i = 0; i < total; i++)
-	{
+	t.start(); int n = 0;
+	for(int i = 0; i < total; i++) {
 		if(settings.value("test", false).toBool())
 			n++;
 	}
 
 	PHDEBUG << "settings " << t.elapsed();
 
-	t.restart() ;
+	t.restart();
 
 	bool b = true;
-	for(int i=0;i<total;i++)
-	{
+	for(int i = 0; i < total; i++) {
 		if(b)
 			n++;
 
-		switch(i)
-		{
+		switch(i) {
 		case 2:
 			PHDEBUG << "2";
 			break;

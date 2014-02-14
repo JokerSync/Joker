@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 
 #include <QApplication>
@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
 	PhDebug::showConsole(true);
 
 	QApplication a(argc, argv);
-    QTranslator translator;
+	QTranslator translator;
 	translator.load(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + QLocale::system().name() + ".qm");
-    a.installTranslator(&translator);
+	a.installTranslator(&translator);
 
 
 	JokerWindow w(&settings);

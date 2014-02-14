@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
@@ -66,9 +66,9 @@ private slots:
 
 	void onLogMaskButtonClicked();
 
-    void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+	void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
-    void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+	void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
 	Ui::PreferencesDialog *ui;
@@ -88,13 +88,13 @@ private:
 	bool _oldDisplayTitle;
 	bool _oldDisplayLoop;
 	int _oldLogMask;
-    int _oldSyncProtocol;
-    QString _oldLTCInput;
+	int _oldSyncProtocol;
+	QString _oldLTCInput;
 
 	QMap<QString, QString> fontList;
 
 	void showParamLTC(bool show);
-    void showParamSony(bool show);
+	void showParamSony(bool show);
 };
 
 #endif // PREFERENCESDIALOG_H

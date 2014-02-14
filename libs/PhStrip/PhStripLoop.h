@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHSTRIPLOOP_H
 #define PHSTRIPLOOP_H
@@ -21,20 +21,20 @@ private:
  * Number of the loop. The first loop can be 1 or another value.
  * The loop numbering is usually continuous but not always.
  */
-    int _number;
+	int _number;
 
 public:
-    /**
-     * @brief PhStripLoop
-     * default constructor
-     */
-    PhStripLoop();
+	/**
+	 * @brief PhStripLoop
+	 * default constructor
+	 */
+	PhStripLoop();
 	/*!
 	 * \brief PhStripLoop constructor
 	 * \param number
 	 * \param TimeIn
 	 */
-    PhStripLoop(int number, PhTime TimeIn);
+	PhStripLoop(int number, PhTime TimeIn);
 };
 
 

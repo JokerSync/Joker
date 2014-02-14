@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 
 #include <QApplication>
@@ -19,27 +19,25 @@ int main(int argc, char *argv[])
 	QSettings settings("Phonations","GraphicStripTest");
 	MainWindow w(&settings);
 
-    w.show();
+	w.show();
 
 	if (argc > 1)
 		w.openFile(argv[1]);
-	else
-	{
+	else{
 		QString lastFile = settings.value("lastFile", "").toString();
 		if(QFile::exists(lastFile))
 			w.openFile(lastFile);
-		else
-		{
+		else{
 			w.createFile(
-						settings.value("peopleNumber", 0).toInt(),
-						settings.value("loopNumber", 0).toInt(),
-						settings.value("textNumber", 0).toInt(),
-						settings.value("trackNumber", 4).toInt(),
-						settings.value("textContent", "Per hoc minui studium suum existimans Paulus.").toString(),
-						settings.value("startFrame", 90000).toInt()
-						);
+			    settings.value("peopleNumber", 0).toInt(),
+			    settings.value("loopNumber", 0).toInt(),
+			    settings.value("textNumber", 0).toInt(),
+			    settings.value("trackNumber", 4).toInt(),
+			    settings.value("textContent", "Per hoc minui studium suum existimans Paulus.").toString(),
+			    settings.value("startFrame", 90000).toInt()
+			    );
 		}
 	}
 
-    return a.exec();
+	return a.exec();
 }

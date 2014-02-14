@@ -17,11 +17,11 @@ class AboutDialog;
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+	explicit MainWindow(QWidget *parent = 0);
+	~MainWindow();
 
 	void generateRGB();
 
@@ -32,9 +32,9 @@ public:
 protected:
 	void paintEvent(QPaintEvent *event);
 private slots:
-    void on_actionAbout_triggered();
+	void on_actionAbout_triggered();
 
-    void on_actionDocumentation_triggered();
+	void on_actionDocumentation_triggered();
 
 	void on_actionOpen_triggered();
 
@@ -43,8 +43,8 @@ private slots:
 	void on_actionGenerate_RGB_pattern_triggered();
 
 private:
-    Ui::MainWindow *ui;
-    AboutDialog _about;
+	Ui::MainWindow *ui;
+	AboutDialog _about;
 	QSettings _settings;
 	QImage *_image;
 	unsigned char * _rgb;

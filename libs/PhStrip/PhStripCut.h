@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHSTRIPCUT_H
 #define PHSTRIPCUT_H
@@ -15,26 +15,26 @@
 class PhStripCut : public PhStripObject {
 
 public:
-    /**
-     * Describes the type of the cut.
-     */
-    enum PhCutType {
-        Simple, FadeIn, FadeOut, CrossFade
-    };
+	/**
+	 * Describes the type of the cut.
+	 */
+	enum PhCutType {
+		Simple, FadeIn, FadeOut, CrossFade
+	};
 
-    /**
-     * @brief PhStripCut
-     * @param type
-     * @param time
-     */
-    PhStripCut(PhStripCut::PhCutType type, PhTime time);
+	/**
+	 * @brief PhStripCut
+	 * @param type
+	 * @param time
+	 */
+	PhStripCut(PhStripCut::PhCutType type, PhTime time);
 
 
 private:
-    /**
-     * Type of cut.
-     */
-    PhCutType _type;
+	/**
+	 * Type of cut.
+	 */
+	PhCutType _type;
 
 };
 

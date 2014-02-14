@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include "PhClock.h"
 
@@ -17,8 +17,7 @@ PhClock::PhClock(PhTimeCodeType tcType, QObject *parent) :
 void PhClock::setTimeCodeType(PhTimeCodeType tcType)
 {
 	PhFrame lastFrame = frame();
-	if(_tcType != tcType)
-	{
+	if(_tcType != tcType) {
 		_tcType = tcType;
 		emit tcTypeChanged(tcType);
 	}
@@ -35,7 +34,7 @@ void PhClock::setTime(qint64 time)
 		emit timeChanged(time);
 	}
 	PhFrame newFrame = frame();
-    if(lastFrame != newFrame)
+	if(lastFrame != newFrame)
 		emit frameChanged(newFrame, _tcType);
 }
 

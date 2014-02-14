@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include <QtGlobal>
 #include <QStringList>
@@ -19,11 +19,9 @@ PhDebug* PhDebug::d = NULL;
 
 void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-	Q_UNUSED(type);Q_UNUSED(context);
-	if(d)
-	{
-		if(d->_logMask & (1 << d->_currentLogLevel))
-		{
+	Q_UNUSED(type); Q_UNUSED(context);
+	if(d) {
+		if(d->_logMask & (1 << d->_currentLogLevel)) {
 			if(d->_showConsole)
 				fprintf(stderr, "%s \n", msg.toLocal8Bit().constData());
 			QTextStream ts(d->_log);
@@ -47,11 +45,11 @@ void PhDebug::showConsole(bool show)
 // Called if init() was forget
 PhDebug PhDebug::instance(int logLevelMessage)
 {
-    if (!d)   // Only allow one instance of class to be generated.
-        d = new PhDebug();
+	if (!d)   // Only allow one instance of class to be generated.
+		d = new PhDebug();
 
 	d->_currentLogLevel = logLevelMessage;
-	return * d;
+	return *d;
 }
 
 QDebug PhDebug::operator<<(QDebug dbg)
@@ -116,7 +114,7 @@ QString PhDebug::getFuncName(QString name)
 QString PhDebug::getFileName(QString name)
 {
 	if (d && d->_dispFileName)
-		return  name.split("/").last() + "\t";
+		return name.split("/").last() + "\t";
 	return "";
 }
 

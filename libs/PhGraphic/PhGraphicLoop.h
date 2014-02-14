@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHGRAPHICLOOP_H
 #define PHGRAPHICLOOP_H
@@ -24,7 +24,7 @@ public:
 	 * \param crossHeight the height of the cross
 	 * \param hThick the cross thickness
 	 */
-	PhGraphicLoop(int x = 0, int y =0, int w = 0, int h = 0, int crossHeight = 0, int hThick = 0);
+	PhGraphicLoop(int x = 0, int y = 0, int w = 0, int h = 0, int crossHeight = 0, int hThick = 0);
 	~PhGraphicLoop();
 
 	/*!
@@ -41,7 +41,9 @@ public:
 	 * \brief Get the thickness
 	 * \return
 	 */
-	int getHThick(){return _hThick;}
+	int getHThick(){
+		return _hThick;
+	}
 
 	/*!
 	 * \brief Set the cross height
@@ -52,7 +54,9 @@ public:
 	 * \brief Get the cross height
 	 * \return cross height in pixels
 	 */
-	int getCrossHeight(){return _crossHeight;}
+	int getCrossHeight(){
+		return _crossHeight;
+	}
 private:
 
 	int _crossHeight;

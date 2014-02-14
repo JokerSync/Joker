@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHMEDIAPANEL_H
 #define PHMEDIAPANEL_H
@@ -11,7 +11,7 @@
 #include "PhTools/PhClock.h"
 
 namespace Ui {
-	class PhMediaPanel;
+class PhMediaPanel;
 }
 
 /**
@@ -30,9 +30,9 @@ class PhMediaPanel : public QWidget
 
 public:
 	/**
-	* @brief PhMediaPanel constructor
-	* @param parent The object owner.
-	*/
+	 * @brief PhMediaPanel constructor
+	 * @param parent The object owner.
+	 */
 	explicit PhMediaPanel(QWidget *parent = 0);
 
 	~PhMediaPanel();
@@ -57,7 +57,7 @@ public:
 	 * \brief set Slider Enable
 	 * \param isEnabled : true if the slider must be enabled, false otherwise.
 	 */
-    void setSliderEnable(bool isEnabled);
+	void setSliderEnable(bool isEnabled);
 
 	/*!
 	 * \brief set the clock

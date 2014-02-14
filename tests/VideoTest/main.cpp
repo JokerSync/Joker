@@ -5,13 +5,13 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+	QApplication app(argc, argv);
 	QSettings settings("Phonations", "VideoTest");
 
 	VideoTestWindow w(&settings);
 	w.resize(800, 600);
 
-    w.show();
+	w.show();
 
 	QString fileName = settings.value("lastVideoFile", "").toString();
 	if(argc > 1)
@@ -19,5 +19,5 @@ int main(int argc, char *argv[])
 	if(QFile(fileName).exists())
 		w.openFile(QString(fileName));
 
-    return app.exec();
+	return app.exec();
 }

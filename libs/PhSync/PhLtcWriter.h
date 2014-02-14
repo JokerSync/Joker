@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHLTCWRITER_H
 #define PHLTCWRITER_H
@@ -59,16 +59,16 @@ public:
 private:
 
 	int processAudio(void *outputBuffer,
-							unsigned long framesPerBuffer);
+	                 unsigned long framesPerBuffer);
 	static int audioCallback( const void *inputBuffer, void *outputBuffer,
-							   unsigned long framesPerBuffer,
-							   const PaStreamCallbackTimeInfo* timeInfo,
-							   PaStreamCallbackFlags statusFlags,
-							   void *userData );
+	                          unsigned long framesPerBuffer,
+	                          const PaStreamCallbackTimeInfo* timeInfo,
+	                          PaStreamCallbackFlags statusFlags,
+	                          void *userData );
 	PaStream *stream;
 	float data;
 
-    PhClock _clock;
+	PhClock _clock;
 	LTCEncoder *_encoder;
 	SMPTETimecode _st;
 

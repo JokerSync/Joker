@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef TIMECODEEDIT_H
 #define TIMECODEEDIT_H
@@ -20,10 +20,10 @@
  */
 class PhTimeCodeEdit : public QLineEdit
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit PhTimeCodeEdit(QWidget *parent = 0);
+	explicit PhTimeCodeEdit(QWidget *parent = 0);
 
 	/*!
 	 * \brief set Frame
@@ -34,7 +34,7 @@ public:
 	 * \param frame the desired PhFrame
 	 * \param tcType the corresponding PhTimeCodeType
 	 */
-    void setFrame(PhFrame frame, PhTimeCodeType tcType);
+	void setFrame(PhFrame frame, PhTimeCodeType tcType);
 
 	/*!
 	 * \brief Check the timecode
@@ -54,13 +54,13 @@ signals:
 	 * \param frame the new frame
 	 * \param tcType the new PhTimeCodeType
 	 */
-    void frameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void frameChanged(PhFrame frame, PhTimeCodeType tcType);
 
 private slots:
-    void onTextChanged(QString text);
+	void onTextChanged(QString text);
 
 private:
-    PhTimeCodeType _tcType;
+	PhTimeCodeType _tcType;
 };
 
 #endif // TIMECODEEDIT_H

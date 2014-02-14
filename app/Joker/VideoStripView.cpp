@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include "VideoStripView.h"
 #include <QtGlobal>
@@ -27,8 +27,7 @@ void VideoStripView::setSettings(QSettings *settings)
 void VideoStripView::setSony(PhSonyController *sony)
 {
 	_sony = sony;
-	if(_sony)
-	{
+	if(_sony) {
 		connect(_sony, SIGNAL(videoSync()), this, SLOT(onVideoSync()));
 		_lastVideoSyncElapsed.start();
 	}
@@ -55,15 +54,14 @@ bool VideoStripView::init()
 void VideoStripView::paint()
 {
 
-    PHDBG(1) << _strip.clock()->time() - (_sony?_sony->clock()->time():0);
+	PHDBG(1) << _strip.clock()->time() - (_sony ? _sony->clock()->time() : 0);
 
 	int y = 0;
 	QString title = _strip.doc()->getTitle();
 	if(_strip.doc()->getEpisode().length() > 0)
 		title += " #" + _strip.doc()->getEpisode();
 
-	if(_settings->value("displayTitle", true).toBool() && (title.length() > 0))
-	{
+	if(_settings->value("displayTitle", true).toBool() && (title.length() > 0)) {
 		int titleHeight = this->height() / 40;
 		_titleBackgroundRect.setRect(0, y, this->width(), titleHeight);
 		int titleWidth = title.length() * titleHeight / 2;
@@ -87,13 +85,11 @@ void VideoStripView::paint()
 
 	int tcWidth = 200;
 
-	if((_videoEngine.height() > 0) and (videoHeight > 0))
-	{
+	if((_videoEngine.height() > 0)and (videoHeight > 0)) {
 		int videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
 		int blackStripHeight = 0; // Height of the upper black strip when video is too large
 		int realVideoHeight = videoHeight;
-		if(videoWidth > this->width())
-		{
+		if(videoWidth > this->width()) {
 			videoWidth = this->width();
 			realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
 			blackStripHeight = (this->height() - stripHeight - videoHeight) / 2;
@@ -113,22 +109,19 @@ void VideoStripView::paint()
 	PhFrame clockFrame = clock->frame() + delay * PhTimeCode::getFps(clock->timeCodeType()) / 1000;
 	int tcHeight = tcWidth / 5;
 
-	if(_settings->value("displayTC", true).toBool())
-	{
+	if(_settings->value("displayTC", true).toBool()) {
 		_tcText.setRect(0, y, tcWidth, tcHeight);
 		_tcText.setContent(PhTimeCode::stringFromFrame(clockFrame, clock->timeCodeType()));
 		_tcText.draw();
 	}
 
-	if(_settings->value("displayNextTC", true).toBool())
-	{
+	if(_settings->value("displayNextTC", true).toBool()) {
 		PhStripText *nextText = NULL;
 
 		_nextTCText.setRect(this->width() - tcWidth, y, tcWidth, tcHeight);
 		y += tcHeight;
 
-		if(_selectedPeoples.count())
-		{
+		if(_selectedPeoples.count()) {
 			_strip.setSelectedPeople(&_selectedPeoples);
 			nextText = _strip.doc()->getNextText(clockFrame, _selectedPeoples);
 			if(nextText == NULL)
@@ -143,24 +136,21 @@ void VideoStripView::paint()
 				y += peopleHeight;
 			}
 		}
-		else
-		{
+		else{
 			_strip.setSelectedPeople(NULL);
 			nextText = _strip.doc()->getNextText(clockFrame);
 			if(nextText == NULL)
 				nextText = _strip.doc()->getNextText(0);
 		}
 
-		if(nextText != NULL)
-		{
+		if(nextText != NULL) {
 			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextText->getTimeIn(), clock->timeCodeType()));
 			_nextTCText.draw();
 		}
 	}
 
 	_noVideoSyncError.setRect(this->width() / 2 - 100, this->height() / 2 - 25, 200, 50);
-	if(_lastVideoSyncElapsed.elapsed() > 1000)
-	{
+	if(_lastVideoSyncElapsed.elapsed() > 1000) {
 		int red = (_lastVideoSyncElapsed.elapsed() - 1000) / 4;
 		if (red > 255)
 			red = 255;

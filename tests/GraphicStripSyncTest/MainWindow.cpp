@@ -26,8 +26,7 @@ MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 
-	if(_sonySlave.open())
-	{
+	if(_sonySlave.open()) {
 		_clock = _sonySlave.clock();
 		_clockSynchroniser.setSonyClock(_clock);
 		connect(ui->stripView, SIGNAL(beforePaint(int)), &_sonySlave, SLOT(checkVideoSync(int)));
@@ -44,10 +43,8 @@ MainWindow::~MainWindow()
 void MainWindow::openFile(QString fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
-	if(QFile::exists(fileName))
-	{
-		if(_doc->openStripFile(fileName))
-		{
+	if(QFile::exists(fileName)) {
+		if(_doc->openStripFile(fileName)) {
 			_clock->setTimeCodeType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
 			this->setWindowTitle(fileName);
@@ -60,8 +57,7 @@ void MainWindow::openFile(QString fileName)
 void MainWindow::onOpenFile()
 {
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
-	if(dlg.exec())
-	{
+	if(dlg.exec()) {
 		QString fileName = dlg.selectedFiles()[0];
 		openFile(fileName);
 	}
@@ -89,12 +85,12 @@ void MainWindow::on_actionPlay_pause_triggered()
 
 void MainWindow::on_actionPlay_backward_triggered()
 {
-    _clock->setRate(-1.0);
+	_clock->setRate(-1.0);
 }
 
 void MainWindow::on_actionStep_forward_triggered()
 {
-    _clock->setRate(0.0);
+	_clock->setRate(0.0);
 	_clock->setFrame(_clock->frame() + 1);
 }
 

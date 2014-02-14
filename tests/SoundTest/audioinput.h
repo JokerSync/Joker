@@ -53,27 +53,29 @@
 
 class AudioInfo : public QIODevice
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    AudioInfo(const QAudioFormat &format, QObject *parent);
-    ~AudioInfo();
+	AudioInfo(const QAudioFormat &format, QObject *parent);
+	~AudioInfo();
 
-    void start();
-    void stop();
+	void start();
+	void stop();
 
-    qreal level() const { return m_level; }
+	qreal level() const {
+		return m_level;
+	}
 
-    qint64 readData(char *data, qint64 maxlen);
-    qint64 writeData(const char *data, qint64 len);
+	qint64 readData(char *data, qint64 maxlen);
+	qint64 writeData(const char *data, qint64 len);
 
 private:
-    const QAudioFormat m_format;
-    quint32 m_maxAmplitude;
-    qreal m_level; // 0.0 <= m_level <= 1.0
+	const QAudioFormat m_format;
+	quint32 m_maxAmplitude;
+	qreal m_level; // 0.0 <= m_level <= 1.0
 
 signals:
-    void update();
+	void update();
 };
 
 

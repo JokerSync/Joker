@@ -6,17 +6,17 @@
 
 class CustomWindow : public QWidget
 {
-Q_OBJECT
+	Q_OBJECT
 
 public:
-  CustomWindow(QWidget *parent = 0);
-  ~CustomWindow();
+	CustomWindow(QWidget *parent = 0);
+	~CustomWindow();
 
 protected:
-  void showEvent(QShowEvent *event);
+	void showEvent(QShowEvent *event);
 
 private:
-  void CenterOnScreen();
+	void CenterOnScreen();
 };
 
 #endif

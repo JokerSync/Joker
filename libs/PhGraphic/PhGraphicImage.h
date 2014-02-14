@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHGRAPHICIMAGE_H
 #define PHGRAPHICIMAGE_H
@@ -23,7 +23,7 @@ public:
 	 * \param w Desired width
 	 * \param h Desired height
 	 */
-	PhGraphicImage( QString filename = "", int x = 0, int y =0, int w = 0, int h = 0);
+	PhGraphicImage( QString filename = "", int x = 0, int y = 0, int w = 0, int h = 0);
 
 	/*!
 	 * \brief Set the file name
@@ -36,22 +36,22 @@ public:
 	 */
 	QString getFilename();
 
-    /**
-     * @brief draw
-     * draw the PhGraphicImage using PhGraphicTexturedRect::draw()
-     */
+	/**
+	 * @brief draw
+	 * draw the PhGraphicImage using PhGraphicTexturedRect::draw()
+	 */
 	void draw();
 
-    /**
-     * @brief init
-     * Currently unused
-     */
+	/**
+	 * @brief init
+	 * Currently unused
+	 */
 	bool init();
-    /**
-     * @brief dispose
-     * Currently unused
-     */
-    void dispose();
+	/**
+	 * @brief dispose
+	 * Currently unused
+	 */
+	void dispose();
 
 private:
 

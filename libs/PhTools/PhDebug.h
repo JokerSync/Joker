@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHDEBUG_H
 #define PHDEBUG_H
@@ -15,7 +15,7 @@
 
 
 #define PHDBG(logLevelMessage) PhDebug::instance(logLevelMessage) <<  qDebug() << Q(PhDebug::getFileName(__FILE__)) << Q(PhDebug::getFuncName(__FUNCTION__)) << Q(PhDebug::getLine(__LINE__))
-#define PHDEBUG PHDBG()
+		#define PHDEBUG PHDBG()
 
 // In order to get rid of double quotes when displaying a variable
 #define Q(string) (string).toStdString().c_str()

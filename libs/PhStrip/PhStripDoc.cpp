@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 
 #include <QFile>
@@ -17,8 +17,7 @@ PhStripDoc::PhStripDoc(QObject *parent) :
 bool PhStripDoc::importDetX(QString fileName)
 {
 	PHDEBUG << fileName;
-	if (!QFile(fileName).exists())
-	{
+	if (!QFile(fileName).exists()) {
 		PHDEBUG << "The file doesn't exists" << fileName;
 		return false;
 	}
@@ -27,16 +26,14 @@ bool PhStripDoc::importDetX(QString fileName)
 
 	// Opening the XML file
 	QFile xmlFile(fileName);
-	if(!xmlFile.open(QIODevice::ReadOnly))
-	{
+	if(!xmlFile.open(QIODevice::ReadOnly)) {
 		PHDEBUG << "Unable to open" << fileName;
 		return false;
 	}
 
 	// Loading the DOM (document object model)
 	QDomDocument *domDoc = new QDomDocument();
-	if (!domDoc->setContent(&xmlFile))
-	{
+	if (!domDoc->setContent(&xmlFile)) {
 		xmlFile.close();
 		PHDEBUG << "The XML document seems to be bad formed " << fileName;
 		return false;
@@ -48,8 +45,7 @@ bool PhStripDoc::importDetX(QString fileName)
 
 	QDomElement detX = domDoc->documentElement();
 
-	if(detX.tagName() != "detx")
-	{
+	if(detX.tagName() != "detx") {
 		xmlFile.close();
 		PHDEBUG << "Bad root element :" << detX.tagName();
 		return false;
@@ -60,8 +56,7 @@ bool PhStripDoc::importDetX(QString fileName)
 	_timeScale = 25.00;
 
 	// Reading the header
-	if(detX.elementsByTagName("header").count())
-	{
+	if(detX.elementsByTagName("header").count()) {
 		QDomElement header = detX.elementsByTagName("header").at(0).toElement();
 
 #warning TODO : Reading Cappella version
@@ -75,16 +70,14 @@ bool PhStripDoc::importDetX(QString fileName)
 			_translatedTitle = detX.elementsByTagName("title2").at(0).toElement().text();
 
 		// Reading the episode info
-		if(header.elementsByTagName("episode").count())
-		{
+		if(header.elementsByTagName("episode").count()) {
 			QDomElement episodeElem = detX.elementsByTagName("episode").at(0).toElement();
 			_episode = episodeElem.attribute("number");
 			_season = episodeElem.attribute("season");
 		}
 
 		// Reading the video path
-		if(header.elementsByTagName("videofile").count())
-		{
+		if(header.elementsByTagName("videofile").count()) {
 			QDomElement videoFile = header.elementsByTagName("videofile").at(0).toElement();
 			_videoPath = videoFile.text();
 			// Reading the video framestamp
@@ -92,8 +85,7 @@ bool PhStripDoc::importDetX(QString fileName)
 		}
 
 		// Reading the last position
-		if(header.elementsByTagName("last_position").count())
-		{
+		if(header.elementsByTagName("last_position").count()) {
 			QDomElement lastPosition = header.elementsByTagName("last_position").at(0).toElement();
 			_lastFrame = PhTimeCode::frameFromString(lastPosition.attribute("timecode"), _tcType);
 
@@ -101,20 +93,17 @@ bool PhStripDoc::importDetX(QString fileName)
 		}
 
 		// Reading the author name
-		if(header.elementsByTagName("author").count())
-		{
+		if(header.elementsByTagName("author").count()) {
 			QDomElement author = header.elementsByTagName("author").at(0).toElement();
 			_authorName = author.attribute("firstname") + " " + author.attribute("name");
 		}
 	}
 
 	// Reading the "role" lists
-	if(detX.elementsByTagName("roles").count())
-	{
+	if(detX.elementsByTagName("roles").count()) {
 		QDomElement roles = detX.elementsByTagName("roles").at(0).toElement();
 		QDomNodeList roleList = roles.elementsByTagName("role");
-		for (int i = 0; i < roleList.length(); i++)
-		{
+		for (int i = 0; i < roleList.length(); i++) {
 			QDomElement role = roleList.at(i).toElement();
 			PhPeople *people = new PhPeople(role.attribute("name"), role.attribute("color"));
 
@@ -127,44 +116,35 @@ bool PhStripDoc::importDetX(QString fileName)
 	int loopNumber = 1;
 
 	// Reading the strip body
-	if(detX.elementsByTagName("body").count())
-	{
+	if(detX.elementsByTagName("body").count()) {
 		QDomElement body = detX.elementsByTagName("body").at(0).toElement();
-		for(int i = 0; i < body.childNodes().length(); i++)
-		{
-			if(body.childNodes().at(i).isElement())
-			{
+		for(int i = 0; i < body.childNodes().length(); i++) {
+			if(body.childNodes().at(i).isElement()) {
 				QDomElement elem = body.childNodes().at(i).toElement();
 
 				// Reading loops
 				if(elem.tagName() == "loop")
 					_loops.append(new PhStripLoop(loopNumber++,
-												  PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
+					                              PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
 					_cuts.append(new PhStripCut(PhStripCut::Simple,
-												PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
-				else if(elem.tagName() == "line")
-				{
+					                            PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
+				else if(elem.tagName() == "line") {
 					PhFrame frameIn = -1;
 					PhFrame lastFrame = -1;
 					PhPeople *people = _peoples[elem.attribute("role")];
 					int track = elem.attribute("track").toInt();
 					QString currentText = "";
-					for(int j = 0; j < elem.childNodes().length(); j++)
-					{
-						if(elem.childNodes().at(j).isElement())
-						{
+					for(int j = 0; j < elem.childNodes().length(); j++) {
+						if(elem.childNodes().at(j).isElement()) {
 							QDomElement lineElem = elem.childNodes().at(j).toElement();
-							if(lineElem.tagName() == "lipsync")
-							{
-								if(lineElem.attribute("link") != "off")
-								{
+							if(lineElem.tagName() == "lipsync") {
+								if(lineElem.attribute("link") != "off") {
 									PhFrame frame = PhTimeCode::frameFromString(lineElem.attribute("timecode"), _tcType);
 									if(frameIn < 0)
 										frameIn = frame;
-									if(currentText.length())
-									{
+									if(currentText.length()) {
 										_texts.append(new PhStripText(lastFrame, people, frame, track, currentText));
 										currentText = "";
 									}
@@ -176,8 +156,7 @@ bool PhStripDoc::importDetX(QString fileName)
 						}
 					}
 					// Handling line with no lipsync out
-					if(currentText.length())
-					{
+					if(currentText.length()) {
 						PhFrame frame = lastFrame + currentText.length();
 						_texts.append(new PhStripText(lastFrame, people, frame, track, currentText));
 						lastFrame = frame;
@@ -199,23 +178,19 @@ bool PhStripDoc::openStripFile(QString fileName)
 	bool succeed = false;
 
 	// Try to open the document
-	if(fileName.split(".").last() == "detx")
-	{
+	if(fileName.split(".").last() == "detx") {
 		return importDetX(fileName);
 	}
-	else if(fileName.split(".").last() == "strip")
-	{
+	else if(fileName.split(".").last() == "strip") {
 		QFile xmlFile(fileName);
-		if(!xmlFile.open(QIODevice::ReadOnly))
-		{
+		if(!xmlFile.open(QIODevice::ReadOnly)) {
 			PHDEBUG << "Unable to open" << fileName;
 			return false;
 		}
 
 		// Loading the DOM
 		QDomDocument *domDoc = new QDomDocument();
-		if (!domDoc->setContent(&xmlFile))
-		{
+		if (!domDoc->setContent(&xmlFile)) {
 			xmlFile.close();
 			PHDEBUG << "The XML document seems to be bad formed" << fileName;
 			return false;
@@ -224,26 +199,22 @@ bool PhStripDoc::openStripFile(QString fileName)
 		PHDEBUG << ("Start parsing " + fileName);
 		QDomElement stripDocument = domDoc->documentElement();
 
-		if(stripDocument.tagName() != "strip")
-		{
+		if(stripDocument.tagName() != "strip") {
 			xmlFile.close();
 			PHDEBUG << "Bad root element :" << stripDocument.tagName();
 			return false;
 		}
 
-		QDomElement metaInfo =	stripDocument.elementsByTagName("meta").at(0).toElement();
+		QDomElement metaInfo =  stripDocument.elementsByTagName("meta").at(0).toElement();
 		// Reading the header
-		if(stripDocument.elementsByTagName("meta").count())
-		{
-			for(int i = 0; i < stripDocument.elementsByTagName("media").count(); i++)
-			{
+		if(stripDocument.elementsByTagName("meta").count()) {
+			for(int i = 0; i < stripDocument.elementsByTagName("media").count(); i++) {
 				QDomElement line = metaInfo.elementsByTagName("media").at(i).toElement();
 				PHDEBUG << "line" << line.attribute("type");
 				if(line.attribute("type") == "detx")
 					succeed = importDetX(line.text());
 
-				if(line.attribute("type")  == "video")
-				{
+				if(line.attribute("type")  == "video") {
 					_videoPath = line.text();
 					_videoFrameStamp = PhTimeCode::frameFromString(line.attribute("tcStamp"), _tcType);
 				}
@@ -261,13 +232,11 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC)
 	QFile file(fileName);
 
 	// open a file
-	if (!file.open(QIODevice::WriteOnly))
-	{
+	if (!file.open(QIODevice::WriteOnly)) {
 		PHDEBUG << "an error occur while saving the strip document";
 		return false;
 	}
-	else
-	{
+	else{
 		//if file is successfully opened then create XML
 		QXmlStreamWriter* xmlWriter = new QXmlStreamWriter();
 		// set device (here file)to streamwriter
@@ -341,8 +310,7 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, 
 	int nbNames = names.length();
 	QStringList idList;
 	// Creation of the Peoples
-	for (int i = 1; i <= nbPeople; i++)
-	{
+	for (int i = 1; i <= nbPeople; i++) {
 		PhPeople *people = new PhPeople(names.at(i % nbNames) + " " + QString::number(i), "black");
 		_peoples[people->getName()] = people;
 		idList.append(people->getName());
@@ -350,8 +318,7 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, 
 
 	int position = _videoFrameStamp;
 	// Creation of the text
-	for (int i=0; i < nbText; i++)
-	{
+	for (int i = 0; i < nbText; i++) {
 		//Make people "talk" alternaly
 		QString id = _peoples[idList.at(i % nbPeople)]->getName();
 
@@ -359,7 +326,7 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, 
 		int end = start + text.length() * 1.20588 + 1;
 
 		addText(_peoples[id], start, end,
-				text, i % nbTrack);
+		        text, i % nbTrack);
 
 		// So the texts are all one after the other
 		position += end - start;
@@ -394,13 +361,12 @@ void PhStripDoc::reset()
 void PhStripDoc::addText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track)
 {
 
-	if(sentence != " " && sentence != "" )
-	{
+	if(sentence != " " && sentence != "" ) {
 
 		_texts.push_back(new PhStripText(start, actor,
-										 end,
-										 track, sentence));
-		_nbTexts ++;
+		                                 end,
+		                                 track, sentence));
+		_nbTexts++;
 	}
 }
 
@@ -424,8 +390,7 @@ PhStripText *PhStripDoc::getNextText(PhFrame frame)
 	PhStripText * result = NULL;
 	foreach(PhStripText* text, _texts)
 	{
-		if(text->getTimeIn() > frame)
-		{
+		if(text->getTimeIn() > frame) {
 			if(!result || (text->getTimeIn() < result->getTimeIn()) )
 				result = text;
 		}
@@ -438,8 +403,7 @@ PhStripText *PhStripDoc::getNextText(PhFrame frame, PhPeople *people)
 	PhStripText * result = NULL;
 	foreach(PhStripText* text, _texts)
 	{
-		if((text->getPeople() == people) && (text->getTimeIn() > frame))
-		{
+		if((text->getPeople() == people) && (text->getTimeIn() > frame)) {
 			if(!result || (text->getTimeIn() < result->getTimeIn()) )
 				result = text;
 		}
@@ -452,8 +416,7 @@ PhStripText *PhStripDoc::getNextText(PhFrame frame, QList<PhPeople *> peopleList
 	PhStripText * result = NULL;
 	foreach(PhStripText* text, _texts)
 	{
-		if(peopleList.contains(text->getPeople()) && (text->getTimeIn() > frame))
-		{
+		if(peopleList.contains(text->getPeople()) && (text->getTimeIn() > frame)) {
 			if(!result || (text->getTimeIn() < result->getTimeIn()) )
 				result = text;
 		}

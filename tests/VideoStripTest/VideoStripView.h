@@ -11,8 +11,12 @@ class VideoStripView : public PhGraphicView
 public:
 	explicit VideoStripView(QWidget *parent = 0);
 
-	PhVideoEngine * videoEngine() { return &_videoEngine;}
-	PhGraphicStrip * strip() { return &_strip;}
+	PhVideoEngine * videoEngine() {
+		return &_videoEngine;
+	}
+	PhGraphicStrip * strip() {
+		return &_strip;
+	}
 protected:
 	bool init();
 	void paint();

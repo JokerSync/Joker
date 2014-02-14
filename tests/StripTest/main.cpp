@@ -18,8 +18,7 @@ int main(int argc, char *argv[])
 	PhStripDoc doc;
 
 	//Check argument count
-	if (argc > 1)
-	{
+	if (argc > 1) {
 		// Open the DetX file in argument:
 		QString fileName(argv[1]);
 		doc.importDetX(fileName);
@@ -37,8 +36,7 @@ int main(int argc, char *argv[])
 	QMap<QString, PhPeople *>::iterator people;
 	PHDEBUG <<"--------- actors ---------";
 	PHDEBUG << list_actors.count();
-	for( people=list_actors.begin(); people!=list_actors.end() ; people++)
-	{
+	for( people = list_actors.begin(); people != list_actors.end(); people++) {
 		PHDEBUG << (*people)->getName();
 	}
 
@@ -68,7 +66,7 @@ int main(int argc, char *argv[])
 
 	foreach (PhStripOff * off, doc.getOffs()) {
 		PHDEBUG << off->getPeople()->getName() << " : " << PhTimeCode::stringFromFrame(off->getTimeIn(), doc.getTCType())
-				 << " - " << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
+		        << " - " << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
 	}
 
 	return 0;
