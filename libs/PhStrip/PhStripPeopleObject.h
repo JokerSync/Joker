@@ -9,14 +9,14 @@
 #include "PhPeople.h"
 #include "PhStrip/PhStripObject.h"
 
-/*!
+/**
  * \brief The PhStripPeopleObject class
  */
 class PhStripPeopleObject : public PhStripObject {
 
 public:
 
-	/*!
+	/**
 	 * \brief PhStripPeopleObject constructor
 	 * \param timeIn the beggining of the PhStripPeopleObject
 	 * \param people the corresponding PhPeople
@@ -45,21 +45,21 @@ public:
 	int getTimeOut(){
 		return _timeOut;
 	}
-	/*!
+	/**
 	 * \brief Set the PhPeople
 	 * \param people
 	 */
 	void setPeople(PhPeople * people){
 		_people = people;
 	}
-	/*!
+	/**
 	 * \brief Set the track
 	 * \param track
 	 */
 	void setTrack(int track){
 		_track = track;
 	}
-	/*!
+	/**
 	 * \brief Set the time out
 	 * \param timeOut
 	 */

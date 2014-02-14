@@ -12,7 +12,7 @@
 
 #include "PhTools/PhTimeCode.h"
 
-/*!
+/**
  * \brief The PhTimeCodeEdit class
  *
  * Provides an UI to edit a timecode, at this moment the verification
@@ -25,7 +25,7 @@ class PhTimeCodeEdit : public QLineEdit
 public:
 	explicit PhTimeCodeEdit(QWidget *parent = 0);
 
-	/*!
+	/**
 	 * \brief set Frame
 	 *
 	 * The corresponding timecode will be displayed on the window.
@@ -36,7 +36,7 @@ public:
 	 */
 	void setFrame(PhFrame frame, PhTimeCodeType tcType);
 
-	/*!
+	/**
 	 * \brief Check the timecode
 	 * \return true if the input is correct, false otherwise
 	 */
@@ -49,7 +49,7 @@ public:
 
 signals:
 
-	/*!
+	/**
 	 * \brief Send a signal when the text box frame changed
 	 * \param frame the new frame
 	 * \param tcType the new PhTimeCodeType

@@ -24,11 +24,11 @@
 namespace Ui {
 class JokerWindow;
 }
-/*!
+/**
    *\file JokerWindow.h
  */
 
-/*!
+/**
  * \brief Joker main application window
  *
  * The JokerWindow class is used to display the rythmo band and the video via the VideoStripView.
@@ -39,7 +39,7 @@ class JokerWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	/*!
+	/**
 	 * \brief JokerWindow The JokerWindow constructor
 	 *
 	 * \param settings The application settings
@@ -47,7 +47,7 @@ public:
 	explicit JokerWindow(QSettings *settings);
 	~JokerWindow();
 
-	/*!
+	/**
 	 * \brief Open all supported strip file
 	 *
 	 * First the file existance is checked then,
@@ -57,7 +57,7 @@ public:
 	 */
 	void openFile(QString filePath);
 
-	/*!
+	/**
 	 * \brief Open a video file
 	 *
 	 * Open a videofile and set the framestamp to the videofile's value or the strip's value if the first one is not usable.
@@ -69,7 +69,7 @@ public:
 	bool openVideoFile(QString videoFile);
 
 protected:
-	/*!
+	/**
 	 * \brief event Filter
 	 *
 	 * The event filter allow Joker to react with external controls like when the mouse mouve or when a
@@ -83,7 +83,7 @@ protected:
 	 */
 	bool eventFilter(QObject *sender, QEvent *event);
 
-	/*!
+	/**
 	 * \brief The PhFloatingMediaPanel state enumeration
 	 *
 	 * The enumeration is used to handle the different state of the PhFloatingMediaPanel:

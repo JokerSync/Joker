@@ -17,14 +17,14 @@
 
 #include "PhTools/PhDebug.h"
 
-/*!
+/**
  * \brief Provide an graphic OpenGL engine
  */
 class PhGraphicObject
 {
 public:
 
-	/*!
+	/**
 	 * \brief PhGraphicObject constructor
 	 * \param x Upper left corner coordinates of the display object
 	 * \param y Upper left corner coordinates of the displayed object
@@ -89,13 +89,13 @@ public:
 	 */
 	int getZ();
 
-	/*!
+	/**
 	 * \brief Set the color of the object
 	 * \param color the desired color
 	 */
 	void setColor(QColor color);
 
-	/*!
+	/**
 	 * \brief Get the color of the object
 	 * \return the color
 	 */

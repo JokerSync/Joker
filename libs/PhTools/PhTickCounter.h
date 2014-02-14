@@ -17,7 +17,7 @@ class PhTickCounter
 public:
 	PhTickCounter();
 
-	/*!
+	/**
 	 * \brief Get frequency
 	 * \return the measured frequency
 	 */
@@ -26,7 +26,7 @@ public:
 	}
 
 public slots:
-	/*!
+	/**
 	 * \brief Handle the tick
 	 *
 	 * This slot must be called every time the measured action occurs

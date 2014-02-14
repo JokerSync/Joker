@@ -29,7 +29,7 @@ public:
 	 * default constructor
 	 */
 	PhStripLoop();
-	/*!
+	/**
 	 * \brief PhStripLoop constructor
 	 * \param number
 	 * \param TimeIn

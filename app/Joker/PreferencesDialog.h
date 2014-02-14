@@ -15,7 +15,7 @@
 namespace Ui {
 class PreferencesDialog;
 }
-/*!
+/**
  * \brief The PreferencesDialog class
  * The PreferencesDialog class open a modal window where the final user can set some preferences about
  * the UI, the synchronisation, the general comportment or the log

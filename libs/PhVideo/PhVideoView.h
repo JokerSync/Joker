@@ -9,8 +9,8 @@
 #include "PhGraphic/PhGraphicView.h"
 #include "PhVideoEngine.h"
 
-/*!
- * \brief The PhVideoView class
+/**
+ * @brief The PhVideoView class
  *
  * Provide the viewer of the video
  */
@@ -19,20 +19,20 @@ class PhVideoView : public PhGraphicView
 	Q_OBJECT
 public:
 	explicit PhVideoView(QWidget *parent = 0);
-	/*!
-	 * \brief Set the PhVideoEngine
-	 * \param videoEngine The given videoEngine
+	/**
+	 * @brief Set the PhVideoEngine
+	 * @param videoEngine The given videoEngine
 	 */
 	void setEngine(PhVideoEngine * videoEngine);
 
 protected:
-	/*!
-	 * \brief Initialize the video view
-	 * \return true if succeed, false otherwise.
+	/**
+	 * @brief Initialize the video view
+	 * @return true if succeed, false otherwise.
 	 */
 	bool init();
-	/*!
-	 * \brief Paint the video on the screen
+	/**
+	 * @brief Paint the video on the screen
 	 */
 	void paint();
 

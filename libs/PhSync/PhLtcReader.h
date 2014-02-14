@@ -19,7 +19,7 @@
 #define FRAME_PER_BUFFER 256
 #define SAMPLE_RATE 48000
 
-/*!
+/**
  * \brief The PhLtcReader class
  *
  * It provides a synchronisation module via the LTC protocol
@@ -30,14 +30,14 @@ class PhLtcReader : public QObject
 	Q_OBJECT
 
 public:
-	/*!
+	/**
 	 * \brief PhLtcReader constructor
 	 * \param tcType the timecode type
 	 * \param parent the reader's parent
 	 */
 	explicit PhLtcReader(PhTimeCodeType tcType = PhTimeCodeType25, QObject *parent = 0);
 
-	/*!
+	/**
 	 * \brief Initialize the reader
 	 *
 	 * It initialize the reader on the given input device if it's found,
@@ -46,17 +46,17 @@ public:
 	 * \return True if succeed, false otherwise
 	 */
 	bool init(QString deviceName = "");
-	/*!
+	/**
 	 * \brief close the reader
 	 */
 	void close();
 
-	/*!
+	/**
 	 * \brief Get the input list
 	 * \return Return all the input devices
 	 */
 	static QList<QString> inputList();
-	/*!
+	/**
 	 * \brief Get the reader clock
 	 * \return The reader clock
 	 */

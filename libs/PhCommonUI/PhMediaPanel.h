@@ -36,49 +36,49 @@ public:
 	explicit PhMediaPanel(QWidget *parent = 0);
 
 	~PhMediaPanel();
-	/*!
+	/**
 	 * \brief set TC Type
 	 * \param tcType The type coming from PhTimeCodeType
 	 */
 	void setTCType(PhTimeCodeType tcType);
-	/*!
+	/**
 	 * \brief set the first Frame
 	 * \param firstFrame Desired PhFrame
 	 */
 	void setFirstFrame(PhFrame firstFrame);
-	/*!
+	/**
 	 * \brief set the media length
 	 * Set the media length and adjust the slider
 	 *
 	 * \param length the desired length
 	 */
 	void setMediaLength(PhFrame length);
-	/*!
+	/**
 	 * \brief set Slider Enable
 	 * \param isEnabled : true if the slider must be enabled, false otherwise.
 	 */
 	void setSliderEnable(bool isEnabled);
 
-	/*!
+	/**
 	 * \brief set the clock
 	 * \param clock the clock which will master the PhMediaPanel
 	 */
 	void setClock(PhClock * clock);
 
 
-	/*!
+	/**
 	 * \brief get the first PhFrame
 	 * \return the corresponding PhFrame
 	 */
 	PhFrame getFirstFrame() const;
 
-	/*!
+	/**
 	 * \brief get the media Length
 	 * \return _mediaLength the media length
 	 */
 	PhFrame getMediaLength();
 
-	/*!
+	/**
 	 * \brief get the timecode Type
 	 * \return a PhTimeCodeType from the enum
 	 */
@@ -86,55 +86,55 @@ public:
 
 signals:
 
-	/*!
+	/**
 	 * \brief Send signal when the play/pause button is pressed.
 	 */
 	void playPause();
-	/*!
+	/**
 	 * \brief Send signal when the fastForward button is pressed.
 	 */
 	void fastForward();
-	/*!
+	/**
 	 * \brief Send signal when the rewind button is pressed.
 	 */
 	void rewind();
-	/*!
+	/**
 	 * \brief Send signal when the back button is pressed.
 	 */
 	void back();
-	/*!
+	/**
 	 * \brief Send signal when the nextFrame button is pressed.
 	 */
 	void nextFrame();
-	/*!
+	/**
 	 * \brief Send signal when the previousFrame button is pressed.
 	 */
 	void previousFrame();
-	/*!
+	/**
 	 * \brief Go to the desired frame
 	 * \param frame the desired frame
 	 * \param tcType the desired PhTimeCodeType
 	 */
 	void goToFrame(PhFrame frame, PhTimeCodeType tcType);
-	/*!
+	/**
 	 * \brief Send a signal when the timecode type change
 	 * \param tcType the correponding PhTimeCodeType
 	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 public slots:
 
-	/*!
+	/**
 	 * \brief Handle a modicifation of the frame
 	 * \param frame the new frame
 	 * \param tcType the corresponding PhTimeCodeType
 	 */
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
-	/*!
+	/**
 	 * \brief Handle a modification of the playing rate
 	 * \param rate the new rate
 	 */
 	void onRateChanged(PhRate rate);
-	/*!
+	/**
 	 * \brief handle a modification of the timecode type
 	 * \param tcType the new PhTimeCodeType
 	 */
