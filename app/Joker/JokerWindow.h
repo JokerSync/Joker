@@ -31,8 +31,13 @@ class JokerWindow;
 /**
  * @brief Joker main application window
  *
- * The JokerWindow class is used to display the rythmo band and the video via the VideoStripView.
- *
+ * The JokerWindow class implements the main screen user interface behaviour:
+ * - Display the VideoStripView
+ * - Handling PhFloatingMediaPanel behaviour
+ * - Opening application dialog : preferences, open file, open video file, save , display properties, timestamp, people selection
+ * - Display properties dialog
+ * - Handling controls command
+ * - Connect the application modules: PhVideoEngine, PhGraphicStrip, Synchronizer, PhSonySlaveController, PhLtcReader
  */
 class JokerWindow : public QMainWindow
 {

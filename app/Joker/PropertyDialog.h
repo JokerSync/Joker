@@ -16,7 +16,9 @@ class PropertyDialog;
 
 /**
  * @brief The PropertyDialog class
- * Show some properties of the strip file and the matching video
+ *
+ * Show some properties of the strip file and the matching video.
+ *
  */
 class PropertyDialog : public QDialog
 {
@@ -35,7 +37,7 @@ public:
 	 *
 	 * Attach the given doc to the window in order to access informations.
 	 *
-	 * @param doc The current PhStripDoc
+	 * @param doc The application document
 	 */
 	void setDoc(PhStripDoc * doc);
 	/**
@@ -43,7 +45,7 @@ public:
 	 *
 	 * Attach the given video engine to the window in order to access informations.
 	 *
-	 * @param videoEngine
+	 * @param videoEngine The application video engine
 	 */
 	void setVideoEngine(PhVideoEngine *videoEngine);
 

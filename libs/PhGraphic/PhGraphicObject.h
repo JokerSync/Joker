@@ -18,7 +18,12 @@
 #include "PhTools/PhDebug.h"
 
 /**
- * @brief Provide an graphic OpenGL engine
+ * @brief A generic graphic object
+ *
+ * A PhGraphicObject is described by :
+ * - its position (x, y, z)
+ * - its color
+ * Concrete PhGraphicObject must implement the draw() method.
  */
 class PhGraphicObject
 {

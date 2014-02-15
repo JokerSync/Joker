@@ -26,6 +26,10 @@ class PeopleDialog : public QDialog
 public:
 	/**
 	 * @brief The PeopleDialog constructor
+	 *
+	 * By giving the PeopleDialog a reference to the current people list, the dialog
+	 * is able to update in real time the PhGraphicStrip display.
+	 *
 	 * @param parent The parent object
 	 * @param doc The current PhStripDoc
 	 * @param peopleList The current selected people list

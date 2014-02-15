@@ -13,7 +13,7 @@
 /**
  * @brief The VideoStripSynchronizer class
  *
- * Provide a synchronisation system between the strip and the video.
+ * Provide a synchronisation system between the strip, the video and the external sync signal.
  */
 class VideoStripSynchronizer : public QObject
 {
@@ -34,7 +34,6 @@ public:
 
 	/**
 	 * @brief Set the strip clock
-	 *
 	 * @param clock The strip clock
 	 */
 	void setStripClock(PhClock *clock);
