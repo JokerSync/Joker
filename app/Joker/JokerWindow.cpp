@@ -331,6 +331,18 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				on_actionOpen_Video_triggered();
 			return true;
 		}
+		if(sender->objectName() == this->objectName())
+		{
+			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
+			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->value("stripHeight", 0.25f).toFloat()))
+			{
+				if(isFullScreen())
+					showNormal();
+				else
+					showFullScreen();
+			}
+			return true;
+		}
 		break;
 	case QEvent::KeyPress:
 		if (static_cast<QKeyEvent *>(event)->key() == Qt::Key_F12)
