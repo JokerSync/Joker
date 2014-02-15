@@ -16,15 +16,25 @@ namespace Ui {
 class PreferencesDialog;
 }
 /**
- * @brief The PreferencesDialog class
- * The PreferencesDialog class open a modal window where the final user can set some preferences about
- * the UI, the synchronisation, the general comportment or the log
+ * @brief The preferences dialog
+ *
+ * The dialog contains the following user settings:
+ * - General HUD: enable/disable element like current timecode
+ * - Synchronization: delay, sync mode, sync mode configuration
+ * - PhGraphicStrip setting: boldness, speed, font, height
+ * - Log
  */
 class PreferencesDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
+	/**
+	 * @brief The PreferencesDialog constructor
+	 *
+	 * @param settings The application settings
+	 * @param parent The parent object
+	 */
 	explicit PreferencesDialog(QSettings *settings, QWidget *parent = 0);
 	~PreferencesDialog();
 

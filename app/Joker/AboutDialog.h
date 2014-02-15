@@ -12,14 +12,17 @@ namespace Ui {
 class AboutDialog;
 }
 /**
- * @brief The AboutDialog class
- * This little class allow Joker to show informations about himself
+ * @brief This dialog display legal and version information about Joker.
  */
 class AboutDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
+	/**
+	 * @brief The AboutDialog constructor
+	 * @param parent The parent object
+	 */
 	explicit AboutDialog(QWidget *parent = 0);
 	~AboutDialog();
 

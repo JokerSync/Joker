@@ -14,9 +14,14 @@ namespace Ui {
 class LTCToolWindow;
 }
 /*!
- * \brief The LTCToolWindow class
+ * \brief LTCTool main application window
  *
- * It displays the two timecodes, the upper one is the master and the lower one is the slave.
+ * The LTCToolWindow class implements the main screen user interface behaviour:
+ * - Display the generator TC in / TC out
+ * - Display the generator PhMediaPanel
+ * - Display the reader timecode label
+ * - Opening application dialog : preferences, set TC in, set TC out
+ * - Connect the application modules to the interface: PhLtcWriter andPhLtcReader
  */
 class LTCToolWindow : public QMainWindow
 {
@@ -24,8 +29,8 @@ class LTCToolWindow : public QMainWindow
 
 public:
 	/*!
-	 * \brief LTCToolWindow constructor
-	 * \param settings The corresponding QSettings
+	 * \brief The LTCToolWindow constructor
+	 * \param settings The application settings
 	 * \param parent
 	 */
 	explicit LTCToolWindow(QSettings *settings, QWidget *parent = 0);
@@ -37,8 +42,9 @@ private slots:
 	void on_actionSet_TC_Out_triggered();
 	void on_actionPreferences_triggered();
 
-	/** If the application loops the LTC,
-	 *  Reset clock to tcIn if tc > tcOut
+	/**
+	 * If the application loops the LTC,
+	 * reset clock to tcIn if tc > tcOut
 	 */
 	void onFrameChanged(PhFrame, PhTimeCodeType);
 	void onSlaveFrameChanged(PhFrame,PhTimeCodeType);

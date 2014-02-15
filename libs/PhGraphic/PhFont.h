@@ -10,9 +10,10 @@
 #include <SDL2/SDL_ttf.h>
 
 /**
- * @brief The PhFont class
+ * @brief Describe the font appearance for PhGraphicText
  *
- * It provides a lot of tools which allow the users to compute texts
+ * The PhFont instance are initialized with a true type font file.
+ * The boldness can be configured.
  */
 class PhFont
 {
