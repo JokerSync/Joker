@@ -17,7 +17,10 @@
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTimeCode.h"
 
+#warning TODO put this in the settings
+/** Number of frame processed by the audio callback call */
 #define FRAME_PER_BUFFER 256
+/** Audio sample rate */
 #define SAMPLE_RATE 48000
 
 /**

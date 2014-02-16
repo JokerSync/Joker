@@ -24,6 +24,10 @@ class PhTimeCodeEdit : public QLineEdit
 	Q_OBJECT
 
 public:
+	/**
+	 * @brief PhTimeCodeEdit constructor
+	 * @param parent The parent object
+	 */
 	explicit PhTimeCodeEdit(QWidget *parent = 0);
 
 	/**

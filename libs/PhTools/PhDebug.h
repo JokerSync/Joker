@@ -14,11 +14,14 @@
 
 #include "iostream"
 
-
+/** PHDBG allow to have a multi level log system */
 #define PHDBG(logLevelMessage) PhDebug::instance(logLevelMessage) <<  qDebug() << Q(PhDebug::getFileName(__FILE__)) << Q(PhDebug::getFuncName(__FUNCTION__)) << Q(PhDebug::getLine(__LINE__))
-		#define PHDEBUG PHDBG()
 
-// In order to get rid of double quotes when displaying a variable
+/** PHDEBUG is the default log system */
+#define PHDEBUG PHDBG()
+
+#warning TODO I don't like it...
+/** In order to get rid of double quotes when displaying a variable */
 #define Q(string) (string).toStdString().c_str()
 
 /**

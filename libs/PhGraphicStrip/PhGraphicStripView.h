@@ -17,6 +17,10 @@ class PhGraphicStripView : public PhGraphicView
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief PhGraphicStripView constructor
+	 * @param parent The parent object
+	 */
 	explicit PhGraphicStripView(QWidget *parent = 0);
 
 	/**

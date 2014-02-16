@@ -10,8 +10,25 @@
 #include "PhGraphicRect.h"
 #include "PhFont.h"
 
+/**
+ * @brief A graphic text object
+ *
+ * This graphic text object is specified with:
+ * - a content
+ * - a color, position and size (inherited from PhGraphicRect)
+ * - a PhFont
+ */
 class PhGraphicText : public PhGraphicRect {
 public:
+	/**
+	 * @brief PhGraphicText constructor
+	 * @param font The font
+	 * @param content The content
+	 * @param x The x coordinate
+	 * @param y The y coordinate
+	 * @param w The width
+	 * @param h The height
+	 */
 	PhGraphicText(PhFont* font, QString content, int x = 0, int y = 0, int w = 0, int h = 0);
 	~PhGraphicText();
 	/**
