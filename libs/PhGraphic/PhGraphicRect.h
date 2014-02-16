@@ -17,6 +17,13 @@ class PhGraphicRect : public PhGraphicObject
 {
 public:
 
+	/**
+	 * @brief PhGraphicRect constructor
+	 * @param x The x coordinate
+	 * @param y The y coordinate
+	 * @param w The width
+	 * @param h The height
+	 */
 	PhGraphicRect(int x = 0, int y = 0, int w = 0, int h = 0);
 	~PhGraphicRect();
 
