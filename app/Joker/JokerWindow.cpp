@@ -333,14 +333,10 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		}
 		if(sender->objectName() == this->objectName())
 		{
-			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
-			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->value("stripHeight", 0.25f).toFloat()))
-			{
-				if(isFullScreen())
-					showNormal();
-				else
-					showFullScreen();
-			}
+			if(isFullScreen())
+				showNormal();
+			else
+				showFullScreen();
 			return true;
 		}
 		break;
