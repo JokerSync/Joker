@@ -19,6 +19,10 @@ class PhVideoView : public PhGraphicView
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief PhVideoView constructor
+	 * @param parent The parent object
+	 */
 	explicit PhVideoView(QWidget *parent = 0);
 	/**
 	 * @brief Set the PhVideoEngine

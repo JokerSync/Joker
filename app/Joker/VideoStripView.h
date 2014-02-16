@@ -33,6 +33,10 @@ class VideoStripView : public PhGraphicView
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief VideoStripView constructor
+	 * @param parent The parent object
+	 */
 	explicit VideoStripView(QWidget *parent = 0);
 
 	/**

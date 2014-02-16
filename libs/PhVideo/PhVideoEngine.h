@@ -8,11 +8,10 @@
 #define PHVIDEOENGINE_H
 
 extern "C" {
-// see http://code.google.com/p/ffmpegsource/issues/detail?id=11#c13
-// and http://code.google.com/p/ffmpegsource/issues/detail?id=11#c23
-
 #ifndef INT64_C
+/** see http://code.google.com/p/ffmpegsource/issues/detail?id=11#c13 */
 #define INT64_C(c) (c ## LL)
+/** and http://code.google.com/p/ffmpegsource/issues/detail?id=11#c23 */
 #define UINT64_C(c) (c ## ULL)
 #endif
 
@@ -39,6 +38,10 @@ class PhVideoEngine : public QObject
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief PhVideoEngine constructor
+	 * @param parent The parent object
+	 */
 	explicit PhVideoEngine(QObject *parent = 0);
 	~PhVideoEngine();
 

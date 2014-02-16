@@ -23,6 +23,10 @@ class PhFloatingMediaPanel : public PhMediaPanel
 	Q_OBJECT
 
 public:
+	/**
+	 * @brief PhFloatingMediaPanel constructor
+	 * @param parent The parent object
+	 */
 	explicit PhFloatingMediaPanel(QWidget *parent = 0);
 	/**
 	 * @brief Check if mouse button is pressed on PhFloatingMediaPanel
