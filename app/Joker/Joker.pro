@@ -70,14 +70,12 @@ mac{
 # For the plist version
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
 	QMAKE_POST_LINK += sed -i \"\" -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
-	QMAKE_POST_LINK += cd $${JOKER_ROOT} && sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \".doxygen\" && ./scripts/doxygen.sh && cd $${OUT_PWD};
-
+warning("I don't like it, see issue 72")
+#	QMAKE_POST_LINK += cd $${JOKER_ROOT} && sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \".doxygen\" && ./scripts/doxygen.sh && cd $${OUT_PWD};
 }
 win32 {
-
 	PATH = .
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
-
 }
 
 
@@ -86,7 +84,7 @@ DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
 TRANSLATIONS =	fr_FR.ts \
 				en_US.ts \
 
-QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/$${PATH}/fr_FR.qm $${CS}
+QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $$shell_path($${RESOURCES_PATH}/) $${CS}
 
 CONFIG(release, debug|release) {
