@@ -32,9 +32,9 @@ git clone https://github.com/Phonations/libltc.git
 cd libltc
 aclocal
 autoheader
-glibtoolize –-copy
+glibtoolize --copy
 autoconf
-automake –-gnu –-add-missing –-copy
+automake --gnu --add-missing --copy
 ./configure
 make
 sudo make install
