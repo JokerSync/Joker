@@ -2,20 +2,20 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="en_US">
 <context>
-    <name>AboutMenu</name>
+    <name>AboutDialog</name>
     <message>
-        <location filename="AboutMenu.ui" line="14"/>
+        <location filename="AboutDialog.ui" line="14"/>
         <source>About Joker</source>
         <translation>About Joker</translation>
     </message>
     <message>
-        <location filename="AboutMenu.ui" line="26"/>
+        <location filename="AboutDialog.ui" line="26"/>
         <source>Copyright 2013-2014 Phonations, All rights reserved.</source>
         <oldsource>Copyright 2013 Phonations, All rights reserved</oldsource>
         <translation type="unfinished">Copyright 2013 Phonations, All rights reserved.</translation>
     </message>
     <message>
-        <location filename="AboutMenu.ui" line="52"/>
+        <location filename="AboutDialog.ui" line="52"/>
         <source>Close</source>
         <translation>Close</translation>
     </message>

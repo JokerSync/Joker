@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef MainView_H
 #define MainView_H
@@ -19,17 +19,17 @@
 
 class MainView : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    MainView();
-   // virtual void keyPressEvent( QKeyEvent *keyEvent );
+	MainView();
+	// virtual void keyPressEvent( QKeyEvent *keyEvent );
 	//virtual void wheelEvent(QWheelEvent *wheel);
-    /**
-     * @brief openFile
-     * call StripWindow::openFile() to open a PhStripDoc with the
-     * user selected file
-     */
+	/**
+	 * @brief openFile
+	 * call StripWindow::openFile() to open a PhStripDoc with the
+	 * user selected file
+	 */
 	void openFile(QString fileName);
 
 //	PhGraphicStripController* getController(){return _MController;};
@@ -73,11 +73,11 @@ private:
 //     */
 //    void createMenus();
 
-    /**
-     * @brief _strip
-     * link to the StripWindow
-     */
-    PhGraphicStripView *_stripView;
+	/**
+	 * @brief _strip
+	 * link to the StripWindow
+	 */
+	PhGraphicStripView *_stripView;
 
 
 //    /**

@@ -19,24 +19,24 @@ class QLabel;
 QT_END_NAMESPACE
 
 namespace Ui {
-	class MainView;
+class MainView;
 }
 
 class MainView : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    /**
-     * @brief MainView constructor
-     */
-    MainView(QSettings *settings);
+	/**
+	 * @brief MainView constructor
+	 */
+	MainView(QSettings *settings);
 	~MainView();
-    /**
-     * Open a video file.
-     * @param fileName Path of the video file to open.
-     * @return True if succeeds, false otherwise.
-     */
-    bool openFile(QString fileName);
+	/**
+	 * Open a video file.
+	 * @param fileName Path of the video file to open.
+	 * @return True if succeeds, false otherwise.
+	 */
+	bool openFile(QString fileName);
 
 private slots:
 

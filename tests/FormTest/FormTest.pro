@@ -37,10 +37,10 @@ include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    AboutMenu.cpp
+    AboutDialog.cpp
 
 HEADERS  += MainWindow.h \
-    AboutMenu.h
+    AboutDialog.h
 
 FORMS    += MainWindow.ui \
-    AboutMenu.ui
+    AboutDialog.ui

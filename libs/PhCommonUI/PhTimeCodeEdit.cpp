@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "PhTimecodeEdit.h"
 
 #include <QRegExpValidator>
@@ -43,8 +49,7 @@ PhFrame PhTimeCodeEdit::frame()
 
 void PhTimeCodeEdit::onTextChanged(QString text)
 {
-	if(isTimeCode())
-	{
+	if(isTimeCode()) {
 		PhFrame frame = PhTimeCode::frameFromString(text, _tcType);
 		emit frameChanged(frame, _tcType);
 	}

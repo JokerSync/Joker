@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -6,7 +12,7 @@
 
 PhGraphicView::PhGraphicView( QWidget *parent)
 	: QGLWidget(parent),
-	  _settings(NULL)
+	_settings(NULL)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";
@@ -17,7 +23,7 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	else
 		PHDEBUG << "TTF error:" << TTF_GetError();
 
- 	t_Timer = new QTimer(this);
+	t_Timer = new QTimer(this);
 	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 	t_Timer->start(10);
 }
@@ -37,16 +43,16 @@ void PhGraphicView::initializeGL()
 
 void PhGraphicView::resizeGL(int width, int height)
 {
-    resize(width, height);
-    if(height == 0)
-        height = 1;
-    glViewport(0, 0, width, height);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, width, height, 0, -10, 10);
-    glMatrixMode(GL_MODELVIEW);
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
+	resize(width, height);
+	if(height == 0)
+		height = 1;
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, width, height, 0, -10, 10);
+	glMatrixMode(GL_MODELVIEW);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 	glLoadIdentity();
 }
 

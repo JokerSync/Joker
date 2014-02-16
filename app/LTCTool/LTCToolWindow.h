@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef LTCTOOLWINDOW_H
 #define LTCTOOLWINDOW_H
 
@@ -13,12 +19,26 @@
 namespace Ui {
 class LTCToolWindow;
 }
-
+/*!
+ * \brief LTCTool main application window
+ *
+ * The LTCToolWindow class implements the main screen user interface behaviour:
+ * - Display the generator TC in / TC out
+ * - Display the generator PhMediaPanel
+ * - Display the reader timecode label
+ * - Opening application dialog : preferences, set TC in, set TC out
+ * - Connect the application modules to the interface: PhLtcWriter andPhLtcReader
+ */
 class LTCToolWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
+	/*!
+	 * \brief The LTCToolWindow constructor
+	 * \param settings The application settings
+	 * \param parent
+	 */
 	explicit LTCToolWindow(QSettings *settings, QWidget *parent = 0);
 	~LTCToolWindow();
 
@@ -28,8 +48,9 @@ private slots:
 	void on_actionSet_TC_Out_triggered();
 	void on_actionPreferences_triggered();
 
-	/** If the application loops the LTC,
-	 *  Reset clock to tcIn if tc > tcOut
+	/**
+	 * If the application loops the LTC,
+	 * reset clock to tcIn if tc > tcOut
 	 */
 	void onFrameChanged(PhFrame, PhTimeCodeType);
 	void onSlaveFrameChanged(PhFrame,PhTimeCodeType);

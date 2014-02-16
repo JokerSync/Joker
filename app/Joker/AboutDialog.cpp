@@ -1,14 +1,15 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
-#include "AboutMenu.h"
-#include "ui_AboutMenu.h"
+#include "AboutDialog.h"
+#include "ui_AboutDialog.h"
 
-AboutMenu::AboutMenu(QWidget *parent) :
+AboutDialog::AboutDialog(QWidget *parent) :
 	QDialog(parent),
-	ui(new Ui::AboutMenu)
+	ui(new Ui::AboutDialog)
 {
 	ui->setupUi(this);
 	QString version = APP_NAME;
@@ -26,12 +27,12 @@ AboutMenu::AboutMenu(QWidget *parent) :
 	scn->addPixmap( pix );
 }
 
-AboutMenu::~AboutMenu()
+AboutDialog::~AboutDialog()
 {
 	delete ui;
 }
 
-void AboutMenu::on_pushButton_clicked()
+void AboutDialog::on_pushButton_clicked()
 {
 	this->close();
 }

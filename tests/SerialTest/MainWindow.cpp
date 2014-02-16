@@ -89,10 +89,8 @@ bool MainWindow::open(QSerialPort * serial, QString suffix)
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
 	{
 		QString name = info.portName();
-		if(name.startsWith("usbserial-"))
-		{
-			if(name.endsWith(suffix))
-			{
+		if(name.startsWith("usbserial-")) {
+			if(name.endsWith(suffix)) {
 				serial->setPort(info);
 				serial->setBaudRate(QSerialPort::Baud38400);
 				serial->setDataBits(QSerialPort::Data8);
@@ -126,13 +124,12 @@ void MainWindow::checkCTS()
 {
 	bool cts = _serialA.pinoutSignals() & QSerialPort::ClearToSendSignal;
 	float frequency = _ctsCounter.frequency();
-	if(cts != _lastCTS)
-	{
+	if(cts != _lastCTS) {
 		_ctsCounter.tick();
 		ui->ctsLabel->setText("CTS : " + QString::number(frequency));
 		_lastCTS = cts;
 	}
 
 	_timerCounter.tick();
-	PHDEBUG << _timerCounter.frequency() << frequency ;
+	PHDEBUG << _timerCounter.frequency() << frequency;
 }

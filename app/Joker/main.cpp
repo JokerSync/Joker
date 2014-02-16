@@ -1,8 +1,8 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
-
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include <QApplication>
 #include <QDebug>
@@ -12,6 +12,12 @@
 
 #include "JokerWindow.h"
 
+/**
+ * @brief The application main entry point
+ * @param argc Command line argument count
+ * @param argv Command line argument list
+ * @return 0 if the application works well.
+ */
 int main(int argc, char *argv[])
 {
 	QSettings settings("Phonations", "Joker");
@@ -22,9 +28,9 @@ int main(int argc, char *argv[])
 	PhDebug::showConsole(true);
 
 	QApplication a(argc, argv);
-    QTranslator translator;
+	QTranslator translator;
 	translator.load(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + QLocale::system().name() + ".qm");
-    a.installTranslator(&translator);
+	a.installTranslator(&translator);
 
 
 	JokerWindow w(&settings);
