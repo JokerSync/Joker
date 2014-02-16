@@ -136,6 +136,7 @@ private :
 	long pixelPerFrame;
 	QList<PhPeople*> *_selectedPeoples;
 
+	QColor computeColor(PhPeople *people);
 };
 
 #endif // PHGRAPHICSTRIP_H
