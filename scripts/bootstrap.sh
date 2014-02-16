@@ -3,7 +3,7 @@
 if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
 
-brew update
+brew update > /dev/null
 brew install qt5 sdl2 sdl2_image sdl2_ttf ffmpeg libav
 find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
 
