@@ -8,9 +8,10 @@
 #define TIMECODEEDIT_H
 
 #include <QWidget>
+#include <QEvent>
 #include <QDebug>
 #include <QLineEdit>
-
+#include <QKeyEvent>
 #include "PhTools/PhTimeCode.h"
 
 /**
@@ -63,6 +64,10 @@ private slots:
 
 private:
 	PhTimeCodeType _tcType;
+	bool eventFilter(QObject *sender, QEvent *event);
+	QString _oldFrame;
+	QString _addedNumbers;
+	void compute(bool add);
 };
 
 #endif // TIMECODEEDIT_H

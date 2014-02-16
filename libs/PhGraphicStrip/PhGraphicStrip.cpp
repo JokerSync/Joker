@@ -131,6 +131,17 @@ void PhGraphicStrip::setPixelPerFrame(long value)
 	pixelPerFrame = value;
 }
 
+QColor PhGraphicStrip::computeColor(PhPeople * people)
+{
+	if(_selectedPeoples and !_selectedPeoples->contains(people))
+	{
+		return Qt::gray;
+	}
+	else
+	{
+		return people->getColor();
+	}
+}
 
 void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
@@ -251,13 +262,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gText->setY(y + track * trackHeight);
 				gText->setHeight(trackHeight);
 				gText->setZ(-1);
-				if(_selectedPeoples and !_selectedPeoples->contains(text->getPeople())) {
-					gText->setColor(Qt::gray);
-				}
-				else{
-					if(text->getPeople())
-						gText->setColor(QColor(text->getPeople()->getColor()));
-				}
+				gText->setColor(computeColor(text->getPeople()));
 
 				gText->draw();
 			}
@@ -291,12 +296,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->setY(y + track * trackHeight);
 				gPeople->setZ(-1);
 				gPeople->setHeight(trackHeight / 2);
-				if(_selectedPeoples and !_selectedPeoples->contains(people)) {
-					gPeople->setColor(Qt::gray);
-				}
-				else{
-					gPeople->setColor(QColor(people->getColor()));
-				}
+				gPeople->setColor(computeColor(people));
 				gPeople->draw();
 
 				//Check if the name is printed on the screen
