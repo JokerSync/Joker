@@ -1,6 +1,5 @@
 language: objective-c
 install:
-- xcode-select --install
 - ./scripts/bootstrap.sh
 - export PATH=$PATH:/usr/local/opt/qt5/bin
 script:
