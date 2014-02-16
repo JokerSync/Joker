@@ -345,7 +345,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		}
 		break;
 	case QEvent::KeyPress:
-		if (static_cast<QKeyEvent *>(event)->key() == Qt::Key_F12)
+		if (static_cast<QKeyEvent *>(event)->key() == Qt::Key_F10)
 		{
 			if(this->isFullScreen()) {
 				this->showNormal();
