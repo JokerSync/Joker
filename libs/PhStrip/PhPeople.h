@@ -10,7 +10,8 @@
 #include <QString>
 
 /**
- * Represents a character or a group of character from the video content.
+ * @brief Represents a character or a group of character from the video content.
+ *
  * It can also be use to write notes or comments on the strip.
  * For example : NDA (note de l'adaptateur).
  */
