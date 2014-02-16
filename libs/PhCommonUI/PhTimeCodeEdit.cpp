@@ -76,12 +76,12 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 			if(_addedNumbers.length())
 			{
 				_addedNumbers.remove(_addedNumbers.length() - 1, 1);
-				PHDBG(0) << "remove";
 				compute(false);
 			}
 			return true;
 		case Qt::Key_Escape:
 		case Qt::Key_Enter:
+		case Qt::Key_Return:
 			return false;
 		default:
 			return true;
