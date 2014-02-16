@@ -11,7 +11,9 @@
 #include "PhStrip/PhStripPeopleObject.h"
 
 /**
- * Sentence or part of a sentence of a PhPeople with synchronization information.
+ * @brief Sentence or part of a sentence of a PhPeople with synchronization information.
+ *
+ * Its property is content.
  */
 class PhStripText : public PhStripPeopleObject {
 

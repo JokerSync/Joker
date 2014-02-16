@@ -14,7 +14,8 @@
 #include "PhTools/PhTickCounter.h"
 
 /**
- * The PhGraphicView class is a canvas to create your custom graphic view.
+ * @brief The PhGraphicView class is a canvas to create your custom graphic view.
+ *
  * Create your PhGraphicView child, initialize your graphic object with init(),
  * paint them with paint(), and clear them with dispose().
  * These methods are called automatically after the view creation and during all

@@ -11,7 +11,9 @@
 #include "PhStrip/PhStripObject.h"
 
 /**
- * @brief The PhStripPeopleObject class
+ * @brief A strip object affected to a PhPeople
+ *
+ * Its properties are people, track and timeOut.
  */
 class PhStripPeopleObject : public PhStripObject {
 

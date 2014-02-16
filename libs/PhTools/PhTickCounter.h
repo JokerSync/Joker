@@ -10,8 +10,10 @@
 #include <QTime>
 
 /**
- * TickCounter is an utility that allow to meter the frequency of a signal
- * connected to the tick slot. It takes 1 second to be accurate.
+ * @brief Utility that allow to meter the frequency of a signal
+ * connected to the tick slot
+ *
+ * It takes 1 second to be accurate.
  */
 class PhTickCounter
 {

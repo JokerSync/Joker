@@ -10,7 +10,9 @@
 #include <PhTools/PhClock.h>
 
 /**
- * Generic object of a rythmo strip (loop, cut, text, ...).
+ * @brief Generic object of a rythmo strip (loop, cut, text, ...).
+ *
+ * Its only property is timeIn.
  */
 class PhStripObject {
 
