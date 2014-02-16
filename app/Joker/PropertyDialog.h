@@ -16,10 +16,7 @@ class PropertyDialog;
 }
 
 /**
- * @brief The PropertyDialog class
- *
- * Show some properties of the strip file and the matching video.
- *
+ * @brief Show some properties of the strip file and the matching video.
  */
 class PropertyDialog : public QDialog
 {

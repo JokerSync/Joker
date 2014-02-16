@@ -23,8 +23,7 @@
 #define SAMPLE_RATE 48000
 
 /**
- * @brief Send master LTC signal
- *
+ * @brief Send master LTC generator
  */
 class PhLtcWriter : public QObject
 {

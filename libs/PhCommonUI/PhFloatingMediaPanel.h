@@ -13,7 +13,7 @@
 #include "PhMediaPanel.h"
 
 /**
- * @brief The PhFloatingMediaPanel class
+ * @brief A floating version of a PhMediaPanel
  *
  * It provides a nice media panel which can control the desired slave (any player).
  *

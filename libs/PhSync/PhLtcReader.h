@@ -24,9 +24,7 @@
 #define SAMPLE_RATE 48000
 
 /**
- * @brief The PhLtcReader class
- *
- * It provides a synchronisation module via the LTC protocol
+ * @brief A synchronisation module via the LTC protocol
  */
 class PhLtcReader : public QObject
 {

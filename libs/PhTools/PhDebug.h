@@ -25,7 +25,7 @@
 #define Q(string) (string).toStdString().c_str()
 
 /**
- * @brief The PhDebug class
+ * @brief A custom log system
  *
  * It provides a powerful log tool, using mask to show/hide some (un)desired
  * log informations which can be saved - or not - to a local file.
@@ -110,6 +110,17 @@ public:
 	static void showConsole(bool show);
 
 private:
+	/**
+	 * @brief Custom message output
+	 *
+	 * This function is called to create an instance of the class.
+	 * Calling the constructor publicly is not allowed. The constructor
+	 * is private and is only called by this Instance function.
+	 *
+	 * @param type The message type
+	 * @param context The message context
+	 * @param msg The message
+	 */
 	static void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
 	static PhDebug * d;

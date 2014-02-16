@@ -14,10 +14,7 @@
 #include "PhTools/PhTimeCode.h"
 
 /**
- * @brief The PhTimeCodeEdit class
- *
- * Provides an UI to edit a timecode, at this moment the verification
- * is done when the widget is quit.
+ * @brief Provides an UI to edit a timecode
  */
 class PhTimeCodeEdit : public QLineEdit
 {
