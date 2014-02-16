@@ -23,7 +23,7 @@
 #include "PhStripOff.h"
 
 /**
- * @brief The PhStripDoc class
+ * @brief The joker document class
  *
  * It contains the script file with all the informations
  * such as the title, the authors, the characters (PhPeople), the lines,

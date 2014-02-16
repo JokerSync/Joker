@@ -21,9 +21,9 @@
 #include "PhTools/PhClock.h"
 
 /**
- * @brief The PhGraphicStrip class
+ * @brief This class draw a segment of strip band.
  *
- * This class draw a segment of strip band. The length of the strip band portion
+ * The length of the strip band portion
  * is proportionnal to its width in pixel.
  *
  * The strip is divided in several horizontal track.

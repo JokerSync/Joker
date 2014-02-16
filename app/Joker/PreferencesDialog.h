@@ -17,7 +17,7 @@ namespace Ui {
 class PreferencesDialog;
 }
 /**
- * @brief The preferences dialog
+ * @brief Joker preferences dialog
  *
  * The dialog contains the following user settings:
  * - General HUD: enable/disable element like current timecode

@@ -11,9 +11,7 @@
 #include "PhVideoEngine.h"
 
 /**
- * @brief The PhVideoView class
- *
- * Provide the viewer of the video
+ * @brief Provide a view for a PhVideoEngine
  */
 class PhVideoView : public PhGraphicView
 {

@@ -14,7 +14,7 @@ class PreferencesPanel;
 }
 
 /*!
- * \brief The PreferencesPanel class
+ * \brief LTCTool preferences dialog
  *
  * It allow the user to select the desired input and output.
  */

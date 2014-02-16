@@ -30,9 +30,9 @@ extern "C" {
 #include "PhGraphic/PhGraphicTexturedRect.h"
 
 /**
- * @brief The PhVideoEngine class
+ * @brief The video engine
  *
- * It provide engine which compute the video from a file to an openGL texture
+ * It provide engine which compute the video from a file to an openGL texture.
  */
 class PhVideoEngine : public QObject
 {

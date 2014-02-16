@@ -8,10 +8,9 @@
 #define PHPICTURETOOLS_H
 
 /**
- * @brief The PhPictureTools class
+ * @brief It provides a lot of useful picture tools
  *
- * It provides a lot of useful picture tools.
- * Essentially space color convertions
+ * It can do space color convertions and picture pattern generation.
  */
 class PhPictureTools
 {

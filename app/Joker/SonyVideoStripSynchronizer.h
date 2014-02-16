@@ -12,9 +12,7 @@
 #include "PhTools/PhClock.h"
 
 /**
- * @brief The VideoStripSynchronizer class
- *
- * Provide a synchronisation system between the strip, the video and the external sync signal.
+ * @brief Provide a synchronisation system between the strip, the video and the external sync signal
  */
 class VideoStripSynchronizer : public QObject
 {

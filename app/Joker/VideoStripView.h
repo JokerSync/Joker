@@ -16,7 +16,7 @@
 #include "PhSync/PhSonyController.h"
 
 /**
- * @brief The VideoStripView class
+ * @brief The Joker main view
  *
  * This PhGraphicView display the following graphic elements:
  * - the PhVideoEngine
@@ -27,8 +27,6 @@
  * - An error message if no video sync is received in sony mode
  * The view layout is configured via the settings.
  */
-
-
 class VideoStripView : public PhGraphicView
 {
 	Q_OBJECT
