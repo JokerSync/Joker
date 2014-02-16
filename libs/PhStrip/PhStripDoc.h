@@ -1,6 +1,7 @@
 /**
- * Copyright (C) 2012-2014 Phonations
- * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
 #ifndef PHSTRIPDOC_H
