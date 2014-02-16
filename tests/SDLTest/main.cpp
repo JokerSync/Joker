@@ -6,7 +6,6 @@
 #include <cstring>
 #include "string.h"
 #include "iostream"
-//#include "SDLMain.h"
 
 #include <QString>
 #include <QFileInfo>
@@ -19,23 +18,27 @@ using namespace std;
 
 #undef main
 
+/**
+ * @brief The application main entry point
+ * @param argc Command line argument count
+ * @param argv Command line argument list
+ * @return 0 if the application works well.
+ */
 int main(int argc, char **argv)
 {
 	QApplication a(argc, argv);
 
-	int numdrivers = SDL_GetNumRenderDrivers(); 
-	printf("Drivers count: %i\n", numdrivers); 
-	for (int i=0;i<numdrivers;i++) 
-	{ 
-		SDL_RendererInfo drinfo; 
-		SDL_GetRenderDriverInfo(i, &drinfo); 
+	int numdrivers = SDL_GetNumRenderDrivers();
+	printf("Drivers count: %i\n", numdrivers);
+	for (int i = 0; i < numdrivers; i++) {
+		SDL_RendererInfo drinfo;
+		SDL_GetRenderDriverInfo(i, &drinfo);
 
-		printf("Driver name: %s\n", drinfo.name); 
+		printf("Driver name: %s\n", drinfo.name);
 	}
 
 	qDebug() << "Initialize all SDL subsystems";
-	if( SDL_Init( SDL_INIT_VIDEO ) == -1 )
-	{
+	if( SDL_Init( SDL_INIT_VIDEO ) == -1 ) {
 		qDebug() << "Error:" << SDL_GetError();
 		return false;
 	}
@@ -58,8 +61,7 @@ int main(int argc, char **argv)
 	qDebug() << "exists" << file.exists();
 	SDL_Surface *image = IMG_Load( lookPath.toStdString().c_str());
 
-	if ( image == NULL )
-	{
+	if ( image == NULL ) {
 		qDebug() << "failed to load " << lookPath;
 		qDebug() << SDL_GetError();
 		return 1;
@@ -81,15 +83,14 @@ int main(int argc, char **argv)
 	TTF_Font *font = TTF_OpenFont(fontPath.toStdString().c_str(), 100 );
 	qDebug() << "Outline :" << TTF_GetFontOutline(font);
 
-	if (font == NULL)
-	{
+	if (font == NULL) {
 		qDebug() << "Error opening " << fontPath;
 		qDebug() << SDL_GetError();
 		return 3;
 	}
 
 	//Font's color (black)
-	SDL_Color color={0, 0, 0, 255};
+	SDL_Color color = {0, 0, 0, 255};
 	Uint16 ch;
 #define TEST  2
 
@@ -128,22 +129,17 @@ int main(int argc, char **argv)
 
 	// Nb pass for bold setting
 	int nbPass = 2;
-	for(int i = 0; i <= nbPass; i++)
-	{
+	for(int i = 0; i <= nbPass; i++) {
 		TTF_SetFontOutline(font, i);
-		for(ch = 32; ch < 256; ++ch)
-		{
-			if(TTF_GlyphIsProvided(font, ch))
-			{
+		for(ch = 32; ch < 256; ++ch) {
+			if(TTF_GlyphIsProvided(font, ch)) {
 				int minx, maxx, miny, maxy, advance;
 				TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
 				//qDebug() << ch << (char) ch << minx << maxx << miny << maxy << advance;
-				if(advance != 0)
-				{
+				if(advance != 0) {
 					// Temporary surface of the character
 					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
-					if (!glyphSurface)
-					{
+					if (!glyphSurface) {
 
 						qDebug() << SDL_GetError();
 						qDebug() << TTF_GetError();
@@ -180,11 +176,9 @@ int main(int argc, char **argv)
 	QString s = "Martin et ses chaussettes propres";
 
 	// Display a string
-	for(int i = 0; i < s.length(); i++)
-	{
+	for(int i = 0; i < s.length(); i++) {
 		int ch = (int)s.at(i).toLatin1();
-		if(glyphWidth[ch] > 0)
-		{
+		if(glyphWidth[ch] > 0) {
 			// Compute glyph rect in the matrix
 			SDL_Rect glyphRect;
 			glyphRect.x = (ch % 16) * space;
@@ -195,7 +189,7 @@ int main(int argc, char **argv)
 
 
 			// Display the glyph on the screen
-			SDL_Rect draw ={x ,y, 500, 500};
+			SDL_Rect draw = {x,y, 500, 500};
 			SDL_BlitSurface(glyphMatrix, &glyphRect, screen, &draw);
 
 		}
@@ -212,8 +206,7 @@ int main(int argc, char **argv)
 
 
 	//Update the screen
-	if( SDL_UpdateWindowSurface(window))
-	{
+	if( SDL_UpdateWindowSurface(window)) {
 		qDebug() << "failed to update";
 		return -1;
 	}
@@ -221,14 +214,14 @@ int main(int argc, char **argv)
 	bool quit = false;
 
 	//While the user hasn't quit
-	while(quit == false)
-	{
+	while(quit == false) {
 		SDL_Event event;
 		//While there's an event to handle
 		while( SDL_PollEvent(&event) ) {
 			//If the user has Xed out the window
 			if( event.type == SDL_QUIT ) { //Quit the program
-				quit = true; }
+				quit = true;
+			}
 		}
 	}
 

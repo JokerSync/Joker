@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "PeopleDialog.h"
 #include "ui_PeopleDialog.h"
 #include "PhTools/PhDebug.h"
@@ -32,7 +38,7 @@ PeopleDialog::~PeopleDialog()
 
 void PeopleDialog::on_peopleList_itemSelectionChanged()
 {
-    _peopleList->clear();
+	_peopleList->clear();
 	foreach (QListWidgetItem* item, ui->peopleList->selectedItems()) {
 		_peopleList->append(_doc->getPeopleByName(item->text()));
 	}
@@ -42,7 +48,7 @@ void PeopleDialog::on_peopleList_itemSelectionChanged()
 
 void PeopleDialog::on_buttonBox_rejected()
 {
-    _peopleList->clear();
+	_peopleList->clear();
 	foreach (PhPeople* people, _oldPeopleList) {
 		_peopleList->append(people);
 	}

@@ -1,6 +1,12 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "PhVideoEngine.h"
 
-PhVideoEngine::PhVideoEngine(QObject *parent) :	QObject(parent),
+PhVideoEngine::PhVideoEngine(QObject *parent) : QObject(parent),
 	_settings(NULL),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
@@ -41,10 +47,8 @@ bool PhVideoEngine::open(QString fileName)
 	_videoStream = NULL;
 
 	// Find video stream :
-	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++)
-	{
-		if(_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO)
-		{
+	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++) {
+		if(_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO) {
 			_videoStream = _pFormatContext->streams[i];
 			break;
 		}
@@ -58,8 +62,7 @@ bool PhVideoEngine::open(QString fileName)
 	if(tag == NULL)
 		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
 
-	if(tag)
-	{
+	if(tag) {
 		PHDEBUG << "Found timestamp:" << tag->value;
 		_firstFrame = PhTimeCode::frameFromString(tag->value, _clock.timeCodeType());
 	}
@@ -98,14 +101,12 @@ bool PhVideoEngine::open(QString fileName)
 void PhVideoEngine::close()
 {
 	PHDEBUG;
-	if(_rgb)
-	{
+	if(_rgb) {
 		delete _rgb;
 		_rgb = NULL;
 	}
 
-	if(_pFormatContext)
-	{
+	if(_pFormatContext) {
 		avformat_close_input(&_pFormatContext);
 		_pFormatContext = NULL;
 		_pCodecContext = NULL;
@@ -166,8 +167,7 @@ int PhVideoEngine::height()
 float PhVideoEngine::framePerSecond()
 {
 	float result = 0;
-	if(_videoStream)
-	{
+	if(_videoStream) {
 		result = _videoStream->avg_frame_rate.num;
 		result /= _videoStream->avg_frame_rate.den;
 	}
@@ -191,8 +191,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	int scaleElapsed = -1;
 	int textureElapsed = -1;
 
-	if(!ready())
-	{
+	if(!ready()) {
 		PHDEBUG << "not ready";
 		return false;
 	}
@@ -206,11 +205,9 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
 	if (frame == _currentFrame)
 		result = true;
-	else
-	{
+	else{
 		// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
-		if(frame - _currentFrame != 1)
-		{
+		if(frame - _currentFrame != 1) {
 			int flags = AVSEEK_FLAG_ANY;
 			int64_t timestamp = frame2time(frame - _firstFrame);
 			PHDEBUG << "seek:" << timestamp << _videoStream->time_base.num << _videoStream->time_base.den;
@@ -222,40 +219,34 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		AVPacket packet;
 
 		bool lookingForVideoFrame = true;
-		while(lookingForVideoFrame)
-		{
+		while(lookingForVideoFrame) {
 			int error = av_read_frame(_pFormatContext, &packet);
-			switch(error)
-			{
+			switch(error) {
 			case 0:
-				if(packet.stream_index == _videoStream->index)
-				{
+				if(packet.stream_index == _videoStream->index) {
 					_currentFrame = frame;
 
 					readElapsed = _testTimer.elapsed();
 					int frameFinished = 0;
 					avcodec_decode_video2(_pCodecContext, _pFrame, &frameFinished, &packet);
-					if(frameFinished)
-					{
+					if(frameFinished) {
 						decodeElapsed = _testTimer.elapsed();
 
 						int frameHeight = _pFrame->height;
-						if(_settings)
-						{
+						if(_settings) {
 							if(_settings->value("videoDeinterlace", false).toBool())
 								frameHeight = _pFrame->height / 2;
 						}
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
-														_pCodecContext->pix_fmt, _pCodecContext->width, frameHeight,
-														AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+						                                _pCodecContext->pix_fmt, _pCodecContext->width, frameHeight,
+						                                AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
 							_rgb = new uint8_t[_pFrame->width * frameHeight * 4];
 						int linesize = _pFrame->width * 4;
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
-										   _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
-										   &linesize))
-						{
+						                   _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
+						                   &linesize)) {
 							scaleElapsed = _testTimer.elapsed();
 
 							videoRect.createTextureFromARGBBuffer(_rgb, _pFrame->width, frameHeight);
@@ -272,13 +263,13 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 			case AVERROR_INVALIDDATA:
 			case AVERROR_EOF:
 			default:
-			{
-				char errorStr[256];
-				av_strerror(error, errorStr, 256);
-				PHDEBUG << frame << "error:" << errorStr;
-				lookingForVideoFrame = false;
-				break;
-			}
+				{
+					char errorStr[256];
+					av_strerror(error, errorStr, 256);
+					PHDEBUG << frame << "error:" << errorStr;
+					lookingForVideoFrame = false;
+					break;
+				}
 			}
 			//Avoid memory leak
 			av_free_packet(&packet);
@@ -297,8 +288,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 int64_t PhVideoEngine::frame2time(PhFrame f)
 {
 	int64_t t = 0;
-	if(_videoStream)
-	{
+	if(_videoStream) {
 		PhFrame fps = PhTimeCode::getFps(_clock.timeCodeType());
 		t = f * _videoStream->time_base.den / _videoStream->time_base.num / fps;
 	}
@@ -308,8 +298,7 @@ int64_t PhVideoEngine::frame2time(PhFrame f)
 PhFrame PhVideoEngine::time2frame(int64_t t)
 {
 	PhFrame f = 0;
-	if(_videoStream)
-	{
+	if(_videoStream) {
 		PhFrame fps = PhTimeCode::getFps(_clock.timeCodeType());
 		f = t * _videoStream->time_base.num * fps / _videoStream->time_base.den;
 	}

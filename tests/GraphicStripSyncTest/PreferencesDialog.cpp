@@ -8,8 +8,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	if(_settings->value("useQuarterFrame", false).toBool())
-	{
+	if(_settings->value("useQuarterFrame", false).toBool()) {
 		ui->useQuarterFrameRadioButton->setChecked(true);
 		ui->delaySpinBox->setValue(_settings->value("delay", 0).toInt() / 20);
 	}

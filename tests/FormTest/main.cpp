@@ -2,6 +2,12 @@
 #include <QApplication>
 #include "PhTools/PhDebug.h"
 
+/**
+ * @brief The application main entry point
+ * @param argc Command line argument count
+ * @param argv Command line argument list
+ * @return 0 if the application works well.
+ */
 int main(int argc, char *argv[])
 {
 	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
@@ -12,5 +18,5 @@ int main(int argc, char *argv[])
 	MainWindow window;
 	window.show();
 
-    return a.exec();
+	return a.exec();
 }

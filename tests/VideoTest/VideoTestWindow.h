@@ -15,25 +15,25 @@
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 
 namespace Ui {
-	class VideoTestWindow;
+class VideoTestWindow;
 }
 
 class VideoTestWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    /**
-     * @brief MainView constructor
-     */
-    VideoTestWindow(QSettings *settings);
+	/**
+	 * @brief MainView constructor
+	 */
+	VideoTestWindow(QSettings *settings);
 
 	~VideoTestWindow();
-    /**
-     * Open a video file.
-     * @param fileName Path of the video file to open.
-     * @return True if succeeds, false otherwise.
-     */
-    bool openFile(QString fileName);
+	/**
+	 * Open a video file.
+	 * @param fileName Path of the video file to open.
+	 * @return True if succeeds, false otherwise.
+	 */
+	bool openFile(QString fileName);
 
 protected:
 	void resizeEvent(QResizeEvent *);
