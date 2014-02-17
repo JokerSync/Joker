@@ -9,7 +9,7 @@ QT       += core
 QT       -= gui
 
 TARGET = AutoTest
-CONFIG   += console
+CONFIG   += console static
 CONFIG   -= app_bundle
 
 TEMPLATE = app
