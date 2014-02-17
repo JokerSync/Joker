@@ -23,6 +23,9 @@ private slots:
 	void importDetXTextTest();
 	void importDetXOffTest();
 
+	void importMosTest01();
+	void importMosTest02();
+
 	// Get people
 	void getPeopleByNameTest();
 

@@ -6,6 +6,7 @@
 
 
 #include <QFile>
+#include "PhTools/PhFileTool.h"
 #include "PhStripDoc.h"
 
 PhStripDoc::PhStripDoc(QObject *parent) :
@@ -170,6 +171,306 @@ bool PhStripDoc::importDetX(QString fileName)
 	}
 
 	emit this->changed();
+
+	return true;
+}
+
+bool PhStripDoc::checkMosTag(QFile &f, int logLevel, QString name)
+{
+	if(PhFileTool::PhFileTool::readString(f, logLevel, name) != name) {
+		PHDBG(logLevel) << "Error reading " << name;
+		f.close();
+		return false;
+	}
+	return true;
+}
+
+bool PhStripDoc::importMos(QString fileName)
+{
+	PHDEBUG << fileName;
+
+	QFile f(fileName);
+	if(!f.exists()) {
+		PHDEBUG << "File doesn't exists : " << fileName;
+		return false;
+	}
+
+	if(!f.open(QFile::ReadOnly)) {
+		PHDEBUG << "Unable to open : " << fileName;
+		return false;
+	}
+
+	int logLevel = 2;
+	int ok = 0;
+
+	PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "NOBLURMOSAIC"))
+		return false;
+
+	PhFileTool::readShort(f, logLevel);
+	PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "CMosaicDoc"))
+		return false;
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "CDocProjet"))
+		return false;
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "CDocProprietes"))
+		return false;
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, ok, "titre vo");
+
+	PhFileTool::readShort(f, logLevel);
+
+	_title = PhFileTool::readString(f, ok, "titre vf");
+
+	PhFileTool::readShort(f, logLevel);
+
+	_season = PhFileTool::readString(f, ok, "saison");
+
+	PhFileTool::readShort(f, logLevel);
+
+	_episode = PhFileTool::readString(f, ok, "episode");
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, logLevel, "titre vo episode");
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, logLevel);
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, logLevel);
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, logLevel);
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, logLevel);
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, logLevel);
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, ok, "detecteur");
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, logLevel, "auteur");
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, logLevel, "studio");
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, logLevel, "D.A.");
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, logLevel);
+
+	PhFileTool::readShort(f, logLevel);
+
+	// read a number that makes a difference wether it's 3 or 4 later
+	unsigned short strangeNumber = PhFileTool::readShort(f, logLevel, "strangeNumber");
+
+	if(!checkMosTag(f, logLevel, "CDocOptionsProjet"))
+		return false;
+
+	for(int j = 0; j < 4; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	if(strangeNumber == 4)
+	{
+		qDebug() << "reading extrasection ???";
+		PhFileTool::readShort(f, logLevel);
+
+		PhFileTool::readShort(f, logLevel);
+	}
+
+	for(int j = 0; j < 12; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "CDocFilm"))
+		return false;
+
+
+	unsigned short peopleNumber = PhFileTool::readShort(f, ok, "people number");
+
+	for(int j = 0; j < 3; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "CDocPersonnage"))
+			return false;
+
+	int peopleLogLevel = 0;
+	for(int i = 0; i < peopleNumber; i++)
+	{
+		PhFileTool::readInt(f, peopleLogLevel, "index");
+
+		PhFileTool::readShort(f, logLevel);
+
+		PhFileTool::readString(f, peopleLogLevel, "nom:");
+		for(int j = 0; j < 8; j++)
+			PhFileTool::readShort(f, logLevel);
+
+		if(PhFileTool::readShort(f, logLevel, "test") != 0x8006) {
+			PhFileTool::readString(f, peopleLogLevel, "date 1");
+			PhFileTool::readShort(f, logLevel);
+		}
+	}
+
+	PhFileTool::readShort(f, logLevel);
+	if(strangeNumber == 4)
+	{
+		qDebug() << "reading extrasection ???";
+
+		PhFileTool::readShort(f, logLevel);
+		PhFileTool::readShort(f, logLevel);
+	}
+
+	if(!checkMosTag(f, logLevel, "CDocVideo"))
+	   return false;
+
+	PhFileTool::readShort(f, logLevel);
+
+	this->setVideoPath(PhFileTool::readString(f, ok, "video path"));
+
+	PhFileTool::readInt(f, ok, "timestamp");
+
+	for(int j = 0; j < 2; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	if(strangeNumber == 4)
+	{
+		qDebug() << "reading extrasection ???";
+
+		for(int j = 0; j < 5; j++)
+			PhFileTool::readShort(f, logLevel);
+
+		unsigned short cutNumber = PhFileTool::readShort(f, ok, "cut number");
+		PhFileTool::readString(f, logLevel, "CDocPlan");
+	}
+
+	for(int j = 0; j < 8; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "CDocDoublage"))
+		return false;
+
+	for(int j = 0; j < 12; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "CDocPiste"))
+		return false;
+
+	if(strangeNumber == 3)
+	{
+		for(int j = 0; j < 4; j++)
+			PhFileTool::readShort(f, logLevel);
+
+		if(!checkMosTag(f, logLevel, "CDocBlocDetection"))
+			return false;
+
+		for(int j = 0; j < 65; j++)
+			PhFileTool::readShort(f, logLevel);
+	}
+
+	for(int j = 0; j < 6; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "CDocLangue"))
+		return false;
+
+	unsigned short textNumber = PhFileTool::readShort(f, ok, "text number");
+
+
+	for(int j = 0; j < 3; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "CDocBlocTexte"))
+		return false;
+
+	PhFileTool::readShort(f, logLevel);
+
+	int textLogLevel = 0;
+	for(int i = 0; i < textNumber; i++)
+	{
+		PhFileTool::readString(f, textLogLevel, "phrase");
+
+		PhFileTool::readInt(f, textLogLevel, "tcin");
+		PhFileTool::readInt(f, textLogLevel, "tcout");
+		for(int j = 0; j < 14; j++)
+			PhFileTool::readShort(f, logLevel);
+	}
+
+	for(int j = 0; j < 4; j++)
+		PhFileTool::readShort(f, ok);
+
+	if(!checkMosTag(f, logLevel, "CDocEtiquetteNom"))
+	   return false;
+
+	PhFileTool::readInt(f, ok, "tcin");
+	for(int j = 0; j < 7; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	if(strangeNumber == 4)
+	{
+		qDebug() << "reading extrasection containing phrase 2:";
+		for(int j = 0; j < 11; j++)
+			PhFileTool::readShort(f, logLevel);
+
+		PhFileTool::readString(f, ok, "phrase 2");
+
+		PhFileTool::readInt(f, ok, "tcin");
+		PhFileTool::readInt(f, ok, "tcout");
+		for(int j = 0; j < 14; j++)
+			PhFileTool::readShort(f, logLevel);
+
+		for(int j = 0; j < 16; j++)
+			PhFileTool::readShort(f, logLevel);
+	}
+
+	int loopLogLevel = 0;
+	int loopNumber = PhFileTool::readShort(f, ok, "loop number");
+	for(int i = 0; i< loopNumber; i++)
+	{
+		PhFileTool::readString(f, loopLogLevel, "CDocBoucle");
+		PhFileTool::readInt(f, loopLogLevel, "loop number");
+		PhFileTool::readInt(f, loopLogLevel, "loop tc");
+	}
+
+	for(int j = 0; j < 10; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	if(!checkMosTag(f, logLevel, "CDocChutier"))
+		return false;
+
+	for(int j = 0; j < 2; j++)
+		PhFileTool::readShort(f, logLevel);
+
+	PHDEBUG << "reading ok";
+
+	f.close();
 
 	return true;
 }

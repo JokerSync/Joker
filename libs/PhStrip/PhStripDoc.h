@@ -136,11 +136,6 @@ public:
 	QList<PhStripOff *> getOffs();
 
 	/**
-	 * @brief setTitle
-	 * @param _title
-	 */
-	void setTitle(QString _title);
-	/**
 	 * @brief setVideoTimestamp
 	 * @param videoFramestamp
 	 */
@@ -156,11 +151,17 @@ public:
 	 */
 	void setTimeScale(int timeScale);
 	/**
-	 * @brief Open a DetX file
+	 * @brief Import a DetX file
 	 * @param filename The path to the DetX file
 	 * @return True if the doc opened well, false otherwise
 	 */
-	bool importDetX(QString filename);
+	bool importDetX(QString fileName);
+	/**
+	 * @brief Import a Mos file
+	 * @param filename The path to the Mos file
+	 * @return True if the doc opened well, false otherwise
+	 */
+	bool importMos(QString fileName);
 	/**
 	 * @brief Open a strip file
 	 * @param fileName The path to the DetX file
@@ -350,6 +351,8 @@ private:
 
 	int _nbTexts;
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
+
+	bool checkMosTag(QFile &f, int logLevel, QString name);
 };
 
 #endif // PHSTRIPDOC_H

@@ -75,6 +75,22 @@ void PhStripDocTest::importDetXOffTest()
 #warning TODO more test
 }
 
+void PhStripDocTest::importMosTest01()
+{
+	QVERIFY(_doc.importMos("test01.mos"));
+
+	QCOMPARE(_doc.getTitle(), QString("Titre VF"));
+	QCOMPARE(_doc.getSeason(), QString("saison"));
+	QCOMPARE(_doc.getEpisode(), QString("episode"));
+}
+
+void PhStripDocTest::importMosTest02()
+{
+	QVERIFY(_doc.importMos("test02.mos"));
+
+	QCOMPARE(_doc.getVideoPath(), QString("C:\\Users\\Matthhou\\Desktop\\Burn Notice\\710\\BurnNotice_BCI710_VOVI.mov"));
+}
+
 void PhStripDocTest::getPeopleByNameTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
