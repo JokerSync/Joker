@@ -18,5 +18,6 @@ INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhStrip/PhStrip.pri)
+include(../../libs/PhSync/PhSync.pri)
 
 SOURCES += main.cpp
