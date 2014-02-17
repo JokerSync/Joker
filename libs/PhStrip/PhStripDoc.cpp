@@ -18,7 +18,7 @@ PhStripDoc::PhStripDoc(QObject *parent) :
 
 bool PhStripDoc::importDetX(QString fileName)
 {
-	PHDEBUG << fileName;
+//	PHDEBUG << fileName;
 	if (!QFile(fileName).exists()) {
 		PHDEBUG << "The file doesn't exists" << fileName;
 		return false;
@@ -40,8 +40,6 @@ bool PhStripDoc::importDetX(QString fileName)
 		PHDEBUG << "The XML document seems to be bad formed " << fileName;
 		return false;
 	}
-
-	PHDEBUG << ("Start parsing " + fileName);
 
 	reset();
 
@@ -200,8 +198,10 @@ bool PhStripDoc::importMos(QString fileName)
 		return false;
 	}
 
+	this->reset();
+
 	int logLevel = 2;
-	int ok = 0;
+	int ok = 2;
 
 	PhFileTool::readShort(f, logLevel);
 
@@ -270,11 +270,11 @@ bool PhStripDoc::importMos(QString fileName)
 
 	PhFileTool::readShort(f, logLevel);
 
-	PhFileTool::readString(f, ok, "detecteur");
+	PhFileTool::readString(f, ok, "detector");
 
 	PhFileTool::readShort(f, logLevel);
 
-	PhFileTool::readString(f, logLevel, "auteur");
+	_authorName = PhFileTool::readString(f, ok, "author");
 
 	PhFileTool::readShort(f, logLevel);
 
@@ -313,7 +313,6 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, logLevel, "CDocFilm"))
 		return false;
 
-
 	unsigned short peopleNumber = PhFileTool::readShort(f, ok, "people number");
 
 	for(int j = 0; j < 3; j++)
@@ -329,7 +328,9 @@ bool PhStripDoc::importMos(QString fileName)
 
 		PhFileTool::readShort(f, logLevel);
 
-		PhFileTool::readString(f, peopleLogLevel, "nom:");
+		QString name = PhFileTool::readString(f, peopleLogLevel, "name");
+		_peoples[name] = new PhPeople(name, "#000000");
+
 		for(int j = 0; j < 8; j++)
 			PhFileTool::readShort(f, logLevel);
 
@@ -354,8 +355,7 @@ bool PhStripDoc::importMos(QString fileName)
 	PhFileTool::readShort(f, logLevel);
 
 	this->setVideoPath(PhFileTool::readString(f, ok, "video path"));
-
-	PhFileTool::readInt(f, ok, "timestamp");
+	this->setVideoTimestamp(PhFileTool::readInt(f, ok, "timestamp") / 12);
 
 	for(int j = 0; j < 2; j++)
 		PhFileTool::readShort(f, logLevel);
@@ -415,10 +415,13 @@ bool PhStripDoc::importMos(QString fileName)
 	int textLogLevel = 0;
 	for(int i = 0; i < textNumber; i++)
 	{
-		PhFileTool::readString(f, textLogLevel, "phrase");
+		QString content = PhFileTool::readString(f, textLogLevel, "content");
 
-		PhFileTool::readInt(f, textLogLevel, "tcin");
-		PhFileTool::readInt(f, textLogLevel, "tcout");
+		PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, textLogLevel, "tcin") / 12;
+		PhFrame frameOut = _videoFrameStamp + PhFileTool::readInt(f, textLogLevel, "tcout") / 12;
+
+#warning TODO decode people and track number
+		_texts.append(new PhStripText(frameIn, NULL, frameOut, 0, content));
 		for(int j = 0; j < 14; j++)
 			PhFileTool::readShort(f, logLevel);
 	}
@@ -439,10 +442,14 @@ bool PhStripDoc::importMos(QString fileName)
 		for(int j = 0; j < 11; j++)
 			PhFileTool::readShort(f, logLevel);
 
-		PhFileTool::readString(f, ok, "phrase 2");
+		QString content = PhFileTool::readString(f, ok, "phrase 2");
 
-		PhFileTool::readInt(f, ok, "tcin");
-		PhFileTool::readInt(f, ok, "tcout");
+		PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, textLogLevel, "tcin") / 12;
+		PhFrame frameOut = _videoFrameStamp + PhFileTool::readInt(f, textLogLevel, "tcout") / 12;
+
+#warning TODO insert text only one time
+		_texts.append(new PhStripText(frameIn, NULL, frameOut, 0, content));
+
 		for(int j = 0; j < 14; j++)
 			PhFileTool::readShort(f, logLevel);
 
@@ -455,8 +462,9 @@ bool PhStripDoc::importMos(QString fileName)
 	for(int i = 0; i< loopNumber; i++)
 	{
 		PhFileTool::readString(f, loopLogLevel, "CDocBoucle");
-		PhFileTool::readInt(f, loopLogLevel, "loop number");
-		PhFileTool::readInt(f, loopLogLevel, "loop tc");
+		int number = PhFileTool::readInt(f, loopLogLevel, "loop number");
+		PhFrame loopFrame = _videoFrameStamp + PhFileTool::readInt(f, loopLogLevel, "loop tc") / 12;
+		_loops.append(new PhStripLoop(loopNumber, loopFrame));
 	}
 
 	for(int j = 0; j < 10; j++)

@@ -19,7 +19,7 @@ class PhPeople {
 
 public:
 	/**
-	 * @brief Default constructor
+	 * @brief PhPeople constructor
 	 */
 	PhPeople();
 	/**
