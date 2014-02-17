@@ -9,7 +9,7 @@
 #include <QRegExpValidator>
 
 PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
-    QLineEdit(parent),
+	QLineEdit(parent),
 	_tcType(PhTimeCodeType25)
 {
 	connect(this, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged(QString)));
@@ -57,8 +57,7 @@ void PhTimeCodeEdit::onTextChanged(QString text)
 
 bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 {
-	if(event->type() == QEvent::KeyPress)
-	{
+	if(event->type() == QEvent::KeyPress) {
 		int keyPressed = static_cast<QKeyEvent *>(event)->key();
 		switch (keyPressed) {
 		case Qt::Key_0:
@@ -71,15 +70,13 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 		case Qt::Key_7:
 		case Qt::Key_8:
 		case Qt::Key_9:
-			if(_addedNumbers.length() < 8)
-			{
+			if(_addedNumbers.length() < 8) {
 				_addedNumbers.append(QString::number(keyPressed % 0x30));
 				compute(true);
 			}
 			return true;
 		case Qt::Key_Backspace:
-			if(_addedNumbers.length())
-			{
+			if(_addedNumbers.length()) {
 				_addedNumbers.remove(_addedNumbers.length() - 1, 1);
 				compute(false);
 			}
@@ -100,14 +97,13 @@ void PhTimeCodeEdit::compute(bool add)
 {
 	QString currentText;
 	if(add)
-		 currentText = this->text();
+		currentText = this->text();
 	else
 		currentText = _oldFrame;
 	currentText.remove(":");
 
 	int i = 0;
-	while(i < _addedNumbers.length())
-	{
+	while(i < _addedNumbers.length()) {
 		currentText.replace(currentText.length() - 1 - i, 1, _addedNumbers.at(_addedNumbers.length() - 1 - i));
 		i++;
 	}
