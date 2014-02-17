@@ -3,7 +3,7 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT += serialport multimedia
+QT += serialport
 
 HEADERS += \
     ../../libs/PhSync/PhSonyController.h \
