@@ -18,7 +18,7 @@ void PhTimeCodeTest::testStringFromFrameForTC2398()
 
 	// Check various value of frame
 	PhFrame frame = 0;
-	QCOMPARE(PhTimeCode::stringFromFrame(frame, type), QString("00:01:00:00"));
+	QCOMPARE(PhTimeCode::stringFromFrame(frame, type), QString("00:00:00:00"));
 	frame = 1;
 	QCOMPARE(PhTimeCode::stringFromFrame(frame, type), QString("00:00:00:01"));
 	frame = 23;
