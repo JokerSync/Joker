@@ -421,7 +421,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			if(displayNextText && ((loop->getTimeIn() + height / 8 / pixelPerFrame) > frameIn)) {
 				PhGraphicLoop gLoopPred;
 
-				int howFarIsLoop = (loop->getTimeIn() - frameOut + (width - syncBar_X_FromLeft) / pixelPerFrame) * verticalPixelPerFrame;
+				int howFarIsLoop = (loop->getTimeIn() - frameOut) * verticalPixelPerFrame;
 
 				gLoopPred.setColor(Qt::blue);
 				gLoopPred.setHorizontalLoop(true);
@@ -437,7 +437,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 				gLoopPred.draw();
 			}
-			if((loop->getTimeIn() - height / 8 / pixelPerFrame ) > frameOut)
+			if((loop->getTimeIn() - height / 8 / pixelPerFrame ) > frameOut + 25 * 30)
 				break;
 		}
 
