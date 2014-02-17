@@ -7,8 +7,8 @@
 #include "math.h"
 #include "PhGraphicLoop.h"
 
-PhGraphicLoop::PhGraphicLoop(int x, int y, int w, int h, int crossHeight, int hThick, bool hozirontal) :
-	PhGraphicRect(x, y, w, h), _crossHeight(crossHeight), _hThick(hThick), _horizontal(hozirontal)
+PhGraphicLoop::PhGraphicLoop(int x, int y, int w, int h, int crossHeight, int hThick, bool horizontal) :
+	PhGraphicRect(x, y, w, h), _crossHeight(crossHeight), _hThick(hThick), _horizontal(horizontal)
 {
 }
 PhGraphicLoop::~PhGraphicLoop()
