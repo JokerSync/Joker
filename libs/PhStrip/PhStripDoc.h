@@ -281,7 +281,17 @@ public:
 	 */
 	PhFrame getFrameOut();
 
+	/**
+	 * @brief Get the next loop
+	 * @param frame
+	 * @return
+	 */
 	PhStripLoop * getNextLoop(PhFrame frame);
+	/**
+	 * @brief Get the previous loop
+	 * @param frame
+	 * @return
+	 */
 	PhStripLoop * getPreviousLoop(PhFrame frame);
 signals:
 	/**

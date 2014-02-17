@@ -38,6 +38,12 @@ public:
 	 * @param TimeIn
 	 */
 	PhStripLoop(int number, PhTime TimeIn);
+
+	/**
+	 * \brief Get the loop number
+	 * \return the loop number
+	 */
+	int getLoopNumber(){return _number;}
 };
 
 

@@ -86,7 +86,7 @@ void VideoStripView::paint()
 
 	int tcWidth = 200;
 
-	if((_videoEngine.height() > 0)and (videoHeight > 0)) {
+	if((_videoEngine.height() > 0) and (videoHeight > 0)) {
 		int videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
 		int blackStripHeight = 0; // Height of the upper black strip when video is too large
 		int realVideoHeight = videoHeight;
@@ -148,6 +148,16 @@ void VideoStripView::paint()
 			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextText->getTimeIn(), clock->timeCodeType()));
 			_nextTCText.draw();
 		}
+	}
+
+	if(_strip.doc()->getPreviousLoop(clockFrame)){
+		int loopNumber = _strip.doc()->getPreviousLoop(clockFrame)->getLoopNumber();
+		PhGraphicText currentLoop(_strip.getHUDFont(), QString::number(loopNumber));
+		int loopHeight = 60;
+		int loopWidth = _strip.getHUDFont()->getNominalWidth(QString::number(loopNumber)) * ((float) loopHeight / _strip.getHUDFont()->getHeight());
+		currentLoop.setRect(10, this->height() - stripHeight - loopHeight, loopWidth, loopHeight);
+		currentLoop.setColor(Qt::blue);
+		currentLoop.draw();
 	}
 
 	_noVideoSyncError.setRect(this->width() / 2 - 100, this->height() / 2 - 25, 200, 50);

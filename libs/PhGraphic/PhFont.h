@@ -77,6 +77,13 @@ public:
 	 */
 	int getBoldness() const;
 
+	/**
+	 * @brief Get the nominal width of a given string
+	 * @param string to be measured
+	 * @return The length
+	 */
+	int getNominalWidth(QString string);
+
 private:
 	/**
 	 * @brief _texture
