@@ -8,16 +8,10 @@
 
 #include "PhStripDocTest.h"
 
-
-void PhStripDocTest::initTestCase()
+void PhStripDocTest::importDetXHeaderTest()
 {
-	QString fileName = "test01.detx";
-	QVERIFY(QFile(fileName).exists());
-	QVERIFY(_doc.importDetX(fileName));
-}
+	QVERIFY(_doc.importDetX("test01.detx"));
 
-void PhStripDocTest::openDetXHeaderTest()
-{
 	QCOMPARE(_doc.getTitle(), QString("Title test"));
 	QCOMPARE(_doc.getTranslatedTitle(), QString("Translated title"));
 	QCOMPARE(_doc.getEpisode(), QString("episode ref"));
@@ -28,28 +22,35 @@ void PhStripDocTest::openDetXHeaderTest()
 	QCOMPARE(s2f("01:00:10:00"), _doc.getLastFrame());
 }
 
-void PhStripDocTest::openDetXPeopleTest()
+void PhStripDocTest::importDetXPeopleTest()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
+
 	QVERIFY(_doc.getPeoples().count() == 3);
 	QVERIFY(_doc.getPeoples().value("jeanne"));
 	QVERIFY(_doc.getPeoples().value("sue"));
 	QVERIFY(_doc.getPeoples().value("johnny") == NULL);
 }
 
-void PhStripDocTest::openDetXLoopTest()
+void PhStripDocTest::importDetXLoopTest()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
+
 	QVERIFY(_doc.getLoops().count() == 1);
 	QVERIFY(_doc.getLoops()[0]->getTimeIn() == PhTimeCode::frameFromString("01:00:00:00", _doc.getTCType()));
 }
 
-void PhStripDocTest::openDetXCutTest()
+void PhStripDocTest::importDetXCutTest()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
+
 	QVERIFY(_doc.getCuts().count() == 1);
 	QVERIFY(_doc.getCuts()[0]->getTimeIn() == PhTimeCode::frameFromString("01:00:01:00", _doc.getTCType()));
 }
 
-void PhStripDocTest::openDetXTextTest()
+void PhStripDocTest::importDetXTextTest()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
 #warning TODO fix link off
 	QVERIFY(_doc.getTexts().count() == 5);
 
@@ -65,8 +66,10 @@ void PhStripDocTest::openDetXTextTest()
 	QCOMPARE(_doc.getTexts()[4]->getContent(), QString("Composed sentence with off"));
 }
 
-void PhStripDocTest::openDetXOffTest()
+void PhStripDocTest::importDetXOffTest()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
+
 	QCOMPARE(_doc.getOffs().count(), 2);
 
 #warning TODO more test
@@ -74,6 +77,8 @@ void PhStripDocTest::openDetXOffTest()
 
 void PhStripDocTest::getPeopleByNameTest()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
+
 	QCOMPARE(_doc.getPeopleByName("Jeanne")->getName(), QString("Jeanne"));
 	QCOMPARE(_doc.getPeopleByName("Sue")->getName(), QString("Sue"));
 	QCOMPARE(_doc.getPeopleByName("Paul")->getName(), QString("Paul"));
@@ -82,6 +87,8 @@ void PhStripDocTest::getPeopleByNameTest()
 
 void PhStripDocTest::getPreviousElementFrameTest()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
+
 	QCOMPARE(_doc.getPreviousElementFrame(s2f("23:00:00:00")), s2f("01:00:15:00"));
 	QCOMPARE(_doc.getPreviousElementFrame(s2f("01:00:15:00")), s2f("01:00:12:00"));
 	QCOMPARE(_doc.getPreviousElementFrame(s2f("01:00:00:00")), PHFRAMEMIN);
@@ -89,6 +96,8 @@ void PhStripDocTest::getPreviousElementFrameTest()
 
 void PhStripDocTest::getNextElementFrameTest()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
+
 	QCOMPARE(_doc.getNextElementFrame(s2f("00:00:00:00")), s2f("01:00:00:00"));
 	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:00:00")), s2f("01:00:01:00"));
 	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:01:00")), s2f("01:00:02:00"));
@@ -98,6 +107,8 @@ void PhStripDocTest::getNextElementFrameTest()
 
 void PhStripDocTest::getNextTextTest()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
+
 	QVERIFY(_doc.getNextText(s2f("00:00:00:00"))->getTimeIn() == s2f("01:00:02:00"));
 	QVERIFY(_doc.getNextText(s2f("01:00:02:00"))->getTimeIn() == s2f("01:00:05:00"));
 	QVERIFY(_doc.getNextText(s2f("01:00:05:00"))->getTimeIn() == s2f("01:00:06:00"));
@@ -108,6 +119,8 @@ void PhStripDocTest::getNextTextTest()
 
 void PhStripDocTest::getNextTextTestByPeople()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
+
 	PhPeople* sue = _doc.getPeopleByName("Sue");
 
 	QVERIFY(_doc.getNextText(s2f("00:00:00:00"), sue)->getTimeIn() == s2f("01:00:05:00"));
@@ -118,6 +131,8 @@ void PhStripDocTest::getNextTextTestByPeople()
 
 void PhStripDocTest::getNextTextTestByPeopleList()
 {
+	QVERIFY(_doc.importDetX("test01.detx"));
+
 	QList<PhPeople*> peopleList;
 	peopleList.append(_doc.getPeopleByName("Sue"));
 	peopleList.append(_doc.getPeopleByName("Paul"));
