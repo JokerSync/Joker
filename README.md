@@ -10,6 +10,8 @@ This depot hosts the Joker projet components:
 Compilation information :
 -------------------------
 
+[![Build Status](https://travis-ci.org/Phonations/Joker.png?branch=master)](https://travis-ci.org/Phonations/Joker)
+
 In order to compile the  project you will need to follow the instructions depending on your system :
 
 * [Mac OS](#mac)
