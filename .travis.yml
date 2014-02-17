@@ -17,6 +17,6 @@ script:
 - ./AutoTest
 - cd .. 
 notifications:
- irc: "irc.freenode.net#phonations"
- email: true
+ irc: "phonations.com#joker"
+ email: false
 
