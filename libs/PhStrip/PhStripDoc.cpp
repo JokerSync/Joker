@@ -485,6 +485,8 @@ PhFrame PhStripDoc::getNextTextFrame(PhFrame frame)
 	{
 		if((text->getTimeIn() > frame) && (text->getTimeIn() < nextTextFrame) )
 			nextTextFrame = text->getTimeIn();
+		else if(text->getTimeIn() > nextTextFrame)
+			return nextTextFrame;
 	}
 
 	return nextTextFrame;
@@ -498,6 +500,8 @@ PhFrame PhStripDoc::getNextLoopFrame(PhFrame frame)
 	{
 		if((loop->getTimeIn() > frame) && (loop->getTimeIn() < nextLoopFrame) )
 			nextLoopFrame = loop->getTimeIn();
+		else if(loop->getTimeIn() > nextLoopFrame)
+			return nextLoopFrame;
 	}
 
 	return nextLoopFrame;
@@ -511,6 +515,8 @@ PhFrame PhStripDoc::getNextCutFrame(PhFrame frame)
 	{
 		if((cut->getTimeIn() > frame) && (cut->getTimeIn() < nextCutFrame) )
 			nextCutFrame = cut->getTimeIn();
+		else if(cut->getTimeIn() > nextCutFrame)
+			return nextCutFrame;
 	}
 
 	return nextCutFrame;
