@@ -38,7 +38,6 @@
 	<text>sentence</text>
     <lipsync timecode="01:00:07:00" type="out_open"/>
   </line>
-
   <line role="paul" track="1" voice="off">
     <lipsync timecode="01:00:12:00" type="in_open"/>
 	<text>Simple off sentence</text>
@@ -52,6 +51,8 @@
 	<text>with off</text>
     <lipsync timecode="01:00:17:00" type="out_open"/>
   </line>
+  <loop timecode="01:01:00:00"/>
+
 
 
   </body>

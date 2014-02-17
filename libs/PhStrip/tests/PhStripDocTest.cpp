@@ -38,8 +38,10 @@ void PhStripDocTest::openDetXPeopleTest()
 
 void PhStripDocTest::openDetXLoopTest()
 {
-	QVERIFY(_doc.getLoops().count() == 1);
+	QVERIFY(_doc.getLoops().count() == 2);
 	QVERIFY(_doc.getLoops()[0]->getTimeIn() == PhTimeCode::frameFromString("01:00:00:00", _doc.getTCType()));
+	QVERIFY(_doc.getLoops()[1]->getTimeIn() == PhTimeCode::frameFromString("01:01:00:00", _doc.getTCType()));
+
 }
 
 void PhStripDocTest::openDetXCutTest()
@@ -82,7 +84,8 @@ void PhStripDocTest::getPeopleByNameTest()
 
 void PhStripDocTest::getPreviousElementFrameTest()
 {
-	QCOMPARE(_doc.getPreviousElementFrame(s2f("23:00:00:00")), s2f("01:00:15:00"));
+	QCOMPARE(_doc.getPreviousElementFrame(s2f("23:00:00:00")), s2f("01:01:00:00"));
+	QCOMPARE(_doc.getPreviousElementFrame(s2f("01:01:00:00")), s2f("01:00:15:00"));
 	QCOMPARE(_doc.getPreviousElementFrame(s2f("01:00:15:00")), s2f("01:00:12:00"));
 	QCOMPARE(_doc.getPreviousElementFrame(s2f("01:00:00:00")), PHFRAMEMIN);
 }
@@ -93,7 +96,9 @@ void PhStripDocTest::getNextElementFrameTest()
 	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:00:00")), s2f("01:00:01:00"));
 	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:01:00")), s2f("01:00:02:00"));
 	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:02:00")), s2f("01:00:05:00"));
-	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:17:00")), PHFRAMEMAX);
+	QCOMPARE(_doc.getNextElementFrame(s2f("01:00:17:00")), s2f("01:01:00:00"));
+	QCOMPARE(_doc.getNextElementFrame(s2f("01:01:00:00")), PHFRAMEMAX);
+
 }
 
 void PhStripDocTest::getNextTextTest()
@@ -127,6 +132,21 @@ void PhStripDocTest::getNextTextTestByPeopleList()
 	QVERIFY(_doc.getNextText(s2f("01:00:06:00"), peopleList)->getTimeIn() == s2f("01:00:12:00"));
 	QVERIFY(_doc.getNextText(s2f("01:00:12:00"), peopleList)->getTimeIn() == s2f("01:00:15:00"));
 	QVERIFY(_doc.getNextText(s2f("01:00:15:00"), peopleList) == NULL);
+}
+
+void PhStripDocTest::getNextLoopTest()
+{
+	QVERIFY(_doc.getNextLoop(s2f("00:00:00:00"))->getTimeIn() == s2f("01:00:00:00"));
+	QVERIFY(_doc.getNextLoop(s2f("01:00:00:00"))->getTimeIn() == s2f("01:01:00:00"));
+	QVERIFY(_doc.getNextLoop(s2f("01:01:00:00")) == NULL);
+}
+
+void PhStripDocTest::getPreviousLoopTest()
+{
+	QVERIFY(_doc.getPreviousLoop(s2f("01:00:00:00")) == NULL);
+	QVERIFY(_doc.getPreviousLoop(s2f("01:01:00:00"))->getTimeIn() == s2f("01:00:00:00"));
+	QVERIFY(_doc.getPreviousLoop(s2f("23:00:00:00"))->getTimeIn() == s2f("01:01:00:00"));
+
 }
 
 QString PhStripDocTest::f2s(PhFrame frame)
