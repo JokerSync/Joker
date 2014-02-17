@@ -321,8 +321,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				on_actionOpen_Video_triggered();
 			return true;
 		}
-		if(sender->objectName() == this->objectName())
-		{
+		if(sender->objectName() == this->objectName()) {
 			if(isFullScreen())
 				showNormal();
 			else
@@ -331,8 +330,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		}
 		break;
 	case QEvent::KeyPress:
-		if (static_cast<QKeyEvent *>(event)->key() == Qt::Key_F10)
-		{
+		if (static_cast<QKeyEvent *>(event)->key() == Qt::Key_F10) {
 			if(this->isFullScreen()) {
 				this->showNormal();
 			}

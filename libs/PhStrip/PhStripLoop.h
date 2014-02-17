@@ -43,7 +43,9 @@ public:
 	 * \brief Get the loop number
 	 * \return the loop number
 	 */
-	int getLoopNumber(){return _number;}
+	int getLoopNumber(){
+		return _number;
+	}
 };
 
 

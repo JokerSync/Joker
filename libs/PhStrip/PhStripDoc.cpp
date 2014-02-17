@@ -558,8 +558,7 @@ PhStripLoop *PhStripDoc::getNextLoop(PhFrame frame)
 PhStripLoop *PhStripDoc::getPreviousLoop(PhFrame frame)
 {
 	int i = _loops.count() - 1;
-	while(i >= 0)
-	{
+	while(i >= 0) {
 		if(_loops.at(i)->getTimeIn() < frame)
 			return _loops.at(i);
 		i--;

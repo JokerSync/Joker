@@ -133,12 +133,10 @@ void PhGraphicStrip::setPixelPerFrame(long value)
 
 QColor PhGraphicStrip::computeColor(PhPeople * people)
 {
-	if(_selectedPeoples and !_selectedPeoples->contains(people))
-	{
+	if(_selectedPeoples and !_selectedPeoples->contains(people)) {
 		return Qt::gray;
 	}
-	else
-	{
+	else{
 		return people->getColor();
 	}
 }
@@ -421,16 +419,22 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			}
 
 			if(displayNextText && ((loop->getTimeIn() + height / 8 / pixelPerFrame) > frameIn)) {
-				PhGraphicSolidRect gLoopPred;
+				PhGraphicLoop gLoopPred;
 
 				int howFarIsLoop = (loop->getTimeIn() - frameOut + (width - syncBar_X_FromLeft) / pixelPerFrame) * verticalPixelPerFrame;
 
-				gLoopPred.setWidth(width / 10);
+				gLoopPred.setColor(Qt::blue);
+				gLoopPred.setHorizontalLoop(true);
+				gLoopPred.setZ(-3);
+
 				gLoopPred.setX(width - width / 10);
 				gLoopPred.setY(y - howFarIsLoop);
-				gLoopPred.setZ(-3);
-				gLoopPred.setHeight(3);
-				gLoopPred.setColor(Qt::blue);
+				gLoopPred.setHeight(30);
+
+				gLoopPred.setHThick(3);
+				gLoopPred.setCrossHeight(20);
+				gLoopPred.setWidth(width / 10);
+
 				gLoopPred.draw();
 			}
 			if((loop->getTimeIn() - height / 8 / pixelPerFrame ) > frameOut)

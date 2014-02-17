@@ -86,7 +86,7 @@ void VideoStripView::paint()
 
 	int tcWidth = 200;
 
-	if((_videoEngine.height() > 0) and (videoHeight > 0)) {
+	if((_videoEngine.height() > 0)and (videoHeight > 0)) {
 		int videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
 		int blackStripHeight = 0; // Height of the upper black strip when video is too large
 		int realVideoHeight = videoHeight;
@@ -151,7 +151,7 @@ void VideoStripView::paint()
 	}
 
 	PhStripLoop * currentLoop = _strip.doc()->getPreviousLoop(clockFrame);
-	if(currentLoop){
+	if(currentLoop) {
 		int loopNumber = currentLoop->getLoopNumber();
 		PhGraphicText gCurrentLoop(_strip.getHUDFont(), QString::number(loopNumber));
 		int loopHeight = 60;
