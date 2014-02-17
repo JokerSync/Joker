@@ -4,19 +4,19 @@ install:
 - export PATH=$PATH:/usr/local/opt/qt5/bin
 script:
 - mkdir tmp && cd tmp
-- qmake -project
-#- qmake tests/ConsoleTest/ConsoleTest.pro
-#- qmake tests/SDLTest/SDLTest.pro
-#- qmake tests/FormTest/FormTest.pro
-#- qmake tests/GraphicTest/GraphicTest.pro
-#- qmake tests/GraphicStripTest/GraphicStripTest.pro
-#- qmake tests/GraphicSyncTest/GraphicSyncTest.pro
-#- qmake tests/VideoTest/VideoTest.pro
-#- qmake tests/GraphicStripSyncTest/GraphicStripSyncTest.pro
-- qmake ../app/Joker/Joker.pro
+# Build Joker
+- mkdir Joker && cd Joker
+- qmake ../../app/Joker/Joker.pro
 - make
+- cd ..
+# Build AutoTest
+- mkdir AutoTest && cd AutoTest
+- qmake ../../tests/AutoTest/AutoTest.pro
+- make
+# Run AutoTest
+- ./AutoTest
 - cd .. 
 notifications:
  irc: "irc.freenode.net#phonations"
- email: false
+ email: true
 
