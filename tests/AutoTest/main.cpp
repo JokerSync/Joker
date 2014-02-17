@@ -2,7 +2,7 @@
 
 #include <PhTools/tests/PhTimeCodeTest.h>
 #include <PhStrip/tests/PhStripDocTest.h>
-#include <PhSync/tests/PhSonyControllerTest.h>
+//#include <PhSync/tests/PhSonyControllerTest.h>
 
 int main(int argc, char *argv[])
 {
@@ -18,11 +18,11 @@ int main(int argc, char *argv[])
 	if(result)
 		return result;
 
-	// Testing PhSonyController
-	PhSonyControllerTest sonyTest;
-	result = QTest::qExec(&sonyTest);
-	if(result)
-		return result;
+//	// Testing PhSonyController
+//	PhSonyControllerTest sonyTest;
+//	result = QTest::qExec(&sonyTest);
+//	if(result)
+//		return result;
 
 	return 0;
 }
