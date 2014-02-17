@@ -280,6 +280,9 @@ public:
 	 * @return The frame out
 	 */
 	PhFrame getFrameOut();
+
+	PhStripLoop * getNextLoop(PhFrame frame);
+	PhStripLoop * getPreviousLoop(PhFrame frame);
 signals:
 	/**
 	 * @brief Emit a signal when the PhStripDoc changed

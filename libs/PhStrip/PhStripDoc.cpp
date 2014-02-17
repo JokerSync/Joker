@@ -539,6 +539,28 @@ PhFrame PhStripDoc::getFrameOut()
 	return getPreviousElementFrame(PHFRAMEMAX);
 }
 
+PhStripLoop *PhStripDoc::getNextLoop(PhFrame frame)
+{
+	foreach(PhStripLoop* loop, _loops)
+	{
+		if(loop->getTimeIn() > frame)
+			return loop;
+	}
+	return NULL;
+}
+
+PhStripLoop *PhStripDoc::getPreviousLoop(PhFrame frame)
+{
+	int i = _loops.count() - 1;
+	while(i >= 0)
+	{
+		if(_loops.at(i)->getTimeIn() < frame)
+			return _loops.at(i);
+		i--;
+	}
+	return NULL;
+}
+
 QString PhStripDoc::getFilePath()
 {
 	return _filePath;
