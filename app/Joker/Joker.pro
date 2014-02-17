@@ -63,6 +63,10 @@ FORMS += \
 	PropertyDialog.ui \
 	PeopleDialog.ui
 
+unix {
+	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${JOKER_ROOT}/.doxygen\";
+}
+
 mac{
 	PATH = "/../Resources"
 	QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH};
@@ -70,8 +74,6 @@ mac{
 # For the plist version
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
 	QMAKE_POST_LINK += sed -i \"\" -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
-warning("I don't like it, see issue 72")
-#	QMAKE_POST_LINK += cd $${JOKER_ROOT} && sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \".doxygen\" && ./scripts/doxygen.sh && cd $${OUT_PWD};
 }
 win32 {
 	PATH = .
