@@ -1,7 +1,13 @@
 #include <stdio.h>
 
+#include <PhTools/tests/PhTimeCodeTest.h>
+
 int main(int argc, char *argv[])
 {
-	printf("test returning 1\n");
+	PhTimeCodeTest tcTest;
+	int result = QTest::qExec(&tcTest);
+	if(result)
+		return result;
+
 	return 0;
 }
