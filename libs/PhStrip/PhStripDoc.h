@@ -283,14 +283,14 @@ public:
 
 	/**
 	 * @brief Get the next loop
-	 * @param frame
-	 * @return
+	 * @param frame the given frame
+	 * @return the corresponding loop
 	 */
 	PhStripLoop * getNextLoop(PhFrame frame);
 	/**
 	 * @brief Get the previous loop
-	 * @param frame
-	 * @return
+	 * @param frame the given frame
+	 * @return the corresponding loop
 	 */
 	PhStripLoop * getPreviousLoop(PhFrame frame);
 signals:

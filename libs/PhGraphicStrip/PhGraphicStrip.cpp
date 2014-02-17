@@ -231,11 +231,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		bool displayNextText = _settings->value("displayNextText", true).toBool();
 
-		int verticalPixelPerFrame = 1;
-		if(displayNextText) {
-			verticalPixelPerFrame = _settings->value("verticalPixelPerFrame", 1).toInt();
-		}
-
+		int verticalPixelPerFrame = verticalPixelPerFrame = _settings->value("verticalPixelPerFrame", 1).toInt();
 
 		foreach(PhStripText * text, _doc.getTexts())
 		{
@@ -347,7 +343,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 					_graphicPeoples[people] = gPeople;
 				}
-				int howFarIsText = (text->getTimeIn() - frameOut) / verticalPixelPerFrame;
+				int howFarIsText = (text->getTimeIn() - frameOut) * verticalPixelPerFrame;
 				//This line is used to see which text's name will be displayed
 				gPeople->setX(width - gPeople->getWidth());
 				gPeople->setY(y - howFarIsText);
@@ -427,7 +423,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			if(displayNextText && ((loop->getTimeIn() + height / 8 / pixelPerFrame) > frameIn)) {
 				PhGraphicSolidRect gLoopPred;
 
-				int howFarIsLoop = (loop->getTimeIn() - frameOut + (width - syncBar_X_FromLeft) / pixelPerFrame) / verticalPixelPerFrame;
+				int howFarIsLoop = (loop->getTimeIn() - frameOut + (width - syncBar_X_FromLeft) / pixelPerFrame) * verticalPixelPerFrame;
 
 				gLoopPred.setWidth(width / 10);
 				gLoopPred.setX(width - width / 10);
