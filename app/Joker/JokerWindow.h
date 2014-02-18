@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef JOKERWINDOW_H
 #define JOKERWINDOW_H
 
@@ -8,7 +14,10 @@
 
 #include "VideoStripView.h"
 #include "PhSync/PhSonySlaveController.h"
-#include "PhCommonUI/PhMediaPanelDialog.h"
+#include "PhCommonUI/PhFloatingMediaPanel.h"
+#if USE_LTC
+#include "PhSync/PhLtcReader.h"
+#endif
 
 #include "SonyVideoStripSynchronizer.h"
 #include "PropertyDialog.h"
@@ -16,22 +25,76 @@
 namespace Ui {
 class JokerWindow;
 }
+/**
+   *\file JokerWindow.h
+ */
 
+/**
+ * @brief Joker main application window
+ *
+ * The JokerWindow class implements the main screen user interface behaviour:
+ * - Display the VideoStripView
+ * - Handling PhFloatingMediaPanel behaviour
+ * - Opening application dialog : preferences, open file, open video file, save , display properties, timestamp, people selection
+ * - Display properties dialog
+ * - Handling controls command
+ * - Connect the application modules: PhVideoEngine, PhGraphicStrip, Synchronizer, PhSonySlaveController, PhLtcReader
+ */
 class JokerWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
+	/**
+	 * @brief JokerWindow The JokerWindow constructor
+	 *
+	 * @param settings The application settings
+	 */
 	explicit JokerWindow(QSettings *settings);
 	~JokerWindow();
 
-	void openFile(QString fileName);
+	/**
+	 * @brief Open all supported strip file
+	 *
+	 * First the file existance is checked then,
+	 * If the file is a supported rythmo file, it will call the PhStripDoc function openStripFile().
+	 *
+	 * @param filePath The file path
+	 */
+	void openFile(QString filePath);
 
+	/**
+	 * @brief Open a video file
+	 *
+	 * Open a videofile and set the framestamp to the videofile's value or the strip's value if the first one is not usable.
+	 *
+	 * @param videoFile The videofile path
+	 *
+	 * @return True if the videoFile opened well, false otherwise.
+	 */
 	bool openVideoFile(QString videoFile);
 
 protected:
-	bool eventFilter(QObject *, QEvent *event);
+	/**
+	 * @brief event Filter
+	 *
+	 * The event filter allow Joker to react with external controls like when the mouse mouve or when a
+	 * file is dropped on the application.
+	 *
+	 * @param sender The object sending the event
+	 * @param event The event
+	 * @return The return boolean is :
+	 *	- True if we totaly handle the event
+	 *  - False if we only want to do pre-treatment.
+	 */
+	bool eventFilter(QObject *sender, QEvent *event);
 
+	/**
+	 * @brief The PhFloatingMediaPanel state enumeration
+	 *
+	 * The enumeration is used to handle the different state of the PhFloatingMediaPanel:
+	 * visible, hidding and hidden for a best fade-in and fade-out effect.
+	 */
 	enum MediaPanelState {
 		MediaPanelVisible,
 		MediaPanelHidding,
@@ -40,7 +103,7 @@ protected:
 
 
 private slots:
-		// Qt Designer slots
+	// Qt Designer slots
 	void on_actionOpen_triggered();
 
 	void on_actionPlay_pause_triggered();
@@ -114,8 +177,11 @@ private:
 	QSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
+#if USE_LTC
+	PhLtcReader _ltcReader;
+#endif
 
-	PhMediaPanelDialog _mediaPanel;
+	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;
 	MediaPanelState _mediaPanelState;
 	QPropertyAnimation _mediaPanelAnimation;
@@ -129,6 +195,7 @@ private:
 
 	void updateOpenRecent();
 	void setupOpenRecentMenu();
+	void setupSyncProtocol();
 	void closeEvent(QCloseEvent *event);
 
 	void setCurrentStripFile(QString stripFile);

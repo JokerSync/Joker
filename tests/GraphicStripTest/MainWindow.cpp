@@ -37,12 +37,10 @@ MainWindow::~MainWindow()
 bool MainWindow::openFile(QString fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
-  //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
-	if(QFile::exists(fileName))
-	{
+	//  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
+	if(QFile::exists(fileName)) {
 		_path = fileName;
-		if(_doc->openStripFile(fileName))
-		{
+		if(_doc->openStripFile(fileName)) {
 			_clock->setTimeCodeType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
 			this->setWindowTitle(fileName);
@@ -56,8 +54,7 @@ void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, Q
 {
 	PHDEBUG << "Creating fake file";
 	_path = "null";
-	if(_doc->createDoc(text, nbPeople, nbText, nbTrack, videoTimeStamp))
-	{
+	if(_doc->createDoc(text, nbPeople, nbText, nbTrack, videoTimeStamp)) {
 		PHDEBUG << "Done";
 		_clock->setTimeCodeType(_doc->getTCType());
 		_clock->setFrame(_doc->getLastFrame());
@@ -68,8 +65,7 @@ void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, Q
 void MainWindow::onOpenFile()
 {
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
-	if(dlg.exec())
-	{
+	if(dlg.exec()) {
 		QString fileName = dlg.selectedFiles()[0];
 		if(openFile(fileName))
 			_settings->setLastFile(fileName);
@@ -79,8 +75,7 @@ void MainWindow::onOpenFile()
 void MainWindow::onGenerate()
 {
 	GenerateDialog dlgGen(_settings, _doc);
-	if (dlgGen.exec())
-	{
+	if (dlgGen.exec()) {
 		_clock->setFrame(_doc->getLastFrame());
 		_settings->setLastFile("");
 	}
@@ -109,12 +104,12 @@ void MainWindow::on_actionPlay_pause_triggered()
 
 void MainWindow::on_actionPlay_backward_triggered()
 {
-    _clock->setRate(-1.0);
+	_clock->setRate(-1.0);
 }
 
 void MainWindow::on_actionStep_forward_triggered()
 {
-    _clock->setRate(0.0);
+	_clock->setRate(0.0);
 	_clock->setFrame(_clock->frame() + 1);
 }
 
@@ -201,4 +196,3 @@ void MainWindow::on_actionStrip_Properties_triggered()
 	dlg = new StripPropertiesDialog(_doc, this);
 	dlg->show();
 }
-

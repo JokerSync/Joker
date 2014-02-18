@@ -10,6 +10,7 @@ public:
 
 	virtual float stripHeight() = 0;
 	virtual int horizontalSpeed() = 0;
+	virtual void setTextFontFile(QString value) = 0;
 	virtual QString textFontFile() = 0;
 	virtual int textBoldness() = 0;
 	virtual int screenDelay() = 0;

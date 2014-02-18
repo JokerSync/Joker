@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "PeopleDialog.h"
 #include "ui_PeopleDialog.h"
 #include "PhTools/PhDebug.h"
@@ -20,6 +26,9 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, QList<PhPeople*> *p
 		if(_oldPeopleList.contains(people))
 			ui->peopleList->item(ui->peopleList->count() - 1)->setSelected(true);
 	}
+
+	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
 }
 
 PeopleDialog::~PeopleDialog()
@@ -29,7 +38,7 @@ PeopleDialog::~PeopleDialog()
 
 void PeopleDialog::on_peopleList_itemSelectionChanged()
 {
-    _peopleList->clear();
+	_peopleList->clear();
 	foreach (QListWidgetItem* item, ui->peopleList->selectedItems()) {
 		_peopleList->append(_doc->getPeopleByName(item->text()));
 	}
@@ -39,7 +48,7 @@ void PeopleDialog::on_peopleList_itemSelectionChanged()
 
 void PeopleDialog::on_buttonBox_rejected()
 {
-    _peopleList->clear();
+	_peopleList->clear();
 	foreach (PhPeople* people, _oldPeopleList) {
 		_peopleList->append(people);
 	}
@@ -48,4 +57,9 @@ void PeopleDialog::on_buttonBox_rejected()
 void PeopleDialog::on_selectAllButton_clicked()
 {
 	ui->peopleList->selectAll();
+}
+
+void PeopleDialog::on_deselectAllButton_clicked()
+{
+	ui->peopleList->clearSelection();
 }

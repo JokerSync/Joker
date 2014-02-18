@@ -1,8 +1,14 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include <QtMath>
 
 #include "PhSonyControllerTest.h"
 
-#include "PhSonyController.h"
+#include "PhSync/PhSonyController.h"
 
 #include "PhTools/PhDebug.h"
 

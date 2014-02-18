@@ -14,6 +14,11 @@ int GraphicStripTestSettings::horizontalSpeed()
 	return intValue("horizontalSpeed", 12);
 }
 
+void GraphicStripTestSettings::setTextFontFile(QString value)
+{
+	setStringValue("textFontFile", value);
+}
+
 QString GraphicStripTestSettings::textFontFile()
 {
 	return stringValue("textFontFile");

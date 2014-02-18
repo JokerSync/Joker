@@ -1,16 +1,13 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
+#include <SDL2/SDL_image.h>
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphicImage.h"
-
-#if defined(Q_OS_MAC)
-#include <SDL2_image/SDL_image.h>
-#else
-#include <SDL2/SDL_image.h>
-#endif
 
 PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h)
 	: PhGraphicTexturedRect(x, y, w, h), _filename(filename), _surface(NULL)
@@ -19,11 +16,9 @@ PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h)
 
 bool PhGraphicImage::init()
 {
-    _surface = IMG_Load(_filename.toStdString().c_str());
-    if(_surface != NULL)
-	{
-		if(createTextureFromSurface(_surface))
-		{
+	_surface = IMG_Load(_filename.toStdString().c_str());
+	if(_surface != NULL) {
+		if(createTextureFromSurface(_surface)) {
 			PHDEBUG << "Loading image";
 			return true;
 		}
@@ -36,7 +31,7 @@ bool PhGraphicImage::init()
 
 void PhGraphicImage::dispose()
 {
-    SDL_FreeSurface(_surface);
+	SDL_FreeSurface(_surface);
 }
 
 void PhGraphicImage::draw()
@@ -46,9 +41,9 @@ void PhGraphicImage::draw()
 }
 
 void PhGraphicImage::setFilename(QString filename){
-    _filename = filename;
+	_filename = filename;
 }
 
 QString PhGraphicImage::getFilename(){
-    return _filename;
+	return _filename;
 }

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "math.h"
 #include "PhGraphicLoop.h"
 
@@ -21,12 +27,12 @@ void PhGraphicLoop::draw()
 	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
 
 
-	glBegin(GL_QUADS); 	// draw the vertical line
+	glBegin(GL_QUADS);  // draw the vertical line
 	{
-		glVertex3f(x,		y,	_z);
-		glVertex3f(x + w,	y,	_z);
-		glVertex3f(x + w,	y + h,  _z);
-		glVertex3f(x,		y + h,  _z);
+		glVertex3f(x,       y,  _z);
+		glVertex3f(x + w,   y,  _z);
+		glVertex3f(x + w,   y + h,  _z);
+		glVertex3f(x,       y + h,  _z);
 	}
 	glEnd();
 
@@ -37,23 +43,23 @@ void PhGraphicLoop::draw()
 	w = _hThick;
 	h = _crossHeight;
 
-	glBegin(GL_QUADS); 	// draw the fist cross segment
+	glBegin(GL_QUADS);  // draw the fist cross segment
 	{
-		glVertex3f(x,		y,	_z);
-		glVertex3f(x + w,	y,	_z);
-		glVertex3f(x + _w,	y + h,  _z);
-		glVertex3f(x + _w - w,		y + h,  _z);
+		glVertex3f(x,       y,  _z);
+		glVertex3f(x + w,   y,  _z);
+		glVertex3f(x + _w,  y + h,  _z);
+		glVertex3f(x + _w - w,      y + h,  _z);
 	}
 	glEnd();
 
 	y = _y + _h/2 + _crossHeight/2;
 
-	glBegin(GL_QUADS); 	// draw the second cross segment
+	glBegin(GL_QUADS);  // draw the second cross segment
 	{
-		glVertex3f(x,		y,	_z);
-		glVertex3f(x + w,	y,	_z);
-		glVertex3f(x + _w,	y - h,  _z);
-		glVertex3f(x + _w -w,		y - h,  _z);
+		glVertex3f(x,       y,  _z);
+		glVertex3f(x + w,   y,  _z);
+		glVertex3f(x + _w,  y - h,  _z);
+		glVertex3f(x + _w -w,       y - h,  _z);
 	}
 	glEnd();
 

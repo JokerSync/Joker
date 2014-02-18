@@ -8,12 +8,33 @@
 
 #include "PhTools/tests/PhTimeCodeTest.h"
 
+enum {
+	One=1,
+	Thh=3,
+};
 
+/**
+ * @brief The application main entry point
+ * @param argc Command line argument count
+ * @param argv Command line argument list
+ * @return 0 if the application works well.
+ */
 int main(int argc, char *argv[])
 {
+	bool a = true;
+	if(a) {
+		a = false;
+	}
+	else if(a)
+		a = true;
+
+	if(a) {
+		a = false;
+		a = false;
+	}
 
 	// Initialize the Debug module.
-//	PhDebug::init(false, true, true, true, true, true, 1, argv[0]);
+	//	PhDebug::init(false, true, true, true, true, true, 1, argv[0]);
 
 
 	PHDEBUG << "should always display.";
@@ -28,10 +49,8 @@ int main(int argc, char *argv[])
 	int total = 10000;
 	QTime t;
 	PHDEBUG << "starting";
-	t.start();
-	int n = 0;
-	for(int i = 0; i < total; i++)
-	{
+	t.start(); int n = 0;
+	for(int i = 0; i < total; i++) {
 		if(settings.value("test", false).toBool())
 			n++;
 	}
@@ -41,10 +60,23 @@ int main(int argc, char *argv[])
 	t.restart();
 
 	bool b = true;
-	for(int i = 0; i < total; i++)
-	{
+	for(int i = 0; i < total; i++) {
 		if(b)
 			n++;
+
+		switch(i) {
+		case 2:
+			PHDEBUG << "2";
+			break;
+		case 3:
+			{
+				PHDEBUG << "3";
+				break;
+			}
+		default:
+			PHDEBUG << "default";
+			break;
+		}
 	}
 
 	PHDEBUG << "bool " << t.elapsed();

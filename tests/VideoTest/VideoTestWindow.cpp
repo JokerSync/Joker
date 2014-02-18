@@ -11,8 +11,8 @@
 
 VideoTestWindow::VideoTestWindow(QSettings *settings)
 	: QMainWindow(0),
-      ui(new Ui::VideoTestWindow),
-	  _settings(settings)
+	ui(new Ui::VideoTestWindow),
+	_settings(settings)
 {
 	ui->setupUi(this);
 	_videoEngine.setSettings(settings);
@@ -29,15 +29,13 @@ VideoTestWindow::~VideoTestWindow()
 
 bool VideoTestWindow::openFile(QString fileName)
 {
-    QFileInfo fileInfo(fileName);
-    if (fileInfo.exists())
-    {
-		if(_videoEngine.open(fileName))
-		{
+	QFileInfo fileInfo(fileName);
+	if (fileInfo.exists()) {
+		if(_videoEngine.open(fileName)) {
 			this->setWindowTitle(fileName);
 			_mediaPanelDialog.setMediaLength(_videoEngine.length());
 
-			PhFrame frameStamp = _videoEngine.frameStamp();
+			PhFrame frameStamp = _videoEngine.firstFrame();
 			_mediaPanelDialog.setFirstFrame(frameStamp);
 
 			_videoEngine.clock()->setFrame(frameStamp);
@@ -45,7 +43,7 @@ bool VideoTestWindow::openFile(QString fileName)
 			_settings->setValue("lastVideoFile", fileName);
 			return true;
 		}
-    }
+	}
 	return false;
 }
 
@@ -53,48 +51,47 @@ void VideoTestWindow::resizeEvent(QResizeEvent *)
 {
 	PHDEBUG << this->width() << this->height();
 	_mediaPanelDialog.move(this->x() + this->width() / 2 - _mediaPanelDialog.width() / 2,
-						   this->y() + this->height() * 0.95 - _mediaPanelDialog.height());
+	                       this->y() + this->height() * 0.95 - _mediaPanelDialog.height());
 }
 
 void VideoTestWindow::on_actionPlay_pause_triggered()
 {
-    if(_videoEngine.clock()->rate()!=0)
-        _videoEngine.clock()->setRate(0);
+	if(_videoEngine.clock()->rate() != 0)
+		_videoEngine.clock()->setRate(0);
 	else
-        _videoEngine.clock()->setRate(1);
+		_videoEngine.clock()->setRate(1);
 }
 
 void VideoTestWindow::on_actionNext_frame_triggered()
 {
-    _videoEngine.clock()->setFrame(_videoEngine.clock()->frame() + 1);
+	_videoEngine.clock()->setFrame(_videoEngine.clock()->frame() + 1);
 }
 
 void VideoTestWindow::on_actionPrevious_frame_triggered()
 {
-    _videoEngine.clock()->setFrame(_videoEngine.clock()->frame() - 1);
+	_videoEngine.clock()->setFrame(_videoEngine.clock()->frame() - 1);
 }
 
 void VideoTestWindow::on_actionSet_timestamp_triggered()
 {
-    PhTimeCodeDialog dlg(_videoEngine.clock()->timeCodeType(), _videoEngine.clock()->frame());
-	if(dlg.exec() == QDialog::Accepted)
-	{
-		PhFrame frameStamp = _videoEngine.frameStamp();
-        frameStamp += dlg.frame() - _videoEngine.clock()->frame();
-		_videoEngine.setFrameStamp(frameStamp);
+	PhTimeCodeDialog dlg(_videoEngine.clock()->timeCodeType(), _videoEngine.clock()->frame());
+	if(dlg.exec() == QDialog::Accepted) {
+		PhFrame frameStamp = _videoEngine.firstFrame();
+		frameStamp += dlg.frame() - _videoEngine.clock()->frame();
+		_videoEngine.setFirstFrame(frameStamp);
 		_mediaPanelDialog.setFirstFrame(frameStamp);
-        _videoEngine.clock()->setFrame(dlg.frame());
+		_videoEngine.clock()->setFrame(dlg.frame());
 	}
 }
 
 void VideoTestWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
-    if(!openFile(fileName))
+	if(!openFile(fileName))
 		QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 }
 
 void VideoTestWindow::on_actionReverse_triggered()
 {
-    _videoEngine.clock()->setRate(-1);
+	_videoEngine.clock()->setRate(-1);
 }

@@ -14,6 +14,7 @@ public:
 	// PhGraphicSettings :
 	float stripHeight();
 	int horizontalSpeed();
+	void setTextFontFile(QString value);
 	QString textFontFile();
 	int textBoldness();
 	int screenDelay();

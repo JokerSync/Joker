@@ -1,3 +1,8 @@
+#
+# Copyright (C) 2012-2014 Phonations
+# License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+#
+
 QT		+= xml
 
 SOURCES += \
@@ -23,15 +28,17 @@ HEADERS += \
     ../../libs/PhStrip/tests/PhStripDocTest.h
 
 # Windows specific
-win32 {
+win32{
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/test01.detx) $${RESOURCES_PATH} $${CS}
+
 }
 
 # Ubuntu specific
-linux {
+linux{
 }
 
 # MacOS specific
-mac {
+mac{
+	QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/strip/test01.detx .;
 }
 
-QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/strip/test01.detx .;

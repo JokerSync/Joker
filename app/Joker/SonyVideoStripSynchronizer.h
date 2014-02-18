@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef SONYVIDEOSTRIPSYNCHRONIZER_H
 #define SONYVIDEOSTRIPSYNCHRONIZER_H
 
@@ -5,18 +11,68 @@
 
 #include "PhTools/PhClock.h"
 
+/**
+ * @brief Provide a synchronisation system between the strip, the video and the external sync signal
+ */
 class VideoStripSynchronizer : public QObject
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief The different kind of synchronization enumeration used by Joker
+	 */
+	enum SyncType {
+		NoSync = 0,
+		Sony = 1,
+#if USE_LTC
+		LTC = 2,
+#endif
+	};
+
 	VideoStripSynchronizer();
 
+	/**
+	 * @brief Set the strip clock
+	 * @param clock The strip clock
+	 */
 	void setStripClock(PhClock *clock);
-	PhClock * stripClock() { return _stripClock; }
+
+	/**
+	 * @brief Get the strip clock
+	 * @return The strip clock
+	 */
+	PhClock * stripClock() {
+		return _stripClock;
+	}
+
+	/**
+	 * @brief Set the videoClock
+	 * @param clock The video clock
+	 */
 	void setVideoClock(PhClock *clock);
-	PhClock * videoClock() { return _videoClock; }
-	void setSonyClock(PhClock *clock);
-	PhClock * sonyClock() { return _sonyClock; }
+
+	/**
+	 * @brief Get the video clock
+	 * @return The video clock
+	 */
+	PhClock * videoClock() {
+		return _videoClock;
+	}
+
+	/**
+	 * @brief Set the synchronization clock
+	 * @param clock The synchronization clock
+	 * @param type The desired PhTimeCodeType
+	 */
+	void setSyncClock(PhClock *clock, SyncType type);
+
+	/**
+	 * @brief Get the Synchronization clock
+	 * @return The Synchronization clock.
+	 */
+	PhClock * syncClock() {
+		return _syncClock;
+	}
 
 private slots:
 	void onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType);
@@ -24,12 +80,13 @@ private slots:
 	void onVideoFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onVideoRateChanged(PhRate rate);
 	void onVideoTCTypeChanged(PhTimeCodeType tcType);
-	void onSonyFrameChanged(PhFrame frame, PhTimeCodeType tcType);
-	void onSonyRateChanged(PhRate rate);
+	void onSyncFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onSyncRateChanged(PhRate rate);
 private:
+	int _syncType;
 	PhClock * _stripClock;
 	PhClock * _videoClock;
-	PhClock * _sonyClock;
+	PhClock * _syncClock;
 	bool _settingStripFrame;
 	bool _settingVideoFrame;
 	bool _settingSonyFrame;

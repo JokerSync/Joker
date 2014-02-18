@@ -1,13 +1,15 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
-#include "PhDebug.h"
-
+#include <QtGlobal>
 #include <QStringList>
 #include <QFile>
 #include <QDir>
+
+#include "PhDebug.h"
 
 PhDebug* PhDebug::d = NULL;
 
@@ -18,11 +20,9 @@ PhDebug* PhDebug::d = NULL;
 
 void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-	Q_UNUSED(type);Q_UNUSED(context);
-	if(d)
-	{
-		if(d->_logMask & (1 << d->_currentLogLevel))
-		{
+	Q_UNUSED(type); Q_UNUSED(context);
+	if(d) {
+		if(d->_logMask & (1 << d->_currentLogLevel)) {
 			if(d->_showConsole)
 				fprintf(stderr, "%s \n", msg.toLocal8Bit().constData());
 			QTextStream ts(d->_log);
@@ -46,11 +46,11 @@ void PhDebug::showConsole(bool show)
 // Called if init() was forget
 PhDebug PhDebug::instance(int logLevelMessage)
 {
-    if (!d)   // Only allow one instance of class to be generated.
-        d = new PhDebug();
+	if (!d)   // Only allow one instance of class to be generated.
+		d = new PhDebug();
 
 	d->_currentLogLevel = logLevelMessage;
-	return * d;
+	return *d;
 }
 
 QDebug PhDebug::operator<<(QDebug dbg)
@@ -78,7 +78,14 @@ PhDebug::PhDebug()
 {
 	qInstallMessageHandler(this->messageOutput);
 
+#if defined(Q_OS_MAC)
 	QString logDirPath = QDir::homePath() + "/Library/Logs/Phonations/";
+#elif defined(Q_OS_WIN)
+	QString logDirPath = QString(qgetenv("APPDATA")) + "/Phonations";
+#else
+#error Choose a folder for log
+#endif
+
 	QDir logDir(logDirPath);
 	if(!logDir.exists()) {
 		QDir().mkdir(logDirPath);
@@ -108,7 +115,7 @@ QString PhDebug::getFuncName(QString name)
 QString PhDebug::getFileName(QString name)
 {
 	if (d && d->_dispFileName)
-		return  name.split("/").last() + "\t";
+		return name.split("/").last() + "\t";
 	return "";
 }
 

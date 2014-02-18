@@ -103,12 +103,10 @@ void MainWindow::onStatusData(unsigned char *statusData, int offset, int length)
 void MainWindow::on_masterActiveCheck_clicked(bool checked)
 {
 	_settings.setValue("masterActiveState", checked);
-	if(checked)
-	{
+	if(checked) {
 		PHDEBUG << "opening master";
 
-		if(_sonyMaster.open())
-		{
+		if(_sonyMaster.open()) {
 			PHDEBUG << "master open ok";
 
 			_sonyMaster.deviceTypeRequest();
@@ -116,15 +114,13 @@ void MainWindow::on_masterActiveCheck_clicked(bool checked)
 			_sonyMaster.timeSense();
 			_sonyMaster.speedSense();
 		}
-		else
-		{
+		else{
 			PHDEBUG << "error opening master";
 			checked = false;
 			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony master");
 		}
 	}
-	else
-	{
+	else{
 		PHDEBUG << "closing sony master";
 		_sonyMaster.close();
 	}
@@ -142,19 +138,16 @@ void MainWindow::on_masterActiveCheck_clicked(bool checked)
 void MainWindow::on_slaveActiveCheck_clicked(bool checked)
 {
 	_settings.setValue("slaveActiveState", checked);
-	if(checked)
-	{
+	if(checked) {
 		if(_sonySlave.open())
 			PHDEBUG << "slave open ok";
-		else
-		{
+		else{
 			PHDEBUG << "error opening slave";
 			checked = false;
 			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
 		}
 	}
-	else
-	{
+	else{
 		PHDEBUG << "closing sony slave";
 		_sonySlave.clock()->setRate(0);
 		_sonySlave.close();
@@ -197,16 +190,14 @@ void MainWindow::switchSlaveVideoInternalSync(bool useVideo)
 	ui->actionSlave_Use_internal_timer->setChecked(!useVideo);
 
 	_slaveTimer.stop();
-	if(useVideo)
-	{
+	if(useVideo) {
 		// timer trigger the checkVideoSync on the serial port
 		disconnect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(onVideoSync()));
 		connect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
 
 		_slaveTimer.start(10);
 	}
-	else
-	{
+	else{
 		// timer trigger the onVideoSync slot directly
 		disconnect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
 		connect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(onVideoSync()));
@@ -234,16 +225,14 @@ void MainWindow::switchMasterVideoInternalSync(bool useVideo)
 	ui->actionMaster_Use_internal_timer->setChecked(!useVideo);
 
 	_masterTimer.stop();
-	if(useVideo)
-	{
+	if(useVideo) {
 		// timer trigger the checkVideoSync on the serial port
 		disconnect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(onVideoSync()));
 		connect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
 
 		_masterTimer.start(10);
 	}
-	else
-	{
+	else{
 		// timer trigger the onVideoSync slot directly
 		disconnect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
 		connect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(onVideoSync()));
