@@ -1,9 +1,5 @@
 #include "GraphicStripTestSettings.h"
 
-GraphicStripTestSettings::GraphicStripTestSettings()
-{
-}
-
 float GraphicStripTestSettings::stripHeight()
 {
 	return floatValue("stripHeight", 0.25f);

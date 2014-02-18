@@ -12,14 +12,14 @@
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
-	QSettings settings("Phonations", "VideoTest");
+	VideoTestSettings settings;
 
 	VideoTestWindow w(&settings);
 	w.resize(800, 600);
 
 	w.show();
 
-	QString fileName = settings.value("lastVideoFile", "").toString();
+	QString fileName = settings.lastFile();
 	if(argc > 1)
 		fileName = argv[1];
 	if(QFile(fileName).exists())

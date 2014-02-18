@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QString>
 #include <QTimer>
-#include <QSettings>
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhDebug.h"
@@ -13,6 +12,8 @@
 #include "PhVideo/PhVideoEngine.h"
 
 #include "PhCommonUI/PhFloatingMediaPanel.h"
+
+#include "VideoTestSettings.h"
 
 namespace Ui {
 class VideoTestWindow;
@@ -25,7 +26,7 @@ public:
 	/**
 	 * @brief MainView constructor
 	 */
-	VideoTestWindow(QSettings *settings);
+	VideoTestWindow(VideoTestSettings *settings);
 
 	~VideoTestWindow();
 	/**
@@ -54,7 +55,7 @@ private slots:
 private:
 
 	Ui::VideoTestWindow *ui;
-	QSettings *_settings;
+	VideoTestSettings *_settings;
 	PhVideoEngine _videoEngine;
 	PhFloatingMediaPanel _mediaPanelDialog;
 };

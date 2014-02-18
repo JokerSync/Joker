@@ -9,7 +9,7 @@
 
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-VideoTestWindow::VideoTestWindow(QSettings *settings)
+VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	: QMainWindow(0),
 	ui(new Ui::VideoTestWindow),
 	_settings(settings)
@@ -40,7 +40,7 @@ bool VideoTestWindow::openFile(QString fileName)
 
 			_videoEngine.clock()->setFrame(frameStamp);
 			//_videoEngine.clock()->setRate(1.0);
-			_settings->setValue("lastVideoFile", fileName);
+			_settings->setLastFile(fileName);
 			return true;
 		}
 	}

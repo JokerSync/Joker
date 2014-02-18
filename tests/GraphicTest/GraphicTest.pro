@@ -20,7 +20,7 @@ include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
 
 HEADERS  += \
 	GraphicTestView.h \
-	MainWindow.h \
+	MainWindow.h
 
 SOURCES += main.cpp \
 	GraphicTestView.cpp \

@@ -9,15 +9,15 @@
 class GraphicStripTestSettings : PhGenericSettings, public PhGraphicStripSettings
 {
 public:
-	GraphicStripTestSettings();
-
 	// PhGraphicSettings :
+	int screenDelay();
+
+	// PhGraphicStripSettings :
 	float stripHeight();
 	int horizontalSpeed();
 	void setTextFontFile(QString value);
 	QString textFontFile();
 	int textBoldness();
-	int screenDelay();
 	bool stripTestMode();
 	bool displayTextPrediction();
 	bool verticalSpeed();
