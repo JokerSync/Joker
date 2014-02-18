@@ -25,24 +25,23 @@ int main(int argc, char *argv[])
 	GraphicStripTestSettings settings;
 	MainWindow w(&settings);
 
-    w.show();
+	w.show();
 
 	if (argc > 1)
 		w.openFile(argv[1]);
-	else
-	{
+	else{
 		QString lastFile = settings.lastFile();
 		if(QFile::exists(lastFile))
 			w.openFile(lastFile);
 		else{
 			w.createFile(
-						settings.peopleNumber(),
-						settings.loopNumber(),
-						settings.textNumber(),
-						settings.trackNumber(),
-						settings.textContent(),
-						settings.startFrame()
-						);
+			    settings.peopleNumber(),
+			    settings.loopNumber(),
+			    settings.textNumber(),
+			    settings.trackNumber(),
+			    settings.textContent(),
+			    settings.startFrame()
+			    );
 		}
 	}
 

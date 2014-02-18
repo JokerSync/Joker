@@ -23,8 +23,8 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
 
-    // This is used to make some time-based test
-    _testTimer.start();
+	// This is used to make some time-based test
+	_testTimer.start();
 }
 
 PhStripDoc *PhGraphicStrip::doc()
@@ -65,15 +65,15 @@ bool PhGraphicStrip::init()
 
 	_stripBackgroundImage.init();
 
-    // Load the font file
-    QString fontFile = "";
-    if(_settings != NULL)
-        fontFile = _settings->textFontFile();
-    if(!QFile(fontFile).exists())
-        fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
+	// Load the font file
+	QString fontFile = "";
+	if(_settings != NULL)
+		fontFile = _settings->textFontFile();
+	if(!QFile(fontFile).exists())
+		fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
 
 	_textFont.setFontFile(fontFile);
-    _textFont.setBoldness(_settings->textBoldness());
+	_textFont.setBoldness(_settings->textBoldness());
 
 	// Init the sync bar
 	_stripSyncBar.setColor(QColor(225, 86, 108));

@@ -114,7 +114,7 @@ bool PhFont::init(QString fontFile)
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, matrixSurface->format->BytesPerPixel, matrixSurface->w, matrixSurface->h, 0,
-				  GL_RGBA, GL_UNSIGNED_BYTE, matrixSurface->pixels);
+	              GL_RGBA, GL_UNSIGNED_BYTE, matrixSurface->pixels);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
