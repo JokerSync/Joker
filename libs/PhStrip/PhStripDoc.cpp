@@ -6,6 +6,7 @@
 
 
 #include <QFile>
+#include <QFileInfo>
 #include "PhTools/PhFileTool.h"
 #include "PhStripDoc.h"
 
@@ -176,7 +177,7 @@ bool PhStripDoc::importDetX(QString fileName)
 bool PhStripDoc::checkMosTag(QFile &f, int logLevel, QString name)
 {
 	if(PhFileTool::PhFileTool::readString(f, logLevel, name) != name) {
-		PHDBG(logLevel) << "Error reading " << name;
+		PHDBG(logLevel) << "!!!!!!!!!!!!!!!" << "Error reading " << name << "!!!!!!!!!!!!!!!";
 		f.close();
 		return false;
 	}
@@ -185,7 +186,7 @@ bool PhStripDoc::checkMosTag(QFile &f, int logLevel, QString name)
 
 bool PhStripDoc::importMos(QString fileName)
 {
-	PHDEBUG << fileName;
+	PHDEBUG << "===============" << fileName << "===============";
 
 	QFile f(fileName);
 	if(!f.exists()) {
@@ -200,8 +201,8 @@ bool PhStripDoc::importMos(QString fileName)
 
 	this->reset();
 
-	int logLevel = 2;
-	int ok = 2;
+	int logLevel = 0;
+	int ok = 0;
 
 	PhFileTool::readShort(f, logLevel);
 
@@ -248,25 +249,10 @@ bool PhStripDoc::importMos(QString fileName)
 
 	PhFileTool::readString(f, logLevel, "titre vo episode");
 
-	PhFileTool::readShort(f, logLevel);
-
-	PhFileTool::readString(f, logLevel);
-
-	PhFileTool::readShort(f, logLevel);
-
-	PhFileTool::readString(f, logLevel);
-
-	PhFileTool::readShort(f, logLevel);
-
-	PhFileTool::readString(f, logLevel);
-
-	PhFileTool::readShort(f, logLevel);
-
-	PhFileTool::readString(f, logLevel);
-
-	PhFileTool::readShort(f, logLevel);
-
-	PhFileTool::readString(f, logLevel);
+	for(int i = 0; i < 5; i++) {
+		PhFileTool::readShort(f, logLevel);
+		PhFileTool::readString(f, logLevel);
+	}
 
 	PhFileTool::readShort(f, logLevel);
 
@@ -476,7 +462,7 @@ bool PhStripDoc::importMos(QString fileName)
 	for(int j = 0; j < 2; j++)
 		PhFileTool::readShort(f, logLevel);
 
-	PHDEBUG << "reading ok";
+	PHDEBUG << "_______________" << "reading ok" << "_______________";
 
 	f.close();
 
@@ -487,11 +473,15 @@ bool PhStripDoc::openStripFile(QString fileName)
 {
 	bool succeed = false;
 
+	QString extension = QFileInfo(fileName).suffix();
 	// Try to open the document
-	if(fileName.split(".").last() == "detx") {
+	if(extension == "detx") {
 		return importDetX(fileName);
 	}
-	else if(fileName.split(".").last() == "strip") {
+	else if(extension == "mos") {
+		return importMos(fileName);
+	}
+	else if(extension == "strip") {
 		QFile xmlFile(fileName);
 		if(!xmlFile.open(QIODevice::ReadOnly)) {
 			PHDEBUG << "Unable to open" << fileName;
