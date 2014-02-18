@@ -37,7 +37,7 @@ public:
 	 * @param tcType The initial timecode type.
 	 * @param settings The application settings
 	 */
-	PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings);
+	PhSonySlaveController(PhTimeCodeType tcType, PhSyncSettings *settings);
 
 	/**
 	 * @brief Various state in which the controller can be.

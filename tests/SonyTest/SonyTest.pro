@@ -20,9 +20,11 @@ include(../../libs//PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhSync/PhSync.pri)
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        MainWindow.cpp \
+    SonyTestSettings.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += MainWindow.h \
+    SonyTestSettings.h
 
 FORMS    += MainWindow.ui
 

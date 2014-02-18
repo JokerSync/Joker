@@ -10,6 +10,7 @@ HEADERS += \
     ../../libs/PhSync/PhSonyMasterController.h \
     ../../libs/PhSync/PhSonySlaveController.h \
     ../../libs/PhSync/tests/PhSonyControllerTest.h \
+    ../../libs/PhSync/PhSyncSettings.h
 
 
 SOURCES += \

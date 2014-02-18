@@ -1,5 +1,4 @@
 #include <QMessageBox>
-#include <QSettings>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -9,7 +8,6 @@
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	_settings("Phonations","SonyTest"),
 	ui(new Ui::MainWindow),
 	_sonyMaster(PhTimeCodeType25, &_settings),
 	_sonySlave(PhTimeCodeType25, &_settings)
@@ -49,8 +47,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(&_sonySlave, SIGNAL(videoSync()), &_sonySlave, SLOT(onVideoSync()));
 	// start master and slave
 
-	on_masterActiveCheck_clicked(_settings.value("masterActiveState", false).toBool());
-	on_slaveActiveCheck_clicked(_settings.value("slaveActiveState", false).toBool());
+	on_masterActiveCheck_clicked(_settings.sonyMasterActive());
+	on_slaveActiveCheck_clicked(_settings.sonySlaveActive());
 
 	switchSlaveVideoInternalSync(true);
 	switchMasterVideoInternalSync(true);
@@ -102,7 +100,7 @@ void MainWindow::onStatusData(unsigned char *statusData, int offset, int length)
 
 void MainWindow::on_masterActiveCheck_clicked(bool checked)
 {
-	_settings.setValue("masterActiveState", checked);
+	_settings.setSonyMasterActive(checked);
 	if(checked) {
 		PHDEBUG << "opening master";
 
@@ -137,7 +135,7 @@ void MainWindow::on_masterActiveCheck_clicked(bool checked)
 
 void MainWindow::on_slaveActiveCheck_clicked(bool checked)
 {
-	_settings.setValue("slaveActiveState", checked);
+	_settings.setSonySlaveActive(checked);
 	if(checked) {
 		if(_sonySlave.open())
 			PHDEBUG << "slave open ok";

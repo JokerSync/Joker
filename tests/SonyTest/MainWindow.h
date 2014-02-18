@@ -3,11 +3,12 @@
 
 #include <QMainWindow>
 #include <QTimer>
-#include <QSettings>
 
 #include "PhTools/PhClock.h"
 #include "PhSync/PhSonyMasterController.h"
 #include "PhSync/PhSonySlaveController.h"
+
+#include "SonyTestSettings.h"
 
 namespace Ui {
 class MainWindow;
@@ -55,7 +56,7 @@ private:
 	void switchSlaveVideoInternalSync(bool useVideo);
 	void switchMasterVideoInternalSync(bool useVideo);
 
-	QSettings _settings;
+	SonyTestSettings _settings;
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;
 	PhSonySlaveController _sonySlave;
