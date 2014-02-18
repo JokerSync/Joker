@@ -4,9 +4,9 @@
 #include <QSettings>
 
 #include "PhTools/PhGenericSettings.h"
-#include "PhGraphicStrip/PhGraphicSettings.h"
+#include "PhGraphicStrip/PhGraphicStripSettings.h"
 
-class GraphicStripTestSettings : PhGenericSettings, public PhGraphicSettings
+class GraphicStripTestSettings : PhGenericSettings, public PhGraphicStripSettings
 {
 public:
 	GraphicStripTestSettings();

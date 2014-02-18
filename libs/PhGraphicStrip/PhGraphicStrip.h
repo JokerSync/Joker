@@ -9,7 +9,7 @@
 
 #include <QObject>
 
-#include "PhGraphicSettings.h"
+#include "PhGraphicStripSettings.h"
 
 #include "PhStrip/PhStripDoc.h"
 
@@ -73,7 +73,7 @@ public:
 	 * @brief Set the settings
 	 * @param settings desired settings
 	 */
-	void setSettings(PhGraphicSettings * settings);
+	void setSettings(PhGraphicStripSettings * settings);
 
 	/**
 	 * Set the font used to render text on the strip.
@@ -186,7 +186,7 @@ private:
 	QTime _testTimer;
 
 	int _trackNumber;
-	PhGraphicSettings * _settings;
+	PhGraphicStripSettings * _settings;
 	QList<PhPeople*> *_selectedPeoples;
 
 	QColor computeColor(PhPeople *people);

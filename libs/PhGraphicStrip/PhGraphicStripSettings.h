@@ -3,11 +3,9 @@
 
 #include <QString>
 
-class PhGraphicSettings
+class PhGraphicStripSettings
 {
 public:
-	PhGraphicSettings();
-
 	virtual float stripHeight() = 0;
 	virtual int horizontalSpeed() = 0;
 	virtual void setTextFontFile(QString value) = 0;

@@ -6,12 +6,11 @@
 HEADERS += \
     ../../libs/PhGraphicStrip/PhGraphicStrip.h \
     ../../libs/PhGraphicStrip/PhGraphicStripView.h \
-    ../../libs/PhGraphicStrip/PhGraphicSettings.h
+    ../../libs/PhGraphicStrip/PhGraphicStripSettings.h
 
 SOURCES += \
     ../../libs/PhGraphicStrip/PhGraphicStrip.cpp \
-    ../../libs/PhGraphicStrip/PhGraphicStripView.cpp \
-    ../../libs/PhGraphicStrip/PhGraphicSettings.cpp
+    ../../libs/PhGraphicStrip/PhGraphicStripView.cpp
 
 mac {
 	QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH};

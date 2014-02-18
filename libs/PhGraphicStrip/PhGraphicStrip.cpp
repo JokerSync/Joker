@@ -37,7 +37,7 @@ PhClock *PhGraphicStrip::clock()
 	return &_clock;
 }
 
-void PhGraphicStrip::setSettings(PhGraphicSettings *settings)
+void PhGraphicStrip::setSettings(PhGraphicStripSettings *settings)
 {
 	_settings = settings;
 }
