@@ -44,8 +44,8 @@ bool VideoStripView::init()
 
 	_titleBackgroundRect.setColor(QColor(0, 0, 128));
 	_titleText.setColor(QColor(255, 255, 255));
-	_tcText.setColor(QColor(128, 128, 128));
-	_nextTCText.setColor(QColor(128, 128, 128));
+	_tcText.setColor(Qt::green);
+	_nextTCText.setColor(Qt::red);
 	_noVideoSyncError.setColor(QColor(0, 0, 0));
 	_currentPeopleName.setColor(QColor(128, 128, 128));
 
