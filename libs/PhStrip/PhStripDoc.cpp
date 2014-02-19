@@ -228,7 +228,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 
 }
 
-bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio)
+bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
@@ -270,7 +270,7 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio)
 				xmlWriter->writeStartElement("media");
 				xmlWriter->writeAttribute("type", "video");
 				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoFrameStamp, PhTimeCodeType25));
-				if(forceRatio)
+				if(forceRatio169)
 					xmlWriter->writeAttribute("forceRatio", "YES");
 				else
 					xmlWriter->writeAttribute("forceRatio", "NO");
@@ -376,7 +376,7 @@ void PhStripDoc::addText(PhPeople * actor, PhTime start, PhTime end, QString sen
 		_nbTexts++;
 	}
 }
-bool PhStripDoc::forceRatio() const
+bool PhStripDoc::forceRatio169() const
 {
 	return _forceRatio169;
 }

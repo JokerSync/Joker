@@ -259,7 +259,7 @@
     <message>
         <location filename="JokerWindow.ui" line="326"/>
         <source>Force 16/9 ration</source>
-        <translation>Forcer le ratio en 16/9</translation>
+        <translation>Forcer le rapport d'aspect 16/9</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="329"/>

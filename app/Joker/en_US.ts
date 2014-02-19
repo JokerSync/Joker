@@ -258,7 +258,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="326"/>
-        <source>Force 16/9 ration</source>
+        <source>Force 16/9 ratio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

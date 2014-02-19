@@ -174,7 +174,7 @@ public:
 	 * @param forceRatio If the aspect ratio has been forced or not.
 	 * @return True if the strip saved well, false otherwise
 	 */
-	bool saveStrip(QString fileName, QString lastTC, bool forceRatio = false);
+	bool saveStrip(QString fileName, QString lastTC, bool forceRatio169 = false);
 	/**
 	 * @brief Create a made up strip using the parameters
 	 * @param text The desired text
@@ -285,7 +285,7 @@ public:
 	 * \brief Get the force ratio information
 	 * \return if the ratio is forced or not
 	 */
-	bool forceRatio() const;
+	bool forceRatio169() const;
 
 signals:
 	/**
