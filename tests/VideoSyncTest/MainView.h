@@ -4,11 +4,12 @@
 #include <QMainWindow>
 #include <QString>
 #include <QTimer>
-#include <QSettings>
 
 #include "PhTools/PhClock.h"
 #include "PhVideo/PhVideoView.h"
 #include "PhCommonUI/PhMediaPanel.h"
+
+#include "VideoSyncTestSettings.h"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ public:
 	/**
 	 * @brief MainView constructor
 	 */
-	MainView(QSettings *settings);
+	MainView(VideoSyncTestSettings *settings);
 	~MainView();
 	/**
 	 * Open a video file.
@@ -44,7 +45,7 @@ private slots:
 private:
 	Ui::MainView *ui;
 	PhVideoEngine _videoEngine;
-	QSettings *_settings;
+	VideoSyncTestSettings *_settings;
 };
 
 #endif

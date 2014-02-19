@@ -6,7 +6,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 
-MainView::MainView(QSettings *settings)
+MainView::MainView(VideoSyncTestSettings *settings)
 	: QMainWindow(0),
 	ui(new Ui::MainView),
 	_settings(settings)
@@ -36,7 +36,7 @@ bool MainView::openFile(QString fileName)
 
 		_videoEngine.clock()->setRate(0.0);
 
-		_settings->setValue("lastFile", fileName);
+		_settings->setLastFile(fileName);
 		return true;
 	}
 	return false;

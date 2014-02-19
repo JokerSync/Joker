@@ -5,6 +5,11 @@ int VideoTestSettings::screenDelay()
 	return intValue("screenDelay");
 }
 
+int VideoTestSettings::screenRefreshInterval()
+{
+	return intValue("screenRefreshIntervale", 10);
+}
+
 bool VideoTestSettings::videoDeinterlace()
 {
 	return boolValue("videoDeinterlace");

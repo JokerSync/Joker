@@ -9,6 +9,7 @@ class VideoTestSettings : PhGenericSettings, public PhVideoSettings
 public:
 	// PhGraphicSettings :
 	int screenDelay();
+	int screenRefreshInterval();
 
 	// PhGraphicStripSettings :
 	bool videoDeinterlace();

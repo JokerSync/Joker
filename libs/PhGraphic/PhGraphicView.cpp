@@ -56,11 +56,11 @@ void PhGraphicView::resizeGL(int width, int height)
 	glLoadIdentity();
 }
 
-void PhGraphicView::setSettings(QSettings *settings)
+void PhGraphicView::setSettings(PhGraphicSettings *settings)
 {
 	_settings = settings;
 	PHDBG(0) << "The refresh rate have changed. Set the property \"onRefreshTime\" and reload" << APP_NAME << "to apply changes";
-	t_Timer->start(_settings->value("onRefreshTime", 10).toInt());
+	t_Timer->start(_settings->screenRefreshInterval());
 }
 
 void PhGraphicView::paintGL()

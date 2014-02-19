@@ -9,9 +9,9 @@
 
 #include <QGLWidget>
 #include <QTimer>
-#include <QSettings>
 
 #include "PhTools/PhTickCounter.h"
+#include "PhGraphicSettings.h"
 
 /**
  * @brief The PhGraphicView class is a canvas to create your custom graphic view.
@@ -61,11 +61,11 @@ protected:
 	 * @brief Set the settings
 	 * @param settings the desired settings
 	 */
-	void setSettings(QSettings *settings);
+	void setSettings(PhGraphicSettings *settings);
 	/**
 	 * @brief The member containing the settings
 	 */
-	QSettings * _settings;
+	PhGraphicSettings * _settings;
 
 	/**
 	 * @brief initialization, every class have to re-implement it.

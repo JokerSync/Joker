@@ -11,6 +11,7 @@ class GraphicStripTestSettings : PhGenericSettings, public PhGraphicStripSetting
 public:
 	// PhGraphicSettings :
 	int screenDelay();
+	int screenRefreshInterval();
 
 	// PhGraphicStripSettings :
 	float stripHeight();

@@ -30,6 +30,11 @@ int GraphicStripTestSettings::screenDelay()
 	return intValue("screenDelay");
 }
 
+int GraphicStripTestSettings::screenRefreshInterval()
+{
+	return intValue("screenRefreshIntervale", 10);
+}
+
 bool GraphicStripTestSettings::stripTestMode()
 {
 	return boolValue("stripTestMode");
