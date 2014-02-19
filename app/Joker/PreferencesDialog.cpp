@@ -121,10 +121,10 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	ui->listWidgetSync->addItem("LTC");
 #endif
 
-	if(_oldSyncProtocol == VideoStripSynchronizer::Sony)
+	if(_oldSyncProtocol == Synchronizer::Sony)
 		showParamSony(true);
 #if USE_LTC
-	else if(_oldSyncProtocol == VideoStripSynchronizer::LTC)
+	else if(_oldSyncProtocol == Synchronizer::LTC)
 		showParamLTC(true);
 #endif
 	else{
@@ -310,11 +310,11 @@ void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *cu
 	Q_UNUSED(previous);
 	int protocol = ui->listWidgetSync->currentRow();
 	switch(protocol) {
-	case VideoStripSynchronizer::Sony:
+	case Synchronizer::Sony:
 		showParamSony(true);
 		break;
 #if USE_LTC
-	case VideoStripSynchronizer::LTC:
+	case Synchronizer::LTC:
 		showParamLTC(true);
 		break;
 #endif

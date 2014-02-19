@@ -11,7 +11,7 @@
 #include <QSettings>
 #include <QListWidgetItem>
 
-#include "SonyVideoStripSynchronizer.h"
+#include "Synchronizer.h"
 
 namespace Ui {
 class PreferencesDialog;

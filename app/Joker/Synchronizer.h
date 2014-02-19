@@ -4,8 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#ifndef SONYVIDEOSTRIPSYNCHRONIZER_H
-#define SONYVIDEOSTRIPSYNCHRONIZER_H
+#ifndef SYNCHRONIZER_H
+#define SYNCHRONIZER_H
 
 #include <QObject>
 
@@ -14,7 +14,7 @@
 /**
  * @brief Provide a synchronisation system between the strip, the video and the external sync signal
  */
-class VideoStripSynchronizer : public QObject
+class Synchronizer : public QObject
 {
 	Q_OBJECT
 public:
@@ -29,7 +29,7 @@ public:
 #endif
 	};
 
-	VideoStripSynchronizer();
+	Synchronizer();
 
 	/**
 	 * @brief Set the strip clock
@@ -95,4 +95,4 @@ private:
 	bool _settingSonyRate;
 };
 
-#endif // SONYVIDEOSTRIPSYNCHRONIZER_H
+#endif // SYNCHRONIZER_H

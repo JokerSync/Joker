@@ -19,7 +19,7 @@
 #include "PhSync/PhLtcReader.h"
 #endif
 
-#include "SonyVideoStripSynchronizer.h"
+#include "Synchronizer.h"
 #include "PropertyDialog.h"
 
 namespace Ui {
@@ -176,7 +176,7 @@ private:
 	PhStripDoc *_doc;
 	QSettings *_settings;
 	PhSonySlaveController _sonySlave;
-	VideoStripSynchronizer _synchronizer;
+	Synchronizer _synchronizer;
 #if USE_LTC
 	PhLtcReader _ltcReader;
 #endif
