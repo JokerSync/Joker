@@ -80,7 +80,7 @@ public:
 	 * \brief Set if the video should be displayed with a forced aspect ratio
 	 * \param force
 	 */
-	void setForceRatio(bool force){_forceRatio = force;}
+	void setForceRatio(bool force){_forceRatio169 = force;}
 
 protected:
 	/**
@@ -115,7 +115,7 @@ private:
 
 	QList<PhPeople*> _selectedPeoples;
 
-	bool _forceRatio;
+	bool _forceRatio169;
 };
 
 #endif // VIDEOSTRIPVIEW_H

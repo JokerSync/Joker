@@ -357,7 +357,7 @@ private:
 
 	int _nbTexts;
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
-	bool _forceRatio;
+	bool _forceRatio169;
 };
 
 #endif // PHSTRIPDOC_H

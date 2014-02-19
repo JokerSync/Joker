@@ -88,8 +88,8 @@ void VideoStripView::paint()
 
 	if((_videoEngine.height() > 0) and (videoHeight > 0)) {
 		int videoWidth;
-		if(_forceRatio)
-			videoWidth = videoHeight * 16.0 / 9.0;
+		if(_forceRatio169)
+			videoWidth = videoHeight * 16 / 9;
 		else
 			videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
 
@@ -97,12 +97,13 @@ void VideoStripView::paint()
 		int realVideoHeight = videoHeight;
 		if(videoWidth > this->width()) {
 			videoWidth = this->width();
-			if(_forceRatio)
-				realVideoHeight = videoWidth  * 9.0 / 16.0;
+			if(_forceRatio169)
+				realVideoHeight = videoWidth  * 9 / 16;
 			else
 				realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
-			blackStripHeight = (this->height() - stripHeight - videoHeight) / 2;
 		}
+		blackStripHeight = (this->height() - stripHeight - realVideoHeight) / 2;
+
 		int videoX = (this->width() - videoWidth) / 2;
 		_videoEngine.drawVideo(videoX, y + blackStripHeight, videoWidth, realVideoHeight);
 
