@@ -171,9 +171,10 @@ public:
 	 * @brief Save the PhStripDoc to a strip file
 	 * @param fileName Path to the stripfile
 	 * @param lastTC The last displayed timecode
+	 * @param forceRatio If the aspect ratio has been forced or not.
 	 * @return True if the strip saved well, false otherwise
 	 */
-	bool saveStrip(QString fileName, QString lastTC);
+	bool saveStrip(QString fileName, QString lastTC, bool forceRatio = false);
 	/**
 	 * @brief Create a made up strip using the parameters
 	 * @param text The desired text
@@ -280,6 +281,12 @@ public:
 	 * @return The frame out
 	 */
 	PhFrame getFrameOut();
+	/*!
+	 * \brief Get the force ratio information
+	 * \return if the ratio is forced or not
+	 */
+	bool forceRatio() const;
+
 signals:
 	/**
 	 * @brief Emit a signal when the PhStripDoc changed
@@ -350,6 +357,7 @@ private:
 
 	int _nbTexts;
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
+	bool _forceRatio;
 };
 
 #endif // PHSTRIPDOC_H

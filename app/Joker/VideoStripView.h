@@ -76,6 +76,8 @@ public:
 	 */
 	void setSony(PhSonyController * sony);
 
+	void setForceRatio(bool force){_forceRatio = force;}
+
 protected:
 	/**
 	 * @brief Initialize the VideoStripView elements.
@@ -108,6 +110,8 @@ private:
 	PhGraphicText _currentPeopleName;
 
 	QList<PhPeople*> _selectedPeoples;
+
+	bool _forceRatio;
 };
 
 #endif // VIDEOSTRIPVIEW_H

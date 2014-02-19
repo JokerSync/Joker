@@ -86,13 +86,21 @@ void VideoStripView::paint()
 
 	int tcWidth = 200;
 
-	if((_videoEngine.height() > 0)and (videoHeight > 0)) {
-		int videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+	if((_videoEngine.height() > 0) and (videoHeight > 0)) {
+		int videoWidth;
+		if(_forceRatio)
+			videoWidth = videoHeight * 16.0 / 9.0;
+		else
+			videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+
 		int blackStripHeight = 0; // Height of the upper black strip when video is too large
 		int realVideoHeight = videoHeight;
 		if(videoWidth > this->width()) {
 			videoWidth = this->width();
-			realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
+			if(_forceRatio)
+				realVideoHeight = videoWidth  * 9.0 / 16.0;
+			else
+				realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
 			blackStripHeight = (this->height() - stripHeight - videoHeight) / 2;
 		}
 		int videoX = (this->width() - videoWidth) / 2;

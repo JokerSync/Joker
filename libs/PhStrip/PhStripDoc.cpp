@@ -218,6 +218,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 				if(line.attribute("type")  == "video") {
 					_videoPath = line.text();
 					_videoFrameStamp = PhTimeCode::frameFromString(line.attribute("tcStamp"), _tcType);
+					_forceRatio = line.attribute("forceRatio") == "YES";
 				}
 			}
 		}
@@ -227,7 +228,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 
 }
 
-bool PhStripDoc::saveStrip(QString fileName, QString lastTC)
+bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
@@ -269,6 +270,10 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC)
 				xmlWriter->writeStartElement("media");
 				xmlWriter->writeAttribute("type", "video");
 				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoFrameStamp, PhTimeCodeType25));
+				if(forceRatio)
+					xmlWriter->writeAttribute("forceRatio", "YES");
+				else
+					xmlWriter->writeAttribute("forceRatio", "NO");
 				xmlWriter->writeCharacters(_videoPath);
 				xmlWriter->writeEndElement();
 
@@ -355,6 +360,7 @@ void PhStripDoc::reset()
 	_videoPath = "";
 	_videoFrameStamp = 0;
 	_authorName = "";
+	_forceRatio = false;
 
 	emit this->changed();
 }
@@ -369,6 +375,10 @@ void PhStripDoc::addText(PhPeople * actor, PhTime start, PhTime end, QString sen
 		                                 track, sentence));
 		_nbTexts++;
 	}
+}
+bool PhStripDoc::forceRatio() const
+{
+	return _forceRatio;
 }
 
 int PhStripDoc::getNbTexts()
