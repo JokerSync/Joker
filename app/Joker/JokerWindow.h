@@ -169,6 +169,8 @@ private slots:
 
 	void on_actionSelect_character_triggered();
 
+	void on_actionForce_16_9_ratio_triggered();
+
 private:
 	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;
