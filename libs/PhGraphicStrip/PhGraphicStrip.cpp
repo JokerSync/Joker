@@ -229,16 +229,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		bool displayNextText = _settings->value("displayNextText", true).toBool();
 
-
-		int appHeight = 1;
-		int verticalPixelPerFrame = 1;
-		if(displayNextText) {
-			if(_settings->value("stripHeight", 0.25f).toFloat() != 0)
-				appHeight = height / _settings->value("stripHeight", 0.25f).toFloat();
-			verticalPixelPerFrame = _settings->value("verticalPixelPerFrame", 6).toInt();
-
-		}
-
+		int verticalPixelPerFrame = verticalPixelPerFrame = _settings->value("verticalPixelPerFrame", 1).toInt();
 
 		foreach(PhStripText * text, _doc.getTexts())
 		{
@@ -353,7 +344,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				int howFarIsText = (text->getTimeIn() - frameOut) * verticalPixelPerFrame;
 				//This line is used to see which text's name will be displayed
 				gPeople->setX(width - gPeople->getWidth());
-				gPeople->setY(appHeight - height - howFarIsText / 6);
+				gPeople->setY(y - howFarIsText);
 				gPeople->setZ(-3);
 				gPeople->setHeight(trackHeight / 2);
 				gPeople->setColor(QColor(people->getColor()));
@@ -405,7 +396,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				break;
 		}
 
-
 		foreach(PhStripLoop * loop, _doc.getLoops())
 		{
 			// This calcul allow the cross to come smoothly on the screen (height / 8 /pixelPerFrame)
@@ -427,7 +417,27 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gLoop->draw();
 				loopCounter++;
 			}
-			if((loop->getTimeIn() - height / 8 /pixelPerFrame ) < frameOut)
+
+			if(displayNextText && ((loop->getTimeIn() + height / 8 / pixelPerFrame) > frameIn)) {
+				PhGraphicLoop gLoopPred;
+
+				int howFarIsLoop = (loop->getTimeIn() - frameOut) * verticalPixelPerFrame;
+
+				gLoopPred.setColor(Qt::blue);
+				gLoopPred.setHorizontalLoop(true);
+				gLoopPred.setZ(-3);
+
+				gLoopPred.setX(width - width / 10);
+				gLoopPred.setY(y - howFarIsLoop);
+				gLoopPred.setHeight(30);
+
+				gLoopPred.setHThick(3);
+				gLoopPred.setCrossHeight(20);
+				gLoopPred.setWidth(width / 10);
+
+				gLoopPred.draw();
+			}
+			if((loop->getTimeIn() - height / 8 / pixelPerFrame ) > frameOut + 25 * 30)
 				break;
 		}
 

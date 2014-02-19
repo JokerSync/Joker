@@ -34,6 +34,8 @@ private slots:
 	void getNextTextTest();
 	void getNextTextTestByPeople();
 	void getNextTextTestByPeopleList();
+	void getNextLoopTest();
+	void getPreviousLoopTest();
 
 private:
 	QString f2s(PhFrame frame);
