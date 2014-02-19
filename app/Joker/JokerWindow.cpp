@@ -245,8 +245,8 @@ void JokerWindow::openFile(QString fileName)
 	if(QFile::exists(fileName)) {
 		if(_doc->openStripFile(fileName)) {
 			setCurrentStripFile(fileName);
-			ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio());
-			ui->videoStripView->setForceRatio(_doc->forceRatio());
+			ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
+			ui->videoStripView->setForceRatio169(_doc->forceRatio169());
 
 			// Opening the corresponding video file if it exists
 			if(openVideoFile(_doc->getVideoPath())) {
@@ -756,6 +756,6 @@ void JokerWindow::on_actionSelect_character_triggered()
 
 void JokerWindow::on_actionForce_16_9_ratio_triggered()
 {
-	ui->videoStripView->setForceRatio(ui->actionForce_16_9_ratio->isChecked());
+	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
 	_needToSave = true;
 }
