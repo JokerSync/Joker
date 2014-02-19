@@ -76,6 +76,10 @@ public:
 	 */
 	void setSony(PhSonyController * sony);
 
+	/*!
+	 * \brief Set if the video should be displayed with a forced aspect ratio
+	 * \param force
+	 */
 	void setForceRatio(bool force){_forceRatio = force;}
 
 protected:
