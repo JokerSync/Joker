@@ -76,6 +76,12 @@ public:
 	 */
 	void setSony(PhSonyController * sony);
 
+	/*!
+	 * \brief Set if the video should be displayed with a forced aspect ratio
+	 * \param force
+	 */
+	void setForceRatio169(bool force){_forceRatio169 = force;}
+
 protected:
 	/**
 	 * @brief Initialize the VideoStripView elements.
@@ -108,6 +114,8 @@ private:
 	PhGraphicText _currentPeopleName;
 
 	QList<PhPeople*> _selectedPeoples;
+
+	bool _forceRatio169;
 };
 
 #endif // VIDEOSTRIPVIEW_H

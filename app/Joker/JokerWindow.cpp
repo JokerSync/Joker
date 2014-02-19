@@ -245,6 +245,8 @@ void JokerWindow::openFile(QString fileName)
 	if(QFile::exists(fileName)) {
 		if(_doc->openStripFile(fileName)) {
 			setCurrentStripFile(fileName);
+			ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
+			ui->videoStripView->setForceRatio169(_doc->forceRatio169());
 
 			// Opening the corresponding video file if it exists
 			if(openVideoFile(_doc->getVideoPath())) {
@@ -692,7 +694,7 @@ void JokerWindow::on_actionSave_triggered()
 	QFileInfo info(_currentStripFile);
 	if(!info.exists() || (info.suffix() != "strip"))
 		on_actionSave_as_triggered();
-	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode()))
+	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked()))
 		_needToSave = false;
 	else
 		QMessageBox::critical(this, "", tr("Unable to save ") + _currentStripFile);
@@ -715,7 +717,7 @@ void JokerWindow::on_actionSave_as_triggered()
 
 	stripFile = QFileDialog::getSaveFileName(this, tr("Save..."), stripFile,"*.strip");
 	if(stripFile != "") {
-		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode())) {
+		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
 			_needToSave = false;
 			setCurrentStripFile(stripFile);
 		}
@@ -750,4 +752,10 @@ void JokerWindow::on_actionSelect_character_triggered()
 	PeopleDialog dlg(this, _doc, ui->videoStripView->getSelectedPeoples());
 
 	dlg.exec();
+}
+
+void JokerWindow::on_actionForce_16_9_ratio_triggered()
+{
+	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
+	_needToSave = true;
 }
