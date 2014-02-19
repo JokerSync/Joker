@@ -287,6 +287,19 @@ public:
 	 */
 	bool forceRatio169() const;
 
+	/**
+	 * @brief Get the next loop
+	 * @param frame the given frame
+	 * @return the corresponding loop
+	 */
+	PhStripLoop * getNextLoop(PhFrame frame);
+	/**
+	 * @brief Get the previous loop
+	 * @param frame the given frame
+	 * @return the corresponding loop
+	 */
+	PhStripLoop * getPreviousLoop(PhFrame frame);
+
 signals:
 	/**
 	 * @brief Emit a signal when the PhStripDoc changed

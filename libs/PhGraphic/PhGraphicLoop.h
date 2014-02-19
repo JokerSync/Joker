@@ -24,8 +24,9 @@ public:
 	 * @param h Desired height
 	 * @param crossHeight the height of the cross
 	 * @param hThick the cross thickness
+	 * @param horizontal if the graphicloop is horizontal or not
 	 */
-	PhGraphicLoop(int x = 0, int y = 0, int w = 0, int h = 0, int crossHeight = 0, int hThick = 0);
+	PhGraphicLoop(int x = 0, int y = 0, int w = 0, int h = 0, int crossHeight = 0, int hThick = 0, bool horizontal = false);
 	~PhGraphicLoop();
 
 	/**
@@ -51,6 +52,16 @@ public:
 	 * @param crossHeight
 	 */
 	void setCrossHeight(int crossHeight);
+
+	/**
+	 * @brief Set horizontal loop
+	 *
+	 * Set if the graphic loop is displayed horizontaly or not
+	 * @param isHorizontal
+	 */
+	void setHorizontalLoop(bool isHorizontal){
+		_horizontal = isHorizontal;
+	}
 	/**
 	 * @brief Get the cross height
 	 * @return cross height in pixels
@@ -60,6 +71,7 @@ public:
 	}
 private:
 
+	bool _horizontal;
 	int _crossHeight;
 	int _hThick;
 

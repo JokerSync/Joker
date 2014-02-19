@@ -495,6 +495,8 @@ PhFrame PhStripDoc::getNextTextFrame(PhFrame frame)
 	{
 		if((text->getTimeIn() > frame) && (text->getTimeIn() < nextTextFrame) )
 			nextTextFrame = text->getTimeIn();
+		else if(text->getTimeIn() > nextTextFrame)
+			return nextTextFrame;
 	}
 
 	return nextTextFrame;
@@ -508,6 +510,8 @@ PhFrame PhStripDoc::getNextLoopFrame(PhFrame frame)
 	{
 		if((loop->getTimeIn() > frame) && (loop->getTimeIn() < nextLoopFrame) )
 			nextLoopFrame = loop->getTimeIn();
+		else if(loop->getTimeIn() > nextLoopFrame)
+			return nextLoopFrame;
 	}
 
 	return nextLoopFrame;
@@ -521,6 +525,8 @@ PhFrame PhStripDoc::getNextCutFrame(PhFrame frame)
 	{
 		if((cut->getTimeIn() > frame) && (cut->getTimeIn() < nextCutFrame) )
 			nextCutFrame = cut->getTimeIn();
+		else if(cut->getTimeIn() > nextCutFrame)
+			return nextCutFrame;
 	}
 
 	return nextCutFrame;
@@ -547,6 +553,27 @@ PhFrame PhStripDoc::getFrameIn()
 PhFrame PhStripDoc::getFrameOut()
 {
 	return getPreviousElementFrame(PHFRAMEMAX);
+}
+
+PhStripLoop *PhStripDoc::getNextLoop(PhFrame frame)
+{
+	foreach(PhStripLoop* loop, _loops)
+	{
+		if(loop->getTimeIn() > frame)
+			return loop;
+	}
+	return NULL;
+}
+
+PhStripLoop *PhStripDoc::getPreviousLoop(PhFrame frame)
+{
+	int i = _loops.count() - 1;
+	while(i >= 0) {
+		if(_loops.at(i)->getTimeIn() < frame)
+			return _loops.at(i);
+		i--;
+	}
+	return NULL;
 }
 
 QString PhStripDoc::getFilePath()

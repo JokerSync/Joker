@@ -159,6 +159,17 @@ void VideoStripView::paint()
 		}
 	}
 
+	PhStripLoop * currentLoop = _strip.doc()->getPreviousLoop(clockFrame);
+	if(currentLoop) {
+		int loopNumber = currentLoop->getLoopNumber();
+		PhGraphicText gCurrentLoop(_strip.getHUDFont(), QString::number(loopNumber));
+		int loopHeight = 60;
+		int loopWidth = _strip.getHUDFont()->getNominalWidth(QString::number(loopNumber)) * ((float) loopHeight / _strip.getHUDFont()->getHeight());
+		gCurrentLoop.setRect(10, this->height() - stripHeight - loopHeight, loopWidth, loopHeight);
+		gCurrentLoop.setColor(Qt::blue);
+		gCurrentLoop.draw();
+	}
+
 	_noVideoSyncError.setRect(this->width() / 2 - 100, this->height() / 2 - 25, 200, 50);
 	if(_lastVideoSyncElapsed.elapsed() > 1000) {
 		int red = (_lastVideoSyncElapsed.elapsed() - 1000) / 4;
