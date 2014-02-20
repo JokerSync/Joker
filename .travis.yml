@@ -9,13 +9,6 @@ script:
 - qmake ../../app/Joker/Joker.pro
 - make
 - cd ..
-# Build AutoTest
-- mkdir AutoTest && cd AutoTest
-- qmake ../../tests/AutoTest/AutoTest.pro
-- make
-# Run AutoTest
-- ./AutoTest
-- cd .. 
 notifications:
  irc: "phonations.com#joker"
  email: false
