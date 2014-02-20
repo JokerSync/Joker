@@ -4,6 +4,13 @@ install:
 - export PATH=$PATH:/usr/local/opt/qt5/bin
 script:
 - mkdir tmp && cd tmp
+# Build AutoTest
+- mkdir AutoTest && cd AutoTest
+- qmake ../../tests/AutoTest/AutoTest.pro
+- make
+# Run AutoTest
+- ./AutoTest
+- cd .. 
 # Build Joker
 - mkdir Joker && cd Joker
 - qmake ../../app/Joker/Joker.pro
