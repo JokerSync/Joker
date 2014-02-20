@@ -15,18 +15,29 @@ using namespace std;
  */
 int main(int argc, char *argv[])
 {
-	PhStripDocTest docTest;
-	int test = QTest::qExec(&docTest);
-	if(test)
-		return test;
+	bool performTest = (argc < 2); // Run test if no strip files in argument
 
-	QThread::msleep(100);
+	for(int i = 1; i < argc; i++) {
+		if (strcmp(argv[i], "test"))
+			performTest = true;
+	}
+
+	if(performTest) {
+		PhStripDocTest docTest;
+		int test = QTest::qExec(&docTest);
+		if(test)
+			return test;
+	}
+
 	// Creating a new doc:
 	PhStripDoc doc;
 
 	for(int i = 1; i < argc; i++) {
-		// Open the strip file in argument:
 		QString fileName(argv[i]);
+		if(!QFile::exists(fileName))
+			continue;
+
+		// Open the strip file in argument:
 		doc.openStripFile(fileName);
 
 		// Display the title:
@@ -57,7 +68,7 @@ int main(int argc, char *argv[])
 
 		foreach (PhStripOff * off, doc.getOffs()) {
 			PHDEBUG << off->getPeople()->getName() << " : " << PhTimeCode::stringFromFrame(off->getTimeIn(), doc.getTCType())
-			        << " - " << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
+					<< " - " << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
 		}
 	}
 
