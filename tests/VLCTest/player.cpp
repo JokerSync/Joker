@@ -142,7 +142,7 @@ void Mwindow::openFile(QString fileName)
 		return;
 
 	/* Create a new libvlc player */
-	vlcPlayer = libvlc_media_player_new_from_media (vlcMedia);
+	vlcPlayer = libvlc_media_player_new_from_media(vlcMedia);
 
 	/* Release the media */
 	libvlc_media_release(vlcMedia);
@@ -157,7 +157,7 @@ void Mwindow::openFile(QString fileName)
 #endif
 
 	/* And start playback */
-	libvlc_media_player_play (vlcPlayer);
+	libvlc_media_player_play(vlcPlayer);
 
 	/* Update playback button */
 	playBut->setText("Pause");
@@ -182,7 +182,7 @@ void Mwindow::play() {
 int Mwindow::changeVolume(int vol) { /* Called on volume slider change */
 
 	if (vlcPlayer)
-		return libvlc_audio_set_volume (vlcPlayer,vol);
+		return libvlc_audio_set_volume(vlcPlayer,vol);
 
 	return 0;
 }

@@ -123,7 +123,7 @@ QList<QString> PhLtcWriter::outputList()
 		}
 	}
 
-	foreach (QString string, names) {
+	foreach(QString string, names) {
 		PHDEBUG << string;
 	}
 

@@ -133,7 +133,7 @@ void PhGraphicStrip::setPixelPerFrame(long value)
 
 QColor PhGraphicStrip::computeColor(PhPeople * people)
 {
-	if(_selectedPeoples and !_selectedPeoples->contains(people)) {
+	if(_selectedPeoples && !_selectedPeoples->contains(people)) {
 		return Qt::gray;
 	}
 	else {
@@ -289,7 +289,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->draw();
 
 				//Check if the name is printed on the screen
-				if( (frameIn < text->getTimeOut())and (text->getTimeIn() - gPeople->getWidth() / pixelPerFrame < frameOut) ) {
+				if( (frameIn < text->getTimeOut()) && (text->getTimeIn() - gPeople->getWidth() / pixelPerFrame < frameOut) ) {
 					trackFull[track] = true;
 				}
 
@@ -329,7 +329,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			//                trackFull[track] = true;
 			//                //PHDEBUG << people->getName();
 			//            }
-			if(displayNextText and (frameOut < text->getTimeIn()) and ((lastText == NULL)or (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))) {
+			if(displayNextText && (frameOut < text->getTimeIn()) && ((lastText == NULL) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))) {
 				PhPeople * people = text->getPeople();
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				if(gPeople == NULL) {
@@ -443,7 +443,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		foreach(PhStripOff * off, _doc.getOffs())
 		{
-			if( (frameIn < off->getTimeOut())and (off->getTimeIn() < frameOut) ) {
+			if( (frameIn < off->getTimeOut()) && (off->getTimeIn() < frameOut) ) {
 				PhGraphicSolidRect *gOff = _graphicOffs[off];
 				if(gOff == NULL) {
 					gOff = new PhGraphicSolidRect();

@@ -86,7 +86,7 @@ void VideoStripView::paint()
 
 	int tcWidth = 200;
 
-	if((_videoEngine.height() > 0)and (videoHeight > 0)) {
+	if((_videoEngine.height() > 0) && (videoHeight > 0)) {
 		int videoWidth;
 		if(_forceRatio169)
 			videoWidth = videoHeight * 16 / 9;
@@ -138,7 +138,7 @@ void VideoStripView::paint()
 				nextText = _strip.doc()->getNextText(0, _selectedPeoples);
 
 			int peopleHeight = this->height() / 30;
-			foreach (PhPeople* people, _selectedPeoples) {
+			foreach(PhPeople* people, _selectedPeoples) {
 				int peopleNameWidth = people->getName().length() * peopleHeight / 2;
 				_currentPeopleName.setRect(10, y, peopleNameWidth, peopleHeight);
 				_currentPeopleName.setContent(people->getName());
