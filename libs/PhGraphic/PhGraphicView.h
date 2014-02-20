@@ -107,6 +107,7 @@ private:
 	 */
 	QTimer *t_Timer;
 	PhTickCounter _frameTickCounter;
+	int _screenFrequency;
 };
 
 #endif // PHGRAPHICVIEW
