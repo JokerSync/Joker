@@ -15,14 +15,10 @@
 #include "iostream"
 
 /** PHDBG allow to have a multi level log system */
-#define PHDBG(logLevelMessage) PhDebug::instance(logLevelMessage) <<  qDebug() << Q(PhDebug::getFileName(__FILE__)) << Q(PhDebug::getFuncName(__FUNCTION__)) << Q(PhDebug::getLine(__LINE__))
+#define PHDBG(logLevelMessage) PhDebug::setCurrentLogLevel(logLevelMessage)
 
 /** PHDEBUG is the default log system */
-#define PHDEBUG PHDBG()
-
-#warning TODO I don't like it...
-/** In order to get rid of double quotes when displaying a variable */
-#define Q(string) (string).toStdString().c_str()
+#define PHDEBUG PHDBG(0)
 
 /**
  * @brief A custom log system
@@ -42,14 +38,9 @@ public:
 	 * @param logLevelMessage the desired mask
 	 * @return The debugger
 	 */
-	static PhDebug instance(int logLevelMessage = 0);
+	static PhDebug* instance();
 
-	/**
-	 * @brief operator <<
-	 * @param dbg
-	 * @return
-	 */
-	QDebug operator<<(QDebug dbg);
+	static QDebug setCurrentLogLevel(int messageLogLevel);
 
 	/**
 	 * @brief Get the function name
@@ -109,6 +100,7 @@ public:
 	 */
 	static void showConsole(bool show);
 
+	static void setDisplay(bool date, bool time, bool fileName, bool functionName, bool line);
 private:
 	/**
 	 * @brief Custom message output
@@ -123,16 +115,16 @@ private:
 	 */
 	static void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
-	static PhDebug * d;
+	static PhDebug * _d;
 	int _logMask;
 	int _currentLogLevel;
-	QFile * _log;
-	QString _logLocation;
-	bool _dispFuncName;
-	bool _dispTime;
-	bool _dispDate;
-	bool _dispFileName;
-	bool _dispLine;
+	QTextStream *_textLog;
+	QString _logFileName;
+	bool _displayDate;
+	bool _displayTime;
+	bool _displayFileName;
+	bool _displayFunctionName;
+	bool _displayLine;
 	bool _showConsole;
 	QString total;
 
