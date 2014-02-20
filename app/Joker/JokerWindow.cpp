@@ -268,6 +268,7 @@ void JokerWindow::openFile(QString fileName)
 
 bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
+	QPoint mousePos;
 	switch (event->type()) {
 	case QEvent::FileOpen:
 		{
@@ -293,6 +294,16 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			// Show the mediaPanel only if Joker has focus.
 			if(this->hasFocus())
 				fadeInMediaPanel();
+		mousePos = static_cast<QMouseEvent *>(event)->pos();
+		if(mousePos.y() > (this->height() - ui->videoStripView->stripHeight()) * 0.95 and mousePos.y() < (this->height() - ui->videoStripView->stripHeight()) * 1.05) {
+			QApplication::setOverrideCursor(Qt::SizeVerCursor);
+			if(_mousePressed)
+				_settings->setValue("stripHeight", 1.0 - ((float) mousePos.y() /(float) this->height()));
+		}
+
+		else
+			QApplication::setOverrideCursor(Qt::ArrowCursor);
+
 		break;
 
 	case QEvent::Drop:
@@ -342,6 +353,12 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			return true;
 		}
 		break;
+	case QEvent::MouseButtonPress:
+		_mousePressed = true;
+		return false;
+	case QEvent::MouseButtonRelease:
+		_mousePressed = false;
+		return false;
 	default:
 		break;
 	}

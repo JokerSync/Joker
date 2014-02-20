@@ -80,7 +80,15 @@ public:
 	 * \brief Set if the video should be displayed with a forced aspect ratio
 	 * \param force
 	 */
-	void setForceRatio169(bool force){_forceRatio169 = force;}
+	void setForceRatio169(bool force){
+		_forceRatio169 = force;
+	}
+
+	/**
+	 * @brief Get the strip height
+	 * @return the strip height
+	 */
+	int stripHeight() const;
 
 protected:
 	/**
@@ -114,6 +122,8 @@ private:
 	PhGraphicText _currentPeopleName;
 
 	QList<PhPeople*> _selectedPeoples;
+
+	int _stripHeight;
 
 	bool _forceRatio169;
 };

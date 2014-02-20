@@ -203,6 +203,8 @@ private:
 	void setCurrentStripFile(QString stripFile);
 
 	bool checkSaveFile();
+
+	bool _mousePressed;
 };
 
 #endif // MAINWINDOW_H
