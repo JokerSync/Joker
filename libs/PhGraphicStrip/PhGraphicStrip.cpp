@@ -447,12 +447,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				PhGraphicSolidRect *gOff = _graphicOffs[off];
 				if(gOff == NULL) {
 					gOff = new PhGraphicSolidRect();
-					if(off->getPeople())
-						gOff->setColor(QColor(off->getPeople()->getColor()));
-
 					_graphicOffs[off] = gOff;
 					gOff->setZ(-1);
 				}
+				gOff->setColor(computeColor(off->getPeople()));
 				gOff->setX(x + off->getTimeIn() * pixelPerFrame - offset);
 				gOff->setY(y + off->getTrack() * trackHeight + trackHeight * 0.8);
 				gOff->setHeight(trackHeight / 20);
