@@ -31,11 +31,11 @@ void PhGraphicObject::setPosition(int x, int y, int z)
 }
 
 
-void PhGraphicObject::setX(int x){
+void PhGraphicObject::setX(int x) {
 	_x = x;
 }
 
-void PhGraphicObject::setY(int y){
+void PhGraphicObject::setY(int y) {
 	_y = y;
 }
 
@@ -45,11 +45,11 @@ void PhGraphicObject::setZ(int z)
 }
 
 
-int PhGraphicObject::getX(){
+int PhGraphicObject::getX() {
 	return _x;
 }
 
-int PhGraphicObject::getY(){
+int PhGraphicObject::getY() {
 	return _y;
 }
 
@@ -59,11 +59,11 @@ int PhGraphicObject::getZ()
 }
 
 
-QColor PhGraphicObject::getColor(){
+QColor PhGraphicObject::getColor() {
 	return _color;
 }
 
-void PhGraphicObject::setColor(QColor color){
+void PhGraphicObject::setColor(QColor color) {
 	_color = color;
 }
 

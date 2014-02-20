@@ -105,7 +105,7 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
 }
 
 
-void PhGraphicTexturedRect::draw(){
+void PhGraphicTexturedRect::draw() {
 
 	//PHDEBUG << "PhGraphicTexturedRect::draw()";
 

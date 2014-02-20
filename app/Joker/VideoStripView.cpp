@@ -44,8 +44,8 @@ bool VideoStripView::init()
 
 	_titleBackgroundRect.setColor(QColor(0, 0, 128));
 	_titleText.setColor(QColor(255, 255, 255));
-	_tcText.setColor(QColor(128, 128, 128));
-	_nextTCText.setColor(QColor(128, 128, 128));
+	_tcText.setColor(Qt::green);
+	_nextTCText.setColor(Qt::red);
 	_noVideoSyncError.setColor(QColor(0, 0, 0));
 	_currentPeopleName.setColor(QColor(128, 128, 128));
 
@@ -86,15 +86,24 @@ void VideoStripView::paint()
 
 	int tcWidth = 200;
 
-	if((_videoEngine.height() > 0)and (videoHeight > 0)) {
-		int videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+	if((_videoEngine.height() > 0) && (videoHeight > 0)) {
+		int videoWidth;
+		if(_forceRatio169)
+			videoWidth = videoHeight * 16 / 9;
+		else
+			videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+
 		int blackStripHeight = 0; // Height of the upper black strip when video is too large
 		int realVideoHeight = videoHeight;
 		if(videoWidth > this->width()) {
 			videoWidth = this->width();
-			realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
-			blackStripHeight = (this->height() - stripHeight - videoHeight) / 2;
+			if(_forceRatio169)
+				realVideoHeight = videoWidth  * 9 / 16;
+			else
+				realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
 		}
+		blackStripHeight = (this->height() - stripHeight - realVideoHeight) / 2;
+
 		int videoX = (this->width() - videoWidth) / 2;
 		_videoEngine.drawVideo(videoX, y + blackStripHeight, videoWidth, realVideoHeight);
 
@@ -129,7 +138,7 @@ void VideoStripView::paint()
 				nextText = _strip.doc()->getNextText(0, _selectedPeoples);
 
 			int peopleHeight = this->height() / 30;
-			foreach (PhPeople* people, _selectedPeoples) {
+			foreach(PhPeople* people, _selectedPeoples) {
 				int peopleNameWidth = people->getName().length() * peopleHeight / 2;
 				_currentPeopleName.setRect(10, y, peopleNameWidth, peopleHeight);
 				_currentPeopleName.setContent(people->getName());
@@ -137,7 +146,7 @@ void VideoStripView::paint()
 				y += peopleHeight;
 			}
 		}
-		else{
+		else {
 			_strip.setSelectedPeople(NULL);
 			nextText = _strip.doc()->getNextText(clockFrame);
 			if(nextText == NULL)
@@ -148,6 +157,17 @@ void VideoStripView::paint()
 			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextText->getTimeIn(), clock->timeCodeType()));
 			_nextTCText.draw();
 		}
+	}
+
+	PhStripLoop * currentLoop = _strip.doc()->getPreviousLoop(clockFrame);
+	if(currentLoop) {
+		int loopNumber = currentLoop->getLoopNumber();
+		PhGraphicText gCurrentLoop(_strip.getHUDFont(), QString::number(loopNumber));
+		int loopHeight = 60;
+		int loopWidth = _strip.getHUDFont()->getNominalWidth(QString::number(loopNumber)) * ((float) loopHeight / _strip.getHUDFont()->getHeight());
+		gCurrentLoop.setRect(10, this->height() - stripHeight - loopHeight, loopWidth, loopHeight);
+		gCurrentLoop.setColor(Qt::blue);
+		gCurrentLoop.draw();
 	}
 
 	_noVideoSyncError.setRect(this->width() / 2 - 100, this->height() / 2 - 25, 200, 50);

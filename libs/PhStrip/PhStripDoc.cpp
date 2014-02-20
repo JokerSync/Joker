@@ -517,6 +517,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 				if(line.attribute("type")  == "video") {
 					_videoPath = line.text();
 					_videoFrameStamp = PhTimeCode::frameFromString(line.attribute("tcStamp"), _tcType);
+					_forceRatio169 = line.attribute("forceRatio") == "YES";
 				}
 			}
 		}
@@ -526,7 +527,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 
 }
 
-bool PhStripDoc::saveStrip(QString fileName, QString lastTC)
+bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
@@ -536,7 +537,7 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC)
 		PHDEBUG << "an error occur while saving the strip document";
 		return false;
 	}
-	else{
+	else {
 		//if file is successfully opened then create XML
 		QXmlStreamWriter* xmlWriter = new QXmlStreamWriter();
 		// set device (here file)to streamwriter
@@ -568,6 +569,10 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC)
 				xmlWriter->writeStartElement("media");
 				xmlWriter->writeAttribute("type", "video");
 				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoFrameStamp, PhTimeCodeType25));
+				if(forceRatio169)
+					xmlWriter->writeAttribute("forceRatio", "YES");
+				else
+					xmlWriter->writeAttribute("forceRatio", "NO");
 				xmlWriter->writeCharacters(_videoPath);
 				xmlWriter->writeEndElement();
 
@@ -654,6 +659,7 @@ void PhStripDoc::reset()
 	_videoPath = "";
 	_videoFrameStamp = 0;
 	_authorName = "";
+	_forceRatio169 = false;
 
 	emit this->changed();
 }
@@ -668,6 +674,10 @@ void PhStripDoc::addText(PhPeople * actor, PhTime start, PhTime end, QString sen
 		                                 track, sentence));
 		_nbTexts++;
 	}
+}
+bool PhStripDoc::forceRatio169() const
+{
+	return _forceRatio169;
 }
 
 int PhStripDoc::getNbTexts()
@@ -784,6 +794,8 @@ PhFrame PhStripDoc::getNextTextFrame(PhFrame frame)
 	{
 		if((text->getTimeIn() > frame) && (text->getTimeIn() < nextTextFrame) )
 			nextTextFrame = text->getTimeIn();
+		else if(text->getTimeIn() > nextTextFrame)
+			return nextTextFrame;
 	}
 
 	return nextTextFrame;
@@ -797,6 +809,8 @@ PhFrame PhStripDoc::getNextLoopFrame(PhFrame frame)
 	{
 		if((loop->getTimeIn() > frame) && (loop->getTimeIn() < nextLoopFrame) )
 			nextLoopFrame = loop->getTimeIn();
+		else if(loop->getTimeIn() > nextLoopFrame)
+			return nextLoopFrame;
 	}
 
 	return nextLoopFrame;
@@ -810,6 +824,8 @@ PhFrame PhStripDoc::getNextCutFrame(PhFrame frame)
 	{
 		if((cut->getTimeIn() > frame) && (cut->getTimeIn() < nextCutFrame) )
 			nextCutFrame = cut->getTimeIn();
+		else if(cut->getTimeIn() > nextCutFrame)
+			return nextCutFrame;
 	}
 
 	return nextCutFrame;
@@ -836,6 +852,27 @@ PhFrame PhStripDoc::getFrameIn()
 PhFrame PhStripDoc::getFrameOut()
 {
 	return getPreviousElementFrame(PHFRAMEMAX);
+}
+
+PhStripLoop *PhStripDoc::getNextLoop(PhFrame frame)
+{
+	foreach(PhStripLoop* loop, _loops)
+	{
+		if(loop->getTimeIn() > frame)
+			return loop;
+	}
+	return NULL;
+}
+
+PhStripLoop *PhStripDoc::getPreviousLoop(PhFrame frame)
+{
+	int i = _loops.count() - 1;
+	while(i >= 0) {
+		if(_loops.at(i)->getTimeIn() < frame)
+			return _loops.at(i);
+		i--;
+	}
+	return NULL;
 }
 
 QString PhStripDoc::getFilePath()

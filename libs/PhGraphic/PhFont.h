@@ -45,7 +45,7 @@ public:
 	 * @param ch ASCII index of the character.
 	 * @return A value in pixel.
 	 */
-	int getAdvance (unsigned char ch);
+	int getAdvance(unsigned char ch);
 
 	/**
 	 * @brief Get the regular height of the font.
@@ -76,6 +76,13 @@ public:
 	 * @return the number of outline pass
 	 */
 	int getBoldness() const;
+
+	/**
+	 * @brief Get the nominal width of a given string
+	 * @param string to be measured
+	 * @return The length
+	 */
+	int getNominalWidth(QString string);
 
 private:
 	/**
