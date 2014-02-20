@@ -138,7 +138,7 @@ void JokerWindow::updateOpenRecent()
 		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), menu);
 	}
 	// Else, add it
-	else{
+	else {
 		// Set the corresponding button
 		QAction * action = new QAction(_doc->getFilePath(), this);
 		// Set the ObjectName, very important for openRecent()
@@ -209,7 +209,7 @@ void JokerWindow::setupSyncProtocol()
 			clock = _sonySlave.clock();
 			ui->videoStripView->setSony(&_sonySlave);
 		}
-		else{
+		else {
 			type = VideoStripSynchronizer::NoSync;
 			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
 		}
@@ -220,7 +220,7 @@ void JokerWindow::setupSyncProtocol()
 			QString input = _settings->value("ltcInputDevice").toString();
 			if(_ltcReader.init(input))
 				clock = _ltcReader.clock();
-			else{
+			else {
 				QMessageBox::critical(this, "", "Unable to open " + input);
 				type = VideoStripSynchronizer::NoSync;
 			}
@@ -709,7 +709,7 @@ void JokerWindow::on_actionSave_as_triggered()
 	// If there is no current strip file, ask for a name
 	if(stripFile == "")
 		stripFile = lastFolder;
-	else{
+	else {
 		QFileInfo info(stripFile);
 		if(info.suffix() != "strip")
 			stripFile = lastFolder + "/" + info.completeBaseName() + ".strip";

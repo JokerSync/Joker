@@ -15,7 +15,9 @@ script:
 - make
 # Run AutoTest
 - ./AutoTest
-- cd .. 
+- cd ../..
+- ./scripts/doxygen.sh
+- ./scripts/uncrustify.sh
 notifications:
  irc: "phonations.com#joker"
  email: false

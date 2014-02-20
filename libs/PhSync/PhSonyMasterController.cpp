@@ -66,7 +66,7 @@ void PhSonyMasterController::jog(PhRate rate)
 		data1 = computeData1FromRate(-rate);
 		sendCommand(0x21, 0x21, data1);
 	}
-	else{
+	else {
 		data1 = computeData1FromRate(rate);
 		sendCommand(0x21, 0x11, data1);
 	}
@@ -80,7 +80,7 @@ void PhSonyMasterController::varispeed(PhRate rate)
 		data1 = computeData1FromRate(-rate);
 		sendCommand(0x21, 0x22, data1);
 	}
-	else{
+	else {
 		data1 = computeData1FromRate(rate);
 		sendCommand(0x21, 0x12, data1);
 	}
@@ -94,7 +94,7 @@ void PhSonyMasterController::shuttle(PhRate rate)
 		data1 = computeData1FromRate(-rate);
 		sendCommand(0x21, 0x23, data1);
 	}
-	else{
+	else {
 		data1 = computeData1FromRate(rate);
 		sendCommand(0x21, 0x13, data1);
 	}
