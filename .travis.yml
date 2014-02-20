@@ -16,6 +16,7 @@ script:
 # Run AutoTest
 - ./AutoTest
 - cd .. 
+- ./scripts/doxygen.sh
 notifications:
  irc: "phonations.com#joker"
  email: false
