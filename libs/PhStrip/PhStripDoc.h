@@ -171,7 +171,7 @@ public:
 	 * @brief Save the PhStripDoc to a strip file
 	 * @param fileName Path to the stripfile
 	 * @param lastTC The last displayed timecode
-	 * @param forceRatio If the aspect ratio has been forced or not.
+	 * @param forceRatio169 If the aspect ratio has been forced or not.
 	 * @return True if the strip saved well, false otherwise
 	 */
 	bool saveStrip(QString fileName, QString lastTC, bool forceRatio169 = false);

@@ -8,17 +8,12 @@
 #define PHDEBUG_H
 
 #include <QDebug>
-#include <QDate>
-#include <QRect>
-#include <QFile>
-
-#include "iostream"
 
 /** PHDBG allow to have a multi level log system */
-#define PHDBG(logLevelMessage) PhDebug::setCurrentLogLevel(logLevelMessage)
+#define PHDBG(messageLogLevel) PhDebug::debug(messageLogLevel)
 
 /** PHDEBUG is the default log system */
-#define PHDEBUG PHDBG(0)
+#define PHDEBUG PHDBG()
 
 /**
  * @brief A custom log system
@@ -29,39 +24,16 @@
 class PhDebug
 {
 public:
-
-	PhDebug();
-
 	/**
-	 * @brief Get the instance
-	 * As the debugger is a singleton, this is the only way to access it.
-	 * @param logLevelMessage the desired mask
-	 * @return The debugger
+	 * @brief
+	 * @param messageLogLevel
+	 * @return
 	 */
-	static PhDebug* instance();
+	static QDebug debug(int messageLogLevel = 0);
 
-	static QDebug setCurrentLogLevel(int messageLogLevel);
-
-	/**
-	 * @brief Get the function name
-	 * @param name The name of the function
-	 * @return If the output is enabled, the function name, else an empty string
-	 */
-	static QString getFuncName(QString name);
-	/**
-	 * @brief Get the file name
-	 * @param name The name of the file
-	 * @return If the output is enabled, the file name, else an empty string
-	 */
-	static QString getFileName(QString name);
-	/**
-	 * @brief Get the line number
-	 * @param line The name of the function
-	 * @return If the output is enabled, the number of the line, else an empty string
-	 */
-	static QString getLine(int line);
 	/**
 	 * @brief Set the log mask
+	 *
 	 * Enable the message with the corresponding mak :
 	 *
 	 *	Always			=>	0
@@ -100,8 +72,28 @@ public:
 	 */
 	static void showConsole(bool show);
 
+	/**
+	 * @brief Specify what a log message shall display
+	 * @param date Display the date
+	 * @param time Display the time
+	 * @param fileName Display the file name
+	 * @param functionName Display the function name
+	 * @param line Display the line number
+	 */
 	static void setDisplay(bool date, bool time, bool fileName, bool functionName, bool line);
 private:
+	/**
+	 * @brief PhDebug constructor
+	 */
+	PhDebug();
+
+	/**
+	 * @brief Get the singleton instance of PhDebug
+	 *
+	 * @return The debugger
+	 */
+	static PhDebug* instance();
+
 	/**
 	 * @brief Custom message output
 	 *

@@ -5,8 +5,9 @@
  */
 
 #include <QtGlobal>
+#include <QDate>
 #include <QStringList>
-#include <QFile>
+#include <iostream>
 #include <QDir>
 
 #include "PhDebug.h"
@@ -85,7 +86,7 @@ PhDebug* PhDebug::instance()
 	return _d;
 }
 
-QDebug PhDebug::setCurrentLogLevel(int messageLogLevel)
+QDebug PhDebug::debug(int messageLogLevel)
 {
 	instance()->_currentLogLevel = messageLogLevel;
 	return qDebug();
