@@ -29,11 +29,11 @@ int main(int argc, char *argv[])
 
 	if (argc > 1)
 		w.openFile(argv[1]);
-	else{
+	else {
 		QString lastFile = settings.value("lastFile", "").toString();
 		if(QFile::exists(lastFile))
 			w.openFile(lastFile);
-		else{
+		else {
 			w.createFile(
 			    settings.value("peopleNumber", 0).toInt(),
 			    settings.value("loopNumber", 0).toInt(),

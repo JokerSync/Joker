@@ -51,7 +51,7 @@ void PhGraphicLoop::draw()
 		_w = _crossHeight;
 
 	}
-	else{
+	else {
 		x = _x - _w/2;
 		y = _y + _h/2 - _crossHeight / 2;
 		w = _hThick;
@@ -74,7 +74,7 @@ void PhGraphicLoop::draw()
 		y = _y + _crossHeight / 2;
 
 	}
-	else{
+	else {
 		y = _y + _h/2 + _crossHeight/2;
 	}
 	glBegin(GL_QUADS);  // draw the second cross segment

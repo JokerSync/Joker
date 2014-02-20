@@ -172,7 +172,7 @@ void Mwindow::play() {
 		libvlc_media_player_pause(vlcPlayer);
 		playBut->setText("Play");
 	}
-	else{
+	else {
 		/* Play again */
 		libvlc_media_player_play(vlcPlayer);
 		playBut->setText("Pause");

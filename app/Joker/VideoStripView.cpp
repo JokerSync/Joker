@@ -86,7 +86,7 @@ void VideoStripView::paint()
 
 	int tcWidth = 200;
 
-	if((_videoEngine.height() > 0) and (videoHeight > 0)) {
+	if((_videoEngine.height() > 0)and (videoHeight > 0)) {
 		int videoWidth;
 		if(_forceRatio169)
 			videoWidth = videoHeight * 16 / 9;
@@ -146,7 +146,7 @@ void VideoStripView::paint()
 				y += peopleHeight;
 			}
 		}
-		else{
+		else {
 			_strip.setSelectedPeople(NULL);
 			nextText = _strip.doc()->getNextText(clockFrame);
 			if(nextText == NULL)

@@ -136,7 +136,7 @@ QColor PhGraphicStrip::computeColor(PhPeople * people)
 	if(_selectedPeoples and !_selectedPeoples->contains(people)) {
 		return Qt::gray;
 	}
-	else{
+	else {
 		return people->getColor();
 	}
 }
@@ -356,7 +356,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 					else
 						background.setColor(QColor(90,90,90));
 				}
-				else{
+				else {
 					background.setColor(QColor(180, 180, 180));
 				}
 
