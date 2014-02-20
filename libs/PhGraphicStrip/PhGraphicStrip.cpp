@@ -134,7 +134,7 @@ void PhGraphicStrip::setPixelPerFrame(long value)
 QColor PhGraphicStrip::computeColor(PhPeople * people)
 {
 	if(_selectedPeoples and !_selectedPeoples->contains(people)) {
-		return Qt::gray;
+		return QColor(100, 100, 100);
 	}
 	else{
 		return people->getColor();
