@@ -29,7 +29,7 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 
 	t_Timer = new QTimer(this);
 	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
-	t_Timer->start(10);
+	t_Timer->start(0);
 }
 
 PhGraphicView::~PhGraphicView()
@@ -64,7 +64,7 @@ void PhGraphicView::setSettings(QSettings *settings)
 {
 	_settings = settings;
 	PHDBG(0) << "The refresh rate have changed. Set the property \"onRefreshTime\" and reload" << APP_NAME << "to apply changes";
-	t_Timer->start(_settings->value("onRefreshTime", 10).toInt());
+	t_Timer->start(_settings->value("onRefreshTime", 0).toInt());
 }
 
 void PhGraphicView::paintGL()
