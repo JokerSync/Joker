@@ -15,10 +15,12 @@ using namespace std;
  */
 int main(int argc, char *argv[])
 {
+	PhDebug::setDisplay(false, false, false, false, false);
 	bool performTest = (argc < 2); // Run test if no strip files in argument
 
 	for(int i = 1; i < argc; i++) {
-		if (strcmp(argv[i], "test"))
+		PHDBG() << argv[i];
+		if (strcmp(argv[i], "test") == 0)
 			performTest = true;
 	}
 

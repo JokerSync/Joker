@@ -177,7 +177,7 @@ bool PhStripDoc::importDetX(QString fileName)
 bool PhStripDoc::checkMosTag(QFile &f, int logLevel, QString name)
 {
 	if(PhFileTool::PhFileTool::readString(f, logLevel, name) != name) {
-		PHDBG(logLevel) << "!!!!!!!!!!!!!!!" << "Error reading " << name << "!!!!!!!!!!!!!!!";
+		PHDEBUG << "!!!!!!!!!!!!!!!" << "Error reading " << name << "!!!!!!!!!!!!!!!";
 		f.close();
 		return false;
 	}
@@ -201,7 +201,7 @@ bool PhStripDoc::importMos(QString fileName)
 
 	this->reset();
 
-	int logLevel = 0;
+	int logLevel = 2;
 	int ok = 0;
 
 	PhFileTool::readShort(f, logLevel);
@@ -231,36 +231,51 @@ bool PhStripDoc::importMos(QString fileName)
 
 	PhFileTool::readShort(f, logLevel);
 
-	PhFileTool::readString(f, ok, "titre vo");
+	PhFileTool::readString(f, ok, "Titre de la versio originale");
 
 	PhFileTool::readShort(f, logLevel);
 
-	_title = PhFileTool::readString(f, ok, "titre vf");
+	_title = PhFileTool::readString(f, ok, "Titre de la version adaptée");
 
 	PhFileTool::readShort(f, logLevel);
 
-	_season = PhFileTool::readString(f, ok, "saison");
+	_season = PhFileTool::readString(f, ok, "Saison");
 
 	PhFileTool::readShort(f, logLevel);
 
-	_episode = PhFileTool::readString(f, ok, "episode");
+	_episode = PhFileTool::readString(f, ok, "Episode/bobine");
 
 	PhFileTool::readShort(f, logLevel);
 
-	PhFileTool::readString(f, logLevel, "titre vo episode");
-
-	for(int i = 0; i < 5; i++) {
-		PhFileTool::readShort(f, logLevel);
-		PhFileTool::readString(f, logLevel);
-	}
+	PhFileTool::readString(f, logLevel, "Titre vo episode");
 
 	PhFileTool::readShort(f, logLevel);
 
-	PhFileTool::readString(f, ok, "detector");
+	PhFileTool::readString(f, ok, "Titre adapté de l'épisode");
 
 	PhFileTool::readShort(f, logLevel);
 
-	_authorName = PhFileTool::readString(f, ok, "author");
+	PhFileTool::readString(f, ok, "Durée");
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, ok, "Date");
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, ok, "Client");
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, ok, "Commentaires");
+
+	PhFileTool::readShort(f, logLevel);
+
+	PhFileTool::readString(f, ok, "Détecteur");
+
+	PhFileTool::readShort(f, logLevel);
+
+	_authorName = PhFileTool::readString(f, ok, "Auteur");
 
 	PhFileTool::readShort(f, logLevel);
 
