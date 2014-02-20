@@ -18,6 +18,9 @@ script:
 - qmake ../../app/Joker/Joker.pro
 - make
 - cd ..
+- cd ..
+- ./scripts/doxygen.sh
+- ./scripts/uncrustify.sh
 notifications:
  irc: "phonations.com#joker"
  email: false

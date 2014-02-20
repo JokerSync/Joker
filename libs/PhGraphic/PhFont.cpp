@@ -144,7 +144,7 @@ int PhFont::getBoldness() const
 int PhFont::getNominalWidth(QString string)
 {
 	int width = 0;
-	foreach (QChar c, string) {
+	foreach(QChar c, string) {
 		width += getAdvance(c.toLatin1());
 	}
 	return width;

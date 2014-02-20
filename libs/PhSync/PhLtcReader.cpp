@@ -89,7 +89,7 @@ QList<QString> PhLtcReader::inputList()
 	if( numDevices <= 0 )
 		PHDBG(21) << "ERROR: Pa_CountDevices returned " << numDevices;
 
-	else{
+	else {
 		const PaDeviceInfo *deviceInfo;
 		for(int i = 0; i < numDevices; i++ ) {
 			deviceInfo = Pa_GetDeviceInfo( i );

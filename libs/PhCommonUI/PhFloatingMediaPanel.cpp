@@ -17,18 +17,18 @@ PhFloatingMediaPanel::PhFloatingMediaPanel(QWidget *parent) :
 	setWindowFlags(this->windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
 }
 
-void PhFloatingMediaPanel::mousePressEvent ( QMouseEvent *event)
+void PhFloatingMediaPanel::mousePressEvent( QMouseEvent *event)
 {
 	_mousePressed = true;
 	_mousePressedLocation = event->pos();
 }
 
-void PhFloatingMediaPanel::mouseReleaseEvent ( QMouseEvent * )
+void PhFloatingMediaPanel::mouseReleaseEvent( QMouseEvent * )
 {
 	_mousePressed = false;
 }
 
-void PhFloatingMediaPanel::mouseMoveEvent ( QMouseEvent *event)
+void PhFloatingMediaPanel::mouseMoveEvent( QMouseEvent *event)
 {
 	if(_mousePressed)
 		this->move(event->globalPos() - _mousePressedLocation);
