@@ -9,6 +9,8 @@ TEMPLATE = app
 
 QT	+= core gui
 
+VERSION = 1.0.0
+
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 INCLUDEPATH += $${JOKER_ROOT}/libs
@@ -44,6 +46,7 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\SWENSON
 CONFIG(release, debug|release) {
 	mac {
 		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
+		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)/tools/$${TARGET}_v$${VERSION}.dmg
 	}
 
 }

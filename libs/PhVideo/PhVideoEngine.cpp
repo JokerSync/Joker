@@ -82,11 +82,15 @@ bool PhVideoEngine::open(QString fileName)
 
 	PHDEBUG << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
 	AVCodec * pCodec = avcodec_find_decoder(_pCodecContext->codec_id);
-	if(pCodec == NULL)
+	if(pCodec == NULL) {
+		PHDEBUG << "Unable to find a codec for " << _pCodecContext->codec_id;
 		return false;
+	}
 
-	if(avcodec_open2(_pCodecContext, pCodec, NULL) < 0)
+	if(avcodec_open2(_pCodecContext, pCodec, NULL) < 0) {
+		PHDEBUG << "Unable to open the codec:" << pCodec;
 		return false;
+	}
 
 	_pFrame = avcodec_alloc_frame();
 
@@ -95,6 +99,7 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setFrame(0);
 	goToFrame(0);
 	_fileName = fileName;
+
 	return true;
 }
 
