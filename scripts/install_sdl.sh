@@ -9,17 +9,17 @@ echo "Mac OS X detected"
 
 wget http://libsdl.org/release/SDL2-2.0.1.dmg
 hdiutil attach SDL2-2.0.1.dmg
-sudo cp /Volumes/SDL2/SDL2.framework /Library/Frameworks
+sudo cp -r /Volumes/SDL2/SDL2.framework /Library/Frameworks
 hdiutil detach /Volumes/SDL2
 
 wget https://www.libsdl.org/projects/SDL_image/release/SDL2_image-2.0.0.dmg
 hdiutil attach SDL2_image-2.0.0.dmg
-sudo cp /Volumes/SDL2_image/SDL2_image.framework /Library/Frameworks
+sudo cp -r /Volumes/SDL2_image/SDL2_image.framework /Library/Frameworks
 hdiutil detach /Volumes/SDL2_image
 
 wget https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.12.dmg
 hdiutil attach SDL2_ttf-2.0.12.dmg
-sudo cp /Volumes/SDL2_ttf/SDL2_ttf.framework /Library/Frameworks
+sudo cp -r /Volumes/SDL2_ttf/SDL2_ttf.framework /Library/Frameworks
 hdiutil detach /Volumes/SDL2_ttf
 
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
