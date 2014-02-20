@@ -170,6 +170,11 @@ void VideoStripView::paint()
 		gCurrentLoop.draw();
 	}
 
+//	PhGraphicText frameRateText(_strip.getHUDFont(), QString::number(this->refreshRate()));
+//	frameRateText.setRect(0, 100, 100, 100);
+//	frameRateText.setColor(Qt::red);
+//	frameRateText.draw();
+
 	_noVideoSyncError.setRect(this->width() / 2 - 100, this->height() / 2 - 25, 200, 50);
 	if(_lastVideoSyncElapsed.elapsed() > 1000) {
 		int red = (_lastVideoSyncElapsed.elapsed() - 1000) / 4;
