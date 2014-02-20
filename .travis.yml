@@ -1,5 +1,7 @@
 language: objective-c
 install:
+- ls -la
+- ls -la scripts
 - ./scripts/install_libltc.sh
 - ./scripts/install_sdl.sh
 - ./scripts/bootstrap.sh
