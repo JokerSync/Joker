@@ -12,7 +12,7 @@ unsigned short PhFileTool::readShort(QFile &f, int logLevel, QString name)
 	unsigned short * p = (unsigned short*)f.read(2).data();
 	unsigned short result = *p;
 
-	PHDBG(logLevel) << Q(QString::number(offset, 16)) << Q(name) << Q(QString::number(result, 16));
+	PHDBG(logLevel) << QString::number(offset, 16).toStdString().c_str() << name.toStdString().c_str() << QString::number(result, 16).toStdString().c_str();
 
 	return result;
 }
@@ -23,7 +23,7 @@ int PhFileTool::readInt(QFile &f, int logLevel, QString name)
 	int * p = (int*)f.read(4).data();
 	int result = *p;
 
-	PHDBG(logLevel) << Q(QString::number(offset, 16)) << Q(name) << result;
+	PHDBG(logLevel) << QString::number(offset, 16).toStdString().c_str() << name.toStdString().c_str() << result;
 
 	return result;
 }
@@ -53,7 +53,7 @@ QString PhFileTool::readString(QFile &f, int logLevel, QString name)
 			result += tab[i];
 	}
 
-	PHDBG(logLevel) << Q(QString::number(offset, 16)) << Q(name) << Q(result);
+	PHDBG(logLevel) << QString::number(offset, 16).toStdString().c_str() << name.toStdString().c_str() << result;
 
 	return result;
 }

@@ -36,7 +36,7 @@ void PhStripDocTest::importDetXLoopTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
-	QVERIFY(_doc.getLoops().count() == 1);
+	QVERIFY(_doc.getLoops().count() == 2);
 	QVERIFY(_doc.getLoops()[0]->getTimeIn() == PhTimeCode::frameFromString("01:00:00:00", _doc.getTCType()));
 	QVERIFY(_doc.getLoops()[1]->getTimeIn() == PhTimeCode::frameFromString("01:01:00:00", _doc.getTCType()));
 
@@ -169,7 +169,6 @@ void PhStripDocTest::getPreviousElementFrameTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
-	QCOMPARE(_doc.getPreviousElementFrame(s2f("23:00:00:00")), s2f("01:00:15:00"));
 	QCOMPARE(_doc.getPreviousElementFrame(s2f("23:00:00:00")), s2f("01:01:00:00"));
 	QCOMPARE(_doc.getPreviousElementFrame(s2f("01:01:00:00")), s2f("01:00:15:00"));
 	QCOMPARE(_doc.getPreviousElementFrame(s2f("01:00:15:00")), s2f("01:00:12:00"));
