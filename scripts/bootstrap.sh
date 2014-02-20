@@ -4,7 +4,9 @@ if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
 
 brew update > /dev/null
-brew install qt5 sdl2 sdl2_image sdl2_ttf ffmpeg libav portaudio
+brew install qt5 
+#brew install sdl2 sdl2_image sdl2_ttf 
+brew install ffmpeg libav portaudio
 find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
 
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
