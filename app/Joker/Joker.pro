@@ -25,7 +25,7 @@ INCLUDEPATH += ../../libs
 
 # Currently LTC works only on Unix system
 unix {
-#	CONFIG += ltc
+	CONFIG += ltc
 }
 
 include(../../libs/PhTools/PhTools.pri)
