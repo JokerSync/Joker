@@ -49,6 +49,8 @@ bool VideoStripView::init()
 	_noVideoSyncError.setColor(QColor(0, 0, 0));
 	_currentPeopleName.setColor(QColor(128, 128, 128));
 
+	connect(this, SIGNAL(beforePaint(int)), _strip.clock(), SLOT(tick2(int)));
+
 	return _strip.init();
 }
 
@@ -56,6 +58,8 @@ void VideoStripView::paint()
 {
 
 	PHDBG(1) << _strip.clock()->time() - (_sony ? _sony->clock()->time() : 0);
+
+	//_strip.clock()->tick(60);
 
 	int y = 0;
 	QString title = _strip.doc()->getTitle();
@@ -86,7 +90,7 @@ void VideoStripView::paint()
 
 	int tcWidth = 200;
 
-	if((_videoEngine.height() > 0) and (videoHeight > 0)) {
+	if((_videoEngine.height() > 0)and (videoHeight > 0)) {
 		int videoWidth;
 		if(_forceRatio169)
 			videoWidth = videoHeight * 16 / 9;

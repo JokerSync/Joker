@@ -145,8 +145,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-	_clock.tick(60);
 	//	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 

@@ -140,6 +140,12 @@ public slots:
 	 * @param frequence Frequence of the signal
 	 */
 	void tick(PhTimeScale frequence);
+	/**
+	 * Sync the clock to a signal at a given frequence.
+	 * The clock time value is then updated accordingly to the clock rate.
+	 * @param frequence Frequence of the signal
+	 */
+	void tick2(int frequence);
 
 private:
 	PhTimeCodeType _tcType;
