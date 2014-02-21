@@ -65,17 +65,6 @@ bool PhGraphicStrip::init()
 	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png");
 	_stripBackgroundImage.init();
 
-<<<<<<< HEAD
-	// Load the font file
-	QString fontFile = "";
-	if(_settings != NULL)
-		fontFile = _settings->textFontFile();
-	if(!QFile(fontFile).exists())
-		fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
-
-	_textFont.setFontFile(fontFile);
-	_textFont.setBoldness(_settings->textBoldness());
-=======
 	PHDEBUG << "Init the sync bar";
 	_stripSyncBar.setColor(QColor(225, 86, 108));
 
@@ -98,7 +87,6 @@ bool PhGraphicStrip::init()
 
 	if(_settings != NULL)
 		_textFont.setBoldness(_settings->value("boldness", 0).toInt());
->>>>>>> master
 
 	// Init the sync bar
 	_stripSyncBar.setColor(QColor(225, 86, 108));

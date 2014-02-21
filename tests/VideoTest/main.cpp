@@ -1,5 +1,5 @@
 #include <QtWidgets/QApplication>
-#include <QSettings>
+#include <QFile>
 
 #include "VideoTestWindow.h"
 
