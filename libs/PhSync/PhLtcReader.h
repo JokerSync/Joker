@@ -61,10 +61,11 @@ public:
 	 */
 	PhClock * clock();
 
+
 private:
 
 	int processAudio(const void *inputBuffer,
-	                 unsigned long framesPerBuffer);
+					 unsigned long framesPerBuffer);
 	static int audioCallback( const void *inputBuffer, void *outputBuffer,
 	                          unsigned long framesPerBuffer,
 	                          const PaStreamCallbackTimeInfo* timeInfo,
@@ -77,7 +78,7 @@ private:
 
 	ltc_off_t _position;
 	LTCDecoder * _decoder;
-	QTime _pauseDetector;
+	int _pauseDetector;
 
 };
 

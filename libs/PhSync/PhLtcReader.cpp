@@ -9,7 +9,8 @@
 PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
 	PhAudioReader(parent),
 	_clock(tcType),
-	_position(0)
+	_position(0),
+	_pauseDetector(0)
 {
 	_decoder = ltc_decoder_create(1920, 1920 * 2);
 	PHDBG(21) << "LTC Reader created";
@@ -111,6 +112,7 @@ int PhLtcReader::processAudio(const void *outputBuffer, unsigned long framesPerB
 	LTCFrameExt frame;
 	unsigned int hhmmssff[4];
 	PhFrame oldFrame = _clock.frame();
+	_pauseDetector++;
 	while(ltc_decoder_read(_decoder, &frame)) {
 		hhmmssff[0] = frame.ltc.hours_tens * 10 + frame.ltc.hours_units;
 		hhmmssff[1] = frame.ltc.mins_tens * 10 + frame.ltc.mins_units;
@@ -126,21 +128,22 @@ int PhLtcReader::processAudio(const void *outputBuffer, unsigned long framesPerB
 			else
 				_clock.setRate(-1);
 		}
-		else
-			_clock.setRate(0);
-		// Handeling delay
 		_clock.setFrame(newFrame);
-
+		_pauseDetector = 0;
 	}
 
 	_position += framesPerBuffer;
 
-	return 0;
+
+	return paContinue;
 }
 
 int PhLtcReader::audioCallback(const void * inputBuffer, void *, unsigned long, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *userData)
 {
 	PhLtcReader * LTCReader = (PhLtcReader *) userData;
-	LTCReader->processAudio(inputBuffer, FRAME_PER_BUFFER);
-	return 0;
+
+	if(LTCReader->_pauseDetector > 10)
+		LTCReader->_clock.setRate(0);
+
+	return LTCReader->processAudio(inputBuffer, FRAME_PER_BUFFER);
 }
