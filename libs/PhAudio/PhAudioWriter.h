@@ -3,9 +3,19 @@
 
 #include "PhAudio.h"
 
+/**
+ * @brief A generic audio output device
+ *
+ * Initialize an audio input device. The child must provide an implementation
+ * for the processAudio() method.
+ */
 class PhAudioWriter : public PhAudio
 {
 public:
+	/**
+	 * @brief PhAudioWriter constructor
+	 * @param parent The parent object
+	 */
 	PhAudioWriter(QObject *parent = 0);
 
 	/**

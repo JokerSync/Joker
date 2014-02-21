@@ -3,9 +3,19 @@
 
 #include "PhAudio.h"
 
+/**
+ * @brief A generic audio input device
+ *
+ * Initialize an audio input device. The child must provide an implementation
+ * for the processAudio() method.
+ */
 class PhAudioReader : public PhAudio
 {
 public:
+	/**
+	 * @brief PhAudioReader constructor
+	 * @param parent The parent object
+	 */
 	PhAudioReader(QObject *parent = 0);
 
 	/**
