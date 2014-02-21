@@ -35,13 +35,3 @@ FORMS += \
     MainWindow.ui \
     PreferencesDialog.ui
 
-
-
-CONFIG(release, debug|release) {
-
-	mac {
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-	}
-
-}
-

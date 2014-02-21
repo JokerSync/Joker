@@ -21,8 +21,6 @@ int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 
-	PhDebug::init(false, true, true, true, true, true, 1, "VideoStripTest");
-
 	QSettings settings("Phonations", "VideoStripTest");
 	MainWindow w(&settings);
 
