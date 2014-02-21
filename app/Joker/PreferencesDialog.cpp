@@ -335,7 +335,7 @@ void PreferencesDialog::showParamLTC(bool show)
 		showParamSony(false);
 #if USE_LTC
 		ui->listWidgetInputs->addItems(PhLtcReader::inputList());
-		foreach (QString inputName, PhLtcReader::inputList()) {
+		foreach(QString inputName, PhLtcReader::inputList()) {
 			PHDEBUG << inputName;
 		}
 #endif
