@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>523</width>
-    <height>316</height>
+    <height>371</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,69 +16,81 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QLabel" name="lblInfo">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>20</height>
-       </size>
-      </property>
+     <widget class="QCheckBox" name="generateCheckBox">
       <property name="text">
-       <string>TextLabel</string>
+       <string>Generate LTC</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="label_2">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>20</height>
-       </size>
+     <widget class="QGroupBox" name="generatorGroupBox">
+      <property name="title">
+       <string>Generator:</string>
       </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="lblInfo">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>00:00:00:00 =&gt; 00:00:00:00</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="PhMediaPanel" name="widgetMaster" native="true"/>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="cBoxLoop">
+         <property name="text">
+          <string>Loop</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="readCheckBox">
       <property name="text">
-       <string>Master :</string>
+       <string>Read LTC:</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="PhMediaPanel" name="widgetMaster" native="true"/>
-    </item>
-    <item>
-     <widget class="QCheckBox" name="cBoxLoop">
-      <property name="text">
-       <string>Loop</string>
+     <widget class="QGroupBox" name="readerGroupBox">
+      <property name="title">
+       <string>Reader:</string>
       </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="label">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>20</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>Slave :</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="lblSlave">
-      <property name="font">
-       <font>
-        <family>Arial Unicode MS</family>
-        <pointsize>45</pointsize>
-        <strikeout>false</strikeout>
-       </font>
-      </property>
-      <property name="text">
-       <string notr="true">00:00:00:00</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="lblSlave">
+         <property name="font">
+          <font>
+           <family>Arial Unicode MS</family>
+           <pointsize>45</pointsize>
+           <strikeout>false</strikeout>
+          </font>
+         </property>
+         <property name="text">
+          <string notr="true">00:00:00:00</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
