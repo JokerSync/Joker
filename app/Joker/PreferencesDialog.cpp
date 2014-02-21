@@ -32,7 +32,6 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	_oldDelay = _settings->value("delay", 0).toInt();
 	_oldStripHeight = _settings->value("stripHeight", 0.25f).toFloat();
 	_oldOpenLastFile = _settings->value("openLastFile", true).toBool();
-	_oldStartFullScreen = _settings->value("startFullScreen", false).toBool();
 	_oldSpeed = _settings->value("speed", 12).toInt();
 	_oldBolness = _settings->value("boldness", 0).toInt();
 	_oldFont = _settings->value("StripFontFile", "").toString();
@@ -60,7 +59,6 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
 	ui->cBoxLastFile->setChecked(_oldOpenLastFile);
-	ui->cBoxFullscreen->setChecked(_oldStartFullScreen);
 	ui->cBoxDeinterlace->setChecked(_oldDeinterlace);
 	ui->cBoxDisplayTC->setChecked(_oldDisplayTC);
 	ui->cBoxDisplayNextTC->setChecked(_oldDisplayNextTC);
@@ -153,7 +151,6 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setValue("delay", _oldDelay);
 	_settings->setValue("stripHeight", _oldStripHeight);
 	_settings->setValue("openLastFile", _oldOpenLastFile);
-	_settings->setValue("startFullScreen", _oldStartFullScreen);
 	_settings->setValue("speed", _oldSpeed);
 	_settings->setValue("boldness", _oldBolness);
 	_settings->setValue("StripFontName", _oldFont);
@@ -202,11 +199,6 @@ void PreferencesDialog::on_sliderStripHeight_valueChanged(int position)
 void PreferencesDialog::on_cBoxLastFile_toggled(bool checked)
 {
 	_settings->setValue("openLastFile", checked);
-}
-
-void PreferencesDialog::on_cBoxFullscreen_toggled(bool checked)
-{
-	_settings->setValue("startFullScreen", checked);
 }
 
 void PreferencesDialog::on_sliderBoldness_valueChanged(int value)

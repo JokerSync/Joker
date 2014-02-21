@@ -12,6 +12,7 @@
 #include <QFileOpenEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QWindowStateChangeEvent>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -103,12 +104,14 @@ JokerWindow::JokerWindow(QSettings *settings) :
 		ui->actionTest_mode->setChecked(true);
 	}
 
-#warning TODO fix fullscreen on startup
-	if(_settings->value("startFullScreen", false).toBool())
-		this->showFullScreen();
-
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
+
+
+	if(_settings->value("fullscreen", false).toBool())
+		showFullScreen();
+	else
+		restoreGeometry(_settings->value("geometry").toByteArray());
 
 }
 
@@ -324,23 +327,13 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			return true;
 		}
 		if(sender->objectName() == this->objectName()) {
-			if(isFullScreen())
-				showNormal();
-			else
-				showFullScreen();
+			on_actionFullscreen_triggered();
 			return true;
 		}
 		break;
-	case QEvent::KeyPress:
-		if (static_cast<QKeyEvent *>(event)->key() == Qt::Key_F10) {
-			if(this->isFullScreen()) {
-				this->showNormal();
-			}
-			else {
-				this->showFullScreen();
-			}
-			return true;
-		}
+	case QEvent::WindowStateChange:
+		_settings->setValue("fullscreen", windowState() == Qt::WindowFullScreen);
+		ui->actionFullscreen->setChecked(windowState() == Qt::WindowFullScreen);
 		break;
 	default:
 		break;
@@ -352,6 +345,15 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 {
 	if(!checkSaveFile())
 		event->ignore();
+}
+
+void JokerWindow::moveEvent(QMoveEvent *)
+{
+	_settings->setValue("geometry", saveGeometry());
+}
+void JokerWindow::resizeEvent(QResizeEvent *)
+{
+	_settings->setValue("geometry", saveGeometry());
 }
 
 void JokerWindow::setCurrentStripFile(QString stripFile)
@@ -758,4 +760,12 @@ void JokerWindow::on_actionForce_16_9_ratio_triggered()
 {
 	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
 	_needToSave = true;
+}
+
+void JokerWindow::on_actionFullscreen_triggered()
+{
+	if(this->isFullScreen())
+		this->showNormal();
+	else
+		this->showFullScreen();
 }
