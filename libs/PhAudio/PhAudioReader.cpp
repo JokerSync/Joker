@@ -61,6 +61,8 @@ bool PhAudioReader::init(QString deviceName)
 	if(Pa_StartStream( _stream ) != paNoError)
 		return false;
 
+	PHDEBUG << deviceName << "is now open.";
+
 	return true;
 }
 

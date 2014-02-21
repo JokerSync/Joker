@@ -65,6 +65,8 @@ bool PhAudioWriter::init(QString deviceName)
 		return false;
 	}
 
+	PHDEBUG << deviceName << "is now open.";
+
 	return true;
 }
 
