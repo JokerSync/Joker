@@ -72,7 +72,7 @@ void LTCToolWindow::updateInfos()
 	tcIn = PhTimeCode::stringFromFrame(ui->widgetMaster->getFirstFrame(), _ltcWriter.clock()->timeCodeType());
 	tcOut = PhTimeCode::stringFromFrame(ui->widgetMaster->getFirstFrame() + ui->widgetMaster->getMediaLength(), _ltcWriter.clock()->timeCodeType());
 
-	ui->lblInfo->setText(tcIn + " -> " + tcOut);
+	ui->generateInfoLabel->setText(tcIn + " -> " + tcOut);
 }
 
 void LTCToolWindow::on_actionPreferences_triggered()
@@ -98,6 +98,11 @@ void LTCToolWindow::onFrameChanged(PhFrame frame, PhTimeCodeType)
 
 void LTCToolWindow::onSlaveFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
+	if(frame - _lastFrame != _frameDelta) {
+		_frameDelta = frame - _lastFrame;
+		ui->readInfoLabel->setText(QString::number(_frameDelta) + " / " + PhTimeCode::stringFromFrame(frame, tcType));
+	}
+	_lastFrame = frame;
 	ui->lblSlave->setText(PhTimeCode::stringFromFrame(frame, tcType));
 }
 

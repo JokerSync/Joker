@@ -68,6 +68,9 @@ private:
 	PhLtcWriter _ltcWriter;
 	PhLtcReader _ltcReader;
 
+	PhFrame _lastFrame;
+	PhFrame _frameDelta;
+
 	void setupInput();
 };
 

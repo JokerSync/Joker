@@ -32,7 +32,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLabel" name="lblInfo">
+        <widget class="QLabel" name="generateInfoLabel">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -41,6 +41,9 @@
          </property>
          <property name="text">
           <string>00:00:00:00 =&gt; 00:00:00:00</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -73,6 +76,16 @@
        <string>Reader:</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="readInfoLabel">
+         <property name="text">
+          <string>0x since 00:00:00:00</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QLabel" name="lblSlave">
          <property name="font">
