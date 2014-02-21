@@ -84,12 +84,13 @@ void PhLtcReader::close()
 
 QList<QString> PhLtcReader::inputList()
 {
+	Pa_Initialize();
 	QList<QString> names;
 	int numDevices = Pa_GetDeviceCount();
 	if( numDevices <= 0 )
 		PHDBG(21) << "ERROR: Pa_CountDevices returned " << numDevices;
 
-	else{
+	else {
 		const PaDeviceInfo *deviceInfo;
 		for(int i = 0; i < numDevices; i++ ) {
 			deviceInfo = Pa_GetDeviceInfo( i );
@@ -97,6 +98,7 @@ QList<QString> PhLtcReader::inputList()
 				names.append(deviceInfo->name);
 		}
 	}
+	Pa_Terminate();
 
 	return names;
 }

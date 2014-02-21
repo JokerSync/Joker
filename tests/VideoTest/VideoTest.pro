@@ -1,3 +1,5 @@
+cache()
+
 TEMPLATE = app
 TARGET = VideoTest
 

@@ -43,6 +43,8 @@ bool VideoTestWindow::openFile(QString fileName)
 			_settings->setLastFile(fileName);
 			return true;
 		}
+		else
+			QMessageBox::critical(this, "Error", "Unable to open video.");
 	}
 	return false;
 }

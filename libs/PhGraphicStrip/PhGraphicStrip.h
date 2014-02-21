@@ -132,7 +132,7 @@ public:
 	 * of the people from the list.
 	 * @param list
 	 */
-	void setSelectedPeople(QList<PhPeople *> * list){
+	void setSelectedPeople(QList<PhPeople *> * list) {
 		_selectedPeoples = list;
 	}
 

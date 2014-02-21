@@ -140,6 +140,15 @@ int PhFont::getBoldness() const
 	return _boldness;
 }
 
+int PhFont::getNominalWidth(QString string)
+{
+	int width = 0;
+	foreach(QChar c, string) {
+		width += getAdvance(c.toLatin1());
+	}
+	return width;
+}
+
 void PhFont::setBoldness(int value)
 {
 	if(_boldness != value) {

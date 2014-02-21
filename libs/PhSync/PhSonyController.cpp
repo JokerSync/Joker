@@ -81,7 +81,7 @@ void PhSonyController::checkVideoSync(int)
 				emit videoSync();
 			}
 		}
-		else{
+		else {
 			if(_lastCTS && !cts) {
 				onVideoSync();
 				emit videoSync();

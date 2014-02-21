@@ -112,13 +112,13 @@ void MainWindow::on_masterActiveCheck_clicked(bool checked)
 			_sonyMaster.timeSense();
 			_sonyMaster.speedSense();
 		}
-		else{
+		else {
 			PHDEBUG << "error opening master";
 			checked = false;
 			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony master");
 		}
 	}
-	else{
+	else {
 		PHDEBUG << "closing sony master";
 		_sonyMaster.close();
 	}
@@ -139,13 +139,13 @@ void MainWindow::on_slaveActiveCheck_clicked(bool checked)
 	if(checked) {
 		if(_sonySlave.open())
 			PHDEBUG << "slave open ok";
-		else{
+		else {
 			PHDEBUG << "error opening slave";
 			checked = false;
 			QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
 		}
 	}
-	else{
+	else {
 		PHDEBUG << "closing sony slave";
 		_sonySlave.clock()->setRate(0);
 		_sonySlave.close();
@@ -195,7 +195,7 @@ void MainWindow::switchSlaveVideoInternalSync(bool useVideo)
 
 		_slaveTimer.start(10);
 	}
-	else{
+	else {
 		// timer trigger the onVideoSync slot directly
 		disconnect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
 		connect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(onVideoSync()));
@@ -230,7 +230,7 @@ void MainWindow::switchMasterVideoInternalSync(bool useVideo)
 
 		_masterTimer.start(10);
 	}
-	else{
+	else {
 		// timer trigger the onVideoSync slot directly
 		disconnect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
 		connect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(onVideoSync()));

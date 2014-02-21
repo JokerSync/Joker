@@ -60,11 +60,15 @@ bool MainWindow::openFile(QString fileName)
 
 	PHDEBUG << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
 	AVCodec * pCodec = avcodec_find_decoder(_pCodecContext->codec_id);
-	if(pCodec == NULL)
+	if(pCodec == NULL) {
+		qDebug() << "Unable to find decoder";
 		return false;
+	}
 
-	if(avcodec_open2(_pCodecContext, pCodec, NULL) < 0)
+	if(avcodec_open2(_pCodecContext, pCodec, NULL) < 0) {
+		qDebug() << "Unable to open decoder";
 		return false;
+	}
 
 	_pFrame = avcodec_alloc_frame();
 

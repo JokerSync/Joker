@@ -8,7 +8,13 @@
 #define PHFONT_H
 
 #include <QString>
+
+#include <QtGlobal>
+#if defined(Q_OS_MAC)
+#include <SDL2_ttf/SDL_ttf.h>
+#else
 #include <SDL2/SDL_ttf.h>
+#endif
 
 /**
  * @brief Describe the font appearance for PhGraphicText
@@ -45,7 +51,7 @@ public:
 	 * @param ch ASCII index of the character.
 	 * @return A value in pixel.
 	 */
-	int getAdvance (unsigned char ch);
+	int getAdvance(unsigned char ch);
 
 	/**
 	 * @brief Get the regular height of the font.
@@ -76,6 +82,13 @@ public:
 	 * @return the number of outline pass
 	 */
 	int getBoldness() const;
+
+	/**
+	 * @brief Get the nominal width of a given string
+	 * @param string to be measured
+	 * @return The length
+	 */
+	int getNominalWidth(QString string);
 
 private:
 	/**

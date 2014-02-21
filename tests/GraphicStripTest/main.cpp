@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 		QString lastFile = settings.lastFile();
 		if(QFile::exists(lastFile))
 			w.openFile(lastFile);
-		else{
+		else {
 			w.createFile(
 			    settings.peopleNumber(),
 			    settings.loopNumber(),

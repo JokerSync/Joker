@@ -112,7 +112,7 @@ QList<QString> PhLtcWriter::outputList()
 	if( numDevices <= 0 )
 		PHDBG(0) << "ERROR: Pa_CountDevices returned " << numDevices;
 
-	else{
+	else {
 		const PaDeviceInfo *deviceInfo;
 		for(int i = 0; i < numDevices; i++ ) {
 			deviceInfo = Pa_GetDeviceInfo( i );
@@ -123,7 +123,7 @@ QList<QString> PhLtcWriter::outputList()
 		}
 	}
 
-	foreach (QString string, names) {
+	foreach(QString string, names) {
 		PHDEBUG << string;
 	}
 
