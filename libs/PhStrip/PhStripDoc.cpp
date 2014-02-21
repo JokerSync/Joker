@@ -238,7 +238,7 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
 		PHDEBUG << "an error occur while saving the strip document";
 		return false;
 	}
-	else{
+	else {
 		//if file is successfully opened then create XML
 		QXmlStreamWriter* xmlWriter = new QXmlStreamWriter();
 		// set device (here file)to streamwriter

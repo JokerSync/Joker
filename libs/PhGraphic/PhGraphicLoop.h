@@ -43,7 +43,7 @@ public:
 	 * @brief Get the thickness
 	 * @return
 	 */
-	int getHThick(){
+	int getHThick() {
 		return _hThick;
 	}
 
@@ -59,14 +59,14 @@ public:
 	 * Set if the graphic loop is displayed horizontaly or not
 	 * @param isHorizontal
 	 */
-	void setHorizontalLoop(bool isHorizontal){
+	void setHorizontalLoop(bool isHorizontal) {
 		_horizontal = isHorizontal;
 	}
 	/**
 	 * @brief Get the cross height
 	 * @return cross height in pixels
 	 */
-	int getCrossHeight(){
+	int getCrossHeight() {
 		return _crossHeight;
 	}
 private:

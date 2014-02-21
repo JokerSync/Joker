@@ -1,6 +1,13 @@
+#include <QtGlobal>
+
 #include <SDL2/SDL.h>
+#if defined(Q_OS_MAC)
+#include <SDL2_image/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
+#else
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#endif
 
 #include <string>
 #include <cstring>
@@ -161,7 +168,7 @@ int main(int argc, char **argv)
 				else
 					qDebug() <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
 			}
-			else{
+			else {
 				glyphAdvance[ch] = 0;
 				glyphWidth[ch] = 0;
 			}

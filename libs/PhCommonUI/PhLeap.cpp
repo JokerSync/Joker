@@ -11,7 +11,7 @@
 
 using namespace Leap;
 
-PhLeap::PhLeap(QObject *parent) : QObject(parent){
+PhLeap::PhLeap(QObject *parent) : QObject(parent) {
 }
 
 void PhLeap::onFrame(const Controller& controller)

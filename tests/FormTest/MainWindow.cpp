@@ -81,7 +81,7 @@ bool MainWindow::openFile(QString fileName)
 		this->update();
 		return true;
 	}
-	else{
+	else {
 		delete _image;
 		return false;
 	}

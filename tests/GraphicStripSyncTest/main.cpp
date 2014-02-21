@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 		QString fileName = argv[1];
 		w.openFile(fileName);
 	}
-	else{
+	else {
 		QString lastFile = settings.value("lastFile", "").toString();
 		if(QFile(lastFile).exists())
 			w.openFile(lastFile);

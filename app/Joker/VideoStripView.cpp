@@ -90,7 +90,7 @@ void VideoStripView::paint()
 
 	int tcWidth = 200;
 
-	if((_videoEngine.height() > 0)and (videoHeight > 0)) {
+	if((_videoEngine.height() > 0) && (videoHeight > 0)) {
 		int videoWidth;
 		if(_forceRatio169)
 			videoWidth = videoHeight * 16 / 9;
@@ -142,7 +142,7 @@ void VideoStripView::paint()
 				nextText = _strip.doc()->getNextText(0, _selectedPeoples);
 
 			int peopleHeight = this->height() / 30;
-			foreach (PhPeople* people, _selectedPeoples) {
+			foreach(PhPeople* people, _selectedPeoples) {
 				int peopleNameWidth = people->getName().length() * peopleHeight / 2;
 				_currentPeopleName.setRect(10, y, peopleNameWidth, peopleHeight);
 				_currentPeopleName.setContent(people->getName());
@@ -150,7 +150,7 @@ void VideoStripView::paint()
 				y += peopleHeight;
 			}
 		}
-		else{
+		else {
 			_strip.setSelectedPeople(NULL);
 			nextText = _strip.doc()->getNextText(clockFrame);
 			if(nextText == NULL)
@@ -173,6 +173,11 @@ void VideoStripView::paint()
 		gCurrentLoop.setColor(Qt::blue);
 		gCurrentLoop.draw();
 	}
+
+//	PhGraphicText frameRateText(_strip.getHUDFont(), QString::number(this->refreshRate()));
+//	frameRateText.setRect(0, 100, 100, 100);
+//	frameRateText.setColor(Qt::red);
+//	frameRateText.draw();
 
 	_noVideoSyncError.setRect(this->width() / 2 - 100, this->height() / 2 - 25, 200, 50);
 	if(_lastVideoSyncElapsed.elapsed() > 1000) {
