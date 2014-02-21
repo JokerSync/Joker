@@ -7,6 +7,12 @@ class PhAudioWriter : public PhAudio
 {
 public:
 	PhAudioWriter(QObject *parent = 0);
+
+	/**
+	 * @brief Get the output list
+	 * @return Return all the output devices
+	 */
+	static QList<QString> outputList();
 };
 
 #endif // PHAUDIOWRITER_H

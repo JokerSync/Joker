@@ -41,11 +41,6 @@ public:
 	 */
 	bool init(QString deviceName = "");
 	/**
-	 * @brief Get the output list
-	 * @return Return all the output devices
-	 */
-	static QList<QString> outputList();
-	/**
 	 * @brief Get the writer clock
 	 * @return The writer clock
 	 */

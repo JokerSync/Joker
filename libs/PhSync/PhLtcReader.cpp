@@ -79,27 +79,6 @@ bool PhLtcReader::init(QString deviceName)
 	return true;
 }
 
-QList<QString> PhLtcReader::inputList()
-{
-	Pa_Initialize();
-	QList<QString> names;
-	int numDevices = Pa_GetDeviceCount();
-	if( numDevices <= 0 )
-		PHDBG(21) << "ERROR: Pa_CountDevices returned " << numDevices;
-
-	else {
-		const PaDeviceInfo *deviceInfo;
-		for(int i = 0; i < numDevices; i++ ) {
-			deviceInfo = Pa_GetDeviceInfo( i );
-			if(deviceInfo->maxInputChannels > 0)
-				names.append(deviceInfo->name);
-		}
-	}
-	Pa_Terminate();
-
-	return names;
-}
-
 PhClock *PhLtcReader::clock()
 {
 	return &_clock;

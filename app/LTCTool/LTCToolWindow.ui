@@ -63,7 +63,7 @@
     <item>
      <widget class="QCheckBox" name="readCheckBox">
       <property name="text">
-       <string>Read LTC:</string>
+       <string>Read LTC</string>
       </property>
       <property name="checked">
        <bool>false</bool>

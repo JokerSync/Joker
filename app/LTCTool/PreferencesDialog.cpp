@@ -7,20 +7,20 @@
 #include "PreferencesDialog.h"
 #include "ui_PreferencesDialog.h"
 
-#include "PhSync/PhLtcWriter.h"
-#include "PhSync/PhLtcReader.h"
+#include "PhAudio/PhAudioWriter.h"
+#include "PhAudio/PhAudioReader.h"
 
 PreferencesDialog::PreferencesDialog(QString audioOutput, QString audioInput, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::PreferencesDialog)
 {
 	ui->setupUi(this);
-	QList<QString> outputList = PhLtcWriter::outputList();
+	QList<QString> outputList = PhAudioWriter::outputList();
 	ui->comboBoxOutput->addItems(outputList);
 	if(outputList.contains(audioOutput))
 		ui->comboBoxOutput->setCurrentText(audioOutput);
 
-	QList<QString> inputList = PhLtcReader::inputList();
+	QList<QString> inputList = PhAudioReader::inputList();
 	ui->comboBoxInput->addItems(inputList);
 	if(inputList.contains(audioInput))
 		ui->comboBoxInput->setCurrentText(audioInput);

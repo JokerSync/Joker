@@ -51,11 +51,6 @@ public:
 	bool init(QString deviceName = "");
 
 	/**
-	 * @brief Get the input list
-	 * @return Return all the input devices
-	 */
-	static QList<QString> inputList();
-	/**
 	 * @brief Get the reader clock
 	 * @return The reader clock
 	 */
