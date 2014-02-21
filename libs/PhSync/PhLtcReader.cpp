@@ -84,9 +84,9 @@ PhClock *PhLtcReader::clock()
 	return &_clock;
 }
 
-int PhLtcReader::processAudio(const void *outputBuffer, unsigned long framesPerBuffer)
+int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer)
 {
-	ltc_decoder_write(_decoder, (ltcsnd_sample_t*)outputBuffer, framesPerBuffer, _position);
+	ltc_decoder_write(_decoder, (ltcsnd_sample_t*)inputBuffer, framesPerBuffer, _position);
 	LTCFrameExt frame;
 	unsigned int hhmmssff[4];
 	PhFrame oldFrame = _clock.frame();
@@ -114,12 +114,5 @@ int PhLtcReader::processAudio(const void *outputBuffer, unsigned long framesPerB
 
 	_position += framesPerBuffer;
 
-	return 0;
-}
-
-int PhLtcReader::audioCallback(const void * inputBuffer, void *, unsigned long, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *userData)
-{
-	PhLtcReader * LTCReader = (PhLtcReader *) userData;
-	LTCReader->processAudio(inputBuffer, FRAME_PER_BUFFER);
 	return 0;
 }

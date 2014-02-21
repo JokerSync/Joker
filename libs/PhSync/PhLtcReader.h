@@ -58,22 +58,12 @@ public:
 
 private:
 
-	int processAudio(const void *inputBuffer,
-	                 unsigned long framesPerBuffer);
-	static int audioCallback( const void *inputBuffer, void *outputBuffer,
-	                          unsigned long framesPerBuffer,
-	                          const PaStreamCallbackTimeInfo* timeInfo,
-	                          PaStreamCallbackFlags statusFlags,
-	                          void *userData );
+	int processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer);
 
 	PhClock _clock;
 
-	float data;
-
 	ltc_off_t _position;
 	LTCDecoder * _decoder;
-	QTime _pauseDetector;
-
 };
 
 #endif // PHLTCREADER_H

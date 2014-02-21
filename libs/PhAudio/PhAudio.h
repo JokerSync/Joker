@@ -25,7 +25,13 @@ signals:
 public slots:
 
 protected:
+	virtual int processAudio(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer) = 0;
+
 	PaStream *_stream;
+
+	static int audioCallback(const void *inputBuffer, void *outputBuffer,
+	                          unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags,
+	                          void *userData );
 
 private:
 	bool _paInitOk;

@@ -37,3 +37,9 @@ void PhAudio::close()
 		_stream = NULL;
 	}
 }
+
+int PhAudio::audioCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags , void *userData)
+{
+	PhAudio* audio = (PhAudio*)userData;
+	return audio->processAudio(inputBuffer, outputBuffer, framesPerBuffer);
+}

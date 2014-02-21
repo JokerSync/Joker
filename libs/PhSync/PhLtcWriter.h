@@ -48,14 +48,7 @@ public:
 
 private:
 
-	int processAudio(void *outputBuffer,
-	                 unsigned long framesPerBuffer);
-	static int audioCallback( const void *inputBuffer, void *outputBuffer,
-	                          unsigned long framesPerBuffer,
-	                          const PaStreamCallbackTimeInfo* timeInfo,
-	                          PaStreamCallbackFlags statusFlags,
-	                          void *userData );
-	float data;
+	int processAudio(const void *, void *outputBuffer, unsigned long framesPerBuffer);
 
 	PhClock _clock;
 	LTCEncoder *_encoder;
