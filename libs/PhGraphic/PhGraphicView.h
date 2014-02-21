@@ -11,6 +11,7 @@
 #include <QTimer>
 #include <QSettings>
 
+#include "PhTools/PhTime.h"
 #include "PhTools/PhTickCounter.h"
 
 /**
@@ -53,7 +54,7 @@ signals:
 	 * @brief emit a signal just before the paint
 	 * @param frequency the effective frequency
 	 */
-	void beforePaint(int frequency);
+	void beforePaint(PhTimeScale frequency);
 
 protected:
 

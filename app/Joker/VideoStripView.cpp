@@ -49,17 +49,14 @@ bool VideoStripView::init()
 	_noVideoSyncError.setColor(QColor(0, 0, 0));
 	_currentPeopleName.setColor(QColor(128, 128, 128));
 
-	connect(this, SIGNAL(beforePaint(int)), _strip.clock(), SLOT(tick2(int)));
+	connect(this, SIGNAL(beforePaint(PhTimeScale)), _strip.clock(), SLOT(tick(PhTimeScale)));
 
 	return _strip.init();
 }
 
 void VideoStripView::paint()
 {
-
 	PHDBG(1) << _strip.clock()->time() - (_sony ? _sony->clock()->time() : 0);
-
-	//_strip.clock()->tick(60);
 
 	int y = 0;
 	QString title = _strip.doc()->getTitle();

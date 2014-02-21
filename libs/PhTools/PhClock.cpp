@@ -90,9 +90,3 @@ void PhClock::tick(PhTimeScale frequence)
 	this->setTime(static_cast<int>(_time + elapsed * _rate));
 }
 
-void PhClock::tick2(int frequence)
-{
-	tick(PhTimeScale(frequence));
-}
-
-
