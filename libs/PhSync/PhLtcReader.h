@@ -16,12 +16,12 @@
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTimeCode.h"
 
-#include "PhAudio/PhAudioReader.h"
+#include "PhAudio/PhAudioInput.h"
 
 /**
  * @brief A synchronisation module via the LTC protocol
  */
-class PhLtcReader : public PhAudioReader
+class PhLtcReader : public PhAudioInput
 {
 
 	Q_OBJECT

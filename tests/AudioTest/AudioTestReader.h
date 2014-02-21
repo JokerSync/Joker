@@ -1,9 +1,9 @@
 #ifndef AUDIOTESTREADER_H
 #define AUDIOTESTREADER_H
 
-#include "PhAudio/PhAudioReader.h"
+#include "PhAudio/PhAudioInput.h"
 
-class AudioTestReader : public PhAudioReader
+class AudioTestReader : public PhAudioInput
 {
 	Q_OBJECT
 public:

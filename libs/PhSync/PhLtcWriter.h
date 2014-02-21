@@ -12,12 +12,12 @@
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTimeCode.h"
 
-#include "PhAudio/PhAudioWriter.h"
+#include "PhAudio/PhAudioOutput.h"
 
 /**
  * @brief Send master LTC generator
  */
-class PhLtcWriter : public PhAudioWriter
+class PhLtcWriter : public PhAudioOutput
 {
 	Q_OBJECT
 public:

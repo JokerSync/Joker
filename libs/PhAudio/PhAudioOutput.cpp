@@ -1,12 +1,12 @@
 #include "PhTools/PhDebug.h"
-#include "PhAudioWriter.h"
+#include "PhAudioOutput.h"
 
-PhAudioWriter::PhAudioWriter(QObject *parent)
+PhAudioOutput::PhAudioOutput(QObject *parent)
 	: PhAudio(parent)
 {
 }
 
-bool PhAudioWriter::init(QString deviceName)
+bool PhAudioOutput::init(QString deviceName)
 {
 	PHDBG(0) << deviceName;
 
@@ -70,7 +70,7 @@ bool PhAudioWriter::init(QString deviceName)
 	return true;
 }
 
-QList<QString> PhAudioWriter::outputList()
+QList<QString> PhAudioOutput::outputList()
 {
 	QList<QString> names;
 	int numDevices = Pa_GetDeviceCount();

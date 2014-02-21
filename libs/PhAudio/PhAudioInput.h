@@ -1,5 +1,5 @@
-#ifndef PHAUDIOREADER_H
-#define PHAUDIOREADER_H
+#ifndef PHAUDIOINPUT_H
+#define PHAUDIOINPUT_H
 
 #include "PhAudio.h"
 
@@ -9,21 +9,21 @@
  * Initialize an audio input device. The child must provide an implementation
  * for the processAudio() method.
  */
-class PhAudioReader : public PhAudio
+class PhAudioInput : public PhAudio
 {
 public:
 	/**
-	 * @brief PhAudioReader constructor
+	 * @brief PhAudioInput constructor
 	 * @param parent The parent object
 	 */
-	PhAudioReader(QObject *parent = 0);
+	PhAudioInput(QObject *parent = 0);
 
 	/**
-	 * @brief Initialize the reader
+	 * @brief Initialize the input device
 	 *
-	 * It initialize the reader on the given input device if it's found,
+	 * It initialize the input device on the given name if it's found,
 	 * or take the default input device if not.
-	 * @param deviceName The desired input device
+	 * @param deviceName The desired input device name
 	 * @return True if succeed, false otherwise
 	 */
 	bool init(QString deviceName);
@@ -34,4 +34,4 @@ public:
 	static QList<QString> inputList();
 };
 
-#endif // PHAUDIOREADER_H
+#endif // PHAUDIOINPUT_H

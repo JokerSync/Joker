@@ -1,12 +1,12 @@
 #include "PhTools/PhDebug.h"
-#include "PhAudioReader.h"
+#include "PhAudioInput.h"
 
-PhAudioReader::PhAudioReader(QObject *parent)
+PhAudioInput::PhAudioInput(QObject *parent)
 	: PhAudio(parent)
 {
 }
 
-bool PhAudioReader::init(QString deviceName)
+bool PhAudioInput::init(QString deviceName)
 {
 	if(!PhAudio::init(deviceName)) {
 		return false;
@@ -66,7 +66,7 @@ bool PhAudioReader::init(QString deviceName)
 	return true;
 }
 
-QList<QString> PhAudioReader::inputList()
+QList<QString> PhAudioInput::inputList()
 {
 	Pa_Initialize();
 	QList<QString> names;

@@ -2,7 +2,7 @@
 #include "AudioTestWriter.h"
 
 AudioTestWriter::AudioTestWriter(QObject *parent) :
-	PhAudioWriter(parent)
+	PhAudioOutput(parent)
 {
 }
 

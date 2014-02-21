@@ -7,7 +7,7 @@
 #include "PhLtcReader.h"
 
 PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
-	PhAudioReader(parent),
+	PhAudioInput(parent),
 	_clock(tcType),
 	_position(0),
 	_noFrameCounter(0)

@@ -2,7 +2,7 @@
 #include "AudioTestReader.h"
 
 AudioTestReader::AudioTestReader(QObject *parent) :
-	PhAudioReader(parent)
+	PhAudioInput(parent)
 {
 }
 

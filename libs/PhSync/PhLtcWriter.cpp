@@ -7,7 +7,7 @@
 #include "PhLtcWriter.h"
 
 PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
-	PhAudioWriter(parent),
+	PhAudioOutput(parent),
 	_clock(tcType),
 	_encoder(NULL)
 {

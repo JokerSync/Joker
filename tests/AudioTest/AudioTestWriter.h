@@ -1,9 +1,9 @@
 #ifndef AUDIOTESTWRITER_H
 #define AUDIOTESTWRITER_H
 
-#include "PhAudio/PhAudioWriter.h"
+#include "PhAudio/PhAudioOutput.h"
 
-class AudioTestWriter : public PhAudioWriter
+class AudioTestWriter : public PhAudioOutput
 {
 	Q_OBJECT
 public:

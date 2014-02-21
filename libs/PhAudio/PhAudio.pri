@@ -8,11 +8,11 @@ LIBS += -L/usr/local/lib -lportaudio
 
 HEADERS += \
     ../../libs/PhAudio/PhAudio.h \
-    ../../libs/PhAudio/PhAudioWriter.h \
-    ../../libs/PhAudio/PhAudioReader.h
+    ../../libs/PhAudio/PhAudioOutput.h \
+    ../../libs/PhAudio/PhAudioInput.h
 
 SOURCES += \
     ../../libs/PhAudio/PhAudio.cpp \
-    ../../libs/PhAudio/PhAudioWriter.cpp \
-    ../../libs/PhAudio/PhAudioReader.cpp
+    ../../libs/PhAudio/PhAudioOutput.cpp \
+    ../../libs/PhAudio/PhAudioInput.cpp
 
