@@ -50,7 +50,7 @@ void LTCToolWindow::on_actionSet_TC_In_triggered()
 
 void LTCToolWindow::on_actionSet_TC_Out_triggered()
 {
-	PhTimeCodeDialog dlg(_LTCWriter.clock()->timeCodeType(), ui->widgetMaster->getFirstFrame() + ui->widgetMaster->getMediaLength());
+	PhTimeCodeDialog dlg(_ltcWriter.clock()->timeCodeType(), ui->widgetMaster->getFirstFrame() + ui->widgetMaster->getMediaLength());
 	if(dlg.exec()) {
 		if(dlg.frame() > ui->widgetMaster->getFirstFrame())
 			ui->widgetMaster->setMediaLength(dlg.frame() - ui->widgetMaster->getFirstFrame());

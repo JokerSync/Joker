@@ -40,6 +40,7 @@ public:
 	 */
 	PhClock * clock();
 
+
 private:
 
 	int processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer);
@@ -48,6 +49,9 @@ private:
 
 	ltc_off_t _position;
 	LTCDecoder * _decoder;
+	/** @brief Used to detect pause in LTC signal */
+	int _noFrameCounter;
+
 };
 
 #endif // PHLTCREADER_H

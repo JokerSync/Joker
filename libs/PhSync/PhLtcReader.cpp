@@ -9,7 +9,8 @@
 PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
 	PhAudioReader(parent),
 	_clock(tcType),
-	_position(0)
+	_position(0),
+	_noFrameCounter(0)
 {
 	_decoder = ltc_decoder_create(1920, 1920 * 2);
 	PHDBG(21) << "LTC Reader created";
@@ -41,14 +42,15 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 			else
 				_clock.setRate(-1);
 		}
-		else
-			_clock.setRate(0);
-		// Handeling delay
 		_clock.setFrame(newFrame);
-
+		_noFrameCounter = 0;
 	}
 
 	_position += framesPerBuffer;
 
-	return 0;
+	_noFrameCounter++;
+	if(_noFrameCounter > 20)
+		_clock.setRate(0);
+
+	return paContinue;
 }
