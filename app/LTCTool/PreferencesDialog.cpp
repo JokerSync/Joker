@@ -4,15 +4,15 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PreferencesPanel.h"
-#include "ui_PreferencesPanel.h"
+#include "PreferencesDialog.h"
+#include "ui_PreferencesDialog.h"
 
 #include "PhSync/PhLtcWriter.h"
 #include "PhSync/PhLtcReader.h"
 
-PreferencesPanel::PreferencesPanel(QString audioOutput, QString audioInput, QWidget *parent) :
+PreferencesDialog::PreferencesDialog(QString audioOutput, QString audioInput, QWidget *parent) :
 	QDialog(parent),
-	ui(new Ui::PreferencesPanel)
+	ui(new Ui::PreferencesDialog)
 {
 	ui->setupUi(this);
 	QList<QString> outputList = PhLtcWriter::outputList();
@@ -26,17 +26,17 @@ PreferencesPanel::PreferencesPanel(QString audioOutput, QString audioInput, QWid
 		ui->comboBoxInput->setCurrentText(audioInput);
 }
 
-PreferencesPanel::~PreferencesPanel()
+PreferencesDialog::~PreferencesDialog()
 {
 	delete ui;
 }
 
-QString PreferencesPanel::selectedAudioOutput()
+QString PreferencesDialog::selectedAudioOutput()
 {
 	return ui->comboBoxOutput->currentText();
 }
 
-QString PreferencesPanel::selectedAudioInput()
+QString PreferencesDialog::selectedAudioInput()
 {
 	return ui->comboBoxInput->currentText();
 }

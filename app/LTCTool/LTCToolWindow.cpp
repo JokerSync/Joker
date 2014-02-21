@@ -7,7 +7,7 @@
 #include "LTCToolWindow.h"
 #include "ui_LTCToolWindow.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
-#include "PreferencesPanel.h"
+#include "PreferencesDialog.h"
 
 LTCToolWindow::LTCToolWindow(QSettings *settings, QWidget *parent) :
 	QMainWindow(parent),
@@ -77,7 +77,7 @@ void LTCToolWindow::updateInfos()
 
 void LTCToolWindow::on_actionPreferences_triggered()
 {
-	PreferencesPanel dlg(_settings->value("audioOutput").toString(), _settings->value("audioInput").toString());
+	PreferencesDialog dlg(_settings->value("audioOutput").toString(), _settings->value("audioInput").toString());
 	if(dlg.exec()) {
 		PHDEBUG << dlg.selectedAudioOutput();
 		_settings->setValue("audioOutput", dlg.selectedAudioOutput());
