@@ -68,34 +68,17 @@ unix {
 }
 
 mac{
-	PATH = "/../Resources"
-	QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/joker.png $${RESOURCES_PATH};
-
-# For the plist version
+	# For the plist version
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
 	QMAKE_POST_LINK += sed -i \"\" -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
 }
-win32 {
-	PATH = .
-	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
-}
 
-
-DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
 
 TRANSLATIONS =	fr_FR.ts \
 				en_US.ts \
 
 QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $$shell_path($${RESOURCES_PATH}/) $${CS}
-
-CONFIG(release, debug|release) {
-
-	mac {
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)$${TARGET}_v$${VERSION}.dmg
-	}
-
-}
 
 cache()

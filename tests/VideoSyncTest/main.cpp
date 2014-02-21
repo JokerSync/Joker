@@ -1,6 +1,8 @@
 #include <QtWidgets/QApplication>
 #include "MainView.h"
 #include "VideoSyncTestSettings.h"
+#include <QSettings>
+#include <QFile>
 
 /**
  * @brief The application main entry point
@@ -10,8 +12,8 @@
  */
 int main(int argc, char *argv[])
 {
-	VideoSyncTestSettings settings;
-	int logLevel = settings.logLevel();
+	QSettings settings("Phonations", "VideoSyncTest");
+	int logLevel = settings.value("logLevel", 1).toInt();
 
 	QApplication app(argc, argv);
 

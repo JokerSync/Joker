@@ -40,12 +40,14 @@ win32 {
 		RESOURCES_PATH = $$shell_path(./debug/)
 		message(Debug mode)
 	}
+	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 }
 
 # Ubuntu specific
 linux {
 	CS = ;
 	RESOURCES_PATH = .
+	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 }
 
 
@@ -53,6 +55,14 @@ linux {
 mac {
 	CS = ;
 	RESOURCES_PATH = $${TARGET}.app/Contents/Resources
+	DEFINES += PATH_TO_RESSOURCES=\\\"/../Resources/\\\"
 }
 
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
+
+CONFIG(release, debug|release) {
+	mac {
+		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
+		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)/$${TARGET}_v$${VERSION}.dmg
+	}
+}
