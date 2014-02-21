@@ -84,6 +84,7 @@ void PhLtcReader::close()
 
 QList<QString> PhLtcReader::inputList()
 {
+	Pa_Initialize();
 	QList<QString> names;
 	int numDevices = Pa_GetDeviceCount();
 	if( numDevices <= 0 )
@@ -97,6 +98,7 @@ QList<QString> PhLtcReader::inputList()
 				names.append(deviceInfo->name);
 		}
 	}
+	Pa_Terminate();
 
 	return names;
 }

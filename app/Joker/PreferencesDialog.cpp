@@ -115,11 +115,11 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 		}
 	}
 
-	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
-
 #if USE_LTC
 	ui->listWidgetSync->addItem("LTC");
 #endif
+
+	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
 
 	if(_oldSyncProtocol == VideoStripSynchronizer::Sony)
 		showParamSony(true);
@@ -335,6 +335,9 @@ void PreferencesDialog::showParamLTC(bool show)
 		showParamSony(false);
 #if USE_LTC
 		ui->listWidgetInputs->addItems(PhLtcReader::inputList());
+		foreach (QString inputName, PhLtcReader::inputList()) {
+			PHDEBUG << inputName;
+		}
 #endif
 		if(ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).count() > 0)
 			ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).first()->setSelected(1);
