@@ -41,7 +41,6 @@ QList<PhPeople *> *VideoStripView::getSelectedPeoples()
 
 bool VideoStripView::init()
 {
-
 	_titleBackgroundRect.setColor(QColor(0, 0, 128));
 	_titleText.setColor(QColor(255, 255, 255));
 	_tcText.setColor(Qt::green);

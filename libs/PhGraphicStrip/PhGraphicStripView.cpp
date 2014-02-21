@@ -13,6 +13,8 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent) :
 
 bool PhGraphicStripView::init()
 {
+	connect(this, SIGNAL(beforePaint(PhTimeScale)), _strip.clock(), SLOT(tick(PhTimeScale)));
+
 	return _strip.init();
 }
 
