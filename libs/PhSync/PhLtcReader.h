@@ -18,12 +18,6 @@
 
 #include "PhAudio/PhAudioReader.h"
 
-#warning TODO put this in the settings
-/** Number of frame processed by the audio callback call */
-#define FRAME_PER_BUFFER 256
-/** Audio sample rate */
-#define SAMPLE_RATE 48000
-
 /**
  * @brief A synchronisation module via the LTC protocol
  */
@@ -39,16 +33,6 @@ public:
 	 * @param parent the reader's parent
 	 */
 	explicit PhLtcReader(PhTimeCodeType tcType = PhTimeCodeType25, QObject *parent = 0);
-
-	/**
-	 * @brief Initialize the reader
-	 *
-	 * It initialize the reader on the given input device if it's found,
-	 * or take the default input device if not.
-	 * @param deviceName The desired input device
-	 * @return True if succeed, false otherwise
-	 */
-	bool init(QString deviceName = "");
 
 	/**
 	 * @brief Get the reader clock

@@ -12,20 +12,21 @@ PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
 	_encoder(NULL)
 {
 	_encoder = ltc_encoder_create(1, 1, LTC_TV_625_50, LTC_USE_DATE);
+#warning TODO fix this in the settings or via autodetection
 	switch (tcType) {
 	case PhTimeCodeType25:
-		ltc_encoder_set_bufsize(_encoder, SAMPLE_RATE, 25.0);
-		//ltc_encoder_reinit(_encoder, SAMPLE_RATE, tcType, fps==25?LTC_TV_625_50:LTC_TV_525_60, LTC_USE_DATE);
-		ltc_encoder_reinit(_encoder, SAMPLE_RATE, 25.0, LTC_TV_625_50, LTC_USE_DATE);
+		ltc_encoder_set_bufsize(_encoder, 48000, 25.0);
+		//ltc_encoder_reinit(_encoder, 48000, tcType, fps==25?LTC_TV_625_50:LTC_TV_525_60, LTC_USE_DATE);
+		ltc_encoder_reinit(_encoder, 48000, 25.0, LTC_TV_625_50, LTC_USE_DATE);
 		break;
 	case PhTimeCodeType24:
 	case PhTimeCodeType2398:
-		ltc_encoder_set_bufsize(_encoder, SAMPLE_RATE, 24.0);
-		ltc_encoder_reinit(_encoder, SAMPLE_RATE, tcType, LTC_TV_525_60, LTC_USE_DATE);
+		ltc_encoder_set_bufsize(_encoder, 48000, 24.0);
+		ltc_encoder_reinit(_encoder, 48000, tcType, LTC_TV_525_60, LTC_USE_DATE);
 		break;
 	case PhTimeCodeType2997:
-		ltc_encoder_set_bufsize(_encoder, SAMPLE_RATE, 29.97);
-		ltc_encoder_reinit(_encoder, SAMPLE_RATE, tcType, LTC_TV_525_60, LTC_USE_DATE);
+		ltc_encoder_set_bufsize(_encoder, 48000, 29.97);
+		ltc_encoder_reinit(_encoder, 48000, tcType, LTC_TV_525_60, LTC_USE_DATE);
 		break;
 	default:
 		break;
@@ -33,68 +34,6 @@ PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
 
 	ltc_encoder_set_volume(_encoder, -18.0);
 
-}
-
-bool PhLtcWriter::init(QString deviceName)
-{
-	PHDBG(0) << deviceName;
-
-	if(!PhAudioWriter::init(deviceName)) {
-		return false;
-	}
-
-	int deviceCount = Pa_GetDeviceCount();
-	if( deviceCount <= 0 ) {
-		PHDBG(0) << "ERROR: Pa_CountDevices returned " << deviceCount;
-		return false;
-	}
-
-	PaStreamParameters outputDeviceInfo;
-	outputDeviceInfo.device = Pa_GetDefaultOutputDevice();
-	outputDeviceInfo.channelCount = 1;
-	outputDeviceInfo.sampleFormat = paInt8;
-	outputDeviceInfo.suggestedLatency = 0;
-	outputDeviceInfo.hostApiSpecificStreamInfo = NULL;
-
-	bool isThereOutput = false;
-	bool deviceFound = false;
-
-	for(int i = 0; i < deviceCount; i++ ) {
-		const PaDeviceInfo *deviceInfo;
-		deviceInfo = Pa_GetDeviceInfo( i );
-		if(deviceInfo->maxOutputChannels > 0 ) {
-			isThereOutput = true;
-			if(deviceName == deviceInfo->name) {
-				deviceFound = true;
-				outputDeviceInfo.device = i;
-				break;
-			}
-		}
-	}
-	if(!isThereOutput) {
-		PHDBG(0) << "No output device";
-		return false;
-	}
-	if(deviceName.length() and !deviceFound) {
-		PHDBG(0) << "Desired output not found :" << deviceName;
-		return false;
-	}
-
-
-	PaError err = Pa_OpenStream(&_stream, NULL, &outputDeviceInfo, SAMPLE_RATE, FRAME_PER_BUFFER, paNoFlag, audioCallback, this);
-
-	if(err != paNoError) {
-		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
-		return false;
-	}
-
-	err = Pa_StartStream( _stream );
-	if(err != paNoError) {
-		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
-		return false;
-	}
-
-	return true;
 }
 
 PhClock *PhLtcWriter::clock()

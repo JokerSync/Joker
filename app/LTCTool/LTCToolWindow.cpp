@@ -114,6 +114,7 @@ void LTCToolWindow::setupOutput()
 		                     tr("Error while loading the output device.\n"
 		                        "See log for more informations"),
 		                     QMessageBox::Ok);
+		on_generateCheckBox_clicked(false);
 	}
 }
 
@@ -125,6 +126,7 @@ void LTCToolWindow::setupInput()
 		                     tr("Error while loading the input device.\n"
 		                        "See log for more informations"),
 		                     QMessageBox::Ok);
+		on_readCheckBox_clicked(false);
 	}
 }
 
