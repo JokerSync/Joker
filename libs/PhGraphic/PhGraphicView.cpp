@@ -35,15 +35,13 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	//set the screen frequency to the most common value (60hz);
 	_screenFrequency = 60;
 	QScreen *screen = QGuiApplication::primaryScreen();
-	if (screen) {
+	if (screen)
 		_screenFrequency = screen->refreshRate();
-		t_Timer->start( 1000 / _screenFrequency);
-		PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << 1000 / _screenFrequency << "ms";
-	}
-	else{
-		t_Timer->start(10);
-		PHDEBUG << "Refresh rate set to the default value (100hz), timer restart every 10 ms";
-	}
+	else
+		PHDEBUG << "Unable to get the screen";
+
+	t_Timer->start( 500 / _screenFrequency);
+	PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << 1000 / _screenFrequency << "ms";
 }
 
 PhGraphicView::~PhGraphicView()
