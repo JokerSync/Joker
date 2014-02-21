@@ -14,10 +14,6 @@
 
 #include "PhAudio/PhAudioWriter.h"
 
-#define FRAME_PER_BUFFER 1920
-/** Audio sample rate */
-#define SAMPLE_RATE 48000
-
 /**
  * @brief Send master LTC generator
  */
@@ -32,20 +28,6 @@ public:
 	 */
 	explicit PhLtcWriter(PhTimeCodeType tcType, QObject *parent = 0);
 	/**
-	 * @brief Initialize the writer
-	 *
-	 * It initialize the writer on the given input device if it's found,
-	 * or take the default output device if not.
-	 * @param deviceName The desired output device
-	 * @return True if succeed, false otherwise
-	 */
-	bool init(QString deviceName = "");
-	/**
-	 * @brief Get the output list
-	 * @return Return all the output devices
-	 */
-	static QList<QString> outputList();
-	/**
 	 * @brief Get the writer clock
 	 * @return The writer clock
 	 */
@@ -53,14 +35,7 @@ public:
 
 private:
 
-	int processAudio(void *outputBuffer,
-	                 unsigned long framesPerBuffer);
-	static int audioCallback( const void *inputBuffer, void *outputBuffer,
-	                          unsigned long framesPerBuffer,
-	                          const PaStreamCallbackTimeInfo* timeInfo,
-	                          PaStreamCallbackFlags statusFlags,
-	                          void *userData );
-	float data;
+	int processAudio(const void *, void *outputBuffer, unsigned long framesPerBuffer);
 
 	PhClock _clock;
 	LTCEncoder *_encoder;
