@@ -7,8 +7,8 @@
 
 GraphicTestView::GraphicTestView(QWidget *parent)
 	: PhGraphicView( parent),
-	  _text1(&_font1, "eéaàiîoô"),
-	  _text2(&_font2, "The party is over!")
+	_text1(&_font1, "eéaàiîoô"),
+	_text2(&_font2, "The party is over!")
 {
 }
 
@@ -20,26 +20,26 @@ bool GraphicTestView::setFontFile(QString fontFile)
 bool GraphicTestView::init()
 {
 	PHDEBUG << "Initialize _image";
-	_image.setFilename(QCoreApplication::applicationDirPath() + "/../Resources/look.png");
+
+	_image.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/look.png");
 	_image.setTextureCoordinate(1,1);
 	_image.setRect(50,0,250,125);
-	if (! _image.init())
-	{
-		PHDEBUG << "_image not initialize";
+	if (!_image.init()) {
+		PHDEBUG << "_image not initialize : " << QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/look.png";
 		return false;
 	}
 
 	PHDEBUG << "Initialize _font";
-	if (!_font1.setFontFile(QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF"))
-	{
-		PHDEBUG << "SWENSON not initialize";
+	if (!_font1.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")) {
+		PHDEBUG << "SWENSON not initialize using path : " << QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF";
 		return false;
 	}
-	if (! _font2.setFontFile("/Library/Fonts/Arial.ttf"))
-	{
+#if defined(Q_OS_MAC)
+	if (!_font2.setFontFile("/Library/Fonts/Arial.ttf")) {
 		PHDEBUG << "ARIAL not initialize";
 		return false;
 	}
+#endif
 
 	PHDEBUG << "Initialize _text";
 	_text1.setRect(50, 100, 100, 100);
@@ -64,8 +64,7 @@ bool GraphicTestView::init()
 	_loop.setHThick(5);
 	_loop.setCrossHeight(60);
 	_loop.setColor(QColor(1, 255, 1));
-	if (! _loop.init())
-	{
+	if (!_loop.init()) {
 		PHDEBUG << "_loop not initialize";
 		return false;
 	}
@@ -110,12 +109,12 @@ void GraphicTestView::paint()
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 
-	glBegin(GL_QUADS); 	//Begining the cube's drawing
+	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
-		glTexCoord3f(0, 0, 1);	glVertex3f(0,				0,				0);
-		glTexCoord3f(1, 0, 1);	glVertex3f(this->width(),	0,				0);
-		glTexCoord3f(1, 1, 1);	glVertex3f(this->width(),	this->height(),	0);
-		glTexCoord3f(0, 1, 1);	glVertex3f(0,				this->height(), 0);
+		glTexCoord3f(0, 0, 1);  glVertex3f(0,               0,              0);
+		glTexCoord3f(1, 0, 1);  glVertex3f(this->width(),   0,              0);
+		glTexCoord3f(1, 1, 1);  glVertex3f(this->width(),   this->height(), 0);
+		glTexCoord3f(0, 1, 1);  glVertex3f(0,               this->height(), 0);
 	}
 	glEnd();
 
@@ -129,6 +128,12 @@ void GraphicTestView::paint()
 //	_loop.draw();
 
 	//_yuvRect.draw();
+
+	PhGraphicText frameRateText(&_font2, QString::number(this->refreshRate()));
+	frameRateText.setRect(0, 100, 100, 100);
+	frameRateText.setColor(Qt::red);
+	frameRateText.draw();
+
 }
 
 

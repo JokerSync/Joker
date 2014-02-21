@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef PHSTRIPDOCTEST_H
 #define PHSTRIPDOCTEST_H
 
@@ -28,6 +34,8 @@ private slots:
 	void getNextTextTest();
 	void getNextTextTestByPeople();
 	void getNextTextTestByPeopleList();
+	void getNextLoopTest();
+	void getPreviousLoopTest();
 
 private:
 	QString f2s(PhFrame frame);

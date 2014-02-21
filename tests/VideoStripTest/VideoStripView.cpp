@@ -7,6 +7,8 @@ VideoStripView::VideoStripView(QWidget *parent) :
 
 bool VideoStripView::init()
 {
+	connect(this, SIGNAL(beforePaint(PhTimeScale)), _strip.clock(), SLOT(tick(PhTimeScale)));
+
 	_strip.init();
 }
 

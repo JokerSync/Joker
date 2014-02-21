@@ -9,6 +9,8 @@ TEMPLATE = app
 
 QT	+= core gui
 
+VERSION = 1.0.0
+
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 INCLUDEPATH += $${JOKER_ROOT}/libs
@@ -29,14 +31,23 @@ SOURCES += main.cpp \
 FORMS += \
 	MainWindow.ui
 
-QMAKE_POST_LINK += echo $${RESOURCES_PATH};
-QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/look.png $${RESOURCES_PATH};
-QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/Bedizen.ttf $${RESOURCES_PATH};
-QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/fonts/SWENSON.TTF $${RESOURCES_PATH};
+mac {
+	DEFINES += PATH_TO_RESSOURCES=\\\"/../Resources/\\\"
+}
+
+win32 {
+	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
+}
+
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\img\look.png) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\Bedizen.ttf) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\SWENSON.TTF) $${RESOURCES_PATH} $${CS}
 
 CONFIG(release, debug|release) {
 	mac {
 		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
+		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)/tools/$${TARGET}_v$${VERSION}.dmg
 	}
 
 }
+

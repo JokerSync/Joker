@@ -1,7 +1,8 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include <QFile>
 #include <QCoreApplication>
@@ -44,14 +45,14 @@ PhClock *PhGraphicStrip::clock()
 
 void PhGraphicStrip::setSettings(QSettings *settings)
 {
+	PHDEBUG;
 	_settings = settings;
 }
 
 
 bool PhGraphicStrip::setFontFile(QString fontFile)
 {
-	if(_textFont.setFontFile(fontFile))
-	{
+	if(_textFont.setFontFile(fontFile)) {
 		if(_settings)
 			_settings->setValue("StripFontFile", fontFile);
 		return true;
@@ -62,31 +63,40 @@ bool PhGraphicStrip::setFontFile(QString fontFile)
 
 bool PhGraphicStrip::init()
 {
-	PHDEBUG << "PhGraphicStrip::init()";
+	PHDEBUG << _settings;
 
 	// Clear the data stored
 	clearData();
 
-	//Load the strip background
-	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + "/../Resources/motif-240.png");
+	PHDEBUG << "Load the strip background";
+	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png");
 	_stripBackgroundImage.init();
 
-	// Init the sync bar
+	PHDEBUG << "Init the sync bar";
 	_stripSyncBar.setColor(QColor(225, 86, 108));
 
-	// Load the font file
+	PHDEBUG << "Load the font file";
 	QString fontFile = "";
 	if(_settings != NULL)
 		fontFile = _settings->value("StripFontFile", "").toString();
-	if(!QFile(fontFile).exists())
-	{
-		fontFile = QCoreApplication::applicationDirPath() + "/../Resources/SWENSON.TTF";
-		_settings->setValue("StripFontFile", fontFile);
+	else
+		PHDEBUG << "no settings...";
+
+	if(!QFile(fontFile).exists()) {
+		PHDEBUG << "File not found:" << fontFile;
+		fontFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
+		if(_settings != NULL)
+			_settings->setValue("StripFontFile", fontFile);
+		else
+			PHDEBUG << "no settings...";
 	}
 	_textFont.setFontFile(fontFile);
-	_textFont.setBoldness(_settings->value("boldness", 0).toInt());
 
-	_hudFont.setFontFile(QCoreApplication::applicationDirPath() + "/../Resources/ARIAL.TTF");
+	if(_settings != NULL)
+		_textFont.setBoldness(_settings->value("boldness", 0).toInt());
+
+
+	_hudFont.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "ARIAL.TTF");
 
 	return true;
 }
@@ -94,23 +104,23 @@ bool PhGraphicStrip::init()
 void PhGraphicStrip::clearData()
 {
 	foreach(PhGraphicText * gPeople, _graphicPeoples.values())
-		delete gPeople;
+	delete gPeople;
 	_graphicPeoples.clear();
 
 	foreach(PhGraphicSolidRect * gCut, _graphicCuts.values())
-		delete gCut;
+	delete gCut;
 	_graphicCuts.clear();
 
 	foreach(PhGraphicText * gText, _graphicTexts.values())
-		delete gText;
+	delete gText;
 	_graphicTexts.clear();
 
 	foreach(PhGraphicLoop * gLoop, _graphicLoops.values())
-		delete gLoop;
+	delete gLoop;
 	_graphicLoops.clear();
 
 	foreach(PhGraphicRect * gOff, _graphicOffs.values())
-		delete gOff;
+	delete gOff;
 	_graphicOffs.clear();
 }
 
@@ -130,20 +140,25 @@ void PhGraphicStrip::setPixelPerFrame(long value)
 	pixelPerFrame = value;
 }
 
+QColor PhGraphicStrip::computeColor(PhPeople * people)
+{
+	if(_selectedPeoples and !_selectedPeoples->contains(people)) {
+		return QColor(100, 100, 100);
+	}
+	else {
+		return people->getColor();
+	}
+}
 
 void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-	_clock.tick(60);
 	//	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
-	if(height > 0)
-	{
-		if(_settings)
-		{
+	if(height > 0) {
+		if(_settings) {
 			setPixelPerFrame(_settings->value("speed", 12).toInt());
 			if(getTextFont()->getBoldness() != _settings->value("boldness", 0).toInt())
 				getTextFont()->setBoldness(_settings->value("boldness", 0).toInt());
@@ -166,12 +181,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		PhFrame clockFrame = _clock.frame() + delay * fps / 1000;
 
-		if(_settings->value("stripTestMode", false).toBool())
-		{
+		if(_settings->value("stripTestMode", false).toBool()) {
 			foreach(PhStripCut * cut, _doc.getCuts())
 			{
-				if(cut->getTimeIn() == clockFrame)
-				{
+				if(cut->getTimeIn() == clockFrame) {
 					PhGraphicSolidRect white(x, y, width, height);
 					white.setColor(QColor("white"));
 					white.draw();
@@ -217,29 +230,18 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 #warning TODO change it for pointers
 		bool trackFull[_trackNumber];
-		for(int i = 0; i < _trackNumber; i++)
-		{
+		for(int i = 0; i < _trackNumber; i++) {
 			trackFull[i] = false;
 		}
 
 		bool displayNextText = _settings->value("displayNextText", true).toBool();
 
-
-		int appHeight = 1;
-		int verticalPixelPerFrame = 1;
-		if(displayNextText){
-			if(_settings->value("stripHeight", 0.25f).toFloat() != 0)
-				appHeight = height / _settings->value("stripHeight", 0.25f).toFloat();
-			verticalPixelPerFrame = _settings->value("verticalPixelPerFrame", 6).toInt();
-
-		}
-
+		int verticalPixelPerFrame = verticalPixelPerFrame = _settings->value("verticalPixelPerFrame", 1).toInt();
 
 		foreach(PhStripText * text, _doc.getTexts())
 		{
 			PhGraphicText* gText = _graphicTexts[text];
-			if(gText == NULL)
-			{
+			if(gText == NULL) {
 				gText = new PhGraphicText( &_textFont, text->getContent());
 
 				gText->setZ(-1);
@@ -250,22 +252,13 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			int track = text->getTrack();
 
 
-			if( ! ((text->getTimeOut() < frameIn) || (text->getTimeIn() > frameOut)) )
-			{
+			if( !((text->getTimeOut() < frameIn) || (text->getTimeIn() > frameOut)) ) {
 				gText->setX(x + text->getTimeIn() * pixelPerFrame - offset);
 				gText->setWidth((text->getTimeOut() - text->getTimeIn()) * pixelPerFrame);
 				gText->setY(y + track * trackHeight);
 				gText->setHeight(trackHeight);
 				gText->setZ(-1);
-				if(_selectedPeoples and !_selectedPeoples->contains(text->getPeople()))
-				{
-					gText->setColor(Qt::gray);
-				}
-				else
-				{
-					if(text->getPeople())
-						gText->setColor(QColor(text->getPeople()->getColor()));
-				}
+				gText->setColor(computeColor(text->getPeople()));
 
 				gText->draw();
 			}
@@ -282,12 +275,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			// - it is the first text
 			// - it is a different people
 			// - the distance between the latest text and the current is superior to a limit
-			if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))
-			{
+			if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople)) {
 				PhPeople * people = text->getPeople();
 				PhGraphicText * gPeople = _graphicPeoples[people];
-				if(gPeople == NULL)
-				{
+				if(gPeople == NULL) {
 					gPeople = new PhGraphicText(&_hudFont, people->getName());
 					gPeople->setColor(QColor(people->getColor()));
 					gPeople->setWidth(people->getName().length() * 12);
@@ -301,19 +292,11 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->setY(y + track * trackHeight);
 				gPeople->setZ(-1);
 				gPeople->setHeight(trackHeight / 2);
-				if(_selectedPeoples and !_selectedPeoples->contains(people))
-				{
-					gPeople->setColor(Qt::gray);
-				}
-				else
-				{
-					gPeople->setColor(QColor(people->getColor()));
-				}
+				gPeople->setColor(computeColor(people));
 				gPeople->draw();
 
 				//Check if the name is printed on the screen
-				if( (frameIn < text->getTimeOut()) and (text->getTimeIn() - gPeople->getWidth() / pixelPerFrame < frameOut) )
-				{
+				if( (frameIn < text->getTimeOut()) && (text->getTimeIn() - gPeople->getWidth() / pixelPerFrame < frameOut) ) {
 					trackFull[track] = true;
 				}
 
@@ -353,12 +336,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			//                trackFull[track] = true;
 			//                //PHDEBUG << people->getName();
 			//            }
-			if(displayNextText and (frameOut < text->getTimeIn()) and ((lastText == NULL) or (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople)))
-			{
+			if(displayNextText && (frameOut < text->getTimeIn()) && ((lastText == NULL) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))) {
 				PhPeople * people = text->getPeople();
 				PhGraphicText * gPeople = _graphicPeoples[people];
-				if(gPeople == NULL)
-				{
+				if(gPeople == NULL) {
 					gPeople = new PhGraphicText(&_textFont, people->getName());
 					gPeople->setColor(QColor(people->getColor()));
 					gPeople->setWidth(people->getName().length() * 12);
@@ -370,21 +351,19 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				int howFarIsText = (text->getTimeIn() - frameOut) * verticalPixelPerFrame;
 				//This line is used to see which text's name will be displayed
 				gPeople->setX(width - gPeople->getWidth());
-				gPeople->setY(appHeight - height - howFarIsText / 6);
+				gPeople->setY(y - howFarIsText);
 				gPeople->setZ(-3);
 				gPeople->setHeight(trackHeight / 2);
 				gPeople->setColor(QColor(people->getColor()));
 
 				PhGraphicSolidRect background(gPeople->getX(), gPeople->getY(), gPeople->getWidth(), gPeople->getHeight() + 2);
-				if(_selectedPeoples)
-				{
+				if(_selectedPeoples) {
 					if(_selectedPeoples->contains(people))
 						background.setColor(QColor(180, 180, 180));
 					else
 						background.setColor(QColor(90,90,90));
 				}
-				else
-				{
+				else {
 					background.setColor(QColor(180, 180, 180));
 				}
 
@@ -402,11 +381,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		foreach(PhStripCut * cut, _doc.getCuts())
 		{
-			if( (frameIn < cut->getTimeIn()) && (cut->getTimeIn() < frameOut))
-			{
+			if( (frameIn < cut->getTimeIn()) && (cut->getTimeIn() < frameOut)) {
 				PhGraphicSolidRect *gCut = _graphicCuts[cut];
-				if(gCut == NULL)
-				{
+				if(gCut == NULL) {
 					gCut = new PhGraphicSolidRect();
 					gCut->setColor(QColor(0, 0, 0));
 					gCut->setZ(-1);
@@ -426,15 +403,12 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				break;
 		}
 
-
 		foreach(PhStripLoop * loop, _doc.getLoops())
 		{
 			// This calcul allow the cross to come smoothly on the screen (height / 8 /pixelPerFrame)
-			if( ((loop->getTimeIn() + height / 8 /pixelPerFrame) > frameIn) && ((loop->getTimeIn() - height / 8 /pixelPerFrame ) < frameOut))
-			{
+			if( ((loop->getTimeIn() + height / 8 /pixelPerFrame) > frameIn) && ((loop->getTimeIn() - height / 8 /pixelPerFrame ) < frameOut)) {
 				PhGraphicLoop * gLoop = _graphicLoops[loop];
-				if(gLoop == NULL)
-				{
+				if(gLoop == NULL) {
 					gLoop = new PhGraphicLoop();
 					gLoop->setColor(QColor(0, 0, 0, 1));
 					_graphicLoops[loop] = gLoop;
@@ -450,24 +424,40 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gLoop->draw();
 				loopCounter++;
 			}
-			if((loop->getTimeIn() - height / 8 /pixelPerFrame ) < frameOut)
+
+			if(displayNextText && ((loop->getTimeIn() + height / 8 / pixelPerFrame) > frameIn)) {
+				PhGraphicLoop gLoopPred;
+
+				int howFarIsLoop = (loop->getTimeIn() - frameOut) * verticalPixelPerFrame;
+
+				gLoopPred.setColor(Qt::blue);
+				gLoopPred.setHorizontalLoop(true);
+				gLoopPred.setZ(-3);
+
+				gLoopPred.setX(width - width / 10);
+				gLoopPred.setY(y - howFarIsLoop);
+				gLoopPred.setHeight(30);
+
+				gLoopPred.setHThick(3);
+				gLoopPred.setCrossHeight(20);
+				gLoopPred.setWidth(width / 10);
+
+				gLoopPred.draw();
+			}
+			if((loop->getTimeIn() - height / 8 / pixelPerFrame ) > frameOut + 25 * 30)
 				break;
 		}
 
 		foreach(PhStripOff * off, _doc.getOffs())
 		{
-			if( (frameIn < off->getTimeOut()) and (off->getTimeIn() < frameOut) )
-			{
+			if( (frameIn < off->getTimeOut()) && (off->getTimeIn() < frameOut) ) {
 				PhGraphicSolidRect *gOff = _graphicOffs[off];
-				if(gOff == NULL)
-				{
+				if(gOff == NULL) {
 					gOff = new PhGraphicSolidRect();
-					if(off->getPeople())
-						gOff->setColor(QColor(off->getPeople()->getColor()));
-
 					_graphicOffs[off] = gOff;
 					gOff->setZ(-1);
 				}
+				gOff->setColor(computeColor(off->getPeople()));
 				gOff->setX(x + off->getTimeIn() * pixelPerFrame - offset);
 				gOff->setY(y + off->getTrack() * trackHeight + trackHeight * 0.8);
 				gOff->setHeight(trackHeight / 20);

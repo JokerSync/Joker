@@ -24,8 +24,7 @@ MainWindow::MainWindow(QSettings *settings, QWidget *parent) :
 
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
-	if(_settings->value("fullScreen", false).toBool())
-	{
+	if(_settings->value("fullScreen", false).toBool()) {
 		this->connect(&_fullScreenTimer, SIGNAL(timeout()), this, SLOT(on_actionFull_screen_triggered()));
 		_fullScreenTimer.start(1000);
 	}
@@ -40,18 +39,15 @@ MainWindow::~MainWindow()
 void MainWindow::openFile(QString fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
-  //  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
-	if(QFile::exists(fileName))
-	{
-		if(_doc->openDetX(fileName))
-		{
+	//  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
+	if(QFile::exists(fileName)) {
+		if(_doc->openDetX(fileName)) {
 			_strip->clock()->setTimeCodeType(_doc->getTCType());
 			_strip->clock()->setFrame(_doc->getLastFrame());
 			this->setWindowTitle(fileName);
 
 			QFileInfo fileInfo(_doc->getVideoPath());
-			if (fileInfo.exists())
-			{
+			if (fileInfo.exists()) {
 				_videoEngine->open(_doc->getVideoPath());
 				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
 			}
@@ -64,8 +60,7 @@ void MainWindow::openFile(QString fileName)
 void MainWindow::on_actionOpen_triggered()
 {
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
-	if(dlg.exec())
-	{
+	if(dlg.exec()) {
 		QString fileName = dlg.selectedFiles()[0];
 		openFile(fileName);
 	}
@@ -161,8 +156,7 @@ void MainWindow::on_actionOpen_Video_triggered()
 bool MainWindow::openVideoFile(QString videoFileName)
 {
 	QFileInfo fileInfo(videoFileName);
-	if (fileInfo.exists())
-	{
+	if (fileInfo.exists()) {
 		_videoEngine->open(videoFileName);
 //#warning TODO read media length from video file
 //		ui->mediaController->setMediaLength(7500);
@@ -186,8 +180,7 @@ void MainWindow::on_actionSet_Time_Code_triggered()
 void MainWindow::on_actionChange_font_triggered()
 {
 	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
-	if(QFile(fontFile).exists())
-	{
+	if(QFile(fontFile).exists()) {
 		if(!_strip->setFontFile(fontFile))
 			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
 	}

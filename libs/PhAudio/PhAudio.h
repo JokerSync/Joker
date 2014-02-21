@@ -15,6 +15,9 @@ public:
 
 	virtual bool init(QString deviceName);
 
+	/**
+	 * @brief Close the audio stream
+	 */
 	void close();
 
 signals:

@@ -1,7 +1,8 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHLEAP_H
 #define PHLEAP_H
@@ -19,15 +20,15 @@ using namespace Leap;
 class PhLeap : public QObject, public Listener
 {
 
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    explicit PhLeap(QObject *parent = 0);
-    virtual void onFrame(const Controller&);
+	explicit PhLeap(QObject *parent = 0);
+	virtual void onFrame(const Controller&);
 
 signals:
-    void setPosition(int move);
-    void setRate(float move);
+	void setPosition(int move);
+	void setRate(float move);
 
 
 };

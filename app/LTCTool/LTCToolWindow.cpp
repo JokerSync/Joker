@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "LTCToolWindow.h"
 #include "ui_LTCToolWindow.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -35,8 +41,7 @@ LTCToolWindow::~LTCToolWindow()
 void LTCToolWindow::on_actionSet_TC_In_triggered()
 {
 	PhTimeCodeDialog dlg(_LTCWriter.clock()->timeCodeType(), ui->widgetMaster->getFirstFrame());
-	if(dlg.exec())
-	{
+	if(dlg.exec()) {
 		ui->widgetMaster->setFirstFrame(dlg.frame());
 		_LTCWriter.clock()->setFrame(ui->widgetMaster->getFirstFrame());
 		updateInfos();
@@ -46,8 +51,7 @@ void LTCToolWindow::on_actionSet_TC_In_triggered()
 void LTCToolWindow::on_actionSet_TC_Out_triggered()
 {
 	PhTimeCodeDialog dlg(_LTCWriter.clock()->timeCodeType(), ui->widgetMaster->getFirstFrame() + ui->widgetMaster->getMediaLength());
-	if(dlg.exec())
-	{
+	if(dlg.exec()) {
 		if(dlg.frame() > ui->widgetMaster->getFirstFrame())
 			ui->widgetMaster->setMediaLength(dlg.frame() - ui->widgetMaster->getFirstFrame());
 		else
@@ -74,8 +78,7 @@ void LTCToolWindow::updateInfos()
 void LTCToolWindow::on_actionPreferences_triggered()
 {
 	PreferencesPanel dlg(_settings->value("audioOutput").toString(), _settings->value("audioInput").toString());
-	if(dlg.exec())
-	{
+	if(dlg.exec()) {
 		PHDEBUG << dlg.selectedAudioOutput();
 		_settings->setValue("audioOutput", dlg.selectedAudioOutput());
 		_settings->setValue("audioInput", dlg.selectedAudioInput());
@@ -101,9 +104,9 @@ void LTCToolWindow::setupOutput()
 	_LTCWriter.close();
 	if(!_LTCWriter.init(_settings->value("audioOutput", "").toString())) {
 		QMessageBox::warning(this, tr("Error"),
-										tr("Error while loading the output device.\n"
-										   "See log for more informations"),
-										QMessageBox::Ok);
+		                     tr("Error while loading the output device.\n"
+		                        "See log for more informations"),
+		                     QMessageBox::Ok);
 	}
 }
 
@@ -112,8 +115,8 @@ void LTCToolWindow::setupInput()
 	_LTCReader.close();
 	if(!_LTCReader.init(_settings->value("audioInput", "").toString())) {
 		QMessageBox::warning(this, tr("Error"),
-										tr("Error while loading the input device.\n"
-										   "See log for more informations"),
-										QMessageBox::Ok);
+		                     tr("Error while loading the input device.\n"
+		                        "See log for more informations"),
+		                     QMessageBox::Ok);
 	}
 }

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "PreferencesPanel.h"
 #include "ui_PreferencesPanel.h"
 
@@ -9,22 +15,15 @@ PreferencesPanel::PreferencesPanel(QString audioOutput, QString audioInput, QWid
 	ui(new Ui::PreferencesPanel)
 {
 	ui->setupUi(this);
-	foreach(QString output, PhLtcWriter::outputList())
-	{
-		ui->comboBoxOutput->addItem(output);
-		if(output == audioOutput)
-		{
-			ui->comboBoxOutput->setCurrentIndex(ui->comboBoxOutput->children().length());
-		}
-	}
-	foreach(QString input, PhLtcReader::inputList())
-	{
-		ui->comboBoxInput->addItem(input);
-		if(input == audioInput)
-		{
-			ui->comboBoxInput->setCurrentIndex(ui->comboBoxInput->children().length());
-		}
-	}
+	QList<QString> outputList = PhLtcWriter::outputList();
+	ui->comboBoxOutput->addItems(outputList);
+	if(outputList.contains(audioOutput))
+		ui->comboBoxOutput->setCurrentText(audioOutput);
+
+	QList<QString> inputList = PhLtcReader::inputList();
+	ui->comboBoxInput->addItems(inputList);
+	if(inputList.contains(audioInput))
+		ui->comboBoxInput->setCurrentText(audioInput);
 }
 
 PreferencesPanel::~PreferencesPanel()

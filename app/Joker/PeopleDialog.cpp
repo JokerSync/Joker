@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "PeopleDialog.h"
 #include "ui_PeopleDialog.h"
 #include "PhTools/PhDebug.h"
@@ -10,11 +16,11 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, QList<PhPeople*> *p
 {
 	ui->setupUi(this);
 
-	foreach (PhPeople* people, *peopleList) {
+	foreach(PhPeople* people, *peopleList) {
 		_oldPeopleList.append(people);
 	}
 
-	foreach (PhPeople* people, _doc->getPeoples().values()) {
+	foreach(PhPeople* people, _doc->getPeoples().values()) {
 		ui->peopleList->addItem(people->getName());
 
 		if(_oldPeopleList.contains(people))
@@ -32,8 +38,8 @@ PeopleDialog::~PeopleDialog()
 
 void PeopleDialog::on_peopleList_itemSelectionChanged()
 {
-    _peopleList->clear();
-	foreach (QListWidgetItem* item, ui->peopleList->selectedItems()) {
+	_peopleList->clear();
+	foreach(QListWidgetItem* item, ui->peopleList->selectedItems()) {
 		_peopleList->append(_doc->getPeopleByName(item->text()));
 	}
 	if(_peopleList->count() == _doc->getPeoples().count())
@@ -42,8 +48,8 @@ void PeopleDialog::on_peopleList_itemSelectionChanged()
 
 void PeopleDialog::on_buttonBox_rejected()
 {
-    _peopleList->clear();
-	foreach (PhPeople* people, _oldPeopleList) {
+	_peopleList->clear();
+	foreach(PhPeople* people, _oldPeopleList) {
 		_peopleList->append(people);
 	}
 }

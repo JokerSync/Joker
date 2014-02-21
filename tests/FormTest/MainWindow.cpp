@@ -3,6 +3,7 @@
 #include <QFileDialog>
 #include <QPainter>
 #include <QMessageBox>
+#include <QScreen>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -11,13 +12,13 @@
 #include "PhTools/PhPictureTools.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow),
+	QMainWindow(parent),
+	ui(new Ui::MainWindow),
 	_settings("Phonations","FormTest"),
 	_image(NULL),
 	_rgb(NULL)
 {
-    ui->setupUi(this);
+	ui->setupUi(this);
 
 	QString mode = _settings.value("mode", "rgb").toString();
 	if(mode == "rgb")
@@ -26,6 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
 		generateYUV();
 	else
 		openFile(mode);
+	QScreen *screen = QGuiApplication::primaryScreen();
+	if (screen)
+		ui->labelFrequency->setText(QString::number(screen->refreshRate()) + "hz");
+
+
 }
 
 MainWindow::~MainWindow()
@@ -71,13 +77,11 @@ bool MainWindow::openFile(QString fileName)
 	if(_image)
 		delete _image;
 	_image = new QImage();
-	if(_image->load(fileName))
-	{
+	if(_image->load(fileName)) {
 		this->update();
 		return true;
 	}
-	else
-	{
+	else {
 		delete _image;
 		return false;
 	}
@@ -85,8 +89,7 @@ bool MainWindow::openFile(QString fileName)
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-	if(_image)
-	{
+	if(_image) {
 		QPainter painter(this);
 		painter.drawImage(0, 0, *_image);
 	}
@@ -106,8 +109,7 @@ void MainWindow::on_actionDocumentation_triggered()
 void MainWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this);
-	if(QFile::exists(fileName))
-	{
+	if(QFile::exists(fileName)) {
 		if(openFile(fileName))
 			_settings.setValue("mode", fileName);
 		else
@@ -117,7 +119,7 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionGenerate_YUV_pattern_triggered()
 {
-    generateYUV();
+	generateYUV();
 	_settings.setValue("mode", "yuv");
 }
 
