@@ -9,14 +9,14 @@ script:
 # Build AutoTest
 - mkdir AutoTest && cd AutoTest
 - qmake ../../tests/AutoTest/AutoTest.pro
-- make
+- make 1>/dev/null
 # Run AutoTest
 - ./AutoTest
 - cd .. 
 # Build Joker
 - mkdir Joker && cd Joker
 - qmake ../../app/Joker/Joker.pro
-- make
+- make 1>/dev/null
 - cd ..
 - cd ..
 - ./scripts/doxygen.sh
