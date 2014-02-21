@@ -29,3 +29,5 @@ Thumbs.db
 doc/html
 doxygen_error.log
 *.qm
+
+*.orig

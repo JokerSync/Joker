@@ -41,7 +41,6 @@ QList<PhPeople *> *VideoStripView::getSelectedPeoples()
 
 bool VideoStripView::init()
 {
-
 	_titleBackgroundRect.setColor(QColor(0, 0, 128));
 	_titleText.setColor(QColor(255, 255, 255));
 	_tcText.setColor(Qt::green);
@@ -49,12 +48,13 @@ bool VideoStripView::init()
 	_noVideoSyncError.setColor(QColor(0, 0, 0));
 	_currentPeopleName.setColor(QColor(128, 128, 128));
 
+	connect(this, SIGNAL(beforePaint(PhTimeScale)), _strip.clock(), SLOT(tick(PhTimeScale)));
+
 	return _strip.init();
 }
 
 void VideoStripView::paint()
 {
-
 	PHDBG(1) << _strip.clock()->time() - (_sony ? _sony->clock()->time() : 0);
 
 	int y = 0;
