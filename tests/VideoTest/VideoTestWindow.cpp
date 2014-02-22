@@ -51,7 +51,12 @@ void VideoTestWindow::resizeEvent(QResizeEvent *)
 {
 	PHDEBUG << this->width() << this->height();
 	_mediaPanelDialog.move(this->x() + this->width() / 2 - _mediaPanelDialog.width() / 2,
-	                       this->y() + this->height() * 0.95 - _mediaPanelDialog.height());
+						   this->y() + this->height() * 0.95 - _mediaPanelDialog.height());
+}
+
+void VideoTestWindow::closeEvent(QCloseEvent *)
+{
+	_mediaPanelDialog.close();
 }
 
 void VideoTestWindow::on_actionPlay_pause_triggered()

@@ -26,6 +26,7 @@ INCLUDEPATH += ../../libs
 # Currently LTC works only on Unix system
 unix {
 	CONFIG += ltc
+include(../../libs/PhAudio/PhAudio.pri)
 }
 
 include(../../libs/PhTools/PhTools.pri)
@@ -34,7 +35,6 @@ include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 include(../../libs/PhVideo/PhVideo.pri)
-include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
 
 #Main app
