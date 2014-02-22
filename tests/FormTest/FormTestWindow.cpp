@@ -6,41 +6,40 @@
 #include <QScreen>
 #include <QTime>
 
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "FormTestWindow.h"
+#include "ui_FormTestWindow.h"
 
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 
-MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent),
-	ui(new Ui::MainWindow),
-	_settings("Phonations","FormTest"),
+FormTestWindow::FormTestWindow(FormTestSettings *settings, QWidget *parent) :
+	PhDocumentWindow(settings, parent),
+	ui(new Ui::FormTestWindow),
+	_settings(settings),
 	_image(NULL),
 	_rgb(NULL)
 {
 	ui->setupUi(this);
 
-	QString mode = _settings.value("mode", "rgb").toString();
+	QString mode = _settings->lastFile();
 	if(mode == "rgb")
 		generateRGB();
 	else if(mode == "yuv")
 		generateYUV();
-	else
+	else if(QFile::exists(mode))
 		openFile(mode);
+
 	QScreen *screen = QGuiApplication::primaryScreen();
 	if (screen)
 		ui->labelFrequency->setText(QString::number(screen->refreshRate()) + "hz");
-
-
 }
 
-MainWindow::~MainWindow()
+FormTestWindow::~FormTestWindow()
 {
 	delete ui;
 }
 
-void MainWindow::generateRGB()
+void FormTestWindow::generateRGB()
 {
 	if(_rgb)
 		delete _rgb;
@@ -53,14 +52,14 @@ void MainWindow::generateRGB()
 	this->update();
 }
 
-void MainWindow::generateYUV()
+void FormTestWindow::generateYUV()
 {
 	if(_rgb)
 		delete _rgb;
 	if(_image)
 		delete _image;
-	int w = 1920;
-	int h = 1080;
+	int w = 300;
+	int h = 200;
 	unsigned char *yuv = PhPictureTools::generateYUVPattern(w, h);
 	_rgb = new unsigned char[w * h * 3];
 	QTime timer;
@@ -73,14 +72,14 @@ void MainWindow::generateYUV()
 	delete yuv;
 }
 
-bool MainWindow::openFile(QString fileName)
+bool FormTestWindow::openFile(QString fileName)
 {
 	if(_image)
 		delete _image;
 	_image = new QImage();
 	if(_image->load(fileName)) {
 		this->update();
-		return true;
+		return PhDocumentWindow::openFile(fileName);
 	}
 	else {
 		delete _image;
@@ -88,7 +87,7 @@ bool MainWindow::openFile(QString fileName)
 	}
 }
 
-void MainWindow::paintEvent(QPaintEvent *event)
+void FormTestWindow::paintEvent(QPaintEvent *)
 {
 	if(_image) {
 		QPainter painter(this);
@@ -96,36 +95,36 @@ void MainWindow::paintEvent(QPaintEvent *event)
 	}
 }
 
-void MainWindow::on_actionAbout_triggered()
+void FormTestWindow::on_actionAbout_triggered()
 {
 	_about.exec();
 }
 
-void MainWindow::on_actionDocumentation_triggered()
+void FormTestWindow::on_actionDocumentation_triggered()
 {
 	if(QDesktopServices::openUrl(QUrl("http://www.doublage.org", QUrl::TolerantMode)))
 		PHDEBUG <<"openned url correctly";
 }
 
-void MainWindow::on_actionOpen_triggered()
+void FormTestWindow::on_actionOpen_triggered()
 {
-	QString fileName = QFileDialog::getOpenFileName(this);
+	QString fileName = QFileDialog::getOpenFileName(this, "Open a picture file...", _settings->lastFolder(), "Picture file (*.png *.jpg)");
 	if(QFile::exists(fileName)) {
 		if(openFile(fileName))
-			_settings.setValue("mode", fileName);
+			_settings->setLastFile(fileName);
 		else
 			QMessageBox::critical(this, "Error", "Unable to open file");
 	}
 }
 
-void MainWindow::on_actionGenerate_YUV_pattern_triggered()
+void FormTestWindow::on_actionGenerate_YUV_pattern_triggered()
 {
 	generateYUV();
-	_settings.setValue("mode", "yuv");
+	_settings->setLastFile("yuv");
 }
 
-void MainWindow::on_actionGenerate_RGB_pattern_triggered()
+void FormTestWindow::on_actionGenerate_RGB_pattern_triggered()
 {
 	generateRGB();
-	_settings.setValue("mode", "rgb");
+	_settings->setLastFile("rgb");
 }

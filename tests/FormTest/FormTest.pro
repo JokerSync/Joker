@@ -36,11 +36,12 @@ include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp \
+        FormTestWindow.cpp \
     AboutDialog.cpp
 
-HEADERS  += MainWindow.h \
-    AboutDialog.h
+HEADERS  += FormTestWindow.h \
+    AboutDialog.h \
+    FormTestSettings.h
 
-FORMS    += MainWindow.ui \
+FORMS    += FormTestWindow.ui \
     AboutDialog.ui

@@ -1,36 +1,38 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include <QDialog>
-#include <QSettings>
 #include <QGraphicsScene>
 
 #include "AboutDialog.h"
 
+#include "PhCommonUI/PhDocumentWindow.h"
+
+#include "FormTestSettings.h"
+
 namespace Ui {
-class MainWindow;
+class FormTestWindow;
 }
 
 class GoTo;
 class AboutDialog;
 
-class MainWindow : public QMainWindow
+class FormTestWindow : public PhDocumentWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+	explicit FormTestWindow(FormTestSettings *settings, QWidget *parent = 0);
+	~FormTestWindow();
 
 	void generateRGB();
 
 	void generateYUV();
 
+protected:
 	bool openFile(QString fileName);
 
-protected:
-	void paintEvent(QPaintEvent *event);
+	void paintEvent(QPaintEvent *);
 private slots:
 	void on_actionAbout_triggered();
 
@@ -43,9 +45,9 @@ private slots:
 	void on_actionGenerate_RGB_pattern_triggered();
 
 private:
-	Ui::MainWindow *ui;
+	Ui::FormTestWindow *ui;
 	AboutDialog _about;
-	QSettings _settings;
+	FormTestSettings *_settings;
 	QImage *_image;
 	unsigned char * _rgb;
 };
