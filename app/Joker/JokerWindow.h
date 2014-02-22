@@ -9,7 +9,6 @@
 
 #include <QMainWindow>
 #include <QMessageBox>
-#include <QSettings>
 #include <QPropertyAnimation>
 
 #include "VideoStripView.h"
@@ -21,6 +20,7 @@
 
 #include "SonyVideoStripSynchronizer.h"
 #include "PropertyDialog.h"
+#include "JokerSettings.h"
 
 namespace Ui {
 class JokerWindow;
@@ -50,7 +50,7 @@ public:
 	 *
 	 * @param settings The application settings
 	 */
-	explicit JokerWindow(QSettings *settings);
+	explicit JokerWindow(JokerSettings *settings);
 	~JokerWindow();
 
 	/**
@@ -176,7 +176,7 @@ private:
 	PhGraphicStrip * _strip;
 	PhVideoEngine * _videoEngine;
 	PhStripDoc *_doc;
-	QSettings *_settings;
+	JokerSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
 #if USE_LTC

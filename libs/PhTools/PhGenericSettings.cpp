@@ -2,6 +2,7 @@
 
 PhGenericSettings::PhGenericSettings() : _settings(ORG_NAME, APP_NAME)
 {
+	QSettings::setDefaultFormat(QSettings::NativeFormat);
 }
 
 void PhGenericSettings::setIntValue(QString name, int value)

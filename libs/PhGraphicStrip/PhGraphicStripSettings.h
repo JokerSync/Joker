@@ -1,9 +1,9 @@
 #ifndef PHGRAPHICSTRIPSETTINGS_H
 #define PHGRAPHICSTRIPSETTINGS_H
 
-#include "PhGraphic/PhGraphicSettings.h"
+#include <QString>
 
-class PhGraphicStripSettings : public PhGraphicSettings
+class PhGraphicStripSettings
 {
 public:
 	virtual float stripHeight() = 0;

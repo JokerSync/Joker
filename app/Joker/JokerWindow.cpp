@@ -19,7 +19,7 @@
 #include "PreferencesDialog.h"
 #include "PeopleDialog.h"
 
-JokerWindow::JokerWindow(QSettings *settings) :
+JokerWindow::JokerWindow(JokerSettings *settings) :
 	QMainWindow(NULL),
 	ui(new Ui::JokerWindow),
 	_settings(settings),
@@ -98,13 +98,13 @@ JokerWindow::JokerWindow(QSettings *settings) :
 
 	this->setFocus();
 
-	if(_settings->value("stripTestMode").toBool()) {
+	if(_settings->stripTestMode()) {
 #warning TODO do we warn the user that test mode is on?
 		ui->actionTest_mode->setChecked(true);
 	}
 
 #warning TODO fix fullscreen on startup
-	if(_settings->value("startFullScreen", false).toBool())
+	if(_settings->fullScreen())
 		this->showFullScreen();
 
 	// This is for the drag and drop feature
@@ -150,44 +150,46 @@ void JokerWindow::updateOpenRecent()
 		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), action);
 	}
 
-	// Open the settings group of recent files
-	_settings->beginGroup("openRecent");
-	int i = 1;
-	// Rewrite the setting files from the menu items
-	foreach(QAction * action, ui->menuOpen_recent->actions())
-	{
-		// Break if the separator or the max number is reached
-		if(action->isSeparator() or i > 10)
-			break;
-		// Write the setting
-		_settings->setValue(QString::number(i), action->objectName());
-		i++;
-	}
-	// Close the setting group
-	_settings->endGroup();
+#warning TODO no more open recent files...
+//	// Open the settings group of recent files
+//	_settings->beginGroup("openRecent");
+//	int i = 1;
+//	// Rewrite the setting files from the menu items
+//	foreach(QAction * action, ui->menuOpen_recent->actions())
+//	{
+//		// Break if the separator or the max number is reached
+//		if(action->isSeparator() or i > 10)
+//			break;
+//		// Write the setting
+//		_settings->setValue(QString::number(i), action->objectName());
+//		i++;
+//	}
+//	// Close the setting group
+//	_settings->endGroup();
 }
 
 void JokerWindow::setupOpenRecentMenu()
 {
-	// Open the settings group of recent files
-	_settings->beginGroup("openRecent");
-	// List them
-	QStringList recentList = _settings->childKeys();
-	foreach(QString recentFileIndex, recentList)
-	{
-		QString fileName = _settings->value(recentFileIndex, "empty").toString();
-		QAction * action = new QAction(fileName, this);
-		action->setObjectName(fileName);
-		connect(action, SIGNAL(triggered()), this, SLOT(openRecent()));
-		_recentFileButtons.append(action);
-	}
+#warning TODO no more open recent files...
+//	// Open the settings group of recent files
+//	_settings->beginGroup("openRecent");
+//	// List them
+//	QStringList recentList = _settings->childKeys();
+//	foreach(QString recentFileIndex, recentList)
+//	{
+//		QString fileName = _settings->value(recentFileIndex, "empty").toString();
+//		QAction * action = new QAction(fileName, this);
+//		action->setObjectName(fileName);
+//		connect(action, SIGNAL(triggered()), this, SLOT(openRecent()));
+//		_recentFileButtons.append(action);
+//	}
 
-	// Add all the actions to the menu
-	ui->menuOpen_recent->insertActions(ui->menuOpen_recent->actions().last(), _recentFileButtons.toList());
-	// Add a separator just above the "clear list" menu
-	ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().last(), ui->menuOpen_recent->addSeparator());
-	// Close the group
-	_settings->endGroup();
+//	// Add all the actions to the menu
+//	ui->menuOpen_recent->insertActions(ui->menuOpen_recent->actions().last(), _recentFileButtons.toList());
+//	// Add a separator just above the "clear list" menu
+//	ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().last(), ui->menuOpen_recent->addSeparator());
+//	// Close the group
+//	_settings->endGroup();
 
 }
 
@@ -200,7 +202,7 @@ void JokerWindow::setupSyncProtocol()
 #if USE_LTC
 	_ltcReader.close();
 #endif
-	VideoStripSynchronizer::SyncType type = (VideoStripSynchronizer::SyncType)_settings->value("synchroProtocol").toInt();
+	VideoStripSynchronizer::SyncType type = (VideoStripSynchronizer::SyncType)_settings->synchroProtocol();
 
 	switch(type) {
 	case VideoStripSynchronizer::Sony:
@@ -217,7 +219,7 @@ void JokerWindow::setupSyncProtocol()
 #if USE_LTC
 	case VideoStripSynchronizer::LTC:
 		{
-			QString input = _settings->value("ltcInputDevice").toString();
+			QString input = _settings->ltcInputDevice();
 			if(_ltcReader.init(input))
 				clock = _ltcReader.clock();
 			else {
@@ -234,7 +236,7 @@ void JokerWindow::setupSyncProtocol()
 	// Disable slide if Joker is sync to a protocol
 	_mediaPanel.setSliderEnable(clock == NULL);
 
-	_settings->setValue("synchroProtocol", type);
+	_settings->setSynchroProtocol(type);
 }
 
 void JokerWindow::openFile(QString fileName)
@@ -289,7 +291,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		break;
 	case QEvent::MouseMove:
 		// Show the mediaPanel only if Joker has focus and is not remote controlled.
-		if(this->hasFocus() and _settings->value("synchroProtocol", VideoStripSynchronizer::NoSync).toInt() == 0)
+		if(this->hasFocus() && _settings->synchroProtocol() == 0)
 			// Show the mediaPanel only if Joker has focus.
 			if(this->hasFocus())
 				fadeInMediaPanel();
@@ -319,7 +321,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		// If the sender is "this" and no videofile is loaded
 		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length()) {
 			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
-			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->value("stripHeight", 0.25f).toFloat()))
+			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->stripHeight()))
 				on_actionOpen_Video_triggered();
 			return true;
 		}
@@ -358,8 +360,8 @@ void JokerWindow::setCurrentStripFile(QString stripFile)
 {
 	_currentStripFile = stripFile;
 	this->setWindowTitle(stripFile);
-	_settings->setValue("lastFile", stripFile);
-	_settings->setValue("lastFolder", QFileInfo(stripFile).absolutePath());
+	_settings->setLastFile(stripFile);
+	_settings->setLastFolder(QFileInfo(stripFile).absolutePath());
 
 	updateOpenRecent();
 }
@@ -373,16 +375,16 @@ void JokerWindow::on_actionOpen_triggered()
 		                 + tr("Joker files") + " (*.strip);; "
 		                 + tr("Rythmo files") + " (*.detx *.strip);; "
 		                 + tr("All files") + " (*.*)";
-		QFileDialog dlg(this, tr("Open..."), _settings->value("lastFolder", QDir::homePath()).toString(), filter);
+		QFileDialog dlg(this, tr("Open..."), _settings->lastFolder(), filter);
 
-		dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
+		dlg.selectNameFilter(_settings->selectedFilter());
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
 
 		dlg.setFileMode(QFileDialog::ExistingFile);
 		if(dlg.exec()) {
 			QString fileName = dlg.selectedFiles()[0];
 			openFile(fileName);
-			_settings->setValue("selectedFilter", dlg.selectedNameFilter());
+			_settings->setSelectedFilter(dlg.selectedNameFilter());
 		}
 	}
 	fadeInMediaPanel();
@@ -464,7 +466,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 {
 	hideMediaPanel();
 
-	QString lastFolder = _settings->value("lastVideoFolder", QDir::homePath()).toString();
+	QString lastFolder = _settings->lastVideoFolder();
 	QFileDialog dlg(this, tr("Open..."), lastFolder, tr("Movie files") + " (*.avi *.mov)");
 	if(dlg.exec()) {
 		QString videoFile = dlg.selectedFiles()[0];
@@ -504,7 +506,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 
 		_videoEngine->clock()->setFrame(frameStamp);
 
-		_settings->setValue("lastVideoFolder", fileInfo.absolutePath());
+		_settings->setLastVideoFolder(fileInfo.absolutePath());
 		return true;
 	}
 	return false;
@@ -557,13 +559,13 @@ void JokerWindow::on_actionAbout_triggered()
 void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
-	int syncProtocol = _settings->value("synchroProtocol").toInt();
-	QString inputLTC = _settings->value("ltcInputDevice").toString();
+	int oldSynchroProtocol = _settings->synchroProtocol();
+	QString oldLTCInputDevice = _settings->ltcInputDevice();
 
 	PreferencesDialog dlg(_settings);
 	dlg.exec();
-	if(syncProtocol != _settings->value("synchroProtocol").toInt() or inputLTC != _settings->value("ltcInputDevice", "")) {
-		PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol").toInt();
+	if((oldSynchroProtocol != _settings->synchroProtocol()) || (oldLTCInputDevice != _settings->ltcInputDevice())) {
+		PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
 		setupSyncProtocol();
 	}
 
@@ -573,7 +575,7 @@ void JokerWindow::on_actionPreferences_triggered()
 void JokerWindow::fadeInMediaPanel()
 {
 	// Don't show the mediaPanel if Joker is remote controled.
-	if(_settings->value("synchroProtocol").toInt() != VideoStripSynchronizer::NoSync)
+	if(_settings->synchroProtocol() != VideoStripSynchronizer::NoSync)
 		return;
 
 	_mediaPanel.show();
@@ -629,10 +631,7 @@ void JokerWindow::on_actionProperties_triggered()
 
 void JokerWindow::on_actionTest_mode_triggered()
 {
-	if(_settings->value("stripTestMode", false).toBool())
-		_settings->setValue("stripTestMode", false);
-	else
-		_settings->setValue("stripTestMode", true);
+	_settings->setStripTestMode(!_settings->stripTestMode());
 }
 
 void JokerWindow::on_actionTimecode_triggered()
@@ -663,15 +662,15 @@ void JokerWindow::on_actionPrevious_element_triggered()
 void JokerWindow::on_actionClear_list_triggered()
 {
 	//Open the recent group
-	_settings->beginGroup("openRecent");
-	//List all keys
-	QStringList indexes = _settings->allKeys();
-	//Remove them from
-	foreach(QString index, indexes)
-	_settings->remove(index);
+//	_settings->beginGroup("openRecent");
+//	//List all keys
+//	QStringList indexes = _settings->allKeys();
+//	//Remove them from
+//	foreach(QString index, indexes)
+//	_settings->remove(index);
 
-	//Close the group
-	_settings->endGroup();
+//	//Close the group
+//	_settings->endGroup();
 
 	//Remove the buttons of the UI, keep the separator and the Clear button
 	foreach(QAction * action, ui->menuOpen_recent->actions())
@@ -705,7 +704,7 @@ void JokerWindow::on_actionSave_as_triggered()
 	hideMediaPanel();
 
 	QString stripFile = _currentStripFile;
-	QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
+	QString lastFolder = _settings->lastFolder();
 	// If there is no current strip file, ask for a name
 	if(stripFile == "")
 		stripFile = lastFolder;

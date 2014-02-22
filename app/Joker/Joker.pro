@@ -44,7 +44,8 @@ SOURCES += main.cpp \
     AboutDialog.cpp \
     PreferencesDialog.cpp \
 	PropertyDialog.cpp \
-    PeopleDialog.cpp
+    PeopleDialog.cpp \
+    JokerSettings.cpp
 
 
 HEADERS += \
@@ -54,7 +55,8 @@ HEADERS += \
     AboutDialog.h \
     PreferencesDialog.h \
 	PropertyDialog.h \
-    PeopleDialog.h
+    PeopleDialog.h \
+    JokerSettings.h
 
 FORMS += \
     JokerWindow.ui \

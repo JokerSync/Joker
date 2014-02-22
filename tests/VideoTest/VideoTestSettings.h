@@ -11,7 +11,7 @@ public:
 	int screenDelay();
 	int screenRefreshInterval();
 
-	// PhGraphicStripSettings :
+	// PhVideoSettings :
 	bool videoDeinterlace();
 
 	// Other settings :

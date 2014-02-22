@@ -71,7 +71,7 @@ bool PhGraphicStrip::init()
 	PHDEBUG << "Load the font file";
 	QString fontFile = "";
 	if(_settings != NULL)
-		fontFile = _settings->value("StripFontFile", "").toString();
+		fontFile = _settings->textFontFile();
 	else
 		PHDEBUG << "no settings...";
 
@@ -79,14 +79,14 @@ bool PhGraphicStrip::init()
 		PHDEBUG << "File not found:" << fontFile;
 		fontFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
 		if(_settings != NULL)
-			_settings->setValue("StripFontFile", fontFile);
+			_settings->textFontFile();
 		else
 			PHDEBUG << "no settings...";
 	}
 	_textFont.setFontFile(fontFile);
 
 	if(_settings != NULL)
-		_textFont.setBoldness(_settings->value("boldness", 0).toInt());
+		_textFont.setBoldness(_settings->textBoldness());
 
 	// Init the sync bar
 	_stripSyncBar.setColor(QColor(225, 86, 108));
@@ -219,23 +219,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			trackFull[i] = false;
 		}
 
-<<<<<<< HEAD
 		bool displayNextText = _settings->displayTextPrediction();
 
-		int appHeight = 1;
-		int verticalPixelPerFrame = 1;
-		if(displayNextText) {
-			if(_settings->stripHeight() != 0)
-				appHeight = height / _settings->stripHeight();
-			verticalPixelPerFrame = _settings->verticalSpeed();
-
-		}
-
-=======
-		bool displayNextText = _settings->value("displayNextText", true).toBool();
-
-		int verticalPixelPerFrame = verticalPixelPerFrame = _settings->value("verticalPixelPerFrame", 1).toInt();
->>>>>>> master
+		int verticalPixelPerFrame = _settings->verticalSpeed();
 
 		foreach(PhStripText * text, _doc.getTexts())
 		{

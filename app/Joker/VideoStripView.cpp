@@ -9,6 +9,7 @@
 
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
+	_settings(NULL),
 	_sony(NULL),
 	_titleText(_strip.getHUDFont(), ""),
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
@@ -19,10 +20,12 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	connect(_strip.doc(), SIGNAL(changed()), this, SLOT(onDocChanged()));
 }
 
-void VideoStripView::setSettings(QSettings *settings)
+void VideoStripView::setSettings(JokerSettings *settings)
 {
 	PhGraphicView::setSettings(settings);
+	_settings = settings;
 	_strip.setSettings(settings);
+
 }
 
 void VideoStripView::setSony(PhSonyController *sony)
@@ -62,7 +65,7 @@ void VideoStripView::paint()
 	if(_strip.doc()->getEpisode().length() > 0)
 		title += " #" + _strip.doc()->getEpisode();
 
-	if(_settings->value("displayTitle", true).toBool() && (title.length() > 0)) {
+	if(_settings->displayTitle() && (title.length() > 0)) {
 		int titleHeight = this->height() / 40;
 		_titleBackgroundRect.setRect(0, y, this->width(), titleHeight);
 		int titleWidth = title.length() * titleHeight / 2;
@@ -77,7 +80,7 @@ void VideoStripView::paint()
 
 	float stripHeightRatio = 0.25f;
 	if(_settings)
-		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
+		stripHeightRatio = _settings->stripHeight();
 
 	int stripHeight = (this->height() - y) * stripHeightRatio;
 	int videoHeight = this->height() - y - stripHeight;
@@ -115,17 +118,17 @@ void VideoStripView::paint()
 	}
 
 	PhClock *clock = _videoEngine.clock();
-	long delay = (int)(_settings->value("delay", 0).toInt() * clock->rate()); // delay in ms
+	long delay = (int)(_settings->screenDelay() * clock->rate()); // delay in ms
 	PhFrame clockFrame = clock->frame() + delay * PhTimeCode::getFps(clock->timeCodeType()) / 1000;
 	int tcHeight = tcWidth / 5;
 
-	if(_settings->value("displayTC", true).toBool()) {
+	if(_settings->displayTC()) {
 		_tcText.setRect(0, y, tcWidth, tcHeight);
 		_tcText.setContent(PhTimeCode::stringFromFrame(clockFrame, clock->timeCodeType()));
 		_tcText.draw();
 	}
 
-	if(_settings->value("displayNextTC", true).toBool()) {
+	if(_settings->displayNextTC()) {
 		PhStripText *nextText = NULL;
 
 		_nextTCText.setRect(this->width() - tcWidth, y, tcWidth, tcHeight);

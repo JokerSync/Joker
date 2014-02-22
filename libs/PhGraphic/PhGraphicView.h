@@ -64,11 +64,6 @@ protected:
 	 */
 	void setSettings(PhGraphicSettings *settings);
 	/**
-	 * @brief The member containing the settings
-	 */
-	PhGraphicSettings * _settings;
-
-	/**
 	 * @brief initialization, every class have to re-implement it.
 	 * @return true if everything went well, false otherwise.
 	 */
@@ -101,6 +96,10 @@ private slots:
 	void onRefresh();
 
 private:
+	/**
+	 * @brief The member containing the settings
+	 */
+	PhGraphicSettings * _settings;
 
 	/**
 	 * @brief t_Timer

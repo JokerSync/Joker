@@ -9,10 +9,11 @@
 
 #include "PhGraphic/PhGraphicSettings.h"
 
-class PhVideoSettings : public PhGraphicSettings
+class PhVideoSettings
 {
 public:
 	virtual bool videoDeinterlace() = 0;
+	virtual int screenDelay() = 0;
 };
 
 #endif // PHVIDEOSETTINGS_H

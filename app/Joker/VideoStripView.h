@@ -15,6 +15,8 @@
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSonyController.h"
 
+#include "JokerSettings.h"
+
 /**
  * @brief The Joker main view
  *
@@ -67,7 +69,7 @@ public:
 	 *
 	 * @param settings The QSettings
 	 */
-	void setSettings(QSettings * settings);
+	void setSettings(JokerSettings *settings);
 
 	/**
 	 * @brief Set the PhSonyController
@@ -103,6 +105,7 @@ private slots:
 	void onDocChanged();
 
 private:
+	JokerSettings *_settings;
 	PhVideoEngine _videoEngine;
 	PhGraphicStrip _strip;
 	PhSonyController *_sony;
