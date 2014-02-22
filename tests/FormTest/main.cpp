@@ -23,10 +23,8 @@ int main(int argc, char *argv[])
 	a.setOrganizationName(ORG_NAME);
 	a.setOrganizationDomain(ORG_NAME);
 
-	if((argc > 1) && (QFile::exists(argv[1])))
-		settings.setLastFile(argv[1]);
-
 	FormTestWindow window(&settings);
+	window.processArg(argc, argv);
 	window.show();
 
 	return a.exec();

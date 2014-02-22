@@ -21,13 +21,11 @@ FormTestWindow::FormTestWindow(FormTestSettings *settings, QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	QString mode = _settings->lastFile();
+	QString mode = _settings->currentDocument();
 	if(mode == "rgb")
 		generateRGB();
 	else if(mode == "yuv")
 		generateYUV();
-	else if(QFile::exists(mode))
-		openFile(mode);
 
 	QScreen *screen = QGuiApplication::primaryScreen();
 	if (screen)
@@ -108,23 +106,21 @@ void FormTestWindow::on_actionDocumentation_triggered()
 
 void FormTestWindow::on_actionOpen_triggered()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, "Open a picture file...", _settings->lastFolder(), "Picture file (*.png *.jpg)");
+	QString fileName = QFileDialog::getOpenFileName(this, "Open a picture file...", _settings->lastDocumentFolder(), "Picture file (*.png *.jpg)");
 	if(QFile::exists(fileName)) {
-		if(openFile(fileName))
-			_settings->setLastFile(fileName);
-		else
-			QMessageBox::critical(this, "Error", "Unable to open file");
+		if(!openFile(fileName))
+			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
 }
 
 void FormTestWindow::on_actionGenerate_YUV_pattern_triggered()
 {
 	generateYUV();
-	_settings->setLastFile("yuv");
+	_settings->setCurrentDocument("yuv");
 }
 
 void FormTestWindow::on_actionGenerate_RGB_pattern_triggered()
 {
 	generateRGB();
-	_settings->setLastFile("rgb");
+	_settings->setCurrentDocument("rgb");
 }

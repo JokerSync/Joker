@@ -11,6 +11,7 @@ class PhDocumentWindow : public QMainWindow
 public:
 	explicit PhDocumentWindow(PhDocumentWindowSettings *settings, QWidget *parent = 0);
 
+	void processArg(int argc, char *argv[]);
 protected:
 	virtual bool openFile(QString fileName);
 

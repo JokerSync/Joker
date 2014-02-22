@@ -6,11 +6,11 @@
 class PhDocumentWindowSettings
 {
 public:
-	virtual QString lastFile() = 0;
-	virtual void setLastFile(QString lastFile) = 0;
+	virtual QString currentDocument() = 0;
+	virtual void setCurrentDocument(QString currentDocument) = 0;
 
-	virtual QString lastFolder() = 0;
-	virtual void setLastFolder(QString lastFolder) = 0;
+	virtual QString lastDocumentFolder() = 0;
+	virtual void setLastDocumentFolder(QString lastDocumentFolder) = 0;
 };
 
 #endif // PHDOCUMENTWINDOWSETTINGS_H

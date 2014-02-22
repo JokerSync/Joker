@@ -8,9 +8,9 @@
 class FormTestSettings : protected PhGenericSettings, public PhDocumentWindowSettings
 {
 public:
-	PH_SETTING_STRING(LastFile, lastFile)
-	PH_SETTING_STRING2(LastFolder, lastFolder, QDir::homePath())
-	PH_SETTING_STRINGLIST(RecentDocuments, recentDocuments)
+	PH_SETTING_STRING(CurrentDocument, currentDocument)
+	PH_SETTING_STRING2(LastDocumentFolder, lastDocumentFolder, QDir::homePath())
+	PH_SETTING_STRINGLIST(RecentDocumentList, recentDocumentList)
 };
 
 #endif // FORMTESTSETTINGS_H
