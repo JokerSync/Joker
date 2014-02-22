@@ -2,6 +2,7 @@
 #define PHGENERICSETTINGS_H
 
 #include <QSettings>
+#include <QStringList>
 
 #define PH_SETTING_INT(setter, getter) \
 	void set ## setter(int getter) { setIntValue(#getter, getter); } \
@@ -35,6 +36,10 @@
 	void set ## setter(QString s) { setStringValue(#getter, s); } \
 	QString getter() {return stringValue(#getter, defaultValue); }
 
+#define PH_SETTING_STRINGLIST(setter, getter) \
+	void set ## setter(QStringList list) { setStringList(#getter, list); } \
+	QStringList getter() {return stringList(#getter); }
+
 class PhGenericSettings
 {
 public:
@@ -53,7 +58,10 @@ protected:
 	void setStringValue(QString name, QString value);
 	QString stringValue(QString name, QString defaultValue = "");
 
-private:
+	void setStringList(QString name, QStringList list);
+	QStringList stringList(QString name);
+
+//private:
 	QSettings _settings;
 };
 

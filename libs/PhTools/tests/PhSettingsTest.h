@@ -28,11 +28,15 @@ public:
 	PH_SETTING_STRING(StringTest2, stringTest2)
 	PH_SETTING_STRING2(StringTest3, stringTest3, "stringTest default value")
 
+	PH_SETTING_STRING(StringTest4, stringTest4)
+	PH_SETTING_STRINGLIST(StringListTest, stringListTest)
+
 private slots:
 	void testIntSettings();
 	void testBoolSettings();
 	void testFloatSettings();
 	void testStringSettings();
+	void testStringListSettings();
 };
 
 #endif // PHSETTINGSTEST_H
