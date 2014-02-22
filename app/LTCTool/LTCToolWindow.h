@@ -55,14 +55,21 @@ private slots:
 	void onFrameChanged(PhFrame, PhTimeCodeType);
 	void onSlaveFrameChanged(PhFrame,PhTimeCodeType);
 
+	void on_generateCheckBox_clicked(bool checked);
+
+	void on_readCheckBox_clicked(bool checked);
+
 private:
 	void setupOutput();
 	void updateInfos();
 	Ui::LTCToolWindow *ui;
 	PhClock *_writingClock;
 	QSettings *_settings;
-	PhLtcWriter _LTCWriter;
-	PhLtcReader _LTCReader;
+	PhLtcWriter _ltcWriter;
+	PhLtcReader _ltcReader;
+
+	PhFrame _lastFrame;
+	PhFrame _frameDelta;
 
 	void setupInput();
 };
