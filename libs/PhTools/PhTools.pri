@@ -18,7 +18,8 @@ HEADERS += \
     ../../libs/PhTools/tests/PhTimeCodeTest.h \
     ../../libs/PhTools/PhTickCounter.h \
     ../../libs/PhTools/PhPictureTools.h \
-    ../../libs/PhTools/PhGenericSettings.h
+    ../../libs/PhTools/PhGenericSettings.h \
+    ../../libs/PhTools/tests/PhSettingsTest.h
 
 SOURCES += \
     ../../libs/PhTools/PhTimeCode.cpp \
@@ -27,7 +28,8 @@ SOURCES += \
     ../../libs/PhTools/tests/PhTimeCodeTest.cpp \
     ../../libs/PhTools/PhTickCounter.cpp \
     ../../libs/PhTools/PhPictureTools.cpp \
-    ../../libs/PhTools/PhGenericSettings.cpp
+    ../../libs/PhTools/PhGenericSettings.cpp \
+    ../../libs/PhTools/tests/PhSettingsTest.cpp
 
 # Windows specific
 win32 {
