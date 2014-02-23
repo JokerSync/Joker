@@ -1,23 +1,23 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "GraphicTestWindow.h"
+#include "ui_GraphicTestWindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+GraphicTestWindow::GraphicTestWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow)
+	ui(new Ui::GraphicTestWindow)
 {
 	ui->setupUi(this);
 }
 
-MainWindow::~MainWindow()
+GraphicTestWindow::~GraphicTestWindow()
 {
 	delete ui;
 }
 
 
-void MainWindow::on_actionChange_font_triggered()
+void GraphicTestWindow::on_actionChange_font_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName();
 	if(QFile(fileName).exists()) {

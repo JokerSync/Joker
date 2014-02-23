@@ -5,22 +5,22 @@
 #include "GraphicTestView.h"
 
 namespace Ui {
-class MainWindow;
+class GraphicTestWindow;
 }
 
-class MainWindow : public QMainWindow
+class GraphicTestWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+	explicit GraphicTestWindow(QWidget *parent = 0);
+	~GraphicTestWindow();
 
 private slots:
 	void on_actionChange_font_triggered();
 
 private:
-	Ui::MainWindow *ui;
+	Ui::GraphicTestWindow *ui;
 };
 
 #endif // MAINWINDOW_H
