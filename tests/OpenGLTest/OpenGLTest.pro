@@ -13,9 +13,9 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        OpenGLTestWindow.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += OpenGLTestWindow.h
 
 QMAKE_CXXFLAGS += -F/Library/Frameworks
 LIBS += -F/Library/Frameworks

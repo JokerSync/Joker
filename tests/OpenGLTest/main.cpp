@@ -1,10 +1,11 @@
-#include "MainWindow.h"
 #include <QApplication>
+
+#include "OpenGLTestWindow.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	MainWindow w;
+	OpenGLTestWindow w;
 	w.show();
 
 	if(argc > 1)
