@@ -31,7 +31,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldUseQuarterFrame = _settings->useQuarterFrame();
 	_oldDelay = _settings->screenDelay();
 	_oldStripHeight = _settings->stripHeight();
-	_oldOpenLastFile = _settings->openLastFile();
 	_oldStartFullScreen = _settings->fullScreen();
 	_oldSpeed = _settings->horizontalSpeed();
 	_oldBolness = _settings->textBoldness();
@@ -59,7 +58,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	}
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
-	ui->cBoxLastFile->setChecked(_oldOpenLastFile);
 	ui->cBoxFullscreen->setChecked(_oldStartFullScreen);
 	ui->cBoxDeinterlace->setChecked(_oldDeinterlace);
 	ui->cBoxDisplayTC->setChecked(_oldDisplayTC);
@@ -152,7 +150,6 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setUseQuarterFrame(_oldUseQuarterFrame);
 	_settings->setScreenDelay(_oldDelay);
 	_settings->setStripHeight(_oldStripHeight);
-	_settings->setOpenLastFile(_oldOpenLastFile);
 	_settings->setFullScreen(_oldStartFullScreen);
 	_settings->setHorizontalSpeed(_oldSpeed);
 	_settings->setTextBoldness(_oldBolness);
@@ -197,11 +194,6 @@ void PreferencesDialog::on_radioButtonQF_toggled(bool checked)
 void PreferencesDialog::on_sliderStripHeight_valueChanged(int position)
 {
 	_settings->setStripHeight(((float)position / ui->sliderStripHeight->maximum()));
-}
-
-void PreferencesDialog::on_cBoxLastFile_toggled(bool checked)
-{
-	_settings->setOpenLastFile(checked);
 }
 
 void PreferencesDialog::on_cBoxFullscreen_toggled(bool checked)

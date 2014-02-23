@@ -51,8 +51,6 @@ private slots:
 
 	void on_buttonBox_rejected();
 
-	void on_cBoxLastFile_toggled(bool checked);
-
 	void on_cBoxFullscreen_toggled(bool checked);
 
 	void on_sliderBoldness_valueChanged(int value);
@@ -90,7 +88,6 @@ private:
 	int _oldSpeed;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldOpenLastFile;
 	bool _oldStartFullScreen;
 	bool _oldDeinterlace;
 	bool _oldDisplayTC;

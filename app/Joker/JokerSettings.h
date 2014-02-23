@@ -19,7 +19,6 @@ class JokerSettings : PhGenericSettings,
 	public PhDocumentWindowSettings
 {
 public:
-	// PhGraphicSettings :
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 
 	// PhGraphicStripSettings :
@@ -47,8 +46,6 @@ public:
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
 
 	// Other settings :
-#warning TODO remove
-	PH_SETTING_BOOL2(setOpenLastFile, openLastFile, true)
 	PH_SETTING_STRING(setLastVideoFolder, lastVideoFolder)
 	PH_SETTING_STRING2(setSelectedFilter, selectedFilter, "Rythmo files (*.detx *.strip)")
 
