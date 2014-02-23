@@ -2,6 +2,8 @@
 #include <QFileDialog>
 #include <QTextStream>
 
+#include <PhTools/PhDebug.h>
+
 #include "TextEditTestWindow.h"
 #include "ui_TextEditTestWindow.h"
 
@@ -38,6 +40,7 @@ QMenu *TextEditTestWindow::recentDocumentMenu()
 
 void TextEditTestWindow::on_actionOpen_triggered()
 {
+	PHDEBUG << _settings->lastDocumentFolder();
 	QString fileName = QFileDialog::getOpenFileName(this, "Open a text file...", _settings->lastDocumentFolder(), "Text file (*.txt)");
 
 	if(QFile::exists(fileName)) {
