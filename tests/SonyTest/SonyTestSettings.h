@@ -8,16 +8,14 @@ class SonyTestSettings : PhGenericSettings, public PhSyncSettings
 {
 public:
 	// PhSyncSettings:
-	bool videoSyncUp();
-	unsigned char sonyDevice1();
-	unsigned char sonyDevice2();
-	float sonyFastRate();
+	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
+	PH_SETTING_INT2(setSonyDevice1, sonyDevice1, 0xF0)
+	PH_SETTING_INT2(setSonyDevice2, sonyDevice2, 0xC0)
+	PH_SETTING_FLOAT2(setSonyFastRate, sonyFastRate, 3)
 
 	// Others settings
-	bool sonyMasterActive();
-	bool setSonyMasterActive(bool value);
-	bool sonySlaveActive();
-	bool setSonySlaveActive(bool value);
+	PH_SETTING_BOOL2(setSonyMasterActive, sonyMasterActive, true)
+	PH_SETTING_BOOL2(setSonySlaveActive, sonySlaveActive, true);
 };
 
 #endif // SONYTESTSETTINGS_H
