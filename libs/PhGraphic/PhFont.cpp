@@ -18,23 +18,22 @@
 PhFont::PhFont() : _texture(-1), _glyphHeight(0)
 {
 	font = NULL;
-	boldness = 0;
+	_boldness = 0;
 }
 
 bool PhFont::setFontFile(QString fontFile)
 {
-	PHDEBUG << fontFile;
-
-	if(fontFile != this->fontFile) {
-		this->fontFile = fontFile;
-		return init(this->fontFile);
+	if(fontFile != this->_fontFile) {
+		PHDEBUG << fontFile;
+		this->_fontFile = fontFile;
+		return init(this->_fontFile);
 	}
 	return true;
 }
 
 QString PhFont::getFontFile()
 {
-	return fontFile;
+	return _fontFile;
 }
 
 // This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
@@ -68,8 +67,8 @@ bool PhFont::init(QString fontFile)
 	_glyphHeight = 0;
 
 	//set the boldness
-	PHDEBUG << "Setting the font boldness to :" << boldness;
-	for(int i = 0; i <= boldness; i++) {
+	PHDEBUG << "Setting the font boldness to :" << _boldness;
+	for(int i = 0; i <= _boldness; i++) {
 		TTF_SetFontOutline(font, i);
 		// We get rid of the 32 first useless char
 		for(Uint16 ch = 32; ch < 256; ++ch) {
@@ -122,7 +121,7 @@ bool PhFont::init(QString fontFile)
 
 	// Once the texture is created, the surface is no longer needed.
 	SDL_FreeSurface(matrixSurface);
-//	TTF_CloseFont(font);
+	//	TTF_CloseFont(font);
 
 	return true;
 }
@@ -138,7 +137,7 @@ void PhFont::select()
 }
 int PhFont::getBoldness() const
 {
-	return boldness;
+	return _boldness;
 }
 
 int PhFont::getNominalWidth(QString string)
@@ -152,7 +151,9 @@ int PhFont::getNominalWidth(QString string)
 
 void PhFont::setBoldness(int value)
 {
-	boldness = value;
-	init(fontFile);
+	if(_boldness != value) {
+		_boldness = value;
+		init(_fontFile);
+	}
 }
 

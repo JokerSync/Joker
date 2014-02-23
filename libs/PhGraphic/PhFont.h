@@ -97,7 +97,7 @@ private:
 	 */
 	unsigned int _texture;
 
-	bool init(QString fontFile);
+	bool init(QString _fontFile);
 
 	/**
 	 * @brief Store the regular advance of each glyph.
@@ -111,9 +111,9 @@ private:
 
 	TTF_Font * font;
 
-	QString fontFile;
+	QString _fontFile;
 
-	int boldness;
+	int _boldness;
 };
 
 #endif // PHFONT_H

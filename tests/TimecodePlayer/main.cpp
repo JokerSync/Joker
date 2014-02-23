@@ -1,6 +1,7 @@
-#include "mainwindow.h"
 #include <QtGui>
 #include <QApplication>
+
+#include "TimecodePlayerWindow.h"
 
 /**
  * @brief The application main entry point

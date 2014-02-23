@@ -15,7 +15,7 @@
 #include "PhSync/PhLtcReader.h"
 #endif
 
-PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
+PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::PreferencesDialog),
 	_settings(settings)
@@ -28,23 +28,22 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	this->setFocus();
 
 	// Load the old settings
-	_oldUseQuarterFrame = _settings->value("useQuarterFrame", false).toBool();
-	_oldDelay = _settings->value("delay", 0).toInt();
-	_oldStripHeight = _settings->value("stripHeight", 0.25f).toFloat();
-	_oldOpenLastFile = _settings->value("openLastFile", true).toBool();
-	_oldSpeed = _settings->value("speed", 12).toInt();
-	_oldBolness = _settings->value("boldness", 0).toInt();
-	_oldFont = _settings->value("StripFontFile", "").toString();
-	_oldDeinterlace = _settings->value("videoDeinterlace", false).toBool();
-	_oldDisplayTC = _settings->value("displayTC", true).toBool();
-	_oldDisplayNextTC = _settings->value("displayNextTC", true).toBool();
-	_oldDisplayNextText = _settings->value("displayNextText", true).toBool();
-	_oldDisplayTitle = _settings->value("displayTitle", true).toBool();
-	_oldDisplayLoop = _settings->value("displayLoop", false).toBool();
-	_oldSyncProtocol = _settings->value("synchroProtocol").toInt();
-	_oldLTCInput = _settings->value("ltcInputDevice").toString();
+	_oldUseQuarterFrame = _settings->useQuarterFrame();
+	_oldDelay = _settings->screenDelay();
+	_oldStripHeight = _settings->stripHeight();
+	_oldSpeed = _settings->horizontalSpeed();
+	_oldBolness = _settings->textBoldness();
+	_oldFont = _settings->textFontFile();
+	_oldDeinterlace = _settings->videoDeinterlace();
+	_oldDisplayTC = _settings->displayTC();
+	_oldDisplayNextTC = _settings->displayNextTC();
+	_oldDisplayNextText = _settings->displayNextText();
+	_oldDisplayTitle = _settings->displayTitle();
+	_oldDisplayLoop = _settings->displayLoop();
+	_oldSyncProtocol = _settings->synchroProtocol();
+	_oldLTCInput = _settings->ltcInputDevice();
 
-	_oldLogMask = _settings->value("logMask", 1).toInt();
+	_oldLogMask = _settings->logMask();
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldSpeed);
@@ -58,7 +57,6 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	}
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
-	ui->cBoxLastFile->setChecked(_oldOpenLastFile);
 	ui->cBoxDeinterlace->setChecked(_oldDeinterlace);
 	ui->cBoxDisplayTC->setChecked(_oldDisplayTC);
 	ui->cBoxDisplayNextTC->setChecked(_oldDisplayNextTC);
@@ -139,7 +137,6 @@ PreferencesDialog::~PreferencesDialog()
 	delete ui;
 }
 
-
 void PreferencesDialog::on_buttonBox_accepted()
 {
 	close();
@@ -147,21 +144,20 @@ void PreferencesDialog::on_buttonBox_accepted()
 
 void PreferencesDialog::on_buttonBox_rejected()
 {
-	_settings->setValue("useQuarterFrame", _oldUseQuarterFrame);
-	_settings->setValue("delay", _oldDelay);
-	_settings->setValue("stripHeight", _oldStripHeight);
-	_settings->setValue("openLastFile", _oldOpenLastFile);
-	_settings->setValue("speed", _oldSpeed);
-	_settings->setValue("boldness", _oldBolness);
-	_settings->setValue("StripFontName", _oldFont);
-	_settings->setValue("videoDeinterlace", _oldDeinterlace);
-	_settings->setValue("displayTC", _oldDisplayTC);
-	_settings->setValue("displayNextTC", _oldDisplayNextTC);
-	_settings->setValue("displayNextText", _oldDisplayNextText);
-	_settings->setValue("displayTitle", _oldDisplayTitle);
-	_settings->setValue("displayLoop", _oldDisplayLoop);
-	_settings->setValue("logMask", _oldLogMask);
-	_settings->setValue("ltcInputDevice", _oldLTCInput);
+	_settings->setUseQuarterFrame(_oldUseQuarterFrame);
+	_settings->setScreenDelay(_oldDelay);
+	_settings->setStripHeight(_oldStripHeight);
+	_settings->setHorizontalSpeed(_oldSpeed);
+	_settings->setTextBoldness(_oldBolness);
+	_settings->setTextFontFile(_oldFont);
+	_settings->setVideoDeinterlace(_oldDeinterlace);
+	_settings->setDisplayTC(_oldDisplayTC);
+	_settings->setDisplayNextTC(_oldDisplayNextTC);
+	_settings->setDisplayNextText(_oldDisplayNextText);
+	_settings->setDisplayTitle(_oldDisplayTitle);
+	_settings->setDisplayLoop(_oldDisplayLoop);
+	_settings->setLogMask(_oldLogMask);
+	_settings->setLTCInputDevice(_oldLTCInput);
 	PhDebug::setLogMask(_oldLogMask);
 
 	close();
@@ -170,40 +166,35 @@ void PreferencesDialog::on_buttonBox_rejected()
 
 void PreferencesDialog::on_spinBoxDelay_valueChanged(int delay)
 {
-	if(_settings->value("useQuarterFrame", false).toBool())
-		_settings->setValue("delay", delay * 10);
+	if(_settings->useQuarterFrame())
+		_settings->setScreenDelay(delay * 10);
 	else
-		_settings->setValue("delay", delay);
+		_settings->setScreenDelay(delay);
 }
 
 void PreferencesDialog::on_spinBoxSpeed_valueChanged(int speed)
 {
-	_settings->setValue("speed", speed);
+	_settings->setHorizontalSpeed(speed);
 }
 
 void PreferencesDialog::on_radioButtonQF_toggled(bool checked)
 {
-	_settings->setValue("useQuarterFrame", checked);
+	_settings->setUseQuarterFrame(checked);
 	if(checked)
-		ui->spinBoxDelay->setValue(_settings->value("delay", 0).toInt() / 10);
+		ui->spinBoxDelay->setValue(_settings->screenDelay() / 10);
 	else
-		ui->spinBoxDelay->setValue(_settings->value("delay", 0).toInt());
+		ui->spinBoxDelay->setValue(_settings->screenDelay());
 	ui->spinBoxDelay->selectAll();
 }
 
 void PreferencesDialog::on_sliderStripHeight_valueChanged(int position)
 {
-	_settings->setValue("stripHeight", ((float)position / ui->sliderStripHeight->maximum()));
-}
-
-void PreferencesDialog::on_cBoxLastFile_toggled(bool checked)
-{
-	_settings->setValue("openLastFile", checked);
+	_settings->setStripHeight(((float)position / ui->sliderStripHeight->maximum()));
 }
 
 void PreferencesDialog::on_sliderBoldness_valueChanged(int value)
 {
-	_settings->setValue("boldness", value);
+	_settings->setTextBoldness(value);
 }
 
 void PreferencesDialog::on_lineEditFilter_textEdited(const QString &arg1)
@@ -220,37 +211,37 @@ void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *cu
 {
 	Q_UNUSED(previous);
 	if(current)
-		_settings->setValue("StripFontFile", fontList[current->text()]);
+		_settings->setTextFontFile(fontList[current->text()]);
 }
 
 void PreferencesDialog::on_cBoxDeinterlace_clicked()
 {
-	_settings->setValue("videoDeinterlace", ui->cBoxDeinterlace->isChecked());
+	_settings->setVideoDeinterlace(ui->cBoxDeinterlace->isChecked());
 }
 
 void PreferencesDialog::on_cBoxDisplayTC_clicked()
 {
-	_settings->setValue("displayTC", ui->cBoxDisplayTC->isChecked());
+	_settings->setDisplayTC(ui->cBoxDisplayTC->isChecked());
 }
 
 void PreferencesDialog::on_cBoxDisplayNextTC_clicked()
 {
-	_settings->setValue("displayNextTC", ui->cBoxDisplayNextTC->isChecked());
+	_settings->setDisplayNextTC(ui->cBoxDisplayNextTC->isChecked());
 }
 
 void PreferencesDialog::on_cBoxDisplayNextText_clicked()
 {
-	_settings->setValue("displayNextText", ui->cBoxDisplayNextText->isChecked());
+	_settings->setDisplayNextText(ui->cBoxDisplayNextText->isChecked());
 }
 
 void PreferencesDialog::on_cBoxDisplayTitle_clicked()
 {
-	_settings->setValue("displayTitle", ui->cBoxDisplayTitle->isChecked());
+	_settings->setDisplayTitle(ui->cBoxDisplayTitle->isChecked());
 }
 
 void PreferencesDialog::on_cBoxDisplayLoop_clicked()
 {
-	_settings->setValue("displayLoop", ui->cBoxDisplayLoop->isChecked());
+	_settings->setDisplayLoop(ui->cBoxDisplayLoop->isChecked());
 }
 
 void PreferencesDialog::on_pButtonReset_clicked()
@@ -294,7 +285,7 @@ void PreferencesDialog::onLogMaskButtonClicked()
 			logMask += 1 << btn->objectName().split("_").last().toInt();
 	}
 	PhDebug::setLogMask(logMask);
-	_settings->setValue("logMask", logMask);
+	_settings->setLogMask(logMask);
 }
 
 void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
@@ -315,7 +306,7 @@ void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *cu
 		showParamSony(false);
 		break;
 	}
-	_settings->setValue("synchroProtocol", protocol);
+	_settings->setSynchroProtocol(protocol);
 }
 
 void PreferencesDialog::showParamLTC(bool show)
@@ -331,8 +322,8 @@ void PreferencesDialog::showParamLTC(bool show)
 			PHDEBUG << inputName;
 		}
 #endif
-		if(ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).count() > 0)
-			ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).first()->setSelected(1);
+		if(ui->listWidgetInputs->findItems(_settings->ltcInputDevice(), Qt::MatchExactly).count() > 0)
+			ui->listWidgetInputs->findItems(_settings->ltcInputDevice(), Qt::MatchExactly).first()->setSelected(1);
 	}
 	else {
 		ui->lblInputs->setVisible(0);
@@ -361,5 +352,5 @@ void PreferencesDialog::showParamSony(bool show)
 void PreferencesDialog::on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
 	Q_UNUSED(previous);
-	_settings->setValue("ltcInputDevice", current->text());
+	_settings->setLTCInputDevice(current->text());
 }

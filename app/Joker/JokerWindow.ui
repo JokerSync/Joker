@@ -52,7 +52,7 @@
      <property name="title">
       <string>Open recent</string>
      </property>
-     <addaction name="actionClear_list"/>
+     <addaction name="actionEmpty"/>
     </widget>
     <addaction name="actionOpen"/>
     <addaction name="menuOpen_recent"/>
@@ -339,6 +339,14 @@
    </property>
    <property name="shortcut">
     <string>F10</string>
+   </property>
+  </action>
+  <action name="actionEmpty">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Empty</string>
    </property>
   </action>
  </widget>

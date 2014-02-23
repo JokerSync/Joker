@@ -17,8 +17,7 @@
 #include "PhGraphicView.h"
 
 PhGraphicView::PhGraphicView( QWidget *parent)
-	: QGLWidget(parent),
-	_settings(NULL)
+	: QGLWidget(parent)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";
@@ -71,13 +70,6 @@ void PhGraphicView::resizeGL(int width, int height)
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glLoadIdentity();
-}
-
-void PhGraphicView::setSettings(QSettings *settings)
-{
-	_settings = settings;
-//	PHDBG(0) << "The refresh rate have changed. Set the property \"onRefreshTime\" and reload" << APP_NAME << "to apply changes";
-//	t_Timer->start(_settings->value("onRefreshTime", 10).toInt());
 }
 
 void PhGraphicView::paintGL()

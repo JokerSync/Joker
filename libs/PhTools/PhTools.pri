@@ -5,6 +5,13 @@
 
 QT += testlib
 
+# Define the preprocessor macro to get the application version in our application.
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES += APP_NAME=\\\"$$TARGET\\\"
+DEFINES += ORG_NAME=\\\"Phonations\\\"
+
+INCLUDEPATH += ../../libs
+
 HEADERS += \
 	../../libs/PhTools/PhTime.h \
 	../../libs/PhTools/PhTimeCode.h \
@@ -12,7 +19,9 @@ HEADERS += \
     ../../libs/PhTools/PhDebug.h \
     ../../libs/PhTools/tests/PhTimeCodeTest.h \
     ../../libs/PhTools/PhTickCounter.h \
-    ../../libs/PhTools/PhPictureTools.h
+    ../../libs/PhTools/PhPictureTools.h \
+    ../../libs/PhTools/PhGenericSettings.h \
+    ../../libs/PhTools/tests/PhSettingsTest.h
 
 SOURCES += \
     ../../libs/PhTools/PhTimeCode.cpp \
@@ -20,7 +29,9 @@ SOURCES += \
     ../../libs/PhTools/PhDebug.cpp \
     ../../libs/PhTools/tests/PhTimeCodeTest.cpp \
     ../../libs/PhTools/PhTickCounter.cpp \
-    ../../libs/PhTools/PhPictureTools.cpp
+    ../../libs/PhTools/PhPictureTools.cpp \
+    ../../libs/PhTools/PhGenericSettings.cpp \
+    ../../libs/PhTools/tests/PhSettingsTest.cpp
 
 # Windows specific
 win32 {
@@ -52,6 +63,8 @@ mac {
 }
 
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
+
+JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 CONFIG(release, debug|release) {
 	mac {

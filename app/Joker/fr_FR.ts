@@ -513,12 +513,12 @@
     <message>
         <location filename="PreferencesDialog.ui" line="286"/>
         <source>No sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de synchronisation</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="291"/>
         <source>Sony 9 pin</source>
-        <translation type="unfinished"></translation>
+        <translation>Sony 9 pin</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="328"/>

@@ -9,10 +9,11 @@
 
 #include <QObject>
 #include <QSerialPort>
-#include <QSettings>
 #include <QThread>
 
-#include <PhTools/PhClock.h>
+#include "PhTools/PhClock.h"
+
+#include "PhSyncSettings.h"
 
 /**
  * @brief Sony abstract controller for  sony 9 pin communication through the serial port.
@@ -52,7 +53,7 @@ public:
 	 * @param settings The application settings
 	 * @param comSuffix Serial port name suffix
 	 */
-	explicit PhSonyController(PhTimeCodeType tcType, QSettings *settings, QString comSuffix);
+	explicit PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, QString comSuffix);
 
 	/**
 	 * @brief PhSonyController destructor
@@ -204,7 +205,7 @@ protected:
 	PhClock _clock;
 
 	/** @brief The application settings */
-	QSettings* _settings;
+	PhSyncSettings* _settings;
 
 	/** @brief Serial port name suffix (A for slave and B for master). */
 	QString _comSuffix;

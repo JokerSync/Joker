@@ -23,11 +23,12 @@ extern "C" {
 
 #include <QObject>
 #include <QElapsedTimer>
-#include <QSettings>
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTickCounter.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
+
+#include "PhVideoSettings.h"
 
 /**
  * @brief The video engine
@@ -109,9 +110,9 @@ public:
 
 	/**
 	 * @brief Set the settings
-	 * @param settings the desired QSettings
+	 * @param settings the desired settings
 	 */
-	void setSettings(QSettings *settings);
+	void setSettings(PhVideoSettings *settings);
 	/**
 	 * @brief Set first frame
 	 * @param frame the new first frame
@@ -150,7 +151,7 @@ private:
 	int64_t frame2time(PhFrame f);
 	PhFrame time2frame(int64_t t);
 
-	QSettings *_settings;
+	PhVideoSettings *_settings;
 	QString _fileName;
 	PhClock _clock;
 	PhFrame _firstFrame;

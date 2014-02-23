@@ -12,9 +12,6 @@ ICON = joker.icns
 
 QT += core gui
 
-JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
-
-
 # The application version
 VERSION = 1.1.3
 # Define the preprocessor macro to get the application version in our application.
@@ -23,18 +20,18 @@ DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 INCLUDEPATH += ../../libs
 
-# Currently LTC works only on Unix system
-unix {
-	CONFIG += ltc
-include(../../libs/PhAudio/PhAudio.pri)
-}
-
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 include(../../libs/PhVideo/PhVideo.pri)
+
+# Currently LTC works only on Unix system
+unix {
+	CONFIG += ltc
+	include(../../libs/PhAudio/PhAudio.pri)
+}
 include(../../libs/PhSync/PhSync.pri)
 
 #Main app
@@ -47,7 +44,6 @@ SOURCES += main.cpp \
 	PropertyDialog.cpp \
     PeopleDialog.cpp
 
-
 HEADERS += \
     JokerWindow.h \
 	VideoStripView.h \
@@ -55,7 +51,8 @@ HEADERS += \
     AboutDialog.h \
     PreferencesDialog.h \
 	PropertyDialog.h \
-    PeopleDialog.h
+    PeopleDialog.h \
+    JokerSettings.h
 
 FORMS += \
     JokerWindow.ui \

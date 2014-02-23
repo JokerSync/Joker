@@ -42,14 +42,6 @@
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
-        <widget class="QCheckBox" name="cBoxLastFile">
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Remember last open file</string>
-         </property>
-        </widget>
         <widget class="QCheckBox" name="cBoxDeinterlace">
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>

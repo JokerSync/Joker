@@ -7,20 +7,20 @@
 #ifndef JOKERWINDOW_H
 #define JOKERWINDOW_H
 
-#include <QMainWindow>
 #include <QMessageBox>
-#include <QSettings>
 #include <QPropertyAnimation>
 
-#include "VideoStripView.h"
 #include "PhSync/PhSonySlaveController.h"
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 #if USE_LTC
 #include "PhSync/PhLtcReader.h"
 #endif
 
+#include "PhCommonUI/PhDocumentWindow.h"
+#include "VideoStripView.h"
 #include "SonyVideoStripSynchronizer.h"
 #include "PropertyDialog.h"
+#include "JokerSettings.h"
 
 namespace Ui {
 class JokerWindow;
@@ -40,7 +40,7 @@ class JokerWindow;
  * - Handling controls command
  * - Connect the application modules: PhVideoEngine, PhGraphicStrip, Synchronizer, PhSonySlaveController, PhLtcReader
  */
-class JokerWindow : public QMainWindow
+class JokerWindow : public PhDocumentWindow
 {
 	Q_OBJECT
 
@@ -50,18 +50,8 @@ public:
 	 *
 	 * @param settings The application settings
 	 */
-	explicit JokerWindow(QSettings *settings);
+	explicit JokerWindow(JokerSettings *settings);
 	~JokerWindow();
-
-	/**
-	 * @brief Open all supported strip file
-	 *
-	 * First the file existance is checked then,
-	 * If the file is a supported rythmo file, it will call the PhStripDoc function openStripFile().
-	 *
-	 * @param filePath The file path
-	 */
-	void openFile(QString filePath);
 
 	/**
 	 * @brief Open a video file
@@ -75,6 +65,16 @@ public:
 	bool openVideoFile(QString videoFile);
 
 protected:
+	/**
+	 * @brief Open all supported strip file
+	 *
+	 * First the file existance is checked then,
+	 * If the file is a supported rythmo file, it will call the PhStripDoc function openStripFile().
+	 *
+	 * @param filePath The file path
+	 */
+	bool openDocument(QString filePath);
+
 	/**
 	 * @brief event Filter
 	 *
@@ -101,6 +101,7 @@ protected:
 		MediaPanelHidden
 	};
 
+	QMenu *recentDocumentMenu();
 
 private slots:
 	// Qt Designer slots
@@ -161,8 +162,6 @@ private slots:
 
 	void on_actionPrevious_element_triggered();
 
-	void openRecent();
-
 	void on_actionSave_triggered();
 
 	void on_actionSave_as_triggered();
@@ -180,7 +179,7 @@ private:
 	PhGraphicStrip * _strip;
 	PhVideoEngine * _videoEngine;
 	PhStripDoc *_doc;
-	QSettings *_settings;
+	JokerSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	VideoStripSynchronizer _synchronizer;
 #if USE_LTC
@@ -194,17 +193,10 @@ private:
 
 	PropertyDialog _propertyDialog;
 
-	QVector<QAction *> _recentFileButtons;
-
 	bool _needToSave;
-	QString _currentStripFile;
 
-	void updateOpenRecent();
-	void setupOpenRecentMenu();
 	void setupSyncProtocol();
 	void closeEvent(QCloseEvent *event);
-
-	void setCurrentStripFile(QString stripFile);
 
 	bool checkSaveFile();
 };

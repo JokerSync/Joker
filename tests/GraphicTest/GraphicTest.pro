@@ -22,14 +22,14 @@ include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
 
 HEADERS  += \
 	GraphicTestView.h \
-	MainWindow.h \
+	GraphicTestWindow.h
 
 SOURCES += main.cpp \
 	GraphicTestView.cpp \
-    MainWindow.cpp
+    GraphicTestWindow.cpp
 
 FORMS += \
-	MainWindow.ui
+	GraphicTestWindow.ui
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\img\look.png) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\Bedizen.ttf) $${RESOURCES_PATH} $${CS}

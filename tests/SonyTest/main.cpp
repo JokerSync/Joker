@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+#include "SonyTestWindow.h"
 #include <QApplication>
 #include <QtTest>
 
