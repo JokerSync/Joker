@@ -104,6 +104,7 @@ protected:
 	 */
 	void paint();
 
+	bool eventFilter(QObject *sender, QEvent *event);
 private slots:
 	void onVideoSync();
 	void onDocChanged();

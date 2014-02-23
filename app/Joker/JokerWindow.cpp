@@ -26,9 +26,9 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_needToSave(false),
-#if USE_LTC
+	#if USE_LTC
 	_ltcReader(),
-#endif
+	#endif
 	_currentStripFile("")
 {
 	// Setting up UI
@@ -64,27 +64,27 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
 	_mediaPanel.setStyleSheet(
-	    "* {"
-	    "	  color: white;"
-	    "  }"
-	    "  PhMediaPanel { "
-	    "	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
-	    "	  border-style: solid;                                                                          "
-	    "	  border-width: 4px;                                                                            "
-	    "	  border-radius: 3px;                                                                           "
-	    "	  border-color: white;                                                                          "
-	    "  }                                                                                                "
-	    "  QPushButton, QComboBox{                                                                          "
-	    "	  background: grey;                                                                             "
-	    "	  border-style: outset;                                                                         "
-	    "	  border-width: 2px;                                                                            "
-	    "	  border-radius: 5px;                                                                           "
-	    "	  border-color: white;                                                                          "
-	    "  }                                                                                                "
-	    "  QLabel#_timecodeLabel{                                                                           "
-	    "	  padding: 10px;                                                                                "
-	    "  }                                                                                                "
-	    );
+				"* {"
+				"	  color: white;"
+				"  }"
+				"  PhMediaPanel { "
+				"	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
+				"	  border-style: solid;                                                                          "
+				"	  border-width: 4px;                                                                            "
+				"	  border-radius: 3px;                                                                           "
+				"	  border-color: white;                                                                          "
+				"  }                                                                                                "
+				"  QPushButton, QComboBox{                                                                          "
+				"	  background: grey;                                                                             "
+				"	  border-style: outset;                                                                         "
+				"	  border-width: 2px;                                                                            "
+				"	  border-radius: 5px;                                                                           "
+				"	  border-color: white;                                                                          "
+				"  }                                                                                                "
+				"  QLabel#_timecodeLabel{                                                                           "
+				"	  padding: 10px;                                                                                "
+				"  }                                                                                                "
+				);
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
@@ -291,21 +291,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		hideMediaPanel();
 		break;
 	case QEvent::MouseMove:
-		// Show the mediaPanel only if Joker has focus and is not remote controlled.
-		if(this->hasFocus() and _settings->value("synchroProtocol", VideoStripSynchronizer::NoSync).toInt() == 0)
-			// Show the mediaPanel only if Joker has focus.
-			if(this->hasFocus())
-				fadeInMediaPanel();
-		mousePos = static_cast<QMouseEvent *>(event)->pos();
-		if(mousePos.y() > (this->height() - ui->videoStripView->stripHeight()) * 0.95 and mousePos.y() < (this->height() - ui->videoStripView->stripHeight()) * 1.05) {
-			QApplication::setOverrideCursor(Qt::SizeVerCursor);
-			if(_mousePressed)
-				_settings->setValue("stripHeight", 1.0 - ((float) mousePos.y() /(float) this->height()));
-		}
-
-		else
-			QApplication::setOverrideCursor(Qt::ArrowCursor);
-
+		fadeInMediaPanel();
 		break;
 
 	case QEvent::Drop:
@@ -329,6 +315,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		event->accept();
 		break;
 	case QEvent::MouseButtonDblClick:
+#warning TODO switch to right click
 		// If the sender is "this" and no videofile is loaded
 		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length()) {
 			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
@@ -355,12 +342,6 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			return true;
 		}
 		break;
-	case QEvent::MouseButtonPress:
-		_mousePressed = true;
-		return false;
-	case QEvent::MouseButtonRelease:
-		_mousePressed = false;
-		return false;
 	default:
 		break;
 	}
@@ -391,9 +372,9 @@ void JokerWindow::on_actionOpen_triggered()
 
 	if(checkSaveFile()) {
 		QString filter = tr("DetX files") + " (*.detx);; "
-		                 + tr("Joker files") + " (*.strip);; "
-		                 + tr("Rythmo files") + " (*.detx *.strip);; "
-		                 + tr("All files") + " (*.*)";
+				+ tr("Joker files") + " (*.strip);; "
+				+ tr("Rythmo files") + " (*.detx *.strip);; "
+				+ tr("All files") + " (*.*)";
 		QFileDialog dlg(this, tr("Open..."), _settings->value("lastFolder", QDir::homePath()).toString(), filter);
 
 		dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
@@ -593,6 +574,9 @@ void JokerWindow::on_actionPreferences_triggered()
 
 void JokerWindow::fadeInMediaPanel()
 {
+	// Don't show the mediaPanel if Joker has not thefocus.
+	if(!this->hasFocus())
+		return;
 	// Don't show the mediaPanel if Joker is remote controled.
 	if(_settings->value("synchroProtocol").toInt() != VideoStripSynchronizer::NoSync)
 		return;
@@ -689,7 +673,7 @@ void JokerWindow::on_actionClear_list_triggered()
 	QStringList indexes = _settings->allKeys();
 	//Remove them from
 	foreach(QString index, indexes)
-	_settings->remove(index);
+		_settings->remove(index);
 
 	//Close the group
 	_settings->endGroup();
