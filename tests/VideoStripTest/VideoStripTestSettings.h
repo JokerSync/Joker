@@ -4,19 +4,16 @@
 #include <QDir>
 
 #include "PhTools/PhGenericSettings.h"
-#include "PhGraphic/PhGraphicSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhVideo/PhVideoSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
 class VideoStripTestSettings : PhGenericSettings,
-	public PhGraphicSettings,
 	public PhGraphicStripSettings,
 	public PhVideoSettings,
 	public PhDocumentWindowSettings
 {
 public:
-	// PhGraphicSettings :
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 
 	// PhGraphicStripSettings :

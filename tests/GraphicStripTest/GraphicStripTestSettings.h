@@ -13,7 +13,6 @@ class GraphicStripTestSettings : PhGenericSettings,
 
 {
 public:
-	// PhGraphicSettings :
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 
 	// PhGraphicStripSettings :

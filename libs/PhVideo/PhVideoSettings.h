@@ -7,8 +7,6 @@
 #ifndef PHVIDEOSETTINGS_H
 #define PHVIDEOSETTINGS_H
 
-#include "PhGraphic/PhGraphicSettings.h"
-
 /**
  * @brief The settings for the PhVideoEngine
  */

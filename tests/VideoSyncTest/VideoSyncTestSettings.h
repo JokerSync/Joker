@@ -14,7 +14,6 @@ class VideoSyncTestSettings : PhGenericSettings,
 	public PhDocumentWindowSettings
 {
 public:
-	// PhGraphicSettings :
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 
 	// PhVideoSettings :

@@ -92,6 +92,7 @@ void MainWindow::onDeviceIdData(unsigned char id1, unsigned char id2)
 
 void MainWindow::onStatusData(unsigned char *statusData, int offset, int length)
 {
+	Q_UNUSED(offset);
 	QString statusStr = "";
 	for (int i = 0; i < length; i++)
 		statusStr += QString::number(statusData[i], 16) + " ";

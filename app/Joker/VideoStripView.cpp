@@ -22,10 +22,8 @@ VideoStripView::VideoStripView(QWidget *parent) :
 
 void VideoStripView::setSettings(JokerSettings *settings)
 {
-	PhGraphicView::setSettings(settings);
 	_settings = settings;
 	_strip.setSettings(settings);
-
 }
 
 void VideoStripView::setSony(PhSonyController *sony)

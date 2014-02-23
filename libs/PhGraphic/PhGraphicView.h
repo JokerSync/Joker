@@ -12,7 +12,6 @@
 
 #include "PhTools/PhTime.h"
 #include "PhTools/PhTickCounter.h"
-#include "PhGraphicSettings.h"
 
 /**
  * @brief The PhGraphicView class is a canvas to create your custom graphic view.
@@ -57,12 +56,6 @@ signals:
 	void beforePaint(PhTimeScale frequency);
 
 protected:
-
-	/**
-	 * @brief Set the settings
-	 * @param settings the desired settings
-	 */
-	void setSettings(PhGraphicSettings *settings);
 	/**
 	 * @brief initialization, every class have to re-implement it.
 	 * @return true if everything went well, false otherwise.
@@ -96,11 +89,6 @@ private slots:
 	void onRefresh();
 
 private:
-	/**
-	 * @brief The member containing the settings
-	 */
-	PhGraphicSettings * _settings;
-
 	/**
 	 * @brief t_Timer
 	 * used to draw
