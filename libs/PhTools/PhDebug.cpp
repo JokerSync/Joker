@@ -42,19 +42,30 @@ void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, c
 		}
 
 		// Display function name
-		if (instance()->_displayFileName) {
-			logMessage += QString(context.function).split("::").last().split("(").first() + "\t";
+		if (instance()->_displayFunctionName) {
+			logMessage += QString(context.function) + "\t";
 		}
 
 		// Display line number
-		if (instance()->_displayFileName) {
+		if (instance()->_displayLine) {
 			logMessage += QString("@") + QString::number(context.line) + "\t";
 		}
 
 		logMessage += msg;
 
-		if(instance()->_showConsole)
-			std::cout << logMessage.toStdString() << std::endl;
+		if(instance()->_showConsole) {
+			switch(type) {
+			case QtDebugMsg:
+				std::cout << logMessage.toStdString() << std::endl;
+				break;
+			case QtWarningMsg:
+			case QtCriticalMsg:
+			case QtFatalMsg:
+				std::cerr << logMessage.toStdString() << std::endl;
+				break;
+			}
+		}
+
 		*instance()->_textLog << logMessage << endl;
 	}
 }
@@ -86,10 +97,16 @@ PhDebug* PhDebug::instance()
 	return _d;
 }
 
-QDebug PhDebug::debug(int messageLogLevel)
+QDebug PhDebug::debug(const char *fileName, int lineNumber, const char *functionName, int messageLogLevel)
 {
 	instance()->_currentLogLevel = messageLogLevel;
-	return qDebug();
+	return QMessageLogger(fileName, lineNumber, functionName).debug();
+}
+
+QDebug PhDebug::error(const char *fileName, int lineNumber, const char *functionName)
+{
+	instance()->_currentLogLevel = 0;
+	return QMessageLogger(fileName, lineNumber, functionName).critical();
 }
 
 PhDebug::PhDebug()

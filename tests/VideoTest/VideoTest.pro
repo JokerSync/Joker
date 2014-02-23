@@ -10,9 +10,7 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
 
-JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
-
-INCLUDEPATH += $${JOKER_ROOT}/libs
+INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
@@ -27,11 +25,3 @@ SOURCES += \
 
 FORMS += \
     VideoTestWindow.ui
-
-CONFIG(release, debug|release) {
-
-	mac {
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)$${TARGET}_v$${VERSION}.dmg
-	}
-}

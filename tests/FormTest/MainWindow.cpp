@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QMessageBox>
 #include <QScreen>
+#include <QTime>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
