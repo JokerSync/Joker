@@ -25,8 +25,10 @@ bool PhWindow::eventFilter(QObject *sender, QEvent *event)
 	case QEvent::WindowStateChange:
 		{
 			_settings->setFullScreen(QMainWindow::isFullScreen());
-			if(this->fullScreenAction())
+			if(this->fullScreenAction()) {
+				this->fullScreenAction()->setCheckable(true);
 				this->fullScreenAction()->setChecked(QMainWindow::isFullScreen());
+			}
 		}
 		break;
 	default:

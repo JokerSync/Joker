@@ -9,8 +9,8 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settings, QWidget *parent) :
-	PhDocumentWindow(settings, parent),
+GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settings) :
+	PhDocumentWindow(settings),
 	ui(new Ui::GraphicStripTestWindow),
 	_settings(settings)
 {
@@ -24,6 +24,8 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
+
+	connect(ui->actionFull_screen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
 	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
@@ -60,6 +62,11 @@ void GraphicStripTestWindow::createFile(int nbPeople, int nbLoop, int nbText, in
 QMenu *GraphicStripTestWindow::recentDocumentMenu()
 {
 	return ui->menuOpen_recent;
+}
+
+QAction *GraphicStripTestWindow::fullScreenAction()
+{
+	return ui->actionFull_screen;
 }
 
 void GraphicStripTestWindow::onOpenFile()
@@ -179,14 +186,6 @@ void GraphicStripTestWindow::on_actionPrevious_Element_triggered()
 void GraphicStripTestWindow::on_actionNext_Element_triggered()
 {
 	_clock->setFrame(_doc->getNextElementFrame(_clock->frame()));
-}
-
-void GraphicStripTestWindow::on_actionFull_Screen_triggered()
-{
-	if(this->windowState() != Qt::WindowFullScreen)
-		this->setWindowState(Qt::WindowFullScreen);
-	else
-		this->setWindowState(Qt::WindowMinimized);
 }
 
 void GraphicStripTestWindow::on_actionStrip_Properties_triggered()

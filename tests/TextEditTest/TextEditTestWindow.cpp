@@ -7,8 +7,8 @@
 #include "TextEditTestWindow.h"
 #include "ui_TextEditTestWindow.h"
 
-TextEditTestWindow::TextEditTestWindow(TextEditTestSettings *settings, QWidget *parent) :
-	PhDocumentWindow(settings, parent),
+TextEditTestWindow::TextEditTestWindow(TextEditTestSettings *settings) :
+	PhDocumentWindow(settings),
 	ui(new Ui::TextEditTestWindow),
 	_settings(settings)
 {

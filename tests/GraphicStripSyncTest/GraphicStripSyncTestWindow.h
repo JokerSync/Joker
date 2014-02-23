@@ -17,7 +17,7 @@ class GraphicStripSyncTestWindow : public PhDocumentWindow
 	Q_OBJECT
 
 public:
-	explicit GraphicStripSyncTestWindow(GraphicStripSyncTestSettings *settings, QWidget *parent = 0);
+	explicit GraphicStripSyncTestWindow(GraphicStripSyncTestSettings *settings);
 	~GraphicStripSyncTestWindow();
 
 	bool openDocument(QString fileName);
