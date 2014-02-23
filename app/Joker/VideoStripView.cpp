@@ -199,7 +199,7 @@ bool VideoStripView::eventFilter(QObject *, QEvent *event)
 			QMouseEvent * mouseEvent = (QMouseEvent*)event;
 			float stripHeight = this->height() * _settings->value("stripHeight", 0.25f).toFloat();
 			if((mouseEvent->pos().y() > (this->height() - stripHeight) * 0.95)
-					&& (mouseEvent->pos().y() < (this->height() - stripHeight) * 1.05)) {
+			   && (mouseEvent->pos().y() < (this->height() - stripHeight) * 1.05)) {
 				QApplication::setOverrideCursor(Qt::SizeVerCursor);
 				if(mouseEvent->buttons() & Qt::LeftButton)
 					_settings->setValue("stripHeight", 1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));

@@ -94,6 +94,7 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 		QApplication::setOverrideCursor(Qt::SizeVerCursor);
 		_mousePressed = true;
 		_mousePressedLocation = static_cast<QMouseEvent *>(event)->pos();
+#warning TODO make it font size independant
 		if(_mousePressedLocation.x() > 110 and _mousePressedLocation.x() < 145) {
 			_selectedIndex = 0;
 		}

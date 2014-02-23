@@ -27,6 +27,7 @@ PhAudio::~PhAudio()
 
 bool PhAudio::init(QString deviceName)
 {
+	Q_UNUSED(deviceName)
 	return _paInitOk;
 }
 
