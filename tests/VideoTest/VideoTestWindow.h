@@ -37,6 +37,7 @@ public:
 
 protected:
 	void resizeEvent(QResizeEvent *);
+	void closeEvent(QCloseEvent *);
 
 private slots:
 	void on_actionPlay_pause_triggered();

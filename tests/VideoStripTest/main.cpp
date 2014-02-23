@@ -21,8 +21,6 @@ int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 
-	PhDebug::init(false, true, true, true, true, true, 1, "VideoStripTest");
-
 	QSettings settings("Phonations", "VideoStripTest");
 	MainWindow w(&settings);
 
@@ -32,7 +30,7 @@ int main(int argc, char *argv[])
 		QString fileName = argv[1];
 		w.openFile(fileName);
 	}
-	else{
+	else {
 		QString lastFile = settings.value("lastFile", "").toString();
 		if(QFile(lastFile).exists())
 			w.openFile(lastFile);

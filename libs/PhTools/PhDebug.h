@@ -8,21 +8,15 @@
 #define PHDEBUG_H
 
 #include <QDebug>
-#include <QDate>
-#include <QRect>
-#include <QFile>
 
-#include "iostream"
+/** PHERR allow to log error */
+#define PHERR PhDebug::error(__FILE__, __LINE__, __FUNCTION__)
 
 /** PHDBG allow to have a multi level log system */
-#define PHDBG(logLevelMessage) PhDebug::instance(logLevelMessage) <<  qDebug() << Q(PhDebug::getFileName(__FILE__)) << Q(PhDebug::getFuncName(__FUNCTION__)) << Q(PhDebug::getLine(__LINE__))
+#define PHDBG(messageLogLevel) PhDebug::debug(__FILE__, __LINE__, __FUNCTION__, messageLogLevel)
 
 /** PHDEBUG is the default log system */
-#define PHDEBUG PHDBG()
-
-#warning TODO I don't like it...
-/** In order to get rid of double quotes when displaying a variable */
-#define Q(string) (string).toStdString().c_str()
+#define PHDEBUG PHDBG(0)
 
 /**
  * @brief A custom log system
@@ -33,44 +27,32 @@
 class PhDebug
 {
 public:
-
-	PhDebug();
-
 	/**
-	 * @brief Get the instance
-	 * As the debugger is a singleton, this is the only way to access it.
-	 * @param logLevelMessage the desired mask
-	 * @return The debugger
+	 * @brief Setup the debug log stream state
+	 *
+	 * This log stream can filter some message when the message log level is not fitting the mask.
+	 *
+	 * @param fileName The file name where the log was triggered from
+	 * @param lineNumber The line number where the log was triggered from
+	 * @param functionName The function name where the log was triggered from
+	 * @param messageLogLevel The log level
+	 * @return A QDebug stream
 	 */
-	static PhDebug instance(int logLevelMessage = 0);
-
-	/**
-	 * @brief operator <<
-	 * @param dbg
-	 * @return
-	 */
-	QDebug operator<<(QDebug dbg);
+	static QDebug debug(const char *fileName, int lineNumber, const char *functionName, int messageLogLevel);
 
 	/**
-	 * @brief Get the function name
-	 * @param name The name of the function
-	 * @return If the output is enabled, the function name, else an empty string
+	 * @brief Setup the error log stream state
+	 *
+	 * @param fileName The file name where the log was triggered from
+	 * @param lineNumber The line number where the log was triggered from
+	 * @param functionName The function name where the log was triggered from
+	 * @return A QCritical stream
 	 */
-	static QString getFuncName(QString name);
-	/**
-	 * @brief Get the file name
-	 * @param name The name of the file
-	 * @return If the output is enabled, the file name, else an empty string
-	 */
-	static QString getFileName(QString name);
-	/**
-	 * @brief Get the line number
-	 * @param line The name of the function
-	 * @return If the output is enabled, the number of the line, else an empty string
-	 */
-	static QString getLine(int line);
+	static QDebug error(const char *fileName, int lineNumber, const char *functionName);
+
 	/**
 	 * @brief Set the log mask
+	 *
 	 * Enable the message with the corresponding mak :
 	 *
 	 *	Always			=>	0
@@ -109,7 +91,28 @@ public:
 	 */
 	static void showConsole(bool show);
 
+	/**
+	 * @brief Specify what a log message shall display
+	 * @param date Display the date
+	 * @param time Display the time
+	 * @param fileName Display the file name
+	 * @param functionName Display the function name
+	 * @param line Display the line number
+	 */
+	static void setDisplay(bool date, bool time, bool fileName, bool functionName, bool line);
 private:
+	/**
+	 * @brief PhDebug constructor
+	 */
+	PhDebug();
+
+	/**
+	 * @brief Get the singleton instance of PhDebug
+	 *
+	 * @return The debugger
+	 */
+	static PhDebug* instance();
+
 	/**
 	 * @brief Custom message output
 	 *
@@ -123,16 +126,16 @@ private:
 	 */
 	static void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
-	static PhDebug * d;
+	static PhDebug * _d;
 	int _logMask;
 	int _currentLogLevel;
-	QFile * _log;
-	QString _logLocation;
-	bool _dispFuncName;
-	bool _dispTime;
-	bool _dispDate;
-	bool _dispFileName;
-	bool _dispLine;
+	QTextStream *_textLog;
+	QString _logFileName;
+	bool _displayDate;
+	bool _displayTime;
+	bool _displayFileName;
+	bool _displayFunctionName;
+	bool _displayLine;
 	bool _showConsole;
 	QString total;
 

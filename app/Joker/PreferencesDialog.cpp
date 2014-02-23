@@ -53,7 +53,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 		ui->radioButtonQF->setChecked(true);
 		ui->spinBoxDelay->setValue(_oldDelay / 10);
 	}
-	else{
+	else {
 		ui->radioButtonMS->setChecked(true);
 		ui->spinBoxDelay->setValue(_oldDelay);
 	}
@@ -115,11 +115,11 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 		}
 	}
 
-	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
-
 #if USE_LTC
 	ui->listWidgetSync->addItem("LTC");
 #endif
+
+	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
 
 	if(_oldSyncProtocol == VideoStripSynchronizer::Sony)
 		showParamSony(true);
@@ -127,7 +127,7 @@ PreferencesDialog::PreferencesDialog(QSettings *settings, QWidget *parent) :
 	else if(_oldSyncProtocol == VideoStripSynchronizer::LTC)
 		showParamLTC(true);
 #endif
-	else{
+	else {
 		showParamLTC(false);
 		showParamSony(false);
 	}
@@ -335,11 +335,14 @@ void PreferencesDialog::showParamLTC(bool show)
 		showParamSony(false);
 #if USE_LTC
 		ui->listWidgetInputs->addItems(PhLtcReader::inputList());
+		foreach(QString inputName, PhLtcReader::inputList()) {
+			PHDEBUG << inputName;
+		}
 #endif
 		if(ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).count() > 0)
 			ui->listWidgetInputs->findItems(_settings->value("ltcInputDevice", "").toString(), Qt::MatchExactly).first()->setSelected(1);
 	}
-	else{
+	else {
 		ui->lblInputs->setVisible(0);
 		ui->listWidgetInputs->setVisible(0);
 	}
@@ -354,7 +357,7 @@ void PreferencesDialog::showParamSony(bool show)
 		ui->lblSonyID->setVisible(1);
 		showParamLTC(false);
 	}
-	else{
+	else {
 		ui->spinBoxSonyHighSpeed->setVisible(0);
 		ui->lineEditSonyID->setVisible(0);
 		ui->lblSonyHighSpeed->setVisible(0);

@@ -105,6 +105,7 @@
     </property>
     <addaction name="actionSelect_character"/>
     <addaction name="actionTest_mode"/>
+    <addaction name="actionForce_16_9_ratio"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -315,6 +316,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionForce_16_9_ratio">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Force 16/9 ratio</string>
+   </property>
+   <property name="shortcut">
+    <string>F8</string>
    </property>
   </action>
  </widget>

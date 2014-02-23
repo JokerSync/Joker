@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = LTCTool
 TEMPLATE = app
 
+VERSION = 1.0.0
+
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 
 CONFIG += ltc
@@ -18,15 +20,16 @@ CONFIG += ltc
 INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri);
+include(../../libs/PhAudio/PhAudio.pri);
 include(../../libs/PhSync/PhSync.pri);
 include(../../libs/PhCommonUI/PhCommonUI.pri);
 
 SOURCES += main.cpp\
         LTCToolWindow.cpp \
-    PreferencesPanel.cpp
+    PreferencesDialog.cpp
 
 HEADERS  += LTCToolWindow.h \
-    PreferencesPanel.h
+    PreferencesDialog.h
 
 FORMS    += LTCToolWindow.ui \
-    PreferencesPanel.ui
+    PreferencesDialog.ui

@@ -138,7 +138,7 @@ void JokerWindow::updateOpenRecent()
 		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), menu);
 	}
 	// Else, add it
-	else{
+	else {
 		// Set the corresponding button
 		QAction * action = new QAction(_doc->getFilePath(), this);
 		// Set the ObjectName, very important for openRecent()
@@ -209,7 +209,7 @@ void JokerWindow::setupSyncProtocol()
 			clock = _sonySlave.clock();
 			ui->videoStripView->setSony(&_sonySlave);
 		}
-		else{
+		else {
 			type = VideoStripSynchronizer::NoSync;
 			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
 		}
@@ -220,13 +220,15 @@ void JokerWindow::setupSyncProtocol()
 			QString input = _settings->value("ltcInputDevice").toString();
 			if(_ltcReader.init(input))
 				clock = _ltcReader.clock();
-			else{
+			else {
 				QMessageBox::critical(this, "", "Unable to open " + input);
 				type = VideoStripSynchronizer::NoSync;
 			}
 			break;
 		}
 #endif
+	case VideoStripSynchronizer::NoSync:
+		break;
 	}
 
 	_synchronizer.setSyncClock(clock, type);
@@ -245,6 +247,8 @@ void JokerWindow::openFile(QString fileName)
 	if(QFile::exists(fileName)) {
 		if(_doc->openStripFile(fileName)) {
 			setCurrentStripFile(fileName);
+			ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
+			ui->videoStripView->setForceRatio169(_doc->forceRatio169());
 
 			// Opening the corresponding video file if it exists
 			if(openVideoFile(_doc->getVideoPath())) {
@@ -350,6 +354,8 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 {
 	if(!checkSaveFile())
 		event->ignore();
+	else
+		_mediaPanel.close();
 }
 
 void JokerWindow::setCurrentStripFile(QString stripFile)
@@ -692,7 +698,7 @@ void JokerWindow::on_actionSave_triggered()
 	QFileInfo info(_currentStripFile);
 	if(!info.exists() || (info.suffix() != "strip"))
 		on_actionSave_as_triggered();
-	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode()))
+	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked()))
 		_needToSave = false;
 	else
 		QMessageBox::critical(this, "", tr("Unable to save ") + _currentStripFile);
@@ -707,7 +713,7 @@ void JokerWindow::on_actionSave_as_triggered()
 	// If there is no current strip file, ask for a name
 	if(stripFile == "")
 		stripFile = lastFolder;
-	else{
+	else {
 		QFileInfo info(stripFile);
 		if(info.suffix() != "strip")
 			stripFile = lastFolder + "/" + info.completeBaseName() + ".strip";
@@ -715,7 +721,7 @@ void JokerWindow::on_actionSave_as_triggered()
 
 	stripFile = QFileDialog::getSaveFileName(this, tr("Save..."), stripFile,"*.strip");
 	if(stripFile != "") {
-		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode())) {
+		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
 			_needToSave = false;
 			setCurrentStripFile(stripFile);
 		}
@@ -750,4 +756,10 @@ void JokerWindow::on_actionSelect_character_triggered()
 	PeopleDialog dlg(this, _doc, ui->videoStripView->getSelectedPeoples());
 
 	dlg.exec();
+}
+
+void JokerWindow::on_actionForce_16_9_ratio_triggered()
+{
+	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
+	_needToSave = true;
 }
