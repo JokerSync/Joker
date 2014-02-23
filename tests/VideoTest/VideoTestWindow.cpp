@@ -43,8 +43,6 @@ bool VideoTestWindow::openFile(QString fileName)
 			_settings->setValue("lastVideoFile", fileName);
 			return true;
 		}
-		else
-			QMessageBox::critical(this, "Error", "Unable to open video.");
 	}
 	return false;
 }
@@ -54,6 +52,11 @@ void VideoTestWindow::resizeEvent(QResizeEvent *)
 	PHDEBUG << this->width() << this->height();
 	_mediaPanelDialog.move(this->x() + this->width() / 2 - _mediaPanelDialog.width() / 2,
 	                       this->y() + this->height() * 0.95 - _mediaPanelDialog.height());
+}
+
+void VideoTestWindow::closeEvent(QCloseEvent *)
+{
+	_mediaPanelDialog.close();
 }
 
 void VideoTestWindow::on_actionPlay_pause_triggered()
@@ -89,8 +92,10 @@ void VideoTestWindow::on_actionSet_timestamp_triggered()
 void VideoTestWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
-	if(!openFile(fileName))
-		QMessageBox::critical(this, "Error", "Unable to open " + fileName);
+	if(QFile::exists(fileName)) {
+		if(!openFile(fileName))
+			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
+	}
 }
 
 void VideoTestWindow::on_actionReverse_triggered()

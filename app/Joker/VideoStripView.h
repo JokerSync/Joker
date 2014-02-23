@@ -80,7 +80,7 @@ public:
 	 * \brief Set if the video should be displayed with a forced aspect ratio
 	 * \param force
 	 */
-	void setForceRatio169(bool force){
+	void setForceRatio169(bool force) {
 		_forceRatio169 = force;
 	}
 

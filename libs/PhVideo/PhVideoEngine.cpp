@@ -210,7 +210,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
 	if (frame == _currentFrame)
 		result = true;
-	else{
+	else {
 		// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
 		if(frame - _currentFrame != 1) {
 			int flags = AVSEEK_FLAG_ANY;

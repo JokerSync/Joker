@@ -3,6 +3,8 @@
 #include <QFileDialog>
 #include <QPainter>
 #include <QMessageBox>
+#include <QScreen>
+#include <QTime>
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -26,6 +28,11 @@ MainWindow::MainWindow(QWidget *parent) :
 		generateYUV();
 	else
 		openFile(mode);
+	QScreen *screen = QGuiApplication::primaryScreen();
+	if (screen)
+		ui->labelFrequency->setText(QString::number(screen->refreshRate()) + "hz");
+
+
 }
 
 MainWindow::~MainWindow()
@@ -75,7 +82,7 @@ bool MainWindow::openFile(QString fileName)
 		this->update();
 		return true;
 	}
-	else{
+	else {
 		delete _image;
 		return false;
 	}

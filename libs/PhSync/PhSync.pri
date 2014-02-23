@@ -20,7 +20,7 @@ SOURCES += \
 
 ltc {
 INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib -lltc -lm -lportaudio
+LIBS += -L/usr/local/lib -lltc
 
 HEADERS += \
 	../../libs/PhSync/PhLtcReader.h \

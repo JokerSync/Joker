@@ -45,6 +45,7 @@ PhClock *PhGraphicStrip::clock()
 
 void PhGraphicStrip::setSettings(QSettings *settings)
 {
+	PHDEBUG;
 	_settings = settings;
 }
 
@@ -62,29 +63,37 @@ bool PhGraphicStrip::setFontFile(QString fontFile)
 
 bool PhGraphicStrip::init()
 {
-	PHDEBUG << "PhGraphicStrip::init()";
+	PHDEBUG << _settings;
 
 	// Clear the data stored
 	clearData();
 
-	//Load the strip background
+	PHDEBUG << "Load the strip background";
 	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png");
-
 	_stripBackgroundImage.init();
 
-	// Init the sync bar
+	PHDEBUG << "Init the sync bar";
 	_stripSyncBar.setColor(QColor(225, 86, 108));
 
-	// Load the font file
+	PHDEBUG << "Load the font file";
 	QString fontFile = "";
 	if(_settings != NULL)
 		fontFile = _settings->value("StripFontFile", "").toString();
+	else
+		PHDEBUG << "no settings...";
+
 	if(!QFile(fontFile).exists()) {
+		PHDEBUG << "File not found:" << fontFile;
 		fontFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
-		_settings->setValue("StripFontFile", fontFile);
+		if(_settings != NULL)
+			_settings->setValue("StripFontFile", fontFile);
+		else
+			PHDEBUG << "no settings...";
 	}
 	_textFont.setFontFile(fontFile);
-	_textFont.setBoldness(_settings->value("boldness", 0).toInt());
+
+	if(_settings != NULL)
+		_textFont.setBoldness(_settings->value("boldness", 0).toInt());
 
 
 	_hudFont.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "ARIAL.TTF");
@@ -136,7 +145,7 @@ QColor PhGraphicStrip::computeColor(PhPeople * people)
 	if(_selectedPeoples and !_selectedPeoples->contains(people)) {
 		return QColor(100, 100, 100);
 	}
-	else{
+	else {
 		return people->getColor();
 	}
 }
@@ -145,8 +154,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-	_clock.tick(60);
 	//	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
@@ -289,7 +296,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->draw();
 
 				//Check if the name is printed on the screen
-				if( (frameIn < text->getTimeOut())and (text->getTimeIn() - gPeople->getWidth() / pixelPerFrame < frameOut) ) {
+				if( (frameIn < text->getTimeOut()) && (text->getTimeIn() - gPeople->getWidth() / pixelPerFrame < frameOut) ) {
 					trackFull[track] = true;
 				}
 
@@ -329,7 +336,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			//                trackFull[track] = true;
 			//                //PHDEBUG << people->getName();
 			//            }
-			if(displayNextText and (frameOut < text->getTimeIn()) and ((lastText == NULL)or (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))) {
+			if(displayNextText && (frameOut < text->getTimeIn()) && ((lastText == NULL) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))) {
 				PhPeople * people = text->getPeople();
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				if(gPeople == NULL) {
@@ -356,7 +363,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 					else
 						background.setColor(QColor(90,90,90));
 				}
-				else{
+				else {
 					background.setColor(QColor(180, 180, 180));
 				}
 
@@ -443,7 +450,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 
 		foreach(PhStripOff * off, _doc.getOffs())
 		{
-			if( (frameIn < off->getTimeOut())and (off->getTimeIn() < frameOut) ) {
+			if( (frameIn < off->getTimeOut()) && (off->getTimeIn() < frameOut) ) {
 				PhGraphicSolidRect *gOff = _graphicOffs[off];
 				if(gOff == NULL) {
 					gOff = new PhGraphicSolidRect();

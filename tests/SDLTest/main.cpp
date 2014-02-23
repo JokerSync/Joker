@@ -168,7 +168,7 @@ int main(int argc, char **argv)
 				else
 					qDebug() <<" Error with : " << ch << (char) ch << minx << maxx << miny << maxy << advance;
 			}
-			else{
+			else {
 				glyphAdvance[ch] = 0;
 				glyphWidth[ch] = 0;
 			}

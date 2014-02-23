@@ -31,42 +31,42 @@ public:
 	 * @brief Get the PhPeople
 	 * @return _people the corresponding PhPeople
 	 */
-	PhPeople * getPeople(){
+	PhPeople * getPeople() {
 		return _people;
 	}
 	/**
 	 * @brief Get the track
 	 * @return _track the corresponding track
 	 */
-	int getTrack(){
+	int getTrack() {
 		return _track;
 	}
 	/**
 	 * @brief getTimeOut
 	 * @return _timeOut
 	 */
-	int getTimeOut(){
+	int getTimeOut() {
 		return _timeOut;
 	}
 	/**
 	 * @brief Set the PhPeople
 	 * @param people
 	 */
-	void setPeople(PhPeople * people){
+	void setPeople(PhPeople * people) {
 		_people = people;
 	}
 	/**
 	 * @brief Set the track
 	 * @param track
 	 */
-	void setTrack(int track){
+	void setTrack(int track) {
 		_track = track;
 	}
 	/**
 	 * @brief Set the time out
 	 * @param timeOut
 	 */
-	void setTimeOut(int timeOut){
+	void setTimeOut(int timeOut) {
 		_timeOut = timeOut;
 	}
 

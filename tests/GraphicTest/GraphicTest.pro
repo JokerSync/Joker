@@ -31,14 +31,6 @@ SOURCES += main.cpp \
 FORMS += \
 	MainWindow.ui
 
-mac {
-	DEFINES += PATH_TO_RESSOURCES=\\\"/../Resources/\\\"
-}
-
-win32 {
-	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
-}
-
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\img\look.png) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\Bedizen.ttf) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\SWENSON.TTF) $${RESOURCES_PATH} $${CS}

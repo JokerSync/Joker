@@ -39,9 +39,8 @@ MainWindow::~MainWindow()
 void MainWindow::openFile(QString fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
-	//  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
 	if(QFile::exists(fileName)) {
-		if(_doc->openDetX(fileName)) {
+		if(_doc->openStripFile(fileName)) {
 			_strip->clock()->setTimeCodeType(_doc->getTCType());
 			_strip->clock()->setFrame(_doc->getLastFrame());
 			this->setWindowTitle(fileName);
@@ -49,7 +48,7 @@ void MainWindow::openFile(QString fileName)
 			QFileInfo fileInfo(_doc->getVideoPath());
 			if (fileInfo.exists()) {
 				_videoEngine->open(_doc->getVideoPath());
-				_videoEngine->setFrameStamp(_doc->getVideoTimestamp());
+				_videoEngine->setFirstFrame(_doc->getVideoTimestamp());
 			}
 
 			_settings->setValue("lastFile", fileName);
@@ -59,7 +58,7 @@ void MainWindow::openFile(QString fileName)
 
 void MainWindow::on_actionOpen_triggered()
 {
-	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
+	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx *.strip)");
 	if(dlg.exec()) {
 		QString fileName = dlg.selectedFiles()[0];
 		openFile(fileName);
@@ -173,7 +172,7 @@ void MainWindow::on_actionSet_Time_Code_triggered()
 {
 	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _strip->clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
-		_videoEngine->setFrameStamp(dlg.frame());
+		_videoEngine->setFirstFrame(dlg.frame());
 
 }
 

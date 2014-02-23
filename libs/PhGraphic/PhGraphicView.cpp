@@ -11,6 +11,8 @@
 #else
 #include <SDL2/SDL_ttf.h>
 #endif
+#include <QtGui>
+
 #include "PhTools/PhDebug.h"
 #include "PhGraphicView.h"
 
@@ -29,7 +31,18 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 
 	t_Timer = new QTimer(this);
 	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
-	t_Timer->start(10);
+
+	//set the screen frequency to the most common value (60hz);
+	_screenFrequency = 60;
+	QScreen *screen = QGuiApplication::primaryScreen();
+	if (screen)
+		_screenFrequency = screen->refreshRate();
+	else
+		PHDEBUG << "Unable to get the screen";
+
+	int timerInterval = 500 / _screenFrequency;
+	t_Timer->start( timerInterval);
+	PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
 }
 
 PhGraphicView::~PhGraphicView()
@@ -63,14 +76,14 @@ void PhGraphicView::resizeGL(int width, int height)
 void PhGraphicView::setSettings(QSettings *settings)
 {
 	_settings = settings;
-	PHDBG(0) << "The refresh rate have changed. Set the property \"onRefreshTime\" and reload" << APP_NAME << "to apply changes";
-	t_Timer->start(_settings->value("onRefreshTime", 10).toInt());
+//	PHDBG(0) << "The refresh rate have changed. Set the property \"onRefreshTime\" and reload" << APP_NAME << "to apply changes";
+//	t_Timer->start(_settings->value("onRefreshTime", 10).toInt());
 }
 
 void PhGraphicView::paintGL()
 {
 	//PHDEBUG << "PhGraphicView::paintGL" ;
-	beforePaint(60);
+	emit beforePaint(_screenFrequency);
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1.0f, 1.0f, 1.0f);

@@ -5,13 +5,14 @@
  */
 
 #include <QtGlobal>
+#include <QDate>
 #include <QStringList>
-#include <QFile>
+#include <iostream>
 #include <QDir>
 
 #include "PhDebug.h"
 
-PhDebug* PhDebug::d = NULL;
+PhDebug* PhDebug::_d = NULL;
 
 // This function is called to create an instance of the class.
 // Calling the constructor publicly is not allowed. The constructor
@@ -21,57 +22,91 @@ PhDebug* PhDebug::d = NULL;
 void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
 	Q_UNUSED(type); Q_UNUSED(context);
-	if(d) {
-		if(d->_logMask & (1 << d->_currentLogLevel)) {
-			if(d->_showConsole)
-				fprintf(stderr, "%s \n", msg.toLocal8Bit().constData());
-			QTextStream ts(d->_log);
-			ts << msg << endl;
+	if(instance()->_logMask & (1 << instance()->_currentLogLevel)) {
+		QString logMessage = "";
+
+		// Display the date
+		if(instance()->_displayDate) {
+			logMessage += QDate::currentDate().toString("dd/MM/yyyy ");
 		}
+
+		// Display timestamp
+		if (instance()->_displayTime) {
+			logMessage += QTime::currentTime().toString("hh:mm:ss.zzz ");
+		}
+
+		// Display filename
+		if (instance()->_displayFileName) {
+
+			logMessage += QString(context.file).split("/").last() + "\t";
+		}
+
+		// Display function name
+		if (instance()->_displayFunctionName) {
+			logMessage += QString(context.function) + "\t";
+		}
+
+		// Display line number
+		if (instance()->_displayLine) {
+			logMessage += QString("@") + QString::number(context.line) + "\t";
+		}
+
+		logMessage += msg;
+
+		if(instance()->_showConsole) {
+			switch(type) {
+			case QtDebugMsg:
+				std::cout << logMessage.toStdString() << std::endl;
+				break;
+			case QtWarningMsg:
+			case QtCriticalMsg:
+			case QtFatalMsg:
+				std::cerr << logMessage.toStdString() << std::endl;
+				break;
+			}
+		}
+
+		*instance()->_textLog << logMessage << endl;
 	}
-	else
-		fprintf(stderr, "%s \n", msg.toLocal8Bit().constData());
 }
+
 QString PhDebug::logLocation()
 {
-	return d->_logLocation;
+	return instance()->_logFileName;
 }
 
 void PhDebug::showConsole(bool show)
 {
-	d->_showConsole = show;
+	instance()->_showConsole = show;
 }
 
+void PhDebug::setDisplay(bool date, bool time, bool fileName, bool functionName, bool line)
+{
+	instance()->_displayDate = date;
+	instance()->_displayTime = time;
+	instance()->_displayFileName = fileName;
+	instance()->_displayFunctionName = functionName;
+	instance()->_displayLine = line;
+}
 
 // Called if init() was forget
-PhDebug PhDebug::instance(int logLevelMessage)
+PhDebug* PhDebug::instance()
 {
-	if (!d)   // Only allow one instance of class to be generated.
-		d = new PhDebug();
-
-	d->_currentLogLevel = logLevelMessage;
-	return *d;
+	if (!_d)   // Only allow one instance of class to be generated.
+		_d = new PhDebug();
+	return _d;
 }
 
-QDebug PhDebug::operator<<(QDebug dbg)
+QDebug PhDebug::debug(const char *fileName, int lineNumber, const char *functionName, int messageLogLevel)
 {
-	QString s;
+	instance()->_currentLogLevel = messageLogLevel;
+	return QMessageLogger(fileName, lineNumber, functionName).debug();
+}
 
-	// Display the date
-	if (_dispDate)
-		s = QDate::currentDate().toString("dd/MM/yyyy");
-
-	if (_dispDate && _dispTime)
-		s += " ";
-
-	// Display timestamp
-	if (_dispTime)
-		s += QTime::currentTime().toString("hh:mm:ss.zzz");
-
-	dbg << Q(s);
-
-	return dbg;
-
+QDebug PhDebug::error(const char *fileName, int lineNumber, const char *functionName)
+{
+	instance()->_currentLogLevel = 0;
+	return QMessageLogger(fileName, lineNumber, functionName).critical();
 }
 
 PhDebug::PhDebug()
@@ -90,51 +125,29 @@ PhDebug::PhDebug()
 	if(!logDir.exists()) {
 		QDir().mkdir(logDirPath);
 	}
-	_log = new QFile(logDirPath + APP_NAME + ".log");
-	_logLocation = _log->fileName();
-	_log->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
-	_log->write("\n\n");
+	_logFileName = logDirPath + APP_NAME + ".log";
+	QFile * f = new QFile(_logFileName);
+	f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+	f->write("\n\n");
+	_textLog = new QTextStream(f);
 
-	_dispDate = false;
-	_dispTime = true;
-	_dispFuncName = true;
-	_dispFileName = true;
-	_dispLine = true;
+	_displayDate = false;
+	_displayTime = true;
+	_displayFunctionName = true;
+	_displayFileName = true;
+	_displayLine = true;
 	_showConsole = true;
 	_logMask = 1;
 }
 
-QString PhDebug::getFuncName(QString name)
-{
-	if(d && d->_dispFuncName)
-		return name + "\t";
-	else
-		return "";
-}
-
-QString PhDebug::getFileName(QString name)
-{
-	if (d && d->_dispFileName)
-		return name.split("/").last() + "\t";
-	return "";
-}
-
-QString PhDebug::getLine(int line)
-{
-	if (d && d->_dispLine)
-		return "@L" + QString::number(line) + "\t";
-	return "";
-}
-
 void PhDebug::setLogMask(int mask)
 {
-	if (d)
-		d->_logMask = mask;
+	instance()->_logMask = mask;
 }
 
 int PhDebug::getLogMask()
 {
-	return d->_logMask;
+	return instance()->_logMask;
 }
 
 

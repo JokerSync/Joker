@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 		//             }
 	}
 
-	foreach (PhStripOff * off, doc.getOffs()) {
+	foreach(PhStripOff * off, doc.getOffs()) {
 		PHDEBUG << off->getPeople()->getName() << " : " << PhTimeCode::stringFromFrame(off->getTimeIn(), doc.getTCType())
 		        << " - " << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
 	}
