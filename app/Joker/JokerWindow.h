@@ -103,7 +103,26 @@ protected:
 		MediaPanelHidden
 	};
 
+	/**
+	 * @brief Give the ui->menuOpen_recent item to PhDocumentWindow
+	 *
+	 * PhDocumentWindow will fill the submenu item with the
+	 * last document opened when calling setCurrentDocument().
+	 * The max number of item is the PhDocumentWindowSettings::maxRecentDocument().
+	 *
+	 * @return A reference to the menu item
+	 */
 	QMenu *recentDocumentMenu();
+
+	/**
+	 * @brief Give the ui->actionFullscreen to PhWindow
+	 *
+	 * PhWindow will make it checkable and check and uncheck it
+	 * each time the user toggle between fullscreen and normal.
+	 * The action must be connected in JokerWindow constructor.
+	 * @todo connect the action with PhWindow
+	 * @return A reference to the action
+	 */
 	QAction *fullScreenAction();
 
 private slots:

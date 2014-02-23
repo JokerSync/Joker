@@ -43,11 +43,27 @@ protected:
 	 */
 	void resizeEvent(QResizeEvent *);
 
+	/**
+	 * @brief The fullScreen action
+	 *
+	 * In order to update the fullScreen action check
+	 * according to the fullscreen test (trigger by the
+	 * toogleFullscreen() slot or by clicking the fullscreen
+	 * top right icon (under MacOS), the child window must
+	 * implement this method to give the action to PhWindow.
+	 * The action must be connected by the child
+	 * to the toogleFullscreen() slot.
+	 *
+	 * @return An action reference
+	 */
 	virtual QAction *fullScreenAction() {
 		return NULL;
 	}
 
 protected slots:
+	/**
+	 * @brief Toggle between fullscreen and normal
+	 */
 	void toggleFullScreen();
 
 private:

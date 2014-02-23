@@ -53,7 +53,7 @@ protected:
 	 * the child window must implement this method to give
 	 * the UI menu element to PhDocumentWindow.
 	 *
-	 * @return A menu item
+	 * @return A menu item reference
 	 */
 	virtual QMenu *recentDocumentMenu() = 0;
 
