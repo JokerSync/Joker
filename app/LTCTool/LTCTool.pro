@@ -32,8 +32,4 @@ HEADERS  += LTCToolWindow.h \
     PreferencesDialog.h
 
 FORMS    += LTCToolWindow.ui \
-<<<<<<< HEAD
-    PreferencesPanel.ui
-=======
     PreferencesDialog.ui
->>>>>>> master
