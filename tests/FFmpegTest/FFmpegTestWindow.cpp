@@ -1,5 +1,5 @@
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "FFmpegTestWindow.h"
+#include "ui_FFmpegTestWindow.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -7,9 +7,9 @@
 #include <QPainter>
 #include "PhTools/PhDebug.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+FFmpegTestWindow::FFmpegTestWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow),
+	ui(new Ui::FFmpegTestWindow),
 	_pFormatContext(NULL),
 	_videoStream(NULL),
 	_pCodecContext(NULL),
@@ -28,12 +28,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	_timer.start(40);
 }
 
-MainWindow::~MainWindow()
+FFmpegTestWindow::~FFmpegTestWindow()
 {
 	delete ui;
 }
 
-bool MainWindow::openFile(QString fileName)
+bool FFmpegTestWindow::openFile(QString fileName)
 {
 	PHDEBUG << fileName;
 	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
@@ -78,7 +78,7 @@ bool MainWindow::openFile(QString fileName)
 	return setFrame(0);
 }
 
-bool MainWindow::setFrame(int frame)
+bool FFmpegTestWindow::setFrame(int frame)
 {
 	if(!_videoStream)
 		return false;
@@ -104,7 +104,7 @@ bool MainWindow::setFrame(int frame)
 	return false;
 }
 
-void MainWindow::paintEvent(QPaintEvent *)
+void FFmpegTestWindow::paintEvent(QPaintEvent *)
 {
 	if(_image) {
 		QPainter painter(this);
@@ -112,7 +112,7 @@ void MainWindow::paintEvent(QPaintEvent *)
 	}
 }
 
-void MainWindow::resizeEvent(QResizeEvent *)
+void FFmpegTestWindow::resizeEvent(QResizeEvent *)
 {
 	if(_pCodecContext == NULL)
 		return;
@@ -139,7 +139,7 @@ void MainWindow::resizeEvent(QResizeEvent *)
 	                          AV_PIX_FMT_RGB24, SWS_FAST_BILINEAR, NULL, NULL, NULL);
 }
 
-void MainWindow::on_actionOpen_triggered()
+void FFmpegTestWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, "Open...");
 	if(QFile::exists(fileName)) {
@@ -148,7 +148,7 @@ void MainWindow::on_actionOpen_triggered()
 	}
 }
 
-void MainWindow::on_actionPlay_pause_triggered()
+void FFmpegTestWindow::on_actionPlay_pause_triggered()
 {
 	if(_rate)
 		_rate = 0;
@@ -156,17 +156,17 @@ void MainWindow::on_actionPlay_pause_triggered()
 		_rate = 1;
 }
 
-void MainWindow::on_actionNext_frame_triggered()
+void FFmpegTestWindow::on_actionNext_frame_triggered()
 {
 	this->setFrame(++_currentFrame);
 }
 
-void MainWindow::on_actionPrevious_frame_triggered()
+void FFmpegTestWindow::on_actionPrevious_frame_triggered()
 {
 	this->setFrame(--_currentFrame);
 }
 
-void MainWindow::onTimeOut()
+void FFmpegTestWindow::onTimeOut()
 {
 	_currentFrame += _rate;
 	this->setFrame(_currentFrame);

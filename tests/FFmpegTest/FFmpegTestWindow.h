@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef FFMPEGTESTWINDOW_H
+#define FFMPEGTESTWINDOW_H
 
 #include <QMainWindow>
 #include <QImage>
@@ -13,16 +13,16 @@ extern "C" {
 }
 
 namespace Ui {
-class MainWindow;
+class FFmpegTestWindow;
 }
 
-class MainWindow : public QMainWindow
+class FFmpegTestWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+	explicit FFmpegTestWindow(QWidget *parent = 0);
+	~FFmpegTestWindow();
 
 	bool openFile(QString fileName);
 
@@ -44,7 +44,7 @@ private slots:
 	void onTimeOut();
 
 private:
-	Ui::MainWindow *ui;
+	Ui::FFmpegTestWindow *ui;
 
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;
@@ -59,4 +59,4 @@ private:
 	int _rate;
 };
 
-#endif // MAINWINDOW_H
+#endif // FFMPEGTESTWINDOW_H

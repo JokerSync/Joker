@@ -16,11 +16,11 @@ INCLUDEPATH += ../../libs
 include(../../libs/PhTools/PhTools.pri)
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        FFmpegTestWindow.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += FFmpegTestWindow.h
 
-FORMS    += MainWindow.ui
+FORMS    += FFmpegTestWindow.ui
 
 INCLUDEPATH += /usr/local/include
 LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
