@@ -35,6 +35,8 @@ protected:
 	void paintEvent(QPaintEvent *);
 
 	QMenu *recentDocumentMenu();
+	QAction *fullScreenAction();
+
 private slots:
 	void on_actionAbout_triggered();
 

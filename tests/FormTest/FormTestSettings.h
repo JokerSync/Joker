@@ -9,7 +9,7 @@ class FormTestSettings : protected PhGenericSettings, public PhDocumentWindowSet
 {
 public:
 	// PhWindowSettings
-//	PH_SETTING_BOOL(setFullScreen, fullScreen)
+	PH_SETTING_BOOL(setFullScreen, fullScreen)
 	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
 
 	// PhDocumentWindowSettings

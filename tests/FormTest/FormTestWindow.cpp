@@ -21,6 +21,8 @@ FormTestWindow::FormTestWindow(FormTestSettings *settings) :
 {
 	ui->setupUi(this);
 
+	connect(ui->actionFull_screen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
+
 	QString mode = _settings->currentDocument();
 	if(mode == "rgb")
 		generateRGB();
@@ -97,6 +99,11 @@ void FormTestWindow::paintEvent(QPaintEvent *)
 QMenu *FormTestWindow::recentDocumentMenu()
 {
 	return ui->menuOpen_recent;
+}
+
+QAction *FormTestWindow::fullScreenAction()
+{
+	return ui->actionFull_screen;
 }
 
 void FormTestWindow::on_actionAbout_triggered()

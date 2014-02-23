@@ -9,16 +9,24 @@
 class PhWindowSettings
 {
 public:
-//	virtual bool fullScreen() = 0;
-//	virtual void setFullScreen(bool fullScreen) = 0;
+	/**
+	 * @brief The window full screen status
+	 * @return True if full screen, false otherwise
+	 */
+	virtual bool fullScreen() = 0;
+	/**
+	 * @brief Store the fullscreen status
+	 * @param fullScreen True if full screen, false otherwise
+	 */
+	virtual void setFullScreen(bool fullScreen) = 0;
 
 	/**
-	 * @brief Get the window geometry
+	 * @brief Get the last window geometry
 	 * @return A byte array
 	 */
 	virtual QByteArray windowGeometry() = 0;
 	/**
-	 * @brief Get the window geometry
+	 * @brief Store the window geometry
 	 * @param geometry A byte array
 	 */
 	virtual void setWindowGeometry(QByteArray geometry) = 0;

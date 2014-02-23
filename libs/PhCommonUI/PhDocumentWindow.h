@@ -23,7 +23,6 @@ public:
 	 */
 	explicit PhDocumentWindow(PhDocumentWindowSettings *settings);
 
-#warning TODO move to PhApplication
 	/**
 	 * @brief Process the application argument
 	 * @param argc The arguments count
