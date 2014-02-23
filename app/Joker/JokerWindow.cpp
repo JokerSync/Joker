@@ -235,7 +235,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		break;
 	case QEvent::MouseButtonDblClick:
 #warning /// @todo switch to right click
-		// If the sender is "this" and no videofile is loaded
+		 // If the sender is "this" and no videofile is loaded
 		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length()) {
 			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
 			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->stripHeight()))

@@ -43,7 +43,9 @@ protected:
 	 */
 	void resizeEvent(QResizeEvent *);
 
-	virtual QAction *fullScreenAction() { return NULL;}
+	virtual QAction *fullScreenAction() {
+		return NULL;
+	}
 
 protected slots:
 	void toggleFullScreen();
