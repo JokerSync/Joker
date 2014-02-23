@@ -12,6 +12,7 @@
 #include <QFileOpenEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QWindowStateChangeEvent>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -100,12 +101,15 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 		ui->actionTest_mode->setChecked(true);
 	}
 
-#warning TODO fix fullscreen on startup
-	if(_settings->fullScreen())
-		this->showFullScreen();
-
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
+
+
+	if(_settings->fullScreen())
+		showFullScreen();
+	else
+		restoreGeometry(_settings->windowGeometry());
+
 }
 
 JokerWindow::~JokerWindow()
@@ -211,11 +215,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		hideMediaPanel();
 		break;
 	case QEvent::MouseMove:
-		// Show the mediaPanel only if Joker has focus and is not remote controlled.
-		if(this->hasFocus() && _settings->synchroProtocol() == 0)
-			// Show the mediaPanel only if Joker has focus.
-			if(this->hasFocus())
-				fadeInMediaPanel();
+		fadeInMediaPanel();
 		break;
 
 	case QEvent::Drop:
@@ -239,6 +239,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		event->accept();
 		break;
 	case QEvent::MouseButtonDblClick:
+#warning TODO switch to right click
 		// If the sender is "this" and no videofile is loaded
 		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length()) {
 			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
@@ -247,23 +248,13 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			return true;
 		}
 		if(sender->objectName() == this->objectName()) {
-			if(isFullScreen())
-				showNormal();
-			else
-				showFullScreen();
+			on_actionFullscreen_triggered();
 			return true;
 		}
 		break;
-	case QEvent::KeyPress:
-		if (static_cast<QKeyEvent *>(event)->key() == Qt::Key_F10) {
-			if(this->isFullScreen()) {
-				this->showNormal();
-			}
-			else {
-				this->showFullScreen();
-			}
-			return true;
-		}
+	case QEvent::WindowStateChange:
+		_settings->setFullScreen(windowState() == Qt::WindowFullScreen);
+		ui->actionFullscreen->setChecked(windowState() == Qt::WindowFullScreen);
 		break;
 	default:
 		break;
@@ -284,11 +275,22 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 		_mediaPanel.close();
 }
 
+void JokerWindow::moveEvent(QMoveEvent *)
+{
+	_settings->setWindowGeometry(saveGeometry());
+}
+
+void JokerWindow::resizeEvent(QResizeEvent *)
+{
+	_settings->setWindowGeometry(saveGeometry());
+}
+
 void JokerWindow::on_actionOpen_triggered()
 {
 	hideMediaPanel();
 
 	if(checkSaveFile()) {
+#warning TODO put rythmo files first
 		QString filter = tr("DetX files") + " (*.detx);; "
 		                 + tr("Joker files") + " (*.strip);; "
 		                 + tr("Rythmo files") + " (*.detx *.strip);; "
@@ -492,6 +494,9 @@ void JokerWindow::on_actionPreferences_triggered()
 
 void JokerWindow::fadeInMediaPanel()
 {
+	// Don't show the mediaPanel if Joker has not thefocus.
+	if(!this->hasFocus())
+		return;
 	// Don't show the mediaPanel if Joker is remote controled.
 	if(_settings->synchroProtocol() != VideoStripSynchronizer::NoSync)
 		return;
@@ -676,4 +681,12 @@ void JokerWindow::on_actionForce_16_9_ratio_triggered()
 {
 	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
 	_needToSave = true;
+}
+
+void JokerWindow::on_actionFullscreen_triggered()
+{
+	if(this->isFullScreen())
+		this->showNormal();
+	else
+		this->showFullScreen();
 }

@@ -4,8 +4,11 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "VideoStripView.h"
 #include <QtGlobal>
+#include <QApplication>
+#include <QMouseEvent>
+
+#include "VideoStripView.h"
 
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
@@ -18,6 +21,7 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	_currentPeopleName(_strip.getHUDFont(), "")
 {
 	connect(_strip.doc(), SIGNAL(changed()), this, SLOT(onDocChanged()));
+	qApp->installEventFilter(this);
 }
 
 void VideoStripView::setSettings(JokerSettings *settings)
@@ -186,6 +190,28 @@ void VideoStripView::paint()
 	}
 	else
 		_noVideoSyncError.setColor(QColor(0, 0, 0));
+}
+
+bool VideoStripView::eventFilter(QObject *, QEvent *event)
+{
+	switch(event->type()) {
+	case QEvent::MouseMove:
+		{
+			QMouseEvent * mouseEvent = (QMouseEvent*)event;
+			float stripHeight = this->height() * _settings->stripHeight();
+			if((mouseEvent->pos().y() > (this->height() - stripHeight) * 0.95)
+			   && (mouseEvent->pos().y() < (this->height() - stripHeight) * 1.05)) {
+				QApplication::setOverrideCursor(Qt::SizeVerCursor);
+				if(mouseEvent->buttons() & Qt::LeftButton)
+					_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
+			}
+			else
+				QApplication::setOverrideCursor(Qt::ArrowCursor);
+		}
+	default:
+		break;
+	}
+	return false;
 }
 
 void VideoStripView::onVideoSync()

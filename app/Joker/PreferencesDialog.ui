@@ -42,17 +42,6 @@
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
-        <widget class="QCheckBox" name="cBoxFullscreen">
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Start Joker in fullscreen mode</string>
-         </property>
-         <property name="tristate">
-          <bool>false</bool>
-         </property>
-        </widget>
         <widget class="QCheckBox" name="cBoxDeinterlace">
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>

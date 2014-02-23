@@ -41,14 +41,15 @@ public:
 	explicit PhStripDoc(QObject *parent = 0);
 
 	/**
-	 * @brief Get the cuts
-	 * @return the cut's list
+	 * @brief Get the information about the document generator
+	 * @return The generator name and version
 	 */
-	QList<PhStripCut *> getCuts();
-
+	QString getGenerator() {
+		return _generator;
+	}
 	/**
-	 * @brief getTitle
-	 * @return _title
+	 * @brief Get the title
+	 * @return The title
 	 */
 	QString getTitle();
 
@@ -128,6 +129,12 @@ public:
 	 * @return _loops
 	 */
 	QList<PhStripLoop *> getLoops();
+
+	/**
+	 * @brief Get the cuts
+	 * @return the cut's list
+	 */
+	QList<PhStripCut *> getCuts();
 
 	/**
 	 * @brief getOffs
@@ -308,6 +315,8 @@ signals:
 
 private:
 	void reset();
+
+	QString _generator;
 	/**
 	 * Title of the corresponding audiovisual content.
 	 */

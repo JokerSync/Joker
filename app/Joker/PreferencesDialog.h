@@ -51,8 +51,6 @@ private slots:
 
 	void on_buttonBox_rejected();
 
-	void on_cBoxFullscreen_toggled(bool checked);
-
 	void on_sliderBoldness_valueChanged(int value);
 
 	void on_lineEditFilter_textEdited(const QString &arg1);
@@ -88,7 +86,6 @@ private:
 	int _oldSpeed;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldStartFullScreen;
 	bool _oldDeinterlace;
 	bool _oldDisplayTC;
 	bool _oldDisplayNextTC;
