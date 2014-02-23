@@ -1,7 +1,6 @@
 #ifndef VIDEOTESTWINDOW_H
 #define VIDEOTESTWINDOW_H
 
-#include <QMainWindow>
 #include <QString>
 #include <QTimer>
 
@@ -12,6 +11,7 @@
 #include "PhVideo/PhVideoEngine.h"
 
 #include "PhCommonUI/PhFloatingMediaPanel.h"
+#include "PhCommonUI/PhDocumentWindow.h"
 
 #include "VideoTestSettings.h"
 
@@ -19,7 +19,7 @@ namespace Ui {
 class VideoTestWindow;
 }
 
-class VideoTestWindow : public QMainWindow
+class VideoTestWindow : public PhDocumentWindow
 {
 	Q_OBJECT
 public:
@@ -39,6 +39,8 @@ public:
 protected:
 	void resizeEvent(QResizeEvent *);
 	void closeEvent(QCloseEvent *);
+
+	QMenu *recentDocumentMenu();
 
 private slots:
 	void on_actionPlay_pause_triggered();

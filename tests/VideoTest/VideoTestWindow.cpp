@@ -10,7 +10,7 @@
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
 VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
-	: QMainWindow(0),
+	: PhDocumentWindow(settings, 0),
 	ui(new Ui::VideoTestWindow),
 	_settings(settings)
 {
@@ -29,22 +29,18 @@ VideoTestWindow::~VideoTestWindow()
 
 bool VideoTestWindow::openFile(QString fileName)
 {
-	QFileInfo fileInfo(fileName);
-	if (fileInfo.exists()) {
-		if(_videoEngine.open(fileName)) {
-			this->setWindowTitle(fileName);
-			_mediaPanelDialog.setMediaLength(_videoEngine.length());
+	if(!_videoEngine.open(fileName))
+		return false;
 
-			PhFrame frameStamp = _videoEngine.firstFrame();
-			_mediaPanelDialog.setFirstFrame(frameStamp);
+	_mediaPanelDialog.setMediaLength(_videoEngine.length());
+	PhFrame frameStamp = _videoEngine.firstFrame();
+	_mediaPanelDialog.setFirstFrame(frameStamp);
 
-			_videoEngine.clock()->setFrame(frameStamp);
-			//_videoEngine.clock()->setRate(1.0);
-			_settings->setLastFile(fileName);
-			return true;
-		}
-	}
-	return false;
+	_videoEngine.clock()->setFrame(frameStamp);
+
+	setCurrentDocument(fileName);
+
+	return true;
 }
 
 void VideoTestWindow::resizeEvent(QResizeEvent *)
@@ -57,6 +53,11 @@ void VideoTestWindow::resizeEvent(QResizeEvent *)
 void VideoTestWindow::closeEvent(QCloseEvent *)
 {
 	_mediaPanelDialog.close();
+}
+
+QMenu *VideoTestWindow::recentDocumentMenu()
+{
+	return ui->menuOpen_recent;
 }
 
 void VideoTestWindow::on_actionPlay_pause_triggered()

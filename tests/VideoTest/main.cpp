@@ -15,15 +15,8 @@ int main(int argc, char *argv[])
 	VideoTestSettings settings;
 
 	VideoTestWindow w(&settings);
-	w.resize(800, 600);
-
+	w.processArg(argc, argv);
 	w.show();
-
-	QString fileName = settings.lastFile();
-	if(argc > 1)
-		fileName = argv[1];
-	if(QFile(fileName).exists())
-		w.openFile(QString(fileName));
 
 	return app.exec();
 }

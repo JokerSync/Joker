@@ -22,8 +22,7 @@ HEADERS += VideoTestWindow.h \
 
 SOURCES += \
     main.cpp \
-    VideoTestWindow.cpp \
-    VideoTestSettings.cpp
+    VideoTestWindow.cpp
 
 FORMS += \
     VideoTestWindow.ui
