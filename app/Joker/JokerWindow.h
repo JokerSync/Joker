@@ -7,17 +7,17 @@
 #ifndef JOKERWINDOW_H
 #define JOKERWINDOW_H
 
-#include <QMainWindow>
 #include <QMessageBox>
 #include <QPropertyAnimation>
 
-#include "VideoStripView.h"
 #include "PhSync/PhSonySlaveController.h"
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 #if USE_LTC
 #include "PhSync/PhLtcReader.h"
 #endif
 
+#include "PhCommonUI/PhDocumentWindow.h"
+#include "VideoStripView.h"
 #include "SonyVideoStripSynchronizer.h"
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
@@ -40,7 +40,7 @@ class JokerWindow;
  * - Handling controls command
  * - Connect the application modules: PhVideoEngine, PhGraphicStrip, Synchronizer, PhSonySlaveController, PhLtcReader
  */
-class JokerWindow : public QMainWindow
+class JokerWindow : public PhDocumentWindow
 {
 	Q_OBJECT
 
@@ -54,16 +54,6 @@ public:
 	~JokerWindow();
 
 	/**
-	 * @brief Open all supported strip file
-	 *
-	 * First the file existance is checked then,
-	 * If the file is a supported rythmo file, it will call the PhStripDoc function openStripFile().
-	 *
-	 * @param filePath The file path
-	 */
-	void openFile(QString filePath);
-
-	/**
 	 * @brief Open a video file
 	 *
 	 * Open a videofile and set the framestamp to the videofile's value or the strip's value if the first one is not usable.
@@ -75,6 +65,16 @@ public:
 	bool openVideoFile(QString videoFile);
 
 protected:
+	/**
+	 * @brief Open all supported strip file
+	 *
+	 * First the file existance is checked then,
+	 * If the file is a supported rythmo file, it will call the PhStripDoc function openStripFile().
+	 *
+	 * @param filePath The file path
+	 */
+	bool openFile(QString filePath);
+
 	/**
 	 * @brief event Filter
 	 *
@@ -161,8 +161,6 @@ private slots:
 
 	void on_actionPrevious_element_triggered();
 
-	void openRecent();
-
 	void on_actionSave_triggered();
 
 	void on_actionSave_as_triggered();
@@ -190,17 +188,10 @@ private:
 
 	PropertyDialog _propertyDialog;
 
-	QVector<QAction *> _recentFileButtons;
-
 	bool _needToSave;
-	QString _currentStripFile;
 
-	void updateOpenRecent();
-	void setupOpenRecentMenu();
 	void setupSyncProtocol();
 	void closeEvent(QCloseEvent *event);
-
-	void setCurrentStripFile(QString stripFile);
 
 	bool checkSaveFile();
 };

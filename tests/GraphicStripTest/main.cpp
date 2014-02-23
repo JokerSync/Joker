@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
 	if (argc > 1)
 		w.openFile(argv[1]);
-	else{
+	else {
 		QString lastFile = settings.lastFile();
 		if(QFile::exists(lastFile))
 			w.openFile(lastFile);

@@ -87,26 +87,6 @@ bool JokerSettings::videoDeinterlace()
 	return boolValue("videoDeinterlace");
 }
 
-void JokerSettings::setLastFile(QString lastFile)
-{
-	setStringValue("lastFile", lastFile);
-}
-
-QString JokerSettings::lastFile()
-{
-	return stringValue("lastFile");
-}
-
-void JokerSettings::setLastFolder(QString lastFolder)
-{
-	setStringValue("lastFolder", lastFolder);
-}
-
-QString JokerSettings::lastFolder()
-{
-	return stringValue("lastFolder", QDir::homePath());
-}
-
 void JokerSettings::setLastVideoFolder(QString lastFolder)
 {
 	setStringValue("lastVideoFolder", lastFolder);

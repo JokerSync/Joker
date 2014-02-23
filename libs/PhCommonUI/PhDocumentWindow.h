@@ -16,7 +16,9 @@ public:
 protected:
 	virtual bool openFile(QString fileName) = 0;
 	void setCurrentDocument(QString fileName);
-	virtual QMenu *recentDocumentMenu() { return NULL;}
+	virtual QMenu *recentDocumentMenu() {
+		return NULL;
+	}
 
 private slots:
 	void onOpenRecentDocumentTriggered();

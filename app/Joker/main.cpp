@@ -33,16 +33,8 @@ int main(int argc, char *argv[])
 
 	JokerWindow w(&settings);
 
+	w.processArg(argc, argv);
 	w.show();
-
-	QString fileName = "";
-	if (argc > 1)
-		fileName = argv[1];
-	else if(settings.openLastFile()) // Load the last file if the setting si selected
-		fileName = settings.lastFile();
-
-	if(QFile(fileName).exists())
-		w.openFile(fileName);
 
 	return a.exec();
 

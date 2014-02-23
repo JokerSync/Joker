@@ -1,17 +1,21 @@
 #ifndef JOKERSETTINGS_H
 #define JOKERSETTINGS_H
 
+#include <QDir>
+
 #include "PhTools/PhGenericSettings.h"
 #include "PhGraphic/PhGraphicSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhVideo/PhVideoSettings.h"
 #include "PhSync/PhSyncSettings.h"
+#include "PhCommonUI/PhDocumentWindowSettings.h"
 
 class JokerSettings : PhGenericSettings,
-		public PhGraphicSettings,
-		public PhGraphicStripSettings,
-		public PhVideoSettings,
-		public PhSyncSettings
+	public PhGraphicSettings,
+	public PhGraphicStripSettings,
+	public PhVideoSettings,
+	public PhSyncSettings,
+	public PhDocumentWindowSettings
 {
 public:
 	// PhGraphicSettings :
@@ -46,20 +50,22 @@ public:
 	float sonyFastRate();
 
 	// Other settings :
+#warning TODO remove
 	void setOpenLastFile(bool openLastFile);
 	bool openLastFile();
 
-	void setLastFile(QString lastFile);
-	QString lastFile();
-
-	void setLastFolder(QString lastFolder);
-	QString lastFolder();
+	PH_SETTING_STRING(CurrentDocument, currentDocument)
+	PH_SETTING_STRING2(LastDocumentFolder, lastDocumentFolder, QDir::homePath())
 
 	void setLastVideoFolder(QString lastFolder);
 	QString lastVideoFolder();
 
 	void setSelectedFilter(QString filter);
 	QString selectedFilter();
+
+	PH_SETTING_STRINGLIST(RecentDocumentList, recentDocumentList)
+
+	PH_SETTING_INT2(MaxRecentDocument, maxRecentDocument, 10)
 
 	void setFullScreen(bool fullScreen);
 	bool fullScreen();

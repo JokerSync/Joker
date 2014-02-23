@@ -6,7 +6,7 @@
 
 PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings, QWidget *parent)
 	: QMainWindow(parent),
-	  _settings(settings)
+	_settings(settings)
 {
 }
 

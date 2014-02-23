@@ -20,16 +20,15 @@
 #include "PeopleDialog.h"
 
 JokerWindow::JokerWindow(JokerSettings *settings) :
-	QMainWindow(NULL),
+	PhDocumentWindow(settings),
 	ui(new Ui::JokerWindow),
 	_settings(settings),
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
-	_needToSave(false),
-#if USE_LTC
+	#if USE_LTC
 	_ltcReader(),
-#endif
-	_currentStripFile("")
+	#endif
+	_needToSave(false)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -37,8 +36,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	// Due to translation, Qt might not be able to link automatically the menu
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
 	ui->actionAbout->setMenuRole(QAction::AboutRole);
-
-	setupOpenRecentMenu();
 
 	// Get the pointer to the differents objects :
 	// strip, video engine and doc
@@ -117,82 +114,6 @@ JokerWindow::~JokerWindow()
 	delete ui;
 }
 
-void JokerWindow::openRecent()
-{
-	if(!checkSaveFile())
-		return;
-
-	// This slot is triggered by dynamic action
-	openFile(sender()->objectName());
-}
-
-void JokerWindow::updateOpenRecent()
-{
-	if(!ui->menuOpen_recent->isEnabled())
-		ui->menuOpen_recent->setEnabled(true);
-
-	QAction * menu = QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly);
-	// If the object already belong to the list, set it on top
-	if(menu) {
-		ui->menuOpen_recent->removeAction(menu);
-		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), menu);
-	}
-	// Else, add it
-	else {
-		// Set the corresponding button
-		QAction * action = new QAction(_doc->getFilePath(), this);
-		// Set the ObjectName, very important for openRecent()
-		action->setObjectName(_doc->getFilePath());
-		connect(action, SIGNAL(triggered()), this, SLOT(openRecent()));
-		// Insert it in the button list
-		_recentFileButtons.insert(0, action);
-		// Insert it at the first place on the menu
-		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), action);
-	}
-
-#warning TODO no more open recent files...
-//	// Open the settings group of recent files
-//	_settings->beginGroup("openRecent");
-//	int i = 1;
-//	// Rewrite the setting files from the menu items
-//	foreach(QAction * action, ui->menuOpen_recent->actions())
-//	{
-//		// Break if the separator or the max number is reached
-//		if(action->isSeparator() or i > 10)
-//			break;
-//		// Write the setting
-//		_settings->setValue(QString::number(i), action->objectName());
-//		i++;
-//	}
-//	// Close the setting group
-//	_settings->endGroup();
-}
-
-void JokerWindow::setupOpenRecentMenu()
-{
-#warning TODO no more open recent files...
-//	// Open the settings group of recent files
-//	_settings->beginGroup("openRecent");
-//	// List them
-//	QStringList recentList = _settings->childKeys();
-//	foreach(QString recentFileIndex, recentList)
-//	{
-//		QString fileName = _settings->value(recentFileIndex, "empty").toString();
-//		QAction * action = new QAction(fileName, this);
-//		action->setObjectName(fileName);
-//		connect(action, SIGNAL(triggered()), this, SLOT(openRecent()));
-//		_recentFileButtons.append(action);
-//	}
-
-//	// Add all the actions to the menu
-//	ui->menuOpen_recent->insertActions(ui->menuOpen_recent->actions().last(), _recentFileButtons.toList());
-//	// Add a separator just above the "clear list" menu
-//	ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().last(), ui->menuOpen_recent->addSeparator());
-//	// Close the group
-//	_settings->endGroup();
-
-}
-
 void JokerWindow::setupSyncProtocol()
 {
 	PhClock* clock = NULL;
@@ -239,33 +160,32 @@ void JokerWindow::setupSyncProtocol()
 	_settings->setSynchroProtocol(type);
 }
 
-void JokerWindow::openFile(QString fileName)
+bool JokerWindow::openFile(QString fileName)
 {
 	hideMediaPanel();
 
-	// Checking if the file exists
-	if(QFile::exists(fileName)) {
-		if(_doc->openStripFile(fileName)) {
-			setCurrentStripFile(fileName);
-			ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
-			ui->videoStripView->setForceRatio169(_doc->forceRatio169());
+	if(!_doc->openStripFile(fileName))
+		return false;
 
-			// Opening the corresponding video file if it exists
-			if(openVideoFile(_doc->getVideoPath())) {
-				PhFrame frameStamp = _doc->getVideoTimestamp();
-				_videoEngine->setFirstFrame(frameStamp);
-				_mediaPanel.setFirstFrame(frameStamp);
-			}
-			else
-				_videoEngine->close();
+	setCurrentDocument(fileName);
 
-			// On succeed, synchronizing the clocks
-			_strip->clock()->setTimeCodeType(_doc->getTCType());
-			_strip->clock()->setFrame(_doc->getLastFrame());
+	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
+	ui->videoStripView->setForceRatio169(_doc->forceRatio169());
 
-			_needToSave = false;
-		}
+	// Opening the corresponding video file if it exists
+	if(openVideoFile(_doc->getVideoPath())) {
+		PhFrame frameStamp = _doc->getVideoTimestamp();
+		_videoEngine->setFirstFrame(frameStamp);
+		_mediaPanel.setFirstFrame(frameStamp);
 	}
+	else
+		_videoEngine->close();
+
+	// On succeed, synchronizing the clocks
+	_strip->clock()->setTimeCodeType(_doc->getTCType());
+	_strip->clock()->setFrame(_doc->getLastFrame());
+
+	_needToSave = false;
 }
 
 bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
@@ -356,16 +276,6 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 		event->ignore();
 }
 
-void JokerWindow::setCurrentStripFile(QString stripFile)
-{
-	_currentStripFile = stripFile;
-	this->setWindowTitle(stripFile);
-	_settings->setLastFile(stripFile);
-	_settings->setLastFolder(QFileInfo(stripFile).absolutePath());
-
-	updateOpenRecent();
-}
-
 void JokerWindow::on_actionOpen_triggered()
 {
 	hideMediaPanel();
@@ -375,7 +285,7 @@ void JokerWindow::on_actionOpen_triggered()
 		                 + tr("Joker files") + " (*.strip);; "
 		                 + tr("Rythmo files") + " (*.detx *.strip);; "
 		                 + tr("All files") + " (*.*)";
-		QFileDialog dlg(this, tr("Open..."), _settings->lastFolder(), filter);
+		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
 		dlg.selectNameFilter(_settings->selectedFilter());
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
@@ -684,44 +594,45 @@ void JokerWindow::on_actionClear_list_triggered()
 	}
 
 	// Remove all the buttons
-	_recentFileButtons.clear();
+//	_recentFileButtons.clear();
 	ui->menuOpen_recent->setEnabled(false);
 }
 
 void JokerWindow::on_actionSave_triggered()
 {
-	QFileInfo info(_currentStripFile);
+	QString fileName = _settings->currentDocument();
+	QFileInfo info(fileName);
 	if(!info.exists() || (info.suffix() != "strip"))
 		on_actionSave_as_triggered();
-	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked()))
+	else if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked()))
 		_needToSave = false;
 	else
-		QMessageBox::critical(this, "", tr("Unable to save ") + _currentStripFile);
+		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
 }
 
 void JokerWindow::on_actionSave_as_triggered()
 {
 	hideMediaPanel();
 
-	QString stripFile = _currentStripFile;
-	QString lastFolder = _settings->lastFolder();
+	QString fileName = _settings->currentDocument();
+	QString lastFolder = _settings->lastDocumentFolder();
 	// If there is no current strip file, ask for a name
-	if(stripFile == "")
-		stripFile = lastFolder;
+	if(fileName == "")
+		fileName = lastFolder;
 	else {
-		QFileInfo info(stripFile);
+		QFileInfo info(fileName);
 		if(info.suffix() != "strip")
-			stripFile = lastFolder + "/" + info.completeBaseName() + ".strip";
+			fileName = lastFolder + "/" + info.completeBaseName() + ".strip";
 	}
 
-	stripFile = QFileDialog::getSaveFileName(this, tr("Save..."), stripFile,"*.strip");
-	if(stripFile != "") {
-		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
+	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName,"*.strip");
+	if(fileName != "") {
+		if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
 			_needToSave = false;
-			setCurrentStripFile(stripFile);
+			setCurrentDocument(fileName);
 		}
 		else
-			QMessageBox::critical(this, "", tr("Unable to save ") + stripFile);
+			QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
 	}
 }
 
