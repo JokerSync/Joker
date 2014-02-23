@@ -76,16 +76,18 @@ protected:
 	bool openDocument(QString filePath);
 
 	/**
-	 * @brief event Filter
+	 * @brief Custom event filter
 	 *
-	 * The event filter allow Joker to react with external controls like when the mouse mouve or when a
-	 * file is dropped on the application.
+	 * The event filter catch the following event:
+	 * - FileOpen : To process a file dragged on the application dock icon (MacOS)
+	 * - ApplicationDeactivate : to hide the mediapanel
+	 * - MouseMove: to show the media panel
+	 * - Drop and DragEnter : to process a file drop on the window
+	 * - MouseButtonDblClick : to toggle fullscreen mode and open video file if no present (@todo pass to right click)
 	 *
-	 * @param sender The object sending the event
+	 * @param sender The event sender
 	 * @param event The event
-	 * @return The return boolean is :
-	 *	- True if we totaly handle the event
-	 *  - False if we only want to do pre-treatment.
+	 * @return True if handled, false otherwise
 	 */
 	bool eventFilter(QObject *sender, QEvent *event);
 
@@ -102,6 +104,7 @@ protected:
 	};
 
 	QMenu *recentDocumentMenu();
+	QAction *fullScreenAction();
 
 private slots:
 	// Qt Designer slots
@@ -169,8 +172,6 @@ private slots:
 	void on_actionSelect_character_triggered();
 
 	void on_actionForce_16_9_ratio_triggered();
-
-	void on_actionFullscreen_triggered();
 
 private:
 	Ui::JokerWindow *ui;

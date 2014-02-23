@@ -38,6 +38,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
 	ui->actionAbout->setMenuRole(QAction::AboutRole);
 
+	connect(ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
+
 	// Get the pointer to the differents objects :
 	// strip, video engine and doc
 	_strip = ui->videoStripView->strip();
@@ -61,6 +63,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
+#warning /// @todo move to CSS file
 	_mediaPanel.setStyleSheet(
 	    "* {"
 	    "	  color: white;"
@@ -90,23 +93,16 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
 	_mediaPanelTimer.start(3000);
 
-	// Set up a filter for catching mouse move event (see eventFilter())
-	// that will show the media panel back
-	qApp->installEventFilter(this);
-
 	this->setFocus();
 
 	if(_settings->stripTestMode()) {
-#warning TODO do we warn the user that test mode is on?
+#warning /// @todo do we warn the user that test mode is on?
 		ui->actionTest_mode->setChecked(true);
 	}
 
+#warning /// @todo move to PhDocumentWindow
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
-
-
-	if(_settings->fullScreen())
-		showFullScreen();
 }
 
 JokerWindow::~JokerWindow()
@@ -195,6 +191,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 	switch (event->type()) {
 	case QEvent::FileOpen:
 		{
+#warning /// @todo move to PhDocumentWindow
 			QString filePath = static_cast<QFileOpenEvent *>(event)->file();
 			QString fileType = filePath.split(".").last().toLower();
 			// As the plist file list all the supported format (which are .strip, .detx, .avi & .mov)
@@ -217,6 +214,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 
 	case QEvent::Drop:
 		{
+#warning /// @todo move to PhDocumentWindow
 			const QMimeData* mimeData = static_cast<QDropEvent *>(event)->mimeData();
 
 			// If there is one file (not more) we open it
@@ -236,7 +234,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		event->accept();
 		break;
 	case QEvent::MouseButtonDblClick:
-#warning TODO switch to right click
+#warning /// @todo switch to right click
 		// If the sender is "this" and no videofile is loaded
 		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length()) {
 			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
@@ -244,24 +242,28 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				on_actionOpen_Video_triggered();
 			return true;
 		}
+
+#warning /// @todo Why checking the name?
 		if(sender->objectName() == this->objectName()) {
-			on_actionFullscreen_triggered();
+			toggleFullScreen();
 			return true;
 		}
-		break;
-	case QEvent::WindowStateChange:
-		_settings->setFullScreen(windowState() == Qt::WindowFullScreen);
-		ui->actionFullscreen->setChecked(windowState() == Qt::WindowFullScreen);
 		break;
 	default:
 		break;
 	}
-	return false;
+
+	return PhDocumentWindow::eventFilter(sender, event);
 }
 
 QMenu *JokerWindow::recentDocumentMenu()
 {
 	return ui->menuOpen_recent;
+}
+
+QAction *JokerWindow::fullScreenAction()
+{
+	return ui->actionFullscreen;
 }
 
 void JokerWindow::closeEvent(QCloseEvent *event)
@@ -277,7 +279,7 @@ void JokerWindow::on_actionOpen_triggered()
 	hideMediaPanel();
 
 	if(checkSaveFile()) {
-#warning TODO put rythmo files first
+#warning /// @todo put rythmo files first
 		QString filter = tr("DetX files") + " (*.detx);; "
 		                 + tr("Joker files") + " (*.strip);; "
 		                 + tr("Rythmo files") + " (*.detx *.strip);; "
@@ -668,12 +670,4 @@ void JokerWindow::on_actionForce_16_9_ratio_triggered()
 {
 	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
 	_needToSave = true;
-}
-
-void JokerWindow::on_actionFullscreen_triggered()
-{
-	if(this->isFullScreen())
-		this->showNormal();
-	else
-		this->showFullScreen();
 }
