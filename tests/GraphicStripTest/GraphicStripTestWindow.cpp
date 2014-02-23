@@ -1,5 +1,5 @@
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "GraphicStripTestWindow.h"
+#include "ui_GraphicStripTestWindow.h"
 
 #include <QFileDialog>
 #include <QFontDialog>
@@ -9,9 +9,9 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-MainWindow::MainWindow(GraphicStripTestSettings * settings, QWidget *parent) :
-	QMainWindow(parent),
-	ui(new Ui::MainWindow),
+GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settings, QWidget *parent) :
+	PhDocumentWindow(settings, parent),
+	ui(new Ui::GraphicStripTestWindow),
 	_settings(settings)
 {
 	ui->setupUi(this);
@@ -29,31 +29,26 @@ MainWindow::MainWindow(GraphicStripTestSettings * settings, QWidget *parent) :
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
 }
 
-MainWindow::~MainWindow()
+GraphicStripTestWindow::~GraphicStripTestWindow()
 {
 	delete ui;
 }
 
-bool MainWindow::openFile(QString fileName)
+bool GraphicStripTestWindow::openFile(QString fileName)
 {
-	PHDEBUG << "openFile : " << fileName;
-	//  PhString fileName = QFileDialog::getOpenFileName(this, tr("Open a script"),QDir::homePath(), "Script File (*.detx)");
-	if(QFile::exists(fileName)) {
-		_path = fileName;
-		if(_doc->openStripFile(fileName)) {
-			_clock->setTimeCodeType(_doc->getTCType());
-			_clock->setFrame(_doc->getLastFrame());
-			this->setWindowTitle(fileName);
-			return true;
-		}
-	}
-	return false;
+	PHDEBUG << fileName;
+	if(!_doc->openStripFile(fileName))
+		return false;
+
+	_clock->setTimeCodeType(_doc->getTCType());
+	_clock->setFrame(_doc->getLastFrame());
+	setCurrentDocument(fileName);
+	return true;
 }
 
-void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text, int videoTimeStamp)
+void GraphicStripTestWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text, int videoTimeStamp)
 {
 	PHDEBUG << "Creating fake file";
-	_path = "null";
 	if(_doc->createDoc(text, nbPeople, nbText, nbTrack, videoTimeStamp)) {
 		PHDEBUG << "Done";
 		_clock->setTimeCodeType(_doc->getTCType());
@@ -62,39 +57,42 @@ void MainWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, Q
 	}
 }
 
-void MainWindow::onOpenFile()
+QMenu *GraphicStripTestWindow::recentDocumentMenu()
 {
-	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
-	if(dlg.exec()) {
-		QString fileName = dlg.selectedFiles()[0];
-		if(openFile(fileName))
-			_settings->setLastFile(fileName);
+	return ui->menuOpen_recent;
+}
+
+void GraphicStripTestWindow::onOpenFile()
+{
+	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.strip *.detx)");
+	if(QFile::exists(fileName)) {
+		if(!openFile(fileName))
+			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
 }
 
-void MainWindow::onGenerate()
+void GraphicStripTestWindow::onGenerate()
 {
 	GenerateDialog dlgGen(_settings, _doc);
 	if (dlgGen.exec()) {
 		_clock->setFrame(_doc->getLastFrame());
-		_settings->setLastFile("");
+		setCurrentDocument("");
 	}
 }
 
-
-void MainWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void GraphicStripTestWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
 	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(frame, tcType), QString::number(_clock->rate()));
 	ui->statusbar->showMessage(message);
 }
 
-void MainWindow::onRateChanged(PhRate rate)
+void GraphicStripTestWindow::onRateChanged(PhRate rate)
 {
 	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(_clock->frame(), _clock->timeCodeType()), QString::number(rate));
 	ui->statusbar->showMessage(message);
 }
 
-void MainWindow::on_actionPlay_pause_triggered()
+void GraphicStripTestWindow::on_actionPlay_pause_triggered()
 {
 	if(_clock->rate() == 0.0)
 		_clock->setRate(1.0);
@@ -102,88 +100,88 @@ void MainWindow::on_actionPlay_pause_triggered()
 		_clock->setRate(0.0);
 }
 
-void MainWindow::on_actionPlay_backward_triggered()
+void GraphicStripTestWindow::on_actionPlay_backward_triggered()
 {
 	_clock->setRate(-1.0);
 }
 
-void MainWindow::on_actionStep_forward_triggered()
+void GraphicStripTestWindow::on_actionStep_forward_triggered()
 {
 	_clock->setRate(0.0);
 	_clock->setFrame(_clock->frame() + 1);
 }
 
-void MainWindow::on_actionStep_backward_triggered()
+void GraphicStripTestWindow::on_actionStep_backward_triggered()
 {
 	_clock->setRate(0.0);
 	_clock->setFrame(_clock->frame() - 1);
 }
 
-void MainWindow::on_actionStep_time_forward_triggered()
+void GraphicStripTestWindow::on_actionStep_time_forward_triggered()
 {
 	_clock->setRate(0.0);
 	_clock->setTime(_clock->time() + 1);
 }
 
-void MainWindow::on_actionStep_time_backward_triggered()
+void GraphicStripTestWindow::on_actionStep_time_backward_triggered()
 {
 	_clock->setRate(0.0);
 	_clock->setTime(_clock->time() - 1);
 }
 
-void MainWindow::on_action_3_triggered()
+void GraphicStripTestWindow::on_action_3_triggered()
 {
 	_clock->setRate(-3.0);
 }
 
-void MainWindow::on_action_1_triggered()
+void GraphicStripTestWindow::on_action_1_triggered()
 {
 	_clock->setRate(-1.0);
 }
 
-void MainWindow::on_action_0_5_triggered()
+void GraphicStripTestWindow::on_action_0_5_triggered()
 {
 	_clock->setRate(-0.5);
 }
 
-void MainWindow::on_action0_triggered()
+void GraphicStripTestWindow::on_action0_triggered()
 {
 	_clock->setRate(0.0);
 }
 
-void MainWindow::on_action0_5_triggered()
+void GraphicStripTestWindow::on_action0_5_triggered()
 {
 	_clock->setRate(0.5);
 }
 
-void MainWindow::on_action1_triggered()
+void GraphicStripTestWindow::on_action1_triggered()
 {
 	_clock->setRate(1.0);
 }
 
-void MainWindow::on_action3_triggered()
+void GraphicStripTestWindow::on_action3_triggered()
 {
 	_clock->setRate(3.0);
 }
 
-void MainWindow::on_actionGo_to_triggered()
+void GraphicStripTestWindow::on_actionGo_to_triggered()
 {
 	PhTimeCodeDialog dlg(_clock->timeCodeType(), _clock->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_clock->setFrame(dlg.frame());
 }
 
-void MainWindow::on_actionPrevious_Element_triggered()
+void GraphicStripTestWindow::on_actionPrevious_Element_triggered()
 {
 	_clock->setFrame(_doc->getPreviousElementFrame(_clock->frame()));
 }
 
-void MainWindow::on_actionNext_Element_triggered()
+void GraphicStripTestWindow::on_actionNext_Element_triggered()
 {
 	_clock->setFrame(_doc->getNextElementFrame(_clock->frame()));
 }
 
-void MainWindow::on_actionFull_Screen_triggered()
+void GraphicStripTestWindow::on_actionFull_Screen_triggered()
 {
 	if(this->windowState() != Qt::WindowFullScreen)
 		this->setWindowState(Qt::WindowFullScreen);
@@ -191,7 +189,7 @@ void MainWindow::on_actionFull_Screen_triggered()
 		this->setWindowState(Qt::WindowMinimized);
 }
 
-void MainWindow::on_actionStrip_Properties_triggered()
+void GraphicStripTestWindow::on_actionStrip_Properties_triggered()
 {
 	dlg = new StripPropertiesDialog(_doc, this);
 	dlg->show();

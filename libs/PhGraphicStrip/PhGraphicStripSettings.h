@@ -13,8 +13,8 @@ public:
 	virtual int textBoldness() = 0;
 	virtual int screenDelay() = 0;
 	virtual bool stripTestMode() = 0;
-	virtual bool displayTextPrediction() = 0;
-	virtual bool verticalSpeed() = 0;
+	virtual bool displayNextText() = 0;
+	virtual int verticalSpeed() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

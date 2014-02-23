@@ -11,7 +11,7 @@
 #include "PhStrip/PhStripDoc.h"
 #include "PhTools/PhDebug.h"
 
-#include "MainWindow.h"
+#include "GraphicStripTestWindow.h"
 
 /**
  * @brief The application main entry point
@@ -23,27 +23,9 @@ int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 	GraphicStripTestSettings settings;
-	MainWindow w(&settings);
-
+	GraphicStripTestWindow w(&settings);
+	w.processArg(argc, argv);
 	w.show();
-
-	if (argc > 1)
-		w.openFile(argv[1]);
-	else {
-		QString lastFile = settings.lastFile();
-		if(QFile::exists(lastFile))
-			w.openFile(lastFile);
-		else {
-			w.createFile(
-			    settings.peopleNumber(),
-			    settings.loopNumber(),
-			    settings.textNumber(),
-			    settings.trackNumber(),
-			    settings.textContent(),
-			    settings.startFrame()
-			    );
-		}
-	}
 
 	return a.exec();
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>GraphicStripTestWindow</class>
+ <widget class="QMainWindow" name="GraphicStripTestWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,11 +11,20 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>GraphicStripTest</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -46,7 +55,14 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuOpen_recent">
+     <property name="title">
+      <string>Open recent</string>
+     </property>
+     <addaction name="actionEmpty"/>
+    </widget>
     <addaction name="actionOpen"/>
+    <addaction name="menuOpen_recent"/>
     <addaction name="actionGenerate"/>
     <addaction name="actionStrip_Properties"/>
    </widget>
@@ -235,6 +251,14 @@
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences...</string>
+   </property>
+  </action>
+  <action name="actionEmpty">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Empty</string>
    </property>
   </action>
  </widget>

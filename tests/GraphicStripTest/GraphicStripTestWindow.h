@@ -1,29 +1,32 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <PhGraphicStrip/PhGraphicStrip.h>
 #include <QMessageBox>
-#include <StripPropertiesDialog.h>
-#include <GenerateDialog.h>
 
+#include "PhGraphicStrip/PhGraphicStrip.h"
+#include "PhCommonUI/PhDocumentWindow.h"
+
+#include "StripPropertiesDialog.h"
+#include "GenerateDialog.h"
 #include "GraphicStripTestSettings.h"
 
 namespace Ui {
-class MainWindow;
+class GraphicStripTestWindow;
 }
 
-class MainWindow : public QMainWindow
+class GraphicStripTestWindow : public PhDocumentWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(GraphicStripTestSettings *settings, QWidget *parent = 0);
-	~MainWindow();
+	explicit GraphicStripTestWindow(GraphicStripTestSettings *settings, QWidget *parent = 0);
+	~GraphicStripTestWindow();
 
 	bool openFile(QString fileName);
 	void createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text = "Default text.", int videoTimeStamp = 0);
 
+protected:
+	QMenu *recentDocumentMenu();
 
 private slots:
 	void onOpenFile();
@@ -68,13 +71,12 @@ private slots:
 	void on_actionStrip_Properties_triggered();
 
 private:
-	Ui::MainWindow *ui;
+	Ui::GraphicStripTestWindow *ui;
 	GraphicStripTestSettings *_settings;
 	PhGraphicStrip *_strip;
 	PhStripDoc *_doc;
 	PhClock *_clock;
 	StripPropertiesDialog *dlg;
-	QString _path;
 };
 
 #endif // MAINWINDOW_H

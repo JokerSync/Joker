@@ -219,7 +219,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 			trackFull[i] = false;
 		}
 
-		bool displayNextText = _settings->displayTextPrediction();
+		bool displayNextText = _settings->displayNextText();
 
 		int verticalPixelPerFrame = _settings->verticalSpeed();
 
