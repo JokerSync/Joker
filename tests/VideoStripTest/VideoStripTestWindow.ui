@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>VideoStripTestWindow</class>
+ <widget class="QMainWindow" name="VideoStripTestWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -18,7 +18,16 @@
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -43,7 +52,14 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuOpen_recent">
+     <property name="title">
+      <string>Open recent</string>
+     </property>
+     <addaction name="actionEmpty"/>
+    </widget>
     <addaction name="actionOpen"/>
+    <addaction name="menuOpen_recent"/>
     <addaction name="actionOpen_Video"/>
    </widget>
    <widget class="QMenu" name="menuControl">
@@ -206,6 +222,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+T</string>
+   </property>
+  </action>
+  <action name="actionEmpty">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Empty</string>
    </property>
   </action>
  </widget>

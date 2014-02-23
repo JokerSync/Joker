@@ -1,31 +1,36 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include <QMessageBox>
 #include <QSettings>
 #include <QTimer>
 
-#include "VideoStripSynchronizer.h"
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhVideo/PhVideoEngine.h"
 #include "PhStrip/PhStripDoc.h"
+#include "PhCommonUI/PhDocumentWindow.h"
+
+#include "VideoStripTestSettings.h"
+#include "VideoStripSynchronizer.h"
 
 namespace Ui {
-class MainWindow;
+class VideoStripTestWindow;
 }
 
-class MainWindow : public QMainWindow
+class VideoStripTestWindow : public PhDocumentWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QSettings * settings, QWidget *parent = 0);
-	~MainWindow();
+	explicit VideoStripTestWindow(VideoStripTestSettings * settings, QWidget *parent = 0);
+	~VideoStripTestWindow();
 
-	void openFile(QString fileName);
+	bool openFile(QString fileName);
 
 	bool openVideoFile(QString videoFileName);
+
+protected:
+	QMenu *recentDocumentMenu();
 
 private slots:
 	void on_actionOpen_triggered();
@@ -68,12 +73,12 @@ private slots:
 	void on_actionTest_mode_triggered();
 
 private:
-	Ui::MainWindow *ui;
+	Ui::VideoStripTestWindow *ui;
 	PhGraphicStrip *_strip;
 	PhStripDoc *_doc;
 	PhVideoEngine * _videoEngine;
 	VideoStripSynchronizer _synchronizer;
-	QSettings * _settings;
+	VideoStripTestSettings * _settings;
 	QTimer _fullScreenTimer;
 };
 

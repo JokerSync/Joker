@@ -1,5 +1,5 @@
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "VideoStripTestWindow.h"
+#include "ui_VideoStripTestWindow.h"
 
 #include <QFileDialog>
 #include <QFontDialog>
@@ -7,9 +7,9 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-MainWindow::MainWindow(QSettings *settings, QWidget *parent) :
-	QMainWindow(parent),
-	ui(new Ui::MainWindow),
+VideoStripTestWindow::VideoStripTestWindow(VideoStripTestSettings *settings, QWidget *parent) :
+	PhDocumentWindow(settings, parent),
+	ui(new Ui::VideoStripTestWindow),
 	_settings(settings)
 {
 	ui->setupUi(this);
@@ -24,48 +24,50 @@ MainWindow::MainWindow(QSettings *settings, QWidget *parent) :
 
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
-	if(_settings->value("fullScreen", false).toBool()) {
+	if(_settings->fullScreen()) {
 		this->connect(&_fullScreenTimer, SIGNAL(timeout()), this, SLOT(on_actionFull_screen_triggered()));
 		_fullScreenTimer.start(1000);
 	}
 }
 
-MainWindow::~MainWindow()
+VideoStripTestWindow::~VideoStripTestWindow()
 {
-	_settings->setValue("fullScreen", this->windowState() == Qt::WindowFullScreen);
+	_settings->setFullScreen(this->windowState() == Qt::WindowFullScreen);
 	delete ui;
 }
 
-void MainWindow::openFile(QString fileName)
+bool VideoStripTestWindow::openFile(QString fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
-	if(QFile::exists(fileName)) {
-		if(_doc->openStripFile(fileName)) {
-			_strip->clock()->setTimeCodeType(_doc->getTCType());
-			_strip->clock()->setFrame(_doc->getLastFrame());
-			this->setWindowTitle(fileName);
+	if(!_doc->openStripFile(fileName))
+		return false;
 
-			QFileInfo fileInfo(_doc->getVideoPath());
-			if (fileInfo.exists()) {
-				_videoEngine->open(_doc->getVideoPath());
-				_videoEngine->setFirstFrame(_doc->getVideoTimestamp());
-			}
+	_strip->clock()->setTimeCodeType(_doc->getTCType());
+	_strip->clock()->setFrame(_doc->getLastFrame());
+	this->setWindowTitle(fileName);
 
-			_settings->setValue("lastFile", fileName);
-		}
+	QFileInfo fileInfo(_doc->getVideoPath());
+	if (fileInfo.exists()) {
+		_videoEngine->open(_doc->getVideoPath());
+		_videoEngine->setFirstFrame(_doc->getVideoTimestamp());
 	}
+
+	setCurrentDocument(fileName);
+
+	return true;
 }
 
-void MainWindow::on_actionOpen_triggered()
+void VideoStripTestWindow::on_actionOpen_triggered()
 {
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx *.strip)");
 	if(dlg.exec()) {
 		QString fileName = dlg.selectedFiles()[0];
-		openFile(fileName);
+		if(!openFile(fileName))
+			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
 }
 
-void MainWindow::on_actionPlay_pause_triggered()
+void VideoStripTestWindow::on_actionPlay_pause_triggered()
 {
 	if(_strip->clock()->rate() == 0.0)
 		_strip->clock()->setRate(1.0);
@@ -74,85 +76,85 @@ void MainWindow::on_actionPlay_pause_triggered()
 		_strip->clock()->setRate(0.0);
 }
 
-void MainWindow::on_actionPlay_backward_triggered()
+void VideoStripTestWindow::on_actionPlay_backward_triggered()
 {
 	_strip->clock()->setRate(-1.0);
 }
 
-void MainWindow::on_actionStep_forward_triggered()
+void VideoStripTestWindow::on_actionStep_forward_triggered()
 {
 	_strip->clock()->setRate(0.0);
 	_strip->clock()->setFrame(_strip->clock()->frame() + 1);
 }
 
-void MainWindow::on_actionStep_backward_triggered()
+void VideoStripTestWindow::on_actionStep_backward_triggered()
 {
 	_strip->clock()->setRate(0.0);
 	_strip->clock()->setFrame(_strip->clock()->frame() - 1);
 }
 
-void MainWindow::on_actionStep_time_forward_triggered()
+void VideoStripTestWindow::on_actionStep_time_forward_triggered()
 {
 	_strip->clock()->setRate(0.0);
 	_strip->clock()->setTime(_strip->clock()->time() + 1);
 }
 
-void MainWindow::on_actionStep_time_backward_triggered()
+void VideoStripTestWindow::on_actionStep_time_backward_triggered()
 {
 	_strip->clock()->setRate(0.0);
 	_strip->clock()->setTime(_strip->clock()->time() - 1);
 }
 
-void MainWindow::on_action_3_triggered()
+void VideoStripTestWindow::on_action_3_triggered()
 {
 	_strip->clock()->setRate(-3.0);
 }
 
-void MainWindow::on_action_1_triggered()
+void VideoStripTestWindow::on_action_1_triggered()
 {
 	_strip->clock()->setRate(-1.0);
 }
 
-void MainWindow::on_action_0_5_triggered()
+void VideoStripTestWindow::on_action_0_5_triggered()
 {
 	_strip->clock()->setRate(-0.5);
 }
 
-void MainWindow::on_action0_triggered()
+void VideoStripTestWindow::on_action0_triggered()
 {
 	_strip->clock()->setRate(0.0);
 }
 
-void MainWindow::on_action0_5_triggered()
+void VideoStripTestWindow::on_action0_5_triggered()
 {
 	_strip->clock()->setRate(0.5);
 }
 
-void MainWindow::on_action1_triggered()
+void VideoStripTestWindow::on_action1_triggered()
 {
 	_strip->clock()->setRate(1.0);
 }
 
-void MainWindow::on_action3_triggered()
+void VideoStripTestWindow::on_action3_triggered()
 {
 	_strip->clock()->setRate(3.0);
 }
 
-void MainWindow::on_actionGo_To_triggered()
+void VideoStripTestWindow::on_actionGo_To_triggered()
 {
 	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _strip->clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_strip->clock()->setFrame(dlg.frame());
 }
 
-void MainWindow::on_actionOpen_Video_triggered()
+void VideoStripTestWindow::on_actionOpen_Video_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
 	openVideoFile(fileName); // TODO: show error in case of error
 }
 
 
-bool MainWindow::openVideoFile(QString videoFileName)
+bool VideoStripTestWindow::openVideoFile(QString videoFileName)
 {
 	QFileInfo fileInfo(videoFileName);
 	if (fileInfo.exists()) {
@@ -168,7 +170,12 @@ bool MainWindow::openVideoFile(QString videoFileName)
 	return false;
 }
 
-void MainWindow::on_actionSet_Time_Code_triggered()
+QMenu *VideoStripTestWindow::recentDocumentMenu()
+{
+	return ui->menuOpen_recent;
+}
+
+void VideoStripTestWindow::on_actionSet_Time_Code_triggered()
 {
 	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _strip->clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
@@ -176,7 +183,7 @@ void MainWindow::on_actionSet_Time_Code_triggered()
 
 }
 
-void MainWindow::on_actionChange_font_triggered()
+void VideoStripTestWindow::on_actionChange_font_triggered()
 {
 	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
 	if(QFile(fontFile).exists()) {
@@ -186,15 +193,14 @@ void MainWindow::on_actionChange_font_triggered()
 }
 
 
-void MainWindow::on_actionFull_screen_triggered()
+void VideoStripTestWindow::on_actionFull_screen_triggered()
 {
 	_fullScreenTimer.stop();
 	this->setWindowState(Qt::WindowFullScreen);
 }
 
 
-void MainWindow::on_actionTest_mode_triggered()
+void VideoStripTestWindow::on_actionTest_mode_triggered()
 {
-	bool testMode = _settings->value("stripTestMode", false).toBool();
-	_settings->setValue("stripTestMode", !testMode);
+	_settings->setStripTestMode(!_settings->stripTestMode());
 }
