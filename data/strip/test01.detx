@@ -7,6 +7,7 @@
 	<episode number="episode ref" season="season ref" title="episode title" title2="traducted episode title"/>
 	<author name="Dupont" firstname="Pierre"/>
 	<detector firstname="Dupond" name="Jean"/>
+  <cappella copyright="Martin Delille et Grégoire Parcollet, 2007" version="0.12.5, 1"/>
 	<videofile timestamp="01:00:00:00">/Path/to/video.mov</videofile>
     <last_position timecode="01:00:10:00" track="1"/>
   </header>

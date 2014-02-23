@@ -18,6 +18,7 @@ void PhStripDocTest::initTestCase()
 
 void PhStripDocTest::openDetXHeaderTest()
 {
+	QCOMPARE(_doc.getGenerator(), QString("Cappella v0.12.5, 1"));
 	QCOMPARE(_doc.getTitle(), QString("Title test"));
 	QCOMPARE(_doc.getTranslatedTitle(), QString("Translated title"));
 	QCOMPARE(_doc.getEpisode(), QString("episode ref"));
