@@ -8,16 +8,16 @@
 #include "PhTools/PhTickCounter.h"
 
 namespace Ui {
-class MainWindow;
+class SerialTestWindow;
 }
 
-class MainWindow : public QMainWindow
+class SerialTestWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+	explicit SerialTestWindow(QWidget *parent = 0);
+	~SerialTestWindow();
 
 private slots:
 	void sendTextA();
@@ -36,7 +36,7 @@ private:
 	void closeB();
 
 
-	Ui::MainWindow *ui;
+	Ui::SerialTestWindow *ui;
 
 	QSerialPort _serialA, _serialB;
 	QTimer _ctsTimer;

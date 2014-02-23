@@ -1,12 +1,12 @@
 #include <QSerialPortInfo>
 
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "SerialTestWindow.h"
+#include "ui_SerialTestWindow.h"
 #include "PhTools/PhDebug.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+SerialTestWindow::SerialTestWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow),
+	ui(new Ui::SerialTestWindow),
 	_serialA(this),
 	_serialB(this)
 {
@@ -27,24 +27,24 @@ MainWindow::MainWindow(QWidget *parent) :
 	_ctsTimer.start(5);
 }
 
-MainWindow::~MainWindow()
+SerialTestWindow::~SerialTestWindow()
 {
 	closeA();
 	closeB();
 	delete ui;
 }
 
-void MainWindow::sendTextA()
+void SerialTestWindow::sendTextA()
 {
 	_serialA.write(ui->inputA->text().toUtf8().constData());
 }
 
-void MainWindow::sendTextB()
+void SerialTestWindow::sendTextB()
 {
 	_serialB.write(ui->inputB->text().toUtf8().constData());
 }
 
-void MainWindow::readTextA()
+void SerialTestWindow::readTextA()
 {
 	char buffer[256];
 	qint64 n = _serialA.read(buffer, 256);
@@ -55,7 +55,7 @@ void MainWindow::readTextA()
 	checkCTS();
 }
 
-void MainWindow::readTextB()
+void SerialTestWindow::readTextB()
 {
 	char buffer[256];
 	qint64 n = _serialB.read(buffer, 256);
@@ -66,7 +66,7 @@ void MainWindow::readTextB()
 	checkCTS();
 }
 
-void MainWindow::on_checkA_toggled(bool checked)
+void SerialTestWindow::on_checkA_toggled(bool checked)
 {
 	if(checked)
 		open(&_serialA, "A");
@@ -74,7 +74,7 @@ void MainWindow::on_checkA_toggled(bool checked)
 		closeA();
 }
 
-void MainWindow::on_checkB_toggled(bool checked)
+void SerialTestWindow::on_checkB_toggled(bool checked)
 {
 	if(checked)
 		open(&_serialB, "B");
@@ -82,7 +82,7 @@ void MainWindow::on_checkB_toggled(bool checked)
 		closeB();
 }
 
-bool MainWindow::open(QSerialPort * serial, QString suffix)
+bool SerialTestWindow::open(QSerialPort * serial, QString suffix)
 {
 	PHDEBUG << "open" << suffix;
 
@@ -108,19 +108,19 @@ bool MainWindow::open(QSerialPort * serial, QString suffix)
 	return false;
 }
 
-void MainWindow::closeA()
+void SerialTestWindow::closeA()
 {
 	PHDEBUG << "Closing " << _serialA.objectName();
 	_serialA.close();
 }
 
-void MainWindow::closeB()
+void SerialTestWindow::closeB()
 {
 	PHDEBUG << "Closing " << _serialB.objectName();
 	_serialB.close();
 }
 
-void MainWindow::checkCTS()
+void SerialTestWindow::checkCTS()
 {
 	bool cts = _serialA.pinoutSignals() & QSerialPort::ClearToSendSignal;
 	float frequency = _ctsCounter.frequency();
