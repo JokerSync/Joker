@@ -6,14 +6,30 @@
 
 #include "PhWindowSettings.h"
 
+/**
+ * @brief Common window behaviour for application
+ *
+ * This class provide common user interface mechanism:
+ * - Save window geometry
+ */
 class PhWindow : public QMainWindow
 {
 	Q_OBJECT
 public:
-	explicit PhWindow(PhWindowSettings *settings, QWidget *parent = 0);
+	/**
+	 * @brief PhWindow constructor
+	 * @param settings The window settings
+	 */
+	explicit PhWindow(PhWindowSettings *settings);
 
 protected:
+	/**
+	 * @brief moveEvent Store the window geometry in the settings
+	 */
 	void moveEvent(QMoveEvent *);
+	/**
+	 * @brief resizeEvent Store the window geometry in the settings
+	 */
 	void resizeEvent(QResizeEvent *);
 
 private:

@@ -19,10 +19,9 @@ class PhDocumentWindow : public PhWindow
 public:
 	/**
 	 * @brief PhDocumentWindow constructor
-	 * @param settings The application settings
-	 * @param parent The parent object
+	 * @param settings The document window settings
 	 */
-	explicit PhDocumentWindow(PhDocumentWindowSettings *settings, QWidget *parent = 0);
+	explicit PhDocumentWindow(PhDocumentWindowSettings *settings);
 
 #warning TODO move to PhApplication
 	/**

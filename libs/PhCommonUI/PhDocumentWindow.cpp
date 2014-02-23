@@ -4,8 +4,8 @@
 
 #include "PhDocumentWindow.h"
 
-PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings, QWidget *parent)
-	: PhWindow(settings, parent),
+PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings)
+	: PhWindow(settings),
 	_settings(settings)
 {
 }

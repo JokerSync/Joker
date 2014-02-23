@@ -100,6 +100,16 @@ protected:
 	 */
 	void paint();
 
+	/**
+	 * @brief Get the mouse event of the view
+	 *
+	 * This event filter check for mouse move event in order to:
+	 * - Display vertical resize cursor around the edge between the video and the strip
+	 * - Resize the strip if the user drag the edge
+	 * @param sender The event sender
+	 * @param event The event
+	 * @return Always false
+	 */
 	bool eventFilter(QObject *sender, QEvent *event);
 private slots:
 	void onVideoSync();

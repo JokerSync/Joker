@@ -70,10 +70,8 @@ public:
 		return _crossHeight;
 	}
 private:
-
-	bool _horizontal;
 	int _crossHeight;
 	int _hThick;
-
+	bool _horizontal;
 };
 #endif // PHGRAPHICLOOP_H

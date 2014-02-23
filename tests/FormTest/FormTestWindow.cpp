@@ -12,8 +12,8 @@
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 
-FormTestWindow::FormTestWindow(FormTestSettings *settings, QWidget *parent) :
-	PhDocumentWindow(settings, parent),
+FormTestWindow::FormTestWindow(FormTestSettings *settings) :
+	PhDocumentWindow(settings),
 	ui(new Ui::FormTestWindow),
 	_settings(settings),
 	_image(NULL),

@@ -1,7 +1,7 @@
 #include "PhWindow.h"
 
-PhWindow::PhWindow(PhWindowSettings *settings, QWidget *parent) :
-	QMainWindow(parent),
+PhWindow::PhWindow(PhWindowSettings *settings) :
+	QMainWindow(NULL),
 	_settings(settings)
 {
 	restoreGeometry(_settings->windowGeometry());
