@@ -1,8 +1,8 @@
-#include "mainwindow.h"
-#include "ui_MainWindow.h"
+#include "TimecodePlayerWindow.h"
+#include "ui_TimecodePlayerWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent), ui(new Ui::MainWindow)
+	QMainWindow(parent), ui(new Ui::TimecodePlayerWindow)
 {
 	ui->setupUi(this);
 	_clock = new PhClock(PhTimeCodeType25);

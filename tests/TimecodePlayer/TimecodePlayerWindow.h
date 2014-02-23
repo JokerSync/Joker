@@ -8,7 +8,7 @@
 #include "PhTools/PhClock.h"
 
 namespace Ui {
-class MainWindow;
+class TimecodePlayerWindow;
 }
 
 class MainWindow : public QMainWindow
@@ -26,7 +26,7 @@ public slots:
 
 private:
 
-	Ui::MainWindow *ui;
+	Ui::TimecodePlayerWindow *ui;
 	QTimer *_timer;
 	PhClock *_clock;
 
