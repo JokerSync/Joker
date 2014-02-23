@@ -13,6 +13,14 @@ void PhSettingsTest::testIntSettings()
 	QCOMPARE(intTest3(), 4);
 }
 
+void PhSettingsTest::testUnsignedCharSettings()
+{
+	setUnsignedCharTest1(0x11);
+	QCOMPARE((int)unsignedCharTest1(), 0x11);
+	QCOMPARE((int)unsignedCharTest2(), 0x0);
+	QCOMPARE((int)unsignedCharTest3(), 0xF0);
+}
+
 void PhSettingsTest::testBoolSettings()
 {
 	setBoolTest1(true);

@@ -16,6 +16,10 @@ public:
 	PH_SETTING_INT(setIntTest2, intTest2)
 	PH_SETTING_INT2(setIntTest3, intTest3, 4)
 
+	PH_SETTING_UCHAR(setUnsignedCharTest1, unsignedCharTest1)
+	PH_SETTING_UCHAR(setUnsignedCharTest2, unsignedCharTest2)
+	PH_SETTING_UCHAR2(setUnsignedCharTest3, unsignedCharTest3, 0xF0)
+
 	PH_SETTING_BOOL(setBoolTest1, boolTest1)
 	PH_SETTING_BOOL(setBoolTest2, boolTest2)
 	PH_SETTING_BOOL2(setBoolTest3, boolTest3, true)
@@ -33,6 +37,7 @@ public:
 
 private slots:
 	void testIntSettings();
+	void testUnsignedCharSettings();
 	void testBoolSettings();
 	void testFloatSettings();
 	void testStringSettings();

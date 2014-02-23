@@ -8,8 +8,8 @@
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
 class VideoTestSettings : PhGenericSettings,
-		public PhVideoSettings,
-		public PhDocumentWindowSettings
+	public PhVideoSettings,
+	public PhDocumentWindowSettings
 {
 public:
 	// PhGraphicSettings :

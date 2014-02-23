@@ -9,9 +9,9 @@
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
 class GraphicStripSyncTestSettings : protected PhGenericSettings,
-		public PhGraphicStripSettings,
-		public PhSyncSettings,
-		public PhDocumentWindowSettings
+	public PhGraphicStripSettings,
+	public PhSyncSettings,
+	public PhDocumentWindowSettings
 {
 public:
 	// PhGraphicSettings :

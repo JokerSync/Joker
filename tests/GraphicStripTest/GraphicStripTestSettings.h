@@ -8,8 +8,8 @@
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
 class GraphicStripTestSettings : PhGenericSettings,
-		public PhGraphicStripSettings,
-		public PhDocumentWindowSettings
+	public PhGraphicStripSettings,
+	public PhDocumentWindowSettings
 
 {
 public:

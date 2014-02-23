@@ -10,6 +10,9 @@
 #include "PhSync/PhSyncSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
+/**
+ * @brief The Joker application settings
+ */
 class JokerSettings : PhGenericSettings,
 	public PhGraphicSettings,
 	public PhGraphicStripSettings,
@@ -49,16 +52,16 @@ public:
 #warning TODO remove
 	PH_SETTING_BOOL2(setOpenLastFile, openLastFile, true)
 	PH_SETTING_STRING(setLastVideoFolder, lastVideoFolder)
-	PH_SETTING_STRING2(setSelectedFilter, selectedFilter, "Rythmo files (*.detx *.strip)");
+	PH_SETTING_STRING2(setSelectedFilter, selectedFilter, "Rythmo files (*.detx *.strip)")
 
 	PH_SETTING_BOOL(setFullScreen, fullScreen)
-	PH_SETTING_INT(setSynchroProtocol, synchroProtocol);
+	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
 	PH_SETTING_STRING(setLTCInputDevice, ltcInputDevice)
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
 
 	PH_SETTING_BOOL2(setDisplayTitle, displayTitle, true)
-	PH_SETTING_BOOL2(setDisplayNextTC, displayNextTC, true);
+	PH_SETTING_BOOL2(setDisplayNextTC, displayNextTC, true)
 	PH_SETTING_BOOL2(setDisplayTC, displayTC, true)
 	PH_SETTING_BOOL2(setDisplayLoop, displayLoop, true)
 

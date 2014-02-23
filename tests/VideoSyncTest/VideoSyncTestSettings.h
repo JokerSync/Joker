@@ -9,9 +9,9 @@
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
 class VideoSyncTestSettings : PhGenericSettings,
-		public PhVideoSettings,
-		public PhSyncSettings,
-		public PhDocumentWindowSettings
+	public PhVideoSettings,
+	public PhSyncSettings,
+	public PhDocumentWindowSettings
 {
 public:
 	// PhGraphicSettings :
