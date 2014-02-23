@@ -6,7 +6,7 @@
 
 PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings, QWidget *parent)
 	: QMainWindow(parent),
-	_settings(settings)
+	  _settings(settings)
 {
 }
 
@@ -18,15 +18,43 @@ void PhDocumentWindow::processArg(int argc, char *argv[])
 	}
 	if(QFile::exists(_settings->currentDocument()))
 		openFile(_settings->currentDocument());
+	else
+		updateRecentDocumentMenu();
 }
 
-bool PhDocumentWindow::openFile(QString fileName)
+void PhDocumentWindow::setCurrentDocument(QString fileName)
 {
-	if(QFile::exists(fileName)) {
-		_settings->setCurrentDocument(fileName);
-		_settings->setLastDocumentFolder(QFileInfo(fileName).absolutePath());
-		this->setWindowTitle(fileName);
-		return true;
+	_settings->setCurrentDocument(fileName);
+	_settings->setLastDocumentFolder(QFileInfo(fileName).absolutePath());
+	this->setWindowTitle(fileName);
+
+	QStringList recentDocList = _settings->recentDocumentList();
+	while(recentDocList.contains(fileName))
+		recentDocList.removeOne(fileName);
+	recentDocList.insert(0, fileName);
+	while(recentDocList.size() > _settings->maxRecentDocument())
+		recentDocList.removeLast();
+
+	_settings->setRecentDocumentList(recentDocList);
+
+	updateRecentDocumentMenu();
+}
+
+void PhDocumentWindow::onOpenRecentDocumentTriggered()
+{
+#warning TODO check to save if needed
+	openFile(sender()->objectName());
+}
+
+void PhDocumentWindow::updateRecentDocumentMenu()
+{
+	if(recentDocumentMenu()) {
+		QStringList recentDocList = _settings->recentDocumentList();
+		recentDocumentMenu()->clear();
+		foreach(QString doc, recentDocList) {
+			QAction *action = recentDocumentMenu()->addAction(doc);
+			action->setObjectName(doc);
+			connect(action, SIGNAL(triggered()), this, SLOT(onOpenRecentDocumentTriggered()));
+		}
 	}
-	return false;
 }

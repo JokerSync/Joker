@@ -33,6 +33,8 @@ protected:
 	bool openFile(QString fileName);
 
 	void paintEvent(QPaintEvent *);
+
+	QMenu *recentDocumentMenu();
 private slots:
 	void on_actionAbout_triggered();
 

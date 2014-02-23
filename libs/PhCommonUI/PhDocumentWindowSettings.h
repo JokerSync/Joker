@@ -11,6 +11,11 @@ public:
 
 	virtual QString lastDocumentFolder() = 0;
 	virtual void setLastDocumentFolder(QString lastDocumentFolder) = 0;
+
+	virtual QStringList recentDocumentList() = 0;
+	virtual void setRecentDocumentList(QStringList list) = 0;
+
+	virtual int maxRecentDocument() = 0;
 };
 
 #endif // PHDOCUMENTWINDOWSETTINGS_H

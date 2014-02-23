@@ -11,6 +11,7 @@ public:
 	PH_SETTING_STRING(CurrentDocument, currentDocument)
 	PH_SETTING_STRING2(LastDocumentFolder, lastDocumentFolder, QDir::homePath())
 	PH_SETTING_STRINGLIST(RecentDocumentList, recentDocumentList)
+	PH_SETTING_INT2(MaxRecentDocument, maxRecentDocument, 5)
 };
 
 #endif // FORMTESTSETTINGS_H

@@ -44,7 +44,14 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuOpen_recent">
+     <property name="title">
+      <string>Open recent</string>
+     </property>
+     <addaction name="actionEmpty"/>
+    </widget>
     <addaction name="actionOpen"/>
+    <addaction name="menuOpen_recent"/>
     <addaction name="separator"/>
     <addaction name="actionGenerate_RGB_pattern"/>
     <addaction name="actionGenerate_YUV_pattern"/>
@@ -78,6 +85,14 @@
   <action name="actionGenerate_RGB_pattern">
    <property name="text">
     <string>Generate RGB pattern</string>
+   </property>
+  </action>
+  <action name="actionEmpty">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Empty</string>
    </property>
   </action>
  </widget>

@@ -10,6 +10,8 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
 
+INCLUDEPATH += ../../libs
+
 HEADERS += \
 	../../libs/PhTools/PhTime.h \
 	../../libs/PhTools/PhTimeCode.h \

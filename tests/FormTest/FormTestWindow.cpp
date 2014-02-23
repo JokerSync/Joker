@@ -77,7 +77,8 @@ bool FormTestWindow::openFile(QString fileName)
 	_image = new QImage();
 	if(_image->load(fileName)) {
 		this->update();
-		return PhDocumentWindow::openFile(fileName);
+		setCurrentDocument(fileName);
+		return true;
 	}
 	else {
 		delete _image;
@@ -91,6 +92,11 @@ void FormTestWindow::paintEvent(QPaintEvent *)
 		QPainter painter(this);
 		painter.drawImage(0, 0, *_image);
 	}
+}
+
+QMenu *FormTestWindow::recentDocumentMenu()
+{
+	return ui->menuOpen_recent;
 }
 
 void FormTestWindow::on_actionAbout_triggered()
