@@ -19,83 +19,50 @@ class JokerSettings : PhGenericSettings,
 {
 public:
 	// PhGraphicSettings :
-	void setScreenDelay(int delay);
-	int screenDelay();
-	int screenRefreshInterval();
+	PH_SETTING_INT(setScreenDelay, screenDelay)
 
 	// PhGraphicStripSettings :
-	void setStripHeight(float stripHeight);
-	float stripHeight();
-	void setHorizontalSpeed(int speed);
-	int horizontalSpeed();
-	void setTextFontFile(QString value);
-	QString textFontFile();
-	void setTextBoldness(int boldness);
-	int textBoldness();
-
-	void setStripTestMode(bool testMode);
-	bool stripTestMode();
-
-	bool displayTextPrediction();
-	bool verticalSpeed();
+	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
+	PH_SETTING_INT2(setHorizontalSpeed, horizontalSpeed, 12)
+	PH_SETTING_STRING(setTextFontFile, textFontFile)
+	PH_SETTING_INT2(setTextBoldness, textBoldness, 2)
+	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
+	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
+	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1)
 
 	// PhVideoSettings :
-	void setVideoDeinterlace(bool deinterlace);
-	bool videoDeinterlace();
+	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
 
 	// PhSyncSettings:
-	bool videoSyncUp();
-	unsigned char sonyDevice1();
-	unsigned char sonyDevice2();
-	float sonyFastRate();
+	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
+	PH_SETTING_INT2(setSonyDevice1, sonyDevice1, 0xF0)
+	PH_SETTING_INT2(setSonyDevice2, sonyDevice2, 0xC0)
+	PH_SETTING_FLOAT2(setSonyFastRate, sonyFastRate, 3)
+
+	// PhDocumentWindowSettings
+	PH_SETTING_STRING(setCurrentDocument, currentDocument)
+	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
+	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
+	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
 
 	// Other settings :
 #warning TODO remove
-	void setOpenLastFile(bool openLastFile);
-	bool openLastFile();
+	PH_SETTING_BOOL2(setOpenLastFile, openLastFile, true)
+	PH_SETTING_STRING(setLastVideoFolder, lastVideoFolder)
+	PH_SETTING_STRING2(setSelectedFilter, selectedFilter, "Rythmo files (*.detx *.strip)");
 
-	PH_SETTING_STRING(CurrentDocument, currentDocument)
-	PH_SETTING_STRING2(LastDocumentFolder, lastDocumentFolder, QDir::homePath())
+	PH_SETTING_BOOL(setFullScreen, fullScreen)
+	PH_SETTING_INT(setSynchroProtocol, synchroProtocol);
+	PH_SETTING_STRING(setLTCInputDevice, ltcInputDevice)
 
-	void setLastVideoFolder(QString lastFolder);
-	QString lastVideoFolder();
+	PH_SETTING_INT2(setLogMask, logMask, 1)
 
-	void setSelectedFilter(QString filter);
-	QString selectedFilter();
+	PH_SETTING_BOOL2(setDisplayTitle, displayTitle, true)
+	PH_SETTING_BOOL2(setDisplayNextTC, displayNextTC, true);
+	PH_SETTING_BOOL2(setDisplayTC, displayTC, true)
+	PH_SETTING_BOOL2(setDisplayLoop, displayLoop, true)
 
-	PH_SETTING_STRINGLIST(RecentDocumentList, recentDocumentList)
-
-	PH_SETTING_INT2(MaxRecentDocument, maxRecentDocument, 10)
-
-	void setFullScreen(bool fullScreen);
-	bool fullScreen();
-
-	void setSynchroProtocol(int syncProtocol);
-	int synchroProtocol();
-
-	void setLTCInputDevice(QString ltcInputDevice);
-	QString ltcInputDevice();
-
-	void setLogMask(int logMask);
-	int logMask();
-
-	void setDisplayTitle(bool displayTitle);
-	bool displayTitle();
-
-	void setDisplayNextTC(bool displayNextTC);
-	bool displayNextTC();
-
-	void setDisplayTC(bool displayTC);
-	bool displayTC();
-
-	void setDisplayNextText(bool displayNextText);
-	bool displayNextText();
-
-	void setDisplayLoop(bool displayLoop);
-	bool displayLoop();
-
-	void setUseQuarterFrame(bool useQuarterFrame);
-	bool useQuarterFrame();
+	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)
 };
 
 #endif // JOKERSETTINGS_H

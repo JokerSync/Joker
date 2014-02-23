@@ -101,6 +101,7 @@ protected:
 		MediaPanelHidden
 	};
 
+	QMenu *recentDocumentMenu();
 
 private slots:
 	// Qt Designer slots

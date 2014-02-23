@@ -259,7 +259,7 @@
     <message>
         <location filename="JokerWindow.ui" line="326"/>
         <source>Force 16/9 ration</source>
-        <translation>Forcer le rapport d'aspect 16/9</translation>
+        <translation>Forcer le rapport d&apos;aspect 16/9</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="329"/>
@@ -519,12 +519,12 @@
     <message>
         <location filename="PreferencesDialog.ui" line="297"/>
         <source>No sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de synchronisation</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="302"/>
         <source>Sony 9 pin</source>
-        <translation type="unfinished"></translation>
+        <translation>Sony 9 pin</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="339"/>

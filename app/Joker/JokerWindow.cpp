@@ -272,6 +272,11 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 	return false;
 }
 
+QMenu *JokerWindow::recentDocumentMenu()
+{
+	return ui->menuOpen_recent;
+}
+
 void JokerWindow::closeEvent(QCloseEvent *event)
 {
 	if(!checkSaveFile())

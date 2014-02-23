@@ -6,7 +6,7 @@
 
 PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings, QWidget *parent)
 	: QMainWindow(parent),
-	_settings(settings)
+	  _settings(settings)
 {
 }
 
@@ -50,11 +50,14 @@ void PhDocumentWindow::updateRecentDocumentMenu()
 {
 	if(recentDocumentMenu()) {
 		QStringList recentDocList = _settings->recentDocumentList();
-		recentDocumentMenu()->clear();
-		foreach(QString doc, recentDocList) {
-			QAction *action = recentDocumentMenu()->addAction(doc);
-			action->setObjectName(doc);
-			connect(action, SIGNAL(triggered()), this, SLOT(onOpenRecentDocumentTriggered()));
+
+		if(_settings->recentDocumentList().count()) {
+			recentDocumentMenu()->clear();
+			foreach(QString doc, recentDocList) {
+				QAction *action = recentDocumentMenu()->addAction(doc);
+				action->setObjectName(doc);
+				connect(action, SIGNAL(triggered()), this, SLOT(onOpenRecentDocumentTriggered()));
+			}
 		}
 	}
 }
