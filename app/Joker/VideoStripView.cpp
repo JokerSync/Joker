@@ -83,10 +83,10 @@ void VideoStripView::paint()
 	if(_settings)
 		stripHeightRatio = _settings->value("stripHeight", 0.25f).toFloat();
 
-	_stripHeight = (this->height() - y) * stripHeightRatio;
-	int videoHeight = this->height() - y - _stripHeight;
+	int stripHeight = (this->height() - y) * stripHeightRatio;
+	int videoHeight = this->height() - y - stripHeight;
 
-	_strip.draw(0, y + videoHeight, this->width(), _stripHeight);
+	_strip.draw(0, y + videoHeight, this->width(), stripHeight);
 
 	int tcWidth = 200;
 
@@ -106,7 +106,7 @@ void VideoStripView::paint()
 			else
 				realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
 		}
-		blackStripHeight = (this->height() - _stripHeight - realVideoHeight) / 2;
+		blackStripHeight = (this->height() - stripHeight - realVideoHeight) / 2;
 
 		int videoX = (this->width() - videoWidth) / 2;
 		_videoEngine.drawVideo(videoX, y + blackStripHeight, videoWidth, realVideoHeight);
@@ -169,7 +169,7 @@ void VideoStripView::paint()
 		PhGraphicText gCurrentLoop(_strip.getHUDFont(), QString::number(loopNumber));
 		int loopHeight = 60;
 		int loopWidth = _strip.getHUDFont()->getNominalWidth(QString::number(loopNumber)) * ((float) loopHeight / _strip.getHUDFont()->getHeight());
-		gCurrentLoop.setRect(10, this->height() - _stripHeight - loopHeight, loopWidth, loopHeight);
+		gCurrentLoop.setRect(10, this->height() - stripHeight - loopHeight, loopWidth, loopHeight);
 		gCurrentLoop.setColor(Qt::blue);
 		gCurrentLoop.draw();
 	}
@@ -222,8 +222,3 @@ void VideoStripView::onDocChanged()
 {
 	_selectedPeoples.clear();
 }
-int VideoStripView::stripHeight() const
-{
-	return _stripHeight;
-}
-

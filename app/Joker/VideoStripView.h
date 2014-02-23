@@ -84,12 +84,6 @@ public:
 		_forceRatio169 = force;
 	}
 
-	/**
-	 * @brief Get the strip height
-	 * @return the strip height
-	 */
-	int stripHeight() const;
-
 protected:
 	/**
 	 * @brief Initialize the VideoStripView elements.
@@ -123,8 +117,6 @@ private:
 	PhGraphicText _currentPeopleName;
 
 	QList<PhPeople*> _selectedPeoples;
-
-	int _stripHeight;
 
 	bool _forceRatio169;
 };

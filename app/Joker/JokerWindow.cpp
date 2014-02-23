@@ -26,9 +26,9 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_needToSave(false),
-	#if USE_LTC
+#if USE_LTC
 	_ltcReader(),
-	#endif
+#endif
 	_currentStripFile("")
 {
 	// Setting up UI
@@ -270,7 +270,6 @@ void JokerWindow::openFile(QString fileName)
 
 bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
-	QPoint mousePos;
 	switch (event->type()) {
 	case QEvent::FileOpen:
 		{
