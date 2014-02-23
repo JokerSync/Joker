@@ -22,16 +22,17 @@ include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 
 #Main app
 SOURCES += main.cpp \
-	MainWindow.cpp \
+	GraphicStripSyncTestWindow.cpp \
     SonyStripSynchronizer.cpp \
     PreferencesDialog.cpp
 
 HEADERS += \
-    MainWindow.h \
+    GraphicStripSyncTestWindow.h \
     SonyStripSynchronizer.h \
-    PreferencesDialog.h
+    PreferencesDialog.h \
+    GraphicStripSyncTestSettings.h
 
 FORMS += \
-    MainWindow.ui \
+    GraphicStripSyncTestWindow.ui \
     PreferencesDialog.ui
 

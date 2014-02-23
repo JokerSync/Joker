@@ -1,6 +1,3 @@
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
-
 #include <QMessageBox>
 #include <QFileDialog>
 
@@ -8,9 +5,12 @@
 #include "PhCommonUI/PhTimeCodeDialog.h"
 #include "PreferencesDialog.h"
 
-MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
-	QMainWindow(parent),
-	ui(new Ui::MainWindow),
+#include "GraphicStripSyncTestWindow.h"
+#include "ui_GraphicStripSyncTestWindow.h"
+
+GraphicStripSyncTestWindow::GraphicStripSyncTestWindow(GraphicStripSyncTestSettings *settings, QWidget *parent) :
+	PhDocumentWindow(settings, parent),
+	ui(new Ui::GraphicStripSyncTestWindow),
 	_settings(settings),
 	_sonySlave(PhTimeCodeType25, _settings)
 {
@@ -35,26 +35,29 @@ MainWindow::MainWindow(QSettings * settings, QWidget *parent) :
 		QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
 }
 
-MainWindow::~MainWindow()
+GraphicStripSyncTestWindow::~GraphicStripSyncTestWindow()
 {
 	delete ui;
 }
 
-void MainWindow::openFile(QString fileName)
+bool GraphicStripSyncTestWindow::openFile(QString fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
 	if(QFile::exists(fileName)) {
 		if(_doc->openStripFile(fileName)) {
 			_clock->setTimeCodeType(_doc->getTCType());
 			_clock->setFrame(_doc->getLastFrame());
-			this->setWindowTitle(fileName);
-			if(_settings)
-				_settings->setValue("lastFile", fileName);
+			setCurrentDocument(fileName);
 		}
 	}
 }
 
-void MainWindow::onOpenFile()
+QMenu *GraphicStripSyncTestWindow::recentDocumentMenu()
+{
+	return ui->menuOpen_recent;
+}
+
+void GraphicStripSyncTestWindow::onOpenFile()
 {
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
 	if(dlg.exec()) {
@@ -63,19 +66,19 @@ void MainWindow::onOpenFile()
 	}
 }
 
-void MainWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void GraphicStripSyncTestWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
 	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(frame, tcType), QString::number(_clock->rate()));
 	ui->statusbar->showMessage(message);
 }
 
-void MainWindow::onRateChanged(PhRate rate)
+void GraphicStripSyncTestWindow::onRateChanged(PhRate rate)
 {
 	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(_clock->frame(), _clock->timeCodeType()), QString::number(rate));
 	ui->statusbar->showMessage(message);
 }
 
-void MainWindow::on_actionPlay_pause_triggered()
+void GraphicStripSyncTestWindow::on_actionPlay_pause_triggered()
 {
 	if(_clock->rate() == 0.0)
 		_clock->setRate(1.0);
@@ -83,71 +86,71 @@ void MainWindow::on_actionPlay_pause_triggered()
 		_clock->setRate(0.0);
 }
 
-void MainWindow::on_actionPlay_backward_triggered()
+void GraphicStripSyncTestWindow::on_actionPlay_backward_triggered()
 {
 	_clock->setRate(-1.0);
 }
 
-void MainWindow::on_actionStep_forward_triggered()
+void GraphicStripSyncTestWindow::on_actionStep_forward_triggered()
 {
 	_clock->setRate(0.0);
 	_clock->setFrame(_clock->frame() + 1);
 }
 
-void MainWindow::on_actionStep_backward_triggered()
+void GraphicStripSyncTestWindow::on_actionStep_backward_triggered()
 {
 	_clock->setRate(0.0);
 	_clock->setFrame(_clock->frame() - 1);
 }
 
-void MainWindow::on_actionStep_time_forward_triggered()
+void GraphicStripSyncTestWindow::on_actionStep_time_forward_triggered()
 {
 	_clock->setRate(0.0);
 	_clock->setTime(_clock->time() + 1);
 }
 
-void MainWindow::on_actionStep_time_backward_triggered()
+void GraphicStripSyncTestWindow::on_actionStep_time_backward_triggered()
 {
 	_clock->setRate(0.0);
 	_clock->setTime(_clock->time() - 1);
 }
 
-void MainWindow::on_action_3_triggered()
+void GraphicStripSyncTestWindow::on_action_3_triggered()
 {
 	_clock->setRate(-3.0);
 }
 
-void MainWindow::on_action_1_triggered()
+void GraphicStripSyncTestWindow::on_action_1_triggered()
 {
 	_clock->setRate(-1.0);
 }
 
-void MainWindow::on_action_0_5_triggered()
+void GraphicStripSyncTestWindow::on_action_0_5_triggered()
 {
 	_clock->setRate(-0.5);
 }
 
-void MainWindow::on_action0_triggered()
+void GraphicStripSyncTestWindow::on_action0_triggered()
 {
 	_clock->setRate(0.0);
 }
 
-void MainWindow::on_action0_5_triggered()
+void GraphicStripSyncTestWindow::on_action0_5_triggered()
 {
 	_clock->setRate(0.5);
 }
 
-void MainWindow::on_action1_triggered()
+void GraphicStripSyncTestWindow::on_action1_triggered()
 {
 	_clock->setRate(1.0);
 }
 
-void MainWindow::on_action3_triggered()
+void GraphicStripSyncTestWindow::on_action3_triggered()
 {
 	_clock->setRate(3.0);
 }
 
-void MainWindow::on_actionGo_To_triggered()
+void GraphicStripSyncTestWindow::on_actionGo_To_triggered()
 {
 	PhTimeCodeDialog dlg(_clock->timeCodeType(), _clock->frame());
 	if(dlg.exec() == QDialog::Accepted)
@@ -155,7 +158,7 @@ void MainWindow::on_actionGo_To_triggered()
 
 }
 
-void MainWindow::on_actionPreferences_triggered()
+void GraphicStripSyncTestWindow::on_actionPreferences_triggered()
 {
 	PreferencesDialog dlg(_settings);
 	if(dlg.exec() == QDialog::Accepted)

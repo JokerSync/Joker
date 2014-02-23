@@ -1,25 +1,29 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSonySlaveController.h"
+#include "PhCommonUI/PhDocumentWindow.h"
+
+#include "GraphicStripSyncTestSettings.h"
 #include "SonyStripSynchronizer.h"
 
 namespace Ui {
-class MainWindow;
+class GraphicStripSyncTestWindow;
 }
 
-class MainWindow : public QMainWindow
+class GraphicStripSyncTestWindow : public PhDocumentWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QSettings *settings, QWidget *parent = 0);
-	~MainWindow();
+	explicit GraphicStripSyncTestWindow(GraphicStripSyncTestSettings *settings, QWidget *parent = 0);
+	~GraphicStripSyncTestWindow();
 
-	void openFile(QString fileName);
+	bool openFile(QString fileName);
+
+protected:
+	QMenu *recentDocumentMenu();
 
 private slots:
 	void onOpenFile();
@@ -57,11 +61,11 @@ private slots:
 	void on_actionPreferences_triggered();
 
 private:
-	Ui::MainWindow *ui;
+	Ui::GraphicStripSyncTestWindow *ui;
 	PhGraphicStrip *_strip;
 	PhStripDoc *_doc;
 	PhClock *_clock;
-	QSettings * _settings;
+	GraphicStripSyncTestSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	SonyStripSynchronizer _clockSynchroniser;
 };
