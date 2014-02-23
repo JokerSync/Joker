@@ -5,7 +5,7 @@
 #include "PhDocumentWindow.h"
 
 PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings, QWidget *parent)
-	: QMainWindow(parent),
+	: PhWindow(settings, parent),
 	_settings(settings)
 {
 }

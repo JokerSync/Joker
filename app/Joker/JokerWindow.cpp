@@ -107,9 +107,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	if(_settings->fullScreen())
 		showFullScreen();
-	else
-		restoreGeometry(_settings->windowGeometry());
-
 }
 
 JokerWindow::~JokerWindow()
@@ -273,16 +270,6 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 		event->ignore();
 	else
 		_mediaPanel.close();
-}
-
-void JokerWindow::moveEvent(QMoveEvent *)
-{
-	_settings->setWindowGeometry(saveGeometry());
-}
-
-void JokerWindow::resizeEvent(QResizeEvent *)
-{
-	_settings->setWindowGeometry(saveGeometry());
 }
 
 void JokerWindow::on_actionOpen_triggered()

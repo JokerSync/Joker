@@ -14,11 +14,6 @@ TEMPLATE = app
 # The application version
 VERSION = 1.0.3
 
-mac {
-	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
-	QMAKE_POST_LINK += sed -i -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
-}
-
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 

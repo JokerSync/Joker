@@ -10,7 +10,9 @@ HEADERS += \
     ../../libs/PhCommonUI/PhTimeCodeDialog.h \
     ../../libs/PhCommonUI/PhFloatingMediaPanel.h \
     ../../libs/PhCommonUI/PhDocumentWindow.h \
-    ../../libs/PhCommonUI/PhDocumentWindowSettings.h
+    ../../libs/PhCommonUI/PhDocumentWindowSettings.h \
+    ../../libs/PhCommonUI/PhWindow.h \
+    ../../libs/PhCommonUI/PhWindowSettings.h
 
 SOURCES += \
 #   ../../libs/PhCommonUI/PhLeap.cpp \
@@ -18,7 +20,8 @@ SOURCES += \
 	../../libs/PhCommonUI/PhTimecodeEdit.cpp \
     ../../libs/PhCommonUI/PhTimeCodeDialog.cpp \
     ../../libs/PhCommonUI/PhFloatingMediaPanel.cpp \
-    ../../libs/PhCommonUI/PhDocumentWindow.cpp
+    ../../libs/PhCommonUI/PhDocumentWindow.cpp \
+    ../../libs/PhCommonUI/PhWindow.cpp
 
 
 FORMS += ../../libs/PhCommonUI/PhMediaPanel.ui \

@@ -1,9 +1,9 @@
 #ifndef PHDOCUMENTWINDOW_H
 #define PHDOCUMENTWINDOW_H
 
-#include <QMainWindow>
 #include <QMenu>
 
+#include "PhWindow.h"
 #include "PhDocumentWindowSettings.h"
 
 /**
@@ -13,7 +13,7 @@
  * handling document:
  * -
  */
-class PhDocumentWindow : public QMainWindow
+class PhDocumentWindow : public PhWindow
 {
 	Q_OBJECT
 public:

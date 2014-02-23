@@ -172,8 +172,6 @@ private slots:
 
 	void on_actionFullscreen_triggered();
 
-	void moveEvent(QMoveEvent *);
-	void resizeEvent(QResizeEvent *);
 private:
 	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;

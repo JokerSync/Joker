@@ -163,7 +163,6 @@ void PreferencesDialog::on_buttonBox_rejected()
 	close();
 }
 
-
 void PreferencesDialog::on_spinBoxDelay_valueChanged(int delay)
 {
 	if(_settings->useQuarterFrame())
