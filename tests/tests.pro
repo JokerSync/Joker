@@ -3,6 +3,7 @@ TEMPLATE = subdirs
 SUBDIRS += \
 	ConsoleTest \
 	FormTest \
+	FFmpegTest \
 	GraphicStripSyncTest \
 	GraphicStripTest \
 	GraphicTest \
@@ -11,6 +12,7 @@ SUBDIRS += \
 	SerialTest \
 	SonyTest \
 	StripTest \
+	TextEditTest \
 	TimecodePlayer \
 	VideoStripTest \
 	VideoSyncTest \

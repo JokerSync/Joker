@@ -1,30 +1,36 @@
 #ifndef VIDEOSYNCTESTSETTINGS_H
 #define VIDEOSYNCTESTSETTINGS_H
 
+#include <QDir>
+
 #include "PhTools/PhGenericSettings.h"
 #include "PhVideo/PhVideoSettings.h"
 #include "PhSync/PhSyncSettings.h"
+#include "PhCommonUI/PhDocumentWindowSettings.h"
 
-class VideoSyncTestSettings : PhGenericSettings, public PhVideoSettings, public PhSyncSettings
+class VideoSyncTestSettings : PhGenericSettings,
+		public PhVideoSettings,
+		public PhSyncSettings,
+		public PhDocumentWindowSettings
 {
 public:
 	// PhGraphicSettings :
-	int screenDelay();
-	int screenRefreshInterval();
+	PH_SETTING_INT(setScreenDelay, screenDelay)
 
-	// PhGraphicStripSettings :
-	bool videoDeinterlace();
+	// PhVideoSettings :
+	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
 
 	// PhSyncSettings:
-	bool videoSyncUp();
-	unsigned char sonyDevice1();
-	unsigned char sonyDevice2();
-	float sonyFastRate();
+	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
+	PH_SETTING_INT2(setSonyDevice1, sonyDevice1, 0xF0)
+	PH_SETTING_INT2(setSonyDevice2, sonyDevice2, 0xC0)
+	PH_SETTING_FLOAT2(setSonyFastRate, sonyFastRate, 3)
 
-	// Others settings
-	int logLevel();
-	void setLastFile(QString lastFile);
-	QString lastFile();
+	// PhDocumentWindowSettings
+	PH_SETTING_STRING(setCurrentDocument, currentDocument)
+	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
+	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
+	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
 };
 
 #endif // VIDEOSYNCTESTSETTINGS_H

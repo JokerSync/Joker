@@ -1,14 +1,14 @@
-#include "MainView.h"
-#include "ui_MainView.h"
+#include "VideoSyncTestWindow.h"
+#include "ui_VideoSyncTestWindow.h"
 
 #include <QPushButton>
 #include <QBoxLayout>
 #include <QFileInfo>
 #include <QFileDialog>
 
-MainView::MainView(VideoSyncTestSettings *settings)
-	: QMainWindow(0),
-	ui(new Ui::MainView),
+VideoSyncTestWindow::VideoSyncTestWindow(VideoSyncTestSettings *settings)
+	: PhDocumentWindow(settings),
+	ui(new Ui::VideoSyncTestWindow),
 	_settings(settings)
 {
 	ui->setupUi(this);
@@ -21,29 +21,31 @@ MainView::MainView(VideoSyncTestSettings *settings)
 }
 
 
-MainView::~MainView()
+VideoSyncTestWindow::~VideoSyncTestWindow()
 {
 	delete ui;
 }
 
-bool MainView::openFile(QString fileName)
+bool VideoSyncTestWindow::openFile(QString fileName)
 {
 	if (_videoEngine.open(fileName)) {
-#warning TODO read media length from video file
-		ui->mediaController->setMediaLength(7500);
-#warning TODO read first frame from video file
-		ui->mediaController->setFirstFrame(0);
+		ui->mediaController->setFirstFrame(_videoEngine.firstFrame());
+		ui->mediaController->setMediaLength(_videoEngine.length());
 
 		_videoEngine.clock()->setRate(0.0);
 
-		_settings->setLastFile(fileName);
+		setCurrentDocument(fileName);
 		return true;
 	}
 	return false;
 }
 
+QMenu *VideoSyncTestWindow::recentDocumentMenu()
+{
+	ui->menuOpen_recent;
+}
 
-void MainView::onOpenFile()
+void VideoSyncTestWindow::onOpenFile()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
 	openFile(fileName);  // TODO: show error in case of error

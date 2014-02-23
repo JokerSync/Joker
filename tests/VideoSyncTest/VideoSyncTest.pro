@@ -11,13 +11,12 @@ include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
 include($${JOKER_ROOT}/libs/PhVideo/PhVideo.pri)
 include($${JOKER_ROOT}/libs/PhCommonUI/PhCommonUI.pri)
 
-HEADERS += MainView.h \
+HEADERS += VideoSyncTestWindow.h \
     VideoSyncTestSettings.h
 
 SOURCES += \
     main.cpp \
-    MainView.cpp \
-    VideoSyncTestSettings.cpp
+    VideoSyncTestWindow.cpp
 
 FORMS += \
-    MainView.ui
+    VideoSyncTestWindow.ui

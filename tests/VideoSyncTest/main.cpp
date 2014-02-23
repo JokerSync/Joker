@@ -1,8 +1,8 @@
-#include <QtWidgets/QApplication>
-#include "MainView.h"
-#include "VideoSyncTestSettings.h"
-#include <QSettings>
+#include <QApplication>
 #include <QFile>
+
+#include "VideoSyncTestWindow.h"
+#include "VideoSyncTestSettings.h"
 
 /**
  * @brief The application main entry point
@@ -12,24 +12,12 @@
  */
 int main(int argc, char *argv[])
 {
-	QSettings settings("Phonations", "VideoSyncTest");
-	int logLevel = settings.value("logLevel", 1).toInt();
-
+	VideoSyncTestSettings settings;
 	QApplication app(argc, argv);
 
-	MainView mainView(&settings);
-	mainView.resize(800, 600);
-
-	mainView.show();
-
-	QString fileName = "";
-	if (argc > 1)
-		fileName = argv[1];
-	else
-		fileName = settings.lastFile();
-
-	if(QFile(fileName).exists())
-		mainView.openFile(fileName);
+	VideoSyncTestWindow w(&settings);
+	w.processArg(argc, argv);
+	w.show();
 
 	return app.exec();
 }

@@ -1,37 +1,29 @@
 #ifndef MAINVIEW_H
 #define MAINVIEW_H
 
-#include <QMainWindow>
 #include <QString>
 #include <QTimer>
 
 #include "PhTools/PhClock.h"
 #include "PhVideo/PhVideoView.h"
 #include "PhCommonUI/PhMediaPanel.h"
+#include "PhCommonUI/PhDocumentWindow.h"
 
 #include "VideoSyncTestSettings.h"
 
-using namespace std;
-
-QT_BEGIN_NAMESPACE
-class QAbstractButton;
-class QSlider;
-class QLabel;
-QT_END_NAMESPACE
-
 namespace Ui {
-class MainView;
+class VideoSyncTestWindow;
 }
 
-class MainView : public QMainWindow
+class VideoSyncTestWindow : public PhDocumentWindow
 {
 	Q_OBJECT
 public:
 	/**
 	 * @brief MainView constructor
 	 */
-	MainView(VideoSyncTestSettings *settings);
-	~MainView();
+	VideoSyncTestWindow(VideoSyncTestSettings *settings);
+	~VideoSyncTestWindow();
 	/**
 	 * Open a video file.
 	 * @param fileName Path of the video file to open.
@@ -39,11 +31,14 @@ public:
 	 */
 	bool openFile(QString fileName);
 
+protected:
+	QMenu *recentDocumentMenu();
+
 private slots:
 
 	void onOpenFile();
 private:
-	Ui::MainView *ui;
+	Ui::VideoSyncTestWindow *ui;
 	PhVideoEngine _videoEngine;
 	VideoSyncTestSettings *_settings;
 };
