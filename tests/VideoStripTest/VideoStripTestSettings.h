@@ -28,12 +28,6 @@ public:
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
 
-	// PhSyncSettings:
-	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
-	PH_SETTING_INT2(setSonyDevice1, sonyDevice1, 0xF0)
-	PH_SETTING_INT2(setSonyDevice2, sonyDevice2, 0xC0)
-	PH_SETTING_FLOAT2(setSonyFastRate, sonyFastRate, 3)
-
 	// PhDocumentWindowSettings
 	PH_SETTING_STRING(setCurrentDocument, currentDocument)
 	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
