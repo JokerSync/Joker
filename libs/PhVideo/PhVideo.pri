@@ -13,11 +13,11 @@ SOURCES += \
 
 # Windows specific
 win32{
-	!exists($$(FFMPEG_DEV_PATH)) {
+	!exists($$(FFMPEG_DEV_PATH)\README.txt) {
 		error("You must define a valid FFMPEG_DEV_PATH")
 	}
 
-	!exists($$(FFMPEG_SHARED_PATH)) {
+	!exists($$(FFMPEG_SHARED_PATH)\README.txt) {
 		error("You must define a valid FFMPEG_SHARED_PATH")
 	}
 

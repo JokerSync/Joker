@@ -54,6 +54,11 @@ void VideoTestWindow::resizeEvent(QResizeEvent *)
 	                       this->y() + this->height() * 0.95 - _mediaPanelDialog.height());
 }
 
+void VideoTestWindow::closeEvent(QCloseEvent *)
+{
+	_mediaPanelDialog.close();
+}
+
 void VideoTestWindow::on_actionPlay_pause_triggered()
 {
 	if(_videoEngine.clock()->rate() != 0)

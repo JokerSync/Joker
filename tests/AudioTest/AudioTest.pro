@@ -8,32 +8,28 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = LTCTool
+TARGET = AudioTest
 TEMPLATE = app
 
 VERSION = 1.0.0
 
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 
-CONFIG += ltc
-
 INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri);
 include(../../libs/PhAudio/PhAudio.pri);
-include(../../libs/PhSync/PhSync.pri);
-include(../../libs/PhCommonUI/PhCommonUI.pri);
 
 SOURCES += main.cpp\
-        LTCToolWindow.cpp \
-    PreferencesDialog.cpp
+        AudioTestWindow.cpp \
+    PreferencesDialog.cpp \
+    AudioTestReader.cpp \
+    AudioTestWriter.cpp
 
-HEADERS  += LTCToolWindow.h \
-    PreferencesDialog.h
+HEADERS  += AudioTestWindow.h \
+    PreferencesDialog.h \
+    AudioTestReader.h \
+    AudioTestWriter.h
 
-FORMS    += LTCToolWindow.ui \
-<<<<<<< HEAD
-    PreferencesPanel.ui
-=======
+FORMS    += AudioTestWindow.ui \
     PreferencesDialog.ui
->>>>>>> master

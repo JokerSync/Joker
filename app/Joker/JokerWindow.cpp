@@ -150,6 +150,8 @@ void JokerWindow::setupSyncProtocol()
 			break;
 		}
 #endif
+	case VideoStripSynchronizer::NoSync:
+		break;
 	}
 
 	_synchronizer.setSyncClock(clock, type);
@@ -274,6 +276,8 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 {
 	if(!checkSaveFile())
 		event->ignore();
+	else
+		_mediaPanel.close();
 }
 
 void JokerWindow::on_actionOpen_triggered()

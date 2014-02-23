@@ -4,13 +4,13 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#ifndef PREFERENCESPANEL_H
-#define PREFERENCESPANEL_H
+#ifndef PREFERENCESDIALOG_H
+#define PREFERENCESDIALOG_H
 
 #include <QDialog>
 
 namespace Ui {
-class PreferencesPanel;
+class PreferencesDialog;
 }
 
 /*!
@@ -18,7 +18,7 @@ class PreferencesPanel;
  *
  * It allow the user to select the desired input and output.
  */
-class PreferencesPanel : public QDialog
+class PreferencesDialog : public QDialog
 {
 	Q_OBJECT
 
@@ -32,8 +32,8 @@ public:
 	 * \param audioInput	The current input device.
 	 * \param parent		The parent.
 	 */
-	explicit PreferencesPanel(QString audioOutput, QString audioInput, QWidget *parent = 0);
-	~PreferencesPanel();
+	explicit PreferencesDialog(QString audioOutput, QString audioInput, QWidget *parent = 0);
+	~PreferencesDialog();
 	/*!
 	 * \brief selectedAudioOutput
 	 * \return The selected output device
@@ -46,7 +46,7 @@ public:
 	QString selectedAudioInput();
 
 private:
-	Ui::PreferencesPanel *ui;
+	Ui::PreferencesDialog *ui;
 };
 
-#endif // PREFERENCESPANEL_H
+#endif // PREFERENCESDIALOG_H
