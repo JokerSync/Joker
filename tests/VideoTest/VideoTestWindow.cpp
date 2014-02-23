@@ -27,7 +27,7 @@ VideoTestWindow::~VideoTestWindow()
 	delete ui;
 }
 
-bool VideoTestWindow::openFile(QString fileName)
+bool VideoTestWindow::openDocument(QString fileName)
 {
 	if(!_videoEngine.open(fileName))
 		return false;
@@ -94,7 +94,7 @@ void VideoTestWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
 	if(QFile::exists(fileName)) {
-		if(!openFile(fileName))
+		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
 }

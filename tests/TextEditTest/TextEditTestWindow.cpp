@@ -20,7 +20,7 @@ TextEditTestWindow::~TextEditTestWindow()
 	delete ui;
 }
 
-bool TextEditTestWindow::openFile(QString fileName)
+bool TextEditTestWindow::openDocument(QString fileName)
 {
 	QFile file(fileName);
 	if(!file.open(QFile::ReadOnly))
@@ -44,7 +44,7 @@ void TextEditTestWindow::on_actionOpen_triggered()
 	QString fileName = QFileDialog::getOpenFileName(this, "Open a text file...", _settings->lastDocumentFolder(), "Text file (*.txt)");
 
 	if(QFile::exists(fileName)) {
-		if(!openFile(fileName))
+		if(!openDocument(fileName))
 			QMessageBox::critical(this, "", tr("Unable to open ") + fileName);
 	}
 }

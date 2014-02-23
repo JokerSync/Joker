@@ -25,7 +25,7 @@ public:
 	explicit VideoStripTestWindow(VideoStripTestSettings * settings, QWidget *parent = 0);
 	~VideoStripTestWindow();
 
-	bool openFile(QString fileName);
+	bool openDocument(QString fileName);
 
 	bool openVideoFile(QString videoFileName);
 

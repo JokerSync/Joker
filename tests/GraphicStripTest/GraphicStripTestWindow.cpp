@@ -34,7 +34,7 @@ GraphicStripTestWindow::~GraphicStripTestWindow()
 	delete ui;
 }
 
-bool GraphicStripTestWindow::openFile(QString fileName)
+bool GraphicStripTestWindow::openDocument(QString fileName)
 {
 	PHDEBUG << fileName;
 	if(!_doc->openStripFile(fileName))
@@ -66,7 +66,7 @@ void GraphicStripTestWindow::onOpenFile()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.strip *.detx)");
 	if(QFile::exists(fileName)) {
-		if(!openFile(fileName))
+		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
 }

@@ -20,7 +20,7 @@ public:
 	explicit GraphicStripSyncTestWindow(GraphicStripSyncTestSettings *settings, QWidget *parent = 0);
 	~GraphicStripSyncTestWindow();
 
-	bool openFile(QString fileName);
+	bool openDocument(QString fileName);
 
 protected:
 	QMenu *recentDocumentMenu();

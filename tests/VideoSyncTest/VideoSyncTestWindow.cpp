@@ -26,7 +26,7 @@ VideoSyncTestWindow::~VideoSyncTestWindow()
 	delete ui;
 }
 
-bool VideoSyncTestWindow::openFile(QString fileName)
+bool VideoSyncTestWindow::openDocument(QString fileName)
 {
 	if (_videoEngine.open(fileName)) {
 		ui->mediaController->setFirstFrame(_videoEngine.firstFrame());
@@ -48,7 +48,7 @@ QMenu *VideoSyncTestWindow::recentDocumentMenu()
 void VideoSyncTestWindow::onOpenFile()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
-	openFile(fileName);  // TODO: show error in case of error
+	openDocument(fileName);  // TODO: show error in case of error
 }
 
 

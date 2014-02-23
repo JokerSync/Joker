@@ -22,7 +22,7 @@ public:
 	explicit GraphicStripTestWindow(GraphicStripTestSettings *settings, QWidget *parent = 0);
 	~GraphicStripTestWindow();
 
-	bool openFile(QString fileName);
+	bool openDocument(QString fileName);
 	void createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text = "Default text.", int videoTimeStamp = 0);
 
 protected:

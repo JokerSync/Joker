@@ -32,13 +32,12 @@ public:
 	 */
 	void processArg(int argc, char *argv[]);
 protected:
-#warning TODO rename to openDocument
 	/**
 	 * @brief Open a document
 	 * @param fileName The document file name
 	 * @return True if success, false otherwise
 	 */
-	virtual bool openFile(QString fileName) = 0;
+	virtual bool openDocument(QString fileName) = 0;
 
 	/**
 	 * @brief Set the current document

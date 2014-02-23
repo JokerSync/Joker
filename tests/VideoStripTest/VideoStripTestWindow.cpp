@@ -36,7 +36,7 @@ VideoStripTestWindow::~VideoStripTestWindow()
 	delete ui;
 }
 
-bool VideoStripTestWindow::openFile(QString fileName)
+bool VideoStripTestWindow::openDocument(QString fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
 	if(!_doc->openStripFile(fileName))
@@ -62,7 +62,7 @@ void VideoStripTestWindow::on_actionOpen_triggered()
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx *.strip)");
 	if(dlg.exec()) {
 		QString fileName = dlg.selectedFiles()[0];
-		if(!openFile(fileName))
+		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
 }

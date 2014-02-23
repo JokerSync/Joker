@@ -18,7 +18,7 @@ public:
 	~TextEditTestWindow();
 
 protected:
-	bool openFile(QString fileName);
+	bool openDocument(QString fileName);
 	QMenu *recentDocumentMenu();
 
 private slots:

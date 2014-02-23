@@ -40,7 +40,7 @@ GraphicStripSyncTestWindow::~GraphicStripSyncTestWindow()
 	delete ui;
 }
 
-bool GraphicStripSyncTestWindow::openFile(QString fileName)
+bool GraphicStripSyncTestWindow::openDocument(QString fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
 	if(QFile::exists(fileName)) {
@@ -62,7 +62,7 @@ void GraphicStripSyncTestWindow::onOpenFile()
 	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx)");
 	if(dlg.exec()) {
 		QString fileName = dlg.selectedFiles()[0];
-		openFile(fileName);
+		openDocument(fileName);
 	}
 }
 

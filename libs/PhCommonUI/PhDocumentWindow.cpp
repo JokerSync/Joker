@@ -17,7 +17,7 @@ void PhDocumentWindow::processArg(int argc, char *argv[])
 			_settings->setCurrentDocument(argv[i]);
 	}
 	if(QFile::exists(_settings->currentDocument()))
-		openFile(_settings->currentDocument());
+		openDocument(_settings->currentDocument());
 	else
 		updateRecentDocumentMenu();
 }
@@ -43,7 +43,7 @@ void PhDocumentWindow::setCurrentDocument(QString fileName)
 void PhDocumentWindow::onOpenRecentDocumentTriggered()
 {
 #warning TODO check to save if needed
-	openFile(sender()->objectName());
+	openDocument(sender()->objectName());
 }
 
 void PhDocumentWindow::updateRecentDocumentMenu()

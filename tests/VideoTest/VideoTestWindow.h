@@ -34,7 +34,7 @@ public:
 	 * @param fileName Path of the video file to open.
 	 * @return True if succeeds, false otherwise.
 	 */
-	bool openFile(QString fileName);
+	bool openDocument(QString fileName);
 
 protected:
 	void resizeEvent(QResizeEvent *);

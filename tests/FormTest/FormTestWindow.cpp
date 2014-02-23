@@ -70,7 +70,7 @@ void FormTestWindow::generateYUV()
 	delete yuv;
 }
 
-bool FormTestWindow::openFile(QString fileName)
+bool FormTestWindow::openDocument(QString fileName)
 {
 	if(_image)
 		delete _image;
@@ -114,7 +114,7 @@ void FormTestWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, "Open a picture file...", _settings->lastDocumentFolder(), "Picture file (*.png *.jpg)");
 	if(QFile::exists(fileName)) {
-		if(!openFile(fileName))
+		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
 }

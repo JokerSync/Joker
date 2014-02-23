@@ -30,7 +30,7 @@ public:
 	void generateYUV();
 
 protected:
-	bool openFile(QString fileName);
+	bool openDocument(QString fileName);
 
 	void paintEvent(QPaintEvent *);
 

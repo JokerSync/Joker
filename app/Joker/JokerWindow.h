@@ -73,7 +73,7 @@ protected:
 	 *
 	 * @param filePath The file path
 	 */
-	bool openFile(QString filePath);
+	bool openDocument(QString filePath);
 
 	/**
 	 * @brief event Filter

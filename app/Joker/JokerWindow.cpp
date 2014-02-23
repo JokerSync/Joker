@@ -162,7 +162,7 @@ void JokerWindow::setupSyncProtocol()
 	_settings->setSynchroProtocol(type);
 }
 
-bool JokerWindow::openFile(QString fileName)
+bool JokerWindow::openDocument(QString fileName)
 {
 	hideMediaPanel();
 
@@ -201,7 +201,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			// if the file is not a strip or a detx file, it's a video file, we don't need any protection
 			if(fileType == "detx" or fileType == "strip") {
 				if(checkSaveFile())
-					openFile(filePath);
+					openDocument(filePath);
 			}
 			else
 				openVideoFile(filePath);
@@ -229,7 +229,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				QString fileType = filePath.split(".").last().toLower();
 				if(fileType == "detx" or fileType == "strip") {
 					if(checkSaveFile())
-						openFile(filePath);
+						openDocument(filePath);
 				}
 				else if (fileType == "avi" or fileType == "mov")
 					openVideoFile(filePath);
@@ -302,7 +302,7 @@ void JokerWindow::on_actionOpen_triggered()
 		dlg.setFileMode(QFileDialog::ExistingFile);
 		if(dlg.exec()) {
 			QString fileName = dlg.selectedFiles()[0];
-			openFile(fileName);
+			openDocument(fileName);
 			_settings->setSelectedFilter(dlg.selectedNameFilter());
 		}
 	}
