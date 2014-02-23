@@ -106,7 +106,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
-
 }
 
 JokerWindow::~JokerWindow()

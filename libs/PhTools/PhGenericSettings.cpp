@@ -1,3 +1,5 @@
+#include <QByteArray>
+
 #include "PhGenericSettings.h"
 
 PhGenericSettings::PhGenericSettings() : _settings(ORG_NAME, APP_NAME)
@@ -67,4 +69,14 @@ QStringList PhGenericSettings::stringList(QString name)
 	_settings.endArray();
 
 	return list;
+}
+
+void PhGenericSettings::setByteArray(QString name, QByteArray array)
+{
+	_settings.setValue(name, array);
+}
+
+QByteArray PhGenericSettings::byteArray(QString name)
+{
+	return _settings.value(name).toByteArray();
 }

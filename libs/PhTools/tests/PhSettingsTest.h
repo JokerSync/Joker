@@ -33,8 +33,11 @@ public:
 	PH_SETTING_STRING2(setStringTest3, stringTest3, "stringTest default value")
 
 	PH_SETTING_STRING(setStringTest4, stringTest4)
-	PH_SETTING_STRINGLIST(setStringListTest, stringListTest)
+	PH_SETTING_STRINGLIST(setStringListTest1, stringListTest1)
+	PH_SETTING_STRINGLIST(setStringListTest2, stringListTest2)
 
+	PH_SETTING_BYTEARRAY(setByteArrayTest1, byteArrayTest1)
+	PH_SETTING_BYTEARRAY(setByteArrayTest2, byteArrayTest2)
 private slots:
 	void testIntSettings();
 	void testUnsignedCharSettings();
@@ -42,6 +45,7 @@ private slots:
 	void testFloatSettings();
 	void testStringSettings();
 	void testStringListSettings();
+	void testByteArraySettings();
 };
 
 #endif // PHSETTINGSTEST_H

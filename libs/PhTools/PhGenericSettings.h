@@ -3,6 +3,7 @@
 
 #include <QSettings>
 #include <QStringList>
+#include <QByteArray>
 
 /** Implement the integer setter and getter for a PhGenericSettings */
 #define PH_SETTING_INT(setter, getter) \
@@ -58,6 +59,11 @@
 #define PH_SETTING_STRINGLIST(setter, getter) \
 	void setter(QStringList list) { setStringList(#getter, list); } \
 	QStringList getter() {return stringList(#getter); }
+
+/** Implement the byte array setter and getter for a PhGenericSettings */
+#define PH_SETTING_BYTEARRAY(setter, getter) \
+	void setter(QByteArray array) { setByteArray(#getter, array); } \
+	QByteArray getter() {return byteArray(#getter); }
 
 /**
  * @brief A generic implementation of the module settings
@@ -132,17 +138,30 @@ protected:
 	 */
 	QString stringValue(QString name, QString defaultValue = "");
 	/**
-	 * @brief Set a string list value
+	 * @brief Set a string list
 	 * @param name The settings name
-	 * @param list The string list value
+	 * @param list The string list
 	 */
 	void setStringList(QString name, QStringList list);
 	/**
-	 * @brief Get a string list value
+	 * @brief Get a string list
 	 * @param name The settings name
-	 * @return The string list value
+	 * @return The string list
 	 */
 	QStringList stringList(QString name);
+
+	/**
+	 * @brief Set a byte array
+	 * @param name The settings name
+	 * @param array The byte array
+	 */
+	void setByteArray(QString name, QByteArray array);
+	/**
+	 * @brief Get a byte array
+	 * @param name The settings name
+	 * @return The byte array
+	 */
+	QByteArray byteArray(QString name);
 
 private:
 	QSettings _settings;

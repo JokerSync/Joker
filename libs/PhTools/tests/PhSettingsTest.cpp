@@ -47,6 +47,11 @@ void PhSettingsTest::testStringSettings()
 
 void PhSettingsTest::testStringListSettings()
 {
+	// Test empty string list
+	QCOMPARE(0, stringListTest1().size());
+
+	// Test changing string list settings
+
 	setStringTest4("Check other settings are not affected by string list settings");
 	QStringList list1;
 	list1.append("a");
@@ -54,30 +59,53 @@ void PhSettingsTest::testStringListSettings()
 	list1.append("c");
 	list1.append("d");
 
-	setStringListTest(list1);
+	setStringListTest2(list1);
 
 	QCOMPARE(stringTest4(), QString("Check other settings are not affected by string list settings"));
 
-	QStringList list2 = stringListTest();
+	QStringList list2 = stringListTest2();
 
 	QCOMPARE(list2.size(), list1.size());
 
 	for(int i=0; i< list1.size();i++)
 		QCOMPARE(list2.at(i), list1.at(i));
 
+	// Test changin an existing list settings
 	QStringList list3;
 	list3.append("e");
 	list3.append("f");
 	list3.append("g");
 
-	setStringListTest(list3);
+	setStringListTest2(list3);
 
 	QCOMPARE(stringTest4(), QString("Check other settings are not affected by string list settings"));
 
-	QStringList list4 = stringListTest();
+	QStringList list4 = stringListTest2();
 
 	QCOMPARE(list3.size(), list4.size());
 
 	for(int i=0; i< list3.size();i++)
 		QCOMPARE(list4.at(i), list3.at(i));
+}
+
+void PhSettingsTest::testByteArraySettings()
+{
+	// Test empty array
+	QCOMPARE(0, byteArrayTest1().size());
+
+	// Test changing array settings
+	QByteArray array1;
+	array1.append('t');
+	array1.append('e');
+	array1.append('s');
+	array1.append('t');
+
+	setByteArrayTest2(array1);
+
+	QByteArray array2 = byteArrayTest2();
+
+	QCOMPARE(array2.size(), array1.size());
+
+	for(int i=0; i< array1.size();i++)
+		QCOMPARE(array2.at(i), array1.at(i));
 }
