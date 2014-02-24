@@ -21,3 +21,4 @@ automake --gnu --add-missing --copy
 make
 sudo make install
 cd ..
+rm -rf libltc
