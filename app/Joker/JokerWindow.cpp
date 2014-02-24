@@ -65,27 +65,27 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mediaPanel.setClock(_strip->clock());
 #warning /// @todo move to CSS file
 	_mediaPanel.setStyleSheet(
-	    "* {"
-	    "	  color: white;"
-	    "  }"
-	    "  PhMediaPanel { "
-	    "	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
-	    "	  border-style: solid;                                                                          "
-	    "	  border-width: 4px;                                                                            "
-	    "	  border-radius: 3px;                                                                           "
-	    "	  border-color: white;                                                                          "
-	    "  }                                                                                                "
-	    "  QPushButton, QComboBox{                                                                          "
-	    "	  background: grey;                                                                             "
-	    "	  border-style: outset;                                                                         "
-	    "	  border-width: 2px;                                                                            "
-	    "	  border-radius: 5px;                                                                           "
-	    "	  border-color: white;                                                                          "
-	    "  }                                                                                                "
-	    "  QLabel#_timecodeLabel{                                                                           "
-	    "	  padding: 10px;                                                                                "
-	    "  }                                                                                                "
-	    );
+				"* {"
+				"	  color: white;"
+				"  }"
+				"  PhMediaPanel { "
+				"	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
+				"	  border-style: solid;                                                                          "
+				"	  border-width: 4px;                                                                            "
+				"	  border-radius: 3px;                                                                           "
+				"	  border-color: white;                                                                          "
+				"  }                                                                                                "
+				"  QPushButton, QComboBox{                                                                          "
+				"	  background: grey;                                                                             "
+				"	  border-style: outset;                                                                         "
+				"	  border-width: 2px;                                                                            "
+				"	  border-radius: 5px;                                                                           "
+				"	  border-color: white;                                                                          "
+				"  }                                                                                                "
+				"  QLabel#_timecodeLabel{                                                                           "
+				"	  padding: 10px;                                                                                "
+				"  }                                                                                                "
+				);
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
@@ -161,16 +161,14 @@ void JokerWindow::setupSyncProtocol()
 bool JokerWindow::openDocument(QString fileName)
 {
 	hideMediaPanel();
-
 	if(!_doc->openStripFile(fileName))
 		return false;
 
+	/// If the document is opened successfully :
+	/// - Update the current document name (settings, windows title)
 	setCurrentDocument(fileName);
 
-	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
-	ui->videoStripView->setForceRatio169(_doc->forceRatio169());
-
-	// Opening the corresponding video file if it exists
+	/// - Open the corresponding video file if it exists.
 	if(openVideoFile(_doc->getVideoPath())) {
 		PhFrame frameStamp = _doc->getVideoTimestamp();
 		_videoEngine->setFirstFrame(frameStamp);
@@ -179,17 +177,25 @@ bool JokerWindow::openDocument(QString fileName)
 	else
 		_videoEngine->close();
 
-	// On succeed, synchronizing the clocks
-	_strip->clock()->setTimeCodeType(_doc->getTCType());
-	_strip->clock()->setFrame(_doc->getLastFrame());
+	/// - Set the video aspect ratio.
+	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
+	ui->videoStripView->setForceRatio169(_doc->forceRatio169());
 
+	/// - Use the document timecode type.
+	_strip->clock()->setTimeCodeType(_doc->getTCType());
+	/// - Goto to the document last position.
+	_strip->clock()->setFrame(_doc->getLastFrame());
+	/// - Disable the need to save flag.
 	_needToSave = false;
+
+	return true;
 }
 
 bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
+	/// The event filter catch the following event:
 	switch (event->type()) {
-	case QEvent::FileOpen:
+	case QEvent::FileOpen: /// - FileOpen : To process a file dragged on the application dock icon (MacOS)
 		{
 #warning /// @todo move to PhDocumentWindow
 			QString filePath = static_cast<QFileOpenEvent *>(event)->file();
@@ -204,14 +210,15 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				openVideoFile(filePath);
 			break;
 		}
-
-	case QEvent::ApplicationDeactivate:
+	case QEvent::ApplicationDeactivate: /// - ApplicationDeactivate : to hide the mediapanel
 		hideMediaPanel();
 		break;
-	case QEvent::MouseMove:
+	case QEvent::MouseMove: /// - Mouse move show the media panel
 		fadeInMediaPanel();
 		break;
-
+	case QEvent::DragEnter: /// - Accept and process a file drop on the window
+		event->accept();
+		break;
 	case QEvent::Drop:
 		{
 #warning /// @todo move to PhDocumentWindow
@@ -230,12 +237,9 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			}
 			break;
 		}
-	case QEvent::DragEnter:
-		event->accept();
-		break;
-	case QEvent::MouseButtonDblClick:
-#warning /// @todo switch to right click
-		 // If the sender is "this" and no videofile is loaded
+	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode and open video file if no present.
+	#warning /// @todo switch to right click
+		// If the sender is "this" and no videofile is loaded
 		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length()) {
 			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
 			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->stripHeight()))
@@ -268,9 +272,10 @@ QAction *JokerWindow::fullScreenAction()
 
 void JokerWindow::closeEvent(QCloseEvent *event)
 {
+	/// Check if the current document has to be saved (it might cancel the action).
 	if(!checkSaveFile())
 		event->ignore();
-	else
+	else /// Close the PhMediaPanel.
 		_mediaPanel.close();
 }
 
@@ -281,9 +286,9 @@ void JokerWindow::on_actionOpen_triggered()
 	if(checkSaveFile()) {
 #warning /// @todo put rythmo files first
 		QString filter = tr("DetX files") + " (*.detx);; "
-		                 + tr("Joker files") + " (*.strip);; "
-		                 + tr("Rythmo files") + " (*.detx *.strip);; "
-		                 + tr("All files") + " (*.*)";
+				+ tr("Joker files") + " (*.strip);; "
+				+ tr("Rythmo files") + " (*.detx *.strip);; "
+				+ tr("All files") + " (*.*)";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
 		dlg.selectNameFilter(_settings->selectedFilter());
@@ -574,15 +579,15 @@ void JokerWindow::on_actionPrevious_element_triggered()
 void JokerWindow::on_actionClear_list_triggered()
 {
 	//Open the recent group
-//	_settings->beginGroup("openRecent");
-//	//List all keys
-//	QStringList indexes = _settings->allKeys();
-//	//Remove them from
-//	foreach(QString index, indexes)
-//	_settings->remove(index);
+	//	_settings->beginGroup("openRecent");
+	//	//List all keys
+	//	QStringList indexes = _settings->allKeys();
+	//	//Remove them from
+	//	foreach(QString index, indexes)
+	//	_settings->remove(index);
 
-//	//Close the group
-//	_settings->endGroup();
+	//	//Close the group
+	//	_settings->endGroup();
 
 	//Remove the buttons of the UI, keep the separator and the Clear button
 	foreach(QAction * action, ui->menuOpen_recent->actions())
@@ -596,7 +601,7 @@ void JokerWindow::on_actionClear_list_triggered()
 	}
 
 	// Remove all the buttons
-//	_recentFileButtons.clear();
+	//	_recentFileButtons.clear();
 	ui->menuOpen_recent->setEnabled(false);
 }
 
@@ -640,20 +645,27 @@ void JokerWindow::on_actionSave_as_triggered()
 
 bool JokerWindow::checkSaveFile()
 {
+
 	if(_needToSave) {
+		/// If the document need to be saved, ask the user
+		/// whether he wants to save his changes.
 		QString msg = tr("Do you want to save your changes ?");
 		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
 		box.setDefaultButton(QMessageBox::Save);
 		switch(box.exec()) {
+		/// Cancel the caller action if clicking cancel.
+		case QMessageBox::Cancel:
+			return false;
+			/// Trigger the document save if clicking save:
 		case QMessageBox::Save:
 			on_actionSave_triggered();
+			/// If the user cancel the save operation, cancel the operation.
 			if(_needToSave)
 				return false;
 			break;
-		case QMessageBox::Cancel:
-			return false;
 		}
 	}
+	/// @return False to interrupt the caller action, true otherwhise.
 	return true;
 }
 
