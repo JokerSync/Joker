@@ -26,7 +26,25 @@ void PhStripDocTest::openDetXHeaderTest()
 	QCOMPARE(_doc.getVideoPath(), QString("/Path/to/video.mov"));
 	QVERIFY(_doc.getVideoTimestamp() == s2f("01:00:00:00"));
 	QCOMPARE(QString("Pierre Dupont"), _doc.getAuthorName());
-	QCOMPARE(s2f("01:00:10:00"), _doc.getLastFrame());
+	QCOMPARE(s2f("01:00:16:00"), _doc.getLastFrame());
+
+	QList<QString> metaKey = _doc.getMetaKey();
+
+	QCOMPARE(metaKey.count(), 6);
+	QVERIFY(metaKey.contains("Producteur"));
+	QVERIFY(metaKey.contains("Année de production"));
+	QVERIFY(metaKey.contains("Distributeur"));
+	QVERIFY(metaKey.contains("Réalisateur"));
+	QVERIFY(metaKey.contains("Diffuseur"));
+	QVERIFY(metaKey.contains("Pays d'origine"));
+
+	QCOMPARE(_doc.getMetaInformation("Producteur"), QString("Producer"));
+	QCOMPARE(_doc.getMetaInformation("Année de production"), QString("2014"));
+	QCOMPARE(_doc.getMetaInformation("Distributeur"), QString("Distributor"));
+	QCOMPARE(_doc.getMetaInformation("Réalisateur"), QString("Director"));
+	QCOMPARE(_doc.getMetaInformation("Diffuseur"), QString("Publisher"));
+	QCOMPARE(_doc.getMetaInformation("Pays d'origine"), QString("Country"));
+	PHDEBUG << _doc.getTitle();
 }
 
 void PhStripDocTest::openDetXPeopleTest()

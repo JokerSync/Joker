@@ -96,6 +96,19 @@ public:
 	}
 
 	/**
+	 * @brief Get the list of meta information key
+	 * @return A string list
+	 */
+	QList<QString> getMetaKey();
+
+	/**
+	 * @brief Get the meta information of a given key
+	 * @param key The meta information key
+	 * @return The meta information value
+	 */
+	QString getMetaInformation(QString key);
+
+	/**
 	 * @brief getLastPosition
 	 * @return _lastPosition
 	 */
@@ -324,6 +337,7 @@ private:
 	QString _translatedTitle;
 	QString _episode;
 	QString _season;
+	QMap<QString, QString> _metaInformation;
 
 	/**
 	 * Starting time of the video content refered by the videoPath : String

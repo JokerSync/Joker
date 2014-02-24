@@ -92,14 +92,23 @@ bool PhStripDoc::importDetX(QString fileName)
 		if(header.elementsByTagName("last_position").count()) {
 			QDomElement lastPosition = header.elementsByTagName("last_position").at(0).toElement();
 			_lastFrame = PhTimeCode::frameFromString(lastPosition.attribute("timecode"), _tcType);
-
-#warning /// @todo Reading the last track
 		}
 
 		// Reading the author name
 		if(header.elementsByTagName("author").count()) {
 			QDomElement author = header.elementsByTagName("author").at(0).toElement();
 			_authorName = author.attribute("firstname") + " " + author.attribute("name");
+		}
+
+		// Reading other meta informations
+		if(header.elementsByTagName("production").count()) {
+			QDomElement production = header.elementsByTagName("production").at(0).toElement();
+			_metaInformation["Producteur"] = production.attribute("producer");
+			_metaInformation["Année de production"] = production.attribute("year");
+			_metaInformation["Distributeur"] = production.attribute("distributor");
+			_metaInformation["Réalisateur"] = production.attribute("director");
+			_metaInformation["Diffuseur"] = production.attribute("diffuser");
+			_metaInformation["Pays d'origine"] = production.attribute("country");
 		}
 	}
 
@@ -116,7 +125,6 @@ bool PhStripDoc::importDetX(QString fileName)
 		}
 	}
 
-#warning /// @todo try reading first loop number if possible
 	int loopNumber = 1;
 
 	// Reading the strip body
@@ -587,6 +595,16 @@ QString PhStripDoc::getFilePath()
 QString PhStripDoc::getVideoPath()
 {
 	return _videoPath;
+}
+
+QList<QString> PhStripDoc::getMetaKey()
+{
+	return _metaInformation.keys();
+}
+
+QString PhStripDoc::getMetaInformation(QString key)
+{
+	return _metaInformation[key];
 }
 
 PhTimeCodeType PhStripDoc::getTCType()
