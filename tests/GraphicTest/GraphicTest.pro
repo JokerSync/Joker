@@ -9,6 +9,8 @@ TEMPLATE = app
 
 QT	+= core gui
 
+VERSION = 1.0.0
+
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 INCLUDEPATH += $${JOKER_ROOT}/libs
@@ -20,22 +22,14 @@ include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
 
 HEADERS  += \
 	GraphicTestView.h \
-	MainWindow.h \
+	GraphicTestWindow.h
 
 SOURCES += main.cpp \
 	GraphicTestView.cpp \
-    MainWindow.cpp
+    GraphicTestWindow.cpp
 
 FORMS += \
-	MainWindow.ui
-
-mac {
-	DEFINES += PATH_TO_RESSOURCES=\\\"/../Resources/\\\"
-}
-
-win32 {
-	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
-}
+	GraphicTestWindow.ui
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\img\look.png) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\Bedizen.ttf) $${RESOURCES_PATH} $${CS}
@@ -44,6 +38,7 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}\data\fonts\SWENSON
 CONFIG(release, debug|release) {
 	mac {
 		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
+		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)/tools/$${TARGET}_v$${VERSION}.dmg
 	}
 
 }

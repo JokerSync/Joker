@@ -2,7 +2,8 @@
 #define PREFERENCESDIALOG_H
 
 #include <QDialog>
-#include <QSettings>
+
+#include "GraphicStripSyncTestSettings.h"
 
 namespace Ui {
 class PreferencesDialog;
@@ -13,7 +14,7 @@ class PreferencesDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit PreferencesDialog(QSettings *settings, QWidget *parent = 0);
+	explicit PreferencesDialog(GraphicStripSyncTestSettings *settings, QWidget *parent = 0);
 	~PreferencesDialog();
 
 private slots:
@@ -23,7 +24,7 @@ private slots:
 
 private:
 	Ui::PreferencesDialog *ui;
-	QSettings *_settings;
+	GraphicStripSyncTestSettings *_settings;
 };
 
 #endif // PREFERENCESDIALOG_H

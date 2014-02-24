@@ -41,14 +41,15 @@ public:
 	explicit PhStripDoc(QObject *parent = 0);
 
 	/**
-	 * @brief Get the cuts
-	 * @return the cut's list
+	 * @brief Get the information about the document generator
+	 * @return The generator name and version
 	 */
-	QList<PhStripCut *> getCuts();
-
+	QString getGenerator() {
+		return _generator;
+	}
 	/**
-	 * @brief getTitle
-	 * @return _title
+	 * @brief Get the title
+	 * @return The title
 	 */
 	QString getTitle();
 
@@ -130,6 +131,12 @@ public:
 	QList<PhStripLoop *> getLoops();
 
 	/**
+	 * @brief Get the cuts
+	 * @return the cut's list
+	 */
+	QList<PhStripCut *> getCuts();
+
+	/**
 	 * @brief getOffs
 	 * @return _offs
 	 */
@@ -171,7 +178,7 @@ public:
 	 * @brief Save the PhStripDoc to a strip file
 	 * @param fileName Path to the stripfile
 	 * @param lastTC The last displayed timecode
-	 * @param forceRatio If the aspect ratio has been forced or not.
+	 * @param forceRatio169 If the aspect ratio has been forced or not.
 	 * @return True if the strip saved well, false otherwise
 	 */
 	bool saveStrip(QString fileName, QString lastTC, bool forceRatio169 = false);
@@ -308,6 +315,8 @@ signals:
 
 private:
 	void reset();
+
+	QString _generator;
 	/**
 	 * Title of the corresponding audiovisual content.
 	 */

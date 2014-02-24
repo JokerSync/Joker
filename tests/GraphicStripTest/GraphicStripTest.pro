@@ -9,9 +9,7 @@ TEMPLATE = app
 
 QT += core gui
 
-JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
-
-INCLUDEPATH += ../../libs
+VERSION = 1.0.0
 
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
@@ -21,31 +19,17 @@ include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 
 #Main app
 SOURCES += main.cpp \
-	MainWindow.cpp \
+	GraphicStripTestWindow.cpp \
     StripPropertiesDialog.cpp \
     GenerateDialog.cpp
 
 HEADERS += \
-    MainWindow.h \
+    GraphicStripTestWindow.h \
     StripPropertiesDialog.h \
-    GenerateDialog.h
+    GenerateDialog.h \
+    GraphicStripTestSettings.h
 
 FORMS += \
-    MainWindow.ui \
+    GraphicStripTestWindow.ui \
     StripPropertiesDialog.ui \
     GenerateDialog.ui
-
-mac{
-	PATH = "/../Resources/"
-}
-win32{
-	PATH = $$shell_path(./debug/)
-}
-
-DEFINES += PATH_TO_RESSOURCES=\\\"$$PATH\\\"
-
-CONFIG(release, debug|release) {
-	mac {
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-	}
-}

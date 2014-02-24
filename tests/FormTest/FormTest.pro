@@ -8,39 +8,28 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-
 TARGET = FormTest
 TEMPLATE = app
 
-JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
-
-
 # The application version
 VERSION = 1.0.3
-# Define the preprocessor macro to get the application version in our application.
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
-DEFINES += ORG_NAME=\\\"Phonations\\\"
-
 
 mac {
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
 	QMAKE_POST_LINK += sed -i -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
 }
 
-
-INCLUDEPATH += $${JOKER_ROOT}/libs
-
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp \
+        FormTestWindow.cpp \
     AboutDialog.cpp
 
-HEADERS  += MainWindow.h \
-    AboutDialog.h
+HEADERS  += FormTestWindow.h \
+    AboutDialog.h \
+    FormTestSettings.h
 
-FORMS    += MainWindow.ui \
+FORMS    += FormTestWindow.ui \
     AboutDialog.ui

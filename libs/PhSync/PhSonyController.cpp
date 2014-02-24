@@ -11,7 +11,7 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyController::PhSonyController(PhTimeCodeType tcType, QSettings *settings, QString comSuffix) :
+PhSonyController::PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, QString comSuffix) :
 	_clock(tcType),
 	_settings(settings),
 	_comSuffix(comSuffix),
@@ -73,7 +73,7 @@ void PhSonyController::checkVideoSync(int)
 	if(_serial.isOpen()) {
 		bool videoSyncUp = true;
 		if(_settings)
-			videoSyncUp = _settings->value("videoSyncUp", true).toBool();
+			videoSyncUp = _settings->videoSyncUp();
 		bool cts = _serial.pinoutSignals() & QSerialPort::ClearToSendSignal;
 		if(videoSyncUp) {
 			if(!_lastCTS && cts) {
@@ -81,7 +81,7 @@ void PhSonyController::checkVideoSync(int)
 				emit videoSync();
 			}
 		}
-		else{
+		else {
 			if(_lastCTS && !cts) {
 				onVideoSync();
 				emit videoSync();

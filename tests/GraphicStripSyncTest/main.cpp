@@ -9,7 +9,7 @@
 
 #include "PhStrip/PhStripDoc.h"
 
-#include "MainWindow.h"
+#include "GraphicStripSyncTestWindow.h"
 
 /**
  * @brief The application main entry point
@@ -20,19 +20,9 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QSettings settings("Phonations", "GraphicStripSyncTest");
-	MainWindow w(&settings);
-
-	if (argc > 1) {
-		QString fileName = argv[1];
-		w.openFile(fileName);
-	}
-	else{
-		QString lastFile = settings.value("lastFile", "").toString();
-		if(QFile(lastFile).exists())
-			w.openFile(lastFile);
-	}
-
+	GraphicStripSyncTestSettings settings;
+	GraphicStripSyncTestWindow w(&settings);
+	w.processArg(argc, argv);
 	w.show();
 
 	return a.exec();

@@ -22,17 +22,18 @@ include(../../libs/PhVideo/PhVideo.pri)
 
 #Main app
 SOURCES += main.cpp \
-	MainWindow.cpp \
+	VideoStripTestWindow.cpp \
 	VideoStripSynchronizer.cpp \
     VideoStripView.cpp
 
 HEADERS += \
-    MainWindow.h \
+    VideoStripTestWindow.h \
 	VideoStripSynchronizer.h \
-    VideoStripView.h
+    VideoStripView.h \
+    VideoStripTestSettings.h
 
 FORMS += \
-    MainWindow.ui
+    VideoStripTestWindow.ui
 
 QMAKE_POST_LINK += echo $${RESOURCES_PATH};
 QMAKE_POST_LINK += cp $${JOKER_ROOT}/data/img/motif-240.png $${RESOURCES_PATH}/../Resources/;

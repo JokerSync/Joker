@@ -20,16 +20,9 @@ include(../../libs//PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhSync/PhSync.pri)
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        SonyTestWindow.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += SonyTestWindow.h \
+    SonyTestSettings.h
 
-FORMS    += MainWindow.ui
-
-CONFIG(release, debug|release) {
-
-	mac {
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-	}
-
-}
+FORMS    += SonyTestWindow.ui

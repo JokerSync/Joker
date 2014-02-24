@@ -8,7 +8,8 @@
 #define PHGRAPHICSTRIP_H
 
 #include <QObject>
-#include <QSettings>
+
+#include "PhGraphicStripSettings.h"
 
 #include "PhStrip/PhStripDoc.h"
 
@@ -67,11 +68,12 @@ public:
 	 */
 	PhClock * clock();
 
+
 	/**
 	 * @brief Set the settings
 	 * @param settings desired settings
 	 */
-	void setSettings(QSettings * settings);
+	void setSettings(PhGraphicStripSettings * settings);
 
 	/**
 	 * Set the font used to render text on the strip.
@@ -89,6 +91,7 @@ public:
 	 *
 	 * @return True if succeed, false otherwise
 	 */
+
 	bool init();
 
 	/**
@@ -103,16 +106,6 @@ public:
 	 * @param height height of the strip
 	 */
 	void draw(int x, int y, int width, int height);
-
-	/**
-	 * @brief Set speed of the strip
-	 *
-	 * Allow the user to vary the speed of the strip (faster or slower)
-	 * The default value is 12ppf
-	 *
-	 * @param value desired number of pixel per frame
-	 */
-	void setPixelPerFrame(long value);
 
 	/**
 	 * @brief Get the font of the strip objects
@@ -139,7 +132,7 @@ public:
 	 * of the people from the list.
 	 * @param list
 	 */
-	void setSelectedPeople(QList<PhPeople *> * list){
+	void setSelectedPeople(QList<PhPeople *> * list) {
 		_selectedPeoples = list;
 	}
 
@@ -193,8 +186,7 @@ private:
 	QTime _testTimer;
 
 	int _trackNumber;
-	QSettings * _settings;
-	long pixelPerFrame;
+	PhGraphicStripSettings * _settings;
 	QList<PhPeople*> *_selectedPeoples;
 
 	QColor computeColor(PhPeople *people);

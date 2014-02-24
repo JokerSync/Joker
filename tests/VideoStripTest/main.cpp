@@ -9,7 +9,7 @@
 #include "PhTools/PhDebug.h"
 #include "PhStrip/PhStripDoc.h"
 
-#include "MainWindow.h"
+#include "VideoStripTestWindow.h"
 
 /**
  * @brief The application main entry point
@@ -21,23 +21,11 @@ int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
 
-	PhDebug::init(false, true, true, true, true, true, 1, "VideoStripTest");
+	VideoStripTestSettings settings;
+	VideoStripTestWindow w(&settings);
 
-	QSettings settings("Phonations", "VideoStripTest");
-	MainWindow w(&settings);
-
+	w.processArg(argc, argv);
 	w.show();
 
-	if (argc > 1) {
-		QString fileName = argv[1];
-		w.openFile(fileName);
-	}
-	else{
-		QString lastFile = settings.value("lastFile", "").toString();
-		if(QFile(lastFile).exists())
-			w.openFile(lastFile);
-	}
-
 	return a.exec();
-
 }

@@ -8,7 +8,13 @@
 #define PHFONT_H
 
 #include <QString>
+
+#include <QtGlobal>
+#if defined(Q_OS_MAC)
+#include <SDL2_ttf/SDL_ttf.h>
+#else
 #include <SDL2/SDL_ttf.h>
+#endif
 
 /**
  * @brief Describe the font appearance for PhGraphicText
@@ -45,7 +51,7 @@ public:
 	 * @param ch ASCII index of the character.
 	 * @return A value in pixel.
 	 */
-	int getAdvance (unsigned char ch);
+	int getAdvance(unsigned char ch);
 
 	/**
 	 * @brief Get the regular height of the font.
@@ -91,7 +97,7 @@ private:
 	 */
 	unsigned int _texture;
 
-	bool init(QString fontFile);
+	bool init(QString _fontFile);
 
 	/**
 	 * @brief Store the regular advance of each glyph.
@@ -105,9 +111,9 @@ private:
 
 	TTF_Font * font;
 
-	QString fontFile;
+	QString _fontFile;
 
-	int boldness;
+	int _boldness;
 };
 
 #endif // PHFONT_H

@@ -52,6 +52,7 @@ bool PhStripDoc::importDetX(QString fileName)
 		return false;
 	}
 
+	_generator = "Cappella";
 	//With DetX files, fps is always 25 no drop
 	_tcType = PhTimeCodeType25;
 	_timeScale = 25.00;
@@ -60,19 +61,21 @@ bool PhStripDoc::importDetX(QString fileName)
 	if(detX.elementsByTagName("header").count()) {
 		QDomElement header = detX.elementsByTagName("header").at(0).toElement();
 
-#warning TODO : Reading Cappella version
+		// Read the Cappella version
+		if(header.elementsByTagName("cappella").count())
+			_generator += " v" + detX.elementsByTagName("cappella").at(0).toElement().attribute("version");
 
 		// Reading the title
 		if(header.elementsByTagName("title").count())
-			_title = detX.elementsByTagName("title").at(0).toElement().text();
+			_title = header.elementsByTagName("title").at(0).toElement().text();
 
 		// Reading the translated title
 		if(header.elementsByTagName("title2").count())
-			_translatedTitle = detX.elementsByTagName("title2").at(0).toElement().text();
+			_translatedTitle = header.elementsByTagName("title2").at(0).toElement().text();
 
 		// Reading the episode info
 		if(header.elementsByTagName("episode").count()) {
-			QDomElement episodeElem = detX.elementsByTagName("episode").at(0).toElement();
+			QDomElement episodeElem = header.elementsByTagName("episode").at(0).toElement();
 			_episode = episodeElem.attribute("number");
 			_season = episodeElem.attribute("season");
 		}
@@ -238,7 +241,7 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
 		PHDEBUG << "an error occur while saving the strip document";
 		return false;
 	}
-	else{
+	else {
 		//if file is successfully opened then create XML
 		QXmlStreamWriter* xmlWriter = new QXmlStreamWriter();
 		// set device (here file)to streamwriter

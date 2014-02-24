@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QtGui>
 #include <QtCore>
-#include "MainWindow.h"
+#include "GraphicTestWindow.h"
 
 /**
  * @brief The application main entry point
@@ -12,7 +12,7 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	MainWindow w;
+	GraphicTestWindow w;
 	w.show();
 
 	return a.exec();

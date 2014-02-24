@@ -15,8 +15,8 @@ Compilation information :
 In order to compile the  project you will need to follow the instructions depending on your system :
 
 * [Mac OS](#mac)
-* [Linux](#linux) _(soon coming)_
-* [Windows](#windows) _(soon coming)_
+* [Linux](#linux) _(coming soon)_
+* [Windows](#windows) _(coming soon)_
 
 ***
 
@@ -94,9 +94,23 @@ You must then define the following global variable in order to compile with the 
 ***
 ## <a name="windows"></a> Windows:
 
+### SDL
+
 ![Coming soon](http://openclipart.org/image/300px/svg_to_png/118519/Red_Coming_Soon_Stamp.png)
 
+### FFMPEG
 
+There is a *Windows* build of the *FFMPEG* library here: http://ffmpeg.zeranoe.com/builds/
+
+Download the *shared* and *dev* 32 bits library:
+
+* http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20140222-git-44b22bb-win32-shared.7z
+* http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20140222-git-44b22bb-win32-dev.7z
+
+Extract is with [7zip][http://www.7-zip.org/] in the folder of your choice and set the following environment variable:
+
+* *FFMPEG_DEV_PATH*
+* *FFMPEG_SHARED_PATH*
 	
 
 

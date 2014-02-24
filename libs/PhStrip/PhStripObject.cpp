@@ -17,7 +17,7 @@ PhStripObject::PhStripObject(PhTime timeIn)
 	_timeIn = timeIn;
 }
 
-PhTime PhStripObject::getTimeIn(){
+PhTime PhStripObject::getTimeIn() {
 	return _timeIn;
 }
 

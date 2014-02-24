@@ -9,10 +9,13 @@
 
 #include <QWidget>
 #include <QEvent>
-#include <QDebug>
 #include <QLineEdit>
 #include <QKeyEvent>
+#include <QRegExpValidator>
+#include <QApplication>
+
 #include "PhTools/PhTimeCode.h"
+#include "PhTools/PhDebug.h"
 
 /**
  * @brief Provides an UI to edit a timecode
@@ -68,6 +71,12 @@ private:
 	QString _oldFrame;
 	QString _addedNumbers;
 	void compute(bool add);
+	int _selectedIndex;
+
+	bool _mousePressed;
+	QPoint _mousePressedLocation;
+
+	void paintEvent(QPaintEvent *);
 };
 
 #endif // TIMECODEEDIT_H

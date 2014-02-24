@@ -9,8 +9,8 @@
 
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-VideoTestWindow::VideoTestWindow(QSettings *settings)
-	: QMainWindow(0),
+VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
+	: PhDocumentWindow(settings, 0),
 	ui(new Ui::VideoTestWindow),
 	_settings(settings)
 {
@@ -27,24 +27,20 @@ VideoTestWindow::~VideoTestWindow()
 	delete ui;
 }
 
-bool VideoTestWindow::openFile(QString fileName)
+bool VideoTestWindow::openDocument(QString fileName)
 {
-	QFileInfo fileInfo(fileName);
-	if (fileInfo.exists()) {
-		if(_videoEngine.open(fileName)) {
-			this->setWindowTitle(fileName);
-			_mediaPanelDialog.setMediaLength(_videoEngine.length());
+	if(!_videoEngine.open(fileName))
+		return false;
 
-			PhFrame frameStamp = _videoEngine.firstFrame();
-			_mediaPanelDialog.setFirstFrame(frameStamp);
+	_mediaPanelDialog.setMediaLength(_videoEngine.length());
+	PhFrame frameStamp = _videoEngine.firstFrame();
+	_mediaPanelDialog.setFirstFrame(frameStamp);
 
-			_videoEngine.clock()->setFrame(frameStamp);
-			//_videoEngine.clock()->setRate(1.0);
-			_settings->setValue("lastVideoFile", fileName);
-			return true;
-		}
-	}
-	return false;
+	_videoEngine.clock()->setFrame(frameStamp);
+
+	setCurrentDocument(fileName);
+
+	return true;
 }
 
 void VideoTestWindow::resizeEvent(QResizeEvent *)
@@ -52,6 +48,16 @@ void VideoTestWindow::resizeEvent(QResizeEvent *)
 	PHDEBUG << this->width() << this->height();
 	_mediaPanelDialog.move(this->x() + this->width() / 2 - _mediaPanelDialog.width() / 2,
 	                       this->y() + this->height() * 0.95 - _mediaPanelDialog.height());
+}
+
+void VideoTestWindow::closeEvent(QCloseEvent *)
+{
+	_mediaPanelDialog.close();
+}
+
+QMenu *VideoTestWindow::recentDocumentMenu()
+{
+	return ui->menuOpen_recent;
 }
 
 void VideoTestWindow::on_actionPlay_pause_triggered()
@@ -87,8 +93,10 @@ void VideoTestWindow::on_actionSet_timestamp_triggered()
 void VideoTestWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
-	if(!openFile(fileName))
-		QMessageBox::critical(this, "Error", "Unable to open " + fileName);
+	if(QFile::exists(fileName)) {
+		if(!openDocument(fileName))
+			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
+	}
 }
 
 void VideoTestWindow::on_actionReverse_triggered()

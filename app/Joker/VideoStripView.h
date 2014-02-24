@@ -15,6 +15,8 @@
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSonyController.h"
 
+#include "JokerSettings.h"
+
 /**
  * @brief The Joker main view
  *
@@ -67,7 +69,7 @@ public:
 	 *
 	 * @param settings The QSettings
 	 */
-	void setSettings(QSettings * settings);
+	void setSettings(JokerSettings *settings);
 
 	/**
 	 * @brief Set the PhSonyController
@@ -80,7 +82,9 @@ public:
 	 * \brief Set if the video should be displayed with a forced aspect ratio
 	 * \param force
 	 */
-	void setForceRatio169(bool force){_forceRatio169 = force;}
+	void setForceRatio169(bool force) {
+		_forceRatio169 = force;
+	}
 
 protected:
 	/**
@@ -96,11 +100,13 @@ protected:
 	 */
 	void paint();
 
+	bool eventFilter(QObject *sender, QEvent *event);
 private slots:
 	void onVideoSync();
 	void onDocChanged();
 
 private:
+	JokerSettings *_settings;
 	PhVideoEngine _videoEngine;
 	PhGraphicStrip _strip;
 	PhSonyController *_sony;

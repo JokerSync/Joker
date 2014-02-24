@@ -5,18 +5,19 @@
 
 HEADERS += \
 	../../libs/PhVideo/PhVideoView.h \
-    ../../libs/PhVideo/PhVideoEngine.h
+    ../../libs/PhVideo/PhVideoEngine.h \
+    ../../libs/PhVideo/PhVideoSettings.h
 SOURCES += \
     ../../libs/PhVideo/PhVideoView.cpp \
     ../../libs/PhVideo/PhVideoEngine.cpp
 
 # Windows specific
 win32{
-	!exists($$(FFMPEG_DEV_PATH)) {
+	!exists($$(FFMPEG_DEV_PATH)\README.txt) {
 		error("You must define a valid FFMPEG_DEV_PATH")
 	}
 
-	!exists($$(FFMPEG_SHARED_PATH)) {
+	!exists($$(FFMPEG_SHARED_PATH)\README.txt) {
 		error("You must define a valid FFMPEG_SHARED_PATH")
 	}
 
