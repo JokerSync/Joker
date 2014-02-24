@@ -115,7 +115,7 @@ void Synchronizer::onSyncFrameChanged(PhFrame frame, PhTimeCodeType)
 		// Precise correction occurs in onStripFrameChanged() that is called after
 		// on SonyFrameChanged (see VideoStripView::paint()).
 		PhFrame error = qAbs(frame - _stripClock->frame());
-		if((error > 10) || (_stripClock->rate() == 0) && (error > 1)) {
+		if((error > 10) || (_stripClock->rate() == 0) && (error > 0)) {
 			PHDEBUG << "correct error:" << frame << _stripClock->frame();
 			_settingStripFrame = true;
 			_stripClock->setFrame(frame);
