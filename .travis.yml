@@ -1,9 +1,10 @@
 language: objective-c
-#install:
+install:
 # - ./scripts/install_libltc.sh
 # - ./scripts/install_sdl.sh
 # - ./scripts/bootstrap.sh
 # - export PATH=$PATH:/usr/local/opt/qt5/bin
+- brew install doxygen
 script:
 # - mkdir tmp && cd tmp
 # # Build AutoTest
