@@ -65,27 +65,27 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mediaPanel.setClock(_strip->clock());
 #warning /// @todo move to CSS file
 	_mediaPanel.setStyleSheet(
-				"* {"
-				"	  color: white;"
-				"  }"
-				"  PhMediaPanel { "
-				"	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
-				"	  border-style: solid;                                                                          "
-				"	  border-width: 4px;                                                                            "
-				"	  border-radius: 3px;                                                                           "
-				"	  border-color: white;                                                                          "
-				"  }                                                                                                "
-				"  QPushButton, QComboBox{                                                                          "
-				"	  background: grey;                                                                             "
-				"	  border-style: outset;                                                                         "
-				"	  border-width: 2px;                                                                            "
-				"	  border-radius: 5px;                                                                           "
-				"	  border-color: white;                                                                          "
-				"  }                                                                                                "
-				"  QLabel#_timecodeLabel{                                                                           "
-				"	  padding: 10px;                                                                                "
-				"  }                                                                                                "
-				);
+	    "* {"
+	    "	  color: white;"
+	    "  }"
+	    "  PhMediaPanel { "
+	    "	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
+	    "	  border-style: solid;                                                                          "
+	    "	  border-width: 4px;                                                                            "
+	    "	  border-radius: 3px;                                                                           "
+	    "	  border-color: white;                                                                          "
+	    "  }                                                                                                "
+	    "  QPushButton, QComboBox{                                                                          "
+	    "	  background: grey;                                                                             "
+	    "	  border-style: outset;                                                                         "
+	    "	  border-width: 2px;                                                                            "
+	    "	  border-radius: 5px;                                                                           "
+	    "	  border-color: white;                                                                          "
+	    "  }                                                                                                "
+	    "  QLabel#_timecodeLabel{                                                                           "
+	    "	  padding: 10px;                                                                                "
+	    "  }                                                                                                "
+	    );
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
@@ -128,7 +128,7 @@ void JokerWindow::setupSyncProtocol()
 			clock = _sonySlave.clock();
 			ui->videoStripView->setSony(&_sonySlave);
 		}
-		else{
+		else {
 			type = Synchronizer::NoSync;
 			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
 		}
@@ -286,9 +286,9 @@ void JokerWindow::on_actionOpen_triggered()
 	if(checkSaveFile()) {
 #warning /// @todo put rythmo files first
 		QString filter = tr("DetX files") + " (*.detx);; "
-				+ tr("Joker files") + " (*.strip);; "
-				+ tr("Rythmo files") + " (*.detx *.strip);; "
-				+ tr("All files") + " (*.*)";
+		                 + tr("Joker files") + " (*.strip);; "
+		                 + tr("Rythmo files") + " (*.detx *.strip);; "
+		                 + tr("All files") + " (*.*)";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
 		dlg.selectNameFilter(_settings->selectedFilter());
@@ -656,7 +656,7 @@ bool JokerWindow::checkSaveFile()
 		/// Cancel the caller action if clicking cancel.
 		case QMessageBox::Cancel:
 			return false;
-			/// Trigger the document save if clicking save:
+		/// Trigger the document save if clicking save:
 		case QMessageBox::Save:
 			on_actionSave_triggered();
 			/// If the user cancel the save operation, cancel the operation.
