@@ -132,10 +132,17 @@ public:
 	 */
 	QMap<QString, PhPeople *> getPeoples();
 	/**
-	 * @brief getTexts
-	 * @return _texts
+	 * @brief Get the list of texts
+	 * @return A list of texts
 	 */
 	QList<PhStripText *> getTexts();
+
+	/**
+	 * @brief Get the list of texts affected to a people
+	 * @param people The people
+	 * @return A list of texts
+	 */
+	QList<PhStripText *> getTexts(PhPeople *people);
 
 	/**
 	 * @brief getLoops

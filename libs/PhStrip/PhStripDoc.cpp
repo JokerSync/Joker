@@ -652,6 +652,16 @@ QList<PhStripText *> PhStripDoc::getTexts()
 	return _texts;
 }
 
+QList<PhStripText *> PhStripDoc::getTexts(PhPeople *people)
+{
+	QList<PhStripText*> result;
+	foreach(PhStripText *text, _texts) {
+		if(text->getPeople() == people)
+			result.append(text);
+	}
+	return result;
+}
+
 QList<PhStripLoop *> PhStripDoc::getLoops()
 {
 	return _loops;
