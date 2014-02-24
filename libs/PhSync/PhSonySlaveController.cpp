@@ -201,7 +201,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x20:
 			{
 				unsigned char status[16];
-#warning TODO : handle status sens properly
+#warning /// @todo handle status sens properly
 				PHDBG(22) << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
 				memset(status, 0, 16);
 				switch (_state) {
@@ -260,7 +260,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			}
 		case 0x30:
 			{
-#warning TODO : handle edit preset sense properly
+#warning /// @todo handle edit preset sense properly
 //			PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status";
 				unsigned char count = dataIn[0];
 				for (int i = 0; i < count; i++)

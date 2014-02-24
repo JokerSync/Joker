@@ -21,6 +21,7 @@ PhWindow::PhWindow(PhWindowSettings *settings) :
 
 bool PhWindow::eventFilter(QObject *sender, QEvent *event)
 {
+	Q_UNUSED(sender)
 	switch(event->type()) {
 	case QEvent::WindowStateChange:
 		{

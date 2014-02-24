@@ -44,7 +44,7 @@ void PhDocumentWindow::setCurrentDocument(QString fileName)
 
 void PhDocumentWindow::onOpenRecentDocumentTriggered()
 {
-#warning TODO check to save if needed
+#warning /// @todo check to save if needed
 	openDocument(sender()->objectName());
 }
 

@@ -93,7 +93,7 @@ bool PhStripDoc::importDetX(QString fileName)
 			QDomElement lastPosition = header.elementsByTagName("last_position").at(0).toElement();
 			_lastFrame = PhTimeCode::frameFromString(lastPosition.attribute("timecode"), _tcType);
 
-#warning TODO : Reading the last track
+#warning /// @todo Reading the last track
 		}
 
 		// Reading the author name
@@ -116,7 +116,7 @@ bool PhStripDoc::importDetX(QString fileName)
 		}
 	}
 
-#warning TODO try reading first loop number if possible
+#warning /// @todo try reading first loop number if possible
 	int loopNumber = 1;
 
 	// Reading the strip body
