@@ -13,6 +13,7 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QWindowStateChangeEvent>
+#include <QMouseEvent>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -237,22 +238,23 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			}
 			break;
 		}
-	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode and open video file if no present.
-	#warning /// @todo switch to right click
-		// If the sender is "this" and no videofile is loaded
-		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length()) {
-			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
-			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->stripHeight()))
-				on_actionOpen_Video_triggered();
-			return true;
-		}
-
-#warning /// @todo Why checking the name?
-		if(sender->objectName() == this->objectName()) {
+	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode
+		if(sender == this)
 			toggleFullScreen();
-			return true;
-		}
 		break;
+	case QEvent::MouseButtonPress:
+		{
+			QMouseEvent *mouseEvent = (QMouseEvent*)event;
+			PHDEBUG << sender << mouseEvent->buttons() << mouseEvent->pos() << this->pos();
+			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
+				/// - Right mouse click on the video open the video file dialog.
+				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
+					on_actionOpen_Video_triggered();
+				else /// - Left mouse click on the strip open the strip file dialog.
+					on_actionOpen_triggered();
+				return true;
+			}
+		}
 	default:
 		break;
 	}
@@ -380,7 +382,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	hideMediaPanel();
 
 	QString lastFolder = _settings->lastVideoFolder();
-	QFileDialog dlg(this, tr("Open..."), lastFolder, tr("Movie files") + " (*.avi *.mov)");
+	QFileDialog dlg(this, tr("Open a video..."), lastFolder, tr("Movie files") + " (*.avi *.mov)");
 	if(dlg.exec()) {
 		QString videoFile = dlg.selectedFiles()[0];
 		if(openVideoFile(videoFile))
