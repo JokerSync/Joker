@@ -21,6 +21,7 @@ script:
 - cd ..
 - ./scripts/doxygen.sh
 - ./scripts/uncrustify.sh
+- ls -la
 notifications:
  irc: "phonations.com#joker"
  email: false
