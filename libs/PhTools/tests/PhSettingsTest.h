@@ -15,6 +15,7 @@ public:
 	PH_SETTING_INT(setIntTest1, intTest1)
 	PH_SETTING_INT(setIntTest2, intTest2)
 	PH_SETTING_INT2(setIntTest3, intTest3, 4)
+	PH_SETTING_INT3(setIntTest4, intTest4, intTest1)
 
 	PH_SETTING_UCHAR(setUnsignedCharTest1, unsignedCharTest1)
 	PH_SETTING_UCHAR(setUnsignedCharTest2, unsignedCharTest2)
@@ -38,7 +39,10 @@ public:
 
 	PH_SETTING_BYTEARRAY(setByteArrayTest1, byteArrayTest1)
 	PH_SETTING_BYTEARRAY(setByteArrayTest2, byteArrayTest2)
+
 private slots:
+	void initTestCase();
+	void testClear();
 	void testIntSettings();
 	void testUnsignedCharSettings();
 	void testBoolSettings();

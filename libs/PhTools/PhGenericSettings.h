@@ -15,6 +15,11 @@
 	void setter(int getter) { setIntValue(#getter, getter); } \
 	int getter() {return intValue(#getter, defaultValue); }
 
+/** Implement the integer setter, getter and alias for a PhGenericSettings */
+#define PH_SETTING_INT3(setter, getter, alias) \
+	void setter(int getter) { setIntValue(#getter, getter); } \
+	int getter() {return intValueWithAlias(#getter, #alias); }
+
 /** Implement the unsigned char setter and getter for a PhGenericSettings */
 #define PH_SETTING_UCHAR(setter, getter) \
 	void setter(unsigned char getter) { setIntValue(#getter, getter); } \
@@ -82,6 +87,11 @@ public:
 	 */
 	PhGenericSettings();
 
+	/**
+	 * @brief Reset the settings to its default value.
+	 */
+	void clear();
+
 protected:
 	/**
 	 * @brief Set an integer value
@@ -96,6 +106,14 @@ protected:
 	 * @return The integer value
 	 */
 	int intValue(QString name, int defaultValue = 0);
+	/**
+	 * @brief Get an integer value with alias
+	 *
+	 * @param name The settings name
+	 * @param alias An alias
+	 * @return The integer value
+	 */
+	int intValueWithAlias(QString name, QString alias);
 
 	/**
 	 * @brief Set a bool value

@@ -19,7 +19,7 @@ class JokerSettings : PhGenericSettings,
 	public PhDocumentWindowSettings
 {
 public:
-	PH_SETTING_INT(setScreenDelay, screenDelay)
+	PH_SETTING_INT3(setScreenDelay, screenDelay, delay)
 
 	// PhGraphicStripSettings :
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)

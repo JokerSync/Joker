@@ -7,6 +7,11 @@ PhGenericSettings::PhGenericSettings() : _settings(ORG_NAME, APP_NAME)
 	QSettings::setDefaultFormat(QSettings::NativeFormat);
 }
 
+void PhGenericSettings::clear()
+{
+	_settings.clear();
+}
+
 void PhGenericSettings::setIntValue(QString name, int value)
 {
 	_settings.setValue(name, value);
@@ -15,6 +20,15 @@ void PhGenericSettings::setIntValue(QString name, int value)
 int PhGenericSettings::intValue(QString name, int defaultValue)
 {
 	return _settings.value(name, defaultValue).toInt();
+}
+
+int PhGenericSettings::intValueWithAlias(QString name, QString alias)
+{
+	/// If the regular value is 0, return the alias value
+	int result = intValue(name);
+	if(result == 0)
+		result = intValue(alias);
+	return result;
 }
 
 void PhGenericSettings::setBoolValue(QString name, bool value)

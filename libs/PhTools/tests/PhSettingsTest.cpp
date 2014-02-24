@@ -5,12 +5,54 @@ PhSettingsTest::PhSettingsTest(QObject *parent) :
 {
 }
 
+void PhSettingsTest::initTestCase()
+{
+	this->clear();
+}
+
+void PhSettingsTest::testClear()
+{
+	setIntTest1(1);
+	setUnsignedCharTest1('a');
+	setBoolTest1(true);
+	setFloatTest1(0.12f);
+	setStringTest1("coucou");
+
+	QStringList list;
+	list.append("alpha");
+	list.append("beta");
+	list.append("gamma");
+	setStringListTest1(list);
+
+	QByteArray array;
+	array.append('a');
+	array.append('b');
+	array.append('c');
+	array.append('b');
+	setByteArrayTest1(array);
+
+	// Clear the settings
+	this->clear();
+
+	QCOMPARE(intTest1(), 0);
+	QCOMPARE((int)unsignedCharTest1(), 0);
+	QVERIFY(!boolTest1());
+	QCOMPARE(floatTest1(), 0.0f);
+	QCOMPARE(stringTest1(), QString(""));
+	QCOMPARE(stringListTest1().count(), 0);
+	QCOMPARE(byteArrayTest1().count(), 0);
+}
+
 void PhSettingsTest::testIntSettings()
 {
 	setIntTest1(6);
 	QCOMPARE(intTest1(), 6);
 	QCOMPARE(intTest2(), 0);
 	QCOMPARE(intTest3(), 4);
+	QCOMPARE(intTest4(), 6);
+	setIntTest4(8);
+	QCOMPARE(intTest1(), 6);
+	QCOMPARE(intTest4(), 8);
 }
 
 void PhSettingsTest::testUnsignedCharSettings()
