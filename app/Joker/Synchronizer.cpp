@@ -5,9 +5,9 @@
  */
 
 #include "PhTools/PhDebug.h"
-#include "SonyVideoStripSynchronizer.h"
+#include "Synchronizer.h"
 
-VideoStripSynchronizer::VideoStripSynchronizer()
+Synchronizer::Synchronizer()
 	: _syncType(NoSync),
 	_stripClock(NULL),
 	_videoClock(NULL),
@@ -21,14 +21,14 @@ VideoStripSynchronizer::VideoStripSynchronizer()
 {
 }
 
-void VideoStripSynchronizer::setStripClock(PhClock *clock)
+void Synchronizer::setStripClock(PhClock *clock)
 {
 	_stripClock = clock;
 	connect(_stripClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onStripFrameChanged(PhFrame,PhTimeCodeType)));
 	connect(_stripClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onStripRateChanged(PhRate)));
 }
 
-void VideoStripSynchronizer::setVideoClock(PhClock *clock)
+void Synchronizer::setVideoClock(PhClock *clock)
 {
 	_videoClock = clock;
 	connect(_videoClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onVideoFrameChanged(PhFrame,PhTimeCodeType)));
@@ -36,7 +36,7 @@ void VideoStripSynchronizer::setVideoClock(PhClock *clock)
 	connect(_videoClock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onVideoTCTypeChanged(PhTimeCodeType)));
 }
 
-void VideoStripSynchronizer::setSyncClock(PhClock *clock, SyncType type)
+void Synchronizer::setSyncClock(PhClock *clock, SyncType type)
 {
 	_syncClock = clock;
 	_syncType = type;
@@ -46,7 +46,7 @@ void VideoStripSynchronizer::setSyncClock(PhClock *clock, SyncType type)
 	}
 }
 
-void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType)
+void Synchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType)
 {
 	if(!_settingStripFrame) {
 		PHDBG(2) << frame;
@@ -69,7 +69,7 @@ void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType)
 	}
 }
 
-void VideoStripSynchronizer::onStripRateChanged(PhRate rate)
+void Synchronizer::onStripRateChanged(PhRate rate)
 {
 	if(!_settingStripRate) {
 		PHDEBUG << rate;
@@ -84,17 +84,17 @@ void VideoStripSynchronizer::onStripRateChanged(PhRate rate)
 	}
 }
 
-void VideoStripSynchronizer::onVideoFrameChanged(PhFrame, PhTimeCodeType)
+void Synchronizer::onVideoFrameChanged(PhFrame, PhTimeCodeType)
 {
 //	if(!_settingVideoFrame)
 //		PHDEBUG << frame;
 }
 
-void VideoStripSynchronizer::onVideoRateChanged(PhRate)
+void Synchronizer::onVideoRateChanged(PhRate)
 {
 }
 
-void VideoStripSynchronizer::onVideoTCTypeChanged(PhTimeCodeType tcType)
+void Synchronizer::onVideoTCTypeChanged(PhTimeCodeType tcType)
 {
 	PHDEBUG << tcType;
 	_stripClock->setTimeCodeType(tcType);
@@ -102,7 +102,7 @@ void VideoStripSynchronizer::onVideoTCTypeChanged(PhTimeCodeType tcType)
 		_syncClock->setTimeCodeType(tcType);
 }
 
-void VideoStripSynchronizer::onSyncFrameChanged(PhFrame frame, PhTimeCodeType)
+void Synchronizer::onSyncFrameChanged(PhFrame frame, PhTimeCodeType)
 {
 	if(!_settingSonyFrame) {
 		PHDBG(3) << frame;
@@ -114,7 +114,8 @@ void VideoStripSynchronizer::onSyncFrameChanged(PhFrame frame, PhTimeCodeType)
 		// We apply correction here only when there is a significant change of sony frame.
 		// Precise correction occurs in onStripFrameChanged() that is called after
 		// on SonyFrameChanged (see VideoStripView::paint()).
-		if(qAbs(frame - _stripClock->frame()) > 10) {
+		PhFrame error = qAbs(frame - _stripClock->frame());
+		if((error > 10) || (_stripClock->rate() == 0) && (error > 0)) {
 			PHDEBUG << "correct error:" << frame << _stripClock->frame();
 			_settingStripFrame = true;
 			_stripClock->setFrame(frame);
@@ -123,7 +124,7 @@ void VideoStripSynchronizer::onSyncFrameChanged(PhFrame frame, PhTimeCodeType)
 	}
 }
 
-void VideoStripSynchronizer::onSyncRateChanged(PhRate rate)
+void Synchronizer::onSyncRateChanged(PhRate rate)
 {
 	if(!_settingSonyRate) {
 		PHDEBUG << rate;

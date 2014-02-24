@@ -38,7 +38,7 @@ include(../../libs/PhSync/PhSync.pri)
 SOURCES += main.cpp \
 	JokerWindow.cpp \
 	VideoStripView.cpp \
-	SonyVideoStripSynchronizer.cpp \
+	Synchronizer.cpp \
     AboutDialog.cpp \
     PreferencesDialog.cpp \
 	PropertyDialog.cpp \
@@ -47,7 +47,7 @@ SOURCES += main.cpp \
 HEADERS += \
     JokerWindow.h \
 	VideoStripView.h \
-	SonyVideoStripSynchronizer.h \
+	Synchronizer.h \
     AboutDialog.h \
     PreferencesDialog.h \
 	PropertyDialog.h \
