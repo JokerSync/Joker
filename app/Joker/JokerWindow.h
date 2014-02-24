@@ -18,7 +18,7 @@
 
 #include "PhCommonUI/PhDocumentWindow.h"
 #include "VideoStripView.h"
-#include "SonyVideoStripSynchronizer.h"
+#include "Synchronizer.h"
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
 
@@ -209,7 +209,7 @@ private:
 	PhStripDoc *_doc;
 	JokerSettings *_settings;
 	PhSonySlaveController _sonySlave;
-	VideoStripSynchronizer _synchronizer;
+	Synchronizer _synchronizer;
 
 	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;

@@ -10,7 +10,7 @@
 #include <QDialog>
 #include <QListWidgetItem>
 
-#include "SonyVideoStripSynchronizer.h"
+#include "Synchronizer.h"
 #include "JokerSettings.h"
 
 namespace Ui {
