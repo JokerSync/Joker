@@ -51,7 +51,7 @@ bool PhAudioOutput::init(QString deviceName)
 		return false;
 	}
 
-#warning TODO use the settings for sample rate and frame per buffer
+#warning /// @todo use the settings for sample rate and frame per buffer
 	PaError err = Pa_OpenStream(&_stream, NULL, &outputDeviceInfo, 48000, 1920, paNoFlag, audioCallback, this);
 
 	if(err != paNoError) {

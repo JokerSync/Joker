@@ -12,14 +12,16 @@
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 
-FormTestWindow::FormTestWindow(FormTestSettings *settings, QWidget *parent) :
-	PhDocumentWindow(settings, parent),
+FormTestWindow::FormTestWindow(FormTestSettings *settings) :
+	PhDocumentWindow(settings),
 	ui(new Ui::FormTestWindow),
 	_settings(settings),
 	_image(NULL),
 	_rgb(NULL)
 {
 	ui->setupUi(this);
+
+	connect(ui->actionFull_screen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
 	QString mode = _settings->currentDocument();
 	if(mode == "rgb")
@@ -97,6 +99,11 @@ void FormTestWindow::paintEvent(QPaintEvent *)
 QMenu *FormTestWindow::recentDocumentMenu()
 {
 	return ui->menuOpen_recent;
+}
+
+QAction *FormTestWindow::fullScreenAction()
+{
+	return ui->actionFull_screen;
 }
 
 void FormTestWindow::on_actionAbout_triggered()

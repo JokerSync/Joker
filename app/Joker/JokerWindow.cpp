@@ -13,6 +13,7 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QWindowStateChangeEvent>
+#include <QMouseEvent>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -38,6 +39,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
 	ui->actionAbout->setMenuRole(QAction::AboutRole);
 
+	connect(ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
+
 	// Get the pointer to the differents objects :
 	// strip, video engine and doc
 	_strip = ui->videoStripView->strip();
@@ -61,6 +64,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
+#warning /// @todo move to CSS file
 	_mediaPanel.setStyleSheet(
 	    "* {"
 	    "	  color: white;"
@@ -90,26 +94,16 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
 	_mediaPanelTimer.start(3000);
 
-	// Set up a filter for catching mouse move event (see eventFilter())
-	// that will show the media panel back
-	qApp->installEventFilter(this);
-
 	this->setFocus();
 
 	if(_settings->stripTestMode()) {
-#warning TODO do we warn the user that test mode is on?
+#warning /// @todo do we warn the user that test mode is on?
 		ui->actionTest_mode->setChecked(true);
 	}
 
+#warning /// @todo move to PhDocumentWindow
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
-
-
-	if(_settings->fullScreen())
-		showFullScreen();
-	else
-		restoreGeometry(_settings->windowGeometry());
-
 }
 
 JokerWindow::~JokerWindow()
@@ -135,7 +129,7 @@ void JokerWindow::setupSyncProtocol()
 			clock = _sonySlave.clock();
 			ui->videoStripView->setSony(&_sonySlave);
 		}
-		else{
+		else {
 			type = Synchronizer::NoSync;
 			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
 		}
@@ -168,16 +162,14 @@ void JokerWindow::setupSyncProtocol()
 bool JokerWindow::openDocument(QString fileName)
 {
 	hideMediaPanel();
-
 	if(!_doc->openStripFile(fileName))
 		return false;
 
+	/// If the document is opened successfully :
+	/// - Update the current document name (settings, windows title)
 	setCurrentDocument(fileName);
 
-	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
-	ui->videoStripView->setForceRatio169(_doc->forceRatio169());
-
-	// Opening the corresponding video file if it exists
+	/// - Open the corresponding video file if it exists.
 	if(openVideoFile(_doc->getVideoPath())) {
 		PhFrame frameStamp = _doc->getVideoTimestamp();
 		_videoEngine->setFirstFrame(frameStamp);
@@ -186,18 +178,27 @@ bool JokerWindow::openDocument(QString fileName)
 	else
 		_videoEngine->close();
 
-	// On succeed, synchronizing the clocks
-	_strip->clock()->setTimeCodeType(_doc->getTCType());
-	_strip->clock()->setFrame(_doc->getLastFrame());
+	/// - Set the video aspect ratio.
+	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
+	ui->videoStripView->setForceRatio169(_doc->forceRatio169());
 
+	/// - Use the document timecode type.
+	_strip->clock()->setTimeCodeType(_doc->getTCType());
+	/// - Goto to the document last position.
+	_strip->clock()->setFrame(_doc->getLastFrame());
+	/// - Disable the need to save flag.
 	_needToSave = false;
+
+	return true;
 }
 
 bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
+	/// The event filter catch the following event:
 	switch (event->type()) {
-	case QEvent::FileOpen:
+	case QEvent::FileOpen: /// - FileOpen : To process a file dragged on the application dock icon (MacOS)
 		{
+#warning /// @todo move to PhDocumentWindow
 			QString filePath = static_cast<QFileOpenEvent *>(event)->file();
 			QString fileType = filePath.split(".").last().toLower();
 			// As the plist file list all the supported format (which are .strip, .detx, .avi & .mov)
@@ -210,16 +211,18 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				openVideoFile(filePath);
 			break;
 		}
-
-	case QEvent::ApplicationDeactivate:
+	case QEvent::ApplicationDeactivate: /// - ApplicationDeactivate : to hide the mediapanel
 		hideMediaPanel();
 		break;
-	case QEvent::MouseMove:
+	case QEvent::MouseMove: /// - Mouse move show the media panel
 		fadeInMediaPanel();
 		break;
-
+	case QEvent::DragEnter: /// - Accept and process a file drop on the window
+		event->accept();
+		break;
 	case QEvent::Drop:
 		{
+#warning /// @todo move to PhDocumentWindow
 			const QMimeData* mimeData = static_cast<QDropEvent *>(event)->mimeData();
 
 			// If there is one file (not more) we open it
@@ -235,31 +238,28 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			}
 			break;
 		}
-	case QEvent::DragEnter:
-		event->accept();
+	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode
+		if(sender == this)
+			toggleFullScreen();
 		break;
-	case QEvent::MouseButtonDblClick:
-#warning TODO switch to right click
-		// If the sender is "this" and no videofile is loaded
-		if(sender->objectName() == this->objectName() and !_videoEngine->fileName().length()) {
-			// It's useless to check for the x position because if it's out of the bounds, the sender will not be "this"
-			if(QCursor::pos().y() > this->pos().y() and QCursor::pos().y() < this->pos().y() + this->height() * (1.0 - _settings->stripHeight()))
-				on_actionOpen_Video_triggered();
-			return true;
+	case QEvent::MouseButtonPress:
+		{
+			QMouseEvent *mouseEvent = (QMouseEvent*)event;
+			PHDEBUG << sender << mouseEvent->buttons() << mouseEvent->pos() << this->pos();
+			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
+				/// - Right mouse click on the video open the video file dialog.
+				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
+					on_actionOpen_Video_triggered();
+				else /// - Left mouse click on the strip open the strip file dialog.
+					on_actionOpen_triggered();
+				return true;
+			}
 		}
-		if(sender->objectName() == this->objectName()) {
-			on_actionFullscreen_triggered();
-			return true;
-		}
-		break;
-	case QEvent::WindowStateChange:
-		_settings->setFullScreen(windowState() == Qt::WindowFullScreen);
-		ui->actionFullscreen->setChecked(windowState() == Qt::WindowFullScreen);
-		break;
 	default:
 		break;
 	}
-	return false;
+
+	return PhDocumentWindow::eventFilter(sender, event);
 }
 
 QMenu *JokerWindow::recentDocumentMenu()
@@ -267,22 +267,18 @@ QMenu *JokerWindow::recentDocumentMenu()
 	return ui->menuOpen_recent;
 }
 
+QAction *JokerWindow::fullScreenAction()
+{
+	return ui->actionFullscreen;
+}
+
 void JokerWindow::closeEvent(QCloseEvent *event)
 {
+	/// Check if the current document has to be saved (it might cancel the action).
 	if(!checkSaveFile())
 		event->ignore();
-	else
+	else /// Close the PhMediaPanel.
 		_mediaPanel.close();
-}
-
-void JokerWindow::moveEvent(QMoveEvent *)
-{
-	_settings->setWindowGeometry(saveGeometry());
-}
-
-void JokerWindow::resizeEvent(QResizeEvent *)
-{
-	_settings->setWindowGeometry(saveGeometry());
 }
 
 void JokerWindow::on_actionOpen_triggered()
@@ -290,10 +286,9 @@ void JokerWindow::on_actionOpen_triggered()
 	hideMediaPanel();
 
 	if(checkSaveFile()) {
-#warning TODO put rythmo files first
-		QString filter = tr("DetX files") + " (*.detx);; "
+		QString filter = tr("Rythmo files") + " (*.detx *.strip);; "
 		                 + tr("Joker files") + " (*.strip);; "
-		                 + tr("Rythmo files") + " (*.detx *.strip);; "
+		                 + tr("DetX files") + " (*.detx);; "
 		                 + tr("All files") + " (*.*)";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
@@ -387,7 +382,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	hideMediaPanel();
 
 	QString lastFolder = _settings->lastVideoFolder();
-	QFileDialog dlg(this, tr("Open..."), lastFolder, tr("Movie files") + " (*.avi *.mov)");
+	QFileDialog dlg(this, tr("Open a video..."), lastFolder, tr("Movie files") + " (*.avi *.mov)");
 	if(dlg.exec()) {
 		QString videoFile = dlg.selectedFiles()[0];
 		if(openVideoFile(videoFile))
@@ -585,15 +580,15 @@ void JokerWindow::on_actionPrevious_element_triggered()
 void JokerWindow::on_actionClear_list_triggered()
 {
 	//Open the recent group
-//	_settings->beginGroup("openRecent");
-//	//List all keys
-//	QStringList indexes = _settings->allKeys();
-//	//Remove them from
-//	foreach(QString index, indexes)
-//	_settings->remove(index);
+	//	_settings->beginGroup("openRecent");
+	//	//List all keys
+	//	QStringList indexes = _settings->allKeys();
+	//	//Remove them from
+	//	foreach(QString index, indexes)
+	//	_settings->remove(index);
 
-//	//Close the group
-//	_settings->endGroup();
+	//	//Close the group
+	//	_settings->endGroup();
 
 	//Remove the buttons of the UI, keep the separator and the Clear button
 	foreach(QAction * action, ui->menuOpen_recent->actions())
@@ -607,7 +602,7 @@ void JokerWindow::on_actionClear_list_triggered()
 	}
 
 	// Remove all the buttons
-//	_recentFileButtons.clear();
+	//	_recentFileButtons.clear();
 	ui->menuOpen_recent->setEnabled(false);
 }
 
@@ -651,20 +646,27 @@ void JokerWindow::on_actionSave_as_triggered()
 
 bool JokerWindow::checkSaveFile()
 {
+
 	if(_needToSave) {
+		/// If the document need to be saved, ask the user
+		/// whether he wants to save his changes.
 		QString msg = tr("Do you want to save your changes ?");
 		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
 		box.setDefaultButton(QMessageBox::Save);
 		switch(box.exec()) {
+		/// Cancel the caller action if clicking cancel.
+		case QMessageBox::Cancel:
+			return false;
+		/// Trigger the document save if clicking save:
 		case QMessageBox::Save:
 			on_actionSave_triggered();
+			/// If the user cancel the save operation, cancel the operation.
 			if(_needToSave)
 				return false;
 			break;
-		case QMessageBox::Cancel:
-			return false;
 		}
 	}
+	/// @return False to interrupt the caller action, true otherwhise.
 	return true;
 }
 
@@ -681,12 +683,4 @@ void JokerWindow::on_actionForce_16_9_ratio_triggered()
 {
 	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
 	_needToSave = true;
-}
-
-void JokerWindow::on_actionFullscreen_triggered()
-{
-	if(this->isFullScreen())
-		this->showNormal();
-	else
-		this->showFullScreen();
 }

@@ -8,8 +8,8 @@
 #include "GraphicStripSyncTestWindow.h"
 #include "ui_GraphicStripSyncTestWindow.h"
 
-GraphicStripSyncTestWindow::GraphicStripSyncTestWindow(GraphicStripSyncTestSettings *settings, QWidget *parent) :
-	PhDocumentWindow(settings, parent),
+GraphicStripSyncTestWindow::GraphicStripSyncTestWindow(GraphicStripSyncTestSettings *settings) :
+	PhDocumentWindow(settings),
 	ui(new Ui::GraphicStripSyncTestWindow),
 	_settings(settings),
 	_sonySlave(PhTimeCodeType25, _settings)

@@ -4,14 +4,16 @@
 
 #include "PhDocumentWindow.h"
 
-PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings, QWidget *parent)
-	: QMainWindow(parent),
+PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings)
+	: PhWindow(settings),
 	_settings(settings)
 {
 }
 
 void PhDocumentWindow::processArg(int argc, char *argv[])
 {
+#warning /// @todo move to PhApplication
+
 	for(int i = 1; i < argc; i++) {
 		if(QFile::exists(argv[i]))
 			_settings->setCurrentDocument(argv[i]);
@@ -42,7 +44,7 @@ void PhDocumentWindow::setCurrentDocument(QString fileName)
 
 void PhDocumentWindow::onOpenRecentDocumentTriggered()
 {
-#warning TODO check to save if needed
+#warning /// @todo check to save if needed
 	openDocument(sender()->objectName());
 }
 

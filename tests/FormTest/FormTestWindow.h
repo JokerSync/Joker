@@ -22,7 +22,7 @@ class FormTestWindow : public PhDocumentWindow
 	Q_OBJECT
 
 public:
-	explicit FormTestWindow(FormTestSettings *settings, QWidget *parent = 0);
+	explicit FormTestWindow(FormTestSettings *settings);
 	~FormTestWindow();
 
 	void generateRGB();
@@ -35,6 +35,8 @@ protected:
 	void paintEvent(QPaintEvent *);
 
 	QMenu *recentDocumentMenu();
+	QAction *fullScreenAction();
+
 private slots:
 	void on_actionAbout_triggered();
 

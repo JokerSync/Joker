@@ -14,7 +14,7 @@ class TextEditTestWindow : public PhDocumentWindow
 	Q_OBJECT
 
 public:
-	explicit TextEditTestWindow(TextEditTestSettings *settings, QWidget *parent = 0);
+	explicit TextEditTestWindow(TextEditTestSettings *settings);
 	~TextEditTestWindow();
 
 protected:

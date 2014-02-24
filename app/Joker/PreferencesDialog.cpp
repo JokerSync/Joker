@@ -163,7 +163,6 @@ void PreferencesDialog::on_buttonBox_rejected()
 	close();
 }
 
-
 void PreferencesDialog::on_spinBoxDelay_valueChanged(int delay)
 {
 	if(_settings->useQuarterFrame())
@@ -270,7 +269,7 @@ void PreferencesDialog::on_lblPathToLogFile_linkActivated(const QString &link)
 	args << "end tell";
 	QProcess::startDetached("osascript", args);
 #else
-#warning TODO Fix me
+#warning /// @todo Fix me
 	Q_UNUSED(link);
 #endif
 }

@@ -48,7 +48,7 @@ bool PhAudioInput::init(QString deviceName)
 
 	PHDBG(0) << "Opening " << deviceInfo->name;
 
-#warning TODO use the settings for sample rate and frame per buffer
+#warning /// @todo use the settings for sample rate and frame per buffer
 	PaError err = Pa_OpenStream(&_stream, &streamParameters, NULL, 48000, 256, paNoFlag, audioCallback, this);
 	if(err != paNoError) {
 		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);

@@ -10,7 +10,7 @@ echo "Install libltc"
 #cd ..
 #rm libltc-1.1.3.tar.gz
 #rm -rf libltc-1.1.3
-git clone https://github.com/Phonations/libltc.git
+git clone https://github.com/x42/libltc.git
 cd libltc
 aclocal
 autoheader
@@ -21,3 +21,6 @@ automake --gnu --add-missing --copy
 make
 sudo make install
 cd ..
+echo "Removing libltc..."
+rm -rf libltc
+echo "Done."

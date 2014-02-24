@@ -3,10 +3,12 @@
 
 #include <QString>
 
+#include "PhWindowSettings.h"
+
 /**
  * @brief The settings for PhDocumentWindow
  */
-class PhDocumentWindowSettings
+class PhDocumentWindowSettings : public PhWindowSettings
 {
 public:
 	/**

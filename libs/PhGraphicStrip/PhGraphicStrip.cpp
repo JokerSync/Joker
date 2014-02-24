@@ -213,7 +213,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 		int trackHeight = height / _trackNumber;
 
 
-#warning TODO change it for pointers
+#warning /// @todo change it for pointers
 		bool trackFull[_trackNumber];
 		for(int i = 0; i < _trackNumber; i++) {
 			trackFull[i] = false;

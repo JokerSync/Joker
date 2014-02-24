@@ -104,6 +104,7 @@
      <string>Display</string>
     </property>
     <addaction name="actionChange_font"/>
+    <addaction name="actionFull_screen"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -230,14 +231,6 @@
     <string>Ctrl+Right</string>
    </property>
   </action>
-  <action name="actionFull_Screen">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Full Screen</string>
-   </property>
-  </action>
   <action name="actionStrip_Properties">
    <property name="text">
     <string>Properties...</string>
@@ -259,6 +252,11 @@
    </property>
    <property name="text">
     <string>Empty</string>
+   </property>
+  </action>
+  <action name="actionFull_screen">
+   <property name="text">
+    <string>Full screen</string>
    </property>
   </action>
  </widget>

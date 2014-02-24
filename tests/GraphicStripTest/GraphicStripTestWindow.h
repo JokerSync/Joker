@@ -19,7 +19,7 @@ class GraphicStripTestWindow : public PhDocumentWindow
 	Q_OBJECT
 
 public:
-	explicit GraphicStripTestWindow(GraphicStripTestSettings *settings, QWidget *parent = 0);
+	explicit GraphicStripTestWindow(GraphicStripTestSettings *settings);
 	~GraphicStripTestWindow();
 
 	bool openDocument(QString fileName);
@@ -27,6 +27,7 @@ public:
 
 protected:
 	QMenu *recentDocumentMenu();
+	QAction *fullScreenAction();
 
 private slots:
 	void onOpenFile();
@@ -65,8 +66,6 @@ private slots:
 	void on_action3_triggered();
 
 	void on_actionGo_to_triggered();
-
-	void on_actionFull_Screen_triggered();
 
 	void on_actionStrip_Properties_triggered();
 

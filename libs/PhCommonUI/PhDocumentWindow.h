@@ -1,9 +1,9 @@
 #ifndef PHDOCUMENTWINDOW_H
 #define PHDOCUMENTWINDOW_H
 
-#include <QMainWindow>
 #include <QMenu>
 
+#include "PhWindow.h"
 #include "PhDocumentWindowSettings.h"
 
 /**
@@ -13,18 +13,16 @@
  * handling document:
  * -
  */
-class PhDocumentWindow : public QMainWindow
+class PhDocumentWindow : public PhWindow
 {
 	Q_OBJECT
 public:
 	/**
 	 * @brief PhDocumentWindow constructor
-	 * @param settings The application settings
-	 * @param parent The parent object
+	 * @param settings The document window settings
 	 */
-	explicit PhDocumentWindow(PhDocumentWindowSettings *settings, QWidget *parent = 0);
+	explicit PhDocumentWindow(PhDocumentWindowSettings *settings);
 
-#warning TODO move to PhApplication
 	/**
 	 * @brief Process the application argument
 	 * @param argc The arguments count
@@ -55,7 +53,7 @@ protected:
 	 * the child window must implement this method to give
 	 * the UI menu element to PhDocumentWindow.
 	 *
-	 * @return A menu item
+	 * @return A menu item reference
 	 */
 	virtual QMenu *recentDocumentMenu() = 0;
 

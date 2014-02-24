@@ -53,7 +53,7 @@ void PhStripDocTest::openDetXCutTest()
 
 void PhStripDocTest::openDetXTextTest()
 {
-#warning TODO fix link off
+#warning /// @todo fix link off
 	QVERIFY(_doc.getTexts().count() == 5);
 
 	QCOMPARE(_doc.getTexts()[0]->getContent(), QString("Simple sentence"));
@@ -72,7 +72,7 @@ void PhStripDocTest::openDetXOffTest()
 {
 	QCOMPARE(_doc.getOffs().count(), 2);
 
-#warning TODO more test
+#warning /// @todo more test
 }
 
 void PhStripDocTest::getPeopleByNameTest()
