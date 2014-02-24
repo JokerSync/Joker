@@ -18,7 +18,6 @@
 
 #include "PhCommonUI/PhDocumentWindow.h"
 #include "VideoStripView.h"
-#include "SonyVideoStripSynchronizer.h"
 #include "Synchronizer.h"
 #include "PropertyDialog.h"
 #include "JokerSettings.h"

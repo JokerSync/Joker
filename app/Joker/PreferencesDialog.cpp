@@ -117,7 +117,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 
 	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
 
-	if(_oldSyncProtocol == VideoStripSynchronizer::Sony)
+	if(_oldSyncProtocol == Synchronizer::Sony)
 		showParamSony(true);
 #if USE_LTC
 	else if(_oldSyncProtocol == Synchronizer::LTC)

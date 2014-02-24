@@ -126,7 +126,7 @@ void JokerWindow::setupSyncProtocol()
 #if USE_LTC
 	_ltcReader.close();
 #endif
-	VideoStripSynchronizer::SyncType type = (VideoStripSynchronizer::SyncType)_settings->synchroProtocol();
+	Synchronizer::SyncType type = (Synchronizer::SyncType)_settings->synchroProtocol();
 
 	switch(type) {
 	case Synchronizer::Sony:
@@ -153,7 +153,7 @@ void JokerWindow::setupSyncProtocol()
 			break;
 		}
 #endif
-	case VideoStripSynchronizer::NoSync:
+	case Synchronizer::NoSync:
 		break;
 	}
 
@@ -498,7 +498,7 @@ void JokerWindow::fadeInMediaPanel()
 	if(!this->hasFocus())
 		return;
 	// Don't show the mediaPanel if Joker is remote controled.
-	if(_settings->synchroProtocol() != VideoStripSynchronizer::NoSync)
+	if(_settings->synchroProtocol() != Synchronizer::NoSync)
 		return;
 
 	_mediaPanel.show();

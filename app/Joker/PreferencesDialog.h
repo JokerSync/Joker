@@ -11,7 +11,6 @@
 #include <QListWidgetItem>
 
 #include "Synchronizer.h"
-#include "SonyVideoStripSynchronizer.h"
 #include "JokerSettings.h"
 
 namespace Ui {
