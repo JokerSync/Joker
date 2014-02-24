@@ -17,8 +17,7 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	_doc(this),
 	_clock(_doc.getTCType()),
 	_trackNumber(4),
-	_settings(NULL),
-	_selectedPeoples(NULL)
+	_settings(NULL)
 {
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
@@ -129,9 +128,9 @@ PhFont *PhGraphicStrip::getHUDFont()
 	return &_hudFont;
 }
 
-QColor PhGraphicStrip::computeColor(PhPeople * people)
+QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selectedPeoples)
 {
-	if(_selectedPeoples and !_selectedPeoples->contains(people)) {
+	if(selectedPeoples.size() && !selectedPeoples.contains(people)) {
 		return QColor(100, 100, 100);
 	}
 	else {
@@ -139,7 +138,7 @@ QColor PhGraphicStrip::computeColor(PhPeople * people)
 	}
 }
 
-void PhGraphicStrip::draw(int x, int y, int width, int height)
+void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *> selectedPeoples)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -243,7 +242,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gText->setY(y + track * trackHeight);
 				gText->setHeight(trackHeight);
 				gText->setZ(-1);
-				gText->setColor(computeColor(text->getPeople()));
+				gText->setColor(computeColor(text->getPeople(), selectedPeoples));
 
 				gText->draw();
 			}
@@ -277,7 +276,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->setY(y + track * trackHeight);
 				gPeople->setZ(-1);
 				gPeople->setHeight(trackHeight / 2);
-				gPeople->setColor(computeColor(people));
+				gPeople->setColor(computeColor(people, selectedPeoples));
 				gPeople->draw();
 
 				//Check if the name is printed on the screen
@@ -342,15 +341,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 				gPeople->setColor(QColor(people->getColor()));
 
 				PhGraphicSolidRect background(gPeople->getX(), gPeople->getY(), gPeople->getWidth(), gPeople->getHeight() + 2);
-				if(_selectedPeoples) {
-					if(_selectedPeoples->contains(people))
-						background.setColor(QColor(180, 180, 180));
-					else
-						background.setColor(QColor(90,90,90));
-				}
-				else {
+				if(selectedPeoples.size() && !selectedPeoples.contains(people))
+					background.setColor(QColor(90,90,90));
+				else
 					background.setColor(QColor(180, 180, 180));
-				}
 
 				background.setZ(gPeople->getZ() - 1);
 				background.draw();
@@ -442,7 +436,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height)
 					_graphicOffs[off] = gOff;
 					gOff->setZ(-1);
 				}
-				gOff->setColor(computeColor(off->getPeople()));
+				gOff->setColor(computeColor(off->getPeople(), selectedPeoples));
 				gOff->setX(x + off->getTimeIn() * pixelPerFrame - offset);
 				gOff->setY(y + off->getTrack() * trackHeight + trackHeight * 0.8);
 				gOff->setHeight(trackHeight / 20);

@@ -20,7 +20,6 @@ VideoStripView::VideoStripView(QWidget *parent) :
 	_noVideoSyncError(_strip.getHUDFont(), "No video sync"),
 	_currentPeopleName(_strip.getHUDFont(), "")
 {
-	connect(_strip.doc(), SIGNAL(changed()), this, SLOT(onDocChanged()));
 	qApp->installEventFilter(this);
 }
 
@@ -37,11 +36,6 @@ void VideoStripView::setSony(PhSonyController *sony)
 		connect(_sony, SIGNAL(videoSync()), this, SLOT(onVideoSync()));
 		_lastVideoSyncElapsed.start();
 	}
-}
-
-QList<PhPeople *> *VideoStripView::getSelectedPeoples()
-{
-	return &_selectedPeoples;
 }
 
 bool VideoStripView::init()
@@ -61,6 +55,13 @@ bool VideoStripView::init()
 void VideoStripView::paint()
 {
 	PHDBG(1) << _strip.clock()->time() - (_sony ? _sony->clock()->time() : 0);
+
+	QList<PhPeople*> selectedPeoples;
+	foreach(QString name, _settings->selectedPeopleNameList()) {
+		PhPeople *people = _strip.doc()->getPeopleByName(name);
+		if(people)
+			selectedPeoples.append(people);
+	}
 
 	int y = 0;
 	QString title = _strip.doc()->getTitle();
@@ -87,7 +88,7 @@ void VideoStripView::paint()
 	int stripHeight = (this->height() - y) * stripHeightRatio;
 	int videoHeight = this->height() - y - stripHeight;
 
-	_strip.draw(0, y + videoHeight, this->width(), stripHeight);
+	_strip.draw(0, y + videoHeight, this->width(), stripHeight, selectedPeoples);
 
 	int tcWidth = 200;
 
@@ -136,14 +137,14 @@ void VideoStripView::paint()
 		_nextTCText.setRect(this->width() - tcWidth, y, tcWidth, tcHeight);
 		y += tcHeight;
 
-		if(_selectedPeoples.count()) {
-			_strip.setSelectedPeople(&_selectedPeoples);
-			nextText = _strip.doc()->getNextText(clockFrame, _selectedPeoples);
+		/// The next time code will be the next element of the people from the list.
+		if(selectedPeoples.count()) {
+			nextText = _strip.doc()->getNextText(clockFrame, selectedPeoples);
 			if(nextText == NULL)
-				nextText = _strip.doc()->getNextText(0, _selectedPeoples);
+				nextText = _strip.doc()->getNextText(0, selectedPeoples);
 
 			int peopleHeight = this->height() / 30;
-			foreach(PhPeople* people, _selectedPeoples) {
+			foreach(PhPeople* people, selectedPeoples) {
 				int peopleNameWidth = people->getName().length() * peopleHeight / 2;
 				_currentPeopleName.setRect(10, y, peopleNameWidth, peopleHeight);
 				_currentPeopleName.setContent(people->getName());
@@ -152,7 +153,6 @@ void VideoStripView::paint()
 			}
 		}
 		else {
-			_strip.setSelectedPeople(NULL);
 			nextText = _strip.doc()->getNextText(clockFrame);
 			if(nextText == NULL)
 				nextText = _strip.doc()->getNextText(0);
@@ -217,9 +217,4 @@ bool VideoStripView::eventFilter(QObject *, QEvent *event)
 void VideoStripView::onVideoSync()
 {
 	_lastVideoSyncElapsed.restart();
-}
-
-void VideoStripView::onDocChanged()
-{
-	_selectedPeoples.clear();
 }

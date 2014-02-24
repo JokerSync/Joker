@@ -30,7 +30,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	#if USE_LTC
 	_ltcReader(),
 	#endif
-	_needToSave(false)
+	_needToSave(false),
+	_firstDoc(true)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -162,6 +163,12 @@ void JokerWindow::setupSyncProtocol()
 bool JokerWindow::openDocument(QString fileName)
 {
 	hideMediaPanel();
+	/// Clear the selected people name list (except for the first document).
+	if(!_firstDoc)
+		_settings->setSelectedPeopleNameList(QStringList());
+	else
+		_firstDoc = false;
+
 	if(!_doc->openStripFile(fileName))
 		return false;
 
@@ -674,7 +681,7 @@ void JokerWindow::on_actionSelect_character_triggered()
 {
 	hideMediaPanel();
 
-	PeopleDialog dlg(this, _doc, ui->videoStripView->getSelectedPeoples());
+	PeopleDialog dlg(this, _doc, _settings);
 
 	dlg.exec();
 }

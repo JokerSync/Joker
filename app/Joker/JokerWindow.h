@@ -222,6 +222,7 @@ private:
 	PhLtcReader _ltcReader;
 #endif
 	bool _needToSave;
+	bool _firstDoc;
 };
 
 #endif // MAINWINDOW_H

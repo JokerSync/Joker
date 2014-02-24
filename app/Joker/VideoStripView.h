@@ -58,13 +58,6 @@ public:
 	}
 
 	/**
-	 * @brief getSelectedPeoples
-	 *
-	 * @return A QList of PhPeople* containing the selected PhPeople
-	 */
-	QList<PhPeople*>* getSelectedPeoples();
-
-	/**
 	 * @brief Attach the given settings to the view
 	 *
 	 * @param settings The QSettings
@@ -113,7 +106,6 @@ protected:
 	bool eventFilter(QObject *sender, QEvent *event);
 private slots:
 	void onVideoSync();
-	void onDocChanged();
 
 private:
 	JokerSettings *_settings;
@@ -128,8 +120,6 @@ private:
 	PhGraphicText _nextTCText;
 	PhGraphicText _noVideoSyncError;
 	PhGraphicText _currentPeopleName;
-
-	QList<PhPeople*> _selectedPeoples;
 
 	bool _forceRatio169;
 };

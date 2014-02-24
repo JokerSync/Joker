@@ -104,8 +104,10 @@ public:
 	 * @param y upper left corner coordinates
 	 * @param width width of the strip (usually the same as the parent window)
 	 * @param height height of the strip
+	 * @param selectedPeoples Selected people will be displayed on the upper left corner,
+	 * the others ones will be shaded.
 	 */
-	void draw(int x, int y, int width, int height);
+	void draw(int x, int y, int width, int height, QList<PhPeople*> selectedPeoples = QList<PhPeople*>());
 
 	/**
 	 * @brief Get the font of the strip objects
@@ -124,17 +126,6 @@ public:
 	 * @return
 	 */
 	PhFont * getHUDFont();
-
-	/**
-	 * @brief setSelectedPeople
-	 * Selected people will be displayed on the upper left corner, the others ones
-	 * will be shaded. The next time code - if displayed - will be the next element
-	 * of the people from the list.
-	 * @param list
-	 */
-	void setSelectedPeople(QList<PhPeople *> * list) {
-		_selectedPeoples = list;
-	}
 
 private slots:
 	/**
@@ -187,9 +178,8 @@ private:
 
 	int _trackNumber;
 	PhGraphicStripSettings * _settings;
-	QList<PhPeople*> *_selectedPeoples;
 
-	QColor computeColor(PhPeople *people);
+	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples);
 };
 
 #endif // PHGRAPHICSTRIP_H
