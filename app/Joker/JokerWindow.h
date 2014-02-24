@@ -73,7 +73,7 @@ protected:
 	/// @brief Custom event filter
 	///
 	/// @param sender The event sender
-	/// @param event The event
+	/// @param evenet The event
 	/// @return True if handled, false otherwise
 	///
 	bool eventFilter(QObject *sender, QEvent *event);
