@@ -284,10 +284,9 @@ void JokerWindow::on_actionOpen_triggered()
 	hideMediaPanel();
 
 	if(checkSaveFile()) {
-#warning /// @todo put rythmo files first
-		QString filter = tr("DetX files") + " (*.detx);; "
+		QString filter = tr("Rythmo files") + " (*.detx *.strip);; "
 		                 + tr("Joker files") + " (*.strip);; "
-		                 + tr("Rythmo files") + " (*.detx *.strip);; "
+		                 + tr("DetX files") + " (*.detx);; "
 		                 + tr("All files") + " (*.*)";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
