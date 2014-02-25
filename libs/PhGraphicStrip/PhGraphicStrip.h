@@ -17,7 +17,6 @@
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicLoop.h"
-#include "PhStrip/PhStripOff.h"
 
 #include "PhTools/PhClock.h"
 

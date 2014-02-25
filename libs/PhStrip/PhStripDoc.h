@@ -158,22 +158,24 @@ public:
 
 	/**
 	 * @brief Get the detect list
+	 * @todo Implement and test frameIn / frameOut
 	 * @return A list of PhStripDetect*
 	 */
-	QList<PhStripDetect *> getDetects();
+	QList<PhStripDetect *> getDetects(PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
 
 	/**
 	 * @brief Get the list of detect affected to a people
 	 * @param people The people
+	 * @todo Test frameIn / frameOut
 	 * @return A list of detects
 	 */
-	QList<PhStripDetect *> getDetects(PhPeople *people);
+	QList<PhStripDetect *> getPeopleDetects(PhPeople *people, PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
 
 	/**
-	 * @brief setTitle
-	 * @param _title
+	 * @brief Set the title property
+	 * @param A string
 	 */
-	void setTitle(QString _title);
+	void setTitle(QString title);
 	/**
 	 * @brief setVideoTimestamp
 	 * @param videoFramestamp

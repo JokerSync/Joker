@@ -610,6 +610,7 @@ QString PhStripDoc::getMetaInformation(QString key)
 
 PhTimeCodeType PhStripDoc::getTCType()
 {
+	#warning /// @todo rename to timeCodeType()
 	return _tcType;
 }
 
@@ -668,19 +669,30 @@ QList<PhStripLoop *> PhStripDoc::getLoops()
 	return _loops;
 }
 
-QList<PhStripDetect *> PhStripDoc::getDetects()
+QList<PhStripDetect *> PhStripDoc::getDetects(PhFrame frameIn, PhFrame frameOut)
 {
-	return _detects;
+	QList<PhStripDetect*> result;
+	foreach(PhStripDetect *detect, this->_detects) {
+		if((detect->getTimeIn() >= frameIn) && (detect->getTimeOut() < frameOut))
+			result.append(detect);
+	}
+
+	return result;
 }
 
-QList<PhStripDetect *> PhStripDoc::getDetects(PhPeople *people)
+QList<PhStripDetect *> PhStripDoc::getPeopleDetects(PhPeople *people, PhFrame frameIn, PhFrame frameOut)
 {
 	QList<PhStripDetect *> result;
-	foreach(PhStripDetect *detect, _detects) {
+	foreach(PhStripDetect *detect, this->getDetects(frameIn, frameOut)) {
 		if(detect->getPeople() == people)
 			result.append(detect);
 	}
 	return result;
+}
+
+void PhStripDoc::setTitle(QString title)
+{
+	_title = title;
 }
 
 void PhStripDoc::setVideoTimestamp(PhFrame videoFramestamp)
