@@ -10,7 +10,7 @@
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
 VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
-	: PhDocumentWindow(settings, 0),
+	: PhDocumentWindow(settings),
 	ui(new Ui::VideoTestWindow),
 	_settings(settings)
 {
