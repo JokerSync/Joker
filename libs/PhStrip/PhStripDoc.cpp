@@ -145,6 +145,7 @@ bool PhStripDoc::importDetX(QString fileName)
 				else if(elem.tagName() == "line") {
 					PhFrame frameIn = -1;
 					PhFrame lastFrame = -1;
+					PhFrame lastLinkedFrame = -1;
 					PhPeople *people = _peoples[elem.attribute("role")];
 					int track = elem.attribute("track").toInt();
 					QString currentText = "";
@@ -152,15 +153,15 @@ bool PhStripDoc::importDetX(QString fileName)
 						if(elem.childNodes().at(j).isElement()) {
 							QDomElement lineElem = elem.childNodes().at(j).toElement();
 							if(lineElem.tagName() == "lipsync") {
+								lastFrame = PhTimeCode::frameFromString(lineElem.attribute("timecode"), _tcType);
+								if(frameIn < 0)
+									frameIn = lastFrame;
 								if(lineElem.attribute("link") != "off") {
-									PhFrame frame = PhTimeCode::frameFromString(lineElem.attribute("timecode"), _tcType);
-									if(frameIn < 0)
-										frameIn = frame;
 									if(currentText.length()) {
-										_texts.append(new PhStripText(lastFrame, people, frame, track, currentText));
+										_texts.append(new PhStripText(lastLinkedFrame, people, lastFrame, track, currentText));
 										currentText = "";
 									}
-									lastFrame = frame;
+									lastLinkedFrame = lastFrame;
 								}
 							}
 							else if(lineElem.tagName() == "text")
@@ -169,12 +170,12 @@ bool PhStripDoc::importDetX(QString fileName)
 					}
 					// Handling line with no lipsync out
 					if(currentText.length()) {
-						PhFrame frame = lastFrame + currentText.length();
-						_texts.append(new PhStripText(lastFrame, people, frame, track, currentText));
-						lastFrame = frame;
+						PhFrame frame = lastLinkedFrame + currentText.length();
+						_texts.append(new PhStripText(lastLinkedFrame, people, frame, track, currentText));
+						lastLinkedFrame = frame;
 					}
-					if(elem.attribute("voice") == "off")
-						_offs.append(new PhStripOff(frameIn, people, lastFrame, track));
+					bool off = (elem.attribute("voice") == "off");
+					_detects.append(new PhStripDetect(off, frameIn, people, lastFrame, track));
 				}
 			}
 		}
@@ -357,7 +358,7 @@ void PhStripDoc::reset()
 {
 	_peoples.clear();
 	_cuts.clear();
-	_offs.clear();
+	_detects.clear();
 	_tcType = PhTimeCodeType25;
 	_lastFrame = 0;
 	_loops.clear();
@@ -667,9 +668,19 @@ QList<PhStripLoop *> PhStripDoc::getLoops()
 	return _loops;
 }
 
-QList<PhStripOff *> PhStripDoc::getOffs()
+QList<PhStripDetect *> PhStripDoc::getDetects()
 {
-	return _offs;
+	return _detects;
+}
+
+QList<PhStripDetect *> PhStripDoc::getDetects(PhPeople *people)
+{
+	QList<PhStripDetect *> result;
+	foreach(PhStripDetect *detect, _detects) {
+		if(detect->getPeople() == people)
+			result.append(detect);
+	}
+	return result;
 }
 
 void PhStripDoc::setVideoTimestamp(PhFrame videoFramestamp)

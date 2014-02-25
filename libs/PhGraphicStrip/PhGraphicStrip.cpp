@@ -113,9 +113,9 @@ void PhGraphicStrip::clearData()
 	delete gLoop;
 	_graphicLoops.clear();
 
-	foreach(PhGraphicRect * gOff, _graphicOffs.values())
-	delete gOff;
-	_graphicOffs.clear();
+	foreach(PhGraphicRect * gDetect, _graphicDetects.values())
+	delete gDetect;
+	_graphicDetects.clear();
 }
 
 PhFont *PhGraphicStrip::getTextFont()
@@ -211,8 +211,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 		int trackHeight = height / _trackNumber;
 
-
-#warning /// @todo change it for pointers
 		bool trackFull[_trackNumber];
 		for(int i = 0; i < _trackNumber; i++) {
 			trackFull[i] = false;
@@ -427,25 +425,26 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				break;
 		}
 
-		foreach(PhStripOff * off, _doc.getOffs())
+		foreach(PhStripDetect * detect, _doc.getDetects())
 		{
-			if( (frameIn < off->getTimeOut()) && (off->getTimeIn() < frameOut) ) {
-				PhGraphicSolidRect *gOff = _graphicOffs[off];
-				if(gOff == NULL) {
-					gOff = new PhGraphicSolidRect();
-					_graphicOffs[off] = gOff;
-					gOff->setZ(-1);
+
+			if( detect->off() && (frameIn < detect->getTimeOut()) && (detect->getTimeIn() < frameOut) ) {
+				PhGraphicSolidRect *gDetect = _graphicDetects[detect];
+				if(gDetect == NULL) {
+					gDetect = new PhGraphicSolidRect();
+					_graphicDetects[detect] = gDetect;
+					gDetect->setZ(-1);
 				}
-				gOff->setColor(computeColor(off->getPeople(), selectedPeoples));
-				gOff->setX(x + off->getTimeIn() * pixelPerFrame - offset);
-				gOff->setY(y + off->getTrack() * trackHeight + trackHeight * 0.8);
-				gOff->setHeight(trackHeight / 20);
-				gOff->setWidth((off->getTimeOut() - off->getTimeIn()) * pixelPerFrame);
-				gOff->draw();
+				gDetect->setColor(computeColor(detect->getPeople(), selectedPeoples));
+				gDetect->setX(x + detect->getTimeIn() * pixelPerFrame - offset);
+				gDetect->setY(y + detect->getTrack() * trackHeight + trackHeight * 0.8);
+				gDetect->setHeight(trackHeight / 20);
+				gDetect->setWidth((detect->getTimeOut() - detect->getTimeIn()) * pixelPerFrame);
+				gDetect->draw();
 				offCounter++;
 			}
 			//Doesn't need to process undisplayed content
-			if(off->getTimeIn() > frameOut)
+			if(detect->getTimeIn() > frameOut)
 				break;
 		}
 	}

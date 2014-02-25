@@ -20,7 +20,7 @@
 #include "PhStripLoop.h"
 #include "PhStripObject.h"
 #include "PhStripText.h"
-#include "PhStripOff.h"
+#include "PhStripDetect.h"
 
 /**
  * @brief The joker document class
@@ -157,10 +157,17 @@ public:
 	QList<PhStripCut *> getCuts();
 
 	/**
-	 * @brief getOffs
-	 * @return _offs
+	 * @brief Get the detect list
+	 * @return A list of PhStripDetect*
 	 */
-	QList<PhStripOff *> getOffs();
+	QList<PhStripDetect *> getDetects();
+
+	/**
+	 * @brief Get the list of detect affected to a people
+	 * @param people The people
+	 * @return A list of detects
+	 */
+	QList<PhStripDetect *> getDetects(PhPeople *people);
 
 	/**
 	 * @brief setTitle
@@ -396,7 +403,7 @@ private:
 	/**
 	 * List of PhStripOff from the file
 	 */
-	QList<PhStripOff *> _offs;
+	QList<PhStripDetect *> _detects;
 
 	int _nbTexts;
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);

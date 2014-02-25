@@ -168,7 +168,7 @@ private:
 
 	QMap<PhStripLoop*, PhGraphicLoop*> _graphicLoops;
 
-	QMap<PhStripOff*, PhGraphicSolidRect*> _graphicOffs;
+	QMap<PhStripDetect*, PhGraphicSolidRect*> _graphicDetects;
 
 	/**
 	 * @brief _test

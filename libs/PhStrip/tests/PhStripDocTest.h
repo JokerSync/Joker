@@ -23,7 +23,7 @@ private slots:
 	void openDetXLoopTest();
 	void openDetXCutTest();
 	void openDetXTextTest();
-	void openDetXOffTest();
+	void openDetXDetectTest();
 
 	// Get people
 	void getPeopleByNameTest();

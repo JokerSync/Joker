@@ -18,6 +18,9 @@
 /** PHDEBUG is the default log system */
 #define PHDEBUG PHDBG(0)
 
+/** PHNQ remove the quote when outputing a QString */
+#define PHNQ(string) (string).toStdString().c_str()
+
 /**
  * @brief A custom log system
  *
