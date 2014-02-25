@@ -22,7 +22,7 @@ class VideoStripTestWindow : public PhDocumentWindow
 	Q_OBJECT
 
 public:
-	explicit VideoStripTestWindow(VideoStripTestSettings * settings, QWidget *parent = 0);
+	explicit VideoStripTestWindow(VideoStripTestSettings * settings);
 	~VideoStripTestWindow();
 
 	bool openDocument(QString fileName);

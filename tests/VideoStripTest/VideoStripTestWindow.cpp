@@ -7,8 +7,8 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-VideoStripTestWindow::VideoStripTestWindow(VideoStripTestSettings *settings, QWidget *parent) :
-	PhDocumentWindow(settings, parent),
+VideoStripTestWindow::VideoStripTestWindow(VideoStripTestSettings *settings) :
+	PhDocumentWindow(settings),
 	ui(new Ui::VideoStripTestWindow),
 	_settings(settings)
 {

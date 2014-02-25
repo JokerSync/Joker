@@ -289,6 +289,7 @@ void PreferencesDialog::onLogMaskButtonClicked()
 
 void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
+	Q_UNUSED(current);
 	Q_UNUSED(previous);
 	int protocol = ui->listWidgetSync->currentRow();
 	switch(protocol) {
