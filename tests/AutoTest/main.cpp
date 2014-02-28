@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
 	bool testSettings = testAll;
 	bool testDoc = testAll;
 	bool testSony = testAll;
+	bool quiet = false;
 
 	bool success = true;
 
@@ -24,6 +25,8 @@ int main(int argc, char *argv[])
 			testDoc = true;
 		else if(strcmp(argv[i], "sony") == 0)
 			testSony = true;
+		else if(strcmp(argv[i], "quiet") == 0)
+			quiet = true;
 	}
 
 	if(testTC) {
@@ -52,7 +55,11 @@ int main(int argc, char *argv[])
 
 	QThread::msleep(500);
 
+	if(quiet)
+		return !success;
+
 	if(success) {
+
 		PHDEBUG << "                            ************";
 		PHDEBUG << "                         *****************";
 		PHDEBUG << "                       ********************";

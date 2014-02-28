@@ -20,7 +20,7 @@
 #include "PhStripLoop.h"
 #include "PhStripObject.h"
 #include "PhStripText.h"
-#include "PhStripOff.h"
+#include "PhStripDetect.h"
 
 /**
  * @brief The joker document class
@@ -132,10 +132,17 @@ public:
 	 */
 	QMap<QString, PhPeople *> getPeoples();
 	/**
-	 * @brief getTexts
-	 * @return _texts
+	 * @brief Get the list of texts
+	 * @return A list of texts
 	 */
 	QList<PhStripText *> getTexts();
+
+	/**
+	 * @brief Get the list of texts affected to a people
+	 * @param people The people
+	 * @return A list of texts
+	 */
+	QList<PhStripText *> getTexts(PhPeople *people);
 
 	/**
 	 * @brief getLoops
@@ -150,16 +157,25 @@ public:
 	QList<PhStripCut *> getCuts();
 
 	/**
-	 * @brief getOffs
-	 * @return _offs
+	 * @brief Get the detect list
+	 * @todo Implement and test frameIn / frameOut
+	 * @return A list of PhStripDetect*
 	 */
-	QList<PhStripOff *> getOffs();
+	QList<PhStripDetect *> getDetects(PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
 
 	/**
-	 * @brief setTitle
-	 * @param _title
+	 * @brief Get the list of detect affected to a people
+	 * @param people The people
+	 * @todo Test frameIn / frameOut
+	 * @return A list of detects
 	 */
-	void setTitle(QString _title);
+	QList<PhStripDetect *> getPeopleDetects(PhPeople *people, PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
+
+	/**
+	 * @brief Set the title property
+	 * @param A string
+	 */
+	void setTitle(QString title);
 	/**
 	 * @brief setVideoTimestamp
 	 * @param videoFramestamp
@@ -389,7 +405,7 @@ private:
 	/**
 	 * List of PhStripOff from the file
 	 */
-	QList<PhStripOff *> _offs;
+	QList<PhStripDetect *> _detects;
 
 	int _nbTexts;
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);

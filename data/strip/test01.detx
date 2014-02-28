@@ -54,6 +54,10 @@
       <text>Composed sentence with off</text>
       <lipsync timecode="01:00:17:00" type="out_open"/>
     </line>
+    <line role="sue" track="2" voice="off">
+      <lipsync timecode="01:00:20:00" type="in_open"/>
+      <lipsync timecode="01:00:22:00" type="out_open" link="off"/>
+    </line>
     <loop timecode="01:01:00:00"/>
   </body>
 
