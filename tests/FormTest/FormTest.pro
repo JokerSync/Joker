@@ -28,3 +28,10 @@ HEADERS  += FormTestWindow.h \
 
 FORMS    += FormTestWindow.ui \
     AboutDialog.ui
+
+CONFIG(release, debug|release) {
+	mac {
+		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
+		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)$${TARGET}_v$${VERSION}.dmg;
+	}
+}
