@@ -143,6 +143,9 @@ void PhStripDocTest::importMosTest01()
 	QVERIFY(people != NULL);
 	QCOMPARE(people->getName(), QString("Nom personnage"));
 
+	// Test cuts
+	QCOMPARE(_doc.getCuts().count(), 0);
+
 	// Test loop
 	QCOMPARE(_doc.getLoops().count(), 0);
 
@@ -183,7 +186,11 @@ void PhStripDocTest::importMosTest02()
 	QVERIFY(marie != NULL);
 	QCOMPARE(marie->getName(), QString("Marie"));
 
-	// Test loop
+	// Test cuts
+	QCOMPARE(_doc.getCuts().count(), 1);
+	QCOMPARE(f2s(_doc.getCuts()[0]->getTimeIn()), QString("01:00:00:00"));
+
+	// Test loops
 	QCOMPARE(_doc.getLoops().count(), 1);
 	QCOMPARE(f2s(_doc.getLoops()[0]->getTimeIn()), QString("01:00:00:00"));
 

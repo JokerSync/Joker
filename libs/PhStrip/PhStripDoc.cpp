@@ -304,7 +304,7 @@ bool PhStripDoc::importMos(QString fileName)
 	PhFileTool::readShort(f, logLevel);
 
 	// read a number that makes a difference wether it's 3 or 4 later
-	unsigned short strangeNumber = PhFileTool::readShort(f, logLevel, "strangeNumber");
+	unsigned short strangeNumber = PhFileTool::readShort(f, ok, "strangeNumber");
 
 	if(!checkMosTag(f, logLevel, "CDocOptionsProjet"))
 		return false;
@@ -367,27 +367,43 @@ bool PhStripDoc::importMos(QString fileName)
 
 	PhFileTool::readShort(f, logLevel);
 
-	this->setVideoPath(PhFileTool::readString(f, ok, "video path"));
-	this->setVideoTimestamp(PhFileTool::readInt(f, ok, "timestamp") / 12);
+	this->setVideoPath(PhFileTool::readString(f, ok, "Video path"));
+	this->setVideoTimestamp(PhFileTool::readInt(f, logLevel, "timestamp") / 12);
+	PHDEBUG << "Timestamp:" << PhTimeCode::stringFromFrame(_videoFrameStamp, _tcType);
 
 	for(int j = 0; j < 2; j++)
-		PhFileTool::readShort(f, logLevel);
+		PhFileTool::readShort(f, ok);
 
 	if(strangeNumber == 4)
 	{
-		qDebug() << "reading extrasection ???";
+		PHDEBUG << "reading extrasection ???";
 
-		for(int j = 0; j < 5; j++)
-			PhFileTool::readShort(f, logLevel);
+		PhFileTool::readShort(f, ok);
+		PhFileTool::readShort(f, ok);
+		unsigned short cutNumber = PhFileTool::readInt(f, ok, "cut number");
+		PhFileTool::readShort(f, ok);
+		PhFileTool::readShort(f, ok);
+		if(!checkMosTag(f, ok, "CDocPlan"))
+			return false;
 
-		unsigned short cutNumber = PhFileTool::readShort(f, ok, "cut number");
-		PhFileTool::readString(f, logLevel, "CDocPlan");
+		for(int j = 0; j < cutNumber; j++) {
+			PhFrame cutFrame = _videoFrameStamp + PhFileTool::readInt(f, logLevel, "cut frame") / 12;
+			PHDEBUG << "cut:" << PhTimeCode::stringFromFrame(cutFrame, _tcType);
+			PhFileTool::readShort(f, logLevel, "cut type?");
+			_cuts.append(new PhStripCut(PhStripCut::Simple, cutFrame));
+		}
+		PhFileTool::readShort(f, ok, "end cut");
+	}
+	else {
+		for(int j = 0; j < 4; j++)
+			PhFileTool::readShort(f, ok);
 	}
 
-	for(int j = 0; j < 8; j++)
-		PhFileTool::readShort(f, logLevel);
 
-	if(!checkMosTag(f, logLevel, "CDocDoublage"))
+	for(int j = 0; j < 4; j++)
+		PhFileTool::readShort(f, ok, "cut");
+
+	if(!checkMosTag(f, ok, "CDocDoublage"))
 		return false;
 
 	for(int j = 0; j < 12; j++)
