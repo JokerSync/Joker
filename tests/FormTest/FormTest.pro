@@ -14,9 +14,11 @@ TEMPLATE = app
 # The application version
 VERSION = 1.0.3
 
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
-
+include(../../common/deploy.pri)
 
 SOURCES += main.cpp\
         FormTestWindow.cpp \

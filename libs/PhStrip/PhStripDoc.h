@@ -164,16 +164,17 @@ public:
 	QList<PhStripDetect *> getDetects(PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
 
 	/**
-	 * @brief Get the list of detect affected to a people
+	 * @brief Get the list of detect affected to a people in a defined range.
 	 * @param people The people
-	 * @todo Test frameIn / frameOut
+	 * @param frameIn The range in
+	 * @param frameOut The range out
 	 * @return A list of detects
 	 */
 	QList<PhStripDetect *> getPeopleDetects(PhPeople *people, PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
 
 	/**
 	 * @brief Set the title property
-	 * @param A string
+	 * @param title A string
 	 */
 	void setTitle(QString title);
 	/**
