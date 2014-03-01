@@ -65,6 +65,8 @@ public:
 	PH_SETTING_BOOL2(setDisplayLoop, displayLoop, true)
 
 	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)
+
+	PH_SETTING_STRING2(setVideoFileFilter, videoFileFilter, " (*.m4v *.mkv *.avi *.mov)")
 };
 
 #endif // JOKERSETTINGS_H

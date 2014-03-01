@@ -389,7 +389,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	hideMediaPanel();
 
 	QString lastFolder = _settings->lastVideoFolder();
-	QFileDialog dlg(this, tr("Open a video..."), lastFolder, tr("Movie files") + " (*.avi *.mov)");
+	QFileDialog dlg(this, tr("Open a video..."), lastFolder, tr("Movie files") + _settings->videoFileFilter());
 	if(dlg.exec()) {
 		QString videoFile = dlg.selectedFiles()[0];
 		if(openVideoFile(videoFile))
