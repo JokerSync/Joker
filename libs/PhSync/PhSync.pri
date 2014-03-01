@@ -10,6 +10,7 @@ HEADERS += \
     ../../libs/PhSync/PhSonyMasterController.h \
     ../../libs/PhSync/PhSonySlaveController.h \
     ../../libs/PhSync/tests/PhSonyControllerTest.h \
+    ../../libs/PhSync/PhSyncSettings.h
 
 
 SOURCES += \
@@ -20,7 +21,7 @@ SOURCES += \
 
 ltc {
 INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib -lltc -lm -lportaudio
+LIBS += -L/usr/local/lib -lltc
 
 HEADERS += \
 	../../libs/PhSync/PhLtcReader.h \

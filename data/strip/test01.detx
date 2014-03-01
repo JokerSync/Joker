@@ -2,58 +2,63 @@
 <detx>
 
   <header>
-	<title>Title test</title>
-	<title2>Translated title</title2>
-	<episode number="episode ref" season="season ref" title="episode title" title2="traducted episode title"/>
-	<author name="Dupont" firstname="Pierre"/>
-	<detector firstname="Dupond" name="Jean"/>
-	<videofile timestamp="01:00:00:00">/Path/to/video.mov</videofile>
-    <last_position timecode="01:00:10:00" track="1"/>
+    <cappella copyright="Martin Delille et Grégoire Parcollet, 2007" version="0.12.5, 1"/>
+    <title>Title test</title>
+    <title2>Translated title</title2>
+    <episode number="episode ref" season="season ref" title="episode title" title2="traducted episode title"/>
+    <production country="Country" diffuser="Publisher" director="Director" distributor="Distributor" producer="Producer" year="2014"/>
+    <author firstname="Pierre" name="Dupont"/>
+    <detector firstname="Dupond" name="Jean"/>
+    <notes>Notes</notes>
+    <summary>Summary
+</summary>
+    <videofile timestamp="01:00:00:00">/Path/to/video.mov</videofile>
+    <last_position timecode="01:00:16:00" track="1"/>
   </header>
 
   <roles>
-    <role color="#00bb00" description="" gender="female" id="jeanne" name="Jeanne">
+    <role color="#00BB00" description="" gender="female" id="jeanne" name="Jeanne">
       <image>/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAB/AH8DASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD3riq11Y214Ua4TcY87D6Zxnjoeg61ZoxxUEHN2vgjSLSSOSMSZjxjMsh6exYj9K3rW1hs7dYLdNkS9BnNTUUXHcQgZo2g/wD66U1Vu7+CyH7xufSgREuk2C3S3CwKJoyWU4GQSCCc9e571PA2d3oKzf8AhI7LcQ2QPXn/AAptnrVqWneSQInG3IJ9farWwixrNnbXkCfaEDGNtyEgHacY7+xNeT6lGsQ3Rj7/ACxAAyeB2+gr1S41SxuECR3AJPbBryrUm3W6n0J/nUS0SBHE3fEp9jWVI7JMrxu0cifddT0z1+taeokC5YVlSnk1vBXREtCQ6vqyW4g/tB/KHt756dK0vCFkl9qksTs4zExY7iS2FPf8K59vr0ro/AzEeIAM43RP/wCgNXTTik9DGpJtanPzIrbVddy49a6aC/v002yKXrjcXB7dD6jGfxrmpDl1rcjX/iU2DdMvJX0CpwmvfVzy+eUfhdj6kooo7V8ce8FFFAoGV7y5W3i3HqelcXqF680haRs+laetXfnXO1T8q8Vy15L859q02QJXEnm4zVGe9CqRuIHsajnl3cDis6aTg5qOYqxae8dTuWVl9DmqU13vgMLjLA5Bqp5uCYz36GoXfclVo9yWjA1M4u2B/wA8VlynmtjVomcrMvPZqw5OvNawVjKRG3Suh8Dc+KIV9Ucf+ONXOEg1v+Byf+EstAOMiQf+Q2rqp7nPPYx5PvLXQRc6HY+0klc8/wB9a6SHH/CP2R/6aP8Azr6GnseXPY+naO1HagdK+MPoAqveT/Z7V5M9BxViua8QXTGVoQflXGaaGYU83zOSawbqT560Z5cLXO31wQ5APPahspCTPyeaoySDvQ0pbOTzWfNdNwBSsXccX/e57CmMcFh6HiolkJOSetOZv3j5qkRJkUrAxyL1yK5i44kOa6Nz+9x2NYWoReVO8f8Ad5H41vAwmUCc10HgZgPGNhn1f/0W1c6e9bngs/8AFZacP9t//QGrpp7mE9jNk/1grfiwfD1rk8iR/wCdc8/3x9TW6hH9gW//AF0b+dfQ0tjy57H1KaO1B6UvavjD3xkjiONn7DrXFalKcHJySea7C7OLZzXG6tH5crITngH86fQa3MC7k2nA9K5u4O5zmt29f5ulYMz4BxUXNLXKsh2q2KzrhPlPbPSrcsrBSNvWoWZWTDVaY7FKAsGTnIyasFvlz61XldYQSB06VIDujwOvUVRDQ2Vv3p9wKzdWQFFfHLcZzVpmywPrUN8DNZEjnYc1rEymjCcYJ5rW8JHHizTuf+Wjf+gmsdxgkHpWr4UfZ4r09j0Eh/8AQTXTTepzVNiiT+9+hNXxLKbCOP8A5ZhiRWef9d+J/nWwmP7Ii4/jNfRUdjzKmx9XHpSUHpS9q+NPeIrhN9u6+orh9SdmcluuMV3Un3DXC6sR9ocD1GKOg47nMXjfMR6Cufun2Nj1rZv5BHcZPQ1iXOS3vULQ0W5Xk3+Xuqj5gkJAGDVmVWwc1V+6D2q00OzK03zsEHVjxVmHG4D04qvCu+UyelSlgkhJHAp3JZBKoDbv4TnFJZbZY2hc43cUsrHdLD3HIqrC+JBng1omZtGVfQvbzyRMOh4p+iTCDW7SVjgK+T+Rqxrzl7vceMj86y4OZ0wcc9a6aW6OaotCyCDP9Sa2IT/xKox6Oax4v9eB9a1rfnT8ejV9LR2PJq6I+rz0o7UGjtXxh74jDKkV59qTbrxgDXfzMVhZh1ArzvUiUkdyOnND2KictqxA29+TWFJLgZatzVASDjsSa5657Ad6hFEMtzweaoTSl+B+NWJIzUIQDJI6datWG2yW2XbAPalwCnPehAQhpjnbtHYZqkSzPndjJHIvcc02fKuso7UjqdijPfrRIWBwOeK0UWzNtLcbqINzYfaB1Tj8zWGrEMDW7C4CSQsPkkGCKw2UpIwPUV0U00znm09i9B/r61Lb/jzYZ/irKtx+9rStT/o7j3FfS0PhPJrH1maB0oNIzbIyx6CvjD3yrfXMcMBRj8zjgVwmovuVwemKu32rST3gdj8qngVmaiSFYDrRPRFROauW+Yhj1GK566OH4ravm2unrk1i3OBKQeahFFRmJ+tQsMAg96lc7GzULHK/jW0Y6EylZ6EyEHoaq3DE5x948AUsb7cHPbmopiVfb1J6GhITehHgOfZaa5DZKilJxx61GScYHeuynCxxVJ3G4GMetUbyAE+Yo571czUb/MpHrW/KZKRDAP3ua0bTmGQe4qhCuH47ir1qTtkH0r3MM7xOGtufWZ6VS1eTy9KnbvtH8xV49KzdbUvpUqjqcY/MV8ctz3zgpFLvikuclGJ6mrzxLbxuzD5u1ZF7K3lbc9airIuKOav5FNxuHIPArMJT7aPMOEHX8qv3OGmJxwtZE5zPn1606S1FU2GagI95MTZUjrWf5mflbg1ZkyCarOu5MGu62hx82pLjCj/aBqGUFcGp0GY1HpVS4k82VsfdAwKxivesbt+7cj5AFJ05NMLEn2FL1HPSu2KOGTIzy2elNJ4HtTmPzcdKa5wMCtEZsamBIRVq36P+FVOjqatwdWr18G7xsc1Y/9k=</image>
     </role>
-	<role color="#bb0000" description="" gender="female" id="sue" name="Sue">
+    <role color="#0000BB" description="" gender="male" id="paul" name="Paul">
       <image>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</image>
     </role>
-	<role color="#0000bb" description="" gender="male" id="paul" name="Paul">
+    <role color="#BB0000" description="" gender="female" id="sue" name="Sue">
       <image>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</image>
     </role>
   </roles>
 
   <body>
-  <loop timecode="01:00:00:00"/>
-  <shot timecode="01:00:01:00"/>
-  <line role="jeanne" track="1">
-    <lipsync timecode="01:00:02:00" type="in_open"/>
-	<text>Simple sentence</text>
-    <lipsync timecode="01:00:04:00" type="out_open"/>
-  </line>
-  <line role="sue" track="2">
-    <lipsync timecode="01:00:05:00" type="in_open"/>
-	<text>Composed </text>
-    <lipsync timecode="01:00:06:00" type="labial"/>
-	<text>sentence</text>
-    <lipsync timecode="01:00:07:00" type="out_open"/>
-  </line>
-  <line role="paul" track="1" voice="off">
-    <lipsync timecode="01:00:12:00" type="in_open"/>
-	<text>Simple off sentence</text>
-    <lipsync timecode="01:00:14:00" type="out_open"/>
-  </line>
-
-  <line role="sue" track="2" voice="off">
-    <lipsync timecode="01:00:15:00" type="in_open"/>
-	<text>Composed sentence </text>
-    <lipsync timecode="01:00:16:00" type="labial" link="off"/>
-	<text>with off</text>
-    <lipsync timecode="01:00:17:00" type="out_open"/>
-  </line>
-  <loop timecode="01:01:00:00"/>
-
-
-
+    <loop timecode="01:00:00:00"/>
+    <shot timecode="01:00:01:00"/>
+    <line role="jeanne" track="1">
+      <lipsync timecode="01:00:02:00" type="in_open"/>
+      <text>Simple sentence</text>
+      <lipsync timecode="01:00:04:00" type="out_open"/>
+    </line>
+    <line role="sue" track="2">
+      <lipsync timecode="01:00:05:00" type="in_open"/>
+      <text>Composed </text>
+      <lipsync timecode="01:00:06:00" type="neutral"/>
+      <text>sentence</text>
+      <lipsync timecode="01:00:07:00" type="out_open"/>
+    </line>
+    <line role="paul" track="1" voice="off">
+      <lipsync timecode="01:00:12:00" type="in_open"/>
+      <text>Simple off sentence</text>
+      <lipsync timecode="01:00:14:00" type="out_open"/>
+    </line>
+    <line role="sue" track="2" voice="off">
+      <lipsync timecode="01:00:15:00" type="in_open"/>
+      <lipsync link="off" timecode="01:00:16:00" type="neutral"/>
+      <text>Composed sentence with off</text>
+      <lipsync timecode="01:00:17:00" type="out_open"/>
+    </line>
+    <line role="sue" track="2" voice="off">
+      <lipsync timecode="01:00:20:00" type="in_open"/>
+      <lipsync timecode="01:00:22:00" type="out_open" link="off"/>
+    </line>
+    <loop timecode="01:01:00:00"/>
   </body>
+
 </detx>

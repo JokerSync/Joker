@@ -52,7 +52,8 @@ void SonyStripSynchronizer::onStripRateChanged(PhRate rate)
 {
 	if(!_settingStripRate) {
 		_settingSonyRate = true;
-		_sonyClock->setRate(rate);
+		if(_sonyClock)
+			_sonyClock->setRate(rate);
 		_settingSonyRate = false;
 	}
 }

@@ -8,10 +8,10 @@
 #define PREFERENCESDIALOG_H
 
 #include <QDialog>
-#include <QSettings>
 #include <QListWidgetItem>
 
-#include "SonyVideoStripSynchronizer.h"
+#include "Synchronizer.h"
+#include "JokerSettings.h"
 
 namespace Ui {
 class PreferencesDialog;
@@ -36,7 +36,7 @@ public:
 	 * @param settings The application settings
 	 * @param parent The parent object
 	 */
-	explicit PreferencesDialog(QSettings *settings, QWidget *parent = 0);
+	explicit PreferencesDialog(JokerSettings *settings, QWidget *parent = 0);
 	~PreferencesDialog();
 
 private slots:
@@ -50,10 +50,6 @@ private slots:
 	void on_buttonBox_accepted();
 
 	void on_buttonBox_rejected();
-
-	void on_cBoxLastFile_toggled(bool checked);
-
-	void on_cBoxFullscreen_toggled(bool checked);
 
 	void on_sliderBoldness_valueChanged(int value);
 
@@ -83,15 +79,13 @@ private slots:
 
 private:
 	Ui::PreferencesDialog *ui;
-	QSettings *_settings;
+	JokerSettings *_settings;
 	QString _oldFont;
 	bool _oldUseQuarterFrame;
 	int _oldDelay;
 	int _oldSpeed;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldOpenLastFile;
-	bool _oldStartFullScreen;
 	bool _oldDeinterlace;
 	bool _oldDisplayTC;
 	bool _oldDisplayNextTC;

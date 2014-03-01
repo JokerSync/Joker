@@ -8,7 +8,7 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings)
+PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, PhSyncSettings *settings)
 	: PhSonyController(tcType, settings, "A"),
 	_autoMode(false), _state(Pause)
 {
@@ -28,8 +28,8 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x11:
 			{
 //			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
-				unsigned char deviceID1 = (unsigned char)_settings->value("PhSonySlaveControllerDeviceID1", 0xf0).toInt();
-				unsigned char deviceID2 = (unsigned char)_settings->value("PhSonySlaveControllerDeviceID2", 0xc0).toInt();
+				unsigned char deviceID1 = _settings->sonyDevice1();
+				unsigned char deviceID2 = _settings->sonyDevice2();
 				switch (_clock.timeCodeType()) {
 				case PhTimeCodeType2398:
 				case PhTimeCodeType24:
@@ -71,13 +71,13 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x10:
 			PHDEBUG << _comSuffix << "Fast forward => ACK";
 			_state = FastForward;
-			_clock.setRate(_settings->value("PhSonySlaveControllerAbsoluteFastRate",3).toInt());
+			_clock.setRate(_settings->sonyFastRate());
 			sendAck();
 			break;
 		case 0x20:
 			PHDEBUG << _comSuffix << "Rewing => ACK";
 			_state = Rewind;
-			_clock.setRate(-_settings->value("PhSonySlaveControllerAbsoluteFastRate",3).toInt());
+			_clock.setRate(-_settings->sonyFastRate());
 			sendAck();
 			break;
 		case 0x11:
@@ -201,7 +201,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x20:
 			{
 				unsigned char status[16];
-#warning TODO : handle status sens properly
+#warning /// @todo handle status sens properly
 				PHDBG(22) << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
 				memset(status, 0, 16);
 				switch (_state) {
@@ -260,7 +260,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			}
 		case 0x30:
 			{
-#warning TODO : handle edit preset sense properly
+#warning /// @todo handle edit preset sense properly
 //			PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status";
 				unsigned char count = dataIn[0];
 				for (int i = 0; i < count; i++)

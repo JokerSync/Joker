@@ -7,10 +7,11 @@
 #define GENERATEDIALOG_H
 
 #include <QDialog>
-#include <QSettings>
 
 #include "PhStrip/PhStripDoc.h"
 #include "PhCommonUI/PhTimeCodeEdit.h"
+
+#include "GraphicStripTestSettings.h"
 
 namespace Ui {
 class GenerateDialog;
@@ -21,7 +22,7 @@ class GenerateDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit GenerateDialog(QSettings *settings, PhStripDoc * _doc, QWidget *parent = 0);
+	explicit GenerateDialog(GraphicStripTestSettings *settings, PhStripDoc * _doc, QWidget *parent = 0);
 	~GenerateDialog();
 	PhTime getTC();
 
@@ -32,7 +33,7 @@ private slots:
 private:
 	Ui::GenerateDialog *ui;
 	PhStripDoc * _doc;
-	QSettings * _settings;
+	GraphicStripTestSettings * _settings;
 };
 
 #endif // GENERATEDIALOG_H

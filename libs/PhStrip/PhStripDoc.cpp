@@ -52,6 +52,7 @@ bool PhStripDoc::importDetX(QString fileName)
 		return false;
 	}
 
+	_generator = "Cappella";
 	//With DetX files, fps is always 25 no drop
 	_tcType = PhTimeCodeType25;
 	_timeScale = 25.00;
@@ -60,19 +61,21 @@ bool PhStripDoc::importDetX(QString fileName)
 	if(detX.elementsByTagName("header").count()) {
 		QDomElement header = detX.elementsByTagName("header").at(0).toElement();
 
-#warning TODO : Reading Cappella version
+		// Read the Cappella version
+		if(header.elementsByTagName("cappella").count())
+			_generator += " v" + detX.elementsByTagName("cappella").at(0).toElement().attribute("version");
 
 		// Reading the title
 		if(header.elementsByTagName("title").count())
-			_title = detX.elementsByTagName("title").at(0).toElement().text();
+			_title = header.elementsByTagName("title").at(0).toElement().text();
 
 		// Reading the translated title
 		if(header.elementsByTagName("title2").count())
-			_translatedTitle = detX.elementsByTagName("title2").at(0).toElement().text();
+			_translatedTitle = header.elementsByTagName("title2").at(0).toElement().text();
 
 		// Reading the episode info
 		if(header.elementsByTagName("episode").count()) {
-			QDomElement episodeElem = detX.elementsByTagName("episode").at(0).toElement();
+			QDomElement episodeElem = header.elementsByTagName("episode").at(0).toElement();
 			_episode = episodeElem.attribute("number");
 			_season = episodeElem.attribute("season");
 		}
@@ -89,14 +92,23 @@ bool PhStripDoc::importDetX(QString fileName)
 		if(header.elementsByTagName("last_position").count()) {
 			QDomElement lastPosition = header.elementsByTagName("last_position").at(0).toElement();
 			_lastFrame = PhTimeCode::frameFromString(lastPosition.attribute("timecode"), _tcType);
-
-#warning TODO : Reading the last track
 		}
 
 		// Reading the author name
 		if(header.elementsByTagName("author").count()) {
 			QDomElement author = header.elementsByTagName("author").at(0).toElement();
 			_authorName = author.attribute("firstname") + " " + author.attribute("name");
+		}
+
+		// Reading other meta informations
+		if(header.elementsByTagName("production").count()) {
+			QDomElement production = header.elementsByTagName("production").at(0).toElement();
+			_metaInformation["Producteur"] = production.attribute("producer");
+			_metaInformation["Année de production"] = production.attribute("year");
+			_metaInformation["Distributeur"] = production.attribute("distributor");
+			_metaInformation["Réalisateur"] = production.attribute("director");
+			_metaInformation["Diffuseur"] = production.attribute("diffuser");
+			_metaInformation["Pays d'origine"] = production.attribute("country");
 		}
 	}
 
@@ -113,7 +125,6 @@ bool PhStripDoc::importDetX(QString fileName)
 		}
 	}
 
-#warning TODO try reading first loop number if possible
 	int loopNumber = 1;
 
 	// Reading the strip body
@@ -134,6 +145,7 @@ bool PhStripDoc::importDetX(QString fileName)
 				else if(elem.tagName() == "line") {
 					PhFrame frameIn = -1;
 					PhFrame lastFrame = -1;
+					PhFrame lastLinkedFrame = -1;
 					PhPeople *people = _peoples[elem.attribute("role")];
 					int track = elem.attribute("track").toInt();
 					QString currentText = "";
@@ -141,15 +153,15 @@ bool PhStripDoc::importDetX(QString fileName)
 						if(elem.childNodes().at(j).isElement()) {
 							QDomElement lineElem = elem.childNodes().at(j).toElement();
 							if(lineElem.tagName() == "lipsync") {
+								lastFrame = PhTimeCode::frameFromString(lineElem.attribute("timecode"), _tcType);
+								if(frameIn < 0)
+									frameIn = lastFrame;
 								if(lineElem.attribute("link") != "off") {
-									PhFrame frame = PhTimeCode::frameFromString(lineElem.attribute("timecode"), _tcType);
-									if(frameIn < 0)
-										frameIn = frame;
 									if(currentText.length()) {
-										_texts.append(new PhStripText(lastFrame, people, frame, track, currentText));
+										_texts.append(new PhStripText(lastLinkedFrame, people, lastFrame, track, currentText));
 										currentText = "";
 									}
-									lastFrame = frame;
+									lastLinkedFrame = lastFrame;
 								}
 							}
 							else if(lineElem.tagName() == "text")
@@ -158,12 +170,12 @@ bool PhStripDoc::importDetX(QString fileName)
 					}
 					// Handling line with no lipsync out
 					if(currentText.length()) {
-						PhFrame frame = lastFrame + currentText.length();
-						_texts.append(new PhStripText(lastFrame, people, frame, track, currentText));
-						lastFrame = frame;
+						PhFrame frame = lastLinkedFrame + currentText.length();
+						_texts.append(new PhStripText(lastLinkedFrame, people, frame, track, currentText));
+						lastLinkedFrame = frame;
 					}
-					if(elem.attribute("voice") == "off")
-						_offs.append(new PhStripOff(frameIn, people, lastFrame, track));
+					bool off = (elem.attribute("voice") == "off");
+					_detects.append(new PhStripDetect(off, frameIn, people, lastFrame, track));
 				}
 			}
 		}
@@ -660,7 +672,7 @@ void PhStripDoc::reset()
 {
 	_peoples.clear();
 	_cuts.clear();
-	_offs.clear();
+	_detects.clear();
 	_tcType = PhTimeCodeType25;
 	_lastFrame = 0;
 	_loops.clear();
@@ -900,8 +912,19 @@ QString PhStripDoc::getVideoPath()
 	return _videoPath;
 }
 
+QList<QString> PhStripDoc::getMetaKey()
+{
+	return _metaInformation.keys();
+}
+
+QString PhStripDoc::getMetaInformation(QString key)
+{
+	return _metaInformation[key];
+}
+
 PhTimeCodeType PhStripDoc::getTCType()
 {
+	#warning /// @todo rename to timeCodeType()
 	return _tcType;
 }
 
@@ -945,14 +968,45 @@ QList<PhStripText *> PhStripDoc::getTexts()
 	return _texts;
 }
 
+QList<PhStripText *> PhStripDoc::getTexts(PhPeople *people)
+{
+	QList<PhStripText*> result;
+	foreach(PhStripText *text, _texts) {
+		if(text->getPeople() == people)
+			result.append(text);
+	}
+	return result;
+}
+
 QList<PhStripLoop *> PhStripDoc::getLoops()
 {
 	return _loops;
 }
 
-QList<PhStripOff *> PhStripDoc::getOffs()
+QList<PhStripDetect *> PhStripDoc::getDetects(PhFrame frameIn, PhFrame frameOut)
 {
-	return _offs;
+	QList<PhStripDetect*> result;
+	foreach(PhStripDetect *detect, this->_detects) {
+		if((detect->getTimeIn() >= frameIn) && (detect->getTimeOut() < frameOut))
+			result.append(detect);
+	}
+
+	return result;
+}
+
+QList<PhStripDetect *> PhStripDoc::getPeopleDetects(PhPeople *people, PhFrame frameIn, PhFrame frameOut)
+{
+	QList<PhStripDetect *> result;
+	foreach(PhStripDetect *detect, this->getDetects(frameIn, frameOut)) {
+		if(detect->getPeople() == people)
+			result.append(detect);
+	}
+	return result;
+}
+
+void PhStripDoc::setTitle(QString title)
+{
+	_title = title;
 }
 
 void PhStripDoc::setVideoTimestamp(PhFrame videoFramestamp)

@@ -8,7 +8,10 @@
 #define PEOPLEDIALOG_H
 
 #include <QDialog>
-#include <PhStrip/PhStripDoc.h>
+
+#include "PhStrip/PhStripDoc.h"
+
+#include "JokerSettings.h"
 
 namespace Ui {
 class PeopleDialog;
@@ -28,14 +31,14 @@ public:
 	/**
 	 * @brief The PeopleDialog constructor
 	 *
-	 * By giving the PeopleDialog a reference to the current people list, the dialog
+	 * By giving the PeopleDialog the application settings, the dialog
 	 * is able to update in real time the PhGraphicStrip display.
 	 *
 	 * @param parent The parent object
 	 * @param doc The current PhStripDoc
-	 * @param peopleList The current selected people list
+	 * @param settings The application settings
 	 */
-	explicit PeopleDialog(QWidget *parent, PhStripDoc* doc, QList<PhPeople*>* peopleList);
+	explicit PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *settings);
 
 	~PeopleDialog();
 
@@ -50,10 +53,9 @@ private slots:
 
 private:
 	Ui::PeopleDialog *ui;
-
 	PhStripDoc* _doc;
-	QList<PhPeople*> *_peopleList;
-	QList<PhPeople*> _oldPeopleList;
+	JokerSettings *_settings;
+	QStringList _oldPeopleNameList;
 };
 
 #endif // PEOPLEDIALOG_H

@@ -5,7 +5,8 @@
 
 HEADERS += \
     ../../libs/PhGraphicStrip/PhGraphicStrip.h \
-    ../../libs/PhGraphicStrip/PhGraphicStripView.h
+    ../../libs/PhGraphicStrip/PhGraphicStripView.h \
+    ../../libs/PhGraphicStrip/PhGraphicStripSettings.h
 
 SOURCES += \
     ../../libs/PhGraphicStrip/PhGraphicStrip.cpp \

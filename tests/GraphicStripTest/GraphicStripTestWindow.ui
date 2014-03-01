@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GraphicStripTestWindow</class>
+ <widget class="QMainWindow" name="GraphicStripTestWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>991</width>
+    <height>340</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>GraphicStripTest</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0">
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="PhGraphicStripView" name="stripView" native="true"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>991</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuOpen_recent">
+     <property name="title">
+      <string>Open recent</string>
+     </property>
+     <addaction name="actionEmpty"/>
+    </widget>
+    <addaction name="actionOpen"/>
+    <addaction name="menuOpen_recent"/>
+    <addaction name="actionGenerate"/>
+    <addaction name="actionStrip_Properties"/>
+   </widget>
+   <widget class="QMenu" name="menuControl">
+    <property name="title">
+     <string>Control</string>
+    </property>
+    <widget class="QMenu" name="menuVarial_Speed">
+     <property name="title">
+      <string>Varial Speed</string>
+     </property>
+     <addaction name="action_3"/>
+     <addaction name="action_1"/>
+     <addaction name="action_0_5"/>
+     <addaction name="action0"/>
+     <addaction name="action0_5"/>
+     <addaction name="action1"/>
+     <addaction name="action3"/>
+    </widget>
+    <widget class="QMenu" name="menuGo">
+     <property name="title">
+      <string>Go</string>
+     </property>
+     <addaction name="actionGo_to"/>
+     <addaction name="actionPrevious_Element"/>
+     <addaction name="actionNext_Element"/>
+    </widget>
+    <addaction name="actionPlay_pause"/>
+    <addaction name="actionPlay_backward"/>
+    <addaction name="actionStep_forward"/>
+    <addaction name="actionStep_backward"/>
+    <addaction name="actionStep_time_forward"/>
+    <addaction name="actionStep_time_backward"/>
+    <addaction name="menuVarial_Speed"/>
+    <addaction name="menuGo"/>
+   </widget>
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <addaction name="actionChange_font"/>
+    <addaction name="actionFull_screen"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuControl"/>
+   <addaction name="menuDisplay"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionPlay_pause">
+   <property name="text">
+    <string>Play/pause</string>
+   </property>
+   <property name="shortcut">
+    <string>Up</string>
+   </property>
+  </action>
+  <action name="actionPlay_backward">
+   <property name="text">
+    <string>Play backward</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
+   </property>
+  </action>
+  <action name="actionStep_forward">
+   <property name="text">
+    <string>Step forward</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actionStep_backward">
+   <property name="text">
+    <string>Step backward</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="actionStep_time_forward">
+   <property name="text">
+    <string>Step time forward</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Right</string>
+   </property>
+  </action>
+  <action name="actionStep_time_backward">
+   <property name="text">
+    <string>Step time backward</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Left</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>-3</string>
+   </property>
+  </action>
+  <action name="action_1">
+   <property name="text">
+    <string>-1</string>
+   </property>
+  </action>
+  <action name="action_0_5">
+   <property name="text">
+    <string>-0.5</string>
+   </property>
+  </action>
+  <action name="action0">
+   <property name="text">
+    <string>0</string>
+   </property>
+  </action>
+  <action name="action0_5">
+   <property name="text">
+    <string>0.5</string>
+   </property>
+  </action>
+  <action name="action1">
+   <property name="text">
+    <string>1</string>
+   </property>
+  </action>
+  <action name="action3">
+   <property name="text">
+    <string>3</string>
+   </property>
+  </action>
+  <action name="actionGo_to">
+   <property name="text">
+    <string>Go to</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionChange_font">
+   <property name="text">
+    <string>Change font...</string>
+   </property>
+  </action>
+  <action name="actionPrevious_Element">
+   <property name="text">
+    <string>Previous Element</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Left</string>
+   </property>
+  </action>
+  <action name="actionNext_Element">
+   <property name="text">
+    <string>Next Element</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Right</string>
+   </property>
+  </action>
+  <action name="actionStrip_Properties">
+   <property name="text">
+    <string>Properties...</string>
+   </property>
+  </action>
+  <action name="actionGenerate">
+   <property name="text">
+    <string>Generate...</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences...</string>
+   </property>
+  </action>
+  <action name="actionEmpty">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Empty</string>
+   </property>
+  </action>
+  <action name="actionFull_screen">
+   <property name="text">
+    <string>Full screen</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PhGraphicStripView</class>
+   <extends>QWidget</extends>
+   <header>PhGraphicStrip/PhGraphicStripView.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

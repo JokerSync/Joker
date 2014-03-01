@@ -20,7 +20,7 @@
 #include "PhStripLoop.h"
 #include "PhStripObject.h"
 #include "PhStripText.h"
-#include "PhStripOff.h"
+#include "PhStripDetect.h"
 
 /**
  * @brief The joker document class
@@ -41,14 +41,15 @@ public:
 	explicit PhStripDoc(QObject *parent = 0);
 
 	/**
-	 * @brief Get the cuts
-	 * @return the cut's list
+	 * @brief Get the information about the document generator
+	 * @return The generator name and version
 	 */
-	QList<PhStripCut *> getCuts();
-
+	QString getGenerator() {
+		return _generator;
+	}
 	/**
-	 * @brief getTitle
-	 * @return _title
+	 * @brief Get the title
+	 * @return The title
 	 */
 	QString getTitle();
 
@@ -95,6 +96,19 @@ public:
 	}
 
 	/**
+	 * @brief Get the list of meta information key
+	 * @return A string list
+	 */
+	QList<QString> getMetaKey();
+
+	/**
+	 * @brief Get the meta information of a given key
+	 * @param key The meta information key
+	 * @return The meta information value
+	 */
+	QString getMetaInformation(QString key);
+
+	/**
 	 * @brief getLastPosition
 	 * @return _lastPosition
 	 */
@@ -118,10 +132,17 @@ public:
 	 */
 	QMap<QString, PhPeople *> getPeoples();
 	/**
-	 * @brief getTexts
-	 * @return _texts
+	 * @brief Get the list of texts
+	 * @return A list of texts
 	 */
 	QList<PhStripText *> getTexts();
+
+	/**
+	 * @brief Get the list of texts affected to a people
+	 * @param people The people
+	 * @return A list of texts
+	 */
+	QList<PhStripText *> getTexts(PhPeople *people);
 
 	/**
 	 * @brief getLoops
@@ -130,11 +151,32 @@ public:
 	QList<PhStripLoop *> getLoops();
 
 	/**
-	 * @brief getOffs
-	 * @return _offs
+	 * @brief Get the cuts
+	 * @return the cut's list
 	 */
-	QList<PhStripOff *> getOffs();
+	QList<PhStripCut *> getCuts();
 
+	/**
+	 * @brief Get the detect list
+	 * @todo Implement and test frameIn / frameOut
+	 * @return A list of PhStripDetect*
+	 */
+	QList<PhStripDetect *> getDetects(PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
+
+	/**
+	 * @brief Get the list of detect affected to a people in a defined range.
+	 * @param people The people
+	 * @param frameIn The range in
+	 * @param frameOut The range out
+	 * @return A list of detects
+	 */
+	QList<PhStripDetect *> getPeopleDetects(PhPeople *people, PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
+
+	/**
+	 * @brief Set the title property
+	 * @param title A string
+	 */
+	void setTitle(QString title);
 	/**
 	 * @brief setVideoTimestamp
 	 * @param videoFramestamp
@@ -309,6 +351,8 @@ signals:
 
 private:
 	void reset();
+
+	QString _generator;
 	/**
 	 * Title of the corresponding audiovisual content.
 	 */
@@ -316,6 +360,7 @@ private:
 	QString _translatedTitle;
 	QString _episode;
 	QString _season;
+	QMap<QString, QString> _metaInformation;
 
 	/**
 	 * Starting time of the video content refered by the videoPath : String
@@ -367,7 +412,7 @@ private:
 	/**
 	 * List of PhStripOff from the file
 	 */
-	QList<PhStripOff *> _offs;
+	QList<PhStripDetect *> _detects;
 
 	int _nbTexts;
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);

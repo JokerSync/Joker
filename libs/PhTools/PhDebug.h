@@ -9,11 +9,17 @@
 
 #include <QDebug>
 
+/** PHERR allow to log error */
+#define PHERR PhDebug::error(__FILE__, __LINE__, __FUNCTION__)
+
 /** PHDBG allow to have a multi level log system */
-#define PHDBG(messageLogLevel) PhDebug::debug(messageLogLevel)
+#define PHDBG(messageLogLevel) PhDebug::debug(__FILE__, __LINE__, __FUNCTION__, messageLogLevel)
 
 /** PHDEBUG is the default log system */
-#define PHDEBUG PHDBG()
+#define PHDEBUG PHDBG(0)
+
+/** PHNQ remove the quote when outputing a QString */
+#define PHNQ(string) (string).toStdString().c_str()
 
 /**
  * @brief A custom log system
@@ -25,11 +31,27 @@ class PhDebug
 {
 public:
 	/**
-	 * @brief
-	 * @param messageLogLevel
-	 * @return
+	 * @brief Setup the debug log stream state
+	 *
+	 * This log stream can filter some message when the message log level is not fitting the mask.
+	 *
+	 * @param fileName The file name where the log was triggered from
+	 * @param lineNumber The line number where the log was triggered from
+	 * @param functionName The function name where the log was triggered from
+	 * @param messageLogLevel The log level
+	 * @return A QDebug stream
 	 */
-	static QDebug debug(int messageLogLevel = 0);
+	static QDebug debug(const char *fileName, int lineNumber, const char *functionName, int messageLogLevel);
+
+	/**
+	 * @brief Setup the error log stream state
+	 *
+	 * @param fileName The file name where the log was triggered from
+	 * @param lineNumber The line number where the log was triggered from
+	 * @param functionName The function name where the log was triggered from
+	 * @return A QCritical stream
+	 */
+	static QDebug error(const char *fileName, int lineNumber, const char *functionName);
 
 	/**
 	 * @brief Set the log mask

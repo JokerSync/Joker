@@ -12,6 +12,7 @@ void PhStripDocTest::importDetXHeaderTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
+	QCOMPARE(_doc.getGenerator(), QString("Cappella v0.12.5, 1"));
 	QCOMPARE(_doc.getTitle(), QString("Title test"));
 	QCOMPARE(_doc.getTranslatedTitle(), QString("Translated title"));
 	QCOMPARE(_doc.getEpisode(), QString("episode ref"));
@@ -19,7 +20,25 @@ void PhStripDocTest::importDetXHeaderTest()
 	QCOMPARE(_doc.getVideoPath(), QString("/Path/to/video.mov"));
 	QVERIFY(_doc.getVideoTimestamp() == s2f("01:00:00:00"));
 	QCOMPARE(QString("Pierre Dupont"), _doc.getAuthorName());
-	QCOMPARE(s2f("01:00:10:00"), _doc.getLastFrame());
+	QCOMPARE(s2f("01:00:16:00"), _doc.getLastFrame());
+
+	QList<QString> metaKey = _doc.getMetaKey();
+
+	QCOMPARE(metaKey.count(), 6);
+	QVERIFY(metaKey.contains("Producteur"));
+	QVERIFY(metaKey.contains("Année de production"));
+	QVERIFY(metaKey.contains("Distributeur"));
+	QVERIFY(metaKey.contains("Réalisateur"));
+	QVERIFY(metaKey.contains("Diffuseur"));
+	QVERIFY(metaKey.contains("Pays d'origine"));
+
+	QCOMPARE(_doc.getMetaInformation("Producteur"), QString("Producer"));
+	QCOMPARE(_doc.getMetaInformation("Année de production"), QString("2014"));
+	QCOMPARE(_doc.getMetaInformation("Distributeur"), QString("Distributor"));
+	QCOMPARE(_doc.getMetaInformation("Réalisateur"), QString("Director"));
+	QCOMPARE(_doc.getMetaInformation("Diffuseur"), QString("Publisher"));
+	QCOMPARE(_doc.getMetaInformation("Pays d'origine"), QString("Country"));
+	PHDEBUG << _doc.getTitle();
 }
 
 void PhStripDocTest::importDetXPeopleTest()
@@ -53,13 +72,13 @@ void PhStripDocTest::importDetXCutTest()
 void PhStripDocTest::importDetXTextTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
-#warning TODO fix link off
+
 	QVERIFY(_doc.getTexts().count() == 5);
 
 	QCOMPARE(_doc.getTexts()[0]->getContent(), QString("Simple sentence"));
 	QVERIFY(_doc.getTexts()[0]->getTimeIn() == PhTimeCode::frameFromString("01:00:02:00", _doc.getTCType()));
 	QVERIFY(_doc.getTexts()[0]->getTimeOut() == PhTimeCode::frameFromString("01:00:04:00", _doc.getTCType()));
-	QCOMPARE(_doc.getTexts()[0]->getPeople(), _doc.getPeoples().value("jeanne"));
+	QCOMPARE(_doc.getTexts()[0]->getPeople(), _doc.getPeopleByName("Jeanne"));
 	QVERIFY(_doc.getTexts()[0]->getTrack() == 1);
 
 	QCOMPARE(_doc.getTexts()[1]->getContent(), QString("Composed "));
@@ -68,13 +87,41 @@ void PhStripDocTest::importDetXTextTest()
 	QCOMPARE(_doc.getTexts()[4]->getContent(), QString("Composed sentence with off"));
 }
 
-void PhStripDocTest::importDetXOffTest()
+void PhStripDocTest::importDetXDetectTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
-	QCOMPARE(_doc.getOffs().count(), 2);
+	QCOMPARE(_doc.getDetects().count(), 5);
 
-#warning TODO more test
+	QCOMPARE(_doc.getDetects()[0]->getPeople(), _doc.getPeopleByName("Jeanne"));
+	QVERIFY(!_doc.getDetects()[0]->off());
+	QVERIFY(_doc.getDetects()[0]->getTimeIn() == PhTimeCode::frameFromString("01:00:02:00", _doc.getTCType()));
+	QVERIFY(_doc.getDetects()[0]->getTimeOut() == PhTimeCode::frameFromString("01:00:04:00", _doc.getTCType()));
+	QCOMPARE(_doc.getDetects()[0]->getTrack(), 1);
+
+	QCOMPARE(_doc.getDetects()[1]->getPeople(), _doc.getPeopleByName("Sue"));
+	QVERIFY(!_doc.getDetects()[1]->off());
+	QVERIFY(_doc.getDetects()[1]->getTimeIn() == PhTimeCode::frameFromString("01:00:05:00", _doc.getTCType()));
+	QVERIFY(_doc.getDetects()[1]->getTimeOut() == PhTimeCode::frameFromString("01:00:07:00", _doc.getTCType()));
+	QCOMPARE(_doc.getDetects()[1]->getTrack(), 2);
+
+	QCOMPARE(_doc.getDetects()[2]->getPeople(), _doc.getPeopleByName("Paul"));
+	QVERIFY(_doc.getDetects()[2]->off());
+	QVERIFY(_doc.getDetects()[2]->getTimeIn() == PhTimeCode::frameFromString("01:00:12:00", _doc.getTCType()));
+	QVERIFY(_doc.getDetects()[2]->getTimeOut() == PhTimeCode::frameFromString("01:00:14:00", _doc.getTCType()));
+	QCOMPARE(_doc.getDetects()[2]->getTrack(), 1);
+
+	QCOMPARE(_doc.getDetects()[3]->getPeople(), _doc.getPeopleByName("Sue"));
+	QVERIFY(_doc.getDetects()[3]->off());
+	QVERIFY(_doc.getDetects()[3]->getTimeIn() == PhTimeCode::frameFromString("01:00:15:00", _doc.getTCType()));
+	QVERIFY(_doc.getDetects()[3]->getTimeOut() == PhTimeCode::frameFromString("01:00:17:00", _doc.getTCType()));
+	QCOMPARE(_doc.getDetects()[3]->getTrack(), 2);
+
+	QCOMPARE(_doc.getDetects()[4]->getPeople(), _doc.getPeopleByName("Sue"));
+	QVERIFY(_doc.getDetects()[4]->off());
+	QVERIFY(_doc.getDetects()[4]->getTimeIn() == PhTimeCode::frameFromString("01:00:20:00", _doc.getTCType()));
+	QVERIFY(_doc.getDetects()[4]->getTimeOut() == PhTimeCode::frameFromString("01:00:22:00", _doc.getTCType()));
+	QCOMPARE(_doc.getDetects()[4]->getTrack(), 2);
 }
 
 void PhStripDocTest::importMosTest01()

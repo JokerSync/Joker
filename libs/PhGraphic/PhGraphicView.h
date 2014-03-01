@@ -9,8 +9,8 @@
 
 #include <QGLWidget>
 #include <QTimer>
-#include <QSettings>
 
+#include "PhTools/PhTime.h"
 #include "PhTools/PhTickCounter.h"
 
 /**
@@ -53,20 +53,9 @@ signals:
 	 * @brief emit a signal just before the paint
 	 * @param frequency the effective frequency
 	 */
-	void beforePaint(int frequency);
+	void beforePaint(PhTimeScale frequency);
 
 protected:
-
-	/**
-	 * @brief Set the settings
-	 * @param settings the desired settings
-	 */
-	void setSettings(QSettings *settings);
-	/**
-	 * @brief The member containing the settings
-	 */
-	QSettings * _settings;
-
 	/**
 	 * @brief initialization, every class have to re-implement it.
 	 * @return true if everything went well, false otherwise.
@@ -100,13 +89,13 @@ private slots:
 	void onRefresh();
 
 private:
-
 	/**
 	 * @brief t_Timer
 	 * used to draw
 	 */
 	QTimer *t_Timer;
 	PhTickCounter _frameTickCounter;
+	int _screenFrequency;
 };
 
 #endif // PHGRAPHICVIEW

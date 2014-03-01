@@ -21,7 +21,7 @@ private slots:
 	void importDetXLoopTest();
 	void importDetXCutTest();
 	void importDetXTextTest();
-	void importDetXOffTest();
+	void importDetXDetectTest();
 
 	void importMosTest01();
 	void importMosTest02();

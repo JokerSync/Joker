@@ -15,6 +15,8 @@
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSonyController.h"
 
+#include "JokerSettings.h"
+
 /**
  * @brief The Joker main view
  *
@@ -56,18 +58,11 @@ public:
 	}
 
 	/**
-	 * @brief getSelectedPeoples
-	 *
-	 * @return A QList of PhPeople* containing the selected PhPeople
-	 */
-	QList<PhPeople*>* getSelectedPeoples();
-
-	/**
 	 * @brief Attach the given settings to the view
 	 *
 	 * @param settings The QSettings
 	 */
-	void setSettings(QSettings * settings);
+	void setSettings(JokerSettings *settings);
 
 	/**
 	 * @brief Set the PhSonyController
@@ -98,11 +93,22 @@ protected:
 	 */
 	void paint();
 
+	/**
+	 * @brief Get the mouse event of the view
+	 *
+	 * This event filter check for mouse move event in order to:
+	 * - Display vertical resize cursor around the edge between the video and the strip
+	 * - Resize the strip if the user drag the edge
+	 * @param sender The event sender
+	 * @param event The event
+	 * @return Always false
+	 */
+	bool eventFilter(QObject *sender, QEvent *event);
 private slots:
 	void onVideoSync();
-	void onDocChanged();
 
 private:
+	JokerSettings *_settings;
 	PhVideoEngine _videoEngine;
 	PhGraphicStrip _strip;
 	PhSonyController *_sony;
@@ -114,8 +120,6 @@ private:
 	PhGraphicText _nextTCText;
 	PhGraphicText _noVideoSyncError;
 	PhGraphicText _currentPeopleName;
-
-	QList<PhPeople*> _selectedPeoples;
 
 	bool _forceRatio169;
 };

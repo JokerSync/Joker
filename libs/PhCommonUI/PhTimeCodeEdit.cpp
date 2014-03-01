@@ -6,8 +6,6 @@
 
 #include "PhTimecodeEdit.h"
 
-#include <QRegExpValidator>
-
 PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
 	QLineEdit(parent),
 	_tcType(PhTimeCodeType25)
@@ -18,6 +16,8 @@ PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
 	//chars like ` or ^
 	QRegExp rx("([0-9]|:){11}");
 	setValidator(new QRegExpValidator(rx, this));
+	_mousePressed = false;
+	_selectedIndex = 0;
 }
 
 void PhTimeCodeEdit::setFrame(PhFrame frame, PhTimeCodeType tcType)
@@ -57,8 +57,10 @@ void PhTimeCodeEdit::onTextChanged(QString text)
 
 bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 {
-	if(event->type() == QEvent::KeyPress) {
-		int keyPressed = static_cast<QKeyEvent *>(event)->key();
+	int keyPressed;
+	switch (event->type()) {
+	case QEvent::KeyPress:
+		keyPressed = static_cast<QKeyEvent *>(event)->key();
 		switch (keyPressed) {
 		case Qt::Key_0:
 		case Qt::Key_1:
@@ -88,9 +90,68 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 		default:
 			return true;
 		}
+	case QEvent::MouseButtonPress:
+		QApplication::setOverrideCursor(Qt::SizeVerCursor);
+		_mousePressed = true;
+		_mousePressedLocation = static_cast<QMouseEvent *>(event)->pos();
+#warning /// @todo make it font size independant
+		if(_mousePressedLocation.x() > 110 and _mousePressedLocation.x() < 145) {
+			_selectedIndex = 0;
+		}
+		else if(_mousePressedLocation.x() > 145 and _mousePressedLocation.x() < 190) {
+			_selectedIndex = 3;
+		}
+		else if(_mousePressedLocation.x() > 190 and _mousePressedLocation.x() < 230) {
+			_selectedIndex = 6;
+		}
+		else if(_mousePressedLocation.x() > 230 and _mousePressedLocation.x() < 270) {
+			_selectedIndex = 9;
+		}
+		return true;
+	case QEvent::MouseButtonRelease:
+		QApplication::setOverrideCursor(Qt::ArrowCursor);
+		_mousePressed = false;
+		return true;
+	case QEvent::MouseMove:
+		{
+			if(_mousePressed) {
+				int y = static_cast<QMouseEvent *>(event)->pos().y();
+				PhFrame currentFrame = PhTimeCode::frameFromString(this->text(), _tcType);
 
+				if(_selectedIndex == 0) {
+					if(_mousePressedLocation.y() > y)
+						currentFrame += 25 * 60 * 60;
+					else
+						currentFrame -= 25 * 60 * 60;
+				}
+				else if(_selectedIndex == 3) {
+					if(_mousePressedLocation.y() > y)
+						currentFrame += 25 * 60;
+					else
+						currentFrame -= 25 * 60;
+				}
+				else if(_selectedIndex == 6) {
+					if(_mousePressedLocation.y() > y)
+						currentFrame += 25;
+					else
+						currentFrame -= 25;
+				}
+				else if(_selectedIndex == 9) {
+					if(_mousePressedLocation.y() > y)
+						currentFrame++;
+					else
+						currentFrame--;
+				}
+
+				_mousePressedLocation.setY(y);
+				this->setText(PhTimeCode::stringFromFrame(currentFrame, _tcType));
+			}
+			return false;
+		}
+
+	default:
+		return false;
 	}
-	return false;
 }
 
 void PhTimeCodeEdit::compute(bool add)
@@ -118,4 +179,18 @@ void PhTimeCodeEdit::compute(bool add)
 	this->setText(currentText);
 	onTextChanged(this->text());
 }
+
+void PhTimeCodeEdit::paintEvent(QPaintEvent *e)
+{
+	if(_mousePressed) {
+		if(text().contains("-"))
+			setSelection(_selectedIndex + 1, 2);
+		else
+			setSelection(_selectedIndex, 2);
+	}
+	else
+		deselect();
+	QLineEdit::paintEvent(e);
+}
+
 

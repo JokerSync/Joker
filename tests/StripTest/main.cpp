@@ -7,6 +7,117 @@
 
 using namespace std;
 
+void runDocTest()
+{
+	PhStripDocTest docTest;
+	int test = QTest::qExec(&docTest);
+	if(test)
+		PHDEBUG << "Doc test failed!!!";
+}
+
+PhStripDoc * openDoc(QString fileName)
+{
+	PhStripDoc * doc = new PhStripDoc();
+	if(doc->openStripFile(fileName)) {
+		if(doc->getTitle().length() == 0)
+			doc->setTitle(QFileInfo(fileName).baseName());
+	}
+	else {
+		delete doc;
+		doc = NULL;
+	}
+	return doc;
+}
+
+int computeLoopLength(PhStripDoc *doc, int loopNumber)
+{
+	PhFrame frameIn = PHFRAMEMIN;
+	PhFrame frameOut = PHFRAMEMAX;
+	if(loopNumber > 0)
+		frameIn = doc->getLoops()[loopNumber - 1]->getTimeIn();
+	if(loopNumber + 1 < doc->getLoops().count())
+		frameOut = doc->getLoops()[loopNumber]->getTimeIn();
+	return frameOut - frameIn;
+}
+
+int countLoopDetectLength(PhStripDoc *doc, int loopNumber)
+{
+	QMap<QString, int> map;
+	/// Compute in and out
+	PhFrame frameIn = PHFRAMEMIN;
+	PhFrame frameOut = PHFRAMEMAX;
+	if(loopNumber > 0)
+		frameIn = doc->getLoops()[loopNumber - 1]->getTimeIn();
+	if(loopNumber + 1 < doc->getLoops().count())
+		frameOut = doc->getLoops()[loopNumber]->getTimeIn();
+
+	int loopLength = 0;
+	foreach(PhStripDetect *detect, doc->getDetects(frameIn, frameOut)) {
+		int detectLength = detect->getTimeOut() - detect->getTimeIn();
+		if(detectLength == 0)
+			PHDEBUG << "ZEROR";
+		map[detect->getPeople()->getName()] += detectLength;
+		loopLength += detectLength;
+		PHDBG(2) << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeIn(), doc->getTCType()))
+		         << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
+		         << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()))
+		         << detectLength
+		         << detect->getPeople()->getName();
+	}
+
+	foreach(QString name, map.keys())
+	PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromFrame(map[name], doc->getTCType()));
+
+	return loopLength;
+}
+
+int displayDetectCountPerLoop(PhStripDoc *doc)
+{
+	int totalLength = 0;
+	PHDBG(3) << doc->getTitle();
+
+	for(int loop = 0; loop <= doc->getLoops().count(); loop++) {
+		int detectLength = countLoopDetectLength(doc, loop);
+		int loopLength = computeLoopLength(doc, loop);
+//				PHDEBUG << loop << "\t:" << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()));
+		PHDBG(3) << loop << "\t:" << detectLength << "\t" << loopLength << "\t" << detectLength * 100 / loopLength;
+		totalLength += detectLength;
+	}
+
+}
+
+int countDetectLength(PhStripDoc *doc)
+{
+	QMap<QString, int> map;
+
+	PHDBG(1) << PHNQ(doc->getTitle());
+
+	int fileLength = 0;
+
+	foreach(PhPeople *people, doc->getPeoples()) {
+		int length = 0;
+		foreach(PhStripDetect *detect, doc->getPeopleDetects(people)) {
+			int detectLength = detect->getTimeOut() - detect->getTimeIn();
+			length += detectLength;
+			PHDBG(2) << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeIn(), doc->getTCType()))
+			         << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
+			         << PHNQ(PhTimeCode::stringFromFrame(length, doc->getTCType()))
+			         << detectLength
+			         << people->getName();
+		}
+		map[people->getName()] += length;
+		fileLength += length;
+	}
+
+	PHDBG(1);
+
+	foreach(QString name, map.keys()) {
+		PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromFrame(map[name], PhTimeCodeType25));
+	}
+
+	return fileLength;
+}
+
 /**
  * @brief The application main entry point
  * @param argc Command line argument count
@@ -16,10 +127,12 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 	PhDebug::setDisplay(false, false, false, false, false);
+	//PhDebug::setLogMask(2);
+
 	bool performTest = (argc < 2); // Run test if no strip files in argument
 
 	for(int i = 1; i < argc; i++) {
-		PHDBG() << argv[i];
+		PHDEBUG << argv[i];
 		if (strcmp(argv[i], "test") == 0)
 			performTest = true;
 	}
@@ -31,48 +144,17 @@ int main(int argc, char *argv[])
 			return test;
 	}
 
-	// Creating a new doc:
-	PhStripDoc doc;
-
+	int totalLength = 0;
 	for(int i = 1; i < argc; i++) {
-		QString fileName(argv[i]);
-		if(!QFile::exists(fileName))
-			continue;
-
-		// Open the strip file in argument:
-		doc.openStripFile(fileName);
-
-		// Display the title:
-		PHDEBUG << "title : " << doc.getTitle();
-		PHDEBUG << "video file : " << doc.getVideoPath();
-		PHDEBUG << "video timestamp" << PhTimeCode::stringFromFrame(doc.getVideoTimestamp(), doc.getTCType());
-
-		// Display actors:
-		QMap<QString, PhPeople *> list_actors = doc.getPeoples();
-		QMap<QString, PhPeople *>::iterator people;
-		PHDEBUG <<"--------- actors ---------";
-		PHDEBUG << list_actors.count();
-		for( people = list_actors.begin(); people != list_actors.end(); people++) {
-			PHDEBUG << (*people)->getName();
-		}
-
-		// Display text
-
-		PHDEBUG <<"--------- texts ---------";
-		QString line;
-		PhPeople * lastPeople;
-
-		foreach(PhStripText* text, doc.getTexts())
-		{
-			line = text->getPeople()->getName() + " : " + text->getContent();
-			PHDEBUG << line;
-		}
-
-		foreach (PhStripOff * off, doc.getOffs()) {
-			PHDEBUG << off->getPeople()->getName() << " : " << PhTimeCode::stringFromFrame(off->getTimeIn(), doc.getTCType())
-					<< " - " << PhTimeCode::stringFromFrame(off->getTimeOut(), doc.getTCType());
-		}
+		QString fileName = argv[i];
+		PhStripDoc *doc = openDoc(fileName);
+		if(doc)
+			totalLength += countDetectLength(doc);
 	}
+
+	PHDBG(1);
+
+	PHDBG(1) << "TOTAL :\t" << PHNQ(PhTimeCode::stringFromFrame(totalLength, PhTimeCodeType25));
 
 	return 0;
 }

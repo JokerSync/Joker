@@ -8,7 +8,8 @@
 #define PHGRAPHICSTRIP_H
 
 #include <QObject>
-#include <QSettings>
+
+#include "PhGraphicStripSettings.h"
 
 #include "PhStrip/PhStripDoc.h"
 
@@ -16,7 +17,6 @@
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicLoop.h"
-#include "PhStrip/PhStripOff.h"
 
 #include "PhTools/PhClock.h"
 
@@ -67,11 +67,12 @@ public:
 	 */
 	PhClock * clock();
 
+
 	/**
 	 * @brief Set the settings
 	 * @param settings desired settings
 	 */
-	void setSettings(QSettings * settings);
+	void setSettings(PhGraphicStripSettings * settings);
 
 	/**
 	 * Set the font used to render text on the strip.
@@ -89,6 +90,7 @@ public:
 	 *
 	 * @return True if succeed, false otherwise
 	 */
+
 	bool init();
 
 	/**
@@ -101,18 +103,10 @@ public:
 	 * @param y upper left corner coordinates
 	 * @param width width of the strip (usually the same as the parent window)
 	 * @param height height of the strip
+	 * @param selectedPeoples Selected people will be displayed on the upper left corner,
+	 * the others ones will be shaded.
 	 */
-	void draw(int x, int y, int width, int height);
-
-	/**
-	 * @brief Set speed of the strip
-	 *
-	 * Allow the user to vary the speed of the strip (faster or slower)
-	 * The default value is 12ppf
-	 *
-	 * @param value desired number of pixel per frame
-	 */
-	void setPixelPerFrame(long value);
+	void draw(int x, int y, int width, int height, QList<PhPeople*> selectedPeoples = QList<PhPeople*>());
 
 	/**
 	 * @brief Get the font of the strip objects
@@ -131,17 +125,6 @@ public:
 	 * @return
 	 */
 	PhFont * getHUDFont();
-
-	/**
-	 * @brief setSelectedPeople
-	 * Selected people will be displayed on the upper left corner, the others ones
-	 * will be shaded. The next time code - if displayed - will be the next element
-	 * of the people from the list.
-	 * @param list
-	 */
-	void setSelectedPeople(QList<PhPeople *> * list) {
-		_selectedPeoples = list;
-	}
 
 private slots:
 	/**
@@ -184,7 +167,7 @@ private:
 
 	QMap<PhStripLoop*, PhGraphicLoop*> _graphicLoops;
 
-	QMap<PhStripOff*, PhGraphicSolidRect*> _graphicOffs;
+	QMap<PhStripDetect*, PhGraphicSolidRect*> _graphicDetects;
 
 	/**
 	 * @brief _test
@@ -193,11 +176,9 @@ private:
 	QTime _testTimer;
 
 	int _trackNumber;
-	QSettings * _settings;
-	long pixelPerFrame;
-	QList<PhPeople*> *_selectedPeoples;
+	PhGraphicStripSettings * _settings;
 
-	QColor computeColor(PhPeople *people);
+	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples);
 };
 
 #endif // PHGRAPHICSTRIP_H

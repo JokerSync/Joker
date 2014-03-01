@@ -82,11 +82,15 @@ bool PhVideoEngine::open(QString fileName)
 
 	PHDEBUG << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
 	AVCodec * pCodec = avcodec_find_decoder(_pCodecContext->codec_id);
-	if(pCodec == NULL)
+	if(pCodec == NULL) {
+		PHDEBUG << "Unable to find a codec for " << _pCodecContext->codec_id;
 		return false;
+	}
 
-	if(avcodec_open2(_pCodecContext, pCodec, NULL) < 0)
+	if(avcodec_open2(_pCodecContext, pCodec, NULL) < 0) {
+		PHDEBUG << "Unable to open the codec:" << pCodec;
 		return false;
+	}
 
 	_pFrame = avcodec_alloc_frame();
 
@@ -95,6 +99,7 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setFrame(0);
 	goToFrame(0);
 	_fileName = fileName;
+
 	return true;
 }
 
@@ -116,7 +121,7 @@ void PhVideoEngine::close()
 	_fileName = "";
 }
 
-void PhVideoEngine::setSettings(QSettings *settings)
+void PhVideoEngine::setSettings(PhVideoSettings *settings)
 {
 	_settings = settings;
 }
@@ -126,7 +131,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 //	_clock.tick(60);
 	PhFrame delay = 0;
 	if(_settings)
-		delay = _settings->value("delay", 0).toInt() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
+		delay = _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
 	goToFrame(_clock.frame() + delay);
 	videoRect.setRect(x, y, w, h);
 	videoRect.setZ(-10);
@@ -234,7 +239,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 
 						int frameHeight = _pFrame->height;
 						if(_settings) {
-							if(_settings->value("videoDeinterlace", false).toBool())
+							if(_settings->videoDeinterlace())
 								frameHeight = _pFrame->height / 2;
 						}
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _pFrame->width, _pCodecContext->height,
