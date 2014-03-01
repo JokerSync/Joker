@@ -65,10 +65,3 @@ mac {
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
-
-CONFIG(release, debug|release) {
-	mac {
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)$${TARGET}_v$${VERSION}.dmg;
-	}
-}
