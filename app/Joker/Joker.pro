@@ -20,6 +20,8 @@ DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 INCLUDEPATH += ../../libs
 
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhStrip/PhStrip.pri)
@@ -79,11 +81,7 @@ TRANSLATIONS =	fr_FR.ts \
 QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $$shell_path($${RESOURCES_PATH}/) $${CS}
 
-CONFIG(release, debug|release) {
-	mac {
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)$${TARGET}_v$${VERSION}.dmg;
-	}
-}
+#PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
+include(../../common/deploy.pri)
 
 cache()
