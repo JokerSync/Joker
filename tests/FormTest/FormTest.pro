@@ -14,9 +14,11 @@ TEMPLATE = app
 # The application version
 VERSION = 1.0.3
 
+
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
-
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)
 
 SOURCES += main.cpp\
         FormTestWindow.cpp \
@@ -28,10 +30,3 @@ HEADERS  += FormTestWindow.h \
 
 FORMS    += FormTestWindow.ui \
     AboutDialog.ui
-
-CONFIG(release, debug|release) {
-	mac {
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)$${TARGET}_v$${VERSION}.dmg;
-	}
-}
