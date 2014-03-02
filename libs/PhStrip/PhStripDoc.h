@@ -194,13 +194,13 @@ public:
 	void setTimeScale(int timeScale);
 	/**
 	 * @brief Import a DetX file
-	 * @param filename The path to the DetX file
+	 * @param fileName The path to the DetX file
 	 * @return True if the doc opened well, false otherwise
 	 */
 	bool importDetX(QString fileName);
 	/**
 	 * @brief Import a Mos file
-	 * @param filename The path to the Mos file
+	 * @param fileName The path to the Mos file
 	 * @return True if the doc opened well, false otherwise
 	 */
 	bool importMos(QString fileName);

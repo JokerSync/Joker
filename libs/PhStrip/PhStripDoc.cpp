@@ -474,7 +474,7 @@ bool PhStripDoc::importMos(QString fileName)
 			for(int j = 0; j < 13; j++)
 				PhFileTool::readShort(f, logLevel);
 			PHDBG(logLevel) << PhTimeCode::stringFromFrame(frameIn, _tcType)
-			                    << PhTimeCode::stringFromFrame(frameOut, _tcType);
+			                << PhTimeCode::stringFromFrame(frameOut, _tcType);
 		}
 		for(int j = 0; j < 10; j++)
 			PhFileTool::readShort(f, logLevel);
