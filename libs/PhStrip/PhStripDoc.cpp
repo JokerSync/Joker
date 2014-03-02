@@ -186,10 +186,23 @@ bool PhStripDoc::importDetX(QString fileName)
 	return true;
 }
 
-bool PhStripDoc::checkMosTag(QFile &f, int logLevel, QString name)
+bool PhStripDoc::checkMosTag(QFile &f, int logLevel, QString expected)
 {
-	if(PhFileTool::PhFileTool::readString(f, logLevel, name) != name) {
-		PHDEBUG << "!!!!!!!!!!!!!!!" << "Error reading " << name << "!!!!!!!!!!!!!!!";
+	QString name = PhFileTool::readString(f, logLevel, expected);
+	if(name != expected) {
+		PHDEBUG << "!!!!!!!!!!!!!!!" << "Error reading " << name<< " instead of" << expected << "!!!!!!!!!!!!!!!";
+		f.close();
+		return false;
+	}
+	return true;
+}
+
+bool PhStripDoc::checkMosWord(QFile &f, int logLevel, unsigned short expected)
+{
+	QString name = QString::number(expected, 16);
+	unsigned short word = PhFileTool::readShort(f, logLevel, PHNQ(name));
+	if(word != expected) {
+		PHDEBUG << "!!!!!!!!!!!!!!!" << "Error reading " << PHNQ(QString::number(word, 16)) << "instead of" << name << "!!!!!!!!!!!!!!!";
 		f.close();
 		return false;
 	}
@@ -232,92 +245,109 @@ bool PhStripDoc::importMos(QString fileName)
 	int logLevel = 2;
 	int ok = 0;
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	if(!checkMosTag(f, logLevel, "NOBLURMOSAIC"))
 		return false;
 
-	PhFileTool::readShort(f, logLevel);
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xffff))
+		return false;
+
+	int strangeNumber3 = PhFileTool::readShort(f, ok, "strangeNumber3");
 
 	if(!checkMosTag(f, logLevel, "CMosaicDoc"))
 		return false;
 
-	PhFileTool::readShort(f, logLevel);
-
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xffff) || !checkMosWord(f, logLevel, 0x1))
+		return false;
 
 	if(!checkMosTag(f, logLevel, "CDocProjet"))
 		return false;
 
-	PhFileTool::readShort(f, logLevel);
-
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xffff) || !checkMosWord(f, logLevel, 0x1))
+		return false;
 
 	if(!checkMosTag(f, logLevel, "CDocProprietes"))
 		return false;
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	PhFileTool::readString(f, ok, "Titre de la versio originale");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	_title = PhFileTool::readString(f, ok, "Titre de la version adaptée");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	_season = PhFileTool::readString(f, ok, "Saison");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	_episode = PhFileTool::readString(f, ok, "Episode/bobine");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	PhFileTool::readString(f, logLevel, "Titre vo episode");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	PhFileTool::readString(f, ok, "Titre adapté de l'épisode");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	PhFileTool::readString(f, ok, "Durée");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	PhFileTool::readString(f, ok, "Date");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	PhFileTool::readString(f, ok, "Client");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	PhFileTool::readString(f, ok, "Commentaires");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	PhFileTool::readString(f, ok, "Détecteur");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	_authorName = PhFileTool::readString(f, ok, "Auteur");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
-	PhFileTool::readString(f, logLevel, "studio");
+	PhFileTool::readString(f, logLevel, "Studio");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
 	PhFileTool::readString(f, logLevel, "D.A.");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xfeff))
+		return false;
 
-	PhFileTool::readString(f, logLevel);
+	PhFileTool::readString(f, logLevel, "Ingénieur du son");
 
-	PhFileTool::readShort(f, logLevel);
+	if(!checkMosWord(f, logLevel, 0xffff))
+		return false;
 
 #warning /// @todo check strange number
 	// read a number that makes a difference wether it's 3 or 4 later
@@ -326,20 +356,20 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, logLevel, "CDocOptionsProjet"))
 		return false;
 
-	for(int j = 0; j < 4; j++)
-		PhFileTool::readShort(f, logLevel);
+	PhFileTool::readInt(f, logLevel, "tctype?");
+	PhFileTool::readInt(f, logLevel, "drop?");
 
 	if(strangeNumber1 == 4) {
-		qDebug() << "reading extrasection ???";
+//		qDebug() << "reading extrasection ???";
+//		PhFileTool::readInt(f, logLevel, "loop continuous numbering");
 		PhFileTool::readShort(f, logLevel);
-
 		PhFileTool::readShort(f, logLevel);
 	}
 
 	for(int j = 0; j < 12; j++)
 		PhFileTool::readShort(f, logLevel);
 
-	if(!checkMosTag(f, logLevel, "CDocFilm"))
+	if(!checkMosTag(f, ok, "CDocFilm"))
 		return false;
 
 	unsigned short peopleNumber = PhFileTool::readShort(f, ok, "people count");
@@ -350,7 +380,7 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, logLevel, "CDocPersonnage"))
 		return false;
 
-	int peopleLogLevel = 0;
+	int peopleLogLevel = ok;
 	for(int i = 0; i < peopleNumber; i++) {
 		PhFileTool::readInt(f, peopleLogLevel, "index");
 
@@ -383,13 +413,14 @@ bool PhStripDoc::importMos(QString fileName)
 
 	this->setVideoPath(PhFileTool::readString(f, ok, "Video path"));
 	this->setVideoTimestamp(PhFileTool::readInt(f, logLevel, "timestamp") / 12);
-	PHDEBUG << "Timestamp:" << PhTimeCode::stringFromFrame(_videoFrameStamp, _tcType);
+	PHDBG(ok) << "Timestamp:" << PhTimeCode::stringFromFrame(_videoFrameStamp, _tcType);
 
 	for(int j = 0; j < 2; j++)
 		PhFileTool::readShort(f, logLevel);
 
+	int cutLogLevel = logLevel;
 	if(strangeNumber1 == 4) {
-		PHDEBUG << "reading extrasection ???";
+		PHDBG(ok) << "reading extrasection ???";
 
 		PhFileTool::readShort(f, logLevel);
 		PhFileTool::readShort(f, logLevel);
@@ -401,7 +432,7 @@ bool PhStripDoc::importMos(QString fileName)
 
 		for(int j = 0; j < cutCount; j++) {
 			PhFrame cutFrame = _videoFrameStamp + PhFileTool::readInt(f, logLevel, "cut frame") / 12;
-			PHDEBUG << "cut:" << PhTimeCode::stringFromFrame(cutFrame, _tcType);
+			PHDBG(cutLogLevel) << "cut:" << PhTimeCode::stringFromFrame(cutFrame, _tcType);
 			PhFileTool::readShort(f, logLevel, "cut type?");
 			_cuts.append(new PhStripCut(PhStripCut::Simple, cutFrame));
 		}

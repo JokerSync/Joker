@@ -59,14 +59,14 @@ int countLoopDetectLength(PhStripDoc *doc, int loopNumber)
 		map[detect->getPeople()->getName()] += detectLength;
 		loopLength += detectLength;
 		PHDBG(2) << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeIn(), doc->getTCType()))
-		         << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
-		         << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()))
-		         << detectLength
-		         << detect->getPeople()->getName();
+				 << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
+				 << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()))
+				 << detectLength
+				 << detect->getPeople()->getName();
 	}
 
 	foreach(QString name, map.keys())
-	PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromFrame(map[name], doc->getTCType()));
+		PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromFrame(map[name], doc->getTCType()));
 
 	return loopLength;
 }
@@ -79,7 +79,7 @@ int displayDetectCountPerLoop(PhStripDoc *doc)
 	for(int loop = 0; loop <= doc->getLoops().count(); loop++) {
 		int detectLength = countLoopDetectLength(doc, loop);
 		int loopLength = computeLoopLength(doc, loop);
-//				PHDEBUG << loop << "\t:" << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()));
+		//				PHDEBUG << loop << "\t:" << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()));
 		PHDBG(3) << loop << "\t:" << detectLength << "\t" << loopLength << "\t" << detectLength * 100 / loopLength;
 		totalLength += detectLength;
 	}
@@ -100,10 +100,10 @@ int countDetectLength(PhStripDoc *doc)
 			int detectLength = detect->getTimeOut() - detect->getTimeIn();
 			length += detectLength;
 			PHDBG(2) << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeIn(), doc->getTCType()))
-			         << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
-			         << PHNQ(PhTimeCode::stringFromFrame(length, doc->getTCType()))
-			         << detectLength
-			         << people->getName();
+					 << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
+					 << PHNQ(PhTimeCode::stringFromFrame(length, doc->getTCType()))
+					 << detectLength
+					 << people->getName();
 		}
 		map[people->getName()] += length;
 		fileLength += length;
@@ -150,10 +150,12 @@ int main(int argc, char *argv[])
 			delete doc;
 	}
 
-	if(result)
-		PHDEBUG << "unit test failed!!!!";
-	else
-		PHDEBUG << "unit test succeed!!!";
+	if(performTest) {
+		if(result)
+			PHDEBUG << "unit test failed!!!!";
+		else
+			PHDEBUG << "unit test succeed!!!";
+	}
 
 	return result;
 }
