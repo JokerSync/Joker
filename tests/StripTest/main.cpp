@@ -137,24 +137,23 @@ int main(int argc, char *argv[])
 			performTest = true;
 	}
 
+	int result = 0;
 	if(performTest) {
 		PhStripDocTest docTest;
-		int test = QTest::qExec(&docTest);
-		if(test)
-			return test;
+		result = QTest::qExec(&docTest);
 	}
 
-	int totalLength = 0;
 	for(int i = 1; i < argc; i++) {
 		QString fileName = argv[i];
 		PhStripDoc *doc = openDoc(fileName);
 		if(doc)
-			totalLength += countDetectLength(doc);
+			delete doc;
 	}
 
-	PHDBG(1);
+	if(result)
+		PHDEBUG << "unit test failed!!!!";
+	else
+		PHDEBUG << "unit test succeed!!!";
 
-	PHDBG(1) << "TOTAL :\t" << PHNQ(PhTimeCode::stringFromFrame(totalLength, PhTimeCodeType25));
-
-	return 0;
+	return result;
 }

@@ -418,6 +418,7 @@ private:
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
 
 	bool checkMosTag(QFile &f, int logLevel, QString name);
+	PhStripText* readMosText(QFile &f, int logLevel);
 	bool _forceRatio169;
 };
 

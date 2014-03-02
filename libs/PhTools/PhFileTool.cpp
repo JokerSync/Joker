@@ -46,7 +46,7 @@ QString PhFileTool::readString(QFile &f, int logLevel, QString name)
 		ushort * tab = (ushort*)f.read(size * 2).data();
 		result = QString::fromUtf16(tab, size);
 	}
-	else{
+	else {
 		QByteArray array = f.read(size);
 		char * tab = array.data();
 		for(int i = 0; i < size; i++)
