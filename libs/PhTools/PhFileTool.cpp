@@ -32,21 +32,17 @@ QString PhFileTool::readString(QFile &f, int logLevel, QString name)
 {
 	int offset = f.pos();
 	ushort size = readChar(f);
-	bool useChar = false;
-
-	if(size == 0xff) {
-		size = readChar(f);
-		useChar = true;
-	}
-	else
-		size += readChar(f) << 8;
 
 	QString result = "";
-	if(useChar) {
+	if (size == 0xff) {
+		size = readChar(f);
+		if(size == 0xff)
+			size = readShort(f, 4);
 		ushort * tab = (ushort*)f.read(size * 2).data();
 		result = QString::fromUtf16(tab, size);
 	}
 	else {
+		size += readChar(f) << 8;
 		QByteArray array = f.read(size);
 		char * tab = array.data();
 		for(int i = 0; i < size; i++)

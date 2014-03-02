@@ -258,6 +258,7 @@ bool PhStripDoc::importMos(QString fileName)
 	int peopleLogLevel = logLevel;
 	int textLogLevel = logLevel;
 	int blocLogLevel = 0;
+	int cutLogLevel = 0;
 	int loopLogLevel = logLevel;
 
 	if(!checkMosWord(f, logLevel, 0xfeff))
@@ -445,7 +446,6 @@ bool PhStripDoc::importMos(QString fileName)
 	for(int j = 0; j < 2; j++)
 		PhFileTool::readShort(f, logLevel);
 
-	int cutLogLevel = logLevel;
 	if(strangeNumber1 == 4) {
 		PHDBG(ok) << "reading extrasection ???";
 
@@ -463,18 +463,19 @@ bool PhStripDoc::importMos(QString fileName)
 			PhFileTool::readShort(f, logLevel, "cut type?");
 			_cuts.append(new PhStripCut(PhStripCut::Simple, cutFrame));
 		}
-		PhFileTool::readShort(f, logLevel, "end cut");
 	}
 	else {
-		for(int j = 0; j < 4; j++)
+		for(int j = 0; j < 3; j++)
 			PhFileTool::readShort(f, logLevel);
 	}
 
+	PhFileTool::readString(f, 0, "script");
 
 	for(int j = 0; j < 4; j++)
-		PhFileTool::readShort(f, logLevel);
+		PhFileTool::readShort(f, 0);
 
-	if(!checkMosTag(f, blocLogLevel, "CDocDoublage"))
+	PHDEBUG << "==================================";
+	if(!checkMosTag(f, 4, "CDocDoublage"))
 		return false;
 
 	for(int j = 0; j < 12; j++)
@@ -500,10 +501,11 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, blocLogLevel, "CDocLangue"))
 		return false;
 
+	logLevel = 0;
 	PhFileTool::readShort(f, logLevel);
 	PhFileTool::readShort(f, logLevel);
 #warning /// @todo check why 1
-	int strangeNumber2 = PhFileTool::readShort(f, ok, "strange number 2");
+	int strangeNumber2 = PhFileTool::readShort(f, ok);
 	if(strangeNumber2 == 1) {
 		for(int j = 0; j < 6; j++)
 			PhFileTool::readShort(f, logLevel);
@@ -512,6 +514,8 @@ bool PhStripDoc::importMos(QString fileName)
 
 	if(!checkMosTag(f, blocLogLevel, "CDocBlocTexte"))
 		return false;
+
+	logLevel = 2;
 
 	while(true) {
 		readMosText(f, textLogLevel);
