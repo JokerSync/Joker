@@ -211,8 +211,8 @@ bool PhStripDoc::checkMosWord(QFile &f, int logLevel, unsigned short expected)
 
 void PhStripDoc::readMosText(QFile &f, int logLevel)
 {
-	int level = 4;
-	PhFileTool::readShort(f, level, "feff");
+	int level = 0;
+	PhFileTool::readShort(f, level, "text start");
 	QString content = PhFileTool::readString(f, 2, "content");
 
 	PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, 2, "tcin") / 12;
@@ -221,13 +221,12 @@ void PhStripDoc::readMosText(QFile &f, int logLevel)
 #warning TODO decode people and track number
 	PhStripText* text = new PhStripText(frameIn, NULL, frameOut, 0, content);
 
-	PhFileTool::readInt(f, level, "20?");
-	PhFileTool::readInt(f, level, "60?");
-	PhFileTool::readInt(f, level);
-	PhFileTool::readInt(f, level);
-	PhFileTool::readInt(f, level);
-	PhFileTool::readInt(f, level);
-	PhFileTool::readShort(f, level);
+	PhFileTool::readInt(f, level, "text");
+	PhFileTool::readInt(f, level, "text");
+	PhFileTool::readInt(f, level, "text");
+	PhFileTool::readInt(f, level, "text");
+	PhFileTool::readInt(f, level, "text");
+	PhFileTool::readInt(f, level, "text");
 
 	PHDBG(logLevel) << PHNQ(PhTimeCode::stringFromFrame(frameIn, _tcType))
 	                << "->"
@@ -501,8 +500,11 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, ok, "CDocBlocTexte"))
 		return false;
 
-	for(int i = 0; i < textCount; i++)
+	while(true) {
 		readMosText(f, textLogLevel);
+		if(PhFileTool::readShort(f, logLevel) != 0x800c)
+			break;
+	}
 
 	for(int j = 0; j < 4; j++)
 		PhFileTool::readShort(f, 0);
@@ -534,8 +536,11 @@ bool PhStripDoc::importMos(QString fileName)
 	if(strangeNumber2 == 1) {
 		for(int j = 0; j < 20; j++)
 			PhFileTool::readShort(f, logLevel, "before text");
-		for(int i = 0; i < 191; i++)
+		while(true) {
 			readMosText(f, textLogLevel);
+			if(PhFileTool::readShort(f, logLevel) != 0x800c)
+				break;
+		}
 		PhFileTool::readShort(f, logLevel, "after text");
 		PhFileTool::readShort(f, logLevel, "after text");
 	}
@@ -546,6 +551,7 @@ bool PhStripDoc::importMos(QString fileName)
 
 #warning TODO insert text only one time
 		readMosText(f, textLogLevel);
+		PhFileTool::readShort(f, logLevel);
 
 		for(int j = 0; j < 17; j++)
 			PhFileTool::readShort(f, logLevel);
