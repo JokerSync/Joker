@@ -209,20 +209,30 @@ bool PhStripDoc::checkMosWord(QFile &f, int logLevel, unsigned short expected)
 	return true;
 }
 
-PhStripText *PhStripDoc::readMosText(QFile &f, int logLevel)
+void PhStripDoc::readMosText(QFile &f, int logLevel)
 {
-	QString content = PhFileTool::readString(f, logLevel, "content");
+	QString content = PhFileTool::readString(f, 2, "content");
 
-	PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, logLevel, "tcin") / 12;
-	PhFrame frameOut = _videoFrameStamp + PhFileTool::readInt(f, logLevel, "tcout") / 12;
+	PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, 2, "tcin") / 12;
+	PhFrame frameOut = _videoFrameStamp + PhFileTool::readInt(f, 2, "tcout") / 12;
 
 #warning TODO decode people and track number
 	PhStripText* text = new PhStripText(frameIn, NULL, frameOut, 0, content);
-	for(int j = 0; j < 14; j++)
-		PhFileTool::readShort(f, logLevel);
 
+	PhFileTool::readInt(f, 4, "alway 20?");
+	PhFileTool::readInt(f, 4, "alway 60?");
+	PhFileTool::readInt(f, 4);
+	PhFileTool::readInt(f, 4);
+	PhFileTool::readInt(f, 4);
+	PhFileTool::readInt(f, 4);
+	PhFileTool::readShort(f, 4);
+	PhFileTool::readShort(f, 4);
+
+	PHDBG(logLevel) << PHNQ(PhTimeCode::stringFromFrame(frameIn, _tcType))
+	                << "->"
+	                << PHNQ(PhTimeCode::stringFromFrame(frameOut, _tcType))
+	                << PHNQ(content);
 	_texts.append(text);
-	return text;
 }
 
 bool PhStripDoc::importMos(QString fileName)
@@ -244,6 +254,8 @@ bool PhStripDoc::importMos(QString fileName)
 
 	int logLevel = 2;
 	int ok = 0;
+	int peopleLogLevel = ok;
+	int textLogLevel = logLevel;
 
 	if(!checkMosWord(f, logLevel, 0xfeff))
 		return false;
@@ -380,7 +392,6 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, logLevel, "CDocPersonnage"))
 		return false;
 
-	int peopleLogLevel = ok;
 	for(int i = 0; i < peopleNumber; i++) {
 		PhFileTool::readInt(f, peopleLogLevel, "index");
 
@@ -389,7 +400,8 @@ bool PhStripDoc::importMos(QString fileName)
 		QString name = PhFileTool::readString(f, peopleLogLevel, "name");
 		_peoples[name] = new PhPeople(name, "#000000");
 
-		for(int j = 0; j < 8; j++)
+		PhFileTool::readInt(f, ok, "line number");
+		for(int j = 0; j < 6; j++)
 			PhFileTool::readShort(f, logLevel);
 
 		if(PhFileTool::readShort(f, logLevel, "test") != 0x8006) {
@@ -491,7 +503,7 @@ bool PhStripDoc::importMos(QString fileName)
 	PhFileTool::readShort(f, logLevel);
 
 	for(int i = 0; i < textCount; i++)
-		readMosText(f, logLevel);
+		readMosText(f, textLogLevel);
 
 	for(int j = 0; j < 3; j++)
 		PhFileTool::readShort(f, logLevel);
@@ -524,7 +536,7 @@ bool PhStripDoc::importMos(QString fileName)
 		for(int j = 0; j < 21; j++)
 			PhFileTool::readShort(f, logLevel, "before text");
 		for(int i = 0; i < 191; i++)
-			readMosText(f, logLevel);
+			readMosText(f, textLogLevel);
 		PhFileTool::readShort(f, logLevel, "after text");
 	}
 	else if(strangeNumber1 == 4) {
@@ -533,7 +545,7 @@ bool PhStripDoc::importMos(QString fileName)
 			PhFileTool::readShort(f, logLevel);
 
 #warning TODO insert text only one time
-		readMosText(f, logLevel);
+		readMosText(f, textLogLevel);
 
 		for(int j = 0; j < 16; j++)
 			PhFileTool::readShort(f, logLevel);

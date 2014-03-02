@@ -59,14 +59,14 @@ int countLoopDetectLength(PhStripDoc *doc, int loopNumber)
 		map[detect->getPeople()->getName()] += detectLength;
 		loopLength += detectLength;
 		PHDBG(2) << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeIn(), doc->getTCType()))
-				 << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
-				 << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()))
-				 << detectLength
-				 << detect->getPeople()->getName();
+		         << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
+		         << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()))
+		         << detectLength
+		         << detect->getPeople()->getName();
 	}
 
 	foreach(QString name, map.keys())
-		PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromFrame(map[name], doc->getTCType()));
+	PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromFrame(map[name], doc->getTCType()));
 
 	return loopLength;
 }
@@ -100,10 +100,10 @@ int countDetectLength(PhStripDoc *doc)
 			int detectLength = detect->getTimeOut() - detect->getTimeIn();
 			length += detectLength;
 			PHDBG(2) << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeIn(), doc->getTCType()))
-					 << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
-					 << PHNQ(PhTimeCode::stringFromFrame(length, doc->getTCType()))
-					 << detectLength
-					 << people->getName();
+			         << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
+			         << PHNQ(PhTimeCode::stringFromFrame(length, doc->getTCType()))
+			         << detectLength
+			         << people->getName();
 		}
 		map[people->getName()] += length;
 		fileLength += length;
