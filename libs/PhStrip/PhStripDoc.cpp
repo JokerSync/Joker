@@ -211,7 +211,7 @@ bool PhStripDoc::checkMosWord(QFile &f, int logLevel, unsigned short expected)
 
 void PhStripDoc::readMosText(QFile &f, int logLevel)
 {
-	int level = 0;
+	int level = 4;
 	PhFileTool::readShort(f, level, "text start");
 	QString content = PhFileTool::readString(f, 2, "content");
 
@@ -252,7 +252,7 @@ bool PhStripDoc::importMos(QString fileName)
 
 	this->reset();
 
-	int logLevel = 0;
+	int logLevel = 2;
 	int ok = 0;
 	int peopleLogLevel = logLevel;
 	int textLogLevel = ok;
@@ -368,8 +368,20 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, logLevel, "CDocOptionsProjet"))
 		return false;
 
-	PhFileTool::readInt(f, logLevel, "tctype?");
-	PhFileTool::readInt(f, logLevel, "drop?");
+	unsigned short type = PhFileTool::readInt(f, logLevel, "type");
+	bool drop = PhFileTool::readInt(f, logLevel, "drop") != 0;
+	switch(type) {
+	case 0:
+		if(drop)
+			_tcType = PhTimeCodeType2398;
+		else
+			_tcType = PhTimeCodeType24;
+		break;
+	default:
+		_tcType = PhTimeCodeType25;
+		break;
+	}
+	PHDBG(ok) << "tc type:" << _tcType;
 
 	if(strangeNumber1 == 4) {
 //		qDebug() << "reading extrasection ???";
