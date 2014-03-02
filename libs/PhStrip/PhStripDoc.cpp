@@ -386,16 +386,16 @@ bool PhStripDoc::importMos(QString fileName)
 	PHDEBUG << "Timestamp:" << PhTimeCode::stringFromFrame(_videoFrameStamp, _tcType);
 
 	for(int j = 0; j < 2; j++)
-		PhFileTool::readShort(f, ok);
+		PhFileTool::readShort(f, logLevel);
 
 	if(strangeNumber1 == 4) {
 		PHDEBUG << "reading extrasection ???";
 
-		PhFileTool::readShort(f, ok);
-		PhFileTool::readShort(f, ok);
+		PhFileTool::readShort(f, logLevel);
+		PhFileTool::readShort(f, logLevel);
 		unsigned short cutCount = PhFileTool::readInt(f, ok, "cut count");
-		PhFileTool::readShort(f, ok);
-		PhFileTool::readShort(f, ok);
+		PhFileTool::readShort(f, logLevel);
+		PhFileTool::readShort(f, logLevel);
 		if(!checkMosTag(f, ok, "CDocPlan"))
 			return false;
 
@@ -444,22 +444,21 @@ bool PhStripDoc::importMos(QString fileName)
 
 	unsigned short textCount = PhFileTool::readShort(f, ok, "text count");
 
-	PhFileTool::readShort(f, ok);
+	PhFileTool::readShort(f, logLevel);
 #warning /// @todo check why 1
 	int strangeNumber2 = PhFileTool::readShort(f, ok, "strange number 2");
 	if(strangeNumber2 == 1) {
 		for(int j = 0; j < 6; j++)
-			PhFileTool::readShort(f, ok);
+			PhFileTool::readShort(f, logLevel);
 		textCount = 15;
 	}
-	PhFileTool::readShort(f, ok, "inter");
+	PhFileTool::readShort(f, logLevel);
 
 	if(!checkMosTag(f, ok, "CDocBlocTexte"))
 		return false;
 
-	PhFileTool::readShort(f, ok, "after bt");
+	PhFileTool::readShort(f, logLevel);
 
-	int textLogLevel = ok;
 	for(int i = 0; i < textCount; i++)
 		readMosText(f, logLevel);
 
