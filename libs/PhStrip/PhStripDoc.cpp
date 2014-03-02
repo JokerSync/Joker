@@ -211,6 +211,8 @@ bool PhStripDoc::checkMosWord(QFile &f, int logLevel, unsigned short expected)
 
 void PhStripDoc::readMosText(QFile &f, int logLevel)
 {
+	int level = 4;
+	PhFileTool::readShort(f, level, "feff");
 	QString content = PhFileTool::readString(f, 2, "content");
 
 	PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, 2, "tcin") / 12;
@@ -219,14 +221,13 @@ void PhStripDoc::readMosText(QFile &f, int logLevel)
 #warning TODO decode people and track number
 	PhStripText* text = new PhStripText(frameIn, NULL, frameOut, 0, content);
 
-	PhFileTool::readInt(f, 4, "alway 20?");
-	PhFileTool::readInt(f, 4, "alway 60?");
-	PhFileTool::readInt(f, 4);
-	PhFileTool::readInt(f, 4);
-	PhFileTool::readInt(f, 4);
-	PhFileTool::readInt(f, 4);
-	PhFileTool::readShort(f, 4);
-	PhFileTool::readShort(f, 4);
+	PhFileTool::readInt(f, level, "20?");
+	PhFileTool::readInt(f, level, "60?");
+	PhFileTool::readInt(f, level);
+	PhFileTool::readInt(f, level);
+	PhFileTool::readInt(f, level);
+	PhFileTool::readInt(f, level);
+	PhFileTool::readShort(f, level);
 
 	PHDBG(logLevel) << PHNQ(PhTimeCode::stringFromFrame(frameIn, _tcType))
 	                << "->"
@@ -252,10 +253,10 @@ bool PhStripDoc::importMos(QString fileName)
 
 	this->reset();
 
-	int logLevel = 2;
+	int logLevel = 0;
 	int ok = 0;
-	int peopleLogLevel = ok;
-	int textLogLevel = logLevel;
+	int peopleLogLevel = logLevel;
+	int textLogLevel = ok;
 
 	if(!checkMosWord(f, logLevel, 0xfeff))
 		return false;
@@ -500,13 +501,11 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, ok, "CDocBlocTexte"))
 		return false;
 
-	PhFileTool::readShort(f, logLevel);
-
 	for(int i = 0; i < textCount; i++)
 		readMosText(f, textLogLevel);
 
-	for(int j = 0; j < 3; j++)
-		PhFileTool::readShort(f, logLevel);
+	for(int j = 0; j < 4; j++)
+		PhFileTool::readShort(f, 0);
 
 	if(strangeNumber2 == 1) {
 		if(!checkMosTag(f, ok, "CDocBlocDetection"))
@@ -533,21 +532,22 @@ bool PhStripDoc::importMos(QString fileName)
 		PhFileTool::readShort(f, logLevel);
 
 	if(strangeNumber2 == 1) {
-		for(int j = 0; j < 21; j++)
+		for(int j = 0; j < 20; j++)
 			PhFileTool::readShort(f, logLevel, "before text");
 		for(int i = 0; i < 191; i++)
 			readMosText(f, textLogLevel);
 		PhFileTool::readShort(f, logLevel, "after text");
+		PhFileTool::readShort(f, logLevel, "after text");
 	}
 	else if(strangeNumber1 == 4) {
 		qDebug() << "reading extrasection containing phrase 2:";
-		for(int j = 0; j < 11; j++)
+		for(int j = 0; j < 10; j++)
 			PhFileTool::readShort(f, logLevel);
 
 #warning TODO insert text only one time
 		readMosText(f, textLogLevel);
 
-		for(int j = 0; j < 16; j++)
+		for(int j = 0; j < 17; j++)
 			PhFileTool::readShort(f, logLevel);
 	}
 
