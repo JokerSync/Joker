@@ -374,10 +374,6 @@ private:
 	 * Path to the video content.
 	 */
 	QString _videoPath;
-	/**
-	 * Amount of time units per second.
-	 */
-	int _timeScale;
 
 	PhTimeCodeType _tcType;
 

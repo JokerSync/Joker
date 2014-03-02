@@ -55,7 +55,6 @@ bool PhStripDoc::importDetX(QString fileName)
 	_generator = "Cappella";
 	//With DetX files, fps is always 25 no drop
 	_tcType = PhTimeCodeType25;
-	_timeScale = 25.00;
 
 	// Reading the header
 	if(detX.elementsByTagName("header").count()) {
@@ -312,7 +311,6 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, 
 	_episode = "1";
 	_season = "1";
 	_tcType = PhTimeCodeType25;
-	_timeScale = 25.00;
 	_videoFrameStamp = videoTimeCode;
 	_lastFrame = _videoFrameStamp;
 
@@ -364,7 +362,6 @@ void PhStripDoc::reset()
 	_loops.clear();
 	_nbTexts = 0;
 	_texts.clear();
-	_timeScale = 25; //TODO fix me
 	_title = "";
 	_translatedTitle = "";
 	_episode = "";
