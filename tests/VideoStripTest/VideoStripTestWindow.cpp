@@ -149,7 +149,7 @@ void VideoStripTestWindow::on_actionGo_To_triggered()
 
 void VideoStripTestWindow::on_actionOpen_Video_triggered()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"), QDir::homePath());
 	openVideoFile(fileName); // TODO: show error in case of error
 }
 

@@ -33,7 +33,7 @@ bool PhTimeCodeEdit::isTimeCode()
 {
 	PhFrame frame;
 	QString text;
-	frame = PhTimeCode::frameFromString(this->text(),_tcType);
+	frame = PhTimeCode::frameFromString(this->text(), _tcType);
 	text = PhTimeCode::stringFromFrame(frame, _tcType);
 
 	if(text == this->text())

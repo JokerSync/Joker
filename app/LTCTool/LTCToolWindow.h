@@ -53,7 +53,7 @@ private slots:
 	 * reset clock to tcIn if tc > tcOut
 	 */
 	void onFrameChanged(PhFrame, PhTimeCodeType);
-	void onSlaveFrameChanged(PhFrame,PhTimeCodeType);
+	void onSlaveFrameChanged(PhFrame, PhTimeCodeType);
 
 	void on_generateCheckBox_clicked(bool checked);
 

@@ -640,7 +640,7 @@ void JokerWindow::on_actionSave_as_triggered()
 			fileName = lastFolder + "/" + info.completeBaseName() + ".strip";
 	}
 
-	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName,"*.strip");
+	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.strip");
 	if(fileName != "") {
 		if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
 			_needToSave = false;

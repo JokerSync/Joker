@@ -405,7 +405,7 @@ private:
 	QList<PhStripDetect *> _detects;
 
 	int _nbTexts;
-	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
+	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track);
 	bool _forceRatio169;
 };
 

@@ -24,14 +24,14 @@ Synchronizer::Synchronizer()
 void Synchronizer::setStripClock(PhClock *clock)
 {
 	_stripClock = clock;
-	connect(_stripClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onStripFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_stripClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onStripFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_stripClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onStripRateChanged(PhRate)));
 }
 
 void Synchronizer::setVideoClock(PhClock *clock)
 {
 	_videoClock = clock;
-	connect(_videoClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onVideoFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_videoClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onVideoFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_videoClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onVideoRateChanged(PhRate)));
 	connect(_videoClock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onVideoTCTypeChanged(PhTimeCodeType)));
 }
@@ -41,7 +41,7 @@ void Synchronizer::setSyncClock(PhClock *clock, SyncType type)
 	_syncClock = clock;
 	_syncType = type;
 	if(_syncClock) {
-		connect(_syncClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onSyncFrameChanged(PhFrame,PhTimeCodeType)));
+		connect(_syncClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onSyncFrameChanged(PhFrame, PhTimeCodeType)));
 		connect(_syncClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onSyncRateChanged(PhRate)));
 	}
 }

@@ -182,7 +182,7 @@ void Mwindow::play() {
 int Mwindow::changeVolume(int vol) { /* Called on volume slider change */
 
 	if (vlcPlayer)
-		return libvlc_audio_set_volume(vlcPlayer,vol);
+		return libvlc_audio_set_volume(vlcPlayer, vol);
 
 	return 0;
 }

@@ -26,11 +26,11 @@ LTCToolWindow::LTCToolWindow(QSettings *settings, QWidget *parent) :
 	ui->widgetMaster->setFirstFrame(_settings->value("firstFrame", 0).toInt());
 	ui->widgetMaster->setClock(_ltcWriter.clock());
 
-	connect(_ltcReader.clock(),  SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onSlaveFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_ltcReader.clock(),  SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onSlaveFrameChanged(PhFrame, PhTimeCodeType)));
 
 	updateInfos();
 
-	connect(_ltcWriter.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_ltcWriter.clock(), SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 }
 
 LTCToolWindow::~LTCToolWindow()

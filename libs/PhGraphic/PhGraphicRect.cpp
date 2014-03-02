@@ -22,8 +22,8 @@ void PhGraphicRect::setSize(int w, int h)
 }
 void PhGraphicRect::setRect(int x, int y, int w, int h)
 {
-	this->setSize(w,h);
-	this->setPosition(x,y,this->getZ());
+	this->setSize(w, h);
+	this->setPosition(x, y, this->getZ());
 }
 
 void PhGraphicRect::setHeight(int h)
