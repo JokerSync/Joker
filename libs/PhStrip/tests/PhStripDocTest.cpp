@@ -167,6 +167,8 @@ void PhStripDocTest::importMosTest01()
 	QCOMPARE(f2s(_doc.getTexts()[2]->getTimeIn()), QString("00:00:01:16"));
 	QCOMPARE(f2s(_doc.getTexts()[2]->getTimeOut()), QString("00:00:02:03"));
 
+	// Detect test
+	QCOMPARE(_doc.getDetects().count(), 4);
 }
 
 void PhStripDocTest::importMosTest02()
@@ -211,6 +213,9 @@ void PhStripDocTest::importMosTest02()
 	QCOMPARE(_doc.getTexts()[1]->getContent(), QString("Bonjour, Pierre."));
 	QCOMPARE(f2s(_doc.getTexts()[1]->getTimeIn()), QString("01:00:04:00"));
 	QCOMPARE(f2s(_doc.getTexts()[1]->getTimeOut()), QString("01:00:06:00"));
+
+	// Detect test
+	QCOMPARE(_doc.getDetects().count(), 0);
 }
 
 void PhStripDocTest::importMosTest03()
@@ -258,6 +263,9 @@ void PhStripDocTest::importMosTest03()
 //	QCOMPARE(_doc.getTexts()[1]->getContent(), QString("Bonjour, Pierre."));
 //	QCOMPARE(f2s(_doc.getTexts()[1]->getTimeIn()), QString("01:00:04:00"));
 //	QCOMPARE(f2s(_doc.getTexts()[1]->getTimeOut()), QString("01:00:06:00"));
+
+	// Detect test
+	QCOMPARE(_doc.getDetects().count(), 24);
 }
 
 void PhStripDocTest::getPeopleByNameTest()
