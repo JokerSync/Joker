@@ -190,7 +190,7 @@ bool PhStripDoc::checkMosTag(QFile &f, int logLevel, QString expected)
 {
 	QString name = PhFileTool::readString(f, logLevel, expected);
 	if(name != expected) {
-		PHDEBUG << "!!!!!!!!!!!!!!!" << "Error reading " << name<< " instead of" << expected << "!!!!!!!!!!!!!!!";
+		PHDEBUG << "!!!!!!!!!!!!!!!" << "Error reading " << expected << "!!!!!!!!!!!!!!!";
 		f.close();
 		return false;
 	}
@@ -256,7 +256,8 @@ bool PhStripDoc::importMos(QString fileName)
 	int ok = 0;
 	int propLogLevel = logLevel;
 	int peopleLogLevel = logLevel;
-	int textLogLevel = logLevel;
+	int textLogLevel = 0;
+	int detectLogLevel = logLevel;
 	int blocLogLevel = 0;
 	int cutLogLevel = 0;
 	int loopLogLevel = logLevel;
@@ -469,13 +470,12 @@ bool PhStripDoc::importMos(QString fileName)
 			PhFileTool::readShort(f, logLevel);
 	}
 
-	PhFileTool::readString(f, 0, "script");
+	QString script = PhFileTool::readString(f, 0, "script");
 
 	for(int j = 0; j < 4; j++)
-		PhFileTool::readShort(f, 0);
+		PhFileTool::readShort(f, logLevel);
 
-	PHDEBUG << "==================================";
-	if(!checkMosTag(f, 4, "CDocDoublage"))
+	if(!checkMosTag(f, blocLogLevel, "CDocDoublage"))
 		return false;
 
 	for(int j = 0; j < 12; j++)
@@ -526,16 +526,23 @@ bool PhStripDoc::importMos(QString fileName)
 	for(int j = 0; j < 4; j++)
 		PhFileTool::readShort(f, logLevel);
 
-	if(strangeNumber2 == 1) {
+	if(script.size() > 0) {
+		for(int j = 0; j < 6; j++)
+			PhFileTool::readShort(f, logLevel);
+	}
+
+	if((strangeNumber2 == 1) || (script.size() > 0)) {
 		if(!checkMosTag(f, blocLogLevel, "CDocBlocDetection"))
 			return false;
-		for(int i = 0; i < 24; i++) {
-			PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, logLevel, "tcin") / 12;
-			PhFrame frameOut = _videoFrameStamp + PhFileTool::readInt(f, logLevel, "tcout") / 12;
-			for(int j = 0; j < 13; j++)
-				PhFileTool::readShort(f, logLevel);
-			PHDBG(logLevel) << PhTimeCode::stringFromFrame(frameIn, _tcType)
+		while(true) {
+			PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, detectLogLevel, "tcin") / 12;
+			PhFrame frameOut = _videoFrameStamp + PhFileTool::readInt(f, detectLogLevel, "tcout") / 12;
+			for(int j = 0; j < 12; j++)
+				PhFileTool::readShort(f, detectLogLevel);
+			PHDBG(detectLogLevel) << PhTimeCode::stringFromFrame(frameIn, _tcType)
 			                << PhTimeCode::stringFromFrame(frameOut, _tcType);
+			if(PhFileTool::readShort(f, detectLogLevel, "follow detect") != 0x800d)
+				break;
 		}
 		for(int j = 0; j < 10; j++)
 			PhFileTool::readShort(f, logLevel);
@@ -546,13 +553,18 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, blocLogLevel, "CDocEtiquetteNom"))
 		return false;
 
-	PhFileTool::readInt(f, ok, "tcin");
-	for(int j = 0; j < 7; j++)
-		PhFileTool::readShort(f, logLevel);
+	while(true) {
+		PhFrame labelFrame = _videoFrameStamp + PhFileTool::readInt(f, logLevel, "label tcin") / 12;
+		for(int j = 0; j < 6; j++)
+			PhFileTool::readShort(f, logLevel);
+		PHDBG(0) << PhTimeCode::stringFromFrame(labelFrame, _tcType);
+		if(PhFileTool::readShort(f, 0, "follow label") != 0x800e)
+			break;
+	}
 
 	if(strangeNumber2 == 1) {
-		for(int j = 0; j < 20; j++)
-			PhFileTool::readShort(f, logLevel, "before text");
+		for(int j = 0; j < 2; j++)
+			PhFileTool::readShort(f, 0, "before text");
 		while(true) {
 			readMosText(f, textLogLevel);
 			if(PhFileTool::readShort(f, logLevel) != 0x800c)
@@ -564,7 +576,7 @@ bool PhStripDoc::importMos(QString fileName)
 	else if(strangeNumber1 == 4) {
 		qDebug() << "reading extrasection containing phrase 2:";
 		for(int j = 0; j < 10; j++)
-			PhFileTool::readShort(f, logLevel);
+			PhFileTool::readShort(f, 0);
 
 #warning TODO insert text only one time
 		readMosText(f, textLogLevel);
