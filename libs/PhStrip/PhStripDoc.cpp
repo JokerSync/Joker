@@ -235,6 +235,91 @@ void PhStripDoc::readMosText(QFile &f, int logLevel)
 	_texts.append(text);
 }
 
+bool PhStripDoc::readMosProperties(QFile &f, int logLevel)
+{
+	int level = 4;
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, logLevel, "Titre de la versio originale");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	_title = PhFileTool::readString(f, logLevel, "Titre de la version adaptée");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	_season = PhFileTool::readString(f, logLevel, "Saison");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	_episode = PhFileTool::readString(f, logLevel, "Episode/bobine");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, level, "Titre vo episode");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, logLevel, "Titre adapté de l'épisode");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, logLevel, "Durée");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, logLevel, "Date");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, logLevel, "Client");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, logLevel, "Commentaires");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, logLevel, "Détecteur");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	_authorName = PhFileTool::readString(f, logLevel, "Auteur");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, level, "Studio");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, level, "D.A.");
+
+	if(!checkMosWord(f, level, 0xfeff))
+		return false;
+
+	PhFileTool::readString(f, level, "Ingénieur du son");
+
+	if(!checkMosWord(f, level, 0xffff))
+		return false;
+
+	return true;
+}
+
 bool PhStripDoc::importMos(QString fileName)
 {
 	PHDEBUG << "===============" << fileName << "===============";
@@ -288,83 +373,7 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, blocLogLevel, "CDocProprietes"))
 		return false;
 
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, propLogLevel, "Titre de la versio originale");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	_title = PhFileTool::readString(f, propLogLevel, "Titre de la version adaptée");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	_season = PhFileTool::readString(f, propLogLevel, "Saison");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	_episode = PhFileTool::readString(f, propLogLevel, "Episode/bobine");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, logLevel, "Titre vo episode");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, propLogLevel, "Titre adapté de l'épisode");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, propLogLevel, "Durée");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, propLogLevel, "Date");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, propLogLevel, "Client");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, propLogLevel, "Commentaires");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, propLogLevel, "Détecteur");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	_authorName = PhFileTool::readString(f, propLogLevel, "Auteur");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, logLevel, "Studio");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, logLevel, "D.A.");
-
-	if(!checkMosWord(f, logLevel, 0xfeff))
-		return false;
-
-	PhFileTool::readString(f, logLevel, "Ingénieur du son");
-
-	if(!checkMosWord(f, logLevel, 0xffff))
-		return false;
+	readMosProperties(f, propLogLevel);
 
 #warning /// @todo check strange number
 	// read a number that makes a difference wether it's 3 or 4 later

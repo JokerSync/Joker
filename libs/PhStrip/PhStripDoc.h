@@ -420,6 +420,7 @@ private:
 	bool checkMosTag(QFile &f, int logLevel, QString expected);
 	bool checkMosWord(QFile &f, int logLevel, unsigned short expected);
 	void readMosText(QFile &f, int logLevel);
+	bool readMosProperties(QFile &f, int logLevel);
 	bool _forceRatio169;
 };
 
