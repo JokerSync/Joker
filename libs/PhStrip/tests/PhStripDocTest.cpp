@@ -128,6 +128,8 @@ void PhStripDocTest::importMosTest01()
 {
 	QVERIFY(_doc.importMos("test01.mos"));
 
+	QVERIFY(_doc.getTCType() == PhTimeCodeType25);
+
 	QCOMPARE(_doc.getAuthorName(), QString("auteur"));
 
 	QCOMPARE(_doc.getVideoPath(), QString(""));
@@ -171,6 +173,8 @@ void PhStripDocTest::importMosTest02()
 {
 	QVERIFY(_doc.importMos("test02.mos"));
 
+	QVERIFY(_doc.getTCType() == PhTimeCodeType25);
+
 	QCOMPARE(_doc.getVideoPath(), QString("C:\\Users\\Matthhou\\Desktop\\Burn Notice\\710\\BurnNotice_BCI710_VOVI.mov"));
 #warning TODO Matthias told me that the timestamp was in fact 00:58:00:00...
 	QCOMPARE(f2s(_doc.getVideoTimestamp()), QString("00:58:24:00"));
@@ -207,6 +211,53 @@ void PhStripDocTest::importMosTest02()
 	QCOMPARE(_doc.getTexts()[1]->getContent(), QString("Bonjour, Pierre."));
 	QCOMPARE(f2s(_doc.getTexts()[1]->getTimeIn()), QString("01:00:04:00"));
 	QCOMPARE(f2s(_doc.getTexts()[1]->getTimeOut()), QString("01:00:06:00"));
+}
+
+void PhStripDocTest::importMosTest03()
+{
+	QVERIFY(_doc.importMos("test03.mos"));
+
+	QVERIFY(_doc.getTCType() == PhTimeCodeType24);
+
+	QCOMPARE(_doc.getVideoPath(), QString("Z:\\MOT POUR MO\\AU FIL D'ARIANE_DETECTION\\jpegAFA_BOB 06_SEQ 30_PISTES SEPARES_H264.mov"));
+	QCOMPARE(f2s(_doc.getVideoTimestamp()), QString("05:59:50:00"));
+
+	// Test peoples
+	QCOMPARE(_doc.getPeoples().count(), 2);
+
+	PhPeople * noName = _doc.getPeopleByName("");
+	QVERIFY(noName != NULL);
+	QCOMPARE(noName->getName(), QString(""));
+
+	PhPeople * denis = _doc.getPeopleByName("Denis");
+	QVERIFY(denis != NULL);
+	QCOMPARE(denis->getName(), QString("Denis"));
+
+	// Test cuts
+	QCOMPARE(_doc.getCuts().count(), 29);
+	QCOMPARE(f2s(_doc.getCuts()[0]->getTimeIn()), QString("05:59:50:00"));
+	QCOMPARE(f2s(_doc.getCuts()[1]->getTimeIn()), QString("05:59:58:00"));
+	QCOMPARE(f2s(_doc.getCuts()[2]->getTimeIn()), QString("06:00:00:00"));
+	QCOMPARE(f2s(_doc.getCuts()[3]->getTimeIn()), QString("06:00:05:22"));
+	QCOMPARE(f2s(_doc.getCuts()[4]->getTimeIn()), QString("06:00:08:05"));
+
+	// Test loops
+	QCOMPARE(_doc.getLoops().count(), 1);
+	QCOMPARE(f2s(_doc.getLoops()[0]->getTimeIn()), QString("06:00:01:00"));
+
+	// Test texts
+	QCOMPARE(_doc.getTexts().count(), 206);
+//#warning TODO reenable this test for complete acceptance:
+////	QCOMPARE(_doc.getTexts()[0]->getPeople(), pierre);
+//	QCOMPARE(_doc.getTexts()[0]->getContent(), QString("Bonjour, Marie."));
+//	QCOMPARE(f2s(_doc.getTexts()[0]->getTimeIn()), QString("01:00:00:00"));
+//	QCOMPARE(f2s(_doc.getTexts()[0]->getTimeOut()), QString("01:00:02:00"));
+
+//#warning TODO reenable this test for complete acceptance:
+////	QCOMPARE(_doc.getTexts()[1]->getPeople(), marie);
+//	QCOMPARE(_doc.getTexts()[1]->getContent(), QString("Bonjour, Pierre."));
+//	QCOMPARE(f2s(_doc.getTexts()[1]->getTimeIn()), QString("01:00:04:00"));
+//	QCOMPARE(f2s(_doc.getTexts()[1]->getTimeOut()), QString("01:00:06:00"));
 }
 
 void PhStripDocTest::getPeopleByNameTest()

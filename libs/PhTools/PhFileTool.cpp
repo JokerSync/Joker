@@ -31,22 +31,26 @@ int PhFileTool::readInt(QFile &f, int logLevel, QString name)
 QString PhFileTool::readString(QFile &f, int logLevel, QString name)
 {
 	int offset = f.pos();
-	ushort size = readChar(f);
+	ushort size = readShort(f, 4);
 
 	QString result = "";
-	if (size == 0xff) {
+	switch(size) {
+	case 0xfeff:
+		readChar(f);
 		size = readChar(f);
-		if(size == 0xff)
-			size = readShort(f, 4);
-		ushort * tab = (ushort*)f.read(size * 2).data();
-		result = QString::fromUtf16(tab, size);
-	}
-	else {
-		size += readChar(f) << 8;
-		QByteArray array = f.read(size);
-		char * tab = array.data();
-		for(int i = 0; i < size; i++)
-			result += tab[i];
+		result = QString::fromUtf16((ushort*)f.read(size * 2).data(), size);
+		break;
+	case 0xffff:
+		size = readShort(f, 4);
+		result = QString::fromUtf16((ushort*)f.read(size * 2).data(), size);
+		break;
+	default:
+		{
+			QByteArray array = f.read(size);
+			char * tab = array.data();
+			for(int i = 0; i < size; i++)
+				result += tab[i];
+		}
 	}
 
 	PHDBG(logLevel) << QString::number(offset, 16).toStdString().c_str() << name.toStdString().c_str() << result;

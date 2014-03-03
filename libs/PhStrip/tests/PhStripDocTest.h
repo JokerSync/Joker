@@ -25,6 +25,7 @@ private slots:
 
 	void importMosTest01();
 	void importMosTest02();
+	void importMosTest03();
 
 	// Get people
 	void getPeopleByNameTest();
