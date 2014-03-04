@@ -12,9 +12,11 @@ public:
 	/**
 	 * @brief Read a single char
 	 * @param f The file
+	 * @param logLevel The log level
+	 * @param name The name (for logging purpose)
 	 * @return A char
 	 */
-	static unsigned char readChar(QFile &f);
+	static unsigned char readChar(QFile &f, int level, QString name = "???");
 
 	/**
 	 * @brief Read a two-bytes unsigned short
@@ -23,7 +25,7 @@ public:
 	 * @param name The name (for logging purpose)
 	 * @return An unsigned short
 	 */
-	static unsigned short readShort(QFile &f, int logLevel, QString name = "???");
+	static unsigned short readShort(QFile &f, int level, QString name = "???");
 
 	/**
 	 * @brief Read a four-bytes signed integer
@@ -32,7 +34,7 @@ public:
 	 * @param name The name (for logging purpose)
 	 * @return A signed int
 	 */
-	static int readInt(QFile &f, int logLevel, QString name = "???");
+	static int readInt(QFile &f, int level, QString name = "???");
 
 	/**
 	 * @brief Read a string
@@ -46,7 +48,7 @@ public:
 	 * @param name The name (for logging purpose)
 	 * @return A string
 	 */
-	static QString readString(QFile &f, int logLevel, QString name = "???");
+	static QString readString(QFile &f, int level, QString name = "???");
 };
 
 #endif // PHFILETOOL_H

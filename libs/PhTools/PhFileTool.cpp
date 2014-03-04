@@ -1,43 +1,52 @@
 #include "PhDebug.h"
 #include "PhFileTool.h"
 
-unsigned char PhFileTool::readChar(QFile &f)
+unsigned char PhFileTool::readChar(QFile &f, int level, QString name)
 {
-	return (unsigned char)f.read(1).data()[0];
+	int offset = f.pos();
+	unsigned char result = (unsigned char)f.read(1).data()[0];
+	PHDBG(level) << PHNQ(QString::number(offset, 16)) << PHNQ(name) << PHNQ(QString::number(result, 16));
+	return result;
 }
 
-unsigned short PhFileTool::readShort(QFile &f, int logLevel, QString name)
+unsigned short PhFileTool::readShort(QFile &f, int level, QString name)
 {
 	int offset = f.pos();
 	unsigned short * p = (unsigned short*)f.read(2).data();
 	unsigned short result = *p;
 
-	PHDBG(logLevel) << QString::number(offset, 16).toStdString().c_str() << name.toStdString().c_str() << QString::number(result, 16).toStdString().c_str();
+	PHDBG(level) << PHNQ(QString::number(offset, 16)) << PHNQ(name) << PHNQ(QString::number(result, 16));
 
 	return result;
 }
 
-int PhFileTool::readInt(QFile &f, int logLevel, QString name)
+int PhFileTool::readInt(QFile &f, int level, QString name)
 {
 	int offset = f.pos();
 	int * p = (int*)f.read(4).data();
 	int result = *p;
 
-	PHDBG(logLevel) << QString::number(offset, 16).toStdString().c_str() << name.toStdString().c_str() << result;
+	PHDBG(level) << PHNQ(QString::number(offset, 16)) << PHNQ(name) << result;
 
 	return result;
 }
 
-QString PhFileTool::readString(QFile &f, int logLevel, QString name)
+QString PhFileTool::readString(QFile &f, int level, QString name)
 {
+	int internLevel = 4;
 	int offset = f.pos();
-	ushort size = readShort(f, 4);
+	int size = readShort(f, internLevel);
 
 	QString result = "";
 	switch(size) {
 	case 0xfeff:
-		readChar(f);
-		size = readChar(f);
+		readChar(f, 0);
+		size = readChar(f, internLevel);
+		if(size == 0xff) {
+			size = readShort(f, internLevel);
+			if(size == 0xffff)
+				size = readInt(f, internLevel);
+		}
 		result = QString::fromUtf16((ushort*)f.read(size * 2).data(), size);
 		break;
 	case 0xffff:
@@ -53,7 +62,13 @@ QString PhFileTool::readString(QFile &f, int logLevel, QString name)
 		}
 	}
 
-	PHDBG(logLevel) << QString::number(offset, 16).toStdString().c_str() << name.toStdString().c_str() << result;
+	QString displayResult = result;
+	QStringList resultSplit = result.split("\r\n");
+	if(resultSplit.count() > 3) {
+		result = resultSplit.first() + "\r\n...\r\n" + resultSplit.last();
+	}
+
+	PHDBG(level) << PHNQ(QString::number(offset, 16)) << PHNQ(name) << result << "(" << PHNQ(QString::number(size, 16)) << ")";
 
 	return result;
 }
