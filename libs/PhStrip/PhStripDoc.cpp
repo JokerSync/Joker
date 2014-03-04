@@ -137,11 +137,11 @@ bool PhStripDoc::importDetX(QString fileName)
 				// Reading loops
 				if(elem.tagName() == "loop")
 					_loops.append(new PhStripLoop(loopNumber++,
-												  PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
+					                              PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
 					_cuts.append(new PhStripCut(PhStripCut::Simple,
-												PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
+					                            PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
 				else if(elem.tagName() == "line") {
 					PhFrame frameIn = -1;
 					PhFrame lastFrame = -1;
@@ -228,9 +228,9 @@ void PhStripDoc::readMosText(QFile &f, int logLevel)
 	PhFileTool::readInt(f, level, "text");
 
 	PHDBG(logLevel) << PHNQ(PhTimeCode::stringFromFrame(frameIn, _tcType))
-					<< "->"
-					<< PHNQ(PhTimeCode::stringFromFrame(frameOut, _tcType))
-					<< PHNQ(content);
+	                << "->"
+	                << PHNQ(PhTimeCode::stringFromFrame(frameOut, _tcType))
+	                << PHNQ(content);
 	_texts.append(text);
 }
 
@@ -243,7 +243,7 @@ void PhStripDoc::readMosDetect(QFile &f, int level)
 		PhFileTool::readShort(f, detectLevel);
 	_detects.append(new PhStripDetect(false, frameIn, NULL, frameOut, 0));
 	PHDBG(level) << PhTimeCode::stringFromFrame(frameIn, _tcType)
-				 << PhTimeCode::stringFromFrame(frameOut, _tcType);
+	             << PhTimeCode::stringFromFrame(frameOut, _tcType);
 }
 
 bool PhStripDoc::readMosProperties(QFile &f, int logLevel)
@@ -292,11 +292,11 @@ bool PhStripDoc::importMos(QString fileName)
 	int propLevel = level;
 	int peopleLevel = level;
 	int textLevel = level;
-	int detectLevel = 0;
+	int detectLevel = level;
 	int blocLevel = 0;
 	int cutLevel = level;
 	int loopLevel = level;
-	int labelLevel = 0;
+	int labelLevel = level;
 
 	if(!checkMosTag(f, blocLevel, "NOBLURMOSAIC"))
 		return false;
@@ -466,6 +466,9 @@ bool PhStripDoc::importMos(QString fileName)
 		PhFileTool::readShort(f, level);
 
 	PhFileTool::readShort(f, blocLevel);
+
+	level = 0;
+
 	if(!checkMosTag(f, blocLevel, "CDocLangue"))
 		return false;
 
@@ -484,15 +487,17 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, blocLevel, "CDocBlocTexte"))
 		return false;
 
+	level = 2;
+
 	for(int i = 0; i < textCount; i++) {
 		if(i > 0)
 			PhFileTool::readShort(f, level, "0x800c");
 		readMosText(f, textLevel);
 	}
 
-	level = 0;
+	int strangeNumber4 = PhFileTool::readShort(f, level, "0x800a");
 
-	if(PhFileTool::readShort(f, level, "0x800a") == 0x800a) {
+	if(strangeNumber4 == 0x800a) {
 		detectCount = PhFileTool::readInt(f, detectLevel, "detect count 2");
 
 		for(int j = 0; j < 2; j++)
@@ -506,7 +511,7 @@ bool PhStripDoc::importMos(QString fileName)
 		if((strangeNumber2 == 1) || (script.size() > 0)) {
 			if(!checkMosTag(f, blocLevel, "CDocBlocDetection"))
 				return false;
-			for(int i = 0; i<detectCount; i++) {
+			for(int i = 0; i < detectCount; i++) {
 				if(i > 0)
 					PhFileTool::readShort(f, level, "0x800d");
 				readMosDetect(f, detectLevel);
@@ -524,7 +529,7 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag(f, blocLevel, "CDocEtiquetteNom"))
 		return false;
 
-	for(int i=0;i<labelCount;i++) {
+	for(int i = 0; i < labelCount; i++) {
 		if(i > 0)
 			PhFileTool::readShort(f, level, "0x800e");
 		PhFrame labelFrame = _videoFrameStamp + PhFileTool::readInt(f, level, "label tcin") / 12;
@@ -533,35 +538,32 @@ bool PhStripDoc::importMos(QString fileName)
 		PHDBG(labelLevel) << "label" << PhTimeCode::stringFromFrame(labelFrame, _tcType);
 	}
 
-	PhFileTool::readShort(f, level);
+	if(strangeNumber4 == 0x800a) {
+		textCount = PhFileTool::readInt(f, level, "text count 3");
 
-	level = 2;
-
-	if(strangeNumber2 == 1) {
-		for(int j = 0; j < 2; j++)
-			PhFileTool::readShort(f, level, "before text");
-		while(true) {
+		for(int i = 0; i < textCount; i++) {
+			PhFileTool::readShort(f, level, "0x800c");
 			readMosText(f, textLevel);
-			if(PhFileTool::readShort(f, level) != 0x800c)
-				break;
 		}
 		PhFileTool::readShort(f, level, "after text");
 		PhFileTool::readShort(f, level, "after text");
 	}
 	else if(strangeNumber1 == 4) {
-		qDebug() << "reading extrasection containing phrase 2:";
-		for(int j = 0; j < 10; j++)
-			PhFileTool::readShort(f, level);
+		PHDEBUG << "IN PIERRE.MOS";
+		for(int j = 0; j < 8; j++)
+			PhFileTool::readShort(f, level, "pierre");
 
-#warning TODO insert text only one time
-		readMosText(f, textLevel);
-		PhFileTool::readShort(f, level);
-
+		textCount = PhFileTool::readInt(f, level, "text count 3");
+		for(int i = 0; i < textCount; i++) {
+			PhFileTool::readShort(f, level, "0x800c");
+			readMosText(f, textLevel);
+		}
 		for(int j = 0; j < 17; j++)
-			PhFileTool::readShort(f, level);
+			PhFileTool::readShort(f, level, "after pierre");
 	}
+	PhFileTool::readShort(f, level, "after text");
 
-	int loopCount = PhFileTool::readShort(f, ok, "loop count");
+	int loopCount = PhFileTool::readShort(f, loopLevel, "loop count");
 	for(int i = 0; i < loopCount; i++) {
 		PhFileTool::readString(f, loopLevel, "CDocBoucle");
 		int number = PhFileTool::readInt(f, loopLevel, "loop number");
@@ -752,7 +754,7 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, 
 		int end = start + text.length() * 1.20588 + 1;
 
 		addText(_peoples[id], start, end,
-				text, i % nbTrack);
+		        text, i % nbTrack);
 
 		// So the texts are all one after the other
 		position += end - start;
@@ -791,8 +793,8 @@ void PhStripDoc::addText(PhPeople * actor, PhTime start, PhTime end, QString sen
 	if(sentence != " " && sentence != "" ) {
 
 		_texts.push_back(new PhStripText(start, actor,
-										 end,
-										 track, sentence));
+		                                 end,
+		                                 track, sentence));
 		_nbTexts++;
 	}
 }
