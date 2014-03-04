@@ -197,6 +197,21 @@ bool PhStripDoc::checkMosTag(QFile &f, int logLevel, QString expected)
 	return true;
 }
 
+bool PhStripDoc::checkMosTag(QFile &f, int level, QString expected, unsigned short expectedTag)
+{
+	unsigned short tag = tag = PhFileTool::readShort(f, level, expected);
+	if(tag == 0xffff) {
+		PhFileTool::readShort(f, level, expected);
+		return checkMosTag(f, level, expected);
+	}
+	else if(tag != expectedTag) {
+		PHDEBUG << "!!!!!!!!!!!!!!!" << expected << "Error reading " << PHNQ(QString::number(tag, 16)) << "instead of" << PHNQ(QString::number(expectedTag, 16)) << "!!!!!!!!!!!!!!!";
+		f.close();
+		return false;
+	}
+	return true;
+}
+
 bool PhStripDoc::checkMosWord(QFile &f, int logLevel, unsigned short expected)
 {
 	QString name = QString::number(expected, 16);
@@ -272,39 +287,29 @@ bool PhStripDoc::readMosProperties(QFile &f, int logLevel)
 
 bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level)
 {
-	int detectCount = PhFileTool::readInt(f, detectLevel, "CDocBlocDetection count");
+	int detectCount = PhFileTool::readInt(f, detectLevel, "track CDocBlocDetection count");
 
 	if(detectCount) {
-
-		PhFileTool::readShort(f, blocLevel, "CDocBlocDetection");
-		PhFileTool::readShort(f, blocLevel, "CDocBlocDetection");
-
-		if(!checkMosTag(f, blocLevel, "CDocBlocDetection"))
+		if(!checkMosTag(f, blocLevel, "CDocBlocDetection", 0x800b))
 			return false;
 
 		for(int i = 0; i < detectCount; i++) {
 			if(i > 0)
-				PhFileTool::readShort(f, level, "0x800d");
+				PhFileTool::readShort(f, level, "0x800b");
 			readMosDetect(f, detectLevel);
 		}
 	}
 
-	PhFileTool::readInt(f, blocLevel, "CDocLangue count");
-	unsigned short langTag = PhFileTool::readShort(f, blocLevel, "CDocLangue");
-	if(langTag == 0xffff) {
-		PhFileTool::readShort(f, blocLevel, "CDocLangue");
-		if(!checkMosTag(f, blocLevel, "CDocLangue"))
+	int langCount = PhFileTool::readInt(f, blocLevel, "track CDocLangue count");
+	if(langCount) {
+		if(!checkMosTag(f, blocLevel, "CDocLangue", 0x800b))
 			return false;
 	}
 
-	int textCount = PhFileTool::readInt(f, blocLevel, "CDocBlocTexte count");
+	int textCount = PhFileTool::readInt(f, blocLevel, "track CDocBlocTexte count");
 	if(textCount) {
-		unsigned short textTag = PhFileTool::readShort(f, blocLevel, "CDocBlocTexte");
-		if(textTag == 0xffff) {
-			PhFileTool::readShort(f, blocLevel, "CDocBlocTexte");
-			if(!checkMosTag(f, blocLevel, "CDocBlocTexte"))
-				return false;
-		}
+		if(!checkMosTag(f, blocLevel, "CDocBlocTexte", 0x800c))
+			return false;
 
 		for(int i = 0; i < textCount; i++) {
 			if(i > 0)
@@ -313,22 +318,16 @@ bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detect
 		}
 	}
 
-	PhFileTool::readShort(f, level);
+	PhFileTool::readInt(f, level, "track id");
 
-	PhFileTool::readShort(f, level);
-
-	int labelCount = PhFileTool::readInt(f, blocLevel, "CDocEtiquetteNom count");
+	int labelCount = PhFileTool::readInt(f, blocLevel, "track CDocEtiquetteNom count");
 	if(labelCount) {
-		unsigned short labelTag = PhFileTool::readShort(f, blocLevel, "CDocEtiquetteNom");
-		if(labelTag == 0xffff) {
-			PhFileTool::readShort(f, blocLevel, "CDocEtiquetteNom");
-			if(!checkMosTag(f, blocLevel, "CDocEtiquetteNom"))
-				return false;
-		}
+		if(!checkMosTag(f, blocLevel, "CDocEtiquetteNom", 0x800d))
+			return false;
 
 		for(int i = 0; i < labelCount; i++) {
 			if(i > 0)
-				PhFileTool::readShort(f, level, "0x800e");
+				PhFileTool::readShort(f, level, "0x800d");
 			PhFrame labelFrame = _videoFrameStamp + PhFileTool::readInt(f, level, "label tcin") / 12;
 			for(int j = 0; j < 6; j++)
 				PhFileTool::readShort(f, level);
@@ -336,8 +335,8 @@ bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detect
 		}
 	}
 
-	PhFileTool::readShort(f, level);
-	PhFileTool::readShort(f, level);
+	PhFileTool::readShort(f, level, "track end");
+	PhFileTool::readShort(f, level, "track end");
 
 	return true;
 }
@@ -512,7 +511,7 @@ bool PhStripDoc::importMos(QString fileName)
 		return false;
 
 	for(int j = 0; j < 8; j++)
-		PhFileTool::readShort(f, level);
+		PhFileTool::readShort(f, level, "CDocDoublage");
 
 	int trackCount = PhFileTool::readInt(f, blocLevel, "CDocPiste count");
 	PhFileTool::readShort(f, blocLevel, "CDocPiste");

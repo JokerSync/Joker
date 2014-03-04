@@ -418,6 +418,7 @@ private:
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
 
 	bool checkMosTag(QFile &f, int logLevel, QString expected);
+	bool checkMosTag(QFile &f, int logLevel, QString expected, unsigned short expectedTag);
 	bool checkMosWord(QFile &f, int logLevel, unsigned short expected);
 	void readMosText(QFile &f, int logLevel);
 	void readMosDetect(QFile &f, int level);
