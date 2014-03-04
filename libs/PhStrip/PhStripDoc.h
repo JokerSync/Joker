@@ -422,6 +422,7 @@ private:
 	void readMosText(QFile &f, int logLevel);
 	void readMosDetect(QFile &f, int level);
 	bool readMosProperties(QFile &f, int logLevel);
+	bool readMosTrack(QFile &f, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level);
 	bool _forceRatio169;
 };
 

@@ -270,6 +270,78 @@ bool PhStripDoc::readMosProperties(QFile &f, int logLevel)
 	return true;
 }
 
+bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level)
+{
+	int detectCount = PhFileTool::readInt(f, detectLevel, "CDocBlocDetection count");
+
+	if(detectCount) {
+
+		PhFileTool::readShort(f, blocLevel, "CDocBlocDetection");
+		PhFileTool::readShort(f, blocLevel, "CDocBlocDetection");
+
+		if(!checkMosTag(f, blocLevel, "CDocBlocDetection"))
+			return false;
+
+		for(int i = 0; i < detectCount; i++) {
+			if(i > 0)
+				PhFileTool::readShort(f, level, "0x800d");
+			readMosDetect(f, detectLevel);
+		}
+	}
+
+	PhFileTool::readInt(f, blocLevel, "CDocLangue count");
+	unsigned short langTag = PhFileTool::readShort(f, blocLevel, "CDocLangue");
+	if(langTag == 0xffff) {
+		PhFileTool::readShort(f, blocLevel, "CDocLangue");
+		if(!checkMosTag(f, blocLevel, "CDocLangue"))
+			return false;
+	}
+
+	int textCount = PhFileTool::readInt(f, blocLevel, "CDocBlocTexte count");
+	if(textCount) {
+		unsigned short textTag = PhFileTool::readShort(f, blocLevel, "CDocBlocTexte");
+		if(textTag == 0xffff) {
+			PhFileTool::readShort(f, blocLevel, "CDocBlocTexte");
+			if(!checkMosTag(f, blocLevel, "CDocBlocTexte"))
+				return false;
+		}
+
+		for(int i = 0; i < textCount; i++) {
+			if(i > 0)
+				PhFileTool::readShort(f, level, "0x800c");
+			readMosText(f, textLevel);
+		}
+	}
+
+	PhFileTool::readShort(f, level);
+
+	PhFileTool::readShort(f, level);
+
+	int labelCount = PhFileTool::readInt(f, blocLevel, "CDocEtiquetteNom count");
+	if(labelCount) {
+		unsigned short labelTag = PhFileTool::readShort(f, blocLevel, "CDocEtiquetteNom");
+		if(labelTag == 0xffff) {
+			PhFileTool::readShort(f, blocLevel, "CDocEtiquetteNom");
+			if(!checkMosTag(f, blocLevel, "CDocEtiquetteNom"))
+				return false;
+		}
+
+		for(int i = 0; i < labelCount; i++) {
+			if(i > 0)
+				PhFileTool::readShort(f, level, "0x800e");
+			PhFrame labelFrame = _videoFrameStamp + PhFileTool::readInt(f, level, "label tcin") / 12;
+			for(int j = 0; j < 6; j++)
+				PhFileTool::readShort(f, level);
+			PHDBG(labelLevel) << "label" << PhTimeCode::stringFromFrame(labelFrame, _tcType);
+		}
+	}
+
+	PhFileTool::readShort(f, level);
+	PhFileTool::readShort(f, level);
+
+	return true;
+}
+
 bool PhStripDoc::importMos(QString fileName)
 {
 	PHDEBUG << "===============" << fileName << "===============";
@@ -287,7 +359,7 @@ bool PhStripDoc::importMos(QString fileName)
 
 	this->reset();
 
-	int level = 2;
+	int level = 0;
 	int ok = level;
 	int propLevel = level;
 	int peopleLevel = level;
@@ -442,143 +514,109 @@ bool PhStripDoc::importMos(QString fileName)
 	for(int j = 0; j < 8; j++)
 		PhFileTool::readShort(f, level);
 
-	PhFileTool::readInt(f, blocLevel, "CDocPiste count");
+	int trackCount = PhFileTool::readInt(f, blocLevel, "CDocPiste count");
 	PhFileTool::readShort(f, blocLevel, "CDocPiste");
 	PhFileTool::readShort(f, blocLevel, "CDocPiste");
 
 	if(!checkMosTag(f, blocLevel, "CDocPiste"))
 		return false;
 
-	int detectCount = PhFileTool::readInt(f, detectLevel, "CDocBlocDetection count");
-
-	if(detectCount) {
-		PhFileTool::readShort(f, blocLevel, "CDocBlocDetection");
-		PhFileTool::readShort(f, blocLevel, "CDocBlocDetection");
-
-		if(!checkMosTag(f, blocLevel, "CDocBlocDetection"))
+	for(int track = 0; track < trackCount; track++) {
+		PHDBG(0) << "====== READING TRACK " << track << "======";
+		if((track > 0) && !checkMosWord(f, 0, 0x800a))
 			return false;
+		if(!readMosTrack(f, blocLevel, textLevel, detectLevel, labelLevel, level))
+			return false;
+	}
 
-		for(int i = 0; i < detectCount; i++) {
+	PHDBG(0) << "====== END OF TRACK ======";
+
+//	int strangeNumber4 = PhFileTool::readShort(f, level, "0x800a");
+
+//	if(strangeNumber4 == 0x800a) {
+//		if(script.size() > 0) {
+//			for(int j = 0; j < 6; j++)
+//				PhFileTool::readShort(f, level);
+//		}
+
+//		detectCount = PhFileTool::readInt(f, detectLevel, "detect count 2");
+
+//		for(int j = 0; j < 2; j++)
+//			PhFileTool::readShort(f, blocLevel, "CDocBlocDetection");
+
+//		if((strangeNumber2 == 1) || (script.size() > 0)) {
+//			if(!checkMosTag(f, blocLevel, "CDocBlocDetection"))
+//				return false;
+//			for(int i = 0; i < detectCount; i++) {
+//				if(i > 0)
+//					PhFileTool::readShort(f, level, "0x800d");
+//				readMosDetect(f, detectLevel);
+//			}
+//			for(int j = 0; j < 6; j++)
+//				PhFileTool::readShort(f, level);
+//		}
+//	}
+
+//	if(strangeNumber4 == 0x800a) {
+//		int textCount = PhFileTool::readInt(f, level, "text count 3");
+
+//		for(int i = 0; i < textCount; i++) {
+//			PhFileTool::readShort(f, level, "0x800c");
+//			readMosText(f, textLevel);
+//		}
+//		PhFileTool::readShort(f, level, "after text");
+//		PhFileTool::readShort(f, level, "after text");
+//	}
+//	else if(strangeNumber1 == 4) {
+//		PHDEBUG << "IN PIERRE.MOS";
+//		for(int j = 0; j < 8; j++)
+//			PhFileTool::readShort(f, level, "pierre");
+
+//		int textCount = PhFileTool::readInt(f, level, "text count 3");
+//		for(int i = 0; i < textCount; i++) {
+//			PhFileTool::readShort(f, level, "0x800c");
+//			readMosText(f, textLevel);
+//		}
+//		for(int j = 0; j < 17; j++)
+//			PhFileTool::readShort(f, level, "after pierre");
+//	}
+//	PhFileTool::readShort(f, level, "after text");
+
+	int loopCount = PhFileTool::readInt(f, loopLevel, "loop count");
+	if(loopCount) {
+		PhFileTool::readShort(f, blocLevel, "CDocBoucle");
+		PhFileTool::readShort(f, blocLevel, "CDocBoucle");
+		if(!checkMosTag(f, blocLevel, "CDocBoucle"))
+			return false;
+		for(int i = 0; i < loopCount; i++) {
 			if(i > 0)
-				PhFileTool::readShort(f, level, "0x800d");
-			readMosDetect(f, detectLevel);
-		}
-	}
-
-	level = 0;
-	PhFileTool::readInt(f, blocLevel, "CDocLangue count");
-	PhFileTool::readShort(f, blocLevel, "CDocLangue");
-	PhFileTool::readShort(f, blocLevel, "CDocLangue");
-
-	if(!checkMosTag(f, blocLevel, "CDocLangue"))
-		return false;
-
-	int textCount = PhFileTool::readInt(f, blocLevel, "CDocBlocTexte count");
-
-#warning /// @todo check why 1
-	int strangeNumber2 = PhFileTool::readShort(f, blocLevel, "CDocBlocTexte");
-	if(strangeNumber2 == 1) {
-		PhFileTool::readShort(f, level);
-		PhFileTool::readShort(f, level);
-		PhFileTool::readShort(f, level);
-		textCount = PhFileTool::readInt(f, level, "CDocBlocTexte count 2");
-		PhFileTool::readShort(f, blocLevel, "CDocBlocTexte");
-	}
-	PhFileTool::readShort(f, blocLevel, "CDocBlocTexte");
-
-	if(!checkMosTag(f, blocLevel, "CDocBlocTexte"))
-		return false;
-
-	level = 2;
-	for(int i = 0; i < textCount; i++) {
-		if(i > 0)
-			PhFileTool::readShort(f, level, "0x800c");
-		readMosText(f, textLevel);
-	}
-
-	int strangeNumber4 = PhFileTool::readShort(f, level, "0x800a");
-
-	if(strangeNumber4 == 0x800a) {
-		if(script.size() > 0) {
-			for(int j = 0; j < 6; j++)
-				PhFileTool::readShort(f, level);
+				PhFileTool::readShort(f, level, "0x80??"); /// @todo check number
+			int number = PhFileTool::readInt(f, loopLevel, "loop number");
+			PhFrame loopFrame = _videoFrameStamp + PhFileTool::readInt(f, loopLevel, "loop tc") / 12;
+			PhFileTool::readString(f, loopLevel, "loop name");
+			_loops.append(new PhStripLoop(loopCount, loopFrame));
 		}
 
-		detectCount = PhFileTool::readInt(f, detectLevel, "detect count 2");
-
-		for(int j = 0; j < 2; j++)
-			PhFileTool::readShort(f, blocLevel, "CDocBlocDetection");
-
-		if((strangeNumber2 == 1) || (script.size() > 0)) {
-			if(!checkMosTag(f, blocLevel, "CDocBlocDetection"))
-				return false;
-			for(int i = 0; i < detectCount; i++) {
-				if(i > 0)
-					PhFileTool::readShort(f, level, "0x800d");
-				readMosDetect(f, detectLevel);
-			}
-			for(int j = 0; j < 6; j++)
-				PhFileTool::readShort(f, level);
-		}
-	}
-	PhFileTool::readShort(f, level);
-
-	int labelCount = PhFileTool::readInt(f, labelLevel, "CDocEtiquetteNom count");
-	PhFileTool::readShort(f, level, "CDocEtiquetteNom");
-	PhFileTool::readShort(f, level, "CDocEtiquetteNom");
-
-	if(!checkMosTag(f, blocLevel, "CDocEtiquetteNom"))
-		return false;
-
-	for(int i = 0; i < labelCount; i++) {
-		if(i > 0)
-			PhFileTool::readShort(f, level, "0x800e");
-		PhFrame labelFrame = _videoFrameStamp + PhFileTool::readInt(f, level, "label tcin") / 12;
-		for(int j = 0; j < 6; j++)
-			PhFileTool::readShort(f, level);
-		PHDBG(labelLevel) << "label" << PhTimeCode::stringFromFrame(labelFrame, _tcType);
 	}
 
-	if(strangeNumber4 == 0x800a) {
-		textCount = PhFileTool::readInt(f, level, "text count 3");
+	int strangeCount = PhFileTool::readInt(f, 0, "strange count");
 
-		for(int i = 0; i < textCount; i++) {
-			PhFileTool::readShort(f, level, "0x800c");
-			readMosText(f, textLevel);
-		}
-		PhFileTool::readShort(f, level, "after text");
-		PhFileTool::readShort(f, level, "after text");
-	}
-	else if(strangeNumber1 == 4) {
-		PHDEBUG << "IN PIERRE.MOS";
-		for(int j = 0; j < 8; j++)
-			PhFileTool::readShort(f, level, "pierre");
-
-		textCount = PhFileTool::readInt(f, level, "text count 3");
-		for(int i = 0; i < textCount; i++) {
-			PhFileTool::readShort(f, level, "0x800c");
-			readMosText(f, textLevel);
-		}
-		for(int j = 0; j < 17; j++)
-			PhFileTool::readShort(f, level, "after pierre");
-	}
-	PhFileTool::readShort(f, level, "after text");
-
-	int loopCount = PhFileTool::readShort(f, loopLevel, "loop count");
-	for(int i = 0; i < loopCount; i++) {
-		PhFileTool::readString(f, loopLevel, "CDocBoucle");
-		int number = PhFileTool::readInt(f, loopLevel, "loop number");
-		PhFrame loopFrame = _videoFrameStamp + PhFileTool::readInt(f, loopLevel, "loop tc") / 12;
-		_loops.append(new PhStripLoop(loopCount, loopFrame));
+	if(strangeCount) {
+		PhFileTool::readShort(f, level, "strange");
+		PhFileTool::readShort(f, level, "strange");
+		PhFileTool::readString(f, 0, "strange string");
+		PhFileTool::readShort(f, level, "strange");
+		PhFileTool::readShort(f, level, "strange");
+		PhFileTool::readString(f, 0, "strange string");
 	}
 
-	for(int j = 0; j < 10; j++)
+	for(int j = 0; j < 6; j++)
 		PhFileTool::readShort(f, level, "after loop1");
 
-	if(strangeNumber2 == 1) {
-		for(int j = 0; j < 9; j++)
-			PhFileTool::readShort(f, level, "after loop2");
-	}
+//	if(strangeNumber2 == 1) {
+//		for(int j = 0; j < 9; j++)
+//			PhFileTool::readShort(f, level, "after loop2");
+//	}
 
 	if(!checkMosTag(f, blocLevel, "CDocChutier"))
 		return false;
