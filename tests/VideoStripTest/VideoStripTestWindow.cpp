@@ -159,12 +159,6 @@ bool VideoStripTestWindow::openVideoFile(QString videoFileName)
 	QFileInfo fileInfo(videoFileName);
 	if (fileInfo.exists()) {
 		_videoEngine->open(videoFileName);
-//#warning TODO read media length from video file
-//		ui->mediaController->setMediaLength(7500);
-//#warning TODO read first frame from video file
-//		ui->mediaController->setFirstFrame(0);
-
-		//_clock->setRate(0.0);
 		return true;
 	}
 	return false;
