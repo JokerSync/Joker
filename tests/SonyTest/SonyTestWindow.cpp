@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->masterPanel, SIGNAL(fastForward()), &_sonyMaster, SLOT(fastForward()));
 	connect(ui->masterPanel, SIGNAL(rewind()), &_sonyMaster, SLOT(rewind()));
 
-	connect(_sonyMaster.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->masterPanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_sonyMaster.clock(), SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), ui->masterPanel, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_sonyMaster.clock(), SIGNAL(rateChanged(PhRate)), ui->masterPanel, SLOT(onRateChanged(PhRate)));
 
 	// Connect sony master to MainWindow
@@ -35,11 +35,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->timeSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(timeSense()));
 	connect(ui->speedSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(speedSense()));
 
-	connect(&_sonyMaster, SIGNAL(deviceIdData(unsigned char,unsigned char)), this, SLOT(onDeviceIdData(unsigned char,unsigned char)));
+	connect(&_sonyMaster, SIGNAL(deviceIdData(unsigned char, unsigned char)), this, SLOT(onDeviceIdData(unsigned char, unsigned char)));
 	connect(&_sonyMaster, SIGNAL(statusData(unsigned char*, int, int)), this, SLOT(onStatusData(unsigned char*, int, int)));
 
 	// Connect sony slave clock to slave panel
-	connect(_sonySlave.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), ui->slavePanel, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_sonySlave.clock(), SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), ui->slavePanel, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_sonySlave.clock(), SIGNAL(rateChanged(PhRate)), ui->slavePanel, SLOT(onRateChanged(PhRate)));
 
 	// Connect video sync signal

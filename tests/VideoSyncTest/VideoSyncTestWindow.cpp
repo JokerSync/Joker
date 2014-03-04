@@ -47,7 +47,7 @@ QMenu *VideoSyncTestWindow::recentDocumentMenu()
 
 void VideoSyncTestWindow::onOpenFile()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"),QDir::homePath());
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"), QDir::homePath());
 	openDocument(fileName);  // TODO: show error in case of error
 }
 

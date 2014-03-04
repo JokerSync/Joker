@@ -55,7 +55,6 @@ bool PhStripDoc::importDetX(QString fileName)
 	_generator = "Cappella";
 	//With DetX files, fps is always 25 no drop
 	_tcType = PhTimeCodeType25;
-	_timeScale = 25.00;
 
 	// Reading the header
 	if(detX.elementsByTagName("header").count()) {
@@ -243,9 +242,9 @@ void PhStripDoc::readMosText(QFile &f, int level)
 	PhFileTool::readInt(f, internLevel, "text");
 
 	PHDBG(level) << PHNQ(PhTimeCode::stringFromFrame(frameIn, _tcType))
-	                << "->"
-	                << PHNQ(PhTimeCode::stringFromFrame(frameOut, _tcType))
-	                << PHNQ(content);
+	             << "->"
+	             << PHNQ(PhTimeCode::stringFromFrame(frameOut, _tcType))
+	             << PHNQ(content);
 	_texts.append(text);
 }
 
@@ -355,7 +354,7 @@ bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detect
 	else if (quitAfter)
 		return true;
 
-	for(int k = 0;k<2;k++) {
+	for(int k = 0; k < 2; k++) {
 		int count = PhFileTool::readInt(f, level, "track other count");
 		if(count == 0)
 			continue;
@@ -574,7 +573,7 @@ bool PhStripDoc::importMos(QString fileName)
 
 	PHDBG(level) << "====== END OF TRACK ======";
 
-	for(int k = 0;k < 2;k++) {
+	for(int k = 0; k < 2; k++) {
 		int loopCount = PhFileTool::readInt(f, loopLevel, "loop count");
 		if(loopCount == 0)
 			continue;
@@ -741,7 +740,6 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, 
 	_episode = "1";
 	_season = "1";
 	_tcType = PhTimeCodeType25;
-	_timeScale = 25.00;
 	_videoFrameStamp = videoTimeCode;
 	_lastFrame = _videoFrameStamp;
 
@@ -793,7 +791,6 @@ void PhStripDoc::reset()
 	_loops.clear();
 	_nbTexts = 0;
 	_texts.clear();
-	_timeScale = 25; //TODO fix me
 	_title = "";
 	_translatedTitle = "";
 	_episode = "";

@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 
 
 	// Creation of the glyph surface
-	SDL_Surface * glyphMatrix = SDL_CreateRGBSurface(0,2048,2048,32,rmask,gmask,bmask,amask);
+	SDL_Surface * glyphMatrix = SDL_CreateRGBSurface(0, 2048, 2048, 32, rmask, gmask, bmask, amask);
 
 
 	// THIS IS ONLY FOR VISUAL PURPOSE, TOTALY USELESS ON A REAL SITUATION
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
 		for(ch = 32; ch < 256; ++ch) {
 			if(TTF_GlyphIsProvided(font, ch)) {
 				int minx, maxx, miny, maxy, advance;
-				TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
+				TTF_GlyphMetrics(font, ch, &minx, &maxx, &miny, &maxy, &advance);
 				//qDebug() << ch << (char) ch << minx << maxx << miny << maxy << advance;
 				if(advance != 0) {
 					// Temporary surface of the character
@@ -196,7 +196,7 @@ int main(int argc, char **argv)
 
 
 			// Display the glyph on the screen
-			SDL_Rect draw = {x,y, 500, 500};
+			SDL_Rect draw = {x, y, 500, 500};
 			SDL_BlitSurface(glyphMatrix, &glyphRect, screen, &draw);
 
 		}

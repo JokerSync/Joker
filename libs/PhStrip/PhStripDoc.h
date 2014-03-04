@@ -380,10 +380,6 @@ private:
 	 * Path to the video content.
 	 */
 	QString _videoPath;
-	/**
-	 * Amount of time units per second.
-	 */
-	int _timeScale;
 
 	PhTimeCodeType _tcType;
 
@@ -415,7 +411,7 @@ private:
 	QList<PhStripDetect *> _detects;
 
 	int _nbTexts;
-	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
+	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track);
 
 	bool checkMosTag(QFile &f, int level, QString expected);
 	bool checkMosTag(QFile &f, int level, QString expected, unsigned short expectedTag);

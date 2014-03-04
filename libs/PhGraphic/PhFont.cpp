@@ -74,7 +74,7 @@ bool PhFont::init(QString fontFile)
 		for(Uint16 ch = 32; ch < 256; ++ch) {
 			if(TTF_GlyphIsProvided(font, ch)) {
 				int minx, maxx, miny, maxy, advance;
-				TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
+				TTF_GlyphMetrics(font, ch, &minx, &maxx, &miny, &maxy, &advance);
 				if(advance != 0) {
 					// First render the glyph to a surface
 					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
