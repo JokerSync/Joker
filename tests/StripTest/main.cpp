@@ -144,8 +144,7 @@ int main(int argc, char *argv[])
 	}
 
 	for(int i = 1; i < argc; i++) {
-		QString fileName = argv[i];
-		PhStripDoc *doc = openDoc(fileName);
+		PhStripDoc *doc = openDoc(argv[i]);
 		if(doc)
 			delete doc;
 	}

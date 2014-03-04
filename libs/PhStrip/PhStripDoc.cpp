@@ -408,7 +408,7 @@ bool PhStripDoc::importMos(QString fileName)
 	int peopleLevel = level;
 	int textLevel = level;
 	int detectLevel = level;
-	int blocLevel = 0;
+	int blocLevel = level;
 	int cutLevel = level;
 	int loopLevel = level;
 	int labelLevel = level;
@@ -565,71 +565,20 @@ bool PhStripDoc::importMos(QString fileName)
 		return false;
 
 	for(int track = 0; track < trackCount; track++) {
-		PHDBG(0) << "====== READING TRACK " << track << "======";
-		if((track > 0) && !checkMosWord(f, 0, 0x800a))
+		PHDBG(level) << "====== READING TRACK " << track << "======";
+		if((track > 0) && !checkMosWord(f, level, 0x800a))
 			return false;
 		if(!readMosTrack(f, blocLevel, textLevel, detectLevel, labelLevel, level))
 			return false;
 	}
 
-	PHDBG(0) << "====== END OF TRACK ======";
+	PHDBG(level) << "====== END OF TRACK ======";
 
-	//	int strangeNumber4 = PhFileTool::readShort(f, level, "0x800a");
-
-	//	if(strangeNumber4 == 0x800a) {
-	//		if(script.size() > 0) {
-	//			for(int j = 0; j < 6; j++)
-	//				PhFileTool::readShort(f, level);
-	//		}
-
-	//		detectCount = PhFileTool::readInt(f, detectLevel, "detect count 2");
-
-	//		for(int j = 0; j < 2; j++)
-	//			PhFileTool::readShort(f, blocLevel, "CDocBlocDetection");
-
-	//		if((strangeNumber2 == 1) || (script.size() > 0)) {
-	//			if(!checkMosTag(f, blocLevel, "CDocBlocDetection"))
-	//				return false;
-	//			for(int i = 0; i < detectCount; i++) {
-	//				if(i > 0)
-	//					PhFileTool::readShort(f, level, "0x800d");
-	//				readMosDetect(f, detectLevel);
-	//			}
-	//			for(int j = 0; j < 6; j++)
-	//				PhFileTool::readShort(f, level);
-	//		}
-	//	}
-
-	//	if(strangeNumber4 == 0x800a) {
-	//		int textCount = PhFileTool::readInt(f, level, "text count 3");
-
-	//		for(int i = 0; i < textCount; i++) {
-	//			PhFileTool::readShort(f, level, "0x800c");
-	//			readMosText(f, textLevel);
-	//		}
-	//		PhFileTool::readShort(f, level, "after text");
-	//		PhFileTool::readShort(f, level, "after text");
-	//	}
-	//	else if(strangeNumber1 == 4) {
-	//		PHDEBUG << "IN PIERRE.MOS";
-	//		for(int j = 0; j < 8; j++)
-	//			PhFileTool::readShort(f, level, "pierre");
-
-	//		int textCount = PhFileTool::readInt(f, level, "text count 3");
-	//		for(int i = 0; i < textCount; i++) {
-	//			PhFileTool::readShort(f, level, "0x800c");
-	//			readMosText(f, textLevel);
-	//		}
-	//		for(int j = 0; j < 17; j++)
-	//			PhFileTool::readShort(f, level, "after pierre");
-	//	}
-	//	PhFileTool::readShort(f, level, "after text");
-
-	int loopCount = PhFileTool::readInt(f, loopLevel, "loop count");
-	if(loopCount) {
-		PhFileTool::readShort(f, blocLevel, "CDocBoucle");
-		PhFileTool::readShort(f, blocLevel, "CDocBoucle");
-		if(!checkMosTag(f, blocLevel, "CDocBoucle"))
+	for(int k = 0;k < 2;k++) {
+		int loopCount = PhFileTool::readInt(f, loopLevel, "loop count");
+		if(loopCount == 0)
+			continue;
+		if(!checkMosTag(f, blocLevel, "CDocBoucle", 0x800f))
 			return false;
 		for(int i = 0; i < loopCount; i++) {
 			if(i > 0)
@@ -639,18 +588,6 @@ bool PhStripDoc::importMos(QString fileName)
 			PhFileTool::readString(f, loopLevel, "loop name");
 			_loops.append(new PhStripLoop(loopCount, loopFrame));
 		}
-
-	}
-
-	int strangeCount = PhFileTool::readInt(f, 0, "strange count");
-
-	if(strangeCount) {
-		PhFileTool::readShort(f, level, "strange");
-		PhFileTool::readShort(f, level, "strange");
-		PhFileTool::readString(f, 0, "strange string");
-		PhFileTool::readShort(f, level, "strange");
-		PhFileTool::readShort(f, level, "strange");
-		PhFileTool::readString(f, 0, "strange string");
 	}
 
 	for(int j = 0; j < 6; j++)

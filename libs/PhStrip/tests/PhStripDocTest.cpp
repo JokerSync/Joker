@@ -247,8 +247,9 @@ void PhStripDocTest::importMosTest03()
 	QCOMPARE(f2s(_doc.getCuts()[4]->getTimeIn()), QString("06:00:08:05"));
 
 	// Test loops
-	QCOMPARE(_doc.getLoops().count(), 1);
+	QCOMPARE(_doc.getLoops().count(), 2);
 	QCOMPARE(f2s(_doc.getLoops()[0]->getTimeIn()), QString("06:00:01:00"));
+	QCOMPARE(f2s(_doc.getLoops()[1]->getTimeIn()), QString("06:01:15:00"));
 
 	// Test texts
 	QCOMPARE(_doc.getTexts().count(), 206);
