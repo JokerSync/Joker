@@ -186,9 +186,9 @@ bool PhStripDoc::importDetX(QString fileName)
 	return true;
 }
 
-bool PhStripDoc::checkMosTag(QFile &f, int logLevel, QString expected)
+bool PhStripDoc::checkMosTag(QFile &f, int level, QString expected)
 {
-	QString name = PhFileTool::readString(f, logLevel, expected);
+	QString name = PhFileTool::readString(f, level, expected);
 	if(name != expected) {
 		PHDEBUG << "!!!!!!!!!!!!!!!" << "Error reading " << expected << "!!!!!!!!!!!!!!!";
 		f.close();
@@ -199,7 +199,7 @@ bool PhStripDoc::checkMosTag(QFile &f, int logLevel, QString expected)
 
 bool PhStripDoc::checkMosTag(QFile &f, int level, QString expected, unsigned short expectedTag)
 {
-	unsigned short tag = tag = PhFileTool::readShort(f, level, expected);
+	unsigned short tag = PhFileTool::readShort(f, level, expected);
 	if(tag == 0xffff) {
 		PhFileTool::readShort(f, level, expected);
 		return checkMosTag(f, level, expected);
@@ -212,10 +212,10 @@ bool PhStripDoc::checkMosTag(QFile &f, int level, QString expected, unsigned sho
 	return true;
 }
 
-bool PhStripDoc::checkMosWord(QFile &f, int logLevel, unsigned short expected)
+bool PhStripDoc::checkMosWord(QFile &f, int level, unsigned short expected)
 {
 	QString name = QString::number(expected, 16);
-	unsigned short word = PhFileTool::readShort(f, logLevel, PHNQ(name));
+	unsigned short word = PhFileTool::readShort(f, level, PHNQ(name));
 	if(word != expected) {
 		PHDEBUG << "!!!!!!!!!!!!!!!" << "Error reading " << PHNQ(QString::number(word, 16)) << "instead of" << name << "!!!!!!!!!!!!!!!";
 		f.close();
@@ -224,9 +224,9 @@ bool PhStripDoc::checkMosWord(QFile &f, int logLevel, unsigned short expected)
 	return true;
 }
 
-void PhStripDoc::readMosText(QFile &f, int logLevel)
+void PhStripDoc::readMosText(QFile &f, int level)
 {
-	int level = 4;
+	int internLevel = 4;
 	QString content = PhFileTool::readString(f, 2, "content");
 
 	PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, 2, "tcin") / 12;
@@ -235,14 +235,14 @@ void PhStripDoc::readMosText(QFile &f, int logLevel)
 #warning TODO decode people and track number
 	PhStripText* text = new PhStripText(frameIn, NULL, frameOut, 0, content);
 
-	PhFileTool::readInt(f, level, "text");
-	PhFileTool::readInt(f, level, "text");
-	PhFileTool::readInt(f, level, "text");
-	PhFileTool::readInt(f, level, "text");
-	PhFileTool::readInt(f, level, "text");
-	PhFileTool::readInt(f, level, "text");
+	PhFileTool::readInt(f, internLevel, "text");
+	PhFileTool::readInt(f, internLevel, "text");
+	PhFileTool::readInt(f, internLevel, "text");
+	PhFileTool::readInt(f, internLevel, "text");
+	PhFileTool::readInt(f, internLevel, "text");
+	PhFileTool::readInt(f, internLevel, "text");
 
-	PHDBG(logLevel) << PHNQ(PhTimeCode::stringFromFrame(frameIn, _tcType))
+	PHDBG(level) << PHNQ(PhTimeCode::stringFromFrame(frameIn, _tcType))
 	                << "->"
 	                << PHNQ(PhTimeCode::stringFromFrame(frameOut, _tcType))
 	                << PHNQ(content);
@@ -261,23 +261,21 @@ void PhStripDoc::readMosDetect(QFile &f, int level)
 	             << PhTimeCode::stringFromFrame(frameOut, _tcType);
 }
 
-bool PhStripDoc::readMosProperties(QFile &f, int logLevel)
+bool PhStripDoc::readMosProperties(QFile &f, int level)
 {
-	int level = 4;
+	PhFileTool::readString(f, level, "Titre de la versio originale");
 
-	PhFileTool::readString(f, logLevel, "Titre de la versio originale");
-
-	_title = PhFileTool::readString(f, logLevel, "Titre de la version adaptée");
-	_season = PhFileTool::readString(f, logLevel, "Saison");
-	_episode = PhFileTool::readString(f, logLevel, "Episode/bobine");
+	_title = PhFileTool::readString(f, level, "Titre de la version adaptée");
+	_season = PhFileTool::readString(f, level, "Saison");
+	_episode = PhFileTool::readString(f, level, "Episode/bobine");
 	PhFileTool::readString(f, level, "Titre vo episode");
-	PhFileTool::readString(f, logLevel, "Titre adapté de l'épisode");
-	PhFileTool::readString(f, logLevel, "Durée");
-	PhFileTool::readString(f, logLevel, "Date");
-	PhFileTool::readString(f, logLevel, "Client");
-	PhFileTool::readString(f, logLevel, "Commentaires");
-	PhFileTool::readString(f, logLevel, "Détecteur");
-	_authorName = PhFileTool::readString(f, logLevel, "Auteur");
+	PhFileTool::readString(f, level, "Titre adapté de l'épisode");
+	PhFileTool::readString(f, level, "Durée");
+	PhFileTool::readString(f, level, "Date");
+	PhFileTool::readString(f, level, "Client");
+	PhFileTool::readString(f, level, "Commentaires");
+	PhFileTool::readString(f, level, "Détecteur");
+	_authorName = PhFileTool::readString(f, level, "Auteur");
 	PhFileTool::readString(f, level, "Studio");
 	PhFileTool::readString(f, level, "D.A.");
 	PhFileTool::readString(f, level, "Ingénieur du son");
@@ -285,17 +283,40 @@ bool PhStripDoc::readMosProperties(QFile &f, int logLevel)
 	return true;
 }
 
+unsigned short PhStripDoc::readMosTag(QFile &f, int level, QString name)
+{
+	unsigned short tag = PhFileTool::readShort(f, level, name);
+	if(tag == 0xffff) {
+		PhFileTool::readShort(f, level, name);
+		QString stringTag = PhFileTool::readString(f, level, name);
+		if(stringTag == "CDocBlocTexte")
+			tag = 0x800c;
+		else if(stringTag == "CDocBlocDetection")
+			tag = 0x800d;
+		else if(stringTag == "CDocLangue")
+			tag = 0x800b;
+		else if(stringTag == "CDocEtiquetteNom")
+			tag = 0x800e;
+		else {
+			PHDEBUG << "!!!!!!!!!!!!!!! Unknown tag:" << stringTag << "!!!!!!!!!!!!!!!";
+			f.close();
+			tag = 0x8888;
+		}
+	}
+	return tag;
+}
+
 bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level)
 {
 	int detectCount = PhFileTool::readInt(f, detectLevel, "track CDocBlocDetection count");
 
 	if(detectCount) {
-		if(!checkMosTag(f, blocLevel, "CDocBlocDetection", 0x800b))
+		if(!checkMosTag(f, blocLevel, "CDocBlocDetection", 0x800d))
 			return false;
 
 		for(int i = 0; i < detectCount; i++) {
 			if(i > 0)
-				PhFileTool::readShort(f, level, "0x800b");
+				PhFileTool::readShort(f, level, "0x800d");
 			readMosDetect(f, detectLevel);
 		}
 	}
@@ -307,6 +328,16 @@ bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detect
 	}
 
 	int textCount = PhFileTool::readInt(f, blocLevel, "track CDocBlocTexte count");
+	bool readTrackId = true;
+	bool quitAfter = false;
+	if(textCount == 0) {
+		readTrackId = false;
+		if(PhFileTool::readInt(f, level, "bizarre") == 1) {
+			quitAfter = true;
+			PhFileTool::readInt(f, level, "bizarre");
+			textCount = PhFileTool::readInt(f, blocLevel, "track CDocBlocTexte count");
+		}
+	}
 	if(textCount) {
 		if(!checkMosTag(f, blocLevel, "CDocBlocTexte", 0x800c))
 			return false;
@@ -318,25 +349,38 @@ bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detect
 		}
 	}
 
-	PhFileTool::readInt(f, level, "track id");
+	int trackId = 0;
+	if(readTrackId)
+		trackId = PhFileTool::readInt(f, level, "track id");
+	else if (quitAfter)
+		return true;
 
-	int labelCount = PhFileTool::readInt(f, blocLevel, "track CDocEtiquetteNom count");
-	if(labelCount) {
-		if(!checkMosTag(f, blocLevel, "CDocEtiquetteNom", 0x800d))
-			return false;
-
-		for(int i = 0; i < labelCount; i++) {
-			if(i > 0)
-				PhFileTool::readShort(f, level, "0x800d");
-			PhFrame labelFrame = _videoFrameStamp + PhFileTool::readInt(f, level, "label tcin") / 12;
-			for(int j = 0; j < 6; j++)
-				PhFileTool::readShort(f, level);
-			PHDBG(labelLevel) << "label" << PhTimeCode::stringFromFrame(labelFrame, _tcType);
+	for(int k = 0;k<2;k++) {
+		int count = PhFileTool::readInt(f, level, "track other count");
+		if(count == 0)
+			continue;
+		for(int i = 0; i < count; i++) {
+			unsigned short tag = readMosTag(f, level, "track other tag");
+			switch(tag) {
+			case 0x800c:
+				readMosText(f, textLevel);
+				break;
+			case 0x800d:
+			case 0x800e:
+				{
+					PhFrame labelFrame = _videoFrameStamp + PhFileTool::readInt(f, level, "label tcin") / 12;
+					for(int j = 0; j < 6; j++)
+						PhFileTool::readShort(f, level);
+					PHDBG(labelLevel) << "label" << PhTimeCode::stringFromFrame(labelFrame, _tcType);
+				}
+				break;
+			default:
+				PHDEBUG << "!!!!!!!!!!!!!!! Unknown tag:" << PHNQ(QString::number(tag, 16)) << "!!!!!!!!!!!!!!!";
+				f.close();
+				return false;
+			}
 		}
 	}
-
-	PhFileTool::readShort(f, level, "track end");
-	PhFileTool::readShort(f, level, "track end");
 
 	return true;
 }

@@ -40,7 +40,7 @@ QString PhFileTool::readString(QFile &f, int level, QString name)
 	QString result = "";
 	switch(size) {
 	case 0xfeff:
-		readChar(f, 0);
+		readChar(f, internLevel);
 		size = readChar(f, internLevel);
 		if(size == 0xff) {
 			size = readShort(f, internLevel);

@@ -417,12 +417,13 @@ private:
 	int _nbTexts;
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence,int track);
 
-	bool checkMosTag(QFile &f, int logLevel, QString expected);
-	bool checkMosTag(QFile &f, int logLevel, QString expected, unsigned short expectedTag);
-	bool checkMosWord(QFile &f, int logLevel, unsigned short expected);
-	void readMosText(QFile &f, int logLevel);
+	bool checkMosTag(QFile &f, int level, QString expected);
+	bool checkMosTag(QFile &f, int level, QString expected, unsigned short expectedTag);
+	bool checkMosWord(QFile &f, int level, unsigned short expected);
+	void readMosText(QFile &f, int level);
 	void readMosDetect(QFile &f, int level);
-	bool readMosProperties(QFile &f, int logLevel);
+	bool readMosProperties(QFile &f, int level);
+	unsigned short readMosTag(QFile &f, int level, QString name);
 	bool readMosTrack(QFile &f, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level);
 	bool _forceRatio169;
 };
