@@ -143,10 +143,13 @@ int main(int argc, char *argv[])
 		result = QTest::qExec(&docTest);
 	}
 
+	PhStripDoc doc;
 	for(int i = 1; i < argc; i++) {
-		PhStripDoc *doc = openDoc(argv[i]);
-		if(doc)
-			delete doc;
+		if(QFile::exists(argv[i]) && !doc.openStripFile(argv[i])) {
+			result = 1;
+			PHDEBUG << "-------- FAILED --------";
+			break;
+		}
 	}
 
 	if(performTest) {

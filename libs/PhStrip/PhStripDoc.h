@@ -413,13 +413,35 @@ private:
 	int _nbTexts;
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track);
 
-	bool checkMosTag(QFile &f, int level, QString expected);
-	bool checkMosTag(QFile &f, int level, QString expected, unsigned short expectedTag);
+	enum MosTag {
+		MosUnknown,
+		MosDub,
+		MosTrack,
+		MosLang,
+		MosPeople,
+		MosText,
+		MosDetect,
+		MosLabel,
+		MosLoop,
+		MosCut,
+		MosVideo,
+		MosMovie,
+		MosOptions,
+		MosDoc,
+		MosProject,
+		MosProperties,
+		MosBin,
+	};
+	unsigned short _mosNextTag;
+	QMap<unsigned short, MosTag> _mosTagMap;
+
+	bool checkMosTag2(QFile &f, int level, QString expected);
+	bool checkMosTag(QFile &f, int level, MosTag expectedTag);
 	bool checkMosWord(QFile &f, int level, unsigned short expected);
 	void readMosText(QFile &f, int level);
 	void readMosDetect(QFile &f, int level);
 	bool readMosProperties(QFile &f, int level);
-	unsigned short readMosTag(QFile &f, int level, QString name);
+	MosTag readMosTag(QFile &f, int level, QString name);
 	bool readMosTrack(QFile &f, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level);
 	bool _forceRatio169;
 };
