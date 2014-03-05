@@ -130,12 +130,18 @@ PhFont *PhGraphicStrip::getHUDFont()
 
 QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selectedPeoples)
 {
-	if(selectedPeoples.size() && !selectedPeoples.contains(people)) {
+	if(people) {
+		if(selectedPeoples.size() && !selectedPeoples.contains(people)) {
+			return QColor(100, 100, 100);
+		}
+		else {
+			return people->getColor();
+		}
+	}
+	else if(selectedPeoples.size())
 		return QColor(100, 100, 100);
-	}
-	else {
-		return people->getColor();
-	}
+	else
+		return Qt::black;
 }
 
 void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *> selectedPeoples)
@@ -260,10 +266,16 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 			if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople)) {
 				PhPeople * people = text->getPeople();
 				PhGraphicText * gPeople = _graphicPeoples[people];
+				QString name = "???";
+				QColor color = Qt::black;
+				if(people) {
+					name = people->getName();
+					color = QColor(people->getColor());
+				}
 				if(gPeople == NULL) {
-					gPeople = new PhGraphicText(&_hudFont, people->getName());
-					gPeople->setColor(QColor(people->getColor()));
-					gPeople->setWidth(people->getName().length() * 12);
+					gPeople = new PhGraphicText(&_hudFont, name);
+					gPeople->setColor(QColor(color));
+					gPeople->setWidth(name.length() * 12);
 					gPeople->setZ(-1);
 
 					gPeople->init();
@@ -320,11 +332,16 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 			//            }
 			if(displayNextText && (frameOut < text->getTimeIn()) && ((lastText == NULL) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))) {
 				PhPeople * people = text->getPeople();
+				QString name = "???";
+				QColor color = Qt::black;
+				if(people) {
+					name = people->getName();
+					color = QColor(people->getColor());
+				}
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				if(gPeople == NULL) {
-					gPeople = new PhGraphicText(&_textFont, people->getName());
-					gPeople->setColor(QColor(people->getColor()));
-					gPeople->setWidth(people->getName().length() * 12);
+					gPeople = new PhGraphicText(&_textFont, name);
+					gPeople->setWidth(name.length() * 12);
 
 					gPeople->init();
 
@@ -336,7 +353,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				gPeople->setY(y - howFarIsText);
 				gPeople->setZ(-3);
 				gPeople->setHeight(trackHeight / 2);
-				gPeople->setColor(QColor(people->getColor()));
+
+				gPeople->setColor(color);
 
 				PhGraphicSolidRect background(gPeople->getX(), gPeople->getY(), gPeople->getWidth(), gPeople->getHeight() + 2);
 				if(selectedPeoples.size() && !selectedPeoples.contains(people))
