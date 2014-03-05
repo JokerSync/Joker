@@ -12,7 +12,7 @@ public:
 	/**
 	 * @brief Read a single char
 	 * @param f The file
-	 * @param logLevel The log level
+	 * @param level The log level
 	 * @param name The name (for logging purpose)
 	 * @return A char
 	 */
@@ -21,7 +21,7 @@ public:
 	/**
 	 * @brief Read a two-bytes unsigned short
 	 * @param f The file
-	 * @param logLevel The log level
+	 * @param level The log level
 	 * @param name The name (for logging purpose)
 	 * @return An unsigned short
 	 */
@@ -30,7 +30,7 @@ public:
 	/**
 	 * @brief Read a four-bytes signed integer
 	 * @param f The file
-	 * @param logLevel The log level
+	 * @param level The log level
 	 * @param name The name (for logging purpose)
 	 * @return A signed int
 	 */
@@ -44,7 +44,7 @@ public:
 	 * If the first char is 0xFF, the next char will contain the string size
 	 * and a wide char string will be decoded.
 	 * @param f The file
-	 * @param logLevel The log level
+	 * @param level The log level
 	 * @param name The name (for logging purpose)
 	 * @return A string
 	 */
