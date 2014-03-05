@@ -327,16 +327,6 @@ bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detect
 	}
 
 	int textCount = PhFileTool::readInt(f, blocLevel, "track CDocBlocTexte count");
-	bool readTrackId = true;
-	bool quitAfter = false;
-	if(textCount == 0) {
-		readTrackId = false;
-		if(PhFileTool::readInt(f, level, "bizarre") == 1) {
-			quitAfter = true;
-			PhFileTool::readInt(f, level, "bizarre");
-			textCount = PhFileTool::readInt(f, blocLevel, "track CDocBlocTexte count");
-		}
-	}
 	if(textCount) {
 		if(!checkMosTag(f, blocLevel, "CDocBlocTexte", 0x800c))
 			return false;
@@ -348,11 +338,7 @@ bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detect
 		}
 	}
 
-	int trackId = 0;
-	if(readTrackId)
-		trackId = PhFileTool::readInt(f, level, "track id");
-	else if (quitAfter)
-		return true;
+	PhFileTool::readInt(f, level, "track id");
 
 	for(int k = 0; k < 2; k++) {
 		int count = PhFileTool::readInt(f, level, "track other count");
