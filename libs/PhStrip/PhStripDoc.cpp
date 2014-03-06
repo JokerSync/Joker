@@ -136,11 +136,11 @@ bool PhStripDoc::importDetX(QString fileName)
 				// Reading loops
 				if(elem.tagName() == "loop")
 					_loops.append(new PhStripLoop(loopNumber++,
-												  PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
+					                              PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
 					_cuts.append(new PhStripCut(PhStripCut::Simple,
-												PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
+					                            PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
 				else if(elem.tagName() == "line") {
 					PhFrame frameIn = -1;
 					PhFrame lastFrame = -1;
@@ -239,9 +239,9 @@ PhStripText* PhStripDoc::readMosText(QFile &f, int level)
 	PhFileTool::readInt(f, internLevel, "text");
 
 	PHDBG(level) << PHNQ(PhTimeCode::stringFromFrame(frameIn, _tcType))
-				 << "->"
-				 << PHNQ(PhTimeCode::stringFromFrame(frameOut, _tcType))
-				 << PHNQ(content);
+	             << "->"
+	             << PHNQ(PhTimeCode::stringFromFrame(frameOut, _tcType))
+	             << PHNQ(content);
 	return text;
 }
 
@@ -254,7 +254,7 @@ void PhStripDoc::readMosDetect(QFile &f, int level)
 		PhFileTool::readShort(f, detectLevel);
 	_detects.append(new PhStripDetect(false, frameIn, NULL, frameOut, 0));
 	PHDBG(level) << PhTimeCode::stringFromFrame(frameIn, _tcType)
-				 << PhTimeCode::stringFromFrame(frameOut, _tcType);
+	             << PhTimeCode::stringFromFrame(frameOut, _tcType);
 }
 
 bool PhStripDoc::readMosProperties(QFile &f, int level)
@@ -783,7 +783,7 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, 
 		int end = start + text.length() * 1.20588 + 1;
 
 		addText(_peoples[id], start, end,
-				text, i % nbTrack);
+		        text, i % nbTrack);
 
 		// So the texts are all one after the other
 		position += end - start;
@@ -822,8 +822,8 @@ void PhStripDoc::addText(PhPeople * actor, PhTime start, PhTime end, QString sen
 	if(sentence != " " && sentence != "" ) {
 
 		_texts.push_back(new PhStripText(start, actor,
-										 end,
-										 track, sentence));
+		                                 end,
+		                                 track, sentence));
 		_nbTexts++;
 	}
 }
