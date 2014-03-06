@@ -154,7 +154,7 @@ void PhStripDocTest::importMosTest01()
 	// Test texts
 	QCOMPARE(_doc.getTexts().count(), 3);
 #warning TODO reenable this test for complete acceptance:
-//	QCOMPARE(_doc.getTexts()[0]->getPeople(), people);
+	QCOMPARE(_doc.getTexts()[0]->getPeople(), people);
 	QCOMPARE(_doc.getTexts()[0]->getContent(), QString("Ceci "));
 	QCOMPARE(f2s(_doc.getTexts()[0]->getTimeIn()), QString("00:00:00:20"));
 	QCOMPARE(f2s(_doc.getTexts()[0]->getTimeOut()), QString("00:00:01:12"));
@@ -202,14 +202,12 @@ void PhStripDocTest::importMosTest02()
 
 	// Test texts
 	QCOMPARE(_doc.getTexts().count(), 2);
-#warning TODO reenable this test for complete acceptance:
-//	QCOMPARE(_doc.getTexts()[0]->getPeople(), pierre);
+	QCOMPARE(_doc.getTexts()[0]->getPeople(), pierre);
 	QCOMPARE(_doc.getTexts()[0]->getContent(), QString("Bonjour, Marie."));
 	QCOMPARE(f2s(_doc.getTexts()[0]->getTimeIn()), QString("01:00:00:00"));
 	QCOMPARE(f2s(_doc.getTexts()[0]->getTimeOut()), QString("01:00:02:00"));
 
-#warning TODO reenable this test for complete acceptance:
-//	QCOMPARE(_doc.getTexts()[1]->getPeople(), marie);
+	QCOMPARE(_doc.getTexts()[1]->getPeople(), marie);
 	QCOMPARE(_doc.getTexts()[1]->getContent(), QString("Bonjour, Pierre."));
 	QCOMPARE(f2s(_doc.getTexts()[1]->getTimeIn()), QString("01:00:04:00"));
 	QCOMPARE(f2s(_doc.getTexts()[1]->getTimeOut()), QString("01:00:06:00"));
@@ -248,8 +246,11 @@ void PhStripDocTest::importMosTest03()
 
 	// Test loops
 	QCOMPARE(_doc.getLoops().count(), 2);
+#warning /// @todo test loop number and name
 	QCOMPARE(f2s(_doc.getLoops()[0]->getTimeIn()), QString("06:00:01:00"));
+//	QCOMPARE(_doc.getLoops()[0]->getLoopNumber(), 1);
 	QCOMPARE(f2s(_doc.getLoops()[1]->getTimeIn()), QString("06:01:15:00"));
+//	QCOMPARE(_doc.getLoops()[1]->getLoopNumber(), 2);
 
 	// Test texts
 	QCOMPARE(_doc.getTexts().count(), 206);

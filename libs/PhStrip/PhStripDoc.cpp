@@ -220,7 +220,7 @@ bool PhStripDoc::checkMosWord(QFile &f, int level, unsigned short expected)
 	return true;
 }
 
-void PhStripDoc::readMosText(QFile &f, int level)
+PhStripText* PhStripDoc::readMosText(QFile &f, int level)
 {
 	int internLevel = 4;
 	QString content = PhFileTool::readString(f, 2, "content");
@@ -242,7 +242,7 @@ void PhStripDoc::readMosText(QFile &f, int level)
 				 << "->"
 				 << PHNQ(PhTimeCode::stringFromFrame(frameOut, _tcType))
 				 << PHNQ(content);
-	_texts.append(text);
+	return text;
 }
 
 void PhStripDoc::readMosDetect(QFile &f, int level)
@@ -325,8 +325,10 @@ PhStripDoc::MosTag PhStripDoc::readMosTag(QFile &f, int level, QString name)
 	}
 }
 
-bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level)
+bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level)
 {
+	QList<PhStripDetect*> detectLists;
+	QList<PhStripText*> textList;
 	int detectCount = PhFileTool::readInt(f, detectLevel, "track CDocBlocDetection count");
 
 	if(detectCount) {
@@ -354,11 +356,11 @@ bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detect
 		for(int i = 0; i < textCount; i++) {
 			if(i > 0)
 				PhFileTool::readShort(f, level, "text tag");
-			readMosText(f, textLevel);
+			textList.append(readMosText(f, textLevel));
 		}
 	}
 
-	PhFileTool::readInt(f, level, "track id");
+	PhPeople *people = peopleMap[PhFileTool::readInt(f, level, "people id")];
 
 	for(int k = 0; k < 2; k++) {
 		int count = PhFileTool::readInt(f, level, "track other count");
@@ -370,7 +372,7 @@ bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detect
 			for(int i = 0; i < count; i++) {
 				if(i > 0)
 					PhFileTool::readShort(f, level, "text tag");
-				readMosText(f, textLevel);
+				textList.append(readMosText(f, textLevel));
 			}
 			break;
 		case MosLabel:
@@ -388,6 +390,12 @@ bool PhStripDoc::readMosTrack(QFile &f, int blocLevel, int textLevel, int detect
 			f.close();
 			return false;
 		}
+	}
+
+	PHDBG(textLevel) << "Adding" << textList.count() << "texts";
+	foreach(PhStripText* text, textList) {
+		text->setPeople(people);
+		_texts.append(text);
 	}
 
 	return true;
@@ -410,7 +418,7 @@ bool PhStripDoc::importMos(QString fileName)
 
 	this->reset();
 
-	int level = 2;
+	int level = 0;
 	int ok = level;
 	int propLevel = level;
 	int peopleLevel = level;
@@ -495,13 +503,15 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag2(f, blocLevel, "CDocPersonnage"))
 		return false;
 
+	QMap<int, PhPeople*> peopleMap;
 	for(int i = 0; i < peopleCount; i++) {
 		if(i > 0)
-			PhFileTool::readShort(f, peopleLevel, "0x8006");
-		PhFileTool::readInt(f, peopleLevel, "index");
+			PhFileTool::readShort(f, level, "people tag");
+
+		int peopleId = PhFileTool::readInt(f, peopleLevel, "peopleId");
 
 		QString name = PhFileTool::readString(f, peopleLevel, "name");
-		_peoples[name] = new PhPeople(name, "#000000");
+		peopleMap[peopleId] = _peoples[name] = new PhPeople(name, "#000000");
 
 		PhFileTool::readInt(f, peopleLevel, "line number");
 		for(int j = 0; j < 6; j++)
@@ -511,8 +521,6 @@ bool PhStripDoc::importMos(QString fileName)
 		if(peopleType == 2)
 			PhFileTool::readString(f, peopleLevel, "date 1");
 	}
-
-	//		PHDEBUG << "reading extrasection ???";
 
 	int peopleCount2 = PhFileTool::readInt(f, blocLevel, "people count 2");
 	if(peopleCount2 != peopleCount) {
@@ -568,7 +576,7 @@ bool PhStripDoc::importMos(QString fileName)
 		PHDBG(level) << "====== READING TRACK " << track << "======";
 		if((track > 0) && !checkMosTag(f, level, MosTrack))
 			return false;
-		if(!readMosTrack(f, blocLevel, textLevel, detectLevel, labelLevel, level))
+		if(!readMosTrack(f, peopleMap, blocLevel, textLevel, detectLevel, labelLevel, level))
 			return false;
 	}
 
@@ -584,9 +592,10 @@ bool PhStripDoc::importMos(QString fileName)
 			if((i > 0) && !checkMosTag(f, level, MosLoop))
 				return false;
 			int number = PhFileTool::readInt(f, loopLevel, "loop number");
+
 			PhFrame loopFrame = _videoFrameStamp + PhFileTool::readInt(f, loopLevel, "loop tc") / 12;
 			PhFileTool::readString(f, loopLevel, "loop name");
-			_loops.append(new PhStripLoop(loopCount, loopFrame));
+			_loops.append(new PhStripLoop(number, loopFrame));
 		}
 	}
 
