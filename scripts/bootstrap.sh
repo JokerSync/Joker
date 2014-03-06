@@ -6,7 +6,7 @@ echo "Mac OS X detected"
 brew update > /dev/null
 brew install qt5
 #brew install sdl2 sdl2_image sdl2_ttf
-brew install ffmpeg libav portaudio doxygen uncrustify node
+brew install ffmpeg libav portaudio doxygen uncrustify node npm
 find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
 
 # Installing appdmg for deployment
