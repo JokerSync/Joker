@@ -442,7 +442,7 @@ private:
 	void readMosDetect(QFile &f, int level);
 	bool readMosProperties(QFile &f, int level);
 	MosTag readMosTag(QFile &f, int level, QString name);
-	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level);
+	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level);
 	bool _forceRatio169;
 };
 

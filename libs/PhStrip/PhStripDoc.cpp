@@ -325,7 +325,7 @@ PhStripDoc::MosTag PhStripDoc::readMosTag(QFile &f, int level, QString name)
 	}
 }
 
-bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level)
+bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level)
 {
 	QList<PhStripDetect*> detectLists;
 	QList<PhStripText*> textList;
@@ -360,7 +360,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, int blo
 		}
 	}
 
-	PhPeople *people = peopleMap[PhFileTool::readInt(f, level, "people id")];
+	int peopleId = PhFileTool::readInt(f, level, "people id");
 
 	for(int k = 0; k < 2; k++) {
 		int count = PhFileTool::readInt(f, level, "track other count");
@@ -394,7 +394,8 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, int blo
 
 	PHDBG(textLevel) << "Adding" << textList.count() << "texts";
 	foreach(PhStripText* text, textList) {
-		text->setPeople(people);
+		text->setPeople(peopleMap[peopleId]);
+		text->setTrack(peopleTrackMap[peopleId]);
 		_texts.append(text);
 	}
 
@@ -504,16 +505,17 @@ bool PhStripDoc::importMos(QString fileName)
 		return false;
 
 	QMap<int, PhPeople*> peopleMap;
+	QMap<int, int> peopleTrackMap;
 	for(int i = 0; i < peopleCount; i++) {
 		if(i > 0)
 			PhFileTool::readShort(f, level, "people tag");
 
 		int peopleId = PhFileTool::readInt(f, peopleLevel, "peopleId");
 
-		QString name = PhFileTool::readString(f, peopleLevel, "name");
+		QString name = PhFileTool::readString(f, peopleLevel, "people name");
 		peopleMap[peopleId] = _peoples[name] = new PhPeople(name, "#000000");
 
-		PhFileTool::readInt(f, peopleLevel, "line number");
+		peopleTrackMap[peopleId] = PhFileTool::readInt(f, peopleLevel, "people track") - 1;
 		for(int j = 0; j < 6; j++)
 			PhFileTool::readShort(f, level);
 
@@ -576,7 +578,7 @@ bool PhStripDoc::importMos(QString fileName)
 		PHDBG(level) << "====== READING TRACK " << track << "======";
 		if((track > 0) && !checkMosTag(f, level, MosTrack))
 			return false;
-		if(!readMosTrack(f, peopleMap, blocLevel, textLevel, detectLevel, labelLevel, level))
+		if(!readMosTrack(f, peopleMap, peopleTrackMap, blocLevel, textLevel, detectLevel, labelLevel, level))
 			return false;
 	}
 
