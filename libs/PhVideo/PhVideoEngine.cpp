@@ -69,14 +69,23 @@ bool PhVideoEngine::open(QString fileName)
 
 	// Looking for timecode type
 	float fps = this->framePerSecond();
-	if(fps < 24)
+	if(fps == 0) {
+		PHDEBUG << "Bad fps detect => assuming 25";
+		_clock.setTimeCodeType(PhTimeCodeType25);
+	}
+	else if(fps < 24)
 		_clock.setTimeCodeType(PhTimeCodeType2398);
 	else if (fps < 24.5f)
 		_clock.setTimeCodeType(PhTimeCodeType24);
 	else if (fps < 26)
 		_clock.setTimeCodeType(PhTimeCodeType25);
-	else
+	else if (fps < 30)
 		_clock.setTimeCodeType(PhTimeCodeType2997);
+	else {
+#warning /// @todo patch for #107 => find better fps decoding
+		PHDEBUG << "Bad fps detect => assuming 25";
+		_clock.setTimeCodeType(PhTimeCodeType25);
+	}
 
 	_pCodecContext = _videoStream->codec;
 
@@ -95,6 +104,7 @@ bool PhVideoEngine::open(QString fileName)
 	_pFrame = avcodec_alloc_frame();
 
 	PHDEBUG << "length:" << this->length();
+	PHDEBUG << "fps:" << this->framePerSecond();
 	_currentFrame = -1;
 	_clock.setFrame(0);
 	goToFrame(0);
@@ -128,7 +138,7 @@ void PhVideoEngine::setSettings(PhVideoSettings *settings)
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
-//	_clock.tick(60);
+	//	_clock.tick(60);
 	PhFrame delay = 0;
 	if(_settings)
 		delay = _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
@@ -189,7 +199,7 @@ QString PhVideoEngine::codecName()
 
 bool PhVideoEngine::goToFrame(PhFrame frame)
 {
-//	int lastGotoElapsed = _testTimer.elapsed();
+	//	int lastGotoElapsed = _testTimer.elapsed();
 	int seekElapsed = -1;
 	int readElapsed = -1;
 	int decodeElapsed = -1;
@@ -281,7 +291,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		}
 	}
 
-//	int currentGotoElapsed = _testTimer.elapsed();
+	//	int currentGotoElapsed = _testTimer.elapsed();
 	//	if(_testTimer.elapsed() > 25)
 	//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
 	//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
