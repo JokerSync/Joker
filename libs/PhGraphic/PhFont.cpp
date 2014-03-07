@@ -1,46 +1,46 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
-
-#include "PhFont.h"
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include <QtGlobal>
 
-
-
+#if defined(Q_OS_WIN)
+#include <GL/glu.h>
+#else
 #include <glu.h>
+#endif
 
+#include "PhFont.h"
 #include "PhTools/PhDebug.h"
 
-PhFont::PhFont(): _texture(-1), _glyphHeight(0)
+PhFont::PhFont() : _texture(-1), _glyphHeight(0)
 {
 	font = NULL;
-	boldness = 0;
+	_boldness = 0;
 }
 
 bool PhFont::setFontFile(QString fontFile)
 {
-	PHDEBUG << fontFile;
-
-	if(fontFile != this->fontFile)
-	{
-		this->fontFile = fontFile;
-		return init(this->fontFile);
+	if(fontFile != this->_fontFile) {
+		PHDEBUG << fontFile;
+		this->_fontFile = fontFile;
+		return init(this->_fontFile);
 	}
 	return true;
 }
 
 QString PhFont::getFontFile()
 {
-	return fontFile;
+	return _fontFile;
 }
 
 // This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
 bool PhFont::init(QString fontFile)
 {
 	PHDEBUG << fontFile;
-	if(font != NULL){
+	if(font != NULL) {
 		TTF_CloseFont(font);
 	}
 	font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
@@ -67,19 +67,15 @@ bool PhFont::init(QString fontFile)
 	_glyphHeight = 0;
 
 	//set the boldness
-	PHDEBUG << "Setting the font boldness to :" << boldness;
-	for(int i = 0; i <= boldness; i++)
-	{
+	PHDEBUG << "Setting the font boldness to :" << _boldness;
+	for(int i = 0; i <= _boldness; i++) {
 		TTF_SetFontOutline(font, i);
 		// We get rid of the 32 first useless char
-		for(Uint16 ch = 32; ch < 256; ++ch)
-		{
-			if(TTF_GlyphIsProvided(font, ch))
-			{
+		for(Uint16 ch = 32; ch < 256; ++ch) {
+			if(TTF_GlyphIsProvided(font, ch)) {
 				int minx, maxx, miny, maxy, advance;
-				TTF_GlyphMetrics(font, ch, &minx,&maxx, &miny, &maxy, &advance);
-				if(advance != 0)
-				{
+				TTF_GlyphMetrics(font, ch, &minx, &maxx, &miny, &maxy, &advance);
+				if(advance != 0) {
 					// First render the glyph to a surface
 					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
 					if (!glyphSurface)
@@ -118,14 +114,14 @@ bool PhFont::init(QString fontFile)
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, matrixSurface->format->BytesPerPixel, matrixSurface->w, matrixSurface->h, 0,
-				  GL_RGBA, GL_UNSIGNED_BYTE, matrixSurface->pixels);
+	              GL_RGBA, GL_UNSIGNED_BYTE, matrixSurface->pixels);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Once the texture is created, the surface is no longer needed.
 	SDL_FreeSurface(matrixSurface);
-//	TTF_CloseFont(font);
+	//	TTF_CloseFont(font);
 
 	return true;
 }
@@ -141,12 +137,23 @@ void PhFont::select()
 }
 int PhFont::getBoldness() const
 {
-	return boldness;
+	return _boldness;
+}
+
+int PhFont::getNominalWidth(QString string)
+{
+	int width = 0;
+	foreach(QChar c, string) {
+		width += getAdvance(c.toLatin1());
+	}
+	return width;
 }
 
 void PhFont::setBoldness(int value)
 {
-	boldness = value;
-	init(fontFile);
+	if(_boldness != value) {
+		_boldness = value;
+		init(_fontFile);
+	}
 }
 

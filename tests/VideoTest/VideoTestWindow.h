@@ -1,10 +1,8 @@
 #ifndef VIDEOTESTWINDOW_H
 #define VIDEOTESTWINDOW_H
 
-#include <QMainWindow>
 #include <QString>
 #include <QTimer>
-#include <QSettings>
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhDebug.h"
@@ -12,31 +10,37 @@
 #include "PhVideo/PhVideoView.h"
 #include "PhVideo/PhVideoEngine.h"
 
-#include "PhCommonUI/PhMediaPanelDialog.h"
+#include "PhCommonUI/PhFloatingMediaPanel.h"
+#include "PhCommonUI/PhDocumentWindow.h"
+
+#include "VideoTestSettings.h"
 
 namespace Ui {
-	class VideoTestWindow;
+class VideoTestWindow;
 }
 
-class VideoTestWindow : public QMainWindow
+class VideoTestWindow : public PhDocumentWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    /**
-     * @brief MainView constructor
-     */
-    VideoTestWindow(QSettings *settings);
+	/**
+	 * @brief MainView constructor
+	 */
+	VideoTestWindow(VideoTestSettings *settings);
 
 	~VideoTestWindow();
-    /**
-     * Open a video file.
-     * @param fileName Path of the video file to open.
-     * @return True if succeeds, false otherwise.
-     */
-    bool openFile(QString fileName);
+	/**
+	 * Open a video file.
+	 * @param fileName Path of the video file to open.
+	 * @return True if succeeds, false otherwise.
+	 */
+	bool openDocument(QString fileName);
 
 protected:
 	void resizeEvent(QResizeEvent *);
+	void closeEvent(QCloseEvent *);
+
+	QMenu *recentDocumentMenu();
 
 private slots:
 	void on_actionPlay_pause_triggered();
@@ -54,9 +58,9 @@ private slots:
 private:
 
 	Ui::VideoTestWindow *ui;
-	QSettings *_settings;
+	VideoTestSettings *_settings;
 	PhVideoEngine _videoEngine;
-	PhMediaPanelDialog _mediaPanelDialog;
+	PhFloatingMediaPanel _mediaPanelDialog;
 };
 
 #endif

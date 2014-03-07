@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "JokerWindow.h"
 #include "ui_JokerWindow.h"
 
@@ -6,22 +12,26 @@
 #include <QFileOpenEvent>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <QWindowStateChangeEvent>
+#include <QMouseEvent>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
-#include "PhCommonUI/PhFontDialog.h"
-#include "AboutMenu.h"
+#include "AboutDialog.h"
 #include "PreferencesDialog.h"
 #include "PeopleDialog.h"
 
-JokerWindow::JokerWindow(QSettings *settings) :
-	QMainWindow(NULL),
+JokerWindow::JokerWindow(JokerSettings *settings) :
+	PhDocumentWindow(settings),
 	ui(new Ui::JokerWindow),
 	_settings(settings),
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
+	#if USE_LTC
+	_ltcReader(),
+	#endif
 	_needToSave(false),
-	_currentStripFile("")
+	_firstDoc(true)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -30,7 +40,7 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
 	ui->actionAbout->setMenuRole(QAction::AboutRole);
 
-	setupOpenRecentMenu();
+	connect(ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
 	// Get the pointer to the differents objects :
 	// strip, video engine and doc
@@ -51,10 +61,33 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	_synchronizer.setStripClock(_strip->clock());
 	_synchronizer.setVideoClock(_videoEngine->clock());
 
-    setupSyncProtocol();
+	setupSyncProtocol();
 
 	// Setting up the media panel
 	_mediaPanel.setClock(_strip->clock());
+#warning /// @todo move to CSS file
+	_mediaPanel.setStyleSheet(
+	    "* {"
+	    "	  color: white;"
+	    "  }"
+	    "  PhMediaPanel { "
+	    "	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
+	    "	  border-style: solid;                                                                          "
+	    "	  border-width: 4px;                                                                            "
+	    "	  border-radius: 3px;                                                                           "
+	    "	  border-color: white;                                                                          "
+	    "  }                                                                                                "
+	    "  QPushButton, QComboBox{                                                                          "
+	    "	  background: grey;                                                                             "
+	    "	  border-style: outset;                                                                         "
+	    "	  border-width: 2px;                                                                            "
+	    "	  border-radius: 5px;                                                                           "
+	    "	  border-color: white;                                                                          "
+	    "  }                                                                                                "
+	    "  QLabel#_timecodeLabel{                                                                           "
+	    "	  padding: 10px;                                                                                "
+	    "  }                                                                                                "
+	    );
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
@@ -62,106 +95,21 @@ JokerWindow::JokerWindow(QSettings *settings) :
 	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
 	_mediaPanelTimer.start(3000);
 
-	// Set up a filter for catching mouse move event (see eventFilter())
-	// that will show the media panel back
-	qApp->installEventFilter(this);
-
 	this->setFocus();
 
-	if(_settings->value("stripTestMode").toBool())
-	{
-#warning TODO do we warn the user that test mode is on?
+	if(_settings->stripTestMode()) {
+#warning /// @todo do we warn the user that test mode is on?
 		ui->actionTest_mode->setChecked(true);
 	}
 
-#warning TODO fix fullscreen on startup
-	if(_settings->value("startFullScreen", false).toBool())
-		this->showFullScreen();
-
+#warning /// @todo move to PhDocumentWindow
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
-
 }
 
 JokerWindow::~JokerWindow()
 {
 	delete ui;
-}
-
-void JokerWindow::openRecent()
-{
-	if(!checkSaveFile())
-		return;
-
-	// This slot is triggered by dynamic action
-	openFile(sender()->objectName());
-}
-
-void JokerWindow::updateOpenRecent()
-{
-	if(!ui->menuOpen_recent->isEnabled())
-		ui->menuOpen_recent->setEnabled(true);
-
-	QAction * menu = QObject::findChild<QAction *>(_doc->getFilePath(), Qt::FindDirectChildrenOnly);
-	// If the object already belong to the list, set it on top
-	if(menu)
-	{
-		ui->menuOpen_recent->removeAction(menu);
-		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), menu);
-	}
-	// Else, add it
-	else
-	{
-		// Set the corresponding button
-		QAction * action = new QAction(_doc->getFilePath(), this);
-		// Set the ObjectName, very important for openRecent()
-		action->setObjectName(_doc->getFilePath());
-		connect(action, SIGNAL(triggered()), this, SLOT(openRecent()));
-		// Insert it in the button list
-		_recentFileButtons.insert(0, action);
-		// Insert it at the first place on the menu
-		ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().first(), action);
-	}
-
-	// Open the settings group of recent files
-	_settings->beginGroup("openRecent");
-	int i = 1;
-	// Rewrite the setting files from the menu items
-	foreach(QAction * action, ui->menuOpen_recent->actions())
-	{
-		// Break if the separator or the max number is reached
-		if(action->isSeparator() or i > 10)
-			break;
-		// Write the setting
-		_settings->setValue(QString::number(i), action->objectName());
-		i++;
-	}
-	// Close the setting group
-	_settings->endGroup();
-}
-
-void JokerWindow::setupOpenRecentMenu()
-{
-	// Open the settings group of recent files
-	_settings->beginGroup("openRecent");
-	// List them
-	QStringList recentList = _settings->childKeys();
-	foreach(QString recentFileIndex, recentList)
-	{
-		QString fileName = _settings->value(recentFileIndex, "empty").toString();
-		QAction * action = new QAction(fileName, this);
-		action->setObjectName(fileName);
-		connect(action, SIGNAL(triggered()), this, SLOT(openRecent()));
-		_recentFileButtons.append(action);
-	}
-
-	// Add all the actions to the menu
-	ui->menuOpen_recent->insertActions(ui->menuOpen_recent->actions().last(), _recentFileButtons.toList());
-	// Add a separator just above the "clear list" menu
-	ui->menuOpen_recent->insertAction(ui->menuOpen_recent->actions().last(), ui->menuOpen_recent->addSeparator());
-	// Close the group
-	_settings->endGroup();
-
 }
 
 void JokerWindow::setupSyncProtocol()
@@ -170,163 +118,195 @@ void JokerWindow::setupSyncProtocol()
 
 	// Disable old protocol
 	_sonySlave.close();
+#if USE_LTC
 	_ltcReader.close();
+#endif
+	Synchronizer::SyncType type = (Synchronizer::SyncType)_settings->synchroProtocol();
 
-	switch(_settings->value("synchroProtocol", NO_SYNC).toInt())
-	{
-	case SONY:
+	switch(type) {
+	case Synchronizer::Sony:
 		// Initialize the sony module
-		if(_sonySlave.open())
-		{
+		if(_sonySlave.open()) {
 			clock = _sonySlave.clock();
 			ui->videoStripView->setSony(&_sonySlave);
 		}
-		else
+		else {
+			type = Synchronizer::NoSync;
 			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
+		}
 		break;
-	case LTC:
+#if USE_LTC
+	case Synchronizer::LTC:
 		{
-			QString input = _settings->value("ltcInputDevice", "").toString();
+			QString input = _settings->ltcInputDevice();
 			if(_ltcReader.init(input))
 				clock = _ltcReader.clock();
-			else
+			else {
 				QMessageBox::critical(this, "", "Unable to open " + input);
+				type = Synchronizer::NoSync;
+			}
 			break;
 		}
+#endif
+	case Synchronizer::NoSync:
+		break;
 	}
 
-	_synchronizer.setSyncClock(clock);
+	_synchronizer.setSyncClock(clock, type);
 
 	// Disable slide if Joker is sync to a protocol
 	_mediaPanel.setSliderEnable(clock == NULL);
 
-	if(clock == NULL)
-		_settings->setValue("synchroProtocol", NO_SYNC);
+	_settings->setSynchroProtocol(type);
 }
 
-void JokerWindow::openFile(QString fileName)
+bool JokerWindow::openDocument(QString fileName)
 {
 	hideMediaPanel();
+	/// Clear the selected people name list (except for the first document).
+	if(!_firstDoc)
+		_settings->setSelectedPeopleNameList(QStringList());
+	else
+		_firstDoc = false;
 
-	// Checking if the file exists
-	if(QFile::exists(fileName))
-	{
-		if(_doc->openStripFile(fileName))
-		{
-			setCurrentStripFile(fileName);
+	if(!_doc->openStripFile(fileName))
+		return false;
 
-			// Opening the corresponding video file if it exists
-			if(openVideoFile(_doc->getVideoPath()))
-			{
-				PhFrame frameStamp = _doc->getVideoTimestamp();
-				_videoEngine->setFrameStamp(frameStamp);
-				_mediaPanel.setFirstFrame(frameStamp);
-			}
-			else
-				_videoEngine->close();
+	/// If the document is opened successfully :
+	/// - Update the current document name (settings, windows title)
+	setCurrentDocument(fileName);
 
-			// On succeed, synchronizing the clocks
-			_strip->clock()->setTimeCodeType(_doc->getTCType());
-			_strip->clock()->setFrame(_doc->getLastFrame());
-
-			_needToSave = false;
-		}
+	/// - Open the corresponding video file if it exists.
+	if(openVideoFile(_doc->getVideoPath())) {
+		PhFrame frameStamp = _doc->getVideoTimestamp();
+		_videoEngine->setFirstFrame(frameStamp);
+		_mediaPanel.setFirstFrame(frameStamp);
 	}
+	else
+		_videoEngine->close();
+
+	/// - Set the video aspect ratio.
+	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
+	ui->videoStripView->setForceRatio169(_doc->forceRatio169());
+
+	/// - Use the document timecode type.
+	_strip->clock()->setTimeCodeType(_doc->getTCType());
+	/// - Goto to the document last position.
+	_strip->clock()->setFrame(_doc->getLastFrame());
+	/// - Disable the need to save flag.
+	_needToSave = false;
+
+	return true;
 }
 
-bool JokerWindow::eventFilter(QObject *, QEvent *event)
+bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
-	switch (event->type())
-	{
-	case QEvent::FileOpen:
-	{
-		QString filePath = static_cast<QFileOpenEvent *>(event)->file();
-		QString fileType = filePath.split(".").last().toLower();
-		// As the plist file list all the supported format (which are .strip, .detx, .avi & .mov)
-		// if the file is not a strip or a detx file, it's a video file, we don't need any protection
-		if(fileType == "detx" or fileType == "strip")
+	/// The event filter catch the following event:
+	switch (event->type()) {
+	case QEvent::FileOpen: /// - FileOpen : To process a file dragged on the application dock icon (MacOS)
 		{
-			if(checkSaveFile())
-				openFile(filePath);
+#warning /// @todo move to PhDocumentWindow
+			QString filePath = static_cast<QFileOpenEvent *>(event)->file();
+			QString fileType = filePath.split(".").last().toLower();
+			// As the plist file list all the supported format (which are .strip, .detx, .avi & .mov)
+			// if the file is not a strip or a detx file, it's a video file, we don't need any protection
+			if(fileType == "detx" or fileType == "strip") {
+				if(checkSaveFile())
+					openDocument(filePath);
+			}
+			else
+				openVideoFile(filePath);
+			break;
 		}
-		else
-			openVideoFile(filePath);
-		break;
-	}
-
-	case QEvent::ApplicationDeactivate:
+	case QEvent::ApplicationDeactivate: /// - ApplicationDeactivate : to hide the mediapanel
 		hideMediaPanel();
 		break;
-	case QEvent::MouseMove:
-		if(this->hasFocus())
-			fadeInMediaPanel();
+	case QEvent::MouseMove: /// - Mouse move show the media panel
+		fadeInMediaPanel();
 		break;
-
-	case QEvent::Drop:
-	{
-		const QMimeData* mimeData = static_cast<QDropEvent *>(event)->mimeData();
-
-		// If there is one file (not more) we open it
-		if (mimeData->urls().length() == 1)
-		{
-			QString filePath = mimeData->urls().first().toLocalFile();
-			QString fileType = filePath.split(".").last().toLower();
-			if(fileType == "detx" or fileType == "strip")
-			{
-				if(checkSaveFile())
-					openFile(filePath);
-			}
-			else if (fileType == "avi" or fileType == "mov")
-				openVideoFile(filePath);
-		}
-		break;
-	}
-	case QEvent::DragEnter:
+	case QEvent::DragEnter: /// - Accept and process a file drop on the window
 		event->accept();
 		break;
+	case QEvent::Drop:
+		{
+#warning /// @todo move to PhDocumentWindow
+			const QMimeData* mimeData = static_cast<QDropEvent *>(event)->mimeData();
+
+			// If there is one file (not more) we open it
+			if (mimeData->urls().length() == 1) {
+				QString filePath = mimeData->urls().first().toLocalFile();
+				QString fileType = filePath.split(".").last().toLower();
+				if(fileType == "detx" or fileType == "strip") {
+					if(checkSaveFile())
+						openDocument(filePath);
+				}
+				else if (fileType == "avi" or fileType == "mov")
+					openVideoFile(filePath);
+			}
+			break;
+		}
+	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode
+		if(sender == this)
+			toggleFullScreen();
+		break;
+	case QEvent::MouseButtonPress:
+		{
+			QMouseEvent *mouseEvent = (QMouseEvent*)event;
+			PHDEBUG << sender << mouseEvent->buttons() << mouseEvent->pos() << this->pos();
+			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
+				/// - Right mouse click on the video open the video file dialog.
+				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
+					on_actionOpen_Video_triggered();
+				else /// - Left mouse click on the strip open the strip file dialog.
+					on_actionOpen_triggered();
+				return true;
+			}
+		}
 	default:
 		break;
 	}
-	return false;
+
+	return PhDocumentWindow::eventFilter(sender, event);
+}
+
+QMenu *JokerWindow::recentDocumentMenu()
+{
+	return ui->menuOpen_recent;
+}
+
+QAction *JokerWindow::fullScreenAction()
+{
+	return ui->actionFullscreen;
 }
 
 void JokerWindow::closeEvent(QCloseEvent *event)
 {
+	/// Check if the current document has to be saved (it might cancel the action).
 	if(!checkSaveFile())
 		event->ignore();
-}
-
-void JokerWindow::setCurrentStripFile(QString stripFile)
-{
-	_currentStripFile = stripFile;
-	this->setWindowTitle(stripFile);
-	_settings->setValue("lastFile", stripFile);
-	_settings->setValue("lastFolder", QFileInfo(stripFile).absolutePath());
-
-	updateOpenRecent();
+	else /// Close the PhMediaPanel.
+		_mediaPanel.close();
 }
 
 void JokerWindow::on_actionOpen_triggered()
 {
 	hideMediaPanel();
 
-	if(checkSaveFile())
-	{
-		QString filter = tr("DetX files") + " (*.detx);; "
-				+ tr("Joker files") + " (*.strip);; "
-				+ tr("Rythmo files") + " (*.detx *.strip);; "
-				+ tr("All files") + " (*.*)";
-		QFileDialog dlg(this, tr("Open..."), _settings->value("lastFolder", QDir::homePath()).toString(), filter);
+	if(checkSaveFile()) {
+		QString filter = tr("Rythmo files") + " (*.detx *.strip);; "
+		                 + tr("Joker files") + " (*.strip);; "
+		                 + tr("DetX files") + " (*.detx);; "
+		                 + tr("All files") + " (*.*)";
+		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
-		dlg.selectNameFilter(_settings->value("selectedFilter", "Rythmo files (*.detx *.strip)").toString());
+		dlg.selectNameFilter(_settings->selectedFilter());
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
 
 		dlg.setFileMode(QFileDialog::ExistingFile);
-		if(dlg.exec())
-		{
+		if(dlg.exec()) {
 			QString fileName = dlg.selectedFiles()[0];
-			openFile(fileName);
-			_settings->setValue("selectedFilter", dlg.selectedNameFilter());
+			openDocument(fileName);
+			_settings->setSelectedFilter(dlg.selectedNameFilter());
 		}
 	}
 	fadeInMediaPanel();
@@ -408,10 +388,9 @@ void JokerWindow::on_actionOpen_Video_triggered()
 {
 	hideMediaPanel();
 
-	QString lastFolder = _settings->value("lastVideoFolder", QDir::homePath()).toString();
-	QFileDialog dlg(this, tr("Open..."), lastFolder, tr("Movie files") + " (*.avi *.mov)");
-	if(dlg.exec())
-	{
+	QString lastFolder = _settings->lastVideoFolder();
+	QFileDialog dlg(this, tr("Open a video..."), lastFolder, tr("Movie files") + _settings->videoFileFilter());
+	if(dlg.exec()) {
 		QString videoFile = dlg.selectedFiles()[0];
 		if(openVideoFile(videoFile))
 			_strip->clock()->setFrame(_doc->getVideoTimestamp());
@@ -424,36 +403,32 @@ bool JokerWindow::openVideoFile(QString videoFile)
 {
 	QFileInfo lastFileInfo(_doc->getVideoPath());
 	QFileInfo fileInfo(videoFile);
-	if (fileInfo.exists() && _videoEngine->open(videoFile))
-	{
-		PhFrame frameStamp = _videoEngine->frameStamp();
+	if (fileInfo.exists() && _videoEngine->open(videoFile)) {
+		PhFrame frameStamp = _videoEngine->firstFrame();
 
 		_mediaPanel.setFirstFrame(frameStamp);
 		_mediaPanel.setMediaLength(_videoEngine->length());
 
-		if(videoFile != _doc->getVideoPath())
-		{
+		if(videoFile != _doc->getVideoPath()) {
 			_doc->setVideoPath(videoFile);
 			if(frameStamp > 0)
 				_doc->setVideoTimestamp(frameStamp);
 			_needToSave = true;
 		}
 
-		if(frameStamp == 0)
-		{
+		if(frameStamp == 0) {
 			frameStamp = _doc->getVideoTimestamp();
-			_videoEngine->setFrameStamp(frameStamp);
+			_videoEngine->setFirstFrame(frameStamp);
 			_videoEngine->clock()->setFrame(frameStamp);
-			if(fileInfo.fileName() != lastFileInfo.fileName())
-			{
+			if(fileInfo.fileName() != lastFileInfo.fileName()) {
 				on_actionChange_timestamp_triggered();
-				frameStamp = _videoEngine->frameStamp();
+				frameStamp = _videoEngine->firstFrame();
 			}
 		}
 
 		_videoEngine->clock()->setFrame(frameStamp);
 
-		_settings->setValue("lastVideoFolder", fileInfo.absolutePath());
+		_settings->setLastVideoFolder(fileInfo.absolutePath());
 		return true;
 	}
 	return false;
@@ -462,15 +437,28 @@ bool JokerWindow::openVideoFile(QString videoFile)
 void JokerWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();
+	PhFrame frame;
+	if(_synchronizer.videoClock()->frame() < _videoEngine->firstFrame())
+		frame = _videoEngine->firstFrame();
+	else if(_synchronizer.videoClock()->frame() > _videoEngine->firstFrame() + _videoEngine->length())
+		frame = _videoEngine->lastFrame();
+	else
+		frame = _synchronizer.videoClock()->frame();
 
-	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), _synchronizer.videoClock()->frame());
-	if(dlg.exec() == QDialog::Accepted)
-	{
-		PhFrame frameStamp = _videoEngine->frameStamp();
-		frameStamp += dlg.frame() - _synchronizer.videoClock()->frame();
-		_videoEngine->setFrameStamp(frameStamp);
+	PhTimeCodeDialog dlg(_strip->clock()->timeCodeType(), frame);
+	if(dlg.exec() == QDialog::Accepted) {
+		PhFrame frameStamp;
+		if(_synchronizer.videoClock()->frame() > _videoEngine->firstFrame() + _videoEngine->length())
+			frameStamp = dlg.frame() - (_videoEngine->length() - 1);
+		else if (_synchronizer.videoClock()->frame() < _videoEngine->firstFrame())
+			frameStamp =  dlg.frame();
+		else
+			frameStamp = _videoEngine->firstFrame() + dlg.frame() - _synchronizer.videoClock()->frame();
+
+		_videoEngine->setFirstFrame(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
 		_doc->setVideoTimestamp(frameStamp);
+		_mediaPanel.setFirstFrame(frameStamp);
 		_needToSave = true;
 	}
 
@@ -483,7 +471,7 @@ void JokerWindow::on_actionAbout_triggered()
 {
 	hideMediaPanel();
 
-	AboutMenu menu;
+	AboutDialog menu;
 	menu.exec();
 
 	fadeInMediaPanel();
@@ -493,21 +481,28 @@ void JokerWindow::on_actionAbout_triggered()
 void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
-    int syncProtocol = _settings->value("synchroProtocol", NO_SYNC).toInt();
-    QString inputLTC = _settings->value("ltcInputDevice", "").toString();
+	int oldSynchroProtocol = _settings->synchroProtocol();
+	QString oldLTCInputDevice = _settings->ltcInputDevice();
+
 	PreferencesDialog dlg(_settings);
-    dlg.exec();
-    if(syncProtocol != _settings->value("synchroProtocol", NO_SYNC).toInt() or inputLTC != _settings->value("ltcInputDevice", ""))
-    {
-        PHDEBUG << "Set protocol:" << _settings->value("synchroProtocol", NO_SYNC).toInt();
-        setupSyncProtocol();
-    }
+	dlg.exec();
+	if((oldSynchroProtocol != _settings->synchroProtocol()) || (oldLTCInputDevice != _settings->ltcInputDevice())) {
+		PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
+		setupSyncProtocol();
+	}
 
 	fadeInMediaPanel();
 }
 
 void JokerWindow::fadeInMediaPanel()
 {
+	// Don't show the mediaPanel if Joker has not thefocus.
+	if(!this->hasFocus())
+		return;
+	// Don't show the mediaPanel if Joker is remote controled.
+	if(_settings->synchroProtocol() != Synchronizer::NoSync)
+		return;
+
 	_mediaPanel.show();
 	_mediaPanelAnimation.stop();
 	_mediaPanelAnimation.setDuration(300);
@@ -520,17 +515,15 @@ void JokerWindow::fadeInMediaPanel()
 
 void JokerWindow::fadeOutMediaPanel()
 {
-    // Don't fade out the media panel if the mouse is over it
-	if(_mediaPanel.underMouse() or _mediaPanel.isMousePressed())
-    {
+	// Don't fade out the media panel if the mouse is over it
+	if(_mediaPanel.underMouse() or _mediaPanel.isMousePressed()) {
 		PHDEBUG << "Don't hide";
-        _mediaPanelTimer.start(3000);
-        return;
-    }
+		_mediaPanelTimer.start(3000);
+		return;
+	}
 
 	PHDEBUG << _mediaPanelState;
-	switch(_mediaPanelState)
-	{
+	switch(_mediaPanelState) {
 	case MediaPanelVisible:
 		PHDEBUG << "Hiding";
 		_mediaPanelAnimation.setDuration(1000);
@@ -563,10 +556,7 @@ void JokerWindow::on_actionProperties_triggered()
 
 void JokerWindow::on_actionTest_mode_triggered()
 {
-	if(_settings->value("stripTestMode", false).toBool())
-		_settings->setValue("stripTestMode", false);
-	else
-		_settings->setValue("stripTestMode", true);
+	_settings->setStripTestMode(!_settings->stripTestMode());
 }
 
 void JokerWindow::on_actionTimecode_triggered()
@@ -597,15 +587,15 @@ void JokerWindow::on_actionPrevious_element_triggered()
 void JokerWindow::on_actionClear_list_triggered()
 {
 	//Open the recent group
-	_settings->beginGroup("openRecent");
-	//List all keys
-	QStringList indexes = _settings->allKeys();
-	//Remove them from
-	foreach(QString index, indexes)
-		_settings->remove(index);
+	//	_settings->beginGroup("openRecent");
+	//	//List all keys
+	//	QStringList indexes = _settings->allKeys();
+	//	//Remove them from
+	//	foreach(QString index, indexes)
+	//	_settings->remove(index);
 
-	//Close the group
-	_settings->endGroup();
+	//	//Close the group
+	//	_settings->endGroup();
 
 	//Remove the buttons of the UI, keep the separator and the Clear button
 	foreach(QAction * action, ui->menuOpen_recent->actions())
@@ -619,68 +609,71 @@ void JokerWindow::on_actionClear_list_triggered()
 	}
 
 	// Remove all the buttons
-	_recentFileButtons.clear();
+	//	_recentFileButtons.clear();
 	ui->menuOpen_recent->setEnabled(false);
 }
 
 void JokerWindow::on_actionSave_triggered()
 {
-	QFileInfo info(_currentStripFile);
+	QString fileName = _settings->currentDocument();
+	QFileInfo info(fileName);
 	if(!info.exists() || (info.suffix() != "strip"))
 		on_actionSave_as_triggered();
-	else if(_doc->saveStrip(_currentStripFile, _strip->clock()->timeCode()))
+	else if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked()))
 		_needToSave = false;
 	else
-		QMessageBox::critical(this, "", tr("Unable to save ") + _currentStripFile);
+		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
 }
 
 void JokerWindow::on_actionSave_as_triggered()
 {
 	hideMediaPanel();
 
-	QString stripFile = _currentStripFile;
-	QString lastFolder = _settings->value("lastFolder", QDir::homePath()).toString();
+	QString fileName = _settings->currentDocument();
+	QString lastFolder = _settings->lastDocumentFolder();
 	// If there is no current strip file, ask for a name
-	if(stripFile == "")
-		stripFile = lastFolder;
-	else
-	{
-		QFileInfo info(stripFile);
+	if(fileName == "")
+		fileName = lastFolder;
+	else {
+		QFileInfo info(fileName);
 		if(info.suffix() != "strip")
-			stripFile = lastFolder + "/" + info.completeBaseName() + ".strip";
+			fileName = lastFolder + "/" + info.completeBaseName() + ".strip";
 	}
 
-	stripFile = QFileDialog::getSaveFileName(this, tr("Save..."), stripFile,"*.strip");
-	if(stripFile != "")
-	{
-		if(_doc->saveStrip(stripFile, _strip->clock()->timeCode()))
-		{
+	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.strip");
+	if(fileName != "") {
+		if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
 			_needToSave = false;
-			setCurrentStripFile(stripFile);
+			setCurrentDocument(fileName);
 		}
 		else
-			QMessageBox::critical(this, "", tr("Unable to save ") + stripFile);
+			QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
 	}
 }
 
 bool JokerWindow::checkSaveFile()
 {
-	if(_needToSave)
-	{
+
+	if(_needToSave) {
+		/// If the document need to be saved, ask the user
+		/// whether he wants to save his changes.
 		QString msg = tr("Do you want to save your changes ?");
 		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
 		box.setDefaultButton(QMessageBox::Save);
-		switch(box.exec())
-		{
+		switch(box.exec()) {
+		/// Cancel the caller action if clicking cancel.
+		case QMessageBox::Cancel:
+			return false;
+		/// Trigger the document save if clicking save:
 		case QMessageBox::Save:
 			on_actionSave_triggered();
+			/// If the user cancel the save operation, cancel the operation.
 			if(_needToSave)
 				return false;
 			break;
-		case QMessageBox::Cancel:
-			return false;
 		}
 	}
+	/// @return False to interrupt the caller action, true otherwhise.
 	return true;
 }
 
@@ -688,7 +681,13 @@ void JokerWindow::on_actionSelect_character_triggered()
 {
 	hideMediaPanel();
 
-	PeopleDialog dlg(this, _doc, ui->videoStripView->getSelectedPeoples());
+	PeopleDialog dlg(this, _doc, _settings);
 
 	dlg.exec();
+}
+
+void JokerWindow::on_actionForce_16_9_ratio_triggered()
+{
+	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
+	_needToSave = true;
 }

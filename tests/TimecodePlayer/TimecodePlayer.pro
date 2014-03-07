@@ -21,8 +21,8 @@ include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
 include($${JOKER_ROOT}/libs/PhCommonUI/PhCommonUI.pri)
 
 SOURCES += main.cpp\
-		mainwindow.cpp
+		TimecodePlayerWindow.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += TimecodePlayerWindow.h
 
-FORMS +=  MainWindow.ui
+FORMS +=  TimecodePlayerWindow.ui

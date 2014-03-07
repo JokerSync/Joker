@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef PHSONYMASTERCONTROLLER_H
 #define PHSONYMASTERCONTROLLER_H
 
@@ -23,8 +29,9 @@ public:
 	/**
 	 * @brief PhSonyMasterController constructor
 	 * @param tcType The initial timecode type.
+	 * @param settings The application settings
 	 */
-	PhSonyMasterController(PhTimeCodeType tcType, QSettings *settings);
+	PhSonyMasterController(PhTimeCodeType tcType, PhSyncSettings *settings);
 
 public slots:
 	/**
@@ -55,7 +62,6 @@ public slots:
 	 * See : http://www.belle-nuit.com/archives/9pin.html#cueUpWithData
 	 *
 	 * @param frame frame number
-	 * @param tcType type of the timecode
 	 */
 	void cue(PhFrame frame);
 

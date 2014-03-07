@@ -8,46 +8,22 @@
 
 #include "PhTools/tests/PhTimeCodeTest.h"
 
-
+/**
+ * @brief The application main entry point
+ * @param argc Command line argument count
+ * @param argv Command line argument list
+ * @return 0 if the application works well.
+ */
 int main(int argc, char *argv[])
 {
-
-	// Initialize the Debug module.
-//	PhDebug::init(false, true, true, true, true, true, 1, argv[0]);
-
-
-	PHDEBUG << "should always display.";
-	PhDebug::setLogMask(0b11);
-	PHDBG(1) << "1 should display";
-	PHDBG(2) << "2 should not display";
-
-	QSettings settings("Phonations", "ConsoleTest");
-
-	settings.setValue("test", true);
-
-	int total = 10000;
-	QTime t;
-	PHDEBUG << "starting";
-	t.start();
-	int n = 0;
-	for(int i = 0; i < total; i++)
-	{
-		if(settings.value("test", false).toBool())
-			n++;
+	PhDebug::setDisplay(true, true, true, true, true);
+	PhDebug::setLogMask(0b111);
+	PHDEBUG << QString("test");
+	for(int i = 0; i < 5; i++) {
+		PHDBG(i) << "level" << i;
 	}
 
-	PHDEBUG << "settings " << t.elapsed();
-
-	t.restart();
-
-	bool b = true;
-	for(int i = 0; i < total; i++)
-	{
-		if(b)
-			n++;
-	}
-
-	PHDEBUG << "bool " << t.elapsed();
-
+	qWarning() << "pouet";
+	PHERR << "coucou";
 	return 0;
 }

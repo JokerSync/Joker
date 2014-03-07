@@ -1,31 +1,42 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
 #include <QDialog>
-#include <QSettings>
 #include <QListWidgetItem>
 
-#include "PhLtcReader.h"
-
-#define NO_SYNC 0
-#define SONY 1
-#define LTC 2
+#include "Synchronizer.h"
+#include "JokerSettings.h"
 
 namespace Ui {
 class PreferencesDialog;
 }
-
+/**
+ * @brief Joker preferences dialog
+ *
+ * The dialog contains the following user settings:
+ * - General HUD: enable/disable element like current timecode
+ * - Synchronization: delay, sync mode, sync mode configuration
+ * - PhGraphicStrip setting: boldness, speed, font, height
+ * - Log
+ */
 class PreferencesDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	explicit PreferencesDialog(QSettings *settings, QWidget *parent = 0);
+	/**
+	 * @brief The PreferencesDialog constructor
+	 *
+	 * @param settings The application settings
+	 * @param parent The parent object
+	 */
+	explicit PreferencesDialog(JokerSettings *settings, QWidget *parent = 0);
 	~PreferencesDialog();
 
 private slots:
@@ -39,10 +50,6 @@ private slots:
 	void on_buttonBox_accepted();
 
 	void on_buttonBox_rejected();
-
-	void on_cBoxLastFile_toggled(bool checked);
-
-	void on_cBoxFullscreen_toggled(bool checked);
 
 	void on_sliderBoldness_valueChanged(int value);
 
@@ -66,21 +73,19 @@ private slots:
 
 	void onLogMaskButtonClicked();
 
-    void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+	void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
-    void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+	void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
 	Ui::PreferencesDialog *ui;
-	QSettings *_settings;
+	JokerSettings *_settings;
 	QString _oldFont;
 	bool _oldUseQuarterFrame;
 	int _oldDelay;
 	int _oldSpeed;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldOpenLastFile;
-	bool _oldStartFullScreen;
 	bool _oldDeinterlace;
 	bool _oldDisplayTC;
 	bool _oldDisplayNextTC;
@@ -88,14 +93,13 @@ private:
 	bool _oldDisplayTitle;
 	bool _oldDisplayLoop;
 	int _oldLogMask;
-    int _oldSyncProtocol;
-    QString _oldLTCInput;
+	int _oldSyncProtocol;
+	QString _oldLTCInput;
 
 	QMap<QString, QString> fontList;
 
-    void showParamLTC(bool show);
-    void showParamSony(bool show);
-
+	void showParamLTC(bool show);
+	void showParamSony(bool show);
 };
 
 #endif // PREFERENCESDIALOG_H

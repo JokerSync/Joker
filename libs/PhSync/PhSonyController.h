@@ -1,12 +1,19 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef PHSONYCONTROLLER_H
 #define PHSONYCONTROLLER_H
 
 #include <QObject>
 #include <QSerialPort>
-#include <QSettings>
 #include <QThread>
 
-#include <PhTools/PhClock.h>
+#include "PhTools/PhClock.h"
+
+#include "PhSyncSettings.h"
 
 /**
  * @brief Sony abstract controller for  sony 9 pin communication through the serial port.
@@ -41,9 +48,12 @@ public:
 
 	/**
 	 * @brief PhSonyController constructor
+	 *
+	 * @param tcType The initial timecode type
+	 * @param settings The application settings
 	 * @param comSuffix Serial port name suffix
 	 */
-	explicit PhSonyController(PhTimeCodeType tcType, QSettings *settings, QString comSuffix);
+	explicit PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, QString comSuffix);
 
 	/**
 	 * @brief PhSonyController destructor
@@ -66,7 +76,9 @@ public:
 	 * @brief Get the sony controller internal clock.
 	 * @return A clock reference.
 	 */
-	PhClock *clock() { return &_clock; }
+	PhClock *clock() {
+		return &_clock;
+	}
 
 	/**
 	 * @brief Compute the rate from the jog, varispeed and shuttle sony protocole
@@ -120,6 +132,13 @@ public slots:
 	virtual void onVideoSync() = 0;
 
 protected:
+	/**
+	 * @brief The thread starting point
+	 *
+	 * This method is called when the thread is created.
+	 * It constantly read the data on the serial port and pass
+	 * it to the child via the processCommand() virtual method.
+	 */
 	void run();
 
 	/**
@@ -135,7 +154,7 @@ protected:
 	virtual void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char* dataIn) = 0;
 
 	/**
-	 * Extract the data size from the first command descriptor.
+	 * @brief Extract the data size from the first command descriptor.
 	 * @param cmd1 First command descriptor.
 	 * @return Data size in byte.
 	 */
@@ -143,6 +162,7 @@ protected:
 
 	/**
 	 * Send a sony protocol command.
+	 *
 	 * @param cmd1 First command descriptor.
 	 * @param cmd2 Second command descriptor.
 	 * @param data Data for the command.
@@ -151,6 +171,7 @@ protected:
 
 	/**
 	 * @brief Send a sony protocol command with an argument list of unsigned char for the data.
+	 *
 	 * @param cmd1 First command descriptor.
 	 * @param cmd2 Second command descriptor.
 	 */
@@ -183,7 +204,8 @@ protected:
 	/** @brief The internal clock of the sony controller. */
 	PhClock _clock;
 
-	QSettings* _settings;
+	/** @brief The application settings */
+	PhSyncSettings* _settings;
 
 	/** @brief Serial port name suffix (A for slave and B for master). */
 	QString _comSuffix;
@@ -204,6 +226,7 @@ private:
 	/** @brief Last value of the serial CTS state. */
 	bool _lastCTS;
 
+	/** @brief Indicate if the thread is currently running */
 	bool _threadRunning;
 
 private slots:

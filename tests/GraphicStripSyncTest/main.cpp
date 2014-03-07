@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 
 #include <QApplication>
@@ -9,30 +9,22 @@
 
 #include "PhStrip/PhStripDoc.h"
 
-#include "MainWindow.h"
+#include "GraphicStripSyncTestWindow.h"
 
+/**
+ * @brief The application main entry point
+ * @param argc Command line argument count
+ * @param argv Command line argument list
+ * @return 0 if the application works well.
+ */
 int main(int argc, char *argv[])
 {
-	PhDebug::init(false, true, true, true, true, false, "GraphicStripSyncTest");
-
 	QApplication a(argc, argv);
-	QSettings settings("Phonations", "GraphicStripSyncTest");
-	MainWindow w(&settings);
+	GraphicStripSyncTestSettings settings;
+	GraphicStripSyncTestWindow w(&settings);
+	w.processArg(argc, argv);
+	w.show();
 
-	if (argc > 1)
-	{
-		QString fileName = argv[1];
-		w.openFile(fileName);
-	}
-	else
-	{
-		QString lastFile = settings.value("lastFile", "").toString();
-		if(QFile(lastFile).exists())
-			w.openFile(lastFile);
-	}
-
-    w.show();
-
-    return a.exec();
+	return a.exec();
 
 }

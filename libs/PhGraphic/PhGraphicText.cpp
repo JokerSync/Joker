@@ -1,7 +1,8 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include "PhGraphicText.h"
 
@@ -41,14 +42,13 @@ void PhGraphicText::draw()
 
 	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
 
-	if((_font == NULL) || (_font->getHeight() == 0)) // draw only a quad
-	{
-		glBegin(GL_QUADS); 	//Begining the cube's drawing
+	if((_font == NULL) || (_font->getHeight() == 0)) { // draw only a quad
+		glBegin(GL_QUADS);  //Begining the cube's drawing
 		{
-			glVertex3f(_x,		_y,	_z);
-			glVertex3f(_x + _w,	_y,	_z);
-			glVertex3f(_x + _w,	_y + _h,  _z);
-			glVertex3f(_x,		_y + _h,  _z);
+			glVertex3f(_x,      _y, _z);
+			glVertex3f(_x + _w, _y, _z);
+			glVertex3f(_x + _w, _y + _h,  _z);
+			glVertex3f(_x,      _y + _h,  _z);
 		}
 		glEnd();
 		return;
@@ -56,16 +56,15 @@ void PhGraphicText::draw()
 
 	_font->select();
 
-    glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
 
-    glEnable(GL_BLEND);
+	glEnable(GL_BLEND);
 
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 	int totalAdvance = 0;
 	//Compute the natural width of the content to scale it later
-	for(int i = 0; i < _content.length(); i++)
-	{
+	for(int i = 0; i < _content.length(); i++) {
 		totalAdvance += _font->getAdvance(_content.at(i).toLatin1());
 	}
 
@@ -73,11 +72,9 @@ void PhGraphicText::draw()
 	int advance = 0;
 	float space = 0.0625f; // all glyph are in a 1/16 x 1/16 box
 	// Display a string
-	for(int i = 0; i < _content.length(); i++)
-	{
+	for(int i = 0; i < _content.length(); i++) {
 		unsigned char ch = (unsigned char)_content.at(i).toLatin1();
-		if(_font->getAdvance(ch) > 0)
-		{
+		if(_font->getAdvance(ch) > 0) {
 			// computing texture coordinates
 			float tu1 = (ch % 16) * space;
 			float tv1 = (ch / 16) * space;
@@ -94,13 +91,13 @@ void PhGraphicText::draw()
 			//        (tu1, tv2) --- (tu2, tv2)
 
 			int offset = _x + advance * _w / totalAdvance;
-			glBegin(GL_QUADS); 	//Begining the cube's drawing
+			glBegin(GL_QUADS);  //Begining the cube's drawing
 			{
-				glTexCoord3f(tu1, tv1, 1);	glVertex3f(offset,		_y,	_z);
-				glTexCoord3f(tu2, tv1, 1);	glVertex3f(offset + w,	_y,	_z);
-				glTexCoord3f(tu2, tv2, 1);	glVertex3f(offset + w,	_y + h,  _z);
-				glTexCoord3f(tu1, tv2, 1);	glVertex3f(offset,		_y + h,  _z);
-            }
+				glTexCoord3f(tu1, tv1, 1);  glVertex3f(offset,      _y, _z);
+				glTexCoord3f(tu2, tv1, 1);  glVertex3f(offset + w,  _y, _z);
+				glTexCoord3f(tu2, tv2, 1);  glVertex3f(offset + w,  _y + h,  _z);
+				glTexCoord3f(tu1, tv2, 1);  glVertex3f(offset,      _y + h,  _z);
+			}
 			glEnd();
 
 		}
@@ -108,8 +105,8 @@ void PhGraphicText::draw()
 		advance += _font->getAdvance(ch);
 	}
 
-    glDisable(GL_BLEND);
+	glDisable(GL_BLEND);
 
-    glDisable(GL_TEXTURE_2D);
+	glDisable(GL_TEXTURE_2D);
 }
 

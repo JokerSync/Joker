@@ -21,6 +21,7 @@ Makefile
 build-*
 
 .DS_Store
+Thumbs.db
 
 *.autosave
 
@@ -28,3 +29,5 @@ build-*
 doc/html
 doxygen_error.log
 *.qm
+
+*.orig

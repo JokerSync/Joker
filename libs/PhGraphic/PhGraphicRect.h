@@ -1,72 +1,75 @@
 /**
-* Copyright (C) 2012-2013 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHGRAPHICSQUARE_H
 #define PHGRAPHICSQUARE_H
 
-#include <glu.h>
-#include <SDL2/SDL.h>
 #include "PhGraphicObject.h"
 
+/**
+ * @brief A generic rectangle object
+ *
+ * A PhGraphicRect is a PhGraphicObject with a size (height and width).
+ */
 class PhGraphicRect : public PhGraphicObject
 {
 public:
 
-	PhGraphicRect(int x = 0, int y =0, int w = 0, int h = 0);
+	/**
+	 * @brief PhGraphicRect constructor
+	 * @param x The x coordinate
+	 * @param y The y coordinate
+	 * @param w The width
+	 * @param h The height
+	 */
+	PhGraphicRect(int x = 0, int y = 0, int w = 0, int h = 0);
 	~PhGraphicRect();
 
-    /**
-     * @brief setSize
-     * @param w
-     * @param h
-     * set the PhGraphicRect size using setHeight() and setWidht()
-     */
-    void setSize(int w, int h);
-    /**
-     * @brief setRect
-	 * @param x
-     * @param y
-     * @param w
-     * @param h
-     * set the PhGraphicRect size and position usgin setSize() and setPosition()
-     */
+	/**
+	 * @brief Set the rectangle size
+	 * @param w The width
+	 * @param h The height
+	 */
+	void setSize(int w, int h);
+	/**
+	 * @brief Set the rectangle position and size
+	 * @param x The x coordinate
+	 * @param y The y coordinate
+	 * @param w The width
+	 * @param h The height
+	 */
 	void setRect(int x, int y, int w, int h);
-    /**
-     * @brief setHeight
-     * @param h
-     */
-    void setHeight(int h);
-    /**
-     * @brief setWidht
-     * @param w
-     */
-    void setWidth(int w);
+	/**
+	 * @brief Set the rectangle height
+	 * @param h The height
+	 */
+	void setHeight(int h);
+	/**
+	 * @brief Set the rectangle width
+	 * @param w The width
+	 */
+	void setWidth(int w);
 
-    /**
-     * @brief getHeight
-     * @return _h
-     */
-    int getHeight();
-    /**
-     * @brief getWidth
-     * @return _w
-     */
-    int getWidth();
+	/**
+	 * @brief Get the rectangle height
+	 * @return The height
+	 */
+	int getHeight();
+	/**
+	 * @brief Get the rectangle width
+	 * @return The width
+	 */
+	int getWidth();
 
 
 protected:
-    /**
-     * @brief _w
-     * is the PhGraphicRect width
-     */
-    int _w;
-    /**
-     * @brief _h
-     * is the PhGraphicRect height
-     */
-    int _h;
+	/** @brief The rectangle width */
+	int _w;
+	/** @brief The rectangle height */
+	int _h;
 };
 
 #endif // PHGRAPHICSQUARE_H

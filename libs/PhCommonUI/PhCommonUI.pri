@@ -1,23 +1,31 @@
+#
+# Copyright (C) 2012-2014 Phonations
+# License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+#
+
 HEADERS += \
 #    ../../libs/PhCommonUI/PhLeap.h \
 	../../libs/PhCommonUI/PhMediaPanel.h \
 	../../libs/PhCommonUI/PhTimecodeEdit.h \
     ../../libs/PhCommonUI/PhTimeCodeDialog.h \
-    ../../libs/PhCommonUI/PhFontDialog.h \
-    ../../libs/PhCommonUI/PhFloatingMediaPanel.h
+    ../../libs/PhCommonUI/PhFloatingMediaPanel.h \
+    ../../libs/PhCommonUI/PhDocumentWindow.h \
+    ../../libs/PhCommonUI/PhDocumentWindowSettings.h \
+    ../../libs/PhCommonUI/PhWindow.h \
+    ../../libs/PhCommonUI/PhWindowSettings.h
 
 SOURCES += \
 #   ../../libs/PhCommonUI/PhLeap.cpp \
 	../../libs/PhCommonUI/PhMediaPanel.cpp \
 	../../libs/PhCommonUI/PhTimecodeEdit.cpp \
     ../../libs/PhCommonUI/PhTimeCodeDialog.cpp \
-    ../../libs/PhCommonUI/PhFontDialog.cpp \
-    ../../libs/PhCommonUI/PhFloatingMediaPanel.cpp
+    ../../libs/PhCommonUI/PhFloatingMediaPanel.cpp \
+    ../../libs/PhCommonUI/PhDocumentWindow.cpp \
+    ../../libs/PhCommonUI/PhWindow.cpp
 
 
 FORMS += ../../libs/PhCommonUI/PhMediaPanel.ui \
-    ../../libs/PhCommonUI/PhTimeCodeDialog.ui \
-    ../../libs/PhCommonUI/PhFontDialog.ui
+	../../libs/PhCommonUI/PhTimeCodeDialog.ui
 
 #INCLUDEPATH += $$(LEAP_SDK)/include
 

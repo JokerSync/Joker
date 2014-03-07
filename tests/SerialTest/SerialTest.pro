@@ -4,26 +4,18 @@
 #
 #-------------------------------------------------
 
-QT       += core gui serialport
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui serialport widgets
 
 TARGET = SerialTest
 TEMPLATE = app
 
 VERSION = 1.0.0
-# Define the preprocessor macro to get the application version in our application.
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
-DEFINES += ORG_NAME=\\\"Phonations\\\"
-
-INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri)
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        SerialTestWindow.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += SerialTestWindow.h
 
-FORMS    += MainWindow.ui
+FORMS    += SerialTestWindow.ui

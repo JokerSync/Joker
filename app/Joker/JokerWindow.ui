@@ -52,7 +52,7 @@
      <property name="title">
       <string>Open recent</string>
      </property>
-     <addaction name="actionClear_list"/>
+     <addaction name="actionEmpty"/>
     </widget>
     <addaction name="actionOpen"/>
     <addaction name="menuOpen_recent"/>
@@ -105,6 +105,8 @@
     </property>
     <addaction name="actionSelect_character"/>
     <addaction name="actionTest_mode"/>
+    <addaction name="actionForce_16_9_ratio"/>
+    <addaction name="actionFullscreen"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -315,6 +317,36 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionForce_16_9_ratio">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Force 16/9 ratio</string>
+   </property>
+   <property name="shortcut">
+    <string>F8</string>
+   </property>
+  </action>
+  <action name="actionFullscreen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Fullscreen</string>
+   </property>
+   <property name="shortcut">
+    <string>F10</string>
+   </property>
+  </action>
+  <action name="actionEmpty">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Empty</string>
    </property>
   </action>
  </widget>

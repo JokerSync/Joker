@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef PHSONYSLAVECONTROLLER_H
 #define PHSONYSLAVECONTROLLER_H
 
@@ -29,8 +35,9 @@ public:
 	/**
 	 * @brief PhSonySlaveController constructor.
 	 * @param tcType The initial timecode type.
+	 * @param settings The application settings
 	 */
-	PhSonySlaveController(PhTimeCodeType tcType, QSettings *settings);
+	PhSonySlaveController(PhTimeCodeType tcType, PhSyncSettings *settings);
 
 	/**
 	 * @brief Various state in which the controller can be.

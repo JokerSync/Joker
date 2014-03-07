@@ -1,8 +1,15 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef PHGRAPHICSTRIP_H
 #define PHGRAPHICSTRIP_H
 
 #include <QObject>
-#include <QSettings>
+
+#include "PhGraphicStripSettings.h"
 
 #include "PhStrip/PhStripDoc.h"
 
@@ -10,14 +17,13 @@
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicLoop.h"
-#include "PhStrip/PhStripOff.h"
 
 #include "PhTools/PhClock.h"
 
 /**
- * @brief The PhGraphicStrip class
+ * @brief This class draw a segment of strip band.
  *
- * This class draw a segment of strip band. The length of the strip band portion
+ * The length of the strip band portion
  * is proportionnal to its width in pixel.
  *
  * The strip is divided in several horizontal track.
@@ -61,25 +67,64 @@ public:
 	 */
 	PhClock * clock();
 
-	void setSettings(QSettings * settings);
+
+	/**
+	 * @brief Set the settings
+	 * @param settings desired settings
+	 */
+	void setSettings(PhGraphicStripSettings * settings);
 
 	/**
 	 * Set the font used to render text on the strip.
-	 * @param fontfile Font file path
+	 * @param fontFile Font file path
 	 * @return true if the operation succeeds, false otherwise.
 	 */
 	bool setFontFile(QString fontFile);
+	/**
+	 * @brief Initializisation of the PhGraphicStrip
+	 *
+	 * Call clearData() then :
+	 * - Load the strip background
+	 * - Set the synchronization bar
+	 * - Load the font file
+	 *
+	 * @return True if succeed, false otherwise
+	 */
 
 	bool init();
 
-	void draw(int x, int y, int width, int height);
+	/**
+	 * @brief draw the strip
+	 *
+	 * It compute all the necessary data for the current frame, skipped
+	 * if height = 0
+	 *
+	 * @param x upper left corner coordinates
+	 * @param y upper left corner coordinates
+	 * @param width width of the strip (usually the same as the parent window)
+	 * @param height height of the strip
+	 * @param selectedPeoples Selected people will be displayed on the upper left corner,
+	 * the others ones will be shaded.
+	 */
+	void draw(int x, int y, int width, int height, QList<PhPeople*> selectedPeoples = QList<PhPeople*>());
 
-	void setPixelPerFrame(long value);
-
+	/**
+	 * @brief Get the font of the strip objects
+	 * @return the font
+	 */
 	PhFont * getTextFont();
-
+	/**
+	 * @brief Get the "head up display" Font
+	 *
+	 * The HUD font is used for all text printed on the screen which is not
+	 * a direct part of the strip :
+	 * - The current timecode
+	 * - The next element timecode
+	 * - The prediction
+	 * - The title of the document...
+	 * @return
+	 */
 	PhFont * getHUDFont();
-
 
 private slots:
 	/**
@@ -87,9 +132,9 @@ private slots:
 	 */
 	void clearData();
 
-private :
+private:
 
- 	/**
+	/**
 	 * @brief _doc
 	 * Reference to the current PhStripDoc
 	 */
@@ -108,8 +153,8 @@ private :
 	PhFont _hudFont;
 
 	/**
-	 *Background Image used for the strip band
-     */
+	 * Background Image used for the strip band
+	 */
 	PhGraphicImage _stripBackgroundImage;
 
 	PhGraphicSolidRect _stripSyncBar;
@@ -122,7 +167,7 @@ private :
 
 	QMap<PhStripLoop*, PhGraphicLoop*> _graphicLoops;
 
-	QMap<PhStripOff*, PhGraphicSolidRect*> _graphicOffs;
+	QMap<PhStripDetect*, PhGraphicSolidRect*> _graphicDetects;
 
 	/**
 	 * @brief _test
@@ -131,8 +176,9 @@ private :
 	QTime _testTimer;
 
 	int _trackNumber;
-	QSettings * _settings;
-	long pixelPerFrame;
+	PhGraphicStripSettings * _settings;
+
+	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples);
 };
 
 #endif // PHGRAPHICSTRIP_H

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "PhGraphicStripView.h"
 
 PhGraphicStripView::PhGraphicStripView(QWidget *parent) :
@@ -7,6 +13,8 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent) :
 
 bool PhGraphicStripView::init()
 {
+	connect(this, SIGNAL(beforePaint(PhTimeScale)), _strip.clock(), SLOT(tick(PhTimeScale)));
+
 	return _strip.init();
 }
 

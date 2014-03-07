@@ -3,15 +3,13 @@
 # Project created by QtCreator 2013-05-23T14:09:50
 #
 #-------------------------------------------------
-
+cache()
 TARGET = GraphicStripTest
 TEMPLATE = app
 
 QT += core gui
 
-JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
-
-INCLUDEPATH += ../../libs
+VERSION = 1.0.0
 
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
@@ -21,16 +19,17 @@ include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 
 #Main app
 SOURCES += main.cpp \
-	MainWindow.cpp \
+	GraphicStripTestWindow.cpp \
     StripPropertiesDialog.cpp \
     GenerateDialog.cpp
 
 HEADERS += \
-    MainWindow.h \
+    GraphicStripTestWindow.h \
     StripPropertiesDialog.h \
-    GenerateDialog.h
+    GenerateDialog.h \
+    GraphicStripTestSettings.h
 
 FORMS += \
-    MainWindow.ui \
+    GraphicStripTestWindow.ui \
     StripPropertiesDialog.ui \
     GenerateDialog.ui

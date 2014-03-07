@@ -1,10 +1,16 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "PhVideoEngine.h"
 
 PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :	QObject(parent),
 	_settings(NULL),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
-	_frameStamp(0),
+	_firstFrame(0),
 	_pFormatContext(NULL),
 	_videoStream(NULL),
 	_videoFrame(NULL),
@@ -39,7 +45,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
 
-	_frameStamp = 0;
+	_firstFrame = 0;
 	_videoStream = NULL;
 	_audioStream = NULL;
 
@@ -73,34 +79,48 @@ bool PhVideoEngine::open(QString fileName)
 	if(tag == NULL)
 		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
 
-	if(tag)
-	{
+	if(tag) {
 		PHDEBUG << "Found timestamp:" << tag->value;
-		_frameStamp = PhTimeCode::frameFromString(tag->value, _clock.timeCodeType());
+		_firstFrame = PhTimeCode::frameFromString(tag->value, _clock.timeCodeType());
 	}
 
 	// Looking for timecode type
 	float fps = this->framePerSecond();
-	if(fps < 24)
+	if(fps == 0) {
+		PHDEBUG << "Bad fps detect => assuming 25";
+		_clock.setTimeCodeType(PhTimeCodeType25);
+	}
+	else if(fps < 24)
 		_clock.setTimeCodeType(PhTimeCodeType2398);
 	else if (fps < 24.5f)
 		_clock.setTimeCodeType(PhTimeCodeType24);
 	else if (fps < 26)
 		_clock.setTimeCodeType(PhTimeCodeType25);
-	else
+	else if (fps < 30)
 		_clock.setTimeCodeType(PhTimeCodeType2997);
+	else {
+#warning /// @todo patch for #107 => find better fps decoding
+		PHDEBUG << "Bad fps detect => assuming 25";
+		_clock.setTimeCodeType(PhTimeCodeType25);
+	}
 
 	PHDEBUG << "size : " << _videoStream->codec->width << "x" << _videoStream->codec->height;
 	AVCodec * videoCodec = avcodec_find_decoder(_videoStream->codec->codec_id);
-	if(videoCodec == NULL)
+	if(videoCodec == NULL) {
+		PHDEBUG << "Unable to find the codec:" << _videoStream->codec->codec_id;
 		return false;
+	}
 
-	if(avcodec_open2(_videoStream->codec, videoCodec, NULL) < 0)
+
+	if (avcodec_open2(_videoStream->codec, videoCodec, NULL) < 0) {
+		PHDEBUG << "Unable to open the codec:" << _videoStream->codec;
 		return false;
+	}
 
 	_videoFrame = avcodec_alloc_frame();
 
 	PHDEBUG << "length:" << this->length();
+	PHDEBUG << "fps:" << this->framePerSecond();
 	_currentFrame = -1;
 	_clock.setFrame(0);
 
@@ -129,20 +149,19 @@ bool PhVideoEngine::open(QString fileName)
 
 	goToFrame(0);
 	_fileName = fileName;
+
 	return true;
 }
 
 void PhVideoEngine::close()
 {
 	PHDEBUG;
-	if(_rgb)
-	{
+	if(_rgb) {
 		delete _rgb;
 		_rgb = NULL;
 	}
 
-	if(_pFormatContext)
-	{
+	if(_pFormatContext) {
 		avformat_close_input(&_pFormatContext);
 		_pFormatContext = NULL;
 		_videoStream = NULL;
@@ -151,19 +170,20 @@ void PhVideoEngine::close()
 	_fileName = "";
 }
 
-void PhVideoEngine::setSettings(QSettings *settings)
+void PhVideoEngine::setSettings(PhVideoSettings *settings)
 {
 	_settings = settings;
 }
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
-//	_clock.tick(60);
+	//	_clock.tick(60);
 	PhFrame delay = 0;
 	if(_settings)
-		delay = _settings->value("delay", 0).toInt() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
+		delay = _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
 	goToFrame(_clock.frame() + delay);
 	videoRect.setRect(x, y, w, h);
+	videoRect.setZ(-10);
 	videoRect.draw();
 }
 
@@ -174,9 +194,9 @@ PhFrame PhVideoEngine::length()
 	return 0;
 }
 
-void PhVideoEngine::setFrameStamp(PhFrame frame)
+void PhVideoEngine::setFirstFrame(PhFrame frame)
 {
-	_frameStamp = frame;
+	_firstFrame = frame;
 }
 
 PhVideoEngine::~PhVideoEngine()
@@ -201,8 +221,7 @@ int PhVideoEngine::height()
 float PhVideoEngine::framePerSecond()
 {
 	float result = 0;
-	if(_videoStream)
-	{
+	if(_videoStream) {
 		result = _videoStream->avg_frame_rate.num;
 		result /= _videoStream->avg_frame_rate.den;
 	}
@@ -219,37 +238,32 @@ QString PhVideoEngine::codecName()
 
 bool PhVideoEngine::goToFrame(PhFrame frame)
 {
-	if(frame != _currentFrame)
-		PHDBG(24) << frame;
-//	int lastGotoElapsed = _testTimer.elapsed();
+	//	int lastGotoElapsed = _testTimer.elapsed();
 	int seekElapsed = -1;
 	int readElapsed = -1;
 	int decodeElapsed = -1;
 	int scaleElapsed = -1;
 	int textureElapsed = -1;
 
-	if(!ready())
-	{
+	if(!ready()) {
 		PHDEBUG << "not ready";
 		return false;
 	}
 
-	if(frame < this->_frameStamp)
-		frame = this->_frameStamp;
-	if (frame >= this->_frameStamp + this->length())
-		frame = this->_frameStamp + this->length() - 1;
+	if(frame < this->firstFrame())
+		frame = this->firstFrame();
+	if (frame >= this->lastFrame())
+		frame = this->lastFrame();
 
 	bool result = false;
 	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
 	if (frame == _currentFrame)
 		result = true;
-	else
-	{
+	else {
 		// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
-		if(frame - _currentFrame != 1)
-		{
+		if(frame - _currentFrame != 1) {
 			int flags = AVSEEK_FLAG_ANY;
-			int64_t timestamp = frame2time(frame - _frameStamp);
+			int64_t timestamp = frame2time(frame - _firstFrame);
 			PHDEBUG << "seek:" << frame;
 			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
 		}
@@ -259,14 +273,11 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		AVPacket packet;
 
 		bool lookingForVideoFrame = true;
-		while(lookingForVideoFrame)
-		{
+		while(lookingForVideoFrame) {
 			int error = av_read_frame(_pFormatContext, &packet);
-			switch(error)
-			{
+			switch(error) {
 			case 0:
-				if(packet.stream_index == _videoStream->index)
-				{
+				if(packet.stream_index == _videoStream->index) {
 					_currentFrame = frame;
 
 					readElapsed = _testTimer.elapsed();
@@ -277,9 +288,8 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 						decodeElapsed = _testTimer.elapsed();
 
 						int frameHeight = _videoFrame->height;
-						if(_settings)
-						{
-							if(_settings->value("videoDeinterlace", false).toBool())
+						if(_settings) {
+							if(_settings->videoDeinterlace())
 								frameHeight = _videoFrame->height / 2;
 						}
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
@@ -318,20 +328,20 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 			case AVERROR_INVALIDDATA:
 			case AVERROR_EOF:
 			default:
-			{
-				char errorStr[256];
-				av_strerror(error, errorStr, 256);
-				PHDEBUG << frame << "error:" << errorStr;
-				lookingForVideoFrame = false;
-				break;
-			}
+				{
+					char errorStr[256];
+					av_strerror(error, errorStr, 256);
+					PHDEBUG << frame << "error:" << errorStr;
+					lookingForVideoFrame = false;
+					break;
+				}
 			}
 			//Avoid memory leak
 			av_free_packet(&packet);
 		}
 	}
 
-//	int currentGotoElapsed = _testTimer.elapsed();
+	//	int currentGotoElapsed = _testTimer.elapsed();
 	//	if(_testTimer.elapsed() > 25)
 	//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
 	//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
@@ -343,8 +353,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 int64_t PhVideoEngine::frame2time(PhFrame f)
 {
 	int64_t t = 0;
-	if(_videoStream)
-	{
+	if(_videoStream) {
 		PhFrame fps = PhTimeCode::getFps(_clock.timeCodeType());
 		t = f * _videoStream->time_base.den / _videoStream->time_base.num / fps;
 	}
@@ -354,8 +363,7 @@ int64_t PhVideoEngine::frame2time(PhFrame f)
 PhFrame PhVideoEngine::time2frame(int64_t t)
 {
 	PhFrame f = 0;
-	if(_videoStream)
-	{
+	if(_videoStream) {
 		PhFrame fps = PhTimeCode::getFps(_clock.timeCodeType());
 		f = t * _videoStream->time_base.num * fps / _videoStream->time_base.den;
 	}

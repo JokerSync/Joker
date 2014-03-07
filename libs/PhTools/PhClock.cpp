@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #include "PhClock.h"
 
 PhClock::PhClock(PhTimeCodeType tcType, QObject *parent) :
@@ -9,13 +15,10 @@ PhClock::PhClock(PhTimeCodeType tcType, QObject *parent) :
 	qRegisterMetaType<PhTimeCodeType>("PhTimeCodeType");
 }
 
-///****************************Properties****************************/
-
 void PhClock::setTimeCodeType(PhTimeCodeType tcType)
 {
 	PhFrame lastFrame = frame();
-	if(_tcType != tcType)
-	{
+	if(_tcType != tcType) {
 		_tcType = tcType;
 		emit tcTypeChanged(tcType);
 	}
@@ -32,7 +35,7 @@ void PhClock::setTime(qint64 time)
 		emit timeChanged(time);
 	}
 	PhFrame newFrame = frame();
-    if(lastFrame != newFrame)
+	if(lastFrame != newFrame)
 		emit frameChanged(newFrame, _tcType);
 }
 
@@ -81,12 +84,9 @@ QString PhClock::timeCode()
 	return PhTimeCode::stringFromFrame(frame(), _tcType);
 }
 
-///****************************Slots****************************/
-
 void PhClock::tick(PhTimeScale frequence)
 {
 	int elapsed = _timeScale / frequence;
 	this->setTime(static_cast<int>(_time + elapsed * _rate));
 }
-
 
