@@ -8,7 +8,6 @@ cache()
 
 TARGET = Joker
 TEMPLATE = app
-ICON = joker.icns
 
 QT += core gui
 
@@ -66,9 +65,15 @@ unix {
 }
 
 mac{
+	ICON = joker.icns
+
 	# For the plist version
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
 	QMAKE_POST_LINK += sed -i \"\" -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
+}
+
+win32 {
+	RC_FILE = joker.rc
 }
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
