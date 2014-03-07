@@ -34,12 +34,11 @@ bool GraphicTestView::init()
 		PHDEBUG << "SWENSON not initialize using path : " << QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF";
 		return false;
 	}
-#if defined(Q_OS_MAC)
-	if (!_font2.setFontFile("/Library/Fonts/Arial.ttf")) {
+
+	if (!_font2.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Arial.ttf")) {
 		PHDEBUG << "ARIAL not initialize";
 		return false;
 	}
-#endif
 
 	PHDEBUG << "Initialize _text";
 	_text1.setRect(50, 100, 100, 100);

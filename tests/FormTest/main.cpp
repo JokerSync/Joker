@@ -13,9 +13,6 @@
  */
 int main(int argc, char *argv[])
 {
-	PHDEBUG << __MAC_OS_X_VERSION_MAX_ALLOWED;
-	PHDEBUG << __MAC_10_8;
-
 	FormTestSettings settings;
 	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
 	QApplication a(argc, argv);
