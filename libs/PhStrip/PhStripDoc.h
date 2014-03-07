@@ -193,11 +193,17 @@ public:
 	 */
 	void setTimeScale(int timeScale);
 	/**
-	 * @brief Open a DetX file
-	 * @param filename The path to the DetX file
+	 * @brief Import a DetX file
+	 * @param fileName The path to the DetX file
 	 * @return True if the doc opened well, false otherwise
 	 */
-	bool importDetX(QString filename);
+	bool importDetX(QString fileName);
+	/**
+	 * @brief Import a Mos file
+	 * @param fileName The path to the Mos file
+	 * @return True if the doc opened well, false otherwise
+	 */
+	bool importMos(QString fileName);
 	/**
 	 * @brief Open a strip file
 	 * @param fileName The path to the DetX file
@@ -406,6 +412,37 @@ private:
 
 	int _nbTexts;
 	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track);
+
+	enum MosTag {
+		MosUnknown,
+		MosDub,
+		MosTrack,
+		MosLang,
+		MosPeople,
+		MosText,
+		MosDetect,
+		MosLabel,
+		MosLoop,
+		MosCut,
+		MosVideo,
+		MosMovie,
+		MosOptions,
+		MosDoc,
+		MosProject,
+		MosProperties,
+		MosBin,
+	};
+	unsigned short _mosNextTag;
+	QMap<unsigned short, MosTag> _mosTagMap;
+
+	bool checkMosTag2(QFile &f, int level, QString expected);
+	bool checkMosTag(QFile &f, int level, MosTag expectedTag);
+	bool checkMosWord(QFile &f, int level, unsigned short expected);
+	PhStripText *readMosText(QFile &f, int level);
+	void readMosDetect(QFile &f, int level);
+	bool readMosProperties(QFile &f, int level);
+	MosTag readMosTag(QFile &f, int level, QString name);
+	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level);
 	bool _forceRatio169;
 };
 
