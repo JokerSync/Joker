@@ -1,4 +1,4 @@
-#!/bin/bash          
+#!/bin/bash
 # This script runs Doxygen an throw an error if
 # Doxygen generate an error log
 
@@ -21,8 +21,15 @@ fi
 
 echo "Done";
 
-if [ `more doxygen_error.log | wc -l` -eq 0 ];
+if [ ! -f doxygen_error.log ];
 then
+  echo " ----------------------------------------------------------";
+  echo "| doxygen_error.log not found!!!";
+  echo " ----------------------------------------------------------";
+  exit 1;
+else
+  if [ `more doxygen_error.log | wc -l` -eq 0 ];
+  then
     echo ".__   __.  __    ______  _______     __  ";
     echo "|  \ |  | |  |  /      ||   ____|   |  | ";
     echo "|   \|  | |  | |  ,----'|  |__      |  | ";
@@ -30,7 +37,7 @@ then
     echo "|  |\   | |  | |   ----.|  |____    |__| ";
     echo "|__| \__| |__|  \______||_______|   (__) ";
     exit 0;
-else
+  else
     cat doxygen_error.log;
     echo "";
     if [ `more doxygen_error.log | wc -l` -lt 10 ]
@@ -49,4 +56,5 @@ else
         echo " --------------------------------------------";
     fi
     exit 1;
+  fi
 fi

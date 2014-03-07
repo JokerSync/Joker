@@ -13,7 +13,7 @@ ICON = joker.icns
 QT += core gui
 
 # The application version
-VERSION = 1.1.5
+VERSION = 1.1.6
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
