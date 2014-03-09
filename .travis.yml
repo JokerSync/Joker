@@ -11,7 +11,7 @@ install:
 - brew install pyenv
 - eval "$(pyenv init -)"
 - pyenv install 2.7.2
-- pyenv local 2.7.2
+- pyenv global 2.7.2
 - pyenv rehash
 - pip install cpp-coveralls
 - pyenv rehash
