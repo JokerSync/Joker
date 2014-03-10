@@ -1,3 +1,5 @@
+#include <QStringList>
+
 #include "PhDebug.h"
 #include "PhFileTool.h"
 
