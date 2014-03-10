@@ -13,10 +13,14 @@ PhWindow::PhWindow(PhWindowSettings *settings) :
 	// Set up a filter for catching event
 	qApp->installEventFilter(this);
 
-	if(_settings->fullScreen())
+	if(_settings->fullScreen()) {
+		PHDEBUG << "Going fullscreen...";
 		QTimer::singleShot(1000, this, SLOT(showFullScreen()));
-	else
+	}
+	else {
+		PHDEBUG << "Restoring geometry...";
 		QMainWindow::restoreGeometry(_settings->windowGeometry());
+	}
 }
 
 bool PhWindow::eventFilter(QObject *sender, QEvent *event)
@@ -26,6 +30,7 @@ bool PhWindow::eventFilter(QObject *sender, QEvent *event)
 	case QEvent::WindowStateChange:
 		{
 			_settings->setFullScreen(QMainWindow::isFullScreen());
+			_settings->setWindowGeometry(QMainWindow::saveGeometry());
 			if(this->fullScreenAction()) {
 				this->fullScreenAction()->setCheckable(true);
 				this->fullScreenAction()->setChecked(QMainWindow::isFullScreen());
