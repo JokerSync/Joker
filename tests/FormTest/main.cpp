@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
 	a.setOrganizationDomain(ORG_NAME);
 
 	FormTestWindow window(&settings);
-	window.processArg(argc, argv);
 	window.show();
 
 	return a.exec();
