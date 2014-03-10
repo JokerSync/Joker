@@ -75,6 +75,9 @@ bool GraphicTestView::init()
 	_yuvRect.setRect(20, 300, 150, 100);
 	_yuvRect.createTextureFromYUVBuffer(yuv, w, h);
 
+	_disc.setPosition(300, 300, 0);
+	_disc.setRadius(100);
+	_disc.setColor(Qt::yellow);
 	return true;
 }
 
@@ -133,6 +136,8 @@ void GraphicTestView::paint()
 	frameRateText.setRect(0, 100, 100, 100);
 	frameRateText.setColor(Qt::red);
 	frameRateText.draw();
+
+	_disc.draw();
 
 }
 
