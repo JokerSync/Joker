@@ -69,6 +69,10 @@ private slots:
 
 	void on_actionStrip_Properties_triggered();
 
+	void on_actionRuler_triggered(bool checked);
+
+	void on_actionChange_ruler_timestamp_triggered();
+
 private:
 	Ui::GraphicStripTestWindow *ui;
 	GraphicStripTestSettings *_settings;

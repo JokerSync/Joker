@@ -21,6 +21,7 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	_doc = _strip->doc();
 	_clock = _strip->clock();
+	ui->actionRuler->setChecked(_settings->displayRuler());
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
@@ -192,4 +193,19 @@ void GraphicStripTestWindow::on_actionStrip_Properties_triggered()
 {
 	dlg = new StripPropertiesDialog(_doc, this);
 	dlg->show();
+}
+
+
+void GraphicStripTestWindow::on_actionRuler_triggered(bool checked)
+{
+	_settings->setDisplayRuler(checked);
+	if(checked && _settings->rulerTimestamp() == 0)
+		on_actionChange_ruler_timestamp_triggered();
+}
+
+void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
+{
+	PhTimeCodeDialog dlg(_doc->getTCType(), _settings->rulerTimestamp(), this);
+	if(dlg.exec())
+		_settings->setRulerTimestamp(dlg.frame());
 }

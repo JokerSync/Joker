@@ -23,6 +23,9 @@ public:
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
 	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1)
+	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
+	PH_SETTING_INT(setRulerTimestamp, rulerTimestamp)
+	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 50)
 
 	// PhDocumentWindowSettings
 	PH_SETTING_STRING(setCurrentDocument, currentDocument)

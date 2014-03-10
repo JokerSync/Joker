@@ -105,6 +105,9 @@
     </property>
     <addaction name="actionChange_font"/>
     <addaction name="actionFull_screen"/>
+    <addaction name="separator"/>
+    <addaction name="actionRuler"/>
+    <addaction name="actionChange_ruler_timestamp"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -211,6 +214,9 @@
    </property>
   </action>
   <action name="actionChange_font">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Change font...</string>
    </property>
@@ -257,6 +263,19 @@
   <action name="actionFull_screen">
    <property name="text">
     <string>Full screen</string>
+   </property>
+  </action>
+  <action name="actionRuler">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ruler</string>
+   </property>
+  </action>
+  <action name="actionChange_ruler_timestamp">
+   <property name="text">
+    <string>Change ruler timestamp...</string>
    </property>
   </action>
  </widget>

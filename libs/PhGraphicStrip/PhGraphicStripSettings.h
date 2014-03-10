@@ -65,6 +65,10 @@ public:
 	 * @return An integer value
 	 */
 	virtual int verticalSpeed() = 0;
+
+	virtual bool displayRuler() = 0;
+	virtual int rulerTimestamp() = 0;
+	virtual int spaceBetweenRuler() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

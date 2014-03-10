@@ -10,6 +10,7 @@
 #include <QMessageBox>
 
 #include "PhTools/PhDebug.h"
+#include "PhGraphic/PhGraphicDisc.h"
 #include "PhGraphicStrip.h"
 
 PhGraphicStrip::PhGraphicStrip(QObject *parent) :
@@ -208,6 +209,61 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 		_stripSyncBar.setSize(4, height);
 		_stripSyncBar.setPosition(x + width/6, y, 0);
 		_stripSyncBar.draw();
+
+		if(_settings->displayRuler()) {
+			PhFrame rulerTimestamp = _settings->rulerTimestamp();
+			PhFrame spaceBetweenRuler = _settings->spaceBetweenRuler();
+			int rulerNumber = (frameIn - rulerTimestamp) / spaceBetweenRuler;
+			if (rulerNumber < 0)
+				rulerNumber = 0;
+
+			PhFrame rulerFrame = rulerTimestamp + rulerNumber * spaceBetweenRuler;
+			QColor rulerColor(80, 80, 80);
+			PhGraphicSolidRect rulerRect;
+			PhGraphicDisc rulerDisc;
+			PhGraphicText rulerText(&_hudFont);
+			int width = pixelPerFrame;
+
+			rulerRect.setColor(rulerColor);
+			rulerRect.setWidth(width);
+			rulerRect.setHeight(height / 2);
+			rulerRect.setZ(0);
+
+			rulerDisc.setColor(rulerColor);
+			rulerDisc.setRadius(2 * width);
+			rulerDisc.setY(height / 2 + 3 * width);
+			rulerDisc.setZ(0);
+
+			rulerText.setColor(rulerColor);
+			rulerText.setY(height / 2);
+			rulerText.setHeight(height / 2);
+			rulerText.setZ(0);
+
+			while (rulerFrame < frameOut + spaceBetweenRuler) {
+				int x = rulerFrame * pixelPerFrame - offset;
+
+				rulerRect.setX(x - rulerRect.getWidth() / 2);
+				rulerRect.draw();
+
+				QString text = QString::number(rulerNumber);
+				rulerText.setContent(text);
+				int textWidth = _hudFont.getNominalWidth(text);
+				rulerText.setWidth(textWidth);
+				rulerText.setX(x - textWidth / 2);
+				rulerText.draw();
+
+				x += spaceBetweenRuler * pixelPerFrame / 2;
+
+				rulerRect.setX(x - rulerRect.getWidth() / 2);
+				rulerRect.draw();
+
+				rulerDisc.setX(x);
+				rulerDisc.draw();
+
+				rulerNumber++;
+				rulerFrame += spaceBetweenRuler;
+			}
+		}
 
 		int minSpaceBetweenPeople = 50;
 		int spaceBetweenPeopleAndText = 4;
