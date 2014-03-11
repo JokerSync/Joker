@@ -68,11 +68,8 @@ bool PhStripDoc::importDetX(QString fileName)
 		if(header.elementsByTagName("title").count())
 			_title = header.elementsByTagName("title").at(0).toElement().text();
 		else
-#if defined(Q_OS_WIN)
-			_title = fileName.split("\\").last();
-#else
-			_title = fileName.split("/").last();
-#endif
+			_title = QFileInfo(fileName).fileName();
+
 
 		// Reading the translated title
 		if(header.elementsByTagName("title2").count())
