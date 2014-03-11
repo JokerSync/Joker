@@ -359,3 +359,10 @@ PhFrame PhStripDocTest::s2f(QString string)
 {
 	return PhTimeCode::frameFromString(string, _doc.getTCType());
 }
+
+void PhStripDocTest::importDetXNoTitleTest()
+{
+	QVERIFY(_doc.importDetX("notitle.detx"));
+	QVERIFY(_doc.getTitle() == "notitle.detx");
+
+}

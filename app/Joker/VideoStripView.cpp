@@ -78,10 +78,7 @@ void VideoStripView::paint()
 		int titleX = (this->width() - titleWidth) / 2;
 		_titleText.setRect(titleX, y, titleWidth, titleHeight);
 		y += titleHeight;
-
-		_titleBackgroundRect.draw();
 		_titleText.setContent(title);
-		_titleText.draw();
 	}
 
 	float stripHeightRatio = 0.25f;
@@ -92,6 +89,12 @@ void VideoStripView::paint()
 	int videoHeight = this->height() - y - stripHeight;
 
 	_strip.draw(0, y + videoHeight, this->width(), stripHeight, selectedPeoples);
+
+	// The strip must be the first drawn object, otherwise it masks previous drawings.
+	if(_settings->displayTitle() && (title.length() > 0)) {
+		_titleBackgroundRect.draw();
+		_titleText.draw();
+	}
 
 	int tcWidth = 200;
 
