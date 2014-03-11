@@ -34,7 +34,8 @@ script:
 - ./scripts/uncrustify.sh
 
 after_success:
-    - coveralls --exclude /usr/local --exclude /Applications --exclude moc_*
+#- coveralls --exclude /usr/local --exclude /Applications --exclude moc_*
+- coveralls 
 
 notifications:
  irc: "phonations.com#joker"
