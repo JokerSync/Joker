@@ -121,6 +121,8 @@ private:
 	PhGraphicText _noVideoSyncError;
 	PhGraphicText _currentPeopleName;
 
+	PhGraphicImage _logo;
+
 	bool _forceRatio169;
 };
 
