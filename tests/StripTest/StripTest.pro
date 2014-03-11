@@ -20,9 +20,6 @@ DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
-QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
-
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 
