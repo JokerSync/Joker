@@ -54,11 +54,18 @@ public:
 	 */
 	void dispose();
 
+	/**
+	 * @brief originalSize
+	 * @return the original image size
+	 */
+	QSize originalSize() const;
+
 private:
 
 	QString _filename;
 
 	SDL_Surface * _surface;
+	QSize _originalSize;
 };
 
 #endif // PHGRAPHICIMAGE_H

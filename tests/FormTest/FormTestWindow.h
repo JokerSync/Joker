@@ -6,7 +6,7 @@
 
 #include "AboutDialog.h"
 
-#include "PhCommonUI/PhDocumentWindow.h"
+#include "PhCommonUI/PhWindow.h"
 
 #include "FormTestSettings.h"
 
@@ -17,7 +17,7 @@ class FormTestWindow;
 class GoTo;
 class AboutDialog;
 
-class FormTestWindow : public PhDocumentWindow
+class FormTestWindow : public PhWindow
 {
 	Q_OBJECT
 
@@ -25,28 +25,13 @@ public:
 	explicit FormTestWindow(FormTestSettings *settings);
 	~FormTestWindow();
 
-	void generateRGB();
-
-	void generateYUV();
-
 protected:
-	bool openDocument(QString fileName);
-
-	void paintEvent(QPaintEvent *);
-
-	QMenu *recentDocumentMenu();
 	QAction *fullScreenAction();
 
 private slots:
 	void on_actionAbout_triggered();
 
 	void on_actionDocumentation_triggered();
-
-	void on_actionOpen_triggered();
-
-	void on_actionGenerate_YUV_pattern_triggered();
-
-	void on_actionGenerate_RGB_pattern_triggered();
 
 private:
 	Ui::FormTestWindow *ui;
