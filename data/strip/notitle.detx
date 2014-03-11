@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<detx>
+
+  <header>
+    <author firstname="Thomas"/>
+    <videofile timestamp="01:00:00:00">../data/test.mov</videofile>
+    <last_position timecode="01:00:00:00" track="1"/>
+  </header>
+
+  <roles>
+    <role color="#FF0000" description="" id="Thomas" name="Thomas"/>
+  </roles>
+  
+  <body>
+    
+    <shot timecode="01:00:00:12"/>
+    <line role="Thomas" track="3">
+      <lipsync timecode="01:00:04:11" type="in_open"/>
+      <text>I'm coming from a script file dude1!</text>
+      <lipsync timecode="01:00:07:01" type="out_open"/>
+    </line>
+    
+   </body>
+</detx>
