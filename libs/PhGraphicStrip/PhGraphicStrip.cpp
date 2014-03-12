@@ -296,10 +296,11 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				PhPeople * people = text->getPeople();
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				QString name = "???";
+				if(people)
+					name = people->getName();
 
 				if(gPeople == NULL) {
 					gPeople = new PhGraphicText(&_hudFont, name);
-					gPeople->setColor(QColor(color));
 					gPeople->setWidth(name.length() * 12);
 					gPeople->setZ(-1);
 
@@ -360,6 +361,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 			if(displayNextText && (frameOut < text->getTimeIn()) && ((lastText == NULL) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))) {
 				PhPeople * people = text->getPeople();
 				QString name = "???";
+				if(people)
+					name = people->getName();
 
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				if(gPeople == NULL) {
