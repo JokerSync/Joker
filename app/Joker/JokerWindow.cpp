@@ -695,7 +695,7 @@ void JokerWindow::on_actionForce_16_9_ratio_triggered()
 }
 
 
-void JokerWindow::on_actionInvert_colors_toggled(bool arg1)
+void JokerWindow::on_actionInvert_colors_toggled(bool checked)
 {
-	_settings->setInvertColor(arg1);
+	_settings->setInvertColor(checked);
 }

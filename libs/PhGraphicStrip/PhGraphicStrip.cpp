@@ -199,7 +199,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 			{
 				if(cut->getTimeIn() == clockFrame) {
 					PhGraphicSolidRect white(x, y, width, height);
-					white.setColor(QColor("white"));
+					white.setColor(Qt::white);
 					white.draw();
 					PHDEBUG << clockFrame << "cut" << _clock.frame();
 
@@ -408,15 +408,15 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				PhGraphicSolidRect *gCut = _graphicCuts[cut];
 				if(gCut == NULL) {
 					gCut = new PhGraphicSolidRect();
-					if(invertedColor)
-						gCut->setColor(QColor(255, 255, 255));
-					else
-						gCut->setColor(QColor(0, 0, 0));
 					gCut->setZ(-1);
 					gCut->setWidth(2);
 
 					_graphicCuts[cut] = gCut;
 				}
+				if(invertedColor)
+					gCut->setColor(QColor(255, 255, 255));
+				else
+					gCut->setColor(QColor(0, 0, 0));
 				gCut->setHeight(height);
 				gCut->setX(x + cut->getTimeIn() * pixelPerFrame - offset);
 				gCut->setY(y);

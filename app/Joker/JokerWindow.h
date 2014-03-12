@@ -202,7 +202,7 @@ private slots:
 
 	void on_actionForce_16_9_ratio_triggered();
 
-	void on_actionInvert_colors_toggled(bool arg1);
+	void on_actionInvert_colors_toggled(bool checked);
 
 private:
 	Ui::JokerWindow *ui;
