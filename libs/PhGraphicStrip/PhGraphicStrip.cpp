@@ -296,11 +296,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				PhPeople * people = text->getPeople();
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				QString name = "???";
-				QColor color = Qt::black;
-				if(people) {
-					name = people->getName();
-					color = QColor(people->getColor());
-				}
+
 				if(gPeople == NULL) {
 					gPeople = new PhGraphicText(&_hudFont, name);
 					gPeople->setColor(QColor(color));
