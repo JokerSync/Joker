@@ -224,7 +224,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 		PhGraphicRect* backgroundRect = &_stripBackgroundImage;
 		if(invertedColor)
-			backgroundRect = &_stripBackgroundImage;
+			backgroundRect = &_stripBackgroundImageInverted;
 
 		backgroundRect->setX(x + leftBG);
 		backgroundRect->setY(y);
@@ -437,13 +437,17 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				PhGraphicLoop * gLoop = _graphicLoops[loop];
 				if(gLoop == NULL) {
 					gLoop = new PhGraphicLoop();
-					gLoop->setColor(QColor(0, 0, 0, 1));
 					_graphicLoops[loop] = gLoop;
 					gLoop->setZ(-1);
 				}
+				if(!invertedColor)
+					gLoop->setColor(Qt::black);
+				else
+					gLoop->setColor(Qt::white);
+
 				gLoop->setX(x + loop->getTimeIn() * pixelPerFrame - offset);
 				gLoop->setY(y);
-				gLoop->setHThick(height/40);
+				gLoop->setHThick(height / 40);
 				gLoop->setHeight(height);
 				gLoop->setCrossHeight(height / 4);
 				gLoop->setWidth(height / 4);
@@ -456,11 +460,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				PhGraphicLoop gLoopPred;
 
 				int howFarIsLoop = (loop->getTimeIn() - frameOut) * verticalPixelPerFrame;
+				gLoopPred.setColor(Qt::white);
 
-				if(invertedColor)
-					gLoopPred.setColor(QColor(255, 255, 0));
-				else
-					gLoopPred.setColor(Qt::blue);
 				gLoopPred.setHorizontalLoop(true);
 				gLoopPred.setZ(-3);
 
