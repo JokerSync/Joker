@@ -202,6 +202,8 @@ private slots:
 
 	void on_actionForce_16_9_ratio_triggered();
 
+	void on_actionInvert_colors_triggered();
+
 private:
 	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;

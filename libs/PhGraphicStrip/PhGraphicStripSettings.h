@@ -65,6 +65,12 @@ public:
 	 * @return An integer value
 	 */
 	virtual int verticalSpeed() = 0;
+
+	/**
+	 * @brief Enable or disable the invertion of color
+	 * @return True if the color is inverted, false otherwise
+	 */
+	virtual bool invertColor() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

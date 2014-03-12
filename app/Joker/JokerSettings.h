@@ -30,6 +30,8 @@ public:
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
 	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1)
 	PH_SETTING_STRINGLIST(setSelectedPeopleNameList, selectedPeopleNameList)
+	PH_SETTING_BOOL2(setInvertColor, invertColor, false)
+
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)

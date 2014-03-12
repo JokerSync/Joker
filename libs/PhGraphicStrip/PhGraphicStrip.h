@@ -126,6 +126,14 @@ public:
 	 */
 	PhFont * getHUDFont();
 
+	/**
+	 * @brief inverseStripColor
+	 *
+	 * This function is called when Joker need to invert the color of the strip
+	 *
+	 */
+	void inverseStripColor();
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.

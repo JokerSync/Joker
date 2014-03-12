@@ -691,3 +691,9 @@ void JokerWindow::on_actionForce_16_9_ratio_triggered()
 	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
 	_needToSave = true;
 }
+
+void JokerWindow::on_actionInvert_colors_triggered()
+{
+	_settings->setInvertColor(!_settings->invertColor());
+	ui->videoStripView->strip()->inverseColor();
+}
