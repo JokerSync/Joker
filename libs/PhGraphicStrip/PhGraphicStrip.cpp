@@ -64,6 +64,9 @@ bool PhGraphicStrip::init()
 	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png");
 	_stripBackgroundImage.init();
 
+	_stripBackgroundImageInverted.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png");
+	_stripBackgroundImageInverted.init();
+
 	PHDEBUG << "Init the sync bar";
 	_stripSyncBar.setColor(QColor(225, 86, 108));
 
@@ -126,15 +129,6 @@ PhFont *PhGraphicStrip::getTextFont()
 PhFont *PhGraphicStrip::getHUDFont()
 {
 	return &_hudFont;
-}
-
-void PhGraphicStrip::inverseStripColor()
-{
-	if(_settings->invertColor())
-		_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png");
-	else
-		_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png");
-	_stripBackgroundImage.init();
 }
 
 QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selectedPeoples)
@@ -209,11 +203,21 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 		else
 			leftBG -= height - ((-offset) % height);
 
-		_stripBackgroundImage.setX(x + leftBG);
-		_stripBackgroundImage.setY(y);
-		_stripBackgroundImage.setSize(height * n, height);
-		_stripBackgroundImage.setZ(-2);
-		_stripBackgroundImage.draw();
+		if(invertedColor){
+			_stripBackgroundImageInverted.setX(x + leftBG);
+			_stripBackgroundImageInverted.setY(y);
+			_stripBackgroundImageInverted.setSize(height * n, height);
+			_stripBackgroundImageInverted.setZ(-2);
+			_stripBackgroundImageInverted.draw();
+		}
+		else
+		{
+			_stripBackgroundImage.setX(x + leftBG);
+			_stripBackgroundImage.setY(y);
+			_stripBackgroundImage.setSize(height * n, height);
+			_stripBackgroundImage.setZ(-2);
+			_stripBackgroundImage.draw();
+		}
 
 		_stripSyncBar.setSize(4, height);
 		_stripSyncBar.setPosition(x + width/6, y, 0);

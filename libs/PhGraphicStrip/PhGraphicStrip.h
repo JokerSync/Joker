@@ -126,13 +126,6 @@ public:
 	 */
 	PhFont * getHUDFont();
 
-	/**
-	 * @brief inverseStripColor
-	 *
-	 * This function is called when Joker need to invert the color of the strip
-	 *
-	 */
-	void inverseStripColor();
 
 private slots:
 	/**
@@ -164,6 +157,8 @@ private:
 	 * Background Image used for the strip band
 	 */
 	PhGraphicImage _stripBackgroundImage;
+	PhGraphicImage _stripBackgroundImageInverted;
+
 
 	PhGraphicSolidRect _stripSyncBar;
 
