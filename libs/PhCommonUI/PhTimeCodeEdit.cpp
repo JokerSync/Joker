@@ -7,9 +7,9 @@
 #include "PhTimecodeEdit.h"
 
 PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
-	QLineEdit(parent),
-	_tcType(PhTimeCodeType25)
+	QLineEdit(parent)
 {
+	setFrame(0, PhTimeCodeType25);
 	connect(this, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged(QString)));
 	this->installEventFilter(this);
 	//Only accept numbers and ":" it avoid the use of special

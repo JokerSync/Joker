@@ -7,11 +7,16 @@ class PhTimeCodeEditTest : public QObject
 {
 	Q_OBJECT
 public:
-	explicit PhTimeCodeEditTest(QObject *parent = 0);
+	explicit PhTimeCodeEditTest();
 
 private slots:
+	void frameTest();
 	void setFrameTest();
 
+	void keyboardInputTest();
+	void keyboardBadInputTest();
+
+	void mouseInputTest();
 };
 
 #endif // PHTIMECODEEDITTEST_H
