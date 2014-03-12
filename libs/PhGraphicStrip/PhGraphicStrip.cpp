@@ -280,13 +280,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				gText->draw();
 			}
 
-			// Set the track to full
-			//if(frameOut + pixelPerFrame > timeIn and frameIn < timeOut)
-			//            if( (frameIn < text->getTimeOut()) and (text->getTimeIn() < frameOut) )
-			//            {
-			//                trackFull[track] = true;
-			//            }
-
 			PhStripText * lastText = lastTextList[track];
 			// Display the people name only if one of the following condition is true:
 			// - it is the first text
@@ -324,40 +317,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 			}
 
-			//            // Displaying text prediction only if the following conditions are true:
-			//            // - The track is empty;
-			//            // - It refers to a texts about to be displayed
-			//            if(displayNextText && trackFull[track] == false && (frameIn < text->getTimeOut()))
-			//            {
-			//                PhPeople * people = text->getPeople();
-			//                PhGraphicText * gPeople = _graphicPeoples[people];
-			//                if(gPeople == NULL)
-			//                {
-			//                    gPeople = new PhGraphicText(&_textFont, people->getName());
-			//                    gPeople->setColor(QColor(people->getColor()));
-			//                    gPeople->setWidth(people->getName().length() * 16);
-			//                    gPeople->setZ(-1);
-
-			//                    gPeople->init();
-
-			//                    _graphicPeoples[people] = gPeople;
-			//                }
-			//                //This line is used to see which text's name will be displayed
-			//                //gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(timeIn, PhTimeCodeType25));
-			//                gPeople->setContent(people->getName() + " " + PhTimeCode::stringFromFrame(text->getTimeIn(), PhTimeCodeType25));
-			//                gPeople->setWidth(gPeople->getContent().length() * 16);
-			//                gPeople->setX(width - gPeople->getWidth() - 20);
-			//                gPeople->setY(y + track * trackHeight);
-			//                gPeople->setHeight(trackHeight / 2);
-
-			//                gPeople->draw();
-
-			//                //Rename gPeople with their real names
-			//                gPeople->setContent(people->getName());
-			//                gPeople->setWidth(gPeople->getContent().length() * 16);
-			//                trackFull[track] = true;
-			//                //PHDEBUG << people->getName();
-			//            }
 			if(displayNextText && (frameOut < text->getTimeIn()) && ((lastText == NULL) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))) {
 				PhPeople * people = text->getPeople();
 				QString name = "???";
