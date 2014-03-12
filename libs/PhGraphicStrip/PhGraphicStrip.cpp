@@ -131,20 +131,39 @@ PhFont *PhGraphicStrip::getHUDFont()
 	return &_hudFont;
 }
 
-QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selectedPeoples)
+QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selectedPeoples, bool invertColor)
 {
-	if(people) {
-		if(selectedPeoples.size() && !selectedPeoples.contains(people)) {
+	if(!invertColor)
+	{
+		if(people) {
+			if(selectedPeoples.size() && !selectedPeoples.contains(people)) {
+				return QColor(100, 100, 100);
+			}
+			else {
+				return people->getColor();
+			}
+		}
+		else if(selectedPeoples.size())
 			return QColor(100, 100, 100);
-		}
-		else {
-			return people->getColor();
-		}
+		else
+			return Qt::black;
 	}
-	else if(selectedPeoples.size())
-		return QColor(100, 100, 100);
 	else
-		return Qt::black;
+	{
+		if(people) {
+			if(selectedPeoples.size() && !selectedPeoples.contains(people)) {
+				return QColor(155, 155, 155);
+			}
+			else {
+				QColor color(people->getColor());
+				return QColor(255 - color.red(), 255 - color.green(), 255 - color.blue());
+			}
+		}
+		else if(selectedPeoples.size())
+			return QColor(155, 155, 155);
+		else
+			return Qt::white;
+	}
 }
 
 void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *> selectedPeoples)
@@ -203,30 +222,20 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 		else
 			leftBG -= height - ((-offset) % height);
 
-		if(invertedColor){
-			_stripBackgroundImageInverted.setX(x + leftBG);
-			_stripBackgroundImageInverted.setY(y);
-			_stripBackgroundImageInverted.setSize(height * n, height);
-			_stripBackgroundImageInverted.setZ(-2);
-			_stripBackgroundImageInverted.draw();
-		}
-		else
-		{
-			_stripBackgroundImage.setX(x + leftBG);
-			_stripBackgroundImage.setY(y);
-			_stripBackgroundImage.setSize(height * n, height);
-			_stripBackgroundImage.setZ(-2);
-			_stripBackgroundImage.draw();
-		}
+		PhGraphicRect* backgroundRect = &_stripBackgroundImage;
+		if(invertedColor)
+			backgroundRect = &_stripBackgroundImage;
+
+		backgroundRect->setX(x + leftBG);
+		backgroundRect->setY(y);
+		backgroundRect->setSize(height * n, height);
+		backgroundRect->setZ(-2);
+		backgroundRect->draw();
 
 		_stripSyncBar.setSize(4, height);
 		_stripSyncBar.setPosition(x + width/6, y, 0);
-		if(invertedColor) {
-			_stripSyncBar.setColor(QColor(30, 169, 147));
-		}
-		else {
-			_stripSyncBar.setColor(QColor(225, 86, 108));
-		}
+		_stripSyncBar.setColor(QColor(225, 86, 108));
+
 		_stripSyncBar.draw();
 
 		int minSpaceBetweenPeople = 50;
@@ -266,12 +275,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				gText->setY(y + track * trackHeight);
 				gText->setHeight(trackHeight);
 				gText->setZ(-1);
-				if(invertedColor) {
-					QColor textColor(text->getPeople()->getColor());
-					gText->setColor(QColor(255 - textColor.red(), 255 - textColor.green(), 255 - textColor.blue()));
-				}
-				else
-					gText->setColor(computeColor(text->getPeople(), selectedPeoples));
+				gText->setColor(computeColor(text->getPeople(), selectedPeoples, invertedColor));
 
 				gText->draw();
 			}
@@ -311,12 +315,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				gPeople->setY(y + track * trackHeight);
 				gPeople->setZ(-1);
 				gPeople->setHeight(trackHeight / 2);
-				if(invertedColor) {
-					QColor color(people->getColor());
-					gPeople->setColor(QColor(255 - color.red(), 255 - color.green(), 255 - color.blue()));
-				}
-				else
-					gPeople->setColor(computeColor(people, selectedPeoples));
+
+				gPeople->setColor(computeColor(people, selectedPeoples, invertedColor));
 
 				gPeople->draw();
 
@@ -381,9 +381,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				gPeople->setZ(-3);
 				gPeople->setHeight(trackHeight / 2);
 
-				gPeople->setColor(computeColor(people, selectedPeoples));
-				if(invertedColor)
-					gPeople->setColor(QColor(255 - gPeople->getColor().red(), 255 - gPeople->getColor().green(), 255 - gPeople->getColor().blue()));
+				gPeople->setColor(computeColor(people, selectedPeoples, invertedColor));
 
 
 				PhGraphicSolidRect background(gPeople->getX(), gPeople->getY(), gPeople->getWidth(), gPeople->getHeight() + 2);
@@ -439,10 +437,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				PhGraphicLoop * gLoop = _graphicLoops[loop];
 				if(gLoop == NULL) {
 					gLoop = new PhGraphicLoop();
-					if(invertedColor)
-						gLoop->setColor(QColor(255, 255, 255, 1));
-					else
-						gLoop->setColor(QColor(0, 0, 0, 1));
+					gLoop->setColor(QColor(0, 0, 0, 1));
 					_graphicLoops[loop] = gLoop;
 					gLoop->setZ(-1);
 				}
@@ -493,12 +488,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 					_graphicDetects[detect] = gDetect;
 					gDetect->setZ(-1);
 				}
-				if(!invertedColor)
-					gDetect->setColor(computeColor(detect->getPeople(), selectedPeoples));
-				else {
-					QColor color(detect->getPeople()->getColor());
-					gDetect->setColor(QColor(255 - color.red(), 255 - color.green(), 255 - color.blue()));
-				}
+
+				gDetect->setColor(computeColor(detect->getPeople(), selectedPeoples, invertedColor));
+
 				gDetect->setX(x + detect->getTimeIn() * pixelPerFrame - offset);
 				gDetect->setY(y + detect->getTrack() * trackHeight + trackHeight * 0.8);
 				gDetect->setHeight(trackHeight / 20);

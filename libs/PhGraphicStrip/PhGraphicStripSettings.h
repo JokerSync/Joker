@@ -67,7 +67,7 @@ public:
 	virtual int verticalSpeed() = 0;
 
 	/**
-	 * @brief Enable or disable the invertion of color
+	 * @brief Allow color invertion
 	 * @return True if the color is inverted, false otherwise
 	 */
 	virtual bool invertColor() = 0;

@@ -181,7 +181,7 @@ private:
 	int _trackNumber;
 	PhGraphicStripSettings * _settings;
 
-	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples);
+	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
 };
 
 #endif // PHGRAPHICSTRIP_H
