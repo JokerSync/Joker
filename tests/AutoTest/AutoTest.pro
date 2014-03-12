@@ -12,6 +12,9 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
+QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
+
 INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri)

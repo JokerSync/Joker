@@ -1,4 +1,5 @@
 language: objective-c
+
 install:
 - mkdir tmp && cd tmp
 - ../scripts/install_libltc.sh
@@ -6,6 +7,15 @@ install:
 - ../scripts/install_sdl.sh
 - ../scripts/bootstrap.sh
 - export PATH=$PATH:/usr/local/opt/qt5/bin
+# Setup python environment for coveralls
+- brew install pyenv
+- eval "$(pyenv init -)"
+- pyenv install 2.7.2
+- pyenv global 2.7.2
+- pyenv rehash
+- pip install cpp-coveralls
+- pyenv rehash
+
 script:
 # Build AutoTest
 - mkdir AutoTest && cd AutoTest
@@ -13,7 +23,7 @@ script:
 - make
 # Run AutoTest
 - ./AutoTest
-- cd .. 
+- cd ..
 # Build Joker
 - mkdir Joker && cd Joker
 - qmake ../../app/Joker/Joker.pro
@@ -22,7 +32,11 @@ script:
 - cd ..
 - ./scripts/doxygen.sh
 - ./scripts/uncrustify.sh
+
+after_success:
+#- coveralls --exclude /usr/local --exclude /Applications --exclude moc_*
+- coveralls 
+
 notifications:
  irc: "phonations.com#joker"
  email: false
-
