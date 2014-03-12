@@ -1,9 +1,12 @@
 #include <stdio.h>
 
-#include <PhTools/tests/PhTimeCodeTest.h>
-#include <PhTools/tests/PhSettingsTest.h>
-#include <PhStrip/tests/PhStripDocTest.h>
-#include <PhSync/tests/PhSonyControllerTest.h>
+#include <QApplication>
+
+#include "PhTools/tests/PhTimeCodeTest.h"
+#include "PhTools/tests/PhSettingsTest.h"
+#include "PhStrip/tests/PhStripDocTest.h"
+#include "PhSync/tests/PhSonyControllerTest.h"
+#include "PhCommonUI/tests/PhTimeCodeEditTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +15,7 @@ int main(int argc, char *argv[])
 	bool testSettings = testAll;
 	bool testDoc = testAll;
 	bool testSony = testAll;
+	bool testUi = testAll;
 	bool quiet = false;
 
 	bool success = true;
@@ -25,6 +29,8 @@ int main(int argc, char *argv[])
 			testDoc = true;
 		else if(strcmp(argv[i], "sony") == 0)
 			testSony = true;
+		else if(strcmp(argv[i], "ui") == 0)
+			testUi = true;
 		else if(strcmp(argv[i], "quiet") == 0)
 			quiet = true;
 	}
@@ -51,6 +57,13 @@ int main(int argc, char *argv[])
 		// Testing PhSonyController
 		PhSonyControllerTest sonyTest;
 		success &= !QTest::qExec(&sonyTest);
+	}
+
+	if(testUi) {
+		QApplication a(argc, argv);
+		// Testing PhTimeCodeEdit
+		PhTimeCodeEditTest tcEditTest;
+		success &= !QTest::qExec(&tcEditTest);
 	}
 
 	QThread::msleep(500);
