@@ -3,6 +3,8 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
+QT += widgets
+
 HEADERS += \
 #    ../../libs/PhCommonUI/PhLeap.h \
 	../../libs/PhCommonUI/PhMediaPanel.h \
