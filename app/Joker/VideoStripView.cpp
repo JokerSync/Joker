@@ -79,6 +79,8 @@ void VideoStripView::paint()
 		_titleText.setRect(titleX, y, titleWidth, titleHeight);
 		y += titleHeight;
 		_titleText.setContent(title);
+		_titleText.setZ(5);
+		_titleBackgroundRect.setZ(5);
 	}
 
 	float stripHeightRatio = 0.25f;
