@@ -215,22 +215,22 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 		//Draw backgroung picture
 		int n = width / height + 2; // compute how much background repetition do we need
-		_stripBackgroundImage.setTextureCoordinate(n, 1);
 		long leftBG = 0;
 		if(offset >= 0)
 			leftBG -= offset % height;
 		else
 			leftBG -= height - ((-offset) % height);
 
-		PhGraphicRect* backgroundRect = &_stripBackgroundImage;
+		PhGraphicTexturedRect* backgroundImage = &_stripBackgroundImage;
 		if(invertedColor)
-			backgroundRect = &_stripBackgroundImageInverted;
+			backgroundImage = &_stripBackgroundImageInverted;
 
-		backgroundRect->setX(x + leftBG);
-		backgroundRect->setY(y);
-		backgroundRect->setSize(height * n, height);
-		backgroundRect->setZ(-2);
-		backgroundRect->draw();
+		backgroundImage->setX(x + leftBG);
+		backgroundImage->setY(y);
+		backgroundImage->setSize(height * n, height);
+		backgroundImage->setZ(-2);
+		backgroundImage->setTextureCoordinate(n, 1);
+		backgroundImage->draw();
 
 		_stripSyncBar.setSize(4, height);
 		_stripSyncBar.setPosition(x + width/6, y, 0);
