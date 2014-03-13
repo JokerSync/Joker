@@ -23,6 +23,7 @@ public:
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
 	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1)
+	PH_SETTING_BOOL(setInvertColor, invertColor)
 
 	// PhDocumentWindowSettings
 	PH_SETTING_STRING(setCurrentDocument, currentDocument)

@@ -69,6 +69,8 @@ private slots:
 
 	void on_actionStrip_Properties_triggered();
 
+	void on_actionInvert_colors_triggered(bool checked);
+
 private:
 	Ui::GraphicStripTestWindow *ui;
 	GraphicStripTestSettings *_settings;

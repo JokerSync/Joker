@@ -21,6 +21,7 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	_doc = _strip->doc();
 	_clock = _strip->clock();
+	ui->actionInvert_colors->setChecked(_settings->invertColor());
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
@@ -192,4 +193,9 @@ void GraphicStripTestWindow::on_actionStrip_Properties_triggered()
 {
 	dlg = new StripPropertiesDialog(_doc, this);
 	dlg->show();
+}
+
+void GraphicStripTestWindow::on_actionInvert_colors_triggered(bool checked)
+{
+    _settings->setInvertColor(checked);
 }

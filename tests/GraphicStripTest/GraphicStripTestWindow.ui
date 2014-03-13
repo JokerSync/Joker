@@ -103,6 +103,7 @@
     <property name="title">
      <string>Display</string>
     </property>
+    <addaction name="actionInvert_colors"/>
     <addaction name="actionChange_font"/>
     <addaction name="actionFull_screen"/>
    </widget>
@@ -257,6 +258,14 @@
   <action name="actionFull_screen">
    <property name="text">
     <string>Full screen</string>
+   </property>
+  </action>
+  <action name="actionInvert_colors">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Invert colors</string>
    </property>
   </action>
  </widget>
