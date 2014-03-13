@@ -6,6 +6,7 @@
 
 #include <QtGlobal>
 #include <QSize>
+#include <QFileInfo>
 
 #if defined(Q_OS_MAC)
 #include <SDL2_image/SDL_image.h>
@@ -23,6 +24,8 @@ PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h)
 
 bool PhGraphicImage::init()
 {
+	QFileInfo info(_filename);
+	PHDEBUG << info.fileName();
 	_surface = IMG_Load(_filename.toStdString().c_str());
 	if(_surface != NULL) {
 		if(createTextureFromSurface(_surface)) {

@@ -15,11 +15,18 @@ PhGraphicRect::~PhGraphicRect()
 {
 }
 
+void PhGraphicRect::setSize(QSize size)
+{
+	this->setWidth(size.width());
+	this->setHeight(size.height());
+}
+
 void PhGraphicRect::setSize(int w, int h)
 {
-	this->setHeight(h);
 	this->setWidth(w);
+	this->setHeight(h);
 }
+
 void PhGraphicRect::setRect(int x, int y, int w, int h)
 {
 	this->setSize(w, h);

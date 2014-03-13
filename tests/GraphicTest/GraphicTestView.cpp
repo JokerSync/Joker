@@ -21,13 +21,15 @@ bool GraphicTestView::init()
 {
 	PHDEBUG << "Initialize _image";
 
-	_image.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/look.png");
+	QString imageFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png";
+	_image.setFilename(imageFile);
 	_image.setTextureCoordinate(1, 1);
-	_image.setRect(50, 0, 250, 125);
+	_image.setPosition(50, 0, 1);
 	if (!_image.init()) {
-		PHDEBUG << "_image not initialize : " << QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/look.png";
+		PHDEBUG << "_image not initialize : " << imageFile;
 		return false;
 	}
+	_image.setSize(_image.originalSize());
 
 	PHDEBUG << "Initialize _font";
 	if (!_font1.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")) {
