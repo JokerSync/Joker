@@ -1,6 +1,8 @@
 Joker
 =====
 
+[![Build Status](https://travis-ci.org/Phonations/Joker.png?branch=master)](https://travis-ci.org/Phonations/Joker) [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.png?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=mdGCov)
+
 This depot hosts the Joker projet components:
 
 * applications
@@ -9,12 +11,6 @@ This depot hosts the Joker projet components:
 
 Compilation information :
 -------------------------
-
-[![Build Status](https://travis-ci.org/Phonations/Joker.png?branch=master)](https://travis-ci.org/Phonations/Joker)
-
-[![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.png?branch=mdGCov)](https://coveralls.io/r/Phonations/Joker?branch=mdGCov)
-
-(TODO : change branch to master)
 
 In order to compile the  project you will need to follow the instructions depending on your system :
 
