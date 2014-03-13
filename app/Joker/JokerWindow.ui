@@ -107,6 +107,8 @@
     <addaction name="actionTest_mode"/>
     <addaction name="actionForce_16_9_ratio"/>
     <addaction name="actionFullscreen"/>
+    <addaction name="actionShow_ruler"/>
+    <addaction name="actionChange_ruler_timestamp"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -347,6 +349,19 @@
    </property>
    <property name="text">
     <string>Empty</string>
+   </property>
+  </action>
+  <action name="actionShow_ruler">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ruler</string>
+   </property>
+  </action>
+  <action name="actionChange_ruler_timestamp">
+   <property name="text">
+    <string>Change ruler timestamp</string>
    </property>
   </action>
  </widget>

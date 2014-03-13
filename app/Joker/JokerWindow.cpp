@@ -105,6 +105,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #warning /// @todo move to PhDocumentWindow
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
+
+	ui->actionShow_ruler->setChecked(_settings->displayRuler());
 }
 
 JokerWindow::~JokerWindow()
@@ -690,4 +692,16 @@ void JokerWindow::on_actionForce_16_9_ratio_triggered()
 {
 	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
 	_needToSave = true;
+}
+
+void JokerWindow::on_actionShow_ruler_toggled(bool display)
+{
+	_settings->setDisplayRuler(display);
+}
+
+void JokerWindow::on_actionChange_ruler_timestamp_triggered()
+{
+	PhTimeCodeDialog dlg(_doc->getTCType(), _settings->rulerTimestamp(), this);
+	if(dlg.exec())
+		_settings->setRulerTimestamp(dlg.frame());
 }

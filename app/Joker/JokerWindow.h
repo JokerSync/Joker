@@ -202,6 +202,10 @@ private slots:
 
 	void on_actionForce_16_9_ratio_triggered();
 
+	void on_actionShow_ruler_toggled(bool arg1);
+
+	void on_actionChange_ruler_timestamp_triggered();
+
 private:
 	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;

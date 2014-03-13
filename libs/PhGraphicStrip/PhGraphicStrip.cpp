@@ -228,16 +228,18 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 			rulerRect.setWidth(width);
 			rulerRect.setHeight(height / 2);
 			rulerRect.setZ(0);
+			rulerRect.setY(y);
 
 			rulerDisc.setColor(rulerColor);
 			rulerDisc.setRadius(2 * width);
-			rulerDisc.setY(height / 2 + 3 * width);
+			rulerDisc.setY(y + height / 2 + 3 * width);
 			rulerDisc.setZ(0);
 
 			rulerText.setColor(rulerColor);
-			rulerText.setY(height / 2);
+			rulerText.setY(y + height / 2);
 			rulerText.setHeight(height / 2);
 			rulerText.setZ(0);
+
 
 			while (rulerFrame < frameOut + spaceBetweenRuler) {
 				int x = rulerFrame * pixelPerFrame - offset;
