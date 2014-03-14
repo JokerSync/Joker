@@ -41,11 +41,16 @@ void PhStripDocTest::importDetXHeaderTest()
 	PHDEBUG << _doc.getTitle();
 }
 
+void PhStripDocTest::importDetXNoFile()
+{
+	QVERIFY(!_doc.importDetX("does_not_exist.detx"));
+}
+
 void PhStripDocTest::importDetXPeopleTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
-	QVERIFY(_doc.getPeoples().count() == 3);
+	QCOMPARE(_doc.getPeoples().count(), 3);
 	QVERIFY(_doc.getPeoples().value("jeanne"));
 	QVERIFY(_doc.getPeoples().value("sue"));
 	QVERIFY(_doc.getPeoples().value("johnny") == NULL);
@@ -358,4 +363,11 @@ QString PhStripDocTest::f2s(PhFrame frame)
 PhFrame PhStripDocTest::s2f(QString string)
 {
 	return PhTimeCode::frameFromString(string, _doc.getTCType());
+}
+
+void PhStripDocTest::importDetXNoTitleTest()
+{
+	QVERIFY(_doc.importDetX("notitle.detx"));
+	QVERIFY(_doc.getTitle() == "notitle.detx");
+
 }

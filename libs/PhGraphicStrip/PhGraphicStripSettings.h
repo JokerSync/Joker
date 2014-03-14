@@ -65,6 +65,12 @@ public:
 	 * @return An integer value
 	 */
 	virtual int verticalSpeed() = 0;
+
+	/**
+	 * @brief Allow color invertion
+	 * @return True if the color is inverted, false otherwise
+	 */
+	virtual bool invertColor() = 0;
 	/**
 	 * @brief Display the ruler on the strip
 	 * @return True if the ruler is displayed, false otherwise

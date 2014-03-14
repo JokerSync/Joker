@@ -7,6 +7,8 @@
 #ifndef PHGRAPHICSQUARE_H
 #define PHGRAPHICSQUARE_H
 
+#include <QSize>
+
 #include "PhGraphicObject.h"
 
 /**
@@ -30,10 +32,17 @@ public:
 
 	/**
 	 * @brief Set the rectangle size
+	 * @param size The size
+	 */
+	void setSize(QSize size);
+
+	/**
+	 * @brief Set the rectangle size
 	 * @param w The width
 	 * @param h The height
 	 */
 	void setSize(int w, int h);
+
 	/**
 	 * @brief Set the rectangle position and size
 	 * @param x The x coordinate

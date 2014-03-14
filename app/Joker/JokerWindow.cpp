@@ -106,6 +106,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
 
+	ui->actionInvert_colors->setChecked(_settings->invertColor());
+
 	ui->actionShow_ruler->setChecked(_settings->displayRuler());
 }
 
@@ -692,6 +694,11 @@ void JokerWindow::on_actionForce_16_9_ratio_triggered()
 {
 	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
 	_needToSave = true;
+}
+
+void JokerWindow::on_actionInvert_colors_toggled(bool checked)
+{
+	_settings->setInvertColor(checked);
 }
 
 void JokerWindow::on_actionShow_ruler_toggled(bool display)

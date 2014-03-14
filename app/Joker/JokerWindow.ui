@@ -107,6 +107,7 @@
     <addaction name="actionTest_mode"/>
     <addaction name="actionForce_16_9_ratio"/>
     <addaction name="actionFullscreen"/>
+    <addaction name="actionInvert_colors"/>
     <addaction name="actionShow_ruler"/>
     <addaction name="actionChange_ruler_timestamp"/>
    </widget>
@@ -349,6 +350,14 @@
    </property>
    <property name="text">
     <string>Empty</string>
+   </property>
+  </action>
+  <action name="actionInvert_colors">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Invert colors</string>
    </property>
   </action>
   <action name="actionShow_ruler">

@@ -49,6 +49,9 @@ bool VideoStripView::init()
 
 	connect(this, SIGNAL(beforePaint(PhTimeScale)), _strip.clock(), SLOT(tick(PhTimeScale)));
 
+	_logo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
+	_logo.init();
+
 	return _strip.init();
 }
 
@@ -75,10 +78,7 @@ void VideoStripView::paint()
 		int titleX = (this->width() - titleWidth) / 2;
 		_titleText.setRect(titleX, y, titleWidth, titleHeight);
 		y += titleHeight;
-
-		_titleBackgroundRect.draw();
 		_titleText.setContent(title);
-		_titleText.draw();
 	}
 
 	float stripHeightRatio = 0.25f;
@@ -90,34 +90,58 @@ void VideoStripView::paint()
 
 	_strip.draw(0, y + videoHeight, this->width(), stripHeight, selectedPeoples);
 
+	// The strip must be the first drawn object, otherwise it masks previous drawings.
+	if(_settings->displayTitle() && (title.length() > 0)) {
+		_titleBackgroundRect.draw();
+		_titleText.draw();
+	}
+
 	int tcWidth = 200;
 
-	if((_videoEngine.height() > 0) && (videoHeight > 0)) {
-		int videoWidth;
-		if(_forceRatio169)
-			videoWidth = videoHeight * 16 / 9;
-		else
-			videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
-
-		int blackStripHeight = 0; // Height of the upper black strip when video is too large
-		int realVideoHeight = videoHeight;
-		if(videoWidth > this->width()) {
-			videoWidth = this->width();
+	if((videoHeight > 0)) {
+		if(_videoEngine.height() > 0) {
+			int videoWidth;
 			if(_forceRatio169)
-				realVideoHeight = videoWidth  * 9 / 16;
+				videoWidth = videoHeight * 16 / 9;
 			else
-				realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
+				videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+
+			int blackStripHeight = 0; // Height of the upper black strip when video is too large
+			int realVideoHeight = videoHeight;
+			if(videoWidth > this->width()) {
+				videoWidth = this->width();
+				if(_forceRatio169)
+					realVideoHeight = videoWidth  * 9 / 16;
+				else
+					realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
+			}
+			blackStripHeight = (this->height() - stripHeight - realVideoHeight) / 2;
+
+			int videoX = (this->width() - videoWidth) / 2;
+			_videoEngine.drawVideo(videoX, y + blackStripHeight, videoWidth, realVideoHeight);
+
+			// adjust tc size
+			if(videoX > tcWidth)
+				tcWidth = videoX;
+			else if( this->width() < 2 * tcWidth)
+				tcWidth = this->width() / 2;
 		}
-		blackStripHeight = (this->height() - stripHeight - realVideoHeight) / 2;
+		else {
+			// The logo file is 500px in native format
+			int logoHeight = _logo.originalSize().height();
+			int logoWidth = _logo.originalSize().width();
+			if(videoHeight < logoHeight) {
+				logoHeight = videoHeight;
+				logoWidth = _logo.originalSize().width() * logoHeight / _logo.originalSize().height();
+			}
+			if(this->width() < logoWidth) {
+				logoWidth = this->width();
+				logoHeight = _logo.originalSize().height() * logoWidth / _logo.originalSize().width();
+			}
+			_logo.setRect((this->width() - logoHeight) / 2, (videoHeight - logoHeight) / 2, logoHeight, logoHeight);
+			_logo.draw();
 
-		int videoX = (this->width() - videoWidth) / 2;
-		_videoEngine.drawVideo(videoX, y + blackStripHeight, videoWidth, realVideoHeight);
-
-		// adjust tc size
-		if(videoX > tcWidth)
-			tcWidth = videoX;
-		else if( this->width() < 2 * tcWidth)
-			tcWidth = this->width() / 2;
+		}
 	}
 
 	PhClock *clock = _videoEngine.clock();

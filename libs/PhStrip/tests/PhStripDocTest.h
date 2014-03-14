@@ -17,11 +17,13 @@ class PhStripDocTest : public QObject
 private slots:
 	// Import DetX tests
 	void importDetXHeaderTest();
+	void importDetXNoFile();
 	void importDetXPeopleTest();
 	void importDetXLoopTest();
 	void importDetXCutTest();
 	void importDetXTextTest();
 	void importDetXDetectTest();
+	void importDetXNoTitleTest();
 
 	void importMosTest01();
 	void importMosTest02();
