@@ -108,6 +108,7 @@
     <addaction name="actionForce_16_9_ratio"/>
     <addaction name="actionFullscreen"/>
     <addaction name="actionInvert_colors"/>
+    <addaction name="separator"/>
     <addaction name="actionShow_ruler"/>
     <addaction name="actionChange_ruler_timestamp"/>
    </widget>
@@ -370,7 +371,7 @@
   </action>
   <action name="actionChange_ruler_timestamp">
    <property name="text">
-    <string>Change ruler timestamp</string>
+    <string>Change ruler timestamp...</string>
    </property>
   </action>
  </widget>
