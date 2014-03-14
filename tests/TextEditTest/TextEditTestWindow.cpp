@@ -13,8 +13,6 @@ TextEditTestWindow::TextEditTestWindow(TextEditTestSettings *settings) :
 	_settings(settings)
 {
 	ui->setupUi(this);
-	connect(&_watcher, SIGNAL(fileChanged(QString)), this, SLOT(onExternalChange(QString)));
-	_restrain.start();
 }
 
 TextEditTestWindow::~TextEditTestWindow()
@@ -30,7 +28,6 @@ bool TextEditTestWindow::openDocument(QString fileName)
 
 	QTextStream ts(&file);
 	ui->textEdit->setText(ts.readAll());
-	_watcher.addPath(fileName);
 
 	setCurrentDocument(fileName);
 	return true;
@@ -62,19 +59,3 @@ void TextEditTestWindow::on_actionSave_as_triggered()
 
 }
 
-void TextEditTestWindow::onExternalChange(QString path)
-{
-	if(_restrain.restart() > 500)
-	{
-		PHDEBUG << "File changed :" << path;
-		int ret = QMessageBox::warning(this,
-									   "Warning",
-									   "The document has been modified outside of the app.\n"
-									   "Do you want to load the changes?",
-									   QMessageBox::Yes | QMessageBox::No,
-									   QMessageBox::Yes);
-		if (ret == QMessageBox::Yes)
-			openDocument(path);
-		_restrain.restart();
-	}
-}

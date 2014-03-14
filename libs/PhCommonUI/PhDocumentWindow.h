@@ -2,6 +2,8 @@
 #define PHDOCUMENTWINDOW_H
 
 #include <QMenu>
+#include <QFileSystemWatcher>
+#include <QTime>
 
 #include "PhWindow.h"
 #include "PhDocumentWindowSettings.h"
@@ -33,9 +35,10 @@ protected:
 	/**
 	 * @brief Open a document
 	 * @param fileName The document file name
+	 * @param  openFromWatcher True if openDocument is called form the watcher, false otherwise
 	 * @return True if success, false otherwise
 	 */
-	virtual bool openDocument(QString fileName) = 0;
+	virtual bool openDocument(QString fileName, bool openFromWatcher = false) = 0;
 
 	/**
 	 * @brief Set the current document
@@ -57,12 +60,27 @@ protected:
 	 */
 	virtual QMenu *recentDocumentMenu() = 0;
 
+	/**
+	 * @brief The file watcher
+	 */
+	QFileSystemWatcher _watcher;
+
+public slots:
+	/**
+	 * @brief On external file change
+	 *
+	 * Handle external changes and reload the file.
+	 * @param path
+	 */
+	void onExternalChange(QString path);
+
 private slots:
 	void onOpenRecentDocumentTriggered();
 
 private:
 	void updateRecentDocumentMenu();
 	PhDocumentWindowSettings * _settings;
+	QTime _restrain;
 };
 
 #endif // PHDOCUMENTWINDOW_H

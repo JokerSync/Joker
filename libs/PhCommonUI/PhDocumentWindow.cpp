@@ -1,4 +1,5 @@
 #include <QFileInfo>
+#include <QMessageBox>
 
 #include "PhTools/PhDebug.h"
 
@@ -8,6 +9,8 @@ PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings)
 	: PhWindow(settings),
 	_settings(settings)
 {
+	_restrain.start();
+	connect(&_watcher, SIGNAL(fileChanged(QString)), this, SLOT(onExternalChange(QString)));
 }
 
 void PhDocumentWindow::processArg(int argc, char *argv[])
@@ -26,6 +29,10 @@ void PhDocumentWindow::processArg(int argc, char *argv[])
 
 void PhDocumentWindow::setCurrentDocument(QString fileName)
 {
+	if(!_watcher.files().isEmpty())
+		_watcher.removePaths(_watcher.files());
+	if(_watcher.addPath(fileName))
+		PHDEBUG << "now watching " << fileName;
 	_settings->setCurrentDocument(fileName);
 	_settings->setLastDocumentFolder(QFileInfo(fileName).absolutePath());
 	this->setWindowTitle(fileName);
@@ -61,5 +68,22 @@ void PhDocumentWindow::updateRecentDocumentMenu()
 				connect(action, SIGNAL(triggered()), this, SLOT(onOpenRecentDocumentTriggered()));
 			}
 		}
+	}
+}
+void PhDocumentWindow::onExternalChange(QString path)
+{
+	if(_restrain.restart() > 1000) {
+		PHDEBUG << "File changed :" << path;
+		int ret = QMessageBox::warning(this,
+		                               "Warning",
+		                               "The document has been modified outside of "
+		                               APP_NAME
+		                               ".\n"
+		                               "Do you want to load the changes?",
+		                               QMessageBox::Yes | QMessageBox::No,
+		                               QMessageBox::Yes);
+		if (ret == QMessageBox::Yes)
+			openDocument(path, true);
+		_restrain.restart();
 	}
 }

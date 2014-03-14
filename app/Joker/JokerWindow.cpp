@@ -160,9 +160,11 @@ void JokerWindow::setupSyncProtocol()
 	_settings->setSynchroProtocol(type);
 }
 
-bool JokerWindow::openDocument(QString fileName)
+bool JokerWindow::openDocument(QString fileName, bool openFromWatcher)
 {
 	hideMediaPanel();
+	if(openFromWatcher and _settings->autoReload())
+		return _doc->importDetX(fileName);
 	/// Clear the selected people name list (except for the first document).
 	if(!_firstDoc)
 		_settings->setSelectedPeopleNameList(QStringList());
@@ -175,6 +177,7 @@ bool JokerWindow::openDocument(QString fileName)
 	/// If the document is opened successfully :
 	/// - Update the current document name (settings, windows title)
 	setCurrentDocument(fileName);
+	_watcher.addPath(_doc->getFilePath());
 
 	/// - Open the corresponding video file if it exists.
 	if(openVideoFile(_doc->getVideoPath())) {
@@ -184,6 +187,7 @@ bool JokerWindow::openDocument(QString fileName)
 	}
 	else
 		_videoEngine->close();
+
 
 	/// - Set the video aspect ratio.
 	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());

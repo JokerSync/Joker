@@ -66,8 +66,9 @@ protected:
 	/// @brief Open all supported strip file
 	///
 	/// @param filePath The file path
+	/// @param openFromWatcher True if openDocument is called form the watcher, false otherwise
 	///
-	bool openDocument(QString filePath);
+	bool openDocument(QString filePath, bool openFromWatcher = false);
 
 	///
 	/// @brief Custom event filter

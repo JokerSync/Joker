@@ -49,6 +49,14 @@ public:
 	 * @return A number of document
 	 */
 	virtual int maxRecentDocument() = 0;
+
+	/**
+	 * @brief Get the file auto reload property
+	 * @return True if autoreload enabled, false otherwise
+	 */
+	virtual bool autoReload() = 0;
+
+
 };
 
 #endif // PHDOCUMENTWINDOWSETTINGS_H
