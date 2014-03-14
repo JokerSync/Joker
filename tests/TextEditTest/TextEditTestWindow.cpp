@@ -22,6 +22,7 @@ TextEditTestWindow::~TextEditTestWindow()
 
 bool TextEditTestWindow::openDocument(QString fileName)
 {
+	PHDEBUG << fileName;
 	QFile file(fileName);
 	if(!file.open(QFile::ReadOnly))
 		return false;

@@ -35,10 +35,9 @@ protected:
 	/**
 	 * @brief Open a document
 	 * @param fileName The document file name
-	 * @param  openFromWatcher True if openDocument is called form the watcher, false otherwise
 	 * @return True if success, false otherwise
 	 */
-	virtual bool openDocument(QString fileName, bool openFromWatcher = false) = 0;
+	virtual bool openDocument(QString fileName) = 0;
 
 	/**
 	 * @brief Set the current document
@@ -80,7 +79,6 @@ private slots:
 private:
 	void updateRecentDocumentMenu();
 	PhDocumentWindowSettings * _settings;
-	QTime _restrain;
 };
 
 #endif // PHDOCUMENTWINDOW_H

@@ -9,7 +9,6 @@ PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings)
 	: PhWindow(settings),
 	_settings(settings)
 {
-	_restrain.start();
 	connect(&_watcher, SIGNAL(fileChanged(QString)), this, SLOT(onExternalChange(QString)));
 }
 
@@ -38,8 +37,7 @@ void PhDocumentWindow::setCurrentDocument(QString fileName)
 	this->setWindowTitle(fileName);
 
 	QStringList recentDocList = _settings->recentDocumentList();
-	while(recentDocList.contains(fileName))
-		recentDocList.removeOne(fileName);
+	recentDocList.removeAll(fileName);
 	recentDocList.insert(0, fileName);
 	while(recentDocList.size() > _settings->maxRecentDocument())
 		recentDocList.removeLast();
@@ -72,18 +70,6 @@ void PhDocumentWindow::updateRecentDocumentMenu()
 }
 void PhDocumentWindow::onExternalChange(QString path)
 {
-	if(_restrain.restart() > 1000) {
-		PHDEBUG << "File changed :" << path;
-		int ret = QMessageBox::warning(this,
-		                               "Warning",
-		                               "The document has been modified outside of "
-		                               APP_NAME
-		                               ".\n"
-		                               "Do you want to load the changes?",
-		                               QMessageBox::Yes | QMessageBox::No,
-		                               QMessageBox::Yes);
-		if (ret == QMessageBox::Yes)
-			openDocument(path, true);
-		_restrain.restart();
-	}
+	PHDEBUG << "File changed :" << path;
+	openDocument(_settings->currentDocument());
 }
