@@ -126,6 +126,7 @@ public:
 	 */
 	PhFont * getHUDFont();
 
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -156,6 +157,8 @@ private:
 	 * Background Image used for the strip band
 	 */
 	PhGraphicImage _stripBackgroundImage;
+	PhGraphicImage _stripBackgroundImageInverted;
+
 
 	PhGraphicSolidRect _stripSyncBar;
 
@@ -178,7 +181,7 @@ private:
 	int _trackNumber;
 	PhGraphicStripSettings * _settings;
 
-	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples);
+	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
 };
 
 #endif // PHGRAPHICSTRIP_H

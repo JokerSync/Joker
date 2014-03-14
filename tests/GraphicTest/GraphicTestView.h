@@ -14,6 +14,7 @@
 #include "PhGraphic/PhFont.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicLoop.h"
+#include "PhGraphic/PhGraphicDisc.h"
 
 class GraphicTestView : public PhGraphicView
 {
@@ -33,6 +34,7 @@ private:
 	PhGraphicSolidRect _rect;
 	PhGraphicLoop _loop;
 	PhGraphicTexturedRect _yuvRect;
+	PhGraphicDisc _disc;
 };
 
 #endif // GraphicTestView_H

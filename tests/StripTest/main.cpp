@@ -79,7 +79,7 @@ int displayDetectCountPerLoop(PhStripDoc *doc)
 	for(int loop = 0; loop <= doc->getLoops().count(); loop++) {
 		int detectLength = countLoopDetectLength(doc, loop);
 		int loopLength = computeLoopLength(doc, loop);
-//				PHDEBUG << loop << "\t:" << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()));
+		//				PHDEBUG << loop << "\t:" << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()));
 		PHDBG(3) << loop << "\t:" << detectLength << "\t" << loopLength << "\t" << detectLength * 100 / loopLength;
 		totalLength += detectLength;
 	}
@@ -127,19 +127,37 @@ int countDetectLength(PhStripDoc *doc)
 int main(int argc, char *argv[])
 {
 	PhDebug::setDisplay(false, false, false, false, false);
-	PhDebug::setLogMask(2);
+	//PhDebug::setLogMask(2);
 
-	int totalLength = 0;
+	bool performTest = (argc < 2); // Run test if no strip files in argument
+
 	for(int i = 1; i < argc; i++) {
-		QString fileName = argv[i];
-		PhStripDoc *doc = openDoc(fileName);
-		if(doc)
-			totalLength += countDetectLength(doc);
+		PHDEBUG << argv[i];
+		if (strcmp(argv[i], "test") == 0)
+			performTest = true;
 	}
 
-	PHDBG(1);
+	int result = 0;
+	if(performTest) {
+		PhStripDocTest docTest;
+		result = QTest::qExec(&docTest);
+	}
 
-	PHDBG(1) << "TOTAL :\t" << PHNQ(PhTimeCode::stringFromFrame(totalLength, PhTimeCodeType25));
+	PhStripDoc doc;
+	for(int i = 1; i < argc; i++) {
+		if(QFile::exists(argv[i]) && !doc.openStripFile(argv[i])) {
+			result = 1;
+			PHDEBUG << "-------- FAILED --------";
+			break;
+		}
+	}
 
-	return 0;
+	if(performTest) {
+		if(result)
+			PHDEBUG << "unit test failed!!!!";
+		else
+			PHDEBUG << "unit test succeed!!!";
+	}
+
+	return result;
 }

@@ -15,15 +15,19 @@ class PhStripDocTest : public QObject
 {
 	Q_OBJECT
 private slots:
-	void initTestCase();
+	// Import DetX tests
+	void importDetXHeaderTest();
+	void importDetXNoFile();
+	void importDetXPeopleTest();
+	void importDetXLoopTest();
+	void importDetXCutTest();
+	void importDetXTextTest();
+	void importDetXDetectTest();
+	void importDetXNoTitleTest();
 
-	// Open DetX tests
-	void openDetXHeaderTest();
-	void openDetXPeopleTest();
-	void openDetXLoopTest();
-	void openDetXCutTest();
-	void openDetXTextTest();
-	void openDetXDetectTest();
+	void importMosTest01();
+	void importMosTest02();
+	void importMosTest03();
 
 	// Get people
 	void getPeopleByNameTest();

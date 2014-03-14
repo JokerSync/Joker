@@ -65,6 +65,27 @@ public:
 	 * @return An integer value
 	 */
 	virtual int verticalSpeed() = 0;
+
+	/**
+	 * @brief Allow color invertion
+	 * @return True if the color is inverted, false otherwise
+	 */
+	virtual bool invertColor() = 0;
+	/**
+	 * @brief Display the ruler on the strip
+	 * @return True if the ruler is displayed, false otherwise
+	 */
+	virtual bool displayRuler() = 0;
+	/**
+	 * @brief The timestamp of the ruler
+	 * @return
+	 */
+	virtual int rulerTimestamp() = 0;
+	/**
+	 * @brief The number of frame between each draw of the ruler
+	 * @return
+	 */
+	virtual int spaceBetweenRuler() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

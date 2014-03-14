@@ -5,6 +5,8 @@
  */
 
 #include <QtGlobal>
+#include <QSize>
+#include <QFileInfo>
 
 #if defined(Q_OS_MAC)
 #include <SDL2_image/SDL_image.h>
@@ -22,9 +24,13 @@ PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h)
 
 bool PhGraphicImage::init()
 {
+	QFileInfo info(_filename);
+	PHDEBUG << info.fileName();
 	_surface = IMG_Load(_filename.toStdString().c_str());
 	if(_surface != NULL) {
 		if(createTextureFromSurface(_surface)) {
+			_originalSize.setHeight(_surface->h);
+			_originalSize.setWidth(_surface->w);
 			PHDEBUG << "Loading image";
 			return true;
 		}
@@ -38,6 +44,10 @@ bool PhGraphicImage::init()
 void PhGraphicImage::dispose()
 {
 	SDL_FreeSurface(_surface);
+}
+QSize PhGraphicImage::originalSize() const
+{
+	return _originalSize;
 }
 
 void PhGraphicImage::draw()
