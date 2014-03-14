@@ -59,7 +59,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="125"/>
-        <location filename="JokerWindow.cpp" line="304"/>
+        <location filename="JokerWindow.cpp" line="306"/>
         <source>Open...</source>
         <translation>Open...</translation>
     </message>
@@ -306,48 +306,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="302"/>
+        <location filename="JokerWindow.cpp" line="304"/>
         <source>DetX files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="301"/>
+        <location filename="JokerWindow.cpp" line="303"/>
         <source>Joker files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="300"/>
+        <location filename="JokerWindow.cpp" line="302"/>
         <source>Rythmo files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="303"/>
+        <location filename="JokerWindow.cpp" line="305"/>
         <source>All files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="396"/>
+        <location filename="JokerWindow.cpp" line="398"/>
         <source>Movie files</source>
         <translation>Movie files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="396"/>
+        <location filename="JokerWindow.cpp" line="398"/>
         <source>Open a video...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="629"/>
-        <location filename="JokerWindow.cpp" line="654"/>
+        <location filename="JokerWindow.cpp" line="631"/>
+        <location filename="JokerWindow.cpp" line="656"/>
         <source>Unable to save </source>
         <translation>Unable to save </translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="647"/>
+        <location filename="JokerWindow.cpp" line="649"/>
         <source>Save...</source>
         <translation>Save...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="664"/>
+        <location filename="JokerWindow.cpp" line="666"/>
         <source>Do you want to save your changes ?</source>
         <translation>Do you want to save your changes ?</translation>
     </message>
@@ -375,12 +375,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="33"/>
+        <location filename="PeopleDialog.cpp" line="36"/>
+        <source>The list is empty...</source>
+        <oldsource>The list is empty</oldsource>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PeopleDialog.cpp" line="41"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="34"/>
+        <location filename="PeopleDialog.cpp" line="42"/>
         <source>Cancel</source>
         <translation type="unfinished">Cancel</translation>
     </message>
@@ -564,12 +570,12 @@
         <translation>Reset</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="131"/>
+        <location filename="PreferencesDialog.cpp" line="134"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="132"/>
+        <location filename="PreferencesDialog.cpp" line="135"/>
         <source>Cancel</source>
         <translation type="unfinished">Cancel</translation>
     </message>

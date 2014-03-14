@@ -22,11 +22,19 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 	}
 
 	foreach(PhPeople* people, _doc->getPeoples().values()) {
-		QString name = people->getName();
-		ui->peopleList->addItem(name);
+		if(people)
+		{
+			QString name = people->getName();
+			ui->peopleList->addItem(name);
 
-		if(peopleList.contains(name))
-			ui->peopleList->item(ui->peopleList->count() - 1)->setSelected(true);
+			if(peopleList.contains(name))
+				ui->peopleList->item(ui->peopleList->count() - 1)->setSelected(true);
+		}
+	}
+	if(ui->peopleList->count() == 0)
+	{
+		ui->peopleList->addItem(tr("The list is empty..."));
+		ui->peopleList->setDisabled(true);
 	}
 
 #warning /// @todo Check if fixed
