@@ -844,7 +844,7 @@ PhPeople *PhStripDoc::getPeopleByName(QString name)
 {
 	foreach(PhPeople* people, _peoples)
 	{
-		if(people->getName() == name)
+		if(people && people->getName() == name)
 			return people;
 	}
 	return NULL;
