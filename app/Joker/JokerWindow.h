@@ -210,6 +210,8 @@ private slots:
 
 	void on_actionNew_triggered();
 
+	void on_actionClose_video_triggered();
+
 private:
 	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;

@@ -60,6 +60,8 @@
     <addaction name="menuOpen_recent"/>
     <addaction name="separator"/>
     <addaction name="actionOpen_Video"/>
+    <addaction name="actionClose_video"/>
+    <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
@@ -379,6 +381,11 @@
   <action name="actionNew">
    <property name="text">
     <string>New</string>
+   </property>
+  </action>
+  <action name="actionClose_video">
+   <property name="text">
+    <string>Close video</string>
    </property>
   </action>
  </widget>

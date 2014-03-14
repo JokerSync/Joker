@@ -716,5 +716,10 @@ void JokerWindow::on_actionChange_ruler_timestamp_triggered()
 void JokerWindow::on_actionNew_triggered()
 {
 	_doc->reset();
+	on_actionClose_video_triggered();
+}
+
+void JokerWindow::on_actionClose_video_triggered()
+{
 	_videoEngine->close();
 }
