@@ -54,10 +54,14 @@
      </property>
      <addaction name="actionEmpty"/>
     </widget>
+    <addaction name="actionNew"/>
+    <addaction name="separator"/>
     <addaction name="actionOpen"/>
     <addaction name="menuOpen_recent"/>
     <addaction name="separator"/>
     <addaction name="actionOpen_Video"/>
+    <addaction name="actionClose_video"/>
+    <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
@@ -107,6 +111,10 @@
     <addaction name="actionTest_mode"/>
     <addaction name="actionForce_16_9_ratio"/>
     <addaction name="actionFullscreen"/>
+    <addaction name="actionInvert_colors"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_ruler"/>
+    <addaction name="actionChange_ruler_timestamp"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -347,6 +355,37 @@
    </property>
    <property name="text">
     <string>Empty</string>
+   </property>
+  </action>
+  <action name="actionInvert_colors">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Invert colors</string>
+   </property>
+  </action>
+  <action name="actionShow_ruler">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ruler</string>
+   </property>
+  </action>
+  <action name="actionChange_ruler_timestamp">
+   <property name="text">
+    <string>Change ruler timestamp...</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionClose_video">
+   <property name="text">
+    <string>Close video</string>
    </property>
   </action>
  </widget>
