@@ -48,7 +48,7 @@ script:
 - ./scripts/uncrustify.sh
 
 after_success:
-- coveralls --exclude /usr/local --exclude tmp/Joker/Joker.app --exclude tests -E moc_ -E ui_ --build-root tmp/AutoTest
+- coveralls --exclude /usr/local --exclude tmp/Joker/Joker.app --exclude tests -E tmp/.+/moc_ -E tmp/.+/ui_ --build-root tmp/AutoTest
 
 notifications:
  irc: "phonations.com#joker"
