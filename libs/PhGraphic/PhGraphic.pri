@@ -14,7 +14,8 @@ HEADERS += \
     ../../libs/PhGraphic/PhGraphicObject.h \
     ../../libs/PhGraphic/PhGraphicRect.h \
     ../../libs/PhGraphic/PhGraphicSolidRect.h \
-	../../libs/PhGraphic/PhGraphicLoop.h
+	../../libs/PhGraphic/PhGraphicLoop.h \
+    ../../libs/PhGraphic/PhGraphicDisc.h
 
 SOURCES += \
 	../../libs/PhGraphic/PhGraphicView.cpp \
@@ -25,7 +26,8 @@ SOURCES += \
     ../../libs/PhGraphic/PhGraphicObject.cpp \
     ../../libs/PhGraphic/PhGraphicRect.cpp \
     ../../libs/PhGraphic/PhGraphicSolidRect.cpp \
-    ../../libs/PhGraphic/PhGraphicLoop.cpp
+    ../../libs/PhGraphic/PhGraphicLoop.cpp \
+    ../../libs/PhGraphic/PhGraphicDisc.cpp
 
 # Windows specific
 win32 {

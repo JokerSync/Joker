@@ -98,13 +98,13 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 		if(_mousePressedLocation.x() > 110 and _mousePressedLocation.x() < 145) {
 			_selectedIndex = 0;
 		}
-		else if(_mousePressedLocation.x() > 145 and _mousePressedLocation.x() < 190) {
+		else if(_mousePressedLocation.x() >= 145 and _mousePressedLocation.x() < 190) {
 			_selectedIndex = 3;
 		}
-		else if(_mousePressedLocation.x() > 190 and _mousePressedLocation.x() < 230) {
+		else if(_mousePressedLocation.x() >= 190 and _mousePressedLocation.x() < 230) {
 			_selectedIndex = 6;
 		}
-		else if(_mousePressedLocation.x() > 230 and _mousePressedLocation.x() < 270) {
+		else if(_mousePressedLocation.x() >= 230 and _mousePressedLocation.x() < 270) {
 			_selectedIndex = 9;
 		}
 		return true;

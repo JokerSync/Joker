@@ -343,6 +343,11 @@ public:
 	 */
 	PhStripLoop * getPreviousLoop(PhFrame frame);
 
+	/**
+	 * @brief Reset the document
+	 */
+	void reset();
+
 signals:
 	/**
 	 * @brief Emit a signal when the PhStripDoc changed
@@ -350,7 +355,7 @@ signals:
 	void changed();
 
 private:
-	void reset();
+
 
 	QString _generator;
 	/**

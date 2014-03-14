@@ -76,23 +76,81 @@ void PhTimeCodeEditTest::mouseInputTest()
 
 	tcEdit.show();
 
+	// Hour testing
+	// Vertical axis mouse move
 	QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 5));
 
 	//QTest::mouseMove(&tcEdit, QPoint(130, 200)); // It doesn't seems to work use rather:
 	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(130, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
-
 	QCOMPARE(tcEdit.text(), QString("01:00:00:00"));
 
 	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(130, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
-
 	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
 
 	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(130, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
-
 	QCOMPARE(tcEdit.text(), QString("-01:00:00:00"));
+
+	// Vertical and Horizontal axis mouse move, horizontal moves are out
+	// of the text limits
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(100, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("01:00:00:00"));
+
+	QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 200));
+
+	//Reset
+	tcEdit.setText("00:00:00:00");
+	// Minutes testing
+	// Vertical axis mouse move
+	QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(167, 5), 100);
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:01:00:00"));
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("-00:01:00:00"));
+
+	// Vertical and Horizontal axis mouse move, horizontal moves are out
+	// of the text limits
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(100, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:01:00:00"));
+
+	QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 200));
+
+	//Reset
+	tcEdit.setText("00:00:00:00");
+	// Seconds testing
+	// Vertical axis mouse move
+	QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(167, 5), 100);
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:01:00:00"));
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("-00:01:00:00"));
+
+	// Vertical and Horizontal axis mouse move, horizontal moves are out
+	// of the text limits
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(100, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:01:00:00"));
+
+	QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 200));
 
 #warning /// @todo do more mouse test
 
-	QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 200));
 }
 
