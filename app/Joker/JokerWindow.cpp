@@ -712,3 +712,9 @@ void JokerWindow::on_actionChange_ruler_timestamp_triggered()
 	if(dlg.exec())
 		_settings->setRulerTimestamp(dlg.frame());
 }
+
+void JokerWindow::on_actionNew_triggered()
+{
+	_doc->reset();
+	_videoEngine->close();
+}

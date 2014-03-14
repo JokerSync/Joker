@@ -54,6 +54,8 @@
      </property>
      <addaction name="actionEmpty"/>
     </widget>
+    <addaction name="actionNew"/>
+    <addaction name="separator"/>
     <addaction name="actionOpen"/>
     <addaction name="menuOpen_recent"/>
     <addaction name="separator"/>
@@ -372,6 +374,11 @@
   <action name="actionChange_ruler_timestamp">
    <property name="text">
     <string>Change ruler timestamp...</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
    </property>
   </action>
  </widget>

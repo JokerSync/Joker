@@ -208,6 +208,8 @@ private slots:
 
 	void on_actionChange_ruler_timestamp_triggered();
 
+	void on_actionNew_triggered();
+
 private:
 	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;
