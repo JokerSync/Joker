@@ -48,9 +48,7 @@ script:
 - ./scripts/uncrustify.sh
 
 after_success:
-# TODO : try to reduce the amount of file in coveralls.io
-#- coveralls --exclude /usr/local --exclude /Applications --exclude moc_*
-- coveralls --exclude /usr/local --build-root tmp/AutoTest
+- coveralls --exclude /usr/local --exclude tmp --exclude tests --build-root tmp/AutoTest
 
 notifications:
  irc: "phonations.com#joker"
