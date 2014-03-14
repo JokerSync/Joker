@@ -97,6 +97,9 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	{
 		fontList[fontName.split(".").first()] = userDirectory + "/Library/Fonts/" + fontName;
 	}
+	if(!fontList["SWENSON"].isNull())
+		fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
+
 
 	// _oldFont is : /Path/To/Font.ttf
 	// So split with "/" then take last gives Font.ttf
