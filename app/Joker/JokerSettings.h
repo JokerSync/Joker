@@ -33,7 +33,7 @@ public:
 	PH_SETTING_BOOL(setInvertColor, invertColor)
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimestamp, rulerTimestamp)
-	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 50)
+	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 33)
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)

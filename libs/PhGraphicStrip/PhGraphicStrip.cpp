@@ -247,10 +247,13 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				rulerNumber = 0;
 
 			PhFrame rulerFrame = rulerTimestamp + rulerNumber * spaceBetweenRuler;
-			QColor rulerColor(80, 80, 80);
 			PhGraphicSolidRect rulerRect;
 			PhGraphicDisc rulerDisc;
 			PhGraphicText rulerText(&_hudFont);
+			QColor rulerColor(80, 80, 80);
+			if(invertedColor)
+				rulerColor = Qt::white;
+
 			int width = pixelPerFrame;
 
 			rulerRect.setColor(rulerColor);
