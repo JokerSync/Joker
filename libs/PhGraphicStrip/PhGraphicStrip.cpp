@@ -134,8 +134,7 @@ PhFont *PhGraphicStrip::getHUDFont()
 
 QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selectedPeoples, bool invertColor)
 {
-	if(!invertColor)
-	{
+	if(!invertColor) {
 		if(people) {
 			if(selectedPeoples.size() && !selectedPeoples.contains(people)) {
 				return QColor(100, 100, 100);
@@ -149,8 +148,7 @@ QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selected
 		else
 			return Qt::black;
 	}
-	else
-	{
+	else {
 		if(people) {
 			if(selectedPeoples.size() && !selectedPeoples.contains(people)) {
 				return QColor(155, 155, 155);

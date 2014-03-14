@@ -198,7 +198,7 @@ void GraphicStripTestWindow::on_actionStrip_Properties_triggered()
 
 void GraphicStripTestWindow::on_actionInvert_colors_triggered(bool checked)
 {
-    _settings->setInvertColor(checked);
+	_settings->setInvertColor(checked);
 }
 
 
