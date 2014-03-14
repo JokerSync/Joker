@@ -7,9 +7,9 @@
 #include "PhTimecodeEdit.h"
 
 PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
-	QLineEdit(parent),
-	_tcType(PhTimeCodeType25)
+	QLineEdit(parent)
 {
+	setFrame(0, PhTimeCodeType25);
 	connect(this, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged(QString)));
 	this->installEventFilter(this);
 	//Only accept numbers and ":" it avoid the use of special
@@ -98,13 +98,13 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 		if(_mousePressedLocation.x() > 110 and _mousePressedLocation.x() < 145) {
 			_selectedIndex = 0;
 		}
-		else if(_mousePressedLocation.x() > 145 and _mousePressedLocation.x() < 190) {
+		else if(_mousePressedLocation.x() >= 145 and _mousePressedLocation.x() < 190) {
 			_selectedIndex = 3;
 		}
-		else if(_mousePressedLocation.x() > 190 and _mousePressedLocation.x() < 230) {
+		else if(_mousePressedLocation.x() >= 190 and _mousePressedLocation.x() < 230) {
 			_selectedIndex = 6;
 		}
-		else if(_mousePressedLocation.x() > 230 and _mousePressedLocation.x() < 270) {
+		else if(_mousePressedLocation.x() >= 230 and _mousePressedLocation.x() < 270) {
 			_selectedIndex = 9;
 		}
 		return true;

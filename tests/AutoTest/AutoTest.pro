@@ -6,8 +6,6 @@
 
 QT       += core
 
-QT       -= gui
-
 TARGET = AutoTest
 CONFIG   += console static
 CONFIG   -= app_bundle
@@ -22,6 +20,7 @@ INCLUDEPATH += ../../libs
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhSync/PhSync.pri)
+include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 SOURCES += main.cpp
 
