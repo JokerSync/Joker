@@ -68,7 +68,7 @@ bool PhStripDoc::importDetX(QString fileName)
 		if(header.elementsByTagName("title").count())
 			_title = header.elementsByTagName("title").at(0).toElement().text();
 		else
-			_title = QFileInfo(fileName).fileName();
+			_title = QFileInfo(fileName).fileName().split(".").first();
 
 
 		// Reading the translated title

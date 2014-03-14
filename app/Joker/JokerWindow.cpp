@@ -179,6 +179,7 @@ bool JokerWindow::openDocument(QString fileName)
 	/// If the document is opened successfully :
 	/// - Update the current document name (settings, windows title)
 	setCurrentDocument(fileName);
+	_watcher.addPath(_doc->getFilePath());
 
 	/// - Open the corresponding video file if it exists.
 	if(openVideoFile(_doc->getVideoPath())) {
@@ -188,6 +189,7 @@ bool JokerWindow::openDocument(QString fileName)
 	}
 	else
 		_videoEngine->close();
+
 
 	/// - Set the video aspect ratio.
 	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());

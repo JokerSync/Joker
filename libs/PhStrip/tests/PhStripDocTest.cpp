@@ -368,6 +368,6 @@ PhFrame PhStripDocTest::s2f(QString string)
 void PhStripDocTest::importDetXNoTitleTest()
 {
 	QVERIFY(_doc.importDetX("notitle.detx"));
-	QVERIFY(_doc.getTitle() == "notitle.detx");
+	QVERIFY(_doc.getTitle() == "notitle");
 
 }
