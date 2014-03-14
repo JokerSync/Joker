@@ -14,9 +14,9 @@ echo "Running Doxygen...";
 
 if [ $# -eq 1 ]
 then
-    /usr/local/bin/doxygen $1 &> /dev/null
+    /usr/local/bin/doxygen
 else
-    /usr/local/bin/doxygen .doxygen &> /dev/null
+    /usr/local/bin/doxygen .doxygen
 fi
 
 echo "Done";
