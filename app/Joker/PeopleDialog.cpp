@@ -22,8 +22,7 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 	}
 
 	foreach(PhPeople* people, _doc->getPeoples().values()) {
-		if(people)
-		{
+		if(people) {
 			QString name = people->getName();
 			ui->peopleList->addItem(name);
 
@@ -31,8 +30,7 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 				ui->peopleList->item(ui->peopleList->count() - 1)->setSelected(true);
 		}
 	}
-	if(ui->peopleList->count() == 0)
-	{
+	if(ui->peopleList->count() == 0) {
 		ui->peopleList->addItem(tr("The list is empty..."));
 		ui->peopleList->setDisabled(true);
 	}
