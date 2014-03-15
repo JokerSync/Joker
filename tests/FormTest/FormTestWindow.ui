@@ -16,6 +16,9 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
+     <widget class="PhLockableSpinBox" name="spinBox"/>
+    </item>
+    <item>
      <widget class="QLabel" name="labelFrequency">
       <property name="text">
        <string>TextLabel</string>
@@ -95,6 +98,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>PhLockableSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>PhCommonUI/PhLockableSpinBox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

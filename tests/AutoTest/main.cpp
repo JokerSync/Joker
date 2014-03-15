@@ -7,6 +7,7 @@
 #include "PhStrip/tests/PhStripDocTest.h"
 #include "PhSync/tests/PhSonyControllerTest.h"
 #include "PhCommonUI/tests/PhTimeCodeEditTest.h"
+#include "PhCommonUI/tests/PhLockableSpinBoxTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -64,6 +65,9 @@ int main(int argc, char *argv[])
 		// Testing PhTimeCodeEdit
 		PhTimeCodeEditTest tcEditTest;
 		success &= !QTest::qExec(&tcEditTest);
+
+		PhLockableSpinBoxTest spinBoxTest;
+		success &= !QTest::qExec(&spinBoxTest);
 	}
 
 	QThread::msleep(500);

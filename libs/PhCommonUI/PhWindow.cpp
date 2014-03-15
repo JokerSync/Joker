@@ -1,4 +1,3 @@
-#include <QCoreApplication>
 #include <QTimer>
 #include <QAction>
 
@@ -11,7 +10,7 @@ PhWindow::PhWindow(PhWindowSettings *settings) :
 	_settings(settings)
 {
 	// Set up a filter for catching event
-	qApp->installEventFilter(this);
+	this->installEventFilter(this);
 
 	if(_settings->fullScreen()) {
 		PHDEBUG << "Going fullscreen...";
