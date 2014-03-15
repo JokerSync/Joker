@@ -24,7 +24,7 @@
      </property>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabGeneral">
        <attribute name="title">
@@ -293,7 +293,7 @@
            </widget>
           </item>
           <item row="0" column="1" alignment="Qt::AlignLeft">
-           <widget class="QSpinBox" name="spinBoxDelay">
+           <widget class="PhLockableSpinBox" name="spinBoxDelay">
             <property name="maximum">
              <number>10000</number>
             </property>
@@ -884,6 +884,13 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>PhLockableSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>PhCommonUI/PhLockableSpinBox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
  <buttongroups>
