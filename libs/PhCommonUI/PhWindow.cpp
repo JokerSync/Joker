@@ -55,6 +55,7 @@ void PhWindow::resizeEvent(QResizeEvent *)
 
 void PhWindow::toggleFullScreen()
 {
+	PHDEBUG;
 	if(QMainWindow::isFullScreen())
 		QMainWindow::showNormal();
 	else

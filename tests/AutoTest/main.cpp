@@ -8,6 +8,7 @@
 #include "SonyControllerTest.h"
 #include "TimeCodeEditTest.h"
 #include "LockableSpinBoxTest.h"
+#include "WindowTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -68,6 +69,9 @@ int main(int argc, char *argv[])
 
 		LockableSpinBoxTest spinBoxTest;
 		success &= !QTest::qExec(&spinBoxTest);
+
+		WindowTest windowTest;
+		success &= !QTest::qExec(&windowTest);
 	}
 
 	QThread::msleep(500);

@@ -1,10 +1,10 @@
-#ifndef FORMTESTSETTINGS_H
-#define FORMTESTSETTINGS_H
+#ifndef AUTOTESTSETTINGS_H
+#define AUTOTESTSETTINGS_H
 
 #include "PhTools/PhGenericSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
-class FormTestSettings : protected PhGenericSettings, public PhWindowSettings
+class AutoTestSettings : public PhGenericSettings, public PhWindowSettings
 {
 public:
 	// PhWindowSettings
@@ -12,4 +12,4 @@ public:
 	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
 };
 
-#endif // FORMTESTSETTINGS_H
+#endif // AUTOTESTSETTINGS_H
