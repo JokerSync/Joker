@@ -4,7 +4,6 @@
 void SettingsTest::testClear()
 {
 	AutoTestSettings settings;
-	settings.clear();
 
 	settings.setIntTest1(1);
 	settings.setUnsignedCharTest1('a');
@@ -39,8 +38,7 @@ void SettingsTest::testClear()
 
 void SettingsTest::testIntSettings()
 {
-	AutoTestSettings settings;
-	settings.clear();
+	AutoTestSettings settings(true);
 
 	settings.setIntTest1(6);
 	QCOMPARE(settings.intTest1(), 6);
@@ -54,8 +52,7 @@ void SettingsTest::testIntSettings()
 
 void SettingsTest::testUnsignedCharSettings()
 {
-	AutoTestSettings settings;
-	settings.clear();
+	AutoTestSettings settings(true);
 
 	settings.setUnsignedCharTest1(0x11);
 	QCOMPARE((int)settings.unsignedCharTest1(), 0x11);
@@ -65,8 +62,7 @@ void SettingsTest::testUnsignedCharSettings()
 
 void SettingsTest::testBoolSettings()
 {
-	AutoTestSettings settings;
-	settings.clear();
+	AutoTestSettings settings(true);
 
 	settings.setBoolTest1(true);
 	QVERIFY(settings.boolTest1());
@@ -76,8 +72,7 @@ void SettingsTest::testBoolSettings()
 
 void SettingsTest::testFloatSettings()
 {
-	AutoTestSettings settings;
-	settings.clear();
+	AutoTestSettings settings(true);
 
 	settings.setFloatTest1(-1.34f);
 	QCOMPARE(settings.floatTest1(), -1.34f);
@@ -87,8 +82,7 @@ void SettingsTest::testFloatSettings()
 
 void SettingsTest::testStringSettings()
 {
-	AutoTestSettings settings;
-	settings.clear();
+	AutoTestSettings settings(true);
 
 	settings.setStringTest1("test setString");
 	QCOMPARE(settings.stringTest1(), QString("test setString"));
@@ -98,8 +92,7 @@ void SettingsTest::testStringSettings()
 
 void SettingsTest::testStringListSettings()
 {
-	AutoTestSettings settings;
-	settings.clear();
+	AutoTestSettings settings(true);
 
 	// Test empty string list
 	QCOMPARE(0, settings.stringListTest1().size());
@@ -144,8 +137,7 @@ void SettingsTest::testStringListSettings()
 
 void SettingsTest::testByteArraySettings()
 {
-	AutoTestSettings settings;
-	settings.clear();
+	AutoTestSettings settings(true);
 
 	// Test empty array
 	QCOMPARE(0, settings.byteArrayTest1().size());

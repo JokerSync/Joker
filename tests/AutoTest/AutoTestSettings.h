@@ -1,15 +1,26 @@
 #ifndef AUTOTESTSETTINGS_H
 #define AUTOTESTSETTINGS_H
 
+#include <QDir>
+
 #include "PhTools/PhGenericSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
-class AutoTestSettings : public PhGenericSettings, public PhWindowSettings
+class AutoTestSettings : public PhGenericSettings, public PhDocumentWindowSettings
 {
 public:
+	AutoTestSettings(bool clear = false) : PhGenericSettings(clear) { }
+
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)
 	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
+
+	// PhDocumentWindowSettings
+	PH_SETTING_STRING(setCurrentDocument, currentDocument)
+	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
+	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
+	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 5)
+	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
 
 	// Other settings
 	PH_SETTING_INT(setIntTest1, intTest1)

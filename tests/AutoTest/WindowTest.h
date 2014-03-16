@@ -9,6 +9,8 @@ class WindowTest : public QObject
 private slots:
 	void fullScreenTest01();
 	void fullScreenTest02();
+
+	void currentDocumentTest();
 };
 
 #endif // WINDOWTEST_H

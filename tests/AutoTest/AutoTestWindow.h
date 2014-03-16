@@ -1,22 +1,26 @@
 #ifndef AUTOTESTWINDOW_H
 #define AUTOTESTWINDOW_H
 
-#include "PhCommonUI/PhWindow.h"
+#include "PhCommonUI/PhDocumentWindow.h"
 
 namespace Ui {
 class AutoTestWindow;
 }
 
-class AutoTestWindow : public PhWindow
+class AutoTestWindow : public PhDocumentWindow
 {
 	Q_OBJECT
 
 public:
-	explicit AutoTestWindow(PhWindowSettings *settings);
+	explicit AutoTestWindow(PhDocumentWindowSettings *settings);
 	~AutoTestWindow();
 
 	QAction *fullScreenAction();
 
+	bool openDocument(QString fileName);
+	QMenu* recentDocumentMenu();
+
+	QString text();
 private:
 	Ui::AutoTestWindow *ui;
 };

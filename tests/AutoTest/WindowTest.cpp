@@ -28,7 +28,8 @@ void WindowTest::fullScreenTest01()
 
 void WindowTest::fullScreenTest02()
 {
-	AutoTestSettings settings;
+	AutoTestSettings settings(true);
+
 	settings.setFullScreen(true);
 	AutoTestWindow w(&settings);
 	w.show();
@@ -45,4 +46,15 @@ void WindowTest::fullScreenTest02()
 	QVERIFY(!w.fullScreenAction()->isChecked());
 
 	w.close();
+}
+
+void WindowTest::currentDocumentTest()
+{
+	AutoTestSettings settings(true);
+
+	settings.setCurrentDocument("text.txt");
+
+	AutoTestWindow w(&settings);
+	w.processArg(0, NULL);
+	QCOMPARE(w.text(), QString("bonjour"));
 }
