@@ -114,7 +114,7 @@ void SettingsTest::testStringListSettings()
 
 	QCOMPARE(list2.size(), list1.size());
 
-	for(int i=0; i< list1.size();i++)
+	for(int i = 0; i < list1.size(); i++)
 		QCOMPARE(list2.at(i), list1.at(i));
 
 	// Test changin an existing list settings
@@ -131,7 +131,7 @@ void SettingsTest::testStringListSettings()
 
 	QCOMPARE(list3.size(), list4.size());
 
-	for(int i=0; i< list3.size();i++)
+	for(int i = 0; i < list3.size(); i++)
 		QCOMPARE(list4.at(i), list3.at(i));
 }
 
@@ -155,6 +155,6 @@ void SettingsTest::testByteArraySettings()
 
 	QCOMPARE(array2.size(), array1.size());
 
-	for(int i=0; i< array1.size();i++)
+	for(int i = 0; i < array1.size(); i++)
 		QCOMPARE(array2.at(i), array1.at(i));
 }

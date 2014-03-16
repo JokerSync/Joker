@@ -6,8 +6,6 @@
 #include "PhTools/PhTimeCode.h"
 #include "PhTools/PhDebug.h"
 
-#include "PhTools/tests/PhTimeCodeTest.h"
-
 /**
  * @brief The application main entry point
  * @param argc Command line argument count

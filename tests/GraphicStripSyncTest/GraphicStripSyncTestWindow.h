@@ -24,6 +24,9 @@ public:
 
 protected:
 	QMenu *recentDocumentMenu();
+	QAction* fullScreenAction() {
+		return NULL;
+	}
 
 private slots:
 	void onOpenFile();

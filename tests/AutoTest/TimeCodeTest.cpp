@@ -709,9 +709,9 @@ void TimeCodeTest::testTCWithSpecialString() {
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("-1:23:34:19", type), type), QString("-01:23:34:19"));
 
 	// Test bad digit count : if there is not enough digit, frame are considered first, then seconds, minutes and hours
-	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("19"            , type), type), QString("00:00:00:19"));
-	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("34:19"         , type), type), QString("00:00:34:19"));
-	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("23:34:19"      , type), type), QString("00:23:34:19"));
+	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("19", type), type), QString("00:00:00:19"));
+	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("34:19", type), type), QString("00:00:34:19"));
+	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("23:34:19", type), type), QString("00:23:34:19"));
 
 	// Test bad digit count : if there is to much digit, only the first four are taken in account
 	QCOMPARE(PhTimeCode::stringFromFrame(PhTimeCode::frameFromString("12:23:34:19:12", type), type), QString("12:23:34:19"));

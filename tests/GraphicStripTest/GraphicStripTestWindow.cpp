@@ -38,15 +38,13 @@ GraphicStripTestWindow::~GraphicStripTestWindow()
 	delete ui;
 }
 
-bool GraphicStripTestWindow::openDocument(QString fileName, bool openFromWatcher)
+bool GraphicStripTestWindow::openDocument(QString fileName)
 {
 	PHDEBUG << fileName;
 	if(!_doc->openStripFile(fileName))
 		return false;
 
 	_clock->setTimeCodeType(_doc->getTCType());
-	if(!openFromWatcher)
-		_clock->setFrame(_doc->getLastFrame());
 	setCurrentDocument(fileName);
 	return true;
 }

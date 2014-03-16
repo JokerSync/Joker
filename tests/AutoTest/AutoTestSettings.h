@@ -9,7 +9,8 @@
 class AutoTestSettings : public PhGenericSettings, public PhDocumentWindowSettings
 {
 public:
-	AutoTestSettings(bool clear = false) : PhGenericSettings(clear) { }
+	AutoTestSettings(bool clear = false) : PhGenericSettings(clear) {
+	}
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

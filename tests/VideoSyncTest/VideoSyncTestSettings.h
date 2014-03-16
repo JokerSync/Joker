@@ -34,6 +34,7 @@ public:
 	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
 	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
+	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
 };
 
 #endif // VIDEOSYNCTESTSETTINGS_H
