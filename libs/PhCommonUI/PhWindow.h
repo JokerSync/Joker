@@ -62,9 +62,7 @@ protected:
 	 *
 	 * @return An action reference
 	 */
-	virtual QAction *fullScreenAction() {
-		return NULL;
-	}
+	virtual QAction *fullScreenAction() = 0;
 
 private:
 	PhWindowSettings *_settings;

@@ -1,111 +1,123 @@
 #include "SettingsTest.h"
-
-SettingsTest::SettingsTest(QObject *parent) :
-	QObject(parent)
-{
-}
-
-void SettingsTest::initTestCase()
-{
-	this->clear();
-}
+#include "AutoTestSettings.h"
 
 void SettingsTest::testClear()
 {
-	setIntTest1(1);
-	setUnsignedCharTest1('a');
-	setBoolTest1(true);
-	setFloatTest1(0.12f);
-	setStringTest1("coucou");
+	AutoTestSettings settings;
+	settings.clear();
+
+	settings.setIntTest1(1);
+	settings.setUnsignedCharTest1('a');
+	settings.setBoolTest1(true);
+	settings.setFloatTest1(0.12f);
+	settings.setStringTest1("coucou");
 
 	QStringList list;
 	list.append("alpha");
 	list.append("beta");
 	list.append("gamma");
-	setStringListTest1(list);
+	settings.setStringListTest1(list);
 
 	QByteArray array;
 	array.append('a');
 	array.append('b');
 	array.append('c');
 	array.append('b');
-	setByteArrayTest1(array);
+	settings.setByteArrayTest1(array);
 
 	// Clear the settings
-	this->clear();
+	settings.clear();
 
-	QCOMPARE(intTest1(), 0);
-	QCOMPARE((int)unsignedCharTest1(), 0);
-	QVERIFY(!boolTest1());
-	QCOMPARE(floatTest1(), 0.0f);
-	QCOMPARE(stringTest1(), QString(""));
-	QCOMPARE(stringListTest1().count(), 0);
-	QCOMPARE(byteArrayTest1().count(), 0);
+	QCOMPARE(settings.intTest1(), 0);
+	QCOMPARE((int)settings.unsignedCharTest1(), 0);
+	QVERIFY(!settings.boolTest1());
+	QCOMPARE(settings.floatTest1(), 0.0f);
+	QCOMPARE(settings.stringTest1(), QString(""));
+	QCOMPARE(settings.stringListTest1().count(), 0);
+	QCOMPARE(settings.byteArrayTest1().count(), 0);
 }
 
 void SettingsTest::testIntSettings()
 {
-	setIntTest1(6);
-	QCOMPARE(intTest1(), 6);
-	QCOMPARE(intTest2(), 0);
-	QCOMPARE(intTest3(), 4);
-	QCOMPARE(intTest4(), 6);
-	setIntTest4(8);
-	QCOMPARE(intTest1(), 6);
-	QCOMPARE(intTest4(), 8);
+	AutoTestSettings settings;
+	settings.clear();
+
+	settings.setIntTest1(6);
+	QCOMPARE(settings.intTest1(), 6);
+	QCOMPARE(settings.intTest2(), 0);
+	QCOMPARE(settings.intTest3(), 4);
+	QCOMPARE(settings.intTest4(), 6);
+	settings.setIntTest4(8);
+	QCOMPARE(settings.intTest1(), 6);
+	QCOMPARE(settings.intTest4(), 8);
 }
 
 void SettingsTest::testUnsignedCharSettings()
 {
-	setUnsignedCharTest1(0x11);
-	QCOMPARE((int)unsignedCharTest1(), 0x11);
-	QCOMPARE((int)unsignedCharTest2(), 0x0);
-	QCOMPARE((int)unsignedCharTest3(), 0xF0);
+	AutoTestSettings settings;
+	settings.clear();
+
+	settings.setUnsignedCharTest1(0x11);
+	QCOMPARE((int)settings.unsignedCharTest1(), 0x11);
+	QCOMPARE((int)settings.unsignedCharTest2(), 0x0);
+	QCOMPARE((int)settings.unsignedCharTest3(), 0xF0);
 }
 
 void SettingsTest::testBoolSettings()
 {
-	setBoolTest1(true);
-	QVERIFY(boolTest1());
-	QVERIFY(!boolTest2());
-	QVERIFY(boolTest3());
+	AutoTestSettings settings;
+	settings.clear();
+
+	settings.setBoolTest1(true);
+	QVERIFY(settings.boolTest1());
+	QVERIFY(!settings.boolTest2());
+	QVERIFY(settings.boolTest3());
 }
 
 void SettingsTest::testFloatSettings()
 {
-	setFloatTest1(-1.34f);
-	QCOMPARE(floatTest1(), -1.34f);
-	QCOMPARE(floatTest2(), 0.0f);
-	QCOMPARE(floatTest3(), 3.14f);
+	AutoTestSettings settings;
+	settings.clear();
+
+	settings.setFloatTest1(-1.34f);
+	QCOMPARE(settings.floatTest1(), -1.34f);
+	QCOMPARE(settings.floatTest2(), 0.0f);
+	QCOMPARE(settings.floatTest3(), 3.14f);
 }
 
 void SettingsTest::testStringSettings()
 {
-	setStringTest1("test setString");
-	QCOMPARE(stringTest1(), QString("test setString"));
-	QCOMPARE(stringTest2(), QString(""));
-	QCOMPARE(stringTest3(), QString("stringTest default value"));
+	AutoTestSettings settings;
+	settings.clear();
+
+	settings.setStringTest1("test setString");
+	QCOMPARE(settings.stringTest1(), QString("test setString"));
+	QCOMPARE(settings.stringTest2(), QString(""));
+	QCOMPARE(settings.stringTest3(), QString("stringTest default value"));
 }
 
 void SettingsTest::testStringListSettings()
 {
+	AutoTestSettings settings;
+	settings.clear();
+
 	// Test empty string list
-	QCOMPARE(0, stringListTest1().size());
+	QCOMPARE(0, settings.stringListTest1().size());
 
 	// Test changing string list settings
 
-	setStringTest4("Check other settings are not affected by string list settings");
+	settings.setStringTest4("Check other settings are not affected by string list settings");
 	QStringList list1;
 	list1.append("a");
 	list1.append("b");
 	list1.append("c");
 	list1.append("d");
 
-	setStringListTest2(list1);
+	settings.setStringListTest2(list1);
 
-	QCOMPARE(stringTest4(), QString("Check other settings are not affected by string list settings"));
+	QCOMPARE(settings.stringTest4(), QString("Check other settings are not affected by string list settings"));
 
-	QStringList list2 = stringListTest2();
+	QStringList list2 = settings.stringListTest2();
 
 	QCOMPARE(list2.size(), list1.size());
 
@@ -118,11 +130,11 @@ void SettingsTest::testStringListSettings()
 	list3.append("f");
 	list3.append("g");
 
-	setStringListTest2(list3);
+	settings.setStringListTest2(list3);
 
-	QCOMPARE(stringTest4(), QString("Check other settings are not affected by string list settings"));
+	QCOMPARE(settings.stringTest4(), QString("Check other settings are not affected by string list settings"));
 
-	QStringList list4 = stringListTest2();
+	QStringList list4 = settings.stringListTest2();
 
 	QCOMPARE(list3.size(), list4.size());
 
@@ -132,8 +144,11 @@ void SettingsTest::testStringListSettings()
 
 void SettingsTest::testByteArraySettings()
 {
+	AutoTestSettings settings;
+	settings.clear();
+
 	// Test empty array
-	QCOMPARE(0, byteArrayTest1().size());
+	QCOMPARE(0, settings.byteArrayTest1().size());
 
 	// Test changing array settings
 	QByteArray array1;
@@ -142,9 +157,9 @@ void SettingsTest::testByteArraySettings()
 	array1.append('s');
 	array1.append('t');
 
-	setByteArrayTest2(array1);
+	settings.setByteArrayTest2(array1);
 
-	QByteArray array2 = byteArrayTest2();
+	QByteArray array2 = settings.byteArrayTest2();
 
 	QCOMPARE(array2.size(), array1.size());
 
