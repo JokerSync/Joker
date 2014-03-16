@@ -4,13 +4,13 @@
 #include <QObject>
 #include <QTest>
 
-#include "../PhGenericSettings.h"
+#include "PhTools/PhGenericSettings.h"
 
-class PhSettingsTest : public QObject, protected PhGenericSettings
+class SettingsTest : public QObject, protected PhGenericSettings
 {
 	Q_OBJECT
 public:
-	explicit PhSettingsTest(QObject *parent = 0);
+	explicit SettingsTest(QObject *parent = 0);
 
 	PH_SETTING_INT(setIntTest1, intTest1)
 	PH_SETTING_INT(setIntTest2, intTest2)

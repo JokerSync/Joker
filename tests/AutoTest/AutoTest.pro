@@ -22,7 +22,21 @@ include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
-SOURCES += main.cpp
+HEADERS += \
+    StripDocTest.h \
+    LockableSpinBoxTest.h \
+    SettingsTest.h \
+    TimeCodeEditTest.h \
+    TimeCodeTest.h \
+    SonyControllerTest.h
+
+SOURCES += main.cpp \
+    StripDocTest.cpp \
+    LockableSpinBoxTest.cpp \
+    SettingsTest.cpp \
+    TimeCodeEditTest.cpp \
+    TimeCodeTest.cpp \
+    SonyControllerTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test01.detx) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test01.mos) . $${CS}

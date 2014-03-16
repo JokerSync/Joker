@@ -11,7 +11,7 @@
 
 #include "PhStrip/PhStripDoc.h"
 
-class PhStripDocTest : public QObject
+class StripDocTest : public QObject
 {
 	Q_OBJECT
 private slots:

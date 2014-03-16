@@ -1,15 +1,15 @@
 #include <QTest>
 
-#include "PhLockableSpinBoxTest.h"
+#include "LockableSpinBoxTest.h"
 
-#include "../PhLockableSpinBox.h"
+#include "PhCommonUI/PhLockableSpinBox.h"
 
-PhLockableSpinBoxTest::PhLockableSpinBoxTest(QObject *parent) :
+LockableSpinBoxTest::LockableSpinBoxTest(QObject *parent) :
 	QObject(parent)
 {
 }
 
-void PhLockableSpinBoxTest::testLock()
+void LockableSpinBoxTest::testLock()
 {
 	PhLockableSpinBox spinBox;
 

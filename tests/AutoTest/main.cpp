@@ -2,12 +2,12 @@
 
 #include <QApplication>
 
-#include "PhTools/tests/PhTimeCodeTest.h"
-#include "PhTools/tests/PhSettingsTest.h"
-#include "PhStrip/tests/PhStripDocTest.h"
-#include "PhSync/tests/PhSonyControllerTest.h"
-#include "PhCommonUI/tests/PhTimeCodeEditTest.h"
-#include "PhCommonUI/tests/PhLockableSpinBoxTest.h"
+#include "TimeCodeTest.h"
+#include "SettingsTest.h"
+#include "StripDocTest.h"
+#include "SonyControllerTest.h"
+#include "TimeCodeEditTest.h"
+#include "LockableSpinBoxTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -38,35 +38,35 @@ int main(int argc, char *argv[])
 
 	if(testTC) {
 		// Testing PhTimeCode
-		PhTimeCodeTest tcTest;
+		TimeCodeTest tcTest;
 		success &= !QTest::qExec(&tcTest);
 	}
 
 	if(testSettings) {
 		// Testing PhSettings
-		PhSettingsTest settingsTest;
+		SettingsTest settingsTest;
 		success &= !QTest::qExec(&settingsTest);
 	}
 
 	if(testDoc) {
 		// Testing PhStripDoc
-		PhStripDocTest docTest;
+		StripDocTest docTest;
 		success &= !QTest::qExec(&docTest);
 	}
 
 	if(testSony) {
 		// Testing PhSonyController
-		PhSonyControllerTest sonyTest;
+		SonyControllerTest sonyTest;
 		success &= !QTest::qExec(&sonyTest);
 	}
 
 	if(testUi) {
 		QApplication a(argc, argv);
 		// Testing PhTimeCodeEdit
-		PhTimeCodeEditTest tcEditTest;
+		TimeCodeEditTest tcEditTest;
 		success &= !QTest::qExec(&tcEditTest);
 
-		PhLockableSpinBoxTest spinBoxTest;
+		LockableSpinBoxTest spinBoxTest;
 		success &= !QTest::qExec(&spinBoxTest);
 	}
 

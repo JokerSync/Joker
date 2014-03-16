@@ -1,16 +1,16 @@
-#include "PhSettingsTest.h"
+#include "SettingsTest.h"
 
-PhSettingsTest::PhSettingsTest(QObject *parent) :
+SettingsTest::SettingsTest(QObject *parent) :
 	QObject(parent)
 {
 }
 
-void PhSettingsTest::initTestCase()
+void SettingsTest::initTestCase()
 {
 	this->clear();
 }
 
-void PhSettingsTest::testClear()
+void SettingsTest::testClear()
 {
 	setIntTest1(1);
 	setUnsignedCharTest1('a');
@@ -43,7 +43,7 @@ void PhSettingsTest::testClear()
 	QCOMPARE(byteArrayTest1().count(), 0);
 }
 
-void PhSettingsTest::testIntSettings()
+void SettingsTest::testIntSettings()
 {
 	setIntTest1(6);
 	QCOMPARE(intTest1(), 6);
@@ -55,7 +55,7 @@ void PhSettingsTest::testIntSettings()
 	QCOMPARE(intTest4(), 8);
 }
 
-void PhSettingsTest::testUnsignedCharSettings()
+void SettingsTest::testUnsignedCharSettings()
 {
 	setUnsignedCharTest1(0x11);
 	QCOMPARE((int)unsignedCharTest1(), 0x11);
@@ -63,7 +63,7 @@ void PhSettingsTest::testUnsignedCharSettings()
 	QCOMPARE((int)unsignedCharTest3(), 0xF0);
 }
 
-void PhSettingsTest::testBoolSettings()
+void SettingsTest::testBoolSettings()
 {
 	setBoolTest1(true);
 	QVERIFY(boolTest1());
@@ -71,7 +71,7 @@ void PhSettingsTest::testBoolSettings()
 	QVERIFY(boolTest3());
 }
 
-void PhSettingsTest::testFloatSettings()
+void SettingsTest::testFloatSettings()
 {
 	setFloatTest1(-1.34f);
 	QCOMPARE(floatTest1(), -1.34f);
@@ -79,7 +79,7 @@ void PhSettingsTest::testFloatSettings()
 	QCOMPARE(floatTest3(), 3.14f);
 }
 
-void PhSettingsTest::testStringSettings()
+void SettingsTest::testStringSettings()
 {
 	setStringTest1("test setString");
 	QCOMPARE(stringTest1(), QString("test setString"));
@@ -87,7 +87,7 @@ void PhSettingsTest::testStringSettings()
 	QCOMPARE(stringTest3(), QString("stringTest default value"));
 }
 
-void PhSettingsTest::testStringListSettings()
+void SettingsTest::testStringListSettings()
 {
 	// Test empty string list
 	QCOMPARE(0, stringListTest1().size());
@@ -130,7 +130,7 @@ void PhSettingsTest::testStringListSettings()
 		QCOMPARE(list4.at(i), list3.at(i));
 }
 
-void PhSettingsTest::testByteArraySettings()
+void SettingsTest::testByteArraySettings()
 {
 	// Test empty array
 	QCOMPARE(0, byteArrayTest1().size());

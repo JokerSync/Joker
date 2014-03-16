@@ -2,14 +2,14 @@
 #include <QMouseEvent>
 
 #include "PhTools/PhDebug.h"
-#include "PhTimeCodeEditTest.h"
+#include "TimeCodeEditTest.h"
 
-#include "../PhTimeCodeEdit.h"
+#include "PhCommonUI/PhTimeCodeEdit.h"
 
-PhTimeCodeEditTest::PhTimeCodeEditTest() : QObject(NULL) {
+TimeCodeEditTest::TimeCodeEditTest() : QObject(NULL) {
 }
 
-void PhTimeCodeEditTest::frameTest()
+void TimeCodeEditTest::frameTest()
 {
 	PhTimeCodeEdit tcEdit;
 
@@ -19,7 +19,7 @@ void PhTimeCodeEditTest::frameTest()
 	QCOMPARE((int)tcEdit.frame(), 25);
 }
 
-void PhTimeCodeEditTest::setFrameTest() {
+void TimeCodeEditTest::setFrameTest() {
 	PhTimeCodeEdit tcEdit;
 
 	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
@@ -31,7 +31,7 @@ void PhTimeCodeEditTest::setFrameTest() {
 	QCOMPARE(tcEdit.text(), QString("00:00:02:00"));
 }
 
-void PhTimeCodeEditTest::keyboardInputTest()
+void TimeCodeEditTest::keyboardInputTest()
 {
 	PhTimeCodeEdit tcEdit;
 
@@ -59,7 +59,7 @@ void PhTimeCodeEditTest::keyboardInputTest()
 	QCOMPARE(tcEdit.text(), QString("00:00:00:91"));
 }
 
-void PhTimeCodeEditTest::keyboardBadInputTest()
+void TimeCodeEditTest::keyboardBadInputTest()
 {
 	PhTimeCodeEdit tcEdit;
 
@@ -70,7 +70,7 @@ void PhTimeCodeEditTest::keyboardBadInputTest()
 	QCOMPARE(tcEdit.text(), QString("00:00:01:00"));
 }
 
-void PhTimeCodeEditTest::mouseInputTest()
+void TimeCodeEditTest::mouseInputTest()
 {
 	PhTimeCodeEdit tcEdit;
 

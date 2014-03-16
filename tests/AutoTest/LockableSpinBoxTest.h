@@ -3,11 +3,11 @@
 
 #include <QObject>
 
-class PhLockableSpinBoxTest : public QObject
+class LockableSpinBoxTest : public QObject
 {
 	Q_OBJECT
 public:
-	explicit PhLockableSpinBoxTest(QObject *parent = 0);
+	explicit LockableSpinBoxTest(QObject *parent = 0);
 
 private slots:
 	void testLock();

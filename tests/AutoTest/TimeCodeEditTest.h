@@ -3,11 +3,11 @@
 
 #include <QObject>
 
-class PhTimeCodeEditTest : public QObject
+class TimeCodeEditTest : public QObject
 {
 	Q_OBJECT
 public:
-	explicit PhTimeCodeEditTest();
+	explicit TimeCodeEditTest();
 
 private slots:
 	void frameTest();

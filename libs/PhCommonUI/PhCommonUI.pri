@@ -15,9 +15,7 @@ HEADERS += \
     ../../libs/PhCommonUI/PhDocumentWindowSettings.h \
     ../../libs/PhCommonUI/PhWindow.h \
     ../../libs/PhCommonUI/PhWindowSettings.h \
-    ../../libs/PhCommonUI/tests/PhTimeCodeEditTest.h \
     ../../libs/PhCommonUI/PhLockableSpinBox.h \
-    ../../libs/PhCommonUI/tests/PhLockableSpinBoxTest.h
 
 SOURCES += \
 #   ../../libs/PhCommonUI/PhLeap.cpp \
@@ -27,9 +25,7 @@ SOURCES += \
     ../../libs/PhCommonUI/PhFloatingMediaPanel.cpp \
     ../../libs/PhCommonUI/PhDocumentWindow.cpp \
     ../../libs/PhCommonUI/PhWindow.cpp \
-    ../../libs/PhCommonUI/tests/PhTimeCodeEditTest.cpp \
     ../../libs/PhCommonUI/PhLockableSpinBox.cpp \
-    ../../libs/PhCommonUI/tests/PhLockableSpinBoxTest.cpp
 
 
 FORMS += ../../libs/PhCommonUI/PhMediaPanel.ui \
