@@ -270,9 +270,19 @@ void StripDocTest::importMosTest03()
 
 void StripDocTest::openStripFileTest()
 {
-	QCOMPARE(_doc.importDetX("test01.detx"), _doc.openStripFile("test01.detx"));
-	QCOMPARE(_doc.importMos("test03.mos"), _doc.openStripFile("test03.mos"));
+	QVERIFY(_doc.openStripFile("test01.detx"));
+	QVERIFY(_doc.openStripFile("test03.mos"));
+
 	QVERIFY(_doc.openStripFile("test.joker"));
+	QCOMPARE(_doc.forceRatio169(), true);
+	QCOMPARE(_doc.getLastFrame(), s2f("01:30:00:00"));
+	QCOMPARE((int)_doc.getVideoTimestamp(), (int)s2f("01:01:00:00"));
+	QCOMPARE(_doc.getVideoPath(), QString("./test.mov"));
+
+	QCOMPARE(_doc.getGenerator(), QString("Cappella v0.12.5, 1"));
+	QCOMPARE(_doc.getTitle(), QString("Title test"));
+
+
 	QVERIFY(_doc.openStripFile("test.strip"));
 	QVERIFY(!_doc.openStripFile("bad_tag.strip"));
 	QVERIFY(!_doc.openStripFile("empty.joker"));
