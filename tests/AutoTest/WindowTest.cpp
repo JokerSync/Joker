@@ -36,7 +36,7 @@ void WindowTest::fullScreenTest02()
 	QTest::qWait(900);
 	// full screen take one second to trigger
 //	QVERIFY(!w.isFullScreen());
-//	QVERIFY(!w.fullScreenAction()->isChecked());
+//	QVERIFY(!w.fullScreenAction()->isChecked()); ----> fails only on travis-ci.org
 	QTest::qWait(200);
 	QVERIFY(w.isFullScreen());
 	QVERIFY(w.fullScreenAction()->isChecked());
