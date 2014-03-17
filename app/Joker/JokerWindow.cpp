@@ -258,7 +258,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 	case QEvent::MouseButtonPress:
 		{
 			QMouseEvent *mouseEvent = (QMouseEvent*)event;
-			PHDEBUG << sender << mouseEvent->buttons() << mouseEvent->pos() << this->pos();
+			//PHDEBUG << sender << mouseEvent->buttons() << mouseEvent->pos() << this->pos();
 			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
 				/// - Right mouse click on the video open the video file dialog.
 				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
