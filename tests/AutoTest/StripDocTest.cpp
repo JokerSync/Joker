@@ -268,6 +268,17 @@ void StripDocTest::importMosTest03()
 	//#warning TODO more test on detect
 }
 
+void StripDocTest::openStripFileTest()
+{
+	QCOMPARE(_doc.importDetX("test01.detx"), _doc.openStripFile("test01.detx"));
+	QCOMPARE(_doc.importMos("test03.mos"), _doc.openStripFile("test03.mos"));
+	QVERIFY(_doc.openStripFile("test.joker"));
+	QVERIFY(_doc.openStripFile("test.strip"));
+	QVERIFY(!_doc.openStripFile("bad_tag.strip"));
+	QVERIFY(!_doc.openStripFile("empty.joker"));
+
+}
+
 void StripDocTest::getPeopleByNameTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));

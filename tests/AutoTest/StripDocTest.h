@@ -25,9 +25,13 @@ private slots:
 	void importDetXDetectTest();
 	void importDetXNoTitleTest();
 
+	// Import Mos tests
 	void importMosTest01();
 	void importMosTest02();
 	void importMosTest03();
+
+	// Open any doc (*.detx, *.strip, *.joker) test
+	void openStripFileTest();
 
 	// Get people
 	void getPeopleByNameTest();
