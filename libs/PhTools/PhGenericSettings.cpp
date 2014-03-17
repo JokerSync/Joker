@@ -2,9 +2,11 @@
 
 #include "PhGenericSettings.h"
 
-PhGenericSettings::PhGenericSettings() : _settings(ORG_NAME, APP_NAME)
+PhGenericSettings::PhGenericSettings(bool clear) : _settings(ORG_NAME, APP_NAME)
 {
 	QSettings::setDefaultFormat(QSettings::NativeFormat);
+	if(clear)
+		this->clear();
 }
 
 void PhGenericSettings::clear()

@@ -105,6 +105,10 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #warning /// @todo move to PhDocumentWindow
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
+
+	ui->actionInvert_colors->setChecked(_settings->invertColor());
+
+	ui->actionShow_ruler->setChecked(_settings->displayRuler());
 }
 
 JokerWindow::~JokerWindow()
@@ -175,6 +179,7 @@ bool JokerWindow::openDocument(QString fileName)
 	/// If the document is opened successfully :
 	/// - Update the current document name (settings, windows title)
 	setCurrentDocument(fileName);
+	_watcher.addPath(_doc->getFilePath());
 
 	/// - Open the corresponding video file if it exists.
 	if(openVideoFile(_doc->getVideoPath())) {
@@ -184,6 +189,7 @@ bool JokerWindow::openDocument(QString fileName)
 	}
 	else
 		_videoEngine->close();
+
 
 	/// - Set the video aspect ratio.
 	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
@@ -208,9 +214,9 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 #warning /// @todo move to PhDocumentWindow
 			QString filePath = static_cast<QFileOpenEvent *>(event)->file();
 			QString fileType = filePath.split(".").last().toLower();
-			// As the plist file list all the supported format (which are .strip, .detx, .avi & .mov)
+			// As the plist file list all the supported format (which are .joker, .strip, .detx, .avi & .mov)
 			// if the file is not a strip or a detx file, it's a video file, we don't need any protection
-			if(fileType == "detx" or fileType == "strip") {
+			if(fileType == "detx" or fileType == "strip" or fileType == "joker") {
 				if(checkSaveFile())
 					openDocument(filePath);
 			}
@@ -236,7 +242,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			if (mimeData->urls().length() == 1) {
 				QString filePath = mimeData->urls().first().toLocalFile();
 				QString fileType = filePath.split(".").last().toLower();
-				if(fileType == "detx" or fileType == "strip") {
+				if(fileType == "detx" or fileType == "strip" or fileType == "joker") {
 					if(checkSaveFile())
 						openDocument(filePath);
 				}
@@ -252,7 +258,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 	case QEvent::MouseButtonPress:
 		{
 			QMouseEvent *mouseEvent = (QMouseEvent*)event;
-			PHDEBUG << sender << mouseEvent->buttons() << mouseEvent->pos() << this->pos();
+			//PHDEBUG << sender << mouseEvent->buttons() << mouseEvent->pos() << this->pos();
 			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
 				/// - Right mouse click on the video open the video file dialog.
 				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
@@ -293,8 +299,8 @@ void JokerWindow::on_actionOpen_triggered()
 	hideMediaPanel();
 
 	if(checkSaveFile()) {
-		QString filter = tr("Rythmo files") + " (*.detx *.strip);; "
-		                 + tr("Joker files") + " (*.strip);; "
+		QString filter = tr("Rythmo files") + " (*.detx *.strip, *.joker);; "
+		                 + tr("Joker files") + " (*.joker);; "
 		                 + tr("DetX files") + " (*.detx);; "
 		                 + tr("All files") + " (*.*)";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
@@ -617,7 +623,7 @@ void JokerWindow::on_actionSave_triggered()
 {
 	QString fileName = _settings->currentDocument();
 	QFileInfo info(fileName);
-	if(!info.exists() || (info.suffix() != "strip"))
+	if(!info.exists() || (info.suffix() != "joker"))
 		on_actionSave_as_triggered();
 	else if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked()))
 		_needToSave = false;
@@ -636,11 +642,11 @@ void JokerWindow::on_actionSave_as_triggered()
 		fileName = lastFolder;
 	else {
 		QFileInfo info(fileName);
-		if(info.suffix() != "strip")
-			fileName = lastFolder + "/" + info.completeBaseName() + ".strip";
+		if(info.suffix() != "joker")
+			fileName = lastFolder + "/" + info.completeBaseName() + ".joker";
 	}
 
-	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.strip");
+	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.joker");
 	if(fileName != "") {
 		if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
 			_needToSave = false;
@@ -690,4 +696,32 @@ void JokerWindow::on_actionForce_16_9_ratio_triggered()
 {
 	ui->videoStripView->setForceRatio169(ui->actionForce_16_9_ratio->isChecked());
 	_needToSave = true;
+}
+
+void JokerWindow::on_actionInvert_colors_toggled(bool checked)
+{
+	_settings->setInvertColor(checked);
+}
+
+void JokerWindow::on_actionShow_ruler_toggled(bool display)
+{
+	_settings->setDisplayRuler(display);
+}
+
+void JokerWindow::on_actionChange_ruler_timestamp_triggered()
+{
+	PhTimeCodeDialog dlg(_doc->getTCType(), _settings->rulerTimestamp(), this);
+	if(dlg.exec())
+		_settings->setRulerTimestamp(dlg.frame());
+}
+
+void JokerWindow::on_actionNew_triggered()
+{
+	_doc->reset();
+	on_actionClose_video_triggered();
+}
+
+void JokerWindow::on_actionClose_video_triggered()
+{
+	_videoEngine->close();
 }

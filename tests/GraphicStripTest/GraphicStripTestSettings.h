@@ -23,12 +23,17 @@ public:
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
 	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1)
+	PH_SETTING_BOOL(setInvertColor, invertColor)
+	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
+	PH_SETTING_INT(setRulerTimestamp, rulerTimestamp)
+	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 50)
 
 	// PhDocumentWindowSettings
 	PH_SETTING_STRING(setCurrentDocument, currentDocument)
 	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
 	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
+	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

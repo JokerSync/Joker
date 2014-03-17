@@ -22,6 +22,12 @@ public:
 	 */
 	explicit PhWindow(PhWindowSettings *settings);
 
+public slots:
+	/**
+	 * @brief Toggle between fullscreen and normal
+	 */
+	void toggleFullScreen();
+
 protected:
 	/**
 	 * @brief Custom event filter
@@ -56,15 +62,7 @@ protected:
 	 *
 	 * @return An action reference
 	 */
-	virtual QAction *fullScreenAction() {
-		return NULL;
-	}
-
-protected slots:
-	/**
-	 * @brief Toggle between fullscreen and normal
-	 */
-	void toggleFullScreen();
+	virtual QAction *fullScreenAction() = 0;
 
 private:
 	PhWindowSettings *_settings;

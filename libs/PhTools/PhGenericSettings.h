@@ -84,8 +84,9 @@ class PhGenericSettings
 public:
 	/**
 	 * @brief PhGenericSettings constructor
+	 * @param clear True if the settings shall be reset
 	 */
-	PhGenericSettings();
+	PhGenericSettings(bool clear = false);
 
 	/**
 	 * @brief Reset the settings to its default value.

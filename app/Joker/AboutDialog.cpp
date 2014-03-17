@@ -17,13 +17,16 @@ AboutDialog::AboutDialog(QWidget *parent) :
 	version += APP_VERSION;
 	ui->labelVersion->setText(version);
 
+	ui->labelContact->setText("<a href=\"mailto:support@phonations.com\">support@phonations.com</a>");
+	ui->labelContact->setTextInteractionFlags(Qt::TextSelectableByMouse);
+
 	ui->graphicsViewIcon->setStyleSheet("background: transparent");
 
 	QGraphicsScene *scn = new QGraphicsScene( ui->graphicsViewIcon );
 	scn->setSceneRect( ui->graphicsViewIcon->rect() );
 	ui->graphicsViewIcon->setScene( scn );
 	ui->graphicsViewIcon->setFixedSize(ui->graphicsViewIcon->width(), ui->graphicsViewIcon->height() );
-	QPixmap pix(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/joker.png");
+	QPixmap pix(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonationsBlack.png");
 	scn->addPixmap( pix );
 }
 

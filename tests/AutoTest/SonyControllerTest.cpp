@@ -6,13 +6,13 @@
 
 #include <QtMath>
 
-#include "PhSonyControllerTest.h"
+#include "SonyControllerTest.h"
 
 #include "PhSync/PhSonyController.h"
 
 #include "PhTools/PhDebug.h"
 
-void PhSonyControllerTest::testComputeRate()
+void SonyControllerTest::testComputeRate()
 {
 	QVERIFY(qAbs(PhSonyController::computeRate(0)) < 0.01);
 	QVERIFY(qAbs(PhSonyController::computeRate(32) - 0.1) < 0.01);

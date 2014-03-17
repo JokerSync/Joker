@@ -20,6 +20,9 @@ public:
 protected:
 	bool openDocument(QString fileName);
 	QMenu *recentDocumentMenu();
+	QAction *fullScreenAction() {
+		return NULL;
+	}
 
 private slots:
 	void on_actionOpen_triggered();

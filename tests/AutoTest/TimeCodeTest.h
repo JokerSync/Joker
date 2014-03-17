@@ -12,7 +12,7 @@
 /**
  * @brief Test the PhTimeCode class.
  */
-class PhTimeCodeTest : public QObject
+class TimeCodeTest : public QObject
 {
 	Q_OBJECT
 public:
@@ -20,7 +20,7 @@ public:
 	 * @brief PhTimeCodeTest constructor.
 	 * @param parent The object owner.
 	 */
-	explicit PhTimeCodeTest(QObject *parent = 0);
+	explicit TimeCodeTest(QObject *parent = 0);
 
 private slots:
 	/** @brief Test stringFromFrame for 23.98 timecode. */

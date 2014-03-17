@@ -3,17 +3,8 @@
 #include <QFileInfo>
 
 #include "PhStrip/PhStripDoc.h"
-#include "PhStrip/tests/PhStripDocTest.h"
 
 using namespace std;
-
-void runDocTest()
-{
-	PhStripDocTest docTest;
-	int test = QTest::qExec(&docTest);
-	if(test)
-		PHDEBUG << "Doc test failed!!!";
-}
 
 PhStripDoc * openDoc(QString fileName)
 {
@@ -129,19 +120,7 @@ int main(int argc, char *argv[])
 	PhDebug::setDisplay(false, false, false, false, false);
 	//PhDebug::setLogMask(2);
 
-	bool performTest = (argc < 2); // Run test if no strip files in argument
-
-	for(int i = 1; i < argc; i++) {
-		PHDEBUG << argv[i];
-		if (strcmp(argv[i], "test") == 0)
-			performTest = true;
-	}
-
 	int result = 0;
-	if(performTest) {
-		PhStripDocTest docTest;
-		result = QTest::qExec(&docTest);
-	}
 
 	PhStripDoc doc;
 	for(int i = 1; i < argc; i++) {
@@ -150,13 +129,6 @@ int main(int argc, char *argv[])
 			PHDEBUG << "-------- FAILED --------";
 			break;
 		}
-	}
-
-	if(performTest) {
-		if(result)
-			PHDEBUG << "unit test failed!!!!";
-		else
-			PHDEBUG << "unit test succeed!!!";
 	}
 
 	return result;

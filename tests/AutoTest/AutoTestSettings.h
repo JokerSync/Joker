@@ -1,17 +1,29 @@
-#ifndef PHSETTINGSTEST_H
-#define PHSETTINGSTEST_H
+#ifndef AUTOTESTSETTINGS_H
+#define AUTOTESTSETTINGS_H
 
-#include <QObject>
-#include <QTest>
+#include <QDir>
 
-#include "../PhGenericSettings.h"
+#include "PhTools/PhGenericSettings.h"
+#include "PhCommonUI/PhDocumentWindowSettings.h"
 
-class PhSettingsTest : public QObject, protected PhGenericSettings
+class AutoTestSettings : public PhGenericSettings, public PhDocumentWindowSettings
 {
-	Q_OBJECT
 public:
-	explicit PhSettingsTest(QObject *parent = 0);
+	AutoTestSettings(bool clear = false) : PhGenericSettings(clear) {
+	}
 
+	// PhWindowSettings
+	PH_SETTING_BOOL(setFullScreen, fullScreen)
+	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
+
+	// PhDocumentWindowSettings
+	PH_SETTING_STRING(setCurrentDocument, currentDocument)
+	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
+	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
+	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 5)
+	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
+
+	// Other settings
 	PH_SETTING_INT(setIntTest1, intTest1)
 	PH_SETTING_INT(setIntTest2, intTest2)
 	PH_SETTING_INT2(setIntTest3, intTest3, 4)
@@ -39,17 +51,6 @@ public:
 
 	PH_SETTING_BYTEARRAY(setByteArrayTest1, byteArrayTest1)
 	PH_SETTING_BYTEARRAY(setByteArrayTest2, byteArrayTest2)
-
-private slots:
-	void initTestCase();
-	void testClear();
-	void testIntSettings();
-	void testUnsignedCharSettings();
-	void testBoolSettings();
-	void testFloatSettings();
-	void testStringSettings();
-	void testStringListSettings();
-	void testByteArraySettings();
 };
 
-#endif // PHSETTINGSTEST_H
+#endif // AUTOTESTSETTINGS_H

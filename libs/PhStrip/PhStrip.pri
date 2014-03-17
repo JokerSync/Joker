@@ -13,7 +13,6 @@ SOURCES += \
 	../../libs/PhStrip/PhStripLoop.cpp \
 	../../libs/PhStrip/PhPeople.cpp \
     ../../libs/PhStrip/PhStripPeopleObject.cpp \
-    ../../libs/PhStrip/tests/PhStripDocTest.cpp \
     ../../libs/PhStrip/PhStripDetect.cpp
 
 HEADERS += \
@@ -24,6 +23,5 @@ HEADERS += \
 	../../libs/PhStrip/PhStripLoop.h \
 	../../libs/PhStrip/PhPeople.h \
     ../../libs/PhStrip/PhStripPeopleObject.h \
-    ../../libs/PhStrip/tests/PhStripDocTest.h \
     ../../libs/PhStrip/PhStripDetect.h
 

@@ -11,21 +11,27 @@
 
 #include "PhStrip/PhStripDoc.h"
 
-class PhStripDocTest : public QObject
+class StripDocTest : public QObject
 {
 	Q_OBJECT
 private slots:
 	// Import DetX tests
 	void importDetXHeaderTest();
+	void importDetXNoFile();
 	void importDetXPeopleTest();
 	void importDetXLoopTest();
 	void importDetXCutTest();
 	void importDetXTextTest();
 	void importDetXDetectTest();
+	void importDetXNoTitleTest();
 
+	// Import Mos tests
 	void importMosTest01();
 	void importMosTest02();
 	void importMosTest03();
+
+	// Open any doc (*.detx, *.strip, *.joker) test
+	void openStripFileTest();
 
 	// Get people
 	void getPeopleByNameTest();

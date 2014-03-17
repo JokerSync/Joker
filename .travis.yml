@@ -1,11 +1,35 @@
 language: objective-c
+
 install:
+- brew update
+- brew install ffmpeg
+- brew install libav
+- brew install portaudio
+- brew install doxygen
+- brew install uncrustify
+- brew install node
+- brew install npm
 - mkdir tmp && cd tmp
 - ../scripts/install_libltc.sh
 - ls -la
 - ../scripts/install_sdl.sh
-- ../scripts/bootstrap.sh
+- brew install qt5
+#- brew install sdl2 sdl2_image sdl2_ttf
+- find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
+
+# Installing appdmg for deployment
+- npm install -g appdmg
+
 - export PATH=$PATH:/usr/local/opt/qt5/bin
+# Setup python environment for coveralls
+- brew install pyenv
+- eval "$(pyenv init -)"
+- pyenv install 2.7.2
+- pyenv global 2.7.2
+- pyenv rehash
+- pip install cpp-coveralls
+- pyenv rehash
+
 script:
 # Build AutoTest
 - mkdir AutoTest && cd AutoTest
@@ -13,7 +37,7 @@ script:
 - make
 # Run AutoTest
 - ./AutoTest
-- cd .. 
+- cd ..
 # Build Joker
 - mkdir Joker && cd Joker
 - qmake ../../app/Joker/Joker.pro
@@ -22,7 +46,11 @@ script:
 - cd ..
 - ./scripts/doxygen.sh
 - ./scripts/uncrustify.sh
+
+after_success:
+# TODO exclude moc and ui files
+- coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root tmp/AutoTest
+
 notifications:
  irc: "phonations.com#joker"
  email: false
-

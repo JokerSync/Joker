@@ -12,7 +12,7 @@
 /**
  * @brief Test for the PhSonyController class.
  */
-class PhSonyControllerTest : public QObject
+class SonyControllerTest : public QObject
 {
 	Q_OBJECT
 private slots:

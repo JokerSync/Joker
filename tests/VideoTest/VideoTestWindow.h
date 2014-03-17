@@ -41,6 +41,9 @@ protected:
 	void closeEvent(QCloseEvent *);
 
 	QMenu *recentDocumentMenu();
+	QAction *fullScreenAction() {
+		return NULL;
+	}
 
 private slots:
 	void on_actionPlay_pause_triggered();

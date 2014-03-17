@@ -67,6 +67,9 @@ bool PhStripDoc::importDetX(QString fileName)
 		// Reading the title
 		if(header.elementsByTagName("title").count())
 			_title = header.elementsByTagName("title").at(0).toElement().text();
+		else
+			_title = QFileInfo(fileName).fileName().split(".").first();
+
 
 		// Reading the translated title
 		if(header.elementsByTagName("title2").count())
@@ -634,7 +637,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 	else if(extension == "mos") {
 		return importMos(fileName);
 	}
-	else if(extension == "strip") {
+	else if(extension == "strip" or extension == "joker") {
 		QFile xmlFile(fileName);
 		if(!xmlFile.open(QIODevice::ReadOnly)) {
 			PHDEBUG << "Unable to open" << fileName;
@@ -652,7 +655,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 		PHDEBUG << ("Start parsing " + fileName);
 		QDomElement stripDocument = domDoc->documentElement();
 
-		if(stripDocument.tagName() != "strip") {
+		if(stripDocument.tagName() != "strip" && stripDocument.tagName() != "joker") {
 			xmlFile.close();
 			PHDEBUG << "Bad root element :" << stripDocument.tagName();
 			return false;
@@ -703,7 +706,7 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
 
 		// Indent is just for keeping in mind XML structure
 		xmlWriter->writeStartDocument();
-		xmlWriter->writeStartElement("strip");
+		xmlWriter->writeStartElement("joker");
 		{
 			xmlWriter->writeStartElement("meta");
 			{
@@ -841,7 +844,7 @@ PhPeople *PhStripDoc::getPeopleByName(QString name)
 {
 	foreach(PhPeople* people, _peoples)
 	{
-		if(people->getName() == name)
+		if(people && people->getName() == name)
 			return people;
 	}
 	return NULL;

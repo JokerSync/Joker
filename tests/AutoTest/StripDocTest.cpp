@@ -6,9 +6,9 @@
 
 #include "PhTools/PhTimeCode.h"
 
-#include "PhStripDocTest.h"
+#include "StripDocTest.h"
 
-void PhStripDocTest::importDetXHeaderTest()
+void StripDocTest::importDetXHeaderTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -41,17 +41,22 @@ void PhStripDocTest::importDetXHeaderTest()
 	PHDEBUG << _doc.getTitle();
 }
 
-void PhStripDocTest::importDetXPeopleTest()
+void StripDocTest::importDetXNoFile()
+{
+	QVERIFY(!_doc.importDetX("does_not_exist.detx"));
+}
+
+void StripDocTest::importDetXPeopleTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
-	QVERIFY(_doc.getPeoples().count() == 3);
+	QCOMPARE(_doc.getPeoples().count(), 3);
 	QVERIFY(_doc.getPeoples().value("jeanne"));
 	QVERIFY(_doc.getPeoples().value("sue"));
 	QVERIFY(_doc.getPeoples().value("johnny") == NULL);
 }
 
-void PhStripDocTest::importDetXLoopTest()
+void StripDocTest::importDetXLoopTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -61,7 +66,7 @@ void PhStripDocTest::importDetXLoopTest()
 
 }
 
-void PhStripDocTest::importDetXCutTest()
+void StripDocTest::importDetXCutTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -69,7 +74,7 @@ void PhStripDocTest::importDetXCutTest()
 	QVERIFY(_doc.getCuts()[0]->getTimeIn() == PhTimeCode::frameFromString("01:00:01:00", _doc.getTCType()));
 }
 
-void PhStripDocTest::importDetXTextTest()
+void StripDocTest::importDetXTextTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -87,7 +92,7 @@ void PhStripDocTest::importDetXTextTest()
 	QCOMPARE(_doc.getTexts()[4]->getContent(), QString("Composed sentence with off"));
 }
 
-void PhStripDocTest::importDetXDetectTest()
+void StripDocTest::importDetXDetectTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -124,7 +129,7 @@ void PhStripDocTest::importDetXDetectTest()
 	QCOMPARE(_doc.getDetects()[4]->getTrack(), 2);
 }
 
-void PhStripDocTest::importMosTest01()
+void StripDocTest::importMosTest01()
 {
 	QVERIFY(_doc.importMos("test01.mos"));
 
@@ -172,7 +177,7 @@ void PhStripDocTest::importMosTest01()
 	QCOMPARE(_doc.getDetects().count(), 4);
 }
 
-void PhStripDocTest::importMosTest02()
+void StripDocTest::importMosTest02()
 {
 	QVERIFY(_doc.importMos("test02.mos"));
 
@@ -219,7 +224,7 @@ void PhStripDocTest::importMosTest02()
 	QCOMPARE(_doc.getDetects().count(), 0);
 }
 
-void PhStripDocTest::importMosTest03()
+void StripDocTest::importMosTest03()
 {
 	QVERIFY(_doc.importMos("test03.mos"));
 
@@ -263,7 +268,18 @@ void PhStripDocTest::importMosTest03()
 	//#warning TODO more test on detect
 }
 
-void PhStripDocTest::getPeopleByNameTest()
+void StripDocTest::openStripFileTest()
+{
+	QCOMPARE(_doc.importDetX("test01.detx"), _doc.openStripFile("test01.detx"));
+	QCOMPARE(_doc.importMos("test03.mos"), _doc.openStripFile("test03.mos"));
+	QVERIFY(_doc.openStripFile("test.joker"));
+	QVERIFY(_doc.openStripFile("test.strip"));
+	QVERIFY(!_doc.openStripFile("bad_tag.strip"));
+	QVERIFY(!_doc.openStripFile("empty.joker"));
+
+}
+
+void StripDocTest::getPeopleByNameTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -273,7 +289,7 @@ void PhStripDocTest::getPeopleByNameTest()
 	QVERIFY(_doc.getPeopleByName("Bob") == NULL);
 }
 
-void PhStripDocTest::getPreviousElementFrameTest()
+void StripDocTest::getPreviousElementFrameTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -283,7 +299,7 @@ void PhStripDocTest::getPreviousElementFrameTest()
 	QCOMPARE(_doc.getPreviousElementFrame(s2f("01:00:00:00")), PHFRAMEMIN);
 }
 
-void PhStripDocTest::getNextElementFrameTest()
+void StripDocTest::getNextElementFrameTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -296,7 +312,7 @@ void PhStripDocTest::getNextElementFrameTest()
 
 }
 
-void PhStripDocTest::getNextTextTest()
+void StripDocTest::getNextTextTest()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -308,7 +324,7 @@ void PhStripDocTest::getNextTextTest()
 	QVERIFY(_doc.getNextText(s2f("01:00:15:00")) == NULL);
 }
 
-void PhStripDocTest::getNextTextTestByPeople()
+void StripDocTest::getNextTextTestByPeople()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -320,7 +336,7 @@ void PhStripDocTest::getNextTextTestByPeople()
 	QVERIFY(_doc.getNextText(s2f("01:00:15:00"), sue) == NULL);
 }
 
-void PhStripDocTest::getNextTextTestByPeopleList()
+void StripDocTest::getNextTextTestByPeopleList()
 {
 	QVERIFY(_doc.importDetX("test01.detx"));
 
@@ -335,14 +351,14 @@ void PhStripDocTest::getNextTextTestByPeopleList()
 	QVERIFY(_doc.getNextText(s2f("01:00:15:00"), peopleList) == NULL);
 }
 
-void PhStripDocTest::getNextLoopTest()
+void StripDocTest::getNextLoopTest()
 {
 	QVERIFY(_doc.getNextLoop(s2f("00:00:00:00"))->getTimeIn() == s2f("01:00:00:00"));
 	QVERIFY(_doc.getNextLoop(s2f("01:00:00:00"))->getTimeIn() == s2f("01:01:00:00"));
 	QVERIFY(_doc.getNextLoop(s2f("01:01:00:00")) == NULL);
 }
 
-void PhStripDocTest::getPreviousLoopTest()
+void StripDocTest::getPreviousLoopTest()
 {
 	QVERIFY(_doc.getPreviousLoop(s2f("01:00:00:00")) == NULL);
 	QVERIFY(_doc.getPreviousLoop(s2f("01:01:00:00"))->getTimeIn() == s2f("01:00:00:00"));
@@ -350,12 +366,19 @@ void PhStripDocTest::getPreviousLoopTest()
 
 }
 
-QString PhStripDocTest::f2s(PhFrame frame)
+QString StripDocTest::f2s(PhFrame frame)
 {
 	return PhTimeCode::stringFromFrame(frame, _doc.getTCType());
 }
 
-PhFrame PhStripDocTest::s2f(QString string)
+PhFrame StripDocTest::s2f(QString string)
 {
 	return PhTimeCode::frameFromString(string, _doc.getTCType());
+}
+
+void StripDocTest::importDetXNoTitleTest()
+{
+	QVERIFY(_doc.importDetX("notitle.detx"));
+	QVERIFY(_doc.getTitle() == "notitle");
+
 }

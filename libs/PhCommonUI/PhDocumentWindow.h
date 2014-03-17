@@ -2,6 +2,8 @@
 #define PHDOCUMENTWINDOW_H
 
 #include <QMenu>
+#include <QFileSystemWatcher>
+#include <QTime>
 
 #include "PhWindow.h"
 #include "PhDocumentWindowSettings.h"
@@ -56,6 +58,20 @@ protected:
 	 * @return A menu item reference
 	 */
 	virtual QMenu *recentDocumentMenu() = 0;
+
+	/**
+	 * @brief The file watcher
+	 */
+	QFileSystemWatcher _watcher;
+
+public slots:
+	/**
+	 * @brief On external file change
+	 *
+	 * Handle external changes and reload the file.
+	 * @param path
+	 */
+	void onExternalChange(QString path);
 
 private slots:
 	void onOpenRecentDocumentTriggered();
