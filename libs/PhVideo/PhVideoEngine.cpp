@@ -6,7 +6,7 @@
 
 #include "PhVideoEngine.h"
 
-PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :	QObject(parent),
+PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 	_settings(NULL),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
@@ -50,12 +50,10 @@ bool PhVideoEngine::open(QString fileName)
 	_audioStream = NULL;
 
 	// Find video stream :
-	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++)
-	{
+	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++) {
 		AVMediaType streamType = _pFormatContext->streams[i]->codec->codec_type;
 		PHDEBUG << i << ":" << streamType;
-		switch(streamType)
-		{
+		switch(streamType) {
 		case AVMEDIA_TYPE_VIDEO:
 			_videoStream = _pFormatContext->streams[i];
 			PHDEBUG << "\t=> video";
@@ -124,24 +122,19 @@ bool PhVideoEngine::open(QString fileName)
 	_currentFrame = -1;
 	_clock.setFrame(0);
 
-	if(_audioStream)
-	{
+	if(_audioStream) {
 		AVCodec* audioCodec = avcodec_find_decoder(_audioStream->codec->codec_id);
-		if(audioCodec)
-		{
-			if(avcodec_open2(_audioStream->codec, audioCodec, NULL) < 0)
-			{
+		if(audioCodec) {
+			if(avcodec_open2(_audioStream->codec, audioCodec, NULL) < 0) {
 				PHDEBUG << "Unable to open audio codec.";
 				_audioStream = NULL;
 			}
-			else
-			{
+			else {
 				_audioFrame = avcodec_alloc_frame();
 				PHDEBUG << "Audio OK.";
 			}
 		}
-		else
-		{
+		else {
 			PHDEBUG << "Unable to find codec for audio.";
 			_audioStream = NULL;
 		}
@@ -283,8 +276,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 					readElapsed = _testTimer.elapsed();
 					int frameFinished = 0;
 					avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
-					if(frameFinished)
-					{
+					if(frameFinished) {
 						decodeElapsed = _testTimer.elapsed();
 
 						int frameHeight = _videoFrame->height;
@@ -292,17 +284,17 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 							if(_settings->videoDeinterlace())
 								frameHeight = _videoFrame->height / 2;
 						}
+#warning /// @todo Use RGB pixel format
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-														_videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
-														AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+						                                _videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
+						                                AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
 							_rgb = new uint8_t[_videoFrame->width * frameHeight * 4];
 						int linesize = _videoFrame->width * 4;
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
-										   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
-										   &linesize))
-						{
+						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
+						                   &linesize)) {
 							scaleElapsed = _testTimer.elapsed();
 
 							videoRect.createTextureFromARGBBuffer(_rgb, _videoFrame->width, frameHeight);
@@ -315,12 +307,10 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 						lookingForVideoFrame = false;
 					} // if frame decode is not finished, let's read another packet.
 				}
-				else if(_audioStream && (packet.stream_index == _audioStream->index))
-				{
+				else if(_audioStream && (packet.stream_index == _audioStream->index)) {
 					int ok = 0;
 					avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
-					if(ok)
-					{
+					if(ok) {
 						PHDEBUG << "audio:" << _audioFrame->nb_samples;
 					}
 				}
