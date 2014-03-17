@@ -214,9 +214,9 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 #warning /// @todo move to PhDocumentWindow
 			QString filePath = static_cast<QFileOpenEvent *>(event)->file();
 			QString fileType = filePath.split(".").last().toLower();
-			// As the plist file list all the supported format (which are .strip, .detx, .avi & .mov)
+			// As the plist file list all the supported format (which are .joker, .strip, .detx, .avi & .mov)
 			// if the file is not a strip or a detx file, it's a video file, we don't need any protection
-			if(fileType == "detx" or fileType == "strip") {
+			if(fileType == "detx" or fileType == "strip" or fileType == "joker") {
 				if(checkSaveFile())
 					openDocument(filePath);
 			}
@@ -242,7 +242,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			if (mimeData->urls().length() == 1) {
 				QString filePath = mimeData->urls().first().toLocalFile();
 				QString fileType = filePath.split(".").last().toLower();
-				if(fileType == "detx" or fileType == "strip") {
+				if(fileType == "detx" or fileType == "strip" or fileType == "joker") {
 					if(checkSaveFile())
 						openDocument(filePath);
 				}
@@ -299,8 +299,8 @@ void JokerWindow::on_actionOpen_triggered()
 	hideMediaPanel();
 
 	if(checkSaveFile()) {
-		QString filter = tr("Rythmo files") + " (*.detx *.strip);; "
-		                 + tr("Joker files") + " (*.strip);; "
+		QString filter = tr("Rythmo files") + " (*.detx *.strip, *.joker);; "
+						 + tr("Joker files") + " (*.joker);; "
 		                 + tr("DetX files") + " (*.detx);; "
 		                 + tr("All files") + " (*.*)";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
@@ -623,7 +623,7 @@ void JokerWindow::on_actionSave_triggered()
 {
 	QString fileName = _settings->currentDocument();
 	QFileInfo info(fileName);
-	if(!info.exists() || (info.suffix() != "strip"))
+	if(!info.exists() || (info.suffix() != "joker"))
 		on_actionSave_as_triggered();
 	else if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked()))
 		_needToSave = false;
@@ -642,11 +642,11 @@ void JokerWindow::on_actionSave_as_triggered()
 		fileName = lastFolder;
 	else {
 		QFileInfo info(fileName);
-		if(info.suffix() != "strip")
-			fileName = lastFolder + "/" + info.completeBaseName() + ".strip";
+		if(info.suffix() != "joker")
+			fileName = lastFolder + "/" + info.completeBaseName() + ".joker";
 	}
 
-	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.strip");
+	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.joker");
 	if(fileName != "") {
 		if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
 			_needToSave = false;
