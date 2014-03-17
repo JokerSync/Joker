@@ -300,7 +300,7 @@ void JokerWindow::on_actionOpen_triggered()
 
 	if(checkSaveFile()) {
 		QString filter = tr("Rythmo files") + " (*.detx *.strip, *.joker);; "
-						 + tr("Joker files") + " (*.joker);; "
+		                 + tr("Joker files") + " (*.joker);; "
 		                 + tr("DetX files") + " (*.detx);; "
 		                 + tr("All files") + " (*.*)";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
