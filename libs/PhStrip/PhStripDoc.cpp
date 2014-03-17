@@ -622,6 +622,8 @@ bool PhStripDoc::importMos(QString fileName)
 
 	f.close();
 
+	emit this->changed();
+
 	return true;
 }
 

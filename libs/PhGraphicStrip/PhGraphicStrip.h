@@ -131,7 +131,7 @@ private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
 	 */
-	void clearData();
+	void onDocChanged();
 
 private:
 
