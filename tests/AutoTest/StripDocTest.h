@@ -46,10 +46,8 @@ private slots:
 	void getPreviousLoopTest();
 
 private:
-	QString f2s(PhFrame frame);
-	PhFrame s2f(QString string);
-
-	PhStripDoc _doc;
+	QString f2s(PhFrame frame, PhTimeCodeType tcType = PhTimeCodeType25);
+	PhFrame s2f(QString string, PhTimeCodeType tcType = PhTimeCodeType25);
 };
 
 #endif // PHSTRIPDOCTEST_H
