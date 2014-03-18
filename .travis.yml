@@ -49,7 +49,7 @@ script:
 
 after_success:
 # TODO exclude moc and ui files
-- coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root tmp/AutoTest
+- coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root tmp/AutoTest -E .+/moc_.+
 
 notifications:
  irc: "phonations.com#joker"
