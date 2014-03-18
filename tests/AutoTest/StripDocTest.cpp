@@ -154,7 +154,7 @@ void StripDocTest::importMosTest01()
 	QCOMPARE(doc.getVideoPath(), QString(""));
 	QCOMPARE(doc.getVideoTimestamp(), 0);
 
-	QCOMPARE(doc.getTitle(), QString("Titre VF"));
+	QCOMPARE(doc.getTitle(), QString("Titre VO"));
 	QCOMPARE(doc.getSeason(), QString("saison"));
 	QCOMPARE(doc.getEpisode(), QString("episode"));
 
@@ -317,6 +317,17 @@ void StripDocTest::openStripFileTest()
 	QCOMPARE(doc.getTitle(), QString("Title test"));
 	QCOMPARE(doc.getGenerator(), QString("Cappella v0.12.5, 1"));
 
+	// Test regular joker file linked to mos
+	QVERIFY(doc.openStripFile("test02.joker"));
+	QCOMPARE(doc.getFilePath(), QString("test03.mos"));
+	QCOMPARE(doc.getVideoPath(), QString("test02.mov"));
+	QCOMPARE(f2s(doc.getVideoTimestamp(), doc.getTCType()), QString("01:03:00:00"));
+	QCOMPARE(doc.forceRatio169(), false);
+	QCOMPARE(f2s(doc.getLastFrame(), doc.getTCType()), QString("01:20:00:00"));
+
+	QCOMPARE(doc.getTitle(), QString("Au fil d'Ariane"));
+	QCOMPARE(doc.getGenerator(), QString("Mosaic"));
+
 	// Test bad files
 	QVERIFY(QFile::exists("bad_tag.joker"));
 	QVERIFY(!doc.openStripFile("bad_tag.joker"));
@@ -331,6 +342,11 @@ void StripDocTest::openStripFileTest()
 	QVERIFY(QFile::exists("empty_meta.joker"));
 	QVERIFY(doc.openStripFile("empty_meta.joker"));
 }
+
+//void StripDocTest::openSaveTest()
+//{
+
+//}
 
 void StripDocTest::getPeopleByNameTest()
 {

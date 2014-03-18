@@ -8,6 +8,7 @@
 #define PHGRAPHICSTRIP_H
 
 #include <QObject>
+#include <QTime>
 
 #include "PhGraphicStripSettings.h"
 

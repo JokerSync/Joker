@@ -72,8 +72,7 @@ bool PhStripDoc::importDetX(QString fileName)
 		if(header.elementsByTagName("title").count())
 			_title = header.elementsByTagName("title").at(0).toElement().text();
 		else
-			_title = QFileInfo(fileName).fileName().split(".").first();
-
+			_title = QFileInfo(fileName).baseName();
 
 		// Reading the translated title
 		if(header.elementsByTagName("title2").count())
@@ -266,9 +265,18 @@ void PhStripDoc::readMosDetect(QFile &f, int level)
 
 bool PhStripDoc::readMosProperties(QFile &f, int level)
 {
-	PhFileTool::readString(f, level, "Titre de la versio originale");
+	QString originalTitle = PhFileTool::readString(f, level, "Titre de la versio originale");
 
-	_title = PhFileTool::readString(f, level, "Titre de la version adaptée");
+	QString translatedTitle = PhFileTool::readString(f, level, "Titre de la version adaptée");
+
+	_metaInformation["Titre de la version originale"] = originalTitle;
+	_metaInformation["Titre de la version adaptée"] = translatedTitle;
+
+	if(originalTitle.length())
+		_title = originalTitle;
+	else if(translatedTitle.length())
+		_title = translatedTitle;
+
 	_season = PhFileTool::readString(f, level, "Saison");
 	_episode = PhFileTool::readString(f, level, "Episode/bobine");
 	PhFileTool::readString(f, level, "Titre vo episode");
@@ -426,6 +434,9 @@ bool PhStripDoc::importMos(QString fileName)
 
 	this->reset();
 
+	_filePath = fileName;
+	_title = QFileInfo(fileName).baseName();
+
 	int level = 0;
 	int ok = level;
 	int propLevel = level;
@@ -439,6 +450,8 @@ bool PhStripDoc::importMos(QString fileName)
 
 	if(!checkMosTag2(f, blocLevel, "NOBLURMOSAIC"))
 		return false;
+
+	_generator = "Mosaic";
 
 	PhFileTool::readShort(f, blocLevel, "CMosaicDoc");
 	int strangeNumber3 = PhFileTool::readShort(f, blocLevel, "CMosaicDoc");
@@ -686,6 +699,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 				_forceRatio169 = media.attribute("forceRatio").toLower() == "yes";
 			}
 		}
+
 		if(stripDocument.elementsByTagName("state").count()) {
 			QDomElement state = stripDocument.elementsByTagName("state").at(0).toElement();
 			_lastFrame = PhTimeCode::frameFromString(state.attribute("lastTimeCode"), _tcType);
@@ -825,6 +839,7 @@ void PhStripDoc::reset()
 	_videoFrameStamp = 0;
 	_authorName = "";
 	_forceRatio169 = false;
+	_generator = "";
 	_mosNextTag = 0x8008;
 
 	emit this->changed();
