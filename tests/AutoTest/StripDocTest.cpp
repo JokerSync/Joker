@@ -290,23 +290,46 @@ void StripDocTest::openStripFileTest()
 {
 	PhStripDoc doc;
 
+	// DetX test
 	QVERIFY(doc.openStripFile("test01.detx"));
+	QCOMPARE(f2s(doc.getLastFrame()), QString("01:00:16:00"));
+	QCOMPARE(f2s(doc.getVideoTimestamp()), QString("01:00:00:00"));
+
+	// Mos test
 	QVERIFY(doc.openStripFile("test03.mos"));
+	QCOMPARE(doc.getTCType(), PhTimeCodeType24);
 
-	QVERIFY(doc.openStripFile("test.joker"));
-	QCOMPARE(doc.forceRatio169(), true);
-	QCOMPARE(doc.getLastFrame(), s2f("01:30:00:00"));
-	QCOMPARE((int)doc.getVideoTimestamp(), (int)s2f("01:01:00:00"));
-	QCOMPARE(doc.getVideoPath(), QString("./test.mov"));
-
-	QCOMPARE(doc.getGenerator(), QString("Cappella v0.12.5, 1"));
-	QCOMPARE(doc.getTitle(), QString("Title test"));
-
-
+	// Strip file
 	QVERIFY(doc.openStripFile("test.strip"));
+	QCOMPARE(doc.forceRatio169(), true);
+	QCOMPARE(doc.getVideoPath(), QString("test01.mov"));
+	QCOMPARE(f2s(doc.getVideoTimestamp()), QString("00:59:00:00"));
+	QCOMPARE(f2s(doc.getLastFrame()), QString("01:02:03:04"));
+
+	// Test regular joker file linked to detx
+	QVERIFY(doc.openStripFile("test01.joker"));
+	QCOMPARE(doc.getFilePath(), QString("test01.detx"));
+	QCOMPARE(doc.getVideoPath(), QString("test01.mov"));
+	QCOMPARE(f2s(doc.getVideoTimestamp()), QString("01:01:00:00"));
+	QCOMPARE(doc.forceRatio169(), true);
+	QCOMPARE(f2s(doc.getLastFrame()), QString("01:30:00:00"));
+
+	QCOMPARE(doc.getTitle(), QString("Title test"));
+	QCOMPARE(doc.getGenerator(), QString("Cappella v0.12.5, 1"));
+
+	// Test bad files
+	QVERIFY(QFile::exists("bad_tag.joker"));
 	QVERIFY(!doc.openStripFile("bad_tag.joker"));
+
+	QVERIFY(QFile::exists("empty.joker"));
 	QVERIFY(!doc.openStripFile("empty.joker"));
 
+	// Test accepted files
+	QVERIFY(QFile::exists("empty_root.joker"));
+//	QVERIFY(doc.openStripFile("empty_root.joker"));
+
+	QVERIFY(QFile::exists("empty_meta.joker"));
+//	QVERIFY(doc.openStripFile("empty_meta.joker"));
 }
 
 void StripDocTest::getPeopleByNameTest()
@@ -413,7 +436,6 @@ void StripDocTest::getPreviousLoopTest()
 	QVERIFY(doc.getPreviousLoop(s2f("01:00:00:00")) == NULL);
 	QVERIFY(doc.getPreviousLoop(s2f("01:01:00:00"))->getTimeIn() == s2f("01:00:00:00"));
 	QVERIFY(doc.getPreviousLoop(s2f("23:00:00:00"))->getTimeIn() == s2f("01:01:00:00"));
-
 }
 
 QString StripDocTest::f2s(PhFrame frame, PhTimeCodeType tcType)

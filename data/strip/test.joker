@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<joker>
-	<meta>
-		<generator name="Joker" version="1.1.6"/>
-		<media type="detx">./test01.detx</media>
-		<media type="video" tcStamp="01:01:00:00" forceRatio="YES">./test.mov</media>
-		<state lastTimeCode="01:30:00:00"/>
-	</meta>
-</joker>

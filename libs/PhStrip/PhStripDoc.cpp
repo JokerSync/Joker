@@ -629,6 +629,7 @@ bool PhStripDoc::importMos(QString fileName)
 
 bool PhStripDoc::openStripFile(QString fileName)
 {
+	PHDEBUG << fileName;
 	bool succeed = false;
 
 	QString extension = QFileInfo(fileName).suffix();
@@ -668,21 +669,22 @@ bool PhStripDoc::openStripFile(QString fileName)
 		if(stripDocument.elementsByTagName("meta").count()) {
 			for(int i = 0; i < stripDocument.elementsByTagName("media").count(); i++) {
 				QDomElement line = metaInfo.elementsByTagName("media").at(i).toElement();
-				PHDEBUG << "line" << line.attribute("type");
-				if(line.attribute("type") == "detx")
+				QString type = line.attribute("type");
+				PHDEBUG << "line" << type;
+				if(type == "detx")
 					succeed = importDetX(line.text());
-
-				if(line.attribute("type")  == "video") {
+				else if(type == "mos")
+					succeed = importMos(line.text());
+				else if(type == "video") {
 					_videoPath = line.text();
 					_videoFrameStamp = PhTimeCode::frameFromString(line.attribute("tcStamp"), _tcType);
-					_forceRatio169 = line.attribute("forceRatio") == "YES";
+					_forceRatio169 = line.attribute("forceRatio").toLower() == "yes";
 				}
 			}
 		}
 		_lastFrame = PhTimeCode::frameFromString(metaInfo.elementsByTagName("state").at(0).toElement().attribute("lastTimeCode"), _tcType);
 	}
 	return succeed;
-
 }
 
 bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
