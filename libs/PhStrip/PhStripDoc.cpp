@@ -5,8 +5,12 @@
  */
 
 
-#include <QFile>
 #include <QFileInfo>
+#include <QDomDocument>
+#include <QDomNodeList>
+#include <QtXml>
+#include <QXmlStreamWriter>
+
 #include "PhTools/PhFileTool.h"
 #include "PhStripDoc.h"
 
@@ -630,7 +634,7 @@ bool PhStripDoc::importMos(QString fileName)
 bool PhStripDoc::openStripFile(QString fileName)
 {
 	PHDEBUG << fileName;
-	bool succeed = false;
+	bool result = false;
 
 	QString extension = QFileInfo(fileName).suffix();
 	// Try to open the document
@@ -664,27 +668,30 @@ bool PhStripDoc::openStripFile(QString fileName)
 			return false;
 		}
 
-		QDomElement metaInfo =  stripDocument.elementsByTagName("meta").at(0).toElement();
-		// Reading the header
-		if(stripDocument.elementsByTagName("meta").count()) {
-			for(int i = 0; i < stripDocument.elementsByTagName("media").count(); i++) {
-				QDomElement line = metaInfo.elementsByTagName("media").at(i).toElement();
-				QString type = line.attribute("type");
-				PHDEBUG << "line" << type;
-				if(type == "detx")
-					succeed = importDetX(line.text());
-				else if(type == "mos")
-					succeed = importMos(line.text());
-				else if(type == "video") {
-					_videoPath = line.text();
-					_videoFrameStamp = PhTimeCode::frameFromString(line.attribute("tcStamp"), _tcType);
-					_forceRatio169 = line.attribute("forceRatio").toLower() == "yes";
-				}
+		result = true;
+
+		// Reading the media nodes
+		QDomNodeList mediaList = stripDocument.elementsByTagName("media");
+		for(int i = 0; i < mediaList.count(); i++) {
+			QDomElement media = mediaList.at(i).toElement();
+			QString type = media.attribute("type");
+			PHDEBUG << "line" << type;
+			if(type == "detx")
+				result = importDetX(media.text());
+			else if(type == "mos")
+				result = importMos(media.text());
+			else if(type == "video") {
+				_videoPath = media.text();
+				_videoFrameStamp = PhTimeCode::frameFromString(media.attribute("tcStamp"), _tcType);
+				_forceRatio169 = media.attribute("forceRatio").toLower() == "yes";
 			}
 		}
-		_lastFrame = PhTimeCode::frameFromString(metaInfo.elementsByTagName("state").at(0).toElement().attribute("lastTimeCode"), _tcType);
+		if(stripDocument.elementsByTagName("state").count()) {
+			QDomElement state = stripDocument.elementsByTagName("state").at(0).toElement();
+			_lastFrame = PhTimeCode::frameFromString(state.attribute("lastTimeCode"), _tcType);
+		}
 	}
-	return succeed;
+	return result;
 }
 
 bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)

@@ -326,10 +326,10 @@ void StripDocTest::openStripFileTest()
 
 	// Test accepted files
 	QVERIFY(QFile::exists("empty_root.joker"));
-//	QVERIFY(doc.openStripFile("empty_root.joker"));
+	QVERIFY(doc.openStripFile("empty_root.joker"));
 
 	QVERIFY(QFile::exists("empty_meta.joker"));
-//	QVERIFY(doc.openStripFile("empty_meta.joker"));
+	QVERIFY(doc.openStripFile("empty_meta.joker"));
 }
 
 void StripDocTest::getPeopleByNameTest()

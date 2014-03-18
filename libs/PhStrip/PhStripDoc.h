@@ -9,9 +9,7 @@
 
 #include <QList>
 #include <QMap>
-#include <QtXml>
-#include <QXmlStreamWriter>
-#include <QDomDocument>
+#include <QFile>
 
 #include "PhTools/PhTimeCode.h"
 
