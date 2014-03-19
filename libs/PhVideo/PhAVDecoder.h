@@ -35,10 +35,32 @@ class PhAVDecoder : public QObject
 	Q_OBJECT
 public:
 	explicit PhAVDecoder(QObject *parent = 0);
+
 	bool open(QString fileName);
 	void close();
 
 	uint8_t* getBuffer(PhFrame frame);
+
+	PhTimeCodeType timeCodeType();
+	PhFrame firstFrame();
+
+	int width();
+	int height();
+	/**
+	 * @brief Get the length
+	 * @return the length of the video
+	 */
+	PhFrame length();
+	/**
+	 * @brief get frame per second
+	 * @return the FPS of the video file
+	 */
+	float framePerSecond();
+	/**
+	 * @brief Get the codec name
+	 * @return the codec name
+	 */
+	QString codecName();
 
 signals:
 	void finished();

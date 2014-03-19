@@ -12,8 +12,7 @@
 VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	: PhDocumentWindow(settings),
 	ui(new Ui::VideoTestWindow),
-	_settings(settings),
-	_videoEngine(false)
+	_settings(settings)
 {
 	ui->setupUi(this);
 	_videoEngine.setSettings(settings);

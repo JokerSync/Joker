@@ -7,20 +7,6 @@
 #ifndef PHVIDEOENGINE_H
 #define PHVIDEOENGINE_H
 
-extern "C" {
-#ifndef INT64_C
-/** see http://code.google.com/p/ffmpegsource/issues/detail?id=11#c13 */
-#define INT64_C(c) (c ## LL)
-/** and http://code.google.com/p/ffmpegsource/issues/detail?id=11#c23 */
-#define UINT64_C(c) (c ## ULL)
-#endif
-
-#include <libavformat/avformat.h>
-#include <libavutil/avutil.h>
-#include <libavcodec/avcodec.h>
-#include <libswscale/swscale.h>
-}
-
 #include <QObject>
 #include <QElapsedTimer>
 #include <QSemaphore>
@@ -45,10 +31,9 @@ class PhVideoEngine : public QObject
 public:
 	/**
 	 * @brief PhVideoEngine constructor
-	 * @param useAudio Shall decode audio frame?
-	 * @param parent The parent object
 	 */
-	explicit PhVideoEngine(bool useAudio, QObject *parent = 0);
+	explicit PhVideoEngine();
+
 	~PhVideoEngine();
 
 	// Properties
@@ -77,19 +62,12 @@ public:
 	 * @brief Get last frame
 	 * @return the last frame of the video file
 	 */
-	PhFrame lastFrame() {
-		return _firstFrame + length() - 1;
-	}
+	PhFrame lastFrame();
 	/**
 	 * @brief Get the length
 	 * @return the length of the video
 	 */
 	PhFrame length();
-	/**
-	 * @brief Get the codec name
-	 * @return the codec name
-	 */
-	QString codecName();
 	/**
 	 * @brief Get the width
 	 * @return the PhVideoEngine width (not necessary the video width)
@@ -101,10 +79,10 @@ public:
 	 */
 	int height();
 	/**
-	 * @brief get frame per second
-	 * @return the FPS of the video file
+	 * @brief Get the codec name
+	 * @return the codec name
 	 */
-	float framePerSecond();
+	QString codecName();
 
 	/**
 	 * @brief Set the settings
@@ -143,22 +121,16 @@ public slots:
 	void errorString(QString);
 
 private:
-	int64_t frame2time(PhFrame f);
-	PhFrame time2frame(int64_t t);
-
 	PhVideoSettings *_settings;
 	QString _fileName;
 	PhClock _clock;
 	PhFrame _firstFrame;
 	PhFrame _oldFrame;
 
-	AVFormatContext *_pFormatContext;
-	AVStream *_videoStream;
-
-	PhAVDecoder * _decoder;
-	QThread * _thread;
+	PhAVDecoder *_decoder;
 
 	PhGraphicTexturedRect _videoRect;
+	PhTickCounter _frameCounter;
 };
 
 #endif // PHVIDEOENGINE_H

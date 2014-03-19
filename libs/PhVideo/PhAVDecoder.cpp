@@ -23,6 +23,8 @@ bool PhAVDecoder::open(QString fileName)
 	if (avformat_find_stream_info(_pFormatContext, NULL) < 0)
 		return false; // Couldn't find stream information
 
+	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
+
 	_firstFrame = 0;
 	_videoStream = NULL;
 	_audioStream = NULL;
@@ -59,6 +61,9 @@ bool PhAVDecoder::open(QString fileName)
 		PHDEBUG << "Found timestamp:" << tag->value;
 		_firstFrame = PhTimeCode::frameFromString(tag->value, PhTimeCodeType25);
 	}
+
+	PHDEBUG << "length:" << this->length();
+	PHDEBUG << "fps:" << this->framePerSecond();
 
 	PHDEBUG << "size : " << _videoStream->codec->width << "x" << _videoStream->codec->height;
 	AVCodec * videoCodec = avcodec_find_decoder(_videoStream->codec->codec_id);
@@ -122,9 +127,89 @@ uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 	}
 	return buffer;
 }
+
+PhTimeCodeType PhAVDecoder::timeCodeType()
+{
+	// Looking for timecode type
+	float fps = framePerSecond();
+
+	if(fps == 0) {
+		PHDEBUG << "Bad fps detect => assuming 25";
+		return PhTimeCodeType25;
+	}
+	else if(fps < 24)
+		return PhTimeCodeType2398;
+	else if (fps < 24.5f)
+		return PhTimeCodeType24;
+	else if (fps < 26)
+		return PhTimeCodeType25;
+	else if (fps < 30)
+		return PhTimeCodeType2997;
+	else {
+#warning /// @todo patch for #107 => find better fps decoding
+		PHDEBUG << "Bad fps detect => assuming 25";
+		return PhTimeCodeType25;
+	}
+
+}
+
+PhFrame PhAVDecoder::firstFrame()
+{
+	// Reading timestamp :
+	AVDictionaryEntry *tag = av_dict_get(_pFormatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+	if(tag == NULL)
+		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+
+	if(tag) {
+		PHDEBUG << "Found timestamp:" << tag->value;
+		_firstFrame = PhTimeCode::frameFromString(tag->value, timeCodeType());
+	}
+	return _firstFrame;
+}
+
+int PhAVDecoder::width()
+{
+	if(_videoStream)
+		return _videoStream->codec->width;
+	else
+		return 0;
+}
+
+int PhAVDecoder::height()
+{
+	if(_videoStream)
+		return _videoStream->codec->height;
+	else
+		return 0;
+}
+
+PhFrame PhAVDecoder::length()
+{
+	if(_videoStream)
+		return time2frame(_videoStream->duration);
+	return 0;
+}
+
+float PhAVDecoder::framePerSecond()
+{
+	float fps = 0;
+	if(_videoStream) {
+		fps = _videoStream->avg_frame_rate.num;
+		fps /= _videoStream->avg_frame_rate.den;
+	}
+	return fps;
+}
+
+QString PhAVDecoder::codecName()
+{
+	if(_videoStream)
+		return _videoStream->codec->codec_name;
+	return "";
+}
+
 void PhAVDecoder::process()
 {
-	while(true){
+	while(_pFormatContext){
 
 //Store elsewhere in a slot
 		int flags = AVSEEK_FLAG_ANY;
@@ -189,7 +274,7 @@ void PhAVDecoder::process()
 		_currentFrame++;
 		_framesProcessed.release();
 	}
-
+	PHDEBUG << "Bye bye";
 }
 
 void PhAVDecoder::quit()
