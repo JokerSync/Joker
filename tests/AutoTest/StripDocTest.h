@@ -32,7 +32,8 @@ private slots:
 
 	// Open any doc (*.detx, *.strip, *.joker) test
 	void openStripFileTest();
-//	void openSaveTest();
+	void openSaveTest01();
+	void openSaveTest02();
 
 	// Get people
 	void getPeopleByNameTest();

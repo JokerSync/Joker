@@ -343,10 +343,49 @@ void StripDocTest::openStripFileTest()
 	QVERIFY(doc.openStripFile("empty_meta.joker"));
 }
 
-//void StripDocTest::openSaveTest()
-//{
+void StripDocTest::openSaveTest01()
+{
+	PhStripDoc doc1;
 
-//}
+	QVERIFY(doc1.openStripFile("test01.joker"));
+
+	QVERIFY(doc1.saveStrip("save01.joker", "01:01:01:01", !doc1.forceRatio169()));
+
+	PhStripDoc doc2;
+
+	QVERIFY(doc2.openStripFile("save01.joker"));
+
+	QCOMPARE(doc2.getFilePath(), doc1.getFilePath());
+	QCOMPARE(doc2.getVideoPath(), doc1.getVideoPath());
+	QCOMPARE(f2s(doc2.getVideoTimestamp()), f2s(doc2.getVideoTimestamp()));
+	QCOMPARE(doc2.forceRatio169(), !doc1.forceRatio169());
+	QCOMPARE(f2s(doc2.getLastFrame()), QString("01:01:01:01"));
+
+	QCOMPARE(doc2.getTitle(), doc1.getTitle());
+	QCOMPARE(doc2.getGenerator(), doc1.getGenerator());
+}
+
+void StripDocTest::openSaveTest02()
+{
+	PhStripDoc doc1;
+
+	QVERIFY(doc1.openStripFile("test02.joker"));
+
+	QVERIFY(doc1.saveStrip("save02.joker", "02:02:02:02", !doc1.forceRatio169()));
+
+	PhStripDoc doc2;
+
+	QVERIFY(doc2.openStripFile("save02.joker"));
+
+	QCOMPARE(doc2.getFilePath(), doc1.getFilePath());
+	QCOMPARE(doc2.getVideoPath(), doc1.getVideoPath());
+	QCOMPARE(f2s(doc2.getVideoTimestamp(), doc2.getTCType()), f2s(doc1.getVideoTimestamp(), doc1.getTCType()));
+	QCOMPARE(doc2.forceRatio169(), !doc1.forceRatio169());
+	QCOMPARE(f2s(doc2.getLastFrame(), doc2.getTCType()), QString("02:02:02:02"));
+
+	QCOMPARE(doc2.getTitle(), doc1.getTitle());
+	QCOMPARE(doc2.getGenerator(), doc1.getGenerator());
+}
 
 void StripDocTest::getPeopleByNameTest()
 {

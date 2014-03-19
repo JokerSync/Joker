@@ -660,7 +660,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 	else if(extension == "strip" or extension == "joker") {
 		QFile xmlFile(fileName);
 		if(!xmlFile.open(QIODevice::ReadOnly)) {
-			PHDEBUG << "Unable to open" << fileName;
+			PHDEBUG << "Unable to open" << fileName << xmlFile.errorString();
 			return false;
 		}
 
@@ -671,12 +671,12 @@ bool PhStripDoc::openStripFile(QString fileName)
 			PHDEBUG << "The XML document seems to be bad formed" << fileName;
 			return false;
 		}
+		xmlFile.close();
 
 		PHDEBUG << ("Start parsing " + fileName);
 		QDomElement stripDocument = domDoc->documentElement();
 
 		if(stripDocument.tagName() != "strip" && stripDocument.tagName() != "joker") {
-			xmlFile.close();
 			PHDEBUG << "Bad root element :" << stripDocument.tagName();
 			return false;
 		}
@@ -742,18 +742,19 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
 #endif
 				xmlWriter->writeEndElement();
 
-				xmlWriter->writeStartElement("media");
-				xmlWriter->writeAttribute("type", "detx");
-				xmlWriter->writeCharacters(getFilePath());
-				xmlWriter->writeEndElement();
+				if(_filePath.length() > 0) {
+					QFileInfo info(_filePath);
+					xmlWriter->writeStartElement("media");
+					xmlWriter->writeAttribute("type", info.suffix());
+					xmlWriter->writeCharacters(getFilePath());
+					xmlWriter->writeEndElement();
+				}
 
 				xmlWriter->writeStartElement("media");
 				xmlWriter->writeAttribute("type", "video");
-				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoFrameStamp, PhTimeCodeType25));
+				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoFrameStamp, _tcType));
 				if(forceRatio169)
-					xmlWriter->writeAttribute("forceRatio", "YES");
-				else
-					xmlWriter->writeAttribute("forceRatio", "NO");
+					xmlWriter->writeAttribute("forceRatio", "yes");
 				xmlWriter->writeCharacters(_videoPath);
 				xmlWriter->writeEndElement();
 
