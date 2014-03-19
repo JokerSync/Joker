@@ -19,15 +19,11 @@ class PhPeople {
 
 public:
 	/**
-	 * @brief PhPeople constructor
-	 */
-	PhPeople();
-	/**
 	 * @brief PhPeople
 	 * @param name
 	 * @param color
 	 */
-	PhPeople(QString name, QString color);
+	PhPeople(QString name = "???", QString color = "#000000");
 	/**
 	 * @brief Get the name
 	 * @return a string

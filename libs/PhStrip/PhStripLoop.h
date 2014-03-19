@@ -28,14 +28,9 @@ private:
 
 public:
 	/**
-	 * @brief PhStripLoop
-	 * default constructor
-	 */
-	PhStripLoop();
-	/**
 	 * @brief PhStripLoop constructor
-	 * @param number
-	 * @param TimeIn
+	 * @param number The loop number
+	 * @param TimeIn The loop TC
 	 */
 	PhStripLoop(int number, PhTime TimeIn);
 

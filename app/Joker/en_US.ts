@@ -59,7 +59,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="125"/>
-        <location filename="JokerWindow.cpp" line="306"/>
+        <location filename="JokerWindow.cpp" line="307"/>
         <source>Open...</source>
         <translation>Open...</translation>
     </message>
@@ -321,33 +321,34 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="305"/>
+        <location filename="JokerWindow.cpp" line="306"/>
+        <location filename="JokerWindow.cpp" line="400"/>
         <source>All files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="398"/>
+        <location filename="JokerWindow.cpp" line="399"/>
         <source>Movie files</source>
         <translation>Movie files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="398"/>
+        <location filename="JokerWindow.cpp" line="402"/>
         <source>Open a video...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="631"/>
-        <location filename="JokerWindow.cpp" line="656"/>
+        <location filename="JokerWindow.cpp" line="635"/>
+        <location filename="JokerWindow.cpp" line="660"/>
         <source>Unable to save </source>
         <translation>Unable to save </translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="649"/>
+        <location filename="JokerWindow.cpp" line="653"/>
         <source>Save...</source>
         <translation>Save...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="666"/>
+        <location filename="JokerWindow.cpp" line="670"/>
         <source>Do you want to save your changes ?</source>
         <translation>Do you want to save your changes ?</translation>
     </message>
@@ -375,18 +376,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="36"/>
+        <location filename="PeopleDialog.cpp" line="34"/>
         <source>The list is empty...</source>
         <oldsource>The list is empty</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="41"/>
+        <location filename="PeopleDialog.cpp" line="39"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="42"/>
+        <location filename="PeopleDialog.cpp" line="40"/>
         <source>Cancel</source>
         <translation type="unfinished">Cancel</translation>
     </message>

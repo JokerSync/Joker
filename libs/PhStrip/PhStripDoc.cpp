@@ -5,8 +5,12 @@
  */
 
 
-#include <QFile>
 #include <QFileInfo>
+#include <QDomDocument>
+#include <QDomNodeList>
+#include <QtXml>
+#include <QXmlStreamWriter>
+
 #include "PhTools/PhFileTool.h"
 #include "PhStripDoc.h"
 
@@ -68,8 +72,7 @@ bool PhStripDoc::importDetX(QString fileName)
 		if(header.elementsByTagName("title").count())
 			_title = header.elementsByTagName("title").at(0).toElement().text();
 		else
-			_title = QFileInfo(fileName).fileName().split(".").first();
-
+			_title = QFileInfo(fileName).baseName();
 
 		// Reading the translated title
 		if(header.elementsByTagName("title2").count())
@@ -211,18 +214,6 @@ bool PhStripDoc::checkMosTag(QFile &f, int level, MosTag expectedTag)
 	return true;
 }
 
-bool PhStripDoc::checkMosWord(QFile &f, int level, unsigned short expected)
-{
-	QString name = QString::number(expected, 16);
-	unsigned short word = PhFileTool::readShort(f, level, PHNQ(name));
-	if(word != expected) {
-		PHDEBUG << "!!!!!!!!!!!!!!!" << "Error reading " << PHNQ(QString::number(word, 16)) << "instead of" << name << "!!!!!!!!!!!!!!!";
-		f.close();
-		return false;
-	}
-	return true;
-}
-
 PhStripText* PhStripDoc::readMosText(QFile &f, int level)
 {
 	int internLevel = 4;
@@ -262,9 +253,18 @@ void PhStripDoc::readMosDetect(QFile &f, int level)
 
 bool PhStripDoc::readMosProperties(QFile &f, int level)
 {
-	PhFileTool::readString(f, level, "Titre de la versio originale");
+	QString originalTitle = PhFileTool::readString(f, level, "Titre de la versio originale");
 
-	_title = PhFileTool::readString(f, level, "Titre de la version adaptée");
+	QString translatedTitle = PhFileTool::readString(f, level, "Titre de la version adaptée");
+
+	_metaInformation["Titre de la version originale"] = originalTitle;
+	_metaInformation["Titre de la version adaptée"] = translatedTitle;
+
+	if(originalTitle.length())
+		_title = originalTitle;
+	else if(translatedTitle.length())
+		_title = translatedTitle;
+
 	_season = PhFileTool::readString(f, level, "Saison");
 	_episode = PhFileTool::readString(f, level, "Episode/bobine");
 	PhFileTool::readString(f, level, "Titre vo episode");
@@ -422,6 +422,9 @@ bool PhStripDoc::importMos(QString fileName)
 
 	this->reset();
 
+	_filePath = fileName;
+	_title = QFileInfo(fileName).baseName();
+
 	int level = 0;
 	int ok = level;
 	int propLevel = level;
@@ -435,6 +438,8 @@ bool PhStripDoc::importMos(QString fileName)
 
 	if(!checkMosTag2(f, blocLevel, "NOBLURMOSAIC"))
 		return false;
+
+	_generator = "Mosaic";
 
 	PhFileTool::readShort(f, blocLevel, "CMosaicDoc");
 	int strangeNumber3 = PhFileTool::readShort(f, blocLevel, "CMosaicDoc");
@@ -622,12 +627,15 @@ bool PhStripDoc::importMos(QString fileName)
 
 	f.close();
 
+	emit this->changed();
+
 	return true;
 }
 
 bool PhStripDoc::openStripFile(QString fileName)
 {
-	bool succeed = false;
+	PHDEBUG << fileName;
+	bool result = false;
 
 	QString extension = QFileInfo(fileName).suffix();
 	// Try to open the document
@@ -640,7 +648,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 	else if(extension == "strip" or extension == "joker") {
 		QFile xmlFile(fileName);
 		if(!xmlFile.open(QIODevice::ReadOnly)) {
-			PHDEBUG << "Unable to open" << fileName;
+			PHDEBUG << "Unable to open" << fileName << xmlFile.errorString();
 			return false;
 		}
 
@@ -651,36 +659,41 @@ bool PhStripDoc::openStripFile(QString fileName)
 			PHDEBUG << "The XML document seems to be bad formed" << fileName;
 			return false;
 		}
+		xmlFile.close();
 
 		PHDEBUG << ("Start parsing " + fileName);
 		QDomElement stripDocument = domDoc->documentElement();
 
 		if(stripDocument.tagName() != "strip" && stripDocument.tagName() != "joker") {
-			xmlFile.close();
 			PHDEBUG << "Bad root element :" << stripDocument.tagName();
 			return false;
 		}
 
-		QDomElement metaInfo =  stripDocument.elementsByTagName("meta").at(0).toElement();
-		// Reading the header
-		if(stripDocument.elementsByTagName("meta").count()) {
-			for(int i = 0; i < stripDocument.elementsByTagName("media").count(); i++) {
-				QDomElement line = metaInfo.elementsByTagName("media").at(i).toElement();
-				PHDEBUG << "line" << line.attribute("type");
-				if(line.attribute("type") == "detx")
-					succeed = importDetX(line.text());
+		result = true;
 
-				if(line.attribute("type")  == "video") {
-					_videoPath = line.text();
-					_videoFrameStamp = PhTimeCode::frameFromString(line.attribute("tcStamp"), _tcType);
-					_forceRatio169 = line.attribute("forceRatio") == "YES";
-				}
+		// Reading the media nodes
+		QDomNodeList mediaList = stripDocument.elementsByTagName("media");
+		for(int i = 0; i < mediaList.count(); i++) {
+			QDomElement media = mediaList.at(i).toElement();
+			QString type = media.attribute("type");
+			PHDEBUG << "line" << type;
+			if(type == "detx")
+				result = importDetX(media.text());
+			else if(type == "mos")
+				result = importMos(media.text());
+			else if(type == "video") {
+				_videoPath = media.text();
+				_videoFrameStamp = PhTimeCode::frameFromString(media.attribute("tcStamp"), _tcType);
+				_forceRatio169 = media.attribute("forceRatio").toLower() == "yes";
 			}
 		}
-		_lastFrame = PhTimeCode::frameFromString(metaInfo.elementsByTagName("state").at(0).toElement().attribute("lastTimeCode"), _tcType);
-	}
-	return succeed;
 
+		if(stripDocument.elementsByTagName("state").count()) {
+			QDomElement state = stripDocument.elementsByTagName("state").at(0).toElement();
+			_lastFrame = PhTimeCode::frameFromString(state.attribute("lastTimeCode"), _tcType);
+		}
+	}
+	return result;
 }
 
 bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
@@ -717,18 +730,19 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
 #endif
 				xmlWriter->writeEndElement();
 
-				xmlWriter->writeStartElement("media");
-				xmlWriter->writeAttribute("type", "detx");
-				xmlWriter->writeCharacters(getFilePath());
-				xmlWriter->writeEndElement();
+				if(_filePath.length() > 0) {
+					QFileInfo info(_filePath);
+					xmlWriter->writeStartElement("media");
+					xmlWriter->writeAttribute("type", info.suffix());
+					xmlWriter->writeCharacters(getFilePath());
+					xmlWriter->writeEndElement();
+				}
 
 				xmlWriter->writeStartElement("media");
 				xmlWriter->writeAttribute("type", "video");
-				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoFrameStamp, PhTimeCodeType25));
+				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoFrameStamp, _tcType));
 				if(forceRatio169)
-					xmlWriter->writeAttribute("forceRatio", "YES");
-				else
-					xmlWriter->writeAttribute("forceRatio", "NO");
+					xmlWriter->writeAttribute("forceRatio", "yes");
 				xmlWriter->writeCharacters(_videoPath);
 				xmlWriter->writeEndElement();
 
@@ -814,6 +828,7 @@ void PhStripDoc::reset()
 	_videoFrameStamp = 0;
 	_authorName = "";
 	_forceRatio169 = false;
+	_generator = "";
 	_mosNextTag = 0x8008;
 
 	emit this->changed();

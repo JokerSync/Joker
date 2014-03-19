@@ -8,6 +8,8 @@
 #define PHVIDEOVIEW_H
 
 #include "PhGraphic/PhGraphicView.h"
+#include "PhGraphic/PhFont.h"
+
 #include "PhVideoEngine.h"
 
 /**
@@ -41,6 +43,8 @@ protected:
 
 private:
 	PhVideoEngine *_videoEngine;
+	PhFont _font;
+	int _maxGraphicRate, _maxVideoRate;
 };
 
 #endif // PHVIDEOVIEW_H

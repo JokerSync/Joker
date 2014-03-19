@@ -8,6 +8,7 @@
 #define PHGRAPHICSTRIP_H
 
 #include <QObject>
+#include <QTime>
 
 #include "PhGraphicStripSettings.h"
 
@@ -131,7 +132,7 @@ private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
 	 */
-	void clearData();
+	void onDocChanged();
 
 private:
 

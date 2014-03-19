@@ -33,11 +33,6 @@ public:
 	 * @return _content
 	 */
 	QString getContent();
-	/**
-	 * @brief Set the text content
-	 * @param content the desired content
-	 */
-	void setContent(QString content);
 
 private:
 
@@ -45,8 +40,6 @@ private:
  * Text string of Sentence or part of a sentence.
  */
 	QString _content;
-
-
 };
 
 #endif // PHSTRIPTEXT_H

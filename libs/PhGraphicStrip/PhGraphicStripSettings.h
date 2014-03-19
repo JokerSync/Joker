@@ -2,6 +2,7 @@
 #define PHGRAPHICSTRIPSETTINGS_H
 
 #include <QString>
+#include <QDir>
 
 /**
  * @brief The settings for PhGraphicStrip

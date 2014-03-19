@@ -21,7 +21,7 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	_settings(NULL)
 {
 	// update the  content when the doc changes :
-	this->connect(&_doc, SIGNAL(changed()), this, SLOT(clearData()));
+	this->connect(&_doc, SIGNAL(changed()), this, SLOT(onDocChanged()));
 
 	// This is used to make some time-based test
 	_testTimer.start();
@@ -57,9 +57,6 @@ bool PhGraphicStrip::setFontFile(QString fontFile)
 bool PhGraphicStrip::init()
 {
 	PHDEBUG << _settings;
-
-	// Clear the data stored
-	clearData();
 
 	PHDEBUG << "Load the strip background";
 	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png");
@@ -99,7 +96,7 @@ bool PhGraphicStrip::init()
 	return true;
 }
 
-void PhGraphicStrip::clearData()
+void PhGraphicStrip::onDocChanged()
 {
 	foreach(PhGraphicText * gPeople, _graphicPeoples.values())
 	delete gPeople;
@@ -120,6 +117,17 @@ void PhGraphicStrip::clearData()
 	foreach(PhGraphicRect * gDetect, _graphicDetects.values())
 	delete gDetect;
 	_graphicDetects.clear();
+
+	_trackNumber = 4;
+	foreach(PhStripText *text, _doc.getTexts()) {
+		if(text->getTrack() >= _trackNumber)
+			_trackNumber = text->getTrack() + 1;
+	}
+
+	foreach(PhStripDetect *detect, _doc.getDetects()) {
+		if(detect->getTrack() >= _trackNumber)
+			_trackNumber = detect->getTrack() + 1;
+	}
 }
 
 PhFont *PhGraphicStrip::getTextFont()

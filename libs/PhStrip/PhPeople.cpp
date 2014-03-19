@@ -6,12 +6,6 @@
 
 #include "PhPeople.h"
 
-PhPeople::PhPeople()
-{
-	_name = "???";
-	_color = "#000000";
-}
-
 PhPeople::PhPeople(QString name, QString color)
 {
 	_name = name;

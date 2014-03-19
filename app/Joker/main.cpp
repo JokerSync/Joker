@@ -6,6 +6,7 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QTranslator>
 
 #include "PhStrip/PhStripDoc.h"
 

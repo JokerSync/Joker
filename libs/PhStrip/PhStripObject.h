@@ -24,11 +24,6 @@ private:
 public:
 	/**
 	 * @brief PhStripObject
-	 * default constructor
-	 */
-	PhStripObject();
-	/**
-	 * @brief PhStripObject
 	 * @param time
 	 * contructor
 	 */
@@ -38,11 +33,6 @@ public:
 	 * @return _timeIn
 	 */
 	PhTime getTimeIn();
-	/**
-	 * @brief Set the time in of the PhStripObject
-	 * @param timeIn
-	 */
-	void setTimeIn(PhTime timeIn);
 };
 
 #endif // PHSTRIPOBJECT_H

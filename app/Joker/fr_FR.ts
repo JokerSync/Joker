@@ -59,7 +59,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="125"/>
-        <location filename="JokerWindow.cpp" line="306"/>
+        <location filename="JokerWindow.cpp" line="307"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -322,32 +322,38 @@
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="305"/>
+        <source>Mosaic files</source>
+        <translation>Fichiers Mosaic</translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="306"/>
+        <location filename="JokerWindow.cpp" line="400"/>
         <source>All files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="398"/>
+        <location filename="JokerWindow.cpp" line="399"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="398"/>
+        <location filename="JokerWindow.cpp" line="402"/>
         <source>Open a video...</source>
         <translation>Ouvrir un fichier vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="631"/>
-        <location filename="JokerWindow.cpp" line="656"/>
+        <location filename="JokerWindow.cpp" line="635"/>
+        <location filename="JokerWindow.cpp" line="660"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="649"/>
+        <location filename="JokerWindow.cpp" line="653"/>
         <source>Save...</source>
         <translation>Enregistrer...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="666"/>
+        <location filename="JokerWindow.cpp" line="670"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
@@ -375,18 +381,18 @@
         <translation>Tout désélectionner</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="36"/>
+        <location filename="PeopleDialog.cpp" line="34"/>
         <source>The list is empty...</source>
         <oldsource>The list is empty</oldsource>
         <translation>La liste est vide...</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="41"/>
+        <location filename="PeopleDialog.cpp" line="39"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="42"/>
+        <location filename="PeopleDialog.cpp" line="40"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>

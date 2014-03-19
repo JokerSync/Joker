@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<joker>
+	<meta>
+		<media type="mos">test03.mos</media>
+		<media type="video" tcStamp="01:03:00:00">test02.mov</media>
+		<state lastTimeCode="01:20:00:00"/>
+	</meta>
+</joker>
