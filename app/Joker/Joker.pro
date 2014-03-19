@@ -12,7 +12,7 @@ TEMPLATE = app
 QT += core gui
 
 # The application version
-VERSION = 1.1.6
+VERSION = 1.1.7
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
