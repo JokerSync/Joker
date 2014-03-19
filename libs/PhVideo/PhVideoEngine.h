@@ -117,6 +117,10 @@ public:
 	 */
 	void drawVideo(int x, int y, int w, int h);
 
+	int refreshRate() {
+		return _frameCounter.frequency();
+	}
+
 public slots:
 	void errorString(QString);
 

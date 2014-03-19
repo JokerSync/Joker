@@ -66,7 +66,6 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		if(frame != _oldFrame) {
 			uint8_t *buffer = _decoder->getBuffer(frame);
 			if(buffer) {
-				PHDEBUG << "Read :" << frame << _frameCounter.frequency();
 				_videoRect.createTextureFromARGBBuffer(buffer, _decoder->width(), _decoder->height());
 				_oldFrame = frame;
 #warning /// @todo delete buffer
