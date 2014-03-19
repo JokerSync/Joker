@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AVTestWindow</class>
+ <widget class="QMainWindow" name="AVTestWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>AVTest</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="PhVideoView" name="_videoView" native="true"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+   </widget>
+   <widget class="QMenu" name="menuControl">
+    <property name="title">
+     <string>Control</string>
+    </property>
+    <addaction name="actionPlay_pause"/>
+    <addaction name="actionReverse"/>
+    <addaction name="actionNext_frame"/>
+    <addaction name="actionPrevious_frame"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_timestamp"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuControl"/>
+  </widget>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionPlay_pause">
+   <property name="text">
+    <string>Play/pause</string>
+   </property>
+   <property name="shortcut">
+    <string>Up</string>
+   </property>
+  </action>
+  <action name="actionNext_frame">
+   <property name="text">
+    <string>Next frame</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actionPrevious_frame">
+   <property name="text">
+    <string>Previous frame</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
+   </property>
+  </action>
+  <action name="actionSet_timestamp">
+   <property name="text">
+    <string>Set timestamp...</string>
+   </property>
+  </action>
+  <action name="actionReverse">
+   <property name="text">
+    <string>Reverse</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PhVideoView</class>
+   <extends>QWidget</extends>
+   <header>PhVideo/PhVideoView.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

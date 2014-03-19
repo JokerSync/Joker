@@ -41,9 +41,10 @@ class PhVideoEngine : public QObject
 public:
 	/**
 	 * @brief PhVideoEngine constructor
+	 * @param useAudio Shall decode audio frame?
 	 * @param parent The parent object
 	 */
-	explicit PhVideoEngine(QObject *parent = 0);
+	explicit PhVideoEngine(bool useAudio, QObject *parent = 0);
 	~PhVideoEngine();
 
 	// Properties
@@ -158,8 +159,7 @@ private:
 
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;
-	AVCodecContext * _pCodecContext;
-	AVFrame * _pFrame;
+	AVFrame * _videoFrame;
 	struct SwsContext * _pSwsCtx;
 	PhGraphicTexturedRect videoRect;
 	uint8_t * _rgb;
@@ -168,7 +168,9 @@ private:
 	QElapsedTimer _testTimer;
 	PhTickCounter _videoFrameTickCounter;
 
-
+	bool _useAudio;
+	AVStream *_audioStream;
+	AVFrame * _audioFrame;
 };
 
 #endif // PHVIDEOENGINE_H
