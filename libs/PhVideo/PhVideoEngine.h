@@ -23,12 +23,16 @@ extern "C" {
 
 #include <QObject>
 #include <QElapsedTimer>
+#include <QSemaphore>
+#include <QThread>
 
 #include "PhTools/PhClock.h"
 #include "PhTools/PhTickCounter.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
 
 #include "PhVideoSettings.h"
+
+#include "PhAVDecoder.h"
 
 /**
  * @brief The video engine
@@ -101,13 +105,6 @@ public:
 	 * @return the FPS of the video file
 	 */
 	float framePerSecond();
-	/**
-	 * @brief Get refreshRate
-	 * @return Return the refresh rate of the PhVideoEngine
-	 */
-	int refreshRate() {
-		return _videoFrameTickCounter.frequency();
-	}
 
 	/**
 	 * @brief Set the settings
@@ -147,30 +144,36 @@ public:
 	 */
 	void drawVideo(int x, int y, int w, int h);
 
+public slots:
+	void errorString(QString);
+
 private:
-	bool goToFrame(PhFrame frame);
 	int64_t frame2time(PhFrame f);
 	PhFrame time2frame(int64_t t);
 
+	PhFrame _firstFrame;
+	PhFrame _oldFrame;
 	PhVideoSettings *_settings;
 	QString _fileName;
 	PhClock _clock;
-	PhFrame _firstFrame;
 
-	AVFormatContext * _pFormatContext;
+	QMap<PhFrame, uint8_t * > * _nextImages;
+
+	PhAVDecoder * _decoder;
+	QSemaphore * _framesProcessed;
+	QSemaphore * _framesFree;
+	QThread * _thread;
+
 	AVStream *_videoStream;
-	AVFrame * _videoFrame;
-	struct SwsContext * _pSwsCtx;
-	PhGraphicTexturedRect videoRect;
-	uint8_t * _rgb;
-	PhFrame _currentFrame;
+	AVFormatContext * _pFormatContext;
 
-	QElapsedTimer _testTimer;
-	PhTickCounter _videoFrameTickCounter;
+	PhGraphicTexturedRect * _videoRect;
 
-	bool _useAudio;
-	AVStream *_audioStream;
-	AVFrame * _audioFrame;
+
+
+
+
+
 };
 
 #endif // PHVIDEOENGINE_H

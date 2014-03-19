@@ -10,31 +10,26 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 	_settings(NULL),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
-	_firstFrame(0),
-	_pFormatContext(NULL),
-	_videoStream(NULL),
-	_videoFrame(NULL),
-	_pSwsCtx(NULL),
-	_rgb(NULL),
-	_currentFrame(-1),
-	_useAudio(useAudio),
-	_audioStream(NULL),
-	_audioFrame(NULL)
+	_firstFrame(0)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
-
-	_testTimer.start();
+	_framesProcessed = new QSemaphore(0);
+	_framesFree = new QSemaphore(100);
+	_decoder = NULL;
+	_videoRect = new PhGraphicTexturedRect();
+	_nextImages = new QMap<PhFrame, uint8_t * >;
 }
 
 bool PhVideoEngine::ready()
 {
-	return (_pFormatContext && _videoStream && _videoFrame);
+//	return (_pFormatContext && _videoStream && _videoFrame);
+	return true;
 }
 
 bool PhVideoEngine::open(QString fileName)
 {
-	close();
+
 	PHDEBUG << fileName;
 	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
 		return false;
@@ -47,7 +42,6 @@ bool PhVideoEngine::open(QString fileName)
 
 	_firstFrame = 0;
 	_videoStream = NULL;
-	_audioStream = NULL;
 
 	// Find video stream :
 	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++) {
@@ -59,8 +53,6 @@ bool PhVideoEngine::open(QString fileName)
 			PHDEBUG << "\t=> video";
 			break;
 		case AVMEDIA_TYPE_AUDIO:
-			if(_useAudio && (_audioStream == NULL))
-				_audioStream = _pFormatContext->streams[i];
 			PHDEBUG << "\t=> audio";
 			break;
 		default:
@@ -110,37 +102,23 @@ bool PhVideoEngine::open(QString fileName)
 	}
 
 
-	if (avcodec_open2(_videoStream->codec, videoCodec, NULL) < 0) {
-		PHDEBUG << "Unable to open the codec:" << _videoStream->codec;
-		return false;
-	}
-
-	_videoFrame = avcodec_alloc_frame();
-
 	PHDEBUG << "length:" << this->length();
 	PHDEBUG << "fps:" << this->framePerSecond();
-	_currentFrame = -1;
 	_clock.setFrame(0);
 
-	if(_audioStream) {
-		AVCodec* audioCodec = avcodec_find_decoder(_audioStream->codec->codec_id);
-		if(audioCodec) {
-			if(avcodec_open2(_audioStream->codec, audioCodec, NULL) < 0) {
-				PHDEBUG << "Unable to open audio codec.";
-				_audioStream = NULL;
-			}
-			else {
-				_audioFrame = avcodec_alloc_frame();
-				PHDEBUG << "Audio OK.";
-			}
-		}
-		else {
-			PHDEBUG << "Unable to find codec for audio.";
-			_audioStream = NULL;
-		}
-	}
+	_decoder = new PhAVDecoder(_framesProcessed, _framesFree, * _nextImages);
+	PHDEBUG << &_nextImages;
+	_decoder->open(fileName);
 
-	goToFrame(0);
+	_thread = new QThread;
+
+	_decoder->moveToThread(_thread);
+	connect(_decoder, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
+	connect(_thread, SIGNAL(started()), _decoder, SLOT(process()));
+	connect(_decoder, SIGNAL(finished()), _thread, SLOT(quit()));
+	connect(_decoder, SIGNAL(finished()), _decoder, SLOT(deleteLater()));
+	connect(_thread, SIGNAL(finished()), _thread, SLOT(deleteLater()));
+	_thread->start();
 	_fileName = fileName;
 
 	return true;
@@ -148,18 +126,6 @@ bool PhVideoEngine::open(QString fileName)
 
 void PhVideoEngine::close()
 {
-	PHDEBUG;
-	if(_rgb) {
-		delete _rgb;
-		_rgb = NULL;
-	}
-
-	if(_pFormatContext) {
-		avformat_close_input(&_pFormatContext);
-		_pFormatContext = NULL;
-		_videoStream = NULL;
-	}
-
 	_fileName = "";
 }
 
@@ -174,10 +140,26 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	PhFrame delay = 0;
 	if(_settings)
 		delay = _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
-	goToFrame(_clock.frame() + delay);
-	videoRect.setRect(x, y, w, h);
-	videoRect.setZ(-10);
-	videoRect.draw();
+
+	if(_decoder)
+	{
+		if((_oldFrame - (_clock.frame() + delay) != 0) && _framesProcessed->tryAcquire())
+		{
+			PHDEBUG << "Read :" << _clock.frame() + delay << _nextImages[(_clock.frame() + delay)];
+			_videoRect->createTextureFromARGBBuffer(&_nextImages[(_clock.frame() + delay)], _videoStream->codec->width, _videoStream->codec->height);
+			_nextImages->remove((_clock.frame() + delay));
+			_framesFree->release();
+			_oldFrame = _clock.frame() + delay;
+		}
+		_videoRect->setRect(x, y, w, h);
+		_videoRect->setZ(-10);
+		_videoRect->draw();
+	}
+}
+
+void PhVideoEngine::errorString(QString msg)
+{
+	PHDEBUG << msg;
 }
 
 PhFrame PhVideoEngine::length()
@@ -227,117 +209,6 @@ QString PhVideoEngine::codecName()
 	if(_videoStream)
 		return _videoStream->codec->codec_name;
 	return "";
-}
-
-bool PhVideoEngine::goToFrame(PhFrame frame)
-{
-	//	int lastGotoElapsed = _testTimer.elapsed();
-	int seekElapsed = -1;
-	int readElapsed = -1;
-	int decodeElapsed = -1;
-	int scaleElapsed = -1;
-	int textureElapsed = -1;
-
-	if(!ready()) {
-		PHDEBUG << "not ready";
-		return false;
-	}
-
-	if(frame < this->firstFrame())
-		frame = this->firstFrame();
-	if (frame >= this->lastFrame())
-		frame = this->lastFrame();
-
-	bool result = false;
-	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
-	if (frame == _currentFrame)
-		result = true;
-	else {
-		// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
-		if(frame - _currentFrame != 1) {
-			int flags = AVSEEK_FLAG_ANY;
-			int64_t timestamp = frame2time(frame - _firstFrame);
-			PHDEBUG << "seek:" << frame;
-			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
-		}
-
-		seekElapsed = _testTimer.elapsed();
-
-		AVPacket packet;
-
-		bool lookingForVideoFrame = true;
-		while(lookingForVideoFrame) {
-			int error = av_read_frame(_pFormatContext, &packet);
-			switch(error) {
-			case 0:
-				if(packet.stream_index == _videoStream->index) {
-					_currentFrame = frame;
-
-					readElapsed = _testTimer.elapsed();
-					int frameFinished = 0;
-					avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
-					if(frameFinished) {
-						decodeElapsed = _testTimer.elapsed();
-
-						int frameHeight = _videoFrame->height;
-						if(_settings) {
-							if(_settings->videoDeinterlace())
-								frameHeight = _videoFrame->height / 2;
-						}
-#warning /// @todo Use RGB pixel format
-						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-						                                _videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
-						                                AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
-
-						if(_rgb == NULL)
-							_rgb = new uint8_t[_videoFrame->width * frameHeight * 4];
-						int linesize = _videoFrame->width * 4;
-						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
-						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
-						                   &linesize)) {
-							scaleElapsed = _testTimer.elapsed();
-
-							videoRect.createTextureFromARGBBuffer(_rgb, _videoFrame->width, frameHeight);
-
-							textureElapsed = _testTimer.elapsed();
-
-							_videoFrameTickCounter.tick();
-							result = true;
-						}
-						lookingForVideoFrame = false;
-					} // if frame decode is not finished, let's read another packet.
-				}
-				else if(_audioStream && (packet.stream_index == _audioStream->index)) {
-					int ok = 0;
-					avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
-					if(ok) {
-						PHDEBUG << "audio:" << _audioFrame->nb_samples;
-					}
-				}
-				break;
-			case AVERROR_INVALIDDATA:
-			case AVERROR_EOF:
-			default:
-				{
-					char errorStr[256];
-					av_strerror(error, errorStr, 256);
-					PHDEBUG << frame << "error:" << errorStr;
-					lookingForVideoFrame = false;
-					break;
-				}
-			}
-			//Avoid memory leak
-			av_free_packet(&packet);
-		}
-	}
-
-	//	int currentGotoElapsed = _testTimer.elapsed();
-	//	if(_testTimer.elapsed() > 25)
-	//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
-	//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
-	_testTimer.restart();
-
-	return result;
 }
 
 int64_t PhVideoEngine::frame2time(PhFrame f)
