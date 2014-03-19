@@ -5,13 +5,12 @@
 
 #include "PhAVDecoder.h"
 
-PhAVDecoder::PhAVDecoder(QSemaphore * framesProcessed, QSemaphore * framesFree, QMap<PhFrame, uint8_t * > frames, QObject *parent) :
+PhAVDecoder::PhAVDecoder(QObject *parent) :
 	QObject(parent),
+	_framesProcessed(0),
+	_framesFree(100),
 	_pFormatContext(NULL)
 {
-	_framesProcessed = framesProcessed;
-	_framesFree = framesFree;
-	_nextImages = &frames;
 }
 
 bool PhAVDecoder::open(QString fileName)
@@ -108,6 +107,21 @@ void PhAVDecoder::close()
 		_videoStream = NULL;
 	}
 }
+
+uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
+{
+	uint8_t *buffer = NULL;
+	if(_framesProcessed.tryAcquire()) {
+		_nextImagesMutex.lock();
+		if(_nextImages.contains(frame)) {
+			buffer = _nextImages[frame];
+			_nextImages.remove(frame);
+			_framesFree.release();
+		}
+		_nextImagesMutex.unlock();
+	}
+	return buffer;
+}
 void PhAVDecoder::process()
 {
 	while(true){
@@ -143,8 +157,8 @@ void PhAVDecoder::process()
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
 										   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
 										   &linesize)) {
-							_framesFree->acquire();
-							_nextImages->insert(_currentFrame, rgb);
+							_framesFree.acquire();
+							_nextImages[_currentFrame] = rgb;
 							//PHDEBUG << _currentFrame << rgb;
 						}
 						lookingForVideoFrame = false;
@@ -173,7 +187,7 @@ void PhAVDecoder::process()
 			av_free_packet(&packet);
 		}
 		_currentFrame++;
-		_framesProcessed->release();
+		_framesProcessed.release();
 	}
 
 }

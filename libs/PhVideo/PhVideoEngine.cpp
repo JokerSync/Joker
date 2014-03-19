@@ -10,26 +10,16 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 	_settings(NULL),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
-	_firstFrame(0)
+	_firstFrame(0),
+	_pFormatContext(NULL),
+	_decoder(NULL)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
-	_framesProcessed = new QSemaphore(0);
-	_framesFree = new QSemaphore(100);
-	_decoder = NULL;
-	_videoRect = new PhGraphicTexturedRect();
-	_nextImages = new QMap<PhFrame, uint8_t * >;
-}
-
-bool PhVideoEngine::ready()
-{
-//	return (_pFormatContext && _videoStream && _videoFrame);
-	return true;
 }
 
 bool PhVideoEngine::open(QString fileName)
 {
-
 	PHDEBUG << fileName;
 	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
 		return false;
@@ -106,9 +96,9 @@ bool PhVideoEngine::open(QString fileName)
 	PHDEBUG << "fps:" << this->framePerSecond();
 	_clock.setFrame(0);
 
-	_decoder = new PhAVDecoder(_framesProcessed, _framesFree, * _nextImages);
-	PHDEBUG << &_nextImages;
-	_decoder->open(fileName);
+	_decoder = new PhAVDecoder();
+	if(!_decoder->open(fileName))
+		return false;
 
 	_thread = new QThread;
 
@@ -136,24 +126,22 @@ void PhVideoEngine::setSettings(PhVideoSettings *settings)
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
-	//	_clock.tick(60);
-	PhFrame delay = 0;
-	if(_settings)
-		delay = _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
-
 	if(_decoder)
 	{
-		if((_oldFrame - (_clock.frame() + delay) != 0) && _framesProcessed->tryAcquire())
-		{
-			PHDEBUG << "Read :" << _clock.frame() + delay << _nextImages[(_clock.frame() + delay)];
-			_videoRect->createTextureFromARGBBuffer(&_nextImages[(_clock.frame() + delay)], _videoStream->codec->width, _videoStream->codec->height);
-			_nextImages->remove((_clock.frame() + delay));
-			_framesFree->release();
-			_oldFrame = _clock.frame() + delay;
+		PhFrame frame = _clock.frame() + _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
+		if(frame != _oldFrame) {
+			uint8_t *buffer = _decoder->getBuffer(frame);
+			if(buffer) {
+				PHDEBUG << "Read :" << frame;
+				_videoRect.createTextureFromARGBBuffer(buffer, _videoStream->codec->width, _videoStream->codec->height);
+				_oldFrame = frame;
+#warning /// @todo delete buffer
+				delete buffer;
+			}
 		}
-		_videoRect->setRect(x, y, w, h);
-		_videoRect->setZ(-10);
-		_videoRect->draw();
+		_videoRect.setRect(x, y, w, h);
+		_videoRect.setZ(-10);
+		_videoRect.draw();
 	}
 }
 

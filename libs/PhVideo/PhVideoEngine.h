@@ -131,11 +131,6 @@ public:
 	 */
 	void close();
 	/**
-	 * @brief Prompt if the PhVideoEngine is ready
-	 * @return True if the PhVideoEngine is ready, false otherwise
-	 */
-	bool ready();
-	/**
 	 * @brief draw the video depending on the parameters
 	 * @param x coordinates of the upperleft corner
 	 * @param y coordinates of the upperleft corner
@@ -151,29 +146,19 @@ private:
 	int64_t frame2time(PhFrame f);
 	PhFrame time2frame(int64_t t);
 
-	PhFrame _firstFrame;
-	PhFrame _oldFrame;
 	PhVideoSettings *_settings;
 	QString _fileName;
 	PhClock _clock;
+	PhFrame _firstFrame;
+	PhFrame _oldFrame;
 
-	QMap<PhFrame, uint8_t * > * _nextImages;
+	AVFormatContext *_pFormatContext;
+	AVStream *_videoStream;
 
 	PhAVDecoder * _decoder;
-	QSemaphore * _framesProcessed;
-	QSemaphore * _framesFree;
 	QThread * _thread;
 
-	AVStream *_videoStream;
-	AVFormatContext * _pFormatContext;
-
-	PhGraphicTexturedRect * _videoRect;
-
-
-
-
-
-
+	PhGraphicTexturedRect _videoRect;
 };
 
 #endif // PHVIDEOENGINE_H

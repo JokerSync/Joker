@@ -24,6 +24,7 @@ extern "C" {
 #include <QObject>
 #include <QMap>
 #include <QSemaphore>
+#include <QMutex>
 
 #include "PhGraphic/PhGraphicTexturedRect.h"
 #include "PhTools/PhTime.h"
@@ -33,10 +34,11 @@ class PhAVDecoder : public QObject
 {
 	Q_OBJECT
 public:
-	explicit PhAVDecoder(QSemaphore * framesProcessed, QSemaphore * framesFree, QMap<PhFrame, uint8_t * >  frames, QObject *parent = 0);
+	explicit PhAVDecoder(QObject *parent = 0);
 	bool open(QString fileName);
 	void close();
 
+	uint8_t* getBuffer(PhFrame frame);
 
 signals:
 	void finished();
@@ -50,10 +52,10 @@ private:
 	int64_t frame2time(PhFrame f);
 	PhFrame time2frame(int64_t t);
 
-
-	QSemaphore * _framesProcessed;
-	QSemaphore * _framesFree;
-	QMap<PhFrame, uint8_t * > * _nextImages;
+	QSemaphore _framesProcessed;
+	QSemaphore _framesFree;
+	QMap<PhFrame, uint8_t * > _nextImages;
+	QMutex _nextImagesMutex;
 
 	PhFrame _firstFrame;
 	PhFrame _currentFrame;
