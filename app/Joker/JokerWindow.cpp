@@ -302,7 +302,7 @@ void JokerWindow::on_actionOpen_triggered()
 		QString filter = tr("Rythmo files") + " (*.joker *.detx *.mos *.strip);; "
 		                 + tr("Joker files") + " (*.joker);; "
 		                 + tr("DetX files") + " (*.detx);; "
-				+ tr("Mosaic files") + " (*.mos);; "
+		                 + tr("Mosaic files") + " (*.mos);; "
 		                 + tr("All files") + " (*.*)";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
@@ -397,7 +397,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 
 	QString lastFolder = _settings->lastVideoFolder();
 	QString filter = tr("Movie files") + _settings->videoFileFilter()
-			+ ";;" + tr("All files") + " (*.*)";
+	                 + ";;" + tr("All files") + " (*.*)";
 
 	QFileDialog dlg(this, tr("Open a video..."), lastFolder, filter);
 	if(dlg.exec()) {
