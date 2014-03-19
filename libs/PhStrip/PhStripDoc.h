@@ -440,7 +440,6 @@ private:
 
 	bool checkMosTag2(QFile &f, int level, QString expected);
 	bool checkMosTag(QFile &f, int level, MosTag expectedTag);
-	bool checkMosWord(QFile &f, int level, unsigned short expected);
 	PhStripText *readMosText(QFile &f, int level);
 	void readMosDetect(QFile &f, int level);
 	bool readMosProperties(QFile &f, int level);

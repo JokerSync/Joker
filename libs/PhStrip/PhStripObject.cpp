@@ -7,11 +7,6 @@
 
 #include "PhStripObject.h"
 
-PhStripObject::PhStripObject()
-{
-	_timeIn = 0;
-}
-
 PhStripObject::PhStripObject(PhTime timeIn)
 {
 	_timeIn = timeIn;
@@ -19,9 +14,4 @@ PhStripObject::PhStripObject(PhTime timeIn)
 
 PhTime PhStripObject::getTimeIn() {
 	return _timeIn;
-}
-
-void PhStripObject::setTimeIn(PhTime timeIn)
-{
-	_timeIn = timeIn;
 }

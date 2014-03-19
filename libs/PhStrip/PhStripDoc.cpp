@@ -214,18 +214,6 @@ bool PhStripDoc::checkMosTag(QFile &f, int level, MosTag expectedTag)
 	return true;
 }
 
-bool PhStripDoc::checkMosWord(QFile &f, int level, unsigned short expected)
-{
-	QString name = QString::number(expected, 16);
-	unsigned short word = PhFileTool::readShort(f, level, PHNQ(name));
-	if(word != expected) {
-		PHDEBUG << "!!!!!!!!!!!!!!!" << "Error reading " << PHNQ(QString::number(word, 16)) << "instead of" << name << "!!!!!!!!!!!!!!!";
-		f.close();
-		return false;
-	}
-	return true;
-}
-
 PhStripText* PhStripDoc::readMosText(QFile &f, int level)
 {
 	int internLevel = 4;

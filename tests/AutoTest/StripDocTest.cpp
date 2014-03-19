@@ -55,9 +55,21 @@ void StripDocTest::importDetXPeopleTest()
 	QVERIFY(doc.importDetX("test01.detx"));
 
 	QCOMPARE(doc.getPeoples().count(), 3);
-	QVERIFY(doc.getPeoples().value("jeanne"));
-	QVERIFY(doc.getPeoples().value("sue"));
-	QVERIFY(doc.getPeoples().value("johnny") == NULL);
+	PhPeople *jeanne = doc.getPeopleByName("Jeanne");
+	QVERIFY(jeanne);
+	QCOMPARE(jeanne->getName(), QString("Jeanne"));
+	QCOMPARE(jeanne->getColor(), QString("#00BB00"));
+
+	PhPeople *sue = doc.getPeopleByName("Sue");
+	QVERIFY(sue);
+	QCOMPARE(sue->getName(), QString("Sue"));
+	QCOMPARE(sue->getColor(), QString("#BB0000"));
+
+	PhPeople *paul = doc.getPeopleByName("Paul");
+	QVERIFY(paul);
+	QCOMPARE(paul->getName(), QString("Paul"));
+	QCOMPARE(paul->getColor(), QString("#0000BB"));
+	QVERIFY(doc.getPeopleByName("Johnny") == NULL);
 }
 
 void StripDocTest::importDetXLoopTest()
