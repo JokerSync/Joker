@@ -276,8 +276,9 @@ void PhAVDecoder::process()
 						                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
 						                   &linesize)) {
 							_framesFree.acquire();
+							_nextImagesMutex.lock();
 							_nextImages[_currentFrame] = rgb;
-							//PHDEBUG << _currentFrame << rgb;
+							_nextImagesMutex.unlock();
 						}
 						lookingForVideoFrame = false;
 					} // if frame decode is not finished, let's read another packet.
