@@ -132,9 +132,11 @@ uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 			_currentFrame = frame;
 			clearBuffer();
 		}
-		buffer = _nextImages[frame];
-		_nextImages.remove(frame);
-		_framesFree.release();
+		else {
+			buffer = _nextImages[frame];
+			_nextImages.remove(frame);
+			_framesFree.release();
+		}
 
 		_nextImagesMutex.unlock();
 		_lastAskedFrame = frame;
