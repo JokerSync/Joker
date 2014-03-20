@@ -97,6 +97,9 @@ PhDebug* PhDebug::instance()
 	return _d;
 }
 
+/**
+ * @brief Message handler that filter all output
+ */
 void noMessageOutput(QtMsgType, const QMessageLogContext &, const QString &)
 {
 
