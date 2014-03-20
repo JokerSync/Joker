@@ -12,6 +12,8 @@
 
 int main(int argc, char *argv[])
 {
+	PHDEBUG << "AutoTest";
+
 	bool testAll = (argc < 2); // if no argument, test all
 	bool testTC = testAll;
 	bool testSettings = testAll;

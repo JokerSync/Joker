@@ -30,6 +30,7 @@
 class PhDebug
 {
 public:
+	static void disable();
 	/**
 	 * @brief Setup the debug log stream state
 	 *

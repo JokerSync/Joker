@@ -15,6 +15,8 @@ class StripDocTest : public QObject
 {
 	Q_OBJECT
 private slots:
+	void initTestCase();
+
 	// Import DetX tests
 	void importDetXHeaderTest();
 	void importDetXNoFile();
