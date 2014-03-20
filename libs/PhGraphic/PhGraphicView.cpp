@@ -40,7 +40,7 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 		PHDEBUG << "Unable to get the screen";
 
 	int timerInterval = 500 / _screenFrequency;
-	t_Timer->start( timerInterval);
+	t_Timer->start(timerInterval);
 	PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
 }
 

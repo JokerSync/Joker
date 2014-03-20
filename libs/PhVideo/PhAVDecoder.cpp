@@ -1,7 +1,9 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
+#include <QTime>
 
 #include "PhAVDecoder.h"
 
@@ -209,7 +211,10 @@ QString PhAVDecoder::codecName()
 
 void PhAVDecoder::process()
 {
-	while(_pFormatContext){
+	QTime timerElapsed;
+	bool needTimer = true;
+	timerElapsed.start();
+	while(_pFormatContext) {
 
 //Store elsewhere in a slot
 		int flags = AVSEEK_FLAG_ANY;
@@ -234,14 +239,14 @@ void PhAVDecoder::process()
 						int frameHeight = _videoFrame->height;
 #warning /// @todo Use RGB pixel format
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-														_videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
-														AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+						                                _videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
+						                                AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
 
 						uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 4];
 						int linesize = _videoFrame->width * 4;
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
-										   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
-										   &linesize)) {
+						                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
+						                   &linesize)) {
 							_framesFree.acquire();
 							_nextImages[_currentFrame] = rgb;
 							//PHDEBUG << _currentFrame << rgb;
@@ -251,7 +256,7 @@ void PhAVDecoder::process()
 				}
 				else if(_audioStream && (packet.stream_index == _audioStream->index)) {
 					int ok = 0;
-					avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
+					//avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
 					if(ok) {
 						//PHDEBUG << "audio:" << _audioFrame->nb_samples;
 					}
@@ -260,19 +265,24 @@ void PhAVDecoder::process()
 			case AVERROR_INVALIDDATA:
 			case AVERROR_EOF:
 			default:
-			{
-				char errorStr[256];
-				av_strerror(error, errorStr, 256);
-				PHDEBUG << _currentFrame << "error:" << errorStr;
-				lookingForVideoFrame = false;
-				break;
-			}
+				{
+					char errorStr[256];
+					av_strerror(error, errorStr, 256);
+					PHDEBUG << _currentFrame << "error:" << errorStr;
+					lookingForVideoFrame = false;
+					break;
+				}
 			}
 			//Avoid memory leak
 			av_free_packet(&packet);
 		}
 		_currentFrame++;
 		_framesProcessed.release();
+		if(needTimer && _framesProcessed.available() == 100)
+		{
+			needTimer = false;
+			PHDEBUG << "it took :" << timerElapsed.elapsed() << "ms to fill the buffer";
+		}
 	}
 	PHDEBUG << "Bye bye";
 }
