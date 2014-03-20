@@ -60,15 +60,14 @@ void PhVideoEngine::setSettings(PhVideoSettings *settings)
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
-	if(_decoder)
-	{
+	if(_decoder) {
 		PhFrame frame = _clock.frame() + _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
 		if(frame != _oldFrame) {
+			_decoder->setDeintrelace(_settings->videoDeinterlace());
 			uint8_t *buffer = _decoder->getBuffer(frame);
 			if(buffer) {
 				_videoRect.createTextureFromARGBBuffer(buffer, _decoder->width(), _decoder->height());
 				_oldFrame = frame;
-#warning /// @todo delete buffer
 				delete buffer;
 				_frameCounter.tick();
 			}

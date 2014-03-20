@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef PHAVDECODER_H
 #define PHAVDECODER_H
@@ -62,6 +62,8 @@ public:
 	 */
 	QString codecName();
 
+	void setDeintrelace(bool deintrelace);
+
 signals:
 	void finished();
 	void error(QString err);
@@ -78,15 +80,19 @@ private:
 	QSemaphore _framesFree;
 	QMap<PhFrame, uint8_t * > _nextImages;
 	QMutex _nextImagesMutex;
+	void clearBuffer();
 
 	PhFrame _firstFrame;
 	PhFrame _currentFrame;
+	int _rate;
+	PhFrame _lastAskedFrame;
 
 
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
 	struct SwsContext * _pSwsCtx;
+	bool _videoDeintrelace;
 
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
