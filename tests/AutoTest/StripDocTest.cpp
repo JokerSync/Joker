@@ -8,6 +8,11 @@
 
 #include "StripDocTest.h"
 
+void StripDocTest::initTestCase()
+{
+	PhDebug::disable();
+}
+
 void StripDocTest::importDetXHeaderTest()
 {
 	PhStripDoc doc;

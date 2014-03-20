@@ -97,6 +97,19 @@ PhDebug* PhDebug::instance()
 	return _d;
 }
 
+/**
+ * @brief Message handler that filter all output
+ */
+void noMessageOutput(QtMsgType, const QMessageLogContext &, const QString &)
+{
+
+}
+
+void PhDebug::disable()
+{
+	qInstallMessageHandler(noMessageOutput);
+}
+
 QDebug PhDebug::debug(const char *fileName, int lineNumber, const char *functionName, int messageLogLevel)
 {
 	instance()->_currentLogLevel = messageLogLevel;
