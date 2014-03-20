@@ -31,6 +31,10 @@ class PhDebug
 {
 public:
 	/**
+	 * @brief Disable the log output
+	 */
+	static void disable();
+	/**
 	 * @brief Setup the debug log stream state
 	 *
 	 * This log stream can filter some message when the message log level is not fitting the mask.
