@@ -16,8 +16,16 @@ PhAVDecoder::PhAVDecoder(QObject *parent) :
 	_audioStream(NULL),
 	_pSwsCtx(NULL),
 	_rate(1),
-	_videoDeintrelace(false)
+	_videoDeintrelace(false),
+	_interupted(false)
 {
+}
+
+PhAVDecoder::~PhAVDecoder()
+{
+	clearBuffer();
+
+	avformat_close_input(&_pFormatContext);
 }
 
 bool PhAVDecoder::open(QString fileName)
@@ -36,7 +44,7 @@ bool PhAVDecoder::open(QString fileName)
 	_videoStream = NULL;
 	_audioStream = NULL;
 
-	// Find video stream :
+	// Find video stream
 	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++) {
 		AVMediaType streamType = _pFormatContext->streams[i]->codec->codec_type;
 		PHDEBUG << i << ":" << streamType;
@@ -113,11 +121,8 @@ void PhAVDecoder::close()
 {
 	PHDEBUG;
 
-	if(_pFormatContext) {
-		avformat_close_input(&_pFormatContext);
-		_pFormatContext = NULL;
-		_videoStream = NULL;
-	}
+	_interupted = true;
+	_framesFree.release();
 }
 
 uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
@@ -126,7 +131,6 @@ uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 		_rate = 1;
 	else
 		_rate = -1;
-
 
 	uint8_t *buffer = NULL;
 	if(frame < _firstFrame + _videoStream->duration && _framesProcessed.tryAcquire()) {
@@ -169,7 +173,6 @@ PhTimeCodeType PhAVDecoder::timeCodeType()
 		PHDEBUG << "Bad fps detect => assuming 25";
 		return PhTimeCodeType25;
 	}
-
 }
 
 PhFrame PhAVDecoder::firstFrame()
@@ -238,7 +241,7 @@ void PhAVDecoder::setDeintrelace(bool deintrelace)
 
 void PhAVDecoder::process()
 {
-	while(_pFormatContext) {
+	while(!_interupted) {
 
 		if(_rate == -1 || (abs(_currentFrame - _lastAskedFrame) > 1)) {
 			int flags = AVSEEK_FLAG_ANY;
@@ -316,12 +319,9 @@ void PhAVDecoder::process()
 		_currentFrame += _rate;
 		_framesProcessed.release();
 	}
-	PHDEBUG << "Bye bye";
-}
 
-void PhAVDecoder::quit()
-{
-	close();
+	PHDEBUG << "Bye bye";
+	emit finished();
 }
 
 int64_t PhAVDecoder::frame2time(PhFrame f)

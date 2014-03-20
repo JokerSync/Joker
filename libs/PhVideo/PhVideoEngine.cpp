@@ -20,6 +20,8 @@ bool PhVideoEngine::open(QString fileName)
 {
 	PHDEBUG << fileName;
 
+	this->close();
+
 	_clock.setFrame(0);
 
 	_decoder = new PhAVDecoder();

@@ -35,6 +35,7 @@ class PhAVDecoder : public QObject
 	Q_OBJECT
 public:
 	explicit PhAVDecoder(QObject *parent = 0);
+	~PhAVDecoder();
 
 	bool open(QString fileName);
 	void close();
@@ -70,9 +71,8 @@ signals:
 
 public slots:
 	void process();
-	void quit();
-private:
 
+private:
 	int64_t frame2time(PhFrame f);
 	PhFrame time2frame(int64_t t);
 
@@ -97,6 +97,7 @@ private:
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
 
+	bool _interupted;
 };
 
 #endif // PHAVDECODER_H
