@@ -12,7 +12,6 @@
 
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
-	_videoEngine(false),
 	_settings(NULL),
 	_sony(NULL),
 	_titleText(_strip.getHUDFont(), ""),
@@ -28,6 +27,7 @@ void VideoStripView::setSettings(JokerSettings *settings)
 {
 	_settings = settings;
 	_strip.setSettings(settings);
+	_videoEngine.setSettings(settings);
 }
 
 void VideoStripView::setSony(PhSonyController *sony)

@@ -12,6 +12,9 @@ PhAVDecoder::PhAVDecoder(QObject *parent) :
 	_framesProcessed(0),
 	_framesFree(100),
 	_pFormatContext(NULL),
+	_videoStream(NULL),
+	_audioStream(NULL),
+	_pSwsCtx(NULL),
 	_rate(1),
 	_videoDeintrelace(false)
 {

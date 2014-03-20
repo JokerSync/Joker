@@ -69,6 +69,11 @@ public:
 	 */
 	PhFrame length();
 	/**
+	 * @brief get frame per second
+	 * @return the FPS of the video file
+	 */
+	float framePerSecond();
+	/**
 	 * @brief Get the width
 	 * @return the PhVideoEngine width (not necessary the video width)
 	 */
