@@ -36,7 +36,13 @@ void PhVideoView::paint()
 		int videoRate = _videoEngine->refreshRate();
 		if(videoRate > _maxVideoRate)
 			_maxVideoRate = videoRate;
-		QString info = QString("%1 / %2 - %3 / %4").arg(graphicRate).arg(_maxGraphicRate).arg(videoRate).arg(_maxVideoRate);
+		QString info = QString("%1 / %2 - %3 / %4 - %5 / %6")
+				.arg(graphicRate)
+				.arg(_maxGraphicRate)
+				.arg(videoRate)
+				.arg(_maxVideoRate)
+				.arg(_videoEngine->bufferOccupation())
+				.arg(100);
 		PhGraphicText text(&_font, info, 0, 0, 400, 100);
 		text.setColor(Qt::red);
 		_videoEngine->drawVideo(0, 0, this->width(), this->height());

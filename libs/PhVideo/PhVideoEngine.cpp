@@ -84,6 +84,13 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	}
 }
 
+int PhVideoEngine::bufferOccupation()
+{
+	if(_decoder)
+		return _decoder->bufferOccupation();
+	return 0;
+}
+
 void PhVideoEngine::errorString(QString msg)
 {
 	PHDEBUG << msg;

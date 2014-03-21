@@ -239,6 +239,11 @@ void PhAVDecoder::setDeintrelace(bool deintrelace)
 	}
 }
 
+int PhAVDecoder::bufferOccupation()
+{
+	return _framesProcessed.available();
+}
+
 void PhAVDecoder::process()
 {
 	while(!_interupted) {

@@ -126,6 +126,8 @@ public:
 		return _frameCounter.frequency();
 	}
 
+	int bufferOccupation();
+
 public slots:
 	void errorString(QString);
 

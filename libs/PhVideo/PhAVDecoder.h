@@ -65,6 +65,8 @@ public:
 
 	void setDeintrelace(bool deintrelace);
 
+	int bufferOccupation();
+
 signals:
 	void finished();
 	void error(QString err);
