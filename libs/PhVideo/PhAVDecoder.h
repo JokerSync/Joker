@@ -34,7 +34,7 @@ class PhAVDecoder : public QObject
 {
 	Q_OBJECT
 public:
-	explicit PhAVDecoder(QObject *parent = 0);
+	explicit PhAVDecoder(int bufferSize, QObject *parent = 0);
 	~PhAVDecoder();
 
 	bool open(QString fileName);
@@ -78,6 +78,7 @@ private:
 	int64_t frame2time(PhFrame f);
 	PhFrame time2frame(int64_t t);
 
+	int _bufferSize;
 	QSemaphore _framesProcessed;
 	QSemaphore _framesFree;
 	QMap<PhFrame, uint8_t * > _bufferMap;

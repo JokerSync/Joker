@@ -16,6 +16,7 @@ public:
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
+	PH_SETTING_INT2(setVideoBufferSize, videoBufferSize, 100)
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

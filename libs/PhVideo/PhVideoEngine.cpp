@@ -24,7 +24,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	_clock.setFrame(0);
 
-	_decoder = new PhAVDecoder();
+	_decoder = new PhAVDecoder(_settings->videoBufferSize());
 	if(!_decoder->open(fileName))
 		return false;
 
@@ -82,6 +82,11 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		_videoRect.setZ(-10);
 		_videoRect.draw();
 	}
+}
+
+int PhVideoEngine::bufferSize()
+{
+	return _settings->videoBufferSize();
 }
 
 int PhVideoEngine::bufferOccupation()

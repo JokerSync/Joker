@@ -126,6 +126,8 @@ public:
 		return _frameCounter.frequency();
 	}
 
+	int bufferSize();
+
 	int bufferOccupation();
 
 public slots:

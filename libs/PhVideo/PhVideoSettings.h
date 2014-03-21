@@ -24,6 +24,8 @@ public:
 	 * @return True if yes, false otherwise
 	 */
 	virtual bool videoDeinterlace() = 0;
+
+	virtual int videoBufferSize() = 0;
 };
 
 #endif // PHVIDEOSETTINGS_H

@@ -7,10 +7,11 @@
 
 #include "PhAVDecoder.h"
 
-PhAVDecoder::PhAVDecoder(QObject *parent) :
+PhAVDecoder::PhAVDecoder(int bufferSize, QObject *parent) :
 	QObject(parent),
+	_bufferSize(bufferSize),
 	_framesProcessed(0),
-	_framesFree(100),
+	_framesFree(bufferSize),
 	_pFormatContext(NULL),
 	_videoStream(NULL),
 	_audioStream(NULL),
@@ -353,7 +354,7 @@ void PhAVDecoder::clearBuffer()
 {
 	qDeleteAll(_bufferMap);
 	_bufferMap.clear();
-	_framesFree.release(100 - _framesFree.available());
+	_framesFree.release(_bufferSize - _framesFree.available());
 	_framesProcessed.acquire(_framesProcessed.available());
 }
 
