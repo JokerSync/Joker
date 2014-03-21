@@ -78,15 +78,14 @@ private:
 
 	QSemaphore _framesProcessed;
 	QSemaphore _framesFree;
-	QMap<PhFrame, uint8_t * > _nextImages;
-	QMutex _nextImagesMutex;
+	QMap<PhFrame, uint8_t * > _bufferMap;
+	QMutex _bufferMutex;
 	void clearBuffer();
 
 	PhFrame _firstFrame;
 	PhFrame _currentFrame;
-	int _rate;
+	int _direction;
 	PhFrame _lastAskedFrame;
-
 
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;

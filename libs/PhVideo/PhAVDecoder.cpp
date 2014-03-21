@@ -15,7 +15,7 @@ PhAVDecoder::PhAVDecoder(QObject *parent) :
 	_videoStream(NULL),
 	_audioStream(NULL),
 	_pSwsCtx(NULL),
-	_rate(1),
+	_direction(1),
 	_videoDeintrelace(false),
 	_interupted(false)
 {
@@ -128,24 +128,24 @@ void PhAVDecoder::close()
 uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 {
 	if(frame > _lastAskedFrame)
-		_rate = 1;
+		_direction = 1;
 	else
-		_rate = -1;
+		_direction = -1;
 
 	uint8_t *buffer = NULL;
 	if(frame < _firstFrame + _videoStream->duration && _framesProcessed.tryAcquire()) {
-		_nextImagesMutex.lock();
-		if(!_nextImages.contains(frame)) {
+		_bufferMutex.lock();
+		if(!_bufferMap.contains(frame)) {
 			_currentFrame = frame;
 			clearBuffer();
 		}
 		else {
-			buffer = _nextImages[frame];
-			_nextImages.remove(frame);
+			buffer = _bufferMap[frame];
+			_bufferMap.remove(frame);
 			_framesFree.release();
 		}
 
-		_nextImagesMutex.unlock();
+		_bufferMutex.unlock();
 		_lastAskedFrame = frame;
 	}
 	return buffer;
@@ -233,9 +233,9 @@ void PhAVDecoder::setDeintrelace(bool deintrelace)
 {
 	if(deintrelace != _videoDeintrelace) {
 		_videoDeintrelace = deintrelace;
-		_nextImagesMutex.lock();
+		_bufferMutex.lock();
 		clearBuffer();
-		_nextImagesMutex.unlock();
+		_bufferMutex.unlock();
 	}
 }
 
@@ -243,7 +243,7 @@ void PhAVDecoder::process()
 {
 	while(!_interupted) {
 
-		if(_rate == -1 || (abs(_currentFrame - _lastAskedFrame) > 1)) {
+		if(_direction == -1 || (abs(_currentFrame - _lastAskedFrame) > 1)) {
 			int flags = AVSEEK_FLAG_ANY;
 			int64_t timestamp = frame2time(_currentFrame - _firstFrame);
 			//PHDEBUG << "seek:" << _currentFrame;
@@ -279,9 +279,9 @@ void PhAVDecoder::process()
 						                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
 						                   &linesize)) {
 							_framesFree.acquire();
-							_nextImagesMutex.lock();
-							_nextImages[_currentFrame] = rgb;
-							_nextImagesMutex.unlock();
+							_bufferMutex.lock();
+							_bufferMap[_currentFrame] = rgb;
+							_bufferMutex.unlock();
 						}
 						lookingForVideoFrame = false;
 					} // if frame decode is not finished, let's read another packet.
@@ -316,7 +316,7 @@ void PhAVDecoder::process()
 //		else {
 //			_currentFrame--;
 //		}
-		_currentFrame += _rate;
+		_currentFrame += _direction;
 		_framesProcessed.release();
 	}
 
@@ -346,8 +346,8 @@ PhFrame PhAVDecoder::time2frame(int64_t t)
 
 void PhAVDecoder::clearBuffer()
 {
-	qDeleteAll(_nextImages);
-	_nextImages.clear();
+	qDeleteAll(_bufferMap);
+	_bufferMap.clear();
 	_framesFree.release(100 - _framesFree.available());
 	_framesProcessed.acquire(_framesProcessed.available());
 }
