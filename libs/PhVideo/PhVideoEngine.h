@@ -55,9 +55,7 @@ public:
 	 * @brief Get first frame
 	 * @return the first frame of the video file
 	 */
-	PhFrame firstFrame() {
-		return _firstFrame;
-	}
+	PhFrame firstFrame();
 	/**
 	 * @brief Get last frame
 	 * @return the last frame of the video file
@@ -137,7 +135,6 @@ private:
 	PhVideoSettings *_settings;
 	QString _fileName;
 	PhClock _clock;
-	PhFrame _firstFrame;
 	PhFrame _oldFrame;
 
 	PhAVDecoder *_decoder;

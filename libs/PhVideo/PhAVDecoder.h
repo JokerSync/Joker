@@ -44,6 +44,11 @@ public:
 
 	PhTimeCodeType timeCodeType();
 	PhFrame firstFrame();
+	/**
+	 * @brief Set first frame
+	 * @param frame the new first frame
+	 */
+	void setFirstFrame(PhFrame frame);
 
 	int width();
 	int height();

@@ -178,16 +178,15 @@ PhTimeCodeType PhAVDecoder::timeCodeType()
 
 PhFrame PhAVDecoder::firstFrame()
 {
-	// Reading timestamp :
-	AVDictionaryEntry *tag = av_dict_get(_pFormatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
-	if(tag == NULL)
-		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
-
-	if(tag) {
-		PHDEBUG << "Found timestamp:" << tag->value;
-		_firstFrame = PhTimeCode::frameFromString(tag->value, timeCodeType());
-	}
 	return _firstFrame;
+}
+
+void PhAVDecoder::setFirstFrame(PhFrame frame)
+{
+	_bufferMutex.lock();
+	clearBuffer();
+	_firstFrame = frame;
+	_bufferMutex.unlock();
 }
 
 int PhAVDecoder::width()

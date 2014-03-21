@@ -30,7 +30,6 @@ bool PhVideoEngine::open(QString fileName)
 
 	_fileName = fileName;
 
-	_firstFrame = _decoder->firstFrame();
 	_clock.setTimeCodeType(_decoder->timeCodeType());
 
 	QThread *thread = new QThread;
@@ -103,7 +102,8 @@ void PhVideoEngine::errorString(QString msg)
 
 void PhVideoEngine::setFirstFrame(PhFrame frame)
 {
-	_firstFrame = frame;
+	if(_decoder)
+		_decoder->setFirstFrame(frame);
 }
 
 PhVideoEngine::~PhVideoEngine()
@@ -111,10 +111,17 @@ PhVideoEngine::~PhVideoEngine()
 	close();
 }
 
+PhFrame PhVideoEngine::firstFrame()
+{
+	if(_decoder)
+		return _decoder->firstFrame();
+	return 0;
+}
+
 PhFrame PhVideoEngine::lastFrame()
 {
 	if(_decoder)
-		return _firstFrame + _decoder->length() - 1;
+		return _decoder->firstFrame() + _decoder->length() - 1;
 	return 0;
 }
 

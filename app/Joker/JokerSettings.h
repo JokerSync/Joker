@@ -37,6 +37,7 @@ public:
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
+	PH_SETTING_INT2(setVideoBufferSize, videoBufferSize, 100)
 
 	// PhSyncSettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
