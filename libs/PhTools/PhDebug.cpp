@@ -23,6 +23,7 @@ void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, c
 {
 	Q_UNUSED(type); Q_UNUSED(context);
 	if(instance()->_logMask & (1 << instance()->_currentLogLevel)) {
+		instance()->_mutex.lock();
 		QString logMessage = "";
 
 		// Display the date
@@ -67,6 +68,7 @@ void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, c
 		}
 
 		*instance()->_textLog << logMessage << endl;
+		instance()->_mutex.unlock();
 	}
 }
 
