@@ -96,7 +96,17 @@ You must then define the following global variable in order to compile with the 
 
 ### SDL
 
-![Coming soon](http://openclipart.org/image/300px/svg_to_png/118519/Red_Coming_Soon_Stamp.png)
+Download the following SDL libraries:
+
+* https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz
+* https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.0-mingw.tar.gz
+* https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.12-mingw.tar.gz
+
+Then create the following environment variable pointing to the *i686-w64-mingw32* subfolder of each folder:
+
+* *SDL_PATH*
+* *SDL_IMAGE_PATH*
+* *SDL_TTF_PATH*
 
 ### FFMPEG
 
