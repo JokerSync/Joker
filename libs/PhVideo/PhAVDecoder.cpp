@@ -17,6 +17,7 @@ PhAVDecoder::PhAVDecoder(int bufferSize, QObject *parent) :
 	_audioStream(NULL),
 	_pSwsCtx(NULL),
 	_direction(1),
+	_lastAskedFrame(-1),
 	_videoDeintrelace(false),
 	_interupted(false)
 {
