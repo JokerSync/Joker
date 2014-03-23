@@ -10,6 +10,7 @@ PhVideoEngine::PhVideoEngine() :  QObject(NULL),
 	_settings(NULL),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
+	_oldFrame(-1),
 	_decoder(NULL)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
@@ -23,6 +24,7 @@ bool PhVideoEngine::open(QString fileName)
 	this->close();
 
 	_clock.setFrame(0);
+	_oldFrame = -1;
 
 	_decoder = new PhAVDecoder(_settings->videoBufferSize());
 	if(!_decoder->open(fileName))
@@ -63,12 +65,12 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	if(_decoder) {
 		PhFrame frame = _clock.frame();
-		if(_settings)
+		if(_settings) {
 			frame += _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
+			_decoder->setDeintrelace(_settings->videoDeinterlace());
+		}
 
 		if(frame != _oldFrame) {
-			if(_settings)
-				_decoder->setDeintrelace(_settings->videoDeinterlace());
 			uint8_t *buffer = _decoder->getBuffer(frame);
 			if(buffer) {
 				_videoRect.createTextureFromARGBBuffer(buffer, _decoder->width(), _decoder->height());
