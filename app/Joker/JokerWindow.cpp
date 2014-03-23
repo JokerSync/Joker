@@ -166,7 +166,6 @@ void JokerWindow::setupSyncProtocol()
 
 bool JokerWindow::openDocument(QString fileName)
 {
-	hideMediaPanel();
 	/// Clear the selected people name list (except for the first document).
 	if(!_firstDoc)
 		_settings->setSelectedPeopleNameList(QStringList());
