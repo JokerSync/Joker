@@ -7,8 +7,14 @@
 #include "PhGraphicStripView.h"
 
 PhGraphicStripView::PhGraphicStripView(QWidget *parent) :
-	PhGraphicView(parent), _strip(parent)
+	PhGraphicView(parent), _strip(parent), _settings(NULL)
 {
+}
+
+void PhGraphicStripView::setSettings(PhGraphicStripSettings *settings)
+{
+	_settings = settings;
+	_strip.setSettings(settings);
 }
 
 bool PhGraphicStripView::init()
@@ -20,5 +26,8 @@ bool PhGraphicStripView::init()
 
 void PhGraphicStripView::paint()
 {
-	_strip.draw(0, 0, this->width(), this->height());
+	int h = this->height();
+	if(_settings)
+		h = this->height()* _settings->stripHeight();
+	_strip.draw(0, this->height() - h, this->width(), h);
 }

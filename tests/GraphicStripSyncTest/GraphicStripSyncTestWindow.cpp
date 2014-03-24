@@ -16,7 +16,7 @@ GraphicStripSyncTestWindow::GraphicStripSyncTestWindow(GraphicStripSyncTestSetti
 {
 	ui->setupUi(this);
 	_strip = ui->stripView->strip();
-	_strip->setSettings(_settings);
+	ui->stripView->setSettings(_settings);
 	_doc = _strip->doc();
 	_clock = _strip->clock();
 	_clockSynchroniser.setStripClock(_clock);
