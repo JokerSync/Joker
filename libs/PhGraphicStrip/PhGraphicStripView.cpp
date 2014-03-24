@@ -30,11 +30,4 @@ void PhGraphicStripView::paint()
 	if(_settings)
 		h = this->height()* _settings->stripHeight();
 	_strip.draw(0, this->height() - h, this->width(), h);
-
-	PhGraphicText text(_strip.getHUDFont(), "", 0, 0, 200, 100);
-	text.setContent(QString("Drop : %1").arg(_strip.dropDetected()));
-	text.draw();
-	text.setY(100);
-	text.setContent(QString("Max : %1").arg(_strip.maxDrawElapsed()));
-	text.draw();
 }

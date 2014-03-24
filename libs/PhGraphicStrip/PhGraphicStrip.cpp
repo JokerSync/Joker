@@ -176,6 +176,7 @@ QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selected
 
 void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *> selectedPeoples)
 {
+	int counter = 0;
 	bool invertedColor = _settings->invertColor();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -205,6 +206,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 		if(_settings->stripTestMode()) {
 			foreach(PhStripCut * cut, _doc.getCuts())
 			{
+				counter++;
 				if(cut->getTimeIn() == clockFrame) {
 					PhGraphicSolidRect white(x, y, width, height);
 					white.setColor(Qt::white);
@@ -281,6 +283,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 
 			while (rulerFrame < frameOut + spaceBetweenRuler) {
+				counter++;
 				int x = rulerFrame * pixelPerFrame - offset;
 
 				rulerRect.setX(x - rulerRect.getWidth() / 2);
@@ -431,6 +434,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 		foreach(PhStripCut * cut, _doc.getCuts())
 		{
+			//_counter++;
 			if( (frameIn < cut->getTimeIn()) && (cut->getTimeIn() < frameOut)) {
 				PhGraphicSolidRect *gCut = _graphicCuts[cut];
 				if(gCut == NULL) {
@@ -458,6 +462,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 		foreach(PhStripLoop * loop, _doc.getLoops())
 		{
+			//_counter++;
 			// This calcul allow the cross to come smoothly on the screen (height / 8 /pixelPerFrame)
 			if( ((loop->getTimeIn() + height / 8 /pixelPerFrame) > frameIn) && ((loop->getTimeIn() - height / 8 /pixelPerFrame ) < frameOut)) {
 				PhGraphicLoop * gLoop = _graphicLoops[loop];
@@ -507,6 +512,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 		foreach(PhStripDetect * detect, _doc.getDetects())
 		{
+			//_counter++;
 
 			if( detect->off() && (frameIn < detect->getTimeOut()) && (detect->getTimeIn() < frameOut) ) {
 				PhGraphicSolidRect *gDetect = _graphicDetects[detect];
@@ -539,4 +545,24 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 	if(currentDrawElapsed > _maxDrawElapsed)
 		_maxDrawElapsed = currentDrawElapsed;
 	_testTimer.restart();
+
+	if(_settings->displayStripInfo()) {
+		int inc = 60;
+		PhGraphicText text(&_hudFont, "", 0, 0, 200, inc);
+		text.setColor(Qt::red);
+		text.setContent(QString("Drop : %1").arg(_dropDetected));
+		text.draw();
+		text.setY(text.getY() + inc);
+		text.setContent(QString("Max : %1").arg(_maxDrawElapsed));
+		text.draw();
+		text.setY(text.getY() + inc);
+		text.setContent(QString("Count : %1").arg(counter));
+		text.draw();
+		text.setY(text.getY() + inc);
+		text.setContent(QString("people : %1").arg(_graphicPeoples.count()));
+		text.draw();
+		text.setY(text.getY() + inc);
+		text.setContent(QString("text : %1").arg(_graphicTexts.count()));
+		text.draw();
+	}
 }

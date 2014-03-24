@@ -87,6 +87,8 @@ public:
 	 * @return
 	 */
 	virtual int spaceBetweenRuler() = 0;
+
+	virtual bool displayStripInfo() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

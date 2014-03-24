@@ -127,9 +127,6 @@ public:
 	 */
 	PhFont * getHUDFont();
 
-	int maxDrawElapsed() { return _maxDrawElapsed; }
-	int dropDetected() { return _dropDetected; }
-
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -180,11 +177,11 @@ private:
 	 * QTime for testing performance
 	 */
 	QTime _testTimer;
-	int _maxDrawElapsed;
-	int _dropDetected;
 
 	int _trackNumber;
 	PhGraphicStripSettings * _settings;
+	int _maxDrawElapsed;
+	int _dropDetected;
 
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
 };
