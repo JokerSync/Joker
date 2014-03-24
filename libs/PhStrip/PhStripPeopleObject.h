@@ -35,8 +35,8 @@ public:
 		return _people;
 	}
 	/**
-	 * @brief Get the track
-	 * @return _track the corresponding track
+	 * @brief The object track
+	 * @return _track An integer
 	 */
 	int track() {
 		return _track;
@@ -49,7 +49,7 @@ public:
 		return _frameOut;
 	}
 	/**
-	 * @brief Set the PhPeople
+	 * @brief Affect a people
 	 * @param people
 	 */
 	void setPeople(PhPeople * people) {
@@ -57,16 +57,16 @@ public:
 	}
 	/**
 	 * @brief Set the track
-	 * @param track
+	 * @param track An integer
 	 */
 	void setTrack(int track) {
 		_track = track;
 	}
 	/**
 	 * @brief Set the frame out
-	 * @param A frame
+	 * @param frameOut A frame
 	 */
-	void setFrameOut(int frameOut) {
+	void setFrameOut(PhFrame frameOut) {
 		_frameOut = frameOut;
 	}
 

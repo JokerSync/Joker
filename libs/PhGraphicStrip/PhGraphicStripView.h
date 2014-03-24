@@ -32,7 +32,13 @@ public:
 		return &_strip;
 	}
 
+	/**
+	 * @brief Attach the given settings to the view
+	 *
+	 * @param settings The Settings
+	 */
 	void setSettings(PhGraphicStripSettings *settings);
+
 protected:
 	/**
 	 * @brief Initializisation of the PhGraphicStrip

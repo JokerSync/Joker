@@ -176,7 +176,7 @@ public:
 	void setTitle(QString title);
 	/**
 	 * @brief Set the video first frame
-	 * @param A PhFrame
+	 * @param videoFramestamp A PhFrame
 	 */
 	void setVideoFramestamp(PhFrame videoFramestamp);
 	/**

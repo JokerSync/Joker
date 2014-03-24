@@ -101,8 +101,8 @@ void PhGraphicStrip::onDocChanged()
 {
 	qDeleteAll(_graphicPeoples);
 	_graphicPeoples.clear();
-	foreach (PhPeople *people, _doc.peoples()) {
-		QString name = people?people->name():"???";
+	foreach(PhPeople *people, _doc.peoples()) {
+		QString name = people ? people->name() : "???";
 		_graphicPeoples[people] = new PhGraphicText(&_hudFont, name);
 		_graphicPeoples[people]->setWidth(name.length() * 12);
 		_graphicPeoples[people]->init();
@@ -110,7 +110,7 @@ void PhGraphicStrip::onDocChanged()
 
 	qDeleteAll(_graphicCuts);
 	_graphicCuts.clear();
-	foreach (PhStripCut *cut, _doc.cuts()) {
+	foreach(PhStripCut *cut, _doc.cuts()) {
 		_graphicCuts[cut] = new PhGraphicSolidRect();
 		_graphicCuts[cut]->setZ(-1);
 		_graphicCuts[cut]->setWidth(2);
@@ -120,7 +120,7 @@ void PhGraphicStrip::onDocChanged()
 	qDeleteAll(_graphicTexts);
 	_graphicTexts.clear();
 	_trackNumber = 4;
-	foreach (PhStripText *text, _doc.texts()) {
+	foreach(PhStripText *text, _doc.texts()) {
 		_graphicTexts[text] = new PhGraphicText(&_textFont, text->content());
 		_graphicTexts[text]->setZ(-1);
 		_graphicTexts[text]->init();
@@ -130,7 +130,7 @@ void PhGraphicStrip::onDocChanged()
 
 	qDeleteAll(_graphicLoops);
 	_graphicLoops.clear();
-	foreach (PhStripLoop *loop, _doc.loops()) {
+	foreach(PhStripLoop *loop, _doc.loops()) {
 		_graphicLoops[loop] = new PhGraphicLoop();
 		_graphicLoops[loop]->setZ(-1);
 		_graphicLoops[loop]->init();
@@ -517,7 +517,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 	int currentDrawElapsed = _testTimer.elapsed() - lastDrawElapsed;
 	if(_testTimer.elapsed() > 20)
-		PHDEBUG << "Drop detected:" << ++_dropDetected;
+		PHDEBUG << "Drop detected:" << ++_dropDetected << currentDrawElapsed;
 	if(currentDrawElapsed > _maxDrawElapsed)
 		_maxDrawElapsed = currentDrawElapsed;
 	_testTimer.restart();

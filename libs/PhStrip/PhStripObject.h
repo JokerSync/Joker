@@ -23,9 +23,8 @@ private:
 	PhFrame _frameIn;
 public:
 	/**
-	 * @brief PhStripObject
-	 * @param frameIn
-	 * contructor
+	 * @brief PhStripObject constructor
+	 * @param frameIn The first frame
 	 */
 	PhStripObject(PhFrame frameIn);
 	/**
