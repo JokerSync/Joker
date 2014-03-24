@@ -12,27 +12,27 @@
 /**
  * @brief Generic object of a rythmo strip (loop, cut, text, ...).
  *
- * Its only property is timeIn.
+ * Its only property is frameIn.
  */
 class PhStripObject {
 
 private:
 	/**
-	 * Starting time of the object.
+	 * Starting frame of the object.
 	 */
-	PhTime _timeIn;
+	PhFrame _frameIn;
 public:
 	/**
 	 * @brief PhStripObject
-	 * @param time
+	 * @param frameIn
 	 * contructor
 	 */
-	PhStripObject(PhTime time);
+	PhStripObject(PhFrame frameIn);
 	/**
-	 * @brief getTimeIn
-	 * @return _timeIn
+	 * @brief The frame in
+	 * @return A PhFrame
 	 */
-	PhTime getTimeIn();
+	PhFrame frameIn();
 };
 
 #endif // PHSTRIPOBJECT_H

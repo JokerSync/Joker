@@ -23,7 +23,7 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 
 	foreach(PhPeople* people, _doc->peoples()) {
 		if(people) {
-			QString name = people->getName();
+			QString name = people->name();
 			ui->peopleList->addItem(name);
 
 			if(peopleList.contains(name))

@@ -16,7 +16,7 @@
 PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	QObject(parent),
 	_doc(this),
-	_clock(_doc.getTCType()),
+	_clock(_doc.timeCodeType()),
 	_trackNumber(4),
 	_settings(NULL),
 	_maxDrawElapsed(0),
@@ -116,14 +116,14 @@ void PhGraphicStrip::onDocChanged()
 
 	_trackNumber = 4;
 
-	foreach(PhStripText *text, _doc.getTexts()) {
-		if(text->getTrack() >= _trackNumber)
-			_trackNumber = text->getTrack() + 1;
+	foreach(PhStripText *text, _doc.texts()) {
+		if(text->track() >= _trackNumber)
+			_trackNumber = text->track() + 1;
 	}
 
-	foreach(PhStripDetect *detect, _doc.getDetects()) {
-		if(detect->getTrack() >= _trackNumber)
-			_trackNumber = detect->getTrack() + 1;
+	foreach(PhStripDetect *detect, _doc.detects()) {
+		if(detect->track() >= _trackNumber)
+			_trackNumber = detect->track() + 1;
 	}
 }
 
@@ -145,7 +145,7 @@ QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selected
 				return QColor(100, 100, 100);
 			}
 			else {
-				return people->getColor();
+				return people->color();
 			}
 		}
 		else if(selectedPeoples.size())
@@ -159,7 +159,7 @@ QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selected
 				return QColor(155, 155, 155);
 			}
 			else {
-				QColor color(people->getColor());
+				QColor color(people->color());
 				return QColor(255 - color.red(), 255 - color.green(), 255 - color.blue());
 			}
 		}
@@ -200,10 +200,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 		PhFrame clockFrame = _clock.frame() + delay * fps / 1000;
 
 		if(_settings->stripTestMode()) {
-			foreach(PhStripCut * cut, _doc.getCuts())
+			foreach(PhStripCut * cut, _doc.cuts())
 			{
 				counter++;
-				if(cut->getTimeIn() == clockFrame) {
+				if(cut->frameIn() == clockFrame) {
 					PhGraphicSolidRect white(x, y, width, height);
 					white.setColor(Qt::white);
 					white.draw();
@@ -324,30 +324,30 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 		if(displayNextText)
 			maxFrameIn += y / verticalPixelPerFrame;
 
-		foreach(PhStripText * text, _doc.getTexts())
+		foreach(PhStripText * text, _doc.texts())
 		{
-			if(text->getTimeOut() < frameIn)
+			if(text->frameOut() < frameIn)
 				continue;
 			counter++;
 			PhGraphicText* gText = _graphicTexts[text];
 			if(gText == NULL) {
-				gText = new PhGraphicText( &_textFont, text->getContent());
+				gText = new PhGraphicText( &_textFont, text->content());
 
 				gText->setZ(-1);
 				gText->init();
 
 				_graphicTexts[text] = gText;
 			}
-			int track = text->getTrack();
+			int track = text->track();
 
 
-			if( !((text->getTimeOut() < frameIn) || (text->getTimeIn() > frameOut)) ) {
-				gText->setX(x + text->getTimeIn() * pixelPerFrame - offset);
-				gText->setWidth((text->getTimeOut() - text->getTimeIn()) * pixelPerFrame);
+			if( !((text->frameOut() < frameIn) || (text->frameIn() > frameOut)) ) {
+				gText->setX(x + text->frameIn() * pixelPerFrame - offset);
+				gText->setWidth((text->frameOut() - text->frameIn()) * pixelPerFrame);
 				gText->setY(y + track * trackHeight);
 				gText->setHeight(trackHeight);
 				gText->setZ(-1);
-				gText->setColor(computeColor(text->getPeople(), selectedPeoples, invertedColor));
+				gText->setColor(computeColor(text->people(), selectedPeoples, invertedColor));
 
 				gText->draw();
 			}
@@ -357,12 +357,12 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 			// - it is the first text
 			// - it is a different people
 			// - the distance between the latest text and the current is superior to a limit
-			if((lastText == NULL) || (lastText->getPeople() != text->getPeople()) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople)) {
-				PhPeople * people = text->getPeople();
+			if((lastText == NULL) || (lastText->people() != text->people()) || (text->frameIn() - lastText->frameOut() > minSpaceBetweenPeople)) {
+				PhPeople * people = text->people();
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				QString name = "???";
 				if(people)
-					name = people->getName();
+					name = people->name();
 
 				if(gPeople == NULL) {
 					gPeople = new PhGraphicText(&_hudFont, name);
@@ -373,7 +373,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 					_graphicPeoples[people] = gPeople;
 				}
-				gPeople->setX(x + text->getTimeIn() * pixelPerFrame - offset - gPeople->getWidth() - spaceBetweenPeopleAndText);
+				gPeople->setX(x + text->frameIn() * pixelPerFrame - offset - gPeople->getWidth() - spaceBetweenPeopleAndText);
 				gPeople->setY(y + track * trackHeight);
 				gPeople->setZ(-1);
 				gPeople->setHeight(trackHeight / 2);
@@ -383,17 +383,17 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				gPeople->draw();
 
 				//Check if the name is printed on the screen
-				if( (frameIn < text->getTimeOut()) && (text->getTimeIn() - gPeople->getWidth() / pixelPerFrame < frameOut) ) {
+				if( (frameIn < text->frameOut()) && (text->frameIn() - gPeople->getWidth() / pixelPerFrame < frameOut) ) {
 					trackFull[track] = true;
 				}
 
 			}
 
-			if(displayNextText && (frameOut < text->getTimeIn()) && ((lastText == NULL) || (text->getTimeIn() - lastText->getTimeOut() > minSpaceBetweenPeople))) {
-				PhPeople * people = text->getPeople();
+			if(displayNextText && (frameOut < text->frameIn()) && ((lastText == NULL) || (text->frameIn() - lastText->frameOut() > minSpaceBetweenPeople))) {
+				PhPeople * people = text->people();
 				QString name = "???";
 				if(people)
-					name = people->getName();
+					name = people->name();
 
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				if(gPeople == NULL) {
@@ -404,7 +404,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 					_graphicPeoples[people] = gPeople;
 				}
-				int howFarIsText = (text->getTimeIn() - frameOut) * verticalPixelPerFrame;
+				int howFarIsText = (text->frameIn() - frameOut) * verticalPixelPerFrame;
 				//This line is used to see which text's name will be displayed
 				gPeople->setX(width - gPeople->getWidth());
 				gPeople->setY(y - howFarIsText);
@@ -429,16 +429,16 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 			lastTextList[track] = text;
 
-			if(text->getTimeIn() > maxFrameIn)
+			if(text->frameIn() > maxFrameIn)
 				break;
 		}
 
 		delete lastTextList;
 
-		foreach(PhStripCut * cut, _doc.getCuts())
+		foreach(PhStripCut * cut, _doc.cuts())
 		{
 			//_counter++;
-			if( (frameIn < cut->getTimeIn()) && (cut->getTimeIn() < frameOut)) {
+			if( (frameIn < cut->frameIn()) && (cut->frameIn() < frameOut)) {
 				PhGraphicSolidRect *gCut = _graphicCuts[cut];
 				if(gCut == NULL) {
 					gCut = new PhGraphicSolidRect();
@@ -452,22 +452,22 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				else
 					gCut->setColor(QColor(0, 0, 0));
 				gCut->setHeight(height);
-				gCut->setX(x + cut->getTimeIn() * pixelPerFrame - offset);
+				gCut->setX(x + cut->frameIn() * pixelPerFrame - offset);
 				gCut->setY(y);
 
 				gCut->draw();
 				cutCounter++;
 			}
 			//Doesn't need to process undisplayed content
-			if(cut->getTimeIn() > frameOut)
+			if(cut->frameIn() > frameOut)
 				break;
 		}
 
-		foreach(PhStripLoop * loop, _doc.getLoops())
+		foreach(PhStripLoop * loop, _doc.loops())
 		{
 			//_counter++;
 			// This calcul allow the cross to come smoothly on the screen (height / 8 /pixelPerFrame)
-			if( ((loop->getTimeIn() + height / 8 /pixelPerFrame) > frameIn) && ((loop->getTimeIn() - height / 8 /pixelPerFrame ) < frameOut)) {
+			if( ((loop->frameIn() + height / 8 /pixelPerFrame) > frameIn) && ((loop->frameIn() - height / 8 /pixelPerFrame ) < frameOut)) {
 				PhGraphicLoop * gLoop = _graphicLoops[loop];
 				if(gLoop == NULL) {
 					gLoop = new PhGraphicLoop();
@@ -479,7 +479,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				else
 					gLoop->setColor(Qt::white);
 
-				gLoop->setX(x + loop->getTimeIn() * pixelPerFrame - offset);
+				gLoop->setX(x + loop->frameIn() * pixelPerFrame - offset);
 				gLoop->setY(y);
 				gLoop->setHThick(height / 40);
 				gLoop->setHeight(height);
@@ -490,10 +490,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				loopCounter++;
 			}
 
-			if(displayNextText && ((loop->getTimeIn() + height / 8 / pixelPerFrame) > frameIn)) {
+			if(displayNextText && ((loop->frameIn() + height / 8 / pixelPerFrame) > frameIn)) {
 				PhGraphicLoop gLoopPred;
 
-				int howFarIsLoop = (loop->getTimeIn() - frameOut) * verticalPixelPerFrame;
+				int howFarIsLoop = (loop->frameIn() - frameOut) * verticalPixelPerFrame;
 				gLoopPred.setColor(Qt::white);
 
 				gLoopPred.setHorizontalLoop(true);
@@ -509,15 +509,15 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 				gLoopPred.draw();
 			}
-			if((loop->getTimeIn() - height / 8 / pixelPerFrame ) > frameOut + 25 * 30)
+			if((loop->frameIn() - height / 8 / pixelPerFrame ) > frameOut + 25 * 30)
 				break;
 		}
 
-		foreach(PhStripDetect * detect, _doc.getDetects())
+		foreach(PhStripDetect * detect, _doc.detects())
 		{
 			//_counter++;
 
-			if( detect->off() && (frameIn < detect->getTimeOut()) && (detect->getTimeIn() < frameOut) ) {
+			if( detect->off() && (frameIn < detect->frameOut()) && (detect->frameIn() < frameOut) ) {
 				PhGraphicSolidRect *gDetect = _graphicDetects[detect];
 				if(gDetect == NULL) {
 					gDetect = new PhGraphicSolidRect();
@@ -525,17 +525,17 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 					gDetect->setZ(-1);
 				}
 
-				gDetect->setColor(computeColor(detect->getPeople(), selectedPeoples, invertedColor));
+				gDetect->setColor(computeColor(detect->people(), selectedPeoples, invertedColor));
 
-				gDetect->setX(x + detect->getTimeIn() * pixelPerFrame - offset);
-				gDetect->setY(y + detect->getTrack() * trackHeight + trackHeight * 0.8);
+				gDetect->setX(x + detect->frameIn() * pixelPerFrame - offset);
+				gDetect->setY(y + detect->track() * trackHeight + trackHeight * 0.8);
 				gDetect->setHeight(trackHeight / 20);
-				gDetect->setWidth((detect->getTimeOut() - detect->getTimeIn()) * pixelPerFrame);
+				gDetect->setWidth((detect->frameOut() - detect->frameIn()) * pixelPerFrame);
 				gDetect->draw();
 				offCounter++;
 			}
 			//Doesn't need to process undisplayed content
-			if(detect->getTimeIn() > frameOut)
+			if(detect->frameIn() > frameOut)
 				break;
 		}
 	}

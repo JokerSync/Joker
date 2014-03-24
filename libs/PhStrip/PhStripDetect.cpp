@@ -6,8 +6,8 @@
 
 #include "PhStripDetect.h"
 
-PhStripDetect::PhStripDetect(bool off, PhTime timeIn, PhPeople *people, PhTime timeOut, int track)
-	: PhStripPeopleObject(timeIn, people, timeOut, track),
+PhStripDetect::PhStripDetect(bool off, PhFrame frameIn, PhPeople *people, PhFrame frameOut, int track)
+	: PhStripPeopleObject(frameIn, people, frameOut, track),
 	_off(off)
 {
 

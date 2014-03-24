@@ -62,15 +62,15 @@ void VideoStripView::paint()
 
 	QList<PhPeople*> selectedPeoples;
 	foreach(QString name, _settings->selectedPeopleNameList()) {
-		PhPeople *people = _strip.doc()->getPeopleByName(name);
+		PhPeople *people = _strip.doc()->peopleByName(name);
 		if(people)
 			selectedPeoples.append(people);
 	}
 
 	int y = 0;
-	QString title = _strip.doc()->getTitle();
-	if(_strip.doc()->getEpisode().length() > 0)
-		title += " #" + _strip.doc()->getEpisode();
+	QString title = _strip.doc()->title();
+	if(_strip.doc()->episode().length() > 0)
+		title += " #" + _strip.doc()->episode();
 
 	if(_settings->displayTitle() && (title.length() > 0)) {
 		int titleHeight = this->height() / 40;
@@ -166,34 +166,34 @@ void VideoStripView::paint()
 
 		/// The next time code will be the next element of the people from the list.
 		if(selectedPeoples.count()) {
-			nextText = _strip.doc()->getNextText(clockFrame, selectedPeoples);
+			nextText = _strip.doc()->nextText(clockFrame, selectedPeoples);
 			if(nextText == NULL)
-				nextText = _strip.doc()->getNextText(0, selectedPeoples);
+				nextText = _strip.doc()->nextText(0, selectedPeoples);
 
 			int peopleHeight = this->height() / 30;
 			foreach(PhPeople* people, selectedPeoples) {
-				int peopleNameWidth = people->getName().length() * peopleHeight / 2;
+				int peopleNameWidth = people->name().length() * peopleHeight / 2;
 				_currentPeopleName.setRect(10, y, peopleNameWidth, peopleHeight);
-				_currentPeopleName.setContent(people->getName());
+				_currentPeopleName.setContent(people->name());
 				_currentPeopleName.draw();
 				y += peopleHeight;
 			}
 		}
 		else {
-			nextText = _strip.doc()->getNextText(clockFrame);
+			nextText = _strip.doc()->nextText(clockFrame);
 			if(nextText == NULL)
-				nextText = _strip.doc()->getNextText(0);
+				nextText = _strip.doc()->nextText(0);
 		}
 
 		if(nextText != NULL) {
-			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextText->getTimeIn(), clock->timeCodeType()));
+			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextText->frameIn(), clock->timeCodeType()));
 			_nextTCText.draw();
 		}
 	}
 
-	PhStripLoop * currentLoop = _strip.doc()->getPreviousLoop(clockFrame);
+	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockFrame);
 	if(currentLoop) {
-		int loopNumber = currentLoop->getLoopNumber();
+		int loopNumber = currentLoop->number();
 		PhGraphicText gCurrentLoop(_strip.getHUDFont(), QString::number(loopNumber));
 		int loopHeight = 60;
 		int loopWidth = _strip.getHUDFont()->getNominalWidth(QString::number(loopNumber)) * ((float) loopHeight / _strip.getHUDFont()->getHeight());

@@ -44,7 +44,7 @@ bool GraphicStripTestWindow::openDocument(QString fileName)
 	if(!_doc->openStripFile(fileName))
 		return false;
 
-	_clock->setTimeCodeType(_doc->getTCType());
+	_clock->setTimeCodeType(_doc->timeCodeType());
 	setCurrentDocument(fileName);
 	return true;
 }
@@ -52,10 +52,10 @@ bool GraphicStripTestWindow::openDocument(QString fileName)
 void GraphicStripTestWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text, int videoTimeStamp)
 {
 	PHDEBUG << "Creating fake file";
-	if(_doc->createDoc(text, nbPeople, nbText, nbTrack, videoTimeStamp)) {
+	if(_doc->create(text, nbPeople, nbText, nbTrack, videoTimeStamp)) {
 		PHDEBUG << "Done";
-		_clock->setTimeCodeType(_doc->getTCType());
-		_clock->setFrame(_doc->getLastFrame());
+		_clock->setTimeCodeType(_doc->timeCodeType());
+		_clock->setFrame(_doc->lastFrame());
 		this->setWindowTitle("GraphicStripTest");
 	}
 }
@@ -83,7 +83,7 @@ void GraphicStripTestWindow::onGenerate()
 {
 	GenerateDialog dlgGen(_settings, _doc);
 	if (dlgGen.exec()) {
-		_clock->setFrame(_doc->getLastFrame());
+		_clock->setFrame(_doc->lastFrame());
 		setCurrentDocument("");
 	}
 }
@@ -181,12 +181,12 @@ void GraphicStripTestWindow::on_actionGo_to_triggered()
 
 void GraphicStripTestWindow::on_actionPrevious_Element_triggered()
 {
-	_clock->setFrame(_doc->getPreviousElementFrame(_clock->frame()));
+	_clock->setFrame(_doc->previousElementFrame(_clock->frame()));
 }
 
 void GraphicStripTestWindow::on_actionNext_Element_triggered()
 {
-	_clock->setFrame(_doc->getNextElementFrame(_clock->frame()));
+	_clock->setFrame(_doc->nextElementFrame(_clock->frame()));
 }
 
 void GraphicStripTestWindow::on_actionStrip_Properties_triggered()
@@ -210,7 +210,7 @@ void GraphicStripTestWindow::on_actionRuler_triggered(bool checked)
 
 void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
 {
-	PhTimeCodeDialog dlg(_doc->getTCType(), _settings->rulerTimestamp(), this);
+	PhTimeCodeDialog dlg(_doc->timeCodeType(), _settings->rulerTimestamp(), this);
 	if(dlg.exec())
 		_settings->setRulerTimestamp(dlg.frame());
 }

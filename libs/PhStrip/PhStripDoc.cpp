@@ -21,7 +21,7 @@ PhStripDoc::PhStripDoc(QObject *parent) :
 }
 
 
-bool PhStripDoc::importDetX(QString fileName)
+bool PhStripDoc::importDetXFile(QString fileName)
 {
 	//	PHDEBUG << fileName;
 	if (!QFile(fileName).exists()) {
@@ -407,7 +407,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 	return true;
 }
 
-bool PhStripDoc::importMos(QString fileName)
+bool PhStripDoc::importMosFile(QString fileName)
 {
 	PHDEBUG << "===============" << fileName << "===============";
 
@@ -547,8 +547,8 @@ bool PhStripDoc::importMos(QString fileName)
 	if(!checkMosTag2(f, blocLevel, "CDocVideo"))
 		return false;
 
-	this->setVideoPath(PhFileTool::readString(f, ok, "Video path"));
-	this->setVideoTimestamp(PhFileTool::readInt(f, level, "timestamp") / 12);
+	this->setVideoFilePath(PhFileTool::readString(f, ok, "Video path"));
+	this->setVideoFramestamp(PhFileTool::readInt(f, level, "timestamp") / 12);
 	PHDBG(ok) << "Timestamp:" << PhTimeCode::stringFromFrame(_videoFrameStamp, _tcType);
 
 	if(videoType == 3) {
@@ -644,10 +644,10 @@ bool PhStripDoc::openStripFile(QString fileName)
 	QString extension = QFileInfo(fileName).suffix();
 	// Try to open the document
 	if(extension == "detx") {
-		return importDetX(fileName);
+		return importDetXFile(fileName);
 	}
 	else if(extension == "mos") {
-		return importMos(fileName);
+		return importMosFile(fileName);
 	}
 	else if(extension == "strip" or extension == "joker") {
 		QFile xmlFile(fileName);
@@ -682,9 +682,9 @@ bool PhStripDoc::openStripFile(QString fileName)
 			QString type = media.attribute("type");
 			PHDEBUG << "line" << type;
 			if(type == "detx")
-				result = importDetX(media.text());
+				result = importDetXFile(media.text());
 			else if(type == "mos")
-				result = importMos(media.text());
+				result = importMosFile(media.text());
 			else if(type == "video") {
 				_videoPath = media.text();
 				_videoFrameStamp = PhTimeCode::frameFromString(media.attribute("tcStamp"), _tcType);
@@ -700,7 +700,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 	return result;
 }
 
-bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
+bool PhStripDoc::saveStripFile(QString fileName, QString lastTC, bool forceRatio169)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
@@ -738,7 +738,7 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
 					QFileInfo info(_filePath);
 					xmlWriter->writeStartElement("media");
 					xmlWriter->writeAttribute("type", info.suffix());
-					xmlWriter->writeCharacters(getFilePath());
+					xmlWriter->writeCharacters(filePath());
 					xmlWriter->writeEndElement();
 				}
 
@@ -765,7 +765,7 @@ bool PhStripDoc::saveStrip(QString fileName, QString lastTC, bool forceRatio169)
 	return true;
 }
 
-bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeCode)
+bool PhStripDoc::create(QString text, int nbPeople, int nbText, int nbTrack, PhFrame videoFramestamp)
 {
 	this->reset();
 	_title = "Generate file";
@@ -773,7 +773,7 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, 
 	_episode = "1";
 	_season = "1";
 	_tcType = PhTimeCodeType25;
-	_videoFrameStamp = videoTimeCode;
+	_videoFrameStamp = videoFramestamp;
 	_lastFrame = _videoFrameStamp;
 
 	if (nbTrack > 4 || nbTrack < 1)
@@ -819,7 +819,6 @@ void PhStripDoc::reset()
 	_tcType = PhTimeCodeType25;
 	_lastFrame = 0;
 	_loops.clear();
-	_nbTexts = 0;
 	_texts.clear();
 	_title = "";
 	_translatedTitle = "";
@@ -835,15 +834,13 @@ void PhStripDoc::reset()
 	emit this->changed();
 }
 
-void PhStripDoc::addText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track)
+void PhStripDoc::addText(PhPeople * actor, PhFrame frameIn, PhFrame frameOut, QString sentence, int track)
 {
-
 	if(sentence != " " && sentence != "" ) {
 
-		_texts.push_back(new PhStripText(start, actor,
-		                                 end,
+		_texts.push_back(new PhStripText(frameIn, actor,
+		                                 frameOut,
 		                                 track, sentence));
-		_nbTexts++;
 	}
 }
 bool PhStripDoc::forceRatio169() const
@@ -851,222 +848,217 @@ bool PhStripDoc::forceRatio169() const
 	return _forceRatio169;
 }
 
-int PhStripDoc::getNbTexts()
-{
-	return _nbTexts;
-}
-
-PhPeople *PhStripDoc::getPeopleByName(QString name)
+PhPeople *PhStripDoc::peopleByName(QString name)
 {
 	foreach(PhPeople* people, _peoples)
 	{
-		if(people && people->getName() == name)
+		if(people && people->name() == name)
 			return people;
 	}
 	return NULL;
 }
 
-PhStripText *PhStripDoc::getNextText(PhFrame frame)
+PhStripText *PhStripDoc::nextText(PhFrame frame)
 {
 	PhStripText * result = NULL;
 	foreach(PhStripText* text, _texts)
 	{
-		if(text->getTimeIn() > frame) {
-			if(!result || (text->getTimeIn() < result->getTimeIn()) )
+		if(text->frameIn() > frame) {
+			if(!result || (text->frameIn() < result->frameIn()) )
 				result = text;
 		}
 	}
 	return result;
 }
 
-PhStripText *PhStripDoc::getNextText(PhFrame frame, PhPeople *people)
+PhStripText *PhStripDoc::nextText(PhFrame frame, PhPeople *people)
 {
 	PhStripText * result = NULL;
 	foreach(PhStripText* text, _texts)
 	{
-		if((text->getPeople() == people) && (text->getTimeIn() > frame)) {
-			if(!result || (text->getTimeIn() < result->getTimeIn()) )
+		if((text->people() == people) && (text->frameIn() > frame)) {
+			if(!result || (text->frameIn() < result->frameIn()) )
 				result = text;
 		}
 	}
 	return result;
 }
 
-PhStripText *PhStripDoc::getNextText(PhFrame frame, QList<PhPeople *> peopleList)
+PhStripText *PhStripDoc::nextText(PhFrame frame, QList<PhPeople *> peopleList)
 {
 	PhStripText * result = NULL;
 	foreach(PhStripText* text, _texts)
 	{
-		if(peopleList.contains(text->getPeople()) && (text->getTimeIn() > frame)) {
-			if(!result || (text->getTimeIn() < result->getTimeIn()) )
+		if(peopleList.contains(text->people()) && (text->frameIn() > frame)) {
+			if(!result || (text->frameIn() < result->frameIn()) )
 				result = text;
 		}
 	}
 	return result;
 }
 
-PhFrame PhStripDoc::getPreviousTextFrame(PhFrame frame)
+PhFrame PhStripDoc::previousTextFrame(PhFrame frame)
 {
 	PhFrame previousTextFrame = PHFRAMEMIN;
 
 	foreach(PhStripText* text, _texts)
 	{
-		if((text->getTimeIn() < frame) && (text->getTimeIn() > previousTextFrame) )
-			previousTextFrame = text->getTimeIn();
+		if((text->frameIn() < frame) && (text->frameIn() > previousTextFrame) )
+			previousTextFrame = text->frameIn();
 	}
 
 	return previousTextFrame;
 }
 
-PhFrame PhStripDoc::getPreviousLoopFrame(PhFrame frame)
+PhFrame PhStripDoc::previousLoopFrame(PhFrame frame)
 {
 	PhFrame previousLoopFrame = PHFRAMEMIN;
 
 	foreach(PhStripLoop* loop, _loops)
 	{
-		if((loop->getTimeIn() < frame) && (loop->getTimeIn() > previousLoopFrame) )
-			previousLoopFrame = loop->getTimeIn();
+		if((loop->frameIn() < frame) && (loop->frameIn() > previousLoopFrame) )
+			previousLoopFrame = loop->frameIn();
 	}
 
 	return previousLoopFrame;
 }
 
-PhFrame PhStripDoc::getPreviousCutFrame(PhFrame frame)
+PhFrame PhStripDoc::previousCutFrame(PhFrame frame)
 {
 	PhFrame previousCutFrame = PHFRAMEMIN;
 
 	foreach(PhStripCut* cut, _cuts)
 	{
-		if((cut->getTimeIn() < frame) && (cut->getTimeIn() > previousCutFrame) )
-			previousCutFrame = cut->getTimeIn();
+		if((cut->frameIn() < frame) && (cut->frameIn() > previousCutFrame) )
+			previousCutFrame = cut->frameIn();
 	}
 
 	return previousCutFrame;
 }
 
-PhFrame PhStripDoc::getPreviousElementFrame(PhFrame frame)
+PhFrame PhStripDoc::previousElementFrame(PhFrame frame)
 {
-	PhFrame previousElementFrame = getPreviousCutFrame(frame);
+	PhFrame previousElementFrame = previousCutFrame(frame);
 
-	if(getPreviousLoopFrame(frame) > previousElementFrame)
-		previousElementFrame = getPreviousLoopFrame(frame);
+	if(previousLoopFrame(frame) > previousElementFrame)
+		previousElementFrame = previousLoopFrame(frame);
 
-	if(getPreviousTextFrame(frame) > previousElementFrame)
-		previousElementFrame = getPreviousTextFrame(frame);
+	if(previousTextFrame(frame) > previousElementFrame)
+		previousElementFrame = previousTextFrame(frame);
 
 	return previousElementFrame;
 }
 
-PhFrame PhStripDoc::getNextTextFrame(PhFrame frame)
+PhFrame PhStripDoc::nextTextFrame(PhFrame frame)
 {
 	PhFrame nextTextFrame = PHFRAMEMAX;
 
 	foreach(PhStripText* text, _texts)
 	{
-		if((text->getTimeIn() > frame) && (text->getTimeIn() < nextTextFrame) )
-			nextTextFrame = text->getTimeIn();
-		else if(text->getTimeIn() > nextTextFrame)
+		if((text->frameIn() > frame) && (text->frameIn() < nextTextFrame) )
+			nextTextFrame = text->frameIn();
+		else if(text->frameIn() > nextTextFrame)
 			return nextTextFrame;
 	}
 
 	return nextTextFrame;
 }
 
-PhFrame PhStripDoc::getNextLoopFrame(PhFrame frame)
+PhFrame PhStripDoc::nextLoopFrame(PhFrame frame)
 {
 	PhFrame nextLoopFrame = PHFRAMEMAX;
 
 	foreach(PhStripLoop* loop, _loops)
 	{
-		if((loop->getTimeIn() > frame) && (loop->getTimeIn() < nextLoopFrame) )
-			nextLoopFrame = loop->getTimeIn();
-		else if(loop->getTimeIn() > nextLoopFrame)
+		if((loop->frameIn() > frame) && (loop->frameIn() < nextLoopFrame) )
+			nextLoopFrame = loop->frameIn();
+		else if(loop->frameIn() > nextLoopFrame)
 			return nextLoopFrame;
 	}
 
 	return nextLoopFrame;
 }
 
-PhFrame PhStripDoc::getNextCutFrame(PhFrame frame)
+PhFrame PhStripDoc::nextCutFrame(PhFrame frame)
 {
 	PhFrame nextCutFrame = PHFRAMEMAX;
 
 	foreach(PhStripCut* cut, _cuts)
 	{
-		if((cut->getTimeIn() > frame) && (cut->getTimeIn() < nextCutFrame) )
-			nextCutFrame = cut->getTimeIn();
-		else if(cut->getTimeIn() > nextCutFrame)
+		if((cut->frameIn() > frame) && (cut->frameIn() < nextCutFrame) )
+			nextCutFrame = cut->frameIn();
+		else if(cut->frameIn() > nextCutFrame)
 			return nextCutFrame;
 	}
 
 	return nextCutFrame;
 }
 
-PhFrame PhStripDoc::getNextElementFrame(PhFrame frame)
+PhFrame PhStripDoc::nextElementFrame(PhFrame frame)
 {
-	PhFrame nextElementFrame = getNextCutFrame(frame);
+	PhFrame nextElementFrame = nextCutFrame(frame);
 
-	if(getNextLoopFrame(frame) < nextElementFrame)
-		nextElementFrame = getNextLoopFrame(frame);
+	if(nextLoopFrame(frame) < nextElementFrame)
+		nextElementFrame = nextLoopFrame(frame);
 
-	if(getNextTextFrame(frame) < nextElementFrame)
-		nextElementFrame = getNextTextFrame(frame);
+	if(nextTextFrame(frame) < nextElementFrame)
+		nextElementFrame = nextTextFrame(frame);
 
 	return nextElementFrame;
 }
 
-PhFrame PhStripDoc::getFrameIn()
+PhFrame PhStripDoc::frameIn()
 {
-	return getNextElementFrame(0);
+	return nextElementFrame(0);
 }
 
-PhFrame PhStripDoc::getFrameOut()
+PhFrame PhStripDoc::frameOut()
 {
-	return getPreviousElementFrame(PHFRAMEMAX);
+	return previousElementFrame(PHFRAMEMAX);
 }
 
-PhStripLoop *PhStripDoc::getNextLoop(PhFrame frame)
+PhStripLoop *PhStripDoc::nextLoop(PhFrame frame)
 {
 	foreach(PhStripLoop* loop, _loops)
 	{
-		if(loop->getTimeIn() > frame)
+		if(loop->frameIn() > frame)
 			return loop;
 	}
 	return NULL;
 }
 
-PhStripLoop *PhStripDoc::getPreviousLoop(PhFrame frame)
+PhStripLoop *PhStripDoc::previousLoop(PhFrame frame)
 {
 	int i = _loops.count() - 1;
 	while(i >= 0) {
-		if(_loops.at(i)->getTimeIn() < frame)
+		if(_loops.at(i)->frameIn() < frame)
 			return _loops.at(i);
 		i--;
 	}
 	return NULL;
 }
 
-QString PhStripDoc::getFilePath()
+QString PhStripDoc::filePath()
 {
 	return _filePath;
 }
 
-QString PhStripDoc::getVideoPath()
+QString PhStripDoc::videoFilePath()
 {
 	return _videoPath;
 }
 
-QList<QString> PhStripDoc::getMetaKey()
+QList<QString> PhStripDoc::metaKeys()
 {
 	return _metaInformation.keys();
 }
 
-QString PhStripDoc::getMetaInformation(QString key)
+QString PhStripDoc::metaInformation(QString key)
 {
 	return _metaInformation[key];
 }
 
-PhTimeCodeType PhStripDoc::getTCType()
+PhTimeCodeType PhStripDoc::timeCodeType()
 {
 #warning /// @todo rename to timeCodeType()
 	return _tcType;
@@ -1077,72 +1069,72 @@ QList<PhPeople *> PhStripDoc::peoples()
 	return _peoples;
 }
 
-QString PhStripDoc::getTitle()
+QString PhStripDoc::title()
 {
 	return _title;
 }
 
-QString PhStripDoc::getTranslatedTitle()
+QString PhStripDoc::translatedTitle()
 {
 	return _translatedTitle;
 }
 
-QString PhStripDoc::getEpisode()
+QString PhStripDoc::episode()
 {
 	return _episode;
 }
 
-QString PhStripDoc::getSeason()
+QString PhStripDoc::season()
 {
 	return _season;
 }
 
-PhTime PhStripDoc::getVideoTimestamp()
+PhFrame PhStripDoc::videoFramestamp()
 {
 	return _videoFrameStamp;
 }
 
-PhFrame PhStripDoc::getLastFrame()
+PhFrame PhStripDoc::lastFrame()
 {
 	return _lastFrame;
 }
 
-QList<PhStripText *> PhStripDoc::getTexts()
+QList<PhStripText *> PhStripDoc::texts()
 {
 	return _texts;
 }
 
-QList<PhStripText *> PhStripDoc::getTexts(PhPeople *people)
+QList<PhStripText *> PhStripDoc::texts(PhPeople *people)
 {
 	QList<PhStripText*> result;
 	foreach(PhStripText *text, _texts) {
-		if(text->getPeople() == people)
+		if(text->people() == people)
 			result.append(text);
 	}
 	return result;
 }
 
-QList<PhStripLoop *> PhStripDoc::getLoops()
+QList<PhStripLoop *> PhStripDoc::loops()
 {
 	return _loops;
 }
 
-QList<PhStripDetect *> PhStripDoc::getDetects(PhFrame frameIn, PhFrame frameOut)
+QList<PhStripDetect *> PhStripDoc::detects(PhFrame frameIn, PhFrame frameOut)
 {
 	QList<PhStripDetect*> result;
 	foreach(PhStripDetect *detect, this->_detects) {
-		if((detect->getTimeIn() >= frameIn) && (detect->getTimeOut() < frameOut))
+		if((detect->frameIn() >= frameIn) && (detect->frameOut() < frameOut))
 			result.append(detect);
 	}
 
 	return result;
 }
 
-QList<PhStripDetect *> PhStripDoc::getPeopleDetects(PhPeople *people, PhFrame frameIn, PhFrame frameOut)
+QList<PhStripDetect *> PhStripDoc::peopleDetects(PhPeople *people, PhFrame frameIn, PhFrame frameOut)
 {
 	QList<PhStripDetect *> result;
-	foreach(PhStripDetect *detect, this->getDetects(frameIn, frameOut)) {
-		if(detect->getPeople() == people)
+	foreach(PhStripDetect *detect, this->detects(frameIn, frameOut)) {
+		if(detect->people() == people)
 			result.append(detect);
 	}
 	return result;
@@ -1153,17 +1145,17 @@ void PhStripDoc::setTitle(QString title)
 	_title = title;
 }
 
-void PhStripDoc::setVideoTimestamp(PhFrame videoFramestamp)
+void PhStripDoc::setVideoFramestamp(PhFrame videoFramestamp)
 {
 	_videoFrameStamp = videoFramestamp;
 }
 
-void PhStripDoc::setVideoPath(QString videoPath)
+void PhStripDoc::setVideoFilePath(QString videoFilePath)
 {
-	_videoPath = videoPath;
+	_videoPath = videoFilePath;
 }
 
-QList<PhStripCut *> PhStripDoc::getCuts()
+QList<PhStripCut *> PhStripDoc::cuts()
 {
 	return _cuts;
 }
