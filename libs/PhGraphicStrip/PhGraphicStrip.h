@@ -127,6 +127,8 @@ public:
 	 */
 	PhFont * getHUDFont();
 
+	int maxDrawElapsed() { return _maxDrawElapsed; }
+	int dropDetected() { return _dropDetected; }
 
 private slots:
 	/**
@@ -178,6 +180,8 @@ private:
 	 * QTime for testing performance
 	 */
 	QTime _testTimer;
+	int _maxDrawElapsed;
+	int _dropDetected;
 
 	int _trackNumber;
 	PhGraphicStripSettings * _settings;

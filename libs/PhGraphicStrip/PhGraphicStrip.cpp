@@ -18,13 +18,12 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	_doc(this),
 	_clock(_doc.getTCType()),
 	_trackNumber(4),
-	_settings(NULL)
+	_settings(NULL),
+	_maxDrawElapsed(0),
+	_dropDetected(0)
 {
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(onDocChanged()));
-
-	// This is used to make some time-based test
-	_testTimer.start();
 }
 
 PhStripDoc *PhGraphicStrip::doc()
@@ -42,7 +41,6 @@ void PhGraphicStrip::setSettings(PhGraphicStripSettings *settings)
 	PHDEBUG;
 	_settings = settings;
 }
-
 
 bool PhGraphicStrip::setFontFile(QString fontFile)
 {
@@ -92,6 +90,9 @@ bool PhGraphicStrip::init()
 	_stripSyncBar.setColor(QColor(225, 86, 108));
 
 	_hudFont.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "ARIAL.TTF");
+
+	// This is used to make some time-based test
+	_testTimer.start();
 
 	return true;
 }
@@ -178,7 +179,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 	bool invertedColor = _settings->invertColor();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//	int lastDrawElapsed = _testTimer.elapsed();
+	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
 	if(height > 0) {
@@ -532,8 +533,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 	//	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
 
-	//	int currentDrawElapsed = _testTimer.elapsed() - lastDrawElapsed;
-	//	if(_testTimer.elapsed() > 20)
-	//		PHDEBUG << lastDrawElapsed << currentDrawElapsed;
+	int currentDrawElapsed = _testTimer.elapsed() - lastDrawElapsed;
+	if(_testTimer.elapsed() > 20)
+		PHDEBUG << "Drop detected:" << ++_dropDetected;
+	if(currentDrawElapsed > _maxDrawElapsed)
+		_maxDrawElapsed = currentDrawElapsed;
 	_testTimer.restart();
 }
