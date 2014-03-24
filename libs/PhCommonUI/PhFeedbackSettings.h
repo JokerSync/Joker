@@ -8,7 +8,7 @@
 
 #include "PhTools/PhGenericSettings.h"
 
-class PhFeedbackSettings : protected PhGenericSettings
+class PhFeedbackSettings
 {
 public:
 	/**
@@ -16,6 +16,9 @@ public:
 	 * @return The path
 	 */
 	virtual QString settingsFileName() = 0;
+
+	virtual QStringList emailList() = 0;
+	virtual void setEmailList(QStringList emails) = 0;
 
 };
 #endif // PHFEEDBACKSETTINGS_H

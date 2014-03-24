@@ -11,6 +11,8 @@
 #include "PhTools/PhDebug.h"
 #include "PhFeedbackSettings.h"
 
+#include "PhTools/SMTP/SmtpMime"
+
 namespace Ui {
 class FeedbackReporter;
 }
@@ -25,6 +27,8 @@ public:
 
 private slots:
 	void on_buttonBox_accepted();
+
+	void on_buttonBox_rejected();
 
 private:
 	Ui::FeedbackReporter *ui;

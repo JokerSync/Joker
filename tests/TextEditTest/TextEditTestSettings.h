@@ -7,7 +7,7 @@
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 #include "PhCommonUI/PhFeedbackSettings.h"
 
-class TextEditTestSettings : protected PhGenericSettings, public PhDocumentWindowSettings
+class TextEditTestSettings : protected PhGenericSettings, public PhDocumentWindowSettings, public PhFeedbackSettings
 {
 public:
 	// PhWindowSettings
@@ -24,6 +24,7 @@ public:
 
 	// PhFeedbackSettings
 	QString settingsFileName(){return _settings.fileName();}
+	PH_SETTING_STRINGLIST(setEmailList, emailList)
 };
 
 #endif // TEXTEDITTESTSETTINGS_H
