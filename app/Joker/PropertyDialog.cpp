@@ -60,7 +60,7 @@ void PropertyDialog::showEvent(QShowEvent *)
 		if(frameOut > 0)
 			ui->tcOutLabel->setText(PhTimeCode::stringFromFrame(frameOut, _doc->getTCType()));
 
-		int peopleNumber = _doc->getPeoples().count();
+		int peopleNumber = _doc->peoples().count();
 		ui->peopleNumberLabel->setText(QString::number(peopleNumber));
 
 		int charNumber = 0;

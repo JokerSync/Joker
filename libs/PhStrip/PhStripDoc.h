@@ -125,10 +125,10 @@ public:
 	PhTimeCodeType getTCType();
 
 	/**
-	 * @brief getActors
-	 * @return _actors
+	 * @brief The list of peoples
+	 * @return A list.
 	 */
-	QMap<QString, PhPeople *> getPeoples();
+	QList<PhPeople *> peoples();
 	/**
 	 * @brief Get the list of texts
 	 * @return A list of texts
@@ -391,7 +391,7 @@ private:
 	/**
 	 * List of PhPeople from the file
 	 */
-	QMap<QString, PhPeople *> _peoples;
+	QList<PhPeople *> _peoples;
 
 	/**
 	 * List of PhStripText from the file

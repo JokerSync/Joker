@@ -85,7 +85,7 @@ int countDetectLength(PhStripDoc *doc)
 
 	int fileLength = 0;
 
-	foreach(PhPeople *people, doc->getPeoples()) {
+	foreach(PhPeople *people, doc->peoples()) {
 		int length = 0;
 		foreach(PhStripDetect *detect, doc->getPeopleDetects(people)) {
 			int detectLength = detect->getTimeOut() - detect->getTimeIn();

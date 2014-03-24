@@ -21,7 +21,7 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 		_oldPeopleNameList.append(name);
 	}
 
-	foreach(PhPeople* people, _doc->getPeoples().values()) {
+	foreach(PhPeople* people, _doc->peoples()) {
 		if(people) {
 			QString name = people->getName();
 			ui->peopleList->addItem(name);
@@ -53,7 +53,7 @@ void PeopleDialog::on_peopleList_itemSelectionChanged()
 		peopleNameList.append(item->text());
 	}
 
-	if(peopleNameList.count() < _doc->getPeoples().count())
+	if(peopleNameList.count() < _doc->peoples().count())
 		_settings->setSelectedPeopleNameList(peopleNameList);
 }
 

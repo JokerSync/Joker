@@ -59,7 +59,7 @@ void StripDocTest::importDetXPeopleTest()
 	PhStripDoc doc;
 	QVERIFY(doc.importDetX("test01.detx"));
 
-	QCOMPARE(doc.getPeoples().count(), 3);
+	QCOMPARE(doc.peoples().count(), 3);
 	PhPeople *jeanne = doc.getPeopleByName("Jeanne");
 	QVERIFY(jeanne);
 	QCOMPARE(jeanne->getName(), QString("Jeanne"));
@@ -176,7 +176,7 @@ void StripDocTest::importMosTest01()
 	QCOMPARE(doc.getEpisode(), QString("episode"));
 
 	// Test peoples
-	QCOMPARE(doc.getPeoples().count(), 1);
+	QCOMPARE(doc.peoples().count(), 1);
 	PhPeople * people = doc.getPeopleByName("Nom personnage");
 	QVERIFY(people != NULL);
 	QCOMPARE(people->getName(), QString("Nom personnage"));
@@ -189,7 +189,6 @@ void StripDocTest::importMosTest01()
 
 	// Test texts
 	QCOMPARE(doc.getTexts().count(), 3);
-#warning TODO reenable this test for complete acceptance:
 	QCOMPARE(doc.getTexts()[0]->getPeople(), people);
 	QCOMPARE(doc.getTexts()[0]->getContent(), QString("Ceci "));
 	QCOMPARE(f2s(doc.getTexts()[0]->getTimeIn()), QString("00:00:00:20"));
@@ -221,7 +220,7 @@ void StripDocTest::importMosTest02()
 	QCOMPARE(f2s(doc.getVideoTimestamp()), QString("00:58:24:00"));
 
 	// Test peoples
-	QCOMPARE(doc.getPeoples().count(), 2);
+	QCOMPARE(doc.peoples().count(), 2);
 
 	PhPeople * pierre = doc.getPeopleByName("Pierre");
 	QVERIFY(pierre != NULL);
@@ -269,7 +268,7 @@ void StripDocTest::importMosTest03()
 	QCOMPARE(f2s(doc.getVideoTimestamp(), doc.getTCType()), QString("05:59:50:00"));
 
 	// Test peoples
-	QCOMPARE(doc.getPeoples().count(), 2);
+	QCOMPARE(doc.peoples().count(), 2);
 
 	PhPeople * noName = doc.getPeopleByName("");
 	QVERIFY(noName != NULL);

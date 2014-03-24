@@ -99,27 +99,23 @@ bool PhGraphicStrip::init()
 
 void PhGraphicStrip::onDocChanged()
 {
-	foreach(PhGraphicText * gPeople, _graphicPeoples.values())
-	delete gPeople;
+	qDeleteAll(_graphicPeoples);
 	_graphicPeoples.clear();
 
-	foreach(PhGraphicSolidRect * gCut, _graphicCuts.values())
-	delete gCut;
+	qDeleteAll(_graphicCuts);
 	_graphicCuts.clear();
 
-	foreach(PhGraphicText * gText, _graphicTexts.values())
-	delete gText;
+	qDeleteAll(_graphicTexts);
 	_graphicTexts.clear();
 
-	foreach(PhGraphicLoop * gLoop, _graphicLoops.values())
-	delete gLoop;
+	qDeleteAll(_graphicLoops);
 	_graphicLoops.clear();
 
-	foreach(PhGraphicRect * gDetect, _graphicDetects.values())
-	delete gDetect;
+	qDeleteAll(_graphicDetects);
 	_graphicDetects.clear();
 
 	_trackNumber = 4;
+
 	foreach(PhStripText *text, _doc.getTexts()) {
 		if(text->getTrack() >= _trackNumber)
 			_trackNumber = text->getTrack() + 1;

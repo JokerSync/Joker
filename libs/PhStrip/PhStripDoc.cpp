@@ -117,6 +117,8 @@ bool PhStripDoc::importDetX(QString fileName)
 		}
 	}
 
+	QMap<QString, PhPeople*> peopleMap;
+
 	// Reading the "role" lists
 	if(detX.elementsByTagName("roles").count()) {
 		QDomElement roles = detX.elementsByTagName("roles").at(0).toElement();
@@ -126,7 +128,8 @@ bool PhStripDoc::importDetX(QString fileName)
 			PhPeople *people = new PhPeople(role.attribute("name"), role.attribute("color"));
 
 			//Currently using id as key instead of name
-			_peoples[role.attribute("id")] = people;
+			peopleMap[role.attribute("id")] = people;
+			_peoples.append(people);
 		}
 	}
 
@@ -151,7 +154,7 @@ bool PhStripDoc::importDetX(QString fileName)
 					PhFrame frameIn = -1;
 					PhFrame lastFrame = -1;
 					PhFrame lastLinkedFrame = -1;
-					PhPeople *people = _peoples[elem.attribute("role")];
+					PhPeople *people = peopleMap[elem.attribute("role")];
 					int track = elem.attribute("track").toInt();
 					QString currentText = "";
 					for(int j = 0; j < elem.childNodes().length(); j++) {
@@ -222,7 +225,6 @@ PhStripText* PhStripDoc::readMosText(QFile &f, int level)
 	PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, 2, "tcin") / 12;
 	PhFrame frameOut = _videoFrameStamp + PhFileTool::readInt(f, 2, "tcout") / 12;
 
-#warning TODO decode people and track number
 	PhStripText* text = new PhStripText(frameIn, NULL, frameOut, 0, content);
 
 	PhFileTool::readInt(f, internLevel, "text");
@@ -521,7 +523,9 @@ bool PhStripDoc::importMos(QString fileName)
 		int peopleId = PhFileTool::readInt(f, peopleLevel, "peopleId");
 
 		QString name = PhFileTool::readString(f, peopleLevel, "people name");
-		peopleMap[peopleId] = _peoples[name] = new PhPeople(name, "#000000");
+		PhPeople *people = new PhPeople(name, "#000000");
+		peopleMap[peopleId] = people;
+		_peoples.append(people);
 
 		peopleTrackMap[peopleId] = PhFileTool::readInt(f, peopleLevel, "people track") - 1;
 		for(int j = 0; j < 6; j++)
@@ -782,25 +786,22 @@ bool PhStripDoc::createDoc(QString text, int nbPeople, int nbText, int nbTrack, 
 	names.append("Jane");
 
 	int nbNames = names.length();
-	QStringList idList;
 	// Creation of the Peoples
 	for (int i = 1; i <= nbPeople; i++) {
 		PhPeople *people = new PhPeople(names.at(i % nbNames) + " " + QString::number(i), "black");
-		_peoples[people->getName()] = people;
-		idList.append(people->getName());
+		_peoples.append(people);
 	}
 
 	int position = _videoFrameStamp;
 	// Creation of the text
 	for (int i = 0; i < nbText; i++) {
 		//Make people "talk" alternaly
-		QString id = _peoples[idList.at(i % nbPeople)]->getName();
+		PhPeople *people = _peoples[i % nbPeople];
 
 		int start = position;
 		int end = start + text.length() * 1.20588 + 1;
 
-		addText(_peoples[id], start, end,
-		        text, i % nbTrack);
+		addText(people, start, end, text, i % nbTrack);
 
 		// So the texts are all one after the other
 		position += end - start;
@@ -1071,6 +1072,11 @@ PhTimeCodeType PhStripDoc::getTCType()
 	return _tcType;
 }
 
+QList<PhPeople *> PhStripDoc::peoples()
+{
+	return _peoples;
+}
+
 QString PhStripDoc::getTitle()
 {
 	return _title;
@@ -1099,11 +1105,6 @@ PhTime PhStripDoc::getVideoTimestamp()
 PhFrame PhStripDoc::getLastFrame()
 {
 	return _lastFrame;
-}
-
-QMap<QString, PhPeople *> PhStripDoc::getPeoples()
-{
-	return _peoples;
 }
 
 QList<PhStripText *> PhStripDoc::getTexts()
