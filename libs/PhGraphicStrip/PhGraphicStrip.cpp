@@ -322,12 +322,17 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 			trackFull[i] = false;
 		}
 
-		bool displayNextText = _settings->displayNextText();
-
 		int verticalPixelPerFrame = _settings->verticalSpeed();
+		bool displayNextText = _settings->displayNextText();
+		PhFrame maxFrameIn = frameOut;
+		if(displayNextText)
+			maxFrameIn += y / verticalPixelPerFrame;
 
 		foreach(PhStripText * text, _doc.getTexts())
 		{
+			if(text->getTimeOut() < frameIn)
+				continue;
+			counter++;
 			PhGraphicText* gText = _graphicTexts[text];
 			if(gText == NULL) {
 				gText = new PhGraphicText( &_textFont, text->getContent());
@@ -428,6 +433,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 			lastTextList[track] = text;
 
+			if(text->getTimeIn() > maxFrameIn)
+				break;
 		}
 
 		delete lastTextList;
