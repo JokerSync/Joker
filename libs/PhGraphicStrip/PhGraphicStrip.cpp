@@ -101,27 +101,49 @@ void PhGraphicStrip::onDocChanged()
 {
 	qDeleteAll(_graphicPeoples);
 	_graphicPeoples.clear();
+	foreach (PhPeople *people, _doc.peoples()) {
+		QString name = people?people->name():"???";
+		_graphicPeoples[people] = new PhGraphicText(&_hudFont, name);
+		_graphicPeoples[people]->setWidth(name.length() * 12);
+		_graphicPeoples[people]->init();
+	}
 
 	qDeleteAll(_graphicCuts);
 	_graphicCuts.clear();
+	foreach (PhStripCut *cut, _doc.cuts()) {
+		_graphicCuts[cut] = new PhGraphicSolidRect();
+		_graphicCuts[cut]->setZ(-1);
+		_graphicCuts[cut]->setWidth(2);
+		_graphicCuts[cut]->init();
+	}
 
 	qDeleteAll(_graphicTexts);
 	_graphicTexts.clear();
-
-	qDeleteAll(_graphicLoops);
-	_graphicLoops.clear();
-
-	qDeleteAll(_graphicDetects);
-	_graphicDetects.clear();
-
 	_trackNumber = 4;
-
-	foreach(PhStripText *text, _doc.texts()) {
+	foreach (PhStripText *text, _doc.texts()) {
+		_graphicTexts[text] = new PhGraphicText(&_textFont, text->content());
+		_graphicTexts[text]->setZ(-1);
+		_graphicTexts[text]->init();
 		if(text->track() >= _trackNumber)
 			_trackNumber = text->track() + 1;
 	}
 
+	qDeleteAll(_graphicLoops);
+	_graphicLoops.clear();
+	foreach (PhStripLoop *loop, _doc.loops()) {
+		_graphicLoops[loop] = new PhGraphicLoop();
+		_graphicLoops[loop]->setZ(-1);
+		_graphicLoops[loop]->init();
+	}
+
+	qDeleteAll(_graphicDetects);
+	_graphicDetects.clear();
 	foreach(PhStripDetect *detect, _doc.detects()) {
+		if(detect->off()) {
+			_graphicDetects[detect] = new PhGraphicSolidRect();
+			_graphicDetects[detect]->setZ(-1);
+			_graphicDetects[detect]->init();
+		}
 		if(detect->track() >= _trackNumber)
 			_trackNumber = detect->track() + 1;
 	}
@@ -330,16 +352,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 				continue;
 			counter++;
 			PhGraphicText* gText = _graphicTexts[text];
-			if(gText == NULL) {
-				gText = new PhGraphicText( &_textFont, text->content());
-
-				gText->setZ(-1);
-				gText->init();
-
-				_graphicTexts[text] = gText;
-			}
 			int track = text->track();
-
 
 			if( !((text->frameOut() < frameIn) || (text->frameIn() > frameOut)) ) {
 				gText->setX(x + text->frameIn() * pixelPerFrame - offset);
@@ -360,19 +373,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 			if((lastText == NULL) || (lastText->people() != text->people()) || (text->frameIn() - lastText->frameOut() > minSpaceBetweenPeople)) {
 				PhPeople * people = text->people();
 				PhGraphicText * gPeople = _graphicPeoples[people];
-				QString name = "???";
-				if(people)
-					name = people->name();
 
-				if(gPeople == NULL) {
-					gPeople = new PhGraphicText(&_hudFont, name);
-					gPeople->setWidth(name.length() * 12);
-					gPeople->setZ(-1);
-
-					gPeople->init();
-
-					_graphicPeoples[people] = gPeople;
-				}
 				gPeople->setX(x + text->frameIn() * pixelPerFrame - offset - gPeople->getWidth() - spaceBetweenPeopleAndText);
 				gPeople->setY(y + track * trackHeight);
 				gPeople->setZ(-1);
@@ -391,19 +392,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 			if(displayNextText && (frameOut < text->frameIn()) && ((lastText == NULL) || (text->frameIn() - lastText->frameOut() > minSpaceBetweenPeople))) {
 				PhPeople * people = text->people();
-				QString name = "???";
-				if(people)
-					name = people->name();
 
 				PhGraphicText * gPeople = _graphicPeoples[people];
-				if(gPeople == NULL) {
-					gPeople = new PhGraphicText(&_textFont, name);
-					gPeople->setWidth(name.length() * 12);
-
-					gPeople->init();
-
-					_graphicPeoples[people] = gPeople;
-				}
 				int howFarIsText = (text->frameIn() - frameOut) * verticalPixelPerFrame;
 				//This line is used to see which text's name will be displayed
 				gPeople->setX(width - gPeople->getWidth());
@@ -440,13 +430,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 			//_counter++;
 			if( (frameIn < cut->frameIn()) && (cut->frameIn() < frameOut)) {
 				PhGraphicSolidRect *gCut = _graphicCuts[cut];
-				if(gCut == NULL) {
-					gCut = new PhGraphicSolidRect();
-					gCut->setZ(-1);
-					gCut->setWidth(2);
-
-					_graphicCuts[cut] = gCut;
-				}
 				if(invertedColor)
 					gCut->setColor(QColor(255, 255, 255));
 				else
@@ -469,11 +452,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 			// This calcul allow the cross to come smoothly on the screen (height / 8 /pixelPerFrame)
 			if( ((loop->frameIn() + height / 8 /pixelPerFrame) > frameIn) && ((loop->frameIn() - height / 8 /pixelPerFrame ) < frameOut)) {
 				PhGraphicLoop * gLoop = _graphicLoops[loop];
-				if(gLoop == NULL) {
-					gLoop = new PhGraphicLoop();
-					_graphicLoops[loop] = gLoop;
-					gLoop->setZ(-1);
-				}
 				if(!invertedColor)
 					gLoop->setColor(Qt::black);
 				else
@@ -519,11 +497,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 			if( detect->off() && (frameIn < detect->frameOut()) && (detect->frameIn() < frameOut) ) {
 				PhGraphicSolidRect *gDetect = _graphicDetects[detect];
-				if(gDetect == NULL) {
-					gDetect = new PhGraphicSolidRect();
-					_graphicDetects[detect] = gDetect;
-					gDetect->setZ(-1);
-				}
 
 				gDetect->setColor(computeColor(detect->people(), selectedPeoples, invertedColor));
 
