@@ -28,6 +28,7 @@ public:
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimestamp, rulerTimestamp)
 	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 33)
+	PH_SETTING_BOOL(setDisplayStripInfo, displayStripInfo)
 
 	// PhSyncSettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
