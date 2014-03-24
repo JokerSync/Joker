@@ -12,6 +12,9 @@ DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 INCLUDEPATH += ../../libs
 
+include(SMTP/SMTPEmail.pri)
+
+
 HEADERS += \
 	../../libs/PhTools/PhTime.h \
 	../../libs/PhTools/PhTimeCode.h \

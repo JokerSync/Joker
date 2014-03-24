@@ -16,6 +16,8 @@ HEADERS += \
     ../../libs/PhCommonUI/PhWindow.h \
     ../../libs/PhCommonUI/PhWindowSettings.h \
     ../../libs/PhCommonUI/PhLockableSpinBox.h \
+    ../../libs/PhCommonUI/FeedbackReporter.h \
+    ../../libs/PhCommonUI/PhFeedbackSettings.h
 
 SOURCES += \
 #   ../../libs/PhCommonUI/PhLeap.cpp \
@@ -26,10 +28,12 @@ SOURCES += \
     ../../libs/PhCommonUI/PhDocumentWindow.cpp \
     ../../libs/PhCommonUI/PhWindow.cpp \
     ../../libs/PhCommonUI/PhLockableSpinBox.cpp \
+    ../../libs/PhCommonUI/FeedbackReporter.cpp
 
 
 FORMS += ../../libs/PhCommonUI/PhMediaPanel.ui \
-	../../libs/PhCommonUI/PhTimeCodeDialog.ui
+	../../libs/PhCommonUI/PhTimeCodeDialog.ui \
+    ../../libs/PhCommonUI/FeedbackReporter.ui
 
 #INCLUDEPATH += $$(LEAP_SDK)/include
 

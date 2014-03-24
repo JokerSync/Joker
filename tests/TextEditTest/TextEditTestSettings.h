@@ -5,12 +5,14 @@
 
 #include "PhTools/PhGenericSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
+#include "PhCommonUI/PhFeedbackSettings.h"
 
 class TextEditTestSettings : protected PhGenericSettings, public PhDocumentWindowSettings
 {
 public:
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)
+	PH_SETTING_BOOL(setExitedNormaly, exitedNormaly)
 	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
 
 	// PhDocumentWindowSettings
@@ -19,6 +21,9 @@ public:
 	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 5)
 	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
+
+	// PhFeedbackSettings
+	QString settingsFileName(){return _settings.fileName();}
 };
 
 #endif // TEXTEDITTESTSETTINGS_H
