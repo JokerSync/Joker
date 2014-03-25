@@ -44,7 +44,7 @@ public:
 	 * @param useAudio Shall decode audio frame?
 	 * @param parent The parent object
 	 */
-	explicit PhVideoEngine(bool useAudio, QObject *parent = 0);
+	explicit PhVideoEngine(bool useAudio = false, QObject *parent = 0);
 	~PhVideoEngine();
 
 	// Properties

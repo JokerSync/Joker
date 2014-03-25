@@ -47,25 +47,25 @@ void PropertyDialog::showEvent(QShowEvent *)
 	ui->codecNameLabel->setText("-");
 
 	if(_doc) {
-		ui->titleLabel->setText(_doc->getTitle());
+		ui->titleLabel->setText(_doc->title());
 
-		if(_doc->getAuthorName().length())
-			ui->authorLabel->setText(_doc->getAuthorName());
+		if(_doc->authorName().length())
+			ui->authorLabel->setText(_doc->authorName());
 
-		PhFrame frameIn = _doc->getFrameIn();
+		PhFrame frameIn = _doc->frameIn();
 		if(frameIn > 0)
-			ui->tcInLabel->setText(PhTimeCode::stringFromFrame(frameIn, _doc->getTCType()));
+			ui->tcInLabel->setText(PhTimeCode::stringFromFrame(frameIn, _doc->timeCodeType()));
 
-		PhFrame frameOut = _doc->getFrameOut();
+		PhFrame frameOut = _doc->frameOut();
 		if(frameOut > 0)
-			ui->tcOutLabel->setText(PhTimeCode::stringFromFrame(frameOut, _doc->getTCType()));
+			ui->tcOutLabel->setText(PhTimeCode::stringFromFrame(frameOut, _doc->timeCodeType()));
 
-		int peopleNumber = _doc->getPeoples().count();
+		int peopleNumber = _doc->peoples().count();
 		ui->peopleNumberLabel->setText(QString::number(peopleNumber));
 
 		int charNumber = 0;
-		foreach(PhStripText * text, _doc->getTexts())
-		charNumber += text->getContent().length();
+		foreach(PhStripText * text, _doc->texts())
+		charNumber += text->content().length();
 		ui->charNumberLabel->setText(QString::number(charNumber));
 	}
 

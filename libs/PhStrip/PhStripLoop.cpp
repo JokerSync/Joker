@@ -7,7 +7,7 @@
 
 #include "PhStripLoop.h"
 
-PhStripLoop::PhStripLoop(int number, PhTime TimeIn) : PhStripObject(TimeIn)
+PhStripLoop::PhStripLoop(int number, PhFrame frameIn) : PhStripObject(frameIn)
 {
 	_number = number;
 }

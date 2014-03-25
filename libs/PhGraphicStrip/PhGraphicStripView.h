@@ -9,6 +9,7 @@
 
 #include "PhGraphic/PhGraphicView.h"
 #include "PhGraphicStrip/PhGraphicStrip.h"
+#include "PhGraphicStrip/PhGraphicStripSettings.h"
 
 /**
  * @brief Provide a view of the PhGraphicStrip class
@@ -30,6 +31,14 @@ public:
 	PhGraphicStrip * strip() {
 		return &_strip;
 	}
+
+	/**
+	 * @brief Attach the given settings to the view
+	 *
+	 * @param settings The Settings
+	 */
+	void setSettings(PhGraphicStripSettings *settings);
+
 protected:
 	/**
 	 * @brief Initializisation of the PhGraphicStrip
@@ -43,6 +52,7 @@ protected:
 
 private:
 	PhGraphicStrip _strip;
+	PhGraphicStripSettings *_settings;
 };
 
 #endif // PHGRAPHICSTRIPVIEW_H

@@ -166,7 +166,6 @@ void JokerWindow::setupSyncProtocol()
 
 bool JokerWindow::openDocument(QString fileName)
 {
-	hideMediaPanel();
 	/// Clear the selected people name list (except for the first document).
 	if(!_firstDoc)
 		_settings->setSelectedPeopleNameList(QStringList());
@@ -179,11 +178,11 @@ bool JokerWindow::openDocument(QString fileName)
 	/// If the document is opened successfully :
 	/// - Update the current document name (settings, windows title)
 	setCurrentDocument(fileName);
-	_watcher.addPath(_doc->getFilePath());
+	_watcher.addPath(_doc->filePath());
 
 	/// - Open the corresponding video file if it exists.
-	if(openVideoFile(_doc->getVideoPath())) {
-		PhFrame frameStamp = _doc->getVideoTimestamp();
+	if(openVideoFile(_doc->videoFilePath())) {
+		PhFrame frameStamp = _doc->videoFramestamp();
 		_videoEngine->setFirstFrame(frameStamp);
 		_mediaPanel.setFirstFrame(frameStamp);
 	}
@@ -196,9 +195,9 @@ bool JokerWindow::openDocument(QString fileName)
 	ui->videoStripView->setForceRatio169(_doc->forceRatio169());
 
 	/// - Use the document timecode type.
-	_strip->clock()->setTimeCodeType(_doc->getTCType());
+	_strip->clock()->setTimeCodeType(_doc->timeCodeType());
 	/// - Goto to the document last position.
-	_strip->clock()->setFrame(_doc->getLastFrame());
+	_strip->clock()->setFrame(_doc->lastFrame());
 	/// - Disable the need to save flag.
 	_needToSave = false;
 
@@ -403,7 +402,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	if(dlg.exec()) {
 		QString videoFile = dlg.selectedFiles()[0];
 		if(openVideoFile(videoFile))
-			_strip->clock()->setFrame(_doc->getVideoTimestamp());
+			_strip->clock()->setFrame(_doc->videoFramestamp());
 	}
 
 	fadeInMediaPanel();
@@ -411,7 +410,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 
 bool JokerWindow::openVideoFile(QString videoFile)
 {
-	QFileInfo lastFileInfo(_doc->getVideoPath());
+	QFileInfo lastFileInfo(_doc->videoFilePath());
 	QFileInfo fileInfo(videoFile);
 	if (fileInfo.exists() && _videoEngine->open(videoFile)) {
 		PhFrame frameStamp = _videoEngine->firstFrame();
@@ -419,15 +418,15 @@ bool JokerWindow::openVideoFile(QString videoFile)
 		_mediaPanel.setFirstFrame(frameStamp);
 		_mediaPanel.setMediaLength(_videoEngine->length());
 
-		if(videoFile != _doc->getVideoPath()) {
-			_doc->setVideoPath(videoFile);
+		if(videoFile != _doc->videoFilePath()) {
+			_doc->setVideoFilePath(videoFile);
 			if(frameStamp > 0)
-				_doc->setVideoTimestamp(frameStamp);
+				_doc->setVideoFramestamp(frameStamp);
 			_needToSave = true;
 		}
 
 		if(frameStamp == 0) {
-			frameStamp = _doc->getVideoTimestamp();
+			frameStamp = _doc->videoFramestamp();
 			_videoEngine->setFirstFrame(frameStamp);
 			_videoEngine->clock()->setFrame(frameStamp);
 			if(fileInfo.fileName() != lastFileInfo.fileName()) {
@@ -467,7 +466,7 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 
 		_videoEngine->setFirstFrame(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
-		_doc->setVideoTimestamp(frameStamp);
+		_doc->setVideoFramestamp(frameStamp);
 		_mediaPanel.setFirstFrame(frameStamp);
 		_needToSave = true;
 	}
@@ -582,14 +581,14 @@ void JokerWindow::on_actionTimecode_triggered()
 
 void JokerWindow::on_actionNext_element_triggered()
 {
-	PhFrame frame = _doc->getNextElementFrame(_strip->clock()->frame());
+	PhFrame frame = _doc->nextElementFrame(_strip->clock()->frame());
 	if(frame < PHFRAMEMAX)
 		_strip->clock()->setFrame(frame);
 }
 
 void JokerWindow::on_actionPrevious_element_triggered()
 {
-	PhFrame frame = _doc->getPreviousElementFrame(_strip->clock()->frame());
+	PhFrame frame = _doc->previousElementFrame(_strip->clock()->frame());
 	if(frame > PHFRAMEMIN)
 		_strip->clock()->setFrame(frame);
 }
@@ -629,7 +628,7 @@ void JokerWindow::on_actionSave_triggered()
 	QFileInfo info(fileName);
 	if(!info.exists() || (info.suffix() != "joker"))
 		on_actionSave_as_triggered();
-	else if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked()))
+	else if(_doc->saveStripFile(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked()))
 		_needToSave = false;
 	else
 		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
@@ -652,7 +651,7 @@ void JokerWindow::on_actionSave_as_triggered()
 
 	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.joker");
 	if(fileName != "") {
-		if(_doc->saveStrip(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
+		if(_doc->saveStripFile(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
 			_needToSave = false;
 			setCurrentDocument(fileName);
 		}
@@ -714,7 +713,7 @@ void JokerWindow::on_actionShow_ruler_toggled(bool display)
 
 void JokerWindow::on_actionChange_ruler_timestamp_triggered()
 {
-	PhTimeCodeDialog dlg(_doc->getTCType(), _settings->rulerTimestamp(), this);
+	PhTimeCodeDialog dlg(_doc->timeCodeType(), _settings->rulerTimestamp(), this);
 	if(dlg.exec())
 		_settings->setRulerTimestamp(dlg.frame());
 }

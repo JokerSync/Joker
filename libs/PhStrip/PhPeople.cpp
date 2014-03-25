@@ -12,13 +12,13 @@ PhPeople::PhPeople(QString name, QString color)
 	_color = color;
 }
 
-QString PhPeople::getName()
+QString PhPeople::name()
 {
 	return _name;
 }
 
 
-QString PhPeople::getColor()
+QString PhPeople::color()
 {
 	return _color;
 }

@@ -30,15 +30,15 @@ public:
 	/**
 	 * @brief PhStripLoop constructor
 	 * @param number The loop number
-	 * @param TimeIn The loop TC
+	 * @param frameIn The loop frame
 	 */
-	PhStripLoop(int number, PhTime TimeIn);
+	PhStripLoop(int number, PhFrame frameIn);
 
 	/**
 	 * \brief Get the loop number
 	 * \return the loop number
 	 */
-	int getLoopNumber() {
+	int number() {
 		return _number;
 	}
 };

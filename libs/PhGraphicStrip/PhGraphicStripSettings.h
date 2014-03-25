@@ -84,9 +84,15 @@ public:
 	virtual int rulerTimestamp() = 0;
 	/**
 	 * @brief The number of frame between each draw of the ruler
-	 * @return
+	 * @return A number of frame
 	 */
 	virtual int spaceBetweenRuler() = 0;
+
+	/**
+	 * @brief Display some informations about the strip
+	 * @return True if the informations are displayed
+	 */
+	virtual bool displayStripInfo() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

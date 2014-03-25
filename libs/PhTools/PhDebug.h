@@ -8,6 +8,7 @@
 #define PHDEBUG_H
 
 #include <QDebug>
+#include <QMutex>
 
 /** PHERR allow to log error */
 #define PHERR PhDebug::error(__FILE__, __LINE__, __FUNCTION__)
@@ -145,6 +146,7 @@ private:
 	bool _displayLine;
 	bool _showConsole;
 	QString total;
+	QMutex _mutex;
 
 };
 
