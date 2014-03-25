@@ -56,6 +56,9 @@ public:
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
 	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
 
+	// PeopleDialog
+	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
+
 	// Other settings :
 	PH_SETTING_STRING(setLastVideoFolder, lastVideoFolder)
 	PH_SETTING_STRING2(setSelectedFilter, selectedFilter, "Rythmo files (*.detx *.strip)")
