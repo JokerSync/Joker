@@ -192,7 +192,7 @@ QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selected
 	}
 }
 
-void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *> selectedPeoples)
+void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QList<PhPeople *> selectedPeoples)
 {
 	int counter = 0;
 	bool invertedColor = _settings->invertColor();
@@ -348,8 +348,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 		foreach(PhStripText * text, _doc.texts())
 		{
-			if(text->frameOut() < frameIn)
-				continue;
 			counter++;
 			PhGraphicText* gText = _graphicTexts[text];
 			int track = text->track();
@@ -390,14 +388,15 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 
 			}
 
-			if(displayNextText && (frameOut < text->frameIn()) && ((lastText == NULL) || (text->frameIn() - lastText->frameOut() > minSpaceBetweenPeople))) {
+			if(displayNextText && (frameIn < text->frameIn()) && ((lastText == NULL) || (text->frameIn() - lastText->frameOut() > minSpaceBetweenPeople))) {
 				PhPeople * people = text->people();
 
 				PhGraphicText * gPeople = _graphicPeoples[people];
 				int howFarIsText = (text->frameIn() - frameOut) * verticalPixelPerFrame;
 				//This line is used to see which text's name will be displayed
 				gPeople->setX(width - gPeople->getWidth());
-				gPeople->setY(y - howFarIsText);
+				gPeople->setY(y - howFarIsText - gPeople->getHeight());
+
 				gPeople->setZ(-3);
 				gPeople->setHeight(trackHeight / 2);
 
@@ -411,10 +410,13 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, QList<PhPeople *>
 					background.setColor(QColor(180, 180, 180));
 
 				background.setZ(gPeople->getZ() - 1);
-				if(!invertedColor)
-					background.draw();
 
-				gPeople->draw();
+				if(gPeople->getY() > tcOffset) {
+					if(!invertedColor)
+						background.draw();
+
+					gPeople->draw();
+				}
 			}
 
 			lastTextList[track] = text;
