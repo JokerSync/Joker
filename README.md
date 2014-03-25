@@ -18,6 +18,8 @@ In order to compile the  project you will need to follow the instructions depend
 * [Linux](#linux) _(coming soon)_
 * [Windows](#windows) _(coming soon)_
 
+The project uses *Qt 5.2.1* available here: http://qt-project.org/downloads
+
 ***
 
 
