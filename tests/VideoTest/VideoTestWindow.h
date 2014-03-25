@@ -45,6 +45,9 @@ protected:
 		return NULL;
 	}
 
+	void onApplicationActivate();
+	void onApplicationDeactivate();
+
 private slots:
 	void on_actionPlay_pause_triggered();
 

@@ -1,5 +1,6 @@
 #include <QTimer>
 #include <QAction>
+#include <QGuiApplication>
 
 #include "PhTools/PhDebug.h"
 
@@ -20,6 +21,8 @@ PhWindow::PhWindow(PhWindowSettings *settings) :
 		PHDEBUG << "Restoring geometry...";
 		QMainWindow::restoreGeometry(_settings->windowGeometry());
 	}
+
+	connect(qApp, SIGNAL(applicationStateChanged(Qt::ApplicationState)), this, SLOT(onApplicationStateChange(Qt::ApplicationState)));
 }
 
 bool PhWindow::eventFilter(QObject *sender, QEvent *event)
@@ -51,6 +54,20 @@ void PhWindow::moveEvent(QMoveEvent *)
 void PhWindow::resizeEvent(QResizeEvent *)
 {
 	_settings->setWindowGeometry(QMainWindow::saveGeometry());
+}
+
+void PhWindow::onApplicationStateChange(Qt::ApplicationState state)
+{
+	switch(state) {
+	case Qt::ApplicationActive:
+		onApplicationActivate();
+		break;
+	case Qt::ApplicationInactive:
+		onApplicationDeactivate();
+		break;
+	default:
+		break;
+	}
 }
 
 void PhWindow::toggleFullScreen()

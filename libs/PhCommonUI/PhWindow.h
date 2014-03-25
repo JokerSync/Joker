@@ -64,6 +64,19 @@ protected:
 	 */
 	virtual QAction *fullScreenAction() = 0;
 
+	/**
+	 * @brief Called when the application is activated
+	 */
+	virtual void onApplicationActivate() {};
+
+	/**
+	 * @brief Called when the application is deactivated
+	 */
+	virtual void onApplicationDeactivate() {}
+
+private slots:
+	void onApplicationStateChange(Qt::ApplicationState state);
+
 private:
 	PhWindowSettings *_settings;
 };
