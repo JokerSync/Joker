@@ -33,63 +33,62 @@ class PhStripDoc : public QObject
 
 public:
 	/**
-	 * @brief PhStripDoc
-	 * Constructor
+	 * @brief PhStripDoc constructor
 	 */
 	explicit PhStripDoc(QObject *parent = 0);
 
 	/**
-	 * @brief Get the information about the document generator
-	 * @return The generator name and version
+	 * @brief The name of the application that generated the document
+	 * @return A string
 	 */
-	QString getGenerator() {
+	QString generator() {
 		return _generator;
 	}
 	/**
-	 * @brief Get the title
-	 * @return The title
+	 * @brief The title
+	 * @return A string
 	 */
-	QString getTitle();
+	QString title();
 
 	/**
-	 * @brief Get the translated title
-	 * @return The translated title
+	 * @brief The translated title
+	 * @return A string
 	 */
-	QString getTranslatedTitle();
+	QString translatedTitle();
 	/**
 	 * @brief Get the episode
-	 * @return the episode
+	 * @return A string
 	 */
-	QString getEpisode();
+	QString episode();
 	/**
 	 * @brief Get the season
-	 * @return the season
+	 * @return A string
 	 */
-	QString getSeason();
+	QString season();
 
 	/**
-	 * @brief getVideoTimestamp
-	 * @return _videoTimestamp
+	 * @brief The first frame of the video file
+	 * @return A frame value
 	 */
-	PhTime getVideoTimestamp();
+	PhFrame videoFramestamp();
 
 	/**
 	 * @brief getFilePath
 	 * @return _filePath
 	 */
-	QString getFilePath();
+	QString filePath();
 
 	/**
 	 * @brief getVideoPath
 	 * @return _videoPath
 	 */
-	QString getVideoPath();
+	QString videoFilePath();
 
 	/**
 	 * @brief Get the author name
 	 * @return
 	 */
-	QString getAuthorName() {
+	QString authorName() {
 		return _authorName;
 	}
 
@@ -97,69 +96,69 @@ public:
 	 * @brief Get the list of meta information key
 	 * @return A string list
 	 */
-	QList<QString> getMetaKey();
+	QList<QString> metaKeys();
 
 	/**
 	 * @brief Get the meta information of a given key
 	 * @param key The meta information key
 	 * @return The meta information value
 	 */
-	QString getMetaInformation(QString key);
+	QString metaInformation(QString key);
 
 	/**
 	 * @brief getLastPosition
 	 * @return _lastPosition
 	 */
-	PhFrame getLastFrame();
+	PhFrame lastFrame();
 
 	/**
 	 * @brief getTimeScale
 	 * @return
 	 */
-	int getTimeScale();
+	int timeScale();
 
 	/**
-	 * @brief Get the timecode type
-	 * @return the corresponding PhTimeCodeType
+	 * @brief The timecode type
+	 * @return A PhTimeCodeType value
 	 */
-	PhTimeCodeType getTCType();
+	PhTimeCodeType timeCodeType();
 
 	/**
-	 * @brief getActors
-	 * @return _actors
+	 * @brief The list of peoples
+	 * @return A list.
 	 */
-	QMap<QString, PhPeople *> getPeoples();
+	QList<PhPeople *> peoples();
 	/**
-	 * @brief Get the list of texts
+	 * @brief The whole text list
 	 * @return A list of texts
 	 */
-	QList<PhStripText *> getTexts();
+	QList<PhStripText *> texts();
 
 	/**
-	 * @brief Get the list of texts affected to a people
-	 * @param people The people
+	 * @brief The list of texts affected to a people
+	 * @param people A people
 	 * @return A list of texts
 	 */
-	QList<PhStripText *> getTexts(PhPeople *people);
+	QList<PhStripText *> texts(PhPeople *people);
 
 	/**
-	 * @brief getLoops
-	 * @return _loops
+	 * @brief The whole loop list
+	 * @return A list of loops
 	 */
-	QList<PhStripLoop *> getLoops();
+	QList<PhStripLoop *> loops();
 
 	/**
-	 * @brief Get the cuts
-	 * @return the cut's list
+	 * @brief The whole cut list
+	 * @return A list of cut
 	 */
-	QList<PhStripCut *> getCuts();
+	QList<PhStripCut *> cuts();
 
 	/**
-	 * @brief Get the detect list
+	 * @brief The whole detect list
 	 * @todo Implement and test frameIn / frameOut
-	 * @return A list of PhStripDetect*
+	 * @return A list of detects
 	 */
-	QList<PhStripDetect *> getDetects(PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
+	QList<PhStripDetect *> detects(PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
 
 	/**
 	 * @brief Get the list of detect affected to a people in a defined range.
@@ -168,7 +167,7 @@ public:
 	 * @param frameOut The range out
 	 * @return A list of detects
 	 */
-	QList<PhStripDetect *> getPeopleDetects(PhPeople *people, PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
+	QList<PhStripDetect *> peopleDetects(PhPeople *people, PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
 
 	/**
 	 * @brief Set the title property
@@ -176,15 +175,15 @@ public:
 	 */
 	void setTitle(QString title);
 	/**
-	 * @brief setVideoTimestamp
-	 * @param videoFramestamp
+	 * @brief Set the video first frame
+	 * @param videoFramestamp A PhFrame
 	 */
-	void setVideoTimestamp(PhFrame videoFramestamp);
+	void setVideoFramestamp(PhFrame videoFramestamp);
 	/**
-	 * @brief setVideoPath
-	 * @param videoPath
+	 * @brief Set the video file path
+	 * @param videoFilePath A string
 	 */
-	void setVideoPath(QString videoPath);
+	void setVideoFilePath(QString videoFilePath);
 	/**
 	 * @brief setTimeScale
 	 * @param timeScale
@@ -195,13 +194,13 @@ public:
 	 * @param fileName The path to the DetX file
 	 * @return True if the doc opened well, false otherwise
 	 */
-	bool importDetX(QString fileName);
+	bool importDetXFile(QString fileName);
 	/**
 	 * @brief Import a Mos file
 	 * @param fileName The path to the Mos file
 	 * @return True if the doc opened well, false otherwise
 	 */
-	bool importMos(QString fileName);
+	bool importMosFile(QString fileName);
 	/**
 	 * @brief Open a strip file
 	 * @param fileName The path to the DetX file
@@ -215,38 +214,31 @@ public:
 	 * @param forceRatio169 If the aspect ratio has been forced or not.
 	 * @return True if the strip saved well, false otherwise
 	 */
-	bool saveStrip(QString fileName, QString lastTC, bool forceRatio169 = false);
+	bool saveStripFile(QString fileName, QString lastTC, bool forceRatio169 = false);
 	/**
 	 * @brief Create a made up strip using the parameters
 	 * @param text The desired text
 	 * @param nbPeople The desired number of actors
 	 * @param nbText The desired number of sentences
 	 * @param nbTrack The desired number of tracks
-	 * @param videoTimeCode The starting timecode
+	 * @param videoFramestamp The starting frame
 	 * @return
 	 */
-	bool createDoc(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeCode);
-
-	/**
-	 * @brief Get the number of texts
-	 * Useful for statistics
-	 * @return The number of texts from the doc
-	 */
-	int getNbTexts();
+	bool create(QString text, int nbPeople, int nbText, int nbTrack, PhFrame videoFramestamp);
 
 	/**
 	 * @brief Get people by their name
 	 * @param name The desired people's name
 	 * @return The corresponding PhPeople
 	 */
-	PhPeople * getPeopleByName(QString name);
+	PhPeople * peopleByName(QString name);
 
 	/**
 	 * @brief Get the next text
 	 * @param frame The desired frame
 	 * @return The correponding text
 	 */
-	PhStripText * getNextText(PhFrame frame);
+	PhStripText * nextText(PhFrame frame);
 
 	/**
 	 * @brief Get the next text
@@ -254,74 +246,74 @@ public:
 	 * @param people The desired PhPeople who speak the texts
 	 * @return The correponding text
 	 */
-	PhStripText * getNextText(PhFrame frame, PhPeople *people);
+	PhStripText * nextText(PhFrame frame, PhPeople *people);
 	/**
 	 * @brief Get the next text
 	 * @param frame The desired frame
 	 * @param peopleList The desired PhPeople list who speak the texts
 	 * @return The first corresponding text. If two (or more) texts
-	 * have the same timecode, the text attach to the first PhPeople of
+	 * have the same frameIn, the text attach to the first PhPeople of
 	 * the list will be returned
 	 */
-	PhStripText * getNextText(PhFrame frame, QList<PhPeople*> peopleList);
+	PhStripText * nextText(PhFrame frame, QList<PhPeople*> peopleList);
 	/**
 	 * @brief Get the previous text frame
 	 * @param frame The given frame
 	 * @return The frame corresponding to the previous text starting
 	 */
-	PhFrame getPreviousTextFrame(PhFrame frame);
+	PhFrame previousTextFrame(PhFrame frame);
 	/**
 	 * @brief Get the previous loop frame
 	 * @param frame The given frame
 	 * @return The frame corresponding to the previous loop
 	 */
-	PhFrame getPreviousLoopFrame(PhFrame frame);
+	PhFrame previousLoopFrame(PhFrame frame);
 	/**
 	 * @brief Get the previous cut frame
 	 * @param frame the given frame
 	 * @return The frame corresponding to the previous cut
 	 */
-	PhFrame getPreviousCutFrame(PhFrame frame);
+	PhFrame previousCutFrame(PhFrame frame);
 	/**
 	 * @brief Get previous element frame
 	 * @param frame the given frame
 	 * @return The frame corresponding to the previous element (cut, loop, text...)
 	 */
-	PhFrame getPreviousElementFrame(PhFrame frame);
+	PhFrame previousElementFrame(PhFrame frame);
 	/**
 	 * @brief Get the next text frame
 	 * @param frame the given frame
 	 * @return The frame corresponding to the next text
 	 */
-	PhFrame getNextTextFrame(PhFrame frame);
+	PhFrame nextTextFrame(PhFrame frame);
 	/**
 	 * @brief Get the next loop frame
 	 * @param frame the given frame
 	 * @return The frame corresponding to the next loop
 	 */
-	PhFrame getNextLoopFrame(PhFrame frame);
+	PhFrame nextLoopFrame(PhFrame frame);
 	/**
 	 * @brief Get the next cut frame
 	 * @param frame the given frame
 	 * @return The frame corresponding to the next cut
 	 */
-	PhFrame getNextCutFrame(PhFrame frame);
+	PhFrame nextCutFrame(PhFrame frame);
 	/**
 	 * @brief Get the next element frame
 	 * @param frame the given frame
 	 * @return The frame corresponding to the next element (cut, loop, text...)
 	 */
-	PhFrame getNextElementFrame(PhFrame frame);
+	PhFrame nextElementFrame(PhFrame frame);
 	/**
 	 * @brief Get the first frame of the PhStripDoc
 	 * @return The frame in
 	 */
-	PhFrame getFrameIn();
+	PhFrame frameIn();
 	/**
 	 * @brief Get the last frame of the PhStripDoc
 	 * @return The frame out
 	 */
-	PhFrame getFrameOut();
+	PhFrame frameOut();
 	/*!
 	 * \brief Get the force ratio information
 	 * \return if the ratio is forced or not
@@ -333,13 +325,13 @@ public:
 	 * @param frame the given frame
 	 * @return the corresponding loop
 	 */
-	PhStripLoop * getNextLoop(PhFrame frame);
+	PhStripLoop * nextLoop(PhFrame frame);
 	/**
 	 * @brief Get the previous loop
 	 * @param frame the given frame
 	 * @return the corresponding loop
 	 */
-	PhStripLoop * getPreviousLoop(PhFrame frame);
+	PhStripLoop * previousLoop(PhFrame frame);
 
 	/**
 	 * @brief Reset the document
@@ -366,13 +358,13 @@ private:
 	QMap<QString, QString> _metaInformation;
 
 	/**
-	 * Starting time of the video content refered by the videoPath : String
+	 * Starting frame of the video content refered by the videoPath : String
 	 */
-	PhTime _videoFrameStamp;
+	PhFrame _videoFrameStamp;
 	/**
-	 * @brief _lastPosition
+	 * @brief The last position
 	 */
-	PhTime _lastFrame;
+	PhFrame _lastFrame;
 
 	/**
 	 * Path to the file content.
@@ -391,7 +383,7 @@ private:
 	/**
 	 * List of PhPeople from the file
 	 */
-	QMap<QString, PhPeople *> _peoples;
+	QList<PhPeople *> _peoples;
 
 	/**
 	 * List of PhStripText from the file
@@ -413,8 +405,7 @@ private:
 	 */
 	QList<PhStripDetect *> _detects;
 
-	int _nbTexts;
-	void addText(PhPeople * actor, PhTime start, PhTime end, QString sentence, int track);
+	void addText(PhPeople * actor, PhFrame frameIn, PhFrame frameOut, QString sentence, int track);
 
 	enum MosTag {
 		MosUnknown,

@@ -10,7 +10,7 @@ PhStripDoc * openDoc(QString fileName)
 {
 	PhStripDoc * doc = new PhStripDoc();
 	if(doc->openStripFile(fileName)) {
-		if(doc->getTitle().length() == 0)
+		if(doc->title().length() == 0)
 			doc->setTitle(QFileInfo(fileName).baseName());
 	}
 	else {
@@ -25,9 +25,9 @@ int computeLoopLength(PhStripDoc *doc, int loopNumber)
 	PhFrame frameIn = PHFRAMEMIN;
 	PhFrame frameOut = PHFRAMEMAX;
 	if(loopNumber > 0)
-		frameIn = doc->getLoops()[loopNumber - 1]->getTimeIn();
-	if(loopNumber + 1 < doc->getLoops().count())
-		frameOut = doc->getLoops()[loopNumber]->getTimeIn();
+		frameIn = doc->loops()[loopNumber - 1]->frameIn();
+	if(loopNumber + 1 < doc->loops().count())
+		frameOut = doc->loops()[loopNumber]->frameIn();
 	return frameOut - frameIn;
 }
 
@@ -38,26 +38,26 @@ int countLoopDetectLength(PhStripDoc *doc, int loopNumber)
 	PhFrame frameIn = PHFRAMEMIN;
 	PhFrame frameOut = PHFRAMEMAX;
 	if(loopNumber > 0)
-		frameIn = doc->getLoops()[loopNumber - 1]->getTimeIn();
-	if(loopNumber + 1 < doc->getLoops().count())
-		frameOut = doc->getLoops()[loopNumber]->getTimeIn();
+		frameIn = doc->loops()[loopNumber - 1]->frameIn();
+	if(loopNumber + 1 < doc->loops().count())
+		frameOut = doc->loops()[loopNumber]->frameIn();
 
 	int loopLength = 0;
-	foreach(PhStripDetect *detect, doc->getDetects(frameIn, frameOut)) {
-		int detectLength = detect->getTimeOut() - detect->getTimeIn();
+	foreach(PhStripDetect *detect, doc->detects(frameIn, frameOut)) {
+		int detectLength = detect->frameOut() - detect->frameIn();
 		if(detectLength == 0)
 			PHDEBUG << "ZEROR";
-		map[detect->getPeople()->getName()] += detectLength;
+		map[detect->people()->name()] += detectLength;
 		loopLength += detectLength;
-		PHDBG(2) << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeIn(), doc->getTCType()))
-		         << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
-		         << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()))
+		PHDBG(2) << PHNQ(PhTimeCode::stringFromFrame(detect->frameIn(), doc->timeCodeType()))
+		         << PHNQ(PhTimeCode::stringFromFrame(detect->frameOut(), doc->timeCodeType()))
+		         << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->timeCodeType()))
 		         << detectLength
-		         << detect->getPeople()->getName();
+		         << detect->people()->name();
 	}
 
 	foreach(QString name, map.keys())
-	PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromFrame(map[name], doc->getTCType()));
+	PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromFrame(map[name], doc->timeCodeType()));
 
 	return loopLength;
 }
@@ -65,9 +65,9 @@ int countLoopDetectLength(PhStripDoc *doc, int loopNumber)
 int displayDetectCountPerLoop(PhStripDoc *doc)
 {
 	int totalLength = 0;
-	PHDBG(3) << doc->getTitle();
+	PHDBG(3) << doc->title();
 
-	for(int loop = 0; loop <= doc->getLoops().count(); loop++) {
+	for(int loop = 0; loop <= doc->loops().count(); loop++) {
 		int detectLength = countLoopDetectLength(doc, loop);
 		int loopLength = computeLoopLength(doc, loop);
 		//				PHDEBUG << loop << "\t:" << PHNQ(PhTimeCode::stringFromFrame(loopLength, doc->getTCType()));
@@ -81,22 +81,22 @@ int countDetectLength(PhStripDoc *doc)
 {
 	QMap<QString, int> map;
 
-	PHDBG(1) << PHNQ(doc->getTitle());
+	PHDBG(1) << PHNQ(doc->title());
 
 	int fileLength = 0;
 
-	foreach(PhPeople *people, doc->getPeoples()) {
+	foreach(PhPeople *people, doc->peoples()) {
 		int length = 0;
-		foreach(PhStripDetect *detect, doc->getPeopleDetects(people)) {
-			int detectLength = detect->getTimeOut() - detect->getTimeIn();
+		foreach(PhStripDetect *detect, doc->peopleDetects(people)) {
+			int detectLength = detect->frameOut() - detect->frameIn();
 			length += detectLength;
-			PHDBG(2) << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeIn(), doc->getTCType()))
-			         << PHNQ(PhTimeCode::stringFromFrame(detect->getTimeOut(), doc->getTCType()))
-			         << PHNQ(PhTimeCode::stringFromFrame(length, doc->getTCType()))
+			PHDBG(2) << PHNQ(PhTimeCode::stringFromFrame(detect->frameIn(), doc->timeCodeType()))
+			         << PHNQ(PhTimeCode::stringFromFrame(detect->frameOut(), doc->timeCodeType()))
+			         << PHNQ(PhTimeCode::stringFromFrame(length, doc->timeCodeType()))
 			         << detectLength
-			         << people->getName();
+			         << people->name();
 		}
-		map[people->getName()] += length;
+		map[people->name()] += length;
 		fileLength += length;
 	}
 

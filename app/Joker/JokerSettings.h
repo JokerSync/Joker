@@ -34,6 +34,7 @@ public:
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimestamp, rulerTimestamp)
 	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 33)
+	PH_SETTING_BOOL(setDisplayStripInfo, displayStripInfo)
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
@@ -55,6 +56,9 @@ public:
 	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
 	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
+
+	// PeopleDialog
+	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
 
 	// Other settings :
 	PH_SETTING_STRING(setLastVideoFolder, lastVideoFolder)

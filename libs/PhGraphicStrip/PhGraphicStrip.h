@@ -127,7 +127,6 @@ public:
 	 */
 	PhFont * getHUDFont();
 
-
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -181,6 +180,8 @@ private:
 
 	int _trackNumber;
 	PhGraphicStripSettings * _settings;
+	int _maxDrawElapsed;
+	int _dropDetected;
 
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
 };

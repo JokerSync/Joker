@@ -7,14 +7,14 @@ StripPropertiesDialog::StripPropertiesDialog(PhStripDoc * doc, QWidget *parent) 
 {
 	ui->setupUi(this);
 
-	QString title = doc->getTitle();
+	QString title = doc->title();
 
-	PhFrame Fps = PhTimeCode::getFps(doc->getTCType());
+	PhFrame Fps = PhTimeCode::getFps(doc->timeCodeType());
 	QString ips = QString::number(Fps);
 
-	QString filePath = doc->getFilePath();
+	QString filePath = doc->filePath();
 
-	QString videoPath = doc->getVideoPath();
+	QString videoPath = doc->videoFilePath();
 
 	ui->titleContentLabel->setText(title);
 	ui->videoPathContentLabel->setText(videoPath);
