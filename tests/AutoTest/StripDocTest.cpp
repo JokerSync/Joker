@@ -169,7 +169,7 @@ void StripDocTest::importMosTest01()
 	QCOMPARE(doc.authorName(), QString("auteur"));
 
 	QCOMPARE(doc.videoFilePath(), QString(""));
-	QCOMPARE(doc.videoFramestamp(), 0);
+	QCOMPARE(f2s(doc.videoFramestamp(), doc.timeCodeType()), QString("00:00:00:00"));
 
 	QCOMPARE(doc.title(), QString("Titre VO"));
 	QCOMPARE(doc.season(), QString("saison"));
