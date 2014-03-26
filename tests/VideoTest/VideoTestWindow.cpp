@@ -60,6 +60,16 @@ QMenu *VideoTestWindow::recentDocumentMenu()
 	return ui->menuOpen_recent;
 }
 
+void VideoTestWindow::onApplicationActivate()
+{
+	_mediaPanelDialog.show();
+}
+
+void VideoTestWindow::onApplicationDeactivate()
+{
+	_mediaPanelDialog.hide();
+}
+
 void VideoTestWindow::on_actionPlay_pause_triggered()
 {
 	if(_videoEngine.clock()->rate() != 0)

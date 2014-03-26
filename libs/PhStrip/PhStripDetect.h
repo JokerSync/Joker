@@ -20,12 +20,12 @@ public:
 	/**
 	 * @brief PhStripOff constructor
 	 * @param off If the people is out of the picture
-	 * @param timeIn the beggining of the PhStripOff
+	 * @param frameIn the beggining of the PhStripOff
 	 * @param people the corresponding PhPeople
-	 * @param timeOut the end of the PhStripOff
+	 * @param frameOut the end of the PhStripOff
 	 * @param track the track of the PhStripOff
 	 */
-	PhStripDetect( bool off, PhTime timeIn, PhPeople * people, PhTime timeOut, int track);
+	PhStripDetect( bool off, PhFrame frameIn, PhPeople * people, PhFrame frameOut, int track);
 
 	/**
 	 * @brief If the people is out of the picture

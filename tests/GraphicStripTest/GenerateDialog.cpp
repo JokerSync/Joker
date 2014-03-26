@@ -16,7 +16,7 @@ GenerateDialog::GenerateDialog(GraphicStripTestSettings *settings, PhStripDoc * 
 	this->_doc = doc;
 	ui->setupUi(this);
 	ui->lineEditText->setText(_settings->textContent());
-	ui->lineEditTimeCode->setFrame(_settings->startFrame(), _doc->getTCType());
+	ui->lineEditTimeCode->setFrame(_settings->startFrame(), _doc->timeCodeType());
 	ui->spinBoxNbPeople->setValue(_settings->peopleNumber());
 	ui->spinBoxNbText->setValue(_settings->textNumber());
 	ui->spinBoxNbTrack->setValue(_settings->trackNumber());
@@ -55,7 +55,7 @@ void GenerateDialog::onAccept()
 	int trackNumber = this->ui->spinBoxNbTrack->value();
 	QString textContent = this->ui->lineEditText->text();
 	int startFrame = this->ui->lineEditTimeCode->frame();
-	_doc->createDoc(textContent, peopleNumber, textNumber, trackNumber, startFrame);
+	_doc->create(textContent, peopleNumber, textNumber, trackNumber, startFrame);
 	_settings->setStartFrame(startFrame);
 	_settings->setPeopleNumber(peopleNumber);
 	_settings->setTextNumber(textNumber);

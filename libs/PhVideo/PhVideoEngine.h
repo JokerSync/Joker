@@ -32,8 +32,8 @@ public:
 	/**
 	 * @brief PhVideoEngine constructor
 	 */
-	explicit PhVideoEngine();
 
+	explicit PhVideoEngine();
 	~PhVideoEngine();
 
 	// Properties

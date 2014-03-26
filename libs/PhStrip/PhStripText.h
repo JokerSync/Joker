@@ -21,18 +21,18 @@ public:
 
 	/**
 	 * @brief PhStripText constructor
-	 * @param timeIn the beggining of the text
+	 * @param frameIn the beggining of the text
 	 * @param people the text's speaker
-	 * @param timeOut the end of the text
+	 * @param frameOut the end of the text
 	 * @param track the track of the text
 	 * @param content the content of the text
 	 */
-	PhStripText( PhTime timeIn, PhPeople * people, PhTime timeOut, int track,  QString content);
+	PhStripText( PhFrame frameIn, PhPeople * people, PhFrame frameOut, int track,  QString content);
 	/**
 	 * @brief Get the text content
 	 * @return _content
 	 */
-	QString getContent();
+	QString content();
 
 private:
 

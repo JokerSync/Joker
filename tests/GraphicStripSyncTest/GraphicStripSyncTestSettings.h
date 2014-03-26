@@ -17,7 +17,7 @@ public:
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 
 	// PhGraphicStripSettings :
-	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
+	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 1)
 	PH_SETTING_INT2(setHorizontalSpeed, horizontalSpeed, 12)
 	PH_SETTING_STRING(setTextFontFile, textFontFile)
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 2)
@@ -28,6 +28,7 @@ public:
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimestamp, rulerTimestamp)
 	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 33)
+	PH_SETTING_BOOL(setDisplayStripInfo, displayStripInfo)
 
 	// PhSyncSettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)

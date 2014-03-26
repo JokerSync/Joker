@@ -7,11 +7,10 @@
 
 #include "PhStripObject.h"
 
-PhStripObject::PhStripObject(PhTime timeIn)
+PhStripObject::PhStripObject(PhFrame frameIn) : _frameIn(frameIn)
 {
-	_timeIn = timeIn;
 }
 
-PhTime PhStripObject::getTimeIn() {
-	return _timeIn;
+PhFrame PhStripObject::frameIn() {
+	return _frameIn;
 }
