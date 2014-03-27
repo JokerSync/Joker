@@ -6,6 +6,7 @@
 QT		+= opengl
 
 HEADERS += \
+	../../libs/PhGraphic/PhGraphicSettings.h \
 	../../libs/PhGraphic/PhGraphicView.h \
 	../../libs/PhGraphic/PhGraphicImage.h \
 	../../libs/PhGraphic/PhGraphicText.h \

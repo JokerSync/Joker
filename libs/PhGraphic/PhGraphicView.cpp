@@ -12,12 +12,14 @@
 #include <SDL2/SDL_ttf.h>
 #endif
 #include <QtGui>
+#include "PhGraphicText.h"
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphicView.h"
 
 PhGraphicView::PhGraphicView( QWidget *parent)
-	: QGLWidget(parent)
+	: QGLWidget(parent),
+	  _settings(NULL)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";
@@ -72,6 +74,17 @@ void PhGraphicView::resizeGL(int width, int height)
 	glLoadIdentity();
 }
 
+void PhGraphicView::setSettings(PhGraphicSettings *settings)
+{
+	_settings = settings;
+	_infoFont.setFontFile(_settings->infoFontFile());
+}
+
+void PhGraphicView::addInfo(QString info)
+{
+	_infos.append(info);
+}
+
 void PhGraphicView::paintGL()
 {
 	//PHDEBUG << "PhGraphicView::paintGL" ;
@@ -79,7 +92,20 @@ void PhGraphicView::paintGL()
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1.0f, 1.0f, 1.0f);
+	_infos.clear();
+	addInfo(QString("refresh: %1").arg(this->refreshRate()));
 	paint();
+	if(_settings && _settings->displayInfo()) {
+		int y = 0;
+		foreach (QString info, _infos) {
+#warning /// @todo assign size on font by default
+			PhGraphicText gInfo(&_infoFont, info, 0, y, 300, 100);
+			gInfo.setZ(10);
+			gInfo.setColor(Qt::red);
+			gInfo.draw();
+			y += gInfo.getHeight();
+		}
+	}
 
 	_frameTickCounter.tick();
 }

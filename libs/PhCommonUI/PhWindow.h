@@ -62,7 +62,7 @@ protected:
 	 *
 	 * @return An action reference
 	 */
-	virtual QAction *fullScreenAction() = 0;
+	virtual QAction *fullScreenAction() { return NULL; }
 
 	/**
 	 * @brief Called when the application is activated
