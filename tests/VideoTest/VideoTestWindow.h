@@ -71,6 +71,8 @@ private slots:
 
 	void on_actionReverse_triggered();
 
+	void on_actionGo_to_triggered();
+
 private:
 
 	Ui::VideoTestWindow *ui;

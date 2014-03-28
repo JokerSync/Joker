@@ -142,3 +142,15 @@ void VideoTestWindow::on_actionReverse_triggered()
 {
 	_videoEngine.clock()->setRate(-1);
 }
+
+void VideoTestWindow::on_actionGo_to_triggered()
+{
+    PhTimeCodeDialog dlg(_videoEngine.clock()->timeCodeType(), _videoEngine.clock()->frame(), this);
+
+	if(dlg.exec() == QDialog::Accepted) {
+		PHDEBUG << PhTimeCode::stringFromFrame(dlg.frame(), _videoEngine.clock()->timeCodeType());
+		_videoEngine.clock()->setFrame(dlg.frame());
+	}
+	else
+		PHDEBUG << "cancel";
+}
