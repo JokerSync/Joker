@@ -35,6 +35,7 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setTimeCodeType(_decoder->timeCodeType());
 
 	QThread *thread = new QThread;
+	thread->setPriority(QThread::LowestPriority);
 
 	_decoder->moveToThread(thread);
 	connect(_decoder, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
@@ -42,6 +43,10 @@ bool PhVideoEngine::open(QString fileName)
 	connect(_decoder, SIGNAL(finished()), thread, SLOT(quit()));
 	connect(_decoder, SIGNAL(finished()), _decoder, SLOT(deleteLater()));
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+
+	connect(&_clock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), _decoder, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(&_clock, SIGNAL(rateChanged(PhRate)), _decoder, SLOT(onRateChanged(PhRate)));
+
 	thread->start();
 
 	return true;
@@ -75,7 +80,6 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 			if(buffer) {
 				_videoRect.createTextureFromARGBBuffer(buffer, _decoder->width(), _decoder->height());
 				_oldFrame = frame;
-				delete buffer;
 				_frameCounter.tick();
 			}
 		}

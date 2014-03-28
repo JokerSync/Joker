@@ -4,21 +4,24 @@
  */
 
 #include <QTime>
+#include <qmath.h>
 
 #include "PhAVDecoder.h"
 
 PhAVDecoder::PhAVDecoder(int bufferSize, QObject *parent) :
 	QObject(parent),
 	_bufferSize(bufferSize),
-	_framesProcessed(0),
 	_framesFree(bufferSize),
+	_firstFrame(0),
+	_currentFrame(0),
+	_direction(0),
 	_pFormatContext(NULL),
 	_videoStream(NULL),
-	_audioStream(NULL),
+	_videoFrame(NULL),
 	_pSwsCtx(NULL),
-	_direction(1),
-	_lastAskedFrame(-1),
 	_videoDeintrelace(false),
+	_audioStream(NULL),
+	_audioFrame(NULL),
 	_interupted(false)
 {
 }
@@ -127,32 +130,6 @@ void PhAVDecoder::close()
 	_framesFree.release();
 }
 
-uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
-{
-	if(frame > _lastAskedFrame)
-		_direction = 1;
-	else
-		_direction = -1;
-
-	uint8_t *buffer = NULL;
-	if(frame < _firstFrame + _videoStream->duration && _framesProcessed.tryAcquire()) {
-		_bufferMutex.lock();
-		if(!_bufferMap.contains(frame)) {
-			_currentFrame = frame;
-			clearBuffer();
-		}
-		else {
-			buffer = _bufferMap[frame];
-			_bufferMap.remove(frame);
-			_framesFree.release();
-		}
-
-		_bufferMutex.unlock();
-		_lastAskedFrame = frame;
-	}
-	return buffer;
-}
-
 PhTimeCodeType PhAVDecoder::timeCodeType()
 {
 	// Looking for timecode type
@@ -242,30 +219,72 @@ void PhAVDecoder::setDeintrelace(bool deintrelace)
 
 int PhAVDecoder::bufferOccupation()
 {
-	return _framesProcessed.available();
+	return _bufferSize - _framesFree.available();
+}
+
+uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
+{
+//	PHDEBUG << frame << _framesFree.available();
+
+	uint8_t *buffer = NULL;
+	_bufferMutex.lock();
+	if(_bufferMap.contains(frame)) {
+		buffer = _bufferMap[frame];
+
+		PhFrame minFrame = frame - _bufferSize / 2;
+		if(minFrame < _firstFrame)
+			minFrame = _firstFrame;
+		PhFrame maxFrame = minFrame + _bufferSize;
+		foreach (PhFrame key, _bufferMap.keys()) {
+			if(key < minFrame) {
+				delete _bufferMap[key];
+				_bufferMap.remove(key);
+				_framesFree.release();
+			}
+			else if(key > maxFrame) {
+				delete _bufferMap[key];
+				_bufferMap.remove(key);
+				_framesFree.release();
+			}
+		}
+	}
+
+	_bufferMutex.unlock();
+
+	return buffer;
 }
 
 void PhAVDecoder::process()
 {
 	while(!_interupted) {
 
-		if(_direction == -1 || (abs(_currentFrame - _lastAskedFrame) > 1)) {
-			int flags = AVSEEK_FLAG_ANY;
-			int64_t timestamp = frame2time(_currentFrame - _firstFrame);
-			//PHDEBUG << "seek:" << _currentFrame;
-			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
+		if(_direction == -1) {
+			_bufferMutex.lock();
+			// If the buffer contains the current frame, seek to the last key frame
+			if(_bufferMap.contains(_currentFrame)) {
+				// Look for the minimun frame
+				foreach(PhFrame key, _bufferMap.keys()) {
+					if(key < _currentFrame)
+						_currentFrame = key;
+				}
+				int flags = AVSEEK_FLAG_BACKWARD;
+				int64_t timestamp = frame2time(_currentFrame - _firstFrame);
+				PHDEBUG << "seek:" << _direction << _currentFrame;
+				av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
+			}
+			_bufferMutex.unlock();
 		}
-
 
 		AVPacket packet;
 
 		bool lookingForVideoFrame = _currentFrame < _firstFrame + _videoStream->duration;
 		while(lookingForVideoFrame) {
+			_bufferMutex.lock();
 			int error = av_read_frame(_pFormatContext, &packet);
+			_bufferMutex.unlock();
 			switch(error) {
 			case 0:
 				if(packet.stream_index == _videoStream->index) {
-
 					int frameFinished = 0;
 					avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
 					if(frameFinished) {
@@ -276,17 +295,18 @@ void PhAVDecoder::process()
 
 #warning /// @todo Use RGB pixel format
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-						                                _videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
-						                                AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+														_videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
+														AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
 
 						uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 4];
 						int linesize = _videoFrame->width * 4;
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
-						                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
-						                   &linesize)) {
+										   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
+										   &linesize)) {
 							_framesFree.acquire();
 							_bufferMutex.lock();
 							_bufferMap[_currentFrame] = rgb;
+							//							PHDEBUG << _currentFrame << rgb << packet.dts << _framesFree.available() << _framesProcessed.available();
 							_bufferMutex.unlock();
 						}
 						lookingForVideoFrame = false;
@@ -315,19 +335,31 @@ void PhAVDecoder::process()
 			av_free_packet(&packet);
 		}
 
-//		As rate == -1 or 1
-//		if(_rate == 1) {
-//			_currentFrame++;
-//		}
-//		else {
-//			_currentFrame--;
-//		}
-		_currentFrame += _direction;
-		_framesProcessed.release();
+		_currentFrame ++;
 	}
 
 	PHDEBUG << "Bye bye";
 	emit finished();
+}
+
+void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+{
+	_bufferMutex.lock();
+	if(!_bufferMap.contains(frame)) {
+		clearBuffer();
+
+	}
+	_bufferMutex.unlock();
+}
+
+void PhAVDecoder::onRateChanged(PhRate rate)
+{
+	if(rate < 0)
+		_direction = -1;
+	else if (rate>0)
+		_direction = 1;
+	else
+		_direction = 0;
 }
 
 int64_t PhAVDecoder::frame2time(PhFrame f)
@@ -352,9 +384,9 @@ PhFrame PhAVDecoder::time2frame(int64_t t)
 
 void PhAVDecoder::clearBuffer()
 {
+	PHDEBUG;
 	qDeleteAll(_bufferMap);
 	_bufferMap.clear();
 	_framesFree.release(_bufferSize - _framesFree.available());
-	_framesProcessed.acquire(_framesProcessed.available());
 }
 

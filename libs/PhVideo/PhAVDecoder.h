@@ -40,8 +40,6 @@ public:
 	bool open(QString fileName);
 	void close();
 
-	uint8_t* getBuffer(PhFrame frame);
-
 	PhTimeCodeType timeCodeType();
 	PhFrame firstFrame();
 	/**
@@ -72,6 +70,7 @@ public:
 
 	int bufferOccupation();
 
+	uint8_t* getBuffer(PhFrame frame);
 signals:
 	void finished();
 	void error(QString err);
@@ -79,12 +78,14 @@ signals:
 public slots:
 	void process();
 
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onRateChanged(PhRate rate);
+
 private:
 	int64_t frame2time(PhFrame f);
 	PhFrame time2frame(int64_t t);
 
 	int _bufferSize;
-	QSemaphore _framesProcessed;
 	QSemaphore _framesFree;
 	QMap<PhFrame, uint8_t * > _bufferMap;
 	QMutex _bufferMutex;
@@ -93,7 +94,6 @@ private:
 	PhFrame _firstFrame;
 	PhFrame _currentFrame;
 	int _direction;
-	PhFrame _lastAskedFrame;
 
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;
