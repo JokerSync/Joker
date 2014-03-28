@@ -107,6 +107,9 @@
    <property name="text">
     <string>Set timestamp...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
   </action>
   <action name="actionReverse">
    <property name="text">
