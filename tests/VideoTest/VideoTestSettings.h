@@ -12,7 +12,8 @@ class VideoTestSettings : PhGenericSettings,
 	public PhDocumentWindowSettings
 {
 public:
-	PH_SETTING_INT(ScreenDelay, screenDelay)
+	PH_SETTING_INT(setScreenDelay, screenDelay)
+	PH_SETTING_INT2(setLogMask, logMask, 1)
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
