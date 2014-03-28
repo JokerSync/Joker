@@ -67,6 +67,7 @@
     <addaction name="actionPrevious_frame"/>
     <addaction name="separator"/>
     <addaction name="actionSet_timestamp"/>
+    <addaction name="actionGo_to"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -107,6 +108,9 @@
    <property name="text">
     <string>Set timestamp...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
   </action>
   <action name="actionReverse">
    <property name="text">
@@ -122,6 +126,14 @@
    </property>
    <property name="text">
     <string>Empty</string>
+   </property>
+  </action>
+  <action name="actionGo_to">
+   <property name="text">
+    <string>Go to...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
  </widget>

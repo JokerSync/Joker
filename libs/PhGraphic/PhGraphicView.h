@@ -13,6 +13,9 @@
 #include "PhTools/PhTime.h"
 #include "PhTools/PhTickCounter.h"
 
+#include "PhGraphicSettings.h"
+#include "PhFont.h"
+
 /**
  * @brief The PhGraphicView class is a canvas to create your custom graphic view.
  *
@@ -48,6 +51,12 @@ public:
 		return _frameTickCounter.frequency();
 	}
 
+	void setGraphicSettings(PhGraphicSettings *settings);
+	/**
+	 * @brief Add a line to the debug info
+	 * @param A string
+	 */
+	void addInfo(QString info);
 signals:
 	/**
 	 * @brief emit a signal just before the paint
@@ -89,6 +98,7 @@ private slots:
 	void onRefresh();
 
 private:
+	PhGraphicSettings *_settings;
 	/**
 	 * @brief t_Timer
 	 * used to draw
@@ -96,6 +106,10 @@ private:
 	QTimer *t_Timer;
 	PhTickCounter _frameTickCounter;
 	int _screenFrequency;
+	QStringList _infos;
+	PhFont _infoFont;
+	QTime _dropTimer;
+	int _dropDetected;
 };
 
 #endif // PHGRAPHICVIEW

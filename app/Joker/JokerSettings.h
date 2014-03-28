@@ -2,6 +2,7 @@
 #define JOKERSETTINGS_H
 
 #include <QDir>
+#include <QApplication>
 
 #include "PhTools/PhGenericSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
@@ -20,6 +21,11 @@ class JokerSettings : PhGenericSettings,
 {
 public:
 	PH_SETTING_INT3(setScreenDelay, screenDelay, delay)
+
+	// PhGraphicSettings
+	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
+	PH_SETTING_STRING2(setInfoFontFile, infoFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/ARIAL.TTF")
+	PH_SETTING_STRING2(setFontFile, fontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
 
 	// PhGraphicStripSettings :
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)

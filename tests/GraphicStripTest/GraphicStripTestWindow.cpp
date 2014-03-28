@@ -17,7 +17,7 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 	ui->setupUi(this);
 	_strip = ui->stripView->strip();
 
-	ui->stripView->setSettings(_settings);
+	ui->stripView->setStripSettings(_settings);
 
 	_doc = _strip->doc();
 	_clock = _strip->clock();

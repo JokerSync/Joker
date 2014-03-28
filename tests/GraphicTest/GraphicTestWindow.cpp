@@ -4,11 +4,13 @@
 #include "GraphicTestWindow.h"
 #include "ui_GraphicTestWindow.h"
 
-GraphicTestWindow::GraphicTestWindow(QWidget *parent) :
-	QMainWindow(parent),
-	ui(new Ui::GraphicTestWindow)
+GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
+	PhWindow(settings),
+	ui(new Ui::GraphicTestWindow),
+	_settings(settings)
 {
 	ui->setupUi(this);
+	ui->graphicView->setGraphicSettings(_settings);
 }
 
 GraphicTestWindow::~GraphicTestWindow()

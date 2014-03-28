@@ -182,7 +182,6 @@ private:
 	int _trackNumber;
 	PhGraphicStripSettings * _settings;
 	int _maxDrawElapsed;
-	int _dropDetected;
 
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
 };

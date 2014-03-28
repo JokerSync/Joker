@@ -27,6 +27,7 @@ void VideoStripView::setSettings(JokerSettings *settings)
 {
 	_settings = settings;
 	_strip.setSettings(settings);
+	this->setGraphicSettings(settings);
 	_videoEngine.setSettings(settings);
 }
 
