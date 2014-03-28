@@ -161,9 +161,10 @@ PhFrame PhAVDecoder::firstFrame()
 
 void PhAVDecoder::setFirstFrame(PhFrame frame)
 {
+	PHDEBUG << frame;
 	_bufferMutex.lock();
 	clearBuffer();
-	_firstFrame = frame;
+	_currentFrame = _firstFrame = frame;
 	_bufferMutex.unlock();
 }
 
@@ -224,7 +225,7 @@ int PhAVDecoder::bufferOccupation()
 
 uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 {
-//	PHDEBUG << frame << _framesFree.available();
+	PHDBG(24) << frame << _framesFree.available();
 
 	uint8_t *buffer = NULL;
 	_bufferMutex.lock();
@@ -277,10 +278,8 @@ void PhAVDecoder::process()
 
 		AVPacket packet;
 
-		bool lookingForVideoFrame = _currentFrame < _firstFrame + _videoStream->duration;
-		while(lookingForVideoFrame) {
-			_bufferMutex.lock();
-			int error = av_read_frame(_pFormatContext, &packet);
+		_bufferMutex.lock();
+		int error = av_read_frame(_pFormatContext, &packet);
 			_bufferMutex.unlock();
 			switch(error) {
 			case 0:
@@ -306,10 +305,10 @@ void PhAVDecoder::process()
 							_framesFree.acquire();
 							_bufferMutex.lock();
 							_bufferMap[_currentFrame] = rgb;
-							//							PHDEBUG << _currentFrame << rgb << packet.dts << _framesFree.available() << _framesProcessed.available();
+							PHDBG(25) << _currentFrame << rgb << packet.dts << _framesFree.available();
 							_bufferMutex.unlock();
 						}
-						lookingForVideoFrame = false;
+						_currentFrame ++;
 					} // if frame decode is not finished, let's read another packet.
 				}
 				else if(_audioStream && (packet.stream_index == _audioStream->index)) {
@@ -327,7 +326,6 @@ void PhAVDecoder::process()
 					char errorStr[256];
 					av_strerror(error, errorStr, 256);
 					PHDEBUG << _currentFrame << "error:" << errorStr;
-					lookingForVideoFrame = false;
 					break;
 				}
 			}
@@ -335,8 +333,6 @@ void PhAVDecoder::process()
 			av_free_packet(&packet);
 		}
 
-		_currentFrame ++;
-	}
 
 	PHDEBUG << "Bye bye";
 	emit finished();
@@ -347,7 +343,7 @@ void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 	_bufferMutex.lock();
 	if(!_bufferMap.contains(frame)) {
 		clearBuffer();
-
+		_currentFrame = frame;
 	}
 	_bufferMutex.unlock();
 }
