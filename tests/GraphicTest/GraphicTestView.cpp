@@ -134,7 +134,6 @@ void GraphicTestView::paint()
 	//_yuvRect.draw();
 
 	_disc.draw();
-
 }
 
 

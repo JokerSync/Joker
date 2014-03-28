@@ -10,7 +10,7 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 	_settings(settings)
 {
 	ui->setupUi(this);
-	ui->graphicView->setSettings(_settings);
+	ui->graphicView->setGraphicSettings(_settings);
 }
 
 GraphicTestWindow::~GraphicTestWindow()

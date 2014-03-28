@@ -11,10 +11,11 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent) :
 {
 }
 
-void PhGraphicStripView::setSettings(PhGraphicStripSettings *settings)
+void PhGraphicStripView::setStripSettings(PhGraphicStripSettings *settings)
 {
 	_settings = settings;
 	_strip.setSettings(settings);
+	this->setGraphicSettings(settings);
 }
 
 bool PhGraphicStripView::init()

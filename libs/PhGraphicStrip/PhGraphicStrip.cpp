@@ -19,8 +19,7 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	_clock(_doc.timeCodeType()),
 	_trackNumber(4),
 	_settings(NULL),
-	_maxDrawElapsed(0),
-	_dropDetected(0)
+	_maxDrawElapsed(0)
 {
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(onDocChanged()));
@@ -518,8 +517,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 	//	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
 
 	int currentDrawElapsed = _testTimer.elapsed() - lastDrawElapsed;
-	if(_testTimer.elapsed() > 20)
-		PHDEBUG << "Drop detected:" << ++_dropDetected << currentDrawElapsed;
 	if(currentDrawElapsed > _maxDrawElapsed)
 		_maxDrawElapsed = currentDrawElapsed;
 	_testTimer.restart();
@@ -528,9 +525,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		int inc = 60;
 		PhGraphicText text(&_hudFont, "", 0, 0, 200, inc);
 		text.setColor(Qt::red);
-		text.setContent(QString("Drop : %1").arg(_dropDetected));
-		text.draw();
-		text.setY(text.getY() + inc);
 		text.setContent(QString("Max : %1").arg(_maxDrawElapsed));
 		text.draw();
 		text.setY(text.getY() + inc);

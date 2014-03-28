@@ -9,6 +9,7 @@
 
 class GraphicTestSettings : protected PhGenericSettings, public PhWindowSettings, public PhGraphicSettings
 {
+	// PhGraphicSettings
 	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
 	PH_SETTING_STRING2(setInfoFontFile, infoFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/ARIAL.TTF")
 	PH_SETTING_STRING2(setFontFile, fontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")

@@ -4,10 +4,12 @@
 #include <QString>
 #include <QDir>
 
+#include "PhGraphic/PhGraphicSettings.h"
+
 /**
  * @brief The settings for PhGraphicStrip
  */
-class PhGraphicStripSettings
+class PhGraphicStripSettings : public PhGraphicSettings
 {
 public:
 	/**

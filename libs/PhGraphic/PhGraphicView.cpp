@@ -19,7 +19,8 @@
 
 PhGraphicView::PhGraphicView( QWidget *parent)
 	: QGLWidget(parent),
-	  _settings(NULL)
+	  _settings(NULL),
+	  _dropDetected(0)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";
@@ -44,6 +45,7 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	int timerInterval = 500 / _screenFrequency;
 	t_Timer->start( timerInterval);
 	PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
+	_dropTimer.start();
 }
 
 PhGraphicView::~PhGraphicView()
@@ -74,7 +76,7 @@ void PhGraphicView::resizeGL(int width, int height)
 	glLoadIdentity();
 }
 
-void PhGraphicView::setSettings(PhGraphicSettings *settings)
+void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
 {
 	_settings = settings;
 	_infoFont.setFontFile(_settings->infoFontFile());
@@ -93,13 +95,22 @@ void PhGraphicView::paintGL()
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	_infos.clear();
+
 	addInfo(QString("refresh: %1").arg(this->refreshRate()));
+
+	if(_dropTimer.elapsed() > 1000 / _screenFrequency + 4)
+		_dropDetected++;
+
+		_dropTimer.restart();
+	addInfo(QString("drop: %1").arg(_dropDetected));
+
 	paint();
 	if(_settings && _settings->displayInfo()) {
 		int y = 0;
 		foreach (QString info, _infos) {
 #warning /// @todo assign size on font by default
-			PhGraphicText gInfo(&_infoFont, info, 0, y, 300, 100);
+			PhGraphicText gInfo(&_infoFont, info, 0, y);
+			gInfo.setSize(_infoFont.getNominalWidth(info) / 2, 50);
 			gInfo.setZ(10);
 			gInfo.setColor(Qt::red);
 			gInfo.draw();

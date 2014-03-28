@@ -51,7 +51,7 @@ public:
 		return _frameTickCounter.frequency();
 	}
 
-	void setSettings(PhGraphicSettings *settings);
+	void setGraphicSettings(PhGraphicSettings *settings);
 	/**
 	 * @brief Add a line to the debug info
 	 * @param A string
@@ -108,6 +108,8 @@ private:
 	int _screenFrequency;
 	QStringList _infos;
 	PhFont _infoFont;
+	QTime _dropTimer;
+	int _dropDetected;
 };
 
 #endif // PHGRAPHICVIEW
