@@ -131,11 +131,13 @@ void VideoTestWindow::on_actionSet_timestamp_triggered()
 
 void VideoTestWindow::on_actionOpen_triggered()
 {
+	_mediaPanelDialog.hide();
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"), QDir::homePath());
 	if(QFile::exists(fileName)) {
 		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
+	_mediaPanelDialog.show();
 }
 
 void VideoTestWindow::on_actionReverse_triggered()
@@ -145,12 +147,13 @@ void VideoTestWindow::on_actionReverse_triggered()
 
 void VideoTestWindow::on_actionGo_to_triggered()
 {
+	_mediaPanelDialog.hide();
 	PhTimeCodeDialog dlg(_videoEngine.clock()->timeCodeType(), _videoEngine.clock()->frame(), this);
 
 	if(dlg.exec() == QDialog::Accepted) {
 		PHDEBUG << PhTimeCode::stringFromFrame(dlg.frame(), _videoEngine.clock()->timeCodeType());
 		_videoEngine.clock()->setFrame(dlg.frame());
 	}
-	else
-		PHDEBUG << "cancel";
+
+	_mediaPanelDialog.show();
 }
