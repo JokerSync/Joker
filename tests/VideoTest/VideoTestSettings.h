@@ -20,7 +20,6 @@ public:
 
 	// PhGraphicSettings
 	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
-	PH_SETTING_STRING2(setInfoFontFile, infoFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/ARIAL.TTF")
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)

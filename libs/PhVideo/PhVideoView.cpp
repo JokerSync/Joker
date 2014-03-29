@@ -11,7 +11,6 @@
 PhVideoView::PhVideoView(QWidget *parent) :
 	PhGraphicView(parent),
 	_videoEngine(NULL),
-	_maxGraphicRate(0),
 	_maxVideoRate(0)
 {
 }
@@ -24,15 +23,10 @@ void PhVideoView::setEngine(PhVideoEngine *videoEngine)
 void PhVideoView::paint()
 {
 	if(_videoEngine) {
-		int graphicRate = this->refreshRate();
-		if(graphicRate > _maxGraphicRate)
-			_maxGraphicRate = graphicRate;
 		int videoRate = _videoEngine->refreshRate();
 		if(videoRate > _maxVideoRate)
 			_maxVideoRate = videoRate;
-		QString info = QString("%1 / %2 - %3 / %4 - %5 / %6")
-				.arg(graphicRate)
-				.arg(_maxGraphicRate)
+		QString info = QString("%1 / %2 - %3 / %4")
 				.arg(videoRate)
 				.arg(_maxVideoRate)
 				.arg(_videoEngine->bufferOccupation())

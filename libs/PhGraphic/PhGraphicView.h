@@ -115,7 +115,7 @@ private:
 	QStringList _infos;
 	PhFont _infoFont;
 	QTime _dropTimer;
-	int _dropDetected;
+	int _dropDetected, _maxRefreshRate;
 };
 
 #endif // PHGRAPHICVIEW
