@@ -38,7 +38,7 @@ protected:
 
 private:
 	PhVideoEngine *_videoEngine;
-	int _maxGraphicRate, _maxVideoRate;
+	int _maxVideoRate;
 };
 
 #endif // PHVIDEOVIEW_H

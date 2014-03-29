@@ -20,7 +20,8 @@
 PhGraphicView::PhGraphicView( QWidget *parent)
 	: QGLWidget(parent),
 	_settings(NULL),
-	_dropDetected(0)
+	_dropDetected(0),
+	_maxRefreshRate(0)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";
@@ -96,7 +97,9 @@ void PhGraphicView::paintGL()
 	glColor3f(1.0f, 1.0f, 1.0f);
 	_infos.clear();
 
-	addInfo(QString("refresh: %1").arg(this->refreshRate()));
+	if(this->refreshRate() > _maxRefreshRate)
+		_maxRefreshRate = this->refreshRate();
+	addInfo(QString("refresh: %1 / %2").arg(this->refreshRate()).arg(_maxRefreshRate));
 
 	if(_dropTimer.elapsed() > 1000 / _screenFrequency + 4)
 		_dropDetected++;
