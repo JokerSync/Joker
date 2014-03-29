@@ -19,8 +19,8 @@
 
 PhGraphicView::PhGraphicView( QWidget *parent)
 	: QGLWidget(parent),
-	  _settings(NULL),
-	  _dropDetected(0)
+	_settings(NULL),
+	_dropDetected(0)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";
@@ -101,14 +101,13 @@ void PhGraphicView::paintGL()
 	if(_dropTimer.elapsed() > 1000 / _screenFrequency + 4)
 		_dropDetected++;
 
-		_dropTimer.restart();
+	_dropTimer.restart();
 	addInfo(QString("drop: %1").arg(_dropDetected));
 
 	paint();
 	if(_settings && _settings->displayInfo()) {
 		int y = 0;
-		foreach (QString info, _infos) {
-#warning /// @todo assign size on font by default
+		foreach(QString info, _infos) {
 			PhGraphicText gInfo(&_infoFont, info, 0, y);
 			gInfo.setSize(_infoFont.getNominalWidth(info) / 2, 50);
 			gInfo.setZ(10);

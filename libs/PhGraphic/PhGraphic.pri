@@ -30,6 +30,8 @@ SOURCES += \
     ../../libs/PhGraphic/PhGraphicLoop.cpp \
     ../../libs/PhGraphic/PhGraphicDisc.cpp
 
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/fonts/ARIAL.TTF) $${RESOURCES_PATH} $${CS}
+
 # Windows specific
 win32 {
         !exists($$(SDL_PATH)) {
@@ -94,3 +96,4 @@ CONFIG(release, debug|release) {
 	}
 
 }
+

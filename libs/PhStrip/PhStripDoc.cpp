@@ -1060,7 +1060,6 @@ QString PhStripDoc::metaInformation(QString key)
 
 PhTimeCodeType PhStripDoc::timeCodeType()
 {
-#warning /// @todo rename to timeCodeType()
 	return _tcType;
 }
 

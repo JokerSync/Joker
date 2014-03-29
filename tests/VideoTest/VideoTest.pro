@@ -27,4 +27,3 @@ SOURCES += \
 FORMS += \
     VideoTestWindow.ui
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/ARIAL.TTF) $${RESOURCES_PATH} $${CS}
