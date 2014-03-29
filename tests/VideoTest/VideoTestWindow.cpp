@@ -133,7 +133,7 @@ void VideoTestWindow::on_actionSet_timestamp_triggered()
 void VideoTestWindow::on_actionOpen_triggered()
 {
 	_mediaPanelDialog.hide();
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"), QDir::homePath());
+	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Movie"), _settings->lastDocumentFolder());
 	if(QFile::exists(fileName)) {
 		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
