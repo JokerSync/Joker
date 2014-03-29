@@ -87,8 +87,8 @@ public:
 	QString codecName();
 
 	/**
-	 * @brief Set the settings
-	 * @param settings the desired settings
+	 * @brief Pass the settings to the engine
+	 * @param settings The settings
 	 */
 	void setSettings(PhVideoSettings *settings);
 	/**

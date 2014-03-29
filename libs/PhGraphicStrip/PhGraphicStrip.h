@@ -70,8 +70,8 @@ public:
 
 
 	/**
-	 * @brief Set the settings
-	 * @param settings desired settings
+	 * @brief Pass the settings to the graphic strip
+	 * @param settings The settings
 	 */
 	void setSettings(PhGraphicStripSettings * settings);
 

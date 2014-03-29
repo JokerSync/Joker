@@ -51,10 +51,14 @@ public:
 		return _frameTickCounter.frequency();
 	}
 
+	/**
+	 * @brief Pass the settings to the graphic view
+	 * @param settings The settings
+	 */
 	void setGraphicSettings(PhGraphicSettings *settings);
 	/**
 	 * @brief Add a line to the debug info
-	 * @param A string
+	 * @param info A string
 	 */
 	void addInfo(QString info);
 signals:
@@ -66,10 +70,12 @@ signals:
 
 protected:
 	/**
-	 * @brief initialization, every class have to re-implement it.
+	 * @brief Child-specific initialization.
 	 * @return true if everything went well, false otherwise.
 	 */
-	virtual bool init() = 0;
+	virtual bool init() {
+		return true;
+	};
 	/**
 	 * @brief paint event, every class have to re-implement it.
 	 * @return true if everything went well, false otherwise.

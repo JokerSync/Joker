@@ -16,6 +16,7 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 {
 	ui->setupUi(this);
 	_videoEngine.setSettings(settings);
+	ui->_videoView->setGraphicSettings(settings);
 	_mediaPanelDialog.setClock(_videoEngine.clock());
 	_mediaPanelDialog.show();
 
@@ -144,7 +145,7 @@ void VideoTestWindow::on_actionReverse_triggered()
 
 void VideoTestWindow::on_actionGo_to_triggered()
 {
-    PhTimeCodeDialog dlg(_videoEngine.clock()->timeCodeType(), _videoEngine.clock()->frame(), this);
+	PhTimeCodeDialog dlg(_videoEngine.clock()->timeCodeType(), _videoEngine.clock()->frame(), this);
 
 	if(dlg.exec() == QDialog::Accepted) {
 		PHDEBUG << PhTimeCode::stringFromFrame(dlg.frame(), _videoEngine.clock()->timeCodeType());

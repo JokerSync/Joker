@@ -1,19 +1,26 @@
 #ifndef VIDEOTESTSETTINGS_H
 #define VIDEOTESTSETTINGS_H
 
+#include <QApplication>
 #include <QDir>
 
 #include "PhTools/PhGenericSettings.h"
+#include "PhGraphic/PhGraphicSettings.h"
 #include "PhVideo/PhVideoSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
 class VideoTestSettings : PhGenericSettings,
+	public PhGraphicSettings,
 	public PhVideoSettings,
 	public PhDocumentWindowSettings
 {
 public:
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 	PH_SETTING_INT2(setLogMask, logMask, 1)
+
+	// PhGraphicSettings
+	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
+	PH_SETTING_STRING2(setInfoFontFile, infoFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/ARIAL.TTF")
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)

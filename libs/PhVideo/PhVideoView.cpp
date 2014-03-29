@@ -21,12 +21,6 @@ void PhVideoView::setEngine(PhVideoEngine *videoEngine)
 	_videoEngine = videoEngine;
 }
 
-bool PhVideoView::init()
-{
-	_font.setFontFile("/Library/Fonts/Arial.ttf");
-	return true;
-}
-
 void PhVideoView::paint()
 {
 	if(_videoEngine) {
@@ -43,10 +37,8 @@ void PhVideoView::paint()
 				.arg(_maxVideoRate)
 				.arg(_videoEngine->bufferOccupation())
 				.arg(_videoEngine->bufferSize());
-		PhGraphicText text(&_font, info, 0, 0, 400, 100);
-		text.setColor(Qt::red);
+		addInfo(info);
 		_videoEngine->drawVideo(0, 0, this->width(), this->height());
-		text.draw();
 		_videoEngine->clock()->tick(60);
 	}
 }
