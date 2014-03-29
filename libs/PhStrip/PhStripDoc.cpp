@@ -444,7 +444,7 @@ bool PhStripDoc::importMosFile(QString fileName)
 	_generator = "Mosaic";
 
 	PhFileTool::readShort(f, blocLevel, "CMosaicDoc");
-	int strangeNumber3 = PhFileTool::readShort(f, blocLevel, "CMosaicDoc");
+	PhFileTool::readShort(f, blocLevel, "CMosaicDoc");
 
 	if(!checkMosTag2(f, blocLevel, "CMosaicDoc"))
 		return false;
