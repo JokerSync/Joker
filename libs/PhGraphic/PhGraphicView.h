@@ -66,10 +66,10 @@ signals:
 
 protected:
 	/**
-	 * @brief initialization, every class have to re-implement it.
+	 * @brief Child-specific initialization.
 	 * @return true if everything went well, false otherwise.
 	 */
-	virtual bool init() = 0;
+	virtual bool init() { return true; };
 	/**
 	 * @brief paint event, every class have to re-implement it.
 	 * @return true if everything went well, false otherwise.

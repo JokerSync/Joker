@@ -32,18 +32,12 @@ public:
 
 protected:
 	/**
-	 * @brief Initialize the video view
-	 * @return true if succeed, false otherwise.
-	 */
-	bool init();
-	/**
 	 * @brief Paint the video on the screen
 	 */
 	void paint();
 
 private:
 	PhVideoEngine *_videoEngine;
-	PhFont _font;
 	int _maxGraphicRate, _maxVideoRate;
 };
 

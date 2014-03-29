@@ -17,6 +17,7 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 {
 	ui->setupUi(this);
 	_videoEngine.setSettings(settings);
+	ui->_videoView->setGraphicSettings(settings);
 	_mediaPanelDialog.setClock(_videoEngine.clock());
 	_mediaPanelDialog.show();
 
