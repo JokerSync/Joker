@@ -152,7 +152,7 @@
       <property name="title">
        <string>Files</string>
       </property>
-      <widget class="QCheckBox" name="checkBoxFile1">
+      <widget class="QCheckBox" name="crashCheckBox">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -168,7 +168,7 @@
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="QCheckBox" name="checkBoxFile2">
+      <widget class="QCheckBox" name="preferencesCheckBox">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -223,7 +223,7 @@
         <string>System informations</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="checkBoxFile3">
+      <widget class="QCheckBox" name="systemCheckBox">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -252,7 +252,7 @@
         <string>Log</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="checkBoxFile4">
+      <widget class="QCheckBox" name="logCheckBox">
        <property name="geometry">
         <rect>
          <x>20</x>

@@ -60,7 +60,7 @@ void PhFeedbackReporter::on_buttonBox_accepted()
 
 
 	// Get the system infos
-	if(ui->checkBoxFile3->isChecked()) {
+	if(ui->systemCheckBox->isChecked()) {
 		system("/usr/sbin/system_profiler SPHardwareDataType > out");
 		QFile file("./out");
 		if(!file.open(QIODevice::ReadOnly)) {
@@ -77,7 +77,7 @@ void PhFeedbackReporter::on_buttonBox_accepted()
 	}
 
 	// Get the preferences
-	if(ui->checkBoxFile2->isChecked()) {
+	if(ui->preferencesCheckBox->isChecked()) {
 		QString cmd = "defaults read com.Phonations." + QString(APP_NAME) + " > out";
 		system(PHNQ(cmd));
 		QFile file("./out");
@@ -95,7 +95,7 @@ void PhFeedbackReporter::on_buttonBox_accepted()
 	}
 
 	// Get the application log
-	if(ui->checkBoxFile4->isChecked()) {
+	if(ui->logCheckBox->isChecked()) {
 		QFile file(QDir::homePath() + "/Library/Logs/Phonations/" + APP_NAME + ".log");
 		if(!file.open(QIODevice::ReadOnly)) {
 			PHDEBUG << file.errorString();
@@ -110,7 +110,7 @@ void PhFeedbackReporter::on_buttonBox_accepted()
 	}
 
 	// Get the crash log
-	if(ui->checkBoxFile1->isChecked()) {
+	if(ui->crashCheckBox->isChecked()) {
 		QString userDirectoryLogs = QDir::homePath() + "/Library/Logs/DiagnosticReports/";
 		QStringList files;
 		QDir logs(userDirectoryLogs);
@@ -198,7 +198,7 @@ void PhFeedbackReporter::on_buttonBox_accepted()
 		PHDEBUG << "add crashLog";
 	}
 
-	QNetworkRequest request(QUrl("http://feedback.phonations.com/submit.php"));
+	QNetworkRequest request(QUrl("http://feedback.phonations.com/feedback.php"));
 	QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 	connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onSyncRequestFinished(QNetworkReply*)));
 
