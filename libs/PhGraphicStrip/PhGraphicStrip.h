@@ -163,16 +163,6 @@ private:
 
 	PhGraphicSolidRect _stripSyncBar;
 
-	QMap<PhPeople*, PhGraphicText*> _graphicPeoples;
-
-	QMap<PhStripText*, PhGraphicText*> _graphicTexts;
-
-	QMap<PhStripCut*, PhGraphicSolidRect*> _graphicCuts;
-
-	QMap<PhStripLoop*, PhGraphicLoop*> _graphicLoops;
-
-	QMap<PhStripDetect*, PhGraphicSolidRect*> _graphicDetects;
-
 	/**
 	 * @brief _test
 	 * QTime for testing performance
