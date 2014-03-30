@@ -3,7 +3,8 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT += widgets
+QT += widgets network
+
 
 HEADERS += \
 #    ../../libs/PhCommonUI/PhLeap.h \
@@ -17,7 +18,7 @@ HEADERS += \
     ../../libs/PhCommonUI/PhWindowSettings.h \
     ../../libs/PhCommonUI/PhLockableSpinBox.h \
     ../../libs/PhCommonUI/FeedbackReporter.h \
-    ../../libs/PhCommonUI/PhFeedbackSettings.h
+	../../libs/PhCommonUI/PhFeedbackSettings.h
 
 SOURCES += \
 #   ../../libs/PhCommonUI/PhLeap.cpp \

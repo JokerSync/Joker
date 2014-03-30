@@ -1,17 +1,23 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #ifndef FEEDBACKREPORTER_H
 #define FEEDBACKREPORTER_H
 
 #include <QWidget>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
+#include <QJsonObject>
+#include <QNetworkReply>
 
 #include "PhTools/PhDebug.h"
+#include "PhTools/SMTP/SmtpMime"
+
 #include "PhFeedbackSettings.h"
 
-#include "PhTools/SMTP/SmtpMime"
+
 
 namespace Ui {
 class FeedbackReporter;
@@ -30,10 +36,11 @@ private slots:
 
 	void on_buttonBox_rejected();
 
+	void onSyncRequestFinished(QNetworkReply*reply);
+
 private:
 	Ui::FeedbackReporter *ui;
 	PhFeedbackSettings *_settings;
-	QString _lastLog;
 };
 
 #endif // FEEDBACKREPORTER_H

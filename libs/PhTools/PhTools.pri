@@ -12,9 +12,6 @@ DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 INCLUDEPATH += ../../libs
 
-include(SMTP/SMTPEmail.pri)
-
-
 HEADERS += \
 	../../libs/PhTools/PhTime.h \
 	../../libs/PhTools/PhTimeCode.h \
@@ -23,7 +20,7 @@ HEADERS += \
     ../../libs/PhTools/PhTickCounter.h \
     ../../libs/PhTools/PhPictureTools.h \
     ../../libs/PhTools/PhFileTool.h \
-    ../../libs/PhTools/PhGenericSettings.h
+	../../libs/PhTools/PhGenericSettings.h
 
 SOURCES += \
     ../../libs/PhTools/PhTimeCode.cpp \
@@ -32,7 +29,7 @@ SOURCES += \
     ../../libs/PhTools/PhTickCounter.cpp \
     ../../libs/PhTools/PhPictureTools.cpp \
     ../../libs/PhTools/PhFileTool.cpp \
-    ../../libs/PhTools/PhGenericSettings.cpp
+	../../libs/PhTools/PhGenericSettings.cpp
 
 # Windows specific
 win32 {

@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 	QApplication a(argc, argv);
 	FeedbackReporter f(&settings);
 
-	if(!settings.exitedNormaly() or true) {
+	if(!settings.exitedNormaly()) {
 		f.show();
 	}
 

@@ -1,18 +1,17 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include <QDir>
 #include <QDateTime>
 #include <QSettings>
 #include <QMessageBox>
+#include <QProcess>
 
 #include "FeedbackReporter.h"
 #include "ui_FeedbackReporter.h"
 
-//#define PASSWORD
-//#define SENDER
 
 FeedbackReporter::FeedbackReporter(PhFeedbackSettings *settings, QWidget *parent) :
 	QWidget(parent),
@@ -23,30 +22,6 @@ FeedbackReporter::FeedbackReporter(PhFeedbackSettings *settings, QWidget *parent
 	ui->setupUi(this);
 
 	ui->labelTitle->setText(QString(APP_NAME) + " " +tr("recently quit unexpectedly."));
-
-	QString userDirectoryLogs = QDir::homePath() + "/Library/Logs/DiagnosticReports/";
-	QStringList files;
-
-	QDir logs(userDirectoryLogs);
-
-	QStringList filters;
-	QString s1 = "VideoTest";
-	QString s2 = "*.crash";
-	filters.append(s1 + s2);
-	logs.setNameFilters(filters);
-	files = logs.entryList();
-
-	_lastLog = (files.first());
-	foreach(QString file, files)
-	{
-		if(QFileInfo(file).created() > QFileInfo(_lastLog).created())
-			_lastLog = file;
-	}
-	_lastLog = QDir::homePath() + "/Library/Logs/DiagnosticReports/" + _lastLog;
-	ui->labelFile1->setText(QFileInfo(_lastLog).fileName());
-	ui->labelFile2->setText(QFileInfo(_settings->settingsFileName()).fileName());
-	ui->labelFile1->adjustSize();
-	ui->labelFile2->adjustSize();
 
 	PHDEBUG << _settings->emailList();
 	ui->comboBoxEmails->addItems(_settings->emailList());
@@ -60,70 +35,187 @@ FeedbackReporter::~FeedbackReporter()
 void FeedbackReporter::on_buttonBox_accepted()
 {
 	QStringList emails;
-	for(int i = 0; i < ui->comboBoxEmails->count(); i++)
-	{
+	for(int i = 0; i < ui->comboBoxEmails->count(); i++) {
 		emails += ui->comboBoxEmails->itemText(i);
 	}
 	emails.removeOne(ui->comboBoxEmails->currentText());
 	emails.insert(0, ui->comboBoxEmails->currentText());
 	_settings->setEmailList(emails);
 
-	PHDEBUG << emails;
 
-	SmtpClient smtp("smtp.googlemail.com", 465, SmtpClient::SslConnection);
 
-#ifdef SENDER and PASSWORD
-	smtp.setUser(SENDER);
-	smtp.setPassword(PASSWORD);
-#endif
+	QString systemConfig;
+	QString crashLog;
+	QString appLog;
+	QString header;
+	QString preferences;
 
-	// Now we create a MimeMessage object. This is the email.
 
-	MimeMessage message;
+	header = "";
 
-	message.setSender(new EmailAddress(ui->comboBoxEmails->currentText(), "Bug report"));
-	message.addRecipient(new EmailAddress("support@phonations.com", "Support"));
-	message.setSubject(tr("Bug repport"));
-
-	MimeText text;
-
-	text.setText("Hi Phonations,\nThis is report bug message form " + ui->comboBoxEmails->currentText() + ".\n");
-
-	// Now add it to the mail
+	header += "--------Feedback report: " + QString(APP_NAME) + " v" + QString(APP_VERSION) + "--------\n";
+	header += "From : " + ui->comboBoxEmails->currentText() + "\n";
 	if(!ui->textEditComment->toPlainText().isEmpty())
-	{
-		text.setText(text.getText() + "\nThe client added thoses infos : \"\n" + ui->textEditComment->toPlainText() + "\"");
-	}
-	message.addPart(&text);
-
-	if(ui->checkBoxFile1->isChecked())
-	{
-		message.addPart(new MimeAttachment(new QFile(ui->labelFile1->text())));
-		PHDEBUG << "send : " << ui->labelFile1->text();
-	}
-	if(ui->checkBoxFile2->isChecked())
-	{
-		message.addPart(new MimeAttachment(new QFile(ui->labelFile2->text())));
-		PHDEBUG << "send : " << ui->labelFile2->text();
-	}
+		header += "Message : " + ui->textEditComment->toPlainText() + "\n";
 
 
-	// Now we can send the mail
-	if(smtp.connectToHost())
-		qDebug() << "host reached.";
-	if(smtp.login())
-		qDebug() << "Login succeed.";
-	bool succeed = smtp.sendMail(message);
-	if (succeed)
-		qDebug() << "Message sent.";
-	smtp.quit();
-	if(succeed)
-		this->hide();
-	else
-		QMessageBox::warning(this, "Error", tr("Error while sending the mail"), QMessageBox::Ok);
+	// Get the system infos
+	if(ui->checkBoxFile3->isChecked()) {
+		system("/usr/sbin/system_profiler SPHardwareDataType > out");
+		QFile file("./out");
+		if(!file.open(QIODevice::ReadOnly)) {
+			PHDEBUG << file.errorString();
+		}
+		else {
+			QTextStream in(&file);
+			while(!in.atEnd()) {
+				systemConfig += in.readLine() + "\n";
+			}
+			file.close();
+			system("rm out");
+		}
+	}
+
+	// Get the preferences
+	if(ui->checkBoxFile2->isChecked()) {
+		QString cmd = "defaults read com.Phonations." + QString(APP_NAME) + " > out";
+		system(PHNQ(cmd));
+		QFile file("./out");
+		if(!file.open(QIODevice::ReadOnly)) {
+			PHDEBUG << file.errorString();
+		}
+		else {
+			QTextStream in(&file);
+			while(!in.atEnd()) {
+				preferences += in.readLine() + "\n";
+			}
+			file.close();
+			system("rm out");
+		}
+	}
+
+	// Get the application log
+	if(ui->checkBoxFile4->isChecked()) {
+		QFile file(QDir::homePath() + "/Library/Logs/Phonations/" + APP_NAME + ".log");
+		if(!file.open(QIODevice::ReadOnly)) {
+			PHDEBUG << file.errorString();
+		}
+		else {
+			QTextStream in(&file);
+			while(!in.atEnd()) {
+				appLog += in.readLine()  + "\n";
+			}
+			file.close();
+		}
+	}
+
+	// Get the crash log
+	if(ui->checkBoxFile1->isChecked()) {
+		QString userDirectoryLogs = QDir::homePath() + "/Library/Logs/DiagnosticReports/";
+		QStringList files;
+		QDir logs(userDirectoryLogs);
+
+		QStringList filters;
+		filters.append(QString(APP_NAME) + "*.crash" );
+		logs.setNameFilters(filters);
+		files = logs.entryList();
+		QString lastCrashLog = (files.first());
+		foreach(QString file, files)
+		{
+			if(QFileInfo(file).created() > QFileInfo(lastCrashLog).created())
+				lastCrashLog = file;
+		}
+		QFile file(lastCrashLog);
+		if(!file.open(QIODevice::ReadOnly)) {
+			PHDEBUG << "Crash log : " << file.errorString();
+		}
+		else {
+			QTextStream in(&file);
+			while(!in.atEnd()) {
+				crashLog += in.readLine()  + "\n";
+			}
+			file.close();
+		}
+	}
+
+	QString name;
+	// Get the machine name
+	system("scutil --get ComputerName > out");
+	QFile file("./out");
+	if(!file.open(QIODevice::ReadOnly)) {
+		PHDEBUG << file.errorString();
+	}
+	else {
+		QTextStream in(&file);
+		while(!in.atEnd()) {
+			name += in.readLine() + "\n";
+		}
+		file.close();
+		system("rm out");
+	}
+
+	name.remove("[=|&]");
+	name.insert(0, "name=");
+	name.append("&");
+
+	header.remove("[=|&]");
+	header.insert(0, "header=");
+	header.append("&");
+
+	QByteArray post;
+
+	post = name.toUtf8() + header.toUtf8();
+
+	if(!preferences.isEmpty()) {
+		preferences.remove("[=|&]");
+		preferences.insert(0, "preferences=");
+		preferences.append("&");
+		post += preferences.toUtf8();
+		PHDEBUG << "add preferences";
+	}
+
+	if(!systemConfig.isEmpty()) {
+		systemConfig.remove("[=|&]");
+		systemConfig.insert(0, "configuration=");
+		systemConfig.append("&");
+		post += systemConfig.toUtf8();
+		PHDEBUG << "add systemConfig";
+	}
+
+	if(!appLog.isEmpty()) {
+		appLog.replace("&", "amp");
+		appLog.insert(0, "applicationLog=");
+		appLog.append("&");
+		post += appLog.toUtf8();
+		PHDEBUG << "add appLog";
+	}
+
+	if(!crashLog.isEmpty()) {
+		crashLog.remove("[=|&]");
+		crashLog.insert(0, "crashLog=");
+		crashLog.append("&");
+		post += crashLog.toUtf8();
+		PHDEBUG << "add crashLog";
+	}
+
+	QNetworkRequest request(QUrl("http://feedback.phonations.com/submit.php"));
+	QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+	connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onSyncRequestFinished(QNetworkReply*)));
+
+	// Send it
+	manager->post(request, post);
+	QMessageBox::information(this, "Information",
+	                         tr("Thank you for your feedback!"),
+	                         QMessageBox::Ok, QMessageBox::Ok);
+	hide();
 }
 
 void FeedbackReporter::on_buttonBox_rejected()
 {
-	this->hide();
+	hide();
+}
+
+void FeedbackReporter::onSyncRequestFinished(QNetworkReply * reply)
+{
+	delete reply;
 }

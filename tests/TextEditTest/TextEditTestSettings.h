@@ -23,7 +23,9 @@ public:
 	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
 
 	// PhFeedbackSettings
-	QString settingsFileName(){return _settings.fileName();}
+	QString settingsFileName() {
+		return _settings.fileName();
+	}
 	PH_SETTING_STRINGLIST(setEmailList, emailList)
 };
 
