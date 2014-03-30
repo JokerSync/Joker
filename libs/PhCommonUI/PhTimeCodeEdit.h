@@ -32,12 +32,15 @@ public:
 	explicit PhTimeCodeEdit(QWidget *parent = 0);
 
 	/**
-	 * @brief Update the timecode string with a time value
+	 * @brief set Frame
 	 *
-	 * @param time A time value
-	 * @param tcType A timecode type
+	 * The corresponding timecode will be displayed on the window.
+	 * For example, if frame = 32 and tcType = PhTimeCodeType24, the
+	 * window will display 00:00:01:12
+	 * @param frame the desired PhFrame
+	 * @param tcType the corresponding PhTimeCodeType
 	 */
-	void setTime(PhTime time, PhTimeCodeType tcType);
+	void setFrame(PhFrame frame, PhTimeCodeType tcType);
 
 	/**
 	 * @brief Check the timecode
@@ -45,19 +48,19 @@ public:
 	 */
 	bool isTimeCode();
 	/**
-	 * @brief Current time value entered in the text field
-	 * @return A time value.
+	 * @brief Current frame value entered in the text field
+	 * @return A frame value.
 	 */
-	PhTime time();
+	PhFrame frame();
 
 signals:
 
 	/**
-	 * @brief Send a signal when the text box time changed
-	 * @param time A time value
-	 * @param tcType A timecode type
+	 * @brief Send a signal when the text box frame changed
+	 * @param frame the new frame
+	 * @param tcType the new PhTimeCodeType
 	 */
-	void timeChanged(PhTime time, PhTimeCodeType tcType);
+	void frameChanged(PhFrame frame, PhTimeCodeType tcType);
 
 private slots:
 	void onTextChanged(QString text);
@@ -65,7 +68,7 @@ private slots:
 private:
 	PhTimeCodeType _tcType;
 	bool eventFilter(QObject *sender, QEvent *event);
-	QString _oldString;
+	QString _oldFrame;
 	QString _addedNumbers;
 	void compute(bool add);
 	int _selectedIndex;

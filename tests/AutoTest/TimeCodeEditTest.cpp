@@ -9,25 +9,25 @@
 TimeCodeEditTest::TimeCodeEditTest() : QObject(NULL) {
 }
 
-void TimeCodeEditTest::timeTest()
+void TimeCodeEditTest::frameTest()
 {
 	PhTimeCodeEdit tcEdit;
 
-	QCOMPARE((int)tcEdit.time(), 0);
+	QCOMPARE((int)tcEdit.frame(), 0);
 
 	tcEdit.setText("00:00:01:00");
-	QCOMPARE((int)tcEdit.time(), 24000);
+	QCOMPARE((int)tcEdit.frame(), 25);
 }
 
-void TimeCodeEditTest::setTimeTest() {
+void TimeCodeEditTest::setFrameTest() {
 	PhTimeCodeEdit tcEdit;
 
 	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
 
-	tcEdit.setTime(24000, PhTimeCodeType25);
+	tcEdit.setFrame(25, PhTimeCodeType25);
 	QCOMPARE(tcEdit.text(), QString("00:00:01:00"));
 
-	tcEdit.setTime(48000, PhTimeCodeType24);
+	tcEdit.setFrame(48, PhTimeCodeType24);
 	QCOMPARE(tcEdit.text(), QString("00:00:02:00"));
 }
 
@@ -37,22 +37,22 @@ void TimeCodeEditTest::keyboardInputTest()
 
 	QTest::keyClicks(&tcEdit, "9");
 	QCOMPARE(tcEdit.text(), QString("00:00:00:09"));
-	QCOMPARE((int)tcEdit.time(), 9 * 960);
+	QCOMPARE((int)tcEdit.frame(), 9);
 	QVERIFY(tcEdit.isTimeCode());
 
 	QTest::keyClicks(&tcEdit, "1");
 	QCOMPARE(tcEdit.text(), QString("00:00:00:91"));
-	QCOMPARE((int)tcEdit.time(), 0);
+	QCOMPARE((int)tcEdit.frame(), 0);
 	QVERIFY(!tcEdit.isTimeCode());
 
 	QTest::keyClicks(&tcEdit, "2");
 	QCOMPARE(tcEdit.text(), QString("00:00:09:12"));
-	QCOMPARE((int)tcEdit.time(), (9 * 25 + 12) * 960);
+	QCOMPARE((int)tcEdit.frame(), 9 * 25 + 12);
 	QVERIFY(tcEdit.isTimeCode());
 
 	QTest::keyClick(&tcEdit, Qt::Key_Backspace);
 	QCOMPARE(tcEdit.text(), QString("00:00:00:91"));
-	QCOMPARE((int)tcEdit.time(), 0);
+	QCOMPARE((int)tcEdit.frame(), 0);
 	QVERIFY(!tcEdit.isTimeCode());
 
 	QTest::keyClick(&tcEdit, Qt::Key_Enter);
@@ -63,7 +63,7 @@ void TimeCodeEditTest::keyboardBadInputTest()
 {
 	PhTimeCodeEdit tcEdit;
 
-	tcEdit.setTime(24000, PhTimeCodeType25);
+	tcEdit.setFrame(25, PhTimeCodeType25);
 	QCOMPARE(tcEdit.text(), QString("00:00:01:00"));
 
 	QTest::keyClicks(&tcEdit, "a");

@@ -30,19 +30,19 @@ class PhTimeCodeDialog : public QDialog
 public:
 	/**
 	 * @brief PhTimeCodeDialog constructor
-	 * @param tcType Timecode type to use for string to time conversion.
-	 * @param time The dialog initial time.
+	 * @param tcType Timecode type to use for string to frame conversion.
+	 * @param frame The dialog initial frame.
 	 * @param parent The object owner.
 	 */
-	explicit PhTimeCodeDialog(PhTimeCodeType tcType, PhTime time = 0, QWidget *parent = 0);
+	explicit PhTimeCodeDialog(PhTimeCodeType tcType, PhFrame frame = 0, QWidget *parent = 0);
 
 	~PhTimeCodeDialog();
 
 	/**
-	 * @brief Current time value entered in the text field
-	 * @return A time value.
+	 * @brief Current frame value entered in the text field
+	 * @return A frame value.
 	 */
-	PhTime time();
+	PhFrame frame();
 
 
 private slots:

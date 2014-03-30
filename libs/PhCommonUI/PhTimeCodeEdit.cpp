@@ -9,7 +9,7 @@
 PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
 	QLineEdit(parent)
 {
-	setTime(0, PhTimeCodeType25);
+	setFrame(0, PhTimeCodeType25);
 	connect(this, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged(QString)));
 	this->installEventFilter(this);
 	//Only accept numbers and ":" it avoid the use of special
@@ -20,21 +20,21 @@ PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
 	_selectedIndex = 0;
 }
 
-void PhTimeCodeEdit::setTime(PhTime time, PhTimeCodeType tcType)
+void PhTimeCodeEdit::setFrame(PhFrame frame, PhTimeCodeType tcType)
 {
 	_tcType = tcType;
-	this->setText(PhTimeCode::stringFromTime(time, tcType));
-	if(_oldString.length() == 0)
-		_oldString = this->text();
+	this->setText(PhTimeCode::stringFromFrame(frame, tcType));
+	if(_oldFrame.length() == 0)
+		_oldFrame = this->text();
 
 }
 
 bool PhTimeCodeEdit::isTimeCode()
 {
-	PhTime time;
+	PhFrame frame;
 	QString text;
-	time = PhTimeCode::timeFromString(this->text(), _tcType);
-	text = PhTimeCode::stringFromTime(time, _tcType);
+	frame = PhTimeCode::frameFromString(this->text(), _tcType);
+	text = PhTimeCode::stringFromFrame(frame, _tcType);
 
 	if(text == this->text())
 		return true;
@@ -42,16 +42,16 @@ bool PhTimeCodeEdit::isTimeCode()
 		return false;
 }
 
-PhTime PhTimeCodeEdit::time()
+PhFrame PhTimeCodeEdit::frame()
 {
-	return PhTimeCode::timeFromString(this->text(), _tcType);
+	return PhTimeCode::frameFromString(this->text(), _tcType);
 }
 
 void PhTimeCodeEdit::onTextChanged(QString text)
 {
 	if(isTimeCode()) {
-		PhTime time = PhTimeCode::timeFromString(text, _tcType);
-		emit timeChanged(time, _tcType);
+		PhFrame frame = PhTimeCode::frameFromString(text, _tcType);
+		emit frameChanged(frame, _tcType);
 	}
 }
 
@@ -116,7 +116,7 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 		{
 			if(_mousePressed) {
 				int y = static_cast<QMouseEvent *>(event)->pos().y();
-				PhTime currentFrame = PhTimeCode::frameFromString(this->text(), _tcType);
+				PhFrame currentFrame = PhTimeCode::frameFromString(this->text(), _tcType);
 
 				if(_selectedIndex == 0) {
 					if(_mousePressedLocation.y() > y)
@@ -160,7 +160,7 @@ void PhTimeCodeEdit::compute(bool add)
 	if(add)
 		currentText = this->text();
 	else
-		currentText = _oldString;
+		currentText = _oldFrame;
 	currentText.remove(":");
 
 	int i = 0;
