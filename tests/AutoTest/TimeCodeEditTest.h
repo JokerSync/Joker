@@ -10,8 +10,8 @@ public:
 	explicit TimeCodeEditTest();
 
 private slots:
-	void frameTest();
-	void setFrameTest();
+	void timeTest();
+	void setTimeTest();
 
 	void keyboardInputTest();
 	void keyboardBadInputTest();
