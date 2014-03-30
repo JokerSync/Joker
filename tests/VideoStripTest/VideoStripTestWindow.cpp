@@ -42,14 +42,15 @@ bool VideoStripTestWindow::openDocument(QString fileName)
 	if(!_doc->openStripFile(fileName))
 		return false;
 
-	_strip->clock()->setTimeCodeType(_doc->timeCodeType());
-	_strip->clock()->setFrame(_doc->lastFrame());
+	PhTimeCodeType tcType = _doc->timeCodeType();
+	_strip->clock()->setTimeCodeType(tcType);
+	_strip->clock()->setTime(_doc->lastTime());
 	this->setWindowTitle(fileName);
 
 	QFileInfo fileInfo(_doc->videoFilePath());
 	if (fileInfo.exists()) {
 		_videoEngine->open(_doc->videoFilePath());
-		_videoEngine->setFirstFrame(_doc->videoFramestamp());
+		_videoEngine->setFirstFrame(_doc->videoTimeIn() / PhTimeCode::timePerFrame(tcType));
 	}
 
 	setCurrentDocument(fileName);
