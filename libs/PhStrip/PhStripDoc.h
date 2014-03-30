@@ -73,6 +73,12 @@ public:
 	PhTime videoTimeIn();
 
 	/**
+	 * @brief The video starting frame
+	 * @return A frame value
+	 */
+	PhTime videoFrameIn();
+
+	/**
 	 * @brief getFilePath
 	 * @return _filePath
 	 */
@@ -179,6 +185,11 @@ public:
 	 * @param time A time value
 	 */
 	void setVideoTimeIn(PhTime time);
+	/**
+	 * @brief Set the video starting frame
+	 * @param frame A frame value
+	 */
+	void setVideoFrameIn(PhFrame frame);
 	/**
 	 * @brief Set the video file path
 	 * @param videoFilePath A string

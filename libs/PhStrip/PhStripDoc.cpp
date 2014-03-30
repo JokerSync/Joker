@@ -1098,6 +1098,11 @@ PhTime PhStripDoc::videoTimeIn()
 	return _videoTimeIn;
 }
 
+PhTime PhStripDoc::videoFrameIn()
+{
+	return _videoTimeIn / PhTimeCode::timePerFrame(_tcType);
+}
+
 PhTime PhStripDoc::lastTime()
 {
 	return _lastTime;
@@ -1152,6 +1157,11 @@ void PhStripDoc::setTitle(QString title)
 void PhStripDoc::setVideoTimeIn(PhTime time)
 {
 	_videoTimeIn = time;
+}
+
+void PhStripDoc::setVideoFrameIn(PhFrame frame)
+{
+	_videoTimeIn = frame * PhTimeCode::timePerFrame(_tcType);
 }
 
 void PhStripDoc::setVideoFilePath(QString videoFilePath)
