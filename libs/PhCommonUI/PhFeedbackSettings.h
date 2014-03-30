@@ -8,6 +8,10 @@
 
 #include "PhTools/PhGenericSettings.h"
 
+/**
+ * @brief The PhFeedbackSettings class
+ *
+ */
 class PhFeedbackSettings
 {
 public:
@@ -17,7 +21,18 @@ public:
 	 */
 	virtual QString settingsFileName() = 0;
 
+	/**
+	 * @brief emailList
+	 * @return The users list.
+	 */
 	virtual QStringList emailList() = 0;
+	/**
+	 * @brief setEmailList
+	 *
+	 * Replace the current list with the provided one.
+	 *
+	 * @param emails
+	 */
 	virtual void setEmailList(QStringList emails) = 0;
 
 };

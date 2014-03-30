@@ -9,14 +9,14 @@
 #include <QMessageBox>
 #include <QProcess>
 
-#include "FeedbackReporter.h"
-#include "ui_FeedbackReporter.h"
+#include "PhFeedbackReporter.h"
+#include "ui_PhFeedbackReporter.h"
 
 
-FeedbackReporter::FeedbackReporter(PhFeedbackSettings *settings, QWidget *parent) :
+PhFeedbackReporter::PhFeedbackReporter(PhFeedbackSettings *settings, QWidget *parent) :
 	QWidget(parent),
 	_settings(settings),
-	ui(new Ui::FeedbackReporter)
+	ui(new Ui::PhFeedbackReporter)
 {
 
 	ui->setupUi(this);
@@ -27,12 +27,12 @@ FeedbackReporter::FeedbackReporter(PhFeedbackSettings *settings, QWidget *parent
 	ui->comboBoxEmails->addItems(_settings->emailList());
 }
 
-FeedbackReporter::~FeedbackReporter()
+PhFeedbackReporter::~PhFeedbackReporter()
 {
 	delete ui;
 }
 
-void FeedbackReporter::on_buttonBox_accepted()
+void PhFeedbackReporter::on_buttonBox_accepted()
 {
 	QStringList emails;
 	for(int i = 0; i < ui->comboBoxEmails->count(); i++) {
@@ -210,12 +210,12 @@ void FeedbackReporter::on_buttonBox_accepted()
 	hide();
 }
 
-void FeedbackReporter::on_buttonBox_rejected()
+void PhFeedbackReporter::on_buttonBox_rejected()
 {
 	hide();
 }
 
-void FeedbackReporter::onSyncRequestFinished(QNetworkReply * reply)
+void PhFeedbackReporter::onSyncRequestFinished(QNetworkReply * reply)
 {
 	delete reply;
 }
