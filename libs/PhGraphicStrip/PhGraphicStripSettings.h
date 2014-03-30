@@ -83,12 +83,12 @@ public:
 	 * @brief The timestamp of the ruler
 	 * @return
 	 */
-	virtual int rulerTimestamp() = 0;
+	virtual int rulerTimeIn() = 0;
 	/**
-	 * @brief The number of frame between each draw of the ruler
-	 * @return A number of frame
+	 * @brief The amount of time between each draw of the ruler
+	 * @return A time value
 	 */
-	virtual int spaceBetweenRuler() = 0;
+	virtual int timeBetweenRuler() = 0;
 
 	/**
 	 * @brief Display some informations about the strip

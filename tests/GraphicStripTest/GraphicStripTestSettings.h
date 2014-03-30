@@ -20,16 +20,16 @@ public:
 
 	// PhGraphicStripSettings :
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
-	PH_SETTING_INT2(setHorizontalSpeed, horizontalSpeed, 12)
+	PH_SETTING_INT2(setHorizontalSpeed, horizontalSpeed, 100)
 	PH_SETTING_STRING(setTextFontFile, textFontFile)
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 1)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
-	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1)
+	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1000)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
-	PH_SETTING_INT(setRulerTimestamp, rulerTimestamp)
-	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 50)
+	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
+	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 48000)
 	PH_SETTING_BOOL(setDisplayStripInfo, displayStripInfo)
 
 	// PhDocumentWindowSettings
