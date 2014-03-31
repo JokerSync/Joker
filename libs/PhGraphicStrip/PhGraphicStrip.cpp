@@ -294,11 +294,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 		int trackHeight = height / _trackNumber;
 
-		bool trackFull[_trackNumber];
-		for(int i = 0; i < _trackNumber; i++) {
-			trackFull[i] = false;
-		}
-
 		int verticalTimePerPixel = _settings->verticalSpeed();
 		bool displayNextText = _settings->displayNextText();
 		PhTime maxTimeIn = timeOut;
@@ -334,9 +329,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			// - it is the first text
 			// - it is a different people
 			// - the distance between the latest text and the current is superior to a limit
-			if((text->timeIn() > timeIn)
-					&& (text->timeIn() - gPeople.getWidth() / timePerPixel < timeOut)
-					&& (
+			if((
 						(lastText == NULL)
 						|| (lastText->people() != text->people())
 						|| (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
@@ -350,12 +343,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gPeople.setColor(computeColor(people, selectedPeoples, invertedColor));
 
 				gPeople.draw();
-
-				//Check if the name is printed on the screen
-				if( (timeIn < text->timeOut()) && (text->timeIn() - gPeople.getWidth() * timePerPixel < timeOut) ) {
-					trackFull[track] = true;
-				}
-
 			}
 
 			if(displayNextText && (timeIn < text->timeIn()) && ((lastText == NULL) || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
@@ -370,7 +357,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gPeople.setHeight(trackHeight / 2);
 
 				gPeople.setColor(computeColor(people, selectedPeoples, invertedColor));
-
 
 				PhGraphicSolidRect background(gPeople.getX(), gPeople.getY(), gPeople.getWidth(), gPeople.getHeight() + 2);
 				if(selectedPeoples.size() && !selectedPeoples.contains(people))
