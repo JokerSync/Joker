@@ -215,3 +215,9 @@ void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
 	if(dlg.exec())
 		_settings->setRulerTimeIn(dlg.frame() * PhTimeCode::timePerFrame(tcType));
 }
+
+void GraphicStripTestWindow::on_actionTest_triggered()
+{
+    PHDEBUG;
+	_strip->clock()->setFrame(_strip->clock()->frame()+1);
+}

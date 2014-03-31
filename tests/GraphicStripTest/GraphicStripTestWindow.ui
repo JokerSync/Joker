@@ -98,6 +98,8 @@
     <addaction name="actionStep_time_backward"/>
     <addaction name="menuVarial_Speed"/>
     <addaction name="menuGo"/>
+    <addaction name="separator"/>
+    <addaction name="actionTest"/>
    </widget>
    <widget class="QMenu" name="menuDisplay">
     <property name="title">
@@ -285,6 +287,14 @@
   <action name="actionChange_ruler_timestamp">
    <property name="text">
     <string>Change ruler timestamp...</string>
+   </property>
+  </action>
+  <action name="actionTest">
+   <property name="text">
+    <string>Test</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>
