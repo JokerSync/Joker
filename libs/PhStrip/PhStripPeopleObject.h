@@ -13,7 +13,7 @@
 /**
  * @brief A strip object affected to a PhPeople
  *
- * Its properties are people, track and frameOut.
+ * Its properties are people, track and timeOut.
  */
 class PhStripPeopleObject : public PhStripObject {
 
@@ -21,12 +21,12 @@ public:
 
 	/**
 	 * @brief PhStripPeopleObject constructor
-	 * @param frameIn the beggining of the PhStripPeopleObject
+	 * @param timeIn the beggining of the PhStripPeopleObject
 	 * @param people the corresponding PhPeople
-	 * @param frameOut the end of the PhStripPeopleObject
+	 * @param timeOut the end of the PhStripPeopleObject
 	 * @param track the track of the PhStripPeopleObject
 	 */
-	PhStripPeopleObject(PhFrame frameIn, PhPeople * people = NULL, PhFrame frameOut = 0, int track = 0);
+	PhStripPeopleObject(PhTime timeIn, PhPeople * people = NULL, PhTime timeOut = 0, int track = 0);
 	/**
 	 * @brief Get the PhPeople
 	 * @return _people the corresponding PhPeople
@@ -42,11 +42,11 @@ public:
 		return _track;
 	}
 	/**
-	 * @brief The frame out
-	 * @return A frame value
+	 * @brief The time out
+	 * @return A time value
 	 */
-	PhFrame frameOut() {
-		return _frameOut;
+	PhTime timeOut() {
+		return _timeOut;
 	}
 	/**
 	 * @brief Affect a people
@@ -63,18 +63,18 @@ public:
 		_track = track;
 	}
 	/**
-	 * @brief Set the frame out
-	 * @param frameOut A frame
+	 * @brief Set the time out
+	 * @param timeOut A time
 	 */
-	void setFrameOut(PhFrame frameOut) {
-		_frameOut = frameOut;
+	void setTimeOut(PhTime timeOut) {
+		_timeOut = timeOut;
 	}
 
 private:
 /**
- * Indicate the end of the PhText. The text content is stretch between frameIn and frameOut
+ * Indicate the end of the PhText. The text content is stretch between timeIn and timeOut
  */
-	PhFrame _frameOut;
+	PhTime _timeOut;
 
 	/**
 	 * Reference to the PhPeople who is affected to the PhStripPeopleObject

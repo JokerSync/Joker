@@ -182,9 +182,9 @@ bool JokerWindow::openDocument(QString fileName)
 
 	/// - Open the corresponding video file if it exists.
 	if(openVideoFile(_doc->videoFilePath())) {
-		PhFrame frameStamp = _doc->videoFramestamp();
-		_videoEngine->setFirstFrame(frameStamp);
-		_mediaPanel.setFirstFrame(frameStamp);
+		PhFrame frameIn = _doc->videoFrameIn();
+		_videoEngine->setFirstFrame(frameIn);
+		_mediaPanel.setFirstFrame(frameIn);
 	}
 	else
 		_videoEngine->close();
@@ -197,7 +197,7 @@ bool JokerWindow::openDocument(QString fileName)
 	/// - Use the document timecode type.
 	_strip->clock()->setTimeCodeType(_doc->timeCodeType());
 	/// - Goto to the document last position.
-	_strip->clock()->setFrame(_doc->lastFrame());
+	_strip->clock()->setTime(_doc->lastTime());
 	/// - Disable the need to save flag.
 	_needToSave = false;
 
@@ -402,7 +402,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	if(dlg.exec()) {
 		QString videoFile = dlg.selectedFiles()[0];
 		if(openVideoFile(videoFile))
-			_strip->clock()->setFrame(_doc->videoFramestamp());
+			_strip->clock()->setTime(_doc->videoTimeIn());
 	}
 
 	fadeInMediaPanel();
@@ -413,29 +413,29 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	QFileInfo lastFileInfo(_doc->videoFilePath());
 	QFileInfo fileInfo(videoFile);
 	if (fileInfo.exists() && _videoEngine->open(videoFile)) {
-		PhFrame frameStamp = _videoEngine->firstFrame();
+		PhFrame frameIn = _videoEngine->firstFrame();
 
-		_mediaPanel.setFirstFrame(frameStamp);
+		_mediaPanel.setFirstFrame(frameIn);
 		_mediaPanel.setMediaLength(_videoEngine->length());
 
 		if(videoFile != _doc->videoFilePath()) {
 			_doc->setVideoFilePath(videoFile);
-			if(frameStamp > 0)
-				_doc->setVideoFramestamp(frameStamp);
+			if(frameIn > 0)
+				_doc->setVideoFrameIn(frameIn);
 			_needToSave = true;
 		}
 
-		if(frameStamp == 0) {
-			frameStamp = _doc->videoFramestamp();
-			_videoEngine->setFirstFrame(frameStamp);
-			_videoEngine->clock()->setFrame(frameStamp);
+		if(frameIn == 0) {
+			frameIn = _doc->videoFrameIn();
+			_videoEngine->setFirstFrame(frameIn);
+			_videoEngine->clock()->setFrame(frameIn);
 			if(fileInfo.fileName() != lastFileInfo.fileName()) {
 				on_actionChange_timestamp_triggered();
-				frameStamp = _videoEngine->firstFrame();
+				frameIn = _videoEngine->firstFrame();
 			}
 		}
 
-		_videoEngine->clock()->setFrame(frameStamp);
+		_videoEngine->clock()->setFrame(frameIn);
 
 		_settings->setLastVideoFolder(fileInfo.absolutePath());
 		return true;
@@ -466,7 +466,7 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 
 		_videoEngine->setFirstFrame(frameStamp);
 		_strip->clock()->setFrame(dlg.frame());
-		_doc->setVideoFramestamp(frameStamp);
+		_doc->setVideoFrameIn(frameStamp);
 		_mediaPanel.setFirstFrame(frameStamp);
 		_needToSave = true;
 	}
@@ -581,16 +581,16 @@ void JokerWindow::on_actionTimecode_triggered()
 
 void JokerWindow::on_actionNext_element_triggered()
 {
-	PhFrame frame = _doc->nextElementFrame(_strip->clock()->frame());
-	if(frame < PHFRAMEMAX)
-		_strip->clock()->setFrame(frame);
+	PhTime time = _doc->nextElementTime(_strip->clock()->time());
+	if(time < PHTIMEMAX)
+		_strip->clock()->setTime(time);
 }
 
 void JokerWindow::on_actionPrevious_element_triggered()
 {
-	PhFrame frame = _doc->previousElementFrame(_strip->clock()->frame());
-	if(frame > PHFRAMEMIN)
-		_strip->clock()->setFrame(frame);
+	PhTime time = _doc->previousElementTime(_strip->clock()->time());
+	if(time > PHTIMEMIN)
+		_strip->clock()->setTime(time);
 }
 
 void JokerWindow::on_actionClear_list_triggered()
@@ -715,9 +715,10 @@ void JokerWindow::on_actionShow_ruler_toggled(bool display)
 
 void JokerWindow::on_actionChange_ruler_timestamp_triggered()
 {
-	PhTimeCodeDialog dlg(_doc->timeCodeType(), _settings->rulerTimestamp(), this);
+	PhTimeCodeType tcType = _doc->timeCodeType();
+	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn() / PhTimeCode::timePerFrame(tcType), this);
 	if(dlg.exec())
-		_settings->setRulerTimestamp(dlg.frame());
+		_settings->setRulerTimeIn(dlg.frame() * PhTimeCode::timePerFrame(tcType));
 }
 
 void JokerWindow::on_actionNew_triggered()

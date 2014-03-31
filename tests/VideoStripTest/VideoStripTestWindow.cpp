@@ -43,13 +43,13 @@ bool VideoStripTestWindow::openDocument(QString fileName)
 		return false;
 
 	_strip->clock()->setTimeCodeType(_doc->timeCodeType());
-	_strip->clock()->setFrame(_doc->lastFrame());
+	_strip->clock()->setTime(_doc->lastTime());
 	this->setWindowTitle(fileName);
 
 	QFileInfo fileInfo(_doc->videoFilePath());
 	if (fileInfo.exists()) {
 		_videoEngine->open(_doc->videoFilePath());
-		_videoEngine->setFirstFrame(_doc->videoFramestamp());
+		_videoEngine->setFirstFrame(_doc->videoFrameIn());
 	}
 
 	setCurrentDocument(fileName);
