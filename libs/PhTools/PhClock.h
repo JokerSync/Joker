@@ -39,11 +39,6 @@ public:
 	 */
 	void setTime(PhTime time);
 	/**
-	 * @brief Set the timescale
-	 * @param timeScale the desired PhTimeScale
-	 */
-	void setTimeScale(PhTimeScale timeScale);
-	/**
 	 * @brief Set the clock rate
 	 * @param rate the desired rate value.
 	 */
@@ -78,13 +73,6 @@ public:
 	 */
 	PhTime time() const {
 		return _time;
-	}
-	/**
-	 * @brief Get the timescale
-	 * @return The PhTimeScale
-	 */
-	PhTimeScale timeScale() const {
-		return _timeScale;
 	}
 	/**
 	 * @brief Get the clock rate
@@ -144,7 +132,6 @@ public slots:
 private:
 	PhTimeCodeType _tcType;
 	PhTime _time;
-	PhTimeScale _timeScale;
 
 	PhRate _rate;
 

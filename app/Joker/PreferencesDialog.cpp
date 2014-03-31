@@ -31,7 +31,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldUseQuarterFrame = _settings->useQuarterFrame();
 	_oldDelay = _settings->screenDelay();
 	_oldStripHeight = _settings->stripHeight();
-	_oldSpeed = _settings->horizontalSpeed();
+	_oldHorizontalTimePerPixel = _settings->horizontalTimePerPixel();
 	_oldBolness = _settings->textBoldness();
 	_oldFont = _settings->textFontFile();
 	_oldDeinterlace = _settings->videoDeinterlace();
@@ -46,7 +46,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldLogMask = _settings->logMask();
 
 	ui->sliderBoldness->setValue(_oldBolness);
-	ui->spinBoxSpeed->setValue(_oldSpeed);
+	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
 	if(_oldUseQuarterFrame) {
 		ui->radioButtonQF->setChecked(true);
 		ui->spinBoxDelay->setValue(_oldDelay / 10);
@@ -150,7 +150,7 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setUseQuarterFrame(_oldUseQuarterFrame);
 	_settings->setScreenDelay(_oldDelay);
 	_settings->setStripHeight(_oldStripHeight);
-	_settings->setHorizontalSpeed(_oldSpeed);
+	_settings->setHorizontalTimePerPixel(_oldHorizontalTimePerPixel);
 	_settings->setTextBoldness(_oldBolness);
 	_settings->setTextFontFile(_oldFont);
 	_settings->setVideoDeinterlace(_oldDeinterlace);
@@ -176,7 +176,7 @@ void PreferencesDialog::on_spinBoxDelay_valueChanged(int delay)
 
 void PreferencesDialog::on_spinBoxSpeed_valueChanged(int speed)
 {
-	_settings->setHorizontalSpeed(speed);
+	_settings->setHorizontalTimePerPixel(speed);
 }
 
 void PreferencesDialog::on_radioButtonQF_toggled(bool checked)

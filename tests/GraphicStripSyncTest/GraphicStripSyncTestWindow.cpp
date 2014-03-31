@@ -46,7 +46,7 @@ bool GraphicStripSyncTestWindow::openDocument(QString fileName)
 	if(QFile::exists(fileName)) {
 		if(_doc->openStripFile(fileName)) {
 			_clock->setTimeCodeType(_doc->timeCodeType());
-			_clock->setFrame(_doc->lastFrame());
+			_clock->setTime(_doc->lastTime());
 			setCurrentDocument(fileName);
 		}
 	}

@@ -89,6 +89,30 @@ PhFrame PhTimeCode::getFps(PhTimeCodeType type) {
 	}
 }
 
+PhTime PhTimeCode::timePerFrame(PhTimeCodeType type)
+{
+	switch (type) {
+	case PhTimeCodeType2398:
+		return 1001;
+	case PhTimeCodeType24:
+		return 1000;
+	case PhTimeCodeType25:
+		return 960;
+	case PhTimeCodeType2997:
+		return 801;
+	}
+}
+
+PhTime PhTimeCode::timeFromString(QString string, PhTimeCodeType type)
+{
+	return frameFromString(string, type) * timePerFrame(type);
+}
+
+QString PhTimeCode::stringFromTime(PhTime time, PhTimeCodeType type)
+{
+	return stringFromFrame(time / timePerFrame(type), type);
+}
+
 void PhTimeCode::ComputeHhMmSsFf(unsigned int *hhmmssff, PhFrame frame, PhTimeCodeType type) {
 	PhFrame fps = getFps(type);
 	bool drop = isDrop(type);
