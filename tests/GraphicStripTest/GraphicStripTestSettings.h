@@ -15,6 +15,9 @@ class GraphicStripTestSettings : PhGenericSettings,
 public:
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 
+	// PhGraphicSettings
+	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
+
 	// PhGraphicStripSettings :
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
 	PH_SETTING_INT2(setHorizontalSpeed, horizontalSpeed, 12)

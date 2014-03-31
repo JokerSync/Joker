@@ -133,13 +133,7 @@ void GraphicTestView::paint()
 
 	//_yuvRect.draw();
 
-	PhGraphicText frameRateText(&_font2, QString::number(this->refreshRate()));
-	frameRateText.setRect(0, 100, 100, 100);
-	frameRateText.setColor(Qt::red);
-	frameRateText.draw();
-
 	_disc.draw();
-
 }
 
 

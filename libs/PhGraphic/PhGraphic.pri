@@ -6,6 +6,7 @@
 QT		+= opengl
 
 HEADERS += \
+	../../libs/PhGraphic/PhGraphicSettings.h \
 	../../libs/PhGraphic/PhGraphicView.h \
 	../../libs/PhGraphic/PhGraphicImage.h \
 	../../libs/PhGraphic/PhGraphicText.h \
@@ -28,6 +29,8 @@ SOURCES += \
     ../../libs/PhGraphic/PhGraphicSolidRect.cpp \
     ../../libs/PhGraphic/PhGraphicLoop.cpp \
     ../../libs/PhGraphic/PhGraphicDisc.cpp
+
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/fonts/ARIAL.TTF) $${RESOURCES_PATH} $${CS}
 
 # Windows specific
 win32 {
@@ -93,3 +96,4 @@ CONFIG(release, debug|release) {
 	}
 
 }
+

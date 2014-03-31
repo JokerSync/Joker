@@ -1,19 +1,21 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_W
+#ifndef GRAPHICTESTWINDOW_H
+#define GRAPHICTESTWINDOW_H
 
-#include <QMainWindow>
+#include "PhCommonUI/PhWindow.h"
+
+#include "GraphicTestSettings.h"
 #include "GraphicTestView.h"
 
 namespace Ui {
 class GraphicTestWindow;
 }
 
-class GraphicTestWindow : public QMainWindow
+class GraphicTestWindow : public PhWindow
 {
 	Q_OBJECT
 
 public:
-	explicit GraphicTestWindow(QWidget *parent = 0);
+	explicit GraphicTestWindow(GraphicTestSettings *settings);
 	~GraphicTestWindow();
 
 private slots:
@@ -21,6 +23,7 @@ private slots:
 
 private:
 	Ui::GraphicTestWindow *ui;
+	GraphicTestSettings *_settings;
 };
 
-#endif // MAINWINDOW_H
+#endif // GRAPHICTESTWINDOW_H

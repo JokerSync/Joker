@@ -9,15 +9,12 @@
 #include <QStringList>
 #include <iostream>
 #include <QDir>
+#include <QEvent>
+#include <QMetaEnum>
 
 #include "PhDebug.h"
 
 PhDebug* PhDebug::_d = NULL;
-
-// This function is called to create an instance of the class.
-// Calling the constructor publicly is not allowed. The constructor
-// is private and is only called by this Instance function.
-
 
 void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -165,5 +162,17 @@ int PhDebug::getLogMask()
 	return instance()->_logMask;
 }
 
-
-
+QDebug operator <<(QDebug stream, const QEvent * event) {
+	static int eventEnumIndex = QEvent::staticMetaObject
+	                            .indexOfEnumerator("Type");
+	stream << "QEvent";
+	if (event) {
+		QString name = QEvent::staticMetaObject
+		               .enumerator(eventEnumIndex).valueToKey(event->type());
+		if (!name.isEmpty()) stream << name; else stream << event->type();
+	}
+	else {
+		stream << (void*)event;
+	}
+	return stream.maybeSpace();
+}

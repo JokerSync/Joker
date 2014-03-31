@@ -28,6 +28,7 @@ void VideoStripView::setSettings(JokerSettings *settings)
 {
 	_settings = settings;
 	_strip.setSettings(settings);
+	this->setGraphicSettings(settings);
 }
 
 void VideoStripView::setSony(PhSonyController *sony)
@@ -91,7 +92,13 @@ void VideoStripView::paint()
 	int stripHeight = (this->height() - y) * stripHeightRatio;
 	int videoHeight = this->height() - y - stripHeight;
 
-	_strip.draw(0, y + videoHeight, this->width(), stripHeight, selectedPeoples);
+	int tcOffset = 0;
+	if(_settings->displayNextTC())
+		tcOffset = _nextTCText.getHeight();
+	if(_settings->displayTitle())
+		tcOffset += _titleText.getHeight();
+
+	_strip.draw(0, y + videoHeight, this->width(), stripHeight, tcOffset, selectedPeoples);
 
 	// The strip must be the first drawn object, otherwise it masks previous drawings.
 	if(_settings->displayTitle() && (title.length() > 0)) {

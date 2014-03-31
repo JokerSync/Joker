@@ -70,8 +70,8 @@ public:
 
 
 	/**
-	 * @brief Set the settings
-	 * @param settings desired settings
+	 * @brief Pass the settings to the graphic strip
+	 * @param settings The settings
 	 */
 	void setSettings(PhGraphicStripSettings * settings);
 
@@ -104,10 +104,11 @@ public:
 	 * @param y upper left corner coordinates
 	 * @param width width of the strip (usually the same as the parent window)
 	 * @param height height of the strip
+	 * @param tcOffset the upper Offset
 	 * @param selectedPeoples Selected people will be displayed on the upper left corner,
 	 * the others ones will be shaded.
 	 */
-	void draw(int x, int y, int width, int height, QList<PhPeople*> selectedPeoples = QList<PhPeople*>());
+	void draw(int x, int y, int width, int height, int tcOffset = 0, QList<PhPeople*> selectedPeoples = QList<PhPeople*>());
 
 	/**
 	 * @brief Get the font of the strip objects
@@ -162,16 +163,6 @@ private:
 
 	PhGraphicSolidRect _stripSyncBar;
 
-	QMap<PhPeople*, PhGraphicText*> _graphicPeoples;
-
-	QMap<PhStripText*, PhGraphicText*> _graphicTexts;
-
-	QMap<PhStripCut*, PhGraphicSolidRect*> _graphicCuts;
-
-	QMap<PhStripLoop*, PhGraphicLoop*> _graphicLoops;
-
-	QMap<PhStripDetect*, PhGraphicSolidRect*> _graphicDetects;
-
 	/**
 	 * @brief _test
 	 * QTime for testing performance
@@ -181,7 +172,6 @@ private:
 	int _trackNumber;
 	PhGraphicStripSettings * _settings;
 	int _maxDrawElapsed;
-	int _dropDetected;
 
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
 };

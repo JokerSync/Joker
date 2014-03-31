@@ -692,7 +692,9 @@ void JokerWindow::on_actionSelect_character_triggered()
 
 	PeopleDialog dlg(this, _doc, _settings);
 
+	dlg.restoreGeometry(_settings->peopleDialogGeometry());
 	dlg.exec();
+	_settings->setPeopleDialogGeometry(dlg.saveGeometry());
 }
 
 void JokerWindow::on_actionForce_16_9_ratio_triggered()

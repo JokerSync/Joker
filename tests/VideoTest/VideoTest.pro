@@ -26,3 +26,4 @@ SOURCES += \
 
 FORMS += \
     VideoTestWindow.ui
+

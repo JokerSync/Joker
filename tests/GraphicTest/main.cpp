@@ -2,6 +2,7 @@
 #include <QtGui>
 #include <QtCore>
 #include "GraphicTestWindow.h"
+#include "GraphicTestSettings.h"
 
 /**
  * @brief The application main entry point
@@ -11,8 +12,9 @@
  */
 int main(int argc, char *argv[])
 {
+	GraphicTestSettings settings;
 	QApplication a(argc, argv);
-	GraphicTestWindow w;
+	GraphicTestWindow w(&settings);
 	w.show();
 
 	return a.exec();

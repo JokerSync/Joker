@@ -2,6 +2,7 @@
 #define JOKERSETTINGS_H
 
 #include <QDir>
+#include <QApplication>
 
 #include "PhTools/PhGenericSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
@@ -23,6 +24,10 @@ class JokerSettings : PhGenericSettings,
 {
 public:
 	PH_SETTING_INT3(setScreenDelay, screenDelay, delay)
+
+	// PhGraphicSettings
+	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
+	PH_SETTING_STRING2(setFontFile, fontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
 
 	// PhGraphicStripSettings :
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
@@ -59,6 +64,9 @@ public:
 	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
 	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
+
+	// PeopleDialog
+	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
 
 	// Other settings :
 	PH_SETTING_STRING(setLastVideoFolder, lastVideoFolder)
