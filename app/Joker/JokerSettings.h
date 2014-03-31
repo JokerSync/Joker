@@ -28,12 +28,12 @@ public:
 
 	// PhGraphicStripSettings :
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
-	PH_SETTING_INT2(setHorizontalSpeed, horizontalSpeed, 50)
+	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 80)
+	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
 	PH_SETTING_STRING(setTextFontFile, textFontFile)
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 2)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
-	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1000)
 	PH_SETTING_STRINGLIST(setSelectedPeopleNameList, selectedPeopleNameList)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)

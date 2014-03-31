@@ -163,7 +163,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
 	if(height > 0) {
-		int timePerPixel = _settings->horizontalSpeed();
+		int timePerPixel = _settings->horizontalTimePerPixel();
 		_textFont.setBoldness(_settings->textBoldness());
 		_textFont.setFontFile(_settings->textFontFile());
 
@@ -172,14 +172,13 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		int cutCounter = 0;
 
 		long syncBar_X_FromLeft = width / 6;
-		long offset = _clock.time() / timePerPixel - syncBar_X_FromLeft;
 		long delay = (int)(24 * _settings->screenDelay() *  _clock.rate());
-		// add the delay to the offset
-		offset += delay / timePerPixel;
+		PhTime clockTime = _clock.time() + delay;
+		long offset = clockTime / timePerPixel - syncBar_X_FromLeft;
+
 		//Compute the visible duration of the strip
 		PhTime stripDuration = width * timePerPixel;
 
-		PhTime clockTime = _clock.time() + delay;
 
 		if(_settings->stripTestMode()) {
 			foreach(PhStripCut * cut, _doc.cuts())
@@ -294,7 +293,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 		int trackHeight = height / _trackNumber;
 
-		int verticalTimePerPixel = _settings->verticalSpeed();
+		int verticalTimePerPixel = _settings->verticalTimePerPixel();
 		bool displayNextText = _settings->displayNextText();
 		PhTime maxTimeIn = timeOut;
 		if(displayNextText)
