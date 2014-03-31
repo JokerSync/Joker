@@ -46,6 +46,7 @@ bool GraphicStripTestWindow::openDocument(QString fileName)
 
 	_clock->setTimeCodeType(_doc->timeCodeType());
 	setCurrentDocument(fileName);
+	_clock->setRate(1);
 	return true;
 }
 
@@ -218,6 +219,6 @@ void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
 
 void GraphicStripTestWindow::on_actionTest_triggered()
 {
-    PHDEBUG;
-	_strip->clock()->setFrame(_strip->clock()->frame()+1);
+	_strip->clock()->setTime(_strip->clock()->time() + 2000);
+	_strip->onExternalCorrection(2000);
 }

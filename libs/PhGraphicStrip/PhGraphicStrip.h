@@ -128,6 +128,9 @@ public:
 	 */
 	PhFont * getHUDFont();
 
+public slots:
+	void onExternalCorrection(PhTime delta);
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -172,6 +175,14 @@ private:
 	int _trackNumber;
 	PhGraphicStripSettings * _settings;
 	int _maxDrawElapsed;
+
+	PhTime _timeIn;
+	PhTime _timeOut;
+	PhTime _correctionDelta;
+	PhTime _correctionTimeIn;
+	PhTime _correctionTimeOut;
+	PhTime _correctionTimeIn2;
+	PhTime _correctionTimeOut2;
 
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
 };
