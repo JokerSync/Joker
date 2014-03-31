@@ -163,7 +163,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
 	if(height > 0) {
-		int timePerPixel = _settings->horizontalSpeed();
+		int timePerPixel = _settings->horizontalTimePerPixel();
 		_textFont.setBoldness(_settings->textBoldness());
 		_textFont.setFontFile(_settings->textFontFile());
 
@@ -293,7 +293,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 		int trackHeight = height / _trackNumber;
 
-		int verticalTimePerPixel = _settings->verticalSpeed();
+		int verticalTimePerPixel = _settings->verticalTimePerPixel();
 		bool displayNextText = _settings->displayNextText();
 		PhTime maxTimeIn = timeOut;
 		if(displayNextText)

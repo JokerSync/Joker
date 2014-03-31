@@ -23,11 +23,15 @@ public:
 	 */
 	virtual float stripHeight() = 0;
 	/**
-	 * @brief The amount of pixel to move a graphic object
-	 * per screen refresh at nominal speed
+	 * @brief Duration of a pixel for horizontal scrolling
 	 * @return An integer value
 	 */
-	virtual int horizontalSpeed() = 0;
+	virtual int horizontalTimePerPixel() = 0;
+	/**
+	 * @brief Duration of a pixel for vertical scrolling
+	 * @return An integer value
+	 */
+	virtual int verticalTimePerPixel() = 0;
 	/**
 	 * @brief Set the strip text font file
 	 * @param value A font file path
@@ -62,12 +66,6 @@ public:
 	 * @return True if displayed, false otherwise
 	 */
 	virtual bool displayNextText() = 0;
-	/**
-	 * @brief The amount of pixel to move a graphic object
-	 * per screen refresh at nominal speed
-	 * @return An integer value
-	 */
-	virtual int verticalSpeed() = 0;
 
 	/**
 	 * @brief Allow color invertion

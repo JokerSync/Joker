@@ -83,7 +83,7 @@ private:
 	QString _oldFont;
 	bool _oldUseQuarterFrame;
 	int _oldDelay;
-	int _oldSpeed;
+	int _oldHorizontalTimePerPixel;
 	int _oldBolness;
 	float _oldStripHeight;
 	bool _oldDeinterlace;
