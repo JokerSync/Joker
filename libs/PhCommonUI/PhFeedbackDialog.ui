@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Error report</string>
+   <string>Feedback report</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -64,7 +64,7 @@
       </size>
      </property>
      <property name="placeholderText">
-      <string>Type here your ideas or describe in which situation Joker doesn't works properly.</string>
+      <string>Any information or idea is valuable !</string>
      </property>
     </widget>
    </item>
