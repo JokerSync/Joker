@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>PhFeedbackReporter</class>
- <widget class="QWidget" name="PhFeedbackReporter">
+ <widget class="QDialog" name="PhFeedbackReporter">
   <property name="geometry">
    <rect>
     <x>0</x>

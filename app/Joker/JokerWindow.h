@@ -212,6 +212,8 @@ private slots:
 
 	void on_actionClose_video_triggered();
 
+	void on_actionSend_feedback_triggered();
+
 private:
 	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;

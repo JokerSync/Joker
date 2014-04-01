@@ -14,7 +14,7 @@
 
 
 PhFeedbackReporter::PhFeedbackReporter(PhFeedbackSettings *settings, QWidget *parent) :
-	QWidget(parent),
+	QDialog(parent),
 	_settings(settings),
 	ui(new Ui::PhFeedbackReporter)
 {
@@ -198,7 +198,7 @@ void PhFeedbackReporter::on_buttonBox_accepted()
 		PHDEBUG << "add crashLog";
 	}
 
-	QNetworkRequest request(QUrl("http://feedback.phonations.com/feedback.php"));
+	QNetworkRequest request(QUrl("http://www.phonations.com/feedback.php"));
 	QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 	connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onSyncRequestFinished(QNetworkReply*)));
 

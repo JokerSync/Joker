@@ -6,7 +6,7 @@
 #ifndef FEEDBACKREPORTER_H
 #define FEEDBACKREPORTER_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 #include <QJsonObject>
@@ -29,7 +29,7 @@ class PhFeedbackReporter;
  * report, logs and informations about the
  * machine configuration.
  */
-class PhFeedbackReporter : public QWidget
+class PhFeedbackReporter : public QDialog
 {
 	Q_OBJECT
 
