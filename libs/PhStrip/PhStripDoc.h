@@ -317,12 +317,12 @@ public:
 	PhTime nextElementTime(PhTime time);
 	/**
 	 * @brief Get the starting time of the document
-	 * @param time A time value
+	 * @return time A time value
 	 */
 	PhTime timeIn();
 	/**
 	 * @brief Get the last position the document was edited.
-	 * @param time A time value
+	 * @return time A time value
 	 */
 	PhTime lastTime();
 	/*!
