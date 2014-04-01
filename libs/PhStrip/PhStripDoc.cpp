@@ -166,7 +166,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 									timeIn = lastTime;
 								if(lineElem.attribute("link") != "off") {
 									if(currentText.length()) {
-										_texts.append(new PhStripText(lastLinkedTime, people, lastTime, track, currentText));
+										_texts1.append(new PhStripText(lastLinkedTime, people, lastTime, track, currentText));
 										currentText = "";
 									}
 									lastLinkedTime = lastTime;
@@ -179,7 +179,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					// Handling line with no lipsync out
 					if(currentText.length()) {
 						PhTime time = lastLinkedTime + currentText.length();
-						_texts.append(new PhStripText(lastLinkedTime, people, time, track, currentText));
+						_texts1.append(new PhStripText(lastLinkedTime, people, time, track, currentText));
 						lastLinkedTime = time;
 					}
 					bool off = (elem.attribute("voice") == "off");
@@ -336,7 +336,7 @@ PhStripDoc::MosTag PhStripDoc::readMosTag(QFile &f, int level, QString name)
 bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel)
 {
 	QList<PhStripDetect*> detectLists;
-	QList<PhStripText*> textList;
+	QList<PhStripText*> textList1, textList2;
 	int detectCount = PhFileTool::readInt(f, detectLevel, "track CDocBlocDetection count");
 
 	if(detectCount) {
@@ -364,7 +364,8 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 		for(int i = 0; i < textCount; i++) {
 			if(i > 0)
 				PhFileTool::readShort(f, level, "text tag");
-			textList.append(readMosText(f, textLevel, internLevel));
+			PhStripText *text = readMosText(f, textLevel, internLevel);
+			textList1.append(text);
 		}
 	}
 
@@ -380,7 +381,8 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 			for(int i = 0; i < count; i++) {
 				if(i > 0)
 					PhFileTool::readShort(f, level, "text tag");
-				textList.append(readMosText(f, textLevel, internLevel));
+				PhStripText *text = readMosText(f, textLevel, internLevel);
+				textList2.append(text);
 			}
 			break;
 		case MosLabel:
@@ -400,11 +402,18 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 		}
 	}
 
-	PHDBG(textLevel) << "Adding" << textList.count() << "texts";
-	foreach(PhStripText* text, textList) {
+	PHDBG(textLevel) << "Adding" << textList1.count() << "texts in list 1";
+	foreach(PhStripText* text, textList1) {
 		text->setPeople(peopleMap[peopleId]);
 		text->setTrack(peopleTrackMap[peopleId]);
-		_texts.append(text);
+		_texts1.append(text);
+	}
+
+	PHDBG(textLevel) << "Adding" << textList2.count() << "texts in  list 2";
+	foreach(PhStripText* text, textList2) {
+		text->setPeople(peopleMap[peopleId]);
+		text->setTrack(peopleTrackMap[peopleId]);
+		_texts2.append(text);
 	}
 
 	return true;
@@ -635,7 +644,8 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 
 	f.close();
 
-	qSort(_texts.begin(), _texts.end(), PhStripObject::dtcomp);
+	qSort(_texts1.begin(), _texts1.end(), PhStripObject::dtcomp);
+	qSort(_texts2.begin(), _texts2.end(), PhStripObject::dtcomp);
 	qSort(_detects.begin(), _detects.end(), PhStripObject::dtcomp);
 	qSort(_cuts.begin(), _cuts.end(), PhStripObject::dtcomp);
 	qSort(_loops.begin(), _loops.end(), PhStripObject::dtcomp);
@@ -828,7 +838,8 @@ void PhStripDoc::reset()
 	_tcType = PhTimeCodeType25;
 	_lastTime = 0;
 	_loops.clear();
-	_texts.clear();
+	_texts1.clear();
+	_texts2.clear();
 	_title = "";
 	_translatedTitle = "";
 	_episode = "";
@@ -847,7 +858,7 @@ void PhStripDoc::addText(PhPeople * actor, PhTime timeIn, PhTime timeOut, QStrin
 {
 	if(sentence != " " && sentence != "" ) {
 
-		_texts.push_back(new PhStripText(timeIn, actor,
+		_texts1.push_back(new PhStripText(timeIn, actor,
 		                                 timeOut,
 		                                 track, sentence));
 	}
@@ -870,7 +881,7 @@ PhPeople *PhStripDoc::peopleByName(QString name)
 PhStripText *PhStripDoc::nextText(PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, _texts)
+	foreach(PhStripText* text, this->texts())
 	{
 		if(text->timeIn() > time) {
 			if(!result || (text->timeIn() < result->timeIn()) )
@@ -883,7 +894,7 @@ PhStripText *PhStripDoc::nextText(PhTime time)
 PhStripText *PhStripDoc::nextText(PhPeople *people, PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, _texts)
+	foreach(PhStripText* text, this->texts())
 	{
 		if((text->people() == people) && (text->timeIn() > time)) {
 			if(!result || (text->timeIn() < result->timeIn()) )
@@ -896,7 +907,7 @@ PhStripText *PhStripDoc::nextText(PhPeople *people, PhTime time)
 PhStripText *PhStripDoc::nextText(QList<PhPeople *> peopleList, PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, _texts)
+	foreach(PhStripText* text, this->texts())
 	{
 		if(peopleList.contains(text->people()) && (text->timeIn() > time)) {
 			if(!result || (text->timeIn() < result->timeIn()) )
@@ -910,7 +921,7 @@ PhTime PhStripDoc::previousTextTime(PhTime time)
 {
 	PhTime previousTextTime = PHTIMEMIN;
 
-	foreach(PhStripText* text, _texts)
+	foreach(PhStripText* text, this->texts())
 	{
 		if((text->timeIn() < time) && (text->timeIn() > previousTextTime) )
 			previousTextTime = text->timeIn();
@@ -962,7 +973,7 @@ PhTime PhStripDoc::nextTextTime(PhTime time)
 {
 	PhTime nextTextTime = PHTIMEMAX;
 
-	foreach(PhStripText* text, _texts)
+	foreach(PhStripText* text, this->texts())
 	{
 		if((text->timeIn() > time) && (text->timeIn() < nextTextTime) )
 			nextTextTime = text->timeIn();
@@ -1112,15 +1123,18 @@ PhTime PhStripDoc::lastTime()
 	return _lastTime;
 }
 
-QList<PhStripText *> PhStripDoc::texts()
+QList<PhStripText *> PhStripDoc::texts(bool alternate)
 {
-	return _texts;
+	if(alternate)
+		return _texts2;
+	else
+		return _texts1;
 }
 
 QList<PhStripText *> PhStripDoc::texts(PhPeople *people)
 {
 	QList<PhStripText*> result;
-	foreach(PhStripText *text, _texts) {
+	foreach(PhStripText *text, this->texts()) {
 		if(text->people() == people)
 			result.append(text);
 	}

@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 		QString fileName = QLatin1String(argv[i]);
 		if(QFile::exists(fileName)){
 			if(doc.openStripFile(fileName)) {
-				//displayDoc(&doc);
+				displayDoc(&doc);
 			}
 			else {
 				result = 1;

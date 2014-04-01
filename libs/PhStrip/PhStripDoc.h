@@ -138,7 +138,7 @@ public:
 	 * @brief The whole text list
 	 * @return A list of texts
 	 */
-	QList<PhStripText *> texts();
+	QList<PhStripText *> texts(bool alternate = false);
 
 	/**
 	 * @brief The list of texts affected to a people
@@ -396,10 +396,7 @@ private:
 	 */
 	QList<PhPeople *> _peoples;
 
-	/**
-	 * List of PhStripText from the file
-	 */
-	QList<PhStripText *> _texts;
+	QList<PhStripText *> _texts1, _texts2;
 
 	/**
 	 * List of PhStripCut form the file

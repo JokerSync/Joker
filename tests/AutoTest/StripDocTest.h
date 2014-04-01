@@ -31,6 +31,7 @@ private slots:
 	void importMosTest01();
 	void importMosTest02();
 	void importMosTest03();
+	void importMosTest04();
 
 	// Open any doc (*.detx, *.strip, *.joker) test
 	void openStripFileTest();

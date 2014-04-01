@@ -295,11 +295,21 @@ void StripDocTest::importMosTest03()
 //	QCOMPARE(doc.getLoops()[1]->getLoopNumber(), 2);
 
 	// Test texts
-	QCOMPARE(doc.texts().count(), 206);
+	QCOMPARE(doc.texts(true).count(), 206);
 //#warning TODO more test on text
 	// Detect test
 	QCOMPARE(doc.detects().count(), 24);
 	//#warning TODO more test on detect
+}
+
+void StripDocTest::importMosTest04()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.importMosFile("test04.mos"));
+
+	QCOMPARE(doc.texts().count(), 1118);
+	QCOMPARE(doc.texts(true).count(), 4329);
 }
 
 void StripDocTest::openStripFileTest()
