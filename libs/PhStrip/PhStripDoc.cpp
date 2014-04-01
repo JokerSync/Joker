@@ -636,6 +636,11 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 
 	f.close();
 
+	qSort(_texts.begin(), _texts.end(), PhStripObject::dtcomp);
+	qSort(_detects.begin(), _detects.end(), PhStripObject::dtcomp);
+	qSort(_cuts.begin(), _cuts.end(), PhStripObject::dtcomp);
+	qSort(_loops.begin(), _loops.end(), PhStripObject::dtcomp);
+
 	emit this->changed();
 
 	return true;

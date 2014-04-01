@@ -32,6 +32,8 @@ public:
 	 * @return A PhTime
 	 */
 	PhTime timeIn();
+
+	static bool dtcomp(PhStripObject *a, PhStripObject *b);
 };
 
 #endif // PHSTRIPOBJECT_H
