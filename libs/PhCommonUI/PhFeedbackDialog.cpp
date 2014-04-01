@@ -21,7 +21,7 @@ PhFeedbackDialog::PhFeedbackDialog(PhFeedbackSettings *settings, QWidget *parent
 
 	ui->setupUi(this);
 
-	ui->labelTitle->setText(QString(APP_NAME) + " " +tr("recently quit unexpectedly."));
+	ui->problemLabel->setText(ui->problemLabel->text().arg(QString(APP_NAME)));
 
 	PHDEBUG << _settings->emailList();
 	ui->comboBoxEmails->addItems(_settings->emailList());
@@ -60,83 +60,81 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 
 
 	// Get the system infos
-	if(ui->systemCheckBox->isChecked()) {
-		system("/usr/sbin/system_profiler SPHardwareDataType > out");
-		QFile file("./out");
-		if(!file.open(QIODevice::ReadOnly)) {
-			PHDEBUG << file.errorString();
+	system("/usr/sbin/system_profiler SPHardwareDataType > out");
+	QFile file1("./out");
+	if(!file1.open(QIODevice::ReadOnly))
+		PHDEBUG << file1.errorString();
+	else {
+		QTextStream in(&file1);
+		while(!in.atEnd()) {
+			systemConfig += in.readLine() + "\n";
 		}
-		else {
-			QTextStream in(&file);
-			while(!in.atEnd()) {
-				systemConfig += in.readLine() + "\n";
-			}
-			file.close();
-			system("rm out");
-		}
+		file1.close();
+		system("rm out");
 	}
+
 
 	// Get the preferences
-	if(ui->preferencesCheckBox->isChecked()) {
-		QString cmd = "defaults read com.Phonations." + QString(APP_NAME) + " > out";
-		system(PHNQ(cmd));
-		QFile file("./out");
-		if(!file.open(QIODevice::ReadOnly)) {
-			PHDEBUG << file.errorString();
-		}
-		else {
-			QTextStream in(&file);
-			while(!in.atEnd()) {
-				preferences += in.readLine() + "\n";
-			}
-			file.close();
-			system("rm out");
-		}
+	QString cmd = "defaults read com.Phonations." + QString(APP_NAME) + " > out";
+	system(PHNQ(cmd));
+	QFile file2("./out");
+	if(!file2.open(QIODevice::ReadOnly)) {
+		PHDEBUG << file2.errorString();
 	}
+	else {
+		QTextStream in(&file2);
+		while(!in.atEnd()) {
+			preferences += in.readLine() + "\n";
+		}
+		file2.close();
+		system("rm out");
+	}
+
 
 	// Get the application log
-	if(ui->logCheckBox->isChecked()) {
-		QFile file(QDir::homePath() + "/Library/Logs/Phonations/" + APP_NAME + ".log");
-		if(!file.open(QIODevice::ReadOnly)) {
-			PHDEBUG << file.errorString();
-		}
-		else {
-			QTextStream in(&file);
-			while(!in.atEnd()) {
-				appLog += in.readLine()  + "\n";
-			}
-			file.close();
-		}
+	QFile file3(QDir::homePath() + "/Library/Logs/Phonations/" + APP_NAME + ".log");
+	if(!file3.open(QIODevice::ReadOnly)) {
+		PHDEBUG << file3.errorString();
 	}
+	else {
+		QTextStream in(&file3);
+		while(!in.atEnd()) {
+			appLog += in.readLine()  + "\n";
+		}
+		// Stripping only the end of the log
+		if(appLog.length() > 10000)
+			appLog = appLog.mid(appLog.length() - 10000);
+		file3.close();
+	}
+
 
 	// Get the crash log
-	if(ui->crashCheckBox->isChecked()) {
-		QString userDirectoryLogs = QDir::homePath() + "/Library/Logs/DiagnosticReports/";
-		QStringList files;
-		QDir logs(userDirectoryLogs);
+	QString userDirectoryLogs = QDir::homePath() + "/Library/Logs/DiagnosticReports/";
+	QStringList files;
+	QDir logs(userDirectoryLogs);
 
-		QStringList filters;
-		filters.append(QString(APP_NAME) + "*.crash" );
-		logs.setNameFilters(filters);
-		files = logs.entryList();
-		QString lastCrashLog = (files.first());
-		foreach(QString file, files)
-		{
-			if(QFileInfo(file).created() > QFileInfo(lastCrashLog).created())
-				lastCrashLog = file;
-		}
-		QFile file(lastCrashLog);
-		if(!file.open(QIODevice::ReadOnly)) {
-			PHDEBUG << "Crash log : " << file.errorString();
-		}
-		else {
-			QTextStream in(&file);
-			while(!in.atEnd()) {
-				crashLog += in.readLine()  + "\n";
-			}
-			file.close();
-		}
+	QStringList filters;
+	filters.append(QString(APP_NAME) + "*.crash" );
+	logs.setNameFilters(filters);
+	files = logs.entryList();
+	QString lastCrashLog = (files.first());
+	foreach(QString file, files)
+	{
+		if(QFileInfo(file).created() > QFileInfo(lastCrashLog).created())
+			lastCrashLog = file;
 	}
+	QFile file4(lastCrashLog);
+	if(!file4.open(QIODevice::ReadOnly)) {
+		PHDEBUG << "Crash log : " << file4.errorString();
+	}
+	else {
+		QTextStream in(&file4);
+		while(!in.atEnd()) {
+			crashLog += in.readLine()  + "\n";
+		}
+		file4.close();
+	}
+
 
 	QString name;
 	// Get the machine name
@@ -162,15 +160,15 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	header.insert(0, "header=");
 	header.append("&");
 
-	QByteArray post;
+	QString post;
 
-	post = name.toUtf8() + header.toUtf8();
+	post = name + header;
 
 	if(!preferences.isEmpty()) {
 		preferences.remove("[=|&]");
 		preferences.insert(0, "preferences=");
 		preferences.append("&");
-		post += preferences.toUtf8();
+		post += preferences;
 		PHDEBUG << "add preferences";
 	}
 
@@ -178,7 +176,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		systemConfig.remove("[=|&]");
 		systemConfig.insert(0, "configuration=");
 		systemConfig.append("&");
-		post += systemConfig.toUtf8();
+		post += systemConfig;
 		PHDEBUG << "add systemConfig";
 	}
 
@@ -186,7 +184,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		appLog.replace("&", "amp");
 		appLog.insert(0, "applicationLog=");
 		appLog.append("&");
-		post += appLog.toUtf8();
+		post += appLog;
 		PHDEBUG << "add appLog";
 	}
 
@@ -194,19 +192,20 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		crashLog.remove("[=|&]");
 		crashLog.insert(0, "crashLog=");
 		crashLog.append("&");
-		post += crashLog.toUtf8();
+		post += crashLog;
 		PHDEBUG << "add crashLog";
 	}
 
 	QNetworkRequest request(QUrl("http://www.phonations.com/feedback.php"));
+	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 	QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 	connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onSyncRequestFinished(QNetworkReply*)));
 
 	// Send it
-	manager->post(request, post);
+	manager->post(request, post.toUtf8());
 	QMessageBox::information(this, "Information",
-	                         tr("Thank you for your feedback!"),
-	                         QMessageBox::Ok, QMessageBox::Ok);
+							 tr("Thank you for your feedback!"),
+							 QMessageBox::Ok, QMessageBox::Ok);
 	hide();
 }
 
