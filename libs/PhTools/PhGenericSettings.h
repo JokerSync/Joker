@@ -182,7 +182,10 @@ protected:
 	 */
 	QByteArray byteArray(QString name);
 
-private:
+protected:
+	/**
+	 * @brief The QSettings object
+	 */
 	QSettings _settings;
 };
 

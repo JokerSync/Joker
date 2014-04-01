@@ -9,6 +9,8 @@
 #include "PhVideo/PhVideoSettings.h"
 #include "PhSync/PhSyncSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
+#include "PhCommonUI/PhFeedbackSettings.h"
+
 
 /**
  * @brief The Joker application settings
@@ -17,7 +19,8 @@ class JokerSettings : PhGenericSettings,
 	public PhGraphicStripSettings,
 	public PhVideoSettings,
 	public PhSyncSettings,
-	public PhDocumentWindowSettings
+	public PhDocumentWindowSettings,
+	public PhFeedbackSettings
 {
 public:
 	PH_SETTING_INT3(setScreenDelay, screenDelay, delay)
@@ -52,6 +55,7 @@ public:
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)
+	PH_SETTING_BOOL2(setExitedNormaly, exitedNormaly, true)
 	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
 
 	// PhDocumentWindowSettings
@@ -81,6 +85,12 @@ public:
 	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)
 
 	PH_SETTING_STRING2(setVideoFileFilter, videoFileFilter, " (*.m4v *.mkv *.avi *.mov *.mxf)")
+
+	// PhFeedbackSettings
+	QString settingsFileName() {
+		return _settings.fileName();
+	}
+	PH_SETTING_STRINGLIST(setEmailList, emailList)
 };
 
 #endif // JOKERSETTINGS_H

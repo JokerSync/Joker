@@ -37,6 +37,10 @@ int main(int argc, char *argv[])
 	w.processArg(argc, argv);
 	w.show();
 
-	return a.exec();
+	int result = a.exec();
+	settings.setExitedNormaly(result == 0);
+
+
+	return result;
 
 }

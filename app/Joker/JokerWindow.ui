@@ -65,7 +65,6 @@
     <addaction name="actionSave"/>
     <addaction name="actionSave_as"/>
     <addaction name="separator"/>
-    <addaction name="actionAbout"/>
     <addaction name="actionPreferences"/>
     <addaction name="actionProperties"/>
    </widget>
@@ -116,9 +115,17 @@
     <addaction name="actionShow_ruler"/>
     <addaction name="actionChange_ruler_timestamp"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionSend_feedback"/>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
    <addaction name="menuView"/>
+   <addaction name="menuHelp"/>
   </widget>
   <action name="actionOpen">
    <property name="text">
@@ -231,7 +238,7 @@
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About</string>
+    <string>About...</string>
    </property>
   </action>
   <action name="actionPreferences">
@@ -386,6 +393,11 @@
   <action name="actionClose_video">
    <property name="text">
     <string>Close video</string>
+   </property>
+  </action>
+  <action name="actionSend_feedback">
+   <property name="text">
+    <string>Send feedback...</string>
    </property>
   </action>
  </widget>

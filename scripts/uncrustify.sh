@@ -4,6 +4,6 @@
 uncrustify -c .uncrustify.cfg */*/*.cpp */*/*.h --replace --no-backup
 
 n=$(git diff --dirstat=files | wc -l)
-git diff --shortstat
+git status
 exit $n
 
