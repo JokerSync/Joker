@@ -9,7 +9,6 @@
 #include <QTranslator>
 
 #include "PhStrip/PhStripDoc.h"
-#include "PhCommonUI/PhFeedbackReporter.h"
 
 #include "JokerWindow.h"
 
@@ -37,14 +36,6 @@ int main(int argc, char *argv[])
 
 	w.processArg(argc, argv);
 	w.show();
-
-	PhFeedbackReporter f(&settings);
-	if(!settings.exitedNormaly()) {
-		f.show();
-	}
-
-	settings.setExitedNormaly(false);
-
 
 	int result = a.exec();
 	settings.setExitedNormaly(result == 0);

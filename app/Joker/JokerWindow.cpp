@@ -89,12 +89,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	    "	  padding: 10px;                                                                                "
 	    "  }                                                                                                "
 	    );
-	_mediaPanel.show();
-	_mediaPanelState = MediaPanelVisible;
-
-	// Trigger a timer that will fade off the media panel after 3 seconds
-	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
-	_mediaPanelTimer.start(3000);
 
 	this->setFocus();
 
@@ -110,6 +104,18 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 
 	ui->actionShow_ruler->setChecked(_settings->displayRuler());
+
+	if(!_settings->exitedNormaly())
+		on_actionSend_feedback_triggered();
+
+	_settings->setExitedNormaly(false);
+
+	_mediaPanel.show();
+	_mediaPanelState = MediaPanelVisible;
+
+	// Trigger a timer that will fade off the media panel after 3 seconds
+	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
+	_mediaPanelTimer.start(3000);
 }
 
 JokerWindow::~JokerWindow()
@@ -735,6 +741,8 @@ void JokerWindow::on_actionClose_video_triggered()
 
 void JokerWindow::on_actionSend_feedback_triggered()
 {
+	hideMediaPanel();
 	PhFeedbackReporter dlg(_settings, this);
 	dlg.exec();
+	fadeInMediaPanel();
 }

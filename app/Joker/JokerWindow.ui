@@ -399,6 +399,9 @@
    <property name="text">
     <string>Send feedback...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
   </action>
  </widget>
  <customwidgets>
