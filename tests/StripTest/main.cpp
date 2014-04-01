@@ -134,7 +134,7 @@ void displayDoc(PhStripDoc* doc)
 int main(int argc, char *argv[])
 {
 	PhDebug::setDisplay(false, false, false, false, false);
-	//PhDebug::setLogMask(2);
+	PhDebug::setLogMask(3);
 
 	int result = 0;
 
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 		QString fileName = QLatin1String(argv[i]);
 		if(QFile::exists(fileName)){
 			if(doc.openStripFile(fileName)) {
-				displayDoc(&doc);
+				//displayDoc(&doc);
 			}
 			else {
 				result = 1;
