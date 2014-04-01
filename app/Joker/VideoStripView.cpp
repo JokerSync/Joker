@@ -139,7 +139,7 @@ void VideoStripView::paint()
 			else if( this->width() < 2 * tcWidth)
 				tcWidth = this->width() / 2;
 		}
-		else {
+		else if(_settings->displayLogo()){
 			// The logo file is 500px in native format
 			int logoHeight = _logo.originalSize().height();
 			int logoWidth = _logo.originalSize().width();
