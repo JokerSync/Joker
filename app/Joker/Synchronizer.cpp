@@ -50,17 +50,6 @@ void Synchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType)
 {
 	if(!_settingStripFrame) {
 		PHDBG(2) << frame;
-		if(_syncClock) {
-			// Apply precise correction.
-			// We don't change sony clock because this would desynchronize the sony master.
-			if(qAbs(frame - _syncClock->frame()) > 1) {
-				PHDEBUG << "correct :" << _stripClock->frame() << _syncClock->frame();
-				_settingStripFrame = true;
-				_stripClock->setFrame(_syncClock->frame());
-				_settingStripFrame = false;
-			}
-		}
-
 		if(_syncType != Sony) {
 			_settingVideoFrame = true;
 			_videoClock->setFrame(frame);
@@ -114,12 +103,16 @@ void Synchronizer::onSyncFrameChanged(PhFrame frame, PhTimeCodeType)
 		// We apply correction here only when there is a significant change of sony frame.
 		// Precise correction occurs in onStripFrameChanged() that is called after
 		// on SonyFrameChanged (see VideoStripView::paint()).
-		PhFrame error = qAbs(frame - _stripClock->frame());
-		if((error > 10) || ((_stripClock->rate() == 0) && (error > 0))) {
-			PHDEBUG << "correct error:" << frame << _stripClock->frame();
-			_settingStripFrame = true;
+		if(_stripClock->rate() == 0)
 			_stripClock->setFrame(frame);
-			_settingStripFrame = false;
+		else {
+			PhTime error = _syncClock->time() - _stripClock->time();
+			if(qAbs(error) > 2000) {
+				_settingStripFrame = true;
+				_stripClock->setFrame(frame);
+				emit correction(error);
+				_settingStripFrame = false;
+			}
 		}
 	}
 }

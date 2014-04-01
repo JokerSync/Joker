@@ -61,6 +61,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	// Initialize the synchronizer
 	_synchronizer.setStripClock(_strip->clock());
 	_synchronizer.setVideoClock(_videoEngine->clock());
+	connect(&_synchronizer, SIGNAL(correction(PhTime)), _strip, SLOT(onExternalCorrection(PhTime)));
 
 	setupSyncProtocol();
 

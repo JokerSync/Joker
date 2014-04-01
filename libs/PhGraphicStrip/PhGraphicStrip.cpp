@@ -22,6 +22,7 @@ PhGraphicStrip::PhGraphicStrip(QObject *parent) :
 	_maxDrawElapsed(0),
 	_timeIn(0),
 	_timeOut(0),
+	_correctionCount(0),
 	_correctionDelta(0),
 	_correctionTimeIn(0),
 	_correctionTimeOut(0),
@@ -129,6 +130,7 @@ PhFont *PhGraphicStrip::getHUDFont()
 
 void PhGraphicStrip::onExternalCorrection(PhTime delta)
 {
+	_correctionCount++;
 	_correctionDelta = delta;
 	_correctionTimeIn = _correctionTimeIn2 = _timeIn;
 	_correctionTimeOut = _correctionTimeOut2 = _timeOut;
@@ -215,7 +217,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		_timeIn = clockTime - syncBar_X_FromLeft * timePerPixel;
 		_timeOut = _timeIn + stripDuration;
 
-		if((_correctionTimeOut2 <_timeIn) || _correctionTimeIn2 > _timeOut) {
+		// Reset correction area if pause or out of range
+		if((_clock.rate() == 0) || (_correctionTimeOut2 <_timeIn) || (_correctionTimeIn2 > _timeOut)) {
 			_correctionDelta = 0;
 			_correctionTimeIn = 0;
 			_correctionTimeOut = 0;
@@ -559,4 +562,5 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 	_infos.append(QString("Max strip draw: %1").arg(_maxDrawElapsed));
 	_infos.append(QString("Count: %1").arg(counter));
+	_infos.append(QString("Correct: %1 %2").arg(_correctionCount).arg(_correctionDelta));
 }

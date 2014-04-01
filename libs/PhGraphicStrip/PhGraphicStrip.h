@@ -184,6 +184,7 @@ private:
 
 	PhTime _timeIn;
 	PhTime _timeOut;
+	int _correctionCount;
 	PhTime _correctionDelta;
 	PhTime _correctionTimeIn;
 	PhTime _correctionTimeOut;

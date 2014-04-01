@@ -124,6 +124,8 @@ private:
 	PhGraphicImage _logo;
 
 	bool _forceRatio169;
+
+	int _maxDiff, _minDiff;
 };
 
 #endif // VIDEOSTRIPVIEW_H

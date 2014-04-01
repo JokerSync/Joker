@@ -74,6 +74,9 @@ public:
 		return _syncClock;
 	}
 
+signals:
+	void correction(PhTime delta);
+
 private slots:
 	void onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onStripRateChanged(PhRate rate);

@@ -12,14 +12,16 @@
 
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
-	_videoEngine(false),
 	_settings(NULL),
+	_videoEngine(false),
 	_sony(NULL),
 	_titleText(_strip.getHUDFont(), ""),
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
 	_nextTCText(_strip.getHUDFont(), "00:00:00:00"),
 	_noVideoSyncError(_strip.getHUDFont(), "No video sync"),
-	_currentPeopleName(_strip.getHUDFont(), "")
+	_currentPeopleName(_strip.getHUDFont(), ""),
+	_maxDiff(0),
+	_minDiff(0)
 {
 	qApp->installEventFilter(this);
 }
@@ -103,6 +105,19 @@ void VideoStripView::paint()
 		this->addInfo(info);
 	}
 
+	this->addInfo(QString("strip time: %1 %2").arg(_strip.clock()->rate()).arg(_strip.clock()->time()));
+	if(_sony) {
+		this->addInfo(QString("sony time: %1 %2").arg(_sony->clock()->rate()).arg(_sony->clock()->time()));
+		int diff = _sony->clock()->time() - _strip.clock()->time();
+		if(diff < _minDiff)
+			_minDiff = diff;
+		if(diff > _maxDiff)
+			_maxDiff = diff;
+		if(_strip.clock()->rate() == 0)
+			_minDiff = _maxDiff = 0;
+		this->addInfo(QString("diff: %1 %2 %3").arg(_minDiff).arg(diff).arg(_maxDiff));
+	}
+
 	// The strip must be the first drawn object, otherwise it masks previous drawings.
 	if(_settings->displayTitle() && (title.length() > 0)) {
 		_titleBackgroundRect.draw();
@@ -153,7 +168,6 @@ void VideoStripView::paint()
 			}
 			_logo.setRect((this->width() - logoHeight) / 2, (videoHeight - logoHeight) / 2, logoHeight, logoHeight);
 			_logo.draw();
-
 		}
 	}
 
