@@ -204,8 +204,8 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	// Send it
 	manager->post(request, post.toUtf8());
 	QMessageBox::information(this, "Information",
-							 tr("Thank you for your feedback!"),
-							 QMessageBox::Ok, QMessageBox::Ok);
+	                         tr("Thank you for your feedback!"),
+	                         QMessageBox::Ok, QMessageBox::Ok);
 	hide();
 }
 
