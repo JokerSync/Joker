@@ -17,7 +17,7 @@
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
-#include "PhCommonUI/PhFeedbackReporter.h"
+#include "PhCommonUI/PhFeedbackDialog.h"
 #include "AboutDialog.h"
 #include "PreferencesDialog.h"
 #include "PeopleDialog.h"
@@ -742,7 +742,7 @@ void JokerWindow::on_actionClose_video_triggered()
 void JokerWindow::on_actionSend_feedback_triggered()
 {
 	hideMediaPanel();
-	PhFeedbackReporter dlg(_settings, this);
+	PhFeedbackDialog dlg(_settings, this);
 	dlg.exec();
 	fadeInMediaPanel();
 }

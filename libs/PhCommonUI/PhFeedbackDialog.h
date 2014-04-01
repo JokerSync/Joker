@@ -3,8 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#ifndef FEEDBACKREPORTER_H
-#define FEEDBACKREPORTER_H
+#ifndef FEEDBACKDIALOG_H
+#define FEEDBACKDIALOG_H
 
 #include <QDialog>
 #include <QNetworkRequest>
@@ -19,23 +19,23 @@
 
 
 namespace Ui {
-class PhFeedbackReporter;
+class PhFeedbackDialog;
 }
 
 /**
- * @brief The FeedbackReporter class
+ * @brief The FeedbackDialog class
  *
  * This class allow the user to send crash
  * report, logs and informations about the
  * machine configuration.
  */
-class PhFeedbackReporter : public QDialog
+class PhFeedbackDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
 	/**
-	 * @brief FeedbackReporter
+	 * @brief FeedbackDialog
 	 *
 	 * Default constructor of the feedback module,
 	 * You MUST provide settings to make it work
@@ -44,8 +44,8 @@ public:
 	 * @param settings
 	 * @param parent
 	 */
-	explicit PhFeedbackReporter(PhFeedbackSettings *settings, QWidget *parent = 0);
-	~PhFeedbackReporter();
+	explicit PhFeedbackDialog(PhFeedbackSettings *settings, QWidget *parent = 0);
+	~PhFeedbackDialog();
 
 private slots:
 	void on_buttonBox_accepted();
@@ -55,8 +55,8 @@ private slots:
 	void onSyncRequestFinished(QNetworkReply*reply);
 
 private:
-	Ui::PhFeedbackReporter *ui;
+	Ui::PhFeedbackDialog *ui;
 	PhFeedbackSettings *_settings;
 };
 
-#endif // FEEDBACKREPORTER_H
+#endif // FEEDBACKDIALOG_H

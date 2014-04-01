@@ -9,14 +9,14 @@
 #include <QMessageBox>
 #include <QProcess>
 
-#include "PhFeedbackReporter.h"
-#include "ui_PhFeedbackReporter.h"
+#include "PhFeedbackDialog.h"
+#include "ui_PhFeedbackDialog.h"
 
 
-PhFeedbackReporter::PhFeedbackReporter(PhFeedbackSettings *settings, QWidget *parent) :
+PhFeedbackDialog::PhFeedbackDialog(PhFeedbackSettings *settings, QWidget *parent) :
 	QDialog(parent),
 	_settings(settings),
-	ui(new Ui::PhFeedbackReporter)
+	ui(new Ui::PhFeedbackDialog)
 {
 
 	ui->setupUi(this);
@@ -27,12 +27,12 @@ PhFeedbackReporter::PhFeedbackReporter(PhFeedbackSettings *settings, QWidget *pa
 	ui->comboBoxEmails->addItems(_settings->emailList());
 }
 
-PhFeedbackReporter::~PhFeedbackReporter()
+PhFeedbackDialog::~PhFeedbackDialog()
 {
 	delete ui;
 }
 
-void PhFeedbackReporter::on_buttonBox_accepted()
+void PhFeedbackDialog::on_buttonBox_accepted()
 {
 	QStringList emails;
 	for(int i = 0; i < ui->comboBoxEmails->count(); i++) {
@@ -210,12 +210,12 @@ void PhFeedbackReporter::on_buttonBox_accepted()
 	hide();
 }
 
-void PhFeedbackReporter::on_buttonBox_rejected()
+void PhFeedbackDialog::on_buttonBox_rejected()
 {
 	hide();
 }
 
-void PhFeedbackReporter::onSyncRequestFinished(QNetworkReply * reply)
+void PhFeedbackDialog::onSyncRequestFinished(QNetworkReply * reply)
 {
 	delete reply;
 }
