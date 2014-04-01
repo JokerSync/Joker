@@ -50,14 +50,14 @@ int countLoopDetectLength(PhStripDoc *doc, int loopNumber)
 		map[detect->people()->name()] += detectLength;
 		loopLength += detectLength;
 		PHDBG(2) << PHNQ(PhTimeCode::stringFromTime(detect->timeIn(), doc->timeCodeType()))
-		         << PHNQ(PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType()))
-		         << PHNQ(PhTimeCode::stringFromTime(loopLength, doc->timeCodeType()))
-		         << detectLength
-		         << detect->people()->name();
+				 << PHNQ(PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType()))
+				 << PHNQ(PhTimeCode::stringFromTime(loopLength, doc->timeCodeType()))
+				 << detectLength
+				 << detect->people()->name();
 	}
 
 	foreach(QString name, map.keys())
-	PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromTime(map[name], doc->timeCodeType()));
+		PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromTime(map[name], doc->timeCodeType()));
 
 	return loopLength;
 }
@@ -91,10 +91,10 @@ int countDetectLength(PhStripDoc *doc)
 			int detectLength = detect->timeOut() - detect->timeIn();
 			length += detectLength;
 			PHDBG(2) << PHNQ(PhTimeCode::stringFromTime(detect->timeIn(), doc->timeCodeType()))
-			         << PHNQ(PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType()))
-			         << PHNQ(PhTimeCode::stringFromTime(length, doc->timeCodeType()))
-			         << detectLength
-			         << people->name();
+					 << PHNQ(PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType()))
+					 << PHNQ(PhTimeCode::stringFromTime(length, doc->timeCodeType()))
+					 << detectLength
+					 << people->name();
 		}
 		map[people->name()] += length;
 		fileLength += length;
@@ -107,6 +107,22 @@ int countDetectLength(PhStripDoc *doc)
 	}
 
 	return fileLength;
+}
+
+void displayDoc(PhStripDoc* doc)
+{
+	PHDEBUG << doc->title();
+	foreach (PhPeople *people, doc->peoples()) {
+		PHDEBUG << people->name();
+	}
+
+	foreach (PhStripText *text, doc->texts()) {
+		PHDEBUG << text->people()->name() << ":"
+				<< PhTimeCode::stringFromTime(text->timeIn(), doc->timeCodeType())
+				<< " -> "
+				<< PhTimeCode::stringFromTime(text->timeOut(), doc->timeCodeType())
+				<< text->content();
+	}
 }
 
 /**
@@ -124,10 +140,16 @@ int main(int argc, char *argv[])
 
 	PhStripDoc doc;
 	for(int i = 1; i < argc; i++) {
-		if(QFile::exists(argv[i]) && !doc.openStripFile(argv[i])) {
-			result = 1;
-			PHDEBUG << "-------- FAILED --------";
-			break;
+		QString fileName = QLatin1String(argv[i]);
+		if(QFile::exists(fileName)){
+			if(doc.openStripFile(fileName)) {
+				displayDoc(&doc);
+			}
+			else {
+				result = 1;
+				PHDEBUG << "-------- FAILED --------";
+				break;
+			}
 		}
 	}
 

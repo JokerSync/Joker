@@ -412,7 +412,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 	return true;
 }
 
-bool PhStripDoc::importMosFile(QString fileName)
+bool PhStripDoc::importMosFile(const QString &fileName)
 {
 	PHDEBUG << "===============" << fileName << "===============";
 
@@ -626,11 +626,11 @@ bool PhStripDoc::importMosFile(QString fileName)
 	//			PhFileTool::readShort(f, level, "after loop2");
 	//	}
 
-	if(!checkMosTag(f, blocLevel, MosBin))
-		return false;
+//	if(!checkMosTag(f, blocLevel, MosBin))
+//		return false;
 
-	for(int j = 0; j < 2; j++)
-		PhFileTool::readShort(f, level);
+//	for(int j = 0; j < 2; j++)
+//		PhFileTool::readShort(f, level);
 
 	PHDEBUG << "_______________" << "reading ok" << "_______________";
 
@@ -641,7 +641,7 @@ bool PhStripDoc::importMosFile(QString fileName)
 	return true;
 }
 
-bool PhStripDoc::openStripFile(QString fileName)
+bool PhStripDoc::openStripFile(const QString &fileName)
 {
 	PHDEBUG << fileName;
 	bool result = false;
@@ -705,7 +705,7 @@ bool PhStripDoc::openStripFile(QString fileName)
 	return result;
 }
 
-bool PhStripDoc::saveStripFile(QString fileName, QString lastTC, bool forceRatio169)
+bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC, bool forceRatio169)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);

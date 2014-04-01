@@ -211,13 +211,13 @@ public:
 	 * @param fileName The path to the Mos file
 	 * @return True if the doc opened well, false otherwise
 	 */
-	bool importMosFile(QString fileName);
+	bool importMosFile(const QString &fileName);
 	/**
 	 * @brief Open a strip file
 	 * @param fileName The path to the DetX file
 	 * @return True if the strip opened well, false otherwise
 	 */
-	bool openStripFile(QString fileName);
+	bool openStripFile(const QString &fileName);
 	/**
 	 * @brief Save the PhStripDoc to a strip file
 	 * @param fileName Path to the stripfile
@@ -225,7 +225,7 @@ public:
 	 * @param forceRatio169 If the aspect ratio has been forced or not.
 	 * @return True if the strip saved well, false otherwise
 	 */
-	bool saveStripFile(QString fileName, QString lastTC, bool forceRatio169 = false);
+	bool saveStripFile(const QString &fileName, const QString &lastTC, bool forceRatio169 = false);
 	/**
 	 * @brief Create a made up strip using the parameters
 	 * @param text The desired text
