@@ -155,6 +155,8 @@ QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selected
 
 void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QList<PhPeople *> selectedPeoples)
 {
+	_infos.clear();
+
 	int counter = 0;
 	bool invertedColor = _settings->invertColor();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -481,14 +483,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		_maxDrawElapsed = currentDrawElapsed;
 	_testTimer.restart();
 
-	if(_settings->displayStripInfo()) {
-		int inc = 60;
-		PhGraphicText text(&_hudFont, "", 0, 0, 200, inc);
-		text.setColor(Qt::red);
-		text.setContent(QString("Max : %1").arg(_maxDrawElapsed));
-		text.draw();
-		text.setY(text.getY() + inc);
-		text.setContent(QString("Count : %1").arg(counter));
-		text.draw();
-	}
+	_infos.append(QString("Max strip draw: %1").arg(_maxDrawElapsed));
+	_infos.append(QString("Count: %1").arg(counter));
 }

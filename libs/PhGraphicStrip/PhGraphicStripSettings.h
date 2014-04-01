@@ -87,12 +87,6 @@ public:
 	 * @return A time value
 	 */
 	virtual int timeBetweenRuler() = 0;
-
-	/**
-	 * @brief Display some informations about the strip
-	 * @return True if the informations are displayed
-	 */
-	virtual bool displayStripInfo() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

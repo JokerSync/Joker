@@ -99,6 +99,9 @@ void VideoStripView::paint()
 		tcOffset += _titleText.getHeight();
 
 	_strip.draw(0, y + videoHeight, this->width(), stripHeight, tcOffset, selectedPeoples);
+	foreach (QString info, _strip.infos()) {
+		this->addInfo(info);
+	}
 
 	// The strip must be the first drawn object, otherwise it masks previous drawings.
 	if(_settings->displayTitle() && (title.length() > 0)) {
