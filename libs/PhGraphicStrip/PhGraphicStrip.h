@@ -128,6 +128,12 @@ public:
 	 */
 	PhFont * getHUDFont();
 
+	/**
+	 * @brief List of info to be displayed on the screen debug overlay
+	 * @return A list of string
+	 */
+	QStringList infos() {return _infos;}
+
 public slots:
 	void onExternalCorrection(PhTime delta);
 
@@ -185,6 +191,8 @@ private:
 	PhTime _correctionTimeOut2;
 
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
+
+	QStringList _infos;
 };
 
 #endif // PHGRAPHICSTRIP_H
