@@ -305,10 +305,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 		foreach(PhStripText * text, _doc.texts())
 		{
-			counter++;
 			int track = text->track();
 
 			if( !((text->timeOut() < timeIn) || (text->timeIn() > timeOut)) ) {
+				counter++;
 				PhGraphicText gText(&_textFont, text->content());
 				gText.setZ(-1);
 
@@ -348,10 +348,12 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gPeople.draw();
 			}
 
-			if(displayNextText && (timeIn < text->timeIn()) && ((lastText == NULL) || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
+			PhTime timePerPeopleHeight = gPeople.getHeight() * verticalTimePerPixel;
+
+			if(displayNextText && (timeIn < text->timeIn() + timePerPeopleHeight) && ((lastText == NULL) || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
 				PhPeople * people = text->people();
 
-				int howFarIsText = (text->timeIn() - timeOut) / verticalTimePerPixel;
+				int howFarIsText = (text->timeIn() - timeIn) / verticalTimePerPixel;
 				//This line is used to see which text's name will be displayed
 				gPeople.setX(width - gPeople.getWidth());
 				gPeople.setY(y - howFarIsText - gPeople.getHeight());
@@ -512,4 +514,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 	_infos.append(QString("Max strip draw: %1").arg(_maxDrawElapsed));
 	_infos.append(QString("Count: %1").arg(counter));
+
+	if(_settings->resetInfo())
+		_maxDrawElapsed = 0;
 }
