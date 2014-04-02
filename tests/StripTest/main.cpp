@@ -147,7 +147,8 @@ void displayDoc(PhStripDoc* doc)
 		PHDEBUG << name << ":"
 		        << PhTimeCode::stringFromTime(detect->timeIn(), doc->timeCodeType())
 		        << " -> "
-		        << PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType());
+		        << PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType())
+		        << "type:" << detect->type();
 	}
 }
 

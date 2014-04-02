@@ -182,8 +182,10 @@ bool PhStripDoc::importDetXFile(QString fileName)
 						_texts1.append(new PhStripText(lastLinkedTime, people, time, track, currentText));
 						lastLinkedTime = time;
 					}
-					bool off = (elem.attribute("voice") == "off");
-					_detects.append(new PhStripDetect(off, timeIn, people, lastTime, track));
+					PhStripDetect::PhDetectType type = PhStripDetect::None;
+					if(elem.attribute("voice") == "off")
+						type = PhStripDetect::Off;
+					_detects.append(new PhStripDetect(type, timeIn, people, lastTime, track));
 				}
 			}
 		}
@@ -249,15 +251,38 @@ PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLe
 {
 	PhTime timeIn = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
 	PhTime timeOut = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
-	PhFileTool::readInt(f, internLevel);
-	int detectType = PhFileTool::readInt(f, internLevel, "detect type");
-	for(int j = 0; j < 8; j++)
+	PhFileTool::readInt(f, internLevel, "detect type 1");
+	int detectType2 = PhFileTool::readInt(f, internLevel, "detect type 2");
+	int detectType3 = PhFileTool::readInt(f, internLevel, "detect type 3");
+	PhStripDetect::PhDetectType type = PhStripDetect::None;
+	switch(detectType3) {
+	case 9:
+		type = PhStripDetect::SemiOff;
+		break;
+	case 10:
+		type = PhStripDetect::Off;
+		break;
+	default:
+		switch (detectType2) {
+		case 15:
+			type = PhStripDetect::ArrowUp;
+			break;
+		case 16:
+			type = PhStripDetect::ArrowDown;
+			break;
+		}
+	}
+
+	for(int j = 0; j < 6; j++)
 		PhFileTool::readShort(f, internLevel);
 	PHDBG(detectLevel) << "detect: "
 					   << PhTimeCode::stringFromTime(timeIn, _tcType)
 	                   << PhTimeCode::stringFromTime(timeOut, _tcType)
-	                   << detectType;
-	return new PhStripDetect(false, timeIn, NULL, timeOut, 0);
+					   << "type2:"
+	                   << detectType2
+					   << "type3:"
+					   << detectType3;
+	return new PhStripDetect((PhStripDetect::PhDetectType)detectType2, timeIn, NULL, timeOut, 0);
 }
 
 bool PhStripDoc::readMosProperties(QFile &f, int level)
