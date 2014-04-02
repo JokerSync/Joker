@@ -132,7 +132,9 @@ public:
 	 * @brief List of info to be displayed on the screen debug overlay
 	 * @return A list of string
 	 */
-	QStringList infos() {return _infos;}
+	QStringList infos() {
+		return _infos;
+	}
 
 private slots:
 	/**
