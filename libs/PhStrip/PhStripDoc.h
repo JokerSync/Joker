@@ -138,7 +138,7 @@ public:
 	 * @brief The whole text list
 	 * @return A list of texts
 	 */
-	QList<PhStripText *> texts();
+	QList<PhStripText *> texts(bool alternate = false);
 
 	/**
 	 * @brief The list of texts affected to a people
@@ -211,13 +211,13 @@ public:
 	 * @param fileName The path to the Mos file
 	 * @return True if the doc opened well, false otherwise
 	 */
-	bool importMosFile(QString fileName);
+	bool importMosFile(const QString &fileName);
 	/**
 	 * @brief Open a strip file
 	 * @param fileName The path to the DetX file
 	 * @return True if the strip opened well, false otherwise
 	 */
-	bool openStripFile(QString fileName);
+	bool openStripFile(const QString &fileName);
 	/**
 	 * @brief Save the PhStripDoc to a strip file
 	 * @param fileName Path to the stripfile
@@ -225,7 +225,7 @@ public:
 	 * @param forceRatio169 If the aspect ratio has been forced or not.
 	 * @return True if the strip saved well, false otherwise
 	 */
-	bool saveStripFile(QString fileName, QString lastTC, bool forceRatio169 = false);
+	bool saveStripFile(const QString &fileName, const QString &lastTC, bool forceRatio169 = false);
 	/**
 	 * @brief Create a made up strip using the parameters
 	 * @param text The desired text
@@ -396,10 +396,7 @@ private:
 	 */
 	QList<PhPeople *> _peoples;
 
-	/**
-	 * List of PhStripText from the file
-	 */
-	QList<PhStripText *> _texts;
+	QList<PhStripText *> _texts1, _texts2;
 
 	/**
 	 * List of PhStripCut form the file
@@ -442,12 +439,12 @@ private:
 
 	bool checkMosTag2(QFile &f, int level, QString expected);
 	bool checkMosTag(QFile &f, int level, MosTag expectedTag);
-	PhTime readMosTime(QFile &f, PhTimeCodeType tcType);
-	PhStripText *readMosText(QFile &f, int level);
-	void readMosDetect(QFile &f, int level);
+	PhTime readMosTime(QFile &f, PhTimeCodeType tcType, int level);
+	PhStripText *readMosText(QFile &f, int textLevel, int internLevel);
+	PhStripDetect *readMosDetect(QFile &f, int detectLevel, int internLevel);
 	bool readMosProperties(QFile &f, int level);
 	MosTag readMosTag(QFile &f, int level, QString name);
-	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level);
+	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel);
 	bool _forceRatio169;
 };
 

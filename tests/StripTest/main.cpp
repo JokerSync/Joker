@@ -4,6 +4,8 @@
 
 #include "PhStrip/PhStripDoc.h"
 
+#include "StripTestSettings.h"
+
 using namespace std;
 
 PhStripDoc * openDoc(QString fileName)
@@ -74,7 +76,7 @@ int displayDetectCountPerLoop(PhStripDoc *doc)
 		PHDBG(3) << loop << "\t:" << detectLength << "\t" << loopLength << "\t" << detectLength * 100 / loopLength;
 		totalLength += detectLength;
 	}
-
+	return totalLength;
 }
 
 int countDetectLength(PhStripDoc *doc)
@@ -109,6 +111,50 @@ int countDetectLength(PhStripDoc *doc)
 	return fileLength;
 }
 
+void displayDoc(PhStripDoc* doc)
+{
+	PHDEBUG << doc->title();
+	foreach(PhPeople *people, doc->peoples()) {
+		PHDEBUG << people->name();
+	}
+
+	foreach(PhStripText *text, doc->texts()) {
+		QString name = "???";
+		if(text->people())
+			name = text->people()->name();
+		PHDEBUG << text->track() << "-"
+		        << name << ":"
+		        << PhTimeCode::stringFromTime(text->timeIn(), doc->timeCodeType())
+		        << " -> "
+		        << PhTimeCode::stringFromTime(text->timeOut(), doc->timeCodeType())
+		        << text->content();
+	}
+
+	foreach(PhStripText *text, doc->texts(true)) {
+		QString name = "???";
+		if(text->people())
+			name = text->people()->name();
+		PHDEBUG << text->track() <<"-"
+		        << name << ":"
+		        << PhTimeCode::stringFromTime(text->timeIn(), doc->timeCodeType())
+		        << " -> "
+		        << PhTimeCode::stringFromTime(text->timeOut(), doc->timeCodeType())
+		        << text->content();
+	}
+
+	foreach(PhStripDetect *detect, doc->detects()) {
+		QString name = "???";
+		if(detect->people())
+			name = detect->people()->name();
+		PHDEBUG << detect->track()<< "-"
+		        << name << ":"
+		        << PhTimeCode::stringFromTime(detect->timeIn(), doc->timeCodeType())
+		        << " -> "
+		        << PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType())
+		        << "type:" << detect->type();
+	}
+}
+
 /**
  * @brief The application main entry point
  * @param argc Command line argument count
@@ -117,17 +163,24 @@ int countDetectLength(PhStripDoc *doc)
  */
 int main(int argc, char *argv[])
 {
+	StripTestSettings settings;
 	PhDebug::setDisplay(false, false, false, false, false);
-	//PhDebug::setLogMask(2);
+	PhDebug::setLogMask(settings.logMask());
 
 	int result = 0;
 
 	PhStripDoc doc;
 	for(int i = 1; i < argc; i++) {
-		if(QFile::exists(argv[i]) && !doc.openStripFile(argv[i])) {
-			result = 1;
-			PHDEBUG << "-------- FAILED --------";
-			break;
+		QString fileName = QLatin1String(argv[i]);
+		if(QFile::exists(fileName)) {
+			if(doc.openStripFile(fileName)) {
+				displayDoc(&doc);
+			}
+			else {
+				result = 1;
+				PHDEBUG << "-------- FAILED --------";
+				break;
+			}
 		}
 	}
 

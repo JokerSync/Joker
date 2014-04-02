@@ -16,7 +16,9 @@ HEADERS += \
     ../../libs/PhGraphic/PhGraphicRect.h \
     ../../libs/PhGraphic/PhGraphicSolidRect.h \
 	../../libs/PhGraphic/PhGraphicLoop.h \
-    ../../libs/PhGraphic/PhGraphicDisc.h
+    ../../libs/PhGraphic/PhGraphicDisc.h \
+    ../../libs/PhGraphic/PhGraphicDashedLine.h \
+    ../../libs/PhGraphic/PhGraphicArrow.h
 
 SOURCES += \
 	../../libs/PhGraphic/PhGraphicView.cpp \
@@ -28,7 +30,9 @@ SOURCES += \
     ../../libs/PhGraphic/PhGraphicRect.cpp \
     ../../libs/PhGraphic/PhGraphicSolidRect.cpp \
     ../../libs/PhGraphic/PhGraphicLoop.cpp \
-    ../../libs/PhGraphic/PhGraphicDisc.cpp
+    ../../libs/PhGraphic/PhGraphicDisc.cpp \
+    ../../libs/PhGraphic/PhGraphicDashedLine.cpp \
+    ../../libs/PhGraphic/PhGraphicArrow.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/fonts/ARIAL.TTF) $${RESOURCES_PATH} $${CS}
 

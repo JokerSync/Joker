@@ -42,18 +42,6 @@ void PhGraphicText::draw()
 
 	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
 
-	if((_font == NULL) || (_font->getHeight() == 0)) { // draw only a quad
-		glBegin(GL_QUADS);  //Begining the cube's drawing
-		{
-			glVertex3f(_x,      _y, _z);
-			glVertex3f(_x + _w, _y, _z);
-			glVertex3f(_x + _w, _y + _h,  _z);
-			glVertex3f(_x,      _y + _h,  _z);
-		}
-		glEnd();
-		return;
-	}
-
 	_font->select();
 
 	glEnable(GL_TEXTURE_2D);

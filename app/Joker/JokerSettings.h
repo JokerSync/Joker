@@ -64,6 +64,12 @@ public:
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
 	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
 
+	// PhFeedbackSettings
+	QString settingsFileName() {
+		return _settings.fileName();
+	}
+	PH_SETTING_STRINGLIST(setEmailList, emailList)
+
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
 
@@ -85,11 +91,7 @@ public:
 
 	PH_SETTING_STRING2(setVideoFileFilter, videoFileFilter, " (*.m4v *.mkv *.avi *.mov *.mxf)")
 
-	// PhFeedbackSettings
-	QString settingsFileName() {
-		return _settings.fileName();
-	}
-	PH_SETTING_STRINGLIST(setEmailList, emailList)
+	PH_SETTING_BOOL2(setDisplayLogo, displayLogo, true)
 };
 
 #endif // JOKERSETTINGS_H

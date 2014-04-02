@@ -32,6 +32,15 @@ public:
 	 * @return A PhTime
 	 */
 	PhTime timeIn();
+
+	/**
+	 * @brief Compare two strip object based on the time in
+	 *
+	 * @param a A strip object
+	 * @param b Another strip object
+	 * @return True if "a" has a stricly lower time in than "b", false otherwise.
+	 */
+	static bool dtcomp(PhStripObject *a, PhStripObject *b);
 };
 
 #endif // PHSTRIPOBJECT_H

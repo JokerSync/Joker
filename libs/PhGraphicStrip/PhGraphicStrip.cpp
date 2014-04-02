@@ -11,6 +11,8 @@
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphic/PhGraphicDisc.h"
+#include "PhGraphic/PhGraphicDashedLine.h"
+#include "PhGraphic/PhGraphicArrow.h"
 #include "PhGraphicStrip.h"
 
 PhGraphicStrip::PhGraphicStrip(QObject *parent) :
@@ -534,18 +536,42 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				}
 			}
 
-			if( detect->off() && (_timeIn < detect->timeOut()) && (detect->timeIn() < _timeOut) ) {
-				PhGraphicSolidRect gDetect;
+			if((_timeIn < detect->timeOut()) && (detect->timeIn() < _timeOut) ) {
+				PhGraphicRect *gDetect = NULL;
+				switch (detect->type()) {
+				case PhStripDetect::Off:
+					gDetect = new PhGraphicSolidRect();
+					gDetect->setY(y + detect->track() * trackHeight + trackHeight * 0.9);
+					gDetect->setHeight(trackHeight / 10);
+					break;
+				case PhStripDetect::SemiOff:
+					gDetect = new PhGraphicDashedLine((detect->timeOut() - detect->timeIn()) / 1200);
+					gDetect->setY(y + detect->track() * trackHeight + trackHeight * 0.9);
+					gDetect->setHeight(trackHeight / 10);
+					break;
+				case PhStripDetect::ArrowUp:
+					gDetect = new PhGraphicArrow(PhGraphicArrow::DownLeftToUpRight);
+					gDetect->setY(y + detect->track() * trackHeight);
+					gDetect->setHeight(trackHeight);
+					break;
+				case PhStripDetect::ArrowDown:
+					gDetect = new PhGraphicArrow(PhGraphicArrow::UpLefToDownRight);
+					gDetect->setY(y + detect->track() * trackHeight);
+					gDetect->setHeight(trackHeight);
+					break;
+				default:
+					break;
+				}
 
-				gDetect.setColor(computeColor(detect->people(), selectedPeoples, invertedColor));
+				if(gDetect) {
+					gDetect->setColor(computeColor(detect->people(), selectedPeoples, invertedColor));
 
-				gDetect.setX(x + detect->timeIn() / timePerPixel - offset + correct);
-				gDetect.setY(y + detect->track() * trackHeight + trackHeight * 0.8);
-				gDetect.setZ(-1);
-				gDetect.setHeight(trackHeight / 20);
-				gDetect.setWidth((detect->timeOut() - detect->timeIn()) / timePerPixel + correctWidth);
-				gDetect.draw();
-				offCounter++;
+					gDetect->setX(x + detect->timeIn() / timePerPixel - offset + correct);
+					gDetect->setZ(-1);
+					gDetect->setWidth((detect->timeOut() - detect->timeIn()) / timePerPixel + correctWidth);
+					gDetect->draw();
+					offCounter++;
+				}
 			}
 			//Doesn't need to process undisplayed content
 			if(detect->timeIn() > _timeOut)
