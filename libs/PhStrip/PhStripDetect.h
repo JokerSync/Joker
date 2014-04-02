@@ -18,25 +18,47 @@ class PhStripDetect : public PhStripPeopleObject
 {
 public:
 	/**
-	 * @brief PhStripOff constructor
-	 * @param off If the people is out of the picture
-	 * @param frameIn the beggining of the PhStripOff
-	 * @param people the corresponding PhPeople
-	 * @param frameOut the end of the PhStripOff
-	 * @param track the track of the PhStripOff
+	 * @brief The various type of detect
 	 */
-	PhStripDetect( bool off, PhFrame frameIn, PhPeople * people, PhFrame frameOut, int track);
+	enum PhDetectType {
+		Unknown,
+		On,
+		SemiOff,
+		Off,
+		MouthOpen,
+		MouthClosed,
+		Aperture,
+		Advance,
+		Labial,
+		SemiLabial,
+		Bowl,
+		Dental,
+		ArrowUp,
+		ArrowDown,
+		AmbianceStart,
+		AmbianceEnd,
+	};
+
+	/**
+	 * @brief PhStripDetect constructor
+	 * @param type The type of detect
+	 * @param timeIn The starting time of the detect
+	 * @param people the corresponding PhPeople
+	 * @param timeOut The ending time of the detect
+	 * @param track The track of the detect
+	 */
+	PhStripDetect( PhDetectType type, PhTime timeIn, PhPeople * people, PhTime timeOut, int track);
 
 	/**
 	 * @brief If the people is out of the picture
 	 * @return True if out of the picture, false otherwise
 	 */
-	bool off() {
-		return _off;
+	PhDetectType type() {
+		return _type;
 	}
 
 private:
-	bool _off;
+	PhDetectType _type;
 };
 
 #endif // PHSTRIPDETECT_H

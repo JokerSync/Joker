@@ -9,6 +9,8 @@
 #include "PhVideo/PhVideoSettings.h"
 #include "PhSync/PhSyncSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
+#include "PhCommonUI/PhFeedbackSettings.h"
+
 
 /**
  * @brief The Joker application settings
@@ -17,7 +19,8 @@ class JokerSettings : PhGenericSettings,
 	public PhGraphicStripSettings,
 	public PhVideoSettings,
 	public PhSyncSettings,
-	public PhDocumentWindowSettings
+	public PhDocumentWindowSettings,
+	public PhFeedbackSettings
 {
 public:
 	PH_SETTING_INT3(setScreenDelay, screenDelay, delay)
@@ -28,18 +31,17 @@ public:
 
 	// PhGraphicStripSettings :
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
-	PH_SETTING_INT2(setHorizontalSpeed, horizontalSpeed, 12)
+	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 50)
+	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
 	PH_SETTING_STRING(setTextFontFile, textFontFile)
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 2)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
-	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1)
 	PH_SETTING_STRINGLIST(setSelectedPeopleNameList, selectedPeopleNameList)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
-	PH_SETTING_INT(setRulerTimestamp, rulerTimestamp)
-	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 33)
-	PH_SETTING_BOOL(setDisplayStripInfo, displayStripInfo)
+	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
+	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
@@ -53,6 +55,7 @@ public:
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)
+	PH_SETTING_BOOL2(setExitedNormaly, exitedNormaly, true)
 	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
 
 	// PhDocumentWindowSettings
@@ -61,6 +64,12 @@ public:
 	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
 	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
+
+	// PhFeedbackSettings
+	QString settingsFileName() {
+		return _settings.fileName();
+	}
+	PH_SETTING_STRINGLIST(setEmailList, emailList)
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
@@ -82,6 +91,8 @@ public:
 	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)
 
 	PH_SETTING_STRING2(setVideoFileFilter, videoFileFilter, " (*.m4v *.mkv *.avi *.mov *.mxf)")
+
+	PH_SETTING_BOOL2(setDisplayLogo, displayLogo, true)
 };
 
 #endif // JOKERSETTINGS_H

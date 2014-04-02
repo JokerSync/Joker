@@ -128,6 +128,14 @@ public:
 	 */
 	PhFont * getHUDFont();
 
+	/**
+	 * @brief List of info to be displayed on the screen debug overlay
+	 * @return A list of string
+	 */
+	QStringList infos() {
+		return _infos;
+	}
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -163,16 +171,6 @@ private:
 
 	PhGraphicSolidRect _stripSyncBar;
 
-	QMap<PhPeople*, PhGraphicText*> _graphicPeoples;
-
-	QMap<PhStripText*, PhGraphicText*> _graphicTexts;
-
-	QMap<PhStripCut*, PhGraphicSolidRect*> _graphicCuts;
-
-	QMap<PhStripLoop*, PhGraphicLoop*> _graphicLoops;
-
-	QMap<PhStripDetect*, PhGraphicSolidRect*> _graphicDetects;
-
 	/**
 	 * @brief _test
 	 * QTime for testing performance
@@ -184,6 +182,8 @@ private:
 	int _maxDrawElapsed;
 
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
+
+	QStringList _infos;
 };
 
 #endif // PHGRAPHICSTRIP_H

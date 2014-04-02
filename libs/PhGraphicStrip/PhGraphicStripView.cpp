@@ -31,4 +31,7 @@ void PhGraphicStripView::paint()
 	if(_settings)
 		h = this->height()* _settings->stripHeight();
 	_strip.draw(0, this->height() - h, this->width(), h);
+	foreach(QString info, _strip.infos()) {
+		this->addInfo(info);
+	}
 }

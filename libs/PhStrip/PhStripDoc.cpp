@@ -89,14 +89,14 @@ bool PhStripDoc::importDetXFile(QString fileName)
 		if(header.elementsByTagName("videofile").count()) {
 			QDomElement videoFile = header.elementsByTagName("videofile").at(0).toElement();
 			_videoPath = videoFile.text();
-			// Reading the video framestamp
-			_videoFrameStamp = PhTimeCode::frameFromString(videoFile.attribute("timestamp"), _tcType);
+			// Reading the video time in
+			_videoTimeIn = PhTimeCode::timeFromString(videoFile.attribute("timestamp"), _tcType);
 		}
 
 		// Reading the last position
 		if(header.elementsByTagName("last_position").count()) {
 			QDomElement lastPosition = header.elementsByTagName("last_position").at(0).toElement();
-			_lastFrame = PhTimeCode::frameFromString(lastPosition.attribute("timecode"), _tcType);
+			_lastTime = PhTimeCode::timeFromString(lastPosition.attribute("timecode"), _tcType);
 		}
 
 		// Reading the author name
@@ -145,15 +145,15 @@ bool PhStripDoc::importDetXFile(QString fileName)
 				// Reading loops
 				if(elem.tagName() == "loop")
 					_loops.append(new PhStripLoop(loopNumber++,
-					                              PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
+					                              PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
 					_cuts.append(new PhStripCut(PhStripCut::Simple,
-					                            PhTimeCode::frameFromString(elem.attribute("timecode"), _tcType)));
+					                            PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
 				else if(elem.tagName() == "line") {
-					PhFrame frameIn = -1;
-					PhFrame lastFrame = -1;
-					PhFrame lastLinkedFrame = -1;
+					PhTime timeIn = -1;
+					PhTime lastTime = -1;
+					PhTime lastLinkedTime = -1;
 					PhPeople *people = peopleMap[elem.attribute("role")];
 					int track = elem.attribute("track").toInt();
 					QString currentText = "";
@@ -161,15 +161,15 @@ bool PhStripDoc::importDetXFile(QString fileName)
 						if(elem.childNodes().at(j).isElement()) {
 							QDomElement lineElem = elem.childNodes().at(j).toElement();
 							if(lineElem.tagName() == "lipsync") {
-								lastFrame = PhTimeCode::frameFromString(lineElem.attribute("timecode"), _tcType);
-								if(frameIn < 0)
-									frameIn = lastFrame;
+								lastTime = PhTimeCode::timeFromString(lineElem.attribute("timecode"), _tcType);
+								if(timeIn < 0)
+									timeIn = lastTime;
 								if(lineElem.attribute("link") != "off") {
 									if(currentText.length()) {
-										_texts.append(new PhStripText(lastLinkedFrame, people, lastFrame, track, currentText));
+										_texts1.append(new PhStripText(lastLinkedTime, people, lastTime, track, currentText));
 										currentText = "";
 									}
-									lastLinkedFrame = lastFrame;
+									lastLinkedTime = lastTime;
 								}
 							}
 							else if(lineElem.tagName() == "text")
@@ -178,12 +178,14 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					}
 					// Handling line with no lipsync out
 					if(currentText.length()) {
-						PhFrame frame = lastLinkedFrame + currentText.length();
-						_texts.append(new PhStripText(lastLinkedFrame, people, frame, track, currentText));
-						lastLinkedFrame = frame;
+						PhTime time = lastLinkedTime + currentText.length();
+						_texts1.append(new PhStripText(lastLinkedTime, people, time, track, currentText));
+						lastLinkedTime = time;
 					}
-					bool off = (elem.attribute("voice") == "off");
-					_detects.append(new PhStripDetect(off, frameIn, people, lastFrame, track));
+					PhStripDetect::PhDetectType type = PhStripDetect::On;
+					if(elem.attribute("voice") == "off")
+						type = PhStripDetect::Off;
+					_detects.append(new PhStripDetect(type, timeIn, people, lastTime, track));
 				}
 			}
 		}
@@ -217,15 +219,19 @@ bool PhStripDoc::checkMosTag(QFile &f, int level, MosTag expectedTag)
 	return true;
 }
 
-PhStripText* PhStripDoc::readMosText(QFile &f, int level)
+PhTime PhStripDoc::readMosTime(QFile &f, PhTimeCodeType tcType, int level)
 {
-	int internLevel = 4;
+	return PhFileTool::readInt(f, level, "time") * PhTimeCode::timePerFrame(tcType) / 12;
+}
+
+PhStripText* PhStripDoc::readMosText(QFile &f, int textLevel, int internLevel)
+{
 	QString content = PhFileTool::readString(f, 2, "content");
 
-	PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, 2, "tcin") / 12;
-	PhFrame frameOut = _videoFrameStamp + PhFileTool::readInt(f, 2, "tcout") / 12;
+	PhTime timeIn = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
+	PhTime timeOut = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
 
-	PhStripText* text = new PhStripText(frameIn, NULL, frameOut, 0, content);
+	PhStripText* text = new PhStripText(timeIn, NULL, timeOut, 0, content);
 
 	PhFileTool::readInt(f, internLevel, "text");
 	PhFileTool::readInt(f, internLevel, "text");
@@ -234,23 +240,85 @@ PhStripText* PhStripDoc::readMosText(QFile &f, int level)
 	PhFileTool::readInt(f, internLevel, "text");
 	PhFileTool::readInt(f, internLevel, "text");
 
-	PHDBG(level) << PHNQ(PhTimeCode::stringFromFrame(frameIn, _tcType))
-	             << "->"
-	             << PHNQ(PhTimeCode::stringFromFrame(frameOut, _tcType))
-	             << PHNQ(content);
+	PHDBG(textLevel) << PHNQ(PhTimeCode::stringFromTime(timeIn, _tcType))
+	                 << "->"
+	                 << PHNQ(PhTimeCode::stringFromTime(timeOut, _tcType))
+	                 << PHNQ(content);
 	return text;
 }
 
-void PhStripDoc::readMosDetect(QFile &f, int level)
+PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLevel)
 {
-	int detectLevel = 5;
-	PhFrame frameIn = _videoFrameStamp + PhFileTool::readInt(f, detectLevel, "tcin") / 12;
-	PhFrame frameOut = _videoFrameStamp + PhFileTool::readInt(f, detectLevel, "tcout") / 12;
-	for(int j = 0; j < 12; j++)
-		PhFileTool::readShort(f, detectLevel);
-	_detects.append(new PhStripDetect(false, frameIn, NULL, frameOut, 0));
-	PHDBG(level) << PhTimeCode::stringFromFrame(frameIn, _tcType)
-	             << PhTimeCode::stringFromFrame(frameOut, _tcType);
+	PhTime timeIn = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
+	PhTime timeOut = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
+	PhFileTool::readInt(f, internLevel, "detect type 1");
+	int detectType2 = PhFileTool::readInt(f, internLevel, "detect type 2");
+	int detectType3 = PhFileTool::readInt(f, internLevel, "detect type 3");
+	PhStripDetect::PhDetectType type = PhStripDetect::Unknown;
+	switch(detectType3) {
+	case 9:
+		type = PhStripDetect::SemiOff;
+		break;
+	case 10:
+		type = PhStripDetect::Off;
+		break;
+	default:
+		switch (detectType2) {
+		case 0:
+			type = PhStripDetect::On;
+			break;
+		case 2:
+			type = PhStripDetect::MouthOpen;
+			break;
+		case 3:
+			type = PhStripDetect::MouthClosed;
+			break;
+		case 4:
+			type = PhStripDetect::Aperture;
+			break;
+		case 5:
+			type = PhStripDetect::Advance;
+			break;
+		case 6:
+			type = PhStripDetect::Labial;
+			break;
+		case 7:
+			type = PhStripDetect::SemiLabial;
+			break;
+		case 8:
+			type = PhStripDetect::Bowl;
+			break;
+		case 13:
+		case 14:
+			type = PhStripDetect::Dental;
+			break;
+		case 15:
+			type = PhStripDetect::ArrowUp;
+			break;
+		case 16:
+			type = PhStripDetect::ArrowDown;
+			break;
+		case 17:
+			type = PhStripDetect::AmbianceStart;
+			break;
+		case 18:
+			type = PhStripDetect::AmbianceEnd;
+			break;
+		}
+	}
+
+	for(int j = 0; j < 6; j++)
+		PhFileTool::readShort(f, internLevel);
+	PHDBG(detectLevel) << "detect: "
+	                   << PhTimeCode::stringFromTime(timeIn, _tcType)
+	                   << PhTimeCode::stringFromTime(timeOut, _tcType)
+	                   << "type2:"
+	                   << detectType2
+	                   << "type3:"
+	                   << detectType3
+	                   << "type:"
+	                   << type;
+	return new PhStripDetect(type, timeIn, NULL, timeOut, 0);
 }
 
 bool PhStripDoc::readMosProperties(QFile &f, int level)
@@ -330,10 +398,10 @@ PhStripDoc::MosTag PhStripDoc::readMosTag(QFile &f, int level, QString name)
 	}
 }
 
-bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level)
+bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel)
 {
-	QList<PhStripDetect*> detectLists;
-	QList<PhStripText*> textList;
+	QList<PhStripDetect*> detectList;
+	QList<PhStripText*> textList1, textList2;
 	int detectCount = PhFileTool::readInt(f, detectLevel, "track CDocBlocDetection count");
 
 	if(detectCount) {
@@ -343,7 +411,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 		for(int i = 0; i < detectCount; i++) {
 			if(i > 0)
 				PhFileTool::readShort(f, level, "detect tag");
-			readMosDetect(f, detectLevel);
+			detectList.append(readMosDetect(f, detectLevel, internLevel));
 		}
 	}
 
@@ -361,7 +429,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 		for(int i = 0; i < textCount; i++) {
 			if(i > 0)
 				PhFileTool::readShort(f, level, "text tag");
-			textList.append(readMosText(f, textLevel));
+			textList1.append(readMosText(f, textLevel, internLevel));
 		}
 	}
 
@@ -377,17 +445,17 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 			for(int i = 0; i < count; i++) {
 				if(i > 0)
 					PhFileTool::readShort(f, level, "text tag");
-				textList.append(readMosText(f, textLevel));
+				textList2.append(readMosText(f, textLevel, internLevel));
 			}
 			break;
 		case MosLabel:
 			for(int i = 0; i < count; i++) {
 				if(i > 0)
 					PhFileTool::readShort(f, level, "label tag");
-				PhFrame labelFrame = _videoFrameStamp + PhFileTool::readInt(f, level, "label tcin") / 12;
+				PhTime labelTime = _videoTimeIn + readMosTime(f, _tcType, internLevel);
 				for(int j = 0; j < 6; j++)
-					PhFileTool::readShort(f, level);
-				PHDBG(labelLevel) << "label" << PhTimeCode::stringFromFrame(labelFrame, _tcType);
+					PhFileTool::readShort(f, internLevel);
+				PHDBG(labelLevel) << "label" << PhTimeCode::stringFromTime(labelTime, _tcType);
 			}
 			break;
 		default:
@@ -397,17 +465,33 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 		}
 	}
 
-	PHDBG(textLevel) << "Adding" << textList.count() << "texts";
-	foreach(PhStripText* text, textList) {
-		text->setPeople(peopleMap[peopleId]);
-		text->setTrack(peopleTrackMap[peopleId]);
-		_texts.append(text);
+	PhPeople *people = peopleMap[peopleId];
+	int track = peopleTrackMap[peopleId];
+
+	PHDBG(textLevel) << "Adding" << textList1.count() << "texts in list 1";
+	foreach(PhStripText* text, textList1) {
+		text->setPeople(people);
+		text->setTrack(track);
+		_texts1.append(text);
+	}
+
+	PHDBG(textLevel) << "Adding" << textList2.count() << "texts in  list 2";
+	foreach(PhStripText* text, textList2) {
+		text->setPeople(people);
+		text->setTrack(track);
+		_texts2.append(text);
+	}
+
+	foreach(PhStripDetect* detect, detectList) {
+		detect->setPeople((people));
+		detect->setTrack(track);
+		_detects.append(detect);
 	}
 
 	return true;
 }
 
-bool PhStripDoc::importMosFile(QString fileName)
+bool PhStripDoc::importMosFile(const QString &fileName)
 {
 	PHDEBUG << "===============" << fileName << "===============";
 
@@ -427,9 +511,9 @@ bool PhStripDoc::importMosFile(QString fileName)
 	_filePath = fileName;
 	_title = QFileInfo(fileName).baseName();
 
-	int level = 0;
-	int ok = level;
-	int propLevel = level;
+	int level = 1;
+	int ok = 0;
+	int propLevel = ok;
 	int peopleLevel = level;
 	int textLevel = level;
 	int detectLevel = level;
@@ -437,6 +521,7 @@ bool PhStripDoc::importMosFile(QString fileName)
 	int cutLevel = level;
 	int loopLevel = level;
 	int labelLevel = level;
+	int internLevel = 2;
 
 	if(!checkMosTag2(f, blocLevel, "NOBLURMOSAIC"))
 		return false;
@@ -444,7 +529,7 @@ bool PhStripDoc::importMosFile(QString fileName)
 	_generator = "Mosaic";
 
 	PhFileTool::readShort(f, blocLevel, "CMosaicDoc");
-	int strangeNumber3 = PhFileTool::readShort(f, blocLevel, "CMosaicDoc");
+	PhFileTool::readShort(f, blocLevel, "CMosaicDoc");
 
 	if(!checkMosTag2(f, blocLevel, "CMosaicDoc"))
 		return false;
@@ -467,7 +552,7 @@ bool PhStripDoc::importMosFile(QString fileName)
 
 #warning /// @todo check strange number
 	// read a number that makes a difference wether it's 3 or 4 later
-	unsigned short strangeNumber1 = PhFileTool::readShort(f, blocLevel, "CDocOptionsProjet");
+	unsigned short strangeNumber1 = PhFileTool::readShort(f, blocLevel, "CDocOptionsProjet strangeNumber1");
 
 
 	if(!checkMosTag2(f, blocLevel, "CDocOptionsProjet"))
@@ -548,8 +633,8 @@ bool PhStripDoc::importMosFile(QString fileName)
 		return false;
 
 	this->setVideoFilePath(PhFileTool::readString(f, ok, "Video path"));
-	this->setVideoFramestamp(PhFileTool::readInt(f, level, "timestamp") / 12);
-	PHDBG(ok) << "Timestamp:" << PhTimeCode::stringFromFrame(_videoFrameStamp, _tcType);
+	this->setVideoTimeIn(readMosTime(f, _tcType, internLevel));
+	PHDBG(ok) << "Timestamp:" << PhTimeCode::stringFromTime(_videoTimeIn, _tcType);
 
 	if(videoType == 3) {
 		PhFileTool::readShort(f, level, "videoType3");
@@ -567,9 +652,9 @@ bool PhStripDoc::importMosFile(QString fileName)
 		for(int j = 0; j < cutCount; j++) {
 			if((j > 0) && !checkMosTag(f, level, MosCut))
 				return false;
-			PhFrame cutFrame = _videoFrameStamp + PhFileTool::readInt(f, level, "cut frame") / 12;
-			PHDBG(cutLevel) << "cut:" << PhTimeCode::stringFromFrame(cutFrame, _tcType);
-			_cuts.append(new PhStripCut(PhStripCut::Simple, cutFrame));
+			PhTime cutTime = _videoTimeIn + readMosTime(f, _tcType, internLevel);
+			PHDBG(cutLevel) << "cut:" << PhTimeCode::stringFromTime(cutTime, _tcType);
+			_cuts.append(new PhStripCut(PhStripCut::Simple, cutTime));
 		}
 	}
 
@@ -590,7 +675,7 @@ bool PhStripDoc::importMosFile(QString fileName)
 		PHDBG(level) << "====== READING TRACK " << track << "======";
 		if((track > 0) && !checkMosTag(f, level, MosTrack))
 			return false;
-		if(!readMosTrack(f, peopleMap, peopleTrackMap, blocLevel, textLevel, detectLevel, labelLevel, level))
+		if(!readMosTrack(f, peopleMap, peopleTrackMap, blocLevel, textLevel, detectLevel, labelLevel, level, internLevel))
 			return false;
 	}
 
@@ -607,9 +692,9 @@ bool PhStripDoc::importMosFile(QString fileName)
 				return false;
 			int number = PhFileTool::readInt(f, loopLevel, "loop number");
 
-			PhFrame loopFrame = _videoFrameStamp + PhFileTool::readInt(f, loopLevel, "loop tc") / 12;
+			PhTime loopTime = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
 			PhFileTool::readString(f, loopLevel, "loop name");
-			_loops.append(new PhStripLoop(number, loopFrame));
+			_loops.append(new PhStripLoop(number, loopTime));
 		}
 	}
 
@@ -621,22 +706,34 @@ bool PhStripDoc::importMosFile(QString fileName)
 	//			PhFileTool::readShort(f, level, "after loop2");
 	//	}
 
-	if(!checkMosTag(f, blocLevel, MosBin))
-		return false;
+//	if(!checkMosTag(f, blocLevel, MosBin))
+//		return false;
 
-	for(int j = 0; j < 2; j++)
-		PhFileTool::readShort(f, level);
+//	for(int j = 0; j < 2; j++)
+//		PhFileTool::readShort(f, level);
 
 	PHDEBUG << "_______________" << "reading ok" << "_______________";
 
 	f.close();
+
+	if((_texts1.count() == 0) && (_texts2.count())) {
+		PHDEBUG << "Switching primary and secondary text lists";
+		_texts1.append(_texts2);
+		_texts2.clear();
+	}
+
+	qSort(_texts1.begin(), _texts1.end(), PhStripObject::dtcomp);
+	qSort(_texts2.begin(), _texts2.end(), PhStripObject::dtcomp);
+	qSort(_detects.begin(), _detects.end(), PhStripObject::dtcomp);
+	qSort(_cuts.begin(), _cuts.end(), PhStripObject::dtcomp);
+	qSort(_loops.begin(), _loops.end(), PhStripObject::dtcomp);
 
 	emit this->changed();
 
 	return true;
 }
 
-bool PhStripDoc::openStripFile(QString fileName)
+bool PhStripDoc::openStripFile(const QString &fileName)
 {
 	PHDEBUG << fileName;
 	bool result = false;
@@ -687,20 +784,20 @@ bool PhStripDoc::openStripFile(QString fileName)
 				result = importMosFile(media.text());
 			else if(type == "video") {
 				_videoPath = media.text();
-				_videoFrameStamp = PhTimeCode::frameFromString(media.attribute("tcStamp"), _tcType);
+				_videoTimeIn = PhTimeCode::timeFromString(media.attribute("tcStamp"), _tcType);
 				_forceRatio169 = media.attribute("forceRatio").toLower() == "yes";
 			}
 		}
 
 		if(stripDocument.elementsByTagName("state").count()) {
 			QDomElement state = stripDocument.elementsByTagName("state").at(0).toElement();
-			_lastFrame = PhTimeCode::frameFromString(state.attribute("lastTimeCode"), _tcType);
+			_lastTime = PhTimeCode::timeFromString(state.attribute("lastTimeCode"), _tcType);
 		}
 	}
 	return result;
 }
 
-bool PhStripDoc::saveStripFile(QString fileName, QString lastTC, bool forceRatio169)
+bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC, bool forceRatio169)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
@@ -744,7 +841,7 @@ bool PhStripDoc::saveStripFile(QString fileName, QString lastTC, bool forceRatio
 
 				xmlWriter->writeStartElement("media");
 				xmlWriter->writeAttribute("type", "video");
-				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromFrame(_videoFrameStamp, _tcType));
+				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromTime(_videoTimeIn, _tcType));
 				if(forceRatio169)
 					xmlWriter->writeAttribute("forceRatio", "yes");
 				xmlWriter->writeCharacters(_videoPath);
@@ -765,7 +862,7 @@ bool PhStripDoc::saveStripFile(QString fileName, QString lastTC, bool forceRatio
 	return true;
 }
 
-bool PhStripDoc::create(QString text, int nbPeople, int nbText, int nbTrack, PhFrame videoFramestamp)
+bool PhStripDoc::create(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeIn)
 {
 	this->reset();
 	_title = "Generate file";
@@ -773,8 +870,8 @@ bool PhStripDoc::create(QString text, int nbPeople, int nbText, int nbTrack, PhF
 	_episode = "1";
 	_season = "1";
 	_tcType = PhTimeCodeType25;
-	_videoFrameStamp = videoFramestamp;
-	_lastFrame = _videoFrameStamp;
+	_videoTimeIn = videoTimeIn;
+	_lastTime = _videoTimeIn;
 
 	if (nbTrack > 4 || nbTrack < 1)
 		nbTrack = 3;
@@ -792,7 +889,7 @@ bool PhStripDoc::create(QString text, int nbPeople, int nbText, int nbTrack, PhF
 		_peoples.append(people);
 	}
 
-	int position = _videoFrameStamp;
+	int position = _videoTimeIn;
 	// Creation of the text
 	for (int i = 0; i < nbText; i++) {
 		//Make people "talk" alternaly
@@ -817,15 +914,16 @@ void PhStripDoc::reset()
 	_cuts.clear();
 	_detects.clear();
 	_tcType = PhTimeCodeType25;
-	_lastFrame = 0;
+	_lastTime = 0;
 	_loops.clear();
-	_texts.clear();
+	_texts1.clear();
+	_texts2.clear();
 	_title = "";
 	_translatedTitle = "";
 	_episode = "";
 	_season = "";
 	_videoPath = "";
-	_videoFrameStamp = 0;
+	_videoTimeIn = 0;
 	_authorName = "";
 	_forceRatio169 = false;
 	_generator = "";
@@ -834,13 +932,13 @@ void PhStripDoc::reset()
 	emit this->changed();
 }
 
-void PhStripDoc::addText(PhPeople * actor, PhFrame frameIn, PhFrame frameOut, QString sentence, int track)
+void PhStripDoc::addText(PhPeople * actor, PhTime timeIn, PhTime timeOut, QString sentence, int track)
 {
 	if(sentence != " " && sentence != "" ) {
 
-		_texts.push_back(new PhStripText(frameIn, actor,
-		                                 frameOut,
-		                                 track, sentence));
+		_texts1.push_back(new PhStripText(timeIn, actor,
+		                                  timeOut,
+		                                  track, sentence));
 	}
 }
 bool PhStripDoc::forceRatio169() const
@@ -858,180 +956,180 @@ PhPeople *PhStripDoc::peopleByName(QString name)
 	return NULL;
 }
 
-PhStripText *PhStripDoc::nextText(PhFrame frame)
+PhStripText *PhStripDoc::nextText(PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, _texts)
+	foreach(PhStripText* text, this->texts())
 	{
-		if(text->frameIn() > frame) {
-			if(!result || (text->frameIn() < result->frameIn()) )
+		if(text->timeIn() > time) {
+			if(!result || (text->timeIn() < result->timeIn()) )
 				result = text;
 		}
 	}
 	return result;
 }
 
-PhStripText *PhStripDoc::nextText(PhFrame frame, PhPeople *people)
+PhStripText *PhStripDoc::nextText(PhPeople *people, PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, _texts)
+	foreach(PhStripText* text, this->texts())
 	{
-		if((text->people() == people) && (text->frameIn() > frame)) {
-			if(!result || (text->frameIn() < result->frameIn()) )
+		if((text->people() == people) && (text->timeIn() > time)) {
+			if(!result || (text->timeIn() < result->timeIn()) )
 				result = text;
 		}
 	}
 	return result;
 }
 
-PhStripText *PhStripDoc::nextText(PhFrame frame, QList<PhPeople *> peopleList)
+PhStripText *PhStripDoc::nextText(QList<PhPeople *> peopleList, PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, _texts)
+	foreach(PhStripText* text, this->texts())
 	{
-		if(peopleList.contains(text->people()) && (text->frameIn() > frame)) {
-			if(!result || (text->frameIn() < result->frameIn()) )
+		if(peopleList.contains(text->people()) && (text->timeIn() > time)) {
+			if(!result || (text->timeIn() < result->timeIn()) )
 				result = text;
 		}
 	}
 	return result;
 }
 
-PhFrame PhStripDoc::previousTextFrame(PhFrame frame)
+PhTime PhStripDoc::previousTextTime(PhTime time)
 {
-	PhFrame previousTextFrame = PHFRAMEMIN;
+	PhTime previousTextTime = PHTIMEMIN;
 
-	foreach(PhStripText* text, _texts)
+	foreach(PhStripText* text, this->texts())
 	{
-		if((text->frameIn() < frame) && (text->frameIn() > previousTextFrame) )
-			previousTextFrame = text->frameIn();
+		if((text->timeIn() < time) && (text->timeIn() > previousTextTime) )
+			previousTextTime = text->timeIn();
 	}
 
-	return previousTextFrame;
+	return previousTextTime;
 }
 
-PhFrame PhStripDoc::previousLoopFrame(PhFrame frame)
+PhTime PhStripDoc::previousLoopTime(PhTime time)
 {
-	PhFrame previousLoopFrame = PHFRAMEMIN;
+	PhTime previousLoopTime = PHTIMEMIN;
 
 	foreach(PhStripLoop* loop, _loops)
 	{
-		if((loop->frameIn() < frame) && (loop->frameIn() > previousLoopFrame) )
-			previousLoopFrame = loop->frameIn();
+		if((loop->timeIn() < time) && (loop->timeIn() > previousLoopTime) )
+			previousLoopTime = loop->timeIn();
 	}
 
-	return previousLoopFrame;
+	return previousLoopTime;
 }
 
-PhFrame PhStripDoc::previousCutFrame(PhFrame frame)
+PhTime PhStripDoc::previousCutTime(PhTime time)
 {
-	PhFrame previousCutFrame = PHFRAMEMIN;
+	PhTime previousCutTime = PHTIMEMIN;
 
 	foreach(PhStripCut* cut, _cuts)
 	{
-		if((cut->frameIn() < frame) && (cut->frameIn() > previousCutFrame) )
-			previousCutFrame = cut->frameIn();
+		if((cut->timeIn() < time) && (cut->timeIn() > previousCutTime) )
+			previousCutTime = cut->timeIn();
 	}
 
-	return previousCutFrame;
+	return previousCutTime;
 }
 
-PhFrame PhStripDoc::previousElementFrame(PhFrame frame)
+PhTime PhStripDoc::previousElementTime(PhTime time)
 {
-	PhFrame previousElementFrame = previousCutFrame(frame);
+	PhTime previousElementTime = previousCutTime(time);
 
-	if(previousLoopFrame(frame) > previousElementFrame)
-		previousElementFrame = previousLoopFrame(frame);
+	if(previousLoopTime(time) > previousElementTime)
+		previousElementTime = previousLoopTime(time);
 
-	if(previousTextFrame(frame) > previousElementFrame)
-		previousElementFrame = previousTextFrame(frame);
+	if(previousTextTime(time) > previousElementTime)
+		previousElementTime = previousTextTime(time);
 
-	return previousElementFrame;
+	return previousElementTime;
 }
 
-PhFrame PhStripDoc::nextTextFrame(PhFrame frame)
+PhTime PhStripDoc::nextTextTime(PhTime time)
 {
-	PhFrame nextTextFrame = PHFRAMEMAX;
+	PhTime nextTextTime = PHTIMEMAX;
 
-	foreach(PhStripText* text, _texts)
+	foreach(PhStripText* text, this->texts())
 	{
-		if((text->frameIn() > frame) && (text->frameIn() < nextTextFrame) )
-			nextTextFrame = text->frameIn();
-		else if(text->frameIn() > nextTextFrame)
-			return nextTextFrame;
+		if((text->timeIn() > time) && (text->timeIn() < nextTextTime) )
+			nextTextTime = text->timeIn();
+		else if(text->timeIn() > nextTextTime)
+			return nextTextTime;
 	}
 
-	return nextTextFrame;
+	return nextTextTime;
 }
 
-PhFrame PhStripDoc::nextLoopFrame(PhFrame frame)
+PhTime PhStripDoc::nextLoopTime(PhTime time)
 {
-	PhFrame nextLoopFrame = PHFRAMEMAX;
+	PhTime nextLoopTime = PHTIMEMAX;
 
 	foreach(PhStripLoop* loop, _loops)
 	{
-		if((loop->frameIn() > frame) && (loop->frameIn() < nextLoopFrame) )
-			nextLoopFrame = loop->frameIn();
-		else if(loop->frameIn() > nextLoopFrame)
-			return nextLoopFrame;
+		if((loop->timeIn() > time) && (loop->timeIn() < nextLoopTime) )
+			nextLoopTime = loop->timeIn();
+		else if(loop->timeIn() > nextLoopTime)
+			return nextLoopTime;
 	}
 
-	return nextLoopFrame;
+	return nextLoopTime;
 }
 
-PhFrame PhStripDoc::nextCutFrame(PhFrame frame)
+PhTime PhStripDoc::nextCutTime(PhTime time)
 {
-	PhFrame nextCutFrame = PHFRAMEMAX;
+	PhTime nextCutTime = PHTIMEMAX;
 
 	foreach(PhStripCut* cut, _cuts)
 	{
-		if((cut->frameIn() > frame) && (cut->frameIn() < nextCutFrame) )
-			nextCutFrame = cut->frameIn();
-		else if(cut->frameIn() > nextCutFrame)
-			return nextCutFrame;
+		if((cut->timeIn() > time) && (cut->timeIn() < nextCutTime) )
+			nextCutTime = cut->timeIn();
+		else if(cut->timeIn() > nextCutTime)
+			return nextCutTime;
 	}
 
-	return nextCutFrame;
+	return nextCutTime;
 }
 
-PhFrame PhStripDoc::nextElementFrame(PhFrame frame)
+PhTime PhStripDoc::nextElementTime(PhTime time)
 {
-	PhFrame nextElementFrame = nextCutFrame(frame);
+	PhTime nextElementTime = nextCutTime(time);
 
-	if(nextLoopFrame(frame) < nextElementFrame)
-		nextElementFrame = nextLoopFrame(frame);
+	if(nextLoopTime(time) < nextElementTime)
+		nextElementTime = nextLoopTime(time);
 
-	if(nextTextFrame(frame) < nextElementFrame)
-		nextElementFrame = nextTextFrame(frame);
+	if(nextTextTime(time) < nextElementTime)
+		nextElementTime = nextTextTime(time);
 
-	return nextElementFrame;
+	return nextElementTime;
 }
 
-PhFrame PhStripDoc::frameIn()
+PhTime PhStripDoc::timeIn()
 {
-	return nextElementFrame(0);
+	return nextElementTime(0);
 }
 
-PhFrame PhStripDoc::frameOut()
+PhTime PhStripDoc::timeOut()
 {
-	return previousElementFrame(PHFRAMEMAX);
+	return previousElementTime(PHTIMEMAX);
 }
 
-PhStripLoop *PhStripDoc::nextLoop(PhFrame frame)
+PhStripLoop *PhStripDoc::nextLoop(PhTime time)
 {
 	foreach(PhStripLoop* loop, _loops)
 	{
-		if(loop->frameIn() > frame)
+		if(loop->timeIn() > time)
 			return loop;
 	}
 	return NULL;
 }
 
-PhStripLoop *PhStripDoc::previousLoop(PhFrame frame)
+PhStripLoop *PhStripDoc::previousLoop(PhTime time)
 {
 	int i = _loops.count() - 1;
 	while(i >= 0) {
-		if(_loops.at(i)->frameIn() < frame)
+		if(_loops.at(i)->timeIn() < time)
 			return _loops.at(i);
 		i--;
 	}
@@ -1088,25 +1186,33 @@ QString PhStripDoc::season()
 	return _season;
 }
 
-PhFrame PhStripDoc::videoFramestamp()
+PhTime PhStripDoc::videoTimeIn()
 {
-	return _videoFrameStamp;
+	return _videoTimeIn;
 }
 
-PhFrame PhStripDoc::lastFrame()
+PhTime PhStripDoc::videoFrameIn()
 {
-	return _lastFrame;
+	return _videoTimeIn / PhTimeCode::timePerFrame(_tcType);
 }
 
-QList<PhStripText *> PhStripDoc::texts()
+PhTime PhStripDoc::lastTime()
 {
-	return _texts;
+	return _lastTime;
+}
+
+QList<PhStripText *> PhStripDoc::texts(bool alternate)
+{
+	if(alternate)
+		return _texts2;
+	else
+		return _texts1;
 }
 
 QList<PhStripText *> PhStripDoc::texts(PhPeople *people)
 {
 	QList<PhStripText*> result;
-	foreach(PhStripText *text, _texts) {
+	foreach(PhStripText *text, this->texts()) {
 		if(text->people() == people)
 			result.append(text);
 	}
@@ -1118,21 +1224,21 @@ QList<PhStripLoop *> PhStripDoc::loops()
 	return _loops;
 }
 
-QList<PhStripDetect *> PhStripDoc::detects(PhFrame frameIn, PhFrame frameOut)
+QList<PhStripDetect *> PhStripDoc::detects(PhTime timeIn, PhTime timeOut)
 {
 	QList<PhStripDetect*> result;
 	foreach(PhStripDetect *detect, this->_detects) {
-		if((detect->frameIn() >= frameIn) && (detect->frameOut() < frameOut))
+		if((detect->timeIn() >= timeIn) && (detect->timeOut() < timeOut))
 			result.append(detect);
 	}
 
 	return result;
 }
 
-QList<PhStripDetect *> PhStripDoc::peopleDetects(PhPeople *people, PhFrame frameIn, PhFrame frameOut)
+QList<PhStripDetect *> PhStripDoc::peopleDetects(PhPeople *people, PhTime timeIn, PhTime timeOut)
 {
 	QList<PhStripDetect *> result;
-	foreach(PhStripDetect *detect, this->detects(frameIn, frameOut)) {
+	foreach(PhStripDetect *detect, this->detects(timeIn, timeOut)) {
 		if(detect->people() == people)
 			result.append(detect);
 	}
@@ -1144,9 +1250,14 @@ void PhStripDoc::setTitle(QString title)
 	_title = title;
 }
 
-void PhStripDoc::setVideoFramestamp(PhFrame videoFramestamp)
+void PhStripDoc::setVideoTimeIn(PhTime time)
 {
-	_videoFrameStamp = videoFramestamp;
+	_videoTimeIn = time;
+}
+
+void PhStripDoc::setVideoFrameIn(PhFrame frame)
+{
+	_videoTimeIn = frame * PhTimeCode::timePerFrame(_tcType);
 }
 
 void PhStripDoc::setVideoFilePath(QString videoFilePath)

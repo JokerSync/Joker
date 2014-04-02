@@ -67,10 +67,16 @@ public:
 	QString season();
 
 	/**
-	 * @brief The first frame of the video file
+	 * @brief The video starting time
+	 * @return A time value
+	 */
+	PhTime videoTimeIn();
+
+	/**
+	 * @brief The video starting frame
 	 * @return A frame value
 	 */
-	PhFrame videoFramestamp();
+	PhTime videoFrameIn();
 
 	/**
 	 * @brief getFilePath
@@ -106,10 +112,10 @@ public:
 	QString metaInformation(QString key);
 
 	/**
-	 * @brief getLastPosition
-	 * @return _lastPosition
+	 * @brief The document ending time
+	 * @return A time value.
 	 */
-	PhFrame lastFrame();
+	PhTime timeOut();
 
 	/**
 	 * @brief getTimeScale
@@ -132,7 +138,7 @@ public:
 	 * @brief The whole text list
 	 * @return A list of texts
 	 */
-	QList<PhStripText *> texts();
+	QList<PhStripText *> texts(bool alternate = false);
 
 	/**
 	 * @brief The list of texts affected to a people
@@ -155,19 +161,19 @@ public:
 
 	/**
 	 * @brief The whole detect list
-	 * @todo Implement and test frameIn / frameOut
+	 * @todo Implement and test timeIn / timeOut
 	 * @return A list of detects
 	 */
-	QList<PhStripDetect *> detects(PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
+	QList<PhStripDetect *> detects(PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
 
 	/**
 	 * @brief Get the list of detect affected to a people in a defined range.
 	 * @param people The people
-	 * @param frameIn The range in
-	 * @param frameOut The range out
+	 * @param timeIn The range starting time
+	 * @param timeOut The range ending time
 	 * @return A list of detects
 	 */
-	QList<PhStripDetect *> peopleDetects(PhPeople *people, PhFrame frameIn = PHFRAMEMIN, PhFrame frameOut = PHFRAMEMAX);
+	QList<PhStripDetect *> peopleDetects(PhPeople *people, PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
 
 	/**
 	 * @brief Set the title property
@@ -175,10 +181,15 @@ public:
 	 */
 	void setTitle(QString title);
 	/**
-	 * @brief Set the video first frame
-	 * @param videoFramestamp A PhFrame
+	 * @brief Set the video starting time
+	 * @param time A time value
 	 */
-	void setVideoFramestamp(PhFrame videoFramestamp);
+	void setVideoTimeIn(PhTime time);
+	/**
+	 * @brief Set the video starting frame
+	 * @param frame A frame value
+	 */
+	void setVideoFrameIn(PhFrame frame);
 	/**
 	 * @brief Set the video file path
 	 * @param videoFilePath A string
@@ -200,13 +211,13 @@ public:
 	 * @param fileName The path to the Mos file
 	 * @return True if the doc opened well, false otherwise
 	 */
-	bool importMosFile(QString fileName);
+	bool importMosFile(const QString &fileName);
 	/**
 	 * @brief Open a strip file
 	 * @param fileName The path to the DetX file
 	 * @return True if the strip opened well, false otherwise
 	 */
-	bool openStripFile(QString fileName);
+	bool openStripFile(const QString &fileName);
 	/**
 	 * @brief Save the PhStripDoc to a strip file
 	 * @param fileName Path to the stripfile
@@ -214,17 +225,17 @@ public:
 	 * @param forceRatio169 If the aspect ratio has been forced or not.
 	 * @return True if the strip saved well, false otherwise
 	 */
-	bool saveStripFile(QString fileName, QString lastTC, bool forceRatio169 = false);
+	bool saveStripFile(const QString &fileName, const QString &lastTC, bool forceRatio169 = false);
 	/**
 	 * @brief Create a made up strip using the parameters
 	 * @param text The desired text
 	 * @param nbPeople The desired number of actors
 	 * @param nbText The desired number of sentences
 	 * @param nbTrack The desired number of tracks
-	 * @param videoFramestamp The starting frame
+	 * @param videoTimeIn The starting time of the document
 	 * @return
 	 */
-	bool create(QString text, int nbPeople, int nbText, int nbTrack, PhFrame videoFramestamp);
+	bool create(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeIn);
 
 	/**
 	 * @brief Get people by their name
@@ -234,86 +245,86 @@ public:
 	PhPeople * peopleByName(QString name);
 
 	/**
-	 * @brief Get the next text
-	 * @param frame The desired frame
-	 * @return The correponding text
+	 * @brief Get the next text after a time value
+	 * @param time A time value
+	 * @return The next text or NULL if no text after the time value
 	 */
-	PhStripText * nextText(PhFrame frame);
+	PhStripText * nextText(PhTime time);
 
 	/**
-	 * @brief Get the next text
-	 * @param frame The desired frame
-	 * @param people The desired PhPeople who speak the texts
-	 * @return The correponding text
+	 * @brief Get the next text affected to a people after a time value
+	 * @param people A people reference
+	 * @param time A time value
+	 * @return The next text or NULL if no text after the time value
 	 */
-	PhStripText * nextText(PhFrame frame, PhPeople *people);
+	PhStripText * nextText(PhPeople *people, PhTime time);
 	/**
-	 * @brief Get the next text
-	 * @param frame The desired frame
-	 * @param peopleList The desired PhPeople list who speak the texts
+	 * @brief Get the next text affected to one of a people list after a time value
+	 * @param peopleList A people list
+	 * @param time A time value
 	 * @return The first corresponding text. If two (or more) texts
-	 * have the same frameIn, the text attach to the first PhPeople of
+	 * have the same timeIn, the text attach to the first PhPeople of
 	 * the list will be returned
 	 */
-	PhStripText * nextText(PhFrame frame, QList<PhPeople*> peopleList);
+	PhStripText * nextText(QList<PhPeople*> peopleList, PhTime time);
 	/**
-	 * @brief Get the previous text frame
-	 * @param frame The given frame
-	 * @return The frame corresponding to the previous text starting
+	 * @brief Get the previous text before a time value
+	 * @param time A time value
+	 * @return A time value
 	 */
-	PhFrame previousTextFrame(PhFrame frame);
+	PhTime previousTextTime(PhTime time);
 	/**
-	 * @brief Get the previous loop frame
-	 * @param frame The given frame
-	 * @return The frame corresponding to the previous loop
+	 * @brief Get the previous loop time
+	 * @param time A time value
+	 * @return A time value
 	 */
-	PhFrame previousLoopFrame(PhFrame frame);
+	PhTime previousLoopTime(PhTime time);
 	/**
-	 * @brief Get the previous cut frame
-	 * @param frame the given frame
-	 * @return The frame corresponding to the previous cut
+	 * @brief Get the previous cut time
+	 * @param time A time value
+	 * @return A time value
 	 */
-	PhFrame previousCutFrame(PhFrame frame);
+	PhTime previousCutTime(PhTime time);
 	/**
-	 * @brief Get previous element frame
-	 * @param frame the given frame
-	 * @return The frame corresponding to the previous element (cut, loop, text...)
+	 * @brief Get previous element time
+	 * @param time A time value
+	 * @return A time value
 	 */
-	PhFrame previousElementFrame(PhFrame frame);
+	PhTime previousElementTime(PhTime time);
 	/**
-	 * @brief Get the next text frame
-	 * @param frame the given frame
-	 * @return The frame corresponding to the next text
+	 * @brief Get the next text time
+	 * @param time A time value
+	 * @return A time value
 	 */
-	PhFrame nextTextFrame(PhFrame frame);
+	PhTime nextTextTime(PhTime time);
 	/**
-	 * @brief Get the next loop frame
-	 * @param frame the given frame
-	 * @return The frame corresponding to the next loop
+	 * @brief Get the next loop time
+	 * @param time A time value
+	 * @return A time value
 	 */
-	PhFrame nextLoopFrame(PhFrame frame);
+	PhTime nextLoopTime(PhTime time);
 	/**
-	 * @brief Get the next cut frame
-	 * @param frame the given frame
-	 * @return The frame corresponding to the next cut
+	 * @brief Get the next cut time
+	 * @param time A time value
+	 * @return A time value
 	 */
-	PhFrame nextCutFrame(PhFrame frame);
+	PhTime nextCutTime(PhTime time);
 	/**
-	 * @brief Get the next element frame
-	 * @param frame the given frame
-	 * @return The frame corresponding to the next element (cut, loop, text...)
+	 * @brief Get the next element time
+	 * @param time A time value
+	 * @return A time value
 	 */
-	PhFrame nextElementFrame(PhFrame frame);
+	PhTime nextElementTime(PhTime time);
 	/**
-	 * @brief Get the first frame of the PhStripDoc
-	 * @return The frame in
+	 * @brief Get the starting time of the document
+	 * @return time A time value
 	 */
-	PhFrame frameIn();
+	PhTime timeIn();
 	/**
-	 * @brief Get the last frame of the PhStripDoc
-	 * @return The frame out
+	 * @brief Get the last position the document was edited.
+	 * @return time A time value
 	 */
-	PhFrame frameOut();
+	PhTime lastTime();
 	/*!
 	 * \brief Get the force ratio information
 	 * \return if the ratio is forced or not
@@ -322,16 +333,16 @@ public:
 
 	/**
 	 * @brief Get the next loop
-	 * @param frame the given frame
+	 * @param time A time value
 	 * @return the corresponding loop
 	 */
-	PhStripLoop * nextLoop(PhFrame frame);
+	PhStripLoop * nextLoop(PhTime time);
 	/**
 	 * @brief Get the previous loop
-	 * @param frame the given frame
+	 * @param time A time value
 	 * @return the corresponding loop
 	 */
-	PhStripLoop * previousLoop(PhFrame frame);
+	PhStripLoop * previousLoop(PhTime time);
 
 	/**
 	 * @brief Reset the document
@@ -358,13 +369,13 @@ private:
 	QMap<QString, QString> _metaInformation;
 
 	/**
-	 * Starting frame of the video content refered by the videoPath : String
+	 * Starting time of the video content refered by the videoPath
 	 */
-	PhFrame _videoFrameStamp;
+	PhTime _videoTimeIn;
 	/**
-	 * @brief The last position
+	 * @brief The last position the document was edited.
 	 */
-	PhFrame _lastFrame;
+	PhTime _lastTime;
 
 	/**
 	 * Path to the file content.
@@ -385,10 +396,7 @@ private:
 	 */
 	QList<PhPeople *> _peoples;
 
-	/**
-	 * List of PhStripText from the file
-	 */
-	QList<PhStripText *> _texts;
+	QList<PhStripText *> _texts1, _texts2;
 
 	/**
 	 * List of PhStripCut form the file
@@ -405,7 +413,7 @@ private:
 	 */
 	QList<PhStripDetect *> _detects;
 
-	void addText(PhPeople * actor, PhFrame frameIn, PhFrame frameOut, QString sentence, int track);
+	void addText(PhPeople * actor, PhTime timeIn, PhTime timeOut, QString sentence, int track);
 
 	enum MosTag {
 		MosUnknown,
@@ -431,11 +439,12 @@ private:
 
 	bool checkMosTag2(QFile &f, int level, QString expected);
 	bool checkMosTag(QFile &f, int level, MosTag expectedTag);
-	PhStripText *readMosText(QFile &f, int level);
-	void readMosDetect(QFile &f, int level);
+	PhTime readMosTime(QFile &f, PhTimeCodeType tcType, int level);
+	PhStripText *readMosText(QFile &f, int textLevel, int internLevel);
+	PhStripDetect *readMosDetect(QFile &f, int detectLevel, int internLevel);
 	bool readMosProperties(QFile &f, int level);
 	MosTag readMosTag(QFile &f, int level, QString name);
-	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level);
+	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel);
 	bool _forceRatio169;
 };
 

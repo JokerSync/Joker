@@ -33,6 +33,8 @@ private slots:
 
 	void on_actionDocumentation_triggered();
 
+	void on_pushButton_clicked();
+
 private:
 	Ui::FormTestWindow *ui;
 	AboutDialog _about;

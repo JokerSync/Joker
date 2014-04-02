@@ -9,6 +9,8 @@ TEMPLATE = app
 
 QT += core gui
 
+VERSION = 1.0.0
+
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 
 INCLUDEPATH += ../../libs
@@ -36,3 +38,5 @@ FORMS += \
     GraphicStripSyncTestWindow.ui \
     PreferencesDialog.ui
 
+PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
+include(../../common/deploy.pri)
