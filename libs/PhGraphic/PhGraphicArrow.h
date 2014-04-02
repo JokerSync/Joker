@@ -5,14 +5,17 @@
 
 /**
  * @brief A graphic diagonal arrow
- *
- * This graphic arrow can point
- * - from the down/left corner to the upper/right corner
- * - from the upper/left corner to the down/right corner
  */
 class PhGraphicArrow : public PhGraphicRect
 {
 public:
+	/**
+	 * @brief The PhGraphicArrowDirection enum
+	 *
+	 * This graphic arrow can point
+	 * - from the down/left corner to the upper/right corner
+	 * - from the upper/left corner to the down/right corner
+	 */
 	enum PhGraphicArrowDirection {
 		DownLeftToUpRight,
 		UpLefToDownRight,

@@ -2,7 +2,7 @@
 
 PhGraphicArrow::PhGraphicArrow(PhGraphicArrow::PhGraphicArrowDirection direction, int x, int y, int w, int h)
 	: PhGraphicRect(x, y, w, h),
-	  _direction(direction)
+	_direction(direction)
 
 {
 }
@@ -24,8 +24,8 @@ void PhGraphicArrow::draw()
 		glBegin(GL_QUADS);
 		{
 			glVertex3i(_x,      _y + thickness, _z);
-			glVertex3i(_x+ thickness,      _y , _z);
-			glVertex3i(_x + _w , _y + _h- thickness,  _z);
+			glVertex3i(_x+ thickness,      _y, _z);
+			glVertex3i(_x + _w, _y + _h- thickness,  _z);
 			glVertex3i(_x + _w - thickness, _y + _h,  _z);
 		}
 		glEnd();
@@ -34,10 +34,10 @@ void PhGraphicArrow::draw()
 		{
 			glVertex3i(_x + _w, _y + _h,  _z);
 			glVertex3i(_x + _w - nose, _y + _h,  _z);
-			glVertex3i(_x + _w , _y + _h- nose,  _z);
+			glVertex3i(_x + _w, _y + _h- nose,  _z);
 		}
 		glEnd();
-  	break;
+		break;
 	case UpLefToDownRight:
 		glBegin(GL_QUADS);
 		{
@@ -51,7 +51,7 @@ void PhGraphicArrow::draw()
 		{
 			glVertex3i(_x + _w, _y,  _z);
 			glVertex3i(_x + _w - nose, _y,  _z);
-			glVertex3i(_x + _w , _y + nose,  _z);
+			glVertex3i(_x + _w, _y + nose,  _z);
 		}
 		glEnd();
 		break;
