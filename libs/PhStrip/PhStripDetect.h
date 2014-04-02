@@ -21,11 +21,22 @@ public:
 	 * @brief The various type of detect
 	 */
 	enum PhDetectType {
-		None,
+		Unknown,
+		On,
 		SemiOff,
 		Off,
+		MouthOpen,
+		MouthClosed,
+		Aperture,
+		Advance,
+		Labial,
+		SemiLabial,
+		Bowl,
+		Dental,
 		ArrowUp,
 		ArrowDown,
+		AmbianceStart,
+		AmbianceEnd,
 	};
 
 	/**

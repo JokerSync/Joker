@@ -182,7 +182,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 						_texts1.append(new PhStripText(lastLinkedTime, people, time, track, currentText));
 						lastLinkedTime = time;
 					}
-					PhStripDetect::PhDetectType type = PhStripDetect::None;
+					PhStripDetect::PhDetectType type = PhStripDetect::On;
 					if(elem.attribute("voice") == "off")
 						type = PhStripDetect::Off;
 					_detects.append(new PhStripDetect(type, timeIn, people, lastTime, track));
@@ -254,7 +254,7 @@ PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLe
 	PhFileTool::readInt(f, internLevel, "detect type 1");
 	int detectType2 = PhFileTool::readInt(f, internLevel, "detect type 2");
 	int detectType3 = PhFileTool::readInt(f, internLevel, "detect type 3");
-	PhStripDetect::PhDetectType type = PhStripDetect::None;
+	PhStripDetect::PhDetectType type = PhStripDetect::Unknown;
 	switch(detectType3) {
 	case 9:
 		type = PhStripDetect::SemiOff;
@@ -264,11 +264,45 @@ PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLe
 		break;
 	default:
 		switch (detectType2) {
+		case 0:
+			type = PhStripDetect::On;
+			break;
+		case 2:
+			type = PhStripDetect::MouthOpen;
+			break;
+		case 3:
+			type = PhStripDetect::MouthClosed;
+			break;
+		case 4:
+			type = PhStripDetect::Aperture;
+			break;
+		case 5:
+			type = PhStripDetect::Advance;
+			break;
+		case 6:
+			type = PhStripDetect::Labial;
+			break;
+		case 7:
+			type = PhStripDetect::SemiLabial;
+			break;
+		case 8:
+			type = PhStripDetect::Bowl;
+			break;
+		case 13:
+		case 14:
+			type = PhStripDetect::Dental;
+			break;
 		case 15:
 			type = PhStripDetect::ArrowUp;
 			break;
 		case 16:
 			type = PhStripDetect::ArrowDown;
+			break;
+		case 17:
+			type = PhStripDetect::AmbianceStart;
+			break;
+		case 18:
+			type = PhStripDetect::AmbianceEnd;
 			break;
 		}
 	}
