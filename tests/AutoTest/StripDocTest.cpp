@@ -295,7 +295,8 @@ void StripDocTest::importMosTest03()
 //	QCOMPARE(doc.getLoops()[1]->getLoopNumber(), 2);
 
 	// Test texts
-	QCOMPARE(doc.texts(true).count(), 206);
+	QCOMPARE(doc.texts(false).count(), 206);
+	QCOMPARE(doc.texts(true).count(), 0);
 //#warning TODO more test on text
 	// Detect test
 	QCOMPARE(doc.detects().count(), 24);

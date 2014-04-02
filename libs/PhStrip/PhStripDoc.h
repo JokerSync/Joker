@@ -441,7 +441,7 @@ private:
 	bool checkMosTag(QFile &f, int level, MosTag expectedTag);
 	PhTime readMosTime(QFile &f, PhTimeCodeType tcType, int level);
 	PhStripText *readMosText(QFile &f, int textLevel, int internLevel);
-	void readMosDetect(QFile &f, int detectLevel, int internLevel);
+	PhStripDetect *readMosDetect(QFile &f, int detectLevel, int internLevel);
 	bool readMosProperties(QFile &f, int level);
 	MosTag readMosTag(QFile &f, int level, QString name);
 	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel);

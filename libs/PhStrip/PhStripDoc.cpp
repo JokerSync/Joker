@@ -239,21 +239,21 @@ PhStripText* PhStripDoc::readMosText(QFile &f, int textLevel, int internLevel)
 	PhFileTool::readInt(f, internLevel, "text");
 
 	PHDBG(textLevel) << PHNQ(PhTimeCode::stringFromTime(timeIn, _tcType))
-	             << "->"
-	             << PHNQ(PhTimeCode::stringFromTime(timeOut, _tcType))
-	             << PHNQ(content);
+	                 << "->"
+	                 << PHNQ(PhTimeCode::stringFromTime(timeOut, _tcType))
+	                 << PHNQ(content);
 	return text;
 }
 
-void PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLevel)
+PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLevel)
 {
 	PhTime timeIn = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
 	PhTime timeOut = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
 	for(int j = 0; j < 12; j++)
 		PhFileTool::readShort(f, internLevel);
-	_detects.append(new PhStripDetect(false, timeIn, NULL, timeOut, 0));
 	PHDBG(detectLevel) << PhTimeCode::stringFromTime(timeIn, _tcType)
-	             << PhTimeCode::stringFromTime(timeOut, _tcType);
+	                   << PhTimeCode::stringFromTime(timeOut, _tcType);
+	return new PhStripDetect(false, timeIn, NULL, timeOut, 0);
 }
 
 bool PhStripDoc::readMosProperties(QFile &f, int level)
@@ -335,7 +335,7 @@ PhStripDoc::MosTag PhStripDoc::readMosTag(QFile &f, int level, QString name)
 
 bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel)
 {
-	QList<PhStripDetect*> detectLists;
+	QList<PhStripDetect*> detectList;
 	QList<PhStripText*> textList1, textList2;
 	int detectCount = PhFileTool::readInt(f, detectLevel, "track CDocBlocDetection count");
 
@@ -346,7 +346,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 		for(int i = 0; i < detectCount; i++) {
 			if(i > 0)
 				PhFileTool::readShort(f, level, "detect tag");
-			readMosDetect(f, detectLevel, internLevel);
+			detectList.append(readMosDetect(f, detectLevel, internLevel));
 		}
 	}
 
@@ -364,8 +364,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 		for(int i = 0; i < textCount; i++) {
 			if(i > 0)
 				PhFileTool::readShort(f, level, "text tag");
-			PhStripText *text = readMosText(f, textLevel, internLevel);
-			textList1.append(text);
+			textList1.append(readMosText(f, textLevel, internLevel));
 		}
 	}
 
@@ -381,8 +380,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 			for(int i = 0; i < count; i++) {
 				if(i > 0)
 					PhFileTool::readShort(f, level, "text tag");
-				PhStripText *text = readMosText(f, textLevel, internLevel);
-				textList2.append(text);
+				textList2.append(readMosText(f, textLevel, internLevel));
 			}
 			break;
 		case MosLabel:
@@ -402,18 +400,27 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 		}
 	}
 
+	PhPeople *people = peopleMap[peopleId];
+	int track = peopleTrackMap[peopleId];
+
 	PHDBG(textLevel) << "Adding" << textList1.count() << "texts in list 1";
 	foreach(PhStripText* text, textList1) {
-		text->setPeople(peopleMap[peopleId]);
-		text->setTrack(peopleTrackMap[peopleId]);
+		text->setPeople(people);
+		text->setTrack(track);
 		_texts1.append(text);
 	}
 
 	PHDBG(textLevel) << "Adding" << textList2.count() << "texts in  list 2";
 	foreach(PhStripText* text, textList2) {
-		text->setPeople(peopleMap[peopleId]);
-		text->setTrack(peopleTrackMap[peopleId]);
+		text->setPeople(people);
+		text->setTrack(track);
 		_texts2.append(text);
+	}
+
+	foreach(PhStripDetect* detect, detectList) {
+		detect->setPeople((people));
+		detect->setTrack(track);
+		_detects.append(detect);
 	}
 
 	return true;
@@ -865,8 +872,8 @@ void PhStripDoc::addText(PhPeople * actor, PhTime timeIn, PhTime timeOut, QStrin
 	if(sentence != " " && sentence != "" ) {
 
 		_texts1.push_back(new PhStripText(timeIn, actor,
-		                                 timeOut,
-		                                 track, sentence));
+		                                  timeOut,
+		                                  track, sentence));
 	}
 }
 bool PhStripDoc::forceRatio169() const
