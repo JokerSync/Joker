@@ -11,6 +11,7 @@
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphic/PhGraphicDisc.h"
+#include "PhGraphic/PhGraphicDashedLine.h"
 #include "PhGraphicStrip.h"
 
 PhGraphicStrip::PhGraphicStrip(QObject *parent) :
@@ -457,18 +458,37 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		{
 			//_counter++;
 
-			if( detect->off() && (timeIn < detect->timeOut()) && (detect->timeIn() < timeOut) ) {
-				PhGraphicSolidRect gDetect;
+			if((timeIn < detect->timeOut()) && (detect->timeIn() < timeOut) ) {
+				PhGraphicRect *gDetect = NULL;
+				switch (detect->type()) {
+				case PhStripDetect::Off:
+					gDetect = new PhGraphicSolidRect();
+					break;
+				case PhStripDetect::SemiOff:
+					gDetect = new PhGraphicDashedLine((detect->timeOut() - detect->timeIn()) / 1200);
+					break;
+				case PhStripDetect::ArrowUp:
+#warning /// @todo draw arrow up
+					break;
+				case PhStripDetect::ArrowDown:
+#warning /// @todo draw arrow down
+					break;
+				default:
+					break;
+				}
 
-				gDetect.setColor(computeColor(detect->people(), selectedPeoples, invertedColor));
+				if(gDetect) {
+					gDetect->setColor(computeColor(detect->people(), selectedPeoples, invertedColor));
 
-				gDetect.setX(x + detect->timeIn() / timePerPixel - offset);
-				gDetect.setY(y + detect->track() * trackHeight + trackHeight * 0.8);
-				gDetect.setZ(-1);
-				gDetect.setHeight(trackHeight / 20);
-				gDetect.setWidth((detect->timeOut() - detect->timeIn()) / timePerPixel);
-				gDetect.draw();
-				offCounter++;
+					gDetect->setX(x + detect->timeIn() / timePerPixel - offset);
+					gDetect->setY(y + detect->track() * trackHeight + trackHeight * 0.9);
+					gDetect->setZ(-1);
+					gDetect->setHeight(trackHeight / 10);
+					gDetect->setWidth((detect->timeOut() - detect->timeIn()) / timePerPixel);
+					gDetect->draw();
+					offCounter++;
+					delete gDetect;
+				}
 			}
 			//Doesn't need to process undisplayed content
 			if(detect->timeIn() > timeOut)

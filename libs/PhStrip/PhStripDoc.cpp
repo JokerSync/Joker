@@ -276,13 +276,15 @@ PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLe
 	for(int j = 0; j < 6; j++)
 		PhFileTool::readShort(f, internLevel);
 	PHDBG(detectLevel) << "detect: "
-					   << PhTimeCode::stringFromTime(timeIn, _tcType)
+	                   << PhTimeCode::stringFromTime(timeIn, _tcType)
 	                   << PhTimeCode::stringFromTime(timeOut, _tcType)
-					   << "type2:"
+	                   << "type2:"
 	                   << detectType2
-					   << "type3:"
-					   << detectType3;
-	return new PhStripDetect((PhStripDetect::PhDetectType)detectType2, timeIn, NULL, timeOut, 0);
+	                   << "type3:"
+	                   << detectType3
+	                   << "type:"
+	                   << type;
+	return new PhStripDetect(type, timeIn, NULL, timeOut, 0);
 }
 
 bool PhStripDoc::readMosProperties(QFile &f, int level)

@@ -4,6 +4,7 @@
 #include "PhTools/PhDebug.h"
 #include "GraphicTestView.h"
 #include "PhTools/PhPictureTools.h"
+#include "PhGraphic/PhGraphicDashedLine.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent)
 	: PhGraphicView( parent),
@@ -122,6 +123,9 @@ void GraphicTestView::paint()
 	}
 	glEnd();
 
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
 //	_text.setX(_text.getX() + 4);
 //	if(_text.getX() > this.width())
 //		_text.setX(0);
@@ -134,6 +138,13 @@ void GraphicTestView::paint()
 	//_yuvRect.draw();
 
 	_disc.draw();
+
+	for (int i = 0; i < 5; ++i) {
+		PhGraphicDashedLine line(i, 0, 50*i, 300, 30);
+		line.setColor(Qt::green);
+		line.setZ(4);
+		line.draw();
+	}
 }
 
 
