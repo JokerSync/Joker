@@ -12,6 +12,7 @@
 #include "PhTools/PhDebug.h"
 #include "PhGraphic/PhGraphicDisc.h"
 #include "PhGraphic/PhGraphicDashedLine.h"
+#include "PhGraphic/PhGraphicArrow.h"
 #include "PhGraphicStrip.h"
 
 PhGraphicStrip::PhGraphicStrip(QObject *parent) :
@@ -463,15 +464,23 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				switch (detect->type()) {
 				case PhStripDetect::Off:
 					gDetect = new PhGraphicSolidRect();
+					gDetect->setY(y + detect->track() * trackHeight + trackHeight * 0.9);
+					gDetect->setHeight(trackHeight / 10);
 					break;
 				case PhStripDetect::SemiOff:
 					gDetect = new PhGraphicDashedLine((detect->timeOut() - detect->timeIn()) / 1200);
+					gDetect->setY(y + detect->track() * trackHeight + trackHeight * 0.9);
+					gDetect->setHeight(trackHeight / 10);
 					break;
 				case PhStripDetect::ArrowUp:
-#warning /// @todo draw arrow up
+					gDetect = new PhGraphicArrow(PhGraphicArrow::DownLeftToUpRight);
+					gDetect->setY(y + detect->track() * trackHeight);
+					gDetect->setHeight(trackHeight);
 					break;
 				case PhStripDetect::ArrowDown:
-#warning /// @todo draw arrow down
+					gDetect = new PhGraphicArrow(PhGraphicArrow::UpLefToDownRight);
+					gDetect->setY(y + detect->track() * trackHeight);
+					gDetect->setHeight(trackHeight);
 					break;
 				default:
 					break;
@@ -481,9 +490,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 					gDetect->setColor(computeColor(detect->people(), selectedPeoples, invertedColor));
 
 					gDetect->setX(x + detect->timeIn() / timePerPixel - offset);
-					gDetect->setY(y + detect->track() * trackHeight + trackHeight * 0.9);
 					gDetect->setZ(-1);
-					gDetect->setHeight(trackHeight / 10);
 					gDetect->setWidth((detect->timeOut() - detect->timeIn()) / timePerPixel);
 					gDetect->draw();
 					offCounter++;
