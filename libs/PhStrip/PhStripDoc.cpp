@@ -249,10 +249,14 @@ PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLe
 {
 	PhTime timeIn = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
 	PhTime timeOut = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
-	for(int j = 0; j < 12; j++)
+	PhFileTool::readInt(f, internLevel);
+	int detectType = PhFileTool::readInt(f, internLevel, "detect type");
+	for(int j = 0; j < 8; j++)
 		PhFileTool::readShort(f, internLevel);
-	PHDBG(detectLevel) << PhTimeCode::stringFromTime(timeIn, _tcType)
-	                   << PhTimeCode::stringFromTime(timeOut, _tcType);
+	PHDBG(detectLevel) << "detect: "
+					   << PhTimeCode::stringFromTime(timeIn, _tcType)
+	                   << PhTimeCode::stringFromTime(timeOut, _tcType)
+	                   << detectType;
 	return new PhStripDetect(false, timeIn, NULL, timeOut, 0);
 }
 
