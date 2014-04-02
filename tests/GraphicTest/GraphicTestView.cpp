@@ -5,6 +5,7 @@
 #include "GraphicTestView.h"
 #include "PhTools/PhPictureTools.h"
 #include "PhGraphic/PhGraphicDashedLine.h"
+#include "PhGraphic/PhGraphicArrow.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent)
 	: PhGraphicView( parent),
@@ -145,6 +146,16 @@ void GraphicTestView::paint()
 		line.setZ(4);
 		line.draw();
 	}
+
+	PhGraphicArrow arrow1(PhGraphicArrow::DownLeftToUpRight, 150, 250, 200, 100);
+	arrow1.setColor(Qt::red);
+	arrow1.setZ(5);
+	arrow1.draw();
+
+	PhGraphicArrow arrow2(PhGraphicArrow::UpLefToDownRight, 150, 400, 200, 100);
+	arrow2.setColor(Qt::red);
+	arrow2.setZ(5);
+	arrow2.draw();
 }
 
 
