@@ -644,6 +644,12 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 
 	f.close();
 
+	if((_texts1.count() == 0) && (_texts2.count())) {
+		PHDEBUG << "Switching primary and secondary text lists";
+		_texts1.append(_texts2);
+		_texts2.clear();
+	}
+
 	qSort(_texts1.begin(), _texts1.end(), PhStripObject::dtcomp);
 	qSort(_texts2.begin(), _texts2.end(), PhStripObject::dtcomp);
 	qSort(_detects.begin(), _detects.end(), PhStripObject::dtcomp);
