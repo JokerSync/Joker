@@ -4,6 +4,8 @@
 
 #include "PhStrip/PhStripDoc.h"
 
+#include "StripTestSettings.h"
+
 using namespace std;
 
 PhStripDoc * openDoc(QString fileName)
@@ -74,7 +76,7 @@ int displayDetectCountPerLoop(PhStripDoc *doc)
 		PHDBG(3) << loop << "\t:" << detectLength << "\t" << loopLength << "\t" << detectLength * 100 / loopLength;
 		totalLength += detectLength;
 	}
-
+	return totalLength;
 }
 
 int countDetectLength(PhStripDoc *doc)
@@ -117,11 +119,35 @@ void displayDoc(PhStripDoc* doc)
 	}
 
 	foreach (PhStripText *text, doc->texts()) {
-		PHDEBUG << text->people()->name() << ":"
+		QString name = "???";
+		if(text->people())
+			name = text->people()->name();
+		PHDEBUG << name << ":"
 				<< PhTimeCode::stringFromTime(text->timeIn(), doc->timeCodeType())
 				<< " -> "
 				<< PhTimeCode::stringFromTime(text->timeOut(), doc->timeCodeType())
 				<< text->content();
+	}
+
+	foreach (PhStripText *text, doc->texts(true)) {
+		QString name = "???";
+		if(text->people())
+			name = text->people()->name();
+		PHDEBUG << name << ":"
+				<< PhTimeCode::stringFromTime(text->timeIn(), doc->timeCodeType())
+				<< " -> "
+				<< PhTimeCode::stringFromTime(text->timeOut(), doc->timeCodeType())
+				<< text->content();
+	}
+
+	foreach (PhStripDetect *detect, doc->detects()) {
+		QString name = "???";
+		if(detect->people())
+			name = detect->people()->name();
+		PHDEBUG << name << ":"
+				<< PhTimeCode::stringFromTime(detect->timeIn(), doc->timeCodeType())
+				<< " -> "
+				<< PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType());
 	}
 }
 
@@ -133,8 +159,9 @@ void displayDoc(PhStripDoc* doc)
  */
 int main(int argc, char *argv[])
 {
+	StripTestSettings settings;
 	PhDebug::setDisplay(false, false, false, false, false);
-	PhDebug::setLogMask(3);
+	PhDebug::setLogMask(settings.logMask());
 
 	int result = 0;
 
