@@ -128,13 +128,13 @@ void StripDocTest::importDetXDetectTest()
 	QCOMPARE(doc.detects().count(), 5);
 
 	QCOMPARE(doc.detects()[0]->people(), doc.peopleByName("Jeanne"));
-	QCOMPARE(doc.detects()[0]->type(), PhStripDetect::None);
+	QCOMPARE(doc.detects()[0]->type(), PhStripDetect::On);
 	QCOMPARE(t2s(doc.detects()[0]->timeIn(), doc.timeCodeType()), QString("01:00:02:00"));
 	QCOMPARE(t2s(doc.detects()[0]->timeOut(), doc.timeCodeType()), QString("01:00:04:00"));
 	QCOMPARE(doc.detects()[0]->track(), 1);
 
 	QCOMPARE(doc.detects()[1]->people(), doc.peopleByName("Sue"));
-	QCOMPARE(doc.detects()[1]->type(), PhStripDetect::None);
+	QCOMPARE(doc.detects()[1]->type(), PhStripDetect::On);
 	QCOMPARE(t2s(doc.detects()[1]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
 	QCOMPARE(t2s(doc.detects()[1]->timeOut(), doc.timeCodeType()), QString("01:00:07:00"));
 	QCOMPARE(doc.detects()[1]->track(), 2);
