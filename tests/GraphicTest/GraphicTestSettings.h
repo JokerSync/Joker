@@ -15,6 +15,7 @@ class GraphicTestSettings : protected PhGenericSettings, public PhWindowSettings
 
 	// PhGraphicSettings
 	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
+	PH_SETTING_BOOL(setResetInfo, resetInfo)
 
 	// Other settings
 	PH_SETTING_STRING2(setFontFile, fontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")

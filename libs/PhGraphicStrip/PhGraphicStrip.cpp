@@ -305,10 +305,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 		foreach(PhStripText * text, _doc.texts())
 		{
-			counter++;
 			int track = text->track();
 
 			if( !((text->timeOut() < timeIn) || (text->timeIn() > timeOut)) ) {
+				counter++;
 				PhGraphicText gText(&_textFont, text->content());
 				gText.setZ(-1);
 
@@ -514,4 +514,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 	_infos.append(QString("Max strip draw: %1").arg(_maxDrawElapsed));
 	_infos.append(QString("Count: %1").arg(counter));
+
+	if(_settings->resetInfo())
+		_maxDrawElapsed = 0;
 }

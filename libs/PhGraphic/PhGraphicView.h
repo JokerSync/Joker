@@ -100,9 +100,6 @@ protected:
 	 */
 	void paintGL();
 
-private slots:
-	void onRefresh();
-
 private:
 	PhGraphicSettings *_settings;
 	/**
@@ -115,7 +112,7 @@ private:
 	QStringList _infos;
 	PhFont _infoFont;
 	QTime _dropTimer;
-	int _dropDetected, _maxRefreshRate;
+	int _dropDetected, _lastDropElapsed, _maxRefreshRate, _maxPaintDuration;
 };
 
 #endif // PHGRAPHICVIEW

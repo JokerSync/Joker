@@ -20,6 +20,7 @@ public:
 
 	// PhGraphicSettings
 	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
+	PH_SETTING_BOOL(setResetInfo, resetInfo)
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
