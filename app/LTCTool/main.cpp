@@ -7,7 +7,7 @@
 #include "LTCToolWindow.h"
 #include <QApplication>
 
-#include <QSettings>
+#include "LTCToolSettings.h"
 
 /**
  * @brief The application main entry point
@@ -17,8 +17,9 @@
  */
 int main(int argc, char *argv[])
 {
-	QSettings settings("Phonations", APP_NAME);
-	QSettings::setDefaultFormat(QSettings::NativeFormat);
+	LTCToolSettings settings;
+
+	PhDebug::setLogMask(settings.logMask());
 
 	QApplication a(argc, argv);
 	LTCToolWindow w(&settings);

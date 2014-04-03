@@ -9,21 +9,21 @@
 #include "PhCommonUI/PhTimeCodeDialog.h"
 #include "PreferencesDialog.h"
 
-LTCToolWindow::LTCToolWindow(QSettings *settings, QWidget *parent) :
+LTCToolWindow::LTCToolWindow(LTCToolSettings *settings, QWidget *parent) :
 	QMainWindow(parent),
-	_settings(settings),
 	ui(new Ui::LTCToolWindow),
+	_settings(settings),
 	_ltcWriter(PhTimeCodeType25),
 	_ltcReader(PhTimeCodeType25)
 {
 	ui->setupUi(this);
 
-	on_generateCheckBox_clicked(_settings->value("generate", true).toBool());
-	on_readCheckBox_clicked(_settings->value("read", true).toBool());
+	on_generateCheckBox_clicked(_settings->generate());
+	on_readCheckBox_clicked(_settings->read());
 
-	_ltcWriter.clock()->setFrame(_settings->value("firstFrame", 0).toInt());
-	ui->widgetMaster->setMediaLength(_settings->value("mediaLength", 1 * 60 * 25).toInt());
-	ui->widgetMaster->setFirstFrame(_settings->value("firstFrame", 0).toInt());
+	_ltcWriter.clock()->setFrame(_settings->firstFrame());
+	ui->widgetMaster->setMediaLength(_settings->length());
+	ui->widgetMaster->setFirstFrame(_settings->firstFrame());
 	ui->widgetMaster->setClock(_ltcWriter.clock());
 
 	connect(_ltcReader.clock(),  SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onSlaveFrameChanged(PhFrame, PhTimeCodeType)));
@@ -65,8 +65,8 @@ void LTCToolWindow::updateInfos()
 	QString tcIn;
 	QString tcOut;
 
-	_settings->setValue("firstFrame", (int) ui->widgetMaster->getFirstFrame());
-	_settings->setValue("mediaLength", (int) ui->widgetMaster->getMediaLength());
+	_settings->setFirstFrame((int) ui->widgetMaster->getFirstFrame());
+	_settings->setLength((int) ui->widgetMaster->getMediaLength());
 
 
 	tcIn = PhTimeCode::stringFromFrame(ui->widgetMaster->getFirstFrame(), _ltcWriter.clock()->timeCodeType());
@@ -77,15 +77,15 @@ void LTCToolWindow::updateInfos()
 
 void LTCToolWindow::on_actionPreferences_triggered()
 {
-	PreferencesDialog dlg(_settings->value("audioOutput").toString(), _settings->value("audioInput").toString());
+	PreferencesDialog dlg(_settings->audioOutput(), _settings->audioInput());
 	if(dlg.exec()) {
 		PHDEBUG << dlg.selectedAudioOutput();
-		_settings->setValue("audioOutput", dlg.selectedAudioOutput());
-		_settings->setValue("audioInput", dlg.selectedAudioInput());
+		_settings->setAudioOutput(dlg.selectedAudioOutput());
+		_settings->setAudioInput(dlg.selectedAudioInput());
 
-		if(_settings->value("generate", true).toBool())
+		if(_settings->generate())
 			setupOutput();
-		if(_settings->value("read", true).toBool())
+		if(_settings->read())
 			setupInput();
 	}
 }
@@ -109,7 +109,7 @@ void LTCToolWindow::onSlaveFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 void LTCToolWindow::setupOutput()
 {
 	_ltcWriter.close();
-	if(!_ltcWriter.init(_settings->value("audioOutput", "").toString())) {
+	if(!_ltcWriter.init(_settings->audioOutput())) {
 		QMessageBox::warning(this, tr("Error"),
 		                     tr("Error while loading the output device.\n"
 		                        "See log for more informations"),
@@ -121,7 +121,7 @@ void LTCToolWindow::setupOutput()
 void LTCToolWindow::setupInput()
 {
 	_ltcReader.close();
-	if(!_ltcReader.init(_settings->value("audioInput", "").toString())) {
+	if(!_ltcReader.init(_settings->audioInput())) {
 		QMessageBox::warning(this, tr("Error"),
 		                     tr("Error while loading the input device.\n"
 		                        "See log for more informations"),
@@ -134,7 +134,7 @@ void LTCToolWindow::on_generateCheckBox_clicked(bool checked)
 {
 	ui->generatorGroupBox->setEnabled(checked);
 	ui->generateCheckBox->setChecked(checked);
-	_settings->setValue("generate", checked);
+	_settings->setGenerate(checked);
 	if(checked)
 		setupOutput();
 	else
@@ -145,7 +145,7 @@ void LTCToolWindow::on_readCheckBox_clicked(bool checked)
 {
 	ui->readerGroupBox->setEnabled(checked);
 	ui->readCheckBox->setChecked(checked);
-	_settings->setValue("read", checked);
+	_settings->setRead(checked);
 	if(checked)
 		setupInput();
 	else

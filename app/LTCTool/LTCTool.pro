@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     PreferencesDialog.cpp
 
 HEADERS  += LTCToolWindow.h \
-    PreferencesDialog.h
+    PreferencesDialog.h \
+    LTCToolSettings.h
 
 FORMS    += LTCToolWindow.ui \
     PreferencesDialog.ui

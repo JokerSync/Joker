@@ -5,8 +5,6 @@
 
 
 #include <QApplication>
-#include <QDebug>
-#include <QSettings>
 
 #include "PhStrip/PhStripDoc.h"
 #include "PhTools/PhDebug.h"

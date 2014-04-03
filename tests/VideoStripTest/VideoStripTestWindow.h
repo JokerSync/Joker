@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMessageBox>
-#include <QSettings>
 #include <QTimer>
 
 #include "PhGraphicStrip/PhGraphicStrip.h"

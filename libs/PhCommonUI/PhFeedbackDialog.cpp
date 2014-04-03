@@ -5,7 +5,6 @@
 
 #include <QDir>
 #include <QDateTime>
-#include <QSettings>
 #include <QMessageBox>
 #include <QProcess>
 
