@@ -7,6 +7,7 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include <QProcess>
+#include <QHostInfo>
 
 #include "PhFeedbackDialog.h"
 #include "ui_PhFeedbackDialog.h"
@@ -137,25 +138,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	}
 
 
-	QString name;
-	// Get the machine name
-	system("scutil --get ComputerName > out");
-	QFile file("./out");
-	if(!file.open(QIODevice::ReadOnly)) {
-		PHDEBUG << file.errorString();
-	}
-	else {
-		QTextStream in(&file);
-		while(!in.atEnd()) {
-			name += in.readLine() + "\n";
-		}
-		file.close();
-		system("rm out");
-	}
-
-	name.remove("[=|&]");
-	name.insert(0, "name=");
-	name.append("&");
+	QString name = QString("name=%1&").arg(QHostInfo::localHostName());
 
 	header.remove("[=|&]");
 	header.insert(0, "header=");
