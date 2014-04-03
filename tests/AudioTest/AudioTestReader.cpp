@@ -2,7 +2,9 @@
 #include "AudioTestReader.h"
 
 AudioTestReader::AudioTestReader(QObject *parent) :
-	PhAudioInput(parent)
+	PhAudioInput(parent),
+	_minLevel(0),
+	_maxLevel(0)
 {
 }
 
@@ -10,13 +12,14 @@ int AudioTestReader::processAudio(const void *inputBuffer, void *, unsigned long
 {
 	const char *buffer = (const char*)inputBuffer;
 
-	int min = 0;
-	int max = 0;
+	_minLevel = 0;
+	_maxLevel = 0;
 	for(int i = 0; i < framesPerBuffer; i++) {
-		if(buffer[i] < min)
-			min = buffer[i];
-		if(buffer[i] > max)
-			max = buffer[i];
+		if(buffer[i] < _minLevel)
+			_minLevel = buffer[i];
+		if(buffer[i] > _maxLevel)
+			_maxLevel = buffer[i];
 	}
+	emit audioProcessed();
 	return paContinue;
 }

@@ -47,6 +47,7 @@ private slots:
 
 	void on_readCheckBox_clicked(bool checked);
 
+	void onAudioProcessed();
 private:
 	void setupOutput();
 	void setupInput();

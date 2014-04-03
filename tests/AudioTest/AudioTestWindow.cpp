@@ -17,6 +17,8 @@ AudioTestWindow::AudioTestWindow(QSettings *settings, QWidget *parent) :
 
 	on_generateCheckBox_clicked(_settings->value("generate", true).toBool());
 	on_readCheckBox_clicked(_settings->value("read", true).toBool());
+
+	connect(&_audioReader, SIGNAL(audioProcessed()), this, SLOT(onAudioProcessed()));
 }
 
 AudioTestWindow::~AudioTestWindow()
@@ -83,4 +85,9 @@ void AudioTestWindow::on_readCheckBox_clicked(bool checked)
 		setupInput();
 	else
 		_audioReader.close();
+}
+
+void AudioTestWindow::onAudioProcessed()
+{
+	ui->inputLevelLabel->setText(QString("Input level : %1 / %2").arg(_audioReader.minLevel()).arg(_audioReader.maxLevel()));
 }

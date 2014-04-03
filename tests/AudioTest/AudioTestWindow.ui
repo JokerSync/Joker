@@ -48,7 +48,15 @@
       <property name="title">
        <string>Reader:</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2"/>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="inputLevelLabel">
+         <property name="text">
+          <string>Input level : -</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </item>
    </layout>
