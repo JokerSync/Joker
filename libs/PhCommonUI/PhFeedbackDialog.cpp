@@ -108,30 +108,32 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 
 
 	// Get the crash log
-	QString userDirectoryLogs = QDir::homePath() + "/Library/Logs/DiagnosticReports/";
-	QStringList files;
-	QDir logs(userDirectoryLogs);
+	QString crashFolder = QDir::homePath() + "/Library/Logs/DiagnosticReports/";
+	QDir crashDir(crashFolder);
 
-	QStringList filters;
-	filters.append(QString(APP_NAME) + "*.crash" );
-	logs.setNameFilters(filters);
-	files = logs.entryList();
-	QString lastCrashLog = (files.first());
-	foreach(QString file, files)
+	QStringList crashFilters;
+	crashFilters.append(QString(APP_NAME) + "*.crash" );
+	crashDir.setNameFilters(crashFilters);
+	QStringList crashFiles = crashDir.entryList();
+	QString lastCrashFilePath = crashFolder + crashFiles.first();
+	PHDEBUG << "last crash log:" << lastCrashFilePath;
+	foreach(QString file, crashFiles)
 	{
-		if(QFileInfo(file).created() > QFileInfo(lastCrashLog).created())
-			lastCrashLog = file;
+ 		QString filePath = crashFolder + file;
+		if(QFileInfo(filePath).created() > QFileInfo(lastCrashFilePath).created())
+			lastCrashFilePath = filePath;
 	}
-	QFile file4(lastCrashLog);
-	if(!file4.open(QIODevice::ReadOnly)) {
-		PHDEBUG << "Crash log : " << file4.errorString();
+	PHDEBUG << lastCrashFilePath;
+	QFile crashFile(lastCrashFilePath);
+	if(!crashFile.open(QIODevice::ReadOnly)) {
+		PHDEBUG << "Crash log : " << crashFile.errorString();
 	}
 	else {
-		QTextStream in(&file4);
+		QTextStream in(&crashFile);
 		while(!in.atEnd()) {
 			crashLog += in.readLine()  + "\n";
 		}
-		file4.close();
+		crashFile.close();
 	}
 
 
