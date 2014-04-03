@@ -60,15 +60,15 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 
 	// Get the system infos
 	system("/usr/sbin/system_profiler SPHardwareDataType > out");
-	QFile file1("./out");
-	if(!file1.open(QIODevice::ReadOnly))
-		PHDEBUG << file1.errorString();
+	QFile systemInfoFile("./out");
+	if(!systemInfoFile.open(QIODevice::ReadOnly))
+		PHDEBUG << systemInfoFile.errorString();
 	else {
-		QTextStream in(&file1);
+		QTextStream in(&systemInfoFile);
 		while(!in.atEnd()) {
 			systemConfig += in.readLine() + "\n";
 		}
-		file1.close();
+		systemInfoFile.close();
 		system("rm out");
 	}
 
@@ -76,34 +76,34 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	// Get the preferences
 	QString cmd = "defaults read com.Phonations." + QString(APP_NAME) + " > out";
 	system(PHNQ(cmd));
-	QFile file2("./out");
-	if(!file2.open(QIODevice::ReadOnly)) {
-		PHDEBUG << file2.errorString();
+	QFile preferencesFile("./out");
+	if(!preferencesFile.open(QIODevice::ReadOnly)) {
+		PHDEBUG << preferencesFile.errorString();
 	}
 	else {
-		QTextStream in(&file2);
+		QTextStream in(&preferencesFile);
 		while(!in.atEnd()) {
 			preferences += in.readLine() + "\n";
 		}
-		file2.close();
+		preferencesFile.close();
 		system("rm out");
 	}
 
 
 	// Get the application log
-	QFile file3(QDir::homePath() + "/Library/Logs/Phonations/" + APP_NAME + ".log");
-	if(!file3.open(QIODevice::ReadOnly)) {
-		PHDEBUG << file3.errorString();
+	QFile applicationLogFile(QDir::homePath() + "/Library/Logs/Phonations/" + APP_NAME + ".log");
+	if(!applicationLogFile.open(QIODevice::ReadOnly)) {
+		PHDEBUG << applicationLogFile.errorString();
 	}
 	else {
-		QTextStream in(&file3);
+		QTextStream in(&applicationLogFile);
 		while(!in.atEnd()) {
 			appLog += in.readLine()  + "\n";
 		}
 		// Stripping only the end of the log
 		if(appLog.length() > 10000)
 			appLog = appLog.mid(appLog.length() - 10000);
-		file3.close();
+		applicationLogFile.close();
 	}
 
 
@@ -170,7 +170,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		preferences.insert(0, "preferences=");
 		preferences.append("&");
 		post += preferences;
-		PHDEBUG << "add preferences";
+		PHDEBUG << "add preferences:" << preferences.length();
 	}
 
 	if(!systemConfig.isEmpty()) {
@@ -178,7 +178,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		systemConfig.insert(0, "configuration=");
 		systemConfig.append("&");
 		post += systemConfig;
-		PHDEBUG << "add systemConfig";
+		PHDEBUG << "add systemConfig:" << systemConfig.length();
 	}
 
 	if(!appLog.isEmpty()) {
@@ -186,7 +186,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		appLog.insert(0, "applicationLog=");
 		appLog.append("&");
 		post += appLog;
-		PHDEBUG << "add appLog";
+		PHDEBUG << "add appLog:" << appLog.length();
 	}
 
 	if(!crashLog.isEmpty()) {
@@ -194,7 +194,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		crashLog.insert(0, "crashLog=");
 		crashLog.append("&");
 		post += crashLog;
-		PHDEBUG << "add crashLog";
+		PHDEBUG << "add crashLog:" << crashLog.length();
 	}
 
 	QNetworkRequest request(QUrl("http://www.phonations.com/feedback.php"));
