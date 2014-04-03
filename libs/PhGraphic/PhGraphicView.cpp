@@ -19,11 +19,11 @@
 
 PhGraphicView::PhGraphicView( QWidget *parent)
 	: QGLWidget(parent),
-	  _settings(NULL),
-	  _dropDetected(0),
-	  _lastDropElapsed(0),
-	  _maxRefreshRate(0),
-	  _maxPaintDuration(0)
+	_settings(NULL),
+	_dropDetected(0),
+	_lastDropElapsed(0),
+	_maxRefreshRate(0),
+	_maxPaintDuration(0)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";

@@ -9,8 +9,12 @@ class AudioTestReader : public PhAudioInput
 public:
 	explicit AudioTestReader(QObject *parent = 0);
 
-	int minLevel() {return _minLevel;}
-	int maxLevel() {return _maxLevel;}
+	int minLevel() {
+		return _minLevel;
+	}
+	int maxLevel() {
+		return _maxLevel;
+	}
 
 signals:
 	void audioProcessed();
