@@ -18,7 +18,7 @@ bool PhAudioInput::init(QString deviceName)
 	streamParameters.device = Pa_GetDefaultOutputDevice();
 	const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(streamParameters.device);
 	streamParameters.channelCount = 1;
-	streamParameters.sampleFormat = paInt8;
+	streamParameters.sampleFormat = paUInt8;
 	streamParameters.suggestedLatency = 0;
 	streamParameters.hostApiSpecificStreamInfo = NULL;
 
