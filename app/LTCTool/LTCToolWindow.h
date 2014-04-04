@@ -54,7 +54,9 @@ private slots:
 	 * reset clock to tcIn if tc > tcOut
 	 */
 	void onFrameChanged(PhFrame, PhTimeCodeType);
-	void onSlaveFrameChanged(PhFrame, PhTimeCodeType);
+	void onSlaveFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onSlaveRateChanged(PhRate rate);
+	void updateSlaveInfo();
 
 	void on_generateCheckBox_clicked(bool checked);
 
@@ -73,6 +75,7 @@ private:
 
 	PhFrame _lastFrame;
 	PhFrame _frameDelta;
+	PhRate _lastRate;
 
 	void setupInput();
 };

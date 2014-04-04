@@ -14,7 +14,10 @@ LTCToolWindow::LTCToolWindow(LTCToolSettings *settings, QWidget *parent) :
 	ui(new Ui::LTCToolWindow),
 	_settings(settings),
 	_ltcWriter(PhTimeCodeType25),
-	_ltcReader(PhTimeCodeType25)
+	_ltcReader(PhTimeCodeType25),
+	_lastFrame(-1),
+	_frameDelta(-1),
+	_lastRate(-1)
 {
 	ui->setupUi(this);
 
@@ -27,6 +30,7 @@ LTCToolWindow::LTCToolWindow(LTCToolSettings *settings, QWidget *parent) :
 	ui->widgetMaster->setClock(_ltcWriter.clock());
 
 	connect(_ltcReader.clock(),  SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onSlaveFrameChanged(PhFrame, PhTimeCodeType)));
+	connect(_ltcReader.clock(),  SIGNAL(rateChanged(PhRate)), this, SLOT(onSlaveRateChanged(PhRate)));
 
 	updateInfos();
 
@@ -101,11 +105,29 @@ void LTCToolWindow::onFrameChanged(PhFrame frame, PhTimeCodeType)
 
 void LTCToolWindow::onSlaveFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	if(frame - _lastFrame != _frameDelta) {
+	updateSlaveInfo();
+}
+
+void LTCToolWindow::onSlaveRateChanged(PhRate rate)
+{
+	updateSlaveInfo();
+}
+
+void LTCToolWindow::updateSlaveInfo()
+{
+	PhFrame frame = _ltcReader.clock()->frame();
+	PhTimeCodeType tcType = _ltcReader.clock()->timeCodeType();
+	PhRate rate = _ltcReader.clock()->rate();
+	if((frame - _lastFrame != _frameDelta) || (rate != _lastRate)) {
 		_frameDelta = frame - _lastFrame;
-		ui->readInfoLabel->setText(QString::number(_frameDelta) + " / " + PhTimeCode::stringFromFrame(frame, tcType));
+		ui->readInfoLabel->setText(QString("%1 / %2 x%3")
+								   .arg(_frameDelta)
+								   .arg(PhTimeCode::stringFromFrame(frame, tcType))
+								   .arg(_ltcReader.clock()->rate()));
 	}
 	_lastFrame = frame;
+	_lastRate = rate;
+
 	ui->lblSlave->setText(PhTimeCode::stringFromFrame(frame, tcType));
 }
 
