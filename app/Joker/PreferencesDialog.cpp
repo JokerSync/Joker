@@ -34,7 +34,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldHorizontalTimePerPixel = _settings->horizontalTimePerPixel();
 	_oldBolness = _settings->textBoldness();
 	_oldFont = _settings->textFontFile();
-	_oldDeinterlace = _settings->videoDeinterlace();
 	_oldDisplayTC = _settings->displayTC();
 	_oldDisplayNextTC = _settings->displayNextTC();
 	_oldDisplayNextText = _settings->displayNextText();
@@ -57,7 +56,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	}
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
-	ui->cBoxDeinterlace->setChecked(_oldDeinterlace);
 	ui->cBoxDisplayTC->setChecked(_oldDisplayTC);
 	ui->cBoxDisplayNextTC->setChecked(_oldDisplayNextTC);
 	ui->cBoxDisplayNextText->setChecked(_oldDisplayNextText);
@@ -153,7 +151,6 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setHorizontalTimePerPixel(_oldHorizontalTimePerPixel);
 	_settings->setTextBoldness(_oldBolness);
 	_settings->setTextFontFile(_oldFont);
-	_settings->setVideoDeinterlace(_oldDeinterlace);
 	_settings->setDisplayTC(_oldDisplayTC);
 	_settings->setDisplayNextTC(_oldDisplayNextTC);
 	_settings->setDisplayNextText(_oldDisplayNextText);
@@ -214,11 +211,6 @@ void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *cu
 	Q_UNUSED(previous);
 	if(current)
 		_settings->setTextFontFile(fontList[current->text()]);
-}
-
-void PreferencesDialog::on_cBoxDeinterlace_clicked()
-{
-	_settings->setVideoDeinterlace(ui->cBoxDeinterlace->isChecked());
 }
 
 void PreferencesDialog::on_cBoxDisplayTC_clicked()

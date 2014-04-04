@@ -85,6 +85,7 @@ bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, i
 		_textureWidth = width;
 		_textureHeight = height;
 	}
+
 	// Have OpenGL generate a texture object handle for us
 	if(_texture == 0)
 		glGenTextures( 1, &_texture );

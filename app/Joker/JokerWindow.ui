@@ -108,12 +108,14 @@
     </property>
     <addaction name="actionSelect_character"/>
     <addaction name="actionTest_mode"/>
-    <addaction name="actionForce_16_9_ratio"/>
     <addaction name="actionFullscreen"/>
     <addaction name="actionInvert_colors"/>
     <addaction name="separator"/>
     <addaction name="actionShow_ruler"/>
     <addaction name="actionChange_ruler_timestamp"/>
+    <addaction name="separator"/>
+    <addaction name="actionForce_16_9_ratio"/>
+    <addaction name="actionDeinterlace_video"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -401,6 +403,14 @@
   <action name="actionSend_feedback">
    <property name="text">
     <string>Send feedback...</string>
+   </property>
+  </action>
+  <action name="actionDeinterlace_video">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Deinterlace video</string>
    </property>
   </action>
  </widget>

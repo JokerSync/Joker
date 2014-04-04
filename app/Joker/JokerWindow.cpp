@@ -191,6 +191,8 @@ bool JokerWindow::openDocument(QString fileName)
 	if(openVideoFile(_doc->videoFilePath())) {
 		PhFrame frameIn = _doc->videoFrameIn();
 		_videoEngine->setFirstFrame(frameIn);
+		_videoEngine->setDeinterlace(_doc->videoDeinterlace());
+		ui->actionDeinterlace_video->setChecked(_doc->videoDeinterlace());
 		_mediaPanel.setFirstFrame(frameIn);
 	}
 	else
@@ -635,7 +637,7 @@ void JokerWindow::on_actionSave_triggered()
 	QFileInfo info(fileName);
 	if(!info.exists() || (info.suffix() != "joker"))
 		on_actionSave_as_triggered();
-	else if(_doc->saveStripFile(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked()))
+	else if(_doc->saveStripFile(fileName, _strip->clock()->timeCode()))
 		_needToSave = false;
 	else
 		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
@@ -658,7 +660,7 @@ void JokerWindow::on_actionSave_as_triggered()
 
 	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.joker");
 	if(fileName != "") {
-		if(_doc->saveStripFile(fileName, _strip->clock()->timeCode(), ui->actionForce_16_9_ratio->isChecked())) {
+		if(_doc->saveStripFile(fileName, _strip->clock()->timeCode())) {
 			_needToSave = false;
 			setCurrentDocument(fileName);
 		}
@@ -745,4 +747,13 @@ void JokerWindow::on_actionSend_feedback_triggered()
 	PhFeedbackDialog dlg(_settings, this);
 	dlg.exec();
 	fadeInMediaPanel();
+}
+
+void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
+{
+    _videoEngine->setDeinterlace(checked);
+	if(checked != _doc->videoDeinterlace()) {
+		_doc->setVideoDeinterlace(checked);
+		_needToSave = true;
+	}
 }

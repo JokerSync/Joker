@@ -214,6 +214,8 @@ private slots:
 
 	void on_actionSend_feedback_triggered();
 
+	void on_actionDeinterlace_video_triggered(bool checked);
+
 private:
 	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;

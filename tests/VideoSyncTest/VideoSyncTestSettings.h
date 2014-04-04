@@ -16,9 +16,9 @@ class VideoSyncTestSettings : PhGenericSettings,
 public:
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 
-	// PhVideoSettings :
-	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
 	PH_SETTING_BOOL(setResetInfo, resetInfo)
+
+	// PhVideoSettings :
 
 	// PhSyncSettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)

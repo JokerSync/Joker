@@ -2,7 +2,7 @@
 <joker>
 	<meta>
 		<media type="mos">test03.mos</media>
-		<media type="video" tcStamp="01:03:00:00">test02.mov</media>
+		<media type="video" tcStamp="01:03:00:00" deinterlace="yes">test02.mov</media>
 		<state lastTimeCode="01:20:00:00"/>
 	</meta>
 </joker>

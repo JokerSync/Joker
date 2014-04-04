@@ -45,7 +45,6 @@ public:
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
 
 	// PhVideoSettings :
-	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
 
 	// PhSyncSettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)

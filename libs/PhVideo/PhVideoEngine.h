@@ -138,6 +138,19 @@ public:
 	 * @return True if the PhVideoEngine is ready, false otherwise
 	 */
 	bool ready();
+
+	/**
+	 * @brief Check if video shall be deinterlace
+	 * @return True if deinterlace false otherwise
+	 */
+	bool deinterlace() {return _deinterlace;}
+
+	/**
+	 * @brief Set the video deinterlace mode
+	 * @param deinterlace True if deinterlace false otherwise
+	 */
+	void setDeinterlace(bool deinterlace) { _deinterlace = deinterlace;}
+
 	/**
 	 * @brief draw the video depending on the parameters
 	 * @param x coordinates of the upperleft corner
@@ -171,6 +184,8 @@ private:
 	bool _useAudio;
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
+
+	bool _deinterlace;
 };
 
 #endif // PHVIDEOENGINE_H

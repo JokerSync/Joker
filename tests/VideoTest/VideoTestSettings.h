@@ -23,7 +23,6 @@ public:
 	PH_SETTING_BOOL(setResetInfo, resetInfo)
 
 	// PhVideoSettings :
-	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

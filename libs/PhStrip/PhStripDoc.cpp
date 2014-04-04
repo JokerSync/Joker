@@ -785,7 +785,9 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 			else if(type == "video") {
 				_videoPath = media.text();
 				_videoTimeIn = PhTimeCode::timeFromString(media.attribute("tcStamp"), _tcType);
-				_forceRatio169 = media.attribute("forceRatio").toLower() == "yes";
+
+				_videoForceRatio169 = media.attribute("forceRatio").toLower() == "yes";
+				_videoDeinterlace = media.attribute("deinterlace").toLower() == "yes";
 			}
 		}
 
@@ -797,7 +799,7 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 	return result;
 }
 
-bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC, bool forceRatio169)
+bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
@@ -842,8 +844,10 @@ bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC, b
 				xmlWriter->writeStartElement("media");
 				xmlWriter->writeAttribute("type", "video");
 				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromTime(_videoTimeIn, _tcType));
-				if(forceRatio169)
+				if(_videoForceRatio169)
 					xmlWriter->writeAttribute("forceRatio", "yes");
+				if(_videoDeinterlace)
+					xmlWriter->writeAttribute("deinterlace", "yes");
 				xmlWriter->writeCharacters(_videoPath);
 				xmlWriter->writeEndElement();
 
@@ -924,8 +928,9 @@ void PhStripDoc::reset()
 	_season = "";
 	_videoPath = "";
 	_videoTimeIn = 0;
+	_videoDeinterlace = false;
 	_authorName = "";
-	_forceRatio169 = false;
+	_videoForceRatio169 = false;
 	_generator = "";
 	_mosNextTag = 0x8008;
 
@@ -943,7 +948,7 @@ void PhStripDoc::addText(PhPeople * actor, PhTime timeIn, PhTime timeOut, QStrin
 }
 bool PhStripDoc::forceRatio169() const
 {
-	return _forceRatio169;
+	return _videoForceRatio169;
 }
 
 PhPeople *PhStripDoc::peopleByName(QString name)

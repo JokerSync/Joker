@@ -18,12 +18,6 @@ public:
 	 * @return A value in millisecond
 	 */
 	virtual int screenDelay() = 0;
-
-	/**
-	 * @brief Shall the PhVideoEngine deinterlace the video picture
-	 * @return True if yes, false otherwise
-	 */
-	virtual bool videoDeinterlace() = 0;
 };
 
 #endif // PHVIDEOSETTINGS_H

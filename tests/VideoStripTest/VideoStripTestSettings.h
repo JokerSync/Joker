@@ -34,7 +34,6 @@ public:
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 48000)
 
 	// PhVideoSettings :
-	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)
