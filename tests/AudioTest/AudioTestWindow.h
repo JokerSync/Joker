@@ -13,8 +13,9 @@
 #include <QSettings>
 
 #include "PhTools/PhClock.h"
+
+#include "PhAudio/PhAudioInput.h"
 #include "AudioTestWriter.h"
-#include "AudioTestReader.h"
 
 namespace Ui {
 class AudioTestWindow;
@@ -47,7 +48,7 @@ private slots:
 
 	void on_readCheckBox_clicked(bool checked);
 
-	void onAudioProcessed();
+	void onAudioProcessed(int minLevel, int maxLevel);
 private:
 	void setupOutput();
 	void setupInput();
@@ -55,7 +56,7 @@ private:
 	Ui::AudioTestWindow *ui;
 	QSettings *_settings;
 	AudioTestWriter _audioWriter;
-	AudioTestReader _audioReader;
+	PhAudioInput _audioReader;
 
 	PhFrame _lastFrame;
 	PhFrame _frameDelta;

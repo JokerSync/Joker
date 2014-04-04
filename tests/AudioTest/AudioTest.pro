@@ -23,12 +23,10 @@ include(../../libs/PhAudio/PhAudio.pri);
 SOURCES += main.cpp\
         AudioTestWindow.cpp \
     PreferencesDialog.cpp \
-    AudioTestReader.cpp \
     AudioTestWriter.cpp
 
 HEADERS  += AudioTestWindow.h \
     PreferencesDialog.h \
-    AudioTestReader.h \
     AudioTestWriter.h
 
 FORMS    += AudioTestWindow.ui \

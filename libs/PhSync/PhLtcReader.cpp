@@ -23,6 +23,8 @@ PhClock *PhLtcReader::clock()
 
 int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer)
 {
+	int result = PhAudioInput::processAudio(inputBuffer, NULL, framesPerBuffer);
+
 	ltc_decoder_write(_decoder, (ltcsnd_sample_t*)inputBuffer, framesPerBuffer, _position);
 	LTCFrameExt frame;
 	unsigned int hhmmssff[4];
@@ -52,5 +54,5 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 	if(_noFrameCounter > 20)
 		_clock.setRate(0);
 
-	return paContinue;
+	return result;
 }

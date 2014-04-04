@@ -4,7 +4,7 @@
 
 #include "PhTools/PhDebug.h"
 
-#define BUFFER_SIZE (8192)
+#define BUFFER_SIZE (256)
 
 /**
  * @brief The application main entry point
@@ -26,14 +26,26 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	fprintf(stderr, "* reading from: %s\n", fileName);
-	offset = 0;
 	LTCDecoder *decoder = ltc_decoder_create(1920, 3840);
 	ltcsnd_sample_t sound[BUFFER_SIZE];
 
-	long int offset = 0;
+	ltc_off_t offset = 0;
 	size_t byteRead = 0;
+	ltc_off_t lastOffset = 0;
 	do {
 		byteRead = fread(sound, 1, BUFFER_SIZE, f);
+
+		int minLevel = 0;
+		int maxLevel = 0;
+
+		for(int i=0;i< byteRead;i++) {
+			if(sound[i] < minLevel)
+				minLevel = sound[i];
+			else if (sound[i] > maxLevel)
+				maxLevel = sound[i];
+		}
+
+		PHDEBUG << minLevel << maxLevel;
 
 		ltc_decoder_write(decoder, sound, byteRead, offset);
 
@@ -41,7 +53,8 @@ int main(int argc, char *argv[])
 		while (ltc_decoder_read(decoder, &frame)) {
 			SMPTETimecode stime;
 			ltc_frame_to_time(&stime, &frame.ltc, 1);
-			PHDEBUG << stime.hours << stime.mins << stime.secs << ":" << stime.frame;
+			PHDEBUG << frame.off_start << ":" << stime.hours << stime.mins << stime.secs << stime.frame << "/" << frame.off_start - lastOffset;
+			lastOffset = frame.off_start;
 		}
 		offset += byteRead;
 	}

@@ -85,3 +85,21 @@ QList<QString> PhAudioInput::inputList()
 
 	return names;
 }
+
+int PhAudioInput::processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer)
+{
+	const char *buffer = (const char*)inputBuffer;
+
+	int minLevel = 0;
+	int maxLevel = 0;
+	for(int i = 0; i < framesPerBuffer; i++) {
+		if(buffer[i] < minLevel)
+			minLevel = buffer[i];
+		if(buffer[i] > maxLevel)
+			maxLevel = buffer[i];
+	}
+
+	emit audioProcessed(minLevel, maxLevel);
+
+	return paContinue;
+}

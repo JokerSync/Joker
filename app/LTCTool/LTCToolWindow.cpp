@@ -31,6 +31,9 @@ LTCToolWindow::LTCToolWindow(LTCToolSettings *settings, QWidget *parent) :
 	updateInfos();
 
 	connect(_ltcWriter.clock(), SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
+
+	connect(&_ltcReader, SIGNAL(audioProcessed(int, int)), this, SLOT(onAudioProcessed(int, int)));
+
 }
 
 LTCToolWindow::~LTCToolWindow()
@@ -150,4 +153,9 @@ void LTCToolWindow::on_readCheckBox_clicked(bool checked)
 		setupInput();
 	else
 		_ltcReader.close();
+}
+
+void LTCToolWindow::onAudioProcessed(int minLevel, int maxLevel)
+{
+	ui->minMaxLevelLabel->setText(QString("%1 / %2").arg(minLevel).arg(maxLevel));
 }

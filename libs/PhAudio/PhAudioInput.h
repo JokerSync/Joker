@@ -11,12 +11,13 @@
  */
 class PhAudioInput : public PhAudio
 {
+	Q_OBJECT
 public:
 	/**
 	 * @brief PhAudioInput constructor
 	 * @param parent The parent object
 	 */
-	PhAudioInput(QObject *parent = 0);
+	explicit PhAudioInput(QObject *parent = 0);
 
 	/**
 	 * @brief Initialize the input device
@@ -27,11 +28,18 @@ public:
 	 * @return True if succeed, false otherwise
 	 */
 	bool init(QString deviceName);
+
 	/**
 	 * @brief Get the input list
 	 * @return Return all the input devices
 	 */
 	static QList<QString> inputList();
+
+signals:
+	void audioProcessed(int minLevel, int maxLevel);
+
+protected:
+	virtual int processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer);
 };
 
 #endif // PHAUDIOINPUT_H

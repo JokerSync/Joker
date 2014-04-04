@@ -60,6 +60,8 @@ private slots:
 
 	void on_readCheckBox_clicked(bool checked);
 
+	void onAudioProcessed(int minLevel, int maxLevel);
+
 private:
 	void setupOutput();
 	void updateInfos();
