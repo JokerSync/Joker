@@ -120,7 +120,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	PHDEBUG << "last crash log:" << lastCrashFilePath;
 	foreach(QString file, crashFiles)
 	{
- 		QString filePath = crashFolder + file;
+		QString filePath = crashFolder + file;
 		if(QFileInfo(filePath).created() > QFileInfo(lastCrashFilePath).created())
 			lastCrashFilePath = filePath;
 	}

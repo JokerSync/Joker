@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 		int minLevel = 0;
 		int maxLevel = 0;
 
-		for(int i=0;i< byteRead;i++) {
+		for(int i = 0; i < byteRead; i++) {
 			if(sound[i] < minLevel)
 				minLevel = sound[i];
 			else if (sound[i] > maxLevel)

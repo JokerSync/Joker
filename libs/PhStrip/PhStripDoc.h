@@ -94,7 +94,9 @@ public:
 	 * @brief Check if video shall be deinterlace
 	 * @return True if deinterlace false otherwise
 	 */
-	bool videoDeinterlace() {return _videoDeinterlace;}
+	bool videoDeinterlace() {
+		return _videoDeinterlace;
+	}
 
 	/**
 	 * @brief Get the author name
@@ -206,7 +208,9 @@ public:
 	 * @brief Set the video deinterlace mode
 	 * @param deinterlace True if deinterlace false otherwise
 	 */
-	void setVideoDeinterlace(bool deinterlace) { _videoDeinterlace = deinterlace;}
+	void setVideoDeinterlace(bool deinterlace) {
+		_videoDeinterlace = deinterlace;
+	}
 
 	/**
 	 * @brief setTimeScale

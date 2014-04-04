@@ -143,13 +143,17 @@ public:
 	 * @brief Check if video shall be deinterlace
 	 * @return True if deinterlace false otherwise
 	 */
-	bool deinterlace() {return _deinterlace;}
+	bool deinterlace() {
+		return _deinterlace;
+	}
 
 	/**
 	 * @brief Set the video deinterlace mode
 	 * @param deinterlace True if deinterlace false otherwise
 	 */
-	void setDeinterlace(bool deinterlace) { _deinterlace = deinterlace;}
+	void setDeinterlace(bool deinterlace) {
+		_deinterlace = deinterlace;
+	}
 
 	/**
 	 * @brief draw the video depending on the parameters

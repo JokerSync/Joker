@@ -751,7 +751,7 @@ void JokerWindow::on_actionSend_feedback_triggered()
 
 void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
 {
-    _videoEngine->setDeinterlace(checked);
+	_videoEngine->setDeinterlace(checked);
 	if(checked != _doc->videoDeinterlace()) {
 		_doc->setVideoDeinterlace(checked);
 		_needToSave = true;

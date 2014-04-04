@@ -121,9 +121,9 @@ void LTCToolWindow::updateSlaveInfo()
 	if((frame - _lastFrame != _frameDelta) || (rate != _lastRate)) {
 		_frameDelta = frame - _lastFrame;
 		ui->readInfoLabel->setText(QString("%1 / %2 x%3")
-								   .arg(_frameDelta)
-								   .arg(PhTimeCode::stringFromFrame(frame, tcType))
-								   .arg(_ltcReader.clock()->rate()));
+		                           .arg(_frameDelta)
+		                           .arg(PhTimeCode::stringFromFrame(frame, tcType))
+		                           .arg(_ltcReader.clock()->rate()));
 	}
 	_lastFrame = frame;
 	_lastRate = rate;
