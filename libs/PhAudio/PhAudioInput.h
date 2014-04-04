@@ -36,6 +36,11 @@ public:
 	static QList<QString> inputList();
 
 signals:
+	/**
+	 * @brief Called after audio buffer has been processed
+	 * @param minLevel The minimum audio level of the buffer
+	 * @param maxLevel The maximum audio level of the buffer
+	 */
 	void audioProcessed(int minLevel, int maxLevel);
 
 protected:
