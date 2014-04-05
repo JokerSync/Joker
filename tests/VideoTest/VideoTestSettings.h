@@ -1,21 +1,28 @@
 #ifndef VIDEOTESTSETTINGS_H
 #define VIDEOTESTSETTINGS_H
 
+#include <QApplication>
 #include <QDir>
 
 #include "PhTools/PhGenericSettings.h"
+#include "PhGraphic/PhGraphicSettings.h"
 #include "PhVideo/PhVideoSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
 class VideoTestSettings : PhGenericSettings,
+	public PhGraphicSettings,
 	public PhVideoSettings,
 	public PhDocumentWindowSettings
 {
 public:
-	PH_SETTING_INT(ScreenDelay, screenDelay)
+	PH_SETTING_INT(setScreenDelay, screenDelay)
+	PH_SETTING_INT2(setLogMask, logMask, 1)
+
+	// PhGraphicSettings
+	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
+	PH_SETTING_BOOL(setResetInfo, resetInfo)
 
 	// PhVideoSettings :
-	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

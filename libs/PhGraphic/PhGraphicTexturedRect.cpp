@@ -11,7 +11,9 @@ PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
 	: PhGraphicRect(x, y, w, h),
 	_texture(0),
 	_tu(1.0f),
-	_tv(1.0f)
+	_tv(1.0f),
+	_textureWidth(0),
+	_textureHeight(0)
 {
 
 }
@@ -76,6 +78,14 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, int height)
 {
 	glEnable( GL_TEXTURE_2D );
+
+	if((width != _textureWidth) || (height != _textureHeight)) {
+		if(_texture != 0)
+			glDeleteTextures(1, &_texture);
+		_textureWidth = width;
+		_textureHeight = height;
+	}
+
 	// Have OpenGL generate a texture object handle for us
 	if(_texture == 0)
 		glGenTextures( 1, &_texture );

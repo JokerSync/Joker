@@ -83,6 +83,9 @@ private:
 	 * number of vertical repetition
 	 */
 	float _tv;
+
+	int _textureWidth;
+	int _textureHeight;
 };
 
 #endif // PHGRAPHICTEXTUREDSQUARE_H

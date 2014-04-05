@@ -40,11 +40,10 @@ public:
 	 */
 	PhClock * clock();
 
-
-private:
-
+protected:
 	int processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer);
 
+private:
 	PhClock _clock;
 
 	ltc_off_t _position;

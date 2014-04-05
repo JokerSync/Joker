@@ -17,7 +17,7 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 	ui->setupUi(this);
 	_strip = ui->stripView->strip();
 
-	ui->stripView->setSettings(_settings);
+	ui->stripView->setStripSettings(_settings);
 
 	_doc = _strip->doc();
 	_clock = _strip->clock();
@@ -52,12 +52,10 @@ bool GraphicStripTestWindow::openDocument(QString fileName)
 void GraphicStripTestWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text, int videoTimeStamp)
 {
 	PHDEBUG << "Creating fake file";
-	if(_doc->create(text, nbPeople, nbText, nbTrack, videoTimeStamp)) {
-		PHDEBUG << "Done";
-		_clock->setTimeCodeType(_doc->timeCodeType());
-		_clock->setFrame(_doc->lastFrame());
-		this->setWindowTitle("GraphicStripTest");
-	}
+	_doc->generate(text, nbLoop, nbPeople, nbText, nbTrack, videoTimeStamp);
+	_clock->setTimeCodeType(_doc->timeCodeType());
+	_clock->setTime(_doc->lastTime());
+	this->setWindowTitle("GraphicStripTest");
 }
 
 QMenu *GraphicStripTestWindow::recentDocumentMenu()
@@ -83,7 +81,7 @@ void GraphicStripTestWindow::onGenerate()
 {
 	GenerateDialog dlgGen(_settings, _doc);
 	if (dlgGen.exec()) {
-		_clock->setFrame(_doc->lastFrame());
+		_clock->setTime(_doc->lastTime());
 		setCurrentDocument("");
 	}
 }
@@ -181,12 +179,16 @@ void GraphicStripTestWindow::on_actionGo_to_triggered()
 
 void GraphicStripTestWindow::on_actionPrevious_Element_triggered()
 {
-	_clock->setFrame(_doc->previousElementFrame(_clock->frame()));
+	PhTime time = _doc->previousElementTime(_clock->time());
+	if(time > PHTIMEMIN)
+		_clock->setTime(time);
 }
 
 void GraphicStripTestWindow::on_actionNext_Element_triggered()
 {
-	_clock->setFrame(_doc->nextElementFrame(_clock->frame()));
+	PhTime time = _doc->nextElementTime(_clock->time());
+	if(time < PHTIMEMAX)
+		_clock->setTime(time);
 }
 
 void GraphicStripTestWindow::on_actionStrip_Properties_triggered()
@@ -204,13 +206,14 @@ void GraphicStripTestWindow::on_actionInvert_colors_triggered(bool checked)
 void GraphicStripTestWindow::on_actionRuler_triggered(bool checked)
 {
 	_settings->setDisplayRuler(checked);
-	if(checked && _settings->rulerTimestamp() == 0)
+	if(checked && _settings->rulerTimeIn() == 0)
 		on_actionChange_ruler_timestamp_triggered();
 }
 
 void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
 {
-	PhTimeCodeDialog dlg(_doc->timeCodeType(), _settings->rulerTimestamp(), this);
+	PhTimeCodeType tcType = _doc->timeCodeType();
+	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn() / PhTimeCode::timePerFrame(tcType), this);
 	if(dlg.exec())
-		_settings->setRulerTimestamp(dlg.frame());
+		_settings->setRulerTimeIn(dlg.frame() * PhTimeCode::timePerFrame(tcType));
 }

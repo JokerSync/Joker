@@ -28,6 +28,7 @@ void VideoStripView::setSettings(JokerSettings *settings)
 {
 	_settings = settings;
 	_strip.setSettings(settings);
+	this->setGraphicSettings(settings);
 }
 
 void VideoStripView::setSony(PhSonyController *sony)
@@ -98,6 +99,9 @@ void VideoStripView::paint()
 		tcOffset += _titleText.getHeight();
 
 	_strip.draw(0, y + videoHeight, this->width(), stripHeight, tcOffset, selectedPeoples);
+	foreach(QString info, _strip.infos()) {
+		this->addInfo(info);
+	}
 
 	// The strip must be the first drawn object, otherwise it masks previous drawings.
 	if(_settings->displayTitle() && (title.length() > 0)) {
@@ -135,7 +139,7 @@ void VideoStripView::paint()
 			else if( this->width() < 2 * tcWidth)
 				tcWidth = this->width() / 2;
 		}
-		else {
+		else if(_settings->displayLogo()) {
 			// The logo file is 500px in native format
 			int logoHeight = _logo.originalSize().height();
 			int logoWidth = _logo.originalSize().width();
@@ -154,13 +158,13 @@ void VideoStripView::paint()
 	}
 
 	PhClock *clock = _videoEngine.clock();
-	long delay = (int)(_settings->screenDelay() * clock->rate()); // delay in ms
-	PhFrame clockFrame = clock->frame() + delay * PhTimeCode::getFps(clock->timeCodeType()) / 1000;
+	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
+	PhTime clockTime = clock->time() + delay;
 	int tcHeight = tcWidth / 5;
 
 	if(_settings->displayTC()) {
 		_tcText.setRect(0, y, tcWidth, tcHeight);
-		_tcText.setContent(PhTimeCode::stringFromFrame(clockFrame, clock->timeCodeType()));
+		_tcText.setContent(PhTimeCode::stringFromTime(clockTime, clock->timeCodeType()));
 		_tcText.draw();
 	}
 
@@ -172,9 +176,9 @@ void VideoStripView::paint()
 
 		/// The next time code will be the next element of the people from the list.
 		if(selectedPeoples.count()) {
-			nextText = _strip.doc()->nextText(clockFrame, selectedPeoples);
+			nextText = _strip.doc()->nextText(selectedPeoples, clockTime);
 			if(nextText == NULL)
-				nextText = _strip.doc()->nextText(0, selectedPeoples);
+				nextText = _strip.doc()->nextText(selectedPeoples, 0);
 
 			int peopleHeight = this->height() / 30;
 			foreach(PhPeople* people, selectedPeoples) {
@@ -186,18 +190,18 @@ void VideoStripView::paint()
 			}
 		}
 		else {
-			nextText = _strip.doc()->nextText(clockFrame);
+			nextText = _strip.doc()->nextText(clockTime);
 			if(nextText == NULL)
 				nextText = _strip.doc()->nextText(0);
 		}
 
 		if(nextText != NULL) {
-			_nextTCText.setContent(PhTimeCode::stringFromFrame(nextText->frameIn(), clock->timeCodeType()));
+			_nextTCText.setContent(PhTimeCode::stringFromTime(nextText->timeIn(), clock->timeCodeType()));
 			_nextTCText.draw();
 		}
 	}
 
-	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockFrame);
+	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 	if(currentLoop) {
 		int loopNumber = currentLoop->number();
 		PhGraphicText gCurrentLoop(_strip.getHUDFont(), QString::number(loopNumber));
@@ -207,11 +211,6 @@ void VideoStripView::paint()
 		gCurrentLoop.setColor(Qt::blue);
 		gCurrentLoop.draw();
 	}
-
-//	PhGraphicText frameRateText(_strip.getHUDFont(), QString::number(this->refreshRate()));
-//	frameRateText.setRect(0, 100, 100, 100);
-//	frameRateText.setColor(Qt::red);
-//	frameRateText.draw();
 
 	_noVideoSyncError.setRect(this->width() / 2 - 100, this->height() / 2 - 25, 200, 50);
 	if(_lastVideoSyncElapsed.elapsed() > 1000) {

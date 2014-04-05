@@ -281,7 +281,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 
 						int frameHeight = _videoFrame->height;
 						if(_settings) {
-							if(_settings->videoDeinterlace())
+							if(_deinterlace)
 								frameHeight = _videoFrame->height / 2;
 						}
 #warning /// @todo Use RGB pixel format

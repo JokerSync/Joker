@@ -12,7 +12,8 @@ TEMPLATE = app
 QT += core gui
 
 # The application version
-VERSION = 1.1.7
+VERSION = 1.1.9
+
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
@@ -25,12 +26,7 @@ include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 include(../../libs/PhVideo/PhVideo.pri)
-
-# Currently LTC works only on Unix system
-unix {
-	CONFIG += ltc
-	include(../../libs/PhAudio/PhAudio.pri)
-}
+include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
 
 #Main app

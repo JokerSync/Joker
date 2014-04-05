@@ -11,10 +11,11 @@ PhGraphicStripView::PhGraphicStripView(QWidget *parent) :
 {
 }
 
-void PhGraphicStripView::setSettings(PhGraphicStripSettings *settings)
+void PhGraphicStripView::setStripSettings(PhGraphicStripSettings *settings)
 {
 	_settings = settings;
 	_strip.setSettings(settings);
+	this->setGraphicSettings(settings);
 }
 
 bool PhGraphicStripView::init()
@@ -30,4 +31,7 @@ void PhGraphicStripView::paint()
 	if(_settings)
 		h = this->height()* _settings->stripHeight();
 	_strip.draw(0, this->height() - h, this->width(), h);
+	foreach(QString info, _strip.infos()) {
+		this->addInfo(info);
+	}
 }

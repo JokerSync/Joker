@@ -7,7 +7,6 @@
 #ifndef VIDEOSTRIPVIEW_H
 #define VIDEOSTRIPVIEW_H
 
-#include <QSettings>
 #include <QTime>
 
 #include "PhGraphic/PhGraphicView.h"
@@ -60,7 +59,7 @@ public:
 	/**
 	 * @brief Attach the given settings to the view
 	 *
-	 * @param settings The QSettings
+	 * @param settings The settings
 	 */
 	void setSettings(JokerSettings *settings);
 

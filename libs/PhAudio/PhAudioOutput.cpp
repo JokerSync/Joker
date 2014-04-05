@@ -20,12 +20,12 @@ bool PhAudioOutput::init(QString deviceName)
 		return false;
 	}
 
-	PaStreamParameters outputDeviceInfo;
-	outputDeviceInfo.device = Pa_GetDefaultOutputDevice();
-	outputDeviceInfo.channelCount = 1;
-	outputDeviceInfo.sampleFormat = paInt8;
-	outputDeviceInfo.suggestedLatency = 0;
-	outputDeviceInfo.hostApiSpecificStreamInfo = NULL;
+	PaStreamParameters streamParameters;
+	streamParameters.device = Pa_GetDefaultOutputDevice();
+	streamParameters.channelCount = 1;
+	streamParameters.sampleFormat = paInt8;
+	streamParameters.suggestedLatency = 0;
+	streamParameters.hostApiSpecificStreamInfo = NULL;
 
 	bool isThereOutput = false;
 	bool deviceFound = false;
@@ -35,9 +35,9 @@ bool PhAudioOutput::init(QString deviceName)
 		deviceInfo = Pa_GetDeviceInfo( i );
 		if(deviceInfo->maxOutputChannels > 0 ) {
 			isThereOutput = true;
-			if(deviceName == deviceInfo->name) {
+			if(deviceName == QString::fromLatin1(deviceInfo->name)) {
 				deviceFound = true;
-				outputDeviceInfo.device = i;
+				streamParameters.device = i;
 				break;
 			}
 		}
@@ -52,7 +52,7 @@ bool PhAudioOutput::init(QString deviceName)
 	}
 
 #warning /// @todo use the settings for sample rate and frame per buffer
-	PaError err = Pa_OpenStream(&_stream, NULL, &outputDeviceInfo, 48000, 1920, paNoFlag, audioCallback, this);
+	PaError err = Pa_OpenStream(&_stream, NULL, &streamParameters, 48000, 1920, paNoFlag, audioCallback, this);
 
 	if(err != paNoError) {
 		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
@@ -65,7 +65,7 @@ bool PhAudioOutput::init(QString deviceName)
 		return false;
 	}
 
-	PHDEBUG << deviceName << "is now open.";
+	PHDEBUG << Pa_GetDeviceInfo(streamParameters.device)->name << "is now open.";
 
 	return true;
 }
@@ -82,7 +82,7 @@ QList<QString> PhAudioOutput::outputList()
 			deviceInfo = Pa_GetDeviceInfo( i );
 			if(deviceInfo->maxOutputChannels > 0) {
 				//PHDEBUG << deviceInfo->name;
-				names.append(deviceInfo->name);
+				names.append(QString::fromLatin1(deviceInfo->name));
 			}
 		}
 	}

@@ -1,8 +1,6 @@
 #ifndef GRAPHICSTRIPTESTSETTINGS_H
 #define GRAPHICSTRIPTESTSETTINGS_H
 
-#include <QSettings>
-
 #include "PhTools/PhGenericSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
@@ -15,19 +13,22 @@ class GraphicStripTestSettings : PhGenericSettings,
 public:
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 
+	// PhGraphicSettings
+	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
+	PH_SETTING_BOOL(setResetInfo, resetInfo)
+
 	// PhGraphicStripSettings :
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
-	PH_SETTING_INT2(setHorizontalSpeed, horizontalSpeed, 12)
+	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 80)
+	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
 	PH_SETTING_STRING(setTextFontFile, textFontFile)
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 1)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
-	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
-	PH_SETTING_INT(setRulerTimestamp, rulerTimestamp)
-	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 50)
-	PH_SETTING_BOOL(setDisplayStripInfo, displayStripInfo)
+	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
+	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 48000)
 
 	// PhDocumentWindowSettings
 	PH_SETTING_STRING(setCurrentDocument, currentDocument)
@@ -46,7 +47,7 @@ public:
 	PH_SETTING_INT2(setTextNumber, textNumber, 10)
 	PH_SETTING_INT2(setTrackNumber, trackNumber, 4)
 	PH_SETTING_STRING2(setTextContent, textContent, "Per hoc minui studium suum existimans Paulus.")
-	PH_SETTING_INT2(setStartFrame, startFrame, 90000)
+	PH_SETTING_INT2(setStartTime, startTime, 0)
 };
 
 #endif // GRAPHICSTRIPTESTSETTINGS_H

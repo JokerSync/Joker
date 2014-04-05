@@ -6,11 +6,12 @@
 #include <QScreen>
 #include <QTime>
 
-#include "FormTestWindow.h"
-#include "ui_FormTestWindow.h"
-
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
+#include "PhCommonUI/PhFeedbackDialog.h"
+
+#include "FormTestWindow.h"
+#include "ui_FormTestWindow.h"
 
 FormTestWindow::FormTestWindow(FormTestSettings *settings) :
 	PhWindow(settings),
@@ -47,4 +48,10 @@ void FormTestWindow::on_actionDocumentation_triggered()
 {
 	if(QDesktopServices::openUrl(QUrl("http://www.doublage.org", QUrl::TolerantMode)))
 		PHDEBUG <<"openned url correctly";
+}
+
+void FormTestWindow::on_pushButton_clicked()
+{
+	PhFeedbackDialog dlg(_settings);
+	dlg.exec();
 }

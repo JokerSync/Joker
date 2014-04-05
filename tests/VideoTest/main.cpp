@@ -11,8 +11,10 @@
  */
 int main(int argc, char *argv[])
 {
+	PHDEBUG << "=========== Starting VideoTest ==============";
 	QApplication app(argc, argv);
 	VideoTestSettings settings;
+	PhDebug::setLogMask(settings.logMask());
 
 	VideoTestWindow w(&settings);
 	w.processArg(argc, argv);

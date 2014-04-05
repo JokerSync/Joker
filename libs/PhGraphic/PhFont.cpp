@@ -135,6 +135,7 @@ void PhFont::select()
 {
 	glBindTexture(GL_TEXTURE_2D, (GLuint)_texture);
 }
+
 int PhFont::getBoldness() const
 {
 	return _boldness;

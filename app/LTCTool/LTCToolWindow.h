@@ -10,11 +10,12 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QMessageBox>
-#include <QSettings>
 
 #include "PhTools/PhClock.h"
 #include "PhSync/PhLtcWriter.h"
 #include "PhSync/PhLtcReader.h"
+
+#include "LTCToolSettings.h"
 
 namespace Ui {
 class LTCToolWindow;
@@ -39,7 +40,7 @@ public:
 	 * \param settings The application settings
 	 * \param parent
 	 */
-	explicit LTCToolWindow(QSettings *settings, QWidget *parent = 0);
+	explicit LTCToolWindow(LTCToolSettings *settings, QWidget *parent = 0);
 	~LTCToolWindow();
 
 private slots:
@@ -53,23 +54,28 @@ private slots:
 	 * reset clock to tcIn if tc > tcOut
 	 */
 	void onFrameChanged(PhFrame, PhTimeCodeType);
-	void onSlaveFrameChanged(PhFrame, PhTimeCodeType);
+	void onSlaveFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onSlaveRateChanged(PhRate rate);
+	void updateSlaveInfo();
 
 	void on_generateCheckBox_clicked(bool checked);
 
 	void on_readCheckBox_clicked(bool checked);
 
+	void onAudioProcessed(int minLevel, int maxLevel);
+
 private:
 	void setupOutput();
 	void updateInfos();
 	Ui::LTCToolWindow *ui;
+	LTCToolSettings *_settings;
 	PhClock *_writingClock;
-	QSettings *_settings;
 	PhLtcWriter _ltcWriter;
 	PhLtcReader _ltcReader;
 
 	PhFrame _lastFrame;
 	PhFrame _frameDelta;
+	PhRate _lastRate;
 
 	void setupInput();
 };

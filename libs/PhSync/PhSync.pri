@@ -9,26 +9,38 @@ HEADERS += \
     ../../libs/PhSync/PhSonyController.h \
     ../../libs/PhSync/PhSonyMasterController.h \
     ../../libs/PhSync/PhSonySlaveController.h \
-    ../../libs/PhSync/PhSyncSettings.h
-
+	../../libs/PhSync/PhSyncSettings.h \
+	../../libs/PhSync/PhLtcReader.h \
+	../../libs/PhSync/PhLtcWriter.h
 
 SOURCES += \
     ../../libs/PhSync/PhSonyController.cpp \
     ../../libs/PhSync/PhSonyMasterController.cpp \
     ../../libs/PhSync/PhSonySlaveController.cpp \
-
-ltc {
-INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib -lltc
-
-HEADERS += \
-	../../libs/PhSync/PhLtcReader.h \
-    ../../libs/PhSync/PhLtcWriter.h
-
-SOURCES += \
 	../../libs/PhSync/PhLtcReader.cpp \
-    ../../libs/PhSync/PhLtcWriter.cpp
+	../../libs/PhSync/PhLtcWriter.cpp
 
-DEFINES += USE_LTC
+unix {
+	INCLUDEPATH += /usr/local/include
+	LIBS += -L/usr/local/lib -lltc
 }
+
+win32 {
+	!exists($$(LTC_PATH)) {
+		error("You must define LTC_PATH")
+	}
+
+	INCLUDEPATH += $$(LTC_PATH)
+
+	HEADERS += $$(LTC_PATH)\ltc.h \
+		$$(LTC_PATH)\encoder.h \
+		$$(LTC_PATH)\decoder.h \
+		$$(LTC_PATH)\timecode.h
+
+	SOURCES += $$(LTC_PATH)\ltc.c \
+		$$(LTC_PATH)\encoder.c \
+		$$(LTC_PATH)\decoder.c \
+		$$(LTC_PATH)\timecode.c
+}
+
 

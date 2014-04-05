@@ -12,12 +12,18 @@
 #include <SDL2/SDL_ttf.h>
 #endif
 #include <QtGui>
+#include "PhGraphicText.h"
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphicView.h"
 
 PhGraphicView::PhGraphicView( QWidget *parent)
-	: QGLWidget(parent)
+	: QGLWidget(parent),
+	_settings(NULL),
+	_dropDetected(0),
+	_lastDropElapsed(0),
+	_maxRefreshRate(0),
+	_maxPaintDuration(0)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";
@@ -29,7 +35,7 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 		PHDEBUG << "TTF error:" << TTF_GetError();
 
 	t_Timer = new QTimer(this);
-	connect(t_Timer, SIGNAL(timeout()), this, SLOT(onRefresh()));
+	connect(t_Timer, SIGNAL(timeout()), this, SLOT(updateGL()));
 
 	//set the screen frequency to the most common value (60hz);
 	_screenFrequency = 60;
@@ -42,6 +48,7 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	int timerInterval = 500 / _screenFrequency;
 	t_Timer->start( timerInterval);
 	PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
+	_dropTimer.start();
 }
 
 PhGraphicView::~PhGraphicView()
@@ -72,6 +79,17 @@ void PhGraphicView::resizeGL(int width, int height)
 	glLoadIdentity();
 }
 
+void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
+{
+	_settings = settings;
+	_infoFont.setFontFile(_settings->infoFontFile());
+}
+
+void PhGraphicView::addInfo(QString info)
+{
+	_infos.append(info);
+}
+
 void PhGraphicView::paintGL()
 {
 	//PHDEBUG << "PhGraphicView::paintGL" ;
@@ -79,19 +97,49 @@ void PhGraphicView::paintGL()
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(1.0f, 1.0f, 1.0f);
+	_infos.clear();
+
+	if(this->refreshRate() > _maxRefreshRate)
+		_maxRefreshRate = this->refreshRate();
+	addInfo(QString("refresh: %1 / %2").arg(_maxRefreshRate).arg(this->refreshRate()));
+
+	if(_dropTimer.elapsed() > 1000 / _screenFrequency + 4) {
+		_dropDetected++;
+		_lastDropElapsed = _dropTimer.elapsed();
+	}
+
+	_dropTimer.restart();
+	addInfo(QString("drop: %1 %2").arg(_lastDropElapsed).arg(_dropDetected));
+
+	QTime timer;
+	timer.start();
+
 	paint();
 
-	_frameTickCounter.tick();
-}
+	if(timer.elapsed() > _maxPaintDuration)
+		_maxPaintDuration = timer.elapsed();
+	addInfo(QString("draw: %1 %2").arg(_maxPaintDuration).arg(timer.elapsed()));
+	if(_settings) {
+		if(_settings->resetInfo()) {
+			_dropDetected = 0;
+			_lastDropElapsed = 0;
+			_maxRefreshRate = 0;
+			_maxPaintDuration = 0;
+		}
+		if(_settings->displayInfo()) {
+			int y = 0;
+			foreach(QString info, _infos) {
+				PhGraphicText gInfo(&_infoFont, info, 0, y);
+				gInfo.setSize(_infoFont.getNominalWidth(info) / 2, 50);
+				gInfo.setZ(10);
+				gInfo.setColor(Qt::red);
+				gInfo.draw();
+				y += gInfo.getHeight();
+			}
+		}
+	}
 
-void PhGraphicView::onRefresh()
-{
-//#if defined(Q_OS_MAC)
-//	if(qApp->hasPendingEvents()) // qApp is a global pointer to the application
-//		return;
-//#endif
-	//PHDEBUG ;
-	updateGL();
+	_frameTickCounter.tick();
 }
 
 
