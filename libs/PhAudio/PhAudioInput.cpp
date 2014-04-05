@@ -15,7 +15,7 @@ bool PhAudioInput::init(QString deviceName)
 	int deviceCount = Pa_GetDeviceCount();
 
 	PaStreamParameters streamParameters;
-	streamParameters.device = Pa_GetDefaultOutputDevice();
+	streamParameters.device = Pa_GetDefaultInputDevice();
 	const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(streamParameters.device);
 	streamParameters.channelCount = 1;
 	streamParameters.sampleFormat = paUInt8;
@@ -61,7 +61,7 @@ bool PhAudioInput::init(QString deviceName)
 	if(Pa_StartStream( _stream ) != paNoError)
 		return false;
 
-	PHDEBUG << deviceName << "is now open.";
+	PHDEBUG << deviceInfo->name << "is now open.";
 
 	return true;
 }
@@ -78,7 +78,7 @@ QList<QString> PhAudioInput::inputList()
 		for(int i = 0; i < numDevices; i++ ) {
 			deviceInfo = Pa_GetDeviceInfo( i );
 			if(deviceInfo->maxInputChannels > 0)
-				names.append(deviceInfo->name);
+				names.append(QString::fromLatin1(deviceInfo->name));
 		}
 	}
 	Pa_Terminate();
