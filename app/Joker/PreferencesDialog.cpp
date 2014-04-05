@@ -7,13 +7,10 @@
 
 #include <QDir>
 #include <QProcess>
+#include "ui_PreferencesDialog.h"
 #include "PreferencesDialog.h"
 #include "PhTools/PhDebug.h"
-#include "ui_PreferencesDialog.h"
-
-#if USE_LTC
 #include "PhSync/PhLtcReader.h"
-#endif
 
 PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QDialog(parent),
@@ -112,18 +109,14 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		}
 	}
 
-#if USE_LTC
 	ui->listWidgetSync->addItem("LTC");
-#endif
 
 	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
 
 	if(_oldSyncProtocol == Synchronizer::Sony)
 		showParamSony(true);
-#if USE_LTC
 	else if(_oldSyncProtocol == Synchronizer::LTC)
 		showParamLTC(true);
-#endif
 	else {
 		showParamLTC(false);
 		showParamSony(false);
@@ -291,11 +284,9 @@ void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *cu
 	case Synchronizer::Sony:
 		showParamSony(true);
 		break;
-#if USE_LTC
 	case Synchronizer::LTC:
 		showParamLTC(true);
 		break;
-#endif
 	default:
 		showParamLTC(false);
 		showParamSony(false);
@@ -311,12 +302,11 @@ void PreferencesDialog::showParamLTC(bool show)
 		ui->listWidgetInputs->setVisible(1);
 		ui->lblInputs->setVisible(1);
 		showParamSony(false);
-#if USE_LTC
 		ui->listWidgetInputs->addItems(PhLtcReader::inputList());
 		foreach(QString inputName, PhLtcReader::inputList()) {
 			PHDEBUG << inputName;
 		}
-#endif
+
 		if(ui->listWidgetInputs->findItems(_settings->ltcInputDevice(), Qt::MatchExactly).count() > 0)
 			ui->listWidgetInputs->findItems(_settings->ltcInputDevice(), Qt::MatchExactly).first()->setSelected(1);
 	}
