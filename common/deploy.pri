@@ -19,6 +19,11 @@ CONFIG(release, debug|release) {
 		QMAKE_POST_LINK += appdmg appdmg.json $${PH_DEPLOY_TARGET};
 		QMAKE_POST_LINK += open $${PH_DEPLOY_TARGET};
 	}
+
+	win32 {
+		QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/JokerSetup.iss) . $${CS}
+		QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/LICENCE.TXT) . $${CS}
+	}
 }
 
 OTHER_FILES += \

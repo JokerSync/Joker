@@ -29,6 +29,10 @@ public:
 	 * @return A float value
 	 */
 	virtual float sonyFastRate() = 0;
+
+	virtual QString sonySlavePortSuffix() = 0;
+
+	virtual QString sonyMasterPortSuffix() = 0;
 };
 
 #endif // PHSYNCSETTINGS_H
