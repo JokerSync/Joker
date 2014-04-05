@@ -87,3 +87,6 @@ PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
 include(../../common/deploy.pri)
 
 cache()
+
+OTHER_FILES += \
+    JokerSetup.iss

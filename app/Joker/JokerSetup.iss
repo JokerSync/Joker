@@ -6,11 +6,20 @@
 #define MyAppPublisher "Phonations"
 #define MyAppURL "http://www.phonations.com/"
 #define MyAppExeName "Joker.exe"
+
+#define MyAppSrc "release\" + MyAppExeName
+#if !FileExists(MyAppSrc)
+#error "Unable to find MyAppSrc"
+#endif
+
+;#define FileVerStr GetFileVersion(MyAppSrc)
+;#define StripBuild(str VerStr) Copy(VerStr, 1, RPos(".", VerStr)-1)
+;#define MyAppVerStr StripBuild(FileVerStr)
+;#define MyAppVerName AppName + " v" + AppVerStr
+
 #define MyOutputDir GetEnv('JOKER_RELEASE_PATH')
 #define QtPath GetEnv('QT_PATH')
-
-
-
+#define PortaudioPath GetEnv('PORTAUDIO_PATH')
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -28,9 +37,10 @@ DefaultDirName={pf}\{#MyAppName}
 DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile="..\..\LICENSE.TXT"
-OutputDir={#MyAppPublisher}
-OutputBaseFilename=JokerSetup
+LicenseFile="LICENSE.TXT"
+OutputDir={#MyOutputDir}
+;OutputBaseFilename={#MyAppName}Setup_v{#MyAppVerStr}
+OutputBaseFilename={#MyAppName}Setup.exe
 Compression=lzma
 SolidCompression=yes
 
@@ -42,44 +52,44 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\Qt5Core.dll; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\Qt5OpenGL.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\Qt5SerialPort.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\Qt5Test.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\icuin51.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\icuuc51.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\icudt51.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\plugins\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion
-;Source: {#QtPath}\bin\.dll"; DestDir: "{app}"; Flags: ignoreversion
-;Source: {#QtPath}\bin\.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\avcodec-55.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\avdevice-55.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\avfilter-4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\avformat-55.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\avutil-52.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\joker.png"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\libjpeg-9.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\libtiff-5.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\libwebp-4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\motif-240.png"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\postproc-52.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\ARIAL.TTF"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\SWENSON.TTF"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\swresample-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\swscale-2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\martindelille\build\Joker-Desktop_Qt_5_2_1_MinGW_32bit-Release\release\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Gui.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5OpenGL.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Network.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5SerialPort.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Test.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Widgets.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Xml.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\libgcc_s_dw2-1.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\libstdc++-6.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\icuin51.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\icuuc51.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\libwinpthread-1.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\icudt51.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\plugins\platforms\*; DestDir: "{app}\platforms"; Flags: ignoreversion
+Source: {#PortaudioPath}\lib\Win32\ReleaseMinDependency\portaudio_x86.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\avcodec-55.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\avdevice-55.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\avfilter-4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\avformat-55.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\avutil-52.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\joker.png"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\libjpeg-9.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\libtiff-5.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\libwebp-4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\motif-240.png"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\postproc-52.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\ARIAL.TTF"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\SWENSON.TTF"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\swresample-0.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\swscale-2.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
