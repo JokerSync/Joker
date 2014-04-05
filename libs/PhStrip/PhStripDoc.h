@@ -243,15 +243,15 @@ public:
 	 */
 	bool saveStripFile(const QString &fileName, const QString &lastTC);
 	/**
-	 * @brief Create a made up strip using the parameters
+	 * @brief Generate a document from given value
 	 * @param text The desired text
-	 * @param nbPeople The desired number of actors
-	 * @param nbText The desired number of sentences
-	 * @param nbTrack The desired number of tracks
+	 * @param loopCount The number of loops
+	 * @param peopleCount The desired number of actors
+	 * @param textCount The desired number of sentences
+	 * @param trackCount The desired number of tracks
 	 * @param videoTimeIn The starting time of the document
-	 * @return
 	 */
-	bool create(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeIn);
+	void generate(QString text, int loopCount, int peopleCount, int textCount, int trackCount, PhTime videoTimeIn);
 
 	/**
 	 * @brief Get people by their name
@@ -429,8 +429,6 @@ private:
 	 * List of PhStripOff from the file
 	 */
 	QList<PhStripDetect *> _detects;
-
-	void addText(PhPeople * actor, PhTime timeIn, PhTime timeOut, QString sentence, int track);
 
 	enum MosTag {
 		MosUnknown,

@@ -52,12 +52,10 @@ bool GraphicStripTestWindow::openDocument(QString fileName)
 void GraphicStripTestWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text, int videoTimeStamp)
 {
 	PHDEBUG << "Creating fake file";
-	if(_doc->create(text, nbPeople, nbText, nbTrack, videoTimeStamp)) {
-		PHDEBUG << "Done";
-		_clock->setTimeCodeType(_doc->timeCodeType());
-		_clock->setTime(_doc->lastTime());
-		this->setWindowTitle("GraphicStripTest");
-	}
+	_doc->generate(text, nbLoop, nbPeople, nbText, nbTrack, videoTimeStamp);
+	_clock->setTimeCodeType(_doc->timeCodeType());
+	_clock->setTime(_doc->lastTime());
+	this->setWindowTitle("GraphicStripTest");
 }
 
 QMenu *GraphicStripTestWindow::recentDocumentMenu()
@@ -181,12 +179,16 @@ void GraphicStripTestWindow::on_actionGo_to_triggered()
 
 void GraphicStripTestWindow::on_actionPrevious_Element_triggered()
 {
-	_clock->setTime(_doc->previousElementTime(_clock->time()));
+	PhTime time = _doc->previousElementTime(_clock->time());
+	if(time > PHTIMEMIN)
+		_clock->setTime(time);
 }
 
 void GraphicStripTestWindow::on_actionNext_Element_triggered()
 {
-	_clock->setTime(_doc->nextElementTime(_clock->time()));
+	PhTime time = _doc->nextElementTime(_clock->time());
+	if(time < PHTIMEMAX)
+		_clock->setTime(time);
 }
 
 void GraphicStripTestWindow::on_actionStrip_Properties_triggered()
