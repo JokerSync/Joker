@@ -26,12 +26,7 @@ include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 include(../../libs/PhVideo/PhVideo.pri)
-
-# Currently LTC works only on Unix system
-unix {
-	CONFIG += ltc
-	include(../../libs/PhAudio/PhAudio.pri)
-}
+include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
 
 #Main app

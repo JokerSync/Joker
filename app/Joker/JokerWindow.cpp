@@ -28,9 +28,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_settings(settings),
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
-	#if USE_LTC
-	_ltcReader(),
-	#endif
 	_needToSave(false),
 	_firstDoc(true)
 {
@@ -129,9 +126,8 @@ void JokerWindow::setupSyncProtocol()
 
 	// Disable old protocol
 	_sonySlave.close();
-#if USE_LTC
 	_ltcReader.close();
-#endif
+
 	Synchronizer::SyncType type = (Synchronizer::SyncType)_settings->synchroProtocol();
 
 	switch(type) {
@@ -146,7 +142,6 @@ void JokerWindow::setupSyncProtocol()
 			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
 		}
 		break;
-#if USE_LTC
 	case Synchronizer::LTC:
 		{
 			QString input = _settings->ltcInputDevice();
@@ -158,7 +153,6 @@ void JokerWindow::setupSyncProtocol()
 			}
 			break;
 		}
-#endif
 	case Synchronizer::NoSync:
 		break;
 	}

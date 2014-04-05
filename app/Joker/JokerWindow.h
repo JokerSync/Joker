@@ -12,9 +12,7 @@
 
 #include "PhSync/PhSonySlaveController.h"
 #include "PhCommonUI/PhFloatingMediaPanel.h"
-#if USE_LTC
 #include "PhSync/PhLtcReader.h"
-#endif
 
 #include "PhCommonUI/PhDocumentWindow.h"
 #include "VideoStripView.h"
@@ -232,9 +230,7 @@ private:
 
 	PropertyDialog _propertyDialog;
 
-#if USE_LTC
 	PhLtcReader _ltcReader;
-#endif
 	bool _needToSave;
 	bool _firstDoc;
 };

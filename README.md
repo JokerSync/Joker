@@ -123,3 +123,10 @@ Extract is with [7zip](http://www.7-zip.org/) in the folder of your choice and s
 
 * *FFMPEG_DEV_PATH*
 * *FFMPEG_SHARED_PATH*
+
+### Portaudio
+
+Download *portaudio* precompiled library here: https://github.com/adfernandes/precompiled-portaudio-windows
+
+Extract is with [7zip](http://www.7-zip.org/) in the folder of your choice and set the following environment variable:
+* *PORTAUDIO_PATH*
