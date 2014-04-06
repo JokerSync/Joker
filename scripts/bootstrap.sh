@@ -18,7 +18,7 @@ echo "Linux detected"
 
 yes | sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
 sudo apt-get update -qq
-sudo apt-get install build-essential g++
+sudo apt-get install build-essential g++ curl
 sudo apt-get install libsdl2-2.0-0 libsdl2-image-2.0-0 libsdl-ttf2.0-0
 sudo apt-get install -qq qt5-default qtdeclarative5-dev
 
