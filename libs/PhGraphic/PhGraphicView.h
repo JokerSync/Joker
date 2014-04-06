@@ -73,9 +73,7 @@ protected:
 	 * @brief Child-specific initialization.
 	 * @return true if everything went well, false otherwise.
 	 */
-	virtual bool init() {
-		return true;
-	};
+	virtual bool init();
 	/**
 	 * @brief paint event, every class have to re-implement it.
 	 * @return true if everything went well, false otherwise.
@@ -101,6 +99,7 @@ protected:
 	void paintGL();
 
 private:
+	bool _initialized;
 	PhGraphicSettings *_settings;
 	/**
 	 * @brief t_Timer

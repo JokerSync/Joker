@@ -109,8 +109,6 @@ private:
 	 */
 	int _glyphHeight;
 
-	TTF_Font * font;
-
 	QString _fontFile;
 
 	int _boldness;
