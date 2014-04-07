@@ -79,9 +79,11 @@ void GraphicTestView::paint()
 	_rect.draw();
 
 	int textCount = 1;
+	int quadCount = 1;
 	QString textContent("Change the text from the settings");
 
 	if(_settings) {
+		quadCount = _settings->quadCount();
 		textCount = _settings->textCount();
 		textContent = _settings->textContent();
 	}
@@ -114,21 +116,23 @@ void GraphicTestView::paint()
 
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
-		glTexCoord3f(0, 0, 1);  glVertex3f(0,               0,              0);
-		glTexCoord3f(1, 0, 1);  glVertex3f(this->width(),   0,              0);
-		glTexCoord3f(1, 1, 1);  glVertex3f(this->width(),   this->height(), 0);
-		glTexCoord3f(0, 1, 1);  glVertex3f(0,               this->height(), 0);
+		for(int i = 0; i < quadCount; i++) {
+			glTexCoord3f(0, 0, 1);  glVertex3i(0,               0,              0);
+			glTexCoord3f(1, 0, 1);  glVertex3i(this->width(),   0,              0);
+			glTexCoord3f(1, 1, 1);  glVertex3i(this->width(),   this->height(), 0);
+			glTexCoord3f(0, 1, 1);  glVertex3i(0,               this->height(), 0);
+		}
 	}
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 
-//	_text.setX(_text.getX() + 4);
-//	if(_text.getX() > this.width())
-//		_text.setX(0);
-//	if((_text.getX()+_text.getWidth()) < 0)
-//		_text.setX(this.width());
+	//	_text.setX(_text.getX() + 4);
+	//	if(_text.getX() > this.width())
+	//		_text.setX(0);
+	//	if((_text.getX()+_text.getWidth()) < 0)
+	//		_text.setX(this.width());
 
 
 	PhGraphicLoop loop;
