@@ -9,7 +9,7 @@ QT += widgets network
 HEADERS += \
 #    ../../libs/PhCommonUI/PhLeap.h \
 	../../libs/PhCommonUI/PhMediaPanel.h \
-	../../libs/PhCommonUI/PhTimecodeEdit.h \
+	../../libs/PhCommonUI/PhTimeCodeEdit.h \
     ../../libs/PhCommonUI/PhTimeCodeDialog.h \
     ../../libs/PhCommonUI/PhFloatingMediaPanel.h \
     ../../libs/PhCommonUI/PhDocumentWindow.h \
@@ -23,7 +23,7 @@ HEADERS += \
 SOURCES += \
 #   ../../libs/PhCommonUI/PhLeap.cpp \
 	../../libs/PhCommonUI/PhMediaPanel.cpp \
-	../../libs/PhCommonUI/PhTimecodeEdit.cpp \
+	../../libs/PhCommonUI/PhTimeCodeEdit.cpp \
     ../../libs/PhCommonUI/PhTimeCodeDialog.cpp \
     ../../libs/PhCommonUI/PhFloatingMediaPanel.cpp \
     ../../libs/PhCommonUI/PhDocumentWindow.cpp \
