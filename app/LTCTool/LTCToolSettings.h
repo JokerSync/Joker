@@ -3,6 +3,9 @@
 
 #include "PhTools/PhGenericSettings.h"
 
+/**
+ * @brief The LTCTool application settings
+ */
 class LTCToolSettings : protected PhGenericSettings
 {
 public:
