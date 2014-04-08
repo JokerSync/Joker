@@ -16,10 +16,12 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   cd gh-pages
   cp -Rf $HOME/Joker_v* .
 
-  #add, commit and push files
+  echo "add"
   git add -f .
+  echo "commit"
   git commit -m "Travis build $TRAVIS_BUILD_NUMBER pushed to gh-pages"
-  git push -fq origin gh-pages
+  echo "push"
+  git push -f origin gh-pages
 
   echo -e "Done magic\n"
 fi
