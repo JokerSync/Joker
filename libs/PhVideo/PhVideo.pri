@@ -36,13 +36,18 @@ win32{
 
 }
 
+# Unix specific
+unix {
+	INCLUDEPATH += /usr/local/include
+	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
+}
+
 # Ubuntu specific
 linux {
+	LIBS += -lva
 }
 
 # MacOS specific
 mac {
-	QT += widgets
-	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale -liconv -lbz2 -lz
+	LIBS += -liconv -lbz2 -lz
 }

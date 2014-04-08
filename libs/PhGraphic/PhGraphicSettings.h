@@ -28,7 +28,7 @@ public:
 	 */
 	virtual QString infoFontFile()
 	{
-		return QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/ARIAL.TTF";
+		return QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Arial.ttf";
 	}
 };
 
