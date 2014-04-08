@@ -16,8 +16,3 @@ SOURCES += main.cpp\
         OpenGLTestWindow.cpp
 
 HEADERS  += OpenGLTestWindow.h
-
-QMAKE_CXXFLAGS += -F/Library/Frameworks
-LIBS += -F/Library/Frameworks
-
-LIBS += -framework SDL2 -framework SDL2_image

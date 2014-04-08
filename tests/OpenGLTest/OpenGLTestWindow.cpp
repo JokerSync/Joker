@@ -1,7 +1,5 @@
 #include "OpenGLTestWindow.h"
 #include <QDebug>
-#include <SDL2/SDL.h>
-#include <SDL2_image/SDL_image.h>
 
 OpenGLTestWindow::OpenGLTestWindow(QWidget *parent) :
 	QGLWidget(parent) {

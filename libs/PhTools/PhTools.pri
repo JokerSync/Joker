@@ -48,7 +48,7 @@ win32 {
 # Ubuntu specific
 linux {
 	CS = ;
-	RESOURCES_PATH = .
+	RESOURCES_PATH = ./
 	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 }
 

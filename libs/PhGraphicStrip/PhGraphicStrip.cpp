@@ -90,7 +90,7 @@ bool PhGraphicStrip::init()
 	// Init the sync bar
 	_stripSyncBar.setColor(QColor(225, 86, 108));
 
-	_hudFont.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "ARIAL.TTF");
+	_hudFont.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "Arial.ttf");
 
 	// This is used to make some time-based test
 	_testTimer.start();
