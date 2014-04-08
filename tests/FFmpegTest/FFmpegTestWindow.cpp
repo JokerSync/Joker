@@ -5,7 +5,6 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QPainter>
-#include "PhTools/PhDebug.h"
 
 FFmpegTestWindow::FFmpegTestWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -35,7 +34,7 @@ FFmpegTestWindow::~FFmpegTestWindow()
 
 bool FFmpegTestWindow::openFile(QString fileName)
 {
-	PHDEBUG << fileName;
+	qDebug() << fileName;
 	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
 		return false;
 
@@ -58,7 +57,7 @@ bool FFmpegTestWindow::openFile(QString fileName)
 
 	_pCodecContext = _videoStream->codec;
 
-	PHDEBUG << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
+	qDebug() << "size : " << _pCodecContext->width << "x" << _pCodecContext->height;
 	AVCodec * pCodec = avcodec_find_decoder(_pCodecContext->codec_id);
 	if(pCodec == NULL) {
 		qDebug() << "Unable to find decoder";
