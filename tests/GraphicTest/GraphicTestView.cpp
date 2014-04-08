@@ -9,7 +9,7 @@
 
 GraphicTestView::GraphicTestView(QWidget *parent)
 	: PhGraphicView( parent),
-	  _settings(NULL)
+	_settings(NULL)
 {
 }
 
