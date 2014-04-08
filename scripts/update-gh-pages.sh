@@ -10,7 +10,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   git config --global user.name "Travis"
 
   #using token clone gh-pages branch
-  git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/Phonations/TravisTest.git  gh-pages
+  git clone --quiet --branch=gh-pages https://${GH_TOKEN}@github.com/Phonations/Joker.git  gh-pages
 
   #go into directory and copy data we're interested in to that directory
   cd gh-pages
