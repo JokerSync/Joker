@@ -2,7 +2,7 @@
 
 CONFIG(release, debug|release) {
 	mac {
-		PH_DEPLOY_TARGET = $${PH_DEPLOY_LOCATION}$${TARGET}_v$${VERSION}.dmg
+		PH_DEPLOY_TARGET = $${PH_DEPLOY_LOCATION}/$${TARGET}_v$${VERSION}.dmg
 		message($$PH_DEPLOY_TARGET)
 
         !exists(/usr/local/bin/appdmg) {

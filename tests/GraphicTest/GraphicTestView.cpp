@@ -8,13 +8,20 @@
 #include "PhGraphic/PhGraphicArrow.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent)
-	: PhGraphicView( parent)
+	: PhGraphicView( parent),
+	  _settings(NULL)
 {
 }
 
 bool GraphicTestView::setFontFile(QString fontFile)
 {
 	return _font1.setFontFile(fontFile);
+}
+
+void GraphicTestView::setTestSettings(GraphicTestSettings *settings)
+{
+	_settings = settings;
+	PhGraphicView::setGraphicSettings(settings);
 }
 
 bool GraphicTestView::init()
@@ -71,15 +78,28 @@ void GraphicTestView::paint()
 	_rect.setRect(50, 175, 500, 25);
 	_rect.draw();
 
-	PhGraphicText text1(&_font1, "eéaàiîoô");
+	int textCount = 1;
+	int quadCount = 1;
+	QString textContent("Change the text from the settings");
 
-	text1.setRect(50, 100, 100, 100);
-	text1.setColor(QColor(255, 0, 0));
-	text1.setZ(-1);
-	text1.setRect(50, 100, 500, 100);
-	text1.draw();
+	if(_settings) {
+		quadCount = _settings->quadCount();
+		textCount = _settings->textCount();
+		textContent = _settings->textContent();
+	}
 
-	PhGraphicText text2(&_font2, "The party is over!");
+	for(int i = 0; i < textCount; i++) {
+		PhGraphicText text1(&_font1, textContent);
+
+		text1.setRect(i % 200, i / 200, 500, 100);
+		text1.setColor(QColor(128, 255, 0));
+		text1.setZ(5);
+		text1.draw();
+	}
+
+	this->addInfo(QString("textCount: %1").arg(textCount));
+
+	PhGraphicText text2(&_font2, "eéaàiîoô");
 	text2.setRect(50, 300, 500, 100);
 	text2.setColor(QColor(255, 0, 0));
 	text2.setZ(-1);
@@ -96,21 +116,23 @@ void GraphicTestView::paint()
 
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
-		glTexCoord3f(0, 0, 1);  glVertex3f(0,               0,              0);
-		glTexCoord3f(1, 0, 1);  glVertex3f(this->width(),   0,              0);
-		glTexCoord3f(1, 1, 1);  glVertex3f(this->width(),   this->height(), 0);
-		glTexCoord3f(0, 1, 1);  glVertex3f(0,               this->height(), 0);
+		for(int i = 0; i < quadCount; i++) {
+			glTexCoord3f(0, 0, 1);  glVertex3i(0,               0,              0);
+			glTexCoord3f(1, 0, 1);  glVertex3i(this->width(),   0,              0);
+			glTexCoord3f(1, 1, 1);  glVertex3i(this->width(),   this->height(), 0);
+			glTexCoord3f(0, 1, 1);  glVertex3i(0,               this->height(), 0);
+		}
 	}
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
 
-//	_text.setX(_text.getX() + 4);
-//	if(_text.getX() > this.width())
-//		_text.setX(0);
-//	if((_text.getX()+_text.getWidth()) < 0)
-//		_text.setX(this.width());
+	//	_text.setX(_text.getX() + 4);
+	//	if(_text.getX() > this.width())
+	//		_text.setX(0);
+	//	if((_text.getX()+_text.getWidth()) < 0)
+	//		_text.setX(this.width());
 
 
 	PhGraphicLoop loop;
