@@ -1,6 +1,6 @@
 # Script adapted from http://sleepycoders.blogspot.fr/2013/03/sharing-travis-ci-generated-files.html
-
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+# It will run only in a branch containing the word "build" to avoid repository size explosion!
+if [[ "$TRAVIS_BRANCH" == *build* ]]; then
   echo -e "Starting to update gh-pages\n"
 
   # Just list the home folder to check the DMG is here
@@ -18,11 +18,9 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   cd gh-pages
   cp -Rf $HOME/Joker_v* .
 
-  echo "add"
+  #add, commit and push
   git add -f .
-  echo "commit"
   git commit -m "Travis build $TRAVIS_BUILD_NUMBER pushed to gh-pages"
-  echo "push"
   git push -f origin gh-pages
 
   echo -e "Done magic\n"
