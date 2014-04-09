@@ -12,10 +12,10 @@
 #error "Unable to find MyAppSrc"
 #endif
 
-;#define FileVerStr GetFileVersion(MyAppSrc)
-;#define StripBuild(str VerStr) Copy(VerStr, 1, RPos(".", VerStr)-1)
-;#define MyAppVerStr StripBuild(FileVerStr)
-;#define MyAppVerName AppName + " v" + AppVerStr
+#define FileVerStr GetFileVersion(MyAppSrc)
+#define StripBuild(str VerStr) Copy(VerStr, 1, RPos(".", VerStr)-1)
+#define MyAppVerStr StripBuild(FileVerStr)
+#define MyAppVerName MyAppName + " v" + MyAppVerStr
 
 #define MyOutputDir GetEnv('JOKER_RELEASE_PATH')
 #define QtPath GetEnv('QT_PATH')
@@ -39,8 +39,8 @@ DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile="LICENSE.TXT"
 OutputDir={#MyOutputDir}
-;OutputBaseFilename={#MyAppName}Setup_v{#MyAppVerStr}
-OutputBaseFilename={#MyAppName}Setup.exe
+OutputBaseFilename={#MyAppName}Setup_v{#MyAppVerStr}
+;OutputBaseFilename={#MyAppName}Setup.exe
 Compression=lzma
 SolidCompression=yes
 
