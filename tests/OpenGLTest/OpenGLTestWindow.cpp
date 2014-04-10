@@ -8,15 +8,16 @@ OpenGLTestWindow::OpenGLTestWindow(QWidget *parent) :
 void OpenGLTestWindow::initializeGL()
 {
 	qDebug() << "initializeGL()";
+
+	connect(&_refreshTimer, SIGNAL(timeout()), this, SLOT(updateGL()));
+	_refreshTimer.setInterval(0);
+	_refreshTimer.start();
+	_timer.start();
 }
 
 void OpenGLTestWindow::paintGL()
 {
-	qDebug() << "paintGL";
+	qDebug() << "paintGL:" << _timer.elapsed();
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void OpenGLTestWindow::loadFile(const char *fileName)
-{
-	// TODO : read file, convert it in YUV and display it as a texture
+	_timer.restart();
 }
