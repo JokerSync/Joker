@@ -2,6 +2,8 @@
 #define OPENGLTESTWINDOW_H
 
 #include <QGLWidget>
+#include <QTimer>
+#include <QTime>
 
 class OpenGLTestWindow : public QGLWidget
 {
@@ -13,7 +15,9 @@ public:
 	void initializeGL();
 	void paintGL();
 
-	void loadFile(const char * fileName);
+private:
+	QTimer _refreshTimer;
+	QTime _timer;
 };
 
 #endif // OPENGLTESTWINDOW_H

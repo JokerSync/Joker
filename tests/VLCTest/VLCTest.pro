@@ -24,9 +24,11 @@ INCLUDEPATH += $${VLC_PATH}/include
 DEPENDPATH += $${VLC_PATH}/include
 LIBS += -L$${VLC_PATH}/lib/ -lvlc
 
-QMAKE_POST_LINK += mkdir -p ./$${TARGET}.app/Contents/MacOS/lib
-QMAKE_POST_LINK += && mkdir -p ./$${TARGET}.app/Contents/MacOS/plugins
-QMAKE_POST_LINK += && cp -r $${VLC_PATH}/lib/* ./$${TARGET}.app/Contents/MacOS/lib
-QMAKE_POST_LINK += && cp -r $${VLC_PATH}/plugins/* ./$${TARGET}.app/Contents/MacOS/plugins
+mac {
+	QMAKE_POST_LINK += mkdir -p ./$${TARGET}.app/Contents/MacOS/lib
+	QMAKE_POST_LINK += && mkdir -p ./$${TARGET}.app/Contents/MacOS/plugins
+	QMAKE_POST_LINK += && cp -r $${VLC_PATH}/lib/* ./$${TARGET}.app/Contents/MacOS/lib
+	QMAKE_POST_LINK += && cp -r $${VLC_PATH}/plugins/* ./$${TARGET}.app/Contents/MacOS/plugins
+}
 
 

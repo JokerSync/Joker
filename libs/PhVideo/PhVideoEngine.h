@@ -111,6 +111,20 @@ public:
 	 */
 	void close();
 	/**
+
+	/**
+	 * @brief Check if video shall be deinterlace
+	 * @return True if deinterlace false otherwise
+	 */
+	bool deinterlace();
+
+	/**
+	 * @brief Set the video deinterlace mode
+	 * @param deinterlace True if deinterlace false otherwise
+	 */
+	void setDeinterlace(bool deinterlace);
+
+	/**
 	 * @brief draw the video depending on the parameters
 	 * @param x coordinates of the upperleft corner
 	 * @param y coordinates of the upperleft corner

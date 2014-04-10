@@ -70,10 +70,8 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	if(_decoder) {
 		PhFrame frame = _clock.frame();
-		if(_settings) {
+		if(_settings)
 			frame += _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
-			_decoder->setDeintrelace(_settings->videoDeinterlace());
-		}
 
 		if(frame != _oldFrame) {
 			uint8_t *buffer = _decoder->getBuffer(frame);

@@ -1,8 +1,6 @@
 #ifndef GRAPHICSTRIPTESTSETTINGS_H
 #define GRAPHICSTRIPTESTSETTINGS_H
 
-#include <QSettings>
-
 #include "PhTools/PhGenericSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
@@ -49,7 +47,7 @@ public:
 	PH_SETTING_INT2(setTextNumber, textNumber, 10)
 	PH_SETTING_INT2(setTrackNumber, trackNumber, 4)
 	PH_SETTING_STRING2(setTextContent, textContent, "Per hoc minui studium suum existimans Paulus.")
-	PH_SETTING_INT2(setStartFrame, startFrame, 90000)
+	PH_SETTING_INT2(setStartTime, startTime, 0)
 };
 
 #endif // GRAPHICSTRIPTESTSETTINGS_H

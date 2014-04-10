@@ -12,9 +12,7 @@
 
 #include "PhSync/PhSonySlaveController.h"
 #include "PhCommonUI/PhFloatingMediaPanel.h"
-#if USE_LTC
 #include "PhSync/PhLtcReader.h"
-#endif
 
 #include "PhCommonUI/PhDocumentWindow.h"
 #include "VideoStripView.h"
@@ -214,6 +212,8 @@ private slots:
 
 	void on_actionSend_feedback_triggered();
 
+	void on_actionDeinterlace_video_triggered(bool checked);
+
 private:
 	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;
@@ -230,9 +230,7 @@ private:
 
 	PropertyDialog _propertyDialog;
 
-#if USE_LTC
 	PhLtcReader _ltcReader;
-#endif
 	bool _needToSave;
 	bool _firstDoc;
 };

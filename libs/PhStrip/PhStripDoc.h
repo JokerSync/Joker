@@ -91,6 +91,14 @@ public:
 	QString videoFilePath();
 
 	/**
+	 * @brief Check if video shall be deinterlace
+	 * @return True if deinterlace false otherwise
+	 */
+	bool videoDeinterlace() {
+		return _videoDeinterlace;
+	}
+
+	/**
 	 * @brief Get the author name
 	 * @return
 	 */
@@ -195,6 +203,15 @@ public:
 	 * @param videoFilePath A string
 	 */
 	void setVideoFilePath(QString videoFilePath);
+
+	/**
+	 * @brief Set the video deinterlace mode
+	 * @param deinterlace True if deinterlace false otherwise
+	 */
+	void setVideoDeinterlace(bool deinterlace) {
+		_videoDeinterlace = deinterlace;
+	}
+
 	/**
 	 * @brief setTimeScale
 	 * @param timeScale
@@ -222,20 +239,19 @@ public:
 	 * @brief Save the PhStripDoc to a strip file
 	 * @param fileName Path to the stripfile
 	 * @param lastTC The last displayed timecode
-	 * @param forceRatio169 If the aspect ratio has been forced or not.
 	 * @return True if the strip saved well, false otherwise
 	 */
-	bool saveStripFile(const QString &fileName, const QString &lastTC, bool forceRatio169 = false);
+	bool saveStripFile(const QString &fileName, const QString &lastTC);
 	/**
-	 * @brief Create a made up strip using the parameters
+	 * @brief Generate a document from given value
 	 * @param text The desired text
-	 * @param nbPeople The desired number of actors
-	 * @param nbText The desired number of sentences
-	 * @param nbTrack The desired number of tracks
+	 * @param loopCount The number of loops
+	 * @param peopleCount The desired number of actors
+	 * @param textCount The desired number of sentences
+	 * @param trackCount The desired number of tracks
 	 * @param videoTimeIn The starting time of the document
-	 * @return
 	 */
-	bool create(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeIn);
+	void generate(QString text, int loopCount, int peopleCount, int textCount, int trackCount, PhTime videoTimeIn);
 
 	/**
 	 * @brief Get people by their name
@@ -386,6 +402,7 @@ private:
 	 * Path to the video content.
 	 */
 	QString _videoPath;
+	bool _videoDeinterlace;
 
 	PhTimeCodeType _tcType;
 
@@ -412,8 +429,6 @@ private:
 	 * List of PhStripOff from the file
 	 */
 	QList<PhStripDetect *> _detects;
-
-	void addText(PhPeople * actor, PhTime timeIn, PhTime timeOut, QString sentence, int track);
 
 	enum MosTag {
 		MosUnknown,
@@ -445,7 +460,7 @@ private:
 	bool readMosProperties(QFile &f, int level);
 	MosTag readMosTag(QFile &f, int level, QString name);
 	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel);
-	bool _forceRatio169;
+	bool _videoForceRatio169;
 };
 
 #endif // PHSTRIPDOC_H

@@ -7,13 +7,10 @@
 
 #include <QDir>
 #include <QProcess>
+#include "ui_PreferencesDialog.h"
 #include "PreferencesDialog.h"
 #include "PhTools/PhDebug.h"
-#include "ui_PreferencesDialog.h"
-
-#if USE_LTC
 #include "PhSync/PhLtcReader.h"
-#endif
 
 PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QDialog(parent),
@@ -34,7 +31,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldHorizontalTimePerPixel = _settings->horizontalTimePerPixel();
 	_oldBolness = _settings->textBoldness();
 	_oldFont = _settings->textFontFile();
-	_oldDeinterlace = _settings->videoDeinterlace();
 	_oldDisplayTC = _settings->displayTC();
 	_oldDisplayNextTC = _settings->displayNextTC();
 	_oldDisplayNextText = _settings->displayNextText();
@@ -57,7 +53,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	}
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
-	ui->cBoxDeinterlace->setChecked(_oldDeinterlace);
 	ui->cBoxDisplayTC->setChecked(_oldDisplayTC);
 	ui->cBoxDisplayNextTC->setChecked(_oldDisplayNextTC);
 	ui->cBoxDisplayNextText->setChecked(_oldDisplayNextText);
@@ -114,18 +109,14 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		}
 	}
 
-#if USE_LTC
 	ui->listWidgetSync->addItem("LTC");
-#endif
 
 	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
 
 	if(_oldSyncProtocol == Synchronizer::Sony)
 		showParamSony(true);
-#if USE_LTC
 	else if(_oldSyncProtocol == Synchronizer::LTC)
 		showParamLTC(true);
-#endif
 	else {
 		showParamLTC(false);
 		showParamSony(false);
@@ -153,7 +144,6 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setHorizontalTimePerPixel(_oldHorizontalTimePerPixel);
 	_settings->setTextBoldness(_oldBolness);
 	_settings->setTextFontFile(_oldFont);
-	_settings->setVideoDeinterlace(_oldDeinterlace);
 	_settings->setDisplayTC(_oldDisplayTC);
 	_settings->setDisplayNextTC(_oldDisplayNextTC);
 	_settings->setDisplayNextText(_oldDisplayNextText);
@@ -214,11 +204,6 @@ void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *cu
 	Q_UNUSED(previous);
 	if(current)
 		_settings->setTextFontFile(fontList[current->text()]);
-}
-
-void PreferencesDialog::on_cBoxDeinterlace_clicked()
-{
-	_settings->setVideoDeinterlace(ui->cBoxDeinterlace->isChecked());
 }
 
 void PreferencesDialog::on_cBoxDisplayTC_clicked()
@@ -299,11 +284,9 @@ void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *cu
 	case Synchronizer::Sony:
 		showParamSony(true);
 		break;
-#if USE_LTC
 	case Synchronizer::LTC:
 		showParamLTC(true);
 		break;
-#endif
 	default:
 		showParamLTC(false);
 		showParamSony(false);
@@ -319,12 +302,11 @@ void PreferencesDialog::showParamLTC(bool show)
 		ui->listWidgetInputs->setVisible(1);
 		ui->lblInputs->setVisible(1);
 		showParamSony(false);
-#if USE_LTC
 		ui->listWidgetInputs->addItems(PhLtcReader::inputList());
 		foreach(QString inputName, PhLtcReader::inputList()) {
 			PHDEBUG << inputName;
 		}
-#endif
+
 		if(ui->listWidgetInputs->findItems(_settings->ltcInputDevice(), Qt::MatchExactly).count() > 0)
 			ui->listWidgetInputs->findItems(_settings->ltcInputDevice(), Qt::MatchExactly).first()->setSelected(1);
 	}

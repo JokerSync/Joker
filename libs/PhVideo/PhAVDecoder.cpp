@@ -19,7 +19,7 @@ PhAVDecoder::PhAVDecoder(int bufferSize, QObject *parent) :
 	_videoStream(NULL),
 	_videoFrame(NULL),
 	_pSwsCtx(NULL),
-	_videoDeintrelace(false),
+	_deinterlace(false),
 	_audioStream(NULL),
 	_audioFrame(NULL),
 	_interupted(false)
@@ -208,10 +208,10 @@ QString PhAVDecoder::codecName()
 	return "";
 }
 
-void PhAVDecoder::setDeintrelace(bool deintrelace)
+void PhAVDecoder::setDeinterlace(bool deintrelace)
 {
-	if(deintrelace != _videoDeintrelace) {
-		_videoDeintrelace = deintrelace;
+	if(deintrelace != _deinterlace) {
+		_deinterlace = deintrelace;
 		_bufferMutex.lock();
 		clearBuffer();
 		_bufferMutex.unlock();
@@ -289,7 +289,7 @@ void PhAVDecoder::process()
 					if(frameFinished) {
 
 						int frameHeight = _videoFrame->height;
-						if(_videoDeintrelace)
+						if(_deinterlace)
 							frameHeight /= 2;
 
 #warning /// @todo Use RGB pixel format

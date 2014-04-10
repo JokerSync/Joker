@@ -55,8 +55,6 @@ private slots:
 
 	void on_lineEditFilter_textEdited(const QString &arg1);
 
-	void on_cBoxDeinterlace_clicked();
-
 	void on_cBoxDisplayTC_clicked();
 
 	void on_cBoxDisplayNextTC_clicked();
@@ -86,7 +84,6 @@ private:
 	int _oldHorizontalTimePerPixel;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldDeinterlace;
 	bool _oldDisplayTC;
 	bool _oldDisplayNextTC;
 	bool _oldDisplayNextText;

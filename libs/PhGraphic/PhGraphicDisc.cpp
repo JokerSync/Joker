@@ -1,3 +1,5 @@
+#include <QtMath>
+
 #include "PhGraphicDisc.h"
 
 PhGraphicDisc::PhGraphicDisc(int x, int y, int radius, int resolution)

@@ -64,7 +64,9 @@ void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, c
 			}
 		}
 
-		*instance()->_textLog << logMessage << endl;
+		if(instance()->_textLog)
+			*instance()->_textLog << logMessage << endl;
+
 		instance()->_mutex.unlock();
 	}
 }
@@ -125,23 +127,27 @@ PhDebug::PhDebug()
 {
 	qInstallMessageHandler(this->messageOutput);
 
+	QString logDirPath;
+
 #if defined(Q_OS_MAC)
-	QString logDirPath = QDir::homePath() + "/Library/Logs/Phonations/";
+	logDirPath = QDir::homePath() + "/Library/Logs/Phonations/";
 #elif defined(Q_OS_WIN)
-	QString logDirPath = QString(qgetenv("APPDATA")) + "/Phonations";
-#else
-#error Choose a folder for log
+	logDirPath = QString(qgetenv("APPDATA")) + "/Phonations";
 #endif
 
-	QDir logDir(logDirPath);
-	if(!logDir.exists()) {
-		QDir().mkdir(logDirPath);
+	if(QFile(logDirPath).exists()) {
+		QDir logDir(logDirPath);
+		if(!logDir.exists()) {
+			QDir().mkdir(logDirPath);
+		}
+		_logFileName = logDirPath + APP_NAME + ".log";
+		QFile * f = new QFile(_logFileName);
+		f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+		f->write("\n\n");
+		_textLog = new QTextStream(f);
 	}
-	_logFileName = logDirPath + APP_NAME + ".log";
-	QFile * f = new QFile(_logFileName);
-	f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
-	f->write("\n\n");
-	_textLog = new QTextStream(f);
+	else
+		_textLog = NULL;
 
 	_displayDate = false;
 	_displayTime = true;

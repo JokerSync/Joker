@@ -26,12 +26,7 @@ include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 include(../../libs/PhVideo/PhVideo.pri)
-
-# Currently LTC works only on Unix system
-unix {
-	CONFIG += ltc
-	include(../../libs/PhAudio/PhAudio.pri)
-}
+include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
 
 #Main app
@@ -74,7 +69,8 @@ mac{
 }
 
 win32 {
-	RC_FILE = joker.rc
+#	Joker icon shall be inserted manually after qmake generation
+#	RC_FILE = joker.rc
 }
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
@@ -92,3 +88,6 @@ PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
 include(../../common/deploy.pri)
 
 cache()
+
+OTHER_FILES += \
+    JokerSetup.iss

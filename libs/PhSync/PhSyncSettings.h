@@ -29,6 +29,18 @@ public:
 	 * @return A float value
 	 */
 	virtual float sonyFastRate() = 0;
+
+	/**
+	 * @brief The slave port name suffix
+	 * @return A string
+	 */
+	virtual QString sonySlavePortSuffix() = 0;
+
+	/**
+	 * @brief The master port name suffix
+	 * @return A string
+	 */
+	virtual QString sonyMasterPortSuffix() = 0;
 };
 
 #endif // PHSYNCSETTINGS_H

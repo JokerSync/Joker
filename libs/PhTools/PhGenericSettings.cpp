@@ -1,10 +1,12 @@
 #include <QByteArray>
 
 #include "PhGenericSettings.h"
+#include "PhDebug.h"
 
 PhGenericSettings::PhGenericSettings(bool clear) : _settings(ORG_NAME, APP_NAME)
 {
 	QSettings::setDefaultFormat(QSettings::NativeFormat);
+	PHDEBUG << "Settings file:" << _settings.fileName();
 	if(clear)
 		this->clear();
 }

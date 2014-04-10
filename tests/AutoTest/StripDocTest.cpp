@@ -381,7 +381,7 @@ void StripDocTest::openSaveTest01()
 
 	QVERIFY(doc1.openStripFile("test01.joker"));
 
-	QVERIFY(doc1.saveStripFile("save01.joker", "01:01:01:01", !doc1.forceRatio169()));
+	QVERIFY(doc1.saveStripFile("save01.joker", "01:01:01:01"));
 
 	PhStripDoc doc2;
 
@@ -390,7 +390,8 @@ void StripDocTest::openSaveTest01()
 	QCOMPARE(doc2.filePath(), doc1.filePath());
 	QCOMPARE(doc2.videoFilePath(), doc1.videoFilePath());
 	QCOMPARE(t2s(doc2.videoTimeIn(), doc2.timeCodeType()), t2s(doc1.videoTimeIn(), doc1.timeCodeType()));
-	QCOMPARE(doc2.forceRatio169(), !doc1.forceRatio169());
+	QCOMPARE(doc2.forceRatio169(), true);
+	QCOMPARE(doc2.videoDeinterlace(), false);
 	QCOMPARE(t2s(doc2.lastTime(), doc2.timeCodeType()), QString("01:01:01:01"));
 
 	QCOMPARE(doc2.title(), doc1.title());
@@ -403,7 +404,7 @@ void StripDocTest::openSaveTest02()
 
 	QVERIFY(doc1.openStripFile("test02.joker"));
 
-	QVERIFY(doc1.saveStripFile("save02.joker", "02:02:02:02", !doc1.forceRatio169()));
+	QVERIFY(doc1.saveStripFile("save02.joker", "02:02:02:02"));
 
 	PhStripDoc doc2;
 
@@ -412,7 +413,8 @@ void StripDocTest::openSaveTest02()
 	QCOMPARE(doc2.filePath(), doc1.filePath());
 	QCOMPARE(doc2.videoFilePath(), doc1.videoFilePath());
 	QCOMPARE(t2s(doc2.videoTimeIn(), doc2.timeCodeType()), t2s(doc1.videoTimeIn(), doc1.timeCodeType()));
-	QCOMPARE(doc2.forceRatio169(), !doc1.forceRatio169());
+	QCOMPARE(doc2.forceRatio169(), false);
+	QCOMPARE(doc2.videoDeinterlace(), true);
 	QCOMPARE(t2s(doc2.lastTime(), doc2.timeCodeType()), QString("02:02:02:02"));
 
 	QCOMPARE(doc2.title(), doc1.title());

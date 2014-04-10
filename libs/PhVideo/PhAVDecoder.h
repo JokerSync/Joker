@@ -66,7 +66,19 @@ public:
 	 */
 	QString codecName();
 
-	void setDeintrelace(bool deintrelace);
+	/**
+	 * @brief Check if video shall be deinterlace
+	 * @return True if deinterlace false otherwise
+	 */
+	bool deinterlace() {
+		return _deinterlace;
+	}
+
+	/**
+	 * @brief Set the video deinterlace mode
+	 * @param deinterlace True if deinterlace false otherwise
+	 */
+	void setDeinterlace(bool deinterlace);
 
 	int bufferOccupation();
 
@@ -99,7 +111,7 @@ private:
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
 	struct SwsContext * _pSwsCtx;
-	bool _videoDeintrelace;
+	bool _deinterlace;
 
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;

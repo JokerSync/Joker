@@ -19,11 +19,12 @@
 
 PhGraphicView::PhGraphicView( QWidget *parent)
 	: QGLWidget(parent),
-	  _settings(NULL),
-	  _dropDetected(0),
-	  _lastDropElapsed(0),
-	  _maxRefreshRate(0),
-	  _maxPaintDuration(0)
+	_initialized(false),
+	_settings(NULL),
+	_dropDetected(0),
+	_lastDropElapsed(0),
+	_maxRefreshRate(0),
+	_maxPaintDuration(0)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";
@@ -61,6 +62,8 @@ PhGraphicView::~PhGraphicView()
 void PhGraphicView::initializeGL()
 {
 	PHDEBUG;
+	if(_settings)
+		_infoFont.setFontFile(_settings->infoFontFile());
 	init();
 }
 
@@ -82,12 +85,19 @@ void PhGraphicView::resizeGL(int width, int height)
 void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
 {
 	_settings = settings;
-	_infoFont.setFontFile(_settings->infoFontFile());
+	if(_initialized)
+		_infoFont.setFontFile(_settings->infoFontFile());
 }
 
 void PhGraphicView::addInfo(QString info)
 {
 	_infos.append(info);
+}
+
+bool PhGraphicView::init()
+{
+	_initialized = true;
+	return true;
 }
 
 void PhGraphicView::paintGL()

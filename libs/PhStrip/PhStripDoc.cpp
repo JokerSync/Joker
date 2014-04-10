@@ -550,9 +550,8 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 
 	PhFileTool::readShort(f, blocLevel, "CDocOptionsProjet");
 
-#warning /// @todo check strange number
 	// read a number that makes a difference wether it's 3 or 4 later
-	unsigned short strangeNumber1 = PhFileTool::readShort(f, blocLevel, "CDocOptionsProjet strangeNumber1");
+	unsigned short mosVersion = PhFileTool::readShort(f, blocLevel, "CDocOptionsProjet mosVersion");
 
 
 	if(!checkMosTag2(f, blocLevel, "CDocOptionsProjet"))
@@ -574,7 +573,7 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	PHDBG(ok) << "TC Type:" << _tcType;
 
 
-	if(strangeNumber1 == 4) {
+	if(mosVersion == 4) {
 		//		qDebug() << "reading extrasection ???";
 		//		PhFileTool::readInt(f, logLevel, "loop continuous numbering");
 		PhFileTool::readShort(f, level);
@@ -785,7 +784,9 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 			else if(type == "video") {
 				_videoPath = media.text();
 				_videoTimeIn = PhTimeCode::timeFromString(media.attribute("tcStamp"), _tcType);
-				_forceRatio169 = media.attribute("forceRatio").toLower() == "yes";
+
+				_videoForceRatio169 = media.attribute("forceRatio").toLower() == "yes";
+				_videoDeinterlace = media.attribute("deinterlace").toLower() == "yes";
 			}
 		}
 
@@ -797,7 +798,7 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 	return result;
 }
 
-bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC, bool forceRatio169)
+bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
@@ -842,8 +843,10 @@ bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC, b
 				xmlWriter->writeStartElement("media");
 				xmlWriter->writeAttribute("type", "video");
 				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromTime(_videoTimeIn, _tcType));
-				if(forceRatio169)
+				if(_videoForceRatio169)
 					xmlWriter->writeAttribute("forceRatio", "yes");
+				if(_videoDeinterlace)
+					xmlWriter->writeAttribute("deinterlace", "yes");
 				xmlWriter->writeCharacters(_videoPath);
 				xmlWriter->writeEndElement();
 
@@ -862,7 +865,7 @@ bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC, b
 	return true;
 }
 
-bool PhStripDoc::create(QString text, int nbPeople, int nbText, int nbTrack, PhTime videoTimeIn)
+void PhStripDoc::generate(QString content, int loopCount, int peopleCount, int textCount, int trackCount, PhTime videoTimeIn)
 {
 	this->reset();
 	_title = "Generate file";
@@ -873,8 +876,8 @@ bool PhStripDoc::create(QString text, int nbPeople, int nbText, int nbTrack, PhT
 	_videoTimeIn = videoTimeIn;
 	_lastTime = _videoTimeIn;
 
-	if (nbTrack > 4 || nbTrack < 1)
-		nbTrack = 3;
+	if (trackCount > 4 || trackCount < 1)
+		trackCount = 3;
 
 	QStringList names;
 	names.append("Actor");
@@ -884,28 +887,31 @@ bool PhStripDoc::create(QString text, int nbPeople, int nbText, int nbTrack, PhT
 
 	int nbNames = names.length();
 	// Creation of the Peoples
-	for (int i = 1; i <= nbPeople; i++) {
+	for (int i = 1; i <= peopleCount; i++) {
 		PhPeople *people = new PhPeople(names.at(i % nbNames) + " " + QString::number(i), "black");
 		_peoples.append(people);
 	}
 
-	int position = _videoTimeIn;
+	PhTime time = _videoTimeIn;
 	// Creation of the text
-	for (int i = 0; i < nbText; i++) {
+	for (int i = 0; i < textCount; i++) {
 		//Make people "talk" alternaly
-		PhPeople *people = _peoples[i % nbPeople];
+		PhPeople *people = _peoples[i % peopleCount];
 
-		int start = position;
-		int end = start + text.length() * 1.20588 + 1;
+		PhTime timeIn = time;
+		PhTime timeOut = timeIn + content.length() * 1000;
 
-		addText(people, start, end, text, i % nbTrack);
+		_texts1.append(new PhStripText(timeIn, people, timeOut, i % trackCount, content));
 
 		// So the texts are all one after the other
-		position += end - start;
+		time += timeOut - timeIn;
 	}
 
+	// Add a loop per minute
+	for(int i = 0; i < loopCount; i++)
+		_loops.append(new PhStripLoop(i, _videoTimeIn + i * 24000 * 60));
+
 	emit changed();
-	return true;
 }
 
 void PhStripDoc::reset()
@@ -924,26 +930,18 @@ void PhStripDoc::reset()
 	_season = "";
 	_videoPath = "";
 	_videoTimeIn = 0;
+	_videoDeinterlace = false;
 	_authorName = "";
-	_forceRatio169 = false;
+	_videoForceRatio169 = false;
 	_generator = "";
 	_mosNextTag = 0x8008;
 
 	emit this->changed();
 }
 
-void PhStripDoc::addText(PhPeople * actor, PhTime timeIn, PhTime timeOut, QString sentence, int track)
-{
-	if(sentence != " " && sentence != "" ) {
-
-		_texts1.push_back(new PhStripText(timeIn, actor,
-		                                  timeOut,
-		                                  track, sentence));
-	}
-}
 bool PhStripDoc::forceRatio169() const
 {
-	return _forceRatio169;
+	return _videoForceRatio169;
 }
 
 PhPeople *PhStripDoc::peopleByName(QString name)
