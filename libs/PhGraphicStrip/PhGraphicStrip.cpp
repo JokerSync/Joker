@@ -353,7 +353,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			if(displayNextText && (timeIn < text->timeIn() + timePerPeopleHeight) && ((lastText == NULL) || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
 				PhPeople * people = text->people();
 
-				int howFarIsText = (text->timeIn() - timeIn) / verticalTimePerPixel;
+				int howFarIsText = (text->timeIn() - clockTime) / verticalTimePerPixel;
 				//This line is used to see which text's name will be displayed
 				gPeople.setX(width - gPeople.getWidth());
 				gPeople.setY(y - howFarIsText - gPeople.getHeight());
@@ -437,7 +437,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			if(displayNextText && ((loop->timeIn() + height * timePerPixel / 8) > timeIn)) {
 				PhGraphicLoop gLoopPred;
 
-				int howFarIsLoop = (loop->timeIn() - timeOut) / verticalTimePerPixel;
+				int howFarIsLoop = (loop->timeIn() - clockTime) / verticalTimePerPixel;
 				gLoopPred.setColor(Qt::white);
 
 				gLoopPred.setHorizontalLoop(true);
