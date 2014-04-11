@@ -32,6 +32,7 @@ after_success:
 - ./scripts/update-gh-pages.sh
 notifications:
   irc: phonations.com#joker
+  flowdock: d48132b46c7d11203f85818bc626f2bf
   email: false
 env:
   global:
