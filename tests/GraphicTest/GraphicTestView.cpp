@@ -9,7 +9,8 @@
 
 GraphicTestView::GraphicTestView(QWidget *parent)
 	: PhGraphicView( parent),
-	_settings(NULL)
+	_settings(NULL),
+	_x(0)
 {
 }
 
@@ -100,10 +101,15 @@ void GraphicTestView::paint()
 	this->addInfo(QString("textCount: %1").arg(textCount));
 
 	PhGraphicText text2(&_font2, "eéaàiîoô");
-	text2.setRect(50, 300, 500, 100);
+	int textWidth = 500;
+	text2.setRect(_x, 300, textWidth, 100);
 	text2.setColor(QColor(255, 0, 0));
 	text2.setZ(-1);
 	text2.draw();
+
+	_x += 4;
+	if(_x > this->width())
+		_x = -textWidth;
 
 	_font1.select();
 
