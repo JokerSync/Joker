@@ -1,4 +1,4 @@
-language: objective-c
+#language: objective-c
 install:
 - "scripts/bootstrap.sh"
 - "scripts/install_libltc.sh"

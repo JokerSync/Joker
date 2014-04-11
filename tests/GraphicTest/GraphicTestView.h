@@ -37,6 +37,7 @@ private:
 	PhFont _font1, _font2;
 	PhGraphicSolidRect _rect;
 	PhGraphicTexturedRect _yuvRect;
+	int _x;
 };
 
 #endif // GraphicTestView_H
