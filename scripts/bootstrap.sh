@@ -28,6 +28,7 @@ sudo apt-get update -qq
 sudo apt-get install build-essential g++ curl
 sudo apt-get install ffmpeg portaudio
 sudo apt-get install -qq qt5-default qtdeclarative5-dev
+sudo apt-get install doxygen uncrustify
 
 sudo pip install cpp-coveralls
 fi
