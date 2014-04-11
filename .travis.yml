@@ -4,13 +4,6 @@ install:
 - "scripts/install_libltc.sh"
 - "scripts/install_sdl.sh"
 - export PATH=$PATH:/usr/local/opt/qt5/bin
-- brew install pyenv
-- eval "$(pyenv init -)"
-- pyenv install 2.7.2
-- pyenv global 2.7.2
-- pyenv rehash
-- pip install cpp-coveralls
-- pyenv rehash
 - export JOKER_RELEASE_PATH=$HOME
 script:
 - mkdir tmp && cd tmp

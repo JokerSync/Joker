@@ -5,7 +5,14 @@ echo "Mac OS X detected"
 
 brew update
 brew install ffmpeg libav portaudio 
-brew install doxygen uncrustify node npm
+brew install doxygen uncrustify node npm pyenv
+eval "$(pyenv init -)"
+pyenv install 2.7.2
+pyenv global 2.7.2
+pyenv rehash
+pip install cpp-coveralls
+pyenv rehash
+
 brew install qt5
 find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
 
@@ -22,4 +29,6 @@ sudo apt-get install build-essential g++ curl
 sudo apt-get install ffmpeg portaudio
 sudo apt-get install -qq qt5-default qtdeclarative5-dev
 
+pip install cpp-coveralls
 fi
+
