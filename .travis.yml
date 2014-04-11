@@ -6,6 +6,7 @@ install:
 - export PATH=$PATH:/usr/local/opt/qt5/bin
 - export JOKER_RELEASE_PATH=$HOME
 script:
+- qmake -v
 - mkdir tmp && cd tmp
 - mkdir AutoTest && cd AutoTest
 - qmake ../../tests/AutoTest/AutoTest.pro
