@@ -29,6 +29,6 @@ sudo apt-get install build-essential g++ curl
 sudo apt-get install ffmpeg portaudio
 sudo apt-get install -qq qt5-default qtdeclarative5-dev
 
-pip install cpp-coveralls
+sudo pip install cpp-coveralls
 fi
 
