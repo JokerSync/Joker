@@ -1,9 +1,8 @@
 language: objective-c
 install:
-- "../scripts/bootstrap.sh"
-- mkdir tmp && cd tmp
-- "../scripts/install_libltc.sh"
-- "../scripts/install_sdl.sh"
+- "scripts/bootstrap.sh"
+- "scripts/install_libltc.sh"
+- "scripts/install_sdl.sh"
 - export PATH=$PATH:/usr/local/opt/qt5/bin
 - brew install pyenv
 - eval "$(pyenv init -)"
@@ -14,6 +13,7 @@ install:
 - pyenv rehash
 - export JOKER_RELEASE_PATH=$HOME
 script:
+- mkdir tmp && cd tmp
 - mkdir AutoTest && cd AutoTest
 - qmake ../../tests/AutoTest/AutoTest.pro
 - make
