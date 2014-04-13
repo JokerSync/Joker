@@ -1,8 +1,8 @@
 language: objective-c
 install:
-- "scripts/bootstrap.sh"
-- "scripts/install_libltc.sh"
-- "scripts/install_sdl.sh"
+- scripts/bootstrap.sh
+- scripts/install_libltc.sh
+- scripts/install_sdl.sh
 - export PATH=$PATH:/usr/local/opt/qt5/bin
 - export JOKER_RELEASE_PATH=$HOME
 script:
@@ -23,10 +23,11 @@ script:
 after_success:
 - coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root
   tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
-- ./scripts/update-gh-pages.sh
+- "./scripts/update-gh-pages.sh"
 notifications:
   irc: phonations.com#joker
-  flowdock: d48132b46c7d11203f85818bc626f2bf
+  flowdock:
+    secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
   email: false
 env:
   global:
