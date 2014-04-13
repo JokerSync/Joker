@@ -34,12 +34,12 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	if(_settings->generate())
 		_doc->generate(_settings->textContent(),
-					   _settings->loopNumber(),
-					   _settings->peopleNumber(),
-					   _settings->spaceBetweenText(),
-					   _settings->textNumber(),
-					   _settings->trackNumber(),
-					   _settings->startTime());
+		               _settings->loopNumber(),
+		               _settings->peopleNumber(),
+		               _settings->spaceBetweenText(),
+		               _settings->textNumber(),
+		               _settings->trackNumber(),
+		               _settings->startTime());
 }
 
 GraphicStripTestWindow::~GraphicStripTestWindow()
