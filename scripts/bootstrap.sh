@@ -5,7 +5,7 @@ echo "Mac OS X detected"
 
 brew update
 brew install ffmpeg libav portaudio 
-brew install doxygen uncrustify node npm pyenv
+brew install doxygen uncrustify node npm pyenv wget
 eval "$(pyenv init -)"
 pyenv install 2.7.2
 pyenv global 2.7.2
