@@ -247,6 +247,9 @@
    <property name="text">
     <string>Generate...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+J</string>
+   </property>
   </action>
   <action name="actionPreferences">
    <property name="text">

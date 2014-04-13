@@ -865,7 +865,7 @@ bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC)
 	return true;
 }
 
-void PhStripDoc::generate(QString content, int loopCount, int peopleCount, int textCount, int trackCount, PhTime videoTimeIn)
+void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTime spaceBetweenText, int textCount, int trackCount, PhTime videoTimeIn)
 {
 	this->reset();
 	_title = "Generate file";
@@ -904,7 +904,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, int t
 		_texts1.append(new PhStripText(timeIn, people, timeOut, i % trackCount, content));
 
 		// So the texts are all one after the other
-		time += timeOut - timeIn;
+		time += spaceBetweenText;
 	}
 
 	// Add a loop per minute
