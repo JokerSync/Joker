@@ -31,6 +31,14 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
+
+	if(_settings->generate())
+		_doc->generate(_settings->textContent(),
+					   _settings->loopNumber(),
+					   _settings->peopleNumber(),
+					   _settings->textNumber(),
+					   _settings->trackNumber(),
+					   _settings->startTime());
 }
 
 GraphicStripTestWindow::~GraphicStripTestWindow()
@@ -45,6 +53,7 @@ bool GraphicStripTestWindow::openDocument(QString fileName)
 		return false;
 
 	_clock->setTimeCodeType(_doc->timeCodeType());
+	_settings->setGenerate(false);
 	setCurrentDocument(fileName);
 	return true;
 }
@@ -82,6 +91,7 @@ void GraphicStripTestWindow::onGenerate()
 	GenerateDialog dlgGen(_settings, _doc);
 	if (dlgGen.exec()) {
 		_clock->setTime(_doc->lastTime());
+		_settings->setGenerate(true);
 		setCurrentDocument("");
 	}
 }

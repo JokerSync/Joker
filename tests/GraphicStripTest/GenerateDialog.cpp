@@ -62,4 +62,6 @@ void GenerateDialog::onAccept()
 	_settings->setTextNumber(textCount);
 	_settings->setTrackNumber(trackCount);
 	_settings->setTextContent(textContent);
+
+	QDialog::accept();
 }

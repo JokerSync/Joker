@@ -42,6 +42,7 @@ public:
 	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
 
 	// Other settings :
+	PH_SETTING_BOOL(setGenerate, generate)
 	PH_SETTING_INT2(setPeopleNumber, peopleNumber, 1)
 	PH_SETTING_INT2(setLoopNumber, loopNumber, 1)
 	PH_SETTING_INT2(setTextNumber, textNumber, 10)
