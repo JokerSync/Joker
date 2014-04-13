@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>426</width>
-    <height>310</height>
+    <width>443</width>
+    <height>340</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -59,14 +59,14 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="labelNbTrack">
        <property name="text">
         <string>Number of track(s)</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QSpinBox" name="spinBoxNbTrack">
        <property name="minimum">
         <number>1</number>
@@ -76,51 +76,65 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="labelNbLoop">
        <property name="text">
         <string>Number of loop(s)</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="QSpinBox" name="spinBoxNbLoop">
        <property name="maximum">
         <number>99999</number>
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="labelText">
        <property name="text">
         <string>Text </string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <widget class="QLineEdit" name="lineEditText"/>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="labelTimeCode">
        <property name="text">
         <string>TimeCode</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="6" column="1">
       <widget class="PhTimeCodeEdit" name="lineEditTimeCode"/>
      </item>
-     <item row="6" column="0">
+     <item row="7" column="0">
       <widget class="QLabel" name="labelInfoTxt">
        <property name="text">
         <string>Strip duration : </string>
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="7" column="1">
       <widget class="QLabel" name="labelInfoDuration">
        <property name="text">
         <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="spaceBetweenTextLabel">
+       <property name="text">
+        <string>Space between text</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="spaceBetweenTextSpinBox">
+       <property name="maximum">
+        <number>2400000</number>
        </property>
       </widget>
      </item>
@@ -142,6 +156,16 @@
    <header>PhCommonUI/PhTimeCodeEdit.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>spinBoxNbPeople</tabstop>
+  <tabstop>spinBoxNbText</tabstop>
+  <tabstop>spaceBetweenTextSpinBox</tabstop>
+  <tabstop>spinBoxNbTrack</tabstop>
+  <tabstop>spinBoxNbLoop</tabstop>
+  <tabstop>lineEditText</tabstop>
+  <tabstop>lineEditTimeCode</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

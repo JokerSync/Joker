@@ -36,6 +36,7 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 		_doc->generate(_settings->textContent(),
 					   _settings->loopNumber(),
 					   _settings->peopleNumber(),
+					   _settings->spaceBetweenText(),
 					   _settings->textNumber(),
 					   _settings->trackNumber(),
 					   _settings->startTime());
@@ -56,15 +57,6 @@ bool GraphicStripTestWindow::openDocument(QString fileName)
 	_settings->setGenerate(false);
 	setCurrentDocument(fileName);
 	return true;
-}
-
-void GraphicStripTestWindow::createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text, int videoTimeStamp)
-{
-	PHDEBUG << "Creating fake file";
-	_doc->generate(text, nbLoop, nbPeople, nbText, nbTrack, videoTimeStamp);
-	_clock->setTimeCodeType(_doc->timeCodeType());
-	_clock->setTime(_doc->lastTime());
-	this->setWindowTitle("GraphicStripTest");
 }
 
 QMenu *GraphicStripTestWindow::recentDocumentMenu()

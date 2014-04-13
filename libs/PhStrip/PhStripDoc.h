@@ -251,7 +251,7 @@ public:
 	 * @param trackCount The desired number of tracks
 	 * @param videoTimeIn The starting time of the document
 	 */
-	void generate(QString text, int loopCount, int peopleCount, int textCount, int trackCount, PhTime videoTimeIn);
+	void generate(QString text, int loopCount, int peopleCount, PhTime spaceBetweenText, int textCount, int trackCount, PhTime videoTimeIn);
 
 	/**
 	 * @brief Get people by their name

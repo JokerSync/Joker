@@ -46,6 +46,7 @@ public:
 	PH_SETTING_INT2(setPeopleNumber, peopleNumber, 1)
 	PH_SETTING_INT2(setLoopNumber, loopNumber, 1)
 	PH_SETTING_INT2(setTextNumber, textNumber, 10)
+	PH_SETTING_INT2(setSpaceBetweenText, spaceBetweenText, 24000)
 	PH_SETTING_INT2(setTrackNumber, trackNumber, 4)
 	PH_SETTING_STRING2(setTextContent, textContent, "Per hoc minui studium suum existimans Paulus.")
 	PH_SETTING_INT2(setStartTime, startTime, 0)
