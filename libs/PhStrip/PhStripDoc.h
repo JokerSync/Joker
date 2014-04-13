@@ -247,6 +247,7 @@ public:
 	 * @param text The desired text
 	 * @param loopCount The number of loops
 	 * @param peopleCount The desired number of actors
+	 * @param spaceBetweenText Time between two texts
 	 * @param textCount The desired number of sentences
 	 * @param trackCount The desired number of tracks
 	 * @param videoTimeIn The starting time of the document
