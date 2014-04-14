@@ -75,8 +75,6 @@ private slots:
 
 	void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
-	void on_cboBoxLang_currentIndexChanged(const QString &arg1);
-
 private:
 	Ui::PreferencesDialog *ui;
 	JokerSettings *_settings;
@@ -96,7 +94,7 @@ private:
 	QString _oldLTCInput;
 
 	QMap<QString, QString> fontList;
-	QMap<QString, QString> langFiles;
+	QMap<QString, QString> langNameMap;
 
 
 	void showParamLTC(bool show);

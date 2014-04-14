@@ -136,14 +136,22 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	appDirectory.setNameFilters(filtersLang);
 	languageFileList = appDirectory.entryList();
 
+
 	foreach(QString tradFile, languageFileList)
 	{
-		langFiles[tradFile.split(".").first()] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + tradFile;
+		if(tradFile.split("_").first() == "fr")
+			langNameMap[tr("Français")] = tradFile;
+		else if (tradFile.split("_").first() == "en")
+			langNameMap[tr("Anglais")] = tradFile;
 	}
 
-	foreach(QString tradFile, langFiles.keys())
+	foreach(QString tradFile, langNameMap.keys())
 	{
 		ui->cboBoxLang->addItem(tradFile);
+		if(langNameMap[tradFile] == _settings->language())
+		{
+			ui->cboBoxLang->setCurrentIndex(ui->cboBoxLang->count() - 1);
+		}
 	}
 }
 
@@ -154,6 +162,14 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::on_buttonBox_accepted()
 {
+	if(langNameMap[_settings->language()] != ui->cboBoxLang->currentText()) {
+		QMessageBox::warning(this, tr("Information"),
+							 tr("You change the language to \"%1\".\n"
+								"You need to restart %2 to apply you changes.").arg(ui->cboBoxLang->currentText(), APP_NAME),
+							 QMessageBox::Ok,
+							 QMessageBox::Ok);
+		_settings->setLanguage(langNameMap[ui->cboBoxLang->currentText()]);
+	}
 	close();
 }
 
@@ -361,15 +377,3 @@ void PreferencesDialog::on_listWidgetInputs_currentItemChanged(QListWidgetItem *
 	_settings->setLTCInputDevice(current->text());
 }
 
-void PreferencesDialog::on_cboBoxLang_currentIndexChanged(const QString &arg1)
-{
-	if(_settings->language() != arg1) {
-		QMessageBox::warning(this, tr("Information"),
-		                     tr("You change the language to \"%1\".\n"
-								"You need to restart %2 to apply you changes.").arg(arg1, APP_NAME),
-		                     QMessageBox::Ok,
-		                     QMessageBox::Ok);
-	}
-	_settings->setLanguage(arg1);
-
-}

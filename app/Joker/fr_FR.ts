@@ -639,12 +639,22 @@
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="367"/>
+        <location filename="PreferencesDialog.cpp" line="143"/>
+        <source>Français</source>
+        <translation>Français</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="145"/>
+        <source>Anglais</source>
+        <translation>Anglais</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="166"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="368"/>
+        <location filename="PreferencesDialog.cpp" line="167"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <oldsource>You change the language to &quot;%1&quot;.
@@ -739,36 +749,4 @@ Vous devez relancer %2 pour appliquer ce changement.</translation>
         <translation>IPS :</translation>
     </message>
 </context>
- <context>
-
-    <name>MAC_APPLICATION_MENU</name>
-    <message>
-        <source>Services</source>
-        <translation>Services</translation>
-    </message>
-    <message>
-        <source>Hide %1</source>
-        <translation>Masquer %1</translation>
-    </message>
-    <message>
-        <source>Hide Others</source>
-        <translation>Masquer les autres</translation>
-    </message>
-    <message>
-        <source>Show All</source>
-        <translation>Tout afficher</translation>
-    </message>
-    <message>
-        <source>Preferences...</source>
-        <translation>Préférences...</translation>
-    </message>
-    <message>
-        <source>Quit %1</source>
-        <translation>Quitter %1</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation>À propos de %1</translation>
-    </message>
-+</context>
 </TS>

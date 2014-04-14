@@ -12,7 +12,7 @@
         <location filename="AboutDialog.ui" line="26"/>
         <source>Copyright 2013-2014 Phonations, All rights reserved.</source>
         <oldsource>Copyright 2013 Phonations, All rights reserved</oldsource>
-        <translation type="unfinished">Copyright 2013 Phonations, All rights reserved.</translation>
+        <translation>Copyright 2013-2014 Phonations, All rights reserved.</translation>
     </message>
     <message>
         <location filename="AboutDialog.ui" line="52"/>
@@ -60,7 +60,7 @@
     <message>
         <location filename="JokerWindow.ui" line="122"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Help</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="134"/>
@@ -71,7 +71,7 @@
     <message>
         <location filename="JokerWindow.ui" line="137"/>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="142"/>
@@ -121,7 +121,7 @@
     <message>
         <location filename="JokerWindow.ui" line="177"/>
         <source>Alt+Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Right</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="182"/>
@@ -131,18 +131,18 @@
     <message>
         <location filename="JokerWindow.ui" line="185"/>
         <source>Alt+Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Left</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="225"/>
         <source>Open video file...</source>
         <oldsource>Open video...</oldsource>
-        <translation type="unfinished">Open video...</translation>
+        <translation>Open video file...</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="228"/>
         <source>Ctrl+Shift+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="233"/>
@@ -157,7 +157,7 @@
     <message>
         <location filename="JokerWindow.ui" line="243"/>
         <source>About...</source>
-        <translation type="unfinished"></translation>
+        <translation>About...</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="248"/>
@@ -178,12 +178,12 @@
         <location filename="JokerWindow.ui" line="264"/>
         <source>Set Joker on Test mode for syncheck</source>
         <oldsource>Set Joker on Test mode for synccheck</oldsource>
-        <translation type="unfinished">Set Joker on Test mode for synccheck</translation>
+        <translation>Set Joker on Test mode for syncheck</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="267"/>
         <source>Ctrl+Shift+T</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="272"/>
@@ -193,7 +193,7 @@
     <message>
         <location filename="JokerWindow.ui" line="275"/>
         <source>Ctrl+G</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+G</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="280"/>
@@ -213,7 +213,7 @@
     <message>
         <location filename="JokerWindow.ui" line="293"/>
         <source>Ctrl+Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Right</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="298"/>
@@ -223,7 +223,7 @@
     <message>
         <location filename="JokerWindow.ui" line="301"/>
         <source>Ctrl+Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Left</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="306"/>
@@ -238,7 +238,7 @@
     <message>
         <location filename="JokerWindow.ui" line="317"/>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="325"/>
@@ -248,7 +248,7 @@
     <message>
         <location filename="JokerWindow.ui" line="328"/>
         <source>Ctrl+Shift+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="333"/>
@@ -258,22 +258,22 @@
     <message>
         <location filename="JokerWindow.ui" line="336"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="344"/>
         <source>Force 16/9 ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Force 16/9 ratio</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="347"/>
         <source>F8</source>
-        <translation type="unfinished"></translation>
+        <translation>F8</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="355"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Fullscreen</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="358"/>
@@ -283,73 +283,73 @@
     <message>
         <location filename="JokerWindow.ui" line="366"/>
         <source>Empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Empty</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="374"/>
         <source>Invert colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Invert colors</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="382"/>
         <source>Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruler</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="387"/>
         <source>Change ruler timestamp...</source>
-        <translation type="unfinished"></translation>
+        <translation>Change ruler timestamp...</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="392"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>New</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="395"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="400"/>
         <source>Close video</source>
-        <translation type="unfinished"></translation>
+        <translation>Close video</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="405"/>
         <source>Send feedback...</source>
-        <translation type="unfinished"></translation>
+        <translation>Send feedback...</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="413"/>
         <source>Deinterlace video</source>
-        <translation type="unfinished">Deinterlace video</translation>
+        <translation>Deinterlace video</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="306"/>
         <source>DetX files</source>
-        <translation type="unfinished"></translation>
+        <translation>DetX files</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="305"/>
         <source>Joker files</source>
-        <translation type="unfinished"></translation>
+        <translation>Joker files</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="304"/>
         <source>Rythmo files</source>
-        <translation type="unfinished"></translation>
+        <translation>Rythmo files</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="307"/>
         <source>Mosaic files</source>
-        <translation type="unfinished"></translation>
+        <translation>Mosaic files</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="308"/>
         <location filename="JokerWindow.cpp" line="402"/>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>All files</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="401"/>
@@ -359,7 +359,7 @@
     <message>
         <location filename="JokerWindow.cpp" line="404"/>
         <source>Open a video...</source>
-        <translation type="unfinished"></translation>
+        <translation>Open a video...</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="637"/>
@@ -398,23 +398,23 @@
     <message>
         <location filename="PeopleDialog.ui" line="44"/>
         <source>Unselect all</source>
-        <translation type="unfinished"></translation>
+        <translation>Unselect all</translation>
     </message>
     <message>
         <location filename="PeopleDialog.cpp" line="34"/>
         <source>The list is empty...</source>
         <oldsource>The list is empty</oldsource>
-        <translation type="unfinished"></translation>
+        <translation>The list is empty...</translation>
     </message>
     <message>
         <location filename="PeopleDialog.cpp" line="39"/>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="PeopleDialog.cpp" line="40"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel</translation>
+        <translation>Cancel</translation>
     </message>
 </context>
 <context>
@@ -422,32 +422,32 @@
     <message>
         <location filename="../../libs/PhCommonUI/PhFeedbackDialog.ui" line="26"/>
         <source>Feedback report</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback report</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhFeedbackDialog.ui" line="38"/>
         <source>Having problem with %1 ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Having problem with %1 ?</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhFeedbackDialog.ui" line="51"/>
         <source>To help us improve this software, please send us this feedback report:</source>
-        <translation type="unfinished"></translation>
+        <translation>To help us improve this software, please send us this feedback report:</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhFeedbackDialog.ui" line="67"/>
         <source>Any information or idea is valuable !</source>
-        <translation type="unfinished"></translation>
+        <translation>Any information or idea is valuable !</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhFeedbackDialog.ui" line="80"/>
         <source>Your email address if you would like us to get in touch with you :</source>
-        <translation type="unfinished"></translation>
+        <translation>Your email address if you would like us to get in touch with you :</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhFeedbackDialog.cpp" line="191"/>
         <source>Thank you for your feedback!</source>
-        <translation type="unfinished"></translation>
+        <translation>Thank you for your feedback!</translation>
     </message>
 </context>
 <context>
@@ -455,12 +455,12 @@
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="121"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>Back</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="140"/>
         <source>FR</source>
-        <translation type="unfinished"></translation>
+        <translation>FR</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="178"/>
@@ -470,7 +470,7 @@
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="216"/>
         <source>FF</source>
-        <translation type="unfinished"></translation>
+        <translation>FF</translation>
     </message>
 </context>
 <context>
@@ -531,7 +531,7 @@
     <message>
         <location filename="PreferencesDialog.ui" line="93"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Language</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="105"/>
@@ -576,22 +576,22 @@
     <message>
         <location filename="PreferencesDialog.ui" line="292"/>
         <source>No sync</source>
-        <translation type="unfinished"></translation>
+        <translation>No sync</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="297"/>
         <source>Sony 9 pin</source>
-        <translation type="unfinished"></translation>
+        <translation>Sony 9 pin</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="334"/>
         <source>Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Parameters</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="365"/>
         <source>Sony ID</source>
-        <translation type="unfinished"></translation>
+        <translation>Sony ID</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="349"/>
@@ -611,7 +611,7 @@
     <message>
         <location filename="PreferencesDialog.ui" line="406"/>
         <source>Available inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Available inputs</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="459"/>
@@ -631,25 +631,36 @@
     <message>
         <location filename="PreferencesDialog.cpp" line="125"/>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.cpp" line="126"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel</translation>
+        <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="367"/>
+        <location filename="PreferencesDialog.cpp" line="143"/>
+        <source>Français</source>
+        <translation>French</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="145"/>
+        <source>Anglais</source>
+        <translation>English</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="166"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="368"/>
+        <location filename="PreferencesDialog.cpp" line="167"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <oldsource>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes</oldsource>
-        <translation type="unfinished"></translation>
+        <translation>You change the language to &quot;%1&quot;.
+You need to restart %2 to apply you changes.</translation>
     </message>
 </context>
 <context>
