@@ -65,12 +65,6 @@ private slots:
 
 	void on_cBoxDisplayLoop_clicked();
 
-	void on_pButtonReset_clicked();
-
-	void on_lblPathToLogFile_linkActivated(const QString &link);
-
-	void onLogMaskButtonClicked();
-
 	void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 	void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
@@ -89,7 +83,6 @@ private:
 	bool _oldDisplayNextText;
 	bool _oldDisplayTitle;
 	bool _oldDisplayLoop;
-	int _oldLogMask;
 	int _oldSyncProtocol;
 	QString _oldLTCInput;
 

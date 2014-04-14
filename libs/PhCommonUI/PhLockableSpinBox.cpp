@@ -5,6 +5,7 @@
  */
 
 #include <QEvent>
+#include <QApplication>
 
 #include "PhTools/PhDebug.h"
 #include "PhLockableSpinBox.h"
@@ -30,6 +31,8 @@ bool PhLockableSpinBox::eventFilter(QObject *sender, QEvent *event)
 			this->setEnabled(true);
 			_pressCounter = 0;
 		}
+		if(QApplication::keyboardModifiers().testFlag(Qt::ControlModifier) == true)
+			this->setEnabled(true);
 		break;
 	default:
 		break;

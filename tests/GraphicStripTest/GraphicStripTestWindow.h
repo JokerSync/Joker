@@ -23,7 +23,6 @@ public:
 	~GraphicStripTestWindow();
 
 	bool openDocument(QString fileName);
-	void createFile(int nbPeople, int nbLoop, int nbText, int nbTrack, QString text = "Default text.", int videoTimeStamp = 0);
 
 protected:
 	QMenu *recentDocumentMenu();

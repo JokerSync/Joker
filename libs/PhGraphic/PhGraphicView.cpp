@@ -65,6 +65,7 @@ void PhGraphicView::initializeGL()
 	if(_settings)
 		_infoFont.setFontFile(_settings->infoFontFile());
 	init();
+	_initialized = true;
 }
 
 void PhGraphicView::resizeGL(int width, int height)
@@ -96,7 +97,6 @@ void PhGraphicView::addInfo(QString info)
 
 bool PhGraphicView::init()
 {
-	_initialized = true;
 	return true;
 }
 

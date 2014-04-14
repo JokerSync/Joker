@@ -23,8 +23,8 @@ PhFeedbackDialog::PhFeedbackDialog(PhFeedbackSettings *settings, QWidget *parent
 
 	ui->problemLabel->setText(ui->problemLabel->text().arg(QString(APP_NAME)));
 
-	PHDEBUG << _settings->emailList();
-	ui->comboBoxEmails->addItems(_settings->emailList());
+	if(!_settings->emailList().isEmpty())
+		ui->comboBoxEmails->addItems(_settings->emailList());
 }
 
 PhFeedbackDialog::~PhFeedbackDialog()

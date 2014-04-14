@@ -1,30 +1,13 @@
 language: objective-c
 install:
-- brew update
-- brew install ffmpeg
-- brew install libav
-- brew install portaudio
-- brew install doxygen
-- brew install uncrustify
-- brew install node
-- brew install npm
-- mkdir tmp && cd tmp
-- "../scripts/install_libltc.sh"
-- ls -la
-- "../scripts/install_sdl.sh"
-- brew install qt5
-- find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
-- npm install -g appdmg
+- scripts/install_sdl.sh
+- scripts/bootstrap.sh
+- scripts/install_libltc.sh
 - export PATH=$PATH:/usr/local/opt/qt5/bin
-- brew install pyenv
-- eval "$(pyenv init -)"
-- pyenv install 2.7.2
-- pyenv global 2.7.2
-- pyenv rehash
-- pip install cpp-coveralls
-- pyenv rehash
 - export JOKER_RELEASE_PATH=$HOME
 script:
+- qmake -v
+- mkdir tmp && cd tmp
 - mkdir AutoTest && cd AutoTest
 - qmake ../../tests/AutoTest/AutoTest.pro
 - make
@@ -40,9 +23,11 @@ script:
 after_success:
 - coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root
   tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
-- ./scripts/update-gh-pages.sh
+- "./scripts/update-gh-pages.sh"
 notifications:
   irc: phonations.com#joker
+  flowdock:
+    secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
   email: false
 env:
   global:

@@ -15,6 +15,7 @@ PhVideoEngine::PhVideoEngine() :  QObject(NULL),
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
+	avcodec_register_all();
 }
 
 bool PhVideoEngine::open(QString fileName)
