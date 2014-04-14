@@ -366,7 +366,7 @@ void PreferencesDialog::on_cboBoxLang_currentIndexChanged(const QString &arg1)
 	if(_settings->language() != arg1) {
 		QMessageBox::warning(this, tr("Information"),
 		                     tr("You change the language to \"%1\".\n"
-		                        "You need to restart %2 to apply you changes").arg(arg1, APP_NAME),
+								"You need to restart %2 to apply you changes.").arg(arg1, APP_NAME),
 		                     QMessageBox::Ok,
 		                     QMessageBox::Ok);
 	}

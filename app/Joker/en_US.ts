@@ -64,7 +64,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="134"/>
-        <location filename="JokerWindow.cpp" line="315"/>
+        <location filename="JokerWindow.cpp" line="309"/>
         <source>Open...</source>
         <translation>Open...</translation>
     </message>
@@ -326,54 +326,54 @@
         <translation type="unfinished">Deinterlace video</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="312"/>
+        <location filename="JokerWindow.cpp" line="306"/>
         <source>DetX files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="311"/>
+        <location filename="JokerWindow.cpp" line="305"/>
         <source>Joker files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="310"/>
+        <location filename="JokerWindow.cpp" line="304"/>
         <source>Rythmo files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="313"/>
+        <location filename="JokerWindow.cpp" line="307"/>
         <source>Mosaic files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="314"/>
-        <location filename="JokerWindow.cpp" line="408"/>
+        <location filename="JokerWindow.cpp" line="308"/>
+        <location filename="JokerWindow.cpp" line="402"/>
         <source>All files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="407"/>
+        <location filename="JokerWindow.cpp" line="401"/>
         <source>Movie files</source>
         <translation>Movie files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="410"/>
+        <location filename="JokerWindow.cpp" line="404"/>
         <source>Open a video...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="643"/>
-        <location filename="JokerWindow.cpp" line="668"/>
+        <location filename="JokerWindow.cpp" line="637"/>
+        <location filename="JokerWindow.cpp" line="662"/>
         <source>Unable to save </source>
         <translation>Unable to save </translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="661"/>
+        <location filename="JokerWindow.cpp" line="655"/>
         <source>Save...</source>
         <translation>Save...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="678"/>
+        <location filename="JokerWindow.cpp" line="672"/>
         <source>Do you want to save your changes ?</source>
         <translation>Do you want to save your changes ?</translation>
     </message>
@@ -504,134 +504,152 @@
         <translation>General</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="50"/>
+        <location filename="PreferencesDialog.ui" line="55"/>
         <source>Display timecode</source>
         <translation>Display timecode</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="55"/>
+        <location filename="PreferencesDialog.ui" line="62"/>
         <source>Display next timecode</source>
         <translation>Display next timecode</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="60"/>
+        <location filename="PreferencesDialog.ui" line="69"/>
         <source>Display next texts</source>
         <translation>Display next texts</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="65"/>
+        <location filename="PreferencesDialog.ui" line="76"/>
         <source>Display title</source>
         <translation>Display title</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="73"/>
+        <location filename="PreferencesDialog.ui" line="86"/>
         <source>Display loop number</source>
         <translation>Display loop number</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="80"/>
+        <location filename="PreferencesDialog.ui" line="93"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="105"/>
         <source>Strip</source>
         <translation>Strip</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="93"/>
+        <location filename="PreferencesDialog.ui" line="118"/>
         <source>Filter</source>
         <translation>Filter</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="116"/>
+        <location filename="PreferencesDialog.ui" line="141"/>
         <source>Bold :</source>
         <translation>Bold :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="178"/>
+        <location filename="PreferencesDialog.ui" line="203"/>
         <source>Strip Height</source>
         <translation>Strip Height</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="193"/>
+        <location filename="PreferencesDialog.ui" line="218"/>
         <source>Italic :</source>
         <translation>Italic :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="220"/>
+        <location filename="PreferencesDialog.ui" line="245"/>
         <source>Speed:</source>
         <translation>Speed :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="245"/>
+        <location filename="PreferencesDialog.ui" line="270"/>
         <source>Synchronisation</source>
         <translation>Synchronisation</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="253"/>
+        <location filename="PreferencesDialog.ui" line="278"/>
         <source>Delay</source>
         <translation>Delay</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="267"/>
+        <location filename="PreferencesDialog.ui" line="292"/>
         <source>No sync</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="272"/>
+        <location filename="PreferencesDialog.ui" line="297"/>
         <source>Sony 9 pin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="309"/>
+        <location filename="PreferencesDialog.ui" line="334"/>
         <source>Parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="340"/>
+        <location filename="PreferencesDialog.ui" line="365"/>
         <source>Sony ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="324"/>
+        <location filename="PreferencesDialog.ui" line="349"/>
         <source>Sony high speed</source>
         <translation>Sony high speed</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="424"/>
+        <location filename="PreferencesDialog.ui" line="449"/>
         <source>millisecond</source>
         <translation>millisecond</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="280"/>
+        <location filename="PreferencesDialog.ui" line="305"/>
         <source>quarter frame</source>
         <translation>quarter frame</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="381"/>
+        <location filename="PreferencesDialog.ui" line="406"/>
         <source>Available inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="434"/>
+        <location filename="PreferencesDialog.ui" line="459"/>
         <source>Log</source>
         <translation>Log</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="446"/>
+        <location filename="PreferencesDialog.ui" line="471"/>
         <source>Log file :</source>
         <translation>Log file :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="502"/>
+        <location filename="PreferencesDialog.ui" line="527"/>
         <source>Reset</source>
         <translation>Reset</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="132"/>
+        <location filename="PreferencesDialog.cpp" line="125"/>
         <source>Ok</source>
         <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="133"/>
+        <location filename="PreferencesDialog.cpp" line="126"/>
         <source>Cancel</source>
         <translation type="unfinished">Cancel</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="367"/>
+        <source>Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="368"/>
+        <source>You change the language to &quot;%1&quot;.
+You need to restart %2 to apply you changes.</source>
+        <oldsource>You change the language to &quot;%1&quot;.
+You need to restart %2 to apply you changes</oldsource>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

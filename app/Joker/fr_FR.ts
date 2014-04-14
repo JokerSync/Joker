@@ -64,7 +64,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="134"/>
-        <location filename="JokerWindow.cpp" line="315"/>
+        <location filename="JokerWindow.cpp" line="309"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -326,54 +326,54 @@
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="312"/>
+        <location filename="JokerWindow.cpp" line="306"/>
         <source>DetX files</source>
         <translation>Fichiers DetX</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="311"/>
+        <location filename="JokerWindow.cpp" line="305"/>
         <source>Joker files</source>
         <translation>Fichiers Joker</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="310"/>
+        <location filename="JokerWindow.cpp" line="304"/>
         <source>Rythmo files</source>
         <translation>Fichier rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="313"/>
+        <location filename="JokerWindow.cpp" line="307"/>
         <source>Mosaic files</source>
         <translation>Fichiers Mosaic</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="314"/>
-        <location filename="JokerWindow.cpp" line="408"/>
+        <location filename="JokerWindow.cpp" line="308"/>
+        <location filename="JokerWindow.cpp" line="402"/>
         <source>All files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="407"/>
+        <location filename="JokerWindow.cpp" line="401"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="410"/>
+        <location filename="JokerWindow.cpp" line="404"/>
         <source>Open a video...</source>
         <translation>Ouvrir un fichier vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="643"/>
-        <location filename="JokerWindow.cpp" line="668"/>
+        <location filename="JokerWindow.cpp" line="637"/>
+        <location filename="JokerWindow.cpp" line="662"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="661"/>
+        <location filename="JokerWindow.cpp" line="655"/>
         <source>Save...</source>
         <translation>Enregistrer...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="678"/>
+        <location filename="JokerWindow.cpp" line="672"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
@@ -504,134 +504,153 @@
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="50"/>
+        <location filename="PreferencesDialog.ui" line="55"/>
         <source>Display timecode</source>
         <translation>Afficher le timecode</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="55"/>
+        <location filename="PreferencesDialog.ui" line="62"/>
         <source>Display next timecode</source>
         <translation>Afficher le timecode suivant</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="60"/>
+        <location filename="PreferencesDialog.ui" line="69"/>
         <source>Display next texts</source>
         <translation>Afficher les textes suivants</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="65"/>
+        <location filename="PreferencesDialog.ui" line="76"/>
         <source>Display title</source>
         <translation>Afficher le titre</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="73"/>
+        <location filename="PreferencesDialog.ui" line="86"/>
         <source>Display loop number</source>
         <translation>Afficher le nombre de boucle</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="80"/>
+        <location filename="PreferencesDialog.ui" line="93"/>
+        <source>Language</source>
+        <translation>Langue</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="105"/>
         <source>Strip</source>
         <translation>Bande rythmo</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="93"/>
+        <location filename="PreferencesDialog.ui" line="118"/>
         <source>Filter</source>
         <translation>Filtre</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="116"/>
+        <location filename="PreferencesDialog.ui" line="141"/>
         <source>Bold :</source>
         <translation>Gras :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="178"/>
+        <location filename="PreferencesDialog.ui" line="203"/>
         <source>Strip Height</source>
         <translation>Hauteur de la bande</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="193"/>
+        <location filename="PreferencesDialog.ui" line="218"/>
         <source>Italic :</source>
         <translation>Italique :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="220"/>
+        <location filename="PreferencesDialog.ui" line="245"/>
         <source>Speed:</source>
         <translation>Vitesse :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="245"/>
+        <location filename="PreferencesDialog.ui" line="270"/>
         <source>Synchronisation</source>
         <translation>Synchronisation</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="253"/>
+        <location filename="PreferencesDialog.ui" line="278"/>
         <source>Delay</source>
         <translation>Délai</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="267"/>
+        <location filename="PreferencesDialog.ui" line="292"/>
         <source>No sync</source>
         <translation>Pas de synchronisation</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="272"/>
+        <location filename="PreferencesDialog.ui" line="297"/>
         <source>Sony 9 pin</source>
         <translation>Sony 9 pin</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="309"/>
+        <location filename="PreferencesDialog.ui" line="334"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="340"/>
+        <location filename="PreferencesDialog.ui" line="365"/>
         <source>Sony ID</source>
         <translation>ID Sony</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="324"/>
+        <location filename="PreferencesDialog.ui" line="349"/>
         <source>Sony high speed</source>
         <translation>Vitesse rapide Sony</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="424"/>
+        <location filename="PreferencesDialog.ui" line="449"/>
         <source>millisecond</source>
         <translation>millisecondes</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="280"/>
+        <location filename="PreferencesDialog.ui" line="305"/>
         <source>quarter frame</source>
         <translation>quart d&apos;image</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="381"/>
+        <location filename="PreferencesDialog.ui" line="406"/>
         <source>Available inputs</source>
         <translation>Entrée(s)</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="434"/>
+        <location filename="PreferencesDialog.ui" line="459"/>
         <source>Log</source>
         <translation>Journal</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="446"/>
+        <location filename="PreferencesDialog.ui" line="471"/>
         <source>Log file :</source>
         <translation>Fichier du jounal :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="502"/>
+        <location filename="PreferencesDialog.ui" line="527"/>
         <source>Reset</source>
         <translation>Réinitialiser</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="132"/>
+        <location filename="PreferencesDialog.cpp" line="125"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="133"/>
+        <location filename="PreferencesDialog.cpp" line="126"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="367"/>
+        <source>Information</source>
+        <translation>Information</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="368"/>
+        <source>You change the language to &quot;%1&quot;.
+You need to restart %2 to apply you changes.</source>
+        <oldsource>You change the language to &quot;%1&quot;.
+You need to restart %2 to apply you changes</oldsource>
+        <translation>Vous avez changé la langue pour &quot;%1&quot;.
+Vous devez relancer %2 pour appliquer ce changement.</translation>
     </message>
 </context>
 <context>
@@ -720,4 +739,36 @@
         <translation>IPS :</translation>
     </message>
 </context>
+ <context>
+
+    <name>MAC_APPLICATION_MENU</name>
+    <message>
+        <source>Services</source>
+        <translation>Services</translation>
+    </message>
+    <message>
+        <source>Hide %1</source>
+        <translation>Masquer %1</translation>
+    </message>
+    <message>
+        <source>Hide Others</source>
+        <translation>Masquer les autres</translation>
+    </message>
+    <message>
+        <source>Show All</source>
+        <translation>Tout afficher</translation>
+    </message>
+    <message>
+        <source>Preferences...</source>
+        <translation>Préférences...</translation>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>Quitter %1</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>À propos de %1</translation>
+    </message>
++</context>
 </TS>
