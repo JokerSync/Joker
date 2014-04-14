@@ -63,6 +63,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QDir systemFont("/Library/Fonts/");
 	QDir userFont(userDirectory + "/Library/Fonts/");
 
+
 	QStringList filters;
 	filters.append("*.ttf");
 	filters.append("*.TTF");
@@ -109,8 +110,9 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		showParamSony(false);
 	}
 
-	ui->buttonGroup->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
-	ui->buttonGroup->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
+//	ui->buttonGroup->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+//	ui->buttonGroup->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
+
 }
 
 PreferencesDialog::~PreferencesDialog()
