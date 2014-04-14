@@ -39,8 +39,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldSyncProtocol = _settings->synchroProtocol();
 	_oldLTCInput = _settings->ltcInputDevice();
 
-	_oldLogMask = _settings->logMask();
-
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
 	if(_oldUseQuarterFrame) {
@@ -58,23 +56,12 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->cBoxDisplayNextText->setChecked(_oldDisplayNextText);
 	ui->cBoxDisplayTitle->setChecked(_oldDisplayTitle);
 	ui->cBoxDisplayLoop->setChecked(_oldDisplayLoop);
-	ui->lblPathToLogFile->setText("<a href=\""+ PhDebug::logLocation() +"\">" + PhDebug::logLocation() + "</a>");
-
-	//Set the checkboxes of log
-	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
-	{
-		connect(btn, SIGNAL(clicked()), this, SLOT(onLogMaskButtonClicked()));
-		if((1 << btn->objectName().split("_").last().toInt()) & _oldLogMask)
-			btn->setChecked(true);
-	}
 
 	//Set the fonts
 	QStringList userFontList, systemFontList;
 	QString userDirectory = QDir::homePath();
 	QDir systemFont("/Library/Fonts/");
 	QDir userFont(userDirectory + "/Library/Fonts/");
-
-
 
 	QStringList filters;
 	filters.append("*.ttf");
@@ -122,8 +109,8 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		showParamSony(false);
 	}
 
-	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
-	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
+	ui->buttonGroup->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
+	ui->buttonGroup->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -149,9 +136,7 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setDisplayNextText(_oldDisplayNextText);
 	_settings->setDisplayTitle(_oldDisplayTitle);
 	_settings->setDisplayLoop(_oldDisplayLoop);
-	_settings->setLogMask(_oldLogMask);
 	_settings->setLTCInputDevice(_oldLTCInput);
-	PhDebug::setLogMask(_oldLogMask);
 
 	close();
 }
@@ -229,50 +214,6 @@ void PreferencesDialog::on_cBoxDisplayTitle_clicked()
 void PreferencesDialog::on_cBoxDisplayLoop_clicked()
 {
 	_settings->setDisplayLoop(ui->cBoxDisplayLoop->isChecked());
-}
-
-void PreferencesDialog::on_pButtonReset_clicked()
-{
-	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
-	{
-		if(btn->objectName().split("_").last() != "0")
-			btn->setChecked(false);
-		else
-			btn->setChecked(true);
-	}
-	onLogMaskButtonClicked();
-}
-
-void PreferencesDialog::on_lblPathToLogFile_linkActivated(const QString &link)
-{
-#if defined(Q_OS_MAC)
-	QStringList args;
-	args << "-e";
-	args << "tell application \"Finder\"";
-	args << "-e";
-	args << "activate";
-	args << "-e";
-	args << "select POSIX file \""+ link +"\"";
-	args << "-e";
-	args << "end tell";
-	QProcess::startDetached("osascript", args);
-#else
-#warning /// @todo Fix me
-	Q_UNUSED(link);
-#endif
-}
-
-void PreferencesDialog::onLogMaskButtonClicked()
-{
-	int logMask = 0;
-	//Set the checkboxes of log
-	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
-	{
-		if(btn->isChecked())
-			logMask += 1 << btn->objectName().split("_").last().toInt();
-	}
-	PhDebug::setLogMask(logMask);
-	_settings->setLogMask(logMask);
 }
 
 void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)

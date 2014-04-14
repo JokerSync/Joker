@@ -12,7 +12,7 @@
         <location filename="AboutDialog.ui" line="26"/>
         <source>Copyright 2013-2014 Phonations, All rights reserved.</source>
         <oldsource>Copyright 2013 Phonations, All rights reserved</oldsource>
-        <translation type="unfinished">Copyright 2013 Phonations, All rights reserved.</translation>
+        <translation>Copyright 2013-2014 Phonations, All rights reserved.</translation>
     </message>
     <message>
         <location filename="AboutDialog.ui" line="52"/>
@@ -64,7 +64,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="134"/>
-        <location filename="JokerWindow.cpp" line="315"/>
+        <location filename="JokerWindow.cpp" line="309"/>
         <source>Open...</source>
         <translation>Open...</translation>
     </message>
@@ -326,54 +326,54 @@
         <translation type="unfinished">Deinterlace video</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="312"/>
+        <location filename="JokerWindow.cpp" line="306"/>
         <source>DetX files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="311"/>
+        <location filename="JokerWindow.cpp" line="305"/>
         <source>Joker files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="310"/>
+        <location filename="JokerWindow.cpp" line="304"/>
         <source>Rythmo files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="313"/>
+        <location filename="JokerWindow.cpp" line="307"/>
         <source>Mosaic files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="314"/>
-        <location filename="JokerWindow.cpp" line="408"/>
+        <location filename="JokerWindow.cpp" line="308"/>
+        <location filename="JokerWindow.cpp" line="402"/>
         <source>All files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="407"/>
+        <location filename="JokerWindow.cpp" line="401"/>
         <source>Movie files</source>
         <translation>Movie files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="410"/>
+        <location filename="JokerWindow.cpp" line="404"/>
         <source>Open a video...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="643"/>
-        <location filename="JokerWindow.cpp" line="668"/>
+        <location filename="JokerWindow.cpp" line="637"/>
+        <location filename="JokerWindow.cpp" line="662"/>
         <source>Unable to save </source>
         <translation>Unable to save </translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="661"/>
+        <location filename="JokerWindow.cpp" line="655"/>
         <source>Save...</source>
         <translation>Save...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="678"/>
+        <location filename="JokerWindow.cpp" line="672"/>
         <source>Do you want to save your changes ?</source>
         <translation>Do you want to save your changes ?</translation>
     </message>
@@ -609,29 +609,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="434"/>
-        <source>Log</source>
-        <translation>Log</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="446"/>
-        <source>Log file :</source>
-        <translation>Log file :</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="502"/>
-        <source>Reset</source>
-        <translation>Reset</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.cpp" line="132"/>
+        <location filename="PreferencesDialog.cpp" line="112"/>
         <source>Ok</source>
-        <translation type="unfinished">Ok</translation>
+        <translation>Ok</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="133"/>
+        <location filename="PreferencesDialog.cpp" line="113"/>
         <source>Cancel</source>
-        <translation type="unfinished">Cancel</translation>
+        <translation>Cancel</translation>
     </message>
 </context>
 <context>

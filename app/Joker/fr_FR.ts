@@ -64,7 +64,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="134"/>
-        <location filename="JokerWindow.cpp" line="315"/>
+        <location filename="JokerWindow.cpp" line="309"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -326,54 +326,54 @@
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="312"/>
+        <location filename="JokerWindow.cpp" line="306"/>
         <source>DetX files</source>
         <translation>Fichiers DetX</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="311"/>
+        <location filename="JokerWindow.cpp" line="305"/>
         <source>Joker files</source>
         <translation>Fichiers Joker</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="310"/>
+        <location filename="JokerWindow.cpp" line="304"/>
         <source>Rythmo files</source>
         <translation>Fichier rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="313"/>
+        <location filename="JokerWindow.cpp" line="307"/>
         <source>Mosaic files</source>
         <translation>Fichiers Mosaic</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="314"/>
-        <location filename="JokerWindow.cpp" line="408"/>
+        <location filename="JokerWindow.cpp" line="308"/>
+        <location filename="JokerWindow.cpp" line="402"/>
         <source>All files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="407"/>
+        <location filename="JokerWindow.cpp" line="401"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="410"/>
+        <location filename="JokerWindow.cpp" line="404"/>
         <source>Open a video...</source>
         <translation>Ouvrir un fichier vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="643"/>
-        <location filename="JokerWindow.cpp" line="668"/>
+        <location filename="JokerWindow.cpp" line="637"/>
+        <location filename="JokerWindow.cpp" line="662"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="661"/>
+        <location filename="JokerWindow.cpp" line="655"/>
         <source>Save...</source>
         <translation>Enregistrer...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="678"/>
+        <location filename="JokerWindow.cpp" line="672"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
@@ -609,27 +609,12 @@
         <translation>Entrée(s)</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="434"/>
-        <source>Log</source>
-        <translation>Journal</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="446"/>
-        <source>Log file :</source>
-        <translation>Fichier du jounal :</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="502"/>
-        <source>Reset</source>
-        <translation>Réinitialiser</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.cpp" line="132"/>
+        <location filename="PreferencesDialog.cpp" line="112"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="133"/>
+        <location filename="PreferencesDialog.cpp" line="113"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
