@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-
+#include <QMessageBox>
 #include <QDir>
 #include <QProcess>
 #include "ui_PreferencesDialog.h"
@@ -124,6 +124,27 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 
 	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
 	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
+
+	//Set the language
+	QStringList languageFileList;
+	QDir appDirectory(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/");
+
+
+
+	QStringList filtersLang;
+	filtersLang.append("*.qm");
+	appDirectory.setNameFilters(filtersLang);
+	languageFileList = appDirectory.entryList();
+
+	foreach(QString tradFile, languageFileList)
+	{
+		langFiles[tradFile.split(".").first()] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + tradFile;
+	}
+
+	foreach(QString tradFile, langFiles.keys())
+	{
+		ui->cboBoxLang->addItem(tradFile);
+	}
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -338,4 +359,17 @@ void PreferencesDialog::on_listWidgetInputs_currentItemChanged(QListWidgetItem *
 {
 	Q_UNUSED(previous);
 	_settings->setLTCInputDevice(current->text());
+}
+
+void PreferencesDialog::on_cboBoxLang_currentIndexChanged(const QString &arg1)
+{
+	if(_settings->language() != arg1) {
+		QMessageBox::warning(this, tr("Information"),
+		                     tr("You change the language to \"%1\".\n"
+		                        "You need to restart %2 to apply you changes").arg(arg1, APP_NAME),
+		                     QMessageBox::Ok,
+		                     QMessageBox::Ok);
+	}
+	_settings->setLanguage(arg1);
+
 }

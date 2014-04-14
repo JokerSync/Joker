@@ -28,7 +28,14 @@ int main(int argc, char *argv[])
 
 	QApplication a(argc, argv);
 	QTranslator translator;
-	translator.load(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + QLocale::system().name() + ".qm");
+	if(!settings.language().isEmpty()) {
+		PHDEBUG << "test";
+		//translator.load(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + settings.language() + ".qm");
+	}
+	else {
+		PHDEBUG << "loading default language";
+		//translator.load(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + QLocale::system().name() + ".qm");
+	}
 	a.installTranslator(&translator);
 
 
