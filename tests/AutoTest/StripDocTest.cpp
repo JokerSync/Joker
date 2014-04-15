@@ -47,6 +47,17 @@ void StripDocTest::importDetXHeaderTest()
 	PHDEBUG << doc.title();
 }
 
+void StripDocTest::importBadDetX()
+{
+	PhStripDoc doc;
+	QVERIFY(QFile("badXML.detx").exists());
+	QVERIFY(doc.importDetXFile("badXML.detx") == false);
+
+	doc.reset();
+	QVERIFY(QFile("badTag.detx").exists());
+	QVERIFY(doc.importDetXFile("badTag.detx") == false);
+}
+
 void StripDocTest::importDetXNoFile()
 {
 	PhStripDoc doc;
@@ -105,7 +116,7 @@ void StripDocTest::importDetXTextTest()
 
 	QVERIFY(doc.importDetXFile("test01.detx"));
 
-	QVERIFY(doc.texts().count() == 5);
+	QVERIFY(doc.texts().count() == 6);
 
 	QCOMPARE(doc.texts()[0]->content(), QString("Simple sentence"));
 	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:02:00"));
@@ -125,7 +136,7 @@ void StripDocTest::importDetXDetectTest()
 
 	QVERIFY(doc.importDetXFile("test01.detx"));
 
-	QCOMPARE(doc.detects().count(), 5);
+	QCOMPARE(doc.detects().count(), 6);
 
 	QCOMPARE(doc.detects()[0]->people(), doc.peopleByName("Jeanne"));
 	QCOMPARE(doc.detects()[0]->type(), PhStripDetect::On);
@@ -441,8 +452,8 @@ void StripDocTest::getPreviousElementTimeTest()
 	PhTimeCodeType tcType = doc.timeCodeType();
 
 	QCOMPARE(t2s(doc.previousElementTime(s2t("23:00:00:00", tcType)), tcType), QString("01:01:00:00"));
-	QCOMPARE(t2s(doc.previousElementTime(s2t("01:01:00:00", tcType)), tcType), QString("01:00:15:00"));
-	QCOMPARE(t2s(doc.previousElementTime(s2t("01:00:15:00", tcType)), tcType), QString("01:00:12:00"));
+	QCOMPARE(t2s(doc.previousElementTime(s2t("01:01:00:00", tcType)), tcType), QString("01:00:23:00"));
+	QCOMPARE(t2s(doc.previousElementTime(s2t("01:00:23:00", tcType)), tcType), QString("01:00:15:00"));
 	QCOMPARE(doc.previousElementTime(s2t("01:00:00:00", tcType)), PHTIMEMIN);
 }
 
@@ -457,7 +468,8 @@ void StripDocTest::getNextElementTimeTest()
 	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:00:00", tcType)), tcType), QString("01:00:01:00"));
 	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:01:00", tcType)), tcType), QString("01:00:02:00"));
 	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:02:00", tcType)), tcType), QString("01:00:05:00"));
-	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:17:00", tcType)), tcType), QString("01:01:00:00"));
+	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:17:00", tcType)), tcType), QString("01:00:23:00"));
+	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:23:00", tcType)), tcType), QString("01:01:00:00"));
 	QCOMPARE(doc.nextElementTime(s2t("01:01:00:00", tcType)), PHTIMEMAX);
 
 }
@@ -474,7 +486,8 @@ void StripDocTest::getNextTextTest()
 	QCOMPARE(t2s(doc.nextText(s2t("01:00:05:00", tcType))->timeIn(), tcType), QString("01:00:06:00"));
 	QCOMPARE(t2s(doc.nextText(s2t("01:00:06:00", tcType))->timeIn(), tcType), QString("01:00:12:00"));
 	QCOMPARE(t2s(doc.nextText(s2t("01:00:12:00", tcType))->timeIn(), tcType), QString("01:00:15:00"));
-	QVERIFY(doc.nextText(s2t("01:00:15:00", tcType)) == NULL);
+	QCOMPARE(t2s(doc.nextText(s2t("01:00:15:00", tcType))->timeIn(), tcType), QString("01:00:23:00"));
+	QVERIFY(doc.nextText(s2t("01:00:23:00", tcType)) == NULL);
 }
 
 void StripDocTest::getNextTextTestByPeople()
@@ -489,7 +502,9 @@ void StripDocTest::getNextTextTestByPeople()
 	QCOMPARE(t2s(doc.nextText(sue, s2t("00:00:00:00", tcType))->timeIn(), tcType), QString("01:00:05:00"));
 	QCOMPARE(t2s(doc.nextText(sue, s2t("01:00:05:00", tcType))->timeIn(), tcType), QString("01:00:06:00"));
 	QCOMPARE(t2s(doc.nextText(sue, s2t("01:00:06:00", tcType))->timeIn(), tcType), QString("01:00:15:00"));
-	QVERIFY(doc.nextText(sue, s2t("01:00:15:00", tcType)) == NULL);
+	QCOMPARE(t2s(doc.nextText(sue, s2t("01:00:15:00", tcType))->timeIn(), tcType), QString("01:00:23:00"));
+
+	QVERIFY(doc.nextText(sue, s2t("01:00:23:00", tcType)) == NULL);
 }
 
 void StripDocTest::getNextTextTestByPeopleList()
@@ -507,7 +522,9 @@ void StripDocTest::getNextTextTestByPeopleList()
 	QCOMPARE(t2s(doc.nextText(peopleList, s2t("01:00:05:00", tcType))->timeIn(), tcType), QString("01:00:06:00"));
 	QCOMPARE(t2s(doc.nextText(peopleList, s2t("01:00:06:00", tcType))->timeIn(), tcType), QString("01:00:12:00"));
 	QCOMPARE(t2s(doc.nextText(peopleList, s2t("01:00:12:00", tcType))->timeIn(), tcType), QString("01:00:15:00"));
-	QVERIFY(doc.nextText(peopleList, s2t("01:00:15:00", tcType)) == NULL);
+	QCOMPARE(t2s(doc.nextText(peopleList, s2t("01:00:15:00", tcType))->timeIn(), tcType), QString("01:00:23:00"));
+
+	QVERIFY(doc.nextText(peopleList, s2t("01:00:23:00", tcType)) == NULL);
 }
 
 void StripDocTest::getNextLoopTest()

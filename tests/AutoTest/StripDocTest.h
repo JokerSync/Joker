@@ -19,6 +19,7 @@ private slots:
 
 	// Import DetX tests
 	void importDetXHeaderTest();
+	void importBadDetX();
 	void importDetXNoFile();
 	void importDetXPeopleTest();
 	void importDetXLoopTest();

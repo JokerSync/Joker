@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<badtag>
+
+  <header>
+    <cappella copyright="Martin Delille et Grégoire Parcollet, 2007" version="0.12.5, 1"/>
+    <title>Title test</title>
+    <title2>Translated title</title2>
+    <episode number="episode ref" season="season ref" title="episode title" title2="traducted episode title"/>
+    <production country="Country" diffuser="Publisher" director="Director" distributor="Distributor" producer="Producer" year="2014"/>
+    <author firstname="Pierre" name="Dupont"/>
+    <detector firstname="Dupond" name="Jean"/>
+    <notes>Notes</notes>
+    <summary>Summary
+</summary>
+    <videofile timestamp="01:00:00:00">/Path/to/video.mov</videofile>
+    <last_position timecode="01:00:16:00" track="1"/>
+  </header>
+
+
+</badtag>

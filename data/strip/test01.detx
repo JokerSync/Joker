@@ -58,6 +58,11 @@
       <lipsync timecode="01:00:20:00" type="in_open"/>
       <lipsync timecode="01:00:22:00" type="out_open" link="off"/>
     </line>
+    <line role="sue" track="2" voice="off">
+      <lipsync timecode="01:00:23:00" type="in_open"/>
+      <lipsync link="off" timecode="01:00:23:00" type="neutral"/>
+      <text>Line with no out</text>
+    </line>
     <loop timecode="01:01:00:00"/>
   </body>
 
