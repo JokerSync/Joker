@@ -136,8 +136,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	foreach(QString tradFile, langNameMap.keys())
 	{
 		ui->cboBoxLang->addItem(tradFile);
-		if(langNameMap[tradFile] == _settings->language())
-		{
+		if(langNameMap[tradFile] == _settings->language()) {
 			ui->cboBoxLang->setCurrentIndex(ui->cboBoxLang->count() - 1);
 		}
 	}
@@ -152,10 +151,10 @@ void PreferencesDialog::on_buttonBox_accepted()
 {
 	if(langNameMap[_settings->language()] != ui->cboBoxLang->currentText()) {
 		QMessageBox::warning(this, tr("Information"),
-							 tr("You change the language to \"%1\".\n"
-								"You need to restart %2 to apply you changes.").arg(ui->cboBoxLang->currentText(), APP_NAME),
-							 QMessageBox::Ok,
-							 QMessageBox::Ok);
+		                     tr("You change the language to \"%1\".\n"
+		                        "You need to restart %2 to apply you changes.").arg(ui->cboBoxLang->currentText(), APP_NAME),
+		                     QMessageBox::Ok,
+		                     QMessageBox::Ok);
 		_settings->setLanguage(langNameMap[ui->cboBoxLang->currentText()]);
 	}
 	close();
