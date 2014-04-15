@@ -50,8 +50,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	on_masterActiveCheck_clicked(_settings.sonyMasterActive());
 	on_slaveActiveCheck_clicked(_settings.sonySlaveActive());
 
-	switchSlaveVideoInternalSync(true);
-	switchMasterVideoInternalSync(true);
+	switchSlaveVideoInternalSync(_settings.useVideoSlaveSync());
+	switchMasterVideoInternalSync(_settings.useVideoMasterSync());
 
 	_sonySlave.clock()->setFrame(25 * 25);
 
@@ -187,6 +187,7 @@ void MainWindow::switchSlaveVideoInternalSync(bool useVideo)
 {
 	ui->actionSlave_Use_video_sync->setChecked(useVideo);
 	ui->actionSlave_Use_internal_timer->setChecked(!useVideo);
+	_settings.setUseVideoSlaveSync(useVideo);
 
 	_slaveTimer.stop();
 	if(useVideo) {
@@ -222,6 +223,7 @@ void MainWindow::switchMasterVideoInternalSync(bool useVideo)
 {
 	ui->actionMaster_Use_video_sync->setChecked(useVideo);
 	ui->actionMaster_Use_internal_timer->setChecked(!useVideo);
+	_settings.setUseVideoMasterSync(useVideo);
 
 	_masterTimer.stop();
 	if(useVideo) {
