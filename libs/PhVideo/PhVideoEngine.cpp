@@ -23,6 +23,7 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
+	avcodec_register_all();
 
 	_testTimer.start();
 }

@@ -614,47 +614,22 @@
         <translation>Available inputs</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="459"/>
-        <source>Log</source>
-        <translation>Log</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="471"/>
-        <source>Log file :</source>
-        <translation>Log file :</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="527"/>
-        <source>Reset</source>
-        <translation>Reset</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.cpp" line="125"/>
-        <source>Ok</source>
-        <translation>Ok</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.cpp" line="126"/>
-        <source>Cancel</source>
-        <translation>Cancel</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.cpp" line="143"/>
+        <location filename="PreferencesDialog.cpp" line="131"/>
         <source>Français</source>
         <translation>French</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="145"/>
+        <location filename="PreferencesDialog.cpp" line="133"/>
         <source>Anglais</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="166"/>
+        <location filename="PreferencesDialog.cpp" line="154"/>
         <source>Information</source>
         <translation>Informations</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="167"/>
+        <location filename="PreferencesDialog.cpp" line="155"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <oldsource>You change the language to &quot;%1&quot;.

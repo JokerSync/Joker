@@ -1,8 +1,8 @@
 language: objective-c
 install:
+- scripts/install_sdl.sh
 - scripts/bootstrap.sh
 - scripts/install_libltc.sh
-- scripts/install_sdl.sh
 - export PATH=$PATH:/usr/local/opt/qt5/bin
 - export JOKER_RELEASE_PATH=$HOME
 script:
