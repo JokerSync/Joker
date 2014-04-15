@@ -50,8 +50,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	on_masterActiveCheck_clicked(_settings.sonyMasterActive());
 	on_slaveActiveCheck_clicked(_settings.sonySlaveActive());
 
-	switchSlaveVideoInternalSync(_settings.useVideoSlaveSync());
-	switchMasterVideoInternalSync(_settings.useVideoMasterSync());
+	ui->actionSlave_Use_video_sync->setChecked(_settings.useVideoSlaveSync());
+	ui->actionMaster_Use_video_sync->setChecked(_settings.useVideoMasterSync());
+
+	on_actionSlave_Use_video_sync_triggered(_settings.useVideoSlaveSync());
+	on_actionMaster_Use_video_sync_triggered(_settings.useVideoMasterSync());
 
 	_sonySlave.clock()->setFrame(25 * 25);
 
@@ -171,22 +174,8 @@ void MainWindow::on_actionSlave_GoTo_triggered()
 		_sonySlave.clock()->setFrame(dlg.frame());
 }
 
-void MainWindow::on_actionSlave_Use_video_sync_triggered()
+void MainWindow::on_actionSlave_Use_video_sync_triggered(bool useVideo)
 {
-	if(ui->actionSlave_Use_internal_timer->isChecked())
-		switchSlaveVideoInternalSync(true);
-}
-
-void MainWindow::on_actionSlave_Use_internal_timer_triggered()
-{
-	if(ui->actionSlave_Use_video_sync->isChecked())
-		switchSlaveVideoInternalSync(false);
-}
-
-void MainWindow::switchSlaveVideoInternalSync(bool useVideo)
-{
-	ui->actionSlave_Use_video_sync->setChecked(useVideo);
-	ui->actionSlave_Use_internal_timer->setChecked(!useVideo);
 	_settings.setUseVideoSlaveSync(useVideo);
 
 	_slaveTimer.stop();
@@ -206,23 +195,8 @@ void MainWindow::switchSlaveVideoInternalSync(bool useVideo)
 	}
 }
 
-void MainWindow::on_actionMaster_Use_video_sync_triggered()
+void MainWindow::on_actionMaster_Use_video_sync_triggered(bool useVideo)
 {
-	if(ui->actionMaster_Use_internal_timer->isChecked())
-		switchMasterVideoInternalSync(true);
-
-}
-
-void MainWindow::on_actionMaster_Use_internal_timer_triggered()
-{
-	if(ui->actionMaster_Use_video_sync->isChecked())
-		switchMasterVideoInternalSync(false);
-}
-
-void MainWindow::switchMasterVideoInternalSync(bool useVideo)
-{
-	ui->actionMaster_Use_video_sync->setChecked(useVideo);
-	ui->actionMaster_Use_internal_timer->setChecked(!useVideo);
 	_settings.setUseVideoMasterSync(useVideo);
 
 	_masterTimer.stop();
@@ -241,4 +215,3 @@ void MainWindow::switchMasterVideoInternalSync(bool useVideo)
 		_masterTimer.start(40);
 	}
 }
-
