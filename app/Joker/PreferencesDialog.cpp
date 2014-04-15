@@ -97,17 +97,15 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		}
 	}
 
-	ui->listWidgetSync->addItem("LTC");
-
-	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
-
-	if(_oldSyncProtocol == Synchronizer::Sony)
-		showParamSony(true);
-	else if(_oldSyncProtocol == Synchronizer::LTC)
-		showParamLTC(true);
+	if(_oldSyncProtocol == Synchronizer::NoSync) {
+		// Remove the synchro tab
+		ui->tabWidget->removeTab(2);
+	}
 	else {
-		showParamLTC(false);
-		showParamSony(false);
+		if(_oldSyncProtocol == Synchronizer::Sony)
+			showParamSony(true);
+		else if(_oldSyncProtocol == Synchronizer::LTC)
+			showParamLTC(true);
 	}
 
 //	ui->buttonGroup->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
@@ -216,26 +214,6 @@ void PreferencesDialog::on_cBoxDisplayTitle_clicked()
 void PreferencesDialog::on_cBoxDisplayLoop_clicked()
 {
 	_settings->setDisplayLoop(ui->cBoxDisplayLoop->isChecked());
-}
-
-void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
-{
-	Q_UNUSED(current);
-	Q_UNUSED(previous);
-	int protocol = ui->listWidgetSync->currentRow();
-	switch(protocol) {
-	case Synchronizer::Sony:
-		showParamSony(true);
-		break;
-	case Synchronizer::LTC:
-		showParamLTC(true);
-		break;
-	default:
-		showParamLTC(false);
-		showParamSony(false);
-		break;
-	}
-	_settings->setSynchroProtocol(protocol);
 }
 
 void PreferencesDialog::showParamLTC(bool show)

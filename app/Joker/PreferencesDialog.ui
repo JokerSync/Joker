@@ -247,33 +247,6 @@
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="lblDelay">
-            <property name="text">
-             <string>Delay</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QListWidget" name="listWidgetSync">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>75</height>
-             </size>
-            </property>
-            <item>
-             <property name="text">
-              <string>No sync</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Sony 9 pin</string>
-             </property>
-            </item>
-           </widget>
-          </item>
           <item row="1" column="2">
            <widget class="QRadioButton" name="radioButtonQF">
             <property name="text">
@@ -294,134 +267,88 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="3">
-           <widget class="QGroupBox" name="groupBoxSony">
+          <item row="0" column="2">
+           <widget class="QRadioButton" name="radioButtonMS">
+            <property name="text">
+             <string>millisecond</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblDelay">
+            <property name="text">
+             <string>Delay</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEditSonyID">
+            <property name="maximumSize">
+             <size>
+              <width>70</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string notr="true">F0 C0</string>
+            </property>
+            <property name="maxLength">
+             <number>20</number>
+            </property>
+            <property name="placeholderText">
+             <string notr="true"/>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="spinBoxSonyHighSpeed">
             <property name="enabled">
              <bool>true</bool>
             </property>
             <property name="minimumSize">
              <size>
-              <width>100</width>
-              <height>150</height>
+              <width>75</width>
+              <height>0</height>
              </size>
             </property>
-            <property name="title">
-             <string>Parameters</string>
+            <property name="minimum">
+             <number>1</number>
             </property>
-            <widget class="QLabel" name="lblSonyHighSpeed">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="geometry">
-              <rect>
-               <x>20</x>
-               <y>61</y>
-               <width>114</width>
-               <height>24</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Sony high speed</string>
-             </property>
-            </widget>
-            <widget class="QLabel" name="lblSonyID">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="geometry">
-              <rect>
-               <x>20</x>
-               <y>30</y>
-               <width>114</width>
-               <height>21</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Sony ID</string>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spinBoxSonyHighSpeed">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="geometry">
-              <rect>
-               <x>180</x>
-               <y>61</y>
-               <width>75</width>
-               <height>24</height>
-              </rect>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>75</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-             <property name="value">
-              <number>3</number>
-             </property>
-            </widget>
-            <widget class="QLabel" name="lblInputs">
-             <property name="geometry">
-              <rect>
-               <x>20</x>
-               <y>30</y>
-               <width>121</width>
-               <height>19</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Available inputs</string>
-             </property>
-            </widget>
-            <widget class="QListWidget" name="listWidgetInputs">
-             <property name="geometry">
-              <rect>
-               <x>150</x>
-               <y>30</y>
-               <width>200</width>
-               <height>100</height>
-              </rect>
-             </property>
-            </widget>
-            <widget class="QLineEdit" name="lineEditSonyID">
-             <property name="geometry">
-              <rect>
-               <x>180</x>
-               <y>30</y>
-               <width>70</width>
-               <height>21</height>
-              </rect>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>70</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string notr="true">F0 C0</string>
-             </property>
-             <property name="maxLength">
-              <number>20</number>
-             </property>
-             <property name="placeholderText">
-              <string notr="true"/>
-             </property>
-            </widget>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>3</number>
+            </property>
            </widget>
           </item>
-          <item row="0" column="2">
-           <widget class="QRadioButton" name="radioButtonMS">
+          <item row="2" column="0">
+           <widget class="QLabel" name="lblSonyHighSpeed">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="text">
-             <string>millisecond</string>
+             <string>Sony high speed</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblSonyID">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Sony ID</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QListWidget" name="listWidgetInputs"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="lblInputs">
+            <property name="text">
+             <string>Available inputs</string>
             </property>
            </widget>
           </item>
@@ -449,11 +376,4 @@
  </customwidgets>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
- </buttongroups>
 </ui>

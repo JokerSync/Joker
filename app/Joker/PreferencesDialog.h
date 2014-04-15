@@ -65,8 +65,6 @@ private slots:
 
 	void on_cBoxDisplayLoop_clicked();
 
-	void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
 	void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
