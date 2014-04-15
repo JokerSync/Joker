@@ -29,7 +29,6 @@ void LockableSpinBoxTest::testControlClickUnload()
 	QTest::mouseClick(&spinBox, Qt::LeftButton);
 	QVERIFY(!spinBox.isEnabled());
 
-	QTest::keyPress(&spinBox, Qt::ControlModifier);
-	QTest::mouseClick(&spinBox, Qt::LeftButton);
-	QVERIFY(!spinBox.isEnabled());
+	QTest::mouseClick(&spinBox, Qt::LeftButton, Qt::ControlModifier);
+	QVERIFY(spinBox.isEnabled());
 }
