@@ -21,6 +21,8 @@ include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
+include(../../libs/PhGraphic/PhGraphic.pri)
+include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 HEADERS += \
@@ -32,7 +34,8 @@ HEADERS += \
     SonyControllerTest.h \
     AutoTestSettings.h \
     WindowTest.h \
-    AutoTestWindow.h
+	AutoTestWindow.h \
+    PhGraphicViewTest.h
 
 SOURCES += main.cpp \
     StripDocTest.cpp \
@@ -42,7 +45,8 @@ SOURCES += main.cpp \
     TimeCodeTest.cpp \
     SonyControllerTest.cpp \
     WindowTest.cpp \
-    AutoTestWindow.cpp
+	AutoTestWindow.cpp \
+    PhGraphicViewTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/empty.joker) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/empty_root.joker) . $${CS}
@@ -58,6 +62,13 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/str
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test04.mos) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/notitle.detx) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/text.txt) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240.png) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/test.bmp) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240_black.png) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/SWENSON.TTF) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/Arial.ttf) . $${CS}
+
+DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 
 FORMS += \
     AutoTestWindow.ui

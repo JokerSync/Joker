@@ -9,6 +9,7 @@
 #include "TimeCodeEditTest.h"
 #include "LockableSpinBoxTest.h"
 #include "WindowTest.h"
+#include "PhGraphicViewTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -79,6 +80,11 @@ int main(int argc, char *argv[])
 
 		WindowTest windowTest;
 		success &= !QTest::qExec(&windowTest);
+
+		PhGraphicViewTest viewTest;
+		success &= !QTest::qExec(&viewTest);
+
+
 	}
 
 	QThread::msleep(500);
