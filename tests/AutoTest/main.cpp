@@ -9,7 +9,7 @@
 #include "TimeCodeEditTest.h"
 #include "LockableSpinBoxTest.h"
 #include "WindowTest.h"
-#include "PhGraphicViewTest.h"
+#include "GraphicStripTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 	}
 
 	if(testGraphicStrip) {
-		PhGraphicViewTest viewTest;
+		GraphicStripTest viewTest;
 		success &= !QTest::qExec(&viewTest);
 	}
 

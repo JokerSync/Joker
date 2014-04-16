@@ -3,16 +3,16 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#ifndef PHGRAPHICVIEWTEST_H
-#define PHGRAPHICVIEWTEST_H
+#ifndef GRAPHICSTRIPTEST_H
+#define GRAPHICSTRIPTEST_H
 
 #include <QObject>
 
-class PhGraphicViewTest : public QObject
+class GraphicStripTest : public QObject
 {
 	Q_OBJECT
 public:
-	explicit PhGraphicViewTest(QObject *parent = 0);
+	explicit GraphicStripTest(QObject *parent = 0);
 
 private slots:
 	void testStripDocObject();
@@ -70,4 +70,4 @@ public:
 	PH_SETTING_INT2(setStartTime, startTime, 0)
 };
 
-#endif // PHGRAPHICVIEWTEST_H
+#endif // GRAPHICSTRIPTEST_H

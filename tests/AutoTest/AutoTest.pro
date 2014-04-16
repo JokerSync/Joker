@@ -35,7 +35,7 @@ HEADERS += \
     AutoTestSettings.h \
     WindowTest.h \
 	AutoTestWindow.h \
-    PhGraphicViewTest.h
+	GraphicStripTest.h
 
 SOURCES += main.cpp \
     StripDocTest.cpp \
@@ -46,7 +46,7 @@ SOURCES += main.cpp \
     SonyControllerTest.cpp \
     WindowTest.cpp \
 	AutoTestWindow.cpp \
-    PhGraphicViewTest.cpp
+	GraphicStripTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/empty.joker) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/empty_root.joker) . $${CS}
