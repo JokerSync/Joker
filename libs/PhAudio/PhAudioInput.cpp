@@ -92,7 +92,7 @@ int PhAudioInput::processAudio(const void *inputBuffer, void *, unsigned long fr
 
 	int minLevel = 0;
 	int maxLevel = 0;
-	for(int i = 0; i < framesPerBuffer; i++) {
+	for(unsigned long i = 0; i < framesPerBuffer; i++) {
 		if(buffer[i] < minLevel)
 			minLevel = buffer[i];
 		if(buffer[i] > maxLevel)

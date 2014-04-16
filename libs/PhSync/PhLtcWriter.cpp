@@ -41,7 +41,7 @@ PhClock *PhLtcWriter::clock()
 	return &_clock;
 }
 
-int PhLtcWriter::processAudio(const void *, void *outputBuffer, unsigned long framesPerBuffer)
+int PhLtcWriter::processAudio(const void *, void *outputBuffer, unsigned long)
 {
 	unsigned int hhmmssff[4];
 	PhTimeCode::ComputeHhMmSsFf(hhmmssff, _clock.frame(), _clock.timeCodeType());
@@ -61,7 +61,6 @@ int PhLtcWriter::processAudio(const void *, void *outputBuffer, unsigned long fr
 	buf = ltc_encoder_get_bufptr(_encoder, &len, 1);
 	memcpy(outputBuffer, buf, len);
 	_clock.tick(PhTimeCode::getFps(_clock.timeCodeType()));
-
 
 	return len;
 }

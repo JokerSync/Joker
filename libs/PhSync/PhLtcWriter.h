@@ -35,7 +35,7 @@ public:
 
 private:
 
-	int processAudio(const void *, void *outputBuffer, unsigned long framesPerBuffer);
+	int processAudio(const void *, void *outputBuffer, unsigned long);
 
 	PhClock _clock;
 	LTCEncoder *_encoder;
