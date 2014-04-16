@@ -370,6 +370,10 @@ public:
 	 * @brief Add a PhGraphicObjet to the doc
 	 */
 	void addObject(PhStripObject *object);
+	/**
+	 * @brief Add a PhPeople to the doc
+	 * @param people the new poeple
+	 */
 	void addPeople(PhPeople * people);
 
 signals:
