@@ -34,5 +34,4 @@ FORMS    += FormTestWindow.ui \
 mac {
 	# For the plist version
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
-	QMAKE_POST_LINK += sed -i \"\" -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
 }
