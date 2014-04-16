@@ -366,6 +366,12 @@ public:
 	 */
 	void reset();
 
+	/**
+	 * @brief Add a PhGraphicObjet to the doc
+	 */
+	void addObject(PhStripObject *object);
+	void addPeople(PhPeople * people);
+
 signals:
 	/**
 	 * @brief Emit a signal when the PhStripDoc changed
