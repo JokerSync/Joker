@@ -62,10 +62,6 @@ public:
 	 */
 	void addInfo(QString info);
 
-	/**
-	 * @brief export the drawn frame
-	 */
-	void exportToImage();
 signals:
 	/**
 	 * @brief emit a signal just before the paint

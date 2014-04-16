@@ -151,11 +151,3 @@ void PhGraphicView::paintGL()
 
 	_frameTickCounter.tick();
 }
-
-void PhGraphicView::exportToImage()
-{
-	QImage impr(this->grabFrameBuffer());
-	impr.save("./test.bmp", "BMP", 100);
-}
-
-

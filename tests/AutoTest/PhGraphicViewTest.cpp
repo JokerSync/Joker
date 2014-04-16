@@ -45,5 +45,6 @@ void PhGraphicViewTest::testStripDocObject()
 
 	view.strip()->draw(0, 0, 981, 319);
 	QImage impr(view.grabFrameBuffer());
-	QVERIFY(impr.operator ==(QImage(QCoreApplication::applicationDirPath() + "/test.bmp")));
+	QImage expected(QCoreApplication::applicationDirPath() + QString("/test.bmp"));
+	QVERIFY(impr == expected);
 }
