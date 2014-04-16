@@ -63,7 +63,8 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/str
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/notitle.detx) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/text.txt) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240.png) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/test.bmp) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/test1.bmp) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/test2.bmp) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240_black.png) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/SWENSON.TTF) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/Arial.ttf) . $${CS}
@@ -72,3 +73,9 @@ DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 
 FORMS += \
     AutoTestWindow.ui
+
+mac{
+	# For the plist version
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+}
+
