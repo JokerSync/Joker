@@ -614,14 +614,19 @@
         <translation>Entrée(s)</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="131"/>
-        <source>Français</source>
-        <translation>Français</translation>
+        <location filename="PreferencesDialog.cpp" line="127"/>
+        <source>&lt;System default&gt;</source>
+        <translation>&lt;Langue du système&gt;</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="133"/>
-        <source>Anglais</source>
+        <location filename="PreferencesDialog.cpp" line="135"/>
+        <source>English</source>
         <translation>Anglais</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="137"/>
+        <source>French</source>
+        <translation>Français</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.cpp" line="154"/>
@@ -724,36 +729,4 @@ Vous devez relancer %2 pour appliquer ce changement.</translation>
         <translation>IPS :</translation>
     </message>
 </context>
-    <context>
-        <name>MAC_APPLICATION_MENU</name>
-        <message>
-            <source>Services</source>
-            <translation>Services</translation>
-        </message>
-        <message>
-            <source>Hide %1</source>
-            <translation>Cacher %1</translation>
-        </message>
-        <message>
-            <source>Hide Others</source>
-            <translation>Cacher les autres</translation>
-        </message>
-        <message>
-            <source>Show All</source>
-            <translation>Montrer tout</translation>
-        </message>
-        <message>
-            <source>Preferences...</source>
-            <translation>Préferences...</translation>
-        </message>
-        <message>
-            <source>Quit %1</source>
-            <translation>Quitter %1</translation>
-        </message>
-        <message>
-            <source>About %1</source>
-            <translation>À propos: %1</translation>
-        </message>
-    </context>
-
 </TS>

@@ -614,14 +614,19 @@
         <translation>Available inputs</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="131"/>
-        <source>Français</source>
-        <translation>French</translation>
+        <location filename="PreferencesDialog.cpp" line="127"/>
+        <source>&lt;System default&gt;</source>
+        <translation>&lt;System default&gt;</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="133"/>
-        <source>Anglais</source>
+        <location filename="PreferencesDialog.cpp" line="135"/>
+        <source>English</source>
         <translation>English</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.cpp" line="137"/>
+        <source>French</source>
+        <translation>French</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.cpp" line="154"/>

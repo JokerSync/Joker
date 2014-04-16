@@ -74,21 +74,21 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 
 	foreach(QString fontName, systemFontList)
 	{
-		fontList[fontName.split(".").first()] = "/Library/Fonts/" + fontName;
+		_fontList[fontName.split(".").first()] = "/Library/Fonts/" + fontName;
 	}
 	foreach(QString fontName, userFontList)
 	{
-		fontList[fontName.split(".").first()] = userDirectory + "/Library/Fonts/" + fontName;
+		_fontList[fontName.split(".").first()] = userDirectory + "/Library/Fonts/" + fontName;
 	}
-	if(!fontList["SWENSON"].isNull())
-		fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
+	if(!_fontList["SWENSON"].isNull())
+		_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
 
 
 	// _oldFont is : /Path/To/Font.ttf
 	// So split with "/" then take last gives Font.ttf
 	// Split with "." then take first, gives the name of the font
 	QString oldFontName = _oldFont.split("/").last().split(".").first();
-	foreach(QString fontName, fontList.keys())
+	foreach(QString fontName, _fontList.keys())
 	{
 		ui->listWidgetFont->addItem(fontName);
 		if(fontName == oldFontName) {
@@ -114,7 +114,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 //	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
 
 	//Set the language
-	QStringList languageFileList;
 	QDir appDirectory(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/");
 
 
@@ -122,24 +121,26 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QStringList filtersLang;
 	filtersLang.append("*.qm");
 	appDirectory.setNameFilters(filtersLang);
-	languageFileList = appDirectory.entryList();
+	QStringList languageFileList = appDirectory.entryList();
 
+
+	_langNameMap[""] = tr("<System default>");
+	ui->cboBoxLang->addItem(_langNameMap[""], "");
 
 	foreach(QString tradFile, languageFileList)
 	{
-		if(tradFile.split("_").first() == "fr")
-			langNameMap[tr("Français")] = tradFile;
-		else if (tradFile.split("_").first() == "en")
-			langNameMap[tr("Anglais")] = tradFile;
+		QFileInfo info(tradFile);
+		QString lang = info.baseName();
+		if (lang == "en_US")
+			_langNameMap[lang] = tr("English");
+		else if(lang == "fr_FR")
+			_langNameMap[lang] = tr("French");
+		else
+			_langNameMap[lang] = lang;
+		ui->cboBoxLang->addItem(_langNameMap[lang], lang);
 	}
 
-	foreach(QString tradFile, langNameMap.keys())
-	{
-		ui->cboBoxLang->addItem(tradFile);
-		if(langNameMap[tradFile] == _settings->language()) {
-			ui->cboBoxLang->setCurrentIndex(ui->cboBoxLang->count() - 1);
-		}
-	}
+	ui->cboBoxLang->setCurrentText(_langNameMap[_settings->language()]);
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -149,13 +150,13 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::on_buttonBox_accepted()
 {
-	if(langNameMap[_settings->language()] != ui->cboBoxLang->currentText()) {
+	if(ui->cboBoxLang->currentData() != _settings->language()) {
 		QMessageBox::warning(this, tr("Information"),
 		                     tr("You change the language to \"%1\".\n"
 		                        "You need to restart %2 to apply you changes.").arg(ui->cboBoxLang->currentText(), APP_NAME),
 		                     QMessageBox::Ok,
 		                     QMessageBox::Ok);
-		_settings->setLanguage(langNameMap[ui->cboBoxLang->currentText()]);
+		_settings->setLanguage(ui->cboBoxLang->currentData().toString());
 	}
 	close();
 }
@@ -214,7 +215,7 @@ void PreferencesDialog::on_sliderBoldness_valueChanged(int value)
 void PreferencesDialog::on_lineEditFilter_textEdited(const QString &arg1)
 {
 	ui->listWidgetFont->clear();
-	foreach(QString fontName, fontList.keys())
+	foreach(QString fontName, _fontList.keys())
 	{
 		if(fontName.contains(&arg1, Qt::CaseInsensitive))
 			ui->listWidgetFont->addItem(fontName);
@@ -225,7 +226,7 @@ void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *cu
 {
 	Q_UNUSED(previous);
 	if(current)
-		_settings->setTextFontFile(fontList[current->text()]);
+		_settings->setTextFontFile(_fontList[current->text()]);
 }
 
 void PreferencesDialog::on_cBoxDisplayTC_clicked()
