@@ -61,6 +61,11 @@ public:
 	 * @param info A string
 	 */
 	void addInfo(QString info);
+
+	/**
+	 * @brief export the drawn frame
+	 */
+	void exportToImage();
 signals:
 	/**
 	 * @brief emit a signal just before the paint
@@ -97,6 +102,7 @@ protected:
 	 * Reimplement it in a subclass.
 	 */
 	void paintGL();
+
 
 private:
 	bool _initialized;
