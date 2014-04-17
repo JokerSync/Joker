@@ -70,5 +70,6 @@ void GraphicStripTest::testStripDocObject()
 
 	// Assuming that getting less than 0,1% of diff is the same
 	// file. See http://stackoverflow.com/q/23136336/2307070
+	qDebug() << nbDiffPixels << imgHeight * imgWidth / 1000;
 	QVERIFY(nbDiffPixels < imgHeight * imgWidth / 1000);
 }
