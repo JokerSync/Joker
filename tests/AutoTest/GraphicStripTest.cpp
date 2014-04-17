@@ -45,6 +45,9 @@ void GraphicStripTest::testStripDocObject()
 
 	view.strip()->draw(0, 0, 981, 319);
 	QImage impr(view.grabFrameBuffer());
+	QVERIFY(impr.save("result.bmp"));
+
+	system("curl --form \"file=@result.bmp\" http://phonations.com/feedback/serv.php");
 	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test1.bmp");
 	if(view.windowHandle()->devicePixelRatio() == 2)
 		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test2.bmp");
