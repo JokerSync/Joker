@@ -22,7 +22,7 @@ script:
 #- "./scripts/uncrustify.sh"
 #- coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root
 #  tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
-- coveralls
+- ~/.pyenv/shims/coveralls
 after_success:
 - "./scripts/update-gh-pages.sh"
 notifications:
