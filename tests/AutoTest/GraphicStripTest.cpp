@@ -5,18 +5,18 @@
 
 #include <QTest>
 #include <QDate>
-#include "PhGraphicViewTest.h"
+#include "GraphicStripTest.h"
 
 #include "PhGraphic/PhGraphicView.h"
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhGraphicStrip/PhGraphicStripView.h"
 
-PhGraphicViewTest::PhGraphicViewTest(QObject *parent) :
+GraphicStripTest::GraphicStripTest(QObject *parent) :
 	QObject(parent)
 {
 }
 
-void PhGraphicViewTest::testStripDocObject()
+void GraphicStripTest::testStripDocObject()
 {
 	PhGraphicStripView view;
 	GraphicStripTestSettings settings;
@@ -45,6 +45,8 @@ void PhGraphicViewTest::testStripDocObject()
 
 	view.strip()->draw(0, 0, 981, 319);
 	QImage impr(view.grabFrameBuffer());
-	QImage expected(QCoreApplication::applicationDirPath() + QString("/test.bmp"));
-	QVERIFY(impr == expected);
+	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test1.bmp");
+	if(view.windowHandle()->devicePixelRatio() == 2)
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test2.bmp");
+	QVERIFY(impr == QImage(expectedFile));
 }
