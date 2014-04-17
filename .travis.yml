@@ -5,7 +5,6 @@ install:
 #- scripts/install_libltc.sh
 #- export PATH=$PATH:/usr/local/opt/qt5/bin
 #- export JOKER_RELEASE_PATH=$HOME
-- sudo pip install cpp-coveralls --use-mirrors
 script:
 #- qmake -v
 #- mkdir tmp && cd tmp

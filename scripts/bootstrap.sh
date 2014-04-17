@@ -4,8 +4,9 @@ if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
 
 brew update
-brew install ffmpeg libav portaudio 
-brew install doxygen uncrustify node npm pyenv wget
+#brew install ffmpeg libav portaudio 
+#brew install doxygen uncrustify node npm pyenv wget
+brew install pyenv
 eval "$(pyenv init -)"
 pyenv install 2.7.2
 pyenv global 2.7.2
@@ -13,11 +14,11 @@ pyenv rehash
 pip install cpp-coveralls
 pyenv rehash
 
-brew install qt5
-find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
+#brew install qt5
+#find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
 
 # Installing appdmg for deployment
-npm install -g appdmg
+#npm install -g appdmg
 
 
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
