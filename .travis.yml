@@ -20,8 +20,9 @@ script:
 #- cd ..
 #- "./scripts/doxygen.sh"
 #- "./scripts/uncrustify.sh"
-- coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root
-  tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
+#- coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root
+#  tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
+- coveralls
 after_success:
 - "./scripts/update-gh-pages.sh"
 notifications:
