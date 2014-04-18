@@ -99,6 +99,10 @@ protected:
 	 */
 	void paintGL();
 
+	/**
+	 * @brief The screen frequency
+	 */
+	int _screenFrequency;
 
 private:
 	bool _initialized;
@@ -109,7 +113,6 @@ private:
 	 */
 	QTimer *t_Timer;
 	PhTickCounter _frameTickCounter;
-	int _screenFrequency;
 	QStringList _infos;
 	PhFont _infoFont;
 	QTime _dropTimer;

@@ -12,8 +12,8 @@
 
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
-	_videoEngine(false),
 	_settings(NULL),
+	_videoEngine(false),
 	_sony(NULL),
 	_titleText(_strip.getHUDFont(), ""),
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),
@@ -50,7 +50,6 @@ bool VideoStripView::init()
 	_currentPeopleName.setColor(QColor(128, 128, 128));
 
 	connect(this, SIGNAL(beforePaint(PhTimeScale)), _strip.clock(), SLOT(tick(PhTimeScale)));
-
 	_logo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
 	_logo.init();
 

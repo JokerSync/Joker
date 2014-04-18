@@ -15,8 +15,8 @@
 
 PhFeedbackDialog::PhFeedbackDialog(PhFeedbackSettings *settings, QWidget *parent) :
 	QDialog(parent),
-	_settings(settings),
-	ui(new Ui::PhFeedbackDialog)
+	ui(new Ui::PhFeedbackDialog),
+	_settings(settings)
 {
 
 	ui->setupUi(this);

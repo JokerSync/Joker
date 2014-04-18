@@ -46,13 +46,6 @@ void GraphicStripTest::testStripDocObject()
 
 	view.strip()->draw(0, 0, 981, 319);
 	QImage impr(view.grabFrameBuffer());
-	QDateTime * d = new QDateTime();
-	QString filename = "result" + d->currentDateTime().toString("hh:mm:ss:zzz") +".bmp";
-	QVERIFY(impr.save(filename));
-	QString cmd;
-	cmd += "curl --form \"file=@" + filename + "\" http://phonations.com/feedback/serv.php";
-
-	system(cmd.toStdString().c_str());
 	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test1.bmp");
 	if(view.windowHandle()->devicePixelRatio() == 2)
 		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test2.bmp");

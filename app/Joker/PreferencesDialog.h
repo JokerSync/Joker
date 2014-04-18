@@ -86,7 +86,9 @@ private:
 	int _oldSyncProtocol;
 	QString _oldLTCInput;
 
-	QMap<QString, QString> fontList;
+	QMap<QString, QString> _fontList;
+	QMap<QString, QString> _langNameMap;
+
 
 	void showParamLTC(bool show);
 	void showParamSony(bool show);

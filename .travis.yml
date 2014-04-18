@@ -21,9 +21,8 @@ script:
 - "./scripts/doxygen.sh"
 - "./scripts/uncrustify.sh"
 after_success:
-#- ~/.pyenv/shims/coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root
-#  tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
-- ~/.pyenv/shims/coveralls --exclude "/usr/local/*" --exclude "tmp/Joker/*" --exclude "tests/*" --root "tmp/AutoTest" -E ".+/moc_.+" -E ".+/ui_.+"
+- ~/.pyenv/shims/coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root
+  tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
 - "./scripts/update-gh-pages.sh"
 notifications:
   irc: phonations.com#joker
