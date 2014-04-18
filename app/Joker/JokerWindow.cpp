@@ -451,7 +451,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 
 void JokerWindow::timeCounter(PhTimeScale frequency)
 {
-	if(_strip->clock()->rate() == 1 && (Synchronizer::SyncType)_settings->synchroProtocol() == Synchronizer::NoSync) {
+	if(_strip->clock()->rate() == 1 && (Synchronizer::SyncType)_settings->synchroProtocol() != Synchronizer::NoSync) {
 		_numberOfDraw++;
 		if(_numberOfDraw >= frequency) {
 			_numberOfDraw = 0;
