@@ -87,6 +87,7 @@ public:
 	 * @return A time value
 	 */
 	virtual int timeBetweenRuler() = 0;
+
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H
