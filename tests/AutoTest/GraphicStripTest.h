@@ -12,10 +12,12 @@ class GraphicStripTest : public QObject
 {
 	Q_OBJECT
 public:
-	explicit GraphicStripTest(QObject *parent = 0);
+	explicit GraphicStripTest(bool travis, QObject *parent = 0);
 
 private slots:
 	void testStripDocObject();
+private:
+	bool _travis;
 
 };
 

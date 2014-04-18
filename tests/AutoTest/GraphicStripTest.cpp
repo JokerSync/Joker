@@ -11,9 +11,10 @@
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhGraphicStrip/PhGraphicStripView.h"
 
-GraphicStripTest::GraphicStripTest(QObject *parent) :
+GraphicStripTest::GraphicStripTest(bool travis, QObject *parent) :
 	QObject(parent)
 {
+	_travis = travis;
 }
 
 void GraphicStripTest::testStripDocObject()
@@ -55,21 +56,9 @@ void GraphicStripTest::testStripDocObject()
 	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test1.bmp");
 	if(view.windowHandle()->devicePixelRatio() == 2)
 		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test2.bmp");
-	QImage expectedImage = QImage(expectedFile);
+	if(_travis)
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/testTravis.bmp");
 
-	int imgWidth = expectedImage.width();
-	int imgHeight = expectedImage.height();
-	int nbDiffPixels = 0;
-	for(int i = 1; i < imgWidth; i++) {
-		for(int j = 1; j < imgHeight; j++) {
-			if(QColor(expectedImage.pixel(i, j)).name() != QColor(impr.pixel(i, j)).name()) {
-				nbDiffPixels++;
-			}
-		}
-	}
+	QVERIFY(impr == QImage(expectedFile));
 
-	// Assuming that getting less than 0,1% of diff is the same
-	// file. See http://stackoverflow.com/q/23136336/2307070
-	qDebug() << nbDiffPixels << imgHeight * imgWidth / 1000;
-	QVERIFY(nbDiffPixels < imgHeight * imgWidth / 1000);
 }
