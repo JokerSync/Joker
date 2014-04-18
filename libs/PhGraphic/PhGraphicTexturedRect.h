@@ -39,13 +39,22 @@ public:
 	void setTextureCoordinate(float tu, float tv);
 
 	/**
-	 * @brief Create a texture from a RGB Buffer
+	 * @brief Create a texture from a RGBA Buffer
 	 * @param data the source buffer
 	 * @param width the dimensions
 	 * @param height the dimensions
 	 * @return True if succeed, false otherwise
 	 */
 	bool createTextureFromARGBBuffer(void *data, int width, int height);
+
+	/**
+	 * @brief Create a texture from a RGB Buffer
+	 * @param data the source buffer
+	 * @param width the dimensions
+	 * @param height the dimensions
+	 * @return True if succeed, false otherwise
+	 */
+	bool createTextureFromRGBBuffer(void *data, int width, int height);
 
 	/**
 	 * @brief Create a texture from a YUV Buffer
