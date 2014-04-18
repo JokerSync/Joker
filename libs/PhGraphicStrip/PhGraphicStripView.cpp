@@ -23,7 +23,7 @@ bool PhGraphicStripView::init()
 	PhGraphicView::init();
 	connect(this, SIGNAL(beforePaint(PhTimeScale)), _strip.clock(), SLOT(tick(PhTimeScale)));
 
-	return _strip.init(_screenFrequency);
+	return _strip.init();
 }
 
 void PhGraphicStripView::paint()

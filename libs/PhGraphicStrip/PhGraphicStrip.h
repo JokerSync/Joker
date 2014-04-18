@@ -88,11 +88,10 @@ public:
 	 * - Load the strip background
 	 * - Set the synchronization bar
 	 * - Load the font file
-	 * @param screenFreq the screen frequency
 	 * @return True if succeed, false otherwise
 	 */
 
-	bool init(int screenFreq = 60);
+	bool init();
 
 	/**
 	 * @brief draw the strip
@@ -184,7 +183,6 @@ private:
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
 
 	QStringList _infos;
-	int _screenFrequency;
 };
 
 #endif // PHGRAPHICSTRIP_H
