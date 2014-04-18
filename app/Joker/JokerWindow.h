@@ -59,6 +59,15 @@ public:
 	///
 	bool openVideoFile(QString videoFile);
 
+public slots:
+	///
+	/// \brief timeCounter Slot used to count the time played on nominal speed
+	/// when the synchro is enabled
+	///
+	/// \param frequency
+	///
+	void timeCounter(PhTimeScale frequency);
+
 protected:
 	///
 	/// @brief Open all supported strip file
@@ -233,6 +242,8 @@ private:
 	PhLtcReader _ltcReader;
 	bool _needToSave;
 	bool _firstDoc;
+	int _numberOfDraw;
+
 };
 
 #endif // MAINWINDOW_H

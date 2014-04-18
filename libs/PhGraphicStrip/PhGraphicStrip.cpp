@@ -53,7 +53,7 @@ bool PhGraphicStrip::setFontFile(QString fontFile)
 	return false;
 }
 
-bool PhGraphicStrip::init()
+bool PhGraphicStrip::init(int screenFreq)
 {
 	PHDEBUG << _settings;
 
@@ -94,6 +94,8 @@ bool PhGraphicStrip::init()
 
 	// This is used to make some time-based test
 	_testTimer.start();
+
+	_screenFrequency = screenFreq;
 
 	return true;
 }
@@ -167,6 +169,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
 	if(height > 0) {
+
 		int timePerPixel = _settings->horizontalTimePerPixel();
 		_textFont.setBoldness(_settings->textBoldness());
 		_textFont.setFontFile(_settings->textFontFile());
