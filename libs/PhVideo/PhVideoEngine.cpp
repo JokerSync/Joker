@@ -288,7 +288,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 #warning /// @todo Use RGB pixel format
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
 						                                _videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
-														AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
+						                                AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
 							_rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
