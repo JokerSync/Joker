@@ -298,7 +298,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 						                   &linesize)) {
 							scaleElapsed = _testTimer.elapsed();
 
-							videoRect.createTextureFromARGBBuffer(_rgb, _videoFrame->width, frameHeight);
+							videoRect.createTextureFromRGBBuffer(_rgb, _videoFrame->width, frameHeight);
 
 							textureElapsed = _testTimer.elapsed();
 
