@@ -17,26 +17,24 @@ install:
 
 script:
 - qmake -v
-#- mkdir tmp && cd tmp
-#- mkdir AutoTest && cd AutoTest
-#- qmake ../../tests/AutoTest/AutoTest.pro
-- qmake tests/AutoTest/AutoTest.pro
+- mkdir ../tmp && cd ../tmp
+- mkdir AutoTest && cd AutoTest
+- qmake ../Joker/tests/AutoTest/AutoTest.pro
 - make
 - "./AutoTest"
-- coveralls -E .+/moc_.+ -E .+/ui_.+
 #- cd ..
 #- mkdir Joker && cd Joker
 #- qmake ../../app/Joker/Joker.pro
 #- make
 #- cd ..
-#- cd ..
+- cd ../Joker
+- coveralls --build-root ../tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
 #- "./scripts/doxygen.sh"
 #- "./scripts/uncrustify.sh"
 #after_success:
 #- ~/.pyenv/shims/coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
 #- "./scripts/update-gh-pages.sh"
 notifications:
-  irc: phonations.com#joker
   flowdock:
     secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
   email: false
