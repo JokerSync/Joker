@@ -1,9 +1,9 @@
 language: objective-c
 install:
-#- scripts/install_sdl.sh
-#- scripts/bootstrap.sh
-#- scripts/install_libltc.sh
-#- export PATH=$PATH:/usr/local/opt/qt5/bin
+- scripts/install_sdl.sh
+- scripts/bootstrap.sh
+- scripts/install_libltc.sh
+- export PATH=$PATH:/usr/local/opt/qt5/bin
 #- export JOKER_RELEASE_PATH=$HOME
 
 - brew install pyenv
@@ -16,12 +16,13 @@ install:
 - pip install cpp-coveralls --use-mirrors
 
 script:
-#- qmake -v
+- qmake -v
 #- mkdir tmp && cd tmp
 #- mkdir AutoTest && cd AutoTest
 #- qmake ../../tests/AutoTest/AutoTest.pro
-#- make
-#- "./AutoTest"
+- qmake tests/AutoTest/AutoTest.pro
+- make
+- "./AutoTest"
 - coveralls
 #- cd ..
 #- mkdir Joker && cd Joker
