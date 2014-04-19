@@ -24,7 +24,7 @@ script:
 - "./AutoTest"
 - cd ..
 - mkdir Joker && cd Joker
-- qmake ../../app/Joker/Joker.pro
+- qmake ../../Joker/app/Joker/Joker.pro
 - make
 - cd ..
 - cd ../Joker
