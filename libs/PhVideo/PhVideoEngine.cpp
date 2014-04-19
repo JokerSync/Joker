@@ -62,6 +62,12 @@ void PhVideoEngine::close()
 	_fileName = "";
 }
 
+void PhVideoEngine::setDeinterlace(bool deinterlace)
+{
+	if(_decoder)
+		_decoder->setDeinterlace(deinterlace);
+}
+
 void PhVideoEngine::setSettings(PhVideoSettings *settings)
 {
 	_settings = settings;
