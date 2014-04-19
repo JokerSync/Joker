@@ -19,7 +19,7 @@ script:
 - qmake -v
 - mkdir ../tmp && cd ../tmp
 - mkdir AutoTest && cd AutoTest
-- qmake ../Joker/tests/AutoTest/AutoTest.pro
+- qmake ../../Joker/tests/AutoTest/AutoTest.pro
 - make
 - "./AutoTest"
 - cd ..
