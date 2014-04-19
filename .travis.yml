@@ -4,7 +4,7 @@ install:
 - scripts/bootstrap.sh
 - scripts/install_libltc.sh
 - export PATH=$PATH:/usr/local/opt/qt5/bin
-- export JOKER_RELEASE_PATH=$HOME
+#- export JOKER_RELEASE_PATH=$HOME
 script:
 - qmake -v
 - mkdir tmp && cd tmp
@@ -12,18 +12,18 @@ script:
 - qmake ../../tests/AutoTest/AutoTest.pro
 - make
 - "./AutoTest"
+- coveralls
 - cd ..
-- mkdir Joker && cd Joker
-- qmake ../../app/Joker/Joker.pro
-- make
+#- mkdir Joker && cd Joker
+#- qmake ../../app/Joker/Joker.pro
+#- make
+#- cd ..
 - cd ..
-- cd ..
-- "./scripts/doxygen.sh"
-- "./scripts/uncrustify.sh"
-after_success:
-- ~/.pyenv/shims/coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root
-  tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
-- "./scripts/update-gh-pages.sh"
+#- "./scripts/doxygen.sh"
+#- "./scripts/uncrustify.sh"
+#after_success:
+#- ~/.pyenv/shims/coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
+#- "./scripts/update-gh-pages.sh"
 notifications:
   irc: phonations.com#joker
   flowdock:
