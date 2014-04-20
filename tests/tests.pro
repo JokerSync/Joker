@@ -2,6 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
 	AudioTest \
+	AutoTest \
 	ConsoleTest \
 	FormTest \
 	FFmpegTest \

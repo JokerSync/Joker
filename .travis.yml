@@ -17,21 +17,19 @@ install:
 
 script:
 - qmake -v
-- mkdir tmp && cd tmp
-- mkdir AutoTest && cd AutoTest
-- qmake ../../tests/AutoTest/AutoTest.pro
+#- mkdir tmp && cd tmp
+#- mkdir AutoTest && cd AutoTest
+- qmake all.pro
 - make
-- "./AutoTest"
-- cd ..
+- "./tests/AutoTest/AutoTest"
 #- mkdir Joker && cd Joker
 #- qmake ../../Joker/app/Joker/Joker.pro
 #- make
-- cd ..
 #- cd ../Joker
 #- "./scripts/doxygen.sh"
 #- "./scripts/uncrustify.sh"
 after_success:
-- coveralls --build-root tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
+- coveralls -E .+/moc_.+ -E .+/ui_.+
 #- "./scripts/update-gh-pages.sh"
 notifications:
   flowdock:
