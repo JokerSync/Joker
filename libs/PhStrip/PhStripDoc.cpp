@@ -23,7 +23,7 @@ PhStripDoc::PhStripDoc(QObject *parent) :
 
 bool PhStripDoc::importDetXFile(QString fileName)
 {
-	//	PHDEBUG << fileName;
+	PHDEBUG << fileName;
 	if (!QFile(fileName).exists()) {
 		PHDEBUG << "The file doesn't exists" << fileName;
 		return false;

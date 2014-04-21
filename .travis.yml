@@ -21,7 +21,9 @@ script:
 #- mkdir AutoTest && cd AutoTest
 - qmake all.pro
 - make
-- "./tests/AutoTest/AutoTest"
+- cd tests/AutoTest
+- "./AutoTest"
+- cd ../..
 #- mkdir Joker && cd Joker
 #- qmake ../../Joker/app/Joker/Joker.pro
 #- make
