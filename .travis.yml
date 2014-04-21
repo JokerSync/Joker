@@ -17,13 +17,12 @@ install:
 
 script:
 - qmake -v
-#- mkdir tmp && cd tmp
-#- mkdir AutoTest && cd AutoTest
-- qmake all.pro
+#- qmake all.pro
+- qmake tests/AutoTest/AutoTest.pro
 - make
-- cd tests/AutoTest
+#- cd tests/AutoTest
 - "./AutoTest"
-- cd ../..
+#- cd ../..
 #- mkdir Joker && cd Joker
 #- qmake ../../Joker/app/Joker/Joker.pro
 #- make
