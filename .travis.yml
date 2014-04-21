@@ -4,16 +4,7 @@ install:
 - scripts/bootstrap.sh
 - scripts/install_libltc.sh
 - export PATH=$PATH:/usr/local/opt/qt5/bin
-#- export JOKER_RELEASE_PATH=$HOME
-
-- brew install pyenv
-- eval "$(pyenv init -)"
-- pyenv install 2.7.6
-- pyenv global 2.7.6
-- pyenv rehash
-- pip install cpp-coveralls
-- pyenv rehash
-- pip install cpp-coveralls --use-mirrors
+- export JOKER_RELEASE_PATH=$HOME
 
 script:
 - qmake -v
