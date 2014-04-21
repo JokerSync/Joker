@@ -33,6 +33,9 @@ private slots:
 	void importMosTest03();
 	void importMosTest04();
 
+	// Import Syn6 tests
+	void importSyn6Test01();
+
 	// Open any doc (*.detx, *.strip, *.joker) test
 	void openStripFileTest();
 	void openSaveTest01();

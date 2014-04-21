@@ -318,6 +318,23 @@ void StripDocTest::importMosTest04()
 	QCOMPARE(doc.detects()[0]->type(), PhStripDetect::Off);
 }
 
+void StripDocTest::importSyn6Test01()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.openStripFile("test01.syn6"));
+
+	QCOMPARE(doc.peoples().count(), 2);
+	QCOMPARE(doc.peoples()[0]->name(), QString("Personnage 1"));
+	QCOMPARE(doc.peoples()[1]->name(), QString("Personnage 2"));
+
+	QCOMPARE(doc.texts().count(), 1);
+	QCOMPARE(doc.texts()[0]->people()->name(), QString("Personnage 1"));
+	QCOMPARE(doc.texts()[0]->track(), 1);
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("00:00:03:13"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("00:00:06:02"));
+}
+
 void StripDocTest::openStripFileTest()
 {
 	PhStripDoc doc;

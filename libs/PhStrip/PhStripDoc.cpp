@@ -771,7 +771,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 
 	if(query.exec("SELECT * FROM TEXTE;")) {
 		while(query.next()) {
-//			for(int i = 0; i < 5; i++)
+//			for(int i = 0; i < 8; i++)
 //				PHDEBUG << i << query.value(i);
 #warning /// @todo check text people id
 			PhPeople* people = peopleMap[query.value(0).toInt()];
@@ -779,7 +779,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 			int timeIn = query.value(3).toInt() * 100;
 			int timeOut = query.value(4).toInt() * 100;
 #warning /// @todo check text track
-			int track = query.value(4).toInt() / 100;
+			int track = query.value(5).toInt() / 50;
 			QString content = query.value(7).toString();
 			PhStripText *text = new PhStripText(timeIn, people, timeOut, track, content);
 			_texts1.append(text);
