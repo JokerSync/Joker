@@ -10,6 +10,9 @@
 #include <QDomNodeList>
 #include <QtXml>
 #include <QXmlStreamWriter>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 
 #include "PhTools/PhFileTool.h"
 #include "PhStripDoc.h"
@@ -705,11 +708,11 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	//			PhFileTool::readShort(f, level, "after loop2");
 	//	}
 
-//	if(!checkMosTag(f, blocLevel, MosBin))
-//		return false;
+	//	if(!checkMosTag(f, blocLevel, MosBin))
+	//		return false;
 
-//	for(int j = 0; j < 2; j++)
-//		PhFileTool::readShort(f, level);
+	//	for(int j = 0; j < 2; j++)
+	//		PhFileTool::readShort(f, level);
 
 	PHDEBUG << "_______________" << "reading ok" << "_______________";
 
@@ -732,6 +735,62 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	return true;
 }
 
+bool PhStripDoc::importSyn6File(const QString &fileName)
+{
+	QSqlDatabase db;
+	db =  QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName(fileName);
+	if(!db.open()) {
+		PHDEBUG << "Error opening the sqlite document:" << db.lastError().text();
+		return false;
+	}
+	PHDEBUG << "database opened: " << db.tables().count() << "tables.";
+
+	foreach(QString tableName, db.tables()) {
+		PHDEBUG << tableName;
+	}
+
+	QSqlQuery query(db);
+
+	QMap<int, PhPeople*> peopleMap;
+	if(query.exec("SELECT * FROM PERSONNAGE;")) {
+		PHDEBUG << "query ok" << query.executedQuery();
+
+		while(query.next()) {
+			int id = query.value(0).toInt();
+			QString name = query.value(1).toString();
+			PhPeople *people = new PhPeople(name);
+			peopleMap[id] = people;
+		}
+	}
+	else
+		PHDEBUG << "query failed";
+
+	foreach(PhPeople *people, peopleMap.values())
+	_peoples.append(people);
+
+	if(query.exec("SELECT * FROM TEXTE;")) {
+		while(query.next()) {
+//			for(int i = 0; i < 5; i++)
+//				PHDEBUG << i << query.value(i);
+#warning /// @todo check text people id
+			PhPeople* people = peopleMap[query.value(0).toInt()];
+#warning /// @todo check text time in/out
+			int timeIn = query.value(3).toInt() * 100;
+			int timeOut = query.value(4).toInt() * 100;
+#warning /// @todo check text track
+			int track = query.value(4).toInt() / 100;
+			QString content = query.value(7).toString();
+			PhStripText *text = new PhStripText(timeIn, people, timeOut, track, content);
+			_texts1.append(text);
+		}
+	}
+
+	db.close();
+
+	return true;
+}
+
 bool PhStripDoc::openStripFile(const QString &fileName)
 {
 	PHDEBUG << fileName;
@@ -744,6 +803,9 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 	}
 	else if(extension == "mos") {
 		return importMosFile(fileName);
+	}
+	else if(extension == "syn6") {
+		return importSyn6File(fileName);
 	}
 	else if(extension == "strip" or extension == "joker") {
 		QFile xmlFile(fileName);

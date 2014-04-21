@@ -230,6 +230,12 @@ public:
 	 */
 	bool importMosFile(const QString &fileName);
 	/**
+	 * @brief Import a Syn6 file
+	 * @param fileName The path to the Syn6 file
+	 * @return True if the doc opened well, false otherwise
+	 */
+	bool importSyn6File(const QString &fileName);
+	/**
 	 * @brief Open a strip file
 	 * @param fileName The path to the DetX file
 	 * @return True if the strip opened well, false otherwise

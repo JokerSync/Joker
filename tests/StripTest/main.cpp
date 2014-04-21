@@ -113,11 +113,13 @@ int countDetectLength(PhStripDoc *doc)
 
 void displayDoc(PhStripDoc* doc)
 {
-	PHDEBUG << doc->title();
+	PHDEBUG << "Title:" << doc->title();
+	PHDEBUG << "People count:" << doc->peoples().count();
 	foreach(PhPeople *people, doc->peoples()) {
 		PHDEBUG << people->name();
 	}
 
+	PHDEBUG << "Text count:" << doc->texts().count();
 	foreach(PhStripText *text, doc->texts()) {
 		QString name = "???";
 		if(text->people())
