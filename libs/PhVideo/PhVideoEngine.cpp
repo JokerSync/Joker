@@ -285,7 +285,9 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 							if(_deinterlace)
 								frameHeight = _videoFrame->height / 2;
 						}
-
+						// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
+						// we replace its with the new ones recommended by LibAv
+						// in order to get ride of the warnings
 						AVPixelFormat pixFormat;
 						switch (_videoStream->codec->pix_fmt) {
 						case AV_PIX_FMT_YUVJ420P:
