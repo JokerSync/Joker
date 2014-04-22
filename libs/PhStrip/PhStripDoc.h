@@ -230,6 +230,12 @@ public:
 	 */
 	bool importMosFile(const QString &fileName);
 	/**
+	 * @brief Import a DRB file
+	 * @param fileName The path to the DRB file
+	 * @return True if the doc opened well, false otherwise
+	 */
+	bool importDrbFile(const QString &fileName);
+	/**
 	 * @brief Import a Syn6 file
 	 * @param fileName The path to the Syn6 file
 	 * @return True if the doc opened well, false otherwise

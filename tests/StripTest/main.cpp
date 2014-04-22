@@ -114,6 +114,7 @@ int countDetectLength(PhStripDoc *doc)
 void displayDoc(PhStripDoc* doc)
 {
 	PHDEBUG << "Title:" << doc->title();
+	PHDEBUG << "Video:" << doc->videoFilePath();
 	PHDEBUG << "People count:" << doc->peoples().count();
 	foreach(PhPeople *people, doc->peoples()) {
 		PHDEBUG << people->name();
@@ -184,6 +185,8 @@ int main(int argc, char *argv[])
 				break;
 			}
 		}
+		else
+			PHDEBUG << fileName << "doesn't exists!!!";
 	}
 
 	return result;

@@ -33,6 +33,9 @@ private slots:
 	void importMosTest03();
 	void importMosTest04();
 
+	// Import DRB tests
+	void importDrbTest01();
+
 	// Import Syn6 tests
 	void importSyn6Test01();
 
