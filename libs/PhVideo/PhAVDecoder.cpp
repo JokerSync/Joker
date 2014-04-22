@@ -292,13 +292,12 @@ void PhAVDecoder::process()
 						if(_deinterlace)
 							frameHeight /= 2;
 
-#warning /// @todo Use RGB pixel format
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
 														_videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
-														AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+														AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
 
-						uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 4];
-						int linesize = _videoFrame->width * 4;
+						uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
+						int linesize = _videoFrame->width * 3;
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
 										   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
 										   &linesize)) {

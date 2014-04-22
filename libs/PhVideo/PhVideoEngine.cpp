@@ -83,7 +83,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		if(frame != _oldFrame) {
 			uint8_t *buffer = _decoder->getBuffer(frame);
 			if(buffer) {
-				_videoRect.createTextureFromARGBBuffer(buffer, _decoder->width(), _decoder->height());
+				_videoRect.createTextureFromRGBBuffer(buffer, _decoder->width(), _decoder->height());
 				_oldFrame = frame;
 				_frameCounter.tick();
 			}
