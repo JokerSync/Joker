@@ -285,9 +285,26 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 							if(_deinterlace)
 								frameHeight = _videoFrame->height / 2;
 						}
-#warning /// @todo Use RGB pixel format
+
+						AVPixelFormat pixFormat;
+						switch (_videoStream->codec->pix_fmt) {
+						case AV_PIX_FMT_YUVJ420P:
+							pixFormat = AV_PIX_FMT_YUV420P;
+							break;
+						case AV_PIX_FMT_YUVJ422P:
+							pixFormat = AV_PIX_FMT_YUV422P;
+							break;
+						case AV_PIX_FMT_YUVJ444P:
+							pixFormat = AV_PIX_FMT_YUV444P;
+							break;
+						case AV_PIX_FMT_YUVJ440P:
+							pixFormat = AV_PIX_FMT_YUV440P;
+						default:
+							pixFormat = _videoStream->codec->codec->pix_fmts;
+							break;
+						}
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-						                                _videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
+						                                pixFormat, _videoStream->codec->width, frameHeight,
 						                                AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
