@@ -5,6 +5,7 @@ install:
 - scripts/install_libltc.sh
 - export PATH=$PATH:/usr/local/opt/qt5/bin
 - export JOKER_RELEASE_PATH=$HOME
+- export TESTS_RELEASE_PATH=$HOME
 - eval "$(pyenv init -)"
 
 script:
