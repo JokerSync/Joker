@@ -9,18 +9,13 @@ install:
 
 script:
 - qmake -v
-#- qmake all.pro
-- qmake tests/AutoTest/AutoTest.pro
+- qmake all.pro
 - make
-#- cd tests/AutoTest
+- cd tests/AutoTest
 - "./AutoTest"
-#- cd ../..
-#- mkdir Joker && cd Joker
-#- qmake ../../Joker/app/Joker/Joker.pro
-#- make
-#- cd ../Joker
-#- "./scripts/doxygen.sh"
-#- "./scripts/uncrustify.sh"
+- cd ../..
+- "./scripts/doxygen.sh"
+- "./scripts/uncrustify.sh"
 after_success:
 - coveralls -E .+/moc_.+ -E .+/ui_.+
 #- "./scripts/update-gh-pages.sh"
