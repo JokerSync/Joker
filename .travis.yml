@@ -18,7 +18,7 @@ script:
 #- "./scripts/doxygen.sh"
 #- "./scripts/uncrustify.sh"
 after_success:
-- coveralls -E .+/moc_.+ -E .+/ui_.+
+- coveralls --exclude /usr/local -E .+/moc_.+ -E .+/ui_.+ -E .+\.app
 #- "./scripts/update-gh-pages.sh"
 notifications:
   flowdock:
