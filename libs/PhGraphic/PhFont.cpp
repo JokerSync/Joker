@@ -15,10 +15,8 @@
 #include "PhFont.h"
 #include "PhTools/PhDebug.h"
 
-PhFont::PhFont() : _texture(-1), _glyphHeight(0)
+PhFont::PhFont() : _texture(-1), _glyphHeight(0), _boldness(0)
 {
-	font = NULL;
-	_boldness = 0;
 }
 
 bool PhFont::setFontFile(QString fontFile)
@@ -40,10 +38,7 @@ QString PhFont::getFontFile()
 bool PhFont::init(QString fontFile)
 {
 	PHDEBUG << fontFile;
-	if(font != NULL) {
-		TTF_CloseFont(font);
-	}
-	font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
+	TTF_Font * font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
 
 	if(!font)
 		return false;
@@ -121,7 +116,7 @@ bool PhFont::init(QString fontFile)
 
 	// Once the texture is created, the surface is no longer needed.
 	SDL_FreeSurface(matrixSurface);
-	//	TTF_CloseFont(font);
+	TTF_CloseFont(font);
 
 	return true;
 }
@@ -135,6 +130,7 @@ void PhFont::select()
 {
 	glBindTexture(GL_TEXTURE_2D, (GLuint)_texture);
 }
+
 int PhFont::getBoldness() const
 {
 	return _boldness;

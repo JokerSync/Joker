@@ -9,15 +9,12 @@
 #include <QStringList>
 #include <iostream>
 #include <QDir>
+#include <QEvent>
+#include <QMetaEnum>
 
 #include "PhDebug.h"
 
 PhDebug* PhDebug::_d = NULL;
-
-// This function is called to create an instance of the class.
-// Calling the constructor publicly is not allowed. The constructor
-// is private and is only called by this Instance function.
-
 
 void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -67,7 +64,9 @@ void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, c
 			}
 		}
 
-		*instance()->_textLog << logMessage << endl;
+		if(instance()->_textLog)
+			*instance()->_textLog << logMessage << endl;
+
 		instance()->_mutex.unlock();
 	}
 }
@@ -128,23 +127,27 @@ PhDebug::PhDebug()
 {
 	qInstallMessageHandler(this->messageOutput);
 
+	QString logDirPath;
+
 #if defined(Q_OS_MAC)
-	QString logDirPath = QDir::homePath() + "/Library/Logs/Phonations/";
+	logDirPath = QDir::homePath() + "/Library/Logs/Phonations/";
 #elif defined(Q_OS_WIN)
-	QString logDirPath = QString(qgetenv("APPDATA")) + "/Phonations";
-#else
-#error Choose a folder for log
+	logDirPath = QString(qgetenv("APPDATA")) + "/Phonations";
 #endif
 
-	QDir logDir(logDirPath);
-	if(!logDir.exists()) {
-		QDir().mkdir(logDirPath);
+	if(QFile(logDirPath).exists()) {
+		QDir logDir(logDirPath);
+		if(!logDir.exists()) {
+			QDir().mkdir(logDirPath);
+		}
+		_logFileName = logDirPath + APP_NAME + ".log";
+		QFile * f = new QFile(_logFileName);
+		f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+		f->write("\n\n");
+		_textLog = new QTextStream(f);
 	}
-	_logFileName = logDirPath + APP_NAME + ".log";
-	QFile * f = new QFile(_logFileName);
-	f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
-	f->write("\n\n");
-	_textLog = new QTextStream(f);
+	else
+		_textLog = NULL;
 
 	_displayDate = false;
 	_displayTime = true;
@@ -165,5 +168,17 @@ int PhDebug::getLogMask()
 	return instance()->_logMask;
 }
 
-
-
+QDebug operator <<(QDebug stream, const QEvent * event) {
+	static int eventEnumIndex = QEvent::staticMetaObject
+	                            .indexOfEnumerator("Type");
+	stream << "QEvent";
+	if (event) {
+		QString name = QEvent::staticMetaObject
+		               .enumerator(eventEnumIndex).valueToKey(event->type());
+		if (!name.isEmpty()) stream << name; else stream << event->type();
+	}
+	else {
+		stream << (void*)event;
+	}
+	return stream.maybeSpace();
+}

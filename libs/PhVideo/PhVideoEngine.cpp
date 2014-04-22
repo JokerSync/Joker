@@ -10,28 +10,33 @@ PhVideoEngine::PhVideoEngine() :  QObject(NULL),
 	_settings(NULL),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
+	_oldFrame(-1),
 	_decoder(NULL)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
+	avcodec_register_all();
 }
 
 bool PhVideoEngine::open(QString fileName)
 {
 	PHDEBUG << fileName;
 
-	_clock.setFrame(0);
+	this->close();
 
-	_decoder = new PhAVDecoder();
+	_clock.setFrame(0);
+	_oldFrame = -1;
+
+	_decoder = new PhAVDecoder(_settings->videoBufferSize());
 	if(!_decoder->open(fileName))
 		return false;
 
 	_fileName = fileName;
 
-	_firstFrame = _decoder->firstFrame();
 	_clock.setTimeCodeType(_decoder->timeCodeType());
 
 	QThread *thread = new QThread;
+	thread->setPriority(QThread::LowestPriority);
 
 	_decoder->moveToThread(thread);
 	connect(_decoder, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
@@ -39,6 +44,10 @@ bool PhVideoEngine::open(QString fileName)
 	connect(_decoder, SIGNAL(finished()), thread, SLOT(quit()));
 	connect(_decoder, SIGNAL(finished()), _decoder, SLOT(deleteLater()));
 	connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
+
+	connect(&_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), _decoder, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
+	connect(&_clock, SIGNAL(rateChanged(PhRate)), _decoder, SLOT(onRateChanged(PhRate)));
+
 	thread->start();
 
 	return true;
@@ -53,6 +62,12 @@ void PhVideoEngine::close()
 	_fileName = "";
 }
 
+void PhVideoEngine::setDeinterlace(bool deinterlace)
+{
+	if(_decoder)
+		_decoder->setDeinterlace(deinterlace);
+}
+
 void PhVideoEngine::setSettings(PhVideoSettings *settings)
 {
 	_settings = settings;
@@ -61,14 +76,15 @@ void PhVideoEngine::setSettings(PhVideoSettings *settings)
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	if(_decoder) {
-		PhFrame frame = _clock.frame() + _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
+		PhFrame frame = _clock.frame();
+		if(_settings)
+			frame += _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
+
 		if(frame != _oldFrame) {
-			_decoder->setDeintrelace(_settings->videoDeinterlace());
 			uint8_t *buffer = _decoder->getBuffer(frame);
 			if(buffer) {
-				_videoRect.createTextureFromARGBBuffer(buffer, _decoder->width(), _decoder->height());
+				_videoRect.createTextureFromRGBBuffer(buffer, _decoder->width(), _decoder->height());
 				_oldFrame = frame;
-				delete buffer;
 				_frameCounter.tick();
 			}
 		}
@@ -78,6 +94,18 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	}
 }
 
+int PhVideoEngine::bufferSize()
+{
+	return _settings->videoBufferSize();
+}
+
+int PhVideoEngine::bufferOccupation()
+{
+	if(_decoder)
+		return _decoder->bufferOccupation();
+	return 0;
+}
+
 void PhVideoEngine::errorString(QString msg)
 {
 	PHDEBUG << msg;
@@ -85,7 +113,8 @@ void PhVideoEngine::errorString(QString msg)
 
 void PhVideoEngine::setFirstFrame(PhFrame frame)
 {
-	_firstFrame = frame;
+	if(_decoder)
+		_decoder->setFirstFrame(frame);
 }
 
 PhVideoEngine::~PhVideoEngine()
@@ -93,10 +122,17 @@ PhVideoEngine::~PhVideoEngine()
 	close();
 }
 
+PhFrame PhVideoEngine::firstFrame()
+{
+	if(_decoder)
+		return _decoder->firstFrame();
+	return 0;
+}
+
 PhFrame PhVideoEngine::lastFrame()
 {
 	if(_decoder)
-		return _firstFrame + _decoder->length() - 1;
+		return _decoder->firstFrame() + _decoder->length() - 1;
 	return 0;
 }
 
@@ -105,6 +141,13 @@ PhFrame PhVideoEngine::length()
 	if(_decoder)
 		return _decoder->length();
 	return 0;
+}
+
+float PhVideoEngine::framePerSecond()
+{
+	if(_decoder)
+		return _decoder->length();
+	return 0.0f;
 }
 
 int PhVideoEngine::width()

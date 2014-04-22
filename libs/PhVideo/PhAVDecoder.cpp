@@ -4,17 +4,33 @@
  */
 
 #include <QTime>
+#include <qmath.h>
 
 #include "PhAVDecoder.h"
 
-PhAVDecoder::PhAVDecoder(QObject *parent) :
+PhAVDecoder::PhAVDecoder(int bufferSize, QObject *parent) :
 	QObject(parent),
-	_framesProcessed(0),
-	_framesFree(100),
+	_bufferSize(bufferSize),
+	_framesFree(bufferSize),
+	_firstFrame(0),
+	_currentFrame(0),
+	_direction(0),
 	_pFormatContext(NULL),
-	_rate(1),
-	_videoDeintrelace(false)
+	_videoStream(NULL),
+	_videoFrame(NULL),
+	_pSwsCtx(NULL),
+	_deinterlace(false),
+	_audioStream(NULL),
+	_audioFrame(NULL),
+	_interupted(false)
 {
+}
+
+PhAVDecoder::~PhAVDecoder()
+{
+	clearBuffer();
+
+	avformat_close_input(&_pFormatContext);
 }
 
 bool PhAVDecoder::open(QString fileName)
@@ -33,7 +49,7 @@ bool PhAVDecoder::open(QString fileName)
 	_videoStream = NULL;
 	_audioStream = NULL;
 
-	// Find video stream :
+	// Find video stream
 	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++) {
 		AVMediaType streamType = _pFormatContext->streams[i]->codec->codec_type;
 		PHDEBUG << i << ":" << streamType;
@@ -110,38 +126,8 @@ void PhAVDecoder::close()
 {
 	PHDEBUG;
 
-	if(_pFormatContext) {
-		avformat_close_input(&_pFormatContext);
-		_pFormatContext = NULL;
-		_videoStream = NULL;
-	}
-}
-
-uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
-{
-	if(frame > _lastAskedFrame)
-		_rate = 1;
-	else
-		_rate = -1;
-
-
-	uint8_t *buffer = NULL;
-	if(frame < _firstFrame + _videoStream->duration && _framesProcessed.tryAcquire()) {
-		_nextImagesMutex.lock();
-		if(!_nextImages.contains(frame)) {
-			_currentFrame = frame;
-			clearBuffer();
-		}
-		else {
-			buffer = _nextImages[frame];
-			_nextImages.remove(frame);
-			_framesFree.release();
-		}
-
-		_nextImagesMutex.unlock();
-		_lastAskedFrame = frame;
-	}
-	return buffer;
+	_interupted = true;
+	_framesFree.release();
 }
 
 PhTimeCodeType PhAVDecoder::timeCodeType()
@@ -166,21 +152,20 @@ PhTimeCodeType PhAVDecoder::timeCodeType()
 		PHDEBUG << "Bad fps detect => assuming 25";
 		return PhTimeCodeType25;
 	}
-
 }
 
 PhFrame PhAVDecoder::firstFrame()
 {
-	// Reading timestamp :
-	AVDictionaryEntry *tag = av_dict_get(_pFormatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
-	if(tag == NULL)
-		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
-
-	if(tag) {
-		PHDEBUG << "Found timestamp:" << tag->value;
-		_firstFrame = PhTimeCode::frameFromString(tag->value, timeCodeType());
-	}
 	return _firstFrame;
+}
+
+void PhAVDecoder::setFirstFrame(PhFrame frame)
+{
+	PHDEBUG << frame;
+	_bufferMutex.lock();
+	clearBuffer();
+	_currentFrame = _firstFrame = frame;
+	_bufferMutex.unlock();
 }
 
 int PhAVDecoder::width()
@@ -223,101 +208,153 @@ QString PhAVDecoder::codecName()
 	return "";
 }
 
-void PhAVDecoder::setDeintrelace(bool deintrelace)
+void PhAVDecoder::setDeinterlace(bool deintrelace)
 {
-	if(deintrelace != _videoDeintrelace) {
-		_videoDeintrelace = deintrelace;
-		_nextImagesMutex.lock();
+	if(deintrelace != _deinterlace) {
+		_deinterlace = deintrelace;
+		_bufferMutex.lock();
 		clearBuffer();
-		_nextImagesMutex.unlock();
+		_bufferMutex.unlock();
 	}
+}
+
+int PhAVDecoder::bufferOccupation()
+{
+	return _bufferSize - _framesFree.available();
+}
+
+uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
+{
+	PHDBG(24) << frame << _framesFree.available();
+
+	uint8_t *buffer = NULL;
+	_bufferMutex.lock();
+	if(_bufferMap.contains(frame)) {
+		buffer = _bufferMap[frame];
+
+		PhFrame minFrame = frame - _bufferSize / 2;
+		if(minFrame < _firstFrame)
+			minFrame = _firstFrame;
+		PhFrame maxFrame = minFrame + _bufferSize;
+		foreach(PhFrame key, _bufferMap.keys()) {
+			if(key < minFrame) {
+				delete _bufferMap[key];
+				_bufferMap.remove(key);
+				_framesFree.release();
+			}
+			else if(key > maxFrame) {
+				delete _bufferMap[key];
+				_bufferMap.remove(key);
+				_framesFree.release();
+			}
+		}
+	}
+
+	_bufferMutex.unlock();
+
+	return buffer;
 }
 
 void PhAVDecoder::process()
 {
-	while(_pFormatContext) {
+	while(!_interupted) {
 
-		if(_rate == -1 || (abs(_currentFrame - _lastAskedFrame) > 1)) {
-			int flags = AVSEEK_FLAG_ANY;
-			int64_t timestamp = frame2time(_currentFrame - _firstFrame);
-			//PHDEBUG << "seek:" << _currentFrame;
-			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
+		if(_direction == -1) {
+			_bufferMutex.lock();
+			// If the buffer contains the current frame, seek to the last key frame
+			if(_bufferMap.contains(_currentFrame)) {
+				// Look for the minimun frame
+				foreach(PhFrame key, _bufferMap.keys()) {
+					if(key < _currentFrame)
+						_currentFrame = key;
+				}
+				int flags = AVSEEK_FLAG_BACKWARD;
+				int64_t timestamp = frame2time(_currentFrame - _firstFrame);
+				PHDEBUG << "seek:" << _direction << _currentFrame;
+				av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
+			}
+			_bufferMutex.unlock();
 		}
-
 
 		AVPacket packet;
 
-		bool lookingForVideoFrame = _currentFrame < _firstFrame + _videoStream->duration;
-		while(lookingForVideoFrame) {
-			int error = av_read_frame(_pFormatContext, &packet);
-			switch(error) {
-			case 0:
-				if(packet.stream_index == _videoStream->index) {
+		_bufferMutex.lock();
+		int error = av_read_frame(_pFormatContext, &packet);
+		_bufferMutex.unlock();
+		switch(error) {
+		case 0:
+			if(packet.stream_index == _videoStream->index) {
+				int frameFinished = 0;
+				avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
+				if(frameFinished) {
 
-					int frameFinished = 0;
-					avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
-					if(frameFinished) {
+					int frameHeight = _videoFrame->height;
+					if(_deinterlace)
+						frameHeight /= 2;
 
-						int frameHeight = _videoFrame->height;
-						if(_videoDeintrelace)
-							frameHeight /= 2;
+					_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
+					                                _videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
+					                                AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
 
-#warning /// @todo Use RGB pixel format
-						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-						                                _videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
-						                                AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
-
-						uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 4];
-						int linesize = _videoFrame->width * 4;
-						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
-						                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
-						                   &linesize)) {
-							_framesFree.acquire();
-							_nextImages[_currentFrame] = rgb;
-							//PHDEBUG << _currentFrame << rgb;
-						}
-						lookingForVideoFrame = false;
-					} // if frame decode is not finished, let's read another packet.
-				}
-				else if(_audioStream && (packet.stream_index == _audioStream->index)) {
-					int ok = 0;
-					avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
-					if(ok) {
-						//PHDEBUG << "audio:" << _audioFrame->nb_samples;
+					uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
+					int linesize = _videoFrame->width * 3;
+					if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
+					                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
+					                   &linesize)) {
+						_framesFree.acquire();
+						_bufferMutex.lock();
+						_bufferMap[_currentFrame] = rgb;
+						PHDBG(25) << _currentFrame << rgb << packet.dts << _framesFree.available();
+						_bufferMutex.unlock();
 					}
-				}
-				break;
-			case AVERROR_INVALIDDATA:
-			case AVERROR_EOF:
-			default:
-				{
-					char errorStr[256];
-					av_strerror(error, errorStr, 256);
-					PHDEBUG << _currentFrame << "error:" << errorStr;
-					lookingForVideoFrame = false;
-					break;
+					_currentFrame++;
+				}     // if frame decode is not finished, let's read another packet.
+			}
+			else if(_audioStream && (packet.stream_index == _audioStream->index)) {
+				int ok = 0;
+				avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
+				if(ok) {
+					//PHDEBUG << "audio:" << _audioFrame->nb_samples;
 				}
 			}
-			//Avoid memory leak
-			av_free_packet(&packet);
+			break;
+		case AVERROR_INVALIDDATA:
+		case AVERROR_EOF:
+		default:
+			{
+				char errorStr[256];
+				av_strerror(error, errorStr, 256);
+				PHDEBUG << _currentFrame << "error:" << errorStr;
+				break;
+			}
 		}
-
-//		As rate == -1 or 1
-//		if(_rate == 1) {
-//			_currentFrame++;
-//		}
-//		else {
-//			_currentFrame--;
-//		}
-		_currentFrame += _rate;
-		_framesProcessed.release();
+		//Avoid memory leak
+		av_free_packet(&packet);
 	}
+
+
 	PHDEBUG << "Bye bye";
+	emit finished();
 }
 
-void PhAVDecoder::quit()
+void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-	close();
+	_bufferMutex.lock();
+	if(!_bufferMap.contains(frame)) {
+		clearBuffer();
+		_currentFrame = frame;
+	}
+	_bufferMutex.unlock();
+}
+
+void PhAVDecoder::onRateChanged(PhRate rate)
+{
+	if(rate < 0)
+		_direction = -1;
+	else if (rate > 0)
+		_direction = 1;
+	else
+		_direction = 0;
 }
 
 int64_t PhAVDecoder::frame2time(PhFrame f)
@@ -342,9 +379,9 @@ PhFrame PhAVDecoder::time2frame(int64_t t)
 
 void PhAVDecoder::clearBuffer()
 {
-	qDeleteAll(_nextImages);
-	_nextImages.clear();
-	_framesFree.release(100 - _framesFree.available());
-	_framesProcessed.acquire(_framesProcessed.available());
+	PHDEBUG;
+	qDeleteAll(_bufferMap);
+	_bufferMap.clear();
+	_framesFree.release(_bufferSize - _framesFree.available());
 }
 

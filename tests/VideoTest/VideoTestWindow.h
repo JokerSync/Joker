@@ -36,6 +36,16 @@ public:
 	 */
 	bool openDocument(QString fileName);
 
+	/**
+	 * @brief Process the application argument
+	 *
+	 * Set the timestamp if provided in the argument
+	 *
+	 * @param argc The arguments count
+	 * @param argv The arguments values
+	 */
+	void processArg(int argc, char *argv[]);
+
 protected:
 	void resizeEvent(QResizeEvent *);
 	void closeEvent(QCloseEvent *);
@@ -60,6 +70,8 @@ private slots:
 	void on_actionOpen_triggered();
 
 	void on_actionReverse_triggered();
+
+	void on_actionGo_to_triggered();
 
 private:
 

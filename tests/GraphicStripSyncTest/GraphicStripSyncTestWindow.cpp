@@ -16,7 +16,7 @@ GraphicStripSyncTestWindow::GraphicStripSyncTestWindow(GraphicStripSyncTestSetti
 {
 	ui->setupUi(this);
 	_strip = ui->stripView->strip();
-	ui->stripView->setSettings(_settings);
+	ui->stripView->setStripSettings(_settings);
 	_doc = _strip->doc();
 	_clock = _strip->clock();
 	_clockSynchroniser.setStripClock(_clock);
@@ -46,7 +46,7 @@ bool GraphicStripSyncTestWindow::openDocument(QString fileName)
 	if(QFile::exists(fileName)) {
 		if(_doc->openStripFile(fileName)) {
 			_clock->setTimeCodeType(_doc->timeCodeType());
-			_clock->setFrame(_doc->lastFrame());
+			_clock->setTime(_doc->lastTime());
 			setCurrentDocument(fileName);
 		}
 	}

@@ -6,6 +6,13 @@
 #include <QTimer>
 
 extern "C" {
+#ifndef INT64_C
+/** see http://code.google.com/p/ffmpegsource/issues/detail?id=11#c13 */
+#define INT64_C(c) (c ## LL)
+/** and http://code.google.com/p/ffmpegsource/issues/detail?id=11#c23 */
+#define UINT64_C(c) (c ## ULL)
+#endif
+
 #include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
 #include <libavcodec/avcodec.h>

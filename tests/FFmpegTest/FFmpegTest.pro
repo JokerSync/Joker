@@ -13,10 +13,6 @@ TEMPLATE = app
 
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 
-INCLUDEPATH += ../../libs
-
-include(../../libs/PhTools/PhTools.pri)
-
 SOURCES += main.cpp\
         FFmpegTestWindow.cpp
 
@@ -26,6 +22,7 @@ FORMS    += FFmpegTestWindow.ui
 
 INCLUDEPATH += /usr/local/include
 LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
+LIBS += -lz
 
 #LIBS += -lxvidcore -lx264 -lvorbis -lvorbisenc -lvorbisfile -lvpx
 #LIBS += -ltheora -ltheoradec -ltheoraenc
@@ -36,9 +33,14 @@ LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
 #LIBS += -lass -ltiff -ltiffxx -lpng -ljpeg
 
 #LIBS += -lssl -lcrypto
-LIBS += -lbz2
-LIBS += -lz
-LIBS += -liconv
+
+mac {
+	LIBS += -lbz2 -liconv
+}
+
+linux {
+	LIBS += -lva
+}
 
 
 CONFIG(release, debug|release) {

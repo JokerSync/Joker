@@ -34,7 +34,9 @@ bool PhSonyController::open(bool inThread)
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
 	{
 		QString name = info.portName();
-		if(name.startsWith("usbserial-") && name.endsWith(_comSuffix)) {
+		PHDEBUG << name;
+
+		if(name.endsWith(_comSuffix)) {
 			_serial.setPort(info);
 
 			PHDEBUG << _comSuffix << "Opening " << name << _serial.parent();

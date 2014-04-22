@@ -9,7 +9,7 @@ LockableSpinBoxTest::LockableSpinBoxTest(QObject *parent) :
 {
 }
 
-void LockableSpinBoxTest::testLock()
+void LockableSpinBoxTest::testMultiClickUnlock()
 {
 	PhLockableSpinBox spinBox;
 
@@ -19,4 +19,17 @@ void LockableSpinBoxTest::testLock()
 	QVERIFY(!spinBox.isEnabled());
 	QTest::mouseClick(&spinBox, Qt::LeftButton);
 	QVERIFY(spinBox.isEnabled());
+}
+
+void LockableSpinBoxTest::testControlClickUnload()
+{
+	PhLockableSpinBox spinBox;
+
+	QVERIFY(!spinBox.isEnabled());
+	QTest::mouseClick(&spinBox, Qt::LeftButton);
+	QVERIFY(!spinBox.isEnabled());
+
+	QTest::keyPress(&spinBox, Qt::ControlModifier);
+	QTest::mouseClick(&spinBox, Qt::LeftButton);
+	QVERIFY(!spinBox.isEnabled());
 }

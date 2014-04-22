@@ -27,10 +27,13 @@ public:
 
 	/**
 	 * @brief Process the application argument
+	 *
+	 * Open the file path in the application argument if it exists.
+	 *
 	 * @param argc The arguments count
 	 * @param argv The arguments values
 	 */
-	void processArg(int argc, char *argv[]);
+	virtual void processArg(int argc, char *argv[]);
 protected:
 	/**
 	 * @brief Open a document

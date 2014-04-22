@@ -37,7 +37,7 @@ public:
 	 *
 	 * @param settings The Settings
 	 */
-	void setSettings(PhGraphicStripSettings *settings);
+	void setStripSettings(PhGraphicStripSettings *settings);
 
 protected:
 	/**

@@ -7,7 +7,7 @@
 #include "PhClock.h"
 
 PhClock::PhClock(PhTimeCodeType tcType, QObject *parent) :
-	QObject(parent), _tcType(tcType), _time(0), _timeScale(600), _rate(0.0)
+	QObject(parent), _tcType(tcType), _time(0), _rate(0.0)
 {
 	qRegisterMetaType<PhTime>("PhTime");
 	qRegisterMetaType<PhFrame>("PhFrame");
@@ -39,11 +39,6 @@ void PhClock::setTime(qint64 time)
 		emit frameChanged(newFrame, _tcType);
 }
 
-void PhClock::setTimeScale(PhTimeScale timeScale)
-{
-	_timeScale = timeScale;
-}
-
 void PhClock::setRate(PhRate rate)
 {
 	if (_rate != rate) {
@@ -54,24 +49,22 @@ void PhClock::setRate(PhRate rate)
 
 void PhClock::setMillisecond(PhTime ms)
 {
-	this->setTime(ms * _timeScale / 1000);
+	this->setTime(ms * 24);
 }
 
 PhTime PhClock::milliSecond()
 {
-	return _time * 1000 / _timeScale;
+	return _time / 24;
 }
 
 void PhClock::setFrame(PhFrame frame)
 {
-	int fps = PhTimeCode::getFps(_tcType);
-	this->setTime(frame * _timeScale / fps);
+	this->setTime(frame * PhTimeCode::timePerFrame(_tcType));
 }
 
 PhFrame PhClock::frame() const
 {
-	int fps = PhTimeCode::getFps(_tcType);
-	return _time * fps / _timeScale;
+	return _time / PhTimeCode::timePerFrame(_tcType);
 }
 
 void PhClock::setTimeCode(QString tc)
@@ -86,7 +79,7 @@ QString PhClock::timeCode()
 
 void PhClock::tick(PhTimeScale frequence)
 {
-	int elapsed = _timeScale / frequence;
+	int elapsed = 24000 / frequence;
 	this->setTime(static_cast<int>(_time + elapsed * _rate));
 }
 

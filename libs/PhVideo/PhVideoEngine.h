@@ -32,7 +32,6 @@ public:
 	/**
 	 * @brief PhVideoEngine constructor
 	 */
-
 	explicit PhVideoEngine();
 	~PhVideoEngine();
 
@@ -55,9 +54,7 @@ public:
 	 * @brief Get first frame
 	 * @return the first frame of the video file
 	 */
-	PhFrame firstFrame() {
-		return _firstFrame;
-	}
+	PhFrame firstFrame();
 	/**
 	 * @brief Get last frame
 	 * @return the last frame of the video file
@@ -68,6 +65,11 @@ public:
 	 * @return the length of the video
 	 */
 	PhFrame length();
+	/**
+	 * @brief get frame per second
+	 * @return the FPS of the video file
+	 */
+	float framePerSecond();
 	/**
 	 * @brief Get the width
 	 * @return the PhVideoEngine width (not necessary the video width)
@@ -85,8 +87,8 @@ public:
 	QString codecName();
 
 	/**
-	 * @brief Set the settings
-	 * @param settings the desired settings
+	 * @brief Pass the settings to the engine
+	 * @param settings The settings
 	 */
 	void setSettings(PhVideoSettings *settings);
 	/**
@@ -109,6 +111,20 @@ public:
 	 */
 	void close();
 	/**
+
+	   /**
+	 * @brief Check if video shall be deinterlace
+	 * @return True if deinterlace false otherwise
+	 */
+	bool deinterlace();
+
+	/**
+	 * @brief Set the video deinterlace mode
+	 * @param deinterlace True if deinterlace false otherwise
+	 */
+	void setDeinterlace(bool deinterlace);
+
+	/**
 	 * @brief draw the video depending on the parameters
 	 * @param x coordinates of the upperleft corner
 	 * @param y coordinates of the upperleft corner
@@ -121,6 +137,10 @@ public:
 		return _frameCounter.frequency();
 	}
 
+	int bufferSize();
+
+	int bufferOccupation();
+
 public slots:
 	void errorString(QString);
 
@@ -128,7 +148,6 @@ private:
 	PhVideoSettings *_settings;
 	QString _fileName;
 	PhClock _clock;
-	PhFrame _firstFrame;
 	PhFrame _oldFrame;
 
 	PhAVDecoder *_decoder;

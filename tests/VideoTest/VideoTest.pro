@@ -26,3 +26,6 @@ SOURCES += \
 
 FORMS += \
     VideoTestWindow.ui
+
+PH_DEPLOY_LOCATION = $$(HOME)
+include(../../common/deploy.pri)

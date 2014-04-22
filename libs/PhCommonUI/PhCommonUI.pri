@@ -3,12 +3,13 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT += widgets
+QT += widgets network
+
 
 HEADERS += \
 #    ../../libs/PhCommonUI/PhLeap.h \
 	../../libs/PhCommonUI/PhMediaPanel.h \
-	../../libs/PhCommonUI/PhTimecodeEdit.h \
+	../../libs/PhCommonUI/PhTimeCodeEdit.h \
     ../../libs/PhCommonUI/PhTimeCodeDialog.h \
     ../../libs/PhCommonUI/PhFloatingMediaPanel.h \
     ../../libs/PhCommonUI/PhDocumentWindow.h \
@@ -16,20 +17,24 @@ HEADERS += \
     ../../libs/PhCommonUI/PhWindow.h \
     ../../libs/PhCommonUI/PhWindowSettings.h \
     ../../libs/PhCommonUI/PhLockableSpinBox.h \
+	../../libs/PhCommonUI/PhFeedbackDialog.h \
+	../../libs/PhCommonUI/PhFeedbackSettings.h
 
 SOURCES += \
 #   ../../libs/PhCommonUI/PhLeap.cpp \
 	../../libs/PhCommonUI/PhMediaPanel.cpp \
-	../../libs/PhCommonUI/PhTimecodeEdit.cpp \
+	../../libs/PhCommonUI/PhTimeCodeEdit.cpp \
     ../../libs/PhCommonUI/PhTimeCodeDialog.cpp \
     ../../libs/PhCommonUI/PhFloatingMediaPanel.cpp \
     ../../libs/PhCommonUI/PhDocumentWindow.cpp \
     ../../libs/PhCommonUI/PhWindow.cpp \
     ../../libs/PhCommonUI/PhLockableSpinBox.cpp \
+	../../libs/PhCommonUI/PhFeedbackDialog.cpp
 
 
 FORMS += ../../libs/PhCommonUI/PhMediaPanel.ui \
-	../../libs/PhCommonUI/PhTimeCodeDialog.ui
+	../../libs/PhCommonUI/PhTimeCodeDialog.ui \
+    ../../libs/PhCommonUI/PhFeedbackDialog.ui
 
 #INCLUDEPATH += $$(LEAP_SDK)/include
 

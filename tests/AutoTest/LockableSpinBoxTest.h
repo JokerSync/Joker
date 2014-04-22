@@ -10,7 +10,9 @@ public:
 	explicit LockableSpinBoxTest(QObject *parent = 0);
 
 private slots:
-	void testLock();
+	void testMultiClickUnlock();
+	void testControlClickUnload();
+
 };
 
 #endif // PHLOCKABLESPINBOXTEST_H

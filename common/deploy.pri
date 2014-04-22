@@ -2,7 +2,8 @@
 
 CONFIG(release, debug|release) {
 	mac {
-		PH_DEPLOY_TARGET = $${PH_DEPLOY_LOCATION}$${TARGET}_v$${VERSION}.dmg
+		PH_DEPLOY_TARGET = $${PH_DEPLOY_LOCATION}/$${TARGET}_v$${VERSION}.dmg
+		message($$PH_DEPLOY_TARGET)
 
         !exists(/usr/local/bin/appdmg) {
                 error("You must install appdmg : https://github.com/LinusU/node-appdmg")
@@ -17,7 +18,12 @@ CONFIG(release, debug|release) {
 		QMAKE_POST_LINK += sed -e "s/@TARGET@/$${TARGET}/g" $${_PRO_FILE_PWD_}/../../common/appdmg.json > appdmg.json;
 		QMAKE_POST_LINK += rm $${PH_DEPLOY_TARGET};
 		QMAKE_POST_LINK += appdmg appdmg.json $${PH_DEPLOY_TARGET};
-		QMAKE_POST_LINK += open $${PH_DEPLOY_TARGET};
+	}
+
+	win32 {
+		QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/JokerSetup.iss) . $${CS}
+		QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/LICENSE.TXT) . $${CS}
+		QMAKE_POST_LINK += iscc JokerSetup.iss
 	}
 }
 

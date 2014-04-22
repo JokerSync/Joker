@@ -31,6 +31,7 @@ private slots:
 	void importMosTest01();
 	void importMosTest02();
 	void importMosTest03();
+	void importMosTest04();
 
 	// Open any doc (*.detx, *.strip, *.joker) test
 	void openStripFileTest();
@@ -41,8 +42,8 @@ private slots:
 	void getPeopleByNameTest();
 
 	// Get prev/next element tests
-	void getPreviousElementFrameTest();
-	void getNextElementFrameTest();
+	void getPreviousElementTimeTest();
+	void getNextElementTimeTest();
 	void getNextTextTest();
 	void getNextTextTestByPeople();
 	void getNextTextTestByPeopleList();
@@ -50,8 +51,8 @@ private slots:
 	void getPreviousLoopTest();
 
 private:
-	QString f2s(PhFrame frame, PhTimeCodeType tcType = PhTimeCodeType25);
-	PhFrame s2f(QString string, PhTimeCodeType tcType = PhTimeCodeType25);
+	QString t2s(PhTime time, PhTimeCodeType tcType);
+	PhTime s2t(QString string, PhTimeCodeType tcType);
 };
 
 #endif // PHSTRIPDOCTEST_H

@@ -52,13 +52,13 @@ void PropertyDialog::showEvent(QShowEvent *)
 		if(_doc->authorName().length())
 			ui->authorLabel->setText(_doc->authorName());
 
-		PhFrame frameIn = _doc->frameIn();
-		if(frameIn > 0)
-			ui->tcInLabel->setText(PhTimeCode::stringFromFrame(frameIn, _doc->timeCodeType()));
+		PhTime timeIn = _doc->timeIn();
+		if(timeIn > 0)
+			ui->tcInLabel->setText(PhTimeCode::stringFromTime(timeIn, _doc->timeCodeType()));
 
-		PhFrame frameOut = _doc->frameOut();
-		if(frameOut > 0)
-			ui->tcOutLabel->setText(PhTimeCode::stringFromFrame(frameOut, _doc->timeCodeType()));
+		PhTime timeOut = _doc->timeOut();
+		if(timeOut > 0)
+			ui->tcOutLabel->setText(PhTimeCode::stringFromTime(timeOut, _doc->timeCodeType()));
 
 		int peopleNumber = _doc->peoples().count();
 		ui->peopleNumberLabel->setText(QString::number(peopleNumber));

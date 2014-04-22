@@ -19,6 +19,7 @@ INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhStrip/PhStrip.pri)
+include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
@@ -54,6 +55,7 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/str
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test01.mos) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test02.mos) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test03.mos) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test04.mos) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/notitle.detx) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/text.txt) . $${CS}
 

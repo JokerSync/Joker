@@ -55,8 +55,6 @@ private slots:
 
 	void on_lineEditFilter_textEdited(const QString &arg1);
 
-	void on_cBoxDeinterlace_clicked();
-
 	void on_cBoxDisplayTC_clicked();
 
 	void on_cBoxDisplayNextTC_clicked();
@@ -66,12 +64,6 @@ private slots:
 	void on_cBoxDisplayTitle_clicked();
 
 	void on_cBoxDisplayLoop_clicked();
-
-	void on_pButtonReset_clicked();
-
-	void on_lblPathToLogFile_linkActivated(const QString &link);
-
-	void onLogMaskButtonClicked();
 
 	void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
@@ -83,16 +75,14 @@ private:
 	QString _oldFont;
 	bool _oldUseQuarterFrame;
 	int _oldDelay;
-	int _oldSpeed;
+	int _oldHorizontalTimePerPixel;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldDeinterlace;
 	bool _oldDisplayTC;
 	bool _oldDisplayNextTC;
 	bool _oldDisplayNextText;
 	bool _oldDisplayTitle;
 	bool _oldDisplayLoop;
-	int _oldLogMask;
 	int _oldSyncProtocol;
 	QString _oldLTCInput;
 

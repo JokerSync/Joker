@@ -1,55 +1,34 @@
 language: objective-c
-
 install:
-- brew update
-- brew install ffmpeg
-- brew install libav
-- brew install portaudio
-- brew install doxygen
-- brew install uncrustify
-- brew install node
-- brew install npm
-- mkdir tmp && cd tmp
-- ../scripts/install_libltc.sh
-- ls -la
-- ../scripts/install_sdl.sh
-- brew install qt5
-#- brew install sdl2 sdl2_image sdl2_ttf
-- find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod +w {} \;
-
-# Installing appdmg for deployment
-- npm install -g appdmg
-
+- scripts/install_sdl.sh
+- scripts/bootstrap.sh
+- scripts/install_libltc.sh
 - export PATH=$PATH:/usr/local/opt/qt5/bin
-# Setup python environment for coveralls
-- brew install pyenv
-- eval "$(pyenv init -)"
-- pyenv install 2.7.2
-- pyenv global 2.7.2
-- pyenv rehash
-- pip install cpp-coveralls
-- pyenv rehash
-
+- export JOKER_RELEASE_PATH=$HOME
 script:
-# Build AutoTest
+- qmake -v
+- mkdir tmp && cd tmp
 - mkdir AutoTest && cd AutoTest
 - qmake ../../tests/AutoTest/AutoTest.pro
 - make
-# Run AutoTest
-- ./AutoTest
+- "./AutoTest"
 - cd ..
-# Build Joker
 - mkdir Joker && cd Joker
 - qmake ../../app/Joker/Joker.pro
 - make
 - cd ..
 - cd ..
-- ./scripts/doxygen.sh
-- ./scripts/uncrustify.sh
-
+- "./scripts/doxygen.sh"
+- "./scripts/uncrustify.sh"
 after_success:
-- coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
-
+- coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root
+  tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
+- "./scripts/update-gh-pages.sh"
 notifications:
- irc: "phonations.com#joker"
- email: false
+  irc: phonations.com#joker
+  flowdock:
+    secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
+  email: false
+env:
+  global:
+    secure: StCptdbX5mPsWDLvwtRS8R0IP2t0ZaPUpRHtnVQbooMyskwWHOiM809iGFoUNyvsZQiPl/0psWjlpXpWm+NBmChj/ADksx9PhFg8WKya3uTLQ2bJkGo9dtW7y1BQ38kDpqrKVjn1zTKF1lZvd3+09KzNmmjAAcoxlD6rqssP7Rw=

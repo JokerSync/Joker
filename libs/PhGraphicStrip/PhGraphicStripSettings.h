@@ -4,10 +4,12 @@
 #include <QString>
 #include <QDir>
 
+#include "PhGraphic/PhGraphicSettings.h"
+
 /**
  * @brief The settings for PhGraphicStrip
  */
-class PhGraphicStripSettings
+class PhGraphicStripSettings : public PhGraphicSettings
 {
 public:
 	/**
@@ -21,11 +23,15 @@ public:
 	 */
 	virtual float stripHeight() = 0;
 	/**
-	 * @brief The amount of pixel to move a graphic object
-	 * per screen refresh at nominal speed
+	 * @brief Duration of a pixel for horizontal scrolling
 	 * @return An integer value
 	 */
-	virtual int horizontalSpeed() = 0;
+	virtual int horizontalTimePerPixel() = 0;
+	/**
+	 * @brief Duration of a pixel for vertical scrolling
+	 * @return An integer value
+	 */
+	virtual int verticalTimePerPixel() = 0;
 	/**
 	 * @brief Set the strip text font file
 	 * @param value A font file path
@@ -60,12 +66,6 @@ public:
 	 * @return True if displayed, false otherwise
 	 */
 	virtual bool displayNextText() = 0;
-	/**
-	 * @brief The amount of pixel to move a graphic object
-	 * per screen refresh at nominal speed
-	 * @return An integer value
-	 */
-	virtual int verticalSpeed() = 0;
 
 	/**
 	 * @brief Allow color invertion
@@ -81,18 +81,12 @@ public:
 	 * @brief The timestamp of the ruler
 	 * @return
 	 */
-	virtual int rulerTimestamp() = 0;
+	virtual int rulerTimeIn() = 0;
 	/**
-	 * @brief The number of frame between each draw of the ruler
-	 * @return A number of frame
+	 * @brief The amount of time between each draw of the ruler
+	 * @return A time value
 	 */
-	virtual int spaceBetweenRuler() = 0;
-
-	/**
-	 * @brief Display some informations about the strip
-	 * @return True if the informations are displayed
-	 */
-	virtual bool displayStripInfo() = 0;
+	virtual int timeBetweenRuler() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

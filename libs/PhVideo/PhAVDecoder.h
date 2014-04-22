@@ -34,15 +34,19 @@ class PhAVDecoder : public QObject
 {
 	Q_OBJECT
 public:
-	explicit PhAVDecoder(QObject *parent = 0);
+	explicit PhAVDecoder(int bufferSize, QObject *parent = 0);
+	~PhAVDecoder();
 
 	bool open(QString fileName);
 	void close();
 
-	uint8_t* getBuffer(PhFrame frame);
-
 	PhTimeCodeType timeCodeType();
 	PhFrame firstFrame();
+	/**
+	 * @brief Set first frame
+	 * @param frame the new first frame
+	 */
+	void setFirstFrame(PhFrame frame);
 
 	int width();
 	int height();
@@ -62,41 +66,57 @@ public:
 	 */
 	QString codecName();
 
-	void setDeintrelace(bool deintrelace);
+	/**
+	 * @brief Check if video shall be deinterlace
+	 * @return True if deinterlace false otherwise
+	 */
+	bool deinterlace() {
+		return _deinterlace;
+	}
 
+	/**
+	 * @brief Set the video deinterlace mode
+	 * @param deinterlace True if deinterlace false otherwise
+	 */
+	void setDeinterlace(bool deinterlace);
+
+	int bufferOccupation();
+
+	uint8_t* getBuffer(PhFrame frame);
 signals:
 	void finished();
 	void error(QString err);
 
 public slots:
 	void process();
-	void quit();
-private:
 
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onRateChanged(PhRate rate);
+
+private:
 	int64_t frame2time(PhFrame f);
 	PhFrame time2frame(int64_t t);
 
-	QSemaphore _framesProcessed;
+	int _bufferSize;
 	QSemaphore _framesFree;
-	QMap<PhFrame, uint8_t * > _nextImages;
-	QMutex _nextImagesMutex;
+	QMap<PhFrame, uint8_t * > _bufferMap;
+	QMutex _bufferMutex;
 	void clearBuffer();
 
 	PhFrame _firstFrame;
 	PhFrame _currentFrame;
-	int _rate;
-	PhFrame _lastAskedFrame;
-
+	int _direction;
 
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
 	struct SwsContext * _pSwsCtx;
-	bool _videoDeintrelace;
+	bool _deinterlace;
 
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
 
+	bool _interupted;
 };
 
 #endif // PHAVDECODER_H

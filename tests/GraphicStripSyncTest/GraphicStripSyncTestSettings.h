@@ -16,25 +16,30 @@ class GraphicStripSyncTestSettings : protected PhGenericSettings,
 public:
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 
+	// PhGraphicSettings
+	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
+	PH_SETTING_BOOL(setResetInfo, resetInfo)
+
 	// PhGraphicStripSettings :
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 1)
-	PH_SETTING_INT2(setHorizontalSpeed, horizontalSpeed, 12)
+	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 80)
+	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
 	PH_SETTING_STRING(setTextFontFile, textFontFile)
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 2)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
-	PH_SETTING_INT2(setVerticalSpeed, verticalSpeed, 1)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
-	PH_SETTING_INT(setRulerTimestamp, rulerTimestamp)
-	PH_SETTING_INT2(setSpaceBetweenRuler, spaceBetweenRuler, 33)
-	PH_SETTING_BOOL(setDisplayStripInfo, displayStripInfo)
+	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
+	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
 
 	// PhSyncSettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
 	PH_SETTING_UCHAR2(setSonyDevice1, sonyDevice1, 0xF0)
 	PH_SETTING_UCHAR2(setSonyDevice2, sonyDevice2, 0xC0)
 	PH_SETTING_FLOAT2(setSonyFastRate, sonyFastRate, 3)
+	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
+	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

@@ -15,10 +15,10 @@ bool PhAudioInput::init(QString deviceName)
 	int deviceCount = Pa_GetDeviceCount();
 
 	PaStreamParameters streamParameters;
-	streamParameters.device = Pa_GetDefaultOutputDevice();
+	streamParameters.device = Pa_GetDefaultInputDevice();
 	const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(streamParameters.device);
 	streamParameters.channelCount = 1;
-	streamParameters.sampleFormat = paInt8;
+	streamParameters.sampleFormat = paUInt8;
 	streamParameters.suggestedLatency = 0;
 	streamParameters.hostApiSpecificStreamInfo = NULL;
 
@@ -61,7 +61,7 @@ bool PhAudioInput::init(QString deviceName)
 	if(Pa_StartStream( _stream ) != paNoError)
 		return false;
 
-	PHDEBUG << deviceName << "is now open.";
+	PHDEBUG << deviceInfo->name << "is now open.";
 
 	return true;
 }
@@ -78,10 +78,28 @@ QList<QString> PhAudioInput::inputList()
 		for(int i = 0; i < numDevices; i++ ) {
 			deviceInfo = Pa_GetDeviceInfo( i );
 			if(deviceInfo->maxInputChannels > 0)
-				names.append(deviceInfo->name);
+				names.append(QString::fromLatin1(deviceInfo->name));
 		}
 	}
 	Pa_Terminate();
 
 	return names;
+}
+
+int PhAudioInput::processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer)
+{
+	const char *buffer = (const char*)inputBuffer;
+
+	int minLevel = 0;
+	int maxLevel = 0;
+	for(int i = 0; i < framesPerBuffer; i++) {
+		if(buffer[i] < minLevel)
+			minLevel = buffer[i];
+		if(buffer[i] > maxLevel)
+			maxLevel = buffer[i];
+	}
+
+	emit audioProcessed(minLevel, maxLevel);
+
+	return paContinue;
 }

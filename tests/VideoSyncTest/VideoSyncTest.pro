@@ -1,15 +1,14 @@
 TEMPLATE = app
 TARGET = VideoSyncTest
 
-JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
+INCLUDEPATH += ../../libs
 
-INCLUDEPATH += $${JOKER_ROOT}/libs
-
-include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
-include($${JOKER_ROOT}/libs/PhSync/PhSync.pri)
-include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
-include($${JOKER_ROOT}/libs/PhVideo/PhVideo.pri)
-include($${JOKER_ROOT}/libs/PhCommonUI/PhCommonUI.pri)
+include(../../libs/PhTools/PhTools.pri)
+include(../../libs/PhAudio/PhAudio.pri)
+include(../../libs/PhSync/PhSync.pri)
+include(../../libs/PhGraphic/PhGraphic.pri)
+include(../../libs/PhVideo/PhVideo.pri)
+include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 HEADERS += VideoSyncTestWindow.h \
     VideoSyncTestSettings.h

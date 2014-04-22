@@ -4,17 +4,25 @@
 #include "PhTools/PhDebug.h"
 #include "GraphicTestView.h"
 #include "PhTools/PhPictureTools.h"
+#include "PhGraphic/PhGraphicDashedLine.h"
+#include "PhGraphic/PhGraphicArrow.h"
 
 GraphicTestView::GraphicTestView(QWidget *parent)
 	: PhGraphicView( parent),
-	_text1(&_font1, "eéaàiîoô"),
-	_text2(&_font2, "The party is over!")
+	_settings(NULL),
+	_x(0)
 {
 }
 
 bool GraphicTestView::setFontFile(QString fontFile)
 {
 	return _font1.setFontFile(fontFile);
+}
+
+void GraphicTestView::setTestSettings(GraphicTestSettings *settings)
+{
+	_settings = settings;
+	PhGraphicView::setGraphicSettings(settings);
 }
 
 bool GraphicTestView::init()
@@ -42,33 +50,10 @@ bool GraphicTestView::init()
 		return false;
 	}
 
-	PHDEBUG << "Initialize _text";
-	_text1.setRect(50, 100, 100, 100);
-	_text1.setColor(QColor(255, 0, 0));
-	_text1.setZ(-1);
-
-	_text2.setRect(50, 300, 500, 100);
-	_text2.setColor(QColor(255, 0, 0));
-	_text2.setZ(-1);
-
 	PHDEBUG << "Initialize _rect";
 	_rect.setRect(100, 100, 75, 40);
 	_rect.setColor(QColor(0, 255, 0));
 	_rect.setZ(-2);
-
-	PHDEBUG << "Initialize _loop";
-	_loop.setX(100);
-	_loop.setY(50);
-	_loop.setZ(-3);
-	_loop.setWidth(120);
-	_loop.setHeight(100);
-	_loop.setHThick(5);
-	_loop.setCrossHeight(60);
-	_loop.setColor(QColor(1, 255, 1));
-	if (!_loop.init()) {
-		PHDEBUG << "_loop not initialize";
-		return false;
-	}
 
 	int w = 50;
 	int h = 50;
@@ -76,9 +61,6 @@ bool GraphicTestView::init()
 	_yuvRect.setRect(20, 300, 150, 100);
 	_yuvRect.createTextureFromYUVBuffer(yuv, w, h);
 
-	_disc.setPosition(300, 300, 0);
-	_disc.setRadius(100);
-	_disc.setColor(Qt::yellow);
 	return true;
 }
 
@@ -86,7 +68,7 @@ void GraphicTestView::paint()
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-//	_image.setTextureCoordinate(1, 3);
+	_image.setTextureCoordinate(1, 3);
 	_image.draw();
 
 	_rect.setColor(QColor(0, 255, 0));
@@ -97,12 +79,37 @@ void GraphicTestView::paint()
 	_rect.setRect(50, 175, 500, 25);
 	_rect.draw();
 
-	_text1.setRect(50, 100, 500, 100);
-	_text1.draw();
+	int textCount = 1;
+	int quadCount = 1;
+	QString textContent("Change the text from the settings");
 
-//	_text2.draw();
+	if(_settings) {
+		quadCount = _settings->quadCount();
+		textCount = _settings->textCount();
+		textContent = _settings->textContent();
+	}
 
+	for(int i = 0; i < textCount; i++) {
+		PhGraphicText text1(&_font1, textContent);
 
+		text1.setRect(i % 200, i / 200, 500, 100);
+		text1.setColor(QColor(128, 255, 0));
+		text1.setZ(5);
+		text1.draw();
+	}
+
+	this->addInfo(QString("textCount: %1").arg(textCount));
+
+	PhGraphicText text2(&_font2, "eéaàiîoô");
+	int textWidth = 500;
+	text2.setRect(_x, 300, textWidth, 100);
+	text2.setColor(QColor(255, 0, 0));
+	text2.setZ(-1);
+	text2.draw();
+
+	_x += 4;
+	if(_x > this->width())
+		_x = -textWidth;
 
 	_font1.select();
 
@@ -115,31 +122,55 @@ void GraphicTestView::paint()
 
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
-		glTexCoord3f(0, 0, 1);  glVertex3f(0,               0,              0);
-		glTexCoord3f(1, 0, 1);  glVertex3f(this->width(),   0,              0);
-		glTexCoord3f(1, 1, 1);  glVertex3f(this->width(),   this->height(), 0);
-		glTexCoord3f(0, 1, 1);  glVertex3f(0,               this->height(), 0);
+		for(int i = 0; i < quadCount; i++) {
+			glTexCoord3f(0, 0, 1);  glVertex3i(0,               0,              0);
+			glTexCoord3f(1, 0, 1);  glVertex3i(this->width(),   0,              0);
+			glTexCoord3f(1, 1, 1);  glVertex3i(this->width(),   this->height(), 0);
+			glTexCoord3f(0, 1, 1);  glVertex3i(0,               this->height(), 0);
+		}
 	}
 	glEnd();
 
-//	_text.setX(_text.getX() + 4);
-//	if(_text.getX() > this.width())
-//		_text.setX(0);
-//	if((_text.getX()+_text.getWidth()) < 0)
-//		_text.setX(this.width());
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	//	_text.setX(_text.getX() + 4);
+	//	if(_text.getX() > this.width())
+	//		_text.setX(0);
+	//	if((_text.getX()+_text.getWidth()) < 0)
+	//		_text.setX(this.width());
 
 
-//	_loop.draw();
+	PhGraphicLoop loop;
+	loop.setPosition(100, 50, -3);
+	loop.setSize(120, 100);
+	loop.setHThick(5);
+	loop.setCrossHeight(60);
+	loop.setColor(QColor(1, 255, 1));
+	loop.draw();
 
 	//_yuvRect.draw();
 
-	PhGraphicText frameRateText(&_font2, QString::number(this->refreshRate()));
-	frameRateText.setRect(0, 100, 100, 100);
-	frameRateText.setColor(Qt::red);
-	frameRateText.draw();
+	PhGraphicDisc disc(300, 300, 100);
+	disc.setColor(Qt::yellow);
+	disc.draw();
 
-	_disc.draw();
+	for (int i = 0; i < 5; ++i) {
+		PhGraphicDashedLine line(i, 0, 50*i, 300, 30);
+		line.setColor(Qt::green);
+		line.setZ(4);
+		line.draw();
+	}
 
+	PhGraphicArrow arrow1(PhGraphicArrow::DownLeftToUpRight, 150, 250, 200, 100);
+	arrow1.setColor(Qt::red);
+	arrow1.setZ(5);
+	arrow1.draw();
+
+	PhGraphicArrow arrow2(PhGraphicArrow::UpLefToDownRight, 150, 400, 200, 100);
+	arrow2.setColor(Qt::red);
+	arrow2.setZ(5);
+	arrow2.draw();
 }
 
 

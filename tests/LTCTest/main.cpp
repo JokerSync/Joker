@@ -1,12 +1,10 @@
-#include <QCoreApplication>
-
 #include <stdio.h>
 #include <math.h>
 #include "ltc.h"
 
 #include "PhTools/PhDebug.h"
 
-#define BUFFER_SIZE (1024)
+#define BUFFER_SIZE (256)
 
 /**
  * @brief The application main entry point
@@ -16,59 +14,52 @@
  */
 int main(int argc, char *argv[])
 {
-	QCoreApplication a(argc, argv);
-
-	for(int i = 0; i < argc; i++)
-		PHDEBUG << argv[i];
-	PHDEBUG << "\n\n";
-
-	int apv = 1920;
-	ltcsnd_sample_t sound[BUFFER_SIZE];
-	size_t n;
-	long int total;
-	FILE* f;
-	char* filename;
-	LTCDecoder *decoder;
-	LTCFrameExt frame;
-
-	// fIXME
-	if (argc > 1) {
-		filename = argv[1];
-		if (argc > 2) {
-			sscanf(argv[2], "%i", &apv);
-		}
-	}
-	else {
+	if (argc < 2) {
 		printf("Usage: %s <filename> [audio-frames-per-video-frame]\n", argv[0]);
 		return -1;
 	}
-	f = fopen(filename, "r");
+
+	char *fileName = argv[1];
+	FILE *f = fopen(fileName, "r");
 	if (!f) {
-		fprintf(stderr, "error opening '%s'\n", filename);
+		fprintf(stderr, "error opening '%s'\n", fileName);
 		return -1;
 	}
-	fprintf(stderr, "* reading from: %s\n", filename);
-	total = 0;
-	decoder = ltc_decoder_create(apv, 3840);
+	fprintf(stderr, "* reading from: %s\n", fileName);
+	LTCDecoder *decoder = ltc_decoder_create(1920, 3840);
+	ltcsnd_sample_t sound[BUFFER_SIZE];
 
+	ltc_off_t offset = 0;
+	size_t byteRead = 0;
+	ltc_off_t lastOffset = 0;
 	do {
-		//PHDEBUG << "in da do";
-		n = fread(sound, sizeof(ltcsnd_sample_t), BUFFER_SIZE, f);
+		byteRead = fread(sound, 1, BUFFER_SIZE, f);
 
-		//PHDEBUG << n;
-		ltc_decoder_write(decoder, sound, n, total);
-		//PHDEBUG << "2";
+		int minLevel = 0;
+		int maxLevel = 0;
 
+		for(int i = 0; i < byteRead; i++) {
+			if(sound[i] < minLevel)
+				minLevel = sound[i];
+			else if (sound[i] > maxLevel)
+				maxLevel = sound[i];
+		}
+
+		PHDEBUG << minLevel << maxLevel;
+
+		ltc_decoder_write(decoder, sound, byteRead, offset);
+
+		LTCFrameExt frame;
 		while (ltc_decoder_read(decoder, &frame)) {
 			SMPTETimecode stime;
 			ltc_frame_to_time(&stime, &frame.ltc, 1);
-			//PHDEBUG << stime.years + 1900 << stime.months << stime.days; // << stime.timezone;
-			PHDEBUG << stime.hours << stime.mins << stime.secs << ":" << stime.frame << "\toffStart " << frame.off_start << "\toffEnd" << frame.off_end;
+			PHDEBUG << frame.off_start << ":" << stime.hours << stime.mins << stime.secs << stime.frame << "/" << frame.off_start - lastOffset;
+			lastOffset = frame.off_start;
 		}
-		total += n;
-		//PHDEBUG << n;
+		offset += byteRead;
 	}
-	while (n);
+	while (byteRead);
+
 	fclose(f);
 	ltc_decoder_free(decoder);
 
