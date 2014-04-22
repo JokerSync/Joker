@@ -15,8 +15,8 @@ script:
 - cd tests/AutoTest
 - "./AutoTest"
 - cd ../..
-- "./scripts/doxygen.sh"
-- "./scripts/uncrustify.sh"
+#- "./scripts/doxygen.sh"
+#- "./scripts/uncrustify.sh"
 after_success:
 - coveralls -E .+/moc_.+ -E .+/ui_.+
 #- "./scripts/update-gh-pages.sh"
