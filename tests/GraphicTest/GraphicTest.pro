@@ -42,8 +42,7 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240
 CONFIG(release, debug|release) {
 	mac {
 		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)/tools/$${TARGET}_v$${VERSION}.dmg
+		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(TESTS_RELEASE_PATH)/$${TARGET}_v$${VERSION}.dmg
 	}
 
 }
-
