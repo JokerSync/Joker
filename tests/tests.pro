@@ -19,5 +19,4 @@ SUBDIRS += \
 	VideoStripTest \
 	VideoSyncTest \
 	VideoTest \
-	VLCTest
-
+#	VLCTest
