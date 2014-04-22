@@ -300,7 +300,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 						case AV_PIX_FMT_YUVJ440P:
 							pixFormat = AV_PIX_FMT_YUV440P;
 						default:
-							pixFormat = _videoStream->codec->codec->pix_fmts;
+							pixFormat = _videoStream->codec->pix_fmt;
 							break;
 						}
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
