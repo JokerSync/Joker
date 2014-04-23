@@ -60,15 +60,10 @@ int main(int argc, char *argv[])
 		success &= !QTest::qExec(&settingsTest);
 	}
 
-	int docArgC = 3;
-	char** docArgV = new char*[docArgC];
-	docArgV[0] = "AutoTest";
-	docArgV[1] = "-maxwarnings";
-	docArgV[2] = "0";
 	if(testDoc) {
 		// Testing PhStripDoc
 		StripDocTest docTest;
-		success &= !QTest::qExec(&docTest, docArgC, docArgV);
+		success &= !QTest::qExec(&docTest);
 	}
 
 	if(testSony) {
