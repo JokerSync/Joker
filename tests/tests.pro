@@ -2,6 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
 	AudioTest \
+	AutoTest \
 	ConsoleTest \
 	FormTest \
 	FFmpegTest \
@@ -18,5 +19,4 @@ SUBDIRS += \
 	VideoStripTest \
 	VideoSyncTest \
 	VideoTest \
-	VLCTest
-
+#	VLCTest

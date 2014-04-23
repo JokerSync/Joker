@@ -4,11 +4,11 @@ if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
 
 brew update
-brew install ffmpeg libav portaudio 
+brew install ffmpeg libav portaudio
 brew install python doxygen uncrustify node npm pyenv wget
 eval "$(pyenv init -)"
-pyenv install 2.7.2
-pyenv global 2.7.2
+pyenv install 2.7.6
+pyenv global 2.7.6
 pyenv rehash
 pip install cpp-coveralls
 pyenv rehash
@@ -32,4 +32,3 @@ sudo apt-get install doxygen uncrustify
 
 sudo pip install cpp-coveralls
 fi
-
