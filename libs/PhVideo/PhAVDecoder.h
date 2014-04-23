@@ -117,6 +117,7 @@ private:
 	AVFrame * _audioFrame;
 
 	bool _interupted;
+	void decodeFrame(PhFrame frame);
 };
 
 #endif // PHAVDECODER_H

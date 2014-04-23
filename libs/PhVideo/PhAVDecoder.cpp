@@ -6,6 +6,7 @@
 #include <QTime>
 #include <qmath.h>
 #include <QCoreApplication>
+#include <QThread>
 
 
 #include "PhAVDecoder.h"
@@ -234,25 +235,7 @@ uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 	_bufferMutex.lock();
 	if(_bufferMap.contains(frame)) {
 		buffer = _bufferMap[frame];
-
-		PhFrame minFrame = frame - _bufferSize / 2;
-		if(minFrame < _firstFrame)
-			minFrame = _firstFrame;
-		PhFrame maxFrame = minFrame + _bufferSize;
-//		foreach(PhFrame key, _bufferMap.keys()) {
-//			if(key < minFrame) {
-//				delete _bufferMap[key];
-//				_bufferMap.remove(key);
-//				_framesFree.release();
-//			}
-//			else if(key > maxFrame) {
-//				delete _bufferMap[key];
-//				_bufferMap.remove(key);
-//				_framesFree.release();
-//			}
-//		}
 	}
-
 	_bufferMutex.unlock();
 
 	return buffer;
@@ -263,133 +246,143 @@ void PhAVDecoder::process()
 	while(!_interupted) {
 		QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
 
-//		if(_direction == -1) {
-//			_bufferMutex.lock();
-//			// If the buffer contains the current frame, seek to the last key frame
-//			if(_bufferMap.contains(_currentFrame)) {
-//				// Look for the minimun frame
-//				foreach(PhFrame key, _bufferMap.keys()) {
-//					if(key < _currentFrame)
-//						_currentFrame = key;
-//				}
-//				int flags = AVSEEK_FLAG_BACKWARD;
-//				int64_t timestamp = frame2time(_currentFrame - _firstFrame);
-//				PHDEBUG << "seek:" << _direction << _currentFrame;
-//				av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
-//			}
-//			_bufferMutex.unlock();
-//		}
-
-
-		AVPacket packet;
-
-		_bufferMutex.lock();
-		int error = av_read_frame(_pFormatContext, &packet);
-		_bufferMutex.unlock();
-		switch(error) {
+		decodeFrame(_currentFrame);
+		switch (_direction) {
+		case 1:
 		case 0:
-			if(packet.stream_index == _videoStream->index) {
-				int frameFinished = 0;
-				avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
-				if(frameFinished) {
-
-					int frameHeight = _videoFrame->height;
-					if(_deinterlace)
-						frameHeight /= 2;
-					// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
-					// we replace its with the new ones recommended by LibAv
-					// in order to get ride of the warnings
-					AVPixelFormat pixFormat;
-					switch (_videoStream->codec->pix_fmt) {
-					case AV_PIX_FMT_YUVJ420P:
-						pixFormat = AV_PIX_FMT_YUV420P;
-						break;
-					case AV_PIX_FMT_YUVJ422P:
-						pixFormat = AV_PIX_FMT_YUV422P;
-						break;
-					case AV_PIX_FMT_YUVJ444P:
-						pixFormat = AV_PIX_FMT_YUV444P;
-						break;
-					case AV_PIX_FMT_YUVJ440P:
-						pixFormat = AV_PIX_FMT_YUV440P;
-					default:
-						pixFormat = _videoStream->codec->pix_fmt;
-						break;
-					}
-					_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-					                                pixFormat, _videoStream->codec->width, frameHeight,
-					                                AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
-					uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
-					int linesize = _videoFrame->width * 3;
-					if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
-					                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
-					                   &linesize)) {
-						while (!_framesFree.tryAcquire()) {
-							QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
-						}
-						_bufferMutex.lock();
-						_bufferMap[_currentFrame] = rgb;
-						PHDBG(25) << "Decoding" <<  PhTimeCode::stringFromFrame(_currentFrame, PhTimeCodeType25) << packet.dts << _framesFree.available();
-						_bufferMutex.unlock();
-					}
-					_currentFrame++;
-				}     // if frame decode is not finished, let's read another packet.
-			}
-			else if(_audioStream && (packet.stream_index == _audioStream->index)) {
-				int ok = 0;
-				avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
-				if(ok) {
-					//PHDEBUG << "audio:" << _audioFrame->nb_samples;
-				}
-			}
+			_currentFrame++;
 			break;
-		case AVERROR_INVALIDDATA:
-		case AVERROR_EOF:
+		case -1:
+			_currentFrame--;
 		default:
-			{
-				char errorStr[256];
-				av_strerror(error, errorStr, 256);
-				PHDEBUG << _currentFrame << "error:" << errorStr;
-				break;
-			}
+			break;
 		}
-		//Avoid memory leak
-		av_free_packet(&packet);
 	}
-
-
 	PHDEBUG << "Bye bye";
 	emit finished();
 }
 
-void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void PhAVDecoder::decodeFrame(PhFrame frame)
 {
-	PHDEBUG << "Reading" << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << _direction;
+	// Exit if the frame is already in the buffer
 	_bufferMutex.lock();
-	if(!_bufferMap.contains(frame)) {
-		clearBuffer();
-		_currentFrame = frame;
-
-		int flags = AVSEEK_FLAG_BACKWARD;
-		int64_t timestamp = frame2time(frame - _firstFrame);
-		PHDEBUG << "seek:" << frame;
-		av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
-
+	if(_bufferMap.contains(frame))
+	{
+		_bufferMutex.unlock();
+		return;
 	}
-	else {
-		// Delete all frames that are bufferSize/2 before the new frame
-		if(_direction == 1 or _direction == 0) {
-			foreach(PhFrame key, _bufferMap.keys()) {
-				if(key < frame - _bufferSize / 2) {
-					delete _bufferMap[key];
-					_bufferMap.remove(key);
-					_framesFree.release();
+	_bufferMutex.unlock();
+
+	int flags = AVSEEK_FLAG_ANY;
+	int64_t timestamp = frame2time(frame - _firstFrame);
+	PHDEBUG << "seek:" << _direction << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25);
+	av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
+
+
+	AVPacket packet;
+	int error = av_read_frame(_pFormatContext, &packet);
+	switch(error) {
+	case 0:
+		if(packet.stream_index == _videoStream->index) {
+			int frameFinished = 0;
+			avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
+			if(frameFinished) {
+
+				int frameHeight = _videoFrame->height;
+				if(_deinterlace)
+					frameHeight /= 2;
+				// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
+				// we replace its with the new ones recommended by LibAv
+				// in order to get ride of the warnings
+				AVPixelFormat pixFormat;
+				switch (_videoStream->codec->pix_fmt) {
+				case AV_PIX_FMT_YUVJ420P:
+					pixFormat = AV_PIX_FMT_YUV420P;
+					break;
+				case AV_PIX_FMT_YUVJ422P:
+					pixFormat = AV_PIX_FMT_YUV422P;
+					break;
+				case AV_PIX_FMT_YUVJ444P:
+					pixFormat = AV_PIX_FMT_YUV444P;
+					break;
+				case AV_PIX_FMT_YUVJ440P:
+					pixFormat = AV_PIX_FMT_YUV440P;
+				default:
+					pixFormat = _videoStream->codec->pix_fmt;
+					break;
 				}
+				_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
+												pixFormat, _videoStream->codec->width, frameHeight,
+												AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
+				uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
+				int linesize = _videoFrame->width * 3;
+				if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
+								   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
+								   &linesize)) {
+					// If the decoder is blocked
+					while (!_framesFree.tryAcquire()) {
+						// Process the events (max time 5ms)
+						QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
+						// sleep for 5 ms in order to decrease CPU load
+						QThread::msleep(5);
+					}
+					_bufferMutex.lock();
+					_bufferMap[frame] = rgb;
+					PHDBG(25) << "Decoding" <<  PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << packet.dts << _framesFree.available();
+					_bufferMutex.unlock();
+				}
+			}     // if frame decode is not finished, let's read another packet.
+		}
+		else if(_audioStream && (packet.stream_index == _audioStream->index)) {
+			int ok = 0;
+			avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
+			if(ok) {
+				PHDEBUG << "audio:" << _audioFrame->nb_samples;
 			}
 		}
-		else if (_direction == -1) {
+		break;
+	case AVERROR_INVALIDDATA:
+	case AVERROR_EOF:
+	default:
+		{
+			char errorStr[256];
+			av_strerror(error, errorStr, 256);
+			PHDEBUG << frame << "error:" << errorStr;
+			break;
 		}
 	}
+	//Avoid memory leak
+	av_free_packet(&packet);
+}
+
+void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+{
+	PHDBG(25) << "Reading" << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << _direction;
+	_bufferMutex.lock();
+	if(_direction == 1 or _direction == 0)
+	{
+		// Remove old frames
+		foreach(PhFrame key, _bufferMap.keys()) {
+			if(key < frame - _bufferSize / 2) {
+				delete _bufferMap[key];
+				_bufferMap.remove(key);
+				_framesFree.release();
+			}
+		}
+	}
+	else if(_direction == -1)
+	{
+		// Remove future frames
+		foreach(PhFrame key, _bufferMap.keys()) {
+			if(key > frame + _bufferSize / 2) {
+				delete _bufferMap[key];
+				_bufferMap.remove(key);
+				_framesFree.release();
+			}
+		}
+	}
+	_currentFrame = frame;
+
 	_bufferMutex.unlock();
 }
 
