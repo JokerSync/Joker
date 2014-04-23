@@ -5,6 +5,8 @@
 
 #include <QTime>
 #include <qmath.h>
+#include <QCoreApplication>
+
 
 #include "PhAVDecoder.h"
 
@@ -24,6 +26,7 @@ PhAVDecoder::PhAVDecoder(int bufferSize, QObject *parent) :
 	_audioFrame(NULL),
 	_interupted(false)
 {
+	PHDEBUG << "Setting the decoder with a buffer of" << bufferSize << "frames";
 }
 
 PhAVDecoder::~PhAVDecoder()
@@ -225,7 +228,7 @@ int PhAVDecoder::bufferOccupation()
 
 uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 {
-	PHDBG(24) << frame << _framesFree.available();
+	//PHDBG(24) << frame << _framesFree.available();
 
 	uint8_t *buffer = NULL;
 	_bufferMutex.lock();
@@ -236,18 +239,18 @@ uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 		if(minFrame < _firstFrame)
 			minFrame = _firstFrame;
 		PhFrame maxFrame = minFrame + _bufferSize;
-		foreach(PhFrame key, _bufferMap.keys()) {
-			if(key < minFrame) {
-				delete _bufferMap[key];
-				_bufferMap.remove(key);
-				_framesFree.release();
-			}
-			else if(key > maxFrame) {
-				delete _bufferMap[key];
-				_bufferMap.remove(key);
-				_framesFree.release();
-			}
-		}
+//		foreach(PhFrame key, _bufferMap.keys()) {
+//			if(key < minFrame) {
+//				delete _bufferMap[key];
+//				_bufferMap.remove(key);
+//				_framesFree.release();
+//			}
+//			else if(key > maxFrame) {
+//				delete _bufferMap[key];
+//				_bufferMap.remove(key);
+//				_framesFree.release();
+//			}
+//		}
 	}
 
 	_bufferMutex.unlock();
@@ -258,23 +261,25 @@ uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 void PhAVDecoder::process()
 {
 	while(!_interupted) {
+		QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
 
-		if(_direction == -1) {
-			_bufferMutex.lock();
-			// If the buffer contains the current frame, seek to the last key frame
-			if(_bufferMap.contains(_currentFrame)) {
-				// Look for the minimun frame
-				foreach(PhFrame key, _bufferMap.keys()) {
-					if(key < _currentFrame)
-						_currentFrame = key;
-				}
-				int flags = AVSEEK_FLAG_BACKWARD;
-				int64_t timestamp = frame2time(_currentFrame - _firstFrame);
-				PHDEBUG << "seek:" << _direction << _currentFrame;
-				av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
-			}
-			_bufferMutex.unlock();
-		}
+//		if(_direction == -1) {
+//			_bufferMutex.lock();
+//			// If the buffer contains the current frame, seek to the last key frame
+//			if(_bufferMap.contains(_currentFrame)) {
+//				// Look for the minimun frame
+//				foreach(PhFrame key, _bufferMap.keys()) {
+//					if(key < _currentFrame)
+//						_currentFrame = key;
+//				}
+//				int flags = AVSEEK_FLAG_BACKWARD;
+//				int64_t timestamp = frame2time(_currentFrame - _firstFrame);
+//				PHDEBUG << "seek:" << _direction << _currentFrame;
+//				av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
+//			}
+//			_bufferMutex.unlock();
+//		}
+
 
 		AVPacket packet;
 
@@ -291,20 +296,40 @@ void PhAVDecoder::process()
 					int frameHeight = _videoFrame->height;
 					if(_deinterlace)
 						frameHeight /= 2;
-
+					// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
+					// we replace its with the new ones recommended by LibAv
+					// in order to get ride of the warnings
+					AVPixelFormat pixFormat;
+					switch (_videoStream->codec->pix_fmt) {
+					case AV_PIX_FMT_YUVJ420P:
+						pixFormat = AV_PIX_FMT_YUV420P;
+						break;
+					case AV_PIX_FMT_YUVJ422P:
+						pixFormat = AV_PIX_FMT_YUV422P;
+						break;
+					case AV_PIX_FMT_YUVJ444P:
+						pixFormat = AV_PIX_FMT_YUV444P;
+						break;
+					case AV_PIX_FMT_YUVJ440P:
+						pixFormat = AV_PIX_FMT_YUV440P;
+					default:
+						pixFormat = _videoStream->codec->pix_fmt;
+						break;
+					}
 					_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-					                                _videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
+					                                pixFormat, _videoStream->codec->width, frameHeight,
 					                                AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
-
 					uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
 					int linesize = _videoFrame->width * 3;
 					if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
 					                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
 					                   &linesize)) {
-						_framesFree.acquire();
+						while (!_framesFree.tryAcquire()) {
+							QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
+						}
 						_bufferMutex.lock();
 						_bufferMap[_currentFrame] = rgb;
-						PHDBG(25) << _currentFrame << rgb << packet.dts << _framesFree.available();
+						PHDBG(25) << "Decoding" <<  PhTimeCode::stringFromFrame(_currentFrame, PhTimeCodeType25) << packet.dts << _framesFree.available();
 						_bufferMutex.unlock();
 					}
 					_currentFrame++;
@@ -339,10 +364,31 @@ void PhAVDecoder::process()
 
 void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
+	PHDEBUG << "Reading" << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << _direction;
 	_bufferMutex.lock();
 	if(!_bufferMap.contains(frame)) {
 		clearBuffer();
 		_currentFrame = frame;
+
+		int flags = AVSEEK_FLAG_BACKWARD;
+		int64_t timestamp = frame2time(frame - _firstFrame);
+		PHDEBUG << "seek:" << frame;
+		av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
+
+	}
+	else {
+		// Delete all frames that are bufferSize/2 before the new frame
+		if(_direction == 1 or _direction == 0) {
+			foreach(PhFrame key, _bufferMap.keys()) {
+				if(key < frame - _bufferSize / 2) {
+					delete _bufferMap[key];
+					_bufferMap.remove(key);
+					_framesFree.release();
+				}
+			}
+		}
+		else if (_direction == -1) {
+		}
 	}
 	_bufferMutex.unlock();
 }
@@ -355,6 +401,7 @@ void PhAVDecoder::onRateChanged(PhRate rate)
 		_direction = 1;
 	else
 		_direction = 0;
+	PHDEBUG << "Direction is now" <<_direction;
 }
 
 int64_t PhAVDecoder::frame2time(PhFrame f)
@@ -379,9 +426,10 @@ PhFrame PhAVDecoder::time2frame(int64_t t)
 
 void PhAVDecoder::clearBuffer()
 {
-	PHDEBUG;
+	PHDEBUG << "Clearing the buffer";
 	qDeleteAll(_bufferMap);
 	_bufferMap.clear();
 	_framesFree.release(_bufferSize - _framesFree.available());
 }
+
 
