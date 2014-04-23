@@ -44,18 +44,11 @@ private slots:
 
 	void on_actionSlave_GoTo_triggered();
 
-	void on_actionSlave_Use_video_sync_triggered();
+	void on_actionSlave_Use_video_sync_triggered(bool useVideo);
 
-	void on_actionSlave_Use_internal_timer_triggered();
-
-	void on_actionMaster_Use_video_sync_triggered();
-
-	void on_actionMaster_Use_internal_timer_triggered();
+	void on_actionMaster_Use_video_sync_triggered(bool useVideo);
 
 private:
-	void switchSlaveVideoInternalSync(bool useVideo);
-	void switchMasterVideoInternalSync(bool useVideo);
-
 	SonyTestSettings _settings;
 	Ui::MainWindow *ui;
 	PhSonyMasterController _sonyMaster;

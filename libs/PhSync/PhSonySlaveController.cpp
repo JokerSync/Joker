@@ -17,7 +17,7 @@ PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, PhSyncSettin
 void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
 {
 	unsigned char dataOut[16];
-	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn);
+	PHDBG(20) << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn);
 	switch (cmd1 >> 4) {
 	case 0:
 		switch (cmd2) {

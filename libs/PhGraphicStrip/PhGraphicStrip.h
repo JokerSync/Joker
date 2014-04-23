@@ -88,7 +88,6 @@ public:
 	 * - Load the strip background
 	 * - Set the synchronization bar
 	 * - Load the font file
-	 *
 	 * @return True if succeed, false otherwise
 	 */
 

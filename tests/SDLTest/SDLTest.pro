@@ -84,7 +84,7 @@ CONFIG(release, debug|release) {
 		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_ttf.framework/Versions/A/SDL2_ttf @executable_path/../Frameworks/SDL2_ttf.framework/Versions/A/SDL2_ttf $${TARGET}.app/Contents/MacOS/$${TARGET};
 
 		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(JOKER_RELEASE_PATH)/tools/$${TARGET}_v$${VERSION}.dmg
+		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(TESTS_RELEASE_PATH)/$${TARGET}_v$${VERSION}.dmg
 	}
 
 }

@@ -43,6 +43,7 @@ public:
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
+	PH_SETTING_INT(setTimePlayed, timePlayed)
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setVideoDeinterlace, videoDeinterlace)
@@ -96,6 +97,8 @@ public:
 	PH_SETTING_STRING2(setVideoFileFilter, videoFileFilter, " (*.m4v *.mkv *.avi *.mov *.mxf)")
 
 	PH_SETTING_BOOL2(setDisplayLogo, displayLogo, true)
+
+	PH_SETTING_STRING(setLanguage, language)
 };
 
 #endif // JOKERSETTINGS_H
