@@ -569,6 +569,33 @@ void StripDocTest::getPreviousLoopTest()
 	QCOMPARE(t2s(doc.previousLoop(s2t("23:00:00:00", tcType))->timeIn(), tcType), QString("01:01:00:00"));
 }
 
+void StripDocTest::addObjectTest()
+{
+	PhStripDoc doc;
+	doc.addPeople(new PhPeople("A people"));
+
+	doc.addObject(new PhStripText(0, doc.peoples().last(), 10000, 1, "Hello"));
+	QVERIFY(doc.texts().count() == 1);
+	doc.addObject(new PhStripCut(PhStripCut::CrossFade, 5400));
+	QVERIFY(doc.cuts().count() == 1);
+	doc.addObject(new PhStripDetect(PhStripDetect::Aperture, 10000, doc.peoples().last(), 11000, 1));
+	QVERIFY(doc.detects().count() == 1);
+
+	doc.addObject(new PhStripLoop(3, 22000));
+	QVERIFY(doc.loops().count() == 1);
+
+}
+
+void StripDocTest::addPeopleTest()
+{
+	PhStripDoc doc;
+	doc.addPeople(new PhPeople("A people"));
+	QVERIFY(doc.peoples().count() == 1);
+	doc.addPeople(new PhPeople("A second people"));
+	QVERIFY(doc.peoples().count() == 2);
+
+}
+
 QString StripDocTest::t2s(PhTime time, PhTimeCodeType tcType)
 {
 	return PhTimeCode::stringFromTime(time, tcType);

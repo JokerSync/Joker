@@ -70,13 +70,15 @@ void PhGraphicView::initializeGL()
 
 void PhGraphicView::resizeGL(int width, int height)
 {
-	resize(width, height);
+	int ratio = this->windowHandle()->devicePixelRatio();
+	PHDEBUG << width << height << ratio;
+
 	if(height == 0)
 		height = 1;
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, width / ratio, height / ratio);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, width, height, 0, -10, 10);
+	glOrtho(0, width / ratio, height / ratio, 0, -10, 10);
 	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -111,7 +113,11 @@ void PhGraphicView::paintGL()
 
 	if(this->refreshRate() > _maxRefreshRate)
 		_maxRefreshRate = this->refreshRate();
-	addInfo(QString("refresh: %1 / %2").arg(_maxRefreshRate).arg(this->refreshRate()));
+	addInfo(QString("refresh: %1x%2, %3 / %4")
+	        .arg(this->width())
+	        .arg(this->height())
+	        .arg(_maxRefreshRate)
+	        .arg(this->refreshRate()));
 
 	if(_dropTimer.elapsed() > 1000 / _screenFrequency + 4) {
 		_dropDetected++;
@@ -151,5 +157,3 @@ void PhGraphicView::paintGL()
 
 	_frameTickCounter.tick();
 }
-
-

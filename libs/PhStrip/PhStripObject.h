@@ -28,6 +28,11 @@ public:
 	 */
 	PhStripObject(PhTime timeIn);
 	/**
+	 * @brief ~PhStripObject
+	 */
+	virtual ~PhStripObject() {
+	}
+	/**
 	 * @brief The time in
 	 * @return A PhTime
 	 */

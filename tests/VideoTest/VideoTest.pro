@@ -27,5 +27,10 @@ SOURCES += \
 FORMS += \
     VideoTestWindow.ui
 
+mac {
+	# For the plist version
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+}
+
 PH_DEPLOY_LOCATION = $$(HOME)
 include(../../common/deploy.pri)
