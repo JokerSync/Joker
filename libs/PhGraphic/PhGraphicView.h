@@ -61,6 +61,7 @@ public:
 	 * @param info A string
 	 */
 	void addInfo(QString info);
+
 signals:
 	/**
 	 * @brief emit a signal just before the paint

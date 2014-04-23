@@ -138,6 +138,13 @@
        </property>
       </widget>
      </item>
+     <item row="8" column="0">
+      <widget class="QCheckBox" name="checkBox">
+       <property name="text">
+        <string>Run for tests</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

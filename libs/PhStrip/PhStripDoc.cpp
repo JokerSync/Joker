@@ -939,6 +939,39 @@ void PhStripDoc::reset()
 	emit this->changed();
 }
 
+void PhStripDoc::addObject(PhStripObject *object)
+{
+	if(dynamic_cast<PhStripCut*>(object)) {
+		this->_cuts.append(dynamic_cast<PhStripCut*>(object));
+		PHDEBUG << "Added a cut";
+	}
+	else if(dynamic_cast<PhStripLoop*>(object)) {
+		this->_loops.append(dynamic_cast<PhStripLoop*>(object));
+		PHDEBUG << "Added a loop";
+	}
+	else if(dynamic_cast<PhStripDetect*>(object)) {
+		this->_detects.append(dynamic_cast<PhStripDetect*>(object));
+		PHDEBUG << "Added a detect!";
+	}
+	else if(dynamic_cast<PhStripText*>(object)) {
+		this->_texts1.append(dynamic_cast<PhStripText*>(object));
+		PHDEBUG << "Added a text!";
+	}
+	else {
+		PHDEBUG << "You try to add a weird object, which seems to be undefined...";
+	}
+	emit changed();
+
+}
+
+void PhStripDoc::addPeople(PhPeople *people)
+{
+	this->_peoples.append(people);
+	PHDEBUG << "Added a people";
+	emit changed();
+
+}
+
 bool PhStripDoc::forceRatio169() const
 {
 	return _videoForceRatio169;
