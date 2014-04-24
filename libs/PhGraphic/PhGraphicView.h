@@ -104,6 +104,9 @@ protected:
 	 */
 	int _screenFrequency;
 
+private slots:
+	void onRefresh();
+
 private:
 	bool _initialized;
 	PhGraphicSettings *_settings;
@@ -111,12 +114,12 @@ private:
 	 * @brief t_Timer
 	 * used to draw
 	 */
-	QTimer *t_Timer;
+	QTimer *_refreshTimer;
 	PhTickCounter _frameTickCounter;
 	QStringList _infos;
 	PhFont _infoFont;
 	QTime _dropTimer;
-	int _dropDetected, _lastDropElapsed, _maxRefreshRate, _maxPaintDuration;
+	int _dropDetected, _maxRefreshRate, _maxPaintDuration, _lastUpdateDuration, _maxUpdateDuration;
 };
 
 #endif // PHGRAPHICVIEW
