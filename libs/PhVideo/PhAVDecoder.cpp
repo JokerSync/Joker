@@ -14,18 +14,18 @@
 PhAVDecoder::PhAVDecoder(int bufferSize, QObject *parent) :
 	QObject(parent),
 	_bufferSize(bufferSize),
-	_framesFree(bufferSize),
+	_bufferFreeSpace(bufferSize),
 	_firstFrame(0),
-	_currentFrame(0),
+	_nextDecodingFrame(0),
 	_direction(0),
 	_pFormatContext(NULL),
 	_videoStream(NULL),
 	_videoFrame(NULL),
-	_pSwsCtx(NULL),
 	_deinterlace(false),
 	_audioStream(NULL),
 	_audioFrame(NULL),
-	_interupted(false)
+	_interupted(false),
+	_lastDecodedFrame(0)
 {
 	PHDEBUG << "Setting the decoder with a buffer of" << bufferSize << "frames";
 }
@@ -104,7 +104,7 @@ bool PhAVDecoder::open(QString fileName)
 
 	_videoFrame = avcodec_alloc_frame();
 
-	_currentFrame = _firstFrame;
+	_nextDecodingFrame = _firstFrame;
 
 	if(_audioStream) {
 		AVCodec* audioCodec = avcodec_find_decoder(_audioStream->codec->codec_id);
@@ -131,7 +131,6 @@ void PhAVDecoder::close()
 	PHDEBUG;
 
 	_interupted = true;
-	_framesFree.release();
 }
 
 PhTimeCodeType PhAVDecoder::timeCodeType()
@@ -168,7 +167,7 @@ void PhAVDecoder::setFirstFrame(PhFrame frame)
 	PHDEBUG << frame;
 	_bufferMutex.lock();
 	clearBuffer();
-	_currentFrame = _firstFrame = frame;
+	_nextDecodingFrame = _firstFrame = frame;
 	_bufferMutex.unlock();
 }
 
@@ -224,7 +223,7 @@ void PhAVDecoder::setDeinterlace(bool deintrelace)
 
 int PhAVDecoder::bufferOccupation()
 {
-	return _bufferSize - _framesFree.available();
+	return _bufferSize - _bufferFreeSpace.available();
 }
 
 uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
@@ -245,19 +244,18 @@ void PhAVDecoder::process()
 {
 	while(!_interupted) {
 		// If the decoder is blocked
-		while (!_framesFree.tryAcquire(1, 5)) {
+		while (!_bufferFreeSpace.tryAcquire(1, 5)) {
 			// Process the events (max time 5ms)
 			QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
-			// sleep for 5 ms in order to decrease CPU load
 		}
-		decodeFrame(_currentFrame);
+		decodeFrame(_nextDecodingFrame);
 		switch (_direction) {
 		case 1:
 		case 0:
-			_currentFrame++;
+			_nextDecodingFrame++;
 			break;
 		case -1:
-			_currentFrame--;
+			_nextDecodingFrame--;
 		default:
 			break;
 		}
@@ -276,114 +274,88 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 	}
 	_bufferMutex.unlock();
 
-	int flags = AVSEEK_FLAG_ANY;
-	int64_t timestamp = frame2time(frame - _firstFrame);
-	PHDEBUG << "seek:" << _direction << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25);
-	av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
+	if(frame - _lastDecodedFrame != 1) {
+		int flags = AVSEEK_FLAG_ANY;
+		int64_t timestamp = frame2time(frame - _firstFrame);
+		PHDEBUG << "seek:" << _direction << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25);
+		av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
+	}
 
+	int frameFinished = 0;
+	while(frameFinished == 0) {
+		AVPacket packet;
+		int error = av_read_frame(_pFormatContext, &packet);
+		switch(error) {
+		case 0:
+			if(packet.stream_index == _videoStream->index) {
+				avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
+				if(frameFinished) {
 
-	AVPacket packet;
-	int error = av_read_frame(_pFormatContext, &packet);
-	switch(error) {
-	case 0:
-		if(packet.stream_index == _videoStream->index) {
-			int frameFinished = 0;
-			avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
-			if(frameFinished) {
+					int frameHeight = _videoFrame->height;
+					if(_deinterlace)
+						frameHeight /= 2;
+					// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
+					// we replace its with the new ones recommended by LibAv
+					// in order to get ride of the warnings
+					AVPixelFormat pixFormat;
+					switch (_videoStream->codec->pix_fmt) {
+					case AV_PIX_FMT_YUVJ420P:
+						pixFormat = AV_PIX_FMT_YUV420P;
+						break;
+					case AV_PIX_FMT_YUVJ422P:
+						pixFormat = AV_PIX_FMT_YUV422P;
+						break;
+					case AV_PIX_FMT_YUVJ444P:
+						pixFormat = AV_PIX_FMT_YUV444P;
+						break;
+					case AV_PIX_FMT_YUVJ440P:
+						pixFormat = AV_PIX_FMT_YUV440P;
+					default:
+						pixFormat = _videoStream->codec->pix_fmt;
+						break;
+					}
+					SwsContext * swsContext = sws_getContext(_videoFrame->width, _videoStream->codec->height,
+					                                         pixFormat, _videoStream->codec->width, frameHeight,
+					                                         AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
 
-				int frameHeight = _videoFrame->height;
-				if(_deinterlace)
-					frameHeight /= 2;
-				// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
-				// we replace its with the new ones recommended by LibAv
-				// in order to get ride of the warnings
-				AVPixelFormat pixFormat;
-				switch (_videoStream->codec->pix_fmt) {
-				case AV_PIX_FMT_YUVJ420P:
-					pixFormat = AV_PIX_FMT_YUV420P;
-					break;
-				case AV_PIX_FMT_YUVJ422P:
-					pixFormat = AV_PIX_FMT_YUV422P;
-					break;
-				case AV_PIX_FMT_YUVJ444P:
-					pixFormat = AV_PIX_FMT_YUV444P;
-					break;
-				case AV_PIX_FMT_YUVJ440P:
-					pixFormat = AV_PIX_FMT_YUV440P;
-				default:
-					pixFormat = _videoStream->codec->pix_fmt;
-					break;
-				}
-				_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-				                                pixFormat, _videoStream->codec->width, frameHeight,
-				                                AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
-				uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
-				int linesize = _videoFrame->width * 3;
-				if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
-				                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
-				                   &linesize)) {
-					_bufferMutex.lock();
-					_bufferMap[frame] = rgb;
-					PHDBG(25) << "Decoding" <<  PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << packet.dts << _framesFree.available();
-					_bufferMutex.unlock();
-				}
-			}     // if frame decode is not finished, let's read another packet.
-		}
-		else if(_audioStream && (packet.stream_index == _audioStream->index)) {
-			PHDEBUG << "audio" << packet.dts;
-			int ok = 0;
-			avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
-			if(ok) {
-				PHDEBUG << "audio:" << _audioFrame->nb_samples;
+					uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
+					int linesize = _videoFrame->width * 3;
+					if (0 <= sws_scale(swsContext, (const uint8_t * const *) _videoFrame->data,
+					                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
+					                   &linesize)) {
+						_bufferMutex.lock();
+						_bufferMap[frame] = rgb;
+						//PHDBG(25) << "Decoding" <<  PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << packet.dts << _bufferFreeSpace.available();
+						_bufferMutex.unlock();
+						_lastDecodedFrame = frame;
+					}
+				}     // if frame decode is not finished, let's read another packet.
 			}
-		}
-		else {
-			PHDEBUG << packet.stream_index;
-		}
-		break;
-	case AVERROR_EOF:
-		// As we reach the end of the file, it's useless to go full speed
-		QThread::msleep(10);
-	case AVERROR_INVALIDDATA:
-	default:
-		{
-			char errorStr[256];
-			av_strerror(error, errorStr, 256);
-			PHDEBUG << "error on frame" << frame << ":" << errorStr;
+			else if(_audioStream && (packet.stream_index == _audioStream->index)) {
+				int ok = 0;
+				avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
+//				if(ok) {
+//					PHDEBUG << "audio:" << _audioFrame->nb_samples;
+//				}
+			}
 			break;
-		}
-	}
-	//Avoid memory leak
-	av_free_packet(&packet);
-}
-
-void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
-{
-	PHDBG(25) << "Reading" << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << _direction;
-	_bufferMutex.lock();
-	if(_direction == 1 or _direction == 0) {
-		// Remove old frames
-		foreach(PhFrame key, _bufferMap.keys()) {
-			if(key < frame - _bufferSize / 2) {
-				delete _bufferMap[key];
-				_bufferMap.remove(key);
-				_framesFree.release();
+		case AVERROR_EOF:
+			// As we reach the end of the file, it's useless to go full speed
+			QThread::msleep(10);
+		case AVERROR_INVALIDDATA:
+		default:
+			{
+				char errorStr[256];
+				av_strerror(error, errorStr, 256);
+				PHDEBUG << "error on frame" << frame << ":" << errorStr;
+				// In order to get out of the while in case of error
+				frameFinished = -1;
+				break;
 			}
 		}
+		//Avoid memory leak
+		av_free_packet(&packet);
 	}
-	else if(_direction == -1) {
-		// Remove future frames
-		foreach(PhFrame key, _bufferMap.keys()) {
-			if(key > frame + _bufferSize / 2) {
-				delete _bufferMap[key];
-				_bufferMap.remove(key);
-				_framesFree.release();
-			}
-		}
-	}
-	_currentFrame = frame;
-
-	_bufferMutex.unlock();
 }
 
 void PhAVDecoder::onRateChanged(PhRate rate)
@@ -397,11 +369,40 @@ void PhAVDecoder::onRateChanged(PhRate rate)
 	PHDEBUG << "Direction is now" <<_direction;
 }
 
+void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType)
+{
+	//PHDBG(25) << "Reading" << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << _direction;
+	_bufferMutex.lock();
+	if(_direction >= 0) {
+		// Remove old frames
+		foreach(PhFrame key, _bufferMap.keys()) {
+			if(key < frame - _bufferSize / 2) {
+				delete _bufferMap[key];
+				_bufferMap.remove(key);
+				_bufferFreeSpace.release();
+			}
+		}
+	}
+	else {
+		// Remove future frames
+		foreach(PhFrame key, _bufferMap.keys()) {
+			if(key > frame + _bufferSize / 2) {
+				delete _bufferMap[key];
+				_bufferMap.remove(key);
+				_bufferFreeSpace.release();
+			}
+		}
+	}
+	_nextDecodingFrame = frame;
+
+	_bufferMutex.unlock();
+}
+
 int64_t PhAVDecoder::frame2time(PhFrame f)
 {
 	int64_t t = 0;
 	if(_videoStream) {
-		PhFrame fps = PhTimeCode::getFps(PhTimeCodeType25);
+		PhFrame fps = PhTimeCode::getFps(timeCodeType());
 		t = f * _videoStream->time_base.den / _videoStream->time_base.num / fps;
 	}
 	return t;
@@ -411,7 +412,7 @@ PhFrame PhAVDecoder::time2frame(int64_t t)
 {
 	PhFrame f = 0;
 	if(_videoStream) {
-		PhFrame fps = PhTimeCode::getFps(PhTimeCodeType25);
+		PhFrame fps = PhTimeCode::getFps(timeCodeType());
 		f = t * _videoStream->time_base.num * fps / _videoStream->time_base.den;
 	}
 	return f;
@@ -422,7 +423,7 @@ void PhAVDecoder::clearBuffer()
 	PHDEBUG << "Clearing the buffer";
 	qDeleteAll(_bufferMap);
 	_bufferMap.clear();
-	_framesFree.release(_bufferSize - _framesFree.available());
+	_bufferFreeSpace.release(_bufferSize - _bufferFreeSpace.available());
 }
 
 

@@ -90,34 +90,36 @@ signals:
 public slots:
 	void process();
 
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onFrameChanged(PhFrame frame, PhTimeCodeType);
 	void onRateChanged(PhRate rate);
 
 private:
 	int64_t frame2time(PhFrame f);
 	PhFrame time2frame(int64_t t);
-
-	int _bufferSize;
-	QSemaphore _framesFree;
-	QMap<PhFrame, uint8_t * > _bufferMap;
-	QMutex _bufferMutex;
+	void decodeFrame(PhFrame frame);
 	void clearBuffer();
 
+	bool _interupted;
+	int _bufferSize;
+	QSemaphore _bufferFreeSpace;
+	QMap<PhFrame, uint8_t * > _bufferMap;
+	QMutex _bufferMutex;
+
 	PhFrame _firstFrame;
-	PhFrame _currentFrame;
+	/**
+	 * @brief The next frame that the decoder will process.
+	 */
+	PhFrame _nextDecodingFrame;
+	PhFrame _lastDecodedFrame;
 	int _direction;
 
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
-	struct SwsContext * _pSwsCtx;
 	bool _deinterlace;
 
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
-
-	bool _interupted;
-	void decodeFrame(PhFrame frame);
 };
 
 #endif // PHAVDECODER_H

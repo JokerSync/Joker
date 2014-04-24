@@ -36,8 +36,9 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setTimeCodeType(_decoder->timeCodeType());
 
 	QThread *thread = new QThread;
-	thread->setPriority(QThread::LowestPriority);
 
+	// Setup the thread worker according to
+	// http://mayaposch.wordpress.com/2011/11/01/how-to-really-truly-use-qthreads-the-full-explanation/
 	_decoder->moveToThread(thread);
 	connect(_decoder, SIGNAL(error(QString)), this, SLOT(errorString(QString)));
 	connect(thread, SIGNAL(started()), _decoder, SLOT(process()));
@@ -48,7 +49,7 @@ bool PhVideoEngine::open(QString fileName)
 	connect(&_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), _decoder, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(&_clock, SIGNAL(rateChanged(PhRate)), _decoder, SLOT(onRateChanged(PhRate)));
 
-	thread->start();
+	thread->start(QThread::LowestPriority);
 
 	return true;
 }
