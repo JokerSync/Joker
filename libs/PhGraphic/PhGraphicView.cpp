@@ -119,7 +119,7 @@ void PhGraphicView::paintGL()
 	        .arg(_maxRefreshRate)
 	        .arg(this->refreshRate()));
 
-	if(_dropTimer.elapsed() > 1000 / _screenFrequency + 4) {
+	if(_dropTimer.elapsed() > 1500 / _screenFrequency) {
 		_dropDetected++;
 		_lastDropElapsed = _dropTimer.elapsed();
 	}
