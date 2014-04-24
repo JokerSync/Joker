@@ -33,6 +33,6 @@ void PhVideoView::paint()
 		               .arg(_videoEngine->bufferSize());
 		addInfo(info);
 		_videoEngine->drawVideo(0, 0, this->width(), this->height());
-		_videoEngine->clock()->tick(60);
+		_videoEngine->clock()->tick(_screenFrequency);
 	}
 }
