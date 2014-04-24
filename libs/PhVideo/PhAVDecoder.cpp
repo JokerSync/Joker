@@ -248,7 +248,10 @@ void PhAVDecoder::process()
 			// Process the events (max time 5ms)
 			QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
 		}
+		//QTime t;
+		//t.start();
 		decodeFrame(_nextDecodingFrame);
+		//PHDEBUG << t.elapsed() << "ms to decode the frame" << _nextDecodingFrame;
 		switch (_direction) {
 		case 1:
 		case 0:
@@ -373,7 +376,12 @@ void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType)
 {
 	//PHDBG(25) << "Reading" << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << _direction;
 	_bufferMutex.lock();
-	if(_direction >= 0) {
+	if(!_bufferMap.contains(frame)) {
+		PHDEBUG << _bufferMap.keys() << frame;
+		clearBuffer();
+		_nextDecodingFrame = frame;
+	}
+	else if(_direction >= 0) {
 		// Remove old frames
 		foreach(PhFrame key, _bufferMap.keys()) {
 			if(key < frame - _bufferSize / 2) {
@@ -393,7 +401,6 @@ void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType)
 			}
 		}
 	}
-	_nextDecodingFrame = frame;
 
 	_bufferMutex.unlock();
 }
