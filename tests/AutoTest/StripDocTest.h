@@ -50,6 +50,9 @@ private slots:
 	void getNextLoopTest();
 	void getPreviousLoopTest();
 
+	void addObjectTest();
+	void addPeopleTest();
+
 private:
 	QString t2s(PhTime time, PhTimeCodeType tcType);
 	PhTime s2t(QString string, PhTimeCodeType tcType);

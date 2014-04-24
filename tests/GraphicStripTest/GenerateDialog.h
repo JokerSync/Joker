@@ -25,6 +25,7 @@ public:
 	explicit GenerateDialog(GraphicStripTestSettings *settings, PhStripDoc * _doc, QWidget *parent = 0);
 	~GenerateDialog();
 	PhTime getTC();
+	bool getCheckBoxState();
 
 private slots:
 	void onTextChanged();

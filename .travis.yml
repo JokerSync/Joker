@@ -13,7 +13,7 @@ script:
 - qmake all.pro
 - make
 - cd tests/AutoTest
-- "./AutoTest"
+- "./AutoTest travis"
 - cd ../..
 - "./scripts/doxygen.sh"
 - "./scripts/uncrustify.sh"

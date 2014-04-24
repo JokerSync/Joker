@@ -9,6 +9,7 @@
 #include "TimeCodeEditTest.h"
 #include "LockableSpinBoxTest.h"
 #include "WindowTest.h"
+#include "GraphicStripTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,7 +23,9 @@ int main(int argc, char *argv[])
 	bool testDoc = testAll;
 	bool testSony = testAll;
 	bool testUi = testAll;
+	bool testGraphicStrip = testAll;
 	bool quiet = false;
+	bool travis = false;
 
 	bool success = true;
 
@@ -37,8 +40,12 @@ int main(int argc, char *argv[])
 			testSony = true;
 		else if(strcmp(argv[i], "ui") == 0)
 			testUi = true;
+		else if(strcasecmp(argv[i], "graphicstrip") == 0)
+			testGraphicStrip = true;
 		else if(strcmp(argv[i], "quiet") == 0)
 			quiet = true;
+		else if(strcmp(argv[i], "travis") == 0)
+			travis = true;
 	}
 
 	if(testTC) {
@@ -75,6 +82,11 @@ int main(int argc, char *argv[])
 
 		WindowTest windowTest;
 		success &= !QTest::qExec(&windowTest);
+	}
+
+	if(testGraphicStrip) {
+		GraphicStripTest viewTest(travis);
+		success &= !QTest::qExec(&viewTest);
 	}
 
 	QThread::msleep(500);
