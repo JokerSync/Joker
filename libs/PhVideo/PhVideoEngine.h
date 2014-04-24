@@ -111,8 +111,6 @@ public:
 	 */
 	void close();
 	/**
-
-	   /**
 	 * @brief Check if video shall be deinterlace
 	 * @return True if deinterlace false otherwise
 	 */

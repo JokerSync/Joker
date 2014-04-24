@@ -22,9 +22,10 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	_initialized(false),
 	_settings(NULL),
 	_dropDetected(0),
-	_lastDropElapsed(0),
 	_maxRefreshRate(0),
-	_maxPaintDuration(0)
+	_maxPaintDuration(0),
+	_lastUpdateDuration(0),
+	_maxUpdateDuration(0)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) == 0)
 		PHDEBUG << "init SDL Ok.";
@@ -35,8 +36,8 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	else
 		PHDEBUG << "TTF error:" << TTF_GetError();
 
-	t_Timer = new QTimer(this);
-	connect(t_Timer, SIGNAL(timeout()), this, SLOT(updateGL()));
+	_refreshTimer = new QTimer(this);
+	connect(_refreshTimer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 
 	//set the screen frequency to the most common value (60hz);
 	_screenFrequency = 60;
@@ -47,14 +48,14 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 		PHDEBUG << "Unable to get the screen";
 
 	int timerInterval = 500 / _screenFrequency;
-	t_Timer->start(timerInterval);
+	_refreshTimer->start( timerInterval);
 	PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
 	_dropTimer.start();
 }
 
 PhGraphicView::~PhGraphicView()
 {
-	t_Timer->stop();
+	_refreshTimer->stop();
 	TTF_Quit();
 	SDL_Quit();
 }
@@ -102,15 +103,8 @@ bool PhGraphicView::init()
 	return true;
 }
 
-void PhGraphicView::paintGL()
+void PhGraphicView::onRefresh()
 {
-	//PHDEBUG << "PhGraphicView::paintGL" ;
-	emit beforePaint(_screenFrequency);
-
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glColor3f(1.0f, 1.0f, 1.0f);
-	_infos.clear();
-
 	if(this->refreshRate() > _maxRefreshRate)
 		_maxRefreshRate = this->refreshRate();
 	addInfo(QString("refresh: %1x%2, %3 / %4")
@@ -118,14 +112,29 @@ void PhGraphicView::paintGL()
 	        .arg(this->height())
 	        .arg(_maxRefreshRate)
 	        .arg(this->refreshRate()));
+	addInfo(QString("Update : %1 %2").arg(_maxUpdateDuration).arg(_lastUpdateDuration));
+	addInfo(QString("drop: %1 %2").arg(_dropDetected).arg(_dropTimer.elapsed() / 1000));
 
-	if(_dropTimer.elapsed() > 1500 / _screenFrequency) {
+	QTime t;
+	t.start();
+	updateGL();
+	_lastUpdateDuration = t.elapsed();
+	if(_lastUpdateDuration > _maxUpdateDuration)
+		_maxUpdateDuration = _lastUpdateDuration;
+	if(_lastUpdateDuration > 1500 / _screenFrequency) {
+		_dropTimer.restart();
 		_dropDetected++;
-		_lastDropElapsed = _dropTimer.elapsed();
 	}
 
-	_dropTimer.restart();
-	addInfo(QString("drop: %1 %2").arg(_lastDropElapsed).arg(_dropDetected));
+}
+
+void PhGraphicView::paintGL()
+{
+	//PHDEBUG << "PhGraphicView::paintGL" ;
+	emit beforePaint(_screenFrequency);
+
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glColor3f(1.0f, 1.0f, 1.0f);
 
 	QTime timer;
 	timer.start();
@@ -138,9 +147,9 @@ void PhGraphicView::paintGL()
 	if(_settings) {
 		if(_settings->resetInfo()) {
 			_dropDetected = 0;
-			_lastDropElapsed = 0;
 			_maxRefreshRate = 0;
 			_maxPaintDuration = 0;
+			_maxUpdateDuration = 0;
 		}
 		if(_settings->displayInfo()) {
 			int y = 0;
@@ -154,6 +163,9 @@ void PhGraphicView::paintGL()
 			}
 		}
 	}
+	// Once the informations have been displayed
+	// clear it
+	_infos.clear();
 
 	_frameTickCounter.tick();
 }

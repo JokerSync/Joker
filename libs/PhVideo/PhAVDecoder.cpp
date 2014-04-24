@@ -244,8 +244,12 @@ uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 void PhAVDecoder::process()
 {
 	while(!_interupted) {
-		QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
-
+		// If the decoder is blocked
+		while (!_framesFree.tryAcquire(1, 5)) {
+			// Process the events (max time 5ms)
+			QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
+			// sleep for 5 ms in order to decrease CPU load
+		}
 		decodeFrame(_currentFrame);
 		switch (_direction) {
 		case 1:
@@ -318,13 +322,6 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 				if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
 				                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
 				                   &linesize)) {
-					// If the decoder is blocked
-					while (!_framesFree.tryAcquire()) {
-						// Process the events (max time 5ms)
-						QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
-						// sleep for 5 ms in order to decrease CPU load
-						QThread::msleep(5);
-					}
 					_bufferMutex.lock();
 					_bufferMap[frame] = rgb;
 					PHDBG(25) << "Decoding" <<  PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << packet.dts << _framesFree.available();
