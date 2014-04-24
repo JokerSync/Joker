@@ -29,6 +29,6 @@ void PhVideoView::paint()
 		QString info = QString("%1 / %2").arg(videoRate).arg(_maxVideoRate);
 		addInfo(info);
 		_videoEngine->drawVideo(0, 0, this->width(), this->height());
-		_videoEngine->clock()->tick(60);
+		_videoEngine->clock()->tick(_screenFrequency);
 	}
 }
