@@ -266,8 +266,7 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 {
 	// Exit if the frame is already in the buffer
 	_bufferMutex.lock();
-	if(_bufferMap.contains(frame))
-	{
+	if(_bufferMap.contains(frame)) {
 		_bufferMutex.unlock();
 		return;
 	}
@@ -312,13 +311,13 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 					break;
 				}
 				_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-												pixFormat, _videoStream->codec->width, frameHeight,
-												AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
+				                                pixFormat, _videoStream->codec->width, frameHeight,
+				                                AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
 				uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
 				int linesize = _videoFrame->width * 3;
 				if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
-								   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
-								   &linesize)) {
+				                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
+				                   &linesize)) {
 					// If the decoder is blocked
 					while (!_framesFree.tryAcquire()) {
 						// Process the events (max time 5ms)
@@ -334,20 +333,26 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 			}     // if frame decode is not finished, let's read another packet.
 		}
 		else if(_audioStream && (packet.stream_index == _audioStream->index)) {
+			PHDEBUG << "audio" << packet.dts;
 			int ok = 0;
 			avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
 			if(ok) {
 				PHDEBUG << "audio:" << _audioFrame->nb_samples;
 			}
 		}
+		else {
+			PHDEBUG << packet.stream_index;
+		}
 		break;
-	case AVERROR_INVALIDDATA:
 	case AVERROR_EOF:
+		// As we reach the end of the file, it's useless to go full speed
+		QThread::msleep(10);
+	case AVERROR_INVALIDDATA:
 	default:
 		{
 			char errorStr[256];
 			av_strerror(error, errorStr, 256);
-			PHDEBUG << frame << "error:" << errorStr;
+			PHDEBUG << "error on frame" << frame << ":" << errorStr;
 			break;
 		}
 	}
@@ -359,8 +364,7 @@ void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
 	PHDBG(25) << "Reading" << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << _direction;
 	_bufferMutex.lock();
-	if(_direction == 1 or _direction == 0)
-	{
+	if(_direction == 1 or _direction == 0) {
 		// Remove old frames
 		foreach(PhFrame key, _bufferMap.keys()) {
 			if(key < frame - _bufferSize / 2) {
@@ -370,8 +374,7 @@ void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 			}
 		}
 	}
-	else if(_direction == -1)
-	{
+	else if(_direction == -1) {
 		// Remove future frames
 		foreach(PhFrame key, _bufferMap.keys()) {
 			if(key > frame + _bufferSize / 2) {
