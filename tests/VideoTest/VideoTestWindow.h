@@ -73,6 +73,8 @@ private slots:
 
 	void on_actionGo_to_triggered();
 
+	void on_actionDisplay_media_panel_triggered(bool checked);
+
 private:
 
 	Ui::VideoTestWindow *ui;
