@@ -25,6 +25,8 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 
 	ui->_videoView->setEngine(&_videoEngine);
 	_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
+
+	connect(_videoEngine.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 }
 
 VideoTestWindow::~VideoTestWindow()
@@ -39,11 +41,24 @@ bool VideoTestWindow::openDocument(QString fileName)
 
 	_mediaPanelDialog.setMediaLength(_videoEngine.length());
 	PhFrame frameStamp = _videoEngine.firstFrame();
+	PhFrame currentFrame = frameStamp;
+
+	if(fileName == _settings->currentDocument()) {
+		frameStamp = _settings->frameStamp();
+		_videoEngine.setFirstFrame(frameStamp);
+		currentFrame = _settings->currentFrame();
+	}
+	else if(_videoEngine.firstFrame() == 0) {
+		on_actionSet_timestamp_triggered();
+		frameStamp = _videoEngine.firstFrame();
+		currentFrame = frameStamp;
+	}
 	_mediaPanelDialog.setFirstFrame(frameStamp);
 
-	_videoEngine.clock()->setFrame(frameStamp);
+	_videoEngine.clock()->setFrame(currentFrame);
 
 	setCurrentDocument(fileName);
+	_settings->setFrameStamp(frameStamp);
 
 	return true;
 }
@@ -130,6 +145,7 @@ void VideoTestWindow::on_actionSet_timestamp_triggered()
 		_videoEngine.setFirstFrame(frameStamp);
 		_mediaPanelDialog.setFirstFrame(frameStamp);
 		_videoEngine.clock()->setFrame(dlg.frame());
+		_settings->setFrameStamp(frameStamp);
 	}
 
 	if(_settings->displayMediaPanel())
@@ -181,4 +197,11 @@ void VideoTestWindow::on_actionDeinterlace_video_triggered(bool checked)
 {
 	_settings->setDeinterlaceVideo(checked);
 	_videoEngine.setDeinterlace(checked);
+}
+
+void VideoTestWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+{
+	_settings->setCurrentFrame(frame);
+	ui->statusBar->showMessage(PhTimeCode::stringFromFrame(frame, tcType));
+
 }

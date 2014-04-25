@@ -86,8 +86,12 @@ void VideoStripView::paint()
 	}
 
 	float stripHeightRatio = 0.25f;
-	if(_settings)
-		stripHeightRatio = _settings->stripHeight();
+	if(_settings) {
+		if(_settings->hideStrip())
+			stripHeightRatio = 0;
+		else
+			stripHeightRatio = _settings->stripHeight();
+	}
 
 	int stripHeight = (this->height() - y) * stripHeightRatio;
 	int videoHeight = this->height() - y - stripHeight;

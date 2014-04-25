@@ -98,6 +98,8 @@ public:
 	PH_SETTING_BOOL2(setDisplayLogo, displayLogo, true)
 
 	PH_SETTING_STRING(setLanguage, language)
+
+	PH_SETTING_BOOL(setHideStrip, hideStrip)
 };
 
 #endif // JOKERSETTINGS_H
