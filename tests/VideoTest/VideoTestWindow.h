@@ -75,6 +75,8 @@ private slots:
 
 	void on_actionDisplay_media_panel_triggered(bool checked);
 
+	void on_actionDeinterlace_video_triggered(bool checked);
+
 private:
 
 	Ui::VideoTestWindow *ui;

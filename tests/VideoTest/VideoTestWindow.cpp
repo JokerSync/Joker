@@ -21,8 +21,10 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	_mediaPanelDialog.setClock(_videoEngine.clock());
 
 	ui->actionDisplay_media_panel->setChecked(_settings->displayMediaPanel());
+	ui->actionDeinterlace_video->setChecked(_settings->deinterlaceVideo());
 
 	ui->_videoView->setEngine(&_videoEngine);
+	_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
 }
 
 VideoTestWindow::~VideoTestWindow()
@@ -173,4 +175,10 @@ void VideoTestWindow::on_actionDisplay_media_panel_triggered(bool checked)
 		_mediaPanelDialog.show();
 	else
 		_mediaPanelDialog.hide();
+}
+
+void VideoTestWindow::on_actionDeinterlace_video_triggered(bool checked)
+{
+	_settings->setDeinterlaceVideo(checked);
+	_videoEngine.setDeinterlace(checked);
 }
