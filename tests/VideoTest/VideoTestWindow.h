@@ -77,6 +77,8 @@ private slots:
 
 	void on_actionDeinterlace_video_triggered(bool checked);
 
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+
 private:
 
 	Ui::VideoTestWindow *ui;
