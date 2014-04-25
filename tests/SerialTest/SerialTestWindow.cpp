@@ -50,9 +50,8 @@ void SerialTestWindow::readTextA()
 	qint64 n = _serialA.read(buffer, 256);
 	buffer[n] = 0;
 	QString s(buffer);
+	PHDEBUG << s;
 	ui->receiveA->setText(ui->receiveA->toPlainText() + s);
-
-	checkCTS();
 }
 
 void SerialTestWindow::readTextB()
@@ -61,9 +60,8 @@ void SerialTestWindow::readTextB()
 	qint64 n = _serialB.read(buffer, 256);
 	buffer[n] = 0;
 	QString s(buffer);
+//	PHDEBUG << s;
 	ui->receiveB->setText(ui->receiveB->toPlainText() + s);
-
-	checkCTS();
 }
 
 void SerialTestWindow::on_checkA_toggled(bool checked)
@@ -72,7 +70,7 @@ void SerialTestWindow::on_checkA_toggled(bool checked)
 	if(checked) {
 		if(open(&_serialA, _settings->portAName())) {
 			_serialA.write("Hello from serial A");
-			_ctsTimer.start(5);
+			_ctsTimer.start(10);
 		}
 		else
 			QMessageBox::critical(this, "Serial Test", QString("Unable to connect to %1").arg(_settings->portAName()));
@@ -130,6 +128,8 @@ void SerialTestWindow::checkCTS()
 		ui->ctsLabel->setText("CTS : " + QString::number(frequency));
 		_lastCTS = cts;
 	}
+
+	_serialA.write("checkCTS");
 
 	_timerCounter.tick();
 	PHDEBUG << _timerCounter.frequency() << frequency;
