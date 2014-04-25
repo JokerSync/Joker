@@ -12,10 +12,12 @@ TEMPLATE = app
 VERSION = 1.0.0
 
 include(../../libs/PhTools/PhTools.pri)
+include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 SOURCES += main.cpp\
         SerialTestWindow.cpp
 
-HEADERS  += SerialTestWindow.h
+HEADERS  += SerialTestWindow.h \
+    SerialTestSettings.h
 
 FORMS    += SerialTestWindow.ui

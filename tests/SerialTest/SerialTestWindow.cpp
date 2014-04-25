@@ -1,11 +1,12 @@
 #include <QSerialPortInfo>
+#include <QMessageBox>
 
 #include "SerialTestWindow.h"
 #include "ui_SerialTestWindow.h"
 #include "PhTools/PhDebug.h"
 
-SerialTestWindow::SerialTestWindow(QWidget *parent) :
-	QMainWindow(parent),
+SerialTestWindow::SerialTestWindow(SerialTestSettings *settings) :
+	_settings(settings),
 	ui(new Ui::SerialTestWindow),
 	_serialA(this),
 	_serialB(this)
@@ -14,23 +15,22 @@ SerialTestWindow::SerialTestWindow(QWidget *parent) :
 
 	connect(ui->sendButton1, SIGNAL(clicked()), this, SLOT(sendTextA()));
 	connect(&_serialA, SIGNAL(readyRead()), this, SLOT(readTextA()));
-	if(open(&_serialA, "A"))
-		_serialA.write("Hello from serial A");
 
+	connect(&_ctsTimer, SIGNAL(timeout()), this, SLOT(checkCTS()));
 
 	connect(ui->sendButton2, SIGNAL(clicked()), this, SLOT(sendTextB()));
 	connect(&_serialB, SIGNAL(readyRead()), this, SLOT(readTextB()));
-	if(open(&_serialB, "B"))
-		_serialB.write("Hello from serial B");
 
-	connect(&_ctsTimer, SIGNAL(timeout()), this, SLOT(checkCTS()));
-	_ctsTimer.start(5);
+	ui->checkA->setChecked(_settings->activatePortA());
+	on_checkA_toggled(_settings->activatePortA());
+	ui->checkB->setChecked(_settings->activatePortB());
+	on_checkB_toggled(_settings->activatePortB());
 }
 
 SerialTestWindow::~SerialTestWindow()
 {
-	closeA();
-	closeB();
+	_serialA.close();
+	_serialB.close();
 	delete ui;
 }
 
@@ -68,18 +68,32 @@ void SerialTestWindow::readTextB()
 
 void SerialTestWindow::on_checkA_toggled(bool checked)
 {
-	if(checked)
-		open(&_serialA, "A");
-	else
-		closeA();
+	_settings->setActivatePortA(checked);
+	if(checked) {
+		if(open(&_serialA, _settings->portAName())) {
+			_serialA.write("Hello from serial A");
+			_ctsTimer.start(5);
+		}
+		else
+			QMessageBox::critical(this, "Serial Test", QString("Unable to connect to %1").arg(_settings->portAName()));
+	}
+	else {
+		_ctsTimer.stop();
+		_serialA.close();
+	}
 }
 
 void SerialTestWindow::on_checkB_toggled(bool checked)
 {
-	if(checked)
-		open(&_serialB, "B");
+	_settings->setActivatePortB(checked);
+	if(checked) {
+		if(open(&_serialB, _settings->portBName()))
+			_serialB.write("Hello from serial B");
+		else
+			QMessageBox::critical(this, "Serial Test", QString("Unable to connect to %1").arg(_settings->portBName()));
+	}
 	else
-		closeB();
+		_serialB.close();
 }
 
 bool SerialTestWindow::open(QSerialPort * serial, QString suffix)
@@ -89,35 +103,22 @@ bool SerialTestWindow::open(QSerialPort * serial, QString suffix)
 	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
 	{
 		QString name = info.portName();
-		if(name.startsWith("usbserial-")) {
-			if(name.endsWith(suffix)) {
-				serial->setPort(info);
-				serial->setBaudRate(QSerialPort::Baud38400);
-				serial->setDataBits(QSerialPort::Data8);
-				serial->setStopBits(QSerialPort::OneStop);
-				serial->setParity(QSerialPort::OddParity);
+		PHDEBUG << name << "available";
+		if(name.endsWith(suffix)) {
+			serial->setPort(info);
+			serial->setBaudRate(QSerialPort::Baud38400);
+			serial->setDataBits(QSerialPort::Data8);
+			serial->setStopBits(QSerialPort::OneStop);
+			serial->setParity(QSerialPort::OddParity);
 
-				PHDEBUG << "Opening " << name;
-				serial->open(QSerialPort::ReadWrite);
+			PHDEBUG << "Opening " << name;
+			serial->open(QSerialPort::ReadWrite);
 
-				return true;
-			}
+			return true;
 		}
 	}
 	PHDEBUG << "not found";
 	return false;
-}
-
-void SerialTestWindow::closeA()
-{
-	PHDEBUG << "Closing " << _serialA.objectName();
-	_serialA.close();
-}
-
-void SerialTestWindow::closeB()
-{
-	PHDEBUG << "Closing " << _serialB.objectName();
-	_serialB.close();
 }
 
 void SerialTestWindow::checkCTS()

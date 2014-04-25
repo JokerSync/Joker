@@ -7,6 +7,8 @@
 
 #include "PhTools/PhTickCounter.h"
 
+#include "SerialTestSettings.h"
+
 namespace Ui {
 class SerialTestWindow;
 }
@@ -16,7 +18,7 @@ class SerialTestWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit SerialTestWindow(QWidget *parent = 0);
+	explicit SerialTestWindow(SerialTestSettings *settings);
 	~SerialTestWindow();
 
 private slots:
@@ -32,9 +34,8 @@ private slots:
 
 private:
 	bool open(QSerialPort * serial, QString suffix);
-	void closeA();
-	void closeB();
 
+	SerialTestSettings *_settings;
 
 	Ui::SerialTestWindow *ui;
 

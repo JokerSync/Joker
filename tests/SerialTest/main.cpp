@@ -1,6 +1,8 @@
 #include "SerialTestWindow.h"
 #include <QApplication>
 
+#include "SerialTestSettings.h"
+
 /**
  * @brief The application main entry point
  * @param argc Command line argument count
@@ -10,7 +12,8 @@
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	SerialTestWindow w;
+	SerialTestSettings settings;
+	SerialTestWindow w(&settings);
 	w.show();
 
 	return a.exec();
