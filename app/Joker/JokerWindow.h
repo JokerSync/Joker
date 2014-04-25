@@ -223,6 +223,8 @@ private slots:
 
 	void on_actionDeinterlace_video_triggered(bool checked);
 
+	void on_actionHide_the_rythmo_triggered(bool checked);
+
 private:
 	Ui::JokerWindow *ui;
 	PhGraphicStrip * _strip;
