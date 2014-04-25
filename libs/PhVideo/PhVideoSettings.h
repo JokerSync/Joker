@@ -18,7 +18,10 @@ public:
 	 * @return A value in millisecond
 	 */
 	virtual int screenDelay() = 0;
-
+	/**
+	 * @brief video buffer size
+	 * @return The siz of the video buffer
+	 */
 	virtual int videoBufferSize() = 0;
 };
 

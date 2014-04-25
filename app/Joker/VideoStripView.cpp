@@ -13,7 +13,7 @@
 VideoStripView::VideoStripView(QWidget *parent) :
 	PhGraphicView(parent),
 	_settings(NULL),
-	_videoEngine(false),
+	_videoEngine(),
 	_sony(NULL),
 	_titleText(_strip.getHUDFont(), ""),
 	_tcText(_strip.getHUDFont(), "00:00:00:00"),

@@ -25,7 +25,8 @@ PhAVDecoder::PhAVDecoder(int bufferSize, QObject *parent) :
 	_audioStream(NULL),
 	_audioFrame(NULL),
 	_interupted(false),
-	_lastDecodedFrame(0)
+	_lastDecodedFrame(0),
+	_oldFrame(0)
 {
 	PHDEBUG << "Setting the decoder with a buffer of" << bufferSize << "frames";
 }
@@ -229,7 +230,6 @@ int PhAVDecoder::bufferOccupation()
 uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 {
 	//PHDBG(24) << frame << _framesFree.available();
-
 	uint8_t *buffer = NULL;
 	_bufferMutex.lock();
 	if(_bufferMap.contains(frame)) {
@@ -243,10 +243,14 @@ uint8_t *PhAVDecoder::getBuffer(PhFrame frame)
 void PhAVDecoder::process()
 {
 	while(!_interupted) {
+		QCoreApplication::processEvents(QEventLoop::AllEvents, 1);
 		// If the decoder is blocked
-		while (!_bufferFreeSpace.tryAcquire(1, 5)) {
+		while (!_bufferFreeSpace.tryAcquire()) {
 			// Process the events (max time 5ms)
-			QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
+			QCoreApplication::processEvents(QEventLoop::AllEvents, 1);
+			// Decrease CPU load if the player is in pause
+			if(_direction == 0)
+				QThread::msleep(5);
 		}
 		//QTime t;
 		//t.start();
@@ -273,6 +277,8 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 	_bufferMutex.lock();
 	if(_bufferMap.contains(frame)) {
 		_bufferMutex.unlock();
+		//Release the unused ressource
+		_bufferFreeSpace.release();
 		return;
 	}
 	_bufferMutex.unlock();
@@ -280,7 +286,7 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 	if(frame - _lastDecodedFrame != 1) {
 		int flags = AVSEEK_FLAG_ANY;
 		int64_t timestamp = frame2time(frame - _firstFrame);
-		PHDEBUG << "seek:" << _direction << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25);
+		PHDEBUG << "seek:" << _direction << frame;
 		av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
 	}
 
@@ -331,6 +337,7 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 						//PHDBG(25) << "Decoding" <<  PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << packet.dts << _bufferFreeSpace.available();
 						_bufferMutex.unlock();
 						_lastDecodedFrame = frame;
+						//PHDEBUG << "Add" << frame;
 					}
 				}     // if frame decode is not finished, let's read another packet.
 			}
@@ -374,33 +381,48 @@ void PhAVDecoder::onRateChanged(PhRate rate)
 
 void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType)
 {
-	//PHDBG(25) << "Reading" << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << _direction;
 	_bufferMutex.lock();
-	if(!_bufferMap.contains(frame)) {
-		PHDEBUG << _bufferMap.keys() << frame;
-		clearBuffer();
+	//PHDBG(25) << "Want" << frame << _direction << "Have ("<<  _bufferMap.count() <<":" << _bufferFreeSpace.available() << "):" << _bufferMap.keys();
+	if(!_bufferMap.contains(frame))
 		_nextDecodingFrame = frame;
-	}
-	else if(_direction >= 0) {
+	if(_direction >= 0) {
 		// Remove old frames
+		PhFrame min = PHFRAMEMAX;
 		foreach(PhFrame key, _bufferMap.keys()) {
 			if(key < frame - _bufferSize / 2) {
 				delete _bufferMap[key];
 				_bufferMap.remove(key);
 				_bufferFreeSpace.release();
+				//PHDEBUG << "Remove" << key;
 			}
+			if(key < min)
+				min = key;
+		}
+		if(min > frame + _bufferSize / 2) {
+			clearBuffer();
+			_nextDecodingFrame = frame;
 		}
 	}
 	else {
 		// Remove future frames
+		PhFrame max = PHFRAMEMIN;
 		foreach(PhFrame key, _bufferMap.keys()) {
 			if(key > frame + _bufferSize / 2) {
 				delete _bufferMap[key];
 				_bufferMap.remove(key);
 				_bufferFreeSpace.release();
 			}
+			if(key > max)
+				max = key;
 		}
+		if(max < frame - _bufferSize / 2) {
+			clearBuffer();
+			_nextDecodingFrame = frame;
+		}
+		// We just change the direction
+		//_nextDecodingFrame = frame;
 	}
+	_oldFrame = frame;
 
 	_bufferMutex.unlock();
 }
@@ -429,8 +451,9 @@ void PhAVDecoder::clearBuffer()
 {
 	PHDEBUG << "Clearing the buffer";
 	qDeleteAll(_bufferMap);
+	_bufferFreeSpace.release(_bufferMap.count());
 	_bufferMap.clear();
-	_bufferFreeSpace.release(_bufferSize - _bufferFreeSpace.available());
+
 }
 
 

@@ -30,6 +30,13 @@ extern "C" {
 #include "PhTools/PhTime.h"
 #include "PhTools/PhTimeCode.h"
 
+/**
+ * @brief The PhAVDecoder class
+ *
+ * This class is the worker used to decode
+ * the video file and store the frame in a
+ * buffer
+ */
 class PhAVDecoder : public QObject
 {
 	Q_OBJECT
@@ -37,10 +44,29 @@ public:
 	explicit PhAVDecoder(int bufferSize, QObject *parent = 0);
 	~PhAVDecoder();
 
+	/**
+	 * @brief open a video file
+	 * @param fileName the video file path
+	 * @return True if succeed, false otherwise
+	 */
 	bool open(QString fileName);
+	/**
+	 * @brief close the decoder
+	 *
+	 * Close the AVStream, free the buffer
+	 */
 	void close();
 
+	/**
+	 * @brief timecode Type
+	 * @return The timeCodeType(), processed
+	 * with the video FPS
+	 */
 	PhTimeCodeType timeCodeType();
+	/**
+	 * @brief firstFrame
+	 * @return The first frame of the video
+	 */
 	PhFrame firstFrame();
 	/**
 	 * @brief Set first frame
@@ -48,7 +74,15 @@ public:
 	 */
 	void setFirstFrame(PhFrame frame);
 
+	/**
+	 * @brief video width
+	 * @return
+	 */
 	int width();
+	/**
+	 * @brief video height
+	 * @return
+	 */
 	int height();
 	/**
 	 * @brief Get the length
@@ -79,18 +113,55 @@ public:
 	 * @param deinterlace True if deinterlace false otherwise
 	 */
 	void setDeinterlace(bool deinterlace);
-
+	/**
+	 * @brief buffer occupation
+	 * @return The buffer occupation
+	 */
 	int bufferOccupation();
-
+	/**
+	 * @brief getBuffer
+	 *
+	 * Give the pointer to the desired frame
+	 * @param frame
+	 * @return
+	 */
 	uint8_t* getBuffer(PhFrame frame);
 signals:
+	/**
+	 * @brief finished
+	 *
+	 * For slot worker compatibility
+	 */
 	void finished();
+	/**
+	 * @brief error
+	 * @param err
+	 *
+	 * For slot worker compatibility
+	 */
 	void error(QString err);
 
 public slots:
+	/**
+	 * @brief process
+	 *
+	 * For slot worker compatibility
+	 */
 	void process();
 
+	/**
+	 * @brief onFrameChanged
+	 * @param frame
+	 *
+	 * Handle the frame change
+	 */
 	void onFrameChanged(PhFrame frame, PhTimeCodeType);
+	/**
+	 * @brief onRateChanged
+	 * @param rate
+	 *
+	 * Handle the rate change
+	 */
 	void onRateChanged(PhRate rate);
 
 private:
@@ -111,6 +182,7 @@ private:
 	 */
 	PhFrame _nextDecodingFrame;
 	PhFrame _lastDecodedFrame;
+	PhFrame _oldFrame;
 	int _direction;
 
 	AVFormatContext * _pFormatContext;

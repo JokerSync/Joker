@@ -131,15 +131,32 @@ public:
 	 */
 	void drawVideo(int x, int y, int w, int h);
 
+	/**
+	 * @brief refreshRate
+	 * @return the refreshRate
+	 */
 	int refreshRate() {
 		return _frameCounter.frequency();
 	}
 
+	/**
+	 * @brief The buffer size
+	 * @return
+	 */
 	int bufferSize();
 
+	/**
+	 * @brief The buffer occupation
+	 * @return
+	 */
 	int bufferOccupation();
 
 public slots:
+	/**
+	 * @brief errorString
+	 *
+	 * For slot worker compatibility
+	 */
 	void errorString(QString);
 
 private:
