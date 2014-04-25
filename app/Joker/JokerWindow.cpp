@@ -463,6 +463,7 @@ void JokerWindow::timeCounter(PhTimeScale frequency)
 void JokerWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();
+	_strip->clock()->setRate(0);
 	PhFrame frame;
 	if(_synchronizer.videoClock()->frame() < _videoEngine->firstFrame())
 		frame = _videoEngine->firstFrame();

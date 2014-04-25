@@ -17,8 +17,10 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	ui->setupUi(this);
 	_videoEngine.setSettings(settings);
 	ui->_videoView->setGraphicSettings(settings);
+
 	_mediaPanelDialog.setClock(_videoEngine.clock());
-	_mediaPanelDialog.show();
+
+	ui->actionDisplay_media_panel->setChecked(_settings->displayMediaPanel());
 
 	ui->_videoView->setEngine(&_videoEngine);
 }
@@ -75,7 +77,8 @@ QMenu *VideoTestWindow::recentDocumentMenu()
 
 void VideoTestWindow::onApplicationActivate()
 {
-	_mediaPanelDialog.show();
+	if(_settings->displayMediaPanel())
+		_mediaPanelDialog.show();
 }
 
 void VideoTestWindow::onApplicationDeactivate()
@@ -126,7 +129,9 @@ void VideoTestWindow::on_actionSet_timestamp_triggered()
 		_mediaPanelDialog.setFirstFrame(frameStamp);
 		_videoEngine.clock()->setFrame(dlg.frame());
 	}
-	_mediaPanelDialog.show();
+
+	if(_settings->displayMediaPanel())
+		_mediaPanelDialog.show();
 }
 
 void VideoTestWindow::on_actionOpen_triggered()
@@ -137,7 +142,9 @@ void VideoTestWindow::on_actionOpen_triggered()
 		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
-	_mediaPanelDialog.show();
+
+	if(_settings->displayMediaPanel())
+		_mediaPanelDialog.show();
 }
 
 void VideoTestWindow::on_actionReverse_triggered()
@@ -155,5 +162,15 @@ void VideoTestWindow::on_actionGo_to_triggered()
 		_videoEngine.clock()->setFrame(dlg.frame());
 	}
 
-	_mediaPanelDialog.show();
+	if(_settings->displayMediaPanel())
+		_mediaPanelDialog.show();
+}
+
+void VideoTestWindow::on_actionDisplay_media_panel_triggered(bool checked)
+{
+	_settings->setDisplayMediaPanel(checked);
+	if(checked)
+		_mediaPanelDialog.show();
+	else
+		_mediaPanelDialog.hide();
 }
