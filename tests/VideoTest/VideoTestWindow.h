@@ -73,6 +73,12 @@ private slots:
 
 	void on_actionGo_to_triggered();
 
+	void on_actionDisplay_media_panel_triggered(bool checked);
+
+	void on_actionDeinterlace_video_triggered(bool checked);
+
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+
 private:
 
 	Ui::VideoTestWindow *ui;

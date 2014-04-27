@@ -18,10 +18,16 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	ui->setupUi(this);
 	_videoEngine.setSettings(settings);
 	ui->_videoView->setGraphicSettings(settings);
+
 	_mediaPanelDialog.setClock(_videoEngine.clock());
-	_mediaPanelDialog.show();
+
+	ui->actionDisplay_media_panel->setChecked(_settings->displayMediaPanel());
+	ui->actionDeinterlace_video->setChecked(_settings->deinterlaceVideo());
 
 	ui->_videoView->setEngine(&_videoEngine);
+	_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
+
+	connect(_videoEngine.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
 }
 
 VideoTestWindow::~VideoTestWindow()
@@ -36,11 +42,24 @@ bool VideoTestWindow::openDocument(QString fileName)
 
 	_mediaPanelDialog.setMediaLength(_videoEngine.length());
 	PhFrame frameStamp = _videoEngine.firstFrame();
+	PhFrame currentFrame = frameStamp;
+
+	if(fileName == _settings->currentDocument()) {
+		frameStamp = _settings->frameStamp();
+		_videoEngine.setFirstFrame(frameStamp);
+		currentFrame = _settings->currentFrame();
+	}
+	else if(_videoEngine.firstFrame() == 0) {
+		on_actionSet_timestamp_triggered();
+		frameStamp = _videoEngine.firstFrame();
+		currentFrame = frameStamp;
+	}
 	_mediaPanelDialog.setFirstFrame(frameStamp);
 
-	_videoEngine.clock()->setFrame(frameStamp);
+	_videoEngine.clock()->setFrame(currentFrame);
 
 	setCurrentDocument(fileName);
+	_settings->setFrameStamp(frameStamp);
 
 	return true;
 }
@@ -76,7 +95,8 @@ QMenu *VideoTestWindow::recentDocumentMenu()
 
 void VideoTestWindow::onApplicationActivate()
 {
-	_mediaPanelDialog.show();
+	if(_settings->displayMediaPanel())
+		_mediaPanelDialog.show();
 }
 
 void VideoTestWindow::onApplicationDeactivate()
@@ -126,8 +146,11 @@ void VideoTestWindow::on_actionSet_timestamp_triggered()
 		_videoEngine.setFirstFrame(frameStamp);
 		_mediaPanelDialog.setFirstFrame(frameStamp);
 		_videoEngine.clock()->setFrame(dlg.frame());
+		_settings->setFrameStamp(frameStamp);
 	}
-	_mediaPanelDialog.show();
+
+	if(_settings->displayMediaPanel())
+		_mediaPanelDialog.show();
 }
 
 void VideoTestWindow::on_actionOpen_triggered()
@@ -138,7 +161,9 @@ void VideoTestWindow::on_actionOpen_triggered()
 		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
-	_mediaPanelDialog.show();
+
+	if(_settings->displayMediaPanel())
+		_mediaPanelDialog.show();
 }
 
 void VideoTestWindow::on_actionReverse_triggered()
@@ -156,5 +181,28 @@ void VideoTestWindow::on_actionGo_to_triggered()
 		_videoEngine.clock()->setFrame(dlg.frame());
 	}
 
-	_mediaPanelDialog.show();
+	if(_settings->displayMediaPanel())
+		_mediaPanelDialog.show();
+}
+
+void VideoTestWindow::on_actionDisplay_media_panel_triggered(bool checked)
+{
+	_settings->setDisplayMediaPanel(checked);
+	if(checked)
+		_mediaPanelDialog.show();
+	else
+		_mediaPanelDialog.hide();
+}
+
+void VideoTestWindow::on_actionDeinterlace_video_triggered(bool checked)
+{
+	_settings->setDeinterlaceVideo(checked);
+	_videoEngine.setDeinterlace(checked);
+}
+
+void VideoTestWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+{
+	_settings->setCurrentFrame(frame);
+	ui->statusBar->showMessage(PhTimeCode::stringFromFrame(frame, tcType));
+
 }

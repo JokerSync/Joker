@@ -105,7 +105,7 @@ void StripDocTest::importDetXTextTest()
 
 	QVERIFY(doc.importDetXFile("test01.detx"));
 
-	QVERIFY(doc.texts().count() == 5);
+	QVERIFY(doc.texts().count() == 6);
 
 	QCOMPARE(doc.texts()[0]->content(), QString("Simple sentence"));
 	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:02:00"));
@@ -114,9 +114,24 @@ void StripDocTest::importDetXTextTest()
 	QCOMPARE(doc.texts()[0]->track(), 1);
 
 	QCOMPARE(doc.texts()[1]->content(), QString("Composed "));
+	QCOMPARE(t2s(doc.texts()[1]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
+	QCOMPARE(t2s(doc.texts()[1]->timeOut(), doc.timeCodeType()), QString("01:00:06:00"));
+
 	QCOMPARE(doc.texts()[2]->content(), QString("sentence"));
+	QCOMPARE(t2s(doc.texts()[2]->timeIn(), doc.timeCodeType()), QString("01:00:06:00"));
+	QCOMPARE(t2s(doc.texts()[2]->timeOut(), doc.timeCodeType()), QString("01:00:07:00"));
+
 	QCOMPARE(doc.texts()[3]->content(), QString("Simple off sentence"));
+	QCOMPARE(t2s(doc.texts()[3]->timeIn(), doc.timeCodeType()), QString("01:00:12:00"));
+	QCOMPARE(t2s(doc.texts()[3]->timeOut(), doc.timeCodeType()), QString("01:00:14:00"));
+
 	QCOMPARE(doc.texts()[4]->content(), QString("Composed sentence with off"));
+	QCOMPARE(t2s(doc.texts()[4]->timeIn(), doc.timeCodeType()), QString("01:00:15:00"));
+	QCOMPARE(t2s(doc.texts()[4]->timeOut(), doc.timeCodeType()), QString("01:00:17:00"));
+
+	QCOMPARE(doc.texts()[5]->content(), QString("Sentence with out not linked"));
+	QCOMPARE(t2s(doc.texts()[5]->timeIn(), doc.timeCodeType()), QString("01:00:30:00"));
+	QCOMPARE(t2s(doc.texts()[5]->timeOut(), doc.timeCodeType()), QString("01:00:31:04"));
 }
 
 void StripDocTest::importDetXDetectTest()
@@ -125,7 +140,7 @@ void StripDocTest::importDetXDetectTest()
 
 	QVERIFY(doc.importDetXFile("test01.detx"));
 
-	QCOMPARE(doc.detects().count(), 5);
+	QCOMPARE(doc.detects().count(), 6);
 
 	QCOMPARE(doc.detects()[0]->people(), doc.peopleByName("Jeanne"));
 	QCOMPARE(doc.detects()[0]->type(), PhStripDetect::On);
@@ -156,6 +171,12 @@ void StripDocTest::importDetXDetectTest()
 	QCOMPARE(t2s(doc.detects()[4]->timeIn(), doc.timeCodeType()), QString("01:00:20:00"));
 	QCOMPARE(t2s(doc.detects()[4]->timeOut(), doc.timeCodeType()), QString("01:00:22:00"));
 	QCOMPARE(doc.detects()[4]->track(), 2);
+
+	QCOMPARE(doc.detects()[5]->people(), doc.peopleByName("Sue"));
+	QCOMPARE(doc.detects()[5]->type(), PhStripDetect::On);
+	QCOMPARE(t2s(doc.detects()[5]->timeIn(), doc.timeCodeType()), QString("01:00:30:00"));
+	QCOMPARE(t2s(doc.detects()[5]->timeOut(), doc.timeCodeType()), QString("01:00:31:04"));
+	QCOMPARE(doc.detects()[5]->track(), 2);
 }
 
 void StripDocTest::importMosTest01()
@@ -476,7 +497,8 @@ void StripDocTest::getPreviousElementTimeTest()
 	PhTimeCodeType tcType = doc.timeCodeType();
 
 	QCOMPARE(t2s(doc.previousElementTime(s2t("23:00:00:00", tcType)), tcType), QString("01:01:00:00"));
-	QCOMPARE(t2s(doc.previousElementTime(s2t("01:01:00:00", tcType)), tcType), QString("01:00:15:00"));
+	QCOMPARE(t2s(doc.previousElementTime(s2t("01:01:00:00", tcType)), tcType), QString("01:00:30:00"));
+	QCOMPARE(t2s(doc.previousElementTime(s2t("01:00:30:00", tcType)), tcType), QString("01:00:15:00"));
 	QCOMPARE(t2s(doc.previousElementTime(s2t("01:00:15:00", tcType)), tcType), QString("01:00:12:00"));
 	QCOMPARE(doc.previousElementTime(s2t("01:00:00:00", tcType)), PHTIMEMIN);
 }
@@ -492,7 +514,8 @@ void StripDocTest::getNextElementTimeTest()
 	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:00:00", tcType)), tcType), QString("01:00:01:00"));
 	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:01:00", tcType)), tcType), QString("01:00:02:00"));
 	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:02:00", tcType)), tcType), QString("01:00:05:00"));
-	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:17:00", tcType)), tcType), QString("01:01:00:00"));
+	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:17:00", tcType)), tcType), QString("01:00:30:00"));
+	QCOMPARE(t2s(doc.nextElementTime(s2t("01:00:30:00", tcType)), tcType), QString("01:01:00:00"));
 	QCOMPARE(doc.nextElementTime(s2t("01:01:00:00", tcType)), PHTIMEMAX);
 
 }
@@ -509,7 +532,8 @@ void StripDocTest::getNextTextTest()
 	QCOMPARE(t2s(doc.nextText(s2t("01:00:05:00", tcType))->timeIn(), tcType), QString("01:00:06:00"));
 	QCOMPARE(t2s(doc.nextText(s2t("01:00:06:00", tcType))->timeIn(), tcType), QString("01:00:12:00"));
 	QCOMPARE(t2s(doc.nextText(s2t("01:00:12:00", tcType))->timeIn(), tcType), QString("01:00:15:00"));
-	QVERIFY(doc.nextText(s2t("01:00:15:00", tcType)) == NULL);
+	QCOMPARE(t2s(doc.nextText(s2t("01:00:15:00", tcType))->timeIn(), tcType), QString("01:00:30:00"));
+	QVERIFY(doc.nextText(s2t("01:00:30:00", tcType)) == NULL);
 }
 
 void StripDocTest::getNextTextTestByPeople()
@@ -524,7 +548,8 @@ void StripDocTest::getNextTextTestByPeople()
 	QCOMPARE(t2s(doc.nextText(sue, s2t("00:00:00:00", tcType))->timeIn(), tcType), QString("01:00:05:00"));
 	QCOMPARE(t2s(doc.nextText(sue, s2t("01:00:05:00", tcType))->timeIn(), tcType), QString("01:00:06:00"));
 	QCOMPARE(t2s(doc.nextText(sue, s2t("01:00:06:00", tcType))->timeIn(), tcType), QString("01:00:15:00"));
-	QVERIFY(doc.nextText(sue, s2t("01:00:15:00", tcType)) == NULL);
+	QCOMPARE(t2s(doc.nextText(sue, s2t("01:00:15:00", tcType))->timeIn(), tcType), QString("01:00:30:00"));
+	QVERIFY(doc.nextText(sue, s2t("01:00:30:00", tcType)) == NULL);
 }
 
 void StripDocTest::getNextTextTestByPeopleList()
@@ -542,7 +567,8 @@ void StripDocTest::getNextTextTestByPeopleList()
 	QCOMPARE(t2s(doc.nextText(peopleList, s2t("01:00:05:00", tcType))->timeIn(), tcType), QString("01:00:06:00"));
 	QCOMPARE(t2s(doc.nextText(peopleList, s2t("01:00:06:00", tcType))->timeIn(), tcType), QString("01:00:12:00"));
 	QCOMPARE(t2s(doc.nextText(peopleList, s2t("01:00:12:00", tcType))->timeIn(), tcType), QString("01:00:15:00"));
-	QVERIFY(doc.nextText(peopleList, s2t("01:00:15:00", tcType)) == NULL);
+	QCOMPARE(t2s(doc.nextText(peopleList, s2t("01:00:15:00", tcType))->timeIn(), tcType), QString("01:00:30:00"));
+	QVERIFY(doc.nextText(peopleList, s2t("01:00:30:00", tcType)) == NULL);
 }
 
 void StripDocTest::getNextLoopTest()

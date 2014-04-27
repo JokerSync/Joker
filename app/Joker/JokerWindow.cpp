@@ -103,6 +103,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->actionShow_ruler->setChecked(_settings->displayRuler());
 
+	ui->actionHide_the_rythmo->setChecked(_settings->hideStrip());
+
 	if(!_settings->exitedNormaly())
 		on_actionSend_feedback_triggered();
 
@@ -463,6 +465,7 @@ void JokerWindow::timeCounter(PhTimeScale frequency)
 void JokerWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();
+	_strip->clock()->setRate(0);
 	PhFrame frame;
 	if(_synchronizer.videoClock()->frame() < _videoEngine->firstFrame())
 		frame = _videoEngine->firstFrame();
@@ -764,4 +767,9 @@ void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
 		_doc->setVideoDeinterlace(checked);
 		_needToSave = true;
 	}
+}
+
+void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
+{
+	_settings->setHideStrip(checked);
 }
