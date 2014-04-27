@@ -178,9 +178,10 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					}
 					// Handling line with no lipsync out
 					if(currentText.length()) {
-						PhTime time = lastLinkedTime + currentText.length();
+						PhTime time = lastLinkedTime + currentText.length() * 1000;
+						PHDEBUG << currentText;
 						_texts1.append(new PhStripText(lastLinkedTime, people, time, track, currentText));
-						lastLinkedTime = time;
+						lastTime = lastLinkedTime = time;
 					}
 					PhStripDetect::PhDetectType type = PhStripDetect::On;
 					if(elem.attribute("voice") == "off")
