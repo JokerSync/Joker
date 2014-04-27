@@ -798,9 +798,17 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 		QFile f(subFileName);
 		if(f.open(QIODevice::ReadOnly)) {
 			QTextStream ts(&f);
-			ts.setCodec("UTF-16");
 
-			QString xmlString = "";
+			QString xmlString = ts.readLine();
+
+			if(xmlString == "<SYNCHRONOS>") {
+				ts.setCodec("latin1");
+			}
+			else {
+				ts.setCodec("UTF-16");
+				xmlString = "<SYNCHRONOS>";
+			}
+
 			while(!ts.atEnd()) {
 				QString line = ts.readLine();
 				if(!line.startsWith("<COPYRIGHT"))
