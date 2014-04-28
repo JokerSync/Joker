@@ -227,9 +227,6 @@ void PhSonyController::onData()
 
 				// Reset the data counter to read another command
 				_dataRead = 0;
-
-				if(_serial.error() != QSerialPort::NoError)
-					PHDEBUG << _serial.errorString();
 			}
 		}
 	}

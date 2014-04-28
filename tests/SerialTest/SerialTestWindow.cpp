@@ -49,14 +49,15 @@ void SerialTestWindow::readTextA()
 	QByteArray array = _serialA.readAll();
 	QString s(array);
 	PHDEBUG << s;
-	ui->receiveA->setText(ui->receiveA->toPlainText() + s);
+//	ui->receiveA->setText(ui->receiveA->toPlainText() + s);
 }
 
 void SerialTestWindow::readTextB()
 {
 	QByteArray array = _serialB.readAll();
 	QString s(array);
-	ui->receiveB->setText(ui->receiveB->toPlainText() + s);
+	PHDEBUG << s;
+//	ui->receiveB->setText(ui->receiveB->toPlainText() + s);
 }
 
 void SerialTestWindow::on_checkA_toggled(bool checked)
