@@ -10,12 +10,11 @@ install:
 
 script:
 - qmake -v
-#- qmake all.pro
-- qmake tests/AutoTest/AutoTest.pro
+- qmake all.pro
 - make
-#- cd tests/AutoTest
+- cd tests/AutoTest
 - ./AutoTest
-#- cd ../..
+- cd ../..
 - "./scripts/doxygen.sh"
 - "./scripts/uncrustify.sh"
 after_success:
