@@ -46,21 +46,16 @@ void SerialTestWindow::sendTextB()
 
 void SerialTestWindow::readTextA()
 {
-	char buffer[256];
-	qint64 n = _serialA.read(buffer, 256);
-	buffer[n] = 0;
-	QString s(buffer);
+	QByteArray array = _serialA.readAll();
+	QString s(array);
 	PHDEBUG << s;
 	ui->receiveA->setText(ui->receiveA->toPlainText() + s);
 }
 
 void SerialTestWindow::readTextB()
 {
-	char buffer[256];
-	qint64 n = _serialB.read(buffer, 256);
-	buffer[n] = 0;
-	QString s(buffer);
-//	PHDEBUG << s;
+	QByteArray array = _serialB.readAll();
+	QString s(array);
 	ui->receiveB->setText(ui->receiveB->toPlainText() + s);
 }
 
