@@ -218,6 +218,12 @@ float PhVideoEngine::framePerSecond()
 	if(_videoStream) {
 		result = _videoStream->avg_frame_rate.num;
 		result /= _videoStream->avg_frame_rate.den;
+		// See http://stackoverflow.com/a/570694/2307070
+		// for NaN handling
+		if(result != result) {
+			result = _videoStream->time_base.den;
+			result /= _videoStream->time_base.num;
+		}
 	}
 
 	return result;
