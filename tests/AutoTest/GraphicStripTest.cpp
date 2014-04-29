@@ -11,10 +11,9 @@
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhGraphicStrip/PhGraphicStripView.h"
 
-GraphicStripTest::GraphicStripTest(bool travis, QObject *parent) :
+GraphicStripTest::GraphicStripTest(QObject *parent) :
 	QObject(parent)
 {
-	_travis = travis;
 }
 
 void GraphicStripTest::testStripDocObject()
@@ -49,7 +48,7 @@ void GraphicStripTest::testStripDocObject()
 	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test1.bmp");
 	if(view.windowHandle()->devicePixelRatio() == 2)
 		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test2.bmp");
-	if(_travis)
+	if(QString(qgetenv("TRAVIS")) == "true")
 		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/testTravis.bmp");
 
 	QVERIFY(impr == QImage(expectedFile));

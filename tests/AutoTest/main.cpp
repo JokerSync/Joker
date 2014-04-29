@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
 	bool testUi = testAll;
 	bool testGraphicStrip = testAll;
 	bool quiet = false;
-	bool travis = false;
 
 	bool success = true;
 
@@ -44,8 +43,6 @@ int main(int argc, char *argv[])
 			testGraphicStrip = true;
 		else if(strcmp(argv[i], "quiet") == 0)
 			quiet = true;
-		else if(strcmp(argv[i], "travis") == 0)
-			travis = true;
 	}
 
 	if(testTC) {
@@ -85,7 +82,7 @@ int main(int argc, char *argv[])
 	}
 
 	if(testGraphicStrip) {
-		GraphicStripTest viewTest(travis);
+		GraphicStripTest viewTest;
 		success &= !QTest::qExec(&viewTest);
 	}
 
