@@ -1,4 +1,3 @@
-#include <QSerialPortInfo>
 #include <QMessageBox>
 
 #include "SerialTestWindow.h"
@@ -14,12 +13,10 @@ SerialTestWindow::SerialTestWindow(SerialTestSettings *settings) :
 	ui->setupUi(this);
 
 	connect(ui->sendButton1, SIGNAL(clicked()), this, SLOT(sendTextA()));
-	connect(&_serialA, SIGNAL(readyRead()), this, SLOT(readTextA()));
 
 	connect(&_ctsTimer, SIGNAL(timeout()), this, SLOT(checkCTS()));
 
 	connect(ui->sendButton2, SIGNAL(clicked()), this, SLOT(sendTextB()));
-	connect(&_serialB, SIGNAL(readyRead()), this, SLOT(readTextB()));
 
 	ui->checkA->setChecked(_settings->activatePortA());
 	on_checkA_toggled(_settings->activatePortA());
@@ -29,35 +26,57 @@ SerialTestWindow::SerialTestWindow(SerialTestSettings *settings) :
 
 SerialTestWindow::~SerialTestWindow()
 {
-	_serialA.close();
-	_serialB.close();
+	FT_Close(_serialA);
+	FT_Close(_serialB);
 	delete ui;
 }
 
 void SerialTestWindow::sendTextA()
 {
-	_serialA.write(ui->inputA->text().toUtf8().constData());
+	QString s = ui->inputA->text();
+	DWORD byteWritten = 0;
+	FT_Write(_serialA, (void*)s.toUtf8().constData(), s.length() + 1, &byteWritten);
+	PHDEBUG << byteWritten << "bytes written";
 }
 
 void SerialTestWindow::sendTextB()
 {
-	_serialB.write(ui->inputB->text().toUtf8().constData());
+	QString s = ui->inputB->text();
+	DWORD byteWritten = 0;
+	FT_Write(_serialB, (void*)s.toUtf8().constData(), s.length() + 1, &byteWritten);
+	PHDEBUG << byteWritten << "bytes written";
 }
 
 void SerialTestWindow::readTextA()
 {
-	QByteArray array = _serialA.readAll();
-	QString s(array);
-	PHDEBUG << s;
-//	ui->receiveA->setText(ui->receiveA->toPlainText() + s);
+	DWORD byteReceived = 0;
+	DWORD byteTransmitted = 0;
+	DWORD event = 0;
+	DWORD byteRead = 0;
+
+	FT_GetStatus(_serialA, &byteReceived, &byteTransmitted, &event);
+	if(byteReceived) {
+		char *buffer = new char[byteReceived];
+		FT_Read(_serialA, buffer, byteReceived, &byteRead);
+		ui->receiveA->setText(ui->receiveA->toPlainText() + buffer);
+		PHDEBUG << byteReceived << "bytes received /" << byteRead << "bytes read";
+	}
 }
 
 void SerialTestWindow::readTextB()
 {
-	QByteArray array = _serialB.readAll();
-	QString s(array);
-	PHDEBUG << s;
-//	ui->receiveB->setText(ui->receiveB->toPlainText() + s);
+	DWORD byteReceived = 0;
+	DWORD byteTransmitted = 0;
+	DWORD event = 0;
+	DWORD byteRead = 0;
+
+	FT_GetStatus(_serialB, &byteReceived, &byteTransmitted, &event);
+	if(byteReceived) {
+		char *buffer = new char[byteReceived];
+		FT_Read(_serialB, buffer, byteReceived, &byteRead);
+		ui->receiveB->setText(ui->receiveB->toPlainText() + buffer);
+		PHDEBUG << byteReceived << "bytes received /" << byteRead << "bytes read";
+	}
 }
 
 void SerialTestWindow::on_checkA_toggled(bool checked)
@@ -65,7 +84,6 @@ void SerialTestWindow::on_checkA_toggled(bool checked)
 	_settings->setActivatePortA(checked);
 	if(checked) {
 		if(open(&_serialA, _settings->portAName())) {
-			_serialA.write("Hello from serial A");
 			_ctsTimer.start(10);
 		}
 		else
@@ -73,7 +91,7 @@ void SerialTestWindow::on_checkA_toggled(bool checked)
 	}
 	else {
 		_ctsTimer.stop();
-		_serialA.close();
+		FT_Close(_serialA);
 	}
 }
 
@@ -81,52 +99,51 @@ void SerialTestWindow::on_checkB_toggled(bool checked)
 {
 	_settings->setActivatePortB(checked);
 	if(checked) {
-		if(open(&_serialB, _settings->portBName()))
-			_serialB.write("Hello from serial B");
-		else
+		if(!open(&_serialB, _settings->portBName()))
 			QMessageBox::critical(this, "Serial Test", QString("Unable to connect to %1").arg(_settings->portBName()));
 	}
 	else
-		_serialB.close();
+		FT_Close(_serialB);
 }
 
-bool SerialTestWindow::open(QSerialPort * serial, QString suffix)
+bool SerialTestWindow::open(FT_HANDLE * serial, QString suffix)
 {
 	PHDEBUG << "open" << suffix;
 
-	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
-	{
-		QString name = info.portName();
-		PHDEBUG << name << "available";
-		if(name.endsWith(suffix)) {
-			serial->setPort(info);
-			serial->setBaudRate(QSerialPort::Baud38400);
-			serial->setDataBits(QSerialPort::Data8);
-			serial->setStopBits(QSerialPort::OneStop);
-			serial->setParity(QSerialPort::OddParity);
-
-			PHDEBUG << "Opening " << name;
-			serial->open(QSerialPort::ReadWrite);
-
-			return true;
+	DWORD deviceCount = 0;
+	if(FT_CreateDeviceInfoList(&deviceCount) == FT_OK) {
+		FT_DEVICE_LIST_INFO_NODE *infos = new FT_DEVICE_LIST_INFO_NODE[deviceCount];
+		FT_GetDeviceInfoList(infos, &deviceCount);
+		for(int i = 0; i < deviceCount; i++) {
+			if(QString(infos[i].Description).endsWith(suffix)) {
+				if(FT_Open(i, serial) == FT_OK) {
+					FT_SetBaudRate(*serial, FT_BAUD_38400);
+					FT_SetDataCharacteristics(*serial, FT_BITS_8, FT_STOP_BITS_1, FT_PARITY_ODD);
+					return true;
+				}
+			}
 		}
 	}
-	PHDEBUG << "not found";
+
 	return false;
 }
 
 void SerialTestWindow::checkCTS()
 {
-	bool cts = _serialA.pinoutSignals() & QSerialPort::ClearToSendSignal;
-	float frequency = _ctsCounter.frequency();
-	if(cts != _lastCTS) {
-		_ctsCounter.tick();
-		ui->ctsLabel->setText("CTS : " + QString::number(frequency));
-		_lastCTS = cts;
+	ULONG status = 0;
+	if(FT_GetModemStatus(_serialA, &status) == FT_OK) {
+
+		bool cts = status & 0x10;
+		float frequency = _ctsCounter.frequency();
+		if(cts != _lastCTS) {
+			_ctsCounter.tick();
+			ui->ctsLabel->setText("CTS : " + QString::number(frequency));
+			_lastCTS = cts;
+		}
 	}
 
-	_serialA.write("checkCTS");
+	readTextA();
+	readTextB();
 
 	_timerCounter.tick();
-	PHDEBUG << _timerCounter.frequency() << frequency;
 }

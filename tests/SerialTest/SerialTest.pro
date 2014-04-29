@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui serialport widgets
+QT       += core gui widgets
 
 TARGET = SerialTest
 TEMPLATE = app
@@ -21,3 +21,7 @@ HEADERS  += SerialTestWindow.h \
     SerialTestSettings.h
 
 FORMS    += SerialTestWindow.ui
+
+INCLUDEPATH += /usr/local/include
+
+LIBS += -L/usr/local/lib -lftd2xx
