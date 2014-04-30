@@ -10,20 +10,20 @@ install:
 
 script:
 - qmake -v
-#- qmake all.pro
+- qmake all.pro
 - qmake tests/AutoTest/AutoTest.pro
 - make
-#- cd tests/AutoTest
+- cd tests/AutoTest
 - ./AutoTest
 - curl --form "file=@resultSwenson.bmp" http://phonations.com/feedback/serv.php
 - curl --form "file=@resultArial.bmp" http://phonations.com/feedback/serv.php
 - curl --form "file=@resultBedizen.bmp" http://phonations.com/feedback/serv.php
-#- cd ../..
+- cd ../..
 - "./scripts/doxygen.sh"
 - "./scripts/uncrustify.sh"
 after_success:
 - coveralls --exclude /usr/local -E .+/moc_.+ -E .+/ui_.+ -E .+\.app
-#- "./scripts/update-gh-pages.sh"
+- "./scripts/update-gh-pages.sh"
 notifications:
   flowdock:
     secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
