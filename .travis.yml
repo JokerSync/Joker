@@ -11,7 +11,7 @@ install:
 script:
 - qmake -v
 #- qmake all.pro
-- qmake test/AutoTest/AutoTest.pro
+- qmake tests/AutoTest/AutoTest.pro
 - make
 #- cd tests/AutoTest
 - ./AutoTest
