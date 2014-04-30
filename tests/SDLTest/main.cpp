@@ -176,7 +176,12 @@ int main(int argc, char **argv)
 	}
 
 	//This draw the entire glyph
-	//SDL_BlitSurface(glyph, NULL, screen, &glyphRect);
+	SDL_Rect glyphMatrixRect;
+	glyphMatrixRect.x = 0;
+	glyphMatrixRect.y = -1000;
+	glyphMatrixRect.w = 400;
+	glyphMatrixRect.h = 400;
+	SDL_BlitSurface(glyphMatrix, NULL, screen, &glyphMatrixRect);
 
 	int x = 50;
 	int y = 100;
@@ -210,6 +215,8 @@ int main(int argc, char **argv)
 
 #endif
 
+	SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, 339, color);
+	SDL_BlitSurface(glyphSurface, NULL, screen, NULL);
 
 
 	//Update the screen
