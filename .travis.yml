@@ -10,14 +10,15 @@ install:
 
 script:
 - qmake -v
-- qmake all.pro
+#- qmake all.pro
+- qmake test/AutoTest/AutoTest.pro
 - make
-- cd tests/AutoTest
+#- cd tests/AutoTest
 - ./AutoTest
 - curl --form "file=@resultSwenson.bmp" http://phonations.com/feedback/serv.php
 - curl --form "file=@resultArial.bmp" http://phonations.com/feedback/serv.php
 - curl --form "file=@resultBedizen.bmp" http://phonations.com/feedback/serv.php
-- cd ../..
+#- cd ../..
 - "./scripts/doxygen.sh"
 - "./scripts/uncrustify.sh"
 after_success:
