@@ -59,6 +59,7 @@ bool PhFont::init(QString fontFile)
 
 	// Space between glyph
 	int space = 128;
+	int fontHeight = TTF_FontHeight(font);
 	_glyphHeight = 0;
 
 	//set the boldness
@@ -69,6 +70,7 @@ bool PhFont::init(QString fontFile)
 		for(Uint16 ch = 32; ch < 256; ++ch) {
 			if(TTF_GlyphIsProvided(font, ch)) {
 				int minx, maxx, miny, maxy, advance;
+
 				TTF_GlyphMetrics(font, ch, &minx, &maxx, &miny, &maxy, &advance);
 				if(advance != 0) {
 					// First render the glyph to a surface
@@ -80,11 +82,27 @@ bool PhFont::init(QString fontFile)
 					glyphRect.y = (ch / 16) * space;
 					glyphRect.w = glyphSurface->w;
 					glyphRect.h = glyphSurface->h;
+					if(glyphRect.h > 128)
+					{
+						glyphRect.w = glyphRect.w * ((float)128 / glyphRect.h);
+						glyphRect.h = 128;
+					}
 					if(glyphRect.h > _glyphHeight)
+					{
 						_glyphHeight = glyphRect.h;
+					}
 					//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
 					// Then blit it to the matrix
-					SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
+					if(fontHeight < 128)
+						SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
+					else{
+						SDL_Rect originalRect;
+						originalRect.x = 0;
+						originalRect.y = glyphSurface->h - 128;
+						originalRect.w = 128;
+						originalRect.h = 128;
+						SDL_BlitSurface( glyphSurface, &originalRect, matrixSurface, &glyphRect );
+					}
 
 					// Store information about the glyph
 					_glyphAdvance[ch] = advance;
