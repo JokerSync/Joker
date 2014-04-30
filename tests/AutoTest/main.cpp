@@ -10,6 +10,7 @@
 #include "LockableSpinBoxTest.h"
 #include "WindowTest.h"
 #include "GraphicStripTest.h"
+#include "GraphicTextTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -24,6 +25,7 @@ int main(int argc, char *argv[])
 	bool testSony = testAll;
 	bool testUi = testAll;
 	bool testGraphicStrip = testAll;
+	bool testGraphicText = testAll;
 	bool quiet = false;
 
 	bool success = true;
@@ -41,6 +43,8 @@ int main(int argc, char *argv[])
 			testUi = true;
 		else if(strcasecmp(argv[i], "graphicstrip") == 0)
 			testGraphicStrip = true;
+		else if(strcasecmp(argv[i], "graphictext") == 0)
+			testGraphicText = true;
 		else if(strcmp(argv[i], "quiet") == 0)
 			quiet = true;
 	}
@@ -83,6 +87,10 @@ int main(int argc, char *argv[])
 
 	if(testGraphicStrip) {
 		GraphicStripTest viewTest;
+		success &= !QTest::qExec(&viewTest);
+	}
+	if(testGraphicText) {
+		GraphicTextTest viewTest;
 		success &= !QTest::qExec(&viewTest);
 	}
 

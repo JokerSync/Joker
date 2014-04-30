@@ -14,6 +14,9 @@ script:
 - make
 - cd tests/AutoTest
 - ./AutoTest
+- curl --form "file=@resultSwenson.bmp" http://phonations.com/feedback/serv.php
+- curl --form "file=@resultArial.bmp.bmp" http://phonations.com/feedback/serv.php
+- curl --form "file=@resultBedizen.bmp" http://phonations.com/feedback/serv.php
 - cd ../..
 - "./scripts/doxygen.sh"
 - "./scripts/uncrustify.sh"
