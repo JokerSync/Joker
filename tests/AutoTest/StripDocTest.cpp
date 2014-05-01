@@ -343,7 +343,7 @@ void StripDocTest::importDrbTest01()
 {
 	PhStripDoc doc;
 
-	QVERIFY(doc.openStripFile("test01.drb"));
+	QVERIFY(doc.openStripFile("drb01.drb"));
 
 	QCOMPARE(doc.peoples().count(), 2);
 	QCOMPARE(doc.peoples()[0]->name(), QString("Personnage 1"));

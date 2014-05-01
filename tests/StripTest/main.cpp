@@ -167,7 +167,7 @@ void displayDoc(PhStripDoc* doc)
 int main(int argc, char *argv[])
 {
 	StripTestSettings settings;
-	PhDebug::setDisplay(false, false, false, false, false);
+//	PhDebug::setDisplay(false, false, false, false, false);
 	PhDebug::setLogMask(settings.logMask());
 
 	int result = 0;
