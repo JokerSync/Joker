@@ -799,7 +799,10 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 		if(f.open(QIODevice::ReadOnly)) {
 			QTextStream ts(&f);
 
-			ts.setCodec("UTF-16");
+			// Detect text codec
+			if(f.peek(2).at(1) == 0)
+				ts.setCodec("UTF-16");
+
 			QString xmlString = "";
 
 			while(!ts.atEnd()) {
