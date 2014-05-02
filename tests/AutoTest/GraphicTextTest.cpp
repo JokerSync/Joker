@@ -91,19 +91,12 @@ void GraphicTextTest::testBedizen() {
 
 }
 
-void GraphicTextTest::testFontSize()
+void GraphicTextTest::computeMaxFontSizeTest()
 {
-	_font.setFontFile(QCoreApplication::applicationDirPath() + "/Arial.ttf");
-	qDebug() << _font.getHeight();
-	QVERIFY(_font.getHeight() >= 127 && _font.getHeight() <= 128);
-
-	_font.setFontFile(QCoreApplication::applicationDirPath() + "/SWENSON.TTF");
-	qDebug() << _font.getHeight();
-	QVERIFY(_font.getHeight() >= 127 && _font.getHeight() <= 128);
-
-	_font.setFontFile(QCoreApplication::applicationDirPath() + "/Bedizen.ttf");
-	qDebug() << _font.getHeight();
-	QVERIFY(_font.getHeight() >= 127 && _font.getHeight() <= 128);
+	QCOMPARE(PhFont::computeMaxFontSize(QCoreApplication::applicationDirPath() + "/Arial.ttf"), 113);
+	QCOMPARE(PhFont::computeMaxFontSize(QCoreApplication::applicationDirPath() + "/SWENSON.ttf"), 124);
+	QCOMPARE(PhFont::computeMaxFontSize(QCoreApplication::applicationDirPath() + "/Bedizen.ttf"), 97);
+	QCOMPARE(PhFont::computeMaxFontSize(QCoreApplication::applicationDirPath() + "/weblysleekuil.ttf"), 94);
 }
 
 void GraphicTextTest::paint() {

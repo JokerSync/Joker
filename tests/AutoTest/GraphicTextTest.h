@@ -26,7 +26,7 @@ private slots:
 	void testSwenson();
 	void testArial();
 	void testWeblysleekuil();
-	void testFontSize();
+	void computeMaxFontSizeTest();
 private:
 	PhFont _font;
 	void paint();
