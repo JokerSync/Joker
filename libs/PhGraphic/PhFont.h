@@ -112,6 +112,7 @@ private:
 	QString _fontFile;
 
 	int _boldness;
+	int computeMaxFontSize(QString file);
 };
 
 #endif // PHFONT_H
