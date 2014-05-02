@@ -19,7 +19,7 @@ script:
 - "./scripts/uncrustify.sh"
 after_success:
 - coveralls --exclude /usr/local -E .+/moc_.+ -E .+/ui_.+ -E .+\.app
-#- "./scripts/update-gh-pages.sh"
+- "./scripts/update-gh-pages.sh"
 notifications:
   flowdock:
     secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
