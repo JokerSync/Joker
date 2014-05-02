@@ -39,10 +39,12 @@ int PhFont::computeMaxFontSize(QString file)
 	int size = 25;
 	int fontHeight = 128;
 	int low = 0, high = 1000;
-	while (low < high)
-	{
+	while (low < high) {
 		size = (low + high) / 2;
 		TTF_Font * font = TTF_OpenFont(file.toStdString().c_str(), size);
+		//Break in case of issue with the file
+		if(!font)
+			return -1;
 		if (fontHeight == TTF_FontHeight(font))
 			break;
 		else if (fontHeight < TTF_FontHeight(font))
@@ -63,12 +65,10 @@ int PhFont::computeMaxFontSize(QString file)
 bool PhFont::init(QString fontFile)
 {
 	int size = computeMaxFontSize(fontFile);
+	if(size < 0)
+		return false;
 	PHDEBUG << "Opening" << fontFile << "at size" << size;
 	TTF_Font * font = TTF_OpenFont(fontFile.toStdString().c_str(), size);
-
-
-	if(!font)
-		return false;
 
 	//Font foreground color is white
 	SDL_Color color = {255, 255, 255, 255};
@@ -120,6 +120,31 @@ bool PhFont::init(QString fontFile)
 				}
 				else
 					PHDEBUG <<" Error with Glyph of char:" << ch << (char) ch << minx << maxx << miny << maxy << advance;
+			}
+			// 153 is the hex code for 339
+			else if(ch == 153) {
+				int minx, maxx, miny, maxy, advance;
+				Uint16 special = 339;
+				TTF_GlyphMetrics(font, special, &minx, &maxx, &miny, &maxy, &advance);
+
+				// First render the glyph to a surface
+				SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, 339, color);
+				if (!glyphSurface)
+					PHDEBUG << "Error during the Render Glyph of " << (char) special << SDL_GetError();
+				SDL_Rect glyphRect;
+				glyphRect.x = (ch % 16) * space;
+				glyphRect.y = (ch / 16) * space;
+				glyphRect.w = glyphSurface->w;
+				glyphRect.h = glyphSurface->h;
+				if(glyphRect.h > _glyphHeight)
+					_glyphHeight = glyphRect.h;
+				// Then blit it to the matrix
+				SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
+
+				// Store information about the glyph
+				_glyphAdvance[ch] = advance;
+
+				SDL_FreeSurface(glyphSurface);
 			}
 			else
 				_glyphAdvance[ch] = 0;
