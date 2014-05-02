@@ -23,9 +23,10 @@ public slots:
 
 private slots:
 	void testBedizen();
-
 	void testSwenson();
 	void testArial();
+	void testWeblysleekuil();
+	void testFontSize();
 private:
 	PhFont _font;
 	void paint();
