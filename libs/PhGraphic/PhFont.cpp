@@ -34,11 +34,37 @@ QString PhFont::getFontFile()
 	return _fontFile;
 }
 
+int PhFont::computeMaxFontSize(QString file)
+{
+	int size = 25;
+	int fontHeight = 128;
+	int low = 0, high = 1000;
+	while (low < high) {
+		size = (low + high) / 2;
+		TTF_Font * font = TTF_OpenFont(file.toStdString().c_str(), size);
+		if (fontHeight == TTF_FontHeight(font))
+			break;
+		else if (fontHeight < TTF_FontHeight(font))
+			high = size - 1;
+		else
+			low = size + 1;
+		TTF_CloseFont(font);
+	}
+	TTF_Font * font = TTF_OpenFont(file.toStdString().c_str(), size);
+	if(fontHeight < TTF_FontHeight(font))
+		size--;
+	TTF_CloseFont(font);
+
+	return size;
+}
+
 // This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
 bool PhFont::init(QString fontFile)
 {
-	PHDEBUG << fontFile;
-	TTF_Font * font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
+	int size = computeMaxFontSize(fontFile);
+	PHDEBUG << "Opening" << fontFile << "at size" << size;
+	TTF_Font * font = TTF_OpenFont(fontFile.toStdString().c_str(), size);
+
 
 	if(!font)
 		return false;

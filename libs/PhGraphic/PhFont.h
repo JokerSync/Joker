@@ -90,6 +90,15 @@ public:
 	 */
 	int getNominalWidth(QString string);
 
+	/**
+	 * @brief Compute the maximum font size
+	 * @param file A font file
+	 *
+	 * Compute the maximum font size to initialize the font with
+	 * so the glyph never take more than 128 pixel
+	 * @return A font size.
+	 */
+	static int computeMaxFontSize(QString file);
 private:
 	/**
 	 * @brief _texture
