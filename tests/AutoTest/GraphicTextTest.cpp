@@ -80,7 +80,7 @@ void GraphicTextTest::testBedizen() {
 	if(windowHandle()->devicePixelRatio() == 2)
 		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/bedizenRetinaTest.bmp");
 	if(QString(qgetenv("TRAVIS")) == "true")
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/bedizenRetinaTest.bmp");
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/bedizenTravisTest.bmp");
 
 	show();
 	paint();

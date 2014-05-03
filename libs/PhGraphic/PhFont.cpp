@@ -39,8 +39,7 @@ int PhFont::computeMaxFontSize(QString file)
 	int size = 25;
 	int fontHeight = 128;
 	int low = 0, high = 1000;
-	while (low < high)
-	{
+	while (low < high) {
 		size = (low + high) / 2;
 		TTF_Font * font = TTF_OpenFont(file.toStdString().c_str(), size);
 		if (fontHeight == TTF_FontHeight(font))
