@@ -155,14 +155,13 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		case 0x20:
 			{
 #warning /// @todo check more than 4 byte data.
-				unsigned char status[4];
 				QString statusStr = "";
 				for (int i = 0; i < 4; i++) {
-					status[i] = dataIn[i];
+					_status[i] = dataIn[i];
 					statusStr += QString::number(dataIn[i], 16) + " ";
 				}
-				statusData(status, 0, 4);
-//			PHDEBUG << _comSuffix << " => Status data : " << statusStr;
+				statusData(_status, 0, 4);
+				//PHDEBUG << _comSuffix << " => Status data : " << statusStr;
 				break;
 			}
 		case 0x2e:

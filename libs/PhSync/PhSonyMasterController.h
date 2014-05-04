@@ -157,6 +157,9 @@ protected:
 	 * @param dataIn Command data.
 	 */
 	void processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn);
+
+private:
+	unsigned char _status[4];
 };
 
 #endif // PHSONYMASTERCONTROLLER_H
