@@ -10,7 +10,7 @@ PhVideoEngine::PhVideoEngine() :  QObject(NULL),
 	_settings(NULL),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
-	_oldFrame(-1),
+	_oldFrame(PHFRAMEMIN),
 	_decoder(NULL)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
@@ -25,7 +25,7 @@ bool PhVideoEngine::open(QString fileName)
 	this->close();
 
 	_clock.setFrame(0);
-	_oldFrame = -1;
+	_oldFrame = PHFRAMEMIN;
 
 	_decoder = new PhAVDecoder(_settings->videoBufferSize());
 	if(!_decoder->open(fileName))
@@ -65,6 +65,7 @@ void PhVideoEngine::close()
 
 void PhVideoEngine::setDeinterlace(bool deinterlace)
 {
+	_oldFrame = PHFRAMEMIN;
 	if(_decoder)
 		_decoder->setDeinterlace(deinterlace);
 }
