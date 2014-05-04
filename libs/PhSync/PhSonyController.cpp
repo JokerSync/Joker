@@ -6,21 +6,21 @@
 
 #include "PhSonyController.h"
 
-#include <QSerialPortInfo>
 #include <qmath.h>
 
 #include "PhTools/PhDebug.h"
 
 PhSonyController::PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, QString comSuffix) :
+	_serial(0),
 	_clock(tcType),
 	_settings(settings),
 	_comSuffix(comSuffix),
-	_dataRead(0),
+	_totalByteRead(0),
 	_lastCTS(false),
 	_threadRunning(false)
 {
-//	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
-//            SLOT(handleError(QSerialPort::SerialPortError)));
+	//	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
+	//            SLOT(handleError(QSerialPort::SerialPortError)));
 }
 
 PhSonyController::~PhSonyController()
@@ -28,32 +28,26 @@ PhSonyController::~PhSonyController()
 	close();
 }
 
-bool PhSonyController::open(bool inThread)
+bool PhSonyController::open()
 {
 	PHDEBUG << _comSuffix;
-	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
-	{
-		QString name = info.portName();
-		PHDEBUG << name;
-
-		if(name.endsWith(_comSuffix)) {
-			_serial.setPort(info);
-
-			PHDEBUG << _comSuffix << "Opening " << name << _serial.parent();
-			if( _serial.open(QSerialPort::ReadWrite)) {
-				_serial.setBaudRate(QSerialPort::Baud38400);
-				_serial.setDataBits(QSerialPort::Data8);
-				_serial.setStopBits(QSerialPort::OneStop);
-				_serial.setParity(QSerialPort::OddParity);
-
-				if(inThread)
+	DWORD deviceCount = 0;
+	if(FT_CreateDeviceInfoList(&deviceCount) == FT_OK) {
+		FT_DEVICE_LIST_INFO_NODE *infos = new FT_DEVICE_LIST_INFO_NODE[deviceCount];
+		FT_GetDeviceInfoList(infos, &deviceCount);
+		for(int i = 0; i < deviceCount; i++) {
+			if(QString(infos[i].Description).endsWith(_comSuffix)) {
+				if(FT_Open(i, &_serial) == FT_OK) {
+					FT_SetBaudRate(_serial, FT_BAUD_38400);
+					FT_SetDataCharacteristics(_serial, FT_BITS_8, FT_STOP_BITS_1, FT_PARITY_ODD);
+					FT_SetTimeouts(_serial, 100, 100);
 					this->start(QThread::HighPriority);
-				else
-					connect(&_serial, SIGNAL(readyRead()), this, SLOT(onData()));
-				return true;
+					return true;
+				}
 			}
 		}
 	}
+
 	PHDEBUG << _comSuffix << "Unable to find usbserial-XXX" << _comSuffix;
 	return false;
 }
@@ -64,19 +58,21 @@ void PhSonyController::close()
 		_threadRunning = false;
 		PHDEBUG << this->wait(1000);
 	}
-	if(_serial.isOpen()) {
-		PHDEBUG << _comSuffix;
-		_serial.close();
+	if(_serial) {
+		FT_Close(_serial);
+		_serial = 0;
 	}
 }
 
 void PhSonyController::checkVideoSync(int)
 {
-	if(_serial.isOpen()) {
+	if(_serial) {
 		bool videoSyncUp = true;
 		if(_settings)
 			videoSyncUp = _settings->videoSyncUp();
-		bool cts = _serial.pinoutSignals() & QSerialPort::ClearToSendSignal;
+		ULONG status = 0;
+		FT_GetModemStatus(_serial, &status);
+		bool cts = status & 0x10;
 		if(videoSyncUp) {
 			if(!_lastCTS && cts) {
 				onVideoSync();
@@ -97,10 +93,9 @@ void PhSonyController::run()
 {
 	_threadRunning = true;
 	while(_threadRunning) {
-		this->checkVideoSync(100);
-		if(_serial.waitForReadyRead(10))
-			onData();
+		onData();
 	}
+	PHDEBUG << _comSuffix << "bye bye";
 }
 
 PhRate PhSonyController::computeRate(unsigned char data1)
@@ -133,17 +128,18 @@ unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 
 void PhSonyController::sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
-//	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, data);
-	unsigned char datacount = getDataSize(cmd1);
+	//	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, data);
+	unsigned char dataCount = getDataSize(cmd1);
 	unsigned char checksum = cmd1 + cmd2;
-	for (int i = 0; i < datacount; i++) {
+	for (int i = 0; i < dataCount; i++) {
 		_dataOut[i + 2] = data[i];
 		checksum += data[i];
 	}
 	_dataOut[0] = cmd1;
 	_dataOut[1] = cmd2;
-	_dataOut[datacount+2] = checksum;
-	_serial.write((const char*)_dataOut, datacount + 3);
+	_dataOut[dataCount+2] = checksum;
+	DWORD written;
+	FT_Write(_serial, _dataOut, dataCount + 3, &written);
 }
 
 void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
@@ -184,55 +180,44 @@ QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cm
 
 void PhSonyController::onData()
 {
-	while(_serial.bytesAvailable()) {
-		//	PHDEBUG << _comSuffix;
-		// reading the cmd1 and cmd2
-		if(_dataRead < 2) {
-			QByteArray array = _serial.read(2 - _dataRead);
-			//		PHDEBUG << "reading : " << array.length();
-			for (int i = 0; i < array.length(); i++)
-				_dataIn[i + _dataRead] = array[i];
-			_dataRead += array.length();
-		}
+	DWORD byteRead = 0;
 
-		// if cmd1 and cmd2 are read, go on with data
-		if(_dataRead >= 2) {
-			unsigned char cmd1 = _dataIn[0];
-			unsigned char cmd2 = _dataIn[1];
-			unsigned char datacount = getDataSize(cmd1);
+	// reading the cmd1 and cmd2
+	if(_totalByteRead < 2) {
+		FT_Read(_serial, _dataIn + _totalByteRead, 2 - _totalByteRead, &byteRead);
+		//PHDEBUG << "reading : " << byteReturned
+		_totalByteRead += byteRead;
+	}
 
-			// Reading the data left
-			QByteArray array = _serial.read(datacount + 3 - _dataRead);
-			//		PHDEBUG << "reading : " << array.length();
-			for (int i = 0; i < array.length(); i++)
-				_dataIn[i + _dataRead] = array[i];
-			_dataRead += array.length();
+	// if cmd1 and cmd2 are read, go on with data
+	if(_totalByteRead >= 2) {
+		unsigned char cmd1 = _dataIn[0];
+		unsigned char cmd2 = _dataIn[1];
+		unsigned char datacount = getDataSize(cmd1);
 
-			if(_dataRead == datacount + 3) { // A whole command has been read
-				QString cmdString = stringFromCommand(cmd1, cmd2, _dataIn + 2);
-				//			PHDEBUG << _comSuffix << "reading : " << cmdString;
+		// Reading the data left
+		FT_Read(_serial, _dataIn + _totalByteRead, datacount + 3 - _totalByteRead, &byteRead);
+		//PHDEBUG << "reading : " << byteRead;
+		_totalByteRead += byteRead;
 
-				// Computing the checksum
-				unsigned char checksum = 0;
-				for (int i = 0; i < datacount + 2; i++)
-					checksum += _dataIn[i];
+		if(_totalByteRead == datacount + 3) { // A whole command has been read
+			QString cmdString = stringFromCommand(cmd1, cmd2, _dataIn + 2);
+			//			PHDEBUG << _comSuffix << "reading : " << cmdString;
 
-				if (checksum != _dataIn[datacount+2]) {
-					PHDEBUG << _comSuffix << "Checksum error : " << cmdString;
-					_serial.flush();
-					checkSumError();
-				}
-				else // Process the data
-					processCommand(cmd1, cmd2, _dataIn + 2);
+			// Computing the checksum
+			unsigned char checksum = 0;
+			for (int i = 0; i < datacount + 2; i++)
+				checksum += _dataIn[i];
 
-				// Reset the data counter to read another command
-				_dataRead = 0;
+			if (checksum != _dataIn[datacount+2]) {
+				PHDEBUG << _comSuffix << "Checksum error : " << cmdString;
+				checkSumError();
 			}
+			else // Process the data
+				processCommand(cmd1, cmd2, _dataIn + 2);
+
+			// Reset the data counter to read another command
+			_totalByteRead = 0;
 		}
 	}
-}
-
-void PhSonyController::handleError(QSerialPort::SerialPortError error)
-{
-	PHDEBUG << _comSuffix << error;
 }

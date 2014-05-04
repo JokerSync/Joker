@@ -206,6 +206,7 @@ void MainWindow::on_actionMaster_Use_video_sync_triggered(bool useVideo)
 		connect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(checkVideoSync()));
 
 		_masterTimer.start(10);
+		PHDEBUG << "master check video";
 	}
 	else {
 		// timer trigger the onVideoSync slot directly
@@ -213,5 +214,6 @@ void MainWindow::on_actionMaster_Use_video_sync_triggered(bool useVideo)
 		connect(&_masterTimer, SIGNAL(timeout()), &_sonyMaster, SLOT(onVideoSync()));
 
 		_masterTimer.start(40);
+		PHDEBUG << "master trigger video";
 	}
 }

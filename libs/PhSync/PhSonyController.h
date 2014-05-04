@@ -8,8 +8,12 @@
 #define PHSONYCONTROLLER_H
 
 #include <QObject>
-#include <QSerialPort>
 #include <QThread>
+
+#define WINAPI
+#define LPCTSTR const char*
+#define LPLONG long*
+#include <ftd2xx.h>
 
 #include "PhTools/PhClock.h"
 
@@ -65,7 +69,7 @@ public:
 	/**
 	 * @brief Open the communication port.
 	 */
-	bool open(bool inThread = true);
+	bool open();
 
 	/**
 	 * @brief Close the communication port.
@@ -212,13 +216,13 @@ protected:
 
 private:
 	/** @brief Serial port connected to the controller. */
-	QSerialPort _serial;
+	FT_HANDLE _serial;
 
 	/** @brief Buffer used for serial data reception. */
 	unsigned char _dataIn[256];
 
 	/** @brief Amount of serial data read for the current command/data */
-	int _dataRead;
+	int _totalByteRead;
 
 	/** @brief Buffer used for serial data emission. */
 	unsigned char _dataOut[256];
@@ -232,9 +236,6 @@ private:
 private slots:
 	/** @brief Slot triggered when data are available on the serial port */
 	void onData();
-
-	/** @brief Slot triggered when a serial error occurs */
-	void handleError(QSerialPort::SerialPortError error);
 };
 
 #endif // PHSONYCONTROLLER_H

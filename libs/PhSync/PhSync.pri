@@ -3,8 +3,6 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT += serialport
-
 HEADERS += \
     ../../libs/PhSync/PhSonyController.h \
     ../../libs/PhSync/PhSonyMasterController.h \
@@ -22,7 +20,7 @@ SOURCES += \
 
 unix {
 	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lltc
+	LIBS += -L/usr/local/lib -lltc -lftd2xx
 }
 
 win32 {
