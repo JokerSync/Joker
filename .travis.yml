@@ -13,13 +13,19 @@ script:
 - qmake all.pro
 - make
 - cd tests/AutoTest
-- "./AutoTest travis"
+- ./AutoTest
 - cd ../..
 - "./scripts/doxygen.sh"
 - "./scripts/uncrustify.sh"
 after_success:
 - coveralls --exclude /usr/local -E .+/moc_.+ -E .+/ui_.+ -E .+\.app
-#- "./scripts/update-gh-pages.sh"
+- "./scripts/update-gh-pages.sh"
+after_failure:
+- curl --form "file=@graphicStripTestResult.bmp" http://phonations.com/feedback/serv.php
+- curl --form "file=@swensonTestResult.bmp" http://phonations.com/feedback/serv.php
+- curl --form "file=@arialTestResult.bmp" http://phonations.com/feedback/serv.php
+- curl --form "file=@bedizenTestResult.bmp" http://phonations.com/feedback/serv.php
+- curl --form "file=@weblysleekuilTestResult.bmp" http://phonations.com/feedback/serv.php
 notifications:
   flowdock:
     secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
