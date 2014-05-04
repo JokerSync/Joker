@@ -225,6 +225,7 @@ void PhAVDecoder::setDeinterlace(bool deintrelace)
 		_deinterlace = deintrelace;
 		_bufferMutex.lock();
 		clearBuffer();
+		_nextDecodingFrame = _oldFrame;
 		_bufferMutex.unlock();
 	}
 }
@@ -330,18 +331,18 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 						pixFormat = _videoStream->codec->pix_fmt;
 						break;
 					}
-					SwsContext * swsContext = sws_getContext(_videoFrame->width, _videoStream->codec->height,
-															 pixFormat, _videoStream->codec->width, frameHeight,
-															 AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
+					SwsContext * swsContext = sws_getContext(_videoFrame->width, _videoFrame->height, pixFormat,
+															 _videoFrame->width, frameHeight, AV_PIX_FMT_RGB24,
+															 SWS_POINT, NULL, NULL, NULL);
 
 					uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
 					int linesize = _videoFrame->width * 3;
 					if (0 <= sws_scale(swsContext, (const uint8_t * const *) _videoFrame->data,
-									   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
-									   &linesize)) {
+									   _videoFrame->linesize, 0, _videoFrame->height, &rgb,
+					                   &linesize)) {
 						_bufferMutex.lock();
 						_bufferMap[frame] = rgb;
-						//PHDBG(25) << "Decoding" <<  PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << packet.dts << _bufferFreeSpace.available();
+						//PHDBG(25) << "Decoding" << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << packet.dts << _bufferFreeSpace.available();
 						_bufferMutex.unlock();
 						_lastDecodedFrame = frame;
 						//PHDEBUG << "Add" << frame;

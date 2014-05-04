@@ -46,6 +46,7 @@ bool VideoTestWindow::openDocument(QString fileName)
 	if(fileName == _settings->currentDocument()) {
 		frameStamp = _settings->frameStamp();
 		_videoEngine.setFirstFrame(frameStamp);
+		_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
 		currentFrame = _settings->currentFrame();
 	}
 	else if(_videoEngine.firstFrame() == 0) {
