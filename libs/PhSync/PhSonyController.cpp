@@ -10,11 +10,11 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyController::PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, QString comSuffix) :
+PhSonyController::PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, QString ftdiDescription) :
 	_serial(0),
 	_clock(tcType),
 	_settings(settings),
-	_comSuffix(comSuffix),
+	_portDescription(ftdiDescription),
 	_totalByteRead(0),
 	_lastCTS(false),
 	_threadRunning(false)
@@ -30,25 +30,16 @@ PhSonyController::~PhSonyController()
 
 bool PhSonyController::open()
 {
-	PHDEBUG << _comSuffix;
-	DWORD deviceCount = 0;
-	if(FT_CreateDeviceInfoList(&deviceCount) == FT_OK) {
-		FT_DEVICE_LIST_INFO_NODE *infos = new FT_DEVICE_LIST_INFO_NODE[deviceCount];
-		FT_GetDeviceInfoList(infos, &deviceCount);
-		for(int i = 0; i < deviceCount; i++) {
-			if(QString(infos[i].Description).endsWith(_comSuffix)) {
-				if(FT_Open(i, &_serial) == FT_OK) {
-					FT_SetBaudRate(_serial, FT_BAUD_38400);
-					FT_SetDataCharacteristics(_serial, FT_BITS_8, FT_STOP_BITS_1, FT_PARITY_ODD);
-					FT_SetTimeouts(_serial, 100, 100);
-					this->start(QThread::HighPriority);
-					return true;
-				}
-			}
-		}
+	PHDEBUG << "Opening" << _portDescription;
+	if(FT_OpenEx((void*)PHNQ(_portDescription), FT_OPEN_BY_DESCRIPTION, &_serial) == FT_OK) {
+		FT_SetBaudRate(_serial, FT_BAUD_38400);
+		FT_SetDataCharacteristics(_serial, FT_BITS_8, FT_STOP_BITS_1, FT_PARITY_ODD);
+		FT_SetTimeouts(_serial, 100, 100);
+		this->start(QThread::HighPriority);
+		return true;
 	}
 
-	PHDEBUG << _comSuffix << "Unable to find usbserial-XXX" << _comSuffix;
+	PHDEBUG << _portDescription << "Unable to open" << _portDescription;
 	return false;
 }
 
@@ -95,7 +86,7 @@ void PhSonyController::run()
 	while(_threadRunning) {
 		onData();
 	}
-	PHDEBUG << _comSuffix << "bye bye";
+	PHDEBUG << _portDescription << "bye bye";
 }
 
 PhRate PhSonyController::computeRate(unsigned char data1)
@@ -128,7 +119,7 @@ unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 
 void PhSonyController::sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
 {
-	//	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, data);
+	//	PHDEBUG << _ftdiDescription << stringFromCommand(cmd1, cmd2, data);
 	unsigned char dataCount = getDataSize(cmd1);
 	unsigned char checksum = cmd1 + cmd2;
 	for (int i = 0; i < dataCount; i++) {
@@ -158,12 +149,12 @@ void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
 
 void PhSonyController::timeOut()
 {
-	PHDEBUG << _comSuffix;
+	PHDEBUG << _portDescription;
 }
 
 void PhSonyController::checkSumError()
 {
-	PHDEBUG << _comSuffix;
+	PHDEBUG << _portDescription;
 }
 
 QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data)
@@ -202,7 +193,7 @@ void PhSonyController::onData()
 
 		if(_totalByteRead == datacount + 3) { // A whole command has been read
 			QString cmdString = stringFromCommand(cmd1, cmd2, _dataIn + 2);
-			//			PHDEBUG << _comSuffix << "reading : " << cmdString;
+			//			PHDEBUG << _ftdiDescription << "reading : " << cmdString;
 
 			// Computing the checksum
 			unsigned char checksum = 0;
@@ -210,7 +201,7 @@ void PhSonyController::onData()
 				checksum += _dataIn[i];
 
 			if (checksum != _dataIn[datacount+2]) {
-				PHDEBUG << _comSuffix << "Checksum error : " << cmdString;
+				PHDEBUG << _portDescription << "Checksum error : " << cmdString;
 				checkSumError();
 			}
 			else // Process the data

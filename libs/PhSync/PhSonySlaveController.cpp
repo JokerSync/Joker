@@ -9,7 +9,7 @@
 #include "PhTools/PhDebug.h"
 
 PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, PhSyncSettings *settings)
-	: PhSonyController(tcType, settings, settings->sonySlavePortSuffix()),
+	: PhSonyController(tcType, settings, settings->slavePortDescription()),
 	_autoMode(false), _state(Pause)
 {
 }
@@ -17,17 +17,17 @@ PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, PhSyncSettin
 void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
 {
 	unsigned char dataOut[16];
-	PHDBG(20) << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn);
+	PHDBG(20) << _portDescription << stringFromCommand(cmd1, cmd2, dataIn);
 	switch (cmd1 >> 4) {
 	case 0:
 		switch (cmd2) {
 		case 0x0c:
-			PHDEBUG << _comSuffix << "Local disable => ACK";
+			PHDEBUG << _portDescription << "Local disable => ACK";
 			sendAck();
 			break;
 		case 0x11:
 			{
-//			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
+//			PHDEBUG << _ftdiDescription << "Device Type Request => F1C0";
 				unsigned char deviceID1 = _settings->sonyDevice1();
 				unsigned char deviceID2 = _settings->sonyDevice2();
 				switch (_clock.timeCodeType()) {
@@ -45,11 +45,11 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				break;
 			}
 		case 0x1d:
-			PHDEBUG << _comSuffix << "Local enable => ACK";
+			PHDEBUG << _portDescription << "Local enable => ACK";
 			sendAck();
 			break;
 		default:
-			PHDEBUG << _comSuffix << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
+			PHDEBUG << _portDescription << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 			sendNak(UndefinedCommand);
 			break;
 		}
@@ -57,25 +57,25 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 	case 2:
 		switch (cmd2) {
 		case 0x00:
-			PHDEBUG << _comSuffix << "Stop => ACK";
+			PHDEBUG << _portDescription << "Stop => ACK";
 			_state = Pause;
 			_clock.setRate(0);
 			sendAck();
 			break;
 		case 0x01:
-			PHDEBUG << _comSuffix << "Play => ACK";
+			PHDEBUG << _portDescription << "Play => ACK";
 			_state = Play;
 			_clock.setRate(1);
 			sendAck();
 			break;
 		case 0x10:
-			PHDEBUG << _comSuffix << "Fast forward => ACK";
+			PHDEBUG << _portDescription << "Fast forward => ACK";
 			_state = FastForward;
 			_clock.setRate(_settings->sonyFastRate());
 			sendAck();
 			break;
 		case 0x20:
-			PHDEBUG << _comSuffix << "Rewing => ACK";
+			PHDEBUG << _portDescription << "Rewing => ACK";
 			_state = Rewind;
 			_clock.setRate(-_settings->sonyFastRate());
 			sendAck();
@@ -99,30 +99,30 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				switch (cmd1) {
 				case 0x11:
 					_state = Jog;
-					PHDEBUG << _comSuffix << "Jog Forward : "<< rate<<"=> ACK";
+					PHDEBUG << _portDescription << "Jog Forward : "<< rate<<"=> ACK";
 					break;
 				case 0x12:
 					_state = Varispeed;
-					PHDEBUG << _comSuffix << "Var Forward : "<< rate<<"=> ACK";
+					PHDEBUG << _portDescription << "Var Forward : "<< rate<<"=> ACK";
 					break;
 				case 0x13:
 					_state = Shuttle;
-					PHDEBUG << _comSuffix << "Shuttle Forward : " << rate << "=> ACK";
+					PHDEBUG << _portDescription << "Shuttle Forward : " << rate << "=> ACK";
 					break;
 				case 0x21:
 					rate = -rate;
 					_state = Jog;
-					PHDEBUG << _comSuffix << "Jog rev : " << rate << "=> ACK";
+					PHDEBUG << _portDescription << "Jog rev : " << rate << "=> ACK";
 					break;
 				case 0x22:
 					rate = -rate;
 					_state = Varispeed;
-					PHDEBUG << _comSuffix << "Var rev : " << rate << "=> ACK";
+					PHDEBUG << _portDescription << "Var rev : " << rate << "=> ACK";
 					break;
 				case 0x23:
 					rate = -rate;
 					_state = Shuttle;
-					PHDEBUG << _comSuffix << "Shuttle rev : " << rate << "=> ACK";
+					PHDEBUG << _portDescription << "Shuttle rev : " << rate << "=> ACK";
 					break;
 				}
 				_clock.setRate(rate);
@@ -133,12 +133,12 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			{
 				PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.timeCodeType());
 				_clock.setFrame(frame);
-				PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.timeCodeType()) << "=> ACK";
+				PHDEBUG << _portDescription << "Cue at " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.timeCodeType()) << "=> ACK";
 				sendAck();
 				break;
 			}
 		default:
-			PHDEBUG << _comSuffix << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
+			PHDEBUG << _portDescription << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 			sendNak(UndefinedCommand);
 			break;
 		}
@@ -146,21 +146,21 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 	case 4:
 		switch (cmd2) {
 		case 0x30:
-			PHDEBUG << _comSuffix << "Edit preset => ACK";
+			PHDEBUG << _portDescription << "Edit preset => ACK";
 			sendAck();
 			break;
 		case 0x40:
-			PHDEBUG << _comSuffix << "Auto Mode Off => ACK";
+			PHDEBUG << _portDescription << "Auto Mode Off => ACK";
 			_autoMode = false;
 			sendAck();
 			break;
 		case 0x41:
 			_autoMode = true;
-			PHDEBUG << _comSuffix << "Auto Mode On => ACK";
+			PHDEBUG << _portDescription << "Auto Mode On => ACK";
 			sendAck();
 			break;  case 6:
 		default:
-			PHDEBUG << _comSuffix << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
+			PHDEBUG << _portDescription << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 			sendNak(UndefinedCommand);
 			break;
 		}
@@ -170,7 +170,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x0c:
 			{
 				cmd1 = 0x74;
-				PHDBG(21) << _comSuffix << "Current Time Sense => " << _clock.timeCode();
+				PHDBG(21) << _portDescription << "Current Time Sense => " << _clock.timeCode();
 				switch (dataIn[0]) {
 				case 0x01:
 					cmd2 = 0x04;
@@ -202,7 +202,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			{
 				unsigned char status[16];
 #warning /// @todo handle status sens properly
-				PHDBG(22) << _comSuffix << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
+				PHDBG(22) << _portDescription << "Status Sense (%x) => Status Data" << QString::number(dataIn[0], 16);
 				memset(status, 0, 16);
 				switch (_state) {
 				case Pause:
@@ -261,7 +261,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x30:
 			{
 #warning /// @todo handle edit preset sense properly
-//			PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status";
+//			PHDEBUG << _ftdiDescription << "Edit Preset Sense => Edit Preset Status";
 				unsigned char count = dataIn[0];
 				for (int i = 0; i < count; i++)
 					dataOut[i] = 0;
@@ -269,18 +269,18 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				break;
 			}
 		default:
-			PHDEBUG << _comSuffix << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
+			PHDEBUG << _portDescription << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 			sendNak(UndefinedCommand);
 			break;
 		}
 		break;
 	default:
-		PHDEBUG << _comSuffix << " => Unknown command " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
+		PHDEBUG << _portDescription << " => Unknown command " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 		sendNak(UndefinedCommand);
 		break;
 	}
 
-//	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn) << " over";
+//	PHDEBUG << _ftdiDescription << stringFromCommand(cmd1, cmd2, dataIn) << " over";
 }
 
 void PhSonySlaveController::onVideoSync()
@@ -291,13 +291,13 @@ void PhSonySlaveController::onVideoSync()
 
 void PhSonySlaveController::sendAck()
 {
-//	PHDEBUG << _comSuffix;
+//	PHDEBUG << _ftdiDescription;
 	sendCommand(0x10, 0x01);
 }
 
 void PhSonySlaveController::sendNak(PhSonyController::PhSonyError error)
 {
-	PHDEBUG << _comSuffix << error;
+	PHDEBUG << _portDescription << error;
 	sendCommand(0x11, 0x12, error);
 }
 

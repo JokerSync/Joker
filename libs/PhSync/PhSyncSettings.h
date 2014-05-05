@@ -31,16 +31,16 @@ public:
 	virtual float sonyFastRate() = 0;
 
 	/**
-	 * @brief The slave port name suffix
+	 * @brief The slave FTDI port description
 	 * @return A string
 	 */
-	virtual QString sonySlavePortSuffix() = 0;
+	virtual QString slavePortDescription() = 0;
 
 	/**
-	 * @brief The master port name suffix
+	 * @brief The master FTDI port description
 	 * @return A string
 	 */
-	virtual QString sonyMasterPortSuffix() = 0;
+	virtual QString masterPortDescription() = 0;
 };
 
 #endif // PHSYNCSETTINGS_H
