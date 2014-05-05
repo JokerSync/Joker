@@ -31,13 +31,40 @@ PhSonyController::~PhSonyController()
 bool PhSonyController::open()
 {
 	PHDEBUG << "Opening" << _portDescription;
-	if(FT_OpenEx((void*)PHNQ(_portDescription), FT_OPEN_BY_DESCRIPTION, &_serial) == FT_OK) {
+	FT_STATUS status = FT_OpenEx((void*)PHNQ(_portDescription), FT_OPEN_BY_DESCRIPTION, &_serial);
+	if(status == FT_OK) {
 		FT_SetBaudRate(_serial, FT_BAUD_38400);
 		FT_SetDataCharacteristics(_serial, FT_BITS_8, FT_STOP_BITS_1, FT_PARITY_ODD);
 		FT_SetTimeouts(_serial, 100, 100);
 		this->start(QThread::HighPriority);
 		return true;
 	}
+
+	// Get more info on connected device if failed
+	DWORD deviceCount = 0;
+
+	status = FT_CreateDeviceInfoList(&deviceCount);
+	if(status != FT_OK) {
+		PHDEBUG << "FT_CreateDeviceInfoList returned:" << status;
+		return false;
+	}
+
+	if(deviceCount == 0) {
+		PHDEBUG << "No connected device...";
+		return false;
+	}
+
+	PHDEBUG << "Connected devices:" << deviceCount;
+
+	FT_DEVICE_LIST_INFO_NODE *infos = new FT_DEVICE_LIST_INFO_NODE[deviceCount];
+	status = FT_GetDeviceInfoList(infos, &deviceCount);
+	if(status != FT_OK) {
+		PHDEBUG << "FT_GetDeviceInfoList returned:" << status;
+		return false;
+	}
+
+	for(int i = 0; i < deviceCount; i++)
+		PHDEBUG << "\t" << i << ":\t" << infos[i].Description;
 
 	PHDEBUG << _portDescription << "Unable to open" << _portDescription;
 	return false;
