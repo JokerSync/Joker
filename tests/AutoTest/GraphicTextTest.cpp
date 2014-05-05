@@ -20,17 +20,17 @@ void GraphicTextTest::testSwenson() {
 	_font.setFontFile(QCoreApplication::applicationDirPath() + "/SWENSON.TTF");
 	setGeometry(0, 0, 776, 576);
 
-	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsSWENSON.bmp");
+	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/swensonTest.bmp");
 	if(windowHandle()->devicePixelRatio() == 2)
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsSWENSON2.bmp");
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/swensonRetinaTest.bmp");
 	if(QString(qgetenv("TRAVIS")) == "true")
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsSWENSONTravis.bmp");
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/swensonTravisTest.bmp");
 
 	show();
 	paint();
 	sleep(2);
 	QImage img(grabFrameBuffer());
-	img.save("./resultSwenson.bmp");
+	img.save("./swensonTestResult.bmp");
 	QVERIFY(QImage(grabFrameBuffer()) == QImage(expectedFile));
 }
 
@@ -38,17 +38,17 @@ void GraphicTextTest::testArial() {
 	_font.setFontFile(QCoreApplication::applicationDirPath() + "/Arial.ttf");
 	setGeometry(0, 0, 776, 576);
 
-	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsArial.bmp");
+	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/arialTest.bmp");
 	if(windowHandle()->devicePixelRatio() == 2)
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsArial2.bmp");
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/arialRetinaTest.bmp");
 	if(QString(qgetenv("TRAVIS")) == "true")
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsArialTravis.bmp");
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/arialTravisTest.bmp");
 
 	show();
 	paint();
 	sleep(2);
 	QImage img(grabFrameBuffer());
-	img.save("./resultArial.bmp");
+	img.save("./arialTestResult.bmp");
 	QVERIFY(QImage(grabFrameBuffer()) == QImage(expectedFile));
 
 }
@@ -58,17 +58,17 @@ void GraphicTextTest::testWeblysleekuil()
 	_font.setFontFile(QCoreApplication::applicationDirPath() + "/weblysleekuil.ttf");
 	setGeometry(0, 0, 776, 576);
 
-	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsWeblysleekuil.bmp");
+	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/weblysleekuilTest.bmp");
 	if(windowHandle()->devicePixelRatio() == 2)
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsWeblysleekuil2.bmp");
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/weblysleekuilRetinaTest.bmp");
 	if(QString(qgetenv("TRAVIS")) == "true")
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsWeblysleekuilTravis.bmp");
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/weblysleekuilTravisTest.bmp");
 
 	show();
 	paint();
 	sleep(2);
 	QImage img(grabFrameBuffer());
-	img.save("./resultWeblysleekuil.bmp");
+	img.save("./weblysleekuilTestResult.bmp");
 	QVERIFY(QImage(grabFrameBuffer()) == QImage(expectedFile));
 }
 
@@ -76,34 +76,27 @@ void GraphicTextTest::testBedizen() {
 	_font.setFontFile(QCoreApplication::applicationDirPath() + "/Bedizen.ttf");
 	setGeometry(0, 0, 776, 576);
 
-	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsBedizen.bmp");
+	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/bedizenTest.bmp");
 	if(windowHandle()->devicePixelRatio() == 2)
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsBedizen2.bmp");
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/bedizenRetinaTest.bmp");
 	if(QString(qgetenv("TRAVIS")) == "true")
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/charsBedizenTravis.bmp");
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/bedizenTravisTest.bmp");
 
 	show();
 	paint();
 	sleep(2);
 	QImage img(grabFrameBuffer());
-	img.save("./resultBedizen.bmp");
+	img.save("./bedizenTestResult.bmp");
 	QVERIFY(QImage(grabFrameBuffer()) == QImage(expectedFile));
 
 }
 
-void GraphicTextTest::testFontSize()
+void GraphicTextTest::computeMaxFontSizeTest()
 {
-	_font.setFontFile(QCoreApplication::applicationDirPath() + "/Arial.ttf");
-	qDebug() << _font.getHeight();
-	QVERIFY(_font.getHeight() >= 127 && _font.getHeight() <= 128);
-
-	_font.setFontFile(QCoreApplication::applicationDirPath() + "/SWENSON.TTF");
-	qDebug() << _font.getHeight();
-	QVERIFY(_font.getHeight() >= 127 && _font.getHeight() <= 128);
-
-	_font.setFontFile(QCoreApplication::applicationDirPath() + "/Bedizen.ttf");
-	qDebug() << _font.getHeight();
-	QVERIFY(_font.getHeight() >= 127 && _font.getHeight() <= 128);
+	QCOMPARE(PhFont::computeMaxFontSize(QCoreApplication::applicationDirPath() + "/Arial.ttf"), 113);
+	QCOMPARE(PhFont::computeMaxFontSize(QCoreApplication::applicationDirPath() + "/SWENSON.ttf"), 124);
+	QCOMPARE(PhFont::computeMaxFontSize(QCoreApplication::applicationDirPath() + "/Bedizen.ttf"), 97);
+	QCOMPARE(PhFont::computeMaxFontSize(QCoreApplication::applicationDirPath() + "/weblysleekuil.ttf"), 94);
 }
 
 void GraphicTextTest::paint() {
