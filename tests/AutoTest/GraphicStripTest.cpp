@@ -5,11 +5,13 @@
 
 #include <QTest>
 #include <QDate>
-#include "GraphicStripTest.h"
 
 #include "PhGraphic/PhGraphicView.h"
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhGraphicStrip/PhGraphicStripView.h"
+
+#include "GraphicStripTest.h"
+#include "GraphicStripTestSettings.h"
 
 GraphicStripTest::GraphicStripTest(QObject *parent) :
 	QObject(parent)
