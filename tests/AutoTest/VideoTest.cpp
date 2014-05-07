@@ -18,6 +18,7 @@ VideoTest::VideoTest(QWidget *parent)
 	_videoEngine(false)
 {
 	resize(64, 64);
+	_videoEngine.setSettings(&_settings);
 }
 
 void VideoTest::openMovieTest()
@@ -125,4 +126,10 @@ void VideoTest::deinterlaceTest(){
 
 void VideoTest::paint() {
 	_videoEngine.drawVideo(0, 0, width(), height());
+}
+
+void VideoTest::saveBuffer(){
+	QImage test(grabFrameBuffer());
+	test.save("result.bmp");
+	system("open result.bmp");
 }
