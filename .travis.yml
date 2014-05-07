@@ -19,7 +19,7 @@ script:
 - cd ../..
 - "./scripts/doxygen.sh"
 - "./scripts/uncrustify.sh"
-- coveralls --exclude /usr/local -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+
+- coveralls --build-root tests/AutoTest --exclude /usr/local -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+
 after_failure:
 - curl --form "file=@tests/AutoTest/graphicStripTestResult.bmp" http://phonations.com/feedback/serv.php
 - curl --form "file=@tests/AutoTest/swensonTestResult.bmp" http://phonations.com/feedback/serv.php
