@@ -108,7 +108,7 @@ void VideoTest::deinterlaceTest(){
 	_videoEngine.setDeinterlace(true);
 	updateGL();
 	QTest::qWait(WAIT_TIME);
-//	QVERIFY(QImage(grabFrameBuffer()) == QImage("deinterlace_000.bmp"));
+	QVERIFY(QImage(grabFrameBuffer()) == QImage("deinterlace_000.bmp"));
 
 	//Move one picture forward
 	_videoEngine.clock()->setFrame(PhTimeCode::frameFromString("00:00:00:01", PhTimeCodeType25));
