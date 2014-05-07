@@ -16,7 +16,7 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 	_videoFrame(NULL),
 	_pSwsCtx(NULL),
 	_rgb(NULL),
-	_currentFrame(-1),
+	_currentFrame(PHFRAMEMIN),
 	_useAudio(useAudio),
 	_audioStream(NULL),
 	_audioFrame(NULL)
@@ -31,6 +31,12 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 bool PhVideoEngine::ready()
 {
 	return (_pFormatContext && _videoStream && _videoFrame);
+}
+
+void PhVideoEngine::setDeinterlace(bool deinterlace)
+{
+	_deinterlace = deinterlace;
+	_currentFrame = PHFRAMEMIN;
 }
 
 bool PhVideoEngine::open(QString fileName)
@@ -120,7 +126,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	PHDEBUG << "length:" << this->length();
 	PHDEBUG << "fps:" << this->framePerSecond();
-	_currentFrame = -1;
+	_currentFrame = PHFRAMEMIN;
 	_clock.setFrame(0);
 
 	if(_audioStream) {
