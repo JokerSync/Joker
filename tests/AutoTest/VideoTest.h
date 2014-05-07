@@ -21,6 +21,8 @@ private slots:
 
 	void openMovieTest();
 	void goToTest();
+	void playTest();
+	void deinterlaceTest();
 private:
 	void paint();
 	PhVideoEngine _videoEngine;
