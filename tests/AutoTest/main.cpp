@@ -29,7 +29,9 @@ int main(int argc, char *argv[])
 
 	int result = 0;
 
-	for(int i = 1; i < argc; i++) {
+	QStringList testArgList;
+
+	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "tc") == 0)
 			testTC = true;
 		else if(strcmp(argv[i], "settings") == 0)
@@ -44,51 +46,53 @@ int main(int argc, char *argv[])
 			testGraphicStrip = true;
 		else if(strcasecmp(argv[i], "graphictext") == 0)
 			testGraphicText = true;
+		else
+			testArgList.append(argv[i]);
 	}
 
 	if(testTC) {
 		// Testing PhTimeCode
 		TimeCodeTest tcTest;
-		result += QTest::qExec(&tcTest);
+		result += QTest::qExec(&tcTest, testArgList);
 	}
 
 	if(testSettings) {
 		// Testing PhSettings
 		SettingsTest settingsTest;
-		result += QTest::qExec(&settingsTest);
+		result += QTest::qExec(&settingsTest, testArgList);
 	}
 
 	if(testDoc) {
 		// Testing PhStripDoc
 		StripDocTest docTest;
-		result += QTest::qExec(&docTest);
+		result += QTest::qExec(&docTest, testArgList);
 	}
 
 	if(testSony) {
 		// Testing PhSonyController
 		SonyControllerTest sonyTest;
-		result += QTest::qExec(&sonyTest);
+		result += QTest::qExec(&sonyTest, testArgList);
 	}
 
 	if(testUi) {
 		// Testing PhTimeCodeEdit
 		TimeCodeEditTest tcEditTest;
-		result += QTest::qExec(&tcEditTest);
+		result += QTest::qExec(&tcEditTest, testArgList);
 
 		LockableSpinBoxTest spinBoxTest;
-		result += QTest::qExec(&spinBoxTest);
+		result += QTest::qExec(&spinBoxTest, testArgList);
 
 		WindowTest windowTest;
-		result += QTest::qExec(&windowTest);
+		result += QTest::qExec(&windowTest, testArgList);
 	}
 
 	if(testGraphicStrip) {
 		GraphicStripTest viewTest;
-		result += QTest::qExec(&viewTest);
+		result += QTest::qExec(&viewTest, testArgList);
 	}
 	if(testGraphicText) {
 		GraphicTextTest viewTest;
-		result += QTest::qExec(&viewTest);
+		result += QTest::qExec(&viewTest, testArgList);
 	}
 
 	QThread::msleep(500);
