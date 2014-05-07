@@ -35,6 +35,7 @@ SOURCES += \
     ../../libs/PhGraphic/PhGraphicArrow.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/fonts/Arial.ttf) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/fonts/HelveticaCYPlain.ttf) $${RESOURCES_PATH} $${CS}
 
 # Windows specific
 win32 {

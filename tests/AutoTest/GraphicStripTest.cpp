@@ -11,10 +11,9 @@
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhGraphicStrip/PhGraphicStripView.h"
 
-GraphicStripTest::GraphicStripTest(bool travis, QObject *parent) :
+GraphicStripTest::GraphicStripTest(QObject *parent) :
 	QObject(parent)
 {
-	_travis = travis;
 }
 
 void GraphicStripTest::testStripDocObject()
@@ -46,11 +45,12 @@ void GraphicStripTest::testStripDocObject()
 
 	view.strip()->draw(0, 0, 981, 319);
 	QImage impr(view.grabFrameBuffer());
-	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test1.bmp");
+	impr.save("graphicStripTestResult.bmp");
+	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTest.bmp");
 	if(view.windowHandle()->devicePixelRatio() == 2)
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/test2.bmp");
-	if(_travis)
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/testTravis.bmp");
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripRetinaTest.bmp");
+	if(QString(qgetenv("TRAVIS")) == "true")
+		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTravisTest.bmp");
 
 	QVERIFY(impr == QImage(expectedFile));
 

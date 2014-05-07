@@ -26,7 +26,7 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	ui->_videoView->setEngine(&_videoEngine);
 	_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
 
-	connect(_videoEngine.clock(), SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame,PhTimeCodeType)));
+	connect(_videoEngine.clock(), SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 }
 
 VideoTestWindow::~VideoTestWindow()
