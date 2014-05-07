@@ -33,6 +33,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionSave"/>
     <addaction name="actionChange_font"/>
    </widget>
    <addaction name="menuFile"/>
@@ -40,6 +41,14 @@
   <action name="actionChange_font">
    <property name="text">
     <string>Change font...</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>
