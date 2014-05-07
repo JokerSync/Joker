@@ -36,7 +36,8 @@ HEADERS += \
     WindowTest.h \
 	AutoTestWindow.h \
 	GraphicStripTest.h \
-    GraphicTextTest.h
+    GraphicTextTest.h \
+    GraphicStripTestSettings.h
 
 SOURCES += main.cpp \
     StripDocTest.cpp \
