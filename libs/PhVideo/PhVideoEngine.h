@@ -151,9 +151,7 @@ public:
 	 * @brief Set the video deinterlace mode
 	 * @param deinterlace True if deinterlace false otherwise
 	 */
-	void setDeinterlace(bool deinterlace) {
-		_deinterlace = deinterlace;
-	}
+	void setDeinterlace(bool deinterlace);
 
 	/**
 	 * @brief draw the video depending on the parameters
