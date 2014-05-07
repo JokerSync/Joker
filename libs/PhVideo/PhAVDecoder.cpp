@@ -201,7 +201,14 @@ float PhAVDecoder::framePerSecond()
 	if(_videoStream) {
 		fps = _videoStream->avg_frame_rate.num;
 		fps /= _videoStream->avg_frame_rate.den;
+		// See http://stackoverflow.com/a/570694/2307070
+		// for NaN handling
+		if(fps != fps) {
+			fps = _videoStream->time_base.den;
+			fps /= _videoStream->time_base.num;
+		}
 	}
+
 	return fps;
 }
 
@@ -218,6 +225,7 @@ void PhAVDecoder::setDeinterlace(bool deintrelace)
 		_deinterlace = deintrelace;
 		_bufferMutex.lock();
 		clearBuffer();
+		_nextDecodingFrame = _oldFrame;
 		_bufferMutex.unlock();
 	}
 }
@@ -323,18 +331,18 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 						pixFormat = _videoStream->codec->pix_fmt;
 						break;
 					}
-					SwsContext * swsContext = sws_getContext(_videoFrame->width, _videoStream->codec->height,
-					                                         pixFormat, _videoStream->codec->width, frameHeight,
-					                                         AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
+					SwsContext * swsContext = sws_getContext(_videoFrame->width, _videoFrame->height, pixFormat,
+															 _videoFrame->width, frameHeight, AV_PIX_FMT_RGB24,
+															 SWS_POINT, NULL, NULL, NULL);
 
 					uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
 					int linesize = _videoFrame->width * 3;
 					if (0 <= sws_scale(swsContext, (const uint8_t * const *) _videoFrame->data,
-					                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
+									   _videoFrame->linesize, 0, _videoFrame->height, &rgb,
 					                   &linesize)) {
 						_bufferMutex.lock();
 						_bufferMap[frame] = rgb;
-						//PHDBG(25) << "Decoding" <<  PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << packet.dts << _bufferFreeSpace.available();
+						//PHDBG(25) << "Decoding" << PhTimeCode::stringFromFrame(frame, PhTimeCodeType25) << packet.dts << _bufferFreeSpace.available();
 						_bufferMutex.unlock();
 						_lastDecodedFrame = frame;
 						//PHDEBUG << "Add" << frame;
@@ -344,9 +352,9 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 			else if(_audioStream && (packet.stream_index == _audioStream->index)) {
 				int ok = 0;
 				avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
-//				if(ok) {
-//					PHDEBUG << "audio:" << _audioFrame->nb_samples;
-//				}
+				//				if(ok) {
+				//					PHDEBUG << "audio:" << _audioFrame->nb_samples;
+				//				}
 			}
 			break;
 		case AVERROR_EOF:
@@ -354,14 +362,14 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 			QThread::msleep(10);
 		case AVERROR_INVALIDDATA:
 		default:
-			{
-				char errorStr[256];
-				av_strerror(error, errorStr, 256);
-				PHDEBUG << "error on frame" << frame << ":" << errorStr;
-				// In order to get out of the while in case of error
-				frameFinished = -1;
-				break;
-			}
+		{
+			char errorStr[256];
+			av_strerror(error, errorStr, 256);
+			PHDEBUG << "error on frame" << frame << ":" << errorStr;
+			// In order to get out of the while in case of error
+			frameFinished = -1;
+			break;
+		}
 		}
 		//Avoid memory leak
 		av_free_packet(&packet);
