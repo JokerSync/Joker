@@ -7,7 +7,7 @@
 QT       += core
 
 TARGET = AutoTest
-CONFIG   += console static
+CONFIG   += console static debug
 CONFIG   -= app_bundle
 
 TEMPLATE = app
