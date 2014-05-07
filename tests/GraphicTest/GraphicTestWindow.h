@@ -21,6 +21,8 @@ public:
 private slots:
 	void on_actionChange_font_triggered();
 
+	void on_actionSave_triggered();
+
 private:
 	Ui::GraphicTestWindow *ui;
 	GraphicTestSettings *_settings;
