@@ -10,6 +10,7 @@
 
 #include "PhGraphic/PhGraphicView.h"
 #include "PhVideo/PhVideoEngine.h"
+#include "VideoTestSettings.h"
 
 class VideoTest : public PhGraphicView
 {
@@ -26,6 +27,10 @@ private slots:
 private:
 	void paint();
 	PhVideoEngine _videoEngine;
+	VideoTestSettings _settings;
+
+#warning /// @todo move to a generic graphicTest implementation
+	void saveBuffer();
 };
 
 #endif // VIDEOTEST_H
