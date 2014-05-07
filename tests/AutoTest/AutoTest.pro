@@ -24,6 +24,7 @@ include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
+include(../../libs/PhVideo/PhVideo.pri)
 
 HEADERS += \
     StripDocTest.h \
@@ -36,7 +37,8 @@ HEADERS += \
     WindowTest.h \
 	AutoTestWindow.h \
 	GraphicStripTest.h \
-    GraphicTextTest.h
+    GraphicTextTest.h \
+    VideoTest.h
 
 SOURCES += main.cpp \
     StripDocTest.cpp \
@@ -48,12 +50,14 @@ SOURCES += main.cpp \
     WindowTest.cpp \
 	AutoTestWindow.cpp \
 	GraphicStripTest.cpp \
-    GraphicTextTest.cpp
+    GraphicTextTest.cpp \
+    VideoTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/video/*) . $${CS}
 
 DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 

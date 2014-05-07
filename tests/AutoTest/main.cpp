@@ -11,6 +11,7 @@
 #include "WindowTest.h"
 #include "GraphicStripTest.h"
 #include "GraphicTextTest.h"
+#include "VideoTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +27,7 @@ int main(int argc, char *argv[])
 	bool testUi = testAll;
 	bool testGraphicStrip = testAll;
 	bool testGraphicText = testAll;
+	bool testVideo = testAll;
 
 	int result = 0;
 
@@ -44,6 +46,8 @@ int main(int argc, char *argv[])
 			testGraphicStrip = true;
 		else if(strcasecmp(argv[i], "graphictext") == 0)
 			testGraphicText = true;
+		else if(strcasecmp(argv[i], "video") == 0)
+			testVideo = true;
 	}
 
 	if(testTC) {
@@ -89,6 +93,10 @@ int main(int argc, char *argv[])
 	if(testGraphicText) {
 		GraphicTextTest viewTest;
 		result += QTest::qExec(&viewTest);
+	}
+	if(testVideo) {
+		VideoTest videoTest;
+		result += QTest::qExec(&videoTest);
 	}
 
 	QThread::msleep(500);
