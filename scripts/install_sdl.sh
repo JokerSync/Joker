@@ -5,7 +5,6 @@ echo "Installing SDL libraries"
 if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
 
-brew install wget
 #brew install sdl2 sdl2_image sdl2_ttf 
 
 wget --no-check-certificate http://libsdl.org/release/SDL2-2.0.1.dmg
