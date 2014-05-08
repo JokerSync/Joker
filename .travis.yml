@@ -1,13 +1,13 @@
 language: objective-c
 env:
-- JOB="UNCRUSTIFY"
-- JOB="DOXYGEN"
-- JOB="BUILD_AUTOTEST"
+- JOB=UNCRUSTIFY
+- JOB=DOXYGEN
+#- JOB="BUILD_AUTOTEST"
 #- JOB="BUILD_JOKER"
 #- JOB="BUILD_ALL"
 install:
-- if [[ "$JOB" == "UNCRUSTIFY" ]]; then brew install uncrustify; fi
-- if [[ "$JOB" == "DOXYGEN" ]]; then brew install doxygen; fi
+- if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
+- if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
 - if [[ "$JOB" == "BUILD_*" ]]; then scripts/install_sdl.sh; fi
 - if [[ "$JOB" == "BUILD_*" ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == "BUILD_*" ]]; then brew install qt5 ffmpeg libav portaudio; fi
@@ -17,8 +17,8 @@ install:
 #- eval "$(pyenv init -)"
 
 script:
-- if [[ "$JOB" == "UNCRUSTIFY" ]]; then ./scripts/uncrustify.sh; fi
-- if [[ "$JOB" == "DOXYGEN" ]]; then ./scripts/doxygen.sh; fi
+- if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
+- if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
 #- qmake all.pro
 - if [[ "$JOB" == "BUILD_AUTOTEST" ]]; then qmake tests/AutoTest/AutoTest.pro; fi
 - if [[ "$JOB" == "BUILD_*" ]]; then make; fi
