@@ -7,7 +7,7 @@
 QT       += core
 
 TARGET = AutoTest
-CONFIG   += console static
+CONFIG   += console static debug
 CONFIG   -= app_bundle
 
 TEMPLATE = app
@@ -37,6 +37,7 @@ HEADERS += \
     WindowTest.h \
 	AutoTestWindow.h \
 	GraphicStripTest.h \
+	GraphicStripTestSettings.h \
     GraphicTextTest.h \
     VideoTest.h \
     VideoTestSettings.h

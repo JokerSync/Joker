@@ -27,3 +27,11 @@ void GraphicTestWindow::on_actionChange_font_triggered()
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 	}
 }
+
+void GraphicTestWindow::on_actionSave_triggered()
+{
+	QString fileName = QFileDialog::getSaveFileName(this, "Save...");
+	QImage image = ui->graphicView->grabFrameBuffer();
+	if(!image.save(fileName))
+		QMessageBox::critical(this, "Error", QString("Unable to save %1").arg(fileName));
+}
