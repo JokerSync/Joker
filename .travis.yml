@@ -1,16 +1,18 @@
 language: objective-c
 env:
-- JOB="UNCRUSTIFY"
-- JOB="DOXYGEN"
-#- JOB="BUILD_AUTOTEST"
-#- JOB="BUILD_JOKER"
-#- JOB="BUILD_ALL"
+  global: PATH=$PATH:/usr/local/opt/qt5/bin
+  matrix:
+  - JOB="UNCRUSTIFY"
+  - JOB="DOXYGEN"
+  #- JOB="BUILD_AUTOTEST"
+  #- JOB="BUILD_JOKER"
+  #- JOB="BUILD_ALL"
 install:
 - if [[ "$JOB" == "UNCRUSTIFY" ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == "DOXYGEN" ]]; then brew install doxygen; fi
-#- scripts/install_sdl.sh
-#- scripts/bootstrap.sh
-#- scripts/install_libltc.sh
+- if [[ "$JOB" == "BUILD_*" ]]; then scripts/install_sdl.sh; fi
+- if [[ "$JOB" == "BUILD_*" ]]; then scripts/install_ltc.sh; fi
+- if [[ "$JOB" == "BUILD_*" ]]; then brew install qt5 ffmpeg libav portaudio; fi
 #- export PATH=$PATH:/usr/local/opt/qt5/bin
 #- export JOKER_RELEASE_PATH=$HOME
 #- export TESTS_RELEASE_PATH=$HOME
@@ -20,9 +22,9 @@ script:
 - if [[ "$JOB" == "UNCRUSTIFY" ]]; then ./scripts/uncrustify.sh; fi
 - if [[ "$JOB" == "DOXYGEN" ]]; then ./scripts/doxygen.sh; fi
 #- qmake all.pro
-#- qmake tests/AutoTest/AutoTest.pro
-#- make
-#- ./AutoTest
+- if [[ "$JOB" == "BUILD_AUTOTEST" ]]; then qmake tests/AutoTest/AutoTest.pro; fi
+- if [[ "$JOB" == "BUILD_*" ]]; then make; fi
+- if [[ "$JOB" == "BUILD_AUTOTEST" ]]; then ./AutoTest; fi
 #- coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose
 #after_failure:
 #- curl --form "file=@tests/AutoTest/graphicStripTestResult.bmp" http://phonations.com/feedback/serv.php
