@@ -6,55 +6,29 @@
 #ifndef GRAPHICSTRIPTESTSETTINGS_H
 #define GRAPHICSTRIPTESTSETTINGS_H
 
-#include "PhTools/PhGenericSettings.h"
+#include <QDir>
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
-#include "PhCommonUI/PhDocumentWindowSettings.h"
 
-class GraphicStripTestSettings : PhGenericSettings,
-	public PhGraphicStripSettings,
-	public PhDocumentWindowSettings
-
+class GraphicStripTestSettings : public PhGraphicStripSettings
 {
 public:
-	PH_SETTING_INT(setScreenDelay, screenDelay)
-
 	// PhGraphicSettings
-	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
-	PH_SETTING_BOOL(setResetInfo, resetInfo)
+	int screenDelay() { return 0; }
+	bool displayInfo() {return false;}
+	bool resetInfo() {return false;}
 
 	// PhGraphicStripSettings :
-	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
-	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 80)
-	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
-	PH_SETTING_STRING(setTextFontFile, textFontFile)
-	PH_SETTING_INT2(setTextBoldness, textBoldness, 1)
-	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
-	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
-	PH_SETTING_BOOL(setInvertColor, invertColor)
-	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
-	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
-	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 48000)
-
-	// PhDocumentWindowSettings
-	PH_SETTING_STRING(setCurrentDocument, currentDocument)
-	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
-	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
-	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
-	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
-
-	// PhWindowSettings
-	PH_SETTING_BOOL(setFullScreen, fullScreen)
-	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
-
-	// Other settings :
-	PH_SETTING_BOOL(setGenerate, generate)
-	PH_SETTING_INT2(setPeopleNumber, peopleNumber, 1)
-	PH_SETTING_INT2(setLoopNumber, loopNumber, 1)
-	PH_SETTING_INT2(setTextNumber, textNumber, 10)
-	PH_SETTING_INT2(setSpaceBetweenText, spaceBetweenText, 24000)
-	PH_SETTING_INT2(setTrackNumber, trackNumber, 4)
-	PH_SETTING_STRING2(setTextContent, textContent, "Per hoc minui studium suum existimans Paulus.")
-	PH_SETTING_INT2(setStartTime, startTime, 0)
+	float stripHeight() { return 1;}
+	int horizontalTimePerPixel() { return 80;}
+	int verticalTimePerPixel() { return 1000;}
+	QString textFontFile() { return QCoreApplication::applicationDirPath() + "/SWENSON.TTF";}
+	int textBoldness() { return 1;}
+	bool stripTestMode() { return false;}
+	bool displayNextText() { return true;}
+	bool invertColor() { return false;}
+	bool displayRuler() { return false;}
+	int rulerTimeIn() { return 0;}
+	int timeBetweenRuler() { return 48000;}
 };
 
 #endif // GRAPHICSTRIPTESTSETTINGS_H
