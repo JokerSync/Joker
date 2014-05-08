@@ -3,8 +3,8 @@ env:
 - JOB=UNCRUSTIFY
 - JOB=DOXYGEN
 - JOB=BUILD_AUTOTEST
-#- JOB=BUILD_JOKER
-#- JOB=BUILD_ALL
+- JOB=BUILD_JOKER
+- JOB=BUILD_ALL
 install:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
@@ -14,14 +14,15 @@ install:
 - if [[ "$JOB" == BUILD_* ]]; then export PATH=$PATH:/usr/local/opt/qt5/bin; fi
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
-#- export JOKER_RELEASE_PATH=$HOME
-#- export TESTS_RELEASE_PATH=$HOME
+- export JOKER_RELEASE_PATH=$HOME
+- export TESTS_RELEASE_PATH=$HOME
 
 script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
 - if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
-#- qmake all.pro
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then qmake tests/AutoTest/AutoTest.pro; fi
+- if [[ "$JOB" == BUILD_JOKER ]]; then qmake app/Joker/Joker.pro; fi
+- if [[ "$JOB" == BUILD_ALL ]]; then qmake all.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make; fi
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./AutoTest; fi
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
