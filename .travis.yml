@@ -12,8 +12,8 @@ install:
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
 - if [[ "$JOB" == BUILD_* ]]; then export PATH=$PATH:/usr/local/opt/qt5/bin; fi
-#- if [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
-#- if [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
 #- export JOKER_RELEASE_PATH=$HOME
 #- export TESTS_RELEASE_PATH=$HOME
 
@@ -24,7 +24,7 @@ script:
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then qmake tests/AutoTest/AutoTest.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make; fi
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./AutoTest; fi
-#- if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
 #after_failure:
 #- curl --form "file=@tests/AutoTest/graphicStripTestResult.bmp" http://phonations.com/feedback/serv.php
 #- curl --form "file=@tests/AutoTest/swensonTestResult.bmp" http://phonations.com/feedback/serv.php
