@@ -45,12 +45,7 @@ void PhGraphicStrip::setSettings(PhGraphicStripSettings *settings)
 
 bool PhGraphicStrip::setFontFile(QString fontFile)
 {
-	if(_textFont.setFontFile(fontFile)) {
-		if(_settings)
-			_settings->setTextFontFile(fontFile);
-		return true;
-	}
-	return false;
+	return _textFont.setFontFile(fontFile);
 }
 
 bool PhGraphicStrip::init()
