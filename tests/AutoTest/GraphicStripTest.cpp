@@ -1,37 +1,34 @@
 /**
- * Copyright (C) 2012-2014 Phonations
- * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
- */
+* Copyright (C) 2012-2014 Phonations
+* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+*/
 
 #include <QTest>
-#include <QDate>
-
-#include "PhGraphic/PhGraphicView.h"
-#include "PhGraphicStrip/PhGraphicStrip.h"
-#include "PhGraphicStrip/PhGraphicStripView.h"
+#include <QWindow>
 
 #include "GraphicStripTest.h"
-#include "GraphicStripTestSettings.h"
 
-GraphicStripTest::GraphicStripTest(QObject *parent) :
-	QObject(parent)
+GraphicStripTest::GraphicStripTest(QWidget *parent) :
+	PhGraphicView(parent)
 {
+	_strip.setSettings(&_settings);
+}
+
+bool GraphicStripTest::init()
+{
+	return _strip.init();
+}
+
+void GraphicStripTest::paint()
+{
+	_strip.draw(0, 0, this->width(), this->height());
 }
 
 void GraphicStripTest::testStripDocObject()
 {
-	PhGraphicStripView view;
-	GraphicStripTestSettings settings;
-	settings.setStripHeight(1);
-	settings.setTextFontFile(QCoreApplication::applicationDirPath() + "/SWENSON.TTF");
-	view.setStripSettings(&settings);
+	this->setGeometry(0, 0, 981, 319);
 
-	view.setMinimumSize(QSize(981, 319));
-	view.setMaximumSize(QSize(981, 319));
-	view.show();
-
-
-	PhStripDoc * doc = view.strip()->doc();
+	PhStripDoc * doc = _strip.doc();
 	doc->reset();
 	doc->addPeople(new PhPeople("A people"));
 	doc->addPeople(new PhPeople("A second people", "red"));
@@ -42,18 +39,19 @@ void GraphicStripTest::testStripDocObject()
 	doc->addObject(new PhStripLoop(3, 22000));
 	doc->addObject(new PhStripText(10000, doc->peoples().last(), 15000, 2, "Hi !"));
 	doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 2));
+	doc->changed();
 
+	updateGL();
 
+	QTest::qWait(1000);
 
-	view.strip()->draw(0, 0, 981, 319);
-	QImage impr(view.grabFrameBuffer());
+	QImage impr(grabFrameBuffer());
 	impr.save("graphicStripTestResult.bmp");
 	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTest.bmp");
-	if(view.windowHandle()->devicePixelRatio() == 2)
+	if(this->windowHandle()->devicePixelRatio() == 2)
 		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripRetinaTest.bmp");
 	if(QString(qgetenv("TRAVIS")) == "true")
 		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTravisTest.bmp");
 
-	QVERIFY(impr == QImage(expectedFile));
-
+	QVERIFY2(impr == QImage(expectedFile), PHNQ(expectedFile));
 }

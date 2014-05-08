@@ -33,11 +33,6 @@ public:
 	 */
 	virtual int verticalTimePerPixel() = 0;
 	/**
-	 * @brief Set the strip text font file
-	 * @param value A font file path
-	 */
-	virtual void setTextFontFile(QString value) = 0;
-	/**
 	 * @brief Get the strip text font file
 	 * @return A font file path
 	 */
