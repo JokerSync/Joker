@@ -1,19 +1,17 @@
 language: objective-c
 env:
-  global: PATH=$PATH:/usr/local/opt/qt5/bin
-  matrix:
-  - JOB="UNCRUSTIFY"
-  - JOB="DOXYGEN"
-  - JOB="BUILD_AUTOTEST"
-  #- JOB="BUILD_JOKER"
-  #- JOB="BUILD_ALL"
+- JOB="UNCRUSTIFY"
+- JOB="DOXYGEN"
+- JOB="BUILD_AUTOTEST"
+#- JOB="BUILD_JOKER"
+#- JOB="BUILD_ALL"
 install:
 - if [[ "$JOB" == "UNCRUSTIFY" ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == "DOXYGEN" ]]; then brew install doxygen; fi
 - if [[ "$JOB" == "BUILD_*" ]]; then scripts/install_sdl.sh; fi
 - if [[ "$JOB" == "BUILD_*" ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == "BUILD_*" ]]; then brew install qt5 ffmpeg libav portaudio; fi
-#- export PATH=$PATH:/usr/local/opt/qt5/bin
+- if [[ "$JOB" == "BUILD_*" ]]; then export PATH=$PATH:/usr/local/opt/qt5/bin; fi
 #- export JOKER_RELEASE_PATH=$HOME
 #- export TESTS_RELEASE_PATH=$HOME
 #- eval "$(pyenv init -)"
