@@ -16,7 +16,7 @@ script:
 - qmake AutoTest.pro
 - make
 - ./AutoTest
-- coveralls -r tests/AutoTest -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose
+- coveralls -r ../.. -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose
 - cd ../..
 - "./scripts/doxygen.sh"
 - "./scripts/uncrustify.sh"
