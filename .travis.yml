@@ -2,28 +2,29 @@ language: objective-c
 env:
 - JOB=UNCRUSTIFY
 - JOB=DOXYGEN
-#- JOB="BUILD_AUTOTEST"
-#- JOB="BUILD_JOKER"
-#- JOB="BUILD_ALL"
+- JOB=BUILD_AUTOTEST
+#- JOB=BUILD_JOKER
+#- JOB=BUILD_ALL
 install:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
-- if [[ "$JOB" == "BUILD_*" ]]; then scripts/install_sdl.sh; fi
-- if [[ "$JOB" == "BUILD_*" ]]; then scripts/install_ltc.sh; fi
-- if [[ "$JOB" == "BUILD_*" ]]; then brew install qt5 ffmpeg libav portaudio; fi
-- if [[ "$JOB" == "BUILD_*" ]]; then export PATH=$PATH:/usr/local/opt/qt5/bin; fi
+- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
+- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
+- if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
+- if [[ "$JOB" == BUILD_* ]]; then export PATH=$PATH:/usr/local/opt/qt5/bin; fi
+#- if [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
+#- if [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
 #- export JOKER_RELEASE_PATH=$HOME
 #- export TESTS_RELEASE_PATH=$HOME
-#- eval "$(pyenv init -)"
 
 script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
 - if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
 #- qmake all.pro
-- if [[ "$JOB" == "BUILD_AUTOTEST" ]]; then qmake tests/AutoTest/AutoTest.pro; fi
-- if [[ "$JOB" == "BUILD_*" ]]; then make; fi
-- if [[ "$JOB" == "BUILD_AUTOTEST" ]]; then ./AutoTest; fi
-#- coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then qmake tests/AutoTest/AutoTest.pro; fi
+- if [[ "$JOB" == BUILD_* ]]; then make; fi
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./AutoTest; fi
+#- if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
 #after_failure:
 #- curl --form "file=@tests/AutoTest/graphicStripTestResult.bmp" http://phonations.com/feedback/serv.php
 #- curl --form "file=@tests/AutoTest/swensonTestResult.bmp" http://phonations.com/feedback/serv.php
