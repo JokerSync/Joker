@@ -18,7 +18,7 @@ install:
 
 script:
 - if [[ "$JOB" == "UNCRUSTIFY" ]]; then ./scripts/uncrustify.sh; fi
-- if [[ "$JOB" == "DOXYGEN" ]]; then ./script/doxygen.sh; fi
+- if [[ "$JOB" == "DOXYGEN" ]]; then ./scripts/doxygen.sh; fi
 #- qmake all.pro
 #- qmake tests/AutoTest/AutoTest.pro
 #- make
