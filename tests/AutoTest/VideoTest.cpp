@@ -55,7 +55,7 @@ void VideoTest::goToTest() {
 	_videoEngine.close();
 }
 
-void VideoTest::playTest(){
+void VideoTest::playTest() {
 	QVERIFY(_videoEngine.open("interlace_%03d.bmp") );
 
 	updateGL();
@@ -71,8 +71,7 @@ void VideoTest::playTest(){
 
 
 	// Play 1 second
-	for(int i = 0; i < 25; i++)
-	{
+	for(int i = 0; i < 25; i++) {
 		_videoEngine.clock()->tick(25);
 		updateGL();
 		QTest::qWait(WAIT_TIME);
@@ -87,8 +86,7 @@ void VideoTest::playTest(){
 	QVERIFY(QImage(grabFrameBuffer()) == QImage("interlace_025.bmp"));
 
 	// Play 1 second
-	for(int i = 0; i < 25; i++)
-	{
+	for(int i = 0; i < 25; i++) {
 		_videoEngine.clock()->tick(25);
 		updateGL();
 		QTest::qWait(WAIT_TIME);
@@ -98,7 +96,7 @@ void VideoTest::playTest(){
 	_videoEngine.close();
 }
 
-void VideoTest::deinterlaceTest(){
+void VideoTest::deinterlaceTest() {
 	//Open the video file in interlaced mode
 	_videoEngine.open("interlace_%03d.bmp");
 	updateGL();
@@ -128,7 +126,7 @@ void VideoTest::paint() {
 	_videoEngine.drawVideo(0, 0, width(), height());
 }
 
-void VideoTest::saveBuffer(){
+void VideoTest::saveBuffer() {
 	QImage test(grabFrameBuffer());
 	test.save("result.bmp");
 	system("open result.bmp");
