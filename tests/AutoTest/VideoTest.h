@@ -21,9 +21,11 @@ public:
 private slots:
 
 	void openMovieTest();
-	void goToTest();
+	void goToTest01();
+	void goToTest02();
 	void playTest();
 	void deinterlaceTest();
+	void goToTest03();
 private:
 	void paint();
 	PhVideoEngine _videoEngine;
@@ -31,6 +33,8 @@ private:
 
 #warning /// @todo move to a generic graphicTest implementation
 	void saveBuffer();
+#warning /// @todo move to a generic graphicTest implementation
+	void findMatch(QImage source);
 };
 
 #endif // VIDEOTEST_H

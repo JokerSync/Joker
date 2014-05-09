@@ -332,13 +332,13 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 						break;
 					}
 					SwsContext * swsContext = sws_getContext(_videoFrame->width, _videoFrame->height, pixFormat,
-															 _videoFrame->width, frameHeight, AV_PIX_FMT_RGB24,
-															 SWS_POINT, NULL, NULL, NULL);
+					                                         _videoFrame->width, frameHeight, AV_PIX_FMT_RGB24,
+					                                         SWS_POINT, NULL, NULL, NULL);
 
 					uint8_t * rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
 					int linesize = _videoFrame->width * 3;
 					if (0 <= sws_scale(swsContext, (const uint8_t * const *) _videoFrame->data,
-									   _videoFrame->linesize, 0, _videoFrame->height, &rgb,
+					                   _videoFrame->linesize, 0, _videoFrame->height, &rgb,
 					                   &linesize)) {
 						_bufferMutex.lock();
 						_bufferMap[frame] = rgb;
@@ -362,14 +362,14 @@ void PhAVDecoder::decodeFrame(PhFrame frame)
 			QThread::msleep(10);
 		case AVERROR_INVALIDDATA:
 		default:
-		{
-			char errorStr[256];
-			av_strerror(error, errorStr, 256);
-			PHDEBUG << "error on frame" << frame << ":" << errorStr;
-			// In order to get out of the while in case of error
-			frameFinished = -1;
-			break;
-		}
+			{
+				char errorStr[256];
+				av_strerror(error, errorStr, 256);
+				PHDEBUG << "error on frame" << frame << ":" << errorStr;
+				// In order to get out of the while in case of error
+				frameFinished = -1;
+				break;
+			}
 		}
 		//Avoid memory leak
 		av_free_packet(&packet);
@@ -390,7 +390,7 @@ void PhAVDecoder::onRateChanged(PhRate rate)
 void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType)
 {
 	_bufferMutex.lock();
-	//PHDBG(25) << "Want" << frame << _direction << "Have ("<<  _bufferMap.count() <<":" << _bufferFreeSpace.available() << "):" << _bufferMap.keys();
+//	PHDBG(25) << "Want" << frame << _direction << "Have ("<<  _bufferMap.count() <<":" << _bufferFreeSpace.available() << "):" << _bufferMap.keys();
 	if(!_bufferMap.contains(frame))
 		_nextDecodingFrame = frame;
 	if(_direction >= 0) {
@@ -406,7 +406,7 @@ void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType)
 			if(key < min)
 				min = key;
 		}
-		if(min > frame + _bufferSize / 2) {
+		if(min > frame) {
 			clearBuffer();
 			_nextDecodingFrame = frame;
 		}
@@ -423,15 +423,13 @@ void PhAVDecoder::onFrameChanged(PhFrame frame, PhTimeCodeType)
 			if(key > max)
 				max = key;
 		}
-		if(max < frame - _bufferSize / 2) {
+		if(max < frame) {
 			clearBuffer();
 			_nextDecodingFrame = frame;
 		}
-		// We just change the direction
-		//_nextDecodingFrame = frame;
 	}
 	_oldFrame = frame;
-
+//	PHDEBUG << "Should decode:" << _nextDecodingFrame << "Have ("<<  _bufferMap.count() <<":" << _bufferFreeSpace.available() << "):" << _bufferMap.keys();
 	_bufferMutex.unlock();
 }
 
