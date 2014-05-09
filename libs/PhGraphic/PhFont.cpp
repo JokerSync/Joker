@@ -37,7 +37,7 @@ QString PhFont::getFontFile()
 int PhFont::computeMaxFontSize(QString file)
 {
 	int size = 25;
-	int fontHeight = 128;
+	int fontHeight = 120;
 	int low = 0, high = 1000;
 	while (low < high) {
 		size = (low + high) / 2;
@@ -89,6 +89,7 @@ bool PhFont::init(QString fontFile)
 	// Space between glyph
 	int space = 128;
 	_glyphHeight = 0;
+	int min = 0, max = 0;
 
 	//set the boldness
 	PHDEBUG << "Setting the font boldness to :" << _boldness;
@@ -100,6 +101,10 @@ bool PhFont::init(QString fontFile)
 				int minx, maxx, miny, maxy, advance;
 				TTF_GlyphMetrics(font, ch, &minx, &maxx, &miny, &maxy, &advance);
 				if(advance != 0) {
+					if(miny < min)
+						min = miny;
+					if(maxy > max)
+						max = maxy;
 					// First render the glyph to a surface
 					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
 					if (!glyphSurface)
@@ -108,7 +113,7 @@ bool PhFont::init(QString fontFile)
 					glyphRect.x = (ch % 16) * space;
 					glyphRect.y = (ch / 16) * space;
 					glyphRect.w = glyphSurface->w;
-					glyphRect.h = glyphSurface->h;
+					glyphRect.h = glyphSurface->h - 4;
 					if(glyphRect.h > _glyphHeight)
 						_glyphHeight = glyphRect.h;
 					//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
@@ -127,6 +132,10 @@ bool PhFont::init(QString fontFile)
 				_glyphAdvance[ch] = 0;
 		}
 	}
+	PHDEBUG << fontFile.split("/").last();
+	PHDEBUG << max - min;
+	PHDEBUG << TTF_FontAscent(font) - TTF_FontDescent(font);
+	PHDEBUG << TTF_FontHeight(font);
 
 	glEnable( GL_TEXTURE_2D );
 	// Have OpenGL generate a texture object handle for us
