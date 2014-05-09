@@ -8,8 +8,8 @@ env:
   - JOB=UNCRUSTIFY
   - JOB=DOXYGEN
   - JOB=BUILD_AUTOTEST
-  - JOB=BUILD_RELEASE_JOKER
-  - JOB=BUILD_RELEASE_ALL
+#  - JOB=BUILD_RELEASE_JOKER
+#  - JOB=BUILD_RELEASE_ALL
 install:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
