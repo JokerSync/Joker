@@ -31,3 +31,4 @@ doxygen_error.log
 *.qm
 
 *.orig
+builds/

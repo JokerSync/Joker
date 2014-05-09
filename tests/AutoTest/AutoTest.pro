@@ -7,7 +7,7 @@
 QT       += core
 
 TARGET = AutoTest
-CONFIG   += console static
+CONFIG   += console static debug
 CONFIG   -= app_bundle
 
 TEMPLATE = app
@@ -39,7 +39,8 @@ HEADERS += \
 	GraphicStripTest.h \
     GraphicTextTest.h \
     VideoTest.h \
-    VideoTestSettings.h
+	VideoTestSettings.h \
+    GraphicStripTestSettings.h
 
 SOURCES += main.cpp \
     StripDocTest.cpp \
