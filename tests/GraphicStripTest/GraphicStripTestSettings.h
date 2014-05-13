@@ -1,6 +1,8 @@
 #ifndef GRAPHICSTRIPTESTSETTINGS_H
 #define GRAPHICSTRIPTESTSETTINGS_H
 
+#include <QDir>
+
 #include "PhTools/PhGenericSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
@@ -21,7 +23,7 @@ public:
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
 	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 80)
 	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
-	PH_SETTING_STRING(setTextFontFile, textFontFile)
+	PH_SETTING_STRING2(setTextFontFile, textFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 1)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)

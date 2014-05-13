@@ -74,10 +74,11 @@ private slots:
 
 	void on_actionChange_ruler_timestamp_triggered();
 
+	void onPaint(int width, int height);
 private:
 	Ui::GraphicStripTestWindow *ui;
 	GraphicStripTestSettings *_settings;
-	PhGraphicStrip *_strip;
+	PhGraphicStrip _strip;
 	PhStripDoc *_doc;
 	PhClock *_clock;
 	StripPropertiesDialog *dlg;

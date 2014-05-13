@@ -15,12 +15,11 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 	_settings(settings)
 {
 	ui->setupUi(this);
-	_strip = ui->stripView->strip();
 
-	ui->stripView->setStripSettings(_settings);
+	_strip.setSettings(_settings);
 
-	_doc = _strip->doc();
-	_clock = _strip->clock();
+	_doc = _strip.doc();
+	_clock = _strip.clock();
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 	ui->actionRuler->setChecked(_settings->displayRuler());
 
@@ -41,6 +40,9 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 		               _settings->trackNumber(),
 		               _settings->startTime());
 
+	_strip.init();
+	connect(ui->stripView, &PhGraphicView::beforePaint, _clock, &PhClock::tick);
+	connect(ui->stripView, &PhGraphicView::paint, this, &GraphicStripTestWindow::onPaint);
 }
 
 GraphicStripTestWindow::~GraphicStripTestWindow()
@@ -237,4 +239,15 @@ void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
 	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn() / PhTimeCode::timePerFrame(tcType), this);
 	if(dlg.exec())
 		_settings->setRulerTimeIn(dlg.frame() * PhTimeCode::timePerFrame(tcType));
+}
+
+void GraphicStripTestWindow::onPaint(int width, int height)
+{
+	int h = height;
+	if(_settings)
+		h = height * _settings->stripHeight();
+	_strip.draw(0, height - h, width, h);
+	foreach(QString info, _strip.infos()) {
+		ui->stripView->addInfo(info);
+	}
 }
