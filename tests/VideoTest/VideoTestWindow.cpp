@@ -13,7 +13,8 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	: PhDocumentWindow(settings),
 	ui(new Ui::VideoTestWindow),
 	_settings(settings),
-	_videoEngine(false)
+	_videoEngine(false),
+	_maxVideoRate(0)
 {
 	ui->setupUi(this);
 	_videoEngine.setSettings(settings);
@@ -24,9 +25,10 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	ui->actionDisplay_media_panel->setChecked(_settings->displayMediaPanel());
 	ui->actionDeinterlace_video->setChecked(_settings->deinterlaceVideo());
 
-	ui->_videoView->setEngine(&_videoEngine);
 	_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
 
+	connect(ui->_videoView, &PhGraphicView::paint, this, &VideoTestWindow::onPaint);
+	connect(ui->_videoView, &PhGraphicView::beforePaint, _videoEngine.clock(), &PhClock::tick);
 	connect(_videoEngine.clock(), SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
 }
 
@@ -205,4 +207,14 @@ void VideoTestWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 	_settings->setCurrentFrame(frame);
 	ui->statusBar->showMessage(PhTimeCode::stringFromFrame(frame, tcType));
 
+}
+
+void VideoTestWindow::onPaint(int width, int height)
+{
+	int videoRate = _videoEngine.refreshRate();
+	if(videoRate > _maxVideoRate)
+		_maxVideoRate = videoRate;
+	QString info = QString("%1 / %2").arg(videoRate).arg(_maxVideoRate);
+	ui->_videoView->addInfo(info);
+	_videoEngine.drawVideo(0, 0, width, height);
 }

@@ -28,7 +28,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="PhVideoView" name="_videoView" native="true"/>
+     <widget class="PhGraphicView" name="_videoView" native="true"/>
     </item>
    </layout>
   </widget>
@@ -167,9 +167,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PhVideoView</class>
+   <class>PhGraphicView</class>
    <extends>QWidget</extends>
-   <header>PhVideo/PhVideoView.h</header>
+   <header>PhGraphic/PhGraphicView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

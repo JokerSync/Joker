@@ -79,12 +79,14 @@ private slots:
 
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 
+	void onPaint(int width, int height);
 private:
 
 	Ui::VideoTestWindow *ui;
 	VideoTestSettings *_settings;
 	PhVideoEngine _videoEngine;
 	PhFloatingMediaPanel _mediaPanelDialog;
+	int _maxVideoRate;
 };
 
 #endif
