@@ -65,7 +65,6 @@ void PhGraphicView::initializeGL()
 	PHDEBUG;
 	if(_settings)
 		_infoFont.setFontFile(_settings->infoFontFile());
-	init();
 	_initialized = true;
 }
 
@@ -96,11 +95,6 @@ void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
 void PhGraphicView::addInfo(QString info)
 {
 	_infos.append(info);
-}
-
-bool PhGraphicView::init()
-{
-	return true;
 }
 
 void PhGraphicView::onRefresh()
@@ -139,7 +133,7 @@ void PhGraphicView::paintGL()
 	QTime timer;
 	timer.start();
 
-	paint();
+	emit paint(this->width(), this->height());
 
 	if(timer.elapsed() > _maxPaintDuration)
 		_maxPaintDuration = timer.elapsed();

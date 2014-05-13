@@ -22,12 +22,10 @@ include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 HEADERS  += \
-	GraphicTestView.h \
 	GraphicTestWindow.h \
     GraphicTestSettings.h
 
 SOURCES += main.cpp \
-	GraphicTestView.cpp \
     GraphicTestWindow.cpp
 
 FORMS += \

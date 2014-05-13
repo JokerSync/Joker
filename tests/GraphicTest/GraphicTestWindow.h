@@ -23,9 +23,16 @@ private slots:
 
 	void on_actionSave_triggered();
 
+	void onPaint();
+
 private:
 	Ui::GraphicTestWindow *ui;
 	GraphicTestSettings *_settings;
+	PhGraphicImage _image;
+	PhFont _font1, _font2;
+	PhGraphicSolidRect _rect;
+	PhGraphicTexturedRect _yuvRect;
+	int _x;
 };
 
 #endif // GRAPHICTESTWINDOW_H

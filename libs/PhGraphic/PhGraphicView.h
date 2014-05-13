@@ -69,18 +69,14 @@ signals:
 	 */
 	void beforePaint(PhTimeScale frequency);
 
-protected:
-	/**
-	 * @brief Child-specific initialization.
-	 * @return true if everything went well, false otherwise.
-	 */
-	virtual bool init();
 	/**
 	 * @brief paint event, every class have to re-implement it.
-	 * @return true if everything went well, false otherwise.
+	 * @param width Width of the paint area
+	 * @param height Height of the paint area
 	 */
-	virtual void paint() = 0;
+	void paint(int width, int height);
 
+protected:
 	/**
 	 * @brief initializeGL
 	 * This virtual function is called once before the first call to paintGL() or resizeGL(),

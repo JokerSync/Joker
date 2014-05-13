@@ -39,7 +39,7 @@ void PhGraphicText::draw()
 {
 	int fontHeight = _font->getHeight();
 	if(fontHeight == 0) {
-		PHDEBUG << "Trying to display an uninitialized font";
+		PHDEBUG << "Trying to display an uninitialized font:" << _font->getFontFile();
 		return;
 	}
 
