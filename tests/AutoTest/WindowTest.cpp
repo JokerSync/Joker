@@ -46,7 +46,7 @@ void WindowTest::fullScreenTest02()
 	settings.setFullScreen(true);
 	AutoTestWindow w(&settings);
 	w.show();
-	QTest::qWait(2000);
+	QTest::qWait(3000);
 	QVERIFY(w.isFullScreen());
 	QVERIFY(w.fullScreenAction()->isChecked());
 
