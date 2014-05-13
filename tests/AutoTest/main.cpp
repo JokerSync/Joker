@@ -9,6 +9,7 @@
 #include "TimeCodeEditTest.h"
 #include "LockableSpinBoxTest.h"
 #include "WindowTest.h"
+#include "GraphicTest.h"
 #include "GraphicStripTest.h"
 #include "GraphicTextTest.h"
 
@@ -26,6 +27,7 @@ int main(int argc, char *argv[])
 	bool testTCEdit = testAll;
 	bool testLockableSpinBox = testAll;
 	bool testWindow = testAll;
+	bool testGraphic = testAll;
 	bool testGraphicStrip = testAll;
 	bool testGraphicText = testAll;
 
@@ -51,6 +53,8 @@ int main(int argc, char *argv[])
 		else if(strcmp(argv[i], "ui") == 0) {
 			testTCEdit = testLockableSpinBox = testWindow = true;
 		}
+		else if(strcmp(argv[i], "graphic") == 0)
+			testGraphic = true;
 		else if(strcasecmp(argv[i], "graphicstrip") == 0)
 			testGraphicStrip = true;
 		else if(strcasecmp(argv[i], "graphictext") == 0)
@@ -99,10 +103,16 @@ int main(int argc, char *argv[])
 		result += QTest::qExec(&windowTest, testArgList);
 	}
 
+	if(testGraphic) {
+		GraphicTest graphicTest;
+		result += QTest::qExec(&graphicTest, testArgList);
+	}
+
 	if(testGraphicStrip) {
 		GraphicStripTest viewTest;
 		result += QTest::qExec(&viewTest, testArgList);
 	}
+
 	if(testGraphicText) {
 		GraphicTextTest viewTest;
 		result += QTest::qExec(&viewTest, testArgList);
