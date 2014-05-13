@@ -28,7 +28,8 @@ void GraphicTextTest::testSwenson() {
 
 	show();
 	paint();
-	sleep(2);
+
+	QTest::qWait(2000);
 	QImage img(grabFrameBuffer());
 	img.save("./swensonTestResult.bmp");
 	QVERIFY(QImage(grabFrameBuffer()) == QImage(expectedFile));
@@ -46,7 +47,7 @@ void GraphicTextTest::testArial() {
 
 	show();
 	paint();
-	sleep(2);
+	QTest::qWait(2000);
 	QImage img(grabFrameBuffer());
 	img.save("./arialTestResult.bmp");
 	QVERIFY(QImage(grabFrameBuffer()) == QImage(expectedFile));
@@ -66,7 +67,7 @@ void GraphicTextTest::testWeblysleekuil()
 
 	show();
 	paint();
-	sleep(2);
+	QTest::qWait(2000);
 	QImage img(grabFrameBuffer());
 	img.save("./weblysleekuilTestResult.bmp");
 	QVERIFY(QImage(grabFrameBuffer()) == QImage(expectedFile));
@@ -84,7 +85,7 @@ void GraphicTextTest::testBedizen() {
 
 	show();
 	paint();
-	sleep(2);
+	QTest::qWait(2000);
 	QImage img(grabFrameBuffer());
 	img.save("./bedizenTestResult.bmp");
 	QVERIFY(QImage(grabFrameBuffer()) == QImage(expectedFile));
