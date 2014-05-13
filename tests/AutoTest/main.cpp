@@ -23,7 +23,9 @@ int main(int argc, char *argv[])
 	bool testSettings = testAll;
 	bool testDoc = testAll;
 	bool testSony = testAll;
-	bool testUi = testAll;
+	bool testTCEdit = testAll;
+	bool testLockableSpinBox = testAll;
+	bool testWindow = testAll;
 	bool testGraphicStrip = testAll;
 	bool testGraphicText = testAll;
 
@@ -40,8 +42,15 @@ int main(int argc, char *argv[])
 			testDoc = true;
 		else if(strcmp(argv[i], "sony") == 0)
 			testSony = true;
-		else if(strcmp(argv[i], "ui") == 0)
-			testUi = true;
+		else if(strcmp(argv[i], "tcedit") == 0)
+			testTCEdit = true;
+		else if(strcmp(argv[i], "lockspin") == 0)
+			testLockableSpinBox = true;
+		else if(strcmp(argv[i], "window") == 0)
+			testWindow = true;
+		else if(strcmp(argv[i], "ui") == 0) {
+			testTCEdit = testLockableSpinBox = testWindow = true;
+		}
 		else if(strcasecmp(argv[i], "graphicstrip") == 0)
 			testGraphicStrip = true;
 		else if(strcasecmp(argv[i], "graphictext") == 0)
@@ -74,14 +83,18 @@ int main(int argc, char *argv[])
 		result += QTest::qExec(&sonyTest, testArgList);
 	}
 
-	if(testUi) {
+	if(testTCEdit) {
 		// Testing PhTimeCodeEdit
 		TimeCodeEditTest tcEditTest;
 		result += QTest::qExec(&tcEditTest, testArgList);
+	}
 
+	if(testLockableSpinBox) {
 		LockableSpinBoxTest spinBoxTest;
 		result += QTest::qExec(&spinBoxTest, testArgList);
+	}
 
+	if(testWindow) {
 		WindowTest windowTest;
 		result += QTest::qExec(&windowTest, testArgList);
 	}

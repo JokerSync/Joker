@@ -73,8 +73,12 @@ void PhWindow::onApplicationStateChange(Qt::ApplicationState state)
 void PhWindow::toggleFullScreen()
 {
 	PHDEBUG;
-	if(QMainWindow::isFullScreen())
+	if(this->isFullScreen()) {
+		PHDEBUG << "switch to normal";
 		QMainWindow::showNormal();
-	else
+	}
+	else {
+		PHDEBUG << "switch to fullscreen";
 		QMainWindow::showFullScreen();
+	}
 }
