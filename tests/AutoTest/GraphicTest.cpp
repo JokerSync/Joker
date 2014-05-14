@@ -7,8 +7,9 @@
 
 #include "PhGraphic/PhGraphicSolidRect.h"
 
+#include "PhGraphic/PhGraphicView.h"
+
 #include "GraphicTest.h"
-#include "GraphicTestView.h"
 
 GraphicTest::GraphicTest(QObject *parent) :
 	QObject(parent)
@@ -20,15 +21,13 @@ void GraphicTest::testPaint()
 	PhGraphicView v;
 	v.setGeometry(0, 0, 16, 16);
 
-	auto draw = [](int w, int h) {
-					PHDEBUG << w << h;
-					PhGraphicSolidRect rect(0, 0, w / 2, h / 2);
+	connect(&v, &PhGraphicView::paint, [&](int w, int h) {
+		PHDEBUG << w << h;
+		PhGraphicSolidRect rect(0, 0, w / 2, h / 2);
 
-					rect.setColor(Qt::red);
-					rect.draw();
-				};
-
-	connect(&v, &PhGraphicView::paint, draw);
+		rect.setColor(Qt::red);
+		rect.draw();
+	});
 
 	v.show();
 
