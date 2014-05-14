@@ -17,7 +17,8 @@ GraphicTest::GraphicTest(QObject *parent) :
 
 void GraphicTest::testPaint()
 {
-	GraphicTestView v;
+	PhGraphicView v;
+	v.setGeometry(0, 0, 16, 16);
 
 	auto draw = [](int w, int h) {
 					PHDEBUG << w << h;
@@ -27,11 +28,11 @@ void GraphicTest::testPaint()
 					rect.draw();
 				};
 
-	connect(&v, &GraphicTestView::draw, draw);
+	connect(&v, &PhGraphicView::paint, draw);
 
 	v.show();
 
-	QImage grab = v.saveBuffer();
+	QImage grab = v.grabFrameBuffer();
 	grab.save("testPaintResult.bmp");
 	QVERIFY(QImage("testPaint.bmp") == grab);
 }
