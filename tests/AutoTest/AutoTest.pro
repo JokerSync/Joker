@@ -38,7 +38,6 @@ HEADERS += \
 	GraphicStripTest.h \
     GraphicTextTest.h \
     GraphicStripTestSettings.h \
-    GraphicTestView.h \
     GraphicTest.h
 
 SOURCES += main.cpp \
@@ -52,7 +51,6 @@ SOURCES += main.cpp \
 	AutoTestWindow.cpp \
 	GraphicStripTest.cpp \
     GraphicTextTest.cpp \
-    GraphicTestView.cpp \
     GraphicTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/*) . $${CS}
