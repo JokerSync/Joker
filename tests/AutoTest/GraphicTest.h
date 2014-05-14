@@ -15,6 +15,7 @@ public:
 	explicit GraphicTest(QObject *parent = 0);
 
 private slots:
+	void initTestCase();
 	void testPaint();
 
 };

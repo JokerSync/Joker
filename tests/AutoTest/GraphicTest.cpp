@@ -16,16 +16,20 @@ GraphicTest::GraphicTest(QObject *parent) :
 {
 }
 
+void GraphicTest::initTestCase()
+{
+	PhDebug::enable();
+}
+
 void GraphicTest::testPaint()
 {
 	PhGraphicView v;
 	v.setGeometry(0, 0, 16, 16);
 
-	connect(&v, &PhGraphicView::paint, [&](int w, int h) {
-	            PHDEBUG << w << h;
-	            PhGraphicSolidRect rect(0, 0, w / 2, h / 2);
+	PhGraphicSolidRect rect(0, 0, 8, 8);
+	rect.setColor(Qt::red);
 
-	            rect.setColor(Qt::red);
+	connect(&v, &PhGraphicView::paint, [&](int w, int h) {
 	            rect.draw();
 			});
 
