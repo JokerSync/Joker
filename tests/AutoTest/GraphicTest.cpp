@@ -22,12 +22,12 @@ void GraphicTest::testPaint()
 	v.setGeometry(0, 0, 16, 16);
 
 	connect(&v, &PhGraphicView::paint, [&](int w, int h) {
-		PHDEBUG << w << h;
-		PhGraphicSolidRect rect(0, 0, w / 2, h / 2);
+	            PHDEBUG << w << h;
+	            PhGraphicSolidRect rect(0, 0, w / 2, h / 2);
 
-		rect.setColor(Qt::red);
-		rect.draw();
-	});
+	            rect.setColor(Qt::red);
+	            rect.draw();
+			});
 
 	v.show();
 

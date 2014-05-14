@@ -26,53 +26,53 @@ void GraphicTextTest::testFont() {
 	view.setGeometry(0, 0, 776, 576);
 
 	connect(&view, &PhGraphicView::paint, [&](int width, int height) {
-		PhFont font;
-		font.setFontFile(fontFile);
+	            PhFont font;
+	            font.setFontFile(fontFile);
 
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	            glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-		int textHeight = 50;
-		int textWidth = 600;
+	            int textHeight = 50;
+	            int textWidth = 600;
 
-		PhGraphicSolidRect rect(0, 0, 900, textHeight);
-		rect.setColor(Qt::yellow);
-		rect.setZ(2);
+	            PhGraphicSolidRect rect(0, 0, 900, textHeight);
+	            rect.setColor(Qt::yellow);
+	            rect.setZ(2);
 
-		QString lowerCase("abcdefghijklmnopqrstuvwxyz");
-		PhGraphicText text1(&font, lowerCase);
-		text1.setRect(0, 0, textWidth, textHeight);
-		text1.setColor(Qt::black);
-		text1.setZ(5);
-		text1.draw();
+	            QString lowerCase("abcdefghijklmnopqrstuvwxyz");
+	            PhGraphicText text1(&font, lowerCase);
+	            text1.setRect(0, 0, textWidth, textHeight);
+	            text1.setColor(Qt::black);
+	            text1.setZ(5);
+	            text1.draw();
 
-		rect.setY(100);
-		rect.draw();
-		QString upperCase(lowerCase.toUpper());
-		PhGraphicText text2(&font, upperCase);
-		text2.setRect(0, 100, textWidth, textHeight);
-		text2.setColor(Qt::black);
-		text2.setZ(5);
-		text2.draw();
+	            rect.setY(100);
+	            rect.draw();
+	            QString upperCase(lowerCase.toUpper());
+	            PhGraphicText text2(&font, upperCase);
+	            text2.setRect(0, 100, textWidth, textHeight);
+	            text2.setColor(Qt::black);
+	            text2.setZ(5);
+	            text2.draw();
 
-		rect.setY(200);
-		rect.draw();
-		QString specials("à â ç è é ê î ô ù û");
-		PhGraphicText text3(&font, specials);
-		text3.setRect(0, 200, textWidth, textHeight);
-		text3.setColor(Qt::black);
-		text3.setZ(5);
-		text3.draw();
+	            rect.setY(200);
+	            rect.draw();
+	            QString specials("à â ç è é ê î ô ù û");
+	            PhGraphicText text3(&font, specials);
+	            text3.setRect(0, 200, textWidth, textHeight);
+	            text3.setColor(Qt::black);
+	            text3.setZ(5);
+	            text3.draw();
 
-		rect.setY(300);
-		rect.draw();
-		QString numbers("0 1 2 3 4 5 6 7 8 9 0");
-		PhGraphicText text4(&font, numbers);
-		text4.setRect(0, 300, textWidth, textHeight);
-		text4.setColor(Qt::black);
-		text4.setZ(5);
-		text4.draw();
-	});
+	            rect.setY(300);
+	            rect.draw();
+	            QString numbers("0 1 2 3 4 5 6 7 8 9 0");
+	            PhGraphicText text4(&font, numbers);
+	            text4.setRect(0, 300, textWidth, textHeight);
+	            text4.setColor(Qt::black);
+	            text4.setZ(5);
+	            text4.draw();
+			});
 
 
 
@@ -99,28 +99,28 @@ void GraphicTextTest::testFont_data()
 	QTest::addColumn<QString>("outputResult");
 
 	QTest::newRow("swenson") << "SWENSON.TTF"
-							 << "swensonTest.bmp"
-							 << "swensonRetinaTest.bmp"
-							 << "swensonTravisTest.bmp"
-							 << "swensonTestResult.bmp";
+	                         << "swensonTest.bmp"
+	                         << "swensonRetinaTest.bmp"
+	                         << "swensonTravisTest.bmp"
+	                         << "swensonTestResult.bmp";
 
 	QTest::newRow("arial") << "Arial.ttf"
-						   << "arialTest.bmp"
-						   << "arialRetinaTest.bmp"
-						   << "arialTravisTest.bmp"
-						   << "arialTestResult.bmp";
+	                       << "arialTest.bmp"
+	                       << "arialRetinaTest.bmp"
+	                       << "arialTravisTest.bmp"
+	                       << "arialTestResult.bmp";
 
 	QTest::newRow("weblyleekuil") << "weblysleekuil.ttf"
-								  << "weblysleekuilTest.bmp"
-								  << "weblysleekuilRetinaTest.bmp"
-								  << "weblysleekuilTravisTest.bmp"
-								  << "weblysleekuilTestResult.bmp";
+	                              << "weblysleekuilTest.bmp"
+	                              << "weblysleekuilRetinaTest.bmp"
+	                              << "weblysleekuilTravisTest.bmp"
+	                              << "weblysleekuilTestResult.bmp";
 
 	QTest::newRow("bedizen") << "Bedizen.ttf"
-							 << "bedizenTest.bmp"
-							 << "bedizenRetinaTest.bmp"
-							 << "bedizenTravisTest.bmp"
-							 << "bedizenTestResult.bmp";
+	                         << "bedizenTest.bmp"
+	                         << "bedizenRetinaTest.bmp"
+	                         << "bedizenTravisTest.bmp"
+	                         << "bedizenTestResult.bmp";
 
 }
 

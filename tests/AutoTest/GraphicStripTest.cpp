@@ -22,9 +22,9 @@ void GraphicStripTest::testStripDocObject()
 	GraphicStripTestSettings _settings;
 	_strip.setSettings(&_settings);
 	connect(&view, &PhGraphicView::paint, [&](int width, int height) {
-		_strip.init();
-		_strip.draw(0, 0, width, height);
-	});
+	            _strip.init();
+	            _strip.draw(0, 0, width, height);
+			});
 
 	PhStripDoc * doc = _strip.doc();
 	doc->reset();
