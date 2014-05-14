@@ -5,6 +5,9 @@
 #include "ui_GraphicTestWindow.h"
 
 #include "PhTools/PhPictureTools.h"
+#include "PhGraphic/PhGraphicText.h"
+#include "PhGraphic/PhGraphicLoop.h"
+#include "PhGraphic/PhGraphicDisc.h"
 #include "PhGraphic/PhGraphicDashedLine.h"
 #include "PhGraphic/PhGraphicArrow.h"
 

@@ -3,8 +3,12 @@
 
 #include "PhCommonUI/PhWindow.h"
 
+#include "PhGraphic/PhGraphicImage.h"
+#include "PhGraphic/PhFont.h"
+#include "PhGraphic/PhGraphicSolidRect.h"
+#include "PhGraphic/PhGraphicTexturedRect.h"
+
 #include "GraphicTestSettings.h"
-#include "GraphicTestView.h"
 
 namespace Ui {
 class GraphicTestWindow;
