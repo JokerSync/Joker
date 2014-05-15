@@ -6,6 +6,8 @@
 
 #include <qmath.h>
 
+#include "PhDebug.h"
+
 #include "PhPictureTools.h"
 
 void PhPictureTools::RGBtoYUV(const unsigned char *rgb, int *yuv, int monochrome, int luminance)
@@ -138,8 +140,10 @@ unsigned char *PhPictureTools::generateYUVPattern(int w, int h)
 unsigned int PhPictureTools::compare(QImage imageA, QImage imageB)
 {
 	int max = std::numeric_limits<unsigned int>::max();
-	if(imageA.size() != imageB.size())
+	if(imageA.size() != imageB.size()) {
+		PHDEBUG << "Size is different:" << imageA.size() << imageB.size();
 		return max;
+	}
 
 	int result = 0;
 	int w = imageA.width();
@@ -150,8 +154,10 @@ unsigned int PhPictureTools::compare(QImage imageA, QImage imageB)
 			QRgb a = imageA.pixel(i, j);
 			QRgb b = imageB.pixel(i, j);
 			result += qPow(qRed(a) - qRed(b), 2) + qPow(qGreen(a) - qGreen(b), 2) + qPow(qBlue(a) - qBlue(b), 2);
-			if(result > max / 2)
+			if(result > max / 2) {
+				PHDEBUG << QString("(%1, %2) Too many difference detected...").arg(i).arg(j);
 				return max;
+			}
 		}
 	}
 
