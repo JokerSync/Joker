@@ -47,16 +47,9 @@ void GraphicStripTest::testStripDocObject()
 
 	view.show();
 
-	QTest::qWait(1000);
-
 	QImage resultImage(view.grabFrameBuffer());
 	resultImage.save("graphicStripTestResult.bmp");
 	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTest.bmp");
-//	if(view.windowHandle()->devicePixelRatio() == 2)
-//		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripRetinaTest.bmp");
-	if(QString(qgetenv("TRAVIS")) == "true")
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTravisTest.bmp");
-
 	QImage expectedImage(expectedFile);
 
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
