@@ -15,8 +15,8 @@ class GraphicTextTest : public QObject
 	Q_OBJECT
 
 private slots:
-	void testFont();
-	void testFont_data();
+	void fontTest();
+	void fontTest_data();
 	void computeMaxFontSizeTest();
 };
 

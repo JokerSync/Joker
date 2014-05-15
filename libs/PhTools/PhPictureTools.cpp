@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <qmath.h>
+
 #include "PhPictureTools.h"
 
 void PhPictureTools::RGBtoYUV(const unsigned char *rgb, int *yuv, int monochrome, int luminance)
@@ -131,4 +133,27 @@ unsigned char *PhPictureTools::generateYUVPattern(int w, int h)
 	}
 
 	return yuvOut;
+}
+
+unsigned int PhPictureTools::compare(QImage imageA, QImage imageB)
+{
+	int max = std::numeric_limits<unsigned int>::max();
+	if(imageA.size() != imageB.size())
+		return max;
+
+	int result = 0;
+	int w = imageA.width();
+	int h = imageA.height();
+
+	for(int i = 0; i < w; i++) {
+		for(int j = 0; j < h; j++) {
+			QRgb a = imageA.pixel(i, j);
+			QRgb b = imageB.pixel(i, j);
+			result += qPow(qRed(a) - qRed(b), 2) + qPow(qGreen(a) - qGreen(b), 2) + qPow(qBlue(a) - qBlue(b), 2);
+			if(result > max / 2)
+				return max;
+		}
+	}
+
+	return result;
 }
