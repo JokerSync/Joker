@@ -67,6 +67,12 @@ public:
 	 */
 	static unsigned char * generateYUVPattern(int w, int h);
 
+	/**
+	 * @brief Compare two QImage
+	 * @param imageA An image
+	 * @param imageB Another image
+	 * @return The sum of the squared difference of the pixel RGB values.
+	 */
 	static unsigned int compare(QImage imageA, QImage imageB);
 };
 

@@ -34,6 +34,15 @@ public:
 	 */
 	explicit PhGraphicView(QWidget *parent = 0);
 
+	/**
+	 * @brief PhGraphicView constructor specifying the client area size.
+	 * @param width The client area width
+	 * @param height The client area height
+	 * @param parent Parent object
+	 *
+	 * The size is expressed in true pixel size. In the case of the retina screen,
+	 * the size will correspond to the opengl viewport: 2 times the widget size.
+	 */
 	PhGraphicView (int width, int height, QWidget *parent = 0);
 
 	~PhGraphicView();
@@ -65,7 +74,19 @@ public:
 	 */
 	void addInfo(QString info);
 
+	/**
+	 * @brief Register the client initialization functor.
+	 * @param initFunction A functor
+	 *
+	 * If the OpenGL initialization has already been done,
+	 * the functor is called immediatly.
+	 */
 	void registerInitialization(std::function<void()> initFunction);
+
+	/**
+	 * @brief Register the paint functor.
+	 * @param paintFunction A functor accepting the size as argument.
+	 */
 	void registerPaint(std::function<void(int w, int h)> paintFunction);
 
 signals:
