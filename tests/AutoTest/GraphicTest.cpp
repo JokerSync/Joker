@@ -25,6 +25,29 @@ void GraphicTest::initTestCase()
 	PhDebug::enable();
 }
 
+void GraphicTest::paintTest()
+{
+	PhGraphicView view(64, 64);
+
+	bool initCalled = false;
+	bool paintCalled = false;
+
+	view.registerInitialization([&]() {
+		initCalled = true;
+	});
+
+	view.registerPaint([&](int w, int h) {
+		paintCalled = true;
+		QCOMPARE(w, 64);
+		QCOMPARE(h, 64);
+	});
+
+	view.show();
+
+	QVERIFY(initCalled);
+	QVERIFY(paintCalled);
+}
+
 void GraphicTest::rectTest()
 {
 	PhGraphicView view(32, 32);
@@ -32,9 +55,9 @@ void GraphicTest::rectTest()
 	PhGraphicSolidRect rect(0, 0, 16, 16);
 	rect.setColor(Qt::red);
 
-	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
-	            rect.draw();
-			});
+	view.registerPaint([&](int w, int h) {
+		rect.draw();
+	});
 
 	view.show();
 

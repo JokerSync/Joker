@@ -16,6 +16,7 @@ public:
 
 private slots:
 	void initTestCase();
+	void paintTest();
 	void rectTest();
 	void imageTest();
 	void rgbPatternTest();

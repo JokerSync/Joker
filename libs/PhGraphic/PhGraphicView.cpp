@@ -140,7 +140,8 @@ void PhGraphicView::paintGL()
 	QTime timer;
 	timer.start();
 
-	emit paint(this->width(), this->height());
+	int ratio = this->windowHandle()->devicePixelRatio();
+	emit paint(this->width() * ratio, this->height() * ratio);
 
 	if(timer.elapsed() > _maxPaintDuration)
 		_maxPaintDuration = timer.elapsed();

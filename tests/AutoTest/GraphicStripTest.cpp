@@ -6,6 +6,8 @@
 #include <QTest>
 #include <QWindow>
 
+#include "PhTools/PhPictureTools.h"
+
 #include "PhGraphic/PhGraphicView.h"
 #include "PhGraphicStrip/PhGraphicStrip.h"
 
@@ -15,16 +17,20 @@
 
 void GraphicStripTest::testStripDocObject()
 {
-	PhGraphicView view;
-	view.setGeometry(0, 0, 981, 319);
+	PhGraphicView view(980, 320);
 
 	PhGraphicStrip _strip;
 	GraphicStripTestSettings _settings;
 	_strip.setSettings(&_settings);
-	connect(&view, &PhGraphicView::paint, [&](int width, int height) {
-				_strip.init();
-	            _strip.draw(0, 0, width, height);
-			});
+
+	view.registerInitialization([&](){
+		_strip.init();
+	});
+
+	view.registerPaint([&](int width, int height) {
+		PHDEBUG << width << height;
+		_strip.draw(0, 0, width, height);
+	});
 
 	PhStripDoc * doc = _strip.doc();
 	doc->reset();
@@ -43,13 +49,17 @@ void GraphicStripTest::testStripDocObject()
 
 	QTest::qWait(1000);
 
-	QImage impr(view.grabFrameBuffer());
-	impr.save("graphicStripTestResult.bmp");
+	QImage resultImage(view.grabFrameBuffer());
+	resultImage.save("graphicStripTestResult.bmp");
 	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTest.bmp");
-	if(view.windowHandle()->devicePixelRatio() == 2)
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripRetinaTest.bmp");
+//	if(view.windowHandle()->devicePixelRatio() == 2)
+//		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripRetinaTest.bmp");
 	if(QString(qgetenv("TRAVIS")) == "true")
 		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTravisTest.bmp");
 
-	QVERIFY2(impr == QImage(expectedFile), PHNQ(expectedFile));
+	QImage expectedImage(expectedFile);
+
+	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+	PHDEBUG << "result:" << result;
+	QVERIFY(result < 5000);
 }
