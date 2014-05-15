@@ -53,6 +53,13 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	_dropTimer.start();
 }
 
+PhGraphicView::PhGraphicView(int width, int height, QWidget *parent)
+	: PhGraphicView(parent)
+{
+	int ratio = this->windowHandle()->devicePixelRatio();
+	this->setGeometry(0, 0, width / ratio, height / ratio);
+}
+
 PhGraphicView::~PhGraphicView()
 {
 	_refreshTimer->stop();
@@ -65,20 +72,20 @@ void PhGraphicView::initializeGL()
 	PHDEBUG;
 	if(_settings)
 		_infoFont.setFontFile(_settings->infoFontFile());
+
+	emit init();
+
 	_initialized = true;
 }
 
 void PhGraphicView::resizeGL(int width, int height)
 {
-	int ratio = this->windowHandle()->devicePixelRatio();
-	PHDEBUG << width << height << ratio;
-
 	if(height == 0)
 		height = 1;
-	glViewport(0, 0, width / ratio, height / ratio);
+	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0, width / ratio, height / ratio, 0, -10, 10);
+	glOrtho(0, width, height, 0, -10, 10);
 	glMatrixMode(GL_MODELVIEW);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
@@ -162,4 +169,17 @@ void PhGraphicView::paintGL()
 	_infos.clear();
 
 	_frameTickCounter.tick();
+}
+
+void PhGraphicView::registerInitialization(std::function<void ()> initFunction)
+{
+	if(_initialized)
+		initFunction();
+	else
+		connect(this, &PhGraphicView::init, initFunction);
+}
+
+void PhGraphicView::registerPaint(std::function<void (int, int)> paintFunction)
+{
+	connect(this, &PhGraphicView::paint, paintFunction);
 }

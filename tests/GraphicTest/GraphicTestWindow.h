@@ -35,7 +35,7 @@ private:
 	PhGraphicImage _image;
 	PhFont _font1, _font2;
 	PhGraphicSolidRect _rect;
-	PhGraphicTexturedRect _yuvRect;
+	PhGraphicTexturedRect _yuvRect, _rgbRect;
 	int _x;
 };
 

@@ -33,6 +33,9 @@ public:
 	 * @param parent Parent object.
 	 */
 	explicit PhGraphicView(QWidget *parent = 0);
+
+	PhGraphicView (int width, int height, QWidget *parent = 0);
+
 	~PhGraphicView();
 
 	/**
@@ -62,12 +65,20 @@ public:
 	 */
 	void addInfo(QString info);
 
+	void registerInitialization(std::function<void()> initFunction);
+	void registerPaint(std::function<void(int w, int h)> paintFunction);
+
 signals:
 	/**
 	 * @brief emit a signal just before the paint
 	 * @param frequency the effective frequency
 	 */
 	void beforePaint(PhTimeScale frequency);
+
+	/**
+	 * @brief initialize your custom graphic objects here
+	 */
+	void init();
 
 	/**
 	 * @brief paint event, every class have to re-implement it.

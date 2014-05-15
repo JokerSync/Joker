@@ -102,9 +102,9 @@ unsigned char *PhPictureTools::generateRGBPattern(int w, int h)
 
 	for(int y = 0; y < h; ++y) {
 		for (int x = 0; x < w; ++x) {
-			rgbOut[3 * (y * w + x)] = 255;
-			rgbOut[3 * (y * w + x) + 1] = 0;
-			rgbOut[3 * (y * w + x) + 2] = 0;
+			rgbOut[3 * (y * w + x)] = 255 * y / h;
+			rgbOut[3 * (y * w + x) + 1] = 255 * x / w;
+			rgbOut[3 * (y * w + x) + 2] = 255 * x * y / w / h;
 		}
 	}
 	return rgbOut;

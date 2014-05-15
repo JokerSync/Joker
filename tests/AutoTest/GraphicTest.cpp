@@ -5,9 +5,13 @@
 
 #include <QTest>
 
-#include "PhGraphic/PhGraphicSolidRect.h"
+#include "PhTools/PhPictureTools.h"
 
 #include "PhGraphic/PhGraphicView.h"
+#include "PhGraphic/PhGraphicSolidRect.h"
+#include "PhGraphic/PhGraphicTexturedRect.h"
+#include "PhGraphic/PhGraphicImage.h"
+
 
 #include "GraphicTest.h"
 
@@ -21,21 +25,85 @@ void GraphicTest::initTestCase()
 	PhDebug::enable();
 }
 
-void GraphicTest::testPaint()
+void GraphicTest::rectTest()
 {
-	PhGraphicView v;
-	v.setGeometry(0, 0, 16, 16);
+	PhGraphicView view(32, 32);
 
-	PhGraphicSolidRect rect(0, 0, 8, 8);
+	PhGraphicSolidRect rect(0, 0, 16, 16);
 	rect.setColor(Qt::red);
 
-	connect(&v, &PhGraphicView::paint, [&](int w, int h) {
+	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
 	            rect.draw();
 			});
 
-	v.show();
+	view.show();
 
-	QImage grab = v.grabFrameBuffer();
-	grab.save("testPaintResult.bmp");
-	QVERIFY(QImage("testPaint.bmp") == grab);
+	QImage grab = view.grabFrameBuffer();
+	grab.save("rectTestResult.bmp");
+
+	PHDEBUG << "grab:" << grab.width() << grab.height();
+	QVERIFY(QImage("rectTest.bmp") == grab);
+}
+
+void GraphicTest::imageTest()
+{
+	int w = 64;
+	int h = 64;
+	PhGraphicView view(w, h);
+
+	PhGraphicImage image("rgbPatternTest.bmp", 0, 0, w, h);
+
+	view.registerInitialization([&]() {
+		QVERIFY(image.init());
+	});
+
+	view.registerPaint([&](int w, int h) {
+		image.draw();
+	});
+
+	view.show();
+
+	QImage grab = view.grabFrameBuffer();
+	grab.save("imageTestResult.bmp");
+
+	// The expected result should be the same than the input (rgbPatternTest.bmp)
+	// but it turns out that image is altered when opened with IMG_Load()
+	// (see PhGraphicImage::init())
+	QImage expected("imageTest.bmp");
+
+	QVERIFY(grab == expected);
+}
+
+void GraphicTest::rgbPatternTest()
+{
+	int w = 64;
+	int h = 64;
+	PhGraphicView view(w, h);
+
+	PhGraphicTexturedRect rect(0, 0, w, h);
+
+	view.registerInitialization([&]() {
+		unsigned char * buffer = PhPictureTools::generateRGBPattern(w, h);
+
+		for(int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+
+			}
+		}
+		rect.createTextureFromRGBBuffer(buffer, w, h);
+		delete buffer;
+	});
+
+	view.registerPaint([&](int w, int h) {
+		rect.draw();
+	});
+
+	view.show();
+
+	QImage grab = view.grabFrameBuffer();
+	grab.save("rgbPatternTestResult.bmp");
+	QImage expected("rgbPatternTest.bmp");
+
+	QVERIFY(grab.size() == expected.size());
+	QVERIFY(grab == expected);
 }

@@ -23,7 +23,7 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 
 	PHDEBUG << "Initialize _image";
 
-	QString imageFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png";
+	QString imageFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/rgbPatternTest.bmp";
 	_image.setFilename(imageFile);
 	_image.setTextureCoordinate(1, 1);
 	_image.setPosition(50, 0, 1);
@@ -44,11 +44,15 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 	_rect.setColor(QColor(0, 255, 0));
 	_rect.setZ(-2);
 
-	int w = 50;
-	int h = 50;
+	int w = 64;
+	int h = 64;
 	unsigned char * yuv = PhPictureTools::generateYUVPattern(w, h);
-	_yuvRect.setRect(20, 300, 150, 100);
+	_yuvRect.setRect(20, 300, 64, 64);
 	_yuvRect.createTextureFromYUVBuffer(yuv, w, h);
+
+	unsigned char * rgb = PhPictureTools::generateRGBPattern(w, h);
+	_rgbRect.setRect(200, 300, 64, 64);
+	_rgbRect.createTextureFromRGBBuffer(rgb, w, h);
 }
 
 GraphicTestWindow::~GraphicTestWindow()
@@ -107,17 +111,6 @@ void GraphicTestWindow::onPaint()
 		text1.setZ(5);
 		text1.draw();
 	}
-
-	PhGraphicText text2(&_font2, "eéaàiîoô");
-	int textWidth = 500;
-	text2.setRect(_x, 300, textWidth, 100);
-	text2.setColor(QColor(255, 0, 0));
-	text2.setZ(-1);
-	text2.draw();
-
-	_x += 4;
-	if(_x > this->width())
-		_x = -textWidth;
 
 	_font1.select();
 
@@ -179,4 +172,18 @@ void GraphicTestWindow::onPaint()
 	arrow2.setColor(Qt::red);
 	arrow2.setZ(5);
 	arrow2.draw();
+
+	_yuvRect.draw();
+	_rgbRect.draw();
+
+	PhGraphicText text2(&_font2, "eéaàiîoô");
+	int textWidth = 500;
+	text2.setRect(_x, 300, textWidth, 100);
+	text2.setColor(QColor(255, 0, 0));
+	text2.setZ(1);
+	text2.draw();
+
+	_x += 4;
+	if(_x > this->width())
+		_x = -textWidth;
 }

@@ -25,6 +25,18 @@ PhGraphicTexturedRect::~PhGraphicTexturedRect()
 
 bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 {
+	glEnable( GL_TEXTURE_2D );
+	// Have OpenGL generate a texture object handle for us
+	glGenTextures( 1, &_texture );
+
+	if(_texture == 0) {
+		PHDEBUG << "glGenTextures() errored: is opengl context ready?";
+		return false;
+	}
+
+	// Bind the texture object
+	glBindTexture( GL_TEXTURE_2D, _texture );
+
 	GLenum textureFormat = 0;
 
 	switch (surface->format->BytesPerPixel) {
@@ -57,14 +69,6 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 		return false;
 	}
 
-	glEnable( GL_TEXTURE_2D );
-	// Have OpenGL generate a texture object handle for us
-	glGenTextures( 1, &_texture );
-
-	// Bind the texture object
-	glBindTexture( GL_TEXTURE_2D, _texture );
-
-
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, surface->format->BytesPerPixel, surface->w, surface->h, 0,
 	              textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
@@ -87,8 +91,13 @@ bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, i
 	}
 
 	// Have OpenGL generate a texture object handle for us
-	if(_texture == 0)
+	if(_texture == 0) {
 		glGenTextures( 1, &_texture );
+		if(_texture == 0) {
+			PHDEBUG << "glGenTextures() errored: is opengl context ready?";
+			return false;
+		}
+	}
 
 	// Bind the texture object
 	glBindTexture( GL_TEXTURE_2D, _texture );
@@ -116,8 +125,14 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 	}
 
 	// Have OpenGL generate a texture object handle for us
-	if(_texture == 0)
+	if(_texture == 0) {
 		glGenTextures( 1, &_texture );
+		PHDEBUG << _texture;
+		if(_texture == 0) {
+			PHDEBUG << "glGenTextures() errored: is opengl context ready?";
+			return false;
+		}
+	}
 
 	// Bind the texture object
 	glBindTexture( GL_TEXTURE_2D, _texture );
@@ -139,6 +154,10 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
 	glEnable( GL_TEXTURE_2D );
 	// Have OpenGL generate a texture object handle for us
 	glGenTextures( 1, &_texture );
+	if(_texture == 0) {
+		PHDEBUG << "glGenTextures() errored: is opengl context ready?";
+		return false;
+	}
 
 	// Bind the texture object
 	glBindTexture( GL_TEXTURE_2D, _texture );
