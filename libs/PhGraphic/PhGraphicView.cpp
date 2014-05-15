@@ -172,7 +172,7 @@ void PhGraphicView::paintGL()
 	_frameTickCounter.tick();
 }
 
-void PhGraphicView::registerInitialization(std::function<void ()> initFunction)
+void PhGraphicView::registerInitialization(std::function<void()> initFunction)
 {
 	if(_initialized)
 		initFunction();

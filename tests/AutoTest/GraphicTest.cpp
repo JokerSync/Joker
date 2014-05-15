@@ -33,14 +33,14 @@ void GraphicTest::paintTest()
 	bool paintCalled = false;
 
 	view.registerInitialization([&]() {
-		initCalled = true;
-	});
+	                                initCalled = true;
+								});
 
 	view.registerPaint([&](int w, int h) {
-		paintCalled = true;
-		QCOMPARE(w, 64);
-		QCOMPARE(h, 64);
-	});
+	                       paintCalled = true;
+	                       QCOMPARE(w, 64);
+	                       QCOMPARE(h, 64);
+					   });
 
 	view.show();
 
@@ -56,8 +56,8 @@ void GraphicTest::rectTest()
 	rect.setColor(Qt::red);
 
 	view.registerPaint([&](int w, int h) {
-		rect.draw();
-	});
+	                       rect.draw();
+					   });
 
 	view.show();
 
@@ -77,12 +77,12 @@ void GraphicTest::imageTest()
 	PhGraphicImage image("rgbPatternTest.bmp", 0, 0, w, h);
 
 	view.registerInitialization([&]() {
-		QVERIFY(image.init());
-	});
+	                                QVERIFY(image.init());
+								});
 
 	view.registerPaint([&](int w, int h) {
-		image.draw();
-	});
+	                       image.draw();
+					   });
 
 	view.show();
 
@@ -106,20 +106,20 @@ void GraphicTest::rgbPatternTest()
 	PhGraphicTexturedRect rect(0, 0, w, h);
 
 	view.registerInitialization([&]() {
-		unsigned char * buffer = PhPictureTools::generateRGBPattern(w, h);
+	                                unsigned char * buffer = PhPictureTools::generateRGBPattern(w, h);
 
-		for(int i = 0; i < w; i++) {
-			for (int j = 0; j < h; j++) {
+	                                for(int i = 0; i < w; i++) {
+	                                    for (int j = 0; j < h; j++) {
 
-			}
-		}
-		rect.createTextureFromRGBBuffer(buffer, w, h);
-		delete buffer;
-	});
+										}
+									}
+	                                rect.createTextureFromRGBBuffer(buffer, w, h);
+	                                delete buffer;
+								});
 
 	view.registerPaint([&](int w, int h) {
-		rect.draw();
-	});
+	                       rect.draw();
+					   });
 
 	view.show();
 

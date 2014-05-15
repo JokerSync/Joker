@@ -23,14 +23,14 @@ void GraphicStripTest::testStripDocObject()
 	GraphicStripTestSettings _settings;
 	_strip.setSettings(&_settings);
 
-	view.registerInitialization([&](){
-		_strip.init();
-	});
+	view.registerInitialization([&]() {
+	                                _strip.init();
+								});
 
 	view.registerPaint([&](int width, int height) {
-		PHDEBUG << width << height;
-		_strip.draw(0, 0, width, height);
-	});
+	                       PHDEBUG << width << height;
+	                       _strip.draw(0, 0, width, height);
+					   });
 
 	PhStripDoc * doc = _strip.doc();
 	doc->reset();
