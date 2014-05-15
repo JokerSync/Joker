@@ -13,7 +13,7 @@ class GraphicStripTest : public QObject
 	Q_OBJECT
 
 private slots:
-	void testStripDocObject();
+	void drawTest();
 
 };
 

@@ -15,7 +15,7 @@
 
 #include "GraphicStripTest.h"
 
-void GraphicStripTest::testStripDocObject()
+void GraphicStripTest::drawTest()
 {
 	PhGraphicView view(980, 320);
 
@@ -48,8 +48,9 @@ void GraphicStripTest::testStripDocObject()
 	view.show();
 
 	QImage resultImage(view.grabFrameBuffer());
-	resultImage.save("graphicStripTestResult.bmp");
-	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTest.bmp");
+	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
+	resultImage.save(resultFile);
+	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
 	QImage expectedImage(expectedFile);
 
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);

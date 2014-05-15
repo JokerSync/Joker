@@ -61,11 +61,15 @@ void GraphicTest::rectTest()
 
 	view.show();
 
-	QImage grab = view.grabFrameBuffer();
-	grab.save("rectTestResult.bmp");
+	QImage resultImage(view.grabFrameBuffer());
+	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
+	resultImage.save(resultFile);
+	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
+	QImage expectedImage(expectedFile);
 
-	PHDEBUG << "grab:" << grab.width() << grab.height();
-	QVERIFY(QImage("rectTest.bmp") == grab);
+	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+	PHDEBUG << "result:" << result;
+	QVERIFY(result == 0);
 }
 
 void GraphicTest::imageTest()
@@ -86,15 +90,18 @@ void GraphicTest::imageTest()
 
 	view.show();
 
-	QImage grab = view.grabFrameBuffer();
-	grab.save("imageTestResult.bmp");
-
+	QImage resultImage(view.grabFrameBuffer());
+	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
+	resultImage.save(resultFile);
 	// The expected result should be the same than the input (rgbPatternTest.bmp)
 	// but it turns out that image is altered when opened with IMG_Load()
 	// (see PhGraphicImage::init())
-	QImage expected("imageTest.bmp");
+	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
+	QImage expectedImage(expectedFile);
 
-	QVERIFY(grab == expected);
+	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+	PHDEBUG << "result:" << result;
+	QVERIFY(result == 0);
 }
 
 void GraphicTest::rgbPatternTest()
@@ -123,10 +130,13 @@ void GraphicTest::rgbPatternTest()
 
 	view.show();
 
-	QImage grab = view.grabFrameBuffer();
-	grab.save("rgbPatternTestResult.bmp");
-	QImage expected("rgbPatternTest.bmp");
+	QImage resultImage(view.grabFrameBuffer());
+	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
+	resultImage.save(resultFile);
+	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
+	QImage expectedImage(expectedFile);
 
-	QVERIFY(grab.size() == expected.size());
-	QVERIFY(grab == expected);
+	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+	PHDEBUG << "result:" << result;
+	QVERIFY(result == 0);
 }
