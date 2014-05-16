@@ -55,5 +55,5 @@ void GraphicStripTest::drawTest()
 
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
 	PHDEBUG << "result:" << result;
-	QVERIFY(result < 5000);
+	QVERIFY(result < 920 * 320 / 4);
 }

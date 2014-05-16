@@ -5,6 +5,7 @@
  */
 
 #include <qmath.h>
+#include <QColor>
 
 #include "PhDebug.h"
 
@@ -137,15 +138,15 @@ unsigned char *PhPictureTools::generateYUVPattern(int w, int h)
 	return yuvOut;
 }
 
-unsigned int PhPictureTools::compare(QImage imageA, QImage imageB)
+unsigned int PhPictureTools::compare(QImage imageA, QImage imageB, bool log)
 {
-	int max = std::numeric_limits<unsigned int>::max();
+	unsigned int max = std::numeric_limits<unsigned int>::max();
 	if(imageA.size() != imageB.size()) {
 		PHDEBUG << "Size is different:" << imageA.size() << imageB.size();
 		return max;
 	}
 
-	int result = 0;
+	unsigned int result = 0;
 	int w = imageA.width();
 	int h = imageA.height();
 
@@ -153,9 +154,22 @@ unsigned int PhPictureTools::compare(QImage imageA, QImage imageB)
 		for(int j = 0; j < h; j++) {
 			QRgb a = imageA.pixel(i, j);
 			QRgb b = imageB.pixel(i, j);
-			result += qPow(qRed(a) - qRed(b), 2) + qPow(qGreen(a) - qGreen(b), 2) + qPow(qBlue(a) - qBlue(b), 2);
+			unsigned int diff = qPow(qRed(a) - qRed(b), 2) + qPow(qGreen(a) - qGreen(b), 2) + qPow(qBlue(a) - qBlue(b), 2);
+			if(log && diff)
+				PHDEBUG << QString("(%1, %2) %3 / %4 => %5 / %6")
+				    .arg(i)
+				    .arg(j)
+				    .arg(QColor(a).name())
+				    .arg(QColor(b).name())
+				    .arg(diff)
+				    .arg(result);
+			result += diff;
 			if(result > max / 2) {
-				PHDEBUG << QString("(%1, %2) Too many difference detected...").arg(i).arg(j);
+				PHDEBUG << QString("(%1, %2) Too many difference detected: %3 / %4")
+				    .arg(i)
+				    .arg(j)
+				    .arg(result)
+				    .arg(max);
 				return max;
 			}
 		}
