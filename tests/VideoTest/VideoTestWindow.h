@@ -7,7 +7,6 @@
 #include "PhTools/PhClock.h"
 #include "PhTools/PhDebug.h"
 
-#include "PhVideo/PhVideoView.h"
 #include "PhVideo/PhVideoEngine.h"
 
 #include "PhCommonUI/PhFloatingMediaPanel.h"

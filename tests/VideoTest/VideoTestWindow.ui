@@ -28,7 +28,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="PhGraphicView" name="_videoView" native="true"/>
+     <widget class="PhGraphicView" name="videoView" native="true"/>
     </item>
    </layout>
   </widget>
