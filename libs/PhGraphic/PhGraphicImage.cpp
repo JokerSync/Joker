@@ -36,7 +36,7 @@ bool PhGraphicImage::init()
 		}
 	}
 
-	PHDEBUG<<"Error loading:"<< _filename;
+	PHDEBUG << "Error loading" << _filename << ":" << SDL_GetError();
 	return false;
 
 }

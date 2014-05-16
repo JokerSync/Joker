@@ -78,7 +78,7 @@ void GraphicTest::imageTest()
 	int h = 64;
 	PhGraphicView view(w, h);
 
-	PhGraphicImage image("rgbPatternTest.bmp", 0, 0, w, h);
+	PhGraphicImage image("rgbPatternTest.expected.bmp", 0, 0, w, h);
 
 	view.registerInitialization([&]() {
 	                                QVERIFY(image.init());
