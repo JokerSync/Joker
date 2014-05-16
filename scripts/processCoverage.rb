@@ -3,9 +3,7 @@
 require 'json'
 require 'markaby'
 
-s = gets.chomp
-
-js = JSON.parse(s)
+js = JSON.parse(ARGF.read)
 
 total_line_count = 0
 total_covered_lines = 0
@@ -52,7 +50,10 @@ mab.html do
       total_line_count += covered_lines + not_covered_lines
       total_covered_lines += covered_lines
     end
-    total_coverage = 100 * total_covered_lines / total_line_count
+    total_coverage = 0
+    if total_line_count > 0
+      total_coverage = 100 * total_covered_lines / total_line_count
+    end
     p "Total coverage : #{total_coverage}%"
   end
 end

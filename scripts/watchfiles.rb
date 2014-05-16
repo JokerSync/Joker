@@ -21,7 +21,7 @@ while true do
 
     diff_hash.each do |df|
       puts "Detected change in #{df[0]}, refreshing"
-      system "cat #{payload} | #{script}"
+      system "#{script} #{payload}"
     end
   end
 
