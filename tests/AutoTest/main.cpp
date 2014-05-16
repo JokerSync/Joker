@@ -36,7 +36,11 @@ int main(int argc, char *argv[])
 	QStringList testArgList;
 
 	for(int i = 0; i < argc; i++) {
-		if(strcmp(argv[i], "tc") == 0)
+		if(strcmp(argv[i], "all") == 0) {
+			testTC = testSettings = testDoc = testSony = testTCEdit = testLockableSpinBox =
+					testWindow = testGraphic = testGraphicStrip = testGraphicText = true;
+		}
+		else if(strcmp(argv[i], "tc") == 0)
 			testTC = true;
 		else if(strcmp(argv[i], "settings") == 0)
 			testSettings = true;
