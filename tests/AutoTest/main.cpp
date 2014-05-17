@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "all") == 0) {
 			testTC = testSettings = testDoc = testSony = testTCEdit = testLockableSpinBox =
-					testWindow = testGraphic = testGraphicStrip = testGraphicText = true;
+			                                                              testWindow = testGraphic = testGraphicStrip = testGraphicText = true;
 		}
 		else if(strcmp(argv[i], "tc") == 0)
 			testTC = true;
