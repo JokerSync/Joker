@@ -78,7 +78,7 @@ void GraphicTestWindow::on_actionSave_triggered()
 		QMessageBox::critical(this, "Error", QString("Unable to save %1").arg(fileName));
 }
 
-void GraphicTestWindow::onPaint()
+void GraphicTestWindow::onPaint(int width, int height)
 {
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -124,10 +124,10 @@ void GraphicTestWindow::onPaint()
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
 		for(int i = 0; i < quadCount; i++) {
-			glTexCoord3f(0, 0, 1);  glVertex3i(0,               0,              0);
-			glTexCoord3f(1, 0, 1);  glVertex3i(this->width(),   0,              0);
-			glTexCoord3f(1, 1, 1);  glVertex3i(this->width(),   this->height(), 0);
-			glTexCoord3f(0, 1, 1);  glVertex3i(0,               this->height(), 0);
+			glTexCoord3f(0, 0, 1);  glVertex3i(0, 0, 0);
+			glTexCoord3f(1, 0, 1);  glVertex3i(width, 0, 0);
+			glTexCoord3f(1, 1, 1);  glVertex3i(width, height, 0);
+			glTexCoord3f(0, 1, 1);  glVertex3i(0,  height, 0);
 		}
 	}
 	glEnd();
@@ -184,6 +184,6 @@ void GraphicTestWindow::onPaint()
 	text2.draw();
 
 	_x += 4;
-	if(_x > this->width())
+	if(_x > width)
 		_x = -textWidth;
 }

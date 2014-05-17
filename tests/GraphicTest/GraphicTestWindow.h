@@ -27,7 +27,7 @@ private slots:
 
 	void on_actionSave_triggered();
 
-	void onPaint();
+	void onPaint(int width, int height);
 
 private:
 	Ui::GraphicTestWindow *ui;
