@@ -12,8 +12,8 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
-QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
+QMAKE_CXXFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
+QMAKE_LFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
 
 INCLUDEPATH += ../../libs
 
