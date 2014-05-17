@@ -30,8 +30,6 @@ script:
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./AutoTest; fi
 after_success:
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
-- if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --dump payload.json; fi
-- if [[ "$JOB" == BUILD_AUTOTEST ]]; then cat payload.json; fi
 after_failure:
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
