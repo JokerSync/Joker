@@ -55,7 +55,6 @@ void PhGraphicImage::draw()
 	if(!this->ready())
 		this->init();
 
-	glColor3f(1, 1, 1);
 	PhGraphicTexturedRect::draw();
 }
 

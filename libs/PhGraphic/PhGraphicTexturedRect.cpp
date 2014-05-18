@@ -71,7 +71,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, surface->format->BytesPerPixel, surface->w, surface->h, 0,
-	              textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
+				  textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -105,7 +105,7 @@ bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, i
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
-	              GL_RGBA, GL_UNSIGNED_BYTE, data);
+				  GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -139,7 +139,7 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
-	              GL_RGB, GL_UNSIGNED_BYTE, data);
+				  GL_RGB, GL_UNSIGNED_BYTE, data);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -164,10 +164,10 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
 	// Edit the texture object's image data using the information SDL_Surface gives us
 #if defined(Q_OS_MAC)
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
-	              GL_YCBCR_422_APPLE, GL_UNSIGNED_SHORT_8_8_APPLE, data);
+				  GL_YCBCR_422_APPLE, GL_UNSIGNED_SHORT_8_8_APPLE, data);
 #else
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
-	              0x85B9, 0x85BA, data);
+				  0x85B9, 0x85BA, data);
 #endif
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -177,15 +177,9 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
 }
 
 
-void PhGraphicTexturedRect::draw() {
-
-	//PHDEBUG << "PhGraphicTexturedRect::draw()";
-
-	glColor3f(this->color().redF(), this->color().greenF(), this->color().blueF());
-
-	glMatrixMode(GL_MODELVIEW);
-
-	glLoadIdentity();
+void PhGraphicTexturedRect::draw()
+{
+	PhGraphicRect::draw();
 
 	glBindTexture(GL_TEXTURE_2D, _texture);
 
@@ -198,10 +192,10 @@ void PhGraphicTexturedRect::draw() {
 
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
-		glTexCoord3f(0, 0, 1);      glVertex3f(this->x(),      this->y(), this->z());
-		glTexCoord3f(_tu, 0, 1);    glVertex3f(this->x() + this->width(), this->y(), this->z());
-		glTexCoord3f(_tu, _tv, 1);  glVertex3f(this->x() + this->width(), this->y() + this->height(),  this->z());
-		glTexCoord3f(0, _tv, 1);    glVertex3f(this->x(),      this->y() + this->height(),  this->z());
+		glTexCoord3f(0, 0, 1);      glVertex3i(this->x(),      this->y(), this->z());
+		glTexCoord3f(_tu, 0, 1);    glVertex3i(this->x() + this->width(), this->y(), this->z());
+		glTexCoord3f(_tu, _tv, 1);  glVertex3i(this->x() + this->width(), this->y() + this->height(),  this->z());
+		glTexCoord3f(0, _tv, 1);    glVertex3i(this->x(),      this->y() + this->height(),  this->z());
 	}
 	glEnd();
 

@@ -287,9 +287,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			// - it is a different people
 			// - the distance between the latest text and the current is superior to a limit
 			if((
-			       (lastText == NULL)
-			       || (lastText->people() != text->people())
-			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
+				   (lastText == NULL)
+				   || (lastText->people() != text->people())
+				   || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
 			   ) {
 
 				gPeople.setX(x + (text->timeIn() - timeBetweenPeopleAndText) / timePerPixel - offset - gPeople.width());
@@ -379,9 +379,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gLoop.setX(x + loop->timeIn() / timePerPixel - offset);
 				gLoop.setY(y);
 				gLoop.setZ(-1);
-				gLoop.setHThick(height / 40);
+				gLoop.setThickness(height / 40);
 				gLoop.setHeight(height);
-				gLoop.setCrossHeight(height / 4);
+				gLoop.setCrossSize(height / 4);
 				gLoop.setWidth(height / 4);
 
 				gLoop.draw();
@@ -401,8 +401,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gLoopPred.setY(y - howFarIsLoop);
 				gLoopPred.setHeight(30);
 
-				gLoopPred.setHThick(3);
-				gLoopPred.setCrossHeight(20);
+				gLoopPred.setThickness(3);
+				gLoopPred.setCrossSize(20);
 				gLoopPred.setWidth(width / 10);
 
 				gLoopPred.draw();

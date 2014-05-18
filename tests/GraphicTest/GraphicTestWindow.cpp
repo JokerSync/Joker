@@ -137,21 +137,24 @@ void GraphicTestWindow::onPaint(int width, int height)
 	//	if((_text.getX()+_text.getWidth()) < 0)
 	//		_text.setX(this.width());
 
+	PhGraphicSolidRect rect3(0, 800, 400, 300);
+	rect3.setColor(Qt::blue);
+	rect3.draw();
 
 	PhGraphicLoop vLoop;
 	vLoop.setPosition(100, 500, 3);
 	vLoop.setSize(220, 200);
-	vLoop.setHThick(50);
-	vLoop.setCrossHeight(60);
+	vLoop.setThickness(30);
+	vLoop.setCrossSize(100);
 	vLoop.setColor(QColor(255, 0, 255));
 	vLoop.draw();
 
 	PhGraphicLoop hLoop;
 	hLoop.setHorizontalLoop(true);
-	hLoop.setPosition(200, 500, 3);
+	hLoop.setPosition(0, 800, 3);
 	hLoop.setSize(300, 50);
-	hLoop.setHThick(5);
-	hLoop.setCrossHeight(60);
+	hLoop.setThickness(20);
+	hLoop.setCrossSize(60);
 	hLoop.setColor(QColor(255, 0, 255));
 	hLoop.draw();
 

@@ -44,10 +44,11 @@ public:
 	virtual void dispose();
 
 	/**
-	 * @brief draw
-	 * virtual method called to draw objects
+	 * @brief Draw the graphical object
+	 *
+	 * Since the object is virtual, it only set the color.
 	 */
-	virtual void draw() = 0;
+	virtual void draw();
 
 	/**
 	 * @brief setPosition

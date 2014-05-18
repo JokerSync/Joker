@@ -18,14 +18,13 @@ PhGraphicSolidRect::~PhGraphicSolidRect()
 
 void PhGraphicSolidRect::draw()
 {
+	PhGraphicObject::draw();
 //		/*
 //		(0,0) ------ (1,0)
 //		  |            |
 //		  |            |
 //		(0,1) ------ (1,1)
 //		*/
-
-	glColor3f(this->color().redF(), this->color().greenF(), this->color().blueF());
 
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{

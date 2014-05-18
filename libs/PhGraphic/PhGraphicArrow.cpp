@@ -14,7 +14,7 @@ void PhGraphicArrow::setDirection(PhGraphicArrow::PhGraphicArrowDirection direct
 
 void PhGraphicArrow::draw()
 {
-	glColor3f(this->color().redF(), this->color().greenF(), this->color().blueF());
+	PhGraphicObject::draw();
 
 	int thickness = this->height() / 10;
 	int nose = this->height() / 3;

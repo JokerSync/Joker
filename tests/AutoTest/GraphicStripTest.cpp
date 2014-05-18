@@ -23,7 +23,7 @@ void GraphicStripTest::drawTest()
 	PhGraphicStrip _strip(&_settings);
 
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
-	            _strip.draw(0, 0, w, h);
+				_strip.draw(0, 0, w, h);
 			});
 
 	PhStripDoc * doc = _strip.doc();

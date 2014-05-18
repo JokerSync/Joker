@@ -15,7 +15,7 @@ void PhGraphicDashedLine::setDashCount(int dashCount)
 
 void PhGraphicDashedLine::draw()
 {
-	glColor3f(this->color().redF(), this->color().greenF(), this->color().blueF());
+	PhGraphicRect::draw();
 
 	int width = this->width() / (2 * _dashCount - 1);
 	int x = this->x();

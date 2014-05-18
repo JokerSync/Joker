@@ -37,12 +37,9 @@ PhFont * PhGraphicText::getFont()
 
 void PhGraphicText::draw()
 {
+	PhGraphicRect::draw();
+
 	_font->select();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glColor3f(this->color().redF(), this->color().greenF(), this->color().blueF());
 
 	glEnable(GL_TEXTURE_2D);
 
@@ -81,10 +78,10 @@ void PhGraphicText::draw()
 			int offset = this->x() + advance * this->width() / totalAdvance;
 			glBegin(GL_QUADS);  //Begining the cube's drawing
 			{
-				glTexCoord3f(tu1, tv1, 1);  glVertex3f(offset,      this->y(), this->z());
-				glTexCoord3f(tu2, tv1, 1);  glVertex3f(offset + w,  this->y(), this->z());
-				glTexCoord3f(tu2, tv2, 1);  glVertex3f(offset + w,  this->y() + h,  this->z());
-				glTexCoord3f(tu1, tv2, 1);  glVertex3f(offset,      this->y() + h,  this->z());
+				glTexCoord3f(tu1, tv1, 1);  glVertex3i(offset,      this->y(), this->z());
+				glTexCoord3f(tu2, tv1, 1);  glVertex3i(offset + w,  this->y(), this->z());
+				glTexCoord3f(tu2, tv2, 1);  glVertex3i(offset + w,  this->y() + h,  this->z());
+				glTexCoord3f(tu1, tv2, 1);  glVertex3i(offset,      this->y() + h,  this->z());
 			}
 			glEnd();
 
