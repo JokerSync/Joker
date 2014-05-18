@@ -39,10 +39,6 @@ public:
 	virtual ~PhGraphicObject();
 
 	/**
-	 * @brief init
-	 */
-	virtual bool init();
-	/**
 	 * @brief dispose
 	 */
 	virtual void dispose();
@@ -108,10 +104,19 @@ public:
 	 */
 	QColor color();
 
+protected:
+	/**
+	 * @brief init
+	 */
+	virtual bool init();
+
+	bool ready();
+
 private:
 
 	int _x, _y, _z;
 	QColor _color;
+	bool _ready;
 };
 
 #endif // PHGRAPHICOBJECT_H

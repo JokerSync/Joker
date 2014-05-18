@@ -73,22 +73,6 @@ public:
 	 * @param info A string
 	 */
 	void addInfo(QString info);
-
-	/**
-	 * @brief Register the client initialization functor.
-	 * @param initFunction A functor
-	 *
-	 * If the OpenGL initialization has already been done,
-	 * the functor is called immediatly.
-	 */
-	void registerInitialization(std::function<void()> initFunction);
-
-	/**
-	 * @brief Register the paint functor.
-	 * @param paintFunction A functor accepting the size as argument.
-	 */
-	void registerPaint(std::function<void(int w, int h)> paintFunction);
-
 signals:
 	/**
 	 * @brief emit a signal just before the paint
@@ -97,17 +81,11 @@ signals:
 	void beforePaint(PhTimeScale frequency);
 
 	/**
-	 * @brief initialize your custom graphic objects here
-	 */
-	void init();
-
-	/**
 	 * @brief paint event, every class have to re-implement it.
 	 * @param width Width of the paint area
 	 * @param height Height of the paint area
 	 */
 	void paint(int width, int height);
-
 protected:
 	/**
 	 * @brief initializeGL

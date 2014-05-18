@@ -32,7 +32,7 @@ bool PhGraphicImage::init()
 			_originalSize.setHeight(_surface->h);
 			_originalSize.setWidth(_surface->w);
 			PHDEBUG << "Loading image";
-			return true;
+			return PhGraphicTexturedRect::init();
 		}
 	}
 
@@ -52,14 +52,19 @@ QSize PhGraphicImage::originalSize() const
 
 void PhGraphicImage::draw()
 {
+	if(!this->ready())
+		this->init();
+
 	glColor3f(1, 1, 1);
 	PhGraphicTexturedRect::draw();
 }
 
-void PhGraphicImage::setFilename(QString filename) {
+void PhGraphicImage::setFilename(QString filename)
+{
 	_filename = filename;
 }
 
-QString PhGraphicImage::getFilename() {
+QString PhGraphicImage::fileName()
+{
 	return _filename;
 }

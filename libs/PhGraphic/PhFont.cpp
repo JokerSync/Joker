@@ -15,18 +15,17 @@
 #include "PhFont.h"
 #include "PhTools/PhDebug.h"
 
-PhFont::PhFont() : _texture(-1), _glyphHeight(0), _boldness(0)
+PhFont::PhFont() : _texture(-1), _glyphHeight(0), _boldness(0), _ready(false)
 {
 }
 
-bool PhFont::setFontFile(QString fontFile)
+void PhFont::setFontFile(QString fontFile)
 {
 	if(fontFile != this->_fontFile) {
 		PHDEBUG << fontFile;
 		this->_fontFile = fontFile;
-		return init(this->_fontFile);
+		_ready = false;
 	}
-	return true;
 }
 
 QString PhFont::getFontFile()
@@ -59,11 +58,11 @@ int PhFont::computeMaxFontSize(QString file)
 }
 
 // This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
-bool PhFont::init(QString fontFile)
+bool PhFont::init()
 {
-	int size = computeMaxFontSize(fontFile);
-	PHDEBUG << "Opening" << fontFile << "at size" << size;
-	TTF_Font * font = TTF_OpenFont(fontFile.toStdString().c_str(), size);
+	int size = computeMaxFontSize(_fontFile);
+	PHDEBUG << "Opening" << _fontFile << "at size" << size;
+	TTF_Font * font = TTF_OpenFont(PHNQ(_fontFile), size);
 
 
 	if(!font)
@@ -144,7 +143,8 @@ bool PhFont::init(QString fontFile)
 	SDL_FreeSurface(matrixSurface);
 	TTF_CloseFont(font);
 
-	return true;
+	_ready = true;
+	return _ready;
 }
 
 int PhFont::getAdvance(unsigned char ch)
@@ -154,6 +154,8 @@ int PhFont::getAdvance(unsigned char ch)
 
 void PhFont::select()
 {
+	if(!_ready)
+		this->init();
 	glBindTexture(GL_TEXTURE_2D, (GLuint)_texture);
 }
 
@@ -175,7 +177,7 @@ void PhFont::setBoldness(int value)
 {
 	if(_boldness != value) {
 		_boldness = value;
-		init(_fontFile);
+		_ready = false;
 	}
 }
 

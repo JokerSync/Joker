@@ -22,14 +22,11 @@ void GraphicStripTest::drawTest()
 	PhGraphicStrip _strip;
 	GraphicStripTestSettings _settings;
 	_strip.setSettings(&_settings);
+#warning /// @todo try to merge two calls into one
+	_strip.init();
 
-	view.registerInitialization([&]() {
-	                                _strip.init();
-								});
-
-	view.registerPaint([&](int width, int height) {
-	                       PHDEBUG << width << height;
-	                       _strip.draw(0, 0, width, height);
+	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
+						   _strip.draw(0, 0, w, h);
 					   });
 
 	PhStripDoc * doc = _strip.doc();

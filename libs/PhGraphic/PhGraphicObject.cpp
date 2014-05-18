@@ -6,7 +6,12 @@
 
 #include "PhGraphicObject.h"
 
-PhGraphicObject::PhGraphicObject(int x, int y) : _x(x), _y(y), _z(0), _color(Qt::white)
+PhGraphicObject::PhGraphicObject(int x, int y) :
+	_x(x),
+	_y(y),
+	_z(0),
+	_color(Qt::white),
+	_ready(false)
 {
 }
 
@@ -20,7 +25,13 @@ void PhGraphicObject::dispose()
 
 bool PhGraphicObject::init()
 {
-	return true;
+	_ready = true;
+	return _ready;
+}
+
+bool PhGraphicObject::ready()
+{
+	return _ready;
 }
 
 void PhGraphicObject::setPosition(int x, int y, int z)

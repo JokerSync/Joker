@@ -27,17 +27,10 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 	_image.setFilename(imageFile);
 	_image.setTextureCoordinate(1, 1);
 	_image.setPosition(50, 0, 1);
-	if (!_image.init())
-		PHDEBUG << "_image not initialize : " << imageFile;
-
-	_image.setSize(_image.originalSize());
 
 	PHDEBUG << "Initialize _font";
-	if (!_font1.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF"))
-		PHDEBUG << "SWENSON not initialize using path : " << QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF";
-
-	if (!_font2.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Arial.ttf"))
-		PHDEBUG << "ARIAL not initialize";
+	_font1.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF");
+	_font2.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Arial.ttf");
 
 	PHDEBUG << "Initialize _rect";
 	_rect.setRect(100, 100, 75, 40);
@@ -65,8 +58,10 @@ void GraphicTestWindow::on_actionChange_font_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName();
 	if(QFile(fileName).exists()) {
-		if(!_font1.setFontFile(fileName))
+		if(PhFont::computeMaxFontSize(fileName) == 0)
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
+		else
+			_font1.setFontFile(fileName);
 	}
 }
 
@@ -83,6 +78,7 @@ void GraphicTestWindow::onPaint(int width, int height)
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	_image.setTextureCoordinate(1, 3);
+	_image.setSize(_image.originalSize());
 	_image.draw();
 
 	_rect.setColor(QColor(0, 255, 0));

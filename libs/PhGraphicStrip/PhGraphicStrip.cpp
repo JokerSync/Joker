@@ -43,9 +43,10 @@ void PhGraphicStrip::setSettings(PhGraphicStripSettings *settings)
 	_settings = settings;
 }
 
-bool PhGraphicStrip::setFontFile(QString fontFile)
+void PhGraphicStrip::setFontFile(QString fontFile)
 {
-	return _textFont.setFontFile(fontFile);
+#warning /// @todo remove and using settings instead
+	_textFont.setFontFile(fontFile);
 }
 
 bool PhGraphicStrip::init()
@@ -54,10 +55,8 @@ bool PhGraphicStrip::init()
 
 	PHDEBUG << "Load the strip background";
 	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png");
-	_stripBackgroundImage.init();
 
 	_stripBackgroundImageInverted.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png");
-	_stripBackgroundImageInverted.init();
 
 	PHDEBUG << "Init the sync bar";
 	_stripSyncBar.setColor(QColor(225, 86, 108));
@@ -328,9 +327,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			// - it is a different people
 			// - the distance between the latest text and the current is superior to a limit
 			if((
-				   (lastText == NULL)
-				   || (lastText->people() != text->people())
-				   || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
+			       (lastText == NULL)
+			       || (lastText->people() != text->people())
+			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
 			   ) {
 
 				gPeople.setX(x + (text->timeIn() - timeBetweenPeopleAndText) / timePerPixel - offset - gPeople.width());

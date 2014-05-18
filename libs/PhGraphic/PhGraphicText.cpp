@@ -37,18 +37,12 @@ PhFont * PhGraphicText::getFont()
 
 void PhGraphicText::draw()
 {
-	int fontHeight = _font->getHeight();
-	if(fontHeight == 0) {
-		PHDEBUG << "Trying to display an uninitialized font:" << _font->getFontFile();
-		return;
-	}
+	_font->select();
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	glColor3f(this->color().redF(), this->color().greenF(), this->color().blueF());
-
-	_font->select();
 
 	glEnable(GL_TEXTURE_2D);
 

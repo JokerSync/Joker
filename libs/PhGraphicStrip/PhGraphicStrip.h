@@ -78,9 +78,8 @@ public:
 	/**
 	 * Set the font used to render text on the strip.
 	 * @param fontFile Font file path
-	 * @return true if the operation succeeds, false otherwise.
 	 */
-	bool setFontFile(QString fontFile);
+	void setFontFile(QString fontFile);
 	/**
 	 * @brief Initializisation of the PhGraphicStrip
 	 *
