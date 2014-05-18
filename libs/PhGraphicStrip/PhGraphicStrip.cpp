@@ -151,11 +151,14 @@ QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selected
 
 void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QList<PhPeople *> selectedPeoples)
 {
+	// Just to preload the font in order to avoid font loading during playback
+	_textFont.select();
+	_hudFont.select();
+
 	_infos.clear();
 
 	int counter = 0;
 	bool invertedColor = _settings->invertColor();
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	int lastDrawElapsed = _testTimer.elapsed();
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();

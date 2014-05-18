@@ -973,11 +973,6 @@ void PhStripDoc::addPeople(PhPeople *people)
 
 }
 
-bool PhStripDoc::forceRatio169() const
-{
-	return _videoForceRatio169;
-}
-
 PhPeople *PhStripDoc::peopleByName(QString name)
 {
 	foreach(PhPeople* people, _peoples)
@@ -1231,6 +1226,16 @@ PhTime PhStripDoc::videoFrameIn()
 PhTime PhStripDoc::lastTime()
 {
 	return _lastTime;
+}
+
+void PhStripDoc::setForceRatio169(bool forceRatio)
+{
+	_videoForceRatio169 = forceRatio;
+}
+
+bool PhStripDoc::forceRatio169() const
+{
+	return _videoForceRatio169;
 }
 
 QList<PhStripText *> PhStripDoc::texts(bool alternate)
