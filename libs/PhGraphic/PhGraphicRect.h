@@ -61,7 +61,7 @@ public:
 	 * @brief Get the rectangle height
 	 * @return The height
 	 */
-	int getHeight();
+	int height();
 
 	/**
 	 * @brief Set the rectangle width
@@ -73,7 +73,7 @@ public:
 	 * @brief Get the rectangle width
 	 * @return The width
 	 */
-	int getWidth();
+	int width();
 
 
 private:

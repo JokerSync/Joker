@@ -161,7 +161,7 @@ void PhGraphicView::paintGL()
 				gInfo.setZ(10);
 				gInfo.setColor(Qt::red);
 				gInfo.draw();
-				y += gInfo.getHeight();
+				y += gInfo.height();
 			}
 		}
 	}

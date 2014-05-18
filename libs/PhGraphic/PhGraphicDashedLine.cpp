@@ -17,15 +17,15 @@ void PhGraphicDashedLine::draw()
 {
 	glColor3f(this->color().redF(), this->color().greenF(), this->color().blueF());
 
-	int width = this->getWidth() / (2 * _dashCount - 1);
-	int x = this->getX();
+	int width = this->width() / (2 * _dashCount - 1);
+	int x = this->x();
 	for(int i = 0; i < _dashCount; i++) {
 		glBegin(GL_QUADS);
 		{
-			glVertex3i(x,      this->getY(), this->getZ());
-			glVertex3i(x + width, this->getY(), this->getZ());
-			glVertex3i(x + width, this->getY() + this->getHeight(),  this->getZ());
-			glVertex3i(x,      this->getY() + this->getHeight(),  this->getZ());
+			glVertex3i(x,      this->y(), this->z());
+			glVertex3i(x + width, this->y(), this->z());
+			glVertex3i(x + width, this->y() + this->height(),  this->z());
+			glVertex3i(x,      this->y() + this->height(),  this->z());
 		}
 		x += 2 * width;
 	}

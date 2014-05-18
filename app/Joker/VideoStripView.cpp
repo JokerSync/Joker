@@ -97,9 +97,9 @@ void VideoStripView::paint()
 
 	int tcOffset = 0;
 	if(_settings->displayNextTC())
-		tcOffset = _nextTCText.getHeight();
+		tcOffset = _nextTCText.height();
 	if(_settings->displayTitle())
-		tcOffset += _titleText.getHeight();
+		tcOffset += _titleText.height();
 
 	_strip.draw(0, y + videoHeight, this->width(), stripHeight, tcOffset, selectedPeoples);
 	foreach(QString info, _strip.infos()) {

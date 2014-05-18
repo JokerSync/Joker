@@ -199,10 +199,10 @@ void PhGraphicTexturedRect::draw() {
 
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
-		glTexCoord3f(0, 0, 1);      glVertex3f(this->getX(),      this->getY(), this->getZ());
-		glTexCoord3f(_tu, 0, 1);    glVertex3f(this->getX() + this->getWidth(), this->getY(), this->getZ());
-		glTexCoord3f(_tu, _tv, 1);  glVertex3f(this->getX() + this->getWidth(), this->getY() + this->getHeight(),  this->getZ());
-		glTexCoord3f(0, _tv, 1);    glVertex3f(this->getX(),      this->getY() + this->getHeight(),  this->getZ());
+		glTexCoord3f(0, 0, 1);      glVertex3f(this->x(),      this->y(), this->z());
+		glTexCoord3f(_tu, 0, 1);    glVertex3f(this->x() + this->width(), this->y(), this->z());
+		glTexCoord3f(_tu, _tv, 1);  glVertex3f(this->x() + this->width(), this->y() + this->height(),  this->z());
+		glTexCoord3f(0, _tv, 1);    glVertex3f(this->x(),      this->y() + this->height(),  this->z());
 	}
 	glEnd();
 

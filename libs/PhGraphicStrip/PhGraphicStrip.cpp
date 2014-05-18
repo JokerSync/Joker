@@ -261,7 +261,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				counter++;
 				int x = rulerTime / timePerPixel - offset;
 
-				rulerRect.setX(x - rulerRect.getWidth() / 2);
+				rulerRect.setX(x - rulerRect.width() / 2);
 				rulerRect.draw();
 
 				QString text = QString::number(rulerNumber);
@@ -273,7 +273,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 				x += timeBetweenRuler / timePerPixel / 2;
 
-				rulerRect.setX(x - rulerRect.getWidth() / 2);
+				rulerRect.setX(x - rulerRect.width() / 2);
 				rulerRect.draw();
 
 				rulerDisc.setX(x);
@@ -328,12 +328,12 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			// - it is a different people
 			// - the distance between the latest text and the current is superior to a limit
 			if((
-			       (lastText == NULL)
-			       || (lastText->people() != text->people())
-			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
+				   (lastText == NULL)
+				   || (lastText->people() != text->people())
+				   || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
 			   ) {
 
-				gPeople.setX(x + (text->timeIn() - timeBetweenPeopleAndText) / timePerPixel - offset - gPeople.getWidth());
+				gPeople.setX(x + (text->timeIn() - timeBetweenPeopleAndText) / timePerPixel - offset - gPeople.width());
 				gPeople.setY(y + track * trackHeight);
 				gPeople.setZ(-1);
 				gPeople.setHeight(trackHeight / 2);
@@ -343,30 +343,30 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gPeople.draw();
 			}
 
-			PhTime timePerPeopleHeight = gPeople.getHeight() * verticalTimePerPixel;
+			PhTime timePerPeopleHeight = gPeople.height() * verticalTimePerPixel;
 
 			if(displayNextText && (timeIn < text->timeIn() + timePerPeopleHeight) && ((lastText == NULL) || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
 				PhPeople * people = text->people();
 
 				int howFarIsText = (text->timeIn() - clockTime) / verticalTimePerPixel;
 				//This line is used to see which text's name will be displayed
-				gPeople.setX(width - gPeople.getWidth());
-				gPeople.setY(y - howFarIsText - gPeople.getHeight());
+				gPeople.setX(width - gPeople.width());
+				gPeople.setY(y - howFarIsText - gPeople.height());
 
 				gPeople.setZ(-3);
 				gPeople.setHeight(trackHeight / 2);
 
 				gPeople.setColor(computeColor(people, selectedPeoples, invertedColor));
 
-				PhGraphicSolidRect background(gPeople.getX(), gPeople.getY(), gPeople.getWidth(), gPeople.getHeight() + 2);
+				PhGraphicSolidRect background(gPeople.x(), gPeople.y(), gPeople.width(), gPeople.height() + 2);
 				if(selectedPeoples.size() && !selectedPeoples.contains(people))
 					background.setColor(QColor(90, 90, 90));
 				else
 					background.setColor(QColor(180, 180, 180));
 
-				background.setZ(gPeople.getZ() - 1);
+				background.setZ(gPeople.z() - 1);
 
-				if(gPeople.getY() > tcOffset) {
+				if(gPeople.y() > tcOffset) {
 					if(!invertedColor)
 						background.draw();
 

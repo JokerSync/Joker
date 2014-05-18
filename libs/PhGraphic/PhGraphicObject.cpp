@@ -45,15 +45,15 @@ void PhGraphicObject::setZ(int z)
 }
 
 
-int PhGraphicObject::getX() {
+int PhGraphicObject::x() {
 	return _x;
 }
 
-int PhGraphicObject::getY() {
+int PhGraphicObject::y() {
 	return _y;
 }
 
-int PhGraphicObject::getZ()
+int PhGraphicObject::z()
 {
 	return _z;
 }

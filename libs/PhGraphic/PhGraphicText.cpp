@@ -76,21 +76,21 @@ void PhGraphicText::draw()
 			float tv2 = tv1 + space;
 
 			// computing quads coordinate;
-			int h = this->getHeight() * 128 / _font->getHeight();
-			int w = this->getWidth() * 128 / totalAdvance;
+			int h = this->height() * 128 / _font->getHeight();
+			int w = this->width() * 128 / totalAdvance;
 
 			//        (tu1, tv1) --- (tu2, tv1)
 			//            |              |
 			//            |              |
 			//        (tu1, tv2) --- (tu2, tv2)
 
-			int offset = this->getX() + advance * this->getWidth() / totalAdvance;
+			int offset = this->x() + advance * this->width() / totalAdvance;
 			glBegin(GL_QUADS);  //Begining the cube's drawing
 			{
-				glTexCoord3f(tu1, tv1, 1);  glVertex3f(offset,      this->getY(), this->getZ());
-				glTexCoord3f(tu2, tv1, 1);  glVertex3f(offset + w,  this->getY(), this->getZ());
-				glTexCoord3f(tu2, tv2, 1);  glVertex3f(offset + w,  this->getY() + h,  this->getZ());
-				glTexCoord3f(tu1, tv2, 1);  glVertex3f(offset,      this->getY() + h,  this->getZ());
+				glTexCoord3f(tu1, tv1, 1);  glVertex3f(offset,      this->y(), this->z());
+				glTexCoord3f(tu2, tv1, 1);  glVertex3f(offset + w,  this->y(), this->z());
+				glTexCoord3f(tu2, tv2, 1);  glVertex3f(offset + w,  this->y() + h,  this->z());
+				glTexCoord3f(tu1, tv2, 1);  glVertex3f(offset,      this->y() + h,  this->z());
 			}
 			glEnd();
 

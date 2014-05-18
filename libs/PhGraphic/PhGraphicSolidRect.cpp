@@ -29,10 +29,10 @@ void PhGraphicSolidRect::draw()
 
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
-		glVertex3i(this->getX(),      this->getY(), this->getZ());
-		glVertex3i(this->getX() + this->getWidth(), this->getY(), this->getZ());
-		glVertex3i(this->getX() + this->getWidth(), this->getY() + this->getHeight(),  this->getZ());
-		glVertex3i(this->getX(),      this->getY() + this->getHeight(),  this->getZ());
+		glVertex3i(this->x(),      this->y(), this->z());
+		glVertex3i(this->x() + this->width(), this->y(), this->z());
+		glVertex3i(this->x() + this->width(), this->y() + this->height(),  this->z());
+		glVertex3i(this->x(),      this->y() + this->height(),  this->z());
 	}
 	glEnd();
 }

@@ -70,7 +70,7 @@ public:
 	 * @brief Get the object X coordinate
 	 * @return An integer value
 	 */
-	int getX();
+	int x();
 
 	/**
 	 * @brief Set the object Y coordinate
@@ -82,7 +82,7 @@ public:
 	 * @brief Get the object y coordinate
 	 * @return An integer value
 	 */
-	int getY();
+	int y();
 
 	/**
 	 * @brief Set the object z coordinate
@@ -94,7 +94,7 @@ public:
 	 * @brief Get the object z coordinate
 	 * @return An integer value
 	 */
-	int getZ();
+	int z();
 
 	/**
 	 * @brief Set the object color
