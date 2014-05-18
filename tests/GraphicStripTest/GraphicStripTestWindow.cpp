@@ -12,11 +12,10 @@
 GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settings) :
 	PhDocumentWindow(settings),
 	ui(new Ui::GraphicStripTestWindow),
-	_settings(settings)
+	_settings(settings),
+	_strip(settings)
 {
 	ui->setupUi(this);
-
-	_strip.setSettings(_settings);
 
 	_doc = _strip.doc();
 	_clock = _strip.clock();
@@ -40,7 +39,6 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 		               _settings->trackNumber(),
 		               _settings->startTime());
 
-	_strip.init();
 	connect(ui->stripView, &PhGraphicView::beforePaint, _clock, &PhClock::tick);
 	connect(ui->stripView, &PhGraphicView::paint, this, &GraphicStripTestWindow::onPaint);
 }

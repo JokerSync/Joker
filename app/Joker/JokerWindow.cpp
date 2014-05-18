@@ -26,6 +26,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	PhDocumentWindow(settings),
 	ui(new Ui::JokerWindow),
 	_settings(settings),
+	_strip(settings),
+	_doc(_strip.doc()),
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_needToSave(false),
@@ -41,12 +43,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	connect(ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
-	// Get the pointer to the doc :
-	_doc = _strip.doc();
-
-	// Pass the settings to the modules
-	_strip.setSettings(_settings);
-	_strip.init();
 	_videoEngine.setSettings(_settings);
 	ui->videoStripView->setGraphicSettings(_settings);
 

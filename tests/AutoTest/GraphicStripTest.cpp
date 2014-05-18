@@ -19,11 +19,8 @@ void GraphicStripTest::drawTest()
 {
 	PhGraphicView view(980, 320);
 
-	PhGraphicStrip _strip;
 	GraphicStripTestSettings _settings;
-	_strip.setSettings(&_settings);
-#warning /// @todo try to merge two calls into one
-	_strip.init();
+	PhGraphicStrip _strip(&_settings);
 
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
 	            _strip.draw(0, 0, w, h);

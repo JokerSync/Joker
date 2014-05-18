@@ -233,10 +233,10 @@ private slots:
 
 private:
 	Ui::JokerWindow *ui;
+	JokerSettings *_settings;
 	PhGraphicStrip _strip;
 	PhVideoEngine _videoEngine;
 	PhStripDoc *_doc;
-	JokerSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	Synchronizer _synchronizer;
 

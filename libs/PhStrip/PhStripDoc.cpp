@@ -14,8 +14,7 @@
 #include "PhTools/PhFileTool.h"
 #include "PhStripDoc.h"
 
-PhStripDoc::PhStripDoc(QObject *parent) :
-	QObject(parent)
+PhStripDoc::PhStripDoc()
 {
 	reset();
 }

@@ -15,51 +15,17 @@
 #include "PhGraphic/PhGraphicArrow.h"
 #include "PhGraphicStrip.h"
 
-PhGraphicStrip::PhGraphicStrip(QObject *parent) :
-	QObject(parent),
-	_doc(this),
+PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
+	_settings(settings),
 	_clock(_doc.timeCodeType()),
 	_trackNumber(4),
-	_settings(NULL),
 	_maxDrawElapsed(0)
 {
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(onDocChanged()));
-}
 
-PhStripDoc *PhGraphicStrip::doc()
-{
-	return &_doc;
-}
-
-PhClock *PhGraphicStrip::clock()
-{
-	return &_clock;
-}
-
-void PhGraphicStrip::setSettings(PhGraphicStripSettings *settings)
-{
-	PHDEBUG;
-	_settings = settings;
-}
-
-void PhGraphicStrip::setFontFile(QString fontFile)
-{
-#warning /// @todo remove and using settings instead
-	_textFont.setFontFile(fontFile);
-}
-
-bool PhGraphicStrip::init()
-{
-	PHDEBUG << _settings;
-
-	PHDEBUG << "Load the strip background";
 	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png");
-
 	_stripBackgroundImageInverted.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png");
-
-	PHDEBUG << "Init the sync bar";
-	_stripSyncBar.setColor(QColor(225, 86, 108));
 
 	PHDEBUG << "Load the font file";
 	QString fontFile = "";
@@ -81,15 +47,27 @@ bool PhGraphicStrip::init()
 	if(_settings != NULL)
 		_textFont.setBoldness(_settings->textBoldness());
 
-	// Init the sync bar
-	_stripSyncBar.setColor(QColor(225, 86, 108));
-
 	_hudFont.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "HelveticaCYPlain.ttf");
 
 	// This is used to make some time-based test
 	_testTimer.start();
 
-	return true;
+}
+
+PhStripDoc *PhGraphicStrip::doc()
+{
+	return &_doc;
+}
+
+PhClock *PhGraphicStrip::clock()
+{
+	return &_clock;
+}
+
+void PhGraphicStrip::setFontFile(QString fontFile)
+{
+#warning /// @todo remove and using settings instead
+	_textFont.setFontFile(fontFile);
 }
 
 void PhGraphicStrip::onDocChanged()
@@ -219,11 +197,12 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		backgroundImage->setTextureCoordinate(n, 1);
 		backgroundImage->draw();
 
-		_stripSyncBar.setSize(4, height);
-		_stripSyncBar.setPosition(x + width/6, y, 0);
-		_stripSyncBar.setColor(QColor(225, 86, 108));
+		PhGraphicSolidRect syncBarRect;
+		syncBarRect.setColor(QColor(225, 86, 108));
+		syncBarRect.setSize(4, height);
+		syncBarRect.setPosition(x + width/6, y, 0);
 
-		_stripSyncBar.draw();
+		syncBarRect.draw();
 
 		if(_settings->displayRuler()) {
 			PhTime rulerTimeIn = _settings->rulerTimeIn();

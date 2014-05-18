@@ -35,7 +35,7 @@ public:
 	/**
 	 * @brief PhStripDoc constructor
 	 */
-	explicit PhStripDoc(QObject *parent = 0);
+	PhStripDoc();
 
 	/**
 	 * @brief The name of the application that generated the document
