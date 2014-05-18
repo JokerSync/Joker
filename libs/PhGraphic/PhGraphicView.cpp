@@ -27,13 +27,9 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	_lastUpdateDuration(0),
 	_maxUpdateDuration(0)
 {
-	if (SDL_Init(SDL_INIT_VIDEO) == 0)
-		PHDEBUG << "init SDL Ok.";
-	else
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 		PHDEBUG << "SDL error:" << SDL_GetError();
-	if (TTF_Init() == 0)
-		PHDEBUG << "init TTF Ok.";
-	else
+	if (TTF_Init() != 0)
 		PHDEBUG << "TTF error:" << TTF_GetError();
 
 	_refreshTimer = new QTimer(this);
@@ -49,7 +45,7 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 
 	int timerInterval = 500 / _screenFrequency;
 	_refreshTimer->start( timerInterval);
-	PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
+	//PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
 	_dropTimer.start();
 }
 

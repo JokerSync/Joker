@@ -62,27 +62,27 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mediaPanel.setClock(_strip.clock());
 #warning /// @todo move to CSS file
 	_mediaPanel.setStyleSheet(
-		"* {"
-		"	  color: white;"
-		"  }"
-		"  PhMediaPanel { "
-		"	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
-		"	  border-style: solid;                                                                          "
-		"	  border-width: 4px;                                                                            "
-		"	  border-radius: 3px;                                                                           "
-		"	  border-color: white;                                                                          "
-		"  }                                                                                                "
-		"  QPushButton, QComboBox{                                                                          "
-		"	  background: grey;                                                                             "
-		"	  border-style: outset;                                                                         "
-		"	  border-width: 2px;                                                                            "
-		"	  border-radius: 5px;                                                                           "
-		"	  border-color: white;                                                                          "
-		"  }                                                                                                "
-		"  QLabel#_timecodeLabel{                                                                           "
-		"	  padding: 10px;                                                                                "
-		"  }                                                                                                "
-		);
+	    "* {"
+	    "	  color: white;"
+	    "  }"
+	    "  PhMediaPanel { "
+	    "	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
+	    "	  border-style: solid;                                                                          "
+	    "	  border-width: 4px;                                                                            "
+	    "	  border-radius: 3px;                                                                           "
+	    "	  border-color: white;                                                                          "
+	    "  }                                                                                                "
+	    "  QPushButton, QComboBox{                                                                          "
+	    "	  background: grey;                                                                             "
+	    "	  border-style: outset;                                                                         "
+	    "	  border-width: 2px;                                                                            "
+	    "	  border-radius: 5px;                                                                           "
+	    "	  border-color: white;                                                                          "
+	    "  }                                                                                                "
+	    "  QLabel#_timecodeLabel{                                                                           "
+	    "	  padding: 10px;                                                                                "
+	    "  }                                                                                                "
+	    );
 
 	this->setFocus();
 
@@ -321,10 +321,10 @@ void JokerWindow::on_actionOpen_triggered()
 
 	if(checkSaveFile()) {
 		QString filter = tr("Rythmo files") + " (*.joker *.detx *.mos *.strip);; "
-						 + tr("Joker files") + " (*.joker);; "
-						 + tr("DetX files") + " (*.detx);; "
-						 + tr("Mosaic files") + " (*.mos);; "
-						 + tr("All files") + " (*.*)";
+		                 + tr("Joker files") + " (*.joker);; "
+		                 + tr("DetX files") + " (*.detx);; "
+		                 + tr("Mosaic files") + " (*.mos);; "
+		                 + tr("All files") + " (*.*)";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
 		dlg.selectNameFilter(_settings->selectedFilter());
@@ -418,7 +418,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 
 	QString lastFolder = _settings->lastVideoFolder();
 	QString filter = tr("Movie files") + _settings->videoFileFilter()
-					 + ";;" + tr("All files") + " (*.*)";
+	                 + ";;" + tr("All files") + " (*.*)";
 
 	QFileDialog dlg(this, tr("Open a video..."), lastFolder, filter);
 	if(dlg.exec()) {

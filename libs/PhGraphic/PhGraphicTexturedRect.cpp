@@ -127,7 +127,6 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 	// Have OpenGL generate a texture object handle for us
 	if(_texture == 0) {
 		glGenTextures( 1, &_texture );
-		PHDEBUG << _texture;
 		if(_texture == 0) {
 			PHDEBUG << "glGenTextures() errored: is opengl context ready?";
 			return false;
