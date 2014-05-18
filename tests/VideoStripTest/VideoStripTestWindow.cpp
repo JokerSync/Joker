@@ -171,24 +171,11 @@ void VideoStripTestWindow::on_actionSet_Time_Code_triggered()
 
 }
 
-void VideoStripTestWindow::on_actionChange_font_triggered()
-{
-	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
-	if(QFile(fontFile).exists()) {
-		if(PhFont::computeMaxFontSize(fontFile) == 0)
-			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
-		else
-			_strip.setFontFile(fontFile);
-	}
-}
-
-
 void VideoStripTestWindow::on_actionFull_screen_triggered()
 {
 	_fullScreenTimer.stop();
 	this->setWindowState(Qt::WindowFullScreen);
 }
-
 
 void VideoStripTestWindow::on_actionTest_mode_triggered()
 {

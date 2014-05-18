@@ -24,31 +24,6 @@ PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
 	// update the  content when the doc changes :
 	this->connect(&_doc, SIGNAL(changed()), this, SLOT(onDocChanged()));
 
-	_stripBackgroundImage.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png");
-	_stripBackgroundImageInverted.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png");
-
-	PHDEBUG << "Load the font file";
-	QString fontFile = "";
-	if(_settings != NULL)
-		fontFile = _settings->textFontFile();
-	else
-		PHDEBUG << "no settings...";
-
-	if(!QFile(fontFile).exists()) {
-		PHDEBUG << "File not found:" << fontFile;
-		fontFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
-		if(_settings != NULL)
-			_settings->textFontFile();
-		else
-			PHDEBUG << "no settings...";
-	}
-	_textFont.setFontFile(fontFile);
-
-	if(_settings != NULL)
-		_textFont.setBoldness(_settings->textBoldness());
-
-	_hudFont.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "HelveticaCYPlain.ttf");
-
 	// This is used to make some time-based test
 	_testTimer.start();
 
@@ -62,12 +37,6 @@ PhStripDoc *PhGraphicStrip::doc()
 PhClock *PhGraphicStrip::clock()
 {
 	return &_clock;
-}
-
-void PhGraphicStrip::setFontFile(QString fontFile)
-{
-#warning /// @todo remove and using settings instead
-	_textFont.setFontFile(fontFile);
 }
 
 void PhGraphicStrip::onDocChanged()
@@ -129,6 +98,15 @@ QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selected
 
 void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QList<PhPeople *> selectedPeoples)
 {
+	// Update the resource path if needed
+	_backgroundImageLight.setFilename(_settings->backgroundImageLight());
+	_backgroundImageDark.setFilename(_settings->backgroundImageDark());
+
+	_textFont.setFontFile(_settings->textFontFile());
+	_textFont.setBoldness(_settings->textBoldness());
+
+	_hudFont.setFontFile(_settings->hudFontFile());
+
 	// Just to preload the font in order to avoid font loading during playback
 	_textFont.select();
 	_hudFont.select();
@@ -186,9 +164,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		else
 			leftBG -= height - ((-offset) % height);
 
-		PhGraphicTexturedRect* backgroundImage = &_stripBackgroundImage;
+		PhGraphicTexturedRect* backgroundImage = &_backgroundImageLight;
 		if(invertedColor)
-			backgroundImage = &_stripBackgroundImageInverted;
+			backgroundImage = &_backgroundImageDark;
 
 		backgroundImage->setX(x + leftBG);
 		backgroundImage->setY(y);

@@ -146,8 +146,8 @@ private:
 	/**
 	 * Background Image used for the strip band
 	 */
-	PhGraphicImage _stripBackgroundImage;
-	PhGraphicImage _stripBackgroundImageInverted;
+	PhGraphicImage _backgroundImageLight;
+	PhGraphicImage _backgroundImageDark;
 
 	/**
 	 * @brief _test
