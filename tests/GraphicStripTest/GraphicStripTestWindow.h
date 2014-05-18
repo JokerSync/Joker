@@ -76,6 +76,8 @@ private slots:
 
 	void onPaint(int width, int height);
 
+	void on_actionChange_font_triggered();
+
 protected:
 	PhClock *_clock;
 private:

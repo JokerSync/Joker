@@ -215,9 +215,6 @@
    </property>
   </action>
   <action name="actionChange_font">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>Change font...</string>
    </property>
