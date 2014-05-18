@@ -102,10 +102,10 @@ void PhGraphicView::onRefresh()
 	if(this->refreshRate() > _maxRefreshRate)
 		_maxRefreshRate = this->refreshRate();
 	addInfo(QString("refresh: %1x%2, %3 / %4")
-			.arg(this->width())
-			.arg(this->height())
-			.arg(_maxRefreshRate)
-			.arg(this->refreshRate()));
+	        .arg(this->width())
+	        .arg(this->height())
+	        .arg(_maxRefreshRate)
+	        .arg(this->refreshRate()));
 	addInfo(QString("Update : %1 %2").arg(_maxUpdateDuration).arg(_lastUpdateDuration));
 	addInfo(QString("drop: %1 %2").arg(_dropDetected).arg(_dropTimer.elapsed() / 1000));
 
