@@ -21,24 +21,24 @@ PhGraphicLoop::~PhGraphicLoop()
 void PhGraphicLoop::draw()
 {
 	//draw rect
-	int x = _x - _hThick / 2;
-	int y = _y;
+	int x = this->getX() - _hThick / 2;
+	int y = this->getY();
 	int w = _hThick;
-	int h = _h;
+	int h = this->getHeight();
 
-	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+	glColor3f(this->color().redF(), this->color().greenF(), this->color().blueF());
 
 	if(_horizontal) {
-		w = _w;
+		w = this->getWidth();
 		h = _hThick;
 	}
 
 	glBegin(GL_QUADS);  // draw the vertical line
 	{
-		glVertex3f(x,       y,  _z);
-		glVertex3f(x + w,   y,  _z);
-		glVertex3f(x + w,   y + h,  _z);
-		glVertex3f(x,       y + h,  _z);
+		glVertex3f(x,       y,  this->getZ());
+		glVertex3f(x + w,   y,  this->getZ());
+		glVertex3f(x + w,   y + h,  this->getZ());
+		glVertex3f(x,       y + h,  this->getZ());
 	}
 
 
@@ -47,26 +47,26 @@ void PhGraphicLoop::draw()
 
 
 	if(_horizontal) {
-		x = _x + _w / 2 - _crossHeight / 2;
-		y = _y - _crossHeight / 2;
+		x = this->getX() + this->getWidth() / 2 - _crossHeight / 2;
+		y = this->getY() - _crossHeight / 2;
 		w = _hThick;
 		h = _crossHeight;
-		_w = _crossHeight;
-
+#warning /// @todo Bad bad bad!!!!
+		this->setWidth(_crossHeight);
 	}
 	else {
-		x = _x - _w/2;
-		y = _y + _h/2 - _crossHeight / 2;
+		x = this->getX() - this->getWidth()/2;
+		y = this->getY() + this->getHeight()/2 - _crossHeight / 2;
 		w = _hThick;
 		h = _crossHeight;
 
 	}
 	glBegin(GL_QUADS);  // draw the fist cross segment
 	{
-		glVertex3f(x,           y,      _z);
-		glVertex3f(x + w,       y,      _z);
-		glVertex3f(x + _w,      y + h,  _z);
-		glVertex3f(x + _w - w,  y + h,  _z);
+		glVertex3f(x,           y,      this->getZ());
+		glVertex3f(x + w,       y,      this->getZ());
+		glVertex3f(x + this->getWidth(),      y + h,  this->getZ());
+		glVertex3f(x + this->getWidth() - w,  y + h,  this->getZ());
 	}
 
 	glEnd();
@@ -74,18 +74,18 @@ void PhGraphicLoop::draw()
 
 
 	if(_horizontal) {
-		y = _y + _crossHeight / 2;
+		y = this->getY() + _crossHeight / 2;
 
 	}
 	else {
-		y = _y + _h/2 + _crossHeight/2;
+		y = this->getY() + this->getHeight()/2 + _crossHeight/2;
 	}
 	glBegin(GL_QUADS);  // draw the second cross segment
 	{
-		glVertex3f(x,       y,  _z);
-		glVertex3f(x + w,   y,  _z);
-		glVertex3f(x + _w,  y - h,  _z);
-		glVertex3f(x + _w -w,       y - h,  _z);
+		glVertex3f(x,       y,  this->getZ());
+		glVertex3f(x + w,   y,  this->getZ());
+		glVertex3f(x + this->getWidth(),  y - h,  this->getZ());
+		glVertex3f(x + this->getWidth() -w,       y - h,  this->getZ());
 	}
 
 	glEnd();

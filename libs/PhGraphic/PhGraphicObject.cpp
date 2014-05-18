@@ -59,7 +59,7 @@ int PhGraphicObject::getZ()
 }
 
 
-QColor PhGraphicObject::getColor() {
+QColor PhGraphicObject::color() {
 	return _color;
 }
 

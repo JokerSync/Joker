@@ -14,44 +14,44 @@ void PhGraphicArrow::setDirection(PhGraphicArrow::PhGraphicArrowDirection direct
 
 void PhGraphicArrow::draw()
 {
-	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+	glColor3f(this->color().redF(), this->color().greenF(), this->color().blueF());
 
-	int thickness = _h / 10;
-	int nose = _h / 3;
+	int thickness = this->getHeight() / 10;
+	int nose = this->getHeight() / 3;
 
 	switch (_direction) {
 	case DownLeftToUpRight:
 		glBegin(GL_QUADS);
 		{
-			glVertex3i(_x,      _y + thickness, _z);
-			glVertex3i(_x+ thickness,      _y, _z);
-			glVertex3i(_x + _w, _y + _h- thickness,  _z);
-			glVertex3i(_x + _w - thickness, _y + _h,  _z);
+			glVertex3i(this->getX(),      this->getY() + thickness, this->getZ());
+			glVertex3i(this->getX()+ thickness,      this->getY(), this->getZ());
+			glVertex3i(this->getX() + this->getWidth(), this->getY() + this->getHeight()- thickness,  this->getZ());
+			glVertex3i(this->getX() + this->getWidth() - thickness, this->getY() + this->getHeight(),  this->getZ());
 		}
 		glEnd();
 
 		glBegin(GL_TRIANGLES);
 		{
-			glVertex3i(_x + _w, _y + _h,  _z);
-			glVertex3i(_x + _w - nose, _y + _h,  _z);
-			glVertex3i(_x + _w, _y + _h- nose,  _z);
+			glVertex3i(this->getX() + this->getWidth(), this->getY() + this->getHeight(),  this->getZ());
+			glVertex3i(this->getX() + this->getWidth() - nose, this->getY() + this->getHeight(),  this->getZ());
+			glVertex3i(this->getX() + this->getWidth(), this->getY() + this->getHeight()- nose,  this->getZ());
 		}
 		glEnd();
 		break;
 	case UpLefToDownRight:
 		glBegin(GL_QUADS);
 		{
-			glVertex3i(_x + _w -thickness, _y, _z);
-			glVertex3i(_x,      _y + _h-thickness,  _z);
-			glVertex3i(_x+thickness,      _y + _h,  _z);
-			glVertex3i(_x + _w, _y+thickness, _z);
+			glVertex3i(this->getX() + this->getWidth() -thickness, this->getY(), this->getZ());
+			glVertex3i(this->getX(),      this->getY() + this->getHeight()-thickness,  this->getZ());
+			glVertex3i(this->getX()+thickness,      this->getY() + this->getHeight(),  this->getZ());
+			glVertex3i(this->getX() + this->getWidth(), this->getY()+thickness, this->getZ());
 		}
 		glEnd();
 		glBegin(GL_TRIANGLES);
 		{
-			glVertex3i(_x + _w, _y,  _z);
-			glVertex3i(_x + _w - nose, _y,  _z);
-			glVertex3i(_x + _w, _y + nose,  _z);
+			glVertex3i(this->getX() + this->getWidth(), this->getY(),  this->getZ());
+			glVertex3i(this->getX() + this->getWidth() - nose, this->getY(),  this->getZ());
+			glVertex3i(this->getX() + this->getWidth(), this->getY() + nose,  this->getZ());
 		}
 		glEnd();
 		break;

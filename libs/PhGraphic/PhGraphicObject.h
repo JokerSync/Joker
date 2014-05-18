@@ -62,42 +62,43 @@ public:
 	 */
 	void setPosition(int x, int y, int z);
 	/**
-	 * @brief setX
-	 * @param x
+	 * @brief Set the object X coordinate
+	 * @param x An integer value
 	 */
 	void setX(int x);
 	/**
-	 * @brief getX
-	 * @return
+	 * @brief Get the object X coordinate
+	 * @return An integer value
 	 */
 	int getX();
 
 	/**
-	 * @brief setY
-	 * @param y
+	 * @brief Set the object Y coordinate
+	 * @param y An integer value
 	 */
 	void setY(int y);
+
 	/**
-	 * @brief getY
-	 * @return
+	 * @brief Get the object y coordinate
+	 * @return An integer value
 	 */
 	int getY();
 
 	/**
-	 * @brief setZ
-	 * @param z
+	 * @brief Set the object z coordinate
+	 * @param z An integer value
 	 */
 	void setZ(int z);
 
 	/**
-	 * @brief getZ
-	 * @return
+	 * @brief Get the object z coordinate
+	 * @return An integer value
 	 */
 	int getZ();
 
 	/**
-	 * @brief Set the color of the object
-	 * @param color the desired color
+	 * @brief Set the object color
+	 * @param color A color value
 	 */
 	void setColor(QColor color);
 
@@ -105,30 +106,11 @@ public:
 	 * @brief Get the color of the object
 	 * @return the color
 	 */
-	QColor getColor();
+	QColor color();
 
-protected:
+private:
 
-	/**
-	 * @brief _x
-	 * is the PhGraphicObject horizontal position
-	 */
-	int _x;
-	/**
-	 * @brief _y
-	 * is the PhGraphicObject vertical position
-	 */
-	int _y;
-	/**
-	 * @brief _z
-	 * is the PhGrapicObject depth
-	 */
-	int _z;
-
-	/**
-	 * @brief _color
-	 * The PhColor of the PhGraphicObject
-	 */
+	int _x, _y, _z;
 	QColor _color;
 };
 

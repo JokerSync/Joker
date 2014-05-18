@@ -142,13 +142,22 @@ void GraphicTestWindow::onPaint(int width, int height)
 	//		_text.setX(this.width());
 
 
-	PhGraphicLoop loop;
-	loop.setPosition(100, 50, -3);
-	loop.setSize(120, 100);
-	loop.setHThick(5);
-	loop.setCrossHeight(60);
-	loop.setColor(QColor(1, 255, 1));
-	loop.draw();
+	PhGraphicLoop vLoop;
+	vLoop.setPosition(100, 500, 3);
+	vLoop.setSize(220, 200);
+	vLoop.setHThick(50);
+	vLoop.setCrossHeight(60);
+	vLoop.setColor(QColor(255, 0, 255));
+	vLoop.draw();
+
+	PhGraphicLoop hLoop;
+	hLoop.setHorizontalLoop(true);
+	hLoop.setPosition(200, 500, 3);
+	hLoop.setSize(120, 100);
+	hLoop.setHThick(5);
+	hLoop.setCrossHeight(60);
+	hLoop.setColor(QColor(255, 0, 255));
+	hLoop.draw();
 
 	//_yuvRect.draw();
 

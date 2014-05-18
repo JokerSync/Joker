@@ -25,14 +25,14 @@ void PhGraphicSolidRect::draw()
 //		(0,1) ------ (1,1)
 //		*/
 
-	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+	glColor3f(this->color().redF(), this->color().greenF(), this->color().blueF());
 
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
-		glVertex3i(_x,      _y, _z);
-		glVertex3i(_x + _w, _y, _z);
-		glVertex3i(_x + _w, _y + _h,  _z);
-		glVertex3i(_x,      _y + _h,  _z);
+		glVertex3i(this->getX(),      this->getY(), this->getZ());
+		glVertex3i(this->getX() + this->getWidth(), this->getY(), this->getZ());
+		glVertex3i(this->getX() + this->getWidth(), this->getY() + this->getHeight(),  this->getZ());
+		glVertex3i(this->getX(),      this->getY() + this->getHeight(),  this->getZ());
 	}
 	glEnd();
 }
