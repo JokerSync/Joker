@@ -39,19 +39,19 @@ void VideoTest::goToTest() {
 	QTest::qWait(WAIT_TIME);
 	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_000.bmp"));
 
-	_videoEngine.clock()->setFrame(PhTimeCode::frameFromString("00:00:00:20", PhTimeCodeType25));
+	_videoEngine.clock()->setFrame(20);
 
 	_view.updateGL();
 	QTest::qWait(WAIT_TIME);
 	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_020.bmp"));
 
-	_videoEngine.clock()->setFrame(PhTimeCode::frameFromString("00:00:04:00", PhTimeCodeType25));
+	_videoEngine.clock()->setFrame(100);
 
 	_view.updateGL();
 	QTest::qWait(WAIT_TIME);
 	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_100.bmp"));
 
-	_videoEngine.clock()->setFrame(PhTimeCode::frameFromString("00:00:03:00", PhTimeCodeType25));
+	_videoEngine.clock()->setFrame(75);
 
 	_view.updateGL();
 	QTest::qWait(WAIT_TIME);
@@ -115,7 +115,7 @@ void VideoTest::deinterlaceTest() {
 	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("deinterlace_000.bmp"));
 
 	//Move one picture forward
-	_videoEngine.clock()->setFrame(PhTimeCode::frameFromString("00:00:00:01", PhTimeCodeType25));
+	_videoEngine.clock()->setFrame(1);
 
 	//Go back to interlaced mode
 	_videoEngine.setDeinterlace(false);
