@@ -42,7 +42,6 @@ public:
 	/**
 	 * @brief PhVideoEngine constructor
 	 * @param settings The settings
-	 * @param parent The parent object
 	 */
 	PhVideoEngine(PhVideoSettings *settings);
 

@@ -106,10 +106,14 @@ public:
 
 protected:
 	/**
-	 * @brief init
+	 * @brief Initialize the graphic object
 	 */
 	virtual bool init();
 
+	/**
+	 * @brief Check if the graphic object is initialized
+	 * @return A boolean value
+	 */
 	bool ready();
 
 private:

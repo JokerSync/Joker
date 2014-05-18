@@ -92,7 +92,7 @@ public:
 
 	/**
 	 * @brief Compute the maximum font size
-	 * @param file A font file
+	 * @param fileName A font file
 	 *
 	 * Compute the maximum font size to initialize the font with
 	 * so the glyph never take more than 128 pixel
