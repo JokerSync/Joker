@@ -13,11 +13,10 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	: PhDocumentWindow(settings),
 	ui(new Ui::VideoTestWindow),
 	_settings(settings),
-	_videoEngine(false),
+	_videoEngine(settings),
 	_maxVideoRate(0)
 {
 	ui->setupUi(this);
-	_videoEngine.setSettings(settings);
 	ui->videoView->setGraphicSettings(settings);
 
 	_mediaPanelDialog.setClock(_videoEngine.clock());
@@ -82,7 +81,7 @@ void VideoTestWindow::resizeEvent(QResizeEvent *)
 {
 	PHDEBUG << this->width() << this->height();
 	_mediaPanelDialog.move(this->x() + this->width() / 2 - _mediaPanelDialog.width() / 2,
-	                       this->y() + this->height() * 0.95 - _mediaPanelDialog.height());
+						   this->y() + this->height() * 0.95 - _mediaPanelDialog.height());
 }
 
 void VideoTestWindow::closeEvent(QCloseEvent *)

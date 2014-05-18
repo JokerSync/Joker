@@ -6,8 +6,8 @@
 
 #include "PhVideoEngine.h"
 
-PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
-	_settings(NULL),
+PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
+	_settings(settings),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
 	_firstFrame(0),
@@ -17,7 +17,7 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 	_pSwsCtx(NULL),
 	_rgb(NULL),
 	_currentFrame(PHFRAMEMIN),
-	_useAudio(useAudio),
+	_useAudio(false),
 	_audioStream(NULL),
 	_audioFrame(NULL)
 {
@@ -170,11 +170,6 @@ void PhVideoEngine::close()
 	_fileName = "";
 }
 
-void PhVideoEngine::setSettings(PhVideoSettings *settings)
-{
-	_settings = settings;
-}
-
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	//	_clock.tick(60);
@@ -317,15 +312,15 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 							break;
 						}
 						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-						                                pixFormat, _videoStream->codec->width, frameHeight,
-						                                AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
+														pixFormat, _videoStream->codec->width, frameHeight,
+														AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
 							_rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
 						int linesize = _videoFrame->width *3;
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
-						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
-						                   &linesize)) {
+										   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
+										   &linesize)) {
 							scaleElapsed = _testTimer.elapsed();
 
 							videoRect.createTextureFromRGBBuffer(_rgb, _videoFrame->width, frameHeight);

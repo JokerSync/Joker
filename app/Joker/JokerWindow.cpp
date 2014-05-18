@@ -27,6 +27,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui(new Ui::JokerWindow),
 	_settings(settings),
 	_strip(settings),
+	_videoEngine(settings),
 	_doc(_strip.doc()),
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
@@ -43,7 +44,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	connect(ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
-	_videoEngine.setSettings(_settings);
 	ui->videoStripView->setGraphicSettings(_settings);
 
 	// Initialize the property dialog
