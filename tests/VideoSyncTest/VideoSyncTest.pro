@@ -11,11 +11,14 @@ include(../../libs/PhVideo/PhVideo.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 HEADERS += VideoSyncTestWindow.h \
-    VideoSyncTestSettings.h
+	VideoSyncTestSettings.h \
+	../VideoTest/VideoTestSettings.h \
+	../VideoTest/VideoTestWindow.h
 
 SOURCES += \
-    main.cpp \
-    VideoSyncTestWindow.cpp
+	main.cpp \
+	VideoSyncTestWindow.cpp \
+	../VideoTest/VideoTestWindow.cpp
 
 FORMS += \
-    VideoSyncTestWindow.ui
+	../VideoTest/VideoTestWindow.ui

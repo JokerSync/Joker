@@ -12,6 +12,7 @@ PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
 	_position(0),
 	_noFrameCounter(0)
 {
+#warning /// @todo autodetect tc type
 	_decoder = ltc_decoder_create(1920, 1920 * 2);
 	PHDBG(21) << "LTC Reader created";
 }

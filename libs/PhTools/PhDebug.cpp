@@ -106,6 +106,11 @@ void noMessageOutput(QtMsgType, const QMessageLogContext &, const QString &)
 
 }
 
+void PhDebug::enable()
+{
+	qInstallMessageHandler(instance()->messageOutput);
+}
+
 void PhDebug::disable()
 {
 	qInstallMessageHandler(noMessageOutput);

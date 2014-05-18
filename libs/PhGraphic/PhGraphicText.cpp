@@ -37,16 +37,7 @@ PhFont * PhGraphicText::getFont()
 
 void PhGraphicText::draw()
 {
-	int fontHeight = _font->getHeight();
-	if(fontHeight == 0) {
-		PHDEBUG << "Trying to display an uninitialized font";
-		return;
-	}
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+	PhGraphicRect::draw();
 
 	_font->select();
 
@@ -76,21 +67,21 @@ void PhGraphicText::draw()
 			float tv2 = tv1 + space;
 
 			// computing quads coordinate;
-			int h = _h * 128 / _font->getHeight();
-			int w = _w * 128 / totalAdvance;
+			int h = this->height() * 128 / _font->getHeight();
+			int w = this->width() * 128 / totalAdvance;
 
 			//        (tu1, tv1) --- (tu2, tv1)
 			//            |              |
 			//            |              |
 			//        (tu1, tv2) --- (tu2, tv2)
 
-			int offset = _x + advance * _w / totalAdvance;
+			int offset = this->x() + advance * this->width() / totalAdvance;
 			glBegin(GL_QUADS);  //Begining the cube's drawing
 			{
-				glTexCoord3f(tu1, tv1, 1);  glVertex3f(offset,      _y, _z);
-				glTexCoord3f(tu2, tv1, 1);  glVertex3f(offset + w,  _y, _z);
-				glTexCoord3f(tu2, tv2, 1);  glVertex3f(offset + w,  _y + h,  _z);
-				glTexCoord3f(tu1, tv2, 1);  glVertex3f(offset,      _y + h,  _z);
+				glTexCoord3f(tu1, tv1, 1);  glVertex3i(offset,      this->y(), this->z());
+				glTexCoord3f(tu2, tv1, 1);  glVertex3i(offset + w,  this->y(), this->z());
+				glTexCoord3f(tu2, tv2, 1);  glVertex3i(offset + w,  this->y() + h,  this->z());
+				glTexCoord3f(tu1, tv2, 1);  glVertex3i(offset,      this->y() + h,  this->z());
 			}
 			glEnd();
 

@@ -12,8 +12,8 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
-QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
+QMAKE_CXXFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
+QMAKE_LFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
 
 INCLUDEPATH += ../../libs
 
@@ -21,39 +21,41 @@ include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
+include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
-include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhVideo/PhVideo.pri)
 
 HEADERS += \
-    StripDocTest.h \
-    LockableSpinBoxTest.h \
-    SettingsTest.h \
-    TimeCodeEditTest.h \
-    TimeCodeTest.h \
-    SonyControllerTest.h \
-    AutoTestSettings.h \
-    WindowTest.h \
+	AutoTestSettings.h \
+	SettingsTest.h \
+	TimeCodeTest.h \
+	StripDocTest.h \
+	SonyControllerTest.h \
+	LockableSpinBoxTest.h \
+	TimeCodeEditTest.h \
 	AutoTestWindow.h \
-	GraphicStripTest.h \
+	WindowTest.h \
+	GraphicTest.h \
+	GraphicTextTest.h \
 	GraphicStripTestSettings.h \
-    GraphicTextTest.h \
-    VideoTest.h \
-    VideoTestSettings.h
+	GraphicStripTest.h \
+	VideoTest.h \
+	VideoTestSettings.h
 
 SOURCES += main.cpp \
-    StripDocTest.cpp \
-    LockableSpinBoxTest.cpp \
-    SettingsTest.cpp \
-    TimeCodeEditTest.cpp \
-    TimeCodeTest.cpp \
-    SonyControllerTest.cpp \
-    WindowTest.cpp \
+	SettingsTest.cpp \
+	TimeCodeTest.cpp \
+	StripDocTest.cpp \
+	SonyControllerTest.cpp \
+	LockableSpinBoxTest.cpp \
+	TimeCodeEditTest.cpp \
 	AutoTestWindow.cpp \
+	WindowTest.cpp \
+	GraphicTest.cpp \
+	GraphicTextTest.cpp \
 	GraphicStripTest.cpp \
-    GraphicTextTest.cpp \
-    VideoTest.cpp
+	VideoTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $${CS}
@@ -61,10 +63,8 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/*) . $${C
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/video/*) . $${CS}
 
-DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
-
 FORMS += \
-    AutoTestWindow.ui
+	AutoTestWindow.ui
 
 mac{
 	# For the plist version

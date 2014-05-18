@@ -6,8 +6,8 @@
 
 #include "PhVideoEngine.h"
 
-PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
-	_settings(NULL),
+PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
+	_settings(settings),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
 	_firstFrame(0),
@@ -17,7 +17,7 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 	_pSwsCtx(NULL),
 	_rgb(NULL),
 	_currentFrame(PHFRAMEMIN),
-	_useAudio(useAudio),
+	_useAudio(false),
 	_audioStream(NULL),
 	_audioFrame(NULL)
 {
@@ -168,11 +168,6 @@ void PhVideoEngine::close()
 	}
 
 	_fileName = "";
-}
-
-void PhVideoEngine::setSettings(PhVideoSettings *settings)
-{
-	_settings = settings;
 }
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)

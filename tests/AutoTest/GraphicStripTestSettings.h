@@ -33,9 +33,23 @@ public:
 	int verticalTimePerPixel() {
 		return 1000;
 	}
-	QString textFontFile() {
-		return QCoreApplication::applicationDirPath() + "/SWENSON.TTF";
+
+	QString backgroundImageLight() {
+		return "motif-240.png";
 	}
+
+	QString backgroundImageDark() {
+		return "motif-240_black.png";
+	}
+
+	QString hudFontFile() {
+		return "HelveticaCYPlain.ttf";
+	}
+
+	QString textFontFile() {
+		return "SWENSON.TTF";
+	}
+
 	int textBoldness() {
 		return 1;
 	}

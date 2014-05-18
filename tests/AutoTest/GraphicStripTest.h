@@ -6,27 +6,14 @@
 #ifndef GRAPHICSTRIPTEST_H
 #define GRAPHICSTRIPTEST_H
 
-#include "PhGraphic/PhGraphicView.h"
-#include "PhGraphicStrip/PhGraphicStrip.h"
+#include <QObject>
 
-#include "GraphicStripTestSettings.h"
-
-class GraphicStripTest : public PhGraphicView
+class GraphicStripTest : public QObject
 {
 	Q_OBJECT
-public:
-	explicit GraphicStripTest(QWidget *parent = 0);
-
-protected:
-	bool init();
-	void paint();
 
 private slots:
-	void testStripDocObject();
-
-private:
-	PhGraphicStrip _strip;
-	GraphicStripTestSettings _settings;
+	void drawTest();
 
 };
 

@@ -33,6 +33,18 @@ public:
 	 * @param parent Parent object.
 	 */
 	explicit PhGraphicView(QWidget *parent = 0);
+
+	/**
+	 * @brief PhGraphicView constructor specifying the client area size.
+	 * @param width The client area width
+	 * @param height The client area height
+	 * @param parent Parent object
+	 *
+	 * The size is expressed in true pixel size. In the case of the retina screen,
+	 * the size will correspond to the opengl viewport: 2 times the widget size.
+	 */
+	PhGraphicView (int width, int height, QWidget *parent = 0);
+
 	~PhGraphicView();
 
 	/**
@@ -61,7 +73,6 @@ public:
 	 * @param info A string
 	 */
 	void addInfo(QString info);
-
 signals:
 	/**
 	 * @brief emit a signal just before the paint
@@ -69,18 +80,13 @@ signals:
 	 */
 	void beforePaint(PhTimeScale frequency);
 
-protected:
-	/**
-	 * @brief Child-specific initialization.
-	 * @return true if everything went well, false otherwise.
-	 */
-	virtual bool init();
 	/**
 	 * @brief paint event, every class have to re-implement it.
-	 * @return true if everything went well, false otherwise.
+	 * @param width Width of the paint area
+	 * @param height Height of the paint area
 	 */
-	virtual void paint() = 0;
-
+	void paint(int width, int height);
+protected:
 	/**
 	 * @brief initializeGL
 	 * This virtual function is called once before the first call to paintGL() or resizeGL(),

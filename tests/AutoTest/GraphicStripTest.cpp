@@ -6,27 +6,25 @@
 #include <QTest>
 #include <QWindow>
 
+#include "PhTools/PhPictureTools.h"
+
+#include "PhGraphic/PhGraphicView.h"
+#include "PhGraphicStrip/PhGraphicStrip.h"
+
+#include "GraphicStripTestSettings.h"
+
 #include "GraphicStripTest.h"
 
-GraphicStripTest::GraphicStripTest(QWidget *parent) :
-	PhGraphicView(parent)
+void GraphicStripTest::drawTest()
 {
-	_strip.setSettings(&_settings);
-}
+	PhGraphicView view(980, 320);
 
-bool GraphicStripTest::init()
-{
-	return _strip.init();
-}
+	GraphicStripTestSettings _settings;
+	PhGraphicStrip _strip(&_settings);
 
-void GraphicStripTest::paint()
-{
-	_strip.draw(0, 0, this->width(), this->height());
-}
-
-void GraphicStripTest::testStripDocObject()
-{
-	this->setGeometry(0, 0, 981, 319);
+	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
+				_strip.draw(0, 0, w, h);
+			});
 
 	PhStripDoc * doc = _strip.doc();
 	doc->reset();
@@ -41,17 +39,15 @@ void GraphicStripTest::testStripDocObject()
 	doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 2));
 	doc->changed();
 
-	updateGL();
+	view.show();
 
-	QTest::qWait(1000);
+	QImage resultImage(view.grabFrameBuffer());
+	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
+	resultImage.save(resultFile);
+	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
+	QImage expectedImage(expectedFile);
 
-	QImage impr(grabFrameBuffer());
-	impr.save("graphicStripTestResult.bmp");
-	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTest.bmp");
-	if(this->windowHandle()->devicePixelRatio() == 2)
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripRetinaTest.bmp");
-	if(QString(qgetenv("TRAVIS")) == "true")
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTravisTest.bmp");
-
-	QVERIFY2(impr == QImage(expectedFile), PHNQ(expectedFile));
+	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+	PHDEBUG << "result:" << result;
+	QVERIFY(result < 920 * 320 / 4); // accept a difference of 1 per 4 pixels
 }
