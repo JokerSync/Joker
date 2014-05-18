@@ -2,13 +2,16 @@
 
 #include <QApplication>
 
-#include "TimeCodeTest.h"
+#include <PhTools/PhDebug.h>
+
 #include "SettingsTest.h"
+#include "TimeCodeTest.h"
 #include "StripDocTest.h"
-#include "SonyControllerTest.h"
-#include "TimeCodeEditTest.h"
 #include "LockableSpinBoxTest.h"
+#include "TimeCodeEditTest.h"
 #include "WindowTest.h"
+#include "SonyControllerTest.h"
+#include "GraphicTest.h"
 #include "GraphicStripTest.h"
 #include "GraphicTextTest.h"
 
@@ -19,47 +22,63 @@ int main(int argc, char *argv[])
 	PHDEBUG << "AutoTest";
 
 	bool testAll = (argc < 2); // if no argument, test all
-	bool testTC = testAll;
 	bool testSettings = testAll;
+	bool testTC = testAll;
 	bool testDoc = testAll;
+	bool testLockableSpinBox = testAll;
+	bool testTCEdit = testAll;
+	bool testWindow = testAll;
 	bool testSony = testAll;
-	bool testUi = testAll;
-	bool testGraphicStrip = testAll;
+	bool testGraphic = testAll;
 	bool testGraphicText = testAll;
+	bool testGraphicStrip = testAll;
 
 	int result = 0;
 
 	QStringList testArgList;
 
 	for(int i = 0; i < argc; i++) {
-		if(strcmp(argv[i], "tc") == 0)
-			testTC = true;
+		if(strcmp(argv[i], "all") == 0) {
+			testSettings = testTC = testDoc = testLockableSpinBox = testTCEdit =
+			                                                            testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
+		}
 		else if(strcmp(argv[i], "settings") == 0)
 			testSettings = true;
+		else if(strcmp(argv[i], "tc") == 0)
+			testTC = true;
 		else if(strcmp(argv[i], "doc") == 0)
 			testDoc = true;
+		else if(strcmp(argv[i], "lockspin") == 0)
+			testLockableSpinBox = true;
+		else if(strcmp(argv[i], "tcedit") == 0)
+			testTCEdit = true;
+		else if(strcmp(argv[i], "window") == 0)
+			testWindow = true;
+		else if(strcmp(argv[i], "ui") == 0) {
+			testTCEdit = testLockableSpinBox = testWindow = true;
+		}
 		else if(strcmp(argv[i], "sony") == 0)
 			testSony = true;
-		else if(strcmp(argv[i], "ui") == 0)
-			testUi = true;
-		else if(strcasecmp(argv[i], "graphicstrip") == 0)
-			testGraphicStrip = true;
+		else if(strcmp(argv[i], "graphic") == 0)
+			testGraphic = true;
 		else if(strcasecmp(argv[i], "graphictext") == 0)
 			testGraphicText = true;
+		else if(strcasecmp(argv[i], "graphicstrip") == 0)
+			testGraphicStrip = true;
 		else
 			testArgList.append(argv[i]);
-	}
-
-	if(testTC) {
-		// Testing PhTimeCode
-		TimeCodeTest tcTest;
-		result += QTest::qExec(&tcTest, testArgList);
 	}
 
 	if(testSettings) {
 		// Testing PhSettings
 		SettingsTest settingsTest;
 		result += QTest::qExec(&settingsTest, testArgList);
+	}
+
+	if(testTC) {
+		// Testing PhTimeCode
+		TimeCodeTest tcTest;
+		result += QTest::qExec(&tcTest, testArgList);
 	}
 
 	if(testDoc) {
@@ -74,24 +93,34 @@ int main(int argc, char *argv[])
 		result += QTest::qExec(&sonyTest, testArgList);
 	}
 
-	if(testUi) {
+	if(testLockableSpinBox) {
+		LockableSpinBoxTest spinBoxTest;
+		result += QTest::qExec(&spinBoxTest, testArgList);
+	}
+
+	if(testTCEdit) {
 		// Testing PhTimeCodeEdit
 		TimeCodeEditTest tcEditTest;
 		result += QTest::qExec(&tcEditTest, testArgList);
+	}
 
-		LockableSpinBoxTest spinBoxTest;
-		result += QTest::qExec(&spinBoxTest, testArgList);
-
+	if(testWindow) {
 		WindowTest windowTest;
 		result += QTest::qExec(&windowTest, testArgList);
 	}
 
-	if(testGraphicStrip) {
-		GraphicStripTest viewTest;
-		result += QTest::qExec(&viewTest, testArgList);
+	if(testGraphic) {
+		GraphicTest graphicTest;
+		result += QTest::qExec(&graphicTest, testArgList);
 	}
+
 	if(testGraphicText) {
 		GraphicTextTest viewTest;
+		result += QTest::qExec(&viewTest, testArgList);
+	}
+
+	if(testGraphicStrip) {
+		GraphicStripTest viewTest;
 		result += QTest::qExec(&viewTest, testArgList);
 	}
 

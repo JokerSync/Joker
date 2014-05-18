@@ -36,7 +36,7 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="PhGraphicStripView" name="stripView" native="true"/>
+       <widget class="PhGraphicView" name="stripView" native="true"/>
       </item>
      </layout>
     </item>
@@ -215,9 +215,6 @@
    </property>
   </action>
   <action name="actionChange_font">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>Change font...</string>
    </property>
@@ -293,9 +290,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PhGraphicStripView</class>
+   <class>PhGraphicView</class>
    <extends>QWidget</extends>
-   <header>PhGraphicStrip/PhGraphicStripView.h</header>
+   <header>PhGraphic/PhGraphicView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

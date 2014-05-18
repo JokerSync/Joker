@@ -22,18 +22,17 @@ include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 HEADERS  += \
-	GraphicTestView.h \
 	GraphicTestWindow.h \
     GraphicTestSettings.h
 
 SOURCES += main.cpp \
-	GraphicTestView.cpp \
     GraphicTestWindow.cpp
 
 FORMS += \
 	GraphicTestWindow.ui
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/look.png) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/rgbPatternTest.bmp) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/box.png) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/Bedizen.ttf) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/SWENSON.TTF) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240_black.png) $${RESOURCES_PATH} $${CS}
@@ -49,5 +48,4 @@ CONFIG(release, debug|release) {
 		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
 		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(TESTS_RELEASE_PATH)/$${TARGET}_v$${VERSION}.dmg
 	}
-
 }

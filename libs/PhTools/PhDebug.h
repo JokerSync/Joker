@@ -32,6 +32,11 @@ class PhDebug
 {
 public:
 	/**
+	 * @brief Enable the log output
+	 */
+	static void enable();
+
+	/**
 	 * @brief Disable the log output
 	 */
 	static void disable();

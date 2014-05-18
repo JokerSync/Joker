@@ -6,7 +6,12 @@
 
 #include "PhGraphicObject.h"
 
-PhGraphicObject::PhGraphicObject(int x, int y) : _x(x), _y(y), _z(0), _color(Qt::white)
+PhGraphicObject::PhGraphicObject(int x, int y) :
+	_x(x),
+	_y(y),
+	_z(0),
+	_color(Qt::white),
+	_ready(false)
 {
 }
 
@@ -18,9 +23,20 @@ void PhGraphicObject::dispose()
 {
 }
 
+void PhGraphicObject::draw()
+{
+	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+}
+
 bool PhGraphicObject::init()
 {
-	return true;
+	_ready = true;
+	return _ready;
+}
+
+bool PhGraphicObject::ready()
+{
+	return _ready;
 }
 
 void PhGraphicObject::setPosition(int x, int y, int z)
@@ -45,21 +61,21 @@ void PhGraphicObject::setZ(int z)
 }
 
 
-int PhGraphicObject::getX() {
+int PhGraphicObject::x() {
 	return _x;
 }
 
-int PhGraphicObject::getY() {
+int PhGraphicObject::y() {
 	return _y;
 }
 
-int PhGraphicObject::getZ()
+int PhGraphicObject::z()
 {
 	return _z;
 }
 
 
-QColor PhGraphicObject::getColor() {
+QColor PhGraphicObject::color() {
 	return _color;
 }
 

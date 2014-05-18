@@ -41,10 +41,10 @@ class PhVideoEngine : public QObject
 public:
 	/**
 	 * @brief PhVideoEngine constructor
-	 * @param useAudio Shall decode audio frame?
-	 * @param parent The parent object
+	 * @param settings The settings
 	 */
-	explicit PhVideoEngine(bool useAudio = false, QObject *parent = 0);
+	PhVideoEngine(PhVideoSettings *settings);
+
 	~PhVideoEngine();
 
 	// Properties
@@ -109,11 +109,6 @@ public:
 		return _videoFrameTickCounter.frequency();
 	}
 
-	/**
-	 * @brief Pass the settings to the engine
-	 * @param settings The settings
-	 */
-	void setSettings(PhVideoSettings *settings);
 	/**
 	 * @brief Set first frame
 	 * @param frame the new first frame
