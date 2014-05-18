@@ -149,7 +149,7 @@ void GraphicTestWindow::onPaint(int width, int height)
 	PhGraphicLoop hLoop;
 	hLoop.setHorizontalLoop(true);
 	hLoop.setPosition(200, 500, 3);
-	hLoop.setSize(120, 100);
+	hLoop.setSize(300, 50);
 	hLoop.setHThick(5);
 	hLoop.setCrossHeight(60);
 	hLoop.setColor(QColor(255, 0, 255));
