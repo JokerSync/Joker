@@ -12,13 +12,13 @@ GraphicStripSyncTestWindow::GraphicStripSyncTestWindow(GraphicStripSyncTestSetti
 	PhDocumentWindow(settings),
 	ui(new Ui::GraphicStripSyncTestWindow),
 	_settings(settings),
+	_strip(settings),
+	_doc(_strip.doc()),
+	_clock(_strip.clock()),
 	_sonySlave(PhTimeCodeType25, _settings)
 {
 	ui->setupUi(this);
-	_strip = ui->stripView->strip();
-	ui->stripView->setStripSettings(_settings);
-	_doc = _strip->doc();
-	_clock = _strip->clock();
+	ui->stripView->setGraphicSettings(_settings);
 	_clockSynchroniser.setStripClock(_clock);
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
@@ -29,10 +29,13 @@ GraphicStripSyncTestWindow::GraphicStripSyncTestWindow(GraphicStripSyncTestSetti
 	if(_sonySlave.open()) {
 		_clock = _sonySlave.clock();
 		_clockSynchroniser.setSonyClock(_clock);
-		connect(ui->stripView, SIGNAL(beforePaint(int)), &_sonySlave, SLOT(checkVideoSync(int)));
+		connect(ui->stripView, &PhGraphicView::beforePaint, &_sonySlave, &PhSonySlaveController::checkVideoSync);
 	}
 	else
 		QMessageBox::critical(this, "Sony Test", "Unable to connect to Sony slave");
+
+	connect(ui->stripView, &PhGraphicView::beforePaint, _clock, &PhClock::tick);
+	connect(ui->stripView, &PhGraphicView::paint, this, &GraphicStripSyncTestWindow::onPaint);
 }
 
 GraphicStripSyncTestWindow::~GraphicStripSyncTestWindow()
@@ -165,4 +168,15 @@ void GraphicStripSyncTestWindow::on_actionPreferences_triggered()
 		PHDEBUG << "accepted";
 	else
 		PHDEBUG << "canceled";
+}
+
+void GraphicStripSyncTestWindow::onPaint(int width, int height)
+{
+	int h = height;
+	if(_settings)
+		h = height * _settings->stripHeight();
+	_strip.draw(0, height - h, width, h);
+	foreach(QString info, _strip.infos()) {
+		ui->stripView->addInfo(info);
+	}
 }

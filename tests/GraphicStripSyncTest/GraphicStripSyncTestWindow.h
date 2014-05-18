@@ -63,12 +63,13 @@ private slots:
 
 	void on_actionPreferences_triggered();
 
+	void onPaint(int width, int height);
 private:
 	Ui::GraphicStripSyncTestWindow *ui;
-	PhGraphicStrip *_strip;
+	GraphicStripSyncTestSettings *_settings;
+	PhGraphicStrip _strip;
 	PhStripDoc *_doc;
 	PhClock *_clock;
-	GraphicStripSyncTestSettings *_settings;
 	PhSonySlaveController _sonySlave;
 	SonyStripSynchronizer _clockSynchroniser;
 };

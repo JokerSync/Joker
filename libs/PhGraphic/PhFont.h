@@ -98,7 +98,7 @@ public:
 	 * so the glyph never take more than 128 pixel
 	 * @return A font size.
 	 */
-	static int computeMaxFontSize(QString file);
+	static int computeMaxFontSize(QString fileName);
 private:
 	/**
 	 * @brief _texture

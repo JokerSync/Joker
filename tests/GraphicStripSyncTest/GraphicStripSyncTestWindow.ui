@@ -36,7 +36,7 @@
        <number>5</number>
       </property>
       <item>
-       <widget class="PhGraphicStripView" name="stripView" native="true"/>
+       <widget class="PhGraphicView" name="stripView" native="true"/>
       </item>
      </layout>
     </item>
@@ -209,9 +209,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PhGraphicStripView</class>
+   <class>PhGraphicView</class>
    <extends>QWidget</extends>
-   <header>PhGraphicStrip/PhGraphicStripView.h</header>
+   <header>PhGraphic/PhGraphicView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

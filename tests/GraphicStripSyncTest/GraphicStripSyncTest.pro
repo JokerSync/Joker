@@ -26,18 +26,20 @@ include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 #Main app
 SOURCES += main.cpp \
 	GraphicStripSyncTestWindow.cpp \
-    SonyStripSynchronizer.cpp \
-    PreferencesDialog.cpp
+	SonyStripSynchronizer.cpp \
+	PreferencesDialog.cpp
 
 HEADERS += \
-    GraphicStripSyncTestWindow.h \
-    SonyStripSynchronizer.h \
-    PreferencesDialog.h \
-    GraphicStripSyncTestSettings.h
+	GraphicStripSyncTestWindow.h \
+	SonyStripSynchronizer.h \
+	PreferencesDialog.h \
+	GraphicStripSyncTestSettings.h
 
 FORMS += \
-    GraphicStripSyncTestWindow.ui \
-    PreferencesDialog.ui
+	GraphicStripSyncTestWindow.ui \
+	PreferencesDialog.ui
+
+QMAKE_INFO_PLIST +=  ../../data/test.plist
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
 include(../../common/deploy.pri)

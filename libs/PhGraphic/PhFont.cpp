@@ -33,14 +33,16 @@ QString PhFont::getFontFile()
 	return _fontFile;
 }
 
-int PhFont::computeMaxFontSize(QString file)
+int PhFont::computeMaxFontSize(QString fileName)
 {
 	int size = 25;
 	int fontHeight = 128;
 	int low = 0, high = 1000;
 	while (low < high) {
 		size = (low + high) / 2;
-		TTF_Font * font = TTF_OpenFont(file.toStdString().c_str(), size);
+		TTF_Font * font = TTF_OpenFont(fileName.toStdString().c_str(), size);
+		if(font == NULL)
+			return 0;
 		if (fontHeight == TTF_FontHeight(font))
 			break;
 		else if (fontHeight < TTF_FontHeight(font))
@@ -49,7 +51,7 @@ int PhFont::computeMaxFontSize(QString file)
 			low = size + 1;
 		TTF_CloseFont(font);
 	}
-	TTF_Font * font = TTF_OpenFont(file.toStdString().c_str(), size);
+	TTF_Font * font = TTF_OpenFont(fileName.toStdString().c_str(), size);
 	if(fontHeight < TTF_FontHeight(font))
 		size--;
 	TTF_CloseFont(font);
@@ -61,9 +63,7 @@ int PhFont::computeMaxFontSize(QString file)
 bool PhFont::init()
 {
 	int size = computeMaxFontSize(_fontFile);
-	PHDEBUG << "Opening" << _fontFile << "at size" << size;
 	TTF_Font * font = TTF_OpenFont(PHNQ(_fontFile), size);
-
 
 	if(!font)
 		return false;
@@ -134,7 +134,7 @@ bool PhFont::init()
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, matrixSurface->format->BytesPerPixel, matrixSurface->w, matrixSurface->h, 0,
-	              GL_RGBA, GL_UNSIGNED_BYTE, matrixSurface->pixels);
+				  GL_RGBA, GL_UNSIGNED_BYTE, matrixSurface->pixels);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

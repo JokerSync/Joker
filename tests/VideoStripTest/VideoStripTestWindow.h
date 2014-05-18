@@ -74,13 +74,14 @@ private slots:
 	void on_actionFull_screen_triggered();
 	void on_actionTest_mode_triggered();
 
+	void onPaint(int width, int height);
 private:
 	Ui::VideoStripTestWindow *ui;
-	PhGraphicStrip *_strip;
-	PhStripDoc *_doc;
-	PhVideoEngine * _videoEngine;
-	VideoStripSynchronizer _synchronizer;
 	VideoStripTestSettings * _settings;
+	PhGraphicStrip _strip;
+	PhStripDoc *_doc;
+	PhVideoEngine _videoEngine;
+	VideoStripSynchronizer _synchronizer;
 	QTimer _fullScreenTimer;
 };
 
