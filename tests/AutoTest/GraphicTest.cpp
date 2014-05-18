@@ -63,8 +63,7 @@ void GraphicTest::rectTest()
 	QImage expectedImage(expectedFile);
 
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-	PHDEBUG << "result:" << result;
-	QVERIFY(result == 0);
+	QVERIFY2(result == 0, PHNQ(QString("Comparison result=%1").arg(result)));
 }
 
 void GraphicTest::imageTest()
@@ -90,8 +89,7 @@ void GraphicTest::imageTest()
 	QImage expectedImage(expectedFile);
 
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-	PHDEBUG << "result:" << result;
-	QVERIFY(result == 0);
+	QVERIFY2(result == 0, PHNQ(QString("Comparison result=%1").arg(result)));
 }
 
 void GraphicTest::rgbPatternTest()
@@ -120,6 +118,5 @@ void GraphicTest::rgbPatternTest()
 	QImage expectedImage(expectedFile);
 
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-	PHDEBUG << "result:" << result;
-	QVERIFY(result == 0);
+	QVERIFY2(result == 0, PHNQ(QString("Comparison result=%1").arg(result)));
 }

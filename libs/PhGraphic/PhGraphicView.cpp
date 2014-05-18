@@ -65,7 +65,6 @@ PhGraphicView::~PhGraphicView()
 
 void PhGraphicView::initializeGL()
 {
-	PHDEBUG;
 	if(_settings)
 		_infoFont.setFontFile(_settings->infoFontFile());
 
