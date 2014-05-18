@@ -21,37 +21,37 @@ include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
+include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
-include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 HEADERS += \
-    StripDocTest.h \
-    LockableSpinBoxTest.h \
-    SettingsTest.h \
-    TimeCodeEditTest.h \
-    TimeCodeTest.h \
-    SonyControllerTest.h \
-    AutoTestSettings.h \
-    WindowTest.h \
+	AutoTestSettings.h \
+	SettingsTest.h \
+	TimeCodeTest.h \
+	StripDocTest.h \
+	SonyControllerTest.h \
+	LockableSpinBoxTest.h \
+	TimeCodeEditTest.h \
 	AutoTestWindow.h \
-	GraphicStripTest.h \
-    GraphicTextTest.h \
-    GraphicStripTestSettings.h \
-    GraphicTest.h
+	WindowTest.h \
+	GraphicTest.h \
+	GraphicTextTest.h \
+	GraphicStripTestSettings.h \
+	GraphicStripTest.h
 
 SOURCES += main.cpp \
-    StripDocTest.cpp \
-    LockableSpinBoxTest.cpp \
-    SettingsTest.cpp \
-    TimeCodeEditTest.cpp \
-    TimeCodeTest.cpp \
-    SonyControllerTest.cpp \
-    WindowTest.cpp \
+	SettingsTest.cpp \
+	TimeCodeTest.cpp \
+	StripDocTest.cpp \
+	SonyControllerTest.cpp \
+	LockableSpinBoxTest.cpp \
+	TimeCodeEditTest.cpp \
 	AutoTestWindow.cpp \
-	GraphicStripTest.cpp \
-    GraphicTextTest.cpp \
-    GraphicTest.cpp
+	WindowTest.cpp \
+	GraphicTest.cpp \
+	GraphicTextTest.cpp \
+	GraphicStripTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $${CS}
@@ -61,7 +61,7 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/*) . $$
 DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 
 FORMS += \
-    AutoTestWindow.ui
+	AutoTestWindow.ui
 
 mac{
 	# For the plist version
