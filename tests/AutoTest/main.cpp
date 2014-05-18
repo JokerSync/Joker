@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "all") == 0) {
 			testSettings = testTC = testDoc = testLockableSpinBox = testTCEdit =
-																		testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
+			                                                            testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
 		}
 		else if(strcmp(argv[i], "settings") == 0)
 			testSettings = true;
