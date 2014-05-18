@@ -7,7 +7,7 @@
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
-class GraphicStripTestSettings : PhGenericSettings,
+class GraphicStripTestSettings : protected PhGenericSettings,
 	public PhGraphicStripSettings,
 	public PhDocumentWindowSettings
 

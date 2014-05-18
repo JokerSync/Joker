@@ -25,19 +25,24 @@ include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 
 #Main app
 SOURCES += main.cpp \
+	../GraphicStripTest/GraphicStripTestWindow.cpp \
+	../GraphicStripTest/StripPropertiesDialog.cpp \
+	../GraphicStripTest/GenerateDialog.cpp \
 	GraphicStripSyncTestWindow.cpp \
-	SonyStripSynchronizer.cpp \
-	PreferencesDialog.cpp
+	SonyStripSynchronizer.cpp
 
 HEADERS += \
+	../GraphicStripTest/GraphicStripTestWindow.h \
+	../GraphicStripTest/StripPropertiesDialog.h \
+	../GraphicStripTest/GenerateDialog.h \
 	GraphicStripSyncTestWindow.h \
 	SonyStripSynchronizer.h \
-	PreferencesDialog.h \
 	GraphicStripSyncTestSettings.h
 
 FORMS += \
-	GraphicStripSyncTestWindow.ui \
-	PreferencesDialog.ui
+	../GraphicStripTest/GraphicStripTestWindow.ui \
+	../GraphicStripTest/StripPropertiesDialog.ui \
+	../GraphicStripTest/GenerateDialog.ui
 
 QMAKE_INFO_PLIST +=  ../../data/test.plist
 
