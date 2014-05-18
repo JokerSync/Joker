@@ -9,14 +9,19 @@
 #include <QObject>
 
 #include "PhGraphic/PhGraphicView.h"
+
 #include "PhVideo/PhVideoEngine.h"
 #include "VideoTestSettings.h"
 
-class VideoTest : public PhGraphicView
+
+class VideoTest : public QObject
 {
 	Q_OBJECT
 public:
 	explicit VideoTest(QWidget *parent = 0);
+
+protected slots:
+	void paint(int width, int height);
 
 private slots:
 
@@ -25,9 +30,9 @@ private slots:
 	void playTest();
 	void deinterlaceTest();
 private:
-	void paint();
-	PhVideoEngine _videoEngine;
 	VideoTestSettings _settings;
+	PhVideoEngine _videoEngine;
+	PhGraphicView _view;
 
 #warning /// @todo move to a generic graphicTest implementation
 	void saveBuffer();
