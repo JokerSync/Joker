@@ -26,7 +26,7 @@ public:
 	 * @param thickness The loop elements thickness
 	 * @param horizontal True if the loop layout is horizontal, false otherwise
 	 */
-	PhGraphicLoop(int x = 0, int y = 0, int w = 0, int h = 0, int crossSize= 0, int thickness = 0, bool horizontal = false);
+	PhGraphicLoop(int x = 0, int y = 0, int w = 0, int h = 0, int crossSize = 0, int thickness = 0, bool horizontal = false);
 
 	/**
 	 * @brief draw the PhGraphicLoop
@@ -48,7 +48,7 @@ public:
 
 	/**
 	 * @brief Set the cross size (width and height)
-	 * @param An integer value
+	 * @param crossSize An integer value
 	 */
 	void setCrossSize(int crossSize);
 	/**

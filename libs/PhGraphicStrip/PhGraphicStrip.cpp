@@ -287,9 +287,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			// - it is a different people
 			// - the distance between the latest text and the current is superior to a limit
 			if((
-				   (lastText == NULL)
-				   || (lastText->people() != text->people())
-				   || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
+			       (lastText == NULL)
+			       || (lastText->people() != text->people())
+			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
 			   ) {
 
 				gPeople.setX(x + (text->timeIn() - timeBetweenPeopleAndText) / timePerPixel - offset - gPeople.width());
