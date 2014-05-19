@@ -25,9 +25,8 @@ public:
 	/**
 	 * @brief PhClock constructor
 	 * @param tcType the desired PhTimeCodeType
-	 * @param parent the object parent
 	 */
-	explicit PhClock(PhTimeCodeType tcType, QObject *parent = 0);
+	explicit PhClock(PhTimeCodeType tcType);
 	/**
 	 * @brief Set the timecode type
 	 * @param tcType the desired PhTimeCodeType
