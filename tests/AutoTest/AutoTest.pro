@@ -24,6 +24,7 @@ include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
+include(../../libs/PhVideo/PhVideo.pri)
 
 HEADERS += \
 	AutoTestSettings.h \
@@ -38,7 +39,9 @@ HEADERS += \
 	GraphicTest.h \
 	GraphicTextTest.h \
 	GraphicStripTestSettings.h \
-	GraphicStripTest.h
+	GraphicStripTest.h \
+	VideoTest.h \
+	VideoTestSettings.h
 
 SOURCES += main.cpp \
 	SettingsTest.cpp \
@@ -51,12 +54,14 @@ SOURCES += main.cpp \
 	WindowTest.cpp \
 	GraphicTest.cpp \
 	GraphicTextTest.cpp \
-	GraphicStripTest.cpp
+	GraphicStripTest.cpp \
+	VideoTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/video/*) . $${CS}
 
 FORMS += \
 	AutoTestWindow.ui
