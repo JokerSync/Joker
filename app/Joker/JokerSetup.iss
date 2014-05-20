@@ -85,7 +85,7 @@ Source: "release\postproc-52.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "release\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "release\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "release\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\Arial.ttf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "release\HelveticaCYPlain.ttf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "release\SWENSON.TTF"; DestDir: "{app}"; Flags: ignoreversion
 Source: "release\swresample-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "release\swscale-2.dll"; DestDir: "{app}"; Flags: ignoreversion

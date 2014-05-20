@@ -13,7 +13,7 @@ public:
 	}
 
 	// PhWindowSettings
-	PH_SETTING_BOOL(setFullScreen, fullScreen)
+	//PH_SETTING_BOOL(setFullScreen, fullScreen) // already implemented in PhWindowSettings
 	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
 
 	// PhDocumentWindowSettings

@@ -17,6 +17,8 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 {
 	ui->setupUi(this);
 
+	ui->stripView->setGraphicSettings(settings);
+
 	_doc = _strip.doc();
 	_clock = _strip.clock();
 	ui->actionInvert_colors->setChecked(_settings->invertColor());

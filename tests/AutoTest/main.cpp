@@ -4,6 +4,7 @@
 
 #include <PhTools/PhDebug.h>
 
+#include "ClockTest.h"
 #include "SettingsTest.h"
 #include "TimeCodeTest.h"
 #include "StripDocTest.h"
@@ -23,6 +24,7 @@ int main(int argc, char *argv[])
 	PHDEBUG << "AutoTest";
 
 	bool testAll = (argc < 2); // if no argument, test all
+	bool testClock = testAll;
 	bool testSettings = testAll;
 	bool testTC = testAll;
 	bool testDoc = testAll;
@@ -41,9 +43,11 @@ int main(int argc, char *argv[])
 
 	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "all") == 0) {
-			testSettings = testTC = testDoc = testLockableSpinBox = testTCEdit =
-			                                                            testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
+			testClock = testSettings = testTC = testDoc = testLockableSpinBox = testTCEdit =
+			                                                                        testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
 		}
+		else if(strcmp(argv[i], "clock") == 0)
+			testClock = true;
 		else if(strcmp(argv[i], "settings") == 0)
 			testSettings = true;
 		else if(strcmp(argv[i], "tc") == 0)
@@ -71,6 +75,12 @@ int main(int argc, char *argv[])
 			testVideo = true;
 		else
 			testArgList.append(argv[i]);
+	}
+
+	if(testClock) {
+		// Testing PhClock
+		ClockTest clockTest;
+		result += QTest::qExec(&clockTest, testArgList);
 	}
 
 	if(testSettings) {

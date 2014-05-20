@@ -28,6 +28,7 @@ include(../../libs/PhVideo/PhVideo.pri)
 
 HEADERS += \
 	AutoTestSettings.h \
+	ClockTest.h \
 	SettingsTest.h \
 	TimeCodeTest.h \
 	StripDocTest.h \
@@ -44,6 +45,7 @@ HEADERS += \
 	VideoTestSettings.h
 
 SOURCES += main.cpp \
+	ClockTest.cpp \
 	SettingsTest.cpp \
 	TimeCodeTest.cpp \
 	StripDocTest.cpp \

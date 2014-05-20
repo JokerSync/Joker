@@ -23,14 +23,14 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 
 	PHDEBUG << "Initialize _image";
 
-	QString imageFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/rgbPatternTest.bmp";
+	QString imageFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png";
 	_image.setFilename(imageFile);
 	_image.setTextureCoordinate(1, 1);
 	_image.setPosition(50, 0, 1);
 
 	PHDEBUG << "Initialize _font";
 	_font1.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF");
-	_font2.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Arial.ttf");
+	_font2.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/HelveticaCYPlain.ttf");
 
 	PHDEBUG << "Initialize _rect";
 	_rect.setRect(100, 100, 75, 40);
