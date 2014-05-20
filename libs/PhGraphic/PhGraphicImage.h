@@ -35,7 +35,7 @@ public:
 	 * @brief Get the file name
 	 * @return the file name
 	 */
-	QString getFilename();
+	QString fileName();
 
 	/**
 	 * @brief draw
@@ -44,21 +44,21 @@ public:
 	void draw();
 
 	/**
-	 * @brief init
-	 * Currently unused
-	 */
-	bool init();
-	/**
-	 * @brief dispose
-	 * Currently unused
-	 */
-	void dispose();
-
-	/**
 	 * @brief originalSize
 	 * @return the original image size
 	 */
 	QSize originalSize() const;
+
+protected:
+	/**
+	 * @brief Initialize the image texture
+	 */
+	bool init();
+
+	/**
+	 * @brief Dispose the image texture
+	 */
+	void dispose();
 
 private:
 

@@ -35,7 +35,7 @@ public:
 	/**
 	 * @brief PhStripDoc constructor
 	 */
-	explicit PhStripDoc(QObject *parent = 0);
+	PhStripDoc();
 
 	/**
 	 * @brief The name of the application that generated the document
@@ -342,9 +342,16 @@ public:
 	 * @return time A time value
 	 */
 	PhTime lastTime();
-	/*!
-	 * \brief Get the force ratio information
-	 * \return if the ratio is forced or not
+
+	/**
+	 * @brief Set the force 16/9 ratio status
+	 * @param forceRatio A bool value
+	 */
+	void setForceRatio169(bool forceRatio);
+
+	/**
+	 * @brief Get the force 16/9ratio status
+	 * @return True if the ratio is forced, false otherwise
 	 */
 	bool forceRatio169() const;
 
@@ -365,6 +372,16 @@ public:
 	 * @brief Reset the document
 	 */
 	void reset();
+
+	/**
+	 * @brief Add a PhGraphicObjet to the doc
+	 */
+	void addObject(PhStripObject *object);
+	/**
+	 * @brief Add a PhPeople to the doc
+	 * @param people the new poeple
+	 */
+	void addPeople(PhPeople * people);
 
 signals:
 	/**

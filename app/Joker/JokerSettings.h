@@ -34,7 +34,10 @@ public:
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
 	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 50)
 	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
-	PH_SETTING_STRING(setTextFontFile, textFontFile)
+	PH_SETTING_STRING2(setBackgroundImageLight, backgroundImageLight, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png")
+	PH_SETTING_STRING2(setBackgroundImageDark, backgroundImageDark, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png")
+	PH_SETTING_STRING2(setHudFontFile, hudFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/HelveticaCYPlain.ttf")
+	PH_SETTING_STRING2(setTextFontFile, textFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 2)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
@@ -97,6 +100,8 @@ public:
 	PH_SETTING_BOOL2(setDisplayLogo, displayLogo, true)
 
 	PH_SETTING_STRING(setLanguage, language)
+
+	PH_SETTING_BOOL(setHideStrip, hideStrip)
 };
 
 #endif // JOKERSETTINGS_H

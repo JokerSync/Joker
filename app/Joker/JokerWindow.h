@@ -9,13 +9,15 @@
 
 #include <QMessageBox>
 #include <QPropertyAnimation>
+#include <QTimer>
 
-#include "PhSync/PhSonySlaveController.h"
 #include "PhCommonUI/PhFloatingMediaPanel.h"
+#include "PhCommonUI/PhDocumentWindow.h"
+#include <PhVideo/PhVideoEngine.h>
+#include <PhGraphicStrip/PhGraphicStrip.h>
+#include "PhSync/PhSonySlaveController.h"
 #include "PhSync/PhLtcReader.h"
 
-#include "PhCommonUI/PhDocumentWindow.h"
-#include "VideoStripView.h"
 #include "Synchronizer.h"
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
@@ -207,7 +209,7 @@ private slots:
 
 	void on_actionSelect_character_triggered();
 
-	void on_actionForce_16_9_ratio_triggered();
+	void on_actionForce_16_9_ratio_triggered(bool checked);
 
 	void on_actionInvert_colors_toggled(bool checked);
 
@@ -223,12 +225,18 @@ private slots:
 
 	void on_actionDeinterlace_video_triggered(bool checked);
 
+	void on_actionHide_the_rythmo_triggered(bool checked);
+
+	void onPaint(int width, int height);
+
+	void onVideoSync();
+
 private:
 	Ui::JokerWindow *ui;
-	PhGraphicStrip * _strip;
-	PhVideoEngine * _videoEngine;
-	PhStripDoc *_doc;
 	JokerSettings *_settings;
+	PhGraphicStrip _strip;
+	PhVideoEngine _videoEngine;
+	PhStripDoc *_doc;
 	PhSonySlaveController _sonySlave;
 	Synchronizer _synchronizer;
 
@@ -244,6 +252,9 @@ private:
 	bool _firstDoc;
 	int _numberOfDraw;
 
+	PhGraphicImage _videoLogo;
+
+	QTime _lastVideoSyncElapsed;
 };
 
 #endif // MAINWINDOW_H

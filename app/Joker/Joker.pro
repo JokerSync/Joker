@@ -12,7 +12,7 @@ TEMPLATE = app
 QT += core gui
 
 # The application version
-VERSION = 1.1.9
+VERSION = 1.1.11
 
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
@@ -32,27 +32,25 @@ include(../../libs/PhSync/PhSync.pri)
 #Main app
 SOURCES += main.cpp \
 	JokerWindow.cpp \
-	VideoStripView.cpp \
 	Synchronizer.cpp \
-    AboutDialog.cpp \
-    PreferencesDialog.cpp \
+	AboutDialog.cpp \
+	PreferencesDialog.cpp \
 	PropertyDialog.cpp \
-    PeopleDialog.cpp
+	PeopleDialog.cpp
 
 HEADERS += \
-    JokerWindow.h \
-	VideoStripView.h \
+	JokerWindow.h \
 	Synchronizer.h \
-    AboutDialog.h \
-    PreferencesDialog.h \
+	AboutDialog.h \
+	PreferencesDialog.h \
 	PropertyDialog.h \
-    PeopleDialog.h \
-    JokerSettings.h
+	PeopleDialog.h \
+	JokerSettings.h
 
 FORMS += \
-    JokerWindow.ui \
-    AboutDialog.ui \
-    PreferencesDialog.ui \
+	JokerWindow.ui \
+	AboutDialog.ui \
+	PreferencesDialog.ui \
 	PropertyDialog.ui \
 	PeopleDialog.ui
 
@@ -92,4 +90,4 @@ include(../../common/deploy.pri)
 cache()
 
 OTHER_FILES += \
-    JokerSetup.iss
+	JokerSetup.iss

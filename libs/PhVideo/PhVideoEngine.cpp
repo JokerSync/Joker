@@ -6,8 +6,8 @@
 
 #include "PhVideoEngine.h"
 
-PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
-	_settings(NULL),
+PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
+	_settings(settings),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
 	_firstFrame(0),
@@ -16,8 +16,8 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 	_videoFrame(NULL),
 	_pSwsCtx(NULL),
 	_rgb(NULL),
-	_currentFrame(-1),
-	_useAudio(useAudio),
+	_currentFrame(PHFRAMEMIN),
+	_useAudio(false),
 	_audioStream(NULL),
 	_audioFrame(NULL)
 {
@@ -31,6 +31,12 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 bool PhVideoEngine::ready()
 {
 	return (_pFormatContext && _videoStream && _videoFrame);
+}
+
+void PhVideoEngine::setDeinterlace(bool deinterlace)
+{
+	_deinterlace = deinterlace;
+	_currentFrame = PHFRAMEMIN;
 }
 
 bool PhVideoEngine::open(QString fileName)
@@ -120,7 +126,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	PHDEBUG << "length:" << this->length();
 	PHDEBUG << "fps:" << this->framePerSecond();
-	_currentFrame = -1;
+	_currentFrame = PHFRAMEMIN;
 	_clock.setFrame(0);
 
 	if(_audioStream) {
@@ -162,11 +168,6 @@ void PhVideoEngine::close()
 	}
 
 	_fileName = "";
-}
-
-void PhVideoEngine::setSettings(PhVideoSettings *settings)
-{
-	_settings = settings;
 }
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
@@ -218,6 +219,12 @@ float PhVideoEngine::framePerSecond()
 	if(_videoStream) {
 		result = _videoStream->avg_frame_rate.num;
 		result /= _videoStream->avg_frame_rate.den;
+		// See http://stackoverflow.com/a/570694/2307070
+		// for NaN handling
+		if(result != result) {
+			result = _videoStream->time_base.den;
+			result /= _videoStream->time_base.num;
+		}
 	}
 
 	return result;
@@ -281,10 +288,9 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 						decodeElapsed = _testTimer.elapsed();
 
 						int frameHeight = _videoFrame->height;
-						if(_settings) {
-							if(_deinterlace)
-								frameHeight = _videoFrame->height / 2;
-						}
+						if(_deinterlace)
+							frameHeight = _videoFrame->height / 2;
+
 						// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
 						// we replace its with the new ones recommended by LibAv
 						// in order to get ride of the warnings

@@ -14,8 +14,7 @@
 #include "PhTools/PhFileTool.h"
 #include "PhStripDoc.h"
 
-PhStripDoc::PhStripDoc(QObject *parent) :
-	QObject(parent)
+PhStripDoc::PhStripDoc()
 {
 	reset();
 }
@@ -23,7 +22,7 @@ PhStripDoc::PhStripDoc(QObject *parent) :
 
 bool PhStripDoc::importDetXFile(QString fileName)
 {
-	//	PHDEBUG << fileName;
+	PHDEBUG << fileName;
 	if (!QFile(fileName).exists()) {
 		PHDEBUG << "The file doesn't exists" << fileName;
 		return false;
@@ -178,9 +177,10 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					}
 					// Handling line with no lipsync out
 					if(currentText.length()) {
-						PhTime time = lastLinkedTime + currentText.length();
+						PhTime time = lastLinkedTime + currentText.length() * 1000;
+						PHDEBUG << currentText;
 						_texts1.append(new PhStripText(lastLinkedTime, people, time, track, currentText));
-						lastLinkedTime = time;
+						lastTime = lastLinkedTime = time;
 					}
 					PhStripDetect::PhDetectType type = PhStripDetect::On;
 					if(elem.attribute("voice") == "off")
@@ -939,9 +939,37 @@ void PhStripDoc::reset()
 	emit this->changed();
 }
 
-bool PhStripDoc::forceRatio169() const
+void PhStripDoc::addObject(PhStripObject *object)
 {
-	return _videoForceRatio169;
+	if(dynamic_cast<PhStripCut*>(object)) {
+		this->_cuts.append(dynamic_cast<PhStripCut*>(object));
+		PHDEBUG << "Added a cut";
+	}
+	else if(dynamic_cast<PhStripLoop*>(object)) {
+		this->_loops.append(dynamic_cast<PhStripLoop*>(object));
+		PHDEBUG << "Added a loop";
+	}
+	else if(dynamic_cast<PhStripDetect*>(object)) {
+		this->_detects.append(dynamic_cast<PhStripDetect*>(object));
+		PHDEBUG << "Added a detect!";
+	}
+	else if(dynamic_cast<PhStripText*>(object)) {
+		this->_texts1.append(dynamic_cast<PhStripText*>(object));
+		PHDEBUG << "Added a text!";
+	}
+	else {
+		PHDEBUG << "You try to add a weird object, which seems to be undefined...";
+	}
+	emit changed();
+
+}
+
+void PhStripDoc::addPeople(PhPeople *people)
+{
+	this->_peoples.append(people);
+	PHDEBUG << "Added a people";
+	emit changed();
+
 }
 
 PhPeople *PhStripDoc::peopleByName(QString name)
@@ -1197,6 +1225,16 @@ PhTime PhStripDoc::videoFrameIn()
 PhTime PhStripDoc::lastTime()
 {
 	return _lastTime;
+}
+
+void PhStripDoc::setForceRatio169(bool forceRatio)
+{
+	_videoForceRatio169 = forceRatio;
+}
+
+bool PhStripDoc::forceRatio169() const
+{
+	return _videoForceRatio169;
 }
 
 QList<PhStripText *> PhStripDoc::texts(bool alternate)

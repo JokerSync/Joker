@@ -6,8 +6,6 @@
 
 QT       += core
 
-QT       -= gui
-
 TARGET = ConsoleTest
 CONFIG   += console
 CONFIG   -= app_bundle

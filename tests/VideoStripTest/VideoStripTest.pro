@@ -23,13 +23,11 @@ include(../../libs/PhVideo/PhVideo.pri)
 #Main app
 SOURCES += main.cpp \
 	VideoStripTestWindow.cpp \
-	VideoStripSynchronizer.cpp \
-    VideoStripView.cpp
+	VideoStripSynchronizer.cpp
 
 HEADERS += \
     VideoStripTestWindow.h \
 	VideoStripSynchronizer.h \
-    VideoStripView.h \
     VideoStripTestSettings.h
 
 FORMS += \

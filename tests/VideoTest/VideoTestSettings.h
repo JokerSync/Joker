@@ -9,7 +9,7 @@
 #include "PhVideo/PhVideoSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
-class VideoTestSettings : PhGenericSettings,
+class VideoTestSettings : protected PhGenericSettings,
 	public PhGraphicSettings,
 	public PhVideoSettings,
 	public PhDocumentWindowSettings
@@ -17,6 +17,10 @@ class VideoTestSettings : PhGenericSettings,
 public:
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 	PH_SETTING_INT2(setLogMask, logMask, 1)
+	PH_SETTING_BOOL2(setDisplayMediaPanel, displayMediaPanel, true)
+	PH_SETTING_BOOL(setDeinterlaceVideo, deinterlaceVideo)
+	PH_SETTING_INT(setFrameStamp, frameStamp)
+	PH_SETTING_INT(setCurrentFrame, currentFrame)
 
 	// PhGraphicSettings
 	PH_SETTING_BOOL(setDisplayInfo, displayInfo)

@@ -25,18 +25,17 @@ PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h)
 bool PhGraphicImage::init()
 {
 	QFileInfo info(_filename);
-	PHDEBUG << info.fileName();
+//	PHDEBUG << info.fileName();
 	_surface = IMG_Load(_filename.toStdString().c_str());
 	if(_surface != NULL) {
 		if(createTextureFromSurface(_surface)) {
 			_originalSize.setHeight(_surface->h);
 			_originalSize.setWidth(_surface->w);
-			PHDEBUG << "Loading image";
-			return true;
+			return PhGraphicTexturedRect::init();
 		}
 	}
 
-	PHDEBUG<<"Error loading:"<< _filename;
+	PHDEBUG << "Error loading" << _filename << ":" << SDL_GetError();
 	return false;
 
 }
@@ -52,14 +51,18 @@ QSize PhGraphicImage::originalSize() const
 
 void PhGraphicImage::draw()
 {
-	glColor3f(1, 1, 1);
+	if(!this->ready())
+		this->init();
+
 	PhGraphicTexturedRect::draw();
 }
 
-void PhGraphicImage::setFilename(QString filename) {
+void PhGraphicImage::setFilename(QString filename)
+{
 	_filename = filename;
 }
 
-QString PhGraphicImage::getFilename() {
+QString PhGraphicImage::fileName()
+{
 	return _filename;
 }
