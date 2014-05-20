@@ -12,7 +12,7 @@ TEMPLATE = app
 QT += core gui
 
 # The application version
-VERSION = 1.1.11
+VERSION = 1.1.11ftdi
 
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
