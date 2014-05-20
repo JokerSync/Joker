@@ -41,6 +41,20 @@ void PhGraphicText::draw()
 
 	_font->select();
 
+	if(_font->getHeight() == 0) {
+		// bad font initialization: displaying a rect
+		glBegin(GL_QUADS);
+		{
+			glVertex3i(this->x(),      this->y(), this->z());
+			glVertex3i(this->x() + this->width(),  this->y(), this->z());
+			glVertex3i(this->x() + this->width(),  this->y() + this->height(),  this->z());
+			glVertex3i(this->x(),      this->y() +this->height(),  this->z());
+		}
+		glEnd();
+
+		return;
+	}
+
 	glEnable(GL_TEXTURE_2D);
 
 	glEnable(GL_BLEND);

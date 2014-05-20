@@ -138,9 +138,9 @@ unsigned char *PhPictureTools::generateYUVPattern(int w, int h)
 	return yuvOut;
 }
 
-unsigned int PhPictureTools::compare(QImage imageA, QImage imageB, bool log)
+int PhPictureTools::compare(QImage imageA, QImage imageB, bool log)
 {
-	unsigned int max = std::numeric_limits<unsigned int>::max();
+	int max = std::numeric_limits<int>::max();
 	if(imageA.size() != imageB.size()) {
 		PHDEBUG << "Size is different:" << imageA.size() << imageB.size();
 		return max;
@@ -154,7 +154,7 @@ unsigned int PhPictureTools::compare(QImage imageA, QImage imageB, bool log)
 		for(int j = 0; j < h; j++) {
 			QRgb a = imageA.pixel(i, j);
 			QRgb b = imageB.pixel(i, j);
-			unsigned int diff = qPow(qRed(a) - qRed(b), 2) + qPow(qGreen(a) - qGreen(b), 2) + qPow(qBlue(a) - qBlue(b), 2);
+			int diff = qPow(qRed(a) - qRed(b), 2) + qPow(qGreen(a) - qGreen(b), 2) + qPow(qBlue(a) - qBlue(b), 2);
 			if(log && diff)
 				PHDEBUG << QString("(%1, %2) %3 / %4 => %5 / %6")
 				    .arg(i)
