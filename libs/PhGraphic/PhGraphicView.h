@@ -88,17 +88,6 @@ signals:
 	void paint(int width, int height);
 protected:
 	/**
-	 * @brief initializeGL
-	 * This virtual function is called once before the first call to paintGL() or resizeGL(),
-	 * and then once whenever the widget has been assigned a new QGLContext.
-	 * Reimplement it in a subclass.
-	 * This function should set up any required OpenGL context rendering flags,
-	 * defining display lists, etc.
-	 *
-	 * It calls init()
-	 */
-	void initializeGL();
-	/**
 	 * @brief paintGL
 	 * This virtual function is called whenever the widget needs to be painted.
 	 * Reimplement it in a subclass.
@@ -114,7 +103,6 @@ private slots:
 	void onRefresh();
 
 private:
-	bool _initialized;
 	PhGraphicSettings *_settings;
 	/**
 	 * @brief t_Timer

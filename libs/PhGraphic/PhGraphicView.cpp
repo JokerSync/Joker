@@ -19,7 +19,6 @@
 
 PhGraphicView::PhGraphicView( QWidget *parent)
 	: QGLWidget(parent),
-	_initialized(false),
 	_settings(NULL),
 	_dropDetected(0),
 	_maxRefreshRate(0),
@@ -63,14 +62,6 @@ PhGraphicView::~PhGraphicView()
 	SDL_Quit();
 }
 
-void PhGraphicView::initializeGL()
-{
-	if(_settings)
-		_infoFont.setFontFile(_settings->infoFontFile());
-
-	_initialized = true;
-}
-
 void PhGraphicView::resizeGL(int width, int height)
 {
 	if(height == 0)
@@ -88,8 +79,6 @@ void PhGraphicView::resizeGL(int width, int height)
 void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
 {
 	_settings = settings;
-	if(_initialized)
-		_infoFont.setFontFile(_settings->infoFontFile());
 }
 
 void PhGraphicView::addInfo(QString info)
@@ -146,6 +135,7 @@ void PhGraphicView::paintGL()
 			_maxUpdateDuration = 0;
 		}
 		if(_settings->displayInfo()) {
+			_infoFont.setFontFile(_settings->infoFontFile());
 			int y = 0;
 			foreach(QString info, _infos) {
 				PhGraphicText gInfo(&_infoFont, info, 0, y);

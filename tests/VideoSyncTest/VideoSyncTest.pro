@@ -22,3 +22,5 @@ SOURCES += \
 
 FORMS += \
 	../VideoTest/VideoTestWindow.ui
+
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/HelveticaCYPlain.ttf) $${RESOURCES_PATH} $${CS}

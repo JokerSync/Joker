@@ -1,0 +1,46 @@
+/* This style sheet make code and line number prettier */
+/* It is used to display coverage report: copy it in the directory where you export out.html */
+
+body {background-color:white;padding:50px 50px}
+
+pre {
+  background-color:#eed;
+  overflow:auto;
+  margin:0 0 1em;
+  padding:.5em 1em;
+}
+
+pre code,
+pre .number {
+  /* Ukuran height antara teks di dalam tag <code> dan <span class="number"> harus sama! */
+  font:normal normal 12px/14px "Courier New",Courier,Monospace;
+  color:black;
+  display:block;
+}
+
+pre .good {
+  background-color:#aea;
+}
+
+pre .bad {
+  background-color:#eaa;
+}
+
+pre .number {
+  float:left;
+  margin:0 1em 0 -1em;
+  border-right:1px solid;
+  width:2em;
+  text-align:right;
+}
+
+pre .number span {
+  display:block;
+  padding:0 .5em 0 1em;
+}
+
+pre .cl {
+  display:block;
+  clear:both;
+}
+
