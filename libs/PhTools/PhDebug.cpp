@@ -175,15 +175,18 @@ int PhDebug::getLogMask()
 
 QDebug operator <<(QDebug stream, const QEvent * event) {
 	static int eventEnumIndex = QEvent::staticMetaObject
-	                            .indexOfEnumerator("Type");
+								.indexOfEnumerator("Type");
 	stream << "QEvent";
 	if (event) {
 		QString name = QEvent::staticMetaObject
-		               .enumerator(eventEnumIndex).valueToKey(event->type());
-		if (!name.isEmpty()) stream << name; else stream << event->type();
+					   .enumerator(eventEnumIndex).valueToKey(event->type());
+		if (!name.isEmpty())
+			stream << PHNQ(name);
+		else
+			stream << event->type();
 	}
 	else {
 		stream << (void*)event;
 	}
-	return stream.maybeSpace();
+	return stream;
 }

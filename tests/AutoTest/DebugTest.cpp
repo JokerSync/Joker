@@ -45,10 +45,14 @@ void DebugTest::initTestCase()
 	PhDebug::enable();
 }
 
+void DebugTest::init()
+{
+	PhDebug::setDisplay(false, false, false, false, false);
+	PhDebug::setLogMask(1);
+}
+
 void DebugTest::stdoutTest()
 {
-	QCOMPARE(PhDebug::getLogMask(), 1);
-
 	std::stringstream buffer;
 	CoutRedirect redirect(buffer.rdbuf());
 
@@ -70,17 +74,28 @@ void DebugTest::stdoutTest()
 	PhDebug::enable();
 	PHDEBUG << "shown because enable()";
 
-	QMouseEvent event(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-	PHDEBUG << &event;
+	QEvent * event = NULL;
+	PHDEBUG << event;
+	event = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+	PHDEBUG << event;
+
+	QCOMPARE(PhDebug::getLogMask(), 1);
+	PHDBG(0) << "it should be displayed when default log mask is 1";
+	PhDebug::setLogMask(2);
+	QCOMPARE(PhDebug::getLogMask(), 2);
+	PHDBG(0) << "it should not be displayed when default log mask is 2";
+	PHDBG(1) << "it should be displayed when default log mask is 2";
 
 	QStringList lines = QString::fromStdString(buffer.str()).split("\n");
-	QCOMPARE(lines.count(), 6);
-	QVERIFY2(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugTest.cpp\tstdoutTest\t@\\d\\d\ttest with all log parameters ").exactMatch(lines[0]), PHNQ(lines[0]));
+	QCOMPARE(lines.count(), 9);
+	QVERIFY2(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugTest.cpp\tstdoutTest\t@[0-9]+\ttest with all log parameters ").exactMatch(lines[0]), PHNQ(lines[0]));
 	QCOMPARE(lines[1], QString("test with no log parameters "));
 	QCOMPARE(lines[2], QString("shown because of showConsole(true) "));
 	QCOMPARE(lines[3], QString("shown because enable() "));
-	QCOMPARE(lines[4], QString("QEvent \"MouseButtonPress\"  "));
-	QCOMPARE(lines[5], QString(""));
+	QCOMPARE(lines[4], QString("QEvent 0x0 "));
+	QCOMPARE(lines[5], QString("QEvent MouseButtonPress "));
+	QCOMPARE(lines[6], QString("it should be displayed when default log mask is 1 "));
+	QCOMPARE(lines[7], QString("it should be displayed when default log mask is 2 "));
 }
 
 void DebugTest::stderrTest()
@@ -89,7 +104,6 @@ void DebugTest::stderrTest()
 
 	CerrRedirect redirect(buffer.rdbuf());
 
-	PhDebug::setDisplay(false, false, false, false, false);
 	PHERR << "test with no log parameters";
 
 	PhDebug::setDisplay(true, true, true, true, true);
@@ -98,6 +112,6 @@ void DebugTest::stderrTest()
 	QStringList lines = QString::fromStdString(buffer.str()).split("\n");
 	QCOMPARE(lines.count(), 3);
 	QVERIFY2(QRegExp("test with no log parameters ").exactMatch(lines[0]), PHNQ(lines[0]));
-	QVERIFY2(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugTest.cpp\tstderrTest\t@\\d\\d\ttest with all log parameters ").exactMatch(lines[1]), PHNQ(lines[1]));
+	QVERIFY2(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugTest.cpp\tstderrTest\t@[0-9]+\ttest with all log parameters ").exactMatch(lines[1]), PHNQ(lines[1]));
 	QCOMPARE(lines[2], QString(""));
 }
