@@ -18,7 +18,7 @@
 #define MyAppVerName MyAppName + " v" + MyAppVerStr
 
 #define MyOutputDir GetEnv('JOKER_RELEASE_PATH')
-#define QtPath GetEnv('QT_PATH')
+#define QtPath GetEnv('QTDIR')
 #define PortaudioPath GetEnv('PORTAUDIO_PATH')
 
 [Setup]
