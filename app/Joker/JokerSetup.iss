@@ -63,10 +63,10 @@ Source: {#QtPath}\bin\Qt5Widgets.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\Qt5Xml.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\libgcc_s_dw2-1.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\libstdc++-6.dll; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\icuin51.dll; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\icuuc51.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\icuin*.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\icuuc*.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\libwinpthread-1.dll; DestDir: "{app}"; Flags: ignoreversion
-Source: {#QtPath}\bin\icudt51.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\icudt*.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\plugins\platforms\*; DestDir: "{app}\platforms"; Flags: ignoreversion
 Source: {#PortaudioPath}\lib\Win32\ReleaseMinDependency\portaudio_x86.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: "release\avcodec-55.dll"; DestDir: "{app}"; Flags: ignoreversion
