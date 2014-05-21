@@ -16,6 +16,7 @@ private slots:
 	void init();
 	void stdoutTest();
 	void stderrTest();
+	void logFileTest();
 };
 
 #endif // DEBUGTEST_H

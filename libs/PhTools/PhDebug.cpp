@@ -140,19 +140,15 @@ PhDebug::PhDebug()
 	logDirPath = QString(qgetenv("APPDATA")) + "/Phonations";
 #endif
 
-	if(QFile(logDirPath).exists()) {
-		QDir logDir(logDirPath);
-		if(!logDir.exists()) {
-			QDir().mkdir(logDirPath);
-		}
-		_logFileName = logDirPath + APP_NAME + ".log";
-		QFile * f = new QFile(_logFileName);
-		f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
-		f->write("\n\n");
-		_textLog = new QTextStream(f);
+	QDir logDir(logDirPath);
+	if(!logDir.exists()) {
+		QDir().mkdir(logDirPath);
 	}
-	else
-		_textLog = NULL;
+	_logFileName = logDirPath + APP_NAME + ".log";
+	QFile * f = new QFile(_logFileName);
+	f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
+	f->write("\n\n");
+	_textLog = new QTextStream(f);
 
 	_displayDate = false;
 	_displayTime = true;
@@ -175,11 +171,11 @@ int PhDebug::getLogMask()
 
 QDebug operator <<(QDebug stream, const QEvent * event) {
 	static int eventEnumIndex = QEvent::staticMetaObject
-								.indexOfEnumerator("Type");
+			.indexOfEnumerator("Type");
 	stream << "QEvent";
 	if (event) {
 		QString name = QEvent::staticMetaObject
-					   .enumerator(eventEnumIndex).valueToKey(event->type());
+				.enumerator(eventEnumIndex).valueToKey(event->type());
 		if (!name.isEmpty())
 			stream << PHNQ(name);
 		else
