@@ -1,7 +1,7 @@
 /**
-* Copyright (C) 2012-2014 Phonations
-* License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
-*/
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
 
 #include <QTest>
 #include <string>       // std::string
@@ -20,9 +20,10 @@ class CoutRedirect {
 public:
 	CoutRedirect( std::streambuf * new_buffer )
 		: old( std::cout.rdbuf( new_buffer ) )
-	{ }
+	{
+	}
 
-	~CoutRedirect( ) {
+	~CoutRedirect() {
 		std::cout.rdbuf( old );
 	}
 private:
@@ -33,9 +34,10 @@ class CerrRedirect {
 public:
 	CerrRedirect( std::streambuf * new_buffer )
 		: old( std::cerr.rdbuf( new_buffer ) )
-	{ }
+	{
+	}
 
-	~CerrRedirect( ) {
+	~CerrRedirect() {
 		std::cerr.rdbuf( old );
 	}
 private:
@@ -125,7 +127,7 @@ void DebugTest::stderrTest()
 void DebugTest::logFileTest()
 {
 	QString expectedLogLocation = QString("%1/Library/Logs/Phonations/AutoTest.log")
-			.arg(QString(QDir::homePath()));
+	                              .arg(QString(QDir::homePath()));
 	QCOMPARE(PhDebug::logLocation(), expectedLogLocation);
 
 	QFile log(expectedLogLocation);
