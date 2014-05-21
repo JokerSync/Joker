@@ -20,9 +20,27 @@ HEADERS  += FFmpegTestWindow.h
 
 FORMS    += FFmpegTestWindow.ui
 
-INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
-LIBS += -lz
+unix {
+	INCLUDEPATH += /usr/local/include
+	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
+	LIBS += -lz
+}
+
+# Windows specific
+win32{
+	!exists($$(FFMPEG_DEV_PATH)\README.txt) {
+		error("You must define a valid FFMPEG_DEV_PATH")
+	}
+
+	!exists($$(FFMPEG_SHARED_PATH)\README.txt) {
+		error("You must define a valid FFMPEG_SHARED_PATH")
+	}
+
+	INCLUDEPATH += $$(FFMPEG_DEV_PATH)\include
+	LIBS += -L$$(FFMPEG_DEV_PATH)\lib -lavformat -lavcodec -lavutil -lswscale -liconv -lz
+}
+
+
 
 #LIBS += -lxvidcore -lx264 -lvorbis -lvorbisenc -lvorbisfile -lvpx
 #LIBS += -ltheora -ltheoradec -ltheoraenc
