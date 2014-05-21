@@ -95,6 +95,7 @@ void GraphicTextTest::fontTest_data()
 	QTest::newRow("Arial.ttf") << "Arial.ttf";
 	QTest::newRow("weblyleekuil.ttf") << "weblysleekuil.ttf";
 	QTest::newRow("Bedizen.ttf") << "Bedizen.ttf";
+	QTest::newRow("bad font") << "Bad_font.ttf";
 }
 
 void GraphicTextTest::computeMaxFontSizeTest()

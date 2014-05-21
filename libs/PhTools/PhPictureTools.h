@@ -74,7 +74,7 @@ public:
 	 * @param log Log the difference
 	 * @return The sum of the squared difference of the pixel RGB values.
 	 */
-	static unsigned int compare(QImage imageA, QImage imageB, bool log = false);
+	static int compare(QImage imageA, QImage imageB, bool log = false);
 };
 
 #endif // PHPICTURETOOLS_H

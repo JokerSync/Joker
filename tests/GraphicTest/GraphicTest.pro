@@ -44,9 +44,5 @@ mac {
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
 }
 
-CONFIG(release, debug|release) {
-	mac {
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(TESTS_RELEASE_PATH)/$${TARGET}_v$${VERSION}.dmg
-	}
-}
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)
