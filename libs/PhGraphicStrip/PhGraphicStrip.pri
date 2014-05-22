@@ -10,4 +10,3 @@ HEADERS += \
 SOURCES += \
 	../../libs/PhGraphicStrip/PhGraphicStrip.cpp
 
-

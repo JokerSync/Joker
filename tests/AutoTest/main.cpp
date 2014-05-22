@@ -7,6 +7,7 @@
 #include "ClockTest.h"
 #include "SettingsTest.h"
 #include "TimeCodeTest.h"
+#include "DebugTest.h"
 #include "StripDocTest.h"
 #include "LockableSpinBoxTest.h"
 #include "TimeCodeEditTest.h"
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
 	bool testClock = testAll;
 	bool testSettings = testAll;
 	bool testTC = testAll;
+	bool testDebug = testAll;
 	bool testDoc = testAll;
 	bool testLockableSpinBox = testAll;
 	bool testTCEdit = testAll;
@@ -43,8 +45,8 @@ int main(int argc, char *argv[])
 
 	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "all") == 0) {
-			testClock = testSettings = testTC = testDoc = testLockableSpinBox = testTCEdit =
-			                                                                        testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
+			testClock = testSettings = testTC = testDebug = testDoc = testLockableSpinBox = testTCEdit =
+			                                                                                    testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
 		}
 		else if(strcmp(argv[i], "clock") == 0)
 			testClock = true;
@@ -52,6 +54,8 @@ int main(int argc, char *argv[])
 			testSettings = true;
 		else if(strcmp(argv[i], "tc") == 0)
 			testTC = true;
+		else if(strcmp(argv[i], "debug") == 0)
+			testDebug = true;
 		else if(strcmp(argv[i], "doc") == 0)
 			testDoc = true;
 		else if(strcmp(argv[i], "lockspin") == 0)
@@ -95,6 +99,10 @@ int main(int argc, char *argv[])
 		result += QTest::qExec(&tcTest, testArgList);
 	}
 
+	if(testDebug) {
+		DebugTest debugTest;
+		result += QTest::qExec(&debugTest, testArgList);
+	}
 	if(testDoc) {
 		// Testing PhStripDoc
 		StripDocTest docTest;

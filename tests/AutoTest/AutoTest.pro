@@ -31,6 +31,7 @@ HEADERS += \
 	ClockTest.h \
 	SettingsTest.h \
 	TimeCodeTest.h \
+	DebugTest.h \
 	StripDocTest.h \
 	SonyControllerTest.h \
 	LockableSpinBoxTest.h \
@@ -48,6 +49,7 @@ SOURCES += main.cpp \
 	ClockTest.cpp \
 	SettingsTest.cpp \
 	TimeCodeTest.cpp \
+	DebugTest.cpp \
 	StripDocTest.cpp \
 	SonyControllerTest.cpp \
 	LockableSpinBoxTest.cpp \
