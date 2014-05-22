@@ -146,7 +146,7 @@ int PhPictureTools::compare(QImage imageA, QImage imageB, bool log)
 		return max;
 	}
 
-	unsigned int result = 0;
+	int result = 0;
 	int w = imageA.width();
 	int h = imageA.height();
 
