@@ -1,0 +1,3 @@
+[submodule "vendor/igloo"]
+	path = vendor/igloo
+	url = https://github.com/joakimkarlsson/igloo
