@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="GraphicTestView" name="graphicView" native="true"/>
+     <widget class="PhGraphicView" name="graphicView" native="true"/>
     </item>
    </layout>
   </widget>
@@ -33,6 +33,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionSave"/>
     <addaction name="actionChange_font"/>
    </widget>
    <addaction name="menuFile"/>
@@ -42,12 +43,20 @@
     <string>Change font...</string>
    </property>
   </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>GraphicTestView</class>
+   <class>PhGraphicView</class>
    <extends>QWidget</extends>
-   <header>GraphicTestView.h</header>
+   <header>PhGraphic/PhGraphicView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

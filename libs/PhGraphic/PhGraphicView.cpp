@@ -19,24 +19,20 @@
 
 PhGraphicView::PhGraphicView( QWidget *parent)
 	: QGLWidget(parent),
-	_initialized(false),
 	_settings(NULL),
 	_dropDetected(0),
-	_lastDropElapsed(0),
 	_maxRefreshRate(0),
-	_maxPaintDuration(0)
+	_maxPaintDuration(0),
+	_lastUpdateDuration(0),
+	_maxUpdateDuration(0)
 {
-	if (SDL_Init(SDL_INIT_VIDEO) == 0)
-		PHDEBUG << "init SDL Ok.";
-	else
+	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 		PHDEBUG << "SDL error:" << SDL_GetError();
-	if (TTF_Init() == 0)
-		PHDEBUG << "init TTF Ok.";
-	else
+	if (TTF_Init() != 0)
 		PHDEBUG << "TTF error:" << TTF_GetError();
 
-	t_Timer = new QTimer(this);
-	connect(t_Timer, SIGNAL(timeout()), this, SLOT(updateGL()));
+	_refreshTimer = new QTimer(this);
+	connect(_refreshTimer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 
 	//set the screen frequency to the most common value (60hz);
 	_screenFrequency = 60;
@@ -47,30 +43,27 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 		PHDEBUG << "Unable to get the screen";
 
 	int timerInterval = 500 / _screenFrequency;
-	t_Timer->start( timerInterval);
-	PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
+	_refreshTimer->start( timerInterval);
+	//PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
 	_dropTimer.start();
+}
+
+PhGraphicView::PhGraphicView(int width, int height, QWidget *parent)
+	: PhGraphicView(parent)
+{
+	int ratio = this->windowHandle()->devicePixelRatio();
+	this->setGeometry(0, 0, width / ratio, height / ratio);
 }
 
 PhGraphicView::~PhGraphicView()
 {
-	t_Timer->stop();
+	_refreshTimer->stop();
 	TTF_Quit();
 	SDL_Quit();
 }
 
-void PhGraphicView::initializeGL()
-{
-	PHDEBUG;
-	if(_settings)
-		_infoFont.setFontFile(_settings->infoFontFile());
-	init();
-	_initialized = true;
-}
-
 void PhGraphicView::resizeGL(int width, int height)
 {
-	resize(width, height);
 	if(height == 0)
 		height = 1;
 	glViewport(0, 0, width, height);
@@ -86,8 +79,6 @@ void PhGraphicView::resizeGL(int width, int height)
 void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
 {
 	_settings = settings;
-	if(_initialized)
-		_infoFont.setFontFile(_settings->infoFontFile());
 }
 
 void PhGraphicView::addInfo(QString info)
@@ -95,9 +86,29 @@ void PhGraphicView::addInfo(QString info)
 	_infos.append(info);
 }
 
-bool PhGraphicView::init()
+void PhGraphicView::onRefresh()
 {
-	return true;
+	if(this->refreshRate() > _maxRefreshRate)
+		_maxRefreshRate = this->refreshRate();
+	addInfo(QString("refresh: %1x%2, %3 / %4")
+	        .arg(this->width())
+	        .arg(this->height())
+	        .arg(_maxRefreshRate)
+	        .arg(this->refreshRate()));
+	addInfo(QString("Update : %1 %2").arg(_maxUpdateDuration).arg(_lastUpdateDuration));
+	addInfo(QString("drop: %1 %2").arg(_dropDetected).arg(_dropTimer.elapsed() / 1000));
+
+	QTime t;
+	t.start();
+	updateGL();
+	_lastUpdateDuration = t.elapsed();
+	if(_lastUpdateDuration > _maxUpdateDuration)
+		_maxUpdateDuration = _lastUpdateDuration;
+	if(_lastUpdateDuration > 1500 / _screenFrequency) {
+		_dropTimer.restart();
+		_dropDetected++;
+	}
+
 }
 
 void PhGraphicView::paintGL()
@@ -106,25 +117,12 @@ void PhGraphicView::paintGL()
 	emit beforePaint(_screenFrequency);
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glColor3f(1.0f, 1.0f, 1.0f);
-	_infos.clear();
-
-	if(this->refreshRate() > _maxRefreshRate)
-		_maxRefreshRate = this->refreshRate();
-	addInfo(QString("refresh: %1 / %2").arg(_maxRefreshRate).arg(this->refreshRate()));
-
-	if(_dropTimer.elapsed() > 1000 / _screenFrequency + 4) {
-		_dropDetected++;
-		_lastDropElapsed = _dropTimer.elapsed();
-	}
-
-	_dropTimer.restart();
-	addInfo(QString("drop: %1 %2").arg(_lastDropElapsed).arg(_dropDetected));
 
 	QTime timer;
 	timer.start();
 
-	paint();
+	int ratio = this->windowHandle()->devicePixelRatio();
+	emit paint(this->width() * ratio, this->height() * ratio);
 
 	if(timer.elapsed() > _maxPaintDuration)
 		_maxPaintDuration = timer.elapsed();
@@ -132,11 +130,12 @@ void PhGraphicView::paintGL()
 	if(_settings) {
 		if(_settings->resetInfo()) {
 			_dropDetected = 0;
-			_lastDropElapsed = 0;
 			_maxRefreshRate = 0;
 			_maxPaintDuration = 0;
+			_maxUpdateDuration = 0;
 		}
 		if(_settings->displayInfo()) {
+			_infoFont.setFontFile(_settings->infoFontFile());
 			int y = 0;
 			foreach(QString info, _infos) {
 				PhGraphicText gInfo(&_infoFont, info, 0, y);
@@ -144,12 +143,13 @@ void PhGraphicView::paintGL()
 				gInfo.setZ(10);
 				gInfo.setColor(Qt::red);
 				gInfo.draw();
-				y += gInfo.getHeight();
+				y += gInfo.height();
 			}
 		}
 	}
+	// Once the informations have been displayed
+	// clear it
+	_infos.clear();
 
 	_frameTickCounter.tick();
 }
-
-

@@ -21,12 +21,20 @@ include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../common/deploy.pri)
 
 SOURCES += main.cpp\
-        FormTestWindow.cpp \
-    AboutDialog.cpp
+		FormTestWindow.cpp \
+	AboutDialog.cpp
 
 HEADERS  += FormTestWindow.h \
-    AboutDialog.h \
-    FormTestSettings.h
+	AboutDialog.h \
+	FormTestSettings.h
 
 FORMS    += FormTestWindow.ui \
-    AboutDialog.ui
+	AboutDialog.ui
+
+mac {
+	# For the plist version
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+}
+
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)

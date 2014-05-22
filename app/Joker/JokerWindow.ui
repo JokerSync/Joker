@@ -31,7 +31,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="VideoStripView" name="videoStripView" native="true"/>
+     <widget class="PhGraphicView" name="videoStripView" native="true"/>
     </item>
    </layout>
   </widget>
@@ -110,6 +110,7 @@
     <addaction name="actionTest_mode"/>
     <addaction name="actionFullscreen"/>
     <addaction name="actionInvert_colors"/>
+    <addaction name="actionHide_the_rythmo"/>
     <addaction name="separator"/>
     <addaction name="actionShow_ruler"/>
     <addaction name="actionChange_ruler_timestamp"/>
@@ -413,12 +414,23 @@
     <string>Deinterlace video</string>
    </property>
   </action>
+  <action name="actionHide_the_rythmo">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hide the rythmo</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>VideoStripView</class>
+   <class>PhGraphicView</class>
    <extends>QWidget</extends>
-   <header>VideoStripView.h</header>
+   <header>PhGraphic/PhGraphicView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

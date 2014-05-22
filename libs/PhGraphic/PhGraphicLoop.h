@@ -22,12 +22,11 @@ public:
 	 * @param y Upper left corner coordinate
 	 * @param w Desired width
 	 * @param h Desired height
-	 * @param crossHeight the height of the cross
-	 * @param hThick the cross thickness
-	 * @param horizontal if the graphicloop is horizontal or not
+	 * @param crossSize The cross size (width and height)
+	 * @param thickness The loop elements thickness
+	 * @param horizontal True if the loop layout is horizontal, false otherwise
 	 */
-	PhGraphicLoop(int x = 0, int y = 0, int w = 0, int h = 0, int crossHeight = 0, int hThick = 0, bool horizontal = false);
-	~PhGraphicLoop();
+	PhGraphicLoop(int x = 0, int y = 0, int w = 0, int h = 0, int crossSize = 0, int thickness = 0, bool horizontal = false);
 
 	/**
 	 * @brief draw the PhGraphicLoop
@@ -35,43 +34,44 @@ public:
 	void draw();
 
 	/**
-	 * @brief Set the thickness
-	 * @param hThick desired thickness
+	 * @brief Set the thickness of the loop elements
+	 * @param thickness An integer value
 	 */
-	void setHThick(int hThick);
+	void setThickness(int thickness);
 	/**
-	 * @brief Get the thickness
-	 * @return
+	 * @brief Get the thickness of the loop elements
+	 * @return An integer value
 	 */
-	int getHThick() {
-		return _hThick;
+	int getThickness() {
+		return _thickness;
 	}
 
 	/**
-	 * @brief Set the cross height
-	 * @param crossHeight
+	 * @brief Set the cross size (width and height)
+	 * @param crossSize An integer value
 	 */
-	void setCrossHeight(int crossHeight);
+	void setCrossSize(int crossSize);
+	/**
+	 * @brief Get the cross size (width and height)
+	 * @return An integer value
+	 */
+	int crossSize() {
+		return _crossSize;
+	}
 
 	/**
-	 * @brief Set horizontal loop
+	 * @brief Set horizontal loop layout
 	 *
-	 * Set if the graphic loop is displayed horizontaly or not
-	 * @param isHorizontal
+	 * Set if the loop is displayed horizontaly or not
+	 *
+	 * @param isHorizontal A boolean value
 	 */
 	void setHorizontalLoop(bool isHorizontal) {
-		_horizontal = isHorizontal;
-	}
-	/**
-	 * @brief Get the cross height
-	 * @return cross height in pixels
-	 */
-	int getCrossHeight() {
-		return _crossHeight;
+		_isHorizontal = isHorizontal;
 	}
 private:
-	int _crossHeight;
-	int _hThick;
-	bool _horizontal;
+	int _crossSize;
+	int _thickness;
+	bool _isHorizontal;
 };
 #endif // PHGRAPHICLOOP_H

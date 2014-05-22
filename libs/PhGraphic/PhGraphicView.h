@@ -33,6 +33,18 @@ public:
 	 * @param parent Parent object.
 	 */
 	explicit PhGraphicView(QWidget *parent = 0);
+
+	/**
+	 * @brief PhGraphicView constructor specifying the client area size.
+	 * @param width The client area width
+	 * @param height The client area height
+	 * @param parent Parent object
+	 *
+	 * The size is expressed in true pixel size. In the case of the retina screen,
+	 * the size will correspond to the opengl viewport: 2 times the widget size.
+	 */
+	PhGraphicView (int width, int height, QWidget *parent = 0);
+
 	~PhGraphicView();
 
 	/**
@@ -68,29 +80,13 @@ signals:
 	 */
 	void beforePaint(PhTimeScale frequency);
 
-protected:
-	/**
-	 * @brief Child-specific initialization.
-	 * @return true if everything went well, false otherwise.
-	 */
-	virtual bool init();
 	/**
 	 * @brief paint event, every class have to re-implement it.
-	 * @return true if everything went well, false otherwise.
+	 * @param width Width of the paint area
+	 * @param height Height of the paint area
 	 */
-	virtual void paint() = 0;
-
-	/**
-	 * @brief initializeGL
-	 * This virtual function is called once before the first call to paintGL() or resizeGL(),
-	 * and then once whenever the widget has been assigned a new QGLContext.
-	 * Reimplement it in a subclass.
-	 * This function should set up any required OpenGL context rendering flags,
-	 * defining display lists, etc.
-	 *
-	 * It calls init()
-	 */
-	void initializeGL();
+	void paint(int width, int height);
+protected:
 	/**
 	 * @brief paintGL
 	 * This virtual function is called whenever the widget needs to be painted.
@@ -103,19 +99,21 @@ protected:
 	 */
 	int _screenFrequency;
 
+private slots:
+	void onRefresh();
+
 private:
-	bool _initialized;
 	PhGraphicSettings *_settings;
 	/**
 	 * @brief t_Timer
 	 * used to draw
 	 */
-	QTimer *t_Timer;
+	QTimer *_refreshTimer;
 	PhTickCounter _frameTickCounter;
 	QStringList _infos;
 	PhFont _infoFont;
 	QTime _dropTimer;
-	int _dropDetected, _lastDropElapsed, _maxRefreshRate, _maxPaintDuration;
+	int _dropDetected, _maxRefreshRate, _maxPaintDuration, _lastUpdateDuration, _maxUpdateDuration;
 };
 
 #endif // PHGRAPHICVIEW

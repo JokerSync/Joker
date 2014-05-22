@@ -7,13 +7,13 @@
 QT       += core
 
 TARGET = AutoTest
-CONFIG   += console static
+CONFIG   += console static debug
 CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -g -fprofile-arcs -ftest-coverage -O0
-QMAKE_LFLAGS += -g -fprofile-arcs -ftest-coverage  -O0
+QMAKE_CXXFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
+QMAKE_LFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
 
 INCLUDEPATH += ../../libs
 
@@ -22,42 +22,57 @@ include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
+include(../../libs/PhGraphic/PhGraphic.pri)
+include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
+include(../../libs/PhVideo/PhVideo.pri)
 
 HEADERS += \
-    StripDocTest.h \
-    LockableSpinBoxTest.h \
-    SettingsTest.h \
-    TimeCodeEditTest.h \
-    TimeCodeTest.h \
-    SonyControllerTest.h \
-    AutoTestSettings.h \
-    WindowTest.h \
-    AutoTestWindow.h
+	AutoTestSettings.h \
+	ClockTest.h \
+	SettingsTest.h \
+	TimeCodeTest.h \
+	DebugTest.h \
+	StripDocTest.h \
+	SonyControllerTest.h \
+	LockableSpinBoxTest.h \
+	TimeCodeEditTest.h \
+	AutoTestWindow.h \
+	WindowTest.h \
+	GraphicTest.h \
+	GraphicTextTest.h \
+	GraphicStripTestSettings.h \
+	GraphicStripTest.h \
+	VideoTest.h \
+	VideoTestSettings.h
 
 SOURCES += main.cpp \
-    StripDocTest.cpp \
-    LockableSpinBoxTest.cpp \
-    SettingsTest.cpp \
-    TimeCodeEditTest.cpp \
-    TimeCodeTest.cpp \
-    SonyControllerTest.cpp \
-    WindowTest.cpp \
-    AutoTestWindow.cpp
+	ClockTest.cpp \
+	SettingsTest.cpp \
+	TimeCodeTest.cpp \
+	DebugTest.cpp \
+	StripDocTest.cpp \
+	SonyControllerTest.cpp \
+	LockableSpinBoxTest.cpp \
+	TimeCodeEditTest.cpp \
+	AutoTestWindow.cpp \
+	WindowTest.cpp \
+	GraphicTest.cpp \
+	GraphicTextTest.cpp \
+	GraphicStripTest.cpp \
+	VideoTest.cpp
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/empty.joker) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/empty_root.joker) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/empty_meta.joker) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/bad_tag.joker) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test.strip) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test01.joker) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test02.joker) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test01.detx) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test01.mos) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test02.mos) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test03.mos) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/test04.mos) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/notitle.detx) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/text.txt) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/video/*) . $${CS}
+QMAKE_POST_LINK += rm -f *.gcda $${CS}
 
 FORMS += \
-    AutoTestWindow.ui
+	AutoTestWindow.ui
+
+mac{
+	# For the plist version
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+}
+

@@ -31,3 +31,8 @@ doxygen_error.log
 *.qm
 
 *.orig
+builds/
+
+out.html
+
+payload.json

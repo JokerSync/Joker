@@ -7,7 +7,6 @@
 #include "PhTools/PhClock.h"
 #include "PhTools/PhDebug.h"
 
-#include "PhVideo/PhVideoView.h"
 #include "PhVideo/PhVideoEngine.h"
 
 #include "PhCommonUI/PhFloatingMediaPanel.h"
@@ -73,12 +72,20 @@ private slots:
 
 	void on_actionGo_to_triggered();
 
+	void on_actionDisplay_media_panel_triggered(bool checked);
+
+	void on_actionDeinterlace_video_triggered(bool checked);
+
+	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+
+	void onPaint(int width, int height);
 private:
 
 	Ui::VideoTestWindow *ui;
 	VideoTestSettings *_settings;
 	PhVideoEngine _videoEngine;
 	PhFloatingMediaPanel _mediaPanelDialog;
+	int _maxVideoRate;
 };
 
 #endif

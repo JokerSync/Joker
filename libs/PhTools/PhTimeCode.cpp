@@ -116,7 +116,7 @@ QString PhTimeCode::stringFromTime(PhTime time, PhTimeCodeType type)
 void PhTimeCode::ComputeHhMmSsFf(unsigned int *hhmmssff, PhFrame frame, PhTimeCodeType type) {
 	PhFrame fps = getFps(type);
 	bool drop = isDrop(type);
-	PhFrame n = std::abs(frame);
+	PhFrame n = qAbs(frame);
 
 	// computing hour
 	PhFrame framePerHour = 3600 * fps;

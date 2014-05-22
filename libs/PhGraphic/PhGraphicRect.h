@@ -56,6 +56,13 @@ public:
 	 * @param h The height
 	 */
 	void setHeight(int h);
+
+	/**
+	 * @brief Get the rectangle height
+	 * @return The height
+	 */
+	int height();
+
 	/**
 	 * @brief Set the rectangle width
 	 * @param w The width
@@ -63,22 +70,14 @@ public:
 	void setWidth(int w);
 
 	/**
-	 * @brief Get the rectangle height
-	 * @return The height
-	 */
-	int getHeight();
-	/**
 	 * @brief Get the rectangle width
 	 * @return The width
 	 */
-	int getWidth();
+	int width();
 
 
-protected:
-	/** @brief The rectangle width */
-	int _w;
-	/** @brief The rectangle height */
-	int _h;
+private:
+	int _w, _h;
 };
 
 #endif // PHGRAPHICSQUARE_H

@@ -40,6 +40,11 @@ PhTime GenerateDialog::getTC()
 	return PhTimeCode::frameFromString(this->ui->lineEditTimeCode->text(), PhTimeCodeType25);
 }
 
+bool GenerateDialog::getCheckBoxState()
+{
+	return ui->checkBox->isChecked();
+}
+
 
 void GenerateDialog::onTextChanged()
 {

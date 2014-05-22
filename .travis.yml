@@ -1,34 +1,38 @@
 language: objective-c
+env:
+  global:
+  - PATH=$PATH:/usr/local/opt/qt5/bin; fi
+  - JOKER_RELEASE_PATH=$HOME
+  - TESTS_RELEASE_PATH=$HOME
+  matrix:
+  - JOB=UNCRUSTIFY
+  - JOB=DOXYGEN
+  - JOB=BUILD_AUTOTEST
+  - JOB=BUILD_RELEASE_JOKER
+  - JOB=BUILD_RELEASE_ALL
 install:
-- scripts/install_sdl.sh
-- scripts/bootstrap.sh
-- scripts/install_libltc.sh
-- export PATH=$PATH:/usr/local/opt/qt5/bin
-- export JOKER_RELEASE_PATH=$HOME
+- if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
+- if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
+- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
+- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
+- if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
+- if [[ "$JOB" == BUILD_RELEASE_* ]]; then brew install npm && npm install -g appdmg; fi
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
+
 script:
-- qmake -v
-- mkdir tmp && cd tmp
-- mkdir AutoTest && cd AutoTest
-- qmake ../../tests/AutoTest/AutoTest.pro
-- make
-- "./AutoTest"
-- cd ..
-- mkdir Joker && cd Joker
-- qmake ../../app/Joker/Joker.pro
-- make
-- cd ..
-- cd ..
-- "./scripts/doxygen.sh"
-- "./scripts/uncrustify.sh"
+- if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
+- if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then qmake tests/AutoTest/AutoTest.pro; fi
+- if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then qmake app/Joker/Joker.pro; fi
+- if [[ "$JOB" == BUILD_RELEASE_ALL ]]; then qmake all.pro; fi
+- if [[ "$JOB" == BUILD_* ]]; then make; fi
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./AutoTest; fi
 after_success:
-- ~/.pyenv/shims/coveralls --exclude /usr/local --exclude tmp/Joker --exclude tests --build-root
-  tmp/AutoTest -E .+/moc_.+ -E .+/ui_.+
-- "./scripts/update-gh-pages.sh"
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
+after_failure:
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
-  irc: phonations.com#joker
   flowdock:
     secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
   email: false
-env:
-  global:
-    secure: StCptdbX5mPsWDLvwtRS8R0IP2t0ZaPUpRHtnVQbooMyskwWHOiM809iGFoUNyvsZQiPl/0psWjlpXpWm+NBmChj/ADksx9PhFg8WKya3uTLQ2bJkGo9dtW7y1BQ38kDpqrKVjn1zTKF1lZvd3+09KzNmmjAAcoxlD6rqssP7Rw=
