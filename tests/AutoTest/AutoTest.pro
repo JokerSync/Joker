@@ -66,6 +66,7 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $$
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/video/*) . $${CS}
+QMAKE_POST_LINK += rm -f *.gcda $${CS}
 
 FORMS += \
 	AutoTestWindow.ui
