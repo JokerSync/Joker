@@ -53,7 +53,7 @@ bool VideoStripTestWindow::openDocument(QString fileName)
 
 void VideoStripTestWindow::on_actionOpen_triggered()
 {
-	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx *.strip)");
+	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx *.joker)");
 	if(dlg.exec()) {
 		QString fileName = dlg.selectedFiles()[0];
 		if(!openDocument(fileName))
