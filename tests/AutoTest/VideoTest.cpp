@@ -82,6 +82,7 @@ void VideoTest::goToTest02() {
 	_videoEngine.close();
 }
 
+// This "stress test" cue the video engine at different random location
 void VideoTest::goToTest03() {
 
 	QVERIFY(_videoEngine.open("interlace_%03d.bmp") );
