@@ -31,6 +31,7 @@ HEADERS += \
 	ClockTest.h \
 	SettingsTest.h \
 	TimeCodeTest.h \
+	DebugTest.h \
 	StripDocTest.h \
 	SonyControllerTest.h \
 	LockableSpinBoxTest.h \
@@ -48,6 +49,7 @@ SOURCES += main.cpp \
 	ClockTest.cpp \
 	SettingsTest.cpp \
 	TimeCodeTest.cpp \
+	DebugTest.cpp \
 	StripDocTest.cpp \
 	SonyControllerTest.cpp \
 	LockableSpinBoxTest.cpp \
@@ -64,6 +66,7 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $$
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/video/*) . $${CS}
+QMAKE_POST_LINK += rm -f *.gcda $${CS}
 
 FORMS += \
 	AutoTestWindow.ui
