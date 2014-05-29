@@ -905,6 +905,7 @@ void JokerWindow::onPaint(int width, int height)
 	if(_settings->displayNextTC()) {
 		PhStripText *nextText = NULL;
 		PhGraphicText nextTCText(_strip.getHUDFont());
+		nextTCText.setColor(Qt::red);
 
 		nextTCText.setRect(width - tcWidth, y, tcWidth, tcHeight);
 		y += tcHeight;
