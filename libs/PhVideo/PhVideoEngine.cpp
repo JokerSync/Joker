@@ -37,6 +37,10 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 {
 	_deinterlace = deinterlace;
 	_currentFrame = PHFRAMEMIN;
+	if(_rgb) {
+		delete _rgb;
+		_rgb = NULL;
+	}
 }
 
 bool PhVideoEngine::open(QString fileName)
