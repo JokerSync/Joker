@@ -15,13 +15,18 @@ include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 SOURCES += main.cpp\
-        SerialTestWindow.cpp
+		SerialTestWindow.cpp
 
 HEADERS  += SerialTestWindow.h \
-    SerialTestSettings.h
+	SerialTestSettings.h
 
 FORMS    += SerialTestWindow.ui
 
 INCLUDEPATH += /usr/local/include
+
+mac {
+	# For the plist version
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+}
 
 LIBS += -L/usr/local/lib -lftd2xx
