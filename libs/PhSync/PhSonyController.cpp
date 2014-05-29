@@ -10,11 +10,11 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyController::PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, QString ftdiDescription) :
+PhSonyController::PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, int deviceNumber) :
 	_serial(0),
 	_clock(tcType),
 	_settings(settings),
-	_portDescription(ftdiDescription),
+	_deviceNumber(deviceNumber),
 	_totalByteRead(0),
 	_lastCTS(false),
 	_threadRunning(false)
@@ -30,8 +30,8 @@ PhSonyController::~PhSonyController()
 
 bool PhSonyController::open()
 {
-	PHDEBUG << "Opening" << _portDescription;
-	FT_STATUS status = FT_OpenEx((void*)PHNQ(_portDescription), FT_OPEN_BY_DESCRIPTION, &_serial);
+	PHDEBUG << "Opening" << _deviceNumber;
+	FT_STATUS status = FT_Open(_deviceNumber, &_serial);
 	if(status == FT_OK) {
 		FT_SetBaudRate(_serial, FT_BAUD_38400);
 		FT_SetDataCharacteristics(_serial, FT_BITS_8, FT_STOP_BITS_1, FT_PARITY_ODD);
@@ -66,7 +66,7 @@ bool PhSonyController::open()
 	for(int i = 0; i < deviceCount; i++)
 		PHDEBUG << "\t" << i << ":\t" << infos[i].Description;
 
-	PHDEBUG << _portDescription << "Unable to open" << _portDescription;
+	PHDEBUG << _deviceNumber << "Unable to open" << _deviceNumber;
 	return false;
 }
 
@@ -113,7 +113,7 @@ void PhSonyController::run()
 	while(_threadRunning) {
 		onData();
 	}
-	PHDEBUG << _portDescription << "bye bye";
+	PHDEBUG << _deviceNumber << "bye bye";
 }
 
 PhRate PhSonyController::computeRate(unsigned char data1)
@@ -176,12 +176,12 @@ void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
 
 void PhSonyController::timeOut()
 {
-	PHDEBUG << _portDescription;
+	PHDEBUG << _deviceNumber;
 }
 
 void PhSonyController::checkSumError()
 {
-	PHDEBUG << _portDescription;
+	PHDEBUG << _deviceNumber;
 }
 
 QString PhSonyController::stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char * data)
@@ -228,7 +228,7 @@ void PhSonyController::onData()
 				checksum += _dataIn[i];
 
 			if (checksum != _dataIn[datacount+2]) {
-				PHDEBUG << _portDescription << "Checksum error : " << cmdString;
+				PHDEBUG << _deviceNumber << "Checksum error : " << cmdString;
 				checkSumError();
 			}
 			else // Process the data

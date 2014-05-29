@@ -57,7 +57,7 @@ public:
 	 * @param settings The application settings
 	 * @param comSuffix Serial port name suffix
 	 */
-	explicit PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, QString ftdiDescription);
+	explicit PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, int deviceNumber);
 
 	/**
 	 * @brief PhSonyController destructor
@@ -211,8 +211,8 @@ protected:
 	/** @brief The application settings */
 	PhSyncSettings* _settings;
 
-	/** @brief FTDI port description (A for slave and B for master). */
-	QString _portDescription;
+	/** @brief FTDI port description (0 for slave and 1 for master). */
+	int _deviceNumber;
 
 private:
 	/** @brief Serial port connected to the controller. */
