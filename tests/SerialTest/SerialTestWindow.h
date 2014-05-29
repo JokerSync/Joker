@@ -37,7 +37,7 @@ private slots:
 	void checkCTS();
 
 private:
-	bool open(FT_HANDLE * serial, QString suffix);
+	bool open(FT_HANDLE * serial, int deviceNumber);
 
 	SerialTestSettings *_settings;
 

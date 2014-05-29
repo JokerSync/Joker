@@ -83,11 +83,11 @@ void SerialTestWindow::on_checkA_toggled(bool checked)
 {
 	_settings->setActivatePortA(checked);
 	if(checked) {
-		if(open(&_serialA, _settings->portAName())) {
-			_ctsTimer.start(10);
+		if(open(&_serialA, _settings->deviceNumberA())) {
+			_ctsTimer.start(1000);
 		}
 		else
-			QMessageBox::critical(this, "Serial Test", QString("Unable to connect to %1").arg(_settings->portAName()));
+			QMessageBox::critical(this, "Serial Test", QString("Unable to connect to %1").arg(_settings->deviceNumberA()));
 	}
 	else {
 		_ctsTimer.stop();
@@ -99,33 +99,29 @@ void SerialTestWindow::on_checkB_toggled(bool checked)
 {
 	_settings->setActivatePortB(checked);
 	if(checked) {
-		if(!open(&_serialB, _settings->portBName()))
-			QMessageBox::critical(this, "Serial Test", QString("Unable to connect to %1").arg(_settings->portBName()));
+		if(!open(&_serialB, _settings->deviceNumberB()))
+			QMessageBox::critical(this, "Serial Test", QString("Unable to connect to %1").arg(_settings->deviceNumberB()));
 	}
 	else
 		FT_Close(_serialB);
 }
 
-bool SerialTestWindow::open(FT_HANDLE * serial, QString suffix)
+bool SerialTestWindow::open(FT_HANDLE * serial, int deviceNumber)
 {
-	PHDEBUG << "open" << suffix;
+	PHDEBUG << "open" << deviceNumber;
 
-	DWORD deviceCount = 0;
-	if(FT_CreateDeviceInfoList(&deviceCount) == FT_OK) {
-		FT_DEVICE_LIST_INFO_NODE *infos = new FT_DEVICE_LIST_INFO_NODE[deviceCount];
-		FT_GetDeviceInfoList(infos, &deviceCount);
-		for(int i = 0; i < deviceCount; i++) {
-			if(QString(infos[i].Description).endsWith(suffix)) {
-				if(FT_Open(i, serial) == FT_OK) {
-					FT_SetBaudRate(*serial, FT_BAUD_38400);
-					FT_SetDataCharacteristics(*serial, FT_BITS_8, FT_STOP_BITS_1, FT_PARITY_ODD);
-					return true;
-				}
-			}
-		}
+	FT_STATUS status = FT_Open(deviceNumber, serial);
+
+	if(status == FT_OK) {
+		FT_ResetDevice(*serial);
+		FT_SetBaudRate(*serial, FT_BAUD_38400);
+		FT_SetDtr(*serial);
+		FT_SetRts(*serial);
+		FT_SetDataCharacteristics(*serial, FT_BITS_8, FT_STOP_BITS_1, FT_PARITY_ODD);
+		FT_SetTimeouts(*serial, 0, 0);
+
 	}
-
-	return false;
+	return (status == FT_OK);
 }
 
 void SerialTestWindow::checkCTS()
