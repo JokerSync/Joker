@@ -118,8 +118,11 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 	glEnable( GL_TEXTURE_2D );
 
 	if((width != _textureWidth) || (height != _textureHeight)) {
-		if(_texture != 0)
+		if(_texture != 0) {
+			PHDEBUG << QString("Deleting texture %1x%2 : %3").arg(_textureWidth).arg(_textureHeight).arg(_texture);
 			glDeleteTextures(1, &_texture);
+			_texture = 0;
+		}
 		_textureWidth = width;
 		_textureHeight = height;
 	}
@@ -131,6 +134,8 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 			PHDEBUG << "glGenTextures() errored: is opengl context ready?";
 			return false;
 		}
+		else
+			PHDEBUG << QString("Creating texture %1x%2 : %3").arg(_textureWidth).arg(_textureHeight).arg(_texture);
 	}
 
 	// Bind the texture object

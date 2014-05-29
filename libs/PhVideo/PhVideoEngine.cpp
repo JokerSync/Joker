@@ -317,7 +317,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 
 						if(_rgb == NULL)
 							_rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
-						int linesize = _videoFrame->width *3;
+						int linesize = _videoFrame->width * 3;
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
 						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
 						                   &linesize)) {
