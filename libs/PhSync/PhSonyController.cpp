@@ -35,7 +35,7 @@ bool PhSonyController::open()
 	if(status == FT_OK) {
 		FT_SetBaudRate(_serial, FT_BAUD_38400);
 		FT_SetDataCharacteristics(_serial, FT_BITS_8, FT_STOP_BITS_1, FT_PARITY_ODD);
-		FT_SetTimeouts(_serial, 100, 100);
+		FT_SetTimeouts(_serial, 10, 10);
 		this->start(QThread::HighPriority);
 		return true;
 	}
@@ -114,6 +114,7 @@ void PhSonyController::run()
 	_threadRunning = true;
 	while(_threadRunning) {
 		onData();
+		checkVideoSync(100);
 	}
 	PHDEBUG << _deviceNumber << "bye bye";
 }
