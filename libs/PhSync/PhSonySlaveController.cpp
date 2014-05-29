@@ -286,7 +286,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 void PhSonySlaveController::onVideoSync()
 {
 	_clock.tick(PhTimeCode::getFps(_clock.timeCodeType()));
-	PHDBG(20) << _clock.timeCode();
+	PHDBG(23) << _clock.timeCode();
 }
 
 void PhSonySlaveController::sendAck()

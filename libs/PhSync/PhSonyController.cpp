@@ -93,12 +93,14 @@ void PhSonyController::checkVideoSync(int)
 		bool cts = status & 0x10;
 		if(videoSyncUp) {
 			if(!_lastCTS && cts) {
+				PHDBG(24);
 				onVideoSync();
 				emit videoSync();
 			}
 		}
 		else {
 			if(_lastCTS && !cts) {
+				PHDBG(24);
 				onVideoSync();
 				emit videoSync();
 			}
