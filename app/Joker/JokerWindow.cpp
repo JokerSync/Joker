@@ -101,11 +101,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->actionHide_the_rythmo->setChecked(_settings->hideStrip());
 
-	if(!_settings->exitedNormaly())
-		on_actionSend_feedback_triggered();
-
-	_settings->setExitedNormaly(false);
-
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
 
