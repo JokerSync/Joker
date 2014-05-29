@@ -317,7 +317,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 				gPeople.setColor(computeColor(people, selectedPeoples, invertedColor));
 
-				PhGraphicSolidRect background(gPeople.x(), gPeople.y(), gPeople.width(), gPeople.height() + 2);
+				PhGraphicSolidRect background(gPeople.x(), gPeople.y() - 2, gPeople.width(), gPeople.height() + 3);
 				if(selectedPeoples.size() && !selectedPeoples.contains(people))
 					background.setColor(QColor(90, 90, 90));
 				else
