@@ -117,16 +117,6 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 {
 	glEnable( GL_TEXTURE_2D );
 
-	if((width != _textureWidth) || (height != _textureHeight)) {
-		if(_texture != 0) {
-			PHDEBUG << QString("Deleting texture %1x%2 : %3").arg(_textureWidth).arg(_textureHeight).arg(_texture);
-			glDeleteTextures(1, &_texture);
-			_texture = 0;
-		}
-		_textureWidth = width;
-		_textureHeight = height;
-	}
-
 	// Have OpenGL generate a texture object handle for us
 	if(_texture == 0) {
 		glGenTextures( 1, &_texture );
@@ -134,17 +124,25 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 			PHDEBUG << "glGenTextures() errored: is opengl context ready?";
 			return false;
 		}
-		else
-			PHDEBUG << QString("Creating texture %1x%2 : %3").arg(_textureWidth).arg(_textureHeight).arg(_texture);
 	}
 
 	// Bind the texture object
 	glBindTexture( GL_TEXTURE_2D, _texture );
 
+	if((width != _textureWidth) || (height != _textureHeight)) {
+		_textureWidth = width;
+		_textureHeight = height;
 
-	// Edit the texture object's image data using the information SDL_Surface gives us
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
-	              GL_RGB, GL_UNSIGNED_BYTE, data);
+		PHDEBUG << QString("%1x%2").arg(width).arg(height);
+
+		// Edit the texture object's image data using the information SDL_Surface gives us
+		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+		              GL_RGB, GL_UNSIGNED_BYTE, data);
+	}
+	else {
+		glBindTexture( GL_TEXTURE_2D, _texture );
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+	}
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -190,10 +188,10 @@ void PhGraphicTexturedRect::draw()
 
 	glEnable(GL_TEXTURE_2D);
 
-//        (0,0) ------ (1,0)
-//          |            |
-//          |            |
-//        (0,1) ------ (1,1)
+	//        (0,0) ------ (1,0)
+	//          |            |
+	//          |            |
+	//        (0,1) ------ (1,1)
 
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
