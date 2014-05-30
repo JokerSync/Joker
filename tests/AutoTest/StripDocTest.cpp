@@ -357,6 +357,26 @@ void StripDocTest::importDrbTest01()
 	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("00:00:04:03"));
 }
 
+void StripDocTest::importDrbTest02()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.openStripFile("drb02.drb"));
+
+	QCOMPARE(doc.peoples().count(), 28);
+
+	QCOMPARE(doc.peoples()[0]->name(), QString("Intervenant 1"));
+	QCOMPARE(doc.peoples()[1]->name(), QString("ned"));
+	QCOMPARE(doc.peoples()[2]->name(), QString("moze"));
+	QCOMPARE(doc.peoples()[3]->name(), QString("suzie"));
+
+	QCOMPARE(doc.texts().count(), 546);
+	QCOMPARE(doc.texts()[0]->people()->name(), QString("ned"));
+	QCOMPARE(doc.texts()[0]->track(), 0);
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("00:00:02:22"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("00:00:02:23"));
+}
+
 void StripDocTest::importSyn6Test01()
 {
 	PhStripDoc doc;
