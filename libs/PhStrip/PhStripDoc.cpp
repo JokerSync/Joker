@@ -147,11 +147,11 @@ bool PhStripDoc::importDetXFile(QString fileName)
 				// Reading loops
 				if(elem.tagName() == "loop")
 					_loops.append(new PhStripLoop(loopNumber++,
-												  PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
+					                              PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
 					_cuts.append(new PhStripCut(PhStripCut::Simple,
-												PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
+					                            PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
 				else if(elem.tagName() == "line") {
 					PhTime timeIn = -1;
 					PhTime lastTime = -1;
@@ -244,9 +244,9 @@ PhStripText* PhStripDoc::readMosText(QFile &f, int textLevel, int internLevel)
 	PhFileTool::readInt(f, internLevel, "text");
 
 	PHDBG(textLevel) << PHNQ(PhTimeCode::stringFromTime(timeIn, _tcType))
-					 << "->"
-					 << PHNQ(PhTimeCode::stringFromTime(timeOut, _tcType))
-					 << PHNQ(content);
+	                 << "->"
+	                 << PHNQ(PhTimeCode::stringFromTime(timeOut, _tcType))
+	                 << PHNQ(content);
 	return text;
 }
 
@@ -313,14 +313,14 @@ PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLe
 	for(int j = 0; j < 6; j++)
 		PhFileTool::readShort(f, internLevel);
 	PHDBG(detectLevel) << "detect: "
-					   << PhTimeCode::stringFromTime(timeIn, _tcType)
-					   << PhTimeCode::stringFromTime(timeOut, _tcType)
-					   << "type2:"
-					   << detectType2
-					   << "type3:"
-					   << detectType3
-					   << "type:"
-					   << type;
+	                   << PhTimeCode::stringFromTime(timeIn, _tcType)
+	                   << PhTimeCode::stringFromTime(timeOut, _tcType)
+	                   << "type2:"
+	                   << detectType2
+	                   << "type3:"
+	                   << detectType3
+	                   << "type:"
+	                   << type;
 	return new PhStripDetect(type, timeIn, NULL, timeOut, 0);
 }
 
@@ -780,7 +780,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 	QDomNodeList peopleList = peopleDoc.elementsByTagName("Row");
 	for (int i = 0; i < peopleList.length(); i++) {
 		QDomElement peopleElement = peopleList.at(i).toElement();
-		int id= peopleElement.elementsByTagName("Id").at(0).toElement().text().toInt();
+		int id = peopleElement.elementsByTagName("Id").at(0).toElement().text().toInt();
 		QString name = peopleElement.elementsByTagName("Nom").at(0).toElement().text();
 		PhPeople *people = new PhPeople(name);
 		peopleMap[id] = people;
@@ -788,11 +788,11 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 
 	peopleFile.close();
 
-	foreach (PhPeople *people, peopleMap.values())
-		_peoples.append(people);
+	foreach(PhPeople *people, peopleMap.values())
+	_peoples.append(people);
 
 	QDir dir(dirName);
-	foreach (QString name, dir.entryList(QStringList("*.dat"))) {
+	foreach(QString name, dir.entryList(QStringList("*.dat"))) {
 		QString subFileName = dir.filePath(name);
 		QFile f(subFileName);
 		if(f.open(QIODevice::ReadOnly)) {
@@ -880,7 +880,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 		PHDEBUG << "query failed";
 
 	foreach(PhPeople *people, peopleMap.values())
-		_peoples.append(people);
+	_peoples.append(people);
 
 	if(query.exec("SELECT * FROM TEXTE;")) {
 		while(query.next()) {
