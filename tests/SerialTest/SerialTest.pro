@@ -14,8 +14,13 @@ VERSION = 1.0.0
 include(../../libs/PhTools/PhTools.pri)
 
 SOURCES += main.cpp\
-        SerialTestWindow.cpp
+		SerialTestWindow.cpp
 
 HEADERS  += SerialTestWindow.h
 
 FORMS    += SerialTestWindow.ui
+
+mac {
+	# For the plist version
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+}

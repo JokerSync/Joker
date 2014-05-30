@@ -35,7 +35,7 @@ public:
 	/**
 	 * @brief PhStripDoc constructor
 	 */
-	explicit PhStripDoc(QObject *parent = 0);
+	PhStripDoc();
 
 	/**
 	 * @brief The name of the application that generated the document
@@ -354,9 +354,16 @@ public:
 	 * @return time A time value
 	 */
 	PhTime lastTime();
-	/*!
-	 * \brief Get the force ratio information
-	 * \return if the ratio is forced or not
+
+	/**
+	 * @brief Set the force 16/9 ratio status
+	 * @param forceRatio A bool value
+	 */
+	void setForceRatio169(bool forceRatio);
+
+	/**
+	 * @brief Get the force 16/9ratio status
+	 * @return True if the ratio is forced, false otherwise
 	 */
 	bool forceRatio169() const;
 

@@ -79,12 +79,14 @@ void PhSonyController::checkVideoSync(int)
 		bool cts = _serial.pinoutSignals() & QSerialPort::ClearToSendSignal;
 		if(videoSyncUp) {
 			if(!_lastCTS && cts) {
+				PHDBG(24);
 				onVideoSync();
 				emit videoSync();
 			}
 		}
 		else {
 			if(_lastCTS && !cts) {
+				PHDBG(24);
 				onVideoSync();
 				emit videoSync();
 			}

@@ -35,7 +35,7 @@ public:
 	 * @param fontFile Path to the new font file
 	 * @return true if the font was loaded successfully, false otherwise.
 	 */
-	bool setFontFile(QString fontFile);
+	void setFontFile(QString fontFile);
 
 	/**
 	 * @brief Get the font file
@@ -90,6 +90,15 @@ public:
 	 */
 	int getNominalWidth(QString string);
 
+	/**
+	 * @brief Compute the maximum font size
+	 * @param fileName A font file
+	 *
+	 * Compute the maximum font size to initialize the font with
+	 * so the glyph never take more than 128 pixel
+	 * @return A font size.
+	 */
+	static int computeMaxFontSize(QString fileName);
 private:
 	/**
 	 * @brief _texture
@@ -97,7 +106,7 @@ private:
 	 */
 	unsigned int _texture;
 
-	bool init(QString _fontFile);
+	bool init();
 
 	/**
 	 * @brief Store the regular advance of each glyph.
@@ -112,6 +121,8 @@ private:
 	QString _fontFile;
 
 	int _boldness;
+
+	bool _ready;
 };
 
 #endif // PHFONT_H

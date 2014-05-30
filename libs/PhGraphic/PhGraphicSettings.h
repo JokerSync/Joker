@@ -28,7 +28,7 @@ public:
 	 */
 	virtual QString infoFontFile()
 	{
-		return QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Arial.ttf";
+		return QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/HelveticaCYPlain.ttf";
 	}
 };
 

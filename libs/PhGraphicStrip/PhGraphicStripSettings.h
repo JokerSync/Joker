@@ -33,10 +33,20 @@ public:
 	 */
 	virtual int verticalTimePerPixel() = 0;
 	/**
-	 * @brief Set the strip text font file
-	 * @param value A font file path
+	 * @brief The light background image file path
+	 * @return An image file path
 	 */
-	virtual void setTextFontFile(QString value) = 0;
+	virtual QString backgroundImageLight() = 0;
+	/**
+	 * @brief The dark background image file path
+	 * @return An image file path
+	 */
+	virtual QString backgroundImageDark() = 0;
+	/**
+	 * @brief Get the HUD font file
+	 * @return A font file path
+	 */
+	virtual QString hudFontFile() = 0;
 	/**
 	 * @brief Get the strip text font file
 	 * @return A font file path

@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef GRAPHICSTRIPTESTWINDOW_H
+#define GRAPHICSTRIPTESTWINDOW_H
 
 #include <QMessageBox>
 
@@ -74,13 +74,18 @@ private slots:
 
 	void on_actionChange_ruler_timestamp_triggered();
 
+	void onPaint(int width, int height);
+
+	void on_actionChange_font_triggered();
+
+protected:
+	PhClock *_clock;
 private:
 	Ui::GraphicStripTestWindow *ui;
 	GraphicStripTestSettings *_settings;
-	PhGraphicStrip *_strip;
+	PhGraphicStrip _strip;
 	PhStripDoc *_doc;
-	PhClock *_clock;
 	StripPropertiesDialog *dlg;
 };
 
-#endif // MAINWINDOW_H
+#endif // GRAPHICSTRIPTESTWINDOW_H
