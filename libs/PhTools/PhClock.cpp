@@ -6,8 +6,8 @@
 
 #include "PhClock.h"
 
-PhClock::PhClock(PhTimeCodeType tcType, QObject *parent) :
-	QObject(parent), _tcType(tcType), _time(0), _rate(0.0)
+PhClock::PhClock(PhTimeCodeType tcType) :
+	QObject(NULL), _tcType(tcType), _time(0), _rate(0.0)
 {
 	qRegisterMetaType<PhTime>("PhTime");
 	qRegisterMetaType<PhFrame>("PhFrame");

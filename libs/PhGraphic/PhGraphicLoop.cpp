@@ -7,100 +7,72 @@
 #include "math.h"
 #include "PhGraphicLoop.h"
 
-PhGraphicLoop::PhGraphicLoop(int x, int y, int w, int h, int crossHeight, int hThick, bool horizontal) :
+PhGraphicLoop::PhGraphicLoop(int x, int y, int w, int h, int crossSize, int thickness, bool isHorizontal) :
 	PhGraphicRect(x, y, w, h),
-	_crossHeight(crossHeight),
-	_hThick(hThick),
-	_horizontal(horizontal)
-{
-}
-PhGraphicLoop::~PhGraphicLoop()
+	_crossSize(crossSize),
+	_thickness(thickness),
+	_isHorizontal(isHorizontal)
 {
 }
 
 void PhGraphicLoop::draw()
 {
-	//draw rect
-	int x = _x - _hThick / 2;
-	int y = _y;
-	int w = _hThick;
-	int h = _h;
+	PhGraphicRect::draw();
 
-	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+	int x = this->x() - _thickness / 2;
+	int y = this->y();
+	int z = this->z();
+	int w = _thickness;
+	int h = this->height();
 
-	if(_horizontal) {
-		w = _w;
-		h = _hThick;
+	if(_isHorizontal) {
+		x = this->x();
+		y = this->y() - _thickness / 2;
+		w = this->width();
+		h = _thickness;
 	}
 
+	// Draw the main rectangle
 	glBegin(GL_QUADS);  // draw the vertical line
 	{
-		glVertex3f(x,       y,  _z);
-		glVertex3f(x + w,   y,  _z);
-		glVertex3f(x + w,   y + h,  _z);
-		glVertex3f(x,       y + h,  _z);
+		glVertex3i(x,     y,     z);
+		glVertex3i(x + w, y,     z);
+		glVertex3i(x + w, y + h, z);
+		glVertex3i(x,     y + h, z);
+
+		x = this->x();
+		y = this->y() + this->height() / 2;
+
+		if(_isHorizontal) {
+			x = this->x() + this->width() / 2;
+			y = this->y();
+		}
+
+		int hcs = _crossSize / 2; // half cross size
+		int ht = _thickness / 3; // half thickness;
+
+		// draw the fist cross segment
+		glVertex3i(x - hcs + ht, y - hcs - ht, z);
+		glVertex3i(x - hcs - ht, y - hcs + ht, z);
+		glVertex3i(x + hcs - ht, y + hcs + ht, z);
+		glVertex3i(x + hcs + ht, y + hcs - ht, z);
+
+		// draw the second cross segment
+		glVertex3i(x + hcs - ht, y - hcs - ht, z);
+		glVertex3i(x + hcs + ht, y - hcs + ht, z);
+		glVertex3i(x - hcs + ht, y + hcs + ht, z);
+		glVertex3i(x - hcs - ht, y + hcs - ht, z);
 	}
-
-
-	//draw cross
-
-
-
-	if(_horizontal) {
-		x = _x + _w / 2 - _crossHeight / 2;
-		y = _y - _crossHeight / 2;
-		w = _hThick;
-		h = _crossHeight;
-		_w = _crossHeight;
-
-	}
-	else {
-		x = _x - _w/2;
-		y = _y + _h/2 - _crossHeight / 2;
-		w = _hThick;
-		h = _crossHeight;
-
-	}
-	glBegin(GL_QUADS);  // draw the fist cross segment
-	{
-		glVertex3f(x,           y,      _z);
-		glVertex3f(x + w,       y,      _z);
-		glVertex3f(x + _w,      y + h,  _z);
-		glVertex3f(x + _w - w,  y + h,  _z);
-	}
-
 	glEnd();
-
-
-
-	if(_horizontal) {
-		y = _y + _crossHeight / 2;
-
-	}
-	else {
-		y = _y + _h/2 + _crossHeight/2;
-	}
-	glBegin(GL_QUADS);  // draw the second cross segment
-	{
-		glVertex3f(x,       y,  _z);
-		glVertex3f(x + w,   y,  _z);
-		glVertex3f(x + _w,  y - h,  _z);
-		glVertex3f(x + _w -w,       y - h,  _z);
-	}
-
-	glEnd();
-
-
-
 }
 
-void PhGraphicLoop::setHThick(int hThick)
+void PhGraphicLoop::setThickness(int thickness)
 {
-	_hThick = hThick;
+	_thickness = thickness;
 }
 
-void PhGraphicLoop::setCrossHeight(int crossHeight)
+void PhGraphicLoop::setCrossSize(int crossSize)
 {
-	_crossHeight = crossHeight;
+	_crossSize = crossSize;
 }
 

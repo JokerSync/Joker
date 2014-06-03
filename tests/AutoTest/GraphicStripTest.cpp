@@ -4,32 +4,29 @@
  */
 
 #include <QTest>
-#include <QDate>
-#include "GraphicStripTest.h"
+#include <QWindow>
+
+#include "PhTools/PhPictureTools.h"
 
 #include "PhGraphic/PhGraphicView.h"
 #include "PhGraphicStrip/PhGraphicStrip.h"
-#include "PhGraphicStrip/PhGraphicStripView.h"
 
-GraphicStripTest::GraphicStripTest(QObject *parent) :
-	QObject(parent)
+#include "GraphicStripTestSettings.h"
+
+#include "GraphicStripTest.h"
+
+void GraphicStripTest::drawTest()
 {
-}
+	PhGraphicView view(980, 320);
 
-void GraphicStripTest::testStripDocObject()
-{
-	PhGraphicStripView view;
-	GraphicStripTestSettings settings;
-	settings.setStripHeight(1);
-	settings.setTextFontFile(QCoreApplication::applicationDirPath() + "/SWENSON.TTF");
-	view.setStripSettings(&settings);
+	GraphicStripTestSettings _settings;
+	PhGraphicStrip _strip(&_settings);
 
-	view.setMinimumSize(QSize(981, 319));
-	view.setMaximumSize(QSize(981, 319));
-	view.show();
+	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
+	            _strip.draw(0, 0, w, h);
+			});
 
-
-	PhStripDoc * doc = view.strip()->doc();
+	PhStripDoc * doc = _strip.doc();
 	doc->reset();
 	doc->addPeople(new PhPeople("A people"));
 	doc->addPeople(new PhPeople("A second people", "red"));
@@ -40,18 +37,17 @@ void GraphicStripTest::testStripDocObject()
 	doc->addObject(new PhStripLoop(3, 22000));
 	doc->addObject(new PhStripText(10000, doc->peoples().last(), 15000, 2, "Hi !"));
 	doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 2));
+	doc->changed();
 
+	view.show();
 
+	QImage resultImage(view.grabFrameBuffer());
+	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
+	resultImage.save(resultFile);
+	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
+	QImage expectedImage(expectedFile);
 
-	view.strip()->draw(0, 0, 981, 319);
-	QImage impr(view.grabFrameBuffer());
-	impr.save("resultStripObject.bmp");
-	QString expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTest.bmp");
-	if(view.windowHandle()->devicePixelRatio() == 2)
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripRetinaTest.bmp");
-	if(QString(qgetenv("TRAVIS")) == "true")
-		expectedFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + QString("/graphicStripTravisTest.bmp");
-
-	QVERIFY(impr == QImage(expectedFile));
-
+	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+	PHDEBUG << "result:" << result;
+	QVERIFY(result < 920 * 320 / 4); // accept a difference of 1 per 4 pixels
 }

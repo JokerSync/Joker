@@ -3,8 +3,12 @@
 
 #include "PhCommonUI/PhWindow.h"
 
+#include "PhGraphic/PhGraphicImage.h"
+#include "PhGraphic/PhFont.h"
+#include "PhGraphic/PhGraphicSolidRect.h"
+#include "PhGraphic/PhGraphicTexturedRect.h"
+
 #include "GraphicTestSettings.h"
-#include "GraphicTestView.h"
 
 namespace Ui {
 class GraphicTestWindow;
@@ -21,9 +25,18 @@ public:
 private slots:
 	void on_actionChange_font_triggered();
 
+	void on_actionSave_triggered();
+
+	void onPaint(int width, int height);
+
 private:
 	Ui::GraphicTestWindow *ui;
 	GraphicTestSettings *_settings;
+	PhGraphicImage _image;
+	PhFont _font1, _font2;
+	PhGraphicSolidRect _rect;
+	PhGraphicTexturedRect _yuvRect, _rgbRect;
+	int _x;
 };
 
 #endif // GRAPHICTESTWINDOW_H

@@ -5,6 +5,8 @@
 
 QT += testlib
 
+CONFIG += c++11
+
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
