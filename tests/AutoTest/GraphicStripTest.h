@@ -11,11 +11,10 @@
 class GraphicStripTest : public QObject
 {
 	Q_OBJECT
-public:
-	explicit GraphicStripTest(QObject *parent = 0);
 
 private slots:
-	void testStripDocObject();
+	void drawTest();
+
 };
 
 #endif // GRAPHICSTRIPTEST_H

@@ -4,6 +4,11 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <qmath.h>
+#include <QColor>
+
+#include "PhDebug.h"
+
 #include "PhPictureTools.h"
 
 void PhPictureTools::RGBtoYUV(const unsigned char *rgb, int *yuv, int monochrome, int luminance)
@@ -102,9 +107,9 @@ unsigned char *PhPictureTools::generateRGBPattern(int w, int h)
 
 	for(int y = 0; y < h; ++y) {
 		for (int x = 0; x < w; ++x) {
-			rgbOut[3 * (y * w + x)] = 255;
-			rgbOut[3 * (y * w + x) + 1] = 0;
-			rgbOut[3 * (y * w + x) + 2] = 0;
+			rgbOut[3 * (y * w + x)] = 255 * y / h;
+			rgbOut[3 * (y * w + x) + 1] = 255 * x / w;
+			rgbOut[3 * (y * w + x) + 2] = 255 * x * y / w / h;
 		}
 	}
 	return rgbOut;
@@ -131,4 +136,44 @@ unsigned char *PhPictureTools::generateYUVPattern(int w, int h)
 	}
 
 	return yuvOut;
+}
+
+int PhPictureTools::compare(QImage imageA, QImage imageB, bool log)
+{
+	int max = std::numeric_limits<int>::max();
+	if(imageA.size() != imageB.size()) {
+		PHDEBUG << "Size is different:" << imageA.size() << imageB.size();
+		return max;
+	}
+
+	int result = 0;
+	int w = imageA.width();
+	int h = imageA.height();
+
+	for(int i = 0; i < w; i++) {
+		for(int j = 0; j < h; j++) {
+			QRgb a = imageA.pixel(i, j);
+			QRgb b = imageB.pixel(i, j);
+			int diff = qPow(qRed(a) - qRed(b), 2) + qPow(qGreen(a) - qGreen(b), 2) + qPow(qBlue(a) - qBlue(b), 2);
+			if(log && diff)
+				PHDEBUG << QString("(%1, %2) %3 / %4 => %5 / %6")
+				    .arg(i)
+				    .arg(j)
+				    .arg(QColor(a).name())
+				    .arg(QColor(b).name())
+				    .arg(diff)
+				    .arg(result);
+			result += diff;
+			if(result > max / 2) {
+				PHDEBUG << QString("(%1, %2) Too many difference detected: %3 / %4")
+				    .arg(i)
+				    .arg(j)
+				    .arg(result)
+				    .arg(max);
+				return max;
+			}
+		}
+	}
+
+	return result;
 }

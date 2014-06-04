@@ -9,7 +9,7 @@
 #include "PhVideo/PhVideoSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
-class VideoTestSettings : PhGenericSettings,
+class VideoTestSettings : protected PhGenericSettings,
 	public PhGraphicSettings,
 	public PhVideoSettings,
 	public PhDocumentWindowSettings

@@ -9,8 +9,10 @@
 #include <QObject>
 
 #include "PhGraphic/PhGraphicView.h"
+
 #include "PhVideo/PhVideoEngine.h"
 #include "VideoTestSettings.h"
+
 
 class VideoTest : public PhGraphicView
 {
@@ -27,14 +29,14 @@ private slots:
 	void deinterlaceTest();
 	void goToTest03();
 private:
-	void paint();
-	PhVideoEngine _videoEngine;
 	VideoTestSettings _settings;
+	PhVideoEngine _videoEngine;
 
 #warning /// @todo move to a generic graphicTest implementation
 	void saveBuffer();
 #warning /// @todo move to a generic graphicTest implementation
 	void findMatch(QImage source);
+	void paint();
 };
 
 #endif // VIDEOTEST_H

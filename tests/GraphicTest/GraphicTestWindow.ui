@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="GraphicTestView" name="graphicView" native="true"/>
+     <widget class="PhGraphicView" name="graphicView" native="true"/>
     </item>
    </layout>
   </widget>
@@ -54,9 +54,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>GraphicTestView</class>
+   <class>PhGraphicView</class>
    <extends>QWidget</extends>
-   <header>GraphicTestView.h</header>
+   <header>PhGraphic/PhGraphicView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

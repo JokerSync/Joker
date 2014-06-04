@@ -140,8 +140,8 @@ void VideoTest::playTest() {
 		_videoEngine.clock()->tick(25);
 		updateGL();
 		QTest::qWait(WAIT_TIME);
-		QVERIFY(QImage(grabFrameBuffer()) == QImage(QString("interlace_%1.bmp").arg(i, 3, 10, QChar('0'))));
 	}
+	QVERIFY(QImage(grabFrameBuffer()) == QImage("interlace_000.bmp"));
 
 	_videoEngine.close();
 }
@@ -160,7 +160,7 @@ void VideoTest::deinterlaceTest() {
 	QVERIFY(QImage(grabFrameBuffer()) == QImage("deinterlace_000.bmp"));
 
 	//Move one picture forward
-	_videoEngine.clock()->setFrame(PhTimeCode::frameFromString("00:00:00:01", PhTimeCodeType25));
+	_videoEngine.clock()->setFrame(1);
 
 	//Go back to interlaced mode
 	_videoEngine.setDeinterlace(false);

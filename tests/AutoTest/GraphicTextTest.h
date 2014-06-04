@@ -8,29 +8,16 @@
 
 #include <QObject>
 
-#include "PhGraphic/PhGraphicView.h"
+#include "PhGraphic/PhFont.h"
 
-
-class GraphicTextTest : public PhGraphicView
+class GraphicTextTest : public QObject
 {
 	Q_OBJECT
-public:
-	explicit GraphicTextTest(QWidget *parent = 0);
-
-signals:
-
-public slots:
 
 private slots:
-	void testBedizen();
-	void testSwenson();
-	void testArial();
-	void testWeblysleekuil();
+	void fontTest();
+	void fontTest_data();
 	void computeMaxFontSizeTest();
-private:
-	PhFont _font;
-	void paint();
-
 };
 
 #endif // GRAPHICTEXTTEST_H

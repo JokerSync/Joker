@@ -9,13 +9,12 @@
 PhVideoEngine::PhVideoEngine() :  QObject(NULL),
 	_settings(NULL),
 	_fileName(""),
-	_clock(PhTimeCodeType25),
-	_oldFrame(PHFRAMEMIN),
-	_decoder(NULL)
+	_clock(PhTimeCodeType25)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
 	avcodec_register_all();
+
 }
 
 bool PhVideoEngine::open(QString fileName)

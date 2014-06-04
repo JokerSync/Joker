@@ -19,10 +19,23 @@ void WindowTest::fullScreenTest01()
 	QVERIFY(!w.isFullScreen());
 	QVERIFY(!w.fullScreenAction()->isChecked());
 
+	QTest::qWait(1000);
+
 	w.toggleFullScreen();
 	QVERIFY(w.isFullScreen());
 	QVERIFY(settings.fullScreen());
 	QVERIFY(w.fullScreenAction()->isChecked());
+
+	QTest::qWait(2000);
+
+	w.toggleFullScreen();
+
+	QVERIFY(!w.isFullScreen());
+	QVERIFY(!settings.fullScreen());
+	QVERIFY(!w.fullScreenAction()->isChecked());
+
+	QTest::qWait(1000);
+
 	w.close();
 }
 
@@ -33,15 +46,13 @@ void WindowTest::fullScreenTest02()
 	settings.setFullScreen(true);
 	AutoTestWindow w(&settings);
 	w.show();
-	QTest::qWait(900);
-	// full screen take one second to trigger
-//	QVERIFY(!w.isFullScreen());
-//	QVERIFY(!w.fullScreenAction()->isChecked()); ----> fails only on travis-ci.org
-	QTest::qWait(200);
+	QTest::qWait(3000);
 	QVERIFY(w.isFullScreen());
 	QVERIFY(w.fullScreenAction()->isChecked());
 
 	w.fullScreenAction()->trigger();
+
+	QTest::qWait(1000);
 	QVERIFY(!w.isFullScreen());
 	QVERIFY(!w.fullScreenAction()->isChecked());
 

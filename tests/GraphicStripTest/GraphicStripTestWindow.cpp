@@ -12,15 +12,15 @@
 GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settings) :
 	PhDocumentWindow(settings),
 	ui(new Ui::GraphicStripTestWindow),
-	_settings(settings)
+	_settings(settings),
+	_strip(settings)
 {
 	ui->setupUi(this);
-	_strip = ui->stripView->strip();
 
-	ui->stripView->setStripSettings(_settings);
+	ui->stripView->setGraphicSettings(settings);
 
-	_doc = _strip->doc();
-	_clock = _strip->clock();
+	_doc = _strip.doc();
+	_clock = _strip.clock();
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 	ui->actionRuler->setChecked(_settings->displayRuler());
 
@@ -41,6 +41,8 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 		               _settings->trackNumber(),
 		               _settings->startTime());
 
+	connect(ui->stripView, &PhGraphicView::beforePaint, _clock, &PhClock::tick);
+	connect(ui->stripView, &PhGraphicView::paint, this, &GraphicStripTestWindow::onPaint);
 }
 
 GraphicStripTestWindow::~GraphicStripTestWindow()
@@ -237,4 +239,26 @@ void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
 	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn() / PhTimeCode::timePerFrame(tcType), this);
 	if(dlg.exec())
 		_settings->setRulerTimeIn(dlg.frame() * PhTimeCode::timePerFrame(tcType));
+}
+
+void GraphicStripTestWindow::onPaint(int width, int height)
+{
+	int h = height;
+	if(_settings)
+		h = height * _settings->stripHeight();
+	_strip.draw(0, height - h, width, h);
+	foreach(QString info, _strip.infos()) {
+		ui->stripView->addInfo(info);
+	}
+}
+
+void GraphicStripTestWindow::on_actionChange_font_triggered()
+{
+	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
+	if(QFile(fontFile).exists()) {
+		if(PhFont::computeMaxFontSize(fontFile) == 0)
+			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
+		else
+			_settings->setTextFontFile(fontFile);
+	}
 }

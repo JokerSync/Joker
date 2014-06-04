@@ -4,12 +4,10 @@
 #
 
 HEADERS += \
-	../../libs/PhVideo/PhVideoView.h \
     ../../libs/PhVideo/PhVideoEngine.h \
     ../../libs/PhVideo/PhVideoSettings.h \
     ../../libs/PhVideo/PhAVDecoder.h
 SOURCES += \
-    ../../libs/PhVideo/PhVideoView.cpp \
     ../../libs/PhVideo/PhVideoEngine.cpp \
     ../../libs/PhVideo/PhAVDecoder.cpp
 
