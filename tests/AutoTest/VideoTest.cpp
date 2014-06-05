@@ -16,13 +16,13 @@
 VideoTest::VideoTest()
 {
 	_videoEngine.setSettings(&_settings);
-	_view.resize(64,64);
+	_view.resize(64, 64);
 
 	connect(&_view, &PhGraphicView::paint, [&](int w, int h) {
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		_videoEngine.drawVideo(0, 0, w, h);
-	});
+	            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	            glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	            _videoEngine.drawVideo(0, 0, w, h);
+			});
 }
 
 void VideoTest::openMovieTest()
@@ -120,12 +120,12 @@ void VideoTest::goToTest03() {
 	QVERIFY(_videoEngine.open("interlace_%03d.bmp") );
 
 	QList<int> list = QList<int>() << 183 << 25 << 71 << 59 << 158 << 8 << 137
-								   << 32 << 37 << 53 << 133 << 108 << 166 << 134
-								   << 110 << 42 << 54 << 107 << 133 << 100 << 169
-								   << 70 << 22 << 12 << 176 << 159 << 180 << 55
-								   << 113 << 89 << 48 << 187 << 16 << 124 << 153
-								   << 90 << 100 << 68 << 96 << 51 << 146 << 154
-								   << 115 << 165 << 85 << 83 << 181 << 57 << 86 << 166;
+	                               << 32 << 37 << 53 << 133 << 108 << 166 << 134
+	                               << 110 << 42 << 54 << 107 << 133 << 100 << 169
+	                               << 70 << 22 << 12 << 176 << 159 << 180 << 55
+	                               << 113 << 89 << 48 << 187 << 16 << 124 << 153
+	                               << 90 << 100 << 68 << 96 << 51 << 146 << 154
+	                               << 115 << 165 << 85 << 83 << 181 << 57 << 86 << 166;
 	foreach(int frame, list) {
 		_videoEngine.clock()->setFrame(frame);
 
