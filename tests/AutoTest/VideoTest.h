@@ -11,14 +11,16 @@
 #include "PhGraphic/PhGraphicView.h"
 
 #include "PhVideo/PhVideoEngine.h"
+#include "PhGraphic/PhGraphicView.h"
+
 #include "VideoTestSettings.h"
 
 
-class VideoTest : public PhGraphicView
+class VideoTest : public QObject
 {
 	Q_OBJECT
 public:
-	explicit VideoTest(QWidget *parent = 0);
+	VideoTest();
 
 private slots:
 
@@ -31,12 +33,12 @@ private slots:
 private:
 	VideoTestSettings _settings;
 	PhVideoEngine _videoEngine;
+	PhGraphicView _view;
 
 #warning /// @todo move to a generic graphicTest implementation
-	void saveBuffer();
+	void saveBuffer(PhGraphicView *view);
 #warning /// @todo move to a generic graphicTest implementation
 	void findMatch(QImage source);
-	void paint();
 };
 
 #endif // VIDEOTEST_H
