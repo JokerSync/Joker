@@ -16,14 +16,13 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 {
 	ui->setupUi(this);
 	_videoEngine.setSettings(settings);
-	ui->_videoView->setGraphicSettings(settings);
+	ui->videoView->setGraphicSettings(settings);
 
 	_mediaPanelDialog.setClock(_videoEngine.clock());
 
 	ui->actionDisplay_media_panel->setChecked(_settings->displayMediaPanel());
 	ui->actionDeinterlace_video->setChecked(_settings->deinterlaceVideo());
 
-	ui->_videoView->setEngine(&_videoEngine);
 	_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
 
 	connect(ui->videoView, &PhGraphicView::paint, this, &VideoTestWindow::onPaint);
