@@ -5,7 +5,7 @@ env:
   - JOKER_RELEASE_PATH=$HOME
   - TESTS_RELEASE_PATH=$HOME
   matrix:
-  - JOB=UNCRUSTIFY
+#  - JOB=UNCRUSTIFY
 #  - JOB=DOXYGEN
   - JOB=BUILD_AUTOTEST
 #  - JOB=BUILD_RELEASE_JOKER
@@ -29,7 +29,7 @@ script:
 - if [[ "$JOB" == BUILD_* ]]; then make; fi
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./AutoTest; fi
 after_success:
-- if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+h$ -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
 after_failure:
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
