@@ -90,6 +90,10 @@ void GraphicTest::imageTest()
 
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
 	QVERIFY2(result == 0, PHNQ(QString("Comparison result=%1").arg(result)));
+	QVERIFY(image.originalSize() == QSize(64,64));
+	QVERIFY(image.fileName() == "rgbPatternTest.expected.bmp");
+
+	image.dispose();
 }
 
 void GraphicTest::rgbPatternTest()
