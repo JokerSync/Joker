@@ -75,8 +75,6 @@ int main(int argc, char *argv[])
 			testGraphicText = true;
 		else if(strcasecmp(argv[i], "graphicstrip") == 0)
 			testGraphicStrip = true;
-		else if(strcasecmp(argv[i], "graphictext") == 0)
-			testGraphicText = true;
 		else if(strcasecmp(argv[i], "video") == 0)
 			testVideo = true;
 		else
