@@ -11,7 +11,7 @@
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
 #include "PhGraphic/PhGraphicImage.h"
-
+#include "PhGraphic/PhGraphicArrow.h"
 
 #include "GraphicTest.h"
 
@@ -111,6 +111,37 @@ void GraphicTest::rgbPatternTest()
 	            rect.createTextureFromRGBBuffer(buffer, w, h);
 	            delete buffer;
 	            rect.draw();
+			});
+
+	view.show();
+
+	QImage resultImage(view.grabFrameBuffer());
+	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
+	resultImage.save(resultFile);
+	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
+	QImage expectedImage(expectedFile);
+
+	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+	QVERIFY2(result == 0, PHNQ(QString("Comparison result=%1").arg(result)));
+}
+
+void GraphicTest::graphicArrowTest()
+{
+	int w = 200;
+	int h = 200;
+	PhGraphicView view(w, h);
+
+	PhGraphicArrow arrow;
+	arrow.setRect(0, 0, 100, 100);
+
+	PhGraphicArrow arrow2;
+	arrow2.setRect(100, 0, 100, 100);
+	arrow2.setDirection(PhGraphicArrow::PhGraphicArrowDirection::UpLefToDownRight);
+
+
+	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
+				arrow.draw();
+				arrow2.draw();
 			});
 
 	view.show();

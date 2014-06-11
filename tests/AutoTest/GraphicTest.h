@@ -20,6 +20,7 @@ private slots:
 	void rectTest();
 	void imageTest();
 	void rgbPatternTest();
+	void graphicArrowTest();
 };
 
 #endif // GRAPHICTEST_H
