@@ -1,4 +1,5 @@
 #include <QTest>
+#include <QThread>
 
 #include "LockableSpinBoxTest.h"
 
@@ -14,6 +15,13 @@ void LockableSpinBoxTest::testMultiClickUnlock()
 	PhLockableSpinBox spinBox;
 
 	QVERIFY(!spinBox.isEnabled());
+	for(int i = 0; i < 7; i++)
+	{
+		QTest::mouseClick(&spinBox, Qt::LeftButton);
+		QThread::msleep(300);
+	}
+	QVERIFY(!spinBox.isEnabled());
+
 	for(int i = 0; i < 7; i++)
 		QTest::mouseClick(&spinBox, Qt::LeftButton);
 	QVERIFY(!spinBox.isEnabled());
