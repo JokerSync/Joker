@@ -12,6 +12,7 @@
 #include "PhGraphic/PhGraphicTexturedRect.h"
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphic/PhGraphicArrow.h"
+#include "PhGraphic/PhGraphicDisc.h"
 
 #include "GraphicTest.h"
 
@@ -142,6 +143,35 @@ void GraphicTest::graphicArrowTest()
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
 				arrow.draw();
 				arrow2.draw();
+			});
+
+	view.show();
+
+	QImage resultImage(view.grabFrameBuffer());
+	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
+	resultImage.save(resultFile);
+	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
+	QImage expectedImage(expectedFile);
+
+	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+	QVERIFY2(result == 0, PHNQ(QString("Comparison result=%1").arg(result)));
+}
+
+void GraphicTest::graphicDiscTest()
+{
+	int w = 200;
+	int h = 200;
+	PhGraphicView view(w, h);
+
+	PhGraphicDisc disc(100, 100, 50);
+	PhGraphicDisc disc2(50, 50, 30);
+	PhGraphicDisc disc3(150, 50, 30);
+
+
+	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
+				disc.draw();
+				disc2.draw();
+				disc3.draw();
 			});
 
 	view.show();
