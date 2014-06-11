@@ -49,6 +49,7 @@ void GraphicTest::rectTest()
 
 	PhGraphicSolidRect rect;
 	rect.setColor(Qt::red);
+	QVERIFY(rect.color() == Qt::red);
 
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
 	            rect.setSize(w / 2, h / 2);
