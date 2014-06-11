@@ -185,3 +185,30 @@ void GraphicTest::graphicDiscTest()
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
 	QVERIFY2(result == 0, PHNQ(QString("Comparison result=%1").arg(result)));
 }
+
+void GraphicTest::rgbaPatternTest(){
+	int w = 64;
+	int h = 64;
+	PhGraphicView view(w, h);
+
+	PhGraphicTexturedRect rect(0, 0, w, h);
+
+
+	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
+				unsigned char * buffer = PhPictureTools::generateRGBAPattern(w, h);
+				rect.createTextureFromARGBBuffer(buffer, w, h);
+				delete buffer;
+				rect.draw();
+			});
+
+	view.show();
+
+	QImage resultImage(view.grabFrameBuffer());
+	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
+	resultImage.save(resultFile);
+	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
+	QImage expectedImage(expectedFile);
+
+	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+	QVERIFY2(result == 0, PHNQ(QString("Comparison result=%1").arg(result)));
+}

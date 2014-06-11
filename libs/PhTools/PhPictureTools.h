@@ -75,6 +75,16 @@ public:
 	 * @return The sum of the squared difference of the pixel RGB values.
 	 */
 	static int compare(QImage imageA, QImage imageB, bool log = false);
+	/**
+	 * @brief generate a RGBA pattern
+	 *
+	 * The pattern correspon to a red frame.
+	 *
+	 * @param w desired width
+	 * @param h desired height
+	 * @return a pointer to the RGBA frame
+	 */
+	static unsigned char *generateRGBAPattern(int w, int h);
 };
 
 #endif // PHPICTURETOOLS_H

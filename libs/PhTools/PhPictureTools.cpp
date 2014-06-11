@@ -115,6 +115,21 @@ unsigned char *PhPictureTools::generateRGBPattern(int w, int h)
 	return rgbOut;
 }
 
+unsigned char *PhPictureTools::generateRGBAPattern(int w, int h)
+{
+	unsigned char * rgbOut = new unsigned char[w * h * 4];
+
+	for(int y = 0; y < h; ++y) {
+		for (int x = 0; x < w; ++x) {
+			rgbOut[4 * (y * w + x)] = 255 * y / h;
+			rgbOut[4 * (y * w + x) + 1] = 255 * x / w;
+			rgbOut[4 * (y * w + x) + 2] = 255 * x * y / w / h;
+			rgbOut[4 * (y * w + x) + 3] = 0;
+		}
+	}
+	return rgbOut;
+}
+
 unsigned char *PhPictureTools::generateYUVPattern(int w, int h)
 {
 	unsigned char * yuvOut = new unsigned char[w * h * 3 / 2];
