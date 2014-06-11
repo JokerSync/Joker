@@ -141,8 +141,8 @@ void GraphicTest::graphicArrowTest()
 
 
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
-				arrow.draw();
-				arrow2.draw();
+	            arrow.draw();
+	            arrow2.draw();
 			});
 
 	view.show();
@@ -169,9 +169,9 @@ void GraphicTest::graphicDiscTest()
 
 
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
-				disc.draw();
-				disc2.draw();
-				disc3.draw();
+	            disc.draw();
+	            disc2.draw();
+	            disc3.draw();
 			});
 
 	view.show();
@@ -186,7 +186,7 @@ void GraphicTest::graphicDiscTest()
 	QVERIFY2(result == 0, PHNQ(QString("Comparison result=%1").arg(result)));
 }
 
-void GraphicTest::rgbaPatternTest(){
+void GraphicTest::rgbaPatternTest() {
 	int w = 64;
 	int h = 64;
 	PhGraphicView view(w, h);
@@ -195,10 +195,10 @@ void GraphicTest::rgbaPatternTest(){
 
 
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
-				unsigned char * buffer = PhPictureTools::generateRGBAPattern(w, h);
-				rect.createTextureFromARGBBuffer(buffer, w, h);
-				delete buffer;
-				rect.draw();
+	            unsigned char * buffer = PhPictureTools::generateRGBAPattern(w, h);
+	            rect.createTextureFromARGBBuffer(buffer, w, h);
+	            delete buffer;
+	            rect.draw();
 			});
 
 	view.show();
