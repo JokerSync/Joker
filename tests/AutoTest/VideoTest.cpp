@@ -213,6 +213,40 @@ void VideoTest::deinterlaceTest() {
 
 }
 
+void VideoTest::testBuffer() {
+	QVERIFY(_videoEngine.bufferSize() == 10);
+	_videoEngine.close();
+	QVERIFY(_videoEngine.bufferOccupation() == 0);
+	_videoEngine.open("interlace_%03d.bmp");
+	QThread::sleep(1);
+
+	QVERIFY(_videoEngine.bufferOccupation() == 10);
+	_videoEngine.close();
+}
+
+void VideoTest::testFirstFrame() {
+	_videoEngine.open("interlace_%03d.bmp");
+	_videoEngine.setFirstFrame(2);
+	QVERIFY(_videoEngine.firstFrame() == 2);
+
+	QVERIFY(_videoEngine.lastFrame() == 2 + 200 - 1);
+	_videoEngine.close();
+}
+
+void VideoTest::testFPS() {
+	_videoEngine.open("interlace_%03d.bmp");
+	QCOMPARE(_videoEngine.framePerSecond(), 25);
+	_videoEngine.close();
+}
+
+void VideoTest::testDimensions() {
+	_videoEngine.open("interlace_%03d.bmp");
+	QCOMPARE(_videoEngine.width(), 64);
+	QCOMPARE(_videoEngine.height(), 64);
+	_videoEngine.close();
+}
+
+
 void VideoTest::saveBuffer(PhGraphicView * _view) {
 
 	QImage test(_view->grabFrameBuffer());

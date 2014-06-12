@@ -150,7 +150,7 @@ PhFrame PhVideoEngine::length()
 float PhVideoEngine::framePerSecond()
 {
 	if(_decoder)
-		return _decoder->length();
+		return _decoder->framePerSecond();
 	return 0.0f;
 }
 

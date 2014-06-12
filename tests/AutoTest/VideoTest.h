@@ -30,6 +30,9 @@ private slots:
 	void playTest();
 	void deinterlaceTest();
 	void goToTest03();
+	void testBuffer();
+	void testFirstFrame();
+	void testFPS();
 private:
 	VideoTestSettings _settings;
 	PhVideoEngine _videoEngine;
