@@ -24,6 +24,7 @@ private slots:
 	void graphicDiscTest();
 	void rgbaPatternTest();
 	void setSizeTest();
+	void resizeViewTest();
 };
 
 #endif // GRAPHICTEST_H

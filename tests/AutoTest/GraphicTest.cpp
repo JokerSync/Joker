@@ -224,3 +224,9 @@ void GraphicTest::setSizeTest() {
 	QVERIFY(rect->width() == 100 && rect->height() == 50);
 	delete rect;
 }
+
+void GraphicTest::resizeViewTest() {
+	PhGraphicView view(64, 64);
+	view.resize(0, 0);
+	QVERIFY(view.height() == 0 && view.width() == 0);
+}
