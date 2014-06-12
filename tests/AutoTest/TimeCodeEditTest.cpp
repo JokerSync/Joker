@@ -129,16 +129,16 @@ void TimeCodeEditTest::mouseInputTest()
 	tcEdit.setText("00:00:00:00");
 	// Seconds testing
 	// Vertical axis mouse move
-	QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(167, 5), 100);
+	QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(195, 5), 100);
 
-	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
-	QCOMPARE(tcEdit.text(), QString("00:01:00:00"));
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(195, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:00:01:00"));
 
-	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(195, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
 
-	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
-	QCOMPARE(tcEdit.text(), QString("-00:01:00:00"));
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(195, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("-00:00:01:00"));
 
 	// Vertical and Horizontal axis mouse move, horizontal moves are out
 	// of the text limits
@@ -146,7 +146,32 @@ void TimeCodeEditTest::mouseInputTest()
 	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
 
 	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
-	QCOMPARE(tcEdit.text(), QString("00:01:00:00"));
+	QCOMPARE(tcEdit.text(), QString("00:00:01:00"));
+
+	QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 200));
+
+	//Reset
+	tcEdit.setText("00:00:00:00");
+	// frame testing
+	// Vertical axis mouse move
+	QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(250, 5), 100);
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(250, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:00:00:01"));
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(250, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(250, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("-00:00:00:01"));
+
+	// Vertical and Horizontal axis mouse move, horizontal moves are out
+	// of the text limits
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(100, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:00:00:00"));
+
+	QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+	QCOMPARE(tcEdit.text(), QString("00:00:00:01"));
 
 	QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 200));
 
