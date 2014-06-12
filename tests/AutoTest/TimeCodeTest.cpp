@@ -719,7 +719,7 @@ void TimeCodeTest::testTCWithSpecialString() {
 
 void TimeCodeTest::testTimePerFrame() {
 	QCOMPARE(PhTimeCode::timePerFrame(PhTimeCodeType2398), 1001);
-	QCOMPARE(PhTimeCode::timePerFrame(PhTimeCodeType24), 100);
+	QCOMPARE(PhTimeCode::timePerFrame(PhTimeCodeType24), 1000);
 	QCOMPARE(PhTimeCode::timePerFrame(PhTimeCodeType25), 960);
 	QCOMPARE(PhTimeCode::timePerFrame(PhTimeCodeType2997), 801);
 }
