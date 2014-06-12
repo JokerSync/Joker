@@ -17,6 +17,7 @@
 #include "GraphicStripTest.h"
 #include "GraphicTextTest.h"
 #include "VideoTest.h"
+#include "MediaPanelTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
 	bool testGraphicText = testAll;
 	bool testGraphicStrip = testAll;
 	bool testVideo = testAll;
+	bool testMediaPanel = testAll;
 
 	int result = 0;
 
@@ -45,8 +47,11 @@ int main(int argc, char *argv[])
 
 	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "all") == 0) {
-			testClock = testSettings = testTC = testDebug = testDoc = testLockableSpinBox = testTCEdit =
-			                                                                                    testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
+			testClock = testSettings = testTC =
+					testDebug = testDoc = testLockableSpinBox =
+					testTCEdit = testWindow = testSony =
+					testGraphic = testGraphicText = testGraphicStrip =
+					testMediaPanel = true;
 		}
 		else if(strcmp(argv[i], "clock") == 0)
 			testClock = true;
@@ -65,7 +70,7 @@ int main(int argc, char *argv[])
 		else if(strcmp(argv[i], "window") == 0)
 			testWindow = true;
 		else if(strcmp(argv[i], "ui") == 0) {
-			testTCEdit = testLockableSpinBox = testWindow = true;
+			testTCEdit = testLockableSpinBox = testWindow = testMediaPanel = true;
 		}
 		else if(strcmp(argv[i], "sony") == 0)
 			testSony = true;
@@ -148,6 +153,11 @@ int main(int argc, char *argv[])
 	if(testGraphicStrip) {
 		GraphicStripTest viewTest;
 		result += QTest::qExec(&viewTest, testArgList);
+	}
+
+	if(testMediaPanel) {
+		MediaPanelTest panelTest;
+		result += QTest::qExec(&panelTest, testArgList);
 	}
 
 	QThread::msleep(500);

@@ -45,7 +45,8 @@ HEADERS += \
     GraphicTextTest.h \
     VideoTest.h \
 	VideoTestSettings.h \
-    GraphicStripTestSettings.h
+    GraphicStripTestSettings.h \
+    MediaPanelTest.h
 
 SOURCES += main.cpp \
 	ClockTest.cpp \
@@ -61,7 +62,8 @@ SOURCES += main.cpp \
 	GraphicTest.cpp \
 	GraphicTextTest.cpp \
 	GraphicStripTest.cpp \
-	VideoTest.cpp
+	VideoTest.cpp \
+    MediaPanelTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $${CS}
