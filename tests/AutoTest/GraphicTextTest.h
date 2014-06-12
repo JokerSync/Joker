@@ -21,6 +21,7 @@ private slots:
 	void setContentTest();
 	void setFontTest();
 
+	void nominalWidthTest();
 };
 
 #endif // GRAPHICTEXTTEST_H
