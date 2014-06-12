@@ -129,15 +129,15 @@ void GraphicTest::rgbPatternTest()
 
 void GraphicTest::graphicArrowTest()
 {
-	int w = 200;
-	int h = 200;
+	int w = 64;
+	int h = 64;
 	PhGraphicView view(w, h);
 
 	PhGraphicArrow arrow;
-	arrow.setRect(0, 0, 100, 100);
+	arrow.setRect(0, 0, 32, 32);
 
 	PhGraphicArrow arrow2;
-	arrow2.setRect(100, 0, 100, 100);
+	arrow2.setRect(32, 0, 32, 32);
 	arrow2.setDirection(PhGraphicArrow::PhGraphicArrowDirection::UpLefToDownRight);
 
 
