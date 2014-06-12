@@ -76,6 +76,9 @@ private slots:
 
 	/** @brief Test stringFromFrame with bad formated strings */
 	void testTCWithSpecialString();
+
+	/** @brief Test the timePerFrame for all timecode types **/
+	void testTimePerFrame();
 };
 
 #endif // PHTIMECODETEST_H
