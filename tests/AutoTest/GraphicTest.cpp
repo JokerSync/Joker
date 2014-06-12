@@ -96,6 +96,9 @@ void GraphicTest::imageTest()
 	QVERIFY(image.fileName() == "rgbPatternTest.expected.bmp");
 
 	image.dispose();
+
+	image.setFilename("wrong_file");
+	QVERIFY(!image.init());
 }
 
 void GraphicTest::rgbPatternTest()

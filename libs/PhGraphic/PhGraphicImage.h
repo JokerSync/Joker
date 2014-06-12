@@ -53,14 +53,10 @@ public:
 	 * @brief Dispose the image texture
 	 */
 	void dispose();
-
-protected:
 	/**
 	 * @brief Initialize the image texture
 	 */
 	bool init();
-
-
 
 private:
 
