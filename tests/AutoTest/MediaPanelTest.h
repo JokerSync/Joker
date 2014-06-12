@@ -20,6 +20,7 @@ public slots:
 
 private slots:
 	void setFirstFrameTest();
+	void setMediaLengthTest();
 };
 
 #endif // MEDIAPANELTEST_H
