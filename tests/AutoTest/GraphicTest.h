@@ -23,6 +23,7 @@ private slots:
 	void graphicArrowTest();
 	void graphicDiscTest();
 	void rgbaPatternTest();
+	void setSizeTest();
 };
 
 #endif // GRAPHICTEST_H

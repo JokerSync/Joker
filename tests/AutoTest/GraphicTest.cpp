@@ -216,3 +216,11 @@ void GraphicTest::rgbaPatternTest() {
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
 	QVERIFY2(result == 0, PHNQ(QString("Comparison result=%1").arg(result)));
 }
+
+void GraphicTest::setSizeTest() {
+	PhGraphicRect * rect = new PhGraphicRect;
+	QVERIFY(rect->width() == 0 && rect->height() == 0);
+	rect->setSize(100, 50);
+	QVERIFY(rect->width() == 100 && rect->height() == 50);
+	delete rect;
+}
