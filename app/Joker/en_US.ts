@@ -19,6 +19,11 @@
         <source>Close</source>
         <translation>Close</translation>
     </message>
+    <message>
+        <location filename="AboutDialog.ui" line="121"/>
+        <source>Joker is based on the following libraries : </source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>JokerWindow</name>
@@ -64,7 +69,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="135"/>
-        <location filename="JokerWindow.cpp" line="314"/>
+        <location filename="JokerWindow.cpp" line="323"/>
         <source>Open...</source>
         <translation>Open...</translation>
     </message>
@@ -336,56 +341,61 @@
         <translation type="unfinished">F9</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="311"/>
+        <location filename="JokerWindow.cpp" line="320"/>
         <source>DetX files</source>
         <translation>DetX files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="310"/>
+        <location filename="JokerWindow.cpp" line="319"/>
         <source>Joker files</source>
         <translation>Joker files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="309"/>
+        <location filename="JokerWindow.cpp" line="318"/>
         <source>Rythmo files</source>
         <translation>Rythmo files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="312"/>
+        <location filename="JokerWindow.cpp" line="321"/>
         <source>Mosaic files</source>
         <translation>Mosaic files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="313"/>
-        <location filename="JokerWindow.cpp" line="407"/>
+        <location filename="JokerWindow.cpp" line="322"/>
+        <location filename="JokerWindow.cpp" line="416"/>
         <source>All files</source>
         <translation>All files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="406"/>
+        <location filename="JokerWindow.cpp" line="415"/>
         <source>Movie files</source>
         <translation>Movie files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="409"/>
+        <location filename="JokerWindow.cpp" line="418"/>
         <source>Open a video...</source>
         <translation>Open a video...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="654"/>
-        <location filename="JokerWindow.cpp" line="679"/>
+        <location filename="JokerWindow.cpp" line="663"/>
+        <location filename="JokerWindow.cpp" line="688"/>
         <source>Unable to save </source>
         <translation>Unable to save </translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="672"/>
+        <location filename="JokerWindow.cpp" line="681"/>
         <source>Save...</source>
         <translation>Save...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="689"/>
+        <location filename="JokerWindow.cpp" line="698"/>
         <source>Do you want to save your changes ?</source>
         <translation>Do you want to save your changes ?</translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="949"/>
+        <source>No video sync</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
