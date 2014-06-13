@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 		result += QTest::qExec(&viewTest, testArgList);
 	}
 
-	if(testMediaPanel or true) {
+	if(testMediaPanel) {
 		MediaPanelTest panelTest;
 		result += QTest::qExec(&panelTest, testArgList);
 	}
