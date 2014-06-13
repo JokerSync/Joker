@@ -14,11 +14,19 @@ namespace Ui {
 class RulerSpaceDialog;
 }
 
+/**
+ * @brief This dialog display size setting for the ruler.
+ */
 class RulerSpaceDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
+	/**
+	 * @brief RulerSpaceDialog constructor
+	 * @param settings The main window settings
+	 * @param parent The parent
+	 */
 	explicit RulerSpaceDialog(JokerSettings * settings, QWidget *parent = 0);
 	~RulerSpaceDialog();
 
