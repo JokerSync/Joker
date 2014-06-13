@@ -235,7 +235,7 @@ void VideoTest::testFirstFrame() {
 
 void VideoTest::testFPS() {
 	_videoEngine.open("interlace_%03d.bmp");
-	QCOMPARE(_videoEngine.framePerSecond(), 25);
+	QVERIFY(_videoEngine.framePerSecond() == 25.00);
 	_videoEngine.close();
 }
 
