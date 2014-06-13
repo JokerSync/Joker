@@ -85,6 +85,11 @@ public:
 	 */
 	PhTimeCodeType timeCodeType() const;
 
+	/**
+	 * @brief set the clock
+	 * @param clock the clock which will master the PhMediaPanel
+	 */
+	PhClock *clock();
 signals:
 
 	/**

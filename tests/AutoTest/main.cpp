@@ -48,10 +48,10 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "all") == 0) {
 			testClock = testSettings = testTC =
-					testDebug = testDoc = testLockableSpinBox =
-					testTCEdit = testWindow = testSony =
-					testGraphic = testGraphicText = testGraphicStrip =
-					testMediaPanel = true;
+			                               testDebug = testDoc = testLockableSpinBox =
+			                                                         testTCEdit = testWindow = testSony =
+			                                                                                       testGraphic = testGraphicText = testGraphicStrip =
+			                                                                                                                           testMediaPanel = true;
 		}
 		else if(strcmp(argv[i], "clock") == 0)
 			testClock = true;
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 		result += QTest::qExec(&viewTest, testArgList);
 	}
 
-	if(testMediaPanel) {
+	if(testMediaPanel or true) {
 		MediaPanelTest panelTest;
 		result += QTest::qExec(&panelTest, testArgList);
 	}

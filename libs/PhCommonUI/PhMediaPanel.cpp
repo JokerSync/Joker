@@ -48,6 +48,7 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	connect(ui->_rateSelectionBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onTCTypeComboChanged()));
 
 	ui->_playButton->setDefault(true);
+
 }
 
 
@@ -56,6 +57,9 @@ PhMediaPanel::~PhMediaPanel()
 	delete ui;
 }
 
+PhClock * PhMediaPanel::clock() {
+	return _clock;
+}
 
 void PhMediaPanel::setTCType(PhTimeCodeType tcType)
 {

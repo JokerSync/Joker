@@ -21,6 +21,9 @@ public slots:
 private slots:
 	void setFirstFrameTest();
 	void setMediaLengthTest();
+	void playPauseTest();
+	void disableSliderTest();
+	void buttonsTest();
 };
 
 #endif // MEDIAPANELTEST_H
