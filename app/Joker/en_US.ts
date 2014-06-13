@@ -63,282 +63,288 @@
         <translation>View</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="123"/>
+        <location filename="JokerWindow.ui" line="124"/>
         <source>Help</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="135"/>
+        <location filename="JokerWindow.ui" line="136"/>
         <location filename="JokerWindow.cpp" line="323"/>
         <source>Open...</source>
         <translation>Open...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="138"/>
+        <location filename="JokerWindow.ui" line="139"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="143"/>
+        <location filename="JokerWindow.ui" line="144"/>
         <source>Play/pause</source>
         <translation>Play/pause</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="146"/>
+        <location filename="JokerWindow.ui" line="147"/>
         <source>Up</source>
         <translation>Up</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="151"/>
+        <location filename="JokerWindow.ui" line="152"/>
         <source>Play backward</source>
         <translation>Play backward</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="154"/>
+        <location filename="JokerWindow.ui" line="155"/>
         <source>Down</source>
         <translation>Down</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="159"/>
+        <location filename="JokerWindow.ui" line="160"/>
         <source>Step forward</source>
         <translation>Step forward</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="162"/>
+        <location filename="JokerWindow.ui" line="163"/>
         <source>Right</source>
         <translation>Right</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="167"/>
+        <location filename="JokerWindow.ui" line="168"/>
         <source>Step backward</source>
         <translation>Step backward</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="170"/>
+        <location filename="JokerWindow.ui" line="171"/>
         <source>Left</source>
         <translation>Left</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="175"/>
+        <location filename="JokerWindow.ui" line="176"/>
         <source>Step time forward</source>
         <translation>Step time forward</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="178"/>
+        <location filename="JokerWindow.ui" line="179"/>
         <source>Alt+Right</source>
         <translation>Alt+Right</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="183"/>
+        <location filename="JokerWindow.ui" line="184"/>
         <source>Step time backward</source>
         <translation>Step time backward</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="186"/>
+        <location filename="JokerWindow.ui" line="187"/>
         <source>Alt+Left</source>
         <translation>Alt+Left</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="226"/>
+        <location filename="JokerWindow.ui" line="227"/>
         <source>Open video file...</source>
         <oldsource>Open video...</oldsource>
         <translation>Open video file...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="229"/>
+        <location filename="JokerWindow.ui" line="230"/>
         <source>Ctrl+Shift+O</source>
         <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="234"/>
+        <location filename="JokerWindow.ui" line="235"/>
         <source>Change timestamp...</source>
         <translation>Change timestamp...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="239"/>
+        <location filename="JokerWindow.ui" line="240"/>
         <source>Change font...</source>
         <translation>Change font...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="244"/>
+        <location filename="JokerWindow.ui" line="245"/>
         <source>About...</source>
         <translation>About...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="249"/>
+        <location filename="JokerWindow.ui" line="250"/>
         <source>Preferences...</source>
         <translation>Preferences...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="254"/>
+        <location filename="JokerWindow.ui" line="255"/>
         <source>Properties...</source>
         <translation>Properties...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="262"/>
+        <location filename="JokerWindow.ui" line="263"/>
         <source>Test mode</source>
         <translation>Test mode</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="265"/>
+        <location filename="JokerWindow.ui" line="266"/>
         <source>Set Joker on Test mode for syncheck</source>
         <oldsource>Set Joker on Test mode for synccheck</oldsource>
         <translation>Set Joker on Test mode for syncheck</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="268"/>
+        <location filename="JokerWindow.ui" line="269"/>
         <source>Ctrl+Shift+T</source>
         <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="273"/>
+        <location filename="JokerWindow.ui" line="274"/>
         <source>Timecode...</source>
         <translation>Timecode...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="276"/>
+        <location filename="JokerWindow.ui" line="277"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="281"/>
+        <location filename="JokerWindow.ui" line="282"/>
         <source>Next text</source>
         <translation>Next text</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="286"/>
+        <location filename="JokerWindow.ui" line="287"/>
         <source>Previous text</source>
         <translation>Previous text</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="291"/>
+        <location filename="JokerWindow.ui" line="292"/>
         <source>Next element</source>
         <translation>Next element</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="294"/>
+        <location filename="JokerWindow.ui" line="295"/>
         <source>Ctrl+Right</source>
         <translation>Ctrl+Right</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="299"/>
+        <location filename="JokerWindow.ui" line="300"/>
         <source>Previous element</source>
         <translation>Previous element</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="302"/>
+        <location filename="JokerWindow.ui" line="303"/>
         <source>Ctrl+Left</source>
         <translation>Ctrl+Left</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="307"/>
+        <location filename="JokerWindow.ui" line="308"/>
         <source>Clear list</source>
         <translation>Clear list</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="315"/>
+        <location filename="JokerWindow.ui" line="316"/>
         <source>Save</source>
         <translation>Save</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="318"/>
+        <location filename="JokerWindow.ui" line="319"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="326"/>
+        <location filename="JokerWindow.ui" line="327"/>
         <source>Save as...</source>
         <translation>Save as...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="329"/>
+        <location filename="JokerWindow.ui" line="330"/>
         <source>Ctrl+Shift+S</source>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="334"/>
+        <location filename="JokerWindow.ui" line="335"/>
         <source>Select character...</source>
         <translation>Select character...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="337"/>
+        <location filename="JokerWindow.ui" line="338"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="345"/>
+        <location filename="JokerWindow.ui" line="346"/>
         <source>Force 16/9 ratio</source>
         <translation>Force 16/9 ratio</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="348"/>
+        <location filename="JokerWindow.ui" line="349"/>
         <source>F8</source>
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="356"/>
+        <location filename="JokerWindow.ui" line="357"/>
         <source>Fullscreen</source>
         <translation>Fullscreen</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="359"/>
+        <location filename="JokerWindow.ui" line="360"/>
         <source>F10</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="367"/>
+        <location filename="JokerWindow.ui" line="368"/>
         <source>Empty</source>
         <translation>Empty</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="375"/>
+        <location filename="JokerWindow.ui" line="376"/>
         <source>Invert colors</source>
         <translation>Invert colors</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="383"/>
+        <location filename="JokerWindow.ui" line="384"/>
         <source>Ruler</source>
         <translation>Ruler</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="388"/>
+        <location filename="JokerWindow.ui" line="389"/>
         <source>Change ruler timestamp...</source>
         <translation>Change ruler timestamp...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="393"/>
+        <location filename="JokerWindow.ui" line="394"/>
         <source>New</source>
         <translation>New</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="396"/>
+        <location filename="JokerWindow.ui" line="397"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="401"/>
+        <location filename="JokerWindow.ui" line="402"/>
         <source>Close video</source>
         <translation>Close video</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="406"/>
+        <location filename="JokerWindow.ui" line="407"/>
         <source>Send feedback...</source>
         <translation>Send feedback...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="414"/>
+        <location filename="JokerWindow.ui" line="415"/>
         <source>Deinterlace video</source>
         <translation>Deinterlace video</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="422"/>
+        <location filename="JokerWindow.ui" line="423"/>
         <source>Hide the rythmo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="425"/>
+        <location filename="JokerWindow.ui" line="426"/>
         <source>F9</source>
         <translation type="unfinished">F9</translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.ui" line="431"/>
+        <source>Set space between two ruler graduation...</source>
+        <oldsource>Set space between two ruler graduation</oldsource>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="320"/>
@@ -747,6 +753,19 @@ You need to restart %2 to apply you changes.</translation>
         <location filename="PropertyDialog.ui" line="248"/>
         <source>FPS:</source>
         <translation>FPS :</translation>
+    </message>
+</context>
+<context>
+    <name>RulerSpaceDialog</name>
+    <message>
+        <location filename="RulerSpaceDialog.ui" line="14"/>
+        <source>Ruler space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="RulerSpaceDialog.ui" line="89"/>
+        <source>Current space :</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

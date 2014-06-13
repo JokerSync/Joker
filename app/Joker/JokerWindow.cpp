@@ -960,3 +960,9 @@ void JokerWindow::onVideoSync()
 {
 	_lastVideoSyncElapsed.restart();
 }
+
+void JokerWindow::on_actionSet_space_between_two_ruler_graduation_triggered()
+{
+	RulerSpaceDialog dlg(_settings);
+	dlg.exec();
+}

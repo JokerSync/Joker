@@ -114,6 +114,7 @@
     <addaction name="separator"/>
     <addaction name="actionShow_ruler"/>
     <addaction name="actionChange_ruler_timestamp"/>
+    <addaction name="actionSet_space_between_two_ruler_graduation"/>
     <addaction name="separator"/>
     <addaction name="actionForce_16_9_ratio"/>
     <addaction name="actionDeinterlace_video"/>
@@ -423,6 +424,11 @@
    </property>
    <property name="shortcut">
     <string>F9</string>
+   </property>
+  </action>
+  <action name="actionSet_space_between_two_ruler_graduation">
+   <property name="text">
+    <string>Set space between two ruler graduation...</string>
    </property>
   </action>
  </widget>
