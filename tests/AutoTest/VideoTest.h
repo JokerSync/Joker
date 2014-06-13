@@ -33,6 +33,7 @@ private slots:
 	void testBuffer();
 	void testFirstFrame();
 	void testFPS();
+	void testDimensions();
 private:
 	VideoTestSettings _settings;
 	PhVideoEngine _videoEngine;
