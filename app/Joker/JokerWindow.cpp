@@ -184,12 +184,14 @@ bool JokerWindow::openDocument(QString fileName)
 	setCurrentDocument(fileName);
 	_watcher.addPath(_doc->filePath());
 
+	/// - Load the deinterlace settings
+	_videoEngine.setDeinterlace(_doc->videoDeinterlace());
+	ui->actionDeinterlace_video->setChecked(_doc->videoDeinterlace());
+
 	/// - Open the corresponding video file if it exists.
 	if(openVideoFile(_doc->videoFilePath())) {
 		PhFrame frameIn = _doc->videoFrameIn();
 		_videoEngine.setFirstFrame(frameIn);
-		_videoEngine.setDeinterlace(_doc->videoDeinterlace());
-		ui->actionDeinterlace_video->setChecked(_doc->videoDeinterlace());
 		_mediaPanel.setFirstFrame(frameIn);
 	}
 	else
