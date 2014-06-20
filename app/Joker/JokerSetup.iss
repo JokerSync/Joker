@@ -53,9 +53,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
-; PortAudio
-Source: {#PortaudioPath}\lib\Win32\ReleaseMinDependency\portaudio_x86.dll; DestDir: "{app}"; Flags: ignoreversion
-; dlls
+; dlls (PortAudio, SDL, etc.)
 Source: "release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; Qt dlls (windeployqt needs to be run first)
 Source: "release\accessible\*.dll"; DestDir: "{app}\accessible"; Flags: ignoreversion
