@@ -34,7 +34,7 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 		hhmmssff[2] = frame.ltc.secs_tens * 10 + frame.ltc.secs_units;
 		hhmmssff[3] = frame.ltc.frame_tens * 10 + frame.ltc.frame_units;
 
-		PhFrame newFrame = PhTimeCode::frameFromHhMmSsFf(hhmmssff, PhTimeCodeType25);
+		PhFrame newFrame = PhTimeCode::frameFromHhMmSsFf(hhmmssff, _clock.timeCodeType());
 		PHDBG(20) << hhmmssff[0] << hhmmssff[1] << hhmmssff[2] << hhmmssff[3];
 
 		if(newFrame > oldFrame)
