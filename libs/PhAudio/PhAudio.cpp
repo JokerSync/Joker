@@ -39,8 +39,16 @@ void PhAudio::close()
 	}
 }
 
-int PhAudio::audioCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags, void *userData)
+int PhAudio::audioCallback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *, PaStreamCallbackFlags statusFlags, void *userData)
 {
+	if (statusFlags & paInputOverflow) {
+		PHDBG(21) << "overflow";
+	}
+
+	if (statusFlags & paInputUnderflow) {
+		PHDBG(21) << "underflow";
+	}
+
 	PhAudio* audio = (PhAudio*)userData;
 	return audio->processAudio(inputBuffer, outputBuffer, framesPerBuffer);
 }
