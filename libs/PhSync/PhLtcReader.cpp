@@ -27,12 +27,14 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 	ltc_decoder_write(_decoder, (ltcsnd_sample_t*)inputBuffer, framesPerBuffer, _position);
 	LTCFrameExt frame;
 	unsigned int hhmmssff[4];
+	SMPTETimecode stime;
 	PhFrame oldFrame = _clock.frame();
 	while(ltc_decoder_read(_decoder, &frame)) {
-		hhmmssff[0] = frame.ltc.hours_tens * 10 + frame.ltc.hours_units;
-		hhmmssff[1] = frame.ltc.mins_tens * 10 + frame.ltc.mins_units;
-		hhmmssff[2] = frame.ltc.secs_tens * 10 + frame.ltc.secs_units;
-		hhmmssff[3] = frame.ltc.frame_tens * 10 + frame.ltc.frame_units;
+		ltc_frame_to_time(&stime, &frame.ltc, 1);
+		hhmmssff[0] = stime.hours;
+		hhmmssff[1] = stime.mins;
+		hhmmssff[2] = stime.secs;
+		hhmmssff[3] = stime.frame;
 
 		PhFrame newFrame = PhTimeCode::frameFromHhMmSsFf(hhmmssff, PhTimeCodeType25);
 		PHDBG(20) << hhmmssff[0] << hhmmssff[1] << hhmmssff[2] << hhmmssff[3];
