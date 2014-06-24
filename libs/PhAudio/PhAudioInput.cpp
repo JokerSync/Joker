@@ -29,7 +29,7 @@ bool PhAudioInput::init(QString deviceName)
 		deviceInfo = Pa_GetDeviceInfo( i );
 		if(deviceInfo->maxInputChannels > 0 ) {
 			isThereInput = true;
-			if(deviceName == deviceInfo->name) {
+			if(deviceName == QString::fromLatin1(deviceInfo->name)) {
 				deviceFound = true;
 				streamParameters.device = i;
 				deviceInfo = Pa_GetDeviceInfo(i);
