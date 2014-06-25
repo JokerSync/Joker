@@ -41,7 +41,7 @@ void GraphicStripTest::drawTest()
 
 	view.show();
 
-	QImage resultImage(view.grabFrameBuffer());
+	QImage resultImage(view.renderPixmap().toImage());
 	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
 	resultImage.save(resultFile);
 	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
