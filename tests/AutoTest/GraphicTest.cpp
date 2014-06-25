@@ -15,6 +15,8 @@
 
 #include "GraphicTest.h"
 
+#define WAIT_TIME 40
+
 GraphicTest::GraphicTest(QObject *parent) :
 	QObject(parent)
 {
@@ -38,6 +40,7 @@ void GraphicTest::paintTest()
 			});
 
 	view.show();
+	QTest::qWait(WAIT_TIME);
 
 	QVERIFY(paintCalled);
 }
