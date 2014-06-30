@@ -69,6 +69,8 @@ private slots:
 
 	void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
+	void on_cBoxDisplayCuts_clicked();
+
 private:
 	Ui::PreferencesDialog *ui;
 	JokerSettings *_settings;
@@ -83,6 +85,7 @@ private:
 	bool _oldDisplayNextText;
 	bool _oldDisplayTitle;
 	bool _oldDisplayLoop;
+	bool _oldDisplayCuts;
 	int _oldSyncProtocol;
 	QString _oldLTCInput;
 

@@ -539,137 +539,142 @@
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="55"/>
+        <location filename="PreferencesDialog.ui" line="58"/>
         <source>Display timecode</source>
         <translation>Afficher le timecode</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="62"/>
+        <location filename="PreferencesDialog.ui" line="65"/>
         <source>Display next timecode</source>
         <translation>Afficher le timecode suivant</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="69"/>
+        <location filename="PreferencesDialog.ui" line="72"/>
         <source>Display next texts</source>
         <translation>Afficher les textes suivants</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="76"/>
+        <location filename="PreferencesDialog.ui" line="79"/>
         <source>Display title</source>
         <translation>Afficher le titre</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="86"/>
+        <location filename="PreferencesDialog.ui" line="89"/>
         <source>Display loop number</source>
         <translation>Afficher le nombre de boucle</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="93"/>
+        <location filename="PreferencesDialog.ui" line="96"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="105"/>
+        <location filename="PreferencesDialog.ui" line="106"/>
+        <source>Display cuts</source>
+        <translation>Afficher les cuts</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="115"/>
         <source>Strip</source>
         <translation>Bande rythmo</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="118"/>
+        <location filename="PreferencesDialog.ui" line="128"/>
         <source>Filter</source>
         <translation>Filtre</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="141"/>
+        <location filename="PreferencesDialog.ui" line="151"/>
         <source>Bold :</source>
         <translation>Gras :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="203"/>
+        <location filename="PreferencesDialog.ui" line="213"/>
         <source>Strip Height</source>
         <translation>Hauteur de la bande</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="218"/>
+        <location filename="PreferencesDialog.ui" line="228"/>
         <source>Italic :</source>
         <translation>Italique :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="245"/>
+        <location filename="PreferencesDialog.ui" line="255"/>
         <source>Speed:</source>
         <translation>Vitesse :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="270"/>
+        <location filename="PreferencesDialog.ui" line="280"/>
         <source>Synchronisation</source>
         <translation>Synchronisation</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="278"/>
+        <location filename="PreferencesDialog.ui" line="288"/>
         <source>Delay</source>
         <translation>Délai</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="292"/>
+        <location filename="PreferencesDialog.ui" line="302"/>
         <source>No sync</source>
         <translation>Pas de synchronisation</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="297"/>
+        <location filename="PreferencesDialog.ui" line="307"/>
         <source>Sony 9 pin</source>
         <translation>Sony 9 pin</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="334"/>
+        <location filename="PreferencesDialog.ui" line="344"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="365"/>
+        <location filename="PreferencesDialog.ui" line="375"/>
         <source>Sony ID</source>
         <translation>ID Sony</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="349"/>
+        <location filename="PreferencesDialog.ui" line="359"/>
         <source>Sony high speed</source>
         <translation>Vitesse rapide Sony</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="449"/>
+        <location filename="PreferencesDialog.ui" line="459"/>
         <source>millisecond</source>
         <translation>millisecondes</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="305"/>
+        <location filename="PreferencesDialog.ui" line="315"/>
         <source>quarter frame</source>
         <translation>quart d&apos;image</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="406"/>
+        <location filename="PreferencesDialog.ui" line="416"/>
         <source>Available inputs</source>
         <translation>Entrée(s)</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="127"/>
+        <location filename="PreferencesDialog.cpp" line="129"/>
         <source>&lt;System default&gt;</source>
         <translation>&lt;Langue du système&gt;</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="135"/>
+        <location filename="PreferencesDialog.cpp" line="137"/>
         <source>English</source>
         <translation>Anglais</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="137"/>
+        <location filename="PreferencesDialog.cpp" line="139"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="154"/>
+        <location filename="PreferencesDialog.cpp" line="156"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="155"/>
+        <location filename="PreferencesDialog.cpp" line="157"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <oldsource>You change the language to &quot;%1&quot;.
