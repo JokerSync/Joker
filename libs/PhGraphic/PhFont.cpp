@@ -44,6 +44,7 @@ int PhFont::computeMaxFontSize(QString fileName)
 		//Break in case of issue with the file
 		if(!font)
 			return -1;
+
 		if (fontHeight == TTF_FontHeight(font))
 			break;
 		else if (fontHeight < TTF_FontHeight(font))
@@ -64,6 +65,7 @@ int PhFont::computeMaxFontSize(QString fileName)
 bool PhFont::init()
 {
 	int size = computeMaxFontSize(_fontFile);
+
 	if(size < 0)
 		return false;
 	PHDEBUG << "Opening" << _fontFile << "at size" << size;
@@ -86,6 +88,10 @@ bool PhFont::init()
 	// Space between glyph
 	int space = 128;
 	_glyphHeight = 0;
+
+	for(Uint16 ch = 0; ch < 32; ++ch) {
+		_glyphAdvance[ch] = 0;
+	}
 
 	//set the boldness
 	PHDEBUG << "Setting the font boldness to :" << _boldness;

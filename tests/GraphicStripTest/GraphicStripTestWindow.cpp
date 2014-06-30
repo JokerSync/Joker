@@ -74,7 +74,7 @@ QAction *GraphicStripTestWindow::fullScreenAction()
 
 void GraphicStripTestWindow::onOpenFile()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.strip *.detx)");
+	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.joker *.detx)");
 	if(QFile::exists(fileName)) {
 		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
