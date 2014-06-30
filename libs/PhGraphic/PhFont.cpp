@@ -86,6 +86,10 @@ bool PhFont::init()
 	int space = 128;
 	_glyphHeight = 0;
 
+	for(Uint16 ch = 0; ch < 32; ++ch) {
+		_glyphAdvance[ch] = 0;
+	}
+
 	//set the boldness
 	PHDEBUG << "Setting the font boldness to :" << _boldness;
 	for(int i = 0; i <= _boldness; i++) {
