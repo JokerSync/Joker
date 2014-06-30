@@ -91,6 +91,8 @@
      <addaction name="actionTimecode"/>
      <addaction name="actionNext_element"/>
      <addaction name="actionPrevious_element"/>
+     <addaction name="actionNext_loop"/>
+     <addaction name="actionPrevious_loop"/>
     </widget>
     <addaction name="actionPlay_pause"/>
     <addaction name="actionPlay_backward"/>
@@ -423,6 +425,22 @@
    </property>
    <property name="shortcut">
     <string>F9</string>
+   </property>
+  </action>
+  <action name="actionNext_loop">
+   <property name="text">
+    <string>Next loop</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Up</string>
+   </property>
+  </action>
+  <action name="actionPrevious_loop">
+   <property name="text">
+    <string>Previous loop</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Down</string>
    </property>
   </action>
  </widget>

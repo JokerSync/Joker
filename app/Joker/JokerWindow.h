@@ -231,6 +231,10 @@ private slots:
 
 	void onVideoSync();
 
+	void on_actionPrevious_loop_triggered();
+
+	void on_actionNext_loop_triggered();
+
 private:
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;

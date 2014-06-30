@@ -960,3 +960,17 @@ void JokerWindow::onVideoSync()
 {
 	_lastVideoSyncElapsed.restart();
 }
+
+void JokerWindow::on_actionPrevious_loop_triggered()
+{
+	PhTime time = _doc->previousLoopTime(_strip.clock()->time());
+	if(time > PHTIMEMIN)
+		_strip.clock()->setTime(time);
+}
+
+void JokerWindow::on_actionNext_loop_triggered()
+{
+	PhTime time = _doc->nextLoopTime(_strip.clock()->time());
+	if(time < PHTIMEMAX)
+		_strip.clock()->setTime(time);
+}
