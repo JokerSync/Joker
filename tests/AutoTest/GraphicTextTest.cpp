@@ -57,10 +57,8 @@ void GraphicTextTest::fontTest() {
 
 	            rect.setY(200);
 	            rect.draw();
-
 	            QString specials("à â ç è é ê \nî ô ù û");
-
-				PhGraphicText text3(&font, specials);
+	            PhGraphicText text3(&font, specials);
 	            text3.setRect(0, 200, textWidth, textHeight);
 	            text3.setColor(Qt::black);
 	            text3.setZ(5);
