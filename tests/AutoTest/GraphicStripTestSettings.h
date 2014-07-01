@@ -71,6 +71,10 @@ public:
 	int timeBetweenRuler() {
 		return 48000;
 	}
+
+	bool displayCuts(){
+		return true;
+	}
 };
 
 #endif // GRAPHICSTRIPTESTSETTINGS_H
