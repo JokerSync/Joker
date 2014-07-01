@@ -72,7 +72,7 @@ public:
 		return 48000;
 	}
 
-	bool displayCuts(){
+	bool displayCuts() {
 		return true;
 	}
 };

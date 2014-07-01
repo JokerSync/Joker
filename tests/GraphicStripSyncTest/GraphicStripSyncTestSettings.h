@@ -18,6 +18,9 @@ public:
 	PH_SETTING_FLOAT2(setSonyFastRate, sonyFastRate, 3)
 	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
+
+	//PhGraphicSettings
+	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 };
 
 #endif // GRAPHICSTRIPSYNCTESTSETTINGS_H
