@@ -420,22 +420,22 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				switch (detect->type()) {
 				case PhStripDetect::Off:
 					gDetect = new PhGraphicSolidRect();
-					gDetect->setY(y + detect->track() * trackHeight + trackHeight * 0.9);
+					gDetect->setY(y + detect->track() * height + trackHeight * 0.9);
 					gDetect->setHeight(trackHeight / 10);
 					break;
 				case PhStripDetect::SemiOff:
 					gDetect = new PhGraphicDashedLine((detect->timeOut() - detect->timeIn()) / 1200);
-					gDetect->setY(y + detect->track() * trackHeight + trackHeight * 0.9);
+					gDetect->setY(y + detect->track() * height + trackHeight * 0.9);
 					gDetect->setHeight(trackHeight / 10);
 					break;
 				case PhStripDetect::ArrowUp:
 					gDetect = new PhGraphicArrow(PhGraphicArrow::DownLeftToUpRight);
-					gDetect->setY(y + detect->track() * trackHeight);
+					gDetect->setY(y + detect->track() * height);
 					gDetect->setHeight(trackHeight);
 					break;
 				case PhStripDetect::ArrowDown:
 					gDetect = new PhGraphicArrow(PhGraphicArrow::UpLefToDownRight);
-					gDetect->setY(y + detect->track() * trackHeight);
+					gDetect->setY(y + detect->track() * height);
 					gDetect->setHeight(trackHeight);
 					break;
 				default:
