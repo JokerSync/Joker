@@ -47,7 +47,7 @@ public:
 	 * @param timeOut The ending time of the detect
 	 * @param track The track of the detect
 	 */
-	PhStripDetect( PhDetectType type, PhTime timeIn, PhPeople * people, PhTime timeOut, int track);
+	PhStripDetect(PhDetectType type, PhTime timeIn, PhPeople * people, PhTime timeOut, float track);
 
 	/**
 	 * @brief If the people is out of the picture

@@ -5,6 +5,7 @@
  */
 
 #include "PhTools/PhTimeCode.h"
+#include "PhTools/PhTestTools.h"
 
 #include "StripDocTest.h"
 
@@ -111,7 +112,7 @@ void StripDocTest::importDetXTextTest()
 	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:02:00"));
 	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("01:00:04:00"));
 	QCOMPARE(doc.texts()[0]->people(), doc.peopleByName("Jeanne"));
-	QCOMPARE(doc.texts()[0]->track(), 1);
+	QCOMPARE(doc.texts()[0]->track(), 0.25);
 
 	QCOMPARE(doc.texts()[1]->content(), QString("Composed "));
 	QCOMPARE(t2s(doc.texts()[1]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
@@ -146,37 +147,37 @@ void StripDocTest::importDetXDetectTest()
 	QCOMPARE(doc.detects()[0]->type(), PhStripDetect::On);
 	QCOMPARE(t2s(doc.detects()[0]->timeIn(), doc.timeCodeType()), QString("01:00:02:00"));
 	QCOMPARE(t2s(doc.detects()[0]->timeOut(), doc.timeCodeType()), QString("01:00:04:00"));
-	QCOMPARE(doc.detects()[0]->track(), 1);
+	QVERIFY2(PhTestTools::compareFloats(doc.detects()[0]->track(), 0.25), PHNQ(QString::number(doc.detects()[0]->track())));
 
 	QCOMPARE(doc.detects()[1]->people(), doc.peopleByName("Sue"));
 	QCOMPARE(doc.detects()[1]->type(), PhStripDetect::On);
 	QCOMPARE(t2s(doc.detects()[1]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
 	QCOMPARE(t2s(doc.detects()[1]->timeOut(), doc.timeCodeType()), QString("01:00:07:00"));
-	QCOMPARE(doc.detects()[1]->track(), 2);
+	QCOMPARE(doc.detects()[1]->track(), 0.5);
 
 	QCOMPARE(doc.detects()[2]->people(), doc.peopleByName("Paul"));
 	QCOMPARE(doc.detects()[2]->type(), PhStripDetect::Off);
 	QCOMPARE(t2s(doc.detects()[2]->timeIn(), doc.timeCodeType()), QString("01:00:12:00"));
 	QCOMPARE(t2s(doc.detects()[2]->timeOut(), doc.timeCodeType()), QString("01:00:14:00"));
-	QCOMPARE(doc.detects()[2]->track(), 1);
+	QCOMPARE(doc.detects()[2]->track(), 0.25);
 
 	QCOMPARE(doc.detects()[3]->people(), doc.peopleByName("Sue"));
 	QCOMPARE(doc.detects()[3]->type(), PhStripDetect::Off);
 	QCOMPARE(t2s(doc.detects()[3]->timeIn(), doc.timeCodeType()), QString("01:00:15:00"));
 	QCOMPARE(t2s(doc.detects()[3]->timeOut(), doc.timeCodeType()), QString("01:00:17:00"));
-	QCOMPARE(doc.detects()[3]->track(), 2);
+	QCOMPARE(doc.detects()[3]->track(), 0.5);
 
 	QCOMPARE(doc.detects()[4]->people(), doc.peopleByName("Sue"));
 	QCOMPARE(doc.detects()[4]->type(), PhStripDetect::Off);
 	QCOMPARE(t2s(doc.detects()[4]->timeIn(), doc.timeCodeType()), QString("01:00:20:00"));
 	QCOMPARE(t2s(doc.detects()[4]->timeOut(), doc.timeCodeType()), QString("01:00:22:00"));
-	QCOMPARE(doc.detects()[4]->track(), 2);
+	QCOMPARE(doc.detects()[4]->track(), 0.5);
 
 	QCOMPARE(doc.detects()[5]->people(), doc.peopleByName("Sue"));
 	QCOMPARE(doc.detects()[5]->type(), PhStripDetect::On);
 	QCOMPARE(t2s(doc.detects()[5]->timeIn(), doc.timeCodeType()), QString("01:00:30:00"));
 	QCOMPARE(t2s(doc.detects()[5]->timeOut(), doc.timeCodeType()), QString("01:00:31:04"));
-	QCOMPARE(doc.detects()[5]->track(), 2);
+	QCOMPARE(doc.detects()[5]->track(), 0.5);
 }
 
 void StripDocTest::importMosTest01()
@@ -262,13 +263,13 @@ void StripDocTest::importMosTest02()
 	// Test texts
 	QCOMPARE(doc.texts().count(), 2);
 	QCOMPARE(doc.texts()[0]->people(), pierre);
-	QCOMPARE(doc.texts()[0]->track(), 0);
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->track(), 0.0), PHNQ(QString::number(doc.texts()[0]->track())));
 	QCOMPARE(doc.texts()[0]->content(), QString("Bonjour, Marie."));
 	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:00"));
 	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("01:00:02:00"));
 
 	QCOMPARE(doc.texts()[1]->people(), marie);
-	QCOMPARE(doc.texts()[1]->track(), 3);
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->track(), 0.6), PHNQ(QString::number(doc.texts()[1]->track())));
 	QCOMPARE(doc.texts()[1]->content(), QString("Bonjour, Pierre."));
 	QCOMPARE(t2s(doc.texts()[1]->timeIn(), doc.timeCodeType()), QString("01:00:04:00"));
 	QCOMPARE(t2s(doc.texts()[1]->timeOut(), doc.timeCodeType()), QString("01:00:06:00"));
@@ -311,14 +312,14 @@ void StripDocTest::importMosTest03()
 	QCOMPARE(doc.loops().count(), 2);
 #warning /// @todo test loop number and name
 	QCOMPARE(t2s(doc.loops()[0]->timeIn(), doc.timeCodeType()), QString("06:00:01:00"));
-//	QCOMPARE(doc.getLoops()[0]->getLoopNumber(), 1);
+	//	QCOMPARE(doc.getLoops()[0]->getLoopNumber(), 1);
 	QCOMPARE(t2s(doc.loops()[1]->timeIn(), doc.timeCodeType()), QString("06:01:15:00"));
-//	QCOMPARE(doc.getLoops()[1]->getLoopNumber(), 2);
+	//	QCOMPARE(doc.getLoops()[1]->getLoopNumber(), 2);
 
 	// Test texts
 	QCOMPARE(doc.texts(false).count(), 206);
 	QCOMPARE(doc.texts(true).count(), 0);
-//#warning TODO more test on text
+	//#warning TODO more test on text
 	// Detect test
 	QCOMPARE(doc.detects().count(), 24);
 	//#warning TODO more test on detect
