@@ -38,7 +38,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldDisplayLoop = _settings->displayLoop();
 	_oldSyncProtocol = _settings->synchroProtocol();
 	_oldLTCInput = _settings->ltcInputDevice();
-	_oldDisplayCuts = _settings->displayCuts();
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
@@ -57,7 +56,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->cBoxDisplayNextText->setChecked(_oldDisplayNextText);
 	ui->cBoxDisplayTitle->setChecked(_oldDisplayTitle);
 	ui->cBoxDisplayLoop->setChecked(_oldDisplayLoop);
-	ui->cBoxDisplayCuts->setChecked(_oldDisplayCuts);
 
 	//Set the fonts
 	QStringList userFontList, systemFontList;
@@ -177,7 +175,6 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setDisplayTitle(_oldDisplayTitle);
 	_settings->setDisplayLoop(_oldDisplayLoop);
 	_settings->setLTCInputDevice(_oldLTCInput);
-	_settings->setDisplayCuts(_oldDisplayCuts);
 
 	close();
 }
@@ -322,8 +319,3 @@ void PreferencesDialog::on_listWidgetInputs_currentItemChanged(QListWidgetItem *
 	_settings->setLTCInputDevice(current->text());
 }
 
-
-void PreferencesDialog::on_cBoxDisplayCuts_clicked()
-{
-	_settings->setDisplayCuts(ui->cBoxDisplayCuts->isChecked());
-}

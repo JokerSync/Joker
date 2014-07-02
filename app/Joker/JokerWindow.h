@@ -235,6 +235,8 @@ private slots:
 
 	void on_actionNext_loop_triggered();
 
+	void on_actionDisplay_the_cuts_toggled(bool arg1);
+
 private:
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;

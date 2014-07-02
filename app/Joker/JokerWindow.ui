@@ -113,6 +113,7 @@
     <addaction name="actionFullscreen"/>
     <addaction name="actionInvert_colors"/>
     <addaction name="actionHide_the_rythmo"/>
+    <addaction name="actionDisplay_the_cuts"/>
     <addaction name="separator"/>
     <addaction name="actionShow_ruler"/>
     <addaction name="actionChange_ruler_timestamp"/>
@@ -441,6 +442,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Down</string>
+   </property>
+  </action>
+  <action name="actionDisplay_the_cuts">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display the cuts</string>
    </property>
   </action>
  </widget>
