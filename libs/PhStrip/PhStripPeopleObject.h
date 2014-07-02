@@ -26,7 +26,7 @@ public:
 	 * @param timeOut the end of the PhStripPeopleObject
 	 * @param track the track of the PhStripPeopleObject
 	 */
-	PhStripPeopleObject(PhTime timeIn, PhPeople * people = NULL, PhTime timeOut = 0, int track = 0);
+	PhStripPeopleObject(PhTime timeIn, PhPeople * people = NULL, PhTime timeOut = 0, float track = 0);
 	/**
 	 * @brief Get the PhPeople
 	 * @return _people the corresponding PhPeople
@@ -38,7 +38,7 @@ public:
 	 * @brief The object track
 	 * @return _track An integer
 	 */
-	int track() {
+	float track() {
 		return _track;
 	}
 	/**
@@ -59,7 +59,7 @@ public:
 	 * @brief Set the track
 	 * @param track An integer
 	 */
-	void setTrack(int track) {
+	void setTrack(float track) {
 		_track = track;
 	}
 	/**
@@ -85,7 +85,7 @@ private:
 	 * @brief _track
 	 * Track of the text, 0 is on top of the strip
 	 */
-	int _track;
+	float _track;
 };
 
 #endif // PHSTRIPPEOPLEOBJECT_H

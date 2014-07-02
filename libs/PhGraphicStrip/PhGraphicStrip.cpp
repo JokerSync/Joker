@@ -259,7 +259,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 		foreach(PhStripText * text, _doc.texts())
 		{
-			int track = text->track();
+			float track = text->track();
 
 			if( !((text->timeOut() < timeIn) || (text->timeIn() > timeOut)) ) {
 				counter++;
@@ -268,7 +268,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 				gText.setX(x + text->timeIn() / timePerPixel - offset);
 				gText.setWidth((text->timeOut() - text->timeIn()) / timePerPixel);
-				gText.setY(y + track * trackHeight);
+				gText.setY(y + track * height);
 				gText.setHeight(trackHeight);
 				gText.setZ(-1);
 				gText.setColor(computeColor(text->people(), selectedPeoples, invertedColor));
@@ -281,7 +281,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			PhGraphicText gPeople(&_hudFont, name);
 			gPeople.setWidth(name.length() * 12);
 
-			PhStripText * lastText = lastTextList[track];
+			PhStripText * lastText = lastTextList[int (track * _trackNumber)];
 			// Display the people name only if one of the following condition is true:
 			// - it is the first text
 			// - it is a different people
@@ -293,7 +293,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			   ) {
 
 				gPeople.setX(x + (text->timeIn() - timeBetweenPeopleAndText) / timePerPixel - offset - gPeople.width());
-				gPeople.setY(y + track * trackHeight);
+				gPeople.setY(y + track * height);
 				gPeople.setZ(-1);
 				gPeople.setHeight(trackHeight / 2);
 
@@ -333,7 +333,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				}
 			}
 
-			lastTextList[track] = text;
+			lastTextList[int (track * _trackNumber)] = text;
 
 			if(text->timeIn() > maxTimeIn)
 				break;

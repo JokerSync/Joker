@@ -154,7 +154,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					PhTime lastTime = -1;
 					PhTime lastLinkedTime = -1;
 					PhPeople *people = peopleMap[elem.attribute("role")];
-					int track = elem.attribute("track").toInt();
+					float track = elem.attribute("track").toInt() / 4.0;
 					QString currentText = "";
 					for(int j = 0; j < elem.childNodes().length(); j++) {
 						if(elem.childNodes().at(j).isElement()) {
@@ -471,7 +471,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 	PHDBG(textLevel) << "Adding" << textList1.count() << "texts in list 1";
 	foreach(PhStripText* text, textList1) {
 		text->setPeople(people);
-		text->setTrack(track);
+		text->setTrack(track / 5.0);
 		_texts1.append(text);
 	}
 

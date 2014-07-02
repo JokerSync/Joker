@@ -8,7 +8,7 @@
 
 
 
-PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, int track, QString content) :
+PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, float track, QString content) :
 	PhStripPeopleObject(timeIn, people, timeOut, track), _content(content)
 {
 }
