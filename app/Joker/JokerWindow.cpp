@@ -747,9 +747,9 @@ void JokerWindow::on_actionInvert_colors_toggled(bool checked)
 	_settings->setInvertColor(checked);
 }
 
-void JokerWindow::on_actionShow_ruler_toggled(bool display)
+void JokerWindow::on_actionShow_ruler_toggled(bool checked)
 {
-	_settings->setDisplayRuler(display);
+	_settings->setDisplayRuler(checked);
 }
 
 void JokerWindow::on_actionChange_ruler_timestamp_triggered()
@@ -985,9 +985,9 @@ void JokerWindow::on_actionNext_loop_triggered()
 		_strip.clock()->setTime(time);
 }
 
-void JokerWindow::on_actionDisplay_the_cuts_toggled(bool arg1)
+void JokerWindow::on_actionDisplay_the_cuts_toggled(bool checked)
 {
-	_settings->setDisplayCuts(arg1);
+	_settings->setDisplayCuts(checked);
 }
 
 void JokerWindow::on_actionSet_space_between_two_ruler_graduation_triggered()

@@ -33,7 +33,7 @@ public:
 private slots:
 	void on_horizontalSlider_sliderMoved(int position);
 
-	void on_spinBox_valueChanged(int arg1);
+	void on_spinBox_valueChanged(int value);
 
 	void on_buttonBox_rejected();
 

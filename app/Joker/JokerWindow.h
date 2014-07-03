@@ -214,7 +214,7 @@ private slots:
 
 	void on_actionInvert_colors_toggled(bool checked);
 
-	void on_actionShow_ruler_toggled(bool arg1);
+	void on_actionShow_ruler_toggled(bool checked);
 
 	void on_actionChange_ruler_timestamp_triggered();
 
@@ -236,7 +236,7 @@ private slots:
 
 	void on_actionNext_loop_triggered();
 
-	void on_actionDisplay_the_cuts_toggled(bool arg1);
+	void on_actionDisplay_the_cuts_toggled(bool checked);
 
 	void on_actionSet_space_between_two_ruler_graduation_triggered();
 

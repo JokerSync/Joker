@@ -212,12 +212,12 @@ void PreferencesDialog::on_sliderBoldness_valueChanged(int value)
 	_settings->setTextBoldness(value);
 }
 
-void PreferencesDialog::on_lineEditFilter_textEdited(const QString &arg1)
+void PreferencesDialog::on_lineEditFilter_textEdited(const QString &value)
 {
 	ui->listWidgetFont->clear();
 	foreach(QString fontName, _fontList.keys())
 	{
-		if(fontName.contains(&arg1, Qt::CaseInsensitive))
+		if(fontName.contains(&value, Qt::CaseInsensitive))
 			ui->listWidgetFont->addItem(fontName);
 	}
 }

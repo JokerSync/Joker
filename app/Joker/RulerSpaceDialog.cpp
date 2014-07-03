@@ -29,10 +29,10 @@ void RulerSpaceDialog::on_horizontalSlider_sliderMoved(int position)
 	_settings->setTimeBetweenRuler(position * 24);
 }
 
-void RulerSpaceDialog::on_spinBox_valueChanged(int arg1)
+void RulerSpaceDialog::on_spinBox_valueChanged(int value)
 {
-	ui->horizontalSlider->setValue(arg1);
-	_settings->setTimeBetweenRuler(arg1 * 24);
+	ui->horizontalSlider->setValue(value);
+	_settings->setTimeBetweenRuler(value * 24);
 }
 
 void RulerSpaceDialog::on_buttonBox_rejected()
