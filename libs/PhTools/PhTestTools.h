@@ -18,7 +18,7 @@ public:
 	 * @brief compareFloats
 	 * @param a the first float to compare
 	 * @param b the second float to compare
-	 * @param epsilon the diff expected
+	 * @param epsilon the max diff expected
 	 * @return true is a and b differ of less than epsilon
 	 */
 	static bool compareFloats(float a, float b, float epsilon = 0.00000001);

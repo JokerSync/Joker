@@ -31,12 +31,12 @@ void GraphicStripTest::drawTest()
 	doc->addPeople(new PhPeople("A people"));
 	doc->addPeople(new PhPeople("A second people", "red"));
 
-	doc->addObject(new PhStripText(0, doc->peoples().first(), 10000, 0.25, "Hello"));
+	doc->addObject(new PhStripText(0, doc->peoples().first(), 10000, 0.25f, "Hello"));
 	doc->addObject(new PhStripCut(PhStripCut::CrossFade, 5400));
-	doc->addObject(new PhStripDetect(PhStripDetect::Off, 0, doc->peoples().first(), 10000, 0.25));
+	doc->addObject(new PhStripDetect(PhStripDetect::Off, 0, doc->peoples().first(), 10000, 0.25f));
 	doc->addObject(new PhStripLoop(3, 22000));
-	doc->addObject(new PhStripText(10000, doc->peoples().last(), 15000, 0.5, "Hi !"));
-	doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5));
+	doc->addObject(new PhStripText(10000, doc->peoples().last(), 15000, 0.5f, "Hi !"));
+	doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
 	doc->changed();
 
 	view.show();
