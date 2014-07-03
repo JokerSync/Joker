@@ -34,7 +34,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_needToSave(false),
 	_firstDoc(true),
 	_numberOfDraw(0),
-	_stripIsClicked(false)
+	_resizingStrip(false)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -236,7 +236,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 
 			// Check if it is near the video/strip border
 			QMouseEvent * mouseEvent = (QMouseEvent*)event;
-			if(_stripIsClicked) {
+			if(_resizingStrip) {
 				QApplication::setOverrideCursor(Qt::SizeVerCursor);
 				if(mouseEvent->buttons() & Qt::LeftButton)
 					_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
@@ -267,7 +267,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			break;
 		}
 	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode
-		_stripIsClicked = false;
+		_resizingStrip = false;
 		if(sender == this)
 			toggleFullScreen();
 		break;
@@ -289,7 +289,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
 			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10)) {
 				QApplication::setOverrideCursor(Qt::SizeVerCursor);
-				_stripIsClicked = true;
+				_resizingStrip = true;
 			}
 		}
 	default:

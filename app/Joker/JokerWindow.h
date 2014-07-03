@@ -250,7 +250,7 @@ private:
 	PhLtcReader _ltcReader;
 	bool _needToSave;
 	bool _firstDoc;
-	bool _stripIsClicked;
+	bool _resizingStrip;
 	int _numberOfDraw;
 
 	PhGraphicImage _videoLogo;
