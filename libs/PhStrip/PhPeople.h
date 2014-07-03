@@ -45,6 +45,8 @@ public:
 	 */
 	void setColor(QString color);
 
+	bool hasColorChanged();
+
 private:
 	/**
 	 * Name of the people
@@ -54,6 +56,8 @@ private:
 	 * Color of the people's text on the strip.
 	 */
 	QString _color;
+
+	bool _colorChanged;
 
 };
 
