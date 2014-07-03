@@ -7,9 +7,19 @@
 #include "PhStrip/PhStripPeopleObject.h"
 
 
-PhStripPeopleObject::PhStripPeopleObject(PhTime timeIn, PhPeople *people, PhTime timeOut, float track) : PhStripObject(timeIn),
-	_timeOut(timeOut), _people(people), _track(track)
+PhStripPeopleObject::PhStripPeopleObject(PhTime timeIn, PhPeople *people, PhTime timeOut, float y, float height) : PhStripObject(timeIn),
+	_timeOut(timeOut), _people(people), _y(y), _trackHeight(height)
 {
 }
+float PhStripPeopleObject::trackHeight() const
+{
+	return _trackHeight;
+}
+
+void PhStripPeopleObject::setTrackHeight(float trackHeight)
+{
+	_trackHeight = trackHeight;
+}
+
 
 

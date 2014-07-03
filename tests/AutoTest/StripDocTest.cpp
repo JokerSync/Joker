@@ -112,7 +112,7 @@ void StripDocTest::importDetXTextTest()
 	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:02:00"));
 	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("01:00:04:00"));
 	QCOMPARE(doc.texts()[0]->people(), doc.peopleByName("Jeanne"));
-	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->track(), 0.25f), PHNQ(QString::number(doc.texts()[0]->track())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.25f), PHNQ(QString::number(doc.texts()[0]->y())));
 
 
 	QCOMPARE(doc.texts()[1]->content(), QString("Composed "));
@@ -148,40 +148,40 @@ void StripDocTest::importDetXDetectTest()
 	QCOMPARE(doc.detects()[0]->type(), PhStripDetect::On);
 	QCOMPARE(t2s(doc.detects()[0]->timeIn(), doc.timeCodeType()), QString("01:00:02:00"));
 	QCOMPARE(t2s(doc.detects()[0]->timeOut(), doc.timeCodeType()), QString("01:00:04:00"));
-	QVERIFY2(PhTestTools::compareFloats(doc.detects()[0]->track(), 0.25f), PHNQ(QString::number(doc.detects()[0]->track())));
+	QVERIFY2(PhTestTools::compareFloats(doc.detects()[0]->y(), 0.25f), PHNQ(QString::number(doc.detects()[0]->y())));
 
 	QCOMPARE(doc.detects()[1]->people(), doc.peopleByName("Sue"));
 	QCOMPARE(doc.detects()[1]->type(), PhStripDetect::On);
 	QCOMPARE(t2s(doc.detects()[1]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
 	QCOMPARE(t2s(doc.detects()[1]->timeOut(), doc.timeCodeType()), QString("01:00:07:00"));
-	QVERIFY2(PhTestTools::compareFloats(doc.detects()[1]->track(), 0.5f), PHNQ(QString::number(doc.detects()[1]->track())));
+	QVERIFY2(PhTestTools::compareFloats(doc.detects()[1]->y(), 0.5f), PHNQ(QString::number(doc.detects()[1]->y())));
 
 
 	QCOMPARE(doc.detects()[2]->people(), doc.peopleByName("Paul"));
 	QCOMPARE(doc.detects()[2]->type(), PhStripDetect::Off);
 	QCOMPARE(t2s(doc.detects()[2]->timeIn(), doc.timeCodeType()), QString("01:00:12:00"));
 	QCOMPARE(t2s(doc.detects()[2]->timeOut(), doc.timeCodeType()), QString("01:00:14:00"));
-	QVERIFY2(PhTestTools::compareFloats(doc.detects()[2]->track(), 0.25f), PHNQ(QString::number(doc.detects()[2]->track())));
+	QVERIFY2(PhTestTools::compareFloats(doc.detects()[2]->y(), 0.25f), PHNQ(QString::number(doc.detects()[2]->y())));
 
 
 	QCOMPARE(doc.detects()[3]->people(), doc.peopleByName("Sue"));
 	QCOMPARE(doc.detects()[3]->type(), PhStripDetect::Off);
 	QCOMPARE(t2s(doc.detects()[3]->timeIn(), doc.timeCodeType()), QString("01:00:15:00"));
 	QCOMPARE(t2s(doc.detects()[3]->timeOut(), doc.timeCodeType()), QString("01:00:17:00"));
-	QVERIFY2(PhTestTools::compareFloats(doc.detects()[3]->track(), 0.5f), PHNQ(QString::number(doc.detects()[3]->track())));
+	QVERIFY2(PhTestTools::compareFloats(doc.detects()[3]->y(), 0.5f), PHNQ(QString::number(doc.detects()[3]->y())));
 
 	QCOMPARE(doc.detects()[4]->people(), doc.peopleByName("Sue"));
 	QCOMPARE(doc.detects()[4]->type(), PhStripDetect::Off);
 	QCOMPARE(t2s(doc.detects()[4]->timeIn(), doc.timeCodeType()), QString("01:00:20:00"));
 	QCOMPARE(t2s(doc.detects()[4]->timeOut(), doc.timeCodeType()), QString("01:00:22:00"));
-	QVERIFY2(PhTestTools::compareFloats(doc.detects()[4]->track(), 0.5f), PHNQ(QString::number(doc.detects()[4]->track())));
+	QVERIFY2(PhTestTools::compareFloats(doc.detects()[4]->y(), 0.5f), PHNQ(QString::number(doc.detects()[4]->y())));
 
 
 	QCOMPARE(doc.detects()[5]->people(), doc.peopleByName("Sue"));
 	QCOMPARE(doc.detects()[5]->type(), PhStripDetect::On);
 	QCOMPARE(t2s(doc.detects()[5]->timeIn(), doc.timeCodeType()), QString("01:00:30:00"));
 	QCOMPARE(t2s(doc.detects()[5]->timeOut(), doc.timeCodeType()), QString("01:00:31:04"));
-	QVERIFY2(PhTestTools::compareFloats(doc.detects()[5]->track(), 0.5f), PHNQ(QString::number(doc.detects()[5]->track())));
+	QVERIFY2(PhTestTools::compareFloats(doc.detects()[5]->y(), 0.5f), PHNQ(QString::number(doc.detects()[5]->y())));
 
 }
 
@@ -268,13 +268,13 @@ void StripDocTest::importMosTest02()
 	// Test texts
 	QCOMPARE(doc.texts().count(), 2);
 	QCOMPARE(doc.texts()[0]->people(), pierre);
-	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->track(), 0.0), PHNQ(QString::number(doc.texts()[0]->track())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.0), PHNQ(QString::number(doc.texts()[0]->y())));
 	QCOMPARE(doc.texts()[0]->content(), QString("Bonjour, Marie."));
 	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:00"));
 	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("01:00:02:00"));
 
 	QCOMPARE(doc.texts()[1]->people(), marie);
-	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->track(), 0.6), PHNQ(QString::number(doc.texts()[1]->track())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->y(), 0.6), PHNQ(QString::number(doc.texts()[1]->y())));
 	QCOMPARE(doc.texts()[1]->content(), QString("Bonjour, Pierre."));
 	QCOMPARE(t2s(doc.texts()[1]->timeIn(), doc.timeCodeType()), QString("01:00:04:00"));
 	QCOMPARE(t2s(doc.texts()[1]->timeOut(), doc.timeCodeType()), QString("01:00:06:00"));
@@ -571,7 +571,7 @@ void StripDocTest::addObjectTest()
 	PhStripDoc doc;
 	doc.addPeople(new PhPeople("A people"));
 
-	doc.addObject(new PhStripText(0, doc.peoples().last(), 10000, 1, "Hello"));
+	doc.addObject(new PhStripText(0, doc.peoples().last(), 10000, 1, "Hello", 0.25f));
 	QVERIFY(doc.texts().count() == 1);
 	doc.addObject(new PhStripCut(PhStripCut::CrossFade, 5400));
 	QVERIFY(doc.cuts().count() == 1);

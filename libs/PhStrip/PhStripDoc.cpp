@@ -154,7 +154,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					PhTime lastTime = -1;
 					PhTime lastLinkedTime = -1;
 					PhPeople *people = peopleMap[elem.attribute("role")];
-					float track = elem.attribute("track").toInt() / 4.0;
+					float y = elem.attribute("track").toInt() / 4.0;
 					QString currentText = "";
 					for(int j = 0; j < elem.childNodes().length(); j++) {
 						if(elem.childNodes().at(j).isElement()) {
@@ -165,7 +165,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 									timeIn = lastTime;
 								if(lineElem.attribute("link") != "off") {
 									if(currentText.length()) {
-										_texts1.append(new PhStripText(lastLinkedTime, people, lastTime, track, currentText));
+										_texts1.append(new PhStripText(lastLinkedTime, people, lastTime, y, currentText, 0.25f));
 										currentText = "";
 									}
 									lastLinkedTime = lastTime;
@@ -179,13 +179,13 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					if(currentText.length()) {
 						PhTime time = lastLinkedTime + currentText.length() * 1000;
 						PHDEBUG << currentText;
-						_texts1.append(new PhStripText(lastLinkedTime, people, time, track, currentText));
+						_texts1.append(new PhStripText(lastLinkedTime, people, time, y, currentText, 0.25f));
 						lastTime = lastLinkedTime = time;
 					}
 					PhStripDetect::PhDetectType type = PhStripDetect::On;
 					if(elem.attribute("voice") == "off")
 						type = PhStripDetect::Off;
-					_detects.append(new PhStripDetect(type, timeIn, people, lastTime, track));
+					_detects.append(new PhStripDetect(type, timeIn, people, lastTime, y));
 				}
 			}
 		}
@@ -231,7 +231,7 @@ PhStripText* PhStripDoc::readMosText(QFile &f, int textLevel, int internLevel)
 	PhTime timeIn = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
 	PhTime timeOut = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
 
-	PhStripText* text = new PhStripText(timeIn, NULL, timeOut, 0, content);
+	PhStripText* text = new PhStripText(timeIn, NULL, timeOut, 0, content, 0.2f);
 
 	PhFileTool::readInt(f, internLevel, "text");
 	PhFileTool::readInt(f, internLevel, "text");
@@ -471,20 +471,20 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 	PHDBG(textLevel) << "Adding" << textList1.count() << "texts in list 1";
 	foreach(PhStripText* text, textList1) {
 		text->setPeople(people);
-		text->setTrack(track / 5.0);
+		text->setY(track / 5.0);
 		_texts1.append(text);
 	}
 
 	PHDBG(textLevel) << "Adding" << textList2.count() << "texts in  list 2";
 	foreach(PhStripText* text, textList2) {
 		text->setPeople(people);
-		text->setTrack(track);
+		text->setY(track);
 		_texts2.append(text);
 	}
 
 	foreach(PhStripDetect* detect, detectList) {
 		detect->setPeople((people));
-		detect->setTrack(track);
+		detect->setY(track);
 		_detects.append(detect);
 	}
 
@@ -901,7 +901,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 		PhTime timeIn = time;
 		PhTime timeOut = timeIn + content.length() * 1000;
 
-		_texts1.append(new PhStripText(timeIn, people, timeOut, i % trackCount, content));
+		_texts1.append(new PhStripText(timeIn, people, timeOut, i % trackCount / 4, content, 0.25f));
 
 		// So the texts are all one after the other
 		time += spaceBetweenText;
