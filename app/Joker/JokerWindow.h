@@ -21,6 +21,7 @@
 #include "Synchronizer.h"
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
+#include "RulerSpaceDialog.h"
 
 namespace Ui {
 class JokerWindow;
@@ -236,6 +237,8 @@ private slots:
 	void on_actionNext_loop_triggered();
 
 	void on_actionDisplay_the_cuts_toggled(bool arg1);
+
+	void on_actionSet_space_between_two_ruler_graduation_triggered();
 
 private:
 	Ui::JokerWindow *ui;

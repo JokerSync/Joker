@@ -989,3 +989,9 @@ void JokerWindow::on_actionDisplay_the_cuts_toggled(bool arg1)
 {
 	_settings->setDisplayCuts(arg1);
 }
+
+void JokerWindow::on_actionSet_space_between_two_ruler_graduation_triggered()
+{
+	RulerSpaceDialog dlg(_settings);
+	dlg.exec();
+}
