@@ -46,6 +46,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="changeCharButton">
+     <property name="text">
+      <string>Change character's options</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

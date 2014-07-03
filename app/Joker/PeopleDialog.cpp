@@ -4,9 +4,13 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QMessageBox>
+
 #include "PeopleDialog.h"
 #include "ui_PeopleDialog.h"
 #include "PhTools/PhDebug.h"
+
+#include "PhCommonUI/PhColorPickerDialog.h"
 
 PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *settings) :
 	QDialog(parent),
@@ -38,6 +42,8 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 #warning /// @todo Check if fixed
 	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
 	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
+
+	this->setGeometry(100, 500, width(), height());
 }
 
 PeopleDialog::~PeopleDialog()
@@ -74,4 +80,17 @@ void PeopleDialog::on_selectAllButton_clicked()
 void PeopleDialog::on_deselectAllButton_clicked()
 {
 	ui->peopleList->clearSelection();
+}
+
+void PeopleDialog::on_changeCharButton_clicked()
+{
+	if(ui->peopleList->selectedItems().count() != 1) {
+		QMessageBox msgBox;
+		msgBox.setText(tr("You have to select one character."));
+		msgBox.exec();
+		return;
+	}
+	PhColorPickerDialog * dlg = new PhColorPickerDialog(_doc, ui->peopleList->selectedItems().first()->text());
+	dlg->exec();
+
 }

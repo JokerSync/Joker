@@ -51,6 +51,8 @@ private slots:
 
 	void on_deselectAllButton_clicked();
 
+	void on_changeCharButton_clicked();
+
 private:
 	Ui::PeopleDialog *ui;
 	PhStripDoc* _doc;
