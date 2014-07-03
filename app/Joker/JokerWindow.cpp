@@ -33,7 +33,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_needToSave(false),
 	_firstDoc(true),
-	_numberOfDraw(0)
+	_numberOfDraw(0),
+	_resizingStrip(false)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -237,9 +238,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 
 			// Check if it is near the video/strip border
 			QMouseEvent * mouseEvent = (QMouseEvent*)event;
-			float stripHeight = this->height() * _settings->stripHeight();
-			if((mouseEvent->pos().y() > (this->height() - stripHeight) * 0.95)
-			   && (mouseEvent->pos().y() < (this->height() - stripHeight) * 1.05)) {
+			if(_resizingStrip) {
 				QApplication::setOverrideCursor(Qt::SizeVerCursor);
 				if(mouseEvent->buttons() & Qt::LeftButton)
 					_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
@@ -270,13 +269,16 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			break;
 		}
 	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode
+		_resizingStrip = false;
 		if(sender == this)
 			toggleFullScreen();
+		break;
+	case QEvent::MouseButtonRelease:
+		QApplication::setOverrideCursor(Qt::ArrowCursor);
 		break;
 	case QEvent::MouseButtonPress:
 		{
 			QMouseEvent *mouseEvent = (QMouseEvent*)event;
-			//PHDEBUG << sender << mouseEvent->buttons() << mouseEvent->pos() << this->pos();
 			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
 				/// - Right mouse click on the video open the video file dialog.
 				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
@@ -284,6 +286,12 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				else /// - Left mouse click on the strip open the strip file dialog.
 					on_actionOpen_triggered();
 				return true;
+			}
+			float stripHeight = this->height() * _settings->stripHeight();
+			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
+			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10)) {
+				QApplication::setOverrideCursor(Qt::SizeVerCursor);
+				_resizingStrip = true;
 			}
 		}
 	default:
