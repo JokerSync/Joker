@@ -32,13 +32,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="selectAllButton">
-     <property name="text">
-      <string>Select all</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QPushButton" name="deselectAllButton">
      <property name="text">
       <string>Unselect all</string>
@@ -48,7 +41,7 @@
    <item>
     <widget class="QPushButton" name="changeCharButton">
      <property name="text">
-      <string>Change character's options</string>
+      <string>Modify</string>
      </property>
     </widget>
    </item>

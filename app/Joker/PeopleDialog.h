@@ -47,8 +47,6 @@ private slots:
 
 	void on_buttonBox_rejected();
 
-	void on_selectAllButton_clicked();
-
 	void on_deselectAllButton_clicked();
 
 	void on_changeCharButton_clicked();

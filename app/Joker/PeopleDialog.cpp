@@ -70,11 +70,6 @@ void PeopleDialog::on_buttonBox_rejected()
 	_settings->setSelectedPeopleNameList(peopleNameList);
 }
 
-void PeopleDialog::on_selectAllButton_clicked()
-{
-	ui->peopleList->selectAll();
-}
-
 void PeopleDialog::on_deselectAllButton_clicked()
 {
 	ui->peopleList->clearSelection();
