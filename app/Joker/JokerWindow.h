@@ -232,6 +232,12 @@ private slots:
 
 	void onVideoSync();
 
+	void on_actionPrevious_loop_triggered();
+
+	void on_actionNext_loop_triggered();
+
+	void on_actionDisplay_the_cuts_toggled(bool arg1);
+
 	void on_actionSet_space_between_two_ruler_graduation_triggered();
 
 private:
@@ -253,6 +259,7 @@ private:
 	PhLtcReader _ltcReader;
 	bool _needToSave;
 	bool _firstDoc;
+	bool _resizingStrip;
 	int _numberOfDraw;
 
 	PhGraphicImage _videoLogo;

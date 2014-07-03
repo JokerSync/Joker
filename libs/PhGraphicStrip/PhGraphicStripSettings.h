@@ -98,6 +98,12 @@ public:
 	 */
 	virtual int timeBetweenRuler() = 0;
 
+	/**
+	 * @brief Display the cuts on the strip
+	 * @return True if the cuts are displayed, false otherwise
+	 */
+	virtual bool displayCuts() = 0;
+
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

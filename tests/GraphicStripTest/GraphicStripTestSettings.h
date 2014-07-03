@@ -34,6 +34,7 @@ public:
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 48000)
+	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 
 	// PhDocumentWindowSettings
 	PH_SETTING_STRING(setCurrentDocument, currentDocument)

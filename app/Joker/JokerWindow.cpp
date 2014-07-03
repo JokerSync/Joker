@@ -33,7 +33,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_needToSave(false),
 	_firstDoc(true),
-	_numberOfDraw(0)
+	_numberOfDraw(0),
+	_resizingStrip(false)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -94,6 +95,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #warning /// @todo move to PhDocumentWindow
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
+
+	ui->actionDisplay_the_cuts->setChecked(_settings->displayCuts());
 
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 
@@ -235,9 +238,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 
 			// Check if it is near the video/strip border
 			QMouseEvent * mouseEvent = (QMouseEvent*)event;
-			float stripHeight = this->height() * _settings->stripHeight();
-			if((mouseEvent->pos().y() > (this->height() - stripHeight) * 0.95)
-			   && (mouseEvent->pos().y() < (this->height() - stripHeight) * 1.05)) {
+			if(_resizingStrip) {
 				QApplication::setOverrideCursor(Qt::SizeVerCursor);
 				if(mouseEvent->buttons() & Qt::LeftButton)
 					_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
@@ -268,13 +269,16 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			break;
 		}
 	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode
+		_resizingStrip = false;
 		if(sender == this)
 			toggleFullScreen();
+		break;
+	case QEvent::MouseButtonRelease:
+		QApplication::setOverrideCursor(Qt::ArrowCursor);
 		break;
 	case QEvent::MouseButtonPress:
 		{
 			QMouseEvent *mouseEvent = (QMouseEvent*)event;
-			//PHDEBUG << sender << mouseEvent->buttons() << mouseEvent->pos() << this->pos();
 			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
 				/// - Right mouse click on the video open the video file dialog.
 				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
@@ -282,6 +286,12 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				else /// - Left mouse click on the strip open the strip file dialog.
 					on_actionOpen_triggered();
 				return true;
+			}
+			float stripHeight = this->height() * _settings->stripHeight();
+			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
+			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10)) {
+				QApplication::setOverrideCursor(Qt::SizeVerCursor);
+				_resizingStrip = true;
 			}
 		}
 	default:
@@ -959,6 +969,25 @@ void JokerWindow::onPaint(int width, int height)
 void JokerWindow::onVideoSync()
 {
 	_lastVideoSyncElapsed.restart();
+}
+
+void JokerWindow::on_actionPrevious_loop_triggered()
+{
+	PhTime time = _doc->previousLoopTime(_strip.clock()->time());
+	if(time > PHTIMEMIN)
+		_strip.clock()->setTime(time);
+}
+
+void JokerWindow::on_actionNext_loop_triggered()
+{
+	PhTime time = _doc->nextLoopTime(_strip.clock()->time());
+	if(time < PHTIMEMAX)
+		_strip.clock()->setTime(time);
+}
+
+void JokerWindow::on_actionDisplay_the_cuts_toggled(bool arg1)
+{
+	_settings->setDisplayCuts(arg1);
 }
 
 void JokerWindow::on_actionSet_space_between_two_ruler_graduation_triggered()
