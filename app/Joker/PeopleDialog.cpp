@@ -42,8 +42,6 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 #warning /// @todo Check if fixed
 	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
 	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
-
-	this->setGeometry(100, 500, width(), height());
 }
 
 PeopleDialog::~PeopleDialog()

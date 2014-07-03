@@ -715,11 +715,11 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	//			PhFileTool::readShort(f, level, "after loop2");
 	//	}
 
-	//	if(!checkMosTag(f, blocLevel, MosBin))
-	//		return false;
+//	if(!checkMosTag(f, blocLevel, MosBin))
+//		return false;
 
-	//	for(int j = 0; j < 2; j++)
-	//		PhFileTool::readShort(f, level);
+//	for(int j = 0; j < 2; j++)
+//		PhFileTool::readShort(f, level);
 
 	PHDEBUG << "_______________" << "reading ok" << "_______________";
 
