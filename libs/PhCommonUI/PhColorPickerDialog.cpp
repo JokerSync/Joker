@@ -47,10 +47,12 @@ PhColorPickerDialog::~PhColorPickerDialog()
 void PhColorPickerDialog::OnColorSelected(QColor newColor) {
 	// Setting the new color
 	_currentPeople->setColor(newColor.name());
+	_doc->setModified(true);
 }
 
 void PhColorPickerDialog::on_buttonBox_rejected()
 {
 	// Reseting color
 	_currentPeople->setColor(_oldColor);
+	_doc->setModified(false);
 }

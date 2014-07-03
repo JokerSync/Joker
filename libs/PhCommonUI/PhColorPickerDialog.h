@@ -14,6 +14,12 @@ namespace Ui {
 class PhColorPickerDialog;
 }
 
+/**
+ * @brief The PhColorPickerDialog class
+ *
+ * It provide a dialog which allow the user
+ * to change a character's color
+ */
 class PhColorPickerDialog : public QDialog
 {
 	Q_OBJECT
@@ -23,6 +29,12 @@ public:
 	~PhColorPickerDialog();
 
 public slots:
+	/**
+	 * @brief On color selected
+	 * @param newColor
+	 *
+	 * React when the user select another color
+	 */
 	void OnColorSelected(QColor newColor);
 private slots:
 	void on_buttonBox_rejected();
