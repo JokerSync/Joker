@@ -95,6 +95,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
 
+	ui->actionDisplay_the_cuts->setChecked(_settings->displayCuts());
+
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 
 	ui->actionShow_ruler->setChecked(_settings->displayRuler());
@@ -959,4 +961,23 @@ void JokerWindow::onPaint(int width, int height)
 void JokerWindow::onVideoSync()
 {
 	_lastVideoSyncElapsed.restart();
+}
+
+void JokerWindow::on_actionPrevious_loop_triggered()
+{
+	PhTime time = _doc->previousLoopTime(_strip.clock()->time());
+	if(time > PHTIMEMIN)
+		_strip.clock()->setTime(time);
+}
+
+void JokerWindow::on_actionNext_loop_triggered()
+{
+	PhTime time = _doc->nextLoopTime(_strip.clock()->time());
+	if(time < PHTIMEMAX)
+		_strip.clock()->setTime(time);
+}
+
+void JokerWindow::on_actionDisplay_the_cuts_toggled(bool arg1)
+{
+	_settings->setDisplayCuts(arg1);
 }
