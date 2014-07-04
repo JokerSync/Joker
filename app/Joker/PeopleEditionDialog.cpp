@@ -4,7 +4,7 @@
  */
 
 #include "PeopleEditionDialog.h"
-#include "ui_PhColorPickerDialog.h"
+#include "ui_PeopleEditionDialog.h"
 
 #include <QColorDialog>
 
