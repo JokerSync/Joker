@@ -38,3 +38,12 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240_black.png) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/SWENSON.TTF) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/HelveticaCYPlain.ttf) $${RESOURCES_PATH} $${CS}
+
+
+mac {
+	# For the plist version
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+}
+
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)
