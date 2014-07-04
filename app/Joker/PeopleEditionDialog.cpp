@@ -3,12 +3,12 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhColorPickerDialog.h"
+#include "PeopleEditionDialog.h"
 #include "ui_PhColorPickerDialog.h"
 
 #include <QColorDialog>
 
-PhColorPickerDialog::PhColorPickerDialog(PhStripDoc *doc, QString name, QWidget *parent) :
+PeopleEditionDialog::PeopleEditionDialog(PhStripDoc *doc, QString name, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::PhColorPickerDialog),
 	_doc(doc),
@@ -30,12 +30,12 @@ PhColorPickerDialog::PhColorPickerDialog(PhStripDoc *doc, QString name, QWidget 
 
 }
 
-PhColorPickerDialog::~PhColorPickerDialog()
+PeopleEditionDialog::~PeopleEditionDialog()
 {
 	delete ui;
 }
 
-void PhColorPickerDialog::OnColorSelected(QColor newColor) {
+void PeopleEditionDialog::OnColorSelected(QColor newColor) {
 	// Setting the new color
 	_currentPeople->setColor(newColor.name());
 	_doc->setModified(true);
@@ -47,13 +47,13 @@ void PhColorPickerDialog::OnColorSelected(QColor newColor) {
 
 }
 
-void PhColorPickerDialog::on_buttonBox_rejected()
+void PeopleEditionDialog::on_buttonBox_rejected()
 {
 	// Reseting color
 	_currentPeople->setColor(_oldColor);
 }
 
-void PhColorPickerDialog::on_pbColor_clicked()
+void PeopleEditionDialog::on_pbColor_clicked()
 {
 	QColorDialog dlg;
 	// Setting the selected color to the character's one

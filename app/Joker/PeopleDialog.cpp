@@ -10,7 +10,7 @@
 #include "ui_PeopleDialog.h"
 #include "PhTools/PhDebug.h"
 
-#include "PhCommonUI/PhColorPickerDialog.h"
+#include "PeopleEditionDialog.h"
 
 PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *settings) :
 	QDialog(parent),
@@ -42,6 +42,9 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 #warning /// @todo Check if fixed
 	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
 	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
+
+	ui->changeCharButton->setEnabled(ui->peopleList->selectedItems().count() == 1);
+
 }
 
 PeopleDialog::~PeopleDialog()
@@ -59,6 +62,8 @@ void PeopleDialog::on_peopleList_itemSelectionChanged()
 
 	if(peopleNameList.count() < _doc->peoples().count())
 		_settings->setSelectedPeopleNameList(peopleNameList);
+
+	ui->changeCharButton->setEnabled(ui->peopleList->selectedItems().count() == 1);
 }
 
 void PeopleDialog::on_buttonBox_rejected()
@@ -77,13 +82,7 @@ void PeopleDialog::on_deselectAllButton_clicked()
 
 void PeopleDialog::on_changeCharButton_clicked()
 {
-	if(ui->peopleList->selectedItems().count() != 1) {
-		QMessageBox msgBox;
-		msgBox.setText(tr("You have to select one character."));
-		msgBox.exec();
-		return;
-	}
-	PhColorPickerDialog * dlg = new PhColorPickerDialog(_doc, ui->peopleList->selectedItems().first()->text());
+	PeopleEditionDialog * dlg = new PeopleEditionDialog(_doc, ui->peopleList->selectedItems().first()->text());
 	dlg->exec();
 
 }

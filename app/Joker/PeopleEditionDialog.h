@@ -9,6 +9,7 @@
 #include <QDialog>
 
 #include "PhStrip/PhStripDoc.h"
+#include "PhStrip/PhPeople.h"
 
 namespace Ui {
 class PhColorPickerDialog;
@@ -20,13 +21,13 @@ class PhColorPickerDialog;
  * It provide a dialog which allow the user
  * to change a character's color
  */
-class PhColorPickerDialog : public QDialog
+class PeopleEditionDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
-	explicit PhColorPickerDialog(PhStripDoc * doc, QString name, QWidget *parent = 0);
-	~PhColorPickerDialog();
+	explicit PeopleEditionDialog(PhStripDoc * doc, QString name, QWidget *parent = 0);
+	~PeopleEditionDialog();
 
 public slots:
 	/**
