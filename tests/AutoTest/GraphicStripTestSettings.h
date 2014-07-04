@@ -79,6 +79,18 @@ public:
 	int cutWidth() {
 		return 2;
 	}
+
+	bool displayBackground() {
+		return true;
+	}
+
+	int backgroundColorLight() {
+		return 0xe7dcb3;
+	}
+
+	int backgroundColorDark() {
+		return 0x242e2c;
+	}
 };
 
 #endif // GRAPHICSTRIPTESTSETTINGS_H

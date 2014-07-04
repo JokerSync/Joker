@@ -156,24 +156,37 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		PhTime timeIn = clockTime - syncBar_X_FromLeft * timePerPixel;
 		PhTime timeOut = timeIn + stripDuration;
 
-		//Draw backgroung picture
-		int n = width / height + 2; // compute how much background repetition do we need
-		long leftBG = 0;
-		if(offset >= 0)
-			leftBG -= offset % height;
-		else
-			leftBG -= height - ((-offset) % height);
 
-		PhGraphicTexturedRect* backgroundImage = &_backgroundImageLight;
-		if(invertedColor)
-			backgroundImage = &_backgroundImageDark;
+		if(_settings->displayBackground()) {
+			//Draw backgroung picture
+			int n = width / height + 2; // compute how much background repetition do we need
+			long leftBG = 0;
+			if(offset >= 0)
+				leftBG -= offset % height;
+			else
+				leftBG -= height - ((-offset) % height);
 
-		backgroundImage->setX(x + leftBG);
-		backgroundImage->setY(y);
-		backgroundImage->setSize(height * n, height);
-		backgroundImage->setZ(-2);
-		backgroundImage->setTextureCoordinate(n, 1);
-		backgroundImage->draw();
+			PhGraphicTexturedRect* backgroundImage = &_backgroundImageLight;
+			if(invertedColor)
+				backgroundImage = &_backgroundImageDark;
+
+			backgroundImage->setX(x + leftBG);
+			backgroundImage->setY(y);
+			backgroundImage->setSize(height * n, height);
+			backgroundImage->setZ(-2);
+			backgroundImage->setTextureCoordinate(n, 1);
+			backgroundImage->draw();
+		}
+		else {
+			PhGraphicSolidRect backgroundRect(x, y, width, height);
+			if(_settings->invertColor())
+				backgroundRect.setColor(QColor(_settings->backgroundColorDark()));
+			else
+				backgroundRect.setColor(QColor(_settings->backgroundColorLight()));
+
+			backgroundRect.setZ(-2);
+			backgroundRect.draw();
+		}
 
 		PhGraphicSolidRect syncBarRect;
 		syncBarRect.setColor(QColor(225, 86, 108));

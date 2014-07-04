@@ -49,6 +49,9 @@ public:
 	PH_SETTING_INT(setTimePlayed, timePlayed)
 
 	PH_SETTING_INT2(setCutWidth, cutWidth, 4)
+	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)
+	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
+	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
 
 	// PhVideoSettings :
 

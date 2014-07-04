@@ -110,6 +110,22 @@ public:
 	 */
 	virtual int cutWidth() = 0;
 
+	/**
+	 * @brief Display a background texture on the strip band
+	 * @return A boolean value
+	 */
+	virtual bool displayBackground() = 0;
+	/**
+	 * @brief Color of the background if no background is displayed.
+	 * @return An integer value
+	 */
+	virtual int backgroundColorLight() = 0;
+
+	/**
+	 * @brief Color of the background if no background is displayed.
+	 * @return An integer value
+	 */
+	virtual int backgroundColorDark() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H
