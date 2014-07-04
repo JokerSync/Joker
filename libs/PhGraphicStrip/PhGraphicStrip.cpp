@@ -342,13 +342,14 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		delete lastTextList;
 
 		if(_settings->displayCuts()) {
+			int cutWidth = _settings->cutWidth();
 			foreach(PhStripCut * cut, _doc.cuts())
 			{
 				//_counter++;
 				if( (timeIn < cut->timeIn()) && (cut->timeIn() < timeOut)) {
 					PhGraphicSolidRect gCut;
 					gCut.setZ(-1);
-					gCut.setWidth(2);
+					gCut.setWidth(cutWidth);
 
 					if(invertedColor)
 						gCut.setColor(QColor(255, 255, 255));

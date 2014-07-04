@@ -36,7 +36,7 @@ public:
 	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 48000)
 	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
-
+	PH_SETTING_INT2(setCutWidth, cutWidth, 4)
 
 	// PhVideoSettings :
 

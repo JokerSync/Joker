@@ -48,6 +48,8 @@ public:
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
 	PH_SETTING_INT(setTimePlayed, timePlayed)
 
+	PH_SETTING_INT2(setCutWidth, cutWidth, 4)
+
 	// PhVideoSettings :
 
 	// PhSyncSettings:

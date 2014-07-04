@@ -75,6 +75,10 @@ public:
 	bool displayCuts() {
 		return true;
 	}
+
+	int cutWidth() {
+		return 2;
+	}
 };
 
 #endif // GRAPHICSTRIPTESTSETTINGS_H

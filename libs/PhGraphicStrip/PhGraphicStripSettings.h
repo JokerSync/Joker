@@ -104,6 +104,12 @@ public:
 	 */
 	virtual bool displayCuts() = 0;
 
+	/**
+	 * @brief Width of the cut bar in pixel
+	 * @return An integer value
+	 */
+	virtual int cutWidth() = 0;
+
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H
