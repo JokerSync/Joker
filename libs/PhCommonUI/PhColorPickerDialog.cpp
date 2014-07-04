@@ -24,9 +24,9 @@ PhColorPickerDialog::PhColorPickerDialog(PhStripDoc *doc, QString name, QWidget 
 	_oldColor = _currentPeople->color();
 
 	ui->pbColor->setStyleSheet("background-color:" +  _oldColor +";"
-							   "border-width: 2px;"
-							   "border-radius: 10px;"
-							   "border-color: beige;");
+	                           "border-width: 2px;"
+	                           "border-radius: 10px;"
+	                           "border-color: beige;");
 
 }
 
@@ -41,9 +41,9 @@ void PhColorPickerDialog::OnColorSelected(QColor newColor) {
 	_doc->setModified(true);
 
 	ui->pbColor->setStyleSheet("background-color:" +  newColor.name() +";"
-							   "border-width: 2px;"
-							   "border-radius: 10px;"
-							   "border-color: beige;");
+	                           "border-width: 2px;"
+	                           "border-radius: 10px;"
+	                           "border-color: beige;");
 
 }
 
@@ -55,12 +55,12 @@ void PhColorPickerDialog::on_buttonBox_rejected()
 
 void PhColorPickerDialog::on_pbColor_clicked()
 {
-		QColorDialog dlg;
-		// Setting the selected color to the character's one
-		dlg.setCurrentColor(QColor(_oldColor));
+	QColorDialog dlg;
+	// Setting the selected color to the character's one
+	dlg.setCurrentColor(QColor(_oldColor));
 
-		// Connecting slots
-		connect(&dlg, SIGNAL(currentColorChanged(QColor)), this, SLOT(OnColorSelected(QColor)));
+	// Connecting slots
+	connect(&dlg, SIGNAL(currentColorChanged(QColor)), this, SLOT(OnColorSelected(QColor)));
 
-		dlg.exec();
+	dlg.exec();
 }
