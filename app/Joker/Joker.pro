@@ -12,7 +12,7 @@ TEMPLATE = app
 QT += core gui
 
 # The application version
-VERSION = 1.1.12
+VERSION = 1.1.13
 
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
@@ -37,7 +37,7 @@ SOURCES += main.cpp \
 	PreferencesDialog.cpp \
 	PropertyDialog.cpp \
 	PeopleDialog.cpp \
-    RulerSpaceDialog.cpp
+	RulerSpaceDialog.cpp
 
 HEADERS += \
 	JokerWindow.h \
@@ -47,7 +47,7 @@ HEADERS += \
 	PropertyDialog.h \
 	PeopleDialog.h \
 	JokerSettings.h \
-    RulerSpaceDialog.h
+	RulerSpaceDialog.h
 
 FORMS += \
 	JokerWindow.ui \
@@ -55,7 +55,7 @@ FORMS += \
 	PreferencesDialog.ui \
 	PropertyDialog.ui \
 	PeopleDialog.ui \
-    RulerSpaceDialog.ui
+	RulerSpaceDialog.ui
 
 unix {
 	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${JOKER_ROOT}/.doxygen\";
