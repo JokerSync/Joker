@@ -2,37 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
-  <name>MAC_APPLICATION_MENU</name>
-  <message>
-    <source>Services</source>
-    <translation>Services</translation>
-  </message>
-  <message>
-    <source>Hide %1</source>
-    <translation>Masquer %1</translation>
-  </message>
-  <message>
-    <source>Hide Others</source>
-    <translation>Masquer les autres</translation>
-  </message>
-  <message>
-    <source>Show All</source>
-  <translation>Tout afficher</translation>
-  </message>
-  <message>
-    <source>Preferences...</source>
-  <translation>Préférences...</translation>
-  </message>
-  <message>
-  <source>Quit %1</source>
-  <translation>Quitter %1</translation>
-  </message>
-  <message>
-    <source>About %1</source>
-    <translation>À propos de %1</translation>
-  </message>
-</context>
-<context>
     <name>AboutDialog</name>
     <message>
         <location filename="AboutDialog.ui" line="14"/>
@@ -95,7 +64,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="135"/>
-        <location filename="JokerWindow.cpp" line="314"/>
+        <location filename="JokerWindow.cpp" line="321"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -367,56 +336,61 @@
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="311"/>
+        <location filename="JokerWindow.cpp" line="318"/>
         <source>DetX files</source>
         <translation>Fichiers DetX</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="310"/>
+        <location filename="JokerWindow.cpp" line="317"/>
         <source>Joker files</source>
         <translation>Fichiers Joker</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="309"/>
+        <location filename="JokerWindow.cpp" line="316"/>
         <source>Rythmo files</source>
         <translation>Fichier rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="312"/>
+        <location filename="JokerWindow.cpp" line="319"/>
         <source>Mosaic files</source>
         <translation>Fichiers Mosaic</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="313"/>
-        <location filename="JokerWindow.cpp" line="407"/>
+        <location filename="JokerWindow.cpp" line="320"/>
+        <location filename="JokerWindow.cpp" line="414"/>
         <source>All files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="406"/>
+        <location filename="JokerWindow.cpp" line="413"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="409"/>
+        <location filename="JokerWindow.cpp" line="416"/>
         <source>Open a video...</source>
         <translation>Ouvrir un fichier vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="654"/>
-        <location filename="JokerWindow.cpp" line="679"/>
+        <location filename="JokerWindow.cpp" line="661"/>
+        <location filename="JokerWindow.cpp" line="686"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="672"/>
+        <location filename="JokerWindow.cpp" line="679"/>
         <source>Save...</source>
         <translation>Enregistrer...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="689"/>
+        <location filename="JokerWindow.cpp" line="696"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="947"/>
+        <source>No video sync</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -433,29 +407,43 @@
     </message>
     <message>
         <location filename="PeopleDialog.ui" line="37"/>
-        <source>Select all</source>
-        <translation>Tout sélectionner</translation>
+        <source>Unselect all</source>
+        <oldsource>Select all</oldsource>
+        <translation>Tout dé-sélectionner</translation>
     </message>
     <message>
         <location filename="PeopleDialog.ui" line="44"/>
-        <source>Unselect all</source>
-        <translation>Tout désélectionner</translation>
+        <source>Modify</source>
+        <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="34"/>
+        <location filename="PeopleDialog.cpp" line="38"/>
         <source>The list is empty...</source>
         <oldsource>The list is empty</oldsource>
         <translation>La liste est vide...</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="39"/>
+        <location filename="PeopleDialog.cpp" line="43"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="40"/>
+        <location filename="PeopleDialog.cpp" line="44"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="PeopleDialog.cpp" line="82"/>
+        <source>You have to select one character.</source>
+        <translation>Vous ne pouvez modifier qu&apos;un seul personnage.</translation>
+    </message>
+</context>
+<context>
+    <name>PhColorPickerDialog</name>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhColorPickerDialog.ui" line="14"/>
+        <source>Modify</source>
+        <translation>Modifier</translation>
     </message>
 </context>
 <context>

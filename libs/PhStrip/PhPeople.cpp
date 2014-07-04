@@ -6,7 +6,7 @@
 
 #include "PhPeople.h"
 
-PhPeople::PhPeople(QString name, QString color) : _colorChanged(false)
+PhPeople::PhPeople(QString name, QString color)
 {
 	_name = name;
 	_color = color;
@@ -27,9 +27,4 @@ void PhPeople::setColor(QString color)
 {
 	_color = color;
 	_colorChanged = true;
-}
-
-bool PhPeople::hasColorChanged()
-{
-	return _colorChanged;
 }

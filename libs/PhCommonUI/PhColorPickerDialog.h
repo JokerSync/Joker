@@ -39,6 +39,8 @@ public slots:
 private slots:
 	void on_buttonBox_rejected();
 
+	void on_pbColor_clicked();
+
 private:
 	Ui::PhColorPickerDialog *ui;
 	PhStripDoc * _doc;

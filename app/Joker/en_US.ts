@@ -64,7 +64,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="135"/>
-        <location filename="JokerWindow.cpp" line="314"/>
+        <location filename="JokerWindow.cpp" line="321"/>
         <source>Open...</source>
         <translation>Open...</translation>
     </message>
@@ -336,56 +336,61 @@
         <translation type="unfinished">F9</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="311"/>
+        <location filename="JokerWindow.cpp" line="318"/>
         <source>DetX files</source>
         <translation>DetX files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="310"/>
+        <location filename="JokerWindow.cpp" line="317"/>
         <source>Joker files</source>
         <translation>Joker files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="309"/>
+        <location filename="JokerWindow.cpp" line="316"/>
         <source>Rythmo files</source>
         <translation>Rythmo files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="312"/>
+        <location filename="JokerWindow.cpp" line="319"/>
         <source>Mosaic files</source>
         <translation>Mosaic files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="313"/>
-        <location filename="JokerWindow.cpp" line="407"/>
+        <location filename="JokerWindow.cpp" line="320"/>
+        <location filename="JokerWindow.cpp" line="414"/>
         <source>All files</source>
         <translation>All files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="406"/>
+        <location filename="JokerWindow.cpp" line="413"/>
         <source>Movie files</source>
         <translation>Movie files</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="409"/>
+        <location filename="JokerWindow.cpp" line="416"/>
         <source>Open a video...</source>
         <translation>Open a video...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="654"/>
-        <location filename="JokerWindow.cpp" line="679"/>
+        <location filename="JokerWindow.cpp" line="661"/>
+        <location filename="JokerWindow.cpp" line="686"/>
         <source>Unable to save </source>
         <translation>Unable to save </translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="672"/>
+        <location filename="JokerWindow.cpp" line="679"/>
         <source>Save...</source>
         <translation>Save...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="689"/>
+        <location filename="JokerWindow.cpp" line="696"/>
         <source>Do you want to save your changes ?</source>
         <translation>Do you want to save your changes ?</translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="947"/>
+        <source>No video sync</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -402,29 +407,48 @@
     </message>
     <message>
         <location filename="PeopleDialog.ui" line="37"/>
-        <source>Select all</source>
-        <translation>Select all</translation>
+        <source>Unselect all</source>
+        <oldsource>Select all</oldsource>
+        <translation type="unfinished">Select all</translation>
     </message>
     <message>
         <location filename="PeopleDialog.ui" line="44"/>
-        <source>Unselect all</source>
-        <translation>Unselect all</translation>
+        <source>Modify</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="34"/>
+        <location filename="PeopleDialog.cpp" line="38"/>
         <source>The list is empty...</source>
         <oldsource>The list is empty</oldsource>
         <translation>The list is empty...</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="39"/>
+        <location filename="PeopleDialog.cpp" line="43"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="40"/>
+        <location filename="PeopleDialog.cpp" line="44"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
+    </message>
+    <message>
+        <location filename="PeopleDialog.cpp" line="82"/>
+        <source>You have to select one character.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PhColorPickerDialog</name>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhColorPickerDialog.ui" line="14"/>
+        <source>Modify</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhColorPickerDialog.ui" line="48"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

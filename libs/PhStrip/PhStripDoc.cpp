@@ -805,11 +805,12 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 			_lastTime = PhTimeCode::timeFromString(state.attribute("lastTimeCode"), _tcType);
 		}
 
-		if(stripDocument.elementsByTagName("changedCharacters").count()) {
-			QDomNodeList chars = stripDocument.elementsByTagName("changedCharacters").at(0).childNodes();
+		if(stripDocument.elementsByTagName("peoples").count()) {
+			QDomNodeList chars = stripDocument.elementsByTagName("peoples").at(0).childNodes();
 			for(int i = 0; i < chars.count(); i++) {
 				QString color = chars.at(i).toElement().attribute("color");
-				peopleByName(chars.at(i).nodeName())->setColor(color);
+				QString name = chars.at(i).toElement().attribute("name");
+				peopleByName(name)->setColor(color);
 			}
 		}
 
@@ -875,15 +876,15 @@ bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC)
 			}
 			xmlWriter->writeEndElement();
 
-			xmlWriter->writeStartElement("changedCharacters");
+			xmlWriter->writeStartElement("peoples");
 			{
 				foreach(PhPeople * ppl, peoples())
 				{
-					if(ppl->hasColorChanged()) {
-						xmlWriter->writeStartElement(ppl->name());
-						xmlWriter->writeAttribute("color", ppl->color());
-						xmlWriter->writeEndElement();
-					}
+					xmlWriter->writeStartElement("people");
+					xmlWriter->writeAttribute("name", ppl->name());
+					xmlWriter->writeAttribute("color", ppl->color());
+					xmlWriter->writeEndElement();
+
 				}
 			}
 			xmlWriter->writeEndElement();

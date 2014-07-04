@@ -45,11 +45,6 @@ public:
 	 */
 	void setColor(QString color);
 
-	/**
-	 * @brief has Color Changed
-	 * @return True if the color have been changed, false otherwise
-	 */
-	bool hasColorChanged();
 
 private:
 	/**
