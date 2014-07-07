@@ -21,12 +21,9 @@ PeopleEditionDialog::PeopleEditionDialog(PhStripDoc *doc, PhPeople * people, QWi
 
 	// Saving old datas
 	_oldColor = _people->color();
+	_oldModified = _doc->modified();
 
-	ui->pbColor->setStyleSheet("background-color:" +  _oldColor +";"
-	                           "border-width: 2px;"
-	                           "border-radius: 10px;"
-	                           "border-color: beige;");
-
+	OnColorSelected(_oldColor);
 }
 
 PeopleEditionDialog::~PeopleEditionDialog()
@@ -39,10 +36,7 @@ void PeopleEditionDialog::OnColorSelected(QColor newColor) {
 	_people->setColor(newColor.name());
 	_doc->setModified(true);
 
-	ui->pbColor->setStyleSheet("background-color:" +  newColor.name() +";"
-	                           "border-width: 2px;"
-	                           "border-radius: 10px;"
-	                           "border-color: beige;");
+	ui->pbColor->setStyleSheet("background-color:" +  newColor.name() +";");
 
 }
 
@@ -50,15 +44,16 @@ void PeopleEditionDialog::on_buttonBox_rejected()
 {
 	// Reseting color
 	_people->setColor(_oldColor);
+	_doc->setModified(_oldModified);
 }
 
 void PeopleEditionDialog::on_pbColor_clicked()
 {
 	QColorDialog dlg;
 	// Setting the selected color to the character's one
-	dlg.setCurrentColor(QColor(_oldColor));
+	dlg.setCurrentColor(QColor(_people->color()));
 
-	// Connecting slots
+	// Connecting slot
 	connect(&dlg, SIGNAL(currentColorChanged(QColor)), this, SLOT(OnColorSelected(QColor)));
 
 	dlg.exec();

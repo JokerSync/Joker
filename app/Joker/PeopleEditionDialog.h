@@ -46,6 +46,7 @@ private:
 	Ui::PhColorPickerDialog *ui;
 	PhStripDoc * _doc;
 	QString _oldColor;
+	bool _oldModified;
 	PhPeople * _people;
 };
 
