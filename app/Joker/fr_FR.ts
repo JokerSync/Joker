@@ -69,7 +69,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="139"/>
-        <location filename="JokerWindow.cpp" line="333"/>
+        <location filename="JokerWindow.cpp" line="331"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -372,61 +372,61 @@
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="330"/>
-        <source>DetX files</source>
-        <translation>Fichiers DetX</translation>
+        <location filename="JokerWindow.cpp" line="326"/>
+        <source>Rythmo files</source>
+        <translation>Fichiers rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="329"/>
+        <location filename="JokerWindow.cpp" line="327"/>
         <source>Joker files</source>
         <translation>Fichiers Joker</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="328"/>
-        <source>Rythmo files</source>
-        <translation>Fichier rythmo</translation>
+        <source>DetX files</source>
+        <translation>Fichiers DetX</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="331"/>
+        <location filename="JokerWindow.cpp" line="329"/>
         <source>Mosaic files</source>
         <translation>Fichiers Mosaic</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="332"/>
-        <location filename="JokerWindow.cpp" line="426"/>
+        <location filename="JokerWindow.cpp" line="330"/>
+        <location filename="JokerWindow.cpp" line="424"/>
         <source>All files</source>
-        <translation>Tous les fichiers</translation>
+        <translation>Tout les fichiers</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="425"/>
+        <location filename="JokerWindow.cpp" line="423"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="428"/>
+        <location filename="JokerWindow.cpp" line="426"/>
         <source>Open a video...</source>
-        <translation>Ouvrir un fichier vidéo...</translation>
+        <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="673"/>
-        <location filename="JokerWindow.cpp" line="698"/>
+        <location filename="JokerWindow.cpp" line="671"/>
+        <location filename="JokerWindow.cpp" line="696"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="691"/>
+        <location filename="JokerWindow.cpp" line="689"/>
         <source>Save...</source>
-        <translation>Enregistrer...</translation>
+        <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="708"/>
+        <location filename="JokerWindow.cpp" line="706"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="959"/>
+        <location filename="JokerWindow.cpp" line="957"/>
         <source>No video sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de synchro vidéo</translation>
     </message>
 </context>
 <context>
@@ -443,29 +443,51 @@
     </message>
     <message>
         <location filename="PeopleDialog.ui" line="37"/>
-        <source>Select all</source>
-        <translation>Tout sélectionner</translation>
+        <source>Unselect all</source>
+        <oldsource>Select all</oldsource>
+        <translation>Tout dé-sélectionner</translation>
     </message>
     <message>
         <location filename="PeopleDialog.ui" line="44"/>
-        <source>Unselect all</source>
-        <translation>Tout désélectionner</translation>
+        <source>Modify</source>
+        <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="34"/>
+        <location filename="PeopleDialog.cpp" line="39"/>
         <source>The list is empty...</source>
         <oldsource>The list is empty</oldsource>
         <translation>La liste est vide...</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="39"/>
+        <location filename="PeopleDialog.cpp" line="44"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="40"/>
+        <location filename="PeopleDialog.cpp" line="45"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+</context>
+<context>
+    <name>PhColorPickerDialog</name>
+    <message>
+        <location filename="PeopleEditionDialog.ui" line="14"/>
+        <source>Modify</source>
+        <translation>Modifier</translation>
+    </message>
+</context>
+<context>
+    <name>PhDialogButtonBox</name>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhDialogButtonBox.cpp" line="24"/>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhDialogButtonBox.cpp" line="33"/>
+        <source>Ok</source>
+        <translation>Ok</translation>
     </message>
 </context>
 <context>
@@ -665,27 +687,27 @@
         <translation>Entrée(s)</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="127"/>
+        <location filename="PreferencesDialog.cpp" line="124"/>
         <source>&lt;System default&gt;</source>
         <translation>&lt;Langue du système&gt;</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="135"/>
+        <location filename="PreferencesDialog.cpp" line="132"/>
         <source>English</source>
         <translation>Anglais</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="137"/>
+        <location filename="PreferencesDialog.cpp" line="134"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="154"/>
+        <location filename="PreferencesDialog.cpp" line="151"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="155"/>
+        <location filename="PreferencesDialog.cpp" line="152"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <oldsource>You change the language to &quot;%1&quot;.

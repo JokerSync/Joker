@@ -458,7 +458,7 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QDialogButtonBox" name="buttonBox">
+     <widget class="PhDialogButtonBox" name="buttonBox">
       <property name="standardButtons">
        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
       </property>
@@ -469,6 +469,11 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>PhDialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>PhCommonUI/PhDialogButtonBox.h</header>
+  </customwidget>
   <customwidget>
    <class>PhLockableSpinBox</class>
    <extends>QSpinBox</extends>

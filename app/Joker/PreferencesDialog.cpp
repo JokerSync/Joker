@@ -80,8 +80,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	{
 		_fontList[fontName.split(".").first()] = userDirectory + "/Library/Fonts/" + fontName;
 	}
-	if(!_fontList["SWENSON"].isNull())
-		_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
+	_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
 
 
 	// _oldFont is : /Path/To/Font.ttf
@@ -109,9 +108,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		showParamLTC(false);
 		showParamSony(false);
 	}
-
-//	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
-//	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
 
 	//Set the language
 	QDir appDirectory(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/");

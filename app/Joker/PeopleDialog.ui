@@ -32,13 +32,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="selectAllButton">
-     <property name="text">
-      <string>Select all</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QPushButton" name="deselectAllButton">
      <property name="text">
       <string>Unselect all</string>
@@ -46,7 +39,14 @@
     </widget>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
+    <widget class="QPushButton" name="changeCharButton">
+     <property name="text">
+      <string>Modify</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="PhDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -57,6 +57,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PhDialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>PhCommonUI/PhDialogButtonBox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
