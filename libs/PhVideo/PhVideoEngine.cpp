@@ -19,7 +19,8 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_currentFrame(PHFRAMEMIN),
 	_useAudio(false),
 	_audioStream(NULL),
-	_audioFrame(NULL)
+	_audioFrame(NULL),
+	_deinterlace(false)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
