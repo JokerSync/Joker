@@ -80,8 +80,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	{
 		_fontList[fontName.split(".").first()] = userDirectory + "/Library/Fonts/" + fontName;
 	}
-	if(!_fontList["SWENSON"].isNull())
-		_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
+	_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
 
 
 	// _oldFont is : /Path/To/Font.ttf
