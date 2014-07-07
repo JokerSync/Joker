@@ -19,23 +19,6 @@ RulerSpaceDialog::RulerSpaceDialog(JokerSettings *settings, QWidget *parent) :
 	ui->horizontalSlider->setValue(_oldSpace / 24);
 	ui->spinBox->setValue(_oldSpace / 24);
 
-	// Unset the Cancel button from default
-	QPushButton * cancelBtn = ui->buttonBox->button(QDialogButtonBox::Cancel);
-	if(cancelBtn) {
-		cancelBtn->setAutoDefault(false);
-		cancelBtn->setDefault(false);
-		cancelBtn->setText(tr("Cancel"));
-	}
-
-	// Set the Ok Button to default
-	QPushButton * okBtn = ui->buttonBox->button(QDialogButtonBox::Ok);
-	if(okBtn) {
-		okBtn->setAutoDefault(true);
-		okBtn->setDefault(true);
-		okBtn->setFocus();
-		okBtn->setText(tr("Ok"));
-	}
-
 }
 
 RulerSpaceDialog::~RulerSpaceDialog()
