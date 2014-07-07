@@ -792,5 +792,15 @@ You need to restart %2 to apply you changes.</translation>
         <source>Current space :</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="RulerSpaceDialog.cpp" line="28"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancel</translation>
+    </message>
+    <message>
+        <location filename="RulerSpaceDialog.cpp" line="38"/>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
+    </message>
 </context>
 </TS>

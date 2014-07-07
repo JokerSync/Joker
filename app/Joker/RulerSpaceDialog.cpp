@@ -25,6 +25,7 @@ RulerSpaceDialog::RulerSpaceDialog(JokerSettings *settings, QWidget *parent) :
 	{
 		cancelBtn->setAutoDefault(false);
 		cancelBtn->setDefault(false);
+		cancelBtn->setText(tr("Cancel"));
 	}
 
 	// Set the Ok Button to default
@@ -34,7 +35,9 @@ RulerSpaceDialog::RulerSpaceDialog(JokerSettings *settings, QWidget *parent) :
 		okBtn->setAutoDefault(true);
 		okBtn->setDefault(true);
 		okBtn->setFocus();
+		okBtn->setText(tr("Ok"));
 	}
+
 }
 
 RulerSpaceDialog::~RulerSpaceDialog()
