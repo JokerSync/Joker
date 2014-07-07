@@ -21,8 +21,7 @@ RulerSpaceDialog::RulerSpaceDialog(JokerSettings *settings, QWidget *parent) :
 
 	// Unset the Cancel button from default
 	QPushButton * cancelBtn = ui->buttonBox->button(QDialogButtonBox::Cancel);
-	if(cancelBtn)
-	{
+	if(cancelBtn) {
 		cancelBtn->setAutoDefault(false);
 		cancelBtn->setDefault(false);
 		cancelBtn->setText(tr("Cancel"));
@@ -30,8 +29,7 @@ RulerSpaceDialog::RulerSpaceDialog(JokerSettings *settings, QWidget *parent) :
 
 	// Set the Ok Button to default
 	QPushButton * okBtn = ui->buttonBox->button(QDialogButtonBox::Ok);
-	if(okBtn)
-	{
+	if(okBtn) {
 		okBtn->setAutoDefault(true);
 		okBtn->setDefault(true);
 		okBtn->setFocus();
