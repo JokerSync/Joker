@@ -4,9 +4,14 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QMessageBox>
+
 #include "PeopleDialog.h"
 #include "ui_PeopleDialog.h"
 #include "PhTools/PhDebug.h"
+#include "PhStrip/PhPeople.h"
+
+#include "PeopleEditionDialog.h"
 
 PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *settings) :
 	QDialog(parent),
@@ -38,6 +43,9 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 #warning /// @todo Check if fixed
 	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
 	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
+
+	ui->changeCharButton->setEnabled(ui->peopleList->selectedItems().count() == 1);
+
 }
 
 PeopleDialog::~PeopleDialog()
@@ -55,6 +63,8 @@ void PeopleDialog::on_peopleList_itemSelectionChanged()
 
 	if(peopleNameList.count() < _doc->peoples().count())
 		_settings->setSelectedPeopleNameList(peopleNameList);
+
+	ui->changeCharButton->setEnabled(ui->peopleList->selectedItems().count() == 1);
 }
 
 void PeopleDialog::on_buttonBox_rejected()
@@ -66,12 +76,14 @@ void PeopleDialog::on_buttonBox_rejected()
 	_settings->setSelectedPeopleNameList(peopleNameList);
 }
 
-void PeopleDialog::on_selectAllButton_clicked()
-{
-	ui->peopleList->selectAll();
-}
-
 void PeopleDialog::on_deselectAllButton_clicked()
 {
 	ui->peopleList->clearSelection();
+}
+
+void PeopleDialog::on_changeCharButton_clicked()
+{
+	PhPeople * people = _doc->peopleByName(ui->peopleList->selectedItems().first()->text());
+	PeopleEditionDialog * dlg = new PeopleEditionDialog(_doc, people);
+	dlg->exec();
 }

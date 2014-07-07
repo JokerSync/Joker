@@ -37,6 +37,7 @@ SOURCES += main.cpp \
 	PreferencesDialog.cpp \
 	PropertyDialog.cpp \
 	PeopleDialog.cpp \
+	PeopleEditionDialog.cpp \
     RulerSpaceDialog.cpp
 
 HEADERS += \
@@ -47,6 +48,7 @@ HEADERS += \
 	PropertyDialog.h \
 	PeopleDialog.h \
 	JokerSettings.h \
+	PeopleEditionDialog.h \
     RulerSpaceDialog.h
 
 FORMS += \
@@ -55,6 +57,7 @@ FORMS += \
 	PreferencesDialog.ui \
 	PropertyDialog.ui \
 	PeopleDialog.ui \
+	PeopleEditionDialog.ui \
     RulerSpaceDialog.ui
 
 unix {

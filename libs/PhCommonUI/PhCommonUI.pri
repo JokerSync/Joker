@@ -34,7 +34,7 @@ SOURCES += \
 
 FORMS += ../../libs/PhCommonUI/PhMediaPanel.ui \
 	../../libs/PhCommonUI/PhTimeCodeDialog.ui \
-    ../../libs/PhCommonUI/PhFeedbackDialog.ui
+	../../libs/PhCommonUI/PhFeedbackDialog.ui
 
 #INCLUDEPATH += $$(LEAP_SDK)/include
 

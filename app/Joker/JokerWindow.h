@@ -257,7 +257,6 @@ private:
 	PropertyDialog _propertyDialog;
 
 	PhLtcReader _ltcReader;
-	bool _needToSave;
 	bool _firstDoc;
 	bool _resizingStrip;
 	int _numberOfDraw;
