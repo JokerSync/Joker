@@ -73,8 +73,7 @@ mac{
 }
 
 win32 {
-#	Joker icon shall be inserted manually after qmake generation
-#	RC_FILE = joker.rc
+	RC_ICONS += "joker.ico"
 }
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}

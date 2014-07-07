@@ -144,7 +144,7 @@ PhDebug::PhDebug()
 	if(!logDir.exists()) {
 		QDir().mkdir(logDirPath);
 	}
-	_logFileName = logDirPath + APP_NAME + ".log";
+	_logFileName = QDir(logDirPath).absoluteFilePath(APP_NAME + QString(".log"));
 	QFile * f = new QFile(_logFileName);
 	f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
 	f->write("\n\n");

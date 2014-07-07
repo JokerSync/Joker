@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QProcess>
+#include <QStandardPaths>
 #include "ui_PreferencesDialog.h"
 #include "PreferencesDialog.h"
 #include "PhTools/PhDebug.h"
@@ -60,9 +61,10 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	//Set the fonts
 	QStringList userFontList, systemFontList;
 	QString userDirectory = QDir::homePath();
-	QDir systemFont("/Library/Fonts/");
+	// standard font dir as found by Qt
+	QDir systemFont(QStandardPaths::writableLocation(QStandardPaths::FontsLocation));
+	// user font dir on MacOS
 	QDir userFont(userDirectory + "/Library/Fonts/");
-
 
 	QStringList filters;
 	filters.append("*.ttf");
@@ -74,11 +76,11 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 
 	foreach(QString fontName, systemFontList)
 	{
-		_fontList[fontName.split(".").first()] = "/Library/Fonts/" + fontName;
+		_fontList[fontName.split(".").first()] = systemFont.filePath(fontName);
 	}
 	foreach(QString fontName, userFontList)
 	{
-		_fontList[fontName.split(".").first()] = userDirectory + "/Library/Fonts/" + fontName;
+		_fontList[fontName.split(".").first()] = userFont.filePath(fontName);
 	}
 	_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
 
