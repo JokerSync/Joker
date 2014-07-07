@@ -8,20 +8,19 @@
 
 #include <QColorDialog>
 
-PeopleEditionDialog::PeopleEditionDialog(PhStripDoc *doc, QString name, QWidget *parent) :
+PeopleEditionDialog::PeopleEditionDialog(PhStripDoc *doc, PhPeople * people, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::PhColorPickerDialog),
 	_doc(doc),
-	_name(name)
+	_people(people)
 {
 	ui->setupUi(this);
 	// Setting the label
-	ui->labelName->setText(_name);
+	ui->labelName->setText(_people->name());
 	ui->labelName->adjustSize();
 
 	// Saving old datas
-	_currentPeople = _doc->peopleByName(_name);
-	_oldColor = _currentPeople->color();
+	_oldColor = _people->color();
 
 	ui->pbColor->setStyleSheet("background-color:" +  _oldColor +";"
 	                           "border-width: 2px;"
@@ -37,7 +36,7 @@ PeopleEditionDialog::~PeopleEditionDialog()
 
 void PeopleEditionDialog::OnColorSelected(QColor newColor) {
 	// Setting the new color
-	_currentPeople->setColor(newColor.name());
+	_people->setColor(newColor.name());
 	_doc->setModified(true);
 
 	ui->pbColor->setStyleSheet("background-color:" +  newColor.name() +";"
@@ -50,7 +49,7 @@ void PeopleEditionDialog::OnColorSelected(QColor newColor) {
 void PeopleEditionDialog::on_buttonBox_rejected()
 {
 	// Reseting color
-	_currentPeople->setColor(_oldColor);
+	_people->setColor(_oldColor);
 }
 
 void PeopleEditionDialog::on_pbColor_clicked()

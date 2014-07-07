@@ -56,8 +56,6 @@ private:
 	 */
 	QString _color;
 
-	bool _colorChanged;
-
 };
 
 #endif // PHPEOPLE_H

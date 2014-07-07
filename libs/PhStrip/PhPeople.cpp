@@ -26,5 +26,4 @@ QString PhPeople::color()
 void PhPeople::setColor(QString color)
 {
 	_color = color;
-	_colorChanged = true;
 }

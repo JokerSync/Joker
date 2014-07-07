@@ -26,7 +26,7 @@ class PeopleEditionDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit PeopleEditionDialog(PhStripDoc * doc, QString name, QWidget *parent = 0);
+	explicit PeopleEditionDialog(PhStripDoc * doc, PhPeople * people, QWidget *parent = 0);
 	~PeopleEditionDialog();
 
 public slots:
@@ -45,9 +45,8 @@ private slots:
 private:
 	Ui::PhColorPickerDialog *ui;
 	PhStripDoc * _doc;
-	QString _name;
 	QString _oldColor;
-	PhPeople * _currentPeople;
+	PhPeople * _people;
 };
 
 #endif // PHCOLORPICKERDIALOG_H

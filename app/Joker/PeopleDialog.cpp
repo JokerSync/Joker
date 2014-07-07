@@ -9,6 +9,7 @@
 #include "PeopleDialog.h"
 #include "ui_PeopleDialog.h"
 #include "PhTools/PhDebug.h"
+#include "PhStrip/PhPeople.h"
 
 #include "PeopleEditionDialog.h"
 
@@ -82,7 +83,7 @@ void PeopleDialog::on_deselectAllButton_clicked()
 
 void PeopleDialog::on_changeCharButton_clicked()
 {
-	PeopleEditionDialog * dlg = new PeopleEditionDialog(_doc, ui->peopleList->selectedItems().first()->text());
+	PhPeople * people = _doc->peopleByName(ui->peopleList->selectedItems().first()->text());
+	PeopleEditionDialog * dlg = new PeopleEditionDialog(_doc, people);
 	dlg->exec();
-
 }
