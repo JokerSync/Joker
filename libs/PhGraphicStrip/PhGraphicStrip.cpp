@@ -236,9 +236,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		int minTimeBetweenPeople = 48000;
 		int timeBetweenPeopleAndText = 4000;
 		QMap<float, PhStripText * > lastTextList;
-		foreach(PhStripText * t, _doc.texts()) {
-			lastTextList[t->y()] = NULL;
-		}
 
 
 		int verticalTimePerPixel = _settings->verticalTimePerPixel();
