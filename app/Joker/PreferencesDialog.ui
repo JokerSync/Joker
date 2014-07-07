@@ -24,7 +24,7 @@
      </property>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tabGeneral">
        <attribute name="title">
@@ -40,6 +40,9 @@
          </rect>
         </property>
         <layout class="QFormLayout" name="formLayout">
+         <property name="fieldGrowthPolicy">
+          <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+         </property>
          <property name="formAlignment">
           <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
          </property>
@@ -455,7 +458,7 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QDialogButtonBox" name="buttonBox">
+     <widget class="PhDialogButtonBox" name="buttonBox">
       <property name="standardButtons">
        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
       </property>
@@ -467,6 +470,11 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
+   <class>PhDialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>PhCommonUI/PhDialogButtonBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>PhLockableSpinBox</class>
    <extends>QSpinBox</extends>
    <header>PhCommonUI/PhLockableSpinBox.h</header>
@@ -474,11 +482,4 @@
  </customwidgets>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
- </buttongroups>
 </ui>

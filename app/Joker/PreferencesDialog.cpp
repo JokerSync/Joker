@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QProcess>
+#include <QStandardPaths>
 #include "ui_PreferencesDialog.h"
 #include "PreferencesDialog.h"
 #include "PhTools/PhDebug.h"
@@ -60,9 +61,10 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	//Set the fonts
 	QStringList userFontList, systemFontList;
 	QString userDirectory = QDir::homePath();
-	QDir systemFont("/Library/Fonts/");
+	// standard font dir as found by Qt
+	QDir systemFont(QStandardPaths::writableLocation(QStandardPaths::FontsLocation));
+	// user font dir on MacOS
 	QDir userFont(userDirectory + "/Library/Fonts/");
-
 
 	QStringList filters;
 	filters.append("*.ttf");
@@ -74,14 +76,13 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 
 	foreach(QString fontName, systemFontList)
 	{
-		_fontList[fontName.split(".").first()] = "/Library/Fonts/" + fontName;
+		_fontList[fontName.split(".").first()] = systemFont.filePath(fontName);
 	}
 	foreach(QString fontName, userFontList)
 	{
-		_fontList[fontName.split(".").first()] = userDirectory + "/Library/Fonts/" + fontName;
+		_fontList[fontName.split(".").first()] = userFont.filePath(fontName);
 	}
-	if(!_fontList["SWENSON"].isNull())
-		_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
+	_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
 
 
 	// _oldFont is : /Path/To/Font.ttf
@@ -110,9 +111,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		showParamSony(false);
 	}
 
-//	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
-//	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
-
 	//Set the language
 	QDir appDirectory(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/");
 
@@ -131,14 +129,15 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	{
 		QFileInfo info(tradFile);
 		QString lang = info.baseName();
-		if (lang == "en_US")
-			_langNameMap[lang] = tr("English");
-		else if(lang == "fr_FR")
+		if(lang == "fr_FR")
 			_langNameMap[lang] = tr("French");
 		else
 			_langNameMap[lang] = lang;
 		ui->cboBoxLang->addItem(_langNameMap[lang], lang);
 	}
+	QString eng = "English";
+	_langNameMap["English"] = eng;
+	ui->cboBoxLang->addItem(_langNameMap["English"], eng);
 
 	ui->cboBoxLang->setCurrentText(_langNameMap[_settings->language()]);
 }
@@ -212,12 +211,12 @@ void PreferencesDialog::on_sliderBoldness_valueChanged(int value)
 	_settings->setTextBoldness(value);
 }
 
-void PreferencesDialog::on_lineEditFilter_textEdited(const QString &arg1)
+void PreferencesDialog::on_lineEditFilter_textEdited(const QString &value)
 {
 	ui->listWidgetFont->clear();
 	foreach(QString fontName, _fontList.keys())
 	{
-		if(fontName.contains(&arg1, Qt::CaseInsensitive))
+		if(fontName.contains(&value, Qt::CaseInsensitive))
 			ui->listWidgetFont->addItem(fontName);
 	}
 }

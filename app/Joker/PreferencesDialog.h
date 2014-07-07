@@ -53,7 +53,7 @@ private slots:
 
 	void on_sliderBoldness_valueChanged(int value);
 
-	void on_lineEditFilter_textEdited(const QString &arg1);
+	void on_lineEditFilter_textEdited(const QString &value);
 
 	void on_cBoxDisplayTC_clicked();
 

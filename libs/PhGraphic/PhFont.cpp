@@ -41,8 +41,10 @@ int PhFont::computeMaxFontSize(QString fileName)
 	while (low < high) {
 		size = (low + high) / 2;
 		TTF_Font * font = TTF_OpenFont(fileName.toStdString().c_str(), size);
-		if(font == NULL)
-			return 0;
+		//Break in case of issue with the file
+		if(!font)
+			return -1;
+
 		if (fontHeight == TTF_FontHeight(font))
 			break;
 		else if (fontHeight < TTF_FontHeight(font))
@@ -63,10 +65,11 @@ int PhFont::computeMaxFontSize(QString fileName)
 bool PhFont::init()
 {
 	int size = computeMaxFontSize(_fontFile);
-	TTF_Font * font = TTF_OpenFont(PHNQ(_fontFile), size);
 
-	if(!font)
+	if(size < 0)
 		return false;
+	PHDEBUG << "Opening" << _fontFile << "at size" << size;
+	TTF_Font * font = TTF_OpenFont(_fontFile.toStdString().c_str(), size);
 
 	//Font foreground color is white
 	SDL_Color color = {255, 255, 255, 255};
@@ -92,21 +95,25 @@ bool PhFont::init()
 
 	//set the boldness
 	PHDEBUG << "Setting the font boldness to :" << _boldness;
-	for(int i = 0; i <= _boldness; i++) {
-		TTF_SetFontOutline(font, i);
+	for(int boldIndex = 0; boldIndex <= _boldness; boldIndex++) {
+		TTF_SetFontOutline(font, boldIndex);
 		// We get rid of the 32 first useless char
-		for(Uint16 ch = 32; ch < 256; ++ch) {
-			if(TTF_GlyphIsProvided(font, ch)) {
+		for(Uint16 charIndex = 32; charIndex < 256; ++charIndex) {
+			if(TTF_GlyphIsProvided(font, charIndex) or charIndex == 153) {
 				int minx, maxx, miny, maxy, advance;
-				TTF_GlyphMetrics(font, ch, &minx, &maxx, &miny, &maxy, &advance);
+				Uint16 charCode = charIndex;
+				if(charCode == 153) {
+					charCode = 339;
+				}
+				TTF_GlyphMetrics(font, charCode, &minx, &maxx, &miny, &maxy, &advance);
 				if(advance != 0) {
 					// First render the glyph to a surface
-					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
+					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, charCode, color);
 					if (!glyphSurface)
-						PHDEBUG << "Error during the Render Glyph of " << (char) ch << SDL_GetError();
+						PHDEBUG << "Error during the Render Glyph of " << (char) charIndex << SDL_GetError();
 					SDL_Rect glyphRect;
-					glyphRect.x = (ch % 16) * space;
-					glyphRect.y = (ch / 16) * space;
+					glyphRect.x = (charIndex % 16) * space;
+					glyphRect.y = (charIndex / 16) * space;
 					glyphRect.w = glyphSurface->w;
 					glyphRect.h = glyphSurface->h;
 					if(glyphRect.h > _glyphHeight)
@@ -116,15 +123,15 @@ bool PhFont::init()
 					SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
 
 					// Store information about the glyph
-					_glyphAdvance[ch] = advance;
+					_glyphAdvance[charIndex] = advance;
 
 					SDL_FreeSurface(glyphSurface);
 				}
 				else
-					PHDEBUG <<" Error with Glyph of char:" << ch << (char) ch << minx << maxx << miny << maxy << advance;
+					PHDEBUG <<" Error with Glyph of char:" << charIndex << (char) charIndex << minx << maxx << miny << maxy << advance;
 			}
 			else
-				_glyphAdvance[ch] = 0;
+				_glyphAdvance[charIndex] = 0;
 		}
 	}
 

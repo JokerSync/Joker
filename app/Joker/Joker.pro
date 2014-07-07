@@ -12,7 +12,7 @@ TEMPLATE = app
 QT += core gui
 
 # The application version
-VERSION = 1.1.12
+VERSION = 1.1.13
 
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
@@ -36,7 +36,9 @@ SOURCES += main.cpp \
 	AboutDialog.cpp \
 	PreferencesDialog.cpp \
 	PropertyDialog.cpp \
-	PeopleDialog.cpp
+	PeopleDialog.cpp \
+	PeopleEditionDialog.cpp \
+    RulerSpaceDialog.cpp
 
 HEADERS += \
 	JokerWindow.h \
@@ -45,14 +47,18 @@ HEADERS += \
 	PreferencesDialog.h \
 	PropertyDialog.h \
 	PeopleDialog.h \
-	JokerSettings.h
+	JokerSettings.h \
+	PeopleEditionDialog.h \
+    RulerSpaceDialog.h
 
 FORMS += \
 	JokerWindow.ui \
 	AboutDialog.ui \
 	PreferencesDialog.ui \
 	PropertyDialog.ui \
-	PeopleDialog.ui
+	PeopleDialog.ui \
+	PeopleEditionDialog.ui \
+    RulerSpaceDialog.ui
 
 unix {
 	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${JOKER_ROOT}/.doxygen\";
@@ -67,8 +73,7 @@ mac{
 }
 
 win32 {
-#	Joker icon shall be inserted manually after qmake generation
-#	RC_FILE = joker.rc
+	RC_ICONS += "joker.ico"
 }
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
@@ -81,10 +86,8 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/Helveti
 
 
 TRANSLATIONS =	fr_FR.ts \
-				en_US.ts \
 
 QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
-QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/en_US.ts -qm $${RESOURCES_PATH}/en_US.qm $${CS}
 
 PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
 include(../../common/deploy.pri)

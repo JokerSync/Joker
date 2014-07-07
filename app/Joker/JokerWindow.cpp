@@ -31,9 +31,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_doc(_strip.doc()),
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
-	_needToSave(false),
 	_firstDoc(true),
-	_numberOfDraw(0)
+	_numberOfDraw(0),
+	_resizingStrip(false)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -94,6 +94,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #warning /// @todo move to PhDocumentWindow
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
+
+	ui->actionDisplay_the_cuts->setChecked(_settings->displayCuts());
 
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 
@@ -202,7 +204,6 @@ bool JokerWindow::openDocument(QString fileName)
 	/// - Goto to the document last position.
 	_strip.clock()->setTime(_doc->lastTime());
 	/// - Disable the need to save flag.
-	_needToSave = false;
 
 	return true;
 }
@@ -235,9 +236,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 
 			// Check if it is near the video/strip border
 			QMouseEvent * mouseEvent = (QMouseEvent*)event;
-			float stripHeight = this->height() * _settings->stripHeight();
-			if((mouseEvent->pos().y() > (this->height() - stripHeight) * 0.95)
-			   && (mouseEvent->pos().y() < (this->height() - stripHeight) * 1.05)) {
+			if(_resizingStrip) {
 				QApplication::setOverrideCursor(Qt::SizeVerCursor);
 				if(mouseEvent->buttons() & Qt::LeftButton)
 					_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
@@ -268,13 +267,16 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			break;
 		}
 	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode
+		_resizingStrip = false;
 		if(sender == this)
 			toggleFullScreen();
+		break;
+	case QEvent::MouseButtonRelease:
+		QApplication::setOverrideCursor(Qt::ArrowCursor);
 		break;
 	case QEvent::MouseButtonPress:
 		{
 			QMouseEvent *mouseEvent = (QMouseEvent*)event;
-			//PHDEBUG << sender << mouseEvent->buttons() << mouseEvent->pos() << this->pos();
 			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
 				/// - Right mouse click on the video open the video file dialog.
 				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
@@ -282,6 +284,12 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				else /// - Left mouse click on the strip open the strip file dialog.
 					on_actionOpen_triggered();
 				return true;
+			}
+			float stripHeight = this->height() * _settings->stripHeight();
+			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
+			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10)) {
+				QApplication::setOverrideCursor(Qt::SizeVerCursor);
+				_resizingStrip = true;
 			}
 		}
 	default:
@@ -439,7 +447,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 			_doc->setVideoFilePath(videoFile);
 			if(frameIn > 0)
 				_doc->setVideoFrameIn(frameIn);
-			_needToSave = true;
+			_doc->setModified(true);
 		}
 
 		if(frameIn == 0) {
@@ -497,7 +505,7 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 		_strip.clock()->setFrame(dlg.frame());
 		_doc->setVideoFrameIn(frameStamp);
 		_mediaPanel.setFirstFrame(frameStamp);
-		_needToSave = true;
+		_doc->setModified(true);
 	}
 
 	fadeInMediaPanel();
@@ -658,7 +666,7 @@ void JokerWindow::on_actionSave_triggered()
 	if(!info.exists() || (info.suffix() != "joker"))
 		on_actionSave_as_triggered();
 	else if(_doc->saveStripFile(fileName, _strip.clock()->timeCode()))
-		_needToSave = false;
+		_doc->setModified(false);
 	else
 		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
 }
@@ -681,7 +689,7 @@ void JokerWindow::on_actionSave_as_triggered()
 	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.joker");
 	if(fileName != "") {
 		if(_doc->saveStripFile(fileName, _strip.clock()->timeCode())) {
-			_needToSave = false;
+			_doc->setModified(false);
 			setCurrentDocument(fileName);
 		}
 		else
@@ -692,7 +700,7 @@ void JokerWindow::on_actionSave_as_triggered()
 bool JokerWindow::checkSaveFile()
 {
 
-	if(_needToSave) {
+	if(_doc->modified()) {
 		/// If the document need to be saved, ask the user
 		/// whether he wants to save his changes.
 		QString msg = tr("Do you want to save your changes ?");
@@ -706,7 +714,7 @@ bool JokerWindow::checkSaveFile()
 		case QMessageBox::Save:
 			on_actionSave_triggered();
 			/// If the user cancel the save operation, cancel the operation.
-			if(_needToSave)
+			if(_doc->modified())
 				return false;
 			break;
 		}
@@ -729,7 +737,7 @@ void JokerWindow::on_actionSelect_character_triggered()
 void JokerWindow::on_actionForce_16_9_ratio_triggered(bool checked)
 {
 	_doc->setForceRatio169(checked);
-	_needToSave = true;
+	_doc->setModified(true);
 }
 
 void JokerWindow::on_actionInvert_colors_toggled(bool checked)
@@ -737,9 +745,9 @@ void JokerWindow::on_actionInvert_colors_toggled(bool checked)
 	_settings->setInvertColor(checked);
 }
 
-void JokerWindow::on_actionShow_ruler_toggled(bool display)
+void JokerWindow::on_actionShow_ruler_toggled(bool checked)
 {
-	_settings->setDisplayRuler(display);
+	_settings->setDisplayRuler(checked);
 }
 
 void JokerWindow::on_actionChange_ruler_timestamp_triggered()
@@ -774,7 +782,7 @@ void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
 	_videoEngine.setDeinterlace(checked);
 	if(checked != _doc->videoDeinterlace()) {
 		_doc->setVideoDeinterlace(checked);
-		_needToSave = true;
+		_doc->setModified(true);
 	}
 }
 
@@ -959,4 +967,29 @@ void JokerWindow::onPaint(int width, int height)
 void JokerWindow::onVideoSync()
 {
 	_lastVideoSyncElapsed.restart();
+}
+
+void JokerWindow::on_actionPrevious_loop_triggered()
+{
+	PhTime time = _doc->previousLoopTime(_strip.clock()->time());
+	if(time > PHTIMEMIN)
+		_strip.clock()->setTime(time);
+}
+
+void JokerWindow::on_actionNext_loop_triggered()
+{
+	PhTime time = _doc->nextLoopTime(_strip.clock()->time());
+	if(time < PHTIMEMAX)
+		_strip.clock()->setTime(time);
+}
+
+void JokerWindow::on_actionDisplay_the_cuts_toggled(bool checked)
+{
+	_settings->setDisplayCuts(checked);
+}
+
+void JokerWindow::on_actionSet_space_between_two_ruler_graduation_triggered()
+{
+	RulerSpaceDialog dlg(_settings);
+	dlg.exec();
 }

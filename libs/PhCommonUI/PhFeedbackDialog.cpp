@@ -60,8 +60,8 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 
 
 	// Get the system infos
-#if defined(Q_OS_MAC)
 	QString tempFileName(tmpnam(NULL));
+#if defined(Q_OS_MAC)
 	system(PHNQ(QString("/usr/sbin/system_profiler SPHardwareDataType > %1").arg(tempFileName)));
 	QFile systemInfoFile(tempFileName);
 	if(!systemInfoFile.open(QIODevice::ReadOnly))
@@ -74,6 +74,8 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		systemInfoFile.close();
 		system(PHNQ(QString("rm %1").arg(tempFileName)));
 	}
+#else
+	system(PHNQ(QString("rm %1").arg(tempFileName)));
 #endif
 
 	// Get the preferences
