@@ -3,8 +3,6 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT += testlib
-
 CONFIG += c++11
 
 # Define the preprocessor macro to get the application version in our application.
