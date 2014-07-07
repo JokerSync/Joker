@@ -9,6 +9,12 @@
 #include <QDialogButtonBox>
 #include <QShowEvent>
 
+/**
+ * @brief Custom dialog box button box class
+ *
+ * This class customize QDialogButtonBox by adding the correct
+ * default button and fix translation issue with "Ok" and "Cancel"
+ */
 class PhDialogButtonBox : public QDialogButtonBox
 {
 	Q_OBJECT
@@ -16,6 +22,9 @@ public:
 	explicit PhDialogButtonBox(QWidget *parent = 0);
 
 protected:
+	/**
+	 * @brief Apply the default button behaviour.
+	 */
 	void showEvent(QShowEvent *);
 
 };
