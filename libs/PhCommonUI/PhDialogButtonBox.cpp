@@ -12,10 +12,10 @@
 PhDialogButtonBox::PhDialogButtonBox(QWidget *parent) :
 	QDialogButtonBox(parent)
 {
-	QTimer::singleShot(200, this, SLOT(updateButtons()));
 }
 
-void PhDialogButtonBox::updateButtons(){
+void PhDialogButtonBox::showEvent(QShowEvent *)
+{
 	// Unset the Cancel button from default
 	QPushButton * cancelBtn = this->button(QDialogButtonBox::Cancel);
 	if(cancelBtn) {
@@ -34,3 +34,4 @@ void PhDialogButtonBox::updateButtons(){
 		PHDEBUG << "Set Ok";
 	}
 }
+

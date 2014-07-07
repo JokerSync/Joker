@@ -7,6 +7,7 @@
 #define PHDIALOGBUTTONBOX_H
 
 #include <QDialogButtonBox>
+#include <QShowEvent>
 
 class PhDialogButtonBox : public QDialogButtonBox
 {
@@ -14,13 +15,8 @@ class PhDialogButtonBox : public QDialogButtonBox
 public:
 	explicit PhDialogButtonBox(QWidget *parent = 0);
 
-signals:
-
-public slots:
-
-private slots:
-	void updateButtons();
-
+protected:
+	void showEvent(QShowEvent *);
 
 };
 

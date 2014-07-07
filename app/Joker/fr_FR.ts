@@ -453,18 +453,18 @@
         <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="38"/>
+        <location filename="PeopleDialog.cpp" line="39"/>
         <source>The list is empty...</source>
         <oldsource>The list is empty</oldsource>
         <translation>La liste est vide...</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="43"/>
+        <location filename="PeopleDialog.cpp" line="44"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="44"/>
+        <location filename="PeopleDialog.cpp" line="45"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -475,6 +475,19 @@
         <location filename="PeopleEditionDialog.ui" line="14"/>
         <source>Modify</source>
         <translation>Modifier</translation>
+    </message>
+</context>
+<context>
+    <name>PhDialogButtonBox</name>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhDialogButtonBox.cpp" line="24"/>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
+    </message>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhDialogButtonBox.cpp" line="33"/>
+        <source>Ok</source>
+        <translation>Ok</translation>
     </message>
 </context>
 <context>
@@ -674,27 +687,27 @@
         <translation>Entrée(s)</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="127"/>
+        <location filename="PreferencesDialog.cpp" line="124"/>
         <source>&lt;System default&gt;</source>
         <translation>&lt;Langue du système&gt;</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="135"/>
+        <location filename="PreferencesDialog.cpp" line="132"/>
         <source>English</source>
         <translation>Anglais</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="137"/>
+        <location filename="PreferencesDialog.cpp" line="134"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="154"/>
+        <location filename="PreferencesDialog.cpp" line="151"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="155"/>
+        <location filename="PreferencesDialog.cpp" line="152"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <oldsource>You change the language to &quot;%1&quot;.
@@ -800,16 +813,6 @@ Vous devez relancer %2 pour appliquer ce changement.</translation>
         <location filename="RulerSpaceDialog.ui" line="89"/>
         <source>Current space :</source>
         <translation>Espace actuel :</translation>
-    </message>
-    <message>
-        <location filename="RulerSpaceDialog.cpp" line="28"/>
-        <source>Cancel</source>
-        <translation>Annuler</translation>
-    </message>
-    <message>
-        <location filename="RulerSpaceDialog.cpp" line="38"/>
-        <source>Ok</source>
-        <translation>Ok</translation>
     </message>
 </context>
 </TS>
