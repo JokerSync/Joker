@@ -1,5 +1,4 @@
 #include <QCoreApplication>
-#include <QTest>
 #include <QTime>
 
 #include "PhTools/PhTimeCode.h"

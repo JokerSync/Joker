@@ -1,6 +1,5 @@
 #include "SonyTestWindow.h"
 #include <QApplication>
-#include <QtTest>
 
 #include "PhTools/PhDebug.h"
 
