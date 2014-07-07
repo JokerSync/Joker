@@ -383,6 +383,17 @@ public:
 	 */
 	void addPeople(PhPeople * people);
 
+	/**
+	 * @brief modified
+	 * @return true if the PhStripDoc have been modified, false otherwise
+	 */
+	bool modified() const;
+	/**
+	 * @brief setModified
+	 * @param modified
+	 */
+	void setModified(bool modified);
+
 signals:
 	/**
 	 * @brief Emit a signal when the PhStripDoc changed
@@ -479,6 +490,7 @@ private:
 	MosTag readMosTag(QFile &f, int level, QString name);
 	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel);
 	bool _videoForceRatio169;
+	bool _modified;
 };
 
 #endif // PHSTRIPDOC_H

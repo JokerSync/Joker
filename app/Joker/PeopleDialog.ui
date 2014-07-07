@@ -32,16 +32,16 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="selectAllButton">
+    <widget class="QPushButton" name="deselectAllButton">
      <property name="text">
-      <string>Select all</string>
+      <string>Unselect all</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="deselectAllButton">
+    <widget class="QPushButton" name="changeCharButton">
      <property name="text">
-      <string>Unselect all</string>
+      <string>Modify</string>
      </property>
     </widget>
    </item>

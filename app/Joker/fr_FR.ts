@@ -69,7 +69,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="139"/>
-        <location filename="JokerWindow.cpp" line="333"/>
+        <location filename="JokerWindow.cpp" line="331"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -372,61 +372,61 @@
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="330"/>
-        <source>DetX files</source>
-        <translation>Fichiers DetX</translation>
+        <location filename="JokerWindow.cpp" line="326"/>
+        <source>Rythmo files</source>
+        <translation>Fichiers rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="329"/>
+        <location filename="JokerWindow.cpp" line="327"/>
         <source>Joker files</source>
         <translation>Fichiers Joker</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="328"/>
-        <source>Rythmo files</source>
-        <translation>Fichier rythmo</translation>
+        <source>DetX files</source>
+        <translation>Fichiers DetX</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="331"/>
+        <location filename="JokerWindow.cpp" line="329"/>
         <source>Mosaic files</source>
         <translation>Fichiers Mosaic</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="332"/>
-        <location filename="JokerWindow.cpp" line="426"/>
+        <location filename="JokerWindow.cpp" line="330"/>
+        <location filename="JokerWindow.cpp" line="424"/>
         <source>All files</source>
-        <translation>Tous les fichiers</translation>
+        <translation>Tout les fichiers</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="425"/>
+        <location filename="JokerWindow.cpp" line="423"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="428"/>
+        <location filename="JokerWindow.cpp" line="426"/>
         <source>Open a video...</source>
-        <translation>Ouvrir un fichier vidéo...</translation>
+        <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="673"/>
-        <location filename="JokerWindow.cpp" line="698"/>
+        <location filename="JokerWindow.cpp" line="671"/>
+        <location filename="JokerWindow.cpp" line="696"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="691"/>
+        <location filename="JokerWindow.cpp" line="689"/>
         <source>Save...</source>
-        <translation>Enregistrer...</translation>
+        <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="708"/>
+        <location filename="JokerWindow.cpp" line="706"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="959"/>
+        <location filename="JokerWindow.cpp" line="957"/>
         <source>No video sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de synchro vidéo</translation>
     </message>
 </context>
 <context>
@@ -443,29 +443,38 @@
     </message>
     <message>
         <location filename="PeopleDialog.ui" line="37"/>
-        <source>Select all</source>
-        <translation>Tout sélectionner</translation>
+        <source>Unselect all</source>
+        <oldsource>Select all</oldsource>
+        <translation>Tout dé-sélectionner</translation>
     </message>
     <message>
         <location filename="PeopleDialog.ui" line="44"/>
-        <source>Unselect all</source>
-        <translation>Tout désélectionner</translation>
+        <source>Modify</source>
+        <translation>Modifier</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="34"/>
+        <location filename="PeopleDialog.cpp" line="38"/>
         <source>The list is empty...</source>
         <oldsource>The list is empty</oldsource>
         <translation>La liste est vide...</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="39"/>
+        <location filename="PeopleDialog.cpp" line="43"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="40"/>
+        <location filename="PeopleDialog.cpp" line="44"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+</context>
+<context>
+    <name>PhColorPickerDialog</name>
+    <message>
+        <location filename="PeopleEditionDialog.ui" line="14"/>
+        <source>Modify</source>
+        <translation>Modifier</translation>
     </message>
 </context>
 <context>

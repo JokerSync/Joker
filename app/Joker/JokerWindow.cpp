@@ -31,7 +31,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_doc(_strip.doc()),
 	_sonySlave(PhTimeCodeType25, settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
-	_needToSave(false),
 	_firstDoc(true),
 	_numberOfDraw(0),
 	_resizingStrip(false)
@@ -205,7 +204,6 @@ bool JokerWindow::openDocument(QString fileName)
 	/// - Goto to the document last position.
 	_strip.clock()->setTime(_doc->lastTime());
 	/// - Disable the need to save flag.
-	_needToSave = false;
 
 	return true;
 }
@@ -449,7 +447,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 			_doc->setVideoFilePath(videoFile);
 			if(frameIn > 0)
 				_doc->setVideoFrameIn(frameIn);
-			_needToSave = true;
+			_doc->setModified(true);
 		}
 
 		if(frameIn == 0) {
@@ -507,7 +505,7 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 		_strip.clock()->setFrame(dlg.frame());
 		_doc->setVideoFrameIn(frameStamp);
 		_mediaPanel.setFirstFrame(frameStamp);
-		_needToSave = true;
+		_doc->setModified(true);
 	}
 
 	fadeInMediaPanel();
@@ -668,7 +666,7 @@ void JokerWindow::on_actionSave_triggered()
 	if(!info.exists() || (info.suffix() != "joker"))
 		on_actionSave_as_triggered();
 	else if(_doc->saveStripFile(fileName, _strip.clock()->timeCode()))
-		_needToSave = false;
+		_doc->setModified(false);
 	else
 		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
 }
@@ -691,7 +689,7 @@ void JokerWindow::on_actionSave_as_triggered()
 	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.joker");
 	if(fileName != "") {
 		if(_doc->saveStripFile(fileName, _strip.clock()->timeCode())) {
-			_needToSave = false;
+			_doc->setModified(false);
 			setCurrentDocument(fileName);
 		}
 		else
@@ -702,7 +700,7 @@ void JokerWindow::on_actionSave_as_triggered()
 bool JokerWindow::checkSaveFile()
 {
 
-	if(_needToSave) {
+	if(_doc->modified()) {
 		/// If the document need to be saved, ask the user
 		/// whether he wants to save his changes.
 		QString msg = tr("Do you want to save your changes ?");
@@ -716,7 +714,7 @@ bool JokerWindow::checkSaveFile()
 		case QMessageBox::Save:
 			on_actionSave_triggered();
 			/// If the user cancel the save operation, cancel the operation.
-			if(_needToSave)
+			if(_doc->modified())
 				return false;
 			break;
 		}
@@ -739,7 +737,7 @@ void JokerWindow::on_actionSelect_character_triggered()
 void JokerWindow::on_actionForce_16_9_ratio_triggered(bool checked)
 {
 	_doc->setForceRatio169(checked);
-	_needToSave = true;
+	_doc->setModified(true);
 }
 
 void JokerWindow::on_actionInvert_colors_toggled(bool checked)
@@ -784,7 +782,7 @@ void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
 	_videoEngine.setDeinterlace(checked);
 	if(checked != _doc->videoDeinterlace()) {
 		_doc->setVideoDeinterlace(checked);
-		_needToSave = true;
+		_doc->setModified(true);
 	}
 }
 
