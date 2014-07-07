@@ -6,6 +6,8 @@
 #include "RulerSpaceDialog.h"
 #include "ui_RulerSpaceDialog.h"
 
+#include <QPushButton>
+
 RulerSpaceDialog::RulerSpaceDialog(JokerSettings *settings, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::RulerSpaceDialog)
@@ -16,6 +18,7 @@ RulerSpaceDialog::RulerSpaceDialog(JokerSettings *settings, QWidget *parent) :
 
 	ui->horizontalSlider->setValue(_oldSpace / 24);
 	ui->spinBox->setValue(_oldSpace / 24);
+
 }
 
 RulerSpaceDialog::~RulerSpaceDialog()

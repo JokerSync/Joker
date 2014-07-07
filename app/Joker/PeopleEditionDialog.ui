@@ -16,7 +16,7 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="PhDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
      <x>-70</x>
@@ -62,6 +62,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PhDialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>PhCommonUI/PhDialogButtonBox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

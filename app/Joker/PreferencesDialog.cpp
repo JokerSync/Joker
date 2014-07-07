@@ -109,9 +109,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		showParamSony(false);
 	}
 
-//	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
-//	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
-
 	//Set the language
 	QDir appDirectory(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/");
 

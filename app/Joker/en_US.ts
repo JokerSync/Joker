@@ -448,19 +448,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="38"/>
+        <location filename="PeopleDialog.cpp" line="39"/>
         <source>The list is empty...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="43"/>
+        <location filename="PeopleDialog.cpp" line="44"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ok</translation>
     </message>
     <message>
-        <location filename="PeopleDialog.cpp" line="44"/>
+        <location filename="PeopleDialog.cpp" line="45"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cancel</translation>
     </message>
 </context>
 <context>
@@ -469,6 +469,19 @@
         <location filename="PeopleEditionDialog.ui" line="14"/>
         <source>Modify</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PhDialogButtonBox</name>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhDialogButtonBox.cpp" line="24"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancel</translation>
+    </message>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhDialogButtonBox.cpp" line="33"/>
+        <source>Ok</source>
+        <translation type="unfinished">Ok</translation>
     </message>
 </context>
 <context>
@@ -537,12 +550,12 @@
     <message>
         <location filename="../../libs/PhCommonUI/PhTimeCodeDialog.ui" line="48"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cancel</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhTimeCodeDialog.ui" line="55"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ok</translation>
     </message>
 </context>
 <context>
@@ -668,27 +681,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="127"/>
+        <location filename="PreferencesDialog.cpp" line="124"/>
         <source>&lt;System default&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="135"/>
+        <location filename="PreferencesDialog.cpp" line="132"/>
         <source>English</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="137"/>
+        <location filename="PreferencesDialog.cpp" line="134"/>
         <source>French</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="154"/>
+        <location filename="PreferencesDialog.cpp" line="151"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="155"/>
+        <location filename="PreferencesDialog.cpp" line="152"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <translation type="unfinished"></translation>
