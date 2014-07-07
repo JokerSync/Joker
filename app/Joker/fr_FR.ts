@@ -687,27 +687,27 @@
         <translation>Entrée(s)</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="124"/>
+        <location filename="PreferencesDialog.cpp" line="123"/>
         <source>&lt;System default&gt;</source>
         <translation>&lt;Langue du système&gt;</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="132"/>
+        <location filename="PreferencesDialog.cpp" line="137"/>
         <source>English</source>
         <translation>Anglais</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="134"/>
+        <location filename="PreferencesDialog.cpp" line="132"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="151"/>
+        <location filename="PreferencesDialog.cpp" line="154"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="152"/>
+        <location filename="PreferencesDialog.cpp" line="155"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <oldsource>You change the language to &quot;%1&quot;.

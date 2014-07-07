@@ -127,14 +127,15 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	{
 		QFileInfo info(tradFile);
 		QString lang = info.baseName();
-		if (lang == "en_US")
-			_langNameMap[lang] = tr("English");
-		else if(lang == "fr_FR")
+		if(lang == "fr_FR")
 			_langNameMap[lang] = tr("French");
 		else
 			_langNameMap[lang] = lang;
 		ui->cboBoxLang->addItem(_langNameMap[lang], lang);
 	}
+	QString eng = "English";
+	_langNameMap["English"] = eng;
+	ui->cboBoxLang->addItem(_langNameMap["English"], eng);
 
 	ui->cboBoxLang->setCurrentText(_langNameMap[_settings->language()]);
 }

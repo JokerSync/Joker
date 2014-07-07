@@ -87,10 +87,8 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/Helveti
 
 
 TRANSLATIONS =	fr_FR.ts \
-				en_US.ts \
 
 QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
-QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/en_US.ts -qm $${RESOURCES_PATH}/en_US.qm $${CS}
 
 PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
 include(../../common/deploy.pri)
