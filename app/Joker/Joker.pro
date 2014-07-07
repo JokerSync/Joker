@@ -37,7 +37,8 @@ SOURCES += main.cpp \
 	PreferencesDialog.cpp \
 	PropertyDialog.cpp \
 	PeopleDialog.cpp \
-	PeopleEditionDialog.cpp
+	PeopleEditionDialog.cpp \
+    RulerSpaceDialog.cpp
 
 HEADERS += \
 	JokerWindow.h \
@@ -47,7 +48,8 @@ HEADERS += \
 	PropertyDialog.h \
 	PeopleDialog.h \
 	JokerSettings.h \
-	PeopleEditionDialog.h
+	PeopleEditionDialog.h \
+    RulerSpaceDialog.h
 
 FORMS += \
 	JokerWindow.ui \
@@ -55,7 +57,8 @@ FORMS += \
 	PreferencesDialog.ui \
 	PropertyDialog.ui \
 	PeopleDialog.ui \
-	PeopleEditionDialog.ui
+	PeopleEditionDialog.ui \
+    RulerSpaceDialog.ui
 
 unix {
 	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${JOKER_ROOT}/.doxygen\";
