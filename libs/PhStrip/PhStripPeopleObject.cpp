@@ -8,17 +8,18 @@
 
 
 PhStripPeopleObject::PhStripPeopleObject(PhTime timeIn, PhPeople *people, PhTime timeOut, float y, float height) : PhStripObject(timeIn),
-	_timeOut(timeOut), _people(people), _y(y), _trackHeight(height)
+	_timeOut(timeOut), _people(people), _y(y), _height(height)
 {
-}
-float PhStripPeopleObject::trackHeight() const
-{
-	return _trackHeight;
 }
 
-void PhStripPeopleObject::setTrackHeight(float trackHeight)
+float PhStripPeopleObject::height() const
 {
-	_trackHeight = trackHeight;
+	return _height;
+}
+
+void PhStripPeopleObject::setHeight(float height)
+{
+	_height = height;
 }
 
 

@@ -57,8 +57,8 @@ public:
 		_people = people;
 	}
 	/**
-	 * @brief Set the track
-	 * @param y An float
+	 * @brief Set the y position of the text on the strip
+	 * @param y An float between 0 and 1
 	 */
 	void setY(float y) {
 		_y = y;
@@ -71,15 +71,15 @@ public:
 		_timeOut = timeOut;
 	}
 	/**
-	 * @brief trackHeight
+	 * @brief Height of the text
 	 * @return the fraction of the track corresponding to the height
 	 */
-	float trackHeight() const;
+	float height() const;
 	/**
-	 * @brief setTrackHeight
-	 * @param trackHeight the fraction desired of the track height
+	 * @brief Set the height of the text
+	 * @param height the fraction desired of the track height
 	 */
-	void setTrackHeight(float trackHeight);
+	void setHeight(float height);
 
 private:
 	/**
@@ -98,7 +98,7 @@ private:
 	 */
 	float _y;
 
-	float _trackHeight;
+	float _height;
 };
 
 #endif // PHSTRIPPEOPLEOBJECT_H
