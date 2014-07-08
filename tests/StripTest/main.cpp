@@ -122,7 +122,7 @@ void displayDoc(PhStripDoc* doc)
 		QString name = "???";
 		if(text->people())
 			name = text->people()->name();
-		PHDEBUG << text->track() << "-"
+		PHDEBUG << text->y() << "-"
 		        << name << ":"
 		        << PhTimeCode::stringFromTime(text->timeIn(), doc->timeCodeType())
 		        << " -> "
@@ -134,7 +134,7 @@ void displayDoc(PhStripDoc* doc)
 		QString name = "???";
 		if(text->people())
 			name = text->people()->name();
-		PHDEBUG << text->track() <<"-"
+		PHDEBUG << text->y() <<"-"
 		        << name << ":"
 		        << PhTimeCode::stringFromTime(text->timeIn(), doc->timeCodeType())
 		        << " -> "
@@ -146,7 +146,7 @@ void displayDoc(PhStripDoc* doc)
 		QString name = "???";
 		if(detect->people())
 			name = detect->people()->name();
-		PHDEBUG << detect->track()<< "-"
+		PHDEBUG << detect->y()<< "-"
 		        << name << ":"
 		        << PhTimeCode::stringFromTime(detect->timeIn(), doc->timeCodeType())
 		        << " -> "

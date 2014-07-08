@@ -6,8 +6,8 @@
 
 #include "PhStripDetect.h"
 
-PhStripDetect::PhStripDetect(PhDetectType type, PhTime timeIn, PhPeople *people, PhTime timeOut, int track)
-	: PhStripPeopleObject(timeIn, people, timeOut, track),
+PhStripDetect::PhStripDetect(PhDetectType type, PhTime timeIn, PhPeople *people, PhTime timeOut, float y)
+	: PhStripPeopleObject(timeIn, people, timeOut, y),
 	_type(type)
 {
 
