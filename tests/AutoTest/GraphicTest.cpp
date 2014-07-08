@@ -15,6 +15,8 @@
 
 #include "GraphicTest.h"
 
+#define WAIT_TIME 40
+
 GraphicTest::GraphicTest(QObject *parent) :
 	QObject(parent)
 {
@@ -38,6 +40,7 @@ void GraphicTest::paintTest()
 			});
 
 	view.show();
+	QTest::qWait(WAIT_TIME);
 
 	QVERIFY(paintCalled);
 }
@@ -56,7 +59,10 @@ void GraphicTest::rectTest()
 
 	view.show();
 
-	QImage resultImage(view.grabFrameBuffer());
+	// Note: using view.grabFrameBuffer() causes timing issues.
+	// There is no warranty that the scene has been fully rendered.
+	// Use view.renderPixmap().toImage() instead.
+	QImage resultImage(view.renderPixmap().toImage());
 	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
 	resultImage.save(resultFile);
 	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
@@ -79,9 +85,10 @@ void GraphicTest::imageTest()
 
 	view.show();
 
-	QImage resultImage(view.grabFrameBuffer());
+	QImage resultImage(view.renderPixmap().toImage());
 	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
 	resultImage.save(resultFile);
+
 	// The expected result should be the same than the input (rgbPatternTest.bmp)
 	// but it turns out that image is altered when opened with IMG_Load()
 	// (see PhGraphicImage::init())
@@ -111,7 +118,7 @@ void GraphicTest::rgbPatternTest()
 
 	view.show();
 
-	QImage resultImage(view.grabFrameBuffer());
+	QImage resultImage(view.renderPixmap().toImage());
 	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
 	resultImage.save(resultFile);
 	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());

@@ -36,26 +36,22 @@ void VideoTest::goToTest() {
 	QVERIFY(_videoEngine.open("interlace_%03d.bmp") );
 
 	_view.updateGL();
-	QTest::qWait(WAIT_TIME);
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_000.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_000.bmp"));
 
 	_videoEngine.clock()->setFrame(20);
 
 	_view.updateGL();
-	QTest::qWait(WAIT_TIME);
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_020.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_020.bmp"));
 
 	_videoEngine.clock()->setFrame(100);
 
 	_view.updateGL();
-	QTest::qWait(WAIT_TIME);
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_100.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_100.bmp"));
 
 	_videoEngine.clock()->setFrame(75);
 
 	_view.updateGL();
-	QTest::qWait(WAIT_TIME);
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_075.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_075.bmp"));
 
 	_videoEngine.close();
 }
@@ -64,39 +60,34 @@ void VideoTest::playTest() {
 	QVERIFY(_videoEngine.open("interlace_%03d.bmp") );
 
 	_view.updateGL();
-	QTest::qWait(WAIT_TIME);
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_000.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_000.bmp"));
 
 	_videoEngine.clock()->setRate(1);
 	_videoEngine.clock()->tick(25);
 
 	_view.updateGL();
-	QTest::qWait(WAIT_TIME);
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_001.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_001.bmp"));
 
 
 	// Play 1 second
 	for(int i = 0; i < 25; i++) {
 		_videoEngine.clock()->tick(25);
 		_view.updateGL();
-		QTest::qWait(WAIT_TIME);
 	}
 
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_026.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_026.bmp"));
 
 	_videoEngine.clock()->setRate(-1);
 	_videoEngine.clock()->tick(25);
 	_view.updateGL();
-	QTest::qWait(WAIT_TIME);
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_025.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_025.bmp"));
 
 	// Play 1 second
 	for(int i = 0; i < 25; i++) {
 		_videoEngine.clock()->tick(25);
 		_view.updateGL();
-		QTest::qWait(WAIT_TIME);
 	}
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_000.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_000.bmp"));
 
 	_videoEngine.close();
 }
@@ -105,14 +96,12 @@ void VideoTest::deinterlaceTest() {
 	//Open the video file in interlaced mode
 	_videoEngine.open("interlace_%03d.bmp");
 	_view.updateGL();
-	QTest::qWait(WAIT_TIME);
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_000.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_000.bmp"));
 
 	//Change mode to deinterlaced
 	_videoEngine.setDeinterlace(true);
 	_view.updateGL();
-	QTest::qWait(WAIT_TIME);
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("deinterlace_000.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("deinterlace_000.bmp"));
 
 	//Move one picture forward
 	_videoEngine.clock()->setFrame(1);
@@ -120,7 +109,6 @@ void VideoTest::deinterlaceTest() {
 	//Go back to interlaced mode
 	_videoEngine.setDeinterlace(false);
 	_view.updateGL();
-	QTest::qWait(WAIT_TIME);
-	QVERIFY(QImage(_view.grabFrameBuffer()) == QImage("interlace_001.bmp"));
+	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("interlace_001.bmp"));
 
 }
