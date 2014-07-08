@@ -9,10 +9,10 @@ This depot hosts the Joker projet components:
 * libraries
 * tests
 
-Compilation information :
--------------------------
+Compilation information:
+------------------------
 
-In order to compile the  project you will need to follow the instructions depending on your system :
+In order to compile the  project you will need to follow the instructions depending on your system:
 
 * [Mac OS](#mac)
 * [Linux](#linux) _(coming soon)_
@@ -33,11 +33,11 @@ You need to have [Xcode](https://developer.apple.com/xcode/) installed and the c
 
 ### Homebrew
 
-[Homebrew](http://brew.sh/) is a very powerful package installer. Let's install it :
+[Homebrew](http://brew.sh/) is a very powerful package installer. Let's install it:
 
     ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 
-### The dependencies :
+### The dependencies:
 
 You can install the dependencies automatically or manually:
 
@@ -49,7 +49,7 @@ Just run the *bootstrap* script:
 
 #### Manual install
 
-You can install all the dependencies via __brew__ :
+You can install all the dependencies via __brew__:
 
     brew install sdl2 sdl2_ttf sdl2_image libav portaudio
 
@@ -69,11 +69,11 @@ Extract it:
 
     tar -xvzf libltc-1.1.3.tar.gz
 
-Then configure the environment :
+Then configure the environment:
 
     aclocal; autoheader; glibtoolize –copy; autoconf; automake –gnu –add-missing –copy
 
-And finaly configure and install :
+And finaly configure and install:
 
     ./configure && make && sudo make install
 
@@ -130,3 +130,14 @@ Download *portaudio* precompiled library here: https://github.com/adfernandes/pr
 
 Extract is with [7zip](http://www.7-zip.org/) in the folder of your choice and set the following environment variable:
 * *PORTAUDIO_PATH*
+
+Test files:
+------------
+
+In order to test *Joker* and its subproject, you'll want to work on an example file: http://www.phonations.com/tmwtga
+
+It contains:
+
+* A *DetX* file containing the english transcription
+* A video file
+* An audio file
