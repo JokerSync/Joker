@@ -10,11 +10,8 @@
 #include <QColor>
 #include <SDL2/SDL.h>
 
-#if defined(Q_OS_WIN)
-#include <GL/glu.h>
-#else
-#include <glu.h>
-#endif
+/* QtGui provides OpenGL definitions */
+#include <QtGui>
 
 #include "PhTools/PhDebug.h"
 
