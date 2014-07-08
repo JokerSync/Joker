@@ -91,6 +91,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 	// Update the resource path if needed
 	_backgroundImageLight.setFilename(_settings->backgroundImageLight());
 	_backgroundImageDark.setFilename(_settings->backgroundImageDark());
+	_backgroundImageLight.setRepeat(true);
+	_backgroundImageDark.setRepeat(true);
 
 	_textFont.setFontFile(_settings->textFontFile());
 	_textFont.setBoldness(_settings->textBoldness());

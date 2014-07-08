@@ -100,8 +100,13 @@ void VideoTest::deinterlaceTest() {
 
 	//Change mode to deinterlaced
 	_videoEngine.setDeinterlace(true);
+	//Disable bilinear filtering for the test
+	_videoEngine.setBilinearFiltering(false);
 	_view.updateGL();
 	QVERIFY(QImage(_view.renderPixmap().toImage()) == QImage("deinterlace_000.bmp"));
+
+	//Re-enable bilinear filtering
+	_videoEngine.setBilinearFiltering(true);
 
 	//Move one picture forward
 	_videoEngine.clock()->setFrame(1);

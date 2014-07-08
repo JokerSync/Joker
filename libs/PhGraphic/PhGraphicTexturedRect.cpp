@@ -14,7 +14,9 @@ PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
 	_tu(1.0f),
 	_tv(1.0f),
 	_textureWidth(0),
-	_textureHeight(0)
+	_textureHeight(0),
+	_repeat(false),
+	_bilinearFiltering(true)
 {
 
 }
@@ -89,8 +91,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 	glTexImage2D( GL_TEXTURE_2D, 0, surface->format->BytesPerPixel, surface->w, surface->h, 0,
 	              textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	applyTextureSettings();
 
 	return true;
 }
@@ -113,8 +114,7 @@ bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, i
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
 	              GL_RGBA, GL_UNSIGNED_BYTE, data);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	applyTextureSettings();
 
 	return true;
 }
@@ -155,8 +155,7 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
 	}
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	applyTextureSettings();
 
 	return true;
 }
@@ -179,8 +178,7 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
 	              GL_YCBCR_422_APPLE, GL_UNSIGNED_SHORT_8_8_APPLE, data);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	applyTextureSettings();
 
 	return true;
 }
@@ -218,3 +216,69 @@ void PhGraphicTexturedRect::setTextureCoordinate(float tu, float tv)
 	_tv = tv;
 }
 
+void PhGraphicTexturedRect::setRepeat(bool repeat)
+{
+	_repeat = repeat;
+
+	if (_currentTexture != 0 and _previousTexture != 0) {
+		glBindTexture(GL_TEXTURE_2D, _currentTexture);
+		applyTextureSettings();
+		glBindTexture(GL_TEXTURE_2D, _previousTexture);
+		applyTextureSettings();
+	}
+}
+
+bool PhGraphicTexturedRect::getRepeat()
+{
+	return _repeat;
+}
+
+void PhGraphicTexturedRect::setBilinearFiltering(bool bilinear)
+{
+	_bilinearFiltering = bilinear;
+
+	if (_currentTexture != 0 and _previousTexture != 0) {
+		glBindTexture(GL_TEXTURE_2D, _currentTexture);
+		applyTextureSettings();
+		glBindTexture(GL_TEXTURE_2D, _previousTexture);
+		applyTextureSettings();
+	}
+}
+
+bool PhGraphicTexturedRect::getBilinearFiltering()
+{
+	return _bilinearFiltering;
+}
+
+void PhGraphicTexturedRect::applyTextureSettings()
+{
+	int filterSetting;
+	if (_bilinearFiltering) {
+		// Use bilinear filtering to scale the texture to the window size.
+		// This produces smooth scaled images.
+		filterSetting = GL_LINEAR;
+	}
+	else {
+		// Use nearest-neighbour filtering to scale the texture to
+		// the window size.
+		// This produces scaled images that are 'blocky'.
+		// This is used for the test suite.
+		filterSetting = GL_NEAREST;
+	}
+
+	int wrapSetting;
+	if (_repeat) {
+		// render the texture as a repeating pattern
+		wrapSetting = GL_REPEAT;
+	}
+	else {
+		// Make sure the colors are ok at the edges of the texture,
+		// by setting the wrapping to 'clamp' instead of 'repeat'
+		wrapSetting = GL_CLAMP_TO_EDGE;
+	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterSetting);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterSetting);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapSetting);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapSetting);
+}
