@@ -9,7 +9,8 @@
 
 PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
 	: PhGraphicRect(x, y, w, h),
-	_texture(0),
+	_currentTexture(0),
+	_previousTexture(0),
 	_tu(1.0f),
 	_tv(1.0f),
 	_textureWidth(0),
@@ -22,20 +23,42 @@ PhGraphicTexturedRect::~PhGraphicTexturedRect()
 {
 }
 
+bool PhGraphicTexturedRect::initTextures() {
+	// Have OpenGL generate a texture object handle for us
+	if(_currentTexture == 0) {
+		glGenTextures( 1, &_currentTexture );
+		glGenTextures( 1, &_previousTexture );
+		if(_currentTexture == 0 or _previousTexture == 0) {
+			PHDEBUG << "glGenTextures() errored: is opengl context ready?";
+			return false;
+		}
+	}
+	return true;
+}
+
+/* swap the current and previous textures to achieve double-buffering and avoid waiting
+ * for the OpenGL driver to finish rendering
+ */
+void PhGraphicTexturedRect::swapTextures()
+{
+	GLuint tempTexture;
+
+	tempTexture = _currentTexture;
+	_currentTexture = _previousTexture;
+	_previousTexture = tempTexture;
+}
 
 bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 {
-	glEnable( GL_TEXTURE_2D );
-	// Have OpenGL generate a texture object handle for us
-	glGenTextures( 1, &_texture );
+	swapTextures();
 
-	if(_texture == 0) {
-		PHDEBUG << "glGenTextures() errored: is opengl context ready?";
+	glEnable( GL_TEXTURE_2D );
+	if(!initTextures()) {
 		return false;
 	}
 
 	// Bind the texture object
-	glBindTexture( GL_TEXTURE_2D, _texture );
+	glBindTexture( GL_TEXTURE_2D, _currentTexture );
 
 	GLenum textureFormat = 0;
 
@@ -73,26 +96,16 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 
 bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, int height)
 {
+	swapTextures();
+
 	glEnable( GL_TEXTURE_2D );
 
-	if((width != _textureWidth) || (height != _textureHeight)) {
-		if(_texture != 0)
-			glDeleteTextures(1, &_texture);
-		_textureWidth = width;
-		_textureHeight = height;
-	}
-
-	// Have OpenGL generate a texture object handle for us
-	if(_texture == 0) {
-		glGenTextures( 1, &_texture );
-		if(_texture == 0) {
-			PHDEBUG << "glGenTextures() errored: is opengl context ready?";
-			return false;
-		}
+	if(!initTextures()) {
+		return false;
 	}
 
 	// Bind the texture object
-	glBindTexture( GL_TEXTURE_2D, _texture );
+	glBindTexture( GL_TEXTURE_2D, _currentTexture );
 
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
@@ -107,19 +120,13 @@ bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, i
 
 bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, int height)
 {
+	swapTextures();
+
 	glEnable( GL_TEXTURE_2D );
 
-	// Have OpenGL generate a texture object handle for us
-	if(_texture == 0) {
-		glGenTextures( 1, &_texture );
-		if(_texture == 0) {
-			PHDEBUG << "glGenTextures() errored: is opengl context ready?";
-			return false;
-		}
+	if(!initTextures()) {
+		return false;
 	}
-
-	// Bind the texture object
-	glBindTexture( GL_TEXTURE_2D, _texture );
 
 	if((width != _textureWidth) || (height != _textureHeight)) {
 		_textureWidth = width;
@@ -127,12 +134,23 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 
 		PHDEBUG << QString("%1x%2").arg(width).arg(height);
 
+		// Bind the texture object
+		glBindTexture( GL_TEXTURE_2D, _previousTexture );
+
+		// Edit the texture object's image data using the information SDL_Surface gives us
+		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
+					  GL_RGB, GL_UNSIGNED_BYTE, data);
+
+		// Bind the texture object
+		glBindTexture( GL_TEXTURE_2D, _currentTexture );
+
 		// Edit the texture object's image data using the information SDL_Surface gives us
 		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
 		              GL_RGB, GL_UNSIGNED_BYTE, data);
 	}
 	else {
-		glBindTexture( GL_TEXTURE_2D, _texture );
+		// Bind the texture object
+		glBindTexture( GL_TEXTURE_2D, _currentTexture );
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
 	}
 
@@ -145,16 +163,16 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 
 bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, int height)
 {
+	swapTextures();
+
 	glEnable( GL_TEXTURE_2D );
-	// Have OpenGL generate a texture object handle for us
-	glGenTextures( 1, &_texture );
-	if(_texture == 0) {
-		PHDEBUG << "glGenTextures() errored: is opengl context ready?";
+
+	if(!initTextures()) {
 		return false;
 	}
 
 	// Bind the texture object
-	glBindTexture( GL_TEXTURE_2D, _texture );
+	glBindTexture( GL_TEXTURE_2D, _currentTexture );
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
@@ -171,7 +189,7 @@ void PhGraphicTexturedRect::draw()
 {
 	PhGraphicRect::draw();
 
-	glBindTexture(GL_TEXTURE_2D, _texture);
+	glBindTexture(GL_TEXTURE_2D, _currentTexture);
 
 	glEnable(GL_TEXTURE_2D);
 

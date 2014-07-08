@@ -73,13 +73,33 @@ protected:
 	 */
 	bool createTextureFromSurface(SDL_Surface * surface);
 
+	/**
+	 * @brief initTextures
+	 * initialize the textures objects if then do not exist yet
+	 * @return True if succeed, false otherwise
+	 */
+	bool initTextures();
+
+	/**
+	 * @brief swapTextures
+	 * swap the current and previous textures to achieve double-buffering and avoid waiting
+	 * for the OpenGL driver to finish rendering
+	 */
+	void swapTextures();
+
 private:
 
 	/**
-	 * @brief _texture
+	 * @brief _currentTexture
 	 * The texture address(?)
 	 */
-	GLuint _texture;
+	GLuint _currentTexture;
+
+	/**
+	 * @brief _previousTexture
+	 * The texture address(?)
+	 */
+	GLuint _previousTexture;
 
 	/**
 	 * @brief _tu
