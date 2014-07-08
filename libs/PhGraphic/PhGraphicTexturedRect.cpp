@@ -87,7 +87,7 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, surface->format->BytesPerPixel, surface->w, surface->h, 0,
-				  textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
+	              textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -111,7 +111,7 @@ bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, i
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
-				  GL_RGBA, GL_UNSIGNED_BYTE, data);
+	              GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -140,14 +140,14 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 
 		// Edit the texture object's image data using the information SDL_Surface gives us
 		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
-					  GL_RGB, GL_UNSIGNED_BYTE, data);
+		              GL_RGB, GL_UNSIGNED_BYTE, data);
 
 		// Bind the texture object
 		glBindTexture( GL_TEXTURE_2D, _currentTexture );
 
 		// Edit the texture object's image data using the information SDL_Surface gives us
 		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
-					  GL_RGB, GL_UNSIGNED_BYTE, data);
+		              GL_RGB, GL_UNSIGNED_BYTE, data);
 	}
 	else {
 		// Bind the texture object
@@ -177,7 +177,7 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
-				  GL_YCBCR_422_APPLE, GL_UNSIGNED_SHORT_8_8_APPLE, data);
+	              GL_YCBCR_422_APPLE, GL_UNSIGNED_SHORT_8_8_APPLE, data);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
