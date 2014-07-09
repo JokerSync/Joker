@@ -48,6 +48,15 @@ public:
 	bool createTextureFromARGBBuffer(void *data, int width, int height);
 
 	/**
+	 * @brief Create a texture from a RGBA Buffer
+	 * @param data the source buffer
+	 * @param width the dimensions
+	 * @param height the dimensions
+	 * @return True if succeed, false otherwise
+	 */
+	bool createTextureFromBGRABuffer(void *data, int width, int height);
+
+	/**
 	 * @brief Create a texture from a RGB Buffer
 	 * @param data the source buffer
 	 * @param width the dimensions

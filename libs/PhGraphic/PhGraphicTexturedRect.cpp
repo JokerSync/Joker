@@ -119,6 +119,55 @@ bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, i
 	return true;
 }
 
+bool PhGraphicTexturedRect::createTextureFromBGRABuffer(void *data, int width, int height)
+{
+	swapTextures();
+
+	glEnable( GL_TEXTURE_2D );
+
+	if(!initTextures()) {
+		return false;
+	}
+
+	if((width != _textureWidth) || (height != _textureHeight)) {
+		_textureWidth = width;
+		_textureHeight = height;
+
+		PHDEBUG << QString("%1x%2").arg(width).arg(height);
+
+		// Bind the texture object
+		glBindTexture( GL_TEXTURE_2D, _previousTexture );
+
+		// Edit the texture object's image data using the information SDL_Surface gives us
+		// Note: Store internally in GL_RGBA8, and upload from our buffer which is
+		// GL_BGRA/GL_UNSIGNED_INT_8_8_8_8_REV.
+		// This combination is supposed to be optimal on Windows with both nVidia and AMD,
+		// avoiding all	CPU-based conversion and allowing direct DMA to video card
+		// See: http://www.opengl.org/wiki/Common_Mistakes#Slow_pixel_transfer_performance
+		// Also see: http://www.opengl.org/wiki/Common_Mistakes#Image_precision
+		// It is also optimal for MacOS. See 'Optimal Data Formats and Types' in:
+		// https://developer.apple.com/library/mac/documentation/graphicsimaging/conceptual/opengl-macprogguide/opengl_texturedata/opengl_texturedata.html#//apple_ref/doc/uid/TP40001987-CH407-SW1
+		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+					  GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
+
+		// Bind the texture object
+		glBindTexture( GL_TEXTURE_2D, _currentTexture );
+
+		// Edit the texture object's image data using the information SDL_Surface gives us
+		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+					  GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
+	}
+	else {
+		// Bind the texture object
+		glBindTexture( GL_TEXTURE_2D, _currentTexture );
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
+	}
+
+	applyTextureSettings();
+
+	return true;
+}
+
 bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, int height)
 {
 	swapTextures();
