@@ -109,8 +109,7 @@ bool PhFont::init()
 				if(advance > 0) {
 					// First render the glyph to a surface
 					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, charCode, color);
-					if (glyphSurface)
-					{
+					if (glyphSurface) {
 						SDL_Rect glyphRect;
 						glyphRect.x = (charIndex % 16) * space;
 						glyphRect.y = (charIndex / 16) * space;
@@ -125,15 +124,13 @@ bool PhFont::init()
 						// Store information about the glyph
 						_glyphAdvance[charIndex] = advance;
 					}
-					else
-					{
+					else {
 						_glyphAdvance[charIndex] = 0;
 						PHDEBUG << "Error during the Render Glyph of " << (char) charIndex << SDL_GetError();
 					}
 					SDL_FreeSurface(glyphSurface);
 				}
-				else
-				{
+				else {
 					PHDEBUG <<" Error with Glyph of char:" << charIndex << (char) charIndex << minx << maxx << miny << maxy << advance;
 					_glyphAdvance[charIndex] = 0;
 				}
