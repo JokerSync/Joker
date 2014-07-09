@@ -20,7 +20,8 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_useAudio(false),
 	_audioStream(NULL),
 	_audioFrame(NULL),
-	_deinterlace(false)
+	_deinterlace(false),
+	_bilinearFiltering(true)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
@@ -41,6 +42,14 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 	if(_rgb) {
 		delete _rgb;
 		_rgb = NULL;
+	}
+}
+
+void PhVideoEngine::setBilinearFiltering(bool bilinear)
+{
+	if (_bilinearFiltering != bilinear) {
+		_bilinearFiltering = bilinear;
+		videoRect.setBilinearFiltering(bilinear);
 	}
 }
 
