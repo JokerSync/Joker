@@ -325,19 +325,23 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 							pixFormat = _videoStream->codec->pix_fmt;
 							break;
 						}
-						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-						                                pixFormat, _videoStream->codec->width, frameHeight,
-						                                AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
+						/* Note: we output the frames in AV_PIX_FMT_BGRA rather than AV_PIX_FMT_RGB24,
+						 * because this format is native to most video cards and will avoid a conversion
+						 * in the video driver */
+						_pSwsCtx = sws_getCachedContext(_pSwsCtx,
+														_videoFrame->width, _videoStream->codec->height, pixFormat,
+														_videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
+														SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
-							_rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
-						int linesize = _videoFrame->width * 3;
+							_rgb = new uint8_t[avpicture_get_size(AV_PIX_FMT_BGRA, _videoFrame->width, frameHeight)];
+						int linesize = _videoFrame->width * 4;
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
 						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
 						                   &linesize)) {
 							scaleElapsed = _testTimer.elapsed();
 
-							videoRect.createTextureFromRGBBuffer(_rgb, _videoFrame->width, frameHeight);
+							videoRect.createTextureFromBGRABuffer(_rgb, _videoFrame->width, frameHeight);
 
 							textureElapsed = _testTimer.elapsed();
 
