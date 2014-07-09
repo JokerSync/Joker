@@ -58,32 +58,46 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->cBoxDisplayTitle->setChecked(_oldDisplayTitle);
 	ui->cBoxDisplayLoop->setChecked(_oldDisplayLoop);
 
-	//Set the fonts
-	QStringList userFontList, systemFontList;
-	QString userDirectory = QDir::homePath();
-	// standard font dir as found by Qt
-	QDir systemFont(QStandardPaths::writableLocation(QStandardPaths::FontsLocation));
-	// user font dir on MacOS
-	QDir userFont(userDirectory + "/Library/Fonts/");
-
+	//Setting the filters
 	QStringList filters;
 	filters.append("*.ttf");
 	filters.append("*.TTF");
-	systemFont.setNameFilters(filters);
-	userFont.setNameFilters(filters);
-	userFontList = userFont.entryList();
-	systemFontList = systemFont.entryList();
 
+	// Adding the system font
+	QStringList systemFontList;
+	QDir systemFont(QStandardPaths::writableLocation(QStandardPaths::FontsLocation));
+	systemFont.setNameFilters(filters);
+	systemFontList = systemFont.entryList();
 	foreach(QString fontName, systemFontList)
 	{
 		_fontList[fontName.split(".").first()] = systemFont.filePath(fontName);
 	}
+
+#if defined(Q_OS_MAC)
+	//Set the user fonts
+	QStringList userFontList;
+	QString userDirectory = QDir::homePath();
+	QDir userFont(userDirectory + "/Library/Fonts/");
+	userFont.setNameFilters(filters);
+	userFontList = userFont.entryList();
 	foreach(QString fontName, userFontList)
 	{
 		_fontList[fontName.split(".").first()] = userFont.filePath(fontName);
 	}
-	_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
 
+	//Set the mac fonts
+	QStringList macOSFontList;
+	QDir macOSFont("/Library/Fonts/");
+	macOSFont.setNameFilters(filters);
+	macOSFontList = macOSFont.entryList();
+	foreach(QString fontName, macOSFontList)
+	{
+		_fontList[fontName.split(".").first()] = macOSFont.filePath(fontName);
+	}
+#endif
+
+	// Adding the default font
+	_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
 
 	// _oldFont is : /Path/To/Font.ttf
 	// So split with "/" then take last gives Font.ttf
