@@ -73,11 +73,12 @@ protected:
 	 * @param inputBuffer The input data buffer
 	 * @param outputBuffer The output data buffer
 	 * @param framesPerBuffer The number of frame in the buffer
+	 * @param statusFlags Flags indicating underflow or overflow conditions
 	 * @param userData A pointer to the PhAudio device
 	 * @return A PaStreamCallbackResult value
 	 */
 	static int audioCallback(const void *inputBuffer, void *outputBuffer,
-	                         unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags,
+	                         unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags statusFlags,
 	                         void *userData );
 
 private:

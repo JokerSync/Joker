@@ -24,7 +24,7 @@ PhClock *PhLtcReader::clock()
 
 int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer)
 {
-	ltc_decoder_write(_decoder, (ltcsnd_sample_t*)inputBuffer, framesPerBuffer, _position);
+	ltc_decoder_write_s16(_decoder, (short*)inputBuffer, framesPerBuffer, _position);
 	LTCFrameExt frame;
 	unsigned int hhmmssff[4];
 	SMPTETimecode stime;
