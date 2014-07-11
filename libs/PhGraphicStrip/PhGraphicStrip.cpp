@@ -306,16 +306,22 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gPeople.draw();
 			}
 
+			int howFarIsText = (text->timeIn() - clockTime) / verticalTimePerPixel;
 			PhTime timePerPeopleHeight = gPeople.height() * verticalTimePerPixel;
+			int y0 = y - howFarIsText - gPeople.height();
 
-			if(displayNextText && (timeIn < text->timeIn() + timePerPeopleHeight) && ((lastText == NULL) || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
+			if(displayNextText
+			   && y0 < y
+			   && y0 > tcOffset
+			   && (timeIn < text->timeIn() + timePerPeopleHeight)
+			   && ((lastText == NULL)
+			       || (lastText->people() != text->people())
+			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
 				PhPeople * people = text->people();
 
-				int howFarIsText = (text->timeIn() - clockTime) / verticalTimePerPixel;
 				//This line is used to see which text's name will be displayed
 				gPeople.setX(width - gPeople.width());
-				gPeople.setY(y - howFarIsText - gPeople.height());
-
+				gPeople.setY(y0);
 				gPeople.setZ(-3);
 				gPeople.setHeight(text->height() * height / 2);
 
@@ -329,12 +335,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 				background.setZ(gPeople.z() - 1);
 
-				if(gPeople.y() > tcOffset) {
-					if(!invertedColor)
-						background.draw();
+				if(!invertedColor)
+					background.draw();
 
-					gPeople.draw();
-				}
+				gPeople.draw();
 			}
 
 			lastTextList[text->y()] = text;
