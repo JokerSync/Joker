@@ -281,22 +281,25 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			QString name = people ? people->name() : "???";
 			PhGraphicText gPeople(&_hudFont, name);
 			gPeople.setWidth(name.length() * 12);
+			gPeople.setHeight(text->height() * height / 2);
+			int x0 = x + (text->timeIn() - timeBetweenPeopleAndText) / timePerPixel - offset - gPeople.width();
 
 			PhStripText * lastText = lastTextList[text->y()];
 			// Display the people name only if one of the following condition is true:
 			// - it is the first text
 			// - it is a different people
 			// - the distance between the latest text and the current is superior to a limit
-			if((
-			       (lastText == NULL)
-			       || (lastText->people() != text->people())
-			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
-			   ) {
+			if( x0 < width
+			    && x0 + gPeople.width() > 0
+			    && (
+			        (lastText == NULL)
+			        || (lastText->people() != text->people())
+			        || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
+			    ) {
 
-				gPeople.setX(x + (text->timeIn() - timeBetweenPeopleAndText) / timePerPixel - offset - gPeople.width());
+				gPeople.setX(x0);
 				gPeople.setY(y + text->y() * height);
 				gPeople.setZ(-1);
-				gPeople.setHeight(text->height() * height / 2);
 
 				gPeople.setColor(computeColor(people, selectedPeoples, invertedColor));
 
