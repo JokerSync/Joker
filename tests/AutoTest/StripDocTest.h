@@ -40,6 +40,7 @@ private slots:
 
 	// Import Syn6 tests
 	void importSyn6Test01();
+	void importSyn6Test02();
 
 	// Open any doc (*.detx, *.strip, *.joker) test
 	void openStripFileTest();

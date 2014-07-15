@@ -452,11 +452,50 @@ void StripDocTest::importSyn6Test01()
 	QCOMPARE(doc.texts().count(), 1);
 	QCOMPARE(doc.texts()[0]->people()->name(), QString("Personnage 1"));
 
-	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.25f), PHNQ(QString::number(doc.texts()[0]->y())));
-	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.25f), PHNQ(QString::number(doc.texts()[0]->height())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.36f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[0]->height())));
 
-	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("00:00:03:13"));
-	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("00:00:06:02"));
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("00:00:03:11"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("00:00:06:14"));
+}
+
+void StripDocTest::importSyn6Test02()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.openStripFile("test02.syn6"));
+
+#warning /// @todo read video file
+	QCOMPARE(doc.videoFilePath(), QString("C:\\Users\\Matthhou\\Desktop\\The Crazy Ones\\The Crazy Ones 121\\The_Crazy_Ones_1AXB21_VOVI.mov"));
+	QCOMPARE(t2s(doc.videoTimeIn(), doc.timeCodeType()), QString("00:58:24:00"));
+
+#warning /// @todo read loop
+//	QCOMPARE(doc.loops().count(), 1);
+
+//	QCOMPARE(doc.loops().at(0)->number(), 1);
+
+//	QCOMPARE(t2s(doc.loops()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:00"));
+
+	QCOMPARE(doc.peoples().count(), 2);
+
+	QCOMPARE(doc.peoples()[0]->name(), QString("Pierre"));
+	QCOMPARE(doc.peoples()[1]->name(), QString("Marie"));
+
+	QCOMPARE(doc.texts().count(), 2);
+
+	QCOMPARE(doc.texts()[0]->people()->name(), QString("Pierre"));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.066666667f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[0]->height())));
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:01:00"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("01:00:03:00"));
+
+	QCOMPARE(doc.texts()[1]->people()->name(), QString("Marie"));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->y(), 0.7f), PHNQ(QString::number(doc.texts()[1]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[1]->height())));
+	QCOMPARE(t2s(doc.texts()[1]->timeIn(), doc.timeCodeType()), QString("01:00:04:00"));
+	QCOMPARE(t2s(doc.texts()[1]->timeOut(), doc.timeCodeType()), QString("01:00:06:00"));
+
+#warning /// @todo test cut
 }
 
 void StripDocTest::openStripFileTest()

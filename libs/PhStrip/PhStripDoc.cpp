@@ -922,15 +922,34 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 	}
 	PHDEBUG << "database opened: " << db.tables().count() << "tables.";
 
-	foreach(QString tableName, db.tables()) {
-		PHDEBUG << tableName;
-	}
+//	foreach(QString tableName, db.tables()) {
+//		PHDEBUG << tableName;
+//	}
 
 	QSqlQuery query(db);
 
+	PhTime offset = 0;
+
+	if(query.exec("SELECT * FROM PREFERENCE;")) {
+		PHDEBUG << "PREFERENCE:";
+		while(query.next()) {
+//			for(int i = 0; i < 7; i++)
+//				PHDEBUG << i << query.value(i);
+			switch(query.value(0).toInt()) {
+			case 6:
+				offset = query.value(3).toLongLong();
+				_videoTimeIn = ComputeDrbTime1(offset, 0);
+				break;
+			case 11:
+				_videoPath = query.value(2).toString().replace("\\\\", "\\");
+				break;
+			}
+		}
+	}
+
 	QMap<int, PhPeople*> peopleMap;
 	if(query.exec("SELECT * FROM PERSONNAGE;")) {
-		PHDEBUG << "query ok" << query.executedQuery();
+		PHDEBUG << "PERSONNAGE:";
 
 		while(query.next()) {
 			int id = query.value(0).toInt();
@@ -946,23 +965,25 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 	_peoples.append(people);
 
 	if(query.exec("SELECT * FROM TEXTE;")) {
+		PHDEBUG << "TEXTE:";
 		while(query.next()) {
-			//			for(int i = 0; i < 8; i++)
-			//				PHDEBUG << i << query.value(i);
+//			for(int i = 0; i < 21; i++)
+//				PHDEBUG << i << query.value(i);
 #warning /// @todo check text people id
 			PhPeople* people = peopleMap[query.value(0).toInt()];
 #warning /// @todo check text time in/out
-			int timeIn = query.value(3).toInt() * 100;
-			int timeOut = query.value(4).toInt() * 100;
-			int y1 = query.value(5).toInt();
+			PhTime timeIn = ComputeDrbTime2(offset, query.value(3).toLongLong());
+			PhTime timeOut = ComputeDrbTime2(offset, query.value(4).toLongLong());
+			int y1 = query.value(6).toInt();
 #warning /// @todo make sure y2 is at the index 6
-			int y2 = query.value(6).toInt();
+			int y2 = query.value(5).toInt();
 #warning /// @todo make sure 150 is the maximum Y value:
 			float y = y1 / 150.0f;
 			float height = (y2 - y1) / 150.0f;
 			QString content = query.value(7).toString();
 			PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
 			_texts1.append(text);
+			PHDEBUG << timeIn << timeOut << content;
 		}
 	}
 
