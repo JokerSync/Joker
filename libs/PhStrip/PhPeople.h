@@ -45,6 +45,7 @@ public:
 	 */
 	void setColor(QString color);
 
+
 private:
 	/**
 	 * Name of the people

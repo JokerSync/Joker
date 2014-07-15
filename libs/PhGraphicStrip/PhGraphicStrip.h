@@ -155,7 +155,6 @@ private:
 	 */
 	QTime _testTimer;
 
-	int _trackNumber;
 	int _maxDrawElapsed;
 
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);

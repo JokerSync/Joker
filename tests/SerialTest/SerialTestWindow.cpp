@@ -131,5 +131,5 @@ void SerialTestWindow::checkCTS()
 	}
 
 	_timerCounter.tick();
-	PHDEBUG << _timerCounter.frequency() << frequency;
+	PHDEBUG << _timerCounter.frequency() << frequency << cts;
 }

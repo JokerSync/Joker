@@ -1,4 +1,6 @@
-
+win32 {
+	QMAKE_POST_LINK += $$(QTDIR)/bin/windeployqt $${RESOURCES_PATH} $${CS}
+}
 
 CONFIG(release, debug|release) {
 	mac {
@@ -23,7 +25,7 @@ CONFIG(release, debug|release) {
 	win32 {
 		QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/JokerSetup.iss) . $${CS}
 		QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/LICENSE.TXT) . $${CS}
-		QMAKE_POST_LINK += iscc JokerSetup.iss
+		QMAKE_POST_LINK += iscc JokerSetup.iss $${CS}
 	}
 }
 

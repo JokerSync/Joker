@@ -18,8 +18,11 @@ bool PhAudioInput::init(QString deviceName)
 	streamParameters.device = Pa_GetDefaultInputDevice();
 	const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(streamParameters.device);
 	streamParameters.channelCount = 1;
-	streamParameters.sampleFormat = paUInt8;
-	streamParameters.suggestedLatency = 0;
+	streamParameters.sampleFormat = paInt16; //paUInt8 does not work on Windows (samples all zero)
+	//24 fps => 41.6 ms per frame => we ask for 20 ms latency
+	//20 ms @ 48000 Hz => 960 samples => we will work on buffers of 512 samples
+	//Note: zero latency does not work on Windows (overflows permanently)
+	streamParameters.suggestedLatency = 0.020;
 	streamParameters.hostApiSpecificStreamInfo = NULL;
 
 	bool isThereInput = false;
@@ -29,7 +32,7 @@ bool PhAudioInput::init(QString deviceName)
 		deviceInfo = Pa_GetDeviceInfo( i );
 		if(deviceInfo->maxInputChannels > 0 ) {
 			isThereInput = true;
-			if(deviceName == deviceInfo->name) {
+			if(deviceName == QString::fromLatin1(deviceInfo->name)) {
 				deviceFound = true;
 				streamParameters.device = i;
 				deviceInfo = Pa_GetDeviceInfo(i);
@@ -49,7 +52,7 @@ bool PhAudioInput::init(QString deviceName)
 	PHDBG(0) << "Opening " << deviceInfo->name;
 
 #warning /// @todo use the settings for sample rate and frame per buffer
-	PaError err = Pa_OpenStream(&_stream, &streamParameters, NULL, 48000, 256, paNoFlag, audioCallback, this);
+	PaError err = Pa_OpenStream(&_stream, &streamParameters, NULL, 48000, 512, paNoFlag, audioCallback, this);
 	if(err != paNoError) {
 		PHDBG(0) << "Error while opening the stream : " << Pa_GetErrorText(err);
 		return false;
@@ -88,7 +91,7 @@ QList<QString> PhAudioInput::inputList()
 
 int PhAudioInput::processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer)
 {
-	const char *buffer = (const char*)inputBuffer;
+	const short *buffer = (short*) inputBuffer;
 
 	int minLevel = 0;
 	int maxLevel = 0;

@@ -3,8 +3,6 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT += testlib
-
 CONFIG += c++11
 
 # Define the preprocessor macro to get the application version in our application.
@@ -22,7 +20,8 @@ HEADERS += \
     ../../libs/PhTools/PhTickCounter.h \
     ../../libs/PhTools/PhPictureTools.h \
     ../../libs/PhTools/PhFileTool.h \
-	../../libs/PhTools/PhGenericSettings.h
+	../../libs/PhTools/PhGenericSettings.h \
+    ../../libs/PhTools/PhTestTools.h
 
 SOURCES += \
     ../../libs/PhTools/PhTimeCode.cpp \
@@ -31,7 +30,8 @@ SOURCES += \
     ../../libs/PhTools/PhTickCounter.cpp \
     ../../libs/PhTools/PhPictureTools.cpp \
     ../../libs/PhTools/PhFileTool.cpp \
-	../../libs/PhTools/PhGenericSettings.cpp
+	../../libs/PhTools/PhGenericSettings.cpp \
+    ../../libs/PhTools/PhTestTools.cpp
 
 # Windows specific
 win32 {

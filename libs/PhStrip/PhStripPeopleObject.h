@@ -24,9 +24,10 @@ public:
 	 * @param timeIn the beggining of the PhStripPeopleObject
 	 * @param people the corresponding PhPeople
 	 * @param timeOut the end of the PhStripPeopleObject
-	 * @param track the track of the PhStripPeopleObject
+	 * @param y the track of the PhStripPeopleObject
+	 * @param height the track height
 	 */
-	PhStripPeopleObject(PhTime timeIn, PhPeople * people = NULL, PhTime timeOut = 0, int track = 0);
+	PhStripPeopleObject(PhTime timeIn, PhPeople * people = NULL, PhTime timeOut = 0, float y = 0, float height = 0.25f);
 	/**
 	 * @brief Get the PhPeople
 	 * @return _people the corresponding PhPeople
@@ -36,10 +37,10 @@ public:
 	}
 	/**
 	 * @brief The object track
-	 * @return _track An integer
+	 * @return _y An integer
 	 */
-	int track() {
-		return _track;
+	float y() {
+		return _y;
 	}
 	/**
 	 * @brief The time out
@@ -56,11 +57,11 @@ public:
 		_people = people;
 	}
 	/**
-	 * @brief Set the track
-	 * @param track An integer
+	 * @brief Set the y position of the text on the strip
+	 * @param y An float between 0 and 1
 	 */
-	void setTrack(int track) {
-		_track = track;
+	void setY(float y) {
+		_y = y;
 	}
 	/**
 	 * @brief Set the time out
@@ -69,11 +70,21 @@ public:
 	void setTimeOut(PhTime timeOut) {
 		_timeOut = timeOut;
 	}
+	/**
+	 * @brief Height of the text
+	 * @return the fraction of the track corresponding to the height
+	 */
+	float height() const;
+	/**
+	 * @brief Set the height of the text
+	 * @param height the fraction desired of the track height
+	 */
+	void setHeight(float height);
 
 private:
-/**
- * Indicate the end of the PhText. The text content is stretch between timeIn and timeOut
- */
+	/**
+	 * Indicate the end of the PhText. The text content is stretch between timeIn and timeOut
+	 */
 	PhTime _timeOut;
 
 	/**
@@ -85,7 +96,9 @@ private:
 	 * @brief _track
 	 * Track of the text, 0 is on top of the strip
 	 */
-	int _track;
+	float _y;
+
+	float _height;
 };
 
 #endif // PHSTRIPPEOPLEOBJECT_H

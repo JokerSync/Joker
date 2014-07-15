@@ -149,6 +149,21 @@ public:
 	void setDeinterlace(bool deinterlace);
 
 	/**
+	 * @brief Retrieve the video filtering
+	 * @return True if bilinear filtering is enabled
+	 */
+	bool getBilinearFiltering() {
+		return _bilinearFiltering;
+	}
+
+	/**
+	 * @brief Enable or disable the video bilinear filtering
+	 * Video bilinear filtering is enabled by default.
+	 * @param bilinear True to enable bilinear filtering
+	 */
+	void setBilinearFiltering(bool bilinear);
+
+	/**
 	 * @brief draw the video depending on the parameters
 	 * @param x coordinates of the upperleft corner
 	 * @param y coordinates of the upperleft corner
@@ -183,6 +198,7 @@ private:
 	AVFrame * _audioFrame;
 
 	bool _deinterlace;
+	bool _bilinearFiltering;
 };
 
 #endif // PHVIDEOENGINE_H

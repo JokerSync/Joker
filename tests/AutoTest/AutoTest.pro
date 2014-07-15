@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core testlib
 
 TARGET = AutoTest
 CONFIG   += console static debug

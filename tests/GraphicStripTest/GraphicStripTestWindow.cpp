@@ -74,7 +74,7 @@ QAction *GraphicStripTestWindow::fullScreenAction()
 
 void GraphicStripTestWindow::onOpenFile()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.strip *.detx)");
+	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.joker *.detx)");
 	if(QFile::exists(fileName)) {
 		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
@@ -93,11 +93,11 @@ void GraphicStripTestWindow::onGenerate()
 			_doc->addPeople(new PhPeople("A people"));
 			_doc->addPeople(new PhPeople("A second people", "red"));
 
-			_doc->addObject(new PhStripText(0, _doc->peoples().first(), 10000, 1, "Hello"));
+			_doc->addObject(new PhStripText(0, _doc->peoples().first(), 10000, 1, "Hello", 0.25f));
 			_doc->addObject(new PhStripCut(PhStripCut::CrossFade, 5400));
 			_doc->addObject(new PhStripDetect(PhStripDetect::Off, 0, _doc->peoples().first(), 10000, 1));
 			_doc->addObject(new PhStripLoop(3, 22000));
-			_doc->addObject(new PhStripText(10000, _doc->peoples().last(), 15000, 2, "Hi !"));
+			_doc->addObject(new PhStripText(10000, _doc->peoples().last(), 15000, 2, "Hi !", 0.25f));
 			_doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, _doc->peoples().last(), 15000, 2));
 		}
 		else {

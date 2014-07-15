@@ -29,8 +29,9 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 	_image.setPosition(50, 0, 1);
 
 	PHDEBUG << "Initialize _font";
-	_font1.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF");
-	_font2.setFontFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/HelveticaCYPlain.ttf");
+
+	_font1.setFontFile(_settings->font1File());
+	_font2.setFontFile(_settings->font2File());
 
 	PHDEBUG << "Initialize _rect";
 	_rect.setRect(100, 100, 75, 40);
@@ -108,6 +109,7 @@ void GraphicTestWindow::onPaint(int width, int height)
 		text1.draw();
 	}
 
+	_font1.setFontFile(_settings->font1File());
 	_font1.select();
 
 	glEnable(GL_TEXTURE_2D);
@@ -183,6 +185,9 @@ void GraphicTestWindow::onPaint(int width, int height)
 
 	_yuvRect.draw();
 	_rgbRect.draw();
+
+	_font2.setFontFile(_settings->font2File());
+	_font2.select();
 
 	PhGraphicText text2(&_font2, "eéaàiîoô");
 	int textWidth = 500;
