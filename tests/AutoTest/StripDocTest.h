@@ -36,6 +36,7 @@ private slots:
 	// Import DRB tests
 	void importDrbTest01();
 	void importDrbTest02();
+	void importDrbTest03();
 
 	// Import Syn6 tests
 	void importSyn6Test01();

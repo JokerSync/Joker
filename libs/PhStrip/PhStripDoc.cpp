@@ -735,6 +735,16 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	return true;
 }
 
+PhTime PhStripDoc::ComputeDrbTime1(PhTime offset, PhTime value)
+{
+	return (offset + value) * PhTimeCode::timePerFrame(this->timeCodeType()) / 400000;
+}
+
+PhTime PhStripDoc::ComputeDrbTime2(PhTime offset, PhTime value)
+{
+	return (offset + (value - 150)* 50000) * PhTimeCode::timePerFrame(this->timeCodeType()) / 400000;
+}
+
 bool PhStripDoc::importDrbFile(const QString &fileName)
 {
 	PHDEBUG << fileName;
@@ -742,14 +752,25 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 
 	reset();
 
+	PhTime offset = 0;
+
 	if(file.open(QIODevice::ReadOnly)) {
 		QTextStream ts(&file);
-		ts.setCodec("UTF-16");
+		// Detect text codec
+		if(file.peek(2).at(1) == 0)
+			ts.setCodec("UTF-16");
 
 		while(!ts.atEnd()) {
 			QString line = ts.readLine();
-			if(line.startsWith("CV:"))
+			if(line.startsWith("CV:")) {
 				_videoPath = line.remove("CV:");
+				PHDEBUG << "videoPath:" << _videoPath;
+			}
+			else if(line.startsWith("O:")) {
+				offset = line.remove("O:").toLongLong();
+				_videoTimeIn = ComputeDrbTime1(offset, 0);
+				PHDEBUG << "videoTimeIn:" << _videoTimeIn << line;
+			}
 		}
 	}
 	else {
@@ -759,10 +780,37 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 
 	QString dirName = fileName;
 	dirName.remove(".drb", Qt::CaseInsensitive);
+
+	QFile loopFile(dirName + "/boucle.xml");
+	if(!loopFile.open(QIODevice::ReadOnly)) {
+		PHDEBUG << "Unable to open boucle.xml";
+		return false;
+	}
+
+	QDomDocument loopDoc;
+	if(!loopDoc.setContent(&loopFile)) {
+		loopFile.close();
+		PHDEBUG << "Unable to parse boucle.xml";
+		return false;
+	}
+
+	int loopNumber = 1;
+	QDomNodeList loopList = loopDoc.elementsByTagName("Row");
+	for (int i = 0; i < loopList.length(); i++) {
+		QDomElement loopElement = loopList.at(i).toElement();
+		QString type = loopElement.elementsByTagName("Type").at(0).toElement().text();
+		PhTime timeIn = ComputeDrbTime1(offset, loopElement.elementsByTagName("Debut").at(0).toElement().text().toLongLong());
+		if(type == "BOUCLE") {
+			_loops.append(new PhStripLoop(loopNumber++, timeIn));
+		}
+	}
+
+	loopFile.close();
+
 	// Opening the XML file
 	QFile peopleFile(dirName + "/intervenant.xml");
 	if(!peopleFile.open(QIODevice::ReadOnly)) {
-		PHDEBUG << "Unable to open" << fileName;
+		PHDEBUG << "Unable to open intervenant.xml";
 		return false;
 	}
 
@@ -770,7 +818,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 	QDomDocument peopleDoc;
 	if (!peopleDoc.setContent(&peopleFile)) {
 		peopleFile.close();
-		PHDEBUG << "The XML document seems to be bad formed " << fileName;
+		PHDEBUG << "The XML document seems to be bad formed intervenant.xml";
 		return false;
 	}
 
@@ -823,13 +871,13 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 					QDomElement textElement = textList.at(i).toElement();
 					int peopleId = textElement.elementsByTagName("ID_INTER").at(0).toElement().text().toInt();
 					PhPeople *people = peopleMap[peopleId];
-					PhTime timeIn = textElement.elementsByTagName("X1").at(0).toElement().text().toInt() * 3;
-					PhTime timeOut = textElement.elementsByTagName("X2").at(0).toElement().text().toInt() * 3;
+					PhTime timeIn = ComputeDrbTime2(offset, textElement.elementsByTagName("X1").at(0).toElement().text().toLongLong());
+					PhTime timeOut = ComputeDrbTime2(offset, textElement.elementsByTagName("X2").at(0).toElement().text().toLongLong());
 					int track = textElement.elementsByTagName("Y1").at(0).toElement().text().toInt() / 50;
 					QString content = textElement.elementsByTagName("VALUE").at(0).toElement().text();
 
+					PHDEBUG << PhTimeCode::stringFromTime(timeIn, _tcType) << PhTimeCode::stringFromTime(timeOut, _tcType) << content;
 					PhStripText *text = new PhStripText(timeIn, people, timeOut, track, content);
-					PHDEBUG << peopleId << people << content;
 					_texts1.append(text);
 				}
 			}

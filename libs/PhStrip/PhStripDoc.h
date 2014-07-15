@@ -460,6 +460,9 @@ private:
 	 */
 	QList<PhStripDetect *> _detects;
 
+	PhTime ComputeDrbTime1(PhTime offset, PhTime value);
+	PhTime ComputeDrbTime2(PhTime offset, PhTime value);
+
 	enum MosTag {
 		MosUnknown,
 		MosDub,
