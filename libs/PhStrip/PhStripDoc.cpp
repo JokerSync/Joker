@@ -850,6 +850,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 	_peoples.append(people);
 
 	QDir dir(dirName);
+
 	foreach(QString name, dir.entryList(QStringList("*.dat"))) {
 		QString subFileName = dir.filePath(name);
 		QFile f(subFileName);
@@ -883,11 +884,16 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 					PhPeople *people = peopleMap[peopleId];
 					PhTime timeIn = ComputeDrbTime2(offset, textElement.elementsByTagName("X1").at(0).toElement().text().toLongLong());
 					PhTime timeOut = ComputeDrbTime2(offset, textElement.elementsByTagName("X2").at(0).toElement().text().toLongLong());
-					int track = textElement.elementsByTagName("Y1").at(0).toElement().text().toInt() / 50;
+					int y1 = textElement.elementsByTagName("Y1").at(0).toElement().text().toInt();
+					int y2 = textElement.elementsByTagName("Y2").at(0).toElement().text().toInt();
+#warning /// @todo make sure 150 is the maximum Y value:
+					float y = y1 / 150.0f;
+					float height = (y2 - y1) / 150.0f;
+
 					QString content = textElement.elementsByTagName("VALUE").at(0).toElement().text();
 
 					PHDEBUG << PhTimeCode::stringFromTime(timeIn, _tcType) << PhTimeCode::stringFromTime(timeOut, _tcType) << content;
-					PhStripText *text = new PhStripText(timeIn, people, timeOut, track, content);
+					PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
 					_texts1.append(text);
 				}
 			}
@@ -901,7 +907,6 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 			result = false;
 		}
 	}
-
 
 	return result;
 }
@@ -949,10 +954,14 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 #warning /// @todo check text time in/out
 			int timeIn = query.value(3).toInt() * 100;
 			int timeOut = query.value(4).toInt() * 100;
-#warning /// @todo check text track
-			int track = query.value(5).toInt() / 50;
+			int y1 = query.value(5).toInt();
+#warning /// @todo make sure y2 is at the index 6
+			int y2 = query.value(6).toInt();
+#warning /// @todo make sure 150 is the maximum Y value:
+			float y = y1 / 150.0f;
+			float height = (y2 - y1) / 150.0f;
 			QString content = query.value(7).toString();
-			PhStripText *text = new PhStripText(timeIn, people, timeOut, track, content);
+			PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
 			_texts1.append(text);
 		}
 	}

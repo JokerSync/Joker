@@ -361,7 +361,10 @@ void StripDocTest::importDrbTest01()
 
 	QCOMPARE(doc.texts().count(), 1);
 	QCOMPARE(doc.texts()[0]->people()->name(), QString("Personnage 2"));
-	QCOMPARE(doc.texts()[0]->track(), 1);
+
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.36f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[0]->height())));
+
 #warning /// @todo should be the same than syn6
 	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("00:02:12:10"));
 	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("00:02:44:07"));
@@ -393,7 +396,8 @@ void StripDocTest::importDrbTest02()
 
 	QCOMPARE(doc.texts().count(), 546);
 	QCOMPARE(doc.texts()[0]->people()->name(), QString("ned"));
-	QCOMPARE(doc.texts()[0]->track(), 0);
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.213333338f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.28666667f), PHNQ(QString::number(doc.texts()[0]->height())));
 	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:13"));
 	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("01:00:01:05"));
 }
@@ -421,14 +425,14 @@ void StripDocTest::importDrbTest03()
 	QCOMPARE(doc.texts().count(), 2);
 
 	QCOMPARE(doc.texts()[0]->people()->name(), QString("Pierre"));
-#warning /// @todo check y and height
-	QCOMPARE(doc.texts()[0]->track(), 0);
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.066666667f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[0]->height())));
 	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:01:00"));
 	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("01:00:03:00"));
 
 	QCOMPARE(doc.texts()[1]->people()->name(), QString("Marie"));
-#warning /// @todo check y and height
-	QCOMPARE(doc.texts()[1]->track(), 2);
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->y(), 0.7f), PHNQ(QString::number(doc.texts()[1]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[1]->height())));
 	QCOMPARE(t2s(doc.texts()[1]->timeIn(), doc.timeCodeType()), QString("01:00:04:00"));
 	QCOMPARE(t2s(doc.texts()[1]->timeOut(), doc.timeCodeType()), QString("01:00:06:00"));
 
@@ -447,7 +451,10 @@ void StripDocTest::importSyn6Test01()
 
 	QCOMPARE(doc.texts().count(), 1);
 	QCOMPARE(doc.texts()[0]->people()->name(), QString("Personnage 1"));
-	QCOMPARE(doc.texts()[0]->track(), 1);
+
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.25f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.25f), PHNQ(QString::number(doc.texts()[0]->height())));
+
 	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("00:00:03:13"));
 	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("00:00:06:02"));
 }
