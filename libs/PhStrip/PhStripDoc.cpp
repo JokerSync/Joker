@@ -813,6 +813,9 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 		if(type == "BOUCLE") {
 			_loops.append(new PhStripLoop(loopNumber++, timeIn));
 		}
+		else if (type == "PLAN") {
+			_cuts.append(new PhStripCut(PhStripCut::PhCutType::Simple, timeIn));
+		}
 	}
 
 	loopFile.close();
