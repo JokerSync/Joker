@@ -11,7 +11,7 @@
 
 void StripDocTest::initTestCase()
 {
-	PhDebug::disable();
+	PhDebug::enable();
 }
 
 void StripDocTest::importDetXHeaderTest()
@@ -436,8 +436,6 @@ void StripDocTest::importDrbTest03()
 	QCOMPARE(t2s(doc.texts()[1]->timeIn(), doc.timeCodeType()), QString("01:00:04:00"));
 	QCOMPARE(t2s(doc.texts()[1]->timeOut(), doc.timeCodeType()), QString("01:00:06:00"));
 
-#warning /// @todo test cut
-
 	QCOMPARE(doc.cuts().count(), 1);
 	QCOMPARE(t2s(doc.cuts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
 }
@@ -468,16 +466,14 @@ void StripDocTest::importSyn6Test02()
 
 	QVERIFY(doc.openStripFile("test02.syn6"));
 
-#warning /// @todo read video file
 	QCOMPARE(doc.videoFilePath(), QString("C:\\Users\\Matthhou\\Desktop\\The Crazy Ones\\The Crazy Ones 121\\The_Crazy_Ones_1AXB21_VOVI.mov"));
 	QCOMPARE(t2s(doc.videoTimeIn(), doc.timeCodeType()), QString("00:58:24:00"));
 
-#warning /// @todo read loop
-//	QCOMPARE(doc.loops().count(), 1);
+	QCOMPARE(doc.loops().count(), 1);
 
-//	QCOMPARE(doc.loops().at(0)->number(), 1);
+	QCOMPARE(doc.loops().at(0)->number(), 1);
 
-//	QCOMPARE(t2s(doc.loops()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:00"));
+	QCOMPARE(t2s(doc.loops()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:00"));
 
 	QCOMPARE(doc.peoples().count(), 2);
 
@@ -499,6 +495,8 @@ void StripDocTest::importSyn6Test02()
 	QCOMPARE(t2s(doc.texts()[1]->timeOut(), doc.timeCodeType()), QString("01:00:06:00"));
 
 #warning /// @todo test cut
+//	QCOMPARE(doc.cuts().count(), 1);
+//	QCOMPARE(t2s(doc.cuts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
 }
 
 void StripDocTest::openStripFileTest()

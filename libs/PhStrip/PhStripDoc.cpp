@@ -752,7 +752,7 @@ PhTime PhStripDoc::ComputeDrbTime1(PhTime offset, PhTime value)
 
 PhTime PhStripDoc::ComputeDrbTime2(PhTime offset, PhTime value)
 {
-	return (offset + (value - 150)* 50000) * PhTimeCode::timePerFrame(this->timeCodeType()) / 400000;
+	return (offset + value * 50000) * PhTimeCode::timePerFrame(this->timeCodeType()) / 400000;
 }
 
 bool PhStripDoc::importDrbFile(const QString &fileName)
@@ -885,8 +885,8 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 					QDomElement textElement = textList.at(i).toElement();
 					int peopleId = textElement.elementsByTagName("ID_INTER").at(0).toElement().text().toInt();
 					PhPeople *people = peopleMap[peopleId];
-					PhTime timeIn = ComputeDrbTime2(offset, textElement.elementsByTagName("X1").at(0).toElement().text().toLongLong());
-					PhTime timeOut = ComputeDrbTime2(offset, textElement.elementsByTagName("X2").at(0).toElement().text().toLongLong());
+					PhTime timeIn = ComputeDrbTime2(offset, textElement.elementsByTagName("X1").at(0).toElement().text().toLongLong() - 150);
+					PhTime timeOut = ComputeDrbTime2(offset, textElement.elementsByTagName("X2").at(0).toElement().text().toLongLong() - 150);
 					int y1 = textElement.elementsByTagName("Y1").at(0).toElement().text().toInt();
 					int y2 = textElement.elementsByTagName("Y2").at(0).toElement().text().toInt();
 #warning /// @todo make sure 150 is the maximum Y value:
@@ -931,8 +931,8 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 
 	QSqlQuery query(db);
 
+	// Reading video file and timestamp
 	PhTime offset = 0;
-
 	if(query.exec("SELECT * FROM PREFERENCE;")) {
 		PHDEBUG << "PREFERENCE:";
 		while(query.next()) {
@@ -950,6 +950,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 		}
 	}
 
+	// Reading peoples
 	QMap<int, PhPeople*> peopleMap;
 	if(query.exec("SELECT * FROM PERSONNAGE;")) {
 		PHDEBUG << "PERSONNAGE:";
@@ -967,6 +968,22 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 	foreach(PhPeople *people, peopleMap.values())
 	_peoples.append(people);
 
+	// Reading loops
+	if(query.exec("SELECT * FROM OBJET_TC;")) {
+		PHDEBUG << "OBJET_TC:";
+		while(query.next()) {
+			for(int i = 0; i < 7; i++)
+				PHDEBUG << i << query.value(i);
+			PhTime time = ComputeDrbTime2(offset, query.value(2).toLongLong());
+			switch(query.value(1).toInt()) {
+			case 7:
+				_loops.append(new PhStripLoop(query.value(4).toInt(), time));
+				break;
+			}
+		}
+	}
+
+	// Reading texts
 	if(query.exec("SELECT * FROM TEXTE;")) {
 		PHDEBUG << "TEXTE:";
 		while(query.next()) {
@@ -975,8 +992,8 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 #warning /// @todo check text people id
 			PhPeople* people = peopleMap[query.value(0).toInt()];
 #warning /// @todo check text time in/out
-			PhTime timeIn = ComputeDrbTime2(offset, query.value(3).toLongLong());
-			PhTime timeOut = ComputeDrbTime2(offset, query.value(4).toLongLong());
+			PhTime timeIn = ComputeDrbTime2(offset, query.value(3).toLongLong() - 150);
+			PhTime timeOut = ComputeDrbTime2(offset, query.value(4).toLongLong() - 150);
 			int y1 = query.value(6).toInt();
 #warning /// @todo make sure y2 is at the index 6
 			int y2 = query.value(5).toInt();
