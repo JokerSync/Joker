@@ -494,9 +494,8 @@ void StripDocTest::importSyn6Test02()
 	QCOMPARE(t2s(doc.texts()[1]->timeIn(), doc.timeCodeType()), QString("01:00:04:00"));
 	QCOMPARE(t2s(doc.texts()[1]->timeOut(), doc.timeCodeType()), QString("01:00:06:00"));
 
-#warning /// @todo test cut
-//	QCOMPARE(doc.cuts().count(), 1);
-//	QCOMPARE(t2s(doc.cuts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
+	QCOMPARE(doc.cuts().count(), 1);
+	QCOMPARE(t2s(doc.cuts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
 }
 
 void StripDocTest::openStripFileTest()

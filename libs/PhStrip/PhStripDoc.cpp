@@ -147,11 +147,11 @@ bool PhStripDoc::importDetXFile(QString fileName)
 				// Reading loops
 				if(elem.tagName() == "loop")
 					_loops.append(new PhStripLoop(loopNumber++,
-					                              PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
+												  PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
 					_cuts.append(new PhStripCut(PhStripCut::Simple,
-					                            PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
+												PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
 				else if(elem.tagName() == "line") {
 					PhTime timeIn = -1;
 					PhTime lastTime = -1;
@@ -244,9 +244,9 @@ PhStripText* PhStripDoc::readMosText(QFile &f, int textLevel, int internLevel)
 	PhFileTool::readInt(f, internLevel, "text");
 
 	PHDBG(textLevel) << PHNQ(PhTimeCode::stringFromTime(timeIn, _tcType))
-	                 << "->"
-	                 << PHNQ(PhTimeCode::stringFromTime(timeOut, _tcType))
-	                 << PHNQ(content);
+					 << "->"
+					 << PHNQ(PhTimeCode::stringFromTime(timeOut, _tcType))
+					 << PHNQ(content);
 	return text;
 }
 
@@ -313,14 +313,14 @@ PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLe
 	for(int j = 0; j < 6; j++)
 		PhFileTool::readShort(f, internLevel);
 	PHDBG(detectLevel) << "detect: "
-	                   << PhTimeCode::stringFromTime(timeIn, _tcType)
-	                   << PhTimeCode::stringFromTime(timeOut, _tcType)
-	                   << "type2:"
-	                   << detectType2
-	                   << "type3:"
-	                   << detectType3
-	                   << "type:"
-	                   << type;
+					   << PhTimeCode::stringFromTime(timeIn, _tcType)
+					   << PhTimeCode::stringFromTime(timeOut, _tcType)
+					   << "type2:"
+					   << detectType2
+					   << "type3:"
+					   << detectType3
+					   << "type:"
+					   << type;
 	return new PhStripDetect(type, timeIn, NULL, timeOut, 0);
 }
 
@@ -976,6 +976,9 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 				PHDEBUG << i << query.value(i);
 			PhTime time = ComputeDrbTime2(offset, query.value(2).toLongLong());
 			switch(query.value(1).toInt()) {
+			case 2:
+				_cuts.append(new PhStripCut(PhStripCut::Simple, time));
+				break;
 			case 7:
 				_loops.append(new PhStripLoop(query.value(4).toInt(), time));
 				break;
