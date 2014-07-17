@@ -52,6 +52,22 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
+Source: {#QtPath}\bin\Qt5Core.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Gui.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5OpenGL.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Network.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5SerialPort.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Test.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Widgets.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Xml.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\libgcc_s_dw2-1.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\libstdc++-6.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\icuin51.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\icuuc51.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\libwinpthread-1.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\icudt51.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\plugins\platforms\*; DestDir: "{app}\platforms"; Flags: ignoreversion
+
 Source: "release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; dlls (PortAudio, SDL, etc.)
 Source: "release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
