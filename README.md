@@ -168,3 +168,9 @@ It contains:
 * A *DetX* file containing the english transcription
 * A video file
 * An audio file
+
+Talk:
+-----
+
+We love talking about this project! I won't let my phone number here but don't hesitate to join our IRC channel: www.phonations.com#joker
+
