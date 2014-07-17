@@ -4,6 +4,10 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QRegExpValidator>
+#include <QKeyEvent>
+#include <QApplication>
+
 #include "PhTimeCodeEdit.h"
 
 PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
@@ -57,38 +61,37 @@ void PhTimeCodeEdit::onTextChanged(QString text)
 
 bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 {
-	int keyPressed;
 	switch (event->type()) {
 	case QEvent::KeyPress:
-		keyPressed = static_cast<QKeyEvent *>(event)->key();
-		switch (keyPressed) {
-		case Qt::Key_0:
-		case Qt::Key_1:
-		case Qt::Key_2:
-		case Qt::Key_3:
-		case Qt::Key_4:
-		case Qt::Key_5:
-		case Qt::Key_6:
-		case Qt::Key_7:
-		case Qt::Key_8:
-		case Qt::Key_9:
-			if(_addedNumbers.length() < 8) {
-				_addedNumbers.append(QString::number(keyPressed % 0x30));
+		{
+			QKeyEvent *keyEvent = (QKeyEvent*)event;
+			switch (keyEvent->key()) {
+			case Qt::Key_0:
+			case Qt::Key_1:
+			case Qt::Key_2:
+			case Qt::Key_3:
+			case Qt::Key_4:
+			case Qt::Key_5:
+			case Qt::Key_6:
+			case Qt::Key_7:
+			case Qt::Key_8:
+			case Qt::Key_9:
+				_addedNumbers.push(keyEvent->key());
 				compute(true);
+				return true;
+			case Qt::Key_Backspace:
+				if(_addedNumbers.length()) {
+					_addedNumbers.pop();
+					compute(false);
+				}
+				return true;
+			case Qt::Key_Escape:
+			case Qt::Key_Enter:
+			case Qt::Key_Return:
+				return false;
+			default:
+				return true;
 			}
-			return true;
-		case Qt::Key_Backspace:
-			if(_addedNumbers.length()) {
-				_addedNumbers.remove(_addedNumbers.length() - 1, 1);
-				compute(false);
-			}
-			return true;
-		case Qt::Key_Escape:
-		case Qt::Key_Enter:
-		case Qt::Key_Return:
-			return false;
-		default:
-			return true;
 		}
 	case QEvent::MouseButtonPress:
 		QApplication::setOverrideCursor(Qt::SizeVerCursor);
@@ -161,20 +164,20 @@ void PhTimeCodeEdit::compute(bool add)
 		currentText = this->text();
 	else
 		currentText = _oldFrame;
+
+	// Remove temporaly the ":"
 	currentText.remove(":");
 
-	int i = 0;
-	while(i < _addedNumbers.length()) {
-		currentText.replace(currentText.length() - 1 - i, 1, _addedNumbers.at(_addedNumbers.length() - 1 - i));
-		i++;
-	}
-	//Current text is xxxxxxxx
-	currentText.insert(2, ":");
-	//xx:xxxxxx
-	currentText.insert(5, ":");
-	//xx:xx:xxxx
-	currentText.insert(8, ":");
-	//xx:xx:xx:xx
+	int start = 0;
+	if(_addedNumbers.size() > 8)
+		start = _addedNumbers.size() - 8;
+	for(int i = start; i < _addedNumbers.size(); i++)
+		currentText.replace(i + 8 - _addedNumbers.size(), 1, _addedNumbers.at(i));
+
+	// Re add the ":"
+	currentText.insert(2, ":"); //xx:xxxxxx
+	currentText.insert(5, ":"); //xx:xx:xxxx
+	currentText.insert(8, ":"); //xx:xx:xx:xx
 
 	this->setText(currentText);
 	onTextChanged(this->text());

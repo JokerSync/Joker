@@ -7,12 +7,8 @@
 #ifndef TIMECODEEDIT_H
 #define TIMECODEEDIT_H
 
-#include <QWidget>
-#include <QEvent>
 #include <QLineEdit>
-#include <QKeyEvent>
-#include <QRegExpValidator>
-#include <QApplication>
+#include <QStack>
 
 #include "PhTools/PhTimeCode.h"
 #include "PhTools/PhDebug.h"
@@ -69,7 +65,7 @@ private:
 	PhTimeCodeType _tcType;
 	bool eventFilter(QObject *sender, QEvent *event);
 	QString _oldFrame;
-	QString _addedNumbers;
+	QStack<QChar> _addedNumbers;
 	void compute(bool add);
 	int _selectedIndex;
 
