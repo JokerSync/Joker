@@ -113,11 +113,14 @@ int countDetectLength(PhStripDoc *doc)
 
 void displayDoc(PhStripDoc* doc)
 {
-	PHDEBUG << doc->title();
+	PHDEBUG << "Title:" << doc->title();
+	PHDEBUG << "Video:" << doc->videoFilePath();
+	PHDEBUG << "People count:" << doc->peoples().count();
 	foreach(PhPeople *people, doc->peoples()) {
 		PHDEBUG << people->name();
 	}
 
+	PHDEBUG << "Text count:" << doc->texts().count();
 	foreach(PhStripText *text, doc->texts()) {
 		QString name = "???";
 		if(text->people())
@@ -164,7 +167,7 @@ void displayDoc(PhStripDoc* doc)
 int main(int argc, char *argv[])
 {
 	StripTestSettings settings;
-	PhDebug::setDisplay(false, false, false, false, false);
+//	PhDebug::setDisplay(false, false, false, false, false);
 	PhDebug::setLogMask(settings.logMask());
 
 	int result = 0;
@@ -182,6 +185,8 @@ int main(int argc, char *argv[])
 				break;
 			}
 		}
+		else
+			PHDEBUG << fileName << "doesn't exists!!!";
 	}
 
 	return result;

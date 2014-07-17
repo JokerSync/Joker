@@ -38,7 +38,7 @@ SOURCES += main.cpp \
 	PropertyDialog.cpp \
 	PeopleDialog.cpp \
 	PeopleEditionDialog.cpp \
-    RulerSpaceDialog.cpp
+	RulerSpaceDialog.cpp
 
 HEADERS += \
 	JokerWindow.h \
@@ -49,7 +49,7 @@ HEADERS += \
 	PeopleDialog.h \
 	JokerSettings.h \
 	PeopleEditionDialog.h \
-    RulerSpaceDialog.h
+	RulerSpaceDialog.h
 
 FORMS += \
 	JokerWindow.ui \
@@ -58,7 +58,7 @@ FORMS += \
 	PropertyDialog.ui \
 	PeopleDialog.ui \
 	PeopleEditionDialog.ui \
-    RulerSpaceDialog.ui
+	RulerSpaceDialog.ui
 
 unix {
 	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${JOKER_ROOT}/.doxygen\";
@@ -68,12 +68,16 @@ mac{
 	ICON = joker.icns
 
 	# For the plist version
+	OTHER_FILES += $${JOKER_ROOT}/data/joker.plist
+
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
 	QMAKE_POST_LINK += sed -i \"\" -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
 }
 
 win32 {
 	RC_ICONS += "joker.ico"
+
+	OTHER_FILES += JokerSetup.iss
 }
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
@@ -93,6 +97,3 @@ PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
 include(../../common/deploy.pri)
 
 cache()
-
-OTHER_FILES += \
-	JokerSetup.iss

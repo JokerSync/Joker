@@ -133,6 +133,21 @@ void SettingsTest::testStringListSettings()
 
 	for(int i = 0; i < list3.size(); i++)
 		QCOMPARE(list4.at(i), list3.at(i));
+
+	QStringList list5 = settings.stringListTest3();
+
+	QCOMPARE(list5.size(), 3);
+	QCOMPARE(list5[0], QString("a"));
+	QCOMPARE(list5[1], QString("b"));
+	QCOMPARE(list5[2], QString("c"));
+
+	settings.setStringListTest3(QStringList({"d", "e"}));
+
+	QStringList list6 = settings.stringListTest3();
+
+	QCOMPARE(list6.size(), 2);
+	QCOMPARE(list6[0], QString("d"));
+	QCOMPARE(list6[1], QString("e"));
 }
 
 void SettingsTest::testByteArraySettings()

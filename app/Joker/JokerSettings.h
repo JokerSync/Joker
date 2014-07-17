@@ -86,7 +86,8 @@ public:
 
 	// Other settings :
 	PH_SETTING_STRING(setLastVideoFolder, lastVideoFolder)
-	PH_SETTING_STRING2(setSelectedFilter, selectedFilter, "Rythmo files (*.detx *.strip)")
+	PH_SETTING_STRINGLIST2(setStripFileType, stripFileType, QStringList({"joker", "detx", "mos", "drb", "syn6"}))
+	PH_SETTING_STRINGLIST2(setVideoFileType, videoFileType, QStringList({"m4v", "mkv", "avi", "mov", "mxf"}))
 
 	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
 	PH_SETTING_STRING(setLTCInputDevice, ltcInputDevice)
@@ -100,8 +101,6 @@ public:
 	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 
 	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)
-
-	PH_SETTING_STRING2(setVideoFileFilter, videoFileFilter, " (*.m4v *.mkv *.avi *.mov *.mxf)")
 
 	PH_SETTING_BOOL2(setDisplayLogo, displayLogo, true)
 

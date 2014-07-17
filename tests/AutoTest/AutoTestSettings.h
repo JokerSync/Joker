@@ -48,6 +48,7 @@ public:
 	PH_SETTING_STRING(setStringTest4, stringTest4)
 	PH_SETTING_STRINGLIST(setStringListTest1, stringListTest1)
 	PH_SETTING_STRINGLIST(setStringListTest2, stringListTest2)
+	PH_SETTING_STRINGLIST2(setStringListTest3, stringListTest3, QStringList({"a", "b", "c"}))
 
 	PH_SETTING_BYTEARRAY(setByteArrayTest1, byteArrayTest1)
 	PH_SETTING_BYTEARRAY(setByteArrayTest2, byteArrayTest2)

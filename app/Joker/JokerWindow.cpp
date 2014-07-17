@@ -219,13 +219,13 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 #warning /// @todo move to PhDocumentWindow
 			QString filePath = static_cast<QFileOpenEvent *>(event)->file();
 			QString fileType = filePath.split(".").last().toLower();
-			// As the plist file list all the supported format (which are .joker, .strip, .detx, .avi & .mov)
-			// if the file is not a strip or a detx file, it's a video file, we don't need any protection
-			if(fileType == "detx" or fileType == "strip" or fileType == "joker") {
+			// As the plist file list all the supported format
+			// if the file is not a strip file, it's a video file, we don't need any protection
+			if(_settings->stripFileType().contains(fileType)) {
 				if(checkSaveFile())
 					openDocument(filePath);
 			}
-			else
+			else if(_settings->videoFileType().contains(fileType))
 				openVideoFile(filePath);
 			break;
 		}
@@ -325,21 +325,18 @@ void JokerWindow::on_actionOpen_triggered()
 	hideMediaPanel();
 
 	if(checkSaveFile()) {
-		QString filter = tr("Rythmo files") + " (*.joker *.detx *.mos *.strip);; "
-		                 + tr("Joker files") + " (*.joker);; "
-		                 + tr("DetX files") + " (*.detx);; "
-		                 + tr("Mosaic files") + " (*.mos);; "
-		                 + tr("All files") + " (*.*)";
+		QString filter = tr("Rythmo files") + " (";
+		foreach(QString type, _settings->stripFileType())
+		filter += "*." + type + " ";
+		filter += ");;";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
-		dlg.selectNameFilter(_settings->selectedFilter());
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
 
 		dlg.setFileMode(QFileDialog::ExistingFile);
 		if(dlg.exec()) {
 			QString fileName = dlg.selectedFiles()[0];
 			openDocument(fileName);
-			_settings->setSelectedFilter(dlg.selectedNameFilter());
 		}
 	}
 	fadeInMediaPanel();
@@ -422,8 +419,10 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	hideMediaPanel();
 
 	QString lastFolder = _settings->lastVideoFolder();
-	QString filter = tr("Movie files") + _settings->videoFileFilter()
-	                 + ";;" + tr("All files") + " (*.*)";
+	QString filter = tr("Movie files") + " (";
+	foreach(QString type, _settings->videoFileType())
+	filter += "*." + type + " ";
+	filter += ");;";
 
 	QFileDialog dlg(this, tr("Open a video..."), lastFolder, filter);
 	if(dlg.exec()) {

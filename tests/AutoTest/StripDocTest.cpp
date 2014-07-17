@@ -11,7 +11,7 @@
 
 void StripDocTest::initTestCase()
 {
-	PhDebug::disable();
+	PhDebug::enable();
 }
 
 void StripDocTest::importDetXHeaderTest()
@@ -343,6 +343,159 @@ void StripDocTest::importMosTest04()
 	QCOMPARE(t2s(doc.detects()[0]->timeIn(), doc.timeCodeType()), QString("01:00:01:13"));
 	QCOMPARE(t2s(doc.detects()[0]->timeOut(), doc.timeCodeType()), QString("01:00:02:20"));
 	QCOMPARE(doc.detects()[0]->type(), PhStripDetect::Off);
+}
+
+void StripDocTest::importDrbTest01()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.openStripFile("drb01.drb"));
+
+	QCOMPARE(doc.videoFilePath(), QString("C:\\Users\\SYNCHRO USER\\Downloads\\TheManWithTheGoldenArm_25fps_high\\TheManWithTheGoldenArm_25fps_high.mov"));
+
+	QCOMPARE(doc.loops().count(), 0);
+
+	QCOMPARE(doc.peoples().count(), 2);
+	QCOMPARE(doc.peoples()[0]->name(), QString("Personnage 1"));
+	QCOMPARE(doc.peoples()[1]->name(), QString("Personnage 2"));
+
+	QCOMPARE(doc.texts().count(), 1);
+	QCOMPARE(doc.texts()[0]->people()->name(), QString("Personnage 2"));
+
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.36f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[0]->height())));
+
+#warning /// @todo should be the same than syn6
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("00:02:12:10"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("00:02:44:07"));
+}
+
+void StripDocTest::importDrbTest02()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.openStripFile("drb02.drb"));
+
+	QCOMPARE(doc.videoFilePath(), QString("D:\\NED 201.mov"));
+	QCOMPARE(t2s(doc.videoTimeIn(), doc.timeCodeType()), QString("00:58:04:20"));
+
+	QCOMPARE(doc.loops().count(), 21);
+
+	for(int i = 0; i < 21; i++)
+		QCOMPARE(doc.loops().at(i)->number(), i + 1);
+
+	QCOMPARE(t2s(doc.loops()[0]->timeIn(), doc.timeCodeType()), QString("01:00:39:02"));
+	QCOMPARE(t2s(doc.loops()[1]->timeIn(), doc.timeCodeType()), QString("01:02:14:23"));
+
+	QCOMPARE(doc.peoples().count(), 28);
+
+	QCOMPARE(doc.peoples()[0]->name(), QString("Intervenant 1"));
+	QCOMPARE(doc.peoples()[1]->name(), QString("ned"));
+	QCOMPARE(doc.peoples()[2]->name(), QString("moze"));
+	QCOMPARE(doc.peoples()[3]->name(), QString("suzie"));
+
+	QCOMPARE(doc.texts().count(), 546);
+	QCOMPARE(doc.texts()[0]->people()->name(), QString("ned"));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.213333338f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.28666667f), PHNQ(QString::number(doc.texts()[0]->height())));
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:13"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("01:00:01:05"));
+}
+
+void StripDocTest::importDrbTest03()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.openStripFile("drb03.drb"));
+
+	QCOMPARE(doc.videoFilePath(), QString("C:\\Users\\Matthhou\\Desktop\\The Crazy Ones\\The Crazy Ones 121\\The_Crazy_Ones_1AXB21_VOVI.mov"));
+	QCOMPARE(t2s(doc.videoTimeIn(), doc.timeCodeType()), QString("00:58:24:00"));
+
+	QCOMPARE(doc.loops().count(), 1);
+
+	QCOMPARE(doc.loops().at(0)->number(), 1);
+
+	QCOMPARE(t2s(doc.loops()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:00"));
+
+	QCOMPARE(doc.peoples().count(), 2);
+
+	QCOMPARE(doc.peoples()[0]->name(), QString("Pierre"));
+	QCOMPARE(doc.peoples()[1]->name(), QString("Marie"));
+
+	QCOMPARE(doc.texts().count(), 2);
+
+	QCOMPARE(doc.texts()[0]->people()->name(), QString("Pierre"));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.066666667f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[0]->height())));
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:01:00"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("01:00:03:00"));
+
+	QCOMPARE(doc.texts()[1]->people()->name(), QString("Marie"));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->y(), 0.7f), PHNQ(QString::number(doc.texts()[1]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[1]->height())));
+	QCOMPARE(t2s(doc.texts()[1]->timeIn(), doc.timeCodeType()), QString("01:00:04:00"));
+	QCOMPARE(t2s(doc.texts()[1]->timeOut(), doc.timeCodeType()), QString("01:00:06:00"));
+
+	QCOMPARE(doc.cuts().count(), 1);
+	QCOMPARE(t2s(doc.cuts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
+}
+
+void StripDocTest::importSyn6Test01()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.openStripFile("test01.syn6"));
+
+	QCOMPARE(doc.peoples().count(), 2);
+	QCOMPARE(doc.peoples()[0]->name(), QString("Personnage 1"));
+	QCOMPARE(doc.peoples()[1]->name(), QString("Personnage 2"));
+
+	QCOMPARE(doc.texts().count(), 1);
+	QCOMPARE(doc.texts()[0]->people()->name(), QString("Personnage 1"));
+
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.36f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[0]->height())));
+
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("00:00:03:11"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("00:00:06:14"));
+}
+
+void StripDocTest::importSyn6Test02()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.openStripFile("test02.syn6"));
+
+	QCOMPARE(doc.videoFilePath(), QString("C:\\Users\\Matthhou\\Desktop\\The Crazy Ones\\The Crazy Ones 121\\The_Crazy_Ones_1AXB21_VOVI.mov"));
+	QCOMPARE(t2s(doc.videoTimeIn(), doc.timeCodeType()), QString("00:58:24:00"));
+
+	QCOMPARE(doc.loops().count(), 1);
+
+	QCOMPARE(doc.loops().at(0)->number(), 1);
+
+	QCOMPARE(t2s(doc.loops()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:00"));
+
+	QCOMPARE(doc.peoples().count(), 2);
+
+	QCOMPARE(doc.peoples()[0]->name(), QString("Pierre"));
+	QCOMPARE(doc.peoples()[1]->name(), QString("Marie"));
+
+	QCOMPARE(doc.texts().count(), 2);
+
+	QCOMPARE(doc.texts()[0]->people()->name(), QString("Pierre"));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 0.066666667f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[0]->height())));
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:01:00"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), doc.timeCodeType()), QString("01:00:03:00"));
+
+	QCOMPARE(doc.texts()[1]->people()->name(), QString("Marie"));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->y(), 0.7f), PHNQ(QString::number(doc.texts()[1]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[1]->height(), 0.22666667f), PHNQ(QString::number(doc.texts()[1]->height())));
+	QCOMPARE(t2s(doc.texts()[1]->timeIn(), doc.timeCodeType()), QString("01:00:04:00"));
+	QCOMPARE(t2s(doc.texts()[1]->timeOut(), doc.timeCodeType()), QString("01:00:06:00"));
+
+	QCOMPARE(doc.cuts().count(), 1);
+	QCOMPARE(t2s(doc.cuts()[0]->timeIn(), doc.timeCodeType()), QString("01:00:05:00"));
 }
 
 void StripDocTest::openStripFileTest()

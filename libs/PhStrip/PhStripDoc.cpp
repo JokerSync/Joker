@@ -4,12 +4,15 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-
+#include <QString>
 #include <QFileInfo>
 #include <QDomDocument>
 #include <QDomNodeList>
 #include <QtXml>
 #include <QXmlStreamWriter>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 
 #include "PhTools/PhFileTool.h"
 #include "PhStripDoc.h"
@@ -715,11 +718,11 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	//			PhFileTool::readShort(f, level, "after loop2");
 	//	}
 
-//	if(!checkMosTag(f, blocLevel, MosBin))
-//		return false;
+	//	if(!checkMosTag(f, blocLevel, MosBin))
+	//		return false;
 
-//	for(int j = 0; j < 2; j++)
-//		PhFileTool::readShort(f, level);
+	//	for(int j = 0; j < 2; j++)
+	//		PhFileTool::readShort(f, level);
 
 	PHDEBUG << "_______________" << "reading ok" << "_______________";
 
@@ -742,18 +745,294 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	return true;
 }
 
+PhTime PhStripDoc::ComputeDrbTime1(PhTime offset, PhTime value)
+{
+	return (offset + value) * PhTimeCode::timePerFrame(this->timeCodeType()) / 400000;
+}
+
+PhTime PhStripDoc::ComputeDrbTime2(PhTime offset, PhTime value)
+{
+	return (offset + value * 50000) * PhTimeCode::timePerFrame(this->timeCodeType()) / 400000;
+}
+
+bool PhStripDoc::importDrbFile(const QString &fileName)
+{
+	PHDEBUG << fileName;
+	QFile file(fileName);
+
+	reset();
+
+	PhTime offset = 0;
+
+	if(file.open(QIODevice::ReadOnly)) {
+		QTextStream ts(&file);
+		// Detect text codec
+		if(file.peek(2).at(1) == 0)
+			ts.setCodec("UTF-16");
+
+		while(!ts.atEnd()) {
+			QString line = ts.readLine();
+			if(line.startsWith("CV:")) {
+				_videoPath = line.remove("CV:");
+				PHDEBUG << "videoPath:" << _videoPath;
+			}
+			else if(line.startsWith("O:")) {
+				offset = line.remove("O:").toLongLong();
+				_videoTimeIn = ComputeDrbTime1(offset, 0);
+				PHDEBUG << "videoTimeIn:" << _videoTimeIn << line;
+			}
+		}
+	}
+	else {
+		PHDEBUG << "Unable to open:" << fileName;
+		return false;
+	}
+
+	QString dirName = fileName;
+	dirName.remove(".drb", Qt::CaseInsensitive);
+
+	QFile loopFile(dirName + "/boucle.xml");
+	if(!loopFile.open(QIODevice::ReadOnly)) {
+		PHDEBUG << "Unable to open boucle.xml";
+		return false;
+	}
+
+	QDomDocument loopDoc;
+	if(!loopDoc.setContent(&loopFile)) {
+		loopFile.close();
+		PHDEBUG << "Unable to parse boucle.xml";
+		return false;
+	}
+
+	int loopNumber = 1;
+	QDomNodeList loopList = loopDoc.elementsByTagName("Row");
+	for (int i = 0; i < loopList.length(); i++) {
+		QDomElement loopElement = loopList.at(i).toElement();
+		QString type = loopElement.elementsByTagName("Type").at(0).toElement().text();
+		PhTime timeIn = ComputeDrbTime1(offset, loopElement.elementsByTagName("Debut").at(0).toElement().text().toLongLong());
+		if(type == "BOUCLE") {
+			_loops.append(new PhStripLoop(loopNumber++, timeIn));
+		}
+		else if (type == "PLAN") {
+			_cuts.append(new PhStripCut(PhStripCut::PhCutType::Simple, timeIn));
+		}
+	}
+
+	loopFile.close();
+
+	// Opening the XML file
+	QFile peopleFile(dirName + "/intervenant.xml");
+	if(!peopleFile.open(QIODevice::ReadOnly)) {
+		PHDEBUG << "Unable to open intervenant.xml";
+		return false;
+	}
+
+	// Loading the DOM (document object model)
+	QDomDocument peopleDoc;
+	if (!peopleDoc.setContent(&peopleFile)) {
+		peopleFile.close();
+		PHDEBUG << "The XML document seems to be bad formed intervenant.xml";
+		return false;
+	}
+
+	bool result = true;
+	QMap<int, PhPeople*> peopleMap;
+
+	QDomNodeList peopleList = peopleDoc.elementsByTagName("Row");
+	for (int i = 0; i < peopleList.length(); i++) {
+		QDomElement peopleElement = peopleList.at(i).toElement();
+		int id = peopleElement.elementsByTagName("Id").at(0).toElement().text().toInt();
+		QString name = peopleElement.elementsByTagName("Nom").at(0).toElement().text();
+		PhPeople *people = new PhPeople(name);
+		peopleMap[id] = people;
+	}
+
+	peopleFile.close();
+
+	foreach(PhPeople *people, peopleMap.values())
+	_peoples.append(people);
+
+	QDir dir(dirName);
+
+	foreach(QString name, dir.entryList(QStringList("*.dat"))) {
+		QString subFileName = dir.filePath(name);
+		QFile f(subFileName);
+		if(f.open(QIODevice::ReadOnly)) {
+			QTextStream ts(&f);
+
+			// Detect text codec
+			if(f.peek(2).at(1) == 0)
+				ts.setCodec("UTF-16");
+
+			QString xmlString = "";
+
+			while(!ts.atEnd()) {
+				QString line = ts.readLine();
+				if(!line.startsWith("<COPYRIGHT"))
+					xmlString += line + "\n";
+				if(line == "</SYNCHRONOS>")
+					break;
+			}
+			f.close();
+
+			QDomDocument subDoc;
+
+			QString errorMsg;
+			int errorLine, errorColumn;
+			if(subDoc.setContent(xmlString, &errorMsg, &errorLine, &errorColumn)) {
+				QDomNodeList textList = subDoc.elementsByTagName("TEXT");
+				for(int i = 0; i < textList.count(); i++) {
+					QDomElement textElement = textList.at(i).toElement();
+					int peopleId = textElement.elementsByTagName("ID_INTER").at(0).toElement().text().toInt();
+					PhPeople *people = peopleMap[peopleId];
+					PhTime timeIn = ComputeDrbTime2(offset, textElement.elementsByTagName("X1").at(0).toElement().text().toLongLong() - 150);
+					PhTime timeOut = ComputeDrbTime2(offset, textElement.elementsByTagName("X2").at(0).toElement().text().toLongLong() - 150);
+					int y1 = textElement.elementsByTagName("Y1").at(0).toElement().text().toInt();
+					int y2 = textElement.elementsByTagName("Y2").at(0).toElement().text().toInt();
+#warning /// @todo make sure 150 is the maximum Y value:
+					float y = y1 / 150.0f;
+					float height = (y2 - y1) / 150.0f;
+
+					QString content = textElement.elementsByTagName("VALUE").at(0).toElement().text();
+
+					PHDEBUG << PhTimeCode::stringFromTime(timeIn, _tcType) << PhTimeCode::stringFromTime(timeOut, _tcType) << content;
+					PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
+					_texts1.append(text);
+				}
+			}
+			else {
+				PHDEBUG << "Unable to parse" << subFileName << ":" << errorMsg << "@" << errorLine << "," << errorColumn;
+				result = false;
+			}
+		}
+		else {
+			PHDEBUG << "Unable to open" << subFileName;
+			result = false;
+		}
+	}
+
+	return result;
+}
+
+bool PhStripDoc::importSyn6File(const QString &fileName)
+{
+	QSqlDatabase db;
+	db =  QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName(fileName);
+	if(!db.open()) {
+		PHDEBUG << "Error opening the sqlite document:" << db.lastError().text();
+		return false;
+	}
+	PHDEBUG << "database opened: " << db.tables().count() << "tables.";
+
+//	foreach(QString tableName, db.tables()) {
+//		PHDEBUG << tableName;
+//	}
+
+	QSqlQuery query(db);
+
+	// Reading video file and timestamp
+	PhTime offset = 0;
+	if(query.exec("SELECT * FROM PREFERENCE;")) {
+		PHDEBUG << "PREFERENCE:";
+		while(query.next()) {
+//			for(int i = 0; i < 7; i++)
+//				PHDEBUG << i << query.value(i);
+			switch(query.value(0).toInt()) {
+			case 6:
+				offset = query.value(3).toLongLong();
+				_videoTimeIn = ComputeDrbTime1(offset, 0);
+				break;
+			case 11:
+				_videoPath = query.value(2).toString().replace("\\\\", "\\");
+				break;
+			}
+		}
+	}
+
+	// Reading peoples
+	QMap<int, PhPeople*> peopleMap;
+	if(query.exec("SELECT * FROM PERSONNAGE;")) {
+		PHDEBUG << "PERSONNAGE:";
+
+		while(query.next()) {
+			int id = query.value(0).toInt();
+			QString name = query.value(1).toString();
+			PhPeople *people = new PhPeople(name);
+			peopleMap[id] = people;
+		}
+	}
+	else
+		PHDEBUG << "query failed";
+
+	foreach(PhPeople *people, peopleMap.values())
+	_peoples.append(people);
+
+	// Reading loops
+	if(query.exec("SELECT * FROM OBJET_TC;")) {
+		PHDEBUG << "OBJET_TC:";
+		while(query.next()) {
+			for(int i = 0; i < 7; i++)
+				PHDEBUG << i << query.value(i);
+			PhTime time = ComputeDrbTime2(offset, query.value(2).toLongLong());
+			switch(query.value(1).toInt()) {
+			case 2:
+				_cuts.append(new PhStripCut(PhStripCut::Simple, time));
+				break;
+			case 7:
+				_loops.append(new PhStripLoop(query.value(4).toInt(), time));
+				break;
+			}
+		}
+	}
+
+	// Reading texts
+	if(query.exec("SELECT * FROM TEXTE;")) {
+		PHDEBUG << "TEXTE:";
+		while(query.next()) {
+//			for(int i = 0; i < 21; i++)
+//				PHDEBUG << i << query.value(i);
+#warning /// @todo check text people id
+			PhPeople* people = peopleMap[query.value(0).toInt()];
+#warning /// @todo check text time in/out
+			PhTime timeIn = ComputeDrbTime2(offset, query.value(3).toLongLong() - 150);
+			PhTime timeOut = ComputeDrbTime2(offset, query.value(4).toLongLong() - 150);
+			int y1 = query.value(6).toInt();
+#warning /// @todo make sure y2 is at the index 6
+			int y2 = query.value(5).toInt();
+#warning /// @todo make sure 150 is the maximum Y value:
+			float y = y1 / 150.0f;
+			float height = (y2 - y1) / 150.0f;
+			QString content = query.value(7).toString();
+			PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
+			_texts1.append(text);
+			PHDEBUG << timeIn << timeOut << content;
+		}
+	}
+
+	db.close();
+
+	return true;
+}
+
 bool PhStripDoc::openStripFile(const QString &fileName)
 {
 	PHDEBUG << fileName;
 	bool result = false;
 
-	QString extension = QFileInfo(fileName).suffix();
+	QString extension = QFileInfo(fileName).suffix().toLower();
 	// Try to open the document
 	if(extension == "detx") {
 		return importDetXFile(fileName);
 	}
 	else if(extension == "mos") {
 		return importMosFile(fileName);
+	}
+	else if(extension == "drb") {
+		return importDrbFile(fileName);
+	}
+	else if(extension == "syn6") {
+		return importSyn6File(fileName);
 	}
 	else if(extension == "strip" or extension == "joker") {
 		QFile xmlFile(fileName);

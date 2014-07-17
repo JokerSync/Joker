@@ -230,6 +230,18 @@ public:
 	 */
 	bool importMosFile(const QString &fileName);
 	/**
+	 * @brief Import a DRB file
+	 * @param fileName The path to the DRB file
+	 * @return True if the doc opened well, false otherwise
+	 */
+	bool importDrbFile(const QString &fileName);
+	/**
+	 * @brief Import a Syn6 file
+	 * @param fileName The path to the Syn6 file
+	 * @return True if the doc opened well, false otherwise
+	 */
+	bool importSyn6File(const QString &fileName);
+	/**
 	 * @brief Open a strip file
 	 * @param fileName The path to the DetX file
 	 * @return True if the strip opened well, false otherwise
@@ -458,6 +470,9 @@ private:
 	 * List of PhStripOff from the file
 	 */
 	QList<PhStripDetect *> _detects;
+
+	PhTime ComputeDrbTime1(PhTime offset, PhTime value);
+	PhTime ComputeDrbTime2(PhTime offset, PhTime value);
 
 	enum MosTag {
 		MosUnknown,
