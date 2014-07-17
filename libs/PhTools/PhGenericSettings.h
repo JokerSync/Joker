@@ -170,6 +170,7 @@ protected:
 	/**
 	 * @brief Get a string list
 	 * @param name The settings name
+	 * @param defaultValue The default value
 	 * @return The string list
 	 */
 	QStringList stringList(QString name, QStringList defaultValue = QStringList());
