@@ -134,6 +134,10 @@ void SettingsTest::testStringListSettings()
 	for(int i = 0; i < list3.size(); i++)
 		QCOMPARE(list4.at(i), list3.at(i));
 
+	// This is just to make sure that changing string
+	// list settings doesn't affect other settings
+	settings.setIntTest1(33);
+
 	QStringList list5 = settings.stringListTest3();
 
 	QCOMPARE(list5.size(), 3);
@@ -148,6 +152,10 @@ void SettingsTest::testStringListSettings()
 	QCOMPARE(list6.size(), 2);
 	QCOMPARE(list6[0], QString("d"));
 	QCOMPARE(list6[1], QString("e"));
+
+	// Check changing string list settings doesn't affect
+	// other settings
+	QCOMPARE(settings.intTest1(), 33);
 }
 
 void SettingsTest::testByteArraySettings()

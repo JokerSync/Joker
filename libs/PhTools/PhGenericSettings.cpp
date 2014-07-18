@@ -81,16 +81,16 @@ QStringList PhGenericSettings::stringList(QString name, QStringList defaultValue
 	QStringList list;
 	int size = _settings.beginReadArray(name);
 	if(size == 0)
-		return defaultValue;
+		list = defaultValue;
 	else {
 		for(int i = 0; i < size; i++) {
 			_settings.setArrayIndex(i);
 			list.append(_settings.value("listItem").toString());
 		}
-		_settings.endArray();
-
-		return list;
 	}
+	_settings.endArray();
+
+	return list;
 }
 
 void PhGenericSettings::setByteArray(QString name, QByteArray array)
