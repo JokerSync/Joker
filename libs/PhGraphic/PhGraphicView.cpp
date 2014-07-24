@@ -51,7 +51,8 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 PhGraphicView::PhGraphicView(int width, int height, QWidget *parent)
 	: PhGraphicView(parent)
 {
-	this->setGeometry(0, 0, width, height);
+	int ratio = this->windowHandle()->devicePixelRatio();
+	this->setGeometry(0, 0, width / ratio, height / ratio);
 }
 
 PhGraphicView::~PhGraphicView()
@@ -120,7 +121,8 @@ void PhGraphicView::paintGL()
 	QTime timer;
 	timer.start();
 
-	emit paint(this->width(), this->height());
+	int ratio = this->windowHandle()->devicePixelRatio();
+	emit paint(this->width() * ratio, this->height() * ratio);
 
 	if(timer.elapsed() > _maxPaintDuration)
 		_maxPaintDuration = timer.elapsed();
