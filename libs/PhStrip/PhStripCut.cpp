@@ -6,7 +6,7 @@
 
 #include "PhStripCut.h"
 
-PhStripCut::PhStripCut(PhStripCut::PhCutType type, PhTime time) : PhStripObject(time)
+PhStripCut::PhStripCut(PhTime time, PhStripCut::PhCutType type) : PhStripObject(time)
 {
 	_type = type;
 }

@@ -150,7 +150,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					_loops.append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
-					_cuts.append(new PhStripCut(PhStripCut::Simple, timeIn));
+					_cuts.append(new PhStripCut(timeIn, PhStripCut::Simple));
 				else if(elem.tagName() == "line") {
 					timeIn = -1;
 					PhTime lastTime = -1;
@@ -665,7 +665,7 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 				return false;
 			PhTime cutTime = _videoTimeIn + readMosTime(f, _tcType, internLevel);
 			PHDBG(cutLevel) << "cut:" << PhTimeCode::stringFromTime(cutTime, _tcType);
-			_cuts.append(new PhStripCut(PhStripCut::Simple, cutTime));
+			_cuts.append(new PhStripCut(cutTime, PhStripCut::Simple));
 		}
 	}
 
@@ -813,7 +813,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 			_loops.append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
 		}
 		else if (type == "PLAN") {
-			_cuts.append(new PhStripCut(PhStripCut::PhCutType::Simple, timeIn));
+			_cuts.append(new PhStripCut(timeIn, PhStripCut::PhCutType::Simple));
 		}
 	}
 
@@ -976,7 +976,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 			PhTime time = ComputeDrbTime2(offset, query.value(2).toLongLong());
 			switch(query.value(1).toInt()) {
 			case 2:
-				_cuts.append(new PhStripCut(PhStripCut::Simple, time));
+				_cuts.append(new PhStripCut(time, PhStripCut::Simple));
 				break;
 			case 7:
 				_loops.append(new PhStripLoop(time, QString::number(query.value(4).toInt())));

@@ -945,10 +945,10 @@ void JokerWindow::onPaint(int width, int height)
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 	if(currentLoop) {
-		int loopNumber = currentLoop->number();
-		PhGraphicText gCurrentLoop(_strip.getHUDFont(), QString::number(loopNumber));
+		QString loopLabel = currentLoop->label();
+		PhGraphicText gCurrentLoop(_strip.getHUDFont(), loopLabel);
 		int loopHeight = 60;
-		int loopWidth = _strip.getHUDFont()->getNominalWidth(QString::number(loopNumber)) * ((float) loopHeight / _strip.getHUDFont()->getHeight());
+		int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) * ((float) loopHeight / _strip.getHUDFont()->getHeight());
 		gCurrentLoop.setRect(10, height - stripHeight - loopHeight, loopWidth, loopHeight);
 		gCurrentLoop.setColor(Qt::blue);
 		gCurrentLoop.draw();

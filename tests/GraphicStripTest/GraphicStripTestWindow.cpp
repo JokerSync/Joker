@@ -94,7 +94,7 @@ void GraphicStripTestWindow::onGenerate()
 			_doc->addPeople(new PhPeople("A second people", "red"));
 
 			_doc->addObject(new PhStripText(0, _doc->peoples().first(), 10000, 1, "Hello", 0.25f));
-			_doc->addObject(new PhStripCut(PhStripCut::CrossFade, 5400));
+			_doc->addObject(new PhStripCut(5400, PhStripCut::CrossFade));
 			_doc->addObject(new PhStripDetect(PhStripDetect::Off, 0, _doc->peoples().first(), 10000, 1));
 			_doc->addObject(new PhStripLoop(22000, "3"));
 			_doc->addObject(new PhStripText(10000, _doc->peoples().last(), 15000, 2, "Hi !", 0.25f));

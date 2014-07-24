@@ -29,9 +29,9 @@ public:
 
 	/**
 	 * \brief Get the loop label
-	 * 
+	 *
 	 * The loop label can ever be a number or a text.
-	 * 
+	 *
 	 * \return A string value
 	 */
 	QString label() {

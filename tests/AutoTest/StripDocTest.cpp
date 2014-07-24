@@ -726,7 +726,7 @@ void StripDocTest::addObjectTest()
 
 	doc.addObject(new PhStripText(0, doc.peoples().last(), 10000, 1, "Hello", 0.25f));
 	QVERIFY(doc.texts().count() == 1);
-	doc.addObject(new PhStripCut(PhStripCut::CrossFade, 5400));
+	doc.addObject(new PhStripCut(5400, PhStripCut::CrossFade));
 	QVERIFY(doc.cuts().count() == 1);
 	doc.addObject(new PhStripDetect(PhStripDetect::Aperture, 10000, doc.peoples().last(), 11000, 1));
 	QVERIFY(doc.detects().count() == 1);
