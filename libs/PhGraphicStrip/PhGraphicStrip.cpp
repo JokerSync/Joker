@@ -116,10 +116,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		_textFont.setBoldness(_settings->textBoldness());
 		_textFont.setFontFile(_settings->textFontFile());
 
-		int loopCounter = 0;
-		int offCounter = 0;
-		int cutCounter = 0;
-
 		long syncBar_X_FromLeft = width / 6;
 		long delay = (int)(24 * _settings->screenDelay() *  _clock.rate());
 		PhTime clockTime = _clock.time() + delay;
@@ -366,7 +362,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 					gCut.setY(y);
 
 					gCut.draw();
-					cutCounter++;
 				}
 				//Doesn't need to process undisplayed content
 				if(cut->timeIn() > timeOut)
@@ -385,7 +380,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				else
 					gLoop.setColor(Qt::white);
 
-				gLoop.setX(x + loop->timeIn() / timePerPixel - offset);
+				int xLoop = x + loop->timeIn() / timePerPixel - offset;
+				gLoop.setX(xLoop);
 				gLoop.setY(y);
 				gLoop.setZ(-1);
 				gLoop.setThickness(height / 40);
@@ -394,7 +390,12 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gLoop.setWidth(height / 4);
 
 				gLoop.draw();
-				loopCounter++;
+				
+				PhGraphicText gLabel(&_hudFont, loop->label(), xLoop + 10, y + height * 3 / 4, -1);
+				gLabel.setWidth(_hudFont.getNominalWidth(loop->label()));
+				gLabel.setHeight(height / 4);
+				gLabel.setColor(Qt::gray);
+				gLabel.draw();
 			}
 
 			if(displayNextText && ((loop->timeIn() + height * timePerPixel / 8) > timeIn)) {
@@ -458,7 +459,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 					gDetect->setZ(-1);
 					gDetect->setWidth((detect->timeOut() - detect->timeIn()) / timePerPixel);
 					gDetect->draw();
-					offCounter++;
 					delete gDetect;
 				}
 			}

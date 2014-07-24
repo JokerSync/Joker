@@ -34,7 +34,7 @@ void GraphicStripTest::drawTest()
 	doc->addObject(new PhStripText(0, doc->peoples().first(), 10000, 0.25f, "Hello", 0.25f));
 	doc->addObject(new PhStripCut(5400, PhStripCut::CrossFade));
 	doc->addObject(new PhStripDetect(PhStripDetect::Off, 0, doc->peoples().first(), 10000, 0.25f));
-	doc->addObject(new PhStripLoop(22000, "3"));
+	doc->addObject(new PhStripLoop(22000, "label"));
 	doc->addObject(new PhStripText(10000, doc->peoples().last(), 15000, 0.5f, "Hi !", 0.25f));
 	doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
 	doc->changed();
