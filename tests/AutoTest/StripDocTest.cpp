@@ -382,7 +382,7 @@ void StripDocTest::importDrbTest02()
 	QCOMPARE(doc.loops().count(), 21);
 
 	for(int i = 0; i < 21; i++)
-		QCOMPARE(doc.loops().at(i)->number(), i + 1);
+		QCOMPARE(doc.loops().at(i)->label(), QString::number(i + 1));
 
 	QCOMPARE(t2s(doc.loops()[0]->timeIn(), doc.timeCodeType()), QString("01:00:39:02"));
 	QCOMPARE(t2s(doc.loops()[1]->timeIn(), doc.timeCodeType()), QString("01:02:14:23"));
@@ -413,7 +413,7 @@ void StripDocTest::importDrbTest03()
 
 	QCOMPARE(doc.loops().count(), 1);
 
-	QCOMPARE(doc.loops().at(0)->number(), 1);
+	QCOMPARE(doc.loops().at(0)->label(), QString("1"));
 
 	QCOMPARE(t2s(doc.loops()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:00"));
 
@@ -471,7 +471,7 @@ void StripDocTest::importSyn6Test02()
 
 	QCOMPARE(doc.loops().count(), 1);
 
-	QCOMPARE(doc.loops().at(0)->number(), 1);
+	QCOMPARE(doc.loops().at(0)->label(), QString("1"));
 
 	QCOMPARE(t2s(doc.loops()[0]->timeIn(), doc.timeCodeType()), QString("01:00:00:00"));
 
@@ -731,7 +731,7 @@ void StripDocTest::addObjectTest()
 	doc.addObject(new PhStripDetect(PhStripDetect::Aperture, 10000, doc.peoples().last(), 11000, 1));
 	QVERIFY(doc.detects().count() == 1);
 
-	doc.addObject(new PhStripLoop(3, 22000));
+	doc.addObject(new PhStripLoop(22000, "3"));
 	QVERIFY(doc.loops().count() == 1);
 
 }

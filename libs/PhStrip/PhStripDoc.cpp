@@ -144,16 +144,15 @@ bool PhStripDoc::importDetXFile(QString fileName)
 			if(body.childNodes().at(i).isElement()) {
 				QDomElement elem = body.childNodes().at(i).toElement();
 
+				PhTime timeIn = PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType);
 				// Reading loops
 				if(elem.tagName() == "loop")
-					_loops.append(new PhStripLoop(loopNumber++,
-					                              PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
+					_loops.append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
-					_cuts.append(new PhStripCut(PhStripCut::Simple,
-					                            PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
+					_cuts.append(new PhStripCut(PhStripCut::Simple, timeIn));
 				else if(elem.tagName() == "line") {
-					PhTime timeIn = -1;
+					timeIn = -1;
 					PhTime lastTime = -1;
 					PhTime lastLinkedTime = -1;
 					PhPeople *people = peopleMap[elem.attribute("role")];
@@ -706,7 +705,7 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 
 			PhTime loopTime = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
 			PhFileTool::readString(f, loopLevel, "loop name");
-			_loops.append(new PhStripLoop(number, loopTime));
+			_loops.append(new PhStripLoop(loopTime, QString::number(number)));
 		}
 	}
 
@@ -811,7 +810,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 		QString type = loopElement.elementsByTagName("Type").at(0).toElement().text();
 		PhTime timeIn = ComputeDrbTime1(offset, loopElement.elementsByTagName("Debut").at(0).toElement().text().toLongLong());
 		if(type == "BOUCLE") {
-			_loops.append(new PhStripLoop(loopNumber++, timeIn));
+			_loops.append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
 		}
 		else if (type == "PLAN") {
 			_cuts.append(new PhStripCut(PhStripCut::PhCutType::Simple, timeIn));
@@ -980,7 +979,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 				_cuts.append(new PhStripCut(PhStripCut::Simple, time));
 				break;
 			case 7:
-				_loops.append(new PhStripLoop(query.value(4).toInt(), time));
+				_loops.append(new PhStripLoop(time, QString::number(query.value(4).toInt())));
 				break;
 			}
 		}
@@ -1222,7 +1221,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 
 	// Add a loop per minute
 	for(int i = 0; i < loopCount; i++)
-		_loops.append(new PhStripLoop(i, _videoTimeIn + i * 24000 * 60));
+		_loops.append(new PhStripLoop(_videoTimeIn + i * 24000 * 60, QString::number(i)));
 
 	emit changed();
 }

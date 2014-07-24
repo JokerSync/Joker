@@ -7,7 +7,7 @@
 
 #include "PhStripLoop.h"
 
-PhStripLoop::PhStripLoop(int number, PhTime timeIn) : PhStripObject(timeIn)
+PhStripLoop::PhStripLoop(PhTime timeIn, QString label) : PhStripObject(timeIn)
 {
-	_number = number;
+	_label = label;
 }
