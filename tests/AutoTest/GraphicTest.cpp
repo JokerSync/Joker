@@ -62,7 +62,7 @@ void GraphicTest::rectTest()
 	// Note: using view.grabFrameBuffer() causes timing issues.
 	// There is no warranty that the scene has been fully rendered.
 	// Use view.renderPixmap().toImage() instead.
-	QImage resultImage(view.renderPixmap().toImage());
+	QImage resultImage(view.renderPixmap(32, 32).toImage());
 	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
 	resultImage.save(resultFile);
 	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
@@ -85,7 +85,7 @@ void GraphicTest::imageTest()
 
 	view.show();
 
-	QImage resultImage(view.renderPixmap().toImage());
+	QImage resultImage(view.renderPixmap(64, 64).toImage());
 	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
 	resultImage.save(resultFile);
 
@@ -118,7 +118,7 @@ void GraphicTest::rgbPatternTest()
 
 	view.show();
 
-	QImage resultImage(view.renderPixmap().toImage());
+	QImage resultImage(view.renderPixmap(64, 64).toImage());
 	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
 	resultImage.save(resultFile);
 	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());

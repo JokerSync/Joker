@@ -78,7 +78,7 @@ void GraphicTextTest::fontTest() {
 
 	view.show();
 
-	QImage resultImage(view.renderPixmap().toImage());
+	QImage resultImage(view.renderPixmap(776, 576).toImage());
 	resultImage.save(imageFileNameTemplate.arg("result"));
 	QImage expectedImage(expectedFile);
 
