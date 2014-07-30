@@ -390,7 +390,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gLoop.setWidth(height / 4);
 
 				gLoop.draw();
-				
+
 				PhGraphicText gLabel(&_hudFont, loop->label(), xLoop + 10, y + height * 3 / 4, -1);
 				gLabel.setWidth(_hudFont.getNominalWidth(loop->label()));
 				gLabel.setHeight(height / 4);

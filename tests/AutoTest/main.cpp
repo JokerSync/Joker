@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
 	}
 	if(testVideo) {
 		VideoTest videoTest;
-		result += QTest::qExec(&videoTest);
+		result += QTest::qExec(&videoTest, testArgList);
 	}
 
 	if(testGraphicStrip) {

@@ -18,14 +18,14 @@ In order to compile the  project you will need to follow the instructions depend
 * [Linux](#linux) _(coming soon)_
 * [Windows](#windows)
 
-The project uses *Qt 5.2.1* available here: http://qt-project.org/downloads
+The project uses *Qt 5.3.1* available here: http://qt-project.org/downloads
 
 ***
 
 
 ## <a name="mac"></a> Mac Os:
 
-You need to have Mac Os 10.8+ installed to make Joker work on your computer. We also recommand you the [5.2.x Qt version](http://download.qt-project.org/official_releases/online_installers/qt-opensource-mac-x64-1.5.0-1-online.dmg).
+You need to have Mac Os 10.8+ installed to make Joker work on your computer. We also recommand you the [5.3.x Qt version](http://download.qt-project.org/official_releases/online_installers/qt-opensource-mac-x64-1.5.0-1-online.dmg).
 
 ### Xcode
 
