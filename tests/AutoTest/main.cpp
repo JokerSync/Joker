@@ -17,6 +17,7 @@
 #include "GraphicStripTest.h"
 #include "GraphicTextTest.h"
 #include "VideoTest.h"
+#include "MidiTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
 	bool testGraphicText = testAll;
 	bool testGraphicStrip = testAll;
 	bool testVideo = testAll;
+	bool testMidi = testAll;
 
 	int result = 0;
 
@@ -46,7 +48,7 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "all") == 0) {
 			testClock = testSettings = testTC = testDebug = testDoc = testLockableSpinBox = testTCEdit =
-			                                                                                    testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
+																								testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
 		}
 		else if(strcmp(argv[i], "clock") == 0)
 			testClock = true;
@@ -77,6 +79,8 @@ int main(int argc, char *argv[])
 			testGraphicStrip = true;
 		else if(strcasecmp(argv[i], "video") == 0)
 			testVideo = true;
+		else if(strcasecmp(argv[i], "midi") == 0)
+			testMidi = true;
 		else
 			testArgList.append(argv[i]);
 	}
@@ -140,14 +144,20 @@ int main(int argc, char *argv[])
 		GraphicTextTest viewTest;
 		result += QTest::qExec(&viewTest, testArgList);
 	}
+
+	if(testGraphicStrip) {
+		GraphicStripTest viewTest;
+		result += QTest::qExec(&viewTest, testArgList);
+	}
+
 	if(testVideo) {
 		VideoTest videoTest;
 		result += QTest::qExec(&videoTest, testArgList);
 	}
 
-	if(testGraphicStrip) {
-		GraphicStripTest viewTest;
-		result += QTest::qExec(&viewTest, testArgList);
+	if(testMidi) {
+		MidiTest midiTest;
+		result += QTest::qExec(&midiTest, testArgList);
 	}
 
 	QThread::msleep(500);

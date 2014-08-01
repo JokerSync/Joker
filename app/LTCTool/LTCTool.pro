@@ -34,3 +34,9 @@ HEADERS  += LTCToolWindow.h \
 
 FORMS    += LTCToolWindow.ui \
     PreferencesDialog.ui
+
+mac {
+	# For the plist version
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+}
+
