@@ -12,19 +12,23 @@ PhMidiOutput::PhMidiOutput() :
 {
 }
 
+PhMidiOutput::~PhMidiOutput()
+{
+	close();
+}
+
 bool PhMidiOutput::open(QString portName)
 {
 	try {
 		_midiOut = new RtMidiOut();
+		PHDEBUG << "Opening" << portName;
 		for(int i = 0; i < _midiOut->getPortCount(); i++) {
-			PHDEBUG << "-" << QString::fromStdString(_midiOut->getPortName(i));
 			if(QString::fromStdString(_midiOut->getPortName(i)) == portName) {
-				PHDEBUG << "Opening" << QString::fromStdString(_midiOut->getPortName(i));
 				_midiOut->openPort(i);
-				PHDEBUG << _midiOut->isPortOpen();
 				return true;
 			}
 		}
+		PHDEBUG << "Unable to find" << portName;
 	}
 	catch(RtMidiError &error) {
 		error.printMessage();
@@ -44,10 +48,10 @@ void PhMidiOutput::close()
 	}
 }
 
-void PhMidiOutput::test()
+void PhMidiOutput::sendMTC(unsigned char data)
 {
 	if(_midiOut) {
-		std::vector<unsigned char> message = { 0xf1, 0x00}; // This message correspond to a quarter frame MTC settings lower frame to 0
+		std::vector<unsigned char> message = { 0xf1, data};
 		_midiOut->sendMessage(&message);
 	}
 }

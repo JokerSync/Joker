@@ -12,7 +12,9 @@ class MidiTest : public QObject
 {
 	Q_OBJECT
 private slots:
+	void initTestCase();
 	void testConnection();
+	void testTC();
 };
 
 #endif // MIDITEST_H

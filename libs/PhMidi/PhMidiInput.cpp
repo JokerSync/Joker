@@ -8,8 +8,18 @@
 #include "PhMidiInput.h"
 
 PhMidiInput::PhMidiInput() :
-	_midiIn(NULL)
+	_midiIn(NULL),
+	_hh(0),
+	_mm(0),
+	_ss(0),
+	_ff(0),
+	_tcType(PhTimeCodeType25)
 {
+}
+
+PhMidiInput::~PhMidiInput()
+{
+	close();
 }
 
 bool PhMidiInput::open(QString portName)
@@ -19,7 +29,8 @@ bool PhMidiInput::open(QString portName)
 		PHDEBUG << "Opening" << portName;
 		_midiIn->openVirtualPort(portName.toStdString());
 		_midiIn->ignoreTypes( false, false, false );
-		_midiIn->setCallback(&PhMidiInput::callback);
+		_midiIn->setCallback(&PhMidiInput::callback, this);
+		_midiIn->setErrorCallback(&PhMidiInput::errorCallback, this);
 		return true;
 	}
 	catch(RtMidiError &error) {
@@ -42,15 +53,66 @@ void PhMidiInput::close()
 
 void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 {
-	QString log = QString("Incoming midi message (%1) :").arg(message->size());
-	foreach (unsigned char c, *message)
-		log += QString::number(c, 16, 2) + " ";
-	PHDEBUG << log;
+	PHDEBUG << message->size();
+	if ( message->size() > 1 ) {
+		if(message->at(0) == 0xf1) {
+			int data1 = message->at(1);
+			switch (data1 >> 4) {
+			case 0:
+				_ff = (_ff & 0xf0) | (data1 & 0x0f);
+				break;
+			case 1:
+				_ff = (_ff & 0x0f) | ((data1 & 0x0f) << 4);
+				break;
+			case 2:
+				_ss = (_ss & 0xf0) | (data1 & 0x0f);
+				break;
+			case 3:
+				_ss = (_ss & 0x0f) | ((data1 & 0x0f) << 4);
+				// Because of the way MTC is structured,
+				// the minutes place won't be updated on the frame
+				// where it changes over.
+				// Dumb? Yes. But this fixes it.
+				// From https://github.com/Figure53/TimecodeDisplay/blob/master/MIDIReceiver.m#L197
+				if((_ss == 0) && (_ff == 0))
+					_mm++;
+				onTC(_hh, _mm, _ss, _ff, _tcType);
+				break;
+			case 4:
+				_mm = (_mm & 0xf0) | (data1 & 0x0f);
+				break;
+			case 5:
+				_mm = (_mm & 0x0f) | ((data1 & 0x0f) << 4);
+				break;
+			case 6:
+				_hh = (_hh & 0xf0) | (data1 & 0x0f);
+				break;
+			case 7:
+				_hh = (_hh & 0x0f) | ((data1 & 0x01) << 4);
+//				switch((data1 & 0x06) >> 1) ;
+				onTC(_hh, _mm, _ss, _ff, _tcType);
+				break;
+			}
+			onQuarterFrame();
+		}
+	}
 }
 
-void PhMidiInput::callback(double deltatime, std::vector<unsigned char> *message, void *userData)
+void PhMidiInput::onError(RtMidiError::Type type, QString errorText)
 {
-	PHDEBUG;
+	PHDEBUG << "Error:" << type << errorText;
+}
+
+void PhMidiInput::callback(double, std::vector<unsigned char> *message, void *userData)
+{
 	PhMidiInput *midiInput = (PhMidiInput*)userData;
-	midiInput->onMessage(message);
+	if(midiInput)
+		midiInput->onMessage(message);
+}
+
+void PhMidiInput::errorCallback(RtMidiError::Type type, const std::string &errorText, void *userData)
+{
+	PhMidiInput *midiInput = (PhMidiInput*)userData;
+	if(midiInput)
+		midiInput->onError(type, QString::fromStdString(errorText));
 }

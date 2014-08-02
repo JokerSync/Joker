@@ -16,7 +16,6 @@ public:
 	PhMidiObject();
 
 	virtual bool open(QString portName) = 0;
-	virtual void close() = 0;
 };
 
 #endif // PHMIDIOBJECT_H

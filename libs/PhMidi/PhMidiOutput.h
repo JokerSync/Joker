@@ -13,10 +13,12 @@ class PhMidiOutput : public PhMidiObject
 	Q_OBJECT
 public:
 	PhMidiOutput();
+	~PhMidiOutput();
 
 	bool open(QString portName);
 	void close();
-	void test();
+	void sendMTC(unsigned char data);
+
 private:
 	RtMidiOut *_midiOut;
 };
