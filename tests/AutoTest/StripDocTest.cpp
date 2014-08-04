@@ -746,6 +746,7 @@ void StripDocTest::addPeopleTest()
 
 }
 
+#warning /// @todo Move to PhTest
 QString StripDocTest::t2s(PhTime time, PhTimeCodeType tcType)
 {
 	return PhTimeCode::stringFromTime(time, tcType);

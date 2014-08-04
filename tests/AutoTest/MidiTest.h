@@ -8,9 +8,16 @@
 
 #include <QObject>
 
+#include "PhTools/PhTimeCode.h"
+
 class MidiTest : public QObject
 {
 	Q_OBJECT
+
+private:
+	QString t2s(PhTime time, PhTimeCodeType tcType);
+	PhTime s2t(QString string, PhTimeCodeType tcType);
+
 private slots:
 	void initTestCase();
 	void testConnection();

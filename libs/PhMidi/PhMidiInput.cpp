@@ -53,7 +53,6 @@ void PhMidiInput::close()
 
 void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 {
-	PHDEBUG << message->size();
 	if ( message->size() > 1 ) {
 		if(message->at(0) == 0xf1) {
 			int data1 = message->at(1);
@@ -89,10 +88,26 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 				break;
 			case 7:
 				_hh = (_hh & 0x0f) | ((data1 & 0x01) << 4);
-//				switch((data1 & 0x06) >> 1) ;
+				switch((data1 & 0x06) >> 1) {
+				case 0:
+					_tcType = PhTimeCodeType24;
+					break;
+				case 1:
+					_tcType = PhTimeCodeType25;
+					break;
+				case 2:
+					_tcType = PhTimeCodeType2997;
+					break;
+				case 3:
+					_tcType = PhTimeCodeType30;
+					break;
+				}
+
 				onTC(_hh, _mm, _ss, _ff, _tcType);
 				break;
 			}
+			PHDEBUG << "QF MTC" << QString::number(data1, 16) << _hh << ":" << _mm << ":" << _ss << ":" << _ff;
+
 			onQuarterFrame();
 		}
 	}
