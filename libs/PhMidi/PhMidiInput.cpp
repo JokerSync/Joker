@@ -73,8 +73,8 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 				// where it changes over.
 				// Dumb? Yes. But this fixes it.
 				// From https://github.com/Figure53/TimecodeDisplay/blob/master/MIDIReceiver.m#L197
-				if((_ss == 0) && (_ff == 0))
-					_mm++;
+//				if((_ss == 0) && (_ff == 0))
+//					_mm++;
 				emit onTC(_hh, _mm, _ss, _ff, _tcType);
 				break;
 			case 4:

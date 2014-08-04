@@ -59,7 +59,7 @@ private slots:
 
 	void on_readCheckBox_clicked(bool checked);
 
-	void onAudioProcessed(int minLevel, int maxLevel);
+	void onTick();
 
 private:
 	void setupOutput();
@@ -67,15 +67,16 @@ private:
 	Ui::MidiToolWindow *ui;
 	MidiToolSettings *_settings;
 
-	PhClock _writingClock;
+	PhClock _generatingClock;
 	PhMidiInput _midiInput;
 	PhMidiOutput _midiOutput;
+
+	QTimer _clockTimer;
+	int _currentDigit;
 
 	PhFrame _lastFrame;
 	PhFrame _frameDelta;
 	PhRate _lastRate;
-
-	void setupInput();
 };
 
 #endif // MIDITOOLWINDOW_H

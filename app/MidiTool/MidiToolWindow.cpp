@@ -13,7 +13,8 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MidiToolWindow),
 	_settings(settings),
-	_writingClock(PhTimeCodeType25),
+	_generatingClock(PhTimeCodeType25),
+	_currentDigit(0),
 	_lastFrame(-1),
 	_frameDelta(-1),
 	_lastRate(-1)
@@ -23,10 +24,14 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	on_readCheckBox_clicked(_settings->read());
 	on_generateCheckBox_clicked(_settings->generate());
 
-//	_ltcWriter.clock()->setFrame(_settings->firstFrame());
+	_generatingClock.setFrame(_settings->firstFrame());
 	ui->widgetMaster->setMediaLength(_settings->length());
 	ui->widgetMaster->setFirstFrame(_settings->firstFrame());
-//	ui->widgetMaster->setClock(_ltcWriter.clock());
+	ui->widgetMaster->setClock(&_generatingClock);
+
+	connect(&_clockTimer, &QTimer::timeout, this, &MidiToolWindow::onTick);
+
+	_clockTimer.start(10);
 
 	connect(&_midiInput, &PhMidiInput::onTC, this, &MidiToolWindow::onTC);
 //	connect(_ltcReader.clock(),  SIGNAL(rateChanged(PhRate)), this, SLOT(onSlaveRateChanged(PhRate)));
@@ -143,18 +148,6 @@ void MidiToolWindow::setupOutput()
 //	}
 }
 
-void MidiToolWindow::setupInput()
-{
-//	_ltcReader.close();
-//	if(!_ltcReader.init(_settings->audioInput())) {
-//		QMessageBox::warning(this, tr("Error"),
-//		                     tr("Error while loading the input device.\n"
-//		                        "See log for more informations"),
-//		                     QMessageBox::Ok);
-//		on_readCheckBox_clicked(false);
-//	}
-}
-
 void MidiToolWindow::on_generateCheckBox_clicked(bool checked)
 {
 
@@ -162,9 +155,7 @@ void MidiToolWindow::on_generateCheckBox_clicked(bool checked)
 	ui->generateCheckBox->setChecked(checked);
 	_settings->setGenerate(checked);
 	if(checked) {
-		if(_midiOutput.open(_settings->outputPortName()))
-			_midiOutput.sendMTC(0x00);
-		else {
+		if(!_midiOutput.open(_settings->outputPortName())) {
 			QMessageBox::critical(this, "Error", "Unable to send to " + _settings->inputPortName());
 			on_generateCheckBox_clicked(false);
 		}
@@ -188,7 +179,55 @@ void MidiToolWindow::on_readCheckBox_clicked(bool checked)
 		_midiInput.close();
 }
 
-void MidiToolWindow::onAudioProcessed(int minLevel, int maxLevel)
+void MidiToolWindow::onTick()
 {
-	ui->minMaxLevelLabel->setText(QString("%1 / %2").arg(minLevel).arg(maxLevel));
+	_generatingClock.tick(100);
+	unsigned int hhmmssff[4];
+	PhTimeCode::ComputeHhMmSsFf(hhmmssff, _generatingClock.frame(), _generatingClock.timeCodeType());
+	unsigned char mtcData = _currentDigit << 4;
+	switch(_currentDigit++) {
+	case 0:
+		mtcData |= hhmmssff[3] & 0x0f;
+		break;
+	case 1:
+		mtcData |= hhmmssff[3] & 0xf0;
+		break;
+	case 2:
+		mtcData |= hhmmssff[2] & 0x0f;
+		break;
+	case 3:
+		mtcData |= hhmmssff[2] & 0xf0;
+		break;
+	case 4:
+		mtcData |= hhmmssff[1] & 0x0f;
+		break;
+	case 5:
+		mtcData |= hhmmssff[1] & 0xf0;
+		break;
+	case 6:
+		mtcData |= hhmmssff[0] & 0x0f;
+		break;
+	case 7:
+		switch(_generatingClock.timeCodeType()) {
+		case PhTimeCodeType2398:
+		case PhTimeCodeType24:
+			mtcData |= 0;
+			break;
+		case PhTimeCodeType25:
+			mtcData |= 1 << 1;
+			break;
+		case PhTimeCodeType2997:
+			mtcData |= 2 << 1;
+			break;
+		case PhTimeCodeType30:
+			mtcData |= 3 << 1;
+			break;
+		}
+
+		mtcData |= hhmmssff[0] & 0xf0;
+		_currentDigit = 0;
+		break;
+	}
+
+	_midiOutput.sendMTC(mtcData);
 }
