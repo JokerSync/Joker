@@ -117,6 +117,8 @@ bool PhVideoEngine::open(QString fileName)
 		_clock.setTimeCodeType(PhTimeCodeType25);
 	else if (fps < 30)
 		_clock.setTimeCodeType(PhTimeCodeType2997);
+	else if (fps < 31)
+		_clock.setTimeCodeType(PhTimeCodeType30);
 	else {
 #warning /// @todo patch for #107 => find better fps decoding
 		PHDEBUG << "Bad fps detect => assuming 25";

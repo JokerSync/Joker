@@ -18,7 +18,8 @@ typedef enum {
 	PhTimeCodeType2398,
 	PhTimeCodeType24,
 	PhTimeCodeType25,
-	PhTimeCodeType2997
+	PhTimeCodeType2997,
+	PhTimeCodeType30,
 } PhTimeCodeType;
 
 /** @brief Timecode representation utility.
@@ -117,6 +118,18 @@ public:
 	 * @return The corresponding frame number.
 	 */
 	static PhFrame frameFromHhMmSsFf(unsigned int * hhmmssff, PhTimeCodeType type);
+
+	/**
+	 * @brief Compute time from the HH, MM, SS and FF timecode component and a type.
+	 *
+	 * @param hh The hour value.
+	 * @param mm The minute value.
+	 * @param ss The second value.
+	 * @param ff The frame value.
+	 * @param type A timecode type.
+	 * @return The corresponding time value.
+	 */
+	static PhFrame timeFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned int ss, unsigned int ff, PhTimeCodeType type);
 
 	/**
 	 * @brief Check if the timecode type is dropframe.

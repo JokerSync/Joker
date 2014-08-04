@@ -39,6 +39,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 					deviceID1 += 1;
 					break;
 				case PhTimeCodeType2997:
+				case PhTimeCodeType30:
 					break;
 				}
 				sendCommand(0x12, 0x11, deviceID1, deviceID2);

@@ -75,6 +75,8 @@ PhTimeCodeType PhMediaPanel::timeCodeType() const
 		return PhTimeCodeType24;
 	case 3:
 		return PhTimeCodeType2997;
+	case 4:
+		return PhTimeCodeType30;
 	default:
 		return PhTimeCodeType25;
 	}
@@ -148,6 +150,9 @@ void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
 		break;
 	case PhTimeCodeType2997:
 		ui->_rateSelectionBox->setCurrentIndex(3);
+		break;
+	case PhTimeCodeType30:
+		ui->_rateSelectionBox->setCurrentIndex(4);
 		break;
 	}
 }

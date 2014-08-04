@@ -85,6 +85,7 @@ PhFrame PhTimeCode::getFps(PhTimeCodeType type) {
 	case PhTimeCodeType25:
 		return 25;
 	case PhTimeCodeType2997:
+	case PhTimeCodeType30:
 		return 30;
 	}
 }
@@ -100,6 +101,8 @@ PhTime PhTimeCode::timePerFrame(PhTimeCodeType type)
 		return 960;
 	case PhTimeCodeType2997:
 		return 801;
+	case PhTimeCodeType30:
+		return 800;
 	}
 }
 
@@ -196,4 +199,9 @@ PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned
 
 PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int *hhmmssff, PhTimeCodeType type) {
 	return frameFromHhMmSsFf(hhmmssff[0], hhmmssff[1], hhmmssff[2], hhmmssff[3], type);
+}
+
+PhFrame PhTimeCode::timeFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned int ss, unsigned int ff, PhTimeCodeType type)
+{
+	return frameFromHhMmSsFf(hh, mm, ss, ff, type) * timePerFrame(type);
 }
