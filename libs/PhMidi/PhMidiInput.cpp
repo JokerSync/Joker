@@ -53,61 +53,76 @@ void PhMidiInput::close()
 
 void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 {
-	if ( message->size() > 1 ) {
-		if(message->at(0) == 0xf1) {
-			int data1 = message->at(1);
-			switch (data1 >> 4) {
-			case 0:
-				_ff = (_ff & 0xf0) | (data1 & 0x0f);
-				break;
-			case 1:
-				_ff = (_ff & 0x0f) | ((data1 & 0x0f) << 4);
-				break;
-			case 2:
-				_ss = (_ss & 0xf0) | (data1 & 0x0f);
-				break;
-			case 3:
-				_ss = (_ss & 0x0f) | ((data1 & 0x0f) << 4);
-				// Because of the way MTC is structured,
-				// the minutes place won't be updated on the frame
-				// where it changes over.
-				// Dumb? Yes. But this fixes it.
-				// From https://github.com/Figure53/TimecodeDisplay/blob/master/MIDIReceiver.m#L197
-//				if((_ss == 0) && (_ff == 0))
-//					_mm++;
-				emit onTC(_hh, _mm, _ss, _ff, _tcType);
-				break;
-			case 4:
-				_mm = (_mm & 0xf0) | (data1 & 0x0f);
-				break;
-			case 5:
-				_mm = (_mm & 0x0f) | ((data1 & 0x0f) << 4);
-				break;
-			case 6:
-				_hh = (_hh & 0xf0) | (data1 & 0x0f);
-				break;
-			case 7:
-				_hh = (_hh & 0x0f) | ((data1 & 0x01) << 4);
-				switch((data1 & 0x06) >> 1) {
+	if ( message->size() > 0 ) {
+		switch (message->at(0)) {
+		case 0xf1:
+			if(message->size() != 2)
+				PHDEBUG << "Bad QF MTC message size:" << message->size();
+			else {
+				unsigned char data1 = message->at(1);
+				switch (data1 >> 4) {
 				case 0:
-					_tcType = PhTimeCodeType24;
+					_ff = (_ff & 0xf0) | (data1 & 0x0f);
 					break;
 				case 1:
-					_tcType = PhTimeCodeType25;
+					_ff = (_ff & 0x0f) | ((data1 & 0x0f) << 4);
 					break;
 				case 2:
-					_tcType = PhTimeCodeType2997;
+					_ss = (_ss & 0xf0) | (data1 & 0x0f);
 					break;
 				case 3:
-					_tcType = PhTimeCodeType30;
+					_ss = (_ss & 0x0f) | ((data1 & 0x0f) << 4);
+					// Because of the way MTC is structured,
+					// the minutes place won't be updated on the frame
+					// where it changes over.
+					// Dumb? Yes. But this fixes it.
+					// From https://github.com/Figure53/TimecodeDisplay/blob/master/MIDIReceiver.m#L197
+					//				if((_ss == 0) && (_ff == 0))
+					//					_mm++;
+					emit onTC(_hh, _mm, _ss, _ff, _tcType);
+					break;
+				case 4:
+					_mm = (_mm & 0xf0) | (data1 & 0x0f);
+					break;
+				case 5:
+					_mm = (_mm & 0x0f) | ((data1 & 0x0f) << 4);
+					break;
+				case 6:
+					_hh = (_hh & 0xf0) | (data1 & 0x0f);
+					break;
+				case 7:
+					_hh = (_hh & 0x0f) | ((data1 & 0x01) << 4);
+					switch((data1 & 0x06) >> 1) {
+					case 0:
+						_tcType = PhTimeCodeType24;
+						break;
+					case 1:
+						_tcType = PhTimeCodeType25;
+						break;
+					case 2:
+						_tcType = PhTimeCodeType2997;
+						break;
+					case 3:
+						_tcType = PhTimeCodeType30;
+						break;
+					}
+
+					emit onTC(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				}
 
-				emit onTC(_hh, _mm, _ss, _ff, _tcType);
+				emit onQuarterFrame();
+				PHDEBUG << "QF MTC:" << _hh << _mm << _ss << _ff;
+			}
+			break;
+		default:
+			{
+				QString errorMessage = "Unknown midi message:";
+				foreach(unsigned char data, *message)
+				errorMessage += " " + QString::number(data, 16);
+				PHDEBUG << errorMessage;
 				break;
 			}
-
-			emit onQuarterFrame();
 		}
 	}
 }
