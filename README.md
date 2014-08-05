@@ -3,11 +3,21 @@ Joker
 
 [![Build Status](https://travis-ci.org/Phonations/Joker.png?branch=master)](https://travis-ci.org/Phonations/Joker) [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.png?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master)
 
-This depot hosts the Joker projet components:
+This repository hosts the Joker projet components:
 
-* applications
-* libraries
-* tests
+* Applications
+  * Joker: The main project.
+  * LTCTool: A LTC generator/reader.
+* Libraries
+  * PhTools: Common basic utilities.
+  * PhCommonUI: Common user interface component.
+  * PhStrip: The strip document model.
+  * PhGraphic: Basic library for displaying graphical object and texts.
+  * PhGraphicStrip: Specific strip related display routine.
+  * PhAudio: Basic library for audio playback/recording.
+  * PhVideo: Video playback library.
+  * PhSync: Sony 9 pin and LTC synchronisation interface.
+* Various test projects for testing the library modules independently or integrated with each others. It contains also unit testing modules in *AutoTest*.
 
 Compilation information:
 ------------------------
