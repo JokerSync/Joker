@@ -23,6 +23,8 @@ private slots:
 	void testConnection();
 	void testQFTC();
 	void testFullTC();
+	void testMMCStop();
+	void testMMCGoto();
 };
 
 #endif // MIDITEST_H

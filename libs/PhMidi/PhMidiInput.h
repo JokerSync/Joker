@@ -52,6 +52,12 @@ signals:
 	void onQuarterFrame();
 	/**
 	 * @brief Signal emitted upon full TC reception
+	 *
+	 * This signal can be emitted after:
+	 * - several quarter frame midi timecode
+	 * - a full MTC timecode
+	 * - a MMC goto
+	 *
 	 * @param hh The hour digits.
 	 * @param mm The minute digits.
 	 * @param ss The second digits.
@@ -60,6 +66,10 @@ signals:
 	 */
 	void onTC(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
+	/**
+	 * @brief Signal emitted upon MMC stop message reception
+	 */
+	void onStop();
 private slots:
 	void onMessage(std::vector<unsigned char> *message);
 	void onError(RtMidiError::Type type, QString errorText);

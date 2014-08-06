@@ -60,8 +60,8 @@ void MidiTest::testQFTC()
 	            tcType = type;
 			});
 
-	QVERIFY(midiIn.open("testTC"));
-	QVERIFY(midiOut.open("testTC"));
+	QVERIFY(midiIn.open("testQFTC"));
+	QVERIFY(midiOut.open("testQFTC"));
 
 	QCOMPARE(quarterFrameCount, 0);
 	QCOMPARE(tcCount, 0);
@@ -133,8 +133,8 @@ void MidiTest::testFullTC()
 	            tcType = type;
 			});
 
-	QVERIFY(midiIn.open("testTC"));
-	QVERIFY(midiOut.open("testTC"));
+	QVERIFY(midiIn.open("testFullTC"));
+	QVERIFY(midiOut.open("testFullTC"));
 
 	QCOMPARE(tcCount, 0);
 	QCOMPARE(tcType, PhTimeCodeType25);
@@ -145,4 +145,55 @@ void MidiTest::testFullTC()
 	QCOMPARE(tcCount, 1);
 	QCOMPARE(tcType, PhTimeCodeType2997);
 	QCOMPARE(t2s(time, tcType), QString("01:02:03:04"));
+}
+
+void MidiTest::testMMCStop()
+{
+	PhMidiInput midiIn;
+	PhMidiOutput midiOut;
+
+	int stopCount = 0;
+
+	connect(&midiIn, &PhMidiInput::onStop, [&]() {
+	            stopCount++;
+			});
+
+	QVERIFY(midiIn.open("testMMCStop"));
+	QVERIFY(midiOut.open("testMMCStop"));
+
+	QCOMPARE(stopCount, 0);
+
+	midiOut.sendMMCStop();
+	QThread::msleep(10);
+
+	QCOMPARE(stopCount, 1);
+}
+
+void MidiTest::testMMCGoto()
+{
+	PhMidiInput midiIn;
+	PhMidiOutput midiOut;
+
+	int tcCount = 0;
+	PhTime time = 0;
+	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	connect(&midiIn, &PhMidiInput::onTC, [&](int h, int m, int s, int f, PhTimeCodeType type) {
+	            tcCount++;
+	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, type);
+	            tcType = type;
+			});
+
+	QVERIFY(midiIn.open("testMMCGoto"));
+	QVERIFY(midiOut.open("testMMCGoto"));
+
+	QCOMPARE(tcCount, 0);
+	QCOMPARE(tcType, PhTimeCodeType25);
+
+	midiOut.sendMMCGoto(2, 3, 4, 5, PhTimeCodeType24);
+	QThread::msleep(10);
+
+	QCOMPARE(tcCount, 1);
+	QCOMPARE(tcType, PhTimeCodeType24);
+	QCOMPARE(t2s(time, tcType), QString("02:03:04:05"));
 }

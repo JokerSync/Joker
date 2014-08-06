@@ -59,8 +59,23 @@ void PhMidiOutput::sendQFTC(unsigned char data)
 void PhMidiOutput::sendFullTC(unsigned char hh, unsigned char mm, unsigned char ss, unsigned char ff, PhTimeCodeType tcType)
 {
 	if(_midiOut) {
-
 		std::vector<unsigned char> message = { 0xf0, 0x7f, 0x7f, 0x01, 0x01, computeHH(hh, tcType), mm, ss, ff, 0xf7 };
+		_midiOut->sendMessage(&message);
+	}
+}
+
+void PhMidiOutput::sendMMCStop()
+{
+	if(_midiOut) {
+		std::vector<unsigned char> message = { 0xf0, 0x7f, 0x7f, 0x06, 0x01, 0xf7 };
+		_midiOut->sendMessage(&message);
+	}
+}
+
+void PhMidiOutput::sendMMCGoto(unsigned char hh, unsigned char mm, unsigned char ss, unsigned char ff, PhTimeCodeType tcType)
+{
+	if(_midiOut) {
+		std::vector<unsigned char> message = { 0xf0, 0x7f, 0x7f, 0x06, 0x44, 0x06, 0x01, computeHH(hh, tcType), mm, ss, ff, 0xf7 };
 		_midiOut->sendMessage(&message);
 	}
 }
