@@ -229,5 +229,5 @@ void MidiToolWindow::onTick()
 		break;
 	}
 
-	_midiOutput.sendMTC(mtcData);
+	_midiOutput.sendQFTC(mtcData);
 }

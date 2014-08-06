@@ -21,7 +21,8 @@ private:
 private slots:
 	void initTestCase();
 	void testConnection();
-	void testTC();
+	void testQFTC();
+	void testFullTC();
 };
 
 #endif // MIDITEST_H

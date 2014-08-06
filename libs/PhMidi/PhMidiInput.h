@@ -6,8 +6,6 @@
 #ifndef PHMIDIINPUT_H
 #define PHMIDIINPUT_H
 
-#include "PhTools/PhTimeCode.h"
-
 #include "PhMidiObject.h"
 
 /**

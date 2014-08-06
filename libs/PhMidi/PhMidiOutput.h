@@ -34,7 +34,17 @@ public:
 	 * @brief Send a MTC quarter frame message
 	 * @param data The data1 byte containing the MTC data.
 	 */
-	void sendMTC(unsigned char data);
+	void sendQFTC(unsigned char data);
+
+	/**
+	 * @brief Send a full midi timecode message
+	 * @param hh The hour digit
+	 * @param mm The minute digit
+	 * @param ss The second digit
+	 * @param ff The frame digit
+	 * @param tcType The timecode type
+	 */
+	void sendFullTC(unsigned char hh, unsigned char mm, unsigned char ss, unsigned char ff, PhTimeCodeType tcType);
 
 private:
 	RtMidiOut *_midiOut;

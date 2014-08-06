@@ -43,7 +43,7 @@ void MidiTest::testConnection()
 	QVERIFY(midiOut.open("testConnection"));
 }
 
-void MidiTest::testTC()
+void MidiTest::testQFTC()
 {
 	PhMidiInput midiIn;
 	PhMidiOutput midiOut;
@@ -68,7 +68,7 @@ void MidiTest::testTC()
 	QCOMPARE(tcType, PhTimeCodeType25);
 
 	// Sending a quarter frame MTC message
-	midiOut.sendMTC(0x01); // setting lower frame to 1
+	midiOut.sendQFTC(0x01); // setting lower frame to 1
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 1);
@@ -76,37 +76,37 @@ void MidiTest::testTC()
 	QCOMPARE(tcType, PhTimeCodeType25);
 
 #warning /// @todo Test basic tc change
-	midiOut.sendMTC(0x11); // setting higher frame to 0x1x
+	midiOut.sendQFTC(0x11); // setting higher frame to 0x1x
 	QThread::msleep(10);
-	midiOut.sendMTC(0x23); // setting lower second to 3
+	midiOut.sendQFTC(0x23); // setting lower second to 3
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 3);
 	QCOMPARE(tcCount, 0);
 	QCOMPARE(tcType, PhTimeCodeType25);
 
-	midiOut.sendMTC(0x31); // setting higher second to 0x1x
+	midiOut.sendQFTC(0x31); // setting higher second to 0x1x
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 4);
 	QCOMPARE(tcCount, 1);
 	QCOMPARE(tcType, PhTimeCodeType25);
 	QCOMPARE(t2s(time, tcType), QString("00:00:19:17"));
 
-	midiOut.sendMTC(0x48); // setting lower minute to 0x08
+	midiOut.sendQFTC(0x48); // setting lower minute to 0x08
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 5);
 	QCOMPARE(tcCount, 1);
 
-	midiOut.sendMTC(0x52); // setting higher minute to 0x2x
+	midiOut.sendQFTC(0x52); // setting higher minute to 0x2x
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 6);
 	QCOMPARE(tcCount, 1);
 
-	midiOut.sendMTC(0x67); // setting lower hour to 0x07
+	midiOut.sendQFTC(0x67); // setting lower hour to 0x07
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 7);
 	QCOMPARE(tcCount, 1);
 
-	midiOut.sendMTC(0x77); // setting rate to 30 and higher hour to 0x1x
+	midiOut.sendQFTC(0x77); // setting rate to 30 and higher hour to 0x1x
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 8);
 	QCOMPARE(tcCount, 2);
@@ -116,4 +116,33 @@ void MidiTest::testTC()
 
 #warning /// @todo Test specific tc change
 #warning /// @todo Test midi tc type
+}
+
+void MidiTest::testFullTC()
+{
+	PhMidiInput midiIn;
+	PhMidiOutput midiOut;
+
+	int tcCount = 0;
+	PhTime time = 0;
+	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	connect(&midiIn, &PhMidiInput::onTC, [&](int h, int m, int s, int f, PhTimeCodeType type) {
+	            tcCount++;
+	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, type);
+	            tcType = type;
+			});
+
+	QVERIFY(midiIn.open("testTC"));
+	QVERIFY(midiOut.open("testTC"));
+
+	QCOMPARE(tcCount, 0);
+	QCOMPARE(tcType, PhTimeCodeType25);
+
+	midiOut.sendFullTC(1, 2, 3, 4, PhTimeCodeType2997);
+	QThread::msleep(10);
+
+	QCOMPARE(tcCount, 1);
+	QCOMPARE(tcType, PhTimeCodeType2997);
+	QCOMPARE(t2s(time, tcType), QString("01:02:03:04"));
 }

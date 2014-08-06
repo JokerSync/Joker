@@ -54,7 +54,45 @@ void PhMidiInput::close()
 void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 {
 	if ( message->size() > 0 ) {
-		switch (message->at(0)) {
+		unsigned char status = message->at(0);
+		switch (status) {
+		// A SysEx message
+		case 0xf0:
+			if(message->size() < 4)
+				PHDEBUG << "Bad SysEx message size:" << message->size();
+			else {
+				unsigned char manufactorId = message->at(1);
+				unsigned char channel = message->at(2);
+				unsigned char type = message->at(3);
+				switch (type) {
+				// Timecode message type
+				case 0x01:
+					if(message->size() != 10)
+						PHDEBUG << "Bad TC message size:" << message->size();
+					else switch(message->at(4)) {
+						case 0x01:
+							_tcType = computeTimeCodeType(message->at(5) >> 5);
+							_hh = message->at(5) & 0x1F;
+							_mm = message->at(6);
+							_ss = message->at(7);
+							_ff = message->at(8);
+							if(message->at(9) != 0xF7)
+								PHDEBUG << "End of SysEx expected:" << QString::number(0xF7);
+							PHDEBUG << "Full TC:" << _hh << _mm << _ss << _ff;
+							onTC(_hh, _mm, _ss, _ff, _tcType);
+							break;
+						default:
+							PHDEBUG << "Unknown TC type:" << message->at(4);
+							break;
+						}
+					break;
+				default:
+					PHDEBUG << "Unknown SysEx type:" << QString::number(type, 16);
+					break;
+				}
+			}
+			break;
+		// A quarter frame midi timecode message
 		case 0xf1:
 			if(message->size() != 2)
 				PHDEBUG << "Bad QF MTC message size:" << message->size();
@@ -92,27 +130,14 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					break;
 				case 7:
 					_hh = (_hh & 0x0f) | ((data1 & 0x01) << 4);
-					switch((data1 & 0x06) >> 1) {
-					case 0:
-						_tcType = PhTimeCodeType24;
-						break;
-					case 1:
-						_tcType = PhTimeCodeType25;
-						break;
-					case 2:
-						_tcType = PhTimeCodeType2997;
-						break;
-					case 3:
-						_tcType = PhTimeCodeType30;
-						break;
-					}
+					_tcType = computeTimeCodeType((data1 & 0x06) >> 1);
 
 					emit onTC(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				}
 
 				emit onQuarterFrame();
-				PHDEBUG << "QF MTC:" << _hh << _mm << _ss << _ff;
+//				PHDEBUG << "QF MTC:" << _hh << _mm << _ss << _ff;
 			}
 			break;
 		default:
