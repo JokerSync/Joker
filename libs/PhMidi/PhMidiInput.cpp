@@ -98,6 +98,10 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 							PHDEBUG << "MMC Stop" << messageStr;
 							emit onStop();
 							break;
+						case 0x02:
+							PHDEBUG << "MMC Play" << messageStr;
+							emit onPlay();
+							break;
 						case 0x44:
 							_tcType = computeTimeCodeType(message->at(7) >> 5);
 							_hh = message->at(7) & 0x1F;

@@ -23,6 +23,7 @@ private slots:
 	void testConnection();
 	void testQFTC();
 	void testFullTC();
+	void testMMCPlay();
 	void testMMCStop();
 	void testMMCGoto();
 };

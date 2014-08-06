@@ -47,6 +47,11 @@ public:
 	void sendFullTC(unsigned char hh, unsigned char mm, unsigned char ss, unsigned char ff, PhTimeCodeType tcType);
 
 	/**
+	 * @brief Send a MMC play message
+	 */
+	void sendMMCPlay();
+
+	/**
 	 * @brief Send a MMC stop message
 	 */
 	void sendMMCStop();

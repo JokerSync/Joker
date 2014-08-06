@@ -64,6 +64,14 @@ void PhMidiOutput::sendFullTC(unsigned char hh, unsigned char mm, unsigned char 
 	}
 }
 
+void PhMidiOutput::sendMMCPlay()
+{
+	if(_midiOut) {
+		std::vector<unsigned char> message = { 0xf0, 0x7f, 0x7f, 0x06, 0x02, 0xf7 };
+		_midiOut->sendMessage(&message);
+	}
+}
+
 void PhMidiOutput::sendMMCStop()
 {
 	if(_midiOut) {
