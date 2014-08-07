@@ -67,9 +67,15 @@ signals:
 	void onTC(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
 	/**
+	 * @brief Signal emitted upon MMC play message reception
+	 */
+	void onPlay();
+
+	/**
 	 * @brief Signal emitted upon MMC stop message reception
 	 */
 	void onStop();
+
 private slots:
 	void onMessage(std::vector<unsigned char> *message);
 	void onError(RtMidiError::Type type, QString errorText);

@@ -147,6 +147,28 @@ void MidiTest::testFullTC()
 	QCOMPARE(t2s(time, tcType), QString("01:02:03:04"));
 }
 
+void MidiTest::testMMCPlay()
+{
+	PhMidiInput midiIn;
+	PhMidiOutput midiOut;
+
+	int playCount = 0;
+
+	connect(&midiIn, &PhMidiInput::onPlay, [&]() {
+	            playCount++;
+			});
+
+	QVERIFY(midiIn.open("testMMCStop"));
+	QVERIFY(midiOut.open("testMMCStop"));
+
+	QCOMPARE(playCount, 0);
+
+	midiOut.sendMMCPlay();
+	QThread::msleep(10);
+
+	QCOMPARE(playCount, 1);
+}
+
 void MidiTest::testMMCStop()
 {
 	PhMidiInput midiIn;
