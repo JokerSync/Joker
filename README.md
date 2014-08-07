@@ -16,7 +16,10 @@ This repository hosts the Joker projet components:
   * PhGraphicStrip: Specific strip related display routine.
   * PhAudio: Basic library for audio playback/recording.
   * PhVideo: Video playback library.
-  * PhSync: Sony 9 pin and LTC synchronisation interface.
+  * PhSync: Generic sync component.
+  * PhSony: Sony 9 pin synchronisation interface.
+  * PhLtc: LTC synchronisation interface.
+  * PhMidi: Midi synchronisation interface.
 * Various test projects for testing the library modules independently or integrated with each others. It contains also unit testing modules in *AutoTest*.
 
 Compilation information:

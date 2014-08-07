@@ -15,8 +15,8 @@
 #include "PhCommonUI/PhDocumentWindow.h"
 #include <PhVideo/PhVideoEngine.h>
 #include <PhGraphicStrip/PhGraphicStrip.h>
-#include "PhSync/PhSonySlaveController.h"
-#include "PhSync/PhLtcReader.h"
+#include "PhSony/PhSonySlaveController.h"
+#include "PhLtc/PhLtcReader.h"
 
 #include "Synchronizer.h"
 #include "PropertyDialog.h"

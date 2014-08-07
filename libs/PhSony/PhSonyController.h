@@ -13,7 +13,7 @@
 
 #include "PhTools/PhClock.h"
 
-#include "PhSyncSettings.h"
+#include "PhSonySettings.h"
 
 /**
  * @brief Sony abstract controller for  sony 9 pin communication through the serial port.
@@ -53,7 +53,7 @@ public:
 	 * @param settings The application settings
 	 * @param comSuffix Serial port name suffix
 	 */
-	explicit PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, QString comSuffix);
+	explicit PhSonyController(PhTimeCodeType tcType, PhSonySettings *settings, QString comSuffix);
 
 	/**
 	 * @brief PhSonyController destructor
@@ -205,7 +205,7 @@ protected:
 	PhClock _clock;
 
 	/** @brief The application settings */
-	PhSyncSettings* _settings;
+	PhSonySettings* _settings;
 
 	/** @brief Serial port name suffix (A for slave and B for master). */
 	QString _comSuffix;

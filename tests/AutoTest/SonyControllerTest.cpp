@@ -8,7 +8,7 @@
 
 #include "SonyControllerTest.h"
 
-#include "PhSync/PhSonyController.h"
+#include "PhSony/PhSonyController.h"
 
 #include "PhTools/PhDebug.h"
 

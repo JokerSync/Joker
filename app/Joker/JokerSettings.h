@@ -7,7 +7,7 @@
 #include "PhTools/PhGenericSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhVideo/PhVideoSettings.h"
-#include "PhSync/PhSyncSettings.h"
+#include "PhSony/PhSonySettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 #include "PhCommonUI/PhFeedbackSettings.h"
 
@@ -18,7 +18,7 @@
 class JokerSettings : PhGenericSettings,
 	public PhGraphicStripSettings,
 	public PhVideoSettings,
-	public PhSyncSettings,
+	public PhSonySettings,
 	public PhDocumentWindowSettings,
 	public PhFeedbackSettings
 {
@@ -55,7 +55,7 @@ public:
 
 	// PhVideoSettings :
 
-	// PhSyncSettings:
+	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
 	PH_SETTING_UCHAR2(setSonyDevice1, sonyDevice1, 0xF0)
 	PH_SETTING_UCHAR2(setSonyDevice2, sonyDevice2, 0xC0)

@@ -11,7 +11,7 @@
 #include "ui_PreferencesDialog.h"
 #include "PreferencesDialog.h"
 #include "PhTools/PhDebug.h"
-#include "PhSync/PhLtcReader.h"
+#include "PhLtc/PhLtcReader.h"
 
 PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QDialog(parent),

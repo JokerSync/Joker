@@ -3,15 +3,15 @@
 
 #include <QDir>
 
-#include "PhSync/PhSyncSettings.h"
+#include "PhSony/PhSonySettings.h"
 
 #include "../GraphicStripTest/GraphicStripTestSettings.h"
 
 class GraphicStripSyncTestSettings : public GraphicStripTestSettings,
-	public PhSyncSettings
+	public PhSonySettings
 {
 public:
-	// PhSyncSettings:
+	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
 	PH_SETTING_UCHAR2(setSonyDevice1, sonyDevice1, 0xF0)
 	PH_SETTING_UCHAR2(setSonyDevice2, sonyDevice2, 0xC0)

@@ -8,7 +8,7 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyMasterController::PhSonyMasterController(PhTimeCodeType tcType, PhSyncSettings *settings)
+PhSonyMasterController::PhSonyMasterController(PhTimeCodeType tcType, PhSonySettings *settings)
 	: PhSonyController(tcType, settings, settings->sonyMasterPortSuffix())
 {
 }

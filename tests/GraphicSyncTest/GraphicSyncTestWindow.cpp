@@ -4,7 +4,6 @@
 GraphicSyncTestWindow::GraphicSyncTestWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::GraphicSyncTestWindow),
-	_settings("Phonations", "GraphicSyncTest"),
 	_sony(PhTimeCodeType25, &_settings),
 	_lastTime(0),
 	_count(0)
