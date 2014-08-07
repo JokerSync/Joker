@@ -14,7 +14,7 @@
 /**
  * @brief Provide a synchronisation system between the strip, the video and the external sync signal
  */
-class Synchronizer : public QObject
+class PhSynchronizer : public QObject
 {
 	Q_OBJECT
 public:
@@ -27,7 +27,7 @@ public:
 		LTC = 2,
 	};
 
-	Synchronizer();
+	PhSynchronizer();
 
 	/**
 	 * @brief Set the strip clock

@@ -8,10 +8,13 @@
 #include <QDir>
 #include <QProcess>
 #include <QStandardPaths>
-#include "ui_PreferencesDialog.h"
-#include "PreferencesDialog.h"
+
 #include "PhTools/PhDebug.h"
 #include "PhLtc/PhLtcReader.h"
+#include "PhSync/PhSynchronizer.h"
+
+#include "ui_PreferencesDialog.h"
+#include "PreferencesDialog.h"
 
 PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QDialog(parent),
@@ -116,9 +119,9 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 
 	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
 
-	if(_oldSyncProtocol == Synchronizer::Sony)
+	if(_oldSyncProtocol == PhSynchronizer::Sony)
 		showParamSony(true);
-	else if(_oldSyncProtocol == Synchronizer::LTC)
+	else if(_oldSyncProtocol == PhSynchronizer::LTC)
 		showParamLTC(true);
 	else {
 		showParamLTC(false);
@@ -165,10 +168,10 @@ void PreferencesDialog::on_buttonBox_accepted()
 {
 	if(ui->cboBoxLang->currentData() != _settings->language()) {
 		QMessageBox::warning(this, tr("Information"),
-		                     tr("You change the language to \"%1\".\n"
-		                        "You need to restart %2 to apply you changes.").arg(ui->cboBoxLang->currentText(), APP_NAME),
-		                     QMessageBox::Ok,
-		                     QMessageBox::Ok);
+							 tr("You change the language to \"%1\".\n"
+								"You need to restart %2 to apply you changes.").arg(ui->cboBoxLang->currentText(), APP_NAME),
+							 QMessageBox::Ok,
+							 QMessageBox::Ok);
 		_settings->setLanguage(ui->cboBoxLang->currentData().toString());
 	}
 	close();
@@ -273,10 +276,10 @@ void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *cu
 	Q_UNUSED(previous);
 	int protocol = ui->listWidgetSync->currentRow();
 	switch(protocol) {
-	case Synchronizer::Sony:
+	case PhSynchronizer::Sony:
 		showParamSony(true);
 		break;
-	case Synchronizer::LTC:
+	case PhSynchronizer::LTC:
 		showParamLTC(true);
 		break;
 	default:

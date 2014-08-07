@@ -7,8 +7,11 @@
 HEADERS += \
 	../../libs/PhSync/PhTime.h \
 	../../libs/PhSync/PhTimeCode.h \
-	../../libs/PhSync/PhClock.h
+	../../libs/PhSync/PhClock.h \
+	../../libs/PhSync/PhSynchronizer.h
 
 SOURCES += \
 	../../libs/PhSync/PhTimeCode.cpp \
-	../../libs/PhSync/PhClock.cpp
+	../../libs/PhSync/PhClock.cpp \
+	../../libs/PhSync/PhSynchronizer.cpp
+

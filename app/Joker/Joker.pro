@@ -34,7 +34,6 @@ include(../../libs/PhLtc/PhLtc.pri)
 #Main app
 SOURCES += main.cpp \
 	JokerWindow.cpp \
-	Synchronizer.cpp \
 	AboutDialog.cpp \
 	PreferencesDialog.cpp \
 	PropertyDialog.cpp \
@@ -44,7 +43,6 @@ SOURCES += main.cpp \
 
 HEADERS += \
 	JokerWindow.h \
-	Synchronizer.h \
 	AboutDialog.h \
 	PreferencesDialog.h \
 	PropertyDialog.h \

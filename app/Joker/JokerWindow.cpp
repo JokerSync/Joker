@@ -62,27 +62,27 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mediaPanel.setClock(_strip.clock());
 #warning /// @todo move to CSS file
 	_mediaPanel.setStyleSheet(
-	    "* {"
-	    "	  color: white;"
-	    "  }"
-	    "  PhMediaPanel { "
-	    "	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
-	    "	  border-style: solid;                                                                          "
-	    "	  border-width: 4px;                                                                            "
-	    "	  border-radius: 3px;                                                                           "
-	    "	  border-color: white;                                                                          "
-	    "  }                                                                                                "
-	    "  QPushButton, QComboBox{                                                                          "
-	    "	  background: grey;                                                                             "
-	    "	  border-style: outset;                                                                         "
-	    "	  border-width: 2px;                                                                            "
-	    "	  border-radius: 5px;                                                                           "
-	    "	  border-color: white;                                                                          "
-	    "  }                                                                                                "
-	    "  QLabel#_timecodeLabel{                                                                           "
-	    "	  padding: 10px;                                                                                "
-	    "  }                                                                                                "
-	    );
+		"* {"
+		"	  color: white;"
+		"  }"
+		"  PhMediaPanel { "
+		"	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
+		"	  border-style: solid;                                                                          "
+		"	  border-width: 4px;                                                                            "
+		"	  border-radius: 3px;                                                                           "
+		"	  border-color: white;                                                                          "
+		"  }                                                                                                "
+		"  QPushButton, QComboBox{                                                                          "
+		"	  background: grey;                                                                             "
+		"	  border-style: outset;                                                                         "
+		"	  border-width: 2px;                                                                            "
+		"	  border-radius: 5px;                                                                           "
+		"	  border-color: white;                                                                          "
+		"  }                                                                                                "
+		"  QLabel#_timecodeLabel{                                                                           "
+		"	  padding: 10px;                                                                                "
+		"  }                                                                                                "
+		);
 
 	this->setFocus();
 
@@ -131,32 +131,32 @@ void JokerWindow::setupSyncProtocol()
 	_sonySlave.close();
 	_ltcReader.close();
 
-	Synchronizer::SyncType type = (Synchronizer::SyncType)_settings->synchroProtocol();
+	PhSynchronizer::SyncType type = (PhSynchronizer::SyncType)_settings->synchroProtocol();
 
 	switch(type) {
-	case Synchronizer::Sony:
+	case PhSynchronizer::Sony:
 		// Initialize the sony module
 		if(_sonySlave.open()) {
 			clock = _sonySlave.clock();
 			_lastVideoSyncElapsed.start();
 		}
 		else {
-			type = Synchronizer::NoSync;
+			type = PhSynchronizer::NoSync;
 			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
 		}
 		break;
-	case Synchronizer::LTC:
+	case PhSynchronizer::LTC:
 		{
 			QString input = _settings->ltcInputDevice();
 			if(_ltcReader.init(input))
 				clock = _ltcReader.clock();
 			else {
 				QMessageBox::critical(this, "", "Unable to open " + input);
-				type = Synchronizer::NoSync;
+				type = PhSynchronizer::NoSync;
 			}
 			break;
 		}
-	case Synchronizer::NoSync:
+	case PhSynchronizer::NoSync:
 		break;
 	}
 
@@ -471,7 +471,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 
 void JokerWindow::timeCounter(PhTimeScale frequency)
 {
-	if(_strip.clock()->rate() == 1 && (Synchronizer::SyncType)_settings->synchroProtocol() != Synchronizer::NoSync) {
+	if(_strip.clock()->rate() == 1 && (PhSynchronizer::SyncType)_settings->synchroProtocol() != PhSynchronizer::NoSync) {
 		_numberOfDraw++;
 		if(_numberOfDraw >= frequency) {
 			_numberOfDraw = 0;
@@ -547,7 +547,7 @@ void JokerWindow::fadeInMediaPanel()
 	if(!this->hasFocus())
 		return;
 	// Don't show the mediaPanel if Joker is remote controled.
-	if(_settings->synchroProtocol() != Synchronizer::NoSync)
+	if(_settings->synchroProtocol() != PhSynchronizer::NoSync)
 		return;
 
 	_mediaPanel.show();
