@@ -28,6 +28,10 @@ PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
 		ltc_encoder_set_bufsize(_encoder, 48000, 29.97);
 		ltc_encoder_reinit(_encoder, 48000, tcType, LTC_TV_525_60, LTC_USE_DATE);
 		break;
+	case PhTimeCodeType30:
+		ltc_encoder_set_bufsize(_encoder, 48000, 30);
+		ltc_encoder_reinit(_encoder, 48000, tcType, LTC_TV_525_60, LTC_USE_DATE);
+		break;
 	default:
 		break;
 	}

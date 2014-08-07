@@ -85,6 +85,7 @@ PhFrame PhTimeCode::getFps(PhTimeCodeType type) {
 	case PhTimeCodeType25:
 		return 25;
 	case PhTimeCodeType2997:
+	case PhTimeCodeType30:
 		return 30;
 	}
 }
@@ -100,6 +101,8 @@ PhTime PhTimeCode::timePerFrame(PhTimeCodeType type)
 		return 960;
 	case PhTimeCodeType2997:
 		return 801;
+	case PhTimeCodeType30:
+		return 800;
 	}
 }
 
@@ -166,29 +169,39 @@ void PhTimeCode::ComputeHhMmSsFf(unsigned int *hhmmssff, PhFrame frame, PhTimeCo
 	hhmmssff[3] = (unsigned int)n;
 }
 
-PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int *hhmmssff, PhTimeCodeType type) {
+PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned int ss, unsigned int ff, PhTimeCodeType type)
+{
 	PhFrame fps = getFps(type);
 
-	if (hhmmssff[1] >= 60) {
-		PHDEBUG << "Bad minute value:" << QString::number(hhmmssff[1]);
-		hhmmssff[1] = 0;
+	if (mm >= 60) {
+		PHDEBUG << "Bad minute value:" << QString::number(mm);
+		mm = 0;
 	}
-	if (hhmmssff[2] >= 60) {
-		PHDEBUG << "Bad second value:" << QString::number(hhmmssff[2]);
-		hhmmssff[2] = 0;
+	if (ss >= 60) {
+		PHDEBUG << "Bad second value:" << QString::number(ss);
+		ss = 0;
 	}
-	if (hhmmssff[3] >= fps) {
-		PHDEBUG << "Bad frame value:" << QString::number(hhmmssff[3]);
-		hhmmssff[3] = 0;
+	if (ff >= fps) {
+		PHDEBUG << "Bad frame value:" << QString::number(ff);
+		ff = 0;
 	}
 	PhFrame dropframe = 0;
 	if (isDrop(type)) {
 		// counting drop per hour
-		dropframe += hhmmssff[0] * 108;
+		dropframe += hh * 108;
 		// counting drop per tenth of minute
-		dropframe += (hhmmssff[1] / 10) * 18;
+		dropframe += (mm / 10) * 18;
 		// counting drop per minute
-		dropframe += (hhmmssff[1] % 10) * 2;
+		dropframe += (mm % 10) * 2;
 	}
-	return (((hhmmssff[0] * 60) + hhmmssff[1]) * 60 + hhmmssff[2]) * fps + hhmmssff[3] - dropframe;
+	return (((hh * 60) + mm) * 60 + ss) * fps + ff - dropframe;
+}
+
+PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int *hhmmssff, PhTimeCodeType type) {
+	return frameFromHhMmSsFf(hhmmssff[0], hhmmssff[1], hhmmssff[2], hhmmssff[3], type);
+}
+
+PhFrame PhTimeCode::timeFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned int ss, unsigned int ff, PhTimeCodeType type)
+{
+	return frameFromHhMmSsFf(hh, mm, ss, ff, type) * timePerFrame(type);
 }

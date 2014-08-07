@@ -8,35 +8,31 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = LTCTool
+TARGET = MidiTool
 TEMPLATE = app
 
 VERSION = 1.0.0
 
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 
-CONFIG += ltc
-
 INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri);
-include(../../libs/PhAudio/PhAudio.pri);
-include(../../libs/PhSync/PhSync.pri);
+include(../../libs/PhMidi/PhMidi.pri);
 include(../../libs/PhCommonUI/PhCommonUI.pri);
 
 SOURCES += main.cpp\
-        LTCToolWindow.cpp \
+        MidiToolWindow.cpp \
     PreferencesDialog.cpp
 
-HEADERS  += LTCToolWindow.h \
+HEADERS  += MidiToolWindow.h \
     PreferencesDialog.h \
-    LTCToolSettings.h
+    MidiToolSettings.h
 
-FORMS    += LTCToolWindow.ui \
+FORMS    += MidiToolWindow.ui \
     PreferencesDialog.ui
 
 mac {
 	# For the plist version
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
 }
-
