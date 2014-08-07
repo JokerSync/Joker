@@ -9,7 +9,7 @@
 
 #include <QDialog>
 
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 
 namespace Ui {
 class PhTimeCodeDialog;

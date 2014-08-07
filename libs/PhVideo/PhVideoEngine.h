@@ -24,7 +24,7 @@ extern "C" {
 #include <QObject>
 #include <QElapsedTimer>
 
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 #include "PhTools/PhTickCounter.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
 

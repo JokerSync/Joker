@@ -5,7 +5,7 @@
 #include <QTimer>
 
 #include "PhCommonUI/PhMediaPanel.h"
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 
 namespace Ui {
 class TimecodePlayerWindow;

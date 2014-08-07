@@ -9,7 +9,7 @@
 
 #include <QWidget>
 
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 
 namespace Ui {
 class PhMediaPanel;

@@ -10,7 +10,7 @@
 #include <QLineEdit>
 #include <QStack>
 
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 #include "PhTools/PhDebug.h"
 
 /**

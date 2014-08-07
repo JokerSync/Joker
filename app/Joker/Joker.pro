@@ -27,6 +27,7 @@ include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 include(../../libs/PhVideo/PhVideo.pri)
 include(../../libs/PhAudio/PhAudio.pri)
+include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhSony/PhSony.pri)
 include(../../libs/PhLtc/PhLtc.pri)
 

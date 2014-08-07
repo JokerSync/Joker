@@ -18,6 +18,7 @@ JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
 INCLUDEPATH += $${JOKER_ROOT}/libs
 
 include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
+include(../../libs/PhSync/PhSync.pri)
 include($${JOKER_ROOT}/libs/PhCommonUI/PhCommonUI.pri)
 
 SOURCES += main.cpp\

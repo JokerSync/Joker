@@ -5,7 +5,7 @@
  */
 
 #include "TimeCodeTest.h"
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 
 TimeCodeTest::TimeCodeTest(QObject *parent) :
 	QObject(parent)

@@ -5,7 +5,7 @@
 
 #include "GenerateDialog.h"
 #include "ui_GenerateDialog.h"
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 #include "PhTools/PhDebug.h"
 
 GenerateDialog::GenerateDialog(GraphicStripTestSettings *settings, PhStripDoc * doc, QWidget *parent) :

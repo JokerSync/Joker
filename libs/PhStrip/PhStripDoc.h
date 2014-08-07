@@ -11,7 +11,7 @@
 #include <QMap>
 #include <QFile>
 
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 
 #include "PhPeople.h"
 #include "PhStripCut.h"

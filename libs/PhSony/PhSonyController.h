@@ -11,7 +11,7 @@
 #include <QSerialPort>
 #include <QThread>
 
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 
 #include "PhSonySettings.h"
 

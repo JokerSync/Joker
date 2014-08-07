@@ -21,6 +21,7 @@ INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri);
 include(../../libs/PhAudio/PhAudio.pri);
+include(../../libs/PhSync/PhSync.pri);
 include(../../libs/PhLtc/PhLtc.pri);
 include(../../libs/PhCommonUI/PhCommonUI.pri);
 

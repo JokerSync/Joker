@@ -4,7 +4,7 @@
 #include <QString>
 #include <QTimer>
 
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 #include "PhTools/PhDebug.h"
 
 #include "PhVideo/PhVideoEngine.h"

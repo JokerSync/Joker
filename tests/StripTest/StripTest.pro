@@ -21,6 +21,7 @@ DEFINES += ORG_NAME=\\\"Phonations\\\"
 TEMPLATE = app
 
 include(../../libs/PhTools/PhTools.pri)
+include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 
 INCLUDEPATH += ../../libs
@@ -35,4 +36,4 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/str
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/../../data/strip/notitle.detx) . $${CS}
 
 HEADERS += \
-    StripTestSettings.h
+	StripTestSettings.h

@@ -10,7 +10,7 @@
 
 #include "PhTimeCode.h"
 
-#include "PhDebug.h"
+#include "PhTools/PhDebug.h"
 
 QString PhTimeCode::stringFromFrame(PhFrame frame, PhTimeCodeType type) {
 	unsigned int hhmmssff[4];

@@ -4,6 +4,11 @@
 #
 
 
-HEADERS +=
+HEADERS += \
+	../../libs/PhSync/PhTime.h \
+	../../libs/PhSync/PhTimeCode.h \
+	../../libs/PhSync/PhClock.h
 
-SOURCES +=
+SOURCES += \
+	../../libs/PhSync/PhTimeCode.cpp \
+	../../libs/PhSync/PhClock.cpp

@@ -4,9 +4,11 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include "PhTools/PhDebug.h"
+#include "PhCommonUI/PhTimeCodeDialog.h"
+
 #include "LTCToolWindow.h"
 #include "ui_LTCToolWindow.h"
-#include "PhCommonUI/PhTimeCodeDialog.h"
 #include "PreferencesDialog.h"
 
 LTCToolWindow::LTCToolWindow(LTCToolSettings *settings, QWidget *parent) :

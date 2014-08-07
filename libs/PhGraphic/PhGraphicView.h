@@ -10,7 +10,7 @@
 #include <QGLWidget>
 #include <QTimer>
 
-#include "PhTools/PhTime.h"
+#include "PhSync/PhTime.h"
 #include "PhTools/PhTickCounter.h"
 
 #include "PhGraphicSettings.h"

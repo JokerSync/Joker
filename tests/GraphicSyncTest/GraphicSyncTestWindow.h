@@ -2,8 +2,6 @@
 #define GRAPHICSYNCTESTWINDOW_H
 
 #include <QMainWindow>
-#include <QSettings>
-#include <QTimer>
 #include <QTime>
 
 #include "PhSony/PhSonySlaveController.h"
@@ -19,7 +17,7 @@ class GraphicSyncTestWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	explicit GraphicSyncTestWindow(QWidget *parent = 0);
+	explicit GraphicSyncTestWindow(GraphicSyncTestSettings *settings);
 	~GraphicSyncTestWindow();
 
 private slots:
@@ -27,7 +25,7 @@ private slots:
 
 private:
 	Ui::GraphicSyncTestWindow *ui;
-	GraphicSyncTestSettings _settings;
+	GraphicSyncTestSettings *_settings;
 	PhSonySlaveController _sony;
 	QTime _time;
 	int _lastTime;

@@ -5,8 +5,9 @@
 
 #include <QTest>
 
-#include "ClockTest.h"
+#include "PhTools/PhDebug.h"
 
+#include "ClockTest.h"
 
 ClockTest::ClockTest() : _clock(PhTimeCodeType25),
 	_time(0),

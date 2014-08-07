@@ -2,6 +2,7 @@
 
 #include <QFileInfo>
 
+#include "PhTools/PhDebug.h"
 #include "PhStrip/PhStripDoc.h"
 
 #include "StripTestSettings.h"

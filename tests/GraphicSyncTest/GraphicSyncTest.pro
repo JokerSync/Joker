@@ -22,6 +22,7 @@ DEFINES += ORG_NAME=\\\"Phonations\\\"
 INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri)
+include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhSony/PhSony.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 
@@ -31,7 +32,7 @@ SOURCES += main.cpp\
 
 HEADERS  += GraphicSyncTestWindow.h \
 	GraphicSyncTestView.h \
-    GraphicSyncTestSettings.h
+	GraphicSyncTestSettings.h
 
 FORMS    += GraphicSyncTestWindow.ui
 

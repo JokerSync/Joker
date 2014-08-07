@@ -8,7 +8,7 @@
 
 #include <QObject>
 
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 
 class ClockTest : public QObject
 {

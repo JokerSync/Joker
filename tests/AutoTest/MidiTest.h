@@ -8,7 +8,7 @@
 
 #include <QObject>
 
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 
 class MidiTest : public QObject
 {

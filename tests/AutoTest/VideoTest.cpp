@@ -7,7 +7,7 @@
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphic/PhGraphicView.h"
-#include "PhTools/PhTime.h"
+#include "PhSync/PhTime.h"
 
 #include "VideoTest.h"
 

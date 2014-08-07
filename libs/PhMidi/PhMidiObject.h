@@ -9,7 +9,7 @@
 #include <QObject>
 #include <RtMidi.h>
 
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 
 /**
  * @brief Common PhMidi object behaviour
