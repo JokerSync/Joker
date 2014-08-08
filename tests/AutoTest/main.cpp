@@ -12,6 +12,7 @@
 #include "LockableSpinBoxTest.h"
 #include "TimeCodeEditTest.h"
 #include "WindowTest.h"
+#include "SynchronizerTest.h"
 #include "SonyControllerTest.h"
 #include "GraphicTest.h"
 #include "GraphicStripTest.h"
@@ -26,14 +27,15 @@ int main(int argc, char *argv[])
 	PHDEBUG << "AutoTest";
 
 	bool testAll = (argc < 2); // if no argument, test all
-	bool testClock = testAll;
 	bool testSettings = testAll;
+	bool testClock = testAll;
 	bool testTC = testAll;
 	bool testDebug = testAll;
 	bool testDoc = testAll;
 	bool testLockableSpinBox = testAll;
 	bool testTCEdit = testAll;
 	bool testWindow = testAll;
+	bool testSync = testAll;
 	bool testSony = testAll;
 	bool testGraphic = testAll;
 	bool testGraphicText = testAll;
@@ -48,8 +50,8 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "all") == 0) {
 			testClock = testSettings = testTC = testDebug = testDoc = testLockableSpinBox = testTCEdit =
-			                                                                                    testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip =
-			                                                                                                                                                testVideo = testMidi = true;
+																								testWindow = testSync = testSony = testGraphic = testGraphicText = testGraphicStrip =
+																																							testVideo = testMidi = true;
 		}
 		else if(strcmp(argv[i], "clock") == 0)
 			testClock = true;
@@ -70,6 +72,8 @@ int main(int argc, char *argv[])
 		else if(strcmp(argv[i], "ui") == 0) {
 			testTCEdit = testLockableSpinBox = testWindow = true;
 		}
+		else if(strcmp(argv[i], "sync") == 0)
+			testSync = true;
 		else if(strcmp(argv[i], "sony") == 0)
 			testSony = true;
 		else if(strcmp(argv[i], "graphic") == 0)
@@ -112,6 +116,12 @@ int main(int argc, char *argv[])
 		// Testing PhStripDoc
 		StripDocTest docTest;
 		result += QTest::qExec(&docTest, testArgList);
+	}
+
+	if(testSync) {
+		// Testing PhSynchronizer
+		SynchronizerTest syncTest;
+		result += QTest::qExec(&syncTest, testArgList);
 	}
 
 	if(testSony) {
