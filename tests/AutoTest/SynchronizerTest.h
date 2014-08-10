@@ -12,7 +12,14 @@ class SynchronizerTest : public QObject
 {
 	Q_OBJECT
 private slots:
-	void test();
+	void testSetClock();
+	void testStripFrameChanged();
+	void testStripRateChanged();
+	void testVideoFrameChanged();
+	void testVideoRateChanged();
+	void testVideoTCTypeChanged();
+	void testSyncFrameChanged();
+	void testSyncRateChanged();
 };
 
 #endif // SYNCHRONIZERTEST_H
