@@ -240,9 +240,12 @@ void MidiTest::testMTCWriter()
 	PhMidiTimeCodeWriter mtcWriter(PhTimeCodeType25);
 	PhMidiInput midiIn;
 
+	int quarterFrameCount = 0;
 	int tcCount = 0;
 	PhTimeCodeType tcType = PhTimeCodeType24;
 	PhTime time = 0;
+
+	connect(&midiIn, &PhMidiInput::quarterFrame, [&]() {quarterFrameCount++; });
 	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
 	            tcCount++;
 	            tcType = type;
@@ -255,8 +258,58 @@ void MidiTest::testMTCWriter()
 	mtcWriter.clock()->setTime(s2t("01:00:00:00", PhTimeCodeType25));
 	QThread::msleep(10);
 
+	QCOMPARE(quarterFrameCount, 0);
 	QCOMPARE(tcCount, 1);
 	QCOMPARE(tcType, PhTimeCodeType25);
 	QCOMPARE(t2s(time, PhTimeCodeType25), QString("01:00:00:00"));
+
+	mtcWriter.clock()->setRate(1);
+	mtcWriter.clock()->tick(100); // 100Hz = one quarter frame
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 1);
+	QCOMPARE(tcCount, 1);
+
+	mtcWriter.clock()->tick(100);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 2);
+	QCOMPARE(tcCount, 1);
+
+	mtcWriter.clock()->tick(100);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 3);
+	QCOMPARE(tcCount, 1);
+
+	mtcWriter.clock()->tick(100);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 4);
+	QCOMPARE(tcCount, 2);
+
+	mtcWriter.clock()->tick(100);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 5);
+	QCOMPARE(tcCount, 2);
+
+	mtcWriter.clock()->tick(100);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 6);
+	QCOMPARE(tcCount, 2);
+
+	mtcWriter.clock()->tick(100);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 7);
+	QCOMPARE(tcCount, 2);
+
+	mtcWriter.clock()->tick(100);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 8);
+	QCOMPARE(tcCount, 3);
 }
 

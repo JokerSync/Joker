@@ -21,11 +21,11 @@ public:
 	}
 
 private slots:
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onTimeChanged(PhTime time);
 
 private:
 	PhClock _clock;
-	PhFrame _lastFrame;
+	PhTime _lastTime;
 	int _currentDigit;
 };
 

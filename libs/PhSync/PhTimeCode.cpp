@@ -169,6 +169,11 @@ void PhTimeCode::ComputeHhMmSsFf(unsigned int *hhmmssff, PhFrame frame, PhTimeCo
 	hhmmssff[3] = (unsigned int)n;
 }
 
+void PhTimeCode::ComputeHhMmSsFfFromTime(unsigned int *hhmmssff, PhTime time, PhTimeCodeType type)
+{
+	ComputeHhMmSsFf(hhmmssff, time / timePerFrame(type), type);
+}
+
 PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned int ss, unsigned int ff, PhTimeCodeType type)
 {
 	PhFrame fps = getFps(type);
