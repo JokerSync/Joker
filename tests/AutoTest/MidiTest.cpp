@@ -10,6 +10,7 @@
 #include "PhMidi/PhMidiInput.h"
 #include "PhMidi/PhMidiOutput.h"
 #include "PhMidi/PhMidiTimeCodeReader.h"
+#include "PhMidi/PhMidiTimeCodeWriter.h"
 
 #include "MidiTest.h"
 
@@ -221,17 +222,41 @@ void MidiTest::testMMCGoto()
 	QCOMPARE(t2s(time, tcType), QString("02:03:04:05"));
 }
 
-void MidiTest::testMTC()
+void MidiTest::testMTCReader()
 {
-	PHDEBUG << QThread::currentThreadId();
-
 	PhMidiTimeCodeReader mtcReader(PhTimeCodeType25);
 	PhMidiOutput midiOut;
 
-	QVERIFY(mtcReader.open("testMTC"));
-	QVERIFY(midiOut.open("testMTC"));
+	QVERIFY(mtcReader.open("testMTCReader"));
+	QVERIFY(midiOut.open("testMTCReader"));
 
 	midiOut.sendFullTC(1, 0, 0, 0, PhTimeCodeType24);
 	QThread::msleep(10);
 	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType25), QString("01:00:00:00"));
 }
+
+void MidiTest::testMTCWriter()
+{
+	PhMidiTimeCodeWriter mtcWriter(PhTimeCodeType25);
+	PhMidiInput midiIn;
+
+	int tcCount = 0;
+	PhTimeCodeType tcType = PhTimeCodeType24;
+	PhTime time = 0;
+	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
+	            tcCount++;
+	            tcType = type;
+	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
+			});
+
+	QVERIFY(midiIn.open("testMTCWriter"));
+	QVERIFY(mtcWriter.open("testMTCWriter"));
+
+	mtcWriter.clock()->setTime(s2t("01:00:00:00", PhTimeCodeType25));
+	QThread::msleep(10);
+
+	QCOMPARE(tcCount, 1);
+	QCOMPARE(tcType, PhTimeCodeType25);
+	QCOMPARE(t2s(time, PhTimeCodeType25), QString("01:00:00:00"));
+}
+

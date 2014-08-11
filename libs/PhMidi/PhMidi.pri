@@ -8,6 +8,7 @@ HEADERS += \
 	../../libs/PhMidi/PhMidiObject.h \
 	../../libs/PhMidi/PhMidiInput.h \
 	../../libs/PhMidi/PhMidiOutput.h \
+	../../libs/PhMidi/PhMidiTimeCodeWriter.h \
 	../../libs/PhMidi/PhMidiTimeCodeReader.h
 
 SOURCES += \
@@ -15,6 +16,7 @@ SOURCES += \
 	../../libs/PhMidi/PhMidiObject.cpp \
 	../../libs/PhMidi/PhMidiInput.cpp \
 	../../libs/PhMidi/PhMidiOutput.cpp \
+	../../libs/PhMidi/PhMidiTimeCodeWriter.cpp \
 	../../libs/PhMidi/PhMidiTimeCodeReader.cpp
 
 INCLUDEPATH += ../../vendor/rtmidi
