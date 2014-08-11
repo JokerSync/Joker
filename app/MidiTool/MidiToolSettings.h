@@ -15,8 +15,8 @@ public:
 	PH_SETTING_INT2(setFirstFrame, firstFrame, 25 * 60 * 60)
 	PH_SETTING_INT2(setLength, length, 25 * 60)
 
-	PH_SETTING_STRING2(setInputPortName, inputPortName, "PhMidi In2")
-	PH_SETTING_STRING2(setOutputPortName, outputPortName, "PhMidi In2")
+	PH_SETTING_STRING2(setInputPortName, inputPortName, "MidiTool")
+	PH_SETTING_STRING2(setOutputPortName, outputPortName, "MidiTool")
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
 };

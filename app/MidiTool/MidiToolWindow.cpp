@@ -33,7 +33,7 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 
 	_clockTimer.start(10);
 
-	connect(&_midiInput, &PhMidiInput::onTC, this, &MidiToolWindow::onTC);
+	connect(&_midiInput, &PhMidiInput::timeCodeReceived, this, &MidiToolWindow::onTC);
 //	connect(_ltcReader.clock(),  SIGNAL(rateChanged(PhRate)), this, SLOT(onSlaveRateChanged(PhRate)));
 
 	updateInfos();

@@ -11,7 +11,7 @@
 #include <QTimer>
 #include <QMessageBox>
 
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 
 #include "PhMidi/PhMidiInput.h"
 #include "PhMidi/PhMidiOutput.h"

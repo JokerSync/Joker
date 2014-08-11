@@ -62,27 +62,27 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mediaPanel.setClock(_strip.clock());
 #warning /// @todo move to CSS file
 	_mediaPanel.setStyleSheet(
-		"* {"
-		"	  color: white;"
-		"  }"
-		"  PhMediaPanel { "
-		"	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
-		"	  border-style: solid;                                                                          "
-		"	  border-width: 4px;                                                                            "
-		"	  border-radius: 3px;                                                                           "
-		"	  border-color: white;                                                                          "
-		"  }                                                                                                "
-		"  QPushButton, QComboBox{                                                                          "
-		"	  background: grey;                                                                             "
-		"	  border-style: outset;                                                                         "
-		"	  border-width: 2px;                                                                            "
-		"	  border-radius: 5px;                                                                           "
-		"	  border-color: white;                                                                          "
-		"  }                                                                                                "
-		"  QLabel#_timecodeLabel{                                                                           "
-		"	  padding: 10px;                                                                                "
-		"  }                                                                                                "
-		);
+	    "* {"
+	    "	  color: white;"
+	    "  }"
+	    "  PhMediaPanel { "
+	    "	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
+	    "	  border-style: solid;                                                                          "
+	    "	  border-width: 4px;                                                                            "
+	    "	  border-radius: 3px;                                                                           "
+	    "	  border-color: white;                                                                          "
+	    "  }                                                                                                "
+	    "  QPushButton, QComboBox{                                                                          "
+	    "	  background: grey;                                                                             "
+	    "	  border-style: outset;                                                                         "
+	    "	  border-width: 2px;                                                                            "
+	    "	  border-radius: 5px;                                                                           "
+	    "	  border-color: white;                                                                          "
+	    "  }                                                                                                "
+	    "  QLabel#_timecodeLabel{                                                                           "
+	    "	  padding: 10px;                                                                                "
+	    "  }                                                                                                "
+	    );
 
 	this->setFocus();
 

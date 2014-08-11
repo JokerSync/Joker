@@ -4,9 +4,11 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "MidiToolWindow.h"
 #include <QApplication>
 
+#include "PhTools/PhDebug.h"
+
+#include "MidiToolWindow.h"
 #include "MidiToolSettings.h"
 
 /**
