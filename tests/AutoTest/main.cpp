@@ -50,8 +50,8 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "all") == 0) {
 			testClock = testSettings = testTC = testDebug = testDoc = testLockableSpinBox = testTCEdit =
-																								testWindow = testSync = testSony = testGraphic = testGraphicText = testGraphicStrip =
-																																							testVideo = testMidi = true;
+			                                                                                    testWindow = testSync = testSony = testGraphic = testGraphicText = testGraphicStrip =
+			                                                                                                                                                           testVideo = testMidi = true;
 		}
 		else if(strcmp(argv[i], "clock") == 0)
 			testClock = true;

@@ -49,7 +49,7 @@ signals:
 	/**
 	 * @brief Signal emitted upon new quarter frame message
 	 */
-	void onQuarterFrame();
+	void quarterFrame();
 	/**
 	 * @brief Signal emitted upon full TC reception
 	 *
@@ -64,7 +64,7 @@ signals:
 	 * @param ff The frame digits.
 	 * @param tcType The timecode type.
 	 */
-	void onTC(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
+	void timeCodeReceived(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
 	/**
 	 * @brief Signal emitted upon MMC play message reception
@@ -75,6 +75,10 @@ signals:
 	 * @brief Signal emitted upon MMC stop message reception
 	 */
 	void onStop();
+
+protected:
+	virtual void onQuarterFrame();
+	virtual void onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
 private slots:
 	void onMessage(std::vector<unsigned char> *message);

@@ -26,6 +26,8 @@ private slots:
 	void testMMCPlay();
 	void testMMCStop();
 	void testMMCGoto();
+
+	void testMTC();
 };
 
 #endif // MIDITEST_H

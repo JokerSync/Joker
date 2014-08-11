@@ -51,6 +51,16 @@ void PhMidiInput::close()
 	}
 }
 
+void PhMidiInput::onQuarterFrame()
+{
+	emit quarterFrame();
+}
+
+void PhMidiInput::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType)
+{
+	emit timeCodeReceived(hh, mm, ss, ff, tcType);
+}
+
 void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 {
 	if ( message->size() > 0 ) {
@@ -84,7 +94,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 								if(message->at(9) != 0xF7)
 									PHDEBUG << "End of SysEx expected:" << QString::number(0xF7);
 								PHDEBUG << "Full TC:" << _hh << _mm << _ss << _ff;
-								onTC(_hh, _mm, _ss, _ff, _tcType);
+								onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 								break;
 							default:
 								PHDEBUG << "Unknown TC type:" << message->at(4) << "/" << messageStr;
@@ -109,7 +119,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 							_ss = message->at(9);
 							_ff = message->at(10);
 							PHDEBUG << "Go To" << _hh << _mm << _ss << _ff;
-							onTC(_hh, _mm, _ss, _ff, _tcType);
+							onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 							break;
 						default:
 							PHDEBUG << "Unknown MMC message:" << messageStr;
@@ -151,7 +161,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					// From https://github.com/Figure53/TimecodeDisplay/blob/master/MIDIReceiver.m#L197
 					//				if((_ss == 0) && (_ff == 0))
 					//					_mm++;
-					emit onTC(_hh, _mm, _ss, _ff, _tcType);
+					onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				case 4:
 					_mm = (_mm & 0xf0) | (data1 & 0x0f);
@@ -166,12 +176,12 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					_hh = (_hh & 0x0f) | ((data1 & 0x01) << 4);
 					_tcType = computeTimeCodeType((data1 & 0x06) >> 1);
 
-					emit onTC(_hh, _mm, _ss, _ff, _tcType);
+					onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				}
 
-				emit onQuarterFrame();
 //				PHDEBUG << "QF MTC:" << _hh << _mm << _ss << _ff;
+				onQuarterFrame();
 			}
 			break;
 		default:

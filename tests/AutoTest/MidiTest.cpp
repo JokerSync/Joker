@@ -9,6 +9,7 @@
 #include "PhTools/PhDebug.h"
 #include "PhMidi/PhMidiInput.h"
 #include "PhMidi/PhMidiOutput.h"
+#include "PhMidi/PhMidiTimeCodeReader.h"
 
 #include "MidiTest.h"
 
@@ -53,11 +54,11 @@ void MidiTest::testQFTC()
 	PhTime time = 0;
 	PhTimeCodeType tcType = PhTimeCodeType25;
 
-	connect(&midiIn, &PhMidiInput::onQuarterFrame, [&]() {quarterFrameCount++; });
-	connect(&midiIn, &PhMidiInput::onTC, [&](int h, int m, int s, int f, PhTimeCodeType type) {
+	connect(&midiIn, &PhMidiInput::quarterFrame, [&]() {quarterFrameCount++; });
+	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
 	            tcCount++;
-	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, type);
 	            tcType = type;
+	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testQFTC"));
@@ -127,10 +128,10 @@ void MidiTest::testFullTC()
 	PhTime time = 0;
 	PhTimeCodeType tcType = PhTimeCodeType25;
 
-	connect(&midiIn, &PhMidiInput::onTC, [&](int h, int m, int s, int f, PhTimeCodeType type) {
+	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
 	            tcCount++;
-	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, type);
 	            tcType = type;
+	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testFullTC"));
@@ -200,10 +201,10 @@ void MidiTest::testMMCGoto()
 	PhTime time = 0;
 	PhTimeCodeType tcType = PhTimeCodeType25;
 
-	connect(&midiIn, &PhMidiInput::onTC, [&](int h, int m, int s, int f, PhTimeCodeType type) {
+	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
 	            tcCount++;
-	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, type);
 	            tcType = type;
+	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testMMCGoto"));
@@ -218,4 +219,19 @@ void MidiTest::testMMCGoto()
 	QCOMPARE(tcCount, 1);
 	QCOMPARE(tcType, PhTimeCodeType24);
 	QCOMPARE(t2s(time, tcType), QString("02:03:04:05"));
+}
+
+void MidiTest::testMTC()
+{
+	PHDEBUG << QThread::currentThreadId();
+
+	PhMidiTimeCodeReader mtcReader(PhTimeCodeType25);
+	PhMidiOutput midiOut;
+
+	QVERIFY(mtcReader.open("testMTC"));
+	QVERIFY(midiOut.open("testMTC"));
+
+	midiOut.sendFullTC(1, 0, 0, 0, PhTimeCodeType24);
+	QThread::msleep(10);
+	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType25), QString("01:00:00:00"));
 }
