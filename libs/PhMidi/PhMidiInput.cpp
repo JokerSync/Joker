@@ -161,7 +161,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					// From https://github.com/Figure53/TimecodeDisplay/blob/master/MIDIReceiver.m#L197
 					//				if((_ss == 0) && (_ff == 0))
 					//					_mm++;
-					onTimeCode(_hh, _mm, _ss, _ff, _tcType);
+					//onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				case 4:
 					_mm = (_mm & 0xf0) | (data1 & 0x0f);

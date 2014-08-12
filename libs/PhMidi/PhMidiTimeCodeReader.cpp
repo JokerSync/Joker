@@ -8,21 +8,14 @@
 #include "PhMidiTimeCodeReader.h"
 
 PhMidiTimeCodeReader::PhMidiTimeCodeReader(PhTimeCodeType tcType) :
-//	QObject(NULL),
 	_clock(tcType)
 {
-//	PHDEBUG << connect(this, &PhMidiTimeCodeReader::timeCodeReceived, this, &PhMidiTimeCodeReader::onTC);
 }
-
-//bool PhMidiTimeCodeReader::open(QString portName)
-//{
-//	return _midiIn.open(portName);
-//}
 
 void PhMidiTimeCodeReader::onQuarterFrame()
 {
-	PHDEBUG;
 	_clock.tick(4 * PhTimeCode::getFps(_clock.timeCodeType()));
+	_clock.setRate(1);
 }
 
 void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType)
