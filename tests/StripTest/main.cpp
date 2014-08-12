@@ -59,7 +59,7 @@ int countLoopDetectLength(PhStripDoc *doc, int loopNumber)
 	}
 
 	foreach(QString name, map.keys())
-	PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromTime(map[name], doc->timeCodeType()));
+		PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromTime(map[name], doc->timeCodeType()));
 
 	return loopLength;
 }

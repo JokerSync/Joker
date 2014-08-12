@@ -68,8 +68,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QDir systemFont(QStandardPaths::writableLocation(QStandardPaths::FontsLocation));
 	systemFont.setNameFilters(filters);
 	systemFontList = systemFont.entryList();
-	foreach(QString fontName, systemFontList)
-	{
+	foreach(QString fontName, systemFontList) {
 		_fontList[fontName.split(".").first()] = systemFont.filePath(fontName);
 	}
 
@@ -80,8 +79,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QDir userFont(userDirectory + "/Library/Fonts/");
 	userFont.setNameFilters(filters);
 	userFontList = userFont.entryList();
-	foreach(QString fontName, userFontList)
-	{
+	foreach(QString fontName, userFontList) {
 		_fontList[fontName.split(".").first()] = userFont.filePath(fontName);
 	}
 
@@ -90,8 +88,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QDir macOSFont("/Library/Fonts/");
 	macOSFont.setNameFilters(filters);
 	macOSFontList = macOSFont.entryList();
-	foreach(QString fontName, macOSFontList)
-	{
+	foreach(QString fontName, macOSFontList) {
 		_fontList[fontName.split(".").first()] = macOSFont.filePath(fontName);
 	}
 #endif
@@ -103,8 +100,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	// So split with "/" then take last gives Font.ttf
 	// Split with "." then take first, gives the name of the font
 	QString oldFontName = _oldFont.split("/").last().split(".").first();
-	foreach(QString fontName, _fontList.keys())
-	{
+	foreach(QString fontName, _fontList.keys()) {
 		ui->listWidgetFont->addItem(fontName);
 		if(fontName == oldFontName) {
 			ui->listWidgetFont->item(ui->listWidgetFont->count() - 1)->setSelected(true);
@@ -139,8 +135,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_langNameMap[""] = tr("<System default>");
 	ui->cboBoxLang->addItem(_langNameMap[""], "");
 
-	foreach(QString tradFile, languageFileList)
-	{
+	foreach(QString tradFile, languageFileList) {
 		QFileInfo info(tradFile);
 		QString lang = info.baseName();
 		if(lang == "fr_FR")
@@ -228,8 +223,7 @@ void PreferencesDialog::on_sliderBoldness_valueChanged(int value)
 void PreferencesDialog::on_lineEditFilter_textEdited(const QString &value)
 {
 	ui->listWidgetFont->clear();
-	foreach(QString fontName, _fontList.keys())
-	{
+	foreach(QString fontName, _fontList.keys()) {
 		if(fontName.contains(&value, Qt::CaseInsensitive))
 			ui->listWidgetFont->addItem(fontName);
 	}

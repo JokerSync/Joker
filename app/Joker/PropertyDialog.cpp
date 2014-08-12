@@ -65,7 +65,7 @@ void PropertyDialog::showEvent(QShowEvent *)
 
 		int charNumber = 0;
 		foreach(PhStripText * text, _doc->texts())
-		charNumber += text->content().length();
+			charNumber += text->content().length();
 		ui->charNumberLabel->setText(QString::number(charNumber));
 	}
 

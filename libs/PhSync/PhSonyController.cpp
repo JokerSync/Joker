@@ -31,8 +31,7 @@ PhSonyController::~PhSonyController()
 bool PhSonyController::open(bool inThread)
 {
 	PHDEBUG << _comSuffix;
-	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
-	{
+	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts()) {
 		QString name = info.portName();
 		PHDEBUG << name;
 

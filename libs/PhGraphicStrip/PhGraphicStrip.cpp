@@ -126,8 +126,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 
 		if(_settings->stripTestMode()) {
-			foreach(PhStripCut * cut, _doc.cuts())
-			{
+			foreach(PhStripCut * cut, _doc.cuts()) {
 				counter++;
 				if(cut->timeIn() == clockTime) {
 					PhGraphicSolidRect white(x, y, width, height);
@@ -255,8 +254,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		if(displayNextText)
 			maxTimeIn += y * verticalTimePerPixel;
 
-		foreach(PhStripText * text, _doc.texts())
-		{
+		foreach(PhStripText * text, _doc.texts()) {
 
 			if( !((text->timeOut() < timeIn) || (text->timeIn() > timeOut)) ) {
 				counter++;
@@ -345,8 +343,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 		if(_settings->displayCuts()) {
 			int cutWidth = _settings->cutWidth();
-			foreach(PhStripCut * cut, _doc.cuts())
-			{
+			foreach(PhStripCut * cut, _doc.cuts()) {
 				//_counter++;
 				if( (timeIn < cut->timeIn()) && (cut->timeIn() < timeOut)) {
 					PhGraphicSolidRect gCut;
@@ -369,8 +366,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			}
 		}
 
-		foreach(PhStripLoop * loop, _doc.loops())
-		{
+		foreach(PhStripLoop * loop, _doc.loops()) {
 			//_counter++;
 			// This calcul allow the cross to come smoothly on the screen (height * timePerPixel / 8)
 			if( ((loop->timeIn() + height * timePerPixel / 8) > timeIn) && ((loop->timeIn() - height * timePerPixel / 8 ) < timeOut)) {
@@ -421,8 +417,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				break;
 		}
 
-		foreach(PhStripDetect * detect, _doc.detects())
-		{
+		foreach(PhStripDetect * detect, _doc.detects()) {
 			//_counter++;
 
 			if((timeIn < detect->timeOut()) && (detect->timeIn() < timeOut) ) {

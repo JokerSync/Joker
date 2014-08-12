@@ -79,8 +79,7 @@ int main(int argc, char *argv[])
 	QList<QAudioDeviceInfo> list = QAudioDeviceInfo::availableDevices(QAudio::AudioInput);
 
 	QAudioDeviceInfo info;
-	foreach(QAudioDeviceInfo input, list)
-	{
+	foreach(QAudioDeviceInfo input, list) {
 		if(input.deviceName() == "Built-in Input")
 			info = input;
 	}
