@@ -851,7 +851,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 	peopleFile.close();
 
 	foreach(PhPeople *people, peopleMap.values())
-	_peoples.append(people);
+		_peoples.append(people);
 
 	QDir dir(dirName);
 
@@ -967,7 +967,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 		PHDEBUG << "query failed";
 
 	foreach(PhPeople *people, peopleMap.values())
-	_peoples.append(people);
+		_peoples.append(people);
 
 	// Reading loops
 	if(query.exec("SELECT * FROM OBJET_TC;")) {
@@ -1158,8 +1158,7 @@ bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC)
 
 			xmlWriter->writeStartElement("peoples");
 			{
-				foreach(PhPeople * ppl, peoples())
-				{
+				foreach(PhPeople * ppl, peoples()) {
 					xmlWriter->writeStartElement("people");
 					xmlWriter->writeAttribute("name", ppl->name());
 					xmlWriter->writeAttribute("color", ppl->color());
@@ -1288,8 +1287,7 @@ void PhStripDoc::addPeople(PhPeople *people)
 
 PhPeople *PhStripDoc::peopleByName(QString name)
 {
-	foreach(PhPeople* people, _peoples)
-	{
+	foreach(PhPeople* people, _peoples) {
 		if(people && people->name() == name)
 			return people;
 	}
@@ -1299,8 +1297,7 @@ PhPeople *PhStripDoc::peopleByName(QString name)
 PhStripText *PhStripDoc::nextText(PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, this->texts())
-	{
+	foreach(PhStripText* text, this->texts()) {
 		if(text->timeIn() > time) {
 			if(!result || (text->timeIn() < result->timeIn()) )
 				result = text;
@@ -1312,8 +1309,7 @@ PhStripText *PhStripDoc::nextText(PhTime time)
 PhStripText *PhStripDoc::nextText(PhPeople *people, PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, this->texts())
-	{
+	foreach(PhStripText* text, this->texts()) {
 		if((text->people() == people) && (text->timeIn() > time)) {
 			if(!result || (text->timeIn() < result->timeIn()) )
 				result = text;
@@ -1325,8 +1321,7 @@ PhStripText *PhStripDoc::nextText(PhPeople *people, PhTime time)
 PhStripText *PhStripDoc::nextText(QList<PhPeople *> peopleList, PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, this->texts())
-	{
+	foreach(PhStripText* text, this->texts()) {
 		if(peopleList.contains(text->people()) && (text->timeIn() > time)) {
 			if(!result || (text->timeIn() < result->timeIn()) )
 				result = text;
@@ -1339,8 +1334,7 @@ PhTime PhStripDoc::previousTextTime(PhTime time)
 {
 	PhTime previousTextTime = PHTIMEMIN;
 
-	foreach(PhStripText* text, this->texts())
-	{
+	foreach(PhStripText* text, this->texts()) {
 		if((text->timeIn() < time) && (text->timeIn() > previousTextTime) )
 			previousTextTime = text->timeIn();
 	}
@@ -1352,8 +1346,7 @@ PhTime PhStripDoc::previousLoopTime(PhTime time)
 {
 	PhTime previousLoopTime = PHTIMEMIN;
 
-	foreach(PhStripLoop* loop, _loops)
-	{
+	foreach(PhStripLoop* loop, _loops) {
 		if((loop->timeIn() < time) && (loop->timeIn() > previousLoopTime) )
 			previousLoopTime = loop->timeIn();
 	}
@@ -1365,8 +1358,7 @@ PhTime PhStripDoc::previousCutTime(PhTime time)
 {
 	PhTime previousCutTime = PHTIMEMIN;
 
-	foreach(PhStripCut* cut, _cuts)
-	{
+	foreach(PhStripCut* cut, _cuts) {
 		if((cut->timeIn() < time) && (cut->timeIn() > previousCutTime) )
 			previousCutTime = cut->timeIn();
 	}
@@ -1391,8 +1383,7 @@ PhTime PhStripDoc::nextTextTime(PhTime time)
 {
 	PhTime nextTextTime = PHTIMEMAX;
 
-	foreach(PhStripText* text, this->texts())
-	{
+	foreach(PhStripText* text, this->texts()) {
 		if((text->timeIn() > time) && (text->timeIn() < nextTextTime) )
 			nextTextTime = text->timeIn();
 		else if(text->timeIn() > nextTextTime)
@@ -1406,8 +1397,7 @@ PhTime PhStripDoc::nextLoopTime(PhTime time)
 {
 	PhTime nextLoopTime = PHTIMEMAX;
 
-	foreach(PhStripLoop* loop, _loops)
-	{
+	foreach(PhStripLoop* loop, _loops) {
 		if((loop->timeIn() > time) && (loop->timeIn() < nextLoopTime) )
 			nextLoopTime = loop->timeIn();
 		else if(loop->timeIn() > nextLoopTime)
@@ -1421,8 +1411,7 @@ PhTime PhStripDoc::nextCutTime(PhTime time)
 {
 	PhTime nextCutTime = PHTIMEMAX;
 
-	foreach(PhStripCut* cut, _cuts)
-	{
+	foreach(PhStripCut* cut, _cuts) {
 		if((cut->timeIn() > time) && (cut->timeIn() < nextCutTime) )
 			nextCutTime = cut->timeIn();
 		else if(cut->timeIn() > nextCutTime)
@@ -1457,8 +1446,7 @@ PhTime PhStripDoc::timeOut()
 
 PhStripLoop *PhStripDoc::nextLoop(PhTime time)
 {
-	foreach(PhStripLoop* loop, _loops)
-	{
+	foreach(PhStripLoop* loop, _loops) {
 		if(loop->timeIn() > time)
 			return loop;
 	}

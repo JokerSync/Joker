@@ -66,7 +66,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 	if ( message->size() > 0 ) {
 		QString messageStr = "";
 		foreach(unsigned char data, *message)
-		messageStr += QString::number(data, 16) + " ";
+			messageStr += QString::number(data, 16) + " ";
 
 		unsigned char status = message->at(0);
 		switch (status) {

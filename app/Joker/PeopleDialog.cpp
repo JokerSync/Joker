@@ -71,7 +71,7 @@ void PeopleDialog::on_buttonBox_rejected()
 {
 	QStringList peopleNameList;
 	foreach(QString name, _oldPeopleNameList)
-	peopleNameList.append(name);
+		peopleNameList.append(name);
 
 	_settings->setSelectedPeopleNameList(peopleNameList);
 }

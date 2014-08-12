@@ -327,7 +327,7 @@ void JokerWindow::on_actionOpen_triggered()
 	if(checkSaveFile()) {
 		QString filter = tr("Rythmo files") + " (";
 		foreach(QString type, _settings->stripFileType())
-		filter += "*." + type + " ";
+			filter += "*." + type + " ";
 		filter += ");;";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
@@ -421,7 +421,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	QString lastFolder = _settings->lastVideoFolder();
 	QString filter = tr("Movie files") + " (";
 	foreach(QString type, _settings->videoFileType())
-	filter += "*." + type + " ";
+		filter += "*." + type + " ";
 	filter += ");;";
 
 	QFileDialog dlg(this, tr("Open a video..."), lastFolder, filter);
@@ -645,8 +645,7 @@ void JokerWindow::on_actionClear_list_triggered()
 	//	_settings->endGroup();
 
 	//Remove the buttons of the UI, keep the separator and the Clear button
-	foreach(QAction * action, ui->menuOpen_recent->actions())
-	{
+	foreach(QAction * action, ui->menuOpen_recent->actions()) {
 		// Break if the separator is reached
 		if(action->isSeparator())
 			break;
