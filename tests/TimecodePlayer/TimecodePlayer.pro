@@ -26,3 +26,6 @@ SOURCES += main.cpp\
 HEADERS  += TimecodePlayerWindow.h
 
 FORMS +=  TimecodePlayerWindow.ui
+
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)

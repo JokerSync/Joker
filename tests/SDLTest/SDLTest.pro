@@ -88,3 +88,6 @@ CONFIG(release, debug|release) {
 	}
 
 }
+
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)

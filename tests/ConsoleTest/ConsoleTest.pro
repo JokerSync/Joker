@@ -26,3 +26,6 @@ RESOURCES_PATH = .
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/look.png) $${RESOURCES_PATH}
 #QMAKE_POST_LINK += echo $${_PRO_FILE_PWD_} && echo test
+
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)

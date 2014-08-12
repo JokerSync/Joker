@@ -60,11 +60,5 @@ linux {
 	LIBS += -lva
 }
 
-
-CONFIG(release, debug|release) {
-
-	mac {
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-	}
-
-}
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)
