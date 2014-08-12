@@ -53,16 +53,16 @@ signals:
 	/**
 	 * @brief Signal emitted upon full TC reception
 	 *
-	 * This signal can be emitted after:
-	 * - several quarter frame midi timecode
-	 * - a full MTC timecode
-	 * - a MMC goto
-	 *
 	 * @param hh The hour digits.
 	 * @param mm The minute digits.
 	 * @param ss The second digits.
 	 * @param ff The frame digits.
 	 * @param tcType The timecode type.
+	 *
+	 * This signal can be emitted after:
+	 * - several quarter frame midi timecode
+	 * - a full MTC timecode
+	 * - a MMC goto
 	 */
 	void timeCodeReceived(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
@@ -77,7 +77,28 @@ signals:
 	void onStop();
 
 protected:
+	/**
+	 * @brief Called when a MTC quarter frame message is received
+	 *
+	 * The class send a quarterFrame() signal but children can
+	 * implement their custom reaction.
+	 */
 	virtual void onQuarterFrame();
+
+	/**
+	 * @brief Called when a midi message updating the current timecode is received
+	 *
+	 * @param hh The hour digits.
+	 * @param mm The minute digits.
+	 * @param ss The second digits.
+	 * @param ff The frame digits.
+	 * @param tcType The timecode type.
+	 *
+	 * This signal can be emitted after:
+	 * - several quarter frame midi timecode
+	 * - a full MTC timecode
+	 * - a MMC goto
+	 */
 	virtual void onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
 private slots:

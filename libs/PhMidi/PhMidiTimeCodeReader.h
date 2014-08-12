@@ -12,13 +12,30 @@
 
 #include "PhMidiInput.h"
 
+/**
+ * @brief PhMidiTimeCodeReader read midi timecode message
+ *
+ * This class can open a new midi port, read
+ * midi timecode messages and update the clock accordingly.
+ */
 class PhMidiTimeCodeReader : public PhMidiInput
 {
 	Q_OBJECT
 public:
+	/**
+	 * @brief The PhMidiTimeCodeReader constructor
+	 * @param tcType The initial clock timecode type.
+	 */
 	PhMidiTimeCodeReader(PhTimeCodeType tcType);
 
-//	bool open(QString portName);
+	/**
+	 * @brief The PhMidiTimeCodeWriter clock
+	 *
+	 * Subscribe to this clock synchronized with the
+	 * incoming midi timecode message.
+	 *
+	 * @return A clock instance.
+	 */
 	PhClock *clock() {
 		return &_clock;
 	}

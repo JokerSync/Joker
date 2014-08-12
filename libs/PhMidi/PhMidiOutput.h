@@ -9,7 +9,10 @@
 #include "PhMidiObject.h"
 
 /**
- * @brief The PhMidiOutput class
+ * @brief PhMidiOutput sends midi message
+ *
+ * This class can open an existing midi port and send
+ * various messages through it.
  */
 class PhMidiOutput : public PhMidiObject
 {

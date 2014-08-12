@@ -102,7 +102,7 @@ public:
 	 * @brief Compute the HH, MM, SS and FF timecode component from a time value and a type.
 	 *
 	 * @param hhmmssff Array that will be filled with the corresponding HH, MM, SS, FF values.
-	 * @param frame A time value.
+	 * @param time A time value.
 	 * @param type A timecode type.
 	 */
 	static void ComputeHhMmSsFfFromTime(unsigned int *hhmmssff, PhTime time, PhTimeCodeType type);
