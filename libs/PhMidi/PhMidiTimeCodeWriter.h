@@ -43,7 +43,6 @@ private slots:
 
 private:
 	PhClock _clock;
-	PhTime _lastTime;
 	int _currentDigit;
 };
 

@@ -43,3 +43,24 @@ unsigned char PhMidiObject::computeHH(unsigned char hh, PhTimeCodeType tcType)
 		return hh | (3 << 5);
 	}
 }
+
+unsigned char PhMidiObject::computeH(unsigned char hh, PhTimeCodeType tcType)
+{
+	unsigned char data = (hh & 0x10) >> 4;
+	switch (tcType) {
+	case PhTimeCodeType2398:
+	case PhTimeCodeType24:
+		data |= (0 << 1); // useless
+		break;
+	case PhTimeCodeType25:
+		data |= (1 << 1);
+		break;
+	case PhTimeCodeType2997:
+		data |= (2 << 1);
+		break;
+	case PhTimeCodeType30:
+		data |= (3 << 1);
+		break;
+	}
+	return data;
+}
