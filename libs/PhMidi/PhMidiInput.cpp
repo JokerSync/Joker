@@ -180,7 +180,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					break;
 				}
 
-//				PHDEBUG << "QF MTC:" << _hh << _mm << _ss << _ff;
+				PHDBG(20) << "QF MTC:" << _hh << _mm << _ss << _ff;
 				onQuarterFrame();
 			}
 			break;
