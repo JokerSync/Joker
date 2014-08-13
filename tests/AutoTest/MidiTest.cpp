@@ -58,14 +58,14 @@ void MidiTest::testQFTC()
 	PhTimeCodeType tcType = PhTimeCodeType25;
 
 	connect(&midiIn, &PhMidiInput::quarterFrame, [&](unsigned char data) {
-				quarterFrameCount++;
-				quarterFrameData = data;
+	            quarterFrameCount++;
+	            quarterFrameData = data;
 			});
 
 	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
-				tcCount++;
-				tcType = type;
-				time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
+	            tcCount++;
+	            tcType = type;
+	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testQFTC"));
@@ -149,9 +149,9 @@ void MidiTest::testFullTC()
 	PhTimeCodeType tcType = PhTimeCodeType25;
 
 	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
-				tcCount++;
-				tcType = type;
-				time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
+	            tcCount++;
+	            tcType = type;
+	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testFullTC"));
@@ -176,7 +176,7 @@ void MidiTest::testMMCPlay()
 	int playCount = 0;
 
 	connect(&midiIn, &PhMidiInput::onPlay, [&]() {
-				playCount++;
+	            playCount++;
 			});
 
 	QVERIFY(midiIn.open("testMMCStop"));
@@ -198,7 +198,7 @@ void MidiTest::testMMCStop()
 	int stopCount = 0;
 
 	connect(&midiIn, &PhMidiInput::onStop, [&]() {
-				stopCount++;
+	            stopCount++;
 			});
 
 	QVERIFY(midiIn.open("testMMCStop"));
@@ -222,9 +222,9 @@ void MidiTest::testMMCGoto()
 	PhTimeCodeType tcType = PhTimeCodeType25;
 
 	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
-				tcCount++;
-				tcType = type;
-				time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
+	            tcCount++;
+	            tcType = type;
+	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testMMCGoto"));
@@ -251,13 +251,14 @@ void MidiTest::testMTCReader()
 
 	midiOut.sendFullTC(1, 0, 0, 0, PhTimeCodeType24);
 	QThread::msleep(10);
-	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType25), QString("01:00:00:00"));
+	QCOMPARE(mtcReader.clock()->timeCodeType(), PhTimeCodeType24);
+	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("01:00:00:00"));
 
 	// Any quarter frame message should trigger play mode
 	midiOut.sendQFTC(0x00); // Send frame low digit
 	QThread::msleep(10);
 
-	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType25), QString("01:00:00:00"));
+	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("01:00:00:00"));
 	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 1));
 
 	// Send frame high digit
@@ -270,11 +271,28 @@ void MidiTest::testMTCReader()
 	midiOut.sendQFTC(0x30);
 	QThread::msleep(10);
 	// Send minute low digit
-	midiOut.sendQFTC(0x30);
+	midiOut.sendQFTC(0x40);
 	QThread::msleep(10);
 
 	// Since 4 quarter frame message have elapsed the frame increment by one
-	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType25), QString("01:00:00:01"));
+	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("01:00:00:01"));
+
+	// Send minute high digit
+	midiOut.sendQFTC(0x50);
+	QThread::msleep(10);
+	// Send hour low digit
+	midiOut.sendQFTC(0x61);
+	QThread::msleep(10);
+	// Send hour high digit and 24 fps info
+	midiOut.sendQFTC(0x70);
+	QThread::msleep(10);
+	// Send frame low digit
+	midiOut.sendQFTC(0x02);
+	QThread::msleep(10);
+
+	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("01:00:00:02"));
+
+#warning /// @todo test passing to the next second smoothly
 }
 
 void MidiTest::testMTCWriter()
@@ -289,14 +307,14 @@ void MidiTest::testMTCWriter()
 	PhTime time = 0;
 
 	connect(&midiIn, &PhMidiInput::quarterFrame, [&](unsigned char data) {
-				quarterFrameCount++;
-				quarterFrameData = data;
+	            quarterFrameCount++;
+	            quarterFrameData = data;
 			});
 
 	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
-				tcCount++;
-				tcType = type;
-				time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
+	            tcCount++;
+	            tcType = type;
+	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testMTCWriter"));

@@ -22,5 +22,6 @@ void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCode
 {
 	PhTime time = PhTimeCode::timeFromHhMmSsFf(hh, mm, ss, ff, tcType);
 
+	_clock.setTimeCodeType(tcType);
 	_clock.setTime(time);
 }
