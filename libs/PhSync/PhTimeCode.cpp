@@ -210,3 +210,8 @@ PhFrame PhTimeCode::timeFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned 
 {
 	return frameFromHhMmSsFf(hh, mm, ss, ff, type) * timePerFrame(type);
 }
+
+PhFrame PhTimeCode::timeFromHhMmSsFf(unsigned int *hhmmssff, PhTimeCodeType type)
+{
+	return frameFromHhMmSsFf(hhmmssff, type) * timePerFrame(type);
+}

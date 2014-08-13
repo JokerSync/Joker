@@ -41,7 +41,7 @@ public:
 	}
 
 protected:
-	void onQuarterFrame(unsigned char);
+	void onQuarterFrame(unsigned char data);
 	void onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
 private:

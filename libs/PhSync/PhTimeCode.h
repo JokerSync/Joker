@@ -141,6 +141,15 @@ public:
 	static PhFrame timeFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned int ss, unsigned int ff, PhTimeCodeType type);
 
 	/**
+	 * @brief Compute time from the HH, MM, SS and FF timecode component and a type.
+	 *
+	 * @param hhmmssff Array containing the HH, MM, SS, FF values.
+	 * @param type A timecode type.
+	 * @return The corresponding time number.
+	 */
+	static PhFrame timeFromHhMmSsFf(unsigned int * hhmmssff, PhTimeCodeType type);
+
+	/**
 	 * @brief Check if the timecode type is dropframe.
 	 *
 	 * @param type A timecode type.
