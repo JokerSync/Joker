@@ -4,9 +4,9 @@
 #include <QMainWindow>
 #include <QTimer>
 
-#include "PhTools/PhClock.h"
-#include "PhSync/PhSonyMasterController.h"
-#include "PhSync/PhSonySlaveController.h"
+#include "PhSync/PhClock.h"
+#include "PhSony/PhSonyMasterController.h"
+#include "PhSony/PhSonySlaveController.h"
 
 #include "SonyTestSettings.h"
 

@@ -21,6 +21,8 @@ include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
+include(../../libs/PhSony/PhSony.pri)
+include(../../libs/PhLtc/PhLtc.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
@@ -45,7 +47,8 @@ HEADERS += \
 	GraphicStripTest.h \
 	VideoTest.h \
 	VideoTestSettings.h \
-	MidiTest.h
+	MidiTest.h \
+    SynchronizerTest.h
 
 SOURCES += main.cpp \
 	ClockTest.cpp \
@@ -62,7 +65,8 @@ SOURCES += main.cpp \
 	GraphicTextTest.cpp \
 	GraphicStripTest.cpp \
 	VideoTest.cpp \
-	MidiTest.cpp
+	MidiTest.cpp \
+    SynchronizerTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $${CS}

@@ -13,6 +13,7 @@ VERSION = 1.0.0
 
 include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
+include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)

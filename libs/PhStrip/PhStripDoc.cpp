@@ -14,7 +14,9 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
+#include "PhTools/PhDebug.h"
 #include "PhTools/PhFileTool.h"
+
 #include "PhStripDoc.h"
 
 PhStripDoc::PhStripDoc()

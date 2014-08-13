@@ -18,19 +18,20 @@ DEFINES += APP_NAME=\\\"$$TARGET\\\"
 INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri);
+include(../../libs/PhSync/PhSync.pri);
 include(../../libs/PhMidi/PhMidi.pri);
 include(../../libs/PhCommonUI/PhCommonUI.pri);
 
 SOURCES += main.cpp\
-        MidiToolWindow.cpp \
-    PreferencesDialog.cpp
+		MidiToolWindow.cpp \
+	PreferencesDialog.cpp
 
 HEADERS  += MidiToolWindow.h \
-    PreferencesDialog.h \
-    MidiToolSettings.h
+	PreferencesDialog.h \
+	MidiToolSettings.h
 
 FORMS    += MidiToolWindow.ui \
-    PreferencesDialog.ui
+	PreferencesDialog.ui
 
 mac {
 	# For the plist version

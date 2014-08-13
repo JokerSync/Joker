@@ -99,6 +99,15 @@ public:
 	static void ComputeHhMmSsFf(unsigned int *hhmmssff, PhFrame frame, PhTimeCodeType type);
 
 	/**
+	 * @brief Compute the HH, MM, SS and FF timecode component from a time value and a type.
+	 *
+	 * @param hhmmssff Array that will be filled with the corresponding HH, MM, SS, FF values.
+	 * @param time A time value.
+	 * @param type A timecode type.
+	 */
+	static void ComputeHhMmSsFfFromTime(unsigned int *hhmmssff, PhTime time, PhTimeCodeType type);
+
+	/**
 	 * @brief Compute frame number from the HH, MM, SS and FF timecode component and a type.
 	 *
 	 * @param hh The hour value.

@@ -7,7 +7,7 @@
 #ifndef PHSTRIPOBJECT_H
 #define PHSTRIPOBJECT_H
 
-#include <PhTools/PhClock.h>
+#include "PhSync/PhClock.h"
 
 /**
  * @brief Generic object of a rythmo strip (loop, cut, text, ...).

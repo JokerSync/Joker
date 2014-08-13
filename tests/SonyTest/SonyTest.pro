@@ -22,6 +22,7 @@ include(../../libs/PhTools/PhTools.pri)
 include(../../libs//PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
+include(../../libs/PhSony/PhSony.pri)
 
 SOURCES += main.cpp\
 		SonyTestWindow.cpp

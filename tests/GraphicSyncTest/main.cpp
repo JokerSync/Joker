@@ -1,14 +1,16 @@
-#include "GraphicSyncTestWindow.h"
 #include <QApplication>
+
+#include "PhTools/PhDebug.h"
+
+#include "GraphicSyncTestWindow.h"
 
 int main(int argc, char *argv[])
 {
-	QSettings settings("Phonations", "GraphicSyncTestWindow");
-	int logLevel = settings.value("logLevel", 1).toInt();
-	PhDebug::setLogMask(logLevel);
+	GraphicSyncTestSettings settings;
+	PhDebug::setLogMask(settings.logLevel());
 
 	QApplication a(argc, argv);
-	GraphicSyncTestWindow w;
+	GraphicSyncTestWindow w(&settings);
 	w.show();
 
 	return a.exec();

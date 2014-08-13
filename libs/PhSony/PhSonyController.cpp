@@ -11,7 +11,7 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyController::PhSonyController(PhTimeCodeType tcType, PhSyncSettings *settings, QString comSuffix) :
+PhSonyController::PhSonyController(PhTimeCodeType tcType, PhSonySettings *settings, QString comSuffix) :
 	_clock(tcType),
 	_settings(settings),
 	_comSuffix(comSuffix),

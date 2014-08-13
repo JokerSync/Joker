@@ -4,8 +4,8 @@ TARGET = VideoSyncTest
 INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri)
-include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
+include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhVideo/PhVideo.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)

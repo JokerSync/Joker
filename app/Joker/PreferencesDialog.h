@@ -10,7 +10,6 @@
 #include <QDialog>
 #include <QListWidgetItem>
 
-#include "Synchronizer.h"
 #include "JokerSettings.h"
 
 namespace Ui {

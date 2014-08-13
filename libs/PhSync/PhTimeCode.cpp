@@ -10,7 +10,7 @@
 
 #include "PhTimeCode.h"
 
-#include "PhDebug.h"
+#include "PhTools/PhDebug.h"
 
 QString PhTimeCode::stringFromFrame(PhFrame frame, PhTimeCodeType type) {
 	unsigned int hhmmssff[4];
@@ -167,6 +167,11 @@ void PhTimeCode::ComputeHhMmSsFf(unsigned int *hhmmssff, PhFrame frame, PhTimeCo
 	}
 
 	hhmmssff[3] = (unsigned int)n;
+}
+
+void PhTimeCode::ComputeHhMmSsFfFromTime(unsigned int *hhmmssff, PhTime time, PhTimeCodeType type)
+{
+	ComputeHhMmSsFf(hhmmssff, time / timePerFrame(type), type);
 }
 
 PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned int ss, unsigned int ff, PhTimeCodeType type)

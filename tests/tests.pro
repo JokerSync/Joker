@@ -9,6 +9,7 @@ SUBDIRS += \
 	GraphicStripSyncTest \
 	GraphicStripTest \
 	GraphicTest \
+	GraphicSyncTest \
 	OpenGLTest \
 	SDLTest \
 	SerialTest \

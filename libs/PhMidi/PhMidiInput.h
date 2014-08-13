@@ -48,23 +48,24 @@ public:
 signals:
 	/**
 	 * @brief Signal emitted upon new quarter frame message
+	 * @param data The quarter frame data
 	 */
-	void onQuarterFrame();
+	void quarterFrame(unsigned char data);
 	/**
 	 * @brief Signal emitted upon full TC reception
-	 *
-	 * This signal can be emitted after:
-	 * - several quarter frame midi timecode
-	 * - a full MTC timecode
-	 * - a MMC goto
 	 *
 	 * @param hh The hour digits.
 	 * @param mm The minute digits.
 	 * @param ss The second digits.
 	 * @param ff The frame digits.
 	 * @param tcType The timecode type.
+	 *
+	 * This signal can be emitted after:
+	 * - several quarter frame midi timecode
+	 * - a full MTC timecode
+	 * - a MMC goto
 	 */
-	void onTC(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
+	void timeCodeReceived(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
 	/**
 	 * @brief Signal emitted upon MMC play message reception
@@ -75,6 +76,32 @@ signals:
 	 * @brief Signal emitted upon MMC stop message reception
 	 */
 	void onStop();
+
+protected:
+	/**
+	 * @brief Called when a MTC quarter frame message is received
+	 * @param data The quarter frame data.
+	 *
+	 * The class send a quarterFrame() signal but children can
+	 * implement their custom reaction.
+	 */
+	virtual void onQuarterFrame(unsigned char data);
+
+	/**
+	 * @brief Called when a midi message updating the current timecode is received
+	 *
+	 * @param hh The hour digits.
+	 * @param mm The minute digits.
+	 * @param ss The second digits.
+	 * @param ff The frame digits.
+	 * @param tcType The timecode type.
+	 *
+	 * This signal can be emitted after:
+	 * - several quarter frame midi timecode
+	 * - a full MTC timecode
+	 * - a MMC goto
+	 */
+	virtual void onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
 private slots:
 	void onMessage(std::vector<unsigned char> *message);

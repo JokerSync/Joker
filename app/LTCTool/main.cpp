@@ -7,6 +7,8 @@
 #include "LTCToolWindow.h"
 #include <QApplication>
 
+#include "PhTools/PhDebug.h"
+
 #include "LTCToolSettings.h"
 
 /**

@@ -8,7 +8,7 @@
 
 #include <QObject>
 
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 
 class MidiTest : public QObject
 {
@@ -26,6 +26,9 @@ private slots:
 	void testMMCPlay();
 	void testMMCStop();
 	void testMMCGoto();
+
+	void testMTCReader();
+	void testMTCWriter();
 };
 
 #endif // MIDITEST_H

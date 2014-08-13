@@ -9,7 +9,7 @@
 #include <QObject>
 #include <RtMidi.h>
 
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 
 /**
  * @brief Common PhMidi object behaviour
@@ -42,9 +42,17 @@ protected:
 	 * @brief Compute the HH data byte from a time code type
 	 * @param hh The hour digit
 	 * @param tcType The timecode type
-	 * @return A MTC data byte containing the timecode type and the hour digit.
+	 * @return A full MTC hour digit containing the timecode type and the hour digit.
 	 */
 	static unsigned char computeHH(unsigned char hh, PhTimeCodeType tcType);
+
+	/**
+	 * @brief Compute the hour high digit from a time code type
+	 * @param hh The hour digits
+	 * @param tcType The timecode type
+	 * @return A quarter frame MTC data byte containing the timecode type and the hour high digit.
+	 */
+	static unsigned char computeH(unsigned char hh, PhTimeCodeType tcType);
 };
 
 #endif // PHMIDIOBJECT_H

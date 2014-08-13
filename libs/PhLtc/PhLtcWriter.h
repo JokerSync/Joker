@@ -9,8 +9,8 @@
 
 #include <ltc.h>
 
-#include "PhTools/PhClock.h"
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhClock.h"
+#include "PhSync/PhTimeCode.h"
 
 #include "PhAudio/PhAudioOutput.h"
 

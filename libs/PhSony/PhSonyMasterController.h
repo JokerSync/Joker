@@ -31,7 +31,7 @@ public:
 	 * @param tcType The initial timecode type.
 	 * @param settings The application settings
 	 */
-	PhSonyMasterController(PhTimeCodeType tcType, PhSyncSettings *settings);
+	PhSonyMasterController(PhTimeCodeType tcType, PhSonySettings *settings);
 
 public slots:
 	/**

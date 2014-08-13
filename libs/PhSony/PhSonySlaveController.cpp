@@ -8,7 +8,7 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, PhSyncSettings *settings)
+PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, PhSonySettings *settings)
 	: PhSonyController(tcType, settings, settings->sonySlavePortSuffix()),
 	_autoMode(false), _state(Pause)
 {

@@ -15,13 +15,14 @@ TEMPLATE = app
 VERSION = 1.0.0
 
 include(../../libs/PhTools/PhTools.pri)
+include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 SOURCES += main.cpp\
-        TextEditTestWindow.cpp
+		TextEditTestWindow.cpp
 
 HEADERS  += TextEditTestWindow.h \
-    TextEditTestSettings.h
+	TextEditTestSettings.h
 
 FORMS    += TextEditTestWindow.ui
 

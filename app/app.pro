@@ -2,5 +2,6 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
 	Joker \
-	LTCTool
+	LTCTool \
+	MidiTool
 

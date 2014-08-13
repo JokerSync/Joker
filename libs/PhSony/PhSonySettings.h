@@ -1,12 +1,12 @@
-#ifndef PHSYNCSETTINGS_H
-#define PHSYNCSETTINGS_H
+#ifndef PHSONYSETTINGS_H
+#define PHSONYSETTINGS_H
 
 #include <QString>
 
 /**
  * @brief The settings for a PhSonyController
  */
-class PhSyncSettings {
+class PhSonySettings {
 public:
 	/**
 	 * @brief Shall the PhSonyController sync on a CTS up front or down front
@@ -43,4 +43,4 @@ public:
 	virtual QString sonyMasterPortSuffix() = 0;
 };
 
-#endif // PHSYNCSETTINGS_H
+#endif // PHSONYSETTINGS_H

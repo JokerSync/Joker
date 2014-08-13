@@ -5,9 +5,9 @@
  */
 
 #include "PhTools/PhDebug.h"
-#include "Synchronizer.h"
+#include "PhSynchronizer.h"
 
-Synchronizer::Synchronizer()
+PhSynchronizer::PhSynchronizer()
 	: _syncType(NoSync),
 	_stripClock(NULL),
 	_videoClock(NULL),
@@ -21,14 +21,14 @@ Synchronizer::Synchronizer()
 {
 }
 
-void Synchronizer::setStripClock(PhClock *clock)
+void PhSynchronizer::setStripClock(PhClock *clock)
 {
 	_stripClock = clock;
 	connect(_stripClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onStripFrameChanged(PhFrame, PhTimeCodeType)));
 	connect(_stripClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onStripRateChanged(PhRate)));
 }
 
-void Synchronizer::setVideoClock(PhClock *clock)
+void PhSynchronizer::setVideoClock(PhClock *clock)
 {
 	_videoClock = clock;
 	connect(_videoClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onVideoFrameChanged(PhFrame, PhTimeCodeType)));
@@ -36,7 +36,7 @@ void Synchronizer::setVideoClock(PhClock *clock)
 	connect(_videoClock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onVideoTCTypeChanged(PhTimeCodeType)));
 }
 
-void Synchronizer::setSyncClock(PhClock *clock, SyncType type)
+void PhSynchronizer::setSyncClock(PhClock *clock, SyncType type)
 {
 	_syncClock = clock;
 	_syncType = type;
@@ -46,7 +46,7 @@ void Synchronizer::setSyncClock(PhClock *clock, SyncType type)
 	}
 }
 
-void Synchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType)
+void PhSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType)
 {
 	if(!_settingStripFrame) {
 		PHDBG(2) << frame;
@@ -69,7 +69,7 @@ void Synchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType)
 	}
 }
 
-void Synchronizer::onStripRateChanged(PhRate rate)
+void PhSynchronizer::onStripRateChanged(PhRate rate)
 {
 	if(!_settingStripRate) {
 		PHDEBUG << rate;
@@ -84,17 +84,17 @@ void Synchronizer::onStripRateChanged(PhRate rate)
 	}
 }
 
-void Synchronizer::onVideoFrameChanged(PhFrame, PhTimeCodeType)
+void PhSynchronizer::onVideoFrameChanged(PhFrame, PhTimeCodeType)
 {
 //	if(!_settingVideoFrame)
 //		PHDEBUG << frame;
 }
 
-void Synchronizer::onVideoRateChanged(PhRate)
+void PhSynchronizer::onVideoRateChanged(PhRate)
 {
 }
 
-void Synchronizer::onVideoTCTypeChanged(PhTimeCodeType tcType)
+void PhSynchronizer::onVideoTCTypeChanged(PhTimeCodeType tcType)
 {
 	PHDEBUG << tcType;
 	_stripClock->setTimeCodeType(tcType);
@@ -102,7 +102,7 @@ void Synchronizer::onVideoTCTypeChanged(PhTimeCodeType tcType)
 		_syncClock->setTimeCodeType(tcType);
 }
 
-void Synchronizer::onSyncFrameChanged(PhFrame frame, PhTimeCodeType)
+void PhSynchronizer::onSyncFrameChanged(PhFrame frame, PhTimeCodeType)
 {
 	if(!_settingSonyFrame) {
 		PHDBG(3) << frame;
@@ -124,7 +124,7 @@ void Synchronizer::onSyncFrameChanged(PhFrame frame, PhTimeCodeType)
 	}
 }
 
-void Synchronizer::onSyncRateChanged(PhRate rate)
+void PhSynchronizer::onSyncRateChanged(PhRate rate)
 {
 	if(!_settingSonyRate) {
 		PHDEBUG << rate;

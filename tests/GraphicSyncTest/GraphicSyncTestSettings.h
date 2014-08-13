@@ -1,10 +1,15 @@
-#ifndef SONYTESTSETTINGS_H
-#define SONYTESTSETTINGS_H
+/**
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
+#ifndef GRAPHICSYNCTESTSETTINGS_H
+#define GRAPHICSYNCTESTSETTINGS_H
 
 #include "PhTools/PhGenericSettings.h"
 #include "PhSony/PhSonySettings.h"
 
-class SonyTestSettings : PhGenericSettings, public PhSonySettings
+class GraphicSyncTestSettings : PhGenericSettings, public PhSonySettings
 {
 public:
 	// PhSonySettings:
@@ -15,13 +20,8 @@ public:
 	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
-	// Others settings
-	PH_SETTING_BOOL2(setSonySlaveActive, sonySlaveActive, true);
-	PH_SETTING_BOOL2(setSonyMasterActive, sonyMasterActive, true)
-
-	PH_SETTING_BOOL2(setUseVideoSlaveSync, useVideoSlaveSync, true);
-	PH_SETTING_BOOL2(setUseVideoMasterSync, useVideoMasterSync, true);
-
+	// Other settings
+	PH_SETTING_INT2(setLogLevel, logLevel, 1)
 };
 
-#endif // SONYTESTSETTINGS_H
+#endif // GRAPHICSYNCTESTSETTINGS_H

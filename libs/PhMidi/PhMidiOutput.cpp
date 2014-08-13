@@ -22,7 +22,7 @@ bool PhMidiOutput::open(QString portName)
 	try {
 		_midiOut = new RtMidiOut();
 		PHDEBUG << "Opening" << portName;
-		for(int i = 0; i < _midiOut->getPortCount(); i++) {
+		for(unsigned int i = 0; i < _midiOut->getPortCount(); i++) {
 			if(QString::fromStdString(_midiOut->getPortName(i)) == portName) {
 				_midiOut->openPort(i);
 				return true;

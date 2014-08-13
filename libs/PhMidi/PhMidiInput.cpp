@@ -51,6 +51,16 @@ void PhMidiInput::close()
 	}
 }
 
+void PhMidiInput::onQuarterFrame(unsigned char data)
+{
+	emit quarterFrame(data);
+}
+
+void PhMidiInput::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType)
+{
+	emit timeCodeReceived(hh, mm, ss, ff, tcType);
+}
+
 void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 {
 	if ( message->size() > 0 ) {
@@ -66,6 +76,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 				PHDEBUG << "Bad SysEx message size:" << message->size() << "/" << messageStr;
 			else {
 				unsigned char manufactorId = message->at(1);
+#warning /// @todo Handle midi channel
 				unsigned char channel = message->at(2);
 				unsigned char type = message->at(3);
 				if(manufactorId == 0x7F) {
@@ -84,7 +95,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 								if(message->at(9) != 0xF7)
 									PHDEBUG << "End of SysEx expected:" << QString::number(0xF7);
 								PHDEBUG << "Full TC:" << _hh << _mm << _ss << _ff;
-								onTC(_hh, _mm, _ss, _ff, _tcType);
+								onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 								break;
 							default:
 								PHDEBUG << "Unknown TC type:" << message->at(4) << "/" << messageStr;
@@ -109,7 +120,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 							_ss = message->at(9);
 							_ff = message->at(10);
 							PHDEBUG << "Go To" << _hh << _mm << _ss << _ff;
-							onTC(_hh, _mm, _ss, _ff, _tcType);
+							onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 							break;
 						default:
 							PHDEBUG << "Unknown MMC message:" << messageStr;
@@ -131,19 +142,20 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 			if(message->size() != 2)
 				PHDEBUG << "Bad QF MTC message size:" << message->size() << "/" << messageStr;
 			else {
-				unsigned char data1 = message->at(1);
-				switch (data1 >> 4) {
+				unsigned char data = message->at(1);
+				switch (data >> 4) {
 				case 0:
-					_ff = (_ff & 0xf0) | (data1 & 0x0f);
+					_ff = (_ff & 0xf0) | (data & 0x0f);
+					onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				case 1:
-					_ff = (_ff & 0x0f) | ((data1 & 0x0f) << 4);
+					_ff = (_ff & 0x0f) | ((data & 0x0f) << 4);
 					break;
 				case 2:
-					_ss = (_ss & 0xf0) | (data1 & 0x0f);
+					_ss = (_ss & 0xf0) | (data & 0x0f);
 					break;
 				case 3:
-					_ss = (_ss & 0x0f) | ((data1 & 0x0f) << 4);
+					_ss = (_ss & 0x0f) | ((data & 0x0f) << 4);
 					// Because of the way MTC is structured,
 					// the minutes place won't be updated on the frame
 					// where it changes over.
@@ -151,27 +163,25 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					// From https://github.com/Figure53/TimecodeDisplay/blob/master/MIDIReceiver.m#L197
 					//				if((_ss == 0) && (_ff == 0))
 					//					_mm++;
-					emit onTC(_hh, _mm, _ss, _ff, _tcType);
+					//onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				case 4:
-					_mm = (_mm & 0xf0) | (data1 & 0x0f);
+					_mm = (_mm & 0xf0) | (data & 0x0f);
 					break;
 				case 5:
-					_mm = (_mm & 0x0f) | ((data1 & 0x0f) << 4);
+					_mm = (_mm & 0x0f) | ((data & 0x0f) << 4);
 					break;
 				case 6:
-					_hh = (_hh & 0xf0) | (data1 & 0x0f);
+					_hh = (_hh & 0xf0) | (data & 0x0f);
 					break;
 				case 7:
-					_hh = (_hh & 0x0f) | ((data1 & 0x01) << 4);
-					_tcType = computeTimeCodeType((data1 & 0x06) >> 1);
-
-					emit onTC(_hh, _mm, _ss, _ff, _tcType);
+					_hh = (_hh & 0x0f) | ((data & 0x01) << 4);
+					_tcType = computeTimeCodeType((data & 0x06) >> 1);
 					break;
 				}
 
-				emit onQuarterFrame();
-//				PHDEBUG << "QF MTC:" << _hh << _mm << _ss << _ff;
+				PHDBG(20) << "QF MTC:" << _hh << _mm << _ss << _ff;
+				onQuarterFrame(data);
 			}
 			break;
 		default:

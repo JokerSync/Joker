@@ -21,6 +21,7 @@ DEFINES += ORG_NAME=\\\"Phonations\\\"
 TEMPLATE = app
 
 include(../../libs/PhTools/PhTools.pri)
+include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 
 INCLUDEPATH += ../../libs

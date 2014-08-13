@@ -1,7 +1,7 @@
 #ifndef GRAPHICSTRIPSYNCTESTWINDOW_H
 #define GRAPHICSTRIPSYNCTESTWINDOW_H
 
-#include "PhSync/PhSonySlaveController.h"
+#include "PhSony/PhSonySlaveController.h"
 
 #include "../GraphicStripTest/GraphicStripTestWindow.h"
 
