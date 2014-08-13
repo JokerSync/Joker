@@ -83,3 +83,5 @@ mac{
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
 }
 
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)

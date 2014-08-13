@@ -16,3 +16,6 @@ SOURCES += main.cpp\
         OpenGLTestWindow.cpp
 
 HEADERS  += OpenGLTestWindow.h
+
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)

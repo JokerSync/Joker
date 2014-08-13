@@ -25,3 +25,6 @@ HEADERS  += TextEditTestWindow.h \
 	TextEditTestSettings.h
 
 FORMS    += TextEditTestWindow.ui
+
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)
