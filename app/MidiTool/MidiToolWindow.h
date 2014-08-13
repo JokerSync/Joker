@@ -13,8 +13,8 @@
 
 #include "PhSync/PhClock.h"
 
-#include "PhMidi/PhMidiInput.h"
-#include "PhMidi/PhMidiOutput.h"
+#include "PhMidi/PhMidiTimeCodeReader.h"
+#include "PhMidi/PhMidiTimeCodeWriter.h"
 
 #include "MidiToolSettings.h"
 
@@ -50,8 +50,7 @@ private slots:
 	void on_actionSet_TC_Out_triggered();
 	void on_actionPreferences_triggered();
 
-	void onFrameChanged(PhFrame, PhTimeCodeType);
-	void onTC(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
+	void onFrameChanged(PhFrame, PhTimeCodeType tcType);
 	void onSlaveRateChanged(PhRate rate);
 	void updateSlaveInfo();
 
@@ -67,9 +66,8 @@ private:
 	Ui::MidiToolWindow *ui;
 	MidiToolSettings *_settings;
 
-	PhClock _generatingClock;
-	PhMidiInput _midiInput;
-	PhMidiOutput _midiOutput;
+	PhMidiTimeCodeReader _mtcReader;
+	PhMidiTimeCodeWriter _mtcWriter;
 
 	QTimer _clockTimer;
 	int _currentDigit;

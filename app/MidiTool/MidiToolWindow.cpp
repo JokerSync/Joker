@@ -13,7 +13,8 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MidiToolWindow),
 	_settings(settings),
-	_generatingClock(PhTimeCodeType25),
+	_mtcReader(PhTimeCodeType25),
+	_mtcWriter(PhTimeCodeType25),
 	_currentDigit(0),
 	_lastFrame(-1),
 	_frameDelta(-1),
@@ -24,17 +25,17 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	on_readCheckBox_clicked(_settings->read());
 	on_generateCheckBox_clicked(_settings->generate());
 
-	_generatingClock.setFrame(_settings->firstFrame());
+	_mtcWriter.clock()->setFrame(_settings->firstFrame());
 	ui->widgetMaster->setMediaLength(_settings->length());
 	ui->widgetMaster->setFirstFrame(_settings->firstFrame());
-	ui->widgetMaster->setClock(&_generatingClock);
+	ui->widgetMaster->setClock(_mtcWriter.clock());
 
 	connect(&_clockTimer, &QTimer::timeout, this, &MidiToolWindow::onTick);
 
 	_clockTimer.start(10);
 
-	connect(&_midiInput, &PhMidiInput::timeCodeReceived, this, &MidiToolWindow::onTC);
-//	connect(_ltcReader.clock(),  SIGNAL(rateChanged(PhRate)), this, SLOT(onSlaveRateChanged(PhRate)));
+	connect(_mtcReader.clock(), &PhClock::frameChanged, this, &MidiToolWindow::onFrameChanged);
+	connect(_mtcReader.clock(), &PhClock::rateChanged, this, &MidiToolWindow::onSlaveRateChanged);
 
 	updateInfos();
 
@@ -101,17 +102,11 @@ void MidiToolWindow::on_actionPreferences_triggered()
 //	}
 }
 
-void MidiToolWindow::onFrameChanged(PhFrame frame, PhTimeCodeType)
+void MidiToolWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 {
-//	if(ui->cBoxLoop->isChecked() and frame > ui->widgetMaster->getMediaLength())
-	//		_ltcWriter.clock()->setFrame(ui->widgetMaster->getFirstFrame());
-}
-
-void MidiToolWindow::onTC(int hh, int mm, int ss, int ff, PhTimeCodeType tcType)
-{
-	PhFrame frame = PhTimeCode::frameFromHhMmSsFf(hh, mm, ss, ff, tcType);
 	ui->lblSlave->setText(PhTimeCode::stringFromFrame(frame, tcType));
 }
+
 
 void MidiToolWindow::onSlaveRateChanged(PhRate rate)
 {
@@ -155,13 +150,13 @@ void MidiToolWindow::on_generateCheckBox_clicked(bool checked)
 	ui->generateCheckBox->setChecked(checked);
 	_settings->setGenerate(checked);
 	if(checked) {
-		if(!_midiOutput.open(_settings->outputPortName())) {
+		if(!_mtcWriter.open(_settings->outputPortName())) {
 			QMessageBox::critical(this, "Error", "Unable to send to " + _settings->inputPortName());
 			on_generateCheckBox_clicked(false);
 		}
 	}
 	else
-		_midiOutput.close();
+		_mtcWriter.close();
 }
 
 void MidiToolWindow::on_readCheckBox_clicked(bool checked)
@@ -170,64 +165,16 @@ void MidiToolWindow::on_readCheckBox_clicked(bool checked)
 	ui->readCheckBox->setChecked(checked);
 	_settings->setRead(checked);
 	if(checked) {
-		if(!_midiInput.open(_settings->inputPortName())) {
+		if(!_mtcReader.open(_settings->inputPortName())) {
 			QMessageBox::critical(this, "Error", "Unable to read from " + _settings->inputPortName());
 			on_readCheckBox_clicked(false);
 		}
 	}
 	else
-		_midiInput.close();
+		_mtcReader.close();
 }
 
 void MidiToolWindow::onTick()
 {
-	_generatingClock.tick(100);
-	unsigned int hhmmssff[4];
-	PhTimeCode::ComputeHhMmSsFf(hhmmssff, _generatingClock.frame(), _generatingClock.timeCodeType());
-	unsigned char mtcData = _currentDigit << 4;
-	switch(_currentDigit++) {
-	case 0:
-		mtcData |= hhmmssff[3] & 0x0f;
-		break;
-	case 1:
-		mtcData |= hhmmssff[3] & 0xf0;
-		break;
-	case 2:
-		mtcData |= hhmmssff[2] & 0x0f;
-		break;
-	case 3:
-		mtcData |= hhmmssff[2] & 0xf0;
-		break;
-	case 4:
-		mtcData |= hhmmssff[1] & 0x0f;
-		break;
-	case 5:
-		mtcData |= hhmmssff[1] & 0xf0;
-		break;
-	case 6:
-		mtcData |= hhmmssff[0] & 0x0f;
-		break;
-	case 7:
-		switch(_generatingClock.timeCodeType()) {
-		case PhTimeCodeType2398:
-		case PhTimeCodeType24:
-			mtcData |= 0;
-			break;
-		case PhTimeCodeType25:
-			mtcData |= 1 << 1;
-			break;
-		case PhTimeCodeType2997:
-			mtcData |= 2 << 1;
-			break;
-		case PhTimeCodeType30:
-			mtcData |= 3 << 1;
-			break;
-		}
-
-		mtcData |= hhmmssff[0] & 0xf0;
-		_currentDigit = 0;
-		break;
-	}
-
-	_midiOutput.sendQFTC(mtcData);
+	_mtcWriter.clock()->tick(100);
 }
