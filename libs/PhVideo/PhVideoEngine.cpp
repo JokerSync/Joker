@@ -138,7 +138,7 @@ bool PhVideoEngine::open(QString fileName)
 		return false;
 	}
 
-	_videoFrame = avcodec_alloc_frame();
+	_videoFrame = av_frame_alloc();
 
 	PHDEBUG << "length:" << this->length();
 	PHDEBUG << "fps:" << this->framePerSecond();
