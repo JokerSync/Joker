@@ -48,8 +48,9 @@ public:
 signals:
 	/**
 	 * @brief Signal emitted upon new quarter frame message
+	 * @param data The quarter frame data
 	 */
-	void quarterFrame();
+	void quarterFrame(unsigned char data);
 	/**
 	 * @brief Signal emitted upon full TC reception
 	 *
@@ -79,11 +80,12 @@ signals:
 protected:
 	/**
 	 * @brief Called when a MTC quarter frame message is received
+	 * @param data The quarter frame data.
 	 *
 	 * The class send a quarterFrame() signal but children can
 	 * implement their custom reaction.
 	 */
-	virtual void onQuarterFrame();
+	virtual void onQuarterFrame(unsigned char data);
 
 	/**
 	 * @brief Called when a midi message updating the current timecode is received

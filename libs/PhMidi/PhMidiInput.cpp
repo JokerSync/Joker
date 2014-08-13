@@ -51,9 +51,9 @@ void PhMidiInput::close()
 	}
 }
 
-void PhMidiInput::onQuarterFrame()
+void PhMidiInput::onQuarterFrame(unsigned char data)
 {
-	emit quarterFrame();
+	emit quarterFrame(data);
 }
 
 void PhMidiInput::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType)
@@ -76,6 +76,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 				PHDEBUG << "Bad SysEx message size:" << message->size() << "/" << messageStr;
 			else {
 				unsigned char manufactorId = message->at(1);
+#warning /// @todo Handle midi channel
 				unsigned char channel = message->at(2);
 				unsigned char type = message->at(3);
 				if(manufactorId == 0x7F) {
@@ -141,20 +142,20 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 			if(message->size() != 2)
 				PHDEBUG << "Bad QF MTC message size:" << message->size() << "/" << messageStr;
 			else {
-				unsigned char data1 = message->at(1);
-				switch (data1 >> 4) {
+				unsigned char data = message->at(1);
+				switch (data >> 4) {
 				case 0:
-					_ff = (_ff & 0xf0) | (data1 & 0x0f);
+					_ff = (_ff & 0xf0) | (data & 0x0f);
 					onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				case 1:
-					_ff = (_ff & 0x0f) | ((data1 & 0x0f) << 4);
+					_ff = (_ff & 0x0f) | ((data & 0x0f) << 4);
 					break;
 				case 2:
-					_ss = (_ss & 0xf0) | (data1 & 0x0f);
+					_ss = (_ss & 0xf0) | (data & 0x0f);
 					break;
 				case 3:
-					_ss = (_ss & 0x0f) | ((data1 & 0x0f) << 4);
+					_ss = (_ss & 0x0f) | ((data & 0x0f) << 4);
 					// Because of the way MTC is structured,
 					// the minutes place won't be updated on the frame
 					// where it changes over.
@@ -165,22 +166,22 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					//onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				case 4:
-					_mm = (_mm & 0xf0) | (data1 & 0x0f);
+					_mm = (_mm & 0xf0) | (data & 0x0f);
 					break;
 				case 5:
-					_mm = (_mm & 0x0f) | ((data1 & 0x0f) << 4);
+					_mm = (_mm & 0x0f) | ((data & 0x0f) << 4);
 					break;
 				case 6:
-					_hh = (_hh & 0xf0) | (data1 & 0x0f);
+					_hh = (_hh & 0xf0) | (data & 0x0f);
 					break;
 				case 7:
-					_hh = (_hh & 0x0f) | ((data1 & 0x01) << 4);
-					_tcType = computeTimeCodeType((data1 & 0x06) >> 1);
+					_hh = (_hh & 0x0f) | ((data & 0x01) << 4);
+					_tcType = computeTimeCodeType((data & 0x06) >> 1);
 					break;
 				}
 
 				PHDBG(20) << "QF MTC:" << _hh << _mm << _ss << _ff;
-				onQuarterFrame();
+				onQuarterFrame(data);
 			}
 			break;
 		default:

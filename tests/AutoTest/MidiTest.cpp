@@ -52,15 +52,20 @@ void MidiTest::testQFTC()
 	PhMidiOutput midiOut;
 
 	int quarterFrameCount = 0;
+	unsigned char quarterFrameData = 255;
 	int tcCount = 0;
 	PhTime time = 0;
 	PhTimeCodeType tcType = PhTimeCodeType25;
 
-	connect(&midiIn, &PhMidiInput::quarterFrame, [&]() {quarterFrameCount++; });
+	connect(&midiIn, &PhMidiInput::quarterFrame, [&](unsigned char data) {
+				quarterFrameCount++;
+				quarterFrameData = data;
+			});
+
 	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
-	            tcCount++;
-	            tcType = type;
-	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
+				tcCount++;
+				tcType = type;
+				time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testQFTC"));
@@ -75,45 +80,57 @@ void MidiTest::testQFTC()
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 1);
+	QCOMPARE((int)quarterFrameData, 0x01);
 	QCOMPARE(tcCount, 1);
 	QCOMPARE(tcType, PhTimeCodeType25);
 	QCOMPARE(t2s(time, tcType), QString("00:00:00:01"));
 
 	midiOut.sendQFTC(0x11); // setting higher frame to 0x1x
 	QThread::msleep(10);
+	QCOMPARE(quarterFrameCount, 2);
+	QCOMPARE((int)quarterFrameData, 0x11);
+	QCOMPARE(tcCount, 1);
+
 	midiOut.sendQFTC(0x23); // setting lower second to 3
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 3);
+	QCOMPARE((int)quarterFrameData, 0x23);
 	QCOMPARE(tcCount, 1);
 
 	midiOut.sendQFTC(0x31); // setting higher second to 0x1x
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 4);
+	QCOMPARE((int)quarterFrameData, 0x31);
 	QCOMPARE(tcCount, 1);
 
 	midiOut.sendQFTC(0x48); // setting lower minute to 0x08
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 5);
+	QCOMPARE((int)quarterFrameData, 0x48);
 	QCOMPARE(tcCount, 1);
 
 	midiOut.sendQFTC(0x52); // setting higher minute to 0x2x
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 6);
+	QCOMPARE((int)quarterFrameData, 0x52);
 	QCOMPARE(tcCount, 1);
 
 	midiOut.sendQFTC(0x67); // setting lower hour to 0x07
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 7);
+	QCOMPARE((int)quarterFrameData, 0x67);
 	QCOMPARE(tcCount, 1);
 
 	midiOut.sendQFTC(0x77); // setting rate to 30 and higher hour to 0x1x
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 8);
+	QCOMPARE((int)quarterFrameData, 0x77);
 	QCOMPARE(tcCount, 1);
 
 	midiOut.sendQFTC(0x03); // Set lower frame to 3
 	QThread::msleep(10);
 	QCOMPARE(quarterFrameCount, 9);
+	QCOMPARE((int)quarterFrameData, 0x03);
 	QCOMPARE(tcCount, 2);
 	QCOMPARE(tcType, PhTimeCodeType30);
 	QCOMPARE(t2s(time, tcType), QString("23:40:19:19"));
@@ -132,9 +149,9 @@ void MidiTest::testFullTC()
 	PhTimeCodeType tcType = PhTimeCodeType25;
 
 	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
-	            tcCount++;
-	            tcType = type;
-	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
+				tcCount++;
+				tcType = type;
+				time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testFullTC"));
@@ -159,7 +176,7 @@ void MidiTest::testMMCPlay()
 	int playCount = 0;
 
 	connect(&midiIn, &PhMidiInput::onPlay, [&]() {
-	            playCount++;
+				playCount++;
 			});
 
 	QVERIFY(midiIn.open("testMMCStop"));
@@ -181,7 +198,7 @@ void MidiTest::testMMCStop()
 	int stopCount = 0;
 
 	connect(&midiIn, &PhMidiInput::onStop, [&]() {
-	            stopCount++;
+				stopCount++;
 			});
 
 	QVERIFY(midiIn.open("testMMCStop"));
@@ -205,9 +222,9 @@ void MidiTest::testMMCGoto()
 	PhTimeCodeType tcType = PhTimeCodeType25;
 
 	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
-	            tcCount++;
-	            tcType = type;
-	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
+				tcCount++;
+				tcType = type;
+				time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testMMCGoto"));
@@ -266,21 +283,26 @@ void MidiTest::testMTCWriter()
 	PhMidiInput midiIn;
 
 	int quarterFrameCount = 0;
+	unsigned char quarterFrameData = 255;
 	int tcCount = 0;
 	PhTimeCodeType tcType = PhTimeCodeType24;
 	PhTime time = 0;
 
-	connect(&midiIn, &PhMidiInput::quarterFrame, [&]() {quarterFrameCount++; });
+	connect(&midiIn, &PhMidiInput::quarterFrame, [&](unsigned char data) {
+				quarterFrameCount++;
+				quarterFrameData = data;
+			});
+
 	connect(&midiIn, &PhMidiInput::timeCodeReceived, [&](int h, int m, int s, int f, PhTimeCodeType type) {
-	            tcCount++;
-	            tcType = type;
-	            time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
+				tcCount++;
+				tcType = type;
+				time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 			});
 
 	QVERIFY(midiIn.open("testMTCWriter"));
 	QVERIFY(mtcWriter.open("testMTCWriter"));
 
-	mtcWriter.clock()->setTime(s2t("01:00:00:00", PhTimeCodeType25));
+	mtcWriter.clock()->setTime(s2t("23:40:19:16", PhTimeCodeType30));
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 0);
@@ -293,6 +315,7 @@ void MidiTest::testMTCWriter()
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 1);
+	QCOMPARE((int)quarterFrameData, 0x00);
 	QCOMPARE(tcCount, 1);
 	QCOMPARE(tcType, PhTimeCodeType25);
 	QCOMPARE(t2s(time, PhTimeCodeType25), QString("00:00:00:00"));
@@ -301,52 +324,58 @@ void MidiTest::testMTCWriter()
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 2);
+	QCOMPARE((int)quarterFrameData, 0x11);
 	QCOMPARE(tcCount, 1);
 
 	mtcWriter.clock()->tick(100);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 3);
+	QCOMPARE((int)quarterFrameData, 0x23);
 	QCOMPARE(tcCount, 1);
 
 	mtcWriter.clock()->tick(100);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 4);
+	QCOMPARE((int)quarterFrameData, 0x31);
 	QCOMPARE(tcCount, 1);
 
 	mtcWriter.clock()->tick(100);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 5);
+	QCOMPARE((int)quarterFrameData, 0x48);
 	QCOMPARE(tcCount, 1);
 
 	mtcWriter.clock()->tick(100);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 6);
+	QCOMPARE((int)quarterFrameData, 0x52);
 	QCOMPARE(tcCount, 1);
 
 	mtcWriter.clock()->tick(100);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 7);
+	QCOMPARE((int)quarterFrameData, 0x67);
 	QCOMPARE(tcCount, 1);
 
 	mtcWriter.clock()->tick(100);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 8);
+	QCOMPARE((int)quarterFrameData, 0x77);
 	QCOMPARE(tcCount, 1);
 
 	mtcWriter.clock()->tick(100);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 9);
+	QCOMPARE((int)quarterFrameData, 0x02);
 	QCOMPARE(tcCount, 2);
 	QCOMPARE(tcType, PhTimeCodeType30);
-	QCOMPARE(t2s(time, PhTimeCodeType30), QString("01:00:00:02"));
-
-#warning /// @todo test all digit generation
+	QCOMPARE(t2s(time, PhTimeCodeType30), QString("23:40:19:18"));
 }
 

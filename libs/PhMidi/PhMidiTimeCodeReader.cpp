@@ -12,7 +12,7 @@ PhMidiTimeCodeReader::PhMidiTimeCodeReader(PhTimeCodeType tcType) :
 {
 }
 
-void PhMidiTimeCodeReader::onQuarterFrame()
+void PhMidiTimeCodeReader::onQuarterFrame(unsigned char)
 {
 	_clock.tick(4 * PhTimeCode::getFps(_clock.timeCodeType()));
 	_clock.setRate(1);
