@@ -34,10 +34,10 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 
 	_clockTimer.start(10);
 
-	connect(_mtcReader.clock(), &PhClock::frameChanged, this, &MidiToolWindow::onFrameChanged);
-	connect(_mtcReader.clock(), &PhClock::rateChanged, this, &MidiToolWindow::onSlaveRateChanged);
-	connect(_mtcReader.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::onSlaveTCTypeChanged);
-	onSlaveTCTypeChanged(_mtcReader.clock()->timeCodeType());
+	connect(_mtcReader.clock(), &PhClock::timeChanged, this, &MidiToolWindow::onReaderTimeChanged);
+	connect(_mtcReader.clock(), &PhClock::rateChanged, this, &MidiToolWindow::onReaderRateChanged);
+	connect(_mtcReader.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::onReaderTCTypeChanged);
+	onReaderTCTypeChanged(_mtcReader.clock()->timeCodeType());
 }
 
 MidiToolWindow::~MidiToolWindow()
@@ -77,13 +77,15 @@ void MidiToolWindow::on_actionPreferences_triggered()
 	on_generateCheckBox_clicked(_settings->generate());
 }
 
-void MidiToolWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void MidiToolWindow::onReaderTimeChanged(PhTime time)
 {
-	ui->lblSlave->setText(PhTimeCode::stringFromFrame(frame, tcType));
+	ui->labelReaderTimeCode->setText(PhTimeCode::stringFromTime(time, _mtcReader.clock()->timeCodeType()));
+	int delay = (_mtcWriter.clock()->time() - _mtcReader.clock()->time()) / 24;
+	ui->labelDelay->setText(QString("%0 ms").arg(delay));
 }
 
 
-void MidiToolWindow::onSlaveRateChanged(PhRate rate)
+void MidiToolWindow::onReaderRateChanged(PhRate rate)
 {
 	QString s = QString("%1x since %2")
 	            .arg(rate)
@@ -91,7 +93,7 @@ void MidiToolWindow::onSlaveRateChanged(PhRate rate)
 	ui->readInfoLabel->setText(s);
 }
 
-void MidiToolWindow::onSlaveTCTypeChanged(PhTimeCodeType tcType)
+void MidiToolWindow::onReaderTCTypeChanged(PhTimeCodeType tcType)
 {
 	ui->fpsLabel->setText(QString("%0 fps").arg(PhTimeCode::getAverageFps(tcType)));
 }

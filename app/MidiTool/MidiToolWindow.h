@@ -53,9 +53,9 @@ private slots:
 	void on_readCheckBox_clicked(bool checked);
 
 	/* custom slots */
-	void onFrameChanged(PhFrame, PhTimeCodeType tcType);
-	void onSlaveRateChanged(PhRate rate);
-	void onSlaveTCTypeChanged(PhTimeCodeType tcType);
+	void onReaderTimeChanged(PhTime time);
+	void onReaderRateChanged(PhRate rate);
+	void onReaderTCTypeChanged(PhTimeCodeType tcType);
 	void onTick();
 
 private:

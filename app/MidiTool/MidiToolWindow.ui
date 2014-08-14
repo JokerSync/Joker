@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>523</width>
-    <height>371</height>
+    <height>384</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -87,7 +87,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="lblSlave">
+        <widget class="QLabel" name="labelReaderTimeCode">
          <property name="font">
           <font>
            <family>Arial Unicode MS</family>
@@ -114,6 +114,16 @@
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="labelDelay">
+      <property name="text">
+       <string>0 ms</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
    </layout>
