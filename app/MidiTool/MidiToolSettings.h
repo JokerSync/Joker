@@ -9,8 +9,8 @@
 class MidiToolSettings : protected PhGenericSettings
 {
 public:
-	PH_SETTING_BOOL2(setGenerate, generate, true)
-	PH_SETTING_BOOL2(setRead, read, true)
+	PH_SETTING_BOOL2(setWriteMTC, writeMTC, true)
+	PH_SETTING_BOOL2(setReadMTC, readMTC, true)
 
 	PH_SETTING_INT2(setFirstFrame, firstFrame, 25 * 60 * 60)
 	PH_SETTING_INT2(setLength, length, 25 * 60)

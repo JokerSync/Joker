@@ -22,8 +22,8 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	on_readCheckBox_clicked(_settings->read());
-	on_generateCheckBox_clicked(_settings->generate());
+	on_checkBoxReadMTC_clicked(_settings->readMTC());
+	on_checkBoxWriteMTC_clicked(_settings->writeMTC());
 
 	_mtcWriter.clock()->setFrame(_settings->firstFrame());
 	ui->widgetMaster->setMediaLength(_settings->length());
@@ -73,8 +73,38 @@ void MidiToolWindow::on_actionPreferences_triggered()
 	_mtcWriter.close();
 	PreferencesDialog dlg(_settings);
 	dlg.exec();
-	on_readCheckBox_clicked(_settings->read());
-	on_generateCheckBox_clicked(_settings->generate());
+	on_checkBoxReadMTC_clicked(_settings->readMTC());
+	on_checkBoxWriteMTC_clicked(_settings->writeMTC());
+}
+
+void MidiToolWindow::on_checkBoxWriteMTC_clicked(bool checked)
+{
+	ui->checkBoxWriteMTC->setChecked(checked);
+	ui->groupBoxWriter->setEnabled(checked);
+	_settings->setWriteMTC(checked);
+	if(checked) {
+		if(!_mtcWriter.open(_settings->midiOutputPortName())) {
+			QMessageBox::critical(this, "Error", "Unable to open " + _settings->midiOutputPortName());
+			on_checkBoxWriteMTC_clicked(false);
+		}
+	}
+	else
+		_mtcWriter.close();
+}
+
+void MidiToolWindow::on_checkBoxReadMTC_clicked(bool checked)
+{
+	ui->checkBoxReadMTC->setChecked(checked);
+	ui->groupBoxReader->setEnabled(checked);
+	_settings->setReadMTC(checked);
+	if(checked) {
+		if(!_mtcReader.open(_settings->midiInputPortName())) {
+			QMessageBox::critical(this, "Error", "Unable to create " + _settings->midiInputPortName());
+			on_checkBoxReadMTC_clicked(false);
+		}
+	}
+	else
+		_mtcReader.close();
 }
 
 void MidiToolWindow::onReaderTimeChanged(PhTime time)
@@ -83,7 +113,6 @@ void MidiToolWindow::onReaderTimeChanged(PhTime time)
 	int delay = (_mtcWriter.clock()->time() - _mtcReader.clock()->time()) / 24;
 	ui->labelDelay->setText(QString("%0 ms").arg(delay));
 }
-
 
 void MidiToolWindow::onReaderRateChanged(PhRate rate)
 {
@@ -96,36 +125,6 @@ void MidiToolWindow::onReaderRateChanged(PhRate rate)
 void MidiToolWindow::onReaderTCTypeChanged(PhTimeCodeType tcType)
 {
 	ui->fpsLabel->setText(QString("%0 fps").arg(PhTimeCode::getAverageFps(tcType)));
-}
-
-void MidiToolWindow::on_generateCheckBox_clicked(bool checked)
-{
-	ui->generatorGroupBox->setEnabled(checked);
-	ui->generateCheckBox->setChecked(checked);
-	_settings->setGenerate(checked);
-	if(checked) {
-		if(!_mtcWriter.open(_settings->midiOutputPortName())) {
-			QMessageBox::critical(this, "Error", "Unable to open " + _settings->midiOutputPortName());
-			on_generateCheckBox_clicked(false);
-		}
-	}
-	else
-		_mtcWriter.close();
-}
-
-void MidiToolWindow::on_readCheckBox_clicked(bool checked)
-{
-	ui->readerGroupBox->setEnabled(checked);
-	ui->readCheckBox->setChecked(checked);
-	_settings->setRead(checked);
-	if(checked) {
-		if(!_mtcReader.open(_settings->midiInputPortName())) {
-			QMessageBox::critical(this, "Error", "Unable to create " + _settings->midiInputPortName());
-			on_readCheckBox_clicked(false);
-		}
-	}
-	else
-		_mtcReader.close();
 }
 
 void MidiToolWindow::onTick()

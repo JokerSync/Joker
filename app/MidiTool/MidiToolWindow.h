@@ -25,8 +25,8 @@ class MidiToolWindow;
  * @brief MidiTool main application window
  *
  * The MidiToolWindow class implements the main screen user interface behaviour:
- * - Display the generator TC in / TC out
- * - Display the generator PhMediaPanel
+ * - Display the writer TC in / TC out
+ * - Display the writer PhMediaPanel
  * - Display the reader timecode label
  * - Opening application dialog : preferences, set TC in, set TC out
  * - ...
@@ -49,14 +49,15 @@ private slots:
 	void on_actionSet_TC_In_triggered();
 	void on_actionSet_TC_Out_triggered();
 	void on_actionPreferences_triggered();
-	void on_generateCheckBox_clicked(bool checked);
-	void on_readCheckBox_clicked(bool checked);
+	void on_checkBoxWriteMTC_clicked(bool checked);
+	void on_checkBoxReadMTC_clicked(bool checked);
 
 	/* custom slots */
 	void onReaderTimeChanged(PhTime time);
 	void onReaderRateChanged(PhRate rate);
 	void onReaderTCTypeChanged(PhTimeCodeType tcType);
 	void onTick();
+
 
 private:
 	Ui::MidiToolWindow *ui;
