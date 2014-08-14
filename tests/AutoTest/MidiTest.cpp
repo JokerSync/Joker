@@ -176,7 +176,7 @@ void MidiTest::testMMCPlay()
 	int playCount = 0;
 
 	connect(&midiIn, &PhMidiInput::onPlay, [&]() {
-	            playCount++;
+				playCount++;
 			});
 
 	QVERIFY(midiIn.open("testMMCStop"));
@@ -198,7 +198,7 @@ void MidiTest::testMMCStop()
 	int stopCount = 0;
 
 	connect(&midiIn, &PhMidiInput::onStop, [&]() {
-	            stopCount++;
+				stopCount++;
 			});
 
 	QVERIFY(midiIn.open("testMMCStop"));
