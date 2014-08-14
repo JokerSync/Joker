@@ -36,13 +36,7 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 
 	connect(_mtcReader.clock(), &PhClock::frameChanged, this, &MidiToolWindow::onFrameChanged);
 	connect(_mtcReader.clock(), &PhClock::rateChanged, this, &MidiToolWindow::onSlaveRateChanged);
-
-	updateInfos();
-
-//	connect(_ltcWriter.clock(), SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
-
-//	connect(&_ltcReader, SIGNAL(audioProcessed(int, int)), this, SLOT(onAudioProcessed(int, int)));
-
+	connect(_mtcReader.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::onSlaveTCTypeChanged);
 }
 
 MidiToolWindow::~MidiToolWindow()
@@ -72,21 +66,6 @@ void MidiToolWindow::on_actionSet_TC_Out_triggered()
 //	}
 }
 
-void MidiToolWindow::updateInfos()
-{
-	QString tcIn;
-	QString tcOut;
-
-	_settings->setFirstFrame((int) ui->widgetMaster->getFirstFrame());
-	_settings->setLength((int) ui->widgetMaster->getMediaLength());
-
-
-//	tcIn = PhTimeCode::stringFromFrame(ui->widgetMaster->getFirstFrame(), _ltcWriter.clock()->timeCodeType());
-//	tcOut = PhTimeCode::stringFromFrame(ui->widgetMaster->getFirstFrame() + ui->widgetMaster->getMediaLength(), _ltcWriter.clock()->timeCodeType());
-
-//	ui->generateInfoLabel->setText(tcIn + " -> " + tcOut);
-}
-
 void MidiToolWindow::on_actionPreferences_triggered()
 {
 //	PreferencesDialog dlg(_settings->audioOutput(), _settings->audioInput());
@@ -110,37 +89,15 @@ void MidiToolWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 
 void MidiToolWindow::onSlaveRateChanged(PhRate rate)
 {
-	updateSlaveInfo();
+	QString s = QString("%1x since %2")
+							   .arg(rate)
+							   .arg(PhTimeCode::stringFromTime(_mtcReader.clock()->time(), _mtcReader.clock()->timeCodeType()));
+	ui->readInfoLabel->setText(s);
 }
 
-void MidiToolWindow::updateSlaveInfo()
+void MidiToolWindow::onSlaveTCTypeChanged(PhTimeCodeType tcType)
 {
-//	PhFrame frame = _ltcReader.clock()->frame();
-//	PhTimeCodeType tcType = _ltcReader.clock()->timeCodeType();
-//	PhRate rate = _ltcReader.clock()->rate();
-//	if((frame - _lastFrame != _frameDelta) || (rate != _lastRate)) {
-//		_frameDelta = frame - _lastFrame;
-//		ui->readInfoLabel->setText(QString("%1 / %2 x%3")
-//		                           .arg(_frameDelta)
-//		                           .arg(PhTimeCode::stringFromFrame(frame, tcType))
-//		                           .arg(_ltcReader.clock()->rate()));
-//	}
-//	_lastFrame = frame;
-//	_lastRate = rate;
-
-//	ui->lblSlave->setText(PhTimeCode::stringFromFrame(frame, tcType));
-}
-
-void MidiToolWindow::setupOutput()
-{
-//	_ltcWriter.close();
-//	if(!_ltcWriter.init(_settings->audioOutput())) {
-//		QMessageBox::warning(this, tr("Error"),
-//		                     tr("Error while loading the output device.\n"
-//		                        "See log for more informations"),
-//		                     QMessageBox::Ok);
-//		on_generateCheckBox_clicked(false);
-//	}
+	ui->fpsLabel->setText(QString("%0 fps").arg(PhTimeCode::getAverageFps(tcType)));
 }
 
 void MidiToolWindow::on_generateCheckBox_clicked(bool checked)

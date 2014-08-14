@@ -104,9 +104,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="minMaxLevelLabel">
+        <widget class="QLabel" name="fpsLabel">
          <property name="text">
-          <string>- / -</string>
+          <string>0 fps</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

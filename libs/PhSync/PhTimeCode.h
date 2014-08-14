@@ -158,12 +158,20 @@ public:
 	static bool isDrop(PhTimeCodeType type);
 
 	/**
-	 * @brief check if the timecode type frame per second.
+	 * @brief Get the timecode type integer fps
 	 *
 	 * @param type A timecode type.
 	 * @return Amount of frame per second.
 	 */
 	static PhFrame getFps(PhTimeCodeType type);
+
+	/**
+	 * @brief Get the timecode type average fps
+	 *
+	 * @param type A timecode type.
+	 * @return The average frame per second.
+	 */
+	static float getAverageFps(PhTimeCodeType type);
 };
 
 #endif // PHTIMECODE_H

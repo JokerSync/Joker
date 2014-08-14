@@ -21,8 +21,8 @@
 namespace Ui {
 class MidiToolWindow;
 }
-/*!
- * \brief MidiTool main application window
+/**
+ * @brief MidiTool main application window
  *
  * The MidiToolWindow class implements the main screen user interface behaviour:
  * - Display the generator TC in / TC out
@@ -36,10 +36,10 @@ class MidiToolWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	/*!
-	 * \brief The MidiToolWindow constructor
-	 * \param settings The application settings
-	 * \param parent
+	/**
+	 * @brief The MidiToolWindow constructor
+	 * @param settings The application settings
+	 * @param parent
 	 */
 	explicit MidiToolWindow(MidiToolSettings *settings, QWidget *parent = 0);
 	~MidiToolWindow();
@@ -49,20 +49,16 @@ private slots:
 	void on_actionSet_TC_In_triggered();
 	void on_actionSet_TC_Out_triggered();
 	void on_actionPreferences_triggered();
-
-	void onFrameChanged(PhFrame, PhTimeCodeType tcType);
-	void onSlaveRateChanged(PhRate rate);
-	void updateSlaveInfo();
-
 	void on_generateCheckBox_clicked(bool checked);
-
 	void on_readCheckBox_clicked(bool checked);
 
+	/* custom slots */
+	void onFrameChanged(PhFrame, PhTimeCodeType tcType);
+	void onSlaveRateChanged(PhRate rate);
+	void onSlaveTCTypeChanged(PhTimeCodeType tcType);
 	void onTick();
 
 private:
-	void setupOutput();
-	void updateInfos();
 	Ui::MidiToolWindow *ui;
 	MidiToolSettings *_settings;
 

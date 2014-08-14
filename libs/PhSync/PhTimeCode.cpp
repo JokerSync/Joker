@@ -90,6 +90,22 @@ PhFrame PhTimeCode::getFps(PhTimeCodeType type) {
 	}
 }
 
+float PhTimeCode::getAverageFps(PhTimeCodeType type)
+{
+	switch (type) {
+	case PhTimeCodeType2398:
+		return 23.98;
+	case PhTimeCodeType24:
+		return 24;
+	case PhTimeCodeType25:
+		return 25;
+	case PhTimeCodeType2997:
+		return 29.97;
+	case PhTimeCodeType30:
+		return 30;
+	}
+}
+
 PhTime PhTimeCode::timePerFrame(PhTimeCodeType type)
 {
 	switch (type) {
