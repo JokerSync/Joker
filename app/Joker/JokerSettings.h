@@ -23,6 +23,25 @@ class JokerSettings : PhGenericSettings,
 	public PhFeedbackSettings
 {
 public:
+	// PhWindowSettings
+	PH_SETTING_BOOL(setFullScreen, fullScreen)
+	PH_SETTING_BOOL2(setExitedNormaly, exitedNormaly, true)
+	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
+
+	// PhDocumentWindowSettings
+	PH_SETTING_STRING(setCurrentDocument, currentDocument)
+	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
+	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
+	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
+	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
+
+	// PhFeedbackSettings
+	QString settingsFileName() {
+		return _settings.fileName();
+	}
+	PH_SETTING_STRINGLIST(setEmailList, emailList)
+
+
 	PH_SETTING_INT3(setScreenDelay, screenDelay, delay)
 
 	// PhGraphicSettings
@@ -63,23 +82,8 @@ public:
 	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
-	// PhWindowSettings
-	PH_SETTING_BOOL(setFullScreen, fullScreen)
-	PH_SETTING_BOOL2(setExitedNormaly, exitedNormaly, true)
-	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
-
-	// PhDocumentWindowSettings
-	PH_SETTING_STRING(setCurrentDocument, currentDocument)
-	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
-	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
-	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
-	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
-
-	// PhFeedbackSettings
-	QString settingsFileName() {
-		return _settings.fileName();
-	}
-	PH_SETTING_STRINGLIST(setEmailList, emailList)
+	// Midi settings:
+	PH_SETTING_STRING2(setMidiTimeCodePortName, midiTimeCodePortName, "Joker")
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)

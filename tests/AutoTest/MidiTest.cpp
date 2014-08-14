@@ -216,6 +216,10 @@ void MidiTest::testMMCGoto()
 
 void MidiTest::testMTCReader()
 {
+	//
+	// Initialize the midi timecode reader:
+	//
+
 	PhMidiTimeCodeReader mtcReader(PhTimeCodeType25);
 	PhMidiOutput midiOut;
 
@@ -227,12 +231,17 @@ void MidiTest::testMTCReader()
 	QCOMPARE(mtcReader.clock()->timeCodeType(), PhTimeCodeType24);
 	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("01:00:00:00"));
 
+	//
 	// Any quarter frame message should trigger play mode
+	//
+
 	midiOut.sendQFTC(0x01); // Send frame low digit
 	QThread::msleep(10);
 
 	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("01:00:00:00"));
 	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 1));
+
+	// Test basic playback behaviour
 
 	midiOut.sendQFTC(0x10); // Send frame high digit
 	QThread::msleep(10);
@@ -256,6 +265,7 @@ void MidiTest::testMTCReader()
 	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("01:00:00:02"));
 
 	// Send 8 quarter frame message from another timecode (23:40:19:20)
+
 	midiOut.sendQFTC(0x05); // Send frame low digit (5 because we start the next frame transmission)
 	QThread::msleep(10);
 	midiOut.sendQFTC(0x11); // Send frame high digit
@@ -277,6 +287,7 @@ void MidiTest::testMTCReader()
 	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("23:40:19:22"));
 
 	// Send the next 8 quarter frame message to check passing seconds
+
 	midiOut.sendQFTC(0x07); // Send frame low digit (5 because we start the next frame transmission)
 	QThread::msleep(10);
 	midiOut.sendQFTC(0x11); // Send frame high digit
