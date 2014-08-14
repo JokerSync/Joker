@@ -37,3 +37,6 @@ mac {
 	# For the plist version
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
 }
+
+PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
+include(../../common/deploy.pri)
