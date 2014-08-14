@@ -153,7 +153,7 @@ bool PhVideoEngine::open(QString fileName)
 				_audioStream = NULL;
 			}
 			else {
-				_audioFrame = avcodec_alloc_frame();
+				_audioFrame = av_frame_alloc();
 				PHDEBUG << "Audio OK.";
 			}
 		}
