@@ -19,7 +19,7 @@
      <x>10</x>
      <y>10</y>
      <width>261</width>
-     <height>101</height>
+     <height>102</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -28,7 +28,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lblDeviceOut">
         <property name="text">
-         <string>Sortie audio</string>
+         <string>Midi out</string>
         </property>
        </widget>
       </item>
@@ -38,12 +38,12 @@
       <item row="1" column="0">
        <widget class="QLabel" name="lblDeviceIn">
         <property name="text">
-         <string>Entrée audio</string>
+         <string>Midi in</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="comboBoxInput"/>
+       <widget class="QLineEdit" name="lineEditInput"/>
       </item>
      </layout>
     </item>

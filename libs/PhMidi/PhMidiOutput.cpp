@@ -17,6 +17,16 @@ PhMidiOutput::~PhMidiOutput()
 	close();
 }
 
+QStringList PhMidiOutput::outputList()
+{
+	QStringList result;
+	RtMidiOut midiOut;
+	for(unsigned int i = 0; i < midiOut.getPortCount(); i++)
+		result.append(QString::fromStdString(midiOut.getPortName(i)));
+
+	return result;
+}
+
 bool PhMidiOutput::open(QString portName)
 {
 	try {

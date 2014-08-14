@@ -37,6 +37,7 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	connect(_mtcReader.clock(), &PhClock::frameChanged, this, &MidiToolWindow::onFrameChanged);
 	connect(_mtcReader.clock(), &PhClock::rateChanged, this, &MidiToolWindow::onSlaveRateChanged);
 	connect(_mtcReader.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::onSlaveTCTypeChanged);
+	onSlaveTCTypeChanged(_mtcReader.clock()->timeCodeType());
 }
 
 MidiToolWindow::~MidiToolWindow()
@@ -68,17 +69,12 @@ void MidiToolWindow::on_actionSet_TC_Out_triggered()
 
 void MidiToolWindow::on_actionPreferences_triggered()
 {
-//	PreferencesDialog dlg(_settings->audioOutput(), _settings->audioInput());
-//	if(dlg.exec()) {
-//		PHDEBUG << dlg.selectedAudioOutput();
-//		_settings->setAudioOutput(dlg.selectedAudioOutput());
-//		_settings->setAudioInput(dlg.selectedAudioInput());
-
-//		if(_settings->generate())
-//			setupOutput();
-//		if(_settings->read())
-//			setupInput();
-//	}
+	_mtcReader.close();
+	_mtcWriter.close();
+	PreferencesDialog dlg(_settings);
+	dlg.exec();
+	on_readCheckBox_clicked(_settings->read());
+	on_generateCheckBox_clicked(_settings->generate());
 }
 
 void MidiToolWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
@@ -90,8 +86,8 @@ void MidiToolWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
 void MidiToolWindow::onSlaveRateChanged(PhRate rate)
 {
 	QString s = QString("%1x since %2")
-							   .arg(rate)
-							   .arg(PhTimeCode::stringFromTime(_mtcReader.clock()->time(), _mtcReader.clock()->timeCodeType()));
+	            .arg(rate)
+	            .arg(PhTimeCode::stringFromTime(_mtcReader.clock()->time(), _mtcReader.clock()->timeCodeType()));
 	ui->readInfoLabel->setText(s);
 }
 
@@ -102,13 +98,12 @@ void MidiToolWindow::onSlaveTCTypeChanged(PhTimeCodeType tcType)
 
 void MidiToolWindow::on_generateCheckBox_clicked(bool checked)
 {
-
 	ui->generatorGroupBox->setEnabled(checked);
 	ui->generateCheckBox->setChecked(checked);
 	_settings->setGenerate(checked);
 	if(checked) {
-		if(!_mtcWriter.open(_settings->outputPortName())) {
-			QMessageBox::critical(this, "Error", "Unable to send to " + _settings->inputPortName());
+		if(!_mtcWriter.open(_settings->midiOutputPortName())) {
+			QMessageBox::critical(this, "Error", "Unable to open " + _settings->midiOutputPortName());
 			on_generateCheckBox_clicked(false);
 		}
 	}
@@ -122,8 +117,8 @@ void MidiToolWindow::on_readCheckBox_clicked(bool checked)
 	ui->readCheckBox->setChecked(checked);
 	_settings->setRead(checked);
 	if(checked) {
-		if(!_mtcReader.open(_settings->inputPortName())) {
-			QMessageBox::critical(this, "Error", "Unable to read from " + _settings->inputPortName());
+		if(!_mtcReader.open(_settings->midiInputPortName())) {
+			QMessageBox::critical(this, "Error", "Unable to create " + _settings->midiInputPortName());
 			on_readCheckBox_clicked(false);
 		}
 	}
