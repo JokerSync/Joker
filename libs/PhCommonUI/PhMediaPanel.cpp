@@ -11,8 +11,8 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::PhMediaPanel),
 	_clock(NULL),
-	_firstFrame(0),
-	_mediaLength(0)
+	_timeIn(0),
+	_length(0)
 {
 	ui->setupUi(this);
 
@@ -82,31 +82,42 @@ PhTimeCodeType PhMediaPanel::timeCodeType() const
 	}
 }
 
-
 void PhMediaPanel::setFirstFrame(PhFrame firstFrame)
 {
-	_firstFrame = firstFrame;
-	ui->_slider->setMinimum(firstFrame);
-	ui->_slider->setMaximum(_firstFrame + _mediaLength);
+	setTimeIn(firstFrame * PhTimeCode::timePerFrame(this->timeCodeType()));
 }
 
+void PhMediaPanel::setTimeIn(PhTime timeIn)
+{
+	_timeIn = timeIn;
+	ui->_slider->setMinimum(_timeIn / 24000);
+	ui->_slider->setMaximum((_timeIn + _length) / 24000);
+}
 
 PhFrame PhMediaPanel::getFirstFrame() const
 {
-	return _firstFrame;
+	return _timeIn / PhTimeCode::timePerFrame(this->timeCodeType());
 }
-
 
 void PhMediaPanel::setMediaLength(PhFrame length)
 {
-	_mediaLength = length;
-	ui->_slider->setMaximum(_firstFrame + length);
+	setLength(length * PhTimeCode::timePerFrame(this->timeCodeType()));
 }
 
+void PhMediaPanel::setLength(PhTime length)
+{
+	_length = length;
+	ui->_slider->setMaximum((_timeIn + length) / 24000);
+}
 
 PhFrame PhMediaPanel::getMediaLength()
 {
-	return _mediaLength;
+	return _length / PhTimeCode::timePerFrame(this->timeCodeType());
+}
+
+PhTime PhMediaPanel::length()
+{
+	return _length;
 }
 
 void PhMediaPanel::setSliderEnable(bool isEnabled)
@@ -185,7 +196,7 @@ void PhMediaPanel::onRewind()
 void PhMediaPanel::onBack()
 {
 	if(_clock)
-		_clock->setFrame(_firstFrame);
+		_clock->setTime(_timeIn);
 	emit back();
 }
 

@@ -31,10 +31,10 @@ class PhMediaPanel : public QWidget
 
 public:
 	/**
-	 * @brief PhMediaPanel constructor
+	 * @brief The PhMediaPanel constructor
 	 * @param parent The object owner.
 	 */
-	explicit PhMediaPanel(QWidget *parent = 0);
+	PhMediaPanel(QWidget *parent = 0);
 
 	~PhMediaPanel();
 	/**
@@ -45,43 +45,73 @@ public:
 	/**
 	 * @brief set the first Frame
 	 * @param firstFrame Desired PhFrame
+	 * @todo remove
 	 */
-	void setFirstFrame(PhFrame firstFrame);
+	void setFirstFrame(PhFrame frameIn);
+
 	/**
-	 * @brief set the media length
-	 * Set the media length and adjust the slider
-	 *
-	 * @param length the desired length
+	 * @brief Set the starting time of the panel
+	 * @param timeIn A time value
+	 */
+	void setTimeIn(PhTime timeIn);
+
+	/**
+	 * @brief Set the media length in frame and adjust the slider
+	 * @param length A frame value
+	 * @todo remove
 	 */
 	void setMediaLength(PhFrame length);
+
 	/**
-	 * @brief set Slider Enable
-	 * @param isEnabled : true if the slider must be enabled, false otherwise.
+	 * @brief Set the media length and adjust the slider
+	 * @param length A time value
+	 */
+	void setLength(PhTime length);
+
+	/**
+	 * @brief Enable the panel slider
+	 * @param isEnabled True if the slider must be enabled, false otherwise.
 	 */
 	void setSliderEnable(bool isEnabled);
 
 	/**
-	 * @brief set the clock
-	 * @param clock the clock which will master the PhMediaPanel
+	 * @brief Set the panel clock
+	 * @param clock A clock instance
+	 *
+	 * The panel will display the value of the clock.
 	 */
 	void setClock(PhClock * clock);
 
 
 	/**
-	 * @brief get the first PhFrame
-	 * @return the corresponding PhFrame
+	 * @brief Get the first frame
+	 * @return A frame value
+	 * @todo remove
 	 */
 	PhFrame getFirstFrame() const;
 
 	/**
-	 * @brief get the media Length
-	 * @return _mediaLength the media length
+	 * @brief Get the starting time
+	 * @return A time value
+	 */
+	PhTime timeIn() const;
+
+	/**
+	 * @brief Get the media length in frame
+	 * @return A frame value
+	 * @todo remove
 	 */
 	PhFrame getMediaLength();
 
 	/**
-	 * @brief get the timecode Type
-	 * @return a PhTimeCodeType from the enum
+	 * @brief Get the media panel length
+	 * @return
+	 */
+	PhTime length();
+
+	/**
+	 * @brief Get the panel timecode type
+	 * @return A timecode type value.
 	 */
 	PhTimeCodeType timeCodeType() const;
 
@@ -154,8 +184,8 @@ private slots:
 private:
 	Ui::PhMediaPanel *ui;
 	PhClock *_clock;
-	PhFrame _firstFrame;
-	PhFrame _mediaLength; //number of frames of the media
+	PhTime _timeIn;
+	PhTime _length; //number of frames of the media
 };
 
 #endif // PHMEDIAPANEL_H
