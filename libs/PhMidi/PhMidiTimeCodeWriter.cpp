@@ -16,6 +16,12 @@ void PhMidiTimeCodeWriter::onTimeChanged(PhTime time)
 	if(_clock.rate() == 1) {
 		unsigned int hhmmssff[4];
 		PhTimeCodeType tcType = _clock.timeCodeType();
+
+		// We add two frame in we are in the four quarter frame of
+		// the message since we send the next frame tc
+		if(_currentDigit < 4)
+			time += 2 * PhTimeCode::timePerFrame(tcType);
+
 		PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, time, tcType);
 		unsigned char data = _currentDigit << 4;
 		switch (_currentDigit) {

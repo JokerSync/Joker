@@ -391,7 +391,7 @@ void MidiTest::testMTCWriter()
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 1);
-	QCOMPARE((int)quarterFrameData, 0x00);
+	QCOMPARE((int)quarterFrameData, 0x02);
 
 	mtcWriter.clock()->tick(100);
 	QThread::msleep(10);
@@ -439,6 +439,6 @@ void MidiTest::testMTCWriter()
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 9);
-	QCOMPARE((int)quarterFrameData, 0x02);
+	QCOMPARE((int)quarterFrameData, 0x04);
 }
 
