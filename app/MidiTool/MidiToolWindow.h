@@ -53,13 +53,17 @@ private slots:
 	void on_checkBoxReadMTC_clicked(bool checked);
 
 	/* custom slots */
+	void updateTCTypeSetting(PhTimeCodeType tcType);
+	void updateRateSetting(PhRate rate);
 	void onReaderTimeChanged(PhTime time);
 	void onReaderRateChanged(PhRate rate);
-	void onReaderTCTypeChanged(PhTimeCodeType tcType);
+	void updateFpsLabel(PhTimeCodeType tcType);
 	void onTick();
 
 
 private:
+	void updateWriterInfoLabel();
+
 	Ui::MidiToolWindow *ui;
 	MidiToolSettings *_settings;
 

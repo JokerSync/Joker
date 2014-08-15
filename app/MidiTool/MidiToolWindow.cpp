@@ -13,8 +13,8 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MidiToolWindow),
 	_settings(settings),
-	_mtcReader(PhTimeCodeType25),
-	_mtcWriter(PhTimeCodeType25),
+	_mtcReader((PhTimeCodeType)settings->writerTimeCodeType()),
+	_mtcWriter((PhTimeCodeType)settings->writerTimeCodeType()),
 	_currentDigit(0),
 	_lastFrame(-1),
 	_frameDelta(-1),
@@ -25,19 +25,26 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	on_checkBoxReadMTC_clicked(_settings->readMTC());
 	on_checkBoxWriteMTC_clicked(_settings->writeMTC());
 
-	_mtcWriter.clock()->setFrame(_settings->firstFrame());
-	ui->widgetMaster->setMediaLength(_settings->length());
-	ui->widgetMaster->setFirstFrame(_settings->firstFrame());
+	_mtcWriter.clock()->setTime(_settings->writerTimeIn());
+	ui->widgetMaster->setLength(_settings->writerLoopLength());
+	ui->widgetMaster->setTimeIn(_settings->writerTimeIn());
 	ui->widgetMaster->setClock(_mtcWriter.clock());
 
 	connect(&_clockTimer, &QTimer::timeout, this, &MidiToolWindow::onTick);
 
 	_clockTimer.start(10);
 
+	connect(_mtcWriter.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::updateTCTypeSetting);
+	connect(_mtcWriter.clock(), &PhClock::rateChanged, this, &MidiToolWindow::updateRateSetting);
+
 	connect(_mtcReader.clock(), &PhClock::timeChanged, this, &MidiToolWindow::onReaderTimeChanged);
 	connect(_mtcReader.clock(), &PhClock::rateChanged, this, &MidiToolWindow::onReaderRateChanged);
-	connect(_mtcReader.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::onReaderTCTypeChanged);
-	onReaderTCTypeChanged(_mtcReader.clock()->timeCodeType());
+	connect(_mtcReader.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::updateFpsLabel);
+
+	updateFpsLabel(_mtcReader.clock()->timeCodeType());
+	updateWriterInfoLabel();
+
+	_mtcWriter.clock()->setRate(_settings->writerRate());
 }
 
 MidiToolWindow::~MidiToolWindow()
@@ -47,24 +54,29 @@ MidiToolWindow::~MidiToolWindow()
 
 void MidiToolWindow::on_actionSet_TC_In_triggered()
 {
-//	PhTimeCodeDialog dlg(_ltcWriter.clock()->timeCodeType(), ui->widgetMaster->getFirstFrame());
-//	if(dlg.exec()) {
-//		ui->widgetMaster->setFirstFrame(dlg.frame());
-//		_ltcWriter.clock()->setFrame(ui->widgetMaster->getFirstFrame());
-//		updateInfos();
-//	}
+#warning /// @todo change to time
+	PhTimeCodeDialog dlg(_mtcWriter.clock()->timeCodeType(), _settings->writerTimeIn() / PhTimeCode::timePerFrame(_mtcWriter.clock()->timeCodeType()));
+	if(dlg.exec()) {
+		_settings->setWriterTimeIn(dlg.time());
+		ui->widgetMaster->setTimeIn(dlg.time());
+		_mtcWriter.clock()->setTime(dlg.time());
+		updateWriterInfoLabel();
+	}
 }
 
 void MidiToolWindow::on_actionSet_TC_Out_triggered()
 {
-//	PhTimeCodeDialog dlg(_ltcWriter.clock()->timeCodeType(), ui->widgetMaster->getFirstFrame() + ui->widgetMaster->getMediaLength());
-//	if(dlg.exec()) {
-//		if(dlg.frame() > ui->widgetMaster->getFirstFrame())
-//			ui->widgetMaster->setMediaLength(dlg.frame() - ui->widgetMaster->getFirstFrame());
-//		else
-//			PHDEBUG << "Can't set a TC Out inferior to TC In";
-//		updateInfos();
-//	}
+	PhTimeCodeDialog dlg(_mtcWriter.clock()->timeCodeType(), (_settings->writerTimeIn() + _settings->writerLoopLength()) / PhTimeCode::timePerFrame(_mtcWriter.clock()->timeCodeType()));
+	if(dlg.exec()) {
+		if(dlg.time() > _settings->writerTimeIn()) {
+			PhTime length = dlg.time() - _settings->writerTimeIn();
+			_settings->setWriterLoopLength(length);
+			ui->widgetMaster->setLength(length);
+			updateWriterInfoLabel();
+		}
+		else
+			QMessageBox::critical(this, "Error", "Can't set a TC Out inferior to TC In");
+	}
 }
 
 void MidiToolWindow::on_actionPreferences_triggered()
@@ -107,6 +119,16 @@ void MidiToolWindow::on_checkBoxReadMTC_clicked(bool checked)
 		_mtcReader.close();
 }
 
+void MidiToolWindow::updateTCTypeSetting(PhTimeCodeType tcType)
+{
+	_settings->setWriterTimeCodeType(tcType);
+}
+
+void MidiToolWindow::updateRateSetting(PhRate rate)
+{
+	_settings->setWriterRate(rate);
+}
+
 void MidiToolWindow::onReaderTimeChanged(PhTime time)
 {
 	ui->labelReaderTimeCode->setText(PhTimeCode::stringFromTime(time, _mtcReader.clock()->timeCodeType()));
@@ -122,7 +144,7 @@ void MidiToolWindow::onReaderRateChanged(PhRate rate)
 	ui->readInfoLabel->setText(s);
 }
 
-void MidiToolWindow::onReaderTCTypeChanged(PhTimeCodeType tcType)
+void MidiToolWindow::updateFpsLabel(PhTimeCodeType tcType)
 {
 	ui->fpsLabel->setText(QString("%0 fps").arg(PhTimeCode::getAverageFps(tcType)));
 }
@@ -130,4 +152,13 @@ void MidiToolWindow::onReaderTCTypeChanged(PhTimeCodeType tcType)
 void MidiToolWindow::onTick()
 {
 	_mtcWriter.clock()->tick(100);
+}
+
+void MidiToolWindow::updateWriterInfoLabel()
+{
+	PhTimeCodeType tcType = _mtcWriter.clock()->timeCodeType();
+	QString info = QString("%0 => %1")
+	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn(), tcType))
+	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn() + _settings->writerLoopLength(), tcType));
+	ui->writerInfoLabel->setText(info);
 }
