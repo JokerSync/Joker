@@ -53,6 +53,7 @@ private slots:
 	void on_checkBoxReadMTC_clicked(bool checked);
 
 	/* custom slots */
+	void onWriterTimeChanged(PhTime time);
 	void updateTCTypeSetting(PhTimeCodeType tcType);
 	void updateRateSetting(PhRate rate);
 	void onReaderTimeChanged(PhTime time);

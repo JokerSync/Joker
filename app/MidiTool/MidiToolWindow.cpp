@@ -4,9 +4,11 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include "PhTools/PhDebug.h"
+#include "PhCommonUI/PhTimeCodeDialog.h"
+
 #include "MidiToolWindow.h"
 #include "ui_MidiToolWindow.h"
-#include "PhCommonUI/PhTimeCodeDialog.h"
 #include "PreferencesDialog.h"
 
 MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
@@ -34,12 +36,13 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 
 	_clockTimer.start(10);
 
+	connect(_mtcWriter.clock(), &PhClock::timeChanged, this, &MidiToolWindow::onWriterTimeChanged);
 	connect(_mtcWriter.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::updateTCTypeSetting);
 	connect(_mtcWriter.clock(), &PhClock::rateChanged, this, &MidiToolWindow::updateRateSetting);
 
 	connect(_mtcReader.clock(), &PhClock::timeChanged, this, &MidiToolWindow::onReaderTimeChanged);
-	connect(_mtcReader.clock(), &PhClock::rateChanged, this, &MidiToolWindow::onReaderRateChanged);
 	connect(_mtcReader.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::updateFpsLabel);
+	connect(_mtcReader.clock(), &PhClock::rateChanged, this, &MidiToolWindow::onReaderRateChanged);
 
 	updateFpsLabel(_mtcReader.clock()->timeCodeType());
 	updateWriterInfoLabel();
@@ -119,6 +122,12 @@ void MidiToolWindow::on_checkBoxReadMTC_clicked(bool checked)
 		_mtcReader.close();
 }
 
+void MidiToolWindow::onWriterTimeChanged(PhTime time)
+{
+	PhTimeCodeType tcType = _mtcWriter.clock()->timeCodeType();
+	PHDBG(2) << PhTimeCode::getAverageFps(tcType) << "/" << PhTimeCode::stringFromTime(time, tcType);
+}
+
 void MidiToolWindow::updateTCTypeSetting(PhTimeCodeType tcType)
 {
 	_settings->setWriterTimeCodeType(tcType);
@@ -131,7 +140,10 @@ void MidiToolWindow::updateRateSetting(PhRate rate)
 
 void MidiToolWindow::onReaderTimeChanged(PhTime time)
 {
-	ui->labelReaderTimeCode->setText(PhTimeCode::stringFromTime(time, _mtcReader.clock()->timeCodeType()));
+	PhTimeCodeType tcType = _mtcReader.clock()->timeCodeType();
+	PHDBG(2) << PhTimeCode::getAverageFps(tcType) << "/" << PhTimeCode::stringFromTime(time, tcType);
+
+	ui->labelReaderTimeCode->setText(PhTimeCode::stringFromTime(time, tcType));
 	int delay = (_mtcWriter.clock()->time() - _mtcReader.clock()->time()) / 24;
 	ui->labelDelay->setText(QString("%0 ms").arg(delay));
 }
@@ -151,7 +163,7 @@ void MidiToolWindow::updateFpsLabel(PhTimeCodeType tcType)
 
 void MidiToolWindow::onTick()
 {
-	_mtcWriter.clock()->tick(100);
+	_mtcWriter.clock()->tick(PhTimeCode::getFps(_mtcWriter.clock()->timeCodeType()) * 4);
 }
 
 void MidiToolWindow::updateWriterInfoLabel()
