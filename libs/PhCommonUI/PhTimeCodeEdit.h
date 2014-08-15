@@ -35,9 +35,16 @@ public:
 	 * window will display 00:00:01:12
 	 * @param frame the desired PhFrame
 	 * @param tcType the corresponding PhTimeCodeType
+	 * @todo remove
 	 */
 	void setFrame(PhFrame frame, PhTimeCodeType tcType);
 
+	/**
+	 * @brief Set the time displayed by the widget
+	 * @param time A time value.
+	 * @param tcType The timecode type.
+	 */
+	void setTime(PhTime time, PhTimeCodeType tcType);
 	/**
 	 * @brief Check the timecode
 	 * @return true if the input is correct, false otherwise
@@ -46,9 +53,15 @@ public:
 	/**
 	 * @brief Current frame value entered in the text field
 	 * @return A frame value.
+	 * @todo remove
 	 */
 	PhFrame frame();
 
+	/**
+	 * @brief Current time value entered in the text field
+	 * @return A time value or zero if the text is not a valid timecode.
+	 */
+	PhTime time();
 signals:
 
 	/**
@@ -64,7 +77,7 @@ private slots:
 private:
 	PhTimeCodeType _tcType;
 	bool eventFilter(QObject *sender, QEvent *event);
-	QString _oldFrame;
+	QString _oldTimeCode;
 	QStack<QChar> _addedNumbers;
 	void compute(bool add);
 	int _selectedIndex;
