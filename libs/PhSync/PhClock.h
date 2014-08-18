@@ -74,13 +74,13 @@ public:
 	PhTime milliSecond();
 	/**
 	 * @brief Get the frame of the clock
-	 * @param A timecode type.
+	 * @param tcType A timecode type.
 	 * @return A frame expressed in the desired timecode type.
 	 */
 	PhFrame frame(PhTimeCodeType tcType) const;
 	/**
 	 * @brief Get the timecode of the clock
-	 * @param A timecode type.
+	 * @param tcType A timecode type.
 	 * @return A timecode string expressed in the desired timecode type.
 	 */
 	QString timeCode(PhTimeCodeType tcType);

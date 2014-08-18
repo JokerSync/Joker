@@ -20,13 +20,15 @@ class SonyToolWindow;
  * The status active/inactive of the ports are saved to the settings whenever they are changed
  * and loaded when the application is launched
  */
-
 class SonyToolWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit SonyToolWindow(QWidget *parent = 0);
+	/**
+	 * @brief The SonyToolWindow constructor
+	 */
+	SonyToolWindow();
 	~SonyToolWindow();
 
 private slots:

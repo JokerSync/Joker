@@ -4,6 +4,9 @@
 #include "PhTools/PhGenericSettings.h"
 #include "PhSony/PhSonySettings.h"
 
+/**
+ * @brief The SonyTool application settings
+ */
 class SonyToolSettings : PhGenericSettings, public PhSonySettings
 {
 public:
@@ -16,11 +19,11 @@ public:
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
 	// Others settings
-	PH_SETTING_BOOL2(setSonySlaveActive, sonySlaveActive, true);
+	PH_SETTING_BOOL2(setSonySlaveActive, sonySlaveActive, true)
 	PH_SETTING_BOOL2(setSonyMasterActive, sonyMasterActive, true)
 
-	PH_SETTING_BOOL2(setUseVideoSlaveSync, useVideoSlaveSync, true);
-	PH_SETTING_BOOL2(setUseVideoMasterSync, useVideoMasterSync, true);
+	PH_SETTING_BOOL2(setUseVideoSlaveSync, useVideoSlaveSync, true)
+	PH_SETTING_BOOL2(setUseVideoMasterSync, useVideoMasterSync, true)
 
 };
 

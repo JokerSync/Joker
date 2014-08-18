@@ -82,7 +82,7 @@ public:
 
 	/**
 	 * @brief Set first frame
-	 * @param frame the new first frame
+	 * @param frameIn the new first frame
 	 */
 	void setFrameIn(PhFrame frameIn);
 
@@ -94,6 +94,10 @@ public:
 		return _frameIn * PhTimeCode::timePerFrame(_tcType);
 	}
 
+	/**
+	 * @brief Set the video starting time
+	 * @param timeIn A time value.
+	 */
 	void setTimeIn(PhTime timeIn);
 
 	/**
@@ -104,6 +108,10 @@ public:
 		return _frameIn + frameLength() - 1;
 	}
 
+	/**
+	 * @brief Get the video ending time
+	 * @return A time value.
+	 */
 	PhTime timeOut() {
 		return frameOut() * PhTimeCode::timePerFrame(_tcType);
 	}
@@ -206,6 +214,10 @@ public:
 	void drawVideo(int x, int y, int w, int h);
 
 signals:
+	/**
+	 * @brief Signal sent upon a different timecode type message
+	 * @param tcType A timecode type value.
+	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 
 private:

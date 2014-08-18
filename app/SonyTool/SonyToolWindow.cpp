@@ -6,8 +6,8 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-SonyToolWindow::SonyToolWindow(QWidget *parent) :
-	QMainWindow(parent),
+SonyToolWindow::SonyToolWindow() :
+	QMainWindow(NULL),
 	ui(new Ui::SonyToolWindow),
 	_sonyMaster(PhTimeCodeType25, &_settings),
 	_sonySlave(PhTimeCodeType25, &_settings)

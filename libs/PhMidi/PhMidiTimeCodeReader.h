@@ -49,6 +49,10 @@ public:
 	}
 
 signals:
+	/**
+	 * @brief Signal sent upon a different timecode type message
+	 * @param tcType A timecode type value.
+	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 
 protected:
