@@ -228,7 +228,7 @@ void MidiTest::testMTCReader()
 
 	midiOut.sendFullTC(1, 0, 0, 0, PhTimeCodeType24);
 	QThread::msleep(10);
-	QCOMPARE(mtcReader.clock()->timeCodeType(), PhTimeCodeType24);
+	QCOMPARE(mtcReader.timeCodeType(), PhTimeCodeType24);
 	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("01:00:00:00"));
 
 	//

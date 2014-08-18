@@ -647,7 +647,9 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	if(!checkMosTag2(f, blocLevel, "CDocVideo"))
 		return false;
 
-	this->setVideoInfo(readMosTime(f, tcType, internLevel), tcType, PhFileTool::readString(f, ok, "Video path"));
+	QString videoFilePath = PhFileTool::readString(f, ok, "Video path");
+	PhTime videoTimeIn = readMosTime(f, tcType, internLevel);
+	this->setVideoInfo(videoTimeIn, tcType, videoFilePath);
 	PHDBG(ok) << "Timestamp:" << PhTimeCode::stringFromTime(_videoTimeIn, tcType);
 
 	if(videoType == 3) {
@@ -1081,8 +1083,8 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 				_videoPath = media.text();
 
 				float fps = media.attribute("frameRate").toFloat();
-				PhTimeCodeType tcType = PhTimeCode::computeTimeCodeType(fps);
-				_videoTimeIn = PhTimeCode::timeFromString(media.attribute("tcStamp"), tcType);
+				_videoTimeCodeType = PhTimeCode::computeTimeCodeType(fps);
+				_videoTimeIn = PhTimeCode::timeFromString(media.attribute("tcStamp"), _videoTimeCodeType);
 
 				_videoForceRatio169 = media.attribute("forceRatio").toLower() == "yes";
 				_videoDeinterlace = media.attribute("deinterlace").toLower() == "yes";
@@ -1092,6 +1094,8 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 		if(stripDocument.elementsByTagName("state").count()) {
 			QDomElement state = stripDocument.elementsByTagName("state").at(0).toElement();
 			_lastTime = state.attribute("lastTime").toLongLong();
+			if(_lastTime == 0)
+				_lastTime = PhTimeCode::timeFromString(state.attribute("lastTimeCode"), _videoTimeCodeType);
 		}
 
 		if(stripDocument.elementsByTagName("peoples").count()) {
@@ -1107,7 +1111,7 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 	return result;
 }
 
-bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC)
+bool PhStripDoc::saveStripFile(const QString &fileName, PhTime lastTime)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
@@ -1162,7 +1166,7 @@ bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC)
 				xmlWriter->writeEndElement();
 
 				xmlWriter->writeStartElement("state");
-				xmlWriter->writeAttribute("lastTimeCode", lastTC);
+				xmlWriter->writeAttribute("lastTime", QString::number(lastTime));
 				xmlWriter->writeEndElement();
 			}
 			xmlWriter->writeEndElement();

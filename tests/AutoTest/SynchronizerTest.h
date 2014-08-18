@@ -13,12 +13,11 @@ class SynchronizerTest : public QObject
 	Q_OBJECT
 private slots:
 	void testSetClock();
-	void testStripFrameChanged();
+	void testStripTimeChanged();
 	void testStripRateChanged();
-	void testVideoFrameChanged();
+	void testVideoTimeChanged();
 	void testVideoRateChanged();
-	void testVideoTCTypeChanged();
-	void testSyncFrameChanged();
+	void testSyncTimeChanged();
 	void testSyncRateChanged();
 };
 

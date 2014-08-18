@@ -242,10 +242,10 @@ public:
 	/**
 	 * @brief Save the PhStripDoc to a strip file
 	 * @param fileName Path to the stripfile
-	 * @param lastTC The last displayed timecode
+	 * @param lastTime The last position to remember
 	 * @return True if the strip saved well, false otherwise
 	 */
-	bool saveStripFile(const QString &fileName, const QString &lastTC);
+	bool saveStripFile(const QString &fileName, PhTime lastTime);
 	/**
 	 * @brief Generate a document from given value
 	 * @param text The desired text
