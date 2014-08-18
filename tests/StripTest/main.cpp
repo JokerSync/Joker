@@ -52,15 +52,15 @@ int countLoopDetectLength(PhStripDoc *doc, int loopNumber)
 			PHDEBUG << "ZEROR";
 		map[detect->people()->name()] += detectLength;
 		loopLength += detectLength;
-		PHDBG(2) << PHNQ(PhTimeCode::stringFromTime(detect->timeIn(), doc->timeCodeType()))
-		         << PHNQ(PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType()))
-		         << PHNQ(PhTimeCode::stringFromTime(loopLength, doc->timeCodeType()))
+		PHDBG(2) << PHNQ(PhTimeCode::stringFromTime(detect->timeIn(), PhTimeCodeType25))
+		         << PHNQ(PhTimeCode::stringFromTime(detect->timeOut(), PhTimeCodeType25))
+		         << PHNQ(PhTimeCode::stringFromTime(loopLength, PhTimeCodeType25))
 		         << detectLength
 		         << detect->people()->name();
 	}
 
 	foreach(QString name, map.keys())
-		PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromTime(map[name], doc->timeCodeType()));
+		PHDBG(1) << PHNQ(name) << ":\t" << PHNQ(PhTimeCode::stringFromTime(map[name], PhTimeCodeType25));
 
 	return loopLength;
 }
@@ -93,9 +93,9 @@ int countDetectLength(PhStripDoc *doc)
 		foreach(PhStripDetect *detect, doc->peopleDetects(people)) {
 			int detectLength = detect->timeOut() - detect->timeIn();
 			length += detectLength;
-			PHDBG(2) << PHNQ(PhTimeCode::stringFromTime(detect->timeIn(), doc->timeCodeType()))
-			         << PHNQ(PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType()))
-			         << PHNQ(PhTimeCode::stringFromTime(length, doc->timeCodeType()))
+			PHDBG(2) << PHNQ(PhTimeCode::stringFromTime(detect->timeIn(), PhTimeCodeType25))
+			         << PHNQ(PhTimeCode::stringFromTime(detect->timeOut(), PhTimeCodeType25))
+			         << PHNQ(PhTimeCode::stringFromTime(length, PhTimeCodeType25))
 			         << detectLength
 			         << people->name();
 		}
@@ -128,9 +128,9 @@ void displayDoc(PhStripDoc* doc)
 			name = text->people()->name();
 		PHDEBUG << text->y() << "-"
 		        << name << ":"
-		        << PhTimeCode::stringFromTime(text->timeIn(), doc->timeCodeType())
+		        << PhTimeCode::stringFromTime(text->timeIn(), PhTimeCodeType25)
 		        << " -> "
-		        << PhTimeCode::stringFromTime(text->timeOut(), doc->timeCodeType())
+		        << PhTimeCode::stringFromTime(text->timeOut(), PhTimeCodeType25)
 		        << text->content();
 	}
 
@@ -140,9 +140,9 @@ void displayDoc(PhStripDoc* doc)
 			name = text->people()->name();
 		PHDEBUG << text->y() <<"-"
 		        << name << ":"
-		        << PhTimeCode::stringFromTime(text->timeIn(), doc->timeCodeType())
+		        << PhTimeCode::stringFromTime(text->timeIn(), PhTimeCodeType25)
 		        << " -> "
-		        << PhTimeCode::stringFromTime(text->timeOut(), doc->timeCodeType())
+		        << PhTimeCode::stringFromTime(text->timeOut(), PhTimeCodeType25)
 		        << text->content();
 	}
 
@@ -152,9 +152,9 @@ void displayDoc(PhStripDoc* doc)
 			name = detect->people()->name();
 		PHDEBUG << detect->y()<< "-"
 		        << name << ":"
-		        << PhTimeCode::stringFromTime(detect->timeIn(), doc->timeCodeType())
+		        << PhTimeCode::stringFromTime(detect->timeIn(), PhTimeCodeType25)
 		        << " -> "
-		        << PhTimeCode::stringFromTime(detect->timeOut(), doc->timeCodeType())
+		        << PhTimeCode::stringFromTime(detect->timeOut(), PhTimeCodeType25)
 		        << "type:" << detect->type();
 	}
 }
