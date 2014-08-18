@@ -1,14 +1,14 @@
 #include <QMessageBox>
 
-#include "SonyTestWindow.h"
-#include "ui_SonyTestWindow.h"
+#include "SonyToolWindow.h"
+#include "ui_SonyToolWindow.h"
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+SonyToolWindow::SonyToolWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow),
+	ui(new Ui::SonyToolWindow),
 	_sonyMaster(PhTimeCodeType25, &_settings),
 	_sonySlave(PhTimeCodeType25, &_settings)
 {
@@ -61,14 +61,14 @@ MainWindow::MainWindow(QWidget *parent) :
 //	_sonySlave.getClock()->setRate(1);
 }
 
-MainWindow::~MainWindow()
+SonyToolWindow::~SonyToolWindow()
 {
 	_sonyMaster.close();
 	_sonySlave.close();
 	delete ui;
 }
 
-void MainWindow::masterPlayPause()
+void SonyToolWindow::masterPlayPause()
 {
 	if(_sonyMaster.clock()->rate() != 0)
 		_sonyMaster.stop();
@@ -76,24 +76,24 @@ void MainWindow::masterPlayPause()
 		_sonyMaster.play();
 }
 
-void MainWindow::masterNextFrame()
+void SonyToolWindow::masterNextFrame()
 {
 	_sonyMaster.cue(_sonyMaster.clock()->frame() + 1);
 }
 
-void MainWindow::masterPreviousFrame()
+void SonyToolWindow::masterPreviousFrame()
 {
 	_sonyMaster.cue(_sonyMaster.clock()->frame() - 1);
 }
 
-void MainWindow::onDeviceIdData(unsigned char id1, unsigned char id2)
+void SonyToolWindow::onDeviceIdData(unsigned char id1, unsigned char id2)
 {
 	QString id;
 	id.sprintf("%2X %2X", id1, id2);
 	ui->idLabel->setText(id);
 }
 
-void MainWindow::onStatusData(unsigned char *statusData, int offset, int length)
+void SonyToolWindow::onStatusData(unsigned char *statusData, int offset, int length)
 {
 	Q_UNUSED(offset);
 	QString statusStr = "";
@@ -102,7 +102,7 @@ void MainWindow::onStatusData(unsigned char *statusData, int offset, int length)
 	ui->statusLabel->setText(statusStr);
 }
 
-void MainWindow::on_masterActiveCheck_clicked(bool checked)
+void SonyToolWindow::on_masterActiveCheck_clicked(bool checked)
 {
 	_settings.setSonyMasterActive(checked);
 	if(checked) {
@@ -137,7 +137,7 @@ void MainWindow::on_masterActiveCheck_clicked(bool checked)
 	ui->masterPanel->setEnabled(checked);
 }
 
-void MainWindow::on_slaveActiveCheck_clicked(bool checked)
+void SonyToolWindow::on_slaveActiveCheck_clicked(bool checked)
 {
 	_settings.setSonySlaveActive(checked);
 	if(checked) {
@@ -160,21 +160,21 @@ void MainWindow::on_slaveActiveCheck_clicked(bool checked)
 }
 
 
-void MainWindow::on_actionMaster_GoTo_triggered()
+void SonyToolWindow::on_actionMaster_GoTo_triggered()
 {
 	PhTimeCodeDialog dlg(_sonyMaster.clock()->timeCodeType(), _sonyMaster.clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_sonyMaster.cue(dlg.frame());
 }
 
-void MainWindow::on_actionSlave_GoTo_triggered()
+void SonyToolWindow::on_actionSlave_GoTo_triggered()
 {
 	PhTimeCodeDialog dlg(_sonySlave.clock()->timeCodeType(), _sonySlave.clock()->frame());
 	if(dlg.exec() == QDialog::Accepted)
 		_sonySlave.clock()->setFrame(dlg.frame());
 }
 
-void MainWindow::on_actionSlave_Use_video_sync_triggered(bool useVideo)
+void SonyToolWindow::on_actionSlave_Use_video_sync_triggered(bool useVideo)
 {
 	_settings.setUseVideoSlaveSync(useVideo);
 
@@ -195,7 +195,7 @@ void MainWindow::on_actionSlave_Use_video_sync_triggered(bool useVideo)
 	}
 }
 
-void MainWindow::on_actionMaster_Use_video_sync_triggered(bool useVideo)
+void SonyToolWindow::on_actionMaster_Use_video_sync_triggered(bool useVideo)
 {
 	_settings.setUseVideoMasterSync(useVideo);
 

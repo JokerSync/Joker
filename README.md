@@ -7,7 +7,9 @@ This repository hosts the Joker projet components:
 
 * Applications
   * Joker: The main project.
+  * SonyTool: A Sony 9 pin master/slave
   * LTCTool: A LTC generator/reader.
+  * MidiTool: A midi timecode (MTC) generator/reader.
 * Libraries
   * PhTools: Common basic utilities.
   * PhCommonUI: Common user interface component.

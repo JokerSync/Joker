@@ -13,7 +13,6 @@ SUBDIRS += \
 	OpenGLTest \
 	SDLTest \
 	SerialTest \
-	SonyTest \
 	StripTest \
 	TextEditTest \
 	TimecodePlayer \

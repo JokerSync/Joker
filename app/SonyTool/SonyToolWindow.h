@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SONYTOOLWINDOW_H
+#define SONYTOOLWINDOW_H
 
 #include <QMainWindow>
 #include <QTimer>
@@ -8,26 +8,26 @@
 #include "PhSony/PhSonyMasterController.h"
 #include "PhSony/PhSonySlaveController.h"
 
-#include "SonyTestSettings.h"
+#include "SonyToolSettings.h"
 
 namespace Ui {
-class MainWindow;
+class SonyToolWindow;
 }
 
 /**
- * @brief The MainWindow class
+ * @brief The SonyToolWindow class
  *
  * The status active/inactive of the ports are saved to the settings whenever they are changed
  * and loaded when the application is launched
  */
 
-class MainWindow : public QMainWindow
+class SonyToolWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+	explicit SonyToolWindow(QWidget *parent = 0);
+	~SonyToolWindow();
 
 private slots:
 	void masterPlayPause();
@@ -49,11 +49,11 @@ private slots:
 	void on_actionMaster_Use_video_sync_triggered(bool useVideo);
 
 private:
-	SonyTestSettings _settings;
-	Ui::MainWindow *ui;
+	SonyToolSettings _settings;
+	Ui::SonyToolWindow *ui;
 	PhSonyMasterController _sonyMaster;
 	PhSonySlaveController _sonySlave;
 	QTimer _masterTimer, _slaveTimer;
 };
 
-#endif // MAINWINDOW_H
+#endif // SONYTOOLWINDOW_H

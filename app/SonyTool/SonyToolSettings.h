@@ -4,7 +4,7 @@
 #include "PhTools/PhGenericSettings.h"
 #include "PhSony/PhSonySettings.h"
 
-class SonyTestSettings : PhGenericSettings, public PhSonySettings
+class SonyToolSettings : PhGenericSettings, public PhSonySettings
 {
 public:
 	// PhSonySettings:

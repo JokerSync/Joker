@@ -9,7 +9,7 @@ QT += widgets
 
 #greaterThan(QT_MAJOR_VERSION, 4):
 
-TARGET = SonyTest
+TARGET = SonyTool
 
 VERSION = 1.0.0
 
@@ -25,12 +25,12 @@ include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhSony/PhSony.pri)
 
 SOURCES += main.cpp\
-		SonyTestWindow.cpp
+		SonyToolWindow.cpp
 
-HEADERS  += SonyTestWindow.h \
-	SonyTestSettings.h
+HEADERS  += SonyToolWindow.h \
+	SonyToolSettings.h
 
-FORMS    += SonyTestWindow.ui
+FORMS    += SonyToolWindow.ui
 
 mac {
 	# For the plist version

@@ -1,5 +1,5 @@
-SonyTest
-==========
+SonyTool
+========
 
 This test project display two media panels comunicating together through the Sony protocol.
 It uses the following libraries:
