@@ -19,7 +19,9 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	ui->setupUi(this);
 	ui->videoView->setGraphicSettings(settings);
 
-	_mediaPanelDialog.setClock(_videoEngine.clock());
+	_mediaPanelDialog.setClock(_videoEngine.timeCodeType(), _videoEngine.clock());
+
+	connect(&_videoEngine, &PhVideoEngine::timeCodeTypeChanged, &_mediaPanelDialog, &PhMediaPanel::onTimeCodeTypeChanged);
 
 	ui->actionDisplay_media_panel->setChecked(_settings->displayMediaPanel());
 	ui->actionDeinterlace_video->setChecked(_settings->deinterlaceVideo());
@@ -41,7 +43,8 @@ bool VideoTestWindow::openDocument(QString fileName)
 	if(!_videoEngine.open(fileName))
 		return false;
 
-	_mediaPanelDialog.setMediaLength(_videoEngine.length());
+	PhTimeCodeType tcType = _videoEngine.timeCodeType();
+	_mediaPanelDialog.setLength(_videoEngine.length() * PhTimeCode::timePerFrame(tcType));
 	PhFrame frameStamp = _videoEngine.firstFrame();
 	PhFrame currentFrame = frameStamp;
 
@@ -55,9 +58,9 @@ bool VideoTestWindow::openDocument(QString fileName)
 		frameStamp = _videoEngine.firstFrame();
 		currentFrame = frameStamp;
 	}
-	_mediaPanelDialog.setFirstFrame(frameStamp);
+	_mediaPanelDialog.setTimeIn(frameStamp * PhTimeCode::timePerFrame(tcType));
 
-	_videoEngine.clock()->setFrame(currentFrame);
+	_videoEngine.clock()->setFrame(currentFrame, tcType);
 
 	setCurrentDocument(fileName);
 	_settings->setFrameStamp(frameStamp);
@@ -69,10 +72,10 @@ void VideoTestWindow::processArg(int argc, char *argv[])
 {
 	PhDocumentWindow::processArg(argc, argv);
 	for(int i = 1; i < argc; i++) {
-		PhFrame firstFrame = PhTimeCode::frameFromString(argv[i], _videoEngine.clock()->timeCodeType());
+		PhFrame firstFrame = PhTimeCode::frameFromString(argv[i], _videoEngine.timeCodeType());
 		if(firstFrame) {
 			_videoEngine.setFirstFrame(firstFrame);
-			_videoEngine.clock()->setFrame(firstFrame);
+			_videoEngine.clock()->setFrame(firstFrame, _videoEngine.timeCodeType());
 		}
 	}
 }
@@ -115,38 +118,39 @@ void VideoTestWindow::on_actionPlay_pause_triggered()
 
 void VideoTestWindow::on_actionNext_frame_triggered()
 {
-	_videoEngine.clock()->setFrame(_videoEngine.clock()->frame() + 1);
+	_videoEngine.clock()->setTime(_videoEngine.clock()->time() + PhTimeCode::timePerFrame(_videoEngine.timeCodeType()));
 }
 
 void VideoTestWindow::on_actionPrevious_frame_triggered()
 {
-	_videoEngine.clock()->setFrame(_videoEngine.clock()->frame() - 1);
+	_videoEngine.clock()->setTime(_videoEngine.clock()->time() - PhTimeCode::timePerFrame(_videoEngine.timeCodeType()));
 }
 
 void VideoTestWindow::on_actionSet_timestamp_triggered()
 {
 	_mediaPanelDialog.hide();
+	PhTimeCodeType tcType = _videoEngine.timeCodeType();
 	PhFrame frame;
-	if(_videoEngine.clock()->frame() < _videoEngine.firstFrame())
+	if(_videoEngine.clock()->frame(tcType) < _videoEngine.firstFrame())
 		frame = _videoEngine.firstFrame();
-	else if(_videoEngine.clock()->frame() > _videoEngine.firstFrame() + _videoEngine.length())
+	else if(_videoEngine.clock()->frame(tcType) > _videoEngine.firstFrame() + _videoEngine.length())
 		frame = _videoEngine.lastFrame();
 	else
-		frame = _videoEngine.clock()->frame();
+		frame = _videoEngine.clock()->frame(tcType);
 
-	PhTimeCodeDialog dlg(_videoEngine.clock()->timeCodeType(), frame);
+	PhTimeCodeDialog dlg(_videoEngine.timeCodeType(), frame * PhTimeCode::timePerFrame(tcType));
 	if(dlg.exec() == QDialog::Accepted) {
 		PhFrame frameStamp;
-		if(_videoEngine.clock()->frame() > _videoEngine.firstFrame() + _videoEngine.length())
+		if(_videoEngine.clock()->frame(tcType) > _videoEngine.firstFrame() + _videoEngine.length())
 			frameStamp = dlg.frame() - (_videoEngine.length() - 1);
-		else if (_videoEngine.clock()->frame() < _videoEngine.firstFrame())
+		else if (_videoEngine.clock()->frame(tcType) < _videoEngine.firstFrame())
 			frameStamp =  dlg.frame();
 		else
-			frameStamp = _videoEngine.firstFrame() + dlg.frame() - _videoEngine.clock()->frame();
+			frameStamp = _videoEngine.firstFrame() + dlg.frame() - _videoEngine.clock()->frame(tcType);
 
 		_videoEngine.setFirstFrame(frameStamp);
-		_mediaPanelDialog.setFirstFrame(frameStamp);
-		_videoEngine.clock()->setFrame(dlg.frame());
+		_mediaPanelDialog.setTimeIn(frameStamp * PhTimeCode::timePerFrame(tcType));
+		_videoEngine.clock()->setFrame(dlg.frame(), tcType);
 		_settings->setFrameStamp(frameStamp);
 	}
 
@@ -175,11 +179,11 @@ void VideoTestWindow::on_actionReverse_triggered()
 void VideoTestWindow::on_actionGo_to_triggered()
 {
 	_mediaPanelDialog.hide();
-	PhTimeCodeDialog dlg(_videoEngine.clock()->timeCodeType(), _videoEngine.clock()->frame(), this);
+	PhTimeCodeDialog dlg(_videoEngine.timeCodeType(), _videoEngine.clock()->time(), this);
 
 	if(dlg.exec() == QDialog::Accepted) {
-		PHDEBUG << PhTimeCode::stringFromFrame(dlg.frame(), _videoEngine.clock()->timeCodeType());
-		_videoEngine.clock()->setFrame(dlg.frame());
+		PHDEBUG << PhTimeCode::stringFromFrame(dlg.frame(), _videoEngine.timeCodeType());
+		_videoEngine.clock()->setFrame(dlg.frame(), _videoEngine.timeCodeType());
 	}
 
 	if(_settings->displayMediaPanel())

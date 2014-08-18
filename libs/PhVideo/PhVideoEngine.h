@@ -55,6 +55,11 @@ public:
 	QString fileName() {
 		return _fileName;
 	}
+
+	PhTimeCodeType timeCodeType() {
+		return _tcType;
+	}
+
 	/**
 	 * @brief Get the clock
 	 * @return the clock
@@ -172,6 +177,9 @@ public:
 	 */
 	void drawVideo(int x, int y, int w, int h);
 
+signals:
+	void timeCodeTypeChanged(PhTimeCodeType tcType);
+
 private:
 	bool goToFrame(PhFrame frame);
 	int64_t frame2time(PhFrame f);
@@ -179,6 +187,7 @@ private:
 
 	PhVideoSettings *_settings;
 	QString _fileName;
+	PhTimeCodeType _tcType;
 	PhClock _clock;
 	PhFrame _firstFrame;
 
