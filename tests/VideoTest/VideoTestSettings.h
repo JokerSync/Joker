@@ -19,8 +19,8 @@ public:
 	PH_SETTING_INT2(setLogMask, logMask, 1)
 	PH_SETTING_BOOL2(setDisplayMediaPanel, displayMediaPanel, true)
 	PH_SETTING_BOOL(setDeinterlaceVideo, deinterlaceVideo)
-	PH_SETTING_INT(setFrameStamp, frameStamp)
-	PH_SETTING_INT(setCurrentFrame, currentFrame)
+	PH_SETTING_INT(setTimeStamp, timeStamp)
+	PH_SETTING_INT(setCurrentTime, currentTime)
 
 	// PhGraphicSettings
 	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
