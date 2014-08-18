@@ -58,6 +58,11 @@ unsigned int PhTimeCode::bcdFromFrame(PhFrame frame, PhTimeCodeType type) {
 	return result;
 }
 
+unsigned int PhTimeCode::bcdFromTime(PhTime time, PhTimeCodeType type)
+{
+	return bcdFromFrame(time / PhTimeCode::timePerFrame(type), type);
+}
+
 PhFrame PhTimeCode::frameFromBcd(unsigned int bcd, PhTimeCodeType type) {
 	unsigned int hhmmssff[4];
 
@@ -71,6 +76,11 @@ PhFrame PhTimeCode::frameFromBcd(unsigned int bcd, PhTimeCodeType type) {
 	hhmmssff[3] += bcd & 0x0f;
 
 	return frameFromHhMmSsFf(hhmmssff, type);
+}
+
+PhTime PhTimeCode::timeFromBcd(unsigned int bcd, PhTimeCodeType type)
+{
+	return frameFromBcd(bcd, type) * PhTimeCode::timePerFrame(type);
 }
 
 bool PhTimeCode::isDrop(PhTimeCodeType type) {

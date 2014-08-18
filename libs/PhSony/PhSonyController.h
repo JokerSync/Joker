@@ -73,6 +73,14 @@ public:
 	void close();
 
 	/**
+	 * @brief The timecode type used by the protocol
+	 * @return A timecode type value.
+	 */
+	PhTimeCodeType timeCodeType() {
+		return _tcType;
+	}
+
+	/**
 	 * @brief Get the sony controller internal clock.
 	 * @return A clock reference.
 	 */
@@ -200,6 +208,9 @@ protected:
 	 * @return The name of the command.
 	 */
 	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data = 0);
+
+	/** @brief The timecode type used by the protocol */
+	PhTimeCodeType _tcType;
 
 	/** @brief The internal clock of the sony controller. */
 	PhClock _clock;
