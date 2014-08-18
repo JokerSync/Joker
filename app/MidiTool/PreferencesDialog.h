@@ -9,12 +9,14 @@
 
 #include <QDialog>
 
+#include "MidiToolSettings.h"
+
 namespace Ui {
 class PreferencesDialog;
 }
 
-/*!
- * \brief MidiTool preferences dialog
+/**
+ * @brief MidiTool preferences dialog
  *
  * It allow the user to select the desired input and output.
  */
@@ -23,30 +25,24 @@ class PreferencesDialog : public QDialog
 	Q_OBJECT
 
 public:
-	/*!
-	 * \brief Preferences Panel
+	/**
+	 * @brief Preferences Panel
 	 *
 	 * Create a modal QDialog which prompt the user for devices.
 	 *
-	 * \param audioOutput	The current output device.
-	 * \param audioInput	The current input device.
-	 * \param parent		The parent.
+	 * @param settings The application settings.
 	 */
-	explicit PreferencesDialog(QString audioOutput, QString audioInput, QWidget *parent = 0);
+	PreferencesDialog(MidiToolSettings *settings);
 	~PreferencesDialog();
-	/*!
-	 * \brief selectedAudioOutput
-	 * \return The selected output device
-	 */
-	QString selectedAudioOutput();
-	/*!
-	 * \brief selectedAudioInput
-	 * \return The selected input device
-	 */
-	QString selectedAudioInput();
+
+protected:
+	void accept();
+	void reject();
 
 private:
 	Ui::PreferencesDialog *ui;
+	MidiToolSettings *_settings;
+	QString _oldMidiInputPortName, _oldMidiOutputPortName;
 };
 
 #endif // PREFERENCESDIALOG_H

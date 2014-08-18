@@ -30,10 +30,11 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_videoEngine(settings),
 	_doc(_strip.doc()),
 	_sonySlave(PhTimeCodeType25, settings),
+	_mtcReader(PhTimeCodeType25),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
-	_numberOfDraw(0),
-	_resizingStrip(false)
+	_resizingStrip(false),
+	_numberOfDraw(0)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -130,6 +131,7 @@ void JokerWindow::setupSyncProtocol()
 	// Disable old protocol
 	_sonySlave.close();
 	_ltcReader.close();
+	_mtcReader.close();
 
 	PhSynchronizer::SyncType type = (PhSynchronizer::SyncType)_settings->synchroProtocol();
 
@@ -142,7 +144,7 @@ void JokerWindow::setupSyncProtocol()
 		}
 		else {
 			type = PhSynchronizer::NoSync;
-			QMessageBox::critical(this, "", "Unable to connect to USB422v module");
+			QMessageBox::critical(this, tr("Error"), "Unable to connect to USB422v module");
 		}
 		break;
 	case PhSynchronizer::LTC:
@@ -151,10 +153,17 @@ void JokerWindow::setupSyncProtocol()
 			if(_ltcReader.init(input))
 				clock = _ltcReader.clock();
 			else {
-				QMessageBox::critical(this, "", "Unable to open " + input);
+				QMessageBox::critical(this, tr("Error"), "Unable to open " + input);
 				type = PhSynchronizer::NoSync;
 			}
 			break;
+		}
+	case PhSynchronizer::MTC:
+		if(_mtcReader.open(_settings->midiTimeCodePortName()))
+			clock = _mtcReader.clock();
+		else {
+			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to create \"%1\" midi port")).arg(_settings->midiTimeCodePortName()));
+			type = PhSynchronizer::NoSync;
 		}
 	case PhSynchronizer::NoSync:
 		break;

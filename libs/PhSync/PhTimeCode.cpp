@@ -90,6 +90,22 @@ PhFrame PhTimeCode::getFps(PhTimeCodeType type) {
 	}
 }
 
+float PhTimeCode::getAverageFps(PhTimeCodeType type)
+{
+	switch (type) {
+	case PhTimeCodeType2398:
+		return 23.98;
+	case PhTimeCodeType24:
+		return 24;
+	case PhTimeCodeType25:
+		return 25;
+	case PhTimeCodeType2997:
+		return 29.97;
+	case PhTimeCodeType30:
+		return 30;
+	}
+}
+
 PhTime PhTimeCode::timePerFrame(PhTimeCodeType type)
 {
 	switch (type) {
@@ -209,4 +225,9 @@ PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int *hhmmssff, PhTimeCodeType typ
 PhFrame PhTimeCode::timeFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned int ss, unsigned int ff, PhTimeCodeType type)
 {
 	return frameFromHhMmSsFf(hh, mm, ss, ff, type) * timePerFrame(type);
+}
+
+PhFrame PhTimeCode::timeFromHhMmSsFf(unsigned int *hhmmssff, PhTimeCodeType type)
+{
+	return frameFromHhMmSsFf(hhmmssff, type) * timePerFrame(type);
 }

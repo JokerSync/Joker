@@ -6,6 +6,8 @@
 #ifndef PHMIDIOUTPUT_H
 #define PHMIDIOUTPUT_H
 
+#include <QStringList>
+
 #include "PhMidiObject.h"
 
 /**
@@ -20,6 +22,8 @@ class PhMidiOutput : public PhMidiObject
 public:
 	PhMidiOutput();
 	~PhMidiOutput();
+
+	static QStringList outputList();
 
 	/**
 	 * @brief Open an existing midi port.

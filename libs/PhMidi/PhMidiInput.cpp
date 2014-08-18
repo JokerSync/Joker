@@ -146,7 +146,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 				switch (data >> 4) {
 				case 0:
 					_ff = (_ff & 0xf0) | (data & 0x0f);
-					onTimeCode(_hh, _mm, _ss, _ff, _tcType);
+//					onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				case 1:
 					_ff = (_ff & 0x0f) | ((data & 0x0f) << 4);
@@ -180,7 +180,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					break;
 				}
 
-				PHDBG(20) << "QF MTC:" << _hh << _mm << _ss << _ff;
+				PHDBG(20) << QString("QF MTC (%1): %2:%3:%4:%5").arg(QString::number(data, 16)).arg(_hh).arg(_mm).arg(_ss).arg(_ff);
 				onQuarterFrame(data);
 			}
 			break;

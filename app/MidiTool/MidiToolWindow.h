@@ -21,12 +21,12 @@
 namespace Ui {
 class MidiToolWindow;
 }
-/*!
- * \brief MidiTool main application window
+/**
+ * @brief MidiTool main application window
  *
  * The MidiToolWindow class implements the main screen user interface behaviour:
- * - Display the generator TC in / TC out
- * - Display the generator PhMediaPanel
+ * - Display the writer TC in / TC out
+ * - Display the writer PhMediaPanel
  * - Display the reader timecode label
  * - Opening application dialog : preferences, set TC in, set TC out
  * - ...
@@ -36,10 +36,10 @@ class MidiToolWindow : public QMainWindow
 	Q_OBJECT
 
 public:
-	/*!
-	 * \brief The MidiToolWindow constructor
-	 * \param settings The application settings
-	 * \param parent
+	/**
+	 * @brief The MidiToolWindow constructor
+	 * @param settings The application settings
+	 * @param parent
 	 */
 	explicit MidiToolWindow(MidiToolSettings *settings, QWidget *parent = 0);
 	~MidiToolWindow();
@@ -49,20 +49,22 @@ private slots:
 	void on_actionSet_TC_In_triggered();
 	void on_actionSet_TC_Out_triggered();
 	void on_actionPreferences_triggered();
+	void on_checkBoxWriteMTC_clicked(bool checked);
+	void on_checkBoxReadMTC_clicked(bool checked);
 
-	void onFrameChanged(PhFrame, PhTimeCodeType tcType);
-	void onSlaveRateChanged(PhRate rate);
-	void updateSlaveInfo();
-
-	void on_generateCheckBox_clicked(bool checked);
-
-	void on_readCheckBox_clicked(bool checked);
-
+	/* custom slots */
+	void onWriterTimeChanged(PhTime time);
+	void updateTCTypeSetting(PhTimeCodeType tcType);
+	void updateRateSetting(PhRate rate);
+	void onReaderTimeChanged(PhTime time);
+	void onReaderRateChanged(PhRate rate);
+	void updateFpsLabel(PhTimeCodeType tcType);
 	void onTick();
 
+
 private:
-	void setupOutput();
-	void updateInfos();
+	void updateWriterInfoLabel();
+
 	Ui::MidiToolWindow *ui;
 	MidiToolSettings *_settings;
 

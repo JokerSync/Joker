@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>523</width>
-    <height>371</height>
+    <height>384</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QCheckBox" name="generateCheckBox">
+     <widget class="QCheckBox" name="checkBoxWriteMTC">
       <property name="text">
-       <string>Generate MTC</string>
+       <string>Write MTC</string>
       </property>
       <property name="checked">
        <bool>false</bool>
@@ -26,13 +26,13 @@
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="generatorGroupBox">
+     <widget class="QGroupBox" name="groupBoxWriter">
       <property name="title">
-       <string>Generator:</string>
+       <string>Writer:</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLabel" name="generateInfoLabel">
+        <widget class="QLabel" name="writerInfoLabel">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -61,7 +61,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QCheckBox" name="readCheckBox">
+     <widget class="QCheckBox" name="checkBoxReadMTC">
       <property name="text">
        <string>Read MTC</string>
       </property>
@@ -71,7 +71,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="readerGroupBox">
+     <widget class="QGroupBox" name="groupBoxReader">
       <property name="title">
        <string>Reader:</string>
       </property>
@@ -87,7 +87,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="lblSlave">
+        <widget class="QLabel" name="labelReaderTimeCode">
          <property name="font">
           <font>
            <family>Arial Unicode MS</family>
@@ -104,9 +104,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="minMaxLevelLabel">
+        <widget class="QLabel" name="fpsLabel">
          <property name="text">
-          <string>- / -</string>
+          <string>0 fps</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -114,6 +114,16 @@
         </widget>
        </item>
       </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="labelDelay">
+      <property name="text">
+       <string>0 ms</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
    </layout>

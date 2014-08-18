@@ -103,6 +103,18 @@ protected:
 	 */
 	virtual void onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
+protected:
+	/** @brief Remember the hour digits */
+	int _hh;
+	/** @brief Remember the minute digits */
+	int _mm;
+	/** @brief Remember the second digits */
+	int _ss;
+	/** @brief Remember the frame digits */
+	int _ff;
+	/** @brief Remember the time code type */
+	PhTimeCodeType _tcType;
+
 private slots:
 	void onMessage(std::vector<unsigned char> *message);
 	void onError(RtMidiError::Type type, QString errorText);
@@ -112,8 +124,6 @@ private:
 	static void errorCallback(RtMidiError::Type type, const std::string &errorText, void *userData);
 
 	RtMidiIn *_midiIn;
-	int _hh, _mm, _ss, _ff;
-	PhTimeCodeType _tcType;
 };
 
 #endif // PHMIDIINPUT_H
