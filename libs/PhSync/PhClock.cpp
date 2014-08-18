@@ -8,8 +8,8 @@
 
 #include "PhClock.h"
 
-PhClock::PhClock(PhTimeCodeType tcType) :
-	QObject(NULL), _tcType(tcType), _time(0), _rate(0.0)
+PhClock::PhClock() :
+	QObject(NULL), _time(0), _rate(0.0)
 {
 	qRegisterMetaType<PhTime>("PhTime");
 	qRegisterMetaType<PhFrame>("PhFrame");
@@ -17,28 +17,12 @@ PhClock::PhClock(PhTimeCodeType tcType) :
 	qRegisterMetaType<PhTimeCodeType>("PhTimeCodeType");
 }
 
-void PhClock::setTimeCodeType(PhTimeCodeType tcType)
-{
-	PhFrame lastFrame = frame();
-	if(_tcType != tcType) {
-		_tcType = tcType;
-		emit tcTypeChanged(tcType);
-	}
-	PhFrame newFrame = frame();
-	if(lastFrame != newFrame)
-		emit frameChanged(newFrame, _tcType);
-}
-
 void PhClock::setTime(qint64 time)
 {
-	PhFrame lastFrame = frame();
 	if (_time != time) {
 		_time = time;
 		emit timeChanged(time);
 	}
-	PhFrame newFrame = frame();
-	if(lastFrame != newFrame)
-		emit frameChanged(newFrame, _tcType);
 }
 
 void PhClock::setRate(PhRate rate)
@@ -59,24 +43,24 @@ PhTime PhClock::milliSecond()
 	return _time / 24;
 }
 
-void PhClock::setFrame(PhFrame frame)
+void PhClock::setFrame(PhFrame frame, PhTimeCodeType tcType)
 {
-	this->setTime(frame * PhTimeCode::timePerFrame(_tcType));
+	this->setTime(frame * PhTimeCode::timePerFrame(tcType));
 }
 
-PhFrame PhClock::frame() const
+PhFrame PhClock::frame(PhTimeCodeType tcType) const
 {
-	return _time / PhTimeCode::timePerFrame(_tcType);
+	return _time / PhTimeCode::timePerFrame(tcType);
 }
 
-void PhClock::setTimeCode(QString tc)
+void PhClock::setTimeCode(QString tc, PhTimeCodeType tcType)
 {
-	setFrame(PhTimeCode::frameFromString(tc, _tcType));
+	setTime(PhTimeCode::timeFromString(tc, tcType));
 }
 
-QString PhClock::timeCode()
+QString PhClock::timeCode(PhTimeCodeType tcType)
 {
-	return PhTimeCode::stringFromFrame(frame(), _tcType);
+	return PhTimeCode::stringFromTime(_time, tcType);
 }
 
 void PhClock::tick(PhTimeScale frequence)

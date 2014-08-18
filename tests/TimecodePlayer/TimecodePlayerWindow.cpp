@@ -5,14 +5,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::TimecodePlayerWindow)
 {
 	ui->setupUi(this);
-	_clock = new PhClock(PhTimeCodeType25);
-	ui->mediaController->setMediaLength(7500);
-	ui->mediaController->setTCType(_clock->timeCodeType());
-	ui->mediaController->setFirstFrame(_clock->frame());
-	ui->mediaController->setClock(_clock);
+	ui->mediaController->setLength(PhTimeCode::timeFromString("00:01:00:00", PhTimeCodeType25));
+	ui->mediaController->setClock(PhTimeCodeType25, &_clock);
+	_clock.setTime(PhTimeCode::timeFromString("01:00:00:00", PhTimeCodeType25));
 
 	_timer = new QTimer();
-	connect(_timer, SIGNAL(timeout()), this, SLOT(updateFrame()));
+	connect(_timer, &QTimer::timeout, this, &MainWindow::updateFrame);
 	_timer->start(10);
 }
 
@@ -23,5 +21,5 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateFrame()
 {
-	_clock->tick(100);
+	_clock.tick(100);
 }

@@ -40,12 +40,12 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 
 	//Combobox Init
 
-	ui->_rateSelectionBox->addItem("23.98 fps");
-	ui->_rateSelectionBox->addItem("24 fps");
-	ui->_rateSelectionBox->addItem("25 fps");
-	ui->_rateSelectionBox->addItem("29.97 fps");
+	ui->timeCodeTypeCombo->addItem("23.98 fps");
+	ui->timeCodeTypeCombo->addItem("24 fps");
+	ui->timeCodeTypeCombo->addItem("25 fps");
+	ui->timeCodeTypeCombo->addItem("29.97 fps");
 
-	connect(ui->_rateSelectionBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onTCTypeComboChanged()));
+	connect(ui->timeCodeTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(onTCTypeComboChanged()));
 
 	ui->_playButton->setDefault(true);
 }
@@ -56,19 +56,9 @@ PhMediaPanel::~PhMediaPanel()
 	delete ui;
 }
 
-
-void PhMediaPanel::setTCType(PhTimeCodeType tcType)
-{
-	onTimeCodeTypeChanged(tcType);
-
-	if(_clock)
-		_clock->setTimeCodeType(tcType);
-}
-
-
 PhTimeCodeType PhMediaPanel::timeCodeType() const
 {
-	switch(ui->_rateSelectionBox->currentIndex()) {
+	switch(ui->timeCodeTypeCombo->currentIndex()) {
 	case 0:
 		return PhTimeCodeType2398;
 	case 1:
@@ -82,9 +72,14 @@ PhTimeCodeType PhMediaPanel::timeCodeType() const
 	}
 }
 
-void PhMediaPanel::setFirstFrame(PhFrame firstFrame)
+void PhMediaPanel::setSliderEnable(bool isEnabled)
 {
-	setTimeIn(firstFrame * PhTimeCode::timePerFrame(this->timeCodeType()));
+	ui->_slider->setEnabled(isEnabled);
+}
+
+PhTime PhMediaPanel::timeIn() const
+{
+	return _timeIn;
 }
 
 void PhMediaPanel::setTimeIn(PhTime timeIn)
@@ -94,14 +89,9 @@ void PhMediaPanel::setTimeIn(PhTime timeIn)
 	ui->_slider->setMaximum((_timeIn + _length) / 24000);
 }
 
-PhFrame PhMediaPanel::getFirstFrame() const
+PhTime PhMediaPanel::length()
 {
-	return _timeIn / PhTimeCode::timePerFrame(this->timeCodeType());
-}
-
-void PhMediaPanel::setMediaLength(PhFrame length)
-{
-	setLength(length * PhTimeCode::timePerFrame(this->timeCodeType()));
+	return _length;
 }
 
 void PhMediaPanel::setLength(PhTime length)
@@ -110,33 +100,16 @@ void PhMediaPanel::setLength(PhTime length)
 	ui->_slider->setMaximum((_timeIn + length) / 24000);
 }
 
-PhFrame PhMediaPanel::getMediaLength()
+void PhMediaPanel::setClock(PhTimeCodeType tcType, PhClock *clock)
 {
-	return _length / PhTimeCode::timePerFrame(this->timeCodeType());
-}
-
-PhTime PhMediaPanel::length()
-{
-	return _length;
-}
-
-void PhMediaPanel::setSliderEnable(bool isEnabled)
-{
-	ui->_slider->setEnabled(isEnabled);
-}
-
-void PhMediaPanel::setClock(PhClock *clock)
-{
+	onTimeCodeTypeChanged(tcType);
 	_clock = clock;
 	if(_clock) {
-		setTCType(_clock->timeCodeType());
-		ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->frame(), _clock->timeCodeType()));
-		connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
-		connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
-		connect(_clock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onTimeCodeTypeChanged(PhTimeCodeType)));
+		ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(_clock->time(), tcType));
+		connect(_clock, &PhClock::timeChanged, this, &PhMediaPanel::onTimeChanged);
+		connect(_clock, &PhClock::rateChanged, this, &PhMediaPanel::onRateChanged);
 	}
 }
-
 
 void PhMediaPanel::onRateChanged(PhRate rate)
 {
@@ -151,19 +124,19 @@ void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
 {
 	switch(tcType) {
 	case PhTimeCodeType2398:
-		ui->_rateSelectionBox->setCurrentIndex(0);
+		ui->timeCodeTypeCombo->setCurrentIndex(0);
 		break;
 	case PhTimeCodeType24:
-		ui->_rateSelectionBox->setCurrentIndex(1);
+		ui->timeCodeTypeCombo->setCurrentIndex(1);
 		break;
 	case PhTimeCodeType25:
-		ui->_rateSelectionBox->setCurrentIndex(2);
+		ui->timeCodeTypeCombo->setCurrentIndex(2);
 		break;
 	case PhTimeCodeType2997:
-		ui->_rateSelectionBox->setCurrentIndex(3);
+		ui->timeCodeTypeCombo->setCurrentIndex(3);
 		break;
 	case PhTimeCodeType30:
-		ui->_rateSelectionBox->setCurrentIndex(4);
+		ui->timeCodeTypeCombo->setCurrentIndex(4);
 		break;
 	}
 }
@@ -204,7 +177,7 @@ void PhMediaPanel::onNextFrame()
 {
 	if(_clock) {
 		_clock->setRate(0);
-		_clock->setFrame(_clock->frame() + 1);
+		_clock->setTime(_clock->time() + PhTimeCode::timePerFrame(this->timeCodeType()));
 	}
 	emit nextFrame();
 }
@@ -213,29 +186,27 @@ void PhMediaPanel::onPreviousFrame()
 {
 	if(_clock) {
 		_clock->setRate(0);
-		_clock->setFrame(_clock->frame() - 1);
+		_clock->setTime(_clock->time() - PhTimeCode::timePerFrame(this->timeCodeType()));
 	}
 	emit previousFrame();
 }
 
 void PhMediaPanel::onSliderChanged(int position)
 {
-	PhFrame frame = (PhFrame)position;
+	PhTime time = (PhTime)(position / 24000);
 	if(_clock)
-		_clock->setFrame(frame);
-	emit goToFrame(frame, timeCodeType());
+		_clock->setTime(time);
+	emit goToTime(time);
 }
 
 void PhMediaPanel::onTCTypeComboChanged()
 {
-	if(_clock)
-		_clock->setTimeCodeType(timeCodeType());
 	emit timeCodeTypeChanged(timeCodeType());
 }
 
-void PhMediaPanel::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void PhMediaPanel::onTimeChanged(PhTime time)
 {
-	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(frame, tcType));
-	ui->_slider->setSliderPosition(frame);
+	ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(time, this->timeCodeType()));
+	ui->_slider->setSliderPosition(time / 24000);
 }
 

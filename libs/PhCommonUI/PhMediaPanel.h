@@ -37,36 +37,19 @@ public:
 	PhMediaPanel(QWidget *parent = 0);
 
 	~PhMediaPanel();
-	/**
-	 * @brief set TC Type
-	 * @param tcType The type coming from PhTimeCodeType
-	 */
-	void setTCType(PhTimeCodeType tcType);
-	/**
-	 * @brief set the first Frame
-	 * @param firstFrame Desired PhFrame
-	 * @todo remove
-	 */
-	void setFirstFrame(PhFrame firstFrame);
 
 	/**
-	 * @brief Set the starting time of the panel
-	 * @param timeIn A time value
+	 * @brief Get the panel timecode type
+	 * @return A timecode type value.
 	 */
-	void setTimeIn(PhTime timeIn);
+	PhTimeCodeType timeCodeType() const;
 
 	/**
-	 * @brief Set the media length in frame and adjust the slider
-	 * @param length A frame value
-	 * @todo remove
+	 * @brief Set the clock that the panel will display
+	 * @param tcType The timecode type used to display the time.
+	 * @param clock A clock instance.
 	 */
-	void setMediaLength(PhFrame length);
-
-	/**
-	 * @brief Set the media length and adjust the slider
-	 * @param length A time value
-	 */
-	void setLength(PhTime length);
+	void setClock(PhTimeCodeType tcType, PhClock * clock);
 
 	/**
 	 * @brief Enable the panel slider
@@ -75,45 +58,27 @@ public:
 	void setSliderEnable(bool isEnabled);
 
 	/**
-	 * @brief Set the panel clock
-	 * @param clock A clock instance
-	 *
-	 * The panel will display the value of the clock.
-	 */
-	void setClock(PhClock * clock);
-
-
-	/**
-	 * @brief Get the first frame
-	 * @return A frame value
-	 * @todo remove
-	 */
-	PhFrame getFirstFrame() const;
-
-	/**
 	 * @brief Get the starting time
 	 * @return A time value
 	 */
 	PhTime timeIn() const;
 
 	/**
-	 * @brief Get the media length in frame
-	 * @return A frame value
-	 * @todo remove
+	 * @brief Set the starting time of the panel
+	 * @param timeIn A time value
 	 */
-	PhFrame getMediaLength();
+	void setTimeIn(PhTime timeIn);
 
 	/**
 	 * @brief Get the media panel length
 	 * @return
 	 */
 	PhTime length();
-
 	/**
-	 * @brief Get the panel timecode type
-	 * @return A timecode type value.
+	 * @brief Set the media length and adjust the slider
+	 * @param length A time value
 	 */
-	PhTimeCodeType timeCodeType() const;
+	void setLength(PhTime length);
 
 signals:
 
@@ -142,32 +107,29 @@ signals:
 	 */
 	void previousFrame();
 	/**
-	 * @brief Go to the desired frame
-	 * @param frame the desired frame
-	 * @param tcType the desired PhTimeCodeType
+	 * @brief Go to the desired time
+	 * @param time A time value.
 	 */
-	void goToFrame(PhFrame frame, PhTimeCodeType tcType);
+	void goToTime(PhTime time);
 	/**
 	 * @brief Send a signal when the timecode type change
-	 * @param tcType the correponding PhTimeCodeType
+	 * @param tcType The new PhTimeCodeType
 	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 public slots:
-
 	/**
-	 * @brief Handle a modicifation of the frame
-	 * @param frame the new frame
-	 * @param tcType the corresponding PhTimeCodeType
+	 * @brief Handle a modification of the time
+	 * @param time The new time
 	 */
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onTimeChanged(PhTime time);
 	/**
 	 * @brief Handle a modification of the playing rate
 	 * @param rate the new rate
 	 */
 	void onRateChanged(PhRate rate);
 	/**
-	 * @brief handle a modification of the timecode type
-	 * @param tcType the new PhTimeCodeType
+	 * @brief Handle a modification of the timecode type
+	 * @param tcType The new timecode type.
 	 */
 	void onTimeCodeTypeChanged(PhTimeCodeType tcType);
 
@@ -185,7 +147,7 @@ private:
 	Ui::PhMediaPanel *ui;
 	PhClock *_clock;
 	PhTime _timeIn;
-	PhTime _length; //number of frames of the media
+	PhTime _length;
 };
 
 #endif // PHMEDIAPANEL_H

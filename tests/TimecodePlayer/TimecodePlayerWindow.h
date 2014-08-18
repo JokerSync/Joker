@@ -28,7 +28,7 @@ private:
 
 	Ui::TimecodePlayerWindow *ui;
 	QTimer *_timer;
-	PhClock *_clock;
+	PhClock _clock;
 
 };
 

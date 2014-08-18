@@ -218,22 +218,38 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="_rateSelectionBox">
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>30</height>
-        </size>
-       </property>
+      <widget class="QComboBox" name="timeCodeTypeCombo">
        <property name="maximumSize">
         <size>
          <width>100</width>
-         <height>30</height>
+         <height>16777215</height>
         </size>
        </property>
-       <property name="editable">
-        <bool>false</bool>
-       </property>
+       <item>
+        <property name="text">
+         <string>23.98 fps</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>24 fps</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>25 fps</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>29.97 fps</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>30 fps</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
