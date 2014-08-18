@@ -23,6 +23,10 @@ public:
 	PhMidiOutput();
 	~PhMidiOutput();
 
+	/**
+	 * @brief List the available output midi port
+	 * @return A list of string.
+	 */
 	static QStringList outputList();
 
 	/**

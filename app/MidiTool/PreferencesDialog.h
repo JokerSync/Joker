@@ -26,20 +26,20 @@ class PreferencesDialog : public QDialog
 
 public:
 	/**
-	 * @brief Preferences Panel
-	 *
-	 * Create a modal QDialog which prompt the user for devices.
-	 *
+	 * @brief The PreferencesDialog constructor
 	 * @param settings The application settings.
 	 */
 	PreferencesDialog(MidiToolSettings *settings);
+
+	/**
+	 * @brief The PreferencesDialog destructor
+	 */
 	~PreferencesDialog();
 
-protected:
+private:
 	void accept();
 	void reject();
 
-private:
 	Ui::PreferencesDialog *ui;
 	MidiToolSettings *_settings;
 	QString _oldMidiInputPortName, _oldMidiOutputPortName;

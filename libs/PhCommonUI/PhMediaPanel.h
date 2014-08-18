@@ -47,7 +47,7 @@ public:
 	 * @param firstFrame Desired PhFrame
 	 * @todo remove
 	 */
-	void setFirstFrame(PhFrame frameIn);
+	void setFirstFrame(PhFrame firstFrame);
 
 	/**
 	 * @brief Set the starting time of the panel
