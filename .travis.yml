@@ -16,7 +16,7 @@ install:
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
-- if [[ "$JOB" == BUILD_RELEASE_* ]]; then brew install npm && npm install -g appdmg; fi
+- if [[ "$JOB" == BUILD_RELEASE_* ]]; then npm install -g appdmg; fi
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
 
