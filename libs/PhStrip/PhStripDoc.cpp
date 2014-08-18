@@ -648,8 +648,9 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 		return false;
 
 	QString videoFilePath = PhFileTool::readString(f, ok, "Video path");
+	this->setVideoFilePath(videoFilePath);
 	PhTime videoTimeIn = readMosTime(f, tcType, internLevel);
-	this->setVideoInfo(videoTimeIn, tcType, videoFilePath);
+	this->setVideoTimeIn(videoTimeIn, tcType);
 	PHDBG(ok) << "Timestamp:" << PhTimeCode::stringFromTime(_videoTimeIn, tcType);
 
 	if(videoType == 3) {
@@ -1603,11 +1604,15 @@ void PhStripDoc::setTitle(QString title)
 	_title = title;
 }
 
-void PhStripDoc::setVideoInfo(PhTime timeIn, PhTimeCodeType tcType, QString filePath)
+void PhStripDoc::setVideoFilePath(QString filePath)
+{
+	_videoPath = filePath;
+}
+
+void PhStripDoc::setVideoTimeIn(PhTime timeIn, PhTimeCodeType tcType)
 {
 	_videoTimeIn = timeIn;
 	_videoTimeCodeType = tcType;
-	_videoPath = filePath;
 }
 
 QList<PhStripCut *> PhStripDoc::cuts()

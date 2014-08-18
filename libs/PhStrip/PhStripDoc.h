@@ -188,14 +188,19 @@ public:
 	 * @param title A string
 	 */
 	void setTitle(QString title);
+
 	/**
-	 * @brief Set the video info
+	 * @brief Set the video file path
+	 * @param filePath The video file path
+	 */
+	void setVideoFilePath(QString filePath);
+
+	/**
+	 * @brief Set the video starting time
 	 * @param timeIn The video starting time
 	 * @param tcType The video timecode type
-	 * @param videoFilePath The video file path
 	 */
-	void setVideoInfo(PhTime timeIn, PhTimeCodeType tcType, QString filePath);
-
+	void setVideoTimeIn(PhTime timeIn, PhTimeCodeType tcType);
 	/**
 	 * @brief Set the video deinterlace mode
 	 * @param deinterlace True if deinterlace false otherwise

@@ -56,6 +56,10 @@ public:
 		return _fileName;
 	}
 
+	/**
+	 * @brief The video timecode type
+	 * @return A timecode type value
+	 */
 	PhTimeCodeType timeCodeType() {
 		return _tcType;
 	}
@@ -67,25 +71,55 @@ public:
 	PhClock* clock() {
 		return &_clock;
 	}
+
 	/**
-	 * @brief Get first frame
-	 * @return the first frame of the video file
+	 * @brief Get the first frame of the video file
+	 * @return A frame value
 	 */
-	PhFrame firstFrame() {
-		return _firstFrame;
+	PhFrame frameIn() {
+		return _frameIn;
 	}
+
+	/**
+	 * @brief Set first frame
+	 * @param frame the new first frame
+	 */
+	void setFrameIn(PhFrame frameIn);
+
+	/**
+	 * @brief Get the starting time of the video file
+	 * @return A time value
+	 */
+	PhTime timeIn() {
+		return _frameIn * PhTimeCode::timePerFrame(_tcType);
+	}
+
+	void setTimeIn(PhTime timeIn);
+
 	/**
 	 * @brief Get last frame
 	 * @return the last frame of the video file
 	 */
-	PhFrame lastFrame() {
-		return _firstFrame + length() - 1;
+	PhFrame frameOut() {
+		return _frameIn + frameLength() - 1;
 	}
+
+	PhTime timeOut() {
+		return frameOut() * PhTimeCode::timePerFrame(_tcType);
+	}
+
 	/**
-	 * @brief Get the length
-	 * @return the length of the video
+	 * @brief Get the video length in frame
+	 * @return A frame value
 	 */
-	PhFrame length();
+	PhFrame frameLength();
+
+	/**
+	 * @brief Get the video length
+	 * @return A time value
+	 */
+	PhTime length();
+
 	/**
 	 * @brief Get the codec name
 	 * @return the codec name
@@ -113,12 +147,6 @@ public:
 	int refreshRate() {
 		return _videoFrameTickCounter.frequency();
 	}
-
-	/**
-	 * @brief Set first frame
-	 * @param frame the new first frame
-	 */
-	void setFirstFrame(PhFrame frame);
 
 	// Methods
 	/**
@@ -189,7 +217,7 @@ private:
 	QString _fileName;
 	PhTimeCodeType _tcType;
 	PhClock _clock;
-	PhFrame _firstFrame;
+	PhFrame _frameIn;
 
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;

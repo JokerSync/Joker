@@ -10,7 +10,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_settings(settings),
 	_fileName(""),
 	_tcType(PhTimeCodeType25),
-	_firstFrame(0),
+	_frameIn(0),
 	_pFormatContext(NULL),
 	_videoStream(NULL),
 	_videoFrame(NULL),
@@ -66,7 +66,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
 
-	_firstFrame = 0;
+	_frameIn = 0;
 	_videoStream = NULL;
 	_audioStream = NULL;
 
@@ -104,7 +104,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	if(tag) {
 		PHDEBUG << "Found timestamp:" << tag->value;
-		_firstFrame = PhTimeCode::frameFromString(tag->value, _tcType);
+		_frameIn = PhTimeCode::frameFromString(tag->value, _tcType);
 	}
 
 
@@ -123,7 +123,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	_videoFrame = av_frame_alloc();
 
-	PHDEBUG << "length:" << this->length();
+	PHDEBUG << "length:" << this->frameLength();
 	PHDEBUG << "fps:" << this->framePerSecond();
 	_currentFrame = PHFRAMEMIN;
 	_clock.setTime(0);
@@ -181,16 +181,26 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	videoRect.draw();
 }
 
-PhFrame PhVideoEngine::length()
+void PhVideoEngine::setFrameIn(PhFrame frameIn)
+{
+	_frameIn = frameIn;
+}
+
+void PhVideoEngine::setTimeIn(PhTime timeIn)
+{
+	setFrameIn(timeIn / PhTimeCode::timePerFrame(_tcType));
+}
+
+PhFrame PhVideoEngine::frameLength()
 {
 	if(_videoStream)
 		return time2frame(_videoStream->duration);
 	return 0;
 }
 
-void PhVideoEngine::setFirstFrame(PhFrame frame)
+PhTime PhVideoEngine::length()
 {
-	_firstFrame = frame;
+	return frameLength() * PhTimeCode::timePerFrame(_tcType);
 }
 
 PhVideoEngine::~PhVideoEngine()
@@ -250,10 +260,10 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		return false;
 	}
 
-	if(frame < this->firstFrame())
-		frame = this->firstFrame();
-	if (frame >= this->lastFrame())
-		frame = this->lastFrame();
+	if(frame < this->frameIn())
+		frame = this->frameIn();
+	if (frame >= this->frameOut())
+		frame = this->frameOut();
 
 	bool result = false;
 	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
@@ -263,7 +273,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
 		if(frame - _currentFrame != 1) {
 			int flags = AVSEEK_FLAG_ANY;
-			int64_t timestamp = frame2time(frame - _firstFrame);
+			int64_t timestamp = frame2time(frame - _frameIn);
 			PHDEBUG << "seek:" << frame;
 			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
 		}
