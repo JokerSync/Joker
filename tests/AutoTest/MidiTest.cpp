@@ -48,7 +48,6 @@ void MidiTest::testConnection()
 
 void MidiTest::testQFTC()
 {
-	// just a test
 	PhMidiInput midiIn;
 	PhMidiOutput midiOut;
 
@@ -115,7 +114,6 @@ void MidiTest::testQFTC()
 
 void MidiTest::testFullTC()
 {
-	// just a test
 	PhMidiInput midiIn;
 	PhMidiOutput midiOut;
 
@@ -189,7 +187,6 @@ void MidiTest::testMMCStop()
 
 void MidiTest::testMMCGoto()
 {
-	// just a test
 	PhMidiInput midiIn;
 	PhMidiOutput midiOut;
 
@@ -219,7 +216,6 @@ void MidiTest::testMMCGoto()
 
 void MidiTest::testMTCReader()
 {
-	// just a test
 	//
 	// Initialize the midi timecode reader:
 	//
