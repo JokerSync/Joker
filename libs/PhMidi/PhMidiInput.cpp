@@ -146,7 +146,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 				switch (data >> 4) {
 				case 0:
 					_ff = (_ff & 0xf0) | (data & 0x0f);
-					onTimeCode(_hh, _mm, _ss, _ff, _tcType);
+//					onTimeCode(_hh, _mm, _ss, _ff, _tcType);
 					break;
 				case 1:
 					_ff = (_ff & 0x0f) | ((data & 0x0f) << 4);

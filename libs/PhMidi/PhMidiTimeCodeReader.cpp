@@ -12,10 +12,41 @@ PhMidiTimeCodeReader::PhMidiTimeCodeReader(PhTimeCodeType tcType) :
 {
 }
 
-void PhMidiTimeCodeReader::onQuarterFrame(unsigned char)
+void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 {
-	_clock.tick(4 * PhTimeCode::getFps(_clock.timeCodeType()));
 	_clock.setRate(1);
+	_clock.tick(4 * PhTimeCode::getFps(_clock.timeCodeType()));
+
+	unsigned int hhmmssff[4];
+	PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, _clock.time(), _clock.timeCodeType());
+
+	bool change = false;
+	PhTimeCodeType tcType = _clock.timeCodeType();
+
+	switch (data >> 4) {
+	case 3:
+		if((hhmmssff[3] != _ff) || (hhmmssff[2] != _ss)) {
+			hhmmssff[3] = _ff;
+			hhmmssff[2] = _ss;
+			change = true;
+		}
+		break;
+	case 7:
+		tcType = computeTimeCodeType((data & 0x0f) >> 1);
+		if((hhmmssff[1] != _mm) || (hhmmssff[0] != _hh) || (_clock.timeCodeType() != tcType)) {
+			hhmmssff[1] = _mm;
+			hhmmssff[0] = _hh;
+			change = true;
+		}
+	default:
+		break;
+	}
+
+	if(change) {
+		PHDEBUG << hhmmssff[0] << hhmmssff[1] << hhmmssff[2] <<hhmmssff[3];
+		_clock.setTimeCodeType(tcType);
+		_clock.setTime(PhTimeCode::timeFromHhMmSsFf(hhmmssff, tcType));
+	}
 }
 
 void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType)
