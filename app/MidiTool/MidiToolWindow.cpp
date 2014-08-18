@@ -15,8 +15,9 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MidiToolWindow),
 	_settings(settings),
-	_mtcReader((PhTimeCodeType)settings->writerTimeCodeType()),
-	_mtcWriter((PhTimeCodeType)settings->writerTimeCodeType()),
+	_writerTimeCodeType((PhTimeCodeType)settings->writerTimeCodeType()),
+	_mtcReader(_writerTimeCodeType),
+	_mtcWriter(_writerTimeCodeType),
 	_currentDigit(0),
 	_lastFrame(-1),
 	_frameDelta(-1),
@@ -30,21 +31,23 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	_mtcWriter.clock()->setTime(_settings->writerTimeIn());
 	ui->widgetMaster->setLength(_settings->writerLoopLength());
 	ui->widgetMaster->setTimeIn(_settings->writerTimeIn());
-	ui->widgetMaster->setClock(_mtcWriter.clock());
+	ui->widgetMaster->setClock(_writerTimeCodeType, _mtcWriter.clock());
 
 	connect(&_clockTimer, &QTimer::timeout, this, &MidiToolWindow::onTick);
 
 	_clockTimer.start(10);
 
+	connect(ui->widgetMaster, &PhMediaPanel::timeCodeTypeChanged, this, &MidiToolWindow::updateTCTypeSetting);
+
 	connect(_mtcWriter.clock(), &PhClock::timeChanged, this, &MidiToolWindow::onWriterTimeChanged);
-	connect(_mtcWriter.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::updateTCTypeSetting);
 	connect(_mtcWriter.clock(), &PhClock::rateChanged, this, &MidiToolWindow::updateRateSetting);
 
+	connect(&_mtcReader, &PhMidiTimeCodeReader::timeCodeTypeChanged, this, &MidiToolWindow::updateFpsLabel);
+
 	connect(_mtcReader.clock(), &PhClock::timeChanged, this, &MidiToolWindow::onReaderTimeChanged);
-	connect(_mtcReader.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::updateFpsLabel);
 	connect(_mtcReader.clock(), &PhClock::rateChanged, this, &MidiToolWindow::onReaderRateChanged);
 
-	updateFpsLabel(_mtcReader.clock()->timeCodeType());
+	updateFpsLabel(_writerTimeCodeType);
 	updateWriterInfoLabel();
 
 	_mtcWriter.clock()->setRate(_settings->writerRate());
@@ -57,8 +60,7 @@ MidiToolWindow::~MidiToolWindow()
 
 void MidiToolWindow::on_actionSet_TC_In_triggered()
 {
-#warning /// @todo change to time
-	PhTimeCodeDialog dlg(_mtcWriter.clock()->timeCodeType(), _settings->writerTimeIn() / PhTimeCode::timePerFrame(_mtcWriter.clock()->timeCodeType()));
+	PhTimeCodeDialog dlg(_writerTimeCodeType, _settings->writerTimeIn());
 	if(dlg.exec()) {
 		_settings->setWriterTimeIn(dlg.time());
 		ui->widgetMaster->setTimeIn(dlg.time());
@@ -69,7 +71,7 @@ void MidiToolWindow::on_actionSet_TC_In_triggered()
 
 void MidiToolWindow::on_actionSet_TC_Out_triggered()
 {
-	PhTimeCodeDialog dlg(_mtcWriter.clock()->timeCodeType(), (_settings->writerTimeIn() + _settings->writerLoopLength()) / PhTimeCode::timePerFrame(_mtcWriter.clock()->timeCodeType()));
+	PhTimeCodeDialog dlg(_writerTimeCodeType, _settings->writerTimeIn() + _settings->writerLoopLength());
 	if(dlg.exec()) {
 		if(dlg.time() > _settings->writerTimeIn()) {
 			PhTime length = dlg.time() - _settings->writerTimeIn();
@@ -124,12 +126,12 @@ void MidiToolWindow::on_checkBoxReadMTC_clicked(bool checked)
 
 void MidiToolWindow::onWriterTimeChanged(PhTime time)
 {
-	PhTimeCodeType tcType = _mtcWriter.clock()->timeCodeType();
-	PHDBG(2) << PhTimeCode::getAverageFps(tcType) << "/" << PhTimeCode::stringFromTime(time, tcType);
+	PHDBG(2) << PhTimeCode::getAverageFps(_writerTimeCodeType) << "/" << PhTimeCode::stringFromTime(time, _writerTimeCodeType);
 }
 
 void MidiToolWindow::updateTCTypeSetting(PhTimeCodeType tcType)
 {
+	_writerTimeCodeType = tcType;
 	_settings->setWriterTimeCodeType(tcType);
 }
 
@@ -140,7 +142,7 @@ void MidiToolWindow::updateRateSetting(PhRate rate)
 
 void MidiToolWindow::onReaderTimeChanged(PhTime time)
 {
-	PhTimeCodeType tcType = _mtcReader.clock()->timeCodeType();
+	PhTimeCodeType tcType = _mtcReader.timeCodeType();
 	PHDBG(2) << PhTimeCode::getAverageFps(tcType) << "/" << PhTimeCode::stringFromTime(time, tcType);
 
 	ui->labelReaderTimeCode->setText(PhTimeCode::stringFromTime(time, tcType));
@@ -152,7 +154,7 @@ void MidiToolWindow::onReaderRateChanged(PhRate rate)
 {
 	QString s = QString("%1x since %2")
 	            .arg(rate)
-	            .arg(PhTimeCode::stringFromTime(_mtcReader.clock()->time(), _mtcReader.clock()->timeCodeType()));
+	            .arg(PhTimeCode::stringFromTime(_mtcReader.clock()->time(), _mtcReader.timeCodeType()));
 	ui->readInfoLabel->setText(s);
 }
 
@@ -163,14 +165,13 @@ void MidiToolWindow::updateFpsLabel(PhTimeCodeType tcType)
 
 void MidiToolWindow::onTick()
 {
-	_mtcWriter.clock()->tick(PhTimeCode::getFps(_mtcWriter.clock()->timeCodeType()) * 4);
+	_mtcWriter.clock()->tick(PhTimeCode::getFps(_writerTimeCodeType) * 4);
 }
 
 void MidiToolWindow::updateWriterInfoLabel()
 {
-	PhTimeCodeType tcType = _mtcWriter.clock()->timeCodeType();
 	QString info = QString("%0 => %1")
-	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn(), tcType))
-	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn() + _settings->writerLoopLength(), tcType));
+	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn(), _writerTimeCodeType))
+	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn() + _settings->writerLoopLength(), _writerTimeCodeType));
 	ui->writerInfoLabel->setText(info);
 }

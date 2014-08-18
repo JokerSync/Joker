@@ -42,6 +42,7 @@ private slots:
 	void onTimeChanged(PhTime time);
 
 private:
+	PhTimeCodeType _tcType;
 	PhClock _clock;
 	int _currentDigit;
 };

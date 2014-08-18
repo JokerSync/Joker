@@ -68,6 +68,7 @@ private:
 	Ui::MidiToolWindow *ui;
 	MidiToolSettings *_settings;
 
+	PhTimeCodeType _writerTimeCodeType;
 	PhMidiTimeCodeReader _mtcReader;
 	PhMidiTimeCodeWriter _mtcWriter;
 

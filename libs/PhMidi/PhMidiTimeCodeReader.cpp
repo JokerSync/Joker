@@ -8,19 +8,17 @@
 #include "PhMidiTimeCodeReader.h"
 
 PhMidiTimeCodeReader::PhMidiTimeCodeReader(PhTimeCodeType tcType) :
-	_clock(tcType)
+	_tcType(tcType)
 {
 }
 
 void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 {
 	_clock.setRate(1);
-	_clock.tick(4 * PhTimeCode::getFps(_clock.timeCodeType()));
+	_clock.tick(4 * PhTimeCode::getFps(_tcType));
 
 	unsigned int hhmmssff[4];
-	PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, _clock.time(), _clock.timeCodeType());
-
-	bool change = false;
+	PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, _clock.time(), _tcType);
 
 	// We apply correction only on the last sequence message
 	if ((data >> 4) == 7) {
@@ -28,10 +26,11 @@ void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 		   || (hhmmssff[2] != _ss)
 		   || (hhmmssff[1] != _mm)
 		   || (hhmmssff[0] != _hh)
-		   || (_clock.timeCodeType() != _tcType)) {
+		   || (_tcType != _mtcType)) {
 			PHDEBUG << _hh << _mm << _ss << _ff;
-			_clock.setTimeCodeType(_tcType);
+			_tcType = _mtcType;
 			_clock.setTime(PhTimeCode::timeFromHhMmSsFf(_hh, _mm, _ss, _ff, _tcType));
+			emit timeCodeTypeChanged(_tcType);
 		}
 	}
 }
@@ -39,7 +38,7 @@ void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType)
 {
 	PhTime time = PhTimeCode::timeFromHhMmSsFf(hh, mm, ss, ff, tcType);
-
-	_clock.setTimeCodeType(tcType);
+	_tcType = tcType;
 	_clock.setTime(time);
+	emit timeCodeTypeChanged(_tcType);
 }

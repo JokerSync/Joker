@@ -29,6 +29,14 @@ public:
 	PhMidiTimeCodeReader(PhTimeCodeType tcType);
 
 	/**
+	 * @brief The current reader decoded timecode type
+	 * @return A timecode type value.
+	 */
+	PhTimeCodeType timeCodeType() {
+		return _tcType;
+	}
+
+	/**
 	 * @brief The PhMidiTimeCodeWriter clock
 	 *
 	 * Subscribe to this clock synchronized with the
@@ -40,12 +48,15 @@ public:
 		return &_clock;
 	}
 
+signals:
+	void timeCodeTypeChanged(PhTimeCodeType tcType);
+
 protected:
 	void onQuarterFrame(unsigned char data);
 	void onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
 private:
-//j	PhMidiInput _midiIn;
+	PhTimeCodeType _tcType;
 	PhClock _clock;
 };
 

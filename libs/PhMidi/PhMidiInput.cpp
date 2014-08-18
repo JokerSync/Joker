@@ -8,12 +8,12 @@
 #include "PhMidiInput.h"
 
 PhMidiInput::PhMidiInput() :
-	_midiIn(NULL),
 	_hh(0),
 	_mm(0),
 	_ss(0),
 	_ff(0),
-	_tcType(PhTimeCodeType25)
+	_mtcType(PhTimeCodeType25),
+	_midiIn(NULL)
 {
 }
 
@@ -87,7 +87,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 							PHDEBUG << "Bad TC message size:" << message->size();
 						else switch(message->at(4)) {
 							case 0x01:
-								_tcType = computeTimeCodeType(message->at(5) >> 5);
+								_mtcType = computeTimeCodeType(message->at(5) >> 5);
 								_hh = message->at(5) & 0x1F;
 								_mm = message->at(6);
 								_ss = message->at(7);
@@ -95,7 +95,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 								if(message->at(9) != 0xF7)
 									PHDEBUG << "End of SysEx expected:" << QString::number(0xF7);
 								PHDEBUG << "Full TC:" << _hh << _mm << _ss << _ff;
-								onTimeCode(_hh, _mm, _ss, _ff, _tcType);
+								onTimeCode(_hh, _mm, _ss, _ff, _mtcType);
 								break;
 							default:
 								PHDEBUG << "Unknown TC type:" << message->at(4) << "/" << messageStr;
@@ -114,13 +114,13 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 							emit onPlay();
 							break;
 						case 0x44:
-							_tcType = computeTimeCodeType(message->at(7) >> 5);
+							_mtcType = computeTimeCodeType(message->at(7) >> 5);
 							_hh = message->at(7) & 0x1F;
 							_mm = message->at(8);
 							_ss = message->at(9);
 							_ff = message->at(10);
 							PHDEBUG << "Go To" << _hh << _mm << _ss << _ff;
-							onTimeCode(_hh, _mm, _ss, _ff, _tcType);
+							onTimeCode(_hh, _mm, _ss, _ff, _mtcType);
 							break;
 						default:
 							PHDEBUG << "Unknown MMC message:" << messageStr;
@@ -176,7 +176,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					break;
 				case 7:
 					_hh = (_hh & 0x0f) | ((data & 0x01) << 4);
-					_tcType = computeTimeCodeType((data & 0x06) >> 1);
+					_mtcType = computeTimeCodeType((data & 0x06) >> 1);
 					break;
 				}
 
