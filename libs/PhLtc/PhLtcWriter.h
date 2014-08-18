@@ -37,6 +37,7 @@ private:
 
 	int processAudio(const void *, void *outputBuffer, unsigned long);
 
+	PhTimeCodeType _tcType;
 	PhClock _clock;
 	LTCEncoder *_encoder;
 	SMPTETimecode _st;

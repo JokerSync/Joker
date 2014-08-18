@@ -31,10 +31,10 @@ public:
 	/**
 	 * @brief PhTimeCodeDialog constructor
 	 * @param tcType Timecode type to use for string to frame conversion.
-	 * @param frame The dialog initial frame.
+	 * @param time The dialog initial time.
 	 * @param parent The object owner.
 	 */
-	explicit PhTimeCodeDialog(PhTimeCodeType tcType, PhFrame frame = 0, QWidget *parent = 0);
+	explicit PhTimeCodeDialog(PhTimeCodeType tcType, PhTime time = 0, QWidget *parent = 0);
 
 	~PhTimeCodeDialog();
 

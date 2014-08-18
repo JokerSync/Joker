@@ -40,12 +40,18 @@ public:
 	 */
 	PhClock * clock();
 
+	/**
+	 * @brief The decoded timecode type by the LTC reader
+	 * @return A timecode type value.
+	 */
+	PhTimeCodeType timeCodeType();
+
 protected:
 	int processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer);
 
 private:
+	PhTimeCodeType _tcType;
 	PhClock _clock;
-
 	ltc_off_t _position;
 	LTCDecoder * _decoder;
 	/** @brief Used to detect pause in LTC signal */
