@@ -190,6 +190,13 @@ public:
 	 * @return The average frame per second.
 	 */
 	static float getAverageFps(PhTimeCodeType type);
+
+	/**
+	 * @brief Compute the timecode type from a average fps value
+	 * @param averageFps A float value
+	 * @return A timecode type
+	 */
+	static PhTimeCodeType computeTimeCodeType(float averageFps);
 };
 
 #endif // PHTIMECODE_H

@@ -17,7 +17,6 @@
 
 PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
 	_settings(settings),
-	_clock(_doc.timeCodeType()),
 	_maxDrawElapsed(0)
 {
 	// update the  content when the doc changes :

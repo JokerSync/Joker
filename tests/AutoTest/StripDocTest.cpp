@@ -554,6 +554,8 @@ void StripDocTest::openStripFileTest()
 
 	QVERIFY(QFile::exists("empty_meta.joker"));
 	QVERIFY(doc.openStripFile("empty_meta.joker"));
+
+#warning /// @todo Test video frame rate
 }
 
 void StripDocTest::openSaveTest01()

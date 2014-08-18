@@ -16,7 +16,7 @@ GenerateDialog::GenerateDialog(GraphicStripTestSettings *settings, PhStripDoc * 
 	this->_doc = doc;
 	ui->setupUi(this);
 	ui->lineEditText->setText(_settings->textContent());
-	ui->lineEditTimeCode->setFrame(_settings->startTime() / PhTimeCode::timePerFrame(_doc->timeCodeType()), _doc->timeCodeType());
+	ui->lineEditTimeCode->setFrame(_settings->startTime() / PhTimeCode::timePerFrame(_doc->videoTimeCodeType()), _doc->videoTimeCodeType());
 	ui->spinBoxNbPeople->setValue(_settings->peopleNumber());
 	ui->spaceBetweenTextSpinBox->setValue(_settings->spaceBetweenText());
 	ui->spinBoxNbText->setValue(_settings->textNumber());
@@ -61,7 +61,7 @@ void GenerateDialog::onAccept()
 	PhTime spaceBetweenText = this->ui->spaceBetweenTextSpinBox->value();
 	int trackCount = this->ui->spinBoxNbTrack->value();
 	QString textContent = this->ui->lineEditText->text();
-	PhTime timeIn = this->ui->lineEditTimeCode->frame() * PhTimeCode::timePerFrame(_doc->timeCodeType());
+	PhTime timeIn = this->ui->lineEditTimeCode->frame() * PhTimeCode::timePerFrame(_doc->videoTimeCodeType());
 	_doc->generate(textContent, loopCount, peopleCount, spaceBetweenText, textCount, trackCount, timeIn);
 	_settings->setStartTime(timeIn);
 	_settings->setLoopNumber(loopCount);

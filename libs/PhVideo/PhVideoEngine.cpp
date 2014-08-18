@@ -94,27 +94,7 @@ bool PhVideoEngine::open(QString fileName)
 		return false;
 
 	// Looking for timecode type
-	float fps = this->framePerSecond();
-	if(fps == 0) {
-		PHDEBUG << "Bad fps detect => assuming 25";
-		_tcType = PhTimeCodeType25;
-	}
-	else if(fps < 24)
-		_tcType = PhTimeCodeType2398;
-	else if (fps < 24.5f)
-		_tcType = PhTimeCodeType24;
-	else if (fps < 26)
-		_tcType = PhTimeCodeType25;
-	else if (fps < 30)
-		_tcType = PhTimeCodeType2997;
-	else if (fps < 31)
-		_tcType = PhTimeCodeType30;
-	else {
-#warning /// @todo patch for #107 => find better fps decoding
-		PHDEBUG << "Bad fps detect => assuming 25";
-		_tcType = PhTimeCodeType25;
-	}
-
+	_tcType = PhTimeCode::computeTimeCodeType(this->framePerSecond());
 	emit timeCodeTypeChanged(_tcType);
 
 	// Reading timestamp :

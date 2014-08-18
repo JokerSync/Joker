@@ -116,6 +116,28 @@ float PhTimeCode::getAverageFps(PhTimeCodeType type)
 	}
 }
 
+PhTimeCodeType PhTimeCode::computeTimeCodeType(float averageFps)
+{
+	if(averageFps == 0) {
+		PHDEBUG << "fps is null => assuming 25";
+		return PhTimeCodeType25;
+	}
+	else if(averageFps < 24)
+		return PhTimeCodeType2398;
+	else if (averageFps < 24.5f)
+		return PhTimeCodeType24;
+	else if (averageFps < 26)
+		return PhTimeCodeType25;
+	else if (averageFps < 30)
+		return PhTimeCodeType2997;
+	else if (averageFps < 31)
+		return PhTimeCodeType30;
+	else {
+		PHDEBUG << "Bad fps detect => assuming 25 (" << averageFps << ")";
+		return PhTimeCodeType25;
+	}
+}
+
 PhTime PhTimeCode::timePerFrame(PhTimeCodeType type)
 {
 	switch (type) {
