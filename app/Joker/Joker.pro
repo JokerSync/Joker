@@ -30,6 +30,7 @@ include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhSony/PhSony.pri)
 include(../../libs/PhLtc/PhLtc.pri)
+include(../../libs/PhMidi/PhMidi.pri)
 
 #Main app
 SOURCES += main.cpp \

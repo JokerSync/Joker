@@ -25,6 +25,7 @@ public:
 		NoSync = 0,
 		Sony = 1,
 		LTC = 2,
+		MTC = 3,
 	};
 
 	PhSynchronizer();

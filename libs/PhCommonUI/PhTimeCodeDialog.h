@@ -41,12 +41,18 @@ public:
 	/**
 	 * @brief Current frame value entered in the text field
 	 * @return A frame value.
+	 * @todo remove
 	 */
 	PhFrame frame();
 
+	/**
+	 * @brief Current time value entered in the text field
+	 * @return A time value or zero if the text is not a valid timecode.
+	 */
+	PhTime time();
 
 private slots:
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onTimeChanged(PhTime frame);
 
 private:
 	Ui::PhTimeCodeDialog *ui;

@@ -4,23 +4,28 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include "PhMidi/PhMidiOutput.h"
+
 #include "PreferencesDialog.h"
 #include "ui_PreferencesDialog.h"
 
-PreferencesDialog::PreferencesDialog(QString audioOutput, QString audioInput, QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::PreferencesDialog)
+PreferencesDialog::PreferencesDialog(MidiToolSettings *settings) :
+	ui(new Ui::PreferencesDialog),
+	_settings(settings),
+	_oldMidiInputPortName(settings->midiInputPortName()),
+	_oldMidiOutputPortName(settings->midiOutputPortName())
 {
 	ui->setupUi(this);
-//	QList<QString> outputList = PhAudioOutput::outputList();
-//	ui->comboBoxOutput->addItems(outputList);
-//	if(outputList.contains(audioOutput))
-//		ui->comboBoxOutput->setCurrentText(audioOutput);
 
-//	QList<QString> inputList = PhAudioInput::inputList();
-//	ui->comboBoxInput->addItems(inputList);
-//	if(inputList.contains(audioInput))
-//		ui->comboBoxInput->setCurrentText(audioInput);
+	QStringList outputList = PhMidiOutput::outputList();
+
+	// We add manually the output since it has been closed
+	outputList.append(settings->midiInputPortName());
+	ui->comboBoxOutput->addItems(outputList);
+	if(outputList.contains(settings->midiOutputPortName()))
+		ui->comboBoxOutput->setCurrentText(settings->midiOutputPortName());
+
+	ui->lineEditInput->setText(settings->midiInputPortName());
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -28,13 +33,19 @@ PreferencesDialog::~PreferencesDialog()
 	delete ui;
 }
 
-QString PreferencesDialog::selectedAudioOutput()
+void PreferencesDialog::accept()
 {
-	return ui->comboBoxOutput->currentText();
+	_settings->setMidiInputPortName(ui->lineEditInput->text());
+	_settings->setMidiOutputPortName(ui->comboBoxOutput->currentText());
+
+	QDialog::accept();
 }
 
-QString PreferencesDialog::selectedAudioInput()
+void PreferencesDialog::reject()
 {
-	return ui->comboBoxInput->currentText();
+	_settings->setMidiInputPortName(_oldMidiInputPortName);
+	_settings->setMidiOutputPortName(_oldMidiOutputPortName);
+
+	QDialog::reject();
 }
 

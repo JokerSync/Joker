@@ -26,11 +26,15 @@ PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
 
 void PhTimeCodeEdit::setFrame(PhFrame frame, PhTimeCodeType tcType)
 {
-	_tcType = tcType;
-	this->setText(PhTimeCode::stringFromFrame(frame, tcType));
-	if(_oldFrame.length() == 0)
-		_oldFrame = this->text();
+	setTime(frame * PhTimeCode::timePerFrame(tcType), tcType);
+}
 
+void PhTimeCodeEdit::setTime(PhTime time, PhTimeCodeType tcType)
+{
+	_tcType = tcType;
+	this->setText(PhTimeCode::stringFromTime(time, tcType));
+	if(_oldTimeCode.length() == 0)
+		_oldTimeCode = this->text();
 }
 
 bool PhTimeCodeEdit::isTimeCode()
@@ -49,6 +53,11 @@ bool PhTimeCodeEdit::isTimeCode()
 PhFrame PhTimeCodeEdit::frame()
 {
 	return PhTimeCode::frameFromString(this->text(), _tcType);
+}
+
+PhTime PhTimeCodeEdit::time()
+{
+	return PhTimeCode::timeFromString(this->text(), _tcType);
 }
 
 void PhTimeCodeEdit::onTextChanged(QString text)
@@ -163,7 +172,7 @@ void PhTimeCodeEdit::compute(bool add)
 	if(add)
 		currentText = this->text();
 	else
-		currentText = _oldFrame;
+		currentText = _oldTimeCode;
 
 	// Remove temporaly the ":"
 	currentText.remove(":");

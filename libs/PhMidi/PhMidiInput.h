@@ -112,6 +112,8 @@ protected:
 	int _ss;
 	/** @brief Remember the frame digits */
 	int _ff;
+	/** @brief Remember the time code type */
+	PhTimeCodeType _tcType;
 
 private slots:
 	void onMessage(std::vector<unsigned char> *message);
@@ -122,7 +124,6 @@ private:
 	static void errorCallback(RtMidiError::Type type, const std::string &errorText, void *userData);
 
 	RtMidiIn *_midiIn;
-	PhTimeCodeType _tcType;
 };
 
 #endif // PHMIDIINPUT_H

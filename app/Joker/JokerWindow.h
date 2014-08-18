@@ -18,6 +18,7 @@
 #include "PhSync/PhSynchronizer.h"
 #include "PhSony/PhSonySlaveController.h"
 #include "PhLtc/PhLtcReader.h"
+#include "PhMidi/PhMidiTimeCodeReader.h"
 
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
@@ -247,6 +248,8 @@ private:
 	PhVideoEngine _videoEngine;
 	PhStripDoc *_doc;
 	PhSonySlaveController _sonySlave;
+	PhLtcReader _ltcReader;
+	PhMidiTimeCodeReader _mtcReader;
 	PhSynchronizer _synchronizer;
 
 	PhFloatingMediaPanel _mediaPanel;
@@ -256,7 +259,6 @@ private:
 
 	PropertyDialog _propertyDialog;
 
-	PhLtcReader _ltcReader;
 	bool _firstDoc;
 	bool _resizingStrip;
 	int _numberOfDraw;

@@ -28,7 +28,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->tabWidget->setCurrentIndex(0);
 	this->setFocus();
 
-	// Load the old settings
+	// Save the old settings in case of cancel
 	_oldUseQuarterFrame = _settings->useQuarterFrame();
 	_oldDelay = _settings->screenDelay();
 	_oldStripHeight = _settings->stripHeight();
@@ -110,8 +110,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 			ui->listWidgetFont->setCurrentRow(ui->listWidgetFont->count() - 1);
 		}
 	}
-
-	ui->listWidgetSync->addItem("LTC");
 
 	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
 
