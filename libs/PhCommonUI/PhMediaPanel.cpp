@@ -19,31 +19,24 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	//Buttons Init
 
 	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-	connect(ui->_playButton, SIGNAL(clicked()), this, SLOT(onPlayPause()));
+	connect(ui->_playButton, &QPushButton::clicked, this, &PhMediaPanel::onPlayPause);
 
 	ui->_fastForwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
-	connect(ui->_fastForwardButton, SIGNAL(clicked()), this, SLOT(onFastForward()));
+	connect(ui->_fastForwardButton, &QPushButton::clicked, this, &PhMediaPanel::onFastForward);
 
 	ui->_fastRewindButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
-	connect(ui->_fastRewindButton, SIGNAL(clicked()), this, SLOT(onRewind()));
+	connect(ui->_fastRewindButton, &QPushButton::clicked, this, &PhMediaPanel::onRewind);
 
 	ui->_backButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
-	connect(ui->_backButton, SIGNAL(clicked()), this, SLOT(onBack()));
+	connect(ui->_backButton, &QPushButton::clicked, this, &PhMediaPanel::onBack);
 
 	ui->_nextFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowForward));
-	connect(ui->_nextFrameButton, SIGNAL(clicked()), this, SLOT(onNextFrame()));
+	connect(ui->_nextFrameButton, &QPushButton::clicked, this, &PhMediaPanel::onNextFrame);
 
 	ui->_previousFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowBack));
-	connect(ui->_previousFrameButton, SIGNAL(clicked()), this, SLOT(onPreviousFrame()));
+	connect(ui->_previousFrameButton, &QPushButton::clicked, this, &PhMediaPanel::onPreviousFrame);
 
-	connect(ui->_slider, SIGNAL(sliderMoved(int)), this, SLOT(onSliderChanged(int)));
-
-	//Combobox Init
-
-	ui->timeCodeTypeCombo->addItem("23.98 fps");
-	ui->timeCodeTypeCombo->addItem("24 fps");
-	ui->timeCodeTypeCombo->addItem("25 fps");
-	ui->timeCodeTypeCombo->addItem("29.97 fps");
+	connect(ui->_slider, &QSlider::sliderMoved, this, &PhMediaPanel::onSliderChanged);
 
 	connect(ui->timeCodeTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(onTCTypeComboChanged()));
 
