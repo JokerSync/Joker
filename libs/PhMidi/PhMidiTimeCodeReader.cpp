@@ -22,15 +22,16 @@ void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 
 	// We apply correction only on the last sequence message
 	if ((data >> 4) == 7) {
+		if(_tcType != _mtcType) {
+			_tcType = _mtcType;
+			emit timeCodeTypeChanged(_tcType);
+		}
 		if((hhmmssff[3] != _ff)
 		   || (hhmmssff[2] != _ss)
 		   || (hhmmssff[1] != _mm)
-		   || (hhmmssff[0] != _hh)
-		   || (_tcType != _mtcType)) {
+		   || (hhmmssff[0] != _hh)) {
 			PHDEBUG << _hh << _mm << _ss << _ff;
-			_tcType = _mtcType;
 			_clock.setTime(PhTimeCode::timeFromHhMmSsFf(_hh, _mm, _ss, _ff, _tcType));
-			emit timeCodeTypeChanged(_tcType);
 		}
 	}
 }
