@@ -1,4 +1,4 @@
-language: objective-c
+os: osx
 env:
   global:
   - PATH=$PATH:/usr/local/opt/qt5/bin; fi
@@ -40,3 +40,6 @@ notifications:
   flowdock:
     secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
   email: false
+  irc:
+   channels: "phonations.com#joker"
+  on_success: always
