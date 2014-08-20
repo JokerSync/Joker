@@ -11,6 +11,16 @@ PhMidiTimeCodeWriter::PhMidiTimeCodeWriter(PhTimeCodeType tcType) :
 	connect(&_clock, &PhClock::timeChanged, this, &PhMidiTimeCodeWriter::onTimeChanged);
 }
 
+PhTimeCodeType PhMidiTimeCodeWriter::timeCodeType()
+{
+	return _tcType;
+}
+
+void PhMidiTimeCodeWriter::setTimeCodeType(PhTimeCodeType tcType)
+{
+	_tcType = tcType;
+}
+
 void PhMidiTimeCodeWriter::onTimeChanged(PhTime time)
 {
 	if(_clock.rate() == 1) {

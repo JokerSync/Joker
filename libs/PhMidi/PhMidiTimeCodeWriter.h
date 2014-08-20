@@ -27,6 +27,14 @@ public:
 	PhMidiTimeCodeWriter(PhTimeCodeType tcType);
 
 	/**
+	 * @brief The timecode type used to write timecode
+	 * @return A timecode type value
+	 */
+	PhTimeCodeType timeCodeType();
+
+	void setTimeCodeType(PhTimeCodeType tcType);
+
+	/**
 	 * @brief The PhMidiTimeCodeWriter clock
 	 *
 	 * Manipulate this clock to send midi timecode
