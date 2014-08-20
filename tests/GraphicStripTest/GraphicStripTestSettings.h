@@ -1,11 +1,13 @@
 #ifndef GRAPHICSTRIPTESTSETTINGS_H
 #define GRAPHICSTRIPTESTSETTINGS_H
 
+#include <QDir>
+
 #include "PhTools/PhGenericSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
-class GraphicStripTestSettings : PhGenericSettings,
+class GraphicStripTestSettings : protected PhGenericSettings,
 	public PhGraphicStripSettings,
 	public PhDocumentWindowSettings
 
@@ -21,7 +23,10 @@ public:
 	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
 	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 80)
 	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
-	PH_SETTING_STRING(setTextFontFile, textFontFile)
+	PH_SETTING_STRING2(setBackgroundImageLight, backgroundImageLight, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png")
+	PH_SETTING_STRING2(setBackgroundImageDark, backgroundImageDark, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png")
+	PH_SETTING_STRING2(setHudFontFile, hudFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/HelveticaCYPlain.ttf")
+	PH_SETTING_STRING2(setTextFontFile, textFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 1)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
@@ -29,6 +34,11 @@ public:
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 48000)
+	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
+	PH_SETTING_INT2(setCutWidth, cutWidth, 4)
+	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)
+	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
+	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
 
 	// PhDocumentWindowSettings
 	PH_SETTING_STRING(setCurrentDocument, currentDocument)

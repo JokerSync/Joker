@@ -7,7 +7,7 @@
 #ifndef PHSTRIPOBJECT_H
 #define PHSTRIPOBJECT_H
 
-#include <PhTools/PhClock.h>
+#include "PhSync/PhClock.h"
 
 /**
  * @brief Generic object of a rythmo strip (loop, cut, text, ...).
@@ -27,6 +27,11 @@ public:
 	 * @param timeIn The time in
 	 */
 	PhStripObject(PhTime timeIn);
+	/**
+	 * @brief ~PhStripObject
+	 */
+	virtual ~PhStripObject() {
+	}
 	/**
 	 * @brief The time in
 	 * @return A PhTime

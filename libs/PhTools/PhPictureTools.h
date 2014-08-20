@@ -7,6 +7,8 @@
 #ifndef PHPICTURETOOLS_H
 #define PHPICTURETOOLS_H
 
+#include <QImage>
+
 /**
  * @brief It provides a lot of useful picture tools
  *
@@ -64,6 +66,15 @@ public:
 	 * @return a pointer to the RGB frame
 	 */
 	static unsigned char * generateYUVPattern(int w, int h);
+
+	/**
+	 * @brief Compare two QImage
+	 * @param imageA An image
+	 * @param imageB Another image
+	 * @param log Log the difference
+	 * @return The sum of the squared difference of the pixel RGB values.
+	 */
+	static int compare(QImage imageA, QImage imageB, bool log = false);
 };
 
 #endif // PHPICTURETOOLS_H

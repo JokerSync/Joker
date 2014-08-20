@@ -15,18 +15,17 @@
 #include "PhFont.h"
 #include "PhTools/PhDebug.h"
 
-PhFont::PhFont() : _texture(-1), _glyphHeight(0), _boldness(0)
+PhFont::PhFont() : _texture(-1), _glyphHeight(0), _boldness(0), _ready(false)
 {
 }
 
-bool PhFont::setFontFile(QString fontFile)
+void PhFont::setFontFile(QString fontFile)
 {
 	if(fontFile != this->_fontFile) {
 		PHDEBUG << fontFile;
 		this->_fontFile = fontFile;
-		return init(this->_fontFile);
+		_ready = false;
 	}
-	return true;
 }
 
 QString PhFont::getFontFile()
@@ -34,14 +33,43 @@ QString PhFont::getFontFile()
 	return _fontFile;
 }
 
-// This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
-bool PhFont::init(QString fontFile)
+int PhFont::computeMaxFontSize(QString fileName)
 {
-	PHDEBUG << fontFile;
-	TTF_Font * font = TTF_OpenFont(fontFile.toStdString().c_str(), 100);
+	int size = 25;
+	int fontHeight = 128;
+	int low = 0, high = 1000;
+	while (low < high) {
+		size = (low + high) / 2;
+		TTF_Font * font = TTF_OpenFont(fileName.toStdString().c_str(), size);
+		//Break in case of issue with the file
+		if(!font)
+			return -1;
 
-	if(!font)
+		if (fontHeight == TTF_FontHeight(font))
+			break;
+		else if (fontHeight < TTF_FontHeight(font))
+			high = size - 1;
+		else
+			low = size + 1;
+		TTF_CloseFont(font);
+	}
+	TTF_Font * font = TTF_OpenFont(fileName.toStdString().c_str(), size);
+	if(fontHeight < TTF_FontHeight(font))
+		size--;
+	TTF_CloseFont(font);
+
+	return size;
+}
+
+// This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
+bool PhFont::init()
+{
+	int size = computeMaxFontSize(_fontFile);
+
+	if(size < 0)
 		return false;
+	PHDEBUG << "Opening" << _fontFile << "at size" << size;
+	TTF_Font * font = TTF_OpenFont(_fontFile.toStdString().c_str(), size);
 
 	//Font foreground color is white
 	SDL_Color color = {255, 255, 255, 255};
@@ -61,41 +89,54 @@ bool PhFont::init(QString fontFile)
 	int space = 128;
 	_glyphHeight = 0;
 
+	for(Uint16 ch = 0; ch < 32; ++ch) {
+		_glyphAdvance[ch] = 0;
+	}
+
 	//set the boldness
 	PHDEBUG << "Setting the font boldness to :" << _boldness;
-	for(int i = 0; i <= _boldness; i++) {
-		TTF_SetFontOutline(font, i);
+	for(int boldIndex = 0; boldIndex <= _boldness; boldIndex++) {
+		TTF_SetFontOutline(font, boldIndex);
 		// We get rid of the 32 first useless char
-		for(Uint16 ch = 32; ch < 256; ++ch) {
-			if(TTF_GlyphIsProvided(font, ch)) {
+		for(Uint16 charIndex = 32; charIndex < 256; ++charIndex) {
+			if(TTF_GlyphIsProvided(font, charIndex) or charIndex == 153) {
 				int minx, maxx, miny, maxy, advance;
-				TTF_GlyphMetrics(font, ch, &minx, &maxx, &miny, &maxy, &advance);
-				if(advance != 0) {
+				Uint16 charCode = charIndex;
+				if(charCode == 153) {
+					charCode = 339;
+				}
+				TTF_GlyphMetrics(font, charCode, &minx, &maxx, &miny, &maxy, &advance);
+				if(advance > 0) {
 					// First render the glyph to a surface
-					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, ch, color);
-					if (!glyphSurface)
-						PHDEBUG << "Error during the Render Glyph of " << (char) ch << SDL_GetError();
-					SDL_Rect glyphRect;
-					glyphRect.x = (ch % 16) * space;
-					glyphRect.y = (ch / 16) * space;
-					glyphRect.w = glyphSurface->w;
-					glyphRect.h = glyphSurface->h;
-					if(glyphRect.h > _glyphHeight)
-						_glyphHeight = glyphRect.h;
-					//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
-					// Then blit it to the matrix
-					SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
+					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, charCode, color);
+					if (glyphSurface) {
+						SDL_Rect glyphRect;
+						glyphRect.x = (charIndex % 16) * space;
+						glyphRect.y = (charIndex / 16) * space;
+						glyphRect.w = glyphSurface->w;
+						glyphRect.h = glyphSurface->h;
+						if(glyphRect.h > _glyphHeight)
+							_glyphHeight = glyphRect.h;
+						//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
+						// Then blit it to the matrix
+						SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
 
-					// Store information about the glyph
-					_glyphAdvance[ch] = advance;
-
+						// Store information about the glyph
+						_glyphAdvance[charIndex] = advance;
+					}
+					else {
+						_glyphAdvance[charIndex] = 0;
+						PHDEBUG << "Error during the Render Glyph of " << (char) charIndex << SDL_GetError();
+					}
 					SDL_FreeSurface(glyphSurface);
 				}
-				else
-					PHDEBUG <<" Error with Glyph of char:" << ch << (char) ch << minx << maxx << miny << maxy << advance;
+				else {
+					PHDEBUG <<" Error with Glyph of char:" << charIndex << (char) charIndex << minx << maxx << miny << maxy << advance;
+					_glyphAdvance[charIndex] = 0;
+				}
 			}
 			else
-				_glyphAdvance[ch] = 0;
+				_glyphAdvance[charIndex] = 0;
 		}
 	}
 
@@ -118,7 +159,8 @@ bool PhFont::init(QString fontFile)
 	SDL_FreeSurface(matrixSurface);
 	TTF_CloseFont(font);
 
-	return true;
+	_ready = true;
+	return _ready;
 }
 
 int PhFont::getAdvance(unsigned char ch)
@@ -128,6 +170,8 @@ int PhFont::getAdvance(unsigned char ch)
 
 void PhFont::select()
 {
+	if(!_ready)
+		this->init();
 	glBindTexture(GL_TEXTURE_2D, (GLuint)_texture);
 }
 
@@ -149,7 +193,7 @@ void PhFont::setBoldness(int value)
 {
 	if(_boldness != value) {
 		_boldness = value;
-		init(_fontFile);
+		_ready = false;
 	}
 }
 

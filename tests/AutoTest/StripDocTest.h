@@ -33,6 +33,15 @@ private slots:
 	void importMosTest03();
 	void importMosTest04();
 
+	// Import DRB tests
+	void importDrbTest01();
+	void importDrbTest02();
+	void importDrbTest03();
+
+	// Import Syn6 tests
+	void importSyn6Test01();
+	void importSyn6Test02();
+
 	// Open any doc (*.detx, *.strip, *.joker) test
 	void openStripFileTest();
 	void openSaveTest01();
@@ -49,6 +58,9 @@ private slots:
 	void getNextTextTestByPeopleList();
 	void getNextLoopTest();
 	void getPreviousLoopTest();
+
+	void addObjectTest();
+	void addPeopleTest();
 
 private:
 	QString t2s(PhTime time, PhTimeCodeType tcType);

@@ -1,7 +1,7 @@
 #include "TimecodePlayerWindow.h"
 #include "ui_TimecodePlayerWindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+SonyToolWindow::SonyToolWindow(QWidget *parent) :
 	QMainWindow(parent), ui(new Ui::TimecodePlayerWindow)
 {
 	ui->setupUi(this);
@@ -16,12 +16,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	_timer->start(10);
 }
 
-MainWindow::~MainWindow()
+SonyToolWindow::~SonyToolWindow()
 {
 	delete ui;
 }
 
-void MainWindow::updateFrame()
+void SonyToolWindow::updateFrame()
 {
 	_clock->tick(100);
 }

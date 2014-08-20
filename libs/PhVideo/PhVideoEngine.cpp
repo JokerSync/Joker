@@ -6,8 +6,8 @@
 
 #include "PhVideoEngine.h"
 
-PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
-	_settings(NULL),
+PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
+	_settings(settings),
 	_fileName(""),
 	_clock(PhTimeCodeType25),
 	_firstFrame(0),
@@ -16,13 +16,16 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 	_videoFrame(NULL),
 	_pSwsCtx(NULL),
 	_rgb(NULL),
-	_currentFrame(-1),
-	_useAudio(useAudio),
+	_currentFrame(PHFRAMEMIN),
+	_useAudio(false),
 	_audioStream(NULL),
-	_audioFrame(NULL)
+	_audioFrame(NULL),
+	_deinterlace(false),
+	_bilinearFiltering(true)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
+	avcodec_register_all();
 
 	_testTimer.start();
 }
@@ -30,6 +33,24 @@ PhVideoEngine::PhVideoEngine(bool useAudio, QObject *parent) :  QObject(parent),
 bool PhVideoEngine::ready()
 {
 	return (_pFormatContext && _videoStream && _videoFrame);
+}
+
+void PhVideoEngine::setDeinterlace(bool deinterlace)
+{
+	_deinterlace = deinterlace;
+	_currentFrame = PHFRAMEMIN;
+	if(_rgb) {
+		delete _rgb;
+		_rgb = NULL;
+	}
+}
+
+void PhVideoEngine::setBilinearFiltering(bool bilinear)
+{
+	if (_bilinearFiltering != bilinear) {
+		_bilinearFiltering = bilinear;
+		videoRect.setBilinearFiltering(bilinear);
+	}
 }
 
 bool PhVideoEngine::open(QString fileName)
@@ -96,6 +117,8 @@ bool PhVideoEngine::open(QString fileName)
 		_clock.setTimeCodeType(PhTimeCodeType25);
 	else if (fps < 30)
 		_clock.setTimeCodeType(PhTimeCodeType2997);
+	else if (fps < 31)
+		_clock.setTimeCodeType(PhTimeCodeType30);
 	else {
 #warning /// @todo patch for #107 => find better fps decoding
 		PHDEBUG << "Bad fps detect => assuming 25";
@@ -115,11 +138,11 @@ bool PhVideoEngine::open(QString fileName)
 		return false;
 	}
 
-	_videoFrame = avcodec_alloc_frame();
+	_videoFrame = av_frame_alloc();
 
 	PHDEBUG << "length:" << this->length();
 	PHDEBUG << "fps:" << this->framePerSecond();
-	_currentFrame = -1;
+	_currentFrame = PHFRAMEMIN;
 	_clock.setFrame(0);
 
 	if(_audioStream) {
@@ -130,7 +153,7 @@ bool PhVideoEngine::open(QString fileName)
 				_audioStream = NULL;
 			}
 			else {
-				_audioFrame = avcodec_alloc_frame();
+				_audioFrame = av_frame_alloc();
 				PHDEBUG << "Audio OK.";
 			}
 		}
@@ -161,11 +184,6 @@ void PhVideoEngine::close()
 	}
 
 	_fileName = "";
-}
-
-void PhVideoEngine::setSettings(PhVideoSettings *settings)
-{
-	_settings = settings;
 }
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
@@ -217,6 +235,12 @@ float PhVideoEngine::framePerSecond()
 	if(_videoStream) {
 		result = _videoStream->avg_frame_rate.num;
 		result /= _videoStream->avg_frame_rate.den;
+		// See http://stackoverflow.com/a/570694/2307070
+		// for NaN handling
+		if(result != result) {
+			result = _videoStream->time_base.den;
+			result /= _videoStream->time_base.num;
+		}
 	}
 
 	return result;
@@ -280,24 +304,46 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 						decodeElapsed = _testTimer.elapsed();
 
 						int frameHeight = _videoFrame->height;
-						if(_settings) {
-							if(_deinterlace)
-								frameHeight = _videoFrame->height / 2;
+						if(_deinterlace)
+							frameHeight = _videoFrame->height / 2;
+
+						// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
+						// we replace its with the new ones recommended by LibAv
+						// in order to get ride of the warnings
+						AVPixelFormat pixFormat;
+						switch (_videoStream->codec->pix_fmt) {
+						case AV_PIX_FMT_YUVJ420P:
+							pixFormat = AV_PIX_FMT_YUV420P;
+							break;
+						case AV_PIX_FMT_YUVJ422P:
+							pixFormat = AV_PIX_FMT_YUV422P;
+							break;
+						case AV_PIX_FMT_YUVJ444P:
+							pixFormat = AV_PIX_FMT_YUV444P;
+							break;
+						case AV_PIX_FMT_YUVJ440P:
+							pixFormat = AV_PIX_FMT_YUV440P;
+						default:
+							pixFormat = _videoStream->codec->pix_fmt;
+							break;
 						}
-#warning /// @todo Use RGB pixel format
-						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-						                                _videoStream->codec->pix_fmt, _videoStream->codec->width, frameHeight,
-						                                AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+						/* Note: we output the frames in AV_PIX_FMT_BGRA rather than AV_PIX_FMT_RGB24,
+						 * because this format is native to most video cards and will avoid a conversion
+						 * in the video driver */
+						_pSwsCtx = sws_getCachedContext(_pSwsCtx,
+						                                _videoFrame->width, _videoStream->codec->height, pixFormat,
+						                                _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
+						                                SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
-							_rgb = new uint8_t[_videoFrame->width * frameHeight * 4];
+							_rgb = new uint8_t[avpicture_get_size(AV_PIX_FMT_BGRA, _videoFrame->width, frameHeight)];
 						int linesize = _videoFrame->width * 4;
 						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
 						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
 						                   &linesize)) {
 							scaleElapsed = _testTimer.elapsed();
 
-							videoRect.createTextureFromARGBBuffer(_rgb, _videoFrame->width, frameHeight);
+							videoRect.createTextureFromBGRABuffer(_rgb, _videoFrame->width, frameHeight);
 
 							textureElapsed = _testTimer.elapsed();
 

@@ -28,7 +28,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="PhVideoView" name="_videoView" native="true"/>
+     <widget class="PhGraphicView" name="videoView" native="true"/>
     </item>
    </layout>
   </widget>
@@ -69,9 +69,18 @@
     <addaction name="actionSet_timestamp"/>
     <addaction name="actionGo_to"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionDisplay_media_panel"/>
+    <addaction name="actionDeinterlace_video"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
+   <addaction name="menuView"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
    <property name="text">
     <string>Open...</string>
@@ -136,12 +145,31 @@
     <string>Ctrl+G</string>
    </property>
   </action>
+  <action name="actionDisplay_media_panel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display media panel</string>
+   </property>
+  </action>
+  <action name="actionDeinterlace_video">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Deinterlace video</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PhVideoView</class>
+   <class>PhGraphicView</class>
    <extends>QWidget</extends>
-   <header>PhVideo/PhVideoView.h</header>
+   <header>PhGraphic/PhGraphicView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

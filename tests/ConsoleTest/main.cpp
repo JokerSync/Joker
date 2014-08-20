@@ -1,8 +1,7 @@
 #include <QCoreApplication>
-#include <QTest>
 #include <QTime>
 
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 #include "PhTools/PhDebug.h"
 
 /**

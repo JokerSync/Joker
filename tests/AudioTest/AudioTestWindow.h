@@ -12,7 +12,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 
 #include "PhAudio/PhAudioInput.h"
 #include "AudioTestWriter.h"

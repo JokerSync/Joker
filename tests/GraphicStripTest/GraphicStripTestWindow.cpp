@@ -12,15 +12,15 @@
 GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settings) :
 	PhDocumentWindow(settings),
 	ui(new Ui::GraphicStripTestWindow),
-	_settings(settings)
+	_settings(settings),
+	_strip(settings)
 {
 	ui->setupUi(this);
-	_strip = ui->stripView->strip();
 
-	ui->stripView->setStripSettings(_settings);
+	ui->stripView->setGraphicSettings(settings);
 
-	_doc = _strip->doc();
-	_clock = _strip->clock();
+	_doc = _strip.doc();
+	_clock = _strip.clock();
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 	ui->actionRuler->setChecked(_settings->displayRuler());
 
@@ -34,12 +34,15 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	if(_settings->generate())
 		_doc->generate(_settings->textContent(),
-					   _settings->loopNumber(),
-					   _settings->peopleNumber(),
-					   _settings->spaceBetweenText(),
-					   _settings->textNumber(),
-					   _settings->trackNumber(),
-					   _settings->startTime());
+		               _settings->loopNumber(),
+		               _settings->peopleNumber(),
+		               _settings->spaceBetweenText(),
+		               _settings->textNumber(),
+		               _settings->trackNumber(),
+		               _settings->startTime());
+
+	connect(ui->stripView, &PhGraphicView::beforePaint, _clock, &PhClock::tick);
+	connect(ui->stripView, &PhGraphicView::paint, this, &GraphicStripTestWindow::onPaint);
 }
 
 GraphicStripTestWindow::~GraphicStripTestWindow()
@@ -71,7 +74,7 @@ QAction *GraphicStripTestWindow::fullScreenAction()
 
 void GraphicStripTestWindow::onOpenFile()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.strip *.detx)");
+	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.joker *.detx)");
 	if(QFile::exists(fileName)) {
 		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
@@ -82,10 +85,28 @@ void GraphicStripTestWindow::onGenerate()
 {
 	GenerateDialog dlgGen(_settings, _doc);
 	if (dlgGen.exec()) {
-		_clock->setTime(_doc->lastTime());
-		_settings->setGenerate(true);
-		setCurrentDocument("");
+
+		if(dlgGen.getCheckBoxState()) {
+			_clock->setTime(0);
+			_settings->setGenerate(true);
+			_doc->reset();
+			_doc->addPeople(new PhPeople("A people"));
+			_doc->addPeople(new PhPeople("A second people", "red"));
+
+			_doc->addObject(new PhStripText(0, _doc->peoples().first(), 10000, 1, "Hello", 0.25f));
+			_doc->addObject(new PhStripCut(5400, PhStripCut::CrossFade));
+			_doc->addObject(new PhStripDetect(PhStripDetect::Off, 0, _doc->peoples().first(), 10000, 1));
+			_doc->addObject(new PhStripLoop(22000, "3"));
+			_doc->addObject(new PhStripText(10000, _doc->peoples().last(), 15000, 2, "Hi !", 0.25f));
+			_doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, _doc->peoples().last(), 15000, 2));
+		}
+		else {
+			_clock->setTime(_doc->lastTime());
+			_settings->setGenerate(true);
+			setCurrentDocument("");
+		}
 	}
+
 }
 
 void GraphicStripTestWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
@@ -218,4 +239,26 @@ void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
 	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn() / PhTimeCode::timePerFrame(tcType), this);
 	if(dlg.exec())
 		_settings->setRulerTimeIn(dlg.frame() * PhTimeCode::timePerFrame(tcType));
+}
+
+void GraphicStripTestWindow::onPaint(int width, int height)
+{
+	int h = height;
+	if(_settings)
+		h = height * _settings->stripHeight();
+	_strip.draw(0, height - h, width, h);
+	foreach(QString info, _strip.infos()) {
+		ui->stripView->addInfo(info);
+	}
+}
+
+void GraphicStripTestWindow::on_actionChange_font_triggered()
+{
+	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
+	if(QFile(fontFile).exists()) {
+		if(PhFont::computeMaxFontSize(fontFile) == 0)
+			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
+		else
+			_settings->setTextFontFile(fontFile);
+	}
 }

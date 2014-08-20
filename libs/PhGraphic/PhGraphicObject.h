@@ -10,11 +10,8 @@
 #include <QColor>
 #include <SDL2/SDL.h>
 
-#if defined(Q_OS_WIN)
-#include <GL/glu.h>
-#else
-#include <glu.h>
-#endif
+/* QtGui provides OpenGL definitions */
+#include <QtGui>
 
 #include "PhTools/PhDebug.h"
 
@@ -39,19 +36,16 @@ public:
 	virtual ~PhGraphicObject();
 
 	/**
-	 * @brief init
-	 */
-	virtual bool init();
-	/**
 	 * @brief dispose
 	 */
 	virtual void dispose();
 
 	/**
-	 * @brief draw
-	 * virtual method called to draw objects
+	 * @brief Draw the graphical object
+	 *
+	 * Since the object is virtual, it only set the color.
 	 */
-	virtual void draw() = 0;
+	virtual void draw();
 
 	/**
 	 * @brief setPosition
@@ -62,42 +56,43 @@ public:
 	 */
 	void setPosition(int x, int y, int z);
 	/**
-	 * @brief setX
-	 * @param x
+	 * @brief Set the object X coordinate
+	 * @param x An integer value
 	 */
 	void setX(int x);
 	/**
-	 * @brief getX
-	 * @return
+	 * @brief Get the object X coordinate
+	 * @return An integer value
 	 */
-	int getX();
+	int x();
 
 	/**
-	 * @brief setY
-	 * @param y
+	 * @brief Set the object Y coordinate
+	 * @param y An integer value
 	 */
 	void setY(int y);
-	/**
-	 * @brief getY
-	 * @return
-	 */
-	int getY();
 
 	/**
-	 * @brief setZ
-	 * @param z
+	 * @brief Get the object y coordinate
+	 * @return An integer value
+	 */
+	int y();
+
+	/**
+	 * @brief Set the object z coordinate
+	 * @param z An integer value
 	 */
 	void setZ(int z);
 
 	/**
-	 * @brief getZ
-	 * @return
+	 * @brief Get the object z coordinate
+	 * @return An integer value
 	 */
-	int getZ();
+	int z();
 
 	/**
-	 * @brief Set the color of the object
-	 * @param color the desired color
+	 * @brief Set the object color
+	 * @param color A color value
 	 */
 	void setColor(QColor color);
 
@@ -105,31 +100,25 @@ public:
 	 * @brief Get the color of the object
 	 * @return the color
 	 */
-	QColor getColor();
+	QColor color();
 
 protected:
+	/**
+	 * @brief Initialize the graphic object
+	 */
+	virtual bool init();
 
 	/**
-	 * @brief _x
-	 * is the PhGraphicObject horizontal position
+	 * @brief Check if the graphic object is initialized
+	 * @return A boolean value
 	 */
-	int _x;
-	/**
-	 * @brief _y
-	 * is the PhGraphicObject vertical position
-	 */
-	int _y;
-	/**
-	 * @brief _z
-	 * is the PhGrapicObject depth
-	 */
-	int _z;
+	bool ready();
 
-	/**
-	 * @brief _color
-	 * The PhColor of the PhGraphicObject
-	 */
+private:
+
+	int _x, _y, _z;
 	QColor _color;
+	bool _ready;
 };
 
 #endif // PHGRAPHICOBJECT_H

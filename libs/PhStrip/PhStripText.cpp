@@ -8,8 +8,8 @@
 
 
 
-PhStripText::PhStripText(PhFrame frameIn, PhPeople *people, PhFrame frameOut, int track, QString content) :
-	PhStripPeopleObject(frameIn, people, frameOut, track), _content(content)
+PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, float track, QString content, float height) :
+	PhStripPeopleObject(timeIn, people, timeOut, track, height), _content(content)
 {
 }
 

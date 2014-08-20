@@ -1,11 +1,11 @@
 #include "GraphicSyncTestWindow.h"
 #include "ui_GraphicSyncTestWindow.h"
 
-GraphicSyncTestWindow::GraphicSyncTestWindow(QWidget *parent) :
-	QMainWindow(parent),
+GraphicSyncTestWindow::GraphicSyncTestWindow(GraphicSyncTestSettings *settings) :
+	QMainWindow(NULL),
 	ui(new Ui::GraphicSyncTestWindow),
-	_settings("Phonations", "GraphicSyncTest"),
-	_sony(PhTimeCodeType25, &_settings),
+	_settings(settings),
+	_sony(PhTimeCodeType25, settings),
 	_lastTime(0),
 	_count(0)
 {

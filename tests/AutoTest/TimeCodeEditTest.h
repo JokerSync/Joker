@@ -13,7 +13,8 @@ private slots:
 	void frameTest();
 	void setFrameTest();
 
-	void keyboardInputTest();
+	void keyboardInputTest01();
+	void keyboardInputTest02();
 	void keyboardBadInputTest();
 
 	void mouseInputTest();

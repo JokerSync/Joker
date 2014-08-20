@@ -24,7 +24,7 @@ extern "C" {
 #include <QObject>
 #include <QElapsedTimer>
 
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 #include "PhTools/PhTickCounter.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
 
@@ -41,10 +41,10 @@ class PhVideoEngine : public QObject
 public:
 	/**
 	 * @brief PhVideoEngine constructor
-	 * @param useAudio Shall decode audio frame?
-	 * @param parent The parent object
+	 * @param settings The settings
 	 */
-	explicit PhVideoEngine(bool useAudio = false, QObject *parent = 0);
+	PhVideoEngine(PhVideoSettings *settings);
+
 	~PhVideoEngine();
 
 	// Properties
@@ -110,11 +110,6 @@ public:
 	}
 
 	/**
-	 * @brief Pass the settings to the engine
-	 * @param settings The settings
-	 */
-	void setSettings(PhVideoSettings *settings);
-	/**
 	 * @brief Set first frame
 	 * @param frame the new first frame
 	 */
@@ -151,9 +146,22 @@ public:
 	 * @brief Set the video deinterlace mode
 	 * @param deinterlace True if deinterlace false otherwise
 	 */
-	void setDeinterlace(bool deinterlace) {
-		_deinterlace = deinterlace;
+	void setDeinterlace(bool deinterlace);
+
+	/**
+	 * @brief Retrieve the video filtering
+	 * @return True if bilinear filtering is enabled
+	 */
+	bool getBilinearFiltering() {
+		return _bilinearFiltering;
 	}
+
+	/**
+	 * @brief Enable or disable the video bilinear filtering
+	 * Video bilinear filtering is enabled by default.
+	 * @param bilinear True to enable bilinear filtering
+	 */
+	void setBilinearFiltering(bool bilinear);
 
 	/**
 	 * @brief draw the video depending on the parameters
@@ -190,6 +198,7 @@ private:
 	AVFrame * _audioFrame;
 
 	bool _deinterlace;
+	bool _bilinearFiltering;
 };
 
 #endif // PHVIDEOENGINE_H

@@ -11,7 +11,7 @@
 #include <QMap>
 #include <QFile>
 
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 
 #include "PhPeople.h"
 #include "PhStripCut.h"
@@ -35,7 +35,7 @@ public:
 	/**
 	 * @brief PhStripDoc constructor
 	 */
-	explicit PhStripDoc(QObject *parent = 0);
+	PhStripDoc();
 
 	/**
 	 * @brief The name of the application that generated the document
@@ -230,6 +230,18 @@ public:
 	 */
 	bool importMosFile(const QString &fileName);
 	/**
+	 * @brief Import a DRB file
+	 * @param fileName The path to the DRB file
+	 * @return True if the doc opened well, false otherwise
+	 */
+	bool importDrbFile(const QString &fileName);
+	/**
+	 * @brief Import a Syn6 file
+	 * @param fileName The path to the Syn6 file
+	 * @return True if the doc opened well, false otherwise
+	 */
+	bool importSyn6File(const QString &fileName);
+	/**
 	 * @brief Open a strip file
 	 * @param fileName The path to the DetX file
 	 * @return True if the strip opened well, false otherwise
@@ -342,9 +354,16 @@ public:
 	 * @return time A time value
 	 */
 	PhTime lastTime();
-	/*!
-	 * \brief Get the force ratio information
-	 * \return if the ratio is forced or not
+
+	/**
+	 * @brief Set the force 16/9 ratio status
+	 * @param forceRatio A bool value
+	 */
+	void setForceRatio169(bool forceRatio);
+
+	/**
+	 * @brief Get the force 16/9ratio status
+	 * @return True if the ratio is forced, false otherwise
 	 */
 	bool forceRatio169() const;
 
@@ -365,6 +384,27 @@ public:
 	 * @brief Reset the document
 	 */
 	void reset();
+
+	/**
+	 * @brief Add a PhGraphicObjet to the doc
+	 */
+	void addObject(PhStripObject *object);
+	/**
+	 * @brief Add a PhPeople to the doc
+	 * @param people the new poeple
+	 */
+	void addPeople(PhPeople * people);
+
+	/**
+	 * @brief modified
+	 * @return true if the PhStripDoc have been modified, false otherwise
+	 */
+	bool modified() const;
+	/**
+	 * @brief setModified
+	 * @param modified
+	 */
+	void setModified(bool modified);
 
 signals:
 	/**
@@ -431,6 +471,9 @@ private:
 	 */
 	QList<PhStripDetect *> _detects;
 
+	PhTime ComputeDrbTime1(PhTime offset, PhTime value);
+	PhTime ComputeDrbTime2(PhTime offset, PhTime value);
+
 	enum MosTag {
 		MosUnknown,
 		MosDub,
@@ -462,6 +505,7 @@ private:
 	MosTag readMosTag(QFile &f, int level, QString name);
 	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel);
 	bool _videoForceRatio169;
+	bool _modified;
 };
 
 #endif // PHSTRIPDOC_H

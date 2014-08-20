@@ -31,7 +31,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="VideoStripView" name="videoStripView" native="true"/>
+     <widget class="PhGraphicView" name="videoStripView" native="true"/>
     </item>
    </layout>
   </widget>
@@ -91,6 +91,8 @@
      <addaction name="actionTimecode"/>
      <addaction name="actionNext_element"/>
      <addaction name="actionPrevious_element"/>
+     <addaction name="actionNext_loop"/>
+     <addaction name="actionPrevious_loop"/>
     </widget>
     <addaction name="actionPlay_pause"/>
     <addaction name="actionPlay_backward"/>
@@ -110,9 +112,12 @@
     <addaction name="actionTest_mode"/>
     <addaction name="actionFullscreen"/>
     <addaction name="actionInvert_colors"/>
+    <addaction name="actionHide_the_rythmo"/>
+    <addaction name="actionDisplay_the_cuts"/>
     <addaction name="separator"/>
     <addaction name="actionShow_ruler"/>
     <addaction name="actionChange_ruler_timestamp"/>
+    <addaction name="actionSet_space_between_two_ruler_graduation"/>
     <addaction name="separator"/>
     <addaction name="actionForce_16_9_ratio"/>
     <addaction name="actionDeinterlace_video"/>
@@ -413,12 +418,52 @@
     <string>Deinterlace video</string>
    </property>
   </action>
+  <action name="actionHide_the_rythmo">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hide the rythmo</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="actionNext_loop">
+   <property name="text">
+    <string>Next loop</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Up</string>
+   </property>
+  </action>
+  <action name="actionPrevious_loop">
+   <property name="text">
+    <string>Previous loop</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Down</string>
+   </property>
+  </action>
+  <action name="actionDisplay_the_cuts">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display the cuts</string>
+   </property>
+  </action>
+  <action name="actionSet_space_between_two_ruler_graduation">
+   <property name="text">
+    <string>Set space between two ruler graduation...</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>VideoStripView</class>
+   <class>PhGraphicView</class>
    <extends>QWidget</extends>
-   <header>VideoStripView.h</header>
+   <header>PhGraphic/PhGraphicView.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

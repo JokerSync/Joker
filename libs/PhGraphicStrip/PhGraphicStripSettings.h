@@ -33,10 +33,20 @@ public:
 	 */
 	virtual int verticalTimePerPixel() = 0;
 	/**
-	 * @brief Set the strip text font file
-	 * @param value A font file path
+	 * @brief The light background image file path
+	 * @return An image file path
 	 */
-	virtual void setTextFontFile(QString value) = 0;
+	virtual QString backgroundImageLight() = 0;
+	/**
+	 * @brief The dark background image file path
+	 * @return An image file path
+	 */
+	virtual QString backgroundImageDark() = 0;
+	/**
+	 * @brief Get the HUD font file
+	 * @return A font file path
+	 */
+	virtual QString hudFontFile() = 0;
 	/**
 	 * @brief Get the strip text font file
 	 * @return A font file path
@@ -87,6 +97,35 @@ public:
 	 * @return A time value
 	 */
 	virtual int timeBetweenRuler() = 0;
+
+	/**
+	 * @brief Display the cuts on the strip
+	 * @return True if the cuts are displayed, false otherwise
+	 */
+	virtual bool displayCuts() = 0;
+
+	/**
+	 * @brief Width of the cut bar in pixel
+	 * @return An integer value
+	 */
+	virtual int cutWidth() = 0;
+
+	/**
+	 * @brief Display a background texture on the strip band
+	 * @return A boolean value
+	 */
+	virtual bool displayBackground() = 0;
+	/**
+	 * @brief Color of the background if no background is displayed.
+	 * @return An integer value
+	 */
+	virtual int backgroundColorLight() = 0;
+
+	/**
+	 * @brief Color of the background if no background is displayed.
+	 * @return An integer value
+	 */
+	virtual int backgroundColorDark() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

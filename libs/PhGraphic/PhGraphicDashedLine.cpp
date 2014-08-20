@@ -15,17 +15,17 @@ void PhGraphicDashedLine::setDashCount(int dashCount)
 
 void PhGraphicDashedLine::draw()
 {
-	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+	PhGraphicRect::draw();
 
-	int width = _w / (2 * _dashCount - 1);
-	int x = _x;
+	int width = this->width() / (2 * _dashCount - 1);
+	int x = this->x();
 	for(int i = 0; i < _dashCount; i++) {
 		glBegin(GL_QUADS);
 		{
-			glVertex3i(x,      _y, _z);
-			glVertex3i(x + width, _y, _z);
-			glVertex3i(x + width, _y + _h,  _z);
-			glVertex3i(x,      _y + _h,  _z);
+			glVertex3i(x,      this->y(), this->z());
+			glVertex3i(x + width, this->y(), this->z());
+			glVertex3i(x + width, this->y() + this->height(),  this->z());
+			glVertex3i(x,      this->y() + this->height(),  this->z());
 		}
 		x += 2 * width;
 	}

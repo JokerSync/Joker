@@ -17,30 +17,28 @@
  * the convocation of the dubbing actors for recording.
  * It is generally between 30 seconds and 1 minute long: what the actor can record in one take.
  */
-class PhStripLoop : public PhStripObject {
-
-private:
-/**
- * Number of the loop. The first loop can be 1 or another value.
- * The loop numbering is usually continuous but not always.
- */
-	int _number;
-
+class PhStripLoop : public PhStripObject
+{
 public:
 	/**
 	 * @brief PhStripLoop constructor
-	 * @param number The loop number
-	 * @param frameIn The loop frame
+	 * @param timeIn The loop time
+	 * @param label The loop label
 	 */
-	PhStripLoop(int number, PhFrame frameIn);
+	PhStripLoop(PhTime timeIn, QString label);
 
 	/**
-	 * \brief Get the loop number
-	 * \return the loop number
+	 * \brief Get the loop label
+	 *
+	 * The loop label can ever be a number or a text.
+	 *
+	 * \return A string value
 	 */
-	int number() {
-		return _number;
+	QString label() {
+		return _label;
 	}
+private:
+	QString _label;
 };
 
 

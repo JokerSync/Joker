@@ -22,15 +22,24 @@ INCLUDEPATH += ../../libs
 include(../../libs/PhTools/PhTools.pri);
 include(../../libs/PhAudio/PhAudio.pri);
 include(../../libs/PhSync/PhSync.pri);
+include(../../libs/PhLtc/PhLtc.pri);
 include(../../libs/PhCommonUI/PhCommonUI.pri);
 
 SOURCES += main.cpp\
-        LTCToolWindow.cpp \
-    PreferencesDialog.cpp
+		LTCToolWindow.cpp \
+	PreferencesDialog.cpp
 
 HEADERS  += LTCToolWindow.h \
-    PreferencesDialog.h \
-    LTCToolSettings.h
+	PreferencesDialog.h \
+	LTCToolSettings.h
 
 FORMS    += LTCToolWindow.ui \
-    PreferencesDialog.ui
+	PreferencesDialog.ui
+
+mac {
+	# For the plist version
+	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+}
+
+PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
+include(../../common/deploy.pri)

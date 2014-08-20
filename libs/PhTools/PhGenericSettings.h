@@ -65,6 +65,11 @@
 	void setter(QStringList list) { setStringList(#getter, list); } \
 	QStringList getter() {return stringList(#getter); }
 
+/** Implement the string list setter and getter qnd default value for a PhGenericSettings */
+#define PH_SETTING_STRINGLIST2(setter, getter, defaultValue) \
+	void setter(QStringList list) { setStringList(#getter, list); } \
+	QStringList getter() {return stringList(#getter, defaultValue); }
+
 /** Implement the byte array setter and getter for a PhGenericSettings */
 #define PH_SETTING_BYTEARRAY(setter, getter) \
 	void setter(QByteArray array) { setByteArray(#getter, array); } \
@@ -165,9 +170,10 @@ protected:
 	/**
 	 * @brief Get a string list
 	 * @param name The settings name
+	 * @param defaultValue The default value
 	 * @return The string list
 	 */
-	QStringList stringList(QString name);
+	QStringList stringList(QString name, QStringList defaultValue = QStringList());
 
 	/**
 	 * @brief Set a byte array

@@ -9,16 +9,20 @@
 
 #include <QMessageBox>
 #include <QPropertyAnimation>
+#include <QTimer>
 
-#include "PhSync/PhSonySlaveController.h"
 #include "PhCommonUI/PhFloatingMediaPanel.h"
-#include "PhSync/PhLtcReader.h"
-
 #include "PhCommonUI/PhDocumentWindow.h"
-#include "VideoStripView.h"
-#include "Synchronizer.h"
+#include <PhVideo/PhVideoEngine.h>
+#include <PhGraphicStrip/PhGraphicStrip.h>
+#include "PhSync/PhSynchronizer.h"
+#include "PhSony/PhSonySlaveController.h"
+#include "PhLtc/PhLtcReader.h"
+#include "PhMidi/PhMidiTimeCodeReader.h"
+
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
+#include "RulerSpaceDialog.h"
 
 namespace Ui {
 class JokerWindow;
@@ -58,6 +62,15 @@ public:
 	/// @return True if the videoFile opened well, false otherwise.
 	///
 	bool openVideoFile(QString videoFile);
+
+public slots:
+	///
+	/// \brief timeCounter Slot used to count the time played on nominal speed
+	/// when the synchro is enabled
+	///
+	/// \param frequency
+	///
+	void timeCounter(PhTimeScale frequency);
 
 protected:
 	///
@@ -198,11 +211,11 @@ private slots:
 
 	void on_actionSelect_character_triggered();
 
-	void on_actionForce_16_9_ratio_triggered();
+	void on_actionForce_16_9_ratio_triggered(bool checked);
 
 	void on_actionInvert_colors_toggled(bool checked);
 
-	void on_actionShow_ruler_toggled(bool arg1);
+	void on_actionShow_ruler_toggled(bool checked);
 
 	void on_actionChange_ruler_timestamp_triggered();
 
@@ -214,14 +227,30 @@ private slots:
 
 	void on_actionDeinterlace_video_triggered(bool checked);
 
+	void on_actionHide_the_rythmo_triggered(bool checked);
+
+	void onPaint(int width, int height);
+
+	void onVideoSync();
+
+	void on_actionPrevious_loop_triggered();
+
+	void on_actionNext_loop_triggered();
+
+	void on_actionDisplay_the_cuts_toggled(bool checked);
+
+	void on_actionSet_space_between_two_ruler_graduation_triggered();
+
 private:
 	Ui::JokerWindow *ui;
-	PhGraphicStrip * _strip;
-	PhVideoEngine * _videoEngine;
-	PhStripDoc *_doc;
 	JokerSettings *_settings;
+	PhGraphicStrip _strip;
+	PhVideoEngine _videoEngine;
+	PhStripDoc *_doc;
 	PhSonySlaveController _sonySlave;
-	Synchronizer _synchronizer;
+	PhLtcReader _ltcReader;
+	PhMidiTimeCodeReader _mtcReader;
+	PhSynchronizer _synchronizer;
 
 	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;
@@ -230,9 +259,13 @@ private:
 
 	PropertyDialog _propertyDialog;
 
-	PhLtcReader _ltcReader;
-	bool _needToSave;
 	bool _firstDoc;
+	bool _resizingStrip;
+	int _numberOfDraw;
+
+	PhGraphicImage _videoLogo;
+
+	QTime _lastVideoSyncElapsed;
 };
 
 #endif // MAINWINDOW_H

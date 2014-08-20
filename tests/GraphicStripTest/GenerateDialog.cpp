@@ -5,7 +5,7 @@
 
 #include "GenerateDialog.h"
 #include "ui_GenerateDialog.h"
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 #include "PhTools/PhDebug.h"
 
 GenerateDialog::GenerateDialog(GraphicStripTestSettings *settings, PhStripDoc * doc, QWidget *parent) :
@@ -38,6 +38,11 @@ GenerateDialog::~GenerateDialog()
 PhTime GenerateDialog::getTC()
 {
 	return PhTimeCode::frameFromString(this->ui->lineEditTimeCode->text(), PhTimeCodeType25);
+}
+
+bool GenerateDialog::getCheckBoxState()
+{
+	return ui->checkBox->isChecked();
 }
 
 

@@ -4,13 +4,17 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-
+#include <QMessageBox>
 #include <QDir>
 #include <QProcess>
+#include <QStandardPaths>
+
+#include "PhTools/PhDebug.h"
+#include "PhLtc/PhLtcReader.h"
+#include "PhSync/PhSynchronizer.h"
+
 #include "ui_PreferencesDialog.h"
 #include "PreferencesDialog.h"
-#include "PhTools/PhDebug.h"
-#include "PhSync/PhLtcReader.h"
 
 PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	QDialog(parent),
@@ -24,7 +28,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->tabWidget->setCurrentIndex(0);
 	this->setFocus();
 
-	// Load the old settings
+	// Save the old settings in case of cancel
 	_oldUseQuarterFrame = _settings->useQuarterFrame();
 	_oldDelay = _settings->screenDelay();
 	_oldStripHeight = _settings->stripHeight();
@@ -38,8 +42,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldDisplayLoop = _settings->displayLoop();
 	_oldSyncProtocol = _settings->synchroProtocol();
 	_oldLTCInput = _settings->ltcInputDevice();
-
-	_oldLogMask = _settings->logMask();
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
@@ -58,50 +60,50 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->cBoxDisplayNextText->setChecked(_oldDisplayNextText);
 	ui->cBoxDisplayTitle->setChecked(_oldDisplayTitle);
 	ui->cBoxDisplayLoop->setChecked(_oldDisplayLoop);
-	ui->lblPathToLogFile->setText("<a href=\""+ PhDebug::logLocation() +"\">" + PhDebug::logLocation() + "</a>");
 
-	//Set the checkboxes of log
-	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
-	{
-		connect(btn, SIGNAL(clicked()), this, SLOT(onLogMaskButtonClicked()));
-		if((1 << btn->objectName().split("_").last().toInt()) & _oldLogMask)
-			btn->setChecked(true);
-	}
-
-	//Set the fonts
-	QStringList userFontList, systemFontList;
-	QString userDirectory = QDir::homePath();
-	QDir systemFont("/Library/Fonts/");
-	QDir userFont(userDirectory + "/Library/Fonts/");
-
-
-
+	//Setting the filters
 	QStringList filters;
 	filters.append("*.ttf");
 	filters.append("*.TTF");
+
+	// Adding the system font
+	QStringList systemFontList;
+	QDir systemFont(QStandardPaths::writableLocation(QStandardPaths::FontsLocation));
 	systemFont.setNameFilters(filters);
+	systemFontList = systemFont.entryList();
+	foreach(QString fontName, systemFontList) {
+		_fontList[fontName.split(".").first()] = systemFont.filePath(fontName);
+	}
+
+#if defined(Q_OS_MAC)
+	//Set the user fonts
+	QStringList userFontList;
+	QString userDirectory = QDir::homePath();
+	QDir userFont(userDirectory + "/Library/Fonts/");
 	userFont.setNameFilters(filters);
 	userFontList = userFont.entryList();
-	systemFontList = systemFont.entryList();
-
-	foreach(QString fontName, systemFontList)
-	{
-		fontList[fontName.split(".").first()] = "/Library/Fonts/" + fontName;
+	foreach(QString fontName, userFontList) {
+		_fontList[fontName.split(".").first()] = userFont.filePath(fontName);
 	}
-	foreach(QString fontName, userFontList)
-	{
-		fontList[fontName.split(".").first()] = userDirectory + "/Library/Fonts/" + fontName;
-	}
-	if(!fontList["SWENSON"].isNull())
-		fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
 
+	//Set the mac fonts
+	QStringList macOSFontList;
+	QDir macOSFont("/Library/Fonts/");
+	macOSFont.setNameFilters(filters);
+	macOSFontList = macOSFont.entryList();
+	foreach(QString fontName, macOSFontList) {
+		_fontList[fontName.split(".").first()] = macOSFont.filePath(fontName);
+	}
+#endif
+
+	// Adding the default font
+	_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
 
 	// _oldFont is : /Path/To/Font.ttf
 	// So split with "/" then take last gives Font.ttf
 	// Split with "." then take first, gives the name of the font
 	QString oldFontName = _oldFont.split("/").last().split(".").first();
-	foreach(QString fontName, fontList.keys())
-	{
+	foreach(QString fontName, _fontList.keys()) {
 		ui->listWidgetFont->addItem(fontName);
 		if(fontName == oldFontName) {
 			ui->listWidgetFont->item(ui->listWidgetFont->count() - 1)->setSelected(true);
@@ -109,21 +111,45 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		}
 	}
 
-	ui->listWidgetSync->addItem("LTC");
-
 	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
 
-	if(_oldSyncProtocol == Synchronizer::Sony)
+	if(_oldSyncProtocol == PhSynchronizer::Sony)
 		showParamSony(true);
-	else if(_oldSyncProtocol == Synchronizer::LTC)
+	else if(_oldSyncProtocol == PhSynchronizer::LTC)
 		showParamLTC(true);
 	else {
 		showParamLTC(false);
 		showParamSony(false);
 	}
 
-	ui->buttonBox->button(QDialogButtonBox::Ok)->setText(tr("Ok"));
-	ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Cancel"));
+	//Set the language
+	QDir appDirectory(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/");
+
+
+
+	QStringList filtersLang;
+	filtersLang.append("*.qm");
+	appDirectory.setNameFilters(filtersLang);
+	QStringList languageFileList = appDirectory.entryList();
+
+
+	_langNameMap[""] = tr("<System default>");
+	ui->cboBoxLang->addItem(_langNameMap[""], "");
+
+	foreach(QString tradFile, languageFileList) {
+		QFileInfo info(tradFile);
+		QString lang = info.baseName();
+		if(lang == "fr_FR")
+			_langNameMap[lang] = tr("French");
+		else
+			_langNameMap[lang] = lang;
+		ui->cboBoxLang->addItem(_langNameMap[lang], lang);
+	}
+	QString eng = "English";
+	_langNameMap["English"] = eng;
+	ui->cboBoxLang->addItem(_langNameMap["English"], eng);
+
+	ui->cboBoxLang->setCurrentText(_langNameMap[_settings->language()]);
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -133,6 +159,14 @@ PreferencesDialog::~PreferencesDialog()
 
 void PreferencesDialog::on_buttonBox_accepted()
 {
+	if(ui->cboBoxLang->currentData() != _settings->language()) {
+		QMessageBox::warning(this, tr("Information"),
+		                     tr("You change the language to \"%1\".\n"
+		                        "You need to restart %2 to apply you changes.").arg(ui->cboBoxLang->currentText(), APP_NAME),
+		                     QMessageBox::Ok,
+		                     QMessageBox::Ok);
+		_settings->setLanguage(ui->cboBoxLang->currentData().toString());
+	}
 	close();
 }
 
@@ -149,9 +183,7 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setDisplayNextText(_oldDisplayNextText);
 	_settings->setDisplayTitle(_oldDisplayTitle);
 	_settings->setDisplayLoop(_oldDisplayLoop);
-	_settings->setLogMask(_oldLogMask);
 	_settings->setLTCInputDevice(_oldLTCInput);
-	PhDebug::setLogMask(_oldLogMask);
 
 	close();
 }
@@ -189,12 +221,11 @@ void PreferencesDialog::on_sliderBoldness_valueChanged(int value)
 	_settings->setTextBoldness(value);
 }
 
-void PreferencesDialog::on_lineEditFilter_textEdited(const QString &arg1)
+void PreferencesDialog::on_lineEditFilter_textEdited(const QString &value)
 {
 	ui->listWidgetFont->clear();
-	foreach(QString fontName, fontList.keys())
-	{
-		if(fontName.contains(&arg1, Qt::CaseInsensitive))
+	foreach(QString fontName, _fontList.keys()) {
+		if(fontName.contains(&value, Qt::CaseInsensitive))
 			ui->listWidgetFont->addItem(fontName);
 	}
 }
@@ -203,7 +234,7 @@ void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *cu
 {
 	Q_UNUSED(previous);
 	if(current)
-		_settings->setTextFontFile(fontList[current->text()]);
+		_settings->setTextFontFile(_fontList[current->text()]);
 }
 
 void PreferencesDialog::on_cBoxDisplayTC_clicked()
@@ -231,60 +262,16 @@ void PreferencesDialog::on_cBoxDisplayLoop_clicked()
 	_settings->setDisplayLoop(ui->cBoxDisplayLoop->isChecked());
 }
 
-void PreferencesDialog::on_pButtonReset_clicked()
-{
-	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
-	{
-		if(btn->objectName().split("_").last() != "0")
-			btn->setChecked(false);
-		else
-			btn->setChecked(true);
-	}
-	onLogMaskButtonClicked();
-}
-
-void PreferencesDialog::on_lblPathToLogFile_linkActivated(const QString &link)
-{
-#if defined(Q_OS_MAC)
-	QStringList args;
-	args << "-e";
-	args << "tell application \"Finder\"";
-	args << "-e";
-	args << "activate";
-	args << "-e";
-	args << "select POSIX file \""+ link +"\"";
-	args << "-e";
-	args << "end tell";
-	QProcess::startDetached("osascript", args);
-#else
-#warning /// @todo Fix me
-	Q_UNUSED(link);
-#endif
-}
-
-void PreferencesDialog::onLogMaskButtonClicked()
-{
-	int logMask = 0;
-	//Set the checkboxes of log
-	foreach(QAbstractButton * btn, ui->buttonGroup->buttons())
-	{
-		if(btn->isChecked())
-			logMask += 1 << btn->objectName().split("_").last().toInt();
-	}
-	PhDebug::setLogMask(logMask);
-	_settings->setLogMask(logMask);
-}
-
 void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
 	Q_UNUSED(current);
 	Q_UNUSED(previous);
 	int protocol = ui->listWidgetSync->currentRow();
 	switch(protocol) {
-	case Synchronizer::Sony:
+	case PhSynchronizer::Sony:
 		showParamSony(true);
 		break;
-	case Synchronizer::LTC:
+	case PhSynchronizer::LTC:
 		showParamLTC(true);
 		break;
 	default:
@@ -339,3 +326,4 @@ void PreferencesDialog::on_listWidgetInputs_currentItemChanged(QListWidgetItem *
 	Q_UNUSED(previous);
 	_settings->setLTCInputDevice(current->text());
 }
+

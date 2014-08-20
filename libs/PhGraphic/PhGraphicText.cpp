@@ -37,12 +37,23 @@ PhFont * PhGraphicText::getFont()
 
 void PhGraphicText::draw()
 {
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+	PhGraphicRect::draw();
 
 	_font->select();
+
+	if(_font->getHeight() == 0) {
+		// bad font initialization: displaying a rect
+		glBegin(GL_QUADS);
+		{
+			glVertex3i(this->x(),      this->y(), this->z());
+			glVertex3i(this->x() + this->width(),  this->y(), this->z());
+			glVertex3i(this->x() + this->width(),  this->y() + this->height(),  this->z());
+			glVertex3i(this->x(),      this->y() +this->height(),  this->z());
+		}
+		glEnd();
+
+		return;
+	}
 
 	glEnable(GL_TEXTURE_2D);
 
@@ -54,6 +65,8 @@ void PhGraphicText::draw()
 	//Compute the natural width of the content to scale it later
 	for(int i = 0; i < _content.length(); i++) {
 		totalAdvance += _font->getAdvance(_content.at(i).toLatin1());
+		if(_content.at(i).unicode() == 339)
+			totalAdvance += _font->getAdvance(153);
 	}
 
 	// Set the letter initial horizontal offset
@@ -62,6 +75,8 @@ void PhGraphicText::draw()
 	// Display a string
 	for(int i = 0; i < _content.length(); i++) {
 		unsigned char ch = (unsigned char)_content.at(i).toLatin1();
+		if(_content.at(i).unicode() == 339)
+			ch = 153;
 		if(_font->getAdvance(ch) > 0) {
 			// computing texture coordinates
 			float tu1 = (ch % 16) * space;
@@ -70,21 +85,21 @@ void PhGraphicText::draw()
 			float tv2 = tv1 + space;
 
 			// computing quads coordinate;
-			int h = _h * 128 / _font->getHeight();
-			int w = _w * 128 / totalAdvance;
+			int h = this->height() * 128 / _font->getHeight();
+			int w = this->width() * 128 / totalAdvance;
 
 			//        (tu1, tv1) --- (tu2, tv1)
 			//            |              |
 			//            |              |
 			//        (tu1, tv2) --- (tu2, tv2)
 
-			int offset = _x + advance * _w / totalAdvance;
+			int offset = this->x() + advance * this->width() / totalAdvance;
 			glBegin(GL_QUADS);  //Begining the cube's drawing
 			{
-				glTexCoord3f(tu1, tv1, 1);  glVertex3f(offset,      _y, _z);
-				glTexCoord3f(tu2, tv1, 1);  glVertex3f(offset + w,  _y, _z);
-				glTexCoord3f(tu2, tv2, 1);  glVertex3f(offset + w,  _y + h,  _z);
-				glTexCoord3f(tu1, tv2, 1);  glVertex3f(offset,      _y + h,  _z);
+				glTexCoord3f(tu1, tv1, 1);  glVertex3i(offset,      this->y(), this->z());
+				glTexCoord3f(tu2, tv1, 1);  glVertex3i(offset + w,  this->y(), this->z());
+				glTexCoord3f(tu2, tv2, 1);  glVertex3i(offset + w,  this->y() + h,  this->z());
+				glTexCoord3f(tu1, tv2, 1);  glVertex3i(offset,      this->y() + h,  this->z());
 			}
 			glEnd();
 

@@ -10,7 +10,6 @@
 #include <QDialog>
 #include <QListWidgetItem>
 
-#include "Synchronizer.h"
 #include "JokerSettings.h"
 
 namespace Ui {
@@ -53,7 +52,7 @@ private slots:
 
 	void on_sliderBoldness_valueChanged(int value);
 
-	void on_lineEditFilter_textEdited(const QString &arg1);
+	void on_lineEditFilter_textEdited(const QString &value);
 
 	void on_cBoxDisplayTC_clicked();
 
@@ -64,12 +63,6 @@ private slots:
 	void on_cBoxDisplayTitle_clicked();
 
 	void on_cBoxDisplayLoop_clicked();
-
-	void on_pButtonReset_clicked();
-
-	void on_lblPathToLogFile_linkActivated(const QString &link);
-
-	void onLogMaskButtonClicked();
 
 	void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
@@ -89,11 +82,12 @@ private:
 	bool _oldDisplayNextText;
 	bool _oldDisplayTitle;
 	bool _oldDisplayLoop;
-	int _oldLogMask;
 	int _oldSyncProtocol;
 	QString _oldLTCInput;
 
-	QMap<QString, QString> fontList;
+	QMap<QString, QString> _fontList;
+	QMap<QString, QString> _langNameMap;
+
 
 	void showParamLTC(bool show);
 	void showParamSony(bool show);

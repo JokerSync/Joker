@@ -3,37 +3,15 @@
 
 #include <QDir>
 
-#include "PhTools/PhGenericSettings.h"
-#include "PhGraphicStrip/PhGraphicStripSettings.h"
-#include "PhSync/PhSyncSettings.h"
-#include "PhCommonUI/PhDocumentWindowSettings.h"
+#include "PhSony/PhSonySettings.h"
 
-class GraphicStripSyncTestSettings : protected PhGenericSettings,
-	public PhGraphicStripSettings,
-	public PhSyncSettings,
-	public PhDocumentWindowSettings
+#include "../GraphicStripTest/GraphicStripTestSettings.h"
+
+class GraphicStripSyncTestSettings : public GraphicStripTestSettings,
+	public PhSonySettings
 {
 public:
-	PH_SETTING_INT(setScreenDelay, screenDelay)
-
-	// PhGraphicSettings
-	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
-	PH_SETTING_BOOL(setResetInfo, resetInfo)
-
-	// PhGraphicStripSettings :
-	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 1)
-	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 80)
-	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
-	PH_SETTING_STRING(setTextFontFile, textFontFile)
-	PH_SETTING_INT2(setTextBoldness, textBoldness, 2)
-	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
-	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
-	PH_SETTING_BOOL(setInvertColor, invertColor)
-	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
-	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
-	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
-
-	// PhSyncSettings:
+	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
 	PH_SETTING_UCHAR2(setSonyDevice1, sonyDevice1, 0xF0)
 	PH_SETTING_UCHAR2(setSonyDevice2, sonyDevice2, 0xC0)
@@ -41,19 +19,8 @@ public:
 	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
-	// PhWindowSettings
-	PH_SETTING_BOOL(setFullScreen, fullScreen)
-	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
-
-	// PhDocumentWindowSettings
-	PH_SETTING_STRING(setCurrentDocument, currentDocument)
-	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
-	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
-	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
-	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
-
-	// Others
-	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)
+	//PhGraphicSettings
+	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 };
 
 #endif // GRAPHICSTRIPSYNCTESTSETTINGS_H

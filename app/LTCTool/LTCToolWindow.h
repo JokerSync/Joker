@@ -11,9 +11,9 @@
 #include <QTimer>
 #include <QMessageBox>
 
-#include "PhTools/PhClock.h"
-#include "PhSync/PhLtcWriter.h"
-#include "PhSync/PhLtcReader.h"
+#include "PhSync/PhClock.h"
+#include "PhLtc/PhLtcWriter.h"
+#include "PhLtc/PhLtcReader.h"
 
 #include "LTCToolSettings.h"
 

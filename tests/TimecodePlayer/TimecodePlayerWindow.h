@@ -5,20 +5,20 @@
 #include <QTimer>
 
 #include "PhCommonUI/PhMediaPanel.h"
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 
 namespace Ui {
 class TimecodePlayerWindow;
 }
 
-class MainWindow : public QMainWindow
+class SonyToolWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
 
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+	explicit SonyToolWindow(QWidget *parent = 0);
+	~SonyToolWindow();
 
 public slots:
 

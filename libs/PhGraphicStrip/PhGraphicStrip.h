@@ -19,7 +19,7 @@
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicLoop.h"
 
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 
 /**
  * @brief This class draw a segment of strip band.
@@ -52,9 +52,9 @@ class PhGraphicStrip : public QObject
 public:
 	/**
 	 * PhGraphicStrip constructor
-	 * @param parent Parent object
+	 * @param settings The settings
 	 */
-	explicit PhGraphicStrip(QObject * parent = 0);
+	explicit PhGraphicStrip(PhGraphicStripSettings * settings);
 
 	/**
 	 * Get the PhStripDoc attached to the .
@@ -68,31 +68,11 @@ public:
 	 */
 	PhClock * clock();
 
-
-	/**
-	 * @brief Pass the settings to the graphic strip
-	 * @param settings The settings
-	 */
-	void setSettings(PhGraphicStripSettings * settings);
-
 	/**
 	 * Set the font used to render text on the strip.
 	 * @param fontFile Font file path
-	 * @return true if the operation succeeds, false otherwise.
 	 */
-	bool setFontFile(QString fontFile);
-	/**
-	 * @brief Initializisation of the PhGraphicStrip
-	 *
-	 * Call clearData() then :
-	 * - Load the strip background
-	 * - Set the synchronization bar
-	 * - Load the font file
-	 *
-	 * @return True if succeed, false otherwise
-	 */
-
-	bool init();
+	void setFontFile(QString fontFile);
 
 	/**
 	 * @brief draw the strip
@@ -143,6 +123,7 @@ private slots:
 	void onDocChanged();
 
 private:
+	PhGraphicStripSettings * _settings;
 
 	/**
 	 * @brief _doc
@@ -165,11 +146,8 @@ private:
 	/**
 	 * Background Image used for the strip band
 	 */
-	PhGraphicImage _stripBackgroundImage;
-	PhGraphicImage _stripBackgroundImageInverted;
-
-
-	PhGraphicSolidRect _stripSyncBar;
+	PhGraphicImage _backgroundImageLight;
+	PhGraphicImage _backgroundImageDark;
 
 	/**
 	 * @brief _test
@@ -177,8 +155,6 @@ private:
 	 */
 	QTime _testTimer;
 
-	int _trackNumber;
-	PhGraphicStripSettings * _settings;
 	int _maxDrawElapsed;
 
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
