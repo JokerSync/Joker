@@ -31,8 +31,7 @@ install:
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ffmpeg.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_portaudio.sh; fi
-- if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_* ]]; then brew install qt5 ; fi
-- if [[ "$TRAVIS_OS_NAME" == linux ]] && [[ "$JOB" == BUILD_* ]]; then sudo apt-get install qt5 ; fi
+- if [[ "$JOB" == BUILD_* ]]; then scripts/install_qt5.sh; fi
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_RELEASE_* ]]; then npm install -g appdmg; fi
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
