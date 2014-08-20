@@ -28,7 +28,8 @@ public:
 	/**
 	 * @brief The SonyToolWindow constructor
 	 */
-	SonyToolWindow();
+	explicit SonyToolWindow();
+
 	~SonyToolWindow();
 
 private slots:
