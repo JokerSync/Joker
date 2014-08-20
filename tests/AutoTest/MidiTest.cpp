@@ -226,9 +226,9 @@ void MidiTest::testMTCReader()
 	PhTimeCodeType tcType = PhTimeCodeType25;
 	int tcTypeCalled = 0;
 	connect(&mtcReader, &PhMidiTimeCodeReader::timeCodeTypeChanged, [&](PhTimeCodeType type) {
-		tcType = type;
-		tcTypeCalled++;
-	});
+	            tcType = type;
+	            tcTypeCalled++;
+			});
 
 	QVERIFY(mtcReader.open("testMTCReader"));
 	QVERIFY(midiOut.open("testMTCReader"));
