@@ -17,21 +17,23 @@ env:
 matrix:
   - exclude:
     - os: linux
-      env:
-        - JOB=UNCRUSTIFY
-        - JOB=DOXYGEN
-        - JOB=BUILD_RELEASE_LTCTOOL
-        - JOB=BUILD_RELEASE_MIDITOOL
+      env: JOB=UNCRUSTIFY
+    - os: linux
+      env: JOB=DOXYGEN
+    - os: linux
+      env: JOB=BUILD_RELEASE_LTCTOOL
+    - os: linux
+      env: JOB=BUILD_RELEASE_MIDITOOL
 install:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
-- if [["$TRAVIS_OS_NAME" == osx]] && [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
-- if [["$TRAVIS_OS_NAME" == linux]] && [[ "$JOB" == BUILD_* ]]; then apt-get install qt5 ffmpeg libav portaudio; fi
-- if [["$TRAVIS_OS_NAME" == osx]] && [[ "$JOB" == BUILD_RELEASE_* ]]; then npm install -g appdmg; fi
-- if [["$TRAVIS_OS_NAME" == osx]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
-- if [["$TRAVIS_OS_NAME" == osx]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
+- if [["$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
+- if [["$TRAVIS_OS_NAME" == linux ]] && [[ "$JOB" == BUILD_* ]]; then apt-get install qt5 ffmpeg libav portaudio; fi
+- if [["$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_RELEASE_* ]]; then npm install -g appdmg; fi
+- if [["$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
+- if [["$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
 
 script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
@@ -44,9 +46,9 @@ script:
 - if [[ "$JOB" == BUILD_* ]]; then make; fi
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./AutoTest; fi
 after_success:
-- if [["$TRAVIS_OS_NAME" == osx]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
+- if [["$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
 after_failure:
-- if [["$TRAVIS_OS_NAME" == osx]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then ./scripts/upload.sh *.result.bmp; fi
+- if [["$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
   flowdock:
     secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
