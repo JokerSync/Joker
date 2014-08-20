@@ -26,9 +26,32 @@ echo "Linux detected"
 yes | sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
 sudo apt-get update -qq
 sudo apt-get install build-essential g++ curl
-sudo apt-get install ffmpeg portaudio
 sudo apt-get install -qq qt5-default qtdeclarative5-dev
-sudo apt-get install doxygen uncrustify
 
-sudo pip install cpp-coveralls
+# Installing portaudio
+sudo apt-get install libasound-dev
+curl -L http://portaudio.com/archives/pa_stable_v19_20140130.tgz -o pa_stable_v19_20140130.tgz
+tar -xvzf pa_stable_v19_20140130.tgz
+cd portaudio
+./configure
+make
+sudo make install
+cd ..
+rm pa_stable_v19_20140130.tgz
+rm -rf portaudio
+
+# Installing ffmpeg
+curl -L http://ffmpeg.org/releases/ffmpeg-2.3.3.tar.bz2 -o ffmpeg-2.3.3.tar.bz2
+tar xjf ffmpeg-2.3.3.tar.bz2
+cd ffmpeg-2.3.3
+./configure --disable-asm
+make
+sudo make install
+cd ..
+rm ffmpeg-2.3.3.tar.bz2
+rm -rf ffmpeg-2.3.3
+
+#sudo apt-get install doxygen uncrustify
+
+#sudo pip install cpp-coveralls
 fi
