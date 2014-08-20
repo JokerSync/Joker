@@ -15,7 +15,7 @@ env:
   - JOB=BUILD_RELEASE_MIDITOOL
   - JOB=BUILD_RELEASE_ALL_TESTS
 matrix:
-  - exclude:
+  exclude:
     - os: linux
       env: JOB=UNCRUSTIFY
     - os: linux
