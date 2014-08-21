@@ -465,7 +465,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 
 		_videoEngine.clock()->setTime(videoTimeIn);
 		_mediaPanel.setTimeIn(videoTimeIn);
-		_mediaPanel.setLength(_videoEngine.frameLength() * PhTimeCode::timePerFrame(_videoEngine.timeCodeType()));
+		_mediaPanel.setLength(_videoEngine.length());
 
 		_settings->setLastVideoFolder(fileInfo.absolutePath());
 		return true;
