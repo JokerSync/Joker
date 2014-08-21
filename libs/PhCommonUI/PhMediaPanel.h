@@ -141,6 +141,7 @@ private slots:
 	void onNextFrame();
 	void onPreviousFrame();
 	void onSliderChanged(int position);
+	void updateSlider();
 	void onTCTypeComboChanged();
 
 private:
