@@ -199,7 +199,7 @@ bool JokerWindow::openDocument(QString fileName)
 
 	/// - Open the corresponding video file if it exists.
 	if(openVideoFile(_doc->videoFilePath())) {
-		_videoEngine.setFrameIn(_doc->videoFrameIn());
+		_videoEngine.setTimeIn(_doc->videoTimeIn());
 		_mediaPanel.setTimeIn(_doc->videoTimeIn());
 	}
 	else
@@ -446,8 +446,6 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	QFileInfo fileInfo(videoFile);
 	if (fileInfo.exists() && _videoEngine.open(videoFile)) {
 		PhTime videoTimeIn = _videoEngine.timeIn();
-		_mediaPanel.setTimeIn(videoTimeIn);
-		_mediaPanel.setLength(_videoEngine.frameLength() * PhTimeCode::timePerFrame(_videoEngine.timeCodeType()));
 
 		if(videoFile != _doc->videoFilePath()) {
 			_doc->setVideoFilePath(videoFile);
@@ -466,6 +464,8 @@ bool JokerWindow::openVideoFile(QString videoFile)
 		}
 
 		_videoEngine.clock()->setTime(videoTimeIn);
+		_mediaPanel.setTimeIn(videoTimeIn);
+		_mediaPanel.setLength(_videoEngine.frameLength() * PhTimeCode::timePerFrame(_videoEngine.timeCodeType()));
 
 		_settings->setLastVideoFolder(fileInfo.absolutePath());
 		return true;
