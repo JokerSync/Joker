@@ -7,6 +7,7 @@
 #define PHMIDITIMECODEREADER_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "PhSync/PhClock.h"
 
@@ -59,9 +60,14 @@ protected:
 	void onQuarterFrame(unsigned char data);
 	void onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
+private slots:
+	void checkPause();
+
 private:
 	PhTimeCodeType _tcType;
 	PhClock _clock;
+	QTimer _pauseDetectionTimer;
+	int _pauseDetectionCounter;
 };
 
 #endif // PHMIDITIMECODEREADER_H

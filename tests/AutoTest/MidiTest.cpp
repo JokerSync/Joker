@@ -399,6 +399,14 @@ void MidiTest::testMTCReader()
 	QCOMPARE(tcType, PhTimeCodeType25);
 	QCOMPARE(mtcReader.timeCodeType(), PhTimeCodeType25);
 	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType25), QString("10:04:00:04"));
+
+	// Stop sending quarter frame MTC message should stop the reader after one frame:
+#warning /// @todo QThread::msleep block the pause detector timer and QTest::qWait crashes...
+//	QThread::msleep(30);
+//	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 1));
+//	QThread::msleep(200);
+//	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 0));
+
 }
 
 void MidiTest::testMTCWriter()
@@ -525,5 +533,20 @@ void MidiTest::testMTCWriter()
 	QCOMPARE(mtcWriter.clock()->time(), s2t("23:40:19:17", PhTimeCodeType25));
 	QCOMPARE(quarterFrameCount, 16);
 	QCOMPARE((int)quarterFrameData, 0x70 | (0x01 << 1) | 0x01); // timecode type info + hour high digit
+
+	// Test changing speed to 0
+	mtcWriter.clock()->setRate(0);
+
+	// No quarter frame message shall be sent anymore
+	QThread::msleep(10);
+	QCOMPARE(quarterFrameCount, 16);
+	QThread::msleep(10);
+	QCOMPARE(quarterFrameCount, 16);
+	QThread::msleep(10);
+	QCOMPARE(quarterFrameCount, 16);
+	QThread::msleep(10);
+	QCOMPARE(quarterFrameCount, 16);
+
+
 }
 

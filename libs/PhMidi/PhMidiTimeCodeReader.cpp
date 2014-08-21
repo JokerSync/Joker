@@ -3,17 +3,23 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QThread>
+
 #include "PhTools/PhDebug.h"
 
 #include "PhMidiTimeCodeReader.h"
 
 PhMidiTimeCodeReader::PhMidiTimeCodeReader(PhTimeCodeType tcType) :
-	_tcType(tcType)
+	_tcType(tcType),
+	_pauseDetectionCounter(0)
 {
+	connect(&_pauseDetectionTimer, &QTimer::timeout, this, &PhMidiTimeCodeReader::checkPause);
+	_pauseDetectionTimer.start(10);
 }
 
 void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 {
+	this->moveToThread(QThread::currentThread());
 	_clock.setRate(1);
 	_clock.tick(4 * PhTimeCode::getFps(_tcType));
 
@@ -34,6 +40,8 @@ void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 			_clock.setTime(PhTimeCode::timeFromHhMmSsFf(_hh, _mm, _ss, _ff, _tcType));
 		}
 	}
+
+	_pauseDetectionCounter = 0;
 }
 
 void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType)
@@ -42,4 +50,14 @@ void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCode
 	_tcType = tcType;
 	_clock.setTime(time);
 	emit timeCodeTypeChanged(_tcType);
+}
+
+void PhMidiTimeCodeReader::checkPause()
+{
+	PHDEBUG << _pauseDetectionCounter;
+	_pauseDetectionCounter++;
+	if(_pauseDetectionCounter >= 4) {
+		PHDEBUG << "Pause detected";
+		_clock.setRate(0);
+	}
 }
