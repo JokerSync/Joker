@@ -559,7 +559,7 @@ void JokerWindow::on_actionPreferences_triggered()
 void JokerWindow::fadeInMediaPanel()
 {
 	// Don't show the mediaPanel if Joker has not thefocus.
-	if(!this->hasFocus())
+	if(!(this->hasFocus() || ui->videoStripView->hasFocus()))
 		return;
 	// Don't show the mediaPanel if Joker is remote controled.
 	if(_settings->synchroProtocol() != PhSynchronizer::NoSync)
