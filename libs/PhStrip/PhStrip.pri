@@ -19,7 +19,13 @@ SOURCES += \
 	$$PWD/PhPeople.cpp \
     $$PWD/PhStripPeopleObject.cpp \
     $$PWD/PhStripDetect.cpp \
-    $$PWD/PhStripSentence.cpp
+    $$PWD/PhStripLine.cpp \
+    $$PWD/PhStripLineModel.cpp \
+    $$PWD/PhStripTextModel.cpp \
+    $$PWD/PhStripDetectModel.cpp \
+    $$PWD/PhStripCutModel.cpp \
+    $$PWD/PhStripLoopModel.cpp \
+    $$PWD/PhStripPeopleModel.cpp
 
 HEADERS += \
 	$$PWD/PhStripDoc.h \
@@ -30,5 +36,11 @@ HEADERS += \
 	$$PWD/PhPeople.h \
     $$PWD/PhStripPeopleObject.h \
     $$PWD/PhStripDetect.h \
-    $$PWD/PhStripSentence.h
+    $$PWD/PhStripLine.h \
+    $$PWD/PhStripLineModel.h \
+    $$PWD/PhStripTextModel.h \
+    $$PWD/PhStripDetectModel.h \
+    $$PWD/PhStripCutModel.h \
+    $$PWD/PhStripLoopModel.h \
+    $$PWD/PhStripPeopleModel.h
 

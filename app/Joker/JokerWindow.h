@@ -7,6 +7,8 @@
 #ifndef JOKERWINDOW_H
 #define JOKERWINDOW_H
 
+#include <QStringListModel>
+#include <QQmlContext>
 #include <QTimer>
 #include <QPropertyAnimation>
 
@@ -14,6 +16,7 @@
 #include "PhCommonUI/PhEditableDocumentWindow.h"
 #ifdef USE_VIDEO
 #include "PhVideo/PhVideoEngine.h"
+#include <PhVideo/PhVideoSurface.h>
 #include "SecondScreenWindow.h"
 #endif
 #include "PhGraphicStrip/PhGraphicStrip.h"
@@ -29,6 +32,7 @@
 #include "PhMidi/PhMidiTimeCodeWriter.h"
 #endif
 
+#include "PhGraphic/PhGraphicView.h"
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
 #include "TimeBetweenTwoFeetDialog.h"
@@ -51,6 +55,16 @@ class JokerWindow;
 class JokerWindow : public PhEditableDocumentWindow
 {
 	Q_OBJECT
+	Q_PROPERTY(QString currentLoopLabel READ currentLoopLabel WRITE setCurrentLoopLabel NOTIFY currentLoopLabelChanged)
+	Q_PROPERTY(PhTime stripTime READ stripTime WRITE setStripTime NOTIFY stripTimeChanged)
+	Q_PROPERTY(QString refreshInfo READ refreshInfo WRITE setRefreshInfo NOTIFY refreshInfoChanged)
+	Q_PROPERTY(QString updateInfo READ updateInfo WRITE setUpdateInfo NOTIFY updateInfoChanged)
+	Q_PROPERTY(QString dropInfo READ dropInfo WRITE setDropInfo NOTIFY dropInfoChanged)
+	Q_PROPERTY(QString stripInfo READ stripInfo WRITE setStripInfo NOTIFY stripInfoChanged)
+	Q_PROPERTY(PhTime timePerFrame READ timePerFrame NOTIFY timePerFrameChanged)
+	Q_PROPERTY(QString tcLabelText READ tcLabelText WRITE setTcLabelText NOTIFY tcLabelTextChanged)
+	Q_PROPERTY(QString nextTcLabelText READ nextTcLabelText WRITE setNextTcLabelText NOTIFY nextTcLabelTextChanged)
+	Q_PROPERTY(JokerSettings settings READ settings)
 
 public:
 	///
@@ -74,6 +88,60 @@ public:
 	bool openVideoFile(QString videoFile);
 #endif
 
+	/**
+	 * @brief The current loop label
+	 * @return A string
+	 */
+	QString currentLoopLabel();
+
+	/**
+	 * @brief Sets the current loop label
+	 * @param A string
+	 */
+	void setCurrentLoopLabel(QString label);
+
+	/**
+	 * @brief The strip time (includes delay)
+	 * @return A PhTime
+	 */
+	PhTime stripTime();
+
+	/**
+	 * @brief Sets the strip time
+	 * @param A PhTime
+	 */
+	void setStripTime(PhTime time);
+
+	QString refreshInfo() {
+		return _refreshInfo;
+	}
+	void setRefreshInfo(QString text);
+
+	QString updateInfo() {
+		return _updateInfo;
+	}
+	void setUpdateInfo(QString text);
+
+	QString dropInfo() {
+		return _dropInfo;
+	}
+	void setDropInfo(QString text);
+
+	QString stripInfo() {
+		return _stripInfo;
+	}
+	void setStripInfo(QString text);
+
+	PhTime timePerFrame();
+
+	JokerSettings *settings() const;
+
+	QString tcLabelText() const;
+	void setTcLabelText(const QString &tcLabelText);
+
+	QString nextTcLabelText() const;
+	void setNextTcLabelText(const QString &nextTcLabelText);
+
 public slots:
 	///
 	/// \brief timeCounter Slot used to count the time played on nominal speed
@@ -82,6 +150,42 @@ public slots:
 	/// \param elapsedTime
 	///
 	void timeCounter(PhTime elapsedTime);
+
+	void on_actionStep_start_triggered();
+
+	void on_actionPlay_pause_triggered();
+
+	void on_actionPlay_backward_triggered();
+
+	void on_actionStep_forward_triggered();
+
+	void on_actionStep_backward_triggered();
+
+	void on_actionStep_time_forward_triggered();
+
+	void on_actionStep_time_backward_triggered();
+
+	void on_action_3_triggered();
+
+	void on_action_1_triggered();
+
+	void on_action_0_5_triggered();
+
+	void on_action0_triggered();
+
+	void on_action0_5_triggered();
+
+	void on_action1_triggered();
+
+	void on_action3_triggered();
+
+	void on_actionSave_triggered();
+
+	void on_actionSave_as_triggered();
+
+	void on_actionNext_element_triggered();
+
+	void on_actionPrevious_element_triggered();
 
 protected:
 	///
@@ -160,14 +264,9 @@ protected:
 
 private slots:
 	// Custom slots
-
 	void showMediaPanel();
 
 	void hideMediaPanel();
-
-	void onPaint(int width, int height);
-
-	void onVideoSync();
 
 	void setCurrentTime(PhTime time);
 
@@ -175,34 +274,20 @@ private slots:
 
 	void onTimecodeTypeChanged(PhTimeCodeType);
 
+	void onPaint(PhTime elapsedTime);
+
+#ifdef USE_VIDEO
+	void videoFileOpened(bool success);
+#endif
+
+	void onSecondScreenClosed(bool closedFromUser);
+
+	void qmlStatusChanged(QQuickWidget::Status status);
+
+	void onVideoTimeCodeTypeChanged(PhTimeCodeType tcType);
+
 	// Qt Designer slots
 	void on_actionOpen_triggered();
-
-	void on_actionPlay_pause_triggered();
-
-	void on_actionPlay_backward_triggered();
-
-	void on_actionStep_forward_triggered();
-
-	void on_actionStep_backward_triggered();
-
-	void on_actionStep_time_forward_triggered();
-
-	void on_actionStep_time_backward_triggered();
-
-	void on_action_3_triggered();
-
-	void on_action_1_triggered();
-
-	void on_action_0_5_triggered();
-
-	void on_action0_triggered();
-
-	void on_action0_5_triggered();
-
-	void on_action1_triggered();
-
-	void on_action3_triggered();
 
 	void on_actionOpen_Video_triggered();
 
@@ -219,14 +304,6 @@ private slots:
 	void on_actionTest_mode_triggered();
 
 	void on_actionTimecode_triggered();
-
-	void on_actionNext_element_triggered();
-
-	void on_actionPrevious_element_triggered();
-
-	void on_actionSave_triggered();
-
-	void on_actionSave_as_triggered();
 
 	void on_actionSelect_character_triggered();
 
@@ -272,15 +349,24 @@ private slots:
 
 	void on_actionLoop_triggered(bool checked);
 
-#ifdef USE_VIDEO
-	void videoFileOpened(bool success);
-#endif
-
 	void on_actionPicture_in_picture_triggered(bool checked);
 
 	void on_actionSecond_screen_triggered(bool checked);
 
-	void onSecondScreenClosed(bool closedFromUser);
+signals:
+	void currentLoopLabelChanged();
+	void stripTimeChanged();
+	void refreshInfoChanged();
+	void updateInfoChanged();
+	void dropInfoChanged();
+	void stripInfoChanged();
+	void timePerFrameChanged();
+	void tcLabelTextChanged();
+	void nextTcLabelTextChanged();
+
+	// used in the GUI to display a warning when the last sync is too old
+	void videoSync();
+
 private:
 	PhTimeCodeType localTimeCodeType();
 	PhTimeCodeType synchroTimeCodeType();
@@ -314,10 +400,27 @@ private:
 	bool _firstDoc;
 	bool _resizingStrip;
 
-	PhGraphicImage _videoLogo;
-//	PhGraphicImage _playButton, _forwardButton;
+	PhTime _stripTime;
+	QString _currentLoopLabel;
+	QStringListModel _selectedPeopleModel;
 
-	QTime _lastVideoSyncElapsed;
+	QString _refreshInfo;
+	QString _updateInfo;
+	QString _dropInfo;
+	QString _stripInfo;
+
+	QString _tcLabelText;
+	QString _nextTcLabelText;
+
+	PhVideoSurface _videoSurface;
+	PhVideoSurface _pipVideoSurface;
+	PhVideoSurface _secondScreenVideoSurface;
+
+	QQmlContext *_context;
+
+	PhGraphicView *_view = new PhGraphicView();
+
+	void setVideoTimeInToOneHour();
 
 	bool _setCurrentTimeToVideoTimeIn;
 	bool _syncTimeInToDoc;

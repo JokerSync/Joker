@@ -77,6 +77,19 @@ FORMS += \
 	PeopleDialog.ui \
 	PeopleEditionDialog.ui \
 	TimeBetweenTwoFeetDialog.ui
+OTHER_FILES += \
+	main.qml \
+	RightColumn.qml \
+	LeftColumn.qml \
+	Strip.qml \
+	Video.qml \
+	MediaPanel.qml \
+	Line.qml \
+	StripText.qml \
+	Detect.qml \
+	PeopleSelection.qml \
+	EditionSwitch.qml \
+	SecondScreen.qml
 
 mac{
 	ICON = joker.icns

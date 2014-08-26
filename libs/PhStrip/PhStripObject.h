@@ -14,7 +14,11 @@
  *
  * Its only property is timeIn.
  */
-class PhStripObject {
+class PhStripObject : public QObject {
+
+	Q_OBJECT
+
+	Q_PROPERTY(PhTime timeIn READ timeIn WRITE setTimeIn NOTIFY timeInChanged)
 
 private:
 	/**
@@ -39,6 +43,12 @@ public:
 	PhTime timeIn() const;
 
 	/**
+	 * @brief Set the time in
+	 * @param timeIn a PhTime
+	 */
+	void setTimeIn(PhTime timeIn);
+
+	/**
 	 * @brief A tc in string representation
 	 * @param tcType The timecode type use to display
 	 * @return A String
@@ -60,6 +70,9 @@ public:
 	 * @return True if "a" has a stricly lower time in than "b", false otherwise.
 	 */
 	static bool dtcomp(PhStripObject *a, PhStripObject *b);
+
+signals:
+	void timeInChanged();
 };
 
 #endif // PHSTRIPOBJECT_H

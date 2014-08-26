@@ -328,8 +328,10 @@ PhVideoDecoder::~PhVideoDecoder()
 
 PhFrame PhVideoDecoder::frameLength()
 {
-	if(_formatContext)
-		return _formatContext->duration * PHTIMEBASE / AV_TIME_BASE / PhTimeCode::timePerFrame(_tcType);
+	// Note: computing the frame length from the format context's duration seems to give bogus results.
+	// Use simply the stream number of frames instead.
+	if(_videoStream)
+		return _videoStream->nb_frames;
 	return 0;
 }
 

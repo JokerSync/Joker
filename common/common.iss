@@ -45,14 +45,7 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "{#MyAppSrc}"; DestDir: "{app}"; Flags: ignoreversion
-
-Source: "{#PWD}\release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#PWD}\release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
-Source: "{#PWD}\release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
-Source: "{#PWD}\release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
-
-Source: "{#PWD}\release\*.qm"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\release\*"; Excludes: "*.o,*.cpp"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

@@ -9,13 +9,17 @@
 
 #include "PhPeople.h"
 #include "PhStrip/PhStripPeopleObject.h"
+#include "PhStrip/PhStripDetect.h"
 
 /**
  * @brief Sentence or part of a sentence of a PhPeople with synchronization information.
  *
  * Its property is content.
  */
-class PhStripText : public PhStripPeopleObject {
+class PhStripText : QObject
+{
+
+	Q_OBJECT
 
 public:
 
@@ -28,7 +32,7 @@ public:
 	 * @param content The text content
 	 * @param height The text height
 	 */
-	PhStripText( PhTime timeIn, PhPeople * people, PhTime timeOut, float y,  QString content, float height);
+	PhStripText(QString content, PhTime duration, PhStripDetect::PhDetectType typeOut);
 	/**
 	 * @brief Get the text content
 	 * @return A string
@@ -37,22 +41,22 @@ public:
 
 	/**
 	 * @brief Set the text content
-	 * @param content A string
+	 * @param content a string
 	 */
 	void setContent(QString content);
 
-	/**
-	 * @brief Text description
-	 * @param tcType The timecode type use to display
-	 * @return A string
-	 */
-	QString description(PhTimeCodeType tcType);
-private:
+	PhStripDetect::PhDetectType typeOut() const;
+	void setTypeOut(const PhStripDetect::PhDetectType &typeOut);
 
-/**
- * Text string of Sentence or part of a sentence.
- */
+	PhTime duration() const;
+	void setDuration(const PhTime &duration);
+
+signals:
+	void contentChanged();
+private:
 	QString _content;
+	PhTime _duration;
+	PhStripDetect::PhDetectType _typeOut;
 };
 
 #endif // PHSTRIPTEXT_H

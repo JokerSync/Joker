@@ -11,11 +11,12 @@
 
 #include "PeopleEditionDialog.h"
 
-PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *settings) :
+PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *settings, QStringListModel *selectedPeopleModel) :
 	QDialog(parent),
 	ui(new Ui::PeopleDialog),
 	_doc(doc),
-	_settings(settings)
+	_settings(settings),
+	_selectedPeopleModel(selectedPeopleModel)
 {
 	ui->setupUi(this);
 
@@ -24,7 +25,9 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 		_oldPeopleNameList.append(name);
 	}
 
-	foreach(PhPeople* people, _doc->peoples()) {
+	QListIterator<PhPeople*> i = _doc->peopleModel()->iterator();
+	while (i.hasNext()) {
+		PhPeople* people = i.next();
 		if(people) {
 			QString name = people->name();
 			ui->peopleList->addItem(name);
@@ -33,6 +36,7 @@ PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *sett
 				ui->peopleList->item(ui->peopleList->count() - 1)->setSelected(true);
 		}
 	}
+
 	if(ui->peopleList->count() == 0) {
 		ui->peopleList->addItem(tr("The list is empty..."));
 		ui->peopleList->setDisabled(true);
@@ -59,8 +63,10 @@ void PeopleDialog::on_peopleList_itemSelectionChanged()
 		peopleNameList.append(item->text());
 	}
 
-	if(peopleNameList.count() < _doc->peoples().count())
+	if(peopleNameList.count() < _doc->peopleModel()->rowCount()) {
 		_settings->setSelectedPeopleNameList(peopleNameList);
+		_selectedPeopleModel->setStringList(peopleNameList);
+	}
 
 	ui->changeCharButton->setEnabled(ui->peopleList->selectedItems().count() == 1);
 }
@@ -72,6 +78,7 @@ void PeopleDialog::on_buttonBox_rejected()
 		peopleNameList.append(name);
 
 	_settings->setSelectedPeopleNameList(peopleNameList);
+	_selectedPeopleModel->setStringList(peopleNameList);
 }
 
 void PeopleDialog::on_deselectAllButton_clicked()

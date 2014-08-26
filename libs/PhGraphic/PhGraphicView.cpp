@@ -12,12 +12,12 @@
 
 #include "PhTools/PhDebug.h"
 
-#include "PhGraphicText.h"
-
 #include "PhGraphicView.h"
 
-PhGraphicView::PhGraphicView(QWidget *parent, PhGraphicView *shareWidget)
-	: QGLWidget(parent, shareWidget),
+PhGraphicView::PhGraphicView(QWidget *parent)
+	: QQuickWidget(parent),
+	//: QQuickView(),
+	//: QQmlApplicationEngine(),
 	_settings(NULL),
 	_dropDetected(0),
 	_maxRefreshRate(0),
@@ -32,7 +32,7 @@ PhGraphicView::PhGraphicView(QWidget *parent, PhGraphicView *shareWidget)
 	//set the screen frequency to the most common value (60hz);
 	_screenFrequency = QGuiApplication::primaryScreen()->refreshRate();
 
-	int timerInterval = static_cast<int>(500.0 / _screenFrequency);
+	int timerInterval = static_cast<int>(1000.0 / _screenFrequency);
 	_refreshTimer->start( timerInterval);
 	//PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
 	_dropTimer.start();
@@ -43,8 +43,8 @@ PhGraphicView::PhGraphicView(QWidget *parent, PhGraphicView *shareWidget)
 PhGraphicView::PhGraphicView(int width, int height, QWidget *parent)
 	: PhGraphicView(parent)
 {
-	int ratio = this->windowHandle()->devicePixelRatio();
-	this->setGeometry(0, 0, width / ratio, height / ratio);
+	//int ratio = this->windowHandle()->devicePixelRatio();
+	//this->setGeometry(0, 0, width / ratio, height / ratio);
 }
 
 PhGraphicView::~PhGraphicView()
@@ -57,18 +57,9 @@ void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
 	_settings = settings;
 }
 
-void PhGraphicView::resizeGL(int width, int height)
+int PhGraphicView::maxRefreshRate()
 {
-	if(height == 0)
-		height = 1;
-	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, width, height, 0, -10, 10);
-	glMatrixMode(GL_MODELVIEW);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glLoadIdentity();
+	return _maxRefreshRate;
 }
 
 int PhGraphicView::refreshRate()
@@ -76,9 +67,14 @@ int PhGraphicView::refreshRate()
 	return _frameTickCounter.frequency();
 }
 
-void PhGraphicView::addInfo(QString info)
+int PhGraphicView::maxUpdateDuration()
 {
-	_infos.append(info);
+	return _maxUpdateDuration;
+}
+
+int PhGraphicView::lastUpdateDuration()
+{
+	return _lastUpdateDuration;
 }
 
 int64_t PhGraphicView::compare(QString imageFile, int threshold, int width, int height)
@@ -90,7 +86,7 @@ int64_t PhGraphicView::compare(QString imageFile, int threshold, int width, int 
 		height = this->height() * ratio;
 	int64_t totalDiff = 0;
 
-	QImage result = this->renderPixmap(width, height).toImage();
+	QImage result = this->grabFramebuffer();
 	QImage expected(imageFile);
 	if((expected.width() == 0) || (expected.height() == 0)) {
 		PHDBG(9) << QString("Bad expected file: %1").arg(imageFile);
@@ -131,35 +127,18 @@ int64_t PhGraphicView::compare(QString imageFile, int threshold, int width, int 
 	return totalDiff;
 }
 
-void PhGraphicView::onRefresh()
+int PhGraphicView::dropDetected()
 {
-	if(this->refreshRate() > _maxRefreshRate)
-		_maxRefreshRate = this->refreshRate();
-	addInfo(QString("refresh: %1x%2, %3 / %4")
-	        .arg(this->width())
-	        .arg(this->height())
-	        .arg(_maxRefreshRate)
-	        .arg(this->refreshRate()));
-	addInfo(QString("Update : %1 %2").arg(_maxUpdateDuration).arg(_lastUpdateDuration));
-	addInfo(QString("drop: %1 %2").arg(_dropDetected).arg(_dropTimer.elapsed() / 1000));
-
-	QTime t;
-	t.start();
-	updateGL();
-	_lastUpdateDuration = t.elapsed();
-	if(_lastUpdateDuration > _maxUpdateDuration)
-		_maxUpdateDuration = _lastUpdateDuration;
-	if(_lastUpdateDuration > static_cast<int>(1500.0 / _screenFrequency)) {
-		_dropTimer.restart();
-		_dropDetected++;
-		PHDBG(8) << "Drop detected:" << _dropDetected;
-	}
+	return _dropDetected;
 }
 
-void PhGraphicView::paintGL()
+int PhGraphicView::secondsSinceLastDrop()
 {
-	//PHDEBUG << "PhGraphicView::paintGL" ;
+	return _dropTimer.elapsed() / 1000;
+}
 
+void PhGraphicView::onRefresh()
+{
 	// Update the clock time taking into account the time elapsed since the last paint event
 	// In the particular case of V-sync enabled and no dropped frames, this is equivalent
 	// to using the screen refresh rate to compute the elapsed time.
@@ -182,19 +161,6 @@ void PhGraphicView::paintGL()
 	if(rasterizedElapsedTime > 0)
 		_previousNsecsElapsed = nsecsElapsed;
 
-	emit beforePaint(rasterizedElapsedTime);
-
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	QTime timer;
-	timer.start();
-
-	int ratio = this->windowHandle()->devicePixelRatio();
-	emit paint(this->width() * ratio, this->height() * ratio);
-
-	if(timer.elapsed() > _maxPaintDuration)
-		_maxPaintDuration = timer.elapsed();
-	addInfo(QString("draw: %1 %2").arg(_maxPaintDuration).arg(timer.elapsed()));
 	if(_settings) {
 		if(_settings->resetInfo()) {
 			_dropDetected = 0;
@@ -202,22 +168,28 @@ void PhGraphicView::paintGL()
 			_maxPaintDuration = 0;
 			_maxUpdateDuration = 0;
 		}
-		if(_settings->displayInfo()) {
-			_infoFont.setFamily(_settings->infoFontFamily());
-			int y = 0;
-			foreach(QString info, _infos) {
-				PhGraphicText gInfo(&_infoFont, info, 0, y);
-				gInfo.setSize(_infoFont.getNominalWidth(info) / 2, 50);
-				gInfo.setZ(10);
-				gInfo.setColor(Qt::red);
-				gInfo.draw();
-				y += gInfo.height();
-			}
-		}
 	}
-	// Once the informations have been displayed
-	// clear it
-	_infos.clear();
+
+	if(this->refreshRate() > _maxRefreshRate)
+		_maxRefreshRate = this->refreshRate();
+
+	QTime t;
+	t.start();
+
+	emit beforePaint(rasterizedElapsedTime);
+	update();
+
+	// Note: the update duration may not be interesting at all, since it only *schedules*
+	// the paint request, but does not repaint immediately
+	#warning /// @todo measure time between two updates instead of update time
+	// the time between two updates may be more significant.
+	_lastUpdateDuration = t.elapsed();
+	if(_lastUpdateDuration > _maxUpdateDuration)
+		_maxUpdateDuration = _lastUpdateDuration;
+	if(_lastUpdateDuration > static_cast<int>(1500.0 / _screenFrequency)) {
+		_dropTimer.restart();
+		_dropDetected++;
+	}
 
 	_frameTickCounter.tick();
 }

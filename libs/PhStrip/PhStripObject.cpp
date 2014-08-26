@@ -7,12 +7,22 @@
 
 #include "PhStripObject.h"
 
-PhStripObject::PhStripObject(PhTime timeIn) : _timeIn(timeIn)
+PhStripObject::PhStripObject(PhTime timeIn)
+  : QObject(),
+	_timeIn(timeIn)
 {
 }
 
 PhTime PhStripObject::timeIn() const {
 	return _timeIn;
+}
+
+void PhStripObject::setTimeIn(PhTime timeIn)
+{
+	if (timeIn != _timeIn) {
+		_timeIn = timeIn;
+		emit timeInChanged();
+	}
 }
 
 QString PhStripObject::tcIn(PhTimeCodeType tcType)

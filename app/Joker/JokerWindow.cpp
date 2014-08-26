@@ -8,14 +8,14 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QFontDatabase>
+#include <QQmlEngine>
+#include <QQuickView>
+#include <QQuickItem>
 
 #include "PhTools/PhDebug.h"
 
 #include "PhCommonUI/PhTimeCodeDialog.h"
 #include "PhCommonUI/PhFeedbackDialog.h"
-
-#include "PhGraphic/PhGraphicText.h"
-#include "PhGraphic/PhGraphicSolidRect.h"
 
 #include "JokerWindow.h"
 #include "ui_JokerWindow.h"
@@ -47,12 +47,50 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #endif
 	_firstDoc(true),
 	_resizingStrip(false),
+	_stripTime(0),
+	_tcLabelText(""),
+	_nextTcLabelText(""),
 	_setCurrentTimeToVideoTimeIn(false),
 	_syncTimeInToDoc(false),
 	_timePlayed(settings->timePlayed())
 {
+	qApp->installEventFilter(this);
+
 	// Setting up UI
 	ui->setupUi(this);
+
+	//_view = ui->videoStripView;
+	_view = new PhGraphicView();
+	_context = _view->engine()->rootContext();
+
+	foreach(QString path, _view->engine()->importPathList()) {
+		PHDEBUG << path;
+	}
+
+	//_context = _view->rootContext();
+
+	_context->setContextProperty("doc", _doc);
+	_context->setContextProperty("jokerWindow", this);
+	_context->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
+	_context->setContextProperty("videoLogoUrl", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/joker_gray.png"));
+	_context->setContextProperty("stripBackgroundUrl", QUrl::fromLocalFile(_settings->backgroundImageLight()));
+	_context->setContextProperty("videoSource", &_videoSurface);
+	_context->setContextProperty("pipVideoSource", &_pipVideoSurface);
+	_context->setContextProperty("secondScreenVideoSource", &_secondScreenVideoSurface);
+	_context->setContextProperty("settings", _settings);
+	_context->setContextProperty("playbackController", &_mediaPanel);
+
+#ifdef USE_VIDEO
+	_context->setContextProperty("videoEngine", &_videoEngine);
+#endif
+
+	connect(_view, &QQuickWidget::statusChanged, this, &JokerWindow::qmlStatusChanged);
+
+	_view->setResizeMode(QQuickWidget::SizeRootObjectToView);
+
+	_view->setSource(QUrl("qrc:///qml/main.qml"));
+
+	ui->verticalLayout->addWidget(_view);
 
 	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Bookerly-BoldItalic.ttf");
 	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella-Regular.ttf");
@@ -63,11 +101,16 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	connect(ui->actionFullscreen, &QAction::triggered, this, &JokerWindow::toggleFullScreen);
 
+	connect(&_videoEngine, &PhVideoEngine::timeCodeTypeChanged, this, &JokerWindow::onVideoTimeCodeTypeChanged);
+
+	_videoEngine.registerVideoSurface(&_videoSurface);
+	_videoEngine.registerVideoSurface(&_pipVideoSurface);
+
 	this->restoreGeometry(_settings->windowGeometry());
 	_mediaPanel.move(this->x() + this->width() / 2 - _mediaPanel.width() / 2,
 	                 this->y() + this->height() * 2 / 3);
 
-	ui->videoStripView->setGraphicSettings(_settings);
+	_view->setGraphicSettings(_settings);
 
 	// Initialize the synchronizer
 	_synchronizer.setStripClock(_strip.clock());
@@ -92,7 +135,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #endif
 
 #ifdef USE_SONY
-	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::onVideoSync);
+	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::videoSync);
 #endif
 
 #ifdef USE_LTC
@@ -113,10 +156,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->actionDisplay_the_control_panel->setChecked(_settings->displayControlPanel());
 
-	showMediaPanel();
-
-	this->setFocus();
-
 	ui->actionDisplay_the_information_panel->setChecked(_settings->displayNextText());
 
 	ui->actionTest_mode->setChecked(_settings->stripTestMode());
@@ -131,24 +170,35 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->actionDisplay_the_vertical_scale->setChecked(_settings->displayVerticalScale());
 
-	on_actionDisplay_feet_triggered(_settings->displayFeet());
+	ui->actionDisplay_feet->setChecked(_settings->displayFeet());
 
-	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
-	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
-
-	this->connect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
-
-	_videoLogo.setFilename(":/Joker/joker_gray");
-	_videoLogo.setTransparent(true);
+	this->connect(_view, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
+	this->connect(_view, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
+	this->connect(_view, &PhGraphicView::beforePaint, this, &JokerWindow::onPaint);
 
 #ifdef USE_VIDEO
 	this->connect(&_videoEngine, &PhVideoEngine::opened, this, &JokerWindow::videoFileOpened);
 #endif
+}
 
-//	_playButton.setFilename(":/PhCommonUI/play");
-//	_playButton.setTransparent(true);
-//	_forwardButton.setFilename(":/PhCommonUI/forward");
-//	_forwardButton.setTransparent(true);
+void JokerWindow::qmlStatusChanged(QQuickWidget::Status status)
+{
+	if (status == QQuickWidget::Error)
+	{
+		foreach (QQmlError error, _view->errors())
+		{
+			PHDEBUG << error.toString();
+
+			QMessageBox msgBox;
+			msgBox.setText(error.toString());
+			msgBox.exec();
+		}
+	}
+}
+
+void JokerWindow::onVideoTimeCodeTypeChanged(PhTimeCodeType)
+{
+	emit timePerFrameChanged();
 }
 
 JokerWindow::~JokerWindow()
@@ -175,11 +225,9 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 			_secondScreenWindow = NULL;
 		}
 
-		this->disconnect(ui->videoStripView, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
-		this->disconnect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
-
-		this->disconnect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
-
+		this->disconnect(_view, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
+		this->disconnect(_view, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
+		this->disconnect(_view, &PhGraphicView::paint, this, &JokerWindow::onPaint);
 
 		// Force doc to unmodified to avoid double confirmation
 		// since closeEvent is called twice
@@ -215,8 +263,8 @@ void JokerWindow::setupSyncProtocol()
 		// Initialize the sony module
 		if(_sonySlave.open()) {
 			clock = _sonySlave.clock();
-			_lastVideoSyncElapsed.start();
 			onTimecodeTypeChanged((PhTimeCodeType)_settings->sonySlaveCommunicationTimeCodeType());
+			emit videoSync();
 		}
 		else {
 			type = PhSynchronizer::NoSync;
@@ -286,9 +334,10 @@ bool JokerWindow::openDocument(const QString &fileName)
 	}
 
 	/// Clear the selected people name list (except for the first document).
-	if(!_firstDoc && (fileName != _settings->currentDocument()))
+	if(!_firstDoc && (fileName != _settings->currentDocument())) {
 		_settings->setSelectedPeopleNameList(QStringList());
-	else
+		_selectedPeopleModel.setStringList(_settings->selectedPeopleNameList());
+	} else
 		_firstDoc = false;
 
 	if(!_doc->openStripFile(fileName))
@@ -351,68 +400,13 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
 	/// The event filter catch the following event:
 	switch (event->type()) {
-	case QEvent::MouseMove: /// - Mouse move show the media panel
-	case QEvent::HoverEnter:
-	case QEvent::HoverMove:
-		{
-			QMouseEvent * mouseEvent = (QMouseEvent*)event;
-			// Check if it is near the video/strip border
-			float stripHeight = this->height() * _settings->stripHeight();
-			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
-			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10))
-				QApplication::setOverrideCursor(Qt::SizeVerCursor);
-			else
-				QApplication::setOverrideCursor(Qt::ArrowCursor);
-
-			if(_resizingStrip && (mouseEvent->buttons() & Qt::LeftButton)) {
-				float newStripHeight = 1.0 - ((float) mouseEvent->pos().y() /(float) this->height());
-				if(newStripHeight <= 0) {
-					_settings->resetStripHeight();
-					ui->actionHide_the_rythmo->setChecked(true);
-					_settings->setHideStrip(true);
-				}
-				else {
-					PHDBG(2) << "resizing strip:" << newStripHeight;
-					_settings->setStripHeight(newStripHeight);
-				}
-			}
-			break;
-		}
 	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode
 		if(sender == this)
 			toggleFullScreen();
 		break;
-	case QEvent::MouseButtonRelease:
-		PHDEBUG << "end resizing strip";
-		_resizingStrip = false;
-		break;
-	case QEvent::MouseButtonPress:
-		{
-			QMouseEvent *mouseEvent = (QMouseEvent*)event;
-			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
-				/// - Right mouse click on the video open the video file dialog.
-				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
-					on_actionOpen_Video_triggered();
-				else /// - Left mouse click on the strip open the strip file dialog.
-					on_actionOpen_triggered();
-				return true;
-			}
-			float stripHeight = this->height() * _settings->stripHeight();
-			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
-			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10)) {
-				PHDEBUG << "start resizing strip";
-				_resizingStrip = true;
-			}
-			break;
-		}
-	case QEvent::KeyPress:
-		{
-			QKeyEvent *keyEvent = (QKeyEvent*)event;
-			if(keyEvent->key() == Qt::Key_Space) {
-				on_actionPlay_pause_triggered();
-			}
-			break;
-		}
+		// TODO
+		// Right mouse click on the video open the video file dialog.
+		// Left mouse click on the strip open the strip file dialog
 	default:
 		break;
 	}
@@ -433,7 +427,7 @@ QAction *JokerWindow::fullScreenAction()
 void JokerWindow::onApplicationActivate()
 {
 	PhDocumentWindow::onApplicationActivate();
-	showMediaPanel();
+	//showMediaPanel();
 }
 
 void JokerWindow::onApplicationDeactivate()
@@ -446,264 +440,13 @@ void JokerWindow::showMediaPanel()
 {
 	// Don't show the mediaPanel if Joker has not thefocus.
 	if(_settings->displayControlPanel()) {
-		_mediaPanel.show();
+		//_mediaPanel.show();
 	}
 }
 
 void JokerWindow::hideMediaPanel()
 {
 	_mediaPanel.hide();
-}
-
-void JokerWindow::onPaint(int width, int height)
-{
-#ifdef USE_VIDEO
-	PhClock *clock = _videoEngine.clock();
-#else
-	PhClock *clock = _strip.clock();
-#endif
-	PhTime delay = (PhTime)(24 * _settings->screenDelay() * clock->rate());
-	PhTime clockTime = clock->time() + delay;
-
-	float stripHeightRatio = 0.0f;
-	if(!_settings->hideStrip())
-		stripHeightRatio = _settings->stripHeight();
-
-	int stripHeight = height * stripHeightRatio;
-	int videoHeight = height - stripHeight;
-	int videoWidth = videoHeight * 16 / 9;
-#ifdef USE_VIDEO
-	if(!_doc->forceRatio169() && (_videoEngine.height() > 0))
-		videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
-#endif
-	int videoAvailableWidth = width;
-	// Center video if no information panel with next text
-	if(_settings->displayNextText())
-		videoAvailableWidth = width * 0.8f;
-	QColor infoColor = _settings->backgroundColorLight();
-
-	int y = 0;
-#ifdef USE_VIDEO
-	// Display the video
-	if((videoHeight > 0)) {
-		if(_videoEngine.height() > 0) {
-
-			int blackStripHeight = 0; // Height of the upper black strip when video is too large
-			int realVideoHeight = videoHeight;
-			if(videoWidth > videoAvailableWidth) {
-				videoWidth = videoAvailableWidth;
-				if(_doc->forceRatio169())
-					realVideoHeight = videoWidth  * 9 / 16;
-				else
-					realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
-			}
-			blackStripHeight = (height - stripHeight - realVideoHeight) / 2;
-
-			int videoX = (videoAvailableWidth - videoWidth) / 2;
-
-			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight, delay);
-
-			if(_settings->videoPictureInPicture()) {
-				int pipWidth = videoWidth * _settings->videoPictureInPictureRatio();
-				int pipHeight = realVideoHeight * _settings->videoPictureInPictureRatio();
-				int pipX = 0;
-				if(_settings->videoPictureInPicturePositionRight()) {
-					pipX = width - pipWidth;
-					y += pipHeight;
-				}
-				_videoEngine.drawVideo(pipX, 0, pipWidth, pipHeight,
-				                       delay + 24 * _settings->videoPictureInPictureOffset());
-			}
-		}
-		else if(_settings->displayLogo()) {
-			// The logo file is 500px in native format
-			int logoHeight = _videoLogo.originalSize().height();
-			int logoWidth = _videoLogo.originalSize().width();
-			int logoMaxHeight = videoHeight * 9 / 10;
-			if(logoHeight > logoMaxHeight) {
-				logoHeight = logoMaxHeight;
-				logoWidth = _videoLogo.originalSize().width() * logoHeight / _videoLogo.originalSize().height();
-			}
-			if(logoWidth > videoAvailableWidth) {
-				logoWidth = videoAvailableWidth;
-				logoHeight = _videoLogo.originalSize().height() * logoWidth / _videoLogo.originalSize().width();
-			}
-			_videoLogo.setRect((videoAvailableWidth - logoWidth) / 2, (logoMaxHeight - logoHeight) / 2, logoWidth, logoHeight);
-			_videoLogo.draw();
-
-			QFileInfo videoFileInfo(_doc->videoFilePath());
-			QString videoBaseName = videoFileInfo.fileName();
-			PhGraphicText gVideoFileName(_strip.hudFont(), videoBaseName);
-			int videoBaseHeight = (videoHeight - logoMaxHeight) / 2;
-			int videoBaseNameNominalWidth = _strip.hudFont()->getNominalWidth(videoBaseName);
-			if(videoBaseNameNominalWidth > 0) {
-				int videoBaseWidth = videoBaseNameNominalWidth * videoBaseHeight / 110;
-				if (videoBaseWidth > videoAvailableWidth) {
-					videoBaseWidth = videoAvailableWidth;
-					videoBaseHeight = videoBaseWidth * 110 / videoBaseNameNominalWidth;
-				}
-				gVideoFileName.setColor(infoColor);
-				gVideoFileName.setWidth(videoBaseWidth);
-				gVideoFileName.setHeight(videoBaseHeight);
-				gVideoFileName.setX((videoAvailableWidth - videoBaseWidth) / 2);
-				gVideoFileName.setY(logoMaxHeight + (videoHeight - logoMaxHeight) / 2 - videoBaseHeight / 2);
-				gVideoFileName.draw();
-			}
-		}
-	}
-#endif
-
-	// Get the selected people list
-	QList<PhPeople*> selectedPeoples;
-	foreach(QString name, _settings->selectedPeopleNameList()) {
-		PhPeople *people = _strip.doc()->peopleByName(name);
-		if(people)
-			selectedPeoples.append(people);
-	}
-
-	int x = videoAvailableWidth;
-	if(_settings->displayNextText()) {
-		int infoWidth = width - videoAvailableWidth;
-		int spacing = 4;
-
-		// Display the title
-		{
-			QString title = _strip.doc()->title().toLower();
-			if(_strip.doc()->episode().length() > 0)
-				title += " #" + _strip.doc()->episode().toLower();
-
-			int titleHeight = infoWidth / 12;
-			int titleWidth = _strip.hudFont()->getNominalWidth(title) * titleHeight / 110;
-			PhGraphicText titleText(_strip.hudFont());
-			titleText.setColor(infoColor);
-			titleText.setRect(x + spacing, y, titleWidth, titleHeight);
-			y += titleHeight;
-			titleText.setContent(title);
-			titleText.setZ(5);
-			titleText.draw();
-		}
-
-		// Display the current timecode
-		{
-			int tcWidth = infoWidth - 2 * spacing;
-			int tcHeight = infoWidth / 6;
-			PhGraphicText tcText(_strip.hudFont());
-			tcText.setColor(infoColor);
-			tcText.setRect(x + 4, y, tcWidth, tcHeight);
-			tcText.setContent(PhTimeCode::stringFromTime(clockTime, localTimeCodeType()));
-			tcText.draw();
-
-			y += tcHeight;
-		}
-
-		// Display the box around current loop number
-		int boxWidth = infoWidth / 4;
-		int nextTcWidth = infoWidth - boxWidth - 3 * spacing;
-		int nextTcHeight = nextTcWidth / 6;
-		int boxHeight = nextTcHeight + spacing;
-		{
-			PhGraphicSolidRect outsideLoopRect(x + spacing, y, boxWidth, boxHeight);
-			outsideLoopRect.setColor(infoColor);
-			outsideLoopRect.draw();
-
-			// Display the current loop number
-			QString loopLabel = "0";
-			PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
-			if(currentLoop)
-				loopLabel = currentLoop->label();
-			int loopWidth = _strip.hudFont()->getNominalWidth(loopLabel) * nextTcHeight / 110;
-			int loopHeight = nextTcHeight;
-			int loopX = x + spacing + (boxWidth - loopWidth) / 2;
-			int loopY = y + spacing;
-
-			PhGraphicText gCurrentLoop(_strip.hudFont(), loopLabel);
-
-			gCurrentLoop.setRect(loopX, loopY, loopWidth, loopHeight);
-			gCurrentLoop.setColor(Qt::black);
-			gCurrentLoop.draw();
-		}
-
-		// Display the next timecode
-		{
-			/// The next time code will be the next element of the people from the list.
-			PhStripText *nextText = NULL;
-			if(selectedPeoples.count()) {
-				nextText = _strip.doc()->nextText(selectedPeoples, clockTime);
-				if(nextText == NULL)
-					nextText = _strip.doc()->nextText(selectedPeoples, 0);
-			}
-			else {
-				nextText = _strip.doc()->nextText(clockTime);
-				if(nextText == NULL)
-					nextText = _strip.doc()->nextText(0);
-			}
-
-			PhTime nextTextTime = 0;
-			if(nextText != NULL)
-				nextTextTime = nextText->timeIn();
-
-			PhGraphicText nextTCText(_strip.hudFont());
-			nextTCText.setColor(infoColor);
-
-			int nextTcX = x + 2 * spacing + boxWidth;
-			int nextTcY = y + spacing;
-			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
-
-			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, localTimeCodeType()));
-			nextTCText.draw();
-
-			y += boxHeight + spacing;
-		}
-
-		// Display the control button
-#warning /// @todo Add control button to the interface
-//		{
-//			_playButton.setColor(infoColor);
-//			_playButton.setRect(x, y, 16, 16);
-//			_playButton.draw();
-//			_forwardButton.setColor(infoColor);
-//			_forwardButton.setRect(x + 16, y, 16, 16);
-//			_forwardButton.draw();
-//		}
-	}
-
-	if(stripHeight > 0) {
-		if(_synchronizer.stripClock() == NULL) {
-			PHDEBUG <<  "Reconnect the strip clock";
-			_synchronizer.setStripClock(_strip.clock());
-#ifdef USE_VIDEO
-			_mediaPanel.setClock(_strip.clock());
-#endif
-		}
-
-		_strip.draw(0, videoHeight, width, stripHeight, x, y, selectedPeoples);
-	}
-	else if(_synchronizer.stripClock()) {
-		PHDEBUG << "Disconnect the strip clock";
-		_synchronizer.setStripClock(NULL);
-#ifdef USE_VIDEO
-		_mediaPanel.setClock(_videoEngine.clock());
-#endif
-	}
-
-	foreach(QString info, _strip.infos()) {
-		ui->videoStripView->addInfo(info);
-	}
-
-	if((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000)) {
-		PhGraphicText errorText(_strip.hudFont(), tr("No video sync"));
-		errorText.setRect(width / 2 - 100, height / 2 - 25, 200, 50);
-		int red = (_lastVideoSyncElapsed.elapsed() - 1000) / 4;
-		if (red > 255)
-			red = 255;
-		errorText.setColor(QColor(red, 0, 0));
-		errorText.draw();
-	}
-}
-
-void JokerWindow::onVideoSync()
-{
-	_lastVideoSyncElapsed.restart();
 }
 
 void JokerWindow::setCurrentTime(PhTime time)
@@ -784,7 +527,13 @@ void JokerWindow::on_actionOpen_triggered()
 				QMessageBox::critical(this, "", QString(tr("Unable to open %1")).arg(fileName));
 		}
 	}
-	showMediaPanel();
+	//showMediaPanel();
+}
+
+void JokerWindow::on_actionStep_start_triggered()
+{
+	setCurrentTime(_doc->videoTimeIn());
+	//showMediaPanel();
 }
 
 void JokerWindow::on_actionPlay_pause_triggered()
@@ -879,8 +628,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 		_setCurrentTimeToVideoTimeIn = true;
 		openVideoFile(videoFile);
 	}
-
-	showMediaPanel();
+	//showMediaPanel();
 #endif
 }
 
@@ -894,7 +642,7 @@ void JokerWindow::videoFileOpened(bool success)
 		QFileInfo lastFileInfo(_doc->videoFilePath());
 		QFileInfo fileInfo(_videoEngine.fileName());
 
-		if(videoTimeIn == 0) {
+		if(videoTimeIn == PHTIMEMAX || videoTimeIn == 0) {
 			/* the video itself has no timestamp, and until now we have not
 			 * propagated the doc videoTimeIn to the videoEngine */
 			videoTimeIn = _doc->videoTimeIn();
@@ -902,10 +650,12 @@ void JokerWindow::videoFileOpened(bool success)
 			_videoEngine.clock()->setTime(videoTimeIn);
 
 			/* ask the user if he wants to change the video time in */
-			if(fileInfo.fileName() != lastFileInfo.fileName()) {
-				on_actionChange_timestamp_triggered();
-				videoTimeIn = _videoEngine.timeIn();
-			}
+//			if(fileInfo.fileName() != lastFileInfo.fileName()) {
+//				on_actionChange_timestamp_triggered();
+//				videoTimeIn = _videoEngine.timeIn();
+//			}
+			setVideoTimeInToOneHour();
+			videoTimeIn = _videoEngine.timeIn();
 		}
 
 		if(_videoEngine.fileName() != _doc->videoFilePath()) {
@@ -991,10 +741,23 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 	}
 #endif
 
-	showMediaPanel();
+	//showMediaPanel();
 }
 
+void JokerWindow::setVideoTimeInToOneHour()
+{
+	setCurrentRate(0);
 
+	PhTime timeStamp = PhTimeCode::timeFromHhMmSsFf(1, 0, 0, 0, localTimeCodeType());
+
+	PHDEBUG << timeStamp;
+
+	_videoEngine.setTimeIn(timeStamp);
+	setCurrentTime(timeStamp);
+	_doc->setVideoTimeIn(timeStamp, localTimeCodeType());
+	_mediaPanel.setTimeIn(timeStamp);
+	_doc->setModified(true);
+}
 
 void JokerWindow::on_actionAbout_triggered()
 {
@@ -1004,7 +767,7 @@ void JokerWindow::on_actionAbout_triggered()
 	dlg.setTimePlayed(_timePlayed);
 	dlg.exec();
 
-	showMediaPanel();
+	//showMediaPanel();
 }
 
 
@@ -1047,7 +810,7 @@ void JokerWindow::on_actionPreferences_triggered()
 #endif // USE_MIDI
 	}
 
-	showMediaPanel();
+	//showMediaPanel();
 }
 
 void JokerWindow::on_actionProperties_triggered()
@@ -1068,7 +831,7 @@ void JokerWindow::on_actionTimecode_triggered()
 	if(dlg.exec() == QDialog::Accepted)
 		setCurrentTime(dlg.time());
 
-	showMediaPanel();
+	//showMediaPanel();
 }
 
 void JokerWindow::on_actionNext_element_triggered()
@@ -1139,6 +902,11 @@ void JokerWindow::on_actionSave_as_triggered()
 	}
 
 	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.detx");
+
+	if (!fileName.endsWith(".detx", Qt::CaseInsensitive)) {
+		fileName.append(".detx");
+	}
+
 	if(fileName != "")
 		saveDocument(fileName);
 }
@@ -1152,7 +920,7 @@ void JokerWindow::on_actionSelect_character_triggered()
 {
 	hideMediaPanel();
 
-	PeopleDialog dlg(this, _doc, _settings);
+	PeopleDialog dlg(this, _doc, _settings, &_selectedPeopleModel);
 
 	dlg.restoreGeometry(_settings->peopleDialogGeometry());
 	dlg.exec();
@@ -1201,7 +969,7 @@ void JokerWindow::on_actionSend_feedback_triggered()
 	hideMediaPanel();
 	PhFeedbackDialog dlg(this);
 	dlg.exec();
-	showMediaPanel();
+	//showMediaPanel();
 }
 
 void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
@@ -1218,6 +986,111 @@ void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
 void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
 {
 	_settings->setHideStrip(checked);
+}
+
+void JokerWindow::onPaint(PhTime elapsedTime)
+{
+#ifdef USE_VIDEO
+	PhClock *clock = _videoEngine.clock();
+#else
+	PhClock *clock = _strip.clock();
+#endif
+	PhTime delay = (PhTime)(24 * _settings->screenDelay() * clock->rate());
+	PhTime clockTime = clock->time() + delay;
+	setStripTime(clockTime);
+
+	QList<PhPeople*> selectedPeoples;
+	foreach(QString name, _settings->selectedPeopleNameList()) {
+		PhPeople *people = _strip.doc()->peopleByName(name);
+		if(people)
+			selectedPeoples.append(people);
+	}
+
+	// FIXME the font size for the list of selected peoples is fixed, whereas it depended on the window size before
+
+	// FIXME
+	float stripHeightRatio = 0.0f;
+	if(!_settings->hideStrip())
+		stripHeightRatio = _settings->stripHeight();
+
+#ifdef USE_VIDEO
+	// Display the video
+
+	// TODO respect _doc->forceRatio169()
+	// TODO respect _settings->hideStrip()
+
+	_videoEngine.decodeVideo();
+
+	// TODO  _settings->videoPictureInPicture()
+
+//	if(_settings->videoPictureInPicture()) {
+//		int pipWidth = videoWidth * _settings->videoPictureInPictureRatio();
+//		int pipHeight = realVideoHeight * _settings->videoPictureInPictureRatio();
+//		int pipX = 0;
+//		if(_settings->videoPictureInPicturePositionRight()) {
+//			pipX = width - pipWidth;
+//			y += pipHeight;
+//		}
+//		_videoEngine.drawVideo(pipX, 0, pipWidth, pipHeight,
+//							   delay + 24 * _settings->videoPictureInPictureOffset());
+//}
+#endif
+
+	int x = 0;
+	int y = 0;
+	int width = 100;
+	int stripHeight = 100;
+
+	_strip.draw(0, y, width, stripHeight, x, 0, selectedPeoples);
+
+	if (_settings->displayInfo()) {
+		// prepare the string list that is used to display the infos
+		setRefreshInfo(QString("refresh: %1x%2, %3 / %4")
+					   .arg(_view->width())
+					   .arg(_view->height())
+					   .arg(_view->maxRefreshRate())
+					   .arg(_view->refreshRate()));
+		setUpdateInfo(QString("Update : %1 %2").arg(_view->maxUpdateDuration())
+											.arg(_view->lastUpdateDuration()));
+		setDropInfo(QString("drop: %1 %2").arg(_view->dropDetected()).arg(_view->secondsSinceLastDrop()));
+		#warning /// @todo measure fps with a custom QML element
+		// The actual painting duration could be measured using a custom QML element.
+		// See: http://developer.nokia.com/community/wiki/QML_Performance_Meter
+		// (anyway, the QML profiler will provide much more details to the developer.)
+
+		QString stripInfoText;
+		foreach(QString info, _strip.infos()) {
+			stripInfoText.append(info);
+		}
+		setStripInfo(stripInfoText);
+	}
+
+	PhStripLine *nextLine = NULL;
+	if(_settings->displayNextText()) {
+		/// The next time code will be the next element of the people from the list.
+		if(selectedPeoples.count()) {
+			nextLine = _strip.doc()->nextLine(selectedPeoples, clockTime);
+			if(nextLine == NULL)
+				nextLine = _strip.doc()->nextLine(selectedPeoples, 0);
+		}
+		else {
+			nextLine = _strip.doc()->nextLine(clockTime);
+			if(nextLine == NULL)
+				nextLine = _strip.doc()->nextLine(0);
+		}
+	}
+
+	setTcLabelText(PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
+
+	if (nextLine != NULL) {
+		setNextTcLabelText(PhTimeCode::stringFromTime(nextLine->timeIn(), _videoEngine.timeCodeType()));
+	}
+	else {
+		setNextTcLabelText("");
+	}
+
+	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
+	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
 }
 
 void JokerWindow::on_actionPrevious_loop_triggered()
@@ -1260,13 +1133,44 @@ PhRate JokerWindow::currentRate()
 	return _strip.clock()->rate();
 }
 
+QString JokerWindow::nextTcLabelText() const
+{
+	return _nextTcLabelText;
+}
+
+void JokerWindow::setNextTcLabelText(const QString &nextTcLabelText)
+{
+	if (_nextTcLabelText != nextTcLabelText) {
+		_nextTcLabelText = nextTcLabelText;
+		emit nextTcLabelTextChanged();
+	}
+}
+
+QString JokerWindow::tcLabelText() const
+{
+	return _tcLabelText;
+}
+
+void JokerWindow::setTcLabelText(const QString &tcLabelText)
+{
+	if (_tcLabelText != tcLabelText) {
+		_tcLabelText = tcLabelText;
+		emit tcLabelTextChanged();
+	}
+}
+
+JokerSettings *JokerWindow::settings() const
+{
+	return _settings;
+}
+
 void JokerWindow::on_actionDisplay_the_control_panel_triggered(bool checked)
 {
 	_settings->setDisplayControlPanel(checked);
-	if(checked)
-		showMediaPanel();
-	else
-		hideMediaPanel();
+//	if(checked)
+//		showMediaPanel();
+//	else
+//		hideMediaPanel();
 }
 
 void JokerWindow::on_actionDisplay_the_information_panel_triggered(bool checked)
@@ -1293,6 +1197,11 @@ void JokerWindow::on_actionPicture_in_picture_triggered(bool checked)
 #endif
 }
 
+PhTime JokerWindow::timePerFrame()
+{
+	return PhTimeCode::timePerFrame(localTimeCodeType());
+}
+
 void JokerWindow::on_actionSet_TC_in_triggered()
 {
 	_settings->setSyncLoopTimeIn(_synchronizer.time());
@@ -1308,12 +1217,91 @@ void JokerWindow::on_actionLoop_triggered(bool checked)
 	_settings->setSyncLooping(checked);
 }
 
+QString JokerWindow::currentLoopLabel()
+{
+	return _currentLoopLabel;
+}
+
+void JokerWindow::setCurrentLoopLabel(QString label)
+{
+	if (label != _currentLoopLabel) {
+		_currentLoopLabel = label;
+		emit currentLoopLabelChanged();
+	}
+}
+
+PhTime JokerWindow::stripTime()
+{
+	return _stripTime;
+}
+
+void JokerWindow::setStripTime(PhTime time)
+{
+	if (time != _stripTime) {
+		_stripTime = time;
+		emit stripTimeChanged();
+	}
+}
+
+void JokerWindow::setRefreshInfo(QString text)
+{
+	if (text != _refreshInfo) {
+		_refreshInfo = text;
+		emit refreshInfoChanged();
+	}
+}
+
+void JokerWindow::setUpdateInfo(QString text)
+{
+	if (text != _updateInfo) {
+		_updateInfo = text;
+		emit updateInfoChanged();
+	}
+}
+
+void JokerWindow::setDropInfo(QString text)
+{
+	if (text != _dropInfo) {
+		_dropInfo = text;
+		emit dropInfoChanged();
+	}
+}
+
+void JokerWindow::setStripInfo(QString text)
+{
+	if (text != _stripInfo) {
+		_stripInfo = text;
+		emit stripInfoChanged();
+	}
+}
 void JokerWindow::on_actionSecond_screen_triggered(bool checked)
 {
 #ifdef USE_VIDEO
 	_settings->setVideoSecondScreen(checked);
 	if(checked) {
-		_secondScreenWindow = new SecondScreenWindow(&_videoEngine, ui->videoStripView, _settings);
+		_videoEngine.registerVideoSurface(&_secondScreenVideoSurface);
+
+		_secondScreenWindow = new SecondScreenWindow(&_videoEngine, _settings);
+
+		foreach(QString path, _secondScreenWindow->engine()->importPathList()) {
+			PHDEBUG << path;
+		}
+
+		QQmlContext *context = _secondScreenWindow->engine()->rootContext();
+		context->setContextProperty("videoLogoUrl", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png"));
+		context->setContextProperty("secondScreenVideoSource", &_secondScreenVideoSurface);
+		context->setContextProperty("settings", _settings);
+
+#ifdef USE_VIDEO
+		context->setContextProperty("videoEngine", &_videoEngine);
+#endif
+
+		connect(_secondScreenWindow, &QQuickWidget::statusChanged, this, &JokerWindow::qmlStatusChanged);
+
+		_secondScreenWindow->setResizeMode(QQuickWidget::SizeRootObjectToView);
+
+		_secondScreenWindow->setSource(QUrl("qrc:///qml/SecondScreen.qml"));
+
 		_secondScreenWindow->show();
 		connect(_secondScreenWindow, &SecondScreenWindow::closing, this, &JokerWindow::onSecondScreenClosed);
 	}
@@ -1321,6 +1309,8 @@ void JokerWindow::on_actionSecond_screen_triggered(bool checked)
 		_secondScreenWindow->close();
 		delete _secondScreenWindow;
 		_secondScreenWindow = NULL;
+
+		_videoEngine.unregisterVideoSurface(&_secondScreenVideoSurface);
 	}
 #endif
 }

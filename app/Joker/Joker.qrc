@@ -2,4 +2,22 @@
     <qresource prefix="/Joker">
         <file alias="joker_gray">../../data/img/joker_gray.png</file>
     </qresource>
+    <qresource prefix="/qml">
+        <file>LeftColumn.qml</file>
+        <file>main.qml</file>
+        <file>MediaPanel.qml</file>
+        <file>RightColumn.qml</file>
+        <file>Strip.qml</file>
+        <file>Video.qml</file>
+        <file>Line.qml</file>
+        <file>StripText.qml</file>
+        <file>Detect.qml</file>
+        <file>PeopleSelection.qml</file>
+        <file>EditionSwitch.qml</file>
+        <file>SecondScreen.qml</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file>fontawesome.js</file>
+        <file alias="fontawesome-webfont.ttf">../../data/fonts/fontawesome-webfont.ttf</file>
+    </qresource>
 </RCC>

@@ -7,6 +7,7 @@
 #ifndef PHPEOPLE_H
 #define PHPEOPLE_H
 
+#include <QObject>
 #include <QString>
 
 /**
@@ -15,7 +16,12 @@
  * It can also be use to write notes or comments on the strip.
  * For example : NDA (note de l'adaptateur).
  */
-class PhPeople {
+class PhPeople : public QObject {
+
+	Q_OBJECT
+
+	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+	Q_PROPERTY(QString color READ color WRITE setColor NOTIFY colorChanged)
 
 public:
 	/**
@@ -55,6 +61,11 @@ public:
 	 * @param picture A base64 string containing JPEG data.
 	 */
 	void setPicture(QString picture);
+
+signals:
+	void nameChanged();
+	void colorChanged();
+
 private:
 	QString _name;
 	QString _color;

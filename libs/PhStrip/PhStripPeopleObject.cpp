@@ -24,7 +24,10 @@ float PhStripPeopleObject::height() const
 
 void PhStripPeopleObject::setHeight(float height)
 {
-	_height = height;
+	if (height != _height) {
+		_height = height;
+		emit heightChanged();
+	}
 }
 
 QString PhStripPeopleObject::peopleObjectDescription(PhTimeCodeType tcType)

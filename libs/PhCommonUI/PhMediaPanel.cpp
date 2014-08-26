@@ -17,6 +17,7 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	_clock(NULL),
 	_timeIn(0),
 	_length(0),
+	_relativeTime(0),
 	_playing(false)
 {
 	ui->setupUi(this);
@@ -83,8 +84,11 @@ PhTime PhMediaPanel::timeIn() const
 
 void PhMediaPanel::setTimeIn(PhTime timeIn)
 {
-	_timeIn = timeIn;
-	updateSlider();
+	if (timeIn != _timeIn) {
+		PHDEBUG << "timeIn: " << timeIn;
+		_timeIn = timeIn;
+		updateSlider();
+	}
 }
 
 PhTime PhMediaPanel::length()
@@ -94,8 +98,30 @@ PhTime PhMediaPanel::length()
 
 void PhMediaPanel::setLength(PhTime length)
 {
-	_length = length;
-	updateSlider();
+	if (length != _length) {
+		PHDEBUG << "length: " << length;
+		_length = length;
+		updateSlider();
+
+		emit lengthChanged();
+	}
+}
+
+PhTime PhMediaPanel::relativeTime()
+{
+	return _relativeTime;
+}
+
+void PhMediaPanel::setRelativeTime(PhTime relativeTime)
+{
+	if (relativeTime != _relativeTime) {
+		_relativeTime = relativeTime;
+
+		PhTime time = _timeIn + relativeTime;
+		_clock->setTime(time);
+
+		emit relativeTimeChanged();
+	}
 }
 
 bool PhMediaPanel::isPlaying()
@@ -108,9 +134,9 @@ bool PhMediaPanel::isPlaying()
 
 void PhMediaPanel::setTimeCodeType(PhTimeCodeType tcType)
 {
+	setAverageFps(PhTimeCode::getAverageFps(tcType));
 	onTimeCodeTypeChanged(tcType);
 }
-
 
 void PhMediaPanel::setClock(PhClock *clock)
 {
@@ -126,6 +152,8 @@ void PhMediaPanel::onRateChanged(PhRate rate)
 {
 	ui->_rateLabel->setText("x"+QString::number(rate));
 	updatePlayingState();
+
+	emit rateChanged();
 }
 
 void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
@@ -219,6 +247,19 @@ void PhMediaPanel::onPreviousFrame()
 	emit previousFrameClicked();
 }
 
+void PhMediaPanel::onPlayPauseBackward()
+{
+	if(_clock) {
+		if(_clock->rate())
+			_clock->setRate(0);
+		else
+			_clock->setRate(-1);
+	}
+	else
+		_playing = !_playing;
+	updatePlayingState();
+}
+
 void PhMediaPanel::onSliderChanged(int position)
 {
 	PhTime time = position * PhTimeCode::timePerFrame(this->timeCodeType());
@@ -234,6 +275,8 @@ void PhMediaPanel::updateSlider()
 	PhFrame frameOut = (_timeIn + _length) / PhTimeCode::timePerFrame(tcType);
 	ui->_slider->setMinimum(frameIn);
 	ui->_slider->setMaximum(frameOut);
+
+	setRelativeTime(_clock->time() - _timeIn);
 }
 
 void PhMediaPanel::onTCTypeComboChanged()
@@ -252,10 +295,24 @@ void PhMediaPanel::updatePlayingState()
 		ui->_playButton->setIcon(QIcon(":play"));
 }
 
+void PhMediaPanel::setAverageFps(double averageFps)
+{
+	if (_averageFps != averageFps) {
+		_averageFps = averageFps;
+		emit averageFpsChanged();
+	}
+}
+
+double PhMediaPanel::averageFps()
+{
+	return _averageFps;
+}
+
 void PhMediaPanel::onTimeChanged(PhTime time)
 {
 	PhTimeCodeType tcType = this->timeCodeType();
 	ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(time, tcType));
 	ui->_slider->setSliderPosition(time / PhTimeCode::timePerFrame(tcType));
+	setRelativeTime(_clock->time() - _timeIn);
 }
 

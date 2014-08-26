@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QVideoSurfaceFormat>
 #include <cmath>
 
 #include "PhTools/PhDebug.h"
@@ -16,7 +17,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_fileName(""),
 	_tcType(PhTimeCodeType25),
 	_frameLength(0),
-	_timeIn(0),
+	_timeIn(PHTIMEMAX),
 	_framePerSecond(25.00f),
 	_width(0),
 	_height(0),
@@ -58,8 +59,8 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 
 	if (deinterlace != _deinterlace) {
 		_deinterlace = deinterlace;
-		foreach (PhVideoRect *videoRect, _videoRectList.values()) {
-			videoRect->discard();
+		foreach (PhVideoSurface *videoSurface, _videoSurfaceList) {
+			videoSurface->discard();
 		}
 
 		emit deinterlaceChanged(_deinterlace);
@@ -79,9 +80,10 @@ bool PhVideoEngine::bilinearFiltering()
 void PhVideoEngine::setBilinearFiltering(bool bilinear)
 {
 	_bilinearFiltering = bilinear;
-	foreach (PhVideoRect *videoRect, _videoRectList.values()) {
-		videoRect->setBilinearFiltering(bilinear);
-	}
+	// FIXME
+//	foreach (PhVideoRect *videoRect, _videoRectList.values()) {
+//		videoRect->setBilinearFiltering(bilinear);
+//	}
 }
 
 bool PhVideoEngine::open(QString fileName)
@@ -95,8 +97,8 @@ bool PhVideoEngine::open(QString fileName)
 
 	_clock.setTime(0);
 	_clock.setRate(0);
-	foreach (PhVideoRect *videoRect, _videoRectList.values()) {
-		videoRect->discard();
+	foreach (PhVideoSurface *videoSurface, _videoSurfaceList) {
+		videoSurface->discard();
 	}
 
 	// cancel pool
@@ -116,9 +118,10 @@ void PhVideoEngine::close()
 
 	PHDEBUG << _fileName << "closed";
 
-	_timeIn = 0;
+	setTimeIn(PHTIMEMAX);
+	setFrameLength(0);
+
 	_fileName = "";
-	_frameLength = 0;
 	_width = 0;
 	_height = 0;
 	_codecName = "";
@@ -133,17 +136,8 @@ PhFrame PhVideoEngine::clockFrame()
 	return (_clock.time() - _timeIn) / PhTimeCode::timePerFrame(_tcType);
 }
 
-void PhVideoEngine::drawVideo(int x, int y, int w, int h, PhTime offset)
+void PhVideoEngine::decodeVideo()
 {
-	PhFrame frameOffset = offset / PhTimeCode::timePerFrame(_tcType);
-	PhFrame frame = clockFrame() + frameOffset;
-
-	// clip to stream boundaries
-	if(frame < 0)
-		frame = 0;
-	if (frame >= _frameLength)
-		frame = _frameLength;
-
 	// 2 possibilities
 	// 1) the frame is currently on screen
 	//		=> nothing to do
@@ -151,37 +145,53 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h, PhTime offset)
 	//		=> refresh the texture with the frame that is the pool
 	// in any case, transmit the current time to the decoder so that it can read ahead
 
-	PhVideoRect *videoRect = _videoRectList[frameOffset];
-	if(videoRect == NULL) {
-		_videoRectList[frameOffset] = videoRect = new PhVideoRect();
-		videoRect->setBilinearFiltering(_bilinearFiltering);
-	}
-	if (videoRect->currentFrame() != frame) {
-		PhVideoBuffer *buffer = _framePool.tryGetFrame(frame);
+	foreach (PhVideoSurface *videoSurface, _videoSurfaceList) {
+		PhFrame frame = clockFrame() + videoSurface->offset();
 
-		if (buffer) {
-			// The time does not correspond to the frame on screen,
-			// but the frame is in the pool,
-			// so just show it.
-			PHDBG(24) << "frame found in pool:" << buffer->frame();
-			videoRect->update(buffer);
-			_videoFrameTickCounter.tick();
+		// clip to stream boundaries
+		if(frame < 0)
+			frame = 0;
+		if (frame >= _frameLength)
+			frame = _frameLength;
+
+		if (videoSurface->currentFrame() != frame) {
+			PhVideoBuffer *buffer = _framePool.tryGetFrame(frame);
+
+			if (buffer) {
+				// The time does not correspond to the frame on screen,
+				// but the frame is in the pool,
+				// so just show it.
+				PHDBG(24) << "frame found in pool:" << buffer->frame();
+				videoSurface->update(buffer);
+				_videoFrameTickCounter.tick();
+			}
 		}
 	}
 
-	// draw whatever frame we currently have
-	if(_settings->useNativeVideoSize())
-		videoRect->setRect(x, y, this->width(), this->height());
-	else
-		videoRect->setRect(x, y, w, h);
-	videoRect->setZ(-10);
-	videoRect->draw();
+	// FIXME bilinear filtering
+//	PhVideoRect *videoRect = _videoRectList[frameOffset];
+//	if(videoRect == NULL) {
+//		_videoRectList[frameOffset] = videoRect = new PhVideoRect();
+//		videoRect->setBilinearFiltering(_bilinearFiltering);
+//	}
 }
 
 void PhVideoEngine::setTimeIn(PhTime timeIn)
 {
 	PHDEBUG << timeIn;
-	_timeIn = timeIn;
+	if (timeIn != _timeIn) {
+		_timeIn = timeIn;
+		emit timeInChanged();
+		emit timeOutChanged();
+	}
+}
+
+void PhVideoEngine::setFrameLength(PhFrame frameLength)
+{
+	if (frameLength != _frameLength) {
+		_frameLength = frameLength;
+		emit timeOutChanged();
+	}
 }
 
 PhTime PhVideoEngine::length()
@@ -233,15 +243,17 @@ void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
 
 	emit newFrameDecoded(bufferFrame);
 	bool shown = false;
-	foreach (PhFrame offset, _videoRectList.keys()) {
-		if ((abs(frame + offset - bufferFrame) <= abs(frame + offset - _videoRectList[offset]->currentFrame())
+	foreach (PhVideoSurface *videoSurface, _videoSurfaceList) {
+		PhFrame offset = videoSurface->offset();
+		if ((abs(frame + offset - bufferFrame) <= abs(frame + offset - videoSurface->currentFrame())
 		     && abs(frame + offset - bufferFrame) < 3)
-		    || abs(frame + offset - bufferFrame) + 50 <= abs(frame + offset - _videoRectList[offset]->currentFrame())) {
+			|| abs(frame + offset - bufferFrame) + 50 <= abs(frame + offset - videoSurface->currentFrame())) {
 			// this frame is closer to the current time than the frame that is currently displayed,
 			// so show it.
 			// Note: we do not wait for the exact frame to be available to improve the responsiveness
 			// when seeking.
-			_videoRectList[offset]->update(buffer);
+			videoSurface->update(buffer);
+
 			_videoFrameTickCounter.tick();
 			PHDBG(24) << "showing frame " << bufferFrame;
 			shown = true;
@@ -255,15 +267,17 @@ void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
 void PhVideoEngine::decoderOpened(PhTimeCodeType tcType, PhFrame frameIn, PhFrame frameLength, int width, int height, QString codecName)
 {
 	_tcType = tcType;
-	_timeIn = frameIn * PhTimeCode::timePerFrame(tcType);
-	_frameLength = frameLength;
+	setTimeIn(frameIn * PhTimeCode::timePerFrame(tcType));
+	setFrameLength(frameLength);
 	_width = width;
 	_height = height;
 	_codecName = codecName;
 
 	// Looking for timecode type
-	_tcType = PhTimeCode::computeTimeCodeType(this->framePerSecond());
+	//_tcType = PhTimeCode::computeTimeCodeType(this->framePerSecond());
 	emit timeCodeTypeChanged(_tcType);
+	emit timeOutChanged();
+
 	_framePool.update(frameLength);
 
 	_ready = true;
@@ -276,6 +290,16 @@ void PhVideoEngine::decoderOpened(PhTimeCodeType tcType, PhFrame frameIn, PhFram
 void PhVideoEngine::openInDecoderFailed()
 {
 	emit opened(false);
+}
+
+void PhVideoEngine::registerVideoSurface(PhVideoSurface *videoSurface)
+{
+	_videoSurfaceList.append(videoSurface);
+}
+
+void PhVideoEngine::unregisterVideoSurface(PhVideoSurface *videoSurface)
+{
+	_videoSurfaceList.removeOne(videoSurface);
 }
 
 void PhVideoEngine::onTimeChanged(PhTime)

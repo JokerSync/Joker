@@ -5,11 +5,12 @@
  */
 
 #include "PhStripText.h"
+#include "PhTools/PhDebug.h"
 
-
-
-PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, float y, QString content, float height) :
-	PhStripPeopleObject(timeIn, people, timeOut, y, height), _content(content)
+PhStripText::PhStripText(QString content, PhTime duration, PhStripDetect::PhDetectType typeOut) :
+	_content(content),
+	_duration(duration),
+	_typeOut(typeOut)
 {
 }
 
@@ -20,11 +21,28 @@ QString PhStripText::content() const
 
 void PhStripText::setContent(QString content)
 {
-	_content = content;
+	if (content != _content) {
+		_content = content;
+		emit contentChanged();
+	}
 }
 
-QString PhStripText::description(PhTimeCodeType tcType)
+PhStripDetect::PhDetectType PhStripText::typeOut() const
 {
-	return this->peopleObjectDescription(tcType).arg(this->content());
+	return _typeOut;
 }
 
+void PhStripText::setTypeOut(const PhStripDetect::PhDetectType &typeOut)
+{
+	_typeOut = typeOut;
+}
+
+PhTime PhStripText::duration() const
+{
+	return _duration;
+}
+
+void PhStripText::setDuration(const PhTime &duration)
+{
+	_duration = duration;
+}

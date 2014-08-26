@@ -7,15 +7,17 @@
 #ifndef PHSTRIPDETECT_H
 #define PHSTRIPDETECT_H
 
-#include "PhStripPeopleObject.h"
+#include "PhSync/PhClock.h"
 
 /**
  * @brief Block of detection during which a PhPeople is speaking.
  *
  * The block can be off (out of the picture) or not.
  */
-class PhStripDetect : public PhStripPeopleObject
+class PhStripDetect : QObject
 {
+	Q_OBJECT
+
 public:
 	/**
 	 * @brief The various type of detect
@@ -42,13 +44,9 @@ public:
 	/**
 	 * @brief PhStripDetect constructor
 	 * @param type The type of detect
-	 * @param timeIn The starting time of the detect
-	 * @param people the corresponding PhPeople
-	 * @param timeOut The ending time of the detect
-	 * @param y The vertical position of the detect
-	 * @param height The vertical height of the detect
+	 * @param relativeTime The starting time of the detect, relative to the line start
 	 */
-	PhStripDetect(PhDetectType type, PhTime timeIn, PhPeople * people, PhTime timeOut, float y, float height);
+	PhStripDetect(PhDetectType type, PhTime relativeTime);
 
 	/**
 	 * @brief If the people is out of the picture
@@ -58,9 +56,14 @@ public:
 		return _type;
 	}
 
-	QString description(PhTimeCodeType tcType);
+	void setType(const PhDetectType &type);
+
+	PhTime relativeTime() const;
+	void setRelativeTime(const PhTime &relativeTime);
+
 private:
 	PhDetectType _type;
+	PhTime _relativeTime;
 };
 
 #endif // PHSTRIPDETECT_H

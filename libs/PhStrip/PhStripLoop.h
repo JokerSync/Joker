@@ -38,6 +38,8 @@ public:
 		return _label;
 	}
 
+	void setLabel(const QString &label);
+
 	/**
 	 * @brief Loop description
 	 * @param tcType The timecode type use to display

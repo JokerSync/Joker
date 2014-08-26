@@ -14,7 +14,7 @@
    <string>Joker</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="1">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -30,9 +30,6 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item>
-     <widget class="PhGraphicView" name="videoStripView" native="true"/>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -41,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>820</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -169,48 +166,30 @@
    <property name="text">
     <string>Play/pause</string>
    </property>
-   <property name="shortcut">
-    <string>Space</string>
-   </property>
   </action>
   <action name="actionPlay_backward">
    <property name="text">
     <string>Play backward</string>
-   </property>
-   <property name="shortcut">
-    <string>Down</string>
    </property>
   </action>
   <action name="actionStep_forward">
    <property name="text">
     <string>Step forward</string>
    </property>
-   <property name="shortcut">
-    <string>Right</string>
-   </property>
   </action>
   <action name="actionStep_backward">
    <property name="text">
     <string>Step backward</string>
-   </property>
-   <property name="shortcut">
-    <string>Left</string>
    </property>
   </action>
   <action name="actionStep_time_forward">
    <property name="text">
     <string>Step time forward</string>
    </property>
-   <property name="shortcut">
-    <string>Alt+Right</string>
-   </property>
   </action>
   <action name="actionStep_time_backward">
    <property name="text">
     <string>Step time backward</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+Left</string>
    </property>
   </action>
   <action name="action_3">
@@ -317,16 +296,10 @@
    <property name="text">
     <string>Next element</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+Right</string>
-   </property>
   </action>
   <action name="actionPrevious_element">
    <property name="text">
     <string>Previous element</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Left</string>
    </property>
   </action>
   <action name="actionSave">
@@ -436,18 +409,18 @@
   </action>
   <action name="actionNext_loop">
    <property name="text">
-    <string>Next loop</string>
+	<string>Next loop</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Up</string>
+	<string>Ctrl+Alt+Up</string>
    </property>
   </action>
   <action name="actionPrevious_loop">
    <property name="text">
-    <string>Previous loop</string>
+	<string>Previous loop</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Down</string>
+	<string>Ctrl+Alt+Down</string>
    </property>
   </action>
   <action name="actionDisplay_the_cuts">

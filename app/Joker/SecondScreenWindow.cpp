@@ -2,12 +2,11 @@
 #include <QCloseEvent>
 
 #include "PhTools/PhDebug.h"
-#include "PhGraphic/PhGraphicSolidRect.h"
 
 #include "SecondScreenWindow.h"
 
-SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView *shareWidget, JokerSettings *settings)
-	: PhGraphicView(NULL, shareWidget), _videoEngine(videoEngine), _jokerSettings(settings)
+SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, JokerSettings *settings)
+	: PhGraphicView(NULL), _videoEngine(videoEngine), _jokerSettings(settings)
 {
 	this->installEventFilter(this);
 
@@ -49,6 +48,7 @@ bool SecondScreenWindow::eventFilter(QObject *, QEvent *event)
 
 void SecondScreenWindow::onPaint(int width, int height)
 {
-	PhTime delay = (PhTime)(24 * _jokerSettings->videoSecondScreenDelay() * _videoEngine->clock()->rate());
-	_videoEngine->drawVideo(0, 0, width, height, delay);
+	// FIXME
+	//PhTime delay = (PhTime)(24 * _jokerSettings->videoSecondScreenDelay() * _videoEngine->clock()->rate());
+	//_videoEngine->drawVideo(0, 0, width, height, delay);
 }

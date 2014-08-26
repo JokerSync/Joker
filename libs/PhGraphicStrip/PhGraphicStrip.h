@@ -8,13 +8,16 @@
 #define PHGRAPHICSTRIP_H
 
 #include <QTime>
+#include <QColor>
 
 #include "PhGraphicStripSettings.h"
 
 #include "PhStrip/PhStripDoc.h"
+#include "PhStrip/PhStripTextModel.h"
 
-#include "PhGraphic/PhFont.h"
-#include "PhGraphic/PhGraphicImage.h"
+#include "PhGraphicStrip/PhNextPeople.h"
+#include "PhGraphicStrip/PhNextPeopleModel.h"
+#include "PhGraphicStrip/PhTrackModel.h"
 
 #include "PhSync/PhClock.h"
 
@@ -82,24 +85,6 @@ public:
 	void draw(int x, int y, int width, int height, int nextTextAreaX = 0, int nextTextAreaY = 0, QList<PhPeople*> selectedPeoples = QList<PhPeople*>());
 
 	/**
-	 * @brief Get the font of the strip objects
-	 * @return the font
-	 */
-	PhFont * getTextFont();
-	/**
-	 * @brief Get the "head up display" Font
-	 *
-	 * The HUD font is used for all text printed on the screen which is not
-	 * a direct part of the strip :
-	 * - The current timecode
-	 * - The next element timecode
-	 * - The prediction
-	 * - The title of the document...
-	 * @return
-	 */
-	PhFont * hudFont();
-
-	/**
 	 * @brief List of info to be displayed on the screen debug overlay
 	 * @return A list of string
 	 */
@@ -117,22 +102,6 @@ private:
 	PhStripDoc _doc;
 
 	PhClock _clock;
-
-	/**
-	 * @brief The font used to draw text
-	 */
-	PhFont _textFont;
-
-	/**
-	 * @brief The font used to draw the rest of the HUD
-	 */
-	PhFont _hudFont;
-
-	/**
-	 * Background Image used for the strip band
-	 */
-	PhGraphicImage _backgroundImageLight;
-	PhGraphicImage _backgroundImageDark;
 
 	/**
 	 * @brief _test

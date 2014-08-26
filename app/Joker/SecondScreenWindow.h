@@ -16,10 +16,9 @@ public:
 	/**
 	 * @brief The SecondScreenWindow constructor
 	 * @param videoEngine The video engine
-	 * @param shareWidget The main window PhGraphicView
 	 * @param settings The application settings
 	 */
-	explicit SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView *shareWidget, JokerSettings *settings);
+	explicit SecondScreenWindow(PhVideoEngine *videoEngine, JokerSettings *settings);
 
 signals:
 	/**

@@ -9,13 +9,15 @@
 
 #include <QThread>
 
+#include <QVideoFrame>
+
 #include "PhSync/PhClock.h"
 #include "PhTools/PhTickCounter.h"
 
 #include "PhVideoSettings.h"
 #include "PhVideoBuffer.h"
 #include "PhVideoPool.h"
-#include "PhVideoRect.h"
+#include "PhVideoSurface.h"
 
 /**
  * @brief The video engine
@@ -25,6 +27,9 @@
 class PhVideoEngine : public QObject
 {
 	Q_OBJECT
+
+	Q_PROPERTY(PhTime timeIn READ timeIn NOTIFY timeInChanged)
+	Q_PROPERTY(PhTime timeOut READ timeOut NOTIFY timeOutChanged)
 public:
 	/**
 	 * @brief PhVideoEngine constructor
@@ -73,11 +78,17 @@ public:
 	 */
 	void setTimeIn(PhTime timeIn);
 
+	void setFrameLength(PhFrame frameLength);
+
 	/**
 	 * @brief Get the video ending time
 	 * @return A time value.
 	 */
 	PhTime timeOut() {
+		if (_timeIn == PHTIMEMAX) {
+			return PHTIMEMIN;
+		}
+
 		return _timeIn + length();
 	}
 
@@ -162,20 +173,19 @@ public:
 	void setBilinearFiltering(bool bilinear);
 
 	/**
-	 * @brief Draw the video depending on the parameters
-	 * @param x Coordinates of the upperleft corner
-	 * @param y Coordinates of the upperleft corner
-	 * @param w Width of the video rectangle (if not native size)
-	 * @param h Height of the video rectangle (if not native size)
-	 * @param offset Time offset relative to the video clock
+	 * @brief Draw the video depending on the current clock time
 	 */
-	void drawVideo(int x, int y, int w, int h, PhTime offset = 0);
+	void decodeVideo();
 
 	/**
 	 * @brief Pool of decoded frames
 	 * @return A read-only map of frames
 	 */
 	const QMap<PhFrame, PhVideoBuffer *> decodedFramePool();
+
+	void registerVideoSurface(PhVideoSurface *videoSurface);
+
+	void unregisterVideoSurface(PhVideoSurface *videoSurface);
 
 public slots:
 	/**
@@ -206,6 +216,12 @@ signals:
 	 * @param tcType A timecode type value.
 	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
+
+	void newVideoContentProduced(const QVideoFrame &frame);
+
+	void timeInChanged();
+
+	void timeOutChanged();
 
 	/**
 	 * @brief Signal sent to the decoder to open a video file
@@ -267,7 +283,7 @@ private:
 	QString _codecName;
 	bool _ready;
 
-	QHash<PhFrame, PhVideoRect*> _videoRectList;
+	QList<PhVideoSurface *> _videoSurfaceList;
 	bool _bilinearFiltering;
 
 	PhTickCounter _videoFrameTickCounter;

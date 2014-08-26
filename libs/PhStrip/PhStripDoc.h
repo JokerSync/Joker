@@ -12,13 +12,17 @@
 
 #include "PhSync/PhTimeCode.h"
 
+#include "PhStrip/PhStripLineModel.h"
+#include "PhStrip/PhStripCutModel.h"
+#include "PhStrip/PhStripLoopModel.h"
+#include "PhStrip/PhStripPeopleModel.h"
+
 #include "PhPeople.h"
 #include "PhStripCut.h"
 #include "PhStripLoop.h"
 #include "PhStripObject.h"
 #include "PhStripText.h"
 #include "PhStripDetect.h"
-#include "PhStripSentence.h"
 
 /**
  * @brief The joker document class
@@ -30,6 +34,14 @@
 class PhStripDoc : public QObject
 {
 	Q_OBJECT
+
+	Q_PROPERTY(QString fullTitle READ fullTitle NOTIFY changed)
+	Q_PROPERTY(PhTime timeIn READ timeIn NOTIFY timeInChanged)
+	Q_PROPERTY(PhTime timeOut READ timeOut NOTIFY timeOutChanged)
+	Q_PROPERTY(PhStripLineModel* lineModel READ lineModel NOTIFY changed)
+	Q_PROPERTY(PhStripCutModel* cutModel READ cutModel NOTIFY changed)
+	Q_PROPERTY(PhStripLoopModel* loopModel READ loopModel NOTIFY changed)
+	Q_PROPERTY(PhStripPeopleModel* peopleModel READ peopleModel NOTIFY changed)
 
 public:
 	/**
@@ -49,6 +61,12 @@ public:
 	 * @return A string
 	 */
 	QString title();
+
+	/**
+	 * @brief The full title, including episode number if appropriate
+	 * @return A string
+	 */
+	QString fullTitle();
 
 	/**
 	 * @brief The translated title
@@ -132,66 +150,12 @@ public:
 	PhTime timeOut() const;
 
 	/**
-	 * @brief The list of peoples
-	 * @return A list.
+	 * @brief getTimeScale
+	 * @return
 	 */
-	const QList<PhPeople*> peoples() const;
+	int timeScale();
 
-	/**
-	 * @brief The whole text list
-	 * @param alternate True in order the get the alternate text list (like original texts)
-	 * @return A list of texts
-	 */
-	const QList<PhStripText*> texts(bool alternate = false) const;
-
-	/**
-	 * @brief The list of texts affected to a people
-	 * @param people A people
-	 * @return A list of texts
-	 */
-	const QList<PhStripText*> texts(PhPeople *people) const;
-
-	/**
-	 * @brief The whole sentences list
-	 * @param alternate True in order the get the alternate sentences list (like original sentences)
-	 * @return A list of sentences
-	 */
-	const QList<PhStripSentence*> sentences(bool alternate = false) const;
-
-	/**
-	 * @brief The list of sentences affected to a people
-	 * @param people A people
-	 * @return A list of sentences
-	 */
-	const QList<PhStripSentence*> sentences(PhPeople *people) const;
-
-	/**
-	 * @brief The whole loop list
-	 * @return A list of loops
-	 */
-	const QList<PhStripLoop*> loops() const;
-
-	/**
-	 * @brief The whole cut list
-	 * @return A list of cut
-	 */
-	const QList<PhStripCut*> cuts() const;
-
-	/**
-	 * @brief The whole detect list
-	 * @todo Implement and test timeIn / timeOut
-	 * @return A list of detects
-	 */
-	const QList<PhStripDetect*> detects(PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
-
-	/**
-	 * @brief Get the list of detect affected to a people in a defined range.
-	 * @param people The people
-	 * @param timeIn The range starting time
-	 * @param timeOut The range ending time
-	 * @return A list of detects
-	 */
-	const QList<PhStripDetect*> peopleDetects(PhPeople *people, PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
+	PhStripLineModel *lineModel();
 
 	/**
 	 * @brief Set the title property
@@ -305,7 +269,7 @@ public:
 	 * @param time A time value
 	 * @return The next text or NULL if no text after the time value
 	 */
-	PhStripText * nextText(PhTime time) const;
+	PhStripLine * nextLine(PhTime time) const;
 
 	/**
 	 * @brief Get the next text affected to a people after a time value
@@ -313,7 +277,7 @@ public:
 	 * @param time A time value
 	 * @return The next text or NULL if no text after the time value
 	 */
-	PhStripText * nextText(PhPeople *people, PhTime time) const;
+	PhStripLine * nextLine(PhPeople *people, PhTime time) const;
 	/**
 	 * @brief Get the next text affected to one of a people list after a time value
 	 * @param peopleList A people list
@@ -322,7 +286,7 @@ public:
 	 * have the same timeIn, the text attach to the first PhPeople of
 	 * the list will be returned
 	 */
-	PhStripText * nextText(QList<PhPeople*> peopleList, PhTime time) const;
+	PhStripLine * nextLine(QList<PhPeople*> peopleList, PhTime time) const;
 	/**
 	 * @brief Get the previous text before a time value
 	 * @param time A time value
@@ -425,12 +389,6 @@ public:
 	void addLoop(PhStripLoop *loop);
 
 	/**
-	 * @brief Add a PhStripDetect to the doc
-	 * @param detect A detect
-	 */
-	void addDetect(PhStripDetect *detect);
-
-	/**
 	 * @brief Add a PhStripText to the doc
 	 * @param text A text
 	 * @param alternate True if the text is original, false otherwise
@@ -454,8 +412,31 @@ public:
 	 */
 	void setModified(bool modified);
 
+	PhStripCutModel *cutModel() const;
+
+	PhStripLoopModel *loopModel() const;
+
+	PhStripPeopleModel *peopleModel() const;
+
+public slots:
+	void assignLineToPeople(int lineIndex, QString peopleName);
+	int deletePeople(int peopleIndex);	
+	void addLine(PhTime time, float y);
+
+signals:
+	void changed();
+	void timeInChanged();
+	void timeOutChanged();
+
+private slots:
+	void updateTimeIn();
+	void updateTimeOut();
+
 private:
 	void sort();
+
+	void setTimeIn(PhTime timeIn);
+	void setTimeOut(PhTime timeOut);
 
 	QString _generator;
 	/**
@@ -491,32 +472,13 @@ private:
 
 	QString _authorName;
 
-	/**
-	 * @brief List of PhPeople
-	 */
-	QList<PhPeople*> _peoples;
+	PhStripLineModel *_lineModel;
+	PhStripCutModel *_cutModel;
+	PhStripLoopModel *_loopModel;
+	PhStripPeopleModel *_peopleModel;
 
-	QList<PhStripText*> _texts1, _texts2;
-
-	/**
-	 * @brief List of PhStripCut form the file
-	 */
-	QList<PhStripCut*> _cuts;
-
-	/**
-	 * @brief List of PhStripLoop
-	 */
-	QList<PhStripLoop*> _loops;
-
-	/**
-	 * @brief List of PhStripDetect
-	 */
-	QList<PhStripDetect*> _detects;
-
-	/**
-	 * @brief List of PhStripSentence
-	 */
-	QList<PhStripSentence*> _sentences1, _sentences2;
+	PhTime _timeIn;
+	PhTime _timeOut;
 
 	PhTime ComputeDrbTime1(PhTime offset, PhTime value, PhTimeCodeType tcType);
 	PhTime ComputeDrbTime2(PhTime offset, PhTime value, PhTimeCodeType tcType);

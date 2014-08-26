@@ -6,16 +6,17 @@
 HEADERS += \
 	$$PWD/PhVideoEngine.h \
 	$$PWD/PhVideoSettings.h \
+	$$PWD/PhVideoSurface.h \
 	$$PWD/PhVideoDecoder.h \
     $$PWD/PhVideoBuffer.h \
-    $$PWD/PhVideoPool.h \
-    $$PWD/PhVideoRect.h
+    $$PWD/PhVideoPool.h
+
 SOURCES += \
 	$$PWD/PhVideoEngine.cpp \
+	$$PWD/PhVideoSurface.cpp \
 	$$PWD/PhVideoDecoder.cpp \
     $$PWD/PhVideoBuffer.cpp \
-    $$PWD/PhVideoPool.cpp \
-    $$PWD/PhVideoRect.cpp
+    $$PWD/PhVideoPool.cpp
 
 # Windows specific
 win32{
@@ -29,7 +30,6 @@ win32{
 
 	INCLUDEPATH += $$(FFMPEG_DEV_PATH)\include
 	LIBS += -L$$(FFMPEG_DEV_PATH)\lib -lavformat -lavcodec -lavutil -lswscale -liconv
-
 
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/*.dll) $${RESOURCES_PATH} $${CS}
 }

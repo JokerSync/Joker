@@ -7,14 +7,15 @@
 #ifndef PHGRAPHICVIEW_H
 #define PHGRAPHICVIEW_H
 
-#include <QGLWidget>
+#include <QQuickWidget>
+//#include <QQuickView>
+//#include <QQmlApplicationEngine>
 #include <QElapsedTimer>
 
 #include "PhSync/PhTime.h"
 #include "PhTools/PhTickCounter.h"
 
 #include "PhGraphicSettings.h"
-#include "PhFont.h"
 
 /**
  * @brief The PhGraphicView class is a canvas to create your custom graphic view.
@@ -24,16 +25,17 @@
  * These methods are called automatically after the view creation and during all
  * its lifetime.
  */
-class PhGraphicView : public QGLWidget
+class PhGraphicView : public QQuickWidget
+//class PhGraphicView : public QQuickView
+//class PhGraphicView : public QQmlApplicationEngine
 {
 	Q_OBJECT
 public:
 	/**
 	 * PhGraphicView constructor.
 	 * @param parent Parent object.
-	 * @param shareWidget Optional view sharing textures
 	 */
-	explicit PhGraphicView(QWidget *parent = 0, PhGraphicView *shareWidget = 0);
+	explicit PhGraphicView(QWidget *parent = 0);
 
 	/**
 	 * @brief PhGraphicView constructor specifying the client area size.
@@ -58,24 +60,38 @@ public:
 	void setGraphicSettings(PhGraphicSettings *settings);
 
 	/**
-	 * Handle the resizing of the view.
-	 *
-	 * @param width
-	 * @param height
-	 */
-	void resizeGL(int width, int height);
-
-	/**
 	 * @brief Get the refresh rate of the view
 	 * @return The rate (in fps)
 	 */
 	int refreshRate();
 
 	/**
-	 * @brief Add a line to the debug info
-	 * @param info A string
+	 * @brief measured max refresh rate
+	 * @return measured max refresh rate
 	 */
-	void addInfo(QString info);
+	int maxRefreshRate();
+	/**
+	 * @brief measured max update duration
+	 * @return measured max update duration
+	 */
+	int maxUpdateDuration();
+	/**
+	 * @brief measured last update duration
+	 * @return measured last update duration
+	 */
+	int lastUpdateDuration();
+
+	/**
+	 * @brief number of drops detected since the start of the application
+	 * @return number of drops detected
+	 */
+	int dropDetected();
+
+	/**
+	 * @brief number of seconds elapsed since last drop detected
+	 * @return number of seconds
+	 */
+	int secondsSinceLastDrop();
 
 	/**
 	 * @brief Compare the current pixmap with a image file and
@@ -101,12 +117,6 @@ signals:
 	 */
 	void paint(int width, int height);
 protected:
-	/**
-	 * @brief paintGL
-	 * This virtual function is called whenever the widget needs to be painted.
-	 * Reimplement it in a subclass.
-	 */
-	void paintGL();
 
 	/**
 	 * @brief The screen frequency
@@ -124,8 +134,6 @@ private:
 	 */
 	QTimer *_refreshTimer;
 	PhTickCounter _frameTickCounter;
-	QStringList _infos;
-	PhFont _infoFont;
 	QTime _dropTimer;
 	int _dropDetected, _maxRefreshRate, _maxPaintDuration, _lastUpdateDuration, _maxUpdateDuration;
 	QElapsedTimer _timer;
