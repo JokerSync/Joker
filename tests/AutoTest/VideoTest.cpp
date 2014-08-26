@@ -11,8 +11,6 @@
 
 #include "VideoTest.h"
 
-#define WAIT_TIME 40
-
 VideoTest::VideoTest() : _videoEngine(&_settings),
 	_view(64, 64)
 {
@@ -20,7 +18,8 @@ VideoTest::VideoTest() : _videoEngine(&_settings),
 	_view.show();
 }
 
-void VideoTest::paint(int width, int height) {
+void VideoTest::paint(int width, int height)
+{
 	_videoEngine.drawVideo(0, 0, width, height);
 }
 
@@ -30,7 +29,8 @@ void VideoTest::openMovieTest()
 	_videoEngine.close();
 }
 
-void VideoTest::goToTest() {
+void VideoTest::goToTest()
+{
 	QVERIFY(_videoEngine.open("interlace_%03d.bmp") );
 
 	_view.updateGL();
@@ -54,7 +54,8 @@ void VideoTest::goToTest() {
 	_videoEngine.close();
 }
 
-void VideoTest::playTest() {
+void VideoTest::playTest()
+{
 	QVERIFY(_videoEngine.open("interlace_%03d.bmp") );
 
 	_view.updateGL();
@@ -90,7 +91,8 @@ void VideoTest::playTest() {
 	_videoEngine.close();
 }
 
-void VideoTest::deinterlaceTest() {
+void VideoTest::deinterlaceTest()
+{
 	//Open the video file in interlaced mode
 	_videoEngine.open("interlace_%03d.bmp");
 	_view.updateGL();
