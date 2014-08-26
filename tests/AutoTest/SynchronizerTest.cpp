@@ -13,7 +13,7 @@
 void SynchronizerTest::testSetClock()
 {
 	PhSynchronizer sync;
-	PhClock stripClock(PhTimeCodeType25), videoClock(PhTimeCodeType25), syncClock(PhTimeCodeType25);
+	PhClock stripClock, videoClock, syncClock;
 
 	sync.setStripClock(&stripClock);
 	sync.setVideoClock(&videoClock);
@@ -24,37 +24,37 @@ void SynchronizerTest::testSetClock()
 	QCOMPARE(&syncClock, sync.syncClock());
 }
 
-void SynchronizerTest::testStripFrameChanged()
+void SynchronizerTest::testStripTimeChanged()
 {
 	PhSynchronizer sync;
-	PhClock stripClock(PhTimeCodeType25), videoClock(PhTimeCodeType25), syncClock(PhTimeCodeType25);
+	PhClock stripClock, videoClock, syncClock;
 
 	sync.setStripClock(&stripClock);
 	sync.setVideoClock(&videoClock);
 
-	stripClock.setFrame(10);
+	stripClock.setTime(9600);
 
-	QCOMPARE((int)stripClock.frame(), 10);
-	QCOMPARE((int)videoClock.frame(), 10);
-	QCOMPARE((int)syncClock.frame(), 0);
+	QCOMPARE((int)stripClock.time(), 9600);
+	QCOMPARE((int)videoClock.time(), 9600);
+	QCOMPARE((int)syncClock.time(), 0);
 
 	sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
 
-	stripClock.setFrame(1);
+	stripClock.setTime(960);
 
-	QCOMPARE((int)stripClock.frame(), 1);
-	QCOMPARE((int)videoClock.frame(), 10);
-	QCOMPARE((int)syncClock.frame(), 0);
-	stripClock.setFrame(2);
-	QCOMPARE((int)stripClock.frame(), 0);
-	QCOMPARE((int)videoClock.frame(), 10);
-	QCOMPARE((int)syncClock.frame(), 0);
+	QCOMPARE((int)stripClock.time(), 960);
+	QCOMPARE((int)videoClock.time(), 9600);
+	QCOMPARE((int)syncClock.time(), 0);
+	stripClock.setTime(1920);
+	QCOMPARE((int)stripClock.time(), 0);
+	QCOMPARE((int)videoClock.time(), 9600);
+	QCOMPARE((int)syncClock.time(), 0);
 }
 
 void SynchronizerTest::testStripRateChanged()
 {
 	PhSynchronizer sync;
-	PhClock stripClock(PhTimeCodeType25), videoClock(PhTimeCodeType25), syncClock(PhTimeCodeType25);
+	PhClock stripClock, videoClock, syncClock;
 
 	sync.setStripClock(&stripClock);
 	sync.setVideoClock(&videoClock);
@@ -74,26 +74,26 @@ void SynchronizerTest::testStripRateChanged()
 	QVERIFY(PhTestTools::compareFloats(syncClock.rate(), 2));
 }
 
-void SynchronizerTest::testVideoFrameChanged()
+void SynchronizerTest::testVideoTimeChanged()
 {
 	PhSynchronizer sync;
-	PhClock stripClock(PhTimeCodeType25), videoClock(PhTimeCodeType25), syncClock(PhTimeCodeType25);
+	PhClock stripClock, videoClock, syncClock;
 
 	sync.setStripClock(&stripClock);
 	sync.setVideoClock(&videoClock);
 	sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
 
-	videoClock.setFrame(10);
+	videoClock.setTime(9600);
 
-	QCOMPARE((int)stripClock.frame(), 0);
-	QCOMPARE((int)videoClock.frame(), 10);
-	QCOMPARE((int)syncClock.frame(), 0);
+	QCOMPARE((int)stripClock.time(), 0);
+	QCOMPARE((int)videoClock.time(), 9600);
+	QCOMPARE((int)syncClock.time(), 0);
 }
 
 void SynchronizerTest::testVideoRateChanged()
 {
 	PhSynchronizer sync;
-	PhClock stripClock(PhTimeCodeType25), videoClock(PhTimeCodeType25), syncClock(PhTimeCodeType25);
+	PhClock stripClock, videoClock, syncClock;
 
 	sync.setStripClock(&stripClock);
 	sync.setVideoClock(&videoClock);
@@ -106,55 +106,39 @@ void SynchronizerTest::testVideoRateChanged()
 	QVERIFY(PhTestTools::compareFloats(syncClock.rate(), 0));
 }
 
-void SynchronizerTest::testVideoTCTypeChanged()
+void SynchronizerTest::testSyncTimeChanged()
 {
 	PhSynchronizer sync;
-	PhClock stripClock(PhTimeCodeType25), videoClock(PhTimeCodeType25), syncClock(PhTimeCodeType25);
+	PhClock stripClock, videoClock, syncClock;
 
 	sync.setStripClock(&stripClock);
 	sync.setVideoClock(&videoClock);
 	sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
 
-	videoClock.setTimeCodeType(PhTimeCodeType24);
+	syncClock.setTime(960);
 
-	QCOMPARE(stripClock.timeCodeType(), PhTimeCodeType24);
-	QCOMPARE(videoClock.timeCodeType(), PhTimeCodeType24);
-	QCOMPARE(syncClock.timeCodeType(), PhTimeCodeType24);
-}
-
-void SynchronizerTest::testSyncFrameChanged()
-{
-	PhSynchronizer sync;
-	PhClock stripClock(PhTimeCodeType25), videoClock(PhTimeCodeType25), syncClock(PhTimeCodeType25);
-
-	sync.setStripClock(&stripClock);
-	sync.setVideoClock(&videoClock);
-	sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
-
-	syncClock.setFrame(1);
-
-	QCOMPARE((int)stripClock.frame(), 1);
-	QCOMPARE((int)videoClock.frame(), 1);
-	QCOMPARE((int)syncClock.frame(), 1);
+	QCOMPARE((int)stripClock.time(), 960);
+	QCOMPARE((int)videoClock.time(), 960);
+	QCOMPARE((int)syncClock.time(), 960);
 
 	stripClock.setRate(1);
-	syncClock.setFrame(2);
+	syncClock.setTime(1920);
 
-	QCOMPARE((int)stripClock.frame(), 1);
-	QCOMPARE((int)videoClock.frame(), 2);
-	QCOMPARE((int)syncClock.frame(), 2);
+	QCOMPARE((int)stripClock.time(), 960);
+	QCOMPARE((int)videoClock.time(), 1920);
+	QCOMPARE((int)syncClock.time(), 1920);
 
-	syncClock.setFrame(12);
+	syncClock.setTime(11520);
 
-	QCOMPARE((int)stripClock.frame(), 12);
-	QCOMPARE((int)videoClock.frame(), 12);
-	QCOMPARE((int)syncClock.frame(), 12);
+	QCOMPARE((int)stripClock.time(), 11520);
+	QCOMPARE((int)videoClock.time(), 11520);
+	QCOMPARE((int)syncClock.time(), 11520);
 }
 
 void SynchronizerTest::testSyncRateChanged()
 {
 	PhSynchronizer sync;
-	PhClock stripClock(PhTimeCodeType25), videoClock(PhTimeCodeType25), syncClock(PhTimeCodeType25);
+	PhClock stripClock, videoClock, syncClock;
 
 	sync.setStripClock(&stripClock);
 	sync.setVideoClock(&videoClock);

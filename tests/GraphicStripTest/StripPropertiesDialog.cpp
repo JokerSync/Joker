@@ -9,7 +9,7 @@ StripPropertiesDialog::StripPropertiesDialog(PhStripDoc * doc, QWidget *parent) 
 
 	QString title = doc->title();
 
-	PhFrame Fps = PhTimeCode::getFps(doc->timeCodeType());
+	PhFrame Fps = PhTimeCode::getFps(doc->videoTimeCodeType());
 	QString ips = QString::number(Fps);
 
 	QString filePath = doc->filePath();

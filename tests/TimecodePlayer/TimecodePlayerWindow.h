@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef TIMECODEPLAYERWINDOW_H
+#define TIMECODEPLAYERWINDOW_H
 
 #include <QMainWindow>
 #include <QTimer>
@@ -11,14 +11,14 @@ namespace Ui {
 class TimecodePlayerWindow;
 }
 
-class SonyToolWindow : public QMainWindow
+class TimecodePlayerWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
 
-	explicit SonyToolWindow(QWidget *parent = 0);
-	~SonyToolWindow();
+	explicit TimecodePlayerWindow(QWidget *parent = 0);
+	~TimecodePlayerWindow();
 
 public slots:
 
@@ -28,9 +28,9 @@ private:
 
 	Ui::TimecodePlayerWindow *ui;
 	QTimer *_timer;
-	PhClock *_clock;
+	PhClock _clock;
 
 };
 
 
-#endif // MAINWINDOW_H
+#endif // TIMECODEPLAYERWINDOW_H

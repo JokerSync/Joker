@@ -76,7 +76,7 @@ private slots:
 
 	void on_actionDeinterlace_video_triggered(bool checked);
 
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onTimeChanged(PhTime time);
 
 	void onPaint(int width, int height);
 private:

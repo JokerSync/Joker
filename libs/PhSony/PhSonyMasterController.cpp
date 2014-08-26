@@ -38,11 +38,10 @@ void PhSonyMasterController::stop()
 	sendCommand(0x20, 0x00);
 }
 
-void PhSonyMasterController::cue(PhFrame frame)
+void PhSonyMasterController::cue(PhTime time)
 {
-	PhTimeCodeType tcType = _clock.timeCodeType();
-	PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(frame, tcType);
-	unsigned int bcd = PhTimeCode::bcdFromFrame(frame, tcType);
+	PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromTime(time, _tcType);
+	unsigned int bcd = PhTimeCode::bcdFromTime(time, _tcType);
 	sendCommandWithData(0x24, 0x31, (const unsigned char *)&bcd);
 }
 
@@ -147,9 +146,9 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		switch (cmd2) {
 		case 0x04:
 			{
-				PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.timeCodeType());
+				PhTime time = PhTimeCode::timeFromBcd(*(unsigned int *)dataIn, _tcType);
 //			PHDEBUG << _comSuffix << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _clock.getTCType());
-				_clock.setFrame(frame);
+				_clock.setTime(time);
 				break;
 			}
 		case 0x20:

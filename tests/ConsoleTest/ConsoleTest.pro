@@ -14,18 +14,14 @@ TEMPLATE = app
 
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 
-JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
-
-include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
+include(../../libs/PhTools/PhTools.pri)
+include(../../libs/PhSync/PhSync.pri)
 
 SOURCES += main.cpp
 
-INCLUDEPATH += 	$${JOKER_ROOT}/libs
+INCLUDEPATH += 	../../libs
 
 RESOURCES_PATH = .
-
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/look.png) $${RESOURCES_PATH}
-#QMAKE_POST_LINK += echo $${_PRO_FILE_PWD_} && echo test
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
 include(../../common/deploy.pri)

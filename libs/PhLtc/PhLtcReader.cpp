@@ -10,7 +10,7 @@
 
 PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
 	PhAudioInput(parent),
-	_clock(tcType),
+	_tcType(tcType),
 	_position(0),
 	_noFrameCounter(0)
 {
@@ -24,30 +24,35 @@ PhClock *PhLtcReader::clock()
 	return &_clock;
 }
 
+PhTimeCodeType PhLtcReader::timeCodeType()
+{
+	return _tcType;
+}
+
 int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer)
 {
 	ltc_decoder_write_s16(_decoder, (short*)inputBuffer, framesPerBuffer, _position);
-	LTCFrameExt frame;
+	LTCFrameExt ltcFrame;
 	unsigned int hhmmssff[4];
 	SMPTETimecode stime;
-	PhFrame oldFrame = _clock.frame();
-	while(ltc_decoder_read(_decoder, &frame)) {
-		ltc_frame_to_time(&stime, &frame.ltc, 1);
+	PhTime oldTime = _clock.time();
+	while(ltc_decoder_read(_decoder, &ltcFrame)) {
+		ltc_frame_to_time(&stime, &ltcFrame.ltc, 1);
 		hhmmssff[0] = stime.hours;
 		hhmmssff[1] = stime.mins;
 		hhmmssff[2] = stime.secs;
 		hhmmssff[3] = stime.frame;
 
-		PhFrame newFrame = PhTimeCode::frameFromHhMmSsFf(hhmmssff, _clock.timeCodeType());
+		PhTime newTime = PhTimeCode::timeFromHhMmSsFf(hhmmssff, _tcType);
 		PHDBG(20) << hhmmssff[0] << hhmmssff[1] << hhmmssff[2] << hhmmssff[3];
 
-		if(newFrame > oldFrame)
+		if(newTime > oldTime)
 			_clock.setRate(1);
-		else if(newFrame < oldFrame )
+		else if(newTime < oldTime )
 			_clock.setRate(-1);
 		else
 			_clock.setRate(0);
-		_clock.setFrame(newFrame);
+		_clock.setTime(newTime);
 		_noFrameCounter = 0;
 	}
 

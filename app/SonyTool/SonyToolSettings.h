@@ -4,6 +4,9 @@
 #include "PhTools/PhGenericSettings.h"
 #include "PhSony/PhSonySettings.h"
 
+/**
+ * @brief The SonyTool application settings
+ */
 class SonyToolSettings : PhGenericSettings, public PhSonySettings
 {
 public:

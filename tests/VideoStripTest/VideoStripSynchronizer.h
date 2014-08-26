@@ -15,9 +15,9 @@ public:
 	void setVideoClock(PhClock *clock);
 
 private slots:
-	void onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType);
-	void onStripRateChanged(PhRate rate);
-	void onVideoFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onStripTimeChanged(PhTime time);
+	void onStripRateChanged(PhRate);
+	void onVideoTimeChanged(PhTime time);
 	void onVideoRateChanged(PhRate rate);
 private:
 	PhClock * _stripClock;

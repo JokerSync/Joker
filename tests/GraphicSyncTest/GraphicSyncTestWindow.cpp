@@ -32,8 +32,8 @@ void GraphicSyncTestWindow::beforePaint(int frequency)
 	_sony.checkVideoSync(frequency);
 //	_sony.clock()->tick(frequency);
 	float ratio = _count++;
-	if(_sony.clock()->frame() > 0)
-		ratio /= _sony.clock()->frame();
+	if(_sony.clock()->time() > 0)
+		ratio /= _sony.clock()->time();
 	QString s = " ";
 	if(elapsed < 10 )
 		s = "<";
@@ -44,5 +44,5 @@ void GraphicSyncTestWindow::beforePaint(int frequency)
 
 //	PHDEBUG << s << elapsed << refreshRate << _sony.clock()->frame() << _count << ratio;
 //	PHDEBUG << s << _sony.clock()->frame() * 1000.0f / _time.elapsed();
-	ui->graphicView->setText(_sony.clock()->timeCode());
+	ui->graphicView->setText(_sony.clock()->timeCode(_sony.timeCodeType()));
 }

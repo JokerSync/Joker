@@ -8,32 +8,31 @@ VideoStripSynchronizer::VideoStripSynchronizer() : _stripClock(NULL), _videoCloc
 void VideoStripSynchronizer::setStripClock(PhClock *clock)
 {
 	_stripClock = clock;
-	connect(_stripClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onStripFrameChanged(PhFrame, PhTimeCodeType)));
-	connect(_stripClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onStripRateChanged(PhRate)));
+	connect(_stripClock, &PhClock::timeChanged, this, &VideoStripSynchronizer::onStripTimeChanged);
+	connect(_stripClock, &PhClock::rateChanged, this, &VideoStripSynchronizer::onStripRateChanged);
 }
 
 void VideoStripSynchronizer::setVideoClock(PhClock *clock)
 {
 	_videoClock = clock;
-	connect(_videoClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onVideoFrameChanged(PhFrame, PhTimeCodeType)));
-	connect(_videoClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onVideoRateChanged(PhRate)));
+	connect(_videoClock, &PhClock::timeChanged, this, &VideoStripSynchronizer::onVideoTimeChanged);
+	connect(_videoClock, &PhClock::rateChanged, this, &VideoStripSynchronizer::onVideoRateChanged);
 }
 
-void VideoStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void VideoStripSynchronizer::onStripTimeChanged(PhTime time)
 {
-	_videoClock->setFrame(frame);
+	_videoClock->setTime(time);
 }
 
-void VideoStripSynchronizer::onStripRateChanged(PhRate rate)
+void VideoStripSynchronizer::onStripRateChanged(PhRate)
 {
-	//_videoClock->setRate(rate);
 }
 
-void VideoStripSynchronizer::onVideoFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void VideoStripSynchronizer::onVideoTimeChanged(PhTime time)
 {
-	if(_stripClock->frame() != frame)
-		PHDEBUG << "error :" << _stripClock->frame() << frame;
-#warning TODO handle frame difference error
+	if(_stripClock->time() != time)
+		PHDEBUG << "error :" << _stripClock->time() << time;
+#warning TODO handle time difference error
 }
 
 void VideoStripSynchronizer::onVideoRateChanged(PhRate rate)

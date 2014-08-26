@@ -14,9 +14,9 @@ SonyToolWindow::SonyToolWindow() :
 	ui->setupUi(this);
 
 	// configure panels
-	ui->masterPanel->setMediaLength(10000);
+	ui->masterPanel->setLength(PhTimeCode::timeFromString("00:01:00:00", PhTimeCodeType25));
 
-	ui->slavePanel->setMediaLength(10000);
+	ui->slavePanel->setLength(PhTimeCode::timeFromString("00:01:00:00", PhTimeCodeType25));
 
 	// Connect master panel to sony master
 	connect(ui->masterPanel, SIGNAL(playPause()), this, SLOT(masterPlayPause()));
@@ -55,7 +55,7 @@ SonyToolWindow::SonyToolWindow() :
 	on_actionSlave_Use_video_sync_triggered(_settings.useVideoSlaveSync());
 	on_actionMaster_Use_video_sync_triggered(_settings.useVideoMasterSync());
 
-	_sonySlave.clock()->setFrame(25 * 25);
+	_sonySlave.clock()->setTime(PhTimeCode::timeFromString("00:01:00:00", PhTimeCodeType25));
 
 //	_sonySlave.getClock()->setRate(1);
 }
@@ -77,12 +77,12 @@ void SonyToolWindow::masterPlayPause()
 
 void SonyToolWindow::masterNextFrame()
 {
-	_sonyMaster.cue(_sonyMaster.clock()->frame() + 1);
+	_sonyMaster.cue(_sonyMaster.clock()->time() + PhTimeCode::timePerFrame(_sonyMaster.timeCodeType()));
 }
 
 void SonyToolWindow::masterPreviousFrame()
 {
-	_sonyMaster.cue(_sonyMaster.clock()->frame() - 1);
+	_sonyMaster.cue(_sonyMaster.clock()->time() - PhTimeCode::timePerFrame(_sonyMaster.timeCodeType()));
 }
 
 void SonyToolWindow::onDeviceIdData(unsigned char id1, unsigned char id2)
@@ -161,16 +161,16 @@ void SonyToolWindow::on_slaveActiveCheck_clicked(bool checked)
 
 void SonyToolWindow::on_actionMaster_GoTo_triggered()
 {
-	PhTimeCodeDialog dlg(_sonyMaster.clock()->timeCodeType(), _sonyMaster.clock()->frame());
+	PhTimeCodeDialog dlg(_sonyMaster.timeCodeType(), _sonyMaster.clock()->time());
 	if(dlg.exec() == QDialog::Accepted)
-		_sonyMaster.cue(dlg.frame());
+		_sonyMaster.cue(dlg.time());
 }
 
 void SonyToolWindow::on_actionSlave_GoTo_triggered()
 {
-	PhTimeCodeDialog dlg(_sonySlave.clock()->timeCodeType(), _sonySlave.clock()->frame());
+	PhTimeCodeDialog dlg(_sonySlave.timeCodeType(), _sonySlave.clock()->time());
 	if(dlg.exec() == QDialog::Accepted)
-		_sonySlave.clock()->setFrame(dlg.frame());
+		_sonySlave.clock()->setTime(dlg.time());
 }
 
 void SonyToolWindow::on_actionSlave_Use_video_sync_triggered(bool useVideo)

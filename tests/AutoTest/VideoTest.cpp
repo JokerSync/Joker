@@ -38,17 +38,17 @@ void VideoTest::goToTest() {
 	_view.updateGL();
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"));
 
-	_videoEngine.clock()->setFrame(20);
+	_videoEngine.clock()->setFrame(20, PhTimeCodeType25);
 
 	_view.updateGL();
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("interlace_020.bmp"));
 
-	_videoEngine.clock()->setFrame(100);
+	_videoEngine.clock()->setFrame(100, PhTimeCodeType25);
 
 	_view.updateGL();
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("interlace_100.bmp"));
 
-	_videoEngine.clock()->setFrame(75);
+	_videoEngine.clock()->setFrame(75, PhTimeCodeType25);
 
 	_view.updateGL();
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("interlace_075.bmp"));
@@ -109,7 +109,7 @@ void VideoTest::deinterlaceTest() {
 	_videoEngine.setBilinearFiltering(true);
 
 	//Move one picture forward
-	_videoEngine.clock()->setFrame(1);
+	_videoEngine.clock()->setFrame(1, PhTimeCodeType25);
 
 	//Go back to interlaced mode
 	_videoEngine.setDeinterlace(false);

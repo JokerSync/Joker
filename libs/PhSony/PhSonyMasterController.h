@@ -61,9 +61,9 @@ public slots:
 	 *
 	 * See : http://www.belle-nuit.com/archives/9pin.html#cueUpWithData
 	 *
-	 * @param frame frame number
+	 * @param time A time value
 	 */
-	void cue(PhFrame frame);
+	void cue(PhTime time);
 
 	/**
 	 * @brief Send a fast forward command to the connected device.

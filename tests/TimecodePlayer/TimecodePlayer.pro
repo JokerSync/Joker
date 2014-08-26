@@ -11,6 +11,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = TimecodePlayer
 TEMPLATE = app
 
+# The application version
+VERSION = 1.0.0
+
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
 
 JOKER_ROOT = $${_PRO_FILE_PWD_}/../..

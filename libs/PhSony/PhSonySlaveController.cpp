@@ -30,7 +30,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 //			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
 				unsigned char deviceID1 = _settings->sonyDevice1();
 				unsigned char deviceID2 = _settings->sonyDevice2();
-				switch (_clock.timeCodeType()) {
+				switch (_tcType) {
 				case PhTimeCodeType2398:
 				case PhTimeCodeType24:
 					deviceID1 += 2;
@@ -132,9 +132,9 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			}
 		case 0x31:
 			{
-				PhFrame frame = PhTimeCode::frameFromBcd(*(unsigned int *)dataIn, _clock.timeCodeType());
-				_clock.setFrame(frame);
-				PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromFrame(_clock.frame(), _clock.timeCodeType()) << "=> ACK";
+				PhTime time = PhTimeCode::timeFromBcd(*(unsigned int *)dataIn, _tcType);
+				_clock.setTime(time);
+				PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromTime(time, _tcType) << "=> ACK";
 				sendAck();
 				break;
 			}
@@ -171,7 +171,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x0c:
 			{
 				cmd1 = 0x74;
-				PHDBG(21) << _comSuffix << "Current Time Sense => " << _clock.timeCode();
+				PHDBG(21) << _comSuffix << "Current Time Sense => " << _clock.timeCode(_tcType);
 				switch (dataIn[0]) {
 				case 0x01:
 					cmd2 = 0x04;
@@ -195,7 +195,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 					cmd2 = 0x04;
 					break;
 				}
-				unsigned int bcd = PhTimeCode::bcdFromFrame(_clock.frame(), _clock.timeCodeType());
+				unsigned int bcd = PhTimeCode::bcdFromTime(_clock.time(), _tcType);
 				sendCommandWithData(0x74, cmd2, (unsigned char *)&bcd);
 				break;
 			}
@@ -286,8 +286,8 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 
 void PhSonySlaveController::onVideoSync()
 {
-	_clock.tick(PhTimeCode::getFps(_clock.timeCodeType()));
-	PHDBG(23) << _clock.timeCode();
+	_clock.tick(PhTimeCode::getFps(_tcType));
+	PHDBG(23) << _clock.timeCode(_tcType);
 }
 
 void PhSonySlaveController::sendAck()

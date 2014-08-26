@@ -7,6 +7,7 @@
 #define PHMIDITIMECODEREADER_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "PhSync/PhClock.h"
 
@@ -29,6 +30,14 @@ public:
 	PhMidiTimeCodeReader(PhTimeCodeType tcType);
 
 	/**
+	 * @brief The current reader decoded timecode type
+	 * @return A timecode type value.
+	 */
+	PhTimeCodeType timeCodeType() {
+		return _tcType;
+	}
+
+	/**
 	 * @brief The PhMidiTimeCodeWriter clock
 	 *
 	 * Subscribe to this clock synchronized with the
@@ -40,13 +49,25 @@ public:
 		return &_clock;
 	}
 
+signals:
+	/**
+	 * @brief Signal sent upon a different timecode type message
+	 * @param tcType A timecode type value.
+	 */
+	void timeCodeTypeChanged(PhTimeCodeType tcType);
+
 protected:
 	void onQuarterFrame(unsigned char data);
 	void onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
+private slots:
+	void checkPause();
+
 private:
-//j	PhMidiInput _midiIn;
+	PhTimeCodeType _tcType;
 	PhClock _clock;
+	QTimer _pauseDetectionTimer;
+	int _pauseDetectionCounter;
 };
 
 #endif // PHMIDITIMECODEREADER_H

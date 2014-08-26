@@ -15,15 +15,15 @@ public:
 	void setStripClock(PhClock *clock);
 
 private slots:
-	void onSonyFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onSonyTimeChanged(PhTime time);
 	void onSonyRateChanged(PhRate rate);
-	void onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onStripTimeChanged(PhTime time);
 	void onStripRateChanged(PhRate rate);
 private:
 	PhClock * _sonyClock;
 	PhClock * _stripClock;
-	bool _settingStripFrame;
-	bool _settingSonyFrame;
+	bool _settingStripTime;
+	bool _settingSonyTime;
 	bool _settingStripRate;
 	bool _settingSonyRate;
 

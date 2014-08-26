@@ -105,15 +105,15 @@ protected:
 
 protected:
 	/** @brief Remember the hour digits */
-	int _hh;
+	unsigned int _hh;
 	/** @brief Remember the minute digits */
-	int _mm;
+	unsigned int _mm;
 	/** @brief Remember the second digits */
-	int _ss;
+	unsigned int _ss;
 	/** @brief Remember the frame digits */
-	int _ff;
+	unsigned int _ff;
 	/** @brief Remember the time code type */
-	PhTimeCodeType _tcType;
+	PhTimeCodeType _mtcType;
 
 private slots:
 	void onMessage(std::vector<unsigned char> *message);
