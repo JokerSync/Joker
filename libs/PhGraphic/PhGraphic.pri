@@ -18,7 +18,8 @@ HEADERS += \
 	../../libs/PhGraphic/PhGraphicLoop.h \
 	../../libs/PhGraphic/PhGraphicDisc.h \
 	../../libs/PhGraphic/PhGraphicDashedLine.h \
-	../../libs/PhGraphic/PhGraphicArrow.h
+	../../libs/PhGraphic/PhGraphicArrow.h \
+    ../../libs/PhGraphic/PhQmlView.h
 
 SOURCES += \
 	../../libs/PhGraphic/PhGraphicView.cpp \
@@ -32,7 +33,8 @@ SOURCES += \
 	../../libs/PhGraphic/PhGraphicLoop.cpp \
 	../../libs/PhGraphic/PhGraphicDisc.cpp \
 	../../libs/PhGraphic/PhGraphicDashedLine.cpp \
-	../../libs/PhGraphic/PhGraphicArrow.cpp
+	../../libs/PhGraphic/PhGraphicArrow.cpp \
+    ../../libs/PhGraphic/PhQmlView.cpp
 
 # Windows specific
 win32 {

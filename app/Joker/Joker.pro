@@ -9,7 +9,7 @@ cache()
 TARGET = Joker
 TEMPLATE = app
 
-QT += core gui
+QT += core gui qml quick quickwidgets
 
 # The application version
 VERSION = 1.1.15
@@ -60,6 +60,10 @@ FORMS += \
 	PeopleDialog.ui \
 	PeopleEditionDialog.ui \
 	RulerSpaceDialog.ui
+
+
+RESOURCES += \
+    Joker.qrc
 
 unix {
 	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${JOKER_ROOT}/.doxygen\";

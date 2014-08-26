@@ -18,7 +18,7 @@
 #include "PhGraphicView.h"
 
 PhGraphicView::PhGraphicView( QWidget *parent)
-	: QGLWidget(parent),
+	: QQuickWidget(parent),
 	_settings(NULL),
 	_dropDetected(0),
 	_maxRefreshRate(0),
@@ -62,20 +62,6 @@ PhGraphicView::~PhGraphicView()
 	SDL_Quit();
 }
 
-void PhGraphicView::resizeGL(int width, int height)
-{
-	if(height == 0)
-		height = 1;
-	glViewport(0, 0, width, height);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, width, height, 0, -10, 10);
-	glMatrixMode(GL_MODELVIEW);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
-	glLoadIdentity();
-}
-
 void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
 {
 	_settings = settings;
@@ -91,16 +77,19 @@ void PhGraphicView::onRefresh()
 	if(this->refreshRate() > _maxRefreshRate)
 		_maxRefreshRate = this->refreshRate();
 	addInfo(QString("refresh: %1x%2, %3 / %4")
-	        .arg(this->width())
-	        .arg(this->height())
-	        .arg(_maxRefreshRate)
-	        .arg(this->refreshRate()));
+			.arg(this->width())
+			.arg(this->height())
+			.arg(_maxRefreshRate)
+			.arg(this->refreshRate()));
 	addInfo(QString("Update : %1 %2").arg(_maxUpdateDuration).arg(_lastUpdateDuration));
 	addInfo(QString("drop: %1 %2").arg(_dropDetected).arg(_dropTimer.elapsed() / 1000));
 
 	QTime t;
 	t.start();
-	updateGL();
+
+	emit beforePaint(_screenFrequency);
+	update();
+
 	_lastUpdateDuration = t.elapsed();
 	if(_lastUpdateDuration > _maxUpdateDuration)
 		_maxUpdateDuration = _lastUpdateDuration;
@@ -108,48 +97,8 @@ void PhGraphicView::onRefresh()
 		_dropTimer.restart();
 		_dropDetected++;
 	}
-
 }
 
-void PhGraphicView::paintGL()
-{
-	//PHDEBUG << "PhGraphicView::paintGL" ;
-	emit beforePaint(_screenFrequency);
 
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	QTime timer;
-	timer.start();
 
-	int ratio = this->windowHandle()->devicePixelRatio();
-	emit paint(this->width() * ratio, this->height() * ratio);
-
-	if(timer.elapsed() > _maxPaintDuration)
-		_maxPaintDuration = timer.elapsed();
-	addInfo(QString("draw: %1 %2").arg(_maxPaintDuration).arg(timer.elapsed()));
-	if(_settings) {
-		if(_settings->resetInfo()) {
-			_dropDetected = 0;
-			_maxRefreshRate = 0;
-			_maxPaintDuration = 0;
-			_maxUpdateDuration = 0;
-		}
-		if(_settings->displayInfo()) {
-			_infoFont.setFontFile(_settings->infoFontFile());
-			int y = 0;
-			foreach(QString info, _infos) {
-				PhGraphicText gInfo(&_infoFont, info, 0, y);
-				gInfo.setSize(_infoFont.getNominalWidth(info) / 2, 50);
-				gInfo.setZ(10);
-				gInfo.setColor(Qt::red);
-				gInfo.draw();
-				y += gInfo.height();
-			}
-		}
-	}
-	// Once the informations have been displayed
-	// clear it
-	_infos.clear();
-
-	_frameTickCounter.tick();
-}

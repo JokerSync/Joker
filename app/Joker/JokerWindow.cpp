@@ -18,6 +18,7 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 #include "PhCommonUI/PhFeedbackDialog.h"
+#include "PhGraphic/PhQmlView.h"
 #include "AboutDialog.h"
 #include "PreferencesDialog.h"
 #include "PeopleDialog.h"
@@ -38,6 +39,11 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 {
 	// Setting up UI
 	ui->setupUi(this);
+
+	qmlRegisterType<PhQmlView>("Joker", 1, 0, "PhQmlView");
+
+	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
+	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
 
 	// Due to translation, Qt might not be able to link automatically the menu
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
@@ -114,7 +120,10 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::tick);
 
-	this->connect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
+	PhQmlView *OpenGLView = ui->videoStripView->rootObject()->findChild<PhQmlView*>("PhQmlView");
+	if (OpenGLView) {
+		this->connect(OpenGLView, &PhQmlView::paint, this, &JokerWindow::onPaint, Qt::DirectConnection);
+	}
 
 	_videoLogo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
 }
