@@ -68,6 +68,10 @@ FORMS += \
 	PeopleEditionDialog.ui \
 	TimeBetweenTwoFeetDialog.ui
 
+
+RESOURCES += \
+    Joker.qrc
+
 unix {
 	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${TOP_ROOT}/.doxygen\";
 }

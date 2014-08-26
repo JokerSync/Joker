@@ -7,6 +7,7 @@
 #ifndef PHGRAPHICVIEW_H
 #define PHGRAPHICVIEW_H
 
+#include <QQuickWidget>
 #include "PhSync/PhTime.h"
 #include "PhTools/PhTickCounter.h"
 
@@ -21,7 +22,7 @@
  * These methods are called automatically after the view creation and during all
  * its lifetime.
  */
-class PhGraphicView : public QGLWidget
+class PhGraphicView : public QQuickWidget
 {
 	Q_OBJECT
 public:
@@ -43,14 +44,6 @@ public:
 	PhGraphicView (int width, int height, QWidget *parent = 0);
 
 	~PhGraphicView();
-
-	/**
-	 * Handle the resizing of the view.
-	 *
-	 * @param width
-	 * @param height
-	 */
-	void resizeGL(int width, int height);
 
 	/**
 	 * @brief Get the refresh rate of the view
@@ -84,12 +77,6 @@ signals:
 	 */
 	void paint(int width, int height);
 protected:
-	/**
-	 * @brief paintGL
-	 * This virtual function is called whenever the widget needs to be painted.
-	 * Reimplement it in a subclass.
-	 */
-	void paintGL();
 
 	/**
 	 * @brief The screen frequency

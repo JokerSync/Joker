@@ -11,6 +11,7 @@
 
 #include "PhGraphic/PhGraphicText.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
+#include "PhGraphic/PhQmlView.h"
 
 #include "JokerWindow.h"
 #include "ui_JokerWindow.h"
@@ -45,8 +46,15 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_resizingStrip(false),
 	_numberOfDraw(0)
 {
+	qApp->installEventFilter(this);
+
 	// Setting up UI
 	ui->setupUi(this);
+
+	qmlRegisterType<PhQmlView>("Joker", 1, 0, "PhQmlView");
+
+	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
+	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
 
 	// Due to translation, Qt might not be able to link automatically the menu
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
@@ -138,7 +146,10 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
 
-	this->connect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
+	PhQmlView *OpenGLView = ui->videoStripView->rootObject()->findChild<PhQmlView*>("PhQmlView");
+	if (OpenGLView) {
+		this->connect(OpenGLView, &PhQmlView::paint, this, &JokerWindow::onPaint, Qt::DirectConnection);
+	}
 
 	_videoLogo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
 }
@@ -635,7 +646,7 @@ void JokerWindow::on_actionPreferences_triggered()
 void JokerWindow::fadeInMediaPanel()
 {
 	// Don't show the mediaPanel if Joker has not thefocus.
-	if(_settings->displayControlPanel() && this->hasFocus()) {
+	if(_settings->displayControlPanel() && this->hasFocus() && ui->videoStripView->hasFocus() ) {
 		_mediaPanel.show();
 		_mediaPanelAnimation.stop();
 		_mediaPanelAnimation.setDuration(300);
