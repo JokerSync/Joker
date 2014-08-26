@@ -18,7 +18,7 @@ class VideoTest : public QObject
 {
 	Q_OBJECT
 public:
-	explicit VideoTest(QWidget *parent = 0);
+	explicit VideoTest();
 
 protected slots:
 	void paint(int width, int height);
@@ -35,7 +35,7 @@ private:
 	PhGraphicView _view;
 
 #warning /// @todo move to a generic graphicTest implementation
-	void saveBuffer();
+	void saveBuffer(QString fileName);
 };
 
 #endif // VIDEOTEST_H

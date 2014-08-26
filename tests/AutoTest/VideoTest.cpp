@@ -13,9 +13,7 @@
 
 #define WAIT_TIME 40
 
-VideoTest::VideoTest(QWidget *parent)
-	: QObject(parent),
-	_videoEngine(&_settings),
+VideoTest::VideoTest() : _videoEngine(&_settings),
 	_view(64, 64)
 {
 	connect(&_view, &PhGraphicView::paint, this, &VideoTest::paint);
@@ -116,4 +114,10 @@ void VideoTest::deinterlaceTest() {
 	_view.updateGL();
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("interlace_001.bmp"));
 
+}
+
+void VideoTest::saveBuffer(QString fileName)
+{
+	QImage image = _view.renderPixmap(64, 64).toImage();
+	image.save(fileName);
 }
