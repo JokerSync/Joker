@@ -37,6 +37,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_resizingStrip(false),
 	_numberOfDraw(0)
 {
+	qApp->installEventFilter(this);
+
 	// Setting up UI
 	ui->setupUi(this);
 
