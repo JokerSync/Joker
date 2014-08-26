@@ -26,7 +26,9 @@ protected slots:
 private slots:
 
 	void openMovieTest();
-	void goToTest();
+	void goToTest01();
+	void goToTest02();
+	void goToTest03();
 	void playTest();
 	void deinterlaceTest();
 private:
@@ -36,6 +38,7 @@ private:
 
 #warning /// @todo move to a generic graphicTest implementation
 	void saveBuffer(QString fileName);
+	void findMatch(QImage source);
 };
 
 #endif // VIDEOTEST_H
