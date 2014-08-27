@@ -23,7 +23,7 @@ HEADERS += \
 	$$PWD/PhGraphicDisc.h \
 	$$PWD/PhGraphicDashedLine.h \
 	$$PWD/PhGraphicArrow.h \
-	$$PWD/PhGraphic/PhQmlView.h
+	$$PWD/PhQmlView.h
 
 SOURCES += \
 	$$PWD/PhGraphicView.cpp \
@@ -38,7 +38,7 @@ SOURCES += \
 	$$PWD/PhGraphicDisc.cpp \
 	$$PWD/PhGraphicDashedLine.cpp \
 	$$PWD/PhGraphicArrow.cpp \
-	$$PWD/PhGraphic/PhQmlView.cpp
+	$$PWD/PhQmlView.cpp
 
 # Windows specific
 win32 {

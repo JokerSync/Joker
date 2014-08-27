@@ -1642,6 +1642,14 @@ QString PhStripDoc::title()
 	return _title;
 }
 
+QString PhStripDoc::fullTitle()
+{
+	QString fullTitle = title();
+	if(episode().length() > 0)
+		fullTitle += " #" + episode();
+	return fullTitle;
+}
+
 QString PhStripDoc::translatedTitle()
 {
 	return _translatedTitle;

@@ -28,6 +28,9 @@ class PhStripDoc : public QObject
 {
 	Q_OBJECT
 
+	// make the title available in QML
+	Q_PROPERTY(QString fullTitle READ fullTitle NOTIFY changed)
+
 public:
 	/**
 	 * @brief PhStripDoc constructor
@@ -46,6 +49,12 @@ public:
 	 * @return A string
 	 */
 	QString title();
+
+	/**
+	 * @brief The full title, including episode number if appropriate
+	 * @return A string
+	 */
+	QString fullTitle();
 
 	/**
 	 * @brief The translated title

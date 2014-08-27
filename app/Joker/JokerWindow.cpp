@@ -4,6 +4,9 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QQmlEngine>
+#include <QQmlContext>
+
 #include "PhTools/PhDebug.h"
 
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -52,6 +55,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->setupUi(this);
 
 	qmlRegisterType<PhQmlView>("Joker", 1, 0, "PhQmlView");
+
+	ui->videoStripView->engine()->rootContext()->setContextProperty("doc", _doc);
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -147,9 +152,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
 
 	PhQmlView *OpenGLView = ui->videoStripView->rootObject()->findChild<PhQmlView*>("PhQmlView");
-	if (OpenGLView) {
-		this->connect(OpenGLView, &PhQmlView::paint, this, &JokerWindow::onPaint, Qt::DirectConnection);
-	}
+	this->connect(OpenGLView, &PhQmlView::paint, this, &JokerWindow::onPaint, Qt::DirectConnection);
 
 	_videoLogo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
 }
@@ -945,27 +948,19 @@ void JokerWindow::onPaint(int width, int height)
 
 	int x = videoX + videoWidth;
 	int y = 0;
+
+	QQuickItem *titleRect = ui->videoStripView->rootObject()->findChild<QQuickItem*>("titleRect");
+	titleRect->setVisible(_settings->displayNextText() && (_strip.doc()->fullTitle().length() > 0));
+	y += (titleRect->height() - titleRect->y())*titleRect->isVisible();
+
 	if(_settings->displayNextText()) {
 		QColor infoColor = _settings->backgroundColorLight();
 		int infoWidth = width - videoWidth;
 		int spacing = 4;
 
-		// Display the title
-		{
-			QString title = _strip.doc()->title().toLower();
-			if(_strip.doc()->episode().length() > 0)
-				title += " #" + _strip.doc()->episode().toLower();
-
-			int titleHeight = height / 40;
-			int titleWidth = _strip.getHUDFont()->getNominalWidth(title) / 2;
-			PhGraphicText titleText(_strip.getHUDFont());
-			titleText.setColor(infoColor);
-			titleText.setRect(x + spacing, y, titleWidth, titleHeight);
-			y += titleHeight;
-			titleText.setContent(title);
-			titleText.setZ(5);
-			titleText.draw();
-		}
+		QQuickItem *titleRect = ui->videoStripView->rootObject()->findChild<QQuickItem*>("titleRect");
+		titleRect->setVisible(_strip.doc()->fullTitle().length() > 0);
+		y += (titleRect->height() - titleRect->y())*titleRect->isVisible();
 
 		// Display the current timecode
 		{
