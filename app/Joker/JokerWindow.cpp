@@ -14,6 +14,8 @@
 #include <QMimeData>
 #include <QWindowStateChangeEvent>
 #include <QMouseEvent>
+#include <QQmlEngine>
+#include <QQmlContext>
 
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -43,6 +45,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->setupUi(this);
 
 	qmlRegisterType<PhQmlView>("Joker", 1, 0, "PhQmlView");
+
+	ui->videoStripView->engine()->rootContext()->setContextProperty("doc", _doc);
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -123,9 +127,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::tick);
 
 	PhQmlView *OpenGLView = ui->videoStripView->rootObject()->findChild<PhQmlView*>("PhQmlView");
-	if (OpenGLView) {
-		this->connect(OpenGLView, &PhQmlView::paint, this, &JokerWindow::onPaint, Qt::DirectConnection);
-	}
+	this->connect(OpenGLView, &PhQmlView::paint, this, &JokerWindow::onPaint, Qt::DirectConnection);
 
 	_videoLogo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
 }
@@ -816,28 +818,10 @@ void JokerWindow::onPaint(int width, int height)
 	}
 
 	int y = 0;
-	QString title = _strip.doc()->title();
-	if(_strip.doc()->episode().length() > 0)
-		title += " #" + _strip.doc()->episode();
 
-	if(_settings->displayTitle() && (title.length() > 0)) {
-		PhGraphicSolidRect titleBackground;
-		titleBackground.setColor(QColor(0, 0, 128));
-		int titleHeight = height / 40;
-		titleBackground.setRect(0, y, width, titleHeight);
-		int titleWidth = title.length() * titleHeight / 2;
-		int titleX = (width - titleWidth) / 2;
-		PhGraphicText titleText(_strip.getHUDFont());
-		titleText.setColor(Qt::white);
-		titleText.setRect(titleX, y, titleWidth, titleHeight);
-		y += titleHeight;
-		titleText.setContent(title);
-		titleText.setZ(5);
-		titleBackground.setZ(5);
-
-		titleBackground.draw();
-		titleText.draw();
-	}
+	QQuickItem *titleRect = ui->videoStripView->rootObject()->findChild<QQuickItem*>("titleRect");
+	titleRect->setVisible(_settings->displayTitle() && (_strip.doc()->fullTitle().length() > 0));
+	y += (titleRect->height() - titleRect->y())*titleRect->isVisible();
 
 	float stripHeightRatio = 0.25f;
 	if(_settings) {

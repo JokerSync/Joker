@@ -17,23 +17,30 @@ Item {
     }
 
     Rectangle {
-        color: Qt.rgba(0.9, 1, 1, 0.7)
-        radius: 10
-        border.width: 1
-        border.color: "red"
-        anchors.fill: label
+        id: titleRect
+        objectName: "titleRect"
+        color: "#000080"
+        anchors.leftMargin: -20
+        anchors.rightMargin: -20
+        anchors.bottomMargin: -2
+        anchors.topMargin: -2
+        anchors.fill: titleLabel
         anchors.margins: -10
     }
 
     Text {
-        id: label
-        color: "black"
+        id: titleLabel
+        color: "#ffffff"
         wrapMode: Text.WordWrap
-        text: "The background here is the Joker window rendered with raw OpenGL using the 'beforeRender()' signal in QQuickWindow. This text label and its border is rendered using QML"
+        text: doc.fullTitle
+        font.pointSize: 8
+        anchors.topMargin: 0
+        horizontalAlignment: Text.AlignHCenter
         anchors.right: parent.right
         anchors.left: parent.left
-        anchors.bottom: parent.bottom
+        anchors.top: parent.top
         anchors.margins: 20
+        visible: titleRect.visible
     }
 }
 
