@@ -43,7 +43,7 @@ public:
 	 * @brief PhVideoEngine constructor
 	 * @param settings The settings
 	 */
-	PhVideoEngine(PhVideoSettings *settings);
+	explicit PhVideoEngine(PhVideoSettings *settings);
 
 	~PhVideoEngine();
 
@@ -144,8 +144,8 @@ public:
 	 */
 	int height();
 	/**
-	 * @brief get frame per second
-	 * @return the FPS of the video file
+	 * @brief Get average number of frame per second
+	 * @return A float value.
 	 */
 	float framePerSecond();
 	/**
@@ -193,9 +193,7 @@ public:
 	 * @brief Retrieve the video filtering
 	 * @return True if bilinear filtering is enabled
 	 */
-	bool getBilinearFiltering() {
-		return _bilinearFiltering;
-	}
+	bool bilinearFiltering();
 
 	/**
 	 * @brief Enable or disable the video bilinear filtering
@@ -234,12 +232,9 @@ private:
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
-	struct SwsContext * _pSwsCtx;
 	PhGraphicTexturedRect videoRect;
-	uint8_t * _rgb;
 	PhFrame _currentFrame;
 
-	QElapsedTimer _testTimer;
 	PhTickCounter _videoFrameTickCounter;
 
 	bool _useAudio;
@@ -247,7 +242,8 @@ private:
 	AVFrame * _audioFrame;
 
 	bool _deinterlace;
-	bool _bilinearFiltering;
+
+	uint8_t * _rgb;
 };
 
 #endif // PHVIDEOENGINE_H
