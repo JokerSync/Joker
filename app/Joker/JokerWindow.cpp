@@ -1045,15 +1045,10 @@ void JokerWindow::onPaint(int width, int height)
 		ui->videoStripView->addInfo(info);
 	}
 
-	if((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000)) {
-		PhGraphicText errorText(_strip.getHUDFont(), tr("No video sync"));
-		errorText.setRect(width / 2 - 100, height / 2 - 25, 200, 50);
-		int red = (_lastVideoSyncElapsed.elapsed() - 1000) / 4;
-		if (red > 255)
-			red = 255;
-		errorText.setColor(QColor(red, 0, 0));
-		errorText.draw();
-	}
+	QQuickItem *noSyncLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("noSyncLabel");
+	noSyncLabel->setVisible((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000));
+	double opacity = (_lastVideoSyncElapsed.elapsed() - 1000.0d) / 1000.0d;
+	noSyncLabel->setOpacity(opacity <= 0 ? 0 : opacity >= 1 ? 1 : opacity);
 }
 
 void JokerWindow::onVideoSync()
