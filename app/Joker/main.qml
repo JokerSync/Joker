@@ -8,6 +8,7 @@ import QtQuick 2.0
 import Joker 1.0
 
 Item {
+    id: item1
 
     width: 320
     height: 480
@@ -41,6 +42,32 @@ Item {
         anchors.top: parent.top
         anchors.margins: 20
         visible: titleRect.visible
+    }
+
+    Rectangle {
+        id: noSyncRect
+        color: "#c0500000"
+        anchors.leftMargin: -10
+        anchors.rightMargin: -10
+        anchors.bottomMargin: -2
+        anchors.topMargin: -2
+        anchors.fill: noSyncLabel
+        visible: noSyncLabel.visible
+        opacity: noSyncLabel.opacity
+    }
+
+    Text {
+        id: noSyncLabel
+        objectName: "noSyncLabel"
+        color: "#ff0000"
+        wrapMode: Text.WordWrap
+        text: qsTr("No video sync")
+        verticalAlignment: Text.AlignVCenter
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        font.pointSize: 30
+        horizontalAlignment: Text.AlignHCenter
+        anchors.margins: 20
     }
 }
 
