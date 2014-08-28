@@ -42,6 +42,7 @@ class JokerWindow;
 class JokerWindow : public PhDocumentWindow
 {
 	Q_OBJECT
+	Q_PROPERTY(QString currentLoopLabel READ currentLoopLabel WRITE setCurrentLoopLabel NOTIFY currentLoopLabelChanged)
 
 public:
 	///
@@ -62,6 +63,18 @@ public:
 	/// @return True if the videoFile opened well, false otherwise.
 	///
 	bool openVideoFile(QString videoFile);
+
+	/**
+	 * @brief The current loop label
+	 * @return A string
+	 */
+	QString currentLoopLabel();
+
+	/**
+	 * @brief Sets the current loop label
+	 * @param A string
+	 */
+	void setCurrentLoopLabel(QString label);
 
 public slots:
 	///
@@ -241,6 +254,9 @@ private slots:
 
 	void on_actionSet_space_between_two_ruler_graduation_triggered();
 
+signals:
+	void currentLoopLabelChanged();
+
 private:
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;
@@ -266,6 +282,8 @@ private:
 	PhGraphicImage _videoLogo;
 
 	QTime _lastVideoSyncElapsed;
+
+	QString _currentLoopLabel;
 };
 
 #endif // MAINWINDOW_H

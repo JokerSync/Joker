@@ -47,6 +47,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	qmlRegisterType<PhQmlView>("Joker", 1, 0, "PhQmlView");
 
 	ui->videoStripView->engine()->rootContext()->setContextProperty("doc", _doc);
+	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -942,15 +943,10 @@ void JokerWindow::onPaint(int width, int height)
 	}
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
-	if(currentLoop) {
-		QString loopLabel = currentLoop->label();
-		PhGraphicText gCurrentLoop(_strip.getHUDFont(), loopLabel);
-		int loopHeight = 60;
-		int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) * ((float) loopHeight / _strip.getHUDFont()->getHeight());
-		gCurrentLoop.setRect(10, height - stripHeight - loopHeight, loopWidth, loopHeight);
-		gCurrentLoop.setColor(Qt::blue);
-		gCurrentLoop.draw();
-	}
+	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
+	QQuickItem *loopLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("currentLoopLabel");
+	// if the strip was drawn with QML too, the following could be replaced with proper anchoring
+	loopLabel->setY(height - stripHeight - loopLabel->height());
 
 	QQuickItem *noSyncLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("noSyncLabel");
 	noSyncLabel->setVisible(_lastVideoSyncElapsed.elapsed() > 1000);
@@ -986,4 +982,17 @@ void JokerWindow::on_actionSet_space_between_two_ruler_graduation_triggered()
 {
 	RulerSpaceDialog dlg(_settings);
 	dlg.exec();
+}
+
+QString JokerWindow::currentLoopLabel()
+{
+	return _currentLoopLabel;
+}
+
+void JokerWindow::setCurrentLoopLabel(QString label)
+{
+	if (label != _currentLoopLabel) {
+		_currentLoopLabel = label;
+		emit currentLoopLabelChanged();
+	}
 }

@@ -31,7 +31,7 @@ Item {
 
     Text {
         id: titleLabel
-        color: "#ffffff"
+        color: "white"
         wrapMode: Text.WordWrap
         text: doc.fullTitle
         font.pointSize: 8
@@ -59,7 +59,7 @@ Item {
     Text {
         id: noSyncLabel
         objectName: "noSyncLabel"
-        color: "#ff0000"
+        color: "red"
         wrapMode: Text.WordWrap
         text: qsTr("No video sync")
         verticalAlignment: Text.AlignVCenter
@@ -68,6 +68,16 @@ Item {
         font.pointSize: 30
         horizontalAlignment: Text.AlignHCenter
         anchors.margins: 20
+    }
+
+    Text {
+        objectName: "currentLoopLabel"
+        color: "blue"
+        text: jokerWindow.currentLoopLabel
+        wrapMode: Text.WordWrap
+        anchors.left: parent.left
+        font.pointSize: 50
+        anchors.leftMargin: 10
     }
 }
 
