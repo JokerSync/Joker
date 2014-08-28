@@ -47,6 +47,7 @@ class JokerWindow;
 class JokerWindow : public PhEditableDocumentWindow
 {
 	Q_OBJECT
+	Q_PROPERTY(QString currentLoopLabel READ currentLoopLabel WRITE setCurrentLoopLabel NOTIFY currentLoopLabelChanged)
 
 public:
 	///
@@ -69,6 +70,18 @@ public:
 	///
 	bool openVideoFile(QString videoFile);
 #endif
+
+	/**
+	 * @brief The current loop label
+	 * @return A string
+	 */
+	QString currentLoopLabel();
+
+	/**
+	 * @brief Sets the current loop label
+	 * @param A string
+	 */
+	void setCurrentLoopLabel(QString label);
 
 public slots:
 	///
@@ -277,6 +290,9 @@ private slots:
 
 	void on_actionLoop_triggered(bool checked);
 
+signals:
+	void currentLoopLabelChanged();
+
 private:
 	PhTimeCodeType timeCodeType();
 	PhTime currentTime();
@@ -315,6 +331,8 @@ private:
 	PhGraphicImage _videoLogo;
 
 	QTime _lastVideoSyncElapsed;
+
+	QString _currentLoopLabel;
 };
 
 #endif // MAINWINDOW_H

@@ -57,6 +57,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	qmlRegisterType<PhQmlView>("Joker", 1, 0, "PhQmlView");
 
 	ui->videoStripView->engine()->rootContext()->setContextProperty("doc", _doc);
+	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -975,38 +976,9 @@ void JokerWindow::onPaint(int width, int height)
 			y += tcHeight;
 		}
 
-		// Display the box around current loop number
-		int boxWidth = infoWidth / 4;
 		int boxHeight = infoWidth / 6;
-		int nextTcWidth = infoWidth - boxWidth - 12;
+		int nextTcWidth = infoWidth - 12;
 		int nextTcHeight = nextTcWidth / 6;
-		{
-			int borderWidth = 2;
-			PhGraphicSolidRect outsideLoopRect(x + spacing, y, boxWidth, boxHeight);
-			outsideLoopRect.setColor(infoColor);
-			outsideLoopRect.draw();
-
-			PhGraphicSolidRect insideLoopRect(x + spacing + borderWidth, y + borderWidth, boxWidth - 2 * borderWidth, boxHeight - 2 * borderWidth);
-			insideLoopRect.setColor(Qt::black);
-			insideLoopRect.draw();
-
-			// Display the current loop number
-			QString loopLabel = "0";
-			PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
-			if(currentLoop)
-				loopLabel = currentLoop->label();
-			int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) / 2;
-			int loopHeight = nextTcHeight;
-			int loopX = x + spacing + (boxWidth - loopWidth) / 2;
-			int loopY = y + (boxHeight - loopHeight) / 2;
-
-			PhGraphicText gCurrentLoop(_strip.getHUDFont(), loopLabel);
-
-			gCurrentLoop.setRect(loopX, loopY, loopWidth, loopHeight);
-			gCurrentLoop.setColor(infoColor);
-			gCurrentLoop.draw();
-		}
-
 		// Display the next timecode
 		{
 			/// The next time code will be the next element of the people from the list.
@@ -1029,7 +1001,7 @@ void JokerWindow::onPaint(int width, int height)
 			PhGraphicText nextTCText(_strip.getHUDFont());
 			nextTCText.setColor(infoColor);
 
-			int nextTcX = x + 2 * spacing + boxWidth;
+			int nextTcX = x + 2 * spacing;
 			int nextTcY = y + (boxHeight - nextTcHeight) / 2;
 			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
 
@@ -1044,6 +1016,13 @@ void JokerWindow::onPaint(int width, int height)
 	foreach(QString info, _strip.infos()) {
 		ui->videoStripView->addInfo(info);
 	}
+
+	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
+	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
+	QQuickItem *loopLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("currentLoopLabel");
+	loopLabel->setVisible(_settings->displayNextText());
+	// if the strip was drawn with QML too, the following could be replaced with proper anchoring
+	loopLabel->setY(height - stripHeight - loopLabel->height());
 
 	QQuickItem *noSyncLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("noSyncLabel");
 	noSyncLabel->setVisible((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000));
@@ -1170,4 +1149,17 @@ void JokerWindow::on_actionSet_TC_out_triggered()
 void JokerWindow::on_actionLoop_triggered(bool checked)
 {
 	_settings->setSyncLooping(checked);
+}
+
+QString JokerWindow::currentLoopLabel()
+{
+	return _currentLoopLabel;
+}
+
+void JokerWindow::setCurrentLoopLabel(QString label)
+{
+	if (label != _currentLoopLabel) {
+		_currentLoopLabel = label;
+		emit currentLoopLabelChanged();
+	}
 }
