@@ -219,7 +219,7 @@ signals:
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 
 private:
-	bool goToFrame(PhFrame frame);
+	bool decodeFrame(PhFrame frame);
 	int64_t frame2time(PhFrame f);
 	PhFrame time2frame(int64_t t);
 

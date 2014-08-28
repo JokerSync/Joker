@@ -70,10 +70,6 @@ bool PhVideoEngine::open(QString fileName)
 
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
 
-	_frameIn = 0;
-	_videoStream = NULL;
-	_audioStream = NULL;
-
 	// Find video stream :
 	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++) {
 		AVMediaType streamType = _pFormatContext->streams[i]->codec->codec_type;
@@ -148,7 +144,7 @@ bool PhVideoEngine::open(QString fileName)
 		}
 	}
 
-	goToFrame(0);
+	decodeFrame(0);
 	_fileName = fileName;
 
 	return true;
@@ -183,7 +179,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	if(_videoStream) {
 		PhFrame delay = _settings->screenDelay() * PhTimeCode::getFps(_tcType) * _clock.rate() / 1000;
-		goToFrame(_clock.frame(_tcType) + delay);
+		decodeFrame(_clock.frame(_tcType) + delay);
 	}
 	_videoRect.setRect(x, y, w, h);
 	_videoRect.setZ(-10);
@@ -255,7 +251,7 @@ QString PhVideoEngine::codecName()
 	return "";
 }
 
-bool PhVideoEngine::goToFrame(PhFrame frame)
+bool PhVideoEngine::decodeFrame(PhFrame frame)
 {
 	if(!ready()) {
 		PHDEBUG << "not ready";
