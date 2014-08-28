@@ -24,6 +24,7 @@ protected slots:
 	void paint(int width, int height);
 
 private slots:
+	void initTestCase();
 
 	void openMovieTest();
 	void goToTest01();

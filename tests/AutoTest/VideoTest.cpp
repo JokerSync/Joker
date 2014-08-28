@@ -17,6 +17,8 @@
 VideoTest::VideoTest() : _videoEngine(&_settings),
 	_view(64, 64)
 {
+	//Disable bilinear filtering for the test
+	_videoEngine.setBilinearFiltering(false);
 	connect(&_view, &PhGraphicView::paint, this, &VideoTest::paint);
 	_view.show();
 }
@@ -26,9 +28,17 @@ void VideoTest::paint(int width, int height)
 	_videoEngine.drawVideo(0, 0, width, height);
 }
 
+void VideoTest::initTestCase()
+{
+	PhDebug::enable();
+}
+
 void VideoTest::openMovieTest()
 {
 	QVERIFY(_videoEngine.open("interlace_%03d.bmp") );
+
+	QTest::qWait(FRAME_WAIT_TIME);
+
 	_videoEngine.close();
 }
 
@@ -157,16 +167,13 @@ void VideoTest::deinterlaceTest()
 
 	//Change mode to deinterlaced
 	_videoEngine.setDeinterlace(true);
-	//Disable bilinear filtering for the test
-	_videoEngine.setBilinearFiltering(false);
 	QTest::qWait(FRAME_WAIT_TIME);
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("deinterlace_000.bmp"));
 
-	//Re-enable bilinear filtering
-	_videoEngine.setBilinearFiltering(true);
-
 	//Move one picture forward
 	_videoEngine.clock()->setFrame(1, PhTimeCodeType25);
+	QTest::qWait(FRAME_WAIT_TIME);
+	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("deinterlace_001.bmp"));
 
 	//Go back to interlaced mode
 	_videoEngine.setDeinterlace(false);
@@ -175,7 +182,7 @@ void VideoTest::deinterlaceTest()
 }
 
 void VideoTest::saveBuffer(QString fileName) {
-	QImage test = _view.renderPixmap(64,64).toImage();
+	QImage test = _view.renderPixmap(64, 64).toImage();
 	test.save(fileName);
 	system(PHNQ(QString("open %0").arg(fileName)));
 }
