@@ -232,7 +232,7 @@ private:
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
-	PhGraphicTexturedRect videoRect;
+	PhGraphicTexturedRect _videoRect;
 	PhFrame _currentFrame;
 
 	PhTickCounter _videoFrameTickCounter;

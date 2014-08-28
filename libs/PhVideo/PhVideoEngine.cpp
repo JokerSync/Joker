@@ -43,12 +43,12 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 
 bool PhVideoEngine::bilinearFiltering()
 {
-	return videoRect.bilinearFiltering();
+	return _videoRect.bilinearFiltering();
 }
 
 void PhVideoEngine::setBilinearFiltering(bool bilinear)
 {
-	videoRect.setBilinearFiltering(bilinear);
+	_videoRect.setBilinearFiltering(bilinear);
 }
 
 bool PhVideoEngine::open(QString fileName)
@@ -184,9 +184,9 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		PhFrame delay = _settings->screenDelay() * PhTimeCode::getFps(_tcType) * _clock.rate() / 1000;
 		goToFrame(_clock.frame(_tcType) + delay);
 	}
-	videoRect.setRect(x, y, w, h);
-	videoRect.setZ(-10);
-	videoRect.draw();
+	_videoRect.setRect(x, y, w, h);
+	_videoRect.setZ(-10);
+	_videoRect.draw();
 }
 
 void PhVideoEngine::setFrameIn(PhFrame frameIn)
@@ -331,7 +331,7 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
 						                   &linesize)) {
 
-							videoRect.createTextureFromBGRABuffer(_rgb, _videoFrame->width, frameHeight);
+							_videoRect.createTextureFromBGRABuffer(_rgb, _videoFrame->width, frameHeight);
 
 
 							_videoFrameTickCounter.tick();
