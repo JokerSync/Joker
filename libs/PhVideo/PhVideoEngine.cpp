@@ -318,8 +318,8 @@ bool PhVideoEngine::decodeFrame(PhFrame frame)
 						 * because this format is native to most video cards and will avoid a conversion
 						 * in the video driver */
 						SwsContext * swsContext = sws_getContext(_videoFrame->width, _videoStream->codec->height, pixFormat,
-						                                _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
-						                                SWS_POINT, NULL, NULL, NULL);
+						                                         _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
+						                                         SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
 							_rgb = new uint8_t[avpicture_get_size(AV_PIX_FMT_BGRA, _videoFrame->width, frameHeight)];
