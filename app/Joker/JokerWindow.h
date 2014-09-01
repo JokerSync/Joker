@@ -333,6 +333,7 @@ private:
 	QTime _lastVideoSyncElapsed;
 
 	QString _currentLoopLabel;
+	QList<QObject*> _selectedPeopleList;
 };
 
 #endif // MAINWINDOW_H

@@ -70,6 +70,23 @@ Item {
                 horizontalAlignment: Text.AlignRight
             }
         }
+
+        ListView {
+            objectName: "selectedPeopleList"
+            width: parent.width
+            height: childrenRect.height
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+
+            model: selectedPeopleModel
+            delegate: Text {
+                text: name
+                color: "grey"
+                font.pointSize: 15
+                lineHeight: 0.75
+                wrapMode: Text.WordWrap
+            }
+        }
     }
 
     Image {

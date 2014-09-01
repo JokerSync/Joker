@@ -58,6 +58,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->videoStripView->engine()->rootContext()->setContextProperty("doc", _doc);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
+	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -889,6 +890,24 @@ void JokerWindow::onPaint(int width, int height)
 	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
 	PhTime clockTime = clock->time() + delay;
 
+	QList<PhPeople*> selectedPeoples;
+	foreach(QString name, _settings->selectedPeopleNameList()) {
+		PhPeople *people = _strip.doc()->peopleByName(name);
+		if(people)
+			selectedPeoples.append(people);
+	}
+
+	// Note: _selectedPeopleList is needed because QVariant does not know how to handle a QList<PhPeople*>
+	// we convert it to QList<QObject*>
+	_selectedPeopleList.clear();
+	foreach(PhPeople *people, selectedPeoples) {
+		_selectedPeopleList.append(people);
+	}
+
+	// refresh the view
+	// TODO the view could be refreshed more intelligently by connecting to the signals of the people selection dialog
+	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
+
 	float stripHeightRatio = 0.0f;
 	if(!_settings->hideStrip())
 		stripHeightRatio = _settings->stripHeight();
@@ -926,14 +945,6 @@ void JokerWindow::onPaint(int width, int height)
 	}
 #endif
 
-	// Get the selected people list
-	QList<PhPeople*> selectedPeoples;
-	foreach(QString name, _settings->selectedPeopleNameList()) {
-		PhPeople *people = _strip.doc()->peopleByName(name);
-		if(people)
-			selectedPeoples.append(people);
-	}
-
 	int x = videoX + videoWidth;
 	int y = 0;
 
@@ -967,6 +978,10 @@ void JokerWindow::onPaint(int width, int height)
 	foreach(QString info, _strip.infos()) {
 		ui->videoStripView->addInfo(info);
 	}
+
+	// FIXME the font size for the list of selected peoples is fixed, whereas it depended on the window size before
+	QQuickItem *selectedPeopleList = ui->videoStripView->rootObject()->findChild<QQuickItem*>("selectedPeopleList");
+	selectedPeopleList->setVisible(!_settings->hideSelectedPeoples() && _selectedPeopleList.count());
 
 	QQuickItem *videoLogo = ui->videoStripView->rootObject()->findChild<QQuickItem*>("videoLogo");
 	videoLogo->setVisible((videoHeight > 0) && (_videoEngine.height() <= 0) && _settings->displayLogo());
