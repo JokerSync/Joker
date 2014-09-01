@@ -21,27 +21,46 @@ Item {
         id: titleRect
         objectName: "titleRect"
         color: "#000080"
-        anchors.leftMargin: -20
-        anchors.rightMargin: -20
-        anchors.bottomMargin: -2
-        anchors.topMargin: -2
         anchors.fill: titleLabel
-        anchors.margins: -10
-    }
-
-    Text {
-        id: titleLabel
-        color: "white"
-        wrapMode: Text.WordWrap
-        text: doc.fullTitle
-        font.pointSize: 8
-        anchors.topMargin: 0
-        horizontalAlignment: Text.AlignHCenter
+        height: childrenRect.height
         anchors.right: parent.right
         anchors.left: parent.left
         anchors.top: parent.top
-        anchors.margins: 20
-        visible: titleRect.visible
+
+        Text {
+            id: titleLabel
+            color: "white"
+            wrapMode: Text.WordWrap
+            text: doc.fullTitle
+            font.pointSize: 8
+            horizontalAlignment: Text.AlignHCenter
+            width: parent.width
+        }
+    }
+
+    Text {
+        id: tcLabel
+        objectName: "tcLabel"
+        color: "#00ff00"
+        text: "#"
+        anchors.topMargin: 0
+        anchors.leftMargin: 2
+        wrapMode: Text.WordWrap
+        anchors.left: parent.left
+        anchors.top: titleRect.bottom
+        font.pointSize: 29
+    }
+
+    Text {
+        objectName: "nextTcLabel"
+        color: "red"
+        text: "#"
+        anchors.topMargin: 0
+        anchors.rightMargin: 2
+        wrapMode: Text.WordWrap
+        anchors.right: parent.right
+        anchors.top: titleRect.bottom
+        font.pointSize: tcLabel.font.pointSize
     }
 
     Rectangle {
@@ -78,31 +97,6 @@ Item {
         anchors.left: parent.left
         font.pointSize: 50
         anchors.leftMargin: 10
-    }
-
-    Text {
-        id: tcLabel
-        objectName: "tcLabel"
-        color: "#00ff00"
-        text: "#"
-        anchors.topMargin: 0
-        anchors.leftMargin: 2
-        wrapMode: Text.WordWrap
-        anchors.left: parent.left
-        anchors.top: titleRect.bottom
-        font.pointSize: 29
-    }
-
-    Text {
-        objectName: "nextTcLabel"
-        color: "red"
-        text: "#"
-        anchors.topMargin: 0
-        anchors.rightMargin: 2
-        wrapMode: Text.WordWrap
-        anchors.right: parent.right
-        anchors.top: titleRect.bottom
-        font.pointSize: tcLabel.font.pointSize
     }
 }
 
