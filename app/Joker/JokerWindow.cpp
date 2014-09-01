@@ -958,24 +958,6 @@ void JokerWindow::onPaint(int width, int height)
 		QColor infoColor = _settings->backgroundColorLight();
 		int infoWidth = width - videoWidth;
 		int spacing = 4;
-
-		QQuickItem *titleRect = ui->videoStripView->rootObject()->findChild<QQuickItem*>("titleRect");
-		titleRect->setVisible(_strip.doc()->fullTitle().length() > 0);
-		y += (titleRect->height() - titleRect->y())*titleRect->isVisible();
-
-		// Display the current timecode
-		{
-			int tcWidth = infoWidth - 2 * spacing;
-			int tcHeight = infoWidth / 6;
-			PhGraphicText tcText(_strip.getHUDFont());
-			tcText.setColor(infoColor);
-			tcText.setRect(x + 4, y, tcWidth, tcHeight);
-			tcText.setContent(PhTimeCode::stringFromTime(clockTime, timeCodeType()));
-			tcText.draw();
-
-			y += tcHeight;
-		}
-
 		int boxHeight = infoWidth / 6;
 		int nextTcWidth = infoWidth - 12;
 		int nextTcHeight = nextTcWidth / 6;
@@ -1016,6 +998,10 @@ void JokerWindow::onPaint(int width, int height)
 	foreach(QString info, _strip.infos()) {
 		ui->videoStripView->addInfo(info);
 	}
+
+	QQuickItem *tcLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("tcLabel");
+	tcLabel->setVisible(_settings->displayNextText());
+	tcLabel->setProperty("text", PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
