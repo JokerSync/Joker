@@ -131,6 +131,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	this->connect(OpenGLView, &PhQmlView::paint, this, &JokerWindow::onPaint, Qt::DirectConnection);
 
 	_videoLogo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
+	QQuickItem *videoLogo = ui->videoStripView->rootObject()->findChild<QQuickItem*>("videoLogo");
+	videoLogo->setProperty("source", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png"));
 }
 
 JokerWindow::~JokerWindow()
@@ -869,23 +871,11 @@ void JokerWindow::onPaint(int width, int height)
 				tcWidth = width / 2;
 			}
 		}
-		else if(_settings->displayLogo()) {
-			// The logo file is 500px in native format
-			int logoHeight = _videoLogo.originalSize().height();
-			int logoWidth = _videoLogo.originalSize().width();
-			if(videoHeight < logoHeight) {
-				logoHeight = videoHeight;
-				logoWidth = _videoLogo.originalSize().width() * logoHeight / _videoLogo.originalSize().height();
-			}
-			if(width < logoWidth) {
-				logoWidth = width;
-				logoHeight = _videoLogo.originalSize().height() * logoWidth / _videoLogo.originalSize().width();
-			}
-			_videoLogo.setRect((width - logoHeight) / 2, (videoHeight - logoHeight) / 2, logoHeight, logoHeight);
-			_videoLogo.draw();
-
-		}
 	}
+
+	QQuickItem *videoLogo = ui->videoStripView->rootObject()->findChild<QQuickItem*>("videoLogo");
+	videoLogo->setVisible((videoHeight > 0) && (_videoEngine.height() <= 0) && _settings->displayLogo());
+	videoLogo->setHeight(videoHeight);
 
 	PhClock *clock = _videoEngine.clock();
 	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
