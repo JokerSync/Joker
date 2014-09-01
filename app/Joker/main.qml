@@ -17,52 +17,58 @@ Item {
         objectName: "PhQmlView"
     }
 
-    Rectangle {
-        id: titleRect
-        objectName: "titleRect"
-        color: "#000080"
-        anchors.fill: titleLabel
-        height: childrenRect.height
-        anchors.right: parent.right
-        anchors.left: parent.left
+    Column {
         anchors.top: parent.top
-
-        Text {
-            id: titleLabel
-            color: "white"
-            wrapMode: Text.WordWrap
-            text: doc.fullTitle
-            font.pointSize: 8
-            horizontalAlignment: Text.AlignHCenter
-            width: parent.width
-        }
-    }
-
-    Item {
-        anchors.top: titleRect.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.topMargin: 0
-        anchors.leftMargin: 2
-        anchors.rightMargin: 2
+        anchors.margins: 0
 
-        Text {
-            id: tcLabel
-            objectName: "tcLabel"
-            color: "#00ff00"
-            text: "#"
-            wrapMode: Text.WordWrap
-            font.pointSize: 29
+        spacing: 0
+
+        move: Transition {
+            NumberAnimation { properties: "x,y"; duration: 100 }
         }
 
-        Text {
-            objectName: "nextTcLabel"
-            color: "red"
-            text: "#"
-            wrapMode: Text.WordWrap
-            font.pointSize: tcLabel.font.pointSize
+        Rectangle {
+            id: titleRect
+            objectName: "titleRect"
+            color: "#000080"
+            height: childrenRect.height
             width: parent.width
-            horizontalAlignment: Text.AlignRight
+
+            Text {
+                id: titleLabel
+                color: "white"
+                wrapMode: Text.WordWrap
+                text: doc.fullTitle
+                font.pointSize: 8
+                horizontalAlignment: Text.AlignHCenter
+                width: parent.width
+            }
+        }
+
+        Item {
+            width: parent.width
+            height: childrenRect.height
+
+            Text {
+                id: tcLabel
+                objectName: "tcLabel"
+                color: "#00ff00"
+                text: "#"
+                wrapMode: Text.WordWrap
+                font.pointSize: 29
+            }
+
+            Text {
+                objectName: "nextTcLabel"
+                color: "red"
+                text: "#"
+                wrapMode: Text.WordWrap
+                font.pointSize: tcLabel.font.pointSize
+                width: parent.width
+                horizontalAlignment: Text.AlignRight
+            }
         }
     }
 
