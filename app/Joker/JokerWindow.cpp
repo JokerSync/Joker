@@ -897,13 +897,9 @@ void JokerWindow::onPaint(int width, int height)
 		ui->videoStripView->addInfo(info);
 	}
 
-	if(_settings->displayTC()) {
-		PhGraphicText tcText(_strip.getHUDFont());
-		tcText.setColor(Qt::green);
-		tcText.setRect(0, y, tcWidth, tcHeight);
-		tcText.setContent(PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
-		tcText.draw();
-	}
+	QQuickItem *tcLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("tcLabel");
+	tcLabel->setVisible(_settings->displayTC());
+	tcLabel->setProperty("text", PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
 
 	if(_settings->displayNextTC()) {
 		PhStripText *nextText = NULL;

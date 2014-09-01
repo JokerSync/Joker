@@ -79,5 +79,17 @@ Item {
         font.pointSize: 50
         anchors.leftMargin: 10
     }
+
+    Text {
+        objectName: "tcLabel"
+        color: "#00ff00"
+        text: "#"
+        anchors.topMargin: 0
+        anchors.leftMargin: 2
+        wrapMode: Text.WordWrap
+        anchors.left: parent.left
+        anchors.top: titleRect.bottom
+        font.pointSize: 29
+    }
 }
 
