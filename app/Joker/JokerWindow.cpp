@@ -954,45 +954,27 @@ void JokerWindow::onPaint(int width, int height)
 	titleRect->setVisible(_settings->displayNextText() && (_strip.doc()->fullTitle().length() > 0));
 	y += (titleRect->height() - titleRect->y())*titleRect->isVisible();
 
+	PhStripText *nextText = NULL;
 	if(_settings->displayNextText()) {
-		QColor infoColor = _settings->backgroundColorLight();
-		int infoWidth = width - videoWidth;
-		int spacing = 4;
-		int boxHeight = infoWidth / 6;
-		int nextTcWidth = infoWidth - 12;
-		int nextTcHeight = nextTcWidth / 6;
-		// Display the next timecode
-		{
-			/// The next time code will be the next element of the people from the list.
-			PhStripText *nextText = NULL;
-			if(selectedPeoples.count()) {
-				nextText = _strip.doc()->nextText(selectedPeoples, clockTime);
-				if(nextText == NULL)
-					nextText = _strip.doc()->nextText(selectedPeoples, 0);
-			}
-			else {
-				nextText = _strip.doc()->nextText(clockTime);
-				if(nextText == NULL)
-					nextText = _strip.doc()->nextText(0);
-			}
-
-			PhTime nextTextTime = 0;
-			if(nextText != NULL)
-				nextTextTime = nextText->timeIn();
-
-			PhGraphicText nextTCText(_strip.getHUDFont());
-			nextTCText.setColor(infoColor);
-
-			int nextTcX = x + 2 * spacing;
-			int nextTcY = y + (boxHeight - nextTcHeight) / 2;
-			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
-
-			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, timeCodeType()));
-			nextTCText.draw();
-
-			y += boxHeight;
+		/// The next time code will be the next element of the people from the list.
+		if(selectedPeoples.count()) {
+			nextText = _strip.doc()->nextText(selectedPeoples, clockTime);
+			if(nextText == NULL)
+				nextText = _strip.doc()->nextText(selectedPeoples, 0);
+		}
+		else {
+			nextText = _strip.doc()->nextText(clockTime);
+			if(nextText == NULL)
+				nextText = _strip.doc()->nextText(0);
 		}
 	}
+
+	QQuickItem *nextTcLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("nextTcLabel");
+	nextTcLabel->setVisible(_settings->displayNextText() && nextText != NULL);
+	if (nextText != NULL) {
+		nextTcLabel->setProperty("text", PhTimeCode::stringFromTime(nextText->timeIn(), _videoEngine.timeCodeType()));
+	}
+	y += nextTcLabel->height()*nextTcLabel->isVisible();
 
 	_strip.draw(0, videoHeight, width, stripHeight, x, y, selectedPeoples);
 	foreach(QString info, _strip.infos()) {
