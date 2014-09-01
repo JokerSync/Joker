@@ -1264,6 +1264,7 @@ void PhStripDoc::reset()
 	_videoForceRatio169 = false;
 	_generator = "";
 	_mosNextTag = 0x8008;
+	_modified = false;
 
 	emit this->changed();
 }
