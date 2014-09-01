@@ -901,40 +901,38 @@ void JokerWindow::onPaint(int width, int height)
 	tcLabel->setVisible(_settings->displayTC());
 	tcLabel->setProperty("text", PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
 
+	PhStripText *nextText = NULL;
 	if(_settings->displayNextTC()) {
-		PhStripText *nextText = NULL;
-		PhGraphicText nextTCText(_strip.getHUDFont());
-		nextTCText.setColor(Qt::red);
-
-		nextTCText.setRect(width - tcWidth, y, tcWidth, tcHeight);
-		y += tcHeight;
-
 		/// The next time code will be the next element of the people from the list.
 		if(selectedPeoples.count()) {
 			nextText = _strip.doc()->nextText(selectedPeoples, clockTime);
 			if(nextText == NULL)
 				nextText = _strip.doc()->nextText(selectedPeoples, 0);
-
-			int peopleHeight = height / 30;
-			PhGraphicText peopleNameText(_strip.getHUDFont());
-			peopleNameText.setColor(QColor(128, 128, 128));
-			foreach(PhPeople* people, selectedPeoples) {
-				int peopleNameWidth = people->name().length() * peopleHeight / 2;
-				peopleNameText.setRect(10, y, peopleNameWidth, peopleHeight);
-				peopleNameText.setContent(people->name());
-				peopleNameText.draw();
-				y += peopleHeight;
-			}
 		}
 		else {
 			nextText = _strip.doc()->nextText(clockTime);
 			if(nextText == NULL)
 				nextText = _strip.doc()->nextText(0);
 		}
+	}
 
-		if(nextText != NULL) {
-			nextTCText.setContent(PhTimeCode::stringFromTime(nextText->timeIn(), _videoEngine.timeCodeType()));
-			nextTCText.draw();
+	QQuickItem *nextTcLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("nextTcLabel");
+	nextTcLabel->setVisible(_settings->displayNextTC() && nextText != NULL);
+	if (nextText != NULL) {
+		nextTcLabel->setProperty("text", PhTimeCode::stringFromTime(nextText->timeIn(), _videoEngine.timeCodeType()));
+	}
+	y += nextTcLabel->height()*nextTcLabel->isVisible();
+
+	if(_settings->displayNextTC() && selectedPeoples.count()) {
+		int peopleHeight = height / 30;
+		PhGraphicText peopleNameText(_strip.getHUDFont());
+		peopleNameText.setColor(QColor(128, 128, 128));
+		foreach(PhPeople* people, selectedPeoples) {
+			int peopleNameWidth = people->name().length() * peopleHeight / 2;
+			peopleNameText.setRect(10, y, peopleNameWidth, peopleHeight);
+			peopleNameText.setContent(people->name());
+			peopleNameText.draw();
+			y += peopleHeight;
 		}
 	}
 

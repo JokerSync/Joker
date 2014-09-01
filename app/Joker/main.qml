@@ -81,6 +81,7 @@ Item {
     }
 
     Text {
+        id: tcLabel
         objectName: "tcLabel"
         color: "#00ff00"
         text: "#"
@@ -90,6 +91,18 @@ Item {
         anchors.left: parent.left
         anchors.top: titleRect.bottom
         font.pointSize: 29
+    }
+
+    Text {
+        objectName: "nextTcLabel"
+        color: "red"
+        text: "#"
+        anchors.topMargin: 0
+        anchors.rightMargin: 2
+        wrapMode: Text.WordWrap
+        anchors.right: parent.right
+        anchors.top: titleRect.bottom
+        font.pointSize: tcLabel.font.pointSize
     }
 }
 
