@@ -7,6 +7,7 @@
 #include "PhPeople.h"
 
 PhPeople::PhPeople(QString name, QString color)
+	: QObject()
 {
 	_name = name;
 	_color = color;
@@ -17,6 +18,13 @@ QString PhPeople::name()
 	return _name;
 }
 
+void PhPeople::setName(QString name)
+{
+	if(name != _name)
+		emit nameChanged();
+
+	_name = name;
+}
 
 QString PhPeople::color()
 {
@@ -25,5 +33,8 @@ QString PhPeople::color()
 
 void PhPeople::setColor(QString color)
 {
+	if(color != _color)
+		emit colorChanged();
+
 	_color = color;
 }

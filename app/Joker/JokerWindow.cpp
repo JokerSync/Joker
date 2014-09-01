@@ -48,6 +48,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->videoStripView->engine()->rootContext()->setContextProperty("doc", _doc);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
+	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -820,6 +821,17 @@ void JokerWindow::onPaint(int width, int height)
 			selectedPeoples.append(people);
 	}
 
+	// Note: _selectedPeopleList is needed because QVariant does not know how to handle a QList<PhPeople*>
+	// we convert it to QList<QObject*>
+	_selectedPeopleList.clear();
+	foreach(PhPeople *people, selectedPeoples) {
+		_selectedPeopleList.append(people);
+	}
+
+	// refresh the view
+	// TODO the view could be refreshed more intelligently by connecting to the signals of the people selection dialog
+	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
+
 	int y = 0;
 
 	QQuickItem *titleRect = ui->videoStripView->rootObject()->findChild<QQuickItem*>("titleRect");
@@ -914,20 +926,10 @@ void JokerWindow::onPaint(int width, int height)
 	if (nextText != NULL) {
 		nextTcLabel->setProperty("text", PhTimeCode::stringFromTime(nextText->timeIn(), _videoEngine.timeCodeType()));
 	}
-	y += nextTcLabel->height()*nextTcLabel->isVisible();
 
-	if(_settings->displayNextTC() && selectedPeoples.count()) {
-		int peopleHeight = height / 30;
-		PhGraphicText peopleNameText(_strip.getHUDFont());
-		peopleNameText.setColor(QColor(128, 128, 128));
-		foreach(PhPeople* people, selectedPeoples) {
-			int peopleNameWidth = people->name().length() * peopleHeight / 2;
-			peopleNameText.setRect(10, y, peopleNameWidth, peopleHeight);
-			peopleNameText.setContent(people->name());
-			peopleNameText.draw();
-			y += peopleHeight;
-		}
-	}
+	// FIXME the font size for the list of selected peoples is fixed, whereas it depended on the window size before
+	QQuickItem *selectedPeopleList = ui->videoStripView->rootObject()->findChild<QQuickItem*>("selectedPeopleList");
+	selectedPeopleList->setVisible(_settings->displayNextTC() && _selectedPeopleList.count());
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
