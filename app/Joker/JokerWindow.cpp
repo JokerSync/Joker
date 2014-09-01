@@ -886,20 +886,19 @@ void JokerWindow::onPaint(int width, int height)
 	PhClock *clock = _videoEngine.clock();
 	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
 	PhTime clockTime = clock->time() + delay;
-	int tcHeight = tcWidth / 5;
+
+	QQuickItem *tcLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("tcLabel");
+	tcLabel->setVisible(_settings->displayTC());
+	tcLabel->setProperty("text", PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
 
 	int tcOffset = 0;
 	if(_settings->displayNextTC())
-		tcOffset = tcHeight;
+		tcOffset = tcLabel->height();
 
 	_strip.draw(0, y + videoHeight, width, stripHeight, tcOffset, selectedPeoples);
 	foreach(QString info, _strip.infos()) {
 		ui->videoStripView->addInfo(info);
 	}
-
-	QQuickItem *tcLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("tcLabel");
-	tcLabel->setVisible(_settings->displayTC());
-	tcLabel->setProperty("text", PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
 
 	PhStripText *nextText = NULL;
 	if(_settings->displayNextTC()) {
