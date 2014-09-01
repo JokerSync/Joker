@@ -860,10 +860,14 @@ void JokerWindow::onPaint(int width, int height)
 			_videoEngine.drawVideo(videoX, y + blackStripHeight, videoWidth, realVideoHeight);
 
 			// adjust tc size
-			if(videoX > tcWidth)
+			// FIXME this does not work now that QML is used for the timecode labels.
+			if(videoX > tcWidth) {
+				// maximize the timecode if we have more room
 				tcWidth = videoX;
-			else if( width < 2 * tcWidth)
+			} else if( width < 2 * tcWidth) {
+				// make sure the timecode labels do not overlap
 				tcWidth = width / 2;
+			}
 		}
 		else if(_settings->displayLogo()) {
 			// The logo file is 500px in native format
