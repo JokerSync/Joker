@@ -15,6 +15,8 @@ win32 {
 
 	INCLUDEPATH += $$(PORTAUDIO_PATH)\include
 	LIBS += -L$$(PORTAUDIO_PATH)\lib\Win32\ReleaseMinDependency -lportaudio_x86
+
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(PORTAUDIO_PATH)/lib/Win32/ReleaseMinDependency/portaudio_x86.dll) $${RESOURCES_PATH} $${CS}
 }
 
 HEADERS += \

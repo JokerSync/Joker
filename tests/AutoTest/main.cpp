@@ -12,11 +12,13 @@
 #include "LockableSpinBoxTest.h"
 #include "TimeCodeEditTest.h"
 #include "WindowTest.h"
+#include "SynchronizerTest.h"
 #include "SonyControllerTest.h"
 #include "GraphicTest.h"
 #include "GraphicStripTest.h"
 #include "GraphicTextTest.h"
 #include "VideoTest.h"
+#include "MidiTest.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,19 +27,21 @@ int main(int argc, char *argv[])
 	PHDEBUG << "AutoTest";
 
 	bool testAll = (argc < 2); // if no argument, test all
-	bool testClock = testAll;
 	bool testSettings = testAll;
+	bool testClock = testAll;
 	bool testTC = testAll;
 	bool testDebug = testAll;
 	bool testDoc = testAll;
 	bool testLockableSpinBox = testAll;
 	bool testTCEdit = testAll;
 	bool testWindow = testAll;
+	bool testSync = testAll;
 	bool testSony = testAll;
 	bool testGraphic = testAll;
 	bool testGraphicText = testAll;
 	bool testGraphicStrip = testAll;
 	bool testVideo = testAll;
+	bool testMidi = testAll;
 
 	int result = 0;
 
@@ -46,7 +50,8 @@ int main(int argc, char *argv[])
 	for(int i = 0; i < argc; i++) {
 		if(strcmp(argv[i], "all") == 0) {
 			testClock = testSettings = testTC = testDebug = testDoc = testLockableSpinBox = testTCEdit =
-			                                                                                    testWindow = testSony = testGraphic = testGraphicText = testGraphicStrip = true;
+			                                                                                    testWindow = testSync = testSony = testGraphic = testGraphicText = testGraphicStrip =
+			                                                                                                                                                           testVideo = testMidi = true;
 		}
 		else if(strcmp(argv[i], "clock") == 0)
 			testClock = true;
@@ -67,6 +72,8 @@ int main(int argc, char *argv[])
 		else if(strcmp(argv[i], "ui") == 0) {
 			testTCEdit = testLockableSpinBox = testWindow = true;
 		}
+		else if(strcmp(argv[i], "sync") == 0)
+			testSync = true;
 		else if(strcmp(argv[i], "sony") == 0)
 			testSony = true;
 		else if(strcmp(argv[i], "graphic") == 0)
@@ -77,6 +84,8 @@ int main(int argc, char *argv[])
 			testGraphicStrip = true;
 		else if(strcasecmp(argv[i], "video") == 0)
 			testVideo = true;
+		else if(strcasecmp(argv[i], "midi") == 0)
+			testMidi = true;
 		else
 			testArgList.append(argv[i]);
 	}
@@ -107,6 +116,12 @@ int main(int argc, char *argv[])
 		// Testing PhStripDoc
 		StripDocTest docTest;
 		result += QTest::qExec(&docTest, testArgList);
+	}
+
+	if(testSync) {
+		// Testing PhSynchronizer
+		SynchronizerTest syncTest;
+		result += QTest::qExec(&syncTest, testArgList);
 	}
 
 	if(testSony) {
@@ -140,14 +155,20 @@ int main(int argc, char *argv[])
 		GraphicTextTest viewTest;
 		result += QTest::qExec(&viewTest, testArgList);
 	}
-	if(testVideo) {
-		VideoTest videoTest;
-		result += QTest::qExec(&videoTest);
-	}
 
 	if(testGraphicStrip) {
 		GraphicStripTest viewTest;
 		result += QTest::qExec(&viewTest, testArgList);
+	}
+
+	if(testVideo) {
+		VideoTest videoTest;
+		result += QTest::qExec(&videoTest, testArgList);
+	}
+
+	if(testMidi) {
+		MidiTest midiTest;
+		result += QTest::qExec(&midiTest, testArgList);
 	}
 
 	QThread::msleep(500);

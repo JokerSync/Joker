@@ -13,6 +13,7 @@ DEFINES += ORG_NAME=\\\"Phonations\\\"
 INCLUDEPATH += ../../libs
 
 include(../../libs/PhTools/PhTools.pri)
+include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhVideo/PhVideo.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
@@ -32,7 +33,8 @@ mac {
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
 }
 
-PH_DEPLOY_LOCATION = $$(HOME)
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/HelveticaCYPlain.ttf) $${RESOURCES_PATH} $${CS}
+
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
 include(../../common/deploy.pri)
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/HelveticaCYPlain.ttf) $${RESOURCES_PATH} $${CS}

@@ -56,7 +56,6 @@ bool GraphicStripTestWindow::openDocument(QString fileName)
 	if(!_doc->openStripFile(fileName))
 		return false;
 
-	_clock->setTimeCodeType(_doc->timeCodeType());
 	_settings->setGenerate(false);
 	setCurrentDocument(fileName);
 	return true;
@@ -74,7 +73,7 @@ QAction *GraphicStripTestWindow::fullScreenAction()
 
 void GraphicStripTestWindow::onOpenFile()
 {
-	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.strip *.detx)");
+	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.joker *.detx)");
 	if(QFile::exists(fileName)) {
 		if(!openDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
@@ -93,11 +92,11 @@ void GraphicStripTestWindow::onGenerate()
 			_doc->addPeople(new PhPeople("A people"));
 			_doc->addPeople(new PhPeople("A second people", "red"));
 
-			_doc->addObject(new PhStripText(0, _doc->peoples().first(), 10000, 1, "Hello"));
-			_doc->addObject(new PhStripCut(PhStripCut::CrossFade, 5400));
+			_doc->addObject(new PhStripText(0, _doc->peoples().first(), 10000, 1, "Hello", 0.25f));
+			_doc->addObject(new PhStripCut(5400, PhStripCut::CrossFade));
 			_doc->addObject(new PhStripDetect(PhStripDetect::Off, 0, _doc->peoples().first(), 10000, 1));
-			_doc->addObject(new PhStripLoop(3, 22000));
-			_doc->addObject(new PhStripText(10000, _doc->peoples().last(), 15000, 2, "Hi !"));
+			_doc->addObject(new PhStripLoop(22000, "3"));
+			_doc->addObject(new PhStripText(10000, _doc->peoples().last(), 15000, 2, "Hi !", 0.25f));
 			_doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, _doc->peoples().last(), 15000, 2));
 		}
 		else {
@@ -117,7 +116,7 @@ void GraphicStripTestWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType
 
 void GraphicStripTestWindow::onRateChanged(PhRate rate)
 {
-	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(_clock->frame(), _clock->timeCodeType()), QString::number(rate));
+	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromTime(_clock->time(), _doc->videoTimeCodeType()), QString::number(rate));
 	ui->statusbar->showMessage(message);
 }
 
@@ -137,13 +136,13 @@ void GraphicStripTestWindow::on_actionPlay_backward_triggered()
 void GraphicStripTestWindow::on_actionStep_forward_triggered()
 {
 	_clock->setRate(0.0);
-	_clock->setFrame(_clock->frame() + 1);
+	_clock->setTime(_clock->time() + PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
 }
 
 void GraphicStripTestWindow::on_actionStep_backward_triggered()
 {
 	_clock->setRate(0.0);
-	_clock->setFrame(_clock->frame() - 1);
+	_clock->setTime(_clock->time() - PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
 }
 
 void GraphicStripTestWindow::on_actionStep_time_forward_triggered()
@@ -195,9 +194,9 @@ void GraphicStripTestWindow::on_action3_triggered()
 
 void GraphicStripTestWindow::on_actionGo_to_triggered()
 {
-	PhTimeCodeDialog dlg(_clock->timeCodeType(), _clock->frame());
+	PhTimeCodeDialog dlg(_doc->videoTimeCodeType(), _clock->time());
 	if(dlg.exec() == QDialog::Accepted)
-		_clock->setFrame(dlg.frame());
+		_clock->setTime(dlg.time());
 }
 
 void GraphicStripTestWindow::on_actionPrevious_Element_triggered()
@@ -235,8 +234,8 @@ void GraphicStripTestWindow::on_actionRuler_triggered(bool checked)
 
 void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
 {
-	PhTimeCodeType tcType = _doc->timeCodeType();
-	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn() / PhTimeCode::timePerFrame(tcType), this);
+	PhTimeCodeType tcType = _doc->videoTimeCodeType();
+	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn(), this);
 	if(dlg.exec())
 		_settings->setRulerTimeIn(dlg.frame() * PhTimeCode::timePerFrame(tcType));
 }

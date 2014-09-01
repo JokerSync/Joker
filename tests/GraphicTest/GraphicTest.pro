@@ -19,6 +19,7 @@ DEFINES += APP_NAME=\\\"$$TARGET\\\"
 
 include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
 include($${JOKER_ROOT}/libs/PhGraphic/PhGraphic.pri)
+include(../../libs/PhSync/PhSync.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 
 HEADERS  += \

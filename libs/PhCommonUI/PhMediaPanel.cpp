@@ -11,41 +11,34 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::PhMediaPanel),
 	_clock(NULL),
-	_firstFrame(0),
-	_mediaLength(0)
+	_timeIn(0),
+	_length(0)
 {
 	ui->setupUi(this);
 
 	//Buttons Init
 
 	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-	connect(ui->_playButton, SIGNAL(clicked()), this, SLOT(onPlayPause()));
+	connect(ui->_playButton, &QPushButton::clicked, this, &PhMediaPanel::onPlayPause);
 
 	ui->_fastForwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
-	connect(ui->_fastForwardButton, SIGNAL(clicked()), this, SLOT(onFastForward()));
+	connect(ui->_fastForwardButton, &QPushButton::clicked, this, &PhMediaPanel::onFastForward);
 
 	ui->_fastRewindButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
-	connect(ui->_fastRewindButton, SIGNAL(clicked()), this, SLOT(onRewind()));
+	connect(ui->_fastRewindButton, &QPushButton::clicked, this, &PhMediaPanel::onRewind);
 
 	ui->_backButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
-	connect(ui->_backButton, SIGNAL(clicked()), this, SLOT(onBack()));
+	connect(ui->_backButton, &QPushButton::clicked, this, &PhMediaPanel::onBack);
 
 	ui->_nextFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowForward));
-	connect(ui->_nextFrameButton, SIGNAL(clicked()), this, SLOT(onNextFrame()));
+	connect(ui->_nextFrameButton, &QPushButton::clicked, this, &PhMediaPanel::onNextFrame);
 
 	ui->_previousFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowBack));
-	connect(ui->_previousFrameButton, SIGNAL(clicked()), this, SLOT(onPreviousFrame()));
+	connect(ui->_previousFrameButton, &QPushButton::clicked, this, &PhMediaPanel::onPreviousFrame);
 
-	connect(ui->_slider, SIGNAL(sliderMoved(int)), this, SLOT(onSliderChanged(int)));
+	connect(ui->_slider, &QSlider::sliderMoved, this, &PhMediaPanel::onSliderChanged);
 
-	//Combobox Init
-
-	ui->_rateSelectionBox->addItem("23.98 fps");
-	ui->_rateSelectionBox->addItem("24 fps");
-	ui->_rateSelectionBox->addItem("25 fps");
-	ui->_rateSelectionBox->addItem("29.97 fps");
-
-	connect(ui->_rateSelectionBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onTCTypeComboChanged()));
+	connect(ui->timeCodeTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(onTCTypeComboChanged()));
 
 	ui->_playButton->setDefault(true);
 }
@@ -56,55 +49,20 @@ PhMediaPanel::~PhMediaPanel()
 	delete ui;
 }
 
-
-void PhMediaPanel::setTCType(PhTimeCodeType tcType)
-{
-	onTimeCodeTypeChanged(tcType);
-
-	if(_clock)
-		_clock->setTimeCodeType(tcType);
-}
-
-
 PhTimeCodeType PhMediaPanel::timeCodeType() const
 {
-	switch(ui->_rateSelectionBox->currentIndex()) {
+	switch(ui->timeCodeTypeCombo->currentIndex()) {
 	case 0:
 		return PhTimeCodeType2398;
 	case 1:
 		return PhTimeCodeType24;
 	case 3:
 		return PhTimeCodeType2997;
+	case 4:
+		return PhTimeCodeType30;
 	default:
 		return PhTimeCodeType25;
 	}
-}
-
-
-void PhMediaPanel::setFirstFrame(PhFrame firstFrame)
-{
-	_firstFrame = firstFrame;
-	ui->_slider->setMinimum(firstFrame);
-	ui->_slider->setMaximum(_firstFrame + _mediaLength);
-}
-
-
-PhFrame PhMediaPanel::getFirstFrame() const
-{
-	return _firstFrame;
-}
-
-
-void PhMediaPanel::setMediaLength(PhFrame length)
-{
-	_mediaLength = length;
-	ui->_slider->setMaximum(_firstFrame + length);
-}
-
-
-PhFrame PhMediaPanel::getMediaLength()
-{
-	return _mediaLength;
 }
 
 void PhMediaPanel::setSliderEnable(bool isEnabled)
@@ -112,18 +70,38 @@ void PhMediaPanel::setSliderEnable(bool isEnabled)
 	ui->_slider->setEnabled(isEnabled);
 }
 
-void PhMediaPanel::setClock(PhClock *clock)
+PhTime PhMediaPanel::timeIn() const
 {
-	_clock = clock;
-	if(_clock) {
-		setTCType(_clock->timeCodeType());
-		ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(_clock->frame(), _clock->timeCodeType()));
-		connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
-		connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
-		connect(_clock, SIGNAL(tcTypeChanged(PhTimeCodeType)), this, SLOT(onTimeCodeTypeChanged(PhTimeCodeType)));
-	}
+	return _timeIn;
 }
 
+void PhMediaPanel::setTimeIn(PhTime timeIn)
+{
+	_timeIn = timeIn;
+	updateSlider();
+}
+
+PhTime PhMediaPanel::length()
+{
+	return _length;
+}
+
+void PhMediaPanel::setLength(PhTime length)
+{
+	_length = length;
+	updateSlider();
+}
+
+void PhMediaPanel::setClock(PhTimeCodeType tcType, PhClock *clock)
+{
+	onTimeCodeTypeChanged(tcType);
+	_clock = clock;
+	if(_clock) {
+		ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(_clock->time(), tcType));
+		connect(_clock, &PhClock::timeChanged, this, &PhMediaPanel::onTimeChanged);
+		connect(_clock, &PhClock::rateChanged, this, &PhMediaPanel::onRateChanged);
+	}
+}
 
 void PhMediaPanel::onRateChanged(PhRate rate)
 {
@@ -138,16 +116,19 @@ void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
 {
 	switch(tcType) {
 	case PhTimeCodeType2398:
-		ui->_rateSelectionBox->setCurrentIndex(0);
+		ui->timeCodeTypeCombo->setCurrentIndex(0);
 		break;
 	case PhTimeCodeType24:
-		ui->_rateSelectionBox->setCurrentIndex(1);
+		ui->timeCodeTypeCombo->setCurrentIndex(1);
 		break;
 	case PhTimeCodeType25:
-		ui->_rateSelectionBox->setCurrentIndex(2);
+		ui->timeCodeTypeCombo->setCurrentIndex(2);
 		break;
 	case PhTimeCodeType2997:
-		ui->_rateSelectionBox->setCurrentIndex(3);
+		ui->timeCodeTypeCombo->setCurrentIndex(3);
+		break;
+	case PhTimeCodeType30:
+		ui->timeCodeTypeCombo->setCurrentIndex(4);
 		break;
 	}
 }
@@ -180,7 +161,7 @@ void PhMediaPanel::onRewind()
 void PhMediaPanel::onBack()
 {
 	if(_clock)
-		_clock->setFrame(_firstFrame);
+		_clock->setTime(_timeIn);
 	emit back();
 }
 
@@ -188,7 +169,7 @@ void PhMediaPanel::onNextFrame()
 {
 	if(_clock) {
 		_clock->setRate(0);
-		_clock->setFrame(_clock->frame() + 1);
+		_clock->setTime(_clock->time() + PhTimeCode::timePerFrame(this->timeCodeType()));
 	}
 	emit nextFrame();
 }
@@ -197,29 +178,37 @@ void PhMediaPanel::onPreviousFrame()
 {
 	if(_clock) {
 		_clock->setRate(0);
-		_clock->setFrame(_clock->frame() - 1);
+		_clock->setTime(_clock->time() - PhTimeCode::timePerFrame(this->timeCodeType()));
 	}
 	emit previousFrame();
 }
 
 void PhMediaPanel::onSliderChanged(int position)
 {
-	PhFrame frame = (PhFrame)position;
+	PhTime time = position * PhTimeCode::timePerFrame(this->timeCodeType());
 	if(_clock)
-		_clock->setFrame(frame);
-	emit goToFrame(frame, timeCodeType());
+		_clock->setTime(time);
+	emit goToTime(time);
+}
+
+void PhMediaPanel::updateSlider()
+{
+	PhTimeCodeType tcType = this->timeCodeType();
+	PhFrame frameIn = _timeIn / PhTimeCode::timePerFrame(tcType);
+	PhFrame frameOut = (_timeIn + _length) / PhTimeCode::timePerFrame(tcType);
+	ui->_slider->setMinimum(frameIn);
+	ui->_slider->setMaximum(frameOut);
 }
 
 void PhMediaPanel::onTCTypeComboChanged()
 {
-	if(_clock)
-		_clock->setTimeCodeType(timeCodeType());
 	emit timeCodeTypeChanged(timeCodeType());
 }
 
-void PhMediaPanel::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void PhMediaPanel::onTimeChanged(PhTime time)
 {
-	ui->_timecodeLabel->setText(PhTimeCode::stringFromFrame(frame, tcType));
-	ui->_slider->setSliderPosition(frame);
+	PhTimeCodeType tcType = this->timeCodeType();
+	ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(time, tcType));
+	ui->_slider->setSliderPosition(time / PhTimeCode::timePerFrame(tcType));
 }
 

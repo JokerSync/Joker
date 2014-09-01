@@ -9,7 +9,7 @@
 
 #include <QDialog>
 
-#include "PhTools/PhTimeCode.h"
+#include "PhSync/PhTimeCode.h"
 
 namespace Ui {
 class PhTimeCodeDialog;
@@ -31,22 +31,28 @@ public:
 	/**
 	 * @brief PhTimeCodeDialog constructor
 	 * @param tcType Timecode type to use for string to frame conversion.
-	 * @param frame The dialog initial frame.
+	 * @param time The dialog initial time.
 	 * @param parent The object owner.
 	 */
-	explicit PhTimeCodeDialog(PhTimeCodeType tcType, PhFrame frame = 0, QWidget *parent = 0);
+	explicit PhTimeCodeDialog(PhTimeCodeType tcType, PhTime time = 0, QWidget *parent = 0);
 
 	~PhTimeCodeDialog();
 
 	/**
 	 * @brief Current frame value entered in the text field
 	 * @return A frame value.
+	 * @todo remove
 	 */
 	PhFrame frame();
 
+	/**
+	 * @brief Current time value entered in the text field
+	 * @return A time value or zero if the text is not a valid timecode.
+	 */
+	PhTime time();
 
 private slots:
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onTimeChanged(PhTime frame);
 
 private:
 	Ui::PhTimeCodeDialog *ui;

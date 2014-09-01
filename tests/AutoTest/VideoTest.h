@@ -18,15 +18,18 @@ class VideoTest : public QObject
 {
 	Q_OBJECT
 public:
-	explicit VideoTest(QWidget *parent = 0);
+	explicit VideoTest();
 
 protected slots:
 	void paint(int width, int height);
 
 private slots:
+	void initTestCase();
 
 	void openMovieTest();
-	void goToTest();
+	void goToTest01();
+	void goToTest02();
+	void goToTest03();
 	void playTest();
 	void deinterlaceTest();
 private:
@@ -35,7 +38,8 @@ private:
 	PhGraphicView _view;
 
 #warning /// @todo move to a generic graphicTest implementation
-	void saveBuffer();
+	void saveBuffer(QString fileName);
+	void findMatch(QImage source);
 };
 
 #endif // VIDEOTEST_H

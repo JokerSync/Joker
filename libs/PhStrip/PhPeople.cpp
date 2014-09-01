@@ -22,3 +22,8 @@ QString PhPeople::color()
 {
 	return _color;
 }
+
+void PhPeople::setColor(QString color)
+{
+	_color = color;
+}

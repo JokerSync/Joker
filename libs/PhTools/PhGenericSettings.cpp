@@ -76,13 +76,17 @@ void PhGenericSettings::setStringList(QString name, QStringList list)
 	_settings.endArray();
 }
 
-QStringList PhGenericSettings::stringList(QString name)
+QStringList PhGenericSettings::stringList(QString name, QStringList defaultValue)
 {
 	QStringList list;
 	int size = _settings.beginReadArray(name);
-	for(int i = 0; i < size; i++) {
-		_settings.setArrayIndex(i);
-		list.append(_settings.value("listItem").toString());
+	if(size == 0)
+		list = defaultValue;
+	else {
+		for(int i = 0; i < size; i++) {
+			_settings.setArrayIndex(i);
+			list.append(_settings.value("listItem").toString());
+		}
 	}
 	_settings.endArray();
 

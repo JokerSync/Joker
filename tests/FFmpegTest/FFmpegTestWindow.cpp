@@ -69,7 +69,7 @@ bool FFmpegTestWindow::openFile(QString fileName)
 		return false;
 	}
 
-	_pFrame = avcodec_alloc_frame();
+	_pFrame = av_frame_alloc();
 
 	resizeEvent(NULL);
 

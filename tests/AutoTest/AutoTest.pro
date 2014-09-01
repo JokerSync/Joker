@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core testlib
 
 TARGET = AutoTest
 CONFIG   += console static debug
@@ -21,10 +21,13 @@ include(../../libs/PhTools/PhTools.pri)
 include(../../libs/PhStrip/PhStrip.pri)
 include(../../libs/PhAudio/PhAudio.pri)
 include(../../libs/PhSync/PhSync.pri)
+include(../../libs/PhSony/PhSony.pri)
+include(../../libs/PhLtc/PhLtc.pri)
 include(../../libs/PhCommonUI/PhCommonUI.pri)
 include(../../libs/PhGraphic/PhGraphic.pri)
 include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
 include(../../libs/PhVideo/PhVideo.pri)
+include(../../libs/PhMidi/PhMidi.pri)
 
 HEADERS += \
 	AutoTestSettings.h \
@@ -43,7 +46,9 @@ HEADERS += \
 	GraphicStripTestSettings.h \
 	GraphicStripTest.h \
 	VideoTest.h \
-	VideoTestSettings.h
+	VideoTestSettings.h \
+	MidiTest.h \
+    SynchronizerTest.h
 
 SOURCES += main.cpp \
 	ClockTest.cpp \
@@ -59,12 +64,14 @@ SOURCES += main.cpp \
 	GraphicTest.cpp \
 	GraphicTextTest.cpp \
 	GraphicStripTest.cpp \
-	VideoTest.cpp
+	VideoTest.cpp \
+	MidiTest.cpp \
+    SynchronizerTest.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/*) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/strip/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} -r $$shell_path($${JOKER_ROOT}/data/strip/) . $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/video/*) . $${CS}
 QMAKE_POST_LINK += rm -f *.gcda $${CS}
 
@@ -76,3 +83,5 @@ mac{
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
 }
 
+PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+include(../../common/deploy.pri)

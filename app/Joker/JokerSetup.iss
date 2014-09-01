@@ -18,7 +18,7 @@
 #define MyAppVerName MyAppName + " v" + MyAppVerStr
 
 #define MyOutputDir GetEnv('JOKER_RELEASE_PATH')
-#define QtPath GetEnv('QT_PATH')
+#define QtPath GetEnv('QTDIR')
 #define PortaudioPath GetEnv('PORTAUDIO_PATH')
 
 [Setup]
@@ -52,7 +52,6 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\Qt5Core.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\Qt5Gui.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\Qt5OpenGL.dll; DestDir: "{app}"; Flags: ignoreversion
@@ -68,28 +67,22 @@ Source: {#QtPath}\bin\icuuc51.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\libwinpthread-1.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\icudt51.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\plugins\platforms\*; DestDir: "{app}\platforms"; Flags: ignoreversion
-Source: {#PortaudioPath}\lib\Win32\ReleaseMinDependency\portaudio_x86.dll; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\avcodec-55.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\avdevice-55.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\avfilter-4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\avformat-55.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\avutil-52.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\joker.png"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\libfreetype-6.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\libjpeg-9.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\libpng16-16.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\libtiff-5.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\libwebp-4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\motif-240.png"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\postproc-52.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\SDL2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\SDL2_image.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\SDL2_ttf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\HelveticaCYPlain.ttf"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\SWENSON.TTF"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\swresample-0.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\swscale-2.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "release\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+Source: "release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
+; dlls (PortAudio, SDL, etc.)
+Source: "release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+; Qt dlls (windeployqt needs to be run first)
+Source: "release\accessible\*.dll"; DestDir: "{app}\accessible"; Flags: ignoreversion
+Source: "release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
+Source: "release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
+Source: "release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
+; translations
+Source: "release\*.qm"; DestDir: "{app}"; Flags: ignoreversion
+; images
+Source: "release\*.png"; DestDir: "{app}"; Flags: ignoreversion
+; fonts
+Source: "release\*.ttf"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

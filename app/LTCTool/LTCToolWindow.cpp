@@ -4,19 +4,22 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include "PhTools/PhDebug.h"
+#include "PhCommonUI/PhTimeCodeDialog.h"
+
 #include "LTCToolWindow.h"
 #include "ui_LTCToolWindow.h"
-#include "PhCommonUI/PhTimeCodeDialog.h"
 #include "PreferencesDialog.h"
 
 LTCToolWindow::LTCToolWindow(LTCToolSettings *settings, QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::LTCToolWindow),
 	_settings(settings),
-	_ltcWriter(PhTimeCodeType25),
-	_ltcReader(PhTimeCodeType25),
-	_lastFrame(-1),
-	_frameDelta(-1),
+	_writerTimeCodeType((PhTimeCodeType)settings->writerTimeCodeType()),
+	_ltcWriter(_writerTimeCodeType),
+	_ltcReader(_writerTimeCodeType),
+	_lastTime(-1),
+	_timeDelta(-1),
 	_lastRate(-1)
 {
 	ui->setupUi(this);
@@ -24,20 +27,20 @@ LTCToolWindow::LTCToolWindow(LTCToolSettings *settings, QWidget *parent) :
 	on_generateCheckBox_clicked(_settings->generate());
 	on_readCheckBox_clicked(_settings->read());
 
-	_ltcWriter.clock()->setFrame(_settings->firstFrame());
-	ui->widgetMaster->setMediaLength(_settings->length());
-	ui->widgetMaster->setFirstFrame(_settings->firstFrame());
-	ui->widgetMaster->setClock(_ltcWriter.clock());
+	_ltcWriter.clock()->setTime(_settings->writerTimeIn());
+	ui->widgetMaster->setLength(_settings->writerLoopLength());
+	ui->widgetMaster->setTimeIn(_settings->writerTimeIn());
+	ui->widgetMaster->setClock(_writerTimeCodeType, _ltcWriter.clock());
 
-	connect(_ltcReader.clock(),  SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onSlaveFrameChanged(PhFrame, PhTimeCodeType)));
-	connect(_ltcReader.clock(),  SIGNAL(rateChanged(PhRate)), this, SLOT(onSlaveRateChanged(PhRate)));
+	connect(ui->widgetMaster, &PhMediaPanel::timeCodeTypeChanged, this, &LTCToolWindow::onWriterTimeCodeTypeChanged);
+	connect(_ltcWriter.clock(), &PhClock::timeChanged, this, &LTCToolWindow::onWriterTimeChanged);
 
-	updateInfos();
+	connect(_ltcReader.clock(), &PhClock::timeChanged, this, &LTCToolWindow::onReaderTimeChanged);
+	connect(_ltcReader.clock(), &PhClock::rateChanged, this, &LTCToolWindow::onReaderRateChanged);
 
-	connect(_ltcWriter.clock(), SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
+	connect(&_ltcReader, &PhLtcReader::audioProcessed, this, &LTCToolWindow::onAudioProcessed);
 
-	connect(&_ltcReader, SIGNAL(audioProcessed(int, int)), this, SLOT(onAudioProcessed(int, int)));
-
+	updateInOutInfoLabel();
 }
 
 LTCToolWindow::~LTCToolWindow()
@@ -47,39 +50,36 @@ LTCToolWindow::~LTCToolWindow()
 
 void LTCToolWindow::on_actionSet_TC_In_triggered()
 {
-	PhTimeCodeDialog dlg(_ltcWriter.clock()->timeCodeType(), ui->widgetMaster->getFirstFrame());
+	PhTimeCodeDialog dlg(_writerTimeCodeType, _settings->writerTimeIn());
 	if(dlg.exec()) {
-		ui->widgetMaster->setFirstFrame(dlg.frame());
-		_ltcWriter.clock()->setFrame(ui->widgetMaster->getFirstFrame());
-		updateInfos();
+		ui->widgetMaster->setTimeIn(dlg.time());
+		_ltcWriter.clock()->setTime(dlg.time());
+		_settings->setWriterTimeIn(dlg.time());
+		updateInOutInfoLabel();
 	}
 }
 
 void LTCToolWindow::on_actionSet_TC_Out_triggered()
 {
-	PhTimeCodeDialog dlg(_ltcWriter.clock()->timeCodeType(), ui->widgetMaster->getFirstFrame() + ui->widgetMaster->getMediaLength());
+	PhTimeCodeDialog dlg(_writerTimeCodeType, _settings->writerTimeIn() + _settings->writerLoopLength());
 	if(dlg.exec()) {
-		if(dlg.frame() > ui->widgetMaster->getFirstFrame())
-			ui->widgetMaster->setMediaLength(dlg.frame() - ui->widgetMaster->getFirstFrame());
+		if(dlg.time() > _settings->writerTimeIn()) {
+			PhTime length = dlg.time() - _settings->writerTimeIn();
+			ui->widgetMaster->setLength(length);
+			_settings->setWriterLoopLength(length);
+		}
 		else
-			PHDEBUG << "Can't set a TC Out inferior to TC In";
-		updateInfos();
+			QMessageBox::critical(this, "Error", "Can't set a TC Out inferior to TC In");
+		updateInOutInfoLabel();
 	}
 }
 
-void LTCToolWindow::updateInfos()
+void LTCToolWindow::updateInOutInfoLabel()
 {
-	QString tcIn;
-	QString tcOut;
+	QString tcIn = PhTimeCode::stringFromTime(_settings->writerTimeIn(), _writerTimeCodeType);
+	QString tcOut = PhTimeCode::stringFromTime(_settings->writerTimeIn() + _settings->writerLoopLength(), _writerTimeCodeType);
 
-	_settings->setFirstFrame((int) ui->widgetMaster->getFirstFrame());
-	_settings->setLength((int) ui->widgetMaster->getMediaLength());
-
-
-	tcIn = PhTimeCode::stringFromFrame(ui->widgetMaster->getFirstFrame(), _ltcWriter.clock()->timeCodeType());
-	tcOut = PhTimeCode::stringFromFrame(ui->widgetMaster->getFirstFrame() + ui->widgetMaster->getMediaLength(), _ltcWriter.clock()->timeCodeType());
-
-	ui->generateInfoLabel->setText(tcIn + " -> " + tcOut);
+	ui->inOutInfoLabel->setText(tcIn + " -> " + tcOut);
 }
 
 void LTCToolWindow::on_actionPreferences_triggered()
@@ -97,38 +97,44 @@ void LTCToolWindow::on_actionPreferences_triggered()
 	}
 }
 
-void LTCToolWindow::onFrameChanged(PhFrame frame, PhTimeCodeType)
+void LTCToolWindow::onWriterTimeCodeTypeChanged(PhTimeCodeType tcType)
 {
-	if(ui->cBoxLoop->isChecked() and frame > ui->widgetMaster->getMediaLength())
-		_ltcWriter.clock()->setFrame(ui->widgetMaster->getFirstFrame());
+	_writerTimeCodeType = tcType;
+	_settings->setWriterTimeCodeType(tcType);
 }
 
-void LTCToolWindow::onSlaveFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void LTCToolWindow::onWriterTimeChanged(PhTime time)
 {
-	updateSlaveInfo();
+	if(ui->cBoxLoop->isChecked() && (time > _settings->writerTimeIn() + _settings->writerLoopLength()))
+		_ltcWriter.clock()->setTime(_settings->writerTimeIn());
 }
 
-void LTCToolWindow::onSlaveRateChanged(PhRate rate)
+void LTCToolWindow::onReaderTimeChanged(PhTime)
 {
-	updateSlaveInfo();
+	updateReaderInfo();
 }
 
-void LTCToolWindow::updateSlaveInfo()
+void LTCToolWindow::onReaderRateChanged(PhRate)
 {
-	PhFrame frame = _ltcReader.clock()->frame();
-	PhTimeCodeType tcType = _ltcReader.clock()->timeCodeType();
+	updateReaderInfo();
+}
+
+void LTCToolWindow::updateReaderInfo()
+{
+	PhTime time = _ltcReader.clock()->time();
+	PhTimeCodeType tcType = _ltcReader.timeCodeType();
 	PhRate rate = _ltcReader.clock()->rate();
-	if((frame - _lastFrame != _frameDelta) || (rate != _lastRate)) {
-		_frameDelta = frame - _lastFrame;
+	if((time - _lastTime != _timeDelta) || (rate != _lastRate)) {
+		_timeDelta = time - _lastTime;
 		ui->readInfoLabel->setText(QString("%1 / %2 x%3")
-		                           .arg(_frameDelta)
-		                           .arg(PhTimeCode::stringFromFrame(frame, tcType))
+		                           .arg(_timeDelta)
+		                           .arg(PhTimeCode::stringFromTime(time, tcType))
 		                           .arg(_ltcReader.clock()->rate()));
 	}
-	_lastFrame = frame;
+	_lastTime = time;
 	_lastRate = rate;
 
-	ui->lblSlave->setText(PhTimeCode::stringFromFrame(frame, tcType));
+	ui->readerTimeCodeLabel->setText(PhTimeCode::stringFromTime(time, tcType));
 }
 
 void LTCToolWindow::setupOutput()

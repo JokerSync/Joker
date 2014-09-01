@@ -1,3 +1,6 @@
+[submodule "vendor/rtmidi"]
+	path = vendor/rtmidi
+	url = https://github.com/thestk/rtmidi.git
 [submodule "vendor/igloo"]
 	path = vendor/igloo
 	url = https://github.com/joakimkarlsson/igloo

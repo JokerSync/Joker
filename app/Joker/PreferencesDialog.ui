@@ -40,6 +40,9 @@
          </rect>
         </property>
         <layout class="QFormLayout" name="formLayout">
+         <property name="fieldGrowthPolicy">
+          <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+         </property>
          <property name="formAlignment">
           <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
          </property>
@@ -297,6 +300,16 @@
               <string>Sony 9 pin</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>LTC</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Midi timecode</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="1" column="2">
@@ -455,7 +468,7 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QDialogButtonBox" name="buttonBox">
+     <widget class="PhDialogButtonBox" name="buttonBox">
       <property name="standardButtons">
        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
       </property>
@@ -467,6 +480,11 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
+   <class>PhDialogButtonBox</class>
+   <extends>QDialogButtonBox</extends>
+   <header>PhCommonUI/PhDialogButtonBox.h</header>
+  </customwidget>
+  <customwidget>
    <class>PhLockableSpinBox</class>
    <extends>QSpinBox</extends>
    <header>PhCommonUI/PhLockableSpinBox.h</header>
@@ -474,11 +492,4 @@
  </customwidgets>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup">
-   <property name="exclusive">
-    <bool>false</bool>
-   </property>
-  </buttongroup>
- </buttongroups>
 </ui>

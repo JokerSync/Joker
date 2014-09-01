@@ -1,24 +1,24 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef TIMECODEPLAYERWINDOW_H
+#define TIMECODEPLAYERWINDOW_H
 
 #include <QMainWindow>
 #include <QTimer>
 
 #include "PhCommonUI/PhMediaPanel.h"
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 
 namespace Ui {
 class TimecodePlayerWindow;
 }
 
-class MainWindow : public QMainWindow
+class TimecodePlayerWindow : public QMainWindow
 {
 	Q_OBJECT
 
 public:
 
-	explicit MainWindow(QWidget *parent = 0);
-	~MainWindow();
+	explicit TimecodePlayerWindow(QWidget *parent = 0);
+	~TimecodePlayerWindow();
 
 public slots:
 
@@ -28,9 +28,9 @@ private:
 
 	Ui::TimecodePlayerWindow *ui;
 	QTimer *_timer;
-	PhClock *_clock;
+	PhClock _clock;
 
 };
 
 
-#endif // MAINWINDOW_H
+#endif // TIMECODEPLAYERWINDOW_H

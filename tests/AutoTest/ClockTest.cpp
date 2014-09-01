@@ -5,13 +5,11 @@
 
 #include <QTest>
 
+#include "PhTools/PhDebug.h"
+
 #include "ClockTest.h"
 
-
-ClockTest::ClockTest() : _clock(PhTimeCodeType25),
-	_time(0),
-	_frame(0),
-	_tcType(PhTimeCodeType25)
+ClockTest::ClockTest() : _time(0)
 {
 
 }
@@ -20,18 +18,6 @@ void ClockTest::onTimeChanged(PhTime time)
 {
 	_time = time;
 	_timeChangedCalled = true;
-}
-
-void ClockTest::onFrameChanged(PhFrame frame, PhTimeCodeType)
-{
-	_frame = frame;
-	_frameChangedCalled = true;
-}
-
-void ClockTest::onTimeCodeTypeChanged(PhTimeCodeType tcType)
-{
-	_tcType = tcType;
-	_tcTypeChangedCalled = true;
 }
 
 void ClockTest::onRateChanged(PhRate rate)
@@ -43,18 +29,13 @@ void ClockTest::onRateChanged(PhRate rate)
 void ClockTest::initTestCase()
 {
 	connect(&_clock, &PhClock::timeChanged, this, &ClockTest::onTimeChanged);
-	connect(&_clock, &PhClock::frameChanged, this, &ClockTest::onFrameChanged);
-	connect(&_clock, &PhClock::tcTypeChanged, this, &ClockTest::onTimeCodeTypeChanged);
 	connect(&_clock, &PhClock::rateChanged, this, &ClockTest::onRateChanged);
 }
 
 void ClockTest::init()
 {
 	_clock.setTime(0);
-	_clock.setTimeCodeType(PhTimeCodeType25);
 	_clock.setRate(0);
-	_frameChangedCalled = false;
-	_tcTypeChangedCalled = false;
 	_timeChangedCalled = false;
 	_rateChangedCalled = false;
 }
@@ -69,24 +50,11 @@ void ClockTest::timeTest()
 	QVERIFY(_timeChangedCalled);
 	QVERIFY(_time == 10);
 
-	// But not the frame signal
-	QVERIFY(!_frameChangedCalled);
-
 	// The time signal should not be called if changing to the same value
 	_timeChangedCalled = false;
 	_clock.setTime(10);
 
 	QVERIFY(!_timeChangedCalled);
-	QVERIFY(!_frameChangedCalled);
-
-	// The time and frame signal should be called if changing the time of a bigger value
-	_clock.setTime(960);
-	QVERIFY(_clock.time() == 960);
-	QVERIFY(_timeChangedCalled);
-	QVERIFY(_time == 960);
-	QVERIFY(_clock.frame() == 1);
-	QVERIFY(_frameChangedCalled);
-	QVERIFY(_frame == 1);
 }
 
 void ClockTest::frameTest()
@@ -94,51 +62,11 @@ void ClockTest::frameTest()
 	QCOMPARE(_clock.time(), 0);
 
 	// The time and frame signal should be called if changing the frame value
-	_clock.setFrame(10);
+	_clock.setFrame(10, PhTimeCodeType25);
 	QVERIFY(_clock.time() == 9600);
 	QVERIFY(_timeChangedCalled);
 	QVERIFY(_time == 9600);
-	QVERIFY(_clock.frame() == 10);
-	QVERIFY(_frameChangedCalled);
-	QVERIFY(_frame == 10);
-}
-
-void ClockTest::tcTypeTest()
-{
-	QCOMPARE(_clock.timeCodeType(), PhTimeCodeType25);
-	QVERIFY(_clock.frame() == 0);
-
-	// The tc type signal shall not be called if settings the same tc type
-	_clock.setTimeCodeType(PhTimeCodeType25);
-
-	QVERIFY(!_tcTypeChangedCalled);
-	QVERIFY(!_frameChangedCalled);
-
-	// The tc type signal shall be called if settings a different tc type
-	_clock.setTimeCodeType(PhTimeCodeType24);
-
-	QCOMPARE(_clock.timeCodeType(), PhTimeCodeType24);
-	QVERIFY(_tcTypeChangedCalled);
-	QCOMPARE(_tcType, PhTimeCodeType24);
-
-	// But not the frame signal
-	QVERIFY(!_frameChangedCalled);
-
-	// Test at another frame value
-	_clock.setFrame(23);
-	_tcTypeChangedCalled = false;
-	_frameChangedCalled = false;
-
-	// The frame signal shall be call
-	_clock.setTimeCodeType(PhTimeCodeType2997);
-
-	QCOMPARE(_clock.timeCodeType(), PhTimeCodeType2997);
-	QVERIFY(_tcTypeChangedCalled);
-	QCOMPARE(_tcType, PhTimeCodeType2997);
-	QVERIFY(_frameChangedCalled);
-	PHDEBUG << _frame;
-	QVERIFY(_frame == 28);
-	QVERIFY(_clock.frame() == 28);
+	QVERIFY(_clock.frame(PhTimeCodeType25) == 10);
 }
 
 void ClockTest::rateTest()
@@ -160,24 +88,22 @@ void ClockTest::msTest()
 
 	QVERIFY(_clock.milliSecond() == 1000);
 	QVERIFY(_clock.time() == 24000);
-	QVERIFY(_clock.frame() == 25);
+	QVERIFY(_clock.frame(PhTimeCodeType25) == 25);
 
 	QVERIFY(_timeChangedCalled);
-	QVERIFY(_frameChangedCalled);
 }
 
 void ClockTest::tcTest()
 {
-	QCOMPARE(QString(_clock.timeCode()), QString("00:00:00:00"));
+	QCOMPARE(QString(_clock.timeCode(PhTimeCodeType25)), QString("00:00:00:00"));
 
-	_clock.setTimeCode("00:00:01:00");
+	_clock.setTimeCode("00:00:01:00", PhTimeCodeType25);
 
-	QCOMPARE(QString(_clock.timeCode()), QString("00:00:01:00"));
+	QCOMPARE(QString(_clock.timeCode(PhTimeCodeType25)), QString("00:00:01:00"));
 	QVERIFY(_clock.time() == 24000);
-	QVERIFY(_clock.frame() == 25);
+	QVERIFY(_clock.frame(PhTimeCodeType25) == 25);
 
 	QVERIFY(_timeChangedCalled);
-	QVERIFY(_frameChangedCalled);
 }
 
 void ClockTest::tickTest()

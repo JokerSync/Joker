@@ -46,6 +46,8 @@ void PropertyDialog::showEvent(QShowEvent *)
 	ui->fpsLabel->setText("-");
 	ui->codecNameLabel->setText("-");
 
+	PhTimeCodeType tcType = _videoEngine->timeCodeType();
+
 	if(_doc) {
 		ui->titleLabel->setText(_doc->title());
 
@@ -54,18 +56,18 @@ void PropertyDialog::showEvent(QShowEvent *)
 
 		PhTime timeIn = _doc->timeIn();
 		if(timeIn > 0)
-			ui->tcInLabel->setText(PhTimeCode::stringFromTime(timeIn, _doc->timeCodeType()));
+			ui->tcInLabel->setText(PhTimeCode::stringFromTime(timeIn, tcType));
 
 		PhTime timeOut = _doc->timeOut();
 		if(timeOut > 0)
-			ui->tcOutLabel->setText(PhTimeCode::stringFromTime(timeOut, _doc->timeCodeType()));
+			ui->tcOutLabel->setText(PhTimeCode::stringFromTime(timeOut, tcType));
 
 		int peopleNumber = _doc->peoples().count();
 		ui->peopleNumberLabel->setText(QString::number(peopleNumber));
 
 		int charNumber = 0;
 		foreach(PhStripText * text, _doc->texts())
-		charNumber += text->content().length();
+			charNumber += text->content().length();
 		ui->charNumberLabel->setText(QString::number(charNumber));
 	}
 
@@ -73,11 +75,11 @@ void PropertyDialog::showEvent(QShowEvent *)
 		if(_videoEngine->fileName().length())
 			ui->videoFileLabel->setText(_videoEngine->fileName());
 
-		if(_videoEngine->firstFrame())
-			ui->videoTCInLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->firstFrame(), _videoEngine->clock()->timeCodeType()));
+		if(_videoEngine->frameIn())
+			ui->videoTCInLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->frameIn(), tcType));
 
-		if(_videoEngine->length())
-			ui->videoTCOutLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->firstFrame() + _videoEngine->length(), _videoEngine->clock()->timeCodeType()));
+		if(_videoEngine->frameLength())
+			ui->videoTCOutLabel->setText(PhTimeCode::stringFromFrame(_videoEngine->frameIn() + _videoEngine->frameLength(), tcType));
 
 		ui->resolutionLabel->setText(QString::number(_videoEngine->width()) + "x" + QString::number(_videoEngine->height()));
 

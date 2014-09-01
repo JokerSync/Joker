@@ -9,23 +9,21 @@
 PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_settings(settings),
 	_fileName(""),
-	_clock(PhTimeCodeType25),
-	_firstFrame(0),
+	_tcType(PhTimeCodeType25),
+	_frameIn(0),
 	_pFormatContext(NULL),
 	_videoStream(NULL),
 	_videoFrame(NULL),
-	_pSwsCtx(NULL),
-	_rgb(NULL),
 	_currentFrame(PHFRAMEMIN),
 	_useAudio(false),
 	_audioStream(NULL),
-	_audioFrame(NULL)
+	_audioFrame(NULL),
+	_deinterlace(false),
+	_rgb(NULL)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
 	avcodec_register_all();
-
-	_testTimer.start();
 }
 
 bool PhVideoEngine::ready()
@@ -35,14 +33,34 @@ bool PhVideoEngine::ready()
 
 void PhVideoEngine::setDeinterlace(bool deinterlace)
 {
+	PHDEBUG << deinterlace;
 	_deinterlace = deinterlace;
+	if(_rgb) {
+		delete _rgb;
+		_rgb = NULL;
+	}
 	_currentFrame = PHFRAMEMIN;
+}
+
+bool PhVideoEngine::bilinearFiltering()
+{
+	return _videoRect.bilinearFiltering();
+}
+
+void PhVideoEngine::setBilinearFiltering(bool bilinear)
+{
+	_videoRect.setBilinearFiltering(bilinear);
 }
 
 bool PhVideoEngine::open(QString fileName)
 {
 	close();
 	PHDEBUG << fileName;
+
+	_clock.setTime(0);
+	_clock.setRate(0);
+	_currentFrame = PHFRAMEMIN;
+
 	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
 		return false;
 
@@ -51,10 +69,6 @@ bool PhVideoEngine::open(QString fileName)
 		return false; // Couldn't find stream information
 
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
-
-	_firstFrame = 0;
-	_videoStream = NULL;
-	_audioStream = NULL;
 
 	// Find video stream :
 	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++) {
@@ -79,6 +93,10 @@ bool PhVideoEngine::open(QString fileName)
 	if(_videoStream == NULL)
 		return false;
 
+	// Looking for timecode type
+	_tcType = PhTimeCode::computeTimeCodeType(this->framePerSecond());
+	emit timeCodeTypeChanged(_tcType);
+
 	// Reading timestamp :
 	AVDictionaryEntry *tag = av_dict_get(_pFormatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
 	if(tag == NULL)
@@ -86,28 +104,9 @@ bool PhVideoEngine::open(QString fileName)
 
 	if(tag) {
 		PHDEBUG << "Found timestamp:" << tag->value;
-		_firstFrame = PhTimeCode::frameFromString(tag->value, _clock.timeCodeType());
+		_frameIn = PhTimeCode::frameFromString(tag->value, _tcType);
 	}
 
-	// Looking for timecode type
-	float fps = this->framePerSecond();
-	if(fps == 0) {
-		PHDEBUG << "Bad fps detect => assuming 25";
-		_clock.setTimeCodeType(PhTimeCodeType25);
-	}
-	else if(fps < 24)
-		_clock.setTimeCodeType(PhTimeCodeType2398);
-	else if (fps < 24.5f)
-		_clock.setTimeCodeType(PhTimeCodeType24);
-	else if (fps < 26)
-		_clock.setTimeCodeType(PhTimeCodeType25);
-	else if (fps < 30)
-		_clock.setTimeCodeType(PhTimeCodeType2997);
-	else {
-#warning /// @todo patch for #107 => find better fps decoding
-		PHDEBUG << "Bad fps detect => assuming 25";
-		_clock.setTimeCodeType(PhTimeCodeType25);
-	}
 
 	PHDEBUG << "size : " << _videoStream->codec->width << "x" << _videoStream->codec->height;
 	AVCodec * videoCodec = avcodec_find_decoder(_videoStream->codec->codec_id);
@@ -122,12 +121,10 @@ bool PhVideoEngine::open(QString fileName)
 		return false;
 	}
 
-	_videoFrame = avcodec_alloc_frame();
+	_videoFrame = av_frame_alloc();
 
-	PHDEBUG << "length:" << this->length();
+	PHDEBUG << "length:" << this->frameLength();
 	PHDEBUG << "fps:" << this->framePerSecond();
-	_currentFrame = PHFRAMEMIN;
-	_clock.setFrame(0);
 
 	if(_audioStream) {
 		AVCodec* audioCodec = avcodec_find_decoder(_audioStream->codec->codec_id);
@@ -137,7 +134,7 @@ bool PhVideoEngine::open(QString fileName)
 				_audioStream = NULL;
 			}
 			else {
-				_audioFrame = avcodec_alloc_frame();
+				_audioFrame = av_frame_alloc();
 				PHDEBUG << "Audio OK.";
 			}
 		}
@@ -147,7 +144,7 @@ bool PhVideoEngine::open(QString fileName)
 		}
 	}
 
-	goToFrame(0);
+	decodeFrame(0);
 	_fileName = fileName;
 
 	return true;
@@ -155,43 +152,61 @@ bool PhVideoEngine::open(QString fileName)
 
 void PhVideoEngine::close()
 {
-	PHDEBUG;
+	PHDEBUG << _fileName;
 	if(_rgb) {
 		delete _rgb;
 		_rgb = NULL;
 	}
 
 	if(_pFormatContext) {
+		PHDEBUG << "Close the media context.";
+		if(_videoStream)
+			avcodec_close(_videoStream->codec);
+		if(_audioStream)
+			avcodec_close(_audioStream->codec);
 		avformat_close_input(&_pFormatContext);
-		_pFormatContext = NULL;
-		_videoStream = NULL;
 	}
+	_frameIn = 0;
+	_pFormatContext = NULL;
+	_videoStream = NULL;
+	_audioStream = NULL;
+	PHDEBUG << _fileName << "closed";
 
 	_fileName = "";
 }
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
-	//	_clock.tick(60);
-	PhFrame delay = 0;
-	if(_settings)
-		delay = _settings->screenDelay() * PhTimeCode::getFps(_clock.timeCodeType()) * _clock.rate() / 1000;
-	goToFrame(_clock.frame() + delay);
-	videoRect.setRect(x, y, w, h);
-	videoRect.setZ(-10);
-	videoRect.draw();
+	if(_videoStream) {
+		PhFrame delay = _settings->screenDelay() * PhTimeCode::getFps(_tcType) * _clock.rate() / 1000;
+		decodeFrame(_clock.frame(_tcType) + delay);
+	}
+	_videoRect.setRect(x, y, w, h);
+	_videoRect.setZ(-10);
+	_videoRect.draw();
 }
 
-PhFrame PhVideoEngine::length()
+void PhVideoEngine::setFrameIn(PhFrame frameIn)
+{
+	PHDEBUG << frameIn;
+	_frameIn = frameIn;
+}
+
+void PhVideoEngine::setTimeIn(PhTime timeIn)
+{
+	setFrameIn(timeIn / PhTimeCode::timePerFrame(_tcType));
+}
+
+PhFrame PhVideoEngine::frameLength()
 {
 	if(_videoStream)
 		return time2frame(_videoStream->duration);
 	return 0;
 }
 
-void PhVideoEngine::setFirstFrame(PhFrame frame)
+PhTime PhVideoEngine::length()
 {
-	_firstFrame = frame;
+	return frameLength() * PhTimeCode::timePerFrame(_tcType);
 }
 
 PhVideoEngine::~PhVideoEngine()
@@ -217,8 +232,7 @@ float PhVideoEngine::framePerSecond()
 {
 	float result = 0;
 	if(_videoStream) {
-		result = _videoStream->avg_frame_rate.num;
-		result /= _videoStream->avg_frame_rate.den;
+		result = _videoStream->avg_frame_rate.num / _videoStream->avg_frame_rate.den;
 		// See http://stackoverflow.com/a/570694/2307070
 		// for NaN handling
 		if(result != result) {
@@ -237,24 +251,17 @@ QString PhVideoEngine::codecName()
 	return "";
 }
 
-bool PhVideoEngine::goToFrame(PhFrame frame)
+bool PhVideoEngine::decodeFrame(PhFrame frame)
 {
-	//	int lastGotoElapsed = _testTimer.elapsed();
-	int seekElapsed = -1;
-	int readElapsed = -1;
-	int decodeElapsed = -1;
-	int scaleElapsed = -1;
-	int textureElapsed = -1;
-
 	if(!ready()) {
 		PHDEBUG << "not ready";
 		return false;
 	}
 
-	if(frame < this->firstFrame())
-		frame = this->firstFrame();
-	if (frame >= this->lastFrame())
-		frame = this->lastFrame();
+	if(frame < this->frameIn())
+		frame = this->frameIn();
+	if (frame >= this->frameOut())
+		frame = this->frameOut();
 
 	bool result = false;
 	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
@@ -264,12 +271,10 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
 		if(frame - _currentFrame != 1) {
 			int flags = AVSEEK_FLAG_ANY;
-			int64_t timestamp = frame2time(frame - _firstFrame);
+			int64_t timestamp = frame2time(frame - _frameIn);
 			PHDEBUG << "seek:" << frame;
 			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
 		}
-
-		seekElapsed = _testTimer.elapsed();
 
 		AVPacket packet;
 
@@ -281,11 +286,9 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 				if(packet.stream_index == _videoStream->index) {
 					_currentFrame = frame;
 
-					readElapsed = _testTimer.elapsed();
 					int frameFinished = 0;
 					avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
 					if(frameFinished) {
-						decodeElapsed = _testTimer.elapsed();
 
 						int frameHeight = _videoFrame->height;
 						if(_deinterlace)
@@ -311,21 +314,22 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 							pixFormat = _videoStream->codec->pix_fmt;
 							break;
 						}
-						_pSwsCtx = sws_getCachedContext(_pSwsCtx, _videoFrame->width, _videoStream->codec->height,
-						                                pixFormat, _videoStream->codec->width, frameHeight,
-						                                AV_PIX_FMT_RGB24, SWS_POINT, NULL, NULL, NULL);
+						/* Note: we output the frames in AV_PIX_FMT_BGRA rather than AV_PIX_FMT_RGB24,
+						 * because this format is native to most video cards and will avoid a conversion
+						 * in the video driver */
+						SwsContext * swsContext = sws_getContext(_videoFrame->width, _videoStream->codec->height, pixFormat,
+						                                         _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
+						                                         SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
-							_rgb = new uint8_t[_videoFrame->width * frameHeight * 3];
-						int linesize = _videoFrame->width *3;
-						if (0 <= sws_scale(_pSwsCtx, (const uint8_t * const *) _videoFrame->data,
+							_rgb = new uint8_t[avpicture_get_size(AV_PIX_FMT_BGRA, _videoFrame->width, frameHeight)];
+						int linesize = _videoFrame->width * 4;
+						if (0 <= sws_scale(swsContext, (const uint8_t * const *) _videoFrame->data,
 						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
 						                   &linesize)) {
-							scaleElapsed = _testTimer.elapsed();
 
-							videoRect.createTextureFromRGBBuffer(_rgb, _videoFrame->width, frameHeight);
+							_videoRect.createTextureFromBGRABuffer(_rgb, _videoFrame->width, frameHeight);
 
-							textureElapsed = _testTimer.elapsed();
 
 							_videoFrameTickCounter.tick();
 							result = true;
@@ -357,12 +361,6 @@ bool PhVideoEngine::goToFrame(PhFrame frame)
 		}
 	}
 
-	//	int currentGotoElapsed = _testTimer.elapsed();
-	//	if(_testTimer.elapsed() > 25)
-	//		PHDEBUG << frame << lastGotoElapsed << seekElapsed - lastGotoElapsed << readElapsed - seekElapsed
-	//				<< decodeElapsed - readElapsed << scaleElapsed - decodeElapsed << textureElapsed - scaleElapsed << currentGotoElapsed - lastGotoElapsed << _testTimer.elapsed();
-	_testTimer.restart();
-
 	return result;
 }
 
@@ -370,7 +368,7 @@ int64_t PhVideoEngine::frame2time(PhFrame f)
 {
 	int64_t t = 0;
 	if(_videoStream) {
-		PhFrame fps = PhTimeCode::getFps(_clock.timeCodeType());
+		PhFrame fps = PhTimeCode::getFps(_tcType);
 		t = f * _videoStream->time_base.den / _videoStream->time_base.num / fps;
 	}
 	return t;
@@ -380,7 +378,7 @@ PhFrame PhVideoEngine::time2frame(int64_t t)
 {
 	PhFrame f = 0;
 	if(_videoStream) {
-		PhFrame fps = PhTimeCode::getFps(_clock.timeCodeType());
+		PhFrame fps = PhTimeCode::getFps(_tcType);
 		f = t * _videoStream->time_base.num * fps / _videoStream->time_base.den;
 	}
 	return f;

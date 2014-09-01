@@ -95,15 +95,15 @@ void DebugTest::stdoutTest()
 
 	QStringList lines = QString::fromStdString(buffer.str()).split("\n");
 	QCOMPARE(lines.count(), 10);
-	QVERIFY2(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugTest.cpp\tstdoutTest\t@[0-9]+\ttest with all log parameters ").exactMatch(lines[0]), PHNQ(lines[0]));
-	QCOMPARE(lines[1], QString("test with no log parameters "));
-	QCOMPARE(lines[2], QString("shown because of showConsole(true) "));
-	QCOMPARE(lines[3], QString("shown because enable() "));
-	QCOMPARE(lines[4], QString("QEvent 0x0 "));
-	QCOMPARE(lines[5], QString("QEvent MouseButtonPress "));
-	QCOMPARE(lines[6], QString("QEvent 999 "));
-	QCOMPARE(lines[7], QString("it should be displayed when default log mask is 1 "));
-	QCOMPARE(lines[8], QString("it should be displayed when default log mask is 2 "));
+	QVERIFY2(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugTest.cpp\tstdoutTest\t@[0-9]+\ttest with all log parameters").exactMatch(lines[0]), PHNQ(lines[0]));
+	QCOMPARE(lines[1], QString("test with no log parameters"));
+	QCOMPARE(lines[2], QString("shown because of showConsole(true)"));
+	QCOMPARE(lines[3], QString("shown because enable()"));
+	QCOMPARE(lines[4], QString("QEvent 0x0"));
+	QCOMPARE(lines[5], QString("QEvent MouseButtonPress"));
+	QCOMPARE(lines[6], QString("QEvent 999"));
+	QCOMPARE(lines[7], QString("it should be displayed when default log mask is 1"));
+	QCOMPARE(lines[8], QString("it should be displayed when default log mask is 2"));
 }
 
 void DebugTest::stderrTest()
@@ -119,8 +119,8 @@ void DebugTest::stderrTest()
 
 	QStringList lines = QString::fromStdString(buffer.str()).split("\n");
 	QCOMPARE(lines.count(), 3);
-	QVERIFY2(QRegExp("test with no log parameters ").exactMatch(lines[0]), PHNQ(lines[0]));
-	QVERIFY2(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugTest.cpp\tstderrTest\t@[0-9]+\ttest with all log parameters ").exactMatch(lines[1]), PHNQ(lines[1]));
+	QVERIFY2(QRegExp("test with no log parameters").exactMatch(lines[0]), PHNQ(lines[0]));
+	QVERIFY2(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugTest.cpp\tstderrTest\t@[0-9]+\ttest with all log parameters").exactMatch(lines[1]), PHNQ(lines[1]));
 	QCOMPARE(lines[2], QString(""));
 }
 
@@ -136,5 +136,5 @@ void DebugTest::logFileTest()
 	QStringList lines = QTextStream(&log).readAll().split("\n");
 	QVERIFY(lines.count() >= 2);
 
-	QCOMPARE(lines[lines.count() - 2], QString("last line in the log "));
+	QCOMPARE(lines[lines.count() - 2], QString("last line in the log"));
 }

@@ -26,8 +26,9 @@ public:
 	 * @param timeOut the end of the text
 	 * @param track the track of the text
 	 * @param content the content of the text
+	 * @param height the track height
 	 */
-	PhStripText( PhTime timeIn, PhPeople * people, PhTime timeOut, int track,  QString content);
+	PhStripText( PhTime timeIn, PhPeople * people, PhTime timeOut, float track,  QString content, float height);
 	/**
 	 * @brief Get the text content
 	 * @return _content

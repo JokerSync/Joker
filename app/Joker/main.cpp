@@ -9,6 +9,7 @@
 #include <QTranslator>
 
 #include "PhStrip/PhStripDoc.h"
+#include "PhCommonUI/PhFeedbackDialog.h"
 
 #include "JokerWindow.h"
 
@@ -36,6 +37,12 @@ int main(int argc, char *argv[])
 	}
 	a.installTranslator(&translator);
 
+	if(!settings.exitedNormaly()) {
+		PhFeedbackDialog dlg(&settings);
+		dlg.exec();
+	}
+
+	settings.setExitedNormaly(false);
 
 	JokerWindow w(&settings);
 

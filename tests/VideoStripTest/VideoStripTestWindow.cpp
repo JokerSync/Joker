@@ -36,14 +36,13 @@ bool VideoStripTestWindow::openDocument(QString fileName)
 	if(!_doc->openStripFile(fileName))
 		return false;
 
-	_strip.clock()->setTimeCodeType(_doc->timeCodeType());
 	_strip.clock()->setTime(_doc->lastTime());
 	this->setWindowTitle(fileName);
 
 	QFileInfo fileInfo(_doc->videoFilePath());
 	if (fileInfo.exists()) {
 		_videoEngine.open(_doc->videoFilePath());
-		_videoEngine.setFirstFrame(_doc->videoFrameIn());
+		_videoEngine.setFrameIn(_doc->videoFrameIn());
 	}
 
 	setCurrentDocument(fileName);
@@ -53,7 +52,7 @@ bool VideoStripTestWindow::openDocument(QString fileName)
 
 void VideoStripTestWindow::on_actionOpen_triggered()
 {
-	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx *.strip)");
+	QFileDialog dlg(this, "Open...", "", "Rythmo files (*.detx *.joker)");
 	if(dlg.exec()) {
 		QString fileName = dlg.selectedFiles()[0];
 		if(!openDocument(fileName))
@@ -78,13 +77,13 @@ void VideoStripTestWindow::on_actionPlay_backward_triggered()
 void VideoStripTestWindow::on_actionStep_forward_triggered()
 {
 	_strip.clock()->setRate(0.0);
-	_strip.clock()->setFrame(_strip.clock()->frame() + 1);
+	_strip.clock()->setTime(_strip.clock()->time() + PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
 }
 
 void VideoStripTestWindow::on_actionStep_backward_triggered()
 {
 	_strip.clock()->setRate(0.0);
-	_strip.clock()->setFrame(_strip.clock()->frame() - 1);
+	_strip.clock()->setTime(_strip.clock()->time() - PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
 }
 
 void VideoStripTestWindow::on_actionStep_time_forward_triggered()
@@ -136,9 +135,9 @@ void VideoStripTestWindow::on_action3_triggered()
 
 void VideoStripTestWindow::on_actionGo_To_triggered()
 {
-	PhTimeCodeDialog dlg(_strip.clock()->timeCodeType(), _strip.clock()->frame());
+	PhTimeCodeDialog dlg(_doc->videoTimeCodeType(), _strip.clock()->time());
 	if(dlg.exec() == QDialog::Accepted)
-		_strip.clock()->setFrame(dlg.frame());
+		_strip.clock()->setTime(dlg.time());
 }
 
 void VideoStripTestWindow::on_actionOpen_Video_triggered()
@@ -165,9 +164,9 @@ QMenu *VideoStripTestWindow::recentDocumentMenu()
 
 void VideoStripTestWindow::on_actionSet_Time_Code_triggered()
 {
-	PhTimeCodeDialog dlg(_strip.clock()->timeCodeType(), _strip.clock()->frame());
+	PhTimeCodeDialog dlg(_doc->videoTimeCodeType(), _strip.clock()->time());
 	if(dlg.exec() == QDialog::Accepted)
-		_videoEngine.setFirstFrame(dlg.frame());
+		_videoEngine.setFrameIn(dlg.frame());
 
 }
 

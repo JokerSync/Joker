@@ -26,10 +26,10 @@ public:
 
 	/**
 	 * @brief PhStripCut constructor
+	 * @param time The cut time
 	 * @param type The cut type
-	 * @param frame The cut frame
 	 */
-	PhStripCut(PhStripCut::PhCutType type, PhFrame frame);
+	PhStripCut(PhTime time, PhStripCut::PhCutType type);
 
 
 private:

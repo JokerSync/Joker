@@ -7,7 +7,7 @@
 #include "PhTools/PhGenericSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhVideo/PhVideoSettings.h"
-#include "PhSync/PhSyncSettings.h"
+#include "PhSony/PhSonySettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 #include "PhCommonUI/PhFeedbackSettings.h"
 
@@ -18,11 +18,30 @@
 class JokerSettings : PhGenericSettings,
 	public PhGraphicStripSettings,
 	public PhVideoSettings,
-	public PhSyncSettings,
+	public PhSonySettings,
 	public PhDocumentWindowSettings,
 	public PhFeedbackSettings
 {
 public:
+	// PhWindowSettings
+	PH_SETTING_BOOL(setFullScreen, fullScreen)
+	PH_SETTING_BOOL2(setExitedNormaly, exitedNormaly, true)
+	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
+
+	// PhDocumentWindowSettings
+	PH_SETTING_STRING(setCurrentDocument, currentDocument)
+	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
+	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
+	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
+	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
+
+	// PhFeedbackSettings
+	QString settingsFileName() {
+		return _settings.fileName();
+	}
+	PH_SETTING_STRINGLIST(setEmailList, emailList)
+
+
 	PH_SETTING_INT3(setScreenDelay, screenDelay, delay)
 
 	// PhGraphicSettings
@@ -48,9 +67,14 @@ public:
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
 	PH_SETTING_INT(setTimePlayed, timePlayed)
 
+	PH_SETTING_INT2(setCutWidth, cutWidth, 4)
+	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)
+	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
+	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
+
 	// PhVideoSettings :
 
-	// PhSyncSettings:
+	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
 	PH_SETTING_UCHAR2(setSonyDevice1, sonyDevice1, 0xF0)
 	PH_SETTING_UCHAR2(setSonyDevice2, sonyDevice2, 0xC0)
@@ -58,30 +82,16 @@ public:
 	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
-	// PhWindowSettings
-	PH_SETTING_BOOL(setFullScreen, fullScreen)
-	PH_SETTING_BOOL2(setExitedNormaly, exitedNormaly, true)
-	PH_SETTING_BYTEARRAY(setWindowGeometry, windowGeometry)
-
-	// PhDocumentWindowSettings
-	PH_SETTING_STRING(setCurrentDocument, currentDocument)
-	PH_SETTING_STRING2(setLastDocumentFolder, lastDocumentFolder, QDir::homePath())
-	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
-	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
-	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
-
-	// PhFeedbackSettings
-	QString settingsFileName() {
-		return _settings.fileName();
-	}
-	PH_SETTING_STRINGLIST(setEmailList, emailList)
+	// Midi settings:
+	PH_SETTING_STRING2(setMidiTimeCodePortName, midiTimeCodePortName, "Joker")
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
 
 	// Other settings :
 	PH_SETTING_STRING(setLastVideoFolder, lastVideoFolder)
-	PH_SETTING_STRING2(setSelectedFilter, selectedFilter, "Rythmo files (*.detx *.strip)")
+	PH_SETTING_STRINGLIST2(setStripFileType, stripFileType, QStringList({"joker", "detx", "mos", "drb", "syn6"}))
+	PH_SETTING_STRINGLIST2(setVideoFileType, videoFileType, QStringList({"m4v", "mkv", "avi", "mov", "mxf"}))
 
 	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
 	PH_SETTING_STRING(setLTCInputDevice, ltcInputDevice)
@@ -92,10 +102,9 @@ public:
 	PH_SETTING_BOOL2(setDisplayNextTC, displayNextTC, true)
 	PH_SETTING_BOOL2(setDisplayTC, displayTC, true)
 	PH_SETTING_BOOL2(setDisplayLoop, displayLoop, true)
+	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 
 	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)
-
-	PH_SETTING_STRING2(setVideoFileFilter, videoFileFilter, " (*.m4v *.mkv *.avi *.mov *.mxf)")
 
 	PH_SETTING_BOOL2(setDisplayLogo, displayLogo, true)
 

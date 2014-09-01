@@ -19,7 +19,7 @@
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicLoop.h"
 
-#include "PhTools/PhClock.h"
+#include "PhSync/PhClock.h"
 
 /**
  * @brief This class draw a segment of strip band.
@@ -155,7 +155,6 @@ private:
 	 */
 	QTime _testTimer;
 
-	int _trackNumber;
 	int _maxDrawElapsed;
 
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);

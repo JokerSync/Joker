@@ -86,8 +86,7 @@ bool SerialTestWindow::open(QSerialPort * serial, QString suffix)
 {
 	PHDEBUG << "open" << suffix;
 
-	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts())
-	{
+	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts()) {
 		QString name = info.portName();
 		if(name.startsWith("usbserial-")) {
 			if(name.endsWith(suffix)) {
@@ -131,5 +130,5 @@ void SerialTestWindow::checkCTS()
 	}
 
 	_timerCounter.tick();
-	PHDEBUG << _timerCounter.frequency() << frequency;
+	PHDEBUG << _timerCounter.frequency() << frequency << cts;
 }

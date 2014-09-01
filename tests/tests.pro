@@ -9,10 +9,10 @@ SUBDIRS += \
 	GraphicStripSyncTest \
 	GraphicStripTest \
 	GraphicTest \
+	GraphicSyncTest \
 	OpenGLTest \
 	SDLTest \
 	SerialTest \
-	SonyTest \
 	StripTest \
 	TextEditTest \
 	TimecodePlayer \

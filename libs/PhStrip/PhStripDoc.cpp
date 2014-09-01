@@ -4,14 +4,19 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-
+#include <QString>
 #include <QFileInfo>
 #include <QDomDocument>
 #include <QDomNodeList>
 #include <QtXml>
 #include <QXmlStreamWriter>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
 
+#include "PhTools/PhDebug.h"
 #include "PhTools/PhFileTool.h"
+
 #include "PhStripDoc.h"
 
 PhStripDoc::PhStripDoc()
@@ -57,7 +62,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 
 	_generator = "Cappella";
 	//With DetX files, fps is always 25 no drop
-	_tcType = PhTimeCodeType25;
+	PhTimeCodeType tcType = PhTimeCodeType25;
 
 	// Reading the header
 	if(detX.elementsByTagName("header").count()) {
@@ -89,13 +94,14 @@ bool PhStripDoc::importDetXFile(QString fileName)
 			QDomElement videoFile = header.elementsByTagName("videofile").at(0).toElement();
 			_videoPath = videoFile.text();
 			// Reading the video time in
-			_videoTimeIn = PhTimeCode::timeFromString(videoFile.attribute("timestamp"), _tcType);
+			_videoTimeIn = PhTimeCode::timeFromString(videoFile.attribute("timestamp"), tcType);
+			_videoTimeCodeType = tcType;
 		}
 
 		// Reading the last position
 		if(header.elementsByTagName("last_position").count()) {
 			QDomElement lastPosition = header.elementsByTagName("last_position").at(0).toElement();
-			_lastTime = PhTimeCode::timeFromString(lastPosition.attribute("timecode"), _tcType);
+			_lastTime = PhTimeCode::timeFromString(lastPosition.attribute("timecode"), tcType);
 		}
 
 		// Reading the author name
@@ -141,31 +147,30 @@ bool PhStripDoc::importDetXFile(QString fileName)
 			if(body.childNodes().at(i).isElement()) {
 				QDomElement elem = body.childNodes().at(i).toElement();
 
+				PhTime timeIn = PhTimeCode::timeFromString(elem.attribute("timecode"), tcType);
 				// Reading loops
 				if(elem.tagName() == "loop")
-					_loops.append(new PhStripLoop(loopNumber++,
-					                              PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
+					_loops.append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
-					_cuts.append(new PhStripCut(PhStripCut::Simple,
-					                            PhTimeCode::timeFromString(elem.attribute("timecode"), _tcType)));
+					_cuts.append(new PhStripCut(timeIn, PhStripCut::Simple));
 				else if(elem.tagName() == "line") {
-					PhTime timeIn = -1;
+					timeIn = -1;
 					PhTime lastTime = -1;
 					PhTime lastLinkedTime = -1;
 					PhPeople *people = peopleMap[elem.attribute("role")];
-					int track = elem.attribute("track").toInt();
+					float y = elem.attribute("track").toInt() / 4.0;
 					QString currentText = "";
 					for(int j = 0; j < elem.childNodes().length(); j++) {
 						if(elem.childNodes().at(j).isElement()) {
 							QDomElement lineElem = elem.childNodes().at(j).toElement();
 							if(lineElem.tagName() == "lipsync") {
-								lastTime = PhTimeCode::timeFromString(lineElem.attribute("timecode"), _tcType);
+								lastTime = PhTimeCode::timeFromString(lineElem.attribute("timecode"), tcType);
 								if(timeIn < 0)
 									timeIn = lastTime;
 								if(lineElem.attribute("link") != "off") {
 									if(currentText.length()) {
-										_texts1.append(new PhStripText(lastLinkedTime, people, lastTime, track, currentText));
+										_texts1.append(new PhStripText(lastLinkedTime, people, lastTime, y, currentText, 0.25f));
 										currentText = "";
 									}
 									lastLinkedTime = lastTime;
@@ -179,13 +184,13 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					if(currentText.length()) {
 						PhTime time = lastLinkedTime + currentText.length() * 1000;
 						PHDEBUG << currentText;
-						_texts1.append(new PhStripText(lastLinkedTime, people, time, track, currentText));
+						_texts1.append(new PhStripText(lastLinkedTime, people, time, y, currentText, 0.25f));
 						lastTime = lastLinkedTime = time;
 					}
 					PhStripDetect::PhDetectType type = PhStripDetect::On;
 					if(elem.attribute("voice") == "off")
 						type = PhStripDetect::Off;
-					_detects.append(new PhStripDetect(type, timeIn, people, lastTime, track));
+					_detects.append(new PhStripDetect(type, timeIn, people, lastTime, y));
 				}
 			}
 		}
@@ -224,14 +229,14 @@ PhTime PhStripDoc::readMosTime(QFile &f, PhTimeCodeType tcType, int level)
 	return PhFileTool::readInt(f, level, "time") * PhTimeCode::timePerFrame(tcType) / 12;
 }
 
-PhStripText* PhStripDoc::readMosText(QFile &f, int textLevel, int internLevel)
+PhStripText* PhStripDoc::readMosText(QFile &f, PhTimeCodeType tcType, int textLevel, int internLevel)
 {
 	QString content = PhFileTool::readString(f, 2, "content");
 
-	PhTime timeIn = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
-	PhTime timeOut = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
+	PhTime timeIn = _videoTimeIn + readMosTime(f, tcType, internLevel);;
+	PhTime timeOut = _videoTimeIn + readMosTime(f, tcType, internLevel);;
 
-	PhStripText* text = new PhStripText(timeIn, NULL, timeOut, 0, content);
+	PhStripText* text = new PhStripText(timeIn, NULL, timeOut, 0, content, 0.2f);
 
 	PhFileTool::readInt(f, internLevel, "text");
 	PhFileTool::readInt(f, internLevel, "text");
@@ -240,17 +245,17 @@ PhStripText* PhStripDoc::readMosText(QFile &f, int textLevel, int internLevel)
 	PhFileTool::readInt(f, internLevel, "text");
 	PhFileTool::readInt(f, internLevel, "text");
 
-	PHDBG(textLevel) << PHNQ(PhTimeCode::stringFromTime(timeIn, _tcType))
+	PHDBG(textLevel) << PHNQ(PhTimeCode::stringFromTime(timeIn, tcType))
 	                 << "->"
-	                 << PHNQ(PhTimeCode::stringFromTime(timeOut, _tcType))
+	                 << PHNQ(PhTimeCode::stringFromTime(timeOut, tcType))
 	                 << PHNQ(content);
 	return text;
 }
 
-PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLevel)
+PhStripDetect *PhStripDoc::readMosDetect(QFile &f, PhTimeCodeType tcType, int detectLevel, int internLevel)
 {
-	PhTime timeIn = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
-	PhTime timeOut = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
+	PhTime timeIn = _videoTimeIn + readMosTime(f, tcType, internLevel);;
+	PhTime timeOut = _videoTimeIn + readMosTime(f, tcType, internLevel);;
 	PhFileTool::readInt(f, internLevel, "detect type 1");
 	int detectType2 = PhFileTool::readInt(f, internLevel, "detect type 2");
 	int detectType3 = PhFileTool::readInt(f, internLevel, "detect type 3");
@@ -310,8 +315,8 @@ PhStripDetect *PhStripDoc::readMosDetect(QFile &f, int detectLevel, int internLe
 	for(int j = 0; j < 6; j++)
 		PhFileTool::readShort(f, internLevel);
 	PHDBG(detectLevel) << "detect: "
-	                   << PhTimeCode::stringFromTime(timeIn, _tcType)
-	                   << PhTimeCode::stringFromTime(timeOut, _tcType)
+	                   << PhTimeCode::stringFromTime(timeIn, tcType)
+	                   << PhTimeCode::stringFromTime(timeOut, tcType)
 	                   << "type2:"
 	                   << detectType2
 	                   << "type3:"
@@ -398,7 +403,7 @@ PhStripDoc::MosTag PhStripDoc::readMosTag(QFile &f, int level, QString name)
 	}
 }
 
-bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel)
+bool PhStripDoc::readMosTrack(QFile &f, PhTimeCodeType tcType, QMap<int, PhPeople *> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel)
 {
 	QList<PhStripDetect*> detectList;
 	QList<PhStripText*> textList1, textList2;
@@ -411,7 +416,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 		for(int i = 0; i < detectCount; i++) {
 			if(i > 0)
 				PhFileTool::readShort(f, level, "detect tag");
-			detectList.append(readMosDetect(f, detectLevel, internLevel));
+			detectList.append(readMosDetect(f, tcType, detectLevel, internLevel));
 		}
 	}
 
@@ -429,7 +434,7 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 		for(int i = 0; i < textCount; i++) {
 			if(i > 0)
 				PhFileTool::readShort(f, level, "text tag");
-			textList1.append(readMosText(f, textLevel, internLevel));
+			textList1.append(readMosText(f, tcType, textLevel, internLevel));
 		}
 	}
 
@@ -445,17 +450,17 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 			for(int i = 0; i < count; i++) {
 				if(i > 0)
 					PhFileTool::readShort(f, level, "text tag");
-				textList2.append(readMosText(f, textLevel, internLevel));
+				textList2.append(readMosText(f, tcType, textLevel, internLevel));
 			}
 			break;
 		case MosLabel:
 			for(int i = 0; i < count; i++) {
 				if(i > 0)
 					PhFileTool::readShort(f, level, "label tag");
-				PhTime labelTime = _videoTimeIn + readMosTime(f, _tcType, internLevel);
+				PhTime labelTime = _videoTimeIn + readMosTime(f, tcType, internLevel);
 				for(int j = 0; j < 6; j++)
 					PhFileTool::readShort(f, internLevel);
-				PHDBG(labelLevel) << "label" << PhTimeCode::stringFromTime(labelTime, _tcType);
+				PHDBG(labelLevel) << "label" << PhTimeCode::stringFromTime(labelTime, tcType);
 			}
 			break;
 		default:
@@ -471,25 +476,35 @@ bool PhStripDoc::readMosTrack(QFile &f, QMap<int, PhPeople *> peopleMap, QMap<in
 	PHDBG(textLevel) << "Adding" << textList1.count() << "texts in list 1";
 	foreach(PhStripText* text, textList1) {
 		text->setPeople(people);
-		text->setTrack(track);
+		text->setY(track / 5.0);
 		_texts1.append(text);
 	}
 
 	PHDBG(textLevel) << "Adding" << textList2.count() << "texts in  list 2";
 	foreach(PhStripText* text, textList2) {
 		text->setPeople(people);
-		text->setTrack(track);
+		text->setY(track);
 		_texts2.append(text);
 	}
 
 	foreach(PhStripDetect* detect, detectList) {
 		detect->setPeople((people));
-		detect->setTrack(track);
+		detect->setY(track);
 		_detects.append(detect);
 	}
 
 	return true;
 }
+bool PhStripDoc::modified() const
+{
+	return _modified;
+}
+
+void PhStripDoc::setModified(bool modified)
+{
+	_modified = modified;
+}
+
 
 bool PhStripDoc::importMosFile(const QString &fileName)
 {
@@ -557,20 +572,21 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	if(!checkMosTag2(f, blocLevel, "CDocOptionsProjet"))
 		return false;
 
+	PhTimeCodeType tcType;
 	unsigned short type = PhFileTool::readInt(f, level, "type");
 	bool drop = PhFileTool::readInt(f, level, "drop") != 0;
 	switch(type) {
 	case 0:
 		if(drop)
-			_tcType = PhTimeCodeType2398;
+			tcType = PhTimeCodeType2398;
 		else
-			_tcType = PhTimeCodeType24;
+			tcType = PhTimeCodeType24;
 		break;
 	default:
-		_tcType = PhTimeCodeType25;
+		tcType = PhTimeCodeType25;
 		break;
 	}
-	PHDBG(ok) << "TC Type:" << _tcType;
+	PHDBG(ok) << "TC Type:" << tcType;
 
 
 	if(mosVersion == 4) {
@@ -631,9 +647,11 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	if(!checkMosTag2(f, blocLevel, "CDocVideo"))
 		return false;
 
-	this->setVideoFilePath(PhFileTool::readString(f, ok, "Video path"));
-	this->setVideoTimeIn(readMosTime(f, _tcType, internLevel));
-	PHDBG(ok) << "Timestamp:" << PhTimeCode::stringFromTime(_videoTimeIn, _tcType);
+	QString videoFilePath = PhFileTool::readString(f, ok, "Video path");
+	this->setVideoFilePath(videoFilePath);
+	PhTime videoTimeIn = readMosTime(f, tcType, internLevel);
+	this->setVideoTimeIn(videoTimeIn, tcType);
+	PHDBG(ok) << "Timestamp:" << PhTimeCode::stringFromTime(_videoTimeIn, tcType);
 
 	if(videoType == 3) {
 		PhFileTool::readShort(f, level, "videoType3");
@@ -651,9 +669,9 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 		for(int j = 0; j < cutCount; j++) {
 			if((j > 0) && !checkMosTag(f, level, MosCut))
 				return false;
-			PhTime cutTime = _videoTimeIn + readMosTime(f, _tcType, internLevel);
-			PHDBG(cutLevel) << "cut:" << PhTimeCode::stringFromTime(cutTime, _tcType);
-			_cuts.append(new PhStripCut(PhStripCut::Simple, cutTime));
+			PhTime cutTime = _videoTimeIn + readMosTime(f, tcType, internLevel);
+			PHDBG(cutLevel) << "cut:" << PhTimeCode::stringFromTime(cutTime, tcType);
+			_cuts.append(new PhStripCut(cutTime, PhStripCut::Simple));
 		}
 	}
 
@@ -674,7 +692,7 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 		PHDBG(level) << "====== READING TRACK " << track << "======";
 		if((track > 0) && !checkMosTag(f, level, MosTrack))
 			return false;
-		if(!readMosTrack(f, peopleMap, peopleTrackMap, blocLevel, textLevel, detectLevel, labelLevel, level, internLevel))
+		if(!readMosTrack(f, tcType, peopleMap, peopleTrackMap, blocLevel, textLevel, detectLevel, labelLevel, level, internLevel))
 			return false;
 	}
 
@@ -691,9 +709,9 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 				return false;
 			int number = PhFileTool::readInt(f, loopLevel, "loop number");
 
-			PhTime loopTime = _videoTimeIn + readMosTime(f, _tcType, internLevel);;
+			PhTime loopTime = _videoTimeIn + readMosTime(f, tcType, internLevel);;
 			PhFileTool::readString(f, loopLevel, "loop name");
-			_loops.append(new PhStripLoop(number, loopTime));
+			_loops.append(new PhStripLoop(loopTime, QString::number(number)));
 		}
 	}
 
@@ -705,11 +723,11 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	//			PhFileTool::readShort(f, level, "after loop2");
 	//	}
 
-//	if(!checkMosTag(f, blocLevel, MosBin))
-//		return false;
+	//	if(!checkMosTag(f, blocLevel, MosBin))
+	//		return false;
 
-//	for(int j = 0; j < 2; j++)
-//		PhFileTool::readShort(f, level);
+	//	for(int j = 0; j < 2; j++)
+	//		PhFileTool::readShort(f, level);
 
 	PHDEBUG << "_______________" << "reading ok" << "_______________";
 
@@ -732,18 +750,299 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	return true;
 }
 
+PhTime PhStripDoc::ComputeDrbTime1(PhTime offset, PhTime value, PhTimeCodeType tcType)
+{
+	return (offset + value) * PhTimeCode::timePerFrame(tcType) / 400000;
+}
+
+PhTime PhStripDoc::ComputeDrbTime2(PhTime offset, PhTime value, PhTimeCodeType tcType)
+{
+	return (offset + value * 50000) * PhTimeCode::timePerFrame(tcType) / 400000;
+}
+
+bool PhStripDoc::importDrbFile(const QString &fileName)
+{
+	PHDEBUG << fileName;
+	QFile file(fileName);
+
+	reset();
+
+#warning /// @todo Handle more drb frame rate
+	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	PhTime offset = 0;
+
+	if(file.open(QIODevice::ReadOnly)) {
+		QTextStream ts(&file);
+		// Detect text codec
+		if(file.peek(2).at(1) == 0)
+			ts.setCodec("UTF-16");
+
+		while(!ts.atEnd()) {
+			QString line = ts.readLine();
+			if(line.startsWith("CV:")) {
+				_videoPath = line.remove("CV:");
+				PHDEBUG << "videoPath:" << _videoPath;
+			}
+			else if(line.startsWith("O:")) {
+				offset = line.remove("O:").toLongLong();
+				_videoTimeIn = ComputeDrbTime1(offset, 0, tcType);
+				PHDEBUG << "videoTimeIn:" << _videoTimeIn << line;
+			}
+		}
+	}
+	else {
+		PHDEBUG << "Unable to open:" << fileName;
+		return false;
+	}
+
+	QString dirName = fileName;
+	dirName.remove(".drb", Qt::CaseInsensitive);
+
+	QFile loopFile(dirName + "/boucle.xml");
+	if(!loopFile.open(QIODevice::ReadOnly)) {
+		PHDEBUG << "Unable to open boucle.xml";
+		return false;
+	}
+
+	QDomDocument loopDoc;
+	if(!loopDoc.setContent(&loopFile)) {
+		loopFile.close();
+		PHDEBUG << "Unable to parse boucle.xml";
+		return false;
+	}
+
+	int loopNumber = 1;
+	QDomNodeList loopList = loopDoc.elementsByTagName("Row");
+	for (int i = 0; i < loopList.length(); i++) {
+		QDomElement loopElement = loopList.at(i).toElement();
+		QString type = loopElement.elementsByTagName("Type").at(0).toElement().text();
+		PhTime timeIn = ComputeDrbTime1(offset, loopElement.elementsByTagName("Debut").at(0).toElement().text().toLongLong(), tcType);
+		if(type == "BOUCLE") {
+			_loops.append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
+		}
+		else if (type == "PLAN") {
+			_cuts.append(new PhStripCut(timeIn, PhStripCut::PhCutType::Simple));
+		}
+	}
+
+	loopFile.close();
+
+	// Opening the XML file
+	QFile peopleFile(dirName + "/intervenant.xml");
+	if(!peopleFile.open(QIODevice::ReadOnly)) {
+		PHDEBUG << "Unable to open intervenant.xml";
+		return false;
+	}
+
+	// Loading the DOM (document object model)
+	QDomDocument peopleDoc;
+	if (!peopleDoc.setContent(&peopleFile)) {
+		peopleFile.close();
+		PHDEBUG << "The XML document seems to be bad formed intervenant.xml";
+		return false;
+	}
+
+	bool result = true;
+	QMap<int, PhPeople*> peopleMap;
+
+	QDomNodeList peopleList = peopleDoc.elementsByTagName("Row");
+	for (int i = 0; i < peopleList.length(); i++) {
+		QDomElement peopleElement = peopleList.at(i).toElement();
+		int id = peopleElement.elementsByTagName("Id").at(0).toElement().text().toInt();
+		QString name = peopleElement.elementsByTagName("Nom").at(0).toElement().text();
+		PhPeople *people = new PhPeople(name);
+		peopleMap[id] = people;
+	}
+
+	peopleFile.close();
+
+	foreach(PhPeople *people, peopleMap.values())
+		_peoples.append(people);
+
+	QDir dir(dirName);
+
+	foreach(QString name, dir.entryList(QStringList("*.dat"))) {
+		QString subFileName = dir.filePath(name);
+		QFile f(subFileName);
+		if(f.open(QIODevice::ReadOnly)) {
+			QTextStream ts(&f);
+
+			// Detect text codec
+			if(f.peek(2).at(1) == 0)
+				ts.setCodec("UTF-16");
+
+			QString xmlString = "";
+
+			while(!ts.atEnd()) {
+				QString line = ts.readLine();
+				if(!line.startsWith("<COPYRIGHT"))
+					xmlString += line + "\n";
+				if(line == "</SYNCHRONOS>")
+					break;
+			}
+			f.close();
+
+			QDomDocument subDoc;
+
+			QString errorMsg;
+			int errorLine, errorColumn;
+			if(subDoc.setContent(xmlString, &errorMsg, &errorLine, &errorColumn)) {
+				QDomNodeList textList = subDoc.elementsByTagName("TEXT");
+				for(int i = 0; i < textList.count(); i++) {
+					QDomElement textElement = textList.at(i).toElement();
+					int peopleId = textElement.elementsByTagName("ID_INTER").at(0).toElement().text().toInt();
+					PhPeople *people = peopleMap[peopleId];
+					PhTime timeIn = ComputeDrbTime2(offset, textElement.elementsByTagName("X1").at(0).toElement().text().toLongLong() - 150, tcType);
+					PhTime timeOut = ComputeDrbTime2(offset, textElement.elementsByTagName("X2").at(0).toElement().text().toLongLong() - 150, tcType);
+					int y1 = textElement.elementsByTagName("Y1").at(0).toElement().text().toInt();
+					int y2 = textElement.elementsByTagName("Y2").at(0).toElement().text().toInt();
+#warning /// @todo make sure 150 is the maximum Y value:
+					float y = y1 / 150.0f;
+					float height = (y2 - y1) / 150.0f;
+
+					QString content = textElement.elementsByTagName("VALUE").at(0).toElement().text();
+
+					PHDEBUG << PhTimeCode::stringFromTime(timeIn, tcType) << PhTimeCode::stringFromTime(timeOut, tcType) << content;
+					PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
+					_texts1.append(text);
+				}
+			}
+			else {
+				PHDEBUG << "Unable to parse" << subFileName << ":" << errorMsg << "@" << errorLine << "," << errorColumn;
+				result = false;
+			}
+		}
+		else {
+			PHDEBUG << "Unable to open" << subFileName;
+			result = false;
+		}
+	}
+
+	return result;
+}
+
+bool PhStripDoc::importSyn6File(const QString &fileName)
+{
+	QSqlDatabase db;
+	db =  QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName(fileName);
+	if(!db.open()) {
+		PHDEBUG << "Error opening the sqlite document:" << db.lastError().text();
+		return false;
+	}
+	PHDEBUG << "database opened: " << db.tables().count() << "tables.";
+
+//	foreach(QString tableName, db.tables()) {
+//		PHDEBUG << tableName;
+//	}
+
+	QSqlQuery query(db);
+
+	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	// Reading video file and timestamp
+	PhTime offset = 0;
+	if(query.exec("SELECT * FROM PREFERENCE;")) {
+		PHDEBUG << "PREFERENCE:";
+		while(query.next()) {
+//			for(int i = 0; i < 7; i++)
+//				PHDEBUG << i << query.value(i);
+			switch(query.value(0).toInt()) {
+			case 6:
+				offset = query.value(3).toLongLong();
+				_videoTimeIn = ComputeDrbTime1(offset, 0, tcType);
+				break;
+			case 11:
+				_videoPath = query.value(2).toString().replace("\\\\", "\\");
+				break;
+			}
+		}
+	}
+
+	// Reading peoples
+	QMap<int, PhPeople*> peopleMap;
+	if(query.exec("SELECT * FROM PERSONNAGE;")) {
+		PHDEBUG << "PERSONNAGE:";
+
+		while(query.next()) {
+			int id = query.value(0).toInt();
+			QString name = query.value(1).toString();
+			PhPeople *people = new PhPeople(name);
+			peopleMap[id] = people;
+		}
+	}
+	else
+		PHDEBUG << "query failed";
+
+	foreach(PhPeople *people, peopleMap.values())
+		_peoples.append(people);
+
+	// Reading loops
+	if(query.exec("SELECT * FROM OBJET_TC;")) {
+		PHDEBUG << "OBJET_TC:";
+		while(query.next()) {
+			for(int i = 0; i < 7; i++)
+				PHDEBUG << i << query.value(i);
+			PhTime time = ComputeDrbTime2(offset, query.value(2).toLongLong(), tcType);
+			switch(query.value(1).toInt()) {
+			case 2:
+				_cuts.append(new PhStripCut(time, PhStripCut::Simple));
+				break;
+			case 7:
+				_loops.append(new PhStripLoop(time, QString::number(query.value(4).toInt())));
+				break;
+			}
+		}
+	}
+
+	// Reading texts
+	if(query.exec("SELECT * FROM TEXTE;")) {
+		PHDEBUG << "TEXTE:";
+		while(query.next()) {
+//			for(int i = 0; i < 21; i++)
+//				PHDEBUG << i << query.value(i);
+#warning /// @todo check text people id
+			PhPeople* people = peopleMap[query.value(0).toInt()];
+#warning /// @todo check text time in/out
+			PhTime timeIn = ComputeDrbTime2(offset, query.value(3).toLongLong() - 150, tcType);
+			PhTime timeOut = ComputeDrbTime2(offset, query.value(4).toLongLong() - 150, tcType);
+			int y1 = query.value(6).toInt();
+#warning /// @todo make sure y2 is at the index 6
+			int y2 = query.value(5).toInt();
+#warning /// @todo make sure 150 is the maximum Y value:
+			float y = y1 / 150.0f;
+			float height = (y2 - y1) / 150.0f;
+			QString content = query.value(7).toString();
+			PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
+			_texts1.append(text);
+			PHDEBUG << timeIn << timeOut << content;
+		}
+	}
+
+	db.close();
+
+	return true;
+}
+
 bool PhStripDoc::openStripFile(const QString &fileName)
 {
 	PHDEBUG << fileName;
 	bool result = false;
 
-	QString extension = QFileInfo(fileName).suffix();
+	QString extension = QFileInfo(fileName).suffix().toLower();
 	// Try to open the document
 	if(extension == "detx") {
 		return importDetXFile(fileName);
 	}
 	else if(extension == "mos") {
 		return importMosFile(fileName);
+	}
+	else if(extension == "drb") {
+		return importDrbFile(fileName);
+	}
+	else if(extension == "syn6") {
+		return importSyn6File(fileName);
 	}
 	else if(extension == "strip" or extension == "joker") {
 		QFile xmlFile(fileName);
@@ -783,7 +1082,10 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 				result = importMosFile(media.text());
 			else if(type == "video") {
 				_videoPath = media.text();
-				_videoTimeIn = PhTimeCode::timeFromString(media.attribute("tcStamp"), _tcType);
+
+				float fps = media.attribute("frameRate").toFloat();
+				_videoTimeCodeType = PhTimeCode::computeTimeCodeType(fps);
+				_videoTimeIn = PhTimeCode::timeFromString(media.attribute("tcStamp"), _videoTimeCodeType);
 
 				_videoForceRatio169 = media.attribute("forceRatio").toLower() == "yes";
 				_videoDeinterlace = media.attribute("deinterlace").toLower() == "yes";
@@ -792,13 +1094,25 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 
 		if(stripDocument.elementsByTagName("state").count()) {
 			QDomElement state = stripDocument.elementsByTagName("state").at(0).toElement();
-			_lastTime = PhTimeCode::timeFromString(state.attribute("lastTimeCode"), _tcType);
+			_lastTime = state.attribute("lastTime").toLongLong();
+			if(_lastTime == 0)
+				_lastTime = PhTimeCode::timeFromString(state.attribute("lastTimeCode"), _videoTimeCodeType);
 		}
+
+		if(stripDocument.elementsByTagName("peoples").count()) {
+			QDomNodeList chars = stripDocument.elementsByTagName("peoples").at(0).childNodes();
+			for(int i = 0; i < chars.count(); i++) {
+				QString color = chars.at(i).toElement().attribute("color");
+				QString name = chars.at(i).toElement().attribute("name");
+				peopleByName(name)->setColor(color);
+			}
+		}
+
 	}
 	return result;
 }
 
-bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC)
+bool PhStripDoc::saveStripFile(const QString &fileName, PhTime lastTime)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
@@ -842,7 +1156,9 @@ bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC)
 
 				xmlWriter->writeStartElement("media");
 				xmlWriter->writeAttribute("type", "video");
-				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromTime(_videoTimeIn, _tcType));
+				xmlWriter->writeAttribute("tcStamp", PhTimeCode::stringFromTime(_videoTimeIn, _videoTimeCodeType));
+				xmlWriter->writeAttribute("frameRate", QString::number(PhTimeCode::getAverageFps(_videoTimeCodeType)));
+
 				if(_videoForceRatio169)
 					xmlWriter->writeAttribute("forceRatio", "yes");
 				if(_videoDeinterlace)
@@ -851,10 +1167,23 @@ bool PhStripDoc::saveStripFile(const QString &fileName, const QString &lastTC)
 				xmlWriter->writeEndElement();
 
 				xmlWriter->writeStartElement("state");
-				xmlWriter->writeAttribute("lastTimeCode", lastTC);
+				xmlWriter->writeAttribute("lastTime", QString::number(lastTime));
 				xmlWriter->writeEndElement();
 			}
 			xmlWriter->writeEndElement();
+
+			xmlWriter->writeStartElement("peoples");
+			{
+				foreach(PhPeople * ppl, peoples()) {
+					xmlWriter->writeStartElement("people");
+					xmlWriter->writeAttribute("name", ppl->name());
+					xmlWriter->writeAttribute("color", ppl->color());
+					xmlWriter->writeEndElement();
+
+				}
+			}
+			xmlWriter->writeEndElement();
+
 		}
 		xmlWriter->writeEndElement();
 
@@ -872,8 +1201,8 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 	_translatedTitle = "Fichier généré";
 	_episode = "1";
 	_season = "1";
-	_tcType = PhTimeCodeType25;
 	_videoTimeIn = videoTimeIn;
+	_videoTimeCodeType = PhTimeCodeType25;
 	_lastTime = _videoTimeIn;
 
 	if (trackCount > 4 || trackCount < 1)
@@ -901,7 +1230,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 		PhTime timeIn = time;
 		PhTime timeOut = timeIn + content.length() * 1000;
 
-		_texts1.append(new PhStripText(timeIn, people, timeOut, i % trackCount, content));
+		_texts1.append(new PhStripText(timeIn, people, timeOut, i % trackCount / 4, content, 0.25f));
 
 		// So the texts are all one after the other
 		time += spaceBetweenText;
@@ -909,7 +1238,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 
 	// Add a loop per minute
 	for(int i = 0; i < loopCount; i++)
-		_loops.append(new PhStripLoop(i, _videoTimeIn + i * 24000 * 60));
+		_loops.append(new PhStripLoop(_videoTimeIn + i * 24000 * 60, QString::number(i)));
 
 	emit changed();
 }
@@ -919,7 +1248,6 @@ void PhStripDoc::reset()
 	_peoples.clear();
 	_cuts.clear();
 	_detects.clear();
-	_tcType = PhTimeCodeType25;
 	_lastTime = 0;
 	_loops.clear();
 	_texts1.clear();
@@ -930,6 +1258,7 @@ void PhStripDoc::reset()
 	_season = "";
 	_videoPath = "";
 	_videoTimeIn = 0;
+	_videoTimeCodeType = PhTimeCodeType25;
 	_videoDeinterlace = false;
 	_authorName = "";
 	_videoForceRatio169 = false;
@@ -974,8 +1303,7 @@ void PhStripDoc::addPeople(PhPeople *people)
 
 PhPeople *PhStripDoc::peopleByName(QString name)
 {
-	foreach(PhPeople* people, _peoples)
-	{
+	foreach(PhPeople* people, _peoples) {
 		if(people && people->name() == name)
 			return people;
 	}
@@ -985,8 +1313,7 @@ PhPeople *PhStripDoc::peopleByName(QString name)
 PhStripText *PhStripDoc::nextText(PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, this->texts())
-	{
+	foreach(PhStripText* text, this->texts()) {
 		if(text->timeIn() > time) {
 			if(!result || (text->timeIn() < result->timeIn()) )
 				result = text;
@@ -998,8 +1325,7 @@ PhStripText *PhStripDoc::nextText(PhTime time)
 PhStripText *PhStripDoc::nextText(PhPeople *people, PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, this->texts())
-	{
+	foreach(PhStripText* text, this->texts()) {
 		if((text->people() == people) && (text->timeIn() > time)) {
 			if(!result || (text->timeIn() < result->timeIn()) )
 				result = text;
@@ -1011,8 +1337,7 @@ PhStripText *PhStripDoc::nextText(PhPeople *people, PhTime time)
 PhStripText *PhStripDoc::nextText(QList<PhPeople *> peopleList, PhTime time)
 {
 	PhStripText * result = NULL;
-	foreach(PhStripText* text, this->texts())
-	{
+	foreach(PhStripText* text, this->texts()) {
 		if(peopleList.contains(text->people()) && (text->timeIn() > time)) {
 			if(!result || (text->timeIn() < result->timeIn()) )
 				result = text;
@@ -1025,8 +1350,7 @@ PhTime PhStripDoc::previousTextTime(PhTime time)
 {
 	PhTime previousTextTime = PHTIMEMIN;
 
-	foreach(PhStripText* text, this->texts())
-	{
+	foreach(PhStripText* text, this->texts()) {
 		if((text->timeIn() < time) && (text->timeIn() > previousTextTime) )
 			previousTextTime = text->timeIn();
 	}
@@ -1038,8 +1362,7 @@ PhTime PhStripDoc::previousLoopTime(PhTime time)
 {
 	PhTime previousLoopTime = PHTIMEMIN;
 
-	foreach(PhStripLoop* loop, _loops)
-	{
+	foreach(PhStripLoop* loop, _loops) {
 		if((loop->timeIn() < time) && (loop->timeIn() > previousLoopTime) )
 			previousLoopTime = loop->timeIn();
 	}
@@ -1051,8 +1374,7 @@ PhTime PhStripDoc::previousCutTime(PhTime time)
 {
 	PhTime previousCutTime = PHTIMEMIN;
 
-	foreach(PhStripCut* cut, _cuts)
-	{
+	foreach(PhStripCut* cut, _cuts) {
 		if((cut->timeIn() < time) && (cut->timeIn() > previousCutTime) )
 			previousCutTime = cut->timeIn();
 	}
@@ -1077,8 +1399,7 @@ PhTime PhStripDoc::nextTextTime(PhTime time)
 {
 	PhTime nextTextTime = PHTIMEMAX;
 
-	foreach(PhStripText* text, this->texts())
-	{
+	foreach(PhStripText* text, this->texts()) {
 		if((text->timeIn() > time) && (text->timeIn() < nextTextTime) )
 			nextTextTime = text->timeIn();
 		else if(text->timeIn() > nextTextTime)
@@ -1092,8 +1413,7 @@ PhTime PhStripDoc::nextLoopTime(PhTime time)
 {
 	PhTime nextLoopTime = PHTIMEMAX;
 
-	foreach(PhStripLoop* loop, _loops)
-	{
+	foreach(PhStripLoop* loop, _loops) {
 		if((loop->timeIn() > time) && (loop->timeIn() < nextLoopTime) )
 			nextLoopTime = loop->timeIn();
 		else if(loop->timeIn() > nextLoopTime)
@@ -1107,8 +1427,7 @@ PhTime PhStripDoc::nextCutTime(PhTime time)
 {
 	PhTime nextCutTime = PHTIMEMAX;
 
-	foreach(PhStripCut* cut, _cuts)
-	{
+	foreach(PhStripCut* cut, _cuts) {
 		if((cut->timeIn() > time) && (cut->timeIn() < nextCutTime) )
 			nextCutTime = cut->timeIn();
 		else if(cut->timeIn() > nextCutTime)
@@ -1143,8 +1462,7 @@ PhTime PhStripDoc::timeOut()
 
 PhStripLoop *PhStripDoc::nextLoop(PhTime time)
 {
-	foreach(PhStripLoop* loop, _loops)
-	{
+	foreach(PhStripLoop* loop, _loops) {
 		if(loop->timeIn() > time)
 			return loop;
 	}
@@ -1182,11 +1500,6 @@ QString PhStripDoc::metaInformation(QString key)
 	return _metaInformation[key];
 }
 
-PhTimeCodeType PhStripDoc::timeCodeType()
-{
-	return _tcType;
-}
-
 QList<PhPeople *> PhStripDoc::peoples()
 {
 	return _peoples;
@@ -1212,6 +1525,11 @@ QString PhStripDoc::season()
 	return _season;
 }
 
+PhTimeCodeType PhStripDoc::videoTimeCodeType()
+{
+	return _videoTimeCodeType;
+}
+
 PhTime PhStripDoc::videoTimeIn()
 {
 	return _videoTimeIn;
@@ -1219,7 +1537,7 @@ PhTime PhStripDoc::videoTimeIn()
 
 PhTime PhStripDoc::videoFrameIn()
 {
-	return _videoTimeIn / PhTimeCode::timePerFrame(_tcType);
+	return _videoTimeIn / PhTimeCode::timePerFrame(_videoTimeCodeType);
 }
 
 PhTime PhStripDoc::lastTime()
@@ -1286,19 +1604,15 @@ void PhStripDoc::setTitle(QString title)
 	_title = title;
 }
 
-void PhStripDoc::setVideoTimeIn(PhTime time)
+void PhStripDoc::setVideoFilePath(QString filePath)
 {
-	_videoTimeIn = time;
+	_videoPath = filePath;
 }
 
-void PhStripDoc::setVideoFrameIn(PhFrame frame)
+void PhStripDoc::setVideoTimeIn(PhTime timeIn, PhTimeCodeType tcType)
 {
-	_videoTimeIn = frame * PhTimeCode::timePerFrame(_tcType);
-}
-
-void PhStripDoc::setVideoFilePath(QString videoFilePath)
-{
-	_videoPath = videoFilePath;
+	_videoTimeIn = timeIn;
+	_videoTimeCodeType = tcType;
 }
 
 QList<PhStripCut *> PhStripDoc::cuts()
