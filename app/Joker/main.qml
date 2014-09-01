@@ -72,6 +72,15 @@ Item {
         }
     }
 
+    Image {
+        objectName: "videoLogo"
+        //source property is set from C++
+        fillMode: Image.PreserveAspectFit
+        anchors.top: titleRect.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+    }
+
     Rectangle {
         id: noSyncRect
         color: "#c0500000"
