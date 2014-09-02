@@ -78,6 +78,8 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 		foreach(unsigned char data, *message)
 			messageStr += QString::number(data, 16) + " ";
 
+		PHDBG(21) << messageStr;
+
 		unsigned char status = message->at(0);
 		switch (status) {
 		// A SysEx message
@@ -128,7 +130,8 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 							_hh = message->at(7) & 0x1F;
 							_mm = message->at(8);
 							_ss = message->at(9);
-							_ff = message->at(10);
+							// It seems that the some information is sent to the frame byte too (not timecode type)...
+							_ff = message->at(10) & 0x1F;
 							PHDEBUG << "Go To" << _hh << _mm << _ss << _ff;
 							onTimeCode(_hh, _mm, _ss, _ff, _mtcType);
 							break;
