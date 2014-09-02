@@ -465,7 +465,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		if(_settings->displayScale()) {
 			PhGraphicSolidRect scale;
 			int scaleWidth;
-			int scaleHeight = 5;
+			int scaleHeight = 4;
 			int spaceBetweenDashes = _settings->secsBetweenDash() * 24000 / verticalTimePerPixel;
 			// Set the first dash to +5sec
 			int y0 = y - spaceBetweenDashes;
@@ -476,9 +476,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 			for(y0; y0 > -1080; y0 = y0 - spaceBetweenDashes) {
 				if(counter % 2 == 0)
-					scaleWidth = 50;
+					scaleWidth = 4;
 				else
-					scaleWidth = 80;
+					scaleWidth = 8;
 				scale.setWidth(scaleWidth);
 				scale.setPosition(width - scaleWidth, y0, 10 );
 				scale.draw();
