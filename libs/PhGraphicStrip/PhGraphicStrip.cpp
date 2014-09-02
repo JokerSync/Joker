@@ -462,7 +462,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		}
 
 		// Change to display the ruler via the settings
-		if(true) {
+		if(_settings->displayScale()) {
 			PhGraphicSolidRect scale;
 			int scaleWidth;
 			int scaleHeight = 5;

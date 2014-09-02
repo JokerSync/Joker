@@ -132,6 +132,12 @@ public:
 	 * @return An interger value
 	 */
 	virtual int secsBetweenDash() = 0;
+
+	/**
+	 * @brief Display a scaler on the right of the screen
+	 * @return A boolean value
+	 */
+	virtual bool displayScale() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

@@ -121,6 +121,8 @@
     <addaction name="separator"/>
     <addaction name="actionForce_16_9_ratio"/>
     <addaction name="actionDeinterlace_video"/>
+    <addaction name="separator"/>
+    <addaction name="actionDisplay_the_scale"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -456,6 +458,14 @@
   <action name="actionSet_space_between_two_ruler_graduation">
    <property name="text">
     <string>Set space between two ruler graduation...</string>
+   </property>
+  </action>
+  <action name="actionDisplay_the_scale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display the scale</string>
    </property>
   </action>
  </widget>
