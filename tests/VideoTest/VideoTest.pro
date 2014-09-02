@@ -33,7 +33,7 @@ mac {
 	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
 }
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/HelveticaCYPlain.ttf) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/Helvetica.ttf) $${RESOURCES_PATH} $${CS}
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
 include(../../common/deploy.pri)

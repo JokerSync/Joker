@@ -43,7 +43,7 @@ public:
 	}
 
 	QString hudFontFile() {
-		return "HelveticaCYPlain.ttf";
+		return "Helvetica.ttf";
 	}
 
 	QString textFontFile() {
