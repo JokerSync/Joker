@@ -4,19 +4,17 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 TARGET = TextEditTest
-TEMPLATE = app
 
-# The application version
 VERSION = 1.0.0
 
-include(../../libs/PhTools/PhTools.pri)
-include(../../libs/PhSync/PhSync.pri)
-include(../../libs/PhCommonUI/PhCommonUI.pri)
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
+
+include($$TOP_ROOT/common/common.pri)
+
+include($$TOP_ROOT/libs/PhTools/PhTools.pri)
+include($$TOP_ROOT/libs/PhSync/PhSync.pri)
+include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 
 SOURCES += main.cpp\
 		TextEditTestWindow.cpp
@@ -27,4 +25,4 @@ HEADERS  += TextEditTestWindow.h \
 FORMS    += TextEditTestWindow.ui
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)
