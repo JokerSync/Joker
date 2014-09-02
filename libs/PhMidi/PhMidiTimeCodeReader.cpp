@@ -60,10 +60,25 @@ void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 
 void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType)
 {
+	PhMidiInput::onTimeCode(hh, mm, ss, ff, tcType);
 	PhTime time = PhTimeCode::timeFromHhMmSsFf(hh, mm, ss, ff, tcType);
-	_tcType = tcType;
 	_clock.setTime(time);
-	emit timeCodeTypeChanged(_tcType);
+	if(_tcType != tcType) {
+		_tcType = tcType;
+		emit timeCodeTypeChanged(_tcType);
+	}
+}
+
+void PhMidiTimeCodeReader::onPlay()
+{
+	PhMidiInput::onPlay();
+	_clock.setRate(1);
+}
+
+void PhMidiTimeCodeReader::onStop()
+{
+	PhMidiInput::onStop();
+	_clock.setRate(0);
 }
 
 void PhMidiTimeCodeReader::checkPause()

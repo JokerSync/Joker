@@ -148,7 +148,7 @@ void MidiTest::testMMCPlay()
 
 	int playCount = 0;
 
-	connect(&midiIn, &PhMidiInput::onPlay, [&]() {
+	connect(&midiIn, &PhMidiInput::play, [&]() {
 	            playCount++;
 			});
 
@@ -170,7 +170,7 @@ void MidiTest::testMMCStop()
 
 	int stopCount = 0;
 
-	connect(&midiIn, &PhMidiInput::onStop, [&]() {
+	connect(&midiIn, &PhMidiInput::stop, [&]() {
 	            stopCount++;
 			});
 

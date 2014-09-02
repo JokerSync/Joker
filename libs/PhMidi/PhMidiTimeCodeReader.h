@@ -72,6 +72,16 @@ protected:
 	void onQuarterFrame(unsigned char data);
 	void onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
+	/**
+	 * @brief Called when a MMC play message is received
+	 */
+	void onPlay();
+
+	/**
+	 * @brief Called when a MMC stop message is received
+	 */
+	void onStop();
+
 private slots:
 	void checkPause();
 

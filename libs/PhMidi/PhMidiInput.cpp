@@ -61,6 +61,16 @@ void PhMidiInput::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcTy
 	emit timeCodeReceived(hh, mm, ss, ff, tcType);
 }
 
+void PhMidiInput::onPlay()
+{
+	emit play();
+}
+
+void PhMidiInput::onStop()
+{
+	emit stop();
+}
+
 void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 {
 	if ( message->size() > 0 ) {
@@ -107,11 +117,11 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 						switch(message->at(4)) {
 						case 0x01:
 							PHDEBUG << "MMC Stop" << messageStr;
-							emit onStop();
+							onStop();
 							break;
 						case 0x02:
 							PHDEBUG << "MMC Play" << messageStr;
-							emit onPlay();
+							onPlay();
 							break;
 						case 0x44:
 							_mtcType = computeTimeCodeType(message->at(7) >> 5);
