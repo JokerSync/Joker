@@ -5,7 +5,6 @@
 
 QT += widgets network
 
-
 HEADERS += \
 #    ../../libs/PhCommonUI/PhLeap.h \
 	../../libs/PhCommonUI/PhMediaPanel.h \

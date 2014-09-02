@@ -4,14 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 TARGET = FFmpegTest
-TEMPLATE = app
 
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
+
+include($$TOP_ROOT/common/common.pri)
 
 SOURCES += main.cpp\
         FFmpegTestWindow.cpp
@@ -61,4 +58,4 @@ linux {
 }
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)

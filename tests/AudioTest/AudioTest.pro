@@ -4,24 +4,19 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 TARGET = AudioTest
-TEMPLATE = app
 
 VERSION = 1.0.0
 
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-INCLUDEPATH += ../../libs
+include($$TOP_ROOT/common/common.pri)
 
-include(../../libs/PhTools/PhTools.pri);
-include(../../libs/PhAudio/PhAudio.pri);
+include($$TOP_ROOT/libs/PhTools/PhTools.pri);
+include($$TOP_ROOT/libs/PhAudio/PhAudio.pri);
 
 SOURCES += main.cpp\
-        AudioTestWindow.cpp \
+    AudioTestWindow.cpp \
     PreferencesDialog.cpp \
     AudioTestWriter.cpp
 
@@ -33,4 +28,4 @@ FORMS    += AudioTestWindow.ui \
     PreferencesDialog.ui
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)

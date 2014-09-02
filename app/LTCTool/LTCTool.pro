@@ -4,29 +4,22 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 TARGET = LTCTool
-TEMPLATE = app
 
 VERSION = 1.0.0
 
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-CONFIG += ltc
+include($$TOP_ROOT/common/common.pri)
 
-INCLUDEPATH += ../../libs
-
-include(../../libs/PhTools/PhTools.pri);
-include(../../libs/PhAudio/PhAudio.pri);
-include(../../libs/PhSync/PhSync.pri);
-include(../../libs/PhLtc/PhLtc.pri);
-include(../../libs/PhCommonUI/PhCommonUI.pri);
+include($$TOP_ROOT/libs/PhTools/PhTools.pri);
+include($$TOP_ROOT/libs/PhAudio/PhAudio.pri);
+include($$TOP_ROOT/libs/PhSync/PhSync.pri);
+include($$TOP_ROOT/libs/PhLtc/PhLtc.pri);
+include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri);
 
 SOURCES += main.cpp\
-		LTCToolWindow.cpp \
+	LTCToolWindow.cpp \
 	PreferencesDialog.cpp
 
 HEADERS  += LTCToolWindow.h \
@@ -38,8 +31,8 @@ FORMS    += LTCToolWindow.ui \
 
 mac {
 	# For the plist version
-	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
 }
 
 PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)
