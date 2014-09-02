@@ -30,6 +30,18 @@ public:
 	PhMidiTimeCodeReader(PhTimeCodeType tcType);
 
 	/**
+	 * @brief Create a virtual midi port and open it.
+	 * @param portName The midi port name
+	 * @return True if success, false otherwise.
+	 */
+	bool open(QString portName);
+
+	/**
+	 * @brief close Close the midi port if opened
+	 */
+	void close();
+
+	/**
 	 * @brief The current reader decoded timecode type
 	 * @return A timecode type value.
 	 */

@@ -14,7 +14,21 @@ PhMidiTimeCodeReader::PhMidiTimeCodeReader(PhTimeCodeType tcType) :
 	_pauseDetectionCounter(0)
 {
 	connect(&_pauseDetectionTimer, &QTimer::timeout, this, &PhMidiTimeCodeReader::checkPause);
-	_pauseDetectionTimer.start(10);
+}
+
+bool PhMidiTimeCodeReader::open(QString portName)
+{
+	if(PhMidiInput::open(portName)) {
+		_pauseDetectionTimer.start(10);
+		return true;
+	}
+	return false;
+}
+
+void PhMidiTimeCodeReader::close()
+{
+	_pauseDetectionTimer.stop();
+	PhMidiInput::close();
 }
 
 void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
@@ -54,10 +68,11 @@ void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCode
 
 void PhMidiTimeCodeReader::checkPause()
 {
-	PHDEBUG << _pauseDetectionCounter;
 	_pauseDetectionCounter++;
 	if(_pauseDetectionCounter >= 4) {
-		PHDEBUG << "Pause detected";
-		_clock.setRate(0);
+		if(_clock.rate() != 0) {
+			PHDEBUG << "Pause detected";
+			_clock.setRate(0);
+		}
 	}
 }
