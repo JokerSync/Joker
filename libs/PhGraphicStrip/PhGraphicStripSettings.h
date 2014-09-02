@@ -126,6 +126,12 @@ public:
 	 * @return An integer value
 	 */
 	virtual int backgroundColorDark() = 0;
+
+	/**
+	 * @brief Hold the number of seconds between the dashes of the right ruler
+	 * @return An interger value
+	 */
+	virtual int secsBetweenDash() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

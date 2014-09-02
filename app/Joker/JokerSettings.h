@@ -66,6 +66,7 @@ public:
 	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
 	PH_SETTING_INT(setTimePlayed, timePlayed)
+	PH_SETTING_INT2(setSecBetweenDash, secsBetweenDash, 5)
 
 	PH_SETTING_INT2(setCutWidth, cutWidth, 4)
 	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)
