@@ -6,12 +6,12 @@
 QT += serialport
 
 HEADERS += \
-	../../libs/PhSony/PhSonyController.h \
-	../../libs/PhSony/PhSonyMasterController.h \
-	../../libs/PhSony/PhSonySlaveController.h \
-	../../libs/PhSony/PhSonySettings.h
+	$$TOP_ROOT/libs/PhSony/PhSonyController.h \
+	$$TOP_ROOT/libs/PhSony/PhSonyMasterController.h \
+	$$TOP_ROOT/libs/PhSony/PhSonySlaveController.h \
+	$$TOP_ROOT/libs/PhSony/PhSonySettings.h
 
 SOURCES += \
-	../../libs/PhSony/PhSonyController.cpp \
-	../../libs/PhSony/PhSonyMasterController.cpp \
-	../../libs/PhSony/PhSonySlaveController.cpp
+	$$TOP_ROOT/libs/PhSony/PhSonyController.cpp \
+	$$TOP_ROOT/libs/PhSony/PhSonyMasterController.cpp \
+	$$TOP_ROOT/libs/PhSony/PhSonySlaveController.cpp

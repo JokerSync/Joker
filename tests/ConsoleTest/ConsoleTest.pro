@@ -4,24 +4,20 @@
 #
 #-------------------------------------------------
 
-QT       += core
-
 TARGET = ConsoleTest
 CONFIG   += console
 CONFIG   -= app_bundle
 
-TEMPLATE = app
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
+include($$TOP_ROOT/common/common.pri)
 
-include(../../libs/PhTools/PhTools.pri)
-include(../../libs/PhSync/PhSync.pri)
+include($$TOP_ROOT/libs/PhTools/PhTools.pri)
+include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 
 SOURCES += main.cpp
-
-INCLUDEPATH += 	../../libs
 
 RESOURCES_PATH = .
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)

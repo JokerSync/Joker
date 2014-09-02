@@ -4,30 +4,30 @@
 #
 #-------------------------------------------------
 
-QT       += core testlib
+QT       += testlib
 
 TARGET = AutoTest
 CONFIG   += console static debug
 CONFIG   -= app_bundle
 
-TEMPLATE = app
-
 QMAKE_CXXFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
 QMAKE_LFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
 
-INCLUDEPATH += ../../libs
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-include(../../libs/PhTools/PhTools.pri)
-include(../../libs/PhStrip/PhStrip.pri)
-include(../../libs/PhAudio/PhAudio.pri)
-include(../../libs/PhSync/PhSync.pri)
-include(../../libs/PhSony/PhSony.pri)
-include(../../libs/PhLtc/PhLtc.pri)
-include(../../libs/PhCommonUI/PhCommonUI.pri)
-include(../../libs/PhGraphic/PhGraphic.pri)
-include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
-include(../../libs/PhVideo/PhVideo.pri)
-include(../../libs/PhMidi/PhMidi.pri)
+include($$TOP_ROOT/common/common.pri)
+
+include($$TOP_ROOT/libs/PhTools/PhTools.pri)
+include($$TOP_ROOT/libs/PhStrip/PhStrip.pri)
+include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
+include($$TOP_ROOT/libs/PhSync/PhSync.pri)
+include($$TOP_ROOT/libs/PhSony/PhSony.pri)
+include($$TOP_ROOT/libs/PhLtc/PhLtc.pri)
+include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
+include($$TOP_ROOT/libs/PhGraphic/PhGraphic.pri)
+include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
+include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
+include($$TOP_ROOT/libs/PhMidi/PhMidi.pri)
 
 HEADERS += \
 	AutoTestSettings.h \
@@ -68,11 +68,11 @@ SOURCES += main.cpp \
 	MidiTest.cpp \
     SynchronizerTest.cpp
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/*) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/*) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/*) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} -r $$shell_path($${JOKER_ROOT}/data/strip/) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/video/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} -r $$shell_path($${TOP_ROOT}/data/strip/) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/video/*) . $${CS}
 QMAKE_POST_LINK += rm -f *.gcda $${CS}
 
 FORMS += \
@@ -80,8 +80,8 @@ FORMS += \
 
 mac{
 	# For the plist version
-	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
 }
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)
