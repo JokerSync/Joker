@@ -4,27 +4,18 @@
 #
 #-------------------------------------------------
 
-QT       += core
-
-QT       += gui
-QT       += xml
-
 CONFIG   += console
 CONFIG   -= app_bundle
 
 TARGET = StripTest
 
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
-DEFINES += ORG_NAME=\\\"Phonations\\\"
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-TEMPLATE = app
+include($$TOP_ROOT/common/common.pri)
 
-include(../../libs/PhTools/PhTools.pri)
-include(../../libs/PhSync/PhSync.pri)
-include(../../libs/PhStrip/PhStrip.pri)
-
-INCLUDEPATH += ../../libs
+include($$TOP_ROOT/libs/PhTools/PhTools.pri)
+include($$TOP_ROOT/libs/PhSync/PhSync.pri)
+include($$TOP_ROOT/libs/PhStrip/PhStrip.pri)
 
 #Main app
 SOURCES += main.cpp \
@@ -39,4 +30,4 @@ HEADERS += \
     StripTestSettings.h
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)

@@ -5,38 +5,37 @@
 
 QT += widgets network
 
-
 HEADERS += \
-#    ../../libs/PhCommonUI/PhLeap.h \
-	../../libs/PhCommonUI/PhMediaPanel.h \
-	../../libs/PhCommonUI/PhTimeCodeEdit.h \
-    ../../libs/PhCommonUI/PhTimeCodeDialog.h \
-    ../../libs/PhCommonUI/PhFloatingMediaPanel.h \
-    ../../libs/PhCommonUI/PhDocumentWindow.h \
-    ../../libs/PhCommonUI/PhDocumentWindowSettings.h \
-    ../../libs/PhCommonUI/PhWindow.h \
-    ../../libs/PhCommonUI/PhWindowSettings.h \
-    ../../libs/PhCommonUI/PhLockableSpinBox.h \
-	../../libs/PhCommonUI/PhFeedbackDialog.h \
-	../../libs/PhCommonUI/PhFeedbackSettings.h \
-    ../../libs/PhCommonUI/PhDialogButtonBox.h
+#    $$TOP_ROOT/libs/PhCommonUI/PhLeap.h \
+	$$TOP_ROOT/libs/PhCommonUI/PhMediaPanel.h \
+	$$TOP_ROOT/libs/PhCommonUI/PhTimeCodeEdit.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhTimeCodeDialog.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhFloatingMediaPanel.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindow.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindowSettings.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhWindow.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhWindowSettings.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhLockableSpinBox.h \
+	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackDialog.h \
+	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackSettings.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhDialogButtonBox.h
 
 SOURCES += \
-#   ../../libs/PhCommonUI/PhLeap.cpp \
-	../../libs/PhCommonUI/PhMediaPanel.cpp \
-	../../libs/PhCommonUI/PhTimeCodeEdit.cpp \
-    ../../libs/PhCommonUI/PhTimeCodeDialog.cpp \
-    ../../libs/PhCommonUI/PhFloatingMediaPanel.cpp \
-    ../../libs/PhCommonUI/PhDocumentWindow.cpp \
-    ../../libs/PhCommonUI/PhWindow.cpp \
-    ../../libs/PhCommonUI/PhLockableSpinBox.cpp \
-	../../libs/PhCommonUI/PhFeedbackDialog.cpp \
-    ../../libs/PhCommonUI/PhDialogButtonBox.cpp
+#   $$TOP_ROOT/libs/PhCommonUI/PhLeap.cpp \
+	$$TOP_ROOT/libs/PhCommonUI/PhMediaPanel.cpp \
+	$$TOP_ROOT/libs/PhCommonUI/PhTimeCodeEdit.cpp \
+    $$TOP_ROOT/libs/PhCommonUI/PhTimeCodeDialog.cpp \
+    $$TOP_ROOT/libs/PhCommonUI/PhFloatingMediaPanel.cpp \
+    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindow.cpp \
+    $$TOP_ROOT/libs/PhCommonUI/PhWindow.cpp \
+    $$TOP_ROOT/libs/PhCommonUI/PhLockableSpinBox.cpp \
+	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackDialog.cpp \
+    $$TOP_ROOT/libs/PhCommonUI/PhDialogButtonBox.cpp
 
 
-FORMS += ../../libs/PhCommonUI/PhMediaPanel.ui \
-	../../libs/PhCommonUI/PhTimeCodeDialog.ui \
-	../../libs/PhCommonUI/PhFeedbackDialog.ui
+FORMS += $$TOP_ROOT/libs/PhCommonUI/PhMediaPanel.ui \
+	$$TOP_ROOT/libs/PhCommonUI/PhTimeCodeDialog.ui \
+	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackDialog.ui
 
 #INCLUDEPATH += $$(LEAP_SDK)/include
 

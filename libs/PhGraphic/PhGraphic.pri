@@ -6,33 +6,33 @@
 QT		+= opengl
 
 HEADERS += \
-	../../libs/PhGraphic/PhGraphicSettings.h \
-	../../libs/PhGraphic/PhGraphicView.h \
-	../../libs/PhGraphic/PhGraphicImage.h \
-	../../libs/PhGraphic/PhGraphicText.h \
-	../../libs/PhGraphic/PhGraphicTexturedRect.h \
-	../../libs/PhGraphic/PhFont.h \
-	../../libs/PhGraphic/PhGraphicObject.h \
-	../../libs/PhGraphic/PhGraphicRect.h \
-	../../libs/PhGraphic/PhGraphicSolidRect.h \
-	../../libs/PhGraphic/PhGraphicLoop.h \
-	../../libs/PhGraphic/PhGraphicDisc.h \
-	../../libs/PhGraphic/PhGraphicDashedLine.h \
-	../../libs/PhGraphic/PhGraphicArrow.h
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicSettings.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicView.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicImage.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicText.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicTexturedRect.h \
+	$$TOP_ROOT/libs/PhGraphic/PhFont.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicObject.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicRect.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicSolidRect.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicLoop.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicDisc.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicDashedLine.h \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicArrow.h
 
 SOURCES += \
-	../../libs/PhGraphic/PhGraphicView.cpp \
-	../../libs/PhGraphic/PhGraphicImage.cpp \
-	../../libs/PhGraphic/PhGraphicText.cpp \
-	../../libs/PhGraphic/PhGraphicTexturedRect.cpp \
-	../../libs/PhGraphic/PhFont.cpp \
-	../../libs/PhGraphic/PhGraphicObject.cpp \
-	../../libs/PhGraphic/PhGraphicRect.cpp \
-	../../libs/PhGraphic/PhGraphicSolidRect.cpp \
-	../../libs/PhGraphic/PhGraphicLoop.cpp \
-	../../libs/PhGraphic/PhGraphicDisc.cpp \
-	../../libs/PhGraphic/PhGraphicDashedLine.cpp \
-	../../libs/PhGraphic/PhGraphicArrow.cpp
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicView.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicImage.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicText.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicTexturedRect.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhFont.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicObject.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicRect.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicSolidRect.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicLoop.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicDisc.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicDashedLine.cpp \
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicArrow.cpp
 
 # Windows specific
 win32 {
