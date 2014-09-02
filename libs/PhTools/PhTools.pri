@@ -4,17 +4,17 @@
 #
 
 HEADERS += \
-	../../libs/PhTools/PhDebug.h \
-	../../libs/PhTools/PhTickCounter.h \
-	../../libs/PhTools/PhPictureTools.h \
-	../../libs/PhTools/PhFileTool.h \
-	../../libs/PhTools/PhGenericSettings.h \
-	../../libs/PhTools/PhTestTools.h
+	$$TOP_ROOT/libs/PhTools/PhDebug.h \
+	$$TOP_ROOT/libs/PhTools/PhTickCounter.h \
+	$$TOP_ROOT/libs/PhTools/PhPictureTools.h \
+	$$TOP_ROOT/libs/PhTools/PhFileTool.h \
+	$$TOP_ROOT/libs/PhTools/PhGenericSettings.h \
+	$$TOP_ROOT/libs/PhTools/PhTestTools.h
 
 SOURCES += \
-	../../libs/PhTools/PhDebug.cpp \
-	../../libs/PhTools/PhTickCounter.cpp \
-	../../libs/PhTools/PhPictureTools.cpp \
-	../../libs/PhTools/PhFileTool.cpp \
-	../../libs/PhTools/PhGenericSettings.cpp \
-	../../libs/PhTools/PhTestTools.cpp
+	$$TOP_ROOT/libs/PhTools/PhDebug.cpp \
+	$$TOP_ROOT/libs/PhTools/PhTickCounter.cpp \
+	$$TOP_ROOT/libs/PhTools/PhPictureTools.cpp \
+	$$TOP_ROOT/libs/PhTools/PhFileTool.cpp \
+	$$TOP_ROOT/libs/PhTools/PhGenericSettings.cpp \
+	$$TOP_ROOT/libs/PhTools/PhTestTools.cpp
