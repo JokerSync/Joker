@@ -67,22 +67,44 @@ void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
 	_settings = settings;
 }
 
-void PhGraphicView::addInfo(QString info)
+int PhGraphicView::maxRefreshRate()
 {
-	_infos.append(info);
+	return _maxRefreshRate;
+}
+
+int PhGraphicView::maxUpdateDuration()
+{
+	return _maxUpdateDuration;
+}
+
+int PhGraphicView::lastUpdateDuration()
+{
+	return _lastUpdateDuration;
+}
+
+int PhGraphicView::dropDetected()
+{
+	return _dropDetected;
+}
+
+int PhGraphicView::secondsSinceLastDrop()
+{
+	return _dropTimer.elapsed() / 1000;
 }
 
 void PhGraphicView::onRefresh()
 {
+	if(_settings) {
+		if(_settings->resetInfo()) {
+			_dropDetected = 0;
+			_maxRefreshRate = 0;
+			_maxPaintDuration = 0;
+			_maxUpdateDuration = 0;
+		}
+	}
+
 	if(this->refreshRate() > _maxRefreshRate)
 		_maxRefreshRate = this->refreshRate();
-	addInfo(QString("refresh: %1x%2, %3 / %4")
-			.arg(this->width())
-			.arg(this->height())
-			.arg(_maxRefreshRate)
-			.arg(this->refreshRate()));
-	addInfo(QString("Update : %1 %2").arg(_maxUpdateDuration).arg(_lastUpdateDuration));
-	addInfo(QString("drop: %1 %2").arg(_dropDetected).arg(_dropTimer.elapsed() / 1000));
 
 	QTime t;
 	t.start();
@@ -90,6 +112,10 @@ void PhGraphicView::onRefresh()
 	emit beforePaint(_screenFrequency);
 	update();
 
+	// Note: the update duration may not be interesting at all, since it only *schedules*
+	// the paint request, but does not repaint immediately
+	#warning /// @todo measure time between two updates instead of update time
+	// the time between two updates may be more significant.
 	_lastUpdateDuration = t.elapsed();
 	if(_lastUpdateDuration > _maxUpdateDuration)
 		_maxUpdateDuration = _lastUpdateDuration;
@@ -97,6 +123,8 @@ void PhGraphicView::onRefresh()
 		_dropTimer.restart();
 		_dropDetected++;
 	}
+
+	_frameTickCounter.tick();
 }
 
 

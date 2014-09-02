@@ -285,6 +285,8 @@ private:
 
 	QString _currentLoopLabel;
 	QList<QObject*> _selectedPeopleList;
+
+	PhFont _infoFont;
 };
 
 #endif // MAINWINDOW_H

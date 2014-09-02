@@ -902,8 +902,37 @@ void JokerWindow::onPaint(int width, int height)
 		tcOffset = tcLabel->height();
 
 	_strip.draw(0, y + videoHeight, width, stripHeight, tcOffset, selectedPeoples);
+
+	QStringList infos;
+	infos.append(QString("refresh: %1x%2, %3 / %4")
+			.arg(ui->videoStripView->width())
+			.arg(ui->videoStripView->height())
+			.arg(ui->videoStripView->maxRefreshRate())
+			.arg(ui->videoStripView->refreshRate()));
+	infos.append(QString("Update : %1 %2").arg(ui->videoStripView->maxUpdateDuration()).arg(ui->videoStripView->lastUpdateDuration()));
+	infos.append(QString("drop: %1 %2").arg(ui->videoStripView->dropDetected()).arg(ui->videoStripView->secondsSinceLastDrop()));
+
+	#warning /// @todo measure fps with a custom QML element
+	// The actual painting duration should be measured using a custom QML element.
+	// See: http://developer.nokia.com/community/wiki/QML_Performance_Meter
+	// (anyway, the QML profiler will provide much more details to the developer.)
+	infos.append(QString("draw: N/A"));
+
 	foreach(QString info, _strip.infos()) {
-		ui->videoStripView->addInfo(info);
+		infos.append(info);
+	}
+
+	if(_settings->displayInfo()) {
+		_infoFont.setFontFile(_settings->infoFontFile());
+		int y2 = 0;
+		foreach(QString info, infos) {
+			PhGraphicText gInfo(&_infoFont, info, 0, y2);
+			gInfo.setSize(_infoFont.getNominalWidth(info) / 2, 50);
+			gInfo.setZ(10);
+			gInfo.setColor(Qt::red);
+			gInfo.draw();
+			y2 += gInfo.height();
+		}
 	}
 
 	PhStripText *nextText = NULL;

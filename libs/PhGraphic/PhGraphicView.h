@@ -61,10 +61,30 @@ public:
 	 */
 	void setGraphicSettings(PhGraphicSettings *settings);
 	/**
-	 * @brief Add a line to the debug info
-	 * @param info A string
+	 * @brief measured max refresh rate
+	 * @return measured max refresh rate
 	 */
-	void addInfo(QString info);
+	int maxRefreshRate();
+	/**
+	 * @brief measured max update duration
+	 * @return measured max update duration
+	 */
+	int maxUpdateDuration();
+	/**
+	 * @brief measured last update duration
+	 * @return measured last update duration
+	 */
+	int lastUpdateDuration();
+	/**
+	 * @brief number of drops detected since the start of the application
+	 * @return number of drops detected
+	 */
+	int dropDetected();
+	/**
+	 * @brief number of seconds elapsed since last drop detected
+	 * @return number of seconds
+	 */
+	int secondsSinceLastDrop();
 signals:
 	/**
 	 * @brief emit a signal just before the paint
@@ -96,8 +116,6 @@ private:
 	 */
 	QTimer *_refreshTimer;
 	PhTickCounter _frameTickCounter;
-	QStringList _infos;
-	PhFont _infoFont;
 	QTime _dropTimer;
 	int _dropDetected, _maxRefreshRate, _maxPaintDuration, _lastUpdateDuration, _maxUpdateDuration;
 };
