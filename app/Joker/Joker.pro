@@ -7,32 +7,25 @@
 cache()
 
 TARGET = Joker
-TEMPLATE = app
 
-QT += core gui
-
-# The application version
 VERSION = 1.1.15
 
-# Define the preprocessor macro to get the application version in our application.
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-DEFINES += ORG_NAME=\\\"Phonations\\\"
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-INCLUDEPATH += ../../libs
+include($$TOP_ROOT/common/common.pri)
 
-include(../../libs/PhTools/PhTools.pri)
-include(../../libs/PhCommonUI/PhCommonUI.pri)
-include(../../libs/PhStrip/PhStrip.pri)
-include(../../libs/PhGraphic/PhGraphic.pri)
-include(../../libs/PhGraphicStrip/PhGraphicStrip.pri)
-include(../../libs/PhVideo/PhVideo.pri)
-include(../../libs/PhAudio/PhAudio.pri)
-include(../../libs/PhSync/PhSync.pri)
-include(../../libs/PhSony/PhSony.pri)
-include(../../libs/PhLtc/PhLtc.pri)
-include(../../libs/PhMidi/PhMidi.pri)
+include($$TOP_ROOT/libs/PhTools/PhTools.pri)
+include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
+include($$TOP_ROOT/libs/PhStrip/PhStrip.pri)
+include($$TOP_ROOT/libs/PhGraphic/PhGraphic.pri)
+include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
+include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
+include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
+include($$TOP_ROOT/libs/PhSync/PhSync.pri)
+include($$TOP_ROOT/libs/PhSony/PhSony.pri)
+include($$TOP_ROOT/libs/PhLtc/PhLtc.pri)
+include($$TOP_ROOT/libs/PhMidi/PhMidi.pri)
 
-#Main app
 SOURCES += main.cpp \
 	JokerWindow.cpp \
 	AboutDialog.cpp \
@@ -62,16 +55,16 @@ FORMS += \
 	RulerSpaceDialog.ui
 
 unix {
-	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${JOKER_ROOT}/.doxygen\";
+	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${TOP_ROOT}/.doxygen\";
 }
 
 mac{
 	ICON = joker.icns
 
 	# For the plist version
-	OTHER_FILES += $${JOKER_ROOT}/data/joker.plist
+	OTHER_FILES += $${TOP_ROOT}/data/joker.plist
 
-	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/joker.plist
+	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/joker.plist
 	QMAKE_POST_LINK += sed -i \"\" -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
 }
 
@@ -81,13 +74,14 @@ win32 {
 	OTHER_FILES += JokerSetup.iss
 }
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/phonations.png) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/phonationsBlack.png) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240.png) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240_black.png) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/SWENSON.TTF) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/Helvetica.ttf) $${RESOURCES_PATH} $${CS}
+
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/phonations.png) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/phonationsBlack.png) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/motif-240.png) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/motif-240_black.png) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/SWENSON.TTF) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Helvetica.ttf) $${RESOURCES_PATH} $${CS}
 
 
 TRANSLATIONS =	fr_FR.ts \
@@ -95,6 +89,6 @@ TRANSLATIONS =	fr_FR.ts \
 QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
 
 PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)
 
 cache()

@@ -4,13 +4,13 @@
 #
 #-------------------------------------------------
 
-QT       += core gui opengl
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 TARGET = OpenGLTest
-TEMPLATE = app
 
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
+
+include($$TOP_ROOT/common/common.pri)
+
+QT += opengl
 
 SOURCES += main.cpp\
         OpenGLTestWindow.cpp
@@ -18,4 +18,4 @@ SOURCES += main.cpp\
 HEADERS  += OpenGLTestWindow.h
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)

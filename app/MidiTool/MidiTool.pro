@@ -4,26 +4,21 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 TARGET = MidiTool
-TEMPLATE = app
 
 VERSION = 1.0.0
 
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-INCLUDEPATH += ../../libs
+include($$TOP_ROOT/common/common.pri)
 
-include(../../libs/PhTools/PhTools.pri);
-include(../../libs/PhSync/PhSync.pri);
-include(../../libs/PhMidi/PhMidi.pri);
-include(../../libs/PhCommonUI/PhCommonUI.pri);
+include($$TOP_ROOT/libs/PhTools/PhTools.pri);
+include($$TOP_ROOT/libs/PhSync/PhSync.pri);
+include($$TOP_ROOT/libs/PhMidi/PhMidi.pri);
+include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri);
 
 SOURCES += main.cpp\
-		MidiToolWindow.cpp \
+	MidiToolWindow.cpp \
 	PreferencesDialog.cpp
 
 HEADERS  += MidiToolWindow.h \
@@ -35,8 +30,8 @@ FORMS    += MidiToolWindow.ui \
 
 mac {
 	# For the plist version
-	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
 }
 
 PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)
