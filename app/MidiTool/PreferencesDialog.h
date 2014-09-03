@@ -36,13 +36,17 @@ public:
 	 */
 	~PreferencesDialog();
 
+private slots:
+	void updateInputPortEnabledControl();
+	void updatePortComboxContent();
+
 private:
 	void accept();
 	void reject();
 
 	Ui::PreferencesDialog *ui;
 	MidiToolSettings *_settings;
-	QString _oldMidiInputPortName, _oldMidiOutputPortName;
+	QString _oldMidiOutputPortName, _oldMidiInputPortName, _oldMidiVirtualInputPortName;
 };
 
 #endif // PREFERENCESDIALOG_H

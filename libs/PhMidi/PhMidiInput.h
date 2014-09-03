@@ -34,11 +34,17 @@ public:
 	~PhMidiInput();
 
 	/**
+	 * @brief List the available midi input port
+	 * @return A list of string.
+	 */
+	static QStringList inputList();
+
+	/**
 	 * @brief Create a virtual midi port and open it.
 	 * @param portName The midi port name
 	 * @return True if success, false otherwise.
 	 */
-	bool open(QString portName);
+	bool open(QString inputPortName);
 
 	/**
 	 * @brief close Close the midi port if opened

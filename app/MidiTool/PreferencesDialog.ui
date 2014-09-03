@@ -6,59 +6,63 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>275</width>
-    <height>118</height>
+    <width>401</width>
+    <height>166</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Preferences</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>261</width>
-     <height>102</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <layout class="QFormLayout" name="formLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblDeviceOut">
-        <property name="text">
-         <string>Midi out</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="comboBoxOutput"/>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="lblDeviceIn">
-        <property name="text">
-         <string>Midi in</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="lineEditInput"/>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QDialogButtonBox" name="buttonBox">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="standardButtons">
-       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="lblDeviceOut">
+         <property name="text">
+          <string>Send midi through:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBoxOutput"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QRadioButton" name="radioButtonVirtualPort">
+         <property name="text">
+          <string>Read midi from virtual port:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QRadioButton" name="radioButtonExistingPort">
+         <property name="text">
+          <string>Read midi from existing port:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEditInput"/>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="comboBoxInput"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>

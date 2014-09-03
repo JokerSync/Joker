@@ -22,12 +22,35 @@ PhMidiInput::~PhMidiInput()
 	close();
 }
 
-bool PhMidiInput::open(QString portName)
+QStringList PhMidiInput::inputList()
 {
+	QStringList result;
+	RtMidiIn midiIn;
+	for(unsigned int i = 0; i < midiIn.getPortCount(); i++)
+		result.append(QString::fromStdString(midiIn.getPortName(i)));
+
+	return result;
+}
+
+bool PhMidiInput::open(QString inputPortName)
+{
+	PHDEBUG << inputPortName;
 	try {
 		_midiIn = new RtMidiIn();
-		PHDEBUG << "Opening" << portName;
-		_midiIn->openVirtualPort(portName.toStdString());
+		int portIndex = -1;
+		for(unsigned int i = 0; i < _midiIn->getPortCount(); i++) {
+			QString portName = QString::fromStdString(_midiIn->getPortName(i));
+			PHDEBUG << "-" << portName;
+			if(inputPortName == portName) {
+				portIndex = i;
+				break;
+			}
+		}
+		PHDEBUG << "Opening" << inputPortName;
+		if(portIndex >= 0)
+			_midiIn->openPort(portIndex);
+		else
+			_midiIn->openVirtualPort(inputPortName.toStdString());
 		_midiIn->ignoreTypes( false, false, false );
 		_midiIn->setCallback(&PhMidiInput::callback, this);
 		_midiIn->setErrorCallback(&PhMidiInput::errorCallback, this);
