@@ -4,10 +4,10 @@
 #
 
 HEADERS += \
-    ../../libs/PhVideo/PhVideoEngine.h \
-    ../../libs/PhVideo/PhVideoSettings.h
+    $$TOP_ROOT/libs/PhVideo/PhVideoEngine.h \
+    $$TOP_ROOT/libs/PhVideo/PhVideoSettings.h
 SOURCES += \
-    ../../libs/PhVideo/PhVideoEngine.cpp
+    $$TOP_ROOT/libs/PhVideo/PhVideoEngine.cpp
 
 # Windows specific
 win32{

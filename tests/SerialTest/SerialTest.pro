@@ -4,17 +4,20 @@
 #
 #-------------------------------------------------
 
-QT       += core gui serialport widgets
-
 TARGET = SerialTest
-TEMPLATE = app
 
 VERSION = 1.0.0
 
-include(../../libs/PhTools/PhTools.pri)
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-SOURCES += main.cpp\
-		SerialTestWindow.cpp
+include($$TOP_ROOT/common/common.pri)
+
+QT += serialport
+
+include($$TOP_ROOT/libs/PhTools/PhTools.pri)
+
+SOURCES += main.cpp \
+	SerialTestWindow.cpp
 
 HEADERS  += SerialTestWindow.h
 
@@ -22,8 +25,8 @@ FORMS    += SerialTestWindow.ui
 
 mac {
 	# For the plist version
-	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
 }
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)

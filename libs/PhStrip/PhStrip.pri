@@ -6,22 +6,22 @@
 QT		+= xml sql
 
 SOURCES += \
-    ../../libs/PhStrip/PhStripDoc.cpp \
-	../../libs/PhStrip/PhStripObject.cpp \
-	../../libs/PhStrip/PhStripCut.cpp \
-	../../libs/PhStrip/PhStripText.cpp \
-	../../libs/PhStrip/PhStripLoop.cpp \
-	../../libs/PhStrip/PhPeople.cpp \
-    ../../libs/PhStrip/PhStripPeopleObject.cpp \
-    ../../libs/PhStrip/PhStripDetect.cpp
+    $$TOP_ROOT/libs/PhStrip/PhStripDoc.cpp \
+	$$TOP_ROOT/libs/PhStrip/PhStripObject.cpp \
+	$$TOP_ROOT/libs/PhStrip/PhStripCut.cpp \
+	$$TOP_ROOT/libs/PhStrip/PhStripText.cpp \
+	$$TOP_ROOT/libs/PhStrip/PhStripLoop.cpp \
+	$$TOP_ROOT/libs/PhStrip/PhPeople.cpp \
+    $$TOP_ROOT/libs/PhStrip/PhStripPeopleObject.cpp \
+    $$TOP_ROOT/libs/PhStrip/PhStripDetect.cpp
 
 HEADERS += \
-	../../libs/PhStrip/PhStripDoc.h \
-	../../libs/PhStrip/PhStripObject.h \
-	../../libs/PhStrip/PhStripCut.h \
-	../../libs/PhStrip/PhStripText.h \
-	../../libs/PhStrip/PhStripLoop.h \
-	../../libs/PhStrip/PhPeople.h \
-    ../../libs/PhStrip/PhStripPeopleObject.h \
-    ../../libs/PhStrip/PhStripDetect.h
+	$$TOP_ROOT/libs/PhStrip/PhStripDoc.h \
+	$$TOP_ROOT/libs/PhStrip/PhStripObject.h \
+	$$TOP_ROOT/libs/PhStrip/PhStripCut.h \
+	$$TOP_ROOT/libs/PhStrip/PhStripText.h \
+	$$TOP_ROOT/libs/PhStrip/PhStripLoop.h \
+	$$TOP_ROOT/libs/PhStrip/PhPeople.h \
+    $$TOP_ROOT/libs/PhStrip/PhStripPeopleObject.h \
+    $$TOP_ROOT/libs/PhStrip/PhStripDetect.h
 
