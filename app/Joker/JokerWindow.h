@@ -285,6 +285,7 @@ private:
 
 	QString _currentLoopLabel;
 	QList<QObject*> _selectedPeopleList;
+	QStringList _infoList;
 
 	PhFont _infoFont;
 };
