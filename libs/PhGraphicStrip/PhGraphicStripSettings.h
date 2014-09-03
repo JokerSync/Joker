@@ -128,16 +128,16 @@ public:
 	virtual int backgroundColorDark() = 0;
 
 	/**
-	 * @brief Hold the number of seconds between the dashes of the right ruler
+	 * @brief Hold the number of seconds between the dashes of the right scale
 	 * @return An interger value
 	 */
-	virtual int secsBetweenDash() = 0;
+	virtual int verticalScaleSpaceInSeconds() = 0;
 
 	/**
 	 * @brief Display a scaler on the right of the screen
 	 * @return A boolean value
 	 */
-	virtual bool displayScale() = 0;
+	virtual bool displayVerticalScale() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

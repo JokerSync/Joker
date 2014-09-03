@@ -40,8 +40,8 @@ public:
 	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)
 	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
 	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
-	PH_SETTING_INT2(setSecBetweenDash, secsBetweenDash, 5)
-	PH_SETTING_BOOL2(setDisplayScale, displayScale, false)
+	PH_SETTING_INT2(setVerticalScaleSpaceInSeconds, verticalScaleSpaceInSeconds, 5)
+	PH_SETTING_BOOL2(setDisplayVerticalScale, displayVerticalScale, false)
 
 	// PhVideoSettings :
 

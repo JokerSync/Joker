@@ -462,11 +462,11 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		}
 
 		// Change to display the ruler via the settings
-		if(_settings->displayScale()) {
+		if(_settings->displayVerticalScale()) {
 			PhGraphicSolidRect scale;
 			int scaleWidth;
 			int scaleHeight = 4;
-			int spaceBetweenDashes = _settings->secsBetweenDash() * 24000 / verticalTimePerPixel;
+			int spaceBetweenDashes = _settings->verticalScaleSpaceInSeconds() * 24000 / verticalTimePerPixel;
 			// Set the first dash to +5sec
 			int y0 = y - spaceBetweenDashes;
 			//int y = 100;

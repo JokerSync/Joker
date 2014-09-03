@@ -1000,5 +1000,5 @@ void JokerWindow::on_actionSet_space_between_two_ruler_graduation_triggered()
 
 void JokerWindow::on_actionDisplay_the_scale_triggered(bool checked)
 {
-	_settings->setDisplayScale(checked);
+	_settings->setDisplayVerticalScale(checked);
 }

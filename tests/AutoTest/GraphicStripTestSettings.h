@@ -92,11 +92,11 @@ public:
 		return 0x242e2c;
 	}
 
-	bool displayScale() {
+	bool displayVerticalScale() {
 		return false;
 	}
 
-	int secsBetweenDash() {
+	int verticalScaleSpaceInSeconds() {
 		return 5;
 	}
 };
