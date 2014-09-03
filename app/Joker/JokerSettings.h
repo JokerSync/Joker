@@ -72,7 +72,8 @@ public:
 	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
 	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
 
-	// PhVideoSettings :
+	// Synchronisation settings:
+	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
 
 	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
@@ -82,8 +83,12 @@ public:
 	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
+	// LTC settings:
+	PH_SETTING_STRING(setLtcInputPort, ltcInputPort)
+
 	// Midi settings:
-	PH_SETTING_STRING2(setMidiTimeCodePortName, midiTimeCodePortName, "Joker")
+	PH_SETTING_STRING2(setMidiInputPort, midiInputPort, "Joker")
+	PH_SETTING_STRING2(setMidiVirtualInputPort, midiVirtualInputPort, "Joker")
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
@@ -93,8 +98,6 @@ public:
 	PH_SETTING_STRINGLIST2(setStripFileType, stripFileType, QStringList({"joker", "detx", "mos", "drb", "syn6"}))
 	PH_SETTING_STRINGLIST2(setVideoFileType, videoFileType, QStringList({"m4v", "mkv", "avi", "mov", "mxf"}))
 
-	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
-	PH_SETTING_STRING(setLTCInputDevice, ltcInputDevice)
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
 
@@ -111,6 +114,8 @@ public:
 	PH_SETTING_STRING(setLanguage, language)
 
 	PH_SETTING_BOOL(setHideStrip, hideStrip)
+
+	PH_SETTING_INT(setLastPreferencesTab, lastPreferencesTab)
 };
 
 #endif // JOKERSETTINGS_H

@@ -38,7 +38,6 @@ public:
 
 private slots:
 	void updateInputPortEnabledControl();
-	void updatePortComboxContent();
 
 private:
 	void accept();

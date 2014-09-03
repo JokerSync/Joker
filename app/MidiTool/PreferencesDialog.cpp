@@ -21,7 +21,30 @@ PreferencesDialog::PreferencesDialog(MidiToolSettings *settings) :
 {
 	ui->setupUi(this);
 
-	updatePortComboxContent();
+	QStringList outputList = PhMidiOutput::outputList();
+
+	// We add manually the output since it has been closed
+	outputList.append(_settings->midiInputPortName());
+	ui->comboBoxOutput->addItems(outputList);
+
+	if(outputList.contains(_settings->midiOutputPortName()))
+		ui->comboBoxOutput->setCurrentText(_settings->midiOutputPortName());
+
+	ui->lineEditInput->setText(_settings->midiVirtualInputPortName());
+
+	QStringList inputList = PhMidiInput::inputList();
+	ui->comboBoxInput->addItems(inputList);
+
+	bool useExistingPort = inputList.contains(_settings->midiInputPortName());
+	if(useExistingPort) {
+		ui->comboBoxInput->setCurrentText(_settings->midiInputPortName());
+		ui->radioButtonExistingPort->setChecked(true);
+	}
+	else {
+		_settings->setMidiVirtualInputPortName(_settings->midiInputPortName());
+		ui->radioButtonVirtualPort->setChecked(true);
+	}
+
 	updateInputPortEnabledControl();
 
 	connect(ui->radioButtonExistingPort, &QRadioButton::toggled, this, &PreferencesDialog::updateInputPortEnabledControl);
@@ -43,34 +66,6 @@ void PreferencesDialog::updateInputPortEnabledControl()
 
 	ui->comboBoxInput->setEnabled(useExistingPort);
 	ui->lineEditInput->setEnabled(!useExistingPort);
-}
-
-void PreferencesDialog::updatePortComboxContent()
-{
-	PHDEBUG;
-	QStringList outputList = PhMidiOutput::outputList();
-
-	// We add manually the output since it has been closed
-	outputList.append(_settings->midiInputPortName());
-	ui->comboBoxOutput->addItems(outputList);
-
-	if(outputList.contains(_settings->midiOutputPortName()))
-		ui->comboBoxOutput->setCurrentText(_settings->midiOutputPortName());
-
-	ui->lineEditInput->setText(_settings->midiVirtualInputPortName());
-
-	QStringList inputList = PhMidiInput::inputList();
-	ui->comboBoxInput->addItems(inputList);
-
-	bool useExistingPort = inputList.contains(_settings->midiInputPortName());
-	if(useExistingPort) {
-		ui->comboBoxInput->setCurrentText(_settings->midiInputPortName());
-		ui->radioButtonExistingPort->setChecked(true);
-	}
-	else {
-		ui->radioButtonVirtualPort->setChecked(true);
-		_settings->setMidiVirtualInputPortName(_settings->midiInputPortName());
-	}
 }
 
 void PreferencesDialog::accept()

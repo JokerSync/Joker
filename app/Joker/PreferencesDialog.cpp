@@ -10,8 +10,9 @@
 #include <QStandardPaths>
 
 #include "PhTools/PhDebug.h"
-#include "PhLtc/PhLtcReader.h"
 #include "PhSync/PhSynchronizer.h"
+#include "PhLtc/PhLtcReader.h"
+#include "PhMidi/PhMidiInput.h"
 
 #include "ui_PreferencesDialog.h"
 #include "PreferencesDialog.h"
@@ -40,8 +41,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldDisplayNextText = _settings->displayNextText();
 	_oldDisplayTitle = _settings->displayTitle();
 	_oldDisplayLoop = _settings->displayLoop();
-	_oldSyncProtocol = _settings->synchroProtocol();
-	_oldLTCInput = _settings->ltcInputDevice();
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
@@ -111,21 +110,60 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		}
 	}
 
-	ui->listWidgetSync->setCurrentRow(_oldSyncProtocol);
+	// Initializing the synchronisation tab
 
-	if(_oldSyncProtocol == PhSynchronizer::Sony)
-		showParamSony(true);
-	else if(_oldSyncProtocol == PhSynchronizer::LTC)
-		showParamLTC(true);
-	else {
-		showParamLTC(false);
-		showParamSony(false);
+	switch(_settings->synchroProtocol()) {
+	case PhSynchronizer::NoSync:
+		ui->noSyncRadioButton->setChecked(true);
+		break;
+	case PhSynchronizer::Sony:
+		ui->sonyRadioButton->setChecked(true);
+		break;
+	case PhSynchronizer::LTC:
+		ui->ltcRadioButton->setChecked(true);
+		break;
+	case PhSynchronizer::Midi:
+		ui->midiRadioButton->setChecked(true);
+		break;
 	}
+
+	QStringList ltcInputPorts = PhLtcReader::inputList();
+	ui->ltcInputPortComboBox->addItems(ltcInputPorts);
+	if(ltcInputPorts.contains(_settings->ltcInputPort()))
+		ui->ltcInputPortComboBox->setCurrentText(_settings->ltcInputPort());
+
+	ui->virtualMidiInputPortLineEdit->setText(_settings->midiVirtualInputPort());
+
+	QStringList midiInputPorts = PhMidiInput::inputList();
+
+	ui->existingMidiInputPortComboBox->addItems(midiInputPorts);
+
+	bool useExistingPort = midiInputPorts.contains(_settings->midiInputPort());
+	if(useExistingPort) {
+		ui->existingMidiInputPortComboBox->setCurrentText(_settings->midiInputPort());
+		ui->midiExistingInputPortRadioButton->setChecked(true);
+	}
+	else {
+		_settings->setMidiVirtualInputPort(_settings->midiInputPort());
+		ui->midiVirtualInputPortRadioButton->setChecked(true);
+	}
+
+	updateSynchronisationEnabledControl(0, false);
+
+	_protocolButtonGroup.addButton(ui->noSyncRadioButton);
+	_protocolButtonGroup.addButton(ui->sonyRadioButton);
+	_protocolButtonGroup.addButton(ui->ltcRadioButton);
+	_protocolButtonGroup.addButton(ui->midiRadioButton);
+
+	connect(&_protocolButtonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(updateSynchronisationEnabledControl(int,bool)));
+
+	_midiPortTypeButtonGroup.addButton(ui->midiExistingInputPortRadioButton);
+	_midiPortTypeButtonGroup.addButton(ui->midiVirtualInputPortRadioButton);
+
+	connect(&_midiPortTypeButtonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(updateSynchronisationEnabledControl(int,bool)));
 
 	//Set the language
 	QDir appDirectory(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/");
-
-
 
 	QStringList filtersLang;
 	filtersLang.append("*.qm");
@@ -150,6 +188,8 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->cboBoxLang->addItem(_langNameMap["English"], eng);
 
 	ui->cboBoxLang->setCurrentText(_langNameMap[_settings->language()]);
+
+	ui->tabWidget->setCurrentIndex(_settings->lastPreferencesTab());
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -157,7 +197,7 @@ PreferencesDialog::~PreferencesDialog()
 	delete ui;
 }
 
-void PreferencesDialog::on_buttonBox_accepted()
+void PreferencesDialog::accept()
 {
 	if(ui->cboBoxLang->currentData() != _settings->language()) {
 		QMessageBox::warning(this, tr("Information"),
@@ -167,10 +207,31 @@ void PreferencesDialog::on_buttonBox_accepted()
 		                     QMessageBox::Ok);
 		_settings->setLanguage(ui->cboBoxLang->currentData().toString());
 	}
-	close();
+
+	if(ui->noSyncRadioButton->isChecked())
+		_settings->setSynchroProtocol(PhSynchronizer::NoSync);
+	else if(ui->sonyRadioButton->isChecked())
+		_settings->setSynchroProtocol(PhSynchronizer::Sony);
+	else if(ui->ltcRadioButton->isChecked())
+		_settings->setSynchroProtocol(PhSynchronizer::LTC);
+	else if(ui->midiRadioButton->isChecked())
+		_settings->setSynchroProtocol(PhSynchronizer::Midi);
+
+	_settings->setLtcInputPort(ui->ltcInputPortComboBox->currentText());
+
+	if(ui->midiExistingInputPortRadioButton->isChecked())
+		_settings->setMidiInputPort(ui->existingMidiInputPortComboBox->currentText());
+	else
+		_settings->setMidiInputPort(ui->virtualMidiInputPortLineEdit->text());
+
+	_settings->setMidiVirtualInputPort(ui->virtualMidiInputPortLineEdit->text());
+
+	_settings->setLastPreferencesTab(ui->tabWidget->currentIndex());
+
+	QDialog::accept();
 }
 
-void PreferencesDialog::on_buttonBox_rejected()
+void PreferencesDialog::reject()
 {
 	_settings->setUseQuarterFrame(_oldUseQuarterFrame);
 	_settings->setScreenDelay(_oldDelay);
@@ -183,9 +244,25 @@ void PreferencesDialog::on_buttonBox_rejected()
 	_settings->setDisplayNextText(_oldDisplayNextText);
 	_settings->setDisplayTitle(_oldDisplayTitle);
 	_settings->setDisplayLoop(_oldDisplayLoop);
-	_settings->setLTCInputDevice(_oldLTCInput);
 
-	close();
+	QDialog::reject();
+}
+
+void PreferencesDialog::updateSynchronisationEnabledControl(int, bool)
+{
+	PHDEBUG;
+
+	ui->ltcFrame->setEnabled(ui->ltcRadioButton->isChecked());
+	ui->midiFrame->setEnabled(ui->midiRadioButton->isChecked());
+
+	bool useExistingPort = ui->midiExistingInputPortRadioButton->isChecked();
+	if(useExistingPort)
+		_settings->setMidiInputPort(ui->existingMidiInputPortComboBox->currentText());
+	else
+		_settings->setMidiInputPort(ui->virtualMidiInputPortLineEdit->text());
+
+	ui->virtualMidiInputPortLineEdit->setEnabled(!useExistingPort);
+	ui->existingMidiInputPortComboBox->setEnabled(useExistingPort);
 }
 
 void PreferencesDialog::on_spinBoxDelay_valueChanged(int delay)
@@ -261,69 +338,3 @@ void PreferencesDialog::on_cBoxDisplayLoop_clicked()
 {
 	_settings->setDisplayLoop(ui->cBoxDisplayLoop->isChecked());
 }
-
-void PreferencesDialog::on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
-{
-	Q_UNUSED(current);
-	Q_UNUSED(previous);
-	int protocol = ui->listWidgetSync->currentRow();
-	switch(protocol) {
-	case PhSynchronizer::Sony:
-		showParamSony(true);
-		break;
-	case PhSynchronizer::LTC:
-		showParamLTC(true);
-		break;
-	default:
-		showParamLTC(false);
-		showParamSony(false);
-		break;
-	}
-	_settings->setSynchroProtocol(protocol);
-}
-
-void PreferencesDialog::showParamLTC(bool show)
-{
-	if(show) {
-		ui->listWidgetInputs->clear();
-		ui->listWidgetInputs->setVisible(1);
-		ui->lblInputs->setVisible(1);
-		showParamSony(false);
-		ui->listWidgetInputs->addItems(PhLtcReader::inputList());
-		foreach(QString inputName, PhLtcReader::inputList()) {
-			PHDEBUG << inputName;
-		}
-
-		if(ui->listWidgetInputs->findItems(_settings->ltcInputDevice(), Qt::MatchExactly).count() > 0)
-			ui->listWidgetInputs->findItems(_settings->ltcInputDevice(), Qt::MatchExactly).first()->setSelected(1);
-	}
-	else {
-		ui->lblInputs->setVisible(0);
-		ui->listWidgetInputs->setVisible(0);
-	}
-}
-
-void PreferencesDialog::showParamSony(bool show)
-{
-	if(show) {
-		ui->spinBoxSonyHighSpeed->setVisible(1);
-		ui->lineEditSonyID->setVisible(1);
-		ui->lblSonyHighSpeed->setVisible(1);
-		ui->lblSonyID->setVisible(1);
-		showParamLTC(false);
-	}
-	else {
-		ui->spinBoxSonyHighSpeed->setVisible(0);
-		ui->lineEditSonyID->setVisible(0);
-		ui->lblSonyHighSpeed->setVisible(0);
-		ui->lblSonyID->setVisible(0);
-	}
-}
-
-
-void PreferencesDialog::on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
-{
-	Q_UNUSED(previous);
-	_settings->setLTCInputDevice(current->text());
-}
-

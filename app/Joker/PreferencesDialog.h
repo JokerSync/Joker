@@ -9,6 +9,7 @@
 
 #include <QDialog>
 #include <QListWidgetItem>
+#include <QButtonGroup>
 
 #include "JokerSettings.h"
 
@@ -38,17 +39,18 @@ public:
 	explicit PreferencesDialog(JokerSettings *settings, QWidget *parent = 0);
 	~PreferencesDialog();
 
+protected:
+	void accept();
+	void reject();
+
 private slots:
+	void updateSynchronisationEnabledControl(int, bool);
 
 	void on_spinBoxDelay_valueChanged(int delay);
 	void on_radioButtonQF_toggled(bool checked);
 	void on_sliderStripHeight_valueChanged(int position);
 	void on_spinBoxSpeed_valueChanged(int speed);
 	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
-	void on_buttonBox_accepted();
-
-	void on_buttonBox_rejected();
 
 	void on_sliderBoldness_valueChanged(int value);
 
@@ -64,10 +66,6 @@ private slots:
 
 	void on_cBoxDisplayLoop_clicked();
 
-	void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
-	void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
 private:
 	Ui::PreferencesDialog *ui;
 	JokerSettings *_settings;
@@ -82,15 +80,11 @@ private:
 	bool _oldDisplayNextText;
 	bool _oldDisplayTitle;
 	bool _oldDisplayLoop;
-	int _oldSyncProtocol;
-	QString _oldLTCInput;
 
 	QMap<QString, QString> _fontList;
 	QMap<QString, QString> _langNameMap;
 
-
-	void showParamLTC(bool show);
-	void showParamSony(bool show);
+	QButtonGroup _protocolButtonGroup, _midiPortTypeButtonGroup;
 };
 
 #endif // PREFERENCESDIALOG_H
