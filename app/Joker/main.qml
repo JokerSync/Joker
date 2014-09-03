@@ -87,6 +87,23 @@ Item {
                 wrapMode: Text.WordWrap
             }
         }
+
+        ListView {
+            objectName: "infoList"
+            width: parent.width
+            height: childrenRect.height
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+
+            model: infoModel
+            delegate: Text {
+                text: modelData
+                color: "red"
+                font.pointSize: tcLabel.font.pointSize
+                lineHeight: 0.75
+                wrapMode: Text.WordWrap
+            }
+        }
     }
 
     Image {

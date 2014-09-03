@@ -59,6 +59,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("doc", _doc);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
+	ui->videoStripView->engine()->rootContext()->setContextProperty("infoModel", QVariant::fromValue(_infoList));
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -952,37 +953,27 @@ void JokerWindow::onPaint(int width, int height)
 	titleRect->setVisible(_settings->displayNextText() && (_strip.doc()->fullTitle().length() > 0));
 	y += (titleRect->height() - titleRect->y())*titleRect->isVisible();
 
-	QStringList infos;
-	infos.append(QString("refresh: %1x%2, %3 / %4")
+	// prepare the string list that is used to display the infos
+	_infoList.clear();
+	_infoList.append(QString("refresh: %1x%2, %3 / %4")
 			.arg(ui->videoStripView->width())
 			.arg(ui->videoStripView->height())
 			.arg(ui->videoStripView->maxRefreshRate())
 			.arg(ui->videoStripView->refreshRate()));
-	infos.append(QString("Update : %1 %2").arg(ui->videoStripView->maxUpdateDuration()).arg(ui->videoStripView->lastUpdateDuration()));
-	infos.append(QString("drop: %1 %2").arg(ui->videoStripView->dropDetected()).arg(ui->videoStripView->secondsSinceLastDrop()));
-
+	_infoList.append(QString("Update : %1 %2").arg(ui->videoStripView->maxUpdateDuration()).arg(ui->videoStripView->lastUpdateDuration()));
+	_infoList.append(QString("drop: %1 %2").arg(ui->videoStripView->dropDetected()).arg(ui->videoStripView->secondsSinceLastDrop()));
 	#warning /// @todo measure fps with a custom QML element
 	// The actual painting duration should be measured using a custom QML element.
 	// See: http://developer.nokia.com/community/wiki/QML_Performance_Meter
 	// (anyway, the QML profiler will provide much more details to the developer.)
-	infos.append(QString("draw: N/A"));
-
+	_infoList.append(QString("draw: N/A"));
 	foreach(QString info, _strip.infos()) {
-		infos.append(info);
+		_infoList.append(info);
 	}
 
-	if(_settings->displayInfo()) {
-		_infoFont.setFontFile(_settings->infoFontFile());
-		int y2 = 0;
-		foreach(QString info, infos) {
-			PhGraphicText gInfo(&_infoFont, info, 0, y2);
-			gInfo.setSize(_infoFont.getNominalWidth(info) / 2, 50);
-			gInfo.setZ(10);
-			gInfo.setColor(Qt::red);
-			gInfo.draw();
-			y2 += gInfo.height();
-		}
-	}
+	ui->videoStripView->engine()->rootContext()->setContextProperty("infoModel", QVariant::fromValue(_infoList));
+	QQuickItem *infoList = ui->videoStripView->rootObject()->findChild<QQuickItem*>("infoList");
+	infoList->setVisible(_settings->displayInfo());
 
 	PhStripText *nextText = NULL;
 	if(_settings->displayNextText()) {
