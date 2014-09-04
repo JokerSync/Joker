@@ -7,6 +7,7 @@
 #define PHMIDITIMECODEREADER_H
 
 #include <QObject>
+#include <QDateTime>
 #include <QTimer>
 
 #include "PhSync/PhClock.h"
@@ -89,6 +90,7 @@ private:
 	PhTimeCodeType _tcType;
 	PhClock _clock;
 	QTimer _pauseDetectionTimer;
+	QDateTime _lastStopDateTime;
 	int _pauseDetectionCounter;
 };
 

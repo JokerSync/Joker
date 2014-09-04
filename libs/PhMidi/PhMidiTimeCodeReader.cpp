@@ -11,6 +11,7 @@
 
 PhMidiTimeCodeReader::PhMidiTimeCodeReader(PhTimeCodeType tcType) :
 	_tcType(tcType),
+	_lastStopDateTime(QDateTime::fromMSecsSinceEpoch(0)),
 	_pauseDetectionCounter(0)
 {
 	connect(&_pauseDetectionTimer, &QTimer::timeout, this, &PhMidiTimeCodeReader::checkPause);
@@ -20,6 +21,7 @@ bool PhMidiTimeCodeReader::open(QString portName)
 {
 	if(PhMidiInput::open(portName)) {
 		_pauseDetectionTimer.start(10);
+		_lastStopDateTime = QDateTime::fromMSecsSinceEpoch(0);
 		return true;
 	}
 	return false;
@@ -33,7 +35,11 @@ void PhMidiTimeCodeReader::close()
 
 void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 {
-	_clock.setRate(1);
+	// Make sure that the last stop occured more than 80ms ago
+	if((_lastStopDateTime.addMSecs(80) < QDateTime::currentDateTime()) && (_clock.rate() != 1)) {
+		PHDEBUG << "Play detected";
+		_clock.setRate(1);
+	}
 	_clock.tick(4 * PhTimeCode::getFps(_tcType));
 
 	unsigned int hhmmssff[4];
@@ -70,14 +76,17 @@ void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCode
 
 void PhMidiTimeCodeReader::onPlay()
 {
+	PHDEBUG;
 	PhMidiInput::onPlay();
 	_clock.setRate(1);
 }
 
 void PhMidiTimeCodeReader::onStop()
 {
+	PHDEBUG;
 	PhMidiInput::onStop();
 	_clock.setRate(0);
+	_lastStopDateTime = QDateTime::currentDateTime();
 }
 
 void PhMidiTimeCodeReader::checkPause()
