@@ -33,7 +33,6 @@ void PhMidiTimeCodeReader::close()
 
 void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 {
-	this->moveToThread(QThread::currentThread());
 	_clock.setRate(1);
 	_clock.tick(4 * PhTimeCode::getFps(_tcType));
 
