@@ -41,7 +41,7 @@ public:
 
 	/**
 	 * @brief Create a virtual midi port and open it.
-	 * @param portName The midi port name
+	 * @param inputPortName The midi port name
 	 * @return True if success, false otherwise.
 	 */
 	bool open(QString inputPortName);

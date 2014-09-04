@@ -155,12 +155,12 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_protocolButtonGroup.addButton(ui->ltcRadioButton);
 	_protocolButtonGroup.addButton(ui->midiRadioButton);
 
-	connect(&_protocolButtonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(updateSynchronisationEnabledControl(int,bool)));
+	connect(&_protocolButtonGroup, SIGNAL(buttonToggled(int, bool)), this, SLOT(updateSynchronisationEnabledControl(int, bool)));
 
 	_midiPortTypeButtonGroup.addButton(ui->midiExistingInputPortRadioButton);
 	_midiPortTypeButtonGroup.addButton(ui->midiVirtualInputPortRadioButton);
 
-	connect(&_midiPortTypeButtonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(updateSynchronisationEnabledControl(int,bool)));
+	connect(&_midiPortTypeButtonGroup, SIGNAL(buttonToggled(int, bool)), this, SLOT(updateSynchronisationEnabledControl(int, bool)));
 
 	//Set the language
 	QDir appDirectory(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/");

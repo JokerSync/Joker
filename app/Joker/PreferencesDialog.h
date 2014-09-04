@@ -40,7 +40,14 @@ public:
 	~PreferencesDialog();
 
 protected:
+	/**
+	 * @brief Update the settings according to the UI
+	 */
 	void accept();
+
+	/**
+	 * @brief Revert the settings to the old values
+	 */
 	void reject();
 
 private slots:
