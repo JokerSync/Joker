@@ -49,8 +49,8 @@ private slots:
 	void on_actionSet_TC_In_triggered();
 	void on_actionSet_TC_Out_triggered();
 	void on_actionPreferences_triggered();
-	void on_checkBoxWriteMTC_clicked(bool checked);
-	void on_checkBoxReadMTC_clicked(bool checked);
+	void on_writeMtcCheckBox_clicked(bool checked);
+	void on_readMtcCheckBox_clicked(bool checked);
 
 	/* custom slots */
 	void onWriterTimeChanged(PhTime time);
@@ -60,7 +60,6 @@ private slots:
 	void onReaderRateChanged(PhRate rate);
 	void updateFpsLabel(PhTimeCodeType tcType);
 	void onTick();
-
 
 private:
 	void updateWriterInfoLabel();
