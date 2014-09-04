@@ -9,13 +9,28 @@
 #include "PhTools/PhGenericSettings.h"
 #include "PhSync/PhTimeCode.h"
 
+/**
+ * @brief The PhLtcReaderSettings class
+ */
 class PhLtcReaderSettings
 {
 public:
 
+	/**
+	 * @brief ltc AutoDetect TimeCodeType
+	 * @return true if the auto detect mode is enabled, false otherwise
+	 */
 	virtual bool ltcAutoDetectTimeCodeType() = 0;
 
+	/**
+	 * @brief Hold the timecode type of the LTC reader
+	 * @return the TimeCode Type
+	 */
 	virtual PhTimeCodeType ltcReaderTimeCodeType() = 0;
+	/**
+	 * @brief ltcInputDevice
+	 * @return The name of the input device
+	 */
 	virtual QString ltcInputDevice() = 0;
 
 };

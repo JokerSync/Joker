@@ -32,7 +32,7 @@ public:
 	/**
 	 * @brief PhLtcReader constructor
 	 * @param tcType the timecode type
-	 * @param parent the reader's parent
+	 * @param settings The parent's settings
 	 */
 	explicit PhLtcReader(PhLtcReaderSettings * settings, PhTimeCodeType tcType = PhTimeCodeType25);
 
@@ -51,14 +51,14 @@ public:
 signals:
 	/**
 	 * @brief Emit a signal when the timecodeType change
-	 * @param the new timecode type
+	 * @param tcType the new timecode type
 	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 
 protected:
 	int processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer);
 
-private:	
+private:
 	PhLtcReaderSettings * _settings;
 
 	PhTimeCodeType _tcType;
