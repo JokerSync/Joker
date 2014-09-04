@@ -190,5 +190,18 @@ void LTCToolWindow::onAudioProcessed(int minLevel, int maxLevel)
 }
 
 void LTCToolWindow::onTCTypeChanged(PhTimeCodeType tcType) {
-	PHDEBUG << "New TC Type : " << tcType;
+	switch (tcType) {
+	case PhTimeCodeType24:
+		ui->tcTypelabel->setText("24fps");
+		break;
+	case PhTimeCodeType25:
+		ui->tcTypelabel->setText("25fps");
+		break;
+	case PhTimeCodeType30:
+		ui->tcTypelabel->setText("30fps");
+		break;
+	default:
+		ui->tcTypelabel->setText("??fps");
+		break;
+	}
 }

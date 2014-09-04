@@ -7,12 +7,16 @@
 #define PHLTCREADERSETTINGS_H
 
 #include "PhTools/PhGenericSettings.h"
+#include "PhSync/PhTimeCode.h"
 
 class PhLtcReaderSettings
 {
 public:
 
 	virtual bool ltcAutoDetectTimeCodeType() = 0;
+
+	virtual PhTimeCodeType ltcReaderTimeCodeType() = 0;
+	virtual QString ltcInputDevice() = 0;
 
 };
 

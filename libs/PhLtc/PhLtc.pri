@@ -9,7 +9,7 @@ HEADERS += \
 	$$TOP_ROOT/libs/PhLtc/PhLtcSettings.h \
 	$$TOP_ROOT/libs/PhLtc/PhLtcReader.h \
 	$$TOP_ROOT/libs/PhLtc/PhLtcWriter.h \
-    $$PWD/PhLtcReaderSettings.h
+	$$TOP_ROOT/libs/PhLtc/PhLtcReaderSettings.h
 
 SOURCES += \
 	$$TOP_ROOT/libs/PhLtc/PhLtcReader.cpp \

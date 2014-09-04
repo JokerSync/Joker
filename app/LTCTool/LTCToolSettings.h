@@ -24,7 +24,9 @@ public:
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
 
-	PH_SETTING_BOOL(setAutoFPSDetection, autoFPSDetection)
+	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
+	PH_SETTING_STRING(setLtcInputDevice, ltcInputDevice)
+	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
 };
 
 #endif // LTCTOOLSETTINGS_H
