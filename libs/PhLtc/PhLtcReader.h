@@ -53,7 +53,7 @@ signals:
 	 * @brief Emit a signal when the timecodeType change
 	 * @param the new timecode type
 	 */
-	void tcTypeChanged(PhTimeCodeType tcType);
+	void timeCodeTypeChanged(PhTimeCodeType tcType);
 
 protected:
 	int processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer);
