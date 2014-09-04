@@ -18,6 +18,8 @@
 
 #include "PhAudio/PhAudioInput.h"
 
+#include "PhLtcReaderSettings.h"
+
 /**
  * @brief A synchronisation module via the LTC protocol
  */
@@ -32,7 +34,7 @@ public:
 	 * @param tcType the timecode type
 	 * @param parent the reader's parent
 	 */
-	explicit PhLtcReader(PhTimeCodeType tcType = PhTimeCodeType25, QObject *parent = 0);
+	explicit PhLtcReader(PhLtcReaderSettings * settings, PhTimeCodeType tcType = PhTimeCodeType25, QObject *parent = 0);
 
 	/**
 	 * @brief Get the reader clock
@@ -56,7 +58,9 @@ signals:
 protected:
 	int processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer);
 
-private:
+private:	
+	PhLtcReaderSettings * _settings;
+
 	PhTimeCodeType _tcType;
 	PhClock _clock;
 	ltc_off_t _position;

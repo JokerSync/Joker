@@ -8,11 +8,13 @@
 
 #include "PhLtcReader.h"
 
-PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
+PhLtcReader::PhLtcReader(PhLtcReaderSettings *settings, PhTimeCodeType tcType, QObject *parent) :
 	PhAudioInput(parent),
 	_tcType(tcType),
 	_position(0),
-	_noFrameCounter(0)
+	_noFrameCounter(0),
+	_lastFrame(0),
+	_settings(settings)
 {
 #warning /// @todo autodetect tc type
 	_decoder = ltc_decoder_create(1920, 1920 * 2);
@@ -43,6 +45,31 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 		hhmmssff[2] = stime.secs;
 		hhmmssff[3] = stime.frame;
 
+		if(_settings->autoFPSDetection()) {
+			PHDEBUG << "auto detect is on";
+			if(stime.frame == 0) {
+				if(_oldLastFrame == _lastFrame)
+					_counter++;
+				else
+					_counter = 0;
+
+				if(_counter >= 5) {
+					if(_lastFrame == 23) {
+						updateTCType(PhTimeCodeType24);
+					}
+					else if(_lastFrame == 24) {
+						updateTCType(PhTimeCodeType25);
+					}
+					else {
+						updateTCType(PhTimeCodeType30);
+					}
+				}
+				_oldLastFrame = _lastFrame;
+			}
+
+			_lastFrame = stime.frame;
+		}
+
 		PhTime newTime = PhTimeCode::timeFromHhMmSsFf(hhmmssff, _tcType);
 		PHDBG(20) << hhmmssff[0] << hhmmssff[1] << hhmmssff[2] << hhmmssff[3];
 
@@ -63,4 +90,13 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 		_clock.setRate(0);
 
 	return PhAudioInput::processAudio(inputBuffer, NULL, framesPerBuffer);
+}
+
+void PhLtcReader::updateTCType(PhTimeCodeType tcType)
+{
+	if(_tcType != tcType) {
+		_tcType = tcType;
+		_counter = 0;
+		emit tcTypeChanged(tcType);
+	}
 }
