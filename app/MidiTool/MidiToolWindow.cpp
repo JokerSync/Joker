@@ -36,6 +36,8 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 
 	_clockTimer.start(10);
 
+	connect(ui->writerMediaPanel, &PhMediaPanel::playPause, this, &MidiToolWindow::onPlayPause);
+	connect(ui->writerMediaPanel, &PhMediaPanel::goToTime, this, &MidiToolWindow::onGoToTime);
 	connect(ui->writerMediaPanel, &PhMediaPanel::timeCodeTypeChanged, this, &MidiToolWindow::updateTCTypeSetting);
 
 	connect(_mtcWriter.clock(), &PhClock::timeChanged, this, &MidiToolWindow::onWriterTimeChanged);
@@ -121,6 +123,23 @@ void MidiToolWindow::on_readMtcCheckBox_clicked(bool checked)
 	}
 	else
 		_mtcReader.close();
+}
+
+void MidiToolWindow::onPlayPause()
+{
+	if(_mtcWriter.clock()->rate() != 0)
+		_mtcWriter.sendMMCStop();
+	else
+		_mtcWriter.sendMMCPlay();
+}
+
+void MidiToolWindow::onGoToTime(PhTime time)
+{
+	unsigned int hhmmssff[4];
+	PhTimeCodeType tcType = _mtcWriter.timeCodeType();
+	PHDEBUG << PhTimeCode::stringFromTime(time, tcType);
+	PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, time, tcType);
+	_mtcWriter.sendMMCGoto(hhmmssff[0], hhmmssff[1], hhmmssff[2], hhmmssff[3], tcType);
 }
 
 void MidiToolWindow::onWriterTimeChanged(PhTime time)
