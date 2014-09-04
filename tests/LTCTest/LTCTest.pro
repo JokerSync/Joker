@@ -14,6 +14,10 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
+
+include($$TOP_ROOT/common/common.pri)
+
 
 SOURCES += main.cpp
 
@@ -42,10 +46,5 @@ win32 {
 }
 
 
-}
-
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
-
-JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
-INCLUDEPATH += $${JOKER_ROOT}/libs
-include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
+INCLUDEPATH += $${TOP_ROOT}/libs
+include($${TOP_ROOT}/libs/PhTools/PhTools.pri)
