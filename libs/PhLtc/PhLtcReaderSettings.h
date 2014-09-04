@@ -26,7 +26,7 @@ public:
 	 * @brief Hold the timecode type of the LTC reader
 	 * @return the TimeCode Type
 	 */
-	virtual PhTimeCodeType ltcReaderTimeCodeType() = 0;
+	virtual int ltcReaderTimeCodeType() = 0;
 	/**
 	 * @brief ltcInputDevice
 	 * @return The name of the input device

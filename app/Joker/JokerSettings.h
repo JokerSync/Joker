@@ -10,6 +10,7 @@
 #include "PhSony/PhSonySettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 #include "PhCommonUI/PhFeedbackSettings.h"
+#include "PhLtc/PhLtcReaderSettings.h"
 
 
 /**
@@ -20,7 +21,8 @@ class JokerSettings : PhGenericSettings,
 	public PhVideoSettings,
 	public PhSonySettings,
 	public PhDocumentWindowSettings,
-	public PhFeedbackSettings
+	public PhFeedbackSettings,
+	public PhLtcReaderSettings
 {
 public:
 	// PhWindowSettings
@@ -84,6 +86,12 @@ public:
 
 	// Midi settings:
 	PH_SETTING_STRING2(setMidiTimeCodePortName, midiTimeCodePortName, "Joker")
+
+	// LTC settings :
+	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
+//	PH_SETTING_STRING(setLtcInputDevice, ltcInputDevice)
+	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
+
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
