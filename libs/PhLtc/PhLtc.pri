@@ -8,7 +8,8 @@ QT += serialport
 HEADERS += \
 	$$TOP_ROOT/libs/PhLtc/PhLtcSettings.h \
 	$$TOP_ROOT/libs/PhLtc/PhLtcReader.h \
-	$$TOP_ROOT/libs/PhLtc/PhLtcWriter.h
+	$$TOP_ROOT/libs/PhLtc/PhLtcWriter.h \
+    $$PWD/PhLtcReaderSettings.h
 
 SOURCES += \
 	$$TOP_ROOT/libs/PhLtc/PhLtcReader.cpp \

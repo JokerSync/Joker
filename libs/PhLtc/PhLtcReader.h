@@ -46,6 +46,13 @@ public:
 	 */
 	PhTimeCodeType timeCodeType();
 
+signals:
+	/**
+	 * @brief Emit a signal when the timecodeType change
+	 * @param the new timecode type
+	 */
+	void tcTypeChanged(PhTimeCodeType tcType);
+
 protected:
 	int processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer);
 
@@ -57,6 +64,11 @@ private:
 	/** @brief Used to detect pause in LTC signal */
 	int _noFrameCounter;
 
+	int _lastFrame;
+	int _counter;
+	int _oldLastFrame;
+
+	void updateTCType(PhTimeCodeType tcType);
 };
 
 #endif // PHLTCREADER_H
