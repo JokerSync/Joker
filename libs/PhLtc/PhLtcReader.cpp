@@ -8,8 +8,8 @@
 
 #include "PhLtcReader.h"
 
-PhLtcReader::PhLtcReader(PhLtcReaderSettings *settings, PhTimeCodeType tcType, QObject *parent) :
-	PhAudioInput(parent),
+PhLtcReader::PhLtcReader(PhLtcReaderSettings *settings, PhTimeCodeType tcType) :
+	PhAudioInput(NULL),
 	_tcType(tcType),
 	_position(0),
 	_noFrameCounter(0),
@@ -45,8 +45,7 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 		hhmmssff[2] = stime.secs;
 		hhmmssff[3] = stime.frame;
 
-		if(_settings->autoFPSDetection()) {
-			PHDEBUG << "auto detect is on";
+		if(_settings->ltcAutoDetectTimeCodeType()) {
 			if(stime.frame == 0) {
 				if(_oldLastFrame == _lastFrame)
 					_counter++;
@@ -97,6 +96,6 @@ void PhLtcReader::updateTCType(PhTimeCodeType tcType)
 	if(_tcType != tcType) {
 		_tcType = tcType;
 		_counter = 0;
-		emit tcTypeChanged(tcType);
+		emit timeCodeTypeChanged(tcType);
 	}
 }

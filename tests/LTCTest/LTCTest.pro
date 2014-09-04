@@ -18,6 +18,8 @@ TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
 
+INCLUDEPATH += $${TOP_ROOT}/libs
+include($${TOP_ROOT}/libs/PhTools/PhTools.pri)
 
 SOURCES += main.cpp
 
@@ -44,7 +46,3 @@ win32 {
 		$$(LTC_PATH)\timecode.c
 
 }
-
-
-INCLUDEPATH += $${TOP_ROOT}/libs
-include($${TOP_ROOT}/libs/PhTools/PhTools.pri)

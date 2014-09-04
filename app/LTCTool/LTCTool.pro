@@ -18,6 +18,9 @@ include($$TOP_ROOT/libs/PhSync/PhSync.pri);
 include($$TOP_ROOT/libs/PhLtc/PhLtc.pri);
 include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri);
 
+PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
+include($$TOP_ROOT/common/deploy.pri)
+
 SOURCES += main.cpp\
 	LTCToolWindow.cpp \
 	PreferencesDialog.cpp
@@ -33,6 +36,3 @@ mac {
 	# For the plist version
 	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
 }
-
-PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
-include($$TOP_ROOT/common/deploy.pri)

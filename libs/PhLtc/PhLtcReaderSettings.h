@@ -12,8 +12,7 @@ class PhLtcReaderSettings
 {
 public:
 
-	virtual bool autoFPSDetection() = 0;
-	virtual void setAutoFPSDetection(bool enabled) = 0;
+	virtual bool ltcAutoDetectTimeCodeType() = 0;
 
 };
 

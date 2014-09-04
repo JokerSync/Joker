@@ -37,7 +37,7 @@ LTCToolWindow::LTCToolWindow(LTCToolSettings *settings, QWidget *parent) :
 
 	connect(_ltcReader.clock(), &PhClock::timeChanged, this, &LTCToolWindow::onReaderTimeChanged);
 	connect(_ltcReader.clock(), &PhClock::rateChanged, this, &LTCToolWindow::onReaderRateChanged);
-	connect(&_ltcReader, &PhLtcReader::tcTypeChanged, this, &LTCToolWindow::onTCTypeChanged);
+	connect(&_ltcReader, &PhLtcReader::timeCodeTypeChanged, this, &LTCToolWindow::onTCTypeChanged);
 
 	connect(&_ltcReader, &PhLtcReader::audioProcessed, this, &LTCToolWindow::onAudioProcessed);
 

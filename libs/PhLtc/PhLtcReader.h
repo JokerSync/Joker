@@ -34,7 +34,7 @@ public:
 	 * @param tcType the timecode type
 	 * @param parent the reader's parent
 	 */
-	explicit PhLtcReader(PhLtcReaderSettings * settings, PhTimeCodeType tcType = PhTimeCodeType25, QObject *parent = 0);
+	explicit PhLtcReader(PhLtcReaderSettings * settings, PhTimeCodeType tcType = PhTimeCodeType25);
 
 	/**
 	 * @brief Get the reader clock
