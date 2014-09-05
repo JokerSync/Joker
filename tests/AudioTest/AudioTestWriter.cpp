@@ -1,8 +1,7 @@
 #include "PhTools/PhDebug.h"
 #include "AudioTestWriter.h"
 
-AudioTestWriter::AudioTestWriter(QObject *parent) :
-	PhAudioOutput(parent)
+AudioTestWriter::AudioTestWriter(QObject *parent)
 {
 }
 

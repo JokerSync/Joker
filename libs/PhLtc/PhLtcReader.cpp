@@ -8,11 +8,14 @@
 
 #include "PhLtcReader.h"
 
-PhLtcReader::PhLtcReader(PhTimeCodeType tcType, QObject *parent) :
-	PhAudioInput(parent),
-	_tcType(tcType),
+PhLtcReader::PhLtcReader(PhLtcReaderSettings *settings) :
+	_tcType((PhTimeCodeType) settings->ltcReaderTimeCodeType()),
 	_position(0),
-	_noFrameCounter(0)
+	_noFrameCounter(0),
+	_lastFrameDigit(0),
+	_oldLastFrameDigit(0),
+	_badTimeCodeGapCounter(0),
+	_settings(settings)
 {
 #warning /// @todo autodetect tc type
 	_decoder = ltc_decoder_create(1920, 1920 * 2);
@@ -43,6 +46,40 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 		hhmmssff[2] = stime.secs;
 		hhmmssff[3] = stime.frame;
 
+		if(_settings->ltcAutoDetectTimeCodeType()) {
+			// If the frame is xx:xx:xx:00 ie, the previous frame was
+			// the biggest one (23 for 24fps...)
+			if(stime.frame == 0) {
+				// If the old last digit is the same than the last frame digit
+				// the counter goes up (it's a confirmation of the change
+				if(_oldLastFrameDigit == _lastFrameDigit)
+					_badTimeCodeGapCounter++;
+				// If the old last frame digit is different than the last
+				// frame digit, the tcType might have changed so the
+				// counter is reset
+				else
+					_badTimeCodeGapCounter = 0;
+
+				// If the old last digit is the same than the last digit
+				// for 5 consecutive time, we update the tcType
+				if(_badTimeCodeGapCounter >= 5) {
+					if(_lastFrameDigit == 23) {
+						updateTCType(PhTimeCodeType24);
+					}
+					else if(_lastFrameDigit == 24) {
+						updateTCType(PhTimeCodeType25);
+					}
+					else {
+						updateTCType(PhTimeCodeType30);
+					}
+				}
+
+				_oldLastFrameDigit = _lastFrameDigit;
+			}
+
+			_lastFrameDigit = stime.frame;
+		}
+
 		PhTime newTime = PhTimeCode::timeFromHhMmSsFf(hhmmssff, _tcType);
 		PHDBG(20) << hhmmssff[0] << hhmmssff[1] << hhmmssff[2] << hhmmssff[3];
 
@@ -63,4 +100,13 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 		_clock.setRate(0);
 
 	return PhAudioInput::processAudio(inputBuffer, NULL, framesPerBuffer);
+}
+
+void PhLtcReader::updateTCType(PhTimeCodeType tcType)
+{
+	if(_tcType != tcType) {
+		_tcType = tcType;
+		_badTimeCodeGapCounter = 0;
+		emit timeCodeTypeChanged(tcType);
+	}
 }
