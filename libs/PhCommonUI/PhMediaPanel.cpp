@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include "PhTools/PhDebug.h"
+
 #include "PhMediaPanel.h"
 #include "ui_PhMediaPanel.h"
 
@@ -92,6 +94,14 @@ void PhMediaPanel::setLength(PhTime length)
 	updateSlider();
 }
 
+bool PhMediaPanel::isPlaying()
+{
+	if(_clock)
+		return (_clock->rate() != 0);
+	else
+		return _playing;
+}
+
 void PhMediaPanel::setClock(PhTimeCodeType tcType, PhClock *clock)
 {
 	onTimeCodeTypeChanged(tcType);
@@ -106,10 +116,7 @@ void PhMediaPanel::setClock(PhTimeCodeType tcType, PhClock *clock)
 void PhMediaPanel::onRateChanged(PhRate rate)
 {
 	ui->_rateLabel->setText("x"+QString::number(rate));
-	if(rate != 0)
-		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-	else
-		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+	updatePlayingState();
 }
 
 void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
@@ -141,28 +148,35 @@ void PhMediaPanel::onPlayPause()
 		else
 			_clock->setRate(1);
 	}
-	emit playPause();
+	else
+		_playing = !_playing;
+	updatePlayingState();
+
+	if(_playing)
+		emit playClicked();
+	else
+		emit pauseClicked();
 }
 
 void PhMediaPanel::onFastForward()
 {
 	if(_clock)
 		_clock->setRate(3);
-	emit fastForward();
+	emit fastForwardClicked();
 }
 
 void PhMediaPanel::onRewind()
 {
 	if(_clock)
 		_clock->setRate(-3);
-	emit rewind();
+	emit rewindClicked();
 }
 
 void PhMediaPanel::onBack()
 {
 	if(_clock)
 		_clock->setTime(_timeIn);
-	emit back();
+	emit backClicked();
 }
 
 void PhMediaPanel::onNextFrame()
@@ -171,7 +185,7 @@ void PhMediaPanel::onNextFrame()
 		_clock->setRate(0);
 		_clock->setTime(_clock->time() + PhTimeCode::timePerFrame(this->timeCodeType()));
 	}
-	emit nextFrame();
+	emit nextFrameClicked();
 }
 
 void PhMediaPanel::onPreviousFrame()
@@ -180,7 +194,7 @@ void PhMediaPanel::onPreviousFrame()
 		_clock->setRate(0);
 		_clock->setTime(_clock->time() - PhTimeCode::timePerFrame(this->timeCodeType()));
 	}
-	emit previousFrame();
+	emit previousFrameClicked();
 }
 
 void PhMediaPanel::onSliderChanged(int position)
@@ -188,7 +202,7 @@ void PhMediaPanel::onSliderChanged(int position)
 	PhTime time = position * PhTimeCode::timePerFrame(this->timeCodeType());
 	if(_clock)
 		_clock->setTime(time);
-	emit goToTime(time);
+	emit sliderMoved(time);
 }
 
 void PhMediaPanel::updateSlider()
@@ -203,6 +217,17 @@ void PhMediaPanel::updateSlider()
 void PhMediaPanel::onTCTypeComboChanged()
 {
 	emit timeCodeTypeChanged(timeCodeType());
+}
+
+void PhMediaPanel::updatePlayingState()
+{
+	if(_clock)
+		_playing = (_clock->rate() != 0);
+	PHDEBUG << _playing;
+	if(_playing)
+		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+	else
+		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
 }
 
 void PhMediaPanel::onTimeChanged(PhTime time)

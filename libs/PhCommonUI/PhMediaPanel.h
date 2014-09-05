@@ -80,37 +80,47 @@ public:
 	 */
 	void setLength(PhTime length);
 
+	/**
+	 * @brief Return the playback status of the panel
+	 * @return A bool value.
+	 */
+	bool isPlaying();
+
 signals:
 
 	/**
-	 * @brief Send signal when the play/pause button is pressed.
+	 * @brief Send signal when the play button is clicked.
 	 */
-	void playPause();
+	void playClicked();
+	/**
+	 * @brief Send signal when the pause button is clicked.
+	 */
+	void pauseClicked();
 	/**
 	 * @brief Send signal when the fastForward button is pressed.
 	 */
-	void fastForward();
+	void fastForwardClicked();
 	/**
 	 * @brief Send signal when the rewind button is pressed.
 	 */
-	void rewind();
+	void rewindClicked();
 	/**
 	 * @brief Send signal when the back button is pressed.
 	 */
-	void back();
+	void backClicked();
 	/**
 	 * @brief Send signal when the nextFrame button is pressed.
 	 */
-	void nextFrame();
+	void nextFrameClicked();
 	/**
 	 * @brief Send signal when the previousFrame button is pressed.
 	 */
-	void previousFrame();
+	void previousFrameClicked();
 	/**
-	 * @brief Go to the desired time
+	 * @brief The slider has moved to a specific time
 	 * @param time A time value.
 	 */
-	void goToTime(PhTime time);
+	void sliderMoved(PhTime time);
 	/**
 	 * @brief Send a signal when the timecode type change
 	 * @param tcType The new PhTimeCodeType
@@ -144,11 +154,14 @@ private slots:
 	void updateSlider();
 	void onTCTypeComboChanged();
 
+	void updatePlayingState();
+
 private:
 	Ui::PhMediaPanel *ui;
 	PhClock *_clock;
 	PhTime _timeIn;
 	PhTime _length;
+	bool _playing;
 };
 
 #endif // PHMEDIAPANEL_H

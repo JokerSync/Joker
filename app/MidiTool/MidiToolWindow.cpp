@@ -36,8 +36,9 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 
 	_clockTimer.start(10);
 
-	connect(ui->writerMediaPanel, &PhMediaPanel::playPause, this, &MidiToolWindow::onPlayPause);
-	connect(ui->writerMediaPanel, &PhMediaPanel::goToTime, this, &MidiToolWindow::onGoToTime);
+	connect(ui->writerMediaPanel, &PhMediaPanel::playClicked, &_mtcWriter, &PhMidiTimeCodeWriter::sendMMCPlay);
+	connect(ui->writerMediaPanel, &PhMediaPanel::pauseClicked, &_mtcWriter, &PhMidiTimeCodeWriter::sendMMCStop);
+	connect(ui->writerMediaPanel, &PhMediaPanel::sliderMoved, this, &MidiToolWindow::onGoToTime);
 	connect(ui->writerMediaPanel, &PhMediaPanel::timeCodeTypeChanged, this, &MidiToolWindow::updateTCTypeSetting);
 
 	connect(_mtcWriter.clock(), &PhClock::timeChanged, this, &MidiToolWindow::onWriterTimeChanged);
@@ -123,14 +124,6 @@ void MidiToolWindow::on_readMtcCheckBox_clicked(bool checked)
 	}
 	else
 		_mtcReader.close();
-}
-
-void MidiToolWindow::onPlayPause()
-{
-	if(_mtcWriter.clock()->rate() != 0)
-		_mtcWriter.sendMMCStop();
-	else
-		_mtcWriter.sendMMCPlay();
 }
 
 void MidiToolWindow::onGoToTime(PhTime time)

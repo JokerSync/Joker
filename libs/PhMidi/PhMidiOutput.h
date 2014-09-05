@@ -58,16 +58,6 @@ public:
 	void sendFullTC(unsigned char hh, unsigned char mm, unsigned char ss, unsigned char ff, PhTimeCodeType tcType);
 
 	/**
-	 * @brief Send a MMC play message
-	 */
-	void sendMMCPlay();
-
-	/**
-	 * @brief Send a MMC stop message
-	 */
-	void sendMMCStop();
-
-	/**
 	 * @brief Send a MMC goto message
 	 * @param hh The hour digit
 	 * @param mm The minute digit
@@ -76,6 +66,17 @@ public:
 	 * @param tcType The timecode type
 	 */
 	void sendMMCGoto(unsigned char hh, unsigned char mm, unsigned char ss, unsigned char ff, PhTimeCodeType tcType);
+
+public slots:
+	/**
+	 * @brief Send a MMC play message
+	 */
+	void sendMMCPlay();
+
+	/**
+	 * @brief Send a MMC stop message
+	 */
+	void sendMMCStop();
 
 private:
 	RtMidiOut *_midiOut;
