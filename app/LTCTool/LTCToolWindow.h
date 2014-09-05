@@ -65,6 +65,8 @@ private slots:
 
 	void onAudioProcessed(int minLevel, int maxLevel);
 
+	void onTCTypeChanged(PhTimeCodeType tcType);
+
 private:
 	void setupOutput();
 	void updateInOutInfoLabel();

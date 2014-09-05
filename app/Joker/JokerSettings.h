@@ -10,6 +10,7 @@
 #include "PhSony/PhSonySettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 #include "PhCommonUI/PhFeedbackSettings.h"
+#include "PhLtc/PhLtcReaderSettings.h"
 
 
 /**
@@ -20,7 +21,8 @@ class JokerSettings : PhGenericSettings,
 	public PhVideoSettings,
 	public PhSonySettings,
 	public PhDocumentWindowSettings,
-	public PhFeedbackSettings
+	public PhFeedbackSettings,
+	public PhLtcReaderSettings
 {
 public:
 	// PhWindowSettings
@@ -74,6 +76,9 @@ public:
 
 	// PhVideoSettings :
 
+	// Synchro Settings
+	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
+
 	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
 	PH_SETTING_UCHAR2(setSonyDevice1, sonyDevice1, 0xF0)
@@ -85,6 +90,11 @@ public:
 	// Midi settings:
 	PH_SETTING_STRING2(setMidiTimeCodePortName, midiTimeCodePortName, "Joker")
 
+	// LTC settings :
+	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
+	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
+	PH_SETTING_STRING(setLTCInputDevice, ltcInputDevice)
+
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
 
@@ -93,8 +103,6 @@ public:
 	PH_SETTING_STRINGLIST2(setStripFileType, stripFileType, QStringList({"joker", "detx", "mos", "drb", "syn6"}))
 	PH_SETTING_STRINGLIST2(setVideoFileType, videoFileType, QStringList({"m4v", "mkv", "avi", "mov", "mxf"}))
 
-	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
-	PH_SETTING_STRING(setLTCInputDevice, ltcInputDevice)
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
 

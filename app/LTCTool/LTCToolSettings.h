@@ -2,12 +2,14 @@
 #define LTCTOOLSETTINGS_H
 
 #include "PhTools/PhGenericSettings.h"
+#include "PhLtc/PhLtcReaderSettings.h"
 #include "PhSync/PhTimeCode.h"
 
 /**
  * @brief The LTCTool application settings
  */
-class LTCToolSettings : protected PhGenericSettings
+class LTCToolSettings : protected PhGenericSettings,
+	public PhLtcReaderSettings
 {
 public:
 	PH_SETTING_BOOL2(setGenerate, generate, true)
@@ -21,6 +23,10 @@ public:
 	PH_SETTING_STRING(setAudioInput, audioInput)
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
+
+	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
+	PH_SETTING_STRING(setLtcInputDevice, ltcInputDevice)
+	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
 };
 
 #endif // LTCTOOLSETTINGS_H

@@ -31,6 +31,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_doc(_strip.doc()),
 	_sonySlave(PhTimeCodeType25, settings),
 	_mtcReader(PhTimeCodeType25),
+	_ltcReader(settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
 	_resizingStrip(false),
