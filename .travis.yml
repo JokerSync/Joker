@@ -5,13 +5,13 @@ env:
   - JOKER_RELEASE_PATH=$HOME
   - TESTS_RELEASE_PATH=$HOME
   matrix:
-#  - JOB=UNCRUSTIFY
-#  - JOB=DOXYGEN
+  - JOB=UNCRUSTIFY
+  - JOB=DOXYGEN
   - JOB=BUILD_AUTOTEST
-#  - JOB=BUILD_RELEASE_JOKER
-#  - JOB=BUILD_RELEASE_LTCTOOL
-#  - JOB=BUILD_RELEASE_MIDITOOL
-#  - JOB=BUILD_RELEASE_ALL_TESTS
+  - JOB=BUILD_RELEASE_JOKER
+  - JOB=BUILD_RELEASE_LTCTOOL
+  - JOB=BUILD_RELEASE_MIDITOOL
+  - JOB=BUILD_RELEASE_ALL_TESTS
 install:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
@@ -31,7 +31,7 @@ script:
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make -j 8; fi
-- if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./AutoTest graphicstrip drawTest; fi
+- if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./AutoTest; fi
 after_success:
 - if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
 after_failure:
