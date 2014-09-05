@@ -1,11 +1,6 @@
 #include "PhTools/PhDebug.h"
 #include "PhAudioOutput.h"
 
-PhAudioOutput::PhAudioOutput()
-	: PhAudio()
-{
-}
-
 bool PhAudioOutput::init(QString deviceName)
 {
 	PHDBG(0) << deviceName;

@@ -68,7 +68,7 @@ private:
 	int _noFrameCounter;
 
 	int _lastFrameDigit;
-	int _counter;
+	int _badTimeCodeGapCounter;
 	int _oldLastFrameDigit;
 
 	void updateTCType(PhTimeCodeType tcType);

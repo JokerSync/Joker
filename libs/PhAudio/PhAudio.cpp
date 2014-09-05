@@ -3,7 +3,6 @@
 #include "PhAudio.h"
 
 PhAudio::PhAudio() :
-	QObject(NULL),
 	_stream(NULL),
 	_paInitOk(false)
 {

@@ -9,12 +9,12 @@
 #include "PhLtcReader.h"
 
 PhLtcReader::PhLtcReader(PhLtcReaderSettings *settings) :
-	PhAudioInput(),
 	_tcType((PhTimeCodeType) settings->ltcReaderTimeCodeType()),
 	_position(0),
 	_noFrameCounter(0),
 	_lastFrameDigit(0),
 	_oldLastFrameDigit(0),
+	_badTimeCodeGapCounter(0),
 	_settings(settings)
 {
 #warning /// @todo autodetect tc type
@@ -53,16 +53,16 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 				// If the old last digit is the same than the last frame digit
 				// the counter goes up (it's a confirmation of the change
 				if(_oldLastFrameDigit == _lastFrameDigit)
-					_counter++;
+					_badTimeCodeGapCounter++;
 				// If the old last frame digit is different than the last
 				// frame digit, the tcType might have changed so the
-				// counter is reseted
+				// counter is reset
 				else
-					_counter = 0;
+					_badTimeCodeGapCounter = 0;
 
 				// If the old last digit is the same than the last digit
 				// for 5 consecutive time, we update the tcType
-				if(_counter >= 5) {
+				if(_badTimeCodeGapCounter >= 5) {
 					if(_lastFrameDigit == 23) {
 						updateTCType(PhTimeCodeType24);
 					}
@@ -106,7 +106,7 @@ void PhLtcReader::updateTCType(PhTimeCodeType tcType)
 {
 	if(_tcType != tcType) {
 		_tcType = tcType;
-		_counter = 0;
+		_badTimeCodeGapCounter = 0;
 		emit timeCodeTypeChanged(tcType);
 	}
 }

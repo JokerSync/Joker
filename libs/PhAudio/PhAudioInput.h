@@ -13,10 +13,6 @@ class PhAudioInput : public PhAudio
 {
 	Q_OBJECT
 public:
-	/**
-	 * @brief PhAudioInput constructor
-	 */
-	explicit PhAudioInput();
 
 	/**
 	 * @brief Initialize the input device

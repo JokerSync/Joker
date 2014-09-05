@@ -12,10 +12,6 @@
 class PhAudioOutput : public PhAudio
 {
 public:
-	/**
-	 * @brief PhAudioOutput constructor
-	 */
-	PhAudioOutput();
 
 	/**
 	 * @brief Initialize the output device

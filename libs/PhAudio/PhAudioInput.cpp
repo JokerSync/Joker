@@ -1,11 +1,6 @@
 #include "PhTools/PhDebug.h"
 #include "PhAudioInput.h"
 
-PhAudioInput::PhAudioInput()
-	: PhAudio()
-{
-}
-
 bool PhAudioInput::init(QString deviceName)
 {
 	if(!PhAudio::init(deviceName)) {
