@@ -2,8 +2,8 @@
 
 #include "PhAudio.h"
 
-PhAudio::PhAudio(QObject *parent) :
-	QObject(parent),
+PhAudio::PhAudio() :
+	QObject(NULL),
 	_stream(NULL),
 	_paInitOk(false)
 {

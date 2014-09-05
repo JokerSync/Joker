@@ -31,10 +31,9 @@ class PhLtcReader : public PhAudioInput
 public:
 	/**
 	 * @brief PhLtcReader constructor
-	 * @param tcType the timecode type
-	 * @param settings The parent's settings
+	 * @param settings The settings
 	 */
-	explicit PhLtcReader(PhLtcReaderSettings * settings, PhTimeCodeType tcType = PhTimeCodeType25);
+	explicit PhLtcReader(PhLtcReaderSettings * settings);
 
 	/**
 	 * @brief Get the reader clock
@@ -68,9 +67,9 @@ private:
 	/** @brief Used to detect pause in LTC signal */
 	int _noFrameCounter;
 
-	int _lastFrame;
+	int _lastFrameDigit;
 	int _counter;
-	int _oldLastFrame;
+	int _oldLastFrameDigit;
 
 	void updateTCType(PhTimeCodeType tcType);
 };

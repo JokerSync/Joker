@@ -17,7 +17,7 @@ LTCToolWindow::LTCToolWindow(LTCToolSettings *settings, QWidget *parent) :
 	_settings(settings),
 	_writerTimeCodeType((PhTimeCodeType)settings->writerTimeCodeType()),
 	_ltcWriter(_writerTimeCodeType),
-	_ltcReader(settings, _writerTimeCodeType),
+	_ltcReader(settings),
 	_lastTime(-1),
 	_timeDelta(-1),
 	_lastRate(-1)
@@ -190,18 +190,5 @@ void LTCToolWindow::onAudioProcessed(int minLevel, int maxLevel)
 }
 
 void LTCToolWindow::onTCTypeChanged(PhTimeCodeType tcType) {
-	switch (tcType) {
-	case PhTimeCodeType24:
-		ui->tcTypelabel->setText("24fps");
-		break;
-	case PhTimeCodeType25:
-		ui->tcTypelabel->setText("25fps");
-		break;
-	case PhTimeCodeType30:
-		ui->tcTypelabel->setText("30fps");
-		break;
-	default:
-		ui->tcTypelabel->setText("??fps");
-		break;
-	}
+	ui->tcTypelabel->setText(QString::number(PhTimeCode::getAverageFps(tcType)) + "fps");
 }

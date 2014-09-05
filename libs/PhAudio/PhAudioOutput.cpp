@@ -1,8 +1,8 @@
 #include "PhTools/PhDebug.h"
 #include "PhAudioOutput.h"
 
-PhAudioOutput::PhAudioOutput(QObject *parent)
-	: PhAudio(parent)
+PhAudioOutput::PhAudioOutput()
+	: PhAudio()
 {
 }
 

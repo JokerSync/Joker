@@ -15,9 +15,8 @@ class PhAudioInput : public PhAudio
 public:
 	/**
 	 * @brief PhAudioInput constructor
-	 * @param parent The parent object
 	 */
-	explicit PhAudioInput(QObject *parent = 0);
+	explicit PhAudioInput();
 
 	/**
 	 * @brief Initialize the input device

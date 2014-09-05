@@ -1,8 +1,8 @@
 #include "PhTools/PhDebug.h"
 #include "PhAudioInput.h"
 
-PhAudioInput::PhAudioInput(QObject *parent)
-	: PhAudio(parent)
+PhAudioInput::PhAudioInput()
+	: PhAudio()
 {
 }
 

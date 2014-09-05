@@ -8,12 +8,13 @@
 
 #include "PhLtcReader.h"
 
-PhLtcReader::PhLtcReader(PhLtcReaderSettings *settings, PhTimeCodeType tcType) :
-	PhAudioInput(NULL),
-	_tcType(tcType),
+PhLtcReader::PhLtcReader(PhLtcReaderSettings *settings) :
+	PhAudioInput(),
+	_tcType((PhTimeCodeType) settings->ltcReaderTimeCodeType()),
 	_position(0),
 	_noFrameCounter(0),
-	_lastFrame(0),
+	_lastFrameDigit(0),
+	_oldLastFrameDigit(0),
 	_settings(settings)
 {
 #warning /// @todo autodetect tc type
@@ -46,27 +47,37 @@ int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long fra
 		hhmmssff[3] = stime.frame;
 
 		if(_settings->ltcAutoDetectTimeCodeType()) {
+			// If the frame is xx:xx:xx:00 ie, the previous frame was
+			// the biggest one (23 for 24fps...)
 			if(stime.frame == 0) {
-				if(_oldLastFrame == _lastFrame)
+				// If the old last digit is the same than the last frame digit
+				// the counter goes up (it's a confirmation of the change
+				if(_oldLastFrameDigit == _lastFrameDigit)
 					_counter++;
+				// If the old last frame digit is different than the last
+				// frame digit, the tcType might have changed so the
+				// counter is reseted
 				else
 					_counter = 0;
 
+				// If the old last digit is the same than the last digit
+				// for 5 consecutive time, we update the tcType
 				if(_counter >= 5) {
-					if(_lastFrame == 23) {
+					if(_lastFrameDigit == 23) {
 						updateTCType(PhTimeCodeType24);
 					}
-					else if(_lastFrame == 24) {
+					else if(_lastFrameDigit == 24) {
 						updateTCType(PhTimeCodeType25);
 					}
 					else {
 						updateTCType(PhTimeCodeType30);
 					}
 				}
-				_oldLastFrame = _lastFrame;
+
+				_oldLastFrameDigit = _lastFrameDigit;
 			}
 
-			_lastFrame = stime.frame;
+			_lastFrameDigit = stime.frame;
 		}
 
 		PhTime newTime = PhTimeCode::timeFromHhMmSsFf(hhmmssff, _tcType);
