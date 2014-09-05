@@ -77,9 +77,6 @@ public:
 	// Synchronisation settings:
 	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
 
-	// Synchro Settings
-	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
-
 	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
 	PH_SETTING_UCHAR2(setSonyDevice1, sonyDevice1, 0xF0)
@@ -90,15 +87,12 @@ public:
 
 	// LTC settings:
 	PH_SETTING_STRING(setLtcInputPort, ltcInputPort)
+	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
+	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
 
 	// Midi settings:
 	PH_SETTING_STRING2(setMidiInputPort, midiInputPort, "Joker")
 	PH_SETTING_STRING2(setMidiVirtualInputPort, midiVirtualInputPort, "Joker")
-
-	// LTC settings :
-	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
-	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
-	PH_SETTING_STRING(setLTCInputDevice, ltcInputDevice)
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
