@@ -74,9 +74,7 @@ public:
 	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
 	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
 
-	// PhVideoSettings :
-
-	// Synchro Settings
+	// Synchronisation settings:
 	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
 
 	// PhSonySettings:
@@ -87,13 +85,14 @@ public:
 	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
-	// Midi settings:
-	PH_SETTING_STRING2(setMidiTimeCodePortName, midiTimeCodePortName, "Joker")
-
-	// LTC settings :
+	// LTC settings:
+	PH_SETTING_STRING(setLtcInputPort, ltcInputPort)
 	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
 	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
-	PH_SETTING_STRING(setLTCInputDevice, ltcInputDevice)
+
+	// Midi settings:
+	PH_SETTING_STRING2(setMidiInputPort, midiInputPort, "Joker")
+	PH_SETTING_STRING2(setMidiVirtualInputPort, midiVirtualInputPort, "Joker")
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
@@ -119,6 +118,8 @@ public:
 	PH_SETTING_STRING(setLanguage, language)
 
 	PH_SETTING_BOOL(setHideStrip, hideStrip)
+
+	PH_SETTING_INT(setLastPreferencesTab, lastPreferencesTab)
 };
 
 #endif // JOKERSETTINGS_H

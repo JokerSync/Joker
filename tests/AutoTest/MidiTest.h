@@ -29,6 +29,8 @@ private slots:
 
 	void testMTCReader();
 	void testMTCWriter();
+
+	void testMTCReaderWithMMC();
 };
 
 #endif // MIDITEST_H

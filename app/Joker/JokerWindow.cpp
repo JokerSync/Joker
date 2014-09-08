@@ -145,25 +145,22 @@ void JokerWindow::setupSyncProtocol()
 		}
 		else {
 			type = PhSynchronizer::NoSync;
-			QMessageBox::critical(this, tr("Error"), "Unable to connect to USB422v module");
+			QMessageBox::critical(this, tr("Error"), tr("Unable to connect to USB422v module"));
 		}
 		break;
 	case PhSynchronizer::LTC:
-		{
-			QString input = _settings->ltcInputDevice();
-			if(_ltcReader.init(input))
-				clock = _ltcReader.clock();
-			else {
-				QMessageBox::critical(this, tr("Error"), "Unable to open " + input);
-				type = PhSynchronizer::NoSync;
-			}
-			break;
+		if(_ltcReader.init(_settings->ltcInputPort()))
+			clock = _ltcReader.clock();
+		else {
+			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to open %0")).arg(_settings->ltcInputPort()));
+			type = PhSynchronizer::NoSync;
 		}
-	case PhSynchronizer::MTC:
-		if(_mtcReader.open(_settings->midiTimeCodePortName()))
+		break;
+	case PhSynchronizer::Midi:
+		if(_mtcReader.open(_settings->midiInputPort()))
 			clock = _mtcReader.clock();
 		else {
-			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to create \"%1\" midi port")).arg(_settings->midiTimeCodePortName()));
+			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to open %0 midi port")).arg(_settings->midiInputPort()));
 			type = PhSynchronizer::NoSync;
 		}
 	case PhSynchronizer::NoSync:
@@ -534,11 +531,14 @@ void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
 	int oldSynchroProtocol = _settings->synchroProtocol();
-	QString oldLTCInputDevice = _settings->ltcInputDevice();
+	QString oldLtcInputPort = _settings->ltcInputPort();
+	QString oldMidiInputPort = _settings->midiInputPort();
 
 	PreferencesDialog dlg(_settings);
 	dlg.exec();
-	if((oldSynchroProtocol != _settings->synchroProtocol()) || (oldLTCInputDevice != _settings->ltcInputDevice())) {
+	if((oldSynchroProtocol != _settings->synchroProtocol())
+	   || (oldLtcInputPort  != _settings->ltcInputPort())
+	   || (oldMidiInputPort != _settings->midiInputPort())) {
 		PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
 		setupSyncProtocol();
 	}

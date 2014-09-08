@@ -31,7 +31,7 @@ public:
 	 * @brief ltcInputDevice
 	 * @return The name of the input device
 	 */
-	virtual QString ltcInputDevice() = 0;
+	virtual QString ltcInputPort() = 0;
 
 };
 
