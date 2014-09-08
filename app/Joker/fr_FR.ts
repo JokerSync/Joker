@@ -93,361 +93,376 @@
         <translation>Affichage</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="129"/>
+        <location filename="JokerWindow.ui" line="128"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="141"/>
-        <location filename="JokerWindow.cpp" line="339"/>
+        <location filename="JokerWindow.ui" line="140"/>
+        <location filename="JokerWindow.cpp" line="338"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="144"/>
+        <location filename="JokerWindow.ui" line="143"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="149"/>
+        <location filename="JokerWindow.ui" line="148"/>
         <source>Play/pause</source>
         <translation>Lecture/pause</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="152"/>
+        <location filename="JokerWindow.ui" line="151"/>
         <source>Up</source>
         <translation>Up</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="157"/>
+        <location filename="JokerWindow.ui" line="156"/>
         <source>Play backward</source>
         <translation>Lecture arrière</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="160"/>
+        <location filename="JokerWindow.ui" line="159"/>
         <source>Down</source>
         <translation>Down</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="165"/>
+        <location filename="JokerWindow.ui" line="164"/>
         <source>Step forward</source>
         <translation>Image suivante</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="168"/>
+        <location filename="JokerWindow.ui" line="167"/>
         <source>Right</source>
         <translation>Right</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="173"/>
+        <location filename="JokerWindow.ui" line="172"/>
         <source>Step backward</source>
         <translation>Image précédente</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="176"/>
+        <location filename="JokerWindow.ui" line="175"/>
         <source>Left</source>
         <translation>Left</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="181"/>
+        <location filename="JokerWindow.ui" line="180"/>
         <source>Step time forward</source>
         <translation>Avancer d&apos;une unité de temps</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="184"/>
+        <location filename="JokerWindow.ui" line="183"/>
         <source>Alt+Right</source>
         <translation>Alt+Right</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="189"/>
+        <location filename="JokerWindow.ui" line="188"/>
         <source>Step time backward</source>
         <translation>Reculer d&apos;une unité de temps</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="192"/>
+        <location filename="JokerWindow.ui" line="191"/>
         <source>Alt+Left</source>
         <translation>Alt+Left</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="232"/>
+        <location filename="JokerWindow.ui" line="231"/>
         <source>Open video file...</source>
         <translation>Ouvrir un fichier vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="235"/>
+        <location filename="JokerWindow.ui" line="234"/>
         <source>Ctrl+Shift+O</source>
         <translation>Ctrl+Shift+O</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="240"/>
+        <location filename="JokerWindow.ui" line="239"/>
         <source>Change timestamp...</source>
         <translation>Changer le timestamp...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="245"/>
+        <location filename="JokerWindow.ui" line="244"/>
         <source>Change font...</source>
         <translation>Changer la police...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="250"/>
+        <location filename="JokerWindow.ui" line="249"/>
         <source>About...</source>
         <translation>À propos...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="255"/>
+        <location filename="JokerWindow.ui" line="254"/>
         <source>Preferences...</source>
         <translation>Préférences...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="260"/>
+        <location filename="JokerWindow.ui" line="259"/>
         <source>Properties...</source>
         <translation>Propriétés...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="268"/>
+        <location filename="JokerWindow.ui" line="267"/>
         <source>Test mode</source>
         <translation>Mode de test</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="271"/>
+        <location filename="JokerWindow.ui" line="270"/>
         <source>Set Joker on Test mode for syncheck</source>
         <translation>Mettre Joker en mode de test pour le syncheck</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="274"/>
+        <location filename="JokerWindow.ui" line="273"/>
         <source>Ctrl+Shift+T</source>
         <translation>Ctrl+Shift+T</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="279"/>
+        <location filename="JokerWindow.ui" line="278"/>
         <source>Timecode...</source>
         <translation>Timecode...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="282"/>
+        <location filename="JokerWindow.ui" line="281"/>
         <source>Ctrl+G</source>
         <translation>Ctrl+G</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="287"/>
+        <location filename="JokerWindow.ui" line="286"/>
         <source>Next text</source>
         <translation>Texte suivant</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="292"/>
+        <location filename="JokerWindow.ui" line="291"/>
         <source>Previous text</source>
         <translation>Texte précédent</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="297"/>
+        <location filename="JokerWindow.ui" line="296"/>
         <source>Next element</source>
         <translation>Élément suivant</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="300"/>
+        <location filename="JokerWindow.ui" line="299"/>
         <source>Ctrl+Right</source>
         <translation>Ctrl+Right</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="305"/>
+        <location filename="JokerWindow.ui" line="304"/>
         <source>Previous element</source>
         <translation>Élément précédent</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="308"/>
+        <location filename="JokerWindow.ui" line="307"/>
         <source>Ctrl+Left</source>
         <translation>Ctrl+Left</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="313"/>
+        <location filename="JokerWindow.ui" line="312"/>
         <source>Clear list</source>
         <translation>Effacer la liste</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="321"/>
+        <location filename="JokerWindow.ui" line="320"/>
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="324"/>
+        <location filename="JokerWindow.ui" line="323"/>
         <source>Ctrl+S</source>
         <translation>Ctrl+S</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="332"/>
+        <location filename="JokerWindow.ui" line="331"/>
         <source>Save as...</source>
         <translation>Enregistrer sous...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="335"/>
+        <location filename="JokerWindow.ui" line="334"/>
         <source>Ctrl+Shift+S</source>
         <translation>Ctrl+Shift+S</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="340"/>
+        <location filename="JokerWindow.ui" line="339"/>
         <source>Select character...</source>
         <translation>Sélectionner un personnage...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="343"/>
+        <location filename="JokerWindow.ui" line="342"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="351"/>
+        <location filename="JokerWindow.ui" line="350"/>
         <source>Force 16/9 ratio</source>
         <translation>Forcer le rapport d&apos;aspect 16/9</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="354"/>
+        <location filename="JokerWindow.ui" line="353"/>
         <source>F8</source>
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="362"/>
+        <location filename="JokerWindow.ui" line="361"/>
         <source>Fullscreen</source>
         <translation>Plein écran</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="365"/>
+        <location filename="JokerWindow.ui" line="364"/>
         <source>F10</source>
         <translation>F10</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="373"/>
+        <location filename="JokerWindow.ui" line="372"/>
         <source>Empty</source>
         <translation>Vide</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="381"/>
+        <location filename="JokerWindow.ui" line="380"/>
         <source>Invert colors</source>
         <translation>Inverser les couleurs</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="389"/>
+        <location filename="JokerWindow.ui" line="388"/>
         <source>Ruler</source>
         <translation>Rythmo en pied</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="394"/>
+        <location filename="JokerWindow.ui" line="393"/>
         <source>Change ruler timestamp...</source>
         <translation>Changer le timecode de la rythmo en pied...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="399"/>
+        <location filename="JokerWindow.ui" line="398"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="402"/>
+        <location filename="JokerWindow.ui" line="401"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="407"/>
+        <location filename="JokerWindow.ui" line="406"/>
         <source>Close video</source>
         <translation>Fermer la video</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="412"/>
+        <location filename="JokerWindow.ui" line="411"/>
         <source>Send feedback...</source>
         <translation>Signaler un problème...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="420"/>
+        <location filename="JokerWindow.ui" line="419"/>
         <source>Deinterlace video</source>
         <translation>Désentrelacer la vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="428"/>
+        <location filename="JokerWindow.ui" line="427"/>
         <source>Hide the rythmo</source>
         <translation>Cacher la rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="431"/>
+        <location filename="JokerWindow.ui" line="430"/>
         <source>F9</source>
         <translation>F9</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="436"/>
+        <location filename="JokerWindow.ui" line="435"/>
         <source>Next loop</source>
         <translation>Boucle suivante</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="439"/>
+        <location filename="JokerWindow.ui" line="438"/>
         <source>Ctrl+Up</source>
         <translation>Ctrl+Up</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="444"/>
+        <location filename="JokerWindow.ui" line="443"/>
         <source>Previous loop</source>
         <translation>Boucle précédente</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="447"/>
+        <location filename="JokerWindow.ui" line="446"/>
         <source>Ctrl+Down</source>
         <translation>Ctrl+down</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="455"/>
+        <location filename="JokerWindow.ui" line="454"/>
         <source>Display the cuts</source>
         <translation>Afficher les changements de plan</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="460"/>
+        <location filename="JokerWindow.ui" line="459"/>
         <source>Set space between two ruler graduation...</source>
         <translation>Changer l&apos;espacement entre les pieds...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="468"/>
+        <location filename="JokerWindow.ui" line="467"/>
         <source>Display the scale</source>
         <translation>Afficher l&apos;échelle</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="148"/>
+        <location filename="JokerWindow.ui" line="475"/>
+        <source>Display the vertical scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="150"/>
         <location filename="JokerWindow.cpp" line="157"/>
-        <location filename="JokerWindow.cpp" line="166"/>
+        <location filename="JokerWindow.cpp" line="165"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="166"/>
-        <source>Unable to create &quot;%1&quot; midi port</source>
-        <translation>Impossible de créer le port midi &quot;%1&quot;</translation>
+        <location filename="JokerWindow.cpp" line="150"/>
+        <source>Unable to connect to USB422v module</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="335"/>
+        <location filename="JokerWindow.cpp" line="157"/>
+        <source>Unable to open %0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="165"/>
+        <source>Unable to open %0 midi port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="334"/>
         <source>Rythmo files</source>
         <translation>Fichiers rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="429"/>
+        <location filename="JokerWindow.cpp" line="428"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="434"/>
+        <location filename="JokerWindow.cpp" line="433"/>
         <source>Open a video...</source>
         <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="676"/>
-        <location filename="JokerWindow.cpp" line="701"/>
+        <location filename="JokerWindow.cpp" line="678"/>
+        <location filename="JokerWindow.cpp" line="703"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="694"/>
+        <location filename="JokerWindow.cpp" line="696"/>
         <source>Save...</source>
         <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="711"/>
+        <location filename="JokerWindow.cpp" line="713"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="962"/>
+        <location filename="JokerWindow.cpp" line="964"/>
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>
@@ -618,150 +633,145 @@
         <translation>Préférences</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="31"/>
+        <location filename="PreferencesDialog.ui" line="34"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="58"/>
+        <location filename="PreferencesDialog.ui" line="61"/>
         <source>Display timecode</source>
         <translation>Afficher le timecode</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="65"/>
+        <location filename="PreferencesDialog.ui" line="68"/>
         <source>Display next timecode</source>
         <translation>Afficher le timecode suivant</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="72"/>
+        <location filename="PreferencesDialog.ui" line="75"/>
         <source>Display next texts</source>
         <translation>Afficher les textes suivants</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="79"/>
+        <location filename="PreferencesDialog.ui" line="82"/>
         <source>Display title</source>
         <translation>Afficher le titre</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="89"/>
+        <location filename="PreferencesDialog.ui" line="92"/>
         <source>Display loop number</source>
         <translation>Afficher le nombre de boucle</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="96"/>
+        <location filename="PreferencesDialog.ui" line="99"/>
         <source>Language</source>
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="108"/>
+        <location filename="PreferencesDialog.ui" line="111"/>
         <source>Strip</source>
         <translation>Bande rythmo</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="121"/>
+        <location filename="PreferencesDialog.ui" line="124"/>
         <source>Filter</source>
         <translation>Filtre</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="144"/>
+        <location filename="PreferencesDialog.ui" line="147"/>
         <source>Bold :</source>
         <translation>Gras :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="206"/>
+        <location filename="PreferencesDialog.ui" line="209"/>
         <source>Strip Height</source>
         <translation>Hauteur de la bande</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="221"/>
+        <location filename="PreferencesDialog.ui" line="224"/>
         <source>Italic :</source>
         <translation>Italique :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="248"/>
+        <location filename="PreferencesDialog.ui" line="251"/>
         <source>Speed:</source>
         <translation>Vitesse :</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="273"/>
+        <location filename="PreferencesDialog.ui" line="276"/>
         <source>Synchronisation</source>
         <translation>Synchronisation</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="281"/>
+        <location filename="PreferencesDialog.ui" line="284"/>
         <source>Delay</source>
         <translation>Délai</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="295"/>
+        <location filename="PreferencesDialog.ui" line="320"/>
         <source>No sync</source>
         <translation>Pas de synchronisation</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="300"/>
+        <location filename="PreferencesDialog.ui" line="327"/>
         <source>Sony 9 pin</source>
         <translation>Sony 9 pin</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="305"/>
+        <location filename="PreferencesDialog.ui" line="334"/>
         <source>LTC</source>
         <translation>LTC</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="310"/>
-        <source>Midi timecode</source>
-        <translation>Midi timecode</translation>
+        <location filename="PreferencesDialog.ui" line="356"/>
+        <source>Audio input port:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="318"/>
+        <location filename="PreferencesDialog.ui" line="366"/>
+        <source>Midi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="385"/>
+        <source>Read from existing port:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="392"/>
+        <source>Read from virtual port:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="291"/>
         <source>quarter frame</source>
         <translation>Quart d&apos;image</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="347"/>
-        <source>Parameters</source>
-        <translation>Paramètres</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="362"/>
-        <source>Sony high speed</source>
-        <translation>Vitesse rapide Sony</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="378"/>
-        <source>Sony ID</source>
-        <translation>ID Sony</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="419"/>
-        <source>Available inputs</source>
-        <translation>Entrée(s)</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="462"/>
+        <location filename="PreferencesDialog.ui" line="311"/>
         <source>millisecond</source>
         <translation>millisecondes</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="136"/>
+        <location filename="PreferencesDialog.cpp" line="174"/>
         <source>&lt;System default&gt;</source>
         <translation>&lt;Langue du système&gt;</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="143"/>
+        <location filename="PreferencesDialog.cpp" line="181"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="163"/>
+        <location filename="PreferencesDialog.cpp" line="203"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="164"/>
+        <location filename="PreferencesDialog.cpp" line="204"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
-<translation>Vous avez changé la langue pour &quot;%1&quot;.
+        <translation>Vous avez changé la langue pour &quot;%1&quot;.
 Vous devez relancer %2 pour appliquer ce changement.</translation>
     </message>
 </context>

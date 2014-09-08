@@ -97,13 +97,15 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
 
-	ui->actionDisplay_the_cuts->setChecked(_settings->displayCuts());
-
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 
-	ui->actionShow_ruler->setChecked(_settings->displayRuler());
-
 	ui->actionHide_the_rythmo->setChecked(_settings->hideStrip());
+
+	ui->actionDisplay_the_cuts->setChecked(_settings->displayCuts());
+
+	ui->actionDisplay_the_vertical_scale->setChecked(_settings->displayVerticalScale());
+
+	ui->actionShow_ruler->setChecked(_settings->displayRuler());
 
 	_mediaPanel.show();
 	_mediaPanelState = MediaPanelVisible;
@@ -999,7 +1001,7 @@ void JokerWindow::on_actionSet_space_between_two_ruler_graduation_triggered()
 	dlg.exec();
 }
 
-void JokerWindow::on_actionDisplay_the_scale_triggered(bool checked)
+void JokerWindow::on_actionDisplay_the_vertical_scale_triggered(bool checked)
 {
 	_settings->setDisplayVerticalScale(checked);
 }
