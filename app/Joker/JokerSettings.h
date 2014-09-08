@@ -16,7 +16,7 @@
 /**
  * @brief The Joker application settings
  */
-class JokerSettings : PhGenericSettings,
+class JokerSettings : public PhGenericSettings,
 	public PhGraphicStripSettings,
 	public PhVideoSettings,
 	public PhSonySettings,
