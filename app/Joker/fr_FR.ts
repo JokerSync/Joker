@@ -42,7 +42,6 @@
     <message>
         <location filename="AboutDialog.ui" line="26"/>
         <source>Copyright 2013-2014 Phonations, All rights reserved.</source>
-        <oldsource>Copyright 2013 Phonations, All rights reserved</oldsource>
         <translation>Copyright 2013-2014 Phonations, Tous droits réservés.</translation>
     </message>
     <message>
@@ -100,7 +99,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="141"/>
-        <location filename="JokerWindow.cpp" line="338"/>
+        <location filename="JokerWindow.cpp" line="339"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -172,7 +171,6 @@
     <message>
         <location filename="JokerWindow.ui" line="232"/>
         <source>Open video file...</source>
-        <oldsource>Open video...</oldsource>
         <translation>Ouvrir un fichier vidéo...</translation>
     </message>
     <message>
@@ -203,7 +201,7 @@
     <message>
         <location filename="JokerWindow.ui" line="260"/>
         <source>Properties...</source>
-        <translation>Propriétées...</translation>
+        <translation>Propriétés...</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="268"/>
@@ -213,7 +211,6 @@
     <message>
         <location filename="JokerWindow.ui" line="271"/>
         <source>Set Joker on Test mode for syncheck</source>
-        <oldsource>Set Joker on Test mode for synccheck</oldsource>
         <translation>Mettre Joker en mode de test pour le syncheck</translation>
     </message>
     <message>
@@ -300,6 +297,11 @@
         <location filename="JokerWindow.ui" line="351"/>
         <source>Force 16/9 ratio</source>
         <translation>Forcer le rapport d&apos;aspect 16/9</translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.ui" line="354"/>
+        <source>F8</source>
+        <translation>F8</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="362"/>
@@ -394,7 +396,6 @@
     <message>
         <location filename="JokerWindow.ui" line="460"/>
         <source>Set space between two ruler graduation...</source>
-        <oldsource>Set space between two ruler graduation</oldsource>
         <translation>Changer l&apos;espacement entre les pieds...</translation>
     </message>
     <message>
@@ -403,16 +404,6 @@
         <translation>Afficher l&apos;échelle</translation>
     </message>
     <message>
-        <location filename="JokerWindow.ui" line="354"/>
-        <source>F8</source>
-        <translation>F8</translation>
-    </message>
-    <message>
-        <location filename="JokerWindow.cpp" line="334"/>
-        <location filename="JokerWindow.cpp" line="335"/>
-        <source>Rythmo files</source>
-        <translation>Fichiers rythmo</translation>
-    </message>
         <location filename="JokerWindow.cpp" line="148"/>
         <location filename="JokerWindow.cpp" line="157"/>
         <location filename="JokerWindow.cpp" line="166"/>
@@ -423,6 +414,11 @@
         <location filename="JokerWindow.cpp" line="166"/>
         <source>Unable to create &quot;%1&quot; midi port</source>
         <translation>Impossible de créer le port midi &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="335"/>
+        <source>Rythmo files</source>
+        <translation>Fichiers rythmo</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="429"/>
@@ -471,7 +467,6 @@
     <message>
         <location filename="PeopleDialog.ui" line="37"/>
         <source>Unselect all</source>
-        <oldsource>Select all</oldsource>
         <translation>Tout dé-sélectionner</translation>
     </message>
     <message>
@@ -482,7 +477,6 @@
     <message>
         <location filename="PeopleDialog.cpp" line="39"/>
         <source>The list is empty...</source>
-        <oldsource>The list is empty</oldsource>
         <translation>La liste est vide...</translation>
     </message>
     <message>
@@ -719,14 +713,14 @@
         <translation>Midi timecode</translation>
     </message>
     <message>
+        <location filename="PreferencesDialog.ui" line="318"/>
+        <source>quarter frame</source>
+        <translation>Quart d&apos;image</translation>
+    </message>
+    <message>
         <location filename="PreferencesDialog.ui" line="347"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="378"/>
-        <source>Sony ID</source>
-        <translation>ID Sony</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="362"/>
@@ -734,19 +728,19 @@
         <translation>Vitesse rapide Sony</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="462"/>
-        <source>millisecond</source>
-        <translation>millisecondes</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.ui" line="318"/>
-        <source>quarter frame</source>
-        <translation>quart d&apos;image</translation>
+        <location filename="PreferencesDialog.ui" line="378"/>
+        <source>Sony ID</source>
+        <translation>ID Sony</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="419"/>
         <source>Available inputs</source>
         <translation>Entrée(s)</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="462"/>
+        <source>millisecond</source>
+        <translation>millisecondes</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.cpp" line="136"/>
@@ -767,9 +761,7 @@
         <location filename="PreferencesDialog.cpp" line="164"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
-        <oldsource>You change the language to &quot;%1&quot;.
-You need to restart %2 to apply you changes</oldsource>
-        <translation>Vous avez changé la langue pour &quot;%1&quot;.
+<translation>Vous avez changé la langue pour &quot;%1&quot;.
 Vous devez relancer %2 pour appliquer ce changement.</translation>
     </message>
 </context>
