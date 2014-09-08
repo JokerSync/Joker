@@ -2,6 +2,37 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
+    <name>MAC_APPLICATION_MENU</name>
+    <message>
+        <source>Services</source>
+        <translation>Services</translation>
+    </message>
+    <message>
+        <source>Hide %1</source>
+        <translation>Masquer %1</translation>
+    </message>
+    <message>
+        <source>Hide Others</source>
+       <translation>Masquer les autres</translation>
+    </message>
+    <message>
+       <source>Show All</source>
+        <translation>Tout afficher</translation>
+    </message>
+    <message>
+        <source>Preferences...</source>
+        <translation>Préférences...</translation>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>Quitter %1</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>À propos de %1</translation>
+    </message>
+</context>
+<context>
     <name>AboutDialog</name>
     <message>
         <location filename="AboutDialog.ui" line="14"/>
@@ -378,49 +409,49 @@
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="334"/>
+        <location filename="JokerWindow.cpp" line="335"/>
         <source>Rythmo files</source>
         <translation>Fichiers rythmo</translation>
     </message>
-    <message>
-        <location filename="JokerWindow.cpp" line="147"/>
-        <location filename="JokerWindow.cpp" line="156"/>
-        <location filename="JokerWindow.cpp" line="165"/>
+        <location filename="JokerWindow.cpp" line="148"/>
+        <location filename="JokerWindow.cpp" line="157"/>
+        <location filename="JokerWindow.cpp" line="166"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="165"/>
+        <location filename="JokerWindow.cpp" line="166"/>
         <source>Unable to create &quot;%1&quot; midi port</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de créer le port midi &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="428"/>
+        <location filename="JokerWindow.cpp" line="429"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="433"/>
+        <location filename="JokerWindow.cpp" line="434"/>
         <source>Open a video...</source>
         <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="675"/>
-        <location filename="JokerWindow.cpp" line="700"/>
+        <location filename="JokerWindow.cpp" line="676"/>
+        <location filename="JokerWindow.cpp" line="701"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="693"/>
+        <location filename="JokerWindow.cpp" line="694"/>
         <source>Save...</source>
         <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="710"/>
+        <location filename="JokerWindow.cpp" line="711"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="961"/>
+        <location filename="JokerWindow.cpp" line="962"/>
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>
@@ -544,27 +575,27 @@
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="230"/>
         <source>23.98 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>23.98 fps</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="235"/>
         <source>24 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>24 fps</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="240"/>
         <source>25 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>25 fps</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="245"/>
         <source>29.97 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>29.97 fps</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="250"/>
         <source>30 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>30 fps</translation>
     </message>
 </context>
 <context>
@@ -680,12 +711,12 @@
     <message>
         <location filename="PreferencesDialog.ui" line="305"/>
         <source>LTC</source>
-        <translation type="unfinished"></translation>
+        <translation>LTC</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="310"/>
         <source>Midi timecode</source>
-        <translation type="unfinished"></translation>
+        <translation>Midi timecode</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="347"/>
@@ -826,6 +857,14 @@ Vous devez relancer %2 pour appliquer ce changement.</translation>
         <location filename="PropertyDialog.ui" line="248"/>
         <source>FPS:</source>
         <translation>IPS :</translation>
+    </message>
+</context>
+<context>
+    <name>QTranslator</name>
+    <message>
+        <location filename="main.cpp" line="36"/>
+        <source>Would you like to reset your settings ?</source>
+        <translation>Souhaitez vous ré-initialiser les réglages ?</translation>
     </message>
 </context>
 <context>
