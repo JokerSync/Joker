@@ -29,7 +29,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_strip(settings),
 	_videoEngine(settings),
 	_doc(_strip.doc()),
-	_sonySlave(PhTimeCodeType25, settings),
+	_sonySlave((PhTimeCodeType)settings->sonySlaveTimeCodeType(), settings),
 	_mtcReader(PhTimeCodeType25),
 	_ltcReader(settings),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
@@ -537,12 +537,14 @@ void JokerWindow::on_actionPreferences_triggered()
 	QString oldMidiInputPort = _settings->midiInputPort();
 
 	PreferencesDialog dlg(_settings);
-	dlg.exec();
-	if((oldSynchroProtocol != _settings->synchroProtocol())
-	   || (oldLtcInputPort  != _settings->ltcInputPort())
-	   || (oldMidiInputPort != _settings->midiInputPort())) {
-		PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
-		setupSyncProtocol();
+	if(dlg.exec() == QDialog::Accepted) {
+		_sonySlave.setTimeCodeType((PhTimeCodeType)_settings->sonySlaveTimeCodeType());
+		if((oldSynchroProtocol != _settings->synchroProtocol())
+				|| (oldLtcInputPort  != _settings->ltcInputPort())
+				|| (oldMidiInputPort != _settings->midiInputPort())) {
+			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
+			setupSyncProtocol();
+		}
 	}
 
 	fadeInMediaPanel();

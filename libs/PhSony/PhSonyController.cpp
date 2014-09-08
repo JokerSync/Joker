@@ -69,6 +69,11 @@ void PhSonyController::close()
 	}
 }
 
+void PhSonyController::setTimeCodeType(PhTimeCodeType tcType)
+{
+	_tcType = tcType;
+}
+
 void PhSonyController::checkVideoSync()
 {
 	if(_serial.isOpen()) {

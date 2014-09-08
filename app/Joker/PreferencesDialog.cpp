@@ -127,6 +127,8 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		break;
 	}
 
+	ui->sonyTimeCodeTypeCombo->setCurrentIndex(_settings->sonySlaveTimeCodeType());
+
 	QStringList ltcInputPorts = PhLtcReader::inputList();
 	ui->ltcInputPortComboBox->addItems(ltcInputPorts);
 	if(ltcInputPorts.contains(_settings->ltcInputPort()))
@@ -216,6 +218,8 @@ void PreferencesDialog::accept()
 		_settings->setSynchroProtocol(PhSynchronizer::LTC);
 	else if(ui->midiRadioButton->isChecked())
 		_settings->setSynchroProtocol(PhSynchronizer::Midi);
+
+	_settings->setSonySlaveTimeCodeType(ui->sonyTimeCodeTypeCombo->currentIndex());
 
 	_settings->setLtcInputPort(ui->ltcInputPortComboBox->currentText());
 

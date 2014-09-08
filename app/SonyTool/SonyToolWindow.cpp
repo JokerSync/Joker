@@ -25,6 +25,7 @@ SonyToolWindow::SonyToolWindow() :
 	connect(ui->masterPanel, &PhMediaPanel::previousFrameClicked, this, &SonyToolWindow::masterPreviousFrame);
 	connect(ui->masterPanel, &PhMediaPanel::fastForwardClicked, &_sonyMaster, &PhSonyMasterController::fastForward);
 	connect(ui->masterPanel, &PhMediaPanel::rewindClicked, &_sonyMaster, &PhSonyMasterController::rewind);
+	connect(ui->masterPanel, &PhMediaPanel::timeCodeTypeChanged, &_sonyMaster, &PhSonyMasterController::setTimeCodeType);
 
 	// Connect sony master to MainWindow
 	connect(ui->queryIdButton, &QPushButton::clicked, &_sonyMaster, &PhSonyMasterController::deviceTypeRequest);
@@ -55,6 +56,7 @@ SonyToolWindow::SonyToolWindow() :
 	on_actionMaster_Use_video_sync_triggered(_settings.useVideoMasterSync());
 
 	_sonySlave.clock()->setTime(PhTimeCode::timeFromString("00:01:00:00", _sonySlave.timeCodeType()));
+	connect(ui->slavePanel, &PhMediaPanel::timeCodeTypeChanged, &_sonySlave, &PhSonySlaveController::setTimeCodeType);
 
 //	_sonySlave.getClock()->setRate(1);
 }

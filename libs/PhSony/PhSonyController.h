@@ -81,6 +81,12 @@ public:
 	}
 
 	/**
+	 * @brief Set the protocol timecode type
+	 * @param tcType A timecode type value.
+	 */
+	void setTimeCodeType(PhTimeCodeType tcType);
+
+	/**
 	 * @brief Get the sony controller internal clock.
 	 * @return A clock reference.
 	 */

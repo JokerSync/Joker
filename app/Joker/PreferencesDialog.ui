@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>464</width>
-    <height>449</height>
+    <height>510</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -326,6 +326,54 @@
           <property name="text">
            <string>Sony 9 pin</string>
           </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="frame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QFormLayout" name="formLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="sonyTimeCodeTypeLabel">
+             <property name="text">
+              <string>Timecode rate:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="sonyTimeCodeTypeCombo">
+             <item>
+              <property name="text">
+               <string>23,98 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>24 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>25 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>29,97 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>30 fps</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item>
