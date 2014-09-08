@@ -11,16 +11,35 @@
 
 PhMidiTimeCodeReader::PhMidiTimeCodeReader(PhTimeCodeType tcType) :
 	_tcType(tcType),
+	_lastStopDateTime(QDateTime::fromMSecsSinceEpoch(0)),
 	_pauseDetectionCounter(0)
 {
 	connect(&_pauseDetectionTimer, &QTimer::timeout, this, &PhMidiTimeCodeReader::checkPause);
-	_pauseDetectionTimer.start(10);
+}
+
+bool PhMidiTimeCodeReader::open(QString portName)
+{
+	if(PhMidiInput::open(portName)) {
+		_pauseDetectionTimer.start(10);
+		_lastStopDateTime = QDateTime::fromMSecsSinceEpoch(0);
+		return true;
+	}
+	return false;
+}
+
+void PhMidiTimeCodeReader::close()
+{
+	_pauseDetectionTimer.stop();
+	PhMidiInput::close();
 }
 
 void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 {
-	this->moveToThread(QThread::currentThread());
-	_clock.setRate(1);
+	// Make sure that the last stop occured more than 80ms ago
+	if((_lastStopDateTime.addMSecs(80) < QDateTime::currentDateTime()) && (_clock.rate() != 1)) {
+		PHDEBUG << "Play detected";
+		_clock.setRate(1);
+	}
 	_clock.tick(4 * PhTimeCode::getFps(_tcType));
 
 	unsigned int hhmmssff[4];
@@ -46,18 +65,37 @@ void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 
 void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType)
 {
+	PhMidiInput::onTimeCode(hh, mm, ss, ff, tcType);
 	PhTime time = PhTimeCode::timeFromHhMmSsFf(hh, mm, ss, ff, tcType);
-	_tcType = tcType;
 	_clock.setTime(time);
-	emit timeCodeTypeChanged(_tcType);
+	if(_tcType != tcType) {
+		_tcType = tcType;
+		emit timeCodeTypeChanged(_tcType);
+	}
+}
+
+void PhMidiTimeCodeReader::onPlay()
+{
+	PHDEBUG;
+	PhMidiInput::onPlay();
+	_clock.setRate(1);
+}
+
+void PhMidiTimeCodeReader::onStop()
+{
+	PHDEBUG;
+	PhMidiInput::onStop();
+	_clock.setRate(0);
+	_lastStopDateTime = QDateTime::currentDateTime();
 }
 
 void PhMidiTimeCodeReader::checkPause()
 {
-	PHDEBUG << _pauseDetectionCounter;
 	_pauseDetectionCounter++;
 	if(_pauseDetectionCounter >= 4) {
-		PHDEBUG << "Pause detected";
-		_clock.setRate(0);
+		if(_clock.rate() != 0) {
+			PHDEBUG << "Pause detected";
+			_clock.setRate(0);
+		}
 	}
 }

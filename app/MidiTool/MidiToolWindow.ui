@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QCheckBox" name="checkBoxWriteMTC">
+     <widget class="QCheckBox" name="writeMtcCheckBox">
       <property name="text">
        <string>Write MTC</string>
       </property>
@@ -26,7 +26,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="groupBoxWriter">
+     <widget class="QGroupBox" name="writerGroupBox">
       <property name="title">
        <string>Writer:</string>
       </property>
@@ -48,10 +48,10 @@
         </widget>
        </item>
        <item>
-        <widget class="PhMediaPanel" name="widgetMaster" native="true"/>
+        <widget class="PhMediaPanel" name="writerMediaPanel" native="true"/>
        </item>
        <item>
-        <widget class="QCheckBox" name="cBoxLoop">
+        <widget class="QCheckBox" name="writerLoopPlaybackCheckBox">
          <property name="text">
           <string>Loop</string>
          </property>
@@ -61,7 +61,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QCheckBox" name="checkBoxReadMTC">
+     <widget class="QCheckBox" name="readMtcCheckBox">
       <property name="text">
        <string>Read MTC</string>
       </property>
@@ -71,13 +71,13 @@
      </widget>
     </item>
     <item>
-     <widget class="QGroupBox" name="groupBoxReader">
+     <widget class="QGroupBox" name="readerGroupBox">
       <property name="title">
        <string>Reader:</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLabel" name="readInfoLabel">
+        <widget class="QLabel" name="readerInfoLabel">
          <property name="text">
           <string>0x since 00:00:00:00</string>
          </property>
@@ -87,7 +87,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="labelReaderTimeCode">
+        <widget class="QLabel" name="readerTimeCodeLabel">
          <property name="font">
           <font>
            <family>Arial Unicode MS</family>
@@ -104,7 +104,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="fpsLabel">
+        <widget class="QLabel" name="readerFpsLabel">
          <property name="text">
           <string>0 fps</string>
          </property>
@@ -117,7 +117,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="labelDelay">
+     <widget class="QLabel" name="delayLabel">
       <property name="text">
        <string>0 ms</string>
       </property>

@@ -22,12 +22,35 @@ PhMidiInput::~PhMidiInput()
 	close();
 }
 
-bool PhMidiInput::open(QString portName)
+QStringList PhMidiInput::inputList()
 {
+	QStringList result;
+	RtMidiIn midiIn;
+	for(unsigned int i = 0; i < midiIn.getPortCount(); i++)
+		result.append(QString::fromStdString(midiIn.getPortName(i)));
+
+	return result;
+}
+
+bool PhMidiInput::open(QString inputPortName)
+{
+	PHDEBUG << inputPortName;
 	try {
 		_midiIn = new RtMidiIn();
-		PHDEBUG << "Opening" << portName;
-		_midiIn->openVirtualPort(portName.toStdString());
+		int portIndex = -1;
+		for(unsigned int i = 0; i < _midiIn->getPortCount(); i++) {
+			QString portName = QString::fromStdString(_midiIn->getPortName(i));
+			PHDEBUG << "-" << portName;
+			if(inputPortName == portName) {
+				portIndex = i;
+				break;
+			}
+		}
+		PHDEBUG << "Opening" << inputPortName;
+		if(portIndex >= 0)
+			_midiIn->openPort(portIndex);
+		else
+			_midiIn->openVirtualPort(inputPortName.toStdString());
 		_midiIn->ignoreTypes( false, false, false );
 		_midiIn->setCallback(&PhMidiInput::callback, this);
 		_midiIn->setErrorCallback(&PhMidiInput::errorCallback, this);
@@ -61,12 +84,24 @@ void PhMidiInput::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcTy
 	emit timeCodeReceived(hh, mm, ss, ff, tcType);
 }
 
+void PhMidiInput::onPlay()
+{
+	emit play();
+}
+
+void PhMidiInput::onStop()
+{
+	emit stop();
+}
+
 void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 {
 	if ( message->size() > 0 ) {
 		QString messageStr = "";
 		foreach(unsigned char data, *message)
 			messageStr += QString::number(data, 16) + " ";
+
+		PHDBG(21) << messageStr;
 
 		unsigned char status = message->at(0);
 		switch (status) {
@@ -107,18 +142,19 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 						switch(message->at(4)) {
 						case 0x01:
 							PHDEBUG << "MMC Stop" << messageStr;
-							emit onStop();
+							onStop();
 							break;
 						case 0x02:
 							PHDEBUG << "MMC Play" << messageStr;
-							emit onPlay();
+							onPlay();
 							break;
 						case 0x44:
 							_mtcType = computeTimeCodeType(message->at(7) >> 5);
 							_hh = message->at(7) & 0x1F;
 							_mm = message->at(8);
 							_ss = message->at(9);
-							_ff = message->at(10);
+							// It seems that the some information is sent to the frame byte too (not timecode type)...
+							_ff = message->at(10) & 0x1F;
 							PHDEBUG << "Go To" << _hh << _mm << _ss << _ff;
 							onTimeCode(_hh, _mm, _ss, _ff, _mtcType);
 							break;

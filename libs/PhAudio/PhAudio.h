@@ -22,9 +22,8 @@ class PhAudio : public QObject
 public:
 	/**
 	 * @brief PhAudio constructor
-	 * @param parent The parent object
 	 */
-	explicit PhAudio(QObject *parent = 0);
+	explicit PhAudio();
 
 	~PhAudio();
 
