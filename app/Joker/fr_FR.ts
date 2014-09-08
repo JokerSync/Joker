@@ -857,9 +857,14 @@ Vous devez relancer %2 pour appliquer ce changement.</translation>
 <context>
     <name>QTranslator</name>
     <message>
-        <location filename="main.cpp" line="36"/>
+        <location filename="main.cpp" line="34"/>
+        <source>Reset the settings</source>
+        <translation>Réinitialisation de l&apos;application</translation>
+    </message>
+    <message>
+        <location filename="main.cpp" line="35"/>
         <source>Would you like to reset your settings ?</source>
-        <translation>Souhaitez vous ré-initialiser les réglages ?</translation>
+        <translation>Souhaitez vous réinitialiser l&apos;application ?</translation>
     </message>
 </context>
 <context>

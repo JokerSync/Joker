@@ -30,12 +30,11 @@ int main(int argc, char *argv[])
 	QApplication a(argc, argv);
 
 	if(QGuiApplication::queryKeyboardModifiers().testFlag(Qt::ShiftModifier)) {
-		QMessageBox msgBox;
-		msgBox.addButton(QMessageBox::Yes);
-		msgBox.addButton(QMessageBox::No);
-		msgBox.setText(QTranslator::tr("Would you like to reset your settings ?"));
-
-		if(msgBox.exec() == QMessageBox::Yes) {
+		if(QMessageBox::critical(NULL,
+							  QTranslator::tr("Reset the settings"),
+							  QTranslator::tr("Would you like to reset your settings ?"),
+							  QMessageBox::No,
+							  QMessageBox::Yes) == QMessageBox::Yes) {
 			settings.clear();
 		}
 	}
