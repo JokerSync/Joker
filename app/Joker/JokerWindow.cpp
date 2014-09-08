@@ -998,3 +998,8 @@ void JokerWindow::on_actionSet_space_between_two_ruler_graduation_triggered()
 	RulerSpaceDialog dlg(_settings);
 	dlg.exec();
 }
+
+void JokerWindow::on_actionDisplay_the_scale_triggered(bool checked)
+{
+	_settings->setDisplayVerticalScale(checked);
+}

@@ -460,6 +460,31 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			if(detect->timeIn() > timeOut)
 				break;
 		}
+
+		// Change to display the ruler via the settings
+		if(_settings->displayVerticalScale()) {
+			PhGraphicSolidRect scale;
+			int scaleWidth;
+			int scaleHeight = 4;
+			int spaceBetweenDashes = _settings->verticalScaleSpaceInSeconds() * 24000 / verticalTimePerPixel;
+			// Set the first dash to +5sec
+			int y0 = y - spaceBetweenDashes;
+			//int y = 100;
+			scale.setHeight(scaleHeight);
+			scale.setColor(Qt::gray);
+			int counter = 0;
+
+			for(y0; y0 > -1080; y0 = y0 - spaceBetweenDashes) {
+				if(counter % 2 == 0)
+					scaleWidth = 4;
+				else
+					scaleWidth = 8;
+				scale.setWidth(scaleWidth);
+				scale.setPosition(width - scaleWidth, y0, 10 );
+				scale.draw();
+				counter++;
+			}
+		}
 	}
 
 	//	PHDEBUG << "off counter : " << offCounter << "cut counter : " << cutCounter << "loop counter : " << loopCounter;
