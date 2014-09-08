@@ -2,6 +2,7 @@
 #define SONYTESTSETTINGS_H
 
 #include "PhTools/PhGenericSettings.h"
+#include "PhSync/PhTimeCode.h"
 #include "PhSony/PhSonySettings.h"
 
 /**
@@ -19,6 +20,9 @@ public:
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
 	// Others settings
+	PH_SETTING_INT2(setMasterTimeCodeType, masterTimeCodeType, PhTimeCodeType25)
+	PH_SETTING_INT2(setSlaveTimeCodeType, slaveTimeCodeType, PhTimeCodeType25)
+
 	PH_SETTING_BOOL2(setSonySlaveActive, sonySlaveActive, true)
 	PH_SETTING_BOOL2(setSonyMasterActive, sonyMasterActive, true)
 

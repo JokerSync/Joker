@@ -33,7 +33,6 @@ public:
 	~SonyToolWindow();
 
 private slots:
-	void masterPlayPause();
 	void masterNextFrame();
 	void masterPreviousFrame();
 

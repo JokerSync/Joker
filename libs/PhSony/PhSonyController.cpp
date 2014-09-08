@@ -69,7 +69,7 @@ void PhSonyController::close()
 	}
 }
 
-void PhSonyController::checkVideoSync(int)
+void PhSonyController::checkVideoSync()
 {
 	if(_serial.isOpen()) {
 		bool videoSyncUp = true;
@@ -98,7 +98,7 @@ void PhSonyController::run()
 {
 	_threadRunning = true;
 	while(_threadRunning) {
-		this->checkVideoSync(100);
+		this->checkVideoSync();
 		if(_serial.waitForReadyRead(10))
 			onData();
 	}

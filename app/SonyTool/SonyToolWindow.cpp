@@ -8,44 +8,43 @@
 
 SonyToolWindow::SonyToolWindow() :
 	ui(new Ui::SonyToolWindow),
-	_sonyMaster(PhTimeCodeType25, &_settings),
-	_sonySlave(PhTimeCodeType25, &_settings)
+	_sonyMaster((PhTimeCodeType)_settings.masterTimeCodeType(), &_settings),
+	_sonySlave((PhTimeCodeType)_settings.slaveTimeCodeType(), &_settings)
 {
 	ui->setupUi(this);
 
 	// configure panels
-	ui->masterPanel->setLength(PhTimeCode::timeFromString("00:01:00:00", PhTimeCodeType25));
+	ui->masterPanel->setLength(PhTimeCode::timeFromString("00:01:00:00", _sonyMaster.timeCodeType()));
 
-	ui->slavePanel->setLength(PhTimeCode::timeFromString("00:01:00:00", PhTimeCodeType25));
+	ui->slavePanel->setLength(PhTimeCode::timeFromString("00:01:00:00", _sonySlave.timeCodeType()));
 
 	// Connect master panel to sony master
-	connect(ui->masterPanel, SIGNAL(playPause()), this, SLOT(masterPlayPause()));
-	connect(ui->masterPanel, SIGNAL(nextFrame()), this, SLOT(masterNextFrame()));
-	connect(ui->masterPanel, SIGNAL(previousFrame()), this, SLOT(masterPreviousFrame()));
-	connect(ui->masterPanel, SIGNAL(fastForward()), &_sonyMaster, SLOT(fastForward()));
-	connect(ui->masterPanel, SIGNAL(rewind()), &_sonyMaster, SLOT(rewind()));
-
-	connect(_sonyMaster.clock(), SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), ui->masterPanel, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
-	connect(_sonyMaster.clock(), SIGNAL(rateChanged(PhRate)), ui->masterPanel, SLOT(onRateChanged(PhRate)));
+	connect(ui->masterPanel, &PhMediaPanel::playClicked, &_sonyMaster, &PhSonyMasterController::play);
+	connect(ui->masterPanel, &PhMediaPanel::pauseClicked, &_sonyMaster, &PhSonyMasterController::stop);
+	connect(ui->masterPanel, &PhMediaPanel::nextFrameClicked, this, &SonyToolWindow::masterNextFrame);
+	connect(ui->masterPanel, &PhMediaPanel::previousFrameClicked, this, &SonyToolWindow::masterPreviousFrame);
+	connect(ui->masterPanel, &PhMediaPanel::fastForwardClicked, &_sonyMaster, &PhSonyMasterController::fastForward);
+	connect(ui->masterPanel, &PhMediaPanel::rewindClicked, &_sonyMaster, &PhSonyMasterController::rewind);
 
 	// Connect sony master to MainWindow
-	connect(ui->queryIdButton, SIGNAL(clicked()), &_sonyMaster, SLOT(deviceTypeRequest()));
-	connect(ui->statusSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(statusSense()));
-	connect(ui->timeSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(timeSense()));
-	connect(ui->speedSenseButton, SIGNAL(clicked()), &_sonyMaster, SLOT(speedSense()));
+	connect(ui->queryIdButton, &QPushButton::clicked, &_sonyMaster, &PhSonyMasterController::deviceTypeRequest);
+	connect(ui->statusSenseButton, &QPushButton::clicked, &_sonyMaster, &PhSonyMasterController::statusSense);
+	connect(ui->timeSenseButton, &QPushButton::clicked, &_sonyMaster, &PhSonyMasterController::timeSense);
+	connect(ui->speedSenseButton, &QPushButton::clicked, &_sonyMaster, &PhSonyMasterController::speedSense);
 
-	connect(&_sonyMaster, SIGNAL(deviceIdData(unsigned char, unsigned char)), this, SLOT(onDeviceIdData(unsigned char, unsigned char)));
-	connect(&_sonyMaster, SIGNAL(statusData(unsigned char*, int, int)), this, SLOT(onStatusData(unsigned char*, int, int)));
+	connect(&_sonyMaster, &PhSonyMasterController::deviceIdData, this, &SonyToolWindow::onDeviceIdData);
+	connect(&_sonyMaster, &PhSonyMasterController::statusData, this, &SonyToolWindow::onStatusData);
 
-	// Connect sony slave clock to slave panel
-	connect(_sonySlave.clock(), SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), ui->slavePanel, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
-	connect(_sonySlave.clock(), SIGNAL(rateChanged(PhRate)), ui->slavePanel, SLOT(onRateChanged(PhRate)));
+	// connect clocks to media panel
+	ui->masterPanel->setClock(_sonyMaster.timeCodeType(), NULL);
+	connect(_sonyMaster.clock(), &PhClock::timeChanged, ui->masterPanel, &PhMediaPanel::onTimeChanged);
+	connect(_sonyMaster.clock(), &PhClock::rateChanged, ui->masterPanel, &PhMediaPanel::onRateChanged);
 
-	// Connect video sync signal
-//	connect(&_sonyMaster, SIGNAL(videoSync()), &_sonyMaster, SLOT(onVideoSync()));
-//	connect(&_sonySlave, SIGNAL(videoSync()), &_sonySlave, SLOT(onVideoSync()));
+	ui->slavePanel->setClock(_sonySlave.timeCodeType(), NULL);
+	connect(_sonySlave.clock(), &PhClock::timeChanged, ui->slavePanel, &PhMediaPanel::onTimeChanged);
+	connect(_sonySlave.clock(), &PhClock::rateChanged, ui->slavePanel, &PhMediaPanel::onRateChanged);
+
 	// start master and slave
-
 	on_masterActiveCheck_clicked(_settings.sonyMasterActive());
 	on_slaveActiveCheck_clicked(_settings.sonySlaveActive());
 
@@ -55,7 +54,7 @@ SonyToolWindow::SonyToolWindow() :
 	on_actionSlave_Use_video_sync_triggered(_settings.useVideoSlaveSync());
 	on_actionMaster_Use_video_sync_triggered(_settings.useVideoMasterSync());
 
-	_sonySlave.clock()->setTime(PhTimeCode::timeFromString("00:01:00:00", PhTimeCodeType25));
+	_sonySlave.clock()->setTime(PhTimeCode::timeFromString("00:01:00:00", _sonySlave.timeCodeType()));
 
 //	_sonySlave.getClock()->setRate(1);
 }
@@ -65,14 +64,6 @@ SonyToolWindow::~SonyToolWindow()
 	_sonyMaster.close();
 	_sonySlave.close();
 	delete ui;
-}
-
-void SonyToolWindow::masterPlayPause()
-{
-	if(_sonyMaster.clock()->rate() != 0)
-		_sonyMaster.stop();
-	else
-		_sonyMaster.play();
 }
 
 void SonyToolWindow::masterNextFrame()
@@ -180,8 +171,8 @@ void SonyToolWindow::on_actionSlave_Use_video_sync_triggered(bool useVideo)
 	_slaveTimer.stop();
 	if(useVideo) {
 		// timer trigger the checkVideoSync on the serial port
-		disconnect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(onVideoSync()));
-		connect(&_slaveTimer, SIGNAL(timeout()), &_sonySlave, SLOT(checkVideoSync()));
+		disconnect(&_slaveTimer, &QTimer::timeout, &_sonySlave, &PhSonySlaveController::onVideoSync);
+		connect(&_slaveTimer, &QTimer::timeout, &_sonySlave, &PhSonySlaveController::checkVideoSync);
 
 		_slaveTimer.start(10);
 	}

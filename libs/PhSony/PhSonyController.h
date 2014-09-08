@@ -130,7 +130,7 @@ public slots:
 	 * If this slot is not trigger
 	 * regulary, no video sync event occurs.
 	 */
-	void checkVideoSync(int frequency = 0);
+	void checkVideoSync();
 
 	/**
 	 * @brief This slot handles the video sync signal.
