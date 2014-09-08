@@ -262,13 +262,17 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x30:
 			{
 #warning /// @todo handle edit preset sense properly
-//			PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status";
+			PHDBG(24) << _comSuffix << "Edit Preset Sense => Edit Preset Status";
 				unsigned char count = dataIn[0];
 				for (int i = 0; i < count; i++)
 					dataOut[i] = 0;
 				sendCommandWithData(0x70 + count, 0x30, dataOut);
 				break;
 			}
+		case 0x36:
+			PHDBG(24) << _comSuffix << "Timer Mode Sense => Timer Mode Status : 0 (timecode)";
+			sendCommand(0x71, 0x36, 0x00);
+			break;
 		default:
 			PHDEBUG << _comSuffix << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 			sendNak(UndefinedCommand);
