@@ -2,6 +2,37 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
+    <name>MAC_APPLICATION_MENU</name>
+    <message>
+        <source>Services</source>
+        <translation>Services</translation>
+    </message>
+    <message>
+        <source>Hide %1</source>
+        <translation>Masquer %1</translation>
+    </message>
+    <message>
+        <source>Hide Others</source>
+       <translation>Masquer les autres</translation>
+    </message>
+    <message>
+       <source>Show All</source>
+        <translation>Tout afficher</translation>
+    </message>
+    <message>
+        <source>Preferences...</source>
+        <translation>Préférences...</translation>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation>Quitter %1</translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation>À propos de %1</translation>
+    </message>
+</context>
+<context>
     <name>AboutDialog</name>
     <message>
         <location filename="AboutDialog.ui" line="14"/>
@@ -69,7 +100,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="139"/>
-        <location filename="JokerWindow.cpp" line="331"/>
+        <location filename="JokerWindow.cpp" line="339"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -372,59 +403,50 @@
         <translation>F8</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="326"/>
+        <location filename="JokerWindow.cpp" line="335"/>
         <source>Rythmo files</source>
         <translation>Fichiers rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="327"/>
-        <source>Joker files</source>
-        <translation>Fichiers Joker</translation>
+        <location filename="JokerWindow.cpp" line="148"/>
+        <location filename="JokerWindow.cpp" line="157"/>
+        <location filename="JokerWindow.cpp" line="166"/>
+        <source>Error</source>
+        <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="328"/>
-        <source>DetX files</source>
-        <translation>Fichiers DetX</translation>
+        <location filename="JokerWindow.cpp" line="166"/>
+        <source>Unable to create &quot;%1&quot; midi port</source>
+        <translation>Impossible de créer le port midi &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="329"/>
-        <source>Mosaic files</source>
-        <translation>Fichiers Mosaic</translation>
-    </message>
-    <message>
-        <location filename="JokerWindow.cpp" line="330"/>
-        <location filename="JokerWindow.cpp" line="424"/>
-        <source>All files</source>
-        <translation>Tout les fichiers</translation>
-    </message>
-    <message>
-        <location filename="JokerWindow.cpp" line="423"/>
+        <location filename="JokerWindow.cpp" line="429"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="426"/>
+        <location filename="JokerWindow.cpp" line="434"/>
         <source>Open a video...</source>
         <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="671"/>
-        <location filename="JokerWindow.cpp" line="696"/>
+        <location filename="JokerWindow.cpp" line="676"/>
+        <location filename="JokerWindow.cpp" line="701"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="689"/>
+        <location filename="JokerWindow.cpp" line="694"/>
         <source>Save...</source>
         <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="706"/>
+        <location filename="JokerWindow.cpp" line="711"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="957"/>
+        <location filename="JokerWindow.cpp" line="962"/>
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>
@@ -518,7 +540,7 @@
         <translation>Votre adresse mail si vous souhaitez que nous vous contactions :</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhFeedbackDialog.cpp" line="191"/>
+        <location filename="../../libs/PhCommonUI/PhFeedbackDialog.cpp" line="192"/>
         <source>Thank you for your feedback!</source>
         <translation>Merci pour votre retour !</translation>
     </message>
@@ -544,6 +566,31 @@
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="216"/>
         <source>FF</source>
         <translation>AR</translation>
+    </message>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="230"/>
+        <source>23.98 fps</source>
+        <translation>23.98 fps</translation>
+    </message>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="235"/>
+        <source>24 fps</source>
+        <translation>24 fps</translation>
+    </message>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="240"/>
+        <source>25 fps</source>
+        <translation>25 fps</translation>
+    </message>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="245"/>
+        <source>29.97 fps</source>
+        <translation>29.97 fps</translation>
+    </message>
+    <message>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="250"/>
+        <source>30 fps</source>
+        <translation>30 fps</translation>
     </message>
 </context>
 <context>
@@ -657,57 +704,62 @@
         <translation>Sony 9 pin</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="337"/>
+        <location filename="PreferencesDialog.ui" line="305"/>
+        <source>LTC</source>
+        <translation>LTC</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="310"/>
+        <source>Midi timecode</source>
+        <translation>Midi timecode</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="347"/>
         <source>Parameters</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="368"/>
+        <location filename="PreferencesDialog.ui" line="378"/>
         <source>Sony ID</source>
         <translation>ID Sony</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="352"/>
+        <location filename="PreferencesDialog.ui" line="362"/>
         <source>Sony high speed</source>
         <translation>Vitesse rapide Sony</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="452"/>
+        <location filename="PreferencesDialog.ui" line="462"/>
         <source>millisecond</source>
         <translation>millisecondes</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="308"/>
+        <location filename="PreferencesDialog.ui" line="318"/>
         <source>quarter frame</source>
         <translation>quart d&apos;image</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="409"/>
+        <location filename="PreferencesDialog.ui" line="419"/>
         <source>Available inputs</source>
         <translation>Entrée(s)</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="123"/>
+        <location filename="PreferencesDialog.cpp" line="136"/>
         <source>&lt;System default&gt;</source>
         <translation>&lt;Langue du système&gt;</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="137"/>
-        <source>English</source>
-        <translation>Anglais</translation>
-    </message>
-    <message>
-        <location filename="PreferencesDialog.cpp" line="132"/>
+        <location filename="PreferencesDialog.cpp" line="143"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="154"/>
+        <location filename="PreferencesDialog.cpp" line="163"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="155"/>
+        <location filename="PreferencesDialog.cpp" line="164"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <oldsource>You change the language to &quot;%1&quot;.
@@ -800,6 +852,14 @@ Vous devez relancer %2 pour appliquer ce changement.</translation>
         <location filename="PropertyDialog.ui" line="248"/>
         <source>FPS:</source>
         <translation>IPS :</translation>
+    </message>
+</context>
+<context>
+    <name>QTranslator</name>
+    <message>
+        <location filename="main.cpp" line="36"/>
+        <source>Would you like to reset your settings ?</source>
+        <translation>Souhaitez vous ré-initialiser les réglages ?</translation>
     </message>
 </context>
 <context>
