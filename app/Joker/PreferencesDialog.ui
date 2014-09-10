@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>464</width>
-    <height>510</height>
+    <height>530</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -329,7 +329,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="frame">
+         <widget class="QFrame" name="sonyFrame">
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
@@ -338,17 +338,17 @@
           </property>
           <layout class="QFormLayout" name="formLayout_4">
            <item row="0" column="0">
-            <widget class="QLabel" name="sonyTimeCodeTypeLabel">
+            <widget class="QLabel" name="sonyCommunicationTimeCodeTypeLabel">
              <property name="text">
-              <string>Timecode rate:</string>
+              <string>Communication framerate:</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="sonyTimeCodeTypeCombo">
+            <widget class="QComboBox" name="sonyCommunicationTimeCodeTypeComboBox">
              <item>
               <property name="text">
-               <string>23,98 fps</string>
+               <string>23.98 fps</string>
               </property>
              </item>
              <item>
@@ -363,7 +363,43 @@
              </item>
              <item>
               <property name="text">
-               <string>29,97 fps</string>
+               <string>29.97 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>30 fps</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="sonyVideoSyncTimeCodeTypeLabel">
+             <property name="text">
+              <string>Video sync framerate:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="sonyVideoSyncTimeCodeTypeComboBox">
+             <item>
+              <property name="text">
+               <string>23.98 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>24 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>25 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>29.97 fps</string>
               </property>
              </item>
              <item>
