@@ -11,8 +11,7 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyController::PhSonyController(PhTimeCodeType tcType, PhSonySettings *settings, QString comSuffix) :
-	_tcType(tcType),
+PhSonyController::PhSonyController(PhSonySettings *settings, QString comSuffix) :
 	_settings(settings),
 	_comSuffix(comSuffix),
 	_dataRead(0),
@@ -67,11 +66,6 @@ void PhSonyController::close()
 		PHDEBUG << _comSuffix;
 		_serial.close();
 	}
-}
-
-void PhSonyController::setTimeCodeType(PhTimeCodeType tcType)
-{
-	_tcType = tcType;
 }
 
 void PhSonyController::checkVideoSync()

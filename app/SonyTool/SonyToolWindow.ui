@@ -120,8 +120,15 @@
     <addaction name="separator"/>
     <addaction name="actionSlave_Use_video_sync"/>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionPreferences"/>
+   </widget>
    <addaction name="menuMaster"/>
    <addaction name="menuSlave"/>
+   <addaction name="menuTools"/>
   </widget>
   <action name="actionMaster_GoTo">
    <property name="text">
@@ -159,6 +166,11 @@
    </property>
    <property name="text">
     <string>Use video sync</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences...</string>
    </property>
   </action>
  </widget>

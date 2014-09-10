@@ -38,9 +38,9 @@ private slots:
 
 	void onDeviceIdData(unsigned char id1, unsigned char id2);
 	void onStatusData(unsigned char * statusData, int offset, int length);
+
 	void on_masterActiveCheck_clicked(bool checked);
 	void on_slaveActiveCheck_clicked(bool checked);
-
 
 	void on_actionMaster_GoTo_triggered();
 
@@ -49,6 +49,8 @@ private slots:
 	void on_actionSlave_Use_video_sync_triggered(bool useVideo);
 
 	void on_actionMaster_Use_video_sync_triggered(bool useVideo);
+
+	void on_actionPreferences_triggered();
 
 private:
 	SonyToolSettings _settings;

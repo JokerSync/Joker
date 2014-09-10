@@ -1,15 +1,16 @@
 #include <QMessageBox>
 
-#include "SonyToolWindow.h"
-#include "ui_SonyToolWindow.h"
-
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
+#include "PreferencesDialog.h"
+#include "SonyToolWindow.h"
+#include "ui_SonyToolWindow.h"
+
 SonyToolWindow::SonyToolWindow() :
 	ui(new Ui::SonyToolWindow),
-	_sonyMaster((PhTimeCodeType)_settings.masterTimeCodeType(), &_settings),
-	_sonySlave((PhTimeCodeType)_settings.slaveTimeCodeType(), &_settings)
+	_sonyMaster(&_settings),
+	_sonySlave(&_settings)
 {
 	ui->setupUi(this);
 
@@ -25,7 +26,7 @@ SonyToolWindow::SonyToolWindow() :
 	connect(ui->masterPanel, &PhMediaPanel::previousFrameClicked, this, &SonyToolWindow::masterPreviousFrame);
 	connect(ui->masterPanel, &PhMediaPanel::fastForwardClicked, &_sonyMaster, &PhSonyMasterController::fastForward);
 	connect(ui->masterPanel, &PhMediaPanel::rewindClicked, &_sonyMaster, &PhSonyMasterController::rewind);
-	connect(ui->masterPanel, &PhMediaPanel::timeCodeTypeChanged, &_sonyMaster, &PhSonyMasterController::setTimeCodeType);
+	connect(ui->masterPanel, &PhMediaPanel::timeCodeTypeChanged, &_settings, &SonyToolSettings::setSonyMasterCommunicationTimeCodeType);
 
 	// Connect sony master to MainWindow
 	connect(ui->queryIdButton, &QPushButton::clicked, &_sonyMaster, &PhSonyMasterController::deviceTypeRequest);
@@ -56,9 +57,7 @@ SonyToolWindow::SonyToolWindow() :
 	on_actionMaster_Use_video_sync_triggered(_settings.useVideoMasterSync());
 
 	_sonySlave.clock()->setTime(PhTimeCode::timeFromString("00:01:00:00", _sonySlave.timeCodeType()));
-	connect(ui->slavePanel, &PhMediaPanel::timeCodeTypeChanged, &_sonySlave, &PhSonySlaveController::setTimeCodeType);
-
-//	_sonySlave.getClock()->setRate(1);
+	connect(ui->slavePanel, &PhMediaPanel::timeCodeTypeChanged, &_settings, &SonyToolSettings::setSonySlaveCommunicationTimeCodeType);
 }
 
 SonyToolWindow::~SonyToolWindow()
@@ -206,4 +205,10 @@ void SonyToolWindow::on_actionMaster_Use_video_sync_triggered(bool useVideo)
 
 		_masterTimer.start(40);
 	}
+}
+
+void SonyToolWindow::on_actionPreferences_triggered()
+{
+	PreferencesDialog dlg(this, &_settings);
+	dlg.exec();
 }

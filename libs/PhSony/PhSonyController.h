@@ -49,11 +49,10 @@ public:
 	/**
 	 * @brief PhSonyController constructor
 	 *
-	 * @param tcType The initial timecode type
 	 * @param settings The application settings
 	 * @param comSuffix Serial port name suffix
 	 */
-	explicit PhSonyController(PhTimeCodeType tcType, PhSonySettings *settings, QString comSuffix);
+	explicit PhSonyController(PhSonySettings *settings, QString comSuffix);
 
 	/**
 	 * @brief PhSonyController destructor
@@ -76,15 +75,7 @@ public:
 	 * @brief The timecode type used by the protocol
 	 * @return A timecode type value.
 	 */
-	PhTimeCodeType timeCodeType() {
-		return _tcType;
-	}
-
-	/**
-	 * @brief Set the protocol timecode type
-	 * @param tcType A timecode type value.
-	 */
-	void setTimeCodeType(PhTimeCodeType tcType);
+	virtual PhTimeCodeType timeCodeType() = 0;
 
 	/**
 	 * @brief Get the sony controller internal clock.
@@ -214,9 +205,6 @@ protected:
 	 * @return The name of the command.
 	 */
 	QString stringFromCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *data = 0);
-
-	/** @brief The timecode type used by the protocol */
-	PhTimeCodeType _tcType;
 
 	/** @brief The internal clock of the sony controller. */
 	PhClock _clock;
