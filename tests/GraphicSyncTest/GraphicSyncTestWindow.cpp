@@ -5,7 +5,7 @@ GraphicSyncTestWindow::GraphicSyncTestWindow(GraphicSyncTestSettings *settings) 
 	QMainWindow(NULL),
 	ui(new Ui::GraphicSyncTestWindow),
 	_settings(settings),
-	_sony(PhTimeCodeType25, settings),
+	_sony(settings),
 	_lastTime(0),
 	_count(0)
 {
@@ -29,7 +29,7 @@ void GraphicSyncTestWindow::beforePaint(int frequency)
 	int elapsed = _time.elapsed() - _lastTime;
 	_lastTime = _time.elapsed();
 //	int refreshRate = ui->graphicView->refreshRate();
-	_sony.checkVideoSync(frequency);
+	_sony.checkVideoSync();
 //	_sony.clock()->tick(frequency);
 	float ratio = _count++;
 	if(_sony.clock()->time() > 0)
