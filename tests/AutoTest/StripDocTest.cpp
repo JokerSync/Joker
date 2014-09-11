@@ -345,6 +345,33 @@ void StripDocTest::importMosTest04()
 	QCOMPARE(doc.detects()[0]->type(), PhStripDetect::Off);
 }
 
+void StripDocTest::importMosTest24fps()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.importMosFile("mos24.mos"));
+
+	QCOMPARE(doc.videoFilePath(), QString("C:\\Users\\Gilles\\Desktop\\Sonic_EP_01_mix_VA.mov"));
+	QCOMPARE(doc.videoTimeCodeType(), PhTimeCodeType24);
+	QCOMPARE(t2s(doc.videoTimeIn(), PhTimeCodeType24), QString("00:59:58:00"));
+
+	QCOMPARE(doc.texts().count(), 1);
+
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType24), QString("01:00:01:00"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType24), QString("01:00:03:00"));
+}
+
+void StripDocTest::importMosTest25fps()
+{
+	PhStripDoc doc;
+
+	QVERIFY(doc.importMosFile("mos25.mos"));
+
+	QCOMPARE(doc.videoFilePath(), QString("C:\\Users\\Gilles\\Desktop\\Get Blake\\Get Blake 115\\GBL_EP115_Online_Master_VA_h264_TCI.mov"));
+	QCOMPARE(doc.videoTimeCodeType(), PhTimeCodeType25);
+	QCOMPARE(t2s(doc.videoTimeIn(), PhTimeCodeType25), QString("09:59:58:00"));
+}
+
 void StripDocTest::importDrbTest01()
 {
 	PhStripDoc doc;
