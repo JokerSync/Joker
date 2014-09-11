@@ -91,7 +91,7 @@ private:
 	QMap<QString, QString> _fontList;
 	QMap<QString, QString> _langNameMap;
 
-	QButtonGroup _protocolButtonGroup, _midiPortTypeButtonGroup;
+	QButtonGroup _delayButtonGroup, _protocolButtonGroup, _midiPortTypeButtonGroup;
 };
 
 #endif // PREFERENCESDIALOG_H

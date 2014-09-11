@@ -44,6 +44,9 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
+
+	_delayButtonGroup.addButton(ui->radioButtonQF);
+	_delayButtonGroup.addButton(ui->radioButtonMS);
 	if(_oldUseQuarterFrame) {
 		ui->radioButtonQF->setChecked(true);
 		ui->spinBoxDelay->setValue(_oldDelay / 10);
