@@ -961,7 +961,7 @@ void JokerWindow::onPaint(int width, int height)
 		gCurrentLoop.draw();
 	}
 
-	if(_lastVideoSyncElapsed.elapsed() > 1000) {
+	if((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000)) {
 		PhGraphicText errorText(_strip.getHUDFont(), tr("No video sync"));
 		errorText.setRect(width / 2 - 100, height / 2 - 25, 200, 50);
 		int red = (_lastVideoSyncElapsed.elapsed() - 1000) / 4;
