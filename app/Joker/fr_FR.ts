@@ -406,7 +406,7 @@
     <message>
         <location filename="JokerWindow.ui" line="475"/>
         <source>Display the vertical scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher l&apos;échelle verticale</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="150"/>
@@ -418,17 +418,17 @@
     <message>
         <location filename="JokerWindow.cpp" line="150"/>
         <source>Unable to connect to USB422v module</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de se connecter au module USB422v</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="157"/>
         <source>Unable to open %0</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir %0</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="165"/>
         <source>Unable to open %0 midi port</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir le port midi %0</translation>
     </message>
     <message>
         <location filename="JokerWindow.cpp" line="334"/>
@@ -446,23 +446,23 @@
         <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="678"/>
-        <location filename="JokerWindow.cpp" line="703"/>
+        <location filename="JokerWindow.cpp" line="679"/>
+        <location filename="JokerWindow.cpp" line="704"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="696"/>
+        <location filename="JokerWindow.cpp" line="697"/>
         <source>Save...</source>
         <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="713"/>
+        <location filename="JokerWindow.cpp" line="714"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="964"/>
+        <location filename="JokerWindow.cpp" line="965"/>
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>
@@ -718,29 +718,69 @@
         <translation>Sony 9 pin</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="334"/>
+        <location filename="PreferencesDialog.ui" line="343"/>
+        <source>Communication framerate:</source>
+        <translation>Vitesse de la communication:</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="351"/>
+        <location filename="PreferencesDialog.ui" line="387"/>
+        <source>23.98 fps</source>
+        <translation>23.98 ips</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="356"/>
+        <location filename="PreferencesDialog.ui" line="392"/>
+        <source>24 fps</source>
+        <translation>24 ips</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="361"/>
+        <location filename="PreferencesDialog.ui" line="397"/>
+        <source>25 fps</source>
+        <translation>25 ips</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="366"/>
+        <location filename="PreferencesDialog.ui" line="402"/>
+        <source>29.97 fps</source>
+        <translation>29.97 ips</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="371"/>
+        <location filename="PreferencesDialog.ui" line="407"/>
+        <source>30 fps</source>
+        <translation>30 ips</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="379"/>
+        <source>Video sync framerate:</source>
+        <translation>Vitesse de la référence vidéo:</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="418"/>
         <source>LTC</source>
         <translation>LTC</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="356"/>
+        <location filename="PreferencesDialog.ui" line="440"/>
         <source>Audio input port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Port audio d&apos;entrée:</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="366"/>
+        <location filename="PreferencesDialog.ui" line="450"/>
         <source>Midi</source>
-        <translation type="unfinished"></translation>
+        <translation>Midi</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="385"/>
+        <location filename="PreferencesDialog.ui" line="469"/>
         <source>Read from existing port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lire à partir d&apos;un port existant:</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="392"/>
+        <location filename="PreferencesDialog.ui" line="476"/>
         <source>Read from virtual port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lire à partir d&apos;un port virtuel:</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="291"/>
@@ -753,22 +793,22 @@
         <translation>millisecondes</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="174"/>
+        <location filename="PreferencesDialog.cpp" line="177"/>
         <source>&lt;System default&gt;</source>
         <translation>&lt;Langue du système&gt;</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="181"/>
+        <location filename="PreferencesDialog.cpp" line="184"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="203"/>
+        <location filename="PreferencesDialog.cpp" line="206"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="204"/>
+        <location filename="PreferencesDialog.cpp" line="207"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <translation>Vous avez changé la langue pour &quot;%1&quot;.
