@@ -18,6 +18,7 @@
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicLoop.h"
+#include "PhGraphicStrip/PhNextPeople.h"
 
 #include "PhSync/PhClock.h"
 
@@ -116,6 +117,10 @@ public:
 		return _infos;
 	}
 
+	QList<PhNextPeople*> nextPeoples() {
+		return _nextPeoples;
+	}
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -160,6 +165,8 @@ private:
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
 
 	QStringList _infos;
+
+	QList<PhNextPeople*> _nextPeoples;
 };
 
 #endif // PHGRAPHICSTRIP_H

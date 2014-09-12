@@ -5,8 +5,10 @@
 
 HEADERS += \
 	../../libs/PhGraphicStrip/PhGraphicStrip.h \
-	../../libs/PhGraphicStrip/PhGraphicStripSettings.h
+	../../libs/PhGraphicStrip/PhGraphicStripSettings.h \
+    $$PWD/PhNextPeople.h
 
 SOURCES += \
-	../../libs/PhGraphicStrip/PhGraphicStrip.cpp
+	../../libs/PhGraphicStrip/PhGraphicStrip.cpp \
+    $$PWD/PhNextPeople.cpp
 

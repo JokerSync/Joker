@@ -50,6 +50,10 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
 	ui->videoStripView->engine()->rootContext()->setContextProperty("infoModel", QVariant::fromValue(_infoList));
+	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", QVariant::fromValue(_nextPeoples));
+	ui->videoStripView->engine()->rootContext()->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("clockTime", _strip.clock()->time() + _settings->screenDelay());
+
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -888,7 +892,6 @@ void JokerWindow::onPaint(int width, int height)
 
 	QQuickItem *videoLogo = ui->videoStripView->rootObject()->findChild<QQuickItem*>("videoLogo");
 	videoLogo->setVisible((videoHeight > 0) && (_videoEngine.height() <= 0) && _settings->displayLogo());
-	videoLogo->setHeight(videoHeight);
 
 	PhClock *clock = _videoEngine.clock();
 	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
@@ -903,6 +906,21 @@ void JokerWindow::onPaint(int width, int height)
 		tcOffset = tcLabel->height();
 
 	_strip.draw(0, y + videoHeight, width, stripHeight, tcOffset, selectedPeoples);
+
+	ui->videoStripView->engine()->rootContext()->setContextProperty("clockTime", _strip.clock()->time() + _settings->screenDelay());
+
+	// Note: _selectedPeopleList is needed because QVariant does not know how to handle a QList<PhPeople*>
+	// we convert it to QList<QObject*>
+	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", NULL);
+	qDeleteAll(_nextPeoples);
+	_nextPeoples.clear();
+	foreach(PhNextPeople *nextPeople, _strip.nextPeoples()) {
+		_nextPeoples.append(nextPeople);
+	}
+
+	// refresh the view
+	// TODO the view could be refreshed more intelligently by defining a true model and define change signals
+	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", QVariant::fromValue(_nextPeoples));
 
 	// prepare the string list that is used to display the infos
 	_infoList.clear();
@@ -953,9 +971,10 @@ void JokerWindow::onPaint(int width, int height)
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
-	QQuickItem *loopLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("currentLoopLabel");
-	// if the strip was drawn with QML too, the following could be replaced with proper anchoring
-	loopLabel->setY(height - stripHeight - loopLabel->height());
+
+	// placeholder used to position other UI elements
+	QQuickItem *stripPlaceholder = ui->videoStripView->rootObject()->findChild<QQuickItem*>("stripPlaceholder");
+	stripPlaceholder->setHeight(stripHeight);
 
 	QQuickItem *noSyncLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("noSyncLabel");
 	noSyncLabel->setVisible(_lastVideoSyncElapsed.elapsed() > 1000);

@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/Phonations/Joker">
         <file>main.qml</file>
+        <file>Video.qml</file>
+        <file>LeftColumn.qml</file>
+        <file>RightColumn.qml</file>
     </qresource>
 </RCC>

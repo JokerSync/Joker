@@ -253,6 +253,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		if(displayNextText)
 			maxTimeIn += y * verticalTimePerPixel;
 
+		// housekeeping !
+		_nextPeoples.clear();
+
 		foreach(PhStripText * text, _doc.texts()) {
 
 			if( !((text->timeOut() < timeIn) || (text->timeIn() > timeOut)) ) {
@@ -299,39 +302,17 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gPeople.draw();
 			}
 
-			int howFarIsText = (text->timeIn() - clockTime) / verticalTimePerPixel;
-			PhTime timePerPeopleHeight = gPeople.height() * verticalTimePerPixel;
-			int y0 = y - howFarIsText - gPeople.height();
-
 			if(displayNextText
-			   && y0 < y
-			   && y0 > tcOffset
-			   && (timeIn < text->timeIn() + timePerPeopleHeight)
+			   && text->timeIn() - clockTime > -50*verticalTimePerPixel // make sure the label does not disappear suddenly
+			   &&  text->timeIn() - clockTime < (y-tcOffset)*verticalTimePerPixel
 			   && ((lastText == NULL)
 			       || (lastText->people() != text->people())
 			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
-				PhPeople * people = text->people();
-
-				//This line is used to see which text's name will be displayed
-				gPeople.setX(width - gPeople.width());
-				gPeople.setY(y0);
-				gPeople.setZ(-3);
-				gPeople.setHeight(text->height() * height / 2);
-
-				gPeople.setColor(computeColor(people, selectedPeoples, invertedColor));
-
-				PhGraphicSolidRect background(gPeople.x(), gPeople.y() - 2, gPeople.width(), gPeople.height() + 3);
-				if(selectedPeoples.size() && !selectedPeoples.contains(people))
-					background.setColor(QColor(90, 90, 90));
-				else
-					background.setColor(QColor(180, 180, 180));
-
-				background.setZ(gPeople.z() - 1);
-
-				if(!invertedColor)
-					background.draw();
-
-				gPeople.draw();
+				PhNextPeople *nextPeople = new PhNextPeople(people->name(),
+															computeColor(people, selectedPeoples, invertedColor).name(),
+															text->timeIn(),
+															selectedPeoples.size()==0 || selectedPeoples.contains(people));
+				_nextPeoples.append(nextPeople);
 			}
 
 			lastTextList[text->y()] = text;
