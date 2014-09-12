@@ -23,9 +23,6 @@ public:
 	~PreferencesDialog();
 
 protected slots:
-	/**
-	 * @brief Update the settings according to the UI
-	 */
 	void accept();
 
 private:

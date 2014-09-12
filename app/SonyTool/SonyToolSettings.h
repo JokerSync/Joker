@@ -12,7 +12,6 @@ class SonyToolSettings : public QObject, PhGenericSettings, public PhSonySetting
 {
 	Q_OBJECT
 
-public:
 	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
 	PH_SETTING_UCHAR2(setSonyDevice1, sonyDevice1, 0xF0)
