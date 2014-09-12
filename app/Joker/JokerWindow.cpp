@@ -539,8 +539,8 @@ void JokerWindow::on_actionPreferences_triggered()
 	PreferencesDialog dlg(_settings);
 	if(dlg.exec() == QDialog::Accepted) {
 		if((oldSynchroProtocol != _settings->synchroProtocol())
-				|| (oldLtcInputPort  != _settings->ltcInputPort())
-				|| (oldMidiInputPort != _settings->midiInputPort())) {
+		   || (oldLtcInputPort  != _settings->ltcInputPort())
+		   || (oldMidiInputPort != _settings->midiInputPort())) {
 			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
 			setupSyncProtocol();
 		}
