@@ -255,6 +255,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		if(displayNextText && (stripTimeIn + verticalScaleDuration > stripTimeOut))
 			maxTimeIn = stripTimeIn + verticalScaleDuration;
 
+		// housekeeping !
+		_nextPeoples.clear();
+
 		QColor selectedPeopleColor(_settings->backgroundColorLight());
 		QColor unselectedPeopleColor(128, 128, 128);
 
@@ -304,28 +307,17 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				gPeople.draw();
 			}
 
-			PhTime timePerPeopleHeight = gPeople.height() * verticalTimePerPixel;
-
 			if(displayNextText
-			   && (text->timeIn() > clockTime)
-			   && (text->timeIn() < maxTimeIn - timePerPeopleHeight)
+			   && text->timeIn() - clockTime > -50*verticalTimePerPixel // make sure the label does not disappear suddenly
+			   &&  text->timeIn() < maxTimeIn
 			   && ((lastText == NULL)
 			       || (lastText->people() != text->people())
 			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
-				PhPeople * people = text->people();
-
-				//This line is used to see which text's name will be displayed
-				gPeople.setX(nextTextX + spacing);
-				gPeople.setY(y - (text->timeIn() - clockTime + timePerPeopleHeight) / verticalTimePerPixel);
-				gPeople.setZ(-3);
-				gPeople.setHeight(height / 10);
-
-				if(selectedPeoples.size() && !selectedPeoples.contains(people))
-					gPeople.setColor(unselectedPeopleColor);
-				else
-					gPeople.setColor(selectedPeopleColor);
-
-				gPeople.draw();
+				PhNextPeople *nextPeople = new PhNextPeople(people->name(),
+															computeColor(people, selectedPeoples, invertedColor).name(),
+															text->timeIn(),
+															selectedPeoples.size()==0 || selectedPeoples.contains(people));
+				_nextPeoples.append(nextPeople);
 			}
 
 			lastTextList[text->y()] = text;
