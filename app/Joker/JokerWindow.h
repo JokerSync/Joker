@@ -241,6 +241,8 @@ private slots:
 
 	void on_actionSet_space_between_two_ruler_graduation_triggered();
 
+	void on_actionDisplay_the_vertical_scale_triggered(bool checked);
+
 private:
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;

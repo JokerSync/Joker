@@ -32,6 +32,8 @@ private slots:
 	void importMosTest02();
 	void importMosTest03();
 	void importMosTest04();
+	void importMosTest24fps();
+	void importMosTest25fps();
 
 	// Import DRB tests
 	void importDrbTest01();

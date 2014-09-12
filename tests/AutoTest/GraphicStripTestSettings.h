@@ -91,6 +91,14 @@ public:
 	int backgroundColorDark() {
 		return 0x242e2c;
 	}
+
+	bool displayVerticalScale() {
+		return false;
+	}
+
+	int verticalScaleSpaceInSeconds() {
+		return 5;
+	}
 };
 
 #endif // GRAPHICSTRIPTESTSETTINGS_H
