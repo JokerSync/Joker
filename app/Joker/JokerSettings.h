@@ -98,9 +98,13 @@ public:
 	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
 	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
 
-	// Midi settings:
-	PH_SETTING_STRING2(setMidiInputPort, midiInputPort, "Joker")
-	PH_SETTING_STRING2(setMidiVirtualInputPort, midiVirtualInputPort, "Joker")
+	// MTC settings:
+	PH_SETTING_STRING2(setMtcInputPort, mtcInputPort, "Joker")
+	PH_SETTING_STRING2(setMtcVirtualInputPort, mtcVirtualInputPort, "Joker")
+
+	// MMC settings
+	PH_SETTING_BOOL(setSendMmcMessage, sendMmcMessage)
+	PH_SETTING_STRING2(setMmcOutputPort, mmcOutputPort, "Joker")
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)

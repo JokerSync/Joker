@@ -36,9 +36,9 @@ QStringList PhMidiOutput::outputList()
 
 bool PhMidiOutput::open(QString portName)
 {
+	PHDEBUG << "Opening" << portName;
 	try {
 		_midiOut = new RtMidiOut();
-		PHDEBUG << "Opening" << portName;
 		for(unsigned int i = 0; i < _midiOut->getPortCount(); i++) {
 			if(QString::fromStdString(_midiOut->getPortName(i)) == portName) {
 				_midiOut->openPort(i);

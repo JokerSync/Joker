@@ -51,6 +51,7 @@ protected:
 	void reject();
 
 private slots:
+	void updateSynchronisationEnabledControl(bool);
 	void updateSynchronisationEnabledControl(int, bool);
 
 	void on_spinBoxDelay_valueChanged(int delay);
