@@ -248,6 +248,8 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		hideMediaPanel();
 		break;
 	case QEvent::MouseMove: /// - Mouse move show the media panel
+	case QEvent::HoverEnter:
+	case QEvent::HoverMove:
 		{
 			fadeInMediaPanel();
 
