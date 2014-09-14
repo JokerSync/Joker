@@ -126,6 +126,18 @@ public:
 	 * @return An integer value
 	 */
 	virtual int backgroundColorDark() = 0;
+
+	/**
+	 * @brief Hold the number of seconds between the dashes of the right scale
+	 * @return An interger value
+	 */
+	virtual int verticalScaleSpaceInSeconds() = 0;
+
+	/**
+	 * @brief Display a scaler on the right of the screen
+	 * @return A boolean value
+	 */
+	virtual bool displayVerticalScale() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

@@ -102,7 +102,7 @@ void PhSynchronizer::onSyncTimeChanged(PhTime time)
 {
 	if(!_settingSonyTime) {
 		PHDBG(3) << time;
-		if(_syncType == Sony) {
+		if(_syncType != LTC) {
 			_settingVideoTime = true;
 			_videoClock->setTime(time);
 			_settingVideoTime = false;

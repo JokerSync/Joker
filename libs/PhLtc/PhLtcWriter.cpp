@@ -8,8 +8,8 @@
 
 #include "PhLtcWriter.h"
 
-PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
-	PhAudioOutput(parent),
+PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType) :
+	PhAudioOutput(),
 	_tcType(tcType),
 	_encoder(NULL)
 {

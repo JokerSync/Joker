@@ -114,6 +114,7 @@
     <addaction name="actionInvert_colors"/>
     <addaction name="actionHide_the_rythmo"/>
     <addaction name="actionDisplay_the_cuts"/>
+    <addaction name="actionDisplay_the_vertical_scale"/>
     <addaction name="separator"/>
     <addaction name="actionShow_ruler"/>
     <addaction name="actionChange_ruler_timestamp"/>
@@ -456,6 +457,22 @@
   <action name="actionSet_space_between_two_ruler_graduation">
    <property name="text">
     <string>Set space between two ruler graduation...</string>
+   </property>
+  </action>
+  <action name="actionDisplay_the_scale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display the scale</string>
+   </property>
+  </action>
+  <action name="actionDisplay_the_vertical_scale">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display the vertical scale</string>
    </property>
   </action>
  </widget>

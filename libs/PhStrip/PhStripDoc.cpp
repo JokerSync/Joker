@@ -233,8 +233,8 @@ PhStripText* PhStripDoc::readMosText(QFile &f, PhTimeCodeType tcType, int textLe
 {
 	QString content = PhFileTool::readString(f, 2, "content");
 
-	PhTime timeIn = _videoTimeIn + readMosTime(f, tcType, internLevel);;
-	PhTime timeOut = _videoTimeIn + readMosTime(f, tcType, internLevel);;
+	PhTime timeIn = _videoTimeIn + readMosTime(f, tcType, internLevel);
+	PhTime timeOut = _videoTimeIn + readMosTime(f, tcType, internLevel);
 
 	PhStripText* text = new PhStripText(timeIn, NULL, timeOut, 0, content, 0.2f);
 
@@ -254,8 +254,8 @@ PhStripText* PhStripDoc::readMosText(QFile &f, PhTimeCodeType tcType, int textLe
 
 PhStripDetect *PhStripDoc::readMosDetect(QFile &f, PhTimeCodeType tcType, int detectLevel, int internLevel)
 {
-	PhTime timeIn = _videoTimeIn + readMosTime(f, tcType, internLevel);;
-	PhTime timeOut = _videoTimeIn + readMosTime(f, tcType, internLevel);;
+	PhTime timeIn = _videoTimeIn + readMosTime(f, tcType, internLevel);
+	PhTime timeOut = _videoTimeIn + readMosTime(f, tcType, internLevel);
 	PhFileTool::readInt(f, internLevel, "detect type 1");
 	int detectType2 = PhFileTool::readInt(f, internLevel, "detect type 2");
 	int detectType3 = PhFileTool::readInt(f, internLevel, "detect type 3");
@@ -709,9 +709,13 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 				return false;
 			int number = PhFileTool::readInt(f, loopLevel, "loop number");
 
-			PhTime loopTime = _videoTimeIn + readMosTime(f, tcType, internLevel);;
-			PhFileTool::readString(f, loopLevel, "loop name");
-			_loops.append(new PhStripLoop(loopTime, QString::number(number)));
+			PhTime loopTime = _videoTimeIn + readMosTime(f, tcType, internLevel);
+			QString label = PhFileTool::readString(f, loopLevel, "loop name");
+			if(k == 1)
+				label = "off";
+			else if(label.isEmpty())
+				label = QString::number(number);
+			_loops.append(new PhStripLoop(loopTime, label));
 		}
 	}
 
@@ -1264,6 +1268,7 @@ void PhStripDoc::reset()
 	_videoForceRatio169 = false;
 	_generator = "";
 	_mosNextTag = 0x8008;
+	_modified = false;
 
 	emit this->changed();
 }
