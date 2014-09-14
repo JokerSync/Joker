@@ -72,7 +72,7 @@ void MidiTest::testQFTC()
 	QCOMPARE((int)quarterFrameData, 0x01);
 
 	midiOut.sendQFTC(0x11); // setting higher frame to 0x1x
-	QThread::msleep(10);
+	QThread::msleep(20); // try to solve travis fail
 	QCOMPARE(quarterFrameCount, 2);
 	QCOMPARE((int)quarterFrameData, 0x11);
 
