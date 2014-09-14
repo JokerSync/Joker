@@ -112,7 +112,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 			else {
 				unsigned char manufactorId = message->at(1);
 #warning /// @todo Handle midi channel
-				unsigned char channel = message->at(2);
+//				unsigned char channel = message->at(2);
 				unsigned char type = message->at(3);
 				if(manufactorId == 0x7F) {
 					switch (type) {

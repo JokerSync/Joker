@@ -9,13 +9,13 @@
 #include "PhLtcReader.h"
 
 PhLtcReader::PhLtcReader(PhLtcReaderSettings *settings) :
+	_settings(settings),
 	_tcType((PhTimeCodeType) settings->ltcReaderTimeCodeType()),
 	_position(0),
 	_noFrameCounter(0),
 	_lastFrameDigit(0),
 	_oldLastFrameDigit(0),
-	_badTimeCodeGapCounter(0),
-	_settings(settings)
+	_badTimeCodeGapCounter(0)
 {
 #warning /// @todo autodetect tc type
 	_decoder = ltc_decoder_create(1920, 1920 * 2);

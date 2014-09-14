@@ -467,12 +467,11 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			int scaleHeight = 4;
 			int spaceBetweenDashes = _settings->verticalScaleSpaceInSeconds() * 24000 / verticalTimePerPixel;
 			// Set the first dash to +5sec
-			int y0 = y - spaceBetweenDashes;
 			scale.setHeight(scaleHeight);
 			scale.setColor(Qt::gray);
 			int counter = 0;
 
-			for(y0; y0 > 0; y0 = y0 - spaceBetweenDashes) {
+			for(int y0 = y - spaceBetweenDashes; y0 > 0; y0 = y0 - spaceBetweenDashes) {
 				int scaleWidth;
 				if(counter % 2 == 0)
 					scaleWidth = 4;
