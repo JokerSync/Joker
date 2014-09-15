@@ -35,11 +35,13 @@ public:
 	}
 
 	QString backgroundImageLight() {
-		return "motif-240.png";
+//		return "motif-240.png";
+		return "";
 	}
 
 	QString backgroundImageDark() {
-		return "motif-240_black.png";
+//		return "motif-240_black.png";
+		return "";
 	}
 
 	QString hudFontFile() {
