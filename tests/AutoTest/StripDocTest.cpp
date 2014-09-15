@@ -196,7 +196,7 @@ void StripDocTest::importMosTest01()
 	QCOMPARE(doc.authorName(), QString("auteur"));
 
 	QCOMPARE(doc.videoFilePath(), QString(""));
-	QVERIFY(doc.videoTimeCodeType() == PhTimeCodeType25);
+	QCOMPARE(doc.videoTimeCodeType(), PhTimeCodeType25);
 	QCOMPARE(t2s(doc.videoTimeIn(), PhTimeCodeType25), QString("00:00:00:00"));
 
 	QCOMPARE(doc.title(), QString("Titre VO"));
@@ -243,7 +243,7 @@ void StripDocTest::importMosTest02()
 
 	QCOMPARE(doc.videoFilePath(), QString("C:\\Users\\Matthhou\\Desktop\\Burn Notice\\710\\BurnNotice_BCI710_VOVI.mov"));
 #warning TODO Matthias told me that the timestamp was in fact 00:58:00:00...
-	QVERIFY(doc.videoTimeCodeType() == PhTimeCodeType25);
+	QCOMPARE(doc.videoTimeCodeType(), PhTimeCodeType25);
 	QCOMPARE(t2s(doc.videoTimeIn(), PhTimeCodeType25), QString("00:58:24:00"));
 
 	// Test peoples
@@ -264,6 +264,7 @@ void StripDocTest::importMosTest02()
 	// Test loops
 	QCOMPARE(doc.loops().count(), 1);
 	QCOMPARE(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType25), QString("01:00:00:00"));
+	QCOMPARE(doc.loops()[0]->label(), QString("1"));
 
 	// Test texts
 	QCOMPARE(doc.texts().count(), 2);
@@ -289,9 +290,8 @@ void StripDocTest::importMosTest03()
 
 	QVERIFY(doc.importMosFile("test03.mos"));
 
-
 	QCOMPARE(doc.videoFilePath(), QString("Z:\\MOT POUR MO\\AU FIL D'ARIANE_DETECTION\\jpegAFA_BOB 06_SEQ 30_PISTES SEPARES_H264.mov"));
-	QVERIFY(doc.videoTimeCodeType() == PhTimeCodeType24);
+	QCOMPARE(doc.videoTimeCodeType(), PhTimeCodeType24);
 	QCOMPARE(t2s(doc.videoTimeIn(), PhTimeCodeType24), QString("05:59:50:00"));
 
 	// Test peoples
@@ -315,16 +315,44 @@ void StripDocTest::importMosTest03()
 
 	// Test loops
 	QCOMPARE(doc.loops().count(), 2);
-#warning /// @todo test loop number and name
 	QCOMPARE(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType24), QString("06:00:01:00"));
-//	QCOMPARE(doc.getLoops()[0]->getLoopNumber(), 1);
+	QCOMPARE(doc.loops()[0]->label(), QString("30"));
 	QCOMPARE(t2s(doc.loops()[1]->timeIn(), PhTimeCodeType24), QString("06:01:15:00"));
-//	QCOMPARE(doc.getLoops()[1]->getLoopNumber(), 2);
+	QCOMPARE(doc.loops()[1]->label(), QString("off"));
 
 	// Test texts
 	QCOMPARE(doc.texts(false).count(), 206);
 	QCOMPARE(doc.texts(true).count(), 0);
-//#warning TODO more test on text
+
+	QCOMPARE(doc.texts()[0]->people(), noName);
+	QCOMPARE(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType24), QString("05:59:49:05"));
+	QCOMPARE(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType24), QString("05:59:49:20"));
+
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->y(), 2.0f), PHNQ(QString::number(doc.texts()[0]->y())));
+	QVERIFY2(PhTestTools::compareFloats(doc.texts()[0]->height(), 0.2f), PHNQ(QString::number(doc.texts()[0]->height())));
+
+	QCOMPARE(doc.texts()[0]->content(), QString("Départ bob 6"));
+	QCOMPARE(doc.texts()[1]->content(), QString("(X)"));
+	QCOMPARE(doc.texts()[2]->content(), QString("05.59.50.00"));
+	QCOMPARE(doc.texts()[3]->content(), QString("1000"));
+	QCOMPARE(doc.texts()[4]->content(), QString("(X)"));
+	QCOMPARE(doc.texts()[5]->content(), QString("P.I"));
+
+	QCOMPARE(doc.texts()[9]->people(), denis);
+	QCOMPARE(t2s(doc.texts()[9]->timeIn(), PhTimeCodeType24), QString("06:00:07:23"));
+	QCOMPARE(t2s(doc.texts()[9]->timeOut(), PhTimeCodeType24), QString("06:00:08:03"));
+	QCOMPARE(t2s(doc.texts()[10]->timeIn(), PhTimeCodeType24), QString("06:00:08:03"));
+	QCOMPARE(t2s(doc.texts()[10]->timeOut(), PhTimeCodeType24), QString("06:00:08:07"));
+
+	QCOMPARE(doc.texts()[9]->content(), QString("Tu "));
+	QCOMPARE(doc.texts()[10]->content(), QString("tra"));
+	QCOMPARE(doc.texts()[11]->content(), QString("vaillais "));
+	QCOMPARE(doc.texts()[12]->content(), QString("pas "));
+	QCOMPARE(doc.texts()[13]->content(), QString("ce "));
+	QCOMPARE(doc.texts()[14]->content(), QString("soir !"));
+
+	QCOMPARE(t2s(doc.texts()[14]->timeOut(), PhTimeCodeType24), QString("06:00:09:06"));
+
 	// Detect test
 	QCOMPARE(doc.detects().count(), 24);
 	//#warning TODO more test on detect
@@ -336,6 +364,27 @@ void StripDocTest::importMosTest04()
 
 	QVERIFY(doc.importMosFile("test04.mos"));
 
+	// Test video info
+	QCOMPARE(doc.videoFilePath(), QString("D:\\Ressources\\Mosaic\\Utilisateurs\\Yves\\Bold 5704\\5704.mov"));
+	QCOMPARE(doc.videoTimeCodeType(), PhTimeCodeType25);
+	QCOMPARE(t2s(doc.videoTimeIn(), PhTimeCodeType25), QString("00:59:39:24"));
+
+	// Test loops
+	QCOMPARE(doc.loops().count(), 27);
+	QCOMPARE(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType25), QString("01:00:00:13"));
+	QCOMPARE(doc.loops()[0]->label(), QString("1"));
+	QCOMPARE(doc.loops()[1]->label(), QString("2"));
+	QCOMPARE(doc.loops()[2]->label(), QString("3"));
+	QCOMPARE(doc.loops()[3]->label(), QString("off"));
+	QCOMPARE(doc.loops()[4]->label(), QString("4"));
+	QCOMPARE(t2s(doc.loops()[5]->timeIn(), PhTimeCodeType25), QString("01:02:56:02"));
+	QCOMPARE(doc.loops()[5]->label(), QString("5"));
+	QCOMPARE(t2s(doc.loops()[25]->timeIn(), PhTimeCodeType25), QString("01:18:14:11"));
+	QCOMPARE(doc.loops()[25]->label(), QString("25"));
+	QCOMPARE(t2s(doc.loops()[26]->timeIn(), PhTimeCodeType25), QString("01:19:01:01"));
+	QCOMPARE(doc.loops()[26]->label(), QString("off"));
+
+	// Test texts
 	QCOMPARE(doc.texts().count(), 1118);
 	QCOMPARE(doc.texts(true).count(), 4329);
 	QCOMPARE(doc.detects().count(), 4552);

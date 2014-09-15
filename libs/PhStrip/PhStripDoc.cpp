@@ -710,8 +710,12 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 			int number = PhFileTool::readInt(f, loopLevel, "loop number");
 
 			PhTime loopTime = _videoTimeIn + readMosTime(f, tcType, internLevel);
-			PhFileTool::readString(f, loopLevel, "loop name");
-			_loops.append(new PhStripLoop(loopTime, QString::number(number)));
+			QString label = PhFileTool::readString(f, loopLevel, "loop name");
+			if(k == 1)
+				label = "off";
+			else if(label.isEmpty())
+				label = QString::number(number);
+			_loops.append(new PhStripLoop(loopTime, label));
 		}
 	}
 
