@@ -20,18 +20,25 @@ PhMidiOutput::~PhMidiOutput()
 QStringList PhMidiOutput::outputList()
 {
 	QStringList result;
-	RtMidiOut midiOut;
-	for(unsigned int i = 0; i < midiOut.getPortCount(); i++)
-		result.append(QString::fromStdString(midiOut.getPortName(i)));
+	RtMidiOut *midiOut;
+	try {
+		midiOut = new RtMidiOut();
+		for(unsigned int i = 0; i < midiOut->getPortCount(); i++)
+			result.append(QString::fromStdString(midiOut->getPortName(i)));
+	}
+	catch(RtMidiError &error) {
+		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
+	}
+	delete midiOut;
 
 	return result;
 }
 
 bool PhMidiOutput::open(QString portName)
 {
+	PHDEBUG << "Opening" << portName;
 	try {
 		_midiOut = new RtMidiOut();
-		PHDEBUG << "Opening" << portName;
 		for(unsigned int i = 0; i < _midiOut->getPortCount(); i++) {
 			if(QString::fromStdString(_midiOut->getPortName(i)) == portName) {
 				_midiOut->openPort(i);
@@ -41,7 +48,7 @@ bool PhMidiOutput::open(QString portName)
 		PHDEBUG << "Unable to find" << portName;
 	}
 	catch(RtMidiError &error) {
-		error.printMessage();
+		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
 	}
 	close();
 	return false;

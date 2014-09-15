@@ -12,18 +12,18 @@ SerialTestWindow::SerialTestWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	connect(ui->sendButton1, SIGNAL(clicked()), this, SLOT(sendTextA()));
-	connect(&_serialA, SIGNAL(readyRead()), this, SLOT(readTextA()));
+	connect(ui->sendButton1, &QPushButton::clicked, this, &SerialTestWindow::sendTextA);
+	connect(&_serialA, &QSerialPort::readyRead, this, &SerialTestWindow::readTextA);
 	if(open(&_serialA, "A"))
 		_serialA.write("Hello from serial A");
 
 
-	connect(ui->sendButton2, SIGNAL(clicked()), this, SLOT(sendTextB()));
-	connect(&_serialB, SIGNAL(readyRead()), this, SLOT(readTextB()));
+	connect(ui->sendButton2, &QPushButton::clicked, this, &SerialTestWindow::sendTextB);
+	connect(&_serialB, &QSerialPort::readyRead, this, &SerialTestWindow::readTextB);
 	if(open(&_serialB, "B"))
 		_serialB.write("Hello from serial B");
 
-	connect(&_ctsTimer, SIGNAL(timeout()), this, SLOT(checkCTS()));
+	connect(&_ctsTimer, &QTimer::timeout, this, &SerialTestWindow::checkCTS);
 	_ctsTimer.start(5);
 }
 

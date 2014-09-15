@@ -21,12 +21,15 @@ include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 include($$TOP_ROOT/libs/PhSony/PhSony.pri)
 
 SOURCES += main.cpp\
-		SonyToolWindow.cpp
+		SonyToolWindow.cpp \
+    PreferencesDialog.cpp
 
 HEADERS  += SonyToolWindow.h \
-	SonyToolSettings.h
+	SonyToolSettings.h \
+    PreferencesDialog.h
 
-FORMS    += SonyToolWindow.ui
+FORMS    += SonyToolWindow.ui \
+    PreferencesDialog.ui
 
 mac {
 	# For the plist version

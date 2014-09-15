@@ -28,10 +28,11 @@ class PhSonyMasterController : public PhSonyController
 public:
 	/**
 	 * @brief PhSonyMasterController constructor
-	 * @param tcType The initial timecode type.
 	 * @param settings The application settings
 	 */
-	PhSonyMasterController(PhTimeCodeType tcType, PhSonySettings *settings);
+	PhSonyMasterController(PhSonySettings *settings);
+
+	PhTimeCodeType timeCodeType();
 
 public slots:
 	/**

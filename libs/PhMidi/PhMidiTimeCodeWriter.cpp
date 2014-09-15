@@ -21,6 +21,13 @@ void PhMidiTimeCodeWriter::setTimeCodeType(PhTimeCodeType tcType)
 	_tcType = tcType;
 }
 
+void PhMidiTimeCodeWriter::sendMMCGotoFromTime(PhTime time)
+{
+	unsigned int hhmmssff[4];
+	PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, time, _tcType);
+	sendMMCGoto((unsigned char)hhmmssff[0], (unsigned char)hhmmssff[1], (unsigned char)hhmmssff[2], (unsigned char)hhmmssff[3], _tcType);
+}
+
 void PhMidiTimeCodeWriter::onTimeChanged(PhTime time)
 {
 	if(_clock.rate() == 1) {

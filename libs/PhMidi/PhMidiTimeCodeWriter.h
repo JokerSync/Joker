@@ -50,6 +50,12 @@ public:
 		return &_clock;
 	}
 
+	/**
+	 * @brief Send a MMC goto message
+	 * @param time A time value
+	 */
+	void sendMMCGotoFromTime(PhTime time);
+
 private slots:
 	void onTimeChanged(PhTime time);
 

@@ -8,9 +8,14 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonyMasterController::PhSonyMasterController(PhTimeCodeType tcType, PhSonySettings *settings)
-	: PhSonyController(tcType, settings, settings->sonyMasterPortSuffix())
+PhSonyMasterController::PhSonyMasterController(PhSonySettings *settings)
+	: PhSonyController(settings, settings->sonyMasterPortSuffix())
 {
+}
+
+PhTimeCodeType PhSonyMasterController::timeCodeType()
+{
+	return (PhTimeCodeType)_settings->sonyMasterCommunicationTimeCodeType();
 }
 
 void PhSonyMasterController::onVideoSync()
@@ -40,8 +45,8 @@ void PhSonyMasterController::stop()
 
 void PhSonyMasterController::cue(PhTime time)
 {
-	PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromTime(time, _tcType);
-	unsigned int bcd = PhTimeCode::bcdFromTime(time, _tcType);
+	PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromTime(time, this->timeCodeType());
+	unsigned int bcd = PhTimeCode::bcdFromTime(time, this->timeCodeType());
 	sendCommandWithData(0x24, 0x31, (const unsigned char *)&bcd);
 }
 
@@ -146,8 +151,8 @@ void PhSonyMasterController::processCommand(unsigned char cmd1, unsigned char cm
 		switch (cmd2) {
 		case 0x04:
 			{
-				PhTime time = PhTimeCode::timeFromBcd(*(unsigned int *)dataIn, _tcType);
-//			PHDEBUG << _comSuffix << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _clock.getTCType());
+				PhTime time = PhTimeCode::timeFromBcd(*(unsigned int *)dataIn, this->timeCodeType());
+//				PHDEBUG << _comSuffix << " => LTC Time Data : " << PhTimeCode::stringFromFrame(frame, _clock.getTCType());
 				_clock.setTime(time);
 				break;
 			}

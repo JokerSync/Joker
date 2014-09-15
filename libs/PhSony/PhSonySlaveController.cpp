@@ -8,16 +8,22 @@
 
 #include "PhTools/PhDebug.h"
 
-PhSonySlaveController::PhSonySlaveController(PhTimeCodeType tcType, PhSonySettings *settings)
-	: PhSonyController(tcType, settings, settings->sonySlavePortSuffix()),
+PhSonySlaveController::PhSonySlaveController(PhSonySettings *settings)
+	: PhSonyController(settings, settings->sonySlavePortSuffix()),
 	_autoMode(false), _state(Pause)
 {
+}
+
+PhTimeCodeType PhSonySlaveController::timeCodeType()
+{
+	return (PhTimeCodeType)_settings->sonySlaveCommunicationTimeCodeType();
 }
 
 void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd2, const unsigned char *dataIn)
 {
 	unsigned char dataOut[16];
 	PHDBG(20) << _comSuffix << stringFromCommand(cmd1, cmd2, dataIn);
+	PhTimeCodeType tcType = this->timeCodeType();
 	switch (cmd1 >> 4) {
 	case 0:
 		switch (cmd2) {
@@ -30,7 +36,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 //			PHDEBUG << _comSuffix << "Device Type Request => F1C0";
 				unsigned char deviceID1 = _settings->sonyDevice1();
 				unsigned char deviceID2 = _settings->sonyDevice2();
-				switch (_tcType) {
+				switch (tcType) {
 				case PhTimeCodeType2398:
 				case PhTimeCodeType24:
 					deviceID1 += 2;
@@ -132,9 +138,9 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 			}
 		case 0x31:
 			{
-				PhTime time = PhTimeCode::timeFromBcd(*(unsigned int *)dataIn, _tcType);
+				PhTime time = PhTimeCode::timeFromBcd(*(unsigned int *)dataIn, tcType);
 				_clock.setTime(time);
-				PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromTime(time, _tcType) << "=> ACK";
+				PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromTime(time, tcType) << "=> ACK";
 				sendAck();
 				break;
 			}
@@ -171,7 +177,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x0c:
 			{
 				cmd1 = 0x74;
-				PHDBG(21) << _comSuffix << "Current Time Sense => " << _clock.timeCode(_tcType);
+				PHDBG(21) << _comSuffix << "Current Time Sense => " << _clock.timeCode(tcType);
 				switch (dataIn[0]) {
 				case 0x01:
 					cmd2 = 0x04;
@@ -195,7 +201,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 					cmd2 = 0x04;
 					break;
 				}
-				unsigned int bcd = PhTimeCode::bcdFromTime(_clock.time(), _tcType);
+				unsigned int bcd = PhTimeCode::bcdFromTime(_clock.time(), tcType);
 				sendCommandWithData(0x74, cmd2, (unsigned char *)&bcd);
 				break;
 			}
@@ -262,13 +268,17 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 		case 0x30:
 			{
 #warning /// @todo handle edit preset sense properly
-//			PHDEBUG << _comSuffix << "Edit Preset Sense => Edit Preset Status";
+				PHDBG(24) << _comSuffix << "Edit Preset Sense => Edit Preset Status";
 				unsigned char count = dataIn[0];
 				for (int i = 0; i < count; i++)
 					dataOut[i] = 0;
 				sendCommandWithData(0x70 + count, 0x30, dataOut);
 				break;
 			}
+		case 0x36:
+			PHDBG(24) << _comSuffix << "Timer Mode Sense => Timer Mode Status : 0 (timecode)";
+			sendCommand(0x71, 0x36, 0x00);
+			break;
 		default:
 			PHDEBUG << _comSuffix << " => Unknown subcommand " << stringFromCommand(cmd1, cmd2, dataIn) << " => NAK";
 			sendNak(UndefinedCommand);
@@ -286,8 +296,9 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 
 void PhSonySlaveController::onVideoSync()
 {
-	_clock.tick(PhTimeCode::getFps(_tcType));
-	PHDBG(23) << _clock.timeCode(_tcType);
+	PhTimeCodeType tcType = (PhTimeCodeType)_settings->sonySlaveVideoSyncTimeCodeType();
+	_clock.elapse(PhTimeCode::timePerFrame(tcType));
+	PHDBG(23) << _clock.timeCode(tcType);
 }
 
 void PhSonySlaveController::sendAck()

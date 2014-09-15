@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>464</width>
-    <height>449</height>
+    <height>631</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -329,6 +329,90 @@
          </widget>
         </item>
         <item>
+         <widget class="QFrame" name="sonyFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QFormLayout" name="formLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="sonyCommunicationTimeCodeTypeLabel">
+             <property name="text">
+              <string>Communication framerate:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="sonyCommunicationTimeCodeTypeComboBox">
+             <item>
+              <property name="text">
+               <string>23.98 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>24 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>25 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>29.97 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>30 fps</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="sonyVideoSyncTimeCodeTypeLabel">
+             <property name="text">
+              <string>Video sync framerate:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="sonyVideoSyncTimeCodeTypeComboBox">
+             <item>
+              <property name="text">
+               <string>23.98 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>24 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>25 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>29.97 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>30 fps</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <widget class="QRadioButton" name="ltcRadioButton">
           <property name="text">
            <string>LTC</string>
@@ -361,14 +445,14 @@
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="midiRadioButton">
+         <widget class="QRadioButton" name="mtcRadioButton">
           <property name="text">
-           <string>Midi</string>
+           <string>Midi timecode</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="midiFrame">
+         <widget class="QFrame" name="mtcFrame">
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
@@ -377,24 +461,53 @@
           </property>
           <layout class="QFormLayout" name="formLayout_3">
            <item row="1" column="1">
-            <widget class="QComboBox" name="existingMidiInputPortComboBox"/>
+            <widget class="QComboBox" name="mtcExistingInputPortComboBox"/>
            </item>
            <item row="1" column="0">
-            <widget class="QRadioButton" name="midiExistingInputPortRadioButton">
+            <widget class="QRadioButton" name="mtcExistingInputPortRadioButton">
              <property name="text">
               <string>Read from existing port:</string>
              </property>
             </widget>
            </item>
            <item row="0" column="0">
-            <widget class="QRadioButton" name="midiVirtualInputPortRadioButton">
+            <widget class="QRadioButton" name="mtcVirtualInputPortRadioButton">
              <property name="text">
               <string>Read from virtual port:</string>
              </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLineEdit" name="virtualMidiInputPortLineEdit"/>
+            <widget class="QLineEdit" name="mtcVirtualInputPortLineEdit"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="mmcCheckBox">
+          <property name="text">
+           <string>Midi machine control:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="mmcFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QFormLayout" name="formLayout_5">
+           <item row="0" column="1">
+            <widget class="QComboBox" name="mmcOutputPortComboBox"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="mmcOutputPortLabel">
+             <property name="text">
+              <string>Send MMC message to port:</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

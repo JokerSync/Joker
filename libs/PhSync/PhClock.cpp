@@ -65,7 +65,11 @@ QString PhClock::timeCode(PhTimeCodeType tcType)
 
 void PhClock::tick(PhTimeScale frequence)
 {
-	int elapsed = 24000 / frequence;
-	this->setTime(static_cast<int>(_time + elapsed * _rate));
+	elapse(24000 / frequence);
+}
+
+void PhClock::elapse(PhTime time)
+{
+	this->setTime(_time + time * _rate);
 }
 

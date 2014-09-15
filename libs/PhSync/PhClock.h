@@ -105,6 +105,13 @@ public slots:
 	 */
 	void tick(PhTimeScale frequence);
 
+	/**
+	 * Sync the clock to a signal at a given elapse time.
+	 * The clock time value is then updated accordingly to the clock rate.
+	 * @param time The elapsed time value.
+	 */
+	void elapse(PhTime time);
+
 private:
 	PhTime _time;
 	PhRate _rate;

@@ -87,14 +87,24 @@ public:
 	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
+	PH_SETTING_INT2(setSonyMasterCommunicationTimeCodeType, sonyMasterCommunicationTimeCodeType, PhTimeCodeType25)
+	PH_SETTING_INT2(setSonySlaveCommunicationTimeCodeType, sonySlaveCommunicationTimeCodeType, PhTimeCodeType25)
+
+	PH_SETTING_INT2(setSonyMasterVideoSyncTimeCodeType, sonyMasterVideoSyncTimeCodeType, PhTimeCodeType25)
+	PH_SETTING_INT2(setSonySlaveVideoSyncTimeCodeType, sonySlaveVideoSyncTimeCodeType, PhTimeCodeType25)
+
 	// LTC settings:
 	PH_SETTING_STRING(setLtcInputPort, ltcInputPort)
 	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
 	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
 
-	// Midi settings:
-	PH_SETTING_STRING2(setMidiInputPort, midiInputPort, "Joker")
-	PH_SETTING_STRING2(setMidiVirtualInputPort, midiVirtualInputPort, "Joker")
+	// MTC settings:
+	PH_SETTING_STRING2(setMtcInputPort, mtcInputPort, "Joker")
+	PH_SETTING_STRING2(setMtcVirtualInputPort, mtcVirtualInputPort, "Joker")
+
+	// MMC settings
+	PH_SETTING_BOOL(setSendMmcMessage, sendMmcMessage)
+	PH_SETTING_STRING2(setMmcOutputPort, mmcOutputPort, "Joker")
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)

@@ -13,6 +13,7 @@
 #include "PhSync/PhSynchronizer.h"
 #include "PhLtc/PhLtcReader.h"
 #include "PhMidi/PhMidiInput.h"
+#include "PhMidi/PhMidiOutput.h"
 
 #include "ui_PreferencesDialog.h"
 #include "PreferencesDialog.h"
@@ -44,6 +45,9 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
+
+	_delayButtonGroup.addButton(ui->radioButtonQF);
+	_delayButtonGroup.addButton(ui->radioButtonMS);
 	if(_oldUseQuarterFrame) {
 		ui->radioButtonQF->setChecked(true);
 		ui->spinBoxDelay->setValue(_oldDelay / 10);
@@ -122,47 +126,63 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	case PhSynchronizer::LTC:
 		ui->ltcRadioButton->setChecked(true);
 		break;
-	case PhSynchronizer::Midi:
-		ui->midiRadioButton->setChecked(true);
+	case PhSynchronizer::MTC:
+		ui->mtcRadioButton->setChecked(true);
 		break;
 	}
 
+	_protocolButtonGroup.addButton(ui->noSyncRadioButton);
+	_protocolButtonGroup.addButton(ui->sonyRadioButton);
+	_protocolButtonGroup.addButton(ui->ltcRadioButton);
+	_protocolButtonGroup.addButton(ui->mtcRadioButton);
+
+	connect(&_protocolButtonGroup, SIGNAL(buttonToggled(int, bool)), this, SLOT(updateSynchronisationEnabledControl(int, bool)));
+	connect(ui->mmcCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateSynchronisationEnabledControl(bool)));
+
+	// Initializing the sony preferences
+	ui->sonyCommunicationTimeCodeTypeComboBox->setCurrentIndex(_settings->sonySlaveCommunicationTimeCodeType());
+	ui->sonyVideoSyncTimeCodeTypeComboBox->setCurrentIndex(_settings->sonySlaveVideoSyncTimeCodeType());
+
+	// Initializing the LTC preferences
 	QStringList ltcInputPorts = PhLtcReader::inputList();
 	ui->ltcInputPortComboBox->addItems(ltcInputPorts);
 	if(ltcInputPorts.contains(_settings->ltcInputPort()))
 		ui->ltcInputPortComboBox->setCurrentText(_settings->ltcInputPort());
 
-	ui->virtualMidiInputPortLineEdit->setText(_settings->midiVirtualInputPort());
+	// Initializing MTC preferences
+	ui->mtcVirtualInputPortLineEdit->setText(_settings->mtcVirtualInputPort());
 
-	QStringList midiInputPorts = PhMidiInput::inputList();
+	QStringList mtcInputPorts = PhMidiInput::inputList();
 
-	ui->existingMidiInputPortComboBox->addItems(midiInputPorts);
+	ui->mtcExistingInputPortComboBox->addItems(mtcInputPorts);
 
-	bool useExistingPort = midiInputPorts.contains(_settings->midiInputPort());
+	bool useExistingPort = mtcInputPorts.contains(_settings->mtcInputPort());
 	if(useExistingPort) {
-		ui->existingMidiInputPortComboBox->setCurrentText(_settings->midiInputPort());
-		ui->midiExistingInputPortRadioButton->setChecked(true);
+		ui->mtcExistingInputPortComboBox->setCurrentText(_settings->mtcInputPort());
+		ui->mtcExistingInputPortRadioButton->setChecked(true);
 	}
 	else {
-		_settings->setMidiVirtualInputPort(_settings->midiInputPort());
-		ui->midiVirtualInputPortRadioButton->setChecked(true);
+		_settings->setMtcVirtualInputPort(_settings->mtcInputPort());
+		ui->mtcVirtualInputPortRadioButton->setChecked(true);
 	}
 
-	updateSynchronisationEnabledControl(0, false);
+	// Initializing MMC preferences
+	ui->mmcCheckBox->setChecked(_settings->sendMmcMessage());
+	QStringList mmcOutputPorts = PhMidiOutput::outputList();
 
-	_protocolButtonGroup.addButton(ui->noSyncRadioButton);
-	_protocolButtonGroup.addButton(ui->sonyRadioButton);
-	_protocolButtonGroup.addButton(ui->ltcRadioButton);
-	_protocolButtonGroup.addButton(ui->midiRadioButton);
+	ui->mmcOutputPortComboBox->addItems(mmcOutputPorts);
 
-	connect(&_protocolButtonGroup, SIGNAL(buttonToggled(int, bool)), this, SLOT(updateSynchronisationEnabledControl(int, bool)));
+	if(mmcOutputPorts.contains(_settings->mmcOutputPort()))
+		ui->mmcOutputPortComboBox->setCurrentText(_settings->mmcOutputPort());
 
-	_midiPortTypeButtonGroup.addButton(ui->midiExistingInputPortRadioButton);
-	_midiPortTypeButtonGroup.addButton(ui->midiVirtualInputPortRadioButton);
+	_midiPortTypeButtonGroup.addButton(ui->mtcExistingInputPortRadioButton);
+	_midiPortTypeButtonGroup.addButton(ui->mtcVirtualInputPortRadioButton);
 
 	connect(&_midiPortTypeButtonGroup, SIGNAL(buttonToggled(int, bool)), this, SLOT(updateSynchronisationEnabledControl(int, bool)));
 
-	//Set the language
+	updateSynchronisationEnabledControl(0, false);
+
+	//Initializing the language preferences
 	QDir appDirectory(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/");
 
 	QStringList filtersLang;
@@ -214,17 +234,23 @@ void PreferencesDialog::accept()
 		_settings->setSynchroProtocol(PhSynchronizer::Sony);
 	else if(ui->ltcRadioButton->isChecked())
 		_settings->setSynchroProtocol(PhSynchronizer::LTC);
-	else if(ui->midiRadioButton->isChecked())
-		_settings->setSynchroProtocol(PhSynchronizer::Midi);
+	else if(ui->mtcRadioButton->isChecked())
+		_settings->setSynchroProtocol(PhSynchronizer::MTC);
+
+	_settings->setSonySlaveCommunicationTimeCodeType(ui->sonyCommunicationTimeCodeTypeComboBox->currentIndex());
+	_settings->setSonySlaveVideoSyncTimeCodeType(ui->sonyVideoSyncTimeCodeTypeComboBox->currentIndex());
 
 	_settings->setLtcInputPort(ui->ltcInputPortComboBox->currentText());
 
-	if(ui->midiExistingInputPortRadioButton->isChecked())
-		_settings->setMidiInputPort(ui->existingMidiInputPortComboBox->currentText());
+	if(ui->mtcExistingInputPortRadioButton->isChecked())
+		_settings->setMtcInputPort(ui->mtcExistingInputPortComboBox->currentText());
 	else
-		_settings->setMidiInputPort(ui->virtualMidiInputPortLineEdit->text());
+		_settings->setMtcInputPort(ui->mtcVirtualInputPortLineEdit->text());
 
-	_settings->setMidiVirtualInputPort(ui->virtualMidiInputPortLineEdit->text());
+	_settings->setMtcVirtualInputPort(ui->mtcVirtualInputPortLineEdit->text());
+
+	_settings->setSendMmcMessage(ui->mmcCheckBox);
+	_settings->setMmcOutputPort(ui->mmcOutputPortComboBox->currentText());
 
 	_settings->setLastPreferencesTab(ui->tabWidget->currentIndex());
 
@@ -248,21 +274,28 @@ void PreferencesDialog::reject()
 	QDialog::reject();
 }
 
-void PreferencesDialog::updateSynchronisationEnabledControl(int, bool)
+void PreferencesDialog::updateSynchronisationEnabledControl(bool)
 {
 	PHDEBUG;
 
+	ui->sonyFrame->setEnabled(ui->sonyRadioButton->isChecked());
 	ui->ltcFrame->setEnabled(ui->ltcRadioButton->isChecked());
-	ui->midiFrame->setEnabled(ui->midiRadioButton->isChecked());
+	ui->mtcFrame->setEnabled(ui->mtcRadioButton->isChecked());
+	ui->mmcFrame->setEnabled(ui->mmcCheckBox->isChecked());
 
-	bool useExistingPort = ui->midiExistingInputPortRadioButton->isChecked();
+	bool useExistingPort = ui->mtcExistingInputPortRadioButton->isChecked();
 	if(useExistingPort)
-		_settings->setMidiInputPort(ui->existingMidiInputPortComboBox->currentText());
+		_settings->setMtcInputPort(ui->mtcExistingInputPortComboBox->currentText());
 	else
-		_settings->setMidiInputPort(ui->virtualMidiInputPortLineEdit->text());
+		_settings->setMtcInputPort(ui->mtcVirtualInputPortLineEdit->text());
 
-	ui->virtualMidiInputPortLineEdit->setEnabled(!useExistingPort);
-	ui->existingMidiInputPortComboBox->setEnabled(useExistingPort);
+	ui->mtcVirtualInputPortLineEdit->setEnabled(!useExistingPort);
+	ui->mtcExistingInputPortComboBox->setEnabled(useExistingPort);
+}
+
+void PreferencesDialog::updateSynchronisationEnabledControl(int, bool)
+{
+	updateSynchronisationEnabledControl(false);
 }
 
 void PreferencesDialog::on_spinBoxDelay_valueChanged(int delay)
