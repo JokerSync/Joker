@@ -34,10 +34,9 @@ class PhSonySlaveController : public PhSonyController
 public:
 	/**
 	 * @brief PhSonySlaveController constructor.
-	 * @param tcType The initial timecode type.
 	 * @param settings The application settings
 	 */
-	PhSonySlaveController(PhTimeCodeType tcType, PhSonySettings *settings);
+	PhSonySlaveController(PhSonySettings *settings);
 
 	/**
 	 * @brief Various state in which the controller can be.
@@ -53,6 +52,8 @@ public:
 		Varispeed,
 		Shuttle,
 	};
+
+	PhTimeCodeType timeCodeType();
 
 public slots:
 	/**

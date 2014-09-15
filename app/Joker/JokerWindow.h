@@ -19,6 +19,7 @@
 #include "PhSony/PhSonySlaveController.h"
 #include "PhLtc/PhLtcReader.h"
 #include "PhMidi/PhMidiTimeCodeReader.h"
+#include "PhMidi/PhMidiTimeCodeWriter.h"
 
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
@@ -243,7 +244,13 @@ private slots:
 
 	void on_actionDisplay_the_vertical_scale_triggered(bool checked);
 
+	void setCurrentTime(PhTime time);
+
+	void setCurrentRate(PhRate rate);
 private:
+	PhTime currentTime();
+	PhRate currentRate();
+
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;
 	PhGraphicStrip _strip;
@@ -252,6 +259,7 @@ private:
 	PhSonySlaveController _sonySlave;
 	PhLtcReader _ltcReader;
 	PhMidiTimeCodeReader _mtcReader;
+	PhMidiTimeCodeWriter _mtcWriter;
 	PhSynchronizer _synchronizer;
 
 	PhFloatingMediaPanel _mediaPanel;

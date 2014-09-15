@@ -64,7 +64,7 @@ bool PhVideoEngine::open(QString fileName)
 	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
 		return false;
 
-	// Retrieve stream information
+	PHDEBUG << "Retrieve stream information";
 	if (avformat_find_stream_info(_pFormatContext, NULL) < 0)
 		return false; // Couldn't find stream information
 
