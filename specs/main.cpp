@@ -15,7 +15,6 @@ int main(int argc, char *argv[])
 {
 	PHDEBUG << "All specs";
 	QApplication a(argc, argv);
-	PhDebug::disable();
 
 	return TestRunner::RunAllTests(argc, argv);
 }

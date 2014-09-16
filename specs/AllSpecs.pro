@@ -12,5 +12,6 @@ include($$TOP_ROOT/common/common.pri)
 
 include($$TOP_ROOT/specs/CommonSpec.pri)
 
+include($$TOP_ROOT/specs/ToolsSpec/ToolsSpec.pri)
 include($$TOP_ROOT/specs/SyncSpec/SyncSpec.pri)
 include($$TOP_ROOT/specs/GraphicSpec/GraphicSpec.pri)

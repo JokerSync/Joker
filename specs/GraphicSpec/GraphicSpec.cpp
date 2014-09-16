@@ -18,6 +18,10 @@
 using namespace igloo;
 
 Describe(graphic_test) {
+	static void SetUpContext() {
+		PhDebug::disable();
+	}
+
 	It(call_paint_when_shown) {
 		PhGraphicView view(64, 64);
 
