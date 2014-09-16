@@ -7,5 +7,6 @@
 include($$TOP_ROOT/libs/PhGraphic/PhGraphic.pri)
 
 SOURCES += $$TOP_ROOT/specs/GraphicSpec/GraphicSpec.cpp
+SOURCES += $$TOP_ROOT/specs/GraphicSpec/GraphicTextSpec.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/*.bmp) . $${CS}
