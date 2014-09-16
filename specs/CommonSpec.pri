@@ -4,6 +4,7 @@
 #
 #-------------------------------------------------
 
+QT       += testlib
 CONFIG   += console
 CONFIG   -= app_bundle
 
