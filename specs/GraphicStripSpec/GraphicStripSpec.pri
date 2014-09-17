@@ -4,7 +4,6 @@
 #
 #-------------------------------------------------
 
-include($$TOP_ROOT/libs/PhStrip/PhStrip.pri)
 include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
 
 HEADERS += $$TOP_ROOT/specs/GraphicStripSpec/GraphicStripSpecSettings.h
