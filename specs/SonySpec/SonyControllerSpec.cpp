@@ -1,0 +1,22 @@
+/**
+ * Copyright (C) 2012-2014 Phonations
+ * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
+#include "igloo/igloo_alt.h"
+
+#include "PhTools/PhDebug.h"
+#include "PhSony/PhSonyController.h"
+
+using namespace igloo;
+
+Describe(sony_controller_test) {
+	It(compute_rate_from_data_bytes) {
+		Assert::That(PhSonyController::computeRate(0), EqualsWithDelta(0.0f, 0.01f));
+		Assert::That(PhSonyController::computeRate(32), EqualsWithDelta(0.1f, 0.01f));
+		Assert::That(PhSonyController::computeRate(64), EqualsWithDelta(1.0f, 0.01f));
+		Assert::That(PhSonyController::computeRate(79), EqualsWithDelta(2.94f, 0.01f));
+		Assert::That(PhSonyController::computeRate(118), EqualsWithDelta(48.69f, 0.01f));
+	}
+};
+
