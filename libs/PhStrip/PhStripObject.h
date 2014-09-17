@@ -14,7 +14,11 @@
  *
  * Its only property is timeIn.
  */
-class PhStripObject {
+class PhStripObject : public QObject {
+
+	Q_OBJECT
+
+	Q_PROPERTY(PhTime timeIn READ timeIn WRITE setTimeIn NOTIFY timeInChanged)
 
 private:
 	/**
@@ -39,6 +43,12 @@ public:
 	PhTime timeIn() const;
 
 	/**
+	 * @brief Set the time in
+	 * @param timeIn a PhTime
+	 */
+	void setTimeIn(PhTime timeIn);
+
+	/**
 	 * @brief Compare two strip object based on the time in
 	 *
 	 * @param a A strip object
@@ -46,6 +56,9 @@ public:
 	 * @return True if "a" has a stricly lower time in than "b", false otherwise.
 	 */
 	static bool dtcomp(PhStripObject *a, PhStripObject *b);
+
+signals:
+	void timeInChanged();
 };
 
 #endif // PHSTRIPOBJECT_H

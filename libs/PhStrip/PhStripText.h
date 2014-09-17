@@ -17,6 +17,10 @@
  */
 class PhStripText : public PhStripPeopleObject {
 
+	Q_OBJECT
+
+	Q_PROPERTY(QString content READ content NOTIFY contentChanged)
+
 public:
 
 	/**
@@ -34,6 +38,9 @@ public:
 	 * @return _content
 	 */
 	QString content() const;
+
+signals:
+	void contentChanged();
 
 private:
 

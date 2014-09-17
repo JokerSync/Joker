@@ -119,6 +119,10 @@ public:
 		return _nextPeoples;
 	}
 
+	QList<PhStripText*> stripTexts() {
+		return _stripTexts;
+	}
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -165,6 +169,7 @@ private:
 	QStringList _infos;
 
 	QList<PhNextPeople*> _nextPeoples;
+	QList<PhStripText *> _stripTexts;
 };
 
 #endif // PHGRAPHICSTRIP_H

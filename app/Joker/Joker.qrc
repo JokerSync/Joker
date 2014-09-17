@@ -4,5 +4,6 @@
         <file>Video.qml</file>
         <file>LeftColumn.qml</file>
         <file>RightColumn.qml</file>
+        <file>Strip.qml</file>
     </qresource>
 </RCC>
