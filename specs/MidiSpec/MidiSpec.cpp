@@ -13,19 +13,9 @@
 #include "PhMidi/PhMidiTimeCodeReader.h"
 #include "PhMidi/PhMidiTimeCodeWriter.h"
 
+#include "CommonSpec.h"
+
 using namespace igloo;
-
-#warning /// @todo Move to PhTest
-std::string t2s(PhTime time, PhTimeCodeType tcType)
-{
-	return PhTimeCode::stringFromTime(time, tcType).toStdString();
-}
-
-PhTime s2t(QString string, PhTimeCodeType tcType)
-{
-	return PhTimeCode::timeFromString(string, tcType);
-}
-
 
 Describe(midi_test) {
 	It(connect_to_a_port) {

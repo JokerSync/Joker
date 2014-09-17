@@ -8,8 +8,13 @@ QT       += testlib
 CONFIG   += console
 CONFIG   -= app_bundle
 
-INCLUDEPATH += $$TOP_ROOT/vendor/igloo
+INCLUDEPATH += $$TOP_ROOT/vendor/igloo \
+    $$PWD
 
 include($$TOP_ROOT/libs/PhTools/PhTools.pri)
 
-SOURCES += $$TOP_ROOT/specs/main.cpp
+SOURCES += $$PWD/main.cpp \
+    $$PWD/CommonSpec.cpp
+
+HEADERS += \
+    $$PWD/CommonSpec.h
