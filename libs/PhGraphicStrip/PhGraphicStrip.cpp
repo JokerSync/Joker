@@ -255,22 +255,16 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 		// housekeeping !
 		_nextPeoples.clear();
+		_stripTexts.clear();
 
 		foreach(PhStripText * text, _doc.texts()) {
 
 			if( !((text->timeOut() < timeIn) || (text->timeIn() > timeOut)) ) {
 				counter++;
-				PhGraphicText gText(&_textFont, text->content());
-				gText.setZ(-1);
-
-				gText.setX(x + text->timeIn() / timePerPixel - offset);
-				gText.setWidth((text->timeOut() - text->timeIn()) / timePerPixel);
-				gText.setY(y + text->y() * height);
-				gText.setHeight(text->height() * height);
-				gText.setZ(-1);
-				gText.setColor(computeColor(text->people(), selectedPeoples, invertedColor));
-
-				gText.draw();
+				// FIXME font and color not implemented
+				//PhGraphicText gText(&_textFont, text->content());
+				//gText.setColor(computeColor(text->people(), selectedPeoples, invertedColor));
+				_stripTexts.append(text);
 			}
 
 			PhPeople * people = text->people();

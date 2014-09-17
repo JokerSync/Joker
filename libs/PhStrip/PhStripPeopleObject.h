@@ -17,6 +17,12 @@
  */
 class PhStripPeopleObject : public PhStripObject {
 
+	Q_OBJECT
+
+	Q_PROPERTY(float y READ y WRITE setY NOTIFY yChanged)
+	Q_PROPERTY(float height READ height WRITE setHeight NOTIFY heightChanged)
+	Q_PROPERTY(PhTime timeOut READ timeOut WRITE setTimeOut NOTIFY timeOutChanged)
+
 public:
 
 	/**
@@ -61,14 +67,20 @@ public:
 	 * @param y An float between 0 and 1
 	 */
 	void setY(float y) {
-		_y = y;
+		if (y != _y) {
+			_y = y;
+			emit yChanged();
+		}
 	}
 	/**
 	 * @brief Set the time out
 	 * @param timeOut A time
 	 */
 	void setTimeOut(PhTime timeOut) {
-		_timeOut = timeOut;
+		if (timeOut != _timeOut) {
+			_timeOut = timeOut;
+			emit timeOutChanged();
+		}
 	}
 	/**
 	 * @brief Height of the text
@@ -80,6 +92,11 @@ public:
 	 * @param height the fraction desired of the track height
 	 */
 	void setHeight(float height);
+
+signals:
+	void heightChanged();
+	void yChanged();
+	void timeOutChanged();
 
 private:
 	/**

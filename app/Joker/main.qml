@@ -42,12 +42,12 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: titleRect.visible ? titleRect.bottom : parent.top
-        anchors.bottom: stripPlaceholder.top
+        anchors.bottom: strip.top
     }
 
-    Item {
-        id: stripPlaceholder
-        objectName: "stripPlaceholder"
+    Strip {
+        id: strip
+        objectName: "strip"
         // height is set from C++
         //height: 200
         anchors.left: parent.left

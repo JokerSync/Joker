@@ -53,7 +53,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", QVariant::fromValue(_nextPeoples));
 	ui->videoStripView->engine()->rootContext()->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("clockTime", _strip.clock()->time() + _settings->screenDelay());
-
+	ui->videoStripView->engine()->rootContext()->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -922,6 +922,16 @@ void JokerWindow::onPaint(int width, int height)
 	// TODO the view could be refreshed more intelligently by defining a true model and define change signals
 	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", QVariant::fromValue(_nextPeoples));
 
+
+	QList<QObject*> stripTexts;
+	foreach(PhStripText *text, _strip.stripTexts()) {
+		stripTexts.append(text);
+	}
+
+	// refresh the view
+	// TODO the view could be refreshed more intelligently by defining a true model and define change signals
+	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModel", QVariant::fromValue(stripTexts));
+
 	// prepare the string list that is used to display the infos
 	_infoList.clear();
 	_infoList.append(QString("refresh: %1x%2, %3 / %4")
@@ -973,8 +983,8 @@ void JokerWindow::onPaint(int width, int height)
 	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
 
 	// placeholder used to position other UI elements
-	QQuickItem *stripPlaceholder = ui->videoStripView->rootObject()->findChild<QQuickItem*>("stripPlaceholder");
-	stripPlaceholder->setHeight(stripHeight);
+	QQuickItem *stripItem = ui->videoStripView->rootObject()->findChild<QQuickItem*>("strip");
+	stripItem->setHeight(stripHeight);
 
 	QQuickItem *noSyncLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("noSyncLabel");
 	noSyncLabel->setVisible(_lastVideoSyncElapsed.elapsed() > 1000);
