@@ -4,4 +4,7 @@
 #
 #-------------------------------------------------
 
-SOURCES += $$TOP_ROOT/specs/ToolsSpec/DebugSpec.cpp
+HEADERS += $$TOP_ROOT/specs/ToolsSpec/SettingsSpecSettings.h
+
+SOURCES += $$TOP_ROOT/specs/ToolsSpec/DebugSpec.cpp \
+	$$TOP_ROOT/specs/ToolsSpec/SettingsSpec.cpp
