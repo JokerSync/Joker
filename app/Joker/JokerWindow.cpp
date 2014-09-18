@@ -969,15 +969,17 @@ void JokerWindow::onPaint(int width, int height)
 		}
 	}
 
-	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
-	if(currentLoop) {
-		QString loopLabel = currentLoop->label();
-		PhGraphicText gCurrentLoop(_strip.getHUDFont(), loopLabel);
-		int loopHeight = 60;
-		int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) * ((float) loopHeight / _strip.getHUDFont()->getHeight());
-		gCurrentLoop.setRect(10, height - stripHeight - loopHeight, loopWidth, loopHeight);
-		gCurrentLoop.setColor(Qt::blue);
-		gCurrentLoop.draw();
+	if(_settings->displayLoopNumber()) {
+		PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
+		if(currentLoop) {
+			QString loopLabel = currentLoop->label();
+			PhGraphicText gCurrentLoop(_strip.getHUDFont(), loopLabel);
+			int loopHeight = 60;
+			int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) * ((float) loopHeight / _strip.getHUDFont()->getHeight());
+			gCurrentLoop.setRect(10, height - stripHeight - loopHeight, loopWidth, loopHeight);
+			gCurrentLoop.setColor(Qt::blue);
+			gCurrentLoop.draw();
+		}
 	}
 
 	if((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000)) {

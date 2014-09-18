@@ -41,7 +41,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldDisplayNextTC = _settings->displayNextTC();
 	_oldDisplayNextText = _settings->displayNextText();
 	_oldDisplayTitle = _settings->displayTitle();
-	_oldDisplayLoop = _settings->displayLoop();
+	_oldDisplayLoopNumber = _settings->displayLoopNumber();
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
@@ -62,7 +62,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->cBoxDisplayNextTC->setChecked(_oldDisplayNextTC);
 	ui->cBoxDisplayNextText->setChecked(_oldDisplayNextText);
 	ui->cBoxDisplayTitle->setChecked(_oldDisplayTitle);
-	ui->cBoxDisplayLoop->setChecked(_oldDisplayLoop);
+	ui->cBoxDisplayLoop->setChecked(_oldDisplayLoopNumber);
 
 	//Setting the filters
 	QStringList filters;
@@ -269,7 +269,7 @@ void PreferencesDialog::reject()
 	_settings->setDisplayNextTC(_oldDisplayNextTC);
 	_settings->setDisplayNextText(_oldDisplayNextText);
 	_settings->setDisplayTitle(_oldDisplayTitle);
-	_settings->setDisplayLoop(_oldDisplayLoop);
+	_settings->setDisplayLoopNumber(_oldDisplayLoopNumber);
 
 	QDialog::reject();
 }
@@ -369,5 +369,5 @@ void PreferencesDialog::on_cBoxDisplayTitle_clicked()
 
 void PreferencesDialog::on_cBoxDisplayLoop_clicked()
 {
-	_settings->setDisplayLoop(ui->cBoxDisplayLoop->isChecked());
+	_settings->setDisplayLoopNumber(ui->cBoxDisplayLoop->isChecked());
 }

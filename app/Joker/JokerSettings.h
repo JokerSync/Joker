@@ -121,7 +121,7 @@ public:
 	PH_SETTING_BOOL2(setDisplayTitle, displayTitle, true)
 	PH_SETTING_BOOL2(setDisplayNextTC, displayNextTC, true)
 	PH_SETTING_BOOL2(setDisplayTC, displayTC, true)
-	PH_SETTING_BOOL2(setDisplayLoop, displayLoop, true)
+	PH_SETTING_BOOL2(setDisplayLoopNumber, displayLoopNumber, true)
 	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 
 	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)

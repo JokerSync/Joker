@@ -13,10 +13,10 @@
     </message>
     <message>
         <source>Hide Others</source>
-       <translation>Masquer les autres</translation>
+        <translation>Masquer les autres</translation>
     </message>
     <message>
-       <source>Show All</source>
+        <source>Show All</source>
         <translation>Tout afficher</translation>
     </message>
     <message>
@@ -667,7 +667,7 @@
     <message>
         <location filename="PreferencesDialog.ui" line="92"/>
         <source>Display loop number</source>
-        <translation>Afficher le nombre de boucle</translation>
+        <translation>Afficher le numéro de la boucle</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="99"/>

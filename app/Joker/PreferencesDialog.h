@@ -87,7 +87,7 @@ private:
 	bool _oldDisplayNextTC;
 	bool _oldDisplayNextText;
 	bool _oldDisplayTitle;
-	bool _oldDisplayLoop;
+	bool _oldDisplayLoopNumber;
 
 	QMap<QString, QString> _fontList;
 	QMap<QString, QString> _langNameMap;
