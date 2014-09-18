@@ -253,15 +253,19 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		{
 			fadeInMediaPanel();
 
-			// Check if it is near the video/strip border
 			QMouseEvent * mouseEvent = (QMouseEvent*)event;
-			if(_resizingStrip) {
+			// Check if it is near the video/strip border
+			float stripHeight = this->height() * _settings->stripHeight();
+			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
+					&& (mouseEvent->pos().y() < (this->height() - stripHeight) + 10))
 				QApplication::setOverrideCursor(Qt::SizeVerCursor);
-				if(mouseEvent->buttons() & Qt::LeftButton)
-					_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
-			}
 			else
 				QApplication::setOverrideCursor(Qt::ArrowCursor);
+
+			if(_resizingStrip && (mouseEvent->buttons() & Qt::LeftButton)) {
+				PHDEBUG << "resizing strip:" << mouseEvent->pos();
+				_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
+			}
 			break;
 		}
 	case QEvent::DragEnter: /// - Accept and process a file drop on the window
@@ -286,12 +290,12 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			break;
 		}
 	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode
-		_resizingStrip = false;
 		if(sender == this)
 			toggleFullScreen();
 		break;
 	case QEvent::MouseButtonRelease:
-		QApplication::setOverrideCursor(Qt::ArrowCursor);
+		PHDEBUG << "end resizing strip";
+		_resizingStrip = false;
 		break;
 	case QEvent::MouseButtonPress:
 		{
@@ -307,7 +311,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			float stripHeight = this->height() * _settings->stripHeight();
 			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
 			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10)) {
-				QApplication::setOverrideCursor(Qt::SizeVerCursor);
+				PHDEBUG << "start resizing strip";
 				_resizingStrip = true;
 			}
 		}
