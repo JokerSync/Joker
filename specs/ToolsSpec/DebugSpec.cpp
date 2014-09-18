@@ -11,8 +11,17 @@
 
 using namespace igloo;
 
+/**
+ * @brief Redirect the standard output to a stream buffer
+ *
+ * The ouput will be redirect to its old value upon object destruction.
+ */
 class CoutRedirect {
 public:
+	/**
+	 * @brief The CoutRedirect constructor
+	 * @param new_buffer A stream buffer
+	 */
 	CoutRedirect( std::streambuf * new_buffer )
 		: old( std::cout.rdbuf( new_buffer ) )
 	{
@@ -25,8 +34,17 @@ private:
 	std::streambuf * old;
 };
 
+/**
+ * @brief Redirect the error output to a string buffer
+ *
+ * The ouput will be redirect to its old value upon object destruction.
+ */
 class CerrRedirect {
 public:
+	/**
+	 * @brief The CerrRedirect constructor
+	 * @param new_buffer A stream buffer
+	 */
 	CerrRedirect( std::streambuf * new_buffer )
 		: old( std::cerr.rdbuf( new_buffer ) )
 	{

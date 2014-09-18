@@ -17,8 +17,13 @@ Describe(settings_test) {
 		PhDebug::disable();
 	}
 
+	SettingsSpecSettings settings;
+
+	void SetUp() {
+		settings.clear();
+	}
+
 	It(clears_all_settings) {
-		SettingsSpecSettings settings;
 
 		settings.setIntTest1(1);
 		settings.setUnsignedCharTest1('a');
@@ -52,8 +57,6 @@ Describe(settings_test) {
 	}
 
 	It(handles_int) {
-		SettingsSpecSettings settings(true);
-
 		settings.setIntTest1(6);
 		Assert::That(settings.intTest1(), Equals(6));
 		Assert::That(settings.intTest2(), Equals(0));
@@ -65,8 +68,6 @@ Describe(settings_test) {
 	}
 
 	It(handles_unsigned_char) {
-		SettingsSpecSettings settings(true);
-
 		settings.setUnsignedCharTest1(0x11);
 		Assert::That((int)settings.unsignedCharTest1(), Equals(0x11));
 		Assert::That((int)settings.unsignedCharTest2(), Equals(0x0));
@@ -74,8 +75,6 @@ Describe(settings_test) {
 	}
 
 	It(handles_bool) {
-		SettingsSpecSettings settings(true);
-
 		settings.setBoolTest1(true);
 		Assert::That(settings.boolTest1());
 		Assert::That(!settings.boolTest2());
@@ -83,8 +82,6 @@ Describe(settings_test) {
 	}
 
 	It(handles_float) {
-		SettingsSpecSettings settings(true);
-
 		settings.setFloatTest1(-1.34f);
 		Assert::That(settings.floatTest1(), Equals(-1.34f));
 		Assert::That(settings.floatTest2(), Equals(0.0f));
@@ -92,8 +89,6 @@ Describe(settings_test) {
 	}
 
 	It(handles_string) {
-		SettingsSpecSettings settings(true);
-
 		settings.setStringTest1("test setString");
 		Assert::That(settings.stringTest1().toStdString(), Equals("test setString"));
 		Assert::That(settings.stringTest2().toStdString(), Equals(""));
@@ -101,8 +96,6 @@ Describe(settings_test) {
 	}
 
 	It(handles_string_list) {
-		SettingsSpecSettings settings(true);
-
 		// Test empty string list
 		Assert::That(settings.stringListTest1().size(), Equals(0));
 
@@ -168,8 +161,6 @@ Describe(settings_test) {
 	}
 
 	It(handles_byte_array) {
-		SettingsSpecSettings settings(true);
-
 		// Test empty array
 		Assert::That(settings.byteArrayTest1().size(), Equals(0));
 

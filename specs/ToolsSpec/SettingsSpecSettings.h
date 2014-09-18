@@ -6,13 +6,12 @@
 #include "PhTools/PhGenericSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 
+/**
+ * @brief Settings for unit tests
+ */
 class SettingsSpecSettings : public PhGenericSettings
 {
 public:
-	SettingsSpecSettings(bool clear = false) : PhGenericSettings(clear) {
-	}
-
-	// Other settings
 	PH_SETTING_INT(setIntTest1, intTest1)
 	PH_SETTING_INT(setIntTest2, intTest2)
 	PH_SETTING_INT2(setIntTest3, intTest3, 4)
