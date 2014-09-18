@@ -84,11 +84,12 @@ public:
 	 * @param y upper left corner coordinates
 	 * @param width width of the strip (usually the same as the parent window)
 	 * @param height height of the strip
-	 * @param tcOffset the upper Offset
+	 * @param nextTextX The horizontal position where the next text are displayed
+	 * @param nextTextY The vertical position where the next text are displayed
 	 * @param selectedPeoples Selected people will be displayed on the upper left corner,
 	 * the others ones will be shaded.
 	 */
-	void draw(int x, int y, int width, int height, int tcOffset = 0, QList<PhPeople*> selectedPeoples = QList<PhPeople*>());
+	void draw(int x, int y, int width, int height, int nextTextX = 0, int nextTextY = 0, QList<PhPeople*> selectedPeoples = QList<PhPeople*>());
 
 	/**
 	 * @brief Get the font of the strip objects

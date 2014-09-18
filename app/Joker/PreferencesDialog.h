@@ -64,16 +64,6 @@ private slots:
 
 	void on_lineEditFilter_textEdited(const QString &value);
 
-	void on_cBoxDisplayTC_clicked();
-
-	void on_cBoxDisplayNextTC_clicked();
-
-	void on_cBoxDisplayNextText_clicked();
-
-	void on_cBoxDisplayTitle_clicked();
-
-	void on_cBoxDisplayLoop_clicked();
-
 private:
 	Ui::PreferencesDialog *ui;
 	JokerSettings *_settings;
@@ -83,11 +73,6 @@ private:
 	int _oldHorizontalTimePerPixel;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldDisplayTC;
-	bool _oldDisplayNextTC;
-	bool _oldDisplayNextText;
-	bool _oldDisplayTitle;
-	bool _oldDisplayLoopNumber;
 
 	QMap<QString, QString> _fontList;
 	QMap<QString, QString> _langNameMap;

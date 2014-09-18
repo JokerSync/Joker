@@ -247,7 +247,10 @@ private slots:
 	void setCurrentTime(PhTime time);
 
 	void setCurrentRate(PhRate rate);
-	void on_actionDisplay_control_panel_toggled(bool checked);
+
+	void on_actionDisplay_the_control_panel_triggered(bool checked);
+
+	void on_actionDisplay_the_information_panel_triggered(bool checked);
 
 private:
 	PhTime currentTime();

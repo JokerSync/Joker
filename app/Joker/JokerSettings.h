@@ -64,12 +64,13 @@ public:
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
 	PH_SETTING_STRINGLIST(setSelectedPeopleNameList, selectedPeopleNameList)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
+	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
 	PH_SETTING_INT(setTimePlayed, timePlayed)
-	PH_SETTING_INT2(setVerticalScaleSpaceInSeconds, verticalScaleSpaceInSeconds, 5)
 	PH_SETTING_BOOL(setDisplayVerticalScale, displayVerticalScale)
+	PH_SETTING_INT2(setVerticalScaleSpaceInSeconds, verticalScaleSpaceInSeconds, 5)
 
 	PH_SETTING_INT2(setCutWidth, cutWidth, 4)
 	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)
@@ -117,12 +118,6 @@ public:
 	PH_SETTING_BOOL(setDisplayControlPanel, displayControlPanel)
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
-
-	PH_SETTING_BOOL2(setDisplayTitle, displayTitle, true)
-	PH_SETTING_BOOL2(setDisplayNextTC, displayNextTC, true)
-	PH_SETTING_BOOL2(setDisplayTC, displayTC, true)
-	PH_SETTING_BOOL2(setDisplayLoopNumber, displayLoopNumber, true)
-	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 
 	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)
 
