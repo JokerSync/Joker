@@ -33,6 +33,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_ltcReader(settings),
 	_mtcReader(PhTimeCodeType25),
 	_mtcWriter(PhTimeCodeType25),
+	_mediaPanelState(MediaPanelHidden),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
 	_resizingStrip(false),
@@ -87,6 +88,14 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	    "  }                                                                                                "
 	    );
 
+	ui->actionDisplay_control_panel->setChecked(_settings->displayControlPanel());
+
+	fadeInMediaPanel();
+
+	// Trigger a timer that will fade off the media panel after 3 seconds
+	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
+	_mediaPanelTimer.start(3000);
+
 	this->setFocus();
 
 	if(_settings->stripTestMode()) {
@@ -107,13 +116,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionDisplay_the_vertical_scale->setChecked(_settings->displayVerticalScale());
 
 	ui->actionShow_ruler->setChecked(_settings->displayRuler());
-
-	_mediaPanel.show();
-	_mediaPanelState = MediaPanelVisible;
-
-	// Trigger a timer that will fade off the media panel after 3 seconds
-	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
-	_mediaPanelTimer.start(3000);
 
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::tick);
@@ -573,20 +575,16 @@ void JokerWindow::on_actionPreferences_triggered()
 void JokerWindow::fadeInMediaPanel()
 {
 	// Don't show the mediaPanel if Joker has not thefocus.
-	if(!this->hasFocus())
-		return;
-	// Don't show the mediaPanel if Joker is remote controled.
-	if(_settings->synchroProtocol() != PhSynchronizer::NoSync)
-		return;
-
-	_mediaPanel.show();
-	_mediaPanelAnimation.stop();
-	_mediaPanelAnimation.setDuration(300);
-	_mediaPanelAnimation.setEndValue(1);
-	_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
-	_mediaPanelAnimation.start();
-	_mediaPanelState = MediaPanelVisible;
-	_mediaPanelTimer.start(3000);
+	if(_settings->displayControlPanel() && this->hasFocus()) {
+		_mediaPanel.show();
+		_mediaPanelAnimation.stop();
+		_mediaPanelAnimation.setDuration(300);
+		_mediaPanelAnimation.setEndValue(1);
+		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
+		_mediaPanelAnimation.start();
+		_mediaPanelState = MediaPanelVisible;
+		_mediaPanelTimer.start(3000);
+	}
 }
 
 void JokerWindow::fadeOutMediaPanel()
@@ -1056,4 +1054,13 @@ PhTime JokerWindow::currentTime()
 PhRate JokerWindow::currentRate()
 {
 	return _strip.clock()->rate();
+}
+
+void JokerWindow::on_actionDisplay_control_panel_toggled(bool checked)
+{
+    _settings->setDisplayControlPanel(checked);
+    if(checked)
+		fadeInMediaPanel();
+	else
+		fadeOutMediaPanel();
 }
