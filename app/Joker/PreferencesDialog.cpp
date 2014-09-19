@@ -249,7 +249,7 @@ void PreferencesDialog::accept()
 
 	_settings->setMtcVirtualInputPort(ui->mtcVirtualInputPortLineEdit->text());
 
-	_settings->setSendMmcMessage(ui->mmcCheckBox);
+	_settings->setSendMmcMessage(ui->mmcCheckBox->isChecked());
 	_settings->setMmcOutputPort(ui->mmcOutputPortComboBox->currentText());
 
 	_settings->setLastPreferencesTab(ui->tabWidget->currentIndex());
