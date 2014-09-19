@@ -253,8 +253,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		int verticalTimePerPixel = _settings->verticalTimePerPixel();
 		bool displayNextText = _settings->displayNextText();
 		PhTime maxTimeIn = timeOut;
+
 		if(displayNextText)
-			maxTimeIn += y * verticalTimePerPixel;
+			maxTimeIn = timeIn + (y - nextTextY) * verticalTimePerPixel;
 
 		QColor selectedPeopleColor(_settings->backgroundColorLight());
 		QColor unselectedPeopleColor(128, 128, 128);
@@ -276,7 +277,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 					if(text && text->people()) {
 						QString name = text->people()->name().toLower();
 						PhGraphicText gPeople(&_hudFont, name);
-						gPeople.setX(nextTextX + 4);
+						gPeople.setX(nextTextX + 8);
 						gPeople.setY(nextTextY);
 						gPeople.setWidth(_hudFont.getNominalWidth(name) / 2);
 						gPeople.setHeight(text->height() * height / 2);
@@ -291,7 +292,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 		// Display the texts
 		foreach(PhStripText * text, _doc.texts()) {
-
 			if( !((text->timeOut() < timeIn) || (text->timeIn() > timeOut)) ) {
 				counter++;
 				PhGraphicText gText(&_textFont, text->content());
@@ -336,22 +336,19 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				gPeople.draw();
 			}
 
-			int howFarIsText = (text->timeIn() - clockTime) / verticalTimePerPixel;
 			PhTime timePerPeopleHeight = gPeople.height() * verticalTimePerPixel;
-			int y0 = y - howFarIsText - gPeople.height();
 
 			if(displayNextText
-			   && y0 < y
-			   && y0 > nextTextY
-			   && (timeIn < text->timeIn() + timePerPeopleHeight)
+			   && (text->timeIn() > clockTime)
+			   && (text->timeIn() < maxTimeIn - timePerPeopleHeight)
 			   && ((lastText == NULL)
 			       || (lastText->people() != text->people())
 			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
 				PhPeople * people = text->people();
 
 				//This line is used to see which text's name will be displayed
-				gPeople.setX(nextTextX + 4);
-				gPeople.setY(y0);
+				gPeople.setX(nextTextX + 8);
+				gPeople.setY(y - (text->timeIn() - clockTime + timePerPeopleHeight) / verticalTimePerPixel);
 				gPeople.setZ(-3);
 				gPeople.setHeight(text->height() * height / 2);
 
