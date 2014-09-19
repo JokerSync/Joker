@@ -480,11 +480,17 @@
    </property>
   </action>
   <action name="actionDisplay_the_information_panel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Display the information panel</string>
    </property>
   </action>
   <action name="actionDisplay_the_control_panel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Display the control panel</string>
    </property>

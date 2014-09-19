@@ -98,10 +98,10 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	this->setFocus();
 
-	if(_settings->stripTestMode()) {
+	ui->actionDisplay_the_information_panel->setChecked(_settings->displayNextText());
+
 #warning /// @todo do we warn the user that test mode is on?
-		ui->actionTest_mode->setChecked(true);
-	}
+	ui->actionTest_mode->setChecked(_settings->stripTestMode());
 
 #warning /// @todo move to PhDocumentWindow
 	// This is for the drag and drop feature
