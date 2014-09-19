@@ -14,10 +14,8 @@
 
 #include "PhStrip/PhStripDoc.h"
 
-#include "PhGraphic/PhGraphicText.h"
+#include "PhGraphic/PhFont.h"
 #include "PhGraphic/PhGraphicImage.h"
-#include "PhGraphic/PhGraphicSolidRect.h"
-#include "PhGraphic/PhGraphicLoop.h"
 
 #include "PhSync/PhClock.h"
 

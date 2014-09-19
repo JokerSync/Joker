@@ -10,10 +10,13 @@
 #include <QMessageBox>
 
 #include "PhTools/PhDebug.h"
+#include "PhGraphic/PhGraphicText.h"
 #include "PhGraphic/PhGraphicDisc.h"
 #include "PhGraphic/PhGraphicDashedLine.h"
 #include "PhGraphic/PhGraphicArrow.h"
 #include "PhGraphicStrip.h"
+#include "PhGraphic/PhGraphicSolidRect.h"
+#include "PhGraphic/PhGraphicLoop.h"
 
 PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
 	_settings(settings),

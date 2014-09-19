@@ -4,9 +4,6 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "JokerWindow.h"
-#include "ui_JokerWindow.h"
-
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QFileOpenEvent>
@@ -16,8 +13,16 @@
 #include <QMouseEvent>
 
 #include "PhTools/PhDebug.h"
+
 #include "PhCommonUI/PhTimeCodeDialog.h"
 #include "PhCommonUI/PhFeedbackDialog.h"
+
+#include "PhGraphic/PhGraphicText.h"
+#include "PhGraphic/PhGraphicSolidRect.h"
+
+#include "JokerWindow.h"
+#include "ui_JokerWindow.h"
+
 #include "AboutDialog.h"
 #include "PreferencesDialog.h"
 #include "PeopleDialog.h"
