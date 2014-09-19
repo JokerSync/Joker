@@ -256,6 +256,37 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		QColor selectedPeopleColor(_settings->backgroundColorLight());
 		QColor unselectedPeopleColor(128, 128, 128);
 
+		// Display the selected people after the vertical scale
+		if(selectedPeoples.count()) {
+			QMap<PhTime, PhStripText*> futureSelectedText;
+			PhTime maxTimeOut = clockTime + (y - nextTextY) * verticalTimePerPixel;
+			foreach (PhPeople *people, selectedPeoples) {
+				PhStripText *nextText = _doc.nextText({people}, maxTimeOut);
+				if(nextText)
+					futureSelectedText[nextText->timeIn() + (int)(10 * nextText->y())] = nextText;
+			}
+			if(futureSelectedText.count()) {
+				QList<PhTime> timeList = futureSelectedText.keys();
+				qSort(timeList.begin(), timeList.end());
+				foreach(PhTime timeIn, timeList) {
+					PhStripText *text = futureSelectedText[timeIn];
+					if(text && text->people()) {
+						QString name = text->people()->name().toLower();
+						PhGraphicText gPeople(&_hudFont, name);
+						gPeople.setX(nextTextX + 4);
+						gPeople.setY(nextTextY);
+						gPeople.setWidth(_hudFont.getNominalWidth(name) / 2);
+						gPeople.setHeight(text->height() * height / 2);
+
+						gPeople.draw();
+
+						nextTextY += gPeople.height();
+					}
+				}
+			}
+		}
+
+		// Display the texts
 		foreach(PhStripText * text, _doc.texts()) {
 
 			if( !((text->timeOut() < timeIn) || (text->timeIn() > timeOut)) ) {

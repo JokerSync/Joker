@@ -886,6 +886,7 @@ void JokerWindow::onPaint(int width, int height)
 	if(_settings->displayNextText()) {
 		QColor infoColor = _settings->backgroundColorLight();
 		int infoWidth = width - videoWidth;
+		int spacing = 4;
 
 		// Display the title
 		{
@@ -897,14 +898,13 @@ void JokerWindow::onPaint(int width, int height)
 			int titleWidth = _strip.getHUDFont()->getNominalWidth(title) / 2;
 			PhGraphicText titleText(_strip.getHUDFont());
 			titleText.setColor(infoColor);
-			titleText.setRect(x, y, titleWidth, titleHeight);
+			titleText.setRect(x + spacing, y, titleWidth, titleHeight);
 			y += titleHeight;
 			titleText.setContent(title);
 			titleText.setZ(5);
 			titleText.draw();
 		}
 
-		int spacing = 4;
 		// Display the current timecode
 		{
 			int tcWidth = infoWidth - 2 * spacing;
@@ -924,11 +924,11 @@ void JokerWindow::onPaint(int width, int height)
 		int nextTcWidth = infoWidth - boxWidth - 12;
 		int nextTcHeight = nextTcWidth / 6;
 		{
+			int borderWidth = 2;
 			PhGraphicSolidRect outsideLoopRect(x + spacing, y, boxWidth, boxHeight);
 			outsideLoopRect.setColor(infoColor);
 			outsideLoopRect.draw();
 
-			int borderWidth = 2;
 			PhGraphicSolidRect insideLoopRect(x + spacing + borderWidth, y + borderWidth, boxWidth - 2 * borderWidth, boxHeight - 2 * borderWidth);
 			insideLoopRect.setColor(Qt::black);
 			insideLoopRect.draw();
@@ -952,32 +952,12 @@ void JokerWindow::onPaint(int width, int height)
 
 		// Display the next timecode
 		{
-			PhGraphicText nextTCText(_strip.getHUDFont());
-			nextTCText.setColor(infoColor);
-
-			int nextTcX = x + 2 * spacing + boxWidth;
-			int nextTcY = y + (boxHeight - nextTcHeight) / 2;
-			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
-
-			y += boxHeight;
-
 			/// The next time code will be the next element of the people from the list.
 			PhStripText *nextText = NULL;
 			if(selectedPeoples.count()) {
 				nextText = _strip.doc()->nextText(selectedPeoples, clockTime);
 				if(nextText == NULL)
 					nextText = _strip.doc()->nextText(selectedPeoples, 0);
-
-				int peopleHeight = height / 30;
-				PhGraphicText peopleNameText(_strip.getHUDFont());
-				peopleNameText.setColor(infoColor);
-				foreach(PhPeople* people, selectedPeoples) {
-					int peopleNameWidth = people->name().length() * peopleHeight / 2;
-					peopleNameText.setRect(x, y, peopleNameWidth, peopleHeight);
-					peopleNameText.setContent(people->name());
-					peopleNameText.draw();
-					y += peopleHeight;
-				}
 			}
 			else {
 				nextText = _strip.doc()->nextText(clockTime);
@@ -988,8 +968,18 @@ void JokerWindow::onPaint(int width, int height)
 			PhTime nextTextTime = 0;
 			if(nextText != NULL)
 				nextTextTime = nextText->timeIn();
+
+			PhGraphicText nextTCText(_strip.getHUDFont());
+			nextTCText.setColor(infoColor);
+
+			int nextTcX = x + 2 * spacing + boxWidth;
+			int nextTcY = y + (boxHeight - nextTcHeight) / 2;
+			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
+
 			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, _videoEngine.timeCodeType()));
 			nextTCText.draw();
+
+			y += boxHeight;
 		}
 	}
 
