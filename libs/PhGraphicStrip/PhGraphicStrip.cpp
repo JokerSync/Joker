@@ -247,6 +247,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 		int minTimeBetweenPeople = 48000;
 		int timeBetweenPeopleAndText = 4000;
+		int spacing = 8;
 		QMap<float, PhStripText * > lastTextList;
 
 
@@ -277,7 +278,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 					if(text && text->people()) {
 						QString name = text->people()->name().toLower();
 						PhGraphicText gPeople(&_hudFont, name);
-						gPeople.setX(nextTextX + 8);
+						gPeople.setX(nextTextX + spacing);
 						gPeople.setY(nextTextY);
 						gPeople.setWidth(_hudFont.getNominalWidth(name) / 2);
 						gPeople.setHeight(text->height() * height / 2);
@@ -347,10 +348,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				PhPeople * people = text->people();
 
 				//This line is used to see which text's name will be displayed
-				gPeople.setX(nextTextX + 8);
+				gPeople.setX(nextTextX + spacing);
 				gPeople.setY(y - (text->timeIn() - clockTime + timePerPeopleHeight) / verticalTimePerPixel);
 				gPeople.setZ(-3);
-				gPeople.setHeight(text->height() * height / 2);
+				gPeople.setHeight(height / 10);
 
 				if(selectedPeoples.size() && !selectedPeoples.contains(people))
 					gPeople.setColor(unselectedPeopleColor);
@@ -425,14 +426,13 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 					&& (loop->timeIn() < maxTimeIn)) {
 				PhGraphicLoop gLoopPred;
 
-				int howFarIsLoop = (loop->timeIn() - clockTime) / verticalTimePerPixel;
 				gLoopPred.setColor(Qt::white);
 
 				gLoopPred.setHorizontalLoop(true);
 				gLoopPred.setZ(-3);
 
 				gLoopPred.setX(nextTextX);
-				gLoopPred.setY(y - howFarIsLoop);
+				gLoopPred.setY(y - (loop->timeIn() - clockTime) / verticalTimePerPixel);
 				gLoopPred.setHeight(30);
 
 				int loopWidth = width - nextTextX;
@@ -441,7 +441,17 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				gLoopPred.setWidth(loopWidth);
 
 				gLoopPred.draw();
-			}
+
+				// Display the label
+				PhGraphicText gLabel(&_hudFont, loop->label());
+				gLabel.setWidth(_hudFont.getNominalWidth(loop->label()) / 3);
+#warning /// @todo better loop sizing
+				gLabel.setHeight(height / 20);
+				gLabel.setX(width - gLabel.width() - spacing);
+				gLabel.setY(gLoopPred.y() - gLabel.height() - spacing);
+				gLabel.setColor(Qt::gray);
+				gLabel.draw();
+		}
 			if(loop->timeIn() > maxTimeIn + timePerPixel * height / 4)
 				break;
 		}
