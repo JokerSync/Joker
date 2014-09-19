@@ -394,6 +394,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		foreach(PhStripLoop * loop, _doc.loops()) {
 			//_counter++;
 			// This calcul allow the cross to come smoothly on the screen (height * timePerPixel / 8)
+#warning /// @todo clean this it is not clear
 			if( ((loop->timeIn() + height * timePerPixel / 8) > timeIn) && ((loop->timeIn() - height * timePerPixel / 8 ) < timeOut)) {
 				PhGraphicLoop gLoop;
 				if(!invertedColor)
@@ -419,7 +420,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				gLabel.draw();
 			}
 
-			if(displayNextText && ((loop->timeIn() + height * timePerPixel / 8) > timeIn)) {
+			if(displayNextText
+					&& (loop->timeIn() > clockTime)
+					&& (loop->timeIn() < maxTimeIn)) {
 				PhGraphicLoop gLoopPred;
 
 				int howFarIsLoop = (loop->timeIn() - clockTime) / verticalTimePerPixel;
@@ -439,7 +442,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 				gLoopPred.draw();
 			}
-			if((loop->timeIn() - height * timePerPixel / 8) > timeOut + 25 * 30)
+			if(loop->timeIn() > maxTimeIn + timePerPixel * height / 4)
 				break;
 		}
 
