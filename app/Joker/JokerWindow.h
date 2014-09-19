@@ -125,6 +125,16 @@ protected:
 	QAction *fullScreenAction();
 
 	///
+	/// \brief Show the control panel on application activation
+	///
+	void onApplicationActivate();
+
+	///
+	/// \brief Hide the control panel on application deactivation
+	///
+	void onApplicationDeactivate();
+
+	///
 	/// @brief Setup the synchronisation protocol
 	///
 	/// Close all the protocol if opened and setup the one specified

@@ -56,6 +56,16 @@ void PhWindow::resizeEvent(QResizeEvent *)
 	_settings->setWindowGeometry(QMainWindow::saveGeometry());
 }
 
+void PhWindow::onApplicationActivate()
+{
+	PHDEBUG;
+}
+
+void PhWindow::onApplicationDeactivate()
+{
+	PHDEBUG;
+}
+
 void PhWindow::onApplicationStateChange(Qt::ApplicationState state)
 {
 	switch(state) {

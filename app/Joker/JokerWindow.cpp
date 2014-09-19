@@ -98,7 +98,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	fadeInMediaPanel();
 
 	// Trigger a timer that will fade off the media panel after 3 seconds
-	this->connect(&_mediaPanelTimer, SIGNAL(timeout()), this, SLOT(fadeOutMediaPanel()));
+	this->connect(&_mediaPanelTimer, &QTimer::timeout, this, &JokerWindow::fadeOutMediaPanel);
 	_mediaPanelTimer.start(3000);
 
 	this->setFocus();
@@ -251,9 +251,6 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				openVideoFile(filePath);
 			break;
 		}
-	case QEvent::ApplicationDeactivate: /// - ApplicationDeactivate : to hide the mediapanel
-		hideMediaPanel();
-		break;
 	case QEvent::MouseMove: /// - Mouse move show the media panel
 	case QEvent::HoverEnter:
 	case QEvent::HoverMove:
@@ -337,6 +334,18 @@ QMenu *JokerWindow::recentDocumentMenu()
 QAction *JokerWindow::fullScreenAction()
 {
 	return ui->actionFullscreen;
+}
+
+void JokerWindow::onApplicationActivate()
+{
+	PhDocumentWindow::onApplicationActivate();
+	fadeInMediaPanel();
+}
+
+void JokerWindow::onApplicationDeactivate()
+{
+	PhDocumentWindow::onApplicationDeactivate();
+	hideMediaPanel();
 }
 
 void JokerWindow::closeEvent(QCloseEvent *event)
