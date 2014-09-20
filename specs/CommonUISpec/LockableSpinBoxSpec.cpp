@@ -5,38 +5,40 @@
 
 #include <QTest>
 
-#include "igloo/igloo_alt.h"
+#include "bandit/bandit.h"
 
 #include "PhTools/PhDebug.h"
 
 #include "PhCommonUI/PhLockableSpinBox.h"
 
-using namespace igloo;
+using namespace bandit;
 
-Describe(lockable_spinbox_test) {
-	static void SetUpContext() {
-		PhDebug::disable();
-	}
+go_bandit([](){
+	describe("lockable_spinbox_test", []() {
+		before_each([&](){
+			PhDebug::disable();
+		});
 
-	It(enable_after_8_clicks) {
-		PhLockableSpinBox spinBox;
+		it("enable_after_8_clicks", [&](){
+			PhLockableSpinBox spinBox;
 
-		Assert::That(spinBox.isEnabled(), IsFalse());
-		for(int i = 0; i < 7; i++)
+			Assert::That(spinBox.isEnabled(), IsFalse());
+			for(int i = 0; i < 7; i++)
+				QTest::mouseClick(&spinBox, Qt::LeftButton);
+			Assert::That(spinBox.isEnabled(), IsFalse());
 			QTest::mouseClick(&spinBox, Qt::LeftButton);
-		Assert::That(spinBox.isEnabled(), IsFalse());
-		QTest::mouseClick(&spinBox, Qt::LeftButton);
-		Assert::That(spinBox.isEnabled());
-	}
+			Assert::That(spinBox.isEnabled());
+		});
 
-	It(enable_if_ctrl_is_pressed) {
-		PhLockableSpinBox spinBox;
+		it("enable_if_ctrl_is_pressed", [&](){
+			PhLockableSpinBox spinBox;
 
-		Assert::That(spinBox.isEnabled(), IsFalse());
-		QTest::mouseClick(&spinBox, Qt::LeftButton);
-		Assert::That(spinBox.isEnabled(), IsFalse());
+			Assert::That(spinBox.isEnabled(), IsFalse());
+			QTest::mouseClick(&spinBox, Qt::LeftButton);
+			Assert::That(spinBox.isEnabled(), IsFalse());
 
-		QTest::mouseClick(&spinBox, Qt::LeftButton, Qt::ControlModifier);
-		Assert::That(spinBox.isEnabled());
-	}
-};
+			QTest::mouseClick(&spinBox, Qt::LeftButton, Qt::ControlModifier);
+			Assert::That(spinBox.isEnabled());
+		});
+	});
+});
