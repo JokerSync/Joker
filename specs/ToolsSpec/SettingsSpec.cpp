@@ -5,25 +5,23 @@
 
 #include <QMouseEvent>
 
-#include "igloo/igloo_alt.h"
+#include "bandit/bandit.h"
 
 #include "PhTools/PhDebug.h"
 #include "SettingsSpecSettings.h"
 
-using namespace igloo;
+using namespace bandit;
 
-Describe(settings_test) {
-	static void SetUpContext() {
-		PhDebug::disable();
-	}
-
+go_bandit([](){
+describe("settings_test", [](){
 	SettingsSpecSettings settings;
 
-	void SetUp() {
+	before_each([&](){
+		PhDebug::disable();
 		settings.clear();
-	}
+	});
 
-	It(clears_all_settings) {
+	it("clears_all_settings", [&](){
 
 		settings.setIntTest1(1);
 		settings.setUnsignedCharTest1('a');
@@ -54,9 +52,9 @@ Describe(settings_test) {
 		AssertThat(settings.stringTest1().toStdString(), Equals(""));
 		AssertThat(settings.stringListTest1().count(), Equals(0));
 		AssertThat(settings.byteArrayTest1().count(), Equals(0));
-	}
+	});
 
-	It(handles_int) {
+	it("handles_int", [&](){
 		settings.setIntTest1(6);
 		AssertThat(settings.intTest1(), Equals(6));
 		AssertThat(settings.intTest2(), Equals(0));
@@ -65,37 +63,37 @@ Describe(settings_test) {
 		settings.setIntTest4(8);
 		AssertThat(settings.intTest1(), Equals(6));
 		AssertThat(settings.intTest4(), Equals(8));
-	}
+	});
 
-	It(handles_unsigned_char) {
+	it("handles_unsigned_char", [&](){
 		settings.setUnsignedCharTest1(0x11);
 		AssertThat((int)settings.unsignedCharTest1(), Equals(0x11));
 		AssertThat((int)settings.unsignedCharTest2(), Equals(0x0));
 		AssertThat((int)settings.unsignedCharTest3(), Equals(0xF0));
-	}
+	});
 
-	It(handles_bool) {
+	it("handles_bool", [&](){
 		settings.setBoolTest1(true);
 		AssertThat(settings.boolTest1(), IsTrue());
 		AssertThat(!settings.boolTest2(), IsTrue());
 		AssertThat(settings.boolTest3(), IsTrue());
-	}
+	});
 
-	It(handles_float) {
+	it("handles_float", [&](){
 		settings.setFloatTest1(-1.34f);
 		AssertThat(settings.floatTest1(), Equals(-1.34f));
 		AssertThat(settings.floatTest2(), Equals(0.0f));
 		AssertThat(settings.floatTest3(), Equals(3.14f));
-	}
+	});
 
-	It(handles_string) {
+	it("handles_string", [&](){
 		settings.setStringTest1("test setString");
 		AssertThat(settings.stringTest1().toStdString(), Equals("test setString"));
 		AssertThat(settings.stringTest2().toStdString(), Equals(""));
 		AssertThat(settings.stringTest3().toStdString(), Equals("stringTest default value"));
-	}
+	});
 
-	It(handles_string_list) {
+	it("handles_string_list", [&](){
 		// Test empty string list
 		AssertThat(settings.stringListTest1().size(), Equals(0));
 
@@ -158,9 +156,9 @@ Describe(settings_test) {
 		// Check changing string list settings doesn't affect
 		// other settings
 		AssertThat(settings.intTest1(), Equals(33));
-	}
+	});
 
-	It(handles_byte_array) {
+	it("handles_byte_array", [&](){
 		// Test empty array
 		AssertThat(settings.byteArrayTest1().size(), Equals(0));
 
@@ -179,6 +177,7 @@ Describe(settings_test) {
 
 		for(int i = 0; i < array1.size(); i++)
 			AssertThat(array2.at(i), Equals(array1.at(i)));
-	}
-};
+	});
+});
 
+});
