@@ -9,6 +9,7 @@ CONFIG   += console
 CONFIG   -= app_bundle
 
 INCLUDEPATH += $$TOP_ROOT/vendor/igloo \
+    $$TOP_ROOT/vendor/bandit \
     $$PWD
 
 include($$TOP_ROOT/libs/PhTools/PhTools.pri)

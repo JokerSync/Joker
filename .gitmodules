@@ -4,3 +4,6 @@
 [submodule "vendor/igloo"]
 	path = vendor/igloo
 	url = https://github.com/joakimkarlsson/igloo
+[submodule "vendor/bandit"]
+	path = vendor/bandit
+	url = https://github.com/joakimkarlsson/bandit

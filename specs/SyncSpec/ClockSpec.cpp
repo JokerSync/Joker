@@ -3,121 +3,124 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "igloo/igloo_alt.h"
+#include "bandit/bandit.h"
 
 #include "PhTools/PhDebug.h"
 #include "PhSync/PhClock.h"
 
-using namespace igloo;
+using namespace bandit;
 
-Describe(clock_test) {
-	PhClock clock;
-	PhTime time;
-	PhRate rate;
-	bool timeChanged;
-	bool rateChanged;
+go_bandit([](){
+	describe("clock_test", []() {
+		PhClock clock;
+		PhTime time;
+		PhRate rate;
+		bool timeChanged;
+		bool rateChanged;
 
-	void SetUp() {
-		clock.setTime(0);
-		clock.setRate(0);
-		time = 0;
-		rate = 0;
-		timeChanged = false;
-		rateChanged = false;
-		QObject::connect(&clock, &PhClock::timeChanged, [&](PhTime t) {
-			time = t;
-			timeChanged = true;
+		before_each([&](){
+			clock.setTime(0);
+			clock.setRate(0);
+			time = 0;
+			rate = 0;
+			timeChanged = false;
+			rateChanged = false;
+			QObject::connect(&clock, &PhClock::timeChanged, [&](PhTime t) {
+				time = t;
+				timeChanged = true;
+			});
+			QObject::connect(&clock, &PhClock::rateChanged, [&](PhRate r) {
+				rate = r;
+				rateChanged = true;
+			});
 		});
-		QObject::connect(&clock, &PhClock::rateChanged, [&](PhRate r) {
-			rate = r;
-			rateChanged = true;
+
+		it("doesnt_call_time_changed_if_no_modification", [&](){
+			AssertThat(clock.time(), Equals(0));
+			AssertThat(timeChanged, IsFalse());
+			AssertThat(time, Equals(0));
+			AssertThat(clock.time(), Equals(0));
 		});
-	}
 
-	It(doesnt_call_time_changed_if_no_modification) {
-		Assert::That(clock.time(), Equals(0));
-		Assert::That(!timeChanged);
-		Assert::That(time, Equals(0));
-		Assert::That(clock.time(), Equals(0));
-	}
+		it("call_time_changed_upon_time_modification", [&](){
+			clock.setTime(1);
+			AssertThat(timeChanged, IsTrue());
+			AssertThat(time, Equals(1));
+			AssertThat(clock.time(), Equals(1));
+		});
 
-	It(call_time_changed_upon_time_modification) {
-		clock.setTime(1);
-		Assert::That(timeChanged);
-		Assert::That(time, Equals(1));
-		Assert::That(clock.time(), Equals(1));
-	}
+		it("call_time_changed_upon_frame_modification", [&](){
+			AssertThat(clock.time(), Equals(0));
+			AssertThat(timeChanged, IsFalse());
+			clock.setFrame(10, PhTimeCodeType25);
+			AssertThat(timeChanged, IsTrue());
+			AssertThat(time, Equals(9600));
+			AssertThat(clock.time(), Equals(9600));
+		});
 
-	It(call_time_changed_upon_frame_modification) {
-		Assert::That(clock.time(), Equals(0));
-		Assert::That(!timeChanged);
-		clock.setFrame(10, PhTimeCodeType25);
-		Assert::That(timeChanged);
-		Assert::That(time, Equals(9600));
-		Assert::That(clock.time(), Equals(9600));
-	}
+		it("call_time_changed_upon_millisecond_modification", [&](){
+			AssertThat(clock.time(), Equals(0));
+			AssertThat(timeChanged, IsFalse());
+			clock.setMillisecond(1000);
+			AssertThat(timeChanged, IsTrue());
+			AssertThat(time, Equals(24000));
+			AssertThat(clock.time(), Equals(24000));
+		});
 
-	It(call_time_changed_upon_millisecond_modification) {
-		Assert::That(clock.time(), Equals(0));
-		Assert::That(!timeChanged);
-		clock.setMillisecond(1000);
-		Assert::That(timeChanged);
-		Assert::That(time, Equals(24000));
-		Assert::That(clock.time(), Equals(24000));
-	}
+		it("call_time_changed_upon_timecode_modification", [&](){
+			AssertThat(clock.time(), Equals(0));
+			AssertThat(timeChanged, IsFalse());
+			clock.setTimeCode("00:00:01:00", PhTimeCodeType25);
+			AssertThat(timeChanged, IsTrue());
+			AssertThat(time, Equals(24000));
+			AssertThat(clock.time(), Equals(24000));
+		});
 
-	It(call_time_changed_upon_timecode_modification) {
-		Assert::That(clock.time(), Equals(0));
-		Assert::That(!timeChanged);
-		clock.setTimeCode("00:00:01:00", PhTimeCodeType25);
-		Assert::That(timeChanged);
-		Assert::That(time, Equals(24000));
-		Assert::That(clock.time(), Equals(24000));
-	}
+		it("doesnt_call_rate_changed_if_no_modification", [&](){
+			AssertThat(clock.rate(), Equals(0));
+			AssertThat(rateChanged, IsFalse());
+			AssertThat(rate, Equals(0));
+			AssertThat(clock.rate(), Equals(0));
+		});
 
-	It(doesnt_call_rate_changed_if_no_modification) {
-		Assert::That(clock.rate(), Equals(0));
-		Assert::That(!rateChanged);
-		Assert::That(rate, Equals(0));
-		Assert::That(clock.rate(), Equals(0));
-	}
+		it("call_rate_changed_upon_rate_modification", [&](){
+			clock.setRate(1);
+			AssertThat(rateChanged, IsTrue());
+			AssertThat(rate, Equals(1));
+			AssertThat(clock.rate(), Equals(1));
+		});
 
-	It(call_rate_changed_upon_rate_modification) {
-		clock.setRate(1);
-		Assert::That(rateChanged);
-		Assert::That(rate, Equals(1));
-		Assert::That(clock.rate(), Equals(1));
-	}
+		it("doesnt_call_time_changed_if_tick_with_no_rate", [&](){
+			clock.tick(1);
+			AssertThat(timeChanged, IsFalse());
+			AssertThat(time, Equals(0));
+			AssertThat(clock.time(), Equals(0));
+		});
 
-	It(doesnt_call_time_changed_if_tick_with_no_rate) {
-		clock.tick(1);
-		Assert::That(!timeChanged);
-		Assert::That(time, Equals(0));
-		Assert::That(clock.time(), Equals(0));
-	}
+		it("call_time_changed_if_tick_with_rate", [&](){
+			clock.setRate(1);
+			clock.tick(1);
+			AssertThat(timeChanged, IsTrue());
+			AssertThat(time, Equals(24000));
+			AssertThat(clock.time(), Equals(24000));
 
-	It(call_time_changed_if_tick_with_rate) {
-		clock.setRate(1);
-		clock.tick(1);
-		Assert::That(timeChanged);
-		Assert::That(time, Equals(24000));
-		Assert::That(clock.time(), Equals(24000));
+			clock.setRate(-2);
+			clock.tick(4);
+			AssertThat(clock.time(), Equals(12000));
+		});
 
-		clock.setRate(-2);
-		clock.tick(4);
-		Assert::That(clock.time(), Equals(12000));
-	}
+		it("call_time_changed_if_elapsed_with_rate", [&](){
+			clock.setRate(1);
+			clock.elapse(48000);
+			AssertThat(timeChanged, IsTrue());
+			AssertThat(time, Equals(48000));
+			AssertThat(clock.time(), Equals(48000));
 
-	It(call_time_changed_if_elapsed_with_rate) {
-		clock.setRate(1);
-		clock.elapse(48000);
-		Assert::That(timeChanged);
-		Assert::That(time, Equals(48000));
-		Assert::That(clock.time(), Equals(48000));
+			clock.setRate(-2);
+			clock.elapse(1000);
+			AssertThat(clock.time(), Equals(46000));
+		});
+	});
+});
 
-		clock.setRate(-2);
-		clock.elapse(1000);
-		Assert::That(clock.time(), Equals(46000));
-	}
-};
 

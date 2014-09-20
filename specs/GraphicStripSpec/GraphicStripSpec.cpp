@@ -55,7 +55,7 @@ Describe(graphic_strip_test) {
 
 		unsigned int result = PhPictureTools::compare(resultImage, expectedImage, true);
 		PHDEBUG << "result:" << result;
-		Assert::That(result, IsLessThan(920 * 320 * 0.04)); // accept a difference of 4%
+		AssertThat(result, IsLessThan(920 * 320 * 0.04)); // accept a difference of 4%
 	}
 };
 

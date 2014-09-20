@@ -5,16 +5,14 @@
 
 #include <QApplication>
 
-#include "igloo/igloo_alt.h"
+#include "bandit/bandit.h"
 
 #include "PhTools/PhDebug.h"
-
-using namespace igloo;
 
 int main(int argc, char *argv[])
 {
 	PHDEBUG << "All specs";
 	QApplication a(argc, argv);
 
-	return TestRunner::RunAllTests(argc, argv);
+	return bandit::run(argc, argv);
 }
