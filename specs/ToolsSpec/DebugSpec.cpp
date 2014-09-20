@@ -97,25 +97,25 @@ Describe(debug_test) {
 		event = new QEvent((QEvent::Type)999);
 		PHDEBUG << event;
 
-		Assert::That(PhDebug::getLogMask(), Equals(1));
+		AssertThat(PhDebug::getLogMask(), Equals(1));
 		PHDBG(0) << "it should be displayed when default log mask is 1";
 		PhDebug::setLogMask(2);
-		Assert::That(PhDebug::getLogMask(), Equals(2));
+		AssertThat(PhDebug::getLogMask(), Equals(2));
 		PHDBG(0) << "it should not be displayed when default log mask is 2";
 		PHDBG(1) << "it should be displayed when default log mask is 2";
 
 		QStringList lines = QString::fromStdString(buffer.str()).split("\n");
-		Assert::That(lines.count(), Equals(10));
-		Assert::That(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugSpec.cpp\tdisplay_in_the_debug\t@[0-9]+\ttest with all log parameters").exactMatch(lines[0]));
+		AssertThat(lines.count(), Equals(10));
+		AssertThat(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugSpec.cpp\tdisplay_in_the_debug\t@[0-9]+\ttest with all log parameters").exactMatch(lines[0]), IsTrue());
 
-		Assert::That(lines[1].toStdString(), Equals("test with no log parameters"));
-		Assert::That(lines[2].toStdString(), Equals("shown because of showConsole(true)"));
-		Assert::That(lines[3].toStdString(), Equals("shown because enable()"));
-		Assert::That(lines[4].toStdString(), Equals("QEvent 0x0"));
-		Assert::That(lines[5].toStdString(), Equals("QEvent MouseButtonPress"));
-		Assert::That(lines[6].toStdString(), Equals("QEvent 999"));
-		Assert::That(lines[7].toStdString(), Equals("it should be displayed when default log mask is 1"));
-		Assert::That(lines[8].toStdString(), Equals("it should be displayed when default log mask is 2"));
+		AssertThat(lines[1].toStdString(), Equals("test with no log parameters"));
+		AssertThat(lines[2].toStdString(), Equals("shown because of showConsole(true)"));
+		AssertThat(lines[3].toStdString(), Equals("shown because enable()"));
+		AssertThat(lines[4].toStdString(), Equals("QEvent 0x0"));
+		AssertThat(lines[5].toStdString(), Equals("QEvent MouseButtonPress"));
+		AssertThat(lines[6].toStdString(), Equals("QEvent 999"));
+		AssertThat(lines[7].toStdString(), Equals("it should be displayed when default log mask is 1"));
+		AssertThat(lines[8].toStdString(), Equals("it should be displayed when default log mask is 2"));
 	}
 
 	It(display_in_the_error) {
@@ -127,10 +127,10 @@ Describe(debug_test) {
 		PhDebug::setDisplay(true, true, true, true, true);
 		PHERR << "test with all log parameters";
 		QStringList lines = QString::fromStdString(buffer.str()).split("\n");
-		Assert::That(lines.count(), Equals(3));
-		Assert::That(lines[0].toStdString(), Equals("test with no log parameters"));
-		Assert::That(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugSpec.cpp\tdisplay_in_the_error\t@[0-9]+\ttest with all log parameters").exactMatch(lines[1]));
-		Assert::That(lines[2].toStdString(), Equals(""));
+		AssertThat(lines.count(), Equals(3));
+		AssertThat(lines[0].toStdString(), Equals("test with no log parameters"));
+		AssertThat(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugSpec.cpp\tdisplay_in_the_error\t@[0-9]+\ttest with all log parameters").exactMatch(lines[1]), IsTrue());
+		AssertThat(lines[2].toStdString(), Equals(""));
 	}
 };
 

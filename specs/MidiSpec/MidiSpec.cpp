@@ -21,15 +21,15 @@ Describe(midi_test) {
 	It(connect_to_a_port) {
 		PhMidiOutput midiOut;
 		// test opening an unexisting midi port
-		Assert::That(!midiOut.open("testConnection"));
+		AssertThat(midiOut.open("testConnection"), IsFalse());
 
 		PhMidiInput midiIn;
 
 		// test creating a virtual port
-		Assert::That(midiIn.open("testConnection"));
+		AssertThat(midiIn.open("testConnection"), IsTrue());
 
 		// test opening an existing midi port
-		Assert::That(midiOut.open("testConnection"));
+		AssertThat(midiOut.open("testConnection"), IsTrue());
 	}
 
 	It(send_and_receive_quarter_frame_midi_timecode_message) {
@@ -44,57 +44,57 @@ Describe(midi_test) {
 			quarterFrameData = data;
 		});
 
-		Assert::That(midiIn.open("testQFTC"));
-		Assert::That(midiOut.open("testQFTC"));
+		AssertThat(midiIn.open("testQFTC"), IsTrue());
+		AssertThat(midiOut.open("testQFTC"), IsTrue());
 
-		Assert::That(quarterFrameCount, Equals(0));
+		AssertThat(quarterFrameCount, Equals(0));
 
 		// Sending a quarter frame MTC message
 		midiOut.sendQFTC(0x01); // setting lower frame to 1
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(1));
-		Assert::That(quarterFrameData, Equals(0x01));
+		AssertThat(quarterFrameCount, Equals(1));
+		AssertThat(quarterFrameData, Equals(0x01));
 
 		midiOut.sendQFTC(0x11); // setting higher frame to 0x1x
 		QThread::msleep(20); // try to solve travis fail
-		Assert::That(quarterFrameCount, Equals(2));
-		Assert::That(quarterFrameData, Equals(0x11));
+		AssertThat(quarterFrameCount, Equals(2));
+		AssertThat(quarterFrameData, Equals(0x11));
 
 		midiOut.sendQFTC(0x23); // setting lower second to 3
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(3));
-		Assert::That(quarterFrameData, Equals(0x23));
+		AssertThat(quarterFrameCount, Equals(3));
+		AssertThat(quarterFrameData, Equals(0x23));
 
 		midiOut.sendQFTC(0x31); // setting higher second to 0x1x
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(4));
-		Assert::That(quarterFrameData, Equals(0x31));
+		AssertThat(quarterFrameCount, Equals(4));
+		AssertThat(quarterFrameData, Equals(0x31));
 
 		midiOut.sendQFTC(0x48); // setting lower minute to 0x08
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(5));
-		Assert::That(quarterFrameData, Equals(0x48));
+		AssertThat(quarterFrameCount, Equals(5));
+		AssertThat(quarterFrameData, Equals(0x48));
 
 		midiOut.sendQFTC(0x52); // setting higher minute to 0x2x
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(6));
-		Assert::That(quarterFrameData, Equals(0x52));
+		AssertThat(quarterFrameCount, Equals(6));
+		AssertThat(quarterFrameData, Equals(0x52));
 
 		midiOut.sendQFTC(0x67); // setting lower hour to 0x07
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(7));
-		Assert::That(quarterFrameData, Equals(0x67));
+		AssertThat(quarterFrameCount, Equals(7));
+		AssertThat(quarterFrameData, Equals(0x67));
 
 		midiOut.sendQFTC(0x77); // setting rate to 30 and higher hour to 0x1x
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(8));
-		Assert::That(quarterFrameData, Equals(0x77));
+		AssertThat(quarterFrameCount, Equals(8));
+		AssertThat(quarterFrameData, Equals(0x77));
 
 		midiOut.sendQFTC(0x03); // Set lower frame to 3
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(9));
-		Assert::That(quarterFrameData, Equals(0x03));
+		AssertThat(quarterFrameCount, Equals(9));
+		AssertThat(quarterFrameData, Equals(0x03));
 	}
 
 	It(send_and_receive_full_midi_timecode_message) {
@@ -111,18 +111,18 @@ Describe(midi_test) {
 			time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 		});
 
-		Assert::That(midiIn.open("testFullTC"));
-		Assert::That(midiOut.open("testFullTC"));
+		AssertThat(midiIn.open("testFullTC"), IsTrue());
+		AssertThat(midiOut.open("testFullTC"), IsTrue());
 
-		Assert::That(tcCount, Equals(0));
-		Assert::That(tcType, Equals(PhTimeCodeType25));
+		AssertThat(tcCount, Equals(0));
+		AssertThat(tcType, Equals(PhTimeCodeType25));
 
 		midiOut.sendFullTC(1, 2, 3, 4, PhTimeCodeType2997);
 		QThread::msleep(10);
 
-		Assert::That(tcCount, Equals(1));
-		Assert::That(tcType, Equals(PhTimeCodeType2997));
-		Assert::That(t2s(time, tcType), Equals("01:02:03:04"));
+		AssertThat(tcCount, Equals(1));
+		AssertThat(tcType, Equals(PhTimeCodeType2997));
+		AssertThat(t2s(time, tcType), Equals("01:02:03:04"));
 	}
 
 	It(send_and_receive_play_midi_machine_control_message) {
@@ -135,15 +135,15 @@ Describe(midi_test) {
 			playCount++;
 		});
 
-		Assert::That(midiIn.open("testMMCStop"));
-		Assert::That(midiOut.open("testMMCStop"));
+		AssertThat(midiIn.open("testMMCStop"), IsTrue());
+		AssertThat(midiOut.open("testMMCStop"), IsTrue());
 
-		Assert::That(playCount, Equals(0));
+		AssertThat(playCount, Equals(0));
 
 		midiOut.sendMMCPlay();
 		QThread::msleep(10);
 
-		Assert::That(playCount, Equals(1));
+		AssertThat(playCount, Equals(1));
 	}
 
 	It(send_and_receive_stop_midi_machine_control_message) {
@@ -156,15 +156,15 @@ Describe(midi_test) {
 			stopCount++;
 		});
 
-		Assert::That(midiIn.open("testMMCStop"));
-		Assert::That(midiOut.open("testMMCStop"));
+		AssertThat(midiIn.open("testMMCStop"), IsTrue());
+		AssertThat(midiOut.open("testMMCStop"), IsTrue());
 
-		Assert::That(stopCount, Equals(0));
+		AssertThat(stopCount, Equals(0));
 
 		midiOut.sendMMCStop();
 		QThread::msleep(10);
 
-		Assert::That(stopCount, Equals(1));
+		AssertThat(stopCount, Equals(1));
 	}
 
 	It(send_and_receive_goto_midi_machine_control_message) {
@@ -181,18 +181,18 @@ Describe(midi_test) {
 			time = PhTimeCode::timeFromHhMmSsFf(h, m, s, f, tcType);
 		});
 
-		Assert::That(midiIn.open("testMMCGoto"));
-		Assert::That(midiOut.open("testMMCGoto"));
+		AssertThat(midiIn.open("testMMCGoto"), IsTrue());
+		AssertThat(midiOut.open("testMMCGoto"), IsTrue());
 
-		Assert::That(tcCount, Equals(0));
-		Assert::That(tcType, Equals(PhTimeCodeType25));
+		AssertThat(tcCount, Equals(0));
+		AssertThat(tcType, Equals(PhTimeCodeType25));
 
 		midiOut.sendMMCGoto(2, 3, 4, 5, PhTimeCodeType24);
 		QThread::msleep(10);
 
-		Assert::That(tcCount, Equals(1));
-		Assert::That(tcType, Equals(PhTimeCodeType24));
-		Assert::That(t2s(time, tcType), Equals("02:03:04:05"));
+		AssertThat(tcCount, Equals(1));
+		AssertThat(tcType, Equals(PhTimeCodeType24));
+		AssertThat(t2s(time, tcType), Equals("02:03:04:05"));
 	}
 
 	It(update_a_clock_from_midi_timecode_message) {
@@ -210,15 +210,15 @@ Describe(midi_test) {
 			tcTypeCalled++;
 		});
 
-		Assert::That(mtcReader.open("testMTCReader"));
-		Assert::That(midiOut.open("testMTCReader"));
+		AssertThat(mtcReader.open("testMTCReader"), IsTrue());
+		AssertThat(midiOut.open("testMTCReader"), IsTrue());
 
 		midiOut.sendFullTC(1, 0, 0, 0, PhTimeCodeType24);
 		QThread::msleep(10);
-		Assert::That(tcTypeCalled, Equals(1));
-		Assert::That(tcType, Equals(PhTimeCodeType24));
-		Assert::That(mtcReader.timeCodeType(), Equals(PhTimeCodeType24));
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:00"));
+		AssertThat(tcTypeCalled, Equals(1));
+		AssertThat(tcType, Equals(PhTimeCodeType24));
+		AssertThat(mtcReader.timeCodeType(), Equals(PhTimeCodeType24));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:00"));
 
 		//
 		// Any quarter frame message should trigger play mode
@@ -227,8 +227,8 @@ Describe(midi_test) {
 		midiOut.sendQFTC(0x02); // Send frame low digit
 		QThread::msleep(10);
 
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:00"));
-		Assert::That(mtcReader.clock()->rate(), EqualsWithDelta(1, 0.001f));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:00"));
+		AssertThat(mtcReader.clock()->rate(), EqualsWithDelta(1, 0.001f));
 
 		// Test basic playback behaviour
 
@@ -240,7 +240,7 @@ Describe(midi_test) {
 		QThread::msleep(10);
 
 		// Since 4 quarter frame message have elapsed the frame increment by one
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:01"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:01"));
 
 		midiOut.sendQFTC(0x40); // Send minute low digit
 		QThread::msleep(10);
@@ -251,7 +251,7 @@ Describe(midi_test) {
 		midiOut.sendQFTC(0x70); // Send hour high digit and 24 fps info
 		QThread::msleep(10);
 
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:02"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:02"));
 
 		// Send 8 quarter frame message from another timecode (23:40:19:20)
 
@@ -263,7 +263,7 @@ Describe(midi_test) {
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x31); // Send second high digit
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:03"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:03"));
 		midiOut.sendQFTC(0x48); // Send minute low digit
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x52); // Send minute high digit
@@ -272,7 +272,7 @@ Describe(midi_test) {
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x71); // Send hour high digit and 24 fps info
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("23:40:19:22"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("23:40:19:22"));
 
 		// Send the next 8 quarter frame message to check passing seconds
 
@@ -284,7 +284,7 @@ Describe(midi_test) {
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x31); // Send second high digit
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("23:40:19:23"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("23:40:19:23"));
 		midiOut.sendQFTC(0x48); // Send minute low digit
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x52); // Send minute high digit
@@ -294,7 +294,7 @@ Describe(midi_test) {
 		midiOut.sendQFTC(0x71); // Send hour high digit and 24 fps info
 		QThread::msleep(10);
 
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("23:40:20:00"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("23:40:20:00"));
 
 		// Test passing minutes (from 10:03:59:20 to 10:04:00:00)
 
@@ -306,7 +306,7 @@ Describe(midi_test) {
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x33); // Send second high digit
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("23:40:20:01"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("23:40:20:01"));
 		midiOut.sendQFTC(0x43); // Send minute low digit
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x50); // Send minute high digit
@@ -315,7 +315,7 @@ Describe(midi_test) {
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x70); // Send hour high digit and 24 fps info
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:03:59:22"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:03:59:22"));
 		midiOut.sendQFTC(0x00); // Send frame low digit
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x10); // Send frame high digit
@@ -324,7 +324,7 @@ Describe(midi_test) {
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x30); // Send second high digit
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:03:59:23"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:03:59:23"));
 		midiOut.sendQFTC(0x44); // Send minute low digit
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x50); // Send minute high digit
@@ -333,7 +333,7 @@ Describe(midi_test) {
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x70); // Send hour high digit and 24 fps info
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:04:00:00"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:04:00:00"));
 		midiOut.sendQFTC(0x02); // Send frame low digit
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x10); // Send frame high digit
@@ -342,7 +342,7 @@ Describe(midi_test) {
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x30); // Send second high digit
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:04:00:01"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:04:00:01"));
 		midiOut.sendQFTC(0x44); // Send minute low digit
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x50); // Send minute high digit
@@ -351,11 +351,11 @@ Describe(midi_test) {
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x70); // Send hour high digit and 24 fps info
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:04:00:02"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:04:00:02"));
 
 		// Switch to 25 fps timecode
-		Assert::That(tcTypeCalled, Equals(1));
-		Assert::That(tcType, Equals(PhTimeCodeType24));
+		AssertThat(tcTypeCalled, Equals(1));
+		AssertThat(tcType, Equals(PhTimeCodeType24));
 
 		midiOut.sendQFTC(0x04); // Send frame low digit
 		QThread::msleep(10);
@@ -365,7 +365,7 @@ Describe(midi_test) {
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x30); // Send second high digit
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:04:00:03"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("10:04:00:03"));
 		midiOut.sendQFTC(0x44); // Send minute low digit
 		QThread::msleep(10);
 		midiOut.sendQFTC(0x50); // Send minute high digit
@@ -375,17 +375,17 @@ Describe(midi_test) {
 		midiOut.sendQFTC(0x72); // Send hour high digit and 25fps info
 		QThread::msleep(10);
 
-		Assert::That(tcTypeCalled, Equals(2));
-		Assert::That(tcType, Equals(PhTimeCodeType25));
-		Assert::That(mtcReader.timeCodeType(), Equals(PhTimeCodeType25));
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType25), Equals("10:04:00:04"));
+		AssertThat(tcTypeCalled, Equals(2));
+		AssertThat(tcType, Equals(PhTimeCodeType25));
+		AssertThat(mtcReader.timeCodeType(), Equals(PhTimeCodeType25));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType25), Equals("10:04:00:04"));
 
 		// Stop sending quarter frame MTC message should stop the reader after one frame:
 #warning /// @todo QThread::msleep block the pause detector timer and QTest::qWait crashes...
 		//	QThread::msleep(30);
-		//	Assert::That(mtcReader.clock()->rate(), EqualsWithDelta(1, 0.0001f));
+		//	AssertThat(mtcReader.clock()->rate(), EqualsWithDelta(1, 0.0001f));
 		//	QThread::msleep(200);
-		//	Assert::That(mtcReader.clock()->rate(), EqualsWithDelta(0, 0.0001f));
+		//	AssertThat(mtcReader.clock()->rate(), EqualsWithDelta(0, 0.0001f));
 	}
 
 	It(write_midi_timecode_message_from_a_clock) {
@@ -400,64 +400,64 @@ Describe(midi_test) {
 			quarterFrameData = data;
 		});
 
-		Assert::That(midiIn.open("testMTCWriter"));
-		Assert::That(mtcWriter.open("testMTCWriter"));
+		AssertThat(midiIn.open("testMTCWriter"), IsTrue());
+		AssertThat(mtcWriter.open("testMTCWriter"), IsTrue());
 
 		mtcWriter.clock()->setTime(s2t("23:40:19:16", PhTimeCodeType30));
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(0));
+		AssertThat(quarterFrameCount, Equals(0));
 
 		mtcWriter.clock()->setRate(1);
 		PhFrame freq = PhTimeCode::getFps(PhTimeCodeType30) * 4; // => one quarter frame frequency
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(1));
-		Assert::That(quarterFrameData, Equals(0x02));
+		AssertThat(quarterFrameCount, Equals(1));
+		AssertThat(quarterFrameData, Equals(0x02));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(2));
-		Assert::That(quarterFrameData, Equals(0x11));
+		AssertThat(quarterFrameCount, Equals(2));
+		AssertThat(quarterFrameData, Equals(0x11));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(3));
-		Assert::That(quarterFrameData, Equals(0x23));
+		AssertThat(quarterFrameCount, Equals(3));
+		AssertThat(quarterFrameData, Equals(0x23));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(4));
-		Assert::That(quarterFrameData, Equals(0x31));
+		AssertThat(quarterFrameCount, Equals(4));
+		AssertThat(quarterFrameData, Equals(0x31));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(5));
-		Assert::That(quarterFrameData, Equals(0x48));
+		AssertThat(quarterFrameCount, Equals(5));
+		AssertThat(quarterFrameData, Equals(0x48));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(6));
-		Assert::That(quarterFrameData, Equals(0x52));
+		AssertThat(quarterFrameCount, Equals(6));
+		AssertThat(quarterFrameData, Equals(0x52));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(7));
-		Assert::That(quarterFrameData, Equals(0x67));
+		AssertThat(quarterFrameCount, Equals(7));
+		AssertThat(quarterFrameData, Equals(0x67));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(mtcWriter.clock()->time(), Equals(s2t("23:40:19:18", PhTimeCodeType30)));
-		Assert::That(quarterFrameCount, Equals(8));
-		Assert::That(quarterFrameData, Equals(0x70 | (0x03 << 1) | 0x01)); // timecode type info + hour high digit
+		AssertThat(mtcWriter.clock()->time(), Equals(s2t("23:40:19:18", PhTimeCodeType30)));
+		AssertThat(quarterFrameCount, Equals(8));
+		AssertThat(quarterFrameData, Equals(0x70 | (0x03 << 1) | 0x01)); // timecode type info + hour high digit
 
 		// Test changing the writer timecode type:
 		mtcWriter.setTimeCodeType(PhTimeCodeType25);
@@ -466,64 +466,64 @@ Describe(midi_test) {
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(9));
-		Assert::That(quarterFrameData, Equals(0x01)); // With 25 fps, the next timecode will be 23:40:19:17
+		AssertThat(quarterFrameCount, Equals(9));
+		AssertThat(quarterFrameData, Equals(0x01)); // With 25 fps, the next timecode will be 23:40:19:17
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(10));
-		Assert::That(quarterFrameData, Equals(0x11));
+		AssertThat(quarterFrameCount, Equals(10));
+		AssertThat(quarterFrameData, Equals(0x11));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(11));
-		Assert::That(quarterFrameData, Equals(0x23));
+		AssertThat(quarterFrameCount, Equals(11));
+		AssertThat(quarterFrameData, Equals(0x23));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(12));
-		Assert::That(quarterFrameData, Equals(0x31));
+		AssertThat(quarterFrameCount, Equals(12));
+		AssertThat(quarterFrameData, Equals(0x31));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(13));
-		Assert::That(quarterFrameData, Equals(0x48));
+		AssertThat(quarterFrameCount, Equals(13));
+		AssertThat(quarterFrameData, Equals(0x48));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(14));
-		Assert::That(quarterFrameData, Equals(0x52));
+		AssertThat(quarterFrameCount, Equals(14));
+		AssertThat(quarterFrameData, Equals(0x52));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(quarterFrameCount, Equals(15));
-		Assert::That(quarterFrameData, Equals(0x67));
+		AssertThat(quarterFrameCount, Equals(15));
+		AssertThat(quarterFrameData, Equals(0x67));
 
 		mtcWriter.clock()->tick(freq);
 		QThread::msleep(10);
 
-		Assert::That(mtcWriter.clock()->time(), Equals(s2t("23:40:19:17", PhTimeCodeType25)));
-		Assert::That(quarterFrameCount, Equals(16));
-		Assert::That(quarterFrameData, Equals(0x70 | (0x01 << 1) | 0x01)); // timecode type info + hour high digit
+		AssertThat(mtcWriter.clock()->time(), Equals(s2t("23:40:19:17", PhTimeCodeType25)));
+		AssertThat(quarterFrameCount, Equals(16));
+		AssertThat(quarterFrameData, Equals(0x70 | (0x01 << 1) | 0x01)); // timecode type info + hour high digit
 
 		// Test changing speed to 0
 		mtcWriter.clock()->setRate(0);
 
 		// No quarter frame message shall be sent anymore
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(16));
+		AssertThat(quarterFrameCount, Equals(16));
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(16));
+		AssertThat(quarterFrameCount, Equals(16));
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(16));
+		AssertThat(quarterFrameCount, Equals(16));
 		QThread::msleep(10);
-		Assert::That(quarterFrameCount, Equals(16));
+		AssertThat(quarterFrameCount, Equals(16));
 
 
 	}
@@ -538,18 +538,18 @@ Describe(midi_test) {
 
 		PhTimeCodeType tcType = PhTimeCodeType25;
 
-		Assert::That(mtcReader.open("testMMCReader"));
-		Assert::That(midiOut.open("testMMCReader"));
+		AssertThat(mtcReader.open("testMMCReader"), IsTrue());
+		AssertThat(midiOut.open("testMMCReader"), IsTrue());
 
 		// Send goto
 		midiOut.sendMMCGoto(1, 0, 0, 0, PhTimeCodeType25);
 		QThread::msleep(10);
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:00"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:00"));
 
 		// Send play
 		midiOut.sendMMCPlay();
 		QThread::msleep(10);
-		Assert::That(mtcReader.clock()->rate(), EqualsWithDelta(1, 0.0001f));
+		AssertThat(mtcReader.clock()->rate(), EqualsWithDelta(1, 0.0001f));
 
 		// Send quarter frame message
 		midiOut.sendQFTC(0x02); // Send frame low digit
@@ -569,26 +569,26 @@ Describe(midi_test) {
 		midiOut.sendQFTC(0x72); // Send hour high digit and 25 fps info
 		QThread::msleep(10);
 
-		Assert::That(t2s(mtcReader.clock()->time(), PhTimeCodeType25), Equals("01:00:00:02"));
+		AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType25), Equals("01:00:00:02"));
 
 		// Send stop
 		midiOut.sendMMCStop();
 		QThread::msleep(10);
-		Assert::That(mtcReader.clock()->rate(), EqualsWithDelta(0, 0.0001f));
+		AssertThat(mtcReader.clock()->rate(), EqualsWithDelta(0, 0.0001f));
 
 		// Make sur quarter frame message doesn't put play back for the next 80 ms
 
 		midiOut.sendQFTC(0x04); // Send frame low digit
 		QThread::msleep(10);
-		Assert::That(mtcReader.clock()->rate(), EqualsWithDelta(0, 0.0001f));
+		AssertThat(mtcReader.clock()->rate(), EqualsWithDelta(0, 0.0001f));
 
 		midiOut.sendQFTC(0x10); // Send frame high digit
 		QThread::msleep(60);
-		Assert::That(mtcReader.clock()->rate(), EqualsWithDelta(0, 0.0001f));
+		AssertThat(mtcReader.clock()->rate(), EqualsWithDelta(0, 0.0001f));
 
 		midiOut.sendQFTC(0x20); // Send second low digit
 		QThread::msleep(20);
-		Assert::That(mtcReader.clock()->rate(), EqualsWithDelta(1, 0.0001f));
+		AssertThat(mtcReader.clock()->rate(), EqualsWithDelta(1, 0.0001f));
 	}
 };
 

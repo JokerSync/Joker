@@ -12,11 +12,11 @@ using namespace igloo;
 
 Describe(sony_controller_test) {
 	It(compute_rate_from_data_bytes) {
-		Assert::That(PhSonyController::computeRate(0), EqualsWithDelta(0.0f, 0.01f));
-		Assert::That(PhSonyController::computeRate(32), EqualsWithDelta(0.1f, 0.01f));
-		Assert::That(PhSonyController::computeRate(64), EqualsWithDelta(1.0f, 0.01f));
-		Assert::That(PhSonyController::computeRate(79), EqualsWithDelta(2.94f, 0.01f));
-		Assert::That(PhSonyController::computeRate(118), EqualsWithDelta(48.69f, 0.01f));
+		AssertThat(PhSonyController::computeRate(0), EqualsWithDelta(0.0f, 0.01f));
+		AssertThat(PhSonyController::computeRate(32), EqualsWithDelta(0.1f, 0.01f));
+		AssertThat(PhSonyController::computeRate(64), EqualsWithDelta(1.0f, 0.01f));
+		AssertThat(PhSonyController::computeRate(79), EqualsWithDelta(2.94f, 0.01f));
+		AssertThat(PhSonyController::computeRate(118), EqualsWithDelta(48.69f, 0.01f));
 	}
 };
 

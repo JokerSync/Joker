@@ -22,23 +22,23 @@ go_bandit([](){
 		it("enable_after_8_clicks", [&](){
 			PhLockableSpinBox spinBox;
 
-			Assert::That(spinBox.isEnabled(), IsFalse());
+			AssertThat(spinBox.isEnabled(), IsFalse());
 			for(int i = 0; i < 7; i++)
 				QTest::mouseClick(&spinBox, Qt::LeftButton);
-			Assert::That(spinBox.isEnabled(), IsFalse());
+			AssertThat(spinBox.isEnabled(), IsFalse());
 			QTest::mouseClick(&spinBox, Qt::LeftButton);
-			Assert::That(spinBox.isEnabled());
+			AssertThat(spinBox.isEnabled(), IsTrue());
 		});
 
 		it("enable_if_ctrl_is_pressed", [&](){
 			PhLockableSpinBox spinBox;
 
-			Assert::That(spinBox.isEnabled(), IsFalse());
+			AssertThat(spinBox.isEnabled(), IsFalse());
 			QTest::mouseClick(&spinBox, Qt::LeftButton);
-			Assert::That(spinBox.isEnabled(), IsFalse());
+			AssertThat(spinBox.isEnabled(), IsFalse());
 
 			QTest::mouseClick(&spinBox, Qt::LeftButton, Qt::ControlModifier);
-			Assert::That(spinBox.isEnabled());
+			AssertThat(spinBox.isEnabled(), IsTrue());
 		});
 	});
 });

@@ -85,7 +85,7 @@ Describe(graphic_text_test) {
 		QImage expectedImage("fontTest.SWENSON.ttf.expected.bmp");
 
 		int result = PhPictureTools::compare(resultImage, expectedImage);
-		Assert::That(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
+		AssertThat(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
 	}
 
 	It(draw_arial_font) {
@@ -96,7 +96,7 @@ Describe(graphic_text_test) {
 		QImage expectedImage("fontTest.Arial.ttf.expected.bmp");
 
 		int result = PhPictureTools::compare(resultImage, expectedImage);
-		Assert::That(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
+		AssertThat(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
 	}
 
 	It(draw_bedizen_font) {
@@ -107,7 +107,7 @@ Describe(graphic_text_test) {
 		QImage expectedImage("fontTest.Bedizen.ttf.expected.bmp");
 
 		int result = PhPictureTools::compare(resultImage, expectedImage);
-		Assert::That(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
+		AssertThat(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
 	}
 
 	It(draw_bad_font) {
@@ -118,7 +118,7 @@ Describe(graphic_text_test) {
 		QImage expectedImage("fontTest.bad_font.ttf.expected.bmp");
 
 		int result = PhPictureTools::compare(resultImage, expectedImage);
-		Assert::That(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
+		AssertThat(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
 	}
 };
 

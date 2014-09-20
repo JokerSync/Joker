@@ -47,57 +47,57 @@ Describe(settings_test) {
 		// Clear the settings
 		settings.clear();
 
-		Assert::That(settings.intTest1(), Equals(0));
-		Assert::That(settings.unsignedCharTest1(), Equals(0));
-		Assert::That(!settings.boolTest1());
-		Assert::That(settings.floatTest1(), EqualsWithDelta(0.0f, 0.001f));
-		Assert::That(settings.stringTest1().toStdString(), Equals(""));
-		Assert::That(settings.stringListTest1().count(), Equals(0));
-		Assert::That(settings.byteArrayTest1().count(), Equals(0));
+		AssertThat(settings.intTest1(), Equals(0));
+		AssertThat(settings.unsignedCharTest1(), Equals(0));
+		AssertThat(settings.boolTest1(), IsFalse());
+		AssertThat(settings.floatTest1(), EqualsWithDelta(0.0f, 0.001f));
+		AssertThat(settings.stringTest1().toStdString(), Equals(""));
+		AssertThat(settings.stringListTest1().count(), Equals(0));
+		AssertThat(settings.byteArrayTest1().count(), Equals(0));
 	}
 
 	It(handles_int) {
 		settings.setIntTest1(6);
-		Assert::That(settings.intTest1(), Equals(6));
-		Assert::That(settings.intTest2(), Equals(0));
-		Assert::That(settings.intTest3(), Equals(4));
-		Assert::That(settings.intTest4(), Equals(6));
+		AssertThat(settings.intTest1(), Equals(6));
+		AssertThat(settings.intTest2(), Equals(0));
+		AssertThat(settings.intTest3(), Equals(4));
+		AssertThat(settings.intTest4(), Equals(6));
 		settings.setIntTest4(8);
-		Assert::That(settings.intTest1(), Equals(6));
-		Assert::That(settings.intTest4(), Equals(8));
+		AssertThat(settings.intTest1(), Equals(6));
+		AssertThat(settings.intTest4(), Equals(8));
 	}
 
 	It(handles_unsigned_char) {
 		settings.setUnsignedCharTest1(0x11);
-		Assert::That((int)settings.unsignedCharTest1(), Equals(0x11));
-		Assert::That((int)settings.unsignedCharTest2(), Equals(0x0));
-		Assert::That((int)settings.unsignedCharTest3(), Equals(0xF0));
+		AssertThat((int)settings.unsignedCharTest1(), Equals(0x11));
+		AssertThat((int)settings.unsignedCharTest2(), Equals(0x0));
+		AssertThat((int)settings.unsignedCharTest3(), Equals(0xF0));
 	}
 
 	It(handles_bool) {
 		settings.setBoolTest1(true);
-		Assert::That(settings.boolTest1());
-		Assert::That(!settings.boolTest2());
-		Assert::That(settings.boolTest3());
+		AssertThat(settings.boolTest1(), IsTrue());
+		AssertThat(!settings.boolTest2(), IsTrue());
+		AssertThat(settings.boolTest3(), IsTrue());
 	}
 
 	It(handles_float) {
 		settings.setFloatTest1(-1.34f);
-		Assert::That(settings.floatTest1(), Equals(-1.34f));
-		Assert::That(settings.floatTest2(), Equals(0.0f));
-		Assert::That(settings.floatTest3(), Equals(3.14f));
+		AssertThat(settings.floatTest1(), Equals(-1.34f));
+		AssertThat(settings.floatTest2(), Equals(0.0f));
+		AssertThat(settings.floatTest3(), Equals(3.14f));
 	}
 
 	It(handles_string) {
 		settings.setStringTest1("test setString");
-		Assert::That(settings.stringTest1().toStdString(), Equals("test setString"));
-		Assert::That(settings.stringTest2().toStdString(), Equals(""));
-		Assert::That(settings.stringTest3().toStdString(), Equals("stringTest default value"));
+		AssertThat(settings.stringTest1().toStdString(), Equals("test setString"));
+		AssertThat(settings.stringTest2().toStdString(), Equals(""));
+		AssertThat(settings.stringTest3().toStdString(), Equals("stringTest default value"));
 	}
 
 	It(handles_string_list) {
 		// Test empty string list
-		Assert::That(settings.stringListTest1().size(), Equals(0));
+		AssertThat(settings.stringListTest1().size(), Equals(0));
 
 		// Test changing string list settings
 
@@ -110,14 +110,14 @@ Describe(settings_test) {
 
 		settings.setStringListTest2(list1);
 
-		Assert::That(settings.stringTest4().toStdString(), Equals("Check other settings are not affected by string list settings"));
+		AssertThat(settings.stringTest4().toStdString(), Equals("Check other settings are not affected by string list settings"));
 
 		QStringList list2 = settings.stringListTest2();
 
-		Assert::That(list2.size(), Equals(list1.size()));
+		AssertThat(list2.size(), Equals(list1.size()));
 
 		for(int i = 0; i < list1.size(); i++)
-			Assert::That(list2.at(i), Equals(list1.at(i)));
+			AssertThat(list2.at(i), Equals(list1.at(i)));
 
 		// Test changin an existing list settings
 		QStringList list3;
@@ -127,14 +127,14 @@ Describe(settings_test) {
 
 		settings.setStringListTest2(list3);
 
-		Assert::That(settings.stringTest4().toStdString(), Equals("Check other settings are not affected by string list settings"));
+		AssertThat(settings.stringTest4().toStdString(), Equals("Check other settings are not affected by string list settings"));
 
 		QStringList list4 = settings.stringListTest2();
 
-		Assert::That(list3.size(), Equals(list4.size()));
+		AssertThat(list3.size(), Equals(list4.size()));
 
 		for(int i = 0; i < list3.size(); i++)
-			Assert::That(list4.at(i), Equals(list3.at(i)));
+			AssertThat(list4.at(i), Equals(list3.at(i)));
 
 		// This is just to make sure that changing string
 		// list settings doesn't affect other settings
@@ -142,27 +142,27 @@ Describe(settings_test) {
 
 		QStringList list5 = settings.stringListTest3();
 
-		Assert::That(list5.size(), Equals(3));
-		Assert::That(list5[0].toStdString(), Equals("a"));
-		Assert::That(list5[1].toStdString(), Equals("b"));
-		Assert::That(list5[2].toStdString(), Equals("c"));
+		AssertThat(list5.size(), Equals(3));
+		AssertThat(list5[0].toStdString(), Equals("a"));
+		AssertThat(list5[1].toStdString(), Equals("b"));
+		AssertThat(list5[2].toStdString(), Equals("c"));
 
 		settings.setStringListTest3(QStringList({"d", "e"}));
 
 		QStringList list6 = settings.stringListTest3();
 
-		Assert::That(list6.size(), Equals(2));
-		Assert::That(list6[0].toStdString(), Equals("d"));
-		Assert::That(list6[1].toStdString(), Equals("e"));
+		AssertThat(list6.size(), Equals(2));
+		AssertThat(list6[0].toStdString(), Equals("d"));
+		AssertThat(list6[1].toStdString(), Equals("e"));
 
 		// Check changing string list settings doesn't affect
 		// other settings
-		Assert::That(settings.intTest1(), Equals(33));
+		AssertThat(settings.intTest1(), Equals(33));
 	}
 
 	It(handles_byte_array) {
 		// Test empty array
-		Assert::That(settings.byteArrayTest1().size(), Equals(0));
+		AssertThat(settings.byteArrayTest1().size(), Equals(0));
 
 		// Test changing array settings
 		QByteArray array1;
@@ -175,10 +175,10 @@ Describe(settings_test) {
 
 		QByteArray array2 = settings.byteArrayTest2();
 
-		Assert::That(array2.size(), Equals(array1.size()));
+		AssertThat(array2.size(), Equals(array1.size()));
 
 		for(int i = 0; i < array1.size(); i++)
-			Assert::That(array2.at(i), Equals(array1.at(i)));
+			AssertThat(array2.at(i), Equals(array1.at(i)));
 	}
 };
 

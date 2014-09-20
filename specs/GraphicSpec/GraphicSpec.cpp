@@ -30,8 +30,8 @@ go_bandit([](){
 
 			QObject::connect(&view, &PhGraphicView::paint, [&](int w, int h) {
 				paintCalled = true;
-				Assert::That(w, Equals(64));
-				Assert::That(h, Equals(64));
+				AssertThat(w, Equals(64));
+				AssertThat(h, Equals(64));
 			});
 
 			view.show();
@@ -39,7 +39,7 @@ go_bandit([](){
 #warning /// @todo remove if unnecessary
 			//		QApplication::processEvents();
 
-			Assert::That(paintCalled);
+			AssertThat(paintCalled, IsTrue());
 		});
 
 		it("draw_a_rect", [&](){
@@ -68,7 +68,7 @@ go_bandit([](){
 			QImage expectedImage(expectedFile);
 
 			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			Assert::That(result, Equals(0));
+			AssertThat(result, Equals(0));
 		});
 
 		it("draw_an_image", [&](){
@@ -94,7 +94,7 @@ go_bandit([](){
 			QImage expectedImage(expectedFile);
 
 			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			Assert::That(result, Equals(0));
+			AssertThat(result, Equals(0));
 		});
 
 		it("draw_a_rgb_pattern", [&](){
@@ -121,7 +121,7 @@ go_bandit([](){
 			QImage expectedImage(expectedFile);
 
 			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			Assert::That(result, Equals(0));
+			AssertThat(result, Equals(0));
 		});
 	});
 });
