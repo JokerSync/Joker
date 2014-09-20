@@ -6,4 +6,6 @@
 
 include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 
-SOURCES += $$TOP_ROOT/specs/SyncSpec/ClockSpec.cpp
+SOURCES += \
+	$$TOP_ROOT/specs/SyncSpec/ClockSpec.cpp \
+	$$TOP_ROOT/specs/SyncSpec/SynchronizerSpec.cpp \
