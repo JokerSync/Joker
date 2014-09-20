@@ -6,4 +6,6 @@
 
 include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 
-SOURCES += $$TOP_ROOT/specs/CommonUISpec/LockableSpinBoxSpec.cpp
+SOURCES += \
+	$$TOP_ROOT/specs/CommonUISpec/LockableSpinBoxSpec.cpp \
+	$$TOP_ROOT/specs/CommonUISpec/TimeCodeEditSpec.cpp \
