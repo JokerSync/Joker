@@ -8,7 +8,7 @@ env:
   - JOB=UNCRUSTIFY
   - JOB=DOXYGEN
     #- JOB=BUILD_SPEC_AUTOTEST
-  - JOB=BUILD_SPEC_IGLOO
+  - JOB=BUILD_SPEC_BANDIT
   - JOB=BUILD_RELEASE_JOKER
   - JOB=BUILD_RELEASE_LTCTOOL
   - JOB=BUILD_RELEASE_MIDITOOL
@@ -22,19 +22,22 @@ install:
 - if [[ "$JOB" == BUILD_RELEASE_* ]]; then npm install -g appdmg; fi
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then scripts/install_coveralls.sh; fi
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then eval "$(pyenv init -)"; fi
+- if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then cd vendor/bandit; fi
+- if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then git submodule update; fi
+- if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then cd ../..; fi
 
 script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
 - if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
 - if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then qmake tests/AutoTest/AutoTest.pro; fi
-- if [[ "$JOB" == BUILD_SPEC_IGLOO ]]; then qmake specs/AllSpecs.pro; fi
+- if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then qmake specs/AllSpecs.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then qmake app/Joker/Joker.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make -j 8; fi
 - if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then ./AutoTest; fi
-- if [[ "$JOB" == BUILD_SPEC_IGLOO ]]; then ./AllSpecs; fi
+- if [[ "$JOB" == BUILD_SPEC_BANDIT]]; then ./AllSpecs; fi
 after_success:
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
 after_failure:
