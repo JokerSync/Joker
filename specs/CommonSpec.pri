@@ -11,7 +11,7 @@ CONFIG   -= app_bundle
 QMAKE_CXXFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
 QMAKE_LFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
 
-INCLUDEPATH += $$TOP_ROOT/vendor/igloo \
+INCLUDEPATH += \
     $$TOP_ROOT/vendor/bandit \
     $$PWD
 
