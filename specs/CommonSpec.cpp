@@ -6,7 +6,11 @@
 #include <QString>
 #include "CommonSpec.h"
 
-#warning /// @todo Move to PhTest
+std::string f2s(PhFrame frame, PhTimeCodeType tcType)
+{
+	return PhTimeCode::stringFromFrame(frame, tcType).toStdString();
+}
+
 std::string t2s(PhTime time, PhTimeCodeType tcType)
 {
 	return PhTimeCode::stringFromTime(time, tcType).toStdString();

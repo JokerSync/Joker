@@ -9,7 +9,10 @@
 #include "PhSync/PhTimeCode.h"
 
 
+std::string f2s(PhFrame frame, PhTimeCodeType tcType);
+
 std::string t2s(PhTime time, PhTimeCodeType tcType);
+
 PhTime s2t(QString string, PhTimeCodeType tcType);
 
 #endif // COMMONSPEC_H
