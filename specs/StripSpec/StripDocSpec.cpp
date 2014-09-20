@@ -313,5 +313,427 @@ Describe(import) {
 			Assert::That(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("09:59:58:00"));
 		}
 	};
+
+	Describe(drb) {
+		Describe(v5) {
+			PhStripDoc doc;
+
+			It(import_drb01) {
+				Assert::That(doc.openStripFile("drb01.drb"));
+
+				Assert::That(doc.videoFilePath().toStdString(), Equals("C:\\Users\\SYNCHRO USER\\Downloads\\TheManWithTheGoldenArm_25fps_high\\TheManWithTheGoldenArm_25fps_high.mov"));
+
+				Assert::That(doc.loops().count(), Equals(0));
+
+				Assert::That(doc.peoples().count(), Equals(2));
+				Assert::That(doc.peoples()[0]->name().toStdString(), Equals("Personnage 1"));
+				Assert::That(doc.peoples()[1]->name().toStdString(), Equals("Personnage 2"));
+
+				Assert::That(doc.texts().count(), Equals(1));
+				Assert::That(doc.texts()[0]->people()->name().toStdString(), Equals("Personnage 2"));
+
+				Assert::That(doc.texts()[0]->y(), Equals(0.36f));
+				Assert::That(doc.texts()[0]->height(), EqualsWithDelta(0.22666667f, 0.00001f));
+
+#warning /// @todo should be the same than syn6
+				Assert::That(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("00:02:12:10"));
+				Assert::That(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("00:02:44:07"));
+			}
+
+			It(import_drb02) {
+				Assert::That(doc.openStripFile("drb02.drb"));
+
+				Assert::That(doc.videoFilePath().toStdString(), Equals("D:\\NED 201.mov"));
+				Assert::That(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
+				Assert::That(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:58:04:20"));
+
+				Assert::That(doc.loops().count(), Equals(21));
+
+				for(int i = 0; i < 21; i++)
+					Assert::That(doc.loops().at(i)->label().toStdString(), Equals(QString::number(i + 1).toStdString()));
+
+				Assert::That(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:39:02"));
+				Assert::That(t2s(doc.loops()[1]->timeIn(), PhTimeCodeType25), Equals("01:02:14:23"));
+
+				Assert::That(doc.peoples().count(), Equals(28));
+
+				Assert::That(doc.peoples()[0]->name().toStdString(), Equals("Intervenant 1"));
+				Assert::That(doc.peoples()[1]->name().toStdString(), Equals("ned"));
+				Assert::That(doc.peoples()[2]->name().toStdString(), Equals("moze"));
+				Assert::That(doc.peoples()[3]->name().toStdString(), Equals("suzie"));
+
+				Assert::That(doc.texts().count(), Equals(546));
+				Assert::That(doc.texts()[0]->people()->name().toStdString(), Equals("ned"));
+				Assert::That(doc.texts()[0]->y(), Equals(0.213333338f));
+				Assert::That(doc.texts()[0]->height(), Equals(0.28666667f));
+				Assert::That(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:00:13"));
+				Assert::That(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:01:05"));
+			}
+
+			It(import_drb03) {
+				Assert::That(doc.openStripFile("drb03.drb"));
+
+				Assert::That(doc.videoFilePath().toStdString(), Equals("C:\\Users\\Matthhou\\Desktop\\The Crazy Ones\\The Crazy Ones 121\\The_Crazy_Ones_1AXB21_VOVI.mov"));
+				Assert::That(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
+				Assert::That(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:58:24:00"));
+
+				Assert::That(doc.loops().count(), Equals(1));
+
+				Assert::That(doc.loops().at(0)->label().toStdString(), Equals("1"));
+
+				Assert::That(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:00:00"));
+
+				Assert::That(doc.peoples().count(), Equals(2));
+
+				Assert::That(doc.peoples()[0]->name().toStdString(), Equals("Pierre"));
+				Assert::That(doc.peoples()[1]->name().toStdString(), Equals("Marie"));
+
+				Assert::That(doc.texts().count(), Equals(2));
+
+				Assert::That(doc.texts()[0]->people()->name().toStdString(), Equals("Pierre"));
+				Assert::That(doc.texts()[0]->y(), Equals(0.066666667f));
+				Assert::That(doc.texts()[0]->height(), Equals(0.22666667f));
+				Assert::That(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:01:00"));
+				Assert::That(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:03:00"));
+
+				Assert::That(doc.texts()[1]->people()->name().toStdString(), Equals("Marie"));
+				Assert::That(doc.texts()[1]->y(), Equals(0.7f));
+				Assert::That(doc.texts()[1]->height(), Equals(0.22666667f));
+				Assert::That(t2s(doc.texts()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:04:00"));
+				Assert::That(t2s(doc.texts()[1]->timeOut(), PhTimeCodeType25), Equals("01:00:06:00"));
+
+				Assert::That(doc.cuts().count(), Equals(1));
+				Assert::That(t2s(doc.cuts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:05:00"));
+			}
+		};
+
+		Describe(v6) {
+			PhStripDoc doc;
+			It(import_test01) {
+				Assert::That(doc.openStripFile("test01.syn6"));
+
+				Assert::That(doc.peoples().count(), Equals(2));
+				Assert::That(doc.peoples()[0]->name().toStdString(), Equals("Personnage 1"));
+				Assert::That(doc.peoples()[1]->name().toStdString(), Equals("Personnage 2"));
+
+				Assert::That(doc.texts().count(), Equals(1));
+				Assert::That(doc.texts()[0]->people()->name().toStdString(), Equals("Personnage 1"));
+
+				Assert::That(doc.texts()[0]->y(), Equals(0.36f));
+				Assert::That(doc.texts()[0]->height(), Equals(0.22666667f));
+
+				Assert::That(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("00:00:03:11"));
+				Assert::That(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("00:00:06:14"));
+			}
+
+			It(import_test02) {
+				Assert::That(doc.openStripFile("test02.syn6"));
+
+				Assert::That(doc.videoFilePath().toStdString(), Equals("C:\\Users\\Matthhou\\Desktop\\The Crazy Ones\\The Crazy Ones 121\\The_Crazy_Ones_1AXB21_VOVI.mov"));
+				Assert::That(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
+				Assert::That(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:58:24:00"));
+
+				Assert::That(doc.loops().count(), Equals(1));
+
+				Assert::That(doc.loops().at(0)->label().toStdString(), Equals("1"));
+
+				Assert::That(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:00:00"));
+
+				Assert::That(doc.peoples().count(), Equals(2));
+
+				Assert::That(doc.peoples()[0]->name().toStdString(), Equals("Pierre"));
+				Assert::That(doc.peoples()[1]->name().toStdString(), Equals("Marie"));
+
+				Assert::That(doc.texts().count(), Equals(2));
+
+				Assert::That(doc.texts()[0]->people()->name().toStdString(), Equals("Pierre"));
+				Assert::That(doc.texts()[0]->y(), Equals(0.066666667f));
+				Assert::That(doc.texts()[0]->height(), Equals(0.22666667f));
+				Assert::That(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:01:00"));
+				Assert::That(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:03:00"));
+
+				Assert::That(doc.texts()[1]->people()->name().toStdString(), Equals("Marie"));
+				Assert::That(doc.texts()[1]->y(), Equals(0.7f));
+				Assert::That(doc.texts()[1]->height(), Equals(0.22666667f));
+				Assert::That(t2s(doc.texts()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:04:00"));
+				Assert::That(t2s(doc.texts()[1]->timeOut(), PhTimeCodeType25), Equals("01:00:06:00"));
+
+				Assert::That(doc.cuts().count(), Equals(1));
+				Assert::That(t2s(doc.cuts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:05:00"));
+			}
+		};
+	};
+	//void StripDocTest::openStripFileTest()
+	//{
+	//	PhStripDoc doc;
+
+	//	// DetX test
+	//	Assert::That(doc.openStripFile("test01.detx"));
+	//	Assert::That(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:00:16:00"));
+	//	Assert::That(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:00:00:00"));
+
+	//	// Mos test
+	//	Assert::That(doc.openStripFile("test03.mos"));
+	//	Assert::That(doc.videoTimeCodeType(), Equals(PhTimeCodeType24));
+
+	//	// Strip file
+	//	Assert::That(doc.openStripFile("test.strip"));
+	//	Assert::That(doc.forceRatio169(), true);
+	//	Assert::That(doc.videoFilePath().toStdString(), Equals("test01.mov"));
+	//	Assert::That(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:59:00:00"));
+	//	Assert::That(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:02:03:04"));
+
+	//	// Test regular joker file linked to detx
+	//	Assert::That(doc.openStripFile("test01.joker"));
+	//	Assert::That(doc.filePath(), Equals("test01.detx"));
+	//	Assert::That(doc.videoFilePath().toStdString(), Equals("test01.mov"));
+	//	Assert::That(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
+	//	Assert::That(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:01:00:00"));
+	//	Assert::That(doc.forceRatio169(), true);
+	//	Assert::That(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:30:00:00"));
+
+	//	Assert::That(doc.title(), Equals("Title test"));
+	//	Assert::That(doc.generator(), Equals("Cappella v0.12.5, 1"));
+
+	//	// Test regular joker file linked to mos
+	//	Assert::That(doc.openStripFile("test02.joker"));
+	//	Assert::That(doc.filePath(), Equals("test03.mos"));
+	//	Assert::That(doc.videoFilePath().toStdString(), Equals("test02.mov"));
+	//	Assert::That(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
+	//	Assert::That(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:03:00:00"));
+	//	Assert::That(doc.forceRatio169(), false);
+	//	Assert::That(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:20:00:00"));
+
+	//	Assert::That(doc.title(), Equals("Au fil d'Ariane"));
+	//	Assert::That(doc.generator(), Equals("Mosaic"));
+
+	//	// Test bad files
+	//	Assert::That(QFile::exists("bad_tag.joker"));
+	//	Assert::That(!doc.openStripFile("bad_tag.joker"));
+
+	//	Assert::That(QFile::exists("empty.joker"));
+	//	Assert::That(!doc.openStripFile("empty.joker"));
+
+	//	// Test accepted files
+	//	Assert::That(QFile::exists("empty_root.joker"));
+	//	Assert::That(doc.openStripFile("empty_root.joker"));
+
+	//	Assert::That(QFile::exists("empty_meta.joker"));
+	//	Assert::That(doc.openStripFile("empty_meta.joker"));
+
+	//#warning /// @todo Test video frame rate
+	//}
+
+	//void StripDocTest::openSaveTest01()
+	//{
+	//	PhStripDoc doc1;
+
+	//	Assert::That(doc1.openStripFile("test01.joker"));
+
+	//	Assert::That(doc1.saveStripFile("save01.joker", s2t("01:01:01:01", PhTimeCodeType25)));
+
+	//	PhStripDoc doc2;
+
+	//	Assert::That(doc2.openStripFile("save01.joker"));
+
+	//	Assert::That(doc2.filePath(), doc1.filePath());
+	//	Assert::That(doc2.videoFilePath(), doc1.videoFilePath());
+	//	Assert::That(doc2.videoTimeCodeType(), Equals(PhTimeCodeType25));
+	//	Assert::That(t2s(doc2.videoTimeIn(), PhTimeCodeType25), t2s(doc1.videoTimeIn(), PhTimeCodeType25));
+	//	Assert::That(doc2.forceRatio169(), true);
+	//	Assert::That(doc2.videoDeinterlace(), false);
+	//	Assert::That(t2s(doc2.lastTime(), PhTimeCodeType25), Equals("01:01:01:01"));
+
+	//	Assert::That(doc2.title(), doc1.title());
+	//	Assert::That(doc2.generator(), doc1.generator());
+	//}
+
+	//void StripDocTest::openSaveTest02()
+	//{
+	//	PhStripDoc doc1;
+
+	//	Assert::That(doc1.openStripFile("test02.joker"));
+
+	//	Assert::That(doc1.saveStripFile("save02.joker", s2t("02:02:02:02", PhTimeCodeType25)));
+
+	//	PhStripDoc doc2;
+
+	//	Assert::That(doc2.openStripFile("save02.joker"));
+
+	//	Assert::That(doc2.filePath(), doc1.filePath());
+	//	Assert::That(doc2.videoFilePath(), doc1.videoFilePath());
+	//	Assert::That(t2s(doc2.videoTimeIn(), PhTimeCodeType25), t2s(doc1.videoTimeIn(), PhTimeCodeType25));
+	//	Assert::That(doc2.forceRatio169(), false);
+	//	Assert::That(doc2.videoDeinterlace(), true);
+	//	Assert::That(t2s(doc2.lastTime(), PhTimeCodeType25), Equals("02:02:02:02"));
+
+	//	Assert::That(doc2.title(), doc1.title());
+	//	Assert::That(doc2.generator(), doc1.generator());
+	//}
+
+	//void StripDocTest::getPeopleByNameTest()
+	//{
+	//	PhStripDoc doc;
+
+	//	Assert::That(doc.importDetXFile("test01.detx"));
+
+	//	Assert::That(doc.peopleByName("Jeanne")->name().toStdString(), Equals("Jeanne"));
+	//	Assert::That(doc.peopleByName("Sue")->name().toStdString(), Equals("Sue"));
+	//	Assert::That(doc.peopleByName("Paul")->name().toStdString(), Equals("Paul"));
+	//	Assert::That(doc.peopleByName("Bob") == NULL);
+	//}
+
+	//void StripDocTest::getPreviousElementTimeTest()
+	//{
+	//	PhStripDoc doc;
+
+	//	Assert::That(doc.importDetXFile("test01.detx"));
+	//	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	//	Assert::That(t2s(doc.previousElementTime(s2t("23:00:00:00", tcType)), tcType), Equals("01:01:00:00"));
+	//	Assert::That(t2s(doc.previousElementTime(s2t("01:01:00:00", tcType)), tcType), Equals("01:00:30:00"));
+	//	Assert::That(t2s(doc.previousElementTime(s2t("01:00:30:00", tcType)), tcType), Equals("01:00:15:00"));
+	//	Assert::That(t2s(doc.previousElementTime(s2t("01:00:15:00", tcType)), tcType), Equals("01:00:12:00"));
+	//	Assert::That(doc.previousElementTime(s2t("01:00:00:00", tcType)), PHTIMEMIN);
+	//}
+
+	//void StripDocTest::getNextElementTimeTest()
+	//{
+	//	PhStripDoc doc;
+
+	//	Assert::That(doc.importDetXFile("test01.detx"));
+	//	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	//	Assert::That(t2s(doc.nextElementTime(s2t("00:00:00:00", tcType)), tcType), Equals("01:00:00:00"));
+	//	Assert::That(t2s(doc.nextElementTime(s2t("01:00:00:00", tcType)), tcType), Equals("01:00:01:00"));
+	//	Assert::That(t2s(doc.nextElementTime(s2t("01:00:01:00", tcType)), tcType), Equals("01:00:02:00"));
+	//	Assert::That(t2s(doc.nextElementTime(s2t("01:00:02:00", tcType)), tcType), Equals("01:00:05:00"));
+	//	Assert::That(t2s(doc.nextElementTime(s2t("01:00:17:00", tcType)), tcType), Equals("01:00:30:00"));
+	//	Assert::That(t2s(doc.nextElementTime(s2t("01:00:30:00", tcType)), tcType), Equals("01:01:00:00"));
+	//	Assert::That(doc.nextElementTime(s2t("01:01:00:00", tcType)), PHTIMEMAX);
+
+	//}
+
+	//void StripDocTest::getNextTextTest()
+	//{
+	//	PhStripDoc doc;
+
+	//	Assert::That(doc.importDetXFile("test01.detx"));
+	//	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	//	Assert::That(t2s(doc.nextText(s2t("00:00:00:00", tcType))->timeIn(), tcType), Equals("01:00:02:00"));
+	//	Assert::That(t2s(doc.nextText(s2t("01:00:02:00", tcType))->timeIn(), tcType), Equals("01:00:05:00"));
+	//	Assert::That(t2s(doc.nextText(s2t("01:00:05:00", tcType))->timeIn(), tcType), Equals("01:00:06:00"));
+	//	Assert::That(t2s(doc.nextText(s2t("01:00:06:00", tcType))->timeIn(), tcType), Equals("01:00:12:00"));
+	//	Assert::That(t2s(doc.nextText(s2t("01:00:12:00", tcType))->timeIn(), tcType), Equals("01:00:15:00"));
+	//	Assert::That(t2s(doc.nextText(s2t("01:00:15:00", tcType))->timeIn(), tcType), Equals("01:00:30:00"));
+	//	Assert::That(doc.nextText(s2t("01:00:30:00", tcType)) == NULL);
+	//}
+
+	//void StripDocTest::getNextTextTestByPeople()
+	//{
+	//	PhStripDoc doc;
+
+	//	Assert::That(doc.importDetXFile("test01.detx"));
+	//	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	//	PhPeople* sue = doc.peopleByName("Sue");
+
+	//	Assert::That(t2s(doc.nextText(sue, s2t("00:00:00:00", tcType))->timeIn(), tcType), Equals("01:00:05:00"));
+	//	Assert::That(t2s(doc.nextText(sue, s2t("01:00:05:00", tcType))->timeIn(), tcType), Equals("01:00:06:00"));
+	//	Assert::That(t2s(doc.nextText(sue, s2t("01:00:06:00", tcType))->timeIn(), tcType), Equals("01:00:15:00"));
+	//	Assert::That(t2s(doc.nextText(sue, s2t("01:00:15:00", tcType))->timeIn(), tcType), Equals("01:00:30:00"));
+	//	Assert::That(doc.nextText(sue, s2t("01:00:30:00", tcType)) == NULL);
+	//}
+
+	//void StripDocTest::getNextTextTestByPeopleList()
+	//{
+	//	PhStripDoc doc;
+
+	//	Assert::That(doc.importDetXFile("test01.detx"));
+	//	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	//	QList<PhPeople*> peopleList;
+	//	peopleList.append(doc.peopleByName("Sue"));
+	//	peopleList.append(doc.peopleByName("Paul"));
+
+	//	Assert::That(t2s(doc.nextText(peopleList, s2t("00:00:00:00", tcType))->timeIn(), tcType), Equals("01:00:05:00"));
+	//	Assert::That(t2s(doc.nextText(peopleList, s2t("01:00:05:00", tcType))->timeIn(), tcType), Equals("01:00:06:00"));
+	//	Assert::That(t2s(doc.nextText(peopleList, s2t("01:00:06:00", tcType))->timeIn(), tcType), Equals("01:00:12:00"));
+	//	Assert::That(t2s(doc.nextText(peopleList, s2t("01:00:12:00", tcType))->timeIn(), tcType), Equals("01:00:15:00"));
+	//	Assert::That(t2s(doc.nextText(peopleList, s2t("01:00:15:00", tcType))->timeIn(), tcType), Equals("01:00:30:00"));
+	//	Assert::That(doc.nextText(peopleList, s2t("01:00:30:00", tcType)) == NULL);
+	//}
+
+	//void StripDocTest::getNextLoopTest()
+	//{
+	//	PhStripDoc doc;
+
+	//	Assert::That(doc.importDetXFile("test01.detx"));
+	//	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	//	Assert::That(t2s(doc.nextLoop(s2t("00:00:00:00", tcType))->timeIn(), tcType), Equals("01:00:00:00"));
+	//	Assert::That(t2s(doc.nextLoop(s2t("01:00:00:00", tcType))->timeIn(), tcType), Equals("01:01:00:00"));
+	//	Assert::That(doc.nextLoop(s2t("01:01:00:00", tcType)) == NULL);
+	//}
+
+	//void StripDocTest::getPreviousLoopTest()
+	//{
+	//	PhStripDoc doc;
+
+	//	Assert::That(doc.importDetXFile("test01.detx"));
+	//	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	//	Assert::That(doc.previousLoop(s2t("01:00:00:00", tcType)) == NULL);
+	//	Assert::That(t2s(doc.previousLoop(s2t("01:01:00:00", tcType))->timeIn(), tcType), Equals("01:00:00:00"));
+	//	Assert::That(t2s(doc.previousLoop(s2t("23:00:00:00", tcType))->timeIn(), tcType), Equals("01:01:00:00"));
+	//}
+
+	//void StripDocTest::addObjectTest()
+	//{
+	//	PhStripDoc doc;
+	//	doc.addPeople(new PhPeople("A people"));
+
+	//	doc.addObject(new PhStripText(0, doc.peoples().last(), 10000, 1, "Hello", 0.25f));
+	//	Assert::That(doc.texts().count() == 1);
+	//	doc.addObject(new PhStripCut(5400, PhStripCut::CrossFade));
+	//	Assert::That(doc.cuts().count() == 1);
+	//	doc.addObject(new PhStripDetect(PhStripDetect::Aperture, 10000, doc.peoples().last(), 11000, 1));
+	//	Assert::That(doc.detects().count() == 1);
+
+	//	doc.addObject(new PhStripLoop(22000, "3"));
+	//	Assert::That(doc.loops().count() == 1);
+
+	//}
+
+	//void StripDocTest::addPeopleTest()
+	//{
+	//	PhStripDoc doc;
+	//	doc.addPeople(new PhPeople("A people"));
+	//	Assert::That(doc.peoples().count() == 1);
+	//	doc.addPeople(new PhPeople("A second people"));
+	//	Assert::That(doc.peoples().count() == 2);
+
+	//}
+
+	//#warning /// @todo Move to PhTest
+	//Equals StripDocTest::t2s(PhTime time, PhTimeCodeType tcType)
+	//{
+	//	return PhTimeCode::stringFromTime(time, tcType);
+	//}
+
+	//PhTime StripDocTest::s2t(Equals string, PhTimeCodeType tcType)
+	//{
+	//	return PhTimeCode::timeFromString(string, tcType);
+	//}
+
+	//void StripDocTest::importDetXNoTitleTest()
+	//{
+	//	PhStripDoc doc;
+
+	//	Assert::That(doc.importDetXFile("notitle.detx"));
+	//	Assert::That(doc.title() == "notitle");
+
+	//}
 };
 
