@@ -67,15 +67,15 @@ describe("settings_test", [](){
 
 	it("handles_unsigned_char", [&](){
 		settings.setUnsignedCharTest1(0x11);
-		AssertThat((int)settings.unsignedCharTest1(), Equals(0x11));
-		AssertThat((int)settings.unsignedCharTest2(), Equals(0x0));
-		AssertThat((int)settings.unsignedCharTest3(), Equals(0xF0));
+		AssertThat(settings.unsignedCharTest1(), Equals(0x11));
+		AssertThat(settings.unsignedCharTest2(), Equals(0x0));
+		AssertThat(settings.unsignedCharTest3(), Equals(0xF0));
 	});
 
 	it("handles_bool", [&](){
 		settings.setBoolTest1(true);
 		AssertThat(settings.boolTest1(), IsTrue());
-		AssertThat(!settings.boolTest2(), IsTrue());
+		AssertThat(settings.boolTest2(), IsFalse());
 		AssertThat(settings.boolTest3(), IsTrue());
 	});
 

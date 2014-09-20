@@ -519,10 +519,10 @@ go_bandit([](){
 
 		//	// Test bad files
 		//	AssertThat(QFile::exists("bad_tag.joker"));
-		//	AssertThat(!doc.openStripFile("bad_tag.joker"));
+		//	AssertThat(doc.openStripFile("bad_tag.joker"), IsFalse());
 
 		//	AssertThat(QFile::exists("empty.joker"));
-		//	AssertThat(!doc.openStripFile("empty.joker"));
+		//	AssertThat(doc.openStripFile("empty.joker"), IsFalse());
 
 		//	// Test accepted files
 		//	AssertThat(QFile::exists("empty_root.joker"));
