@@ -37,7 +37,7 @@ script:
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make -j 8; fi
 - if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then ./AutoTest; fi
-- if [[ "$JOB" == BUILD_SPEC_BANDIT]]; then ./Specs; fi
+- if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./Specs; fi
 after_success:
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
 after_failure:
