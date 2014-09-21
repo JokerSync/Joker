@@ -8,8 +8,11 @@ QT       += testlib
 CONFIG   += console
 CONFIG   -= app_bundle
 
-QMAKE_CXXFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
-QMAKE_LFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
+
+CONFIG(release, debug|release) {
+    QMAKE_CXXFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
+    QMAKE_LFLAGS += -g -O0 -fprofile-arcs -ftest-coverage
+}
 
 INCLUDEPATH += \
     $$TOP_ROOT/vendor/bandit \
