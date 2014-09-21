@@ -14,6 +14,7 @@ env:
   - JOB=BUILD_RELEASE_MIDITOOL
   - JOB=BUILD_RELEASE_ALL_TESTS
 install:
+- git submodule update --init --recursive
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
@@ -22,9 +23,6 @@ install:
 - if [[ "$JOB" == BUILD_RELEASE_* ]]; then npm install -g appdmg; fi
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then scripts/install_coveralls.sh; fi
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then eval "$(pyenv init -)"; fi
-- if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then cd vendor/bandit; fi
-- if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then git submodule update; fi
-- if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then cd ../..; fi
 
 script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
