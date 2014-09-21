@@ -125,6 +125,16 @@ protected:
 	QAction *fullScreenAction();
 
 	///
+	/// \brief Show the control panel on application activation
+	///
+	void onApplicationActivate();
+
+	///
+	/// \brief Hide the control panel on application deactivation
+	///
+	void onApplicationDeactivate();
+
+	///
 	/// @brief Setup the synchronisation protocol
 	///
 	/// Close all the protocol if opened and setup the one specified
@@ -247,6 +257,11 @@ private slots:
 	void setCurrentTime(PhTime time);
 
 	void setCurrentRate(PhRate rate);
+
+	void on_actionDisplay_the_control_panel_triggered(bool checked);
+
+	void on_actionDisplay_the_information_panel_triggered(bool checked);
+
 private:
 	PhTime currentTime();
 	PhRate currentRate();

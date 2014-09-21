@@ -37,11 +37,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldHorizontalTimePerPixel = _settings->horizontalTimePerPixel();
 	_oldBolness = _settings->textBoldness();
 	_oldFont = _settings->textFontFile();
-	_oldDisplayTC = _settings->displayTC();
-	_oldDisplayNextTC = _settings->displayNextTC();
-	_oldDisplayNextText = _settings->displayNextText();
-	_oldDisplayTitle = _settings->displayTitle();
-	_oldDisplayLoop = _settings->displayLoop();
 
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
@@ -58,11 +53,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	}
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
-	ui->cBoxDisplayTC->setChecked(_oldDisplayTC);
-	ui->cBoxDisplayNextTC->setChecked(_oldDisplayNextTC);
-	ui->cBoxDisplayNextText->setChecked(_oldDisplayNextText);
-	ui->cBoxDisplayTitle->setChecked(_oldDisplayTitle);
-	ui->cBoxDisplayLoop->setChecked(_oldDisplayLoop);
 
 	//Setting the filters
 	QStringList filters;
@@ -249,7 +239,7 @@ void PreferencesDialog::accept()
 
 	_settings->setMtcVirtualInputPort(ui->mtcVirtualInputPortLineEdit->text());
 
-	_settings->setSendMmcMessage(ui->mmcCheckBox);
+	_settings->setSendMmcMessage(ui->mmcCheckBox->isChecked());
 	_settings->setMmcOutputPort(ui->mmcOutputPortComboBox->currentText());
 
 	_settings->setLastPreferencesTab(ui->tabWidget->currentIndex());
@@ -265,11 +255,6 @@ void PreferencesDialog::reject()
 	_settings->setHorizontalTimePerPixel(_oldHorizontalTimePerPixel);
 	_settings->setTextBoldness(_oldBolness);
 	_settings->setTextFontFile(_oldFont);
-	_settings->setDisplayTC(_oldDisplayTC);
-	_settings->setDisplayNextTC(_oldDisplayNextTC);
-	_settings->setDisplayNextText(_oldDisplayNextText);
-	_settings->setDisplayTitle(_oldDisplayTitle);
-	_settings->setDisplayLoop(_oldDisplayLoop);
 
 	QDialog::reject();
 }
@@ -345,29 +330,4 @@ void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *cu
 	Q_UNUSED(previous);
 	if(current)
 		_settings->setTextFontFile(_fontList[current->text()]);
-}
-
-void PreferencesDialog::on_cBoxDisplayTC_clicked()
-{
-	_settings->setDisplayTC(ui->cBoxDisplayTC->isChecked());
-}
-
-void PreferencesDialog::on_cBoxDisplayNextTC_clicked()
-{
-	_settings->setDisplayNextTC(ui->cBoxDisplayNextTC->isChecked());
-}
-
-void PreferencesDialog::on_cBoxDisplayNextText_clicked()
-{
-	_settings->setDisplayNextText(ui->cBoxDisplayNextText->isChecked());
-}
-
-void PreferencesDialog::on_cBoxDisplayTitle_clicked()
-{
-	_settings->setDisplayTitle(ui->cBoxDisplayTitle->isChecked());
-}
-
-void PreferencesDialog::on_cBoxDisplayLoop_clicked()
-{
-	_settings->setDisplayLoop(ui->cBoxDisplayLoop->isChecked());
 }
