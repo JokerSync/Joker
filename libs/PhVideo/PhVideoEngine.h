@@ -232,6 +232,7 @@ private:
 	AVFormatContext * _pFormatContext;
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
+	struct SwsContext * _swsContext;
 	PhGraphicTexturedRect _videoRect;
 	PhFrame _currentFrame;
 
