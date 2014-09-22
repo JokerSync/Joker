@@ -908,8 +908,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 					QString content = textElement.elementsByTagName("VALUE").at(0).toElement().text();
 
 					PHDEBUG << PhTimeCode::stringFromTime(timeIn, tcType) << PhTimeCode::stringFromTime(timeOut, tcType) << content;
-					PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
-					_texts1.append(text);
+					_texts1.append(new PhStripText(timeIn, people, timeOut, y, content, height));
 				}
 			}
 			else {
@@ -1018,8 +1017,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 			float y = y1 / 150.0f;
 			float height = (y2 - y1) / 150.0f;
 			QString content = query.value(7).toString();
-			PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
-			_texts1.append(text);
+			_texts1.append(new PhStripText(timeIn, people, timeOut, y, content, height));
 			PHDEBUG << timeIn << timeOut << content;
 		}
 	}
@@ -1249,13 +1247,21 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 
 void PhStripDoc::reset()
 {
+	/* Note: clearing a QList does not free its elements. */
+	qDeleteAll(_peoples);
 	_peoples.clear();
+	qDeleteAll(_cuts);
 	_cuts.clear();
+	qDeleteAll(_detects);
 	_detects.clear();
 	_lastTime = 0;
+	qDeleteAll(_loops);
 	_loops.clear();
+	qDeleteAll(_texts1);
 	_texts1.clear();
+	qDeleteAll(_texts2);
 	_texts2.clear();
+
 	_title = "";
 	_translatedTitle = "";
 	_episode = "";
