@@ -142,8 +142,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			return;
 		}
 
-		PhTime timeIn = clockTime - syncBar_X_FromLeft * timePerPixel;
-		PhTime timeOut = timeIn + stripDuration;
+		PhTime stripTimeIn = clockTime - syncBar_X_FromLeft * timePerPixel;
+		PhTime stripTimeOut = stripTimeIn + stripDuration;
 
 
 		if(_settings->displayBackground()) {
@@ -187,7 +187,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		if(_settings->displayRuler()) {
 			PhTime rulerTimeIn = _settings->rulerTimeIn();
 			PhTime timeBetweenRuler = _settings->timeBetweenRuler();
-			int rulerNumber = (timeIn - rulerTimeIn) / timeBetweenRuler;
+			int rulerNumber = (stripTimeIn - rulerTimeIn) / timeBetweenRuler;
 			if (rulerNumber < 0)
 				rulerNumber = 0;
 
@@ -218,7 +218,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			rulerText.setZ(0);
 
 
-			while (rulerTime < timeOut + timeBetweenRuler) {
+			while (rulerTime < stripTimeOut + timeBetweenRuler) {
 				counter++;
 				int x = rulerTime / timePerPixel - offset;
 
@@ -253,10 +253,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 		int verticalTimePerPixel = _settings->verticalTimePerPixel();
 		bool displayNextText = _settings->displayNextText();
-		PhTime maxTimeIn = timeOut;
+		PhTime maxTimeIn = stripTimeOut;
 
 		if(displayNextText)
-			maxTimeIn = timeIn + (y - nextTextY) * verticalTimePerPixel;
+			maxTimeIn = stripTimeIn + (y - nextTextY) * verticalTimePerPixel;
 
 		QColor selectedPeopleColor(_settings->backgroundColorLight());
 		QColor unselectedPeopleColor(128, 128, 128);
@@ -293,7 +293,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 		// Display the texts
 		foreach(PhStripText * text, _doc.texts()) {
-			if( !((text->timeOut() < timeIn) || (text->timeIn() > timeOut)) ) {
+			if( !((text->timeOut() < stripTimeIn) || (text->timeIn() > stripTimeOut)) ) {
 				counter++;
 				PhGraphicText gText(&_textFont, text->content());
 				gText.setZ(-1);
@@ -371,7 +371,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			int cutWidth = _settings->cutWidth();
 			foreach(PhStripCut * cut, _doc.cuts()) {
 				//_counter++;
-				if( (timeIn < cut->timeIn()) && (cut->timeIn() < timeOut)) {
+				if( (stripTimeIn < cut->timeIn()) && (cut->timeIn() < stripTimeOut)) {
 					PhGraphicSolidRect gCut;
 					gCut.setZ(-1);
 					gCut.setWidth(cutWidth);
@@ -387,7 +387,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 					gCut.draw();
 				}
 				//Doesn't need to process undisplayed content
-				if(cut->timeIn() > timeOut)
+				if(cut->timeIn() > stripTimeOut)
 					break;
 			}
 		}
@@ -396,7 +396,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			//_counter++;
 			// This calcul allow the cross to come smoothly on the screen (height * timePerPixel / 8)
 #warning /// @todo clean this it is not clear
-			if( ((loop->timeIn() + height * timePerPixel / 8) > timeIn) && ((loop->timeIn() - height * timePerPixel / 8 ) < timeOut)) {
+			if( ((loop->timeIn() + height * timePerPixel / 8) > stripTimeIn) && ((loop->timeIn() - height * timePerPixel / 8 ) < stripTimeOut)) {
 				PhGraphicLoop gLoop;
 				if(!invertedColor)
 					gLoop.setColor(Qt::black);
@@ -459,7 +459,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		foreach(PhStripDetect * detect, _doc.detects()) {
 			//_counter++;
 
-			if((timeIn < detect->timeOut()) && (detect->timeIn() < timeOut) ) {
+			if((stripTimeIn < detect->timeOut()) && (detect->timeIn() < stripTimeOut) ) {
 				PhGraphicRect *gDetect = NULL;
 				switch (detect->type()) {
 				case PhStripDetect::Off:
@@ -497,7 +497,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				}
 			}
 			//Doesn't need to process undisplayed content
-			if(detect->timeIn() > timeOut)
+			if(detect->timeIn() > stripTimeOut)
 				break;
 		}
 
