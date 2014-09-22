@@ -255,8 +255,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		bool displayNextText = _settings->displayNextText();
 		PhTime maxTimeIn = stripTimeOut;
 
-		if(displayNextText)
-			maxTimeIn = stripTimeIn + (y - nextTextY) * verticalTimePerPixel;
+		PhTime verticalScaleDuration = (y - nextTextY) * verticalTimePerPixel;
+		if(displayNextText && (stripTimeIn + verticalScaleDuration > stripTimeOut))
+			maxTimeIn = stripTimeIn + verticalScaleDuration;
 
 		QColor selectedPeopleColor(_settings->backgroundColorLight());
 		QColor unselectedPeopleColor(128, 128, 128);
