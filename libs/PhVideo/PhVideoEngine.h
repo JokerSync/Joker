@@ -229,7 +229,7 @@ private:
 	PhClock _clock;
 	PhFrame _frameIn;
 
-	AVFormatContext * _pFormatContext;
+	AVFormatContext * _formatContext;
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
 	struct SwsContext * _swsContext;
