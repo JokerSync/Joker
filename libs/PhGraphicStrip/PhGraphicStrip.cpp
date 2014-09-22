@@ -312,7 +312,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			PhPeople * people = text->people();
 			QString name = people ? people->name().toLower() : "???";
 			PhGraphicText gPeople(&_hudFont, name);
-			gPeople.setWidth(_hudFont.getNominalWidth(name) / 4);
+			gPeople.setWidth(_hudFont.getNominalWidth(name) / 5);
 			gPeople.setHeight(text->height() * height / 2);
 			int x0 = x + (text->timeIn() - timeBetweenPeopleAndText) / timePerPixel - offset - gPeople.width();
 

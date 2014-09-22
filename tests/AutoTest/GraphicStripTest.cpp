@@ -39,8 +39,6 @@ void GraphicStripTest::drawTest()
 	doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
 	doc->changed();
 
-	view.show();
-
 	QImage resultImage(view.renderPixmap(720, 240).toImage());
 	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
 	resultImage.save(resultFile);
