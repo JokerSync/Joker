@@ -22,6 +22,11 @@ PhLtcReader::PhLtcReader(PhLtcReaderSettings *settings) :
 	PHDBG(21) << "LTC Reader created";
 }
 
+PhLtcReader::~PhLtcReader()
+{
+	ltc_decoder_free(_decoder);
+}
+
 PhClock *PhLtcReader::clock()
 {
 	return &_clock;

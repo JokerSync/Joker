@@ -36,6 +36,11 @@ public:
 	explicit PhLtcReader(PhLtcReaderSettings * settings);
 
 	/**
+	 * @brief PhLtcReader destructor
+	 */
+	~PhLtcReader();
+
+	/**
 	 * @brief Get the reader clock
 	 * @return The reader clock
 	 */

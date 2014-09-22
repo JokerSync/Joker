@@ -14,6 +14,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_pFormatContext(NULL),
 	_videoStream(NULL),
 	_videoFrame(NULL),
+	_swsContext(NULL),
 	_currentFrame(PHFRAMEMIN),
 	_useAudio(false),
 	_audioStream(NULL),
@@ -36,7 +37,7 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 	PHDEBUG << deinterlace;
 	_deinterlace = deinterlace;
 	if(_rgb) {
-		delete _rgb;
+		delete[] _rgb;
 		_rgb = NULL;
 	}
 	_currentFrame = PHFRAMEMIN;
@@ -154,8 +155,13 @@ void PhVideoEngine::close()
 {
 	PHDEBUG << _fileName;
 	if(_rgb) {
-		delete _rgb;
+		delete[] _rgb;
 		_rgb = NULL;
+	}
+
+	if (_swsContext) {
+		sws_freeContext(_swsContext);
+		_swsContext = NULL;
 	}
 
 	if(_pFormatContext) {
@@ -166,6 +172,12 @@ void PhVideoEngine::close()
 			avcodec_close(_audioStream->codec);
 		avformat_close_input(&_pFormatContext);
 	}
+
+	if (_videoFrame) {
+		av_frame_free(&_videoFrame);
+		_videoFrame = NULL;
+	}
+
 	_frameIn = 0;
 	_pFormatContext = NULL;
 	_videoStream = NULL;
@@ -317,14 +329,16 @@ bool PhVideoEngine::decodeFrame(PhFrame frame)
 						/* Note: we output the frames in AV_PIX_FMT_BGRA rather than AV_PIX_FMT_RGB24,
 						 * because this format is native to most video cards and will avoid a conversion
 						 * in the video driver */
-						SwsContext * swsContext = sws_getContext(_videoFrame->width, _videoStream->codec->height, pixFormat,
-						                                         _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
-						                                         SWS_POINT, NULL, NULL, NULL);
+						/* sws_getCachedContext will check if the context is valid for the given parameters. It the context is not valid,
+						 * it will be freed and a new one will be allocated. */
+						_swsContext = sws_getCachedContext(_swsContext, _videoFrame->width, _videoStream->codec->height, pixFormat,
+						                                   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
+						                                   SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
 							_rgb = new uint8_t[avpicture_get_size(AV_PIX_FMT_BGRA, _videoFrame->width, frameHeight)];
 						int linesize = _videoFrame->width * 4;
-						if (0 <= sws_scale(swsContext, (const uint8_t * const *) _videoFrame->data,
+						if (0 <= sws_scale(_swsContext, (const uint8_t * const *) _videoFrame->data,
 						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
 						                   &linesize)) {
 
