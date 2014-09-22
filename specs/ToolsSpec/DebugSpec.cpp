@@ -104,7 +104,7 @@ go_bandit([](){
 
 			QStringList lines = QString::fromStdString(buffer.str()).split("\n");
 			AssertThat(lines.count(), Equals(10));
-			AssertThat(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugSpec.cpp\toperator\\(\\)\t@[0-9]+\ttest with all log parameters").exactMatch(lines[0]), IsTrue());
+			AssertThat(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d DebugSpec.cpp\toperator\\(\\)\t@[0-9]+\ttest with all log parameters").exactMatch(lines[0]), IsTrue());
 
 			AssertThat(lines[1].toStdString(), Equals("test with no log parameters"));
 			AssertThat(lines[2].toStdString(), Equals("shown because of showConsole(true)"));
@@ -127,7 +127,7 @@ go_bandit([](){
 			QStringList lines = QString::fromStdString(buffer.str()).split("\n");
 			AssertThat(lines.count(), Equals(3));
 			AssertThat(lines[0].toStdString(), Equals("test with no log parameters"));
-			AssertThat(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\.\\d\\d\\d DebugSpec.cpp\toperator\\(\\)\t@[0-9]+\ttest with all log parameters").exactMatch(lines[1]), IsTrue());
+			AssertThat(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d DebugSpec.cpp\toperator\\(\\)\t@[0-9]+\ttest with all log parameters").exactMatch(lines[1]), IsTrue());
 			AssertThat(lines[2].toStdString(), Equals(""));
 		});
 	});

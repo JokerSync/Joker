@@ -537,8 +537,6 @@ go_bandit([](){
 			PhMidiTimeCodeReader mtcReader(PhTimeCodeType25);
 			PhMidiOutput midiOut;
 
-			PhTimeCodeType tcType = PhTimeCodeType25;
-
 			AssertThat(mtcReader.open("testMMCReader"), IsTrue());
 			AssertThat(midiOut.open("testMMCReader"), IsTrue());
 
