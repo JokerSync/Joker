@@ -423,8 +423,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			}
 
 			if(displayNextText
-					&& (loop->timeIn() > clockTime)
-					&& (loop->timeIn() < maxTimeIn)) {
+			   && (loop->timeIn() > clockTime)
+			   && (loop->timeIn() < maxTimeIn)) {
 				PhGraphicLoop gLoopPred;
 
 				gLoopPred.setColor(Qt::white);
@@ -452,7 +452,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				gLabel.setY(gLoopPred.y() - gLabel.height() - spacing);
 				gLabel.setColor(Qt::gray);
 				gLabel.draw();
-		}
+			}
 			if(loop->timeIn() > maxTimeIn + timePerPixel * height / 4)
 				break;
 		}
