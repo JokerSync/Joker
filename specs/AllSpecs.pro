@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-TARGET = Specs
+TARGET = AllSpecs
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/..
 
