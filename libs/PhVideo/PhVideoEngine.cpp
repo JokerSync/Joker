@@ -37,7 +37,7 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 	PHDEBUG << deinterlace;
 	_deinterlace = deinterlace;
 	if(_rgb) {
-		delete _rgb;
+		delete[] _rgb;
 		_rgb = NULL;
 	}
 	_currentFrame = PHFRAMEMIN;
@@ -155,7 +155,7 @@ void PhVideoEngine::close()
 {
 	PHDEBUG << _fileName;
 	if(_rgb) {
-		delete _rgb;
+		delete[] _rgb;
 		_rgb = NULL;
 	}
 
@@ -172,6 +172,12 @@ void PhVideoEngine::close()
 			avcodec_close(_audioStream->codec);
 		avformat_close_input(&_pFormatContext);
 	}
+
+	if (_videoFrame) {
+		av_frame_free(&_videoFrame);
+		_videoFrame = NULL;
+	}
+
 	_frameIn = 0;
 	_pFormatContext = NULL;
 	_videoStream = NULL;
