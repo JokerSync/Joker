@@ -172,6 +172,12 @@ void PhVideoEngine::close()
 			avcodec_close(_audioStream->codec);
 		avformat_close_input(&_pFormatContext);
 	}
+
+	if (_videoFrame) {
+		av_frame_free(&_videoFrame);
+		_videoFrame = NULL;
+	}
+
 	_frameIn = 0;
 	_pFormatContext = NULL;
 	_videoStream = NULL;
