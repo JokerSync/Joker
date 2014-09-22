@@ -46,6 +46,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 	QDomDocument *domDoc = new QDomDocument();
 	if (!domDoc->setContent(&xmlFile)) {
 		xmlFile.close();
+		delete domDoc;
 		PHDEBUG << "The XML document seems to be bad formed " << fileName;
 		return false;
 	}
@@ -56,6 +57,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 
 	if(detX.tagName() != "detx") {
 		xmlFile.close();
+		delete domDoc;
 		PHDEBUG << "Bad root element :" << detX.tagName();
 		return false;
 	}
@@ -195,6 +197,9 @@ bool PhStripDoc::importDetXFile(QString fileName)
 			}
 		}
 	}
+
+	xmlFile.close();
+	delete domDoc;
 
 	emit this->changed();
 
@@ -1057,6 +1062,7 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 		QDomDocument *domDoc = new QDomDocument();
 		if (!domDoc->setContent(&xmlFile)) {
 			xmlFile.close();
+			delete domDoc;
 			PHDEBUG << "The XML document seems to be bad formed" << fileName;
 			return false;
 		}
@@ -1109,6 +1115,8 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 				peopleByName(name)->setColor(color);
 			}
 		}
+
+		delete domDoc;
 
 	}
 	return result;
