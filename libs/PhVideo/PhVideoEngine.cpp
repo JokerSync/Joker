@@ -155,7 +155,7 @@ void PhVideoEngine::close()
 {
 	PHDEBUG << _fileName;
 	if(_rgb) {
-		delete _rgb;
+		delete[] _rgb;
 		_rgb = NULL;
 	}
 
