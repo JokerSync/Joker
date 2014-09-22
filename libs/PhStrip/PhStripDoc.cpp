@@ -46,6 +46,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 	QDomDocument *domDoc = new QDomDocument();
 	if (!domDoc->setContent(&xmlFile)) {
 		xmlFile.close();
+		delete domDoc;
 		PHDEBUG << "The XML document seems to be bad formed " << fileName;
 		return false;
 	}
@@ -56,6 +57,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 
 	if(detX.tagName() != "detx") {
 		xmlFile.close();
+		delete domDoc;
 		PHDEBUG << "Bad root element :" << detX.tagName();
 		return false;
 	}
@@ -195,6 +197,9 @@ bool PhStripDoc::importDetXFile(QString fileName)
 			}
 		}
 	}
+
+	xmlFile.close();
+	delete domDoc;
 
 	emit this->changed();
 
@@ -908,8 +913,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 					QString content = textElement.elementsByTagName("VALUE").at(0).toElement().text();
 
 					PHDEBUG << PhTimeCode::stringFromTime(timeIn, tcType) << PhTimeCode::stringFromTime(timeOut, tcType) << content;
-					PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
-					_texts1.append(text);
+					_texts1.append(new PhStripText(timeIn, people, timeOut, y, content, height));
 				}
 			}
 			else {
@@ -1018,8 +1022,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 			float y = y1 / 150.0f;
 			float height = (y2 - y1) / 150.0f;
 			QString content = query.value(7).toString();
-			PhStripText *text = new PhStripText(timeIn, people, timeOut, y, content, height);
-			_texts1.append(text);
+			_texts1.append(new PhStripText(timeIn, people, timeOut, y, content, height));
 			PHDEBUG << timeIn << timeOut << content;
 		}
 	}
@@ -1059,6 +1062,7 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 		QDomDocument *domDoc = new QDomDocument();
 		if (!domDoc->setContent(&xmlFile)) {
 			xmlFile.close();
+			delete domDoc;
 			PHDEBUG << "The XML document seems to be bad formed" << fileName;
 			return false;
 		}
@@ -1111,6 +1115,8 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 				peopleByName(name)->setColor(color);
 			}
 		}
+
+		delete domDoc;
 
 	}
 	return result;
@@ -1249,13 +1255,21 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 
 void PhStripDoc::reset()
 {
+	/* Note: clearing a QList does not free its elements. */
+	qDeleteAll(_peoples);
 	_peoples.clear();
+	qDeleteAll(_cuts);
 	_cuts.clear();
+	qDeleteAll(_detects);
 	_detects.clear();
 	_lastTime = 0;
+	qDeleteAll(_loops);
 	_loops.clear();
+	qDeleteAll(_texts1);
 	_texts1.clear();
+	qDeleteAll(_texts2);
 	_texts2.clear();
+
 	_title = "";
 	_translatedTitle = "";
 	_episode = "";

@@ -26,6 +26,12 @@ public:
 	 * @param tcType the timecode type
 	 */
 	explicit PhLtcWriter(PhTimeCodeType tcType);
+
+	/**
+	 * @brief PhLtcWriter destructor
+	 */
+	~PhLtcWriter();
+
 	/**
 	 * @brief Get the writer clock
 	 * @return The writer clock
