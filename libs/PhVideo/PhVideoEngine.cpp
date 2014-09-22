@@ -37,7 +37,7 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 	PHDEBUG << deinterlace;
 	_deinterlace = deinterlace;
 	if(_rgb) {
-		delete _rgb;
+		delete[] _rgb;
 		_rgb = NULL;
 	}
 	_currentFrame = PHFRAMEMIN;
