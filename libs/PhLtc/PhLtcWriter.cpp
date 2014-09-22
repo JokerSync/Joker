@@ -42,6 +42,11 @@ PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType) :
 
 }
 
+PhLtcWriter::~PhLtcWriter()
+{
+	ltc_encoder_free(_encoder);
+}
+
 PhClock *PhLtcWriter::clock()
 {
 	return &_clock;
