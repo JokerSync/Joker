@@ -290,6 +290,7 @@ private:
 	PhFont _infoFont;
 
 	QList<QObject*> _nextPeoples;
+	QList<QObject*> _stripTexts;
 };
 
 #endif // MAINWINDOW_H

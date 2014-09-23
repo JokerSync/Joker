@@ -835,7 +835,7 @@ void JokerWindow::onPaint(int width, int height)
 
 	// refresh the view
 	// TODO the view could be refreshed more intelligently by connecting to the signals of the people selection dialog
-	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
+	//ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
 
 	int y = 0;
 
@@ -922,15 +922,15 @@ void JokerWindow::onPaint(int width, int height)
 	// TODO the view could be refreshed more intelligently by defining a true model and define change signals
 	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", QVariant::fromValue(_nextPeoples));
 
+	if (_stripTexts.empty() && !_strip.stripTexts().empty()) {
+		foreach(PhStripText *text, _strip.stripTexts()) {
+			_stripTexts.append(text);
+		}
 
-	QList<QObject*> stripTexts;
-	foreach(PhStripText *text, _strip.stripTexts()) {
-		stripTexts.append(text);
+		// refresh the view
+		// TODO the view could be refreshed more intelligently by defining a true model and define change signals
+		ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModel", QVariant::fromValue(_stripTexts));
 	}
-
-	// refresh the view
-	// TODO the view could be refreshed more intelligently by defining a true model and define change signals
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModel", QVariant::fromValue(stripTexts));
 
 	// prepare the string list that is used to display the infos
 	_infoList.clear();
@@ -950,7 +950,7 @@ void JokerWindow::onPaint(int width, int height)
 		_infoList.append(info);
 	}
 
-	ui->videoStripView->engine()->rootContext()->setContextProperty("infoModel", QVariant::fromValue(_infoList));
+	//ui->videoStripView->engine()->rootContext()->setContextProperty("infoModel", QVariant::fromValue(_infoList));
 	QQuickItem *infoList = ui->videoStripView->rootObject()->findChild<QQuickItem*>("infoList");
 	infoList->setVisible(_settings->displayInfo());
 
