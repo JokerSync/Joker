@@ -312,7 +312,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			PhPeople * people = text->people();
 			QString name = people ? people->name().toLower() : "???";
 			PhGraphicText gPeople(&_hudFont, name);
-			gPeople.setWidth(_hudFont.getNominalWidth(name) / 4);
+			gPeople.setWidth(_hudFont.getNominalWidth(name) / 5);
 			gPeople.setHeight(text->height() * height / 2);
 			int x0 = x + (text->timeIn() - timeBetweenPeopleAndText) / timePerPixel - offset - gPeople.width();
 
@@ -415,9 +415,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 				gLoop.draw();
 
-				PhGraphicText gLabel(&_hudFont, loop->label(), xLoop + 10, y + height * 3 / 4, -1);
-				gLabel.setWidth(_hudFont.getNominalWidth(loop->label()));
-				gLabel.setHeight(height / 4);
+				PhGraphicText gLabel(&_hudFont, loop->label(), xLoop + 10, y + height * 4 / 5, -1);
+				gLabel.setWidth(_hudFont.getNominalWidth(loop->label()) / 2);
+				gLabel.setHeight(height / 5);
 				gLabel.setColor(Qt::gray);
 				gLabel.draw();
 			}
