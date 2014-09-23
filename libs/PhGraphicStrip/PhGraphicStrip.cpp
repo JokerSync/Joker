@@ -257,7 +257,14 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 		// housekeeping !
 		_nextPeoples.clear();
-		_stripTexts.clear();
+		//_stripTexts.clear();
+
+		// append all strip texts !
+		if (_stripTexts.empty() && !_doc.texts().empty()) {
+			foreach(PhStripText * text, _doc.texts()) {
+				_stripTexts.append(text);
+			}
+		}
 
 		QColor selectedPeopleColor(_settings->backgroundColorLight());
 		QColor unselectedPeopleColor(128, 128, 128);
@@ -269,7 +276,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				// FIXME font and color not implemented
 				//PhGraphicText gText(&_textFont, text->content());
 				//gText.setColor(computeColor(text->people(), selectedPeoples, invertedColor));
-				_stripTexts.append(text);
+				//_stripTexts.append(text);
 			}
 
 			PhPeople * people = text->people();
