@@ -7,35 +7,39 @@ env:
   matrix:
   - JOB=UNCRUSTIFY
   - JOB=DOXYGEN
-  - JOB=BUILD_AUTOTEST
+    #- JOB=BUILD_SPEC_AUTOTEST
+  - JOB=BUILD_SPEC_BANDIT
   - JOB=BUILD_RELEASE_JOKER
   - JOB=BUILD_RELEASE_LTCTOOL
   - JOB=BUILD_RELEASE_MIDITOOL
   - JOB=BUILD_RELEASE_ALL_TESTS
 install:
+- git submodule update --init --recursive
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
 - if [[ "$JOB" == BUILD_RELEASE_* ]]; then npm install -g appdmg; fi
-- if [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
-- if [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
+- if [[ "$JOB" == BUILD_SPEC_* ]]; then scripts/install_coveralls.sh; fi
+- if [[ "$JOB" == BUILD_SPEC_* ]]; then eval "$(pyenv init -)"; fi
 
 script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
 - if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
-- if [[ "$JOB" == BUILD_AUTOTEST ]]; then qmake tests/AutoTest/AutoTest.pro; fi
+- if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then qmake tests/AutoTest/AutoTest.pro; fi
+- if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then qmake specs/AllSpecs.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then qmake app/Joker/Joker.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make -j 8; fi
-- if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./AutoTest; fi
+- if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then ./AutoTest; fi
+- if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
 after_success:
-- if [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
+- if [[ "$JOB" == BUILD_SPEC_* ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ -E .+/specs/.+ --verbose; fi
 after_failure:
-- if [[ "$JOB" == BUILD_AUTOTEST ]]; then ./scripts/upload.sh *.result.bmp; fi
+- if [[ "$JOB" == BUILD_SPEC_* ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
   flowdock:
     secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=

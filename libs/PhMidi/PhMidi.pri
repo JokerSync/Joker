@@ -4,7 +4,7 @@
 #
 
 HEADERS += \
-	../../vendor/rtmidi/RtMidi.h \
+	$$TOP_ROOT/vendor/rtmidi/RtMidi.h \
 	$$TOP_ROOT/libs/PhMidi/PhMidiObject.h \
 	$$TOP_ROOT/libs/PhMidi/PhMidiInput.h \
 	$$TOP_ROOT/libs/PhMidi/PhMidiOutput.h \
@@ -12,14 +12,14 @@ HEADERS += \
 	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeReader.h
 
 SOURCES += \
-	../../vendor/rtmidi/RtMidi.cpp \
+	$$TOP_ROOT/vendor/rtmidi/RtMidi.cpp \
 	$$TOP_ROOT/libs/PhMidi/PhMidiObject.cpp \
 	$$TOP_ROOT/libs/PhMidi/PhMidiInput.cpp \
 	$$TOP_ROOT/libs/PhMidi/PhMidiOutput.cpp \
 	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeWriter.cpp \
 	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeReader.cpp
 
-INCLUDEPATH += ../../vendor/rtmidi
+INCLUDEPATH += $$TOP_ROOT/vendor/rtmidi
 
 mac {
 DEFINES += __MACOSX_CORE__
