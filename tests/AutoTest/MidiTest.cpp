@@ -609,7 +609,7 @@ void MidiTest::testMTCReaderWithMMC()
 	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 0));
 
 	midiOut.sendQFTC(0x20); // Send second low digit
-	QThread::msleep(20);
+	QThread::msleep(40);
 	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 1));
 }
 

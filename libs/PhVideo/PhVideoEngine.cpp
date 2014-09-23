@@ -11,7 +11,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_fileName(""),
 	_tcType(PhTimeCodeType25),
 	_frameIn(0),
-	_pFormatContext(NULL),
+	_formatContext(NULL),
 	_videoStream(NULL),
 	_videoFrame(NULL),
 	_swsContext(NULL),
@@ -29,7 +29,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 
 bool PhVideoEngine::ready()
 {
-	return (_pFormatContext && _videoStream && _videoFrame);
+	return (_formatContext && _videoStream && _videoFrame);
 }
 
 void PhVideoEngine::setDeinterlace(bool deinterlace)
@@ -62,27 +62,27 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setRate(0);
 	_currentFrame = PHFRAMEMIN;
 
-	if(avformat_open_input(&_pFormatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
+	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
 		return false;
 
 	PHDEBUG << "Retrieve stream information";
-	if (avformat_find_stream_info(_pFormatContext, NULL) < 0)
+	if (avformat_find_stream_info(_formatContext, NULL) < 0)
 		return false; // Couldn't find stream information
 
-	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
+	av_dump_format(_formatContext, 0, fileName.toStdString().c_str(), 0);
 
 	// Find video stream :
-	for(int i = 0; i < (int)_pFormatContext->nb_streams; i++) {
-		AVMediaType streamType = _pFormatContext->streams[i]->codec->codec_type;
+	for(int i = 0; i < (int)_formatContext->nb_streams; i++) {
+		AVMediaType streamType = _formatContext->streams[i]->codec->codec_type;
 		PHDEBUG << i << ":" << streamType;
 		switch(streamType) {
 		case AVMEDIA_TYPE_VIDEO:
-			_videoStream = _pFormatContext->streams[i];
+			_videoStream = _formatContext->streams[i];
 			PHDEBUG << "\t=> video";
 			break;
 		case AVMEDIA_TYPE_AUDIO:
 			if(_useAudio && (_audioStream == NULL))
-				_audioStream = _pFormatContext->streams[i];
+				_audioStream = _formatContext->streams[i];
 			PHDEBUG << "\t=> audio";
 			break;
 		default:
@@ -99,7 +99,7 @@ bool PhVideoEngine::open(QString fileName)
 	emit timeCodeTypeChanged(_tcType);
 
 	// Reading timestamp :
-	AVDictionaryEntry *tag = av_dict_get(_pFormatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+	AVDictionaryEntry *tag = av_dict_get(_formatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
 	if(tag == NULL)
 		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
 
@@ -164,13 +164,13 @@ void PhVideoEngine::close()
 		_swsContext = NULL;
 	}
 
-	if(_pFormatContext) {
+	if(_formatContext) {
 		PHDEBUG << "Close the media context.";
 		if(_videoStream)
 			avcodec_close(_videoStream->codec);
 		if(_audioStream)
 			avcodec_close(_audioStream->codec);
-		avformat_close_input(&_pFormatContext);
+		avformat_close_input(&_formatContext);
 	}
 
 	if (_videoFrame) {
@@ -179,7 +179,7 @@ void PhVideoEngine::close()
 	}
 
 	_frameIn = 0;
-	_pFormatContext = NULL;
+	_formatContext = NULL;
 	_videoStream = NULL;
 	_audioStream = NULL;
 	PHDEBUG << _fileName << "closed";
@@ -285,14 +285,14 @@ bool PhVideoEngine::decodeFrame(PhFrame frame)
 			int flags = AVSEEK_FLAG_ANY;
 			int64_t timestamp = frame2time(frame - _frameIn);
 			PHDEBUG << "seek:" << frame;
-			av_seek_frame(_pFormatContext, _videoStream->index, timestamp, flags);
+			av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
 		}
 
 		AVPacket packet;
 
 		bool lookingForVideoFrame = true;
 		while(lookingForVideoFrame) {
-			int error = av_read_frame(_pFormatContext, &packet);
+			int error = av_read_frame(_formatContext, &packet);
 			switch(error) {
 			case 0:
 				if(packet.stream_index == _videoStream->index) {
