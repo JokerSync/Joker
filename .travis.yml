@@ -37,7 +37,7 @@ script:
 - if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then ./AutoTest; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
 after_success:
-- if [[ "$JOB" == BUILD_SPEC_* ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ --verbose; fi
+- if [[ "$JOB" == BUILD_SPEC_* ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ -E .+/specs/.+ --verbose; fi
 after_failure:
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
