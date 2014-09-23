@@ -24,7 +24,7 @@ go_bandit([](){
 		});
 
 		it("draw_a_graphic_strip", [&](){
-			PhGraphicView view(980, 320);
+			PhGraphicView view(720, 240);
 
 			GraphicStripSpecSettings settings;
 			PhGraphicStrip strip(&settings);
@@ -46,7 +46,7 @@ go_bandit([](){
 			doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
 			doc->changed();
 
-			QImage resultImage(view.renderPixmap(980, 320).toImage());
+			QImage resultImage(view.renderPixmap(720, 240).toImage());
 			QString resultFile = "drawTest.result.bmp";
 			resultImage.save(resultFile);
 			QString expectedFile = "drawTest.expected.bmp";
@@ -54,7 +54,7 @@ go_bandit([](){
 
 			unsigned int result = PhPictureTools::compare(resultImage, expectedImage, true);
 			PHDEBUG << "result:" << result;
-			AssertThat(result, IsLessThan(920 * 320)); // accept a difference of 1 per pixel
+			AssertThat(result, IsLessThan(720 * 240)); // accept a difference of 1 per pixel
 		});
 	});
 });
