@@ -47,5 +47,5 @@ void GraphicStripTest::drawTest()
 
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
 	PHDEBUG << "result:" << result;
-	QVERIFY(result < 720 * 240 * 0.04); // accept a difference of 4 %
+	QVERIFY(result < 720 * 240); // accept a difference of 1 per pixel
 }
