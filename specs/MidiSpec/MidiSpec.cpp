@@ -4,6 +4,7 @@
  */
 
 #include <QThread>
+#include <QApplication>
 
 #include "bandit/bandit.h"
 
@@ -58,7 +59,7 @@ go_bandit([](){
 			AssertThat(quarterFrameData, Equals(0x01));
 
 			midiOut.sendQFTC(0x11); // setting higher frame to 0x1x
-			QThread::msleep(20); // try to solve travis fail
+			QApplication::processEvents(QEventLoop::AllEvents, 10); // try to solve travis fail
 			AssertThat(quarterFrameCount, Equals(2));
 			AssertThat(quarterFrameData, Equals(0x11));
 
