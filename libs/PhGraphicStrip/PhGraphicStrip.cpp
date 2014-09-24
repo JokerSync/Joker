@@ -255,14 +255,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 		// housekeeping !
 		_nextPeoples.clear();
-		//_stripTexts.clear();
-
-		// append all strip texts !
-		if (_stripTexts.empty() && !_doc.texts().empty()) {
-			foreach(PhStripText * text, _doc.texts()) {
-				_stripTexts.append(text);
-			}
-		}
+		_stripTexts.clear();
 
 		foreach(PhStripText * text, _doc.texts()) {
 
@@ -271,7 +264,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				// FIXME font and color not implemented
 				//PhGraphicText gText(&_textFont, text->content());
 				//gText.setColor(computeColor(text->people(), selectedPeoples, invertedColor));
-				//_stripTexts.append(text);
+				_stripTexts.append(text);
 			}
 
 			PhPeople * people = text->people();
