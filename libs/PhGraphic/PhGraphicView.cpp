@@ -35,14 +35,14 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	connect(_refreshTimer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 
 	//set the screen frequency to the most common value (60hz);
-	_screenFrequency = 60;
+	_screenFrequency = 60.0;
 	QScreen *screen = QGuiApplication::primaryScreen();
 	if (screen)
 		_screenFrequency = screen->refreshRate();
 	else
 		PHDEBUG << "Unable to get the screen";
 
-	int timerInterval = 500 / _screenFrequency;
+	int timerInterval = static_cast<int>(500.0 / _screenFrequency);
 	_refreshTimer->start( timerInterval);
 	//PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
 	_dropTimer.start();
@@ -104,7 +104,7 @@ void PhGraphicView::onRefresh()
 	_lastUpdateDuration = t.elapsed();
 	if(_lastUpdateDuration > _maxUpdateDuration)
 		_maxUpdateDuration = _lastUpdateDuration;
-	if(_lastUpdateDuration > 1500 / _screenFrequency) {
+	if(_lastUpdateDuration > static_cast<int>(1500.0 / _screenFrequency)) {
 		_dropTimer.restart();
 		_dropDetected++;
 	}

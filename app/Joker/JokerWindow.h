@@ -71,7 +71,7 @@ public slots:
 	///
 	/// \param frequency
 	///
-	void timeCounter(PhTimeScale frequency);
+	void timeCounter(qreal frequency);
 
 protected:
 	///

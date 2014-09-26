@@ -78,7 +78,7 @@ signals:
 	 * @brief emit a signal just before the paint
 	 * @param frequency the effective frequency
 	 */
-	void beforePaint(PhTimeScale frequency);
+	void beforePaint(qreal frequency);
 
 	/**
 	 * @brief paint event, every class have to re-implement it.
@@ -97,7 +97,7 @@ protected:
 	/**
 	 * @brief The screen frequency
 	 */
-	int _screenFrequency;
+	qreal _screenFrequency;
 
 private slots:
 	void onRefresh();
