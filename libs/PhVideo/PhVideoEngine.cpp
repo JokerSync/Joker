@@ -190,7 +190,7 @@ void PhVideoEngine::close()
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	if(_videoStream) {
-		PhFrame delay = _settings->screenDelay() * PhTimeCode::getFps(_tcType) * _clock.rate() / 1000;
+		PhFrame delay = static_cast<PhFrame>(_settings->screenDelay() * framePerSecond() * _clock.rate() / 1000.);
 		decodeFrame(_clock.frame(_tcType) + delay);
 	}
 	_videoRect.setRect(x, y, w, h);
@@ -240,17 +240,11 @@ int PhVideoEngine::height()
 	return 0;
 }
 
-float PhVideoEngine::framePerSecond()
+double PhVideoEngine::framePerSecond()
 {
-	float result = 0;
+	double result = 0;
 	if(_videoStream) {
-		result = _videoStream->avg_frame_rate.num / _videoStream->avg_frame_rate.den;
-		// See http://stackoverflow.com/a/570694/2307070
-		// for NaN handling
-		if(result != result) {
-			result = _videoStream->time_base.den;
-			result /= _videoStream->time_base.num;
-		}
+		result =  av_q2d(_videoStream->avg_frame_rate);
 	}
 
 	return result;
@@ -382,8 +376,7 @@ int64_t PhVideoEngine::frame2time(PhFrame f)
 {
 	int64_t t = 0;
 	if(_videoStream) {
-		PhFrame fps = PhTimeCode::getFps(_tcType);
-		t = f * _videoStream->time_base.den / _videoStream->time_base.num / fps;
+		t = static_cast<int64_t>(static_cast<double>(f) / av_q2d(_videoStream->time_base) / framePerSecond());
 	}
 	return t;
 }
@@ -392,8 +385,7 @@ PhFrame PhVideoEngine::time2frame(int64_t t)
 {
 	PhFrame f = 0;
 	if(_videoStream) {
-		PhFrame fps = PhTimeCode::getFps(_tcType);
-		f = t * _videoStream->time_base.num * fps / _videoStream->time_base.den;
+		f = static_cast<PhFrame>(static_cast<double>(t) * av_q2d(_videoStream->time_base) * framePerSecond());
 	}
 	return f;
 }
