@@ -480,20 +480,24 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	if (fileInfo.exists() && _videoEngine.open(videoFile)) {
 		PhTime videoTimeIn = _videoEngine.timeIn();
 
-		if(videoFile != _doc->videoFilePath()) {
-			_doc->setVideoFilePath(videoFile);
-			_doc->setVideoTimeIn(videoTimeIn, _videoEngine.timeCodeType());
-			_doc->setModified(true);
-		}
-
 		if(videoTimeIn == 0) {
+			/* the video itself has no timestamp, and until now we have not
+			 * propagated the doc videoTimeIn to the videoEngine */
 			videoTimeIn = _doc->videoTimeIn();
 			_videoEngine.setTimeIn(videoTimeIn);
 			_videoEngine.clock()->setTime(videoTimeIn);
+
+			/* ask the user if he wants to change the video time in */
 			if(fileInfo.fileName() != lastFileInfo.fileName()) {
 				on_actionChange_timestamp_triggered();
 				videoTimeIn = _videoEngine.timeIn();
 			}
+		}
+
+		if(videoFile != _doc->videoFilePath()) {
+			_doc->setVideoFilePath(videoFile);
+			_doc->setVideoTimeIn(videoTimeIn, _videoEngine.timeCodeType());
+			_doc->setModified(true);
 		}
 
 		_videoEngine.clock()->setTime(videoTimeIn);
