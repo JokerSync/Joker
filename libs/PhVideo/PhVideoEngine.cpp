@@ -10,12 +10,12 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_settings(settings),
 	_fileName(""),
 	_tcType(PhTimeCodeType25),
-	_frameIn(0),
+	_timeIn(0),
 	_formatContext(NULL),
 	_videoStream(NULL),
 	_videoFrame(NULL),
 	_swsContext(NULL),
-	_currentFrame(PHFRAMEMIN),
+	_currentTime(PHTIMEMIN),
 	_useAudio(false),
 	_audioStream(NULL),
 	_audioFrame(NULL),
@@ -40,7 +40,7 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 		delete[] _rgb;
 		_rgb = NULL;
 	}
-	_currentFrame = PHFRAMEMIN;
+	_currentTime = PHTIMEMIN;
 }
 
 bool PhVideoEngine::bilinearFiltering()
@@ -60,7 +60,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	_clock.setTime(0);
 	_clock.setRate(0);
-	_currentFrame = PHFRAMEMIN;
+	_currentTime = PHTIMEMIN;
 
 	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
 		return false;
@@ -105,7 +105,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	if(tag) {
 		PHDEBUG << "Found timestamp:" << tag->value;
-		_frameIn = PhTimeCode::frameFromString(tag->value, _tcType);
+		_timeIn = PhTimeCode::timeFromString(tag->value, _tcType);
 	}
 
 
@@ -124,7 +124,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	_videoFrame = av_frame_alloc();
 
-	PHDEBUG << "length:" << this->frameLength();
+	PHDEBUG << "length:" << this->length();
 	PHDEBUG << "fps:" << this->framePerSecond();
 
 	if(_audioStream) {
@@ -178,7 +178,7 @@ void PhVideoEngine::close()
 		_videoFrame = NULL;
 	}
 
-	_frameIn = 0;
+	_timeIn = 0;
 	_formatContext = NULL;
 	_videoStream = NULL;
 	_audioStream = NULL;
@@ -190,35 +190,25 @@ void PhVideoEngine::close()
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	if(_videoStream) {
-		PhFrame delay = static_cast<PhFrame>(_settings->screenDelay() * framePerSecond() * _clock.rate() / 1000.);
-		decodeFrame(_clock.frame(_tcType) + delay);
+		PhTime delay = static_cast<PhTime>(_settings->screenDelay() * _clock.rate() * 24000.);
+		decodeFrame(_clock.time() + delay);
 	}
 	_videoRect.setRect(x, y, w, h);
 	_videoRect.setZ(-10);
 	_videoRect.draw();
 }
 
-void PhVideoEngine::setFrameIn(PhFrame frameIn)
-{
-	PHDEBUG << frameIn;
-	_frameIn = frameIn;
-}
-
 void PhVideoEngine::setTimeIn(PhTime timeIn)
 {
-	setFrameIn(timeIn / PhTimeCode::timePerFrame(_tcType));
-}
-
-PhFrame PhVideoEngine::frameLength()
-{
-	if(_videoStream)
-		return time2frame(_videoStream->duration);
-	return 0;
+	PHDEBUG << timeIn;
+	_timeIn = timeIn;
 }
 
 PhTime PhVideoEngine::length()
 {
-	return frameLength() * PhTimeCode::timePerFrame(_tcType);
+	if(_videoStream)
+		return AVTimestamp_to_PhTime(_videoStream->duration);
+	return 0;
 }
 
 PhVideoEngine::~PhVideoEngine()
@@ -258,28 +248,31 @@ QString PhVideoEngine::codecName()
 	return "";
 }
 
-bool PhVideoEngine::decodeFrame(PhFrame frame)
+bool PhVideoEngine::decodeFrame(PhTime time)
 {
 	if(!ready()) {
 		PHDEBUG << "not ready";
 		return false;
 	}
 
-	if(frame < _frameIn)
-		frame = _frameIn;
-	if (frame >= this->frameOut())
-		frame = this->frameOut();
+	if(time < _timeIn)
+		time = _timeIn;
+	if (time >= this->timeOut())
+		time = this->timeOut();
 
 	bool result = false;
-	// Do not perform frame seek if the rate is 0 and the last frame is the same frame
-	if (frame == _currentFrame)
+
+	// Stay with the same frame if the time has changed less than the time between two frames
+	if ((time - _currentTime < PhTimeCode::timePerFrame(_tcType))
+	    && (time - _currentTime >= 0))
 		result = true;
 	else {
-		// Do not perform frame seek if the rate is 1 and the last frame is the previous frame
-		if(frame - _currentFrame != 1) {
+		// we need to perform a frame seek if the requested frame is not the next frame in the stream
+		if((time - _currentTime >= 2*PhTimeCode::timePerFrame(_tcType))
+		   || (time - _currentTime < 0)) {
 			int flags = AVSEEK_FLAG_ANY;
-			int64_t timestamp = frame2time(frame - _frameIn);
-			PHDEBUG << "seek:" << frame;
+			int64_t timestamp = PhTime_to_AVTimestamp(time - _timeIn);
+			PHDEBUG << "seek:" << time << " " << _currentTime << " " << _timeIn << " " << timestamp;
 			av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
 		}
 
@@ -291,8 +284,6 @@ bool PhVideoEngine::decodeFrame(PhFrame frame)
 			switch(error) {
 			case 0:
 				if(packet.stream_index == _videoStream->index) {
-					_currentFrame = frame;
-
 					int frameFinished = 0;
 					avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
 					if(frameFinished) {
@@ -360,11 +351,18 @@ bool PhVideoEngine::decodeFrame(PhFrame frame)
 				{
 					char errorStr[256];
 					av_strerror(error, errorStr, 256);
-					PHDEBUG << frame << "error:" << errorStr;
+					PHDEBUG << time << "error:" << errorStr;
 					lookingForVideoFrame = false;
 					break;
 				}
 			}
+
+			// update the current position of the engine
+			// (Note that it is best not to do use '_currentTime = time' here, because the seeking operation may
+			// not be 100% accurate: the actual time may be different from the requested time. So a time drift
+			// could appear.)
+			_currentTime = _timeIn + AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
+
 			//Avoid memory leak
 			av_free_packet(&packet);
 		}
@@ -373,20 +371,20 @@ bool PhVideoEngine::decodeFrame(PhFrame frame)
 	return result;
 }
 
-int64_t PhVideoEngine::frame2time(PhFrame f)
+int64_t PhVideoEngine::PhTime_to_AVTimestamp(PhTime time)
 {
-	int64_t t = 0;
+	int64_t timestamp = 0;
 	if(_videoStream) {
-		t = static_cast<int64_t>(static_cast<double>(f) / av_q2d(_videoStream->time_base) / framePerSecond());
+		timestamp = static_cast<int64_t>(static_cast<double>(time) / 24000. / av_q2d(_videoStream->time_base));
 	}
-	return t;
+	return timestamp;
 }
 
-PhFrame PhVideoEngine::time2frame(int64_t t)
+PhTime PhVideoEngine::AVTimestamp_to_PhTime(int64_t timestamp)
 {
-	PhFrame f = 0;
+	PhTime time = 0;
 	if(_videoStream) {
-		f = static_cast<PhFrame>(static_cast<double>(t) * av_q2d(_videoStream->time_base) * framePerSecond());
+		time = static_cast<PhTime>(static_cast<double>(timestamp) * av_q2d(_videoStream->time_base) * 24000.);
 	}
-	return f;
+	return time;
 }
