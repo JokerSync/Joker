@@ -145,9 +145,9 @@ public:
 	int height();
 	/**
 	 * @brief Get average number of frame per second
-	 * @return A float value.
+	 * @return A double value.
 	 */
-	float framePerSecond();
+	double framePerSecond();
 	/**
 	 * @brief Get refreshRate
 	 * @return Return the refresh rate of the PhVideoEngine

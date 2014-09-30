@@ -63,9 +63,9 @@ QString PhClock::timeCode(PhTimeCodeType tcType)
 	return PhTimeCode::stringFromTime(_time, tcType);
 }
 
-void PhClock::tick(PhTimeScale frequence)
+void PhClock::tick(float frequency)
 {
-	elapse(24000 / frequence);
+	elapse(static_cast<PhTime> (24000.0 / frequency));
 }
 
 void PhClock::elapse(PhTime time)

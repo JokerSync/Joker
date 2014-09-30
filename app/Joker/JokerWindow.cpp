@@ -506,7 +506,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	return false;
 }
 
-void JokerWindow::timeCounter(PhTimeScale frequency)
+void JokerWindow::timeCounter(qreal frequency)
 {
 	if(currentRate() == 1 && (PhSynchronizer::SyncType)_settings->synchroProtocol() != PhSynchronizer::NoSync) {
 		_numberOfDraw++;

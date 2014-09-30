@@ -101,9 +101,9 @@ public slots:
 	/**
 	 * Sync the clock to a signal at a given frequence.
 	 * The clock time value is then updated accordingly to the clock rate.
-	 * @param frequence Frequence of the signal
+	 * @param frequency Frequency of the signal in float
 	 */
-	void tick(PhTimeScale frequence);
+	void tick(float frequency);
 
 	/**
 	 * Sync the clock to a signal at a given elapse time.
