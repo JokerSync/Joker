@@ -73,14 +73,6 @@ public:
 	}
 
 	/**
-	 * @brief Get the first frame of the video file
-	 * @return A frame value
-	 */
-	PhFrame frameIn() {
-		return _frameIn;
-	}
-
-	/**
 	 * @brief Set first frame
 	 * @param frameIn the new first frame
 	 */

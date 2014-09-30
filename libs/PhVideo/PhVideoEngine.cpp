@@ -265,8 +265,8 @@ bool PhVideoEngine::decodeFrame(PhFrame frame)
 		return false;
 	}
 
-	if(frame < this->frameIn())
-		frame = this->frameIn();
+	if(frame < _frameIn)
+		frame = _frameIn;
 	if (frame >= this->frameOut())
 		frame = this->frameOut();
 
