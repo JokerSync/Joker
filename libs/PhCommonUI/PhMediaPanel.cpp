@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QKeyEvent>
+
 #include "PhTools/PhDebug.h"
 
 #include "PhMediaPanel.h"
@@ -43,6 +45,8 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	connect(ui->timeCodeTypeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(onTCTypeComboChanged()));
 
 	ui->_playButton->setDefault(true);
+
+	installEventFilter(this);
 }
 
 
@@ -138,6 +142,19 @@ void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
 		ui->timeCodeTypeCombo->setCurrentIndex(4);
 		break;
 	}
+}
+
+bool PhMediaPanel::eventFilter(QObject *sender, QEvent *event)
+{
+	if(event->type() == QEvent::KeyPress) {
+		QKeyEvent *keyEvent = (QKeyEvent*)event;
+		if(keyEvent->key() == Qt::Key_Space) {
+			onPlayPause();
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void PhMediaPanel::onPlayPause()

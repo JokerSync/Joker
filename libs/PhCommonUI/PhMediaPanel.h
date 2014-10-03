@@ -143,6 +143,15 @@ public slots:
 	 */
 	void onTimeCodeTypeChanged(PhTimeCodeType tcType);
 
+protected:
+	/**
+	 * @brief Filter the space key press event
+	 * @param sender The event sender
+	 * @param event The event
+	 * @return True if the event has been handled, false otherwise
+	 */
+	bool eventFilter(QObject *sender, QEvent *event);
+
 private slots:
 	void onPlayPause();
 	void onFastForward();
