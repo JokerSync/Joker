@@ -152,7 +152,7 @@
     <string>Play/pause</string>
    </property>
    <property name="shortcut">
-    <string>Up</string>
+    <string>Space</string>
    </property>
   </action>
   <action name="actionPlay_backward">
