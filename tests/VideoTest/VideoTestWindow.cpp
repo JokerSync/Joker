@@ -9,6 +9,8 @@
 
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
+#include "PropertyDialog.h"
+
 VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	: PhDocumentWindow(settings),
 	ui(new Ui::VideoTestWindow),
@@ -219,4 +221,11 @@ void VideoTestWindow::onPaint(int width, int height)
 	QString info = QString("%1 / %2").arg(videoRate).arg(_maxVideoRate);
 	ui->videoView->addInfo(info);
 	_videoEngine.drawVideo(0, 0, width, height);
+}
+
+void VideoTestWindow::on_actionProperties_triggered()
+{
+    PropertyDialog dlg;
+    dlg.setVideoEngine(&_videoEngine);
+    dlg.exec();
 }

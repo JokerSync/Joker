@@ -253,7 +253,8 @@ double PhVideoEngine::framePerSecond()
 QString PhVideoEngine::codecName()
 {
 	if(_videoStream)
-		return _videoStream->codec->codec_name;
+		return _videoStream->codec->codec_descriptor->long_name;
+
 	return "";
 }
 
