@@ -405,7 +405,7 @@ go_bandit([](){
 				AssertThat(PhTimeCode::frameFromBcd(0x00110000, type), Equals(16500));
 			});
 
-			it("get_time_from_hhmmssf", [&](){
+			it("get_time_from_hhmmssf_1", [&](){
 				// Check various value of string
 				AssertThat(PhTimeCode::timeFromHhMmSsFf(0, 0, 0, 0,  type), Equals(0));
 				AssertThat(PhTimeCode::timeFromHhMmSsFf(0, 0, 0, 1, type), Equals(960));
@@ -424,6 +424,27 @@ go_bandit([](){
 				AssertThat(PhTimeCode::timeFromHhMmSsFf(0, 10, 0, 1, type), Equals(14400960));
 				AssertThat(PhTimeCode::timeFromHhMmSsFf(0, 10, 59, 24, type), Equals(15839040));
 				AssertThat(PhTimeCode::timeFromHhMmSsFf(0, 11, 0, 0,  type), Equals(15840000));
+			});
+
+			it("get_time_from_hhmmssf_2", [&](){
+				// Check various value of string
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 0,  0,  0},  type), Equals(0));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 0,  0,  1},  type), Equals(960));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 0,  0,  24}, type), Equals(23040));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 0,  1,  0},  type), Equals(24000));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 0,  1,  24}, type), Equals(47040));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 0,  2,  0},  type), Equals(48000));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 0,  59, 24}, type), Equals(1439040));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 1,  0,  0},  type), Equals(1440000));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 1,  59, 24}, type), Equals(2879040));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 2,  0,  0},  type), Equals(2880000));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 2,  59, 24}, type), Equals(4319040));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 3,  0,  0},  type), Equals(4320000));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 9,  59, 24}, type), Equals(14399040));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 10, 0,  0},  type), Equals(14400000));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 10, 0,  1},  type), Equals(14400960));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 10, 59, 24}, type), Equals(15839040));
+				AssertThat(PhTimeCode::timeFromHhMmSsFf(new unsigned int[4]{0, 11, 0,  0},  type), Equals(15840000));
 			});
 
 			it("get_frame_from_hhmmssf", [&](){
