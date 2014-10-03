@@ -21,15 +21,18 @@ include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 HEADERS += VideoSyncTestWindow.h \
 	VideoSyncTestSettings.h \
 	../VideoTest/VideoTestSettings.h \
-	../VideoTest/VideoTestWindow.h
+	../VideoTest/VideoTestWindow.h \
+	../VideoTest/PropertyDialog.h
 
 SOURCES += \
 	main.cpp \
 	VideoSyncTestWindow.cpp \
-	../VideoTest/VideoTestWindow.cpp
+	../VideoTest/VideoTestWindow.cpp \
+	../VideoTest/PropertyDialog.cpp
 
 FORMS += \
-	../VideoTest/VideoTestWindow.ui
+	../VideoTest/VideoTestWindow.ui \
+	../VideoTest/PropertyDialog.ui
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Helvetica.ttf) $${RESOURCES_PATH} $${CS}
 
