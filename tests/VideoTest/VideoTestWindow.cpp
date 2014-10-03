@@ -238,7 +238,7 @@ void VideoTestWindow::onPaint(int width, int height)
 
 void VideoTestWindow::on_actionProperties_triggered()
 {
-    PropertyDialog dlg;
-    dlg.setVideoEngine(&_videoEngine);
-    dlg.exec();
+	PropertyDialog dlg;
+	dlg.setVideoEngine(&_videoEngine);
+	dlg.exec();
 }
