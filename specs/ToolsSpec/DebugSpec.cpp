@@ -65,6 +65,11 @@ go_bandit([](){
 			PhDebug::setLogMask(1);
 		});
 
+		it("log_in_file", []() {
+			QString expected = QString("/Users/") + qgetenv("USER") + QString("/Library/Logs/Phonations/AllSpecs.log");
+			AssertThat(PhDebug::logLocation().toStdString(), Equals(expected.toStdString()));
+		});
+
 		it("display_in_the_debug", []() {
 			std::stringstream buffer;
 			CoutRedirect redirect(buffer.rdbuf());
