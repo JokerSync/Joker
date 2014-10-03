@@ -6,6 +6,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QKeyEvent>
 
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
@@ -79,6 +80,18 @@ void VideoTestWindow::processArg(int argc, char *argv[])
 			_videoEngine.clock()->setTime(timeIn);
 		}
 	}
+}
+
+bool VideoTestWindow::eventFilter(QObject *sender, QEvent *event)
+{
+	if(event->type() == QEvent::KeyPress) {
+		QKeyEvent *keyEvent = (QKeyEvent*)event;
+		if(keyEvent->key() == Qt::Key_Space) {
+			on_actionPlay_pause_triggered();
+		}
+	}
+
+	return PhDocumentWindow::eventFilter(sender, event);
 }
 
 void VideoTestWindow::resizeEvent(QResizeEvent *)

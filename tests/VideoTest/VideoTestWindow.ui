@@ -96,7 +96,7 @@
     <string>Play/pause</string>
    </property>
    <property name="shortcut">
-    <string>Up</string>
+    <string>Space</string>
    </property>
   </action>
   <action name="actionNext_frame">

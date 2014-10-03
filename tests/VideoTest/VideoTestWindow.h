@@ -46,6 +46,7 @@ public:
 	void processArg(int argc, char *argv[]);
 
 protected:
+	bool eventFilter(QObject *sender, QEvent *event);
 	void resizeEvent(QResizeEvent *);
 	void closeEvent(QCloseEvent *);
 
