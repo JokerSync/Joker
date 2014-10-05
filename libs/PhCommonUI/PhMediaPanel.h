@@ -150,7 +150,7 @@ protected:
 	 * @param event The event
 	 * @return True if the event has been handled, false otherwise
 	 */
-	bool eventFilter(QObject *sender, QEvent *event);
+	bool eventFilter(QObject *, QEvent *event);
 
 private slots:
 	void onPlayPause();

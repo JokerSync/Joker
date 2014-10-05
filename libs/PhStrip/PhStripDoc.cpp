@@ -1010,8 +1010,8 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 		while(query.next()) {
 //			for(int i = 0; i < 21; i++)
 //				PHDEBUG << i << query.value(i);
-#warning /// @todo check text people id
-			PhPeople* people = peopleMap[query.value(0).toInt()];
+			int peopleId = query.value(0).toInt();
+			PhPeople* people = (peopleMap.contains(peopleId)) ? peopleMap[peopleId] : NULL;
 #warning /// @todo check text time in/out
 			PhTime timeIn = ComputeDrbTime2(offset, query.value(3).toLongLong() - 150, tcType);
 			PhTime timeOut = ComputeDrbTime2(offset, query.value(4).toLongLong() - 150, tcType);

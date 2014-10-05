@@ -144,7 +144,7 @@ void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
 	}
 }
 
-bool PhMediaPanel::eventFilter(QObject *sender, QEvent *event)
+bool PhMediaPanel::eventFilter(QObject *, QEvent *event)
 {
 	if(event->type() == QEvent::KeyPress) {
 		QKeyEvent *keyEvent = (QKeyEvent*)event;
