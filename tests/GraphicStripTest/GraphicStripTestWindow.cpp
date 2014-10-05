@@ -50,7 +50,7 @@ GraphicStripTestWindow::~GraphicStripTestWindow()
 	delete ui;
 }
 
-bool GraphicStripTestWindow::openDocument(QString fileName)
+bool GraphicStripTestWindow::openDocument(const QString &fileName)
 {
 	PHDEBUG << fileName;
 	if(!_doc->openStripFile(fileName))

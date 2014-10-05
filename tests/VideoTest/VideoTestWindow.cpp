@@ -41,7 +41,7 @@ VideoTestWindow::~VideoTestWindow()
 	delete ui;
 }
 
-bool VideoTestWindow::openDocument(QString fileName)
+bool VideoTestWindow::openDocument(const QString &fileName)
 {
 	if(!_videoEngine.open(fileName))
 		return false;

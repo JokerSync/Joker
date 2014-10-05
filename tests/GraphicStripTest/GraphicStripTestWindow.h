@@ -22,11 +22,12 @@ public:
 	explicit GraphicStripTestWindow(GraphicStripTestSettings *settings);
 	~GraphicStripTestWindow();
 
-	bool openDocument(QString fileName);
+	bool openDocument(const QString &fileName);
 
 protected:
 	QMenu *recentDocumentMenu();
 	QAction *fullScreenAction();
+	bool isDocumentModified();
 
 private slots:
 	void onOpenFile();

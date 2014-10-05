@@ -30,7 +30,7 @@ VideoStripTestWindow::~VideoStripTestWindow()
 	delete ui;
 }
 
-bool VideoStripTestWindow::openDocument(QString fileName)
+bool VideoStripTestWindow::openDocument(const QString &fileName)
 {
 	PHDEBUG << "openFile : " << fileName;
 	if(!_doc->openStripFile(fileName))
