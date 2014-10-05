@@ -17,7 +17,7 @@ public:
 
 	QAction *fullScreenAction();
 
-	bool openDocument(QString fileName);
+	bool openDocument(const QString &fileName);
 	QMenu* recentDocumentMenu();
 
 	QString text();

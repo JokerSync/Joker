@@ -40,7 +40,7 @@ protected:
 	 * @param fileName The document file name
 	 * @return True if success, false otherwise
 	 */
-	virtual bool openDocument(QString fileName) = 0;
+	virtual bool openDocument(const QString &fileName) = 0;
 
 	/**
 	 * @brief Set the current document
@@ -49,7 +49,7 @@ protected:
 	 *
 	 * @param fileName The document file name
 	 */
-	void setCurrentDocument(QString fileName);
+	void setCurrentDocument(const QString &fileName);
 
 	/**
 	 * @brief The recent document menu item
@@ -74,7 +74,7 @@ public slots:
 	 * Handle external changes and reload the file.
 	 * @param path
 	 */
-	void onExternalChange(QString path);
+	void onExternalChange(const QString &path);
 
 private slots:
 	void onOpenRecentDocumentTriggered();

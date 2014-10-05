@@ -24,7 +24,7 @@ QAction *WindowSpecWindow::fullScreenAction()
 	return ui->actionFull_screen;
 }
 
-bool WindowSpecWindow::openDocument(QString fileName)
+bool WindowSpecWindow::openDocument(const QString &fileName)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);

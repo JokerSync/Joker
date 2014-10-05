@@ -1,5 +1,6 @@
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QDir>
 
 #include "PhTools/PhDebug.h"
 
@@ -26,14 +27,15 @@ void PhDocumentWindow::processArg(int argc, char *argv[])
 		updateRecentDocumentMenu();
 }
 
-void PhDocumentWindow::setCurrentDocument(QString fileName)
+void PhDocumentWindow::setCurrentDocument(const QString &fileName)
 {
 	if(!_watcher.files().isEmpty())
 		_watcher.removePaths(_watcher.files());
 	if(_watcher.addPath(fileName))
 		PHDEBUG << "now watching " << fileName;
 	_settings->setCurrentDocument(fileName);
-	_settings->setLastDocumentFolder(QFileInfo(fileName).absolutePath());
+	if(!fileName.isEmpty())
+		_settings->setLastDocumentFolder(QFileInfo(fileName).absolutePath());
 	this->setWindowTitle(fileName);
 
 	QStringList recentDocList = _settings->recentDocumentList();
@@ -68,7 +70,7 @@ void PhDocumentWindow::updateRecentDocumentMenu()
 		}
 	}
 }
-void PhDocumentWindow::onExternalChange(QString path)
+void PhDocumentWindow::onExternalChange(const QString &path)
 {
 	PHDEBUG << "File changed :" << path;
 	openDocument(_settings->currentDocument());

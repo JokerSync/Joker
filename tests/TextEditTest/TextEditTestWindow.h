@@ -18,13 +18,17 @@ public:
 	~TextEditTestWindow();
 
 protected:
-	bool openDocument(QString fileName);
+	bool openDocument(const QString &fileName);
+	bool saveDocument(const QString &fileName);
+
 	QMenu *recentDocumentMenu();
 	QAction *fullScreenAction() {
 		return NULL;
 	}
 
 private slots:
+	void on_actionNew_triggered();
+
 	void on_actionOpen_triggered();
 
 	void on_actionSave_triggered();
