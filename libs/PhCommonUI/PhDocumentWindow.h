@@ -76,8 +76,8 @@ public slots:
 	 */
 	void onExternalChange(const QString &path);
 
-private slots:
-	void onOpenRecentDocumentTriggered();
+protected slots:
+	virtual void onOpenRecentDocumentTriggered();
 
 private:
 	void updateRecentDocumentMenu();

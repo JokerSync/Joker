@@ -51,8 +51,9 @@ void PhDocumentWindow::setCurrentDocument(const QString &fileName)
 
 void PhDocumentWindow::onOpenRecentDocumentTriggered()
 {
-#warning /// @todo check to save if needed
-	openDocument(sender()->objectName());
+	QString fileName = sender()->objectName();
+	PHDEBUG << fileName;
+	openDocument(fileName);
 }
 
 void PhDocumentWindow::updateRecentDocumentMenu()
@@ -70,6 +71,7 @@ void PhDocumentWindow::updateRecentDocumentMenu()
 		}
 	}
 }
+
 void PhDocumentWindow::onExternalChange(const QString &path)
 {
 	PHDEBUG << "File changed :" << path;

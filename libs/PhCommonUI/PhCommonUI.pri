@@ -11,10 +11,11 @@ HEADERS += \
 	$$TOP_ROOT/libs/PhCommonUI/PhTimeCodeEdit.h \
     $$TOP_ROOT/libs/PhCommonUI/PhTimeCodeDialog.h \
     $$TOP_ROOT/libs/PhCommonUI/PhFloatingMediaPanel.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindow.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindowSettings.h \
     $$TOP_ROOT/libs/PhCommonUI/PhWindow.h \
     $$TOP_ROOT/libs/PhCommonUI/PhWindowSettings.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindow.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindowSettings.h \
+    $$TOP_ROOT/libs/PhCommonUI/PhEditableDocumentWindow.h \
     $$TOP_ROOT/libs/PhCommonUI/PhLockableSpinBox.h \
 	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackDialog.h \
 	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackSettings.h \
@@ -26,8 +27,9 @@ SOURCES += \
 	$$TOP_ROOT/libs/PhCommonUI/PhTimeCodeEdit.cpp \
     $$TOP_ROOT/libs/PhCommonUI/PhTimeCodeDialog.cpp \
     $$TOP_ROOT/libs/PhCommonUI/PhFloatingMediaPanel.cpp \
-    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindow.cpp \
     $$TOP_ROOT/libs/PhCommonUI/PhWindow.cpp \
+    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindow.cpp \
+    $$TOP_ROOT/libs/PhCommonUI/PhEditableDocumentWindow.cpp \
     $$TOP_ROOT/libs/PhCommonUI/PhLockableSpinBox.cpp \
 	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackDialog.cpp \
     $$TOP_ROOT/libs/PhCommonUI/PhDialogButtonBox.cpp

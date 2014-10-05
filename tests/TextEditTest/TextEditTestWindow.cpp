@@ -9,11 +9,14 @@
 #include "ui_TextEditTestWindow.h"
 
 TextEditTestWindow::TextEditTestWindow(TextEditTestSettings *settings) :
-	PhDocumentWindow(settings),
+	PhEditableDocumentWindow(settings),
 	ui(new Ui::TextEditTestWindow),
-	_settings(settings)
+	_settings(settings),
+	_isModified(false)
 {
 	ui->setupUi(this);
+
+	connect(ui->textEdit, &QTextEdit::textChanged, this, &TextEditTestWindow::onTextChanged);
 }
 
 TextEditTestWindow::~TextEditTestWindow()
@@ -37,6 +40,7 @@ bool TextEditTestWindow::openDocument(const QString &fileName)
 	file.close();
 
 	setCurrentDocument(fileName);
+	_isModified = false;
 	return true;
 }
 
@@ -55,6 +59,7 @@ bool TextEditTestWindow::saveDocument(const QString &fileName)
 
 	setCurrentDocument(fileName);
 
+	_isModified = false;
 
 	return true;
 }
@@ -64,11 +69,23 @@ QMenu *TextEditTestWindow::recentDocumentMenu()
 	return ui->menuOpen_recent;
 }
 
+QAction *TextEditTestWindow::fullScreenAction()
+{
+	return NULL;
+}
+
+bool TextEditTestWindow::isDocumentModified()
+{
+	return _isModified;
+}
+
 void TextEditTestWindow::on_actionNew_triggered()
 {
 	PHDEBUG;
 	ui->textEdit->clear();
 	setCurrentDocument("");
+
+	_isModified = false;
 }
 
 void TextEditTestWindow::on_actionOpen_triggered()
@@ -103,4 +120,9 @@ void TextEditTestWindow::on_actionSave_as_triggered()
 		if(!saveDocument(fileName))
 			QMessageBox::critical(this, "Error", "Unable to save " + fileName);
 	}
+}
+
+void TextEditTestWindow::onTextChanged()
+{
+	_isModified = true;
 }

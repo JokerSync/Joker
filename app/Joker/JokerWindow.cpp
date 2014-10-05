@@ -28,7 +28,7 @@
 #include "PeopleDialog.h"
 
 JokerWindow::JokerWindow(JokerSettings *settings) :
-	PhDocumentWindow(settings),
+	PhEditableDocumentWindow(settings),
 	ui(new Ui::JokerWindow),
 	_settings(settings),
 	_strip(settings),
@@ -132,6 +132,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 JokerWindow::~JokerWindow()
 {
+	_mediaPanel.close();
+
 	delete ui;
 }
 
@@ -193,7 +195,7 @@ void JokerWindow::setupSyncProtocol()
 	_settings->setSynchroProtocol(type);
 }
 
-bool JokerWindow::openDocument(QString fileName)
+bool JokerWindow::openDocument(const QString &fileName)
 {
 	/// Clear the selected people name list (except for the first document).
 	if(!_firstDoc)
@@ -244,7 +246,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			// As the plist file list all the supported format
 			// if the file is not a strip file, it's a video file, we don't need any protection
 			if(_settings->stripFileType().contains(fileType)) {
-				if(checkSaveFile())
+				if(checkDocumentModification())
 					openDocument(filePath);
 			}
 			else if(_settings->videoFileType().contains(fileType))
@@ -285,7 +287,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				QString filePath = mimeData->urls().first().toLocalFile();
 				QString fileType = filePath.split(".").last().toLower();
 				if(fileType == "detx" or fileType == "strip" or fileType == "joker") {
-					if(checkSaveFile())
+					if(checkDocumentModification())
 						openDocument(filePath);
 				}
 				else if (fileType == "avi" or fileType == "mov")
@@ -355,20 +357,11 @@ void JokerWindow::onApplicationDeactivate()
 	hideMediaPanel();
 }
 
-void JokerWindow::closeEvent(QCloseEvent *event)
-{
-	/// Check if the current document has to be saved (it might cancel the action).
-	if(!checkSaveFile())
-		event->ignore();
-	else /// Close the PhMediaPanel.
-		_mediaPanel.close();
-}
-
 void JokerWindow::on_actionOpen_triggered()
 {
 	hideMediaPanel();
 
-	if(checkSaveFile()) {
+	if(checkDocumentModification()) {
 		QString filter = tr("Rythmo files") + " (";
 		foreach(QString type, _settings->stripFileType())
 			filter += "*." + type + " ";
@@ -749,30 +742,9 @@ void JokerWindow::on_actionSave_as_triggered()
 	}
 }
 
-bool JokerWindow::checkSaveFile()
+bool JokerWindow::isDocumentModified()
 {
-
-	if(_doc->modified()) {
-		/// If the document need to be saved, ask the user
-		/// whether he wants to save his changes.
-		QString msg = tr("Do you want to save your changes ?");
-		QMessageBox box(QMessageBox::Question, "", msg, QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel);
-		box.setDefaultButton(QMessageBox::Save);
-		switch(box.exec()) {
-		/// Cancel the caller action if clicking cancel.
-		case QMessageBox::Cancel:
-			return false;
-		/// Trigger the document save if clicking save:
-		case QMessageBox::Save:
-			on_actionSave_triggered();
-			/// If the user cancel the save operation, cancel the operation.
-			if(_doc->modified())
-				return false;
-			break;
-		}
-	}
-	/// @return False to interrupt the caller action, true otherwhise.
-	return true;
+	return _doc->modified();
 }
 
 void JokerWindow::on_actionSelect_character_triggered()
