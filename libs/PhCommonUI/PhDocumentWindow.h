@@ -77,6 +77,9 @@ public slots:
 	void onExternalChange(const QString &path);
 
 protected slots:
+	/**
+	 * @brief Open the clicked recent document
+	 */
 	virtual void onOpenRecentDocumentTriggered();
 
 private:

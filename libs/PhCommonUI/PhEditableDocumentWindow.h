@@ -35,6 +35,9 @@ protected:
 	 */
 	virtual bool checkDocumentModification();
 
+	/**
+	 * @brief Virtual slot triggered when File/Save is clicked
+	 */
 	virtual void on_actionSave_triggered() = 0;
 
 	/**
@@ -43,8 +46,15 @@ protected:
 	 */
 	virtual bool isDocumentModified() = 0;
 
+	/**
+	 * @brief Check if the document is modified and
+	 * @param event
+	 */
 	virtual void closeEvent(QCloseEvent *event);
 protected slots:
+	/**
+	 * @brief Check if document has been modified before opening the recent document
+	 */
 	void onOpenRecentDocumentTriggered() override;
 };
 

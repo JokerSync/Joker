@@ -146,7 +146,6 @@ public slots:
 protected:
 	/**
 	 * @brief Filter the space key press event
-	 * @param sender The event sender
 	 * @param event The event
 	 * @return True if the event has been handled, false otherwise
 	 */
