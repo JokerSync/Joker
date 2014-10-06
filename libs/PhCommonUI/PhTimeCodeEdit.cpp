@@ -11,17 +11,21 @@
 #include "PhTimeCodeEdit.h"
 
 PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
-	QLineEdit(parent)
+	QLineEdit(parent),
+	_tcType(PhTimeCodeType25),
+	_oldTimeCode("00:00:00:00"),
+	_selectedIndex(-1),
+	_mousePressed(false),
+	_mousePressedLocation(0, 0)
 {
-	setFrame(0, PhTimeCodeType25);
-	connect(this, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged(QString)));
+	_addedNumbers.clear();
+	setText("00:00:00:00");
+	connect(this, &PhTimeCodeEdit::textChanged, this, &PhTimeCodeEdit::onTextChanged);
 	this->installEventFilter(this);
 	//Only accept numbers and ":" it avoid the use of special
 	//chars like ` or ^
 	QRegExp rx("([0-9]|:){11}");
 	setValidator(new QRegExpValidator(rx, this));
-	_mousePressed = false;
-	_selectedIndex = 0;
 }
 
 void PhTimeCodeEdit::setFrame(PhFrame frame, PhTimeCodeType tcType)
@@ -116,31 +120,27 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 			if(_mousePressed) {
 				int y = static_cast<QMouseEvent *>(event)->pos().y();
 				PhFrame currentFrame = PhTimeCode::frameFromString(this->text(), _tcType);
+				PhFrame fps = PhTimeCode::getFps(_tcType);
 
-				if(_selectedIndex == 0) {
-					if(_mousePressedLocation.y() > y)
-						currentFrame += 25 * 60 * 60;
-					else
-						currentFrame -= 25 * 60 * 60;
+				PhFrame offset = 0;
+				switch(_selectedIndex) {
+				case 0:
+					offset = fps * 60 * 60;
+					break;
+				case 3:
+					offset = fps * 60;
+					break;
+				case 6:
+					offset = fps;
+					break;
+				case 9:
+					offset = 1;
+					break;
 				}
-				else if(_selectedIndex == 3) {
-					if(_mousePressedLocation.y() > y)
-						currentFrame += 25 * 60;
-					else
-						currentFrame -= 25 * 60;
-				}
-				else if(_selectedIndex == 6) {
-					if(_mousePressedLocation.y() > y)
-						currentFrame += 25;
-					else
-						currentFrame -= 25;
-				}
-				else if(_selectedIndex == 9) {
-					if(_mousePressedLocation.y() > y)
-						currentFrame++;
-					else
-						currentFrame--;
-				}
+				if(_mousePressedLocation.y() > y)
+					currentFrame += offset;
+				else
+					currentFrame -= offset;
 
 				_mousePressedLocation.setY(y);
 				this->setText(PhTimeCode::stringFromFrame(currentFrame, _tcType));

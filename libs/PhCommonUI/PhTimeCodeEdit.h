@@ -75,11 +75,12 @@ private slots:
 	void onTextChanged(QString text);
 
 private:
-	PhTimeCodeType _tcType;
 	bool eventFilter(QObject *sender, QEvent *event);
+	void compute(bool add);
+
+	PhTimeCodeType _tcType;
 	QString _oldTimeCode;
 	QStack<QChar> _addedNumbers;
-	void compute(bool add);
 	int _selectedIndex;
 
 	bool _mousePressed;
