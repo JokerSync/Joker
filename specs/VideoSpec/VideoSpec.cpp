@@ -46,6 +46,16 @@ go_bandit([](){
 			engine->close();
 		});
 
+		it("default_framerate", [&](){
+			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+
+			QThread::msleep(FRAME_WAIT_TIME);
+
+			AssertThat(engine->framePerSecond(), Equals(25.00f));
+
+			engine->close();
+		});
+
 		it("go_to_01", [&](){
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
