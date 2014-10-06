@@ -232,8 +232,12 @@ int PhVideoEngine::height()
 
 double PhVideoEngine::framePerSecond()
 {
-	double result = 0;
-	if(_videoStream) {
+	// default is 25 fps.
+	// It will be used when loading a collection of image files (as it is done in the tests and specs),
+	// where ffmpeg framerate is undefined (avg_frame_rate.den is 0).
+	double result = 25.00f;
+
+	if(_videoStream && (_videoStream->avg_frame_rate.den != 0)) {
 		result =  av_q2d(_videoStream->avg_frame_rate);
 	}
 
