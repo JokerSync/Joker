@@ -103,80 +103,83 @@ go_bandit([](){
 
 			// Hour testing
 			// Vertical axis mouse move
-			QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 5));
+			int x = 20;
+			QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(x, 5));
 
 			//QTest::mouseMove(&tcEdit, QPoint(130, 200)); // It doesn't seems to work use rather:
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(130, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("01:00:00:00"));
 			AssertThat(tcEdit.selectedText().toStdString(), Equals("01"));
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(130, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:00"));
 			AssertThat(tcEdit.selectedText().toStdString(), Equals("00"));
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(130, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("-01:00:00:00"));
 			AssertThat(tcEdit.selectedText().toStdString(), Equals("01"));
 
 			// Vertical and Horizontal axis mouse move, horizontal moves are out
 			// of the text limits
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(100, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x + 100, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:00"));
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x + 200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("01:00:00:00"));
 
-			QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 200));
+			QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(x, 200));
 
 			//Reset
 			tcEdit.setText("00:00:00:00");
 			// Minutes testing
 			// Vertical axis mouse move
-			QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(167, 5), 100);
+			x = 40;
+			QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(x, 5), 100);
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("00:01:00:00"));
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:00"));
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("-00:01:00:00"));
 
 			// Vertical and Horizontal axis mouse move, horizontal moves are out
 			// of the text limits
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(100, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x + 100, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:00"));
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x + 200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("00:01:00:00"));
 
-			QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 200));
+			QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(x, 200));
 
 			//Reset
 			tcEdit.setText("00:00:00:00");
 			// Seconds testing
 			// Vertical axis mouse move
-			QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(167, 5), 100);
+			x = 60;
+			QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(x, 5), 100);
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
-			AssertThat(tcEdit.text().toStdString(),Equals("00:01:00:00"));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			AssertThat(tcEdit.text().toStdString(),Equals("00:00:01:00"));
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:00"));
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(167, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
-			AssertThat(tcEdit.text().toStdString(),Equals("-00:01:00:00"));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			AssertThat(tcEdit.text().toStdString(),Equals("-00:00:01:00"));
 
 			// Vertical and Horizontal axis mouse move, horizontal moves are out
 			// of the text limits
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(100, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x + 100, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:00"));
 
-			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
-			AssertThat(tcEdit.text().toStdString(),Equals("00:01:00:00"));
+			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(x + 200, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
+			AssertThat(tcEdit.text().toStdString(),Equals("00:00:01:00"));
 
-			QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 200));
+			QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(x, 200));
 
 #warning /// @todo do more mouse test
 		});
