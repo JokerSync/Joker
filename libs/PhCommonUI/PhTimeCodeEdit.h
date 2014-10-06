@@ -84,8 +84,6 @@ private:
 
 	bool _mousePressed;
 	QPoint _mousePressedLocation;
-
-	void paintEvent(QPaintEvent *);
 };
 
 #endif // TIMECODEEDIT_H

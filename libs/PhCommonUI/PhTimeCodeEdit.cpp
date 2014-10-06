@@ -39,10 +39,8 @@ void PhTimeCodeEdit::setTime(PhTime time, PhTimeCodeType tcType)
 
 bool PhTimeCodeEdit::isTimeCode()
 {
-	PhFrame frame;
-	QString text;
-	frame = PhTimeCode::frameFromString(this->text(), _tcType);
-	text = PhTimeCode::stringFromFrame(frame, _tcType);
+	PhFrame frame = PhTimeCode::frameFromString(this->text(), _tcType);
+	QString text = PhTimeCode::stringFromFrame(frame, _tcType);
 
 	if(text == this->text())
 		return true;
@@ -157,6 +155,13 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 
 				_mousePressedLocation.setY(y);
 				this->setText(PhTimeCode::stringFromFrame(currentFrame, _tcType));
+
+				if(text().contains("-"))
+					setSelection(_selectedIndex + 1, 2);
+				else
+					setSelection(_selectedIndex, 2);
+
+				return true;
 			}
 			return false;
 		}
@@ -189,20 +194,16 @@ void PhTimeCodeEdit::compute(bool add)
 	currentText.insert(8, ":"); //xx:xx:xx:xx
 
 	this->setText(currentText);
+
+	int textLength = this->text().length();
+	int selectionLength = this->_addedNumbers.count();
+	if(selectionLength > 6)
+		selectionLength += 3;
+	else if(selectionLength > 4)
+		selectionLength += 2;
+	else if(selectionLength > 2)
+		selectionLength += 1;
+	setSelection(textLength - selectionLength, textLength);
+
 	onTextChanged(this->text());
 }
-
-void PhTimeCodeEdit::paintEvent(QPaintEvent *e)
-{
-	if(_mousePressed) {
-		if(text().contains("-"))
-			setSelection(_selectedIndex + 1, 2);
-		else
-			setSelection(_selectedIndex, 2);
-	}
-	else
-		deselect();
-	QLineEdit::paintEvent(e);
-}
-
-

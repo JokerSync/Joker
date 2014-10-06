@@ -39,25 +39,31 @@ go_bandit([](){
 		it("get_keyboard_input01", [&](){
 			PhTimeCodeEdit tcEdit;
 
+			AssertThat(tcEdit.selectedText().toStdString(), Equals(""));
+
 			QTest::keyClicks(&tcEdit, "9");
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:09"));
 			AssertThat(tcEdit.frame(), Equals(9));
 			AssertThat(tcEdit.isTimeCode(), IsTrue());
+			AssertThat(tcEdit.selectedText().toStdString(), Equals("9"));
 
 			QTest::keyClicks(&tcEdit, "1");
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:91"));
 			AssertThat(tcEdit.frame(), Equals(0));
 			AssertThat(tcEdit.isTimeCode(), IsFalse());
+			AssertThat(tcEdit.selectedText().toStdString(), Equals("91"));
 
 			QTest::keyClicks(&tcEdit, "2");
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:09:12"));
 			AssertThat(tcEdit.frame(), Equals(9 * 25 + 12));
 			AssertThat(tcEdit.isTimeCode(), IsTrue());
+			AssertThat(tcEdit.selectedText().toStdString(), Equals("9:12"));
 
 			QTest::keyClick(&tcEdit, Qt::Key_Backspace);
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:91"));
 			AssertThat(tcEdit.frame(), Equals(0));
 			AssertThat(tcEdit.isTimeCode(), IsFalse());
+			AssertThat(tcEdit.selectedText().toStdString(), Equals("91"));
 
 			QTest::keyClick(&tcEdit, Qt::Key_Enter);
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:91"));
@@ -93,6 +99,8 @@ go_bandit([](){
 
 			tcEdit.show();
 
+			AssertThat(tcEdit.selectedText().toStdString(), Equals(""));
+
 			// Hour testing
 			// Vertical axis mouse move
 			QTest::mousePress(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(130, 5));
@@ -100,12 +108,15 @@ go_bandit([](){
 			//QTest::mouseMove(&tcEdit, QPoint(130, 200)); // It doesn't seems to work use rather:
 			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(130, 4), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("01:00:00:00"));
+			AssertThat(tcEdit.selectedText().toStdString(), Equals("01"));
 
 			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(130, 5), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("00:00:00:00"));
+			AssertThat(tcEdit.selectedText().toStdString(), Equals("00"));
 
 			QApplication::sendEvent(&tcEdit, new QMouseEvent(QEvent::MouseMove, QPoint(130, 6), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier));
 			AssertThat(tcEdit.text().toStdString(),Equals("-01:00:00:00"));
+			AssertThat(tcEdit.selectedText().toStdString(), Equals("01"));
 
 			// Vertical and Horizontal axis mouse move, horizontal moves are out
 			// of the text limits
