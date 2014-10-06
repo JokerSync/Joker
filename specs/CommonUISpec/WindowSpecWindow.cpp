@@ -34,8 +34,7 @@ bool WindowSpecWindow::openDocument(const QString &fileName)
 	QTextStream ts(&file);
 	ui->plainTextEdit->setPlainText(ts.readAll());
 
-	setCurrentDocument(fileName);
-	return true;
+	return PhDocumentWindow::openDocument(fileName);
 }
 
 QMenu *WindowSpecWindow::recentDocumentMenu()

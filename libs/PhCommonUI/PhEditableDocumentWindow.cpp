@@ -12,6 +12,13 @@ PhEditableDocumentWindow::PhEditableDocumentWindow(PhDocumentWindowSettings *set
 {
 }
 
+bool PhEditableDocumentWindow::openDocument(const QString &fileName)
+{
+	if(checkDocumentModification())
+		return PhDocumentWindow::openDocument(fileName);
+	return false;
+}
+
 bool PhEditableDocumentWindow::saveDocument(const QString &fileName)
 {
 	_settings->setCurrentDocument(fileName);
@@ -50,6 +57,5 @@ void PhEditableDocumentWindow::onOpenRecentDocumentTriggered()
 {
 	QString fileName = sender()->objectName();
 	PHDEBUG << fileName;
-	if(checkDocumentModification())
-		openDocument(fileName);
+	openDocument(fileName);
 }

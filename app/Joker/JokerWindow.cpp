@@ -7,8 +7,6 @@
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QFileOpenEvent>
-#include <QDragEnterEvent>
-#include <QMimeData>
 #include <QWindowStateChangeEvent>
 #include <QMouseEvent>
 
@@ -197,6 +195,11 @@ void JokerWindow::setupSyncProtocol()
 
 bool JokerWindow::openDocument(const QString &fileName)
 {
+	QFileInfo info(fileName);
+	if(_settings->videoFileType().contains(info.suffix().toLower())) {
+		return openVideoFile(fileName);
+	}
+
 	/// Clear the selected people name list (except for the first document).
 	if(!_firstDoc)
 		_settings->setSelectedPeopleNameList(QStringList());
@@ -208,7 +211,7 @@ bool JokerWindow::openDocument(const QString &fileName)
 
 	/// If the document is opened successfully :
 	/// - Update the current document name (settings, windows title)
-	setCurrentDocument(fileName);
+	PhEditableDocumentWindow::openDocument(fileName);
 	_watcher.addPath(_doc->filePath());
 
 	/// - Load the deinterlace settings
@@ -222,7 +225,6 @@ bool JokerWindow::openDocument(const QString &fileName)
 	}
 	else
 		_videoEngine.close();
-
 
 	/// - Set the video aspect ratio.
 	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
@@ -238,21 +240,6 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
 	/// The event filter catch the following event:
 	switch (event->type()) {
-	case QEvent::FileOpen: /// - FileOpen : To process a file dragged on the application dock icon (MacOS)
-		{
-#warning /// @todo move to PhDocumentWindow
-			QString filePath = static_cast<QFileOpenEvent *>(event)->file();
-			QString fileType = filePath.split(".").last().toLower();
-			// As the plist file list all the supported format
-			// if the file is not a strip file, it's a video file, we don't need any protection
-			if(_settings->stripFileType().contains(fileType)) {
-				if(checkDocumentModification())
-					openDocument(filePath);
-			}
-			else if(_settings->videoFileType().contains(fileType))
-				openVideoFile(filePath);
-			break;
-		}
 	case QEvent::MouseMove: /// - Mouse move show the media panel
 	case QEvent::HoverEnter:
 	case QEvent::HoverMove:
@@ -271,27 +258,6 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			if(_resizingStrip && (mouseEvent->buttons() & Qt::LeftButton)) {
 				PHDEBUG << "resizing strip:" << mouseEvent->pos();
 				_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
-			}
-			break;
-		}
-	case QEvent::DragEnter: /// - Accept and process a file drop on the window
-		event->accept();
-		break;
-	case QEvent::Drop:
-		{
-#warning /// @todo move to PhDocumentWindow
-			const QMimeData* mimeData = static_cast<QDropEvent *>(event)->mimeData();
-
-			// If there is one file (not more) we open it
-			if (mimeData->urls().length() == 1) {
-				QString filePath = mimeData->urls().first().toLocalFile();
-				QString fileType = filePath.split(".").last().toLower();
-				if(fileType == "detx" or fileType == "strip" or fileType == "joker") {
-					if(checkDocumentModification())
-						openDocument(filePath);
-				}
-				else if (fileType == "avi" or fileType == "mov")
-					openVideoFile(filePath);
 			}
 			break;
 		}
@@ -735,7 +701,7 @@ void JokerWindow::on_actionSave_as_triggered()
 	if(fileName != "") {
 		if(_doc->saveStripFile(fileName, currentTime())) {
 			_doc->setModified(false);
-			setCurrentDocument(fileName);
+			PhEditableDocumentWindow::saveDocument(fileName);
 		}
 		else
 			QMessageBox::critical(this, "", tr("Unable to save ") + fileName);

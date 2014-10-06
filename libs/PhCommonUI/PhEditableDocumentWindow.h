@@ -26,13 +26,6 @@ public:
 
 protected:
 	/**
-	 * @brief Update the settings with the document name
-	 * @param fileName A string.
-	 * @return Always true.
-	 */
-	virtual bool saveDocument(const QString &fileName);
-
-	/**
 	 * @brief Check if the current document is modified and need to be save.
 	 *
 	 * If the document need to be saved, ask the user
@@ -40,7 +33,16 @@ protected:
 	 *
 	 * @return False to interrupt the caller action, true otherwhise.
 	 */
-	virtual bool checkDocumentModification();
+	bool openDocument(const QString &fileName) override;
+
+	/**
+	 * @brief Update the settings with the document name
+	 * @param fileName A string.
+	 * @return Always true.
+	 */
+	virtual bool saveDocument(const QString &fileName);
+
+	bool checkDocumentModification();
 
 	/**
 	 * @brief Virtual slot triggered when File/Save is clicked

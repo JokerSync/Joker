@@ -41,7 +41,7 @@ bool TextEditTestWindow::openDocument(const QString &fileName)
 
 	_isModified = false;
 
-	return openDocument(fileName);
+	return PhEditableDocumentWindow::openDocument(fileName);
 }
 
 bool TextEditTestWindow::saveDocument(const QString &fileName)
@@ -80,20 +80,24 @@ bool TextEditTestWindow::isDocumentModified()
 void TextEditTestWindow::on_actionNew_triggered()
 {
 	PHDEBUG;
-	ui->textEdit->clear();
-	_settings->setCurrentDocument("");
+	if(checkDocumentModification()) {
+		ui->textEdit->clear();
+		_isModified = false;
 
-	_isModified = false;
+		resetDocument();
+	}
 }
 
 void TextEditTestWindow::on_actionOpen_triggered()
 {
 	PHDEBUG << _settings->lastDocumentFolder();
-	QString fileName = QFileDialog::getOpenFileName(this, "Open a text file...", _settings->lastDocumentFolder(), "Text file (*.txt)");
+	if(checkDocumentModification()) {
+		QString fileName = QFileDialog::getOpenFileName(this, "Open a text file...", _settings->lastDocumentFolder(), "Text file (*.txt)");
 
-	if(QFile::exists(fileName)) {
-		if(!openDocument(fileName))
-			QMessageBox::critical(this, "", tr("Unable to open ") + fileName);
+		if(QFile::exists(fileName)) {
+			if(!openDocument(fileName))
+				QMessageBox::critical(this, "", tr("Unable to open ") + fileName);
+		}
 	}
 }
 

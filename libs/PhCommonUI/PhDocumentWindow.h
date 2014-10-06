@@ -50,6 +50,14 @@ protected:
 	virtual bool openDocument(const QString &fileName);
 
 	/**
+	 * @brief Handle file drag and drop
+	 * @param sender The event sender
+	 * @param event The sender
+	 * @return True if handled, false otherwise
+	 */
+	bool eventFilter(QObject *sender, QEvent *event) override;
+
+	/**
 	 * @brief The recent document menu item
 	 *
 	 * In order to make the recent document history work,
@@ -82,6 +90,7 @@ protected slots:
 
 private:
 	void updateRecentDocumentMenu();
+
 	PhDocumentWindowSettings * _settings;
 };
 

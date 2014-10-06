@@ -1,6 +1,8 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QDir>
+#include <QDragEnterEvent>
+#include <QMimeData>
 
 #include "PhTools/PhDebug.h"
 
@@ -16,7 +18,6 @@ PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings)
 void PhDocumentWindow::processArg(int argc, char *argv[])
 {
 #warning /// @todo move to PhApplication
-
 	for(int i = 1; i < argc; i++) {
 		if(QFile::exists(argv[i]))
 			_settings->setCurrentDocument(argv[i]);
@@ -30,6 +31,7 @@ void PhDocumentWindow::processArg(int argc, char *argv[])
 void PhDocumentWindow::resetDocument()
 {
 	_settings->setCurrentDocument("");
+	this->setWindowTitle("");
 	if(!_watcher.files().isEmpty())
 		_watcher.removePaths(_watcher.files());
 }
@@ -55,6 +57,36 @@ bool PhDocumentWindow::openDocument(const QString &fileName)
 	updateRecentDocumentMenu();
 
 	return true;
+}
+
+bool PhDocumentWindow::eventFilter(QObject *sender, QEvent *event)
+{
+	switch (event->type()) {
+	case QEvent::FileOpen:
+		{
+			QString fileName = static_cast<QFileOpenEvent*>(event)->file();
+			PHDEBUG << "File dragged on the application dock icon (MacOS):" + fileName;
+			openDocument(fileName);
+			break;
+		}
+	case QEvent::DragEnter: // Accept and process a file drop on the window
+		event->accept();
+		break;
+	case QEvent::Drop:
+		{
+			const QMimeData* mimeData = static_cast<QDropEvent *>(event)->mimeData();
+
+			// If there is one file (not more) we open it
+			if (mimeData->urls().length() == 1) {
+				QString fileName = mimeData->urls().first().toLocalFile();
+				PHDEBUG << "File dragged on the application window:" + fileName;
+				openDocument(fileName);
+			}
+			break;
+		}
+	}
+
+	return PhWindow::eventFilter(sender, event);
 }
 
 void PhDocumentWindow::onOpenRecentDocumentTriggered()
