@@ -27,10 +27,16 @@ void PhDocumentWindow::processArg(int argc, char *argv[])
 		updateRecentDocumentMenu();
 }
 
-void PhDocumentWindow::setCurrentDocument(const QString &fileName)
+void PhDocumentWindow::resetDocument()
 {
+	_settings->setCurrentDocument("");
 	if(!_watcher.files().isEmpty())
 		_watcher.removePaths(_watcher.files());
+}
+
+bool PhDocumentWindow::openDocument(const QString &fileName)
+{
+	resetDocument();
 	if(_watcher.addPath(fileName))
 		PHDEBUG << "now watching " << fileName;
 	_settings->setCurrentDocument(fileName);
@@ -47,6 +53,8 @@ void PhDocumentWindow::setCurrentDocument(const QString &fileName)
 	_settings->setRecentDocumentList(recentDocList);
 
 	updateRecentDocumentMenu();
+
+	return true;
 }
 
 void PhDocumentWindow::onOpenRecentDocumentTriggered()

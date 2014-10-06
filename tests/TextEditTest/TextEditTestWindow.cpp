@@ -39,9 +39,9 @@ bool TextEditTestWindow::openDocument(const QString &fileName)
 
 	file.close();
 
-	setCurrentDocument(fileName);
 	_isModified = false;
-	return true;
+
+	return openDocument(fileName);
 }
 
 bool TextEditTestWindow::saveDocument(const QString &fileName)
@@ -57,11 +57,9 @@ bool TextEditTestWindow::saveDocument(const QString &fileName)
 
 	file.close();
 
-	setCurrentDocument(fileName);
-
 	_isModified = false;
 
-	return true;
+	return PhEditableDocumentWindow::saveDocument(fileName);
 }
 
 QMenu *TextEditTestWindow::recentDocumentMenu()
@@ -83,7 +81,7 @@ void TextEditTestWindow::on_actionNew_triggered()
 {
 	PHDEBUG;
 	ui->textEdit->clear();
-	setCurrentDocument("");
+	_settings->setCurrentDocument("");
 
 	_isModified = false;
 }

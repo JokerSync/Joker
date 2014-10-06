@@ -26,6 +26,13 @@ public:
 
 protected:
 	/**
+	 * @brief Update the settings with the document name
+	 * @param fileName A string.
+	 * @return Always true.
+	 */
+	virtual bool saveDocument(const QString &fileName);
+
+	/**
 	 * @brief Check if the current document is modified and need to be save.
 	 *
 	 * If the document need to be saved, ask the user
@@ -56,6 +63,9 @@ protected slots:
 	 * @brief Check if document has been modified before opening the recent document
 	 */
 	void onOpenRecentDocumentTriggered() override;
+
+private:
+	PhDocumentWindowSettings *_settings;
 };
 
 #endif // PHEDITABLEDOCUMENTWINDOW_H

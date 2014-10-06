@@ -7,8 +7,15 @@
 #include "PhEditableDocumentWindow.h"
 
 PhEditableDocumentWindow::PhEditableDocumentWindow(PhDocumentWindowSettings *settings)
-	: PhDocumentWindow(settings)
+	: PhDocumentWindow(settings),
+	_settings(settings)
 {
+}
+
+bool PhEditableDocumentWindow::saveDocument(const QString &fileName)
+{
+	_settings->setCurrentDocument(fileName);
+	return true;
 }
 
 bool PhEditableDocumentWindow::checkDocumentModification()

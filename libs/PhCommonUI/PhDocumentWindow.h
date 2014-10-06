@@ -36,20 +36,18 @@ public:
 	virtual void processArg(int argc, char *argv[]);
 protected:
 	/**
-	 * @brief Open a document
-	 * @param fileName The document file name
-	 * @return True if success, false otherwise
+	 * @brief Reset the document
 	 */
-	virtual bool openDocument(const QString &fileName) = 0;
+	virtual void resetDocument();
 
 	/**
-	 * @brief Set the current document
+	 * @brief Open the current document
 	 *
 	 * Update the current document settings, the windows title and the recent file list.
 	 *
 	 * @param fileName The document file name
 	 */
-	void setCurrentDocument(const QString &fileName);
+	virtual bool openDocument(const QString &fileName);
 
 	/**
 	 * @brief The recent document menu item

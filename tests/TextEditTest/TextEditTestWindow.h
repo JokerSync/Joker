@@ -19,7 +19,7 @@ public:
 
 protected:
 	bool openDocument(const QString &fileName) override;
-	bool saveDocument(const QString &fileName);
+	bool saveDocument(const QString &fileName) override;
 
 	QMenu *recentDocumentMenu() override;
 	QAction *fullScreenAction() override;
