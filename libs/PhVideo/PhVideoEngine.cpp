@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <cmath>
+
 #include "PhVideoEngine.h"
 
 PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
@@ -379,7 +381,7 @@ int64_t PhVideoEngine::PhTime_to_AVTimestamp(PhTime time)
 {
 	int64_t timestamp = 0;
 	if(_videoStream) {
-		timestamp = static_cast<int64_t>(static_cast<double>(time) / 24000. / av_q2d(_videoStream->time_base));
+		timestamp = static_cast<int64_t>(std::round(static_cast<double>(time) / 24000. / av_q2d(_videoStream->time_base)));
 	}
 	return timestamp;
 }
@@ -388,7 +390,7 @@ PhTime PhVideoEngine::AVTimestamp_to_PhTime(int64_t timestamp)
 {
 	PhTime time = 0;
 	if(_videoStream) {
-		time = static_cast<PhTime>(static_cast<double>(timestamp) * av_q2d(_videoStream->time_base) * 24000.);
+		time = static_cast<PhTime>(std::round(static_cast<double>(timestamp) * av_q2d(_videoStream->time_base) * 24000.));
 	}
 	return time;
 }
