@@ -42,7 +42,7 @@ bool VideoStripTestWindow::openDocument(QString fileName)
 	QFileInfo fileInfo(_doc->videoFilePath());
 	if (fileInfo.exists()) {
 		_videoEngine.open(_doc->videoFilePath());
-		_videoEngine.setFrameIn(_doc->videoFrameIn());
+		_videoEngine.setTimeIn(_doc->videoTimeIn());
 	}
 
 	setCurrentDocument(fileName);
@@ -166,8 +166,7 @@ void VideoStripTestWindow::on_actionSet_Time_Code_triggered()
 {
 	PhTimeCodeDialog dlg(_doc->videoTimeCodeType(), _strip.clock()->time());
 	if(dlg.exec() == QDialog::Accepted)
-		_videoEngine.setFrameIn(dlg.frame());
-
+		_videoEngine.setTimeIn(dlg.time());
 }
 
 void VideoStripTestWindow::on_actionFull_screen_triggered()

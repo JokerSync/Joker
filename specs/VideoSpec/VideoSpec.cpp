@@ -38,12 +38,25 @@ go_bandit([](){
 			});
 		});
 
+		after_each([&](){
+			engine->close();
+
+			delete engine;
+			delete view;
+		});
+
 		it("open_video", [&](){
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
 			QThread::msleep(FRAME_WAIT_TIME);
+		});
 
-			engine->close();
+		it("default_framerate", [&](){
+			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+
+			QThread::msleep(FRAME_WAIT_TIME);
+
+			AssertThat(engine->framePerSecond(), Equals(25.00f));
 		});
 
 		it("go_to_01", [&](){
@@ -68,8 +81,6 @@ go_bandit([](){
 
 			QThread::msleep(FRAME_WAIT_TIME);
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_075.bmp"), IsTrue());
-
-			engine->close();
 		});
 
 		it("go_to_02", [&](){
@@ -96,8 +107,6 @@ go_bandit([](){
 				QString name = QString("interlace_%1.bmp").arg(i, 3, 10, QChar('0'));
 				AssertThat(view->renderPixmap(64, 64).toImage() == QImage(name), IsTrue());
 			}
-
-			engine->close();
 		});
 
 		// This "stress test" cue the video engine at different random location
@@ -121,8 +130,6 @@ go_bandit([](){
 				QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
 				AssertThat(view->renderPixmap(64, 64).toImage() == QImage(name), IsTrue());
 			}
-
-			engine->close();
 		});
 
 		it("play", [&](){
@@ -157,8 +164,6 @@ go_bandit([](){
 				QThread::msleep(FRAME_WAIT_TIME);
 			}
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
-
-			engine->close();
 		});
 
 		it("deinterlace", [&](){

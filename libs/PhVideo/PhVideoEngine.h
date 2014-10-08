@@ -73,25 +73,11 @@ public:
 	}
 
 	/**
-	 * @brief Get the first frame of the video file
-	 * @return A frame value
-	 */
-	PhFrame frameIn() {
-		return _frameIn;
-	}
-
-	/**
-	 * @brief Set first frame
-	 * @param frameIn the new first frame
-	 */
-	void setFrameIn(PhFrame frameIn);
-
-	/**
 	 * @brief Get the starting time of the video file
 	 * @return A time value
 	 */
 	PhTime timeIn() {
-		return _frameIn * PhTimeCode::timePerFrame(_tcType);
+		return _timeIn;
 	}
 
 	/**
@@ -101,26 +87,12 @@ public:
 	void setTimeIn(PhTime timeIn);
 
 	/**
-	 * @brief Get last frame
-	 * @return the last frame of the video file
-	 */
-	PhFrame frameOut() {
-		return _frameIn + frameLength() - 1;
-	}
-
-	/**
 	 * @brief Get the video ending time
 	 * @return A time value.
 	 */
 	PhTime timeOut() {
-		return frameOut() * PhTimeCode::timePerFrame(_tcType);
+		return _timeIn + length();
 	}
-
-	/**
-	 * @brief Get the video length in frame
-	 * @return A frame value
-	 */
-	PhFrame frameLength();
 
 	/**
 	 * @brief Get the video length
@@ -219,22 +191,22 @@ signals:
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 
 private:
-	bool decodeFrame(PhFrame frame);
-	int64_t frame2time(PhFrame f);
-	PhFrame time2frame(int64_t t);
+	bool decodeFrame(PhTime time);
+	int64_t PhTime_to_AVTimestamp(PhTime time);
+	PhTime AVTimestamp_to_PhTime(int64_t timestamp);
 
 	PhVideoSettings *_settings;
 	QString _fileName;
 	PhTimeCodeType _tcType;
 	PhClock _clock;
-	PhFrame _frameIn;
+	PhTime _timeIn;
 
 	AVFormatContext * _formatContext;
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
 	struct SwsContext * _swsContext;
 	PhGraphicTexturedRect _videoRect;
-	PhFrame _currentFrame;
+	PhTime _currentTime;
 
 	PhTickCounter _videoFrameTickCounter;
 
