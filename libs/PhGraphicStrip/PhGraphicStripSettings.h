@@ -78,6 +78,12 @@ public:
 	virtual bool displayNextText() = 0;
 
 	/**
+	 * @brief Hide the selected peoples
+	 * @return True if hidden, false otherwise
+	 */
+	virtual bool hideSelectedPeoples() = 0;
+
+	/**
 	 * @brief Allow color invertion
 	 * @return True if the color is inverted, false otherwise
 	 */

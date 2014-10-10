@@ -112,6 +112,7 @@
     <addaction name="actionDisplay_the_control_panel"/>
     <addaction name="actionDisplay_the_information_panel"/>
     <addaction name="actionSelect_character"/>
+    <addaction name="actionHide_selected_peoples"/>
     <addaction name="actionTest_mode"/>
     <addaction name="separator"/>
     <addaction name="actionInvert_colors"/>
@@ -493,6 +494,14 @@
    </property>
    <property name="text">
     <string>Display the control panel</string>
+   </property>
+  </action>
+  <action name="actionHide_selected_peoples">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hide selected peoples</string>
    </property>
   </action>
  </widget>
