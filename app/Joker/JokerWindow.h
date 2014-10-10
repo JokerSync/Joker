@@ -255,6 +255,8 @@ private slots:
 
 	void on_actionDisplay_the_information_panel_triggered(bool checked);
 
+	void on_actionHide_selected_peoples_triggered(bool checked);
+
 private:
 	PhTime currentTime();
 	PhRate currentRate();

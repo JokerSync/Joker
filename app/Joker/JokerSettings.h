@@ -62,6 +62,7 @@ public:
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 2)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
+	PH_SETTING_BOOL(setHideSelectedPeoples, hideSelectedPeoples)
 	PH_SETTING_STRINGLIST(setSelectedPeopleNameList, selectedPeopleNameList)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
 	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)

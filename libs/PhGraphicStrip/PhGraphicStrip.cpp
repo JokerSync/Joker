@@ -263,7 +263,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		QColor unselectedPeopleColor(128, 128, 128);
 
 		// Display the selected people after the vertical scale
-		if(selectedPeoples.count()) {
+		if(!_settings->hideSelectedPeoples() && selectedPeoples.count()) {
 			QMap<PhTime, PhStripText*> futureSelectedText;
 			PhTime maxTimeOut = clockTime + (y - nextTextY) * verticalTimePerPixel;
 			foreach (PhPeople *people, selectedPeoples) {

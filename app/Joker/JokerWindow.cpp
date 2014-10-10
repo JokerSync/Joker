@@ -1040,3 +1040,8 @@ void JokerWindow::on_actionDisplay_the_information_panel_triggered(bool checked)
 {
 	_settings->setDisplayNextText(checked);
 }
+
+void JokerWindow::on_actionHide_selected_peoples_triggered(bool checked)
+{
+    _settings->setHideSelectedPeoples(checked);
+}
