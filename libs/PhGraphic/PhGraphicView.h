@@ -9,6 +9,7 @@
 
 #include <QGLWidget>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include "PhSync/PhTime.h"
 #include "PhTools/PhTickCounter.h"
@@ -114,6 +115,8 @@ private:
 	PhFont _infoFont;
 	QTime _dropTimer;
 	int _dropDetected, _maxRefreshRate, _maxPaintDuration, _lastUpdateDuration, _maxUpdateDuration;
+	QElapsedTimer _timer;
+	qint64 _previousNsecsElapsed;
 };
 
 #endif // PHGRAPHICVIEW

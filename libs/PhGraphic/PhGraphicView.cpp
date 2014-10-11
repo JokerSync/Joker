@@ -24,7 +24,8 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	_maxRefreshRate(0),
 	_maxPaintDuration(0),
 	_lastUpdateDuration(0),
-	_maxUpdateDuration(0)
+	_maxUpdateDuration(0),
+	_previousNsecsElapsed(0)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 		PHDEBUG << "SDL error:" << SDL_GetError();
@@ -46,6 +47,8 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	_refreshTimer->start( timerInterval);
 	//PHDEBUG << "Refresh rate set to " << _screenFrequency << "hz, timer restart every" << timerInterval << "ms";
 	_dropTimer.start();
+
+	_timer.start();
 }
 
 PhGraphicView::PhGraphicView(int width, int height, QWidget *parent)
@@ -114,7 +117,18 @@ void PhGraphicView::onRefresh()
 void PhGraphicView::paintGL()
 {
 	//PHDEBUG << "PhGraphicView::paintGL" ;
-	emit beforePaint(static_cast<PhTime> (24000.0 / _screenFrequency));
+
+	// Update the clock time according to the time elapsed since the last paint event
+	// In the particular case of V-sync enabled and no dropped frames, this is equivalent
+	// to using the screen refresh rate to compute the elapsed time.
+	// If V-sync is not enabled, using the screen refresh rate is plain wrong
+	// (the refreshTimer period would be ok though).
+	// If frames are dropped, only an actual timer can be correct.
+	// Millisecond precision is not enough (60 Hz is 16.6 ms), so we use nanoseconds.
+	qint64 nsecsElapsed = _timer.nsecsElapsed();
+	double elapsedSeconds = static_cast<double>(nsecsElapsed - _previousNsecsElapsed) / 1000000000.0f;
+	emit beforePaint(static_cast<PhTime> (24000.0 * elapsedSeconds));
+	_previousNsecsElapsed = nsecsElapsed;
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
