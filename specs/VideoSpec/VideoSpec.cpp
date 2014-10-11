@@ -139,7 +139,7 @@ go_bandit([](){
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
 
 			engine->clock()->setRate(1);
-			engine->clock()->tick(25);
+			engine->clock()->elapse(960); // 1 frame at 25 fps
 
 			QThread::msleep(FRAME_WAIT_TIME);
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_001.bmp"), IsTrue());
@@ -147,20 +147,20 @@ go_bandit([](){
 
 			// Play 1 second
 			for(int i = 0; i < 25; i++) {
-				engine->clock()->tick(25);
+				engine->clock()->elapse(960); // 1 frame at 25 fps
 				QThread::msleep(FRAME_WAIT_TIME);
 			}
 
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_026.bmp"), IsTrue());
 
 			engine->clock()->setRate(-1);
-			engine->clock()->tick(25);
+			engine->clock()->elapse(960); // 1 frame at 25 fps
 			QThread::msleep(FRAME_WAIT_TIME);
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_025.bmp"), IsTrue());
 
 			// Play 1 second
 			for(int i = 24; i >= 0; i--) {
-				engine->clock()->tick(25);
+				engine->clock()->elapse(960); // 1 frame at 25 fps
 				QThread::msleep(FRAME_WAIT_TIME);
 			}
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());

@@ -114,7 +114,7 @@ void PhGraphicView::onRefresh()
 void PhGraphicView::paintGL()
 {
 	//PHDEBUG << "PhGraphicView::paintGL" ;
-	emit beforePaint(_screenFrequency);
+	emit beforePaint(static_cast<PhTime> (24000.0 / _screenFrequency));
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

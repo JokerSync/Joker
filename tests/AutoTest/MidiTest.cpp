@@ -430,50 +430,50 @@ void MidiTest::testMTCWriter()
 	QCOMPARE(quarterFrameCount, 0);
 
 	mtcWriter.clock()->setRate(1);
-	PhFrame freq = PhTimeCode::getFps(PhTimeCodeType30) * 4; // => one quarter frame frequency
-	mtcWriter.clock()->tick(freq);
+	PhTime elapsedTime = static_cast<PhTime> (24000.0 / (4.0 * PhTimeCode::getAverageFps(PhTimeCodeType30))); // => one quarter frame frequency
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 1);
 	QCOMPARE((int)quarterFrameData, 0x02);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 2);
 	QCOMPARE((int)quarterFrameData, 0x11);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 3);
 	QCOMPARE((int)quarterFrameData, 0x23);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 4);
 	QCOMPARE((int)quarterFrameData, 0x31);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 5);
 	QCOMPARE((int)quarterFrameData, 0x48);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 6);
 	QCOMPARE((int)quarterFrameData, 0x52);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 7);
 	QCOMPARE((int)quarterFrameData, 0x67);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(mtcWriter.clock()->time(), s2t("23:40:19:18", PhTimeCodeType30));
@@ -482,51 +482,51 @@ void MidiTest::testMTCWriter()
 
 	// Test changing the writer timecode type:
 	mtcWriter.setTimeCodeType(PhTimeCodeType25);
-	freq = PhTimeCode::getFps(PhTimeCodeType25) * 4; // => one quarter frame frequency
+	elapsedTime = static_cast<PhTime> (24000.0 / (4.0 * PhTimeCode::getAverageFps(PhTimeCodeType25))); // => one quarter frame frequency
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 9);
 	QCOMPARE((int)quarterFrameData, 0x01); // With 25 fps, the next timecode will be 23:40:19:17
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 10);
 	QCOMPARE((int)quarterFrameData, 0x11);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 11);
 	QCOMPARE((int)quarterFrameData, 0x23);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 12);
 	QCOMPARE((int)quarterFrameData, 0x31);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 13);
 	QCOMPARE((int)quarterFrameData, 0x48);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 14);
 	QCOMPARE((int)quarterFrameData, 0x52);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 15);
 	QCOMPARE((int)quarterFrameData, 0x67);
 
-	mtcWriter.clock()->tick(freq);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(mtcWriter.clock()->time(), s2t("23:40:19:17", PhTimeCodeType25));

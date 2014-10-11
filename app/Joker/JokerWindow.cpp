@@ -121,7 +121,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionShow_ruler->setChecked(_settings->displayRuler());
 
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
-	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::tick);
+	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
 
 	this->connect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
 
@@ -476,8 +476,10 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	return false;
 }
 
-void JokerWindow::timeCounter(qreal frequency)
+void JokerWindow::timeCounter(PhTime elapsedTime)
 {
+	int frequency = static_cast<int>(24000./static_cast<double>(elapsedTime));
+
 	if(currentRate() == 1 && (PhSynchronizer::SyncType)_settings->synchroProtocol() != PhSynchronizer::NoSync) {
 		_numberOfDraw++;
 		if(_numberOfDraw >= frequency) {

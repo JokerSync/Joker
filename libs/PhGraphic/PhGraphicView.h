@@ -76,9 +76,9 @@ public:
 signals:
 	/**
 	 * @brief emit a signal just before the paint
-	 * @param frequency the effective frequency
+	 * @param elapsedTime the time elapsed since the last paint event
 	 */
-	void beforePaint(qreal frequency);
+	void beforePaint(PhTime elapsedTime);
 
 	/**
 	 * @brief paint event, every class have to re-implement it.

@@ -129,7 +129,7 @@ void VideoTest::playTest()
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"));
 
 	_videoEngine.clock()->setRate(1);
-	_videoEngine.clock()->tick(25);
+	_videoEngine.clock()->elapse(960); // 1 frame at 25 fps
 
 	QTest::qWait(FRAME_WAIT_TIME);
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("interlace_001.bmp"));
@@ -137,20 +137,20 @@ void VideoTest::playTest()
 
 	// Play 1 second
 	for(int i = 0; i < 25; i++) {
-		_videoEngine.clock()->tick(25);
+		_videoEngine.clock()->elapse(960); // 1 frame at 25 fps
 		QTest::qWait(FRAME_WAIT_TIME);
 	}
 
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("interlace_026.bmp"));
 
 	_videoEngine.clock()->setRate(-1);
-	_videoEngine.clock()->tick(25);
+	_videoEngine.clock()->elapse(960); // 1 frame at 25 fps
 	QTest::qWait(FRAME_WAIT_TIME);
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("interlace_025.bmp"));
 
 	// Play 1 second
 	for(int i = 24; i >= 0; i--) {
-		_videoEngine.clock()->tick(25);
+		_videoEngine.clock()->elapse(960); // 1 frame at 25 fps
 		QTest::qWait(FRAME_WAIT_TIME);
 	}
 	QVERIFY(_view.renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"));

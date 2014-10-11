@@ -111,20 +111,20 @@ void ClockTest::tickTest()
 	QCOMPARE(_clock.time(), 0);
 
 	// Ticking a clock with a null rate should not change the time
-	_clock.tick(1); // ticking 1Hz = 1 second
+	_clock.elapse(24000); // ticking 1 second
 
 	QVERIFY(!_timeChangedCalled);
 	QCOMPARE(_clock.time(), 0);
 
 	// Ticking a clock with a rate of 1 should move the time forward
 	_clock.setRate(1);
-	_clock.tick(1); // ticking 1Hz = 1 second
+	_clock.elapse(24000); // ticking 1 second
 	QVERIFY(_timeChangedCalled);
 	QCOMPARE(_clock.time(), 24000);
 
 	// Ticking a clock with a rate of -2 should move the time backward
 	_clock.setRate(-2);
-	_clock.tick(4); // ticking 4Hz = 0.25 second
+	_clock.elapse(6000); // ticking 0.25 second
 	QCOMPARE(_clock.time(), 12000);
 
 }

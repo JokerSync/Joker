@@ -30,7 +30,7 @@ void GraphicSyncTestWindow::beforePaint(int frequency)
 	_lastTime = _time.elapsed();
 //	int refreshRate = ui->graphicView->refreshRate();
 	_sony.checkVideoSync();
-//	_sony.clock()->tick(frequency);
+//	_sony.clock()->elapse(static_cast<PhTime> (24000.0 / static_cast<double>(frequency)));
 	float ratio = _count++;
 	if(_sony.clock()->time() > 0)
 		ratio /= _sony.clock()->time();

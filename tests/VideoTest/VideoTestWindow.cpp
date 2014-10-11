@@ -32,7 +32,7 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
 
 	connect(ui->videoView, &PhGraphicView::paint, this, &VideoTestWindow::onPaint);
-	connect(ui->videoView, &PhGraphicView::beforePaint, _videoEngine.clock(), &PhClock::tick);
+	connect(ui->videoView, &PhGraphicView::beforePaint, _videoEngine.clock(), &PhClock::elapse);
 	connect(_videoEngine.clock(), &PhClock::timeChanged, this, &VideoTestWindow::onTimeChanged);
 }
 
