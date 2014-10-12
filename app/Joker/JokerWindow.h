@@ -288,8 +288,6 @@ private:
 	QStringList _infoList;
 
 	PhFont _infoFont;
-
-	QList<QObject*> _nextPeoples;
 };
 
 #endif // MAINWINDOW_H

@@ -13,7 +13,7 @@ PhPeople::PhPeople(QString name, QString color)
 	_color = color;
 }
 
-QString PhPeople::name()
+QString PhPeople::name() const
 {
 	return _name;
 }
@@ -26,7 +26,7 @@ void PhPeople::setName(QString name)
 	_name = name;
 }
 
-QString PhPeople::color()
+QString PhPeople::color() const
 {
 	return _color;
 }

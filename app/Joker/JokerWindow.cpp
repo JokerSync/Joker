@@ -50,7 +50,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
 	ui->videoStripView->engine()->rootContext()->setContextProperty("infoModel", QVariant::fromValue(_infoList));
-	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", QVariant::fromValue(_nextPeoples));
+	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("clockTime", _strip.clock()->time() + _settings->screenDelay());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
@@ -908,20 +908,6 @@ void JokerWindow::onPaint(int width, int height)
 	_strip.draw(0, y + videoHeight, width, stripHeight, tcOffset, selectedPeoples);
 
 	ui->videoStripView->engine()->rootContext()->setContextProperty("clockTime", _strip.clock()->time() + _settings->screenDelay());
-
-	// Note: _selectedPeopleList is needed because QVariant does not know how to handle a QList<PhPeople*>
-	// we convert it to QList<QObject*>
-	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", NULL);
-	qDeleteAll(_nextPeoples);
-	_nextPeoples.clear();
-	foreach(PhNextPeople *nextPeople, _strip.nextPeoples()) {
-		_nextPeoples.append(nextPeople);
-	}
-
-	// refresh the view
-	// TODO the view could be refreshed more intelligently by defining a true model and define change signals
-	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", QVariant::fromValue(_nextPeoples));
-
 
 	QList<QObject*> stripTexts;
 	foreach(PhStripText *text, _strip.stripTexts()) {

@@ -34,7 +34,7 @@ public:
 	 * @brief Get the name
 	 * @return a string
 	 */
-	QString name();
+	QString name() const;
 	/**
 	 * @brief Set the name
 	 * @param name a string
@@ -44,7 +44,7 @@ public:
 	 * @brief Get the color
 	 * @return a PhColor
 	 */
-	QString color();
+	QString color() const;
 	/**
 	 * @brief Set the color
 	 * @param color a PhColor

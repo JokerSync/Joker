@@ -39,6 +39,19 @@ PhClock *PhGraphicStrip::clock()
 
 void PhGraphicStrip::onDocChanged()
 {
+	QList<PhPeople *> selectedPeoples;
+	bool invertedColor = _settings->invertColor();
+
+	_nextPeopleModel.clear();
+
+	foreach(PhStripText * text, _doc.texts()) {
+		PhPeople * people = text->people();
+		PhNextPeople *nextPeople = new PhNextPeople(people->name(),
+													computeColor(people, selectedPeoples, invertedColor).name(),
+													text->timeIn(),
+													selectedPeoples.size()==0 || selectedPeoples.contains(people));
+		_nextPeopleModel.addNextPeople(nextPeople);
+	}
 
 }
 
@@ -254,7 +267,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			maxTimeIn += y * verticalTimePerPixel;
 
 		// housekeeping !
-		_nextPeoples.clear();
+		//_nextPeoples.clear();
 		_stripTexts.clear();
 
 		foreach(PhStripText * text, _doc.texts()) {
@@ -296,18 +309,18 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				gPeople.draw();
 			}
 
-			if(displayNextText
-			   && text->timeIn() - clockTime > -50*verticalTimePerPixel // make sure the label does not disappear suddenly
-			   &&  text->timeIn() - clockTime < (y-tcOffset)*verticalTimePerPixel
-			   && ((lastText == NULL)
-			       || (lastText->people() != text->people())
-			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
-				PhNextPeople *nextPeople = new PhNextPeople(people->name(),
-															computeColor(people, selectedPeoples, invertedColor).name(),
-															text->timeIn(),
-															selectedPeoples.size()==0 || selectedPeoples.contains(people));
-				_nextPeoples.append(nextPeople);
-			}
+//			if(displayNextText
+//			   && text->timeIn() - clockTime > -50*verticalTimePerPixel // make sure the label does not disappear suddenly
+//			   &&  text->timeIn() - clockTime < (y-tcOffset)*verticalTimePerPixel
+//			   && ((lastText == NULL)
+//			       || (lastText->people() != text->people())
+//			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
+//				PhNextPeople *nextPeople = new PhNextPeople(people->name(),
+//															computeColor(people, selectedPeoples, invertedColor).name(),
+//															text->timeIn(),
+//															selectedPeoples.size()==0 || selectedPeoples.contains(people));
+//				_nextPeoples.append(nextPeople);
+//			}
 
 			lastTextList[text->y()] = text;
 

@@ -22,7 +22,7 @@ public:
 	 * @brief Get the time in
 	 * @return a PhTime
 	 */
-	PhTime timeIn();
+	PhTime timeIn() const;
 	/**
 	 * @brief Set the time in
 	 * @param timeIn a PhTime
@@ -32,7 +32,7 @@ public:
 	 * @brief Get whether this person is selected
 	 * @return a bool
 	 */
-	bool selected();
+	bool selected() const;
 	/**
 	 * @brief Set whether this person is selected
 	 * @param selected a bool

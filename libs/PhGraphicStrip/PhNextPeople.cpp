@@ -7,7 +7,7 @@ PhNextPeople::PhNextPeople(QString name, QString color, PhTime timeIn, bool sele
 {
 }
 
-PhTime PhNextPeople::timeIn()
+PhTime PhNextPeople::timeIn() const
 {
 	return _timeIn;
 }
@@ -20,7 +20,7 @@ void PhNextPeople::setTimeIn(PhTime timeIn)
 	}
 }
 
-bool PhNextPeople::selected()
+bool PhNextPeople::selected() const
 {
 	return _selected;
 }
