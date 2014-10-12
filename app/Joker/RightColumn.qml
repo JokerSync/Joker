@@ -31,18 +31,18 @@ Item {
 
             // FIXME inverted colors are not implemented
             delegate: Rectangle {
-                color: model.modelData.selected ? "#b0b0b0b0" : "#b0707070"
+                color: selected ? "#b0b0b0b0" : "#b0707070"
                 height: childrenRect.height + 2
                 width: childrenRect.width + 2
                 // y is relative to the parent
-                y: nextPeopleList.height - (model.modelData.timeIn - clockTime) / verticalTimePerPixel - height
+                y: nextPeopleList.height - (timeIn - clockTime) / verticalTimePerPixel - height
                 anchors.right: nextPeopleList.right
                 antialiasing: true // without antialiasing the jump from one pixel line to the next is visible
                 visible: name.length > 0 // do not draw when the name is empty
 
                 Text {
                     text: name
-                    color: model.modelData.color
+                    color: color
                     font.pointSize: 15
                     wrapMode: Text.WordWrap
                     horizontalAlignment: Text.AlignHCenter // FIXME does not work

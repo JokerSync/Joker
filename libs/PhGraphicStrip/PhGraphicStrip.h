@@ -16,6 +16,7 @@
 #include "PhGraphic/PhFont.h"
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphicStrip/PhNextPeople.h"
+#include "PhGraphicStrip/PhNextPeopleModel.h"
 
 #include "PhSync/PhClock.h"
 
@@ -115,8 +116,8 @@ public:
 		return _infos;
 	}
 
-	QList<PhNextPeople*> nextPeoples() {
-		return _nextPeoples;
+	PhNextPeopleModel *nextPeopleModel() {
+		return &_nextPeopleModel;
 	}
 
 	QList<PhStripText*> stripTexts() {
@@ -168,7 +169,7 @@ private:
 
 	QStringList _infos;
 
-	QList<PhNextPeople*> _nextPeoples;
+	PhNextPeopleModel _nextPeopleModel;
 	QList<PhStripText *> _stripTexts;
 };
 
