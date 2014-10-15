@@ -12,7 +12,8 @@ public:
 		NameRole = Qt::UserRole + 1,
 		ColorRole,
 		TimeInRole,
-		SelectedRole
+		SelectedRole,
+		DurationRole
 	};
 
 	PhNextPeopleModel(QObject *parent = 0);

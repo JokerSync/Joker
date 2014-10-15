@@ -44,15 +44,37 @@ void PhGraphicStrip::onDocChanged()
 
 	_nextPeopleModel.clear();
 
-	foreach(PhStripText * text, _doc.texts()) {
+	if (_doc.texts().isEmpty())
+		return;
+
+	PhNextPeople *nextPeople = new PhNextPeople("",
+												"#000000",
+												0,
+												true,
+												_doc.texts().first()->timeIn());
+	_nextPeopleModel.addNextPeople(nextPeople);
+
+	for(int i=0; i<_doc.texts().length() - 1; i++)
+	{
+		PhStripText * text = _doc.texts()[i];
+		PhStripText * nextText = _doc.texts()[i+1];
 		PhPeople * people = text->people();
 		PhNextPeople *nextPeople = new PhNextPeople(people->name(),
 													computeColor(people, selectedPeoples, invertedColor).name(),
 													text->timeIn(),
-													selectedPeoples.size()==0 || selectedPeoples.contains(people));
+													selectedPeoples.size()==0 || selectedPeoples.contains(people),
+													nextText->timeIn() - text->timeIn());
 		_nextPeopleModel.addNextPeople(nextPeople);
 	}
 
+	PhStripText * text = _doc.texts().last();
+	PhPeople * people = text->people();
+	nextPeople = new PhNextPeople(people->name(),
+								computeColor(people, selectedPeoples, invertedColor).name(),
+								text->timeIn(),
+								selectedPeoples.size()==0 || selectedPeoples.contains(people),
+								_doc.timeOut() - text->timeIn());
+	_nextPeopleModel.addNextPeople(nextPeople);
 }
 
 PhFont *PhGraphicStrip::getTextFont()

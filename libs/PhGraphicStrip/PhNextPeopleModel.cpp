@@ -28,6 +28,8 @@ QVariant PhNextPeopleModel::data(const QModelIndex & index, int role) const {
 		return nextPeople->timeIn();
 	else if (role == SelectedRole)
 		return nextPeople->selected();
+	else if (role == DurationRole)
+		return nextPeople->duration();
 	return QVariant();
 }
 
@@ -37,11 +39,11 @@ QHash<int, QByteArray> PhNextPeopleModel::roleNames() const {
 	roles[ColorRole] = "color";
 	roles[TimeInRole] = "timeIn";
 	roles[SelectedRole] = "selected";
+	roles[DurationRole] = "duration";
 	return roles;
 }
 
 void PhNextPeopleModel::clear() {
-	// delete ?
 	beginRemoveRows(QModelIndex(), 0, rowCount());
 	qDeleteAll(_nextPeoples);
 	_nextPeoples.clear();
