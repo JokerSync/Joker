@@ -1,9 +1,10 @@
 #include "PhGraphicStrip/PhNextPeople.h"
 
-PhNextPeople::PhNextPeople(QString name, QString color, PhTime timeIn, bool selected)
+PhNextPeople::PhNextPeople(QString name, QString color, PhTime timeIn, bool selected, PhTime duration)
  : PhPeople(name, color),
    _timeIn(timeIn),
-   _selected(selected)
+   _selected(selected),
+   _duration(duration)
 {
 }
 
@@ -17,6 +18,19 @@ void PhNextPeople::setTimeIn(PhTime timeIn)
 	if (timeIn != _timeIn) {
 		_timeIn = timeIn;
 		emit timeInChanged();
+	}
+}
+
+PhTime PhNextPeople::duration() const
+{
+	return _duration;
+}
+
+void PhNextPeople::setDuration(PhTime duration)
+{
+	if (duration != _duration) {
+		_duration = duration;
+		emit durationChanged();
 	}
 }
 

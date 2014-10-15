@@ -16,7 +16,7 @@ Item {
         horizontalAlignment: Text.AlignRight
     }
 
-    Item {
+    ListView {
         id: nextPeopleList
         objectName: "nextPeopleList"
         anchors.top: nextTcLabel.bottom
@@ -24,19 +24,27 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.rightMargin: 2
+        orientation: ListView.Vertical
+        contentY:  -height -clockTime / verticalTimePerPixel
+        verticalLayoutDirection: "BottomToTop"
+        interactive: false
         clip: true
 
-        Repeater {
-            model: nextPeopleModel
+        model: nextPeopleModel
 
-            // FIXME inverted colors are not implemented
-            delegate: Rectangle {
+        // FIXME inverted colors are not implemented
+        delegate: Item {
+            width: parent.width
+            height: duration / verticalTimePerPixel
+            x:0
+
+            Rectangle {
                 color: selected ? "#b0b0b0b0" : "#b0707070"
                 height: childrenRect.height + 2
                 width: childrenRect.width + 2
-                // y is relative to the parent
-                y: nextPeopleList.height - (timeIn - clockTime) / verticalTimePerPixel - height
-                anchors.right: nextPeopleList.right
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+
                 antialiasing: true // without antialiasing the jump from one pixel line to the next is visible
                 visible: name.length > 0 // do not draw when the name is empty
 
