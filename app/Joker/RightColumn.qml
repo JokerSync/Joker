@@ -25,7 +25,7 @@ Item {
         anchors.right: parent.right
         anchors.rightMargin: 2
         orientation: ListView.Vertical
-        contentY:  -height -clockTime / verticalTimePerPixel
+        contentY:  -height -jokerWindow.stripTime / verticalTimePerPixel
         verticalLayoutDirection: "BottomToTop"
         interactive: false
         clip: true
