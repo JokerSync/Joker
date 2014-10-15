@@ -18,7 +18,7 @@ Item {
 
             // FIXME inverted colors are not implemented
             delegate: Item {
-                x: (model.modelData.timeIn - clockTime) / horizontalTimePerPixel + stripTexts.width / 6
+                x: (model.modelData.timeIn - jokerWindow.stripTime) / horizontalTimePerPixel + stripTexts.width / 6
                 y: model.modelData.y * stripTexts.height
                 transform: Scale { xScale: (model.modelData.timeOut - model.modelData.timeIn) / horizontalTimePerPixel / childrenRect.width;
                                    yScale: model.modelData.height*stripTexts.height / childrenRect.height}

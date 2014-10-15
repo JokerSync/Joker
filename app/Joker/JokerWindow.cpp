@@ -37,7 +37,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
 	_resizingStrip(false),
-	_numberOfDraw(0)
+	_numberOfDraw(0),
+	_stripTime(0)
 {
 	qApp->installEventFilter(this);
 
@@ -52,7 +53,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("infoModel", QVariant::fromValue(_infoList));
 	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("clockTime", _strip.clock()->time() + _settings->screenDelay());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
@@ -896,6 +896,7 @@ void JokerWindow::onPaint(int width, int height)
 	PhClock *clock = _videoEngine.clock();
 	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
 	PhTime clockTime = clock->time() + delay;
+	setStripTime(clockTime);
 
 	QQuickItem *tcLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("tcLabel");
 	tcLabel->setVisible(_settings->displayTC());
@@ -906,8 +907,6 @@ void JokerWindow::onPaint(int width, int height)
 		tcOffset = tcLabel->height();
 
 	_strip.draw(0, y + videoHeight, width, stripHeight, tcOffset, selectedPeoples);
-
-	ui->videoStripView->engine()->rootContext()->setContextProperty("clockTime", _strip.clock()->time() + _settings->screenDelay());
 
 	QList<QObject*> stripTexts;
 	foreach(PhStripText *text, _strip.stripTexts()) {
@@ -1018,5 +1017,18 @@ void JokerWindow::setCurrentLoopLabel(QString label)
 	if (label != _currentLoopLabel) {
 		_currentLoopLabel = label;
 		emit currentLoopLabelChanged();
+	}
+}
+
+PhTime JokerWindow::stripTime()
+{
+	return _stripTime;
+}
+
+void JokerWindow::setStripTime(PhTime time)
+{
+	if (time != _stripTime) {
+		_stripTime = time;
+		emit stripTimeChanged();
 	}
 }

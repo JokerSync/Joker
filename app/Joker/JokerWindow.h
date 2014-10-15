@@ -43,6 +43,7 @@ class JokerWindow : public PhDocumentWindow
 {
 	Q_OBJECT
 	Q_PROPERTY(QString currentLoopLabel READ currentLoopLabel WRITE setCurrentLoopLabel NOTIFY currentLoopLabelChanged)
+	Q_PROPERTY(PhTime stripTime READ stripTime WRITE setStripTime NOTIFY stripTimeChanged)
 
 public:
 	///
@@ -75,6 +76,18 @@ public:
 	 * @param A string
 	 */
 	void setCurrentLoopLabel(QString label);
+
+	/**
+	 * @brief The strip time (includes delay)
+	 * @return A PhTime
+	 */
+	PhTime stripTime();
+
+	/**
+	 * @brief Sets the strip time
+	 * @param A PhTime
+	 */
+	void setStripTime(PhTime time);
 
 public slots:
 	///
@@ -256,6 +269,7 @@ private slots:
 
 signals:
 	void currentLoopLabelChanged();
+	void stripTimeChanged();
 
 private:
 	Ui::JokerWindow *ui;
@@ -283,6 +297,7 @@ private:
 
 	QTime _lastVideoSyncElapsed;
 
+	PhTime _stripTime;
 	QString _currentLoopLabel;
 	QList<QObject*> _selectedPeopleList;
 	QStringList _infoList;
