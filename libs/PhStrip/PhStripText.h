@@ -32,15 +32,27 @@ public:
 	 * @param content The text content
 	 * @param height The text height
 	 */
-	PhStripText( PhTime timeIn, PhPeople * people, PhTime timeOut, float y,  QString content, float height);
+	PhStripText( PhTime timeIn, PhPeople * people, PhTime timeOut, float y,  QString content, float height, bool selected = true);
 	/**
 	 * @brief Get the text content
 	 * @return _content
 	 */
 	QString content() const;
 
+	/**
+	 * @brief Get whether this person is selected
+	 * @return a bool
+	 */
+	bool selected() const;
+	/**
+	 * @brief Set whether this person is selected
+	 * @param selected a bool
+	 */
+	void setSelected(bool selected);
+
 signals:
 	void contentChanged();
+	void selectedChanged();
 
 private:
 
@@ -48,6 +60,7 @@ private:
  * Text string of Sentence or part of a sentence.
  */
 	QString _content;
+	bool _selected;
 };
 
 #endif // PHSTRIPTEXT_H
