@@ -44,6 +44,10 @@ class JokerWindow : public PhDocumentWindow
 	Q_OBJECT
 	Q_PROPERTY(QString currentLoopLabel READ currentLoopLabel WRITE setCurrentLoopLabel NOTIFY currentLoopLabelChanged)
 	Q_PROPERTY(PhTime stripTime READ stripTime WRITE setStripTime NOTIFY stripTimeChanged)
+	Q_PROPERTY(QString refreshInfo READ refreshInfo WRITE setRefreshInfo NOTIFY refreshInfoChanged)
+	Q_PROPERTY(QString updateInfo READ updateInfo WRITE setUpdateInfo NOTIFY updateInfoChanged)
+	Q_PROPERTY(QString dropInfo READ dropInfo WRITE setDropInfo NOTIFY dropInfoChanged)
+	Q_PROPERTY(QString stripInfo READ stripInfo WRITE setStripInfo NOTIFY stripInfoChanged)
 
 public:
 	///
@@ -88,6 +92,26 @@ public:
 	 * @param A PhTime
 	 */
 	void setStripTime(PhTime time);
+
+	QString refreshInfo() {
+		return _refreshInfo;
+	}
+	void setRefreshInfo(QString text);
+
+	QString updateInfo() {
+		return _updateInfo;
+	}
+	void setUpdateInfo(QString text);
+
+	QString dropInfo() {
+		return _dropInfo;
+	}
+	void setDropInfo(QString text);
+
+	QString stripInfo() {
+		return _stripInfo;
+	}
+	void setStripInfo(QString text);
 
 public slots:
 	///
@@ -270,6 +294,10 @@ private slots:
 signals:
 	void currentLoopLabelChanged();
 	void stripTimeChanged();
+	void refreshInfoChanged();
+	void updateInfoChanged();
+	void dropInfoChanged();
+	void stripInfoChanged();
 
 private:
 	Ui::JokerWindow *ui;
@@ -300,7 +328,11 @@ private:
 	PhTime _stripTime;
 	QString _currentLoopLabel;
 	QList<QObject*> _selectedPeopleList;
-	QStringList _infoList;
+
+	QString _refreshInfo;
+	QString _updateInfo;
+	QString _dropInfo;
+	QString _stripInfo;
 
 	PhFont _infoFont;
 };
