@@ -59,7 +59,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->videoStripView->engine()->rootContext()->setContextProperty("doc", _doc);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
-	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
+	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack0", _strip.stripTextModelTrack0());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack1", _strip.stripTextModelTrack1());
@@ -283,9 +283,10 @@ bool JokerWindow::openDocument(const QString &fileName)
 	}
 
 	/// Clear the selected people name list (except for the first document).
-	if(!_firstDoc)
+	if(!_firstDoc) {
 		_settings->setSelectedPeopleNameList(QStringList());
-	else
+		_selectedPeopleModel.setStringList(_settings->selectedPeopleNameList());
+	} else
 		_firstDoc = false;
 
 	if(!_doc->openStripFile(fileName))
@@ -819,7 +820,7 @@ void JokerWindow::on_actionSelect_character_triggered()
 {
 	hideMediaPanel();
 
-	PeopleDialog dlg(this, _doc, _settings);
+	PeopleDialog dlg(this, _doc, _settings, &_selectedPeopleModel);
 
 	dlg.restoreGeometry(_settings->peopleDialogGeometry());
 	dlg.exec();
@@ -905,17 +906,6 @@ void JokerWindow::onPaint(int width, int height)
 		if(people)
 			selectedPeoples.append(people);
 	}
-
-	// Note: _selectedPeopleList is needed because QVariant does not know how to handle a QList<PhPeople*>
-	// we convert it to QList<QObject*>
-	_selectedPeopleList.clear();
-	foreach(PhPeople *people, selectedPeoples) {
-		_selectedPeopleList.append(people);
-	}
-
-	// refresh the view
-	// TODO the view could be refreshed more intelligently by connecting to the signals of the people selection dialog
-	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
 
 	float stripHeightRatio = 0.0f;
 	if(!_settings->hideStrip())
@@ -1010,7 +1000,7 @@ void JokerWindow::onPaint(int width, int height)
 
 	// FIXME the font size for the list of selected peoples is fixed, whereas it depended on the window size before
 	QQuickItem *selectedPeopleList = ui->videoStripView->rootObject()->findChild<QQuickItem*>("selectedPeopleList");
-	selectedPeopleList->setVisible(!_settings->hideSelectedPeoples() && _selectedPeopleList.count());
+	selectedPeopleList->setVisible(!_settings->hideSelectedPeoples() && _settings->selectedPeopleNameList().count());
 
 	QQuickItem *videoLogo = ui->videoStripView->rootObject()->findChild<QQuickItem*>("videoLogo");
 	videoLogo->setVisible((videoHeight > 0) && (_videoEngine.height() <= 0) && _settings->displayLogo());

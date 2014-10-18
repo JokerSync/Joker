@@ -11,11 +11,12 @@
 
 #include "PeopleEditionDialog.h"
 
-PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *settings) :
+PeopleDialog::PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *settings, QStringListModel *selectedPeopleModel) :
 	QDialog(parent),
 	ui(new Ui::PeopleDialog),
 	_doc(doc),
-	_settings(settings)
+	_settings(settings),
+	_selectedPeopleModel(selectedPeopleModel)
 {
 	ui->setupUi(this);
 
@@ -59,8 +60,10 @@ void PeopleDialog::on_peopleList_itemSelectionChanged()
 		peopleNameList.append(item->text());
 	}
 
-	if(peopleNameList.count() < _doc->peoples().count())
+	if(peopleNameList.count() < _doc->peoples().count()) {
 		_settings->setSelectedPeopleNameList(peopleNameList);
+		_selectedPeopleModel->setStringList(peopleNameList);
+	}
 
 	ui->changeCharButton->setEnabled(ui->peopleList->selectedItems().count() == 1);
 }
@@ -72,6 +75,7 @@ void PeopleDialog::on_buttonBox_rejected()
 		peopleNameList.append(name);
 
 	_settings->setSelectedPeopleNameList(peopleNameList);
+	_selectedPeopleModel->setStringList(peopleNameList);
 }
 
 void PeopleDialog::on_deselectAllButton_clicked()
