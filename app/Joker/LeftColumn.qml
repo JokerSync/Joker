@@ -64,7 +64,7 @@ Item {
 
         model: selectedPeopleModel
         delegate: Text {
-            text: name
+            text: display
             color: "grey"
             font.pointSize: 15
             lineHeight: 0.75

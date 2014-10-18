@@ -327,7 +327,7 @@ private:
 
 	PhTime _stripTime;
 	QString _currentLoopLabel;
-	QList<QObject*> _selectedPeopleList;
+	QStringListModel _selectedPeopleModel;
 
 	QString _refreshInfo;
 	QString _updateInfo;

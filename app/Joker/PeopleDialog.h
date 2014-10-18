@@ -7,7 +7,9 @@
 #ifndef PEOPLEDIALOG_H
 #define PEOPLEDIALOG_H
 
+
 #include <QDialog>
+#include <QStringListModel>
 
 #include "PhStrip/PhStripDoc.h"
 
@@ -38,7 +40,7 @@ public:
 	 * @param doc The current PhStripDoc
 	 * @param settings The application settings
 	 */
-	explicit PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *settings);
+	explicit PeopleDialog(QWidget *parent, PhStripDoc* doc, JokerSettings *settings, QStringListModel *selectedPeopleModel);
 
 	~PeopleDialog();
 
@@ -56,6 +58,7 @@ private:
 	PhStripDoc* _doc;
 	JokerSettings *_settings;
 	QStringList _oldPeopleNameList;
+	QStringListModel *_selectedPeopleModel;
 };
 
 #endif // PEOPLEDIALOG_H
