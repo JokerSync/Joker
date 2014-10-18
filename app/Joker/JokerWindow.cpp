@@ -52,6 +52,10 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
 	ui->videoStripView->engine()->rootContext()->setContextProperty("infoModel", QVariant::fromValue(_infoList));
 	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack0", _strip.stripTextModelTrack0());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack1", _strip.stripTextModelTrack1());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack2", _strip.stripTextModelTrack2());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack3", _strip.stripTextModelTrack3());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
 
@@ -907,15 +911,6 @@ void JokerWindow::onPaint(int width, int height)
 		tcOffset = tcLabel->height();
 
 	_strip.draw(0, y + videoHeight, width, stripHeight, tcOffset, selectedPeoples);
-
-	QList<QObject*> stripTexts;
-	foreach(PhStripText *text, _strip.stripTexts()) {
-		stripTexts.append(text);
-	}
-
-	// refresh the view
-	// TODO the view could be refreshed more intelligently by defining a true model and define change signals
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModel", QVariant::fromValue(stripTexts));
 
 	// prepare the string list that is used to display the infos
 	_infoList.clear();

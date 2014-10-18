@@ -75,6 +75,81 @@ void PhGraphicStrip::onDocChanged()
 								selectedPeoples.size()==0 || selectedPeoples.contains(people),
 								_doc.timeOut() - text->timeIn());
 	_nextPeopleModel.addNextPeople(nextPeople);
+
+	// strip texts
+	_stripTextModelTrack0.clear();
+	_stripTextModelTrack1.clear();
+	_stripTextModelTrack2.clear();
+	_stripTextModelTrack3.clear();
+	int previousTimeOutTrack0 = 0;
+	int previousTimeOutTrack1 = 0;
+	int previousTimeOutTrack2 = 0;
+	int previousTimeOutTrack3 = 0;
+
+	foreach(PhStripText * text, _doc.texts()) {
+		text->setSelected(selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
+
+		if (text->y() == 0) {
+			PhStripText *emptyText = new PhStripText(previousTimeOutTrack0,
+													 text->people(),
+													 text->timeIn(),
+													 0,
+													 "", // empty content
+													 0, //height
+													 true);
+
+			_stripTextModelTrack0.addStripText(emptyText);
+			_stripTextModelTrack0.addStripText(text);
+
+			previousTimeOutTrack0 = text->timeOut();
+		}
+
+		if (text->y() == 0.25) {
+			PhStripText *emptyText = new PhStripText(previousTimeOutTrack1,
+													 text->people(),
+													 text->timeIn(),
+													 0,
+													 "", // empty content
+													 0, //height
+													 true);
+
+			_stripTextModelTrack1.addStripText(emptyText);
+			_stripTextModelTrack1.addStripText(text);
+
+			previousTimeOutTrack1 = text->timeOut();
+		}
+
+		if (text->y() == 0.5) {
+			PhStripText *emptyText = new PhStripText(previousTimeOutTrack2,
+													 text->people(),
+													 text->timeIn(),
+													 0,
+													 "", // empty content
+													 0, //height
+													 true);
+
+			_stripTextModelTrack2.addStripText(emptyText);
+			_stripTextModelTrack2.addStripText(text);
+
+			previousTimeOutTrack2 = text->timeOut();
+		}
+
+
+		if (text->y() == 0.75) {
+			PhStripText *emptyText = new PhStripText(previousTimeOutTrack3,
+													 text->people(),
+													 text->timeIn(),
+													 0,
+													 "", // empty content
+													 0, //height
+													 true);
+
+			_stripTextModelTrack3.addStripText(emptyText);
+			_stripTextModelTrack3.addStripText(text);
+
+			previousTimeOutTrack3 = text->timeOut();
+		}
+	}
 }
 
 PhFont *PhGraphicStrip::getTextFont()
@@ -288,20 +363,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		if(displayNextText)
 			maxTimeIn += y * verticalTimePerPixel;
 
-		// housekeeping !
-		//_nextPeoples.clear();
-		_stripTexts.clear();
-
 		foreach(PhStripText * text, _doc.texts()) {
-
-			if( !((text->timeOut() < timeIn) || (text->timeIn() > timeOut)) ) {
-				counter++;
-				// FIXME font and color not implemented
-				//PhGraphicText gText(&_textFont, text->content());
-				//gText.setColor(computeColor(text->people(), selectedPeoples, invertedColor));
-				_stripTexts.append(text);
-			}
-
 			PhPeople * people = text->people();
 			QString name = people ? people->name() : "???";
 			PhGraphicText gPeople(&_hudFont, name);
@@ -330,19 +392,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 				gPeople.draw();
 			}
-
-//			if(displayNextText
-//			   && text->timeIn() - clockTime > -50*verticalTimePerPixel // make sure the label does not disappear suddenly
-//			   &&  text->timeIn() - clockTime < (y-tcOffset)*verticalTimePerPixel
-//			   && ((lastText == NULL)
-//			       || (lastText->people() != text->people())
-//			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
-//				PhNextPeople *nextPeople = new PhNextPeople(people->name(),
-//															computeColor(people, selectedPeoples, invertedColor).name(),
-//															text->timeIn(),
-//															selectedPeoples.size()==0 || selectedPeoples.contains(people));
-//				_nextPeoples.append(nextPeople);
-//			}
 
 			lastTextList[text->y()] = text;
 

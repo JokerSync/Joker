@@ -38,7 +38,7 @@ public:
 	 * @brief Get the PhPeople
 	 * @return _people the corresponding PhPeople
 	 */
-	PhPeople * people() {
+	PhPeople * people() const {
 		return _people;
 	}
 	/**
@@ -52,7 +52,7 @@ public:
 	 * @brief The time out
 	 * @return A time value
 	 */
-	PhTime timeOut() {
+	PhTime timeOut() const {
 		return _timeOut;
 	}
 	/**

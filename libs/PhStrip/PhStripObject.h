@@ -40,7 +40,7 @@ public:
 	 * @brief The time in
 	 * @return A PhTime
 	 */
-	PhTime timeIn();
+	PhTime timeIn() const;
 
 	/**
 	 * @brief Set the time in

@@ -20,6 +20,7 @@
 #include "PhGraphic/PhGraphicLoop.h"
 #include "PhGraphicStrip/PhNextPeople.h"
 #include "PhGraphicStrip/PhNextPeopleModel.h"
+#include "PhGraphicStrip/PhStripTextModel.h"
 
 #include "PhSync/PhClock.h"
 
@@ -122,8 +123,20 @@ public:
 		return &_nextPeopleModel;
 	}
 
-	QList<PhStripText*> stripTexts() {
-		return _stripTexts;
+	PhStripTextModel *stripTextModelTrack0() {
+		return &_stripTextModelTrack0;
+	}
+
+	PhStripTextModel *stripTextModelTrack1() {
+		return &_stripTextModelTrack1;
+	}
+
+	PhStripTextModel *stripTextModelTrack2() {
+		return &_stripTextModelTrack2;
+	}
+
+	PhStripTextModel *stripTextModelTrack3() {
+		return &_stripTextModelTrack3;
 	}
 
 private slots:
@@ -172,7 +185,10 @@ private:
 	QStringList _infos;
 
 	PhNextPeopleModel _nextPeopleModel;
-	QList<PhStripText *> _stripTexts;
+	PhStripTextModel _stripTextModelTrack0;
+	PhStripTextModel _stripTextModelTrack1;
+	PhStripTextModel _stripTextModelTrack2;
+	PhStripTextModel _stripTextModelTrack3;
 };
 
 #endif // PHGRAPHICSTRIP_H

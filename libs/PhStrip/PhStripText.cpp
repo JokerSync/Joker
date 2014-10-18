@@ -8,13 +8,27 @@
 
 
 
-PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, float track, QString content, float height) :
-	PhStripPeopleObject(timeIn, people, timeOut, track, height), _content(content)
+PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, float track, QString content, float height, bool selected) :
+	PhStripPeopleObject(timeIn, people, timeOut, track, height),
+	_content(content),
+	_selected(selected)
 {
 }
 
-QString PhStripText::content()
+QString PhStripText::content() const
 {
 	return _content;
 }
 
+bool PhStripText::selected() const
+{
+	return _selected;
+}
+
+void PhStripText::setSelected(bool selected)
+{
+	if (selected != _selected) {
+		_selected = selected;
+		emit selectedChanged();
+	}
+}

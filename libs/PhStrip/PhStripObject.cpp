@@ -13,7 +13,7 @@ PhStripObject::PhStripObject(PhTime timeIn)
 {
 }
 
-PhTime PhStripObject::timeIn() {
+PhTime PhStripObject::timeIn() const {
 	return _timeIn;
 }
 
