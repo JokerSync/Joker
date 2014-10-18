@@ -567,7 +567,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 	_testTimer.restart();
 
 	_infos.append(QString("Max strip draw: %1").arg(_maxDrawElapsed));
-	_infos.append(QString("Count: %1").arg(counter));
+	_infos.append(QString(" Count: %1").arg(counter));
 
 	if(_settings->resetInfo())
 		_maxDrawElapsed = 0;

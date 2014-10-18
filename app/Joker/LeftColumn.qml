@@ -16,23 +16,42 @@ Item {
         anchors.left: parent.left
     }
 
-    Item {
+    Column {
+        objectName: "infos"
         anchors.top: tcLabel.bottom
         anchors.left: parent.left
         anchors.leftMargin: 10
 
-        ListView {
-            objectName: "infoList"
-            height: childrenRect.height
+        Text {
+            text: jokerWindow.updateInfo
+            color: "red"
+            font.pointSize: tcLabel.font.pointSize
+            lineHeight: 0.75
+            wrapMode: Text.WordWrap
+        }
 
-            model: infoModel
-            delegate: Text {
-                text: modelData
-                color: "red"
-                font.pointSize: tcLabel.font.pointSize
-                lineHeight: 0.75
-                wrapMode: Text.WordWrap
-            }
+        Text {
+            text: jokerWindow.refreshInfo
+            color: "red"
+            font.pointSize: tcLabel.font.pointSize
+            lineHeight: 0.75
+            wrapMode: Text.WordWrap
+        }
+
+        Text {
+            text: jokerWindow.dropInfo
+            color: "red"
+            font.pointSize: tcLabel.font.pointSize
+            lineHeight: 0.75
+            wrapMode: Text.WordWrap
+        }
+
+        Text {
+            text: jokerWindow.stripInfo
+            color: "red"
+            font.pointSize: tcLabel.font.pointSize
+            lineHeight: 0.75
+            wrapMode: Text.WordWrap
         }
     }
 

@@ -60,7 +60,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("doc", _doc);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", QVariant::fromValue(_selectedPeopleList));
-	ui->videoStripView->engine()->rootContext()->setContextProperty("infoModel", QVariant::fromValue(_infoList));
 	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack0", _strip.stripTextModelTrack0());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack1", _strip.stripTextModelTrack1());
@@ -963,26 +962,27 @@ void JokerWindow::onPaint(int width, int height)
 	y += (titleRect->height() - titleRect->y())*titleRect->isVisible();
 
 	// prepare the string list that is used to display the infos
-	_infoList.clear();
-	_infoList.append(QString("refresh: %1x%2, %3 / %4")
-			.arg(ui->videoStripView->width())
-			.arg(ui->videoStripView->height())
-			.arg(ui->videoStripView->maxRefreshRate())
-			.arg(ui->videoStripView->refreshRate()));
-	_infoList.append(QString("Update : %1 %2").arg(ui->videoStripView->maxUpdateDuration()).arg(ui->videoStripView->lastUpdateDuration()));
-	_infoList.append(QString("drop: %1 %2").arg(ui->videoStripView->dropDetected()).arg(ui->videoStripView->secondsSinceLastDrop()));
+	setRefreshInfo(QString("refresh: %1x%2, %3 / %4")
+				   .arg(ui->videoStripView->width())
+				   .arg(ui->videoStripView->height())
+				   .arg(ui->videoStripView->maxRefreshRate())
+				   .arg(ui->videoStripView->refreshRate()));
+	setUpdateInfo(QString("Update : %1 %2").arg(ui->videoStripView->maxUpdateDuration())
+										.arg(ui->videoStripView->lastUpdateDuration()));
+	setDropInfo(QString("drop: %1 %2").arg(ui->videoStripView->dropDetected()).arg(ui->videoStripView->secondsSinceLastDrop()));
 	#warning /// @todo measure fps with a custom QML element
 	// The actual painting duration should be measured using a custom QML element.
 	// See: http://developer.nokia.com/community/wiki/QML_Performance_Meter
 	// (anyway, the QML profiler will provide much more details to the developer.)
-	_infoList.append(QString("draw: N/A"));
-	foreach(QString info, _strip.infos()) {
-		_infoList.append(info);
-	}
 
-	ui->videoStripView->engine()->rootContext()->setContextProperty("infoModel", QVariant::fromValue(_infoList));
-	QQuickItem *infoList = ui->videoStripView->rootObject()->findChild<QQuickItem*>("infoList");
-	infoList->setVisible(_settings->displayInfo());
+	QString stripInfoText;
+	foreach(QString info, _strip.infos()) {
+		stripInfoText.append(info);
+	}
+	setStripInfo(stripInfoText);
+
+	QQuickItem *infosItem = ui->videoStripView->rootObject()->findChild<QQuickItem*>("infos");
+	infosItem->setVisible(true);//_settings->displayInfo());
 
 	PhStripText *nextText = NULL;
 	if(_settings->displayNextText()) {
@@ -1180,5 +1180,37 @@ void JokerWindow::setStripTime(PhTime time)
 	if (time != _stripTime) {
 		_stripTime = time;
 		emit stripTimeChanged();
+	}
+}
+
+void JokerWindow::setRefreshInfo(QString text)
+{
+	if (text != _refreshInfo) {
+		_refreshInfo = text;
+		emit refreshInfoChanged();
+	}
+}
+
+void JokerWindow::setUpdateInfo(QString text)
+{
+	if (text != _updateInfo) {
+		_updateInfo = text;
+		emit updateInfoChanged();
+	}
+}
+
+void JokerWindow::setDropInfo(QString text)
+{
+	if (text != _dropInfo) {
+		_dropInfo = text;
+		emit dropInfoChanged();
+	}
+}
+
+void JokerWindow::setStripInfo(QString text)
+{
+	if (text != _stripInfo) {
+		_stripInfo = text;
+		emit stripInfoChanged();
 	}
 }
