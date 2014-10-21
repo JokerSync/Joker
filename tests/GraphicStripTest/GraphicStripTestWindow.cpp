@@ -57,7 +57,7 @@ bool GraphicStripTestWindow::openDocument(const QString &fileName)
 		return false;
 
 	_settings->setGenerate(false);
-	setCurrentDocument(fileName);
+	openDocument(fileName);
 	return true;
 }
 
@@ -102,7 +102,7 @@ void GraphicStripTestWindow::onGenerate()
 		else {
 			_clock->setTime(_doc->lastTime());
 			_settings->setGenerate(true);
-			setCurrentDocument("");
+			openDocument("");
 		}
 	}
 

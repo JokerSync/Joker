@@ -30,6 +30,7 @@ public:
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 1)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
+	PH_SETTING_BOOL(setHideSelectedPeoples, hideSelectedPeoples)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)

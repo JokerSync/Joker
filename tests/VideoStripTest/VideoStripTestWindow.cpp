@@ -45,7 +45,7 @@ bool VideoStripTestWindow::openDocument(const QString &fileName)
 		_videoEngine.setTimeIn(_doc->videoTimeIn());
 	}
 
-	setCurrentDocument(fileName);
+	openDocument(fileName);
 
 	return true;
 }

@@ -64,7 +64,7 @@ bool VideoTestWindow::openDocument(const QString &fileName)
 
 	_videoEngine.clock()->setTime(currentTime);
 
-	setCurrentDocument(fileName);
+	openDocument(fileName);
 	_settings->setTimeStamp(timeStamp);
 
 	return true;
