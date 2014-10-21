@@ -82,4 +82,12 @@ Item {
             delegate: stripTextDelegate
         }
     }
+
+    Rectangle {
+        x: parent.width/6
+        y: 0
+        width: 4
+        height: parent.height
+        color: "#FFFF566C"
+    }
 }

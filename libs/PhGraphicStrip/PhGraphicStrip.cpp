@@ -284,13 +284,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			backgroundRect.draw();
 		}
 
-		PhGraphicSolidRect syncBarRect;
-		syncBarRect.setColor(QColor(225, 86, 108));
-		syncBarRect.setSize(4, height);
-		syncBarRect.setPosition(x + width/6, y, 0);
-
-		syncBarRect.draw();
-
 		if(_settings->displayRuler()) {
 			PhTime rulerTimeIn = _settings->rulerTimeIn();
 			PhTime timeBetweenRuler = _settings->timeBetweenRuler();
