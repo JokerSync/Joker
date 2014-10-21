@@ -140,7 +140,12 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		ui->ltcInputPortComboBox->setCurrentText(_settings->ltcInputPort());
 
 	// Initializing MTC preferences
-	ui->mtcVirtualInputPortLineEdit->setText(_settings->mtcVirtualInputPort());
+	if (PhMidiObject::canUseVirtualPorts()) {
+		ui->mtcVirtualInputPortLineEdit->setText(_settings->mtcVirtualInputPort());
+	} else {
+		ui->mtcVirtualInputPortLineEdit->setEnabled(false);
+		ui->mtcVirtualInputPortRadioButton->setEnabled(false);
+	}
 
 	QStringList mtcInputPorts = PhMidiInput::inputList();
 	ui->mtcExistingInputPortComboBox->addItems(mtcInputPorts);
