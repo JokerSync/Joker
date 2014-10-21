@@ -926,7 +926,7 @@ void JokerWindow::onPaint(int width, int height)
 	setStripInfo(stripInfoText);
 
 	QQuickItem *infosItem = ui->videoStripView->rootObject()->findChild<QQuickItem*>("infos");
-	infosItem->setVisible(true);//_settings->displayInfo());
+	infosItem->setVisible(_settings->displayInfo());
 
 	PhStripText *nextText = NULL;
 	if(_settings->displayNextTC()) {
