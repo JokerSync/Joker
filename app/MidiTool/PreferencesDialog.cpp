@@ -28,7 +28,12 @@ PreferencesDialog::PreferencesDialog(MidiToolSettings *settings) :
 	if(outputList.contains(_settings->midiOutputPortName()))
 		ui->comboBoxOutput->setCurrentText(_settings->midiOutputPortName());
 
-	ui->lineEditInput->setText(_settings->midiVirtualInputPortName());
+	if (PhMidiObject::canUseVirtualPorts()) {
+		ui->lineEditInput->setText(_settings->midiVirtualInputPortName());
+	} else {
+		ui->lineEditInput->setEnabled(false);
+		ui->radioButtonVirtualPort->setEnabled(false);
+	}
 
 	QStringList inputList = PhMidiInput::inputList();
 	ui->comboBoxInput->addItems(inputList);
