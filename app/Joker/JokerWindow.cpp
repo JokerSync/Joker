@@ -67,6 +67,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack3", _strip.stripTextModelTrack3());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("textFontUrl", QUrl::fromLocalFile(_settings->textFontFile()));
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
