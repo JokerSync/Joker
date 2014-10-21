@@ -5,6 +5,9 @@ Item {
     width: 600
     height: 400
 
+    // the font name is passed from here
+    FontLoader { id: stripFont; source: textFontUrl }
+
     // FIXME color, font, inverted color are not implemented
     Component {
         id: stripTextDelegate
@@ -25,7 +28,7 @@ Item {
                 id: stripText
                 text: content
                 font.pixelSize: parent.height
-                font.family: "Arial"
+                font.family: stripFont.name
                 transform: Scale {  xScale: stripTextContainer.width/stripText.width;
                                     yScale: 1;}
                 smooth: true // smooth scaling
