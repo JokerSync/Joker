@@ -59,6 +59,10 @@ public:
 	bool displayNextText() {
 		return true;
 	}
+	bool hideSelectedPeoples() {
+		return false;
+	}
+
 	bool invertColor() {
 		return false;
 	}
