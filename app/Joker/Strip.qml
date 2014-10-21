@@ -43,7 +43,6 @@ Item {
             orientation: ListView.Horizontal
             contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
             interactive: false
-            clip: true
             model: stripTextModelTrack0
             delegate: stripTextDelegate
         }
@@ -55,7 +54,6 @@ Item {
             orientation: ListView.Horizontal
             contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
             interactive: false
-            clip: true
             model: stripTextModelTrack1
             delegate: stripTextDelegate
         }
@@ -66,7 +64,6 @@ Item {
             orientation: ListView.Horizontal
             contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
             interactive: false
-            clip: true
             model: stripTextModelTrack2
             delegate: stripTextDelegate
         }
@@ -77,7 +74,6 @@ Item {
             orientation: ListView.Horizontal
             contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
             interactive: false
-            clip: true
             model: stripTextModelTrack3
             delegate: stripTextDelegate
         }
