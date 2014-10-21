@@ -17,7 +17,8 @@ PreferencesDialog::PreferencesDialog(MidiToolSettings *settings) :
 	_settings(settings),
 	_oldMidiOutputPortName(settings->midiOutputPortName()),
 	_oldMidiInputPortName(settings->midiInputPortName()),
-	_oldMidiVirtualInputPortName(settings->midiVirtualInputPortName())
+	_oldMidiVirtualInputPortName(settings->midiVirtualInputPortName()),
+	_oldMidiInputUseExistingPort(settings->midiInputUseExistingPort())
 {
 	ui->setupUi(this);
 
@@ -32,13 +33,12 @@ PreferencesDialog::PreferencesDialog(MidiToolSettings *settings) :
 	QStringList inputList = PhMidiInput::inputList();
 	ui->comboBoxInput->addItems(inputList);
 
-	bool useExistingPort = inputList.contains(_settings->midiInputPortName());
-	if(useExistingPort) {
+	if(inputList.contains(_settings->midiInputPortName()))
 		ui->comboBoxInput->setCurrentText(_settings->midiInputPortName());
+
+	if(_settings->midiInputUseExistingPort()) {
 		ui->radioButtonExistingPort->setChecked(true);
-	}
-	else {
-		_settings->setMidiVirtualInputPortName(_settings->midiInputPortName());
+	} else {
 		ui->radioButtonVirtualPort->setChecked(true);
 	}
 
@@ -56,10 +56,9 @@ void PreferencesDialog::updateInputPortEnabledControl()
 {
 	PHDEBUG;
 	bool useExistingPort = ui->radioButtonExistingPort->isChecked();
-	if(useExistingPort)
-		_settings->setMidiInputPortName(ui->comboBoxInput->currentText());
-	else
-		_settings->setMidiInputPortName(ui->lineEditInput->text());
+	_settings->setMidiInputUseExistingPort(useExistingPort);
+	_settings->setMidiInputPortName(ui->comboBoxInput->currentText());
+	_settings->setMidiVirtualInputPortName(ui->lineEditInput->text());
 
 	ui->comboBoxInput->setEnabled(useExistingPort);
 	ui->lineEditInput->setEnabled(!useExistingPort);
@@ -68,10 +67,8 @@ void PreferencesDialog::updateInputPortEnabledControl()
 void PreferencesDialog::accept()
 {
 	_settings->setMidiOutputPortName(ui->comboBoxOutput->currentText());
-	if(ui->radioButtonExistingPort->isChecked())
-		_settings->setMidiInputPortName(ui->comboBoxInput->currentText());
-	else
-		_settings->setMidiInputPortName(ui->lineEditInput->text());
+	_settings->setMidiInputUseExistingPort(ui->radioButtonExistingPort->isChecked());
+	_settings->setMidiInputPortName(ui->comboBoxInput->currentText());
 	_settings->setMidiVirtualInputPortName(ui->lineEditInput->text());
 
 	QDialog::accept();
@@ -82,6 +79,7 @@ void PreferencesDialog::reject()
 	_settings->setMidiInputPortName(_oldMidiInputPortName);
 	_settings->setMidiOutputPortName(_oldMidiOutputPortName);
 	_settings->setMidiVirtualInputPortName(_oldMidiVirtualInputPortName);
+	_settings->setMidiInputUseExistingPort(_oldMidiInputUseExistingPort);
 
 	QDialog::reject();
 }
