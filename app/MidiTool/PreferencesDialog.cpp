@@ -22,9 +22,6 @@ PreferencesDialog::PreferencesDialog(MidiToolSettings *settings) :
 	ui->setupUi(this);
 
 	QStringList outputList = PhMidiOutput::outputList();
-
-	// We add manually the output since it has been closed
-	outputList.append(_settings->midiInputPortName());
 	ui->comboBoxOutput->addItems(outputList);
 
 	if(outputList.contains(_settings->midiOutputPortName()))
