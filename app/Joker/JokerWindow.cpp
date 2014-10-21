@@ -135,6 +135,19 @@ JokerWindow::~JokerWindow()
 	delete ui;
 }
 
+void JokerWindow::closeEvent(QCloseEvent *event)
+{
+	// the user will be asked if the document has to be saved
+	PhEditableDocumentWindow::closeEvent(event);
+
+	// if the close operation is not cancelled by the user,
+	// the media panel has to be closed manually, or the application
+	// will stay open forever in the background
+	if (event->isAccepted()) {
+		_mediaPanel.close();
+	}
+}
+
 void JokerWindow::setupSyncProtocol()
 {
 	PhClock* clock = NULL;
