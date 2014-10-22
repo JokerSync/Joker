@@ -22,9 +22,8 @@ bool PhMidiObject::canUseVirtualPorts()
 		RtMidi::Api midiApi = midiOut->getCurrentApi();
 
 		if ((midiApi == RtMidi::MACOSX_CORE)
-				|| (midiApi == RtMidi::LINUX_ALSA)
-				|| (midiApi == RtMidi::UNIX_JACK))
-		{
+		    || (midiApi == RtMidi::LINUX_ALSA)
+		    || (midiApi == RtMidi::UNIX_JACK)) {
 			result = true;
 		}
 	}

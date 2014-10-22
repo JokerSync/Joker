@@ -121,7 +121,8 @@ void MidiToolWindow::on_readMtcCheckBox_clicked(bool checked)
 
 		if (_settings->midiInputUseExistingPort()) {
 			portName = _settings->midiInputPortName();
-		} else {
+		}
+		else {
 			portName = _settings->midiVirtualInputPortName();
 		}
 

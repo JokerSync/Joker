@@ -142,7 +142,8 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	// Initializing MTC preferences
 	if (PhMidiObject::canUseVirtualPorts()) {
 		ui->mtcVirtualInputPortLineEdit->setText(_settings->mtcVirtualInputPort());
-	} else {
+	}
+	else {
 		ui->mtcVirtualInputPortLineEdit->setEnabled(false);
 		ui->mtcVirtualInputPortRadioButton->setEnabled(false);
 	}
@@ -155,7 +156,8 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 
 	if(_settings->mtcInputUseExistingPort()) {
 		ui->mtcExistingInputPortRadioButton->setChecked(true);
-	} else {
+	}
+	else {
 		ui->mtcVirtualInputPortRadioButton->setChecked(true);
 	}
 

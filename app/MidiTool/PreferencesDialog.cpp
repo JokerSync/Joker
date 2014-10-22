@@ -30,7 +30,8 @@ PreferencesDialog::PreferencesDialog(MidiToolSettings *settings) :
 
 	if (PhMidiObject::canUseVirtualPorts()) {
 		ui->lineEditInput->setText(_settings->midiVirtualInputPortName());
-	} else {
+	}
+	else {
 		ui->lineEditInput->setEnabled(false);
 		ui->radioButtonVirtualPort->setEnabled(false);
 	}
@@ -43,7 +44,8 @@ PreferencesDialog::PreferencesDialog(MidiToolSettings *settings) :
 
 	if(_settings->midiInputUseExistingPort()) {
 		ui->radioButtonExistingPort->setChecked(true);
-	} else {
+	}
+	else {
 		ui->radioButtonVirtualPort->setChecked(true);
 	}
 

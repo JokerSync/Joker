@@ -171,7 +171,8 @@ void JokerWindow::setupSyncProtocol()
 	case PhSynchronizer::MTC:
 		if (_settings->mtcInputUseExistingPort()) {
 			mtcPortName = _settings->mtcInputPort();
-		} else {
+		}
+		else {
 			mtcPortName = _settings->mtcVirtualInputPort();
 		}
 
@@ -553,12 +554,12 @@ void JokerWindow::on_actionPreferences_triggered()
 	PreferencesDialog dlg(_settings);
 	if(dlg.exec() == QDialog::Accepted) {
 		if((oldSynchroProtocol != _settings->synchroProtocol())
-		    || (oldLtcInputPort  != _settings->ltcInputPort())
-			|| (oldMtcInputPort != _settings->mtcInputPort())
-			|| (oldMtcVirtualInputPort != _settings->mtcVirtualInputPort())
-			|| (oldMtcInputUseExistingPort != _settings->mtcInputUseExistingPort())
-			|| (oldSendMmcMessage != _settings->sendMmcMessage())
-			|| (oldMmcOutputPort != _settings->mmcOutputPort())) {
+		   || (oldLtcInputPort  != _settings->ltcInputPort())
+		   || (oldMtcInputPort != _settings->mtcInputPort())
+		   || (oldMtcVirtualInputPort != _settings->mtcVirtualInputPort())
+		   || (oldMtcInputUseExistingPort != _settings->mtcInputUseExistingPort())
+		   || (oldSendMmcMessage != _settings->sendMmcMessage())
+		   || (oldMmcOutputPort != _settings->mmcOutputPort())) {
 			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
 			setupSyncProtocol();
 		}
