@@ -29,6 +29,7 @@ Item {
                 text: content
                 font.pixelSize: parent.height
                 font.family: stripFont.name
+                font.weight: textBoldness * 99/5
                 transform: Scale {  xScale: stripTextContainer.width/stripText.width;
                                     yScale: 1;}
                 smooth: true // smooth scaling
