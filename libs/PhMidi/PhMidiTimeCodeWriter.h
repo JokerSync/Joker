@@ -63,6 +63,7 @@ private:
 	PhTimeCodeType _tcType;
 	PhClock _clock;
 	int _currentDigit;
+	PhTime _currentQFTime;
 };
 
 #endif // PHMIDITIMECODEWRITER_H
