@@ -85,6 +85,15 @@ void PhGraphicStrip::onDocChanged()
 		previousCutTime = cut->timeIn();
 	}
 
+	// loops
+	_loopModel.clear();
+	int previousLoopTime = 0;
+	foreach(PhStripLoop * loop, _doc.loops()) {
+		PhNextPeople *loopPeople = new PhNextPeople(loop->label(), "", previousLoopTime, true, loop->timeIn() - previousLoopTime);
+		_loopModel.addNextPeople(loopPeople);
+		previousLoopTime = loop->timeIn();
+	}
+
 	// strip texts
 	_stripTextModelTrack0.clear();
 	_stripTextModelTrack1.clear();
@@ -402,33 +411,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 		}
 
 		foreach(PhStripLoop * loop, _doc.loops()) {
-			//_counter++;
-			// This calcul allow the cross to come smoothly on the screen (height * timePerPixel / 8)
-			if( ((loop->timeIn() + height * timePerPixel / 8) > timeIn) && ((loop->timeIn() - height * timePerPixel / 8 ) < timeOut)) {
-				PhGraphicLoop gLoop;
-				if(!invertedColor)
-					gLoop.setColor(Qt::black);
-				else
-					gLoop.setColor(Qt::white);
-
-				int xLoop = x + loop->timeIn() / timePerPixel - offset;
-				gLoop.setX(xLoop);
-				gLoop.setY(y);
-				gLoop.setZ(-1);
-				gLoop.setThickness(height / 40);
-				gLoop.setHeight(height);
-				gLoop.setCrossSize(height / 4);
-				gLoop.setWidth(height / 4);
-
-				gLoop.draw();
-
-				PhGraphicText gLabel(&_hudFont, loop->label(), xLoop + 10, y + height * 3 / 4, -1);
-				gLabel.setWidth(_hudFont.getNominalWidth(loop->label()));
-				gLabel.setHeight(height / 4);
-				gLabel.setColor(Qt::gray);
-				gLabel.draw();
-			}
-
+			// loop in the next people part
 			if(displayNextText && ((loop->timeIn() + height * timePerPixel / 8) > timeIn)) {
 				PhGraphicLoop gLoopPred;
 

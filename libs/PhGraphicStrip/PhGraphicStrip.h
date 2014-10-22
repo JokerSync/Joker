@@ -143,6 +143,9 @@ public:
 		return &_cutModel;
 	}
 
+	PhNextPeopleModel *loopModel() {
+		return &_loopModel;
+	}
 
 private slots:
 	/**
@@ -195,6 +198,7 @@ private:
 	PhStripTextModel _stripTextModelTrack2;
 	PhStripTextModel _stripTextModelTrack3;
 	PhNextPeopleModel _cutModel;
+	PhNextPeopleModel _loopModel;
 };
 
 #endif // PHGRAPHICSTRIP_H

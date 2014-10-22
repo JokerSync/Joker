@@ -111,4 +111,58 @@ Item {
             }
         }
     }
+
+    ListView {
+        anchors.fill: parent
+        orientation: ListView.Horizontal
+        contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+        interactive: false
+        model: loopModel
+        delegate: Item {
+            id: loopContainer
+            width: duration/horizontalTimePerPixel
+            height: parent.height
+
+            Rectangle {
+                color: invertColor? "white":"black"
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                x: parent.width - width/2
+                width: parent.height / 40
+            }
+
+            Rectangle {
+                color: invertColor? "white":"black"
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.topMargin: parent.height/3
+                anchors.bottomMargin: parent.height/3
+                x: parent.width - width/2
+                width: parent.height / 40
+                rotation: 45
+                transformOrigin: Center
+            }
+
+            Rectangle {
+                color: invertColor? "white":"black"
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.topMargin: parent.height/3
+                anchors.bottomMargin: parent.height/3
+                x: parent.width - width/2
+                width: parent.height / 40
+                rotation: -45
+                transformOrigin: Center
+            }
+
+            Text {
+                text: name
+                color: "gray"
+                font.pixelSize: parent.height/4
+                font.family: "Arial"
+                x: parent.width + 10
+                y: parent.height * 2 / 3
+            }
+        }
+    }
 }
