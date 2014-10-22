@@ -90,4 +90,25 @@ Item {
         height: parent.height
         color: "#FFFF566C"
     }
+
+    ListView {
+        anchors.fill: parent
+        orientation: ListView.Horizontal
+        contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+        interactive: false
+        model: cutModel
+        visible: displayCuts
+        delegate: Item {
+            width: duration/horizontalTimePerPixel
+            height: parent.height
+
+            Rectangle {
+                color: invertColor? "white":"black"
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                x: parent.width
+                width: cutWidth
+            }
+        }
+    }
 }
