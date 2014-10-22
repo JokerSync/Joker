@@ -62,6 +62,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("cutModel", _strip.cutModel());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("loopModel", _strip.loopModel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack0", _strip.stripTextModelTrack0());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack1", _strip.stripTextModelTrack1());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack2", _strip.stripTextModelTrack2());
