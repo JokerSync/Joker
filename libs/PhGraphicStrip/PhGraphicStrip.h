@@ -139,6 +139,11 @@ public:
 		return &_stripTextModelTrack3;
 	}
 
+	PhNextPeopleModel *cutModel() {
+		return &_cutModel;
+	}
+
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -189,6 +194,7 @@ private:
 	PhStripTextModel _stripTextModelTrack1;
 	PhStripTextModel _stripTextModelTrack2;
 	PhStripTextModel _stripTextModelTrack3;
+	PhNextPeopleModel _cutModel;
 };
 
 #endif // PHGRAPHICSTRIP_H

@@ -51,6 +51,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
 	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("cutModel", _strip.cutModel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack0", _strip.stripTextModelTrack0());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack1", _strip.stripTextModelTrack1());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack2", _strip.stripTextModelTrack2());
@@ -59,6 +60,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("textFontUrl", QUrl::fromLocalFile(_settings->textFontFile()));
 	ui->videoStripView->engine()->rootContext()->setContextProperty("textBoldness", _settings->textBoldness());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("cutWidth", _settings->cutWidth());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("displayCuts", _settings->displayCuts());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("invertColor", _settings->invertColor());
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
