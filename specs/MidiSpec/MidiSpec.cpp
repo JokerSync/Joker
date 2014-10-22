@@ -412,7 +412,7 @@ go_bandit([](){
 			AssertThat(quarterFrameCount, Equals(0));
 
 			mtcWriter.clock()->setRate(1);
-			PhTime elapsedTime = static_cast<PhTime> (24000.0 / (4.0 * PhTimeCode::getAverageFps(PhTimeCodeType30))); // => one quarter frame frequency
+			PhTime elapsedTime = PhTimeCode::timePerFrame(PhTimeCodeType30) / 4; // => one quarter frame period
 			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
@@ -464,7 +464,7 @@ go_bandit([](){
 
 			// Test changing the writer timecode type:
 			mtcWriter.setTimeCodeType(PhTimeCodeType25);
-			elapsedTime = static_cast<PhTime> (24000.0 / (4.0 * PhTimeCode::getAverageFps(PhTimeCodeType25))); // => one quarter frame frequency
+			elapsedTime = PhTimeCode::timePerFrame(PhTimeCodeType25) / 4; // => one quarter frame period
 
 			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
