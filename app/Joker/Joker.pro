@@ -61,6 +61,9 @@ unix {
 mac{
 	ICON = joker.icns
 
+	QMAKE_CFLAGS += -gdwarf-2
+	QMAKE_CXXFLAGS += -gdwarf-2
+
 	# For the plist version
 	OTHER_FILES += $${TOP_ROOT}/data/joker.plist
 
