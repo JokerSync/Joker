@@ -75,6 +75,12 @@ public slots:
 
 protected:
 	///
+	/// @brief Close event, if accepted by the user, will close the media panel
+	/// @param event
+	///
+	virtual void closeEvent(QCloseEvent *event);
+
+	///
 	/// @brief Open all supported strip file
 	///
 	/// @param filePath The file path
