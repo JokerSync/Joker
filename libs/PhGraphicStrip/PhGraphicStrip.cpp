@@ -412,42 +412,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				break;
 		}
 
-		foreach(PhStripLoop * loop, _doc.loops()) {
-			if(displayNextText
-			   && (loop->timeIn() > clockTime)
-			   && (loop->timeIn() < maxTimeIn)) {
-				PhGraphicLoop gLoopPred;
-
-				gLoopPred.setColor(Qt::white);
-
-				gLoopPred.setHorizontalLoop(true);
-				gLoopPred.setZ(-3);
-
-				gLoopPred.setX(nextTextX);
-				gLoopPred.setY(y - (loop->timeIn() - clockTime) / verticalTimePerPixel);
-				gLoopPred.setHeight(30);
-
-				int loopWidth = width - nextTextX;
-				gLoopPred.setThickness(4);
-				gLoopPred.setCrossSize(loopWidth / 10);
-				gLoopPred.setWidth(loopWidth);
-
-				gLoopPred.draw();
-
-				// Display the label
-				PhGraphicText gLabel(&_hudFont, loop->label());
-				gLabel.setWidth(_hudFont.getNominalWidth(loop->label()) / 3);
-#warning /// @todo better loop sizing
-				gLabel.setHeight(height / 20);
-				gLabel.setX(width - gLabel.width() - spacing);
-				gLabel.setY(gLoopPred.y() - gLabel.height() - spacing);
-				gLabel.setColor(Qt::gray);
-				gLabel.draw();
-			}
-			if(loop->timeIn() > maxTimeIn + timePerPixel * height / 4)
-				break;
-		}
-
 		foreach(PhStripDetect * detect, _doc.detects()) {
 			//_counter++;
 
