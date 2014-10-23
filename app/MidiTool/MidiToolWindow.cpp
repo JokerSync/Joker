@@ -177,7 +177,7 @@ void MidiToolWindow::updateFpsLabel(PhTimeCodeType tcType)
 
 void MidiToolWindow::onTick()
 {
-	_mtcWriter.clock()->tick(PhTimeCode::getFps(_mtcWriter.timeCodeType()) * 4);
+	_mtcWriter.clock()->elapse(PhTimeCode::timePerFrame(_mtcWriter.timeCodeType()) / 4);
 }
 
 void MidiToolWindow::updateWriterInfoLabel()

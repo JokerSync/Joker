@@ -412,50 +412,50 @@ go_bandit([](){
 			AssertThat(quarterFrameCount, Equals(0));
 
 			mtcWriter.clock()->setRate(1);
-			PhFrame freq = PhTimeCode::getFps(PhTimeCodeType30) * 4; // => one quarter frame frequency
-			mtcWriter.clock()->tick(freq);
+			PhTime elapsedTime = PhTimeCode::timePerFrame(PhTimeCodeType30) / 4; // => one quarter frame period
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(1));
 			AssertThat(quarterFrameData, Equals(0x02));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(2));
 			AssertThat(quarterFrameData, Equals(0x11));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(3));
 			AssertThat(quarterFrameData, Equals(0x23));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(4));
 			AssertThat(quarterFrameData, Equals(0x31));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(5));
 			AssertThat(quarterFrameData, Equals(0x48));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(6));
 			AssertThat(quarterFrameData, Equals(0x52));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(7));
 			AssertThat(quarterFrameData, Equals(0x67));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(mtcWriter.clock()->time(), Equals(s2t("23:40:19:18", PhTimeCodeType30)));
@@ -464,51 +464,51 @@ go_bandit([](){
 
 			// Test changing the writer timecode type:
 			mtcWriter.setTimeCodeType(PhTimeCodeType25);
-			freq = PhTimeCode::getFps(PhTimeCodeType25) * 4; // => one quarter frame frequency
+			elapsedTime = PhTimeCode::timePerFrame(PhTimeCodeType25) / 4; // => one quarter frame period
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(9));
 			AssertThat(quarterFrameData, Equals(0x01)); // With 25 fps, the next timecode will be 23:40:19:17
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(10));
 			AssertThat(quarterFrameData, Equals(0x11));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(11));
 			AssertThat(quarterFrameData, Equals(0x23));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(12));
 			AssertThat(quarterFrameData, Equals(0x31));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(13));
 			AssertThat(quarterFrameData, Equals(0x48));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(14));
 			AssertThat(quarterFrameData, Equals(0x52));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(quarterFrameCount, Equals(15));
 			AssertThat(quarterFrameData, Equals(0x67));
 
-			mtcWriter.clock()->tick(freq);
+			mtcWriter.clock()->elapse(elapsedTime);
 			QThread::msleep(10);
 
 			AssertThat(mtcWriter.clock()->time(), Equals(s2t("23:40:19:17", PhTimeCodeType25)));

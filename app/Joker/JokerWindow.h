@@ -69,9 +69,9 @@ public slots:
 	/// \brief timeCounter Slot used to count the time played on nominal speed
 	/// when the synchro is enabled
 	///
-	/// \param frequency
+	/// \param elapsedTime
 	///
-	void timeCounter(qreal frequency);
+	void timeCounter(PhTime elapsedTime);
 
 protected:
 	///

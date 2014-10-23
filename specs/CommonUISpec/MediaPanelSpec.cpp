@@ -28,11 +28,11 @@ go_bandit([](){
 
 			clock.setRate(1);
 
-			clock.tick(40.0f);
-			clock.tick(40.0f);
-			clock.tick(40.0f);
-			clock.tick(40.0f);
-			clock.tick(40.0f);
+			clock.elapse(600);
+			clock.elapse(600);
+			clock.elapse(600);
+			clock.elapse(600);
+			clock.elapse(600);
 		});
 
 		it("play_upon_space_bar_pressed", []() {

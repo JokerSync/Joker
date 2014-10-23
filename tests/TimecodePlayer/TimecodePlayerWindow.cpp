@@ -21,5 +21,5 @@ TimecodePlayerWindow::~TimecodePlayerWindow()
 
 void TimecodePlayerWindow::updateFrame()
 {
-	_clock.tick(100);
+	_clock.elapse(240); // 1 frame at 100 fps
 }

@@ -99,18 +99,11 @@ signals:
 
 public slots:
 	/**
-	 * Sync the clock to a signal at a given frequence.
-	 * The clock time value is then updated accordingly to the clock rate.
-	 * @param frequency Frequency of the signal in float
-	 */
-	void tick(float frequency);
-
-	/**
 	 * Sync the clock to a signal at a given elapse time.
 	 * The clock time value is then updated accordingly to the clock rate.
-	 * @param time The elapsed time value.
+	 * @param elapsedTime The elapsed time value.
 	 */
-	void elapse(PhTime time);
+	void elapse(PhTime elapsedTime);
 
 private:
 	PhTime _time;
