@@ -17,6 +17,10 @@ CONFIG(release, debug|release) {
 
 			QMAKE_POST_LINK += macdeployqt $${TARGET}.app;
 
+			ENTITLEMENTS = $$TOP_ROOT/app/Joker/entitlements.plist
+
+			OTHER_FILES += $${ENTITLEMENTS}
+
 ##################################################
 			BUNDLEID += com.phonations.joker
 
@@ -70,7 +74,9 @@ CONFIG(release, debug|release) {
 #			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) $${TARGET}.app/Contents/Frameworks/
 #			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) $${TARGET}.app/Contents/Frameworks/
 			QMAKE_POST_LINK += echo "sign all";
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID $${TARGET}.app;
+
+			QMAKE_POST_LINK += cp $${ENTITLEMENTS} .;
+			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -v --entitlements $${ENTITLEMENTS} $${TARGET}.app;
 
 #			QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications -sign $$(INSTALLER_CERTIFICATE) $${TARGET}.pkg;
 			QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications $${TARGET}.pkg;
