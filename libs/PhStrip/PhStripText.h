@@ -38,6 +38,11 @@ public:
 	 * @return _content
 	 */
 	QString content() const;
+	/**
+	 * @brief Set the text content
+	 * @param content a string
+	 */
+	void setContent(QString content);
 
 	/**
 	 * @brief Get whether this person is selected

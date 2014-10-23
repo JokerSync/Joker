@@ -83,6 +83,74 @@ Item {
         }
     }
 
+    // people names
+    // FIXME color, font, inverted color are not implemented
+    Component {
+        id: stripPeopleDelegate
+        Item {
+            width: (timeOut - timeIn)/horizontalTimePerPixel
+            height: parent.height
+
+            Text {
+                anchors.right: parent.right
+                anchors.rightMargin: 4000/horizontalTimePerPixel
+                text: content
+                font.pixelSize: parent.height*2/5
+                font.family: "Arial"
+                color: "blue"
+                smooth: true // smooth scaling
+            }
+        }
+    }
+
+    ColumnLayout {
+        anchors.fill: parent
+        spacing: 0
+
+        ListView {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            orientation: ListView.Horizontal
+            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+            interactive: false
+            model: stripPeopleModelTrack0
+            delegate: stripPeopleDelegate
+        }
+
+
+        ListView {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            orientation: ListView.Horizontal
+            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+            interactive: false
+            model: stripPeopleModelTrack1
+            delegate: stripPeopleDelegate
+        }
+
+        ListView {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            orientation: ListView.Horizontal
+            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+            interactive: false
+            model: stripPeopleModelTrack2
+            delegate: stripPeopleDelegate
+        }
+
+        ListView {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            orientation: ListView.Horizontal
+            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+            interactive: false
+            model: stripPeopleModelTrack3
+            delegate: stripPeopleDelegate
+        }
+    }
+
+
+    // sync bar
     Rectangle {
         x: parent.width/6
         y: 0
