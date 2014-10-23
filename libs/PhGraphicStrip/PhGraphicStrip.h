@@ -147,6 +147,22 @@ public:
 		return &_loopModel;
 	}
 
+	PhStripTextModel *stripPeopleModelTrack0() {
+		return &_stripPeopleModelTrack0;
+	}
+
+	PhStripTextModel *stripPeopleModelTrack1() {
+		return &_stripPeopleModelTrack1;
+	}
+
+	PhStripTextModel *stripPeopleModelTrack2() {
+		return &_stripPeopleModelTrack2;
+	}
+
+	PhStripTextModel *stripPeopleModelTrack3() {
+		return &_stripPeopleModelTrack3;
+	}
+
 private slots:
 	/**
 	 * @brief Clear all the graphic strip object related to the PhStripDoc.
@@ -199,6 +215,10 @@ private:
 	PhStripTextModel _stripTextModelTrack3;
 	PhNextPeopleModel _cutModel;
 	PhNextPeopleModel _loopModel;
+	PhStripTextModel _stripPeopleModelTrack0;
+	PhStripTextModel _stripPeopleModelTrack1;
+	PhStripTextModel _stripPeopleModelTrack2;
+	PhStripTextModel _stripPeopleModelTrack3;
 };
 
 #endif // PHGRAPHICSTRIP_H

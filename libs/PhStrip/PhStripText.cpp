@@ -20,6 +20,14 @@ QString PhStripText::content() const
 	return _content;
 }
 
+void PhStripText::setContent(QString content)
+{
+	if (content != _content) {
+		_content = content;
+		emit contentChanged();
+	}
+}
+
 bool PhStripText::selected() const
 {
 	return _selected;
