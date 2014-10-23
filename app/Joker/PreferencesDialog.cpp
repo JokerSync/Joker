@@ -140,19 +140,24 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		ui->ltcInputPortComboBox->setCurrentText(_settings->ltcInputPort());
 
 	// Initializing MTC preferences
-	ui->mtcVirtualInputPortLineEdit->setText(_settings->mtcVirtualInputPort());
+	if (PhMidiObject::canUseVirtualPorts()) {
+		ui->mtcVirtualInputPortLineEdit->setText(_settings->mtcVirtualInputPort());
+	}
+	else {
+		ui->mtcVirtualInputPortLineEdit->setEnabled(false);
+		ui->mtcVirtualInputPortRadioButton->setEnabled(false);
+	}
 
 	QStringList mtcInputPorts = PhMidiInput::inputList();
-
 	ui->mtcExistingInputPortComboBox->addItems(mtcInputPorts);
 
-	bool useExistingPort = mtcInputPorts.contains(_settings->mtcInputPort());
-	if(useExistingPort) {
+	if(mtcInputPorts.contains(_settings->mtcInputPort()))
 		ui->mtcExistingInputPortComboBox->setCurrentText(_settings->mtcInputPort());
+
+	if(_settings->mtcInputUseExistingPort()) {
 		ui->mtcExistingInputPortRadioButton->setChecked(true);
 	}
 	else {
-		_settings->setMtcVirtualInputPort(_settings->mtcInputPort());
 		ui->mtcVirtualInputPortRadioButton->setChecked(true);
 	}
 
@@ -232,11 +237,8 @@ void PreferencesDialog::accept()
 
 	_settings->setLtcInputPort(ui->ltcInputPortComboBox->currentText());
 
-	if(ui->mtcExistingInputPortRadioButton->isChecked())
-		_settings->setMtcInputPort(ui->mtcExistingInputPortComboBox->currentText());
-	else
-		_settings->setMtcInputPort(ui->mtcVirtualInputPortLineEdit->text());
-
+	_settings->setMtcInputUseExistingPort(ui->mtcExistingInputPortRadioButton->isChecked());
+	_settings->setMtcInputPort(ui->mtcExistingInputPortComboBox->currentText());
 	_settings->setMtcVirtualInputPort(ui->mtcVirtualInputPortLineEdit->text());
 
 	_settings->setSendMmcMessage(ui->mmcCheckBox->isChecked());
@@ -269,10 +271,10 @@ void PreferencesDialog::updateSynchronisationEnabledControl(bool)
 	ui->mmcFrame->setEnabled(ui->mmcCheckBox->isChecked());
 
 	bool useExistingPort = ui->mtcExistingInputPortRadioButton->isChecked();
-	if(useExistingPort)
-		_settings->setMtcInputPort(ui->mtcExistingInputPortComboBox->currentText());
-	else
-		_settings->setMtcInputPort(ui->mtcVirtualInputPortLineEdit->text());
+
+	_settings->setMtcInputUseExistingPort(useExistingPort);
+	_settings->setMtcInputPort(ui->mtcExistingInputPortComboBox->currentText());
+	_settings->setMtcVirtualInputPort(ui->mtcVirtualInputPortLineEdit->text());
 
 	ui->mtcVirtualInputPortLineEdit->setEnabled(!useExistingPort);
 	ui->mtcExistingInputPortComboBox->setEnabled(useExistingPort);

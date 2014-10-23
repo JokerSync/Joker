@@ -103,6 +103,7 @@ public:
 	// MTC settings:
 	PH_SETTING_STRING2(setMtcInputPort, mtcInputPort, "Joker")
 	PH_SETTING_STRING2(setMtcVirtualInputPort, mtcVirtualInputPort, "Joker")
+	PH_SETTING_BOOL2(setMtcInputUseExistingPort, mtcInputUseExistingPort, true)
 
 	// MMC settings
 	PH_SETTING_BOOL(setSendMmcMessage, sendMmcMessage)

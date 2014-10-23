@@ -151,6 +151,7 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 void JokerWindow::setupSyncProtocol()
 {
 	PhClock* clock = NULL;
+	QString mtcPortName;
 
 	// Disable old protocol
 	_sonySlave.close();
@@ -181,10 +182,17 @@ void JokerWindow::setupSyncProtocol()
 		}
 		break;
 	case PhSynchronizer::MTC:
-		if(_mtcReader.open(_settings->mtcInputPort()))
+		if (_settings->mtcInputUseExistingPort()) {
+			mtcPortName = _settings->mtcInputPort();
+		}
+		else {
+			mtcPortName = _settings->mtcVirtualInputPort();
+		}
+
+		if(_mtcReader.open(mtcPortName))
 			clock = _mtcReader.clock();
 		else {
-			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to open %0 midi port")).arg(_settings->mtcInputPort()));
+			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to open %0 midi port")).arg(mtcPortName));
 			type = PhSynchronizer::NoSync;
 		}
 	case PhSynchronizer::NoSync:
@@ -553,14 +561,18 @@ void JokerWindow::on_actionPreferences_triggered()
 	int oldSynchroProtocol = _settings->synchroProtocol();
 	QString oldLtcInputPort = _settings->ltcInputPort();
 	QString oldMtcInputPort = _settings->mtcInputPort();
+	QString oldMtcVirtualInputPort = _settings->mtcVirtualInputPort();
+	bool oldMtcInputUseExistingPort = _settings->mtcInputUseExistingPort();
 	bool oldSendMmcMessage = _settings->sendMmcMessage();
 	QString oldMmcOutputPort = _settings->mmcOutputPort();
 
 	PreferencesDialog dlg(_settings);
 	if(dlg.exec() == QDialog::Accepted) {
-		if(((oldSynchroProtocol != _settings->synchroProtocol())
-		    || (oldLtcInputPort  != _settings->ltcInputPort())
-		    || (oldMtcInputPort != _settings->mtcInputPort()))
+		if((oldSynchroProtocol != _settings->synchroProtocol())
+		   || (oldLtcInputPort  != _settings->ltcInputPort())
+		   || (oldMtcInputPort != _settings->mtcInputPort())
+		   || (oldMtcVirtualInputPort != _settings->mtcVirtualInputPort())
+		   || (oldMtcInputUseExistingPort != _settings->mtcInputUseExistingPort())
 		   || (oldSendMmcMessage != _settings->sendMmcMessage())
 		   || (oldMmcOutputPort != _settings->mmcOutputPort())) {
 			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
