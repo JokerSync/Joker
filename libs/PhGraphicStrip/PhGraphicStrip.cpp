@@ -410,31 +410,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 				break;
 		}
 
-		foreach(PhStripLoop * loop, _doc.loops()) {
-			// loop in the next people part
-			if(displayNextText && ((loop->timeIn() + height * timePerPixel / 8) > timeIn)) {
-				PhGraphicLoop gLoopPred;
-
-				int howFarIsLoop = (loop->timeIn() - clockTime) / verticalTimePerPixel;
-				gLoopPred.setColor(Qt::white);
-
-				gLoopPred.setHorizontalLoop(true);
-				gLoopPred.setZ(-3);
-
-				gLoopPred.setX(width - width / 10);
-				gLoopPred.setY(y - howFarIsLoop);
-				gLoopPred.setHeight(30);
-
-				gLoopPred.setThickness(3);
-				gLoopPred.setCrossSize(20);
-				gLoopPred.setWidth(width / 10);
-
-				gLoopPred.draw();
-			}
-			if((loop->timeIn() - height * timePerPixel / 8) > timeOut + 25 * 30)
-				break;
-		}
-
 		foreach(PhStripDetect * detect, _doc.detects()) {
 			//_counter++;
 
