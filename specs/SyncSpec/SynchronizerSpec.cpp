@@ -41,12 +41,12 @@ go_bandit([](){
 
 			sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
 
-			stripClock.setTime(960);
+			stripClock.setTime(1920); // 2 frames at 25 fps
 
-			AssertThat(stripClock.time(), Equals(960));
+			AssertThat(stripClock.time(), Equals(1920));
 			AssertThat(videoClock.time(), Equals(9600));
 			AssertThat(syncClock.time(), Equals(0));
-			stripClock.setTime(1920);
+			stripClock.setTime(2880); // 3 frames at 25 fps
 			AssertThat(stripClock.time(), Equals(0));
 			AssertThat(videoClock.time(), Equals(9600));
 			AssertThat(syncClock.time(), Equals(0));
