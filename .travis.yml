@@ -36,7 +36,7 @@ script:
 - if [[ "$JOB" == BUILD_* ]]; then make -j 8; fi
 - if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then ./AutoTest; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
-- export RELEASED_PACKAGE_FILENAME=$(ls -1 *_$TRAVIS_TAG.dmg)
+- export RELEASED_PACKAGE_FILENAME=$(ls -1 $JOKER_RELEASE_PATH/Joker_$TRAVIS_TAG.dmg)
 - echo ${RELEASED_PACKAGE_FILENAME}
 
 after_success:
