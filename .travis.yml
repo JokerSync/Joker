@@ -36,6 +36,8 @@ script:
 - if [[ "$JOB" == BUILD_* ]]; then make -j 8; fi
 - if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then ./AutoTest; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
+- export RELEASED_PACKAGE_FILENAME=$(ls -1 *_$TRAVIS_TAG.dmg)
+
 after_success:
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ -E .+/specs/.+ --verbose; fi
 after_failure:
@@ -47,3 +49,13 @@ notifications:
   irc:
    channels: "phonations.com#joker"
   on_success: always
+deploy:
+  provider: releases
+  api_key:
+    secure: DTPxxREDO8+Pi/cnqKr1nce9FxJ3AUY7h4S9gHt3S2vBkrlZM4vD4GLXCVjbZuSpnqkTTAiGhUiYEN8jiF3pjStKKlEl2w537cDpoSl1ZAB5G+G3PKTBxG5MhRMZkTEgYFvtx/VPpvleQ4C8cMosogQk7iBwwuk19FLbcL0/kL4=
+  file: ${RELEASED_PACKAGE_FILENAME}
+  on:
+    tags: true
+    all_branches: true
+    repo: Phonations/Joker
+    condition: $JOB = BUILD_RELEASE_JOKER
