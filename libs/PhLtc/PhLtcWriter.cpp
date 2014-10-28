@@ -71,7 +71,7 @@ int PhLtcWriter::processAudio(const void *, void *outputBuffer, unsigned long)
 
 	buf = ltc_encoder_get_bufptr(_encoder, &len, 1);
 	memcpy(outputBuffer, buf, len);
-	_clock.tick(PhTimeCode::getAverageFps(_tcType));
+	_clock.elapse(PhTimeCode::timePerFrame(_tcType) / 4);
 
 	return len;
 }

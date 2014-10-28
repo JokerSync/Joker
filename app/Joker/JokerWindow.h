@@ -69,11 +69,17 @@ public slots:
 	/// \brief timeCounter Slot used to count the time played on nominal speed
 	/// when the synchro is enabled
 	///
-	/// \param frequency
+	/// \param elapsedTime
 	///
-	void timeCounter(qreal frequency);
+	void timeCounter(PhTime elapsedTime);
 
 protected:
+	///
+	/// @brief Close event, if accepted by the user, will close the media panel
+	/// @param event
+	///
+	virtual void closeEvent(QCloseEvent *event);
+
 	///
 	/// @brief Open all supported strip file
 	///

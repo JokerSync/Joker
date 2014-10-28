@@ -117,8 +117,17 @@ void MidiToolWindow::on_readMtcCheckBox_clicked(bool checked)
 	ui->readerGroupBox->setEnabled(checked);
 	_settings->setReadMTC(checked);
 	if(checked) {
-		if(!_mtcReader.open(_settings->midiInputPortName())) {
-			QMessageBox::critical(this, "Error", "Unable to create " + _settings->midiInputPortName());
+		QString portName;
+
+		if (_settings->midiInputUseExistingPort()) {
+			portName = _settings->midiInputPortName();
+		}
+		else {
+			portName = _settings->midiVirtualInputPortName();
+		}
+
+		if(!_mtcReader.open(portName)) {
+			QMessageBox::critical(this, "Error", "Unable to create " + portName);
 			on_readMtcCheckBox_clicked(false);
 		}
 	}
@@ -177,7 +186,7 @@ void MidiToolWindow::updateFpsLabel(PhTimeCodeType tcType)
 
 void MidiToolWindow::onTick()
 {
-	_mtcWriter.clock()->tick(PhTimeCode::getFps(_mtcWriter.timeCodeType()) * 4);
+	_mtcWriter.clock()->elapse(PhTimeCode::timePerFrame(_mtcWriter.timeCodeType()) / 4);
 }
 
 void MidiToolWindow::updateWriterInfoLabel()

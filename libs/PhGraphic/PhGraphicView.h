@@ -9,6 +9,7 @@
 
 #include <QGLWidget>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include "PhSync/PhTime.h"
 #include "PhTools/PhTickCounter.h"
@@ -76,9 +77,9 @@ public:
 signals:
 	/**
 	 * @brief emit a signal just before the paint
-	 * @param frequency the effective frequency
+	 * @param elapsedTime the time elapsed since the last paint event
 	 */
-	void beforePaint(qreal frequency);
+	void beforePaint(PhTime elapsedTime);
 
 	/**
 	 * @brief paint event, every class have to re-implement it.
@@ -114,6 +115,8 @@ private:
 	PhFont _infoFont;
 	QTime _dropTimer;
 	int _dropDetected, _maxRefreshRate, _maxPaintDuration, _lastUpdateDuration, _maxUpdateDuration;
+	QElapsedTimer _timer;
+	qint64 _previousNsecsElapsed;
 };
 
 #endif // PHGRAPHICVIEW

@@ -40,7 +40,7 @@ void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 		PHDEBUG << "Play detected";
 		_clock.setRate(1);
 	}
-	_clock.tick(4.0 * PhTimeCode::getAverageFps(_tcType));
+	_clock.elapse(PhTimeCode::timePerFrame(_tcType) / 4);
 
 	unsigned int hhmmssff[4];
 	PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, _clock.time(), _tcType);

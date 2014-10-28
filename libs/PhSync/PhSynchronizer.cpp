@@ -55,9 +55,10 @@ void PhSynchronizer::onStripTimeChanged(PhTime time)
 		PHDBG(2) << time;
 		if(_syncClock) {
 			// Apply precise correction.
+			// We use a 2-frame error margin, which is consistent with LTC needs
 			// We don't change sony clock because this would desynchronize the sony master.
 #warning /// @todo Make the error a settings
-			if(qAbs(time - _syncClock->time()) > 1000) {
+			if(qAbs(time - _syncClock->time()) > 2*PhTimeCode::timePerFrame(PhTimeCodeType24)) {
 				PHDEBUG << "correct :" << _stripClock->time() << _syncClock->time();
 				_settingStripTime = true;
 				_stripClock->setTime(_syncClock->time());
@@ -111,7 +112,8 @@ void PhSynchronizer::onSyncTimeChanged(PhTime time)
 		// Precise correction occurs in onStripTimeChanged() that is called after
 		// on SonyTimeChanged (see VideoStripView::paint()).
 		PhTime error = qAbs(time - _stripClock->time());
-		if((error > 10000) || ((_stripClock->rate() == 0) && (error > 0))) {
+		if((error > 10*PhTimeCode::timePerFrame(PhTimeCodeType24))
+		   || ((_stripClock->rate() == 0) && (error > 0))) {
 			PHDEBUG << "correct error:" << time << _stripClock->time();
 			_settingStripTime = true;
 			_stripClock->setTime(time);

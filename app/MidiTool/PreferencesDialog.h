@@ -46,6 +46,7 @@ private:
 	Ui::PreferencesDialog *ui;
 	MidiToolSettings *_settings;
 	QString _oldMidiOutputPortName, _oldMidiInputPortName, _oldMidiVirtualInputPortName;
+	bool _oldMidiInputUseExistingPort;
 };
 
 #endif // PREFERENCESDIALOG_H

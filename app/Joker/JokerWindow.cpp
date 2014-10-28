@@ -121,7 +121,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionShow_ruler->setChecked(_settings->displayRuler());
 
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
-	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::tick);
+	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
 
 	this->connect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
 
@@ -135,9 +135,23 @@ JokerWindow::~JokerWindow()
 	delete ui;
 }
 
+void JokerWindow::closeEvent(QCloseEvent *event)
+{
+	// the user will be asked if the document has to be saved
+	PhEditableDocumentWindow::closeEvent(event);
+
+	// if the close operation is not cancelled by the user,
+	// the media panel has to be closed manually, or the application
+	// will stay open forever in the background
+	if (event->isAccepted()) {
+		_mediaPanel.close();
+	}
+}
+
 void JokerWindow::setupSyncProtocol()
 {
 	PhClock* clock = NULL;
+	QString mtcPortName;
 
 	// Disable old protocol
 	_sonySlave.close();
@@ -168,10 +182,17 @@ void JokerWindow::setupSyncProtocol()
 		}
 		break;
 	case PhSynchronizer::MTC:
-		if(_mtcReader.open(_settings->mtcInputPort()))
+		if (_settings->mtcInputUseExistingPort()) {
+			mtcPortName = _settings->mtcInputPort();
+		}
+		else {
+			mtcPortName = _settings->mtcVirtualInputPort();
+		}
+
+		if(_mtcReader.open(mtcPortName))
 			clock = _mtcReader.clock();
 		else {
-			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to open %0 midi port")).arg(_settings->mtcInputPort()));
+			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to open %0 midi port")).arg(mtcPortName));
 			type = PhSynchronizer::NoSync;
 		}
 	case PhSynchronizer::NoSync:
@@ -476,8 +497,10 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	return false;
 }
 
-void JokerWindow::timeCounter(qreal frequency)
+void JokerWindow::timeCounter(PhTime elapsedTime)
 {
+	int frequency = static_cast<int>(24000./static_cast<double>(elapsedTime));
+
 	if(currentRate() == 1 && (PhSynchronizer::SyncType)_settings->synchroProtocol() != PhSynchronizer::NoSync) {
 		_numberOfDraw++;
 		if(_numberOfDraw >= frequency) {
@@ -538,14 +561,18 @@ void JokerWindow::on_actionPreferences_triggered()
 	int oldSynchroProtocol = _settings->synchroProtocol();
 	QString oldLtcInputPort = _settings->ltcInputPort();
 	QString oldMtcInputPort = _settings->mtcInputPort();
+	QString oldMtcVirtualInputPort = _settings->mtcVirtualInputPort();
+	bool oldMtcInputUseExistingPort = _settings->mtcInputUseExistingPort();
 	bool oldSendMmcMessage = _settings->sendMmcMessage();
 	QString oldMmcOutputPort = _settings->mmcOutputPort();
 
 	PreferencesDialog dlg(_settings);
 	if(dlg.exec() == QDialog::Accepted) {
-		if(((oldSynchroProtocol != _settings->synchroProtocol())
-		    || (oldLtcInputPort  != _settings->ltcInputPort())
-		    || (oldMtcInputPort != _settings->mtcInputPort()))
+		if((oldSynchroProtocol != _settings->synchroProtocol())
+		   || (oldLtcInputPort  != _settings->ltcInputPort())
+		   || (oldMtcInputPort != _settings->mtcInputPort())
+		   || (oldMtcVirtualInputPort != _settings->mtcVirtualInputPort())
+		   || (oldMtcInputUseExistingPort != _settings->mtcInputUseExistingPort())
 		   || (oldSendMmcMessage != _settings->sendMmcMessage())
 		   || (oldMmcOutputPort != _settings->mmcOutputPort())) {
 			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();

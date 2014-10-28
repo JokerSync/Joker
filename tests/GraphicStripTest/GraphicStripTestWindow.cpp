@@ -41,7 +41,7 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 		               _settings->trackNumber(),
 		               _settings->startTime());
 
-	connect(ui->stripView, &PhGraphicView::beforePaint, _clock, &PhClock::tick);
+	connect(ui->stripView, &PhGraphicView::beforePaint, _clock, &PhClock::elapse);
 	connect(ui->stripView, &PhGraphicView::paint, this, &GraphicStripTestWindow::onPaint);
 }
 

@@ -21,7 +21,7 @@ VideoStripTestWindow::VideoStripTestWindow(VideoStripTestSettings *settings) :
 
 	_synchronizer.setVideoClock(_videoEngine.clock());
 
-	connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::tick);
+	connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
 	connect(ui->videoStripView, &PhGraphicView::paint, this, &VideoStripTestWindow::onPaint);
 }
 
