@@ -50,6 +50,7 @@
   <string>True</string>
   <key>LSMinimumSystemVersion</key>
   <string>10.6</string>
-
+  <key>LSApplicationCategoryType</key>
+  <string>public.app-category.video</string>
 </dict>
 </plist>
