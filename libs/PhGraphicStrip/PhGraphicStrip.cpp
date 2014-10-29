@@ -76,6 +76,19 @@ void PhGraphicStrip::onDocChanged()
 								_doc.timeOut() - text->timeIn());
 	_nextPeopleModel.addNextPeople(nextPeople);
 
+	// ruler
+	_rulerModel.clear();
+	PhTime rulerTimeIn = _settings->firstFootTime();
+	PhTime timeBetweenRuler = _settings->timeBetweenTwoFeet();
+	PhTime rulerTime = rulerTimeIn;
+	PhTime docTimeOut = _doc.timeOut();
+	while (rulerTime < docTimeOut + timeBetweenRuler) {
+		int rulerNumber = (rulerTime - rulerTimeIn) / timeBetweenRuler;
+		PhNextPeople *rulerPeople = new PhNextPeople(QString::number(rulerNumber), "", rulerTime, true, timeBetweenRuler);
+		_rulerModel.addNextPeople(rulerPeople);
+		rulerTime += timeBetweenRuler;
+	}
+
 	// cuts
 	_cutModel.clear();
 	int previousCutTime = 0;
@@ -381,66 +394,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 			backgroundRect.setZ(-2);
 			backgroundRect.draw();
-		}
-
-		if(_settings->displayFeet()) {
-			PhTime firstFootTime = _settings->firstFootTime();
-			PhTime timeBetweenTwoFeet = _settings->timeBetweenTwoFeet();
-			int feetNumber = (stripTimeIn - firstFootTime) / timeBetweenTwoFeet;
-			if (feetNumber < 0)
-				feetNumber = 0;
-
-			PhTime footTime = firstFootTime + feetNumber * timeBetweenTwoFeet;
-			PhGraphicSolidRect footRect;
-			PhGraphicDisc footDisc;
-			PhGraphicText footText(&_hudFont);
-			QColor footColor(80, 80, 80);
-			if(invertedColor)
-				footColor = Qt::white;
-
-			int width = 250 / timePerPixel;
-
-			footRect.setColor(footColor);
-			footRect.setWidth(width);
-			footRect.setHeight(height / 2);
-			footRect.setZ(0);
-			footRect.setY(y);
-
-			footDisc.setColor(footColor);
-			footDisc.setRadius(2 * width);
-			footDisc.setY(y + height / 2 + 3 * width);
-			footDisc.setZ(0);
-
-			footText.setColor(footColor);
-			footText.setY(y + height / 2);
-			footText.setHeight(height / 2);
-			footText.setZ(0);
-
-			while (footTime < stripTimeOut + timeBetweenTwoFeet) {
-				counter++;
-				int x = footTime / timePerPixel - offset;
-
-				footRect.setX(x - footRect.width() / 2);
-				footRect.draw();
-
-				QString text = QString::number(feetNumber);
-				footText.setContent(text);
-				int textWidth = _hudFont.getNominalWidth(text) / 3;
-				footText.setWidth(textWidth);
-				footText.setX(x - textWidth / 2);
-				footText.draw();
-
-				x += timeBetweenTwoFeet / timePerPixel / 2;
-
-				footRect.setX(x - footRect.width() / 2);
-				footRect.draw();
-
-				footDisc.setX(x);
-				footDisc.draw();
-
-				feetNumber++;
-				footTime += timeBetweenTwoFeet;
-			}
 		}
 
 		int verticalTimePerPixel = _settings->verticalTimePerPixel();
