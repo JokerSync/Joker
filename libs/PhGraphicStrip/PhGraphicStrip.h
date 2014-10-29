@@ -139,6 +139,10 @@ public:
 		return &_stripTextModelTrack3;
 	}
 
+	PhNextPeopleModel *rulerModel() {
+		return &_rulerModel;
+	}
+
 	PhNextPeopleModel *cutModel() {
 		return &_cutModel;
 	}
@@ -213,6 +217,7 @@ private:
 	PhStripTextModel _stripTextModelTrack1;
 	PhStripTextModel _stripTextModelTrack2;
 	PhStripTextModel _stripTextModelTrack3;
+	PhNextPeopleModel _rulerModel;
 	PhNextPeopleModel _cutModel;
 	PhNextPeopleModel _loopModel;
 	PhStripTextModel _stripPeopleModelTrack0;

@@ -8,6 +8,54 @@ Item {
     // the font name is passed from here
     FontLoader { id: stripFont; source: textFontUrl }
 
+    // ruler
+    ListView {
+        anchors.fill: parent
+        orientation: ListView.Horizontal
+        contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+        interactive: false
+        model: rulerModel
+        visible: displayRuler
+        delegate: Item {
+            width: duration/horizontalTimePerPixel
+            height: parent.height
+
+            Rectangle {
+                color: invertColor? "white":"#808080"
+                anchors.top: parent.top
+                width: 1000/horizontalTimePerPixel
+                x: -width/2
+                height: parent.height/2
+            }
+
+            Rectangle {
+                color: invertColor? "white":"#808080"
+                anchors.top: parent.top
+                width: 1000/horizontalTimePerPixel
+                x: -width/2 + parent.width/2
+                height: parent.height/2
+            }
+
+            // ruler disc
+            Rectangle {
+                width: 4000/horizontalTimePerPixel
+                height: width
+                color: invertColor? "white":"#808080"
+                radius: width*0.5
+                x: parent.width/2 - width/2
+                y: parent.height/2 + width/4
+            }
+
+            Text {
+                color: invertColor? "white":"#808080"
+                x: -width/2
+                y: parent.height/2
+                text: name
+                font.pixelSize: parent.height/3
+            }
+        }
+    }
+
     // FIXME color, font, inverted color are not implemented
     Component {
         id: stripTextDelegate
@@ -148,7 +196,6 @@ Item {
             delegate: stripPeopleDelegate
         }
     }
-
 
     // sync bar
     Rectangle {

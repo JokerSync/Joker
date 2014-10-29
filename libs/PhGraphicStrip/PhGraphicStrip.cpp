@@ -76,6 +76,19 @@ void PhGraphicStrip::onDocChanged()
 								_doc.timeOut() - text->timeIn());
 	_nextPeopleModel.addNextPeople(nextPeople);
 
+	// ruler
+	_rulerModel.clear();
+	PhTime rulerTimeIn = _settings->rulerTimeIn();
+	PhTime timeBetweenRuler = _settings->timeBetweenRuler();
+	PhTime rulerTime = rulerTimeIn;
+	PhTime docTimeOut = _doc.timeOut();
+	while (rulerTime < docTimeOut + timeBetweenRuler) {
+		int rulerNumber = (rulerTime - rulerTimeIn) / timeBetweenRuler;
+		PhNextPeople *rulerPeople = new PhNextPeople(QString::number(rulerNumber), "", rulerTime, true, timeBetweenRuler);
+		_rulerModel.addNextPeople(rulerPeople);
+		rulerTime += timeBetweenRuler;
+	}
+
 	// cuts
 	_cutModel.clear();
 	int previousCutTime = 0;
@@ -381,67 +394,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 
 			backgroundRect.setZ(-2);
 			backgroundRect.draw();
-		}
-
-		if(_settings->displayRuler()) {
-			PhTime rulerTimeIn = _settings->rulerTimeIn();
-			PhTime timeBetweenRuler = _settings->timeBetweenRuler();
-			int rulerNumber = (timeIn - rulerTimeIn) / timeBetweenRuler;
-			if (rulerNumber < 0)
-				rulerNumber = 0;
-
-			PhTime rulerTime = rulerTimeIn + rulerNumber * timeBetweenRuler;
-			PhGraphicSolidRect rulerRect;
-			PhGraphicDisc rulerDisc;
-			PhGraphicText rulerText(&_hudFont);
-			QColor rulerColor(80, 80, 80);
-			if(invertedColor)
-				rulerColor = Qt::white;
-
-			int width = 1000 / timePerPixel;
-
-			rulerRect.setColor(rulerColor);
-			rulerRect.setWidth(width);
-			rulerRect.setHeight(height / 2);
-			rulerRect.setZ(0);
-			rulerRect.setY(y);
-
-			rulerDisc.setColor(rulerColor);
-			rulerDisc.setRadius(2 * width);
-			rulerDisc.setY(y + height / 2 + 3 * width);
-			rulerDisc.setZ(0);
-
-			rulerText.setColor(rulerColor);
-			rulerText.setY(y + height / 2);
-			rulerText.setHeight(height / 2);
-			rulerText.setZ(0);
-
-
-			while (rulerTime < timeOut + timeBetweenRuler) {
-				counter++;
-				int x = rulerTime / timePerPixel - offset;
-
-				rulerRect.setX(x - rulerRect.width() / 2);
-				rulerRect.draw();
-
-				QString text = QString::number(rulerNumber);
-				rulerText.setContent(text);
-				int textWidth = _hudFont.getNominalWidth(text);
-				rulerText.setWidth(textWidth);
-				rulerText.setX(x - textWidth / 2);
-				rulerText.draw();
-
-				x += timeBetweenRuler / timePerPixel / 2;
-
-				rulerRect.setX(x - rulerRect.width() / 2);
-				rulerRect.draw();
-
-				rulerDisc.setX(x);
-				rulerDisc.draw();
-
-				rulerNumber++;
-				rulerTime += timeBetweenRuler;
-			}
 		}
 
 		foreach(PhStripDetect * detect, _doc.detects()) {
