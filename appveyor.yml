@@ -30,11 +30,11 @@ install:
   - 7z x ffmpeg-20140222-git-44b22bb-win32-shared.7z
   - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-20140222-git-44b22bb-win32-shared
   # Installing PortAudio
-  - Wget https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip
+  - Wget https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip --no-check-certificate
   - 7z x portaudio-r1891-build.zip
   - set PORTAUDIO_PATH=%CD%\portaudio-r1891-build
   # Installing libltc
-  - Wget https://github.com/x42/libltc/releases/download/v1.1.4/libltc-1.1.4.tar.gz
+  - Wget https://github.com/x42/libltc/releases/download/v1.1.4/libltc-1.1.4.tar.gz --no-check-certificate
   - 7z x libltc-1.1.4.tar.gz
   - 7z x libltc-1.1.4.tar
   - set LTC_PATH=%CD%\libltc-1.1.4\src
