@@ -1,40 +1,40 @@
 install:
   # Installing various utilities
-  - choco install Wget 7zip InnoSetup
+  - choco install curl 7zip InnoSetup
   - set PATH=%PATH%;"C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5"
   # Installing Qt
   - choco install qt-sdk-windows-x64-mingw_opengl_seh
   - set QTDIR="C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\qt-5.3.2-x64-mingw491r1-seh-opengl"
   - set PATH=%PATH%;%QTDIR%\bin;C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\mingw64\bin
   # Installing SDL2
-  - Wget https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz --no-check-certificate
+  - curl -L https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz --no-check-certificate
   - 7z x SDL2-devel-2.0.3-mingw.tar.gz
   - 7z x SDL2-devel-2.0.3-mingw.tar
   - set SDL_PATH=%CD%\SDL2-2.0.3\i686-w64-mingw32\
   # Installing SDL2_image
-  - Wget https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.0-mingw.tar.gz --no-check-certificate
+  - curl -L https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.0-mingw.tar.gz --no-check-certificate
   - 7z x SDL2_image-devel-2.0.0-mingw.tar.gz
   - 7z x SDL2_image-devel-2.0.0-mingw.tar
   - set SDL_IMAGE_PATH=%CD%\SDL2_image-2.0.0\i686-w64-mingw32\
   # Installing SDL2_ttf
-  - Wget https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.12-mingw.tar.gz --no-check-certificate
+  - curl -L https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.12-mingw.tar.gz --no-check-certificate
   - 7z x SDL2_ttf-devel-2.0.12-mingw.tar.gz
   - 7z x SDL2_ttf-devel-2.0.12-mingw.tar
   - set SDL_TTF_PATH=%CD%\SDL2_ttf-2.0.12\i686-w64-mingw32\
   # Installing ffmpeg dev
-  - Wget http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20140222-git-44b22bb-win32-dev.7z
+  - curl -L http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20140222-git-44b22bb-win32-dev.7z
   - 7z x ffmpeg-20140222-git-44b22bb-win32-dev.7z
   - set FFMPEG_DEV_PATH=%CD%\ffmpeg-20140222-git-44b22bb-win32-dev
   # Installing ffmpeg shared
-  - Wget http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20140222-git-44b22bb-win32-shared.7z
+  - curl -L http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20140222-git-44b22bb-win32-shared.7z
   - 7z x ffmpeg-20140222-git-44b22bb-win32-shared.7z
   - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-20140222-git-44b22bb-win32-shared
   # Installing PortAudio
-  - Wget https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip --no-check-certificate
+  - curl -L https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip --no-check-certificate
   - 7z x portaudio-r1891-build.zip
   - set PORTAUDIO_PATH=%CD%\portaudio-r1891-build
   # Installing libltc
-  - Wget https://github.com/x42/libltc/releases/download/v1.1.4/libltc-1.1.4.tar.gz --no-check-certificate
+  - curl -L https://github.com/x42/libltc/releases/download/v1.1.4/libltc-1.1.4.tar.gz --no-check-certificate
   - 7z x libltc-1.1.4.tar.gz
   - 7z x libltc-1.1.4.tar
   - set LTC_PATH=%CD%\libltc-1.1.4\src
