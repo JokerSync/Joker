@@ -1,12 +1,15 @@
+os: unstable
 install:
   - git submodule update --init --recursive
   # Installing various utilities
   - choco install curl 7zip InnoSetup
   - set PATH=%PATH%;"C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5"
   # Installing Qt
-  - choco install qt-sdk-windows-x64-mingw_opengl_seh
-  - set QTDIR="C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\qt-5.3.2-x64-mingw491r1-seh-opengl"
-  - set PATH=%PATH%;%QTDIR%\bin;C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\mingw64\bin
+  #- choco install qt-sdk-windows-x64-mingw_opengl_seh
+  #- set QTDIR="C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\qt-5.3.2-x64-mingw491r1-seh-opengl"
+  #- set PATH=%PATH%;%QTDIR%\bin;C:\Qt\qt-5.3.2-x64-mingw491r1-seh-opengl\mingw64\bin
+  - set QTDIR="C:\Qt\Qt-5.3.2"
+  - set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin
   # Installing SDL2
   - curl -kLO https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz
   - 7z x SDL2-devel-2.0.3-mingw.tar.gz
