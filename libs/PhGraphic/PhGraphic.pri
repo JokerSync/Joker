@@ -86,16 +86,55 @@ mac {
 CONFIG(release, debug|release) {
 
 	mac {
-		QMAKE_POST_LINK += rm -rf $${TARGET}.app/Contents/Frameworks/;
-		QMAKE_POST_LINK += mkdir $${TARGET}.app/Contents/Frameworks;
-		QMAKE_POST_LINK += cp -R /Library/Frameworks/SDL2.framework $${TARGET}.app/Contents/Frameworks/;
-		QMAKE_POST_LINK += cp -R /Library/Frameworks/SDL2_image.framework $${TARGET}.app/Contents/Frameworks/;
-		QMAKE_POST_LINK += cp -R /Library/Frameworks/SDL2_ttf.framework $${TARGET}.app/Contents/Frameworks/;
-
+		# Create SDL2 framework bundle
+		QMAKE_POST_LINK += mkdir -p $${TARGET}.app/Contents/Frameworks/SDL2.framework/Versions/A/Resources;
+		QMAKE_POST_LINK += cp /Library/Frameworks/SDL2.framework/Versions/A/SDL2 $${TARGET}.app/Contents/Frameworks/SDL2.framework/Versions/A/;
+		QMAKE_POST_LINK += cp /Library/Frameworks/SDL2.framework/Versions/A/Resources/Info.plist $${TARGET}.app/Contents/Frameworks/SDL2.framework/Versions/A/Resources;
+		QMAKE_POST_LINK += ln -s A $${TARGET}.app/Contents/Frameworks/SDL2.framework/Versions/Current;
+		QMAKE_POST_LINK += ln -s Versions/Current/SDL2 $${TARGET}.app/Contents/Frameworks/SDL2.framework/SDL2;
+		QMAKE_POST_LINK += ln -s Versions/Current/Resources $${TARGET}.app/Contents/Frameworks/SDL2.framework/Resources;
 		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2.framework/Versions/A/SDL2  @executable_path/../Frameworks/SDL2.framework/Versions/A/SDL2 $${TARGET}.app/Contents/MacOS/$${TARGET};
-		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_image.framework/Versions/A/SDL2_image  @executable_path/../Frameworks/SDL2_image.framework/Versions/A/SDL2_image $${TARGET}.app/Contents/MacOS/$${TARGET};
-		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_ttf.framework/Versions/A/SDL2_ttf @executable_path/../Frameworks/SDL2_ttf.framework/Versions/A/SDL2_ttf $${TARGET}.app/Contents/MacOS/$${TARGET};
-	}
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/SDL2.framework/Resources/Info.plist;
 
+		# Create SDL2_image framework bundle
+		QMAKE_POST_LINK += mkdir -p $${TARGET}.app/Contents/Frameworks/SDL2_image.framework/Versions/A/Resources;
+		QMAKE_POST_LINK += cp /Library/Frameworks/SDL2_image.framework/Versions/A/SDL2_image $${TARGET}.app/Contents/Frameworks/SDL2_image.framework/Versions/A/;
+		QMAKE_POST_LINK += cp /Library/Frameworks/SDL2_image.framework/Versions/A/Resources/Info.plist $${TARGET}.app/Contents/Frameworks/SDL2_image.framework/Versions/A/Resources;
+		QMAKE_POST_LINK += ln -s A $${TARGET}.app/Contents/Frameworks/SDL2_image.framework/Versions/Current;
+		QMAKE_POST_LINK += ln -s Versions/Current/SDL2_image $${TARGET}.app/Contents/Frameworks/SDL2_image.framework/SDL2_image;
+		QMAKE_POST_LINK += ln -s Versions/Current/Resources $${TARGET}.app/Contents/Frameworks/SDL2_image.framework/Resources;
+		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_image.framework/Versions/A/SDL2_image  @executable_path/../Frameworks/SDL2_image.framework/Versions/A/SDL2_image $${TARGET}.app/Contents/MacOS/$${TARGET};
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/SDL2_image.framework/Resources/Info.plist;
+
+		# Create webp framework bundle
+		QMAKE_POST_LINK += mkdir -p $${TARGET}.app/Contents/Frameworks/webp.framework/Versions/A/Resources;
+		QMAKE_POST_LINK += cp /Library/Frameworks/SDL2_image.framework/Frameworks/webp.framework/Versions/A/webp $${TARGET}.app/Contents/Frameworks/webp.framework/Versions/A/;
+		QMAKE_POST_LINK += cp /Library/Frameworks/SDL2_image.framework/Frameworks/webp.framework/Versions/A/Resources/Info.plist $${TARGET}.app/Contents/Frameworks/webp.framework/Versions/A/Resources;
+		QMAKE_POST_LINK += ln -s A $${TARGET}.app/Contents/Frameworks/webp.framework/Versions/Current;
+		QMAKE_POST_LINK += ln -s Versions/Current/webp $${TARGET}.app/Contents/Frameworks/webp.framework/webp;
+		QMAKE_POST_LINK += ln -s Versions/Current/Resources $${TARGET}.app/Contents/Frameworks/webp.framework/Resources;
+		QMAKE_POST_LINK += install_name_tool -change @rpath/webp.framework/Versions/A/webp  @executable_path/../Frameworks/webp.framework/Versions/A/webp $${TARGET}.app/Contents/MacOS/$${TARGET};
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/webp.framework/Resources/Info.plist;
+
+		# Create SDL2_ttf framework bundle
+		QMAKE_POST_LINK += mkdir -p $${TARGET}.app/Contents/Frameworks/SDL2_ttf.framework/Versions/A/Resources;
+		QMAKE_POST_LINK += cp /Library/Frameworks/SDL2_ttf.framework/Versions/A/SDL2_ttf $${TARGET}.app/Contents/Frameworks/SDL2_ttf.framework/Versions/A/;
+		QMAKE_POST_LINK += cp /Library/Frameworks/SDL2_ttf.framework/Versions/A/Resources/Info.plist $${TARGET}.app/Contents/Frameworks/SDL2_ttf.framework/Versions/A/Resources;
+		QMAKE_POST_LINK += ln -s A $${TARGET}.app/Contents/Frameworks/SDL2_ttf.framework/Versions/Current;
+		QMAKE_POST_LINK += ln -s Versions/Current/SDL2_ttf $${TARGET}.app/Contents/Frameworks/SDL2_ttf.framework/SDL2_ttf;
+		QMAKE_POST_LINK += ln -s Versions/Current/Resources $${TARGET}.app/Contents/Frameworks/SDL2_ttf.framework/Resources;
+		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_ttf.framework/Versions/A/SDL2_ttf @executable_path/../Frameworks/SDL2_ttf.framework/Versions/A/SDL2_ttf $${TARGET}.app/Contents/MacOS/$${TARGET};
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/SDL2_ttf.framework/Resources/Info.plist;
+
+		# Create FreeType framework bundle
+		QMAKE_POST_LINK += mkdir -p $${TARGET}.app/Contents/Frameworks/FreeType.framework/Versions/A/Resources;
+		QMAKE_POST_LINK += cp /Library/Frameworks/SDL2_ttf.framework/Frameworks/FreeType.framework/Versions/A/FreeType $${TARGET}.app/Contents/Frameworks/FreeType.framework/Versions/A/;
+		QMAKE_POST_LINK += cp /Library/Frameworks/SDL2_ttf.framework/Frameworks/FreeType.framework/Versions/A/Resources/Info.plist $${TARGET}.app/Contents/Frameworks/FreeType.framework/Versions/A/Resources;
+		QMAKE_POST_LINK += ln -s A $${TARGET}.app/Contents/Frameworks/FreeType.framework/Versions/Current;
+		QMAKE_POST_LINK += ln -s Versions/Current/FreeType $${TARGET}.app/Contents/Frameworks/FreeType.framework/FreeType;
+		QMAKE_POST_LINK += ln -s Versions/Current/Resources $${TARGET}.app/Contents/Frameworks/FreeType.framework/Resources;
+		QMAKE_POST_LINK += install_name_tool -change @rpath/FreeType.framework/Versions/A/FreeType  @executable_path/../Frameworks/FreeType.framework/Versions/A/FreeType $${TARGET}.app/Contents/MacOS/$${TARGET};
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/FreeType.framework/Resources/Info.plist;
+	}
 }
 

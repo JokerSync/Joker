@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# Taken from https://gist.github.com/kingcheez/6154462d7734e0c0f3a4
+#
 # https://bugreports.qt-project.org/browse/QTBUG-38511?focusedCommentId=256497&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-256497
 # Please note that Qt5 frameworks have incorrect layout after SDK build, so this isn't just a problem with `macdeployqt` but whole framework assembly part.
 # Present
@@ -30,7 +32,7 @@ import shutil
 import sys
 
 parser = argparse.ArgumentParser(
-    description = "Fixup Qt5 frameworks after macdeployqt"
+    description = "Fixup Qt5 and SDL frameworks after macdeployqt"
 )
 
 parser.add_argument("qt5Path",action="store",
@@ -69,3 +71,12 @@ for root,frameworks,files in os.walk(frameworksPath):
             copy(os.path.join(qt5Path,'lib',framework,'Contents','Info.plist'),
                'Versions/5/Resources/Info.plist')
             symlink('Versions/Current/Resources','Resources')
+        if fnmatch.fnmatch(framework,'SDL2*.framework'):
+            os.chdir(os.path.join(root,framework))
+            module = framework.replace('.framework','')
+#            symlink('A','Versions/Current')
+#            symlink('Versions/Current/' + module,module)
+#            move('Resources','Versions/A')
+#            copy(os.path.join('/Library/Frameworks',framework,'Resources','Info.plist'),
+#               'Versions/A/Resources/Info.plist')
+#            symlink('Versions/Current/Resources','Resources')
