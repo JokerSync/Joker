@@ -33,7 +33,7 @@ public:
 	 * @param fileName Path of the video file to open.
 	 * @return True if succeeds, false otherwise.
 	 */
-	bool openDocument(QString fileName);
+	bool openDocument(const QString &fileName);
 
 	/**
 	 * @brief Process the application argument
@@ -46,6 +46,7 @@ public:
 	void processArg(int argc, char *argv[]);
 
 protected:
+	bool eventFilter(QObject *sender, QEvent *event);
 	void resizeEvent(QResizeEvent *);
 	void closeEvent(QCloseEvent *);
 
@@ -76,9 +77,11 @@ private slots:
 
 	void on_actionDeinterlace_video_triggered(bool checked);
 
-	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onTimeChanged(PhTime time);
 
 	void onPaint(int width, int height);
+	void on_actionProperties_triggered();
+
 private:
 
 	Ui::VideoTestWindow *ui;

@@ -22,15 +22,9 @@ class PhClock : public QObject
 	Q_OBJECT
 public:
 	/**
-	 * @brief PhClock constructor
-	 * @param tcType the desired PhTimeCodeType
+	 * @brief The PhClock constructor
 	 */
-	explicit PhClock(PhTimeCodeType tcType);
-	/**
-	 * @brief Set the timecode type
-	 * @param tcType the desired PhTimeCodeType
-	 */
-	void setTimeCodeType(PhTimeCodeType tcType);
+	explicit PhClock();
 	/**
 	 * @brief Set the clock time
 	 * @param time the desired PhTime
@@ -48,23 +42,17 @@ public:
 	 */
 	void setMillisecond(PhTime ms);
 	/**
-	 * @brief Set the clock frame
-	 * @param frame the desired PhFrame
+	 * @brief Set the clock time with a frame
+	 * @param frame A frame value.
+	 * @param tcType The timecode type the frame is express into.
 	 */
-	void setFrame(PhFrame frame);
+	void setFrame(PhFrame frame, PhTimeCodeType tcType);
 	/**
-	 * @brief Set the timecode
-	 * The conversion between the string and the time code is done undercover using PhTimeCode::frameFromString
-	 * @param tc the desired timecode
+	 * @brief Set the clock time with a string
+	 * @param tc A string containing a timecode value (HH:MM:SS:FF).
+	 * @param tcType The timecode type the string is express into.
 	 */
-	void setTimeCode(QString tc);
-	/**
-	 * @brief Get the timecode type
-	 * @return The PhTimeCodeType of the clock
-	 */
-	PhTimeCodeType timeCodeType() {
-		return _tcType;
-	}
+	void setTimeCode(QString tc, PhTimeCodeType tcType);
 	/**
 	 * @brief Get the time
 	 * @return The PhTime of the clock
@@ -85,16 +73,17 @@ public:
 	 */
 	PhTime milliSecond();
 	/**
-	 * @brief Get the PhFrame of the clock
-	 * @return The PhFrame of the clock
+	 * @brief Get the frame of the clock
+	 * @param tcType A timecode type.
+	 * @return A frame expressed in the desired timecode type.
 	 */
-	PhFrame frame() const;
+	PhFrame frame(PhTimeCodeType tcType) const;
 	/**
 	 * @brief Get the timecode of the clock
-	 * @return The timecode of the clock
+	 * @param tcType A timecode type.
+	 * @return A timecode string expressed in the desired timecode type.
 	 */
-	QString timeCode();
-
+	QString timeCode(PhTimeCodeType tcType);
 
 signals:
 	/**
@@ -107,32 +96,18 @@ signals:
 	 * @param rate the new rate
 	 */
 	void rateChanged(PhRate rate);
-	/**
-	 * @brief emit a signal when the frame changed
-	 * @param frame the new frame
-	 * @param tcType the corresponding PhTimeCodeType
-	 */
-	void frameChanged(PhFrame frame, PhTimeCodeType tcType);
-	/**
-	 * @brief emit a signal when the timecode type changed
-	 * @param tcType the new PhTimeCodeType
-	 */
-	void tcTypeChanged(PhTimeCodeType tcType);
 
 public slots:
 	/**
-	 * Sync the clock to a signal at a given frequence.
+	 * Sync the clock to a signal at a given elapse time.
 	 * The clock time value is then updated accordingly to the clock rate.
-	 * @param frequence Frequence of the signal
+	 * @param elapsedTime The elapsed time value.
 	 */
-	void tick(PhTimeScale frequence);
+	void elapse(PhTime elapsedTime);
 
 private:
-	PhTimeCodeType _tcType;
 	PhTime _time;
-
 	PhRate _rate;
-
 };
 
 #endif // PHCLOCK_H

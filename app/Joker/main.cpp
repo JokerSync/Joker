@@ -28,6 +28,17 @@ int main(int argc, char *argv[])
 	PhDebug::showConsole(true);
 
 	QApplication a(argc, argv);
+
+	if(QGuiApplication::queryKeyboardModifiers().testFlag(Qt::ShiftModifier)) {
+		if(QMessageBox::critical(NULL,
+		                         QTranslator::tr("Reset the settings"),
+		                         QTranslator::tr("Would you like to reset your settings ?"),
+		                         QMessageBox::No,
+		                         QMessageBox::Yes) == QMessageBox::Yes) {
+			settings.clear();
+		}
+	}
+
 	QTranslator translator;
 	if(!settings.language().isEmpty()) {
 		translator.load(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + settings.language() + ".qm");

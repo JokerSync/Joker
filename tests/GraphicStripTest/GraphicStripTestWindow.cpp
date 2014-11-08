@@ -41,7 +41,7 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 		               _settings->trackNumber(),
 		               _settings->startTime());
 
-	connect(ui->stripView, &PhGraphicView::beforePaint, _clock, &PhClock::tick);
+	connect(ui->stripView, &PhGraphicView::beforePaint, _clock, &PhClock::elapse);
 	connect(ui->stripView, &PhGraphicView::paint, this, &GraphicStripTestWindow::onPaint);
 }
 
@@ -50,15 +50,14 @@ GraphicStripTestWindow::~GraphicStripTestWindow()
 	delete ui;
 }
 
-bool GraphicStripTestWindow::openDocument(QString fileName)
+bool GraphicStripTestWindow::openDocument(const QString &fileName)
 {
 	PHDEBUG << fileName;
 	if(!_doc->openStripFile(fileName))
 		return false;
 
-	_clock->setTimeCodeType(_doc->timeCodeType());
 	_settings->setGenerate(false);
-	setCurrentDocument(fileName);
+	openDocument(fileName);
 	return true;
 }
 
@@ -103,7 +102,7 @@ void GraphicStripTestWindow::onGenerate()
 		else {
 			_clock->setTime(_doc->lastTime());
 			_settings->setGenerate(true);
-			setCurrentDocument("");
+			openDocument("");
 		}
 	}
 
@@ -117,7 +116,7 @@ void GraphicStripTestWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType
 
 void GraphicStripTestWindow::onRateChanged(PhRate rate)
 {
-	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(_clock->frame(), _clock->timeCodeType()), QString::number(rate));
+	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromTime(_clock->time(), _doc->videoTimeCodeType()), QString::number(rate));
 	ui->statusbar->showMessage(message);
 }
 
@@ -137,13 +136,13 @@ void GraphicStripTestWindow::on_actionPlay_backward_triggered()
 void GraphicStripTestWindow::on_actionStep_forward_triggered()
 {
 	_clock->setRate(0.0);
-	_clock->setFrame(_clock->frame() + 1);
+	_clock->setTime(_clock->time() + PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
 }
 
 void GraphicStripTestWindow::on_actionStep_backward_triggered()
 {
 	_clock->setRate(0.0);
-	_clock->setFrame(_clock->frame() - 1);
+	_clock->setTime(_clock->time() - PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
 }
 
 void GraphicStripTestWindow::on_actionStep_time_forward_triggered()
@@ -195,9 +194,9 @@ void GraphicStripTestWindow::on_action3_triggered()
 
 void GraphicStripTestWindow::on_actionGo_to_triggered()
 {
-	PhTimeCodeDialog dlg(_clock->timeCodeType(), _clock->frame());
+	PhTimeCodeDialog dlg(_doc->videoTimeCodeType(), _clock->time());
 	if(dlg.exec() == QDialog::Accepted)
-		_clock->setFrame(dlg.frame());
+		_clock->setTime(dlg.time());
 }
 
 void GraphicStripTestWindow::on_actionPrevious_Element_triggered()
@@ -235,8 +234,8 @@ void GraphicStripTestWindow::on_actionRuler_triggered(bool checked)
 
 void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
 {
-	PhTimeCodeType tcType = _doc->timeCodeType();
-	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn() / PhTimeCode::timePerFrame(tcType), this);
+	PhTimeCodeType tcType = _doc->videoTimeCodeType();
+	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn(), this);
 	if(dlg.exec())
 		_settings->setRulerTimeIn(dlg.frame() * PhTimeCode::timePerFrame(tcType));
 }

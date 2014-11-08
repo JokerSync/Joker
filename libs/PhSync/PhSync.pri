@@ -5,13 +5,13 @@
 
 
 HEADERS += \
-	../../libs/PhSync/PhTime.h \
-	../../libs/PhSync/PhTimeCode.h \
-	../../libs/PhSync/PhClock.h \
-	../../libs/PhSync/PhSynchronizer.h
+	$$TOP_ROOT/libs/PhSync/PhTime.h \
+	$$TOP_ROOT/libs/PhSync/PhTimeCode.h \
+	$$TOP_ROOT/libs/PhSync/PhClock.h \
+	$$TOP_ROOT/libs/PhSync/PhSynchronizer.h
 
 SOURCES += \
-	../../libs/PhSync/PhTimeCode.cpp \
-	../../libs/PhSync/PhClock.cpp \
-	../../libs/PhSync/PhSynchronizer.cpp
+	$$TOP_ROOT/libs/PhSync/PhTimeCode.cpp \
+	$$TOP_ROOT/libs/PhSync/PhClock.cpp \
+	$$TOP_ROOT/libs/PhSync/PhSynchronizer.cpp
 

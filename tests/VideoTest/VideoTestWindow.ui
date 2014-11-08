@@ -56,6 +56,8 @@
     </widget>
     <addaction name="actionOpen"/>
     <addaction name="menuOpen_recent"/>
+    <addaction name="separator"/>
+    <addaction name="actionProperties"/>
    </widget>
    <widget class="QMenu" name="menuControl">
     <property name="title">
@@ -94,7 +96,7 @@
     <string>Play/pause</string>
    </property>
    <property name="shortcut">
-    <string>Up</string>
+    <string>Space</string>
    </property>
   </action>
   <action name="actionNext_frame">
@@ -162,6 +164,14 @@
    </property>
    <property name="shortcut">
     <string>F9</string>
+   </property>
+  </action>
+  <action name="actionProperties">
+   <property name="text">
+    <string>Properties...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>

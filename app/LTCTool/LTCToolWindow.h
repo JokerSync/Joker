@@ -53,10 +53,11 @@ private slots:
 	 * If the application loops the LTC,
 	 * reset clock to tcIn if tc > tcOut
 	 */
-	void onFrameChanged(PhFrame, PhTimeCodeType);
-	void onSlaveFrameChanged(PhFrame frame, PhTimeCodeType tcType);
-	void onSlaveRateChanged(PhRate rate);
-	void updateSlaveInfo();
+	void onWriterTimeChanged(PhTime time);
+	void onWriterTimeCodeTypeChanged(PhTimeCodeType tcType);
+	void onReaderTimeChanged(PhTime);
+	void onReaderRateChanged(PhRate);
+	void updateReaderInfo();
 
 	void on_generateCheckBox_clicked(bool checked);
 
@@ -64,17 +65,20 @@ private slots:
 
 	void onAudioProcessed(int minLevel, int maxLevel);
 
+	void onTCTypeChanged(PhTimeCodeType tcType);
+
 private:
 	void setupOutput();
-	void updateInfos();
+	void updateInOutInfoLabel();
 	Ui::LTCToolWindow *ui;
 	LTCToolSettings *_settings;
+	PhTimeCodeType _writerTimeCodeType;
 	PhClock *_writingClock;
 	PhLtcWriter _ltcWriter;
 	PhLtcReader _ltcReader;
 
-	PhFrame _lastFrame;
-	PhFrame _frameDelta;
+	PhTime _lastTime;
+	PhTime _timeDelta;
 	PhRate _lastRate;
 
 	void setupInput();

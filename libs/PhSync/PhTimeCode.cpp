@@ -58,6 +58,11 @@ unsigned int PhTimeCode::bcdFromFrame(PhFrame frame, PhTimeCodeType type) {
 	return result;
 }
 
+unsigned int PhTimeCode::bcdFromTime(PhTime time, PhTimeCodeType type)
+{
+	return bcdFromFrame(time / PhTimeCode::timePerFrame(type), type);
+}
+
 PhFrame PhTimeCode::frameFromBcd(unsigned int bcd, PhTimeCodeType type) {
 	unsigned int hhmmssff[4];
 
@@ -71,6 +76,11 @@ PhFrame PhTimeCode::frameFromBcd(unsigned int bcd, PhTimeCodeType type) {
 	hhmmssff[3] += bcd & 0x0f;
 
 	return frameFromHhMmSsFf(hhmmssff, type);
+}
+
+PhTime PhTimeCode::timeFromBcd(unsigned int bcd, PhTimeCodeType type)
+{
+	return frameFromBcd(bcd, type) * PhTimeCode::timePerFrame(type);
 }
 
 bool PhTimeCode::isDrop(PhTimeCodeType type) {
@@ -103,6 +113,28 @@ float PhTimeCode::getAverageFps(PhTimeCodeType type)
 		return 29.97;
 	case PhTimeCodeType30:
 		return 30;
+	}
+}
+
+PhTimeCodeType PhTimeCode::computeTimeCodeType(float averageFps)
+{
+	if(averageFps == 0) {
+		PHDEBUG << "fps is null => assuming 25";
+		return PhTimeCodeType25;
+	}
+	else if(averageFps < 24)
+		return PhTimeCodeType2398;
+	else if (averageFps < 24.5f)
+		return PhTimeCodeType24;
+	else if (averageFps < 26)
+		return PhTimeCodeType25;
+	else if (averageFps < 30)
+		return PhTimeCodeType2997;
+	else if (averageFps < 31)
+		return PhTimeCodeType30;
+	else {
+		PHDEBUG << "Bad fps detect => assuming 25 (" << averageFps << ")";
+		return PhTimeCodeType25;
 	}
 }
 

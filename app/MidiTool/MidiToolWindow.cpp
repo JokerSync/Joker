@@ -24,27 +24,32 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 {
 	ui->setupUi(this);
 
-	on_checkBoxReadMTC_clicked(_settings->readMTC());
-	on_checkBoxWriteMTC_clicked(_settings->writeMTC());
+	on_readMtcCheckBox_clicked(_settings->readMTC());
+	on_writeMtcCheckBox_clicked(_settings->writeMTC());
 
 	_mtcWriter.clock()->setTime(_settings->writerTimeIn());
-	ui->widgetMaster->setLength(_settings->writerLoopLength());
-	ui->widgetMaster->setTimeIn(_settings->writerTimeIn());
-	ui->widgetMaster->setClock(_mtcWriter.clock());
+	ui->writerMediaPanel->setClock(_mtcWriter.timeCodeType(), _mtcWriter.clock());
+	ui->writerMediaPanel->setTimeIn(_settings->writerTimeIn());
+	ui->writerMediaPanel->setLength(_settings->writerLoopLength());
 
 	connect(&_clockTimer, &QTimer::timeout, this, &MidiToolWindow::onTick);
 
 	_clockTimer.start(10);
 
+	connect(ui->writerMediaPanel, &PhMediaPanel::playClicked, &_mtcWriter, &PhMidiTimeCodeWriter::sendMMCPlay);
+	connect(ui->writerMediaPanel, &PhMediaPanel::pauseClicked, &_mtcWriter, &PhMidiTimeCodeWriter::sendMMCStop);
+	connect(ui->writerMediaPanel, &PhMediaPanel::sliderMoved, this, &MidiToolWindow::onGoToTime);
+	connect(ui->writerMediaPanel, &PhMediaPanel::timeCodeTypeChanged, this, &MidiToolWindow::updateTCTypeSetting);
+
 	connect(_mtcWriter.clock(), &PhClock::timeChanged, this, &MidiToolWindow::onWriterTimeChanged);
-	connect(_mtcWriter.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::updateTCTypeSetting);
 	connect(_mtcWriter.clock(), &PhClock::rateChanged, this, &MidiToolWindow::updateRateSetting);
 
+	connect(&_mtcReader, &PhMidiTimeCodeReader::timeCodeTypeChanged, this, &MidiToolWindow::updateFpsLabel);
+
 	connect(_mtcReader.clock(), &PhClock::timeChanged, this, &MidiToolWindow::onReaderTimeChanged);
-	connect(_mtcReader.clock(), &PhClock::tcTypeChanged, this, &MidiToolWindow::updateFpsLabel);
 	connect(_mtcReader.clock(), &PhClock::rateChanged, this, &MidiToolWindow::onReaderRateChanged);
 
-	updateFpsLabel(_mtcReader.clock()->timeCodeType());
+	updateFpsLabel(_mtcReader.timeCodeType());
 	updateWriterInfoLabel();
 
 	_mtcWriter.clock()->setRate(_settings->writerRate());
@@ -57,11 +62,10 @@ MidiToolWindow::~MidiToolWindow()
 
 void MidiToolWindow::on_actionSet_TC_In_triggered()
 {
-#warning /// @todo change to time
-	PhTimeCodeDialog dlg(_mtcWriter.clock()->timeCodeType(), _settings->writerTimeIn() / PhTimeCode::timePerFrame(_mtcWriter.clock()->timeCodeType()));
+	PhTimeCodeDialog dlg(_mtcWriter.timeCodeType(), _settings->writerTimeIn());
 	if(dlg.exec()) {
 		_settings->setWriterTimeIn(dlg.time());
-		ui->widgetMaster->setTimeIn(dlg.time());
+		ui->writerMediaPanel->setTimeIn(dlg.time());
 		_mtcWriter.clock()->setTime(dlg.time());
 		updateWriterInfoLabel();
 	}
@@ -69,12 +73,12 @@ void MidiToolWindow::on_actionSet_TC_In_triggered()
 
 void MidiToolWindow::on_actionSet_TC_Out_triggered()
 {
-	PhTimeCodeDialog dlg(_mtcWriter.clock()->timeCodeType(), (_settings->writerTimeIn() + _settings->writerLoopLength()) / PhTimeCode::timePerFrame(_mtcWriter.clock()->timeCodeType()));
+	PhTimeCodeDialog dlg(_mtcWriter.timeCodeType(), _settings->writerTimeIn() + _settings->writerLoopLength());
 	if(dlg.exec()) {
 		if(dlg.time() > _settings->writerTimeIn()) {
 			PhTime length = dlg.time() - _settings->writerTimeIn();
 			_settings->setWriterLoopLength(length);
-			ui->widgetMaster->setLength(length);
+			ui->writerMediaPanel->setLength(length);
 			updateWriterInfoLabel();
 		}
 		else
@@ -88,48 +92,66 @@ void MidiToolWindow::on_actionPreferences_triggered()
 	_mtcWriter.close();
 	PreferencesDialog dlg(_settings);
 	dlg.exec();
-	on_checkBoxReadMTC_clicked(_settings->readMTC());
-	on_checkBoxWriteMTC_clicked(_settings->writeMTC());
+	on_readMtcCheckBox_clicked(_settings->readMTC());
+	on_writeMtcCheckBox_clicked(_settings->writeMTC());
 }
 
-void MidiToolWindow::on_checkBoxWriteMTC_clicked(bool checked)
+void MidiToolWindow::on_writeMtcCheckBox_clicked(bool checked)
 {
-	ui->checkBoxWriteMTC->setChecked(checked);
-	ui->groupBoxWriter->setEnabled(checked);
+	ui->writeMtcCheckBox->setChecked(checked);
+	ui->writerGroupBox->setEnabled(checked);
 	_settings->setWriteMTC(checked);
 	if(checked) {
 		if(!_mtcWriter.open(_settings->midiOutputPortName())) {
 			QMessageBox::critical(this, "Error", "Unable to open " + _settings->midiOutputPortName());
-			on_checkBoxWriteMTC_clicked(false);
+			on_writeMtcCheckBox_clicked(false);
 		}
 	}
 	else
 		_mtcWriter.close();
 }
 
-void MidiToolWindow::on_checkBoxReadMTC_clicked(bool checked)
+void MidiToolWindow::on_readMtcCheckBox_clicked(bool checked)
 {
-	ui->checkBoxReadMTC->setChecked(checked);
-	ui->groupBoxReader->setEnabled(checked);
+	ui->readMtcCheckBox->setChecked(checked);
+	ui->readerGroupBox->setEnabled(checked);
 	_settings->setReadMTC(checked);
 	if(checked) {
-		if(!_mtcReader.open(_settings->midiInputPortName())) {
-			QMessageBox::critical(this, "Error", "Unable to create " + _settings->midiInputPortName());
-			on_checkBoxReadMTC_clicked(false);
+		QString portName;
+
+		if (_settings->midiInputUseExistingPort()) {
+			portName = _settings->midiInputPortName();
+		}
+		else {
+			portName = _settings->midiVirtualInputPortName();
+		}
+
+		if(!_mtcReader.open(portName)) {
+			QMessageBox::critical(this, "Error", "Unable to create " + portName);
+			on_readMtcCheckBox_clicked(false);
 		}
 	}
 	else
 		_mtcReader.close();
 }
 
+void MidiToolWindow::onGoToTime(PhTime time)
+{
+	unsigned int hhmmssff[4];
+	PhTimeCodeType tcType = _mtcWriter.timeCodeType();
+	PHDEBUG << PhTimeCode::stringFromTime(time, tcType);
+	PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, time, tcType);
+	_mtcWriter.sendMMCGoto(hhmmssff[0], hhmmssff[1], hhmmssff[2], hhmmssff[3], tcType);
+}
+
 void MidiToolWindow::onWriterTimeChanged(PhTime time)
 {
-	PhTimeCodeType tcType = _mtcWriter.clock()->timeCodeType();
-	PHDBG(2) << PhTimeCode::getAverageFps(tcType) << "/" << PhTimeCode::stringFromTime(time, tcType);
+	PHDBG(2) << PhTimeCode::getAverageFps(_mtcWriter.timeCodeType()) << "/" << PhTimeCode::stringFromTime(time, _mtcWriter.timeCodeType());
 }
 
 void MidiToolWindow::updateTCTypeSetting(PhTimeCodeType tcType)
 {
+	_mtcWriter.setTimeCodeType(tcType);
 	_settings->setWriterTimeCodeType(tcType);
 }
 
@@ -140,37 +162,37 @@ void MidiToolWindow::updateRateSetting(PhRate rate)
 
 void MidiToolWindow::onReaderTimeChanged(PhTime time)
 {
-	PhTimeCodeType tcType = _mtcReader.clock()->timeCodeType();
+	PhTimeCodeType tcType = _mtcReader.timeCodeType();
 	PHDBG(2) << PhTimeCode::getAverageFps(tcType) << "/" << PhTimeCode::stringFromTime(time, tcType);
 
-	ui->labelReaderTimeCode->setText(PhTimeCode::stringFromTime(time, tcType));
+	ui->readerTimeCodeLabel->setText(PhTimeCode::stringFromTime(time, tcType));
 	int delay = (_mtcWriter.clock()->time() - _mtcReader.clock()->time()) / 24;
-	ui->labelDelay->setText(QString("%0 ms").arg(delay));
+	ui->delayLabel->setText(QString("%0 ms").arg(delay));
 }
 
 void MidiToolWindow::onReaderRateChanged(PhRate rate)
 {
 	QString s = QString("%1x since %2")
 	            .arg(rate)
-	            .arg(PhTimeCode::stringFromTime(_mtcReader.clock()->time(), _mtcReader.clock()->timeCodeType()));
-	ui->readInfoLabel->setText(s);
+	            .arg(PhTimeCode::stringFromTime(_mtcReader.clock()->time(), _mtcReader.timeCodeType()));
+	ui->readerInfoLabel->setText(s);
 }
 
 void MidiToolWindow::updateFpsLabel(PhTimeCodeType tcType)
 {
-	ui->fpsLabel->setText(QString("%0 fps").arg(PhTimeCode::getAverageFps(tcType)));
+	PHDEBUG << tcType;
+	ui->readerFpsLabel->setText(QString("%0 fps").arg(PhTimeCode::getAverageFps(tcType)));
 }
 
 void MidiToolWindow::onTick()
 {
-	_mtcWriter.clock()->tick(PhTimeCode::getFps(_mtcWriter.clock()->timeCodeType()) * 4);
+	_mtcWriter.clock()->elapse(PhTimeCode::timePerFrame(_mtcWriter.timeCodeType()) / 4);
 }
 
 void MidiToolWindow::updateWriterInfoLabel()
 {
-	PhTimeCodeType tcType = _mtcWriter.clock()->timeCodeType();
 	QString info = QString("%0 => %1")
-	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn(), tcType))
-	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn() + _settings->writerLoopLength(), tcType));
+	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn(), _mtcWriter.timeCodeType()))
+	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn() + _settings->writerLoopLength(), _mtcWriter.timeCodeType()));
 	ui->writerInfoLabel->setText(info);
 }

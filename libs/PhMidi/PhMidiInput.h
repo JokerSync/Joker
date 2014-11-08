@@ -34,11 +34,17 @@ public:
 	~PhMidiInput();
 
 	/**
+	 * @brief List the available midi input port
+	 * @return A list of string.
+	 */
+	static QStringList inputList();
+
+	/**
 	 * @brief Create a virtual midi port and open it.
-	 * @param portName The midi port name
+	 * @param inputPortName The midi port name
 	 * @return True if success, false otherwise.
 	 */
-	bool open(QString portName);
+	bool open(QString inputPortName);
 
 	/**
 	 * @brief close Close the midi port if opened
@@ -70,12 +76,12 @@ signals:
 	/**
 	 * @brief Signal emitted upon MMC play message reception
 	 */
-	void onPlay();
+	void play();
 
 	/**
 	 * @brief Signal emitted upon MMC stop message reception
 	 */
-	void onStop();
+	void stop();
 
 protected:
 	/**
@@ -103,17 +109,27 @@ protected:
 	 */
 	virtual void onTimeCode(int hh, int mm, int ss, int ff, PhTimeCodeType tcType);
 
+	/**
+	 * @brief Called when a MMC play message is received
+	 */
+	virtual void onPlay();
+
+	/**
+	 * @brief Called when a MMC stop message is received
+	 */
+	virtual void onStop();
+
 protected:
 	/** @brief Remember the hour digits */
-	int _hh;
+	unsigned int _hh;
 	/** @brief Remember the minute digits */
-	int _mm;
+	unsigned int _mm;
 	/** @brief Remember the second digits */
-	int _ss;
+	unsigned int _ss;
 	/** @brief Remember the frame digits */
-	int _ff;
+	unsigned int _ff;
 	/** @brief Remember the time code type */
-	PhTimeCodeType _tcType;
+	PhTimeCodeType _mtcType;
 
 private slots:
 	void onMessage(std::vector<unsigned char> *message);

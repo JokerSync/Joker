@@ -8,9 +8,9 @@
 
 #include "PhLtcWriter.h"
 
-PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
-	PhAudioOutput(parent),
-	_clock(tcType),
+PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType) :
+	PhAudioOutput(),
+	_tcType(tcType),
 	_encoder(NULL)
 {
 	_encoder = ltc_encoder_create(1, 1, LTC_TV_625_50, LTC_USE_DATE);
@@ -42,6 +42,11 @@ PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType, QObject *parent) :
 
 }
 
+PhLtcWriter::~PhLtcWriter()
+{
+	ltc_encoder_free(_encoder);
+}
+
 PhClock *PhLtcWriter::clock()
 {
 	return &_clock;
@@ -50,7 +55,7 @@ PhClock *PhLtcWriter::clock()
 int PhLtcWriter::processAudio(const void *, void *outputBuffer, unsigned long)
 {
 	unsigned int hhmmssff[4];
-	PhTimeCode::ComputeHhMmSsFf(hhmmssff, _clock.frame(), _clock.timeCodeType());
+	PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, _clock.time(), _tcType);
 	_st.hours = hhmmssff[0];
 	_st.mins = hhmmssff[1];
 	_st.secs = hhmmssff[2];
@@ -66,7 +71,7 @@ int PhLtcWriter::processAudio(const void *, void *outputBuffer, unsigned long)
 
 	buf = ltc_encoder_get_bufptr(_encoder, &len, 1);
 	memcpy(outputBuffer, buf, len);
-	_clock.tick(PhTimeCode::getFps(_clock.timeCodeType()));
+	_clock.elapse(PhTimeCode::timePerFrame(_tcType) / 4);
 
 	return len;
 }

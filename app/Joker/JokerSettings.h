@@ -10,17 +10,19 @@
 #include "PhSony/PhSonySettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 #include "PhCommonUI/PhFeedbackSettings.h"
+#include "PhLtc/PhLtcReaderSettings.h"
 
 
 /**
  * @brief The Joker application settings
  */
-class JokerSettings : PhGenericSettings,
+class JokerSettings : public PhGenericSettings,
 	public PhGraphicStripSettings,
 	public PhVideoSettings,
 	public PhSonySettings,
 	public PhDocumentWindowSettings,
-	public PhFeedbackSettings
+	public PhFeedbackSettings,
+	public PhLtcReaderSettings
 {
 public:
 	// PhWindowSettings
@@ -55,24 +57,29 @@ public:
 	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
 	PH_SETTING_STRING2(setBackgroundImageLight, backgroundImageLight, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png")
 	PH_SETTING_STRING2(setBackgroundImageDark, backgroundImageDark, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png")
-	PH_SETTING_STRING2(setHudFontFile, hudFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/HelveticaCYPlain.ttf")
+	PH_SETTING_STRING2(setHudFontFile, hudFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Helvetica.ttf")
 	PH_SETTING_STRING2(setTextFontFile, textFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 2)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
+	PH_SETTING_BOOL(setHideSelectedPeoples, hideSelectedPeoples)
 	PH_SETTING_STRINGLIST(setSelectedPeopleNameList, selectedPeopleNameList)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
+	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
 	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
 	PH_SETTING_INT(setTimePlayed, timePlayed)
+	PH_SETTING_BOOL(setDisplayVerticalScale, displayVerticalScale)
+	PH_SETTING_INT2(setVerticalScaleSpaceInSeconds, verticalScaleSpaceInSeconds, 5)
 
 	PH_SETTING_INT2(setCutWidth, cutWidth, 4)
 	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)
 	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
 	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
 
-	// PhVideoSettings :
+	// Synchronisation settings:
+	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
 
 	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
@@ -82,8 +89,25 @@ public:
 	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
 
-	// Midi settings:
-	PH_SETTING_STRING2(setMidiTimeCodePortName, midiTimeCodePortName, "Joker")
+	PH_SETTING_INT2(setSonyMasterCommunicationTimeCodeType, sonyMasterCommunicationTimeCodeType, PhTimeCodeType25)
+	PH_SETTING_INT2(setSonySlaveCommunicationTimeCodeType, sonySlaveCommunicationTimeCodeType, PhTimeCodeType25)
+
+	PH_SETTING_INT2(setSonyMasterVideoSyncTimeCodeType, sonyMasterVideoSyncTimeCodeType, PhTimeCodeType25)
+	PH_SETTING_INT2(setSonySlaveVideoSyncTimeCodeType, sonySlaveVideoSyncTimeCodeType, PhTimeCodeType25)
+
+	// LTC settings:
+	PH_SETTING_STRING(setLtcInputPort, ltcInputPort)
+	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
+	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
+
+	// MTC settings:
+	PH_SETTING_STRING2(setMtcInputPort, mtcInputPort, "Joker")
+	PH_SETTING_STRING2(setMtcVirtualInputPort, mtcVirtualInputPort, "Joker")
+	PH_SETTING_BOOL2(setMtcInputUseExistingPort, mtcInputUseExistingPort, true)
+
+	// MMC settings
+	PH_SETTING_BOOL(setSendMmcMessage, sendMmcMessage)
+	PH_SETTING_STRING2(setMmcOutputPort, mmcOutputPort, "Joker")
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
@@ -93,16 +117,9 @@ public:
 	PH_SETTING_STRINGLIST2(setStripFileType, stripFileType, QStringList({"joker", "detx", "mos", "drb", "syn6"}))
 	PH_SETTING_STRINGLIST2(setVideoFileType, videoFileType, QStringList({"m4v", "mkv", "avi", "mov", "mxf"}))
 
-	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
-	PH_SETTING_STRING(setLTCInputDevice, ltcInputDevice)
+	PH_SETTING_BOOL(setDisplayControlPanel, displayControlPanel)
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
-
-	PH_SETTING_BOOL2(setDisplayTitle, displayTitle, true)
-	PH_SETTING_BOOL2(setDisplayNextTC, displayNextTC, true)
-	PH_SETTING_BOOL2(setDisplayTC, displayTC, true)
-	PH_SETTING_BOOL2(setDisplayLoop, displayLoop, true)
-	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 
 	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)
 
@@ -111,6 +128,8 @@ public:
 	PH_SETTING_STRING(setLanguage, language)
 
 	PH_SETTING_BOOL(setHideStrip, hideStrip)
+
+	PH_SETTING_INT(setLastPreferencesTab, lastPreferencesTab)
 };
 
 #endif // JOKERSETTINGS_H

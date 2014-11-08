@@ -27,6 +27,18 @@ public:
 	PhMidiTimeCodeWriter(PhTimeCodeType tcType);
 
 	/**
+	 * @brief The timecode type used to write MTC
+	 * @return A timecode type value
+	 */
+	PhTimeCodeType timeCodeType();
+
+	/**
+	 * @brief Set the timecode type used to write MTC
+	 * @param tcType A timecode type value
+	 */
+	void setTimeCodeType(PhTimeCodeType tcType);
+
+	/**
 	 * @brief The PhMidiTimeCodeWriter clock
 	 *
 	 * Manipulate this clock to send midi timecode
@@ -38,12 +50,20 @@ public:
 		return &_clock;
 	}
 
+	/**
+	 * @brief Send a MMC goto message
+	 * @param time A time value
+	 */
+	void sendMMCGotoFromTime(PhTime time);
+
 private slots:
 	void onTimeChanged(PhTime time);
 
 private:
+	PhTimeCodeType _tcType;
 	PhClock _clock;
 	int _currentDigit;
+	PhTime _currentQFTime;
 };
 
 #endif // PHMIDITIMECODEWRITER_H

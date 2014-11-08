@@ -9,6 +9,7 @@
 
 #include <QDialog>
 #include <QListWidgetItem>
+#include <QButtonGroup>
 
 #include "JokerSettings.h"
 
@@ -38,7 +39,20 @@ public:
 	explicit PreferencesDialog(JokerSettings *settings, QWidget *parent = 0);
 	~PreferencesDialog();
 
+protected:
+	/**
+	 * @brief Update the settings according to the UI
+	 */
+	void accept();
+
+	/**
+	 * @brief Revert the settings to the old values
+	 */
+	void reject();
+
 private slots:
+	void updateSynchronisationEnabledControl(bool);
+	void updateSynchronisationEnabledControl(int, bool);
 
 	void on_spinBoxDelay_valueChanged(int delay);
 	void on_radioButtonQF_toggled(bool checked);
@@ -46,27 +60,9 @@ private slots:
 	void on_spinBoxSpeed_valueChanged(int speed);
 	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
-	void on_buttonBox_accepted();
-
-	void on_buttonBox_rejected();
-
 	void on_sliderBoldness_valueChanged(int value);
 
 	void on_lineEditFilter_textEdited(const QString &value);
-
-	void on_cBoxDisplayTC_clicked();
-
-	void on_cBoxDisplayNextTC_clicked();
-
-	void on_cBoxDisplayNextText_clicked();
-
-	void on_cBoxDisplayTitle_clicked();
-
-	void on_cBoxDisplayLoop_clicked();
-
-	void on_listWidgetSync_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
-	void on_listWidgetInputs_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
 	Ui::PreferencesDialog *ui;
@@ -77,20 +73,11 @@ private:
 	int _oldHorizontalTimePerPixel;
 	int _oldBolness;
 	float _oldStripHeight;
-	bool _oldDisplayTC;
-	bool _oldDisplayNextTC;
-	bool _oldDisplayNextText;
-	bool _oldDisplayTitle;
-	bool _oldDisplayLoop;
-	int _oldSyncProtocol;
-	QString _oldLTCInput;
 
 	QMap<QString, QString> _fontList;
 	QMap<QString, QString> _langNameMap;
 
-
-	void showParamLTC(bool show);
-	void showParamSony(bool show);
+	QButtonGroup _delayButtonGroup, _protocolButtonGroup, _midiPortTypeButtonGroup;
 };
 
 #endif // PREFERENCESDIALOG_H

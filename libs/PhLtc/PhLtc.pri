@@ -6,13 +6,14 @@
 QT += serialport
 
 HEADERS += \
-	../../libs/PhLtc/PhLtcSettings.h \
-	../../libs/PhLtc/PhLtcReader.h \
-	../../libs/PhLtc/PhLtcWriter.h
+	$$TOP_ROOT/libs/PhLtc/PhLtcSettings.h \
+	$$TOP_ROOT/libs/PhLtc/PhLtcReader.h \
+	$$TOP_ROOT/libs/PhLtc/PhLtcWriter.h \
+	$$TOP_ROOT/libs/PhLtc/PhLtcReaderSettings.h
 
 SOURCES += \
-	../../libs/PhLtc/PhLtcReader.cpp \
-	../../libs/PhLtc/PhLtcWriter.cpp
+	$$TOP_ROOT/libs/PhLtc/PhLtcReader.cpp \
+	$$TOP_ROOT/libs/PhLtc/PhLtcWriter.cpp
 
 unix {
 	INCLUDEPATH += /usr/local/include

@@ -3,6 +3,7 @@
 
 #include <QDir>
 
+#include "PhSync/PhTimeCode.h"
 #include "PhSony/PhSonySettings.h"
 #include "../VideoTest/VideoTestSettings.h"
 
@@ -17,6 +18,12 @@ public:
 	PH_SETTING_FLOAT2(setSonyFastRate, sonyFastRate, 3)
 	PH_SETTING_STRING2(setSonySlavePortSuffix, sonySlavePortSuffix, "A")
 	PH_SETTING_STRING2(setSonyMasterPortSuffix, sonyMasterPortSuffix, "B")
+
+	PH_SETTING_INT2(setSonyMasterCommunicationTimeCodeType, sonyMasterCommunicationTimeCodeType, PhTimeCodeType25)
+	PH_SETTING_INT2(setSonySlaveCommunicationTimeCodeType, sonySlaveCommunicationTimeCodeType, PhTimeCodeType25)
+
+	PH_SETTING_INT2(setSonyMasterVideoSyncTimeCodeType, sonyMasterVideoSyncTimeCodeType, PhTimeCodeType25)
+	PH_SETTING_INT2(setSonySlaveVideoSyncTimeCodeType, sonySlaveVideoSyncTimeCodeType, PhTimeCodeType25)
 };
 
 #endif // VIDEOSYNCTESTSETTINGS_H

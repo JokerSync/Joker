@@ -30,6 +30,17 @@ public:
 	 */
 	virtual bool open(QString portName) = 0;
 
+	/**
+	 * @brief close Close the midi port if opened
+	 */
+	virtual void close() = 0;
+
+	/**
+	 * @brief Finds whether the MIDI implementation can use virtual ports
+	 * @return True if virtual ports are available, false otherwise.
+	 */
+	static bool canUseVirtualPorts();
+
 protected:
 	/**
 	 * @brief Compute the time code type from a MTC data byte.

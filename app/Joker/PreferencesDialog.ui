@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>PreferencesDialog</class>
- <widget class="QWidget" name="PreferencesDialog">
+ <widget class="QDialog" name="PreferencesDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>464</width>
-    <height>449</height>
+    <height>631</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,6 +15,9 @@
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -24,84 +27,37 @@
      </property>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabGeneral">
        <attribute name="title">
         <string>General</string>
        </attribute>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>70</x>
-          <y>20</y>
-          <width>301</width>
-          <height>241</height>
-         </rect>
-        </property>
-        <layout class="QFormLayout" name="formLayout">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::FieldsStayAtSizeHint</enum>
-         </property>
-         <property name="formAlignment">
-          <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-         </property>
-         <property name="verticalSpacing">
-          <number>20</number>
-         </property>
-         <item row="0" column="0" colspan="2">
-          <widget class="QCheckBox" name="cBoxDisplayTC">
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string>Display timecode</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0" colspan="2">
-          <widget class="QCheckBox" name="cBoxDisplayNextTC">
-           <property name="text">
-            <string>Display next timecode</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0" colspan="2">
-          <widget class="QCheckBox" name="cBoxDisplayNextText">
-           <property name="text">
-            <string>Display next texts</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QCheckBox" name="cBoxDisplayTitle">
-           <property name="text">
-            <string>Display title</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0" colspan="2">
-          <widget class="QCheckBox" name="cBoxDisplayLoop">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Display loop number</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>Language</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QComboBox" name="cboBoxLang"/>
-         </item>
-        </layout>
-       </widget>
+       <layout class="QFormLayout" name="formLayout_6">
+        <item row="0" column="0">
+         <layout class="QFormLayout" name="formLayout">
+          <property name="fieldGrowthPolicy">
+           <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+          </property>
+          <property name="formAlignment">
+           <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+          </property>
+          <property name="verticalSpacing">
+           <number>20</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Language:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="cboBoxLang"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tabStrip">
        <attribute name="title">
@@ -282,36 +238,6 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QListWidget" name="listWidgetSync">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>75</height>
-             </size>
-            </property>
-            <item>
-             <property name="text">
-              <string>No sync</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Sony 9 pin</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>LTC</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Midi timecode</string>
-             </property>
-            </item>
-           </widget>
-          </item>
           <item row="1" column="2">
            <widget class="QRadioButton" name="radioButtonQF">
             <property name="text">
@@ -332,130 +258,6 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0" colspan="3">
-           <widget class="QGroupBox" name="groupBoxSony">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="title">
-             <string>Parameters</string>
-            </property>
-            <widget class="QLabel" name="lblSonyHighSpeed">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="geometry">
-              <rect>
-               <x>20</x>
-               <y>61</y>
-               <width>114</width>
-               <height>24</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Sony high speed</string>
-             </property>
-            </widget>
-            <widget class="QLabel" name="lblSonyID">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="geometry">
-              <rect>
-               <x>20</x>
-               <y>30</y>
-               <width>114</width>
-               <height>21</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Sony ID</string>
-             </property>
-            </widget>
-            <widget class="QSpinBox" name="spinBoxSonyHighSpeed">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="geometry">
-              <rect>
-               <x>180</x>
-               <y>61</y>
-               <width>75</width>
-               <height>24</height>
-              </rect>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>75</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-             <property name="value">
-              <number>3</number>
-             </property>
-            </widget>
-            <widget class="QLabel" name="lblInputs">
-             <property name="geometry">
-              <rect>
-               <x>20</x>
-               <y>30</y>
-               <width>121</width>
-               <height>19</height>
-              </rect>
-             </property>
-             <property name="text">
-              <string>Available inputs</string>
-             </property>
-            </widget>
-            <widget class="QListWidget" name="listWidgetInputs">
-             <property name="geometry">
-              <rect>
-               <x>150</x>
-               <y>30</y>
-               <width>200</width>
-               <height>100</height>
-              </rect>
-             </property>
-            </widget>
-            <widget class="QLineEdit" name="lineEditSonyID">
-             <property name="geometry">
-              <rect>
-               <x>180</x>
-               <y>30</y>
-               <width>70</width>
-               <height>21</height>
-              </rect>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>70</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string notr="true">F0 C0</string>
-             </property>
-             <property name="maxLength">
-              <number>20</number>
-             </property>
-             <property name="placeholderText">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </widget>
-          </item>
           <item row="0" column="2">
            <widget class="QRadioButton" name="radioButtonMS">
             <property name="text">
@@ -464,6 +266,204 @@
            </widget>
           </item>
          </layout>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="noSyncRadioButton">
+          <property name="text">
+           <string>No sync</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="sonyRadioButton">
+          <property name="text">
+           <string>Sony 9 pin</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="sonyFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QFormLayout" name="formLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="sonyCommunicationTimeCodeTypeLabel">
+             <property name="text">
+              <string>Communication framerate:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="sonyCommunicationTimeCodeTypeComboBox">
+             <item>
+              <property name="text">
+               <string>23.98 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>24 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>25 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>29.97 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>30 fps</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="sonyVideoSyncTimeCodeTypeLabel">
+             <property name="text">
+              <string>Video sync framerate:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="sonyVideoSyncTimeCodeTypeComboBox">
+             <item>
+              <property name="text">
+               <string>23.98 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>24 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>25 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>29.97 fps</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>30 fps</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="ltcRadioButton">
+          <property name="text">
+           <string>LTC</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="ltcFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QFormLayout" name="formLayout_2">
+           <property name="fieldGrowthPolicy">
+            <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+           </property>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="ltcInputPortComboBox"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="ltcInputPortLabel">
+             <property name="text">
+              <string>Audio input port:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="mtcRadioButton">
+          <property name="text">
+           <string>Midi timecode</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="mtcFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QFormLayout" name="formLayout_3">
+           <item row="1" column="1">
+            <widget class="QComboBox" name="mtcExistingInputPortComboBox"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="mtcExistingInputPortRadioButton">
+             <property name="text">
+              <string>Read from existing port:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="mtcVirtualInputPortRadioButton">
+             <property name="text">
+              <string>Read from virtual port:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="mtcVirtualInputPortLineEdit"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="mmcCheckBox">
+          <property name="text">
+           <string>Midi machine control:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="mmcFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QFormLayout" name="formLayout_5">
+           <item row="0" column="1">
+            <widget class="QComboBox" name="mmcOutputPortComboBox"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="mmcOutputPortLabel">
+             <property name="text">
+              <string>Send MMC message to port:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -491,5 +491,38 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>231</x>
+     <y>420</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>PreferencesDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>231</x>
+     <y>420</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

@@ -17,7 +17,7 @@
 
 void GraphicStripTest::drawTest()
 {
-	PhGraphicView view(980, 320);
+	PhGraphicView view(720, 240);
 
 	GraphicStripTestSettings _settings;
 	PhGraphicStrip _strip(&_settings);
@@ -39,9 +39,7 @@ void GraphicStripTest::drawTest()
 	doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
 	doc->changed();
 
-	view.show();
-
-	QImage resultImage(view.renderPixmap(980, 320).toImage());
+	QImage resultImage(view.renderPixmap(720, 240).toImage());
 	QString resultFile = QString("%1.result.bmp").arg(QTest::currentTestFunction());
 	resultImage.save(resultFile);
 	QString expectedFile = QString("%1.expected.bmp").arg(QTest::currentTestFunction());
@@ -49,5 +47,5 @@ void GraphicStripTest::drawTest()
 
 	unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
 	PHDEBUG << "result:" << result;
-	QVERIFY(result < 920 * 320 / 4); // accept a difference of 1 per 4 pixels
+	QVERIFY(result < 720 * 240); // accept a difference of 1 per pixel
 }

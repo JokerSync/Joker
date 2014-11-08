@@ -4,8 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#ifndef SYNCHRONIZER_H
-#define SYNCHRONIZER_H
+#ifndef PHSYNCHRONIZER_H
+#define PHSYNCHRONIZER_H
 
 #include <QObject>
 
@@ -74,24 +74,23 @@ public:
 	}
 
 private slots:
-	void onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onStripTimeChanged(PhTime time);
 	void onStripRateChanged(PhRate rate);
-	void onVideoFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onVideoTimeChanged(PhTime time);
 	void onVideoRateChanged(PhRate rate);
-	void onVideoTCTypeChanged(PhTimeCodeType tcType);
-	void onSyncFrameChanged(PhFrame frame, PhTimeCodeType tcType);
+	void onSyncTimeChanged(PhTime time);
 	void onSyncRateChanged(PhRate rate);
 private:
 	int _syncType;
 	PhClock * _stripClock;
 	PhClock * _videoClock;
 	PhClock * _syncClock;
-	bool _settingStripFrame;
-	bool _settingVideoFrame;
-	bool _settingSonyFrame;
+	bool _settingStripTime;
+	bool _settingVideoTime;
+	bool _settingSonyTime;
 	bool _settingStripRate;
 	bool _settingVideoRate;
 	bool _settingSonyRate;
 };
 
-#endif // SYNCHRONIZER_H
+#endif // PHSYNCHRONIZER_H

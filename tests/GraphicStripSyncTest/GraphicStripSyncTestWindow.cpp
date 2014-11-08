@@ -9,7 +9,7 @@
 GraphicStripSyncTestWindow::GraphicStripSyncTestWindow(GraphicStripSyncTestSettings *settings) :
 	GraphicStripTestWindow(settings),
 	_settings(settings),
-	_sonySlave(PhTimeCodeType25, _settings)
+	_sonySlave(_settings)
 {
 	_clockSynchroniser.setStripClock(_clock);
 

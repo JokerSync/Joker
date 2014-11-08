@@ -43,7 +43,7 @@ public:
 	}
 
 	QString hudFontFile() {
-		return "HelveticaCYPlain.ttf";
+		return "Helvetica.ttf";
 	}
 
 	QString textFontFile() {
@@ -90,6 +90,14 @@ public:
 
 	int backgroundColorDark() {
 		return 0x242e2c;
+	}
+
+	bool displayVerticalScale() {
+		return false;
+	}
+
+	int verticalScaleSpaceInSeconds() {
+		return 5;
 	}
 };
 

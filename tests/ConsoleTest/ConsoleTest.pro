@@ -4,28 +4,20 @@
 #
 #-------------------------------------------------
 
-QT       += core
-
 TARGET = ConsoleTest
 CONFIG   += console
 CONFIG   -= app_bundle
 
-TEMPLATE = app
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
+include($$TOP_ROOT/common/common.pri)
 
-JOKER_ROOT = $${_PRO_FILE_PWD_}/../..
-
-include($${JOKER_ROOT}/libs/PhTools/PhTools.pri)
+include($$TOP_ROOT/libs/PhTools/PhTools.pri)
+include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 
 SOURCES += main.cpp
 
-INCLUDEPATH += 	$${JOKER_ROOT}/libs
-
 RESOURCES_PATH = .
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/look.png) $${RESOURCES_PATH}
-#QMAKE_POST_LINK += echo $${_PRO_FILE_PWD_} && echo test
-
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)

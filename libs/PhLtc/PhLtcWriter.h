@@ -24,9 +24,14 @@ public:
 	/**
 	 * @brief PhLtcWriter constructor
 	 * @param tcType the timecode type
-	 * @param parent the reader's parent
 	 */
-	explicit PhLtcWriter(PhTimeCodeType tcType, QObject *parent = 0);
+	explicit PhLtcWriter(PhTimeCodeType tcType);
+
+	/**
+	 * @brief PhLtcWriter destructor
+	 */
+	~PhLtcWriter();
+
 	/**
 	 * @brief Get the writer clock
 	 * @return The writer clock
@@ -37,6 +42,7 @@ private:
 
 	int processAudio(const void *, void *outputBuffer, unsigned long);
 
+	PhTimeCodeType _tcType;
 	PhClock _clock;
 	LTCEncoder *_encoder;
 	SMPTETimecode _st;

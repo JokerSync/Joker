@@ -18,8 +18,6 @@ public:
 
 protected slots:
 	void onTimeChanged(PhTime time);
-	void onFrameChanged(PhFrame frame, PhTimeCodeType);
-	void onTimeCodeTypeChanged(PhTimeCodeType tcType);
 	void onRateChanged(PhRate rate);
 
 private slots:
@@ -27,7 +25,6 @@ private slots:
 	void init();
 	void timeTest();
 	void frameTest();
-	void tcTypeTest();
 	void rateTest();
 	void msTest();
 	void tcTest();
@@ -36,12 +33,8 @@ private slots:
 private:
 	PhClock _clock;
 	PhTime _time;
-	PhFrame _frame;
-	PhTimeCodeType _tcType;
 	PhRate _rate;
 	bool _timeChangedCalled;
-	bool _frameChangedCalled;
-	bool _tcTypeChangedCalled;
 	bool _rateChangedCalled;
 };
 

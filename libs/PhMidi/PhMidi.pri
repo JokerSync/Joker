@@ -4,22 +4,22 @@
 #
 
 HEADERS += \
-	../../vendor/rtmidi/RtMidi.h \
-	../../libs/PhMidi/PhMidiObject.h \
-	../../libs/PhMidi/PhMidiInput.h \
-	../../libs/PhMidi/PhMidiOutput.h \
-	../../libs/PhMidi/PhMidiTimeCodeWriter.h \
-	../../libs/PhMidi/PhMidiTimeCodeReader.h
+	$$TOP_ROOT/vendor/rtmidi/RtMidi.h \
+	$$TOP_ROOT/libs/PhMidi/PhMidiObject.h \
+	$$TOP_ROOT/libs/PhMidi/PhMidiInput.h \
+	$$TOP_ROOT/libs/PhMidi/PhMidiOutput.h \
+	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeWriter.h \
+	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeReader.h
 
 SOURCES += \
-	../../vendor/rtmidi/RtMidi.cpp \
-	../../libs/PhMidi/PhMidiObject.cpp \
-	../../libs/PhMidi/PhMidiInput.cpp \
-	../../libs/PhMidi/PhMidiOutput.cpp \
-	../../libs/PhMidi/PhMidiTimeCodeWriter.cpp \
-	../../libs/PhMidi/PhMidiTimeCodeReader.cpp
+	$$TOP_ROOT/vendor/rtmidi/RtMidi.cpp \
+	$$TOP_ROOT/libs/PhMidi/PhMidiObject.cpp \
+	$$TOP_ROOT/libs/PhMidi/PhMidiInput.cpp \
+	$$TOP_ROOT/libs/PhMidi/PhMidiOutput.cpp \
+	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeWriter.cpp \
+	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeReader.cpp
 
-INCLUDEPATH += ../../vendor/rtmidi
+INCLUDEPATH += $$TOP_ROOT/vendor/rtmidi
 
 mac {
 DEFINES += __MACOSX_CORE__
@@ -30,6 +30,7 @@ linux {
 DEFINES += __LINUX_ALSA__
 }
 
-win {
+win32 {
 DEFINES += __WINDOWS_MM__
+LIBS += -lwinmm
 }

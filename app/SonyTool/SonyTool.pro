@@ -4,38 +4,37 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT += widgets
-
-#greaterThan(QT_MAJOR_VERSION, 4):
-
 TARGET = SonyTool
 
 VERSION = 1.0.0
 
-TEMPLATE = app
 ICON = sony.icns
 
-INCLUDEPATH += ../../libs
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-include(../../libs/PhTools/PhTools.pri)
-include(../../libs//PhCommonUI/PhCommonUI.pri)
-include(../../libs/PhAudio/PhAudio.pri)
-include(../../libs/PhSync/PhSync.pri)
-include(../../libs/PhSony/PhSony.pri)
+include($$TOP_ROOT/common/common.pri)
+
+include($$TOP_ROOT/libs/PhTools/PhTools.pri)
+include($$TOP_ROOT/libs//PhCommonUI/PhCommonUI.pri)
+include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
+include($$TOP_ROOT/libs/PhSync/PhSync.pri)
+include($$TOP_ROOT/libs/PhSony/PhSony.pri)
 
 SOURCES += main.cpp\
-		SonyToolWindow.cpp
+		SonyToolWindow.cpp \
+    PreferencesDialog.cpp
 
 HEADERS  += SonyToolWindow.h \
-	SonyToolSettings.h
+	SonyToolSettings.h \
+    PreferencesDialog.h
 
-FORMS    += SonyToolWindow.ui
+FORMS    += SonyToolWindow.ui \
+    PreferencesDialog.ui
 
 mac {
 	# For the plist version
-	QMAKE_INFO_PLIST +=  $${JOKER_ROOT}/data/test.plist
+	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
 }
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)

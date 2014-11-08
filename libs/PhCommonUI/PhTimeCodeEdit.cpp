@@ -11,17 +11,21 @@
 #include "PhTimeCodeEdit.h"
 
 PhTimeCodeEdit::PhTimeCodeEdit(QWidget *parent) :
-	QLineEdit(parent)
+	QLineEdit(parent),
+	_tcType(PhTimeCodeType25),
+	_oldTimeCode("00:00:00:00"),
+	_selectedIndex(-1),
+	_mousePressed(false),
+	_mousePressedLocation(0, 0)
 {
-	setFrame(0, PhTimeCodeType25);
-	connect(this, SIGNAL(textChanged(QString)), this, SLOT(onTextChanged(QString)));
+	_addedNumbers.clear();
+	setText("00:00:00:00");
+	connect(this, &PhTimeCodeEdit::textChanged, this, &PhTimeCodeEdit::onTextChanged);
 	this->installEventFilter(this);
 	//Only accept numbers and ":" it avoid the use of special
 	//chars like ` or ^
 	QRegExp rx("([0-9]|:){11}");
 	setValidator(new QRegExpValidator(rx, this));
-	_mousePressed = false;
-	_selectedIndex = 0;
 }
 
 void PhTimeCodeEdit::setFrame(PhFrame frame, PhTimeCodeType tcType)
@@ -39,10 +43,8 @@ void PhTimeCodeEdit::setTime(PhTime time, PhTimeCodeType tcType)
 
 bool PhTimeCodeEdit::isTimeCode()
 {
-	PhFrame frame;
-	QString text;
-	frame = PhTimeCode::frameFromString(this->text(), _tcType);
-	text = PhTimeCode::stringFromFrame(frame, _tcType);
+	PhFrame frame = PhTimeCode::frameFromString(this->text(), _tcType);
+	QString text = PhTimeCode::stringFromFrame(frame, _tcType);
 
 	if(text == this->text())
 		return true;
@@ -106,19 +108,8 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 		QApplication::setOverrideCursor(Qt::SizeVerCursor);
 		_mousePressed = true;
 		_mousePressedLocation = static_cast<QMouseEvent *>(event)->pos();
-#warning /// @todo make it font size independant
-		if(_mousePressedLocation.x() > 110 and _mousePressedLocation.x() < 145) {
-			_selectedIndex = 0;
-		}
-		else if(_mousePressedLocation.x() >= 145 and _mousePressedLocation.x() < 190) {
-			_selectedIndex = 3;
-		}
-		else if(_mousePressedLocation.x() >= 190 and _mousePressedLocation.x() < 230) {
-			_selectedIndex = 6;
-		}
-		else if(_mousePressedLocation.x() >= 230 and _mousePressedLocation.x() < 270) {
-			_selectedIndex = 9;
-		}
+		_selectedIndex = (cursorPositionAt(_mousePressedLocation) / 3) * 3;
+
 		return true;
 	case QEvent::MouseButtonRelease:
 		QApplication::setOverrideCursor(Qt::ArrowCursor);
@@ -129,34 +120,37 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 			if(_mousePressed) {
 				int y = static_cast<QMouseEvent *>(event)->pos().y();
 				PhFrame currentFrame = PhTimeCode::frameFromString(this->text(), _tcType);
+				PhFrame fps = PhTimeCode::getFps(_tcType);
 
-				if(_selectedIndex == 0) {
-					if(_mousePressedLocation.y() > y)
-						currentFrame += 25 * 60 * 60;
-					else
-						currentFrame -= 25 * 60 * 60;
+				PhFrame offset = 0;
+				switch(_selectedIndex) {
+				case 0:
+					offset = fps * 60 * 60;
+					break;
+				case 3:
+					offset = fps * 60;
+					break;
+				case 6:
+					offset = fps;
+					break;
+				case 9:
+					offset = 1;
+					break;
 				}
-				else if(_selectedIndex == 3) {
-					if(_mousePressedLocation.y() > y)
-						currentFrame += 25 * 60;
-					else
-						currentFrame -= 25 * 60;
-				}
-				else if(_selectedIndex == 6) {
-					if(_mousePressedLocation.y() > y)
-						currentFrame += 25;
-					else
-						currentFrame -= 25;
-				}
-				else if(_selectedIndex == 9) {
-					if(_mousePressedLocation.y() > y)
-						currentFrame++;
-					else
-						currentFrame--;
-				}
+				if(_mousePressedLocation.y() > y)
+					currentFrame += offset;
+				else
+					currentFrame -= offset;
 
 				_mousePressedLocation.setY(y);
 				this->setText(PhTimeCode::stringFromFrame(currentFrame, _tcType));
+
+				if(text().contains("-"))
+					setSelection(_selectedIndex + 1, 2);
+				else
+					setSelection(_selectedIndex, 2);
+
+				return true;
 			}
 			return false;
 		}
@@ -189,20 +183,16 @@ void PhTimeCodeEdit::compute(bool add)
 	currentText.insert(8, ":"); //xx:xx:xx:xx
 
 	this->setText(currentText);
+
+	int textLength = this->text().length();
+	int selectionLength = this->_addedNumbers.count();
+	if(selectionLength > 6)
+		selectionLength += 3;
+	else if(selectionLength > 4)
+		selectionLength += 2;
+	else if(selectionLength > 2)
+		selectionLength += 1;
+	setSelection(textLength - selectionLength, textLength);
+
 	onTextChanged(this->text());
 }
-
-void PhTimeCodeEdit::paintEvent(QPaintEvent *e)
-{
-	if(_mousePressed) {
-		if(text().contains("-"))
-			setSelection(_selectedIndex + 1, 2);
-		else
-			setSelection(_selectedIndex, 2);
-	}
-	else
-		deselect();
-	QLineEdit::paintEvent(e);
-}
-
-

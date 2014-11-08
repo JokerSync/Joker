@@ -25,7 +25,6 @@ PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h)
 bool PhGraphicImage::init()
 {
 	QFileInfo info(_filename);
-//	PHDEBUG << info.fileName();
 	_surface = IMG_Load(_filename.toStdString().c_str());
 	if(_surface != NULL) {
 		if(createTextureFromSurface(_surface)) {
@@ -44,6 +43,7 @@ void PhGraphicImage::dispose()
 {
 	SDL_FreeSurface(_surface);
 }
+
 QSize PhGraphicImage::originalSize() const
 {
 	return _originalSize;
@@ -51,7 +51,7 @@ QSize PhGraphicImage::originalSize() const
 
 void PhGraphicImage::draw()
 {
-	if(!this->ready())
+	if(!_filename.isEmpty() && !this->ready())
 		this->init();
 
 	PhGraphicTexturedRect::draw();

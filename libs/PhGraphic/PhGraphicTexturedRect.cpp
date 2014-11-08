@@ -277,7 +277,7 @@ void PhGraphicTexturedRect::setRepeat(bool repeat)
 	}
 }
 
-bool PhGraphicTexturedRect::getRepeat()
+bool PhGraphicTexturedRect::repeat()
 {
 	return _repeat;
 }
@@ -294,7 +294,7 @@ void PhGraphicTexturedRect::setBilinearFiltering(bool bilinear)
 	}
 }
 
-bool PhGraphicTexturedRect::getBilinearFiltering()
+bool PhGraphicTexturedRect::bilinearFiltering()
 {
 	return _bilinearFiltering;
 }

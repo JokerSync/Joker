@@ -6,23 +6,43 @@
 #include "PhMidiTimeCodeWriter.h"
 
 PhMidiTimeCodeWriter::PhMidiTimeCodeWriter(PhTimeCodeType tcType) :
-	_clock(tcType), _currentDigit(0)
+	_tcType(tcType), _currentDigit(0)
 {
 	connect(&_clock, &PhClock::timeChanged, this, &PhMidiTimeCodeWriter::onTimeChanged);
+}
+
+PhTimeCodeType PhMidiTimeCodeWriter::timeCodeType()
+{
+	return _tcType;
+}
+
+void PhMidiTimeCodeWriter::setTimeCodeType(PhTimeCodeType tcType)
+{
+	_tcType = tcType;
+}
+
+void PhMidiTimeCodeWriter::sendMMCGotoFromTime(PhTime time)
+{
+	unsigned int hhmmssff[4];
+	PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, time, _tcType);
+	sendMMCGoto((unsigned char)hhmmssff[0], (unsigned char)hhmmssff[1], (unsigned char)hhmmssff[2], (unsigned char)hhmmssff[3], _tcType);
 }
 
 void PhMidiTimeCodeWriter::onTimeChanged(PhTime time)
 {
 	if(_clock.rate() == 1) {
 		unsigned int hhmmssff[4];
-		PhTimeCodeType tcType = _clock.timeCodeType();
 
 		// We add two frame in we are in the four quarter frame of
 		// the message since we send the next frame tc
-		if(_currentDigit < 4)
-			time += 2 * PhTimeCode::timePerFrame(tcType);
+		time += 2 * PhTimeCode::timePerFrame(_tcType);
 
-		PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, time, tcType);
+		// do not change the time while we are sending a Quarter-frame sequence of message
+		if (_currentDigit == 0) {
+			_currentQFTime = time;
+		}
+
+		PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, _currentQFTime, _tcType);
 		unsigned char data = _currentDigit << 4;
 		switch (_currentDigit) {
 		case 0:
@@ -47,7 +67,7 @@ void PhMidiTimeCodeWriter::onTimeChanged(PhTime time)
 			data |= hhmmssff[0] & 0x0F;
 			break;
 		case 7:
-			data |= computeH(hhmmssff[0], tcType);
+			data |= computeH(hhmmssff[0], _tcType);
 			break;
 		}
 		this->sendQFTC(data);

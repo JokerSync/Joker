@@ -1,15 +1,17 @@
-QT       += core gui widgets
+#
+# Copyright (C) 2012-2014 Phonations
+# License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+#
 
-TEMPLATE = app
+TARGET = SDLTest
+
+VERSION = 1.0.0
+
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
+
+include($$TOP_ROOT/common/common.pri)
 
 SOURCES += main.cpp
-
-# The application version
-VERSION = 1.0.0
-# Define the preprocessor macro to get the application version in our application.
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
-DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 # Windows specific
 win32 {
@@ -90,4 +92,4 @@ CONFIG(release, debug|release) {
 }
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include(../../common/deploy.pri)
+include($$TOP_ROOT/common/deploy.pri)

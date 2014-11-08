@@ -18,8 +18,10 @@ public:
 	PH_SETTING_INT2(setWriterTimeIn, writerTimeIn, PhTimeCode::timeFromString("01:00:00:00", PhTimeCodeType25))
 	PH_SETTING_INT2(setWriterLoopLength, writerLoopLength, PhTimeCode::timeFromString("00:01:00:00", PhTimeCodeType25))
 
-	PH_SETTING_STRING2(setMidiInputPortName, midiInputPortName, "MidiTool")
 	PH_SETTING_STRING2(setMidiOutputPortName, midiOutputPortName, "MidiTool")
+	PH_SETTING_STRING2(setMidiInputPortName, midiInputPortName, "MidiTool")
+	PH_SETTING_STRING2(setMidiVirtualInputPortName, midiVirtualInputPortName, "MidiTool")
+	PH_SETTING_BOOL2(setMidiInputUseExistingPort, midiInputUseExistingPort, true)
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
 };

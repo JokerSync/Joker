@@ -12,13 +12,14 @@
 #include <QTimer>
 
 #include "PhCommonUI/PhFloatingMediaPanel.h"
-#include "PhCommonUI/PhDocumentWindow.h"
+#include "PhCommonUI/PhEditableDocumentWindow.h"
 #include <PhVideo/PhVideoEngine.h>
 #include <PhGraphicStrip/PhGraphicStrip.h>
 #include "PhSync/PhSynchronizer.h"
 #include "PhSony/PhSonySlaveController.h"
 #include "PhLtc/PhLtcReader.h"
 #include "PhMidi/PhMidiTimeCodeReader.h"
+#include "PhMidi/PhMidiTimeCodeWriter.h"
 
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
@@ -39,7 +40,7 @@ class JokerWindow;
 /// - Handling controls command
 /// - Connect the application modules: PhVideoEngine, PhGraphicStrip, Synchronizer, PhSonySlaveController, PhLtcReader
 ///
-class JokerWindow : public PhDocumentWindow
+class JokerWindow : public PhEditableDocumentWindow
 {
 	Q_OBJECT
 
@@ -68,17 +69,23 @@ public slots:
 	/// \brief timeCounter Slot used to count the time played on nominal speed
 	/// when the synchro is enabled
 	///
-	/// \param frequency
+	/// \param elapsedTime
 	///
-	void timeCounter(PhTimeScale frequency);
+	void timeCounter(PhTime elapsedTime);
 
 protected:
+	///
+	/// @brief Close event, if accepted by the user, will close the media panel
+	/// @param event
+	///
+	virtual void closeEvent(QCloseEvent *event);
+
 	///
 	/// @brief Open all supported strip file
 	///
 	/// @param filePath The file path
 	///
-	bool openDocument(QString filePath);
+	bool openDocument(const QString &filePath);
 
 	///
 	/// @brief Custom event filter
@@ -124,6 +131,16 @@ protected:
 	QAction *fullScreenAction();
 
 	///
+	/// \brief Show the control panel on application activation
+	///
+	void onApplicationActivate();
+
+	///
+	/// \brief Hide the control panel on application deactivation
+	///
+	void onApplicationDeactivate();
+
+	///
 	/// @brief Setup the synchronisation protocol
 	///
 	/// Close all the protocol if opened and setup the one specified
@@ -135,16 +152,9 @@ protected:
 	void setupSyncProtocol();
 
 	///
-	/// @brief Event called when the user try to close the window.
+	/// @brief Check if the current document has been modified.
 	///
-	/// @param event The event
-	///
-	void closeEvent(QCloseEvent *event);
-
-	///
-	/// @brief Check if the current document need to be save.
-	///
-	bool checkSaveFile();
+	bool isDocumentModified();
 
 private slots:
 	// Qt Designer slots
@@ -241,7 +251,22 @@ private slots:
 
 	void on_actionSet_space_between_two_ruler_graduation_triggered();
 
+	void on_actionDisplay_the_vertical_scale_triggered(bool checked);
+
+	void setCurrentTime(PhTime time);
+
+	void setCurrentRate(PhRate rate);
+
+	void on_actionDisplay_the_control_panel_triggered(bool checked);
+
+	void on_actionDisplay_the_information_panel_triggered(bool checked);
+
+	void on_actionHide_selected_peoples_triggered(bool checked);
+
 private:
+	PhTime currentTime();
+	PhRate currentRate();
+
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;
 	PhGraphicStrip _strip;
@@ -250,6 +275,7 @@ private:
 	PhSonySlaveController _sonySlave;
 	PhLtcReader _ltcReader;
 	PhMidiTimeCodeReader _mtcReader;
+	PhMidiTimeCodeWriter _mtcWriter;
 	PhSynchronizer _synchronizer;
 
 	PhFloatingMediaPanel _mediaPanel;

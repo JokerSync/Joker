@@ -28,10 +28,11 @@ class PhSonyMasterController : public PhSonyController
 public:
 	/**
 	 * @brief PhSonyMasterController constructor
-	 * @param tcType The initial timecode type.
 	 * @param settings The application settings
 	 */
-	PhSonyMasterController(PhTimeCodeType tcType, PhSonySettings *settings);
+	PhSonyMasterController(PhSonySettings *settings);
+
+	PhTimeCodeType timeCodeType();
 
 public slots:
 	/**
@@ -61,9 +62,9 @@ public slots:
 	 *
 	 * See : http://www.belle-nuit.com/archives/9pin.html#cueUpWithData
 	 *
-	 * @param frame frame number
+	 * @param time A time value
 	 */
-	void cue(PhFrame frame);
+	void cue(PhTime time);
 
 	/**
 	 * @brief Send a fast forward command to the connected device.

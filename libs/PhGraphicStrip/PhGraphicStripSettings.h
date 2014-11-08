@@ -78,6 +78,12 @@ public:
 	virtual bool displayNextText() = 0;
 
 	/**
+	 * @brief Hide the selected peoples
+	 * @return True if hidden, false otherwise
+	 */
+	virtual bool hideSelectedPeoples() = 0;
+
+	/**
 	 * @brief Allow color invertion
 	 * @return True if the color is inverted, false otherwise
 	 */
@@ -126,6 +132,18 @@ public:
 	 * @return An integer value
 	 */
 	virtual int backgroundColorDark() = 0;
+
+	/**
+	 * @brief Hold the number of seconds between the dashes of the right scale
+	 * @return An interger value
+	 */
+	virtual int verticalScaleSpaceInSeconds() = 0;
+
+	/**
+	 * @brief Display a scaler on the right of the screen
+	 * @return A boolean value
+	 */
+	virtual bool displayVerticalScale() = 0;
 };
 
 #endif // PHGRAPHICSTRIPSETTINGS_H

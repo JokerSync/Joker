@@ -43,7 +43,7 @@ public:
 	 * @brief PhVideoEngine constructor
 	 * @param settings The settings
 	 */
-	PhVideoEngine(PhVideoSettings *settings);
+	explicit PhVideoEngine(PhVideoSettings *settings);
 
 	~PhVideoEngine();
 
@@ -55,6 +55,15 @@ public:
 	QString fileName() {
 		return _fileName;
 	}
+
+	/**
+	 * @brief The video timecode type
+	 * @return A timecode type value
+	 */
+	PhTimeCodeType timeCodeType() {
+		return _tcType;
+	}
+
 	/**
 	 * @brief Get the clock
 	 * @return the clock
@@ -62,25 +71,35 @@ public:
 	PhClock* clock() {
 		return &_clock;
 	}
+
 	/**
-	 * @brief Get first frame
-	 * @return the first frame of the video file
+	 * @brief Get the starting time of the video file
+	 * @return A time value
 	 */
-	PhFrame firstFrame() {
-		return _firstFrame;
+	PhTime timeIn() {
+		return _timeIn;
 	}
+
 	/**
-	 * @brief Get last frame
-	 * @return the last frame of the video file
+	 * @brief Set the video starting time
+	 * @param timeIn A time value.
 	 */
-	PhFrame lastFrame() {
-		return _firstFrame + length() - 1;
+	void setTimeIn(PhTime timeIn);
+
+	/**
+	 * @brief Get the video ending time
+	 * @return A time value.
+	 */
+	PhTime timeOut() {
+		return _timeIn + length();
 	}
+
 	/**
-	 * @brief Get the length
-	 * @return the length of the video
+	 * @brief Get the video length
+	 * @return A time value
 	 */
-	PhFrame length();
+	PhTime length();
+
 	/**
 	 * @brief Get the codec name
 	 * @return the codec name
@@ -97,10 +116,10 @@ public:
 	 */
 	int height();
 	/**
-	 * @brief get frame per second
-	 * @return the FPS of the video file
+	 * @brief Get average number of frame per second
+	 * @return A double value.
 	 */
-	float framePerSecond();
+	double framePerSecond();
 	/**
 	 * @brief Get refreshRate
 	 * @return Return the refresh rate of the PhVideoEngine
@@ -108,12 +127,6 @@ public:
 	int refreshRate() {
 		return _videoFrameTickCounter.frequency();
 	}
-
-	/**
-	 * @brief Set first frame
-	 * @param frame the new first frame
-	 */
-	void setFirstFrame(PhFrame frame);
 
 	// Methods
 	/**
@@ -152,9 +165,7 @@ public:
 	 * @brief Retrieve the video filtering
 	 * @return True if bilinear filtering is enabled
 	 */
-	bool getBilinearFiltering() {
-		return _bilinearFiltering;
-	}
+	bool bilinearFiltering();
 
 	/**
 	 * @brief Enable or disable the video bilinear filtering
@@ -172,25 +183,31 @@ public:
 	 */
 	void drawVideo(int x, int y, int w, int h);
 
+signals:
+	/**
+	 * @brief Signal sent upon a different timecode type message
+	 * @param tcType A timecode type value.
+	 */
+	void timeCodeTypeChanged(PhTimeCodeType tcType);
+
 private:
-	bool goToFrame(PhFrame frame);
-	int64_t frame2time(PhFrame f);
-	PhFrame time2frame(int64_t t);
+	bool decodeFrame(PhTime time);
+	int64_t PhTime_to_AVTimestamp(PhTime time);
+	PhTime AVTimestamp_to_PhTime(int64_t timestamp);
 
 	PhVideoSettings *_settings;
 	QString _fileName;
+	PhTimeCodeType _tcType;
 	PhClock _clock;
-	PhFrame _firstFrame;
+	PhTime _timeIn;
 
-	AVFormatContext * _pFormatContext;
+	AVFormatContext * _formatContext;
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
-	struct SwsContext * _pSwsCtx;
-	PhGraphicTexturedRect videoRect;
-	uint8_t * _rgb;
-	PhFrame _currentFrame;
+	struct SwsContext * _swsContext;
+	PhGraphicTexturedRect _videoRect;
+	PhTime _currentTime;
 
-	QElapsedTimer _testTimer;
 	PhTickCounter _videoFrameTickCounter;
 
 	bool _useAudio;
@@ -198,7 +215,8 @@ private:
 	AVFrame * _audioFrame;
 
 	bool _deinterlace;
-	bool _bilinearFiltering;
+
+	uint8_t * _rgb;
 };
 
 #endif // PHVIDEOENGINE_H

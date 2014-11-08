@@ -49,11 +49,10 @@ public:
 	/**
 	 * @brief PhSonyController constructor
 	 *
-	 * @param tcType The initial timecode type
 	 * @param settings The application settings
 	 * @param comSuffix Serial port name suffix
 	 */
-	explicit PhSonyController(PhTimeCodeType tcType, PhSonySettings *settings, QString comSuffix);
+	explicit PhSonyController(PhSonySettings *settings, QString comSuffix);
 
 	/**
 	 * @brief PhSonyController destructor
@@ -71,6 +70,12 @@ public:
 	 * @brief Close the communication port.
 	 */
 	void close();
+
+	/**
+	 * @brief The timecode type used by the protocol
+	 * @return A timecode type value.
+	 */
+	virtual PhTimeCodeType timeCodeType() = 0;
 
 	/**
 	 * @brief Get the sony controller internal clock.
@@ -122,7 +127,7 @@ public slots:
 	 * If this slot is not trigger
 	 * regulary, no video sync event occurs.
 	 */
-	void checkVideoSync(int frequency = 0);
+	void checkVideoSync();
 
 	/**
 	 * @brief This slot handles the video sync signal.

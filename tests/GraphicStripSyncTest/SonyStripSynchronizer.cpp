@@ -8,24 +8,24 @@ SonyStripSynchronizer::SonyStripSynchronizer()
 void SonyStripSynchronizer::setSonyClock(PhClock *clock)
 {
 	_sonyClock = clock;
-	connect(_sonyClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onSonyFrameChanged(PhFrame, PhTimeCodeType)));
+	connect(_sonyClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onSonyTimeChanged(PhFrame, PhTimeCodeType)));
 	connect(_sonyClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onSonyRateChanged(PhRate)));
 }
 
 void SonyStripSynchronizer::setStripClock(PhClock *clock)
 {
 	_stripClock = clock;
-	connect(_stripClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onStripFrameChanged(PhFrame, PhTimeCodeType)));
+	connect(_stripClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onStripTimeChanged(PhFrame, PhTimeCodeType)));
 	connect(_stripClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onStripRateChanged(PhRate)));
 }
 
-void SonyStripSynchronizer::onSonyFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void SonyStripSynchronizer::onSonyTimeChanged(PhTime time)
 {
-	if(qAbs(_stripClock->frame() - frame) > 10) {
-		PHDEBUG << "error :" << frame - _stripClock->frame();
-		_settingStripFrame = true;
-		_stripClock->setFrame(frame);
-		_settingStripFrame = false;
+	if(qAbs(_stripClock->time() - time) > 10000) {
+		PHDEBUG << "error :" << time - _stripClock->time();
+		_settingStripTime = true;
+		_stripClock->setTime(time);
+		_settingStripTime = false;
 
 	}
 }
@@ -35,15 +35,15 @@ void SonyStripSynchronizer::onSonyRateChanged(PhRate rate)
 	_stripClock->setRate(rate);
 }
 
-void SonyStripSynchronizer::onStripFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void SonyStripSynchronizer::onStripTimeChanged(PhTime time)
 {
-	if(!_settingStripFrame) {
-		if(qAbs(_sonyClock->frame() - frame) > 1) {
-			PHDEBUG << "error :" << _sonyClock->frame() - frame;
+	if(!_settingStripTime) {
+		if(qAbs(_sonyClock->time() - time) > 1000) {
+			PHDEBUG << "error :" << _sonyClock->time() - time;
 	#warning TODO handle frame difference error
-			_settingSonyFrame = true;
-			_sonyClock->setFrame(frame);
-			_settingSonyFrame = false;
+			_settingSonyTime = true;
+			_sonyClock->setTime(time);
+			_settingSonyTime = false;
 		}
 	}
 }

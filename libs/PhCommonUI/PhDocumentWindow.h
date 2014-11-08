@@ -36,20 +36,26 @@ public:
 	virtual void processArg(int argc, char *argv[]);
 protected:
 	/**
-	 * @brief Open a document
-	 * @param fileName The document file name
-	 * @return True if success, false otherwise
+	 * @brief Reset the document
 	 */
-	virtual bool openDocument(QString fileName) = 0;
+	virtual void resetDocument();
 
 	/**
-	 * @brief Set the current document
+	 * @brief Open the current document
 	 *
 	 * Update the current document settings, the windows title and the recent file list.
 	 *
 	 * @param fileName The document file name
 	 */
-	void setCurrentDocument(QString fileName);
+	virtual bool openDocument(const QString &fileName);
+
+	/**
+	 * @brief Handle file drag and drop
+	 * @param sender The event sender
+	 * @param event The sender
+	 * @return True if handled, false otherwise
+	 */
+	bool eventFilter(QObject *sender, QEvent *event) override;
 
 	/**
 	 * @brief The recent document menu item
@@ -74,13 +80,17 @@ public slots:
 	 * Handle external changes and reload the file.
 	 * @param path
 	 */
-	void onExternalChange(QString path);
+	void onExternalChange(const QString &path);
 
-private slots:
-	void onOpenRecentDocumentTriggered();
+protected slots:
+	/**
+	 * @brief Open the clicked recent document
+	 */
+	virtual void onOpenRecentDocumentTriggered();
 
 private:
 	void updateRecentDocumentMenu();
+
 	PhDocumentWindowSettings * _settings;
 };
 

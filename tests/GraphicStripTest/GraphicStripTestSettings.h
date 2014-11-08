@@ -30,6 +30,7 @@ public:
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 1)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
+	PH_SETTING_BOOL(setHideSelectedPeoples, hideSelectedPeoples)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
 	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
 	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
@@ -39,6 +40,9 @@ public:
 	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)
 	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
 	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
+	PH_SETTING_INT2(setVerticalScaleSpaceInSeconds, verticalScaleSpaceInSeconds, 5)
+	PH_SETTING_BOOL2(setDisplayVerticalScale, displayVerticalScale, false)
+
 
 	// PhDocumentWindowSettings
 	PH_SETTING_STRING(setCurrentDocument, currentDocument)

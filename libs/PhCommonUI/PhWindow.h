@@ -69,14 +69,12 @@ protected:
 	/**
 	 * @brief Called when the application is activated
 	 */
-	virtual void onApplicationActivate() {
-	};
+	virtual void onApplicationActivate();
 
 	/**
 	 * @brief Called when the application is deactivated
 	 */
-	virtual void onApplicationDeactivate() {
-	}
+	virtual void onApplicationDeactivate();
 
 private slots:
 	void onApplicationStateChange(Qt::ApplicationState state);

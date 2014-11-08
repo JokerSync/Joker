@@ -72,7 +72,7 @@ void MidiTest::testQFTC()
 	QCOMPARE((int)quarterFrameData, 0x01);
 
 	midiOut.sendQFTC(0x11); // setting higher frame to 0x1x
-	QThread::msleep(10);
+	QThread::msleep(20); // try to solve travis fail
 	QCOMPARE(quarterFrameCount, 2);
 	QCOMPARE((int)quarterFrameData, 0x11);
 
@@ -148,7 +148,7 @@ void MidiTest::testMMCPlay()
 
 	int playCount = 0;
 
-	connect(&midiIn, &PhMidiInput::onPlay, [&]() {
+	connect(&midiIn, &PhMidiInput::play, [&]() {
 	            playCount++;
 			});
 
@@ -170,7 +170,7 @@ void MidiTest::testMMCStop()
 
 	int stopCount = 0;
 
-	connect(&midiIn, &PhMidiInput::onStop, [&]() {
+	connect(&midiIn, &PhMidiInput::stop, [&]() {
 	            stopCount++;
 			});
 
@@ -223,12 +223,21 @@ void MidiTest::testMTCReader()
 	PhMidiTimeCodeReader mtcReader(PhTimeCodeType25);
 	PhMidiOutput midiOut;
 
+	PhTimeCodeType tcType = PhTimeCodeType25;
+	int tcTypeCalled = 0;
+	connect(&mtcReader, &PhMidiTimeCodeReader::timeCodeTypeChanged, [&](PhTimeCodeType type) {
+	            tcType = type;
+	            tcTypeCalled++;
+			});
+
 	QVERIFY(mtcReader.open("testMTCReader"));
 	QVERIFY(midiOut.open("testMTCReader"));
 
 	midiOut.sendFullTC(1, 0, 0, 0, PhTimeCodeType24);
 	QThread::msleep(10);
-	QCOMPARE(mtcReader.clock()->timeCodeType(), PhTimeCodeType24);
+	QCOMPARE(tcTypeCalled, 1);
+	QCOMPARE(tcType, PhTimeCodeType24);
+	QCOMPARE(mtcReader.timeCodeType(), PhTimeCodeType24);
 	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("01:00:00:00"));
 
 	//
@@ -363,6 +372,40 @@ void MidiTest::testMTCReader()
 	midiOut.sendQFTC(0x70); // Send hour high digit and 24 fps info
 	QThread::msleep(10);
 	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("10:04:00:02"));
+
+	// Switch to 25 fps timecode
+	QCOMPARE(tcTypeCalled, 1);
+	QCOMPARE(tcType, PhTimeCodeType24);
+
+	midiOut.sendQFTC(0x04); // Send frame low digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x10); // Send frame high digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x20); // Send second low digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x30); // Send second high digit
+	QThread::msleep(10);
+	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("10:04:00:03"));
+	midiOut.sendQFTC(0x44); // Send minute low digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x50); // Send minute high digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x6a); // Send hour low digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x72); // Send hour high digit and 25fps info
+	QThread::msleep(10);
+
+	QCOMPARE(tcTypeCalled, 2);
+	QCOMPARE(tcType, PhTimeCodeType25);
+	QCOMPARE(mtcReader.timeCodeType(), PhTimeCodeType25);
+	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType25), QString("10:04:00:04"));
+
+	// Stop sending quarter frame MTC message should stop the reader after one frame:
+#warning /// @todo QThread::msleep block the pause detector timer and QTest::qWait crashes...
+//	QThread::msleep(30);
+//	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 1));
+//	QThread::msleep(200);
+//	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 0));
 }
 
 void MidiTest::testMTCWriter()
@@ -387,58 +430,186 @@ void MidiTest::testMTCWriter()
 	QCOMPARE(quarterFrameCount, 0);
 
 	mtcWriter.clock()->setRate(1);
-	mtcWriter.clock()->tick(100); // 100Hz = one quarter frame
+	PhTime elapsedTime = PhTimeCode::timePerFrame(PhTimeCodeType30) / 4; // => one quarter frame period
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 1);
 	QCOMPARE((int)quarterFrameData, 0x02);
 
-	mtcWriter.clock()->tick(100);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 2);
 	QCOMPARE((int)quarterFrameData, 0x11);
 
-	mtcWriter.clock()->tick(100);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 3);
 	QCOMPARE((int)quarterFrameData, 0x23);
 
-	mtcWriter.clock()->tick(100);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 4);
 	QCOMPARE((int)quarterFrameData, 0x31);
 
-	mtcWriter.clock()->tick(100);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 5);
 	QCOMPARE((int)quarterFrameData, 0x48);
 
-	mtcWriter.clock()->tick(100);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 6);
 	QCOMPARE((int)quarterFrameData, 0x52);
 
-	mtcWriter.clock()->tick(100);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 7);
 	QCOMPARE((int)quarterFrameData, 0x67);
 
-	mtcWriter.clock()->tick(100);
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
+	QCOMPARE(mtcWriter.clock()->time(), s2t("23:40:19:18", PhTimeCodeType30));
 	QCOMPARE(quarterFrameCount, 8);
-	QCOMPARE((int)quarterFrameData, 0x77);
+	QCOMPARE((int)quarterFrameData, 0x70 | (0x03 << 1) | 0x01); // timecode type info + hour high digit
 
-	mtcWriter.clock()->tick(100);
+	// Test changing the writer timecode type:
+	mtcWriter.setTimeCodeType(PhTimeCodeType25);
+	elapsedTime = PhTimeCode::timePerFrame(PhTimeCodeType25) / 4; // => one quarter frame period
+
+	mtcWriter.clock()->elapse(elapsedTime);
 	QThread::msleep(10);
 
 	QCOMPARE(quarterFrameCount, 9);
-	QCOMPARE((int)quarterFrameData, 0x04);
+	QCOMPARE((int)quarterFrameData, 0x01); // With 25 fps, the next timecode will be 23:40:19:17
+
+	mtcWriter.clock()->elapse(elapsedTime);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 10);
+	QCOMPARE((int)quarterFrameData, 0x11);
+
+	mtcWriter.clock()->elapse(elapsedTime);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 11);
+	QCOMPARE((int)quarterFrameData, 0x23);
+
+	mtcWriter.clock()->elapse(elapsedTime);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 12);
+	QCOMPARE((int)quarterFrameData, 0x31);
+
+	mtcWriter.clock()->elapse(elapsedTime);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 13);
+	QCOMPARE((int)quarterFrameData, 0x48);
+
+	mtcWriter.clock()->elapse(elapsedTime);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 14);
+	QCOMPARE((int)quarterFrameData, 0x52);
+
+	mtcWriter.clock()->elapse(elapsedTime);
+	QThread::msleep(10);
+
+	QCOMPARE(quarterFrameCount, 15);
+	QCOMPARE((int)quarterFrameData, 0x67);
+
+	mtcWriter.clock()->elapse(elapsedTime);
+	QThread::msleep(10);
+
+	QCOMPARE(mtcWriter.clock()->time(), s2t("23:40:19:17", PhTimeCodeType25));
+	QCOMPARE(quarterFrameCount, 16);
+	QCOMPARE((int)quarterFrameData, 0x70 | (0x01 << 1) | 0x01); // timecode type info + hour high digit
+
+	// Test changing speed to 0
+	mtcWriter.clock()->setRate(0);
+
+	// No quarter frame message shall be sent anymore
+	QThread::msleep(10);
+	QCOMPARE(quarterFrameCount, 16);
+	QThread::msleep(10);
+	QCOMPARE(quarterFrameCount, 16);
+	QThread::msleep(10);
+	QCOMPARE(quarterFrameCount, 16);
+	QThread::msleep(10);
+	QCOMPARE(quarterFrameCount, 16);
+
+
+}
+
+void MidiTest::testMTCReaderWithMMC()
+{
+	//
+	// Initialize the midi timecode reader:
+	//
+
+	PhMidiTimeCodeReader mtcReader(PhTimeCodeType25);
+	PhMidiOutput midiOut;
+
+	PhTimeCodeType tcType = PhTimeCodeType25;
+
+	QVERIFY(mtcReader.open("testMMCReader"));
+	QVERIFY(midiOut.open("testMMCReader"));
+
+	// Send goto
+	midiOut.sendMMCGoto(1, 0, 0, 0, PhTimeCodeType25);
+	QThread::msleep(10);
+	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType24), QString("01:00:00:00"));
+
+	// Send play
+	midiOut.sendMMCPlay();
+	QThread::msleep(10);
+	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 1));
+
+	// Send quarter frame message
+	midiOut.sendQFTC(0x02); // Send frame low digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x10); // Send frame high digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x20); // Send second low digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x30); // Send second high digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x40); // Send minute low digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x50); // Send minute high digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x61); // Send hour low digit
+	QThread::msleep(10);
+	midiOut.sendQFTC(0x72); // Send hour high digit and 25 fps info
+	QThread::msleep(10);
+
+	QCOMPARE(t2s(mtcReader.clock()->time(), PhTimeCodeType25), QString("01:00:00:02"));
+
+	// Send stop
+	midiOut.sendMMCStop();
+	QThread::msleep(10);
+	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 0));
+
+	// Make sur quarter frame message doesn't put play back for the next 80 ms
+
+	midiOut.sendQFTC(0x04); // Send frame low digit
+	QThread::msleep(10);
+	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 0));
+
+	midiOut.sendQFTC(0x10); // Send frame high digit
+	QThread::msleep(60);
+	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 0));
+
+	midiOut.sendQFTC(0x20); // Send second low digit
+	QThread::msleep(40);
+	QVERIFY(PhTestTools::compareFloats(mtcReader.clock()->rate(), 1));
 }
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>523</width>
-    <height>371</height>
+    <height>376</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLabel" name="generateInfoLabel">
+        <widget class="QLabel" name="inOutInfoLabel">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -87,7 +87,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="lblSlave">
+        <widget class="QLabel" name="readerTimeCodeLabel">
          <property name="font">
           <font>
            <family>Arial Unicode MS</family>
@@ -113,6 +113,16 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="tcTypelabel">
+         <property name="text">
+          <string notr="true">??fps</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -124,7 +134,7 @@
      <x>0</x>
      <y>0</y>
      <width>523</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuControls">

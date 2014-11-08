@@ -67,6 +67,12 @@ public:
 	QString season();
 
 	/**
+	 * @brief The video timecode type
+	 * @return A timecode type value.
+	 */
+	PhTimeCodeType videoTimeCodeType();
+
+	/**
 	 * @brief The video starting time
 	 * @return A time value
 	 */
@@ -132,12 +138,6 @@ public:
 	int timeScale();
 
 	/**
-	 * @brief The timecode type
-	 * @return A PhTimeCodeType value
-	 */
-	PhTimeCodeType timeCodeType();
-
-	/**
 	 * @brief The list of peoples
 	 * @return A list.
 	 */
@@ -188,22 +188,19 @@ public:
 	 * @param title A string
 	 */
 	void setTitle(QString title);
-	/**
-	 * @brief Set the video starting time
-	 * @param time A time value
-	 */
-	void setVideoTimeIn(PhTime time);
-	/**
-	 * @brief Set the video starting frame
-	 * @param frame A frame value
-	 */
-	void setVideoFrameIn(PhFrame frame);
+
 	/**
 	 * @brief Set the video file path
-	 * @param videoFilePath A string
+	 * @param filePath The video file path
 	 */
-	void setVideoFilePath(QString videoFilePath);
+	void setVideoFilePath(QString filePath);
 
+	/**
+	 * @brief Set the video starting time
+	 * @param timeIn The video starting time
+	 * @param tcType The video timecode type
+	 */
+	void setVideoTimeIn(PhTime timeIn, PhTimeCodeType tcType);
 	/**
 	 * @brief Set the video deinterlace mode
 	 * @param deinterlace True if deinterlace false otherwise
@@ -250,10 +247,10 @@ public:
 	/**
 	 * @brief Save the PhStripDoc to a strip file
 	 * @param fileName Path to the stripfile
-	 * @param lastTC The last displayed timecode
+	 * @param lastTime The last position to remember
 	 * @return True if the strip saved well, false otherwise
 	 */
-	bool saveStripFile(const QString &fileName, const QString &lastTC);
+	bool saveStripFile(const QString &fileName, PhTime lastTime);
 	/**
 	 * @brief Generate a document from given value
 	 * @param text The desired text
@@ -429,6 +426,8 @@ private:
 	 * Starting time of the video content refered by the videoPath
 	 */
 	PhTime _videoTimeIn;
+	PhTimeCodeType _videoTimeCodeType;
+
 	/**
 	 * @brief The last position the document was edited.
 	 */
@@ -444,8 +443,6 @@ private:
 	 */
 	QString _videoPath;
 	bool _videoDeinterlace;
-
-	PhTimeCodeType _tcType;
 
 	QString _authorName;
 
@@ -471,8 +468,8 @@ private:
 	 */
 	QList<PhStripDetect *> _detects;
 
-	PhTime ComputeDrbTime1(PhTime offset, PhTime value);
-	PhTime ComputeDrbTime2(PhTime offset, PhTime value);
+	PhTime ComputeDrbTime1(PhTime offset, PhTime value, PhTimeCodeType tcType);
+	PhTime ComputeDrbTime2(PhTime offset, PhTime value, PhTimeCodeType tcType);
 
 	enum MosTag {
 		MosUnknown,
@@ -499,11 +496,11 @@ private:
 	bool checkMosTag2(QFile &f, int level, QString expected);
 	bool checkMosTag(QFile &f, int level, MosTag expectedTag);
 	PhTime readMosTime(QFile &f, PhTimeCodeType tcType, int level);
-	PhStripText *readMosText(QFile &f, int textLevel, int internLevel);
-	PhStripDetect *readMosDetect(QFile &f, int detectLevel, int internLevel);
+	PhStripText *readMosText(QFile &f, PhTimeCodeType tcType, int textLevel, int internLevel);
+	PhStripDetect *readMosDetect(QFile &f, PhTimeCodeType tcType, int detectLevel, int internLevel);
 	bool readMosProperties(QFile &f, int level);
 	MosTag readMosTag(QFile &f, int level, QString name);
-	bool readMosTrack(QFile &f, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel);
+	bool readMosTrack(QFile &f, PhTimeCodeType tcType, QMap<int, PhPeople*> peopleMap, QMap<int, int> peopleTrackMap, int blocLevel, int textLevel, int detectLevel, int labelLevel, int level, int internLevel);
 	bool _videoForceRatio169;
 	bool _modified;
 };

@@ -12,6 +12,29 @@ PhMidiObject::PhMidiObject() :
 {
 }
 
+bool PhMidiObject::canUseVirtualPorts()
+{
+	bool result = false;
+	RtMidiOut *midiOut;
+	try {
+		midiOut = new RtMidiOut();
+
+		RtMidi::Api midiApi = midiOut->getCurrentApi();
+
+		if ((midiApi == RtMidi::MACOSX_CORE)
+		    || (midiApi == RtMidi::LINUX_ALSA)
+		    || (midiApi == RtMidi::UNIX_JACK)) {
+			result = true;
+		}
+	}
+	catch(RtMidiError &error) {
+		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
+	}
+	delete midiOut;
+
+	return result;
+}
+
 PhTimeCodeType PhMidiObject::computeTimeCodeType(unsigned char data)
 {
 	switch (data) {
