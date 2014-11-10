@@ -22,9 +22,21 @@ include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
 include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
 include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
 include($$TOP_ROOT/libs/PhSync/PhSync.pri)
-include($$TOP_ROOT/libs/PhSony/PhSony.pri)
 include($$TOP_ROOT/libs/PhLtc/PhLtc.pri)
 include($$TOP_ROOT/libs/PhMidi/PhMidi.pri)
+
+win {
+CONFIG += sony
+}
+
+mac {
+CONFIG += sony
+}
+
+sony {
+include($$TOP_ROOT/libs/PhSony/PhSony.pri)
+}
+
 
 SOURCES += main.cpp \
 	JokerWindow.cpp \

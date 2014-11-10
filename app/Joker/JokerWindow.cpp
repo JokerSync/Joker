@@ -32,7 +32,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_strip(settings),
 	_videoEngine(settings),
 	_doc(_strip.doc()),
+#ifdef SONY
 	_sonySlave(settings),
+#endif
 	_ltcReader(settings),
 	_mtcReader(PhTimeCodeType25),
 	_mtcWriter(PhTimeCodeType25),
@@ -61,7 +63,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_synchronizer.setStripClock(_strip.clock());
 	_synchronizer.setVideoClock(_videoEngine.clock());
 
+#ifdef SONY
 	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::onVideoSync);
+#endif
 
 	setupSyncProtocol();
 
@@ -154,7 +158,9 @@ void JokerWindow::setupSyncProtocol()
 	QString mtcPortName;
 
 	// Disable old protocol
+#ifdef SONY
 	_sonySlave.close();
+#endif
 	_ltcReader.close();
 	_mtcReader.close();
 	_mtcWriter.close();
@@ -162,6 +168,7 @@ void JokerWindow::setupSyncProtocol()
 	PhSynchronizer::SyncType type = (PhSynchronizer::SyncType)_settings->synchroProtocol();
 
 	switch(type) {
+#ifdef SONY
 	case PhSynchronizer::Sony:
 		// Initialize the sony module
 		if(_sonySlave.open()) {
@@ -173,6 +180,7 @@ void JokerWindow::setupSyncProtocol()
 			QMessageBox::critical(this, tr("Error"), tr("Unable to connect to USB422v module"));
 		}
 		break;
+#endif
 	case PhSynchronizer::LTC:
 		if(_ltcReader.init(_settings->ltcInputPort()))
 			clock = _ltcReader.clock();

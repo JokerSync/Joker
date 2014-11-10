@@ -16,7 +16,9 @@
 #include <PhVideo/PhVideoEngine.h>
 #include <PhGraphicStrip/PhGraphicStrip.h>
 #include "PhSync/PhSynchronizer.h"
+#ifdef SONY
 #include "PhSony/PhSonySlaveController.h"
+#endif
 #include "PhLtc/PhLtcReader.h"
 #include "PhMidi/PhMidiTimeCodeReader.h"
 #include "PhMidi/PhMidiTimeCodeWriter.h"
@@ -272,7 +274,9 @@ private:
 	PhGraphicStrip _strip;
 	PhVideoEngine _videoEngine;
 	PhStripDoc *_doc;
+#ifdef SONY
 	PhSonySlaveController _sonySlave;
+#endif
 	PhLtcReader _ltcReader;
 	PhMidiTimeCodeReader _mtcReader;
 	PhMidiTimeCodeWriter _mtcWriter;
