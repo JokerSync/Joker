@@ -133,7 +133,7 @@ CONFIG(release, debug|release) {
 		QMAKE_POST_LINK += ln -s A $${TARGET}.app/Contents/Frameworks/FreeType.framework/Versions/Current;
 		QMAKE_POST_LINK += ln -s Versions/Current/FreeType $${TARGET}.app/Contents/Frameworks/FreeType.framework/FreeType;
 		QMAKE_POST_LINK += ln -s Versions/Current/Resources $${TARGET}.app/Contents/Frameworks/FreeType.framework/Resources;
-		QMAKE_POST_LINK += install_name_tool -change @rpath/FreeType.framework/Versions/A/FreeType  @executable_path/../Frameworks/FreeType.framework/Versions/A/FreeType $${TARGET}.app/Contents/MacOS/$${TARGET};
+		QMAKE_POST_LINK += install_name_tool -change @rpath/FreeType.framework/Versions/A/FreeType  @executable_path/../Frameworks/FreeType.framework/Versions/A/FreeType $${TARGET}.app/Contents/Frameworks/SDL2_ttf.framework/Versions/A/SDL2_ttf;
 		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/FreeType.framework/Resources/Info.plist;
 	}
 }
