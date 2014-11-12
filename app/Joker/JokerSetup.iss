@@ -52,7 +52,7 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: {#QtPath}\bin\Qt5Core.dll; DestDir: "{app}"; Flags: ignoreversion
+Source: {#QtPath}\bin\Qt5Core.dll; DestDir: {app}; Flags: ignoreversion
 Source: {#QtPath}\bin\Qt5Gui.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\Qt5OpenGL.dll; DestDir: "{app}"; Flags: ignoreversion
 Source: {#QtPath}\bin\Qt5Network.dll; DestDir: "{app}"; Flags: ignoreversion
