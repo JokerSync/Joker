@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 
 	PhStripDoc doc;
 	for(int i = 1; i < argc; i++) {
-		QString fileName = QLatin1String(argv[i]);
+		QString fileName = argv[i];
 		if(QFile::exists(fileName)) {
 			if(doc.openStripFile(fileName)) {
 				displayDoc(&doc);

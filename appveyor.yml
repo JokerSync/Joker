@@ -1,0 +1,6 @@
+os: unstable
+branches:
+  only:
+    - appveyor
+build_script:
+  - dir
