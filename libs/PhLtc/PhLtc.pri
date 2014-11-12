@@ -3,8 +3,6 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT += serialport
-
 HEADERS += \
 	$$TOP_ROOT/libs/PhLtc/PhLtcSettings.h \
 	$$TOP_ROOT/libs/PhLtc/PhLtcReader.h \
