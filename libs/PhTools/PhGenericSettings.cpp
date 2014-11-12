@@ -1,4 +1,3 @@
-
 #include "PhGenericSettings.h"
 #include "PhDebug.h"
 
