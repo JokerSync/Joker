@@ -4,15 +4,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QtGlobal>
-#include <QSize>
-#include <QFileInfo>
-
-#if defined(Q_OS_MAC)
-#include <SDL2_image/SDL_image.h>
-#else
-#include <SDL2/SDL_image.h>
-#endif
+#include "PhGraphic.h"
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphicImage.h"

@@ -4,13 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QtGlobal>
-#include <QDate>
-#include <QStringList>
-#include <iostream>
-#include <QDir>
-#include <QEvent>
-#include <QMetaEnum>
+#include "PhTools/PhFile.h"
+#include "PhTools/PhData.h"
 
 #include "PhDebug.h"
 

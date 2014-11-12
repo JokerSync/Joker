@@ -6,8 +6,6 @@
 #include "PeopleEditionDialog.h"
 #include "ui_PeopleEditionDialog.h"
 
-#include <QColorDialog>
-
 PeopleEditionDialog::PeopleEditionDialog(PhStripDoc *doc, PhPeople * people, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::PhColorPickerDialog),

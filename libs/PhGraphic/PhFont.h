@@ -7,14 +7,7 @@
 #ifndef PHFONT_H
 #define PHFONT_H
 
-#include <QString>
-
-#include <QtGlobal>
-#if defined(Q_OS_MAC)
-#include <SDL2_ttf/SDL_ttf.h>
-#else
-#include <SDL2/SDL_ttf.h>
-#endif
+#include "PhGraphic.h"
 
 /**
  * @brief Describe the font appearance for PhGraphicText

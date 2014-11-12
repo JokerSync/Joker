@@ -5,6 +5,9 @@
 
 QT += widgets network
 
+PRECOMPILED_HEADERS += \
+    $$TOP_ROOT/libs/PhCommonUI/PhUI.h \
+
 HEADERS += \
 #    $$TOP_ROOT/libs/PhCommonUI/PhLeap.h \
 	$$TOP_ROOT/libs/PhCommonUI/PhMediaPanel.h \
@@ -19,7 +22,7 @@ HEADERS += \
     $$TOP_ROOT/libs/PhCommonUI/PhLockableSpinBox.h \
 	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackDialog.h \
 	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackSettings.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhDialogButtonBox.h
+    $$TOP_ROOT/libs/PhCommonUI/PhDialogButtonBox.h \
 
 SOURCES += \
 #   $$TOP_ROOT/libs/PhCommonUI/PhLeap.cpp \

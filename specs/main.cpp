@@ -3,11 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QApplication>
-
-#include "bandit/bandit.h"
+#include "PhTools/PhGeneric.h"
 
 #include "PhTools/PhDebug.h"
+
+#include "PhSpec.h"
 
 int main(int argc, char *argv[])
 {

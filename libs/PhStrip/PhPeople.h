@@ -7,7 +7,7 @@
 #ifndef PHPEOPLE_H
 #define PHPEOPLE_H
 
-#include <QString>
+#include "PhTools/PhData.h"
 
 /**
  * @brief Represents a character or a group of character from the video content.

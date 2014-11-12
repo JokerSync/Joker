@@ -1,8 +1,7 @@
 #ifndef JOKERSETTINGS_H
 #define JOKERSETTINGS_H
 
-#include <QDir>
-#include <QApplication>
+#include "PhTools/PhFile.h"
 
 #include "PhTools/PhGenericSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"

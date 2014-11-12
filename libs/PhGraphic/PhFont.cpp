@@ -4,14 +4,6 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QtGlobal>
-
-#if defined(Q_OS_WIN)
-#include <GL/glu.h>
-#else
-#include <glu.h>
-#endif
-
 #include "PhFont.h"
 #include "PhTools/PhDebug.h"
 

@@ -5,7 +5,11 @@
 
 QT		+= opengl
 
+PRECOMPILED_HEADERS += \
+    $$TOP_ROOT/libs/PhGraphic/PhGraphic.h \
+
 HEADERS += \
+    $$TOP_ROOT/libs/PhGraphic/PhGraphic.h \
 	$$TOP_ROOT/libs/PhGraphic/PhGraphicSettings.h \
 	$$TOP_ROOT/libs/PhGraphic/PhGraphicView.h \
 	$$TOP_ROOT/libs/PhGraphic/PhGraphicImage.h \
@@ -18,7 +22,7 @@ HEADERS += \
 	$$TOP_ROOT/libs/PhGraphic/PhGraphicLoop.h \
 	$$TOP_ROOT/libs/PhGraphic/PhGraphicDisc.h \
 	$$TOP_ROOT/libs/PhGraphic/PhGraphicDashedLine.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicArrow.h
+	$$TOP_ROOT/libs/PhGraphic/PhGraphicArrow.h \
 
 SOURCES += \
 	$$TOP_ROOT/libs/PhGraphic/PhGraphicView.cpp \

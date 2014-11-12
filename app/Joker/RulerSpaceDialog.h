@@ -6,7 +6,7 @@
 #ifndef RULERSPACEDIALOG_H
 #define RULERSPACEDIALOG_H
 
-#include <QDialog>
+#include "PhCommonUI/PhUI.h"
 
 #include "JokerSettings.h"
 

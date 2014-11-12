@@ -7,13 +7,7 @@
 #ifndef PHGRAPHICOBJECT_H
 #define PHGRAPHICOBJECT_H
 
-#include <QColor>
-#include <SDL2/SDL.h>
-
-/* QtGui provides OpenGL definitions */
-#include <QtGui>
-
-#include "PhTools/PhDebug.h"
+#include "PhGraphic.h"
 
 /**
  * @brief A generic graphic object

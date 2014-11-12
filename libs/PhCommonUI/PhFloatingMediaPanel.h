@@ -8,8 +8,6 @@
 #ifndef PHFLOATINGMEDIAPANEL_H
 #define PHFLOATINGMEDIAPANEL_H
 
-#include <QDialog>
-
 #include "PhMediaPanel.h"
 
 /**

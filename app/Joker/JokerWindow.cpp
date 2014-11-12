@@ -4,12 +4,6 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QFileDialog>
-#include <QFontDialog>
-#include <QFileOpenEvent>
-#include <QWindowStateChangeEvent>
-#include <QMouseEvent>
-
 #include "PhTools/PhDebug.h"
 
 #include "PhCommonUI/PhTimeCodeDialog.h"

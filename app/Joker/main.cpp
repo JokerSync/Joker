@@ -4,9 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QApplication>
-#include <QDebug>
-#include <QTranslator>
+#include "PhTools/PhGeneric.h"
+#include "PhCommonUI/PhUI.h"
 
 #include "PhStrip/PhStripDoc.h"
 #include "PhCommonUI/PhFeedbackDialog.h"

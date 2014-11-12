@@ -7,7 +7,7 @@
 #ifndef TICKCOUNTER_H
 #define TICKCOUNTER_H
 
-#include <QTime>
+#include "PhTools/PhGeneric.h"
 
 /**
  * @brief Utility that allow to meter the frequency of a signal

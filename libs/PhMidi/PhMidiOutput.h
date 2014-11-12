@@ -6,7 +6,7 @@
 #ifndef PHMIDIOUTPUT_H
 #define PHMIDIOUTPUT_H
 
-#include <QStringList>
+#include "PhTools/PhData.h"
 
 #include "PhMidiObject.h"
 

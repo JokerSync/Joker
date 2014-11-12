@@ -1,7 +1,7 @@
 #ifndef PHSONYSETTINGS_H
 #define PHSONYSETTINGS_H
 
-#include <QString>
+#include "PhTools/PhData.h"
 
 /**
  * @brief The settings for a PhSonyController

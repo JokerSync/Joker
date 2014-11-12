@@ -4,9 +4,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QRegExpValidator>
-#include <QKeyEvent>
-#include <QApplication>
+#include "PhTools/PhGeneric.h"
 
 #include "PhTimeCodeEdit.h"
 

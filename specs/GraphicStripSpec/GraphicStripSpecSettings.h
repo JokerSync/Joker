@@ -6,7 +6,8 @@
 #ifndef GRAPHICSTRIPSPECSETTINGS_H
 #define GRAPHICSTRIPSPECSETTINGS_H
 
-#include <QDir>
+#include "PhTools/PhFile.h"
+
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 
 class GraphicStripSpecSettings : public PhGraphicStripSettings

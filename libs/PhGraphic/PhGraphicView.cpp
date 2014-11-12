@@ -4,17 +4,10 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QtGlobal>
-#include <SDL2/SDL.h>
-#if defined(Q_OS_MAC)
-#include <SDL2_ttf/SDL_ttf.h>
-#else
-#include <SDL2/SDL_ttf.h>
-#endif
-#include <QtGui>
+#include "PhTools/PhDebug.h"
+
 #include "PhGraphicText.h"
 
-#include "PhTools/PhDebug.h"
 #include "PhGraphicView.h"
 
 PhGraphicView::PhGraphicView( QWidget *parent)
