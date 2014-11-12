@@ -3,6 +3,8 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
+QT		+= xml sql network
+
 PRECOMPILED_HEADERS += \
     $$TOP_ROOT/libs/PhTools/PhGeneric.h \
     $$TOP_ROOT/libs/PhTools/PhFile.h \
