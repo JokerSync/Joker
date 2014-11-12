@@ -26,7 +26,7 @@ CONFIG(release, debug|release) {
 	}
 
 	win32 {
-		QMAKE_POST_LINK += cd debug
+		QMAKE_POST_LINK += echo "Deploying Joker" $${CS}
 		QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/app/Joker/JokerSetup.iss) . $${CS}
 		QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/LICENSE.TXT) . $${CS}
 		QMAKE_POST_LINK += iscc JokerSetup.iss $${CS}
