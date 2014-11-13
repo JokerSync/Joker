@@ -5,7 +5,6 @@ install:
   - choco install curl 7zip InnoSetup
   - set PATH=%PATH%;"C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5"
   - set JOKER_RELEASE_PATH=.
-  - dir "C:\Program Files (x86)\Inno Setup 5"
   # Configuring Qt
   - set QTDIR=C:\Qt\Qt5.3.2\5.3\mingw482_32
   - set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin
