@@ -4,14 +4,14 @@
 #
 
 HEADERS += \
-	$$TOP_ROOT/libs/PhLtc/PhLtcSettings.h \
-	$$TOP_ROOT/libs/PhLtc/PhLtcReader.h \
-	$$TOP_ROOT/libs/PhLtc/PhLtcWriter.h \
-	$$TOP_ROOT/libs/PhLtc/PhLtcReaderSettings.h
+	$$PWD/PhLtcSettings.h \
+	$$PWD/PhLtcReader.h \
+	$$PWD/PhLtcWriter.h \
+	$$PWD/PhLtcReaderSettings.h
 
 SOURCES += \
-	$$TOP_ROOT/libs/PhLtc/PhLtcReader.cpp \
-	$$TOP_ROOT/libs/PhLtc/PhLtcWriter.cpp
+	$$PWD/PhLtcReader.cpp \
+	$$PWD/PhLtcWriter.cpp
 
 unix {
 	INCLUDEPATH += /usr/local/include
