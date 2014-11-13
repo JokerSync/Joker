@@ -1,5 +1,5 @@
 win32 {
-	QMAKE_POST_LINK += $$(QTDIR)/bin/windeployqt $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += windeployqt $${RESOURCES_PATH} $${CS}
 }
 
 CONFIG(release, debug|release) {
