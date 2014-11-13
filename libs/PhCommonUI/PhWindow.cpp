@@ -1,6 +1,10 @@
-#include <QTimer>
-#include <QAction>
-#include <QGuiApplication>
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
+#include "PhTools/PhGeneric.h"
 
 #include "PhTools/PhDebug.h"
 

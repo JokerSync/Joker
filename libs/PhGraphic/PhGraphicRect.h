@@ -7,8 +7,6 @@
 #ifndef PHGRAPHICSQUARE_H
 #define PHGRAPHICSQUARE_H
 
-#include <QSize>
-
 #include "PhGraphicObject.h"
 
 /**

@@ -3,8 +3,6 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "bandit/bandit.h"
-
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 #include "PhGraphic/PhGraphicView.h"
@@ -14,6 +12,8 @@
 #include "VideoSpecSettings.h"
 
 #define FRAME_WAIT_TIME 40
+
+#include "PhSpec.h"
 
 using namespace bandit;
 

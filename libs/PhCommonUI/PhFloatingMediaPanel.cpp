@@ -6,8 +6,6 @@
 
 #include "PhFloatingMediaPanel.h"
 
-#include <QMouseEvent>
-
 PhFloatingMediaPanel::PhFloatingMediaPanel(QWidget *parent) :
 	PhMediaPanel(parent),
 	_mousePressed(false),

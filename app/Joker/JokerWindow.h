@@ -7,14 +7,10 @@
 #ifndef JOKERWINDOW_H
 #define JOKERWINDOW_H
 
-#include <QMessageBox>
-#include <QPropertyAnimation>
-#include <QTimer>
-
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 #include "PhCommonUI/PhEditableDocumentWindow.h"
-#include <PhVideo/PhVideoEngine.h>
-#include <PhGraphicStrip/PhGraphicStrip.h>
+#include "PhVideo/PhVideoEngine.h"
+#include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSynchronizer.h"
 #include "PhSony/PhSonySlaveController.h"
 #include "PhLtc/PhLtcReader.h"

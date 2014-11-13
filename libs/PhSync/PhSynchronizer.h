@@ -7,7 +7,7 @@
 #ifndef PHSYNCHRONIZER_H
 #define PHSYNCHRONIZER_H
 
-#include <QObject>
+#include "PhTools/PhGeneric.h"
 
 #include "PhSync/PhClock.h"
 

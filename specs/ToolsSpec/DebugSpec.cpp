@@ -3,11 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QMouseEvent>
-
-#include "bandit/bandit.h"
-
+#include "PhCommonUI/PhUI.h"
 #include "PhTools/PhDebug.h"
+
+#include "PhSpec.h"
 
 using namespace bandit;
 

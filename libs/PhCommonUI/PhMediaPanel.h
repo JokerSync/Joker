@@ -7,7 +7,7 @@
 #ifndef PHMEDIAPANEL_H
 #define PHMEDIAPANEL_H
 
-#include <QWidget>
+#include "PhCommonUI/PhUI.h"
 
 #include "PhSync/PhClock.h"
 

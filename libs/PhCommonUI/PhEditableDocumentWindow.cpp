@@ -1,7 +1,3 @@
-#include <QFileInfo>
-#include <QMessageBox>
-#include <QDir>
-
 #include "PhTools/PhDebug.h"
 
 #include "PhEditableDocumentWindow.h"

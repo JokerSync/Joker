@@ -6,9 +6,6 @@
 #include "PhDialogButtonBox.h"
 #include "PhTools/PhDebug.h"
 
-#include <QPushButton>
-#include <QTimer>
-
 PhDialogButtonBox::PhDialogButtonBox(QWidget *parent) :
 	QDialogButtonBox(parent)
 {

@@ -3,8 +3,6 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT		+= xml sql
-
 SOURCES += \
     $$TOP_ROOT/libs/PhStrip/PhStripDoc.cpp \
 	$$TOP_ROOT/libs/PhStrip/PhStripObject.cpp \

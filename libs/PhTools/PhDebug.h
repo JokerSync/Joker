@@ -7,8 +7,7 @@
 #ifndef PHDEBUG_H
 #define PHDEBUG_H
 
-#include <QDebug>
-#include <QMutex>
+#include "PhTools/PhGeneric.h"
 
 /** PHERR allow to log error */
 #define PHERR PhDebug::error(__FILE__, __LINE__, __FUNCTION__)

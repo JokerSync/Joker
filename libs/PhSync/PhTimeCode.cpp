@@ -4,9 +4,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-
-#include <algorithm>
-#include <QStringList>
+#include "PhTools/PhData.h"
 
 #include "PhTimeCode.h"
 

@@ -7,8 +7,7 @@
 #ifndef PHTIME_H
 #define PHTIME_H
 
-#include <QtGlobal>
-#include <limits>
+#include "PhTools/PhGeneric.h"
 
 /** @brief Time unit in ticks : 1 second = 24000 ticks */
 typedef qint64 PhTime;

@@ -1,9 +1,7 @@
 #ifndef PHGRAPHICSTRIPSETTINGS_H
 #define PHGRAPHICSTRIPSETTINGS_H
 
-#include <QString>
-#include <QDir>
-
+#include "PhTools/PhFile.h"
 #include "PhGraphic/PhGraphicSettings.h"
 
 /**

@@ -7,10 +7,6 @@
 #ifndef PHLTCREADER_H
 #define PHLTCREADER_H
 
-#include <QString>
-#include <QObject>
-#include <QTime>
-
 #include <ltc.h>
 
 #include "PhSync/PhClock.h"

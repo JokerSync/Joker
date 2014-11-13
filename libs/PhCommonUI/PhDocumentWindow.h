@@ -1,9 +1,8 @@
 #ifndef PHDOCUMENTWINDOW_H
 #define PHDOCUMENTWINDOW_H
 
-#include <QMenu>
-#include <QFileSystemWatcher>
-#include <QTime>
+
+#include "PhTools/PhFile.h"
 
 #include "PhWindow.h"
 #include "PhDocumentWindowSettings.h"

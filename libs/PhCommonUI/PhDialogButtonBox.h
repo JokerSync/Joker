@@ -6,8 +6,7 @@
 #ifndef PHDIALOGBUTTONBOX_H
 #define PHDIALOGBUTTONBOX_H
 
-#include <QDialogButtonBox>
-#include <QShowEvent>
+#include "PhUI.h"
 
 /**
  * @brief Custom dialog box button box class

@@ -3,7 +3,10 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT += widgets network
+QT += widgets
+
+PRECOMPILED_HEADERS += \
+    $$TOP_ROOT/libs/PhCommonUI/PhUI.h \
 
 HEADERS += \
 #    $$TOP_ROOT/libs/PhCommonUI/PhLeap.h \
@@ -19,7 +22,7 @@ HEADERS += \
     $$TOP_ROOT/libs/PhCommonUI/PhLockableSpinBox.h \
 	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackDialog.h \
 	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackSettings.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhDialogButtonBox.h
+    $$TOP_ROOT/libs/PhCommonUI/PhDialogButtonBox.h \
 
 SOURCES += \
 #   $$TOP_ROOT/libs/PhCommonUI/PhLeap.cpp \

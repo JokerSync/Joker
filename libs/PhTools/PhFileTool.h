@@ -1,7 +1,13 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef PHFILETOOL_H
 #define PHFILETOOL_H
 
-#include <QFile>
+#include "PhTools/PhFile.h"
 
 /**
  * @brief Provides tools for binary files reading

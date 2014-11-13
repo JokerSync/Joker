@@ -21,9 +21,6 @@ extern "C" {
 #include <libswscale/swscale.h>
 }
 
-#include <QObject>
-#include <QElapsedTimer>
-
 #include "PhSync/PhClock.h"
 #include "PhTools/PhTickCounter.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"

@@ -1,10 +1,6 @@
 #ifndef PHEDITABLEDOCUMENTWINDOW_H
 #define PHEDITABLEDOCUMENTWINDOW_H
 
-#include <QMenu>
-#include <QFileSystemWatcher>
-#include <QTime>
-
 #include "PhDocumentWindow.h"
 
 /**
