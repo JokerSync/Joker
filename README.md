@@ -1,7 +1,7 @@
 Joker
 =====
 
-[![Build Status](https://travis-ci.org/Phonations/Joker.png?branch=master)](https://travis-ci.org/Phonations/Joker) [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.png?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master) [![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille)
+[![Build Status](https://travis-ci.org/Phonations/Joker.png?branch=master)](https://travis-ci.org/Phonations/Joker) [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.png?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master) [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=martindelille&url=https://github.com/Phonations/Joker&title=Joker&language=cpp&tags=github&category=software) [![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille)
 
 This repository hosts the Joker projet components:
 
