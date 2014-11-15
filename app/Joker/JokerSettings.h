@@ -114,7 +114,7 @@ public:
 	// Other settings :
 	PH_SETTING_STRING(setLastVideoFolder, lastVideoFolder)
 	PH_SETTING_STRINGLIST2(setStripFileType, stripFileType, QStringList({"joker", "detx", "mos", "drb", "syn6"}))
-	PH_SETTING_STRINGLIST2(setVideoFileType, videoFileType, QStringList({"m4v", "mkv", "avi", "mov", "mxf"}))
+	PH_SETTING_STRINGLIST2(setVideoFileType, videoFileType, QStringList({"m4v", "mkv", "avi", "mov", "mxf", "mp4"}))
 
 	PH_SETTING_BOOL(setDisplayControlPanel, displayControlPanel)
 
