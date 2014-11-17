@@ -20,7 +20,7 @@ win32{
 	}
 
 	INCLUDEPATH += $$(FFMPEG_DEV_PATH)\include
-	LIBS += -L$$(FFMPEG_DEV_PATH)\lib -lavformat -lavcodec -lavutil -lswscale -liconv -lz
+	LIBS += -L$$(FFMPEG_DEV_PATH)\lib -lavformat -lavcodec -lavutil -lswscale -liconv
 
 
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/swscale-2.dll) $${RESOURCES_PATH} $${CS}

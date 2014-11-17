@@ -28,7 +28,6 @@ win32 {
 	HEADERS += $$(LTC_PATH)\ltc.h \
 		$$(LTC_PATH)\encoder.h \
 		$$(LTC_PATH)\decoder.h \
-		$$(LTC_PATH)\timecode.h
 
 	SOURCES += $$(LTC_PATH)\ltc.c \
 		$$(LTC_PATH)\encoder.c \
