@@ -261,7 +261,10 @@ bool JokerWindow::openDocument(const QString &fileName)
 	/// If the document is opened successfully :
 	/// - Update the current document name (settings, windows title)
 	PhEditableDocumentWindow::openDocument(fileName);
-	_watcher.addPath(_doc->filePath());
+	if(fileName != _doc->filePath()) {
+		PHDEBUG << "Adding to watch: " << _doc->filePath();
+		_watcher.addPath(_doc->filePath());
+	}
 
 #ifdef USE_VIDEO
 	/// - Load the deinterlace settings
@@ -280,9 +283,17 @@ bool JokerWindow::openDocument(const QString &fileName)
 
 	/// - Goto to the document last position.
 	setCurrentTime(_doc->lastTime());
+
 	/// - Disable the need to save flag.
 
 	return true;
+}
+
+void JokerWindow::onExternalChange(const QString &path)
+{
+	PhTime currentTime = _videoEngine.clock()->time();
+	PhDocumentWindow::onExternalChange(path);
+	_videoEngine.clock()->setTime(currentTime);
 }
 
 bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
