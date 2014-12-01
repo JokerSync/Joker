@@ -107,160 +107,62 @@ void PhGraphicStrip::onDocChanged()
 		previousLoopTime = loop->timeIn();
 	}
 
-	// strip texts
-	_stripTextModelTrack0.clear();
-	_stripTextModelTrack1.clear();
-	_stripTextModelTrack2.clear();
-	_stripTextModelTrack3.clear();
-	int previousTimeOutTrack0 = 0;
-	int previousTimeOutTrack1 = 0;
-	int previousTimeOutTrack2 = 0;
-	int previousTimeOutTrack3 = 0;
+	QList<float> trackY;
+	trackY << 0 << 0.25 << 0.5 << 0.75;
 
-	foreach(PhStripText * text, _doc.texts()) {
-		text->setSelected(selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
+	foreach(float y, trackY) {
+		PhTrack * track = new PhTrack();
+		int previousTimeOut;
 
-		if (text->y() == 0) {
-			PhStripText *emptyText = new PhStripText(previousTimeOutTrack0,
-													 text->people(),
-													 text->timeIn(),
-													 0,
-													 "", // empty content
-													 0, //height
-													 true);
+		// strip texts
+		previousTimeOut = 0;
+		foreach(PhStripText * text, _doc.texts()) {
+			if (text->y() == y) {
+				text->setSelected(selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
 
-			_stripTextModelTrack0.addStripText(emptyText);
-			_stripTextModelTrack0.addStripText(text);
+				PhStripText *emptyText = new PhStripText(previousTimeOut,
+														 text->people(),
+														 text->timeIn(),
+														 0,
+														 "", // empty content
+														 0, //height
+														 true);
 
-			previousTimeOutTrack0 = text->timeOut();
+				track->stripTextModel()->addStripText(emptyText);
+				track->stripTextModel()->addStripText(text);
+
+				previousTimeOut = text->timeOut();
+			}
 		}
 
-		if (text->y() == 0.25) {
-			PhStripText *emptyText = new PhStripText(previousTimeOutTrack1,
-													 text->people(),
-													 text->timeIn(),
-													 0,
-													 "", // empty content
-													 0, //height
-													 true);
+		// strip text people
+		previousTimeOut = 0;
+		foreach(PhStripText * text, _doc.texts()) {
+			if (text->y() == y) {
+				PhStripText *peopleText = new PhStripText(previousTimeOut,
+														 text->people(),
+														 text->timeIn(),
+														 0,
+														 text->people()->name(),
+														 0, //height
+														 selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
 
-			_stripTextModelTrack1.addStripText(emptyText);
-			_stripTextModelTrack1.addStripText(text);
+				PhStripText *emptyText = new PhStripText(text->timeIn(),
+														  text->people(),
+														  text->timeOut(),
+														  0,
+														  "", //empty content
+														  0, //height
+														  true);
 
-			previousTimeOutTrack1 = text->timeOut();
+				track->stripPeopleModel()->addStripText(peopleText);
+				track->stripPeopleModel()->addStripText(emptyText);
+
+				previousTimeOut = text->timeOut();
+			}
 		}
 
-		if (text->y() == 0.5) {
-			PhStripText *emptyText = new PhStripText(previousTimeOutTrack2,
-													 text->people(),
-													 text->timeIn(),
-													 0,
-													 "", // empty content
-													 0, //height
-													 true);
-
-			_stripTextModelTrack2.addStripText(emptyText);
-			_stripTextModelTrack2.addStripText(text);
-
-			previousTimeOutTrack2 = text->timeOut();
-		}
-
-
-		if (text->y() == 0.75) {
-			PhStripText *emptyText = new PhStripText(previousTimeOutTrack3,
-													 text->people(),
-													 text->timeIn(),
-													 0,
-													 "", // empty content
-													 0, //height
-													 true);
-
-			_stripTextModelTrack3.addStripText(emptyText);
-			_stripTextModelTrack3.addStripText(text);
-
-			previousTimeOutTrack3 = text->timeOut();
-		}
-	}
-
-	// strip text people
-	_stripPeopleModelTrack0.clear();
-	_stripPeopleModelTrack1.clear();
-	_stripPeopleModelTrack2.clear();
-	_stripPeopleModelTrack3.clear();
-	previousTimeOutTrack0 = 0;
-	previousTimeOutTrack1 = 0;
-	previousTimeOutTrack2 = 0;
-	previousTimeOutTrack3 = 0;
-
-	foreach(PhStripText * text, _doc.texts()) {
-		PhStripText *peopleText = new PhStripText(text->timeIn(),
-												  text->people(),
-												  text->timeOut(),
-												  0,
-												  "", //empty content
-												  0, //height
-												  true);
-
-		if (text->y() == 0) {
-			PhStripText *emptyText = new PhStripText(previousTimeOutTrack0,
-													 text->people(),
-													 text->timeIn(),
-													 0,
-													 text->people()->name(),
-													 0, //height
-													 selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
-
-			_stripPeopleModelTrack0.addStripText(emptyText);
-			_stripPeopleModelTrack0.addStripText(peopleText);
-
-			previousTimeOutTrack0 = text->timeOut();
-		}
-
-		if (text->y() == 0.25) {
-			PhStripText *emptyText = new PhStripText(previousTimeOutTrack1,
-													 text->people(),
-													 text->timeIn(),
-													 0,
-													 text->people()->name(),
-													 0, //height
-													 selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
-
-			_stripPeopleModelTrack1.addStripText(emptyText);
-			_stripPeopleModelTrack1.addStripText(peopleText);
-
-			previousTimeOutTrack1 = text->timeOut();
-		}
-
-		if (text->y() == 0.5) {
-			PhStripText *emptyText = new PhStripText(previousTimeOutTrack2,
-													 text->people(),
-													 text->timeIn(),
-													 0,
-													 text->people()->name(),
-													 0, //height
-													 selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
-
-			_stripPeopleModelTrack2.addStripText(emptyText);
-			_stripPeopleModelTrack2.addStripText(peopleText);
-
-			previousTimeOutTrack2 = text->timeOut();
-		}
-
-
-		if (text->y() == 0.75) {
-			PhStripText *emptyText = new PhStripText(previousTimeOutTrack3,
-													 text->people(),
-													 text->timeIn(),
-													 0,
-													 text->people()->name(),
-													 0, //height
-													 selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
-
-			_stripPeopleModelTrack3.addStripText(emptyText);
-			_stripPeopleModelTrack3.addStripText(peopleText);
-
-			previousTimeOutTrack3 = text->timeOut();
-		}
+		_trackModel.addTrack(track);
 	}
 }
 

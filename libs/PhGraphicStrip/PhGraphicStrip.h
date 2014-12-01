@@ -21,6 +21,7 @@
 #include "PhGraphicStrip/PhNextPeople.h"
 #include "PhGraphicStrip/PhNextPeopleModel.h"
 #include "PhGraphicStrip/PhStripTextModel.h"
+#include "PhGraphicStrip/PhTrackModel.h"
 
 #include "PhSync/PhClock.h"
 
@@ -123,22 +124,6 @@ public:
 		return &_nextPeopleModel;
 	}
 
-	PhStripTextModel *stripTextModelTrack0() {
-		return &_stripTextModelTrack0;
-	}
-
-	PhStripTextModel *stripTextModelTrack1() {
-		return &_stripTextModelTrack1;
-	}
-
-	PhStripTextModel *stripTextModelTrack2() {
-		return &_stripTextModelTrack2;
-	}
-
-	PhStripTextModel *stripTextModelTrack3() {
-		return &_stripTextModelTrack3;
-	}
-
 	PhNextPeopleModel *rulerModel() {
 		return &_rulerModel;
 	}
@@ -151,20 +136,8 @@ public:
 		return &_loopModel;
 	}
 
-	PhStripTextModel *stripPeopleModelTrack0() {
-		return &_stripPeopleModelTrack0;
-	}
-
-	PhStripTextModel *stripPeopleModelTrack1() {
-		return &_stripPeopleModelTrack1;
-	}
-
-	PhStripTextModel *stripPeopleModelTrack2() {
-		return &_stripPeopleModelTrack2;
-	}
-
-	PhStripTextModel *stripPeopleModelTrack3() {
-		return &_stripPeopleModelTrack3;
+	PhTrackModel *trackModel() {
+		return &_trackModel;
 	}
 
 private slots:
@@ -213,17 +186,10 @@ private:
 	QStringList _infos;
 
 	PhNextPeopleModel _nextPeopleModel;
-	PhStripTextModel _stripTextModelTrack0;
-	PhStripTextModel _stripTextModelTrack1;
-	PhStripTextModel _stripTextModelTrack2;
-	PhStripTextModel _stripTextModelTrack3;
 	PhNextPeopleModel _rulerModel;
 	PhNextPeopleModel _cutModel;
 	PhNextPeopleModel _loopModel;
-	PhStripTextModel _stripPeopleModelTrack0;
-	PhStripTextModel _stripPeopleModelTrack1;
-	PhStripTextModel _stripPeopleModelTrack2;
-	PhStripTextModel _stripPeopleModelTrack3;
+	PhTrackModel _trackModel;
 };
 
 #endif // PHGRAPHICSTRIP_H

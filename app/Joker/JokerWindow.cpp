@@ -54,14 +54,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("rulerModel", _strip.rulerModel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("cutModel", _strip.cutModel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("loopModel", _strip.loopModel());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack0", _strip.stripTextModelTrack0());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack1", _strip.stripTextModelTrack1());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack2", _strip.stripTextModelTrack2());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripTextModelTrack3", _strip.stripTextModelTrack3());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripPeopleModelTrack0", _strip.stripPeopleModelTrack0());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripPeopleModelTrack1", _strip.stripPeopleModelTrack1());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripPeopleModelTrack2", _strip.stripPeopleModelTrack2());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripPeopleModelTrack3", _strip.stripPeopleModelTrack3());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("trackModel", _strip.trackModel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("textFontUrl", QUrl::fromLocalFile(_settings->textFontFile()));

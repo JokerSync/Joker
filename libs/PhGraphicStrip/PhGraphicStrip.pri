@@ -8,11 +8,15 @@ HEADERS += \
 	../../libs/PhGraphicStrip/PhGraphicStripSettings.h \
     $$PWD/PhNextPeople.h \
     $$PWD/PhNextPeopleModel.h \
-    $$PWD/PhStripTextModel.h
+    $$PWD/PhStripTextModel.h \
+	$$PWD/PhTrack.h \
+	$$PWD/PhTrackModel.h
 
 SOURCES += \
 	../../libs/PhGraphicStrip/PhGraphicStrip.cpp \
     $$PWD/PhNextPeople.cpp \
     $$PWD/PhNextPeopleModel.cpp \
-    $$PWD/PhStripTextModel.cpp
+    $$PWD/PhStripTextModel.cpp \
+    $$PWD/PhTrack.cpp \
+    $$PWD/PhTrackModel.cpp
 
