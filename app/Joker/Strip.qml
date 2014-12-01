@@ -73,61 +73,15 @@ Item {
             }
 
             Text {
-                id: stripText
+                id: stripTextItem
                 text: content
                 font.pixelSize: parent.height
                 font.family: stripFont.name
                 font.weight: textBoldness * 99/5
-                transform: Scale {  xScale: stripTextContainer.width/stripText.width;
+                transform: Scale {  xScale: stripTextContainer.width/stripTextItem.width;
                                     yScale: 1;}
                 smooth: true // smooth scaling
             }
-        }
-    }
-
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: 0
-
-        ListView {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            orientation: ListView.Horizontal
-            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
-            interactive: false
-            model: stripTextModelTrack0
-            delegate: stripTextDelegate
-        }
-
-
-        ListView {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            orientation: ListView.Horizontal
-            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
-            interactive: false
-            model: stripTextModelTrack1
-            delegate: stripTextDelegate
-        }
-
-        ListView {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            orientation: ListView.Horizontal
-            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
-            interactive: false
-            model: stripTextModelTrack2
-            delegate: stripTextDelegate
-        }
-
-        ListView {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            orientation: ListView.Horizontal
-            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
-            interactive: false
-            model: stripTextModelTrack3
-            delegate: stripTextDelegate
         }
     }
 
@@ -151,49 +105,41 @@ Item {
         }
     }
 
+    Component {
+        id: trackDelegate
+        Item {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            ListView {
+                width: parent.width
+                height: parent.height
+                orientation: ListView.Horizontal
+                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                interactive: false
+                model: stripPeople
+                delegate: stripPeopleDelegate
+            }
+
+            ListView {
+                width: parent.width
+                height: parent.height
+                orientation: ListView.Horizontal
+                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                interactive: false
+                model: stripText
+                delegate: stripTextDelegate
+            }
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
 
-        ListView {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            orientation: ListView.Horizontal
-            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
-            interactive: false
-            model: stripPeopleModelTrack0
-            delegate: stripPeopleDelegate
-        }
-
-
-        ListView {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            orientation: ListView.Horizontal
-            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
-            interactive: false
-            model: stripPeopleModelTrack1
-            delegate: stripPeopleDelegate
-        }
-
-        ListView {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            orientation: ListView.Horizontal
-            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
-            interactive: false
-            model: stripPeopleModelTrack2
-            delegate: stripPeopleDelegate
-        }
-
-        ListView {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            orientation: ListView.Horizontal
-            contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
-            interactive: false
-            model: stripPeopleModelTrack3
-            delegate: stripPeopleDelegate
+        Repeater {
+            model: trackModel
+            delegate: trackDelegate
         }
     }
 
