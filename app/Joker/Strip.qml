@@ -106,6 +106,144 @@ Item {
     }
 
     Component {
+        id: offDetectDelegate
+        Item {
+            width: duration/horizontalTimePerPixel
+            height: parent.height
+
+            Canvas {
+               id: offCanvas
+               anchors.fill: parent
+               antialiasing: true
+
+               onPaint: paintCanvas();
+
+               function paintCanvas() {
+                   var ctx = offCanvas.getContext("2d");
+                   ctx.save();
+                   // color should be the same as the text
+                   ctx.fillStyle = "black";
+                   ctx.fillRect(0, arrowUpCanvas.height*9/10, arrowUpCanvas.width, arrowUpCanvas.height/10);
+                   ctx.restore();
+                }
+            }
+        }
+    }
+
+    Component {
+        id: semiOffDetectDelegate
+        Item {
+            width: duration/horizontalTimePerPixel
+            height: parent.height
+
+            Canvas {
+               id: semiOffCanvas
+               anchors.fill: parent
+               antialiasing: true
+
+               onPaint: paintCanvas();
+
+               function paintCanvas() {
+                   var ctx = semiOffCanvas.getContext("2d");
+                   ctx.save();
+                   // color should be the same as the text
+                   ctx.fillStyle = "grey";
+                   ctx.fillRect(0, arrowUpCanvas.height*9/10, arrowUpCanvas.width, arrowUpCanvas.height/10);
+                   ctx.restore();
+                }
+            }
+        }
+    }
+
+    Component {
+        id: arrowUpDetectDelegate
+        Item {
+            width: duration/horizontalTimePerPixel
+            height: parent.height
+
+            Canvas {
+               id: arrowUpCanvas
+               anchors.fill: parent
+               antialiasing: true
+
+               onPaint: paintCanvas();
+
+               function paintCanvas() {
+                   var ctx = arrowUpCanvas.getContext("2d");
+                   ctx.save();
+
+                   // color should be the same as the text
+                   ctx.fillStyle = "black";
+
+                   var thickness = arrowUpCanvas.height/10;
+                   var nose = arrowUpCanvas.height/3;
+
+                   ctx.beginPath();
+                   ctx.moveTo(0, thickness);
+                   ctx.lineTo(thickness, 0);
+                   ctx.lineTo(arrowUpCanvas.width, arrowUpCanvas.height - thickness);
+                   ctx.lineTo(arrowUpCanvas.width - thickness, arrowUpCanvas.height);
+                   ctx.closePath();
+                   ctx.fill();
+
+                   ctx.beginPath();
+                   ctx.moveTo(arrowUpCanvas.width, arrowUpCanvas.height);
+                   ctx.lineTo(arrowUpCanvas.width - nose, arrowUpCanvas.height);
+                   ctx.lineTo(arrowUpCanvas.width, arrowUpCanvas.height - nose);
+                   ctx.closePath();
+                   ctx.fill();
+
+                   ctx.restore();
+                }
+            }
+        }
+    }
+
+    Component {
+        id: arrowDownDetectDelegate
+        Item {
+            width: duration/horizontalTimePerPixel
+            height: parent.height
+
+            Canvas {
+               id: arrowDownCanvas
+               anchors.fill: parent
+               antialiasing: true
+
+               onPaint: paintCanvas();
+
+               function paintCanvas() {
+                   var ctx = arrowDownCanvas.getContext("2d");
+
+                   // color should be the same as the text
+                   ctx.fillStyle = "black";
+
+                   var thickness = arrowDownCanvas.height/10;
+                   var nose = arrowDownCanvas.height/3;
+
+                   ctx.beginPath();
+                   ctx.moveTo(arrowDownCanvas.width - thickness, arrowDownCanvas.height);
+                   ctx.lineTo(0, arrowDownCanvas.height - thickness);
+                   ctx.lineTo(thickness, arrowDownCanvas.height);
+                   ctx.lineTo(arrowDownCanvas.width, thickness);
+
+                   ctx.closePath();
+                   ctx.fill();
+
+                   ctx.beginPath();
+                   ctx.moveTo(arrowDownCanvas.width, 0);
+                   ctx.lineTo(arrowDownCanvas.width - nose, 0);
+                   ctx.lineTo(arrowDownCanvas.width, nose);
+                   ctx.closePath();
+                   ctx.fill();
+
+                   ctx.restore();
+                }
+            }
+        }
+    }
+
+    Component {
         id: trackDelegate
         Item {
             Layout.fillHeight: true
@@ -129,6 +267,46 @@ Item {
                 interactive: false
                 model: stripText
                 delegate: stripTextDelegate
+            }
+
+            ListView {
+                width: parent.width
+                height: parent.height
+                orientation: ListView.Horizontal
+                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                interactive: false
+                model: offDetect
+                delegate: offDetectDelegate
+            }
+
+            ListView {
+                width: parent.width
+                height: parent.height
+                orientation: ListView.Horizontal
+                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                interactive: false
+                model: semiOffDetect
+                delegate: semiOffDetectDelegate
+            }
+
+            ListView {
+                width: parent.width
+                height: parent.height
+                orientation: ListView.Horizontal
+                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                interactive: false
+                model: arrowUpDetect
+                delegate: arrowUpDetectDelegate
+            }
+
+            ListView {
+                width: parent.width
+                height: parent.height
+                orientation: ListView.Horizontal
+                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                interactive: false
+                model: arrowDownDetect
+                delegate: arrowDownDetectDelegate
             }
         }
     }

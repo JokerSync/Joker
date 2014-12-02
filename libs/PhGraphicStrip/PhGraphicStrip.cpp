@@ -162,6 +162,48 @@ void PhGraphicStrip::onDocChanged()
 			}
 		}
 
+		// off detects
+		previousTimeOut = 0;
+		foreach(PhStripDetect * detect, _doc.detects()) {
+			if (text->y() == y && detect->type() == PhStripDetect::Off) {
+				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
+				track->offDetectModel()->addNextPeople(detectPeople);
+				previousTimeOut = detect->timeIn();
+			}
+		}
+
+		// semi-off detects
+		previousTimeOut = 0;
+		foreach(PhStripDetect * detect, _doc.detects()) {
+			if (text->y() == y && detect->type() == PhStripDetect::SemiOff) {
+				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
+				track->semiOffDetectModel()->addNextPeople(detectPeople);
+				previousTimeOut = detect->timeIn();
+			}
+		}
+
+		// arrow-up detects
+		previousTimeOut = 0;
+		foreach(PhStripDetect * detect, _doc.detects()) {
+			if (text->y() == y && detect->type() == PhStripDetect::ArrowUp) {
+				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
+				track->arrowUpDetectModel()->addNextPeople(detectPeople);
+				previousTimeOut = detect->timeIn();
+			}
+		}
+
+		// arrow-down detects
+		previousTimeOut = 0;
+		foreach(PhStripDetect * detect, _doc.detects()) {
+			if (text->y() == y && detect->type() == PhStripDetect::ArrowDown) {
+				PhNextPeople *spacer = new PhNextPeople("spacer", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
+				PhNextPeople *detectPeople = new PhNextPeople("", "", detect->timeIn(), true, detect->timeOut() - detect->timeIn());
+				track->arrowDownDetectModel()->addNextPeople(spacer);
+				track->arrowDownDetectModel()->addNextPeople(detectPeople);
+				previousTimeOut = detect->timeOut();
+			}
+		}
+
 		_trackModel.addTrack(track);
 	}
 }
@@ -299,51 +341,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		}
 
 		int verticalTimePerPixel = _settings->verticalTimePerPixel();
-
-		foreach(PhStripDetect * detect, _doc.detects()) {
-			//_counter++;
-
-			if((stripTimeIn < detect->timeOut()) && (detect->timeIn() < stripTimeOut) ) {
-				PhGraphicRect *gDetect = NULL;
-				switch (detect->type()) {
-				case PhStripDetect::Off:
-					gDetect = new PhGraphicSolidRect();
-					gDetect->setY(y + detect->y() * height + detect->height() * height * 0.9);
-					gDetect->setHeight(detect->height() * height / 10);
-					break;
-				case PhStripDetect::SemiOff:
-					gDetect = new PhGraphicDashedLine((detect->timeOut() - detect->timeIn()) / 1200);
-					gDetect->setY(y + detect->y() * height + detect->height() * height * 0.9);
-					gDetect->setHeight(detect->height() * height / 10);
-					break;
-				case PhStripDetect::ArrowUp:
-					gDetect = new PhGraphicArrow(PhGraphicArrow::DownLeftToUpRight);
-					gDetect->setY(y + detect->y() * height);
-					gDetect->setHeight(detect->height() * height);
-					break;
-				case PhStripDetect::ArrowDown:
-					gDetect = new PhGraphicArrow(PhGraphicArrow::UpLefToDownRight);
-					gDetect->setY(y + detect->y() * height);
-					gDetect->setHeight(detect->height() * height);
-					break;
-				default:
-					break;
-				}
-
-				if(gDetect) {
-					gDetect->setColor(computeColor(detect->people(), selectedPeoples, invertedColor));
-
-					gDetect->setX(x + detect->timeIn() / timePerPixel - offset);
-					gDetect->setZ(-1);
-					gDetect->setWidth((detect->timeOut() - detect->timeIn()) / timePerPixel);
-					gDetect->draw();
-					delete gDetect;
-				}
-			}
-			//Doesn't need to process undisplayed content
-			if(detect->timeIn() > stripTimeOut)
-				break;
-		}
 
 		// Change to display the vertical scale via the settings
 		if(_settings->displayVerticalScale()) {
