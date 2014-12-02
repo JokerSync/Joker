@@ -321,8 +321,6 @@ private:
 	bool _resizingStrip;
 	int _numberOfDraw;
 
-	PhGraphicImage _videoLogo;
-
 	QTime _lastVideoSyncElapsed;
 
 	PhTime _stripTime;

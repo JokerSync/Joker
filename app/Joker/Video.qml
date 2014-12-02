@@ -10,7 +10,7 @@ Item {
 
     Image {
         objectName: "videoLogo"
-        //source property is set from C++
+        source: videoLogoUrl
         fillMode: Image.PreserveAspectFit
         anchors.top: videoOverlay.top
         anchors.left: videoOverlay.left
