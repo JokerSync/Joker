@@ -8,6 +8,20 @@ Item {
     // the font name is passed from here
     FontLoader { id: stripFont; source: textFontUrl }
 
+    // background image
+    // TODO: inverted colors, solid color if background is disabled
+    Image {
+        id: stripBackground
+        objectName: "stripBackground"
+        source: stripBackgroundUrl
+        fillMode: Image.TileHorizontally
+        anchors.top: parent.top
+        x: 0
+        width: 2*parent.width
+        anchors.bottom: parent.bottom
+        transform: Translate { x: (-jokerWindow.stripTime / horizontalTimePerPixel - stripBackground.width/2 / 6) % (stripBackground.width/2) }
+    }
+
     // ruler
     ListView {
         anchors.fill: parent
@@ -115,6 +129,7 @@ Item {
                id: offCanvas
                anchors.fill: parent
                antialiasing: true
+               visible: content.length===0
 
                onPaint: paintCanvas();
 
@@ -140,6 +155,7 @@ Item {
                id: semiOffCanvas
                anchors.fill: parent
                antialiasing: true
+               visible: content.length===0
 
                onPaint: paintCanvas();
 
@@ -165,6 +181,7 @@ Item {
                id: arrowUpCanvas
                anchors.fill: parent
                antialiasing: true
+               visible: content.length===0
 
                onPaint: paintCanvas();
 
@@ -209,6 +226,7 @@ Item {
                id: arrowDownCanvas
                anchors.fill: parent
                antialiasing: true
+               visible: content.length===0
 
                onPaint: paintCanvas();
 

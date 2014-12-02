@@ -73,6 +73,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("displayCuts", _settings->displayCuts());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("invertColor", _settings->invertColor());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("displayRuler", _settings->displayFeet());
+	ui->videoStripView->engine()->rootContext()->setContextProperty("videoLogoUrl", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png"));
+	ui->videoStripView->engine()->rootContext()->setContextProperty("stripBackgroundUrl", QUrl::fromLocalFile(_settings->backgroundImageLight()));
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -169,10 +171,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	PhQmlView *OpenGLView = ui->videoStripView->rootObject()->findChild<PhQmlView*>("PhQmlView");
 	this->connect(OpenGLView, &PhQmlView::paint, this, &JokerWindow::onPaint, Qt::DirectConnection);
-
-	_videoLogo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
-	QQuickItem *videoLogo = ui->videoStripView->rootObject()->findChild<QQuickItem*>("videoLogo");
-	videoLogo->setProperty("source", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png"));
 }
 
 JokerWindow::~JokerWindow()
