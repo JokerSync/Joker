@@ -14,6 +14,7 @@
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 #include "PhCommonUI/PhDocumentWindow.h"
 #include <PhVideo/PhVideoEngine.h>
+#include <PhVideo/PhVideoSurface.h>
 #include <PhGraphicStrip/PhGraphicStrip.h>
 #include "PhSync/PhSynchronizer.h"
 #include "PhSony/PhSonySlaveController.h"
@@ -333,6 +334,8 @@ private:
 	QString _stripInfo;
 
 	PhFont _infoFont;
+
+	PhVideoSurface _videoSurface;
 };
 
 #endif // MAINWINDOW_H

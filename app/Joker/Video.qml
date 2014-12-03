@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import Joker 1.0
 import QtQml 2.2
-
+import QtMultimedia 5.0
 
 Item {
     id: videoOverlay
@@ -21,6 +21,16 @@ Item {
         //anchors.centerIn: videoOverlay
         //horizontalAlignment: Image.AlignHCenter
         //verticalAlignment: Image.AlignVCenter
+    }
+
+    VideoOutput {
+        id: videoOutput
+        source: videoSource
+        anchors.fill: parent
+        //anchors.top: parent.top
+        //anchors.left: parent.left
+        //width: 300
+        //height: 200
     }
 
     Rectangle {

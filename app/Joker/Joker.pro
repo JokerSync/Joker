@@ -9,7 +9,7 @@ cache()
 TARGET = Joker
 TEMPLATE = app
 
-QT += core gui qml quick quickwidgets
+QT += core gui qml quick quickwidgets multimedia
 
 # The application version
 VERSION = 1.1.15
