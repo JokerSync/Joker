@@ -7,6 +7,8 @@
 import QtQuick 2.0
 import Joker 1.0
 import QtQml 2.2
+import QtQuick.Controls 1.2
+import QtQuick.Layouts 1.1
 
 Item {
     id: item1
@@ -38,21 +40,26 @@ Item {
         }
     }
 
-    Video {
+    SplitView {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: titleRect.visible ? titleRect.bottom : parent.top
-        anchors.bottom: strip.top
-    }
-
-    Strip {
-        id: strip
-        objectName: "strip"
-        // height is set from C++
-        //height: 200
-        anchors.left: parent.left
-        anchors.right: parent.right
         anchors.bottom: parent.bottom
+
+        orientation: Qt.Vertical
+
+        Video {
+            Layout.fillHeight: true
+            Layout.minimumHeight: 50
+        }
+
+        Strip {
+            id: strip
+            objectName: "strip"
+            // TODO save and restore height on startup
+            height: 200
+            Layout.minimumHeight: 50
+        }
     }
 }
 

@@ -275,6 +275,11 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		{
 			fadeInMediaPanel();
 
+			break;
+
+			// FIXME
+			// do this from QML
+
 			// Check if it is near the video/strip border
 			QMouseEvent * mouseEvent = (QMouseEvent*)event;
 			if(_resizingStrip) {
@@ -326,6 +331,11 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 					on_actionOpen_triggered();
 				return true;
 			}
+
+			break;
+			// FIXME
+			// do this from QML
+
 			float stripHeight = this->height() * _settings->stripHeight();
 			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
 			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10)) {
@@ -858,41 +868,32 @@ void JokerWindow::onPaint(int width, int height)
 	int stripHeight = (height - y) * stripHeightRatio;
 	int videoHeight = height - y - stripHeight;
 
-	int tcWidth = 200 * this->devicePixelRatio();
+	_videoEngine.decodeVideo();
 
-	if((videoHeight > 0)) {
-		if(_videoEngine.height() > 0) {
-			int videoWidth;
-			if(_doc->forceRatio169())
-				videoWidth = videoHeight * 16 / 9;
-			else
-				videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+//	if((videoHeight > 0)) {
+//		int tcWidth = 200 * this->devicePixelRatio();
+//		if(_videoEngine.height() > 0) {
+//			int videoWidth;
+//			if(_doc->forceRatio169())
+//				videoWidth = videoHeight * 16 / 9;
+//			else
+//				videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
 
-			int blackStripHeight = 0; // Height of the upper black strip when video is too large
-			int realVideoHeight = videoHeight;
-			if(videoWidth > width) {
-				videoWidth = width;
-				if(_doc->forceRatio169())
-					realVideoHeight = videoWidth  * 9 / 16;
-				else
-					realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
-			}
-			blackStripHeight = (height - stripHeight - realVideoHeight) / 2;
-
-			int videoX = (width - videoWidth) / 2;
-			_videoEngine.decodeVideo();
-
-			// adjust tc size
-			// FIXME this does not work now that QML is used for the timecode labels.
-			if(videoX > tcWidth) {
-				// maximize the timecode if we have more room
-				tcWidth = videoX;
-			} else if( width < 2 * tcWidth) {
-				// make sure the timecode labels do not overlap
-				tcWidth = width / 2;
-			}
-		}
-	}
+//			if(videoWidth > width) {
+//				videoWidth = width;
+//			}
+//			int videoX = (width - videoWidth) / 2;
+//			// adjust tc size
+//			// FIXME this does not work now that QML is used for the timecode labels.
+//			if(videoX > tcWidth) {
+//				// maximize the timecode if we have more room
+//				tcWidth = videoX;
+//			} else if( width < 2 * tcWidth) {
+//				// make sure the timecode labels do not overlap
+//				tcWidth = width / 2;
+//			}
+//		}
+//	}
 
 	QQuickItem *videoLogo = ui->videoStripView->rootObject()->findChild<QQuickItem*>("videoLogo");
 	videoLogo->setVisible((videoHeight > 0) && (_videoEngine.height() <= 0) && _settings->displayLogo());
@@ -958,10 +959,6 @@ void JokerWindow::onPaint(int width, int height)
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
-
-	// placeholder used to position other UI elements
-	QQuickItem *stripItem = ui->videoStripView->rootObject()->findChild<QQuickItem*>("strip");
-	stripItem->setHeight(stripHeight);
 
 	QQuickItem *noSyncLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("noSyncLabel");
 	noSyncLabel->setVisible(_lastVideoSyncElapsed.elapsed() > 1000);
