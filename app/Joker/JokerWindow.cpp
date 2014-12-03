@@ -336,6 +336,12 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		{
 			fadeInMediaPanel();
 
+			break;
+
+			// FIXME
+			// do this from QML
+
+			// Check if it is near the video/strip border
 			QMouseEvent * mouseEvent = (QMouseEvent*)event;
 			// Check if it is near the video/strip border
 			float stripHeight = this->height() * _settings->stripHeight();
@@ -370,6 +376,11 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 					on_actionOpen_triggered();
 				return true;
 			}
+
+			break;
+			// FIXME
+			// do this from QML
+
 			float stripHeight = this->height() * _settings->stripHeight();
 			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
 			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10)) {
@@ -932,23 +943,25 @@ void JokerWindow::onPaint(int width, int height)
 
 #ifdef USE_VIDEO
 	// Display the video
-	if((videoHeight > 0)) {
-		if(_videoEngine.height() > 0) {
+//	if((videoHeight > 0)) {
+//		if(_videoEngine.height() > 0) {
 
-			int blackStripHeight = 0; // Height of the upper black strip when video is too large
-			int realVideoHeight = videoHeight;
-			if(videoWidth > width) {
-				videoWidth = width;
-				if(_doc->forceRatio169())
-					realVideoHeight = videoWidth  * 9 / 16;
-				else
-					realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
-			}
-			blackStripHeight = (height - stripHeight - realVideoHeight) / 2;
+//			int blackStripHeight = 0; // Height of the upper black strip when video is too large
+//			int realVideoHeight = videoHeight;
+//			if(videoWidth > width) {
+//				videoWidth = width;
+//				if(_doc->forceRatio169())
+//					realVideoHeight = videoWidth  * 9 / 16;
+//				else
+//					realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
+//			}
+//			blackStripHeight = (height - stripHeight - realVideoHeight) / 2;
 
-			_videoEngine.decodeVideo();
-		}
-	}
+//			_videoEngine.decodeVideo();
+//		}
+//	}
+
+	_videoEngine.decodeVideo();
 #endif
 
 	int x = videoX + videoWidth;
@@ -1022,10 +1035,6 @@ void JokerWindow::onPaint(int width, int height)
 
 	QQuickItem *loopLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("currentLoopLabel");
 	loopLabel->setVisible(_settings->displayNextText());
-
-	// placeholder used to position other UI elements
-	QQuickItem *stripItem = ui->videoStripView->rootObject()->findChild<QQuickItem*>("strip");
-	stripItem->setHeight(stripHeight);
 
 	QQuickItem *noSyncLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("noSyncLabel");
 	noSyncLabel->setVisible((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000));

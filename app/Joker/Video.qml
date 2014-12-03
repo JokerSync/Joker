@@ -8,6 +8,12 @@ Item {
     width: 500
     height: 700
 
+    // black background
+    Rectangle {
+        anchors.fill: parent
+        color: "black"
+    }
+
     Image {
         objectName: "videoLogo"
         source: videoLogoUrl
