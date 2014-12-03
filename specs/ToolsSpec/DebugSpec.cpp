@@ -65,7 +65,7 @@ go_bandit([](){
 		});
 
 		it("log_in_file", []() {
-			QString expected = QString("/Users/") + qgetenv("USER") + QString("/Library/Logs/Phonations/AllSpecs.log");
+			QString expected = QString("/Users/") + qgetenv("USER") + QString("/Library/Logs/Phonations/%1.log").arg(APP_NAME);
 			AssertThat(PhDebug::logLocation().toStdString(), Equals(expected.toStdString()));
 		});
 
