@@ -21,6 +21,8 @@ extern "C" {
 #include <libswscale/swscale.h>
 }
 
+#include <QVideoFrame>
+
 #include "PhSync/PhClock.h"
 #include "PhTools/PhTickCounter.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
@@ -180,12 +182,19 @@ public:
 	 */
 	void drawVideo(int x, int y, int w, int h);
 
+	/**
+	 * @brief decode the video for the current time (may not do anything if not needed)
+	 */
+	void decodeVideo();
+
 signals:
 	/**
 	 * @brief Signal sent upon a different timecode type message
 	 * @param tcType A timecode type value.
 	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
+
+	void newVideoContentProduced(const QVideoFrame &frame);
 
 private:
 	bool decodeFrame(PhTime time);

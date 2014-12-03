@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QVideoSurfaceFormat>
+
 #include "PhTools/PhGeneric.h"
 #include "PhTools/PhDebug.h"
 
@@ -192,10 +194,7 @@ void PhVideoEngine::close()
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
-	if(_videoStream) {
-		PhTime delay = static_cast<PhTime>(_settings->screenDelay() * _clock.rate() * 24);
-		decodeFrame(_clock.time() + delay);
-	}
+	decodeVideo();
 
 	if(_settings->useNativeVideoSize())
 		_videoRect.setRect(x, y, this->width(), this->height());
@@ -203,6 +202,14 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		_videoRect.setRect(x, y, w, h);
 	_videoRect.setZ(-10);
 	_videoRect.draw();
+}
+
+void PhVideoEngine::decodeVideo()
+{
+	if(_videoStream) {
+		PhTime delay = static_cast<PhTime>(_settings->screenDelay() * _clock.rate() * 24);
+		decodeFrame(_clock.time() + delay);
+	}
 }
 
 void PhVideoEngine::setTimeIn(PhTime timeIn)
@@ -329,11 +336,22 @@ bool PhVideoEngine::decodeFrame(PhTime time)
 						/* Note: we output the frames in AV_PIX_FMT_BGRA rather than AV_PIX_FMT_RGB24,
 						 * because this format is native to most video cards and will avoid a conversion
 						 * in the video driver */
+
+//						_swsContext = sws_getCachedContext(_swsContext,
+//						                                _videoFrame->width, _videoStream->codec->height, pixFormat,
+//						                                _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
+//						                                SWS_POINT, NULL, NULL, NULL);
+
+						/* When outputting to OpenGL, BGRA is a smart choice, but when outputting to QImage,
+						 * it is not possible... so use a more classic RGB32 instead
+						 * Note that Qt may be able to handle the native format instead ! */
+
 						/* sws_getCachedContext will check if the context is valid for the given parameters. It the context is not valid,
 						 * it will be freed and a new one will be allocated. */
-						_swsContext = sws_getCachedContext(_swsContext, _videoFrame->width, _videoStream->codec->height, pixFormat,
-						                                   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
-						                                   SWS_POINT, NULL, NULL, NULL);
+						_swsContext = sws_getCachedContext(_swsContext,
+														_videoFrame->width, _videoStream->codec->height, pixFormat,
+														_videoStream->codec->width, frameHeight, AV_PIX_FMT_RGB32,
+														SWS_POINT, NULL, NULL, NULL);
 
 						if(_rgb == NULL)
 							_rgb = new uint8_t[avpicture_get_size(AV_PIX_FMT_BGRA, _videoFrame->width, frameHeight)];
@@ -342,8 +360,13 @@ bool PhVideoEngine::decodeFrame(PhTime time)
 						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
 						                   &linesize)) {
 
-							_videoRect.createTextureFromBGRABuffer(_rgb, _videoFrame->width, frameHeight);
+							QImage image(_rgb,
+									_videoFrame->width, frameHeight,
+									QImage::Format_RGB32);
 
+							QVideoFrame *f = new QVideoFrame(image);
+
+							emit newVideoContentProduced(*f);
 
 							_videoFrameTickCounter.tick();
 							result = true;

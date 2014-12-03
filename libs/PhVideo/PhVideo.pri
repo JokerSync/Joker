@@ -5,9 +5,11 @@
 
 HEADERS += \
     $$PWD/PhVideoEngine.h \
-    $$PWD/PhVideoSettings.h
+	$$PWD/PhVideoSettings.h \
+	$$PWD/PhVideoSurface.h
 SOURCES += \
-    $$PWD/PhVideoEngine.cpp
+	$$PWD/PhVideoEngine.cpp \
+	$$PWD/PhVideoSurface.cpp
 
 # Windows specific
 win32{

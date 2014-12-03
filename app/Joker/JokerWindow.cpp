@@ -75,6 +75,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->videoStripView->engine()->rootContext()->setContextProperty("displayRuler", _settings->displayFeet());
 	ui->videoStripView->engine()->rootContext()->setContextProperty("videoLogoUrl", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png"));
 	ui->videoStripView->engine()->rootContext()->setContextProperty("stripBackgroundUrl", QUrl::fromLocalFile(_settings->backgroundImageLight()));
+	ui->videoStripView->engine()->rootContext()->setContextProperty("videoSource", &_videoSurface);
 
 	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
@@ -84,6 +85,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionAbout->setMenuRole(QAction::AboutRole);
 
 	connect(ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
+
+	connect(&_videoEngine, &PhVideoEngine::newVideoContentProduced, &_videoSurface, &PhVideoSurface::onNewVideoContentReceived);
 
 	ui->videoStripView->setGraphicSettings(_settings);
 
@@ -943,7 +946,7 @@ void JokerWindow::onPaint(int width, int height)
 			}
 			blackStripHeight = (height - stripHeight - realVideoHeight) / 2;
 
-			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight);
+			_videoEngine.decodeVideo();
 		}
 	}
 #endif

@@ -11,6 +11,7 @@
 #include "PhCommonUI/PhEditableDocumentWindow.h"
 #ifdef USE_VIDEO
 #include "PhVideo/PhVideoEngine.h"
+#include <PhVideo/PhVideoSurface.h>
 #endif
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSynchronizer.h"
@@ -382,6 +383,8 @@ private:
 	QString _stripInfo;
 
 	PhFont _infoFont;
+
+	PhVideoSurface _videoSurface;
 };
 
 #endif // MAINWINDOW_H
