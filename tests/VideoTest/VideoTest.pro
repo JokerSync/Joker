@@ -17,18 +17,19 @@ include($$TOP_ROOT/libs/PhGraphic/PhGraphic.pri)
 include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
 include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 
-HEADERS += VideoTestWindow.h \
-	VideoTestSettings.h \
-    PropertyDialog.h
+HEADERS +=
+	$$PWD/VideoTestWindow.h \
+	$$PWD/VideoTestSettings.h \
+    $$PWD/PropertyDialog.h
 
 SOURCES += \
-	main.cpp \
-	VideoTestWindow.cpp \
-    PropertyDialog.cpp
+	$$PWD/main.cpp \
+	$$PWD/VideoTestWindow.cpp \
+    $$PWD/PropertyDialog.cpp
 
 FORMS += \
-	VideoTestWindow.ui \
-    PropertyDialog.ui
+	$$PWD/VideoTestWindow.ui \
+    $$PWD/PropertyDialog.ui
 
 mac {
 	# For the plist version
