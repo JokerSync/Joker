@@ -397,7 +397,6 @@ Item {
                 x: parent.width - width/2
                 width: parent.height / 40
                 rotation: 45
-                transformOrigin: Center
             }
 
             Rectangle {
@@ -409,7 +408,6 @@ Item {
                 x: parent.width - width/2
                 width: parent.height / 40
                 rotation: -45
-                transformOrigin: Center
             }
 
             Text {
