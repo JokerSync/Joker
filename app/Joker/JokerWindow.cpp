@@ -90,10 +90,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_view->setSource(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/main.qml"));
 	_view->show();
 
-	QMessageBox msgBox;
-	msgBox.setText(_view->engine()->importPathList().join(", "));
-	msgBox.exec();
-
 	// Due to translation, Qt might not be able to link automatically the menu
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
 	ui->actionAbout->setMenuRole(QAction::AboutRole);
