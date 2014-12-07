@@ -94,7 +94,7 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/Video.qm
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/Strip.qml) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/LeftColumn.qml) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/RightColumn.qml) $${RESOURCES_PATH} $${CS}
-
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/MediaPanel.qml) $${RESOURCES_PATH} $${CS}
 
 TRANSLATIONS =	fr_FR.ts \
 
@@ -110,4 +110,5 @@ OTHER_FILES += \
     RightColumn.qml \
     LeftColumn.qml \
     Strip.qml \
-    Video.qml
+    Video.qml \
+    MediaPanel.qml
