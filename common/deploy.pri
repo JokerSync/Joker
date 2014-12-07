@@ -1,5 +1,5 @@
 win32 {
-	QMAKE_POST_LINK += windeployqt $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += windeployqt --qmldir $$shell_path($${JOKER_ROOT}/app/Joker/) $$shell_path($${RESOURCES_PATH}/Joker.exe) $${CS}
 }
 
 CONFIG(release, debug|release) {
