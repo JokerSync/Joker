@@ -93,7 +93,6 @@ Item {
                 y: -height/2
                 height: 3
                 rotation: 45
-                transformOrigin: Center
             }
 
             Rectangle {
@@ -105,7 +104,6 @@ Item {
                 y: -height/2
                 height: 3
                 rotation: -45
-                transformOrigin: Center
             }
         }
     }
