@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QPropertyAnimation>
 #include <QTimer>
+#include <QQmlContext>
 
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 #include "PhCommonUI/PhDocumentWindow.h"
@@ -20,7 +21,7 @@
 #include "PhSony/PhSonySlaveController.h"
 #include "PhLtc/PhLtcReader.h"
 #include "PhMidi/PhMidiTimeCodeReader.h"
-
+#include "PhGraphic/PhGraphicView.h"
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
 #include "RulerSpaceDialog.h"
@@ -280,7 +281,8 @@ private slots:
 
 	void on_actionHide_the_rythmo_triggered(bool checked);
 
-	void onPaint(int width, int height);
+	//void onPaint(int width, int height);
+	void onPaint(PhTimeScale frequency);
 
 	void onVideoSync();
 
@@ -291,6 +293,8 @@ private slots:
 	void on_actionDisplay_the_cuts_toggled(bool checked);
 
 	void on_actionSet_space_between_two_ruler_graduation_triggered();
+
+	void qmlStatusChanged(QQuickView::Status status);
 
 signals:
 	void currentLoopLabelChanged();
@@ -336,6 +340,10 @@ private:
 	PhFont _infoFont;
 
 	PhVideoSurface _videoSurface;
+
+	QQmlContext *_context;
+
+	PhGraphicView *_view = new PhGraphicView();
 };
 
 #endif // MAINWINDOW_H

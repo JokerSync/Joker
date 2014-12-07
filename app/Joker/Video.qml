@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import Joker 1.0
 import QtQml 2.2
 import QtMultimedia 5.0
 
@@ -18,25 +17,14 @@ Item {
         objectName: "videoLogo"
         source: videoLogoUrl
         fillMode: Image.PreserveAspectFit
-        anchors.top: videoOverlay.top
-        anchors.left: videoOverlay.left
-        //width: 500
-        anchors.right: videoOverlay.right
-        anchors.bottom: videoOverlay.bottom
-        //anchors.horizontalCenter: parent.Center
-        //anchors.centerIn: videoOverlay
-        //horizontalAlignment: Image.AlignHCenter
-        //verticalAlignment: Image.AlignVCenter
+        anchors.fill: parent
+        visible: videoLogoVisible
     }
 
     VideoOutput {
         id: videoOutput
         source: videoSource
         anchors.fill: parent
-        //anchors.top: parent.top
-        //anchors.left: parent.left
-        //width: 300
-        //height: 200
     }
 
     Rectangle {
@@ -63,6 +51,8 @@ Item {
         anchors.margins: 20
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
+        visible: noSyncLabelVisible
+        opacity: noSyncLabelOpacity
     }
 
     LeftColumn {

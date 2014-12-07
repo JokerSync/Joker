@@ -14,7 +14,7 @@
    <string>Joker</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="1">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -30,9 +30,6 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item>
-     <widget class="PhGraphicView" name="videoStripView" native="true"/>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -41,7 +38,7 @@
      <x>0</x>
      <y>0</y>
      <width>820</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -459,14 +456,6 @@
    </property>
   </action>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>PhGraphicView</class>
-   <extends>QWidget</extends>
-   <header>PhGraphic/PhGraphicView.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -8,12 +8,13 @@ Item {
         id: nextTcLabel
         objectName: "nextTcLabel"
         color: "red"
-        text: "#"
+        text: nextTcLabelText
         wrapMode: Text.WordWrap
         font.pointSize: 29
         anchors.top: parent.top
         anchors.right: parent.right
         horizontalAlignment: Text.AlignRight
+        visible: nextTcLabelVisible
     }
 
     ListView {

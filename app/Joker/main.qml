@@ -5,7 +5,6 @@
  */
 
 import QtQuick 2.0
-import Joker 1.0
 import QtQml 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
@@ -16,10 +15,6 @@ Item {
     width: 800
     height: 600
 
-    PhQmlView {
-        objectName: "PhQmlView"
-    }
-
     Rectangle {
         id: titleRect
         objectName: "titleRect"
@@ -28,6 +23,7 @@ Item {
         width: parent.width
         anchors.top: parent.top
         anchors.left: parent.left
+        visible: titleRectVisible
 
         Text {
             id: titleLabel

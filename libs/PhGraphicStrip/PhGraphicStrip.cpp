@@ -271,24 +271,15 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 	_infos.clear();
 
 	int counter = 0;
-	bool invertedColor = _settings->invertColor();
 
 	int lastDrawElapsed = _testTimer.elapsed();
-	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
 	if(height > 0) {
-		int timePerPixel = _settings->horizontalTimePerPixel();
 		_textFont.setBoldness(_settings->textBoldness());
 		_textFont.setFontFile(_settings->textFontFile());
 
-		long syncBar_X_FromLeft = width / 6;
 		long delay = (int)(24 * _settings->screenDelay() *  _clock.rate());
 		PhTime clockTime = _clock.time() + delay;
-		long offset = clockTime / timePerPixel - syncBar_X_FromLeft;
-
-		//Compute the visible duration of the strip
-		PhTime stripDuration = width * timePerPixel;
-
 
 		if(_settings->stripTestMode()) {
 			foreach(PhStripCut * cut, _doc.cuts()) {
@@ -305,9 +296,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 			return;
 		}
 
-		PhTime timeIn = clockTime - syncBar_X_FromLeft * timePerPixel;
-		PhTime timeOut = timeIn + stripDuration;
-
 
 //		if(_settings->displayBackground()) {
 //			//Draw backgroung picture
@@ -319,7 +307,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int tcOffset, QLi
 //				leftBG -= height - ((-offset) % height);
 
 //			PhGraphicTexturedRect* backgroundImage = &_backgroundImageLight;
-//			if(invertedColor)
+//			if(_settings->invertColor())
 //				backgroundImage = &_backgroundImageDark;
 
 //			backgroundImage->setX(x + leftBG);
