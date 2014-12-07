@@ -66,4 +66,10 @@ Item {
         anchors.top: videoOverlay.top
         anchors.bottom: videoOverlay.bottom
     }
+
+    MediaPanel {
+        anchors.left: videoOverlay.left
+        anchors.bottom: videoOverlay.bottom
+        anchors.right: videoOverlay.right
+    }
 }
