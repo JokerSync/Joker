@@ -68,10 +68,6 @@ FORMS += \
 	PeopleEditionDialog.ui \
 	TimeBetweenTwoFeetDialog.ui
 
-
-RESOURCES += \
-    Joker.qrc
-
 unix {
 	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${TOP_ROOT}/.doxygen\";
 }
@@ -100,6 +96,12 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/motif-240_b
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/SWENSON.TTF) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Helvetica.ttf) $${RESOURCES_PATH} $${CS}
 
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/main.qml) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/Video.qml) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/Strip.qml) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/LeftColumn.qml) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/RightColumn.qml) $${RESOURCES_PATH} $${CS}
+
 
 TRANSLATIONS =	fr_FR.ts \
 
@@ -109,3 +111,10 @@ PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
 include($$TOP_ROOT/common/deploy.pri)
 
 cache()
+
+OTHER_FILES += \
+    main.qml \
+    RightColumn.qml \
+    LeftColumn.qml \
+    Strip.qml \
+    Video.qml

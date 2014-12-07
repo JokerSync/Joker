@@ -7,6 +7,8 @@
 #ifndef JOKERWINDOW_H
 #define JOKERWINDOW_H
 
+#include <QQmlContext>
+
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 #include "PhCommonUI/PhEditableDocumentWindow.h"
 #ifdef USE_VIDEO
@@ -26,6 +28,7 @@
 #include "PhMidi/PhMidiTimeCodeWriter.h"
 #endif
 
+#include "PhGraphic/PhGraphicView.h"
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
 #include "TimeBetweenTwoFeetDialog.h"
@@ -298,7 +301,8 @@ private slots:
 
 	void on_actionHide_the_rythmo_triggered(bool checked);
 
-	void onPaint(int width, int height);
+	//void onPaint(int width, int height);
+	void onPaint(PhTimeScale frequency);
 
 	void onVideoSync();
 
@@ -327,6 +331,8 @@ private slots:
 	void on_actionSet_TC_out_triggered();
 
 	void on_actionLoop_triggered(bool checked);
+
+	void qmlStatusChanged(QQuickView::Status status);
 
 signals:
 	void currentLoopLabelChanged();
@@ -385,6 +391,10 @@ private:
 	PhFont _infoFont;
 
 	PhVideoSurface _videoSurface;
+
+	QQmlContext *_context;
+
+	PhGraphicView *_view = new PhGraphicView();
 };
 
 #endif // MAINWINDOW_H

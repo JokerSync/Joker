@@ -11,7 +11,8 @@
 #include "PhGraphicView.h"
 
 PhGraphicView::PhGraphicView( QWidget *parent)
-	: QQuickWidget(parent),
+	//: QQuickWidget(parent),
+	: QQuickView(),
 	_settings(NULL),
 	_dropDetected(0),
 	_maxRefreshRate(0),
@@ -47,8 +48,8 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 PhGraphicView::PhGraphicView(int width, int height, QWidget *parent)
 	: PhGraphicView(parent)
 {
-	int ratio = this->windowHandle()->devicePixelRatio();
-	this->setGeometry(0, 0, width / ratio, height / ratio);
+	//int ratio = this->windowHandle()->devicePixelRatio();
+	//this->setGeometry(0, 0, width / ratio, height / ratio);
 }
 
 PhGraphicView::~PhGraphicView()

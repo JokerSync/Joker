@@ -5,7 +5,7 @@
  */
 
 #include <QQmlEngine>
-#include <QQmlContext>
+#include <QQuickView>
 
 #include "PhTools/PhDebug.h"
 
@@ -14,7 +14,6 @@
 
 #include "PhGraphic/PhGraphicText.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
-#include "PhGraphic/PhQmlView.h"
 
 #include "JokerWindow.h"
 #include "ui_JokerWindow.h"
@@ -55,30 +54,51 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	// Setting up UI
 	ui->setupUi(this);
 
-	qmlRegisterType<PhQmlView>("Joker", 1, 0, "PhQmlView");
+	//_view = ui->videoStripView;
+	_view = new PhGraphicView();
+	_context = _view->engine()->rootContext();
 
-	ui->videoStripView->engine()->rootContext()->setContextProperty("doc", _doc);
-	ui->videoStripView->engine()->rootContext()->setContextProperty("jokerWindow", this);
-	ui->videoStripView->engine()->rootContext()->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
-	ui->videoStripView->engine()->rootContext()->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("rulerModel", _strip.rulerModel());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("cutModel", _strip.cutModel());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("loopModel", _strip.loopModel());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("trackModel", _strip.trackModel());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("textFontUrl", QUrl::fromLocalFile(_settings->textFontFile()));
-	ui->videoStripView->engine()->rootContext()->setContextProperty("textBoldness", _settings->textBoldness());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("cutWidth", _settings->cutWidth());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("displayCuts", _settings->displayCuts());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("invertColor", _settings->invertColor());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("displayRuler", _settings->displayFeet());
-	ui->videoStripView->engine()->rootContext()->setContextProperty("videoLogoUrl", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png"));
-	ui->videoStripView->engine()->rootContext()->setContextProperty("stripBackgroundUrl", QUrl::fromLocalFile(_settings->backgroundImageLight()));
-	ui->videoStripView->engine()->rootContext()->setContextProperty("videoSource", &_videoSurface);
+	_context->setContextProperty("doc", _doc);
+	_context->setContextProperty("jokerWindow", this);
+	_context->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
+	_context->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
+	_context->setContextProperty("rulerModel", _strip.rulerModel());
+	_context->setContextProperty("cutModel", _strip.cutModel());
+	_context->setContextProperty("loopModel", _strip.loopModel());
+	_context->setContextProperty("trackModel", _strip.trackModel());
+	_context->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
+	_context->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
+	_context->setContextProperty("textFontUrl", QUrl::fromLocalFile(_settings->textFontFile()));
+	_context->setContextProperty("textBoldness", _settings->textBoldness());
+	_context->setContextProperty("cutWidth", _settings->cutWidth());
+	_context->setContextProperty("displayCuts", _settings->displayCuts());
+	_context->setContextProperty("invertColor", _settings->invertColor());
+	_context->setContextProperty("displayRuler", _settings->displayFeet());
+	_context->setContextProperty("videoLogoUrl", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png"));
+	_context->setContextProperty("stripBackgroundUrl", QUrl::fromLocalFile(_settings->backgroundImageLight()));
+	_context->setContextProperty("videoSource", &_videoSurface);
 
-	ui->videoStripView->setResizeMode(QQuickWidget::SizeRootObjectToView);
-	ui->videoStripView->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
+	// the following are updated in onPaint. They should probably be properties with signals instead
+	_context->setContextProperty("selectedPeopleListVisible", _settings->displayNextText() && _settings->selectedPeopleNameList().count());
+	_context->setContextProperty("titleRectVisible", _settings->displayNextText());
+	_context->setContextProperty("videoLogoVisible", (_videoEngine.height() <= 0) && _settings->displayLogo());
+	_context->setContextProperty("tcLabelVisible", _settings->displayNextText());
+	_context->setContextProperty("tcLabelText", "#");
+	_context->setContextProperty("infosVisible", _settings->displayInfo());
+	_context->setContextProperty("nextTcLabelVisible", _settings->displayNextText());
+	_context->setContextProperty("nextTcLabelText", "#");
+	_context->setContextProperty("noSyncLabelVisible", false);
+	_context->setContextProperty("noSyncLabelOpacity", 0);
+
+	connect(_view, &QQuickView::statusChanged, this, &JokerWindow::qmlStatusChanged);
+
+	//view->setResizeMode(QQuickWidget::SizeRootObjectToView);
+	_view->setResizeMode(QQuickView::SizeRootObjectToView);
+
+	// in resources or in full path, the qml sub-files are not found if launched from outside Qt Creator !
+	//_view->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
+	_view->setSource(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/main.qml"));
+	_view->show();
 
 	// Due to translation, Qt might not be able to link automatically the menu
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
@@ -88,7 +108,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	connect(&_videoEngine, &PhVideoEngine::newVideoContentProduced, &_videoSurface, &PhVideoSurface::onNewVideoContentReceived);
 
-	ui->videoStripView->setGraphicSettings(_settings);
+	_view->setGraphicSettings(_settings);
 
 	// Initialize the synchronizer
 	_synchronizer.setStripClock(_strip.clock());
@@ -169,11 +189,24 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	on_actionDisplay_feet_triggered(_settings->displayFeet());
 
-	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
-	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
+	this->connect(_view, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
+	this->connect(_view, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
+	this->connect(_view, &PhGraphicView::beforePaint, this, &JokerWindow::onPaint);
+}
 
-	PhQmlView *OpenGLView = ui->videoStripView->rootObject()->findChild<PhQmlView*>("PhQmlView");
-	this->connect(OpenGLView, &PhQmlView::paint, this, &JokerWindow::onPaint, Qt::DirectConnection);
+void JokerWindow::qmlStatusChanged(QQuickView::Status status)
+{
+	if (status == QQuickView::Error)
+	{
+		foreach (QQmlError error, _view->errors())
+		{
+			PHDEBUG << error.toString();
+
+			QMessageBox msgBox;
+			msgBox.setText(error.toString());
+			msgBox.exec();
+		}
+	}
 }
 
 JokerWindow::~JokerWindow()
@@ -680,7 +713,8 @@ void JokerWindow::on_actionPreferences_triggered()
 void JokerWindow::fadeInMediaPanel()
 {
 	// Don't show the mediaPanel if Joker has not thefocus.
-	if(_settings->displayControlPanel() && this->hasFocus() && ui->videoStripView->hasFocus() ) {
+	//if(_settings->displayControlPanel() && this->hasFocus() && ui->videoStripView->hasFocus() ) {
+	if(_settings->displayControlPanel() && this->hasFocus() ) {
 		_mediaPanel.show();
 		_mediaPanelAnimation.stop();
 		_mediaPanelAnimation.setDuration(300);
@@ -907,7 +941,8 @@ void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
 	_settings->setHideStrip(checked);
 }
 
-void JokerWindow::onPaint(int width, int height)
+//void JokerWindow::onPaint(int width, int height)
+void JokerWindow::onPaint(PhTimeScale frequency)
 {
 #ifdef USE_VIDEO
 	PhClock *clock = _videoEngine.clock();
@@ -925,24 +960,38 @@ void JokerWindow::onPaint(int width, int height)
 			selectedPeoples.append(people);
 	}
 
+	// FIXME the font size for the list of selected peoples is fixed, whereas it depended on the window size before
+	_context->setContextProperty("selectedPeopleListVisible", _settings->displayNextText() && _settings->selectedPeopleNameList().count());
+	_context->setContextProperty("titleRectVisible", _settings->displayNextText() && (_strip.doc()->fullTitle().length() > 0));
+
+	// FIXME
 	float stripHeightRatio = 0.0f;
 	if(!_settings->hideStrip())
 		stripHeightRatio = _settings->stripHeight();
 
-	int stripHeight = height * stripHeightRatio;
-	int videoHeight = height - stripHeight;
-	int videoWidth = videoHeight * 16 / 9;
-#ifdef USE_VIDEO
-	if(!_doc->forceRatio169() && (_videoEngine.height() > 0))
-		videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
-#endif
-	int videoX = 0;
-	// Center video if no information panel with next text
-	if(!_settings->displayNextText())
-		videoX = (width - videoWidth) / 2;
+	// FIXME
+//	int videoWidth = videoHeight * 16 / 9;
+//#ifdef USE_VIDEO
+//	if(!_doc->forceRatio169() && (_videoEngine.height() > 0))
+//		videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+//#endif
+//	int videoX = 0;
+//	// Center video if no information panel with next text
+//	if(!_settings->displayNextText())
+//		videoX = (width() - videoWidth) / 2;
 
 #ifdef USE_VIDEO
 	// Display the video
+
+	// FIXME
+//	float stripHeightRatio = 0.25f;
+//	if(_settings) {
+//		if(_settings->hideStrip())
+//			stripHeightRatio = 0;
+//		else
+//			stripHeightRatio = _settings->stripHeight();
+//	}
+
 //	if((videoHeight > 0)) {
 //		if(_videoEngine.height() > 0) {
 
@@ -964,22 +1013,24 @@ void JokerWindow::onPaint(int width, int height)
 	_videoEngine.decodeVideo();
 #endif
 
-	int x = videoX + videoWidth;
+	// FIXME
+	//int x = videoX + videoWidth;
+	int x = 0;
 	int y = 0;
+	int width = 100;
+	int stripHeight = 100;
 
-	QQuickItem *titleRect = ui->videoStripView->rootObject()->findChild<QQuickItem*>("titleRect");
-	titleRect->setVisible(_settings->displayNextText() && (_strip.doc()->fullTitle().length() > 0));
-	y += (titleRect->height() - titleRect->y())*titleRect->isVisible();
+	_strip.draw(0, y, width, stripHeight, x, 0, selectedPeoples);
 
 	// prepare the string list that is used to display the infos
 	setRefreshInfo(QString("refresh: %1x%2, %3 / %4")
-				   .arg(ui->videoStripView->width())
-				   .arg(ui->videoStripView->height())
-				   .arg(ui->videoStripView->maxRefreshRate())
-				   .arg(ui->videoStripView->refreshRate()));
-	setUpdateInfo(QString("Update : %1 %2").arg(ui->videoStripView->maxUpdateDuration())
-										.arg(ui->videoStripView->lastUpdateDuration()));
-	setDropInfo(QString("drop: %1 %2").arg(ui->videoStripView->dropDetected()).arg(ui->videoStripView->secondsSinceLastDrop()));
+				   .arg(_view->width())
+				   .arg(_view->height())
+				   .arg(_view->maxRefreshRate())
+				   .arg(_view->refreshRate()));
+	setUpdateInfo(QString("Update : %1 %2").arg(_view->maxUpdateDuration())
+										.arg(_view->lastUpdateDuration()));
+	setDropInfo(QString("drop: %1 %2").arg(_view->dropDetected()).arg(_view->secondsSinceLastDrop()));
 	#warning /// @todo measure fps with a custom QML element
 	// The actual painting duration should be measured using a custom QML element.
 	// See: http://developer.nokia.com/community/wiki/QML_Performance_Meter
@@ -990,9 +1041,6 @@ void JokerWindow::onPaint(int width, int height)
 		stripInfoText.append(info);
 	}
 	setStripInfo(stripInfoText);
-
-	QQuickItem *infosItem = ui->videoStripView->rootObject()->findChild<QQuickItem*>("infos");
-	infosItem->setVisible(_settings->displayInfo());
 
 	PhStripText *nextText = NULL;
 	if(_settings->displayNextText()) {
@@ -1009,37 +1057,22 @@ void JokerWindow::onPaint(int width, int height)
 		}
 	}
 
-	QQuickItem *nextTcLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("nextTcLabel");
-	nextTcLabel->setVisible(_settings->displayNextText() && nextText != NULL);
+	_context->setContextProperty("videoLogoVisible", (_videoEngine.height() <= 0) && _settings->displayLogo());
+	_context->setContextProperty("tcLabelVisible", _settings->displayNextText());
+	_context->setContextProperty("tcLabelText", PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
+	_context->setContextProperty("infosVisible", _settings->displayInfo());
+
+	_context->setContextProperty("nextTcLabelVisible", _settings->displayNextText() && nextText != NULL);
 	if (nextText != NULL) {
-		nextTcLabel->setProperty("text", PhTimeCode::stringFromTime(nextText->timeIn(), _videoEngine.timeCodeType()));
+		_context->setContextProperty("nextTcLabelText", PhTimeCode::stringFromTime(nextText->timeIn(), _videoEngine.timeCodeType()));
 	}
-	y += nextTcLabel->height()*nextTcLabel->isVisible();
-
-	_strip.draw(0, videoHeight, width, stripHeight, x, y, selectedPeoples);
-
-	// FIXME the font size for the list of selected peoples is fixed, whereas it depended on the window size before
-	QQuickItem *selectedPeopleList = ui->videoStripView->rootObject()->findChild<QQuickItem*>("selectedPeopleList");
-	selectedPeopleList->setVisible(!_settings->hideSelectedPeoples() && _settings->selectedPeopleNameList().count());
-
-	QQuickItem *videoLogo = ui->videoStripView->rootObject()->findChild<QQuickItem*>("videoLogo");
-	videoLogo->setVisible((videoHeight > 0) && (_videoEngine.height() <= 0) && _settings->displayLogo());
-	videoLogo->setHeight(videoHeight);
-
-	QQuickItem *tcLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("tcLabel");
-	tcLabel->setVisible(_settings->displayNextText());
-	tcLabel->setProperty("text", PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
 
-	QQuickItem *loopLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("currentLoopLabel");
-	loopLabel->setVisible(_settings->displayNextText());
-
-	QQuickItem *noSyncLabel = ui->videoStripView->rootObject()->findChild<QQuickItem*>("noSyncLabel");
-	noSyncLabel->setVisible((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000));
+	_context->setContextProperty("noSyncLabelVisible", _lastVideoSyncElapsed.elapsed() > 1000);
 	double opacity = (_lastVideoSyncElapsed.elapsed() - 1000.0d) / 1000.0d;
-	noSyncLabel->setOpacity(opacity <= 0 ? 0 : opacity >= 1 ? 1 : opacity);
+	_context->setContextProperty("noSyncLabelOpacity", opacity <= 0 ? 0 : opacity >= 1 ? 1 : opacity);
 }
 
 void JokerWindow::onVideoSync()

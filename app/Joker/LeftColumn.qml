@@ -9,11 +9,12 @@ Item {
         id: tcLabel
         objectName: "tcLabel"
         color: "#00ff00"
-        text: "#"
+        text: tcLabelText
         wrapMode: Text.WordWrap
         font.pointSize: 29
         anchors.top: parent.top
         anchors.left: parent.left
+        visible: tcLabelVisible
     }
 
     Column {
@@ -21,6 +22,7 @@ Item {
         anchors.top: tcLabel.bottom
         anchors.left: parent.left
         anchors.leftMargin: 10
+        visible: infosVisible
 
         Text {
             text: jokerWindow.updateInfo
@@ -61,6 +63,7 @@ Item {
         anchors.leftMargin: 10
         anchors.top: tcLabel.bottom
         height: childrenRect.height
+        visible: selectedPeopleListVisible
 
         model: selectedPeopleModel
         delegate: Text {
@@ -83,5 +86,6 @@ Item {
         anchors.left: leftColumn.left
         anchors.leftMargin: 10
         anchors.bottomMargin: 0
+        visible: tcLabelVisible
     }
 }
