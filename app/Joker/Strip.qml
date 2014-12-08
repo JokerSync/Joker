@@ -2,8 +2,11 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.1
 
 Item {
+    id: stripContainer
     width: 600
     height: 400
+
+    property int contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
 
     // the font name is passed from here
     FontLoader { id: stripFont; source: textFontUrl }
@@ -26,10 +29,12 @@ Item {
     ListView {
         anchors.fill: parent
         orientation: ListView.Horizontal
-        contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+        contentX: stripContainer.contentX
         interactive: false
         model: rulerModel
         visible: displayRuler
+        cacheBuffer: 2*stripContainer.width
+
         delegate: Item {
             width: duration/horizontalTimePerPixel
             height: parent.height
@@ -271,60 +276,66 @@ Item {
                 width: parent.width
                 height: parent.height
                 orientation: ListView.Horizontal
-                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                contentX: stripContainer.contentX
                 interactive: false
                 model: stripPeople
                 delegate: stripPeopleDelegate
+                cacheBuffer: 2*stripContainer.width
             }
 
             ListView {
                 width: parent.width
                 height: parent.height
                 orientation: ListView.Horizontal
-                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                contentX: stripContainer.contentX
                 interactive: false
                 model: stripText
                 delegate: stripTextDelegate
+                cacheBuffer: 2*stripContainer.width
             }
 
             ListView {
                 width: parent.width
                 height: parent.height
                 orientation: ListView.Horizontal
-                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                contentX: stripContainer.contentX
                 interactive: false
                 model: offDetect
                 delegate: offDetectDelegate
+                cacheBuffer: 2*stripContainer.width
             }
 
             ListView {
                 width: parent.width
                 height: parent.height
                 orientation: ListView.Horizontal
-                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                contentX: stripContainer.contentX
                 interactive: false
                 model: semiOffDetect
                 delegate: semiOffDetectDelegate
+                cacheBuffer: 2*stripContainer.width
             }
 
             ListView {
                 width: parent.width
                 height: parent.height
                 orientation: ListView.Horizontal
-                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                contentX: stripContainer.contentX
                 interactive: false
                 model: arrowUpDetect
                 delegate: arrowUpDetectDelegate
+                cacheBuffer: 2*stripContainer.width
             }
 
             ListView {
                 width: parent.width
                 height: parent.height
                 orientation: ListView.Horizontal
-                contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+                contentX: stripContainer.contentX
                 interactive: false
                 model: arrowDownDetect
                 delegate: arrowDownDetectDelegate
+                cacheBuffer: 2*stripContainer.width
             }
         }
     }
@@ -351,10 +362,12 @@ Item {
     ListView {
         anchors.fill: parent
         orientation: ListView.Horizontal
-        contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+        contentX: stripContainer.contentX
         interactive: false
         model: cutModel
         visible: displayCuts
+        cacheBuffer: 2*stripContainer.width
+
         delegate: Item {
             width: duration/horizontalTimePerPixel
             height: parent.height
@@ -372,9 +385,11 @@ Item {
     ListView {
         anchors.fill: parent
         orientation: ListView.Horizontal
-        contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+        contentX: stripContainer.contentX
         interactive: false
         model: loopModel
+        cacheBuffer: 2*stripContainer.width
+
         delegate: Item {
             id: loopContainer
             width: duration/horizontalTimePerPixel
@@ -397,7 +412,6 @@ Item {
                 x: parent.width - width/2
                 width: parent.height / 40
                 rotation: 45
-                transformOrigin: Center
             }
 
             Rectangle {
@@ -409,7 +423,6 @@ Item {
                 x: parent.width - width/2
                 width: parent.height / 40
                 rotation: -45
-                transformOrigin: Center
             }
 
             Text {
