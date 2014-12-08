@@ -133,13 +133,14 @@ public slots:
 	 */
 	void onTimeCodeTypeChanged(PhTimeCodeType tcType);
 
-private slots:
 	void onPlayPause();
 	void onFastForward();
 	void onRewind();
 	void onBack();
 	void onNextFrame();
 	void onPreviousFrame();
+
+private slots:
 	void onSliderChanged(int position);
 	void updateSlider();
 	void onTCTypeComboChanged();

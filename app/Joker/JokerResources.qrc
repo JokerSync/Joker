@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>LeftColumn.qml</file>
+        <file>main.qml</file>
+        <file>MediaPanel.qml</file>
+        <file>RightColumn.qml</file>
+        <file>Strip.qml</file>
+        <file>Video.qml</file>
+    </qresource>
+</RCC>

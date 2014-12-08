@@ -71,5 +71,8 @@ Item {
         anchors.left: videoOverlay.left
         anchors.bottom: videoOverlay.bottom
         anchors.right: videoOverlay.right
+        anchors.leftMargin: 20
+        anchors.rightMargin: 20
+        anchors.bottomMargin: 20
     }
 }

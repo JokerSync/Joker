@@ -89,13 +89,6 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/img/motif-240
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/SWENSON.TTF) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/data/fonts/HelveticaCYPlain.ttf) $${RESOURCES_PATH} $${CS}
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/main.qml) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/Video.qml) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/Strip.qml) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/LeftColumn.qml) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/RightColumn.qml) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${JOKER_ROOT}/app/Joker/MediaPanel.qml) $${RESOURCES_PATH} $${CS}
-
 TRANSLATIONS =	fr_FR.ts \
 
 QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
@@ -112,3 +105,6 @@ OTHER_FILES += \
     Strip.qml \
     Video.qml \
     MediaPanel.qml
+
+RESOURCES += \
+    JokerResources.qrc
