@@ -6,6 +6,7 @@
 
 #include <QQmlEngine>
 #include <QQuickView>
+#include <QQuickItem>
 
 #include "PhTools/PhDebug.h"
 
@@ -96,9 +97,14 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_view->setResizeMode(QQuickView::SizeRootObjectToView);
 
 	// in resources or in full path, the qml sub-files are not found if launched from outside Qt Creator !
-	//_view->setSource(QUrl("qrc:///Phonations/Joker/main.qml"));
-	_view->setSource(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/main.qml"));
+	_view->setSource(QUrl("qrc:///main.qml"));
+	//_view->setSource(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/main.qml"));
 	_view->show();
+
+
+	QObject *button = _view->rootObject()->findChild<QObject *>("PlayButton");
+	// connect QML signal to C++ slot
+	QObject::connect(button, SIGNAL(clicked()), &_mediaPanel, SLOT(onPlayPause()));
 
 	// Due to translation, Qt might not be able to link automatically the menu
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);

@@ -143,6 +143,13 @@ public slots:
 	 */
 	void onTimeCodeTypeChanged(PhTimeCodeType tcType);
 
+	void onPlayPause();
+	void onFastForward();
+	void onRewind();
+	void onBack();
+	void onNextFrame();
+	void onPreviousFrame();
+
 protected:
 	/**
 	 * @brief Filter the space key press event
@@ -152,12 +159,6 @@ protected:
 	bool eventFilter(QObject *, QEvent *event);
 
 private slots:
-	void onPlayPause();
-	void onFastForward();
-	void onRewind();
-	void onBack();
-	void onNextFrame();
-	void onPreviousFrame();
 	void onSliderChanged(int position);
 	void updateSlider();
 	void onTCTypeComboChanged();

@@ -24,16 +24,14 @@ win32{
 	INCLUDEPATH += $$(FFMPEG_DEV_PATH)\include
 	LIBS += -L$$(FFMPEG_DEV_PATH)\lib -lavformat -lavcodec -lavutil -lswscale -liconv
 
-
-	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/swscale-3.dll) $${RESOURCES_PATH} $${CS}
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avcodec-56.dll) $${RESOURCES_PATH} $${CS}
-	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avdevice-55.dll) $${RESOURCES_PATH} $${CS}
-	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avfilter-4.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avdevice-56.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avfilter-5.dll) $${RESOURCES_PATH} $${CS}
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avformat-56.dll) $${RESOURCES_PATH} $${CS}
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/avutil-54.dll) $${RESOURCES_PATH} $${CS}
-	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/postproc-52.dll) $${RESOURCES_PATH} $${CS}
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/postproc-53.dll) $${RESOURCES_PATH} $${CS}
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/swresample-1.dll) $${RESOURCES_PATH} $${CS}
-
+	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/swscale-3.dll) $${RESOURCES_PATH} $${CS}
 }
 
 # Unix specific
