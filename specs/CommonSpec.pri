@@ -1,8 +1,9 @@
-#-------------------------------------------------
+#
+# Copyright (C) 2012-2014 Phonations
+# License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 # Project created by QtCreator 2014-09-01T17:54:58
 #
-#-------------------------------------------------
 
 QT       += testlib
 CONFIG   += console
