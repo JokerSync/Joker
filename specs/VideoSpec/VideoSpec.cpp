@@ -22,6 +22,7 @@ go_bandit([](){
 		PhGraphicView *view;
 		PhVideoEngine *engine;
 		VideoSpecSettings settings;
+		int factor;
 
 		before_each([&](){
 			PhDebug::disable();
@@ -33,8 +34,10 @@ go_bandit([](){
 
 			engine->setBilinearFiltering(false);
 
+			factor = 1;
+
 			QObject::connect(view, &PhGraphicView::paint, [&](int w, int h) {
-				engine->drawVideo(0, 0, w, h);
+				engine->drawVideo(0, 0, factor * w, factor * h);
 			});
 		});
 
@@ -167,7 +170,7 @@ go_bandit([](){
 		});
 
 		it("deinterlace", [&](){
-			//Open the video file in interlaced mode
+			// Open the video file in interlaced mode
 			engine->open("interlace_%03d.bmp");
 			QThread::msleep(FRAME_WAIT_TIME);
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
@@ -186,6 +189,18 @@ go_bandit([](){
 			engine->setDeinterlace(false);
 			QThread::msleep(FRAME_WAIT_TIME);
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_001.bmp"), IsTrue());
+		});
+
+		it("scales", [&](){
+			// the video file
+			engine->open("interlace_%03d.bmp");
+			QThread::msleep(FRAME_WAIT_TIME);
+
+			factor = 2;
+
+			QImage result = view->renderPixmap(128, 128).toImage();
+			result.save("interlace_000_scaled.bmp");
+			AssertThat(result == QImage("interlace_000_scaled.bmp"), IsTrue());
 		});
 
 		//		it("saveBuffer(QString fileName) {
