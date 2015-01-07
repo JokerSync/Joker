@@ -99,12 +99,13 @@ go_bandit([](){
 			event = new QEvent((QEvent::Type)999);
 			PHDEBUG << event;
 
-			AssertThat(PhDebug::getLogMask(), Equals(1));
+			AssertThat(PhDebug::logMask(), Equals(1));
 			PHDBG(0) << "it should be displayed when default log mask is 1";
-			PhDebug::setLogMask(2);
-			AssertThat(PhDebug::getLogMask(), Equals(2));
-			PHDBG(0) << "it should not be displayed when default log mask is 2";
-			PHDBG(1) << "it should be displayed when default log mask is 2";
+			int testLogLevel = 31;
+			PhDebug::setLogMask(1 << testLogLevel);
+			AssertThat(PhDebug::logMask(), Equals(1 << testLogLevel));
+			PHDBG(0) << "it should not be displayed when default log mask is " + testLogLevel;
+			PHDBG(testLogLevel) << "it should be displayed when default log mask is " + testLogLevel;
 
 			QStringList lines = QString::fromStdString(buffer.str()).split("\n");
 			AssertThat(lines.count(), Equals(10));
@@ -117,7 +118,7 @@ go_bandit([](){
 			AssertThat(lines[5].toStdString(), Equals("QEvent MouseButtonPress"));
 			AssertThat(lines[6].toStdString(), Equals("QEvent 999"));
 			AssertThat(lines[7].toStdString(), Equals("it should be displayed when default log mask is 1"));
-			AssertThat(lines[8].toStdString(), Equals("it should be displayed when default log mask is 2"));
+			AssertThat(lines[8].toStdString(), Equals("it should be displayed when default log mask is " + testLogLevel));
 		});
 
 		it("display_in_the_error", []() {

@@ -159,7 +159,7 @@ void PhDebug::setLogMask(int mask)
 	instance()->_logMask = mask;
 }
 
-int PhDebug::getLogMask()
+int PhDebug::logMask()
 {
 	return instance()->_logMask;
 }
