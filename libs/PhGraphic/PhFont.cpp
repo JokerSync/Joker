@@ -11,6 +11,11 @@ PhFont::PhFont() : _texture(-1), _glyphHeight(0), _boldness(0), _ready(false)
 {
 }
 
+bool PhFont::ready()
+{
+	return _ready;
+}
+
 void PhFont::setFontFile(QString fontFile)
 {
 	if(fontFile != this->_fontFile) {
@@ -20,7 +25,7 @@ void PhFont::setFontFile(QString fontFile)
 	}
 }
 
-QString PhFont::getFontFile()
+QString PhFont::fontFile()
 {
 	return _fontFile;
 }

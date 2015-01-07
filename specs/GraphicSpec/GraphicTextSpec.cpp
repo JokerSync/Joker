@@ -80,10 +80,17 @@ go_bandit([](){
 
 		it("draw_swenson_font", [&](){
 			font->setFontFile("SWENSON.ttf");
+			AssertThat(font->ready(), IsFalse());
 
 			QImage resultImage(view->renderPixmap(776, 576).toImage());
+
+			// Check the font is ready after the first rendered frame
+			AssertThat(font->ready(), IsTrue());
+
 			resultImage.save("fontTest.SWENSON.ttf.result.bmp");
 			QImage expectedImage("fontTest.SWENSON.ttf.expected.bmp");
+
+			AssertThat(font->ready(), IsTrue());
 
 			int result = PhPictureTools::compare(resultImage, expectedImage);
 			AssertThat(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
