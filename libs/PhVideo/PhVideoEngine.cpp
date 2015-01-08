@@ -196,7 +196,11 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		PhTime delay = static_cast<PhTime>(_settings->screenDelay() * _clock.rate() * 24000.);
 		decodeFrame(_clock.time() + delay);
 	}
-	_videoRect.setRect(x, y, w, h);
+
+	if(_settings->useNativeVideoSize())
+		_videoRect.setRect(x, y, this->width(), this->height());
+	else
+		_videoRect.setRect(x, y, w, h);
 	_videoRect.setZ(-10);
 	_videoRect.draw();
 }

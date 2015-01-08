@@ -195,22 +195,28 @@ go_bandit([](){
 		});
 
 		it("scales", [&](){
-			// the video file
+			// Open the video file in interlaced mode
 			engine->open("interlace_%03d.bmp");
 			QThread::msleep(FRAME_WAIT_TIME);
 
 			factor = 2;
 
-			QImage result = view->renderPixmap(128, 128).toImage();
-			result.save("interlace_000_scaled.bmp");
-			AssertThat(result == QImage("interlace_000_scaled.bmp"), IsTrue());
+			settings->setUseNativeVideoSize(false);
+
+			AssertThat(compareImage(view->renderPixmap(128, 128).toImage(), QImage("interlace_000_scaled.bmp"), "interlace_000_scaled"), IsTrue());
 		});
 
-		//		it("saveBuffer(QString fileName) {
-		//		   QImage test = view->renderPixmap(64, 64).toImage();
-		//		test.save(fileName);
-		//		system(PHNQ(QString("open %0").arg(fileName)));
-		//	}
+		it("doesn't scale when using native video size", [&](){
+			// Open the video file in interlaced mode
+			engine->open("interlace_%03d.bmp");
+			QThread::msleep(FRAME_WAIT_TIME);
+
+			factor = 2;
+
+			settings->setUseNativeVideoSize(true);
+
+			AssertThat(compareImage(view->renderPixmap(128, 128).toImage(), QImage("interlace_000_native.bmp"), "interlace_000_native"), IsTrue());
+		});
 
 		//	it("findMatch(QImage source", [&](){
 		//	   for(int i = 0; i < 200; i++) {
