@@ -14,21 +14,23 @@
 #define FRAME_WAIT_TIME 40
 
 #include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 
 go_bandit([](){
-	describe("video_test", [](){
+	describe("video", [](){
 		PhGraphicView *view;
+		VideoSpecSettings *settings;
 		PhVideoEngine *engine;
-		VideoSpecSettings settings;
 		int factor;
 
 		before_each([&](){
-			PhDebug::disable();
+			PhDebug::setLogMask(PHDEBUG_SPEC_MASK);
 
 			view = new PhGraphicView(64, 64);
-			engine = new PhVideoEngine(&settings);
+			settings = new VideoSpecSettings();
+			engine = new PhVideoEngine(settings);
 
 			view->show();
 
@@ -45,6 +47,7 @@ go_bandit([](){
 			engine->close();
 
 			delete engine;
+			delete settings;
 			delete view;
 		});
 
@@ -131,7 +134,7 @@ go_bandit([](){
 
 				QThread::msleep(FRAME_WAIT_TIME);
 				QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
-				AssertThat(view->renderPixmap(64, 64).toImage() == QImage(name), IsTrue());
+				AssertThat(compareImage(view->renderPixmap(64, 64).toImage(), QImage(name), "go_to_03"), IsTrue());
 			}
 		});
 
@@ -185,7 +188,7 @@ go_bandit([](){
 			QThread::msleep(FRAME_WAIT_TIME);
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("deinterlace_001.bmp"), IsTrue());
 
-			//Go back to interlaced mode
+			// Go back to interlaced mode
 			engine->setDeinterlace(false);
 			QThread::msleep(FRAME_WAIT_TIME);
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_001.bmp"), IsTrue());
