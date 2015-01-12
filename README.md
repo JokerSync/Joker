@@ -66,7 +66,7 @@ Just run the *bootstrap* script:
 
 You can install all the dependencies via __brew__:
 
-    brew install sdl2 sdl2_ttf sdl2_image libav portaudio
+    brew install sdl2 sdl2_ttf sdl2_image libav portaudio libltc
 
     brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass --with-libcaca --with-libvo-aacenc --with-libvorbis --with-libvpx --with-openjpeg --with-openssl --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-speex --with-theora --with-tools
 
@@ -74,10 +74,6 @@ You can install all the dependencies via __brew__:
 Then as __macdeployqt__ doesn't work well with brew, you'll have to change the libs permissions
 
     find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod 644 {} \;
-
-The __ltc__ libs is now installable via brew:
-
-    brew install libltc
 
 
 ### The Leap SDK _(optionnal)_
