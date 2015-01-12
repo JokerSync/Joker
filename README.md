@@ -75,22 +75,10 @@ Then as __macdeployqt__ doesn't work well with brew, you'll have to change the l
 
     find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod 644 {} \;
 
-Unfortunatly, the __ltc__ libs are not (yet) installable via brew but this is not a big deal.
-Get the latest release:
+The __ltc__ libs is now installable via brew:
 
-    wget https://github.com/x42/libltc/releases/download/v1.1.3/libltc-1.1.3.tar.gz
+    brew install libltc
 
-Extract it:
-
-    tar -xvzf libltc-1.1.3.tar.gz
-
-Then configure the environment:
-
-    aclocal; autoheader; glibtoolize –copy; autoconf; automake –gnu –add-missing –copy
-
-And finaly configure and install:
-
-    ./configure && make && sudo make install
 
 ### The Leap SDK _(optionnal)_
 
