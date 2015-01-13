@@ -17,7 +17,7 @@ include($$TOP_ROOT/libs/PhGraphic/PhGraphic.pri)
 include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
 include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 
-HEADERS +=
+HEADERS += \
 	$$PWD/VideoTestWindow.h \
 	$$PWD/VideoTestSettings.h \
     $$PWD/PropertyDialog.h
