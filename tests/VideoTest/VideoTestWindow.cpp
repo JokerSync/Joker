@@ -64,10 +64,9 @@ bool VideoTestWindow::openDocument(const QString &fileName)
 
 	_videoEngine.clock()->setTime(currentTime);
 
-	openDocument(fileName);
 	_settings->setTimeStamp(timeStamp);
 
-	return true;
+	return PhDocumentWindow::openDocument(fileName);
 }
 
 void VideoTestWindow::processArg(int argc, char *argv[])
