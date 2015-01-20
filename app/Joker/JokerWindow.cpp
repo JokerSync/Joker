@@ -1066,3 +1066,8 @@ void JokerWindow::on_actionHide_selected_peoples_triggered(bool checked)
 {
 	_settings->setHideSelectedPeoples(checked);
 }
+
+void JokerWindow::on_actionUse_native_video_size_triggered(bool checked)
+{
+    _settings->setUseNativeVideoSize(checked);
+}

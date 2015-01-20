@@ -259,6 +259,8 @@ private slots:
 
 	void on_actionHide_selected_peoples_triggered(bool checked);
 
+	void on_actionUse_native_video_size_triggered(bool checked);
+
 private:
 	PhTime currentTime();
 	PhRate currentRate();

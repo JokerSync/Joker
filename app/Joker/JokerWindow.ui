@@ -126,6 +126,7 @@
     </property>
     <addaction name="actionForce_16_9_ratio"/>
     <addaction name="actionDeinterlace_video"/>
+    <addaction name="actionUse_native_video_size"/>
    </widget>
    <widget class="QMenu" name="menuRythmo">
     <property name="title">
@@ -499,6 +500,14 @@
   <action name="actionSet_distance_between_two_feet">
    <property name="text">
     <string>Set distance between two feet...</string>
+   </property>
+  </action>
+  <action name="actionUse_native_video_size">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use native video size</string>
    </property>
   </action>
  </widget>

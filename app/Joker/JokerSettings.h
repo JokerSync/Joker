@@ -77,6 +77,9 @@ public:
 	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
 	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
 
+	// Video settings:
+	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
+
 	// Synchronisation settings:
 	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
 
