@@ -19,7 +19,7 @@
 
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
-#include "RulerSpaceDialog.h"
+#include "TimeBetweenTwoFeetDialog.h"
 
 namespace Ui {
 class JokerWindow;
@@ -221,9 +221,11 @@ private slots:
 
 	void on_actionInvert_colors_toggled(bool checked);
 
-	void on_actionShow_ruler_toggled(bool checked);
+	void on_actionDisplay_feet_triggered(bool checked);
 
-	void on_actionChange_ruler_timestamp_triggered();
+	void on_actionSet_first_foot_timecode_triggered();
+
+	void on_actionSet_distance_between_two_feet_triggered();
 
 	void on_actionNew_triggered();
 
@@ -244,8 +246,6 @@ private slots:
 	void on_actionNext_loop_triggered();
 
 	void on_actionDisplay_the_cuts_toggled(bool checked);
-
-	void on_actionSet_space_between_two_ruler_graduation_triggered();
 
 	void on_actionDisplay_the_vertical_scale_triggered(bool checked);
 
