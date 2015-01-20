@@ -28,6 +28,7 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 
 	ui->actionDisplay_media_panel->setChecked(_settings->displayMediaPanel());
 	ui->actionDeinterlace_video->setChecked(_settings->deinterlaceVideo());
+	ui->actionUse_native_video_size->setChecked(_settings->useNativeVideoSize());
 
 	_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
 
@@ -240,4 +241,9 @@ void VideoTestWindow::on_actionProperties_triggered()
 	PropertyDialog dlg;
 	dlg.setVideoEngine(&_videoEngine);
 	dlg.exec();
+}
+
+void VideoTestWindow::on_actionUse_native_video_size_triggered(bool checked)
+{
+	_settings->setUseNativeVideoSize(checked);
 }
