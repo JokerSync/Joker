@@ -66,7 +66,7 @@ Just run the *bootstrap* script:
 
 You can install all the dependencies via __brew__:
 
-    brew install sdl2 sdl2_ttf sdl2_image libav portaudio
+    brew install sdl2 sdl2_ttf sdl2_image libav portaudio libltc
 
     brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass --with-libcaca --with-libvo-aacenc --with-libvorbis --with-libvpx --with-openjpeg --with-openssl --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-speex --with-theora --with-tools
 
@@ -75,22 +75,6 @@ Then as __macdeployqt__ doesn't work well with brew, you'll have to change the l
 
     find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod 644 {} \;
 
-Unfortunatly, the __ltc__ libs are not (yet) installable via brew but this is not a big deal.
-Get the latest release:
-
-    wget https://github.com/x42/libltc/releases/download/v1.1.3/libltc-1.1.3.tar.gz
-
-Extract it:
-
-    tar -xvzf libltc-1.1.3.tar.gz
-
-Then configure the environment:
-
-    aclocal; autoheader; glibtoolize –copy; autoconf; automake –gnu –add-missing –copy
-
-And finaly configure and install:
-
-    ./configure && make && sudo make install
 
 ### The Leap SDK _(optionnal)_
 

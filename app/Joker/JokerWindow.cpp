@@ -112,7 +112,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->actionDisplay_the_vertical_scale->setChecked(_settings->displayVerticalScale());
 
-	ui->actionShow_ruler->setChecked(_settings->displayRuler());
+	on_actionDisplay_feet_triggered(_settings->displayFeet());
 
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
 	this->connect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
@@ -756,17 +756,17 @@ void JokerWindow::on_actionInvert_colors_toggled(bool checked)
 	_settings->setInvertColor(checked);
 }
 
-void JokerWindow::on_actionShow_ruler_toggled(bool checked)
+void JokerWindow::on_actionDisplay_feet_triggered(bool checked)
 {
-	_settings->setDisplayRuler(checked);
+	_settings->setDisplayFeet(checked);
 }
 
-void JokerWindow::on_actionChange_ruler_timestamp_triggered()
+void JokerWindow::on_actionSet_first_foot_timecode_triggered()
 {
 	PhTimeCodeType tcType = _videoEngine.timeCodeType();
-	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn(), this);
+	PhTimeCodeDialog dlg(tcType, _settings->firstFootTime(), this);
 	if(dlg.exec())
-		_settings->setRulerTimeIn(dlg.time());
+		_settings->setFirstFootTime(dlg.time());
 }
 
 void JokerWindow::on_actionNew_triggered()
@@ -1007,9 +1007,9 @@ void JokerWindow::on_actionDisplay_the_cuts_toggled(bool checked)
 	_settings->setDisplayCuts(checked);
 }
 
-void JokerWindow::on_actionSet_space_between_two_ruler_graduation_triggered()
+void JokerWindow::on_actionSet_distance_between_two_feet_triggered()
 {
-	RulerSpaceDialog dlg(_settings);
+	TimeBetweenTwoFeetDialog dlg(_settings);
 	dlg.exec();
 }
 
