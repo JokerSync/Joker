@@ -67,13 +67,13 @@ public:
 	bool invertColor() {
 		return false;
 	}
-	bool displayRuler() {
+	bool displayFeet() {
 		return false;
 	}
-	int rulerTimeIn() {
+	int firstFootTime() {
 		return 0;
 	}
-	int timeBetweenRuler() {
+	int timeBetweenTwoFeet() {
 		return 48000;
 	}
 
