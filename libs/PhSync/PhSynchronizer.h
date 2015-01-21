@@ -30,6 +30,10 @@ public:
 
 	PhSynchronizer();
 
+	PhTime time();
+
+	PhRate rate();
+
 	/**
 	 * @brief Set the strip clock
 	 * @param clock The strip clock

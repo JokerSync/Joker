@@ -24,7 +24,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui(new Ui::JokerWindow),
 	_settings(settings),
 	_strip(settings),
+#ifdef USE_VIDEO
 	_videoEngine(settings),
+#endif
 	_doc(_strip.doc()),
 	_sonySlave(settings),
 	_ltcReader(settings),
@@ -47,13 +49,20 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->videoStripView->setGraphicSettings(_settings);
 
-	// Initialize the property dialog
-	_propertyDialog.setDoc(_doc);
-	_propertyDialog.setVideoEngine(&_videoEngine);
-
 	// Initialize the synchronizer
 	_synchronizer.setStripClock(_strip.clock());
+
+	// Initialize the property dialog
+	_propertyDialog.setDoc(_doc);
+#ifdef USE_VIDEO
+	_propertyDialog.setVideoEngine(&_videoEngine);
 	_synchronizer.setVideoClock(_videoEngine.clock());
+#else
+	ui->actionOpen_Video->setEnabled(false);
+	ui->actionClose_video->setEnabled(false);
+	ui->actionDeinterlace_video->setEnabled(false);
+	ui->actionForce_16_9_ratio->setEnabled(false);
+#endif
 
 	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::onVideoSync);
 
@@ -212,7 +221,11 @@ bool JokerWindow::openDocument(const QString &fileName)
 {
 	QFileInfo info(fileName);
 	if(_settings->videoFileType().contains(info.suffix().toLower())) {
+#ifdef USE_VIDEO
 		return openVideoFile(fileName);
+#else
+		return false;
+#endif
 	}
 
 	/// Clear the selected people name list (except for the first document).
@@ -229,10 +242,9 @@ bool JokerWindow::openDocument(const QString &fileName)
 	PhEditableDocumentWindow::openDocument(fileName);
 	_watcher.addPath(_doc->filePath());
 
+#ifdef USE_VIDEO
 	/// - Load the deinterlace settings
-	_videoEngine.setDeinterlace(_doc->videoDeinterlace());
-	ui->actionDeinterlace_video->setChecked(_doc->videoDeinterlace());
-
+	on_actionDeinterlace_video_triggered(_doc->videoDeinterlace());
 	/// - Open the corresponding video file if it exists.
 	if(openVideoFile(_doc->videoFilePath())) {
 		_videoEngine.setTimeIn(_doc->videoTimeIn());
@@ -240,6 +252,7 @@ bool JokerWindow::openDocument(const QString &fileName)
 	}
 	else
 		_videoEngine.close();
+#endif
 
 	/// - Set the video aspect ratio.
 	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
@@ -436,6 +449,7 @@ void JokerWindow::on_action3_triggered()
 
 void JokerWindow::on_actionOpen_Video_triggered()
 {
+#ifdef USE_VIDEO
 	hideMediaPanel();
 
 	QString lastFolder = _settings->lastVideoFolder();
@@ -452,8 +466,10 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	}
 
 	fadeInMediaPanel();
+#endif
 }
 
+#ifdef USE_VIDEO
 bool JokerWindow::openVideoFile(QString videoFile)
 {
 	QFileInfo lastFileInfo(_doc->videoFilePath());
@@ -477,7 +493,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 
 		if(videoFile != _doc->videoFilePath()) {
 			_doc->setVideoFilePath(videoFile);
-			_doc->setVideoTimeIn(videoTimeIn, _videoEngine.timeCodeType());
+			_doc->setVideoTimeIn(videoTimeIn, timeCodeType());
 			_doc->setModified(true);
 		}
 
@@ -490,6 +506,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	}
 	return false;
 }
+#endif
 
 void JokerWindow::timeCounter(PhTime elapsedTime)
 {
@@ -508,19 +525,19 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();
 	setCurrentRate(0);
-	PhTime time;
+	PhTime time = _synchronizer.videoClock()->time();
+
+#ifdef USE_VIDEO
 	if(_synchronizer.videoClock()->time() < _videoEngine.timeIn())
 		time = _videoEngine.timeIn();
 	else if(_synchronizer.videoClock()->time() > _videoEngine.timeIn() + _videoEngine.length())
 		time = _videoEngine.timeOut();
-	else
-		time = _synchronizer.videoClock()->time();
 
 	PhTimeCodeDialog dlg(_doc->videoTimeCodeType(), time);
 	if(dlg.exec() == QDialog::Accepted) {
-		PhTime timeStamp;
+		PhTime timeStamp = 0;
 		if(_synchronizer.videoClock()->time() > _videoEngine.timeIn() + _videoEngine.length())
-			timeStamp = dlg.time() - (_videoEngine.length() - PhTimeCode::timePerFrame(_videoEngine.timeCodeType()));
+			timeStamp = dlg.time() - (_videoEngine.length() - PhTimeCode::timePerFrame(timeCodeType()));
 		else if (_synchronizer.videoClock()->time() < _videoEngine.timeIn())
 			timeStamp =  dlg.time();
 		else
@@ -528,10 +545,11 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 
 		_videoEngine.setTimeIn(timeStamp);
 		setCurrentTime(dlg.time());
-		_doc->setVideoTimeIn(timeStamp, _videoEngine.timeCodeType());
+		_doc->setVideoTimeIn(timeStamp, timeCodeType());
 		_mediaPanel.setTimeIn(timeStamp);
 		_doc->setModified(true);
 	}
+#endif
 
 	fadeInMediaPanel();
 }
@@ -642,7 +660,7 @@ void JokerWindow::on_actionTimecode_triggered()
 {
 	hideMediaPanel();
 
-	PhTimeCodeDialog dlg(_videoEngine.timeCodeType(), currentTime());
+	PhTimeCodeDialog dlg(timeCodeType(), currentTime());
 	if(dlg.exec() == QDialog::Accepted)
 		setCurrentTime(dlg.time());
 
@@ -763,7 +781,7 @@ void JokerWindow::on_actionDisplay_feet_triggered(bool checked)
 
 void JokerWindow::on_actionSet_first_foot_timecode_triggered()
 {
-	PhTimeCodeType tcType = _videoEngine.timeCodeType();
+	PhTimeCodeType tcType = timeCodeType();
 	PhTimeCodeDialog dlg(tcType, _settings->firstFootTime(), this);
 	if(dlg.exec())
 		_settings->setFirstFootTime(dlg.time());
@@ -777,7 +795,9 @@ void JokerWindow::on_actionNew_triggered()
 
 void JokerWindow::on_actionClose_video_triggered()
 {
+#ifdef USE_VIDEO
 	_videoEngine.close();
+#endif
 }
 
 void JokerWindow::on_actionSend_feedback_triggered()
@@ -790,11 +810,13 @@ void JokerWindow::on_actionSend_feedback_triggered()
 
 void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
 {
+#ifdef USE_VIDEO
 	_videoEngine.setDeinterlace(checked);
 	if(checked != _doc->videoDeinterlace()) {
 		_doc->setVideoDeinterlace(checked);
 		_doc->setModified(true);
 	}
+#endif
 }
 
 void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
@@ -804,7 +826,11 @@ void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
 
 void JokerWindow::onPaint(int width, int height)
 {
+#ifdef USE_VIDEO
 	PhClock *clock = _videoEngine.clock();
+#else
+	PhClock *clock = _strip.clock();
+#endif
 	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
 	PhTime clockTime = clock->time() + delay;
 
@@ -815,14 +841,16 @@ void JokerWindow::onPaint(int width, int height)
 	int stripHeight = height * stripHeightRatio;
 	int videoHeight = height - stripHeight;
 	int videoWidth = videoHeight * 16 / 9;
+#ifdef USE_VIDEO
 	if(!_doc->forceRatio169() && (_videoEngine.height() > 0))
 		videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
-
+#endif
 	int videoX = 0;
 	// Center video if no information panel with next text
 	if(!_settings->displayNextText())
 		videoX = (width - videoWidth) / 2;
 
+#ifdef USE_VIDEO
 	// Display the video
 	if((videoHeight > 0)) {
 		if(_videoEngine.height() > 0) {
@@ -856,6 +884,7 @@ void JokerWindow::onPaint(int width, int height)
 			_videoLogo.draw();
 		}
 	}
+#endif
 
 	// Get the selected people list
 	QList<PhPeople*> selectedPeoples;
@@ -896,7 +925,7 @@ void JokerWindow::onPaint(int width, int height)
 			PhGraphicText tcText(_strip.getHUDFont());
 			tcText.setColor(infoColor);
 			tcText.setRect(x + 4, y, tcWidth, tcHeight);
-			tcText.setContent(PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
+			tcText.setContent(PhTimeCode::stringFromTime(clockTime, timeCodeType()));
 			tcText.draw();
 
 			y += tcHeight;
@@ -960,7 +989,7 @@ void JokerWindow::onPaint(int width, int height)
 			int nextTcY = y + (boxHeight - nextTcHeight) / 2;
 			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
 
-			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, _videoEngine.timeCodeType()));
+			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, timeCodeType()));
 			nextTCText.draw();
 
 			y += boxHeight;
@@ -1065,4 +1094,14 @@ void JokerWindow::on_actionDisplay_the_information_panel_triggered(bool checked)
 void JokerWindow::on_actionHide_selected_peoples_triggered(bool checked)
 {
 	_settings->setHideSelectedPeoples(checked);
+}
+
+PhTimeCodeType JokerWindow::timeCodeType()
+{
+#ifdef USE_VIDEO
+	return _videoEngine.timeCodeType();
+#else
+	return (PhTimeCodeType)_settings->sonyMasterCommunicationTimeCodeType();
+#endif
+
 }

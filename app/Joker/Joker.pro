@@ -10,6 +10,8 @@ TARGET = Joker
 
 VERSION = 1.1.20
 
+#CONFIG += video
+
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
@@ -19,7 +21,11 @@ include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 include($$TOP_ROOT/libs/PhStrip/PhStrip.pri)
 include($$TOP_ROOT/libs/PhGraphic/PhGraphic.pri)
 include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
+
+video {
+DEFINES += USE_VIDEO
 include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
+}
 include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
 include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 include($$TOP_ROOT/libs/PhSony/PhSony.pri)
