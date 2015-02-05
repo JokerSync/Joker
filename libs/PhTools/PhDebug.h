@@ -23,15 +23,24 @@
 
 /** Debug log mask */
 
-#define PHDEBUG_MAIN_MASK         0x00000001 // bit 0
-#define PHDEBUG_CUSTOM_MASK       0x0000000E // bit 1-3
-#define PHDEBUG_SPEC_MASK         0x000000F0 // bit 4-7
-#define PHDEBUG_GRAPHIC_MASK      0x00000F00 // bit 8-11
-#define PHDEBUG_GRAPHICSTRIP_MASK 0x0000F000 // bit 12-15
-#define PHDEBUG_STRIP_MASK        0x000F0000 // bit 16-19
-#define PHDEBUG_SYNC_MASK         0x00F00000 // bit 20-23
-#define PHDEBUG_VIDEO_MASK        0x0F000000 // bit 24-27
-#define PHDEBUG_COMMONUI_MASK     0xF0000000 // bit 28-31
+/** bit 0 */
+#define PHDEBUG_MAIN_MASK         0x00000001
+/** bit 1-3 */
+#define PHDEBUG_CUSTOM_MASK       0x0000000E
+/** bit 4-7 */
+#define PHDEBUG_SPEC_MASK         0x000000F0
+/** bit 8-11 */
+#define PHDEBUG_GRAPHIC_MASK      0x00000F00
+/** bit 12-15 */
+#define PHDEBUG_GRAPHICSTRIP_MASK 0x0000F000
+/** bit 16-19 */
+#define PHDEBUG_STRIP_MASK        0x000F0000
+/** bit 20-23 */
+#define PHDEBUG_SYNC_MASK         0x00F00000
+/** bit 24-27 */
+#define PHDEBUG_VIDEO_MASK        0x0F000000
+/** bit 28-31 */
+#define PHDEBUG_COMMONUI_MASK     0xF0000000
 
 /**
  * @brief A custom log system
