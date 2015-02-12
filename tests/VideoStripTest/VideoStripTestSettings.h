@@ -45,6 +45,7 @@ public:
 	PH_SETTING_BOOL2(setDisplayVerticalScale, displayVerticalScale, false)
 
 	// PhVideoSettings :
+	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)
