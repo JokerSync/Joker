@@ -90,7 +90,7 @@ void PhSynchronizer::onStripTimeChanged(PhTime time)
 			}
 		}
 
-		if((_syncType != Sony) && _videoClock){
+		if((_syncType != Sony) && _videoClock) {
 			_settingVideoTime = true;
 			_videoClock->setTime(time);
 			_settingVideoTime = false;
@@ -139,7 +139,7 @@ void PhSynchronizer::onSyncTimeChanged(PhTime time)
 		// on SonyTimeChanged (see VideoStripView::paint()).
 		PhTime error = qAbs(time - _stripClock->time());
 		if(_stripClock && ((error > 10 * PhTimeCode::timePerFrame(PhTimeCodeType24))
-		   || ((_stripClock->rate() == 0) && (error > 0)))) {
+		                   || ((_stripClock->rate() == 0) && (error > 0)))) {
 			PHDEBUG << "correct error:" << time << _stripClock->time();
 			_settingStripTime = true;
 			_stripClock->setTime(time);

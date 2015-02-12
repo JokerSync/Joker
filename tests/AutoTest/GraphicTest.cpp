@@ -34,10 +34,10 @@ void GraphicTest::paintTest()
 	bool paintCalled = false;
 
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
-	            paintCalled = true;
-	            QCOMPARE(w, 64);
-	            QCOMPARE(h, 64);
-			});
+		paintCalled = true;
+		QCOMPARE(w, 64);
+		QCOMPARE(h, 64);
+	});
 
 	view.show();
 	QTest::qWait(WAIT_TIME);
@@ -53,9 +53,9 @@ void GraphicTest::rectTest()
 	rect.setColor(Qt::red);
 
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
-	            rect.setSize(w / 2, h / 2);
-	            rect.draw();
-			});
+		rect.setSize(w / 2, h / 2);
+		rect.draw();
+	});
 
 	view.show();
 
@@ -79,9 +79,9 @@ void GraphicTest::imageTest()
 	PhGraphicImage image("rgbPatternTest.expected.bmp");
 
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
-	            image.setSize(w, h);
-	            image.draw();
-			});
+		image.setSize(w, h);
+		image.draw();
+	});
 
 	view.show();
 
@@ -110,11 +110,11 @@ void GraphicTest::rgbPatternTest()
 
 	connect(&view, &PhGraphicView::paint, [&](int w, int h) {
 #warning /// @todo try to make it before (creating the texture on auto init)
-	            unsigned char * buffer = PhPictureTools::generateRGBPattern(w, h);
-	            rect.createTextureFromRGBBuffer(buffer, w, h);
-	            delete buffer;
-	            rect.draw();
-			});
+		unsigned char * buffer = PhPictureTools::generateRGBPattern(w, h);
+		rect.createTextureFromRGBBuffer(buffer, w, h);
+		delete buffer;
+		rect.draw();
+	});
 
 	view.show();
 
