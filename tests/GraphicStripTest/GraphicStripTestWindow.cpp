@@ -58,8 +58,7 @@ bool GraphicStripTestWindow::openDocument(const QString &fileName)
 		return false;
 
 	_settings->setGenerate(false);
-	openDocument(fileName);
-	return true;
+	return PhDocumentWindow::openDocument(fileName);
 }
 
 QMenu *GraphicStripTestWindow::recentDocumentMenu()
