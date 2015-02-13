@@ -21,6 +21,27 @@
 /** PHNQ remove the quote when outputing a QString */
 #define PHNQ(string) (string).toStdString().c_str()
 
+/** Debug log mask */
+
+/** bit 0 */
+#define PHDEBUG_MAIN_MASK         0x00000001
+/** bit 1-3 */
+#define PHDEBUG_CUSTOM_MASK       0x0000000E
+/** bit 4-7 */
+#define PHDEBUG_SPEC_MASK         0x000000F0
+/** bit 8-11 */
+#define PHDEBUG_GRAPHIC_MASK      0x00000F00
+/** bit 12-15 */
+#define PHDEBUG_GRAPHICSTRIP_MASK 0x0000F000
+/** bit 16-19 */
+#define PHDEBUG_STRIP_MASK        0x000F0000
+/** bit 20-23 */
+#define PHDEBUG_SYNC_MASK         0x00F00000
+/** bit 24-27 */
+#define PHDEBUG_VIDEO_MASK        0x0F000000
+/** bit 28-31 */
+#define PHDEBUG_COMMONUI_MASK     0xF0000000
+
 /**
  * @brief A custom log system
  *
@@ -65,16 +86,7 @@ public:
 	/**
 	 * @brief Set the log mask
 	 *
-	 * Enable the message with the corresponding mak :
-	 *
-	 *	Always			=>	0
-	 *	Custom			=>	1-7
-	 *	Graphic			=>	8-11
-	 *	GraphicStrip	=>	12-15
-	 *	Strip			=>	16-19
-	 *  Sync			=>	20-23
-	 *  Video			=>	24-27
-	 *	CommonUI		=>	28-31
+	 * Enable the message with the corresponding mask :
 	 *
 	 * @param mask The desired mask
 	 *
@@ -87,7 +99,7 @@ public:
 	 * @brief Get the current log mask
 	 * @return The log mask.
 	 */
-	static int getLogMask();
+	static int logMask();
 	/**
 	 * @brief Get the log location
 	 * As the log file is with the others system & user logs, and this place

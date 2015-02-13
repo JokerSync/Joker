@@ -22,7 +22,8 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 	_doc = _strip.doc();
 	_clock = _strip.clock();
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
-	ui->actionRuler->setChecked(_settings->displayRuler());
+
+	on_actionRuler_triggered(_settings->displayFeet());
 
 	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
@@ -226,17 +227,17 @@ void GraphicStripTestWindow::on_actionInvert_colors_triggered(bool checked)
 
 void GraphicStripTestWindow::on_actionRuler_triggered(bool checked)
 {
-	_settings->setDisplayRuler(checked);
-	if(checked && _settings->rulerTimeIn() == 0)
+	_settings->setDisplayFeet(checked);
+	if(checked && _settings->firstFootTime() == 0)
 		on_actionChange_ruler_timestamp_triggered();
 }
 
 void GraphicStripTestWindow::on_actionChange_ruler_timestamp_triggered()
 {
 	PhTimeCodeType tcType = _doc->videoTimeCodeType();
-	PhTimeCodeDialog dlg(tcType, _settings->rulerTimeIn(), this);
+	PhTimeCodeDialog dlg(tcType, _settings->firstFootTime(), this);
 	if(dlg.exec())
-		_settings->setRulerTimeIn(dlg.frame() * PhTimeCode::timePerFrame(tcType));
+		_settings->setFirstFootTime(dlg.frame() * PhTimeCode::timePerFrame(tcType));
 }
 
 void GraphicStripTestWindow::onPaint(int width, int height)

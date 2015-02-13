@@ -18,6 +18,12 @@ public:
 	 * @return A value in millisecond
 	 */
 	virtual int screenDelay() = 0;
+
+	/**
+	 * @brief Display video in its native size
+	 * @return True if native, false otherwise
+	 */
+	virtual bool useNativeVideoSize() = 0;
 };
 
 #endif // PHVIDEOSETTINGS_H

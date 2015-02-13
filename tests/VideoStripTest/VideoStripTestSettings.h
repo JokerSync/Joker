@@ -33,9 +33,9 @@ public:
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
 	PH_SETTING_BOOL(setHideSelectedPeoples, hideSelectedPeoples)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
-	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
-	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
-	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 48000)
+	PH_SETTING_BOOL(setDisplayFeet, displayFeet)
+	PH_SETTING_INT(setFirstFootTime, firstFootTime)
+	PH_SETTING_INT2(setTimeBetweenTwoFeet, timeBetweenTwoFeet, 48000)
 	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 	PH_SETTING_INT2(setCutWidth, cutWidth, 4)
 	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)
@@ -45,6 +45,7 @@ public:
 	PH_SETTING_BOOL2(setDisplayVerticalScale, displayVerticalScale, false)
 
 	// PhVideoSettings :
+	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RulerSpaceDialog</class>
- <widget class="QDialog" name="RulerSpaceDialog">
+ <class>TimeBetweenTwoFeetDialog</class>
+ <widget class="QDialog" name="TimeBetweenTwoFeetDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Ruler space</string>
+   <string>Time between two feet</string>
   </property>
   <widget class="PhDialogButtonBox" name="buttonBox">
    <property name="geometry">
@@ -86,7 +86,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Current space :</string>
+    <string>Current time :</string>
    </property>
   </widget>
  </widget>
@@ -102,7 +102,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>RulerSpaceDialog</receiver>
+   <receiver>TimeBetweenTwoFeetDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -118,7 +118,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>RulerSpaceDialog</receiver>
+   <receiver>TimeBetweenTwoFeetDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

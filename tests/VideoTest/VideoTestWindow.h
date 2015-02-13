@@ -82,6 +82,8 @@ private slots:
 	void onPaint(int width, int height);
 	void on_actionProperties_triggered();
 
+	void on_actionUse_native_video_size_triggered(bool checked);
+
 private:
 
 	Ui::VideoTestWindow *ui;

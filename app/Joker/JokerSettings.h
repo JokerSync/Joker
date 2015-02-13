@@ -65,9 +65,9 @@ public:
 	PH_SETTING_STRINGLIST(setSelectedPeopleNameList, selectedPeopleNameList)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
 	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
-	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
-	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
-	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 24000)
+	PH_SETTING_BOOL(setDisplayFeet, displayFeet)
+	PH_SETTING_INT(setFirstFootTime, firstFootTime)
+	PH_SETTING_INT2(setTimeBetweenTwoFeet, timeBetweenTwoFeet, 24000)
 	PH_SETTING_INT(setTimePlayed, timePlayed)
 	PH_SETTING_BOOL(setDisplayVerticalScale, displayVerticalScale)
 	PH_SETTING_INT2(setVerticalScaleSpaceInSeconds, verticalScaleSpaceInSeconds, 5)
@@ -76,6 +76,9 @@ public:
 	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)
 	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
 	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
+
+	// Video settings:
+	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
 
 	// Synchronisation settings:
 	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)

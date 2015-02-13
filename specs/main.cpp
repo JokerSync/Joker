@@ -11,7 +11,6 @@
 
 int main(int argc, char *argv[])
 {
-	PHDEBUG << "All specs";
 	QApplication a(argc, argv);
 
 	return bandit::run(argc, argv);

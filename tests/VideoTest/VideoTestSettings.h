@@ -27,6 +27,7 @@ public:
 	PH_SETTING_BOOL(setResetInfo, resetInfo)
 
 	// PhVideoSettings :
+	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)
