@@ -3,10 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QThread>
-
-#include "bandit/bandit.h"
-
+#include "PhTools/PhGeneric.h"
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 
@@ -14,6 +11,8 @@
 #include "PhGraphicStrip/PhGraphicStrip.h"
 
 #include "GraphicStripSpecSettings.h"
+
+#include "PhSpec.h"
 
 using namespace bandit;
 

@@ -4,12 +4,9 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QFile>
-#include <QCoreApplication>
-#include <QDir>
-#include <QMessageBox>
-
+#include "PhTools/PhFile.h"
 #include "PhTools/PhDebug.h"
+#include "PhCommonUI/PhUI.h"
 #include "PhGraphic/PhGraphicText.h"
 #include "PhGraphic/PhGraphicDisc.h"
 #include "PhGraphic/PhGraphicDashedLine.h"
@@ -184,64 +181,64 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 		syncBarRect.draw();
 
-		if(_settings->displayRuler()) {
-			PhTime rulerTimeIn = _settings->rulerTimeIn();
-			PhTime timeBetweenRuler = _settings->timeBetweenRuler();
-			int rulerNumber = (stripTimeIn - rulerTimeIn) / timeBetweenRuler;
-			if (rulerNumber < 0)
-				rulerNumber = 0;
+		if(_settings->displayFeet()) {
+			PhTime firstFootTime = _settings->firstFootTime();
+			PhTime timeBetweenTwoFeet = _settings->timeBetweenTwoFeet();
+			int feetNumber = (stripTimeIn - firstFootTime) / timeBetweenTwoFeet;
+			if (feetNumber < 0)
+				feetNumber = 0;
 
-			PhTime rulerTime = rulerTimeIn + rulerNumber * timeBetweenRuler;
-			PhGraphicSolidRect rulerRect;
-			PhGraphicDisc rulerDisc;
-			PhGraphicText rulerText(&_hudFont);
-			QColor rulerColor(80, 80, 80);
+			PhTime footTime = firstFootTime + feetNumber * timeBetweenTwoFeet;
+			PhGraphicSolidRect footRect;
+			PhGraphicDisc footDisc;
+			PhGraphicText footText(&_hudFont);
+			QColor footColor(80, 80, 80);
 			if(invertedColor)
-				rulerColor = Qt::white;
+				footColor = Qt::white;
 
 			int width = 1000 / timePerPixel;
 
-			rulerRect.setColor(rulerColor);
-			rulerRect.setWidth(width);
-			rulerRect.setHeight(height / 2);
-			rulerRect.setZ(0);
-			rulerRect.setY(y);
+			footRect.setColor(footColor);
+			footRect.setWidth(width);
+			footRect.setHeight(height / 2);
+			footRect.setZ(0);
+			footRect.setY(y);
 
-			rulerDisc.setColor(rulerColor);
-			rulerDisc.setRadius(2 * width);
-			rulerDisc.setY(y + height / 2 + 3 * width);
-			rulerDisc.setZ(0);
+			footDisc.setColor(footColor);
+			footDisc.setRadius(2 * width);
+			footDisc.setY(y + height / 2 + 3 * width);
+			footDisc.setZ(0);
 
-			rulerText.setColor(rulerColor);
-			rulerText.setY(y + height / 2);
-			rulerText.setHeight(height / 2);
-			rulerText.setZ(0);
+			footText.setColor(footColor);
+			footText.setY(y + height / 2);
+			footText.setHeight(height / 2);
+			footText.setZ(0);
 
 
-			while (rulerTime < stripTimeOut + timeBetweenRuler) {
+			while (footTime < stripTimeOut + timeBetweenTwoFeet) {
 				counter++;
-				int x = rulerTime / timePerPixel - offset;
+				int x = footTime / timePerPixel - offset;
 
-				rulerRect.setX(x - rulerRect.width() / 2);
-				rulerRect.draw();
+				footRect.setX(x - footRect.width() / 2);
+				footRect.draw();
 
-				QString text = QString::number(rulerNumber);
-				rulerText.setContent(text);
+				QString text = QString::number(feetNumber);
+				footText.setContent(text);
 				int textWidth = _hudFont.getNominalWidth(text);
-				rulerText.setWidth(textWidth);
-				rulerText.setX(x - textWidth / 2);
-				rulerText.draw();
+				footText.setWidth(textWidth);
+				footText.setX(x - textWidth / 2);
+				footText.draw();
 
-				x += timeBetweenRuler / timePerPixel / 2;
+				x += timeBetweenTwoFeet / timePerPixel / 2;
 
-				rulerRect.setX(x - rulerRect.width() / 2);
-				rulerRect.draw();
+				footRect.setX(x - footRect.width() / 2);
+				footRect.draw();
 
-				rulerDisc.setX(x);
-				rulerDisc.draw();
+				footDisc.setX(x);
+				footDisc.draw();
 
-				rulerNumber++;
-				rulerTime += timeBetweenRuler;
+				feetNumber++;
+				footTime += timeBetweenTwoFeet;
 			}
 		}
 
@@ -502,7 +499,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				break;
 		}
 
-		// Change to display the ruler via the settings
+		// Change to display the vertical scale via the settings
 		if(_settings->displayVerticalScale()) {
 			PhGraphicSolidRect scale;
 			int scaleHeight = 4;

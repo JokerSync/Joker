@@ -4,8 +4,6 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QMessageBox>
-
 #include "PeopleDialog.h"
 #include "ui_PeopleDialog.h"
 #include "PhTools/PhDebug.h"

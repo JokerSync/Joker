@@ -4,6 +4,7 @@
 #include "GraphicTestWindow.h"
 #include "ui_GraphicTestWindow.h"
 
+#include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 #include "PhGraphic/PhGraphicText.h"
 #include "PhGraphic/PhGraphicLoop.h"

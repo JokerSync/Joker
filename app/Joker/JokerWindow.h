@@ -7,14 +7,10 @@
 #ifndef JOKERWINDOW_H
 #define JOKERWINDOW_H
 
-#include <QMessageBox>
-#include <QPropertyAnimation>
-#include <QTimer>
-
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 #include "PhCommonUI/PhEditableDocumentWindow.h"
-#include <PhVideo/PhVideoEngine.h>
-#include <PhGraphicStrip/PhGraphicStrip.h>
+#include "PhVideo/PhVideoEngine.h"
+#include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSynchronizer.h"
 #include "PhSony/PhSonySlaveController.h"
 #include "PhLtc/PhLtcReader.h"
@@ -23,7 +19,7 @@
 
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
-#include "RulerSpaceDialog.h"
+#include "TimeBetweenTwoFeetDialog.h"
 
 namespace Ui {
 class JokerWindow;
@@ -225,9 +221,11 @@ private slots:
 
 	void on_actionInvert_colors_toggled(bool checked);
 
-	void on_actionShow_ruler_toggled(bool checked);
+	void on_actionDisplay_feet_triggered(bool checked);
 
-	void on_actionChange_ruler_timestamp_triggered();
+	void on_actionSet_first_foot_timecode_triggered();
+
+	void on_actionSet_distance_between_two_feet_triggered();
 
 	void on_actionNew_triggered();
 
@@ -249,8 +247,6 @@ private slots:
 
 	void on_actionDisplay_the_cuts_toggled(bool checked);
 
-	void on_actionSet_space_between_two_ruler_graduation_triggered();
-
 	void on_actionDisplay_the_vertical_scale_triggered(bool checked);
 
 	void setCurrentTime(PhTime time);
@@ -262,6 +258,8 @@ private slots:
 	void on_actionDisplay_the_information_panel_triggered(bool checked);
 
 	void on_actionHide_selected_peoples_triggered(bool checked);
+
+	void on_actionUse_native_video_size_triggered(bool checked);
 
 private:
 	PhTime currentTime();

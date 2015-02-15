@@ -3,15 +3,13 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "bandit/bandit.h"
-
-#include <QAction>
-#include <QTest>
-
 #include "PhTools/PhDebug.h"
+#include "PhCommonUI/PhUI.h"
 
 #include "WindowSpecSettings.h"
 #include "WindowSpecWindow.h"
+
+#include "PhSpec.h"
 
 using namespace bandit;
 

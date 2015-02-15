@@ -3,25 +3,23 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT		+= xml sql
-
 SOURCES += \
-    $$TOP_ROOT/libs/PhStrip/PhStripDoc.cpp \
-	$$TOP_ROOT/libs/PhStrip/PhStripObject.cpp \
-	$$TOP_ROOT/libs/PhStrip/PhStripCut.cpp \
-	$$TOP_ROOT/libs/PhStrip/PhStripText.cpp \
-	$$TOP_ROOT/libs/PhStrip/PhStripLoop.cpp \
-	$$TOP_ROOT/libs/PhStrip/PhPeople.cpp \
-    $$TOP_ROOT/libs/PhStrip/PhStripPeopleObject.cpp \
-    $$TOP_ROOT/libs/PhStrip/PhStripDetect.cpp
+    $$PWD/PhStripDoc.cpp \
+	$$PWD/PhStripObject.cpp \
+	$$PWD/PhStripCut.cpp \
+	$$PWD/PhStripText.cpp \
+	$$PWD/PhStripLoop.cpp \
+	$$PWD/PhPeople.cpp \
+    $$PWD/PhStripPeopleObject.cpp \
+    $$PWD/PhStripDetect.cpp
 
 HEADERS += \
-	$$TOP_ROOT/libs/PhStrip/PhStripDoc.h \
-	$$TOP_ROOT/libs/PhStrip/PhStripObject.h \
-	$$TOP_ROOT/libs/PhStrip/PhStripCut.h \
-	$$TOP_ROOT/libs/PhStrip/PhStripText.h \
-	$$TOP_ROOT/libs/PhStrip/PhStripLoop.h \
-	$$TOP_ROOT/libs/PhStrip/PhPeople.h \
-    $$TOP_ROOT/libs/PhStrip/PhStripPeopleObject.h \
-    $$TOP_ROOT/libs/PhStrip/PhStripDetect.h
+	$$PWD/PhStripDoc.h \
+	$$PWD/PhStripObject.h \
+	$$PWD/PhStripCut.h \
+	$$PWD/PhStripText.h \
+	$$PWD/PhStripLoop.h \
+	$$PWD/PhPeople.h \
+    $$PWD/PhStripPeopleObject.h \
+    $$PWD/PhStripDetect.h
 

@@ -7,7 +7,7 @@
 #ifndef PHCLOCK_H
 #define PHCLOCK_H
 
-#include <QObject>
+#include "PhTools/PhGeneric.h"
 
 #include "PhTimeCode.h"
 

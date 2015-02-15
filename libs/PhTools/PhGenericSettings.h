@@ -1,9 +1,7 @@
 #ifndef PHGENERICSETTINGS_H
 #define PHGENERICSETTINGS_H
 
-#include <QSettings>
-#include <QStringList>
-#include <QByteArray>
+#include "PhTools/PhData.h"
 
 /** Implement the integer setter and getter for a PhGenericSettings */
 #define PH_SETTING_INT(setter, getter) \

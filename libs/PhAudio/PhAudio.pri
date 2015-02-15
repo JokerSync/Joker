@@ -20,12 +20,12 @@ win32 {
 }
 
 HEADERS += \
-    $$TOP_ROOT/libs/PhAudio/PhAudio.h \
-    $$TOP_ROOT/libs/PhAudio/PhAudioOutput.h \
-    $$TOP_ROOT/libs/PhAudio/PhAudioInput.h
+    $$PWD/PhAudio.h \
+    $$PWD/PhAudioOutput.h \
+    $$PWD/PhAudioInput.h
 
 SOURCES += \
-    $$TOP_ROOT/libs/PhAudio/PhAudio.cpp \
-    $$TOP_ROOT/libs/PhAudio/PhAudioOutput.cpp \
-    $$TOP_ROOT/libs/PhAudio/PhAudioInput.cpp
+    $$PWD/PhAudio.cpp \
+    $$PWD/PhAudioOutput.cpp \
+    $$PWD/PhAudioInput.cpp
 

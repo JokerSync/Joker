@@ -1,9 +1,3 @@
-#include <QFileInfo>
-#include <QMessageBox>
-#include <QDir>
-#include <QDragEnterEvent>
-#include <QMimeData>
-
 #include "PhTools/PhDebug.h"
 
 #include "PhDocumentWindow.h"

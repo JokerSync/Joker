@@ -7,7 +7,7 @@
 #ifndef PROPERTYDIALOG_H
 #define PROPERTYDIALOG_H
 
-#include <QDialog>
+#include "PhCommonUI/PhUI.h"
 #include "PhStrip/PhStripDoc.h"
 #include "PhVideo/PhVideoEngine.h"
 

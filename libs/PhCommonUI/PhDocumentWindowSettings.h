@@ -1,8 +1,6 @@
 #ifndef PHDOCUMENTWINDOWSETTINGS_H
 #define PHDOCUMENTWINDOWSETTINGS_H
 
-#include <QString>
-
 #include "PhWindowSettings.h"
 
 /**

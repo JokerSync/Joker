@@ -7,7 +7,6 @@
 #include "PhSonyController.h"
 
 #include <QSerialPortInfo>
-#include <qmath.h>
 
 #include "PhTools/PhDebug.h"
 

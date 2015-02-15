@@ -3,11 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QThread>
-#include <QApplication>
-
-#include "bandit/bandit.h"
-
+#include "PhTools/PhGeneric.h"
 #include "PhTools/PhDebug.h"
 #include "PhMidi/PhMidiInput.h"
 #include "PhMidi/PhMidiOutput.h"
@@ -15,6 +11,8 @@
 #include "PhMidi/PhMidiTimeCodeWriter.h"
 
 #include "CommonSpec.h"
+
+#include "PhSpec.h"
 
 using namespace bandit;
 

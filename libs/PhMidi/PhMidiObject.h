@@ -6,8 +6,9 @@
 #ifndef PHMIDIOBJECT_H
 #define PHMIDIOBJECT_H
 
-#include <QObject>
 #include <RtMidi.h>
+
+#include "PhTools/PhGeneric.h"
 
 #include "PhSync/PhTimeCode.h"
 

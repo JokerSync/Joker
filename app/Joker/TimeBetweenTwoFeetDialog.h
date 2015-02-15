@@ -6,29 +6,29 @@
 #ifndef RULERSPACEDIALOG_H
 #define RULERSPACEDIALOG_H
 
-#include <QDialog>
+#include "PhCommonUI/PhUI.h"
 
 #include "JokerSettings.h"
 
 namespace Ui {
-class RulerSpaceDialog;
+class TimeBetweenTwoFeetDialog;
 }
 
 /**
  * @brief This dialog display size setting for the ruler.
  */
-class RulerSpaceDialog : public QDialog
+class TimeBetweenTwoFeetDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
 	/**
-	 * @brief RulerSpaceDialog constructor
+	 * @brief TimeBetweenTwoFeetDialog constructor
 	 * @param settings The main window settings
 	 * @param parent The parent
 	 */
-	explicit RulerSpaceDialog(JokerSettings * settings, QWidget *parent = 0);
-	~RulerSpaceDialog();
+	explicit TimeBetweenTwoFeetDialog(JokerSettings * settings, QWidget *parent = 0);
+	~TimeBetweenTwoFeetDialog();
 
 private slots:
 	void on_horizontalSlider_sliderMoved(int position);
@@ -38,9 +38,9 @@ private slots:
 	void on_buttonBox_rejected();
 
 private:
-	Ui::RulerSpaceDialog *ui;
+	Ui::TimeBetweenTwoFeetDialog *ui;
 	JokerSettings * _settings;
-	int _oldSpace;
+	int _oldTimeBetweenTwoFeet;
 };
 
 #endif // RULERSPACEDIALOG_H

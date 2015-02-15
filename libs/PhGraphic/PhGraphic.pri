@@ -5,34 +5,38 @@
 
 QT		+= opengl
 
+PRECOMPILED_HEADERS += \
+    $$PWD/PhGraphic.h \
+
 HEADERS += \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicSettings.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicView.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicImage.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicText.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicTexturedRect.h \
-	$$TOP_ROOT/libs/PhGraphic/PhFont.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicObject.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicRect.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicSolidRect.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicLoop.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicDisc.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicDashedLine.h \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicArrow.h
+    $$PWD/PhGraphic.h \
+	$$PWD/PhGraphicSettings.h \
+	$$PWD/PhGraphicView.h \
+	$$PWD/PhGraphicImage.h \
+	$$PWD/PhGraphicText.h \
+	$$PWD/PhGraphicTexturedRect.h \
+	$$PWD/PhFont.h \
+	$$PWD/PhGraphicObject.h \
+	$$PWD/PhGraphicRect.h \
+	$$PWD/PhGraphicSolidRect.h \
+	$$PWD/PhGraphicLoop.h \
+	$$PWD/PhGraphicDisc.h \
+	$$PWD/PhGraphicDashedLine.h \
+	$$PWD/PhGraphicArrow.h \
 
 SOURCES += \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicView.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicImage.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicText.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicTexturedRect.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhFont.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicObject.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicRect.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicSolidRect.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicLoop.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicDisc.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicDashedLine.cpp \
-	$$TOP_ROOT/libs/PhGraphic/PhGraphicArrow.cpp
+	$$PWD/PhGraphicView.cpp \
+	$$PWD/PhGraphicImage.cpp \
+	$$PWD/PhGraphicText.cpp \
+	$$PWD/PhGraphicTexturedRect.cpp \
+	$$PWD/PhFont.cpp \
+	$$PWD/PhGraphicObject.cpp \
+	$$PWD/PhGraphicRect.cpp \
+	$$PWD/PhGraphicSolidRect.cpp \
+	$$PWD/PhGraphicLoop.cpp \
+	$$PWD/PhGraphicDisc.cpp \
+	$$PWD/PhGraphicDashedLine.cpp \
+	$$PWD/PhGraphicArrow.cpp
 
 # Windows specific
 win32 {

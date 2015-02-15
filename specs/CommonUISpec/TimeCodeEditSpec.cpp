@@ -1,11 +1,9 @@
-#include <QTest>
-#include <QMouseEvent>
-
-#include "bandit/bandit.h"
 
 #include "PhTools/PhDebug.h"
-
+#include "PhCommonUI/PhUI.h"
 #include "PhCommonUI/PhTimeCodeEdit.h"
+
+#include "PhSpec.h"
 
 using namespace bandit;
 
