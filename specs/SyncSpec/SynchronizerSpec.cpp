@@ -147,5 +147,49 @@ go_bandit([](){
 			AssertThat(videoClock->rate(), Equals(-1));
 			AssertThat(syncClock->rate(), Equals(-1));
 		});
+
+		it("returns and set time according to the clocks set", [&]() {
+			stripClock->setTime(1);
+			videoClock->setTime(2);
+			syncClock->setTime(3);
+			AssertThat(sync->time(), Equals(0));
+
+			sync->setSyncClock(syncClock, PhSynchronizer::Sony);
+			AssertThat(sync->time(), Equals(3));
+
+			sync->setStripClock(stripClock);
+			AssertThat(sync->time(), Equals(1));
+
+			sync->setVideoClock(videoClock);
+			AssertThat(sync->time(), Equals(2));
+
+			sync->setTime(4);
+			AssertThat(sync->time(), Equals(4));
+			AssertThat(stripClock->time(), Equals(4));
+			AssertThat(videoClock->time(), Equals(4));
+			AssertThat(syncClock->time(), Equals(4));
+		});
+
+		it("returns and set rate according to the clocks set", [&]() {
+			stripClock->setRate(1);
+			videoClock->setRate(2);
+			syncClock->setRate(3);
+			AssertThat(sync->rate(), Equals(0));
+
+			sync->setSyncClock(syncClock, PhSynchronizer::Sony);
+			AssertThat(sync->rate(), Equals(3));
+
+			sync->setStripClock(stripClock);
+			AssertThat(sync->rate(), Equals(1));
+
+			sync->setVideoClock(videoClock);
+			AssertThat(sync->rate(), Equals(2));
+
+			sync->setRate(4);
+			AssertThat(sync->rate(), Equals(4));
+			AssertThat(stripClock->rate(), Equals(4));
+			AssertThat(videoClock->rate(), Equals(4));
+			AssertThat(syncClock->rate(), Equals(4));
+		});
 	});
 });

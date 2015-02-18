@@ -42,6 +42,11 @@ public:
 	PhTime time();
 
 	/**
+	 * @brief Set the time for all the clocks
+	 */
+	void setTime(PhTime value);
+
+	/**
 	 * @brief Get the rate of the active clock
 	 *
 	 * Video rate, or strip rate (if video clock is null) or sync rate (if strip clock is null).
@@ -49,6 +54,11 @@ public:
 	 * @return A time value
 	 */
 	PhRate rate();
+
+	/**
+	 * @brief Set the rate for all the clocks
+	 */
+	void setRate(PhRate value);
 
 	/**
 	 * @brief Set the strip clock

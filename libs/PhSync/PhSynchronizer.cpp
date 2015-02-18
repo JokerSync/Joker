@@ -34,6 +34,16 @@ PhTime PhSynchronizer::time()
 		return 0;
 }
 
+void PhSynchronizer::setTime(PhTime value)
+{
+	if(_videoClock)
+		_videoClock->setTime(value);
+	if(_stripClock)
+		_stripClock->setTime(value);
+	if(_syncClock)
+		_syncClock->setTime(value);
+}
+
 PhRate PhSynchronizer::rate()
 {
 	if(_videoClock)
@@ -44,6 +54,16 @@ PhRate PhSynchronizer::rate()
 		return _syncClock->rate();
 	else
 		return 0;
+}
+
+void PhSynchronizer::setRate(PhRate value)
+{
+	if(_videoClock)
+		_videoClock->setRate(value);
+	if(_stripClock)
+		_stripClock->setRate(value);
+	if(_syncClock)
+		_syncClock->setRate(value);
 }
 
 void PhSynchronizer::setStripClock(PhClock *clock)
