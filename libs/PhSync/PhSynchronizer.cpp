@@ -7,8 +7,9 @@
 #include "PhTools/PhDebug.h"
 #include "PhSynchronizer.h"
 
-PhSynchronizer::PhSynchronizer()
-	: _syncType(NoSync),
+PhSynchronizer::PhSynchronizer(PhSyncSettings *settings)
+	: _settings(settings),
+	 _syncType(NoSync),
 	_stripClock(NULL),
 	_videoClock(NULL),
 	_syncClock(NULL),

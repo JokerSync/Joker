@@ -1,6 +1,6 @@
 /**
  * @file
- * @copyright (C) 2012-2014 Phonations
+ * @copyright (C) 2012-2015 Phonations
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
@@ -10,6 +10,8 @@
 #include "PhTools/PhGeneric.h"
 
 #include "PhSync/PhClock.h"
+
+#include "PhSyncSettings.h"
 
 /**
  * @brief Provide a synchronisation system between the strip, the video and the external sync signal
@@ -28,7 +30,7 @@ public:
 		MTC = 3,
 	};
 
-	PhSynchronizer();
+	PhSynchronizer(PhSyncSettings* settings);
 
 	/**
 	 * @brief Get the time of the active clock
@@ -99,6 +101,7 @@ private slots:
 	void onSyncTimeChanged(PhTime time);
 	void onSyncRateChanged(PhRate rate);
 private:
+	PhSyncSettings* _settings;
 	int _syncType;
 	PhClock * _stripClock;
 	PhClock * _videoClock;

@@ -9,6 +9,7 @@ HEADERS += \
 	$$PWD/PhTimeCode.h \
 	$$PWD/PhClock.h \
 	$$PWD/PhSynchronizer.h \
+    $$PWD/PhSyncSettings.h
 
 SOURCES += \
 	$$PWD/PhTimeCode.cpp \

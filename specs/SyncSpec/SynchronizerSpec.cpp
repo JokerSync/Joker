@@ -9,142 +9,143 @@
 
 #include "PhSpec.h"
 
+#include "SyncSpecSettings.h"
+
 using namespace bandit;
 
 go_bandit([](){
 	describe("synchronizer_test", []() {
-		it("set_clock", []() {
-			PhSynchronizer sync;
-			PhClock stripClock, videoClock, syncClock;
+		SyncSpecSettings *settings;
+		PhSynchronizer *sync;
+		PhClock *stripClock, *videoClock, *syncClock;
 
-			sync.setStripClock(&stripClock);
-			sync.setVideoClock(&videoClock);
-			sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
-
-			AssertThat(&stripClock, Equals(sync.stripClock()));
-			AssertThat(&videoClock, Equals(sync.videoClock()));
-			AssertThat(&syncClock, Equals(sync.syncClock()));
+		before_each([&](){
+			settings = new SyncSpecSettings();
+			sync = new PhSynchronizer(settings);
+			stripClock = new PhClock();
+			videoClock = new PhClock();
+			syncClock = new PhClock();
 		});
 
-		it("handle_strip_time_change", []() {
-			PhSynchronizer sync;
-			PhClock stripClock, videoClock, syncClock;
-
-			sync.setStripClock(&stripClock);
-			sync.setVideoClock(&videoClock);
-
-			stripClock.setTime(9600);
-
-			AssertThat(stripClock.time(), Equals(9600));
-			AssertThat(videoClock.time(), Equals(9600));
-			AssertThat(syncClock.time(), Equals(0));
-
-			sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
-
-			stripClock.setTime(1920); // 2 frames at 25 fps
-
-			AssertThat(stripClock.time(), Equals(1920));
-			AssertThat(videoClock.time(), Equals(9600));
-			AssertThat(syncClock.time(), Equals(0));
-			stripClock.setTime(2880); // 3 frames at 25 fps
-			AssertThat(stripClock.time(), Equals(0));
-			AssertThat(videoClock.time(), Equals(9600));
-			AssertThat(syncClock.time(), Equals(0));
+		after_each([&](){
+			delete syncClock;
+			delete videoClock;
+			delete stripClock;
+			delete sync;
+			delete settings;
 		});
 
-		it("handle_strip_rat_e_change", []() {
-			PhSynchronizer sync;
-			PhClock stripClock, videoClock, syncClock;
+		it("set_clock", [&]() {
+			sync->setStripClock(stripClock);
+			sync->setVideoClock(videoClock);
+			sync->setSyncClock(syncClock, PhSynchronizer::Sony);
 
-			sync.setStripClock(&stripClock);
-			sync.setVideoClock(&videoClock);
-
-			stripClock.setRate(1);
-
-			AssertThat(stripClock.rate(), Equals(1));
-			AssertThat(videoClock.rate(), Equals(1));
-			AssertThat(syncClock.rate(), Equals(0));
-
-			sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
-
-			stripClock.setRate(2);
-
-			AssertThat(stripClock.rate(), Equals(2));
-			AssertThat(videoClock.rate(), Equals(2));
-			AssertThat(syncClock.rate(), Equals(2));
+			AssertThat(stripClock, Equals(sync->stripClock()));
+			AssertThat(videoClock, Equals(sync->videoClock()));
+			AssertThat(syncClock, Equals(sync->syncClock()));
 		});
 
-		it("handle_video_time_change", []() {
-			PhSynchronizer sync;
-			PhClock stripClock, videoClock, syncClock;
+		it("handle_strip_time_change", [&]() {
+			sync->setStripClock(stripClock);
+			sync->setVideoClock(videoClock);
 
-			sync.setStripClock(&stripClock);
-			sync.setVideoClock(&videoClock);
-			sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
+			stripClock->setTime(9600);
 
-			videoClock.setTime(9600);
+			AssertThat(stripClock->time(), Equals(9600));
+			AssertThat(videoClock->time(), Equals(9600));
+			AssertThat(syncClock->time(), Equals(0));
 
-			AssertThat(stripClock.time(), Equals(0));
-			AssertThat(videoClock.time(), Equals(9600));
-			AssertThat(syncClock.time(), Equals(0));
+			sync->setSyncClock(syncClock, PhSynchronizer::Sony);
+
+			stripClock->setTime(1920); // 2 frames at 25 fps
+
+			AssertThat(stripClock->time(), Equals(1920));
+			AssertThat(videoClock->time(), Equals(9600));
+			AssertThat(syncClock->time(), Equals(0));
+			stripClock->setTime(2880); // 3 frames at 25 fps
+			AssertThat(stripClock->time(), Equals(0));
+			AssertThat(videoClock->time(), Equals(9600));
+			AssertThat(syncClock->time(), Equals(0));
 		});
 
-		it("handle_video_rate_change", []() {
-			PhSynchronizer sync;
-			PhClock stripClock, videoClock, syncClock;
+		it("handle_strip_rat_e_change", [&]() {
+			sync->setStripClock(stripClock);
+			sync->setVideoClock(videoClock);
 
-			sync.setStripClock(&stripClock);
-			sync.setVideoClock(&videoClock);
-			sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
+			stripClock->setRate(1);
 
-			videoClock.setRate(3);
+			AssertThat(stripClock->rate(), Equals(1));
+			AssertThat(videoClock->rate(), Equals(1));
+			AssertThat(syncClock->rate(), Equals(0));
 
-			AssertThat(stripClock.rate(), Equals(0));
-			AssertThat(videoClock.rate(), Equals(3));
-			AssertThat(syncClock.rate(), Equals(0));
+			sync->setSyncClock(syncClock, PhSynchronizer::Sony);
+
+			stripClock->setRate(2);
+
+			AssertThat(stripClock->rate(), Equals(2));
+			AssertThat(videoClock->rate(), Equals(2));
+			AssertThat(syncClock->rate(), Equals(2));
 		});
 
-		it("handle_sync_time_change", []() {
-			PhSynchronizer sync;
-			PhClock stripClock, videoClock, syncClock;
+		it("handle_video_time_change", [&]() {
+			sync->setStripClock(stripClock);
+			sync->setVideoClock(videoClock);
+			sync->setSyncClock(syncClock, PhSynchronizer::Sony);
 
-			sync.setStripClock(&stripClock);
-			sync.setVideoClock(&videoClock);
-			sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
+			videoClock->setTime(9600);
 
-			syncClock.setTime(960);
-
-			AssertThat(stripClock.time(), Equals(960));
-			AssertThat(videoClock.time(), Equals(960));
-			AssertThat(syncClock.time(), Equals(960));
-
-			stripClock.setRate(1);
-			syncClock.setTime(1920);
-
-			AssertThat(stripClock.time(), Equals(960));
-			AssertThat(videoClock.time(), Equals(1920));
-			AssertThat(syncClock.time(), Equals(1920));
-
-			syncClock.setTime(11520);
-
-			AssertThat(stripClock.time(), Equals(11520));
-			AssertThat(videoClock.time(), Equals(11520));
-			AssertThat(syncClock.time(), Equals(11520));
+			AssertThat(stripClock->time(), Equals(0));
+			AssertThat(videoClock->time(), Equals(9600));
+			AssertThat(syncClock->time(), Equals(0));
 		});
 
-		it("handle_sync_rae_change", []() {
-			PhSynchronizer sync;
-			PhClock stripClock, videoClock, syncClock;
+		it("handle_video_rate_change", [&]() {
+			sync->setStripClock(stripClock);
+			sync->setVideoClock(videoClock);
+			sync->setSyncClock(syncClock, PhSynchronizer::Sony);
 
-			sync.setStripClock(&stripClock);
-			sync.setVideoClock(&videoClock);
-			sync.setSyncClock(&syncClock, PhSynchronizer::Sony);
+			videoClock->setRate(3);
 
-			syncClock.setRate(-1);
+			AssertThat(stripClock->rate(), Equals(0));
+			AssertThat(videoClock->rate(), Equals(3));
+			AssertThat(syncClock->rate(), Equals(0));
+		});
 
-			AssertThat(stripClock.rate(), Equals(-1));
-			AssertThat(videoClock.rate(), Equals(-1));
-			AssertThat(syncClock.rate(), Equals(-1));
+		it("handle_sync_time_change", [&]() {
+			sync->setStripClock(stripClock);
+			sync->setVideoClock(videoClock);
+			sync->setSyncClock(syncClock, PhSynchronizer::Sony);
+
+			syncClock->setTime(960);
+
+			AssertThat(stripClock->time(), Equals(960));
+			AssertThat(videoClock->time(), Equals(960));
+			AssertThat(syncClock->time(), Equals(960));
+
+			stripClock->setRate(1);
+			syncClock->setTime(1920);
+
+			AssertThat(stripClock->time(), Equals(960));
+			AssertThat(videoClock->time(), Equals(1920));
+			AssertThat(syncClock->time(), Equals(1920));
+
+			syncClock->setTime(11520);
+
+			AssertThat(stripClock->time(), Equals(11520));
+			AssertThat(videoClock->time(), Equals(11520));
+			AssertThat(syncClock->time(), Equals(11520));
+		});
+
+		it("handle_sync_rate_change", [&]() {
+			sync->setStripClock(stripClock);
+			sync->setVideoClock(videoClock);
+			sync->setSyncClock(syncClock, PhSynchronizer::Sony);
+
+			syncClock->setRate(-1);
+
+			AssertThat(stripClock->rate(), Equals(-1));
+			AssertThat(videoClock->rate(), Equals(-1));
+			AssertThat(syncClock->rate(), Equals(-1));
 		});
 	});
 });
