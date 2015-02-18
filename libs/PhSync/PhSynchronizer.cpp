@@ -21,6 +21,30 @@ PhSynchronizer::PhSynchronizer()
 {
 }
 
+PhTime PhSynchronizer::time()
+{
+	if(_videoClock)
+		return _videoClock->time();
+	else if(_stripClock)
+		return _stripClock->time();
+	else if(_syncClock)
+		return _syncClock->time();
+	else
+		return 0;
+}
+
+PhRate PhSynchronizer::rate()
+{
+	if(_videoClock)
+		return _videoClock->rate();
+	else if(_stripClock)
+		return _stripClock->rate();
+	else if(_syncClock)
+		return _syncClock->rate();
+	else
+		return 0;
+}
+
 void PhSynchronizer::setStripClock(PhClock *clock)
 {
 	_stripClock = clock;
@@ -66,7 +90,7 @@ void PhSynchronizer::onStripTimeChanged(PhTime time)
 			}
 		}
 
-		if(_syncType != Sony) {
+		if((_syncType != Sony) && _videoClock) {
 			_settingVideoTime = true;
 			_videoClock->setTime(time);
 			_settingVideoTime = false;
@@ -83,9 +107,11 @@ void PhSynchronizer::onStripRateChanged(PhRate rate)
 			_syncClock->setRate(rate);
 			_settingSonyRate = false;
 		}
-		_settingVideoRate = true;
-		_videoClock->setRate(rate);
-		_settingVideoRate = false;
+		if(_videoClock) {
+			_settingVideoRate = true;
+			_videoClock->setRate(rate);
+			_settingVideoRate = false;
+		}
 	}
 }
 
@@ -103,7 +129,7 @@ void PhSynchronizer::onSyncTimeChanged(PhTime time)
 {
 	if(!_settingSonyTime) {
 		PHDBG(3) << time;
-		if(_syncType != LTC) {
+		if((_syncType != LTC) && _videoClock) {
 			_settingVideoTime = true;
 			_videoClock->setTime(time);
 			_settingVideoTime = false;
@@ -112,8 +138,8 @@ void PhSynchronizer::onSyncTimeChanged(PhTime time)
 		// Precise correction occurs in onStripTimeChanged() that is called after
 		// on SonyTimeChanged (see VideoStripView::paint()).
 		PhTime error = qAbs(time - _stripClock->time());
-		if((error > 10*PhTimeCode::timePerFrame(PhTimeCodeType24))
-		   || ((_stripClock->rate() == 0) && (error > 0))) {
+		if(_stripClock && ((error > 10 * PhTimeCode::timePerFrame(PhTimeCodeType24))
+		                   || ((_stripClock->rate() == 0) && (error > 0)))) {
 			PHDEBUG << "correct error:" << time << _stripClock->time();
 			_settingStripTime = true;
 			_stripClock->setTime(time);
@@ -126,11 +152,15 @@ void PhSynchronizer::onSyncRateChanged(PhRate rate)
 {
 	if(!_settingSonyRate) {
 		PHDEBUG << rate;
-		_settingStripRate = true;
-		_stripClock->setRate(rate);
-		_settingStripRate = false;
-		_settingVideoRate = true;
-		_videoClock->setRate(rate);
-		_settingVideoTime = false;
+		if(_stripClock) {
+			_settingStripRate = true;
+			_stripClock->setRate(rate);
+			_settingStripRate = false;
+		}
+		if(_videoClock) {
+			_settingVideoRate = true;
+			_videoClock->setRate(rate);
+			_settingVideoTime = false;
+		}
 	}
 }

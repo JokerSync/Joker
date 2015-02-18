@@ -196,7 +196,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			if(invertedColor)
 				footColor = Qt::white;
 
-			int width = 1000 / timePerPixel;
+			int width = 250 / timePerPixel;
 
 			footRect.setColor(footColor);
 			footRect.setWidth(width);
@@ -214,7 +214,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			footText.setHeight(height / 2);
 			footText.setZ(0);
 
-
 			while (footTime < stripTimeOut + timeBetweenTwoFeet) {
 				counter++;
 				int x = footTime / timePerPixel - offset;
@@ -224,7 +223,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 				QString text = QString::number(feetNumber);
 				footText.setContent(text);
-				int textWidth = _hudFont.getNominalWidth(text);
+				int textWidth = _hudFont.getNominalWidth(text) / 3;
 				footText.setWidth(textWidth);
 				footText.setX(x - textWidth / 2);
 				footText.draw();

@@ -31,6 +31,24 @@ public:
 	PhSynchronizer();
 
 	/**
+	 * @brief Get the time of the active clock
+	 *
+	 * Video time, or strip time (if video clock is null) or sync time (if strip clock is null).
+	 *
+	 * @return A time value
+	 */
+	PhTime time();
+
+	/**
+	 * @brief Get the rate of the active clock
+	 *
+	 * Video rate, or strip rate (if video clock is null) or sync rate (if strip clock is null).
+	 *
+	 * @return A time value
+	 */
+	PhRate rate();
+
+	/**
 	 * @brief Set the strip clock
 	 * @param clock The strip clock
 	 */
