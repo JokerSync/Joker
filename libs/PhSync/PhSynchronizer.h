@@ -30,6 +30,10 @@ public:
 		MTC = 3,
 	};
 
+	/**
+	 * @brief PhSynchronizer constructor
+	 * @param settings The specific sync settings
+	 */
 	PhSynchronizer(PhSyncSettings* settings);
 
 	/**
@@ -110,6 +114,7 @@ private slots:
 	void onVideoRateChanged(PhRate rate);
 	void onSyncTimeChanged(PhTime time);
 	void onSyncRateChanged(PhRate rate);
+
 private:
 	PhSyncSettings* _settings;
 	int _syncType;
@@ -121,7 +126,7 @@ private:
 	bool _settingSonyTime;
 	bool _settingStripRate;
 	bool _settingVideoRate;
-	bool _settingSonyRate;
+	bool _settingSyncRate;
 };
 
 #endif // PHSYNCHRONIZER_H

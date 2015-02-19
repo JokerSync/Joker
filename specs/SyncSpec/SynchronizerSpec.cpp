@@ -191,5 +191,23 @@ go_bandit([](){
 			AssertThat(videoClock->rate(), Equals(4));
 			AssertThat(syncClock->rate(), Equals(4));
 		});
+
+		it("loops", [&]() {
+			settings->setSyncLoopTimeIn(100);
+			settings->setSyncLoopTimeOut(200);
+			settings->setSyncLooping(true);
+
+			stripClock->setTime(150);
+			stripClock->setRate(1);
+			sync->setStripClock(stripClock);
+
+			AssertThat(sync->time(), Equals(150));
+
+			stripClock->elapse(50);
+			AssertThat(sync->time(), Equals(200));
+
+			stripClock->elapse(1);
+			AssertThat(sync->time(), Equals(100));
+		});
 	});
 });

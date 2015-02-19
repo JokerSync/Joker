@@ -9,7 +9,7 @@
 
 PhSynchronizer::PhSynchronizer(PhSyncSettings *settings)
 	: _settings(settings),
-	 _syncType(NoSync),
+	_syncType(NoSync),
 	_stripClock(NULL),
 	_videoClock(NULL),
 	_syncClock(NULL),
@@ -18,7 +18,7 @@ PhSynchronizer::PhSynchronizer(PhSyncSettings *settings)
 	_settingSonyTime(false),
 	_settingStripRate(false),
 	_settingVideoRate(false),
-	_settingSonyRate(false)
+	_settingSyncRate(false)
 {
 }
 
@@ -58,12 +58,21 @@ PhRate PhSynchronizer::rate()
 
 void PhSynchronizer::setRate(PhRate value)
 {
-	if(_videoClock)
+	if(_videoClock) {
+		_settingVideoRate = true;
 		_videoClock->setRate(value);
-	if(_stripClock)
+		_settingVideoRate = false;
+	}
+	if(_stripClock) {
+		_settingStripRate = true;
 		_stripClock->setRate(value);
-	if(_syncClock)
+		_settingStripRate = false;
+	}
+	if(_syncClock) {
+		_settingSyncRate = true;
 		_syncClock->setRate(value);
+		_settingSyncRate = false;
+	}
 }
 
 void PhSynchronizer::setStripClock(PhClock *clock)
@@ -97,24 +106,30 @@ void PhSynchronizer::setSyncClock(PhClock *clock, SyncType type)
 void PhSynchronizer::onStripTimeChanged(PhTime time)
 {
 	if(!_settingStripTime) {
-		PHDBG(2) << time;
-		if(_syncClock) {
-			// Apply precise correction.
-			// We use a 2-frame error margin, which is consistent with LTC needs
-			// We don't change sony clock because this would desynchronize the sony master.
-#warning /// @todo Make the error a settings
-			if(qAbs(time - _syncClock->time()) > 2*PhTimeCode::timePerFrame(PhTimeCodeType24)) {
-				PHDEBUG << "correct :" << _stripClock->time() << _syncClock->time();
-				_settingStripTime = true;
-				_stripClock->setTime(_syncClock->time());
-				_settingStripTime = false;
-			}
-		}
 
-		if((_syncType != Sony) && _videoClock) {
-			_settingVideoTime = true;
-			_videoClock->setTime(time);
-			_settingVideoTime = false;
+		PHDBG(2) << time;
+		if(_settings->syncLooping() && (time > _settings->syncLoopTimeOut())) {
+			this->setTime(_settings->syncLoopTimeIn());
+		}
+		else {
+			if(_syncClock) {
+				// Apply precise correction.
+				// We use a 2-frame error margin, which is consistent with LTC needs
+				// We don't change sony clock because this would desynchronize the sony master.
+#warning /// @todo Make the error a settings
+				if(qAbs(time - _syncClock->time()) > 2*PhTimeCode::timePerFrame(PhTimeCodeType24)) {
+					PHDEBUG << "correct :" << _stripClock->time() << _syncClock->time();
+					_settingStripTime = true;
+					_stripClock->setTime(_syncClock->time());
+					_settingStripTime = false;
+				}
+			}
+
+			if((_syncType != Sony) && _videoClock) {
+				_settingVideoTime = true;
+				_videoClock->setTime(time);
+				_settingVideoTime = false;
+			}
 		}
 	}
 }
@@ -124,9 +139,9 @@ void PhSynchronizer::onStripRateChanged(PhRate rate)
 	if(!_settingStripRate) {
 		PHDEBUG << rate;
 		if(_syncClock) {
-			_settingSonyRate = true;
+			_settingSyncRate = true;
 			_syncClock->setRate(rate);
-			_settingSonyRate = false;
+			_settingSyncRate = false;
 		}
 		if(_videoClock) {
 			_settingVideoRate = true;
@@ -138,8 +153,8 @@ void PhSynchronizer::onStripRateChanged(PhRate rate)
 
 void PhSynchronizer::onVideoTimeChanged(PhTime)
 {
-//	if(!_settingVideoTime)
-//		PHDEBUG << time;
+	//	if(!_settingVideoTime)
+	//		PHDEBUG << time;
 }
 
 void PhSynchronizer::onVideoRateChanged(PhRate)
@@ -150,28 +165,33 @@ void PhSynchronizer::onSyncTimeChanged(PhTime time)
 {
 	if(!_settingSonyTime) {
 		PHDBG(3) << time;
-		if((_syncType != LTC) && _videoClock) {
-			_settingVideoTime = true;
-			_videoClock->setTime(time);
-			_settingVideoTime = false;
+		if(_settings->syncLooping() && (time > _settings->syncLoopTimeOut())) {
+			this->setTime(_settings->syncLoopTimeIn());
 		}
-		// We apply correction here only when there is a significant change of sony time.
-		// Precise correction occurs in onStripTimeChanged() that is called after
-		// on SonyTimeChanged (see VideoStripView::paint()).
-		PhTime error = qAbs(time - _stripClock->time());
-		if(_stripClock && ((error > 10 * PhTimeCode::timePerFrame(PhTimeCodeType24))
-		                   || ((_stripClock->rate() == 0) && (error > 0)))) {
-			PHDEBUG << "correct error:" << time << _stripClock->time();
-			_settingStripTime = true;
-			_stripClock->setTime(time);
-			_settingStripTime = false;
+		else {
+			if((_syncType != LTC) && _videoClock) {
+				_settingVideoTime = true;
+				_videoClock->setTime(time);
+				_settingVideoTime = false;
+			}
+			// We apply correction here only when there is a significant change of sony time.
+			// Precise correction occurs in onStripTimeChanged() that is called after
+			// on SonyTimeChanged (see VideoStripView::paint()).
+			PhTime error = qAbs(time - _stripClock->time());
+			if(_stripClock && ((error > 10 * PhTimeCode::timePerFrame(PhTimeCodeType24))
+			                   || ((_stripClock->rate() == 0) && (error > 0)))) {
+				PHDEBUG << "correct error:" << time << _stripClock->time();
+				_settingStripTime = true;
+				_stripClock->setTime(time);
+				_settingStripTime = false;
+			}
 		}
 	}
 }
 
 void PhSynchronizer::onSyncRateChanged(PhRate rate)
 {
-	if(!_settingSonyRate) {
+	if(!_settingSyncRate) {
 		PHDEBUG << rate;
 		if(_stripClock) {
 			_settingStripRate = true;
