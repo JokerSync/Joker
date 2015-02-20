@@ -265,6 +265,12 @@ private slots:
 
 	void on_actionUse_native_video_size_triggered(bool checked);
 
+	void on_actionSet_TC_in_triggered();
+
+	void on_actionSet_TC_out_triggered();
+
+	void on_actionLoop_triggered(bool checked);
+
 private:
 	PhTimeCodeType timeCodeType();
 	PhTime currentTime();

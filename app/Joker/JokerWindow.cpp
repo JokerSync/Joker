@@ -32,6 +32,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_ltcReader(settings),
 	_mtcReader(PhTimeCodeType25),
 	_mtcWriter(PhTimeCodeType25),
+	_synchronizer(settings),
 	_mediaPanelState(MediaPanelHidden),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
@@ -112,6 +113,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #warning /// @todo move to PhDocumentWindow
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
+
+	ui->actionLoop->setChecked(_settings->syncLooping());
 
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 
@@ -1109,4 +1112,19 @@ PhTimeCodeType JokerWindow::timeCodeType()
 	return (PhTimeCodeType)_settings->sonyMasterCommunicationTimeCodeType();
 #endif
 
+}
+
+void JokerWindow::on_actionSet_TC_in_triggered()
+{
+	_settings->setSyncLoopTimeIn(_synchronizer.time());
+}
+
+void JokerWindow::on_actionSet_TC_out_triggered()
+{
+	_settings->setSyncLoopTimeOut(_synchronizer.time());
+}
+
+void JokerWindow::on_actionLoop_triggered(bool checked)
+{
+	_settings->setSyncLooping(checked);
 }

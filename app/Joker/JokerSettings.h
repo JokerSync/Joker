@@ -4,6 +4,7 @@
 #include "PhTools/PhFile.h"
 
 #include "PhTools/PhGenericSettings.h"
+#include "PhSync/PhSyncSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhVideo/PhVideoSettings.h"
 #include "PhSony/PhSonySettings.h"
@@ -16,6 +17,7 @@
  * @brief The Joker application settings
  */
 class JokerSettings : public PhGenericSettings,
+	public PhSyncSettings,
 	public PhGraphicStripSettings,
 	public PhVideoSettings,
 	public PhSonySettings,
@@ -44,6 +46,11 @@ public:
 
 
 	PH_SETTING_INT3(setScreenDelay, screenDelay, delay)
+
+	// Sync settings
+	PH_SETTING_TIME(setSyncLoopTimeIn, syncLoopTimeIn)
+	PH_SETTING_TIME(setSyncLoopTimeOut, syncLoopTimeOut)
+	PH_SETTING_BOOL(setSyncLooping, syncLooping)
 
 	// PhGraphicSettings
 	PH_SETTING_BOOL(setDisplayInfo, displayInfo)

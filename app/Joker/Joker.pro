@@ -10,7 +10,7 @@ TARGET = Joker
 
 VERSION = 15.2.5
 
-#CONFIG += video
+CONFIG += video
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
