@@ -8,7 +8,7 @@ cache()
 
 TARGET = Joker
 
-VERSION = 15.2.5
+VERSION = 15.3.18
 
 CONFIG += video
 
