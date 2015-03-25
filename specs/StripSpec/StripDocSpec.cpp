@@ -115,86 +115,88 @@ go_bandit([](){
 		});
 
 		describe("detx", [&]() {
-			before_each([&](){
-				AssertThat(doc.importDetXFile("test01.detx"), IsTrue());
-			});
+			describe("import test01.detx", [&]() {
+				before_each([&](){
+					AssertThat(doc.importDetXFile("test01.detx"), IsTrue());
+				});
 
-			it("import header", [&](){
-				AssertThat(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:00:16:00"));
-				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:00:00:00"));
-			});
+				it("import header", [&](){
+					AssertThat(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:00:16:00"));
+					AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:00:00:00"));
+				});
 
-			it("import_text", [&](){
-				AssertThat(doc.texts().count(), Equals(6));
+				it("import_text", [&](){
+					AssertThat(doc.texts().count(), Equals(6));
 
-				AssertThat(doc.texts()[0]->content().toStdString(), Equals("Simple sentence"));
-				AssertThat(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:02:00"));
-				AssertThat(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:04:00"));
-				AssertThat(doc.texts()[0]->people(), Equals(doc.peopleByName("Jeanne")));
-				AssertThat(doc.texts()[0]->y(), Equals(0.25f));
+					AssertThat(doc.texts()[0]->content().toStdString(), Equals("Simple sentence"));
+					AssertThat(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:02:00"));
+					AssertThat(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:04:00"));
+					AssertThat(doc.texts()[0]->people(), Equals(doc.peopleByName("Jeanne")));
+					AssertThat(doc.texts()[0]->y(), Equals(0.25f));
 
-				AssertThat(doc.texts()[1]->content().toStdString(), Equals("Composed "));
-				AssertThat(t2s(doc.texts()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:05:00"));
-				AssertThat(t2s(doc.texts()[1]->timeOut(), PhTimeCodeType25), Equals("01:00:06:00"));
+					AssertThat(doc.texts()[1]->content().toStdString(), Equals("Composed "));
+					AssertThat(t2s(doc.texts()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:05:00"));
+					AssertThat(t2s(doc.texts()[1]->timeOut(), PhTimeCodeType25), Equals("01:00:06:00"));
 
-				AssertThat(doc.texts()[2]->content().toStdString(), Equals("sentence"));
-				AssertThat(t2s(doc.texts()[2]->timeIn(), PhTimeCodeType25), Equals("01:00:06:00"));
-				AssertThat(t2s(doc.texts()[2]->timeOut(), PhTimeCodeType25), Equals("01:00:07:00"));
+					AssertThat(doc.texts()[2]->content().toStdString(), Equals("sentence"));
+					AssertThat(t2s(doc.texts()[2]->timeIn(), PhTimeCodeType25), Equals("01:00:06:00"));
+					AssertThat(t2s(doc.texts()[2]->timeOut(), PhTimeCodeType25), Equals("01:00:07:00"));
 
-				AssertThat(doc.texts()[3]->content().toStdString(), Equals("Simple off sentence"));
-				AssertThat(t2s(doc.texts()[3]->timeIn(), PhTimeCodeType25), Equals("01:00:12:00"));
-				AssertThat(t2s(doc.texts()[3]->timeOut(), PhTimeCodeType25), Equals("01:00:14:00"));
+					AssertThat(doc.texts()[3]->content().toStdString(), Equals("Simple off sentence"));
+					AssertThat(t2s(doc.texts()[3]->timeIn(), PhTimeCodeType25), Equals("01:00:12:00"));
+					AssertThat(t2s(doc.texts()[3]->timeOut(), PhTimeCodeType25), Equals("01:00:14:00"));
 
-				AssertThat(doc.texts()[4]->content().toStdString(), Equals("Composed sentence with off"));
-				AssertThat(t2s(doc.texts()[4]->timeIn(), PhTimeCodeType25), Equals("01:00:15:00"));
-				AssertThat(t2s(doc.texts()[4]->timeOut(), PhTimeCodeType25), Equals("01:00:17:00"));
+					AssertThat(doc.texts()[4]->content().toStdString(), Equals("Composed sentence with off"));
+					AssertThat(t2s(doc.texts()[4]->timeIn(), PhTimeCodeType25), Equals("01:00:15:00"));
+					AssertThat(t2s(doc.texts()[4]->timeOut(), PhTimeCodeType25), Equals("01:00:17:00"));
 
-				AssertThat(doc.texts()[5]->content().toStdString(), Equals("Sentence with out not linked"));
-				AssertThat(t2s(doc.texts()[5]->timeIn(), PhTimeCodeType25), Equals("01:00:30:00"));
-				AssertThat(t2s(doc.texts()[5]->timeOut(), PhTimeCodeType25), Equals("01:00:31:04"));
-			});
+					AssertThat(doc.texts()[5]->content().toStdString(), Equals("Sentence with out not linked"));
+					AssertThat(t2s(doc.texts()[5]->timeIn(), PhTimeCodeType25), Equals("01:00:30:00"));
+					AssertThat(t2s(doc.texts()[5]->timeOut(), PhTimeCodeType25), Equals("01:00:31:04"));
+				});
 
-			it("import detect", [&](){
-				AssertThat(doc.detects().count(), Equals(6));
+				it("import detect", [&](){
+					AssertThat(doc.detects().count(), Equals(6));
 
-				AssertThat(doc.detects()[0]->people(), Equals(doc.peopleByName("Jeanne")));
-				AssertThat(doc.detects()[0]->type(), Equals(PhStripDetect::On));
-				AssertThat(t2s(doc.detects()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:02:00"));
-				AssertThat(t2s(doc.detects()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:04:00"));
-				AssertThat(doc.detects()[0]->y(), Equals(0.25f));
+					AssertThat(doc.detects()[0]->people(), Equals(doc.peopleByName("Jeanne")));
+					AssertThat(doc.detects()[0]->type(), Equals(PhStripDetect::On));
+					AssertThat(t2s(doc.detects()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:02:00"));
+					AssertThat(t2s(doc.detects()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:04:00"));
+					AssertThat(doc.detects()[0]->y(), Equals(0.25f));
 
-				AssertThat(doc.detects()[1]->people(), Equals(doc.peopleByName("Sue")));
-				AssertThat(doc.detects()[1]->type(), Equals(PhStripDetect::On));
-				AssertThat(t2s(doc.detects()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:05:00"));
-				AssertThat(t2s(doc.detects()[1]->timeOut(), PhTimeCodeType25), Equals("01:00:07:00"));
-				AssertThat(doc.detects()[1]->y(), Equals(0.5f));
-
-
-				AssertThat(doc.detects()[2]->people(), Equals(doc.peopleByName("Paul")));
-				AssertThat(doc.detects()[2]->type(), Equals(PhStripDetect::Off));
-				AssertThat(t2s(doc.detects()[2]->timeIn(), PhTimeCodeType25), Equals("01:00:12:00"));
-				AssertThat(t2s(doc.detects()[2]->timeOut(), PhTimeCodeType25), Equals("01:00:14:00"));
-				AssertThat(doc.detects()[2]->y(), Equals(0.25f));
+					AssertThat(doc.detects()[1]->people(), Equals(doc.peopleByName("Sue")));
+					AssertThat(doc.detects()[1]->type(), Equals(PhStripDetect::On));
+					AssertThat(t2s(doc.detects()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:05:00"));
+					AssertThat(t2s(doc.detects()[1]->timeOut(), PhTimeCodeType25), Equals("01:00:07:00"));
+					AssertThat(doc.detects()[1]->y(), Equals(0.5f));
 
 
-				AssertThat(doc.detects()[3]->people(), Equals(doc.peopleByName("Sue")));
-				AssertThat(doc.detects()[3]->type(), Equals(PhStripDetect::Off));
-				AssertThat(t2s(doc.detects()[3]->timeIn(), PhTimeCodeType25), Equals("01:00:15:00"));
-				AssertThat(t2s(doc.detects()[3]->timeOut(), PhTimeCodeType25), Equals("01:00:17:00"));
-				AssertThat(doc.detects()[3]->y(), Equals(0.5f));
-
-				AssertThat(doc.detects()[4]->people(), Equals(doc.peopleByName("Sue")));
-				AssertThat(doc.detects()[4]->type(), Equals(PhStripDetect::Off));
-				AssertThat(t2s(doc.detects()[4]->timeIn(), PhTimeCodeType25), Equals("01:00:20:00"));
-				AssertThat(t2s(doc.detects()[4]->timeOut(), PhTimeCodeType25), Equals("01:00:22:00"));
-				AssertThat(doc.detects()[4]->y(), Equals(0.5f));
+					AssertThat(doc.detects()[2]->people(), Equals(doc.peopleByName("Paul")));
+					AssertThat(doc.detects()[2]->type(), Equals(PhStripDetect::Off));
+					AssertThat(t2s(doc.detects()[2]->timeIn(), PhTimeCodeType25), Equals("01:00:12:00"));
+					AssertThat(t2s(doc.detects()[2]->timeOut(), PhTimeCodeType25), Equals("01:00:14:00"));
+					AssertThat(doc.detects()[2]->y(), Equals(0.25f));
 
 
-				AssertThat(doc.detects()[5]->people(), Equals(doc.peopleByName("Sue")));
-				AssertThat(doc.detects()[5]->type(), Equals(PhStripDetect::On));
-				AssertThat(t2s(doc.detects()[5]->timeIn(), PhTimeCodeType25), Equals("01:00:30:00"));
-				AssertThat(t2s(doc.detects()[5]->timeOut(), PhTimeCodeType25), Equals("01:00:31:04"));
-				AssertThat(doc.detects()[5]->y(), Equals(0.5f));
+					AssertThat(doc.detects()[3]->people(), Equals(doc.peopleByName("Sue")));
+					AssertThat(doc.detects()[3]->type(), Equals(PhStripDetect::Off));
+					AssertThat(t2s(doc.detects()[3]->timeIn(), PhTimeCodeType25), Equals("01:00:15:00"));
+					AssertThat(t2s(doc.detects()[3]->timeOut(), PhTimeCodeType25), Equals("01:00:17:00"));
+					AssertThat(doc.detects()[3]->y(), Equals(0.5f));
+
+					AssertThat(doc.detects()[4]->people(), Equals(doc.peopleByName("Sue")));
+					AssertThat(doc.detects()[4]->type(), Equals(PhStripDetect::Off));
+					AssertThat(t2s(doc.detects()[4]->timeIn(), PhTimeCodeType25), Equals("01:00:20:00"));
+					AssertThat(t2s(doc.detects()[4]->timeOut(), PhTimeCodeType25), Equals("01:00:22:00"));
+					AssertThat(doc.detects()[4]->y(), Equals(0.5f));
+
+
+					AssertThat(doc.detects()[5]->people(), Equals(doc.peopleByName("Sue")));
+					AssertThat(doc.detects()[5]->type(), Equals(PhStripDetect::On));
+					AssertThat(t2s(doc.detects()[5]->timeIn(), PhTimeCodeType25), Equals("01:00:30:00"));
+					AssertThat(t2s(doc.detects()[5]->timeOut(), PhTimeCodeType25), Equals("01:00:31:04"));
+					AssertThat(doc.detects()[5]->y(), Equals(0.5f));
+				});
 			});
 
 			it("import detx without title", [&](){
