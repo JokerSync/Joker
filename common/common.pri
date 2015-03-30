@@ -31,7 +31,7 @@ win32 {
 	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 }
 
-# Ubuntu specific
+# linux specific
 linux {
 	CS = ;
 	RESOURCES_PATH = ./
@@ -45,4 +45,10 @@ mac {
 	CS = ;
 	RESOURCES_PATH = $${TARGET}.app/Contents/Resources
 	DEFINES += PATH_TO_RESSOURCES=\\\"/../Resources/\\\"
+}
+
+# MacOS and linux specific
+unix {
+	INCLUDEPATH += /usr/local/include
+	LIBS += -L/usr/local/lib
 }

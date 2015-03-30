@@ -14,8 +14,7 @@ SOURCES += \
 	$$PWD/PhLtcWriter.cpp
 
 unix {
-	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lltc
+	LIBS += -lltc
 }
 
 win32 {
