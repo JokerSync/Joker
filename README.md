@@ -70,12 +70,6 @@ You can install all the dependencies via __brew__:
 
     brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass --with-libcaca --with-libvo-aacenc --with-libvorbis --with-libvpx --with-openjpeg --with-openssl --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-speex --with-theora --with-tools
 
-
-Then as __macdeployqt__ doesn't work well with brew, you'll have to change the libs permissions
-
-    find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod 644 {} \;
-
-
 ### The Leap SDK _(optionnal)_
 
 Before any download or installation, you must know that the **leap** have been skipped for the moment.
