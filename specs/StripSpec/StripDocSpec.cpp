@@ -214,7 +214,7 @@ go_bandit([](){
 					doc.setVideoFilePath("test01.mov");
 					doc.setVideoTimeIn(s2t("01:01:00:00", PhTimeCodeType25), PhTimeCodeType25);
 					doc.addPeople(new PhPeople("Bob", "#0000ff", "not base64 data, just for test"));
-					//doc.addPeople(new PhPeople("Sue", "#ff00ff", "bouboubou"));
+					doc.addPeople(new PhPeople("Sue", "#ff00ff", "bouboubou"));
 
 					AssertThat(doc.exportDetXFile("save01.detx", s2t("01:01:01:01", PhTimeCodeType25)), IsTrue());
 
@@ -232,15 +232,14 @@ go_bandit([](){
 					AssertThat(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:01:01:01"));
 
 					// test people
-					AssertThat(doc.peoples().count(), Equals(1));
-//					AssertThat(doc.peoples().count(), Equals(2));
+					AssertThat(doc.peoples().count(), Equals(2));
 
 					AssertThat(doc.peoples().at(0)->name().toStdString(), Equals("Bob"));
 					AssertThat(doc.peoples().at(0)->color().toStdString(), Equals("#0000ff"));
 //					AssertThat(doc.peoples().at(0)->picture().toStdString(), Equals("not base64 data, just for test"));
 
-//					AssertThat(doc.peoples().at(1)->name().toStdString(), Equals("Sue"));
-//					AssertThat(doc.peoples().at(1)->color().toStdString(), Equals("#ff00ff"));
+					AssertThat(doc.peoples().at(1)->name().toStdString(), Equals("Sue"));
+					AssertThat(doc.peoples().at(1)->color().toStdString(), Equals("#ff00ff"));
 //					AssertThat(doc.peoples().at(1)->picture().toStdString(), Equals("not base64 data, just for test"));
 				});
 			});

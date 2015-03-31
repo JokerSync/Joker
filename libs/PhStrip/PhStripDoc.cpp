@@ -212,16 +212,21 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	pt.put("detx.header.videofile.<xmlattr>.tctype", PhTimeCode::getAverageFps(_videoTimeCodeType));
 	pt.put("detx.header.last_position.<xmlattr>.timecode", PhTimeCode::stringFromTime(lastTime, _videoTimeCodeType).toStdString());
 
-
-
+	ptree roles;
 
 	foreach(const PhPeople *people,_peoples) {
-		pt.put("detx.roles.role.<xmlattr>.name", people->name().toStdString());
-		pt.put("detx.roles.role.<xmlattr>.color", people->color().toStdString());
-		pt.put("detx.roles.role.image", people->picture().toStdString());
-	}
+		ptree role;
+		role.put("<xmlattr>.name", people->name().toStdString());
+		role.put("<xmlattr>.color", people->color().toStdString());
+		role.put("image", people->picture().toStdString());
 
-    write_xml(fileName.toStdString(), pt);
+		roles.push_back(std::make_pair("role", role));
+	}
+	pt.add_child("detx.roles", roles);
+
+	std::ofstream file(fileName.toStdString());
+
+	write_xml(file, pt, boost::property_tree::xml_writer_make_settings<std::string>('\t', 1));
 
 	return true;
 }
