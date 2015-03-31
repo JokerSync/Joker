@@ -199,9 +199,50 @@ go_bandit([](){
 				});
 			});
 
-			it("import detx without title", [&](){
-				AssertThat(doc.importDetXFile("notitle.detx"), IsTrue());
-				AssertThat(doc.title().toStdString(), Equals("notitle"));
+			describe("import test01.detx", [&]() {
+				before_each([&](){
+					doc.reset();
+				});
+
+				it("import detx without title", [&](){
+					AssertThat(doc.importDetXFile("notitle.detx"), IsTrue());
+					AssertThat(doc.title().toStdString(), Equals("notitle"));
+				});
+
+				it("export and import detx", [&](){
+					doc.setTitle("Title test for detx");
+					doc.setVideoFilePath("test01.mov");
+					doc.setVideoTimeIn(s2t("01:01:00:00", PhTimeCodeType25), PhTimeCodeType25);
+					doc.addPeople(new PhPeople("Bob", "#0000ff", "not base64 data, just for test"));
+					//doc.addPeople(new PhPeople("Sue", "#ff00ff", "bouboubou"));
+
+					AssertThat(doc.exportDetXFile("save01.detx", s2t("01:01:01:01", PhTimeCodeType25)), IsTrue());
+
+					doc.reset();
+
+					AssertThat(doc.importDetXFile("save01.detx"), IsTrue());
+
+					AssertThat(doc.filePath().toStdString(), Equals("save01.detx"));
+					AssertThat(doc.title().toStdString(), Equals("Title test for detx"));
+					AssertThat(doc.videoFilePath().toStdString(), Equals("test01.mov"));
+					AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
+					AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:01:00:00"));
+					AssertThat(doc.forceRatio169(), IsFalse());
+					AssertThat(doc.videoDeinterlace(), IsFalse());
+					AssertThat(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:01:01:01"));
+
+					// test people
+					AssertThat(doc.peoples().count(), Equals(1));
+//					AssertThat(doc.peoples().count(), Equals(2));
+
+					AssertThat(doc.peoples().at(0)->name().toStdString(), Equals("Bob"));
+					AssertThat(doc.peoples().at(0)->color().toStdString(), Equals("#0000ff"));
+//					AssertThat(doc.peoples().at(0)->picture().toStdString(), Equals("not base64 data, just for test"));
+
+//					AssertThat(doc.peoples().at(1)->name().toStdString(), Equals("Sue"));
+//					AssertThat(doc.peoples().at(1)->color().toStdString(), Equals("#ff00ff"));
+//					AssertThat(doc.peoples().at(1)->picture().toStdString(), Equals("not base64 data, just for test"));
+				});
 			});
 		});
 

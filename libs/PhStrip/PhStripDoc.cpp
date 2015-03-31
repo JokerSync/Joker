@@ -199,6 +199,33 @@ bool PhStripDoc::importDetXFile(QString fileName)
 	return true;
 }
 
+bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
+{
+	PHDEBUG << fileName;
+
+	using boost::property_tree::ptree;
+	ptree pt;
+
+	pt.put("detx.header.title", _title.toStdString());
+	pt.put("detx.header.videofile", _videoPath.toStdString());
+	pt.put("detx.header.videofile.<xmlattr>.timestamp", PhTimeCode::stringFromTime(_videoTimeIn, _videoTimeCodeType).toStdString());
+	pt.put("detx.header.videofile.<xmlattr>.tctype", PhTimeCode::getAverageFps(_videoTimeCodeType));
+	pt.put("detx.header.last_position.<xmlattr>.timecode", PhTimeCode::stringFromTime(lastTime, _videoTimeCodeType).toStdString());
+
+
+
+
+	foreach(const PhPeople *people,_peoples) {
+		pt.put("detx.roles.role.<xmlattr>.name", people->name().toStdString());
+		pt.put("detx.roles.role.<xmlattr>.color", people->color().toStdString());
+		pt.put("detx.roles.role.image", people->picture().toStdString());
+	}
+
+    write_xml(fileName.toStdString(), pt);
+
+	return true;
+}
+
 bool PhStripDoc::checkMosTag2(QFile &f, int level, QString expected)
 {
 	QString name = PhFileTool::readString(f, level, expected);
@@ -1263,6 +1290,7 @@ void PhStripDoc::reset()
 	qDeleteAll(_texts2);
 	_texts2.clear();
 
+	_generator = "???";
 	_title = "";
 	_translatedTitle = "";
 	_episode = "";

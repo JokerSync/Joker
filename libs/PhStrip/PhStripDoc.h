@@ -217,6 +217,14 @@ public:
 	 * @return True if the doc opened well, false otherwise
 	 */
 	bool importDetXFile(QString fileName);
+
+	/**
+	 * @brief Export the document using the DetX format
+	 * @param The file name
+	 * @return True if the doc export well, false otherwise
+	 */
+	bool exportDetXFile(QString fileName, PhTime lastTime);
+
 	/**
 	 * @brief Import a Mos file
 	 * @param fileName The path to the Mos file

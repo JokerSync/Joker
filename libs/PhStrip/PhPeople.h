@@ -23,12 +23,12 @@ public:
 	 * @param name
 	 * @param color
 	 */
-	PhPeople(QString name = "???", QString color = "#000000");
+	PhPeople(QString name = "???", QString color = "#000000", QString picture = "");
 	/**
 	 * @brief Get the name
 	 * @return a string
 	 */
-	QString name();
+	QString name() const;
 	/**
 	 * @brief Set the name
 	 * @param name a string
@@ -38,23 +38,26 @@ public:
 	 * @brief Get the color
 	 * @return a PhColor
 	 */
-	QString color();
+	QString color() const;
 	/**
 	 * @brief Set the color
 	 * @param color a PhColor
 	 */
 	void setColor(QString color);
-
-
+	/**
+	 * @brief The picture in base64 coding
+	 * @return A base64 string containing JPEG data.
+	 */
+	QString picture() const;
+	/**
+	 * @brief Set the picture date
+	 * @param picture A base64 string containing JPEG data.
+	 */
+	void setPicture(QString picture);
 private:
-	/**
-	 * Name of the people
-	 */
 	QString _name;
-	/**
-	 * Color of the people's text on the strip.
-	 */
 	QString _color;
+	QString _picture;
 
 };
 
