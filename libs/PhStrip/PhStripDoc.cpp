@@ -134,6 +134,13 @@ bool PhStripDoc::importDetXFile(QString fileName)
 				reset();
 				return false;
 			}
+
+			// Reading picture
+			if(role.elementsByTagName("image").count() != 0) {
+				QDomElement image = role.elementsByTagName("image").at(0).toElement();
+				people->setPicture(image.text());
+			}
+
 			peopleMap[id] = people;
 			_peoples.append(people);
 		}

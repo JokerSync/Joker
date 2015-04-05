@@ -246,11 +246,11 @@ go_bandit([](){
 
 					AssertThat(doc.peoples().at(0)->name().toStdString(), Equals("Bob"));
 					AssertThat(doc.peoples().at(0)->color().toStdString(), Equals("#0000ff"));
-//					AssertThat(doc.peoples().at(0)->picture().toStdString(), Equals("not base64 data, just for test"));
+					AssertThat(doc.peoples().at(0)->picture().toStdString(), Equals("not base64 data, just for test"));
 
 					AssertThat(doc.peoples().at(1)->name().toStdString(), Equals("Sue"));
 					AssertThat(doc.peoples().at(1)->color().toStdString(), Equals("#ff00ff"));
-//					AssertThat(doc.peoples().at(1)->picture().toStdString(), Equals("not base64 data, just for test"));
+					AssertThat(doc.peoples().at(1)->picture().toStdString(), Equals("bouboubou"));
 
 					// Texts
 					AssertThat(doc.texts().count(), Equals(1));
