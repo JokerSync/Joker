@@ -7,7 +7,6 @@ env:
   matrix:
   - JOB=UNCRUSTIFY
   - JOB=DOXYGEN
-    #- JOB=BUILD_SPEC_AUTOTEST
   - JOB=BUILD_SPEC_BANDIT
   - JOB=BUILD_RELEASE_JOKER
   - JOB=BUILD_RELEASE_LTCTOOL
@@ -27,14 +26,12 @@ install:
 script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
 - if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
-- if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then qmake tests/AutoTest/AutoTest.pro; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then qmake specs/AllSpecs.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then qmake app/Joker/Joker.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make -j 8; fi
-- if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then ./AutoTest; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
 - export RELEASED_PACKAGE_FILENAME=$(ls -1 $JOKER_RELEASE_PATH/Joker_$TRAVIS_TAG.dmg)
 - echo ${RELEASED_PACKAGE_FILENAME}
