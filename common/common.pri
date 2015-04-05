@@ -29,6 +29,8 @@ win32 {
 		message(Debug mode)
 	}
 	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
+
+	INCLUDEPATH += $$(BOOST_PATH)
 }
 
 # linux specific
