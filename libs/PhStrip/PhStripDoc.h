@@ -220,7 +220,8 @@ public:
 
 	/**
 	 * @brief Export the document using the DetX format
-	 * @param The file name
+	 * @param fileName The file name
+	 * @param lastTime The last position to remember
 	 * @return True if the doc export well, false otherwise
 	 */
 	bool exportDetXFile(QString fileName, PhTime lastTime);

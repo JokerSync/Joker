@@ -19,9 +19,10 @@ class PhPeople {
 
 public:
 	/**
-	 * @brief PhPeople
-	 * @param name
-	 * @param color
+	 * @brief PhPeople constructor
+	 * @param name The people name
+	 * @param color The people color
+	 * @param picture The people picture
 	 */
 	PhPeople(QString name = "???", QString color = "#000000", QString picture = "");
 	/**
