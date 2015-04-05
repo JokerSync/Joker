@@ -128,7 +128,13 @@ bool PhStripDoc::importDetXFile(QString fileName)
 			PhPeople *people = new PhPeople(role.attribute("name"), role.attribute("color"));
 
 			//Currently using id as key instead of name
-			peopleMap[role.attribute("id")] = people;
+			QString id = role.attribute("id");
+			if(id.isEmpty()) {
+				PHDEBUG << "empty id";
+				reset();
+				return false;
+			}
+			peopleMap[id] = people;
 			_peoples.append(people);
 		}
 	}
@@ -213,10 +219,25 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	pt.put("detx.header.last_position.<xmlattr>.timecode", PhTimeCode::stringFromTime(lastTime, _videoTimeCodeType).toStdString());
 
 	ptree roles;
+	QMap<const PhPeople*, QString> idMap;
 
-	foreach(const PhPeople *people,_peoples) {
+	foreach(const PhPeople *people, _peoples) {
+		// Compute an unic id:
+		QString id = computeDetXId(people->name());
+
+		while(true) {
+			if(!idMap.values().contains(id)) {
+				idMap[people] = id;
+				break;
+			}
+			else { // try to create unic id
+				id += "_";
+			}
+		}
+
 		ptree role;
 		role.put("<xmlattr>.name", people->name().toStdString());
+		role.put("<xmlattr>.id", id.toStdString());
 		role.put("<xmlattr>.color", people->color().toStdString());
 		role.put("image", people->picture().toStdString());
 
@@ -228,7 +249,7 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 
 	foreach(const PhStripText *text, texts()) {
 		ptree line;
-		line.put("<xmlattr>.role", text->people()->name().toStdString());
+		line.put("<xmlattr>.role", idMap[text->people()].toStdString());
 		line.put("<xmlattr>.track", boost::format("%d") % (int)(text->y() * 4));
 
 		ptree lipsync1;
@@ -251,7 +272,22 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 
 	write_xml(file, pt, boost::property_tree::xml_writer_make_settings<std::string>('\t', 1));
 
+	file.close();
+
 	return true;
+}
+
+QString PhStripDoc::computeDetXId(QString name)
+{
+	QString id = "";
+	foreach (QChar c, name.toLower()) {
+		if(c >= 'a' && c <= 'z')
+			id.append(c);
+		else
+			id += '_';
+	}
+
+	return id;
 }
 
 bool PhStripDoc::checkMosTag2(QFile &f, int level, QString expected)
@@ -557,7 +593,6 @@ void PhStripDoc::setModified(bool modified)
 {
 	_modified = modified;
 }
-
 
 bool PhStripDoc::importMosFile(const QString &fileName)
 {

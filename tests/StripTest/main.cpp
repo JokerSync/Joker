@@ -169,8 +169,12 @@ int main(int argc, char *argv[])
 {
 	PhStripDoc doc;
 
-	PHDEBUG << doc.importDetXFile("/Users/martin/dev/builds/StripSpec-Desktop_Qt_5_3_clang_64bit-Debug/save01.detx");
-	PHDEBUG << doc.title();
+//	PHDEBUG << doc.computeDetXId("abc");
+//	PHDEBUG << doc.computeDetXId("ABC");
+//	PHDEBUG << doc.computeDetXId("It's ok!");
+
+//	PHDEBUG << doc.importDetXFile("/Users/martin/dev/builds/StripSpec-Desktop_Qt_5_3_clang_64bit-Debug/save01.detx");
+//	PHDEBUG << doc.title();
 
 	return 0;
 

@@ -17,7 +17,7 @@ go_bandit([](){
 		PhStripDoc doc;
 
 		before_each([&](){
-			PhDebug::disable();
+			//PhDebug::disable();
 			doc.reset();
 		});
 
@@ -202,6 +202,12 @@ go_bandit([](){
 			describe("import test01.detx", [&]() {
 				before_each([&](){
 					doc.reset();
+				});
+
+				it("compute detx id", [&](){
+					AssertThat(doc.computeDetXId("abc").toStdString(), Equals("abc"));
+					AssertThat(doc.computeDetXId("ABC").toStdString(), Equals("abc"));
+					AssertThat(doc.computeDetXId("It's ok!").toStdString(), Equals("it_s_ok_"));
 				});
 
 				it("import detx without title", [&](){
