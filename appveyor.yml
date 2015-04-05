@@ -45,7 +45,7 @@ install:
   - set LTC_PATH=%CD%\libltc-1.1.4\src
   - copy qopengl.h C:\Qt\Qt5.3.2\5.3\mingw482_32\include\QtGui
   # Configure boost
-  - set BOOST_PATH C:\Libraries\boost
+  - set BOOST_PATH=C:\Libraries\boost
 build_script:
   - qmake app/Joker/Joker.pro
   - mingw32-make -j 8
