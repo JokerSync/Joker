@@ -22,6 +22,16 @@ PhTime s2t(QString string, PhTimeCodeType tcType)
 	return PhTimeCode::timeFromString(string, tcType);
 }
 
+std::string t2s25(PhTime time)
+{
+	return t2s(time, PhTimeCodeType25);
+}
+
+PhTime s2t25(QString string)
+{
+	return s2t(string, PhTimeCodeType25);
+}
+
 bool compareImage(QImage result, QImage expected, QString testName, int gap)
 {
 	bool ret = false;
