@@ -256,10 +256,45 @@ go_bandit([](){
 					AssertThat(doc.texts().count(), Equals(1));
 
 					// simple text
-					AssertThat(t2s25(doc.texts().at(0)->timeIn()), Equals("01:01:00:05"));
-					AssertThat(doc.texts().at(0)->people()->name().toStdString(), Equals("Sue"));
-					AssertThat(t2s25(doc.texts().at(0)->timeIn()), Equals("01:01:00:05"));
-					AssertThat(doc.texts().at(0)->content().toStdString(), Equals("Hello"));
+					PhStripText *text = doc.texts().at(0);
+					AssertThat(t2s25(text->timeIn()), Equals("01:01:00:05"));
+					AssertThat(text->people()->name().toStdString(), Equals("Sue"));
+					AssertThat(t2s25(text->timeOut()), Equals("01:01:00:15"));
+					AssertThat(text->content().toStdString(), Equals("Hello"));
+				});
+
+				it("export and import detx with complex lines", [&](){
+					doc.setTitle("export and import detx with complex lines");
+					PhPeople *sue = new PhPeople("Sue", "#ff00ff", "bouboubou");
+					doc.addPeople(sue);
+
+					doc.addObject(new PhStripText(s2t25("01:01:00:05"), sue, s2t25("01:01:00:15"), 0.50f, "Hello ", 0.25f));
+					doc.addObject(new PhStripText(s2t25("01:01:00:15"), sue, s2t25("01:01:01:00"), 0.50f, "world", 0.25f));
+
+					AssertThat(doc.exportDetXFile("save02.detx", s2t25("01:01:01:01")), IsTrue());
+
+					doc.reset();
+
+					AssertThat(doc.importDetXFile("save02.detx"), IsTrue());
+
+					AssertThat(doc.filePath().toStdString(), Equals("save02.detx"));
+					AssertThat(doc.title().toStdString(), Equals("export and import detx with complex lines"));
+
+					// Texts
+					AssertThat(doc.texts().count(), Equals(2));
+
+					// double text
+					PhStripText *text = doc.texts().at(0);
+					AssertThat(t2s25(text->timeIn()), Equals("01:01:00:05"));
+					AssertThat(text->people()->name().toStdString(), Equals("Sue"));
+					AssertThat(t2s25(text->timeOut()), Equals("01:01:00:15"));
+					AssertThat(text->content().toStdString(), Equals("Hello "));
+
+					text = doc.texts().at(1);
+					AssertThat(t2s25(text->timeIn()), Equals("01:01:00:15"));
+					AssertThat(text->people()->name().toStdString(), Equals("Sue"));
+					AssertThat(t2s25(text->timeOut()), Equals("01:01:01:00"));
+					AssertThat(text->content().toStdString(), Equals("world"));
 				});
 			});
 		});
