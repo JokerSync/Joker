@@ -36,7 +36,7 @@ public:
 	 * @brief The time in
 	 * @return A PhTime
 	 */
-	PhTime timeIn();
+	PhTime timeIn() const;
 
 	/**
 	 * @brief Compare two strip object based on the time in

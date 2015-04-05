@@ -8,12 +8,12 @@
 
 
 
-PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, float track, QString content, float height) :
-	PhStripPeopleObject(timeIn, people, timeOut, track, height), _content(content)
+PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, float y, QString content, float height) :
+	PhStripPeopleObject(timeIn, people, timeOut, y, height), _content(content)
 {
 }
 
-QString PhStripText::content()
+QString PhStripText::content() const
 {
 	return _content;
 }
