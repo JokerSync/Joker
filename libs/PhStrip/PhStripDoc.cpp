@@ -224,6 +224,29 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	}
 	pt.add_child("detx.roles", roles);
 
+	ptree lines;
+
+	foreach(const PhStripText *text, texts()) {
+		ptree line;
+		line.put("<xmlattr>.role", text->people()->name().toStdString());
+		line.put("<xmlattr>.track", boost::format("%d") % (int)(text->y() * 4));
+
+		ptree lipsync1;
+		lipsync1.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeIn(), _videoTimeCodeType).toStdString());
+		lipsync1.put("<xmlattr>.type", "in_open");
+		line.push_back(std::make_pair("lipsync", lipsync1));
+
+		line.put("text", text->content().toStdString());
+
+		ptree lipsync2;
+		lipsync2.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
+		lipsync2.put("<xmlattr>.type", "out_open");
+		line.push_back(std::make_pair("lipsync", lipsync2));
+
+		lines.push_back(std::make_pair("line", line));
+	}
+	pt.add_child("detx.body", lines);
+
 	std::ofstream file(fileName.toStdString());
 
 	write_xml(file, pt, boost::property_tree::xml_writer_make_settings<std::string>('\t', 1));

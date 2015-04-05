@@ -212,11 +212,15 @@ go_bandit([](){
 				it("export and import detx", [&](){
 					doc.setTitle("Title test for detx");
 					doc.setVideoFilePath("test01.mov");
-					doc.setVideoTimeIn(s2t("01:01:00:00", PhTimeCodeType25), PhTimeCodeType25);
-					doc.addPeople(new PhPeople("Bob", "#0000ff", "not base64 data, just for test"));
-					doc.addPeople(new PhPeople("Sue", "#ff00ff", "bouboubou"));
+					doc.setVideoTimeIn(s2t25("01:01:00:00"), PhTimeCodeType25);
+					PhPeople *bob = new PhPeople("Bob", "#0000ff", "not base64 data, just for test");
+					doc.addPeople(bob);
+					PhPeople *sue = new PhPeople("Sue", "#ff00ff", "bouboubou");
+					doc.addPeople(sue);
 
-					AssertThat(doc.exportDetXFile("save01.detx", s2t("01:01:01:01", PhTimeCodeType25)), IsTrue());
+					doc.addObject(new PhStripText(s2t25("01:01:00:05"), sue, s2t25("01:01:00:15"), 0.50f, "Hello", 0.25f));
+
+					AssertThat(doc.exportDetXFile("save01.detx", s2t25("01:01:01:01")), IsTrue());
 
 					doc.reset();
 
@@ -226,12 +230,12 @@ go_bandit([](){
 					AssertThat(doc.title().toStdString(), Equals("Title test for detx"));
 					AssertThat(doc.videoFilePath().toStdString(), Equals("test01.mov"));
 					AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
-					AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:01:00:00"));
+					AssertThat(t2s25(doc.videoTimeIn()), Equals("01:01:00:00"));
 					AssertThat(doc.forceRatio169(), IsFalse());
 					AssertThat(doc.videoDeinterlace(), IsFalse());
-					AssertThat(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:01:01:01"));
+					AssertThat(t2s25(doc.lastTime()), Equals("01:01:01:01"));
 
-					// test people
+					// Peoples
 					AssertThat(doc.peoples().count(), Equals(2));
 
 					AssertThat(doc.peoples().at(0)->name().toStdString(), Equals("Bob"));
@@ -241,6 +245,15 @@ go_bandit([](){
 					AssertThat(doc.peoples().at(1)->name().toStdString(), Equals("Sue"));
 					AssertThat(doc.peoples().at(1)->color().toStdString(), Equals("#ff00ff"));
 //					AssertThat(doc.peoples().at(1)->picture().toStdString(), Equals("not base64 data, just for test"));
+
+					// Texts
+					AssertThat(doc.texts().count(), Equals(1));
+
+					// simple text
+					AssertThat(t2s25(doc.texts().at(0)->timeIn()), Equals("01:01:00:05"));
+					AssertThat(doc.texts().at(0)->people()->name().toStdString(), Equals("Sue"));
+					AssertThat(t2s25(doc.texts().at(0)->timeIn()), Equals("01:01:00:05"));
+					AssertThat(doc.texts().at(0)->content().toStdString(), Equals("Hello"));
 				});
 			});
 		});

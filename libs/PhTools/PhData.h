@@ -23,5 +23,6 @@
 #include <QSettings>
 #include <QMetaEnum>
 
+#include <boost/format.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
