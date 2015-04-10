@@ -716,9 +716,9 @@ void JokerWindow::on_actionSave_triggered()
 {
 	QString fileName = _settings->currentDocument();
 	QFileInfo info(fileName);
-	if(!info.exists() || (info.suffix() != "joker"))
+	if(!info.exists() || (info.suffix() != "detx"))
 		on_actionSave_as_triggered();
-	else if(_doc->saveStripFile(fileName, currentTime()))
+	else if(_doc->exportDetXFile(fileName, currentTime()))
 		_doc->setModified(false);
 	else
 		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
@@ -735,11 +735,11 @@ void JokerWindow::on_actionSave_as_triggered()
 		fileName = lastFolder;
 	else {
 		QFileInfo info(fileName);
-		if(info.suffix() != "joker")
-			fileName = lastFolder + "/" + info.completeBaseName() + ".joker";
+		if(info.suffix() != "detx")
+			fileName = lastFolder + "/" + info.completeBaseName() + ".detx";
 	}
 
-	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.joker");
+	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.detx");
 	if(fileName != "") {
 		if(_doc->saveStripFile(fileName, currentTime())) {
 			_doc->setModified(false);
