@@ -215,7 +215,7 @@ go_bandit([](){
 					AssertThat(doc.title().toStdString(), Equals("notitle"));
 				});
 
-				it("export and import detx", [&](){
+				it("export and import basic detx", [&](){
 					doc.setTitle("Title test for detx");
 					doc.setVideoFilePath("test01.mov");
 					doc.setVideoTimeIn(s2t25("01:01:00:00"), PhTimeCodeType25);
@@ -223,6 +223,10 @@ go_bandit([](){
 					doc.addPeople(bob);
 					PhPeople *sue = new PhPeople("Sue", "#ff00ff", "bouboubou");
 					doc.addPeople(sue);
+
+					doc.addObject(new PhStripLoop(s2t25("01:01:00:00"), "1"));
+
+					doc.addObject(new PhStripCut(s2t25("01:01:00:02"), PhStripCut::Simple));
 
 					doc.addObject(new PhStripText(s2t25("01:01:00:05"), sue, s2t25("01:01:00:15"), 0.50f, "Hello", 0.25f));
 
@@ -251,6 +255,20 @@ go_bandit([](){
 					AssertThat(doc.peoples().at(1)->name().toStdString(), Equals("Sue"));
 					AssertThat(doc.peoples().at(1)->color().toStdString(), Equals("#ff00ff"));
 					AssertThat(doc.peoples().at(1)->picture().toStdString(), Equals("bouboubou"));
+
+					// Loops
+					AssertThat(doc.loops().count(), Equals(1));
+
+					PhStripLoop *loop = doc.loops().at(0);
+					AssertThat(t2s25(loop->timeIn()), Equals("01:01:00:00"));
+					AssertThat(loop->label().toStdString(), Equals("1"));
+
+					// Cuts
+					AssertThat(doc.cuts().count(), Equals(1));
+
+					PhStripCut *cut = doc.cuts().at(0);
+					AssertThat(t2s25(cut->timeIn()), Equals("01:01:00:02"));
+					AssertThat(cut->type(), Equals(PhStripCut::Simple));
 
 					// Texts
 					AssertThat(doc.texts().count(), Equals(1));
