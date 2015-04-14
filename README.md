@@ -64,17 +64,15 @@ Just run the *bootstrap* script:
 
 #### Manual install
 
-You can install all the dependencies via __brew__:
+You can install most of the dependencies via __brew__:
 
-    brew install sdl2 sdl2_ttf sdl2_image libav portaudio libltc
+    brew install libav portaudio libltc
 
     brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass --with-libcaca --with-libvo-aacenc --with-libvorbis --with-libvpx --with-openjpeg --with-openssl --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-speex --with-theora --with-tools
+    
+The SDL libraries can be installed with a specific script:
 
-
-Then as __macdeployqt__ doesn't work well with brew, you'll have to change the libs permissions
-
-    find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod 644 {} \;
-
+    ./script/install_sdl.sh
 
 ### The Leap SDK _(optionnal)_
 
