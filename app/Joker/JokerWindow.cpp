@@ -794,6 +794,7 @@ void JokerWindow::on_actionNew_triggered()
 {
 	_doc->reset();
 	on_actionClose_video_triggered();
+	this->resetDocument();
 }
 
 void JokerWindow::on_actionClose_video_triggered()
