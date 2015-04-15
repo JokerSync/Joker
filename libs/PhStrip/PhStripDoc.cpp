@@ -295,7 +295,8 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 
 	std::ofstream file(fileName.toStdString());
 
-	write_xml(file, ptDetX, boost::property_tree::xml_writer_make_settings<std::string>('\t', 1));
+	boost::property_tree::xml_writer_settings<std::string> settings = boost::property_tree::xml_writer_make_settings<std::string>('\t', 1);
+	boost::property_tree::write_xml(file, ptDetX, settings);
 
 	file.close();
 
