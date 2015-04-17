@@ -216,8 +216,7 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 {
 	PHDEBUG << fileName;
 
-	using boost::property_tree::ptree;
-	ptree ptDetX;
+	pt::ptree ptDetX;
 
 	ptDetX.put("detx.header.title", _title.toStdString());
 	ptDetX.put("detx.header.videofile", _videoPath.toStdString());
