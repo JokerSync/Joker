@@ -193,7 +193,7 @@ void PhVideoEngine::close()
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
 	if(_videoStream) {
-		PhTime delay = static_cast<PhTime>(_settings->screenDelay() * _clock.rate() * 24000.);
+		PhTime delay = static_cast<PhTime>(_settings->screenDelay() * _clock.rate() * 24);
 		decodeFrame(_clock.time() + delay);
 	}
 
