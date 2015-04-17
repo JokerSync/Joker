@@ -4,8 +4,7 @@
 #
 
 unix {
-	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lportaudio
+	LIBS += -lportaudio
 }
 
 win32 {

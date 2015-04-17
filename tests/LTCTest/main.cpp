@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include "ltc.h"
+#include <ltc.h>
 
 #include "PhTools/PhDebug.h"
 
