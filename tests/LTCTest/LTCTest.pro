@@ -3,29 +3,21 @@
 # Project created by QtCreator 2013-12-16T16:13:48
 #
 #-------------------------------------------------
-cache()
-
-QT       += core
-QT       -= gui
 
 TARGET = LTCTest
 CONFIG   += console
 CONFIG   -= app_bundle
 
-TEMPLATE = app
-
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
 
-INCLUDEPATH += $${TOP_ROOT}/libs
-include($${TOP_ROOT}/libs/PhTools/PhTools.pri)
+include($$TOP_ROOT/libs/PhTools/PhTools.pri)
 
 SOURCES += main.cpp
 
 unix {
-	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lltc -lm
+	LIBS += -lltc -lm
 }
 
 win32 {
@@ -44,5 +36,4 @@ win32 {
 		$$(LTC_PATH)\encoder.c \
 		$$(LTC_PATH)\decoder.c \
 		$$(LTC_PATH)\timecode.c
-
 }

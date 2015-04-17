@@ -43,7 +43,7 @@ linux {
 
 # MacOS specific
 mac {
-	QMAKE_MAC_SDK = macosx10.9
+#	QMAKE_MAC_SDK = macosx10.9
 	CS = ;
 	RESOURCES_PATH = $${TARGET}.app/Contents/Resources
 	DEFINES += PATH_TO_RESSOURCES=\\\"/../Resources/\\\"
