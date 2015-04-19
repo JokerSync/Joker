@@ -12,7 +12,7 @@
 
 #include "VideoSpecSettings.h"
 
-#define FRAME_WAIT_TIME 40
+#define FRAME_WAIT_TIME 80
 
 #include "CommonSpec.h"
 
@@ -81,52 +81,37 @@ go_bandit([](){
 			});
 
 			it("go_to_01", [&](){
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setFrame(20, PhTimeCodeType25);
 
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_020.bmp"), Equals(0));
 
 				engine->clock()->setFrame(100, PhTimeCodeType25);
 
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_100.bmp"), Equals(0));
 
 				engine->clock()->setFrame(75, PhTimeCodeType25);
 
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_075.bmp"), Equals(0));
-
-				engine->clock()->setFrame(199, PhTimeCodeType25);
-
-				QThread::msleep(FRAME_WAIT_TIME);
-				AssertThat(view->compare("interlace_199.bmp"), Equals(0));
-
-				engine->clock()->setFrame(200, PhTimeCodeType25);
-
-				QThread::msleep(FRAME_WAIT_TIME);
-				AssertThat(view->compare("interlace_199.bmp"), Equals(0));
-
-				engine->clock()->setFrame(-1, PhTimeCodeType25);
-
-				QThread::msleep(FRAME_WAIT_TIME);
-				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 			});
 
 			it("go_to_02", [&](){
 				engine->clock()->setFrame(100, PhTimeCodeType25);
 
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_100.bmp"), Equals(0));
 
 				engine->clock()->setFrame(99, PhTimeCodeType25);
 
 				PHDEBUG << "second paint";
 
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_099.bmp"), Equals(0));
 
 				for(int i = 75; i >= 50; i--) {
@@ -134,7 +119,7 @@ go_bandit([](){
 
 					qDebug() << "Set frame :" << i;
 
-					QThread::msleep(FRAME_WAIT_TIME);
+					QTest::qWait(FRAME_WAIT_TIME);
 					QString name = QString("interlace_%1.bmp").arg(i, 3, 10, QChar('0'));
 					AssertThat(view->compare(name), Equals(0));
 				}
@@ -155,7 +140,7 @@ go_bandit([](){
 					PhFrame frame = list[i];
 					engine->clock()->setFrame(frame, PhTimeCodeType25);
 
-					QThread::msleep(FRAME_WAIT_TIME);
+					QTest::qWait(FRAME_WAIT_TIME);
 					QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
 					AssertThat(view->compare(name), Equals(0));
 				}
@@ -176,53 +161,54 @@ go_bandit([](){
 			});
 
 			it("play", [&](){
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setRate(1);
 				engine->clock()->elapse(960); // 1 frame at 25 fps
 
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_001.bmp"), Equals(0));
 
 
 				// Play 1 second
 				for(int i = 0; i < 25; i++) {
 					engine->clock()->elapse(960); // 1 frame at 25 fps
-					QThread::msleep(FRAME_WAIT_TIME);
+					QTest::qWait(FRAME_WAIT_TIME);
 				}
 
 				AssertThat(view->compare("interlace_026.bmp"), Equals(0));
 
 				engine->clock()->setRate(-1);
 				engine->clock()->elapse(960); // 1 frame at 25 fps
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_025.bmp"), Equals(0));
 
 				// Play 1 second
 				for(int i = 24; i >= 0; i--) {
 					engine->clock()->elapse(960); // 1 frame at 25 fps
-					QThread::msleep(FRAME_WAIT_TIME);
+					QTest::qWait(FRAME_WAIT_TIME);
 				}
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 			});
 
 			it("deinterlace", [&](){
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				//Change mode to deinterlaced
 				engine->setDeinterlace(true);
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("deinterlace_000.bmp"), Equals(0));
 
 				//Move one picture forward
 				engine->clock()->setFrame(1, PhTimeCodeType25);
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("deinterlace_001.bmp"), Equals(0));
 
 				// Go back to interlaced mode
 				engine->setDeinterlace(false);
-				QThread::msleep(FRAME_WAIT_TIME);
+				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_001.bmp"), Equals(0));
 			});
 
