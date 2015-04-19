@@ -9,6 +9,7 @@
 #include "PhTools/PhDebug.h"
 
 #include "PhVideoEngine.h"
+#include "PhVideoDecoder.h"
 
 PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_settings(settings),
@@ -17,34 +18,41 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_timeIn(0),
 	_formatContext(NULL),
 	_videoStream(NULL),
-	_videoFrame(NULL),
-	_swsContext(NULL),
 	_currentTime(PHTIMEMIN),
 	_useAudio(false),
 	_audioStream(NULL),
 	_audioFrame(NULL),
-	_deinterlace(false),
-	_rgb(NULL)
+	_deinterlace(false)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
 	avcodec_register_all();
+
+	// initialize the decoder that operates in a separate thread
+	PhVideoDecoder *decoder = new PhVideoDecoder();
+	decoder->moveToThread(&_decoderThread);
+	connect(&_decoderThread, &QThread::finished, decoder, &QObject::deleteLater);
+	connect(this, &PhVideoEngine::decodeFrame, decoder, &PhVideoDecoder::decodeFrame);
+	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
+	connect(this, &PhVideoEngine::closeInDecoder, decoder, &PhVideoDecoder::close);
+	connect(decoder, &PhVideoDecoder::frameAvailable, this, &PhVideoEngine::frameAvailable);
+	_decoderThread.start();
 }
 
 bool PhVideoEngine::ready()
 {
-	return (_formatContext && _videoStream && _videoFrame);
+	return (_formatContext && _videoStream);
 }
 
 void PhVideoEngine::setDeinterlace(bool deinterlace)
 {
 	PHDEBUG << deinterlace;
-	_deinterlace = deinterlace;
-	if(_rgb) {
-		delete[] _rgb;
-		_rgb = NULL;
+
+	if (deinterlace != _deinterlace) {
+		_deinterlace = deinterlace;
+		// request the frame again to apply the deinterlace settings
+		requestFrame(_currentTime);
 	}
-	_currentTime = PHTIMEMIN;
 }
 
 bool PhVideoEngine::bilinearFiltering()
@@ -60,7 +68,11 @@ void PhVideoEngine::setBilinearFiltering(bool bilinear)
 bool PhVideoEngine::open(QString fileName)
 {
 	close();
+
 	PHDEBUG << fileName;
+
+	// tell the decoder thread to open the file too
+	emit openInDecoder(fileName);
 
 	_clock.setTime(0);
 	_clock.setRate(0);
@@ -126,8 +138,6 @@ bool PhVideoEngine::open(QString fileName)
 		return false;
 	}
 
-	_videoFrame = av_frame_alloc();
-
 	PHDEBUG << "length:" << this->length();
 	PHDEBUG << "fps:" << this->framePerSecond();
 	PHDEBUG << "timebase:" << _videoStream->time_base.num << "/" << _videoStream->time_base.den;
@@ -150,7 +160,6 @@ bool PhVideoEngine::open(QString fileName)
 		}
 	}
 
-	decodeFrame(0);
 	_fileName = fileName;
 
 	return true;
@@ -159,14 +168,18 @@ bool PhVideoEngine::open(QString fileName)
 void PhVideoEngine::close()
 {
 	PHDEBUG << _fileName;
-	if(_rgb) {
-		delete[] _rgb;
-		_rgb = NULL;
-	}
 
-	if (_swsContext) {
-		sws_freeContext(_swsContext);
-		_swsContext = NULL;
+	// tell the decoder thread to close the file too
+	emit closeInDecoder();
+
+	// delete all unused buffers
+	// Those that are marked as used should not be deleted for now since the decoder thread may be
+	// operating on them.
+	while (_bufferUsageList.contains(false)) {
+		int unusedBufferIndex = _bufferUsageList.indexOf(false);
+		delete[] _rgbBufferList.takeAt(unusedBufferIndex);
+		_bufferSizeList.removeAt(unusedBufferIndex);
+		_bufferUsageList.removeAt(unusedBufferIndex);
 	}
 
 	if(_formatContext) {
@@ -176,11 +189,6 @@ void PhVideoEngine::close()
 		if(_audioStream)
 			avcodec_close(_audioStream->codec);
 		avformat_close_input(&_formatContext);
-	}
-
-	if (_videoFrame) {
-		av_frame_free(&_videoFrame);
-		_videoFrame = NULL;
 	}
 
 	_timeIn = 0;
@@ -194,17 +202,62 @@ void PhVideoEngine::close()
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
-	if(_videoStream) {
-		PhTime delay = static_cast<PhTime>(_settings->screenDelay() * _clock.rate() * 24);
-		decodeFrame(_clock.time() + delay);
+	PhTime delay = static_cast<PhTime>(_settings->screenDelay() * _clock.rate() * 24.);
+	PhTime time = _clock.time() + delay;
+
+	// If the time corresponds to a different frame than the one we currently have,
+	// request that frame to the decoder thread by sending a signal.
+	// The engine manages the frame buffers.
+	if(!isFrameAvailable(time)) {
+		requestFrame(time);
 	}
 
+	// draw whatever frame we currently have
 	if(_settings->useNativeVideoSize())
 		_videoRect.setRect(x, y, this->width(), this->height());
 	else
 		_videoRect.setRect(x, y, w, h);
 	_videoRect.setZ(-10);
 	_videoRect.draw();
+}
+
+void PhVideoEngine::requestFrame(PhTime time)
+{
+	int frameHeight = _videoStream->codec->height;
+	if(_deinterlace)
+		frameHeight = frameHeight / 2;
+	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, _videoStream->codec->width, frameHeight);
+
+	// find an available buffer
+	uint8_t * rgb;
+	int bufferIndex = _bufferUsageList.indexOf(false);
+
+	if(bufferIndex != -1) {
+		// we can reuse an existing available buffer
+		rgb = _rgbBufferList.at(bufferIndex);
+
+		if (_bufferSizeList.at(bufferIndex) != bufferSize) {
+			// the size has changed, update the buffer
+			delete[] rgb;
+			rgb = new uint8_t[bufferSize];
+			_rgbBufferList.replace(bufferIndex, rgb);
+			_bufferSizeList.replace(bufferIndex, bufferSize);
+		}
+	}
+	else {
+		// no buffer is currently available, we need a new one
+		rgb = new uint8_t[bufferSize];
+		_rgbBufferList.append(rgb);
+		_bufferUsageList.append(true);
+		_bufferSizeList.append(bufferSize);
+	}
+
+	// ask the frame to the decoder.
+	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
+	emit decodeFrame(time - _timeIn, rgb, _deinterlace);
+
+	// update current time so that we do not request the frame again
+	_currentTime = time;
 }
 
 void PhVideoEngine::setTimeIn(PhTime timeIn)
@@ -223,6 +276,16 @@ PhTime PhVideoEngine::length()
 PhVideoEngine::~PhVideoEngine()
 {
 	close();
+
+	_decoderThread.quit();
+	_decoderThread.wait();
+
+	// the decoder thread has exited, so all the buffers can be cleaned.
+	while (!_rgbBufferList.isEmpty())
+		delete[] _rgbBufferList.takeFirst();
+
+	_bufferSizeList.clear();
+	_bufferUsageList.clear();
 }
 
 int PhVideoEngine::width()
@@ -260,133 +323,48 @@ QString PhVideoEngine::codecName()
 	return "";
 }
 
-bool PhVideoEngine::decodeFrame(PhTime time)
+bool PhVideoEngine::isFrameAvailable(PhTime time)
 {
 	if(!ready()) {
 		PHDEBUG << "not ready";
 		return false;
 	}
 
-	PhTime tpf = PhTimeCode::timePerFrame(_tcType);
-
+	// clip to stream boundaries
 	if(time < _timeIn)
 		time = _timeIn;
 	if (time >= this->timeOut())
 		time = this->timeOut() - tpf;
 
+	if (_currentTime == PHTIMEMIN) {
+		return false;
+	}
+
 	bool result = false;
 
 	// Stay with the same frame if the time has changed less than the time between two frames
-	if ((time >= _currentTime) && (time < _currentTime + tpf))
+	// Note that av_seek_frame will seek to the _closest_ frame, sometimes a little bit in the "future",
+	// so it is necessary to use a little margin for the second comparison, otherwise a seek may
+	// be performed on each call to decodeFrame
+	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
+	    && (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2)) {
 		result = true;
-	else {
-		// we need to perform a frame seek if the requested frame is not the next frame in the stream
-		if((time >= _currentTime + 2 * tpf)
-		   || (time < _currentTime)) {
-			int flags = AVSEEK_FLAG_ANY;
-			int64_t timestamp = PhTime_to_AVTimestamp(time - _timeIn - (time % tpf)); // remove mid-frame timing
-			PHDEBUG << "seek:" << time << " " << _currentTime << " " << _timeIn << " " << timestamp;
-			av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
-		}
-
-		AVPacket packet;
-
-		bool lookingForVideoFrame = true;
-		while(lookingForVideoFrame) {
-			int error = av_read_frame(_formatContext, &packet);
-			switch(error) {
-			case 0:
-				if(packet.stream_index == _videoStream->index) {
-					int frameFinished = 0;
-					avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
-					if(frameFinished) {
-
-						int frameHeight = _videoFrame->height;
-						if(_deinterlace)
-							frameHeight = _videoFrame->height / 2;
-
-						// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
-						// we replace its with the new ones recommended by LibAv
-						// in order to get ride of the warnings
-						AVPixelFormat pixFormat;
-						switch (_videoStream->codec->pix_fmt) {
-						case AV_PIX_FMT_YUVJ420P:
-							pixFormat = AV_PIX_FMT_YUV420P;
-							break;
-						case AV_PIX_FMT_YUVJ422P:
-							pixFormat = AV_PIX_FMT_YUV422P;
-							break;
-						case AV_PIX_FMT_YUVJ444P:
-							pixFormat = AV_PIX_FMT_YUV444P;
-							break;
-						case AV_PIX_FMT_YUVJ440P:
-							pixFormat = AV_PIX_FMT_YUV440P;
-							break;
-						default:
-							pixFormat = _videoStream->codec->pix_fmt;
-							break;
-						}
-						/* Note: we output the frames in AV_PIX_FMT_BGRA rather than AV_PIX_FMT_RGB24,
-						 * because this format is native to most video cards and will avoid a conversion
-						 * in the video driver */
-						/* sws_getCachedContext will check if the context is valid for the given parameters. It the context is not valid,
-						 * it will be freed and a new one will be allocated. */
-						_swsContext = sws_getCachedContext(_swsContext, _videoFrame->width, _videoStream->codec->height, pixFormat,
-						                                   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
-						                                   SWS_POINT, NULL, NULL, NULL);
-
-						if(_rgb == NULL)
-							_rgb = new uint8_t[avpicture_get_size(AV_PIX_FMT_BGRA, _videoFrame->width, frameHeight)];
-						int linesize = _videoFrame->width * 4;
-						if (0 <= sws_scale(_swsContext, (const uint8_t * const *) _videoFrame->data,
-						                   _videoFrame->linesize, 0, _videoStream->codec->height, &_rgb,
-						                   &linesize)) {
-
-							_videoRect.createTextureFromBGRABuffer(_rgb, _videoFrame->width, frameHeight);
-
-
-							_videoFrameTickCounter.tick();
-							result = true;
-						}
-						lookingForVideoFrame = false;
-					} // if frame decode is not finished, let's read another packet.
-				}
-				else if(_audioStream && (packet.stream_index == _audioStream->index)) {
-					int ok = 0;
-					avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
-					if(ok) {
-						PHDEBUG << "audio:" << _audioFrame->nb_samples;
-					}
-				}
-				break;
-			case AVERROR_INVALIDDATA:
-			case AVERROR_EOF:
-			default:
-				{
-					char errorStr[256];
-					av_strerror(error, errorStr, 256);
-					PHDEBUG << time << "error:" << errorStr;
-					lookingForVideoFrame = false;
-					break;
-				}
-			}
-
-			// update the current position of the engine
-			// (Note that it is best not to do use '_currentTime = time' here, because the seeking operation may
-			// not be 100% accurate: the actual time may be different from the requested time. So a time drift
-			// could appear.)
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55, 28, 1)
-			_currentTime = time;
-#else
-			_currentTime = _timeIn + AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
-#endif
-
-			//Avoid memory leak
-			av_free_packet(&packet);
-		}
 	}
 
 	return result;
+}
+
+void PhVideoEngine::frameAvailable(PhTime time, uint8_t *rgb, int width, int height)
+{
+	// This slot is connected to the decoder thread.
+	// We receive here asynchronously the frame freshly decoded.
+
+	// mark that this buffer is now available
+	int bufferIndex = _rgbBufferList.indexOf(rgb);
+	_bufferUsageList.replace(bufferIndex, false);
+
+	_videoRect.createTextureFromBGRABuffer(rgb, width, height);
+	_videoFrameTickCounter.tick();
 }
 
 int64_t PhVideoEngine::PhTime_to_AVTimestamp(PhTime time)
