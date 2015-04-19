@@ -77,6 +77,7 @@ private:
 	bool ready();
 	double framePerSecond();
 	PhTime length();
+	void frameToRgb(uint8_t *rgb, bool deinterlace);
 
 	int64_t PhTime_to_AVTimestamp(PhTime time);
 	PhTime AVTimestamp_to_PhTime(int64_t timestamp);

@@ -166,6 +166,55 @@ double PhVideoDecoder::framePerSecond()
 	return result;
 }
 
+void PhVideoDecoder::frameToRgb(uint8_t *rgb, bool deinterlace)
+{
+	int frameHeight = _videoFrame->height;
+	if(deinterlace)
+		frameHeight = _videoFrame->height / 2;
+
+	// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
+	// we replace its with the new ones recommended by LibAv
+	// in order to get ride of the warnings
+	AVPixelFormat pixFormat;
+	switch (_videoStream->codec->pix_fmt) {
+	case AV_PIX_FMT_YUVJ420P:
+		pixFormat = AV_PIX_FMT_YUV420P;
+		break;
+	case AV_PIX_FMT_YUVJ422P:
+		pixFormat = AV_PIX_FMT_YUV422P;
+		break;
+	case AV_PIX_FMT_YUVJ444P:
+		pixFormat = AV_PIX_FMT_YUV444P;
+		break;
+	case AV_PIX_FMT_YUVJ440P:
+		pixFormat = AV_PIX_FMT_YUV440P;
+	default:
+		pixFormat = _videoStream->codec->pix_fmt;
+		break;
+	}
+
+	/* Note: we output the frames in AV_PIX_FMT_BGRA rather than AV_PIX_FMT_RGB24,
+	 * because this format is native to most video cards and will avoid a conversion
+	 * in the video driver */
+	/* sws_getCachedContext will check if the context is valid for the given parameters. It the context is not valid,
+	 * it will be freed and a new one will be allocated. */
+	_swsContext = sws_getCachedContext(_swsContext, _videoFrame->width, _videoStream->codec->height, pixFormat,
+	                                   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
+	                                   SWS_POINT, NULL, NULL, NULL);
+
+
+	int linesize = _videoFrame->width * 4;
+	if (0 <= sws_scale(_swsContext, (const uint8_t * const *) _videoFrame->data,
+	                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
+	                   &linesize)) {
+
+		PhTime time = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
+
+		// tell the video engine that we have finished decoding!
+		emit frameAvailable(time, rgb, _videoFrame->width, frameHeight);
+	}
+}
+
 void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 {
 	if(!ready()) {
@@ -185,6 +234,7 @@ void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 	// be performed on each call to decodeFrame
 	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
 	    && (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2)) {
+		frameToRgb(rgb, deinterlace);
 		return;
 	}
 
@@ -208,51 +258,7 @@ void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 				int frameFinished = 0;
 				avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
 				if(frameFinished) {
-
-					int frameHeight = _videoFrame->height;
-					if(deinterlace)
-						frameHeight = _videoFrame->height / 2;
-
-					// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
-					// we replace its with the new ones recommended by LibAv
-					// in order to get ride of the warnings
-					AVPixelFormat pixFormat;
-					switch (_videoStream->codec->pix_fmt) {
-					case AV_PIX_FMT_YUVJ420P:
-						pixFormat = AV_PIX_FMT_YUV420P;
-						break;
-					case AV_PIX_FMT_YUVJ422P:
-						pixFormat = AV_PIX_FMT_YUV422P;
-						break;
-					case AV_PIX_FMT_YUVJ444P:
-						pixFormat = AV_PIX_FMT_YUV444P;
-						break;
-					case AV_PIX_FMT_YUVJ440P:
-						pixFormat = AV_PIX_FMT_YUV440P;
-					default:
-						pixFormat = _videoStream->codec->pix_fmt;
-						break;
-					}
-					/* Note: we output the frames in AV_PIX_FMT_BGRA rather than AV_PIX_FMT_RGB24,
-					 * because this format is native to most video cards and will avoid a conversion
-					 * in the video driver */
-					/* sws_getCachedContext will check if the context is valid for the given parameters. It the context is not valid,
-					 * it will be freed and a new one will be allocated. */
-					_swsContext = sws_getCachedContext(_swsContext, _videoFrame->width, _videoStream->codec->height, pixFormat,
-					                                   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
-					                                   SWS_POINT, NULL, NULL, NULL);
-
-
-					int linesize = _videoFrame->width * 4;
-					if (0 <= sws_scale(_swsContext, (const uint8_t * const *) _videoFrame->data,
-					                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
-					                   &linesize)) {
-
-						PhTime time = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
-
-						// tell the video engine that we have finished decoding!
-						emit frameAvailable(time, rgb, _videoFrame->width, frameHeight);
-					}
+					frameToRgb(rgb, deinterlace);
 					lookingForVideoFrame = false;
 				} // if frame decode is not finished, let's read another packet.
 			}
