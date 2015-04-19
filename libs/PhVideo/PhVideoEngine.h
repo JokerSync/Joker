@@ -18,7 +18,6 @@ extern "C" {
 #include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
 #include <libavcodec/avcodec.h>
-#include <libswscale/swscale.h>
 }
 
 #include "PhSync/PhClock.h"
@@ -180,6 +179,23 @@ public:
 	 */
 	void drawVideo(int x, int y, int w, int h);
 
+	/**
+	 * @brief whether the time corresponds to the frame that we currently have (or that we have requested)
+	 * @param time the current time
+	 * @return True if the frame is available
+	 */
+	bool isFrameAvailable(PhTime time);
+
+public slots:
+	/**
+	 * @brief Handle a frame that has just been decoded
+	 * @param time the time of the decoded frame (with origin at the start of video file)
+	 * @param rgb the buffer where the decoded frame is
+	 * @param width the width of the frame
+	 * @param height the height of the frame
+	 */
+	void frameAvailable(PhTime time, uint8_t *rgb, int width, int height);
+
 signals:
 	/**
 	 * @brief Signal sent upon a different timecode type message
@@ -187,8 +203,27 @@ signals:
 	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 
+	/**
+	 * @brief Signal sent to ask the decoder to decode a video frame
+	 * @param time the time of the requested frame (with origin at the start of video file)
+	 * @param rgb the buffer where to output the decoded frame
+	 * @param deinterlace whether the frame is to be deinterlaced
+	 */
+	void decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace);
+
+	/**
+	 * @brief Signal sent to the decoder to open a video file
+	 * @param fileName A video file path
+	 */
+	void openInDecoder(QString fileName);
+
+	/**
+	 * @brief Signal sent to the decoder to close the file
+	 */
+	void closeInDecoder();
+
 private:
-	bool decodeFrame(PhTime time);
+	void requestFrame(PhTime time);
 	int64_t PhTime_to_AVTimestamp(PhTime time);
 	PhTime AVTimestamp_to_PhTime(int64_t timestamp);
 
@@ -200,8 +235,6 @@ private:
 
 	AVFormatContext * _formatContext;
 	AVStream *_videoStream;
-	AVFrame * _videoFrame;
-	struct SwsContext * _swsContext;
 	PhGraphicTexturedRect _videoRect;
 	PhTime _currentTime;
 
@@ -213,7 +246,11 @@ private:
 
 	bool _deinterlace;
 
-	uint8_t * _rgb;
+	QList<uint8_t *> _rgbBufferList;
+	QList<bool> _bufferUsageList;
+	QList<int> _bufferSizeList;
+
+	QThread _decoderThread;
 };
 
 #endif // PHVIDEOENGINE_H
