@@ -190,11 +190,11 @@ public slots:
 	/**
 	 * @brief Handle a frame that has just been decoded
 	 * @param time the time of the decoded frame (with origin at the start of video file)
-	 * @param rgbBuffer the buffer where the decoded frame is
+	 * @param rgb the buffer where the decoded frame is
 	 * @param width the width of the frame
 	 * @param height the height of the frame
 	 */
-	void frameAvailable(PhTime, uint8_t *rgb, int width, int height);
+	void frameAvailable(PhTime time, uint8_t *rgb, int width, int height);
 
 signals:
 	/**
@@ -206,7 +206,7 @@ signals:
 	/**
 	 * @brief Signal sent to ask the decoder to decode a video frame
 	 * @param time the time of the requested frame (with origin at the start of video file)
-	 * @param rgbBuffer the buffer where to output the decoded frame
+	 * @param rgb the buffer where to output the decoded frame
 	 * @param deinterlace whether the frame is to be deinterlaced
 	 */
 	void decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace);
