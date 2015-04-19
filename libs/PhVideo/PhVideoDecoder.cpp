@@ -45,7 +45,8 @@ void PhVideoDecoder::open(QString fileName)
 	if (avformat_find_stream_info(_formatContext, NULL) < 0)
 		return; // Couldn't find stream information
 
-	av_dump_format(_formatContext, 0, fileName.toStdString().c_str(), 0);
+	// PhVideoEngine already dumps the stream info, do not do it again here.
+	//av_dump_format(_formatContext, 0, fileName.toStdString().c_str(), 0);
 
 	// Find video stream :
 	for(int i = 0; i < (int)_formatContext->nb_streams; i++) {
