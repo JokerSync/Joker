@@ -183,7 +183,7 @@ void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 	// so it is necessary to use a little margin for the second comparison, otherwise a seek may
 	// be performed on each call to decodeFrame
 	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
-		&& (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2)) {
+	    && (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2)) {
 		return;
 	}
 
@@ -238,14 +238,14 @@ void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 					/* sws_getCachedContext will check if the context is valid for the given parameters. It the context is not valid,
 					 * it will be freed and a new one will be allocated. */
 					_swsContext = sws_getCachedContext(_swsContext, _videoFrame->width, _videoStream->codec->height, pixFormat,
-													   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
-													   SWS_POINT, NULL, NULL, NULL);
+					                                   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
+					                                   SWS_POINT, NULL, NULL, NULL);
 
 
 					int linesize = _videoFrame->width * 4;
 					if (0 <= sws_scale(_swsContext, (const uint8_t * const *) _videoFrame->data,
-									   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
-									   &linesize)) {
+					                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
+					                   &linesize)) {
 
 						PhTime time = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
 

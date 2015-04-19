@@ -165,8 +165,7 @@ void PhVideoEngine::close()
 	// delete all unused buffers
 	// Those that are marked as used should not be deleted for now since the decoder thread may be
 	// operating on them.
-	while (_bufferUsageList.contains(false))
-	{
+	while (_bufferUsageList.contains(false)) {
 		int unusedBufferIndex = _bufferUsageList.indexOf(false);
 		delete[] _rgbBufferList.takeAt(unusedBufferIndex);
 		_bufferSizeList.removeAt(unusedBufferIndex);
@@ -223,7 +222,8 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 				_rgbBufferList.replace(bufferIndex, rgb);
 				_bufferSizeList.replace(bufferIndex, bufferSize);
 			}
-		} else {
+		}
+		else {
 			// no buffer is currently available, we need a new one
 			rgb = new uint8_t[bufferSize];
 			_rgbBufferList.append(rgb);
@@ -336,7 +336,7 @@ bool PhVideoEngine::isFrameAvailable(PhTime time)
 	// so it is necessary to use a little margin for the second comparison, otherwise a seek may
 	// be performed on each call to decodeFrame
 	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
-		&& (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2)) {
+	    && (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2)) {
 		result = true;
 	}
 
