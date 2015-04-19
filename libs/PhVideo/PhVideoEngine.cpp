@@ -46,8 +46,12 @@ bool PhVideoEngine::ready()
 void PhVideoEngine::setDeinterlace(bool deinterlace)
 {
 	PHDEBUG << deinterlace;
-	_deinterlace = deinterlace;
-	_currentTime = PHTIMEMIN;
+
+	if (deinterlace != _deinterlace) {
+		_deinterlace = deinterlace;
+		// request the frame again to apply the deinterlace settings
+		requestFrame(_currentTime);
+	}
 }
 
 bool PhVideoEngine::bilinearFiltering()
@@ -63,7 +67,11 @@ void PhVideoEngine::setBilinearFiltering(bool bilinear)
 bool PhVideoEngine::open(QString fileName)
 {
 	close();
+
 	PHDEBUG << fileName;
+
+	// tell the decoder thread to open the file too
+	emit openInDecoder(fileName);
 
 	_clock.setTime(0);
 	_clock.setRate(0);
@@ -152,15 +160,15 @@ bool PhVideoEngine::open(QString fileName)
 
 	_fileName = fileName;
 
-	// tell the decoder thread to open the file too
-	emit openInDecoder(fileName);
-
 	return true;
 }
 
 void PhVideoEngine::close()
 {
 	PHDEBUG << _fileName;
+
+	// tell the decoder thread to close the file too
+	emit closeInDecoder();
 
 	// delete all unused buffers
 	// Those that are marked as used should not be deleted for now since the decoder thread may be
@@ -188,9 +196,6 @@ void PhVideoEngine::close()
 	PHDEBUG << _fileName << "closed";
 
 	_fileName = "";
-
-	// tell the decoder thread to close the file too
-	emit closeInDecoder();
 }
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
@@ -202,41 +207,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	// request that frame to the decoder thread by sending a signal.
 	// The engine manages the frame buffers.
 	if(!isFrameAvailable(time)) {
-		int frameHeight = _videoStream->codec->height;
-		if(_deinterlace)
-			frameHeight = frameHeight / 2;
-		int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, _videoStream->codec->width, frameHeight);
-
-		// find an available buffer
-		uint8_t * rgb;
-		int bufferIndex = _bufferUsageList.indexOf(false);
-
-		if(bufferIndex != -1) {
-			// we can reuse an existing available buffer
-			rgb = _rgbBufferList.at(bufferIndex);
-
-			if (_bufferSizeList.at(bufferIndex) != bufferSize) {
-				// the size has changed, update the buffer
-				delete[] rgb;
-				rgb = new uint8_t[bufferSize];
-				_rgbBufferList.replace(bufferIndex, rgb);
-				_bufferSizeList.replace(bufferIndex, bufferSize);
-			}
-		}
-		else {
-			// no buffer is currently available, we need a new one
-			rgb = new uint8_t[bufferSize];
-			_rgbBufferList.append(rgb);
-			_bufferUsageList.append(true);
-			_bufferSizeList.append(bufferSize);
-		}
-
-		// ask the frame to the decoder.
-		// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
-		emit decodeFrame(time - _timeIn, rgb, _deinterlace);
-
-		// update current time so that we do not request the frame again
-		_currentTime = time;
+		requestFrame(time);
 	}
 
 	// draw whatever frame we currently have
@@ -246,6 +217,45 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		_videoRect.setRect(x, y, w, h);
 	_videoRect.setZ(-10);
 	_videoRect.draw();
+}
+
+void PhVideoEngine::requestFrame(PhTime time)
+{
+	int frameHeight = _videoStream->codec->height;
+	if(_deinterlace)
+		frameHeight = frameHeight / 2;
+	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, _videoStream->codec->width, frameHeight);
+
+	// find an available buffer
+	uint8_t * rgb;
+	int bufferIndex = _bufferUsageList.indexOf(false);
+
+	if(bufferIndex != -1) {
+		// we can reuse an existing available buffer
+		rgb = _rgbBufferList.at(bufferIndex);
+
+		if (_bufferSizeList.at(bufferIndex) != bufferSize) {
+			// the size has changed, update the buffer
+			delete[] rgb;
+			rgb = new uint8_t[bufferSize];
+			_rgbBufferList.replace(bufferIndex, rgb);
+			_bufferSizeList.replace(bufferIndex, bufferSize);
+		}
+	}
+	else {
+		// no buffer is currently available, we need a new one
+		rgb = new uint8_t[bufferSize];
+		_rgbBufferList.append(rgb);
+		_bufferUsageList.append(true);
+		_bufferSizeList.append(bufferSize);
+	}
+
+	// ask the frame to the decoder.
+	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
+	emit decodeFrame(time - _timeIn, rgb, _deinterlace);
+
+	// update current time so that we do not request the frame again
+	_currentTime = time;
 }
 
 void PhVideoEngine::setTimeIn(PhTime timeIn)
@@ -343,18 +353,17 @@ bool PhVideoEngine::isFrameAvailable(PhTime time)
 	return result;
 }
 
-void PhVideoEngine::frameAvailable(PhTime, uint8_t *rgb, int width, int height)
+void PhVideoEngine::frameAvailable(PhTime time, uint8_t *rgb, int width, int height)
 {
 	// This slot is connected to the decoder thread.
 	// We receive here asynchronously the frame freshly decoded.
 
-	_videoRect.createTextureFromBGRABuffer(rgb, width, height);
-
-	_videoFrameTickCounter.tick();
-
 	// mark that this buffer is now available
 	int bufferIndex = _rgbBufferList.indexOf(rgb);
 	_bufferUsageList.replace(bufferIndex, false);
+
+	_videoRect.createTextureFromBGRABuffer(rgb, width, height);
+	_videoFrameTickCounter.tick();
 }
 
 int64_t PhVideoEngine::PhTime_to_AVTimestamp(PhTime time)

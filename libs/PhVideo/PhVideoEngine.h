@@ -223,6 +223,7 @@ signals:
 	void closeInDecoder();
 
 private:
+	void requestFrame(PhTime time);
 	int64_t PhTime_to_AVTimestamp(PhTime time);
 	PhTime AVTimestamp_to_PhTime(int64_t timestamp);
 
