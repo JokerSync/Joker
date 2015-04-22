@@ -13,11 +13,8 @@ TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 include($$TOP_ROOT/common/common.pri)
 
 include($$TOP_ROOT/libs/PhTools/PhTools.pri)
-include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 
 SOURCES += main.cpp
-
-RESOURCES_PATH = .
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
 include($$TOP_ROOT/common/deploy.pri)

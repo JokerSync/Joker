@@ -1,4 +1,6 @@
 # Script adapted from http://sleepycoders.blogspot.fr/2013/03/sharing-travis-ci-generated-files.html
+exit 1 # disabled because not used anymore
+
 # It will run only in a branch containing the word "build" to avoid repository size explosion!
 if [[ "$TRAVIS_BRANCH" == *build* ]]; then
   echo -e "Starting to update gh-pages\n"

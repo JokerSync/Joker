@@ -6,7 +6,7 @@
 
 TARGET = FFmpegTest
 
-VERSION = 1.0.1
+VERSION = $$system(date +%y.%m.%d)
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 

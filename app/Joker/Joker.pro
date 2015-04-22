@@ -8,7 +8,7 @@ cache()
 
 TARGET = Joker
 
-VERSION = 15.4.13
+VERSION = $$system(date +%y.%m.%d)
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
