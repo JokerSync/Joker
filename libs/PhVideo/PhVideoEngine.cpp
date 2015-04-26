@@ -223,6 +223,10 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 
 void PhVideoEngine::requestFrame(PhTime time)
 {
+	if(!ready()) {
+		return;
+	}
+
 	int frameHeight = _videoStream->codec->height;
 	if(_deinterlace)
 		frameHeight = frameHeight / 2;
