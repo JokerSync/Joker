@@ -250,7 +250,7 @@ private:
 	QList<bool> _bufferUsageList;
 	QList<int> _bufferSizeList;
 
-	QThread decoderThread;
+	QThread _decoderThread;
 };
 
 #endif // PHVIDEOENGINE_H

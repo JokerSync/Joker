@@ -29,13 +29,13 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 
 	// initialize the decoder that operates in a separate thread
 	PhVideoDecoder *decoder = new PhVideoDecoder();
-	decoder->moveToThread(&decoderThread);
-	connect(&decoderThread, &QThread::finished, decoder, &QObject::deleteLater);
+	decoder->moveToThread(&_decoderThread);
+	connect(&_decoderThread, &QThread::finished, decoder, &QObject::deleteLater);
 	connect(this, &PhVideoEngine::decodeFrame, decoder, &PhVideoDecoder::decodeFrame);
 	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
 	connect(this, &PhVideoEngine::closeInDecoder, decoder, &PhVideoDecoder::close);
 	connect(decoder, &PhVideoDecoder::frameAvailable, this, &PhVideoEngine::frameAvailable);
-	decoderThread.start();
+	_decoderThread.start();
 }
 
 bool PhVideoEngine::ready()
@@ -275,8 +275,8 @@ PhVideoEngine::~PhVideoEngine()
 {
 	close();
 
-	decoderThread.quit();
-	decoderThread.wait();
+	_decoderThread.quit();
+	_decoderThread.wait();
 
 	// the decoder thread has exited, so all the buffers can be cleaned.
 	while (!_rgbBufferList.isEmpty())
