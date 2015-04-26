@@ -6,7 +6,7 @@
 
 TARGET = SonyTool
 
-VERSION = 1.0.0
+VERSION = $$system(date +%y.%m.%d)
 
 ICON = sony.icns
 

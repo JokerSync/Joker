@@ -6,7 +6,7 @@
 
 TARGET = AudioTest
 
-VERSION = 1.0.0
+VERSION = $$system(date +%y.%m.%d)
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
