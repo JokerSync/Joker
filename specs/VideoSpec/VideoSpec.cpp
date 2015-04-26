@@ -11,7 +11,7 @@
 
 #include "VideoSpecSettings.h"
 
-#define FRAME_WAIT_TIME 40
+#define FRAME_WAIT_TIME 80
 
 #include "PhSpec.h"
 #include "CommonSpec.h"
