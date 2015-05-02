@@ -253,8 +253,6 @@ bool JokerWindow::openDocument(const QString &fileName)
 		_videoEngine.setTimeIn(_doc->videoTimeIn());
 		_mediaPanel.setTimeIn(_doc->videoTimeIn());
 	}
-	else
-		_videoEngine.close();
 #endif
 
 	/// - Set the video aspect ratio.
