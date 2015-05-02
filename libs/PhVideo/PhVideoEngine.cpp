@@ -78,12 +78,16 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setRate(0);
 	_currentTime = PHTIMEMIN;
 
-	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) < 0)
+	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) < 0) {
+		close();
 		return false;
+	}
 
 	PHDEBUG << "Retrieve stream information";
-	if (avformat_find_stream_info(_formatContext, NULL) < 0)
+	if (avformat_find_stream_info(_formatContext, NULL) < 0) {
+		close();
 		return false; // Couldn't find stream information
+	}
 
 	av_dump_format(_formatContext, 0, fileName.toStdString().c_str(), 0);
 
@@ -107,8 +111,10 @@ bool PhVideoEngine::open(QString fileName)
 		}
 	}
 
-	if(_videoStream == NULL)
+	if(_videoStream == NULL) {
+		close();
 		return false;
+	}
 
 	// Looking for timecode type
 	_tcType = PhTimeCode::computeTimeCodeType(this->framePerSecond());
@@ -129,12 +135,14 @@ bool PhVideoEngine::open(QString fileName)
 	AVCodec * videoCodec = avcodec_find_decoder(_videoStream->codec->codec_id);
 	if(videoCodec == NULL) {
 		PHDEBUG << "Unable to find the codec:" << _videoStream->codec->codec_id;
+		close();
 		return false;
 	}
 
 
 	if (avcodec_open2(_videoStream->codec, videoCodec, NULL) < 0) {
 		PHDEBUG << "Unable to open the codec:" << _videoStream->codec;
+		close();
 		return false;
 	}
 
