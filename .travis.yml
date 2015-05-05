@@ -16,6 +16,7 @@ install:
 - git submodule update --init --recursive
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
+- if [[ "$JOB" == BUILD_* ]]; then brew update; brew upgrade boost; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
