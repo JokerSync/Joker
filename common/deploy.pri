@@ -10,12 +10,12 @@ CONFIG(release, debug|release) {
 
 			QMAKE_POST_LINK += macdeployqt $${TARGET}.app;
 
-			ENTITLEMENTS = $$TOP_ROOT/app/Joker/entitlements.plist
+			ENTITLEMENTS = $$TOP_ROOT/common/entitlements.plist
 
 			OTHER_FILES += $${ENTITLEMENTS}
 
 ##################################################
-			BUNDLEID += com.phonations.joker
+			BUNDLEID += com.phonations.$${TARGET}
 
 			QMAKE_POST_LINK += echo "Prepare Qt frameworks";
 			QMAKE_POST_LINK += $$TOP_ROOT/scripts/prepare-framework.py $(QTDIR) $${TARGET}.app;
