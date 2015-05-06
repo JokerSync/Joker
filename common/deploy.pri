@@ -35,36 +35,36 @@ CONFIG(release, debug|release) {
 
 			QMAKE_POST_LINK += echo "Sign Qt frameworks";
 
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtCore.framework;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtGui.framework;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtNetwork.framework;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtPrintSupport.framework;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtWidgets.framework;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtOpenGL.framework;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtSerialPort.framework;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtSql.framework;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtXml.framework;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtCore.framework;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtGui.framework;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtNetwork.framework;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtPrintSupport.framework;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtWidgets.framework;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtOpenGL.framework;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtSerialPort.framework;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtSql.framework;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtXml.framework;
 
 			QMAKE_POST_LINK += echo "Sign SDL frameworks";
 
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/SDL2.framework/Versions/A --force;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/webp.framework/Versions/A --force --verbose;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/SDL2_image.framework/Versions/A --force --verbose;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/FreeType.framework/Versions/A --force --verbose;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/SDL2_ttf.framework/Versions/A --force --verbose;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/SDL2.framework/Versions/A --force;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/webp.framework/Versions/A --force --verbose;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/SDL2_image.framework/Versions/A --force --verbose;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/FreeType.framework/Versions/A --force --verbose;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/SDL2_ttf.framework/Versions/A --force --verbose;
 
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/PlugIns/*/*.dylib;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/*.*.*;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/PlugIns/*/*.dylib;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/*.*.*;
 
 			QMAKE_POST_LINK += echo "Add entitlements";
 
 			QMAKE_POST_LINK += cp $${ENTITLEMENTS} .;
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -v --entitlements $${ENTITLEMENTS} $${TARGET}.app;
+			QMAKE_POST_LINK += codesign -s \"$$(APPLICATION_CERTIFICATE)\" -v --entitlements $${ENTITLEMENTS} $${TARGET}.app;
 
 			QMAKE_POST_LINK += echo "Build PKG";
 
-			QMAKE_POST_LINK += echo $$(INSTALLER_CERTIFICATE);
-			QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${TARGET}.pkg;
+			QMAKE_POST_LINK += echo \"$$(INSTALLER_CERTIFICATE)\";
+			QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign \"$$(INSTALLER_CERTIFICATE)\" $${TARGET}.pkg;
 
 ##################################################
 
