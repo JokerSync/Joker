@@ -12,7 +12,8 @@ CONFIG(release, debug|release) {
 
 			ENTITLEMENTS = $$TOP_ROOT/common/entitlements.plist
 
-			OTHER_FILES += $${ENTITLEMENTS}
+			OTHER_FILES += $${ENTITLEMENTS} \
+				$$TOP_ROOT/scripts/prepare-framework.py
 
 ##################################################
 			BUNDLEID += com.phonations.$${TARGET}
