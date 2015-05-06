@@ -7,18 +7,7 @@
 #ifndef PHVIDEOENGINE_H
 #define PHVIDEOENGINE_H
 
-extern "C" {
-#ifndef INT64_C
-/** see http://code.google.com/p/ffmpegsource/issues/detail?id=11#c13 */
-#define INT64_C(c) (c ## LL)
-/** and http://code.google.com/p/ffmpegsource/issues/detail?id=11#c23 */
-#define UINT64_C(c) (c ## ULL)
-#endif
-
-#include <libavformat/avformat.h>
-#include <libavutil/avutil.h>
-#include <libavcodec/avcodec.h>
-}
+#include <QThread>
 
 #include "PhSync/PhClock.h"
 #include "PhTools/PhTickCounter.h"
@@ -196,6 +185,22 @@ public slots:
 	 */
 	void frameAvailable(PhTime time, uint8_t *rgb, int width, int height);
 
+	/**
+	 * @brief Handle the signal that the video file has been opened in the decoder
+	 * @param length the length of the video file
+	 * @param framePerSecond the frame per second
+	 * @param timeIn the time in of the video file
+	 * @param width the width of the frame
+	 * @param height the height of the frame
+	 * @param codecName the codec name
+	 */
+	void decoderOpened(PhTime length, double framePerSecond, PhTime timeIn, int width, int height, QString codecName);
+
+	/**
+	 * @brief Handle the signal sent when the decoder failed to open the file
+	 */
+	void openInDecoderFailed();
+
 signals:
 	/**
 	 * @brief Signal sent upon a different timecode type message
@@ -222,27 +227,31 @@ signals:
 	 */
 	void closeInDecoder();
 
+	/**
+	 * @brief Signal sent when the engine is ready
+	 * @param success Whether the video was opened successfully
+	 */
+	void opened(bool success);
+
 private:
 	void requestFrame(PhTime time);
-	int64_t PhTime_to_AVTimestamp(PhTime time);
-	PhTime AVTimestamp_to_PhTime(int64_t timestamp);
 
 	PhVideoSettings *_settings;
 	QString _fileName;
 	PhTimeCodeType _tcType;
 	PhClock _clock;
+	PhTime _length;
 	PhTime _timeIn;
+	double _framePerSecond;
+	int _width;
+	int _height;
+	QString _codecName;
+	bool _ready;
 
-	AVFormatContext * _formatContext;
-	AVStream *_videoStream;
 	PhGraphicTexturedRect _videoRect;
 	PhTime _currentTime;
 
 	PhTickCounter _videoFrameTickCounter;
-
-	bool _useAudio;
-	AVStream *_audioStream;
-	AVFrame * _audioFrame;
 
 	bool _deinterlace;
 

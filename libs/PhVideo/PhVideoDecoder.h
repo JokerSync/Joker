@@ -73,11 +73,31 @@ signals:
 	 */
 	void frameAvailable(PhTime time, uint8_t *rgb, int width, int height);
 
+	/**
+	 * @brief Signal sent when the decoder is ready
+	 * @param length the length of the video file
+	 * @param framePerSecond the frame per second
+	 * @param timeIn the time in of the video file
+	 * @param width the width of the frame
+	 * @param height the height of the frame
+	 * @param codecName the codec name
+	 */
+	void opened(PhTime length, double framePerSecond, PhTime timeIn, int width, int height, QString codecName);
+
+	/**
+	 * @brief Signal sent when the decoder failed to open the file
+	 */
+	void openFailed();
+
 private:
 	bool ready();
 	double framePerSecond();
 	PhTime length();
 	void frameToRgb(uint8_t *rgb, bool deinterlace);
+	int width();
+	int height();
+	QString codecName();
+	PhTime timeIn();
 
 	int64_t PhTime_to_AVTimestamp(PhTime time);
 	PhTime AVTimestamp_to_PhTime(int64_t timestamp);

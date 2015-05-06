@@ -4,7 +4,6 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhGeneric.h"
 #include "PhTools/PhDebug.h"
 
 #include "PhVideoDecoder.h"
@@ -39,18 +38,20 @@ void PhVideoDecoder::open(QString fileName)
 	_currentTime = PHTIMEMIN;
 
 	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) < 0) {
+		emit openFailed();
 		close();
 		return;
 	}
 
 	PHDEBUG << "Retrieve stream information";
 	if (avformat_find_stream_info(_formatContext, NULL) < 0) {
+		emit openFailed();
 		close();
 		return; // Couldn't find stream information
 	}
 
 	// PhVideoEngine already dumps the stream info, do not do it again here.
-	//av_dump_format(_formatContext, 0, fileName.toStdString().c_str(), 0);
+	av_dump_format(_formatContext, 0, fileName.toStdString().c_str(), 0);
 
 	// Find video stream :
 	for(int i = 0; i < (int)_formatContext->nb_streams; i++) {
@@ -73,6 +74,7 @@ void PhVideoDecoder::open(QString fileName)
 	}
 
 	if(_videoStream == NULL) {
+		emit openFailed();
 		close();
 		return;
 	}
@@ -84,12 +86,14 @@ void PhVideoDecoder::open(QString fileName)
 	AVCodec * videoCodec = avcodec_find_decoder(_videoStream->codec->codec_id);
 	if(videoCodec == NULL) {
 		PHDEBUG << "Unable to find the codec:" << _videoStream->codec->codec_id;
+		emit openFailed();
 		close();
 		return;
 	}
 
 	if (avcodec_open2(_videoStream->codec, videoCodec, NULL) < 0) {
 		PHDEBUG << "Unable to open the codec:" << _videoStream->codec;
+		emit openFailed();
 		close();
 		return;
 	}
@@ -115,6 +119,8 @@ void PhVideoDecoder::open(QString fileName)
 	}
 
 	_fileName = fileName;
+
+	emit opened(length(), framePerSecond(), timeIn(), width(), height(), codecName());
 }
 
 void PhVideoDecoder::close()
@@ -301,20 +307,56 @@ void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 	}
 }
 
+int PhVideoDecoder::width()
+{
+	if(_videoStream)
+		return _videoStream->codec->width;
+	return 0;
+}
+
+int PhVideoDecoder::height()
+{
+	if(_videoStream)
+		return _videoStream->codec->height;
+	return 0;
+}
+
+QString PhVideoDecoder::codecName()
+{
+	if(_videoStream)
+		return _videoStream->codec->codec_descriptor->long_name;
+
+	return "";
+}
+
+PhTime PhVideoDecoder::timeIn()
+{
+	PhTime timeIn = 0;
+
+	AVDictionaryEntry *tag = av_dict_get(_formatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+	if(tag == NULL)
+		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+
+	if(tag) {
+		PHDEBUG << "Found timestamp:" << tag->value;
+		timeIn = PhTimeCode::timeFromString(tag->value, _tcType);
+	}
+
+	return timeIn;
+}
+
 int64_t PhVideoDecoder::PhTime_to_AVTimestamp(PhTime time)
 {
 	int64_t timestamp = 0;
-	if(_videoStream) {
-		timestamp = static_cast<int64_t>(std::round(static_cast<double>(time) / 24000. / av_q2d(_videoStream->time_base)));
-	}
+	if(_videoStream)
+		timestamp = time * _videoStream->time_base.den / _videoStream->time_base.num / PHTIMEBASE;
 	return timestamp;
 }
 
 PhTime PhVideoDecoder::AVTimestamp_to_PhTime(int64_t timestamp)
 {
 	PhTime time = 0;
-	if(_videoStream) {
-		time = static_cast<PhTime>(std::round(static_cast<double>(timestamp) * av_q2d(_videoStream->time_base) * 24000.));
-	}
+	if(_videoStream)
+		time = timestamp * PHTIMEBASE * _videoStream->time_base.num / _videoStream->time_base.den;
 	return time;
 }
