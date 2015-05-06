@@ -39,18 +39,20 @@ void PhVideoDecoder::open(QString fileName)
 	_currentTime = PHTIMEMIN;
 
 	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) < 0) {
+		emit openFailed();
 		close();
 		return;
 	}
 
 	PHDEBUG << "Retrieve stream information";
 	if (avformat_find_stream_info(_formatContext, NULL) < 0) {
+		emit openFailed();
 		close();
 		return; // Couldn't find stream information
 	}
 
 	// PhVideoEngine already dumps the stream info, do not do it again here.
-	//av_dump_format(_formatContext, 0, fileName.toStdString().c_str(), 0);
+	av_dump_format(_formatContext, 0, fileName.toStdString().c_str(), 0);
 
 	// Find video stream :
 	for(int i = 0; i < (int)_formatContext->nb_streams; i++) {
@@ -73,6 +75,7 @@ void PhVideoDecoder::open(QString fileName)
 	}
 
 	if(_videoStream == NULL) {
+		emit openFailed();
 		close();
 		return;
 	}
@@ -84,12 +87,14 @@ void PhVideoDecoder::open(QString fileName)
 	AVCodec * videoCodec = avcodec_find_decoder(_videoStream->codec->codec_id);
 	if(videoCodec == NULL) {
 		PHDEBUG << "Unable to find the codec:" << _videoStream->codec->codec_id;
+		emit openFailed();
 		close();
 		return;
 	}
 
 	if (avcodec_open2(_videoStream->codec, videoCodec, NULL) < 0) {
 		PHDEBUG << "Unable to open the codec:" << _videoStream->codec;
+		emit openFailed();
 		close();
 		return;
 	}
@@ -115,6 +120,8 @@ void PhVideoDecoder::open(QString fileName)
 	}
 
 	_fileName = fileName;
+
+	emit opened(length(), framePerSecond(), timeIn(), width(), height(), codecName());
 }
 
 void PhVideoDecoder::close()
@@ -299,6 +306,44 @@ void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 		//Avoid memory leak
 		av_free_packet(&packet);
 	}
+}
+
+int PhVideoDecoder::width()
+{
+	if(_videoStream)
+		return _videoStream->codec->width;
+	return 0;
+}
+
+int PhVideoDecoder::height()
+{
+	if(_videoStream)
+		return _videoStream->codec->height;
+	return 0;
+}
+
+QString PhVideoDecoder::codecName()
+{
+	if(_videoStream)
+		return _videoStream->codec->codec_descriptor->long_name;
+
+	return "";
+}
+
+PhTime PhVideoDecoder::timeIn()
+{
+	PhTime timeIn = 0;
+
+	AVDictionaryEntry *tag = av_dict_get(_formatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+	if(tag == NULL)
+		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
+
+	if(tag) {
+		PHDEBUG << "Found timestamp:" << tag->value;
+		timeIn = PhTimeCode::timeFromString(tag->value, _tcType);
+	}
+
+	return timeIn;
 }
 
 int64_t PhVideoDecoder::PhTime_to_AVTimestamp(PhTime time)

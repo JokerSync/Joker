@@ -15,18 +15,15 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_fileName(""),
 	_tcType(PhTimeCodeType25),
 	_timeIn(0),
-	_formatContext(NULL),
-	_videoStream(NULL),
 	_currentTime(PHTIMEMIN),
-	_useAudio(false),
-	_audioStream(NULL),
-	_audioFrame(NULL),
-	_deinterlace(false)
+	_deinterlace(false),
+	_length(0),
+	_width(0),
+	_height(0),
+	_framePerSecond(25.00f),
+	_codecName(""),
+	_ready(false)
 {
-	PHDEBUG << "Using FFMpeg widget for video playback.";
-	av_register_all();
-	avcodec_register_all();
-
 	// initialize the decoder that operates in a separate thread
 	PhVideoDecoder *decoder = new PhVideoDecoder();
 	decoder->moveToThread(&_decoderThread);
@@ -35,12 +32,14 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
 	connect(this, &PhVideoEngine::closeInDecoder, decoder, &PhVideoDecoder::close);
 	connect(decoder, &PhVideoDecoder::frameAvailable, this, &PhVideoEngine::frameAvailable);
+	connect(decoder, &PhVideoDecoder::opened, this, &PhVideoEngine::decoderOpened);
+	connect(decoder, &PhVideoDecoder::openFailed, this, &PhVideoEngine::openInDecoderFailed);
 	_decoderThread.start();
 }
 
 bool PhVideoEngine::ready()
 {
-	return (_formatContext && _videoStream);
+	return _ready;
 }
 
 void PhVideoEngine::setDeinterlace(bool deinterlace)
@@ -76,96 +75,6 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setTime(0);
 	_clock.setRate(0);
 	_currentTime = PHTIMEMIN;
-
-	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) < 0) {
-		close();
-		return false;
-	}
-
-	PHDEBUG << "Retrieve stream information";
-	if (avformat_find_stream_info(_formatContext, NULL) < 0) {
-		close();
-		return false; // Couldn't find stream information
-	}
-
-	av_dump_format(_formatContext, 0, fileName.toStdString().c_str(), 0);
-
-	// Find video stream :
-	for(int i = 0; i < (int)_formatContext->nb_streams; i++) {
-		AVMediaType streamType = _formatContext->streams[i]->codec->codec_type;
-		PHDEBUG << i << ":" << streamType;
-		switch(streamType) {
-		case AVMEDIA_TYPE_VIDEO:
-			_videoStream = _formatContext->streams[i];
-			PHDEBUG << "\t=> video";
-			break;
-		case AVMEDIA_TYPE_AUDIO:
-			if(_useAudio && (_audioStream == NULL))
-				_audioStream = _formatContext->streams[i];
-			PHDEBUG << "\t=> audio";
-			break;
-		default:
-			PHDEBUG << "\t=> unknown";
-			break;
-		}
-	}
-
-	if(_videoStream == NULL) {
-		close();
-		return false;
-	}
-
-	// Looking for timecode type
-	_tcType = PhTimeCode::computeTimeCodeType(this->framePerSecond());
-	emit timeCodeTypeChanged(_tcType);
-
-	// Reading timestamp :
-	AVDictionaryEntry *tag = av_dict_get(_formatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
-	if(tag == NULL)
-		tag = av_dict_get(_videoStream->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
-
-	if(tag) {
-		PHDEBUG << "Found timestamp:" << tag->value;
-		_timeIn = PhTimeCode::timeFromString(tag->value, _tcType);
-	}
-
-
-	PHDEBUG << "size : " << _videoStream->codec->width << "x" << _videoStream->codec->height;
-	AVCodec * videoCodec = avcodec_find_decoder(_videoStream->codec->codec_id);
-	if(videoCodec == NULL) {
-		PHDEBUG << "Unable to find the codec:" << _videoStream->codec->codec_id;
-		close();
-		return false;
-	}
-
-
-	if (avcodec_open2(_videoStream->codec, videoCodec, NULL) < 0) {
-		PHDEBUG << "Unable to open the codec:" << _videoStream->codec;
-		close();
-		return false;
-	}
-
-	PHDEBUG << "length:" << this->length();
-	PHDEBUG << "fps:" << this->framePerSecond();
-
-	if(_audioStream) {
-		AVCodec* audioCodec = avcodec_find_decoder(_audioStream->codec->codec_id);
-		if(audioCodec) {
-			if(avcodec_open2(_audioStream->codec, audioCodec, NULL) < 0) {
-				PHDEBUG << "Unable to open audio codec.";
-				_audioStream = NULL;
-			}
-			else {
-				_audioFrame = av_frame_alloc();
-				PHDEBUG << "Audio OK.";
-			}
-		}
-		else {
-			PHDEBUG << "Unable to find codec for audio.";
-			_audioStream = NULL;
-		}
-	}
-
 	_fileName = fileName;
 
 	return true;
@@ -188,22 +97,15 @@ void PhVideoEngine::close()
 		_bufferUsageList.removeAt(unusedBufferIndex);
 	}
 
-	if(_formatContext) {
-		PHDEBUG << "Close the media context.";
-		if(_videoStream)
-			avcodec_close(_videoStream->codec);
-		if(_audioStream)
-			avcodec_close(_audioStream->codec);
-		avformat_close_input(&_formatContext);
-	}
-
-	_timeIn = 0;
-	_formatContext = NULL;
-	_videoStream = NULL;
-	_audioStream = NULL;
 	PHDEBUG << _fileName << "closed";
 
+	_timeIn = 0;
 	_fileName = "";
+	_length = 0;
+	_width = 0;
+	_height = 0;
+	_codecName = "";
+	_ready = false;
 }
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
@@ -233,10 +135,7 @@ void PhVideoEngine::requestFrame(PhTime time)
 		return;
 	}
 
-	int frameHeight = _videoStream->codec->height;
-	if(_deinterlace)
-		frameHeight = frameHeight / 2;
-	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, _videoStream->codec->width, frameHeight);
+	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
 
 	// find an available buffer
 	uint8_t * rgb;
@@ -278,9 +177,7 @@ void PhVideoEngine::setTimeIn(PhTime timeIn)
 
 PhTime PhVideoEngine::length()
 {
-	if(_videoStream)
-		return AVTimestamp_to_PhTime(_videoStream->duration);
-	return 0;
+	return _length;
 }
 
 PhVideoEngine::~PhVideoEngine()
@@ -300,38 +197,22 @@ PhVideoEngine::~PhVideoEngine()
 
 int PhVideoEngine::width()
 {
-	if(_videoStream)
-		return _videoStream->codec->width;
-	return 0;
+	return _width;
 }
 
 int PhVideoEngine::height()
 {
-	if(_videoStream)
-		return _videoStream->codec->height;
-	return 0;
+	return _height;
 }
 
 double PhVideoEngine::framePerSecond()
 {
-	// default is 25 fps.
-	// It will be used when loading a collection of image files (as it is done in the tests and specs),
-	// where ffmpeg framerate is undefined (avg_frame_rate.den is 0).
-	double result = 25.00f;
-
-	if(_videoStream && (_videoStream->avg_frame_rate.den != 0)) {
-		result =  av_q2d(_videoStream->avg_frame_rate);
-	}
-
-	return result;
+	return _framePerSecond;
 }
 
 QString PhVideoEngine::codecName()
 {
-	if(_videoStream)
-		return _videoStream->codec->codec_descriptor->long_name;
-
-	return "";
+	return _codecName;
 }
 
 bool PhVideoEngine::isFrameAvailable(PhTime time)
@@ -378,20 +259,27 @@ void PhVideoEngine::frameAvailable(PhTime time, uint8_t *rgb, int width, int hei
 	_videoFrameTickCounter.tick();
 }
 
-int64_t PhVideoEngine::PhTime_to_AVTimestamp(PhTime time)
+void PhVideoEngine::decoderOpened(PhTime length, double framePerSecond, PhTime timeIn, int width, int height, QString codecName)
 {
-	int64_t timestamp = 0;
-	if(_videoStream) {
-		timestamp = static_cast<int64_t>(std::round(static_cast<double>(time) / 24000. / av_q2d(_videoStream->time_base)));
-	}
-	return timestamp;
+	_length = length;
+	_framePerSecond = framePerSecond;
+	_timeIn = timeIn;
+	_width = width;
+	_height = height;
+	_codecName = codecName;
+
+	PHDEBUG << timeIn;
+
+	// Looking for timecode type
+	_tcType = PhTimeCode::computeTimeCodeType(this->framePerSecond());
+	emit timeCodeTypeChanged(_tcType);
+
+	_ready = true;
+
+	emit opened(true);
 }
 
-PhTime PhVideoEngine::AVTimestamp_to_PhTime(int64_t timestamp)
+void PhVideoEngine::openInDecoderFailed()
 {
-	PhTime time = 0;
-	if(_videoStream) {
-		time = static_cast<PhTime>(std::round(static_cast<double>(timestamp) * av_q2d(_videoStream->time_base) * 24000.));
-	}
-	return time;
+	emit opened(false);
 }
