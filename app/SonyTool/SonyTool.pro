@@ -6,8 +6,6 @@
 
 TARGET = SonyTool
 
-VERSION = $$system(date +%y.%m.%d)
-
 ICON = sony.icns
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..

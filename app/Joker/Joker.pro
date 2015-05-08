@@ -8,8 +8,6 @@ cache()
 
 TARGET = Joker
 
-VERSION = $$system(date +%y.%m.%d)
-
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
