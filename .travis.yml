@@ -1,4 +1,6 @@
+language: cpp
 os: osx
+compiler: clang
 env:
   global:
   - PATH=$PATH:/usr/local/opt/qt5/bin; fi
@@ -42,14 +44,12 @@ after_failure:
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
   email: false
-  flowdock:
-    secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
   irc:
-    - "phonations.com#joker"
-    - "irc.freenode.net#joker"
+    channels: "phonations.com#joker"
+    on_success: always
   webhooks:
-    url: https://webhooks.gitter.im/e/9e468ed6125989020262
-  on_success: always
+    urls: https://webhooks.gitter.im/e/9e468ed6125989020262
+    on_success: always
 deploy:
   provider: releases
   api_key:
