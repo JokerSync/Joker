@@ -10,7 +10,7 @@ brew install libav ffmpeg
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"
 
-udo apt-get install yasm
+sudo apt-get install yasm
 curl -L http://ffmpeg.org/releases/ffmpeg-2.6.2.tar.bz2 -o ffmpeg-2.6.2.tar.bz2 
 tar -xvjf ffmpeg-2.6.2.tar.bz2 
 cd ffmpeg-2.6.2
