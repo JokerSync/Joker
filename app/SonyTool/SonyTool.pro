@@ -6,8 +6,6 @@
 
 TARGET = SonyTool
 
-ICON = sony.icns
-
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
@@ -30,8 +28,7 @@ FORMS    += SonyToolWindow.ui \
     PreferencesDialog.ui
 
 mac {
-	# For the plist version
-	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
+	ICON = sony.icns
 }
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)

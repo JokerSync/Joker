@@ -21,10 +21,5 @@ HEADERS  += SerialTestWindow.h
 
 FORMS    += SerialTestWindow.ui
 
-mac {
-	# For the plist version
-	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
-}
-
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
 include($$TOP_ROOT/common/deploy.pri)

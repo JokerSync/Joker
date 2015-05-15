@@ -2,13 +2,31 @@ win32 {
 	QMAKE_POST_LINK += windeployqt $${RESOURCES_PATH} $${CS}
 }
 
+mac {
+	app_bundle {
+		QMAKE_POST_LINK += echo Create Info.plist;
+		QMAKE_POST_LINK += cp $$(QTDIR)/mkspecs/macx-clang/Info.plist.app $${TARGET}.app/Contents/Info.plist;
+
+		QMAKE_POST_LINK += plutil -replace CFBundleExecutable -string $${TARGET} $${TARGET}.app/Contents/Info.plist;
+
+		!defined(ICON) ICON = $$TOP_ROOT/data/icon.icns
+		QMAKE_POST_LINK += cp $$ICON $${TARGET}.app/Contents/Resources/$${TARGET}.icns;
+		QMAKE_POST_LINK += plutil -replace CFBundleIconFile -string $${TARGET}.icns $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string com.phonations.$${TARGET} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleSignature -string ??? $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -insert CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -insert NSPrincipalClass -string NSApplication $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -insert NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
+	}
+}
+
 CONFIG(release, debug|release) {
 	mac {
 		app_bundle {
 			PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}.dmg
 			message($$PH_DEPLOY_TARGET)
 
-            QMAKE_POST_LINK += macdeployqt $${TARGET}.app;
+			QMAKE_POST_LINK += macdeployqt $${TARGET}.app;
 
 			ENTITLEMENTS = $$TOP_ROOT/common/entitlements.plist
 
@@ -69,16 +87,10 @@ CONFIG(release, debug|release) {
 
 ##################################################
 
+			# creating dmg with create-dmg
 
-#			QMAKE_POST_LINK += export PATH=/usr/local/bin:$$(PATH);
-#			QMAKE_POST_LINK += cp $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png .;
-#			QMAKE_POST_LINK += sed -e "s/@TARGET@/$${TARGET}/g" $${_PRO_FILE_PWD_}/../../common/appdmg.json > appdmg.json;
-#			QMAKE_POST_LINK += rm $${PH_DEPLOY_TARGET};
-#			QMAKE_POST_LINK += appdmg appdmg.json $${PH_DEPLOY_TARGET};
-#			QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET} $${PH_DEPLOY_LOCATION};
 			QMAKE_POST_LINK += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
 				--volname $${TARGET}_v$${VERSION} \
-				--volicon $${_PRO_FILE_PWD_}/../../app/Joker/joker.icns \
 				--background $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png \
 				--app-drop-link 450 218 \
 				--icon $${TARGET}.app 150 218 \
