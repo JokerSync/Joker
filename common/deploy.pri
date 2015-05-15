@@ -10,9 +10,12 @@ CONFIG(release, debug|release) {
 
 			QMAKE_POST_LINK += macdeployqt $${TARGET}.app;
 
+##################################################
+
+			# creating dmg with create-dmg
+
 			QMAKE_POST_LINK += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
 				--volname $${TARGET}_v$${VERSION} \
-				--volicon $${_PRO_FILE_PWD_}/../../app/Joker/joker.icns \
 				--background $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png \
 				--app-drop-link 450 218 \
 				--icon $${TARGET}.app 150 218 \
