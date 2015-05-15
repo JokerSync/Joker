@@ -11,13 +11,20 @@ mac {
 			message("Settings default icon")
 			ICON = $$TOP_ROOT/data/icon.icns
 		}
+
+		isEmpty(BUNDLEID) {
+			message("Settings default bundleid")
+			BUNDLEID = com.phonations.$${TARGET}
+		}
+
 		QMAKE_POST_LINK += cp $$ICON $${TARGET}.app/Contents/Resources/$${TARGET}.icns;
 
 		QMAKE_POST_LINK += plutil -replace CFBundleExecutable -string $${TARGET} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleIconFile -string $${TARGET}.icns $${TARGET}.app/Contents/Info.plist;
-		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string com.phonations.$${TARGET} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string $${BUNDLEID} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleSignature -string ??? $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -insert CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert NSPrincipalClass -string NSApplication $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
 	}
@@ -37,8 +44,6 @@ CONFIG(release, debug|release) {
 				$$TOP_ROOT/scripts/prepare-framework.py
 
 ##################################################
-			BUNDLEID += com.phonations.$${TARGET}
-
             QMAKE_POST_LINK += echo "Prepare Qt frameworks";
             QMAKE_POST_LINK += pwd;
             QMAKE_POST_LINK += $$TOP_ROOT/scripts/prepare-framework.py $(QTDIR) $${TARGET}.app;
@@ -86,7 +91,7 @@ CONFIG(release, debug|release) {
             QMAKE_POST_LINK += echo "Build PKG";
 
             QMAKE_POST_LINK += echo $$(INSTALLER_CERTIFICATE);
-            QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${TARGET}.pkg;
+			QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${TARGET}_v$${VERSION}.pkg;
 
 ##################################################
 

@@ -58,6 +58,7 @@ unix {
 
 mac{
 	ICON = $$PWD/joker.icns
+	BUNDLEID = com.phonations.joker
 
 	QMAKE_CFLAGS += -gdwarf-2
 	QMAKE_CXXFLAGS += -gdwarf-2
