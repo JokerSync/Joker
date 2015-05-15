@@ -1,6 +1,7 @@
 language: cpp
-os: osx
-compiler: clang
+os:
+  - linux
+  - osx
 env:
   global:
   - PATH=$PATH:/usr/local/opt/qt5/bin; fi
