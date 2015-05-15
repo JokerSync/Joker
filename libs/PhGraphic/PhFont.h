@@ -7,14 +7,7 @@
 #ifndef PHFONT_H
 #define PHFONT_H
 
-#include <QString>
-
-#include <QtGlobal>
-#if defined(Q_OS_MAC)
-#include <SDL2_ttf/SDL_ttf.h>
-#else
-#include <SDL2/SDL_ttf.h>
-#endif
+#include "PhGraphic.h"
 
 /**
  * @brief Describe the font appearance for PhGraphicText
@@ -31,6 +24,12 @@ public:
 	PhFont();
 
 	/**
+	 * @brief Check is the font is ready for drawing
+	 * @return True if ready, false otherwise
+	 */
+	bool ready();
+
+	/**
 	 * @brief Set the source font file.
 	 * @param fontFile Path to the new font file
 	 * @return true if the font was loaded successfully, false otherwise.
@@ -41,7 +40,7 @@ public:
 	 * @brief Get the font file
 	 * @return the path to the font file
 	 */
-	QString getFontFile();
+	QString fontFile();
 
 	/**
 	 * @brief Get the regular advance offset of a character.

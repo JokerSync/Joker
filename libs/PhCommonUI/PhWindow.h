@@ -1,8 +1,13 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef PHWINDOW_H
 #define PHWINDOW_H
 
-#include <QKeyEvent>
-#include <QMainWindow>
+#include "PhUI.h"
 
 #include "PhWindowSettings.h"
 

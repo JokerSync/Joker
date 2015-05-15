@@ -4,8 +4,6 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QKeyEvent>
-
 #include "PhTools/PhDebug.h"
 
 #include "PhMediaPanel.h"

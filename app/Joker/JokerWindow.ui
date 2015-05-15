@@ -111,21 +111,6 @@
     <addaction name="actionFullscreen"/>
     <addaction name="actionDisplay_the_control_panel"/>
     <addaction name="actionDisplay_the_information_panel"/>
-    <addaction name="actionSelect_character"/>
-    <addaction name="actionHide_selected_peoples"/>
-    <addaction name="actionTest_mode"/>
-    <addaction name="separator"/>
-    <addaction name="actionInvert_colors"/>
-    <addaction name="actionHide_the_rythmo"/>
-    <addaction name="actionDisplay_the_cuts"/>
-    <addaction name="actionDisplay_the_vertical_scale"/>
-    <addaction name="separator"/>
-    <addaction name="actionShow_ruler"/>
-    <addaction name="actionChange_ruler_timestamp"/>
-    <addaction name="actionSet_space_between_two_ruler_graduation"/>
-    <addaction name="separator"/>
-    <addaction name="actionForce_16_9_ratio"/>
-    <addaction name="actionDeinterlace_video"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -135,8 +120,34 @@
     <addaction name="actionSend_feedback"/>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuVideo">
+    <property name="title">
+     <string>Video</string>
+    </property>
+    <addaction name="actionForce_16_9_ratio"/>
+    <addaction name="actionDeinterlace_video"/>
+    <addaction name="actionUse_native_video_size"/>
+   </widget>
+   <widget class="QMenu" name="menuRythmo">
+    <property name="title">
+     <string>Rythmo</string>
+    </property>
+    <addaction name="actionSelect_character"/>
+    <addaction name="actionHide_selected_peoples"/>
+    <addaction name="separator"/>
+    <addaction name="actionHide_the_rythmo"/>
+    <addaction name="actionInvert_colors"/>
+    <addaction name="actionDisplay_the_cuts"/>
+    <addaction name="actionDisplay_the_vertical_scale"/>
+    <addaction name="separator"/>
+    <addaction name="actionDisplay_feet"/>
+    <addaction name="actionSet_first_foot_timecode"/>
+    <addaction name="actionSet_distance_between_two_feet"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
+   <addaction name="menuRythmo"/>
+   <addaction name="menuVideo"/>
    <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -312,11 +323,6 @@
     <string>Ctrl+Left</string>
    </property>
   </action>
-  <action name="actionClear_list">
-   <property name="text">
-    <string>Clear list</string>
-   </property>
-  </action>
   <action name="actionSave">
    <property name="enabled">
     <bool>true</bool>
@@ -385,19 +391,6 @@
     <string>Invert colors</string>
    </property>
   </action>
-  <action name="actionShow_ruler">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Ruler</string>
-   </property>
-  </action>
-  <action name="actionChange_ruler_timestamp">
-   <property name="text">
-    <string>Change ruler timestamp...</string>
-   </property>
-  </action>
   <action name="actionNew">
    <property name="text">
     <string>New</string>
@@ -459,19 +452,6 @@
     <string>Display the cuts</string>
    </property>
   </action>
-  <action name="actionSet_space_between_two_ruler_graduation">
-   <property name="text">
-    <string>Set space between two ruler graduation...</string>
-   </property>
-  </action>
-  <action name="actionDisplay_the_scale">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Display the scale</string>
-   </property>
-  </action>
   <action name="actionDisplay_the_vertical_scale">
    <property name="checkable">
     <bool>true</bool>
@@ -502,6 +482,32 @@
    </property>
    <property name="text">
     <string>Hide selected peoples</string>
+   </property>
+  </action>
+  <action name="actionDisplay_feet">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display feet</string>
+   </property>
+  </action>
+  <action name="actionSet_first_foot_timecode">
+   <property name="text">
+    <string>Set first foot timecode...</string>
+   </property>
+  </action>
+  <action name="actionSet_distance_between_two_feet">
+   <property name="text">
+    <string>Set distance between two feet...</string>
+   </property>
+  </action>
+  <action name="actionUse_native_video_size">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Use native video size</string>
    </property>
   </action>
  </widget>

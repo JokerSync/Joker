@@ -4,15 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QString>
-#include <QFileInfo>
-#include <QDomDocument>
-#include <QDomNodeList>
-#include <QtXml>
-#include <QXmlStreamWriter>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlError>
+#include "PhTools/PhFile.h"
+#include "PhTools/PhData.h"
 
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhFileTool.h"

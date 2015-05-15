@@ -3,18 +3,28 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
+QT		+= xml sql network
+
+PRECOMPILED_HEADERS += \
+    $$PWD/PhGeneric.h \
+    $$PWD/PhFile.h \
+    $$PWD/PhData.h \
+
 HEADERS += \
-	$$TOP_ROOT/libs/PhTools/PhDebug.h \
-	$$TOP_ROOT/libs/PhTools/PhTickCounter.h \
-	$$TOP_ROOT/libs/PhTools/PhPictureTools.h \
-	$$TOP_ROOT/libs/PhTools/PhFileTool.h \
-	$$TOP_ROOT/libs/PhTools/PhGenericSettings.h \
-	$$TOP_ROOT/libs/PhTools/PhTestTools.h
+    $$PWD/PhGeneric.h \
+    $$PWD/PhFile.h \
+    $$PWD/PhData.h \
+	$$PWD/PhDebug.h \
+	$$PWD/PhTickCounter.h \
+	$$PWD/PhPictureTools.h \
+	$$PWD/PhFileTool.h \
+	$$PWD/PhGenericSettings.h \
+	$$PWD/PhTestTools.h \
 
 SOURCES += \
-	$$TOP_ROOT/libs/PhTools/PhDebug.cpp \
-	$$TOP_ROOT/libs/PhTools/PhTickCounter.cpp \
-	$$TOP_ROOT/libs/PhTools/PhPictureTools.cpp \
-	$$TOP_ROOT/libs/PhTools/PhFileTool.cpp \
-	$$TOP_ROOT/libs/PhTools/PhGenericSettings.cpp \
-	$$TOP_ROOT/libs/PhTools/PhTestTools.cpp
+	$$PWD/PhDebug.cpp \
+	$$PWD/PhTickCounter.cpp \
+	$$PWD/PhPictureTools.cpp \
+	$$PWD/PhFileTool.cpp \
+	$$PWD/PhGenericSettings.cpp \
+	$$PWD/PhTestTools.cpp \

@@ -3,41 +3,44 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT += widgets network
+QT += widgets
+
+PRECOMPILED_HEADERS += \
+    $$PWD/PhUI.h \
 
 HEADERS += \
-#    $$TOP_ROOT/libs/PhCommonUI/PhLeap.h \
-	$$TOP_ROOT/libs/PhCommonUI/PhMediaPanel.h \
-	$$TOP_ROOT/libs/PhCommonUI/PhTimeCodeEdit.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhTimeCodeDialog.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhFloatingMediaPanel.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhWindow.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhWindowSettings.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindow.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindowSettings.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhEditableDocumentWindow.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhLockableSpinBox.h \
-	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackDialog.h \
-	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackSettings.h \
-    $$TOP_ROOT/libs/PhCommonUI/PhDialogButtonBox.h
+#    $$PWD/PhLeap.h \
+	$$PWD/PhMediaPanel.h \
+	$$PWD/PhTimeCodeEdit.h \
+    $$PWD/PhTimeCodeDialog.h \
+    $$PWD/PhFloatingMediaPanel.h \
+    $$PWD/PhWindow.h \
+    $$PWD/PhWindowSettings.h \
+    $$PWD/PhDocumentWindow.h \
+    $$PWD/PhDocumentWindowSettings.h \
+    $$PWD/PhEditableDocumentWindow.h \
+    $$PWD/PhLockableSpinBox.h \
+	$$PWD/PhFeedbackDialog.h \
+	$$PWD/PhFeedbackSettings.h \
+    $$PWD/PhDialogButtonBox.h \
 
 SOURCES += \
-#   $$TOP_ROOT/libs/PhCommonUI/PhLeap.cpp \
-	$$TOP_ROOT/libs/PhCommonUI/PhMediaPanel.cpp \
-	$$TOP_ROOT/libs/PhCommonUI/PhTimeCodeEdit.cpp \
-    $$TOP_ROOT/libs/PhCommonUI/PhTimeCodeDialog.cpp \
-    $$TOP_ROOT/libs/PhCommonUI/PhFloatingMediaPanel.cpp \
-    $$TOP_ROOT/libs/PhCommonUI/PhWindow.cpp \
-    $$TOP_ROOT/libs/PhCommonUI/PhDocumentWindow.cpp \
-    $$TOP_ROOT/libs/PhCommonUI/PhEditableDocumentWindow.cpp \
-    $$TOP_ROOT/libs/PhCommonUI/PhLockableSpinBox.cpp \
-	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackDialog.cpp \
-    $$TOP_ROOT/libs/PhCommonUI/PhDialogButtonBox.cpp
+#   $$PWD/PhLeap.cpp \
+	$$PWD/PhMediaPanel.cpp \
+	$$PWD/PhTimeCodeEdit.cpp \
+    $$PWD/PhTimeCodeDialog.cpp \
+    $$PWD/PhFloatingMediaPanel.cpp \
+    $$PWD/PhWindow.cpp \
+    $$PWD/PhDocumentWindow.cpp \
+    $$PWD/PhEditableDocumentWindow.cpp \
+    $$PWD/PhLockableSpinBox.cpp \
+	$$PWD/PhFeedbackDialog.cpp \
+    $$PWD/PhDialogButtonBox.cpp
 
 
-FORMS += $$TOP_ROOT/libs/PhCommonUI/PhMediaPanel.ui \
-	$$TOP_ROOT/libs/PhCommonUI/PhTimeCodeDialog.ui \
-	$$TOP_ROOT/libs/PhCommonUI/PhFeedbackDialog.ui
+FORMS += $$PWD/PhMediaPanel.ui \
+	$$PWD/PhTimeCodeDialog.ui \
+	$$PWD/PhFeedbackDialog.ui
 
 #INCLUDEPATH += $$(LEAP_SDK)/include
 

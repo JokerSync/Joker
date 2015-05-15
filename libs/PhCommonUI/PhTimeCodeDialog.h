@@ -7,7 +7,7 @@
 #ifndef PHTIMECODEDIALOG_H
 #define PHTIMECODEDIALOG_H
 
-#include <QDialog>
+#include "PhCommonUI/PhUI.h"
 
 #include "PhSync/PhTimeCode.h"
 

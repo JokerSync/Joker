@@ -4,8 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QEvent>
-#include <QApplication>
+#include "PhTools/PhGeneric.h"
+#include "PhCommonUI/PhUI.h"
 
 #include "PhTools/PhDebug.h"
 #include "PhLockableSpinBox.h"

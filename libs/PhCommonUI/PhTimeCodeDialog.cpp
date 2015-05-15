@@ -6,8 +6,6 @@
 
 #include "PhTimeCodeDialog.h"
 #include "ui_PhTimeCodeDialog.h"
-#include <QDialogButtonBox>
-#include <QPushButton>
 
 PhTimeCodeDialog::PhTimeCodeDialog(PhTimeCodeType tcType, PhTime time, QWidget *parent) :
 	QDialog(parent),

@@ -1,8 +1,7 @@
 #ifndef PHGRAPHICSETTINGS_H
 #define PHGRAPHICSETTINGS_H
 
-#include <QApplication>
-#include <QString>
+#include "PhTools/PhGeneric.h"
 
 /**
  * @brief The settings for PhGraphic

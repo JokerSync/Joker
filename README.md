@@ -1,7 +1,7 @@
 Joker
 =====
 
-[![Build Status](https://travis-ci.org/Phonations/Joker.png?branch=master)](https://travis-ci.org/Phonations/Joker) [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.png?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master) [![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille)
+[![Build Status](https://travis-ci.org/Phonations/Joker.png?branch=master)](https://travis-ci.org/Phonations/Joker) [![Build status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva/branch/master?svg=true)](https://ci.appveyor.com/project/MartinDelille/Joker/branch/master) [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.png?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master) [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=martindelille&url=https://github.com/Phonations/Joker&title=Joker&language=cpp&tags=github&category=software) [![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Phonations/Joker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This repository hosts the Joker projet components:
 
@@ -64,33 +64,15 @@ Just run the *bootstrap* script:
 
 #### Manual install
 
-You can install all the dependencies via __brew__:
+You can install most of the dependencies via __brew__:
 
-    brew install sdl2 sdl2_ttf sdl2_image libav portaudio
+    brew install libav portaudio libltc
 
     brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass --with-libcaca --with-libvo-aacenc --with-libvorbis --with-libvpx --with-openjpeg --with-openssl --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-speex --with-theora --with-tools
+    
+The SDL libraries can be installed with a specific script:
 
-
-Then as __macdeployqt__ doesn't work well with brew, you'll have to change the libs permissions
-
-    find /usr/local/Cellar/ -perm -ugo+r -iname "*dylib*" -exec chmod 644 {} \;
-
-Unfortunatly, the __ltc__ libs are not (yet) installable via brew but this is not a big deal.
-Get the latest release:
-
-    wget https://github.com/x42/libltc/releases/download/v1.1.3/libltc-1.1.3.tar.gz
-
-Extract it:
-
-    tar -xvzf libltc-1.1.3.tar.gz
-
-Then configure the environment:
-
-    aclocal; autoheader; glibtoolize –copy; autoconf; automake –gnu –add-missing –copy
-
-And finaly configure and install:
-
-    ./configure && make && sudo make install
+    ./script/install_sdl.sh
 
 ### The Leap SDK _(optionnal)_
 

@@ -1,16 +1,15 @@
-os:
-  #  - osx
-  - linux
+language: cpp
+os: osx
+compiler: clang
 env:
   global:
   - PATH=$PATH:/usr/local/opt/qt5/bin; fi
   - JOKER_RELEASE_PATH=$HOME
   - TESTS_RELEASE_PATH=$HOME
   matrix:
-    #- JOB=UNCRUSTIFY
-    #  - JOB=DOXYGEN
-    #- JOB=BUILD_SPEC_AUTOTEST
-    #  - JOB=BUILD_SPEC_BANDIT
+#  - JOB=UNCRUSTIFY
+#  - JOB=DOXYGEN
+#  - JOB=BUILD_SPEC_BANDIT
   - JOB=BUILD_RELEASE_JOKER
     #  - JOB=BUILD_RELEASE_LTCTOOL
     #  - JOB=BUILD_RELEASE_MIDITOOL
@@ -41,14 +40,12 @@ install:
 script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
 - if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
-- if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then qmake tests/AutoTest/AutoTest.pro; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then qmake specs/AllSpecs.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then qmake app/Joker/Joker.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make -j 8; fi
-- if [[ "$JOB" == BUILD_SPEC_AUTOTEST ]]; then ./AutoTest; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
 - export RELEASED_PACKAGE_FILENAME=$(ls -1 $JOKER_RELEASE_PATH/Joker_$TRAVIS_TAG.dmg)
 - echo ${RELEASED_PACKAGE_FILENAME}
@@ -58,12 +55,13 @@ after_success:
 after_failure:
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
-  flowdock:
-    secure: CnvMZuPXcFS6FQ17QYgtWsp9GUTbidjulsmpzbVh9S2zN2xVjGEMKe8KafPa55ugFYbYudCt7w20+wJO4OomYFQxgKAtJuGHZQ9jIfv0vl2sAcuzdaJY6aCFDtL4DFpAjGp8qwkZ0Mtx1xFgqyMcF/8eHfQm7bGO+ahmI5f9Jbc=
   email: false
   irc:
-   channels: "phonations.com#joker"
-  on_success: always
+    channels: "phonations.com#joker"
+    on_success: always
+  webhooks:
+    urls: https://webhooks.gitter.im/e/9e468ed6125989020262
+    on_success: always
 deploy:
   provider: releases
   api_key:

@@ -4,9 +4,9 @@
 #
 
 HEADERS += \
-	$$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.h \
-	$$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStripSettings.h
+	$$PWD/PhGraphicStrip.h \
+	$$PWD/PhGraphicStripSettings.h
 
 SOURCES += \
-	$$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.cpp
+	$$PWD/PhGraphicStrip.cpp
 

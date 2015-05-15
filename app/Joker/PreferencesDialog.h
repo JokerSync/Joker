@@ -7,9 +7,7 @@
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
-#include <QDialog>
-#include <QListWidgetItem>
-#include <QButtonGroup>
+#include "PhCommonUI/PhUI.h"
 
 #include "JokerSettings.h"
 

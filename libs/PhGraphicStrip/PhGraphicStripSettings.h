@@ -1,9 +1,7 @@
 #ifndef PHGRAPHICSTRIPSETTINGS_H
 #define PHGRAPHICSTRIPSETTINGS_H
 
-#include <QString>
-#include <QDir>
-
+#include "PhTools/PhFile.h"
 #include "PhGraphic/PhGraphicSettings.h"
 
 /**
@@ -89,20 +87,20 @@ public:
 	 */
 	virtual bool invertColor() = 0;
 	/**
-	 * @brief Display the ruler on the strip
-	 * @return True if the ruler is displayed, false otherwise
+	 * @brief Display the feet on the rythmo view
+	 * @return True if the feet are displayed, false otherwise
 	 */
-	virtual bool displayRuler() = 0;
+	virtual bool displayFeet() = 0;
 	/**
-	 * @brief The timestamp of the ruler
+	 * @brief The time of the first foot
 	 * @return
 	 */
-	virtual int rulerTimeIn() = 0;
+	virtual int firstFootTime() = 0;
 	/**
-	 * @brief The amount of time between each draw of the ruler
+	 * @brief The amount of time between two feet
 	 * @return A time value
 	 */
-	virtual int timeBetweenRuler() = 0;
+	virtual int timeBetweenTwoFeet() = 0;
 
 	/**
 	 * @brief Display the cuts on the strip

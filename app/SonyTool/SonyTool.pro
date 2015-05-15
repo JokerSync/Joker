@@ -6,8 +6,6 @@
 
 TARGET = SonyTool
 
-VERSION = 1.0.0
-
 ICON = sony.icns
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..

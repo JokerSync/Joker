@@ -20,8 +20,8 @@ public:
 	PH_SETTING_BOOL(setResetInfo, resetInfo)
 
 	// PhGraphicStripSettings :
-	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 0.25f)
-	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 80)
+	PH_SETTING_FLOAT2(setStripHeight, stripHeight, 1.0f)
+	PH_SETTING_INT2(setHorizontalTimePerPixel, horizontalTimePerPixel, 50)
 	PH_SETTING_INT2(setVerticalTimePerPixel, verticalTimePerPixel, 1000)
 	PH_SETTING_STRING2(setBackgroundImageLight, backgroundImageLight, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png")
 	PH_SETTING_STRING2(setBackgroundImageDark, backgroundImageDark, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png")
@@ -32,9 +32,9 @@ public:
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
 	PH_SETTING_BOOL(setHideSelectedPeoples, hideSelectedPeoples)
 	PH_SETTING_BOOL(setInvertColor, invertColor)
-	PH_SETTING_BOOL(setDisplayRuler, displayRuler)
-	PH_SETTING_INT(setRulerTimeIn, rulerTimeIn)
-	PH_SETTING_INT2(setTimeBetweenRuler, timeBetweenRuler, 48000)
+	PH_SETTING_BOOL(setDisplayFeet, displayFeet)
+	PH_SETTING_INT(setFirstFootTime, firstFootTime)
+	PH_SETTING_INT2(setTimeBetweenTwoFeet, timeBetweenTwoFeet, 48000)
 	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 	PH_SETTING_INT2(setCutWidth, cutWidth, 4)
 	PH_SETTING_BOOL2(setDisplayBackground, displayBackground, true)

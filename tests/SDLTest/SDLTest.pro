@@ -5,8 +5,6 @@
 
 TARGET = SDLTest
 
-VERSION = 1.0.0
-
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
@@ -85,8 +83,8 @@ CONFIG(release, debug|release) {
 		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_image.framework/Versions/A/SDL2_image  @executable_path/../Frameworks/SDL2_image.framework/Versions/A/SDL2_image $${TARGET}.app/Contents/MacOS/$${TARGET};
 		QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_ttf.framework/Versions/A/SDL2_ttf @executable_path/../Frameworks/SDL2_ttf.framework/Versions/A/SDL2_ttf $${TARGET}.app/Contents/MacOS/$${TARGET};
 
-		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
-		QMAKE_POST_LINK += cp $${TARGET}.dmg $$(TESTS_RELEASE_PATH)/$${TARGET}_v$${VERSION}.dmg
+#		QMAKE_POST_LINK += macdeployqt $${TARGET}.app -dmg;
+#		QMAKE_POST_LINK += cp $${TARGET}_v$${VERSION}.dmg $$(TESTS_RELEASE_PATH)/$${TARGET}_v$${VERSION}.dmg
 	}
 
 }

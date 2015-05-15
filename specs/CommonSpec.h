@@ -15,4 +15,6 @@ std::string t2s(PhTime time, PhTimeCodeType tcType);
 
 PhTime s2t(QString string, PhTimeCodeType tcType);
 
+bool compareImage(QImage result, QImage expected, QString testName, int gap = 0);
+
 #endif // COMMONSPEC_H

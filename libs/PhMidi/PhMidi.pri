@@ -5,19 +5,19 @@
 
 HEADERS += \
 	$$TOP_ROOT/vendor/rtmidi/RtMidi.h \
-	$$TOP_ROOT/libs/PhMidi/PhMidiObject.h \
-	$$TOP_ROOT/libs/PhMidi/PhMidiInput.h \
-	$$TOP_ROOT/libs/PhMidi/PhMidiOutput.h \
-	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeWriter.h \
-	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeReader.h
+	$$PWD/PhMidiObject.h \
+	$$PWD/PhMidiInput.h \
+	$$PWD/PhMidiOutput.h \
+	$$PWD/PhMidiTimeCodeWriter.h \
+	$$PWD/PhMidiTimeCodeReader.h
 
 SOURCES += \
 	$$TOP_ROOT/vendor/rtmidi/RtMidi.cpp \
-	$$TOP_ROOT/libs/PhMidi/PhMidiObject.cpp \
-	$$TOP_ROOT/libs/PhMidi/PhMidiInput.cpp \
-	$$TOP_ROOT/libs/PhMidi/PhMidiOutput.cpp \
-	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeWriter.cpp \
-	$$TOP_ROOT/libs/PhMidi/PhMidiTimeCodeReader.cpp
+	$$PWD/PhMidiObject.cpp \
+	$$PWD/PhMidiInput.cpp \
+	$$PWD/PhMidiOutput.cpp \
+	$$PWD/PhMidiTimeCodeWriter.cpp \
+	$$PWD/PhMidiTimeCodeReader.cpp
 
 INCLUDEPATH += $$TOP_ROOT/vendor/rtmidi
 

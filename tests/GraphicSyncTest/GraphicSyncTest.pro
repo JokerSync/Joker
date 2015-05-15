@@ -6,8 +6,6 @@
 
 TARGET = GraphicSyncTest
 
-VERSION = 1.0.0
-
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)

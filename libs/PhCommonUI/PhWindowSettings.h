@@ -1,7 +1,13 @@
+/**
+ * @file
+ * @copyright (C) 2012-2014 Phonations
+ * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
+ */
+
 #ifndef PHWINDOWSETTINGS_H
 #define PHWINDOWSETTINGS_H
 
-#include <QByteArray>
+#include "PhTools/PhGeneric.h"
 
 /**
  * @brief The settings for PhDocumentWindow

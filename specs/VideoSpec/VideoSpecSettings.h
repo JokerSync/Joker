@@ -8,10 +8,11 @@
 
 
 
-
+#include "PhTools/PhGenericSettings.h"
 #include "PhVideo/PhVideoSettings.h"
 
-class VideoSpecSettings : public PhVideoSettings
+class VideoSpecSettings : protected PhGenericSettings,
+		public PhVideoSettings
 {
 public:
 	//PhVideoSettings
@@ -19,6 +20,7 @@ public:
 		return 0;
 	}
 
+	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
 };
 
 #endif // VIDEOSPECSETTINGS_H

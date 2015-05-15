@@ -4,19 +4,16 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QtGlobal>
-
-#if defined(Q_OS_WIN)
-#include <GL/glu.h>
-#else
-#include <glu.h>
-#endif
-
 #include "PhFont.h"
 #include "PhTools/PhDebug.h"
 
 PhFont::PhFont() : _texture(-1), _glyphHeight(0), _boldness(0), _ready(false)
 {
+}
+
+bool PhFont::ready()
+{
+	return _ready;
 }
 
 void PhFont::setFontFile(QString fontFile)
@@ -28,7 +25,7 @@ void PhFont::setFontFile(QString fontFile)
 	}
 }
 
-QString PhFont::getFontFile()
+QString PhFont::fontFile()
 {
 	return _fontFile;
 }

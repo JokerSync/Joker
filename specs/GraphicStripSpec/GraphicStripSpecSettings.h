@@ -6,7 +6,8 @@
 #ifndef GRAPHICSTRIPSPECSETTINGS_H
 #define GRAPHICSTRIPSPECSETTINGS_H
 
-#include <QDir>
+#include "PhTools/PhFile.h"
+
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 
 class GraphicStripSpecSettings : public PhGraphicStripSettings
@@ -66,13 +67,13 @@ public:
 	bool invertColor() {
 		return false;
 	}
-	bool displayRuler() {
+	bool displayFeet() {
 		return false;
 	}
-	int rulerTimeIn() {
+	int firstFootTime() {
 		return 0;
 	}
-	int timeBetweenRuler() {
+	int timeBetweenTwoFeet() {
 		return 48000;
 	}
 
