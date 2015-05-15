@@ -8,8 +8,6 @@ cache()
 
 TARGET = Joker
 
-VERSION = $$system(date +%y.%m.%d)
-
 CONFIG += video
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
