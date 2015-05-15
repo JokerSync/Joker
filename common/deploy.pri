@@ -25,6 +25,7 @@ mac {
 		QMAKE_POST_LINK += plutil -replace CFBundleSignature -string ??? $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -insert LSApplicationCategoryType -string public.app-category.video $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert NSPrincipalClass -string NSApplication $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
 	}
