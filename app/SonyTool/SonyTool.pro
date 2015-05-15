@@ -28,7 +28,7 @@ FORMS    += SonyToolWindow.ui \
     PreferencesDialog.ui
 
 mac {
-	ICON = sony.icns
+	ICON = $$PWD/sony.icns
 }
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)

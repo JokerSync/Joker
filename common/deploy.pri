@@ -7,10 +7,13 @@ mac {
 		QMAKE_POST_LINK += echo Create Info.plist;
 		QMAKE_POST_LINK += cp $$(QTDIR)/mkspecs/macx-clang/Info.plist.app $${TARGET}.app/Contents/Info.plist;
 
-		QMAKE_POST_LINK += plutil -replace CFBundleExecutable -string $${TARGET} $${TARGET}.app/Contents/Info.plist;
-
-		!defined(ICON) ICON = $$TOP_ROOT/data/icon.icns
+		isEmpty(ICON) {
+			message("Settings default icon")
+			ICON = $$TOP_ROOT/data/icon.icns
+		}
 		QMAKE_POST_LINK += cp $$ICON $${TARGET}.app/Contents/Resources/$${TARGET}.icns;
+
+		QMAKE_POST_LINK += plutil -replace CFBundleExecutable -string $${TARGET} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleIconFile -string $${TARGET}.icns $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string com.phonations.$${TARGET} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleSignature -string ??? $${TARGET}.app/Contents/Info.plist;
