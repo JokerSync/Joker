@@ -2,6 +2,24 @@ win32 {
 	QMAKE_POST_LINK += windeployqt $${RESOURCES_PATH} $${CS}
 }
 
+mac {
+	app_bundle {
+		QMAKE_POST_LINK += echo Create Info.plist;
+		QMAKE_POST_LINK += cp $$(QTDIR)/mkspecs/macx-clang/Info.plist.app $${TARGET}.app/Contents/Info.plist;
+
+		QMAKE_POST_LINK += plutil -replace CFBundleExecutable -string $${TARGET} $${TARGET}.app/Contents/Info.plist;
+
+		!defined(ICON) ICON = $$TOP_ROOT/data/icon.icns
+		QMAKE_POST_LINK += cp $$ICON $${TARGET}.app/Contents/Resources/$${TARGET}.icns;
+		QMAKE_POST_LINK += plutil -replace CFBundleIconFile -string $${TARGET}.icns $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string com.phonations.$${TARGET} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleSignature -string ??? $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -insert CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -insert NSPrincipalClass -string NSApplication $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -insert NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
+	}
+}
+
 CONFIG(release, debug|release) {
 	mac {
 		app_bundle {
