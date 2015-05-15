@@ -118,7 +118,6 @@ CONFIG(release, debug|release) {
 		QMAKE_POST_LINK += ln -s A Versions/Current;
 		QMAKE_POST_LINK += ln -s Versions/Current/webp webp;
 		QMAKE_POST_LINK += ln -s Versions/Current/Resources Resources;
-		QMAKE_POST_LINK += install_name_tool -change @rpath/webp.framework/Versions/A/webp  @executable_path/../Frameworks/webp.framework/Versions/A/webp ../SDL2_image.framework/SDL2_image;
 		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" Resources/Info.plist;
 		QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep . --force;
 		QMAKE_POST_LINK += cd ..;
@@ -132,7 +131,8 @@ CONFIG(release, debug|release) {
         QMAKE_POST_LINK += ln -s Versions/Current/SDL2_image SDL2_image;
         QMAKE_POST_LINK += ln -s Versions/Current/Resources Resources;
         QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_image.framework/Versions/A/SDL2_image  @executable_path/../Frameworks/SDL2_image.framework/Versions/A/SDL2_image ../../MacOS/$${TARGET};
-        QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" Resources/Info.plist;
+		QMAKE_POST_LINK += install_name_tool -change @rpath/webp.framework/Versions/A/webp  @executable_path/../Frameworks/webp.framework/Versions/A/webp SDL2_image;
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" Resources/Info.plist;
         QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep . --force;
         QMAKE_POST_LINK += cd ..;
 
@@ -144,7 +144,6 @@ CONFIG(release, debug|release) {
 		QMAKE_POST_LINK += ln -s A Versions/Current;
 		QMAKE_POST_LINK += ln -s Versions/Current/FreeType FreeType;
 		QMAKE_POST_LINK += ln -s Versions/Current/Resources Resources;
-		QMAKE_POST_LINK += install_name_tool -change @rpath/FreeType.framework/Versions/A/FreeType  @executable_path/../Frameworks/FreeType.framework/Versions/A/FreeType ../SDL2_ttf.framework/SDL2_ttf;
 		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" Resources/Info.plist;
 		QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep . --force;
 		QMAKE_POST_LINK += cd ..;
@@ -158,7 +157,8 @@ CONFIG(release, debug|release) {
         QMAKE_POST_LINK += ln -s Versions/Current/SDL2_ttf SDL2_ttf;
         QMAKE_POST_LINK += ln -s Versions/Current/Resources Resources;
         QMAKE_POST_LINK += install_name_tool -change @rpath/SDL2_ttf.framework/Versions/A/SDL2_ttf  @executable_path/../Frameworks/SDL2_ttf.framework/Versions/A/SDL2_ttf ../../MacOS/$${TARGET};
-        QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" Resources/Info.plist;
+		QMAKE_POST_LINK += install_name_tool -change @rpath/FreeType.framework/Versions/A/FreeType  @executable_path/../Frameworks/FreeType.framework/Versions/A/FreeType SDL2_ttf;
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" Resources/Info.plist;
         QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep . --force;
         QMAKE_POST_LINK += cd ..;
 
