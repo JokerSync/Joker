@@ -17,6 +17,11 @@ else {
 	VERSION = $$system(date +%y.%m.%d)
 }
 
+# Use default icon if not defined
+isEmpty(ICON) {
+	ICON = $$TOP_ROOT/data/icon.icns
+}
+
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
