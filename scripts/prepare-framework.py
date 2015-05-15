@@ -100,13 +100,17 @@ def call_program(*args):
         return l
 
 chdir(bundlePath)
-for link in call_program(["find","-L",bundlePath,"-type","l"]):
-    filename = os.path.split(link)[1]
-    # find the actual file
-    params = ["find",bundlePath,
-              "-type","f",
-              "-and","-not","-type","l",
-              "-and","-name",filename]
-    targetfile = call_program(params)
-    os.remove(link)
-    symlink(targetfile,link)
+
+#print 'find in ', bundlePath
+
+#for link in call_program(["find","-L",bundlePath,"-type","l"]):
+#    filename = os.path.split(link)[1]
+#    print 'filename: ', filename
+#    # find the actual file
+#    params = ["find",bundlePath,
+#              "-type","f",
+#              "-and","-not","-type","l",
+#              "-and","-name",filename]
+#    targetfile = call_program(params)
+#    os.remove(link)
+#    symlink(targetfile,link)

@@ -65,7 +65,7 @@ mac{
 	# For the plist version
 	OTHER_FILES += $${TOP_ROOT}/data/joker.plist
 
-	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/joker.plist
+	QMAKE_INFO_PLIST =  $${TOP_ROOT}/data/joker.plist
 	QMAKE_POST_LINK += sed -i \"\" -e "s/@VERSION@/$$VERSION/g" "./$${TARGET}.app/Contents/Info.plist";
 }
 

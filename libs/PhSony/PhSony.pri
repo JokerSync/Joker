@@ -5,6 +5,8 @@
 
 QT += serialport
 
+CONFIG += phsony
+
 HEADERS += \
 	$$PWD/PhSonyController.h \
 	$$PWD/PhSonyMasterController.h \
