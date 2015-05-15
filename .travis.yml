@@ -1,7 +1,7 @@
 language: cpp
 os:
   - linux
-  - osx
+#  - osx
 env:
   global:
   - PATH=$PATH:/usr/local/opt/qt5/bin; fi
