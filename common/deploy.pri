@@ -80,25 +80,29 @@ CONFIG(release, debug|release) {
             QMAKE_POST_LINK += cp $${ENTITLEMENTS} .;
             QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -v --entitlements $${ENTITLEMENTS} $${TARGET}.app;
 
-            QMAKE_POST_LINK += echo "Build PKG";
+			create-pkg {
+				QMAKE_POST_LINK += echo "Build PKG";
 
-            QMAKE_POST_LINK += echo $$(INSTALLER_CERTIFICATE);
-			QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${TARGET}_v$${VERSION}.pkg;
+				QMAKE_POST_LINK += echo $$(INSTALLER_CERTIFICATE);
+				QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${TARGET}_v$${VERSION}.pkg;
+			}
 
 ##################################################
 
-			# creating dmg with create-dmg
+			create-dmg {
+				QMAKE_POST_LINK += echo "Creating dmg with create-dmg"
 
-			QMAKE_POST_LINK += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
-				--volname $${TARGET}_v$${VERSION} \
-				--background $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png \
-				--app-drop-link 450 218 \
-				--icon $${TARGET}.app 150 218 \
-				--window-size 600 450 \
-				$${PH_DEPLOY_TARGET} \
-				$${TARGET}.app;
+				QMAKE_POST_LINK += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
+					--volname $${TARGET}_v$${VERSION} \
+					--background $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png \
+					--app-drop-link 450 218 \
+					--icon $${TARGET}.app 150 218 \
+					--window-size 600 450 \
+					$${PH_DEPLOY_TARGET} \
+					$${TARGET}.app;
 
-			QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET} $${PH_DEPLOY_LOCATION};
+				QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET} $${PH_DEPLOY_LOCATION};
+			}
 		}
 	}
 
