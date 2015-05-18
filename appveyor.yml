@@ -2,7 +2,7 @@ os: unstable
 install:
   - git submodule update --init --recursive
   # Installing various utilities
-  - choco install curl 7zip InnoSetup
+  - choco install -y curl 7zip InnoSetup
   - set PATH=%PATH%;"C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5"
   - set JOKER_RELEASE_PATH=.
   # Configuring Qt
