@@ -72,11 +72,8 @@ win32 {
 linux {
 	INCLUDEPATH +=  /usr/include/GL
 	DEPENDPATH +=   /usr/include/GL
-}
-
-linux {
-	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf
+	INCLUDEPATH += /usr/include
+	LIBS += -L/usr/lib -lSDL2 -lSDL2_image -lSDL2_ttf
 }
 
 mac {
