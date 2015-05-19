@@ -11,10 +11,11 @@ env:
 #  - JOB=UNCRUSTIFY
 #  - JOB=DOXYGEN
 #  - JOB=BUILD_SPEC_BANDIT
-  - JOB=BUILD_RELEASE_JOKER
-    #  - JOB=BUILD_RELEASE_LTCTOOL
-    #  - JOB=BUILD_RELEASE_MIDITOOL
-    #  - JOB=BUILD_RELEASE_ALL_TESTS
+#  - JOB=BUILD_RELEASE_JOKER
+  - JOB=BUILD_RELEASE_POUET
+#  - JOB=BUILD_RELEASE_LTCTOOL
+#  - JOB=BUILD_RELEASE_MIDITOOL
+#  - JOB=BUILD_RELEASE_ALL_TESTS
 matrix:
   exclude:
     - os: linux
@@ -29,12 +30,12 @@ install:
 - git submodule update --init --recursive
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
-- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
-- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
-- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ffmpeg.sh; fi
-- if [[ "$JOB" == BUILD_* ]]; then scripts/install_portaudio.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_qt5.sh; fi
-- if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_RELEASE_* ]]; then npm install -g appdmg; fi
+#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
+#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
+#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ffmpeg.sh; fi
+#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_portaudio.sh; fi
+#- if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_RELEASE_* ]]; then npm install -g appdmg; fi
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
 
@@ -43,10 +44,11 @@ script:
 - if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then qmake specs/AllSpecs.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then qmake app/Joker/Joker.pro; fi
+- if [[ "$JOB" == BUILD_RELEASE_POUET ]]; then qmake tests/FormTest/FormTest.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
-- if [[ "$JOB" == BUILD_* ]]; then make -j 8; fi
+- if [[ "$JOB" == BUILD_* ]]; then make; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
 - export RELEASED_PACKAGE_FILENAME=$(ls -1 $JOKER_RELEASE_PATH/Joker_$TRAVIS_TAG.dmg)
 - echo ${RELEASED_PACKAGE_FILENAME}
