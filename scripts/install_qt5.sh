@@ -12,6 +12,6 @@ echo "Linux detected"
 #yes | sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
 #sudo apt-get update -qq
 sudo apt-get install build-essential g++ curl
-sudo apt-get install -qq qt5-default qtdeclarative5-dev
+sudo apt-get install libqt5core5a libqt5gui5 libqt5opengl5
 
 fi
