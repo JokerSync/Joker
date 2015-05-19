@@ -9,7 +9,7 @@ brew install qt5
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"
 
-#yes | sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
+yes | sudo add-apt-repository ppa:ubuntu-sdk-team/ppa
 sudo apt-get update 
 sudo apt-cache search qt5
 #sudo apt-get install build-essential g++ curl
