@@ -8,46 +8,45 @@ install:
   # Configuring Qt
   - set QTDIR=C:\Qt\Qt5.3.2\5.3\mingw482_32
   - set PATH=%PATH%;%QTDIR%\bin;C:\MinGW\bin
-    #  # Installing SDL2
-    #  - curl -kLO https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz
-    #  - 7z x SDL2-devel-2.0.3-mingw.tar.gz
-    #  - 7z x SDL2-devel-2.0.3-mingw.tar
-    #  - set SDL_PATH=%CD%\SDL2-2.0.3\i686-w64-mingw32\
-    #  - cat %SDL_PATH%\include\SDL2\SDL_platform.h
-    #  - curl -kL https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h -o %SDL_PATH%\include\SDL2\SDL_platform.h
-    #  - cat %SDL_PATH%\include\SDL2\SDL_platform.h
-    #  # Installing SDL2_image
-    #  - curl -kLO https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.0-mingw.tar.gz
-    #  - 7z x SDL2_image-devel-2.0.0-mingw.tar.gz
-    #  - 7z x SDL2_image-devel-2.0.0-mingw.tar
-    #  - set SDL_IMAGE_PATH=%CD%\SDL2_image-2.0.0\i686-w64-mingw32\
-    #  # Installing SDL2_ttf
-    #  - curl -kLO https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.12-mingw.tar.gz
-    #  - 7z x SDL2_ttf-devel-2.0.12-mingw.tar.gz
-    #  - 7z x SDL2_ttf-devel-2.0.12-mingw.tar
-    #  - set SDL_TTF_PATH=%CD%\SDL2_ttf-2.0.12\i686-w64-mingw32\
-    #  # Installing ffmpeg dev
-    #  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20140222-git-44b22bb-win32-dev.7z
-    #  - 7z x ffmpeg-20140222-git-44b22bb-win32-dev.7z
-    #  - set FFMPEG_DEV_PATH=%CD%\ffmpeg-20140222-git-44b22bb-win32-dev
-    #  # Installing ffmpeg shared
-    #  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20140222-git-44b22bb-win32-shared.7z
-    #  - 7z x ffmpeg-20140222-git-44b22bb-win32-shared.7z
-    #  - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-20140222-git-44b22bb-win32-shared
-    #  # Installing PortAudio
-    #  - curl -kLO https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip
-    #  - 7z x portaudio-r1891-build.zip
-    #  - set PORTAUDIO_PATH=%CD%\portaudio-r1891-build
-    #  # Installing libltc
-    #  - curl -kLO https://github.com/x42/libltc/releases/download/v1.1.4/libltc-1.1.4.tar.gz
-    #  - 7z x libltc-1.1.4.tar.gz
-    #  - 7z x libltc-1.1.4.tar
-    #  - set LTC_PATH=%CD%\libltc-1.1.4\src
-    #  - copy qopengl.h C:\Qt\Qt5.3.2\5.3\mingw482_32\include\QtGui
+  # Installing SDL2
+  - curl -kLO https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz
+  - 7z x SDL2-devel-2.0.3-mingw.tar.gz
+  - 7z x SDL2-devel-2.0.3-mingw.tar
+  - set SDL_PATH=%CD%\SDL2-2.0.3\i686-w64-mingw32\
+  - cat %SDL_PATH%\include\SDL2\SDL_platform.h
+  - curl -kL https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h -o %SDL_PATH%\include\SDL2\SDL_platform.h
+  - cat %SDL_PATH%\include\SDL2\SDL_platform.h
+  # Installing SDL2_image
+  - curl -kLO https://www.libsdl.org/projects/SDL_image/release/SDL2_image-devel-2.0.0-mingw.tar.gz
+  - 7z x SDL2_image-devel-2.0.0-mingw.tar.gz
+  - 7z x SDL2_image-devel-2.0.0-mingw.tar
+  - set SDL_IMAGE_PATH=%CD%\SDL2_image-2.0.0\i686-w64-mingw32\
+  # Installing SDL2_ttf
+  - curl -kLO https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.12-mingw.tar.gz
+  - 7z x SDL2_ttf-devel-2.0.12-mingw.tar.gz
+  - 7z x SDL2_ttf-devel-2.0.12-mingw.tar
+  - set SDL_TTF_PATH=%CD%\SDL2_ttf-2.0.12\i686-w64-mingw32\
+  # Installing ffmpeg dev
+  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20140222-git-44b22bb-win32-dev.7z
+  - 7z x ffmpeg-20140222-git-44b22bb-win32-dev.7z
+  - set FFMPEG_DEV_PATH=%CD%\ffmpeg-20140222-git-44b22bb-win32-dev
+  # Installing ffmpeg shared
+  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20140222-git-44b22bb-win32-shared.7z
+  - 7z x ffmpeg-20140222-git-44b22bb-win32-shared.7z
+  - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-20140222-git-44b22bb-win32-shared
+  # Installing PortAudio
+  - curl -kLO https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip
+  - 7z x portaudio-r1891-build.zip
+  - set PORTAUDIO_PATH=%CD%\portaudio-r1891-build
+  # Installing libltc
+  - curl -kLO https://github.com/x42/libltc/releases/download/v1.1.4/libltc-1.1.4.tar.gz
+  - 7z x libltc-1.1.4.tar.gz
+  - 7z x libltc-1.1.4.tar
+  - set LTC_PATH=%CD%\libltc-1.1.4\src
+  - copy qopengl.h C:\Qt\Qt5.3.2\5.3\mingw482_32\include\QtGui
 build_script:
-  #  - qmake app/Joker/Joker.pro
-  - qmake tests/FormTest/FormTest.pro
-    #  - cat Makefile.Release
+  - qmake app/Joker/Joker.pro
+  - cat Makefile.Release
   - mingw32-make
   - dir release
     #  - echo "Running Inno Setup:"
