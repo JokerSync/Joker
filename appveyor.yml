@@ -2,7 +2,7 @@ os: unstable
 install:
   - git submodule update --init --recursive
   # Installing various utilities
-  - choco install -y curl 7zip #InnoSetup
+  - choco install -y curl 7zip InnoSetup
   - set PATH=%PATH%;"C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5"
   - set JOKER_RELEASE_PATH=.
   # Configuring Qt
@@ -46,9 +46,8 @@ install:
   - copy qopengl.h C:\Qt\Qt5.3.2\5.3\mingw482_32\include\QtGui
 build_script:
   - qmake app/Joker/Joker.pro
-  - cat Makefile.Release
   - mingw32-make
   - dir release
-    #  - echo "Running Inno Setup:"
-    #  - iscc JokerSetup.iss
-    #  - dir
+  - echo "Running Inno Setup:"
+  - iscc JokerSetup.iss
+  - dir
