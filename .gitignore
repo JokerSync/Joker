@@ -36,3 +36,5 @@ builds/
 out.html
 
 payload.json
+
+.qmake.stash
