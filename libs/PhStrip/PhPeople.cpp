@@ -6,19 +6,17 @@
 
 #include "PhPeople.h"
 
-PhPeople::PhPeople(QString name, QString color)
+PhPeople::PhPeople(QString name, QString color, QString picture) : _name(name), _color(color), _picture(picture)
 {
-	_name = name;
-	_color = color;
 }
 
-QString PhPeople::name()
+QString PhPeople::name() const
 {
 	return _name;
 }
 
 
-QString PhPeople::color()
+QString PhPeople::color() const
 {
 	return _color;
 }
@@ -26,4 +24,14 @@ QString PhPeople::color()
 void PhPeople::setColor(QString color)
 {
 	_color = color;
+}
+
+QString PhPeople::picture() const
+{
+	return _picture;
+}
+
+void PhPeople::setPicture(QString picture)
+{
+	_picture = picture;
 }

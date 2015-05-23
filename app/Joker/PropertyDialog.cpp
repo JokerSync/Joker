@@ -25,10 +25,12 @@ void PropertyDialog::setDoc(PhStripDoc *doc)
 	_doc = doc;
 }
 
+#ifdef USE_VIDEO
 void PropertyDialog::setVideoEngine(PhVideoEngine *videoEngine)
 {
 	_videoEngine = videoEngine;
 }
+#endif
 
 void PropertyDialog::showEvent(QShowEvent *)
 {
@@ -46,7 +48,11 @@ void PropertyDialog::showEvent(QShowEvent *)
 	ui->fpsLabel->setText("-");
 	ui->codecNameLabel->setText("-");
 
+#ifdef USE_VIDEO
 	PhTimeCodeType tcType = _videoEngine->timeCodeType();
+#else
+	PhTimeCodeType tcType = _doc->videoTimeCodeType();
+#endif
 
 	if(_doc) {
 		ui->titleLabel->setText(_doc->title());
@@ -71,6 +77,7 @@ void PropertyDialog::showEvent(QShowEvent *)
 		ui->charNumberLabel->setText(QString::number(charNumber));
 	}
 
+#ifdef USE_VIDEO
 	if(_videoEngine) {
 		if(_videoEngine->fileName().length())
 			ui->videoFileLabel->setText(_videoEngine->fileName());
@@ -88,4 +95,5 @@ void PropertyDialog::showEvent(QShowEvent *)
 		if(_videoEngine->codecName().length())
 			ui->codecNameLabel->setText(_videoEngine->codecName());
 	}
+#endif
 }
