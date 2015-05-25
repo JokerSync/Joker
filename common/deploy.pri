@@ -25,7 +25,7 @@ mac {
 CONFIG(release, debug|release) {
 	mac {
 		app_bundle {
-			PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}.dmg
+			PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}
 			message($$PH_DEPLOY_TARGET)
 
 			QMAKE_POST_LINK += macdeployqt $${TARGET}.app;
@@ -84,7 +84,9 @@ CONFIG(release, debug|release) {
 				QMAKE_POST_LINK += echo "Build PKG";
 
 				QMAKE_POST_LINK += echo $$(INSTALLER_CERTIFICATE);
-				QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${TARGET}_v$${VERSION}.pkg;
+				QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${PH_DEPLOY_TARGET}.pkg;
+
+				QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION};
 			}
 
 ##################################################
@@ -93,15 +95,15 @@ CONFIG(release, debug|release) {
 				QMAKE_POST_LINK += echo "Creating dmg with create-dmg"
 
 				QMAKE_POST_LINK += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
-					--volname $${TARGET}_v$${VERSION} \
+					--volname $${PH_DEPLOY_TARGET} \
 					--background $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png \
 					--app-drop-link 450 218 \
 					--icon $${TARGET}.app 150 218 \
 					--window-size 600 450 \
-					$${PH_DEPLOY_TARGET} \
+					$${PH_DEPLOY_TARGET}.dmg \
 					$${TARGET}.app;
 
-				QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET} $${PH_DEPLOY_LOCATION};
+				QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION};
 			}
 		}
 	}
