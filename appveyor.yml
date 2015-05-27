@@ -54,12 +54,12 @@ build_script:
   - iscc JokerSetup.iss
   - dir
 artifacts:
-  - path: Joker_v%JOKER_VERSION%.exe
+  - path: Joker_v${JOKER_VERSION}.exe
 deploy:
   provider: GitHub
   auth_token:
     secure: 9bMCGL2D0e/GK3MGOJu7Ma1hNb6sxAOyEftuonF/tV31LoLLM77+hitI6T3snyCM
-  artifact: Joker_v%JOKER_VERSION%.exe
+  artifact: Joker_v${JOKER_VERSION}.exe
   draft: false
   prerelease: false
   on:
