@@ -44,6 +44,8 @@ install:
   - 7z x libltc-1.1.4.tar
   - set LTC_PATH=%CD%\libltc-1.1.4\src
   - copy qopengl.h C:\Qt\Qt5.3.2\5.3\mingw482_32\include\QtGui
+  # Setting version
+  - set JOKER_VERSION=2015.05.27
 build_script:
   - qmake app/Joker/Joker.pro
   - mingw32-make
@@ -51,3 +53,16 @@ build_script:
   - echo "Running Inno Setup:"
   - iscc JokerSetup.iss
   - dir
+artifacts:
+  - Joker_v%JOKER_VERSION%.exe
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: 9bMCGL2D0e/GK3MGOJu7Ma1hNb6sxAOyEftuonF/tV31LoLLM77+hitI6T3snyCM
+  artifact: Joker_v%JOKER_VERSION%.exe
+  draft: false
+  prerelease: false
+  on:
+    branch: deploy2
+    appveyor_repo_tag: true
+
