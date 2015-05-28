@@ -348,8 +348,9 @@ PhTime PhVideoDecoder::timeIn()
 int64_t PhVideoDecoder::PhTime_to_AVTimestamp(PhTime time)
 {
 	int64_t timestamp = 0;
-	if(_videoStream)
+	if(_videoStream) {
 		timestamp = time * _videoStream->time_base.den / _videoStream->time_base.num / PHTIMEBASE;
+	}
 	return timestamp;
 }
 

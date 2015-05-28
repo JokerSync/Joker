@@ -3,7 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QThread>
+#include <QSignalSpy>
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphic/PhGraphicView.h"
@@ -12,7 +12,8 @@
 
 #include "VideoSpecSettings.h"
 
-#define FRAME_WAIT_TIME 80
+#define FRAME_WAIT_TIME 40
+#define OPEN_WAIT_TIME 1000
 
 #include "CommonSpec.h"
 
@@ -23,6 +24,7 @@ go_bandit([](){
 		PhGraphicView *view;
 		VideoSpecSettings *settings;
 		PhVideoEngine *engine;
+		QSignalSpy *spy;
 		int factor;
 
 		before_each([&](){
@@ -31,6 +33,7 @@ go_bandit([](){
 			view = new PhGraphicView(64, 64);
 			settings = new VideoSpecSettings();
 			engine = new PhVideoEngine(settings);
+			spy = new QSignalSpy(engine, SIGNAL(opened(bool)));
 
 			view->show();
 
@@ -46,6 +49,7 @@ go_bandit([](){
 		after_each([&](){
 			engine->close();
 
+			delete spy;
 			delete engine;
 			delete settings;
 			delete view;
@@ -62,6 +66,7 @@ go_bandit([](){
 
 			before_each([&](){
 				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+				AssertThat(spy->wait(OPEN_WAIT_TIME), IsTrue());
 			});
 
 			it("open", [&](){
