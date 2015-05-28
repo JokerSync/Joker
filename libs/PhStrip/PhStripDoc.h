@@ -217,6 +217,22 @@ public:
 	 * @return True if the doc opened well, false otherwise
 	 */
 	bool importDetXFile(QString fileName);
+
+	/**
+	 * @brief Export the document using the DetX format
+	 * @param fileName The file name
+	 * @param lastTime The last position to remember
+	 * @return True if the doc export well, false otherwise
+	 */
+	bool exportDetXFile(QString fileName, PhTime lastTime);
+
+	/**
+	 * @brief Compute the XML id for DetX peoples
+	 * @param name The people name
+	 * @return A string made of a-z and _
+	 */
+	QString computeDetXId(QString name);
+
 	/**
 	 * @brief Import a Mos file
 	 * @param fileName The path to the Mos file
@@ -407,8 +423,6 @@ signals:
 	void changed();
 
 private:
-
-
 	QString _generator;
 	/**
 	 * Title of the corresponding audiovisual content.

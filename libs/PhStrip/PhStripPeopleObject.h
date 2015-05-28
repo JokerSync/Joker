@@ -32,21 +32,21 @@ public:
 	 * @brief Get the PhPeople
 	 * @return _people the corresponding PhPeople
 	 */
-	PhPeople * people() {
+	PhPeople * people() const {
 		return _people;
 	}
 	/**
 	 * @brief The object track
 	 * @return _y An integer
 	 */
-	float y() {
+	float y() const {
 		return _y;
 	}
 	/**
 	 * @brief The time out
 	 * @return A time value
 	 */
-	PhTime timeOut() {
+	PhTime timeOut() const {
 		return _timeOut;
 	}
 	/**

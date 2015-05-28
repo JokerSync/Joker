@@ -36,9 +36,11 @@ win32 {
 		message(Debug mode)
 	}
 	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
+
+	INCLUDEPATH += $$(BOOST_PATH)
 }
 
-# Ubuntu specific
+# linux specific
 linux {
 	CS = ;
 	RESOURCES_PATH = ./
@@ -54,6 +56,7 @@ mac {
 	DEFINES += PATH_TO_RESSOURCES=\\\"/../Resources/\\\"
 }
 
+# MacOS and linux specific
 unix {
 	INCLUDEPATH += /usr/local/include
 	LIBS += -L/usr/local/lib

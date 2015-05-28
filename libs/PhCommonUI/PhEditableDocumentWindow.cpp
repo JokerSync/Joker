@@ -18,6 +18,7 @@ bool PhEditableDocumentWindow::openDocument(const QString &fileName)
 bool PhEditableDocumentWindow::saveDocument(const QString &fileName)
 {
 	_settings->setCurrentDocument(fileName);
+	this->setWindowTitle(fileName);
 	return true;
 }
 

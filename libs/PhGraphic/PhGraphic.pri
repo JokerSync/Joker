@@ -75,8 +75,7 @@ linux {
 }
 
 linux {
-	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf
+	LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf
 }
 
 mac {

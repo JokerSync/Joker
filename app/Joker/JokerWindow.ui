@@ -103,6 +103,10 @@
     <addaction name="menuVarial_Speed"/>
     <addaction name="actionChange_timestamp"/>
     <addaction name="menuGo_to"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_TC_in"/>
+    <addaction name="actionSet_TC_out"/>
+    <addaction name="actionLoop"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -508,6 +512,33 @@
    </property>
    <property name="text">
     <string>Use native video size</string>
+   </property>
+  </action>
+  <action name="actionSet_TC_in">
+   <property name="text">
+    <string>Set TC in</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+J</string>
+   </property>
+  </action>
+  <action name="actionSet_TC_out">
+   <property name="text">
+    <string>Set TC out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+K</string>
+   </property>
+  </action>
+  <action name="actionLoop">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Loop</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
    </property>
   </action>
  </widget>
