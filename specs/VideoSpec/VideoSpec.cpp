@@ -3,6 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QSignalSpy>
+
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 #include "PhGraphic/PhGraphicView.h"
@@ -11,7 +13,8 @@
 
 #include "VideoSpecSettings.h"
 
-#define FRAME_WAIT_TIME 80
+#define FRAME_WAIT_TIME 40
+#define OPEN_WAIT_TIME 1000
 
 #include "PhSpec.h"
 #include "CommonSpec.h"
@@ -23,6 +26,7 @@ go_bandit([](){
 		PhGraphicView *view;
 		VideoSpecSettings *settings;
 		PhVideoEngine *engine;
+		QSignalSpy *spy;
 		int factor;
 
 		before_each([&](){
@@ -31,6 +35,7 @@ go_bandit([](){
 			view = new PhGraphicView(64, 64);
 			settings = new VideoSpecSettings();
 			engine = new PhVideoEngine(settings);
+			spy = new QSignalSpy(engine, SIGNAL(opened(bool)));
 
 			view->show();
 
@@ -46,6 +51,7 @@ go_bandit([](){
 		after_each([&](){
 			engine->close();
 
+			delete spy;
 			delete engine;
 			delete settings;
 			delete view;
@@ -53,20 +59,21 @@ go_bandit([](){
 
 		it("open_video", [&](){
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
-
-			QThread::msleep(FRAME_WAIT_TIME);
+			AssertThat(spy->wait(OPEN_WAIT_TIME), IsTrue());
 		});
 
 		it("default_framerate", [&](){
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+			AssertThat(spy->wait(OPEN_WAIT_TIME), IsTrue());
 
-			QThread::msleep(FRAME_WAIT_TIME);
+			QTest::qWait(FRAME_WAIT_TIME);
 
 			AssertThat(engine->framePerSecond(), Equals(25.00f));
 		});
 
 		it("go_to_01", [&](){
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+			AssertThat(spy->wait(OPEN_WAIT_TIME), IsTrue());
 
 			QTest::qWait(FRAME_WAIT_TIME);
 			QImage result = view->renderPixmap(64, 64).toImage();
@@ -92,6 +99,7 @@ go_bandit([](){
 
 		it("go_to_02", [&](){
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+			AssertThat(spy->wait(OPEN_WAIT_TIME), IsTrue());
 
 			engine->clock()->setFrame(100, PhTimeCodeType25);
 
@@ -119,6 +127,7 @@ go_bandit([](){
 		// This "stress test" cue the video engine at different random location
 		it("go_to_03", [&](){
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+			AssertThat(spy->wait(OPEN_WAIT_TIME), IsTrue());
 
 			QList<PhFrame> list = QList<PhFrame>() << 183 << 25 << 71 << 59 << 158 << 8 << 137
 												   << 32 << 37 << 53 << 133 << 108 << 166 << 134
@@ -141,6 +150,7 @@ go_bandit([](){
 
 		it("play", [&](){
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+			AssertThat(spy->wait(OPEN_WAIT_TIME), IsTrue());
 
 			QTest::qWait(FRAME_WAIT_TIME);
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
@@ -176,6 +186,8 @@ go_bandit([](){
 		it("deinterlace", [&](){
 			// Open the video file in interlaced mode
 			engine->open("interlace_%03d.bmp");
+			AssertThat(spy->wait(OPEN_WAIT_TIME), IsTrue());
+
 			QTest::qWait(FRAME_WAIT_TIME);
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
 
@@ -198,6 +210,8 @@ go_bandit([](){
 		it("scales", [&](){
 			// Open the video file in interlaced mode
 			engine->open("interlace_%03d.bmp");
+			AssertThat(spy->wait(OPEN_WAIT_TIME), IsTrue());
+
 			QTest::qWait(FRAME_WAIT_TIME);
 
 			factor = 2;
@@ -210,6 +224,8 @@ go_bandit([](){
 		it("doesn't scale when using native video size", [&](){
 			// Open the video file in interlaced mode
 			engine->open("interlace_%03d.bmp");
+			AssertThat(spy->wait(OPEN_WAIT_TIME), IsTrue());
+
 			QTest::qWait(FRAME_WAIT_TIME);
 
 			factor = 2;
