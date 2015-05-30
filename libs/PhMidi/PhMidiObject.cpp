@@ -65,6 +65,7 @@ unsigned char PhMidiObject::computeHH(unsigned char hh, PhTimeCodeType tcType)
 	case PhTimeCodeType30:
 		return hh | (3 << 5);
 	}
+	return 0;
 }
 
 unsigned char PhMidiObject::computeH(unsigned char hh, PhTimeCodeType tcType)
