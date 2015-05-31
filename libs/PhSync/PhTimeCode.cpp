@@ -235,7 +235,7 @@ PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned
 		PHDEBUG << "Bad second value:" << QString::number(ss);
 		ss = 0;
 	}
-	if (ff >= fps) {
+	if ((long) ff >= fps) {
 		PHDEBUG << "Bad frame value:" << QString::number(ff);
 		ff = 0;
 	}
