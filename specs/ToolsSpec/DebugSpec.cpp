@@ -91,14 +91,6 @@ go_bandit([](){
 			PhDebug::enable();
 			PHDEBUG << "shown because enable()";
 
-			QEvent * event = NULL;
-			PHDEBUG << event;
-			event = new QMouseEvent(QEvent::MouseButtonPress, QPoint(0, 0), Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-			PHDEBUG << event;
-			delete event;
-			event = new QEvent((QEvent::Type)999);
-			PHDEBUG << event;
-
 			AssertThat(PhDebug::logMask(), Equals(1));
 			PHDBG(0) << "it should be displayed when default log mask is 1";
 			int testLogLevel = 31;
@@ -108,17 +100,14 @@ go_bandit([](){
 			PHDBG(testLogLevel) << "it should be displayed when default log mask is " + testLogLevel;
 
 			QStringList lines = QString::fromStdString(buffer.str()).split("\n");
-			AssertThat(lines.count(), Equals(10));
+			AssertThat(lines.count(), Equals(7));
 			AssertThat(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d DebugSpec.cpp\toperator\\(\\)\t@[0-9]+\ttest with all log parameters").exactMatch(lines[0]), IsTrue());
 
 			AssertThat(lines[1].toStdString(), Equals("test with no log parameters"));
 			AssertThat(lines[2].toStdString(), Equals("shown because of showConsole(true)"));
 			AssertThat(lines[3].toStdString(), Equals("shown because enable()"));
-			AssertThat(lines[4].toStdString(), Equals("QEvent 0x0"));
-			AssertThat(lines[5].toStdString(), Equals("QEvent MouseButtonPress"));
-			AssertThat(lines[6].toStdString(), Equals("QEvent 999"));
-			AssertThat(lines[7].toStdString(), Equals("it should be displayed when default log mask is 1"));
-			AssertThat(lines[8].toStdString(), Equals("it should be displayed when default log mask is " + testLogLevel));
+			AssertThat(lines[4].toStdString(), Equals("it should be displayed when default log mask is 1"));
+			AssertThat(lines[5].toStdString(), Equals("it should be displayed when default log mask is " + testLogLevel));
 		});
 
 		it("display_in_the_error", []() {

@@ -26,16 +26,14 @@ QStringList PhMidiInput::inputList()
 {
 	QStringList result;
 
-	RtMidiIn *midiIn;
 	try {
-		midiIn = new RtMidiIn();
+		QScopedPointer<RtMidiIn> midiIn;
 		for(unsigned int i = 0; i < midiIn->getPortCount(); i++)
 			result.append(QString::fromStdString(midiIn->getPortName(i)));
 	}
 	catch(RtMidiError &error) {
 		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
 	}
-	delete midiIn;
 
 	return result;
 }

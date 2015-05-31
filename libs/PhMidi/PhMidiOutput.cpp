@@ -20,16 +20,14 @@ PhMidiOutput::~PhMidiOutput()
 QStringList PhMidiOutput::outputList()
 {
 	QStringList result;
-	RtMidiOut *midiOut;
 	try {
-		midiOut = new RtMidiOut();
+		QScopedPointer<RtMidiOut> midiOut;
 		for(unsigned int i = 0; i < midiOut->getPortCount(); i++)
 			result.append(QString::fromStdString(midiOut->getPortName(i)));
 	}
 	catch(RtMidiError &error) {
 		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
 	}
-	delete midiOut;
 
 	return result;
 }
