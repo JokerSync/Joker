@@ -92,7 +92,7 @@ CONFIG(release, debug|release) {
 ##################################################
 
 			create-dmg {
-				QMAKE_POST_LINK += echo "Creating dmg with create-dmg"
+				QMAKE_POST_LINK += echo "Creating dmg with create-dmg";
 
 				QMAKE_POST_LINK += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
 					--volname $${PH_DEPLOY_TARGET} \
