@@ -78,6 +78,8 @@ bool PhDocumentWindow::eventFilter(QObject *sender, QEvent *event)
 			}
 			break;
 		}
+	default:
+		break;
 	}
 
 	return PhWindow::eventFilter(sender, event);

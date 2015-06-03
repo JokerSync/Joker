@@ -166,12 +166,4 @@ private:
 
 };
 
-/**
- * @brief Gives human-readable event type information
- * @param stream The debug stream
- * @param event The event
- * @return The new debug stream
- */
-QDebug operator <<(QDebug stream, const QEvent * event);
-
 #endif // PHDEBUG_H
