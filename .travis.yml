@@ -6,6 +6,7 @@ env:
   - PATH=$PATH:/usr/local/opt/qt5/bin; fi
   - JOKER_RELEASE_PATH=$HOME
   - TESTS_RELEASE_PATH=$HOME
+  - secure: YlyaETwveWXOT1wpOz68Vp8Pj1zZ5u44ppOabNw/Xe4M8ZHdPy3QkmyB7wTeUgNjlHzkW23aOOzTk8bm5wxS1iQRxHsQ/DnZd0TcULPuTY9+yO2L/Wkwk6quFBqGlkT8h2v4xkRDyshG8OxF6eqeeq5Cflt/LOhx+MnJqse9EzQ=
   matrix:
 #  - JOB=UNCRUSTIFY
 #  - JOB=DOXYGEN
