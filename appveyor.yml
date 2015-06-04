@@ -1,4 +1,7 @@
 os: unstable
+branches:
+  except:
+    -coverity
 install:
   - git submodule update --init --recursive
   # Installing various utilities
