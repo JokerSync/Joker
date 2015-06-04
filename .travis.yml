@@ -7,21 +7,23 @@ env:
   - JOKER_RELEASE_PATH=$HOME
   - TESTS_RELEASE_PATH=$HOME
   matrix:
-  - JOB=UNCRUSTIFY
-  - JOB=DOXYGEN
-  - JOB=BUILD_SPEC_BANDIT
-  - JOB=BUILD_RELEASE_JOKER
-  - JOB=BUILD_RELEASE_LTCTOOL
-  - JOB=BUILD_RELEASE_MIDITOOL
-  - JOB=BUILD_RELEASE_ALL_TESTS
+#  - JOB=UNCRUSTIFY
+#  - JOB=DOXYGEN
+#  - JOB=BUILD_SPEC_BANDIT
+#  - JOB=BUILD_RELEASE_JOKER
+#  - JOB=BUILD_RELEASE_LTCTOOL
+#  - JOB=BUILD_RELEASE_MIDITOOL
+#  - JOB=BUILD_RELEASE_ALL_TESTS
+  - JOB=BUILD_RELEASE_POUET
 install:
 - git submodule update --init --recursive
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
-- if [[ "$JOB" == BUILD_* ]]; then brew update; brew upgrade boost; fi
-- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
-- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
-- if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
+#- if [[ "$JOB" == BUILD_* ]]; then brew update; brew upgrade boost; fi
+#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
+#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
+#- if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
+- if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ; fi
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then scripts/install_coveralls.sh; fi
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then eval "$(pyenv init -)"; fi
 
@@ -60,3 +62,13 @@ deploy:
     all_branches: true
     repo: Phonations/Joker
     condition: $JOB = BUILD_RELEASE_JOKER
+addons:
+  coverity_scan:
+    project:
+      name: Phonations/Joker
+      description: Build submitted via Travis CI
+    notification_email: martin@phonations.com
+    build_command_prepend: cov-configure --comptype clangcxx --compiler clang++ --template
+    build_command_prepend: qmake tests/FormTest/FormTest.pro
+    build_command: make -j 4
+    branch_pattern: coverity
