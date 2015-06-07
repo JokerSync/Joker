@@ -169,11 +169,18 @@ public:
 	void drawVideo(int x, int y, int w, int h);
 
 	/**
-	 * @brief whether the time corresponds to the frame that we currently have (or that we have requested)
+	 * @brief whether the time corresponds to the frame that we currently have
 	 * @param time the current time
 	 * @return True if the frame is available
 	 */
 	bool isFrameAvailable(PhTime time);
+
+	/**
+	 * @brief whether the time corresponds to the frame that we have requested
+	 * @param time the current time
+	 * @return True if the frame has already been requested
+	 */
+	bool isFrameRequested(PhTime time);
 
 public slots:
 	/**
@@ -250,6 +257,7 @@ private:
 
 	PhGraphicTexturedRect _videoRect;
 	PhTime _currentTime;
+	PhTime _requestedTime;
 
 	PhTickCounter _videoFrameTickCounter;
 

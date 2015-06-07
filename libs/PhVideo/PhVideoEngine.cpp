@@ -15,15 +15,16 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_settings(settings),
 	_fileName(""),
 	_tcType(PhTimeCodeType25),
-	_timeIn(0),
-	_currentTime(PHTIMEMIN),
-	_deinterlace(false),
 	_length(0),
+	_timeIn(0),
+	_framePerSecond(25.00f),
 	_width(0),
 	_height(0),
-	_framePerSecond(25.00f),
 	_codecName(""),
-	_ready(false)
+	_ready(false),
+	_currentTime(PHTIMEMIN),
+	_requestedTime(PHTIMEMIN),
+	_deinterlace(false)
 {
 	// initialize the decoder that operates in a separate thread
 	PhVideoDecoder *decoder = new PhVideoDecoder();
@@ -76,6 +77,7 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setTime(0);
 	_clock.setRate(0);
 	_currentTime = PHTIMEMIN;
+	_requestedTime = PHTIMEMIN;
 	_fileName = fileName;
 
 	return true;
@@ -115,9 +117,20 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	PhTime time = _clock.time() + delay;
 
 	// If the time corresponds to a different frame than the one we currently have,
+	// and if we have not already requested it,
 	// request that frame to the decoder thread by sending a signal.
 	// The engine manages the frame buffers.
-	if(!isFrameAvailable(time)) {
+	if(!isFrameAvailable(time) && !isFrameRequested(time)) {
+
+		// if possible, adjust the requested time to exactly one of the video frame
+		// this avoids superfluous seeking
+		if ((time - _currentTime >= PhTimeCode::timePerFrame(_tcType))
+				&& (time - _currentTime < 2*PhTimeCode::timePerFrame(_tcType)))
+		{
+			time = _currentTime + PhTimeCode::timePerFrame(_tcType);
+		}
+
+		// ask the decoder to decode that frame
 		requestFrame(time);
 	}
 
@@ -166,8 +179,8 @@ void PhVideoEngine::requestFrame(PhTime time)
 	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
 	emit decodeFrame(time - _timeIn, rgb, _deinterlace);
 
-	// update current time so that we do not request the frame again
-	_currentTime = time;
+	// update requested time so that we do not request the frame again
+	_requestedTime = time;
 }
 
 void PhVideoEngine::setTimeIn(PhTime timeIn)
@@ -230,17 +243,47 @@ bool PhVideoEngine::isFrameAvailable(PhTime time)
 		time = this->timeOut() - tpf;
 
 	if (_currentTime == PHTIMEMIN) {
+		// never got a frame
 		return false;
 	}
 
 	bool result = false;
 
 	// Stay with the same frame if the time has changed less than the time between two frames
-	// Note that av_seek_frame will seek to the _closest_ frame, sometimes a little bit in the "future",
-	// so it is necessary to use a little margin for the second comparison, otherwise a seek may
-	// be performed on each call to decodeFrame
 	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
-	    && (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2)) {
+		&& (time >= _currentTime)) {
+		// we have already that frame
+		result = true;
+	}
+
+	return result;
+}
+
+bool PhVideoEngine::isFrameRequested(PhTime time)
+{
+	if(!ready()) {
+		PHDEBUG << "not ready";
+		return false;
+	}
+
+	// clip to stream boundaries
+	if(time < _timeIn)
+		time = _timeIn;
+	if (time >= this->timeOut())
+		time = this->timeOut();
+
+	if (_requestedTime == PHTIMEMIN) {
+		// never requested a frame
+		return false;
+	}
+
+	bool result = false;
+
+	// We consider that we have requested the frame if the time has changed less
+	// than the time between two frames.
+	if ((time < _requestedTime + PhTimeCode::timePerFrame(_tcType))
+		&& (time >= _requestedTime)) {
+		// we have already that frame
 		result = true;
 	}
 
@@ -258,6 +301,9 @@ void PhVideoEngine::frameAvailable(PhTime time, uint8_t *rgb, int width, int hei
 
 	_videoRect.createTextureFromBGRABuffer(rgb, width, height);
 	_videoFrameTickCounter.tick();
+
+	// update the current time with the true frame time as sent by the decoder
+	_currentTime = time + _timeIn;
 }
 
 void PhVideoEngine::decoderOpened(PhTime length, double framePerSecond, PhTime timeIn, int width, int height, QString codecName)
@@ -268,8 +314,6 @@ void PhVideoEngine::decoderOpened(PhTime length, double framePerSecond, PhTime t
 	_width = width;
 	_height = height;
 	_codecName = codecName;
-
-	PHDEBUG << timeIn;
 
 	// Looking for timecode type
 	_tcType = PhTimeCode::computeTimeCodeType(this->framePerSecond());

@@ -296,15 +296,15 @@ void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 			}
 		}
 
-		// update the current position of the engine
-		// (Note that it is best not to do use '_currentTime = time' here, because the seeking operation may
-		// not be 100% accurate: the actual time may be different from the requested time. So a time drift
-		// could appear.)
-		_currentTime = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
-
 		//Avoid memory leak
 		av_free_packet(&packet);
 	}
+
+	// update the current position of the engine
+	// (Note that it is best not to do use '_currentTime = time' here, because the seeking operation may
+	// not be 100% accurate: the actual time may be different from the requested time. So a time drift
+	// could appear.)
+	_currentTime = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
 }
 
 int PhVideoDecoder::width()
