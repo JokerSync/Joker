@@ -5,22 +5,27 @@ win32 {
 CONFIG(release, debug|release) {
 	mac {
 		app_bundle {
-			PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}.dmg
+			if(equals(PH_GIT_BRANCH, "master")) {
+				PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}
+			} else {
+				PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}_$${PH_GIT_BRANCH}
+			}
+
 			message($$PH_DEPLOY_TARGET)
 
 			QMAKE_POST_LINK += macdeployqt $${TARGET}.app;
 
 			QMAKE_POST_LINK += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
-				--volname $${TARGET}_v$${VERSION} \
+				--volname $${PH_DEPLOY_TARGET} \
 				--volicon $${_PRO_FILE_PWD_}/../../app/Joker/joker.icns \
 				--background $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png \
 				--app-drop-link 450 218 \
 				--icon $${TARGET}.app 150 218 \
 				--window-size 600 450 \
-				$${PH_DEPLOY_TARGET} \
+				$${PH_DEPLOY_TARGET}.dmg \
 				$${TARGET}.app;
 
-			QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET} $${PH_DEPLOY_LOCATION};
+			QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION};
 		}
 	}
 

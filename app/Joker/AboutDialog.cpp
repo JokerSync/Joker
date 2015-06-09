@@ -16,6 +16,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
 	version += " v";
 	version += APP_VERSION;
 	ui->labelVersion->setText(version);
+	ui->revisionLabel->setText(tr("Revision:") + QString("<a href='https://github.com/phonations/joker/tree/%1'>%2</a>").arg(PH_GIT_REVISION).arg(QString(PH_GIT_REVISION).left(7)));
 
 	ui->labelContact->setText("<a href=\"mailto:support@phonations.com\">support@phonations.com</a>");
 	ui->labelContact->setTextInteractionFlags(Qt::TextSelectableByMouse);
