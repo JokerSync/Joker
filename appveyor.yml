@@ -3,10 +3,10 @@ install:
   - git submodule update --init --recursive
   # Installing various utilities
   - choco install -y curl 7zip InnoSetup
-  - set PATH=%PATH%;"C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5"
+  - set PATH="C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5";%PATH%
   - set JOKER_RELEASE_PATH=.
   # Configuring Qt
-  - set QTDIR=C:\Qt\Qt5.4\mingw491_32
+  - set QTDIR=C:\Qt\5.4\mingw491_32
   - set PATH=%QTDIR%\bin;C:\MinGW\bin;%PATH%
   # Installing SDL2
   - curl -kLO https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz
