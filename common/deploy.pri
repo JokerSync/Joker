@@ -28,7 +28,7 @@ CONFIG(release, debug|release) {
 		if(exists($${_PRO_FILE_PWD_}/$$TARGET.iss)) {
 			message("Processing $$TARGET")
 			QMAKE_POST_LINK += echo "Deploying $${_PRO_FILE_PWD_}/$${TARGET}.iss" $${CS}
-#			QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/$${TARGET}.iss) . $${CS}
+			QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/$${TARGET}.iss) . $${CS}
 #			QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/LICENSE.TXT) . $${CS}
 #			QMAKE_POST_LINK += echo $$(PATH) $${CS}
 #			QMAKE_POST_LINK += iscc "$${TARGET}.iss" $${CS}
