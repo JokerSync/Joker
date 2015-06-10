@@ -57,10 +57,9 @@ deploy:
   provider: GitHub
   auth_token:
     secure: 9bMCGL2D0e/GK3MGOJu7Ma1hNb6sxAOyEftuonF/tV31LoLLM77+hitI6T3snyCM
-  artifact: /Joker_v[0-9]+\.[0-9]+\.[0-9]+\.txt/
+  artifact: /Joker_v[0-9]+\.[0-9]+\.[0-9]+\.exe/
   draft: false
   prerelease: true
   on:
-    branch: deploy2
     appveyor_repo_tag: true
 
