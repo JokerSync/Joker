@@ -43,7 +43,7 @@ install:
   - 7z x libltc-1.1.4.tar.gz
   - 7z x libltc-1.1.4.tar
   - set LTC_PATH=%CD%\libltc-1.1.4\src
-    #  - copy qopengl.h C:\Qt\Qt5.3.2\5.3\mingw482_32\include\QtGui
+  - copy qopengl.h %QTPATH%\include\QtGui
   # Configure boost
   - set BOOST_PATH=C:\Libraries\boost
 build_script:
