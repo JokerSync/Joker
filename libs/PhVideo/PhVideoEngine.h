@@ -218,9 +218,8 @@ signals:
 	/**
 	 * @brief Signal sent to ask the decoder to decode a video frame
 	 * @param time the time of the requested frame (with origin at the start of video file)
-	 * @param deinterlace whether the frame is to be deinterlaced
 	 */
-	void decodeFrame(PhTime time, bool deinterlace);
+	void decodeFrame(PhTime time);
 
 	/**
 	 * @brief Signal sent to the decoder to open a video file
@@ -244,6 +243,12 @@ signals:
 	 * @param rgb the buffer where to output the decoded frame
 	 */
 	void recycleBuffer(uint8_t *rgb);
+
+	/**
+	 * @brief Signal sent when the deinterlace settings change
+	 * @param success Whether the video should be deinterlaced
+	 */
+	void deinterlaceChanged(bool deinterlace);
 
 private:
 	void requestFrame(PhTime time);

@@ -34,6 +34,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
 	connect(this, &PhVideoEngine::closeInDecoder, decoder, &PhVideoDecoder::close);
 	connect(this, &PhVideoEngine::recycleBuffer, decoder, &PhVideoDecoder::recycleBuffer);
+	connect(this, &PhVideoEngine::deinterlaceChanged, decoder, &PhVideoDecoder::setDeinterlace);
 	connect(decoder, &PhVideoDecoder::frameAvailable, this, &PhVideoEngine::frameAvailable);
 	connect(decoder, &PhVideoDecoder::opened, this, &PhVideoEngine::decoderOpened);
 	connect(decoder, &PhVideoDecoder::openFailed, this, &PhVideoEngine::openInDecoderFailed);
@@ -51,8 +52,8 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 
 	if (deinterlace != _deinterlace) {
 		_deinterlace = deinterlace;
-		// request the frame again to apply the deinterlace settings
-		requestFrame(_currentTime);
+
+		emit deinterlaceChanged(_deinterlace);
 	}
 }
 
@@ -141,7 +142,7 @@ void PhVideoEngine::requestFrame(PhTime time)
 
 	// ask the frame to the decoder.
 	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
-	emit decodeFrame(time - _timeIn, _deinterlace);
+	emit decodeFrame(time - _timeIn);
 
 	// update requested time so that we do not request the frame again
 	_requestedTime = time;
