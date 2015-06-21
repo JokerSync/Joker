@@ -218,10 +218,9 @@ signals:
 	/**
 	 * @brief Signal sent to ask the decoder to decode a video frame
 	 * @param time the time of the requested frame (with origin at the start of video file)
-	 * @param rgb the buffer where to output the decoded frame
 	 * @param deinterlace whether the frame is to be deinterlaced
 	 */
-	void decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace);
+	void decodeFrame(PhTime time, bool deinterlace);
 
 	/**
 	 * @brief Signal sent to the decoder to open a video file
@@ -239,6 +238,12 @@ signals:
 	 * @param success Whether the video was opened successfully
 	 */
 	void opened(bool success);
+
+	/**
+	 * @brief Signal sent to notify the decoder that a buffer can be reused now
+	 * @param rgb the buffer where to output the decoded frame
+	 */
+	void recycleBuffer(uint8_t *rgb);
 
 private:
 	void requestFrame(PhTime time);
@@ -262,10 +267,6 @@ private:
 	PhTickCounter _videoFrameTickCounter;
 
 	bool _deinterlace;
-
-	QList<uint8_t *> _rgbBufferList;
-	QList<bool> _bufferUsageList;
-	QList<int> _bufferSizeList;
 
 	QThread _decoderThread;
 };

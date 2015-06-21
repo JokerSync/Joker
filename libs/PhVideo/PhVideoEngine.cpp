@@ -33,6 +33,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	connect(this, &PhVideoEngine::decodeFrame, decoder, &PhVideoDecoder::decodeFrame);
 	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
 	connect(this, &PhVideoEngine::closeInDecoder, decoder, &PhVideoDecoder::close);
+	connect(this, &PhVideoEngine::recycleBuffer, decoder, &PhVideoDecoder::recycleBuffer);
 	connect(decoder, &PhVideoDecoder::frameAvailable, this, &PhVideoEngine::frameAvailable);
 	connect(decoder, &PhVideoDecoder::opened, this, &PhVideoEngine::decoderOpened);
 	connect(decoder, &PhVideoDecoder::openFailed, this, &PhVideoEngine::openInDecoderFailed);
@@ -90,16 +91,6 @@ void PhVideoEngine::close()
 	// tell the decoder thread to close the file too
 	emit closeInDecoder();
 
-	// delete all unused buffers
-	// Those that are marked as used should not be deleted for now since the decoder thread may be
-	// operating on them.
-	while (_bufferUsageList.contains(false)) {
-		int unusedBufferIndex = _bufferUsageList.indexOf(false);
-		delete[] _rgbBufferList.takeAt(unusedBufferIndex);
-		_bufferSizeList.removeAt(unusedBufferIndex);
-		_bufferUsageList.removeAt(unusedBufferIndex);
-	}
-
 	PHDEBUG << _fileName << "closed";
 
 	_timeIn = 0;
@@ -125,8 +116,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		// if possible, adjust the requested time to exactly one of the video frame
 		// this avoids superfluous seeking
 		if ((time - _currentTime >= PhTimeCode::timePerFrame(_tcType))
-				&& (time - _currentTime < 2*PhTimeCode::timePerFrame(_tcType)))
-		{
+		    && (time - _currentTime < 2*PhTimeCode::timePerFrame(_tcType))) {
 			time = _currentTime + PhTimeCode::timePerFrame(_tcType);
 		}
 
@@ -149,35 +139,9 @@ void PhVideoEngine::requestFrame(PhTime time)
 		return;
 	}
 
-	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
-
-	// find an available buffer
-	uint8_t * rgb;
-	int bufferIndex = _bufferUsageList.indexOf(false);
-
-	if(bufferIndex != -1) {
-		// we can reuse an existing available buffer
-		rgb = _rgbBufferList.at(bufferIndex);
-
-		if (_bufferSizeList.at(bufferIndex) != bufferSize) {
-			// the size has changed, update the buffer
-			delete[] rgb;
-			rgb = new uint8_t[bufferSize];
-			_rgbBufferList.replace(bufferIndex, rgb);
-			_bufferSizeList.replace(bufferIndex, bufferSize);
-		}
-	}
-	else {
-		// no buffer is currently available, we need a new one
-		rgb = new uint8_t[bufferSize];
-		_rgbBufferList.append(rgb);
-		_bufferUsageList.append(true);
-		_bufferSizeList.append(bufferSize);
-	}
-
 	// ask the frame to the decoder.
 	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
-	emit decodeFrame(time - _timeIn, rgb, _deinterlace);
+	emit decodeFrame(time - _timeIn, _deinterlace);
 
 	// update requested time so that we do not request the frame again
 	_requestedTime = time;
@@ -200,13 +164,6 @@ PhVideoEngine::~PhVideoEngine()
 
 	_decoderThread.quit();
 	_decoderThread.wait();
-
-	// the decoder thread has exited, so all the buffers can be cleaned.
-	while (!_rgbBufferList.isEmpty())
-		delete[] _rgbBufferList.takeFirst();
-
-	_bufferSizeList.clear();
-	_bufferUsageList.clear();
 }
 
 int PhVideoEngine::width()
@@ -251,7 +208,7 @@ bool PhVideoEngine::isFrameAvailable(PhTime time)
 
 	// Stay with the same frame if the time has changed less than the time between two frames
 	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
-		&& (time >= _currentTime)) {
+	    && (time >= _currentTime)) {
 		// we have already that frame
 		result = true;
 	}
@@ -282,7 +239,7 @@ bool PhVideoEngine::isFrameRequested(PhTime time)
 	// We consider that we have requested the frame if the time has changed less
 	// than the time between two frames.
 	if ((time < _requestedTime + PhTimeCode::timePerFrame(_tcType))
-		&& (time >= _requestedTime)) {
+	    && (time >= _requestedTime)) {
 		// we have already that frame
 		result = true;
 	}
@@ -295,12 +252,11 @@ void PhVideoEngine::frameAvailable(PhTime time, uint8_t *rgb, int width, int hei
 	// This slot is connected to the decoder thread.
 	// We receive here asynchronously the frame freshly decoded.
 
-	// mark that this buffer is now available
-	int bufferIndex = _rgbBufferList.indexOf(rgb);
-	_bufferUsageList.replace(bufferIndex, false);
-
 	_videoRect.createTextureFromBGRABuffer(rgb, width, height);
 	_videoFrameTickCounter.tick();
+
+	// tell the decoder that the buffer can be recycled now
+	emit recycleBuffer(rgb);
 
 	// update the current time with the true frame time as sent by the decoder
 	_currentTime = time + _timeIn;

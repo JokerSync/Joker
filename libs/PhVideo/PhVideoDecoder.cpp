@@ -146,6 +146,16 @@ void PhVideoDecoder::close()
 		_videoFrame = NULL;
 	}
 
+	// delete all unused buffers
+	// Those that are marked as used should not be deleted for now since the decoder thread may be
+	// operating on them.
+	while (_bufferUsageList.contains(false)) {
+		int unusedBufferIndex = _bufferUsageList.indexOf(false);
+		delete[] _rgbBufferList.takeAt(unusedBufferIndex);
+		_bufferSizeList.removeAt(unusedBufferIndex);
+		_bufferUsageList.removeAt(unusedBufferIndex);
+	}
+
 	_formatContext = NULL;
 	_videoStream = NULL;
 	_audioStream = NULL;
@@ -154,9 +164,23 @@ void PhVideoDecoder::close()
 	_fileName = "";
 }
 
+void PhVideoDecoder::recycleBuffer(uint8_t *rgb)
+{
+	// mark that this buffer is now available
+	int bufferIndex = _rgbBufferList.indexOf(rgb);
+	_bufferUsageList.replace(bufferIndex, false);
+}
+
 PhVideoDecoder::~PhVideoDecoder()
 {
 	close();
+
+	// the decoder thread has exited, so all the buffers can be cleaned.
+	while (!_rgbBufferList.isEmpty())
+		delete[] _rgbBufferList.takeFirst();
+
+	_bufferSizeList.clear();
+	_bufferUsageList.clear();
 }
 
 PhTime PhVideoDecoder::length()
@@ -229,11 +253,37 @@ void PhVideoDecoder::frameToRgb(uint8_t *rgb, bool deinterlace)
 	}
 }
 
-void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
+void PhVideoDecoder::decodeFrame(PhTime time, bool deinterlace)
 {
 	if(!ready()) {
 		PHDEBUG << "not ready";
 		return;
+	}
+
+	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
+
+	// find an available buffer
+	uint8_t * rgb;
+	int bufferIndex = _bufferUsageList.indexOf(false);
+
+	if(bufferIndex != -1) {
+		// we can reuse an existing available buffer
+		rgb = _rgbBufferList.at(bufferIndex);
+
+		if (_bufferSizeList.at(bufferIndex) != bufferSize) {
+			// the size has changed, update the buffer
+			delete[] rgb;
+			rgb = new uint8_t[bufferSize];
+			_rgbBufferList.replace(bufferIndex, rgb);
+			_bufferSizeList.replace(bufferIndex, bufferSize);
+		}
+	}
+	else {
+		// no buffer is currently available, we need a new one
+		rgb = new uint8_t[bufferSize];
+		_rgbBufferList.append(rgb);
+		_bufferUsageList.append(true);
+		_bufferSizeList.append(bufferSize);
 	}
 
 	// clip to stream boundaries
