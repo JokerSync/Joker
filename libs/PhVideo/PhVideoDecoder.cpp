@@ -338,9 +338,10 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 	// 1) in the past
 	// 2) after the next keyframe
 	//      how to know when the next keyframe is ??
-	if((time >= _currentTime + 10*2*PhTimeCode::timePerFrame(_tcType))
+	//      -> for now we take a arbitrary threshold of 20 frames
+	if((time >= _currentTime + 20*PhTimeCode::timePerFrame(_tcType))
 	   || (time < _currentTime)) {
-		//int flags = AVSEEK_FLAG_ANY;
+		// seek to the closest keyframe in the past
 		int flags = AVSEEK_FLAG_BACKWARD;
 		int64_t timestamp = PhTime_to_AVTimestamp(time);
 		PHDEBUG << "seek:" << time << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << PhTimeCode::timePerFrame(_tcType);
