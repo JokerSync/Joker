@@ -58,10 +58,15 @@ public slots:
 	/**
 	 * @brief decode a video frame
 	 * @param time the time of the requested frame (with origin at the start of video file)
-	 * @param rgb the buffer where to output the decoded frame
 	 * @param deinterlace whether the frame is to be deinterlaced
 	 */
-	void decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace);
+	void decodeFrame(PhTime time, bool deinterlace);
+
+	/**
+	 * @brief recycle a buffer
+	 * @param rgb the buffer that can be recycled
+	 */
+	void recycleBuffer(uint8_t *rgb);
 
 signals:
 	/**
@@ -114,6 +119,10 @@ private:
 	bool _useAudio;
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
+
+	QList<uint8_t *> _rgbBufferList;
+	QList<bool> _bufferUsageList;
+	QList<int> _bufferSizeList;
 };
 
 #endif // PHVIDEODECODER_H
