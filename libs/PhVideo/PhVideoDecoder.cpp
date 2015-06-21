@@ -19,7 +19,8 @@ PhVideoDecoder::PhVideoDecoder() :
 	_useAudio(false),
 	_audioStream(NULL),
 	_audioFrame(NULL),
-	_deinterlace(false)
+	_deinterlace(false),
+	_recursive(false)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
@@ -272,6 +273,24 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 		PHDEBUG << "not ready";
 		return;
 	}
+
+	_requestedTime = time;
+
+	if (_recursive) {
+		// if we are called recursively, just let the top caller handle the rest
+		return;
+	}
+
+	// call processEvents to walk through the queued signals
+	// This makes sure we are working on the latest requested time.
+	// We use the _recursive flag to indicate that the child slots
+	// should not actually decode the frame.
+	_recursive = true;
+	QCoreApplication::processEvents();
+	_recursive = false;
+
+	// at this point _requestedTime is really from the latest requestFrame signal
+	time = _requestedTime;
 
 	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
 
