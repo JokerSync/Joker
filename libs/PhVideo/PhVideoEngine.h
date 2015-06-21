@@ -246,7 +246,7 @@ signals:
 
 	/**
 	 * @brief Signal sent when the deinterlace settings change
-	 * @param success Whether the video should be deinterlaced
+	 * @param deinterlace Whether the video should be deinterlaced
 	 */
 	void deinterlaceChanged(bool deinterlace);
 
