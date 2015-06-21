@@ -19,7 +19,8 @@ PhVideoDecoder::PhVideoDecoder() :
 	_currentTime(PHTIMEMIN),
 	_useAudio(false),
 	_audioStream(NULL),
-	_audioFrame(NULL)
+	_audioFrame(NULL),
+	_deinterlace(false)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
@@ -172,6 +173,18 @@ void PhVideoDecoder::recycleBuffer(uint8_t *rgb)
 	_bufferUsageList.replace(bufferIndex, false);
 }
 
+void PhVideoDecoder::setDeinterlace(bool deinterlace)
+{
+	PHDEBUG << deinterlace;
+
+	if (deinterlace != _deinterlace) {
+		_deinterlace = deinterlace;
+
+		// decode the frame again to apply the new deinterlace setting
+		decodeFrame(_currentTime);
+	}
+}
+
 PhVideoDecoder::~PhVideoDecoder()
 {
 	close();
@@ -205,10 +218,10 @@ double PhVideoDecoder::framePerSecond()
 	return result;
 }
 
-void PhVideoDecoder::frameToRgb(uint8_t *rgb, bool deinterlace)
+void PhVideoDecoder::frameToRgb(uint8_t *rgb)
 {
 	int frameHeight = _videoFrame->height;
-	if(deinterlace)
+	if(_deinterlace)
 		frameHeight = _videoFrame->height / 2;
 
 	// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
@@ -254,7 +267,7 @@ void PhVideoDecoder::frameToRgb(uint8_t *rgb, bool deinterlace)
 	}
 }
 
-void PhVideoDecoder::decodeFrame(PhTime time, bool deinterlace)
+void PhVideoDecoder::decodeFrame(PhTime time)
 {
 	if(!ready()) {
 		PHDEBUG << "not ready";
@@ -299,7 +312,7 @@ void PhVideoDecoder::decodeFrame(PhTime time, bool deinterlace)
 	// be performed on each call to decodeFrame
 	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
 	    && (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2)) {
-		frameToRgb(rgb, deinterlace);
+		frameToRgb(rgb);
 		return;
 	}
 
@@ -340,7 +353,7 @@ void PhVideoDecoder::decodeFrame(PhTime time, bool deinterlace)
 					// convert and emit the frame if this is the one that was requested
 					if (time < _currentTime + PhTimeCode::timePerFrame(_tcType)) {
 						PHDEBUG << "decoded!";
-						frameToRgb(rgb, deinterlace);
+						frameToRgb(rgb);
 						lookingForVideoFrame = false;
 					}
 				} // if frame decode is not finished, let's read another packet.

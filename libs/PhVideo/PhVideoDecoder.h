@@ -58,15 +58,20 @@ public slots:
 	/**
 	 * @brief decode a video frame
 	 * @param time the time of the requested frame (with origin at the start of video file)
-	 * @param deinterlace whether the frame is to be deinterlaced
 	 */
-	void decodeFrame(PhTime time, bool deinterlace);
+	void decodeFrame(PhTime time);
 
 	/**
 	 * @brief recycle a buffer
 	 * @param rgb the buffer that can be recycled
 	 */
 	void recycleBuffer(uint8_t *rgb);
+
+	/**
+	 * @brief Signal sent when the deinterlace settings change
+	 * @param success Whether the video should be deinterlaced
+	 */
+	void setDeinterlace(bool deinterlace);
 
 signals:
 	/**
@@ -98,7 +103,7 @@ private:
 	bool ready();
 	double framePerSecond();
 	PhTime length();
-	void frameToRgb(uint8_t *rgb, bool deinterlace);
+	void frameToRgb(uint8_t *rgb);
 	int width();
 	int height();
 	QString codecName();
@@ -123,6 +128,8 @@ private:
 	QList<uint8_t *> _rgbBufferList;
 	QList<bool> _bufferUsageList;
 	QList<int> _bufferSizeList;
+
+	bool _deinterlace;
 };
 
 #endif // PHVIDEODECODER_H
