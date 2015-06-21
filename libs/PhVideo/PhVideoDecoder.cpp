@@ -252,13 +252,19 @@ void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 		return;
 	}
 
-	// we need to perform a frame seek if the requested frame is not the next frame in the stream
-	if((time >= _currentTime + 2*PhTimeCode::timePerFrame(_tcType))
+	// we need to perform a frame seek if the requested frame is:
+	// 1) in the past
+	// 2) after the next keyframe
+	//      how to know when the next keyframe is ??
+	if((time >= _currentTime + 10*2*PhTimeCode::timePerFrame(_tcType))
 	   || (time < _currentTime)) {
-		int flags = AVSEEK_FLAG_ANY;
+		//int flags = AVSEEK_FLAG_ANY;
+		int flags = AVSEEK_FLAG_BACKWARD;
 		int64_t timestamp = PhTime_to_AVTimestamp(time);
-		PHDEBUG << "seek:" << time << " " << _currentTime << " " << " " << timestamp;
+		PHDEBUG << "seek:" << time << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << PhTimeCode::timePerFrame(_tcType);
 		av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
+
+		avcodec_flush_buffers(_videoStream->codec);
 	}
 
 	AVPacket packet;
@@ -272,8 +278,20 @@ void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 				int frameFinished = 0;
 				avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
 				if(frameFinished) {
-					frameToRgb(rgb, deinterlace);
-					lookingForVideoFrame = false;
+					// update the current position of the engine
+					// (Note that it is best not to do use '_currentTime = time' here, because the seeking operation may
+					// not be 100% accurate: the actual time may be different from the requested time. So a time drift
+					// could appear.)
+					_currentTime = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
+
+					PHDEBUG << time << " " << _currentTime << " " << (time - _currentTime)/PhTimeCode::timePerFrame(_tcType);
+
+					// convert and emit the frame if this is the one that was requested
+					if (time < _currentTime + PhTimeCode::timePerFrame(_tcType)) {
+						PHDEBUG << "decoded!";
+						frameToRgb(rgb, deinterlace);
+						lookingForVideoFrame = false;
+					}
 				} // if frame decode is not finished, let's read another packet.
 			}
 			else if(_audioStream && (packet.stream_index == _audioStream->index)) {
@@ -299,12 +317,6 @@ void PhVideoDecoder::decodeFrame(PhTime time, uint8_t *rgb, bool deinterlace)
 		//Avoid memory leak
 		av_free_packet(&packet);
 	}
-
-	// update the current position of the engine
-	// (Note that it is best not to do use '_currentTime = time' here, because the seeking operation may
-	// not be 100% accurate: the actual time may be different from the requested time. So a time drift
-	// could appear.)
-	_currentTime = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
 }
 
 int PhVideoDecoder::width()
