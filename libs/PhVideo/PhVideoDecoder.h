@@ -130,6 +130,9 @@ private:
 	QList<int> _bufferSizeList;
 
 	bool _deinterlace;
+	bool _recursive;
+
+	PhTime _requestedTime;
 };
 
 #endif // PHVIDEODECODER_H
