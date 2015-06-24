@@ -154,7 +154,7 @@ void PhVideoDecoder::close()
 	}
 
 	// delete all unused buffers
-	// Those that are marked as used should not be deleted for now since the decoder thread may be
+	// Those that are marked as used should not be deleted for now since the engine thread may be
 	// operating on them.
 	while (_bufferUsageList.contains(false)) {
 		int unusedBufferIndex = _bufferUsageList.indexOf(false);
@@ -178,6 +178,37 @@ void PhVideoDecoder::recycleBuffer(uint8_t *rgb)
 	_bufferUsageList.replace(bufferIndex, false);
 }
 
+uint8_t *PhVideoDecoder::newRgbBuffer()
+{
+	// find an available buffer, reuse existing one if possible
+	uint8_t * rgb;
+
+	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
+	int bufferIndex = _bufferUsageList.indexOf(false);
+
+	if(bufferIndex != -1) {
+		// we can reuse an existing available buffer
+		rgb = _rgbBufferList.at(bufferIndex);
+
+		if (_bufferSizeList.at(bufferIndex) != bufferSize) {
+			// the size has changed, update the buffer
+			delete[] rgb;
+			rgb = new uint8_t[bufferSize];
+			_rgbBufferList.replace(bufferIndex, rgb);
+			_bufferSizeList.replace(bufferIndex, bufferSize);
+		}
+	}
+	else {
+		// no buffer is currently available, we need a new one
+		rgb = new uint8_t[bufferSize];
+		_rgbBufferList.append(rgb);
+		_bufferUsageList.append(true);
+		_bufferSizeList.append(bufferSize);
+	}
+
+	return rgb;
+}
+
 void PhVideoDecoder::setDeinterlace(bool deinterlace)
 {
 	PHDEBUG << deinterlace;
@@ -194,7 +225,7 @@ PhVideoDecoder::~PhVideoDecoder()
 {
 	close();
 
-	// the decoder thread has exited, so all the buffers can be cleaned.
+	// the engine thread is exiting too, so all the buffers can be cleaned.
 	while (!_rgbBufferList.isEmpty())
 		delete[] _rgbBufferList.takeFirst();
 
@@ -297,31 +328,8 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 	// at this point _requestedTime is really from the latest requestFrame signal
 	time = _requestedTime;
 
-	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
-
 	// find an available buffer
-	uint8_t * rgb;
-	int bufferIndex = _bufferUsageList.indexOf(false);
-
-	if(bufferIndex != -1) {
-		// we can reuse an existing available buffer
-		rgb = _rgbBufferList.at(bufferIndex);
-
-		if (_bufferSizeList.at(bufferIndex) != bufferSize) {
-			// the size has changed, update the buffer
-			delete[] rgb;
-			rgb = new uint8_t[bufferSize];
-			_rgbBufferList.replace(bufferIndex, rgb);
-			_bufferSizeList.replace(bufferIndex, bufferSize);
-		}
-	}
-	else {
-		// no buffer is currently available, we need a new one
-		rgb = new uint8_t[bufferSize];
-		_rgbBufferList.append(rgb);
-		_bufferUsageList.append(true);
-		_bufferSizeList.append(bufferSize);
-	}
+	uint8_t * rgb = newRgbBuffer();
 
 	// clip to stream boundaries
 	if(time < 0)

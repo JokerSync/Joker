@@ -108,6 +108,7 @@ private:
 	int height();
 	QString codecName();
 	PhTime timeIn();
+	uint8_t *newRgbBuffer();
 
 	int64_t PhTime_to_AVTimestamp(PhTime time);
 	PhTime AVTimestamp_to_PhTime(int64_t timestamp);
