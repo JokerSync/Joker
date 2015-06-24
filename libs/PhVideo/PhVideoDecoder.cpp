@@ -61,7 +61,12 @@ void PhVideoDecoder::open(QString fileName)
 		PHDEBUG << i << ":" << streamType;
 		switch(streamType) {
 		case AVMEDIA_TYPE_VIDEO:
-			_videoStream = _formatContext->streams[i];
+			// Some containers are advertised with several video streams.
+			// For example, one is the main stream and the other one is just a cover picture (single frame).
+			// Here we choose the one that has the largest number of frames.
+			if (!_videoStream || _videoStream->nb_frames < _formatContext->streams[i]->nb_frames) {
+				_videoStream = _formatContext->streams[i];
+			}
 			PHDEBUG << "\t=> video";
 			break;
 		case AVMEDIA_TYPE_AUDIO:
