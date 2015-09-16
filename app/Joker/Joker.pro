@@ -75,7 +75,7 @@ mac{
 win32 {
 	RC_ICONS += "joker.ico"
 
-	OTHER_FILES += JokerSetup.iss
+	OTHER_FILES += Joker.iss
 }
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
