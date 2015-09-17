@@ -11,7 +11,7 @@ PhStripObject::PhStripObject(PhTime timeIn) : _timeIn(timeIn)
 {
 }
 
-PhTime PhStripObject::timeIn() {
+PhTime PhStripObject::timeIn() const {
 	return _timeIn;
 }
 

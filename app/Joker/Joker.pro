@@ -8,6 +8,8 @@ cache()
 
 TARGET = Joker
 
+CONFIG += video
+
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
@@ -17,7 +19,11 @@ include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 include($$TOP_ROOT/libs/PhStrip/PhStrip.pri)
 include($$TOP_ROOT/libs/PhGraphic/PhGraphic.pri)
 include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
+
+video {
+DEFINES += USE_VIDEO
 include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
+}
 include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
 include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 include($$TOP_ROOT/libs/PhLtc/PhLtc.pri)
@@ -81,7 +87,7 @@ mac{
 win32 {
 	RC_ICONS += "joker.ico"
 
-	OTHER_FILES += JokerSetup.iss
+	OTHER_FILES += Joker.iss
 }
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}

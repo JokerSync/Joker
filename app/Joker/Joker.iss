@@ -39,8 +39,7 @@ DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile="LICENSE.TXT"
 OutputDir={#MyOutputDir}
-OutputBaseFilename={#MyAppName}Setup_v{#MyAppVerStr}
-;OutputBaseFilename={#MyAppName}Setup.exe
+OutputBaseFilename={#MyAppName}_v{#MyAppVerStr}
 Compression=lzma
 SolidCompression=yes
 
@@ -62,17 +61,17 @@ Source: "{#QtDir}\bin\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\bin\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\icuin52.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\icuuc52.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QtDir}\bin\icuin53.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QtDir}\bin\icuuc53.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\icudt52.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QtDir}\bin\icudt53.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\plugins\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion
 
 Source: "release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; dlls (PortAudio, SDL, etc.)
 Source: "release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; Qt dlls (windeployqt needs to be run first)
-Source: "release\accessible\*.dll"; DestDir: "{app}\accessible"; Flags: ignoreversion
+;Source: "release\accessible\*.dll"; DestDir: "{app}\accessible"; Flags: ignoreversion
 Source: "release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
 Source: "release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
 Source: "release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion

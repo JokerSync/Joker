@@ -9,7 +9,9 @@
 
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 #include "PhCommonUI/PhEditableDocumentWindow.h"
+#ifdef USE_VIDEO
 #include "PhVideo/PhVideoEngine.h"
+#endif
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSynchronizer.h"
 #ifdef SONY
@@ -51,6 +53,7 @@ public:
 	explicit JokerWindow(JokerSettings *settings);
 	~JokerWindow();
 
+#ifdef USE_VIDEO
 	///
 	/// @brief Open a video file
 	///
@@ -61,6 +64,7 @@ public:
 	/// @return True if the videoFile opened well, false otherwise.
 	///
 	bool openVideoFile(QString videoFile);
+#endif
 
 public slots:
 	///
@@ -263,14 +267,23 @@ private slots:
 
 	void on_actionUse_native_video_size_triggered(bool checked);
 
+	void on_actionSet_TC_in_triggered();
+
+	void on_actionSet_TC_out_triggered();
+
+	void on_actionLoop_triggered(bool checked);
+
 private:
+	PhTimeCodeType timeCodeType();
 	PhTime currentTime();
 	PhRate currentRate();
 
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;
 	PhGraphicStrip _strip;
+#ifdef USE_VIDEO
 	PhVideoEngine _videoEngine;
+#endif
 	PhStripDoc *_doc;
 #ifdef SONY
 	PhSonySlaveController _sonySlave;

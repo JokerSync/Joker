@@ -74,6 +74,7 @@ linux {
 	DEPENDPATH +=   /usr/include/GL
 	INCLUDEPATH += /usr/include
 	LIBS += -L/usr/lib -lSDL2 -lSDL2_image -lSDL2_ttf
+	LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf
 }
 
 mac {

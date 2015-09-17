@@ -24,6 +24,16 @@ int PhGenericSettings::intValue(QString name, int defaultValue)
 	return _settings.value(name, defaultValue).toInt();
 }
 
+void PhGenericSettings::setLongLongValue(QString name, qlonglong value)
+{
+	_settings.setValue(name, value);
+}
+
+qlonglong PhGenericSettings::longLongValue(QString name, qlonglong defaultValue)
+{
+	return _settings.value(name, defaultValue).toLongLong();
+}
+
 int PhGenericSettings::intValueWithAlias(QString name, QString alias)
 {
 	/// If the regular value is 0, return the alias value

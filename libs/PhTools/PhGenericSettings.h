@@ -139,6 +139,19 @@ protected:
 	 */
 	int intValue(QString name, int defaultValue = 0);
 	/**
+	 * @brief Set a long long value (64 bit)
+	 * @param name The settings name
+	 * @param value The long long value
+	 */
+	void setLongLongValue(QString name, qlonglong value);
+	/**
+	 * @brief Get a long long value (64 bit)
+	 * @param name The settings name
+	 * @param defaultValue The default value
+	 * @return The long long value
+	 */
+	qlonglong longLongValue(QString name, qlonglong defaultValue = 0);
+	/**
 	 * @brief Get an integer value with alias
 	 *
 	 * @param name The settings name

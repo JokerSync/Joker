@@ -36,8 +36,7 @@ win32{
 
 # Unix specific
 unix {
-	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
+	LIBS += -lavformat -lavcodec -lavutil -lswscale
 }
 
 # MacOS specific

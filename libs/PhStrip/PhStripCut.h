@@ -31,7 +31,13 @@ public:
 	 */
 	PhStripCut(PhTime time, PhStripCut::PhCutType type);
 
-
+	/**
+	 * @brief Get the cut type
+	 * @return A cut type
+	 */
+	PhCutType type() const {
+		return _type;
+	}
 private:
 	/**
 	 * Type of cut.
