@@ -5,7 +5,7 @@ win32 {
 CONFIG(release, debug|release) {
 	mac {
 		app_bundle {
-			if(equals(PH_GIT_BRANCH, "master")) {
+			if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {
 				PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}
 			} else {
 				PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}_$${PH_GIT_BRANCH}
