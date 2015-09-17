@@ -22,8 +22,7 @@ install:
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
-- if [[ "$JOB" == BUILD_SPEC_* ]]; then scripts/install_coveralls.sh; fi
-- if [[ "$JOB" == BUILD_SPEC_* ]]; then eval "$(pyenv init -)"; fi
+- if [[ "$JOB" == BUILD_SPEC_* ]]; then sudo pip install cpp-coverall; fi
 
 script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
