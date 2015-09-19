@@ -11,6 +11,7 @@
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
 #include "PhGraphic/PhGraphicImage.h"
+#include "PhGraphic/PhGraphicLoop.h"
 
 #include "PhSpec.h"
 
@@ -117,6 +118,27 @@ go_bandit([](){
 			QString resultFile = "rgbPatternTest.result.bmp";
 			resultImage.save(resultFile);
 			QString expectedFile = "rgbPatternTest.expected.bmp";
+			QImage expectedImage(expectedFile);
+
+			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+			AssertThat(result, Equals(0));
+		});
+
+		it("draw a loop", [&]() {
+			PhGraphicView view(64, 64);
+
+			PhGraphicLoop loop(32, 0, 32, 64, 16, 4);
+
+			QObject::connect(&view, &PhGraphicView::paint, [&](int w, int h) {
+				loop.draw();
+			});
+
+			view.show();
+
+			QImage resultImage(view.renderPixmap(64, 64).toImage());
+			QString resultFile = "loopTest.result.bmp";
+			resultImage.save(resultFile);
+			QString expectedFile = "loopTest.expected.bmp";
 			QImage expectedImage(expectedFile);
 
 			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
