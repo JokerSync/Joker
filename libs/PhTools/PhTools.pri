@@ -19,7 +19,6 @@ HEADERS += \
 	$$PWD/PhPictureTools.h \
 	$$PWD/PhFileTool.h \
 	$$PWD/PhGenericSettings.h \
-	$$PWD/PhTestTools.h \
 
 SOURCES += \
 	$$PWD/PhDebug.cpp \
@@ -27,4 +26,3 @@ SOURCES += \
 	$$PWD/PhPictureTools.cpp \
 	$$PWD/PhFileTool.cpp \
 	$$PWD/PhGenericSettings.cpp \
-	$$PWD/PhTestTools.cpp \
