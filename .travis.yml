@@ -11,11 +11,10 @@ env:
 #  - JOB=UNCRUSTIFY
 #  - JOB=DOXYGEN
 #  - JOB=BUILD_SPEC_BANDIT
-#  - JOB=BUILD_RELEASE_JOKER
+  - JOB=BUILD_RELEASE_JOKER
 #  - JOB=BUILD_RELEASE_LTCTOOL
 #  - JOB=BUILD_RELEASE_MIDITOOL
 #  - JOB=BUILD_RELEASE_ALL_TESTS
-  - JOB=BUILD_RELEASE_POUET
 install:
 - git submodule update --init --recursive
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
