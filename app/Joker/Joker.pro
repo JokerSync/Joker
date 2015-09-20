@@ -109,7 +109,10 @@ TRANSLATIONS =	fr_FR.ts \
 
 QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
 
+QMAKE_POST_LINK += echo "Translation ok" {CS}
 PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
-include($$TOP_ROOT/common/deploy.pri)
+#include($$TOP_ROOT/common/deploy.pri)
 
 cache()
+
+QMAKE_POST_LINK += echo "Joker build ok" {CS}
