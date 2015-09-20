@@ -42,7 +42,7 @@ after_success:
 after_failure:
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
-  email: false
+  email: true
   irc:
     channels: "phonations.com#joker"
     on_success: always
