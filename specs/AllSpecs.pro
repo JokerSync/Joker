@@ -21,6 +21,3 @@ include($$TOP_ROOT/specs/GraphicStripSpec/GraphicStripSpec.pri)
 include($$TOP_ROOT/specs/SonySpec/SonySpec.pri)
 include($$TOP_ROOT/specs/MidiSpec/MidiSpec.pri)
 include($$TOP_ROOT/specs/VideoSpec/VideoSpec.pri)
-
-PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include($$TOP_ROOT/common/deploy.pri)

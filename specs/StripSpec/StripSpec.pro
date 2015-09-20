@@ -1,4 +1,4 @@
-#
+
 # Copyright (C) 2012-2015 Phonations
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
@@ -18,7 +18,3 @@ include($$TOP_ROOT/specs/StripSpec/StripSpec.pri)
 
 # Common spec directive
 include($$TOP_ROOT/specs/CommonSpec.pri)
-
-# Deployement (why in spec????)
-PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include($$TOP_ROOT/common/deploy.pri)
