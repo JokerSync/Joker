@@ -66,7 +66,7 @@ addons:
       name: Phonations/Joker
       description: Build submitted via Travis CI
     notification_email: martin@phonations.com
-    build_command_prepend: cov-configure --comptype clangcxx --compiler clang++ --template
+    build_command_prepend: cov-configure --comptype clangcxx --compiler clang++
     build_command_prepend: qmake app/Joker/Joker.pro
     build_command: make -j 4
     branch_pattern: coverity
