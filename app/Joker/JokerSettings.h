@@ -6,7 +6,9 @@
 #include "PhTools/PhGenericSettings.h"
 #include "PhSync/PhSyncSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
+#ifdef USE_VIDEO
 #include "PhVideo/PhVideoSettings.h"
+#endif
 #include "PhSony/PhSonySettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 #include "PhCommonUI/PhFeedbackSettings.h"
@@ -19,7 +21,9 @@
 class JokerSettings : public PhGenericSettings,
 	public PhSyncSettings,
 	public PhGraphicStripSettings,
+#ifdef USE_VIDEO
 	public PhVideoSettings,
+#endif
 	public PhSonySettings,
 	public PhDocumentWindowSettings,
 	public PhFeedbackSettings,
@@ -84,8 +88,10 @@ public:
 	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
 	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
 
+#ifdef USE_VIDEO
 	// Video settings:
 	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
+#endif
 
 	// Synchronisation settings:
 	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)

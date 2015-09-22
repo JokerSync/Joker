@@ -63,6 +63,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionClose_video->setEnabled(false);
 	ui->actionDeinterlace_video->setEnabled(false);
 	ui->actionForce_16_9_ratio->setEnabled(false);
+	ui->actionUse_native_video_size->setEnabled(false);
 #endif
 
 	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::onVideoSync);
@@ -1102,7 +1103,9 @@ void JokerWindow::on_actionHide_selected_peoples_triggered(bool checked)
 
 void JokerWindow::on_actionUse_native_video_size_triggered(bool checked)
 {
+#ifdef USE_VIDEO
 	_settings->setUseNativeVideoSize(checked);
+#endif
 }
 
 PhTimeCodeType JokerWindow::timeCodeType()
