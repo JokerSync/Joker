@@ -270,32 +270,32 @@
     <message>
         <location filename="JokerWindow.ui" line="519"/>
         <source>Set TC in</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler le TC de début</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="522"/>
         <source>Ctrl+J</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+J</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="527"/>
         <source>Set TC out</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler le TC de fin</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="530"/>
         <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+K</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="538"/>
         <source>Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Lecture en boucle</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="541"/>
         <source>Ctrl+L</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+L</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="335"/>
@@ -810,7 +810,7 @@
     <message>
         <location filename="PreferencesDialog.ui" line="442"/>
         <source>Midi machine control:</source>
-        <translation>Midi machine control</translation>
+        <translation>Midi machine control:</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="461"/>
