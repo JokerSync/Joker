@@ -24,15 +24,17 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui(new Ui::JokerWindow),
 	_settings(settings),
 	_strip(settings),
+	_doc(_strip.doc()),
 #ifdef USE_VIDEO
 	_videoEngine(settings),
 #endif
-	_doc(_strip.doc()),
+	_synchronizer(settings),
 	_sonySlave(settings),
 	_ltcReader(settings),
+#ifdef USE_MIDI
 	_mtcReader(PhTimeCodeType25),
 	_mtcWriter(PhTimeCodeType25),
-	_synchronizer(settings),
+#endif
 	_mediaPanelState(MediaPanelHidden),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
@@ -163,8 +165,10 @@ void JokerWindow::setupSyncProtocol()
 	// Disable old protocol
 	_sonySlave.close();
 	_ltcReader.close();
+#ifdef USE_MIDI
 	_mtcReader.close();
 	_mtcWriter.close();
+#endif
 
 	PhSynchronizer::SyncType type = (PhSynchronizer::SyncType)_settings->synchroProtocol();
 
@@ -188,6 +192,7 @@ void JokerWindow::setupSyncProtocol()
 			type = PhSynchronizer::NoSync;
 		}
 		break;
+#ifdef USE_MIDI
 	case PhSynchronizer::MTC:
 		if (_settings->mtcInputUseExistingPort()) {
 			mtcPortName = _settings->mtcInputPort();
@@ -202,16 +207,21 @@ void JokerWindow::setupSyncProtocol()
 			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to open %0 midi port")).arg(mtcPortName));
 			type = PhSynchronizer::NoSync;
 		}
-	case PhSynchronizer::NoSync:
+		break;
+#endif
+	default:
+		type = PhSynchronizer::NoSync;
 		break;
 	}
 
+#ifdef USE_MIDI
 	if(_settings->sendMmcMessage()) {
 		if(!_mtcWriter.open(_settings->mmcOutputPort())) {
 			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to open %0 midi port")).arg(_settings->mmcOutputPort()));
 			_settings->setSendMmcMessage(false);
 		}
 	}
+#endif
 
 	_synchronizer.setSyncClock(clock, type);
 
@@ -576,21 +586,26 @@ void JokerWindow::on_actionPreferences_triggered()
 	hideMediaPanel();
 	int oldSynchroProtocol = _settings->synchroProtocol();
 	QString oldLtcInputPort = _settings->ltcInputPort();
+#ifdef USE_MIDI
 	QString oldMtcInputPort = _settings->mtcInputPort();
 	QString oldMtcVirtualInputPort = _settings->mtcVirtualInputPort();
 	bool oldMtcInputUseExistingPort = _settings->mtcInputUseExistingPort();
 	bool oldSendMmcMessage = _settings->sendMmcMessage();
 	QString oldMmcOutputPort = _settings->mmcOutputPort();
+#endif// USE_MIDI
 
 	PreferencesDialog dlg(_settings);
 	if(dlg.exec() == QDialog::Accepted) {
 		if((oldSynchroProtocol != _settings->synchroProtocol())
 		   || (oldLtcInputPort  != _settings->ltcInputPort())
+#ifdef USE_MIDI
 		   || (oldMtcInputPort != _settings->mtcInputPort())
 		   || (oldMtcVirtualInputPort != _settings->mtcVirtualInputPort())
 		   || (oldMtcInputUseExistingPort != _settings->mtcInputUseExistingPort())
 		   || (oldSendMmcMessage != _settings->sendMmcMessage())
-		   || (oldMmcOutputPort != _settings->mmcOutputPort())) {
+		   || (oldMmcOutputPort != _settings->mmcOutputPort())
+#endif // USE_MIDI
+		){
 			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
 			setupSyncProtocol();
 		}
@@ -1055,14 +1070,17 @@ void JokerWindow::on_actionDisplay_the_vertical_scale_triggered(bool checked)
 void JokerWindow::setCurrentTime(PhTime time)
 {
 	_strip.clock()->setTime(time);
+#ifdef USE_MIDI
 	if(_settings->sendMmcMessage())
 		_mtcWriter.sendMMCGotoFromTime(time);
+#endif
 
 }
 
 void JokerWindow::setCurrentRate(PhRate rate)
 {
 	_strip.clock()->setRate(rate);
+#ifdef USE_MIDI
 	if(_settings->sendMmcMessage()) {
 		_mtcWriter.sendMMCGotoFromTime(currentTime());
 		if(rate == 0.0f)
@@ -1070,6 +1088,7 @@ void JokerWindow::setCurrentRate(PhRate rate)
 		else if(rate == 1.0f)
 			_mtcWriter.sendMMCPlay();
 	}
+#endif // USE_MIDI
 }
 
 PhTime JokerWindow::currentTime()

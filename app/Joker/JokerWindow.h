@@ -16,8 +16,10 @@
 #include "PhSync/PhSynchronizer.h"
 #include "PhSony/PhSonySlaveController.h"
 #include "PhLtc/PhLtcReader.h"
+#ifdef USE_MIDI
 #include "PhMidi/PhMidiTimeCodeReader.h"
 #include "PhMidi/PhMidiTimeCodeWriter.h"
+#endif
 
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
@@ -279,15 +281,17 @@ private:
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;
 	PhGraphicStrip _strip;
+	PhStripDoc *_doc;
 #ifdef USE_VIDEO
 	PhVideoEngine _videoEngine;
 #endif
-	PhStripDoc *_doc;
+	PhSynchronizer _synchronizer;
 	PhSonySlaveController _sonySlave;
 	PhLtcReader _ltcReader;
+#ifdef USE_MIDI
 	PhMidiTimeCodeReader _mtcReader;
 	PhMidiTimeCodeWriter _mtcWriter;
-	PhSynchronizer _synchronizer;
+#endif
 
 	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;
