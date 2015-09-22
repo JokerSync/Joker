@@ -9,7 +9,9 @@
 
 #include "PhTools/PhDebug.h"
 #include "PhSync/PhSynchronizer.h"
+#ifdef USE_LTC
 #include "PhLtc/PhLtcReader.h"
+#endif // USE_LTC
 #ifdef USE_MIDI
 #include "PhMidi/PhMidiInput.h"
 #include "PhMidi/PhMidiOutput.h"
@@ -133,11 +135,15 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->sonyCommunicationTimeCodeTypeComboBox->setCurrentIndex(_settings->sonySlaveCommunicationTimeCodeType());
 	ui->sonyVideoSyncTimeCodeTypeComboBox->setCurrentIndex(_settings->sonySlaveVideoSyncTimeCodeType());
 
+#ifdef USE_LTC
 	// Initializing the LTC preferences
 	QStringList ltcInputPorts = PhLtcReader::inputList();
 	ui->ltcInputPortComboBox->addItems(ltcInputPorts);
 	if(ltcInputPorts.contains(_settings->ltcInputPort()))
 		ui->ltcInputPortComboBox->setCurrentText(_settings->ltcInputPort());
+#else
+	ui->ltcRadioButton->setEnabled(false);
+#endif
 
 #ifdef USE_MIDI
 	// Initializing MTC preferences
@@ -240,7 +246,9 @@ void PreferencesDialog::accept()
 	_settings->setSonySlaveCommunicationTimeCodeType(ui->sonyCommunicationTimeCodeTypeComboBox->currentIndex());
 	_settings->setSonySlaveVideoSyncTimeCodeType(ui->sonyVideoSyncTimeCodeTypeComboBox->currentIndex());
 
+#ifdef USE_LTC
 	_settings->setLtcInputPort(ui->ltcInputPortComboBox->currentText());
+#endif
 
 #ifdef USE_MIDI
 	_settings->setMtcInputUseExistingPort(ui->mtcExistingInputPortRadioButton->isChecked());

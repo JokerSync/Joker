@@ -2,32 +2,36 @@
 #define JOKERSETTINGS_H
 
 #include "PhTools/PhFile.h"
-
 #include "PhTools/PhGenericSettings.h"
 #include "PhSync/PhSyncSettings.h"
+#include "PhSync/PhTimeCode.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
+#include "PhCommonUI/PhDocumentWindowSettings.h"
+#include "PhCommonUI/PhFeedbackSettings.h"
 #ifdef USE_VIDEO
 #include "PhVideo/PhVideoSettings.h"
 #endif
 #include "PhSony/PhSonySettings.h"
-#include "PhCommonUI/PhDocumentWindowSettings.h"
-#include "PhCommonUI/PhFeedbackSettings.h"
+#ifdef USE_LTC
 #include "PhLtc/PhLtcReaderSettings.h"
+#endif
 
 
 /**
  * @brief The Joker application settings
  */
 class JokerSettings : public PhGenericSettings,
-	public PhSyncSettings,
 	public PhGraphicStripSettings,
+	public PhDocumentWindowSettings,
+	public PhFeedbackSettings,
 #ifdef USE_VIDEO
 	public PhVideoSettings,
 #endif
 	public PhSonySettings,
-	public PhDocumentWindowSettings,
-	public PhFeedbackSettings,
-	public PhLtcReaderSettings
+#ifdef USE_LTC
+	public PhLtcReaderSettings,
+#endif
+	public PhSyncSettings
 {
 public:
 	// PhWindowSettings
@@ -110,10 +114,12 @@ public:
 	PH_SETTING_INT2(setSonyMasterVideoSyncTimeCodeType, sonyMasterVideoSyncTimeCodeType, PhTimeCodeType25)
 	PH_SETTING_INT2(setSonySlaveVideoSyncTimeCodeType, sonySlaveVideoSyncTimeCodeType, PhTimeCodeType25)
 
+#ifdef USE_LTC
 	// LTC settings:
 	PH_SETTING_STRING(setLtcInputPort, ltcInputPort)
 	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
 	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
+#endif
 
 #ifdef USE_MIDI
 	// MTC settings:

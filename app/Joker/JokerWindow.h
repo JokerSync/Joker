@@ -15,7 +15,9 @@
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSynchronizer.h"
 #include "PhSony/PhSonySlaveController.h"
+#ifdef USE_LTC
 #include "PhLtc/PhLtcReader.h"
+#endif
 #ifdef USE_MIDI
 #include "PhMidi/PhMidiTimeCodeReader.h"
 #include "PhMidi/PhMidiTimeCodeWriter.h"
@@ -287,7 +289,9 @@ private:
 #endif
 	PhSynchronizer _synchronizer;
 	PhSonySlaveController _sonySlave;
+#ifdef USE_LTC
 	PhLtcReader _ltcReader;
+#endif
 #ifdef USE_MIDI
 	PhMidiTimeCodeReader _mtcReader;
 	PhMidiTimeCodeWriter _mtcWriter;

@@ -30,7 +30,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #endif
 	_synchronizer(settings),
 	_sonySlave(settings),
+#ifdef USE_LTC
 	_ltcReader(settings),
+#endif
 #ifdef USE_MIDI
 	_mtcReader(PhTimeCodeType25),
 	_mtcWriter(PhTimeCodeType25),
@@ -164,7 +166,9 @@ void JokerWindow::setupSyncProtocol()
 
 	// Disable old protocol
 	_sonySlave.close();
+#ifdef USE_LTC
 	_ltcReader.close();
+#endif
 #ifdef USE_MIDI
 	_mtcReader.close();
 	_mtcWriter.close();
@@ -185,6 +189,7 @@ void JokerWindow::setupSyncProtocol()
 		}
 		break;
 	case PhSynchronizer::LTC:
+#ifdef USE_LTC
 		if(_ltcReader.init(_settings->ltcInputPort()))
 			clock = _ltcReader.clock();
 		else {
@@ -192,6 +197,7 @@ void JokerWindow::setupSyncProtocol()
 			type = PhSynchronizer::NoSync;
 		}
 		break;
+#endif
 #ifdef USE_MIDI
 	case PhSynchronizer::MTC:
 		if (_settings->mtcInputUseExistingPort()) {
@@ -585,7 +591,9 @@ void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
 	int oldSynchroProtocol = _settings->synchroProtocol();
+#ifdef USE_LTC
 	QString oldLtcInputPort = _settings->ltcInputPort();
+#endif// USE_LTC
 #ifdef USE_MIDI
 	QString oldMtcInputPort = _settings->mtcInputPort();
 	QString oldMtcVirtualInputPort = _settings->mtcVirtualInputPort();
@@ -597,7 +605,9 @@ void JokerWindow::on_actionPreferences_triggered()
 	PreferencesDialog dlg(_settings);
 	if(dlg.exec() == QDialog::Accepted) {
 		if((oldSynchroProtocol != _settings->synchroProtocol())
+#ifdef USE_LTC
 		   || (oldLtcInputPort  != _settings->ltcInputPort())
+#endif // USE_LTC
 #ifdef USE_MIDI
 		   || (oldMtcInputPort != _settings->mtcInputPort())
 		   || (oldMtcVirtualInputPort != _settings->mtcVirtualInputPort())
