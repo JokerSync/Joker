@@ -23,6 +23,9 @@
 #include <QSettings>
 #include <QMetaEnum>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
 #include <boost/format.hpp>
+#pragma clang diagnostic pop
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
