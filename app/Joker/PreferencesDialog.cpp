@@ -131,9 +131,13 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	connect(&_protocolButtonGroup, SIGNAL(buttonToggled(int, bool)), this, SLOT(updateSynchronisationEnabledControl(int, bool)));
 	connect(ui->mmcCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateSynchronisationEnabledControl(bool)));
 
+#ifdef USE_SONY
 	// Initializing the sony preferences
 	ui->sonyCommunicationTimeCodeTypeComboBox->setCurrentIndex(_settings->sonySlaveCommunicationTimeCodeType());
 	ui->sonyVideoSyncTimeCodeTypeComboBox->setCurrentIndex(_settings->sonySlaveVideoSyncTimeCodeType());
+#else
+	ui->sonyRadioButton->setEnabled(false);
+#endif
 
 #ifdef USE_LTC
 	// Initializing the LTC preferences
@@ -243,9 +247,10 @@ void PreferencesDialog::accept()
 	else if(ui->mtcRadioButton->isChecked())
 		_settings->setSynchroProtocol(PhSynchronizer::MTC);
 
+#ifdef USE_SONY
 	_settings->setSonySlaveCommunicationTimeCodeType(ui->sonyCommunicationTimeCodeTypeComboBox->currentIndex());
 	_settings->setSonySlaveVideoSyncTimeCodeType(ui->sonyVideoSyncTimeCodeTypeComboBox->currentIndex());
-
+#endif
 #ifdef USE_LTC
 	_settings->setLtcInputPort(ui->ltcInputPortComboBox->currentText());
 #endif

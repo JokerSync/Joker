@@ -29,7 +29,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_videoEngine(settings),
 #endif
 	_synchronizer(settings),
+#ifdef USE_SONY
 	_sonySlave(settings),
+#endif
 #ifdef USE_LTC
 	_ltcReader(settings),
 #endif
@@ -70,7 +72,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionUse_native_video_size->setEnabled(false);
 #endif
 
+#ifdef USE_SONY
 	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::onVideoSync);
+#endif
 
 	setupSyncProtocol();
 
@@ -165,7 +169,9 @@ void JokerWindow::setupSyncProtocol()
 	QString mtcPortName;
 
 	// Disable old protocol
+#ifdef USE_SONY
 	_sonySlave.close();
+#endif
 #ifdef USE_LTC
 	_ltcReader.close();
 #endif
@@ -177,6 +183,7 @@ void JokerWindow::setupSyncProtocol()
 	PhSynchronizer::SyncType type = (PhSynchronizer::SyncType)_settings->synchroProtocol();
 
 	switch(type) {
+#ifdef USE_SONY
 	case PhSynchronizer::Sony:
 		// Initialize the sony module
 		if(_sonySlave.open()) {
@@ -188,6 +195,7 @@ void JokerWindow::setupSyncProtocol()
 			QMessageBox::critical(this, tr("Error"), tr("Unable to connect to USB422v module"));
 		}
 		break;
+#endif
 	case PhSynchronizer::LTC:
 #ifdef USE_LTC
 		if(_ltcReader.init(_settings->ltcInputPort()))

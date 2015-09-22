@@ -11,7 +11,9 @@
 #ifdef USE_VIDEO
 #include "PhVideo/PhVideoSettings.h"
 #endif
+#ifdef USE_SONY
 #include "PhSony/PhSonySettings.h"
+#endif
 #ifdef USE_LTC
 #include "PhLtc/PhLtcReaderSettings.h"
 #endif
@@ -27,7 +29,9 @@ class JokerSettings : public PhGenericSettings,
 #ifdef USE_VIDEO
 	public PhVideoSettings,
 #endif
+#ifdef USE_SONY
 	public PhSonySettings,
+#endif
 #ifdef USE_LTC
 	public PhLtcReaderSettings,
 #endif
@@ -100,6 +104,7 @@ public:
 	// Synchronisation settings:
 	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
 
+#ifdef USE_SONY
 	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
 	PH_SETTING_UCHAR2(setSonyDevice1, sonyDevice1, 0xF0)
@@ -113,6 +118,7 @@ public:
 
 	PH_SETTING_INT2(setSonyMasterVideoSyncTimeCodeType, sonyMasterVideoSyncTimeCodeType, PhTimeCodeType25)
 	PH_SETTING_INT2(setSonySlaveVideoSyncTimeCodeType, sonySlaveVideoSyncTimeCodeType, PhTimeCodeType25)
+#endif
 
 #ifdef USE_LTC
 	// LTC settings:

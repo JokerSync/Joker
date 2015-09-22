@@ -14,7 +14,9 @@
 #endif
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSynchronizer.h"
+#ifdef USE_SONY
 #include "PhSony/PhSonySlaveController.h"
+#endif
 #ifdef USE_LTC
 #include "PhLtc/PhLtcReader.h"
 #endif
@@ -288,7 +290,9 @@ private:
 	PhVideoEngine _videoEngine;
 #endif
 	PhSynchronizer _synchronizer;
+#ifdef USE_SONY
 	PhSonySlaveController _sonySlave;
+#endif
 #ifdef USE_LTC
 	PhLtcReader _ltcReader;
 #endif
