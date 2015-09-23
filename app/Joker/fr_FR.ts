@@ -2,37 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
-    <name>MAC_APPLICATION_MENU</name>
-    <message>
-        <source>Services</source>
-        <translation>Services</translation>
-    </message>
-    <message>
-        <source>Hide %1</source>
-        <translation>Masquer %1</translation>
-    </message>
-    <message>
-        <source>Hide Others</source>
-        <translation>Masquer les autres</translation>
-    </message>
-    <message>
-        <source>Show All</source>
-        <translation>Tout afficher</translation>
-    </message>
-    <message>
-        <source>Preferences...</source>
-        <translation>Préférences...</translation>
-    </message>
-    <message>
-        <source>Quit %1</source>
-        <translation>Quitter %1</translation>
-    </message>
-    <message>
-        <source>About %1</source>
-        <translation>À propos de %1</translation>
-    </message>
-</context>
-<context>
     <name>AboutDialog</name>
     <message>
         <location filename="AboutDialog.ui" line="14"/>
@@ -301,32 +270,32 @@
     <message>
         <location filename="JokerWindow.ui" line="519"/>
         <source>Set TC in</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler le TC de début</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="522"/>
         <source>Ctrl+J</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+J</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="527"/>
         <source>Set TC out</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler le TC de fin</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="530"/>
         <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+K</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="538"/>
         <source>Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Lecture en boucle</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="541"/>
         <source>Ctrl+L</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+L</translation>
     </message>
     <message>
         <location filename="JokerWindow.ui" line="335"/>
@@ -528,31 +497,31 @@
     <name>MAC_APPLICATION_MENU</name>
     <message>
         <source>Services</source>
-        <translation type="vanished">Services</translation>
+        <translation>Services</translation>
     </message>
     <message>
         <source>Hide %1</source>
-        <translation type="vanished">Masquer %1</translation>
+        <translation>Masquer %1</translation>
     </message>
     <message>
         <source>Hide Others</source>
-        <translation type="vanished">Masquer les autres</translation>
+        <translation>Masquer les autres</translation>
     </message>
     <message>
         <source>Show All</source>
-        <translation type="vanished">Tout afficher</translation>
+        <translation>Tout afficher</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation type="vanished">Préférences...</translation>
+        <translation>Préférences...</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation type="vanished">Quitter %1</translation>
+        <translation>Quitter %1</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation type="vanished">À propos de %1</translation>
+        <translation>À propos de %1</translation>
     </message>
 </context>
 <context>
@@ -841,7 +810,7 @@
     <message>
         <location filename="PreferencesDialog.ui" line="442"/>
         <source>Midi machine control:</source>
-        <translation>Midi machine control</translation>
+        <translation>Midi machine control:</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="461"/>

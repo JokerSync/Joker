@@ -17,9 +17,13 @@
 #ifdef SONY
 #include "PhSony/PhSonySlaveController.h"
 #endif
+#ifdef USE_LTC
 #include "PhLtc/PhLtcReader.h"
+#endif
+#ifdef USE_MIDI
 #include "PhMidi/PhMidiTimeCodeReader.h"
 #include "PhMidi/PhMidiTimeCodeWriter.h"
+#endif
 
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
@@ -281,17 +285,21 @@ private:
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;
 	PhGraphicStrip _strip;
+	PhStripDoc *_doc;
 #ifdef USE_VIDEO
 	PhVideoEngine _videoEngine;
 #endif
-	PhStripDoc *_doc;
-#ifdef SONY
+	PhSynchronizer _synchronizer;
+#ifdef USE_SONY
 	PhSonySlaveController _sonySlave;
 #endif
+#ifdef USE_LTC
 	PhLtcReader _ltcReader;
+#endif
+#ifdef USE_MIDI
 	PhMidiTimeCodeReader _mtcReader;
 	PhMidiTimeCodeWriter _mtcWriter;
-	PhSynchronizer _synchronizer;
+#endif
 
 	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;

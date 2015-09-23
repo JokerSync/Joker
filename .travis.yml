@@ -35,12 +35,8 @@ install:
 #- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 #- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ffmpeg.sh; fi
 #- if [[ "$JOB" == BUILD_* ]]; then scripts/install_portaudio.sh; fi
-#- if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_RELEASE_* ]]; then npm install -g appdmg; fi
-- if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then scripts/install_coveralls.sh; fi
-- if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then eval "$(pyenv init -)"; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_boost.sh; fi
-- if [[ "$JOB" == BUILD_SPEC_* ]]; then scripts/install_coveralls.sh; fi
-- if [[ "$JOB" == BUILD_SPEC_* ]]; then eval "$(pyenv init -)"; fi
+- if [[ "$JOB" == BUILD_SPEC_* ]]; then sudo pip install cpp-coveralls; fi
 
 script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
@@ -61,7 +57,7 @@ after_success:
 after_failure:
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
-  email: false
+  email: true
   irc:
     channels: "phonations.com#joker"
     on_success: always
