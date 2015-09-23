@@ -601,14 +601,14 @@ void JokerWindow::on_actionPreferences_triggered()
 	int oldSynchroProtocol = _settings->synchroProtocol();
 #ifdef USE_LTC
 	QString oldLtcInputPort = _settings->ltcInputPort();
-#endif// USE_LTC
+#endif // USE_LTC
 #ifdef USE_MIDI
 	QString oldMtcInputPort = _settings->mtcInputPort();
 	QString oldMtcVirtualInputPort = _settings->mtcVirtualInputPort();
 	bool oldMtcInputUseExistingPort = _settings->mtcInputUseExistingPort();
 	bool oldSendMmcMessage = _settings->sendMmcMessage();
 	QString oldMmcOutputPort = _settings->mmcOutputPort();
-#endif// USE_MIDI
+#endif // USE_MIDI
 
 	PreferencesDialog dlg(_settings);
 	if(dlg.exec() == QDialog::Accepted) {
