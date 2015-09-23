@@ -623,7 +623,7 @@ void JokerWindow::on_actionPreferences_triggered()
 		   || (oldSendMmcMessage != _settings->sendMmcMessage())
 		   || (oldMmcOutputPort != _settings->mmcOutputPort())
 #endif // USE_MIDI
-		){
+		   ) {
 			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
 			setupSyncProtocol();
 		}
