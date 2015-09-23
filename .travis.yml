@@ -4,7 +4,7 @@ os:
 #  - osx
 env:
   global:
-  - PATH=$PATH:/usr/local/opt/qt5/bin; fi
+  - PATH=/usr/lib/x86_64-linux-gnu/qt5/bin:/usr/local/opt/qt5/bin:$PATH
   - JOKER_RELEASE_PATH=$HOME
   - TESTS_RELEASE_PATH=$HOME
   matrix:
