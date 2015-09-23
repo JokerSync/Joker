@@ -5,6 +5,8 @@
 
 #include "PhTools/PhFile.h"
 
+#include <QProcess>
+
 #include "PhFeedbackDialog.h"
 #include "ui_PhFeedbackDialog.h"
 
@@ -56,39 +58,20 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 
 
 	// Get the system infos
-	QString tempFileName(tmpnam(NULL));
 #if defined(Q_OS_MAC)
-	system(PHNQ(QString("/usr/sbin/system_profiler SPHardwareDataType > %1").arg(tempFileName)));
-	QFile systemInfoFile(tempFileName);
-	if(!systemInfoFile.open(QIODevice::ReadOnly))
-		PHDEBUG << systemInfoFile.errorString();
-	else {
-		QTextStream in(&systemInfoFile);
-		while(!in.atEnd()) {
-			systemConfig += in.readLine() + "\n";
-		}
-		systemInfoFile.close();
-		system(PHNQ(QString("rm %1").arg(tempFileName)));
-	}
-#else
-	system(PHNQ(QString("rm %1").arg(tempFileName)));
-#endif
+	QProcess process;
+	process.start("/usr/sbin/system_profiler SPHardwareDataType");
+	if(process.waitForFinished())
+		systemConfig = process.readAllStandardOutput();
+	else
+		PHDEBUG << "Error reading the system configuration...";
 
 	// Get the preferences
-	system(PHNQ(QString("defaults read com.Phonations.%1 > %2").arg(QString(APP_NAME)).arg(tempFileName)));
-	QFile preferencesFile(tempFileName);
-	if(!preferencesFile.open(QIODevice::ReadOnly)) {
-		PHDEBUG << preferencesFile.errorString();
-	}
-	else {
-		QTextStream in(&preferencesFile);
-		while(!in.atEnd()) {
-			preferences += in.readLine() + "\n";
-		}
-		preferencesFile.close();
-		system(PHNQ(QString("rm %1").arg(tempFileName)));
-	}
-
+	process.start(QString("defaults read com.Phonations.%1").arg(QString(APP_NAME)));
+	if(process.waitForFinished())
+		preferences = process.readAllStandardOutput();
+	else
+		PHDEBUG << "Error reading the application preferences...";
 
 	// Get the application log
 	QFile applicationLogFile(QDir::homePath() + "/Library/Logs/Phonations/" + APP_NAME + ".log");
@@ -106,7 +89,6 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		applicationLogFile.close();
 	}
 
-
 	// Get the crash log
 	QString crashFolder = QDir::homePath() + "/Library/Logs/DiagnosticReports/";
 	QDir crashDir(crashFolder);
@@ -122,6 +104,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		if(QFileInfo(filePath).created() > QFileInfo(lastCrashFilePath).created())
 			lastCrashFilePath = filePath;
 	}
+
 	PHDEBUG << lastCrashFilePath;
 	QFile crashFile(lastCrashFilePath);
 	if(!crashFile.open(QIODevice::ReadOnly)) {
@@ -135,6 +118,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		crashFile.close();
 	}
 
+#endif
 
 	QString name = QString("name=%1&").arg(QHostInfo::localHostName());
 

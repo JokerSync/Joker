@@ -57,7 +57,8 @@ after_success:
 after_failure:
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
-  email: true
+  email:
+    on_success: always
   irc:
     channels: "phonations.com#joker"
     on_success: always
