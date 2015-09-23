@@ -11,18 +11,20 @@ env:
 #  - JOB=UNCRUSTIFY
 #  - JOB=DOXYGEN
 #  - JOB=BUILD_SPEC_BANDIT
-  - JOB=BUILD_RELEASE_JOKER
+#  - JOB=BUILD_RELEASE_JOKER
 #  - JOB=BUILD_RELEASE_LTCTOOL
 #  - JOB=BUILD_RELEASE_MIDITOOL
 #  - JOB=BUILD_RELEASE_ALL_TESTS
+  - JOB=BUILD_RELEASE_FORMTEST
 install:
 - git submodule update --init --recursive
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
-- if [[ "$JOB" == BUILD_* ]]; then brew update; brew upgrade boost; fi
-- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
-- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
-- if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
+#- if [[ "$JOB" == BUILD_* ]]; then brew update; brew upgrade boost; fi
+#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
+#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
+#- if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
+- if [[ "$JOB" == BUILD_* ]]; then brew install qt5; fi
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then sudo pip install cpp-coveralls; fi
 
 script:
@@ -33,6 +35,7 @@ script:
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
+- if [[ "$JOB" == BUILD_RELEASE_FORMTEST ]]; then qmake tests/FormTest/FormTest.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make -j 8; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
 - export RELEASED_PACKAGE_FILENAME=$(ls -1 $JOKER_RELEASE_PATH/Joker_$TRAVIS_TAG.dmg)
@@ -67,6 +70,6 @@ addons:
       description: Build submitted via Travis CI
     notification_email: martin@phonations.com
     build_command_prepend: cov-configure --comptype clangcxx --compiler clang++
-    build_command_prepend: qmake app/Joker/Joker.pro
+    build_command_prepend: qmake tests/FormTest/FormTest.pro
     build_command: make -j 4
     branch_pattern: coverity
