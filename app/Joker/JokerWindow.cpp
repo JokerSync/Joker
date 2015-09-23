@@ -1150,7 +1150,8 @@ PhTimeCodeType JokerWindow::timeCodeType()
 #ifdef USE_VIDEO
 	return _videoEngine.timeCodeType();
 #else
-	return (PhTimeCodeType)_settings->sonyMasterCommunicationTimeCodeType();
+#warning /// @todo Are we sure to use default 25?
+	return PhTimeCodeType25;
 #endif
 
 }
