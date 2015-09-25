@@ -36,11 +36,10 @@ install:
 - git submodule update --init --recursive
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
-- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qy install qt55base qt55xmlpatterns; fi
+- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qy install qt55base qt55xmlpatterns boost; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then . /opt/qt55/bin/qt55-env.sh; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then brew install qt5; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then brew link --force qt5; fi
-- if [[ "$JOB" == BUILD_* ]]; then scripts/install_boost.sh; fi
 #- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 #- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 #- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ffmpeg.sh; fi
