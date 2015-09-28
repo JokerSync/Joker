@@ -33,6 +33,7 @@ matrix:
 
 before_install:
   - export SHORT_VER=`echo $QTVER | cut -b1-2`
+  - if [[ "$TRAVIS_OS_NAME" == linux ]]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
   - if [[ "$TRAVIS_OS_NAME" == linux ]]; then sudo add-apt-repository -y ppa:beineri/opt-qt${QTVER}; fi
   - if [[ "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qy update; fi
   - if [[ "$TRAVIS_OS_NAME" == osx && $QTVER != 532 ]]; then brew update; fi
