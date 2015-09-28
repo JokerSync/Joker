@@ -18,20 +18,20 @@ public:
 	~TextEditTestWindow();
 
 protected:
-	bool openDocument(const QString &fileName) override;
-	bool saveDocument(const QString &fileName) override;
+	bool openDocument(const QString &fileName);
+	bool saveDocument(const QString &fileName);
 
-	QMenu *recentDocumentMenu() override;
-	QAction *fullScreenAction() override;
+	QMenu *recentDocumentMenu();
+	QAction *fullScreenAction();
 
-	bool isDocumentModified() override;
+	bool isDocumentModified();
 
 private slots:
 	void on_actionNew_triggered();
 
 	void on_actionOpen_triggered();
 
-	void on_actionSave_triggered() override;
+	void on_actionSave_triggered();
 
 	void on_actionSave_as_triggered();
 
