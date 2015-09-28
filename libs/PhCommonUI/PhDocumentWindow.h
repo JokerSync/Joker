@@ -54,7 +54,7 @@ protected:
 	 * @param event The sender
 	 * @return True if handled, false otherwise
 	 */
-	bool eventFilter(QObject *sender, QEvent *event);
+	bool eventFilter(QObject *sender, QEvent *event) override;
 
 	/**
 	 * @brief The recent document menu item

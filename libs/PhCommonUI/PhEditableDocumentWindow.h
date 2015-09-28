@@ -29,7 +29,7 @@ protected:
 	 *
 	 * @return False to interrupt the caller action, true otherwhise.
 	 */
-	bool openDocument(const QString &fileName);
+	bool openDocument(const QString &fileName) override;
 
 	/**
 	 * @brief Update the settings with the document name
@@ -60,7 +60,7 @@ protected slots:
 	/**
 	 * @brief Check if document has been modified before opening the recent document
 	 */
-	void onOpenRecentDocumentTriggered();
+	void onOpenRecentDocumentTriggered() override;
 
 private:
 	PhDocumentWindowSettings *_settings;
