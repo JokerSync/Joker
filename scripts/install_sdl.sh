@@ -28,7 +28,8 @@ rm SDL2_ttf-2.0.12.dmg
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"
 
-#sudo apt-get update -qq
+sudo add-apt-repository -y ppa:openmw/openmw
+sudo apt-get update -qq
 sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
 
 #echo "Install SDL2"
