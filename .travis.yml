@@ -1,11 +1,8 @@
-language: cpp
 os:
   - linux
     #  - osx
-language:
-  -cpp
-compiler:
-  -clang
+language: cpp
+compiler: clang
 env:
   global:
   - JOKER_RELEASE_PATH=$HOME
@@ -47,7 +44,7 @@ install:
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then brew install qt5; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then brew link --force qt5; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx   ]]; then export QMAKESPEC=macx-clang;  fi
-#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
+- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 #- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ffmpeg.sh; fi
 #- if [[ "$JOB" == BUILD_* ]]; then scripts/install_portaudio.sh; fi
