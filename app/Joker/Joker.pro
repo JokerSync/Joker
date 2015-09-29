@@ -38,14 +38,14 @@ midi {
 	include($$TOP_ROOT/libs/PhMidi/PhMidi.pri)
 }
 
-CONFIG += ltc
+CONFIG += video ltc
 
 win {
-CONFIG += video sony midi
+CONFIG += sony midi
 }
 
 mac {
-CONFIG += video sony midi
+CONFIG += sony midi
 }
 
 SOURCES += main.cpp \

@@ -24,8 +24,8 @@ matrix:
       env: JOB=DOXYGEN
     - os: linux
       env: JOB=BUILD_SPEC_BANDIT
-#    - os: linux
-#      env: JOB=BUILD_RELEASE_LTCTOOL
+    - os: linux
+      env: JOB=BUILD_RELEASE_LTCTOOL
     - os: linux
       env: JOB=BUILD_RELEASE_MIDITOOL
     - os: linux
