@@ -9,6 +9,11 @@
 
 #include "PhVideoEngine.h"
 
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55,28,1)
+#define av_frame_alloc avcodec_alloc_frame
+#define av_frame_free avcodec_free_frame
+#endif
+
 PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_settings(settings),
 	_fileName(""),
@@ -253,10 +258,12 @@ double PhVideoEngine::framePerSecond()
 
 QString PhVideoEngine::codecName()
 {
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55,28,1)
+	return "";
+#else
 	if(_videoStream)
 		return _videoStream->codec->codec_descriptor->long_name;
-
-	return "";
+#endif
 }
 
 bool PhVideoEngine::decodeFrame(PhTime time)
@@ -375,7 +382,11 @@ bool PhVideoEngine::decodeFrame(PhTime time)
 			// (Note that it is best not to do use '_currentTime = time' here, because the seeking operation may
 			// not be 100% accurate: the actual time may be different from the requested time. So a time drift
 			// could appear.)
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55,28,1)
+			_currentTime = time;
+#else
 			_currentTime = _timeIn + AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
+#endif
 
 			//Avoid memory leak
 			av_free_packet(&packet);
