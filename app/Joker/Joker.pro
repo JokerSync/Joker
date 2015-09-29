@@ -8,8 +8,6 @@ cache()
 
 TARGET = Joker
 
-#CONFIG += video sony ltc midi
-
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
@@ -41,17 +39,12 @@ midi {
 }
 
 win {
-CONFIG += sony
+CONFIG += video sony ltc midi
 }
 
 mac {
-CONFIG += sony
+CONFIG += video sony ltc midi
 }
-
-sony {
-include($$TOP_ROOT/libs/PhSony/PhSony.pri)
-}
-
 
 SOURCES += main.cpp \
 	JokerWindow.cpp \
