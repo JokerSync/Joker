@@ -1,7 +1,6 @@
 os: unstable
-branches:
-  except:
-    -mdTravisLinux
+except:
+  - mdTravisLinux
 install:
   - git submodule update --init --recursive
   # Installing various utilities
