@@ -2,28 +2,40 @@
 #define JOKERSETTINGS_H
 
 #include "PhTools/PhFile.h"
-
 #include "PhTools/PhGenericSettings.h"
 #include "PhSync/PhSyncSettings.h"
+#include "PhSync/PhTimeCode.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
-#include "PhVideo/PhVideoSettings.h"
-#include "PhSony/PhSonySettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 #include "PhCommonUI/PhFeedbackSettings.h"
+#ifdef USE_VIDEO
+#include "PhVideo/PhVideoSettings.h"
+#endif
+#ifdef USE_SONY
+#include "PhSony/PhSonySettings.h"
+#endif
+#ifdef USE_LTC
 #include "PhLtc/PhLtcReaderSettings.h"
+#endif
 
 
 /**
  * @brief The Joker application settings
  */
 class JokerSettings : public PhGenericSettings,
-	public PhSyncSettings,
 	public PhGraphicStripSettings,
-	public PhVideoSettings,
-	public PhSonySettings,
 	public PhDocumentWindowSettings,
 	public PhFeedbackSettings,
-	public PhLtcReaderSettings
+#ifdef USE_VIDEO
+	public PhVideoSettings,
+#endif
+#ifdef USE_SONY
+	public PhSonySettings,
+#endif
+#ifdef USE_LTC
+	public PhLtcReaderSettings,
+#endif
+	public PhSyncSettings
 {
 public:
 	// PhWindowSettings
@@ -84,12 +96,15 @@ public:
 	PH_SETTING_INT2(setBackgroundColorLight, backgroundColorLight, 0xe7dcb3)
 	PH_SETTING_INT2(setBackgroundColorDark, backgroundColorDark, 0x242e2c)
 
+#ifdef USE_VIDEO
 	// Video settings:
 	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
+#endif
 
 	// Synchronisation settings:
 	PH_SETTING_INT(setSynchroProtocol, synchroProtocol)
 
+#ifdef USE_SONY
 	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)
 	PH_SETTING_UCHAR2(setSonyDevice1, sonyDevice1, 0xF0)
@@ -103,12 +118,16 @@ public:
 
 	PH_SETTING_INT2(setSonyMasterVideoSyncTimeCodeType, sonyMasterVideoSyncTimeCodeType, PhTimeCodeType25)
 	PH_SETTING_INT2(setSonySlaveVideoSyncTimeCodeType, sonySlaveVideoSyncTimeCodeType, PhTimeCodeType25)
+#endif
 
+#ifdef USE_LTC
 	// LTC settings:
 	PH_SETTING_STRING(setLtcInputPort, ltcInputPort)
 	PH_SETTING_BOOL(setLtcAutoDetectTimeCodeType, ltcAutoDetectTimeCodeType)
 	PH_SETTING_INT2(setLtcReaderTimeCodeType, ltcReaderTimeCodeType, PhTimeCodeType25)
+#endif
 
+#ifdef USE_MIDI
 	// MTC settings:
 	PH_SETTING_STRING2(setMtcInputPort, mtcInputPort, "Joker")
 	PH_SETTING_STRING2(setMtcVirtualInputPort, mtcVirtualInputPort, "Joker")
@@ -117,6 +136,7 @@ public:
 	// MMC settings
 	PH_SETTING_BOOL(setSendMmcMessage, sendMmcMessage)
 	PH_SETTING_STRING2(setMmcOutputPort, mmcOutputPort, "Joker")
+#endif
 
 	// PeopleDialog
 	PH_SETTING_BYTEARRAY(setPeopleDialogGeometry, peopleDialogGeometry)
