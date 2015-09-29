@@ -8,7 +8,7 @@ cache()
 
 TARGET = Joker
 
-CONFIG += video sony ltc midi
+#CONFIG += video sony ltc midi
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
