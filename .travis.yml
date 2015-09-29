@@ -47,9 +47,9 @@ install:
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then brew install qt5; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then brew link --force qt5; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx   ]]; then export QMAKESPEC=macx-clang;  fi
-- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
+#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 #- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
-#- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ffmpeg.sh; fi
+- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ffmpeg.sh; fi
 #- if [[ "$JOB" == BUILD_* ]]; then scripts/install_portaudio.sh; fi
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then sudo pip install cpp-coveralls; fi
 
@@ -59,7 +59,7 @@ script:
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then qmake specs/AllSpecs.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then qmake app/Joker/Joker.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_POUET ]]; then qmake --version; fi
-- if [[ "$JOB" == BUILD_RELEASE_POUET ]]; then qmake tests/GraphicTest/GraphicTest.pro; fi
+- if [[ "$JOB" == BUILD_RELEASE_POUET ]]; then qmake tests/VideoTest/VideoTest.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
