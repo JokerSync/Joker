@@ -5,8 +5,6 @@
 
 QT += serialport
 
-DEFINES += SONY
-
 HEADERS += \
 	$$PWD/PhSonyController.h \
 	$$PWD/PhSonyMasterController.h \

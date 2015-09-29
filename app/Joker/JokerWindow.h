@@ -14,7 +14,7 @@
 #endif
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSynchronizer.h"
-#ifdef SONY
+#ifdef USE_SONY
 #include "PhSony/PhSonySlaveController.h"
 #endif
 #ifdef USE_LTC
