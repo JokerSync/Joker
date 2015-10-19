@@ -23,6 +23,7 @@
 #include <QSettings>
 #include <QMetaEnum>
 
+#include <boost/version.hpp>
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 #include <boost/format.hpp>
