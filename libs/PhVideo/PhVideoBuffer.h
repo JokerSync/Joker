@@ -7,7 +7,6 @@
 #ifndef PHVIDEOBUFFER_H
 #define PHVIDEOBUFFER_H
 
-#include "PhTools/PhGeneric.h"
 #include "PhSync/PhClock.h"
 
 /**
