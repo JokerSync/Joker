@@ -33,9 +33,9 @@ void PhVideoBuffer::reuse(int size)
 		}
 		_size = size;
 		_rgb = new uint8_t[_size];
-		_inUse = true;
 	}
 
+	_inUse = true;
 }
 
 void PhVideoBuffer::recycle()
