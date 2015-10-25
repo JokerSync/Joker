@@ -8,6 +8,7 @@
 #define PHVIDEOBUFFER_H
 
 #include "PhTools/PhGeneric.h"
+#include "PhSync/PhClock.h"
 
 /**
  * @brief A video buffer
@@ -50,10 +51,49 @@ public:
 	 */
 	uint8_t *rgb();
 
+	/**
+	 * @brief Gets the time of the decoded frame (with origin at the start of video file)
+	 * @return The time
+	 */
+	PhTime time();
+
+	/**
+	 * @brief Gets the width of the frame
+	 * @return The width of the frame
+	 */
+	int width();
+
+	/**
+	 * @brief Gets the height of the frame
+	 * @return The height of the frame
+	 */
+	int height();
+
+	/**
+	 * @brief Sets the time of the decoded frame (with origin at the start of video file)
+	 * @param time The time
+	 */
+	void setTime(PhTime time);
+
+	/**
+	 * @brief Sets the width of the frame
+	 * @param width The width of the frame
+	 */
+	void setWidth(int width);
+
+	/**
+	 * @brief Sets the height of the frame
+	 * @param height The height of the frame
+	 */
+	void setHeight(int height);
+
 private:
 	uint8_t * _rgb;
 	bool _inUse;
 	int _size;
+	PhTime _time;
+	int _width;
+	int _height;
 };
 
 #endif // PHVIDEOBUFFER_H

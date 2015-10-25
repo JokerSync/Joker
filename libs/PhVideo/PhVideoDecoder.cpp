@@ -260,8 +260,12 @@ void PhVideoDecoder::frameToRgb(PhVideoBuffer *buffer)
 
 		PhTime time = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
 
+		buffer->setTime(time);
+		buffer->setWidth(_videoFrame->width);
+		buffer->setHeight(frameHeight);
+
 		// tell the video engine that we have finished decoding!
-		emit frameAvailable(time, buffer, _videoFrame->width, frameHeight);
+		emit frameAvailable(buffer);
 	}
 }
 

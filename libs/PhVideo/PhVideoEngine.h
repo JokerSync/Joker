@@ -186,12 +186,9 @@ public:
 public slots:
 	/**
 	 * @brief Handle a frame that has just been decoded
-	 * @param time the time of the decoded frame (with origin at the start of video file)
 	 * @param buffer the buffer where the decoded frame is
-	 * @param width the width of the frame
-	 * @param height the height of the frame
 	 */
-	void frameAvailable(PhTime time, PhVideoBuffer *buffer, int width, int height);
+	void frameAvailable(PhVideoBuffer *buffer);
 
 	/**
 	 * @brief Handle the signal that the video file has been opened in the decoder
