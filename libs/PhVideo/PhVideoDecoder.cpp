@@ -158,11 +158,7 @@ void PhVideoDecoder::close()
 	// delete all unused buffers
 	// Those that are marked as used should not be deleted for now since the engine thread may be
 	// operating on them.
-	for (int i; i < _bufferList.size(); i++) {
-		if (_bufferList.at(i)->isInUse() == false) {
-			delete _bufferList.takeAt(i);
-		}
-	}
+	_bufferList.clearUnusedBuffers();
 
 	_formatContext = NULL;
 	_videoStream = NULL;
@@ -176,25 +172,6 @@ void PhVideoDecoder::recycleBuffer(PhVideoBuffer *buffer)
 {
 	// mark that this buffer is now available
 	buffer->recycle();
-}
-
-PhVideoBuffer *PhVideoDecoder::newVideoBuffer()
-{
-	// find an available buffer, reuse existing one if possible
-	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
-
-	foreach (PhVideoBuffer *existingBuffer, _bufferList) {
-		if (existingBuffer->isInUse() == false) {
-			// we can reuse an existing available buffer
-			existingBuffer->reuse(bufferSize);
-			return existingBuffer;
-		}
-	}
-
-	// no buffer is currently available, we need a new one
-	PhVideoBuffer *newBuffer = new PhVideoBuffer(bufferSize);
-	_bufferList.append(newBuffer);
-	return newBuffer;
 }
 
 void PhVideoDecoder::setDeinterlace(bool deinterlace)
@@ -214,7 +191,6 @@ PhVideoDecoder::~PhVideoDecoder()
 	close();
 
 	// the engine thread is exiting too, so all the buffers can be cleaned.
-	qDeleteAll(_bufferList);
 	_bufferList.clear();
 }
 
@@ -315,7 +291,8 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 	time = _requestedTime;
 
 	// find an available buffer
-	PhVideoBuffer *buffer = newVideoBuffer();
+	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
+	PhVideoBuffer *buffer = _bufferList.newVideoBuffer(bufferSize);
 
 	// clip to stream boundaries
 	if(time < 0)
