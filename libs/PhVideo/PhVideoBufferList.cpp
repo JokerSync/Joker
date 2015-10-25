@@ -23,9 +23,12 @@ void PhVideoBufferList::clear()
 
 void PhVideoBufferList::clearUnusedBuffers()
 {
-	for (int i; i < _bufferList.size(); i++) {
-		if (_bufferList.at(i)->isInUse() == false) {
-			delete _bufferList.takeAt(i);
+	QMutableListIterator<PhVideoBuffer*> i(_bufferList);
+	while (i.hasNext()) {
+		PhVideoBuffer *buffer = i.next();
+		if (buffer->isInUse() == false) {
+			i.remove();
+			delete buffer;
 		}
 	}
 }
