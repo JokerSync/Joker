@@ -21,7 +21,6 @@ extern "C" {
 #include <libswscale/swscale.h>
 }
 
-#include "PhSync/PhClock.h"
 #include "PhVideoBufferList.h"
 #include "PhVideoBuffer.h"
 
@@ -78,12 +77,9 @@ public slots:
 signals:
 	/**
 	 * @brief Signal sent when a frame has been decoded
-	 * @param time the time of the decoded frame (with origin at the start of video file)
 	 * @param buffer the buffer where the decoded frame is
-	 * @param width the width of the frame
-	 * @param height the height of the frame
 	 */
-	void frameAvailable(PhTime time, PhVideoBuffer *buffer, int width, int height);
+	void frameAvailable(PhVideoBuffer *buffer);
 
 	/**
 	 * @brief Signal sent when the decoder is ready

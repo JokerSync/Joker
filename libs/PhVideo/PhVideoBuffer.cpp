@@ -8,7 +8,10 @@
 
 PhVideoBuffer::PhVideoBuffer(int size) :
 	_inUse(true),
-	_size(size)
+	_size(size),
+	_time(0),
+	_width(0),
+	_height(0)
 {
 	_rgb = new uint8_t[size];
 }
@@ -48,4 +51,34 @@ bool PhVideoBuffer::isInUse()
 uint8_t *PhVideoBuffer::rgb()
 {
 	return _rgb;
+}
+
+PhTime PhVideoBuffer::time()
+{
+	return _time;
+}
+
+int PhVideoBuffer::width()
+{
+	return _width;
+}
+
+int PhVideoBuffer::height()
+{
+	return _height;
+}
+
+void PhVideoBuffer::setTime(PhTime time)
+{
+	_time = time;
+}
+
+void PhVideoBuffer::setWidth(int width)
+{
+	_width = width;
+}
+
+void PhVideoBuffer::setHeight(int height)
+{
+	_height = height;
 }
