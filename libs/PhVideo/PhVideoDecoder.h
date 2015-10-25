@@ -22,6 +22,7 @@ extern "C" {
 }
 
 #include "PhSync/PhClock.h"
+#include "PhVideoBuffer.h"
 
 /**
  * @brief The video decoder
@@ -63,9 +64,9 @@ public slots:
 
 	/**
 	 * @brief recycle a buffer
-	 * @param rgb the buffer that can be recycled
+	 * @param buffer the buffer that can be recycled
 	 */
-	void recycleBuffer(uint8_t *rgb);
+	void recycleBuffer(PhVideoBuffer *buffer);
 
 	/**
 	 * @brief Signal sent when the deinterlace settings change
@@ -77,11 +78,11 @@ signals:
 	/**
 	 * @brief Signal sent when a frame has been decoded
 	 * @param time the time of the decoded frame (with origin at the start of video file)
-	 * @param rgb the buffer where the decoded frame is
+	 * @param buffer the buffer where the decoded frame is
 	 * @param width the width of the frame
 	 * @param height the height of the frame
 	 */
-	void frameAvailable(PhTime time, uint8_t *rgb, int width, int height);
+	void frameAvailable(PhTime time, PhVideoBuffer *buffer, int width, int height);
 
 	/**
 	 * @brief Signal sent when the decoder is ready
@@ -103,12 +104,12 @@ private:
 	bool ready();
 	double framePerSecond();
 	PhTime length();
-	void frameToRgb(uint8_t *rgb);
+	void frameToRgb(PhVideoBuffer *buffer);
 	int width();
 	int height();
 	QString codecName();
 	PhTime timeIn();
-	uint8_t *newRgbBuffer();
+	PhVideoBuffer *newVideoBuffer();
 
 	int64_t PhTime_to_AVTimestamp(PhTime time);
 	PhTime AVTimestamp_to_PhTime(int64_t timestamp);
@@ -126,9 +127,7 @@ private:
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
 
-	QList<uint8_t *> _rgbBufferList;
-	QList<bool> _bufferUsageList;
-	QList<int> _bufferSizeList;
+	QList<PhVideoBuffer*> _bufferList;
 
 	bool _deinterlace;
 	bool _recursive;

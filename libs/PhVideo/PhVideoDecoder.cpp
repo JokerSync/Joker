@@ -158,11 +158,10 @@ void PhVideoDecoder::close()
 	// delete all unused buffers
 	// Those that are marked as used should not be deleted for now since the engine thread may be
 	// operating on them.
-	while (_bufferUsageList.contains(false)) {
-		int unusedBufferIndex = _bufferUsageList.indexOf(false);
-		delete[] _rgbBufferList.takeAt(unusedBufferIndex);
-		_bufferSizeList.removeAt(unusedBufferIndex);
-		_bufferUsageList.removeAt(unusedBufferIndex);
+	for (int i; i < _bufferList.size(); i++) {
+		if (_bufferList.at(i)->isInUse() == false) {
+			delete _bufferList.takeAt(i);
+		}
 	}
 
 	_formatContext = NULL;
@@ -173,42 +172,29 @@ void PhVideoDecoder::close()
 	_fileName = "";
 }
 
-void PhVideoDecoder::recycleBuffer(uint8_t *rgb)
+void PhVideoDecoder::recycleBuffer(PhVideoBuffer *buffer)
 {
 	// mark that this buffer is now available
-	int bufferIndex = _rgbBufferList.indexOf(rgb);
-	_bufferUsageList.replace(bufferIndex, false);
+	buffer->recycle();
 }
 
-uint8_t *PhVideoDecoder::newRgbBuffer()
+PhVideoBuffer *PhVideoDecoder::newVideoBuffer()
 {
 	// find an available buffer, reuse existing one if possible
-	uint8_t * rgb;
-
 	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
-	int bufferIndex = _bufferUsageList.indexOf(false);
 
-	if(bufferIndex != -1) {
-		// we can reuse an existing available buffer
-		rgb = _rgbBufferList.at(bufferIndex);
-
-		if (_bufferSizeList.at(bufferIndex) != bufferSize) {
-			// the size has changed, update the buffer
-			delete[] rgb;
-			rgb = new uint8_t[bufferSize];
-			_rgbBufferList.replace(bufferIndex, rgb);
-			_bufferSizeList.replace(bufferIndex, bufferSize);
+	foreach (PhVideoBuffer *existingBuffer, _bufferList) {
+		if (existingBuffer->isInUse() == false) {
+			// we can reuse an existing available buffer
+			existingBuffer->reuse(bufferSize);
+			return existingBuffer;
 		}
 	}
-	else {
-		// no buffer is currently available, we need a new one
-		rgb = new uint8_t[bufferSize];
-		_rgbBufferList.append(rgb);
-		_bufferUsageList.append(true);
-		_bufferSizeList.append(bufferSize);
-	}
 
-	return rgb;
+	// no buffer is currently available, we need a new one
+	PhVideoBuffer *newBuffer = new PhVideoBuffer(bufferSize);
+	_bufferList.append(newBuffer);
+	return newBuffer;
 }
 
 void PhVideoDecoder::setDeinterlace(bool deinterlace)
@@ -228,11 +214,8 @@ PhVideoDecoder::~PhVideoDecoder()
 	close();
 
 	// the engine thread is exiting too, so all the buffers can be cleaned.
-	while (!_rgbBufferList.isEmpty())
-		delete[] _rgbBufferList.takeFirst();
-
-	_bufferSizeList.clear();
-	_bufferUsageList.clear();
+	qDeleteAll(_bufferList);
+	_bufferList.clear();
 }
 
 PhTime PhVideoDecoder::length()
@@ -256,7 +239,7 @@ double PhVideoDecoder::framePerSecond()
 	return result;
 }
 
-void PhVideoDecoder::frameToRgb(uint8_t *rgb)
+void PhVideoDecoder::frameToRgb(PhVideoBuffer *buffer)
 {
 	int frameHeight = _videoFrame->height;
 	if(_deinterlace)
@@ -294,6 +277,7 @@ void PhVideoDecoder::frameToRgb(uint8_t *rgb)
 
 
 	int linesize = _videoFrame->width * 4;
+	uint8_t *rgb = buffer->rgb();
 	if (0 <= sws_scale(_swsContext, (const uint8_t * const *) _videoFrame->data,
 	                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
 	                   &linesize)) {
@@ -301,7 +285,7 @@ void PhVideoDecoder::frameToRgb(uint8_t *rgb)
 		PhTime time = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
 
 		// tell the video engine that we have finished decoding!
-		emit frameAvailable(time, rgb, _videoFrame->width, frameHeight);
+		emit frameAvailable(time, buffer, _videoFrame->width, frameHeight);
 	}
 }
 
@@ -331,7 +315,7 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 	time = _requestedTime;
 
 	// find an available buffer
-	uint8_t * rgb = newRgbBuffer();
+	PhVideoBuffer *buffer = newVideoBuffer();
 
 	// clip to stream boundaries
 	if(time < 0)
@@ -345,7 +329,7 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 	// be performed on each call to decodeFrame
 	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
 	    && (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2)) {
-		frameToRgb(rgb);
+		frameToRgb(buffer);
 		return;
 	}
 
@@ -387,7 +371,7 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 					// convert and emit the frame if this is the one that was requested
 					if (time < _currentTime + PhTimeCode::timePerFrame(_tcType)) {
 						PHDEBUG << "decoded!";
-						frameToRgb(rgb);
+						frameToRgb(buffer);
 						lookingForVideoFrame = false;
 					}
 				} // if frame decode is not finished, let's read another packet.

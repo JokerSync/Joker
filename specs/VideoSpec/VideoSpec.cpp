@@ -36,7 +36,7 @@ go_bandit([](){
 			settings = new VideoSpecSettings();
 			engine = new PhVideoEngine(settings);
 			openSpy = new QSignalSpy(engine, SIGNAL(opened(bool)));
-			paintSpy = new QSignalSpy(engine, SIGNAL(recycleBuffer(uint8_t *)));
+			paintSpy = new QSignalSpy(engine, SIGNAL(recycleBuffer(PhVideoBuffer *)));
 
 			view->show();
 

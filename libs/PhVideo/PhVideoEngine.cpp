@@ -248,16 +248,16 @@ bool PhVideoEngine::isFrameRequested(PhTime time)
 	return result;
 }
 
-void PhVideoEngine::frameAvailable(PhTime time, uint8_t *rgb, int width, int height)
+void PhVideoEngine::frameAvailable(PhTime time, PhVideoBuffer *buffer, int width, int height)
 {
 	// This slot is connected to the decoder thread.
 	// We receive here asynchronously the frame freshly decoded.
 
-	_videoRect.createTextureFromBGRABuffer(rgb, width, height);
+	_videoRect.createTextureFromBGRABuffer(buffer->rgb(), width, height);
 	_videoFrameTickCounter.tick();
 
 	// tell the decoder that the buffer can be recycled now
-	emit recycleBuffer(rgb);
+	emit recycleBuffer(buffer);
 
 	// update the current time with the true frame time as sent by the decoder
 	_currentTime = time + _timeIn;

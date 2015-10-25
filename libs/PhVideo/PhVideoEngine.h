@@ -14,6 +14,7 @@
 #include "PhGraphic/PhGraphicTexturedRect.h"
 
 #include "PhVideoSettings.h"
+#include "PhVideoBuffer.h"
 
 /**
  * @brief The video engine
@@ -186,11 +187,11 @@ public slots:
 	/**
 	 * @brief Handle a frame that has just been decoded
 	 * @param time the time of the decoded frame (with origin at the start of video file)
-	 * @param rgb the buffer where the decoded frame is
+	 * @param buffer the buffer where the decoded frame is
 	 * @param width the width of the frame
 	 * @param height the height of the frame
 	 */
-	void frameAvailable(PhTime time, uint8_t *rgb, int width, int height);
+	void frameAvailable(PhTime time, PhVideoBuffer *buffer, int width, int height);
 
 	/**
 	 * @brief Handle the signal that the video file has been opened in the decoder
@@ -240,9 +241,9 @@ signals:
 
 	/**
 	 * @brief Signal sent to notify the decoder that a buffer can be reused now
-	 * @param rgb the buffer where to output the decoded frame
+	 * @param buffer the buffer that can be reused
 	 */
-	void recycleBuffer(uint8_t *rgb);
+	void recycleBuffer(PhVideoBuffer *buffer);
 
 	/**
 	 * @brief Signal sent when the deinterlace settings change
