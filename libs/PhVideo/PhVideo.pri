@@ -7,11 +7,13 @@ HEADERS += \
     $$PWD/PhVideoEngine.h \
 	$$PWD/PhVideoSettings.h \
 	$$PWD/PhVideoDecoder.h \
-	$$PWD/PhVideoBuffer.h
+	$$PWD/PhVideoBuffer.h \
+	$$PWD/PhVideoBufferList.h
 SOURCES += \
 	$$PWD/PhVideoEngine.cpp \
 	$$PWD/PhVideoDecoder.cpp \
-	$$PWD/PhVideoBuffer.cpp
+	$$PWD/PhVideoBuffer.cpp \
+	$$PWD/PhVideoBufferList.cpp
 
 # Windows specific
 win32{

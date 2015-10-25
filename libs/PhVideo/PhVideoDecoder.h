@@ -22,6 +22,7 @@ extern "C" {
 }
 
 #include "PhSync/PhClock.h"
+#include "PhVideoBufferList.h"
 #include "PhVideoBuffer.h"
 
 /**
@@ -109,7 +110,6 @@ private:
 	int height();
 	QString codecName();
 	PhTime timeIn();
-	PhVideoBuffer *newVideoBuffer();
 
 	int64_t PhTime_to_AVTimestamp(PhTime time);
 	PhTime AVTimestamp_to_PhTime(int64_t timestamp);
@@ -127,7 +127,7 @@ private:
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
 
-	QList<PhVideoBuffer*> _bufferList;
+	PhVideoBufferList _bufferList;
 
 	bool _deinterlace;
 	bool _recursive;
