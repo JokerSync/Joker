@@ -14,7 +14,7 @@
 
 #define FRAME_WAIT_TIME 40
 #define OPEN_WAIT_TIME 10000
-#define PAINT_WAIT_TIME 10000
+#define PAINT_WAIT_TIME 500
 
 #include "CommonSpec.h"
 
@@ -36,7 +36,7 @@ go_bandit([](){
 			settings = new VideoSpecSettings();
 			engine = new PhVideoEngine(settings);
 			openSpy = new QSignalSpy(engine, SIGNAL(opened(bool)));
-			paintSpy = new QSignalSpy(engine, SIGNAL(recycleBuffer(PhVideoBuffer *)));
+			paintSpy = new QSignalSpy(engine, SIGNAL(newFrameDisplayed(PhTime)));
 
 			view->show();
 
@@ -99,6 +99,7 @@ go_bandit([](){
 
 				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
+
 				AssertThat(view->compare("interlace_020.bmp"), Equals(0));
 
 				engine->clock()->setFrame(100, PhTimeCodeType25);

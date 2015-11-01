@@ -155,11 +155,6 @@ void PhVideoDecoder::close()
 		_videoFrame = NULL;
 	}
 
-	// delete all unused buffers
-	// Those that are marked as used should not be deleted for now since the engine thread may be
-	// operating on them.
-	_bufferList.clearUnusedBuffers();
-
 	_formatContext = NULL;
 	_videoStream = NULL;
 	_audioStream = NULL;
@@ -168,21 +163,12 @@ void PhVideoDecoder::close()
 	_fileName = "";
 }
 
-void PhVideoDecoder::recycleBuffer(PhVideoBuffer *buffer)
-{
-	// mark that this buffer is now available
-	buffer->recycle();
-}
-
 void PhVideoDecoder::setDeinterlace(bool deinterlace)
 {
 	PHDEBUG << deinterlace;
 
 	if (deinterlace != _deinterlace) {
 		_deinterlace = deinterlace;
-
-		// decode the frame again to apply the new deinterlace setting
-		decodeFrame(_currentTime);
 	}
 }
 
@@ -190,8 +176,8 @@ PhVideoDecoder::~PhVideoDecoder()
 {
 	close();
 
-	// the engine thread is exiting too, so all the buffers can be cleaned.
-	_bufferList.clear();
+	// the engine thread is exiting too, so all the frames can be cleaned.
+	_requestedFrames.clear();
 }
 
 PhTime PhVideoDecoder::length()
@@ -215,11 +201,11 @@ double PhVideoDecoder::framePerSecond()
 	return result;
 }
 
-void PhVideoDecoder::frameToRgb(PhVideoBuffer *buffer)
+void PhVideoDecoder::frameToRgb(AVFrame *avFrame, PhVideoFrame *frame)
 {
-	int frameHeight = _videoFrame->height;
+	int frameHeight = avFrame->height;
 	if(_deinterlace)
-		frameHeight = _videoFrame->height / 2;
+		frameHeight = avFrame->height / 2;
 
 	// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
 	// we replace its with the new ones recommended by LibAv
@@ -247,36 +233,38 @@ void PhVideoDecoder::frameToRgb(PhVideoBuffer *buffer)
 	 * in the video driver */
 	/* sws_getCachedContext will check if the context is valid for the given parameters. It the context is not valid,
 	 * it will be freed and a new one will be allocated. */
-	_swsContext = sws_getCachedContext(_swsContext, _videoFrame->width, _videoStream->codec->height, pixFormat,
+	_swsContext = sws_getCachedContext(_swsContext, avFrame->width, _videoStream->codec->height, pixFormat,
 	                                   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
 	                                   SWS_POINT, NULL, NULL, NULL);
 
 
-	int linesize = _videoFrame->width * 4;
-	uint8_t *rgb = buffer->rgb();
-	if (0 <= sws_scale(_swsContext, (const uint8_t * const *) _videoFrame->data,
-	                   _videoFrame->linesize, 0, _videoStream->codec->height, &rgb,
+	int linesize = avFrame->width * 4;
+	uint8_t *rgb = frame->rgb();
+	if (0 <= sws_scale(_swsContext, (const uint8_t * const *) avFrame->data,
+	                   avFrame->linesize, 0, _videoStream->codec->height, &rgb,
 	                   &linesize)) {
 
-		PhTime time = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
+		PhTime time = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(avFrame));
 
-		buffer->setTime(time);
-		buffer->setWidth(_videoFrame->width);
-		buffer->setHeight(frameHeight);
+		frame->setTime(time);
+		frame->setWidth(avFrame->width);
+		frame->setHeight(frameHeight);
 
 		// tell the video engine that we have finished decoding!
-		emit frameAvailable(buffer);
+		emit frameAvailable(frame);
 	}
 }
 
-void PhVideoDecoder::decodeFrame(PhTime time)
+void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 {
 	if(!ready()) {
 		PHDEBUG << "not ready";
 		return;
 	}
 
-	_requestedTime = time;
+	if (frame) {
+		_requestedFrames.append(frame);
+	}
 
 	if (_recursive) {
 		// if we are called recursively, just let the top caller handle the rest
@@ -284,19 +272,25 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 	}
 
 	// call processEvents to walk through the queued signals
-	// This makes sure we are working on the latest requested time.
+	// This makes sure we process the cancelling signals.
 	// We use the _recursive flag to indicate that the child slots
 	// should not actually decode the frame.
 	_recursive = true;
 	QCoreApplication::processEvents();
 	_recursive = false;
 
-	// at this point _requestedTime is really from the latest requestFrame signal
-	time = _requestedTime;
+	if (_requestedFrames.empty()) {
+		// all pending requests have been cancelled
+		return;
+	}
 
-	// find an available buffer
+	// now proceed with the first requested frame
+	frame = _requestedFrames.takeFirst();
+	PhTime time = frame->requestTime();
+
+	// resize the buffer if needed
 	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
-	PhVideoBuffer *buffer = _bufferList.newVideoBuffer(bufferSize);
+	frame->reuse(bufferSize);
 
 	// clip to stream boundaries
 	if(time < 0)
@@ -309,8 +303,8 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 	// so it is necessary to use a little margin for the second comparison, otherwise a seek may
 	// be performed on each call to decodeFrame
 	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
-	    && (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2)) {
-		frameToRgb(buffer);
+	    && time >= _currentTime) {
+		frameToRgb(_videoFrame, frame);
 		return;
 	}
 
@@ -324,7 +318,7 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 		// seek to the closest keyframe in the past
 		int flags = AVSEEK_FLAG_BACKWARD;
 		int64_t timestamp = PhTime_to_AVTimestamp(time);
-		PHDEBUG << "seek:" << time << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << PhTimeCode::timePerFrame(_tcType);
+		PHDEBUG << "seek:" << frame << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << PhTimeCode::timePerFrame(_tcType);
 		av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
 
 		avcodec_flush_buffers(_videoStream->codec);
@@ -349,10 +343,21 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 
 					PHDEBUG << time << " " << _currentTime << " " << (time - _currentTime)/PhTimeCode::timePerFrame(_tcType);
 
+					if (time < _currentTime) {
+						// something went wrong with the seeking
+						// this is not going to work! we cannot go backward!
+						// the loop will go until the end of the file, which is bad...
+						// So stop here and just return what we have.
+						PHDEBUG << "current video time is larger than requested time... returning current frame!";
+						frameToRgb(_videoFrame, frame);
+						lookingForVideoFrame = false;
+					}
+
 					// convert and emit the frame if this is the one that was requested
-					if (time < _currentTime + PhTimeCode::timePerFrame(_tcType)) {
+					if (time >= _currentTime
+					    && time < _currentTime + PhTimeCode::timePerFrame(_tcType)) {
 						PHDEBUG << "decoded!";
-						frameToRgb(buffer);
+						frameToRgb(_videoFrame, frame);
 						lookingForVideoFrame = false;
 					}
 				} // if frame decode is not finished, let's read another packet.
@@ -379,6 +384,21 @@ void PhVideoDecoder::decodeFrame(PhTime time)
 
 		//Avoid memory leak
 		av_free_packet(&packet);
+	}
+
+	// call the same function again to proceed with the other requested frames
+	if (!_requestedFrames.empty()) {
+		decodeFrame(NULL);
+	}
+}
+
+void PhVideoDecoder::cancelFrameRequest(PhVideoFrame *frame)
+{
+	int r = _requestedFrames.removeAll(frame);
+	PHDEBUG << "removing requests " << frame->requestTime() << " " << r;
+
+	if (r > 0) {
+		emit frameCancelled(frame);
 	}
 }
 

@@ -4,45 +4,32 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#ifndef PHVIDEOBUFFER_H
-#define PHVIDEOBUFFER_H
+#ifndef PHVIDEOFRAME_H
+#define PHVIDEOFRAME_H
 
 #include "PhSync/PhClock.h"
 
 /**
- * @brief A video buffer
+ * @brief A video frame
  *
- * It contains an rgb buffer (uint8 per pixel per color).
- * The class using the buffer can mark that the buffer is not used anymore.
- * This allows to reuse existing buffers, instead of creating new ones.
+ * It contains an rgb buffer (uint8 per pixel per color), and frame-related properties.
  */
-class PhVideoBuffer
+class PhVideoFrame
 {
 public:
 	/**
-	 * @brief PhVideoBuffer constructor
+	 * @brief PhVideoFrame constructor
 	 * @param size The size of the rgb buffer
 	 */
-	PhVideoBuffer(int size);
+	PhVideoFrame(int size);
 
-	~PhVideoBuffer();
+	~PhVideoFrame();
 
 	/**
-	 * @brief Reuse an existing buffer, recreating the rgb buffer only if the new size is different.
+	 * @brief Reuse an existing frame, recreating the rgb buffer if the new size is different.
 	 * @param size The new size
 	 */
 	void reuse(int size);
-
-	/**
-	 * @brief Recycle a buffer, marking it as unused
-	 */
-	void recycle();
-
-	/**
-	 * @brief Gets whether this buffer is in use
-	 * @return Whether the buffer is in use
-	 */
-	bool isInUse();
 
 	/**
 	 * @brief Gets the rgb buffer
@@ -55,6 +42,12 @@ public:
 	 * @return The time
 	 */
 	PhTime time();
+
+	/**
+	 * @brief Gets the request time of the frame (with origin at the start of video file)
+	 * @return The time
+	 */
+	PhTime requestTime();
 
 	/**
 	 * @brief Gets the width of the frame
@@ -75,6 +68,12 @@ public:
 	void setTime(PhTime time);
 
 	/**
+	 * @brief Sets the request time of the frame (with origin at the start of video file)
+	 * @param requestTime The time
+	 */
+	void setRequestTime(PhTime requestTime);
+
+	/**
 	 * @brief Sets the width of the frame
 	 * @param width The width of the frame
 	 */
@@ -88,11 +87,11 @@ public:
 
 private:
 	uint8_t * _rgb;
-	bool _inUse;
 	int _size;
+	PhTime _requestTime;
 	PhTime _time;
 	int _width;
 	int _height;
 };
 
-#endif // PHVIDEOBUFFER_H
+#endif // PHVIDEOFRAME_H

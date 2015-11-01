@@ -21,8 +21,7 @@ extern "C" {
 #include <libswscale/swscale.h>
 }
 
-#include "PhVideoBufferList.h"
-#include "PhVideoBuffer.h"
+#include "PhVideoFrame.h"
 
 /**
  * @brief The video decoder
@@ -58,15 +57,15 @@ public slots:
 
 	/**
 	 * @brief decode a video frame
-	 * @param time the time of the requested frame (with origin at the start of video file)
+	 * @param frame the requested frame
 	 */
-	void decodeFrame(PhTime time);
+	void decodeFrame(PhVideoFrame *frame);
 
 	/**
-	 * @brief recycle a buffer
-	 * @param buffer the buffer that can be recycled
+	 * @brief cancel a frame request
+	 * @param frame the frame describing the request
 	 */
-	void recycleBuffer(PhVideoBuffer *buffer);
+	void cancelFrameRequest(PhVideoFrame *frame);
 
 	/**
 	 * @brief Signal sent when the deinterlace settings change
@@ -77,9 +76,15 @@ public slots:
 signals:
 	/**
 	 * @brief Signal sent when a frame has been decoded
-	 * @param buffer the buffer where the decoded frame is
+	 * @param frame the frame where the decoded frame is
 	 */
-	void frameAvailable(PhVideoBuffer *buffer);
+	void frameAvailable(PhVideoFrame *frame);
+
+	/**
+	 * @brief Signal sent when a frame request has been cancelled
+	 * @param frame the frame describing the request
+	 */
+	void frameCancelled(PhVideoFrame *frame);
 
 	/**
 	 * @brief Signal sent when the decoder is ready
@@ -101,7 +106,7 @@ private:
 	bool ready();
 	double framePerSecond();
 	PhTime length();
-	void frameToRgb(PhVideoBuffer *buffer);
+	void frameToRgb(AVFrame *avFrame, PhVideoFrame *frame);
 	int width();
 	int height();
 	QString codecName();
@@ -123,12 +128,10 @@ private:
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
 
-	PhVideoBufferList _bufferList;
-
 	bool _deinterlace;
 	bool _recursive;
 
-	PhTime _requestedTime;
+	QList<PhVideoFrame *> _requestedFrames;
 };
 
 #endif // PHVIDEODECODER_H

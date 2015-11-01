@@ -14,7 +14,7 @@
 #include "PhGraphic/PhGraphicTexturedRect.h"
 
 #include "PhVideoSettings.h"
-#include "PhVideoBuffer.h"
+#include "PhVideoFrame.h"
 
 /**
  * @brief The video engine
@@ -172,9 +172,9 @@ public:
 	/**
 	 * @brief whether the time corresponds to the frame that we currently have
 	 * @param time the current time
-	 * @return True if the frame is available
+	 * @return True if the frame is current
 	 */
-	bool isFrameAvailable(PhTime time);
+	bool isFrameCurrent(PhTime time);
 
 	/**
 	 * @brief whether the time corresponds to the frame that we have requested
@@ -186,9 +186,15 @@ public:
 public slots:
 	/**
 	 * @brief Handle a frame that has just been decoded
-	 * @param buffer the buffer where the decoded frame is
+	 * @param frame the decoded frame
 	 */
-	void frameAvailable(PhVideoBuffer *buffer);
+	void frameAvailable(PhVideoFrame *frame);
+
+	/**
+	 * @brief Handle the signal that a frame request has been cancelled in the decoder
+	 * @param frame the frame describing the request
+	 */
+	void frameCancelled(PhVideoFrame *frame);
 
 	/**
 	 * @brief Handle the signal that the video file has been opened in the decoder
@@ -215,9 +221,9 @@ signals:
 
 	/**
 	 * @brief Signal sent to ask the decoder to decode a video frame
-	 * @param time the time of the requested frame (with origin at the start of video file)
+	 * @param frame the requested frame
 	 */
-	void decodeFrame(PhTime time);
+	void decodeFrame(PhVideoFrame *frame);
 
 	/**
 	 * @brief Signal sent to the decoder to open a video file
@@ -237,10 +243,10 @@ signals:
 	void opened(bool success);
 
 	/**
-	 * @brief Signal sent to notify the decoder that a buffer can be reused now
-	 * @param buffer the buffer that can be reused
+	 * @brief Signal sent to cancel a frame request
+	 * @param frame the frame describing the request
 	 */
-	void recycleBuffer(PhVideoBuffer *buffer);
+	void cancelFrameRequest(PhVideoFrame *frame);
 
 	/**
 	 * @brief Signal sent when the deinterlace settings change
@@ -248,8 +254,20 @@ signals:
 	 */
 	void deinterlaceChanged(bool deinterlace);
 
+	/**
+	 * @brief Signal sent when a new frame is displayed on screen.
+	 * This is used by the tests, where some form of synchronization is required.
+	 * @param frameTime the time of the frame being displayed
+	 */
+	void newFrameDisplayed(PhTime frameTime);
+
 private:
 	void requestFrame(PhTime time);
+	void requestFrames(PhTime time);
+	void cleanupFramePools();
+	void showFrame(PhVideoFrame *frame);
+	PhVideoFrame *frameFromPool(PhTime time);
+	PhTime clockTime();
 
 	PhVideoSettings *_settings;
 	QString _fileName;
@@ -264,12 +282,16 @@ private:
 	bool _ready;
 
 	PhGraphicTexturedRect _videoRect;
-	PhTime _currentTime;
-	PhTime _requestedTime;
+	PhTime _currentFrameTime;
 
 	PhTickCounter _videoFrameTickCounter;
 
 	bool _deinterlace;
+
+	QList<PhVideoFrame*> _recycledframePool;
+	QList<PhVideoFrame*> _requestedframePool;
+	QList<PhVideoFrame*> _cancelledframePool;
+	QList<PhVideoFrame*> _decodedFramePool;
 
 	QThread _decoderThread;
 };

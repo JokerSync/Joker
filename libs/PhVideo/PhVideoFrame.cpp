@@ -4,10 +4,9 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhVideoBuffer.h"
+#include "PhVideoFrame.h"
 
-PhVideoBuffer::PhVideoBuffer(int size) :
-	_inUse(true),
+PhVideoFrame::PhVideoFrame(int size) :
 	_size(size),
 	_time(0),
 	_width(0),
@@ -16,7 +15,7 @@ PhVideoBuffer::PhVideoBuffer(int size) :
 	_rgb = new uint8_t[size];
 }
 
-PhVideoBuffer::~PhVideoBuffer()
+PhVideoFrame::~PhVideoFrame()
 {
 	if (_rgb != NULL) {
 		delete[] _rgb;
@@ -24,7 +23,7 @@ PhVideoBuffer::~PhVideoBuffer()
 	}
 }
 
-void PhVideoBuffer::reuse(int size)
+void PhVideoFrame::reuse(int size)
 {
 	if (_size != size) {
 		// the size has changed, update the buffer
@@ -35,50 +34,50 @@ void PhVideoBuffer::reuse(int size)
 		_rgb = new uint8_t[_size];
 	}
 
-	_inUse = true;
+	_time = 0;
 }
 
-void PhVideoBuffer::recycle()
-{
-	_inUse = false;
-}
-
-bool PhVideoBuffer::isInUse()
-{
-	return _inUse;
-}
-
-uint8_t *PhVideoBuffer::rgb()
+uint8_t *PhVideoFrame::rgb()
 {
 	return _rgb;
 }
 
-PhTime PhVideoBuffer::time()
+PhTime PhVideoFrame::time()
 {
 	return _time;
 }
 
-int PhVideoBuffer::width()
+PhTime PhVideoFrame::requestTime()
+{
+	return _requestTime;
+}
+
+int PhVideoFrame::width()
 {
 	return _width;
 }
 
-int PhVideoBuffer::height()
+int PhVideoFrame::height()
 {
 	return _height;
 }
 
-void PhVideoBuffer::setTime(PhTime time)
+void PhVideoFrame::setTime(PhTime time)
 {
 	_time = time;
 }
 
-void PhVideoBuffer::setWidth(int width)
+void PhVideoFrame::setRequestTime(PhTime requestTime)
+{
+	_requestTime = requestTime;
+}
+
+void PhVideoFrame::setWidth(int width)
 {
 	_width = width;
 }
 
-void PhVideoBuffer::setHeight(int height)
+void PhVideoFrame::setHeight(int height)
 {
 	_height = height;
 }
