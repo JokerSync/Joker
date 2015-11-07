@@ -18,7 +18,6 @@ install:
 - git submodule update --init --recursive
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
-- if [[ "$JOB" == BUILD_* ]]; then brew update; brew upgrade boost; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then brew install qt5 ffmpeg libav portaudio; fi
@@ -42,7 +41,8 @@ after_success:
 after_failure:
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then ./scripts/upload.sh *.result.bmp; fi
 notifications:
-  email: true
+  email:
+    on_success: always
   irc:
     channels: "phonations.com#joker"
     on_success: always
