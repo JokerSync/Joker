@@ -91,6 +91,17 @@ int PhGraphicView::secondsSinceLastDrop()
 
 void PhGraphicView::onRefresh()
 {
+	// Update the clock time according to the time elapsed since the last paint event
+	// In the particular case of V-sync enabled and no dropped frames, this is equivalent
+	// to using the screen refresh rate to compute the elapsed time.
+	// If V-sync is not enabled, using the screen refresh rate is plain wrong
+	// (the refreshTimer period would be ok though).
+	// If frames are dropped, only an actual timer can be correct.
+	// Millisecond precision is not enough (60 Hz is 16.6 ms), so we use nanoseconds.
+	qint64 nsecsElapsed = _timer.nsecsElapsed();
+	double elapsedSeconds = static_cast<double>(nsecsElapsed - _previousNsecsElapsed) / 1000000000.0f;
+	_previousNsecsElapsed = nsecsElapsed;
+
 	if(_settings) {
 		if(_settings->resetInfo()) {
 			_dropDetected = 0;
@@ -106,7 +117,7 @@ void PhGraphicView::onRefresh()
 	QTime t;
 	t.start();
 
-	emit beforePaint(_screenFrequency);
+	emit beforePaint(static_cast<PhTime> (24000.0 * elapsedSeconds));
 	update();
 
 	// Note: the update duration may not be interesting at all, since it only *schedules*

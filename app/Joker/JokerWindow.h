@@ -302,7 +302,7 @@ private slots:
 	void on_actionHide_the_rythmo_triggered(bool checked);
 
 	//void onPaint(int width, int height);
-	void onPaint(PhTimeScale frequency);
+	void onPaint(PhTime elapsedTime);
 
 	void onVideoSync();
 

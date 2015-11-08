@@ -948,7 +948,7 @@ void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
 }
 
 //void JokerWindow::onPaint(int width, int height)
-void JokerWindow::onPaint(PhTimeScale frequency)
+void JokerWindow::onPaint(PhTime elapsedTime)
 {
 #ifdef USE_VIDEO
 	PhClock *clock = _videoEngine.clock();
