@@ -4,7 +4,7 @@
 #include <QMessageBox>
 
 #include "PhGraphicStrip/PhGraphicStrip.h"
-#include "PhCommonUI/PhDocumentWindow.h"
+#include "PhCommonUI/PhEditableDocumentWindow.h"
 
 #include "StripPropertiesDialog.h"
 #include "GenerateDialog.h"
@@ -14,7 +14,7 @@ namespace Ui {
 class GraphicStripTestWindow;
 }
 
-class GraphicStripTestWindow : public PhDocumentWindow
+class GraphicStripTestWindow : public PhEditableDocumentWindow
 {
 	Q_OBJECT
 
@@ -30,8 +30,18 @@ protected:
 	bool isDocumentModified();
 
 private slots:
+	// Menu file
+	void on_actionNew_triggered();
+
 	void onOpenFile();
+
+	void on_actionSave_triggered();
+
+	void on_actionSave_as_triggered();
+
 	void onGenerate();
+
+	// Other
 	void onFrameChanged(PhFrame frame, PhTimeCodeType tcType);
 	void onRateChanged(PhRate rate);
 

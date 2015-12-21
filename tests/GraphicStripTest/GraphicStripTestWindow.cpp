@@ -10,7 +10,7 @@
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
 GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settings) :
-	PhDocumentWindow(settings),
+	PhEditableDocumentWindow(settings),
 	ui(new Ui::GraphicStripTestWindow),
 	_settings(settings),
 	_strip(settings)
@@ -51,6 +51,12 @@ GraphicStripTestWindow::~GraphicStripTestWindow()
 	delete ui;
 }
 
+void GraphicStripTestWindow::on_actionNew_triggered()
+{
+	_doc->reset();
+	this->resetDocument();
+}
+
 bool GraphicStripTestWindow::openDocument(const QString &fileName)
 {
 	PHDEBUG << fileName;
@@ -61,6 +67,43 @@ bool GraphicStripTestWindow::openDocument(const QString &fileName)
 	return PhDocumentWindow::openDocument(fileName);
 }
 
+
+void GraphicStripTestWindow::on_actionSave_triggered()
+{
+	QString fileName = _settings->currentDocument();
+	QFileInfo info(fileName);
+	if(!info.exists() || (info.suffix() != "detx"))
+		on_actionSave_as_triggered();
+	else if(_doc->exportDetXFile(fileName, _strip.clock()->time()))
+		_doc->setModified(false);
+	else
+		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
+}
+
+void GraphicStripTestWindow::on_actionSave_as_triggered()
+{
+	QString fileName = _settings->currentDocument();
+	QString lastFolder = _settings->lastDocumentFolder();
+	// If there is no current strip file, ask for a name
+	if(fileName == "")
+		fileName = lastFolder;
+	else {
+		QFileInfo info(fileName);
+		if(info.suffix() != "detx")
+			fileName = lastFolder + "/" + info.completeBaseName() + ".detx";
+	}
+
+	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.detx");
+	if(fileName != "") {
+		if(_doc->exportDetXFile(fileName, _strip.clock()->time())) {
+			_doc->setModified(false);
+			PhEditableDocumentWindow::saveDocument(fileName);
+		}
+		else
+			QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
+	}
+}
+
 QMenu *GraphicStripTestWindow::recentDocumentMenu()
 {
 	return ui->menuOpen_recent;
@@ -69,6 +112,11 @@ QMenu *GraphicStripTestWindow::recentDocumentMenu()
 QAction *GraphicStripTestWindow::fullScreenAction()
 {
 	return ui->actionFull_screen;
+}
+
+bool GraphicStripTestWindow::isDocumentModified()
+{
+	return _doc->modified();
 }
 
 void GraphicStripTestWindow::onOpenFile()
