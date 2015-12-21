@@ -25,8 +25,6 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	on_actionRuler_triggered(_settings->displayFeet());
 
-	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
-
 	connect(ui->actionFull_screen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
 	connect(_clock, &PhClock::timeChanged, this, &GraphicStripTestWindow::onTimeChanged);
@@ -128,7 +126,7 @@ void GraphicStripTestWindow::on_actionOpen_triggered()
 	}
 }
 
-void GraphicStripTestWindow::onGenerate()
+void GraphicStripTestWindow::on_actionGenerate_triggered()
 {
 	GenerateDialog dlgGen(_settings, _doc);
 	if (dlgGen.exec()) {

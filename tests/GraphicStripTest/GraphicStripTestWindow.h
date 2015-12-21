@@ -39,7 +39,7 @@ private slots:
 
 	void on_actionSave_as_triggered();
 
-	void onGenerate();
+	void on_actionGenerate_triggered();
 
 	// Other
 	void onTimeChanged(PhTime time);
