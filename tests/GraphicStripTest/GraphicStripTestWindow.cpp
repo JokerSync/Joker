@@ -30,8 +30,9 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	connect(ui->actionFull_screen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
-	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
-	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
+	connect(_clock, &PhClock::timeChanged, this, &GraphicStripTestWindow::onTimeChanged);
+	connect(_clock, &PhClock::rateChanged, this, &GraphicStripTestWindow::onRateChanged);
+	this->onTimeChanged(_clock->time());
 
 	if(_settings->generate())
 		_doc->generate(_settings->textContent(),
@@ -153,12 +154,11 @@ void GraphicStripTestWindow::onGenerate()
 			openDocument("");
 		}
 	}
-
 }
 
-void GraphicStripTestWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void GraphicStripTestWindow::onTimeChanged(PhTime time)
 {
-	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(frame, tcType), QString::number(_clock->rate()));
+	QString message = QString("%1 - x%2").arg(_clock->timeCode(_doc->videoTimeCodeType()), QString::number(_clock->rate()));
 	ui->statusbar->showMessage(message);
 }
 
