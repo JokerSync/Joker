@@ -33,7 +33,7 @@ private slots:
 	// Menu file
 	void on_actionNew_triggered();
 
-	void onOpenFile();
+	void on_actionOpen_triggered();
 
 	void on_actionSave_triggered();
 

@@ -25,7 +25,6 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	on_actionRuler_triggered(_settings->displayFeet());
 
-	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
 	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
 
 	connect(ui->actionFull_screen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
@@ -120,7 +119,7 @@ bool GraphicStripTestWindow::isDocumentModified()
 	return _doc->modified();
 }
 
-void GraphicStripTestWindow::onOpenFile()
+void GraphicStripTestWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.joker *.detx)");
 	if(QFile::exists(fileName)) {
