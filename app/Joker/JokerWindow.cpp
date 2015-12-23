@@ -52,7 +52,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
 	ui->actionAbout->setMenuRole(QAction::AboutRole);
 
-	connect(ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
+	connect(ui->actionFullscreen, &QAction::triggered, this, &JokerWindow::toggleFullScreen);
 
 	ui->videoStripView->setGraphicSettings(_settings);
 

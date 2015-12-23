@@ -25,7 +25,7 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	on_actionRuler_triggered(_settings->displayFeet());
 
-	connect(ui->actionFull_screen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
+	connect(ui->actionFull_screen, &QAction::triggered, this, &GraphicStripTestWindow::toggleFullScreen);
 
 	connect(_clock, &PhClock::timeChanged, this, &GraphicStripTestWindow::onTimeChanged);
 	connect(_clock, &PhClock::rateChanged, this, &GraphicStripTestWindow::onRateChanged);
