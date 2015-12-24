@@ -10,7 +10,14 @@ CONFIG   -= app_bundle
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-include($$TOP_ROOT/common/common.pri)
+QT       += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+CONFIG += c++11
+
+TEMPLATE = app
+
+#include($$TOP_ROOT/common/common.pri)
 
 #include($$TOP_ROOT/libs/PhTools/PhTools.pri)
 
