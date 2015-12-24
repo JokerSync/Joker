@@ -23,5 +23,5 @@ TEMPLATE = app
 
 SOURCES += main.cpp
 
-PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include($$TOP_ROOT/common/deploy.pri)
+#PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+#include($$TOP_ROOT/common/deploy.pri)
