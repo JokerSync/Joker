@@ -25,13 +25,13 @@ install:
   - 7z x SDL2_ttf-devel-2.0.12-mingw.tar
   - set SDL_TTF_PATH=%CD%\SDL2_ttf-2.0.12\i686-w64-mingw32\
   # Installing ffmpeg dev
-  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20140222-git-44b22bb-win32-dev.7z
-  - 7z x ffmpeg-20140222-git-44b22bb-win32-dev.7z
-  - set FFMPEG_DEV_PATH=%CD%\ffmpeg-20140222-git-44b22bb-win32-dev
+  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20151221-git-c0f67e1-win32-dev.7z
+  - 7z x ffmpeg-20151221-git-c0f67e1-win32-dev.7z
+  - set FFMPEG_DEV_PATH=%CD%\ffmpeg-20151221-git-c0f67e1-win32-dev
   # Installing ffmpeg shared
-  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20140222-git-44b22bb-win32-shared.7z
-  - 7z x ffmpeg-20140222-git-44b22bb-win32-shared.7z
-  - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-20140222-git-44b22bb-win32-shared
+  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20151221-git-c0f67e1-win32-shared.7z
+  - 7z x ffmpeg-20151221-git-c0f67e1-win32-shared.7z
+  - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-20151221-git-c0f67e1-win32-shared
   # Installing PortAudio
   - curl -kLO https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip
   - 7z x portaudio-r1891-build.zip
