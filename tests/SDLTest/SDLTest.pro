@@ -12,8 +12,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TEMPLATE = app
 
-#include($$TOP_ROOT/common/common.pri)
-
 SOURCES += main.cpp
 
 # Windows specific

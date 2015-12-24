@@ -45,7 +45,7 @@ install:
   - set BOOST_PATH=C:\Libraries\boost
 build_script:
 #  - qmake app/Joker/Joker.pro
-  - qmake tests/SDLTest/SDLTest.pro
+  - qmake tests/ConsoleTest/ConsoleTest.pro
 #  - type Makefile.Release
   - mingw32-make -j 8
   - dir release
