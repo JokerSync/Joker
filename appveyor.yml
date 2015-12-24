@@ -44,6 +44,8 @@ install:
   # Configure boost
   - set BOOST_PATH=C:\Libraries\boost
 build_script:
+  - qmake
+  - qmake -v
 #  - qmake app/Joker/Joker.pro
   - qmake tests/ConsoleTest/ConsoleTest.pro
 #  - type Makefile.Release
