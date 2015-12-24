@@ -1,8 +1,8 @@
 #include <QCoreApplication>
 #include <QTime>
 
-#include "PhSync/PhTimeCode.h"
-#include "PhTools/PhDebug.h"
+//#include "PhSync/PhTimeCode.h"
+//#include "PhTools/PhDebug.h"
 
 /**
  * @brief The application main entry point
@@ -12,14 +12,14 @@
  */
 int main(int argc, char *argv[])
 {
-	PhDebug::setDisplay(true, true, true, true, true);
-	PhDebug::setLogMask(0b111);
-	PHDEBUG << QString("test");
-	for(int i = 0; i < 5; i++) {
-		PHDBG(i) << "level" << i;
-	}
+//	PhDebug::setDisplay(true, true, true, true, true);
+//	PhDebug::setLogMask(0b111);
+//	PHDEBUG << QString("test");
+//	for(int i = 0; i < 5; i++) {
+//		PHDBG(i) << "level" << i;
+//	}
 
-	qWarning() << "pouet";
-	PHERR << "coucou";
+//	qWarning() << "pouet";
+//	PHERR << "coucou";
 	return 0;
 }
