@@ -49,7 +49,7 @@ build_script:
 #  - type Makefile.Release
   - mingw32-make -j 8
   - dir release
-  - iscc Joker.iss
+#  - iscc Joker.iss
   - dir
 artifacts:
   - path: Joker_v*.exe
