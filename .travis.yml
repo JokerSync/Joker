@@ -1,9 +1,6 @@
 language: cpp
 os: osx
 compiler: clang
-branches:
-  except:
-    - fix-appveyor
 env:
   global:
   - PATH=$PATH:/usr/local/opt/qt5/bin; fi
