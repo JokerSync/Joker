@@ -7,7 +7,10 @@ TARGET = SDLTest
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-include($$TOP_ROOT/common/common.pri)
+QT       += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TEMPLATE = app
 
 SOURCES += main.cpp
 
