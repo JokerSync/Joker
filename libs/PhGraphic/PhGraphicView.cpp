@@ -72,6 +72,11 @@ void PhGraphicView::resizeGL(int width, int height)
 	glLoadIdentity();
 }
 
+int PhGraphicView::refreshRate()
+{
+	return _frameTickCounter.frequency();
+}
+
 void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
 {
 	_settings = settings;

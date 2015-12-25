@@ -43,8 +43,7 @@
  *
  * The font used by the text is customisable.
  */
-class PhGraphicStrip : public QObject
-{
+class PhGraphicStrip : public QObject {
 	Q_OBJECT
 public:
 	/**

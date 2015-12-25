@@ -15,10 +15,6 @@ PhGraphicObject::PhGraphicObject(int x, int y) :
 {
 }
 
-PhGraphicObject::~PhGraphicObject()
-{
-}
-
 void PhGraphicObject::dispose()
 {
 }
