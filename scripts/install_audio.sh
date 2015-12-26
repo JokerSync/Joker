@@ -25,15 +25,14 @@ sudo apt-get install libasound2-dev
 echo "Install RtMidi"
 cd vendor/rtmidi
 sudo apt-get install autoconf libtool
-libtoolize
-aclocal
-automake --add-missing
+#libtoolize
+#aclocal
+#automake --add-missing
 autoconf
 ./configure
 make
 sudo make install
-
-
+cd ../..
 
 fi
 
