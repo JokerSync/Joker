@@ -12,8 +12,7 @@
 /**
  * @brief Draw the loop symbol (a cross)
  */
-class PhGraphicLoop : public PhGraphicRect
-{
+class PhGraphicLoop : public PhGraphicRect {
 public:
 
 	/**
@@ -42,9 +41,7 @@ public:
 	 * @brief Get the thickness of the loop elements
 	 * @return An integer value
 	 */
-	int getThickness() {
-		return _thickness;
-	}
+	int thickness();
 
 	/**
 	 * @brief Set the cross size (width and height)
@@ -55,9 +52,7 @@ public:
 	 * @brief Get the cross size (width and height)
 	 * @return An integer value
 	 */
-	int crossSize() {
-		return _crossSize;
-	}
+	int crossSize();
 
 	/**
 	 * @brief Set horizontal loop layout
@@ -66,9 +61,7 @@ public:
 	 *
 	 * @param isHorizontal A boolean value
 	 */
-	void setHorizontalLoop(bool isHorizontal) {
-		_isHorizontal = isHorizontal;
-	}
+	void setHorizontalLoop(bool isHorizontal);
 private:
 	int _crossSize;
 	int _thickness;

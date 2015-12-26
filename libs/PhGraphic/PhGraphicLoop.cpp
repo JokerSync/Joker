@@ -71,8 +71,23 @@ void PhGraphicLoop::setThickness(int thickness)
 	_thickness = thickness;
 }
 
+int PhGraphicLoop::thickness()
+{
+	return _thickness;
+}
+
 void PhGraphicLoop::setCrossSize(int crossSize)
 {
 	_crossSize = crossSize;
+}
+
+int PhGraphicLoop::crossSize()
+{
+	return _crossSize;
+}
+
+void PhGraphicLoop::setHorizontalLoop(bool isHorizontal)
+{
+	_isHorizontal = isHorizontal;
 }
 
