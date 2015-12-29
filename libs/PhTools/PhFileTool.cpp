@@ -4,8 +4,6 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhData.h"
-
 #include "PhDebug.h"
 #include "PhFileTool.h"
 

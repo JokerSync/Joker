@@ -3,7 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhGeneric.h"
+#include <QThread>
+
 #include "PhTools/PhDebug.h"
 #include "PhMidi/PhMidiInput.h"
 #include "PhMidi/PhMidiOutput.h"

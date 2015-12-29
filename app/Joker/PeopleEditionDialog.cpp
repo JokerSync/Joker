@@ -3,6 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QColorDialog>
+
 #include "PeopleEditionDialog.h"
 #include "ui_PeopleEditionDialog.h"
 

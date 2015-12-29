@@ -3,6 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QThread>
+
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 #include "PhGraphic/PhGraphicView.h"

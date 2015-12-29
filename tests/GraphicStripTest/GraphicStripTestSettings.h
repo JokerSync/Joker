@@ -1,6 +1,7 @@
 #ifndef GRAPHICSTRIPTESTSETTINGS_H
 #define GRAPHICSTRIPTESTSETTINGS_H
 
+#include <QApplication>
 #include <QDir>
 
 #include "PhTools/PhGenericSettings.h"

@@ -7,7 +7,7 @@
 #ifndef PHAUDIO_H
 #define PHAUDIO_H
 
-#include "PhTools/PhGeneric.h"
+#include <QObject>
 
 #include <portaudio.h>
 

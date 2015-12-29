@@ -1,7 +1,6 @@
 #ifndef PHGRAPHICSTRIPSETTINGS_H
 #define PHGRAPHICSTRIPSETTINGS_H
 
-#include "PhTools/PhFile.h"
 #include "PhGraphic/PhGraphicSettings.h"
 
 /**

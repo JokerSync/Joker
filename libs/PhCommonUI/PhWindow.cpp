@@ -4,7 +4,9 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhGeneric.h"
+#include <QTimer>
+#include <QApplication>
+#include <QAction>
 
 #include "PhTools/PhDebug.h"
 

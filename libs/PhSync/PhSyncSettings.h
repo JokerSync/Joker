@@ -7,8 +7,6 @@
 #ifndef PHSYNCSETTINGS_H
 #define PHSYNCSETTINGS_H
 
-#include "PhTools/PhGeneric.h"
-
 #include "PhTime.h"
 
 /** Implement the time setter and getter for a PhSyncSettings */

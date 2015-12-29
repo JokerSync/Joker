@@ -4,7 +4,6 @@
  */
 
 #include "PhTools/PhDebug.h"
-#include "PhCommonUI/PhUI.h"
 
 #include "WindowSpecWindow.h"
 #include "ui_WindowSpecWindow.h"

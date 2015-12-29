@@ -6,7 +6,8 @@
 #ifndef PHMIDITIMECODEREADER_H
 #define PHMIDITIMECODEREADER_H
 
-#include "PhTools/PhGeneric.h"
+#include <QTimer>
+#include <QDateTime>
 
 #include "PhSync/PhClock.h"
 

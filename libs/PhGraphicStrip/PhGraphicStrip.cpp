@@ -4,9 +4,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhFile.h"
 #include "PhTools/PhDebug.h"
-#include "PhCommonUI/PhUI.h"
 #include "PhGraphic/PhGraphicText.h"
 #include "PhGraphic/PhGraphicDisc.h"
 #include "PhGraphic/PhGraphicDashedLine.h"

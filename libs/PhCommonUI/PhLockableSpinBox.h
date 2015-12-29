@@ -7,8 +7,8 @@
 #ifndef PHLOCKABLESPINBOX_H
 #define PHLOCKABLESPINBOX_H
 
-#include "PhTools/PhGeneric.h"
-#include "PhCommonUI/PhUI.h"
+#include <QTime>
+#include <QSpinBox>
 
 /**
  * @brief A lockable spin box
