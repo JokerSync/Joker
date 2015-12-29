@@ -6,6 +6,7 @@
 
 #include <QDate>
 #include <QDir>
+#include <QMutex>
 
 #include <iostream>
 
