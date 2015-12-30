@@ -1,6 +1,7 @@
 #!/bin/bash
 BASEDIR=$(dirname $0)
 echo $BASEDIR
+source $BASEDIR/install_qt.sh
 $BASEDIR/install_ffmpeg.sh
 $BASEDIR/install_portaudio.sh
 $BASEDIR/install_rtmidi
