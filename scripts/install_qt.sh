@@ -3,7 +3,7 @@
 QTVER=532
 SHORT_VER=`echo $QTVER | cut -b1-2`
 
-echo "Install FFMpeg"
+echo "Install Qt5"
 if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
 
