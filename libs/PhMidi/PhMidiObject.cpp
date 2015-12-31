@@ -16,7 +16,7 @@ bool PhMidiObject::canUseVirtualPorts()
 {
 	bool result = false;
 	try {
-        QScopedPointer<RtMidiOut> midiOut(new RtMidiOut());
+		QScopedPointer<RtMidiOut> midiOut(new RtMidiOut());
 
 		RtMidi::Api midiApi = midiOut->getCurrentApi();
 
