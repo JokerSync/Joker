@@ -147,8 +147,8 @@ void PhSonyController::sendCommandWithData(unsigned char cmd1, unsigned char cmd
 
 void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
 {
-	unsigned char data[256];
 	unsigned char datacount = getDataSize(cmd1);
+	unsigned char * data = new unsigned char[datacount];
 	va_list argumentList;
 	va_start(argumentList, cmd2);
 	for (int i = 0; i < datacount; i++)
@@ -157,6 +157,7 @@ void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
 	va_end(argumentList);
 
 	sendCommandWithData(cmd1, cmd2, data);
+	delete data;
 }
 
 void PhSonyController::timeOut()

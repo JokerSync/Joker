@@ -111,7 +111,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
 	if(height > 0) {
-		int timePerPixel = _settings->horizontalTimePerPixel();
+		PhTime timePerPixel = (PhTime)_settings->horizontalTimePerPixel();
 		_textFont.setBoldness(_settings->textBoldness());
 		_textFont.setFontFile(_settings->textFontFile());
 
@@ -247,7 +247,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		QMap<float, PhStripText * > lastTextList;
 
 
-		int verticalTimePerPixel = _settings->verticalTimePerPixel();
+		PhTime verticalTimePerPixel = (PhTime)_settings->verticalTimePerPixel();
 		bool displayNextText = _settings->displayNextText();
 		PhTime maxTimeIn = stripTimeOut;
 

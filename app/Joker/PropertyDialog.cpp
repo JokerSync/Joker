@@ -10,7 +10,8 @@
 PropertyDialog::PropertyDialog(QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::PropertyDialog),
-	_doc(NULL)
+	_doc(NULL),
+	_videoEngine(NULL)
 {
 	ui->setupUi(this);
 }
@@ -78,22 +79,20 @@ void PropertyDialog::showEvent(QShowEvent *)
 	}
 
 #ifdef USE_VIDEO
-	if(_videoEngine) {
-		if(_videoEngine->fileName().length())
-			ui->videoFileLabel->setText(_videoEngine->fileName());
+	if(_videoEngine->fileName().length())
+		ui->videoFileLabel->setText(_videoEngine->fileName());
 
-		if(_videoEngine->timeIn())
-			ui->videoTCInLabel->setText(PhTimeCode::stringFromTime(_videoEngine->timeIn(), tcType));
+	if(_videoEngine->timeIn())
+		ui->videoTCInLabel->setText(PhTimeCode::stringFromTime(_videoEngine->timeIn(), tcType));
 
-		if(_videoEngine->timeIn() && _videoEngine->timeOut())
-			ui->videoTCOutLabel->setText(PhTimeCode::stringFromTime(_videoEngine->timeOut(), tcType));
+	if(_videoEngine->timeIn() && _videoEngine->timeOut())
+		ui->videoTCOutLabel->setText(PhTimeCode::stringFromTime(_videoEngine->timeOut(), tcType));
 
-		ui->resolutionLabel->setText(QString::number(_videoEngine->width()) + "x" + QString::number(_videoEngine->height()));
+	ui->resolutionLabel->setText(QString::number(_videoEngine->width()) + "x" + QString::number(_videoEngine->height()));
 
-		ui->fpsLabel->setText(QString::number(_videoEngine->framePerSecond()));
+	ui->fpsLabel->setText(QString::number(_videoEngine->framePerSecond()));
 
-		if(_videoEngine->codecName().length())
-			ui->codecNameLabel->setText(_videoEngine->codecName());
-	}
+	if(_videoEngine->codecName().length())
+		ui->codecNameLabel->setText(_videoEngine->codecName());
 #endif
 }

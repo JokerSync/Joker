@@ -342,6 +342,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				PHDEBUG << "start resizing strip";
 				_resizingStrip = true;
 			}
+			break;
 		}
 	case QEvent::KeyPress:
 		{
@@ -349,6 +350,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			if(keyEvent->key() == Qt::Key_Space) {
 				on_actionPlay_pause_triggered();
 			}
+			break;
 		}
 	default:
 		break;

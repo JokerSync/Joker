@@ -177,13 +177,15 @@ void PhSynchronizer::onSyncTimeChanged(PhTime time)
 			// We apply correction here only when there is a significant change of sony time.
 			// Precise correction occurs in onStripTimeChanged() that is called after
 			// on SonyTimeChanged (see VideoStripView::paint()).
-			PhTime error = qAbs(time - _stripClock->time());
-			if(_stripClock && ((error > 10 * PhTimeCode::timePerFrame(PhTimeCodeType24))
-			                   || ((_stripClock->rate() == 0) && (error > 0)))) {
-				PHDEBUG << "correct error:" << time << _stripClock->time();
-				_settingStripTime = true;
-				_stripClock->setTime(time);
-				_settingStripTime = false;
+			if(_stripClock) {
+				PhTime error = qAbs(time - _stripClock->time());
+				if(((error > 10 * PhTimeCode::timePerFrame(PhTimeCodeType24))
+				    || ((_stripClock->rate() == 0) && (error > 0)))) {
+					PHDEBUG << "correct error:" << time << _stripClock->time();
+					_settingStripTime = true;
+					_stripClock->setTime(time);
+					_settingStripTime = false;
+				}
 			}
 		}
 	}
