@@ -258,13 +258,13 @@ double PhVideoEngine::framePerSecond()
 
 QString PhVideoEngine::codecName()
 {
-    if(_videoStream)
+	if(_videoStream)
 #if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55, 28, 1)
-        return _videoStream->codec->codec->name;
+		return _videoStream->codec->codec->name;
 #else
 		return _videoStream->codec->codec_descriptor->long_name;
 #endif
-    return "";
+	return "";
 }
 
 bool PhVideoEngine::decodeFrame(PhTime time)
