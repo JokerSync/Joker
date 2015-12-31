@@ -27,7 +27,6 @@ LIBS += -framework CoreMIDI -framework CoreAudio -framework CoreFoundation
 }
 
 linux {
-DEFINES += __LINUX_ALSA__
 LIBS += -lrtmidi
 }
 
