@@ -10,7 +10,7 @@
 #include "PhCommonUI/PhTimeCodeDialog.h"
 
 GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settings) :
-	PhDocumentWindow(settings),
+	PhEditableDocumentWindow(settings),
 	ui(new Ui::GraphicStripTestWindow),
 	_settings(settings),
 	_strip(settings)
@@ -25,13 +25,11 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	on_actionRuler_triggered(_settings->displayFeet());
 
-	connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(onOpenFile()));
-	connect(ui->actionGenerate, SIGNAL(triggered()), this, SLOT(onGenerate()));
+	connect(ui->actionFull_screen, &QAction::triggered, this, &GraphicStripTestWindow::toggleFullScreen);
 
-	connect(ui->actionFull_screen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
-
-	connect(_clock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onFrameChanged(PhFrame, PhTimeCodeType)));
-	connect(_clock, SIGNAL(rateChanged(PhRate)), this, SLOT(onRateChanged(PhRate)));
+	connect(_clock, &PhClock::timeChanged, this, &GraphicStripTestWindow::onTimeChanged);
+	connect(_clock, &PhClock::rateChanged, this, &GraphicStripTestWindow::onRateChanged);
+	this->onTimeChanged(_clock->time());
 
 	if(_settings->generate())
 		_doc->generate(_settings->textContent(),
@@ -51,6 +49,12 @@ GraphicStripTestWindow::~GraphicStripTestWindow()
 	delete ui;
 }
 
+void GraphicStripTestWindow::on_actionNew_triggered()
+{
+	_doc->reset();
+	this->resetDocument();
+}
+
 bool GraphicStripTestWindow::openDocument(const QString &fileName)
 {
 	PHDEBUG << fileName;
@@ -59,6 +63,43 @@ bool GraphicStripTestWindow::openDocument(const QString &fileName)
 
 	_settings->setGenerate(false);
 	return PhDocumentWindow::openDocument(fileName);
+}
+
+
+void GraphicStripTestWindow::on_actionSave_triggered()
+{
+	QString fileName = _settings->currentDocument();
+	QFileInfo info(fileName);
+	if(!info.exists() || (info.suffix() != "detx"))
+		on_actionSave_as_triggered();
+	else if(_doc->exportDetXFile(fileName, _strip.clock()->time()))
+		_doc->setModified(false);
+	else
+		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
+}
+
+void GraphicStripTestWindow::on_actionSave_as_triggered()
+{
+	QString fileName = _settings->currentDocument();
+	QString lastFolder = _settings->lastDocumentFolder();
+	// If there is no current strip file, ask for a name
+	if(fileName == "")
+		fileName = lastFolder;
+	else {
+		QFileInfo info(fileName);
+		if(info.suffix() != "detx")
+			fileName = lastFolder + "/" + info.completeBaseName() + ".detx";
+	}
+
+	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.detx");
+	if(fileName != "") {
+		if(_doc->exportDetXFile(fileName, _strip.clock()->time())) {
+			_doc->setModified(false);
+			PhEditableDocumentWindow::saveDocument(fileName);
+		}
+		else
+			QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
+	}
 }
 
 QMenu *GraphicStripTestWindow::recentDocumentMenu()
@@ -71,7 +112,12 @@ QAction *GraphicStripTestWindow::fullScreenAction()
 	return ui->actionFull_screen;
 }
 
-void GraphicStripTestWindow::onOpenFile()
+bool GraphicStripTestWindow::isDocumentModified()
+{
+	return _doc->modified();
+}
+
+void GraphicStripTestWindow::on_actionOpen_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName(this, "Open...", _settings->lastDocumentFolder(), "Rythmo files (*.joker *.detx)");
 	if(QFile::exists(fileName)) {
@@ -80,7 +126,7 @@ void GraphicStripTestWindow::onOpenFile()
 	}
 }
 
-void GraphicStripTestWindow::onGenerate()
+void GraphicStripTestWindow::on_actionGenerate_triggered()
 {
 	GenerateDialog dlgGen(_settings, _doc);
 	if (dlgGen.exec()) {
@@ -105,12 +151,11 @@ void GraphicStripTestWindow::onGenerate()
 			openDocument("");
 		}
 	}
-
 }
 
-void GraphicStripTestWindow::onFrameChanged(PhFrame frame, PhTimeCodeType tcType)
+void GraphicStripTestWindow::onTimeChanged(PhTime time)
 {
-	QString message = QString("%1 - x%2").arg(PhTimeCode::stringFromFrame(frame, tcType), QString::number(_clock->rate()));
+	QString message = QString("%1 - x%2").arg(_clock->timeCode(_doc->videoTimeCodeType()), QString::number(_clock->rate()));
 	ui->statusbar->showMessage(message);
 }
 

@@ -8,7 +8,7 @@ cache()
 
 TARGET = Joker
 
-CONFIG += video
+CONFIG += video sony ltc midi
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
@@ -19,16 +19,26 @@ include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 include($$TOP_ROOT/libs/PhStrip/PhStrip.pri)
 include($$TOP_ROOT/libs/PhGraphic/PhGraphic.pri)
 include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
-
-video {
-DEFINES += USE_VIDEO
-include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
-}
-include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
 include($$TOP_ROOT/libs/PhSync/PhSync.pri)
-include($$TOP_ROOT/libs/PhSony/PhSony.pri)
-include($$TOP_ROOT/libs/PhLtc/PhLtc.pri)
-include($$TOP_ROOT/libs/PhMidi/PhMidi.pri)
+
+# Optionnal library component
+video {
+	DEFINES += USE_VIDEO
+	include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
+}
+sony {
+	DEFINES += USE_SONY
+	include($$TOP_ROOT/libs/PhSony/PhSony.pri)
+}
+ltc {
+	DEFINES += USE_LTC
+	include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
+	include($$TOP_ROOT/libs/PhLtc/PhLtc.pri)
+}
+midi {
+	DEFINES += USE_MIDI
+	include($$TOP_ROOT/libs/PhMidi/PhMidi.pri)
+}
 
 SOURCES += main.cpp \
 	JokerWindow.cpp \

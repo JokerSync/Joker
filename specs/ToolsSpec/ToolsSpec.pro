@@ -19,7 +19,3 @@ include($$TOP_ROOT/specs/ToolsSpec/ToolsSpec.pri)
 
 # Common spec directive
 include($$TOP_ROOT/specs/CommonSpec.pri)
-
-# Deployement (why in spec????)
-PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include($$TOP_ROOT/common/deploy.pri)

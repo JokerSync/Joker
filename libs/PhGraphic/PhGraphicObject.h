@@ -27,7 +27,6 @@ public:
 	 * @param y Upper left corner coordinates of the displayed object
 	 */
 	PhGraphicObject(int x = 0, int y = 0);
-	virtual ~PhGraphicObject();
 
 	/**
 	 * @brief dispose

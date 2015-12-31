@@ -52,7 +52,7 @@ void PeopleEditionDialog::on_pbColor_clicked()
 	dlg.setCurrentColor(QColor(_people->color()));
 
 	// Connecting slot
-	connect(&dlg, SIGNAL(currentColorChanged(QColor)), this, SLOT(OnColorSelected(QColor)));
+	connect(&dlg, &QColorDialog::currentColorChanged, this, &PeopleEditionDialog::OnColorSelected);
 
 	dlg.exec();
 }
