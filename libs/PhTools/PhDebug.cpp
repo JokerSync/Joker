@@ -125,7 +125,7 @@ QDebug PhDebug::error(const char *fileName, int lineNumber, const char *function
 	return QMessageLogger(fileName, lineNumber, functionName).critical();
 }
 
-PhDebug::PhDebug()
+PhDebug::PhDebug() : _currentLogLevel(0)
 {
 	qInstallMessageHandler(this->messageOutput);
 
