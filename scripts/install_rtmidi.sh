@@ -15,6 +15,8 @@ cd rtmidi-2.1.0
 
 ./configure
 make
+sudo make install
+
 cd ..
 
 fi
