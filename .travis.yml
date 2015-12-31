@@ -12,7 +12,7 @@ env:
   - JOB=UNCRUSTIFY
   - JOB=DOXYGEN
   - JOB=BUILD_SPEC_BANDIT
-#  - JOB=BUILD_RELEASE_JOKER
+  - JOB=BUILD_RELEASE_JOKER
   - JOB=BUILD_RELEASE_LTCTOOL
   - JOB=BUILD_RELEASE_MIDITOOL
   - JOB=BUILD_RELEASE_ALL_TESTS
@@ -59,8 +59,6 @@ script:
 - if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then qmake specs/AllSpecs.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then qmake app/Joker/Joker.pro; fi
-- if [[ "$JOB" == BUILD_RELEASE_POUET ]]; then qmake --version; fi
-- if [[ "$JOB" == BUILD_RELEASE_POUET ]]; then qmake tests/GraphicStripTest/GraphicStripTest.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
