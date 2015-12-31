@@ -59,7 +59,11 @@ go_bandit([](){
 
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
-			AssertThat(engine->codecName().toStdString(), Equals("BMP (Windows and OS/2 bitmap)"));
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+            AssertThat(engine->codecName().toStdString(), Equals("BMP (Windows and OS/2 bitmap)"));
+#else
+            AssertThat(engine->codecName().toStdString(), Equals("bmp"));
+#endif
 			AssertThat(engine->bilinearFiltering(), IsFalse());
 			AssertThat(engine->length(), Equals(192000));
 			AssertThat(engine->width(), Equals(64));
