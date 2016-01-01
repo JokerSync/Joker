@@ -39,11 +39,6 @@ unix {
 	LIBS += -lavformat -lavcodec -lavutil -lswscale
 }
 
-# Ubuntu specific
-linux {
-	LIBS += -lva
-}
-
 # MacOS specific
 mac {
 	LIBS += -liconv -lbz2 -lz

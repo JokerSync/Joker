@@ -91,7 +91,7 @@ bool PhTimeCodeEdit::eventFilter(QObject *, QEvent *event)
 				compute(true);
 				return true;
 			case Qt::Key_Backspace:
-				if(_addedNumbers.length()) {
+				if(!_addedNumbers.isEmpty()) {
 					_addedNumbers.pop();
 					compute(false);
 				}

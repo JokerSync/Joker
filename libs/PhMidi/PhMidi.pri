@@ -4,7 +4,6 @@
 #
 
 HEADERS += \
-	$$TOP_ROOT/vendor/rtmidi/RtMidi.h \
 	$$PWD/PhMidiObject.h \
 	$$PWD/PhMidiInput.h \
 	$$PWD/PhMidiOutput.h \
@@ -12,7 +11,6 @@ HEADERS += \
 	$$PWD/PhMidiTimeCodeReader.h
 
 SOURCES += \
-	$$TOP_ROOT/vendor/rtmidi/RtMidi.cpp \
 	$$PWD/PhMidiObject.cpp \
 	$$PWD/PhMidiInput.cpp \
 	$$PWD/PhMidiOutput.cpp \
@@ -22,15 +20,19 @@ SOURCES += \
 INCLUDEPATH += $$TOP_ROOT/vendor/rtmidi
 
 mac {
+HEADERS += $$TOP_ROOT/vendor/rtmidi/RtMidi.h
+SOURCES += $$TOP_ROOT/vendor/rtmidi/RtMidi.cpp
 DEFINES += __MACOSX_CORE__
 LIBS += -framework CoreMIDI -framework CoreAudio -framework CoreFoundation
 }
 
 linux {
-DEFINES += __LINUX_ALSA__
+LIBS += -lrtmidi
 }
 
 win32 {
+HEADERS += $$TOP_ROOT/vendor/rtmidi/RtMidi.h
+SOURCES += $$TOP_ROOT/vendor/rtmidi/RtMidi.cpp
 DEFINES += __WINDOWS_MM__
 LIBS += -lwinmm
 }
