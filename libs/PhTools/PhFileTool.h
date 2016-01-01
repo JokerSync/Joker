@@ -7,7 +7,7 @@
 #ifndef PHFILETOOL_H
 #define PHFILETOOL_H
 
-#include "PhTools/PhFile.h"
+#include <QDir>
 
 /**
  * @brief Provides tools for binary files reading

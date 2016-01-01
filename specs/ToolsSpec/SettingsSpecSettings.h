@@ -1,7 +1,6 @@
 #ifndef SETTINGSSPECSETTINGS_H
 #define SETTINGSSPECSETTINGS_H
 
-#include "PhTools/PhFile.h"
 #include "PhTools/PhGenericSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
 

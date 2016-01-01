@@ -6,6 +6,8 @@
 #ifndef COMMONSPEC_H
 #define COMMONSPEC_H
 
+#include <QImage>
+
 #include "PhSync/PhTimeCode.h"
 
 

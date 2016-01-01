@@ -5,11 +5,7 @@
 
 QT		+= opengl
 
-PRECOMPILED_HEADERS += \
-    $$PWD/PhGraphic.h \
-
 HEADERS += \
-    $$PWD/PhGraphic.h \
 	$$PWD/PhGraphicSettings.h \
 	$$PWD/PhGraphicView.h \
 	$$PWD/PhGraphicImage.h \

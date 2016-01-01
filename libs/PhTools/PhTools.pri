@@ -5,15 +5,7 @@
 
 QT		+= xml sql network
 
-PRECOMPILED_HEADERS += \
-    $$PWD/PhGeneric.h \
-    $$PWD/PhFile.h \
-    $$PWD/PhData.h \
-
 HEADERS += \
-    $$PWD/PhGeneric.h \
-    $$PWD/PhFile.h \
-    $$PWD/PhData.h \
 	$$PWD/PhDebug.h \
 	$$PWD/PhTickCounter.h \
 	$$PWD/PhPictureTools.h \

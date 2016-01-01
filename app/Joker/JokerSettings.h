@@ -1,7 +1,9 @@
 #ifndef JOKERSETTINGS_H
 #define JOKERSETTINGS_H
 
-#include "PhTools/PhFile.h"
+#include <QApplication>
+#include <QDir>
+
 #include "PhTools/PhGenericSettings.h"
 #include "PhSync/PhSyncSettings.h"
 #include "PhSync/PhTimeCode.h"

@@ -3,9 +3,11 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhFile.h"
-
 #include <QProcess>
+#include <QFile>
+#include <QDir>
+#include <QHostInfo>
+#include <QMessageBox>
 
 #include "PhFeedbackDialog.h"
 #include "ui_PhFeedbackDialog.h"

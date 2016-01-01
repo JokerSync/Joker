@@ -7,7 +7,7 @@
 #ifndef PHWINDOW_H
 #define PHWINDOW_H
 
-#include "PhUI.h"
+#include <QMainWindow>
 
 #include "PhWindowSettings.h"
 

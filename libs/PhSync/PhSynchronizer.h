@@ -7,8 +7,6 @@
 #ifndef PHSYNCHRONIZER_H
 #define PHSYNCHRONIZER_H
 
-#include "PhTools/PhGeneric.h"
-
 #include "PhSync/PhClock.h"
 
 #include "PhSyncSettings.h"

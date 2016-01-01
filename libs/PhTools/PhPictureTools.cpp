@@ -4,6 +4,10 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QRgb>
+#include <QColor>
+#include <qmath.h>
+
 #include "PhDebug.h"
 
 #include "PhPictureTools.h"
