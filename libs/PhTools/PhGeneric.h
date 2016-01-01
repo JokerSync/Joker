@@ -9,7 +9,6 @@
 #include <QHostInfo>
 #include <QNetworkReply>
 #include <QtGlobal>
-#include <QtMath>
 #include <cmath>
 #include <qmath.h>
 #include <QTimer>

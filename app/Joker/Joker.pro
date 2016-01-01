@@ -8,8 +8,6 @@ cache()
 
 TARGET = Joker
 
-CONFIG += video sony ltc midi
-
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
@@ -38,6 +36,16 @@ ltc {
 midi {
 	DEFINES += USE_MIDI
 	include($$TOP_ROOT/libs/PhMidi/PhMidi.pri)
+}
+
+CONFIG += video ltc midi
+
+win {
+CONFIG += sony
+}
+
+mac {
+CONFIG += sony
 }
 
 SOURCES += main.cpp \
