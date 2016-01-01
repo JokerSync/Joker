@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+	AllSpecs \
 	CommonUISpec \
 	GraphicSpec \
 	GraphicStripSpec \
