@@ -15,11 +15,7 @@
 
 *.pro.user
 *.pro.user.*
-moc_*.cpp
 qrc_*.cpp
-Makefile
-*-build-*
-build-*
 
 .DS_Store
 Thumbs.db

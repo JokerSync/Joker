@@ -6,8 +6,6 @@
 #ifndef PHMIDIOUTPUT_H
 #define PHMIDIOUTPUT_H
 
-#include "PhTools/PhData.h"
-
 #include "PhMidiObject.h"
 
 /**

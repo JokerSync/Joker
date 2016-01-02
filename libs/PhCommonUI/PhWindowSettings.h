@@ -7,8 +7,6 @@
 #ifndef PHWINDOWSETTINGS_H
 #define PHWINDOWSETTINGS_H
 
-#include "PhTools/PhGeneric.h"
-
 /**
  * @brief The settings for PhDocumentWindow
  */

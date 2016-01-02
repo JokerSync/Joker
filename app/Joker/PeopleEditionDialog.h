@@ -6,7 +6,7 @@
 #ifndef PHCOLORPICKERDIALOG_H
 #define PHCOLORPICKERDIALOG_H
 
-#include "PhCommonUI/PhUI.h"
+#include <QDialog>
 
 #include "PhStrip/PhStripDoc.h"
 #include "PhStrip/PhPeople.h"

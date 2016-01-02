@@ -7,6 +7,8 @@
 #ifndef PHGRAPHICIMAGE_H
 #define PHGRAPHICIMAGE_H
 
+#include <QSize>
+
 #include "PhGraphicTexturedRect.h"
 
 /**

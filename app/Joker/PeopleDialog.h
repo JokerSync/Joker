@@ -7,7 +7,7 @@
 #ifndef PEOPLEDIALOG_H
 #define PEOPLEDIALOG_H
 
-#include "PhCommonUI/PhUI.h"
+#include <QDialog>
 
 #include "PhStrip/PhStripDoc.h"
 

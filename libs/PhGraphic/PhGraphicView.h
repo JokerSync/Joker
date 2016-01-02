@@ -7,6 +7,9 @@
 #ifndef PHGRAPHICVIEW_H
 #define PHGRAPHICVIEW_H
 
+#include <QGLWidget>
+#include <QElapsedTimer>
+
 #include "PhSync/PhTime.h"
 #include "PhTools/PhTickCounter.h"
 

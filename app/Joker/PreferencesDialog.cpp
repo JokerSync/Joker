@@ -4,8 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-
-#include "PhTools/PhFile.h"
+#include <QStandardPaths>
+#include <QMessageBox>
 
 #include "PhTools/PhDebug.h"
 #include "PhSync/PhSynchronizer.h"

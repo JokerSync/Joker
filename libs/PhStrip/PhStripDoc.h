@@ -7,7 +7,9 @@
 #ifndef PHSTRIPDOC_H
 #define PHSTRIPDOC_H
 
-#include "PhTools/PhData.h"
+#include <QMap>
+#include <QFile>
+
 #include "PhSync/PhTimeCode.h"
 
 #include "PhPeople.h"

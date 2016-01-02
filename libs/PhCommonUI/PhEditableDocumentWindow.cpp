@@ -1,3 +1,6 @@
+#include <QMessageBox>
+#include <QCloseEvent>
+
 #include "PhTools/PhDebug.h"
 
 #include "PhEditableDocumentWindow.h"

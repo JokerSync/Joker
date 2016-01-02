@@ -7,7 +7,7 @@
 #ifndef PHPICTURETOOLS_H
 #define PHPICTURETOOLS_H
 
-#include "PhTools/PhData.h"
+#include <QImage>
 
 /**
  * @brief It provides a lot of useful picture tools

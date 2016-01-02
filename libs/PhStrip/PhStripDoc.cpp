@@ -4,8 +4,25 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhFile.h"
-#include "PhTools/PhData.h"
+#include <QDomDocument>
+#include <QXmlStreamWriter>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+
+#include <boost/version.hpp>
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
+
+#include <boost/format.hpp>
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhFileTool.h"

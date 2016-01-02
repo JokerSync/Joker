@@ -3,8 +3,10 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <qmath.h>
+#include <QColor>
+
 #include "CommonSpec.h"
-#include "PhTools/PhData.h"
 #include "PhTools/PhDebug.h"
 
 std::string f2s(PhFrame frame, PhTimeCodeType tcType)

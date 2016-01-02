@@ -4,9 +4,10 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhSonyController.h"
-
+#include <qmath.h>
 #include <QSerialPortInfo>
+
+#include "PhSonyController.h"
 
 #include "PhTools/PhDebug.h"
 

@@ -7,6 +7,9 @@
 #ifndef JOKERWINDOW_H
 #define JOKERWINDOW_H
 
+#include <QTimer>
+#include <QPropertyAnimation>
+
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 #include "PhCommonUI/PhEditableDocumentWindow.h"
 #ifdef USE_VIDEO

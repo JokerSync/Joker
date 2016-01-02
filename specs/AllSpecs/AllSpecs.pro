@@ -6,7 +6,7 @@
 
 TARGET = AllSpecs
 
-TOP_ROOT = $${_PRO_FILE_PWD_}/..
+TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
 

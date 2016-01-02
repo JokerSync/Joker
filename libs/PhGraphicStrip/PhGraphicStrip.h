@@ -7,7 +7,7 @@
 #ifndef PHGRAPHICSTRIP_H
 #define PHGRAPHICSTRIP_H
 
-#include "PhTools/PhGeneric.h"
+#include <QTime>
 
 #include "PhGraphicStripSettings.h"
 

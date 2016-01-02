@@ -4,8 +4,10 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhFile.h"
-#include "PhTools/PhData.h"
+#include <QDate>
+#include <QDir>
+
+#include <iostream>
 
 #include "PhDebug.h"
 

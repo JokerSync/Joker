@@ -7,9 +7,8 @@
 #ifndef PHSONYCONTROLLER_H
 #define PHSONYCONTROLLER_H
 
+#include <QThread>
 #include <QSerialPort>
-
-#include "PhTools/PhGeneric.h"
 
 #include "PhSync/PhClock.h"
 

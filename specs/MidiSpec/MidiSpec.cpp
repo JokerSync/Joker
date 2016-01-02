@@ -3,7 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhGeneric.h"
+#include <QThread>
+
 #include "PhTools/PhDebug.h"
 #include "PhMidi/PhMidiInput.h"
 #include "PhMidi/PhMidiOutput.h"
@@ -58,7 +59,6 @@ go_bandit([](){
 
 			midiOut.sendQFTC(0x11); // setting higher frame to 0x1x
 			QThread::msleep(10);
-			QApplication::processEvents(QEventLoop::AllEvents, 10); // try to solve travis fail
 			AssertThat(quarterFrameCount, Equals(2));
 			AssertThat(quarterFrameData, Equals(0x11));
 

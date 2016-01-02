@@ -7,7 +7,13 @@
 #ifndef PHGRAPHICOBJECT_H
 #define PHGRAPHICOBJECT_H
 
-#include "PhGraphic.h"
+#include <QColor>
+
+#if defined(Q_OS_WIN)
+#include <GL/glu.h>
+#else
+#include <glu.h>
+#endif
 
 /**
  * @brief A generic graphic object

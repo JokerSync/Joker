@@ -4,6 +4,10 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QCloseEvent>
+#include <QMessageBox>
+#include <QFileDialog>
+
 #include "PhTools/PhDebug.h"
 
 #include "PhCommonUI/PhTimeCodeDialog.h"

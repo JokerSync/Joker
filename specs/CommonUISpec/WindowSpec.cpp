@@ -3,8 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QAction>
+
 #include "PhTools/PhDebug.h"
-#include "PhCommonUI/PhUI.h"
 
 #include "WindowSpecSettings.h"
 #include "WindowSpecWindow.h"
