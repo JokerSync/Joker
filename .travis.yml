@@ -9,14 +9,13 @@ env:
   - TESTS_RELEASE_PATH=$HOME
   - QTVER=532
   matrix:
-#  - JOB=UNCRUSTIFY
-#  - JOB=DOXYGEN
-#  - JOB=BUILD_SPEC_BANDIT
+  - JOB=UNCRUSTIFY
+  - JOB=DOXYGEN
+  - JOB=BUILD_SPEC_BANDIT
   - JOB=BUILD_RELEASE_JOKER
-#  - JOB=BUILD_RELEASE_VIDEOTEST
-#  - JOB=BUILD_RELEASE_LTCTOOL
-#  - JOB=BUILD_RELEASE_MIDITOOL
-#  - JOB=BUILD_RELEASE_ALL_TESTS
+  - JOB=BUILD_RELEASE_LTCTOOL
+  - JOB=BUILD_RELEASE_MIDITOOL
+  - JOB=BUILD_RELEASE_ALL_TESTS
 matrix:
   exclude:
     - os: linux
@@ -60,7 +59,6 @@ script:
 - if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then qmake specs/AllSpecs/AllSpecs.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then qmake app/Joker/Joker.pro; fi
-- if [[ "$JOB" == BUILD_RELEASE_VIDEOTEST ]]; then qmake tests/VideoTest/VideoTest.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
