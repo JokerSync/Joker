@@ -30,7 +30,7 @@ echo "Linux detected"
 
 sudo add-apt-repository -y ppa:zoogie/sdl2-snapshots
 sudo apt-get update -qq
-sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+sudo apt-get -y install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
 
 fi
 
