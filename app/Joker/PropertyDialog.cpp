@@ -10,6 +10,9 @@
 PropertyDialog::PropertyDialog(QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::PropertyDialog),
+#ifdef USE_VIDEO
+	_videoEngine(NULL),
+#endif
 	_doc(NULL)
 {
 	ui->setupUi(this);
