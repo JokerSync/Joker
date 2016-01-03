@@ -10,11 +10,6 @@
 
 #include "PhVideoEngine.h"
 
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55, 28, 1)
-#define av_frame_alloc avcodec_alloc_frame
-#define av_frame_free avcodec_free_frame
-#endif
-
 PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_settings(settings),
 	_fileName(""),
@@ -260,11 +255,7 @@ double PhVideoEngine::framePerSecond()
 QString PhVideoEngine::codecName()
 {
 	if(_videoStream)
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55, 28, 1)
-		return _videoStream->codec->codec->name;
-#else
 		return _videoStream->codec->codec_descriptor->long_name;
-#endif
 	return "";
 }
 
