@@ -72,7 +72,7 @@ Source: "release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; Qt dlls (windeployqt needs to be run first)
 ;Source: "release\accessible\*.dll"; DestDir: "{app}\accessible"; Flags: ignoreversion
-Source: "release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
+;Source: "release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
 Source: "release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
 Source: "release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
 Source: "release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
