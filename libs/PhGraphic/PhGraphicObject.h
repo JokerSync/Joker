@@ -10,9 +10,9 @@
 #include <QColor>
 
 #if defined(Q_OS_WIN)
-#include <GL/glu.h>
+#include <GL/gl.h>
 #else
-#include <glu.h>
+#include <gl.h>
 #endif
 
 /**
