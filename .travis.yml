@@ -49,7 +49,7 @@ install:
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then export QMAKESPEC=macx-clang;  fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
-- if [[ "$JOB" == BUILD_*  && "$TRAVIS_OS_NAME" == osx ]]; then scripts/install_ffmpeg.sh; fi
+- if [[ "$JOB" == BUILD_* ]]; then scripts/install_ffmpeg.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_portaudio.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_rtmidi.sh; fi
 - if [[ "$JOB" == BUILD_SPEC_* ]]; then sudo pip install cpp-coveralls; fi
