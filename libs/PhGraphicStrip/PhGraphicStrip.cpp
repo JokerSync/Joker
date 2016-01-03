@@ -261,7 +261,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			QMap<PhTime, PhStripText*> futureSelectedText;
 			PhTime maxTimeOut = clockTime + (y - nextTextY) * verticalTimePerPixel;
 			foreach (PhPeople *people, selectedPeoples) {
-				PhStripText *nextText = _doc.nextText({people}, maxTimeOut);
+				PhStripText *nextText = _doc.nextText(people, maxTimeOut);
 				if(nextText)
 					futureSelectedText[nextText->timeIn() + (int)(10 * nextText->y())] = nextText;
 			}

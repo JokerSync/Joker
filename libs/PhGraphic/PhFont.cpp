@@ -12,12 +12,7 @@
 #include <SDL2/SDL_ttf.h>
 #endif
 
-#if defined(Q_OS_WIN)
-#include <GL/glu.h>
-#else
-#include <glu.h>
-#endif
-
+#include "PhGraphicObject.h"
 #include "PhFont.h"
 #include "PhTools/PhDebug.h"
 

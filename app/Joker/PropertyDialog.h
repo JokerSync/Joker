@@ -63,10 +63,10 @@ protected:
 
 private:
 	Ui::PropertyDialog *ui;
-	PhStripDoc *_doc;
 #ifdef USE_VIDEO
 	PhVideoEngine *_videoEngine;
 #endif
+	PhStripDoc *_doc;
 };
 
 #endif // PROPERTYDIALOG_H
