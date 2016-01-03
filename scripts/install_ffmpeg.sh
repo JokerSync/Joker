@@ -10,7 +10,7 @@ brew install libav ffmpeg
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"
 
-sudo apt-get install libavformat-dev libswscale-dev
+sudo apt-get -y install libavformat-dev libswscale-dev
 
 fi
 
