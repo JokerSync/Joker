@@ -19,9 +19,20 @@ include($$TOP_ROOT/libs/PhGraphic/PhGraphic.pri)
 include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
 include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 
+CONFIG += video ltc midi
+
+win {
+CONFIG += sony
+}
+
+mac {
+CONFIG += sony
+}
+
 # Optionnal library component
 video {
 	DEFINES += USE_VIDEO
+	message("video")
 	include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
 }
 sony {
@@ -36,16 +47,6 @@ ltc {
 midi {
 	DEFINES += USE_MIDI
 	include($$TOP_ROOT/libs/PhMidi/PhMidi.pri)
-}
-
-CONFIG += video ltc midi
-
-win {
-CONFIG += sony
-}
-
-mac {
-CONFIG += sony
 }
 
 SOURCES += main.cpp \
