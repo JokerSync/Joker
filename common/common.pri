@@ -17,6 +17,8 @@ else {
 	VERSION = $$system(date +%y.%m.%d)
 }
 
+message(Version: $$VERSION)
+
 PH_GIT_BRANCH = $$system(git rev-parse --abbrev-ref HEAD)
 PH_GIT_REVISION = $$system(git rev-parse HEAD)
 
