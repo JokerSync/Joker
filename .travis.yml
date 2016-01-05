@@ -1,5 +1,5 @@
 os:
-#  - linux
+  - linux
   - osx
 language: cpp
 compiler: clang
@@ -101,6 +101,5 @@ addons:
     notification_email: martin@phonations.com
     build_command_prepend: cov-configure --comptype clangcxx --compiler clang++
     build_command_prepend: qmake app/Joker/Joker.pro
-#    build_command_prepend: qmake tests/FormTest/FormTest.pro
     build_command: make -j 4
     branch_pattern: coverity
