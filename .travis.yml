@@ -64,8 +64,10 @@ script:
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
-- if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then export RELEASED_PACKAGE_FILENAME=$(ls -1 $JOKER_RELEASE_PATH/Joker_$TRAVIS_TAG.dmg); fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then make installer; fi
+- if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then export RELEASED_PACKAGE_FILENAME=$(ls -1 Joker_v*.dmg); fi
+- if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then echo "RELEASED_PACKAGE_FILENAME:"; fi
+- if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then echo $RELEASED_PACKAGE_FILENAME; fi
 
 after_success:
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ -E .+/specs/.+ --verbose; fi
