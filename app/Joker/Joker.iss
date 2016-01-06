@@ -7,7 +7,7 @@
 #define MyAppURL "http://www.phonations.com/"
 #define MyAppExeName "Joker.exe"
 
-#define MyAppSrc "release\" + MyAppExeName
+#define MyAppSrc PWD + "\release\" + MyAppExeName
 #if !FileExists(MyAppSrc)
 #error "Unable to find MyAppSrc"
 #endif
@@ -42,7 +42,7 @@ DefaultDirName={pf}\{#MyAppName}
 DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile="LICENSE.TXT"
+LicenseFile="..\..\LICENSE.TXT"
 OutputDir={#MyOutputDir}
 OutputBaseFilename={#MyAppName}_v{#MyAppVerStr}
 Compression=lzma
@@ -72,21 +72,21 @@ Source: "{#QtDir}\bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversi
 Source: "{#QtDir}\bin\icudt53.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\plugins\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion
 
-Source: "release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppSrc}"; DestDir: "{app}"; Flags: ignoreversion
 ; dlls (PortAudio, SDL, etc.)
-Source: "release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; Qt dlls (windeployqt needs to be run first)
-;Source: "release\accessible\*.dll"; DestDir: "{app}\accessible"; Flags: ignoreversion
-Source: "release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
-Source: "release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
-Source: "release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
-Source: "release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
+;Source: "{#PWD}\release\accessible\*.dll"; DestDir: "{app}\accessible"; Flags: ignoreversion
+Source: "{#PWD}\release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
+Source: "{#PWD}\release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
+Source: "{#PWD}\release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "{#PWD}\release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 ; translations
-Source: "release\*.qm"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\release\*.qm"; DestDir: "{app}"; Flags: ignoreversion
 ; images
-Source: "release\*.png"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\release\*.png"; DestDir: "{app}"; Flags: ignoreversion
 ; fonts
-Source: "release\*.ttf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\release\*.ttf"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
