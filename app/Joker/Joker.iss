@@ -7,6 +7,10 @@
 #define MyAppURL "http://www.phonations.com/"
 #define MyAppExeName "Joker.exe"
 
+#if !defined(PWD)
+#define PWD "."
+#endif
+
 #define MyAppSrc PWD + "\release\" + MyAppExeName
 #if !FileExists(MyAppSrc)
 #error "Unable to find MyAppSrc"
