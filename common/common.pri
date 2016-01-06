@@ -17,8 +17,6 @@ else {
 	VERSION = $$system(date +%y.%m.%d)
 }
 
-message(Version: $$VERSION)
-
 PH_GIT_BRANCH = $$system(git rev-parse --abbrev-ref HEAD)
 PH_GIT_REVISION = $$system(git rev-parse HEAD)
 
@@ -36,11 +34,9 @@ win32 {
 	CS = &
 	CONFIG(release, debug|release) {
 		RESOURCES_PATH = $$shell_path(./release/)
-		message(Release mode)
 	}
 	CONFIG(debug, debug|release) {
 		RESOURCES_PATH = $$shell_path(./debug/)
-		message(Debug mode)
 	}
 	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 
