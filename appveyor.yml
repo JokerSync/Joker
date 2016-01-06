@@ -46,7 +46,8 @@ install:
 build_script:
   - qmake app/Joker/Joker.pro
   - mingw32-make -j 8
-  - mingw32-make installer
+#  - mingw32-make installer
+  - iscc app/Joker/Joker.iss
   - dir
 artifacts:
   - path: Joker_v*.exe
