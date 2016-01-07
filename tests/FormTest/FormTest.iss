@@ -6,6 +6,10 @@
 #define MyAppURL "http://www.phonations.com/"
 #define MyAppExeName "FormTest.exe"
 
+#if !Defined(PWD)
+#define PWD "."
+#endif
+
 #define MyAppSrc PWD + "\release\" + MyAppExeName
 #pragma message MyAppSrc
 

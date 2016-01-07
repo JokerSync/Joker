@@ -67,8 +67,10 @@ script:
 - if [[ "$JOB" == BUILD_RELEASE_FORMTEST ]]; then qmake tests/FormTest/FormTest.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
-- if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then export RELEASED_PACKAGE_FILENAME=$(ls -1 $JOKER_RELEASE_PATH/Joker_$TRAVIS_TAG.dmg); fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then make installer; fi
+- if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then export RELEASED_PACKAGE_FILENAME=$(ls -1 Joker_v*.dmg); fi
+- if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then echo "RELEASED_PACKAGE_FILENAME:"; fi
+- if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then echo $RELEASED_PACKAGE_FILENAME; fi
 
 after_success:
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ -E .+/specs/.+ --verbose; fi
@@ -88,11 +90,10 @@ deploy:
   api_key:
     secure: DTPxxREDO8+Pi/cnqKr1nce9FxJ3AUY7h4S9gHt3S2vBkrlZM4vD4GLXCVjbZuSpnqkTTAiGhUiYEN8jiF3pjStKKlEl2w537cDpoSl1ZAB5G+G3PKTBxG5MhRMZkTEgYFvtx/VPpvleQ4C8cMosogQk7iBwwuk19FLbcL0/kL4=
   file: ${RELEASED_PACKAGE_FILENAME}
+  skip_cleanup: true
   on:
     tags: true
-    all_branches: true
-    repo: Phonations/Joker
-    condition: $JOB = BUILD_RELEASE_JOKER
+    condition: $JOB = BUILD_RELEASE_JOKER && $TRAVIS_OS_NAME = osx
 addons:
   coverity_scan:
     project:
