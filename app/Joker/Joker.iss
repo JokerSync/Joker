@@ -12,6 +12,7 @@
 #endif
 
 #define MyAppSrc PWD + "\release\" + MyAppExeName
+#pragma message MyAppSrc
 #if !FileExists(MyAppSrc)
 #error "Unable to find MyAppSrc"
 #endif
