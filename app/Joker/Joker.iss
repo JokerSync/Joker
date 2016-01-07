@@ -8,7 +8,7 @@
 #define MyAppExeName "Joker.exe"
 
 #if !defined(PWD)
-#define PWD "..\.."
+#define PWD "."
 #endif
 
 #define MyAppSrc PWD + "\release\" + MyAppExeName
