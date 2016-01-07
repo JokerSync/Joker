@@ -13,8 +13,8 @@ CONFIG(release, debug|release) {
 
 			message($$PH_DEPLOY_TARGET)
 
-			installer.commands = macdeployqt $${TARGET}.app && \
-				$${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
+			installer.commands += macdeployqt $${TARGET}.app &&
+			installer.commands += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
 					--volname $${PH_DEPLOY_TARGET} \
 #					--volicon $${_PRO_FILE_PWD_}/../../app/Joker/joker.icns \
 					--background $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png \
@@ -22,24 +22,17 @@ CONFIG(release, debug|release) {
 					--icon $${TARGET}.app 150 218 \
 					--window-size 600 450 \
 					$${PH_DEPLOY_TARGET}.dmg \
-					$${TARGET}.app && \
-				cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION}
+					$${TARGET}.app &&
+			installer.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION}
 		}
 	}
 
 	win32 {
 		if(exists($${_PRO_FILE_PWD_}/$$TARGET.iss)) {
-			message("Processing $$TARGET")
-			QMAKE_POST_LINK += echo "Deploying $${_PRO_FILE_PWD_}/$${TARGET}.iss" $${CS}
-			QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/$${TARGET}.iss) . $${CS}
-#			QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/LICENSE.TXT) . $${CS}
-#			QMAKE_POST_LINK += echo $$(PATH) $${CS}
-#			QMAKE_POST_LINK += iscc "$${TARGET}.iss" $${CS}
-#			QMAKE_POST_LINK += dir
-
+			installer.commands += echo "Running Innosetup on $$shell_path($${_PRO_FILE_PWD_}/$${TARGET}.iss)" &
+			installer.commands += iscc /dPWD=$$shell_path($$OUT_PWD) $${_PRO_FILE_PWD_}/$${TARGET}.iss &
 		}
 	}
 }
 
 QMAKE_EXTRA_TARGETS += installer
-

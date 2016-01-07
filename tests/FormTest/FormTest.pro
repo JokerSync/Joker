@@ -30,5 +30,10 @@ mac {
 	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
 }
 
+
+win32 {
+	OTHER_FILES += FormTest.iss
+}
+
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
 include($$TOP_ROOT/common/deploy.pri)

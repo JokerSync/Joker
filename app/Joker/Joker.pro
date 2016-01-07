@@ -32,7 +32,6 @@ CONFIG += sony
 # Optionnal library component
 video {
 	DEFINES += USE_VIDEO
-	message("video")
 	include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
 }
 sony {
