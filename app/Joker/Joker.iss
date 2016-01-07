@@ -7,7 +7,7 @@
 #define MyAppURL "http://www.phonations.com/"
 #define MyAppExeName "Joker.exe"
 
-#if !defined(PWD)
+#if !Defined(PWD)
 #define PWD "."
 #endif
 
