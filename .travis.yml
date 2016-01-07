@@ -89,6 +89,4 @@ deploy:
   file: ${RELEASED_PACKAGE_FILENAME}
   on:
     tags: true
-    all_branches: true
-    repo: Phonations/Joker
-    condition: ($JOB = BUILD_RELEASE_JOKER) && ($TRAVIS_OS_NAME = osx)
+    condition: $JOB = BUILD_RELEASE_JOKER && $TRAVIS_OS_NAME = osx
