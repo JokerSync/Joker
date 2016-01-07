@@ -48,6 +48,8 @@ build_script:
   - mingw32-make -j 8
   - iscc app/Joker/Joker.iss /DPWD=%CD% /O"."
   - dir
+  - dir release
+  - dir FFMPEG_DEV_PATH
 artifacts:
   - path: Joker_v*.exe
 deploy:
