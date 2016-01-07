@@ -29,7 +29,7 @@ CONFIG(release, debug|release) {
 
 	win32 {
 		if(exists($${_PRO_FILE_PWD_}/$$TARGET.iss)) {
-			installer.commands += echo "Running Innosetup on $$shell_path($${_PRO_FILE_PWD_}/$${TARGET}.iss)" &
+			installer.commands += echo "Running Innosetup on $${_PRO_FILE_PWD_}/$${TARGET}.iss" &
 			installer.commands += iscc $${_PRO_FILE_PWD_}/$${TARGET}.iss /DPWD=$$OUT_PWD &
 		}
 	}
