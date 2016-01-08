@@ -41,8 +41,8 @@ void PhGraphicText::draw()
 
 	_font->select();
 
-	if(_font->getHeight() == 0) {
-		// bad font initialization: displaying a rect
+	if((_content.length() == 0) || (_font->getHeight() == 0)) {
+		// empty string or bad font initialization: displaying a rect
 		glBegin(GL_QUADS);
 		{
 			glVertex3i(this->x(),      this->y(), this->z());
