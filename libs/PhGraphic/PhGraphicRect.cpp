@@ -13,10 +13,6 @@ PhGraphicRect::PhGraphicRect(int x, int y, int w, int h)
 {
 }
 
-PhGraphicRect::~PhGraphicRect()
-{
-}
-
 void PhGraphicRect::setSize(QSize size)
 {
 	this->setWidth(size.width());

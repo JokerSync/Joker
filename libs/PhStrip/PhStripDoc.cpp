@@ -143,6 +143,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 		for (int i = 0; i < roleList.length(); i++) {
 			QDomElement role = roleList.at(i).toElement();
 			PhPeople *people = new PhPeople(role.attribute("name"), role.attribute("color"));
+			_peoples.append(people);
 
 			//Currently using id as key instead of name
 			QString id = role.attribute("id");
@@ -152,14 +153,13 @@ bool PhStripDoc::importDetXFile(QString fileName)
 				return false;
 			}
 
+			peopleMap[id] = people;
+
 			// Reading picture
 			if(role.elementsByTagName("image").count() != 0) {
 				QDomElement image = role.elementsByTagName("image").at(0).toElement();
 				people->setPicture(image.text());
 			}
-
-			peopleMap[id] = people;
-			_peoples.append(people);
 		}
 	}
 

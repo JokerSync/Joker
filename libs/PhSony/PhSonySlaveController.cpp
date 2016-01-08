@@ -271,7 +271,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				for (int i = 0; i < count; i++)
 					dataOut[i] = 0;
 				sendCommandWithData(0x70 + count, 0x30, dataOut);
-				delete dataOut;
+				delete[] dataOut;
 				break;
 			}
 		case 0x36:

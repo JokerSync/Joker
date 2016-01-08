@@ -53,9 +53,6 @@ bool PhAudioInput::init(QString deviceName)
 		return false;
 	}
 
-	if(err != paNoError)
-		return false;
-
 	if(Pa_StartStream( _stream ) != paNoError)
 		return false;
 
