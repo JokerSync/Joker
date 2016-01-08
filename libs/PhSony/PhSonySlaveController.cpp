@@ -201,7 +201,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 					break;
 				}
 				unsigned int bcd = PhTimeCode::bcdFromTime(_clock.time(), tcType);
-				sendCommandWithData(0x74, cmd2, (unsigned char *)&bcd);
+				sendCommandWithData(0x74, cmd2, (unsigned char *)&bcd, 4);
 				break;
 			}
 		case 0x20:
@@ -252,7 +252,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 					status[3] = 0x80;
 				unsigned char start = dataIn[0] >> 4;
 				unsigned char count = dataIn[0] & 0xf;
-				sendCommandWithData(0x70+count, 0x20, status);
+				sendCommandWithData(0x70+count, 0x20, status, count);
 				break;
 			}
 		case 0x2e:
@@ -270,7 +270,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				unsigned char *dataOut = new unsigned char[count];
 				for (int i = 0; i < count; i++)
 					dataOut[i] = 0;
-				sendCommandWithData(0x70 + count, 0x30, dataOut);
+				sendCommandWithData(0x70 + count, 0x30, dataOut, count);
 				delete[] dataOut;
 				break;
 			}
