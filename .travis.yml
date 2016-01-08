@@ -1,5 +1,5 @@
 os:
-  #  - linux
+  - linux
   - osx
 language: cpp
 compiler: clang
@@ -10,14 +10,13 @@ env:
   - QTVER=532
   - secure: YlyaETwveWXOT1wpOz68Vp8Pj1zZ5u44ppOabNw/Xe4M8ZHdPy3QkmyB7wTeUgNjlHzkW23aOOzTk8bm5wxS1iQRxHsQ/DnZd0TcULPuTY9+yO2L/Wkwk6quFBqGlkT8h2v4xkRDyshG8OxF6eqeeq5Cflt/LOhx+MnJqse9EzQ=
   matrix:
-#  - JOB=UNCRUSTIFY
-#  - JOB=DOXYGEN
-#  - JOB=BUILD_SPEC_BANDIT
+  - JOB=UNCRUSTIFY
+  - JOB=DOXYGEN
+  - JOB=BUILD_SPEC_BANDIT
   - JOB=BUILD_RELEASE_JOKER
-#  - JOB=BUILD_RELEASE_LTCTOOL
-#  - JOB=BUILD_RELEASE_MIDITOOL
-#  - JOB=BUILD_RELEASE_ALL_TESTS
-#  - JOB=BUILD_RELEASE_FORMTEST
+  - JOB=BUILD_RELEASE_LTCTOOL
+  - JOB=BUILD_RELEASE_MIDITOOL
+  - JOB=BUILD_RELEASE_ALL_TESTS
 matrix:
   exclude:
     - os: linux
@@ -64,7 +63,6 @@ script:
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
-- if [[ "$JOB" == BUILD_RELEASE_FORMTEST ]]; then qmake tests/FormTest/FormTest.pro; fi
 - if [[ "$JOB" == BUILD_* ]]; then make; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then make installer; fi
@@ -104,3 +102,4 @@ addons:
     build_command_prepend: qmake app/Joker/Joker.pro
     build_command: make -j 4
     branch_pattern: coverity
+    build_script_url: https://raw.githubusercontent.com/Phonations/Joker/coverity/scripts/coverity.sh
