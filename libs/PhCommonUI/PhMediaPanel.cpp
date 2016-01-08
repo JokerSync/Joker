@@ -16,7 +16,8 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	ui(new Ui::PhMediaPanel),
 	_clock(NULL),
 	_timeIn(0),
-	_length(0)
+	_length(0),
+	_playing(false)
 {
 	ui->setupUi(this);
 
