@@ -125,7 +125,7 @@ QDebug PhDebug::error(const char *fileName, int lineNumber, const char *function
 	return QMessageLogger(fileName, lineNumber, functionName).critical();
 }
 
-PhDebug::PhDebug() : _currentLogLevel(0)
+PhDebug::PhDebug() : _currentLogLevel(0), _textLog(NULL)
 {
 	qInstallMessageHandler(this->messageOutput);
 
@@ -143,17 +143,20 @@ PhDebug::PhDebug() : _currentLogLevel(0)
 	}
 	_logFileName = QDir(logDirPath).absoluteFilePath(APP_NAME + QString(".log"));
 	QFile * f = new QFile(_logFileName);
-	f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
-	f->write("\n\n");
-	_textLog = new QTextStream(f);
+	if(f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
+		f->write("\n\n");
+		_textLog = new QTextStream(f);
 
-	_displayDate = false;
-	_displayTime = true;
-	_displayFunctionName = true;
-	_displayFileName = true;
-	_displayLine = true;
-	_showConsole = true;
-	_logMask = 1;
+		_displayDate = false;
+		_displayTime = true;
+		_displayFunctionName = true;
+		_displayFileName = true;
+		_displayLine = true;
+		_showConsole = true;
+		_logMask = 1;
+	}
+	else
+		delete f;
 }
 
 void PhDebug::setLogMask(int mask)

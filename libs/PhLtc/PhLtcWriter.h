@@ -45,8 +45,6 @@ private:
 	PhTimeCodeType _tcType;
 	PhClock _clock;
 	LTCEncoder *_encoder;
-	SMPTETimecode _st;
-
 };
 
 #endif // PHLTCWRITER_H
