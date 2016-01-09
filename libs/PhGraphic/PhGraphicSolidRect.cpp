@@ -11,11 +11,6 @@ PhGraphicSolidRect::PhGraphicSolidRect(int x, int y, int w, int h) :
 {
 }
 
-PhGraphicSolidRect::~PhGraphicSolidRect()
-{
-}
-
-
 void PhGraphicSolidRect::draw()
 {
 	PhGraphicObject::draw();

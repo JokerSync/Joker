@@ -146,17 +146,17 @@ PhDebug::PhDebug() : _currentLogLevel(0), _textLog(NULL)
 	if(f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
 		f->write("\n\n");
 		_textLog = new QTextStream(f);
-
-		_displayDate = false;
-		_displayTime = true;
-		_displayFunctionName = true;
-		_displayFileName = true;
-		_displayLine = true;
-		_showConsole = true;
-		_logMask = 1;
 	}
 	else
 		delete f;
+
+	_displayDate = false;
+	_displayTime = true;
+	_displayFunctionName = true;
+	_displayFileName = true;
+	_displayLine = true;
+	_showConsole = true;
+	_logMask = 1;
 }
 
 void PhDebug::setLogMask(int mask)
