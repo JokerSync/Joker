@@ -68,7 +68,6 @@ public:
 
 	// PhGraphicSettings
 	PH_SETTING_BOOL(setDisplayInfo, displayInfo)
-	PH_SETTING_STRING2(setFontFile, fontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
 	PH_SETTING_BOOL(setResetInfo, resetInfo)
 
 	// PhGraphicStripSettings :
@@ -78,7 +77,7 @@ public:
 	PH_SETTING_STRING2(setBackgroundImageLight, backgroundImageLight, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png")
 	PH_SETTING_STRING2(setBackgroundImageDark, backgroundImageDark, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png")
 	PH_SETTING_STRING2(setHudFontFile, hudFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Helvetica.ttf")
-	PH_SETTING_STRING2(setTextFontFile, textFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
+	PH_SETTING_STRING2(setTextFontFile, textFontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella.ttf")
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 2)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
