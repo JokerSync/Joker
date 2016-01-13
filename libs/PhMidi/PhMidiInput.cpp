@@ -29,7 +29,7 @@ QStringList PhMidiInput::inputList()
 	try {
 		QScopedPointer<RtMidiIn> midiIn(new RtMidiIn());
 		for(unsigned int i = 0; i < midiIn->getPortCount(); i++)
-			result.append(QString::fromStdString(midiIn->getPortName(i)));
+			result.append(convertName(midiIn->getPortName(i)));
 	}
 	catch(RtMidiError &error) {
 		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
@@ -45,7 +45,7 @@ bool PhMidiInput::open(QString inputPortName)
 		_midiIn = new RtMidiIn();
 		int portIndex = -1;
 		for(unsigned int i = 0; i < _midiIn->getPortCount(); i++) {
-			QString portName = QString::fromStdString(_midiIn->getPortName(i));
+			QString portName = convertName(_midiIn->getPortName(i));
 			PHDEBUG << "-" << portName;
 			if(inputPortName == portName) {
 				portIndex = i;

@@ -107,8 +107,10 @@ void MidiToolWindow::on_writeMtcCheckBox_clicked(bool checked)
 			on_writeMtcCheckBox_clicked(false);
 		}
 	}
-	else
+	else {
+		_mtcWriter.clock()->setRate(0.0);
 		_mtcWriter.close();
+	}
 }
 
 void MidiToolWindow::on_readMtcCheckBox_clicked(bool checked)

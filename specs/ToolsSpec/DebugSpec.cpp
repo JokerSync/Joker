@@ -95,8 +95,8 @@ go_bandit([](){
 			int testLogLevel = 31;
 			PhDebug::setLogMask(1 << testLogLevel);
 			AssertThat(PhDebug::logMask(), Equals(1 << testLogLevel));
-			PHDBG(0) << "it should not be displayed when default log mask is " + testLogLevel;
-			PHDBG(testLogLevel) << "it should be displayed when default log mask is " + testLogLevel;
+			PHDBG(0) << "it should not be displayed when default log mask is" << testLogLevel;
+			PHDBG(testLogLevel) << "it should be displayed when default log mask is" << testLogLevel;
 
 			QStringList lines = QString::fromStdString(buffer.str()).split("\n");
 			AssertThat(lines.count(), Equals(7));
@@ -106,7 +106,7 @@ go_bandit([](){
 			AssertThat(lines[2].toStdString(), Equals("shown because of showConsole(true)"));
 			AssertThat(lines[3].toStdString(), Equals("shown because enable()"));
 			AssertThat(lines[4].toStdString(), Equals("it should be displayed when default log mask is 1"));
-			AssertThat(lines[5].toStdString(), Equals("it should be displayed when default log mask is " + testLogLevel));
+			AssertThat(lines[5].toStdString(), Equals("it should be displayed when default log mask is " + QString::number(testLogLevel).toStdString()));
 		});
 
 		it("display_in_the_error", []() {
