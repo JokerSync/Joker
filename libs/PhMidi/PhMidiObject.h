@@ -42,6 +42,11 @@ public:
 	 */
 	static bool canUseVirtualPorts();
 
+	/**
+	 * @brief Convert the midi port name in UTF8
+	 * @param name The midi port name
+	 * @return A UTF8 QString
+	 */
 	static QString convertName(std::string name);
 
 protected:
