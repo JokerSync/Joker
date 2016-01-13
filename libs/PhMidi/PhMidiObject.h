@@ -42,6 +42,8 @@ public:
 	 */
 	static bool canUseVirtualPorts();
 
+	static QString convertName(std::string name);
+
 protected:
 	/**
 	 * @brief Compute the time code type from a MTC data byte.
