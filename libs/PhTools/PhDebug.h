@@ -7,7 +7,9 @@
 #ifndef PHDEBUG_H
 #define PHDEBUG_H
 
-#include "PhTools/PhGeneric.h"
+#include <QDebug>
+#include <QTextStream>
+#include <QMutex>
 
 /** PHERR allow to log error */
 #define PHERR PhDebug::error(__FILE__, __LINE__, __FUNCTION__)
@@ -165,13 +167,5 @@ private:
 	QMutex _mutex;
 
 };
-
-/**
- * @brief Gives human-readable event type information
- * @param stream The debug stream
- * @param event The event
- * @return The new debug stream
- */
-QDebug operator <<(QDebug stream, const QEvent * event);
 
 #endif // PHDEBUG_H

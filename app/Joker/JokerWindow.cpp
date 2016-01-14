@@ -4,6 +4,10 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QCloseEvent>
+#include <QMessageBox>
+#include <QFileDialog>
+
 #include "PhTools/PhDebug.h"
 
 #include "PhCommonUI/PhTimeCodeDialog.h"
@@ -24,12 +28,21 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui(new Ui::JokerWindow),
 	_settings(settings),
 	_strip(settings),
-	_videoEngine(settings),
 	_doc(_strip.doc()),
+#ifdef USE_VIDEO
+	_videoEngine(settings),
+#endif
+	_synchronizer(settings),
+#ifdef USE_SONY
 	_sonySlave(settings),
+#endif
+#ifdef USE_LTC
 	_ltcReader(settings),
+#endif
+#ifdef USE_MIDI
 	_mtcReader(PhTimeCodeType25),
 	_mtcWriter(PhTimeCodeType25),
+#endif
 	_mediaPanelState(MediaPanelHidden),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
@@ -43,19 +56,29 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
 	ui->actionAbout->setMenuRole(QAction::AboutRole);
 
-	connect(ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
+	connect(ui->actionFullscreen, &QAction::triggered, this, &JokerWindow::toggleFullScreen);
 
 	ui->videoStripView->setGraphicSettings(_settings);
 
-	// Initialize the property dialog
-	_propertyDialog.setDoc(_doc);
-	_propertyDialog.setVideoEngine(&_videoEngine);
-
 	// Initialize the synchronizer
 	_synchronizer.setStripClock(_strip.clock());
-	_synchronizer.setVideoClock(_videoEngine.clock());
 
+	// Initialize the property dialog
+	_propertyDialog.setDoc(_doc);
+#ifdef USE_VIDEO
+	_propertyDialog.setVideoEngine(&_videoEngine);
+	_synchronizer.setVideoClock(_videoEngine.clock());
+#else
+	ui->actionOpen_Video->setEnabled(false);
+	ui->actionClose_video->setEnabled(false);
+	ui->actionDeinterlace_video->setEnabled(false);
+	ui->actionForce_16_9_ratio->setEnabled(false);
+	ui->actionUse_native_video_size->setEnabled(false);
+#endif
+
+#ifdef USE_SONY
 	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::onVideoSync);
+#endif
 
 	setupSyncProtocol();
 
@@ -104,6 +127,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	// This is for the drag and drop feature
 	setAcceptDrops(true);
 
+	ui->actionLoop->setChecked(_settings->syncLooping());
+
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 
 	ui->actionHide_the_rythmo->setChecked(_settings->hideStrip());
@@ -148,14 +173,21 @@ void JokerWindow::setupSyncProtocol()
 	QString mtcPortName;
 
 	// Disable old protocol
+#ifdef USE_SONY
 	_sonySlave.close();
+#endif
+#ifdef USE_LTC
 	_ltcReader.close();
+#endif
+#ifdef USE_MIDI
 	_mtcReader.close();
 	_mtcWriter.close();
+#endif
 
 	PhSynchronizer::SyncType type = (PhSynchronizer::SyncType)_settings->synchroProtocol();
 
 	switch(type) {
+#ifdef USE_SONY
 	case PhSynchronizer::Sony:
 		// Initialize the sony module
 		if(_sonySlave.open()) {
@@ -167,7 +199,9 @@ void JokerWindow::setupSyncProtocol()
 			QMessageBox::critical(this, tr("Error"), tr("Unable to connect to USB422v module"));
 		}
 		break;
+#endif
 	case PhSynchronizer::LTC:
+#ifdef USE_LTC
 		if(_ltcReader.init(_settings->ltcInputPort()))
 			clock = _ltcReader.clock();
 		else {
@@ -175,6 +209,8 @@ void JokerWindow::setupSyncProtocol()
 			type = PhSynchronizer::NoSync;
 		}
 		break;
+#endif
+#ifdef USE_MIDI
 	case PhSynchronizer::MTC:
 		if (_settings->mtcInputUseExistingPort()) {
 			mtcPortName = _settings->mtcInputPort();
@@ -189,16 +225,21 @@ void JokerWindow::setupSyncProtocol()
 			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to open %0 midi port")).arg(mtcPortName));
 			type = PhSynchronizer::NoSync;
 		}
-	case PhSynchronizer::NoSync:
+		break;
+#endif
+	default:
+		type = PhSynchronizer::NoSync;
 		break;
 	}
 
+#ifdef USE_MIDI
 	if(_settings->sendMmcMessage()) {
 		if(!_mtcWriter.open(_settings->mmcOutputPort())) {
 			QMessageBox::critical(this, tr("Error"), QString(tr("Unable to open %0 midi port")).arg(_settings->mmcOutputPort()));
 			_settings->setSendMmcMessage(false);
 		}
 	}
+#endif
 
 	_synchronizer.setSyncClock(clock, type);
 
@@ -212,7 +253,11 @@ bool JokerWindow::openDocument(const QString &fileName)
 {
 	QFileInfo info(fileName);
 	if(_settings->videoFileType().contains(info.suffix().toLower())) {
+#ifdef USE_VIDEO
 		return openVideoFile(fileName);
+#else
+		return false;
+#endif
 	}
 
 	/// Clear the selected people name list (except for the first document).
@@ -229,10 +274,9 @@ bool JokerWindow::openDocument(const QString &fileName)
 	PhEditableDocumentWindow::openDocument(fileName);
 	_watcher.addPath(_doc->filePath());
 
+#ifdef USE_VIDEO
 	/// - Load the deinterlace settings
-	_videoEngine.setDeinterlace(_doc->videoDeinterlace());
-	ui->actionDeinterlace_video->setChecked(_doc->videoDeinterlace());
-
+	on_actionDeinterlace_video_triggered(_doc->videoDeinterlace());
 	/// - Open the corresponding video file if it exists.
 	if(openVideoFile(_doc->videoFilePath())) {
 		_videoEngine.setTimeIn(_doc->videoTimeIn());
@@ -240,6 +284,7 @@ bool JokerWindow::openDocument(const QString &fileName)
 	}
 	else
 		_videoEngine.close();
+#endif
 
 	/// - Set the video aspect ratio.
 	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
@@ -301,6 +346,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				PHDEBUG << "start resizing strip";
 				_resizingStrip = true;
 			}
+			break;
 		}
 	case QEvent::KeyPress:
 		{
@@ -308,6 +354,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			if(keyEvent->key() == Qt::Key_Space) {
 				on_actionPlay_pause_triggered();
 			}
+			break;
 		}
 	default:
 		break;
@@ -436,6 +483,7 @@ void JokerWindow::on_action3_triggered()
 
 void JokerWindow::on_actionOpen_Video_triggered()
 {
+#ifdef USE_VIDEO
 	hideMediaPanel();
 
 	QString lastFolder = _settings->lastVideoFolder();
@@ -452,8 +500,10 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	}
 
 	fadeInMediaPanel();
+#endif
 }
 
+#ifdef USE_VIDEO
 bool JokerWindow::openVideoFile(QString videoFile)
 {
 	QFileInfo lastFileInfo(_doc->videoFilePath());
@@ -477,7 +527,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 
 		if(videoFile != _doc->videoFilePath()) {
 			_doc->setVideoFilePath(videoFile);
-			_doc->setVideoTimeIn(videoTimeIn, _videoEngine.timeCodeType());
+			_doc->setVideoTimeIn(videoTimeIn, timeCodeType());
 			_doc->setModified(true);
 		}
 
@@ -490,6 +540,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	}
 	return false;
 }
+#endif
 
 void JokerWindow::timeCounter(PhTime elapsedTime)
 {
@@ -508,19 +559,19 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 {
 	hideMediaPanel();
 	setCurrentRate(0);
-	PhTime time;
+	PhTime time = _synchronizer.videoClock()->time();
+
+#ifdef USE_VIDEO
 	if(_synchronizer.videoClock()->time() < _videoEngine.timeIn())
 		time = _videoEngine.timeIn();
 	else if(_synchronizer.videoClock()->time() > _videoEngine.timeIn() + _videoEngine.length())
 		time = _videoEngine.timeOut();
-	else
-		time = _synchronizer.videoClock()->time();
 
 	PhTimeCodeDialog dlg(_doc->videoTimeCodeType(), time);
 	if(dlg.exec() == QDialog::Accepted) {
-		PhTime timeStamp;
+		PhTime timeStamp = 0;
 		if(_synchronizer.videoClock()->time() > _videoEngine.timeIn() + _videoEngine.length())
-			timeStamp = dlg.time() - (_videoEngine.length() - PhTimeCode::timePerFrame(_videoEngine.timeCodeType()));
+			timeStamp = dlg.time() - (_videoEngine.length() - PhTimeCode::timePerFrame(timeCodeType()));
 		else if (_synchronizer.videoClock()->time() < _videoEngine.timeIn())
 			timeStamp =  dlg.time();
 		else
@@ -528,10 +579,11 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 
 		_videoEngine.setTimeIn(timeStamp);
 		setCurrentTime(dlg.time());
-		_doc->setVideoTimeIn(timeStamp, _videoEngine.timeCodeType());
+		_doc->setVideoTimeIn(timeStamp, timeCodeType());
 		_mediaPanel.setTimeIn(timeStamp);
 		_doc->setModified(true);
 	}
+#endif
 
 	fadeInMediaPanel();
 }
@@ -553,22 +605,31 @@ void JokerWindow::on_actionPreferences_triggered()
 {
 	hideMediaPanel();
 	int oldSynchroProtocol = _settings->synchroProtocol();
+#ifdef USE_LTC
 	QString oldLtcInputPort = _settings->ltcInputPort();
+#endif // USE_LTC
+#ifdef USE_MIDI
 	QString oldMtcInputPort = _settings->mtcInputPort();
 	QString oldMtcVirtualInputPort = _settings->mtcVirtualInputPort();
 	bool oldMtcInputUseExistingPort = _settings->mtcInputUseExistingPort();
 	bool oldSendMmcMessage = _settings->sendMmcMessage();
 	QString oldMmcOutputPort = _settings->mmcOutputPort();
+#endif // USE_MIDI
 
 	PreferencesDialog dlg(_settings);
 	if(dlg.exec() == QDialog::Accepted) {
 		if((oldSynchroProtocol != _settings->synchroProtocol())
+#ifdef USE_LTC
 		   || (oldLtcInputPort  != _settings->ltcInputPort())
+#endif // USE_LTC
+#ifdef USE_MIDI
 		   || (oldMtcInputPort != _settings->mtcInputPort())
 		   || (oldMtcVirtualInputPort != _settings->mtcVirtualInputPort())
 		   || (oldMtcInputUseExistingPort != _settings->mtcInputUseExistingPort())
 		   || (oldSendMmcMessage != _settings->sendMmcMessage())
-		   || (oldMmcOutputPort != _settings->mmcOutputPort())) {
+		   || (oldMmcOutputPort != _settings->mmcOutputPort())
+#endif // USE_MIDI
+		   ) {
 			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
 			setupSyncProtocol();
 		}
@@ -642,7 +703,7 @@ void JokerWindow::on_actionTimecode_triggered()
 {
 	hideMediaPanel();
 
-	PhTimeCodeDialog dlg(_videoEngine.timeCodeType(), currentTime());
+	PhTimeCodeDialog dlg(timeCodeType(), currentTime());
 	if(dlg.exec() == QDialog::Accepted)
 		setCurrentTime(dlg.time());
 
@@ -695,9 +756,9 @@ void JokerWindow::on_actionSave_triggered()
 {
 	QString fileName = _settings->currentDocument();
 	QFileInfo info(fileName);
-	if(!info.exists() || (info.suffix() != "joker"))
+	if(!info.exists() || (info.suffix() != "detx"))
 		on_actionSave_as_triggered();
-	else if(_doc->saveStripFile(fileName, currentTime()))
+	else if(_doc->exportDetXFile(fileName, currentTime()))
 		_doc->setModified(false);
 	else
 		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
@@ -714,13 +775,13 @@ void JokerWindow::on_actionSave_as_triggered()
 		fileName = lastFolder;
 	else {
 		QFileInfo info(fileName);
-		if(info.suffix() != "joker")
-			fileName = lastFolder + "/" + info.completeBaseName() + ".joker";
+		if(info.suffix() != "detx")
+			fileName = lastFolder + "/" + info.completeBaseName() + ".detx";
 	}
 
-	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.joker");
+	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.detx");
 	if(fileName != "") {
-		if(_doc->saveStripFile(fileName, currentTime())) {
+		if(_doc->exportDetXFile(fileName, currentTime())) {
 			_doc->setModified(false);
 			PhEditableDocumentWindow::saveDocument(fileName);
 		}
@@ -763,7 +824,7 @@ void JokerWindow::on_actionDisplay_feet_triggered(bool checked)
 
 void JokerWindow::on_actionSet_first_foot_timecode_triggered()
 {
-	PhTimeCodeType tcType = _videoEngine.timeCodeType();
+	PhTimeCodeType tcType = timeCodeType();
 	PhTimeCodeDialog dlg(tcType, _settings->firstFootTime(), this);
 	if(dlg.exec())
 		_settings->setFirstFootTime(dlg.time());
@@ -773,11 +834,14 @@ void JokerWindow::on_actionNew_triggered()
 {
 	_doc->reset();
 	on_actionClose_video_triggered();
+	this->resetDocument();
 }
 
 void JokerWindow::on_actionClose_video_triggered()
 {
+#ifdef USE_VIDEO
 	_videoEngine.close();
+#endif
 }
 
 void JokerWindow::on_actionSend_feedback_triggered()
@@ -790,11 +854,13 @@ void JokerWindow::on_actionSend_feedback_triggered()
 
 void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
 {
+#ifdef USE_VIDEO
 	_videoEngine.setDeinterlace(checked);
 	if(checked != _doc->videoDeinterlace()) {
 		_doc->setVideoDeinterlace(checked);
 		_doc->setModified(true);
 	}
+#endif
 }
 
 void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
@@ -804,7 +870,11 @@ void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
 
 void JokerWindow::onPaint(int width, int height)
 {
+#ifdef USE_VIDEO
 	PhClock *clock = _videoEngine.clock();
+#else
+	PhClock *clock = _strip.clock();
+#endif
 	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
 	PhTime clockTime = clock->time() + delay;
 
@@ -815,14 +885,16 @@ void JokerWindow::onPaint(int width, int height)
 	int stripHeight = height * stripHeightRatio;
 	int videoHeight = height - stripHeight;
 	int videoWidth = videoHeight * 16 / 9;
+#ifdef USE_VIDEO
 	if(!_doc->forceRatio169() && (_videoEngine.height() > 0))
 		videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
-
+#endif
 	int videoX = 0;
 	// Center video if no information panel with next text
 	if(!_settings->displayNextText())
 		videoX = (width - videoWidth) / 2;
 
+#ifdef USE_VIDEO
 	// Display the video
 	if((videoHeight > 0)) {
 		if(_videoEngine.height() > 0) {
@@ -856,6 +928,7 @@ void JokerWindow::onPaint(int width, int height)
 			_videoLogo.draw();
 		}
 	}
+#endif
 
 	// Get the selected people list
 	QList<PhPeople*> selectedPeoples;
@@ -896,7 +969,7 @@ void JokerWindow::onPaint(int width, int height)
 			PhGraphicText tcText(_strip.getHUDFont());
 			tcText.setColor(infoColor);
 			tcText.setRect(x + 4, y, tcWidth, tcHeight);
-			tcText.setContent(PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
+			tcText.setContent(PhTimeCode::stringFromTime(clockTime, timeCodeType()));
 			tcText.draw();
 
 			y += tcHeight;
@@ -960,7 +1033,7 @@ void JokerWindow::onPaint(int width, int height)
 			int nextTcY = y + (boxHeight - nextTcHeight) / 2;
 			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
 
-			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, _videoEngine.timeCodeType()));
+			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, timeCodeType()));
 			nextTCText.draw();
 
 			y += boxHeight;
@@ -1021,14 +1094,17 @@ void JokerWindow::on_actionDisplay_the_vertical_scale_triggered(bool checked)
 void JokerWindow::setCurrentTime(PhTime time)
 {
 	_strip.clock()->setTime(time);
+#ifdef USE_MIDI
 	if(_settings->sendMmcMessage())
 		_mtcWriter.sendMMCGotoFromTime(time);
+#endif
 
 }
 
 void JokerWindow::setCurrentRate(PhRate rate)
 {
 	_strip.clock()->setRate(rate);
+#ifdef USE_MIDI
 	if(_settings->sendMmcMessage()) {
 		_mtcWriter.sendMMCGotoFromTime(currentTime());
 		if(rate == 0.0f)
@@ -1036,6 +1112,7 @@ void JokerWindow::setCurrentRate(PhRate rate)
 		else if(rate == 1.0f)
 			_mtcWriter.sendMMCPlay();
 	}
+#endif // USE_MIDI
 }
 
 PhTime JokerWindow::currentTime()
@@ -1069,5 +1146,33 @@ void JokerWindow::on_actionHide_selected_peoples_triggered(bool checked)
 
 void JokerWindow::on_actionUse_native_video_size_triggered(bool checked)
 {
+#ifdef USE_VIDEO
 	_settings->setUseNativeVideoSize(checked);
+#endif
+}
+
+PhTimeCodeType JokerWindow::timeCodeType()
+{
+#ifdef USE_VIDEO
+	return _videoEngine.timeCodeType();
+#else
+#warning /// @todo Are we sure to use default 25?
+	return PhTimeCodeType25;
+#endif
+
+}
+
+void JokerWindow::on_actionSet_TC_in_triggered()
+{
+	_settings->setSyncLoopTimeIn(_synchronizer.time());
+}
+
+void JokerWindow::on_actionSet_TC_out_triggered()
+{
+	_settings->setSyncLoopTimeOut(_synchronizer.time());
+}
+
+void JokerWindow::on_actionLoop_triggered(bool checked)
+{
+	_settings->setSyncLooping(checked);
 }

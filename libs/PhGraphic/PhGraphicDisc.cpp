@@ -1,4 +1,4 @@
-#include "PhTools/PhGeneric.h"
+#include <qmath.h>
 
 #include "PhGraphicDisc.h"
 

@@ -3,6 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QThread>
+
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 #include "PhGraphic/PhGraphicView.h"
@@ -52,7 +54,22 @@ go_bandit([](){
 		});
 
 		it("open_video", [&](){
+			AssertThat(engine->codecName().toStdString(), Equals(""));
+			AssertThat(engine->length(), Equals(0));
+			AssertThat(engine->width(), Equals(0));
+			AssertThat(engine->height(), Equals(0));
+
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+            AssertThat(engine->codecName().toStdString(), Equals("BMP (Windows and OS/2 bitmap)"));
+#else
+            AssertThat(engine->codecName().toStdString(), Equals("bmp"));
+#endif
+			AssertThat(engine->bilinearFiltering(), IsFalse());
+			AssertThat(engine->length(), Equals(192000));
+			AssertThat(engine->width(), Equals(64));
+			AssertThat(engine->height(), Equals(64));
 
 			QThread::msleep(FRAME_WAIT_TIME);
 		});
@@ -87,6 +104,21 @@ go_bandit([](){
 
 			QThread::msleep(FRAME_WAIT_TIME);
 			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_075.bmp"), IsTrue());
+
+			engine->clock()->setFrame(199, PhTimeCodeType25);
+
+			QThread::msleep(FRAME_WAIT_TIME);
+			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_199.bmp"), IsTrue());
+
+			engine->clock()->setFrame(200, PhTimeCodeType25);
+
+			QThread::msleep(FRAME_WAIT_TIME);
+			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_199.bmp"), IsTrue());
+
+			engine->clock()->setFrame(-1, PhTimeCodeType25);
+
+			QThread::msleep(FRAME_WAIT_TIME);
+			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
 		});
 
 		it("go_to_02", [&](){
@@ -216,6 +248,19 @@ go_bandit([](){
 			settings->setUseNativeVideoSize(true);
 
 			AssertThat(compareImage(view->renderPixmap(128, 128).toImage(), QImage("interlace_000_native.bmp"), "interlace_000_native"), IsTrue());
+		});
+
+		it("handles timestamp", [&](){
+			engine->open("interlace_%03d.bmp");
+			engine->setTimeIn(240000);
+			QThread::msleep(FRAME_WAIT_TIME);
+
+			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
+			engine->clock()->setTime(240000 + 24000);
+			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_025.bmp"), IsTrue());
+			engine->clock()->setTime(0);
+			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
+			AssertThat(engine->clock()->time(), Equals(0));
 		});
 
 		//	it("findMatch(QImage source", [&](){

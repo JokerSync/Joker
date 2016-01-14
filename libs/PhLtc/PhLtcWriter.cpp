@@ -56,13 +56,14 @@ int PhLtcWriter::processAudio(const void *, void *outputBuffer, unsigned long)
 {
 	unsigned int hhmmssff[4];
 	PhTimeCode::ComputeHhMmSsFfFromTime(hhmmssff, _clock.time(), _tcType);
-	_st.hours = hhmmssff[0];
-	_st.mins = hhmmssff[1];
-	_st.secs = hhmmssff[2];
-	_st.frame = hhmmssff[3];
-	ltc_encoder_set_timecode(_encoder, &_st);
+	SMPTETimecode st;
+	st.hours = hhmmssff[0];
+	st.mins = hhmmssff[1];
+	st.secs = hhmmssff[2];
+	st.frame = hhmmssff[3];
+	ltc_encoder_set_timecode(_encoder, &st);
 
-	PHDBG(21) << _st.hours << _st.mins << _st.secs << _st.frame;
+	PHDBG(21) << st.hours << st.mins << st.secs << st.frame;
 
 	int len;
 	ltcsnd_sample_t *buf;

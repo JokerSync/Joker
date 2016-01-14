@@ -7,9 +7,8 @@
 #ifndef PHSONYCONTROLLER_H
 #define PHSONYCONTROLLER_H
 
+#include <QThread>
 #include <QSerialPort>
-
-#include "PhTools/PhGeneric.h"
 
 #include "PhSync/PhClock.h"
 
@@ -171,8 +170,9 @@ protected:
 	 * @param cmd1 First command descriptor.
 	 * @param cmd2 Second command descriptor.
 	 * @param data Data for the command.
+	 * @param dataCount Size of the data
 	 */
-	void sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data);
+	void sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data, unsigned char dataCount);
 
 	/**
 	 * @brief Send a sony protocol command with an argument list of unsigned char for the data.

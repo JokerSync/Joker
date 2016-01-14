@@ -7,14 +7,24 @@
 #define MyAppURL "http://www.phonations.com/"
 #define MyAppExeName "Joker.exe"
 
-#define MyAppSrc "release\" + MyAppExeName
+#if !Defined(PWD)
+#define PWD "."
+#endif
+
+#define MyAppSrc PWD + "\release\" + MyAppExeName
+#pragma message MyAppSrc
 #if !FileExists(MyAppSrc)
 #error "Unable to find MyAppSrc"
 #endif
 
-#define FileVerStr GetFileVersion(MyAppSrc)
-#define StripBuild(str VerStr) Copy(VerStr, 1, RPos(".", VerStr)-1)
-#define MyAppVerStr StripBuild(FileVerStr)
+#define AddPaddingZero(n) \
+  ((Len(Str(n)) == 1) ? "0" : "") + Str(n)
+
+#define ExtractVersion(str FileName) \
+  ParseVersion(FileName,Local[1],Local[2],Local[3],Local[4]), \
+  AddPaddingZero(Local[1]) + "." + AddPaddingZero(Local[2]) + "." + AddPaddingZero(Local[3])
+
+#define MyAppVerStr ExtractVersion(MyAppSrc)
 #define MyAppVerName MyAppName + " v" + MyAppVerStr
 
 #define MyOutputDir GetEnv('JOKER_RELEASE_PATH')
@@ -37,10 +47,9 @@ DefaultDirName={pf}\{#MyAppName}
 DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile="LICENSE.TXT"
+LicenseFile="..\..\LICENSE.TXT"
 OutputDir={#MyOutputDir}
-OutputBaseFilename={#MyAppName}Setup_v{#MyAppVerStr}
-;OutputBaseFilename={#MyAppName}Setup.exe
+OutputBaseFilename={#MyAppName}_v{#MyAppVerStr}
 Compression=lzma
 SolidCompression=yes
 
@@ -62,27 +71,27 @@ Source: "{#QtDir}\bin\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\bin\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\icuin52.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\icuuc52.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QtDir}\bin\icuin53.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QtDir}\bin\icuuc53.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\icudt52.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#QtDir}\bin\icudt53.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#QtDir}\plugins\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion
 
-Source: "release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppSrc}"; DestDir: "{app}"; Flags: ignoreversion
 ; dlls (PortAudio, SDL, etc.)
-Source: "release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; Qt dlls (windeployqt needs to be run first)
-Source: "release\accessible\*.dll"; DestDir: "{app}\accessible"; Flags: ignoreversion
-Source: "release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
-Source: "release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
-Source: "release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
-Source: "release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
+;Source: "{#PWD}\release\accessible\*.dll"; DestDir: "{app}\accessible"; Flags: ignoreversion
+Source: "{#PWD}\release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
+Source: "{#PWD}\release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
+Source: "{#PWD}\release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
+Source: "{#PWD}\release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
 ; translations
-Source: "release\*.qm"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\release\*.qm"; DestDir: "{app}"; Flags: ignoreversion
 ; images
-Source: "release\*.png"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\release\*.png"; DestDir: "{app}"; Flags: ignoreversion
 ; fonts
-Source: "release\*.ttf"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#PWD}\release\*.ttf"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

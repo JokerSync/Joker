@@ -4,9 +4,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhFile.h"
 #include "PhTools/PhDebug.h"
-#include "PhCommonUI/PhUI.h"
 #include "PhGraphic/PhGraphicText.h"
 #include "PhGraphic/PhGraphicDisc.h"
 #include "PhGraphic/PhGraphicDashedLine.h"
@@ -111,7 +109,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 	//PHDEBUG << "time " << _clock.time() << " \trate " << _clock.rate();
 
 	if(height > 0) {
-		int timePerPixel = _settings->horizontalTimePerPixel();
+		PhTime timePerPixel = (PhTime)_settings->horizontalTimePerPixel();
 		_textFont.setBoldness(_settings->textBoldness());
 		_textFont.setFontFile(_settings->textFontFile());
 
@@ -196,7 +194,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			if(invertedColor)
 				footColor = Qt::white;
 
-			int width = 1000 / timePerPixel;
+			int width = 250 / timePerPixel;
 
 			footRect.setColor(footColor);
 			footRect.setWidth(width);
@@ -214,7 +212,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			footText.setHeight(height / 2);
 			footText.setZ(0);
 
-
 			while (footTime < stripTimeOut + timeBetweenTwoFeet) {
 				counter++;
 				int x = footTime / timePerPixel - offset;
@@ -224,7 +221,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 
 				QString text = QString::number(feetNumber);
 				footText.setContent(text);
-				int textWidth = _hudFont.getNominalWidth(text);
+				int textWidth = _hudFont.getNominalWidth(text) / 3;
 				footText.setWidth(textWidth);
 				footText.setX(x - textWidth / 2);
 				footText.draw();
@@ -248,7 +245,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		QMap<float, PhStripText * > lastTextList;
 
 
-		int verticalTimePerPixel = _settings->verticalTimePerPixel();
+		PhTime verticalTimePerPixel = (PhTime)_settings->verticalTimePerPixel();
 		bool displayNextText = _settings->displayNextText();
 		PhTime maxTimeIn = stripTimeOut;
 
@@ -264,7 +261,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			QMap<PhTime, PhStripText*> futureSelectedText;
 			PhTime maxTimeOut = clockTime + (y - nextTextY) * verticalTimePerPixel;
 			foreach (PhPeople *people, selectedPeoples) {
-				PhStripText *nextText = _doc.nextText({people}, maxTimeOut);
+				PhStripText *nextText = _doc.nextText(people, maxTimeOut);
 				if(nextText)
 					futureSelectedText[nextText->timeIn() + (int)(10 * nextText->y())] = nextText;
 			}

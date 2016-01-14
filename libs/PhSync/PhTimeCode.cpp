@@ -4,8 +4,6 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhData.h"
-
 #include "PhTimeCode.h"
 
 #include "PhTools/PhDebug.h"
@@ -96,6 +94,7 @@ PhFrame PhTimeCode::getFps(PhTimeCodeType type) {
 	case PhTimeCodeType30:
 		return 30;
 	}
+	return 0;
 }
 
 float PhTimeCode::getAverageFps(PhTimeCodeType type)
@@ -112,6 +111,7 @@ float PhTimeCode::getAverageFps(PhTimeCodeType type)
 	case PhTimeCodeType30:
 		return 30;
 	}
+	return 0;
 }
 
 PhTimeCodeType PhTimeCode::computeTimeCodeType(float averageFps)
@@ -150,6 +150,7 @@ PhTime PhTimeCode::timePerFrame(PhTimeCodeType type)
 	case PhTimeCodeType30:
 		return 800;
 	}
+	return 0;
 }
 
 PhTime PhTimeCode::timeFromString(QString string, PhTimeCodeType type)
@@ -232,7 +233,7 @@ PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned
 		PHDEBUG << "Bad second value:" << QString::number(ss);
 		ss = 0;
 	}
-	if (ff >= fps) {
+	if ((long) ff >= fps) {
 		PHDEBUG << "Bad frame value:" << QString::number(ff);
 		ff = 0;
 	}

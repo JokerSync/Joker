@@ -4,8 +4,25 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhFile.h"
-#include "PhTools/PhData.h"
+#include <QDomDocument>
+#include <QXmlStreamWriter>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+
+#include <boost/version.hpp>
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#endif
+
+#include <boost/format.hpp>
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
 
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhFileTool.h"
@@ -126,10 +143,23 @@ bool PhStripDoc::importDetXFile(QString fileName)
 		for (int i = 0; i < roleList.length(); i++) {
 			QDomElement role = roleList.at(i).toElement();
 			PhPeople *people = new PhPeople(role.attribute("name"), role.attribute("color"));
+			_peoples.append(people);
 
 			//Currently using id as key instead of name
-			peopleMap[role.attribute("id")] = people;
-			_peoples.append(people);
+			QString id = role.attribute("id");
+			if(id.isEmpty()) {
+				PHDEBUG << "empty id";
+				reset();
+				return false;
+			}
+
+			peopleMap[id] = people;
+
+			// Reading picture
+			if(role.elementsByTagName("image").count() != 0) {
+				QDomElement image = role.elementsByTagName("image").at(0).toElement();
+				people->setPicture(image.text());
+			}
 		}
 	}
 
@@ -197,6 +227,113 @@ bool PhStripDoc::importDetXFile(QString fileName)
 	emit this->changed();
 
 	return true;
+}
+
+bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
+{
+	PHDEBUG << fileName;
+
+	using boost::property_tree::ptree;
+	ptree ptDetX;
+
+	ptDetX.put("detx.header.title", _title.toStdString());
+	ptDetX.put("detx.header.videofile", _videoPath.toStdString());
+	ptDetX.put("detx.header.videofile.<xmlattr>.timestamp", PhTimeCode::stringFromTime(_videoTimeIn, _videoTimeCodeType).toStdString());
+	ptDetX.put("detx.header.videofile.<xmlattr>.tctype", PhTimeCode::getAverageFps(_videoTimeCodeType));
+	ptDetX.put("detx.header.last_position.<xmlattr>.timecode", PhTimeCode::stringFromTime(lastTime, _videoTimeCodeType).toStdString());
+
+	// export <role> list
+	ptree roles;
+	QMap<const PhPeople*, QString> idMap;
+
+	foreach(const PhPeople *people, _peoples) {
+		// Compute an unic id:
+		QString id = computeDetXId(people->name());
+
+		while(true) {
+			if(!idMap.values().contains(id)) {
+				idMap[people] = id;
+				break;
+			}
+			else { // try to create unic id
+				id += "_";
+			}
+		}
+
+		ptree role;
+		role.put("<xmlattr>.name", people->name().toStdString());
+		role.put("<xmlattr>.id", id.toStdString());
+		role.put("<xmlattr>.color", people->color().toStdString());
+		role.put("image", people->picture().toStdString());
+
+		roles.push_back(std::make_pair("role", role));
+	}
+	ptDetX.add_child("detx.roles", roles);
+
+	// export <body>
+	ptree ptBody;
+
+	// export <loop> list
+	foreach (const PhStripLoop *loop, this->loops()) {
+		ptree ptLoop;
+		ptLoop.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(loop->timeIn(), _videoTimeCodeType).toStdString());
+		ptBody.push_back(std::make_pair("loop", ptLoop));
+	}
+
+	// export <cut> list
+	foreach (const PhStripCut *cut, this->cuts()) {
+		ptree ptShot;
+		ptShot.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(cut->timeIn(), _videoTimeCodeType).toStdString());
+		ptBody.push_back(std::make_pair("shot", ptShot));
+	}
+
+	// export <line> list
+	foreach(const PhStripText *text, texts()) {
+		ptree ptLine;
+		ptLine.put("<xmlattr>.role", idMap[text->people()].toStdString());
+		ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(text->y() * 4));
+
+		ptree lipsync1;
+		lipsync1.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeIn(), _videoTimeCodeType).toStdString());
+		lipsync1.put("<xmlattr>.type", "in_open");
+		ptLine.push_back(std::make_pair("lipsync", lipsync1));
+
+		ptLine.put("text", text->content().toStdString());
+
+		ptree lipsync2;
+		lipsync2.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
+		lipsync2.put("<xmlattr>.type", "out_open");
+		ptLine.push_back(std::make_pair("lipsync", lipsync2));
+
+		ptBody.push_back(std::make_pair("line", ptLine));
+	}
+
+	ptDetX.add_child("detx.body", ptBody);
+
+	std::ofstream file(fileName.toStdString());
+
+#if BOOST_VERSION >= 105600
+	boost::property_tree::write_xml(file, ptDetX, boost::property_tree::xml_writer_make_settings<std::string>('\t', 1));
+#else
+	boost::property_tree::write_xml(file, ptDetX, boost::property_tree::xml_writer_make_settings('\t', 1));
+#endif
+
+	file.close();
+
+	return true;
+}
+
+QString PhStripDoc::computeDetXId(QString name)
+{
+	QString id = "";
+	foreach (QChar c, name.toLower()) {
+		if(c >= 'a' && c <= 'z')
+			id.append(c);
+		else
+			id += '_';
+	}
+
+	return id;
 }
 
 bool PhStripDoc::checkMosTag2(QFile &f, int level, QString expected)
@@ -502,7 +639,6 @@ void PhStripDoc::setModified(bool modified)
 {
 	_modified = modified;
 }
-
 
 bool PhStripDoc::importMosFile(const QString &fileName)
 {
@@ -1263,6 +1399,7 @@ void PhStripDoc::reset()
 	qDeleteAll(_texts2);
 	_texts2.clear();
 
+	_generator = "???";
 	_title = "";
 	_translatedTitle = "";
 	_episode = "";

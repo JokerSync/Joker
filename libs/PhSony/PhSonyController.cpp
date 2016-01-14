@@ -4,9 +4,10 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhSonyController.h"
-
+#include <qmath.h>
 #include <QSerialPortInfo>
+
+#include "PhSonyController.h"
 
 #include "PhTools/PhDebug.h"
 
@@ -130,33 +131,35 @@ unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 	return cmd1 & 0x0f;
 }
 
-void PhSonyController::sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data)
+void PhSonyController::sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data, unsigned char dataCount)
 {
 //	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, data);
-	unsigned char datacount = getDataSize(cmd1);
-	unsigned char checksum = cmd1 + cmd2;
-	for (int i = 0; i < datacount; i++) {
-		_dataOut[i + 2] = data[i];
-		checksum += data[i];
+	if(dataCount == getDataSize(cmd1)) {
+		unsigned char checksum = cmd1 + cmd2;
+		for (int i = 0; i < dataCount; i++) {
+			_dataOut[i + 2] = data[i];
+			checksum += data[i];
+		}
+		_dataOut[0] = cmd1;
+		_dataOut[1] = cmd2;
+		_dataOut[dataCount+2] = checksum;
+		_serial.write((const char*)_dataOut, dataCount + 3);
 	}
-	_dataOut[0] = cmd1;
-	_dataOut[1] = cmd2;
-	_dataOut[datacount+2] = checksum;
-	_serial.write((const char*)_dataOut, datacount + 3);
 }
 
 void PhSonyController::sendCommand(unsigned char cmd1, unsigned char cmd2, ...)
 {
-	unsigned char data[256];
-	unsigned char datacount = getDataSize(cmd1);
+	unsigned char dataCount = getDataSize(cmd1);
+	unsigned char * data = new unsigned char[dataCount];
 	va_list argumentList;
 	va_start(argumentList, cmd2);
-	for (int i = 0; i < datacount; i++)
+	for (int i = 0; i < dataCount; i++)
 		data[i] = (char)va_arg(argumentList, int);
 
 	va_end(argumentList);
 
-	sendCommandWithData(cmd1, cmd2, data);
+	sendCommandWithData(cmd1, cmd2, data, dataCount);
+	delete[] data;
 }
 
 void PhSonyController::timeOut()

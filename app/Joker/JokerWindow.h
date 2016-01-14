@@ -7,15 +7,26 @@
 #ifndef JOKERWINDOW_H
 #define JOKERWINDOW_H
 
+#include <QTimer>
+#include <QPropertyAnimation>
+
 #include "PhCommonUI/PhFloatingMediaPanel.h"
 #include "PhCommonUI/PhEditableDocumentWindow.h"
+#ifdef USE_VIDEO
 #include "PhVideo/PhVideoEngine.h"
+#endif
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSynchronizer.h"
+#ifdef USE_SONY
 #include "PhSony/PhSonySlaveController.h"
+#endif
+#ifdef USE_LTC
 #include "PhLtc/PhLtcReader.h"
+#endif
+#ifdef USE_MIDI
 #include "PhMidi/PhMidiTimeCodeReader.h"
 #include "PhMidi/PhMidiTimeCodeWriter.h"
+#endif
 
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
@@ -49,6 +60,7 @@ public:
 	explicit JokerWindow(JokerSettings *settings);
 	~JokerWindow();
 
+#ifdef USE_VIDEO
 	///
 	/// @brief Open a video file
 	///
@@ -59,6 +71,7 @@ public:
 	/// @return True if the videoFile opened well, false otherwise.
 	///
 	bool openVideoFile(QString videoFile);
+#endif
 
 public slots:
 	///
@@ -261,20 +274,35 @@ private slots:
 
 	void on_actionUse_native_video_size_triggered(bool checked);
 
+	void on_actionSet_TC_in_triggered();
+
+	void on_actionSet_TC_out_triggered();
+
+	void on_actionLoop_triggered(bool checked);
+
 private:
+	PhTimeCodeType timeCodeType();
 	PhTime currentTime();
 	PhRate currentRate();
 
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;
 	PhGraphicStrip _strip;
-	PhVideoEngine _videoEngine;
 	PhStripDoc *_doc;
+#ifdef USE_VIDEO
+	PhVideoEngine _videoEngine;
+#endif
+	PhSynchronizer _synchronizer;
+#ifdef USE_SONY
 	PhSonySlaveController _sonySlave;
+#endif
+#ifdef USE_LTC
 	PhLtcReader _ltcReader;
+#endif
+#ifdef USE_MIDI
 	PhMidiTimeCodeReader _mtcReader;
 	PhMidiTimeCodeWriter _mtcWriter;
-	PhSynchronizer _synchronizer;
+#endif
 
 	PhFloatingMediaPanel _mediaPanel;
 	QTimer _mediaPanelTimer;

@@ -9,16 +9,14 @@
 *.so
 *.dll
 *.dylib
+*.swp
+*.bak
 
 # Qt-es
 
 *.pro.user
 *.pro.user.*
-moc_*.cpp
 qrc_*.cpp
-Makefile
-*-build-*
-build-*
 
 .DS_Store
 Thumbs.db
@@ -36,3 +34,5 @@ builds/
 out.html
 
 payload.json
+
+.qmake.stash

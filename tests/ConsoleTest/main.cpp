@@ -19,6 +19,9 @@ int main(int argc, char *argv[])
 		PHDBG(i) << "level" << i;
 	}
 
+	for(int i = 0; i < argc; i++)
+		PHDEBUG << argv[i];
+
 	qWarning() << "pouet";
 	PHERR << "coucou";
 	return 0;

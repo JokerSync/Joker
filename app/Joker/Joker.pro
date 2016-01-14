@@ -17,12 +17,36 @@ include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 include($$TOP_ROOT/libs/PhStrip/PhStrip.pri)
 include($$TOP_ROOT/libs/PhGraphic/PhGraphic.pri)
 include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
-include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
-include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
 include($$TOP_ROOT/libs/PhSync/PhSync.pri)
-include($$TOP_ROOT/libs/PhSony/PhSony.pri)
-include($$TOP_ROOT/libs/PhLtc/PhLtc.pri)
-include($$TOP_ROOT/libs/PhMidi/PhMidi.pri)
+
+CONFIG += video ltc midi
+
+win {
+CONFIG += sony
+}
+
+mac {
+CONFIG += sony
+}
+
+# Optionnal library component
+video {
+	DEFINES += USE_VIDEO
+	include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
+}
+sony {
+	DEFINES += USE_SONY
+	include($$TOP_ROOT/libs/PhSony/PhSony.pri)
+}
+ltc {
+	DEFINES += USE_LTC
+	include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
+	include($$TOP_ROOT/libs/PhLtc/PhLtc.pri)
+}
+midi {
+	DEFINES += USE_MIDI
+	include($$TOP_ROOT/libs/PhMidi/PhMidi.pri)
+}
 
 SOURCES += main.cpp \
 	JokerWindow.cpp \
@@ -67,7 +91,7 @@ mac{
 win32 {
 	RC_ICONS += "joker.ico"
 
-	OTHER_FILES += JokerSetup.iss
+	OTHER_FILES += Joker.iss
 }
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
@@ -83,7 +107,10 @@ TRANSLATIONS =	fr_FR.ts \
 
 QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
 
+QMAKE_POST_LINK += echo "Translation ok" $${CS}
 PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
 include($$TOP_ROOT/common/deploy.pri)
 
 cache()
+
+QMAKE_POST_LINK += echo "Joker build ok" $${CS}

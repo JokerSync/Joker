@@ -7,6 +7,9 @@
 #ifndef PHGRAPHICVIEW_H
 #define PHGRAPHICVIEW_H
 
+#include <QGLWidget>
+#include <QElapsedTimer>
+
 #include "PhSync/PhTime.h"
 #include "PhTools/PhTickCounter.h"
 
@@ -56,9 +59,7 @@ public:
 	 * @brief Get the refresh rate of the view
 	 * @return The rate (in fps)
 	 */
-	int refreshRate() {
-		return _frameTickCounter.frequency();
-	}
+	int refreshRate();
 
 	/**
 	 * @brief Pass the settings to the graphic view

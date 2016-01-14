@@ -6,7 +6,7 @@
 #include "PhMidiTimeCodeWriter.h"
 
 PhMidiTimeCodeWriter::PhMidiTimeCodeWriter(PhTimeCodeType tcType) :
-	_tcType(tcType), _currentDigit(0)
+	_tcType(tcType), _currentDigit(0), _currentQFTime(0)
 {
 	connect(&_clock, &PhClock::timeChanged, this, &PhMidiTimeCodeWriter::onTimeChanged);
 }

@@ -4,6 +4,20 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QTimer>
+#include <QScreen>
+#include <QWindow>
+
+#include <SDL2/SDL.h>
+
+#if defined(Q_OS_MAC)
+#include <SDL2_image/SDL_image.h>
+#include <SDL2_ttf/SDL_ttf.h>
+#else
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#endif
+
 #include "PhTools/PhDebug.h"
 
 #include "PhGraphicText.h"
@@ -70,6 +84,11 @@ void PhGraphicView::resizeGL(int width, int height)
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glLoadIdentity();
+}
+
+int PhGraphicView::refreshRate()
+{
+	return _frameTickCounter.frequency();
 }
 
 void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)

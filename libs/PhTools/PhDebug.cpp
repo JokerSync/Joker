@@ -4,8 +4,10 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhFile.h"
-#include "PhTools/PhData.h"
+#include <QDate>
+#include <QDir>
+
+#include <iostream>
 
 #include "PhDebug.h"
 
@@ -123,7 +125,7 @@ QDebug PhDebug::error(const char *fileName, int lineNumber, const char *function
 	return QMessageLogger(fileName, lineNumber, functionName).critical();
 }
 
-PhDebug::PhDebug()
+PhDebug::PhDebug() : _currentLogLevel(0), _textLog(NULL)
 {
 	qInstallMessageHandler(this->messageOutput);
 
@@ -141,9 +143,12 @@ PhDebug::PhDebug()
 	}
 	_logFileName = QDir(logDirPath).absoluteFilePath(APP_NAME + QString(".log"));
 	QFile * f = new QFile(_logFileName);
-	f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append);
-	f->write("\n\n");
-	_textLog = new QTextStream(f);
+	if(f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
+		f->write("\n\n");
+		_textLog = new QTextStream(f);
+	}
+	else
+		delete f;
 
 	_displayDate = false;
 	_displayTime = true;
@@ -162,22 +167,4 @@ void PhDebug::setLogMask(int mask)
 int PhDebug::logMask()
 {
 	return instance()->_logMask;
-}
-
-QDebug operator <<(QDebug stream, const QEvent * event) {
-	static int eventEnumIndex = QEvent::staticMetaObject
-	                            .indexOfEnumerator("Type");
-	stream << "QEvent";
-	if (event) {
-		QString name = QEvent::staticMetaObject
-		               .enumerator(eventEnumIndex).valueToKey(event->type());
-		if (!name.isEmpty())
-			stream << PHNQ(name);
-		else
-			stream << event->type();
-	}
-	else {
-		stream << (void*)event;
-	}
-	return stream;
 }

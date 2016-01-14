@@ -41,8 +41,16 @@ void PhGraphicText::draw()
 
 	_font->select();
 
-	if(_font->getHeight() == 0) {
-		// bad font initialization: displaying a rect
+	int totalAdvance = 0;
+	//Compute the natural width of the content to scale it later
+	for(int i = 0; i < _content.length(); i++) {
+		totalAdvance += _font->getAdvance(_content.at(i).toLatin1());
+		if(_content.at(i).unicode() == 339)
+			totalAdvance += _font->getAdvance(153);
+	}
+
+	if((totalAdvance == 0) || (_font->getHeight() == 0)) {
+		// empty string or bad font initialization: displaying a rect
 		glBegin(GL_QUADS);
 		{
 			glVertex3i(this->x(),      this->y(), this->z());
@@ -60,14 +68,6 @@ void PhGraphicText::draw()
 	glEnable(GL_BLEND);
 
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
-	int totalAdvance = 0;
-	//Compute the natural width of the content to scale it later
-	for(int i = 0; i < _content.length(); i++) {
-		totalAdvance += _font->getAdvance(_content.at(i).toLatin1());
-		if(_content.at(i).unicode() == 339)
-			totalAdvance += _font->getAdvance(153);
-	}
 
 	// Set the letter initial horizontal offset
 	int advance = 0;

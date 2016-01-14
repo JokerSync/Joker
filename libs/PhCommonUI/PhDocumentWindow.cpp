@@ -1,3 +1,11 @@
+#include <QFile>
+#include <QFileInfo>
+#include <QMimeData>
+#include <QEvent>
+#include <QFileOpenEvent>
+#include <QMenu>
+#include <QAction>
+
 #include "PhTools/PhDebug.h"
 
 #include "PhDocumentWindow.h"
@@ -78,6 +86,8 @@ bool PhDocumentWindow::eventFilter(QObject *sender, QEvent *event)
 			}
 			break;
 		}
+	default:
+		break;
 	}
 
 	return PhWindow::eventFilter(sender, event);

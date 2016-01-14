@@ -47,7 +47,7 @@ void PhSonyMasterController::cue(PhTime time)
 {
 	PHDEBUG << _comSuffix << "Cue at " << PhTimeCode::stringFromTime(time, this->timeCodeType());
 	unsigned int bcd = PhTimeCode::bcdFromTime(time, this->timeCodeType());
-	sendCommandWithData(0x24, 0x31, (const unsigned char *)&bcd);
+	sendCommandWithData(0x24, 0x31, (const unsigned char *)&bcd, 4);
 }
 
 void PhSonyMasterController::fastForward()

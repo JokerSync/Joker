@@ -7,7 +7,13 @@
 #ifndef PHGRAPHICOBJECT_H
 #define PHGRAPHICOBJECT_H
 
-#include "PhGraphic.h"
+#include <QColor>
+
+#if defined(Q_OS_WIN)
+#include <GL/gl.h>
+#else
+#include <gl.h>
+#endif
 
 /**
  * @brief A generic graphic object
@@ -27,7 +33,6 @@ public:
 	 * @param y Upper left corner coordinates of the displayed object
 	 */
 	PhGraphicObject(int x = 0, int y = 0);
-	virtual ~PhGraphicObject();
 
 	/**
 	 * @brief dispose
