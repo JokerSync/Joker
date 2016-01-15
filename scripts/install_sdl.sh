@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 echo "Installing SDL libraries"
 
 if [ "$(uname)" == "Darwin" ]; then

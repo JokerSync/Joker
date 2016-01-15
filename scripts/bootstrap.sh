@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 BASEDIR=$(dirname $0)
 echo $BASEDIR
 source $BASEDIR/install_qt.sh

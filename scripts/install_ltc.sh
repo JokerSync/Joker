@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 echo "Install libltc"
 if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
