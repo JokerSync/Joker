@@ -89,6 +89,8 @@ notifications:
   webhooks:
     urls: https://webhooks.gitter.im/e/9e468ed6125989020262
     on_success: always
+  slack:
+    secure: CVzAyvFoT5LFnODOVooG21txFq7B75nER+tLiGr4GFTimKWPb9mdmrqxvaHyJdp0RBtdLFyuWCeA2Gxi1SarPSCstlw0HP0rP0w27gEwVmt2E1xO4RUzHv5JKdbogKNHZJfdTw5VVAgzGNhCRBw2pL33CV0KwJ20lfJUOcg0JY8=
 deploy:
   provider: releases
   api_key:
