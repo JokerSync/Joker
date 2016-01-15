@@ -288,9 +288,9 @@ private:
 
 	bool _deinterlace;
 
-	QList<PhVideoFrame*> _recycledframePool;
-	QList<PhVideoFrame*> _requestedframePool;
-	QList<PhVideoFrame*> _cancelledframePool;
+	QList<PhVideoFrame*> _recycledFramePool;
+	QList<PhVideoFrame*> _requestedFramePool;
+	QList<PhVideoFrame*> _cancelledFramePool;
 	QList<PhVideoFrame*> _decodedFramePool;
 
 	QThread _decoderThread;

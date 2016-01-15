@@ -55,13 +55,13 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 
 		emit deinterlaceChanged(_deinterlace);
 
-		foreach(PhVideoFrame * requestedFrame, _requestedframePool) {
+		foreach(PhVideoFrame * requestedFrame, _requestedFramePool) {
 			emit cancelFrameRequest(requestedFrame);
 		}
-		_cancelledframePool.append(_requestedframePool);
-		_requestedframePool.clear();
+		_cancelledFramePool.append(_requestedFramePool);
+		_requestedFramePool.clear();
 
-		_recycledframePool.append(_decodedFramePool);
+		_recycledFramePool.append(_decodedFramePool);
 		_decodedFramePool.clear();
 
 		// request the frames again to apply the new deinterlace setting
@@ -92,13 +92,13 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setRate(0);
 	_currentFrameTime = PHTIMEMIN;
 
-	foreach(PhVideoFrame * requestedFrame, _requestedframePool) {
+	foreach(PhVideoFrame * requestedFrame, _requestedFramePool) {
 		emit cancelFrameRequest(requestedFrame);
 	}
-	_cancelledframePool.append(_requestedframePool);
-	_requestedframePool.clear();
+	_cancelledFramePool.append(_requestedFramePool);
+	_requestedFramePool.clear();
 
-	_recycledframePool.append(_decodedFramePool);
+	_recycledFramePool.append(_decodedFramePool);
 	_decodedFramePool.clear();
 
 	_fileName = fileName;
@@ -123,13 +123,13 @@ void PhVideoEngine::close()
 	_codecName = "";
 	_ready = false;
 
-	foreach(PhVideoFrame * requestedFrame, _requestedframePool) {
+	foreach(PhVideoFrame * requestedFrame, _requestedFramePool) {
 		emit cancelFrameRequest(requestedFrame);
 	}
-	_cancelledframePool.append(_requestedframePool);
-	_requestedframePool.clear();
+	_cancelledFramePool.append(_requestedFramePool);
+	_requestedFramePool.clear();
 
-	_recycledframePool.append(_decodedFramePool);
+	_recycledFramePool.append(_decodedFramePool);
 	_decodedFramePool.clear();
 }
 
@@ -213,8 +213,8 @@ void PhVideoEngine::requestFrame(PhTime time)
 
 	PhVideoFrame * frame;
 
-	if (!_recycledframePool.empty()) {
-		frame = _recycledframePool.takeFirst();
+	if (!_recycledFramePool.empty()) {
+		frame = _recycledFramePool.takeFirst();
 	}
 	else {
 		PHDEBUG << "creating a new frame";
@@ -230,7 +230,7 @@ void PhVideoEngine::requestFrame(PhTime time)
 	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
 	emit decodeFrame(frame);
 
-	_requestedframePool.append(frame);
+	_requestedFramePool.append(frame);
 }
 
 void PhVideoEngine::setTimeIn(PhTime timeIn)
@@ -316,7 +316,7 @@ bool PhVideoEngine::isFrameRequested(PhTime time)
 		time = this->timeOut();
 
 	QList<PhVideoFrame *> requestedOrDecodedFrames;
-	requestedOrDecodedFrames.append(_requestedframePool);
+	requestedOrDecodedFrames.append(_requestedFramePool);
 	requestedOrDecodedFrames.append(_decodedFramePool);
 
 	foreach(PhVideoFrame *requestedFrame, requestedOrDecodedFrames) {
@@ -358,13 +358,13 @@ void PhVideoEngine::cleanupFramePools()
 			// this frame is not likely to be shown on screen anytime soon.
 			i.remove();
 
-			_recycledframePool.append(frame);
+			_recycledFramePool.append(frame);
 
 			PHDEBUG << "recycle frame " << frameTime - _timeIn;
 		}
 	}
 
-	QMutableListIterator<PhVideoFrame*> r(_requestedframePool);
+	QMutableListIterator<PhVideoFrame*> r(_requestedFramePool);
 	while (r.hasNext()) {
 		PhVideoFrame *frame = r.next();
 
@@ -379,7 +379,7 @@ void PhVideoEngine::cleanupFramePools()
 			// this frame is not likely to be shown on screen anytime soon.
 			r.remove();
 
-			_cancelledframePool.append(frame);
+			_cancelledFramePool.append(frame);
 
 			// tell the decoder we no longer want this frame to be decoded
 			emit cancelFrameRequest(frame);
@@ -392,8 +392,8 @@ void PhVideoEngine::cleanupFramePools()
 	// They accumulate when seeking, because there is a short time lag
 	// between the time when the engine asks to cancel a frame and the
 	// time when the decoder really does it.
-	while (_recycledframePool.count() > 10) {
-		PhVideoFrame * frameToDelete = _recycledframePool.takeFirst();
+	while (_recycledFramePool.count() > 10) {
+		PhVideoFrame * frameToDelete = _recycledFramePool.takeFirst();
 		delete frameToDelete;
 	}
 }
@@ -445,8 +445,8 @@ void PhVideoEngine::frameAvailable(PhVideoFrame *frame)
 	}
 
 	// move from requested to decoded
-	_cancelledframePool.removeAll(frame);
-	_requestedframePool.removeAll(frame);
+	_cancelledFramePool.removeAll(frame);
+	_requestedFramePool.removeAll(frame);
 	_decodedFramePool.append(frame);
 
 	// cleanup
@@ -455,9 +455,9 @@ void PhVideoEngine::frameAvailable(PhVideoFrame *frame)
 
 void PhVideoEngine::frameCancelled(PhVideoFrame *frame)
 {
-	if (_cancelledframePool.contains(frame)) {
-		_cancelledframePool.removeAll(frame);
-		_recycledframePool.append(frame);
+	if (_cancelledFramePool.contains(frame)) {
+		_cancelledFramePool.removeAll(frame);
+		_recycledFramePool.append(frame);
 	}
 }
 
