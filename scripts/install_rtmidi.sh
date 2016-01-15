@@ -17,6 +17,8 @@ cd rtmidi-2.1.0
 
 ./configure
 make
+# allow error for make install
+set +e
 sudo make install
 
 cd ..
