@@ -7,7 +7,7 @@ env:
   global:
   - JOKER_RELEASE_PATH=$HOME
   - TESTS_RELEASE_PATH=$HOME
-  - QTVER=532
+  - QTVER=551
   matrix:
   - JOB=UNCRUSTIFY
   - JOB=DOXYGEN
