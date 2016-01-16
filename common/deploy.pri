@@ -5,16 +5,11 @@ win32 {
 mac {
 	app_bundle {
 
-		isEmpty(BUNDLEID) {
-			message("Settings default bundleid")
-			BUNDLEID = com.phonations.$${TARGET}
-		}
+		BUNDLEID = com.phonations.$$lower($${TARGET})
 
 		QMAKE_POST_LINK += cp $$ICON $${TARGET}.app/Contents/Resources/$${TARGET}.icns;
 
-		QMAKE_POST_LINK += plutil -replace CFBundleIconFile -string $${TARGET}.icns $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string $${BUNDLEID} $${TARGET}.app/Contents/Info.plist;
-		QMAKE_POST_LINK += plutil -replace CFBundleSignature -string ??? $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert LSApplicationCategoryType -string public.app-category.video $${TARGET}.app/Contents/Info.plist;
