@@ -3,6 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QtGlobal>
+#include <QTextCodec>
+
 #include "PhMidiObject.h"
 
 #include "PhTools/PhDebug.h"
@@ -31,6 +34,16 @@ bool PhMidiObject::canUseVirtualPorts()
 	}
 
 	return result;
+}
+
+QString PhMidiObject::convertName(std::string name)
+{
+#if defined(Q_OS_MAC)
+	QTextCodec *codec = QTextCodec::codecForName("Apple Roman");
+	return codec->toUnicode(name.c_str());
+#else
+	return QString::fromStdString(name);
+#endif
 }
 
 PhTimeCodeType PhMidiObject::computeTimeCodeType(unsigned char data)

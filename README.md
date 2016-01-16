@@ -22,7 +22,7 @@ This repository hosts the Joker projet components:
   * PhSony: Sony 9 pin synchronisation interface.
   * PhLtc: LTC synchronisation interface.
   * PhMidi: Midi synchronisation interface.
-* Various test projects for testing the library modules independently or integrated with each others. It contains also unit testing modules in *AutoTest*.
+* Various test projects for testing the library modules independently or integrated with each others. It contains also unit testing modules in the *specs* directory.
 
 Compilation information:
 ------------------------
