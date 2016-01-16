@@ -318,7 +318,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 		// seek to the closest keyframe in the past
 		int flags = AVSEEK_FLAG_BACKWARD;
 		int64_t timestamp = PhTime_to_AVTimestamp(time);
-		PHDEBUG << "seek:" << frame << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << PhTimeCode::timePerFrame(_tcType);
+		PHDBG(24) << "seek:" << frame << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << PhTimeCode::timePerFrame(_tcType);
 		av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
 
 		avcodec_flush_buffers(_videoStream->codec);
@@ -341,7 +341,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 					// could appear.)
 					_currentTime = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
 
-					PHDEBUG << time << " " << _currentTime << " " << (time - _currentTime) / PhTimeCode::timePerFrame(_tcType);
+					PHDBG(24) << time << " " << _currentTime << " " << (time - _currentTime) / PhTimeCode::timePerFrame(_tcType);
 
 					if (time < _currentTime) {
 						// something went wrong with the seeking
@@ -356,7 +356,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 					// convert and emit the frame if this is the one that was requested
 					if (time >= _currentTime
 					    && time < _currentTime + PhTimeCode::timePerFrame(_tcType)) {
-						PHDEBUG << "decoded!";
+						PHDBG(24) << "decoded!";
 						frameToRgb(_videoFrame, frame);
 						lookingForVideoFrame = false;
 					}
@@ -366,7 +366,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 				int ok = 0;
 				avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
 				if(ok) {
-					PHDEBUG << "audio:" << _audioFrame->nb_samples;
+					PHDBG(24) << "audio:" << _audioFrame->nb_samples;
 				}
 			}
 			break;
@@ -376,7 +376,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 			{
 				char errorStr[256];
 				av_strerror(error, errorStr, 256);
-				PHDEBUG << time << "error:" << errorStr;
+				PHDBG(24) << time << "error:" << errorStr;
 				lookingForVideoFrame = false;
 				break;
 			}

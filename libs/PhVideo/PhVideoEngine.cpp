@@ -169,7 +169,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 			// The time does not correspond to the frame on screen,
 			// but the frame is in the pool,
 			// so just show it.
-			PHDEBUG << "frame found in pool";
+			PHDBG(24) << "frame found in pool:" << frame->time();
 			showFrame(frame);
 		}
 	}
@@ -221,14 +221,14 @@ void PhVideoEngine::requestFrame(PhTime time)
 		frame = _recycledFramePool.takeFirst();
 	}
 	else {
-		PHDEBUG << "creating a new frame";
+		PHDBG(24) << "creating a new frame";
 		frame = new PhVideoFrame(0);
 	}
 
 	frame->setTime(0);
 	frame->setRequestTime(time - _timeIn);
 
-	PHDEBUG << "request frame " << time - _timeIn;
+	PHDBG(24) << "request frame " << time - _timeIn;
 
 	// ask the frame to the decoder.
 	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
@@ -279,7 +279,7 @@ QString PhVideoEngine::codecName()
 bool PhVideoEngine::isFrameCurrent(PhTime time)
 {
 	if(!ready()) {
-		PHDEBUG << "not ready";
+		PHDBG(24) << "not ready";
 		return false;
 	}
 
@@ -309,7 +309,7 @@ bool PhVideoEngine::isFrameCurrent(PhTime time)
 bool PhVideoEngine::isFrameRequested(PhTime time)
 {
 	if(!ready()) {
-		PHDEBUG << "not ready";
+		PHDBG(24) << "not ready";
 		return false;
 	}
 
@@ -365,7 +365,7 @@ void PhVideoEngine::cleanupFramePools()
 
 			_recycledFramePool.append(frame);
 
-			PHDEBUG << "recycle frame " << frameTime - _timeIn;
+			PHDBG(24) << "recycle frame " << frameTime - _timeIn;
 		}
 	}
 
@@ -389,7 +389,7 @@ void PhVideoEngine::cleanupFramePools()
 			// tell the decoder we no longer want this frame to be decoded
 			emit cancelFrameRequest(frame);
 
-			PHDEBUG << "cancel frame request " << frameTime - _timeIn;
+			PHDBG(24) << "cancel frame request " << frameTime - _timeIn;
 		}
 	}
 
@@ -443,10 +443,10 @@ void PhVideoEngine::frameAvailable(PhVideoFrame *frame)
 		// Note: we do not wait for the exact frame to be available to improve the responsiveness
 		// when seeking.
 		showFrame(frame);
-		PHDEBUG << "showing frame " << frameTime - _timeIn << " " << time - _timeIn;
+		PHDBG(24) << "showing frame " << frameTime - _timeIn << " " << time - _timeIn;
 	}
 	else {
-		PHDEBUG << "non-current frame " << frameTime - _timeIn << " " << time - _timeIn;
+		PHDBG(24) << "non-current frame " << frameTime - _timeIn << " " << time - _timeIn;
 	}
 
 	// move from requested to decoded
