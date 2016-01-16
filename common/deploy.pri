@@ -2,6 +2,13 @@ win32 {
 	QMAKE_POST_LINK += windeployqt $${RESOURCES_PATH} $${CS}
 }
 
+mac {
+	app_bundle {
+		QMAKE_POST_LINK += plutil -insert CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -insert NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
+	}
+}
+
 CONFIG(release, debug|release) {
 	mac {
 		app_bundle {
