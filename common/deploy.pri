@@ -96,12 +96,7 @@ CONFIG(release, debug|release) {
 
 ##################################################
 
-			create-dmg {
-				QMAKE_POST_LINK += echo "Creating dmg with create-dmg";
-
-				QMAKE_POST_LINK += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
-					--volname $${PH_DEPLOY_TARGET} \
-			installer.commands += macdeployqt $${TARGET}.app &&
+			installer.commands += echo "Creating dmg with create-dmg";
 			installer.commands += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
 					--volname $${PH_DEPLOY_TARGET} \
 #					--volicon $${_PRO_FILE_PWD_}/../../app/Joker/joker.icns \
