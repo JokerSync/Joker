@@ -8,12 +8,18 @@ env:
   - JOKER_RELEASE_PATH=$HOME
   - TESTS_RELEASE_PATH=$HOME
   - QTVER=532
+  - COVERITY_SCAN_PROJECT_NAME=Phonations/Joker
+  - COVERITY_SCAN_SCRIPT=https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh
+  - COVERITY_SCAN_NOTIFICATION_EMAIL=martin@phonations.com
+  - COVERITY_SCAN_BRANCH_PATTERN=coverity
+  - COVERITY_SCAN_BUILD_COMMAND=make
   - secure: YlyaETwveWXOT1wpOz68Vp8Pj1zZ5u44ppOabNw/Xe4M8ZHdPy3QkmyB7wTeUgNjlHzkW23aOOzTk8bm5wxS1iQRxHsQ/DnZd0TcULPuTY9+yO2L/Wkwk6quFBqGlkT8h2v4xkRDyshG8OxF6eqeeq5Cflt/LOhx+MnJqse9EzQ=
   matrix:
   - JOB=UNCRUSTIFY
   - JOB=DOXYGEN
   - JOB=BUILD_SPEC_BANDIT
   - JOB=BUILD_RELEASE_JOKER
+  - JOB=BUILD_COVERITY_JOKER
   - JOB=BUILD_RELEASE_LTCTOOL
   - JOB=BUILD_RELEASE_MIDITOOL
   - JOB=BUILD_RELEASE_ALL_TESTS
@@ -61,12 +67,13 @@ script:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then ./scripts/uncrustify.sh; fi
 - if [[ "$JOB" == DOXYGEN ]]; then ./scripts/doxygen.sh; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then qmake specs/AllSpecs/AllSpecs.pro; fi
-- if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then qmake app/Joker/Joker.pro; fi
+- if [[ "$JOB" == BUILD_*_JOKER ]]; then qmake app/Joker/Joker.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_LTCTOOL ]]; then qmake app/LTCTool/LTCTool.pro; fi
 - if [[ "$JOB" == BUILD_RELEASE_MIDITOOL ]]; then qmake app/MidiTool/MidiTool.pro;
   fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
-- if [[ "$JOB" == BUILD_* ]]; then make; fi
+- if [[ "$JOB" == BUILD_* && "$JOB" != BUILD_COVERITY_JOKER ]]; then make; fi
+- if [[ "$JOB" == BUILD_COVERITY_JOKER ]]; then curl -s "$COVERITY_SCAN_SCRIPT" | bash; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then make installer; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then export RELEASED_PACKAGE_FILENAME=$(ls
