@@ -313,7 +313,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 	// 2) after the next keyframe
 	//      how to know when the next keyframe is ??
 	//      -> for now we take a arbitrary threshold of 20 frames
-	if((time >= _currentTime + 20*PhTimeCode::timePerFrame(_tcType))
+	if((time >= _currentTime + 20 * PhTimeCode::timePerFrame(_tcType))
 	   || (time < _currentTime)) {
 		// seek to the closest keyframe in the past
 		int flags = AVSEEK_FLAG_BACKWARD;
@@ -341,7 +341,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 					// could appear.)
 					_currentTime = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
 
-					PHDEBUG << time << " " << _currentTime << " " << (time - _currentTime)/PhTimeCode::timePerFrame(_tcType);
+					PHDEBUG << time << " " << _currentTime << " " << (time - _currentTime) / PhTimeCode::timePerFrame(_tcType);
 
 					if (time < _currentTime) {
 						// something went wrong with the seeking

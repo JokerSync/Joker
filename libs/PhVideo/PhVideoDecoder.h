@@ -76,24 +76,24 @@ public slots:
 signals:
 	/**
 	 * @brief Signal sent when a frame has been decoded
-	 * @param frame the frame where the decoded frame is
+	 * @param frame The frame where the decoded frame is
 	 */
 	void frameAvailable(PhVideoFrame *frame);
 
 	/**
 	 * @brief Signal sent when a frame request has been cancelled
-	 * @param frame the frame describing the request
+	 * @param frame The frame describing the request
 	 */
 	void frameCancelled(PhVideoFrame *frame);
 
 	/**
 	 * @brief Signal sent when the decoder is ready
-	 * @param length the length of the video file
-	 * @param framePerSecond the frame per second
-	 * @param timeIn the time in of the video file
-	 * @param width the width of the frame
-	 * @param height the height of the frame
-	 * @param codecName the codec name
+	 * @param length The length of the video file
+	 * @param framePerSecond The frame per second
+	 * @param timeIn The time in of the video file
+	 * @param width The width of the frame
+	 * @param height The height of the frame
+	 * @param codecName The codec name
 	 */
 	void opened(PhTime length, double framePerSecond, PhTime timeIn, int width, int height, QString codecName);
 

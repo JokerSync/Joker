@@ -92,12 +92,14 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setRate(0);
 	_currentFrameTime = PHTIMEMIN;
 
+	// cancel all requested frames
 	foreach(PhVideoFrame * requestedFrame, _requestedFramePool) {
 		emit cancelFrameRequest(requestedFrame);
 	}
 	_cancelledFramePool.append(_requestedFramePool);
 	_requestedFramePool.clear();
 
+	// recycle all decoded frames
 	_recycledFramePool.append(_decodedFramePool);
 	_decodedFramePool.clear();
 
@@ -123,12 +125,14 @@ void PhVideoEngine::close()
 	_codecName = "";
 	_ready = false;
 
+	// cancel all requested frames
 	foreach(PhVideoFrame * requestedFrame, _requestedFramePool) {
 		emit cancelFrameRequest(requestedFrame);
 	}
 	_cancelledFramePool.append(_requestedFramePool);
 	_requestedFramePool.clear();
 
+	// recycle all decoded frames
 	_recycledFramePool.append(_decodedFramePool);
 	_decodedFramePool.clear();
 }
@@ -146,7 +150,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	// Round the time to multiple of timePerFrame
 	// This avoids issues with time comparisons.
 	PhTime tpf = PhTimeCode::timePerFrame(_tcType);
-	time = _timeIn + ((time - _timeIn)/tpf)*tpf;
+	time = _timeIn + ((time - _timeIn) / tpf) * tpf;
 
 	// 4 possibilities
 	// 1) the frame is currently on screen
@@ -197,7 +201,7 @@ void PhVideoEngine::requestFrames(PhTime time)
 			factor *= -1;
 		}
 
-		PhTime requestTime = time + factor*PhTimeCode::timePerFrame(_tcType);
+		PhTime requestTime = time + factor * PhTimeCode::timePerFrame(_tcType);
 
 		if (!isFrameRequested(requestTime)) {
 			requestFrame(requestTime);
@@ -337,6 +341,7 @@ bool PhVideoEngine::isFrameRequested(PhTime time)
 void PhVideoEngine::cleanupFramePools()
 {
 	PhTime time = clockTime();
+	PhTime tpf = PhTimeCode::timePerFrame(_tcType);
 
 	bool playingForward = true;
 	if (_clock.rate() < 0) {
@@ -349,10 +354,10 @@ void PhVideoEngine::cleanupFramePools()
 
 		PhTime frameTime = frame->time() + _timeIn;
 
-		if ((playingForward && (frameTime < time - 2*PhTimeCode::timePerFrame(_tcType)
-		                        || frameTime >= time + 5*PhTimeCode::timePerFrame(_tcType)))
-		    || (!playingForward && (frameTime >= time + 2*PhTimeCode::timePerFrame(_tcType)
-		                            || frameTime < time - 5*PhTimeCode::timePerFrame(_tcType)))
+		if ((playingForward && (frameTime < time - 2 * tpf
+		                        || frameTime >= time + 5 * tpf))
+		    || (!playingForward && (frameTime >= time + 2 * tpf
+		                            || frameTime < time - 5 * tpf))
 		    ) {
 			// Given the current playing direction and position,
 			// this frame is not likely to be shown on screen anytime soon.
@@ -370,10 +375,10 @@ void PhVideoEngine::cleanupFramePools()
 
 		PhTime frameTime = frame->requestTime() + _timeIn;
 
-		if ((playingForward && (frameTime < time - 2*PhTimeCode::timePerFrame(_tcType)
-		                        || frameTime >= time + 5*PhTimeCode::timePerFrame(_tcType)))
-		    || (!playingForward && (frameTime >= time + 2*PhTimeCode::timePerFrame(_tcType)
-		                            || frameTime < time - 5*PhTimeCode::timePerFrame(_tcType)))
+		if ((playingForward && (frameTime < time - 2 * tpf
+		                        || frameTime >= time + 5 * tpf))
+		    || (!playingForward && (frameTime >= time + 2 * tpf
+		                            || frameTime < time - 5 * tpf))
 		    ) {
 			// Given the current playing direction and position,
 			// this frame is not likely to be shown on screen anytime soon.

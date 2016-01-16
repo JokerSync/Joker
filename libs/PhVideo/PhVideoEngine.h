@@ -52,7 +52,7 @@ public:
 
 	/**
 	 * @brief Get the clock
-	 * @return the clock
+	 * @return The clock
 	 */
 	PhClock* clock() {
 		return &_clock;
@@ -88,17 +88,17 @@ public:
 
 	/**
 	 * @brief Get the codec name
-	 * @return the codec name
+	 * @return The codec name
 	 */
 	QString codecName();
 	/**
 	 * @brief Get the width
-	 * @return the PhVideoEngine width (not necessary the video width)
+	 * @return The video rectangle width (if not using native size)
 	 */
 	int width();
 	/**
 	 * @brief Get the height
-	 * @return the PhVideoEngine height (not necessary the video height)
+	 * @return The video rectangle height (if not using native size)
 	 */
 	int height();
 	/**
@@ -161,24 +161,24 @@ public:
 	void setBilinearFiltering(bool bilinear);
 
 	/**
-	 * @brief draw the video depending on the parameters
-	 * @param x coordinates of the upperleft corner
-	 * @param y coordinates of the upperleft corner
-	 * @param w width
-	 * @param h height
+	 * @brief Draw the video depending on the parameters
+	 * @param x Coordinates of the upperleft corner
+	 * @param y Coordinates of the upperleft corner
+	 * @param w Width of the video rectangle (if not native size)
+	 * @param h Height of the video rectangle (if not native size)
 	 */
 	void drawVideo(int x, int y, int w, int h);
 
 	/**
-	 * @brief whether the time corresponds to the frame that we currently have
-	 * @param time the current time
+	 * @brief Whether the time corresponds to the frame that we currently have
+	 * @param time The current time
 	 * @return True if the frame is current
 	 */
 	bool isFrameCurrent(PhTime time);
 
 	/**
-	 * @brief whether the time corresponds to the frame that we have requested
-	 * @param time the current time
+	 * @brief Whether the time corresponds to the frame that we have requested
+	 * @param time The current time
 	 * @return True if the frame has already been requested
 	 */
 	bool isFrameRequested(PhTime time);
@@ -192,16 +192,16 @@ public slots:
 
 	/**
 	 * @brief Handle the signal that a frame request has been cancelled in the decoder
-	 * @param frame the frame describing the request
+	 * @param frame The frame describing the request
 	 */
 	void frameCancelled(PhVideoFrame *frame);
 
 	/**
 	 * @brief Handle the signal that the video file has been opened in the decoder
-	 * @param length the length of the video file
-	 * @param framePerSecond the frame per second
-	 * @param timeIn the time in of the video file
-	 * @param width the width of the frame
+	 * @param length The length of the video file
+	 * @param framePerSecond The frame per second
+	 * @param timeIn The time in of the video file
+	 * @param width The width of the frame
 	 * @param height the height of the frame
 	 * @param codecName the codec name
 	 */
@@ -244,7 +244,7 @@ signals:
 
 	/**
 	 * @brief Signal sent to cancel a frame request
-	 * @param frame the frame describing the request
+	 * @param frame The frame describing the request
 	 */
 	void cancelFrameRequest(PhVideoFrame *frame);
 
@@ -257,7 +257,7 @@ signals:
 	/**
 	 * @brief Signal sent when a new frame is displayed on screen.
 	 * This is used by the tests, where some form of synchronization is required.
-	 * @param frameTime the time of the frame being displayed
+	 * @param frameTime The time of the frame being displayed
 	 */
 	void newFrameDisplayed(PhTime frameTime);
 
