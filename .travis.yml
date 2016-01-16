@@ -13,6 +13,7 @@ env:
   - COVERITY_SCAN_NOTIFICATION_EMAIL=martin@phonations.com
   - COVERITY_SCAN_BRANCH_PATTERN=coverity
   - COVERITY_SCAN_BUILD_COMMAND=make
+#  - COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --comptype clangcxx --compiler clang++"
   - secure: YlyaETwveWXOT1wpOz68Vp8Pj1zZ5u44ppOabNw/Xe4M8ZHdPy3QkmyB7wTeUgNjlHzkW23aOOzTk8bm5wxS1iQRxHsQ/DnZd0TcULPuTY9+yO2L/Wkwk6quFBqGlkT8h2v4xkRDyshG8OxF6eqeeq5Cflt/LOhx+MnJqse9EzQ=
   matrix:
   - JOB=UNCRUSTIFY
@@ -108,14 +109,3 @@ deploy:
   on:
     tags: true
     condition: "$JOB = BUILD_RELEASE_JOKER && $TRAVIS_OS_NAME = osx"
-addons:
-  coverity_scan:
-    project:
-      name: Phonations/Joker
-      description: Build submitted via Travis CI
-    notification_email: martin@phonations.com
-    build_command_prepend: cov-configure --comptype clangcxx --compiler clang++
-    build_command_prepend: qmake app/Joker/Joker.pro
-    build_command: make -j 4
-    branch_pattern: coverity
-    build_script_url: https://raw.githubusercontent.com/Phonations/Joker/coverity/scripts/coverity.sh
