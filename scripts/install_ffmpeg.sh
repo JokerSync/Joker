@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 echo "Install FFMpeg"
 if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"

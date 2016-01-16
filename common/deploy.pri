@@ -114,7 +114,6 @@ CONFIG(release, debug|release) {
 			installer.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION}
 		}
 	}
-	}
 
 	win32 {
 		if(exists($${_PRO_FILE_PWD_}/$$TARGET.iss)) {

@@ -35,9 +35,6 @@ go_bandit([](){
 
 			view.show();
 
-#warning /// @todo remove if unnecessary
-			//		QApplication::processEvents();
-
 			AssertThat(paintCalled, IsTrue());
 		});
 
@@ -54,9 +51,6 @@ go_bandit([](){
 
 			view.show();
 
-#warning /// @todo remove if unnecessary
-			//		QApplication::processEvents();
-
 			// Note: using view.grabFrameBuffer() causes timing issues.
 			// There is no warranty that the scene has been fully rendered.
 			// Use view.renderPixmap().toImage() instead.
@@ -67,7 +61,7 @@ go_bandit([](){
 			QImage expectedImage(expectedFile);
 
 			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, Equals(0));
+			AssertThat(result, Equals((unsigned int)0));
 		});
 
 		it("draw_an_image", [&](){
@@ -93,7 +87,7 @@ go_bandit([](){
 			QImage expectedImage(expectedFile);
 
 			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, Equals(0));
+			AssertThat(result, Equals((unsigned int)0));
 		});
 
 		it("draw_a_rgb_pattern", [&](){
@@ -104,7 +98,6 @@ go_bandit([](){
 			PhGraphicTexturedRect rect(0, 0, w, h);
 
 			QObject::connect(&view, &PhGraphicView::paint, [&](int w, int h) {
-#warning /// @todo try to make it before (creating the texture on auto init)
 				unsigned char * buffer = PhPictureTools::generateRGBPattern(w, h);
 				rect.createTextureFromRGBBuffer(buffer, w, h);
 				delete buffer;
@@ -120,7 +113,63 @@ go_bandit([](){
 			QImage expectedImage(expectedFile);
 
 			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, Equals(0));
+			AssertThat(result, Equals((unsigned int)0));
+		});
+
+		it("draw a loop", [&]() {
+			PhGraphicView view(64, 64);
+
+			PhGraphicLoop loop(32, 0, 32, 64);
+
+			loop.setCrossSize(16);
+			loop.setThickness(4);
+			loop.setHorizontalLoop(false);
+
+			AssertThat(loop.crossSize(), Equals(16));
+			AssertThat(loop.thickness(), Equals(4));
+
+			QObject::connect(&view, &PhGraphicView::paint, [&](int, int) {
+				loop.draw();
+			});
+
+			view.show();
+
+			QImage resultImage(view.renderPixmap(64, 64).toImage());
+			QString resultFile = "loopTest.result.bmp";
+			resultImage.save(resultFile);
+			QString expectedFile = "loopTest.expected.bmp";
+			QImage expectedImage(expectedFile);
+
+			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+			AssertThat(result, Equals((unsigned int)0));
+		});
+
+		it("draw an horizontal loop", [&]() {
+			PhGraphicView view(64, 64);
+
+			PhGraphicLoop loop(0, 32, 64, 32);
+
+			loop.setCrossSize(16);
+			loop.setThickness(4);
+			loop.setHorizontalLoop(true);
+
+			AssertThat(loop.crossSize(), Equals(16));
+			AssertThat(loop.thickness(), Equals(4));
+
+			QObject::connect(&view, &PhGraphicView::paint, [&](int, int) {
+				loop.draw();
+			});
+
+			view.show();
+
+			QImage resultImage(view.renderPixmap(64, 64).toImage());
+			QString resultFile = "loopHorizontalTest.result.bmp";
+			resultImage.save(resultFile);
+			QString expectedFile = "loopHorizontalTest.expected.bmp";
+			QImage expectedImage(expectedFile);
+
+			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
+			AssertThat(result, Equals((unsigned int)0));
 		});
 
 		it("draw a loop", [&]() {
