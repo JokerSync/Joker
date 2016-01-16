@@ -17,6 +17,11 @@ else {
 	VERSION = $$system(date +%y.%m.%d)
 }
 
+# Use default icon if not defined
+isEmpty(ICON) {
+	ICON = $$TOP_ROOT/data/icon.icns
+}
+
 PH_GIT_BRANCH = $$system(git rev-parse --abbrev-ref HEAD)
 PH_GIT_REVISION = $$system(git rev-parse HEAD)
 

@@ -25,12 +25,6 @@ HEADERS  += FormTestWindow.h \
 FORMS    += FormTestWindow.ui \
 	AboutDialog.ui
 
-mac {
-	# For the plist version
-	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
-}
-
-
 win32 {
 	OTHER_FILES += FormTest.iss
 }
