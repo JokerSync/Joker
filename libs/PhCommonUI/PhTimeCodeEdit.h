@@ -7,8 +7,8 @@
 #ifndef TIMECODEEDIT_H
 #define TIMECODEEDIT_H
 
-#include "PhTools/PhData.h"
-#include "PhCommonUI/PhUI.h"
+#include <QStack>
+#include <QLineEdit>
 
 #include "PhSync/PhTimeCode.h"
 #include "PhTools/PhDebug.h"

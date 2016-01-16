@@ -22,9 +22,14 @@ isEmpty(ICON) {
 	ICON = $$TOP_ROOT/data/icon.icns
 }
 
+PH_GIT_BRANCH = $$system(git rev-parse --abbrev-ref HEAD)
+PH_GIT_REVISION = $$system(git rev-parse HEAD)
+
 # Define the preprocessor macro to get the application version in our application.
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 DEFINES += APP_NAME=\\\"$$TARGET\\\"
+DEFINES += PH_GIT_BRANCH=\\\"$$PH_GIT_BRANCH\\\"
+DEFINES += PH_GIT_REVISION=\\\"$$PH_GIT_REVISION\\\"
 DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 INCLUDEPATH += $$TOP_ROOT/libs
@@ -34,16 +39,16 @@ win32 {
 	CS = &
 	CONFIG(release, debug|release) {
 		RESOURCES_PATH = $$shell_path(./release/)
-		message(Release mode)
 	}
 	CONFIG(debug, debug|release) {
 		RESOURCES_PATH = $$shell_path(./debug/)
-		message(Debug mode)
 	}
 	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
+
+	INCLUDEPATH += $$(BOOST_PATH)
 }
 
-# Ubuntu specific
+# linux specific
 linux {
 	CS = ;
 	RESOURCES_PATH = ./
@@ -59,6 +64,7 @@ mac {
 	DEFINES += PATH_TO_RESSOURCES=\\\"/../Resources/\\\"
 }
 
+# MacOS and linux specific
 unix {
 	INCLUDEPATH += /usr/local/include
 	LIBS += -L/usr/local/lib

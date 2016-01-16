@@ -7,9 +7,12 @@
 #ifndef PROPERTYDIALOG_H
 #define PROPERTYDIALOG_H
 
-#include "PhCommonUI/PhUI.h"
+#include <QDialog>
+
 #include "PhStrip/PhStripDoc.h"
+#ifdef USE_VIDEO
 #include "PhVideo/PhVideoEngine.h"
+#endif
 
 namespace Ui {
 class PropertyDialog;
@@ -38,6 +41,8 @@ public:
 	 * @param doc The application document
 	 */
 	void setDoc(PhStripDoc * doc);
+
+#ifdef USE_VIDEO
 	/**
 	 * @brief Set the video engine
 	 *
@@ -46,6 +51,7 @@ public:
 	 * @param videoEngine The application video engine
 	 */
 	void setVideoEngine(PhVideoEngine *videoEngine);
+#endif
 
 protected:
 	/**
@@ -57,8 +63,10 @@ protected:
 
 private:
 	Ui::PropertyDialog *ui;
-	PhStripDoc *_doc;
+#ifdef USE_VIDEO
 	PhVideoEngine *_videoEngine;
+#endif
+	PhStripDoc *_doc;
 };
 
 #endif // PROPERTYDIALOG_H

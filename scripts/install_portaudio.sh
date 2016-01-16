@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 echo "Install portaudio"
 if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
@@ -8,7 +10,7 @@ brew install portaudio
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"
 
-sudo apt-get install yasm
+sudo apt-get -y install yasm
 curl -L http://portaudio.com/archives/pa_stable_v19_20140130.tgz -o pa_stable_v19_20140130.tgz
 tar -xvzf pa_stable_v19_20140130.tgz
 cd portaudio

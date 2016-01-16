@@ -10,3 +10,6 @@ SOURCES += \
 	$$PWD/TimeCodeSpec.cpp \
 	$$PWD/ClockSpec.cpp \
 	$$PWD/SynchronizerSpec.cpp \
+
+HEADERS += \
+    $$PWD/SyncSpecSettings.h

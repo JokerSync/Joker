@@ -3,6 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QColorDialog>
+
 #include "PeopleEditionDialog.h"
 #include "ui_PeopleEditionDialog.h"
 
@@ -52,7 +54,7 @@ void PeopleEditionDialog::on_pbColor_clicked()
 	dlg.setCurrentColor(QColor(_people->color()));
 
 	// Connecting slot
-	connect(&dlg, SIGNAL(currentColorChanged(QColor)), this, SLOT(OnColorSelected(QColor)));
+	connect(&dlg, &QColorDialog::currentColorChanged, this, &PeopleEditionDialog::OnColorSelected);
 
 	dlg.exec();
 }

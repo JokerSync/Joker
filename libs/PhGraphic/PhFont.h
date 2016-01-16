@@ -7,7 +7,7 @@
 #ifndef PHFONT_H
 #define PHFONT_H
 
-#include "PhGraphic.h"
+#include <QString>
 
 /**
  * @brief Describe the font appearance for PhGraphicText

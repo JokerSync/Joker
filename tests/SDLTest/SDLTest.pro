@@ -7,7 +7,10 @@ TARGET = SDLTest
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
-include($$TOP_ROOT/common/common.pri)
+QT       += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TEMPLATE = app
 
 SOURCES += main.cpp
 
@@ -61,8 +64,8 @@ mac {
 }
 
 linux {
-	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lSDL2 -lSDL2_image -lSDL2_ttf
+	INCLUDEPATH += /usr/include
+	LIBS += -L/usr/lib -lSDL2 -lSDL2_image -lSDL2_ttf
 }
 
 QMAKE_POST_LINK += echo $${RESOURCES_PATH} $${CS}

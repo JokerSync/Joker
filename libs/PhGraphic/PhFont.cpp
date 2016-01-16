@@ -4,6 +4,15 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QtGlobal>
+
+#if defined(Q_OS_MAC)
+#include <SDL2_ttf/SDL_ttf.h>
+#else
+#include <SDL2/SDL_ttf.h>
+#endif
+
+#include "PhGraphicObject.h"
 #include "PhFont.h"
 #include "PhTools/PhDebug.h"
 

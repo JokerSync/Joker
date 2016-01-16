@@ -1,7 +1,7 @@
 Joker
 =====
 
-[![Build Status](https://travis-ci.org/Phonations/Joker.png?branch=master)](https://travis-ci.org/Phonations/Joker) [![Build status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva/branch/master?svg=true)](https://ci.appveyor.com/project/MartinDelille/Joker/branch/master) [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.png?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master) [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=martindelille&url=https://github.com/Phonations/Joker&title=Joker&language=cpp&tags=github&category=software) [![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Phonations/Joker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/Phonations/Joker.svg?branch=master)](https://travis-ci.org/Phonations/Joker) [![Build status](https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva/branch/master?svg=true)](https://ci.appveyor.com/project/MartinDelille/Joker/branch/master) [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.svg?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master) [![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Phonations/Joker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This repository hosts the Joker projet components:
 
@@ -22,7 +22,7 @@ This repository hosts the Joker projet components:
   * PhSony: Sony 9 pin synchronisation interface.
   * PhLtc: LTC synchronisation interface.
   * PhMidi: Midi synchronisation interface.
-* Various test projects for testing the library modules independently or integrated with each others. It contains also unit testing modules in *AutoTest*.
+* Various test projects for testing the library modules independently or integrated with each others. It contains also unit testing modules in the *specs* directory.
 
 Compilation information:
 ------------------------

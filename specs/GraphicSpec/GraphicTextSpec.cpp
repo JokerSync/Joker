@@ -3,7 +3,6 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhGeneric.h"
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 
@@ -26,7 +25,7 @@ go_bandit([](){
 			view = new PhGraphicView(776, 576);
 			font = new PhFont();
 
-			QObject::connect(view, &PhGraphicView::paint, [&](int w, int h) {
+			QObject::connect(view, &PhGraphicView::paint, [&](int, int) {
 				glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 				glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

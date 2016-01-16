@@ -7,7 +7,7 @@
 #ifndef PHGRAPHICSTRIP_H
 #define PHGRAPHICSTRIP_H
 
-#include "PhTools/PhGeneric.h"
+#include <QTime>
 
 #include "PhGraphicStripSettings.h"
 
@@ -43,8 +43,7 @@
  *
  * The font used by the text is customisable.
  */
-class PhGraphicStrip : public QObject
-{
+class PhGraphicStrip : public QObject {
 	Q_OBJECT
 public:
 	/**

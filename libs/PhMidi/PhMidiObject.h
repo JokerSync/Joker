@@ -6,9 +6,9 @@
 #ifndef PHMIDIOBJECT_H
 #define PHMIDIOBJECT_H
 
-#include <RtMidi.h>
+#include <QObject>
 
-#include "PhTools/PhGeneric.h"
+#include <RtMidi.h>
 
 #include "PhSync/PhTimeCode.h"
 
@@ -41,6 +41,13 @@ public:
 	 * @return True if virtual ports are available, false otherwise.
 	 */
 	static bool canUseVirtualPorts();
+
+	/**
+	 * @brief Convert the midi port name in UTF8
+	 * @param name The midi port name
+	 * @return A UTF8 QString
+	 */
+	static QString convertName(std::string name);
 
 protected:
 	/**

@@ -25,5 +25,9 @@ HEADERS  += FormTestWindow.h \
 FORMS    += FormTestWindow.ui \
 	AboutDialog.ui
 
+win32 {
+	OTHER_FILES += FormTest.iss
+}
+
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
 include($$TOP_ROOT/common/deploy.pri)

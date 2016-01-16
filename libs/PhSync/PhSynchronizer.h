@@ -1,15 +1,15 @@
 /**
  * @file
- * @copyright (C) 2012-2014 Phonations
+ * @copyright (C) 2012-2015 Phonations
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
 #ifndef PHSYNCHRONIZER_H
 #define PHSYNCHRONIZER_H
 
-#include "PhTools/PhGeneric.h"
-
 #include "PhSync/PhClock.h"
+
+#include "PhSyncSettings.h"
 
 /**
  * @brief Provide a synchronisation system between the strip, the video and the external sync signal
@@ -28,7 +28,39 @@ public:
 		MTC = 3,
 	};
 
-	PhSynchronizer();
+	/**
+	 * @brief PhSynchronizer constructor
+	 * @param settings The specific sync settings
+	 */
+	PhSynchronizer(PhSyncSettings* settings);
+
+	/**
+	 * @brief Get the time of the active clock
+	 *
+	 * Video time, or strip time (if video clock is null) or sync time (if strip clock is null).
+	 *
+	 * @return A time value
+	 */
+	PhTime time();
+
+	/**
+	 * @brief Set the time for all the clocks
+	 */
+	void setTime(PhTime value);
+
+	/**
+	 * @brief Get the rate of the active clock
+	 *
+	 * Video rate, or strip rate (if video clock is null) or sync rate (if strip clock is null).
+	 *
+	 * @return A time value
+	 */
+	PhRate rate();
+
+	/**
+	 * @brief Set the rate for all the clocks
+	 */
+	void setRate(PhRate value);
 
 	/**
 	 * @brief Set the strip clock
@@ -80,7 +112,9 @@ private slots:
 	void onVideoRateChanged(PhRate rate);
 	void onSyncTimeChanged(PhTime time);
 	void onSyncRateChanged(PhRate rate);
+
 private:
+	PhSyncSettings* _settings;
 	int _syncType;
 	PhClock * _stripClock;
 	PhClock * _videoClock;
@@ -90,7 +124,7 @@ private:
 	bool _settingSonyTime;
 	bool _settingStripRate;
 	bool _settingVideoRate;
-	bool _settingSonyRate;
+	bool _settingSyncRate;
 };
 
 #endif // PHSYNCHRONIZER_H

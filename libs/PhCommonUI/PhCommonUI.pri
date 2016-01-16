@@ -5,9 +5,6 @@
 
 QT += widgets
 
-PRECOMPILED_HEADERS += \
-    $$PWD/PhUI.h \
-
 HEADERS += \
 #    $$PWD/PhLeap.h \
 	$$PWD/PhMediaPanel.h \

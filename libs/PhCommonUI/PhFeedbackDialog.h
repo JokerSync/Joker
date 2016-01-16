@@ -6,8 +6,8 @@
 #ifndef FEEDBACKDIALOG_H
 #define FEEDBACKDIALOG_H
 
-#include "PhTools/PhGeneric.h"
-#include "PhCommonUI/PhUI.h"
+#include <QDialog>
+#include <QNetworkReply>
 
 #include "PhTools/PhDebug.h"
 

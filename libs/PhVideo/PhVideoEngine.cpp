@@ -4,7 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include "PhTools/PhGeneric.h"
+#include <cmath>
+
 #include "PhTools/PhDebug.h"
 
 #include "PhVideoEngine.h"
@@ -255,7 +256,6 @@ QString PhVideoEngine::codecName()
 {
 	if(_videoStream)
 		return _videoStream->codec->codec_descriptor->long_name;
-
 	return "";
 }
 
@@ -322,6 +322,7 @@ bool PhVideoEngine::decodeFrame(PhTime time)
 							break;
 						case AV_PIX_FMT_YUVJ440P:
 							pixFormat = AV_PIX_FMT_YUV440P;
+							break;
 						default:
 							pixFormat = _videoStream->codec->pix_fmt;
 							break;
@@ -375,7 +376,11 @@ bool PhVideoEngine::decodeFrame(PhTime time)
 			// (Note that it is best not to do use '_currentTime = time' here, because the seeking operation may
 			// not be 100% accurate: the actual time may be different from the requested time. So a time drift
 			// could appear.)
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(55, 28, 1)
+			_currentTime = time;
+#else
 			_currentTime = _timeIn + AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
+#endif
 
 			//Avoid memory leak
 			av_free_packet(&packet);

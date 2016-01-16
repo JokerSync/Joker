@@ -4,14 +4,12 @@
  * @license: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QSize>
+
 #include "PhGraphicRect.h"
 
 PhGraphicRect::PhGraphicRect(int x, int y, int w, int h)
 	: PhGraphicObject(x, y), _w(w), _h(h)
-{
-}
-
-PhGraphicRect::~PhGraphicRect()
 {
 }
 

@@ -3,6 +3,9 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QtGlobal>
+#include <QTextCodec>
+
 #include "PhMidiObject.h"
 
 #include "PhTools/PhDebug.h"
@@ -15,9 +18,8 @@ PhMidiObject::PhMidiObject() :
 bool PhMidiObject::canUseVirtualPorts()
 {
 	bool result = false;
-	RtMidiOut *midiOut;
 	try {
-		midiOut = new RtMidiOut();
+		QScopedPointer<RtMidiOut> midiOut(new RtMidiOut());
 
 		RtMidi::Api midiApi = midiOut->getCurrentApi();
 
@@ -30,9 +32,18 @@ bool PhMidiObject::canUseVirtualPorts()
 	catch(RtMidiError &error) {
 		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
 	}
-	delete midiOut;
 
 	return result;
+}
+
+QString PhMidiObject::convertName(std::string name)
+{
+#if defined(Q_OS_MAC)
+	QTextCodec *codec = QTextCodec::codecForName("Apple Roman");
+	return codec->toUnicode(name.c_str());
+#else
+	return QString::fromStdString(name);
+#endif
 }
 
 PhTimeCodeType PhMidiObject::computeTimeCodeType(unsigned char data)
@@ -65,6 +76,7 @@ unsigned char PhMidiObject::computeHH(unsigned char hh, PhTimeCodeType tcType)
 	case PhTimeCodeType30:
 		return hh | (3 << 5);
 	}
+	return 0;
 }
 
 unsigned char PhMidiObject::computeH(unsigned char hh, PhTimeCodeType tcType)
