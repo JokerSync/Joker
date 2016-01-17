@@ -5,6 +5,8 @@
 
 QT		+= xml sql network
 
+message("Using Qt v$$QT_VERSION")
+
 HEADERS += \
 	$$PWD/PhDebug.h \
 	$$PWD/PhTickCounter.h \
