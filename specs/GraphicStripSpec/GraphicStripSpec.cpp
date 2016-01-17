@@ -50,7 +50,7 @@ go_bandit([](){
 			QString expectedFile = "drawTest.expected.bmp";
 			QImage expectedImage(expectedFile);
 
-			int result = PhPictureTools::compare(resultImage, expectedImage, true);
+			int result = PhPictureTools::compare(resultImage, expectedImage);
 			PHDEBUG << "result:" << result;
 			AssertThat(result, IsLessThan(720 * 240)); // accept a difference of 1 per pixel
 		});
