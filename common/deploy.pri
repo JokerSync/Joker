@@ -12,6 +12,8 @@ mac {
 CONFIG(release, debug|release) {
 	mac {
 		app_bundle {
+			QMAKE_POST_LINK += macdeployqt $${TARGET}.app; # -codesign=$$(APPLICATION_CERTIFICATE);
+
 			if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {
 				PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}
 			} else {
@@ -20,7 +22,7 @@ CONFIG(release, debug|release) {
 
 			message($$PH_DEPLOY_TARGET)
 
-			installer.commands += macdeployqt $${TARGET}.app &&
+			installer.commands += echo "Generate $$PH_DEPLOY_TARGET:";
 			installer.commands += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
 					--volname $${PH_DEPLOY_TARGET} \
 #					--volicon $${_PRO_FILE_PWD_}/../../app/Joker/joker.icns \
