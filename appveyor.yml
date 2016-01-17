@@ -1,6 +1,6 @@
 environment:
   JOKER_RELEASE_PATH: .
-  QTDIR: C:\Qt\5.5\mingw491_32
+  QTDIR: C:\Qt\5.5\mingw492_32
   BOOST_PATH: C:\Libraries\boost
 
 install:
