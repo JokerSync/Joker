@@ -184,8 +184,6 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 		_textureWidth = width;
 		_textureHeight = height;
 
-		PHDEBUG << QString("%1x%2").arg(width).arg(height);
-
 		// Bind the texture object
 		glBindTexture( GL_TEXTURE_2D, _previousTexture );
 
