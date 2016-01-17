@@ -86,5 +86,6 @@ CONFIG(release, debug|release) {
 
 }
 
-PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
-include($$TOP_ROOT/common/deploy.pri)
+win32 {
+	QMAKE_POST_LINK += windeployqt $${RESOURCES_PATH} $${CS}
+}
