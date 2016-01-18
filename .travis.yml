@@ -1,6 +1,6 @@
 os:
 - linux
-- osx
+  #- osx
 language: cpp
 compiler: clang
 env:
@@ -30,7 +30,7 @@ matrix:
     env: JOB=UNCRUSTIFY
   - os: linux
     env: JOB=DOXYGEN
-  - os: linux
+  - os: osx
     env: JOB=BUILD_COVERITY_JOKER
   - os: linux
     env: JOB=BUILD_SPEC_BANDIT
