@@ -1,13 +1,8 @@
 #include <QtGlobal>
 
 #include <SDL2/SDL.h>
-#if defined(Q_OS_MAC)
-#include <SDL2_image/SDL_image.h>
-#include <SDL2_ttf/SDL_ttf.h>
-#else
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#endif
 
 #include <string>
 #include <cstring>
@@ -60,7 +55,7 @@ int main(int argc, char **argv)
 	SDL_Rect rect = {600, 20, 200, 300};
 	SDL_FillRect(screen, &rect, 0xff0000ff);
 
-	QString ressourcesPath = QApplication::applicationDirPath();
+	QString ressourcesPath = QApplication::applicationDirPath() + PATH_TO_RESSOURCES;
 	// Create a surface from picture:
 	QString lookPath = ressourcesPath + "/look.png";
 

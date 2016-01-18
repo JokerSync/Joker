@@ -26,10 +26,5 @@ HEADERS  += MidiToolWindow.h \
 FORMS    += MidiToolWindow.ui \
 	PreferencesDialog.ui
 
-mac {
-	# For the plist version
-	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
-}
-
 PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
 include($$TOP_ROOT/common/deploy.pri)

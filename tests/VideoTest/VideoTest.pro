@@ -29,11 +29,6 @@ FORMS += \
 	$$PWD/VideoTestWindow.ui \
     $$PWD/PropertyDialog.ui
 
-mac {
-	# For the plist version
-	QMAKE_INFO_PLIST +=  $${TOP_ROOT}/data/test.plist
-}
-
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Helvetica.ttf) $${RESOURCES_PATH} $${CS}
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
