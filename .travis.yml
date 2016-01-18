@@ -3,6 +3,9 @@ os:
 - osx
 language: cpp
 compiler: clang
+branch:
+  except:
+    - /^skipthisbranch$/
 env:
   global:
   - JOKER_RELEASE_PATH=$HOME
