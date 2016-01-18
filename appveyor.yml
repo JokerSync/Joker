@@ -3,7 +3,7 @@ environment:
   QTDIR: C:\Qt\5.4\mingw491_32
   BOOST_PATH: C:\Libraries\boost
 
-branch:
+branches:
   except:
     - /^skipthisbranch$/
 install:
