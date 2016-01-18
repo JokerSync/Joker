@@ -20,13 +20,13 @@ matrix:
   - os: osx
     env:
       - JOB=DOXYGEN
-  - os: osx
-    env:
-      - JOB=BUILD_RELEASE_LTCTOOL
-      - QTVER=551
   - os: linux
     env:
-      - JOB=BUILD_RELEASE_LTCTOOL
+      - JOB=BUILD_RELEASE_JOKER
+      - QTVER=551
+  - os: osx
+    env:
+      - JOB=BUILD_RELEASE_JOKER
       - QTVER=551
   - os: osx
     env:
@@ -44,7 +44,7 @@ matrix:
     env:
       - JOB=BUILD_RELEASE_MIDITOOL
       - QTVER=551
-  - os: linux
+  - os: osx
     env:
       - JOB=BUILD_RELEASE_ALL_TESTS
       - QTVER=551
