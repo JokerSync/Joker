@@ -78,7 +78,7 @@ after_success:
   -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ -E .+/specs/.+ --verbose;
   fi
 after_failure:
-- if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then ./scripts/upload.sh
+- if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./scripts/upload.sh
   *.result.bmp; fi
 notifications:
   email: false

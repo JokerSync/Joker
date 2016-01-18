@@ -9,14 +9,8 @@
 #include <QWindow>
 
 #include <SDL2/SDL.h>
-
-#if defined(Q_OS_MAC)
-#include <SDL2_image/SDL_image.h>
-#include <SDL2_ttf/SDL_ttf.h>
-#else
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#endif
 
 #include "PhTools/PhDebug.h"
 
