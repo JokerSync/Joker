@@ -3,6 +3,9 @@ environment:
   QTDIR: C:\Qt\5.4\mingw491_32
   BOOST_PATH: C:\Libraries\boost
 
+branches:
+  except:
+    - /^skipthisbranch$/
 install:
   - git submodule update --init --recursive
   # Installing various utilities
@@ -43,7 +46,7 @@ install:
   - 7z x libltc-1.1.4.tar.gz
   - 7z x libltc-1.1.4.tar
   - set LTC_PATH=%CD%\libltc-1.1.4\src
-  - copy qopengl.h %QTDIR%\include\QtGui
+  #- copy qopengl.h %QTDIR%\include\QtGui
 
 build_script:
   - qmake app/Joker/Joker.pro

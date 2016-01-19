@@ -12,6 +12,7 @@
 #include "GraphicStripSpecSettings.h"
 
 #include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 
@@ -50,9 +51,9 @@ go_bandit([](){
 			QString expectedFile = "drawTest.expected.bmp";
 			QImage expectedImage(expectedFile);
 
-			int result = PhPictureTools::compare(resultImage, expectedImage, true);
+			int result = PhPictureTools::compare(resultImage, expectedImage);
 			PHDEBUG << "result:" << result;
-			AssertThat(result, IsLessThan(720 * 240)); // accept a difference of 1 per pixel
+			AssertThat(result, IsLessThan(720 * 240 * 4)); // accept a difference of 4 per pixel
 		});
 	});
 });
