@@ -1,4 +1,7 @@
 language: cpp
+branches:
+  except:
+    - /^skipthisbranch$/
 env:
   global:
   - JOKER_RELEASE_PATH=$HOME
@@ -10,14 +13,14 @@ env:
   - COVERITY_SCAN_BUILD_COMMAND=make
   - COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --comptype clangcxx --compiler clang++"
   - secure: YlyaETwveWXOT1wpOz68Vp8Pj1zZ5u44ppOabNw/Xe4M8ZHdPy3QkmyB7wTeUgNjlHzkW23aOOzTk8bm5wxS1iQRxHsQ/DnZd0TcULPuTY9+yO2L/Wkwk6quFBqGlkT8h2v4xkRDyshG8OxF6eqeeq5Cflt/LOhx+MnJqse9EzQ=
-matrix:
+  matrix:
   include:
   - os: osx
     env:
-      - JOB=UNCRUSTIFY
+  - JOB=UNCRUSTIFY
   - os: osx
     env:
-      - JOB=DOXYGEN
+  - JOB=DOXYGEN
   - os: linux
     env:
       - JOB=BUILD_RELEASE_JOKER
@@ -32,19 +35,19 @@ matrix:
       - QTVER=532
   - os: osx
     env:
-      - JOB=BUILD_SPEC_BANDIT
+  - JOB=BUILD_SPEC_BANDIT
       - QTVER=551
   - os: osx
     env:
-      - JOB=BUILD_RELEASE_LTCTOOL
+  - JOB=BUILD_RELEASE_LTCTOOL
       - QTVER=551
   - os: osx
     env:
-      - JOB=BUILD_RELEASE_MIDITOOL
+  - JOB=BUILD_RELEASE_MIDITOOL
       - QTVER=551
   - os: osx
     env:
-      - JOB=BUILD_RELEASE_ALL_TESTS
+  - JOB=BUILD_RELEASE_ALL_TESTS
       - QTVER=551
 before_install:
 - export SHORT_VER=`echo $QTVER | cut -b1-2`
