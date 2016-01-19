@@ -4,7 +4,9 @@ win32 {
 
 mac {
 	app_bundle {
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string com.phonations.$$lower($${TARGET}) $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
 	}
 }
@@ -12,7 +14,7 @@ mac {
 CONFIG(release, debug|release) {
 	mac {
 		app_bundle {
-			QMAKE_POST_LINK += macdeployqt $${TARGET}.app; # -codesign=$$(APPLICATION_CERTIFICATE);
+			QMAKE_POST_LINK += macdeployqt $${TARGET}.app -always-overwrite -codesign=$$(APPLICATION_CERTIFICATE);
 
 			if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {
 				PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}
@@ -21,6 +23,13 @@ CONFIG(release, debug|release) {
 			}
 
 			message($$PH_DEPLOY_TARGET)
+
+			QMAKE_POST_LINK += echo "Build PKG";
+
+			QMAKE_POST_LINK += echo $$(INSTALLER_CERTIFICATE);
+			QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${PH_DEPLOY_TARGET}.pkg;
+
+			QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION};
 
 			installer.commands += echo "Generate $$PH_DEPLOY_TARGET:";
 			installer.commands += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
