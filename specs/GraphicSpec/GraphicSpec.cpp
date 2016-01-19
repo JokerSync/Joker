@@ -74,20 +74,7 @@ go_bandit([](){
 				image.draw();
 			});
 
-			view.show();
-
-			QImage resultImage(view.renderPixmap(64, 64).toImage());
-			QString resultFile = "imageTest.result.bmp";
-			resultImage.save(resultFile);
-
-			// The expected result should be the same than the input (rgbPatternTest.expected.bmp)
-			// but it turns out that image is altered when opened with IMG_Load()
-			// (see PhGraphicImage::init())
-			QString expectedFile = "imageTest.expected.bmp";
-			QImage expectedImage(expectedFile);
-
-			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, Equals((unsigned int)0));
+			AssertThat(QImage(view.renderPixmap(64, 64).toImage()) == QImage("rgbPatternTest.expected.bmp"), IsTrue());
 		});
 
 		it("draw_a_rgb_pattern", [&](){
@@ -104,16 +91,7 @@ go_bandit([](){
 				rect.draw();
 			});
 
-			view.show();
-
-			QImage resultImage(view.renderPixmap(64, 64).toImage());
-			QString resultFile = "rgbPatternTest.result.bmp";
-			resultImage.save(resultFile);
-			QString expectedFile = "rgbPatternTest.expected.bmp";
-			QImage expectedImage(expectedFile);
-
-			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, Equals((unsigned int)0));
+			AssertThat(QImage(view.renderPixmap(64, 64).toImage()) == QImage("rgbPatternTest.expected.bmp"), IsTrue());
 		});
 
 		it("draw a loop", [&]() {

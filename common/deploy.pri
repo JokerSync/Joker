@@ -4,22 +4,18 @@ win32 {
 
 mac {
 	app_bundle {
-
-		BUNDLEID = com.phonations.$$lower($${TARGET})
-
-		QMAKE_POST_LINK += cp $$ICON $${TARGET}.app/Contents/Resources/$${TARGET}.icns;
-
-		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string $${BUNDLEID} $${TARGET}.app/Contents/Info.plist;
-		QMAKE_POST_LINK += plutil -insert CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
-		QMAKE_POST_LINK += plutil -insert CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
-		QMAKE_POST_LINK += plutil -insert LSApplicationCategoryType -string public.app-category.video $${TARGET}.app/Contents/Info.plist;
-		QMAKE_POST_LINK += plutil -insert NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string com.phonations.$$lower($${TARGET}) $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
 	}
 }
 
 CONFIG(release, debug|release) {
 	mac {
 		app_bundle {
+			QMAKE_POST_LINK += macdeployqt $${TARGET}.app -always-overwrite -codesign=$$(APPLICATION_CERTIFICATE);
+
 			if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {
 				PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}
 			} else {
@@ -28,70 +24,14 @@ CONFIG(release, debug|release) {
 
 			message($$PH_DEPLOY_TARGET)
 
-			QMAKE_POST_LINK += macdeployqt $${TARGET}.app;
+			QMAKE_POST_LINK += echo "Build PKG";
 
-			ENTITLEMENTS = $$TOP_ROOT/common/entitlements.plist
+			QMAKE_POST_LINK += echo $$(INSTALLER_CERTIFICATE);
+			QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${PH_DEPLOY_TARGET}.pkg;
 
-			OTHER_FILES += $${ENTITLEMENTS} \
-				$$TOP_ROOT/scripts/prepare-framework.py
+			QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION};
 
-##################################################
-            QMAKE_POST_LINK += echo "Prepare Qt frameworks";
-            QMAKE_POST_LINK += pwd;
-            QMAKE_POST_LINK += $$TOP_ROOT/scripts/prepare-framework.py $(QTDIR) $${TARGET}.app;
-
-            QMAKE_POST_LINK += echo "Update CFBundleIdentifier";
-            QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/QtCore.framework/Resources/Info.plist;
-            QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/QtGui.framework/Resources/Info.plist;
-            QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/QtNetwork.framework/Resources/Info.plist;
-            QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/QtPrintSupport.framework/Resources/Info.plist;
-            QMAKE_POST_LINK += plutil -replace CFBundleExecutable -string "QtPrintSupport" $${TARGET}.app/Contents/Frameworks/QtPrintSupport.framework/Resources/Info.plist;
-            QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/QtWidgets.framework/Resources/Info.plist;
-            phgraphic {
-                QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/QtOpenGL.framework/Resources/Info.plist;
-            }
-            phsony {
-                QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/QtSerialPort.framework/Resources/Info.plist;
-            }
-            QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/QtSql.framework/Resources/Info.plist;
-            QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string "UNDLEID" $${TARGET}.app/Contents/Frameworks/QtXml.framework/Resources/Info.plist;
-
-            QMAKE_POST_LINK += echo "Sign Qt frameworks with $$(APPLICATION_CERTIFICATE)";
-
-            QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtCore.framework;
-            QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtGui.framework;
-            QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtNetwork.framework;
-            QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtPrintSupport.framework;
-            QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtWidgets.framework;
-            phgraphic {
-                QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtOpenGL.framework;
-            }
-            phsony {
-                QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtSerialPort.framework;
-            }
-            QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtSql.framework;
-            QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/QtXml.framework;
-
-            QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/PlugIns/*/*.dylib;
-            QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -i $BUNDLEID --deep $${TARGET}.app/Contents/Frameworks/*.*.*;
-
-            QMAKE_POST_LINK += echo "Add entitlements";
-
-            QMAKE_POST_LINK += cp $${ENTITLEMENTS} .;
-            QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -v --entitlements $${ENTITLEMENTS} $${TARGET}.app;
-
-			create-pkg {
-				QMAKE_POST_LINK += echo "Build PKG";
-
-				QMAKE_POST_LINK += echo $$(INSTALLER_CERTIFICATE);
-				QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${PH_DEPLOY_TARGET}.pkg;
-
-				QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION};
-			}
-
-##################################################
-
-			installer.commands += echo "Creating dmg with create-dmg";
+			installer.commands += echo "Generate $$PH_DEPLOY_TARGET:";
 			installer.commands += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
 					--volname $${PH_DEPLOY_TARGET} \
 #					--volicon $${_PRO_FILE_PWD_}/../../app/Joker/joker.icns \
