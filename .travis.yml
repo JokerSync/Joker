@@ -85,7 +85,7 @@ script:
   fi
 - if [[ "$JOB" == BUILD_RELEASE_ALL_TESTS ]]; then qmake tests/tests.pro; fi
 - if [[ "$JOB" == BUILD_* && "$JOB" != BUILD_COVERITY_JOKER ]]; then make; fi
-- if [[ "$JOB" == BUILD_COVERITY_JOKER ]]; then curl -s "$COVERITY_SCAN_SCRIPT" | bash; fi
+- if [[ "$JOB" == BUILD_COVERITY_JOKER && "$TRAVIS_BRANCH" == "$COVERITY_SCAN_BRANCH_PATTERN" ]]; then curl -s "$COVERITY_SCAN_SCRIPT" | bash; fi
 - if [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./AllSpecs; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then make installer; fi
 - if [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then export RELEASED_PACKAGE_FILENAME=$(ls
