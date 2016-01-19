@@ -1,5 +1,5 @@
 language: cpp
-compiler: clang
+#compiler: clang
 #env:
 #  global:
 #  - JOKER_RELEASE_PATH=$HOME
