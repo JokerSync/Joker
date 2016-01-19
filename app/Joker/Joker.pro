@@ -81,7 +81,7 @@ unix {
 }
 
 mac{
-	ICON = $$PWD/joker.icns
+	ICON = joker.icns
 
 	QMAKE_CFLAGS += -gdwarf-2
 	QMAKE_CXXFLAGS += -gdwarf-2
