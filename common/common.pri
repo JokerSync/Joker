@@ -11,10 +11,10 @@ CONFIG += c++11
 TEMPLATE = app
 
 win32 {
-	VERSION = $$system($$TOP_ROOT/scripts/date.bat)
+	PH_DATE = $$system($$TOP_ROOT/scripts/date.bat)
 }
 else {
-	VERSION = $$system(date +%y.%m.%d)
+	PH_DATE = $$system(date +%y.%m.%d)
 }
 
 # Use default icon if not defined
