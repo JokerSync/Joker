@@ -83,8 +83,8 @@ unix {
 mac{
 	ICON = joker.icns
 
-	QMAKE_CFLAGS += -gdwarf-2
-	QMAKE_CXXFLAGS += -gdwarf-2
+#	QMAKE_CFLAGS += -gdwarf-2
+#	QMAKE_CXXFLAGS += -gdwarf-2
 }
 
 win32 {
