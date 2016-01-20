@@ -22,6 +22,7 @@ public:
 	PH_SETTING_STRING2(setMidiInputPortName, midiInputPortName, "MidiTool")
 	PH_SETTING_STRING2(setMidiVirtualInputPortName, midiVirtualInputPortName, "MidiTool")
 	PH_SETTING_BOOL2(setMidiInputUseExistingPort, midiInputUseExistingPort, true)
+	PH_SETTING_BOOL(setMidiForce24as2398, midiForce24as2398);
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
 };
