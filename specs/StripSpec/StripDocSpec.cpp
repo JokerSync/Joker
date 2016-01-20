@@ -314,6 +314,21 @@ go_bandit([](){
 					AssertThat(t2s25(text->timeOut()), Equals("01:01:01:00"));
 					AssertThat(text->content().toStdString(), Equals("world"));
 				});
+
+				it("export and import detx with other timecode type", [&](){
+					doc.setVideoFilePath("test.mov");
+					doc.setVideoTimeIn(PhTimeCode::timeFromString("01:00:00:00", PhTimeCodeType2398), PhTimeCodeType2398);
+
+					AssertThat(doc.exportDetXFile("save03.detx", s2t("01:01:01:01", PhTimeCodeType2398)), IsTrue());
+
+					doc.reset();
+
+					AssertThat(doc.importDetXFile("save03.detx"), IsTrue());
+
+					AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType2398));
+					AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType2398), Equals("01:00:00:00"));
+					AssertThat(t2s(doc.lastTime(), PhTimeCodeType2398), Equals("01:01:01:01"));
+				});
 			});
 		});
 
