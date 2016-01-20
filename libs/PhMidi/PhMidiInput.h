@@ -51,6 +51,12 @@ public:
 	 */
 	void close();
 
+	/**
+	 * @brief When a 24fps midi message is received, treat it as 23.98
+	 * @param force True if force, false otherwise
+	 */
+	void force24as2398(bool force);
+
 signals:
 	/**
 	 * @brief Signal emitted upon new quarter frame message
@@ -119,6 +125,13 @@ protected:
 	 */
 	virtual void onStop();
 
+	/**
+	 * @brief Compute the time code type from a MTC data byte.
+	 * @param data The MTC data byte
+	 * @return A timecode type value
+	 */
+	PhTimeCodeType computeTimeCodeType(unsigned char data);
+
 protected:
 	/** @brief Remember the hour digits */
 	unsigned int _hh;
@@ -140,6 +153,7 @@ private:
 	static void errorCallback(RtMidiError::Type type, const std::string &errorText, void *userData);
 
 	RtMidiIn *_midiIn;
+	bool _force24as2398;
 };
 
 #endif // PHMIDIINPUT_H

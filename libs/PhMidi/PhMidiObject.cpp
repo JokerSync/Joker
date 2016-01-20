@@ -46,23 +46,6 @@ QString PhMidiObject::convertName(std::string name)
 #endif
 }
 
-PhTimeCodeType PhMidiObject::computeTimeCodeType(unsigned char data)
-{
-	switch (data) {
-	case 0:
-		return PhTimeCodeType24;
-	case 1:
-		return PhTimeCodeType25;
-	case 2:
-		return PhTimeCodeType2997;
-	case 3:
-		return PhTimeCodeType30;
-	default:
-		PHDEBUG << "Unknown tc type (assuming 25):" << data;
-		return PhTimeCodeType25;
-	}
-}
-
 unsigned char PhMidiObject::computeHH(unsigned char hh, PhTimeCodeType tcType)
 {
 	switch (tcType) {

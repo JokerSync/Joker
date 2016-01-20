@@ -51,13 +51,6 @@ public:
 
 protected:
 	/**
-	 * @brief Compute the time code type from a MTC data byte.
-	 * @param data The MTC data byte
-	 * @return A timecode type value
-	 */
-	static PhTimeCodeType computeTimeCodeType(unsigned char data);
-
-	/**
 	 * @brief Compute the HH data byte from a time code type
 	 * @param hh The hour digit
 	 * @param tcType The timecode type

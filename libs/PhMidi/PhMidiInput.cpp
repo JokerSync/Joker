@@ -13,7 +13,8 @@ PhMidiInput::PhMidiInput() :
 	_ss(0),
 	_ff(0),
 	_mtcType(PhTimeCodeType25),
-	_midiIn(NULL)
+	_midiIn(NULL),
+	_force24as2398(false)
 {
 }
 
@@ -80,6 +81,11 @@ void PhMidiInput::close()
 	}
 }
 
+void PhMidiInput::force24as2398(bool force)
+{
+	_force24as2398 = force;
+}
+
 void PhMidiInput::onQuarterFrame(unsigned char data)
 {
 	emit quarterFrame(data);
@@ -98,6 +104,26 @@ void PhMidiInput::onPlay()
 void PhMidiInput::onStop()
 {
 	emit stop();
+}
+
+PhTimeCodeType PhMidiInput::computeTimeCodeType(unsigned char data)
+{
+	switch (data) {
+	case 0:
+		if(_force24as2398)
+			return PhTimeCodeType2398;
+		else
+			return PhTimeCodeType24;
+	case 1:
+		return PhTimeCodeType25;
+	case 2:
+		return PhTimeCodeType2997;
+	case 3:
+		return PhTimeCodeType30;
+	default:
+		PHDEBUG << "Unknown tc type (assuming 25):" << data;
+		return PhTimeCodeType25;
+	}
 }
 
 void PhMidiInput::onMessage(std::vector<unsigned char> *message)
