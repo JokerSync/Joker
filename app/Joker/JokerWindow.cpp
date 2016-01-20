@@ -662,7 +662,7 @@ void JokerWindow::fadeOutMediaPanel()
 		return;
 	}
 
-	PHDEBUG << _mediaPanelState;
+//	PHDEBUG << _mediaPanelState;
 	switch(_mediaPanelState) {
 	case MediaPanelVisible:
 		PHDEBUG << "Hiding";
