@@ -172,6 +172,8 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		ui->mtcVirtualInputPortRadioButton->setChecked(true);
 	}
 
+	ui->mtcForce24as2398CheckBox->setChecked(_settings->mtcForce24as2398());
+
 	// Initializing MMC preferences
 	ui->mmcCheckBox->setChecked(_settings->sendMmcMessage());
 	QStringList mmcOutputPorts = PhMidiOutput::outputList();
@@ -187,6 +189,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	connect(&_midiPortTypeButtonGroup, SIGNAL(buttonToggled(int, bool)), this, SLOT(updateSynchronisationEnabledControl(int, bool)));
 #else
 	ui->mtcRadioButton->setEnabled(false);
+	ui->mtcForce24as2398CheckBox->setEnabled(false);
 	ui->mmcCheckBox->setEnabled(false);
 #endif
 
@@ -259,6 +262,7 @@ void PreferencesDialog::accept()
 	_settings->setMtcInputUseExistingPort(ui->mtcExistingInputPortRadioButton->isChecked());
 	_settings->setMtcInputPort(ui->mtcExistingInputPortComboBox->currentText());
 	_settings->setMtcVirtualInputPort(ui->mtcVirtualInputPortLineEdit->text());
+	_settings->setMtcForce24as2398(ui->mtcForce24as2398CheckBox->isChecked());
 
 	_settings->setSendMmcMessage(ui->mmcCheckBox->isChecked());
 	_settings->setMmcOutputPort(ui->mmcOutputPortComboBox->currentText());

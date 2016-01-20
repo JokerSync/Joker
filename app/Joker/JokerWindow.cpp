@@ -80,6 +80,10 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::onVideoSync);
 #endif
 
+#ifdef USE_MIDI
+	_mtcReader.force24as2398(_settings->mtcForce24as2398());
+#endif // USE_MIDI
+
 	setupSyncProtocol();
 
 	// Setting up the media panel
@@ -633,6 +637,9 @@ void JokerWindow::on_actionPreferences_triggered()
 			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
 			setupSyncProtocol();
 		}
+#ifdef USE_MIDI
+		_mtcReader.force24as2398(_settings->mtcForce24as2398());
+#endif // USE_MIDI
 	}
 
 	fadeInMediaPanel();
