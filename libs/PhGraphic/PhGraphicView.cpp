@@ -9,7 +9,6 @@
 #include <QWindow>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
 #include "PhTools/PhDebug.h"
@@ -117,7 +116,6 @@ void PhGraphicView::onRefresh()
 		_dropTimer.restart();
 		_dropDetected++;
 	}
-
 }
 
 void PhGraphicView::paintGL()
