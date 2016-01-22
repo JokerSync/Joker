@@ -50,14 +50,13 @@ void PhDebug::messageOutput(QtMsgType type, const QMessageLogContext &context, c
 
 		if(instance()->_showConsole) {
 			switch(type) {
-			case QtInfoMsg:
-			case QtDebugMsg:
-				std::cout << logMessage.toStdString() << std::endl;
-				break;
 			case QtWarningMsg:
 			case QtCriticalMsg:
 			case QtFatalMsg:
 				std::cerr << logMessage.toStdString() << std::endl;
+				break;
+			default:
+				std::cout << logMessage.toStdString() << std::endl;
 				break;
 			}
 		}
