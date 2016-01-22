@@ -274,18 +274,15 @@ bool PhVideoEngine::decodeFrame(PhTime time)
 	bool result = false;
 
 	// Stay with the same frame if the time has changed less than the time between two frames
-	// Note that av_seek_frame will seek to the _closest_ frame, sometimes a little bit in the "future",
-	// so it is necessary to use a little margin for the second comparison, otherwise a seek may
-	// be performed on each call to decodeFrame
-	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
-	    && (time > _currentTime - PhTimeCode::timePerFrame(_tcType)/2))
+	PhTime tpf = PhTimeCode::timePerFrame(_tcType);
+	if ((time >= _currentTime) && (time < _currentTime + tpf))
 		result = true;
 	else {
 		// we need to perform a frame seek if the requested frame is not the next frame in the stream
-		if((time >= _currentTime + 2*PhTimeCode::timePerFrame(_tcType))
+		if((time >= _currentTime + 2 * tpf)
 		   || (time < _currentTime)) {
 			int flags = AVSEEK_FLAG_ANY;
-			int64_t timestamp = PhTime_to_AVTimestamp(time - _timeIn);
+			int64_t timestamp = PhTime_to_AVTimestamp(time - _timeIn - (time % tpf)); // remove mid-frame timing
 			PHDEBUG << "seek:" << time << " " << _currentTime << " " << _timeIn << " " << timestamp;
 			av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
 		}

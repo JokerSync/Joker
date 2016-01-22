@@ -52,6 +52,8 @@ PreferencesDialog::PreferencesDialog(MidiToolSettings *settings) :
 	updateInputPortEnabledControl();
 
 	connect(ui->radioButtonExistingPort, &QRadioButton::toggled, this, &PreferencesDialog::updateInputPortEnabledControl);
+
+	ui->checkBoxForce24as2398->setChecked(_settings->midiForce24as2398());
 }
 
 PreferencesDialog::~PreferencesDialog()
@@ -77,6 +79,7 @@ void PreferencesDialog::accept()
 	_settings->setMidiInputUseExistingPort(ui->radioButtonExistingPort->isChecked());
 	_settings->setMidiInputPortName(ui->comboBoxInput->currentText());
 	_settings->setMidiVirtualInputPortName(ui->lineEditInput->text());
+	_settings->setMidiForce24as2398(ui->checkBoxForce24as2398->isChecked());
 
 	QDialog::accept();
 }

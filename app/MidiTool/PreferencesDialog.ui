@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>401</width>
-    <height>166</height>
+    <height>208</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,6 +47,13 @@
        </item>
        <item row="2" column="1">
         <widget class="QComboBox" name="comboBoxInput"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="checkBoxForce24as2398">
+         <property name="text">
+          <string>Force 24 fps as 23.98 fps</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

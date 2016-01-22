@@ -5,6 +5,8 @@
 
 TARGET = MidiSpec
 
+VERSION = 2.0.0
+
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 # Common QMake directive

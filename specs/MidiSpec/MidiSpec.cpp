@@ -589,6 +589,27 @@ go_bandit([](){
 			QThread::msleep(20);
 			AssertThat(mtcReader.clock()->rate(), EqualsWithDelta(1, 0.0001f));
 		});
+
+		it("can treat 24 as 23.98", [&]() {
+			PhMidiTimeCodeWriter mtcWriter(PhTimeCodeType2398);
+			PhMidiTimeCodeReader mtcReader(PhTimeCodeType25);
+
+			AssertThat(mtcReader.open("testMMCReader"), IsTrue());
+			AssertThat(mtcWriter.open("testMMCReader"), IsTrue());
+
+			// Send goto
+			mtcWriter.sendMMCGoto(1, 0, 0, 0, PhTimeCodeType2398);
+			QThread::msleep(10);
+			AssertThat(mtcReader.timeCodeType(), Equals(PhTimeCodeType24));
+			AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType24), Equals("01:00:00:00"));
+
+			mtcReader.force24as2398(true);
+
+			mtcWriter.sendMMCGoto(1, 0, 1, 0, PhTimeCodeType2398);
+			QThread::msleep(10);
+			AssertThat(mtcReader.timeCodeType(), Equals(PhTimeCodeType2398));
+			AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType2398), Equals("01:00:01:00"));
+		});
 	});
 });
 

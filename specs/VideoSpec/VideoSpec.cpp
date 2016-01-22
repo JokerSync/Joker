@@ -170,6 +170,22 @@ go_bandit([](){
 			}
 		});
 
+		it("go to interframe", [&]() {
+			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+
+			AssertThat(compareImage(view->renderPixmap(64, 64).toImage(), QImage("interlace_000.bmp"), "go to interframe"), IsTrue());
+
+			engine->clock()->setTime(960);
+			QThread::msleep(FRAME_WAIT_TIME);
+
+			AssertThat(compareImage(view->renderPixmap(64, 64).toImage(), QImage("interlace_001.bmp"), "go to interframe"), IsTrue());
+
+			engine->clock()->setTime(959);
+			QThread::msleep(FRAME_WAIT_TIME);
+
+			AssertThat(compareImage(view->renderPixmap(64, 64).toImage(), QImage("interlace_000.bmp"), "go to interframe"), IsTrue());
+		});
+
 		it("play", [&](){
 			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
