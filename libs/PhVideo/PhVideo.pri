@@ -28,10 +28,22 @@ win32{
 
 # Unix specific
 unix {
+	FFMPEG_DEV_PATH = $$(FFMPEG_DEV_PATH)
+
+	!exists($$FFMPEG_DEV_PATH) {
+		FFMPEG_DEV_PATH = /usr/local
+	}
+	message("FFmpeg path: $$FFMPEG_DEV_PATH")
+
+	INCLUDEPATH += $$FFMPEG_DEV_PATH/include
+	LIBS += -L$$FFMPEG_DEV_PATH/lib
+
 	LIBS += -lavformat -lavcodec -lavutil -lswscale
 }
 
 # MacOS specific
 mac {
+	LIBS += -framework CoreFoundation -framework CoreMedia -framework CoreVideo -framework VideoDecodeAcceleration -framework VideoToolbox
+	LIBS += -llzma -lswresample
 	LIBS += -liconv -lbz2 -lz
 }
