@@ -1,7 +1,6 @@
 #include <QtGlobal>
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
 #include <string>
@@ -56,23 +55,6 @@ int main(int argc, char **argv)
 	SDL_FillRect(screen, &rect, 0xff0000ff);
 
 	QString ressourcesPath = QApplication::applicationDirPath() + PATH_TO_RESSOURCES;
-	// Create a surface from picture:
-	QString lookPath = ressourcesPath + "/look.png";
-
-	QFile file(lookPath);
-	qDebug() << "exists" << file.exists();
-	SDL_Surface *image = IMG_Load( lookPath.toStdString().c_str());
-
-	if ( image == NULL ) {
-		qDebug() << "failed to load " << lookPath;
-		qDebug() << SDL_GetError();
-		return 1;
-	}
-
-	// Display the picture:
-	SDL_Rect imageRect = {0, 0, image->w, image->h};
-
-	SDL_BlitSurface( image, NULL, screen, &imageRect );
 
 	// Initialize TTF :
 	if( TTF_Init() == -1 ) {
@@ -235,8 +217,6 @@ int main(int argc, char **argv)
 	}
 
 //	//Free the surface and quit SDL
-	SDL_FreeSurface( image );
-//	SDL_FreeSurface(message);
 	SDL_FreeSurface(screen);
 
 //	//Quit SDL

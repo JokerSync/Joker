@@ -45,7 +45,7 @@ bool FFmpegTestWindow::openFile(QString fileName)
 	av_dump_format(_pFormatContext, 0, fileName.toStdString().c_str(), 0);
 
 	// Find video stream :
-	for(int i = 0; i < _pFormatContext->nb_streams; i++) {
+	for(unsigned int i = 0; i < _pFormatContext->nb_streams; i++) {
 		if(_pFormatContext->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO) {
 			_videoStream = _pFormatContext->streams[i];
 			break;

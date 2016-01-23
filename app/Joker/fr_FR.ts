@@ -88,7 +88,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="160"/>
-        <location filename="JokerWindow.cpp" line="366"/>
+        <location filename="JokerWindow.cpp" line="401"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -438,57 +438,57 @@
         <translation>Cacher les personnages sélectionnés</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="179"/>
-        <location filename="JokerWindow.cpp" line="186"/>
-        <location filename="JokerWindow.cpp" line="201"/>
-        <location filename="JokerWindow.cpp" line="210"/>
+        <location filename="JokerWindow.cpp" line="203"/>
+        <location filename="JokerWindow.cpp" line="212"/>
+        <location filename="JokerWindow.cpp" line="229"/>
+        <location filename="JokerWindow.cpp" line="242"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="179"/>
+        <location filename="JokerWindow.cpp" line="203"/>
         <source>Unable to connect to USB422v module</source>
         <translation>Impossible de se connecter au module USB422v</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="186"/>
+        <location filename="JokerWindow.cpp" line="212"/>
         <source>Unable to open %0</source>
         <translation>Impossible d&apos;ouvrir %0</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="201"/>
-        <location filename="JokerWindow.cpp" line="210"/>
+        <location filename="JokerWindow.cpp" line="229"/>
+        <location filename="JokerWindow.cpp" line="242"/>
         <source>Unable to open %0 midi port</source>
         <translation>Impossible d&apos;ouvrir le port midi %0</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="362"/>
+        <location filename="JokerWindow.cpp" line="397"/>
         <source>Rythmo files</source>
         <translation>Fichiers rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="459"/>
+        <location filename="JokerWindow.cpp" line="494"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="464"/>
+        <location filename="JokerWindow.cpp" line="499"/>
         <source>Open a video...</source>
         <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="724"/>
-        <location filename="JokerWindow.cpp" line="749"/>
+        <location filename="JokerWindow.cpp" line="771"/>
+        <location filename="JokerWindow.cpp" line="796"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="742"/>
+        <location filename="JokerWindow.cpp" line="789"/>
         <source>Save...</source>
         <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="1009"/>
+        <location filename="JokerWindow.cpp" line="1056"/>
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>
@@ -497,31 +497,31 @@
     <name>MAC_APPLICATION_MENU</name>
     <message>
         <source>Services</source>
-        <translation>Services</translation>
+        <translation type="vanished">Services</translation>
     </message>
     <message>
         <source>Hide %1</source>
-        <translation>Masquer %1</translation>
+        <translation type="vanished">Masquer %1</translation>
     </message>
     <message>
         <source>Hide Others</source>
-        <translation>Masquer les autres</translation>
+        <translation type="vanished">Masquer les autres</translation>
     </message>
     <message>
         <source>Show All</source>
-        <translation>Tout afficher</translation>
+        <translation type="vanished">Tout afficher</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation>Préférences...</translation>
+        <translation type="vanished">Préférences...</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation>Quitter %1</translation>
+        <translation type="vanished">Quitter %1</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation>À propos de %1</translation>
+        <translation type="vanished">À propos de %1</translation>
     </message>
 </context>
 <context>
@@ -573,12 +573,12 @@
 <context>
     <name>PhDialogButtonBox</name>
     <message>
-        <location filename="../../libs/PhCommonUI/PhDialogButtonBox.cpp" line="21"/>
+        <location filename="../../libs/PhCommonUI/PhDialogButtonBox.cpp" line="23"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhDialogButtonBox.cpp" line="30"/>
+        <location filename="../../libs/PhCommonUI/PhDialogButtonBox.cpp" line="32"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -586,7 +586,7 @@
 <context>
     <name>PhEditableDocumentWindow</name>
     <message>
-        <location filename="../../libs/PhCommonUI/PhEditableDocumentWindow.cpp" line="28"/>
+        <location filename="../../libs/PhCommonUI/PhEditableDocumentWindow.cpp" line="31"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>
@@ -619,7 +619,7 @@
         <translation>Votre adresse mail si vous souhaitez que nous vous contactions :</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhFeedbackDialog.cpp" line="188"/>
+        <location filename="../../libs/PhCommonUI/PhFeedbackDialog.cpp" line="174"/>
         <source>Thank you for your feedback!</source>
         <translation>Merci pour votre retour !</translation>
     </message>
@@ -808,12 +808,17 @@
         <translation>Midi timecode</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="442"/>
+        <location filename="PreferencesDialog.ui" line="439"/>
+        <source>Force 24 fps as 23.98 when reading MTC</source>
+        <translation>Forcer le 24 i/s en 23.98 lors de la lecture du MTC</translation>
+    </message>
+    <message>
+        <location filename="PreferencesDialog.ui" line="449"/>
         <source>Midi machine control:</source>
         <translation>Midi machine control:</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.ui" line="461"/>
+        <location filename="PreferencesDialog.ui" line="468"/>
         <source>Send MMC message to port:</source>
         <translation>Envoyer des messages MMC au port:</translation>
     </message>
@@ -843,22 +848,22 @@
         <translation>millisecondes</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="187"/>
+        <location filename="PreferencesDialog.cpp" line="207"/>
         <source>&lt;System default&gt;</source>
         <translation>&lt;Langue du système&gt;</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="194"/>
+        <location filename="PreferencesDialog.cpp" line="214"/>
         <source>French</source>
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="216"/>
+        <location filename="PreferencesDialog.cpp" line="236"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="PreferencesDialog.cpp" line="217"/>
+        <location filename="PreferencesDialog.cpp" line="237"/>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
         <translation>Vous avez changé la langue pour &quot;%1&quot;.

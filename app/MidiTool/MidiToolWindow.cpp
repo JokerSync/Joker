@@ -53,6 +53,8 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	updateWriterInfoLabel();
 
 	_mtcWriter.clock()->setRate(_settings->writerRate());
+
+	_mtcReader.force24as2398(_settings->midiForce24as2398());
 }
 
 MidiToolWindow::~MidiToolWindow()
@@ -94,6 +96,7 @@ void MidiToolWindow::on_actionPreferences_triggered()
 	dlg.exec();
 	on_readMtcCheckBox_clicked(_settings->readMTC());
 	on_writeMtcCheckBox_clicked(_settings->writeMTC());
+	_mtcReader.force24as2398(_settings->midiForce24as2398());
 }
 
 void MidiToolWindow::on_writeMtcCheckBox_clicked(bool checked)

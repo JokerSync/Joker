@@ -57,16 +57,10 @@ protected:
 	 */
 	bool init();
 
-	/**
-	 * @brief Dispose the image texture
-	 */
-	void dispose();
-
 private:
 
 	QString _filename;
 
-	SDL_Surface * _surface;
 	QSize _originalSize;
 };
 

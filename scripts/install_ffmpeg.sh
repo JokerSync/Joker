@@ -8,7 +8,6 @@ echo "Mac OS X detected"
 
 brew update
 brew install ffmpeg --without-qtkit
-brew install libav
 
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"

@@ -9,6 +9,10 @@ mac {
 		QMAKE_POST_LINK += plutil -replace CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -insert LSApplicationCategoryType -string public.app-category.video $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
+
+		removeapp.commands += rm -rf $${TARGET}.app
+
+		QMAKE_EXTRA_TARGETS += removeapp
 	}
 }
 
@@ -45,6 +49,10 @@ CONFIG(release, debug|release) {
 					$${PH_DEPLOY_TARGET}.dmg \
 					$${TARGET}.app &&
 			installer.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION}
+
+			removedmg.commands += rm $${PH_DEPLOY_TARGET}.dmg
+
+			QMAKE_EXTRA_TARGETS += removedmg
 		}
 	}
 
