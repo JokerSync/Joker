@@ -97,8 +97,6 @@ after_success:
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_AUTOTEST ]]; then coveralls
   -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ -E .+/specs/.+ --verbose;
   fi
-- if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_RELEASE_JOKER ]]; then ./scripts/upload.sh
-  *.dmg; fi
 after_failure:
 - if [[ "$TRAVIS_OS_NAME" == osx ]] && [[ "$JOB" == BUILD_SPEC_BANDIT ]]; then ./scripts/upload.sh
   *.result.bmp; fi
