@@ -4,38 +4,30 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QFileInfo>
-
-#include <SDL2/SDL_image.h>
+#include <QImage>
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphicImage.h"
 
 PhGraphicImage::PhGraphicImage(QString filename, int x, int y, int w, int h)
-	: PhGraphicTexturedRect(x, y, w, h), _filename(filename), _surface(NULL)
+	: PhGraphicTexturedRect(x, y, w, h), _filename(filename)
 {
 }
 
 bool PhGraphicImage::init()
 {
-	QFileInfo info(_filename);
-	_surface = IMG_Load(_filename.toStdString().c_str());
-	if(_surface != NULL) {
-		if(createTextureFromSurface(_surface)) {
-			_originalSize.setHeight(_surface->h);
-			_originalSize.setWidth(_surface->w);
+	QImage image;
+	if(image.load(_filename)) {
+		if(createTextureFromBGRABuffer(image.bits(), image.width(), image.height())) {
+			_originalSize.setWidth(image.width());
+			_originalSize.setHeight(image.height());
 			return PhGraphicTexturedRect::init();
 		}
 	}
 
-	PHDEBUG << "Error loading" << _filename << ":" << SDL_GetError();
+	PHDEBUG << "Error loading" << _filename;
 	return false;
 
-}
-
-void PhGraphicImage::dispose()
-{
-	SDL_FreeSurface(_surface);
 }
 
 QSize PhGraphicImage::originalSize() const
