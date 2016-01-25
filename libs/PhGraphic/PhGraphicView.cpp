@@ -115,6 +115,7 @@ void PhGraphicView::onRefresh()
 	if(_lastUpdateDuration > static_cast<int>(1500.0 / _screenFrequency)) {
 		_dropTimer.restart();
 		_dropDetected++;
+		PHDBG(8) << "Drop detected:" << _dropDetected;
 	}
 }
 
