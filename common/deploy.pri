@@ -36,6 +36,7 @@ CONFIG(release, debug|release) {
 					--window-size 600 450 \
 					$${PH_DEPLOY_TARGET}.dmg \
 					$${TARGET}.app &&
+			installer.commands += echo Copying to $${PH_DEPLOY_LOCATION} &&
 			installer.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION} &&
 			installer.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.dmg
 
