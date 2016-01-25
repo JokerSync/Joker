@@ -1369,7 +1369,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 		PhTime timeIn = time;
 		PhTime timeOut = timeIn + content.length() * 1000;
 
-		_texts1.append(new PhStripText(timeIn, people, timeOut, i % trackCount / 4, content, 0.25f));
+		_texts1.append(new PhStripText(timeIn, people, timeOut, i % trackCount / 4.0, content, 0.25f));
 
 		// So the texts are all one after the other
 		time += spaceBetweenText;
