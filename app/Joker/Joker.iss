@@ -17,14 +17,9 @@
 #error "Unable to find MyAppSrc"
 #endif
 
-#define AddPaddingZero(n) \
-  ((Len(Str(n)) == 1) ? "0" : "") + Str(n)
-
-#define ExtractVersion(str FileName) \
-  ParseVersion(FileName,Local[1],Local[2],Local[3],Local[4]), \
-  AddPaddingZero(Local[1]) + "." + AddPaddingZero(Local[2]) + "." + AddPaddingZero(Local[3])
-
-#define MyAppVerStr ExtractVersion(MyAppSrc)
+#define FileVerStr GetFileVersion(MyAppSrc)
+#define StripBuild(str VerStr) Copy(VerStr, 1, RPos(".", VerStr)-1)
+#define MyAppVerStr StripBuild(FileVerStr)
 #define MyAppVerName MyAppName + " v" + MyAppVerStr
 
 #define MyOutputDir GetEnv('JOKER_RELEASE_PATH')
