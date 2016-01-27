@@ -1,5 +1,4 @@
 #define MyAppName "FormTest"
-#define MyOutputDir GetEnv('TEST_RELEASE_PATH')
 
 #include "..\..\common\common.iss"
 
