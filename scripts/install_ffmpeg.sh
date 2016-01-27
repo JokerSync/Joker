@@ -7,7 +7,7 @@ if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
 
 brew update
-brew install libav ffmpeg
+brew install ffmpeg --without-qtkit
 
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"

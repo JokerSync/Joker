@@ -19,14 +19,27 @@ HEADERS  += FFmpegTestWindow.h
 
 FORMS    += FFmpegTestWindow.ui
 
+mac {
+	LIBS += -framework CoreFoundation -framework CoreMedia -framework CoreVideo -framework VideoDecodeAcceleration -framework VideoToolbox
+	LIBS += -lbz2 -liconv -llzma -lswresample
+}
+
+
 unix {
-	INCLUDEPATH += /usr/local/include
-	LIBS += -L/usr/local/lib -lavformat -lavcodec -lavutil -lswscale
-	LIBS += -lz
+	FFMPEG_DEV_PATH = $$(FFMPEG_DEV_PATH)
+
+	!exists($$FFMPEG_DEV_PATH) {
+		FFMPEG_DEV_PATH = /usr/local
+	}
+	message("FFmpeg path: $$FFMPEG_DEV_PATH")
+
+	INCLUDEPATH += $$FFMPEG_DEV_PATH/include
+	LIBS += -L$$FFMPEG_DEV_PATH/lib
+	LIBS += -lavformat -lavcodec -lavutil -lswscale -lz
 }
 
 # Windows specific
-win32{
+win32 {
 	!exists($$(FFMPEG_DEV_PATH)\README.txt) {
 		error("You must define a valid FFMPEG_DEV_PATH")
 	}
@@ -37,22 +50,6 @@ win32{
 
 	INCLUDEPATH += $$(FFMPEG_DEV_PATH)\include
 	LIBS += -L$$(FFMPEG_DEV_PATH)\lib -lavformat -lavcodec -lavutil -lswscale -liconv -lz
-}
-
-
-
-#LIBS += -lxvidcore -lx264 -lvorbis -lvorbisenc -lvorbisfile -lvpx
-#LIBS += -ltheora -ltheoradec -ltheoraenc
-#LIBS += -lspeex -lspeexdsp
-#LIBS += -lschroedinger-1.0 -lopus -lvo-aacenc -lopenjpeg -lmp3lame -lfaac -lcelt0 -lfdk-aac
-#LIBS += -laacplus
-#to test
-#LIBS += -lass -ltiff -ltiffxx -lpng -ljpeg
-
-#LIBS += -lssl -lcrypto
-
-mac {
-	LIBS += -lbz2 -liconv
 }
 
 linux {
