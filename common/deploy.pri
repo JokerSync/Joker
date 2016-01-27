@@ -1,3 +1,7 @@
+!defined(VERSION, var) {
+error("You must define a version number for $$TARGET")
+}
+
 win32 {
 	QMAKE_POST_LINK += windeployqt $${RESOURCES_PATH} $${CS}
 }

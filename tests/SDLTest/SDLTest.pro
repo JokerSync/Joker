@@ -5,12 +5,12 @@
 
 TARGET = SDLTest
 
+VERSION = 2.0.0
+
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
-VERSION = 1.0.0
 
 TEMPLATE = app
 
