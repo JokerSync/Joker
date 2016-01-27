@@ -1,4 +1,6 @@
 win32 {
+	OTHER_FILES += ../../common/common.iss
+
 	QMAKE_POST_LINK += windeployqt $${RESOURCES_PATH} $${CS}
 }
 
