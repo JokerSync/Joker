@@ -9,6 +9,8 @@ CONFIG   -= app_bundle
 
 TARGET = StripTest
 
+VERSION = 2.0.0
+
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
