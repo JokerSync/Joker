@@ -3,7 +3,7 @@
 # Project created by QtCreator 2013-05-23T14:09:50
 #
 #-------------------------------------------------
-cache()
+
 TARGET = GraphicStripTest
 
 VERSION = 2.0.0
