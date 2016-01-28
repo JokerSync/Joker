@@ -32,13 +32,16 @@ CONFIG(release, debug|release) {
 
 	mac {
 		app_bundle {
-			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -v --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app;
+			APPLICATION_CERTIFICATE = \"3rd Party Mac Developer Application: Phonations (Y44UPVP368)\"
+			INSTALLER_CERTIFICATE = \"3rd Party Mac Developer Installer: Phonations (Y44UPVP368)\"
 
-			QMAKE_POST_LINK += macdeployqt $${TARGET}.app -always-overwrite -codesign=$$(APPLICATION_CERTIFICATE);
+			QMAKE_POST_LINK += codesign -s $$APPLICATION_CERTIFICATE -v --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app;
+
+			QMAKE_POST_LINK += macdeployqt $${TARGET}.app -always-overwrite -codesign=$$APPLICATION_CERTIFICATE;
 
 			# Target for PKG generation
 			buildpkg.commands += echo "Build PKG" &&
-			buildpkg.commands += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${PH_DEPLOY_TARGET}.pkg &&
+			buildpkg.commands += productbuild --component $${TARGET}.app /Applications --sign $$INSTALLER_CERTIFICATE $${PH_DEPLOY_TARGET}.pkg &&
 			buildpkg.commands += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION} &&
 			buildpkg.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.pkg
 
