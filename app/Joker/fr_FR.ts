@@ -507,31 +507,31 @@
     <name>MAC_APPLICATION_MENU</name>
     <message>
         <source>Services</source>
-        <translation type="vanished">Services</translation>
+        <translation>Services</translation>
     </message>
     <message>
         <source>Hide %1</source>
-        <translation type="vanished">Masquer %1</translation>
+        <translation>Masquer %1</translation>
     </message>
     <message>
         <source>Hide Others</source>
-        <translation type="vanished">Masquer les autres</translation>
+        <translation>Masquer les autres</translation>
     </message>
     <message>
         <source>Show All</source>
-        <translation type="vanished">Tout afficher</translation>
+        <translation>Tout afficher</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation type="vanished">Préférences...</translation>
+        <translation>Préférences...</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation type="vanished">Quitter %1</translation>
+        <translation>Quitter %1</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation type="vanished">À propos de %1</translation>
+        <translation>À propos de %1</translation>
     </message>
 </context>
 <context>
