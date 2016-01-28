@@ -1377,7 +1377,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 
 	// Add a loop per minute
 	for(int i = 0; i < loopCount; i++)
-		_loops.append(new PhStripLoop(_videoTimeIn + i * 24000 * 60, QString::number(i)));
+		_loops.append(new PhStripLoop(_videoTimeIn + i * PHTIMEBASE * 60, QString::number(i)));
 
 	emit changed();
 }

@@ -88,7 +88,7 @@ public:
 	PH_SETTING_BOOL2(setDisplayCuts, displayCuts, true)
 	PH_SETTING_BOOL(setDisplayFeet, displayFeet)
 	PH_SETTING_INT(setFirstFootTime, firstFootTime)
-	PH_SETTING_INT2(setTimeBetweenTwoFeet, timeBetweenTwoFeet, 24000)
+	PH_SETTING_INT2(setTimeBetweenTwoFeet, timeBetweenTwoFeet, PHTIMEBASE)
 	PH_SETTING_INT(setTimePlayed, timePlayed)
 	PH_SETTING_BOOL(setDisplayVerticalScale, displayVerticalScale)
 	PH_SETTING_INT2(setVerticalScaleSpaceInSeconds, verticalScaleSpaceInSeconds, 5)

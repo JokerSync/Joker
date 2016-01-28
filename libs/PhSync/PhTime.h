@@ -21,6 +21,9 @@ typedef double PhRate;
 /** @brief Type for the timecode frame */
 typedef long PhFrame;
 
+/** @brief The number of time unit per seconds */
+#define PHTIMEBASE 24000
+
 /** @brief The maximum PhTime value */
 #define PHTIMEMAX std::numeric_limits<PhTime>::max()
 

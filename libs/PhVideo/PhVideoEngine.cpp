@@ -391,7 +391,7 @@ int64_t PhVideoEngine::PhTime_to_AVTimestamp(PhTime time)
 {
 	int64_t timestamp = 0;
 	if(_videoStream) {
-		timestamp = static_cast<int64_t>(std::round(static_cast<double>(time) / 24000. / av_q2d(_videoStream->time_base)));
+		timestamp = static_cast<int64_t>(std::round(static_cast<double>(time) / av_q2d(_videoStream->time_base) / PHTIMEBASE));
 	}
 	return timestamp;
 }
@@ -400,7 +400,7 @@ PhTime PhVideoEngine::AVTimestamp_to_PhTime(int64_t timestamp)
 {
 	PhTime time = 0;
 	if(_videoStream) {
-		time = static_cast<PhTime>(std::round(static_cast<double>(timestamp) * av_q2d(_videoStream->time_base) * 24000.));
+		time = static_cast<PhTime>(std::round(static_cast<double>(timestamp) * av_q2d(_videoStream->time_base) * PHTIMEBASE));
 	}
 	return time;
 }

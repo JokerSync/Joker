@@ -47,7 +47,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
 	_resizingStrip(false),
-	_timePlayed(_settings->timePlayed() * 24000)
+	_timePlayed(_settings->timePlayed() * PHTIMEBASE)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -550,7 +550,7 @@ void JokerWindow::timeCounter(PhTime elapsedTime)
 {
 	if(currentRate() == 1 && (PhSynchronizer::SyncType)_settings->synchroProtocol() != PhSynchronizer::NoSync) {
 		_timePlayed += elapsedTime;
-		_settings->setTimePlayed(_timePlayed / 24000);
+		_settings->setTimePlayed(_timePlayed / PHTIMEBASE);
 	}
 }
 
