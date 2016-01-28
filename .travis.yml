@@ -53,9 +53,8 @@ matrix:
     - QTVER=551
 before_install:
 - openssl aes-256-cbc -K $encrypted_5acf05a46408_key -iv $encrypted_5acf05a46408_iv
-  -in scripts/certs/dev_id.p12.enc -out scripts/certs/dev_id.p12 -d
-- openssl aes-256-cbc -K $encrypted_5acf05a46408_key -iv $encrypted_5acf05a46408_iv
-  -in scripts/certs/mac_app.cer.enc -out scripts/certs/mac_app.cer -d
+  -in scripts/certs/certs.tar.enc -out scripts/certs/certs.tar -d
+- tar xvf scripts/certs/certs.tar
 - export SHORT_VER=`echo $QTVER | cut -b1-2`
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then sudo add-apt-repository
   -y ppa:beineri/opt-qt${QTVER}; fi
