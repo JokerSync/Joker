@@ -313,7 +313,7 @@ private:
 
 	bool _firstDoc;
 	bool _resizingStrip;
-	int _numberOfDraw;
+	PhTime _timePlayed;
 
 	PhGraphicImage _videoLogo;
 
