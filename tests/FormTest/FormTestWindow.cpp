@@ -7,7 +7,6 @@
 #include <QTime>
 
 #include "PhTools/PhDebug.h"
-#include "PhTools/PhPictureTools.h"
 #include "PhCommonUI/PhFeedbackDialog.h"
 
 #include "FormTestWindow.h"

@@ -76,6 +76,11 @@ bool compareImage(QImage result, QImage expected, QString testName, int gap)
 						break;
 					}
 					if(totalDiff > gap) {
+						PHDBG(5) << QString("(%1, %2) Too many difference detected: %3 > %4")
+									.arg(i)
+									.arg(j)
+									.arg(totalDiff)
+									.arg(gap);
 						ret = false;
 						break;
 					}

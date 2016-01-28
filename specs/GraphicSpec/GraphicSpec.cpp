@@ -13,6 +13,7 @@
 #include "PhGraphic/PhGraphicLoop.h"
 
 #include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 
@@ -33,7 +34,7 @@ go_bandit([](){
 				AssertThat(h, Equals(64));
 			});
 
-			view.show();
+			view.renderPixmap(64, 64);
 
 			AssertThat(paintCalled, IsTrue());
 		});
@@ -41,27 +42,13 @@ go_bandit([](){
 		it("draw_a_rect", [&](){
 			PhGraphicView view(32, 32);
 
-			PhGraphicSolidRect rect;
-			rect.setColor(Qt::red);
-
 			QObject::connect(&view, &PhGraphicView::paint, [&](int w, int h) {
-				rect.setSize(w / 2, h / 2);
+				PhGraphicSolidRect rect(0, 0, w / 2, h / 2);
+				rect.setColor(Qt::red);
 				rect.draw();
 			});
 
-			view.show();
-
-			// Note: using view.grabFrameBuffer() causes timing issues.
-			// There is no warranty that the scene has been fully rendered.
-			// Use view.renderPixmap().toImage() instead.
-			QImage resultImage(view.renderPixmap(32, 32).toImage());
-			QString resultFile = "rectTest.result.bmp";
-			resultImage.save(resultFile);
-			QString expectedFile = "rectTest.expected.bmp";
-			QImage expectedImage(expectedFile);
-
-			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, Equals((unsigned int)0));
+			AssertThat(compareImage(view.renderPixmap(32, 32).toImage(), QImage("rectTest.expected.bmp"), "rectTest"), IsTrue());
 		});
 
 		it("draw_an_image", [&](){
@@ -74,7 +61,7 @@ go_bandit([](){
 				image.draw();
 			});
 
-			AssertThat(QImage(view.renderPixmap(64, 64).toImage()) == QImage("rgbPatternTest.expected.bmp"), IsTrue());
+			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("rgbPatternTest.expected.bmp"), "draw_an_image"), IsTrue());
 		});
 
 		it("draw_a_rgb_pattern", [&](){
@@ -91,7 +78,7 @@ go_bandit([](){
 				rect.draw();
 			});
 
-			AssertThat(QImage(view.renderPixmap(64, 64).toImage()) == QImage("rgbPatternTest.expected.bmp"), IsTrue());
+			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("rgbPatternTest.expected.bmp"), "draw_a_rgb_pattern"), IsTrue());
 		});
 
 		it("draw a loop", [&]() {
@@ -110,16 +97,7 @@ go_bandit([](){
 				loop.draw();
 			});
 
-			view.show();
-
-			QImage resultImage(view.renderPixmap(64, 64).toImage());
-			QString resultFile = "loopTest.result.bmp";
-			resultImage.save(resultFile);
-			QString expectedFile = "loopTest.expected.bmp";
-			QImage expectedImage(expectedFile);
-
-			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, Equals((unsigned int)0));
+			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("loopTest.expected.bmp"), "loopTest"), IsTrue());
 		});
 
 		it("draw an horizontal loop", [&]() {
@@ -138,16 +116,7 @@ go_bandit([](){
 				loop.draw();
 			});
 
-			view.show();
-
-			QImage resultImage(view.renderPixmap(64, 64).toImage());
-			QString resultFile = "loopHorizontalTest.result.bmp";
-			resultImage.save(resultFile);
-			QString expectedFile = "loopHorizontalTest.expected.bmp";
-			QImage expectedImage(expectedFile);
-
-			unsigned int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, Equals((unsigned int)0));
+			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("loopHorizontalTest.expected.bmp"), "loopHorizontalTest"), IsTrue());
 		});
 	});
 });
