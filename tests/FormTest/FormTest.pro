@@ -31,5 +31,6 @@ win32 {
 	OTHER_FILES += FormTest.iss
 }
 
-PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+PH_DEPLOY_LOCATION = $$(TEST_RELEASE_PATH)
+
 include($$TOP_ROOT/common/deploy.pri)

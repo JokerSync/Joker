@@ -34,5 +34,10 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/motif-240_b
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/motif-240.png) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Helvetica.ttf) $${RESOURCES_PATH} $${CS}
 
-PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
+win32 {
+	OTHER_FILES += GraphicTest.iss
+}
+
+PH_DEPLOY_LOCATION = $$(TEST_RELEASE_PATH)
+
 include($$TOP_ROOT/common/deploy.pri)
