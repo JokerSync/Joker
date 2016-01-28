@@ -1,4 +1,10 @@
+!defined(VERSION, var) {
+error("You must define a version number for $$TARGET")
+}
+
 win32 {
+	OTHER_FILES += ../../common/common.iss
+
 	QMAKE_POST_LINK += windeployqt $${RESOURCES_PATH} $${CS}
 }
 
@@ -17,19 +23,19 @@ mac {
 }
 
 CONFIG(release, debug|release) {
+	if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {
+		PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}
+	} else {
+		PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}_$${PH_GIT_BRANCH}
+	}
+	message($$PH_DEPLOY_TARGET)
+
 	mac {
 		app_bundle {
 			QMAKE_POST_LINK += codesign -s $$(APPLICATION_CERTIFICATE) -v --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app;
 
 			QMAKE_POST_LINK += macdeployqt $${TARGET}.app -always-overwrite -codesign=$$(APPLICATION_CERTIFICATE);
 
-			if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {
-				PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}
-			} else {
-				PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}_$${PH_GIT_BRANCH}
-			}
-
-			message($$PH_DEPLOY_TARGET)
 
 			QMAKE_POST_LINK += echo "Build PKG";
 
@@ -48,6 +54,7 @@ CONFIG(release, debug|release) {
 					--window-size 600 450 \
 					$${PH_DEPLOY_TARGET}.dmg \
 					$${TARGET}.app &&
+			installer.commands += echo Copying to $${PH_DEPLOY_LOCATION} &&
 			installer.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION} &&
 			installer.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.dmg
 
@@ -58,9 +65,12 @@ CONFIG(release, debug|release) {
 	}
 
 	win32 {
+		message($$PH_DEPLOY_LOCATION)
 		if(exists($${_PRO_FILE_PWD_}/$$TARGET.iss)) {
 			installer.commands += echo "Running Innosetup on $${_PRO_FILE_PWD_}/$${TARGET}.iss" &
-			installer.commands += iscc $${_PRO_FILE_PWD_}/$${TARGET}.iss /DPWD=$$OUT_PWD
+			installer.commands += iscc $${_PRO_FILE_PWD_}/$${TARGET}.iss /DPWD=$$OUT_PWD &
+			installer.commands += echo "Copy to $${PH_DEPLOY_LOCATION}" &
+			installer.commands += copy $${TARGET}_v$${VERSION}.exe $${PH_DEPLOY_LOCATION}\\$${PH_DEPLOY_TARGET}.exe
 		}
 	}
 }
