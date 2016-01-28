@@ -13,7 +13,7 @@
 int main(int argc, char *argv[])
 {
 	PhDebug::setDisplay(true, true, true, true, true);
-	PhDebug::setLogMask(0xF00);
+	PhDebug::setLogMask(0xF01);
 	PHDEBUG << QString("test");
 	for(int i = 0; i < 18; i++) {
 		PHDBG(i) << "level" << i;
@@ -24,5 +24,6 @@ int main(int argc, char *argv[])
 
 	qWarning() << "pouet";
 	PHERR << "coucou";
+
 	return 0;
 }

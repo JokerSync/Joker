@@ -36,6 +36,11 @@ AboutDialog::~AboutDialog()
 	delete ui;
 }
 
+void AboutDialog::setTimePlayed(PhTime timePlayed)
+{
+	ui->timePlayedLabel->setText(QString(tr("Synchronous playback time: %1 seconds")).arg(timePlayed / 24000));
+}
+
 void AboutDialog::on_pushButton_clicked()
 {
 	this->close();

@@ -594,6 +594,7 @@ void JokerWindow::on_actionAbout_triggered()
 	hideMediaPanel();
 
 	AboutDialog menu;
+	menu.setTimePlayed(_timePlayed);
 	menu.exec();
 
 	fadeInMediaPanel();

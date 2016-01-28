@@ -29,9 +29,19 @@
         <translation>Révision: </translation>
     </message>
     <message>
+        <location filename="AboutDialog.ui" line="201"/>
+        <source>Synchronous playback time: </source>
+        <translation>Temps de lecture synchrone: </translation>
+    </message>
+    <message>
         <location filename="AboutDialog.cpp" line="19"/>
         <source>Revision:</source>
         <translation>Révision: </translation>
+    </message>
+    <message>
+        <location filename="AboutDialog.cpp" line="41"/>
+        <source>Synchronous playback time: %1 seconds</source>
+        <translation>Temps de lecture synchrone: %1 secondes</translation>
     </message>
 </context>
 <context>
@@ -477,18 +487,18 @@
         <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="771"/>
-        <location filename="JokerWindow.cpp" line="796"/>
+        <location filename="JokerWindow.cpp" line="767"/>
+        <location filename="JokerWindow.cpp" line="792"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="789"/>
+        <location filename="JokerWindow.cpp" line="785"/>
         <source>Save...</source>
         <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="1056"/>
+        <location filename="JokerWindow.cpp" line="1052"/>
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>

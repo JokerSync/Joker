@@ -9,6 +9,8 @@
 
 #include <QDialog>
 
+#include "PhSync/PhTime.h"
+
 namespace Ui {
 class AboutDialog;
 }
@@ -26,6 +28,7 @@ public:
 	 */
 	explicit AboutDialog(QWidget *parent = 0);
 	~AboutDialog();
+	void setTimePlayed(PhTime timePlayed);
 
 private slots:
 	void on_pushButton_clicked();
