@@ -36,18 +36,16 @@ CONFIG(release, debug|release) {
 
 			QMAKE_POST_LINK += macdeployqt $${TARGET}.app -always-overwrite -codesign=$$(APPLICATION_CERTIFICATE);
 
+			# Target for PKG generation
+			buildpkg.commands += echo "Build PKG" &&
+			buildpkg.commands += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${PH_DEPLOY_TARGET}.pkg &&
+			buildpkg.commands += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION} &&
+			buildpkg.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.pkg
 
-			QMAKE_POST_LINK += echo "Build PKG";
-
-			QMAKE_POST_LINK += echo $$(INSTALLER_CERTIFICATE);
-			QMAKE_POST_LINK += productbuild --component $${TARGET}.app /Applications --sign $$(INSTALLER_CERTIFICATE) $${PH_DEPLOY_TARGET}.pkg;
-
-			QMAKE_POST_LINK += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION};
-
+			# Target for DMG generation
 			installer.commands += echo "Generate $$PH_DEPLOY_TARGET:";
 			installer.commands += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
 					--volname $${PH_DEPLOY_TARGET} \
-#					--volicon $${_PRO_FILE_PWD_}/../../app/Joker/joker.icns \
 					--background $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png \
 					--app-drop-link 450 218 \
 					--icon $${TARGET}.app 150 218 \
@@ -58,9 +56,10 @@ CONFIG(release, debug|release) {
 			installer.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION} &&
 			installer.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.dmg
 
-			removedmg.commands += rm $${PH_DEPLOY_TARGET}.dmg
+			# Target for PKG and DMG cleaning
+			removedmg.commands += rm $${PH_DEPLOY_TARGET}.*
 
-			QMAKE_EXTRA_TARGETS += removedmg
+			QMAKE_EXTRA_TARGETS += buildpkg removedmg
 		}
 	}
 
