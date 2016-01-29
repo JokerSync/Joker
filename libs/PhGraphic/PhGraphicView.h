@@ -76,9 +76,11 @@ public:
 	 * @brief Compare the current pixmap with a image file and
 	 * save the result in case of difference
 	 * @param imageFile The image file path
+	 * @param width Force the output width
+	 * @param height Force the output height
 	 * @return The distance between both image expressed in squared RGB difference
 	 */
-	int compare(QString imageFile);
+	int compare(QString imageFile, int width = 0, int height = 0);
 signals:
 	/**
 	 * @brief emit a signal just before the paint

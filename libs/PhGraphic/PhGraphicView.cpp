@@ -96,11 +96,13 @@ void PhGraphicView::addInfo(QString info)
 	_infos.append(info);
 }
 
-int PhGraphicView::compare(QString imageFile)
+int PhGraphicView::compare(QString imageFile, int width, int height)
 {
 	int ratio = this->windowHandle()->devicePixelRatio();
-	int width = this->width() * ratio;
-	int height = this->height() * ratio;
+	if(width == 0)
+		width = this->width() * ratio;
+	if(height == 0)
+		height = this->height() * ratio;
 	int totalDiff = 0;
 
 	QImage result = this->renderPixmap(width, height).toImage();
