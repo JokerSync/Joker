@@ -37,7 +37,8 @@ public:
 	/**
 	 * @brief PhGraphicObject desctructor
 	 */
-	virtual ~PhGraphicObject() {}
+	virtual ~PhGraphicObject() {
+	}
 
 	/**
 	 * @brief dispose

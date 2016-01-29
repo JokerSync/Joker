@@ -26,7 +26,8 @@ public:
 	/**
 	 * @brief PhSyncSettings destructor
 	 */
-	virtual ~PhSyncSettings() {}
+	virtual ~PhSyncSettings() {
+	}
 
 	/**
 	 * @brief Time to start playback when looped

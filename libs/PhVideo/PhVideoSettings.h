@@ -16,7 +16,8 @@ public:
 	/**
 	 * @brief PhVideoSettings desctructor
 	 */
-	virtual ~PhVideoSettings() {}
+	virtual ~PhVideoSettings() {
+	}
 
 	/**
 	 * @brief Screen delay compensation

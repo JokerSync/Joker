@@ -22,7 +22,8 @@ public:
 	/**
 	 * @brief PhWindowSettings destructor
 	 */
-	virtual ~PhWindowSettings() {}
+	virtual ~PhWindowSettings() {
+	}
 
 	/**
 	 * @brief The window full screen status

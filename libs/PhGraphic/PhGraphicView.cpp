@@ -113,11 +113,11 @@ int PhGraphicView::compare(QString imageFile, int width, int height)
 	}
 	else if(expected.size() != QSize(width, height)) {
 		PHDBG(9) << QString("Bad size for %1: %2x%3 / %4x%5")
-								 .arg(imageFile)
-								 .arg(expected.width())
-								 .arg(expected.height())
-								 .arg(width)
-								 .arg(height);
+		    .arg(imageFile)
+		    .arg(expected.width())
+		    .arg(expected.height())
+		    .arg(width)
+		    .arg(height);
 		totalDiff = std::numeric_limits<int>::max();
 	}
 	else {
