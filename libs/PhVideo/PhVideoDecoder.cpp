@@ -182,8 +182,8 @@ PhVideoDecoder::~PhVideoDecoder()
 
 PhTime PhVideoDecoder::length()
 {
-	if(_videoStream)
-		return AVTimestamp_to_PhTime(_videoStream->duration);
+	if(_formatContext)
+		return _formatContext->duration * PHTIMEBASE / AV_TIME_BASE;
 	return 0;
 }
 
