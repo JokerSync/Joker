@@ -8,4 +8,4 @@ include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
 
 SOURCES += $$TOP_ROOT/specs/VideoSpec/VideoSpec.cpp
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/video/*.bmp) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/video/*.*) . $${CS}
