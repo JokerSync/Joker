@@ -6,6 +6,7 @@
 #include "PhTools/PhDebug.h"
 
 #include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 
@@ -65,7 +66,7 @@ go_bandit([](){
 
 		it("log_in_file", []() {
 			QString expected = QString("/Users/") + qgetenv("USER") + QString("/Library/Logs/Phonations/%1.log").arg(APP_NAME);
-			AssertThat(PhDebug::logLocation().toStdString(), Equals(expected.toStdString()));
+			AssertThat(PhDebug::logLocation(), Equals(expected));
 		});
 
 		it("display_in_the_debug", []() {
@@ -102,11 +103,11 @@ go_bandit([](){
 			AssertThat(lines.count(), Equals(7));
 			AssertThat(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d DebugSpec.cpp\toperator\\(\\)\t@[0-9]+\ttest with all log parameters").exactMatch(lines[0]), IsTrue());
 
-			AssertThat(lines[1].toStdString(), Equals("test with no log parameters"));
-			AssertThat(lines[2].toStdString(), Equals("shown because of showConsole(true)"));
-			AssertThat(lines[3].toStdString(), Equals("shown because enable()"));
-			AssertThat(lines[4].toStdString(), Equals("it should be displayed when default log mask is 1"));
-			AssertThat(lines[5].toStdString(), Equals("it should be displayed when default log mask is " + QString::number(testLogLevel).toStdString()));
+			AssertThat(lines[1], Equals("test with no log parameters"));
+			AssertThat(lines[2], Equals("shown because of showConsole(true)"));
+			AssertThat(lines[3], Equals("shown because enable()"));
+			AssertThat(lines[4], Equals("it should be displayed when default log mask is 1"));
+			AssertThat(lines[5], Equals("it should be displayed when default log mask is " + QString::number(testLogLevel)));
 		});
 
 		it("display_in_the_error", []() {
@@ -119,9 +120,9 @@ go_bandit([](){
 			PHERR << "test with all log parameters";
 			QStringList lines = QString::fromStdString(buffer.str()).split("\n");
 			AssertThat(lines.count(), Equals(3));
-			AssertThat(lines[0].toStdString(), Equals("test with no log parameters"));
+			AssertThat(lines[0], Equals("test with no log parameters"));
 			AssertThat(QRegExp("\\d\\d/\\d\\d/\\d\\d\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d DebugSpec.cpp\toperator\\(\\)\t@[0-9]+\ttest with all log parameters").exactMatch(lines[1]), IsTrue());
-			AssertThat(lines[2].toStdString(), Equals(""));
+			AssertThat(lines[2], Equals(""));
 		});
 	});
 });

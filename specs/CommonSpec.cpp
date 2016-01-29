@@ -5,14 +5,14 @@
 
 #include "CommonSpec.h"
 
-std::string f2s(PhFrame frame, PhTimeCodeType tcType)
+QString f2s(PhFrame frame, PhTimeCodeType tcType)
 {
-	return PhTimeCode::stringFromFrame(frame, tcType).toStdString();
+	return PhTimeCode::stringFromFrame(frame, tcType);
 }
 
-std::string t2s(PhTime time, PhTimeCodeType tcType)
+QString t2s(PhTime time, PhTimeCodeType tcType)
 {
-	return PhTimeCode::stringFromTime(time, tcType).toStdString();
+	return PhTimeCode::stringFromTime(time, tcType);
 }
 
 PhTime s2t(QString string, PhTimeCodeType tcType)
@@ -20,7 +20,7 @@ PhTime s2t(QString string, PhTimeCodeType tcType)
 	return PhTimeCode::timeFromString(string, tcType);
 }
 
-std::string t2s25(PhTime time)
+QString t2s25(PhTime time)
 {
 	return t2s(time, PhTimeCodeType25);
 }
@@ -28,4 +28,9 @@ std::string t2s25(PhTime time)
 PhTime s2t25(QString string)
 {
 	return s2t(string, PhTimeCodeType25);
+}
+
+bool operator==(const std::string &str, const QString &qstr)
+{
+	return str == qstr.toStdString();
 }

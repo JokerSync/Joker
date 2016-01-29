@@ -11,6 +11,7 @@
 #include "WindowSpecWindow.h"
 
 #include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 
@@ -74,19 +75,19 @@ go_bandit([](){
 
 			WindowSpecWindow w(settings);
 			w.processArg(0, NULL);
-			AssertThat(w.text().toStdString(), Equals("bonjour"));
+			AssertThat(w.text(), Equals("bonjour"));
 		});
 
 		it("handle_last_folder", [&](){
 			WindowSpecWindow w(settings);
 			w.processArg(0, NULL);
 
-			AssertThat(settings->lastDocumentFolder().toStdString(), Equals(QDir::homePath().toStdString()));
+			AssertThat(settings->lastDocumentFolder(), Equals(QDir::homePath()));
 
 			w.openDocument("text.txt");
 
 			QString currentFolder = QDir::currentPath();
-			AssertThat(settings->lastDocumentFolder().toStdString(), Equals(currentFolder.toStdString()));
+			AssertThat(settings->lastDocumentFolder(), Equals(currentFolder));
 		});
 	});
 });

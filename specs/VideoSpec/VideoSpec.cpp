@@ -60,14 +60,14 @@ go_bandit([](){
 		});
 
 		it("open_video", [&](){
-			AssertThat(engine->codecName().toStdString(), Equals(""));
+			AssertThat(engine->codecName(), Equals(""));
 			AssertThat(engine->length(), Equals(0));
 			AssertThat(engine->width(), Equals(0));
 			AssertThat(engine->height(), Equals(0));
 
 			AssertThat(engine->open(videoFile), IsTrue());
 
-			AssertThat(engine->codecName().toStdString(), Equals(videoCodec.toStdString()));
+			AssertThat(engine->codecName(), Equals(videoCodec));
 			AssertThat(engine->bilinearFiltering(), IsFalse());
 			AssertThat(engine->length(), Equals(192000));
 			AssertThat(engine->width(), Equals(64));
