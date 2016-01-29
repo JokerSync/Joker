@@ -10,7 +10,10 @@ win32 {
 
 mac {
 	app_bundle {
+		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string com.phonations.$$lower($${TARGET}) $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -insert LSApplicationCategoryType -string public.app-category.video $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
 
 		removeapp.commands += rm -rf $${TARGET}.app
@@ -29,13 +32,23 @@ CONFIG(release, debug|release) {
 
 	mac {
 		app_bundle {
-			QMAKE_POST_LINK += macdeployqt $${TARGET}.app; # -codesign=$$(APPLICATION_CERTIFICATE);
+			APPLICATION_CERTIFICATE = \"3rd Party Mac Developer Application: Phonations (Y44UPVP368)\"
+			INSTALLER_CERTIFICATE = \"3rd Party Mac Developer Installer: Phonations (Y44UPVP368)\"
 
+			QMAKE_POST_LINK += codesign -s $$APPLICATION_CERTIFICATE -v --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app;
 
+			QMAKE_POST_LINK += macdeployqt $${TARGET}.app -always-overwrite -codesign=$$APPLICATION_CERTIFICATE;
+
+			# Target for PKG generation
+			buildpkg.commands += echo "Build PKG" &&
+			buildpkg.commands += productbuild --component $${TARGET}.app /Applications --sign $$INSTALLER_CERTIFICATE $${PH_DEPLOY_TARGET}.pkg &&
+			buildpkg.commands += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION} &&
+			buildpkg.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.pkg
+
+			# Target for DMG generation
 			installer.commands += echo "Generate $$PH_DEPLOY_TARGET:";
 			installer.commands += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
 					--volname $${PH_DEPLOY_TARGET} \
-#					--volicon $${_PRO_FILE_PWD_}/../../app/Joker/joker.icns \
 					--background $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png \
 					--app-drop-link 450 218 \
 					--icon $${TARGET}.app 150 218 \
@@ -46,9 +59,10 @@ CONFIG(release, debug|release) {
 			installer.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION} &&
 			installer.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.dmg
 
-			removedmg.commands += rm $${PH_DEPLOY_TARGET}.dmg
+			# Target for PKG and DMG cleaning
+			removedmg.commands += rm $${PH_DEPLOY_TARGET}.*
 
-			QMAKE_EXTRA_TARGETS += removedmg
+			QMAKE_EXTRA_TARGETS += buildpkg removedmg
 		}
 	}
 
