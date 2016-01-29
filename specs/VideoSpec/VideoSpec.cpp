@@ -51,13 +51,15 @@ go_bandit([](){
 			delete view;
 		});
 
-		describe("bmp", [&](){
-			it("open_video", [&](){
-				AssertThat(engine->codecName(), Equals(""));
-				AssertThat(engine->length(), Equals(0));
-				AssertThat(engine->width(), Equals(0));
-				AssertThat(engine->height(), Equals(0));
+		it("is empty", [&](){
+			AssertThat(engine->codecName(), Equals(""));
+			AssertThat(engine->length(), Equals(0));
+			AssertThat(engine->width(), Equals(0));
+			AssertThat(engine->height(), Equals(0));
+		});
 
+		describe("bmp", [&](){
+			it("open", [&](){
 				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
@@ -70,6 +72,7 @@ go_bandit([](){
 				AssertThat(engine->length(), Equals(192000));
 				AssertThat(engine->width(), Equals(64));
 				AssertThat(engine->height(), Equals(64));
+				AssertThat(engine->timeCodeType(), Equals(PhTimeCodeType25));
 				AssertThat(engine->framePerSecond(), Equals(25.00f));
 				AssertThat(engine->timeIn(), Equals(0));
 			});
