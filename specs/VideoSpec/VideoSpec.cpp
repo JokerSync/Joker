@@ -322,6 +322,7 @@ go_bandit([](){
 
 			before_each([&](){
 				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
+				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
 			});
 
 			it("read properties", [&](){
@@ -339,22 +340,26 @@ go_bandit([](){
 			it("play x264", [&](){
 				int threshold = 64 * 64 * 32; // allow high threshold due to compression
 
+				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+
 				AssertThat(view->compare("interlace_000.bmp", threshold), IsLessThan(threshold));
 
 				engine->clock()->setRate(1);
 				engine->clock()->elapse(960); // 1 frame at 25 fps
 
-				QThread::msleep(FRAME_WAIT_TIME);
+				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+
 				AssertThat(view->compare("interlace_001.bmp", threshold), IsLessThan(threshold));
 
 				// Play 1 second
 				for(int i = 0; i < 24; i++) {
 					engine->clock()->elapse(960); // 1 frame at 25 fps
-					QThread::msleep(FRAME_WAIT_TIME);
+					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 					view->renderPixmap(64, 64);
 				}
 				engine->clock()->elapse(960); // 1 frame at 25 fps
-				QThread::msleep(FRAME_WAIT_TIME);
+
+				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 
 				AssertThat(view->compare("interlace_026.bmp", threshold), IsLessThan(threshold));
 			});
