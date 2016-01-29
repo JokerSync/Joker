@@ -106,23 +106,23 @@ go_bandit([](){
 
 			it("get_bcd_from_frame", [&](){
 				// Check various value of frame
-				AssertThat((int)PhTimeCode::bcdFromFrame(0, type), Equals((int)0x00000000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1, type), Equals((int)0x00000001));
-				AssertThat((int)PhTimeCode::bcdFromFrame(23, type), Equals((int)0x00000023));
-				AssertThat((int)PhTimeCode::bcdFromFrame(24, type), Equals((int)0x00000100));
-				AssertThat((int)PhTimeCode::bcdFromFrame(47, type), Equals((int)0x00000123));
-				AssertThat((int)PhTimeCode::bcdFromFrame(48, type), Equals((int)0x00000200));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1439, type), Equals((int)0x00005923));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1440, type), Equals((int)0x00010000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(2879, type), Equals((int)0x00015923));
-				AssertThat((int)PhTimeCode::bcdFromFrame(2880, type), Equals((int)0x00020000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(4319, type), Equals((int)0x00025923));
-				AssertThat((int)PhTimeCode::bcdFromFrame(4320, type), Equals((int)0x00030000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(14399, type), Equals((int)0x00095923));
-				AssertThat((int)PhTimeCode::bcdFromFrame(14400, type), Equals((int)0x00100000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(14401, type), Equals((int)0x00100001));
-				AssertThat((int)PhTimeCode::bcdFromFrame(15839, type), Equals((int)0x00105923));
-				AssertThat((int)PhTimeCode::bcdFromFrame(15840, type), Equals((int)0x00110000));
+				AssertThat(PhTimeCode::bcdFromFrame(0, type), Equals(0x00000000u));
+				AssertThat(PhTimeCode::bcdFromFrame(1, type), Equals(0x00000001u));
+				AssertThat(PhTimeCode::bcdFromFrame(23, type), Equals(0x00000023u));
+				AssertThat(PhTimeCode::bcdFromFrame(24, type), Equals(0x00000100u));
+				AssertThat(PhTimeCode::bcdFromFrame(47, type), Equals(0x00000123u));
+				AssertThat(PhTimeCode::bcdFromFrame(48, type), Equals(0x00000200u));
+				AssertThat(PhTimeCode::bcdFromFrame(1439, type), Equals(0x00005923u));
+				AssertThat(PhTimeCode::bcdFromFrame(1440, type), Equals(0x00010000u));
+				AssertThat(PhTimeCode::bcdFromFrame(2879, type), Equals(0x00015923u));
+				AssertThat(PhTimeCode::bcdFromFrame(2880, type), Equals(0x00020000u));
+				AssertThat(PhTimeCode::bcdFromFrame(4319, type), Equals(0x00025923u));
+				AssertThat(PhTimeCode::bcdFromFrame(4320, type), Equals(0x00030000u));
+				AssertThat(PhTimeCode::bcdFromFrame(14399, type), Equals(0x00095923u));
+				AssertThat(PhTimeCode::bcdFromFrame(14400, type), Equals(0x00100000u));
+				AssertThat(PhTimeCode::bcdFromFrame(14401, type), Equals(0x00100001u));
+				AssertThat(PhTimeCode::bcdFromFrame(15839, type), Equals(0x00105923u));
+				AssertThat(PhTimeCode::bcdFromFrame(15840, type), Equals(0x00110000u));
 			});
 
 			it("get_frame_from_bcd", [&](){
@@ -193,23 +193,23 @@ go_bandit([](){
 
 			it("get_bcd_from_frame", [&](){
 				// Check various value of frame
-				AssertThat((int)PhTimeCode::bcdFromFrame(0, type), Equals((int)0x00000000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1, type), Equals((int)0x00000001));
-				AssertThat((int)PhTimeCode::bcdFromFrame(23, type), Equals((int)0x00000023));
-				AssertThat((int)PhTimeCode::bcdFromFrame(24, type), Equals((int)0x00000100));
-				AssertThat((int)PhTimeCode::bcdFromFrame(47, type), Equals((int)0x00000123));
-				AssertThat((int)PhTimeCode::bcdFromFrame(48, type), Equals((int)0x00000200));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1439, type), Equals((int)0x00005923));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1440, type), Equals((int)0x00010000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(2879, type), Equals((int)0x00015923));
-				AssertThat((int)PhTimeCode::bcdFromFrame(2880, type), Equals((int)0x00020000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(4319, type), Equals((int)0x00025923));
-				AssertThat((int)PhTimeCode::bcdFromFrame(4320, type), Equals((int)0x00030000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(14399, type), Equals((int)0x00095923));
-				AssertThat((int)PhTimeCode::bcdFromFrame(14400, type), Equals((int)0x00100000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(14401, type), Equals((int)0x00100001));
-				AssertThat((int)PhTimeCode::bcdFromFrame(15839, type), Equals((int)0x00105923));
-				AssertThat((int)PhTimeCode::bcdFromFrame(15840, type), Equals((int)0x00110000));
+				AssertThat(PhTimeCode::bcdFromFrame(0, type), Equals(0x00000000u));
+				AssertThat(PhTimeCode::bcdFromFrame(1, type), Equals(0x00000001u));
+				AssertThat(PhTimeCode::bcdFromFrame(23, type), Equals(0x00000023u));
+				AssertThat(PhTimeCode::bcdFromFrame(24, type), Equals(0x00000100u));
+				AssertThat(PhTimeCode::bcdFromFrame(47, type), Equals(0x00000123u));
+				AssertThat(PhTimeCode::bcdFromFrame(48, type), Equals(0x00000200u));
+				AssertThat(PhTimeCode::bcdFromFrame(1439, type), Equals(0x00005923u));
+				AssertThat(PhTimeCode::bcdFromFrame(1440, type), Equals(0x00010000u));
+				AssertThat(PhTimeCode::bcdFromFrame(2879, type), Equals(0x00015923u));
+				AssertThat(PhTimeCode::bcdFromFrame(2880, type), Equals(0x00020000u));
+				AssertThat(PhTimeCode::bcdFromFrame(4319, type), Equals(0x00025923u));
+				AssertThat(PhTimeCode::bcdFromFrame(4320, type), Equals(0x00030000u));
+				AssertThat(PhTimeCode::bcdFromFrame(14399, type), Equals(0x00095923u));
+				AssertThat(PhTimeCode::bcdFromFrame(14400, type), Equals(0x00100000u));
+				AssertThat(PhTimeCode::bcdFromFrame(14401, type), Equals(0x00100001u));
+				AssertThat(PhTimeCode::bcdFromFrame(15839, type), Equals(0x00105923u));
+				AssertThat(PhTimeCode::bcdFromFrame(15840, type), Equals(0x00110000u));
 			});
 
 			it("get_frame_from_bcd", [&](){
@@ -323,44 +323,44 @@ go_bandit([](){
 
 			it("get_bcd_from_time", [&](){
 				// Check various value of frame
-				AssertThat((int)PhTimeCode::bcdFromTime(0, type), Equals((int)0x00000000));
-				AssertThat((int)PhTimeCode::bcdFromTime(960, type), Equals((int)0x00000001));
-				AssertThat((int)PhTimeCode::bcdFromTime(23040, type), Equals((int)0x00000024));
-				AssertThat((int)PhTimeCode::bcdFromTime(24000, type), Equals((int)0x00000100));
-				AssertThat((int)PhTimeCode::bcdFromTime(47040, type), Equals((int)0x00000124));
-				AssertThat((int)PhTimeCode::bcdFromTime(48000, type), Equals((int)0x00000200));
-				AssertThat((int)PhTimeCode::bcdFromTime(1439040, type), Equals((int)0x00005924));
-				AssertThat((int)PhTimeCode::bcdFromTime(1440000, type), Equals((int)0x00010000));
-				AssertThat((int)PhTimeCode::bcdFromTime(2879040, type), Equals((int)0x00015924));
-				AssertThat((int)PhTimeCode::bcdFromTime(2880000, type), Equals((int)0x00020000));
-				AssertThat((int)PhTimeCode::bcdFromTime(4319040, type), Equals((int)0x00025924));
-				AssertThat((int)PhTimeCode::bcdFromTime(4320000, type), Equals((int)0x00030000));
-				AssertThat((int)PhTimeCode::bcdFromTime(14399040, type), Equals((int)0x00095924));
-				AssertThat((int)PhTimeCode::bcdFromTime(14400000, type), Equals((int)0x00100000));
-				AssertThat((int)PhTimeCode::bcdFromTime(14400960, type), Equals((int)0x00100001));
-				AssertThat((int)PhTimeCode::bcdFromTime(15839040, type), Equals((int)0x00105924));
-				AssertThat((int)PhTimeCode::bcdFromTime(15840000, type), Equals((int)0x00110000));
+				AssertThat(PhTimeCode::bcdFromTime(0, type), Equals(0x00000000u));
+				AssertThat(PhTimeCode::bcdFromTime(960, type), Equals(0x00000001u));
+				AssertThat(PhTimeCode::bcdFromTime(23040, type), Equals(0x00000024u));
+				AssertThat(PhTimeCode::bcdFromTime(24000, type), Equals(0x00000100u));
+				AssertThat(PhTimeCode::bcdFromTime(47040, type), Equals(0x00000124u));
+				AssertThat(PhTimeCode::bcdFromTime(48000, type), Equals(0x00000200u));
+				AssertThat(PhTimeCode::bcdFromTime(1439040, type), Equals(0x00005924u));
+				AssertThat(PhTimeCode::bcdFromTime(1440000, type), Equals(0x00010000u));
+				AssertThat(PhTimeCode::bcdFromTime(2879040, type), Equals(0x00015924u));
+				AssertThat(PhTimeCode::bcdFromTime(2880000, type), Equals(0x00020000u));
+				AssertThat(PhTimeCode::bcdFromTime(4319040, type), Equals(0x00025924u));
+				AssertThat(PhTimeCode::bcdFromTime(4320000, type), Equals(0x00030000u));
+				AssertThat(PhTimeCode::bcdFromTime(14399040, type), Equals(0x00095924u));
+				AssertThat(PhTimeCode::bcdFromTime(14400000, type), Equals(0x00100000u));
+				AssertThat(PhTimeCode::bcdFromTime(14400960, type), Equals(0x00100001u));
+				AssertThat(PhTimeCode::bcdFromTime(15839040, type), Equals(0x00105924u));
+				AssertThat(PhTimeCode::bcdFromTime(15840000, type), Equals(0x00110000u));
 			});
 
 			it("get_bcd_from_frame", [&](){
 				// Check various value of frame
-				AssertThat((int)PhTimeCode::bcdFromFrame(0, type), Equals((int)0x00000000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1, type), Equals((int)0x00000001));
-				AssertThat((int)PhTimeCode::bcdFromFrame(24, type), Equals((int)0x00000024));
-				AssertThat((int)PhTimeCode::bcdFromFrame(25, type), Equals((int)0x00000100));
-				AssertThat((int)PhTimeCode::bcdFromFrame(49, type), Equals((int)0x00000124));
-				AssertThat((int)PhTimeCode::bcdFromFrame(50, type), Equals((int)0x00000200));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1499, type), Equals((int)0x00005924));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1500, type), Equals((int)0x00010000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(2999, type), Equals((int)0x00015924));
-				AssertThat((int)PhTimeCode::bcdFromFrame(3000, type), Equals((int)0x00020000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(4499, type), Equals((int)0x00025924));
-				AssertThat((int)PhTimeCode::bcdFromFrame(4500, type), Equals((int)0x00030000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(14999, type), Equals((int)0x00095924));
-				AssertThat((int)PhTimeCode::bcdFromFrame(15000, type), Equals((int)0x00100000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(15001, type), Equals((int)0x00100001));
-				AssertThat((int)PhTimeCode::bcdFromFrame(16499, type), Equals((int)0x00105924));
-				AssertThat((int)PhTimeCode::bcdFromFrame(16500, type), Equals((int)0x00110000));
+				AssertThat(PhTimeCode::bcdFromFrame(0, type), Equals((int)0x00000000u));
+				AssertThat(PhTimeCode::bcdFromFrame(1, type), Equals(0x00000001u));
+				AssertThat(PhTimeCode::bcdFromFrame(24, type), Equals(0x00000024u));
+				AssertThat(PhTimeCode::bcdFromFrame(25, type), Equals(0x00000100u));
+				AssertThat(PhTimeCode::bcdFromFrame(49, type), Equals(0x00000124u));
+				AssertThat(PhTimeCode::bcdFromFrame(50, type), Equals(0x00000200u));
+				AssertThat(PhTimeCode::bcdFromFrame(1499, type), Equals(0x00005924u));
+				AssertThat(PhTimeCode::bcdFromFrame(1500, type), Equals(0x00010000u));
+				AssertThat(PhTimeCode::bcdFromFrame(2999, type), Equals(0x00015924u));
+				AssertThat(PhTimeCode::bcdFromFrame(3000, type), Equals(0x00020000u));
+				AssertThat(PhTimeCode::bcdFromFrame(4499, type), Equals(0x00025924u));
+				AssertThat(PhTimeCode::bcdFromFrame(4500, type), Equals(0x00030000u));
+				AssertThat(PhTimeCode::bcdFromFrame(14999, type), Equals(0x00095924u));
+				AssertThat(PhTimeCode::bcdFromFrame(15000, type), Equals(0x00100000u));
+				AssertThat(PhTimeCode::bcdFromFrame(15001, type), Equals(0x00100001u));
+				AssertThat(PhTimeCode::bcdFromFrame(16499, type), Equals(0x00105924u));
+				AssertThat(PhTimeCode::bcdFromFrame(16500, type), Equals(0x00110000u));
 			});
 
 			it("get_time_from_bcd", [&](){
@@ -559,26 +559,26 @@ go_bandit([](){
 
 			it("get_bcd_from_frame", [&](){
 				// Check various value of frame
-				AssertThat((int)PhTimeCode::bcdFromFrame(0, type), Equals((int)0x000000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1, type), Equals((int)0x00000001));
-				AssertThat((int)PhTimeCode::bcdFromFrame(2, type), Equals((int)0x00000002));
-				AssertThat((int)PhTimeCode::bcdFromFrame(29, type), Equals((int)0x00000029));
-				AssertThat((int)PhTimeCode::bcdFromFrame(30, type), Equals((int)0x00000100));
-				AssertThat((int)PhTimeCode::bcdFromFrame(59, type), Equals((int)0x00000129));
-				AssertThat((int)PhTimeCode::bcdFromFrame(60, type), Equals((int)0x00000200));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1799, type), Equals((int)0x00005929));
-				AssertThat((int)PhTimeCode::bcdFromFrame(1800, type), Equals((int)0x00010002));
-				AssertThat((int)PhTimeCode::bcdFromFrame(3597, type), Equals((int)0x00015929));
-				AssertThat((int)PhTimeCode::bcdFromFrame(3598, type), Equals((int)0x00020002));
-				AssertThat((int)PhTimeCode::bcdFromFrame(5395, type), Equals((int)0x00025929));
-				AssertThat((int)PhTimeCode::bcdFromFrame(5396, type), Equals((int)0x00030002));
-				AssertThat((int)PhTimeCode::bcdFromFrame(7193, type), Equals((int)0x00035929));
-				AssertThat((int)PhTimeCode::bcdFromFrame(7194, type), Equals((int)0x00040002));
-				AssertThat((int)PhTimeCode::bcdFromFrame(17981, type), Equals((int)0x00095929));
-				AssertThat((int)PhTimeCode::bcdFromFrame(17982, type), Equals((int)0x00100000));
-				AssertThat((int)PhTimeCode::bcdFromFrame(17983, type), Equals((int)0x00100001));
-				AssertThat((int)PhTimeCode::bcdFromFrame(19781, type), Equals((int)0x00105929));
-				AssertThat((int)PhTimeCode::bcdFromFrame(19782, type), Equals((int)0x00110002));
+				AssertThat(PhTimeCode::bcdFromFrame(0, type), Equals(0x000000u));
+				AssertThat(PhTimeCode::bcdFromFrame(1, type), Equals(0x00000001u));
+				AssertThat(PhTimeCode::bcdFromFrame(2, type), Equals(0x00000002u));
+				AssertThat(PhTimeCode::bcdFromFrame(29, type), Equals(0x00000029u));
+				AssertThat(PhTimeCode::bcdFromFrame(30, type), Equals(0x00000100u));
+				AssertThat(PhTimeCode::bcdFromFrame(59, type), Equals(0x00000129u));
+				AssertThat(PhTimeCode::bcdFromFrame(60, type), Equals(0x00000200u));
+				AssertThat(PhTimeCode::bcdFromFrame(1799, type), Equals(0x00005929u));
+				AssertThat(PhTimeCode::bcdFromFrame(1800, type), Equals(0x00010002u));
+				AssertThat(PhTimeCode::bcdFromFrame(3597, type), Equals(0x00015929u));
+				AssertThat(PhTimeCode::bcdFromFrame(3598, type), Equals(0x00020002u));
+				AssertThat(PhTimeCode::bcdFromFrame(5395, type), Equals(0x00025929u));
+				AssertThat(PhTimeCode::bcdFromFrame(5396, type), Equals(0x00030002u));
+				AssertThat(PhTimeCode::bcdFromFrame(7193, type), Equals(0x00035929u));
+				AssertThat(PhTimeCode::bcdFromFrame(7194, type), Equals(0x00040002u));
+				AssertThat(PhTimeCode::bcdFromFrame(17981, type), Equals(0x00095929u));
+				AssertThat(PhTimeCode::bcdFromFrame(17982, type), Equals(0x00100000u));
+				AssertThat(PhTimeCode::bcdFromFrame(17983, type), Equals(0x00100001u));
+				AssertThat(PhTimeCode::bcdFromFrame(19781, type), Equals(0x00105929u));
+				AssertThat(PhTimeCode::bcdFromFrame(19782, type), Equals(0x00110002u));
 			});
 
 			it("get_frame_from_bcd", [&](){
