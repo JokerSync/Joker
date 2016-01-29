@@ -254,5 +254,46 @@ go_bandit([](){
 				AssertThat(engine->clock()->time(), Equals(0));
 			});
 		});
+
+		describe("x264", [&](){
+			it("open", [&](){
+				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
+
+				AssertThat(engine->codecName().toStdString(), Equals("H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10"));
+
+				AssertThat(engine->bilinearFiltering(), IsFalse());
+				AssertThat(engine->length(), Equals(192000));
+				AssertThat(engine->width(), Equals(64));
+				AssertThat(engine->height(), Equals(64));
+				AssertThat(engine->timeCodeType(), Equals(PhTimeCodeType25));
+				AssertThat(engine->framePerSecond(), Equals(25.00f));
+				AssertThat(engine->timeIn(), Equals(0));
+			});
+
+			it("play x264", [&](){
+				int threshold = 64 * 64 * 32; // allow high threshold due to compression
+				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
+
+				QThread::msleep(FRAME_WAIT_TIME);
+				AssertThat(view->compare("interlace_000.bmp"), IsLessThan(threshold));
+
+				engine->clock()->setRate(1);
+				engine->clock()->elapse(960); // 1 frame at 25 fps
+
+				QThread::msleep(FRAME_WAIT_TIME);
+				AssertThat(view->compare("interlace_001.bmp"), IsLessThan(threshold));
+
+				// Play 1 second
+				for(int i = 0; i < 24; i++) {
+					engine->clock()->elapse(960); // 1 frame at 25 fps
+					QThread::msleep(FRAME_WAIT_TIME);
+					view->renderPixmap(64, 64);
+				}
+				engine->clock()->elapse(960); // 1 frame at 25 fps
+				QThread::msleep(FRAME_WAIT_TIME);
+
+				AssertThat(view->compare("interlace_026.bmp"), IsLessThan(threshold));
+			});
+		});
 	});
 });
