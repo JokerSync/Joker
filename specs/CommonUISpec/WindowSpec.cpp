@@ -16,17 +16,18 @@ using namespace bandit;
 
 go_bandit([](){
 	describe("window_test", [](){
-
+		WindowSpecSettings *settings;
 		before_each([&](){
 			PhDebug::disable();
+			settings = new WindowSpecSettings();
+		});
+
+		after_each([&](){
+			delete settings;
 		});
 
 		it("go_fullscreen_01", [&](){
-			WindowSpecSettings settings(true);
-			QByteArray emptyArray;
-			settings.setWindowGeometry(emptyArray);
-			settings.setFullScreen(false);
-			WindowSpecWindow w(&settings);
+			WindowSpecWindow w(settings);
 			w.show();
 			AssertThat(w.isFullScreen(), IsFalse());
 			AssertThat(w.fullScreenAction()->isChecked(), IsFalse());
@@ -35,7 +36,7 @@ go_bandit([](){
 
 			w.toggleFullScreen();
 			AssertThat(w.isFullScreen(), IsTrue());
-			AssertThat(settings.fullScreen(), IsTrue());
+			AssertThat(settings->fullScreen(), IsTrue());
 			AssertThat(w.fullScreenAction()->isChecked(), IsTrue());
 
 			QTest::qWait(2000);
@@ -43,7 +44,7 @@ go_bandit([](){
 			w.toggleFullScreen();
 
 			AssertThat(w.isFullScreen(), IsFalse());
-			AssertThat(settings.fullScreen(), IsFalse());
+			AssertThat(settings->fullScreen(), IsFalse());
 			AssertThat(w.fullScreenAction()->isChecked(), IsFalse());
 
 			QTest::qWait(1000);
@@ -52,10 +53,8 @@ go_bandit([](){
 		});
 
 		it("go_fullscreen_02", [&](){
-			WindowSpecSettings settings(true);
-
-			settings.setFullScreen(true);
-			WindowSpecWindow w(&settings);
+			settings->setFullScreen(true);
+			WindowSpecWindow w(settings);
 			w.show();
 			QTest::qWait(3000);
 			AssertThat(w.isFullScreen(), IsTrue());
@@ -71,27 +70,23 @@ go_bandit([](){
 		});
 
 		it("has_current_document", [&](){
-			WindowSpecSettings settings(true);
+			settings->setCurrentDocument("text.txt");
 
-			settings.setCurrentDocument("text.txt");
-
-			WindowSpecWindow w(&settings);
+			WindowSpecWindow w(settings);
 			w.processArg(0, NULL);
 			AssertThat(w.text().toStdString(), Equals("bonjour"));
 		});
 
 		it("handle_last_folder", [&](){
-			WindowSpecSettings settings(true);
-
-			WindowSpecWindow w(&settings);
+			WindowSpecWindow w(settings);
 			w.processArg(0, NULL);
 
-			AssertThat(settings.lastDocumentFolder().toStdString(), Equals(QDir::homePath().toStdString()));
+			AssertThat(settings->lastDocumentFolder().toStdString(), Equals(QDir::homePath().toStdString()));
 
 			w.openDocument("text.txt");
 
 			QString currentFolder = QDir::currentPath();
-			AssertThat(settings.lastDocumentFolder().toStdString(), Equals(currentFolder.toStdString()));
+			AssertThat(settings->lastDocumentFolder().toStdString(), Equals(currentFolder.toStdString()));
 		});
 	});
 });
