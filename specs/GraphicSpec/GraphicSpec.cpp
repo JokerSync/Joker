@@ -3,6 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <exception>
+
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 
@@ -20,7 +22,7 @@ using namespace bandit;
 go_bandit([](){
 	describe("graphic_test", [&](){
 		before_each([&](){
-			PhDebug::disable();
+			PhDebug::setLogMask((1 << 9) | PHDEBUG_SPEC_MASK);
 		});
 
 		it("call_paint_when_shown", [&](){
@@ -37,6 +39,30 @@ go_bandit([](){
 			view.renderPixmap(64, 64);
 
 			AssertThat(paintCalled, IsTrue());
+		});
+
+		it("compare", [&](){
+			PhGraphicView view(32, 32);
+
+			AssertThat(view.compare("compareTest.unexisting.bmp"), Equals(std::numeric_limits<int>::max()));
+
+			AssertThat(view.compare("compareTest.64x32.bmp"), Equals(std::numeric_limits<int>::max()));
+
+			QFile file("compareTest.smalldiff.result.bmp");
+			if(file.exists()) {
+				file.remove();
+			}
+			AssertThat(file.exists(), IsFalse());
+			AssertThat(view.compare("compareTest.smalldiff.bmp"), Equals(14));
+			AssertThat(file.exists(), IsTrue());
+
+			AssertThat(view.compare("compareTest.expected.bmp"), Equals(0));
+		});
+
+		it("compare big difference", [&](){
+			PhGraphicView view(128, 128);
+
+			AssertThat(view.compare("compareTest.bigdiff.bmp"), Equals(std::numeric_limits<int>::max()));
 		});
 
 		it("draw_a_rect", [&](){

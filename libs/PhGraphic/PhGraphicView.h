@@ -71,6 +71,14 @@ public:
 	 * @param info A string
 	 */
 	void addInfo(QString info);
+
+	/**
+	 * @brief Compare the current pixmap with a image file and
+	 * save the result in case of difference
+	 * @param imageFile The image file path
+	 * @return The distance between both image expressed in squared RGB difference
+	 */
+	int compare(QString imageFile);
 signals:
 	/**
 	 * @brief emit a signal just before the paint
