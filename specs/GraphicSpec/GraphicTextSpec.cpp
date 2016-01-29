@@ -11,7 +11,6 @@
 #include "PhGraphic/PhGraphicSolidRect.h"
 
 #include "PhSpec.h"
-#include "CommonSpec.h"
 
 using namespace bandit;
 
@@ -21,7 +20,7 @@ go_bandit([](){
 		PhFont *font;
 
 		before_each([&](){
-			PhDebug::disable();
+			PhDebug::setLogMask((1 << 9) | PHDEBUG_SPEC_MASK);
 
 			view = new PhGraphicView(776, 576);
 			font = new PhFont();
@@ -82,12 +81,7 @@ go_bandit([](){
 			font->setFontFile("SWENSON.ttf");
 			AssertThat(font->ready(), IsFalse());
 
-			AssertThat(compareImage(
-						   view->renderPixmap(776, 576).toImage(),
-						   QImage("fontTest.SWENSON.ttf.expected.bmp"),
-						   "fontTest.SWENSON.ttf",
-						   776 * 576 * 0.04),
-					   IsTrue());
+			AssertThat(view->compare("fontTest.SWENSON.ttf.expected.bmp"), IsLessThan(776 * 576 * 0.04));
 
 			AssertThat(font->ready(), IsTrue());
 		});
@@ -95,34 +89,19 @@ go_bandit([](){
 		it("draw_arial_font", [&](){
 			font->setFontFile("Arial.ttf");
 
-			AssertThat(compareImage(
-						   view->renderPixmap(776, 576).toImage(),
-						   QImage("fontTest.Arial.ttf.expected.bmp"),
-						   "fontTest.Arial.ttf",
-						   776 * 576 * 0.04),
-					   IsTrue());
+			AssertThat(view->compare("fontTest.Arial.ttf.expected.bmp"), IsLessThan(776 * 576 * 0.04));
 		});
 
 		it("draw_bedizen_font", [&](){
 			font->setFontFile("Bedizen.ttf");
 
-			AssertThat(compareImage(
-						   view->renderPixmap(776, 576).toImage(),
-						   QImage("fontTest.Bedizen.ttf.expected.bmp"),
-						   "fontTest.Bedizen.ttf",
-						   776 * 576 * 0.04),
-					   IsTrue());
+			AssertThat(view->compare("fontTest.Bedizen.ttf.expected.bmp"), IsLessThan(776 * 576 * 0.04));
 		});
 
 		it("draw_bad_font", [&](){
 			font->setFontFile("bad_font.ttf");
 
-			AssertThat(compareImage(
-						   view->renderPixmap(776, 576).toImage(),
-						   QImage("fontTest.bad_font.ttf.expected.bmp"),
-						   "fontTest.bad_font.ttf",
-						   776 * 576 * 0.04),
-					   IsTrue());
+			AssertThat(view->compare("fontTest.bad_font.ttf.expected.bmp"), IsLessThan(776 * 576 * 0.04));
 		});
 	});
 });

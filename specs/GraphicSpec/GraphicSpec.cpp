@@ -15,7 +15,6 @@
 #include "PhGraphic/PhGraphicLoop.h"
 
 #include "PhSpec.h"
-#include "CommonSpec.h"
 
 using namespace bandit;
 
@@ -76,7 +75,7 @@ go_bandit([](){
 				rect.draw();
 			});
 
-			AssertThat(compareImage(view.renderPixmap(32, 32).toImage(), QImage("rectTest.expected.bmp"), "rectTest"), IsTrue());
+			AssertThat(view.compare("rectTest.expected.bmp"), Equals(0));
 		});
 
 		it("draw_an_image", [&](){
@@ -89,7 +88,7 @@ go_bandit([](){
 				image.draw();
 			});
 
-			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("rgbPatternTest.expected.bmp"), "draw_an_image"), IsTrue());
+			AssertThat(view.compare("rgbPatternTest.expected.bmp"), Equals(0));
 		});
 
 		it("draw_a_rgb_pattern", [&](){
@@ -106,7 +105,7 @@ go_bandit([](){
 				rect.draw();
 			});
 
-			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("rgbPatternTest.expected.bmp"), "draw_a_rgb_pattern"), IsTrue());
+			AssertThat(view.compare("rgbPatternTest.expected.bmp"), Equals(0));
 		});
 
 		it("draw a loop", [&]() {
@@ -125,7 +124,7 @@ go_bandit([](){
 				loop.draw();
 			});
 
-			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("loopTest.expected.bmp"), "loopTest"), IsTrue());
+			AssertThat(view.compare("loopTest.expected.bmp"), Equals(0));
 		});
 
 		it("draw an horizontal loop", [&]() {
@@ -144,7 +143,7 @@ go_bandit([](){
 				loop.draw();
 			});
 
-			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("loopHorizontalTest.expected.bmp"), "loopHorizontalTest"), IsTrue());
+			AssertThat(view.compare("loopHorizontalTest.expected.bmp"), Equals(0));
 		});
 	});
 });

@@ -12,14 +12,13 @@
 #include "GraphicStripSpecSettings.h"
 
 #include "PhSpec.h"
-#include "CommonSpec.h"
 
 using namespace bandit;
 
 go_bandit([](){
 	describe("graphic_strip_test", []() {
 		before_each([&](){
-			PhDebug::disable();
+			PhDebug::setLogMask((1 << 9) | PHDEBUG_SPEC_MASK);
 		});
 
 		it("draw_a_graphic_strip", [&](){
@@ -45,12 +44,7 @@ go_bandit([](){
 			doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
 			doc->changed();
 
-			AssertThat(compareImage(
-						   view.renderPixmap(720, 240).toImage(),
-						   QImage("drawTest.expected.bmp"),
-						   "drawTest",
-						   720 * 240 * 4),
-					   IsTrue());
+			AssertThat(view.compare("drawTest.expected.bmp"), IsLessThan(720 * 240 * 4));
 		});
 	});
 });
