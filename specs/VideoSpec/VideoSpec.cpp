@@ -14,7 +14,6 @@
 
 #define FRAME_WAIT_TIME 40
 
-#include "PhSpec.h"
 #include "CommonSpec.h"
 
 using namespace bandit;

@@ -6,7 +6,7 @@
 #include "PhTools/PhDebug.h"
 #include "PhSync/PhClock.h"
 
-#include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 

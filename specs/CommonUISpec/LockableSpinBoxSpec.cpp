@@ -8,7 +8,7 @@
 
 #include "PhCommonUI/PhLockableSpinBox.h"
 
-#include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 

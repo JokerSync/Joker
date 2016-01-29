@@ -7,7 +7,7 @@
 
 #include "PhSync/PhSynchronizer.h"
 
-#include "PhSpec.h"
+#include "CommonSpec.h"
 
 #include "SyncSpecSettings.h"
 

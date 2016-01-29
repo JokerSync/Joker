@@ -6,7 +6,7 @@
 #include "PhTools/PhDebug.h"
 #include "PhSony/PhSonyController.h"
 
-#include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 

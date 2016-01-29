@@ -10,7 +10,6 @@
 #include "WindowSpecSettings.h"
 #include "WindowSpecWindow.h"
 
-#include "PhSpec.h"
 #include "CommonSpec.h"
 
 using namespace bandit;

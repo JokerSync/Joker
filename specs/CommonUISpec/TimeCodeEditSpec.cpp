@@ -2,7 +2,6 @@
 #include "PhTools/PhDebug.h"
 #include "PhCommonUI/PhTimeCodeEdit.h"
 
-#include "PhSpec.h"
 #include "CommonSpec.h"
 
 using namespace bandit;

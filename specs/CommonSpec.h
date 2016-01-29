@@ -6,6 +6,9 @@
 #ifndef COMMONSPEC_H
 #define COMMONSPEC_H
 
+#include <QTest>
+#include "bandit/bandit.h"
+
 #include "PhSync/PhTimeCode.h"
 
 

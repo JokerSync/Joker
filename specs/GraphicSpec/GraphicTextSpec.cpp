@@ -10,7 +10,7 @@
 #include "PhGraphic/PhGraphicText.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
 
-#include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 

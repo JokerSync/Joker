@@ -14,7 +14,7 @@
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphic/PhGraphicLoop.h"
 
-#include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 

@@ -5,7 +5,7 @@
 
 #include "PhTools/PhDebug.h"
 
-#include "PhSpec.h"
+#include "CommonSpec.h"
 
 int main(int argc, char *argv[])
 {
