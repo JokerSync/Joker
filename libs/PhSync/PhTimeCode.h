@@ -7,6 +7,8 @@
 #ifndef PHTIMECODE_H
 #define PHTIMECODE_H
 
+#include <QString>
+
 #include "PhTime.h"
 
 /**
