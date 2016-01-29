@@ -70,16 +70,8 @@ go_bandit([](){
 				AssertThat(engine->length(), Equals(192000));
 				AssertThat(engine->width(), Equals(64));
 				AssertThat(engine->height(), Equals(64));
-
-				QThread::msleep(FRAME_WAIT_TIME);
-			});
-
-			it("default_framerate", [&](){
-				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
-
-				QThread::msleep(FRAME_WAIT_TIME);
-
 				AssertThat(engine->framePerSecond(), Equals(25.00f));
+				AssertThat(engine->timeIn(), Equals(0));
 			});
 
 			it("go_to_01", [&](){
