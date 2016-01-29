@@ -29,9 +29,19 @@
         <translation>Révision: </translation>
     </message>
     <message>
+        <location filename="AboutDialog.ui" line="201"/>
+        <source>Synchronous playback time: </source>
+        <translation>Temps de lecture synchrone: </translation>
+    </message>
+    <message>
         <location filename="AboutDialog.cpp" line="19"/>
         <source>Revision:</source>
         <translation>Révision: </translation>
+    </message>
+    <message>
+        <location filename="AboutDialog.cpp" line="41"/>
+        <source>Synchronous playback time: %1 seconds</source>
+        <translation>Temps de lecture synchrone: %1 secondes</translation>
     </message>
 </context>
 <context>
@@ -477,18 +487,18 @@
         <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="771"/>
-        <location filename="JokerWindow.cpp" line="796"/>
+        <location filename="JokerWindow.cpp" line="767"/>
+        <location filename="JokerWindow.cpp" line="792"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="789"/>
+        <location filename="JokerWindow.cpp" line="785"/>
         <source>Save...</source>
         <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="1056"/>
+        <location filename="JokerWindow.cpp" line="1052"/>
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>
@@ -497,31 +507,31 @@
     <name>MAC_APPLICATION_MENU</name>
     <message>
         <source>Services</source>
-        <translation type="vanished">Services</translation>
+        <translation>Services</translation>
     </message>
     <message>
         <source>Hide %1</source>
-        <translation type="vanished">Masquer %1</translation>
+        <translation>Masquer %1</translation>
     </message>
     <message>
         <source>Hide Others</source>
-        <translation type="vanished">Masquer les autres</translation>
+        <translation>Masquer les autres</translation>
     </message>
     <message>
         <source>Show All</source>
-        <translation type="vanished">Tout afficher</translation>
+        <translation>Tout afficher</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation type="vanished">Préférences...</translation>
+        <translation>Préférences...</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation type="vanished">Quitter %1</translation>
+        <translation>Quitter %1</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation type="vanished">À propos de %1</translation>
+        <translation>À propos de %1</translation>
     </message>
 </context>
 <context>

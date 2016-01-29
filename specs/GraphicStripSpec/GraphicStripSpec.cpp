@@ -45,15 +45,12 @@ go_bandit([](){
 			doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
 			doc->changed();
 
-			QImage resultImage(view.renderPixmap(720, 240).toImage());
-			QString resultFile = "drawTest.result.bmp";
-			resultImage.save(resultFile);
-			QString expectedFile = "drawTest.expected.bmp";
-			QImage expectedImage(expectedFile);
-
-			int result = PhPictureTools::compare(resultImage, expectedImage);
-			PHDEBUG << "result:" << result;
-			AssertThat(result, IsLessThan(720 * 240 * 4)); // accept a difference of 4 per pixel
+			AssertThat(compareImage(
+						   view.renderPixmap(720, 240).toImage(),
+						   QImage("drawTest.expected.bmp"),
+						   "drawTest",
+						   720 * 240 * 4),
+					   IsTrue());
 		});
 	});
 });

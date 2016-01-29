@@ -132,7 +132,7 @@ void PhGraphicView::paintGL()
 	// Millisecond precision is not enough (60 Hz is 16.6 ms), so we use nanoseconds.
 	qint64 nsecsElapsed = _timer.nsecsElapsed();
 	double elapsedSeconds = static_cast<double>(nsecsElapsed - _previousNsecsElapsed) / 1000000000.0f;
-	emit beforePaint(static_cast<PhTime> (24000.0 * elapsedSeconds));
+	emit beforePaint(static_cast<PhTime> (PHTIMEBASE * elapsedSeconds));
 	_previousNsecsElapsed = nsecsElapsed;
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

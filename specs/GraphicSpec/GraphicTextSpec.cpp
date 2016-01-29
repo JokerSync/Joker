@@ -11,6 +11,7 @@
 #include "PhGraphic/PhGraphicSolidRect.h"
 
 #include "PhSpec.h"
+#include "CommonSpec.h"
 
 using namespace bandit;
 
@@ -81,51 +82,47 @@ go_bandit([](){
 			font->setFontFile("SWENSON.ttf");
 			AssertThat(font->ready(), IsFalse());
 
-			QImage resultImage(view->renderPixmap(776, 576).toImage());
+			AssertThat(compareImage(
+						   view->renderPixmap(776, 576).toImage(),
+						   QImage("fontTest.SWENSON.ttf.expected.bmp"),
+						   "fontTest.SWENSON.ttf",
+						   776 * 576 * 0.04),
+					   IsTrue());
 
-			// Check the font is ready after the first rendered frame
 			AssertThat(font->ready(), IsTrue());
-
-			resultImage.save("fontTest.SWENSON.ttf.result.bmp");
-			QImage expectedImage("fontTest.SWENSON.ttf.expected.bmp");
-
-			AssertThat(font->ready(), IsTrue());
-
-			int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
 		});
 
 		it("draw_arial_font", [&](){
 			font->setFontFile("Arial.ttf");
 
-			QImage resultImage(view->renderPixmap(776, 576).toImage());
-			resultImage.save("fontTest.Arial.ttf.result.bmp");
-			QImage expectedImage("fontTest.Arial.ttf.expected.bmp");
-
-			int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
+			AssertThat(compareImage(
+						   view->renderPixmap(776, 576).toImage(),
+						   QImage("fontTest.Arial.ttf.expected.bmp"),
+						   "fontTest.Arial.ttf",
+						   776 * 576 * 0.04),
+					   IsTrue());
 		});
 
 		it("draw_bedizen_font", [&](){
 			font->setFontFile("Bedizen.ttf");
 
-			QImage resultImage(view->renderPixmap(776, 576).toImage());
-			resultImage.save("fontTest.Bedizen.ttf.result.bmp");
-			QImage expectedImage("fontTest.Bedizen.ttf.expected.bmp");
-
-			int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
+			AssertThat(compareImage(
+						   view->renderPixmap(776, 576).toImage(),
+						   QImage("fontTest.Bedizen.ttf.expected.bmp"),
+						   "fontTest.Bedizen.ttf",
+						   776 * 576 * 0.04),
+					   IsTrue());
 		});
 
 		it("draw_bad_font", [&](){
 			font->setFontFile("bad_font.ttf");
 
-			QImage resultImage(view->renderPixmap(776, 576).toImage());
-			resultImage.save("fontTest.bad_font.ttf.result.bmp");
-			QImage expectedImage("fontTest.bad_font.ttf.expected.bmp");
-
-			int result = PhPictureTools::compare(resultImage, expectedImage);
-			AssertThat(result, IsLessThan(776 * 576 * 0.04)); // accept a difference of 4% pixels
+			AssertThat(compareImage(
+						   view->renderPixmap(776, 576).toImage(),
+						   QImage("fontTest.bad_font.ttf.expected.bmp"),
+						   "fontTest.bad_font.ttf",
+						   776 * 576 * 0.04),
+					   IsTrue());
 		});
 	});
 });

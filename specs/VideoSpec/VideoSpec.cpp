@@ -6,7 +6,6 @@
 #include <QThread>
 
 #include "PhTools/PhDebug.h"
-#include "PhTools/PhPictureTools.h"
 #include "PhGraphic/PhGraphicView.h"
 
 #include "PhVideo/PhVideoEngine.h"

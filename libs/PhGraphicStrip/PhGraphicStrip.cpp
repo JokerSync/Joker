@@ -500,7 +500,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		if(_settings->displayVerticalScale()) {
 			PhGraphicSolidRect scale;
 			int scaleHeight = 4;
-			int spaceBetweenDashes = _settings->verticalScaleSpaceInSeconds() * 24000 / verticalTimePerPixel;
+			int spaceBetweenDashes = _settings->verticalScaleSpaceInSeconds() * PHTIMEBASE / verticalTimePerPixel;
 			// Set the first dash to +5sec
 			scale.setHeight(scaleHeight);
 			scale.setColor(Qt::gray);

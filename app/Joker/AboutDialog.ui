@@ -188,6 +188,19 @@
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QLabel" name="timePlayedLabel">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>260</y>
+     <width>341</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Synchronous playback time: </string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
