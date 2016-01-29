@@ -14,6 +14,11 @@ class PhVideoSettings
 {
 public:
 	/**
+	 * @brief PhVideoSettings desctructor
+	 */
+	virtual ~PhVideoSettings() {}
+
+	/**
 	 * @brief Screen delay compensation
 	 * @return A value in millisecond
 	 */

@@ -24,6 +24,11 @@ class PhSyncSettings
 {
 public:
 	/**
+	 * @brief PhSyncSettings destructor
+	 */
+	virtual ~PhSyncSettings() {}
+
+	/**
 	 * @brief Time to start playback when looped
 	 * @return A time value
 	 */
