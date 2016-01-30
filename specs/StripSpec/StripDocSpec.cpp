@@ -8,8 +8,6 @@
 
 #include "CommonSpec.h"
 
-#include "PhSpec.h"
-
 using namespace bandit;
 
 go_bandit([](){
@@ -25,35 +23,36 @@ go_bandit([](){
 			it("open strip, old joker file", [&](){
 				AssertThat(doc.openStripFile("test.strip"), IsTrue());
 				AssertThat(doc.forceRatio169(), IsTrue());
-				AssertThat(doc.videoFilePath().toStdString(), Equals("test01.mov"));
+				AssertThat(doc.videoFilePath(), Equals("test01.mov"));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:59:00:00"));
 				AssertThat(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:02:03:04"));
 			});
 
 			it("open joker file linking to a detx file", [&](){
 				AssertThat(doc.openStripFile("test01.joker"), IsTrue());
-				AssertThat(doc.filePath().toStdString(), Equals("test01.detx"));
-				AssertThat(doc.videoFilePath().toStdString(), Equals("test01.mov"));
+				AssertThat(doc.filePath(), Equals("test01.detx"));
+				AssertThat(doc.videoFilePath(), Equals("test01.mov"));
 				AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:01:00:00"));
 				AssertThat(doc.forceRatio169(), IsTrue());
 				AssertThat(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:30:00:00"));
 
-				AssertThat(doc.title().toStdString(), Equals("Title test"));
-				AssertThat(doc.generator().toStdString(), Equals("Cappella v0.12.5, 1"));
+				AssertThat(doc.title(), Equals("Title test"));
+				AssertThat(doc.generator(), Equals("Cappella v0.12.5, 1"));
 			});
 
 			it("open joker file linking to a detx file", [&](){
 				AssertThat(doc.openStripFile("test02.joker"), IsTrue());
-				AssertThat(doc.filePath().toStdString(), Equals("test03.mos"));
-				AssertThat(doc.videoFilePath().toStdString(), Equals("test02.mov"));
+				AssertThat(doc.filePath(), Equals("test03.mos"));
+				AssertThat(doc.videoFilePath(), Equals("test02.mov"));
 				AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:03:00:00"));
 				AssertThat(doc.forceRatio169(), IsFalse());
 				AssertThat(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:20:00:00"));
 
-				AssertThat(doc.title().toStdString(), Equals("Au fil d'Ariane"));
-				AssertThat(doc.generator().toStdString(), Equals("Mosaic"));
+				AssertThat(doc.title(), Equals("Au fil d'Ariane"));
+				AssertThat(doc.generator()
+						   , Equals("Mosaic"));
 			});
 
 			it("fails to open bad tag joker file", [&](){
@@ -83,16 +82,16 @@ go_bandit([](){
 
 				AssertThat(doc.openStripFile("save01.joker"), IsTrue());
 
-				AssertThat(doc.filePath().toStdString(), Equals("test01.detx"));
-				AssertThat(doc.videoFilePath().toStdString(), Equals("test01.mov"));
+				AssertThat(doc.filePath(), Equals("test01.detx"));
+				AssertThat(doc.videoFilePath(), Equals("test01.mov"));
 				AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:01:00:00"));
 				AssertThat(doc.forceRatio169(), IsTrue());
 				AssertThat(doc.videoDeinterlace(), IsFalse());
 				AssertThat(t2s(doc.lastTime(), PhTimeCodeType25), Equals("01:01:01:01"));
 
-				AssertThat(doc.title().toStdString(), Equals("Title test"));
-				AssertThat(doc.generator().toStdString(), Equals("Cappella v0.12.5, 1"));
+				AssertThat(doc.title(), Equals("Title test"));
+				AssertThat(doc.generator(), Equals("Cappella v0.12.5, 1"));
 			});
 
 			it("open and save with mos", [&](){
@@ -102,15 +101,15 @@ go_bandit([](){
 
 				AssertThat(doc.openStripFile("save02.joker"), IsTrue());
 
-				AssertThat(doc.filePath().toStdString(), Equals("test03.mos"));
-				AssertThat(doc.videoFilePath().toStdString(), Equals("test02.mov"));
+				AssertThat(doc.filePath(), Equals("test03.mos"));
+				AssertThat(doc.videoFilePath(), Equals("test02.mov"));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:03:00:00"));
 				AssertThat(doc.forceRatio169(), IsFalse());
 				AssertThat(doc.videoDeinterlace(), IsTrue());
 				AssertThat(t2s(doc.lastTime(), PhTimeCodeType25), Equals("02:02:02:02"));
 
-				AssertThat(doc.title().toStdString(), Equals("Au fil d'Ariane"));
-				AssertThat(doc.generator().toStdString(), Equals("Mosaic"));
+				AssertThat(doc.title(), Equals("Au fil d'Ariane"));
+				AssertThat(doc.generator(), Equals("Mosaic"));
 			});
 		});
 
@@ -128,29 +127,29 @@ go_bandit([](){
 				it("import_text", [&](){
 					AssertThat(doc.texts().count(), Equals(6));
 
-					AssertThat(doc.texts()[0]->content().toStdString(), Equals("Simple sentence"));
+					AssertThat(doc.texts()[0]->content(), Equals("Simple sentence"));
 					AssertThat(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:02:00"));
 					AssertThat(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:04:00"));
 					AssertThat(doc.texts()[0]->people(), Equals(doc.peopleByName("Jeanne")));
 					AssertThat(doc.texts()[0]->y(), Equals(0.25f));
 
-					AssertThat(doc.texts()[1]->content().toStdString(), Equals("Composed "));
+					AssertThat(doc.texts()[1]->content(), Equals("Composed "));
 					AssertThat(t2s(doc.texts()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:05:00"));
 					AssertThat(t2s(doc.texts()[1]->timeOut(), PhTimeCodeType25), Equals("01:00:06:00"));
 
-					AssertThat(doc.texts()[2]->content().toStdString(), Equals("sentence"));
+					AssertThat(doc.texts()[2]->content(), Equals("sentence"));
 					AssertThat(t2s(doc.texts()[2]->timeIn(), PhTimeCodeType25), Equals("01:00:06:00"));
 					AssertThat(t2s(doc.texts()[2]->timeOut(), PhTimeCodeType25), Equals("01:00:07:00"));
 
-					AssertThat(doc.texts()[3]->content().toStdString(), Equals("Simple off sentence"));
+					AssertThat(doc.texts()[3]->content(), Equals("Simple off sentence"));
 					AssertThat(t2s(doc.texts()[3]->timeIn(), PhTimeCodeType25), Equals("01:00:12:00"));
 					AssertThat(t2s(doc.texts()[3]->timeOut(), PhTimeCodeType25), Equals("01:00:14:00"));
 
-					AssertThat(doc.texts()[4]->content().toStdString(), Equals("Composed sentence with off"));
+					AssertThat(doc.texts()[4]->content(), Equals("Composed sentence with off"));
 					AssertThat(t2s(doc.texts()[4]->timeIn(), PhTimeCodeType25), Equals("01:00:15:00"));
 					AssertThat(t2s(doc.texts()[4]->timeOut(), PhTimeCodeType25), Equals("01:00:17:00"));
 
-					AssertThat(doc.texts()[5]->content().toStdString(), Equals("Sentence with out not linked"));
+					AssertThat(doc.texts()[5]->content(), Equals("Sentence with out not linked"));
 					AssertThat(t2s(doc.texts()[5]->timeIn(), PhTimeCodeType25), Equals("01:00:30:00"));
 					AssertThat(t2s(doc.texts()[5]->timeOut(), PhTimeCodeType25), Equals("01:00:31:04"));
 				});
@@ -205,14 +204,14 @@ go_bandit([](){
 				});
 
 				it("compute detx id", [&](){
-					AssertThat(doc.computeDetXId("abc").toStdString(), Equals("abc"));
-					AssertThat(doc.computeDetXId("ABC").toStdString(), Equals("abc"));
-					AssertThat(doc.computeDetXId("It's ok!").toStdString(), Equals("it_s_ok_"));
+					AssertThat(doc.computeDetXId("abc"), Equals("abc"));
+					AssertThat(doc.computeDetXId("ABC"), Equals("abc"));
+					AssertThat(doc.computeDetXId("It's ok!"), Equals("it_s_ok_"));
 				});
 
 				it("import detx without title", [&](){
 					AssertThat(doc.importDetXFile("notitle.detx"), IsTrue());
-					AssertThat(doc.title().toStdString(), Equals("notitle"));
+					AssertThat(doc.title(), Equals("notitle"));
 				});
 
 				it("export and import basic detx", [&](){
@@ -236,9 +235,9 @@ go_bandit([](){
 
 					AssertThat(doc.importDetXFile("save01.detx"), IsTrue());
 
-					AssertThat(doc.filePath().toStdString(), Equals("save01.detx"));
-					AssertThat(doc.title().toStdString(), Equals("Title test for detx"));
-					AssertThat(doc.videoFilePath().toStdString(), Equals("test01.mov"));
+					AssertThat(doc.filePath(), Equals("save01.detx"));
+					AssertThat(doc.title(), Equals("Title test for detx"));
+					AssertThat(doc.videoFilePath(), Equals("test01.mov"));
 					AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 					AssertThat(t2s25(doc.videoTimeIn()), Equals("01:01:00:00"));
 					AssertThat(doc.forceRatio169(), IsFalse());
@@ -248,20 +247,20 @@ go_bandit([](){
 					// Peoples
 					AssertThat(doc.peoples().count(), Equals(2));
 
-					AssertThat(doc.peoples().at(0)->name().toStdString(), Equals("Bob"));
-					AssertThat(doc.peoples().at(0)->color().toStdString(), Equals("#0000ff"));
-					AssertThat(doc.peoples().at(0)->picture().toStdString(), Equals("not base64 data, just for test"));
+					AssertThat(doc.peoples().at(0)->name(), Equals("Bob"));
+					AssertThat(doc.peoples().at(0)->color(), Equals("#0000ff"));
+					AssertThat(doc.peoples().at(0)->picture(), Equals("not base64 data, just for test"));
 
-					AssertThat(doc.peoples().at(1)->name().toStdString(), Equals("Sue"));
-					AssertThat(doc.peoples().at(1)->color().toStdString(), Equals("#ff00ff"));
-					AssertThat(doc.peoples().at(1)->picture().toStdString(), Equals("bouboubou"));
+					AssertThat(doc.peoples().at(1)->name(), Equals("Sue"));
+					AssertThat(doc.peoples().at(1)->color(), Equals("#ff00ff"));
+					AssertThat(doc.peoples().at(1)->picture(), Equals("bouboubou"));
 
 					// Loops
 					AssertThat(doc.loops().count(), Equals(1));
 
 					PhStripLoop *loop = doc.loops().at(0);
 					AssertThat(t2s25(loop->timeIn()), Equals("01:01:00:00"));
-					AssertThat(loop->label().toStdString(), Equals("1"));
+					AssertThat(loop->label(), Equals("1"));
 
 					// Cuts
 					AssertThat(doc.cuts().count(), Equals(1));
@@ -276,9 +275,9 @@ go_bandit([](){
 					// simple text
 					PhStripText *text = doc.texts().at(0);
 					AssertThat(t2s25(text->timeIn()), Equals("01:01:00:05"));
-					AssertThat(text->people()->name().toStdString(), Equals("Sue"));
+					AssertThat(text->people()->name(), Equals("Sue"));
 					AssertThat(t2s25(text->timeOut()), Equals("01:01:00:15"));
-					AssertThat(text->content().toStdString(), Equals("Hello"));
+					AssertThat(text->content(), Equals("Hello"));
 				});
 
 				it("export and import detx with complex lines", [&](){
@@ -295,8 +294,8 @@ go_bandit([](){
 
 					AssertThat(doc.importDetXFile("save02.detx"), IsTrue());
 
-					AssertThat(doc.filePath().toStdString(), Equals("save02.detx"));
-					AssertThat(doc.title().toStdString(), Equals("export and import detx with complex lines"));
+					AssertThat(doc.filePath(), Equals("save02.detx"));
+					AssertThat(doc.title(), Equals("export and import detx with complex lines"));
 
 					// Texts
 					AssertThat(doc.texts().count(), Equals(2));
@@ -304,15 +303,15 @@ go_bandit([](){
 					// double text
 					PhStripText *text = doc.texts().at(0);
 					AssertThat(t2s25(text->timeIn()), Equals("01:01:00:05"));
-					AssertThat(text->people()->name().toStdString(), Equals("Sue"));
+					AssertThat(text->people()->name(), Equals("Sue"));
 					AssertThat(t2s25(text->timeOut()), Equals("01:01:00:15"));
-					AssertThat(text->content().toStdString(), Equals("Hello "));
+					AssertThat(text->content(), Equals("Hello "));
 
 					text = doc.texts().at(1);
 					AssertThat(t2s25(text->timeIn()), Equals("01:01:00:15"));
-					AssertThat(text->people()->name().toStdString(), Equals("Sue"));
+					AssertThat(text->people()->name(), Equals("Sue"));
 					AssertThat(t2s25(text->timeOut()), Equals("01:01:01:00"));
-					AssertThat(text->content().toStdString(), Equals("world"));
+					AssertThat(text->content(), Equals("world"));
 				});
 
 				it("export and import detx with other timecode type", [&](){
@@ -337,21 +336,21 @@ go_bandit([](){
 				PhStripDoc doc;
 				AssertThat(doc.importMosFile("test01.mos"), IsTrue());
 
-				AssertThat(doc.authorName().toStdString(), Equals("auteur"));
+				AssertThat(doc.authorName(), Equals("auteur"));
 
-				AssertThat(doc.videoFilePath().toStdString(), Equals(""));
+				AssertThat(doc.videoFilePath(), Equals(""));
 				AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:00:00:00"));
 
-				AssertThat(doc.title().toStdString(), Equals("Titre VO"));
-				AssertThat(doc.season().toStdString(), Equals("saison"));
-				AssertThat(doc.episode().toStdString(), Equals("episode"));
+				AssertThat(doc.title(), Equals("Titre VO"));
+				AssertThat(doc.season(), Equals("saison"));
+				AssertThat(doc.episode(), Equals("episode"));
 
 				// Test peoples
 				AssertThat(doc.peoples().count(), Equals(1));
 				PhPeople * people = doc.peopleByName("Nom personnage");
 				AssertThat(people != NULL, IsTrue());
-				AssertThat(people->name().toStdString(), Equals("Nom personnage"));
+				AssertThat(people->name(), Equals("Nom personnage"));
 
 				// Test cuts
 				AssertThat(doc.cuts().count(), Equals(0));
@@ -362,15 +361,15 @@ go_bandit([](){
 				// Test texts
 				AssertThat(doc.texts().count(), Equals(3));
 				AssertThat(doc.texts()[0]->people(), Equals(people));
-				AssertThat(doc.texts()[0]->content().toStdString(), Equals("Ceci "));
+				AssertThat(doc.texts()[0]->content(), Equals("Ceci "));
 				AssertThat(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("00:00:00:20"));
 				AssertThat(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("00:00:01:12"));
 
-				AssertThat(doc.texts()[1]->content().toStdString(), Equals("est un"));
+				AssertThat(doc.texts()[1]->content(), Equals("est un"));
 				AssertThat(t2s(doc.texts()[1]->timeIn(), PhTimeCodeType25), Equals("00:00:01:12"));
 				AssertThat(t2s(doc.texts()[1]->timeOut(), PhTimeCodeType25), Equals("00:00:01:16"));
 
-				AssertThat(doc.texts()[2]->content().toStdString(), Equals(" test."));
+				AssertThat(doc.texts()[2]->content(), Equals(" test."));
 				AssertThat(t2s(doc.texts()[2]->timeIn(), PhTimeCodeType25), Equals("00:00:01:16"));
 				AssertThat(t2s(doc.texts()[2]->timeOut(), PhTimeCodeType25), Equals("00:00:02:03"));
 
@@ -383,7 +382,7 @@ go_bandit([](){
 				PhStripDoc doc;
 				AssertThat(doc.importMosFile("test02.mos"), IsTrue());
 
-				AssertThat(doc.videoFilePath().toStdString(), Equals("C:\\Users\\Matthhou\\Desktop\\Burn Notice\\710\\BurnNotice_BCI710_VOVI.mov"));
+				AssertThat(doc.videoFilePath(), Equals("C:\\Users\\Matthhou\\Desktop\\Burn Notice\\710\\BurnNotice_BCI710_VOVI.mov"));
 #warning TODO Matthias told me that the timestamp was in fact 00:58:00:00...
 				AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:58:24:00"));
@@ -393,11 +392,11 @@ go_bandit([](){
 
 				PhPeople * pierre = doc.peopleByName("Pierre");
 				AssertThat(pierre != NULL, IsTrue());
-				AssertThat(pierre->name().toStdString(), Equals("Pierre"));
+				AssertThat(pierre->name(), Equals("Pierre"));
 
 				PhPeople * marie = doc.peopleByName("Marie");
 				AssertThat(marie != NULL, IsTrue());
-				AssertThat(marie->name().toStdString(), Equals("Marie"));
+				AssertThat(marie->name(), Equals("Marie"));
 
 				// Test cuts
 				AssertThat(doc.cuts().count(), Equals(1));
@@ -406,19 +405,19 @@ go_bandit([](){
 				// Test loops
 				AssertThat(doc.loops().count(), Equals(1));
 				AssertThat(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:00:00"));
-				AssertThat(doc.loops()[0]->label().toStdString(), Equals("1"));
+				AssertThat(doc.loops()[0]->label(), Equals("1"));
 
 				// Test texts
 				AssertThat(doc.texts().count(), Equals(2));
 				AssertThat(doc.texts()[0]->people(), Equals(pierre));
 				AssertThat(doc.texts()[0]->y(), Equals(0.0f));
-				AssertThat(doc.texts()[0]->content().toStdString(), Equals("Bonjour, Marie."));
+				AssertThat(doc.texts()[0]->content(), Equals("Bonjour, Marie."));
 				AssertThat(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:00:00"));
 				AssertThat(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:02:00"));
 
 				AssertThat(doc.texts()[1]->people(), Equals(marie));
 				AssertThat(doc.texts()[1]->y(), Equals(0.6f));
-				AssertThat(doc.texts()[1]->content().toStdString(), Equals("Bonjour, Pierre."));
+				AssertThat(doc.texts()[1]->content(), Equals("Bonjour, Pierre."));
 				AssertThat(t2s(doc.texts()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:04:00"));
 				AssertThat(t2s(doc.texts()[1]->timeOut(), PhTimeCodeType25), Equals("01:00:06:00"));
 
@@ -430,7 +429,7 @@ go_bandit([](){
 				PhStripDoc doc;
 				AssertThat(doc.importMosFile("test03.mos"), IsTrue());
 
-				AssertThat(doc.videoFilePath().toStdString(), Equals("Z:\\MOT POUR MO\\AU FIL D'ARIANE_DETECTION\\jpegAFA_BOB 06_SEQ 30_PISTES SEPARES_H264.mov"));
+				AssertThat(doc.videoFilePath(), Equals("Z:\\MOT POUR MO\\AU FIL D'ARIANE_DETECTION\\jpegAFA_BOB 06_SEQ 30_PISTES SEPARES_H264.mov"));
 				AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType24));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType24), Equals("05:59:50:00"));
 
@@ -439,11 +438,11 @@ go_bandit([](){
 
 				PhPeople * noName = doc.peopleByName("");
 				AssertThat(noName != NULL, IsTrue());
-				AssertThat(noName->name().toStdString(), Equals(""));
+				AssertThat(noName->name(), Equals(""));
 
 				PhPeople * denis = doc.peopleByName("Denis");
 				AssertThat(denis != NULL, IsTrue());
-				AssertThat(denis->name().toStdString(), Equals("Denis"));
+				AssertThat(denis->name(), Equals("Denis"));
 
 				// Test cuts
 				AssertThat(doc.cuts().count(), Equals(29));
@@ -456,9 +455,9 @@ go_bandit([](){
 				// Test loops
 				AssertThat(doc.loops().count(), Equals(2));
 				AssertThat(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType24), Equals("06:00:01:00"));
-				AssertThat(doc.loops()[0]->label().toStdString(), Equals("30"));
+				AssertThat(doc.loops()[0]->label(), Equals("30"));
 				AssertThat(t2s(doc.loops()[1]->timeIn(), PhTimeCodeType24), Equals("06:01:15:00"));
-				AssertThat(doc.loops()[1]->label().toStdString(), Equals("off"));
+				AssertThat(doc.loops()[1]->label(), Equals("off"));
 
 				// Test texts
 				AssertThat(doc.texts(false).count(), Equals(206));
@@ -471,12 +470,12 @@ go_bandit([](){
 				AssertThat(doc.texts()[0]->y(), Equals(2.0f));
 				AssertThat(doc.texts()[0]->height(), Equals(0.2f));
 
-				AssertThat(doc.texts()[0]->content().toStdString(), Equals("Départ bob 6"));
-				AssertThat(doc.texts()[1]->content().toStdString(), Equals("(X)"));
-				AssertThat(doc.texts()[2]->content().toStdString(), Equals("05.59.50.00"));
-				AssertThat(doc.texts()[3]->content().toStdString(), Equals("1000"));
-				AssertThat(doc.texts()[4]->content().toStdString(), Equals("(X)"));
-				AssertThat(doc.texts()[5]->content().toStdString(), Equals("P.I"));
+				AssertThat(doc.texts()[0]->content(), Equals("Départ bob 6"));
+				AssertThat(doc.texts()[1]->content(), Equals("(X)"));
+				AssertThat(doc.texts()[2]->content(), Equals("05.59.50.00"));
+				AssertThat(doc.texts()[3]->content(), Equals("1000"));
+				AssertThat(doc.texts()[4]->content(), Equals("(X)"));
+				AssertThat(doc.texts()[5]->content(), Equals("P.I"));
 
 				AssertThat(doc.texts()[9]->people(), Equals(denis));
 				AssertThat(t2s(doc.texts()[9]->timeIn(), PhTimeCodeType24), Equals("06:00:07:23"));
@@ -484,12 +483,12 @@ go_bandit([](){
 				AssertThat(t2s(doc.texts()[10]->timeIn(), PhTimeCodeType24), Equals("06:00:08:03"));
 				AssertThat(t2s(doc.texts()[10]->timeOut(), PhTimeCodeType24), Equals("06:00:08:07"));
 
-				AssertThat(doc.texts()[9]->content().toStdString(), Equals("Tu "));
-				AssertThat(doc.texts()[10]->content().toStdString(), Equals("tra"));
-				AssertThat(doc.texts()[11]->content().toStdString(), Equals("vaillais "));
-				AssertThat(doc.texts()[12]->content().toStdString(), Equals("pas "));
-				AssertThat(doc.texts()[13]->content().toStdString(), Equals("ce "));
-				AssertThat(doc.texts()[14]->content().toStdString(), Equals("soir !"));
+				AssertThat(doc.texts()[9]->content(), Equals("Tu "));
+				AssertThat(doc.texts()[10]->content(), Equals("tra"));
+				AssertThat(doc.texts()[11]->content(), Equals("vaillais "));
+				AssertThat(doc.texts()[12]->content(), Equals("pas "));
+				AssertThat(doc.texts()[13]->content(), Equals("ce "));
+				AssertThat(doc.texts()[14]->content(), Equals("soir !"));
 
 				AssertThat(t2s(doc.texts()[14]->timeOut(), PhTimeCodeType24), Equals("06:00:09:06"));
 
@@ -504,24 +503,24 @@ go_bandit([](){
 				AssertThat(doc.importMosFile("test04.mos"), IsTrue());
 
 				// Test video info
-				AssertThat(doc.videoFilePath().toStdString(), Equals("D:\\Ressources\\Mosaic\\Utilisateurs\\Yves\\Bold 5704\\5704.mov"));
+				AssertThat(doc.videoFilePath(), Equals("D:\\Ressources\\Mosaic\\Utilisateurs\\Yves\\Bold 5704\\5704.mov"));
 				AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:59:39:24"));
 
 				// Test loops
 				AssertThat(doc.loops().count(), Equals(27));
 				AssertThat(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:00:13"));
-				AssertThat(doc.loops()[0]->label().toStdString(), Equals("1"));
-				AssertThat(doc.loops()[1]->label().toStdString(), Equals("2"));
-				AssertThat(doc.loops()[2]->label().toStdString(), Equals("3"));
-				AssertThat(doc.loops()[3]->label().toStdString(), Equals("off"));
-				AssertThat(doc.loops()[4]->label().toStdString(), Equals("4"));
+				AssertThat(doc.loops()[0]->label(), Equals("1"));
+				AssertThat(doc.loops()[1]->label(), Equals("2"));
+				AssertThat(doc.loops()[2]->label(), Equals("3"));
+				AssertThat(doc.loops()[3]->label(), Equals("off"));
+				AssertThat(doc.loops()[4]->label(), Equals("4"));
 				AssertThat(t2s(doc.loops()[5]->timeIn(), PhTimeCodeType25), Equals("01:02:56:02"));
-				AssertThat(doc.loops()[5]->label().toStdString(), Equals("5"));
+				AssertThat(doc.loops()[5]->label(), Equals("5"));
 				AssertThat(t2s(doc.loops()[25]->timeIn(), PhTimeCodeType25), Equals("01:18:14:11"));
-				AssertThat(doc.loops()[25]->label().toStdString(), Equals("25"));
+				AssertThat(doc.loops()[25]->label(), Equals("25"));
 				AssertThat(t2s(doc.loops()[26]->timeIn(), PhTimeCodeType25), Equals("01:19:01:01"));
-				AssertThat(doc.loops()[26]->label().toStdString(), Equals("off"));
+				AssertThat(doc.loops()[26]->label(), Equals("off"));
 
 				// Test texts
 				AssertThat(doc.texts().count(), Equals(1118));
@@ -538,7 +537,7 @@ go_bandit([](){
 
 				AssertThat(doc.importMosFile("mos24.mos"), IsTrue());
 
-				AssertThat(doc.videoFilePath().toStdString(), Equals("C:\\Users\\Gilles\\Desktop\\Sonic_EP_01_mix_VA.mov"));
+				AssertThat(doc.videoFilePath(), Equals("C:\\Users\\Gilles\\Desktop\\Sonic_EP_01_mix_VA.mov"));
 				AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType24));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType24), Equals("00:59:58:00"));
 
@@ -553,7 +552,7 @@ go_bandit([](){
 
 				AssertThat(doc.importMosFile("mos25.mos"), IsTrue());
 
-				AssertThat(doc.videoFilePath().toStdString(), Equals("C:\\Users\\Gilles\\Desktop\\Get Blake\\Get Blake 115\\GBL_EP115_Online_Master_VA_h264_TCI.mov"));
+				AssertThat(doc.videoFilePath(), Equals("C:\\Users\\Gilles\\Desktop\\Get Blake\\Get Blake 115\\GBL_EP115_Online_Master_VA_h264_TCI.mov"));
 				AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("09:59:58:00"));
 			});
@@ -564,16 +563,16 @@ go_bandit([](){
 				it("import_drb01", [&]() {
 					AssertThat(doc.openStripFile("drb01.drb"), IsTrue());
 
-					AssertThat(doc.videoFilePath().toStdString(), Equals("C:\\Users\\SYNCHRO USER\\Downloads\\TheManWithTheGoldenArm_25fps_high\\TheManWithTheGoldenArm_25fps_high.mov"));
+					AssertThat(doc.videoFilePath(), Equals("C:\\Users\\SYNCHRO USER\\Downloads\\TheManWithTheGoldenArm_25fps_high\\TheManWithTheGoldenArm_25fps_high.mov"));
 
 					AssertThat(doc.loops().count(), Equals(0));
 
 					AssertThat(doc.peoples().count(), Equals(2));
-					AssertThat(doc.peoples()[0]->name().toStdString(), Equals("Personnage 1"));
-					AssertThat(doc.peoples()[1]->name().toStdString(), Equals("Personnage 2"));
+					AssertThat(doc.peoples()[0]->name(), Equals("Personnage 1"));
+					AssertThat(doc.peoples()[1]->name(), Equals("Personnage 2"));
 
 					AssertThat(doc.texts().count(), Equals(1));
-					AssertThat(doc.texts()[0]->people()->name().toStdString(), Equals("Personnage 2"));
+					AssertThat(doc.texts()[0]->people()->name(), Equals("Personnage 2"));
 
 					AssertThat(doc.texts()[0]->y(), Equals(0.36f));
 					AssertThat(doc.texts()[0]->height(), EqualsWithDelta(0.22666667f, 0.00001f));
@@ -586,27 +585,27 @@ go_bandit([](){
 				it("import_drb02", [&]() {
 					AssertThat(doc.openStripFile("drb02.drb"), IsTrue());
 
-					AssertThat(doc.videoFilePath().toStdString(), Equals("D:\\NED 201.mov"));
+					AssertThat(doc.videoFilePath(), Equals("D:\\NED 201.mov"));
 					AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 					AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:58:04:20"));
 
 					AssertThat(doc.loops().count(), Equals(21));
 
 					for(int i = 0; i < 21; i++)
-						AssertThat(doc.loops().at(i)->label().toStdString(), Equals(QString::number(i + 1).toStdString()));
+						AssertThat(doc.loops().at(i)->label(), Equals(QString::number(i + 1)));
 
 					AssertThat(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:39:02"));
 					AssertThat(t2s(doc.loops()[1]->timeIn(), PhTimeCodeType25), Equals("01:02:14:23"));
 
 					AssertThat(doc.peoples().count(), Equals(28));
 
-					AssertThat(doc.peoples()[0]->name().toStdString(), Equals("Intervenant 1"));
-					AssertThat(doc.peoples()[1]->name().toStdString(), Equals("ned"));
-					AssertThat(doc.peoples()[2]->name().toStdString(), Equals("moze"));
-					AssertThat(doc.peoples()[3]->name().toStdString(), Equals("suzie"));
+					AssertThat(doc.peoples()[0]->name(), Equals("Intervenant 1"));
+					AssertThat(doc.peoples()[1]->name(), Equals("ned"));
+					AssertThat(doc.peoples()[2]->name(), Equals("moze"));
+					AssertThat(doc.peoples()[3]->name(), Equals("suzie"));
 
 					AssertThat(doc.texts().count(), Equals(546));
-					AssertThat(doc.texts()[0]->people()->name().toStdString(), Equals("ned"));
+					AssertThat(doc.texts()[0]->people()->name(), Equals("ned"));
 					AssertThat(doc.texts()[0]->y(), Equals(0.213333338f));
 					AssertThat(doc.texts()[0]->height(), Equals(0.28666667f));
 					AssertThat(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:00:13"));
@@ -616,30 +615,30 @@ go_bandit([](){
 				it("import_drb03", [&]() {
 					AssertThat(doc.openStripFile("drb03.drb"), IsTrue());
 
-					AssertThat(doc.videoFilePath().toStdString(), Equals("C:\\Users\\Matthhou\\Desktop\\The Crazy Ones\\The Crazy Ones 121\\The_Crazy_Ones_1AXB21_VOVI.mov"));
+					AssertThat(doc.videoFilePath(), Equals("C:\\Users\\Matthhou\\Desktop\\The Crazy Ones\\The Crazy Ones 121\\The_Crazy_Ones_1AXB21_VOVI.mov"));
 					AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 					AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:58:24:00"));
 
 					AssertThat(doc.loops().count(), Equals(1));
 
-					AssertThat(doc.loops().at(0)->label().toStdString(), Equals("1"));
+					AssertThat(doc.loops().at(0)->label(), Equals("1"));
 
 					AssertThat(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:00:00"));
 
 					AssertThat(doc.peoples().count(), Equals(2));
 
-					AssertThat(doc.peoples()[0]->name().toStdString(), Equals("Pierre"));
-					AssertThat(doc.peoples()[1]->name().toStdString(), Equals("Marie"));
+					AssertThat(doc.peoples()[0]->name(), Equals("Pierre"));
+					AssertThat(doc.peoples()[1]->name(), Equals("Marie"));
 
 					AssertThat(doc.texts().count(), Equals(2));
 
-					AssertThat(doc.texts()[0]->people()->name().toStdString(), Equals("Pierre"));
+					AssertThat(doc.texts()[0]->people()->name(), Equals("Pierre"));
 					AssertThat(doc.texts()[0]->y(), Equals(0.066666667f));
 					AssertThat(doc.texts()[0]->height(), Equals(0.22666667f));
 					AssertThat(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:01:00"));
 					AssertThat(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:03:00"));
 
-					AssertThat(doc.texts()[1]->people()->name().toStdString(), Equals("Marie"));
+					AssertThat(doc.texts()[1]->people()->name(), Equals("Marie"));
 					AssertThat(doc.texts()[1]->y(), Equals(0.7f));
 					AssertThat(doc.texts()[1]->height(), Equals(0.22666667f));
 					AssertThat(t2s(doc.texts()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:04:00"));
@@ -655,11 +654,11 @@ go_bandit([](){
 					AssertThat(doc.openStripFile("test01.syn6"), IsTrue());
 
 					AssertThat(doc.peoples().count(), Equals(2));
-					AssertThat(doc.peoples()[0]->name().toStdString(), Equals("Personnage 1"));
-					AssertThat(doc.peoples()[1]->name().toStdString(), Equals("Personnage 2"));
+					AssertThat(doc.peoples()[0]->name(), Equals("Personnage 1"));
+					AssertThat(doc.peoples()[1]->name(), Equals("Personnage 2"));
 
 					AssertThat(doc.texts().count(), Equals(1));
-					AssertThat(doc.texts()[0]->people()->name().toStdString(), Equals("Personnage 1"));
+					AssertThat(doc.texts()[0]->people()->name(), Equals("Personnage 1"));
 
 					AssertThat(doc.texts()[0]->y(), Equals(0.36f));
 					AssertThat(doc.texts()[0]->height(), Equals(0.22666667f));
@@ -671,30 +670,30 @@ go_bandit([](){
 				it("import_test02", [&]() {
 					AssertThat(doc.openStripFile("test02.syn6"), IsTrue());
 
-					AssertThat(doc.videoFilePath().toStdString(), Equals("C:\\Users\\Matthhou\\Desktop\\The Crazy Ones\\The Crazy Ones 121\\The_Crazy_Ones_1AXB21_VOVI.mov"));
+					AssertThat(doc.videoFilePath(), Equals("C:\\Users\\Matthhou\\Desktop\\The Crazy Ones\\The Crazy Ones 121\\The_Crazy_Ones_1AXB21_VOVI.mov"));
 					AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 					AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:58:24:00"));
 
 					AssertThat(doc.loops().count(), Equals(1));
 
-					AssertThat(doc.loops().at(0)->label().toStdString(), Equals("1"));
+					AssertThat(doc.loops().at(0)->label(), Equals("1"));
 
 					AssertThat(t2s(doc.loops()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:00:00"));
 
 					AssertThat(doc.peoples().count(), Equals(2));
 
-					AssertThat(doc.peoples()[0]->name().toStdString(), Equals("Pierre"));
-					AssertThat(doc.peoples()[1]->name().toStdString(), Equals("Marie"));
+					AssertThat(doc.peoples()[0]->name(), Equals("Pierre"));
+					AssertThat(doc.peoples()[1]->name(), Equals("Marie"));
 
 					AssertThat(doc.texts().count(), Equals(2));
 
-					AssertThat(doc.texts()[0]->people()->name().toStdString(), Equals("Pierre"));
+					AssertThat(doc.texts()[0]->people()->name(), Equals("Pierre"));
 					AssertThat(doc.texts()[0]->y(), Equals(0.066666667f));
 					AssertThat(doc.texts()[0]->height(), Equals(0.22666667f));
 					AssertThat(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:01:00"));
 					AssertThat(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:03:00"));
 
-					AssertThat(doc.texts()[1]->people()->name().toStdString(), Equals("Marie"));
+					AssertThat(doc.texts()[1]->people()->name(), Equals("Marie"));
 					AssertThat(doc.texts()[1]->y(), Equals(0.7f));
 					AssertThat(doc.texts()[1]->height(), Equals(0.22666667f));
 					AssertThat(t2s(doc.texts()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:04:00"));
@@ -710,9 +709,9 @@ go_bandit([](){
 		it("get people by name", [&](){
 			AssertThat(doc.importDetXFile("test01.detx"), IsTrue());
 
-			AssertThat(doc.peopleByName("Jeanne")->name().toStdString(), Equals("Jeanne"));
-			AssertThat(doc.peopleByName("Sue")->name().toStdString(), Equals("Sue"));
-			AssertThat(doc.peopleByName("Paul")->name().toStdString(), Equals("Paul"));
+			AssertThat(doc.peopleByName("Jeanne")->name(), Equals("Jeanne"));
+			AssertThat(doc.peopleByName("Sue")->name(), Equals("Sue"));
+			AssertThat(doc.peopleByName("Paul")->name(), Equals("Paul"));
 			AssertThat(doc.peopleByName("Bob") == NULL, IsTrue());
 		});
 

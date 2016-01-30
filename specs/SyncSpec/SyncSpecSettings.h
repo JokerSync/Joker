@@ -15,6 +15,9 @@ class SyncSpecSettings : protected PhGenericSettings,
 		public PhSyncSettings
 {
 public:
+	SyncSpecSettings() : PhGenericSettings(true) {
+	}
+
 	// Sync settings
 	PH_SETTING_TIME(setSyncLoopTimeIn, syncLoopTimeIn)
 	PH_SETTING_TIME(setSyncLoopTimeOut, syncLoopTimeOut)

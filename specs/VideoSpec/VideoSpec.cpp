@@ -14,7 +14,6 @@
 
 #define FRAME_WAIT_TIME 40
 
-#include "PhSpec.h"
 #include "CommonSpec.h"
 
 using namespace bandit;
@@ -34,7 +33,7 @@ go_bandit([](){
 		int factor;
 
 		before_each([&](){
-			PhDebug::setLogMask(PHDEBUG_SPEC_MASK);
+			PhDebug::setLogMask(PHDEBUG_SPEC_MASK | (1 << 9));
 
 			view = new PhGraphicView(64, 64);
 			settings = new VideoSpecSettings();
@@ -60,14 +59,14 @@ go_bandit([](){
 		});
 
 		it("open_video", [&](){
-			AssertThat(engine->codecName().toStdString(), Equals(""));
+			AssertThat(engine->codecName(), Equals(""));
 			AssertThat(engine->length(), Equals(0));
 			AssertThat(engine->width(), Equals(0));
 			AssertThat(engine->height(), Equals(0));
 
 			AssertThat(engine->open(videoFile), IsTrue());
 
-			AssertThat(engine->codecName().toStdString(), Equals(videoCodec.toStdString()));
+			AssertThat(engine->codecName(), Equals(videoCodec));
 			AssertThat(engine->bilinearFiltering(), IsFalse());
 			AssertThat(engine->length(), Equals(192000));
 			AssertThat(engine->width(), Equals(64));
@@ -88,39 +87,38 @@ go_bandit([](){
 			AssertThat(engine->open(videoFile), IsTrue());
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			QImage result = view->renderPixmap(64, 64).toImage();
-			result.save("result.bmp");
-			AssertThat(result == QImage("interlace_000.bmp"), IsTrue());
+
+			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 			engine->clock()->setFrame(20, PhTimeCodeType25);
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_020.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_020.bmp"), Equals(0));
 
 			engine->clock()->setFrame(100, PhTimeCodeType25);
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_100.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_100.bmp"), Equals(0));
 
 			engine->clock()->setFrame(75, PhTimeCodeType25);
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_075.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_075.bmp"), Equals(0));
 
 			engine->clock()->setFrame(199, PhTimeCodeType25);
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_199.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_199.bmp"), Equals(0));
 
 			engine->clock()->setFrame(200, PhTimeCodeType25);
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_199.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_199.bmp"), Equals(0));
 
 			engine->clock()->setFrame(-1, PhTimeCodeType25);
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 		});
 
 		it("go_to_02", [&](){
@@ -129,14 +127,14 @@ go_bandit([](){
 			engine->clock()->setFrame(100, PhTimeCodeType25);
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_100.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_100.bmp"), Equals(0));
 
 			engine->clock()->setFrame(99, PhTimeCodeType25);
 
 			PHDEBUG << "second paint";
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_099.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_099.bmp"), Equals(0));
 
 			for(int i = 75; i >= 50; i--) {
 				engine->clock()->setFrame(i, PhTimeCodeType25);
@@ -145,7 +143,7 @@ go_bandit([](){
 
 				QThread::msleep(FRAME_WAIT_TIME);
 				QString name = QString("interlace_%1.bmp").arg(i, 3, 10, QChar('0'));
-				AssertThat(view->renderPixmap(64, 64).toImage() == QImage(name), IsTrue());
+				AssertThat(view->compare(name), Equals(0));
 			}
 		});
 
@@ -168,37 +166,37 @@ go_bandit([](){
 
 				QThread::msleep(FRAME_WAIT_TIME);
 				QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
-				AssertThat(compareImage(view->renderPixmap(64, 64).toImage(), QImage(name), "go_to_03"), IsTrue());
+				AssertThat(view->compare(name), Equals(0));
 			}
 		});
 
 		it("go to interframe", [&]() {
 			AssertThat(engine->open(videoFile), IsTrue());
 
-			AssertThat(compareImage(view->renderPixmap(64, 64).toImage(), QImage("interlace_000.bmp"), "go to interframe"), IsTrue());
+			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 			engine->clock()->setTime(960);
 			QThread::msleep(FRAME_WAIT_TIME);
 
-			AssertThat(compareImage(view->renderPixmap(64, 64).toImage(), QImage("interlace_001.bmp"), "go to interframe"), IsTrue());
+			AssertThat(view->compare("interlace_001.bmp"), Equals(0));
 
 			engine->clock()->setTime(959);
 			QThread::msleep(FRAME_WAIT_TIME);
 
-			AssertThat(compareImage(view->renderPixmap(64, 64).toImage(), QImage("interlace_000.bmp"), "go to interframe"), IsTrue());
+			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 		});
 
 		it("play", [&](){
 			AssertThat(engine->open(videoFile), IsTrue());
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 			engine->clock()->setRate(1);
 			engine->clock()->elapse(960); // 1 frame at 25 fps
 
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_001.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_001.bmp"), Equals(0));
 
 
 			// Play 1 second
@@ -207,41 +205,41 @@ go_bandit([](){
 				QThread::msleep(FRAME_WAIT_TIME);
 			}
 
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_026.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_026.bmp"), Equals(0));
 
 			engine->clock()->setRate(-1);
 			engine->clock()->elapse(960); // 1 frame at 25 fps
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_025.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_025.bmp"), Equals(0));
 
 			// Play 1 second
 			for(int i = 24; i >= 0; i--) {
 				engine->clock()->elapse(960); // 1 frame at 25 fps
 				QThread::msleep(FRAME_WAIT_TIME);
 			}
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 		});
 
 		it("deinterlace", [&](){
 			// Open the video file in interlaced mode
 			engine->open(videoFile);
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 			//Change mode to deinterlaced
 			engine->setDeinterlace(true);
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("deinterlace_000.bmp"), IsTrue());
+			AssertThat(view->compare("deinterlace_000.bmp"), Equals(0));
 
 			//Move one picture forward
 			engine->clock()->setFrame(1, PhTimeCodeType25);
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("deinterlace_001.bmp"), IsTrue());
+			AssertThat(view->compare("deinterlace_001.bmp"), Equals(0));
 
 			// Go back to interlaced mode
 			engine->setDeinterlace(false);
 			QThread::msleep(FRAME_WAIT_TIME);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_001.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_001.bmp"), Equals(0));
 		});
 
 		it("scales", [&](){
@@ -253,7 +251,7 @@ go_bandit([](){
 
 			settings->setUseNativeVideoSize(false);
 
-			AssertThat(compareImage(view->renderPixmap(128, 128).toImage(), QImage("interlace_000_scaled.bmp"), "interlace_000_scaled"), IsTrue());
+			AssertThat(view->compare("interlace_000_scaled.bmp", 128, 128), Equals(0));
 		});
 
 		it("doesn't scale when using native video size", [&](){
@@ -265,7 +263,7 @@ go_bandit([](){
 
 			settings->setUseNativeVideoSize(true);
 
-			AssertThat(compareImage(view->renderPixmap(128, 128).toImage(), QImage("interlace_000_native.bmp"), "interlace_000_native"), IsTrue());
+			AssertThat(view->compare("interlace_000_native.bmp", 128, 128), Equals(0));
 		});
 
 		it("handles timestamp", [&](){
@@ -273,26 +271,12 @@ go_bandit([](){
 			engine->setTimeIn(240000);
 			QThread::msleep(FRAME_WAIT_TIME);
 
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 			engine->clock()->setTime(240000 + 24000);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_025.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_025.bmp"), Equals(0));
 			engine->clock()->setTime(0);
-			AssertThat(view->renderPixmap(64, 64).toImage() == QImage("interlace_000.bmp"), IsTrue());
+			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 			AssertThat(engine->clock()->time(), Equals(0));
 		});
-
-		//	it("findMatch(QImage source", [&](){
-		//	   for(int i = 0; i < 200; i++) {
-		//		if(QImage(QString("interlace_%1.bmp").arg(i, 3, 10, QChar('0'))) == source) {
-		//			PHDEBUG << "The matching frame is" << QString("interlace_%1.bmp").arg(i, 3, 10, QChar('0'));
-		//			break;
-		//		}
-		//	}
-		//	for(int i = 0; i < 200; i++) {
-		//		if(QImage(QString("deinterlace_%1.bmp").arg(i, 3, 10, QChar('0'))) == source) {
-		//			PHDEBUG << "The matching frame is" << QString("deinterlace_%1.bmp").arg(i, 3, 10, QChar('0'));
-		//			break;
-		//		}
-		//	}
 	});
 });

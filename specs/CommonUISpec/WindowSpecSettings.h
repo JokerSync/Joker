@@ -9,7 +9,7 @@
 class WindowSpecSettings : public PhGenericSettings, public PhDocumentWindowSettings
 {
 public:
-	WindowSpecSettings(bool clear = false) : PhGenericSettings(clear) {
+	WindowSpecSettings() : PhGenericSettings(true) {
 	}
 
 	// PhWindowSettings

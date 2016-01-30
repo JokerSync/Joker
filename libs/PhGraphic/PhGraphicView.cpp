@@ -4,9 +4,11 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <qmath.h>
 #include <QTimer>
 #include <QScreen>
 #include <QWindow>
+#include <QFileInfo>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
@@ -92,6 +94,55 @@ void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
 void PhGraphicView::addInfo(QString info)
 {
 	_infos.append(info);
+}
+
+int PhGraphicView::compare(QString imageFile, int width, int height)
+{
+	int ratio = this->windowHandle()->devicePixelRatio();
+	if(width == 0)
+		width = this->width() * ratio;
+	if(height == 0)
+		height = this->height() * ratio;
+	int totalDiff = 0;
+
+	QImage result = this->renderPixmap(width, height).toImage();
+	QImage expected(imageFile);
+	if((expected.width() == 0) || (expected.height() == 0)) {
+		PHDBG(9) << QString("Bad expected file: %1").arg(imageFile);
+		totalDiff = std::numeric_limits<int>::max();
+	}
+	else if(expected.size() != QSize(width, height)) {
+		PHDBG(9) << QString("Bad size for %1: %2x%3 / %4x%5")
+		    .arg(imageFile)
+		    .arg(expected.width())
+		    .arg(expected.height())
+		    .arg(width)
+		    .arg(height);
+		totalDiff = std::numeric_limits<int>::max();
+	}
+	else {
+		for(int i = 0; i < width; i++) {
+			for(int j = 0; j < height; j++) {
+				QRgb a = result.pixel(i, j);
+				QRgb b = expected.pixel(i, j);
+				int diff = qPow(qRed(a) - qRed(b), 2) + qPow(qGreen(a) - qGreen(b), 2) + qPow(qBlue(a) - qBlue(b), 2);
+				totalDiff += diff;
+			}
+			if(totalDiff < 0) {
+				totalDiff = std::numeric_limits<int>::max();
+				break;
+			}
+		}
+	}
+
+	if(totalDiff > 0) {
+		QFileInfo info(imageFile);
+		QString resultFile = info.completeBaseName() + ".result.bmp";
+		PHDBG(9) << "saving to " << resultFile;
+		result.save(resultFile);
+	}
+
+	return totalDiff;
 }
 
 void PhGraphicView::onRefresh()

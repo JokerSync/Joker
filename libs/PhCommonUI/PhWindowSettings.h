@@ -20,6 +20,12 @@ public:
 	}
 
 	/**
+	 * @brief PhWindowSettings destructor
+	 */
+	virtual ~PhWindowSettings() {
+	}
+
+	/**
 	 * @brief The window full screen status
 	 * @return True if full screen, false otherwise
 	 */

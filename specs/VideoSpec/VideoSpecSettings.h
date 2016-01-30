@@ -15,6 +15,9 @@ class VideoSpecSettings : protected PhGenericSettings,
 		public PhVideoSettings
 {
 public:
+	VideoSpecSettings() : PhGenericSettings(true) {
+	}
+
 	//PhVideoSettings
 	int screenDelay() {
 		return 0;

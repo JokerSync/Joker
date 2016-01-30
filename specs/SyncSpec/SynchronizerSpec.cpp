@@ -7,7 +7,7 @@
 
 #include "PhSync/PhSynchronizer.h"
 
-#include "PhSpec.h"
+#include "CommonSpec.h"
 
 #include "SyncSpecSettings.h"
 
@@ -68,7 +68,7 @@ go_bandit([](){
 			AssertThat(syncClock->time(), Equals(0));
 		});
 
-		it("handle_strip_rat_e_change", [&]() {
+		it("handle_strip_rate_change", [&]() {
 			sync->setStripClock(stripClock);
 			sync->setVideoClock(videoClock);
 

@@ -250,7 +250,7 @@ void PhSonySlaveController::processCommand(unsigned char cmd1, unsigned char cmd
 				}
 				if (_autoMode)
 					status[3] = 0x80;
-				unsigned char start = dataIn[0] >> 4;
+//				unsigned char start = dataIn[0] >> 4;
 				unsigned char count = dataIn[0] & 0xf;
 				sendCommandWithData(0x70+count, 0x20, status, count);
 				break;

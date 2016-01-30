@@ -35,6 +35,12 @@ public:
 	PhGraphicObject(int x = 0, int y = 0);
 
 	/**
+	 * @brief PhGraphicObject desctructor
+	 */
+	virtual ~PhGraphicObject() {
+	}
+
+	/**
 	 * @brief dispose
 	 */
 	virtual void dispose();

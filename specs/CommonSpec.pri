@@ -26,4 +26,3 @@ SOURCES += $$PWD/main.cpp \
 
 HEADERS += \
     $$PWD/CommonSpec.h \
-    $$PWD/PhSpec.h

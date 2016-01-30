@@ -13,8 +13,6 @@
 
 #include "CommonSpec.h"
 
-#include "PhSpec.h"
-
 using namespace bandit;
 
 go_bandit([](){

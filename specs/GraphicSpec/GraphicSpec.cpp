@@ -3,6 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <exception>
+
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 
@@ -12,7 +14,6 @@
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphic/PhGraphicLoop.h"
 
-#include "PhSpec.h"
 #include "CommonSpec.h"
 
 using namespace bandit;
@@ -20,7 +21,7 @@ using namespace bandit;
 go_bandit([](){
 	describe("graphic_test", [&](){
 		before_each([&](){
-			PhDebug::disable();
+			PhDebug::setLogMask((1 << 9) | PHDEBUG_SPEC_MASK);
 		});
 
 		it("call_paint_when_shown", [&](){
@@ -39,6 +40,32 @@ go_bandit([](){
 			AssertThat(paintCalled, IsTrue());
 		});
 
+		it("compare", [&](){
+			PhGraphicView view(32, 32);
+
+			AssertThat(view.compare("compareTest.unexisting.bmp"), Equals(std::numeric_limits<int>::max()));
+
+			AssertThat(view.compare("compareTest.64x32.bmp"), Equals(std::numeric_limits<int>::max()));
+
+			AssertThat(view.compare("compareTest.64x32.bmp", 64, 32), Equals(0));
+
+			QFile file("compareTest.smalldiff.result.bmp");
+			if(file.exists()) {
+				file.remove();
+			}
+			AssertThat(file.exists(), IsFalse());
+			AssertThat(view.compare("compareTest.smalldiff.bmp"), Equals(14));
+			AssertThat(file.exists(), IsTrue());
+
+			AssertThat(view.compare("compareTest.expected.bmp"), Equals(0));
+		});
+
+		it("compare big difference", [&](){
+			PhGraphicView view(128, 128);
+
+			AssertThat(view.compare("compareTest.bigdiff.bmp"), Equals(std::numeric_limits<int>::max()));
+		});
+
 		it("draw_a_rect", [&](){
 			PhGraphicView view(32, 32);
 
@@ -48,7 +75,7 @@ go_bandit([](){
 				rect.draw();
 			});
 
-			AssertThat(compareImage(view.renderPixmap(32, 32).toImage(), QImage("rectTest.expected.bmp"), "rectTest"), IsTrue());
+			AssertThat(view.compare("rectTest.expected.bmp"), Equals(0));
 		});
 
 		it("draw_an_image", [&](){
@@ -61,7 +88,7 @@ go_bandit([](){
 				image.draw();
 			});
 
-			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("rgbPatternTest.expected.bmp"), "draw_an_image"), IsTrue());
+			AssertThat(view.compare("rgbPatternTest.expected.bmp"), Equals(0));
 		});
 
 		it("draw_a_rgb_pattern", [&](){
@@ -78,7 +105,7 @@ go_bandit([](){
 				rect.draw();
 			});
 
-			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("rgbPatternTest.expected.bmp"), "draw_a_rgb_pattern"), IsTrue());
+			AssertThat(view.compare("rgbPatternTest.expected.bmp"), Equals(0));
 		});
 
 		it("draw a loop", [&]() {
@@ -97,7 +124,7 @@ go_bandit([](){
 				loop.draw();
 			});
 
-			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("loopTest.expected.bmp"), "loopTest"), IsTrue());
+			AssertThat(view.compare("loopTest.expected.bmp"), Equals(0));
 		});
 
 		it("draw an horizontal loop", [&]() {
@@ -116,7 +143,7 @@ go_bandit([](){
 				loop.draw();
 			});
 
-			AssertThat(compareImage(view.renderPixmap(64, 64).toImage(), QImage("loopHorizontalTest.expected.bmp"), "loopHorizontalTest"), IsTrue());
+			AssertThat(view.compare("loopHorizontalTest.expected.bmp"), Equals(0));
 		});
 	});
 });
