@@ -9,7 +9,7 @@ env:
   - COVERITY_SCAN_PROJECT_NAME=Phonations/Joker
   - COVERITY_SCAN_SCRIPT=https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh
   - COVERITY_SCAN_NOTIFICATION_EMAIL=martin@phonations.com
-  - COVERITY_SCAN_BRANCH_PATTERN=master
+  - COVERITY_SCAN_BRANCH_PATTERN=better-travis
   - COVERITY_SCAN_BUILD_COMMAND=make
   - COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --comptype clangcxx --compiler
     clang++"
@@ -23,18 +23,18 @@ matrix:
   - os: linux
     env:
     - JOB=DOXYGEN
-  - os: linux
-    env:
-    - JOB=BUILD_RELEASE_JOKER
-    - QTVER=551
-#  - os: osx
+#  - os: linux
 #    env:
 #    - JOB=BUILD_RELEASE_JOKER
 #    - QTVER=551
 #  - os: osx
 #    env:
-#    - JOB=BUILD_COVERITY_JOKER
-#    - QTVER=532
+#    - JOB=BUILD_RELEASE_JOKER
+#    - QTVER=551
+  - os: linux
+    env:
+    - JOB=BUILD_COVERITY_JOKER
+    - QTVER=532
 #  - os: osx
 #    env:
 #    - JOB=BUILD_SPEC_BANDIT
