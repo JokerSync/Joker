@@ -23,18 +23,18 @@ matrix:
   - os: linux
     env:
     - JOB=DOXYGEN
-#  - os: linux
-#    env:
-#    - JOB=BUILD_RELEASE_JOKER
-#    - QTVER=551
-#  - os: osx
-#    env:
-#    - JOB=BUILD_RELEASE_JOKER
-#    - QTVER=551
   - os: linux
     env:
-    - JOB=BUILD_COVERITY_JOKER
+    - JOB=BUILD_RELEASE_JOKER
     - QTVER=551
+  - os: osx
+    env:
+    - JOB=BUILD_RELEASE_JOKER
+    - QTVER=551
+#  - os: linux
+#    env:
+#    - JOB=BUILD_COVERITY_JOKER
+#    - QTVER=551
 #  - os: osx
 #    env:
 #    - JOB=BUILD_SPEC_BANDIT
@@ -55,28 +55,29 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_5acf05a46408_key -iv $encrypted_5acf05a46408_iv
   -in scripts/certs/certs.tar.enc -out scripts/certs/certs.tar -d
 - tar xvf scripts/certs/certs.tar
-- export SHORT_VER=`echo $QTVER | cut -b1-2`
-- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then sudo add-apt-repository
-  -y ppa:beineri/opt-qt${QTVER}; fi
-- if [[ "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qy update; fi
-- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx && $QTVER != 532 ]]; then brew
-  update; fi
+#- export SHORT_VER=`echo $QTVER | cut -b1-2`
+#- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then sudo add-apt-repository
+#  -y ppa:beineri/opt-qt${QTVER}; fi
+#- if [[ "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qy update; fi
+#- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx && $QTVER != 532 ]]; then brew
+#  update; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then ./scripts/add_key.sh;
   fi
 install:
 - git submodule update --init --recursive
 - if [[ "$JOB" == UNCRUSTIFY ]]; then sudo apt-get install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then sudo apt-get install doxygen; fi
-- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qy
-  install qt${SHORT_VER}base libboost-all-dev; fi
-- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then . /opt/qt${SHORT_VER}/bin/qt${SHORT_VER}-env.sh;
-  fi
-- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then export QMAKESPEC=linux-clang;
-  fi
-- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then brew install qt5; fi
-- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then brew link --force qt5;
-  fi
-- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then export QMAKESPEC=macx-clang;  fi
+#- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qy
+#  install qt${SHORT_VER}base libboost-all-dev; fi
+#- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then . /opt/qt${SHORT_VER}/bin/qt${SHORT_VER}-env.sh;
+#  fi
+#- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then export QMAKESPEC=linux-clang;
+#  fi
+#- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then brew install qt5; fi
+#- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then brew link --force qt5;
+#  fi
+#- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == osx ]]; then export QMAKESPEC=macx-clang;  fi
+- if [[ "$JOB" == BUILD_* ]]; then . scripts/install_qt.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_sdl.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ltc.sh; fi
 - if [[ "$JOB" == BUILD_* ]]; then scripts/install_ffmpeg.sh; fi
