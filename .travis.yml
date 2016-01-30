@@ -27,30 +27,30 @@ matrix:
     env:
     - JOB=BUILD_RELEASE_JOKER
     - QTVER=551
-  - os: osx
-    env:
-    - JOB=BUILD_RELEASE_JOKER
-    - QTVER=551
-  - os: osx
-    env:
-    - JOB=BUILD_COVERITY_JOKER
-    - QTVER=532
-  - os: osx
-    env:
-    - JOB=BUILD_SPEC_BANDIT
-    - QTVER=551
-  - os: osx
-    env:
-    - JOB=BUILD_RELEASE_LTCTOOL
-    - QTVER=551
-  - os: osx
-    env:
-    - JOB=BUILD_RELEASE_MIDITOOL
-    - QTVER=551
-  - os: osx
-    env:
-    - JOB=BUILD_RELEASE_ALL_TESTS
-    - QTVER=551
+#  - os: osx
+#    env:
+#    - JOB=BUILD_RELEASE_JOKER
+#    - QTVER=551
+#  - os: osx
+#    env:
+#    - JOB=BUILD_COVERITY_JOKER
+#    - QTVER=532
+#  - os: osx
+#    env:
+#    - JOB=BUILD_SPEC_BANDIT
+#    - QTVER=551
+#  - os: osx
+#    env:
+#    - JOB=BUILD_RELEASE_LTCTOOL
+#    - QTVER=551
+#  - os: osx
+#    env:
+#    - JOB=BUILD_RELEASE_MIDITOOL
+#    - QTVER=551
+#  - os: osx
+#    env:
+#    - JOB=BUILD_RELEASE_ALL_TESTS
+#    - QTVER=551
 before_install:
 - openssl aes-256-cbc -K $encrypted_5acf05a46408_key -iv $encrypted_5acf05a46408_iv
   -in scripts/certs/certs.tar.enc -out scripts/certs/certs.tar -d
