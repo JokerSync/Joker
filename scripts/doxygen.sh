@@ -8,6 +8,8 @@ then
     exit 1
 fi
 
+mkdir -p doc
+
 #run the doxygen
 pwd
 echo "Running Doxygen...";
