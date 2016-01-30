@@ -34,7 +34,7 @@ matrix:
   - os: linux
     env:
     - JOB=BUILD_COVERITY_JOKER
-    - QTVER=532
+    - QTVER=551
 #  - os: osx
 #    env:
 #    - JOB=BUILD_SPEC_BANDIT
