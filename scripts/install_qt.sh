@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+#set -e
 
 SHORT_VER=`echo $QTVER | cut -b1-2`
 
