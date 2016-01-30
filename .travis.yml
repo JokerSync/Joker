@@ -17,40 +17,42 @@ env:
   - secure: PtkXntkuVwLiSWejZCEiyF/7jzVz4uD6lROei/4I/obqAdWliGoEWuH04HYLto4Vyzu97dbDi5EgHuP9NwpQPYhYblzGZwm09mRz2gQkpXXBVbiIV7EQEm7PDeuWAHpIJ07ufOaQG8w40meHT631CBhkbHPwJ7TVwfLzK9nOxBU=
 matrix:
   include:
-  - os: linux
-    env:
-    - JOB=UNCRUSTIFY
-  - os: linux
-    env:
-    - JOB=DOXYGEN
-  - os: linux
-    env:
+  - env: JOB=UNCRUSTIFY
+    os: osx
+    install: brew install uncrustify
+    script: scripts/uncrustify.sh
+  - env: JOB=DOXYGEN
+    os: linux
+    install: sudo apt-get update && sudo apt-get install doxygen
+    script: scripts/doxygen.sh
+  - env:
     - JOB=BUILD_RELEASE_JOKER
     - QTVER=551
-  - os: osx
-    env:
+    os: linux
+  - env:
     - JOB=BUILD_RELEASE_JOKER
     - QTVER=551
-#  - os: linux
-#    env:
-#    - JOB=BUILD_COVERITY_JOKER
-#    - QTVER=551
-#  - os: osx
-#    env:
-#    - JOB=BUILD_SPEC_BANDIT
-#    - QTVER=551
-#  - os: osx
-#    env:
-#    - JOB=BUILD_RELEASE_LTCTOOL
-#    - QTVER=551
-#  - os: osx
-#    env:
-#    - JOB=BUILD_RELEASE_MIDITOOL
-#    - QTVER=551
-#  - os: osx
-#    env:
-#    - JOB=BUILD_RELEASE_ALL_TESTS
-#    - QTVER=551
+    os: osx
+  - env:
+    - JOB=BUILD_COVERITY_JOKER
+    - QTVER=551
+    os: linux
+  - env:
+    - JOB=BUILD_SPEC_BANDIT
+    - QTVER=551
+    os: osx
+  - env:
+    - JOB=BUILD_RELEASE_LTCTOOL
+    - QTVER=551
+    os: osx
+  - env:
+    - JOB=BUILD_RELEASE_MIDITOOL
+    - QTVER=551
+    os: osx
+  - env:
+    - JOB=BUILD_RELEASE_ALL_TESTS
+    - QTVER=551
+    os: osx
 before_install:
 - openssl aes-256-cbc -K $encrypted_5acf05a46408_key -iv $encrypted_5acf05a46408_iv
   -in scripts/certs/certs.tar.enc -out scripts/certs/certs.tar -d
@@ -65,8 +67,6 @@ before_install:
   fi
 install:
 - git submodule update --init --recursive
-- if [[ "$JOB" == UNCRUSTIFY ]]; then sudo apt-get install uncrustify; fi
-- if [[ "$JOB" == DOXYGEN ]]; then sudo apt-get install doxygen; fi
 #- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qy
 #  install qt${SHORT_VER}base libboost-all-dev; fi
 #- if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then . /opt/qt${SHORT_VER}/bin/qt${SHORT_VER}-env.sh;
