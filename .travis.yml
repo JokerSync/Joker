@@ -17,10 +17,10 @@ env:
   - secure: PtkXntkuVwLiSWejZCEiyF/7jzVz4uD6lROei/4I/obqAdWliGoEWuH04HYLto4Vyzu97dbDi5EgHuP9NwpQPYhYblzGZwm09mRz2gQkpXXBVbiIV7EQEm7PDeuWAHpIJ07ufOaQG8w40meHT631CBhkbHPwJ7TVwfLzK9nOxBU=
 matrix:
   include:
-  - os: osx
+  - os: linux
     env:
     - JOB=UNCRUSTIFY
-  - os: osx
+  - os: linux
     env:
     - JOB=DOXYGEN
   - os: linux
@@ -66,8 +66,8 @@ before_install:
   fi
 install:
 - git submodule update --init --recursive
-- if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
-- if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
+- if [[ "$JOB" == UNCRUSTIFY ]]; then sudo apt-get install uncrustify; fi
+- if [[ "$JOB" == DOXYGEN ]]; then sudo apt-get install doxygen; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qy
   install qt${SHORT_VER}base libboost-all-dev; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then . /opt/qt${SHORT_VER}/bin/qt${SHORT_VER}-env.sh;
