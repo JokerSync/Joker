@@ -69,7 +69,7 @@ install:
 - if [[ "$JOB" == UNCRUSTIFY ]]; then brew install uncrustify; fi
 - if [[ "$JOB" == DOXYGEN ]]; then brew install doxygen; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qy
-  install qt${SHORT_VER}base qt${SHORT_VER}xmlpatterns libboost-all-dev; fi
+  install qt${SHORT_VER}base libboost-all-dev; fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then . /opt/qt${SHORT_VER}/bin/qt${SHORT_VER}-env.sh;
   fi
 - if [[ "$JOB" == BUILD_* && "$TRAVIS_OS_NAME" == linux ]]; then export QMAKESPEC=linux-clang;
