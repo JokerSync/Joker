@@ -35,7 +35,6 @@ matrix:
   - env:
     - QTVER=551
     - PROJECT=app/Joker/Joker.pro
-    - COVERITY
     - COVERITY_SCAN_PROJECT_NAME=Phonations/Joker
     - COVERITY_SCAN_SCRIPT=https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh
     - COVERITY_SCAN_NOTIFICATION_EMAIL=martin@phonations.com
