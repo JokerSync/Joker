@@ -46,8 +46,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mediaPanelState(MediaPanelHidden),
 	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
-	_resizingStrip(false),
-	_timePlayed(_settings->timePlayed() * PHTIMEBASE)
+	_resizingStrip(false)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -549,8 +548,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 void JokerWindow::timeCounter(PhTime elapsedTime)
 {
 	if(currentRate() == 1 && (PhSynchronizer::SyncType)_settings->synchroProtocol() != PhSynchronizer::NoSync) {
-		_timePlayed += elapsedTime;
-		_settings->setTimePlayed(_timePlayed / PHTIMEBASE);
+		_settings->setTimePlayed(_settings->timePlayed() + elapsedTime);
 	}
 }
 
@@ -593,9 +591,9 @@ void JokerWindow::on_actionAbout_triggered()
 {
 	hideMediaPanel();
 
-	AboutDialog menu;
-	menu.setTimePlayed(_timePlayed);
-	menu.exec();
+	AboutDialog dlg;
+	dlg.setTimePlayed(_settings->timePlayed());
+	dlg.exec();
 
 	fadeInMediaPanel();
 }

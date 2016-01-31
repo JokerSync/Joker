@@ -6,8 +6,6 @@
 #ifndef VIDEOSPECSETTINGS_H
 #define VIDEOSPECSETTINGS_H
 
-
-
 #include "PhTools/PhGenericSettings.h"
 #include "PhVideo/PhVideoSettings.h"
 

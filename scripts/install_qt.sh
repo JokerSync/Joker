@@ -1,8 +1,7 @@
 #!/bin/bash
 
-set -e
+#set -e
 
-QTVER=532
 SHORT_VER=`echo $QTVER | cut -b1-2`
 
 echo "Install Qt5"
