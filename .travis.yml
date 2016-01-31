@@ -12,61 +12,58 @@ matrix:
   - env: UNCRUSTIFY
     os: osx
     install: brew install uncrustify
+    before_script: echo N/A
     script: scripts/uncrustify.sh
   - env: DOXYGEN
     os: linux
     install: sudo apt-get update && sudo apt-get install doxygen
+    before_script: echo N/A
     script: scripts/doxygen.sh
   - env:
-    - JOKER_LINUX
-    - PROJECT=app/Joker/Joker.pro
     - QTVER=551
+    - PROJECT=app/Joker/Joker.pro
     os: linux
   - env:
-    - JOKER_OSX
-    - PROJECT=app/Joker/Joker.pro
     - QTVER=551
+    - PROJECT=app/Joker/Joker.pro
     os: osx
-    after_install: scripts/add_key.sh
+    before_install: scripts/add_key.sh
     after_script:
     - make installer
     - export RELEASED_PACKAGE_FILENAME=$(ls -1 Joker_v*.dmg)
     - echo "RELEASED_PACKAGE_FILENAME:$RELEASED_PACKAGE_FILENAME"
   - env:
-    - JOKER_COVERITY
     - QTVER=551
+    - PROJECT=app/Joker/Joker.pro
+    - COVERITY
     - COVERITY_SCAN_PROJECT_NAME=Phonations/Joker
     - COVERITY_SCAN_SCRIPT=https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh
     - COVERITY_SCAN_NOTIFICATION_EMAIL=martin@phonations.com
     - COVERITY_SCAN_BRANCH_PATTERN=better-travis
     - COVERITY_SCAN_BUILD_COMMAND=make
-    - COVERITY_SCAN_BUILD_COMMAND_PREPEND="qmake app/Joker/Joker.pro && cov-configure --comptype clangcxx --compiler clang++"
+    - COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --comptype clangcxx --compiler clang++"
     - secure: YlyaETwveWXOT1wpOz68Vp8Pj1zZ5u44ppOabNw/Xe4M8ZHdPy3QkmyB7wTeUgNjlHzkW23aOOzTk8bm5wxS1iQRxHsQ/DnZd0TcULPuTY9+yO2L/Wkwk6quFBqGlkT8h2v4xkRDyshG8OxF6eqeeq5Cflt/LOhx+MnJqse9EzQ=
     os: linux
     script: if [[ "$TRAVIS_BRANCH" == "$COVERITY_SCAN_BRANCH_PATTERN" ]]; then curl -s "$COVERITY_SCAN_SCRIPT" | bash; fi
   - env:
-    - SPECS
-    - PROJECT=specs/AllSpecs/AllSpecs.pro
     - QTVER=551
+    - PROJECT=specs/AllSpecs/AllSpecs.pro
     os: osx
     after_install: sudo pip install cpp-coveralls
     after_script: ./AllSpecs; fi
     after_success: coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ -E .+/specs/.+ --verbose
     after_failure: ./scripts/upload.sh *.result.bmp
   - env:
-    - LTCTOOL
+    - QTVER=551
     - PROJECT=app/LTCTool/LTCTool.pro
-    - QTVER=551
     os: osx
   - env:
-    - MIDITOOL
+    - QTVER=551
     - PROJECT=app/MidiTool/MidiTool.pro
-    - QTVER=551
     os: osx
   - env:
-    - ALL_TESTS
-    - PROJECT=tests/tests.pro
     - QTVER=551
+    - PROJECT=tests/tests.pro
     os: osx
 install:
 - git submodule update --init --recursive
@@ -76,9 +73,8 @@ install:
 - scripts/install_ffmpeg.sh
 - scripts/install_portaudio.sh
 - scripts/install_rtmidi.sh
-script:
-- qmake $PROJECT
-- make
+before_script: qmake $PROJECT
+script: make
 notifications:
   email: false
   irc:
