@@ -48,8 +48,10 @@ matrix:
     - QTVER=551
     - PROJECT=specs/AllSpecs/AllSpecs.pro
     os: osx
-    after_install: sudo pip install cpp-coveralls
-    after_script: ./AllSpecs; fi
+    before_install: sudo pip install cpp-coveralls
+    script:
+    - make
+    - ./AllSpecs
     after_success: coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E .+/app/.+ -E .+/specs/.+ --verbose
     after_failure: ./scripts/upload.sh *.result.bmp
   - env:
