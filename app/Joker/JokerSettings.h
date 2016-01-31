@@ -89,7 +89,6 @@ public:
 	PH_SETTING_BOOL(setDisplayFeet, displayFeet)
 	PH_SETTING_INT(setFirstFootTime, firstFootTime)
 	PH_SETTING_INT2(setTimeBetweenTwoFeet, timeBetweenTwoFeet, PHTIMEBASE)
-	PH_SETTING_INT(setTimePlayed, timePlayed)
 	PH_SETTING_BOOL(setDisplayVerticalScale, displayVerticalScale)
 	PH_SETTING_INT2(setVerticalScaleSpaceInSeconds, verticalScaleSpaceInSeconds, 5)
 
@@ -162,6 +161,8 @@ public:
 	PH_SETTING_BOOL(setHideStrip, hideStrip)
 
 	PH_SETTING_INT(setLastPreferencesTab, lastPreferencesTab)
+
+	PH_SETTING_TIME(setTimePlayed, timePlayed)
 };
 
 #endif // JOKERSETTINGS_H
