@@ -32,7 +32,7 @@ matrix:
     - export RELEASED_PACKAGE_FILENAME=$(ls -1 Joker_v*.dmg)
     - echo "RELEASED_PACKAGE_FILENAME:$RELEASED_PACKAGE_FILENAME"
   - env:
-    - QTVER=551
+    - QTVER=532
     - PROJECT=app/Joker/Joker.pro
     - COVERITY_SCAN_PROJECT_NAME=Phonations/Joker
     - COVERITY_SCAN_SCRIPT=https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh
