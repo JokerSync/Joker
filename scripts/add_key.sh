@@ -4,6 +4,10 @@
 
 set -e
 
+# Decrypt certificates
+openssl aes-256-cbc -K $encrypted_5acf05a46408_key -iv $encrypted_5acf05a46408_iv -in scripts/certs/certs.tar.enc -out scripts/certs/certs.tar -d
+tar xvf scripts/certs/certs.tar
+
 # Create a custom keychain
 security create-keychain -p travis macos-build.keychain
 
