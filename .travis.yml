@@ -37,7 +37,7 @@ matrix:
     - COVERITY_SCAN_PROJECT_NAME=Phonations/Joker
     - COVERITY_SCAN_SCRIPT=https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh
     - COVERITY_SCAN_NOTIFICATION_EMAIL=martin@phonations.com
-    - COVERITY_SCAN_BRANCH_PATTERN=better-travis
+    - COVERITY_SCAN_BRANCH_PATTERN=master
     - COVERITY_SCAN_BUILD_COMMAND=make
     - COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --comptype clangcxx --compiler clang++"
     - secure: YlyaETwveWXOT1wpOz68Vp8Pj1zZ5u44ppOabNw/Xe4M8ZHdPy3QkmyB7wTeUgNjlHzkW23aOOzTk8bm5wxS1iQRxHsQ/DnZd0TcULPuTY9+yO2L/Wkwk6quFBqGlkT8h2v4xkRDyshG8OxF6eqeeq5Cflt/LOhx+MnJqse9EzQ=
