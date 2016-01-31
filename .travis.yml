@@ -54,7 +54,7 @@ matrix:
     - make
     - "./AllSpecs"
     after_success: coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E
-      .+/app/.+ -E .+/specs/.+ --verbose
+      .+/app/.+ -E .+/specs/.+
     after_failure: "./scripts/upload.sh *.result.bmp"
   - env:
     - QTVER=551
