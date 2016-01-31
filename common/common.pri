@@ -40,6 +40,9 @@ DEFINES += PH_GIT_REVISION=\\\"$$PH_GIT_REVISION\\\"
 
 INCLUDEPATH += $$TOP_ROOT/libs
 
+RESOURCES_PATH = ./
+DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
+
 # Windows specific
 win32 {
 	CS = &
@@ -49,29 +52,22 @@ win32 {
 	CONFIG(debug, debug|release) {
 		RESOURCES_PATH = $$shell_path(./debug/)
 	}
-	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 
 	INCLUDEPATH += $$(BOOST_PATH)
 }
 
-# linux specific
-linux {
-	CS = ;
-	RESOURCES_PATH = ./
-	DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
-}
-
-
 # MacOS specific
 mac {
-#	QMAKE_MAC_SDK = macosx10.9
-	CS = ;
-	RESOURCES_PATH = $${TARGET}.app/Contents/Resources
-	DEFINES += PATH_TO_RESSOURCES=\\\"/../Resources/\\\"
+	app_bundle {
+		RESOURCES_PATH = $${TARGET}.app/Contents/Resources
+		DEFINES -= PATH_TO_RESSOURCES=\\\"\\\"
+		DEFINES += PATH_TO_RESSOURCES=\\\"/../Resources/\\\"
+	}
 }
 
 # MacOS and linux specific
 unix {
+	CS = ;
 	INCLUDEPATH += /usr/local/include
 	LIBS += -L/usr/local/lib
 }

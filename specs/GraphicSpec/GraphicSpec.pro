@@ -9,6 +9,9 @@ TARGET = GraphicSpec
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
+# Common spec directive
+include($$TOP_ROOT/specs/CommonSpec.pri)
+
 # Common QMake directive
 include($$TOP_ROOT/common/common.pri)
 
@@ -17,6 +20,3 @@ include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 
 # Graphic specific directive
 include($$TOP_ROOT/specs/GraphicSpec/GraphicSpec.pri)
-
-# Common spec directive
-include($$TOP_ROOT/specs/CommonSpec.pri)
