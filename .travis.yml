@@ -27,7 +27,6 @@ matrix:
     - QTVER=551
     - PROJECT=app/Joker/Joker.pro
     os: osx
-    before_install: scripts/add_key.sh
     after_script:
     - make installer
     - export RELEASED_PACKAGE_FILENAME=$(ls -1 Joker_v*.dmg)
@@ -74,6 +73,7 @@ install:
 - scripts/install_ffmpeg.sh
 - scripts/install_portaudio.sh
 - scripts/install_rtmidi.sh
+- if [[ "$TRAVIS_OS_NAME" == osx ]]; then scripts/add_key.sh; fi
 before_script: qmake $PROJECT
 script: make
 notifications:
