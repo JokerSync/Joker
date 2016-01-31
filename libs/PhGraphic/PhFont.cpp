@@ -14,6 +14,9 @@
 
 PhFont::PhFont() : _texture(-1), _glyphHeight(0), _boldness(0), _ready(false)
 {
+	for(Uint16 ch = 0; ch < 256; ++ch) {
+		_glyphAdvance[ch] = 0;
+	}
 }
 
 bool PhFont::ready()
@@ -44,8 +47,10 @@ int PhFont::computeMaxFontSize(QString fileName, int boldness)
 		size = (low + high) / 2;
 		TTF_Font * font = TTF_OpenFont(fileName.toStdString().c_str(), size);
 		//Break in case of issue with the file
-		if(!font)
+		if(!font) {
+			PHDEBUG << "Error opening" << fileName;
 			return -1;
+		}
 
 		int computedFontHeight = TTF_FontHeight(font);
 
@@ -92,10 +97,6 @@ bool PhFont::init()
 	// Space between glyph
 	int space = 128;
 	_glyphHeight = 0;
-
-	for(Uint16 ch = 0; ch < 32; ++ch) {
-		_glyphAdvance[ch] = 0;
-	}
 
 	//set the boldness
 	PHDEBUG << "Setting the font boldness to :" << _boldness;
@@ -188,6 +189,8 @@ int PhFont::getBoldness() const
 
 int PhFont::getNominalWidth(QString string)
 {
+	if(!_ready)
+		this->init();
 	int width = 0;
 	foreach(QChar c, string) {
 		width += getAdvance(c.toLatin1());

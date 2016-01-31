@@ -45,7 +45,16 @@ public:
 	 */
 	PhGraphicView (int width, int height, QWidget *parent = 0);
 
+	/**
+	  * @brief PhGraphicView destructor
+	  */
 	~PhGraphicView();
+
+	/**
+	 * @brief Pass the settings to the graphic view
+	 * @param settings The settings
+	 */
+	void setGraphicSettings(PhGraphicSettings *settings);
 
 	/**
 	 * Handle the resizing of the view.
@@ -61,11 +70,6 @@ public:
 	 */
 	int refreshRate();
 
-	/**
-	 * @brief Pass the settings to the graphic view
-	 * @param settings The settings
-	 */
-	void setGraphicSettings(PhGraphicSettings *settings);
 	/**
 	 * @brief Add a line to the debug info
 	 * @param info A string

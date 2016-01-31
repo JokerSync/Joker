@@ -29,21 +29,14 @@ PhGraphicView::PhGraphicView( QWidget *parent)
 	_maxUpdateDuration(0),
 	_previousNsecsElapsed(0)
 {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0)
-		PHDEBUG << "SDL error:" << SDL_GetError();
-	if (TTF_Init() != 0)
-		PHDEBUG << "TTF error:" << TTF_GetError();
+	PHDEBUG << "SDL_Init(SDL_INIT_VIDEO):" << SDL_Init(SDL_INIT_VIDEO);
+	PHDEBUG << "TTF_Init():" << TTF_Init();
 
 	_refreshTimer = new QTimer(this);
 	connect(_refreshTimer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 
 	//set the screen frequency to the most common value (60hz);
-	_screenFrequency = 60.0;
-	QScreen *screen = QGuiApplication::primaryScreen();
-	if (screen)
-		_screenFrequency = screen->refreshRate();
-	else
-		PHDEBUG << "Unable to get the screen";
+	_screenFrequency = QGuiApplication::primaryScreen()->refreshRate();
 
 	int timerInterval = static_cast<int>(500.0 / _screenFrequency);
 	_refreshTimer->start( timerInterval);
@@ -67,6 +60,11 @@ PhGraphicView::~PhGraphicView()
 	SDL_Quit();
 }
 
+void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
+{
+	_settings = settings;
+}
+
 void PhGraphicView::resizeGL(int width, int height)
 {
 	if(height == 0)
@@ -84,11 +82,6 @@ void PhGraphicView::resizeGL(int width, int height)
 int PhGraphicView::refreshRate()
 {
 	return _frameTickCounter.frequency();
-}
-
-void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
-{
-	_settings = settings;
 }
 
 void PhGraphicView::addInfo(QString info)
