@@ -9,44 +9,44 @@ branches:
 install:
   - git submodule update --init --recursive
   # Installing various utilities
-  - choco install -y curl 7zip InnoSetup
-  - set PATH="C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5";%PATH%
-  # Configuring Qt
-  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw491_32\bin;%PATH%
-  # Installing SDL2
-  - curl -kLO https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz
-  - 7z x SDL2-devel-2.0.3-mingw.tar.gz
-  - 7z x SDL2-devel-2.0.3-mingw.tar
-  - set SDL_PATH=%CD%\SDL2-2.0.3\i686-w64-mingw32\
-  - curl -kL https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h -o %SDL_PATH%\include\SDL2\SDL_platform.h
-  # Installing SDL2_ttf
-  - curl -kLO https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.12-mingw.tar.gz
-  - 7z x SDL2_ttf-devel-2.0.12-mingw.tar.gz
-  - 7z x SDL2_ttf-devel-2.0.12-mingw.tar
-  - set SDL_TTF_PATH=%CD%\SDL2_ttf-2.0.12\i686-w64-mingw32\
-  # Installing ffmpeg dev
-  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20151221-git-c0f67e1-win32-dev.7z
-  - 7z x ffmpeg-20151221-git-c0f67e1-win32-dev.7z
-  - set FFMPEG_DEV_PATH=%CD%\ffmpeg-20151221-git-c0f67e1-win32-dev
-  # Installing ffmpeg shared
-  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20151221-git-c0f67e1-win32-shared.7z
-  - 7z x ffmpeg-20151221-git-c0f67e1-win32-shared.7z
-  - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-20151221-git-c0f67e1-win32-shared
-  # Installing PortAudio
-  - curl -kLO https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip
-  - 7z x portaudio-r1891-build.zip
-  - set PORTAUDIO_PATH=%CD%\portaudio-r1891-build
-  # Installing libltc
-  - curl -kLO https://github.com/x42/libltc/releases/download/v1.1.4/libltc-1.1.4.tar.gz
-  - 7z x libltc-1.1.4.tar.gz
-  - 7z x libltc-1.1.4.tar
-  - set LTC_PATH=%CD%\libltc-1.1.4\src
+  #  - choco install -y curl 7zip InnoSetup
+  #  - set PATH="C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5";%PATH%
+  #  # Configuring Qt
+  #  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw491_32\bin;%PATH%
+  #  # Installing SDL2
+  #  - curl -kLO https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz
+  #  - 7z x SDL2-devel-2.0.3-mingw.tar.gz
+  #  - 7z x SDL2-devel-2.0.3-mingw.tar
+  #  - set SDL_PATH=%CD%\SDL2-2.0.3\i686-w64-mingw32\
+  #  - curl -kL https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h -o %SDL_PATH%\include\SDL2\SDL_platform.h
+  #  # Installing SDL2_ttf
+  #  - curl -kLO https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.12-mingw.tar.gz
+  #  - 7z x SDL2_ttf-devel-2.0.12-mingw.tar.gz
+  #  - 7z x SDL2_ttf-devel-2.0.12-mingw.tar
+  #  - set SDL_TTF_PATH=%CD%\SDL2_ttf-2.0.12\i686-w64-mingw32\
+  #  # Installing ffmpeg dev
+  #  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20151221-git-c0f67e1-win32-dev.7z
+  #  - 7z x ffmpeg-20151221-git-c0f67e1-win32-dev.7z
+  #  - set FFMPEG_DEV_PATH=%CD%\ffmpeg-20151221-git-c0f67e1-win32-dev
+  #  # Installing ffmpeg shared
+  #  - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20151221-git-c0f67e1-win32-shared.7z
+  #  - 7z x ffmpeg-20151221-git-c0f67e1-win32-shared.7z
+  #  - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-20151221-git-c0f67e1-win32-shared
+  #  # Installing PortAudio
+  #  - curl -kLO https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip
+  #  - 7z x portaudio-r1891-build.zip
+  #  - set PORTAUDIO_PATH=%CD%\portaudio-r1891-build
+  #  # Installing libltc
+  #  - curl -kLO https://github.com/x42/libltc/releases/download/v1.1.4/libltc-1.1.4.tar.gz
+  #  - 7z x libltc-1.1.4.tar.gz
+  #  - 7z x libltc-1.1.4.tar
+  #  - set LTC_PATH=%CD%\libltc-1.1.4\src
   #- copy qopengl.h %QTDIR%\include\QtGui
 
 build_script:
-  - qmake app/Joker/Joker.pro
-  - mingw32-make -j 8
-  - iscc app/Joker/Joker.iss /DPWD=%CD% /O%JOKER_RELEASE_PATH%
+  #  - qmake app/Joker/Joker.pro
+  #  - mingw32-make -j 8
+  #  - iscc app/Joker/Joker.iss /DPWD=%CD% /O%JOKER_RELEASE_PATH%
   - dir
 
 artifacts:
