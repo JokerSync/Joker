@@ -41,7 +41,6 @@ install:
   - 7z x libltc-1.1.4.tar.gz
   - 7z x libltc-1.1.4.tar
   - set LTC_PATH=%CD%\libltc-1.1.4\src
-  #- copy qopengl.h %QTDIR%\include\QtGui
 
 build_script:
   - qmake app/Joker/Joker.pro
@@ -61,3 +60,8 @@ deploy:
   on:
     appveyor_repo_tag: true
 
+notifications:
+  - provider: Slack
+    channel: joker
+    auth_token:
+      secure: QY4pTvHSFOMIlArGDqQLwE6nE4oPBkWaAGUuFEK2RXWNejGxGy6huwPLN1l0yPCEfrCD9W/3yw9FDxuuFiNLhA==
