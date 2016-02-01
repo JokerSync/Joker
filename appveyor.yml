@@ -61,3 +61,8 @@ deploy:
   on:
     appveyor_repo_tag: true
 
+notifications:
+  - provider: Slack
+    channel: joker
+    auth_token:
+      secure: QY4pTvHSFOMIlArGDqQLwE6nE4oPBkWaAGUuFEK2RXWNejGxGy6huwPLN1l0yPCEfrCD9W/3yw9FDxuuFiNLhA==
