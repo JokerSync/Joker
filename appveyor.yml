@@ -41,7 +41,6 @@ install:
   - 7z x libltc-1.1.4.tar.gz
   - 7z x libltc-1.1.4.tar
   - set LTC_PATH=%CD%\libltc-1.1.4\src
-  #- copy qopengl.h %QTDIR%\include\QtGui
 
 build_script:
   - qmake app/Joker/Joker.pro
