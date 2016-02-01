@@ -1,7 +1,7 @@
 language: cpp
 branches:
   except:
-  - "/^appveyor-notification$/"
+  - "/^skipthisbranch$/"
 env:
   global:
   - JOKER_RELEASE_PATH=$HOME
