@@ -39,6 +39,7 @@ OutputDir={#PWD}
 OutputBaseFilename={#MyAppName}_v{#MyAppVerStr}
 Compression=lzma
 SolidCompression=yes
+UninstallDisplayIcon={app}\{#MyAppExeName}
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
