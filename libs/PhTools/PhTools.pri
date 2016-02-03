@@ -3,8 +3,6 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT		+= xml sql network
-
 message("Using Qt v$$QT_VERSION")
 
 HEADERS += \
