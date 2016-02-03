@@ -10,6 +10,8 @@ win32 {
 
 mac {
 	app_bundle {
+		OTHER_FILES += ../../common/entitlements.plist
+
 		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string com.phonations.$$lower($${TARGET}) $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
@@ -28,7 +30,8 @@ CONFIG(release, debug|release) {
 	} else {
 		PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}_$${PH_GIT_BRANCH}
 	}
-	message($$PH_DEPLOY_TARGET)
+
+	message($$PH_DEPLOY_LOCATION/$$PH_DEPLOY_TARGET)
 
 	mac {
 		app_bundle {
@@ -37,6 +40,7 @@ CONFIG(release, debug|release) {
 
 			QMAKE_POST_LINK += codesign -s $$APPLICATION_CERTIFICATE -v --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app;
 
+			QMAKE_POST_LINK += echo "Running macdeployqt";
 			QMAKE_POST_LINK += macdeployqt $${TARGET}.app -always-overwrite -codesign=$$APPLICATION_CERTIFICATE;
 
 			# Target for PKG generation
@@ -67,7 +71,6 @@ CONFIG(release, debug|release) {
 	}
 
 	win32 {
-		message($$PH_DEPLOY_LOCATION)
 		if(exists($${_PRO_FILE_PWD_}/$$TARGET.iss)) {
 			installer.commands += echo "Running Innosetup on $${_PRO_FILE_PWD_}/$${TARGET}.iss" &
 			installer.commands += iscc $${_PRO_FILE_PWD_}/$${TARGET}.iss /DPWD=$$OUT_PWD &
