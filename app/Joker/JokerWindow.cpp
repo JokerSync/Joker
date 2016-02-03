@@ -396,7 +396,7 @@ void JokerWindow::on_actionOpen_triggered()
 		QString filter = tr("Rythmo files") + " (";
 		foreach(QString type, _settings->stripFileType())
 			filter += "*." + type + " ";
-		filter += ");;";
+		filter += ");";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
@@ -493,7 +493,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	QString filter = tr("Movie files") + " (";
 	foreach(QString type, _settings->videoFileType())
 		filter += "*." + type + " ";
-	filter += ");;";
+	filter += ");";
 
 	QFileDialog dlg(this, tr("Open a video..."), lastFolder, filter);
 	if(dlg.exec()) {
