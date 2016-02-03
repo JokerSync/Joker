@@ -3,6 +3,8 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
+QT		+= xml sql
+
 SOURCES += \
     $$PWD/PhStripDoc.cpp \
 	$$PWD/PhStripObject.cpp \
