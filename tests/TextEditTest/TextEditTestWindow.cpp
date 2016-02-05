@@ -28,8 +28,10 @@ bool TextEditTestWindow::openDocument(const QString &fileName)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
-	if(!file.open(QFile::ReadOnly))
+	if(!file.open(QFile::ReadOnly)) {
+		PHDEBUG << "Error opening" << fileName;
 		return false;
+	}
 
 	QTextStream ts(&file);
 	ui->textEdit->setText(ts.readAll());

@@ -168,6 +168,10 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 	if (event->isAccepted()) {
 		_mediaPanel.close();
 	}
+	// Force doc to unmodified to avoid double confirmation
+	// since closeEvent is called twice
+	// https://bugreports.qt.io/browse/QTBUG-43344
+	_doc->setModified(false);
 }
 
 void JokerWindow::setupSyncProtocol()
