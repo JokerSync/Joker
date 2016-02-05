@@ -42,7 +42,10 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	emails.insert(0, ui->comboBoxEmails->currentText());
 	_settings->setEmailList(emails);
 
-	QString header = "";
+	QString header;
+	QString preferences;
+	QString appLog;
+	QString crashLog;
 
 	header += "--------Feedback report: " + QString(APP_NAME) + " v" + QString(APP_VERSION) + "--------\n";
 	header += "From : " + ui->comboBoxEmails->currentText() + "\n";
@@ -60,7 +63,6 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		PHDEBUG << "Error reading the system configuration...";
 
 	PHDEBUG <<  "Get the preferences";
-	QString preferences;
 	process.start(QString("defaults read com.Phonations.%1").arg(QString(APP_NAME)));
 	if(process.waitForFinished())
 		preferences = process.readAllStandardOutput();
@@ -68,7 +70,6 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		PHDEBUG << "Error reading the application preferences...";
 
 	PHDEBUG << "Get the application log";
-	QString appLog;
 	QFile applicationLogFile(QDir::homePath() + "/Library/Logs/Phonations/" + APP_NAME + ".log");
 	if(!applicationLogFile.open(QIODevice::ReadOnly)) {
 		PHDEBUG << applicationLogFile.errorString();
@@ -85,7 +86,6 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	}
 
 	PHDEBUG <<  "Get the crash log";
-	QString crashLog;
 	QString crashFolder = QDir::homePath() + "/Library/Logs/DiagnosticReports/";
 	QDir crashDir(crashFolder);
 
