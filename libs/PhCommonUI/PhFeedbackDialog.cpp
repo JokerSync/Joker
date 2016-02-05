@@ -42,24 +42,18 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	emails.insert(0, ui->comboBoxEmails->currentText());
 	_settings->setEmailList(emails);
 
-
-
-	QString systemConfig;
-	QString crashLog;
-	QString appLog;
 	QString header;
 	QString preferences;
-
-
-	header = "";
+	QString appLog;
+	QString crashLog;
 
 	header += "--------Feedback report: " + QString(APP_NAME) + " v" + QString(APP_VERSION) + "--------\n";
 	header += "From : " + ui->comboBoxEmails->currentText() + "\n";
 	if(!ui->textEditComment->toPlainText().isEmpty())
 		header += "Message : " + ui->textEditComment->toPlainText() + "\n";
 
-
-	// Get the system infos
+	PHDEBUG <<  "Get the system infos";
+	QString systemConfig;
 #if defined(Q_OS_MAC)
 	QProcess process;
 	process.start("/usr/sbin/system_profiler SPHardwareDataType");
@@ -68,14 +62,14 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	else
 		PHDEBUG << "Error reading the system configuration...";
 
-	// Get the preferences
+	PHDEBUG <<  "Get the preferences";
 	process.start(QString("defaults read com.Phonations.%1").arg(QString(APP_NAME)));
 	if(process.waitForFinished())
 		preferences = process.readAllStandardOutput();
 	else
 		PHDEBUG << "Error reading the application preferences...";
 
-	// Get the application log
+	PHDEBUG << "Get the application log";
 	QFile applicationLogFile(QDir::homePath() + "/Library/Logs/Phonations/" + APP_NAME + ".log");
 	if(!applicationLogFile.open(QIODevice::ReadOnly)) {
 		PHDEBUG << applicationLogFile.errorString();
@@ -91,7 +85,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		applicationLogFile.close();
 	}
 
-	// Get the crash log
+	PHDEBUG <<  "Get the crash log";
 	QString crashFolder = QDir::homePath() + "/Library/Logs/DiagnosticReports/";
 	QDir crashDir(crashFolder);
 
@@ -99,25 +93,27 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	crashFilters.append(QString(APP_NAME) + "*.crash" );
 	crashDir.setNameFilters(crashFilters);
 	QStringList crashFiles = crashDir.entryList();
-	QString lastCrashFilePath = crashFolder + crashFiles.first();
-	PHDEBUG << "last crash log:" << lastCrashFilePath;
-	foreach(QString file, crashFiles) {
-		QString filePath = crashFolder + file;
-		if(QFileInfo(filePath).created() > QFileInfo(lastCrashFilePath).created())
-			lastCrashFilePath = filePath;
-	}
-
-	PHDEBUG << lastCrashFilePath;
-	QFile crashFile(lastCrashFilePath);
-	if(!crashFile.open(QIODevice::ReadOnly)) {
-		PHDEBUG << "Crash log : " << crashFile.errorString();
-	}
-	else {
-		QTextStream in(&crashFile);
-		while(!in.atEnd()) {
-			crashLog += in.readLine()  + "\n";
+	if(!crashFiles.empty()) {
+		QString lastCrashFilePath = crashFolder + crashFiles.first();
+		PHDEBUG << "last crash log:" << lastCrashFilePath;
+		foreach(QString file, crashFiles) {
+			QString filePath = crashFolder + file;
+			PHDEBUG << filePath;
+			if(QFileInfo(filePath).created() > QFileInfo(lastCrashFilePath).created())
+				lastCrashFilePath = filePath;
 		}
-		crashFile.close();
+
+		QFile crashFile(lastCrashFilePath);
+		if(!crashFile.open(QIODevice::ReadOnly)) {
+			PHDEBUG << "Crash log : " << crashFile.errorString();
+		}
+		else {
+			QTextStream in(&crashFile);
+			while(!in.atEnd()) {
+				crashLog += in.readLine()  + "\n";
+			}
+			crashFile.close();
+		}
 	}
 
 #endif

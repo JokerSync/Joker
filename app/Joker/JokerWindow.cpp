@@ -168,6 +168,10 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 	if (event->isAccepted()) {
 		_mediaPanel.close();
 	}
+	// Force doc to unmodified to avoid double confirmation
+	// since closeEvent is called twice
+	// https://bugreports.qt.io/browse/QTBUG-43344
+	_doc->setModified(false);
 }
 
 void JokerWindow::setupSyncProtocol()
@@ -396,7 +400,7 @@ void JokerWindow::on_actionOpen_triggered()
 		QString filter = tr("Rythmo files") + " (";
 		foreach(QString type, _settings->stripFileType())
 			filter += "*." + type + " ";
-		filter += ");;";
+		filter += ");";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
 
 		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
@@ -493,7 +497,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	QString filter = tr("Movie files") + " (";
 	foreach(QString type, _settings->videoFileType())
 		filter += "*." + type + " ";
-	filter += ");;";
+	filter += ");";
 
 	QFileDialog dlg(this, tr("Open a video..."), lastFolder, filter);
 	if(dlg.exec()) {
