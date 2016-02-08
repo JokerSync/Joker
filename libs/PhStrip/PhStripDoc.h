@@ -128,43 +128,38 @@ public:
 	 * @brief The document ending time
 	 * @return A time value.
 	 */
-	PhTime timeOut();
-
-	/**
-	 * @brief getTimeScale
-	 * @return
-	 */
-	int timeScale();
+	PhTime timeOut() const;
 
 	/**
 	 * @brief The list of peoples
 	 * @return A list.
 	 */
-	QList<PhPeople*> peoples();
+	QList<PhPeople*> peoples() const;
+
 	/**
 	 * @brief The whole text list
 	 * @return A list of texts
 	 */
-	QList<PhStripText*> texts(bool alternate = false);
+	QList<PhStripText*> texts(bool alternate = false) const;
 
 	/**
 	 * @brief The list of texts affected to a people
 	 * @param people A people
 	 * @return A list of texts
 	 */
-	QList<PhStripText*> texts(PhPeople *people);
+	QList<PhStripText*> texts(PhPeople *people) const;
 
 	/**
 	 * @brief The whole loop list
 	 * @return A list of loops
 	 */
-	QList<PhStripLoop*> loops();
+	QList<PhStripLoop*> loops() const;
 
 	/**
 	 * @brief The whole cut list
 	 * @return A list of cut
 	 */
-	QList<PhStripCut*> cuts();
+	QList<PhStripCut*> cuts() const;
 
 	/**
 	 * @brief The whole detect list
@@ -283,14 +278,14 @@ public:
 	 * @param name The desired people's name
 	 * @return The corresponding PhPeople
 	 */
-	PhPeople * peopleByName(QString name);
+	PhPeople * peopleByName(QString name) const;
 
 	/**
 	 * @brief Get the next text after a time value
 	 * @param time A time value
 	 * @return The next text or NULL if no text after the time value
 	 */
-	PhStripText * nextText(PhTime time);
+	PhStripText * nextText(PhTime time) const;
 
 	/**
 	 * @brief Get the next text affected to a people after a time value
@@ -298,7 +293,7 @@ public:
 	 * @param time A time value
 	 * @return The next text or NULL if no text after the time value
 	 */
-	PhStripText * nextText(PhPeople *people, PhTime time);
+	PhStripText * nextText(PhPeople *people, PhTime time) const;
 	/**
 	 * @brief Get the next text affected to one of a people list after a time value
 	 * @param peopleList A people list
@@ -307,65 +302,65 @@ public:
 	 * have the same timeIn, the text attach to the first PhPeople of
 	 * the list will be returned
 	 */
-	PhStripText * nextText(QList<PhPeople*> peopleList, PhTime time);
+	PhStripText * nextText(QList<PhPeople*> peopleList, PhTime time) const;
 	/**
 	 * @brief Get the previous text before a time value
 	 * @param time A time value
 	 * @return A time value
 	 */
-	PhTime previousTextTime(PhTime time);
+	PhTime previousTextTime(PhTime time) const;
 	/**
 	 * @brief Get the previous loop time
 	 * @param time A time value
 	 * @return A time value
 	 */
-	PhTime previousLoopTime(PhTime time);
+	PhTime previousLoopTime(PhTime time) const;
 	/**
 	 * @brief Get the previous cut time
 	 * @param time A time value
 	 * @return A time value
 	 */
-	PhTime previousCutTime(PhTime time);
+	PhTime previousCutTime(PhTime time) const;
 	/**
 	 * @brief Get previous element time
 	 * @param time A time value
 	 * @return A time value
 	 */
-	PhTime previousElementTime(PhTime time);
+	PhTime previousElementTime(PhTime time) const;
 	/**
 	 * @brief Get the next text time
 	 * @param time A time value
 	 * @return A time value
 	 */
-	PhTime nextTextTime(PhTime time);
+	PhTime nextTextTime(PhTime time) const;
 	/**
 	 * @brief Get the next loop time
 	 * @param time A time value
 	 * @return A time value
 	 */
-	PhTime nextLoopTime(PhTime time);
+	PhTime nextLoopTime(PhTime time) const;
 	/**
 	 * @brief Get the next cut time
 	 * @param time A time value
 	 * @return A time value
 	 */
-	PhTime nextCutTime(PhTime time);
+	PhTime nextCutTime(PhTime time) const;
 	/**
 	 * @brief Get the next element time
 	 * @param time A time value
 	 * @return A time value
 	 */
-	PhTime nextElementTime(PhTime time);
+	PhTime nextElementTime(PhTime time) const;
 	/**
 	 * @brief Get the starting time of the document
 	 * @return time A time value
 	 */
-	PhTime timeIn();
+	PhTime timeIn() const;
 	/**
 	 * @brief Get the last position the document was edited.
 	 * @return time A time value
 	 */
-	PhTime lastTime();
+	PhTime lastTime() const;
 
 	/**
 	 * @brief Set the force 16/9 ratio status
@@ -384,13 +379,13 @@ public:
 	 * @param time A time value
 	 * @return the corresponding loop
 	 */
-	PhStripLoop * nextLoop(PhTime time);
+	PhStripLoop * nextLoop(PhTime time) const;
 	/**
 	 * @brief Get the previous loop
 	 * @param time A time value
 	 * @return the corresponding loop
 	 */
-	PhStripLoop * previousLoop(PhTime time);
+	PhStripLoop * previousLoop(PhTime time) const;
 
 	/**
 	 * @brief Reset the document

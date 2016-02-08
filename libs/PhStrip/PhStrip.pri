@@ -6,7 +6,7 @@
 QT		+= xml sql
 
 SOURCES += \
-    $$PWD/PhStripDoc.cpp \
+	$$PWD/PhStripDoc.cpp \
 	$$PWD/PhStripObject.cpp \
 	$$PWD/PhStripCut.cpp \
 	$$PWD/PhStripText.cpp \

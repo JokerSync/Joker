@@ -36,12 +36,12 @@ go_bandit([](){
 			doc->addPeople(new PhPeople("A people"));
 			doc->addPeople(new PhPeople("A second people", "red"));
 
-			doc->addObject(new PhStripText(0, doc->peoples().first(), 10000, 0.25f, "Hello", 0.25f));
-			doc->addObject(new PhStripCut(5400, PhStripCut::CrossFade));
-			doc->addObject(new PhStripDetect(PhStripDetect::Off, 0, doc->peoples().first(), 10000, 0.25f));
-			doc->addObject(new PhStripLoop(22000, "label"));
-			doc->addObject(new PhStripText(10000, doc->peoples().last(), 15000, 0.5f, "Hi !", 0.25f));
-			doc->addObject(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
+			doc->addText(new PhStripText(0, doc->peoples().first(), 10000, 0.25f, "Hello", 0.25f));
+			doc->addCut(new PhStripCut(5400, PhStripCut::CrossFade));
+			doc->addDetect(new PhStripDetect(PhStripDetect::Off, 0, doc->peoples().first(), 10000, 0.25f));
+			doc->addLoop(new PhStripLoop(22000, "label"));
+			doc->addText(new PhStripText(10000, doc->peoples().last(), 15000, 0.5f, "Hi !", 0.25f));
+			doc->addDetect(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
 			doc->changed();
 
 			AssertThat(view.compare("drawTest.expected.bmp"), IsLessThan(720 * 240 * 4));
