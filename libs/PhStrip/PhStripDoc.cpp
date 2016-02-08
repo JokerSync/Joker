@@ -1398,6 +1398,10 @@ void PhStripDoc::reset()
 	_texts1.clear();
 	qDeleteAll(_texts2);
 	_texts2.clear();
+	qDeleteAll(_sentences1);
+	_sentences1.clear();
+	qDeleteAll(_sentences2);
+	_sentences2.clear();
 
 	_generator = "???";
 	_title = "";
@@ -1433,12 +1437,22 @@ void PhStripDoc::addDetect(PhStripDetect *detect)
 	_modified = true;
 }
 
-void PhStripDoc::addText(PhStripText *text, bool original)
+void PhStripDoc::addText(PhStripText *text, bool alternate)
 {
-	if(original)
-		_texts2.append(text);
-	else
-		_texts1.append(text);
+	QList<PhStripText*> *texts = alternate ? &_texts2 : &_texts1;
+	QList<PhStripSentence*> *sentences = alternate ? &_sentences2 : &_sentences1;
+
+	PhStripSentence *sentence = sentences->count() ? sentences->last() : NULL;
+	if(sentence && (sentence->timeOut() == text->timeIn()) && (sentence->people() == text->people())) {
+		sentence->add(text);
+	}
+	else {
+		sentence = new PhStripSentence(text);
+		sentences->append(sentence);
+	}
+
+	texts->append(text);
+	
 	_modified = true;
 }
 
@@ -1718,6 +1732,14 @@ QList<PhStripText *> PhStripDoc::texts(PhPeople *people) const
 			result.append(text);
 	}
 	return result;
+}
+
+QList<PhStripSentence *> PhStripDoc::sentences(bool alternate) const
+{
+	if(alternate)
+		return _sentences2;
+	else
+		return _sentences1;
 }
 
 QList<PhStripLoop *> PhStripDoc::loops() const

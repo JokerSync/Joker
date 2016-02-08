@@ -18,6 +18,7 @@
 #include "PhStripObject.h"
 #include "PhStripText.h"
 #include "PhStripDetect.h"
+#include "PhStripSentence.h"
 
 /**
  * @brief The joker document class
@@ -148,6 +149,8 @@ public:
 	 * @return A list of texts
 	 */
 	QList<PhStripText*> texts(PhPeople *people) const;
+
+	QList<PhStripSentence*> sentences(bool alternate = false) const;
 
 	/**
 	 * @brief The whole loop list
@@ -400,9 +403,9 @@ public:
 
 	/**
 	 * @brief Add a PhStripText to the doc
-	 * @param original True if the text is original, false otherwise
+	 * @param alternate True if the text is original, false otherwise
 	 */
-	void addText(PhStripText *text, bool original = false);
+	void addText(PhStripText *text, bool alternate = false);
 
 	/**
 	 * @brief Add a PhPeople to the doc
@@ -477,6 +480,11 @@ private:
 	 * @brief List of PhStripDetect
 	 */
 	QList<PhStripDetect*> _detects;
+
+	/**
+	 * @brief List of PhStripSentence
+	 */
+	QList<PhStripSentence*> _sentences1, _sentences2;
 
 	PhTime ComputeDrbTime1(PhTime offset, PhTime value, PhTimeCodeType tcType);
 	PhTime ComputeDrbTime2(PhTime offset, PhTime value, PhTimeCodeType tcType);

@@ -195,6 +195,41 @@ go_bandit([](){
 					AssertThat(t2s(doc.detects()[5]->timeOut(), PhTimeCodeType25), Equals("01:00:31:04"));
 					AssertThat(doc.detects()[5]->y(), Equals(0.5f));
 				});
+
+				it("import sentences", [&](){
+					AssertThat(doc.sentences().count(), Equals(5));
+
+					AssertThat(doc.sentences()[0]->people(), Equals(doc.peopleByName("Jeanne")));
+					AssertThat(doc.sentences()[0]->content(), Equals("Simple sentence"));
+					AssertThat(t2s(doc.sentences()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:02:00"));
+					AssertThat(t2s(doc.sentences()[0]->timeOut(), PhTimeCodeType25), Equals("01:00:04:00"));
+					AssertThat(doc.sentences()[1]->y(), Equals(0.5f));
+
+					AssertThat(doc.sentences()[1]->people(), Equals(doc.peopleByName("Sue")));
+					AssertThat(doc.sentences()[1]->content(), Equals("Composed sentence"));
+					AssertThat(t2s(doc.sentences()[1]->timeIn(), PhTimeCodeType25), Equals("01:00:05:00"));
+					AssertThat(t2s(doc.sentences()[1]->timeOut(), PhTimeCodeType25), Equals("01:00:07:00"));
+					AssertThat(doc.sentences()[1]->y(), Equals(0.5f));
+
+					AssertThat(doc.sentences()[2]->people(), Equals(doc.peopleByName("Paul")));
+					AssertThat(doc.sentences()[2]->content(), Equals("Simple off sentence"));
+					AssertThat(t2s(doc.sentences()[2]->timeIn(), PhTimeCodeType25), Equals("01:00:12:00"));
+					AssertThat(t2s(doc.sentences()[2]->timeOut(), PhTimeCodeType25), Equals("01:00:14:00"));
+					AssertThat(doc.sentences()[2]->y(), Equals(0.25f));
+
+
+					AssertThat(doc.sentences()[3]->people(), Equals(doc.peopleByName("Sue")));
+					AssertThat(doc.sentences()[3]->content(), Equals("Composed sentence with off"));
+					AssertThat(t2s(doc.sentences()[3]->timeIn(), PhTimeCodeType25), Equals("01:00:15:00"));
+					AssertThat(t2s(doc.sentences()[3]->timeOut(), PhTimeCodeType25), Equals("01:00:17:00"));
+					AssertThat(doc.sentences()[3]->y(), Equals(0.5f));
+
+					AssertThat(doc.sentences()[4]->people(), Equals(doc.peopleByName("Sue")));
+					AssertThat(doc.sentences()[4]->content(), Equals("Sentence with out not linked"));
+					AssertThat(t2s(doc.sentences()[4]->timeIn(), PhTimeCodeType25), Equals("01:00:30:00"));
+					AssertThat(t2s(doc.sentences()[4]->timeOut(), PhTimeCodeType25), Equals("01:00:31:04"));
+					AssertThat(doc.sentences()[4]->y(), Equals(0.5f));
+				});
 			});
 
 			describe("import test01.detx", [&]() {
@@ -818,6 +853,51 @@ go_bandit([](){
 			AssertThat(doc.peoples().count(), Equals(1));
 			doc.addPeople(new PhPeople("A second people"));
 			AssertThat(doc.peoples().count(), Equals(2));
+		});
+
+		it("add sentences", [&](){
+			PhPeople *bob = new PhPeople("Bob");
+			PhPeople *jeanne = new PhPeople("Jeanne");
+
+			doc.addPeople(bob);
+			doc.addPeople(jeanne);
+
+			doc.addText(new PhStripText(0, bob, 10, 0.5f, "hello", 0.25f));
+
+			AssertThat(doc.texts().count(), Equals(1));
+			AssertThat(doc.sentences().count(), Equals(1));
+			AssertThat(doc.sentences()[0]->timeIn(), Equals(0));
+			AssertThat(doc.sentences()[0]->people(), Equals(bob));
+			AssertThat(doc.sentences()[0]->timeOut(), Equals(10));
+			AssertThat(doc.sentences()[0]->content(), Equals("hello"));
+
+			doc.addText(new PhStripText(10, bob, 20, 0.5f, " world", 0.25f));
+
+			AssertThat(doc.sentences().count(), Equals(1));
+			AssertThat(doc.sentences()[0]->timeIn(), Equals(0));
+			AssertThat(doc.sentences()[0]->people(), Equals(bob));
+			AssertThat(doc.sentences()[0]->timeOut(), Equals(20));
+			AssertThat(doc.sentences()[0]->content(), Equals("hello world"));
+
+			doc.addText(new PhStripText(30, bob, 40, 0.5, "alright?", 0x25f));
+
+			AssertThat(doc.sentences().count(), Equals(2));
+			AssertThat(doc.sentences()[1]->timeIn(), Equals(30));
+			AssertThat(doc.sentences()[1]->people(), Equals(bob));
+			AssertThat(doc.sentences()[1]->timeOut(), Equals(40));
+			AssertThat(doc.sentences()[1]->content(), Equals("alright?"));
+
+			doc.addText(new PhStripText(40, jeanne, 50, 0.5, "cool!", 0x25f));
+
+			AssertThat(doc.sentences().count(), Equals(3));
+			AssertThat(doc.sentences()[2]->timeIn(), Equals(40));
+			AssertThat(doc.sentences()[2]->people(), Equals(jeanne));
+			AssertThat(doc.sentences()[2]->timeOut(), Equals(50));
+			AssertThat(doc.sentences()[2]->content(), Equals("cool!"));
+
+			doc.reset();
+
+			AssertThat(doc.sentences().count(), Equals(0));
 		});
 	});
 });

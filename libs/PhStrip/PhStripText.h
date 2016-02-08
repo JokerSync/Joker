@@ -35,6 +35,8 @@ public:
 	 */
 	QString content() const;
 
+	void setContent(QString content);
+
 private:
 
 /**
