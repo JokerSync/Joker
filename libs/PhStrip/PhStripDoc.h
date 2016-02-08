@@ -140,38 +140,38 @@ public:
 	 * @brief The list of peoples
 	 * @return A list.
 	 */
-	QList<PhPeople *> peoples();
+	QList<PhPeople*> peoples();
 	/**
 	 * @brief The whole text list
 	 * @return A list of texts
 	 */
-	QList<PhStripText *> texts(bool alternate = false);
+	QList<PhStripText*> texts(bool alternate = false);
 
 	/**
 	 * @brief The list of texts affected to a people
 	 * @param people A people
 	 * @return A list of texts
 	 */
-	QList<PhStripText *> texts(PhPeople *people);
+	QList<PhStripText*> texts(PhPeople *people);
 
 	/**
 	 * @brief The whole loop list
 	 * @return A list of loops
 	 */
-	QList<PhStripLoop *> loops();
+	QList<PhStripLoop*> loops();
 
 	/**
 	 * @brief The whole cut list
 	 * @return A list of cut
 	 */
-	QList<PhStripCut *> cuts();
+	QList<PhStripCut*> cuts();
 
 	/**
 	 * @brief The whole detect list
 	 * @todo Implement and test timeIn / timeOut
 	 * @return A list of detects
 	 */
-	QList<PhStripDetect *> detects(PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
+	QList<PhStripDetect*> detects(PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
 
 	/**
 	 * @brief Get the list of detect affected to a people in a defined range.
@@ -180,7 +180,7 @@ public:
 	 * @param timeOut The range ending time
 	 * @return A list of detects
 	 */
-	QList<PhStripDetect *> peopleDetects(PhPeople *people, PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
+	QList<PhStripDetect*> peopleDetects(PhPeople *people, PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
 
 	/**
 	 * @brief Set the title property
@@ -460,26 +460,26 @@ private:
 	QString _authorName;
 
 	/**
-	 * List of PhPeople from the file
+	 * @brief List of PhPeople
 	 */
-	QList<PhPeople *> _peoples;
+	QList<PhPeople*> _peoples;
 
-	QList<PhStripText *> _texts1, _texts2;
-
-	/**
-	 * List of PhStripCut form the file
-	 */
-	QList<PhStripCut *> _cuts;
+	QList<PhStripText*> _texts1, _texts2;
 
 	/**
-	 * List of PhStripLoop from the file
+	 * @brief List of PhStripCut form the file
 	 */
-	QList<PhStripLoop *> _loops;
+	QList<PhStripCut*> _cuts;
 
 	/**
-	 * List of PhStripOff from the file
+	 * @brief List of PhStripLoop
 	 */
-	QList<PhStripDetect *> _detects;
+	QList<PhStripLoop*> _loops;
+
+	/**
+	 * @brief List of PhStripDetect
+	 */
+	QList<PhStripDetect*> _detects;
 
 	PhTime ComputeDrbTime1(PhTime offset, PhTime value, PhTimeCodeType tcType);
 	PhTime ComputeDrbTime2(PhTime offset, PhTime value, PhTimeCodeType tcType);

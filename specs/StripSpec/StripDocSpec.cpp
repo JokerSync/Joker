@@ -124,7 +124,7 @@ go_bandit([](){
 					AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("01:00:00:00"));
 				});
 
-				it("import_text", [&](){
+				it("import texts", [&](){
 					AssertThat(doc.texts().count(), Equals(6));
 
 					AssertThat(doc.texts()[0]->content(), Equals("Simple sentence"));
@@ -154,7 +154,7 @@ go_bandit([](){
 					AssertThat(t2s(doc.texts()[5]->timeOut(), PhTimeCodeType25), Equals("01:00:31:04"));
 				});
 
-				it("import detect", [&](){
+				it("import detects", [&](){
 					AssertThat(doc.detects().count(), Equals(6));
 
 					AssertThat(doc.detects()[0]->people(), Equals(doc.peopleByName("Jeanne")));
@@ -188,7 +188,6 @@ go_bandit([](){
 					AssertThat(t2s(doc.detects()[4]->timeIn(), PhTimeCodeType25), Equals("01:00:20:00"));
 					AssertThat(t2s(doc.detects()[4]->timeOut(), PhTimeCodeType25), Equals("01:00:22:00"));
 					AssertThat(doc.detects()[4]->y(), Equals(0.5f));
-
 
 					AssertThat(doc.detects()[5]->people(), Equals(doc.peopleByName("Sue")));
 					AssertThat(doc.detects()[5]->type(), Equals(PhStripDetect::On));
