@@ -397,10 +397,18 @@ public:
 	 */
 	void reset();
 
+	void addCut(PhStripCut *cut);
+
+	void addLoop(PhStripLoop *loop);
+
+	void addDetect(PhStripDetect *detect);
+
 	/**
-	 * @brief Add a PhGraphicObjet to the doc
+	 * @brief Add a PhStripText to the doc
+	 * @param original True if the text is original, false otherwise
 	 */
-	void addObject(PhStripObject *object);
+	void addText(PhStripText *text, bool original = false);
+
 	/**
 	 * @brief Add a PhPeople to the doc
 	 * @param people the new poeple

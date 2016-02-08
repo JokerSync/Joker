@@ -1417,29 +1417,31 @@ void PhStripDoc::reset()
 	emit this->changed();
 }
 
-void PhStripDoc::addObject(PhStripObject *object)
+void PhStripDoc::addCut(PhStripCut *cut)
 {
-	if(dynamic_cast<PhStripCut*>(object)) {
-		this->_cuts.append(dynamic_cast<PhStripCut*>(object));
-		PHDEBUG << "Added a cut";
-	}
-	else if(dynamic_cast<PhStripLoop*>(object)) {
-		this->_loops.append(dynamic_cast<PhStripLoop*>(object));
-		PHDEBUG << "Added a loop";
-	}
-	else if(dynamic_cast<PhStripDetect*>(object)) {
-		this->_detects.append(dynamic_cast<PhStripDetect*>(object));
-		PHDEBUG << "Added a detect!";
-	}
-	else if(dynamic_cast<PhStripText*>(object)) {
-		this->_texts1.append(dynamic_cast<PhStripText*>(object));
-		PHDEBUG << "Added a text!";
-	}
-	else {
-		PHDEBUG << "You try to add a weird object, which seems to be undefined...";
-	}
+	_cuts.append(cut);
 	emit changed();
+}
 
+void PhStripDoc::addLoop(PhStripLoop *loop)
+{
+	_loops.append(loop);
+	emit changed();
+}
+
+void PhStripDoc::addDetect(PhStripDetect *detect)
+{
+	_detects.append(detect);
+	emit changed();
+}
+
+void PhStripDoc::addText(PhStripText *text, bool original)
+{
+	if(original)
+		_texts2.append(text);
+	else
+		_texts1.append(text);
+	emit changed();
 }
 
 void PhStripDoc::addPeople(PhPeople *people)

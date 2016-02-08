@@ -222,11 +222,11 @@ go_bandit([](){
 					PhPeople *sue = new PhPeople("Sue", "#ff00ff", "bouboubou");
 					doc.addPeople(sue);
 
-					doc.addObject(new PhStripLoop(s2t25("01:01:00:00"), "1"));
+					doc.addLoop(new PhStripLoop(s2t25("01:01:00:00"), "1"));
 
-					doc.addObject(new PhStripCut(s2t25("01:01:00:02"), PhStripCut::Simple));
+					doc.addCut(new PhStripCut(s2t25("01:01:00:02"), PhStripCut::Simple));
 
-					doc.addObject(new PhStripText(s2t25("01:01:00:05"), sue, s2t25("01:01:00:15"), 0.50f, "Hello", 0.25f));
+					doc.addText(new PhStripText(s2t25("01:01:00:05"), sue, s2t25("01:01:00:15"), 0.50f, "Hello", 0.25f));
 
 					AssertThat(doc.exportDetXFile("save01.detx", s2t25("01:01:01:01")), IsTrue());
 
@@ -284,8 +284,8 @@ go_bandit([](){
 					PhPeople *sue = new PhPeople("Sue", "#ff00ff", "bouboubou");
 					doc.addPeople(sue);
 
-					doc.addObject(new PhStripText(s2t25("01:01:00:05"), sue, s2t25("01:01:00:15"), 0.50f, "Hello ", 0.25f));
-					doc.addObject(new PhStripText(s2t25("01:01:00:15"), sue, s2t25("01:01:01:00"), 0.50f, "world", 0.25f));
+					doc.addText(new PhStripText(s2t25("01:01:00:05"), sue, s2t25("01:01:00:15"), 0.50f, "Hello ", 0.25f));
+					doc.addText(new PhStripText(s2t25("01:01:00:15"), sue, s2t25("01:01:01:00"), 0.50f, "world", 0.25f));
 
 					AssertThat(doc.exportDetXFile("save02.detx", s2t25("01:01:01:01")), IsTrue());
 
@@ -798,17 +798,17 @@ go_bandit([](){
 			AssertThat(t2s(doc.previousLoop(s2t("23:00:00:00", tcType))->timeIn(), tcType), Equals("01:01:00:00"));
 		});
 
-		it("add object", [&](){
+		it("add objects", [&](){
 			doc.addPeople(new PhPeople("A people"));
 
-			doc.addObject(new PhStripText(0, doc.peoples().last(), 10000, 1, "Hello", 0.25f));
+			doc.addText(new PhStripText(0, doc.peoples().last(), 10000, 1, "Hello", 0.25f));
 			AssertThat(doc.texts().count(), Equals(1));
-			doc.addObject(new PhStripCut(5400, PhStripCut::CrossFade));
+			doc.addCut(new PhStripCut(5400, PhStripCut::CrossFade));
 			AssertThat(doc.cuts().count(), Equals(1));
-			doc.addObject(new PhStripDetect(PhStripDetect::Aperture, 10000, doc.peoples().last(), 11000, 1));
+			doc.addDetect(new PhStripDetect(PhStripDetect::Aperture, 10000, doc.peoples().last(), 11000, 1));
 			AssertThat(doc.detects().count(), Equals(1));
 
-			doc.addObject(new PhStripLoop(22000, "3"));
+			doc.addLoop(new PhStripLoop(22000, "3"));
 			AssertThat(doc.loops().count(), Equals(1));
 
 		});
