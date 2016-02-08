@@ -421,12 +421,6 @@ public:
 	 */
 	void setModified(bool modified);
 
-signals:
-	/**
-	 * @brief Emit a signal when the PhStripDoc changed
-	 */
-	void changed();
-
 private:
 	QString _generator;
 	/**

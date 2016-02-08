@@ -42,7 +42,6 @@ go_bandit([](){
 			doc->addLoop(new PhStripLoop(22000, "label"));
 			doc->addText(new PhStripText(10000, doc->peoples().last(), 15000, 0.5f, "Hi !", 0.25f));
 			doc->addDetect(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
-			doc->changed();
 
 			AssertThat(view.compare("drawTest.expected.bmp"), IsLessThan(720 * 240 * 4));
 		});

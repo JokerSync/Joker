@@ -224,7 +224,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 	xmlFile.close();
 	delete domDoc;
 
-	emit this->changed();
+	_modified = true;
 
 	return true;
 }
@@ -883,7 +883,7 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	qSort(_cuts.begin(), _cuts.end(), PhStripObject::dtcomp);
 	qSort(_loops.begin(), _loops.end(), PhStripObject::dtcomp);
 
-	emit this->changed();
+	_modified = true;
 
 	return true;
 }
@@ -1379,7 +1379,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 	for(int i = 0; i < loopCount; i++)
 		this->addLoop(new PhStripLoop(_videoTimeIn + i * PHTIMEBASE * 60, QString::number(i)));
 
-	emit changed();
+	_modified = true;
 }
 
 void PhStripDoc::reset()
@@ -1413,26 +1413,24 @@ void PhStripDoc::reset()
 	_generator = "";
 	_mosNextTag = 0x8008;
 	_modified = false;
-
-	emit this->changed();
 }
 
 void PhStripDoc::addCut(PhStripCut *cut)
 {
 	_cuts.append(cut);
-	emit changed();
+	_modified = true;
 }
 
 void PhStripDoc::addLoop(PhStripLoop *loop)
 {
 	_loops.append(loop);
-	emit changed();
+	_modified = true;
 }
 
 void PhStripDoc::addDetect(PhStripDetect *detect)
 {
 	_detects.append(detect);
-	emit changed();
+	_modified = true;
 }
 
 void PhStripDoc::addText(PhStripText *text, bool original)
@@ -1441,14 +1439,13 @@ void PhStripDoc::addText(PhStripText *text, bool original)
 		_texts2.append(text);
 	else
 		_texts1.append(text);
-	emit changed();
+	_modified = true;
 }
 
 void PhStripDoc::addPeople(PhPeople *people)
 {
 	_peoples.append(people);
-	emit changed();
-
+	_modified = true;
 }
 
 PhPeople *PhStripDoc::peopleByName(QString name) const
