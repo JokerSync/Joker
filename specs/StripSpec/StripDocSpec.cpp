@@ -895,6 +895,8 @@ go_bandit([](){
 			AssertThat(doc.sentences()[2]->timeOut(), Equals(50));
 			AssertThat(doc.sentences()[2]->content(), Equals("cool!"));
 
+			AssertThat(doc.sentences(bob).count(), Equals(2));
+
 			doc.reset();
 
 			AssertThat(doc.sentences().count(), Equals(0));

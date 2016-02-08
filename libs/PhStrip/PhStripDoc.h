@@ -152,6 +152,8 @@ public:
 
 	QList<PhStripSentence*> sentences(bool alternate = false) const;
 
+	QList<PhStripSentence*> sentences(PhPeople *people) const;
+
 	/**
 	 * @brief The whole loop list
 	 * @return A list of loops

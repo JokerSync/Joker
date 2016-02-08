@@ -1742,6 +1742,17 @@ QList<PhStripSentence *> PhStripDoc::sentences(bool alternate) const
 		return _sentences1;
 }
 
+QList<PhStripSentence *> PhStripDoc::sentences(PhPeople *people) const
+{
+	QList<PhStripSentence*> result;
+
+	foreach (PhStripSentence *sentence, this->sentences()) {
+		if(sentence->people() == people)
+			result.append(sentence);
+	}
+	return result;
+}
+
 QList<PhStripLoop *> PhStripDoc::loops() const
 {
 	return _loops;
