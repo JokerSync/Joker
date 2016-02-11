@@ -1452,7 +1452,7 @@ void PhStripDoc::addText(PhStripText *text, bool alternate)
 	}
 
 	texts->append(text);
-	
+
 	_modified = true;
 }
 

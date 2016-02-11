@@ -139,6 +139,7 @@ public:
 
 	/**
 	 * @brief The whole text list
+	 * @param alternate True in order the get the alternate text list (like original texts)
 	 * @return A list of texts
 	 */
 	QList<PhStripText*> texts(bool alternate = false) const;
@@ -150,8 +151,18 @@ public:
 	 */
 	QList<PhStripText*> texts(PhPeople *people) const;
 
+	/**
+	 * @brief The whole sentences list
+	 * @param alternate True in order the get the alternate sentences list (like original sentences)
+	 * @return A list of sentences
+	 */
 	QList<PhStripSentence*> sentences(bool alternate = false) const;
 
+	/**
+	 * @brief The list of sentences affected to a people
+	 * @param people A people
+	 * @return A list of sentences
+	 */
 	QList<PhStripSentence*> sentences(PhPeople *people) const;
 
 	/**
@@ -397,14 +408,27 @@ public:
 	 */
 	void reset();
 
+	/**
+	 * @brief Add a PhStripCut to the doc
+	 * @param cut A cut
+	 */
 	void addCut(PhStripCut *cut);
 
+	/**
+	 * @brief Add a PhStripLoop to the doc
+	 * @param loop A loop
+	 */
 	void addLoop(PhStripLoop *loop);
 
+	/**
+	 * @brief Add a PhStripDetect to the doc
+	 * @param detect A detect
+	 */
 	void addDetect(PhStripDetect *detect);
 
 	/**
 	 * @brief Add a PhStripText to the doc
+	 * @param text A text
 	 * @param alternate True if the text is original, false otherwise
 	 */
 	void addText(PhStripText *text, bool alternate = false);
