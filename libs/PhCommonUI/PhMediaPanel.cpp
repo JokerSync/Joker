@@ -23,22 +23,16 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 
 	//Buttons Init
 
-	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
 	connect(ui->_playButton, &QPushButton::clicked, this, &PhMediaPanel::onPlayPause);
 
-	ui->_fastForwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
 	connect(ui->_fastForwardButton, &QPushButton::clicked, this, &PhMediaPanel::onFastForward);
 
-	ui->_fastRewindButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
 	connect(ui->_fastRewindButton, &QPushButton::clicked, this, &PhMediaPanel::onRewind);
 
-	ui->_backButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
 	connect(ui->_backButton, &QPushButton::clicked, this, &PhMediaPanel::onBack);
 
-	ui->_nextFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowForward));
 	connect(ui->_nextFrameButton, &QPushButton::clicked, this, &PhMediaPanel::onNextFrame);
 
-	ui->_previousFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowBack));
 	connect(ui->_previousFrameButton, &QPushButton::clicked, this, &PhMediaPanel::onPreviousFrame);
 
 	connect(ui->_slider, &QSlider::sliderMoved, this, &PhMediaPanel::onSliderChanged);
@@ -243,9 +237,9 @@ void PhMediaPanel::updatePlayingState()
 		_playing = (_clock->rate() != 0);
 	PHDEBUG << _playing;
 	if(_playing)
-		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+		ui->_playButton->setIcon(QIcon(":pause"));
 	else
-		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+		ui->_playButton->setIcon(QIcon(":play"));
 }
 
 void PhMediaPanel::onTimeChanged(PhTime time)
