@@ -53,9 +53,15 @@ public:
 
 	/**
 	 * @brief Enable the panel slider
-	 * @param isEnabled True if the slider must be enabled, false otherwise.
+	 * @param enabled True if the slider must be enabled, false otherwise.
 	 */
-	void setSliderEnable(bool isEnabled);
+	void setSliderEnable(bool enabled);
+
+	/**
+	 * @brief Enable the dropdown allowing selecting speed
+	 * @param enabled True if the dropdown must be enabled, false otherwise.
+	 */
+	void setDropdownEnable(bool enabled);
 
 	/**
 	 * @brief Get the starting time

@@ -66,9 +66,14 @@ PhTimeCodeType PhMediaPanel::timeCodeType() const
 	}
 }
 
-void PhMediaPanel::setSliderEnable(bool isEnabled)
+void PhMediaPanel::setSliderEnable(bool enabled)
 {
-	ui->_slider->setEnabled(isEnabled);
+	ui->_slider->setEnabled(enabled);
+}
+
+void PhMediaPanel::setDropdownEnable(bool enabled)
+{
+	ui->timeCodeTypeCombo->setEnabled(enabled);
 }
 
 PhTime PhMediaPanel::timeIn() const

@@ -85,6 +85,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	// Setting up the media panel
 	_mediaPanel.setClock(_doc->videoTimeCodeType(), _strip.clock());
+	_mediaPanel.setDropdownEnable(false);
 
 	ui->actionDisplay_the_control_panel->setChecked(_settings->displayControlPanel());
 
