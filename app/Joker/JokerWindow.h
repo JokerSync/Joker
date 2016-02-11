@@ -154,6 +154,20 @@ protected:
 	bool isDocumentModified();
 
 private slots:
+	// Custom slots
+
+	void showMediaPanel();
+
+	void hideMediaPanel();
+
+	void onPaint(int width, int height);
+
+	void onVideoSync();
+
+	void setCurrentTime(PhTime time);
+
+	void setCurrentRate(PhRate rate);
+
 	// Qt Designer slots
 	void on_actionOpen_triggered();
 
@@ -193,13 +207,6 @@ private slots:
 
 	void on_actionClear_list_triggered();
 
-
-	// Custom slots
-
-	void showMediaPanel();
-
-	void hideMediaPanel();
-
 	void on_actionProperties_triggered();
 
 	void on_actionTest_mode_triggered();
@@ -236,10 +243,6 @@ private slots:
 
 	void on_actionHide_the_rythmo_triggered(bool checked);
 
-	void onPaint(int width, int height);
-
-	void onVideoSync();
-
 	void on_actionPrevious_loop_triggered();
 
 	void on_actionNext_loop_triggered();
@@ -247,10 +250,6 @@ private slots:
 	void on_actionDisplay_the_cuts_toggled(bool checked);
 
 	void on_actionDisplay_the_vertical_scale_triggered(bool checked);
-
-	void setCurrentTime(PhTime time);
-
-	void setCurrentRate(PhRate rate);
 
 	void on_actionDisplay_the_control_panel_triggered(bool checked);
 

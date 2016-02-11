@@ -362,6 +362,236 @@ void JokerWindow::onApplicationDeactivate()
 	hideMediaPanel();
 }
 
+void JokerWindow::showMediaPanel()
+{
+	// Don't show the mediaPanel if Joker has not thefocus.
+	if(_settings->displayControlPanel() && this->hasFocus()) {
+		_mediaPanel.show();
+	}
+}
+
+void JokerWindow::hideMediaPanel()
+{
+	_mediaPanel.hide();
+}
+
+void JokerWindow::onPaint(int width, int height)
+{
+#ifdef USE_VIDEO
+	PhClock *clock = _videoEngine.clock();
+#else
+	PhClock *clock = _strip.clock();
+#endif
+	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
+	PhTime clockTime = clock->time() + delay;
+
+	float stripHeightRatio = 0.0f;
+	if(!_settings->hideStrip())
+		stripHeightRatio = _settings->stripHeight();
+
+	int stripHeight = height * stripHeightRatio;
+	int videoHeight = height - stripHeight;
+	int videoWidth = videoHeight * 16 / 9;
+#ifdef USE_VIDEO
+	if(!_doc->forceRatio169() && (_videoEngine.height() > 0))
+		videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
+#endif
+	int videoX = 0;
+	// Center video if no information panel with next text
+	if(!_settings->displayNextText())
+		videoX = (width - videoWidth) / 2;
+
+#ifdef USE_VIDEO
+	// Display the video
+	if((videoHeight > 0)) {
+		if(_videoEngine.height() > 0) {
+
+			int blackStripHeight = 0; // Height of the upper black strip when video is too large
+			int realVideoHeight = videoHeight;
+			if(videoWidth > width) {
+				videoWidth = width;
+				if(_doc->forceRatio169())
+					realVideoHeight = videoWidth  * 9 / 16;
+				else
+					realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
+			}
+			blackStripHeight = (height - stripHeight - realVideoHeight) / 2;
+
+			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight);
+		}
+		else if(_settings->displayLogo()) {
+			// The logo file is 500px in native format
+			int logoHeight = _videoLogo.originalSize().height();
+			int logoWidth = _videoLogo.originalSize().width();
+			if(videoHeight < logoHeight) {
+				logoHeight = videoHeight;
+				logoWidth = _videoLogo.originalSize().width() * logoHeight / _videoLogo.originalSize().height();
+			}
+			if(width < logoWidth) {
+				logoWidth = width;
+				logoHeight = _videoLogo.originalSize().height() * logoWidth / _videoLogo.originalSize().width();
+			}
+			_videoLogo.setRect((width - logoHeight) / 2, (videoHeight - logoHeight) / 2, logoHeight, logoHeight);
+			_videoLogo.draw();
+		}
+	}
+#endif
+
+	// Get the selected people list
+	QList<PhPeople*> selectedPeoples;
+	foreach(QString name, _settings->selectedPeopleNameList()) {
+		PhPeople *people = _strip.doc()->peopleByName(name);
+		if(people)
+			selectedPeoples.append(people);
+	}
+
+	int x = videoX + videoWidth;
+	int y = 0;
+	if(_settings->displayNextText()) {
+		QColor infoColor = _settings->backgroundColorLight();
+		int infoWidth = width - videoWidth;
+		int spacing = 4;
+
+		// Display the title
+		{
+			QString title = _strip.doc()->title().toLower();
+			if(_strip.doc()->episode().length() > 0)
+				title += " #" + _strip.doc()->episode().toLower();
+
+			int titleHeight = height / 40;
+			int titleWidth = _strip.getHUDFont()->getNominalWidth(title) / 2;
+			PhGraphicText titleText(_strip.getHUDFont());
+			titleText.setColor(infoColor);
+			titleText.setRect(x + spacing, y, titleWidth, titleHeight);
+			y += titleHeight;
+			titleText.setContent(title);
+			titleText.setZ(5);
+			titleText.draw();
+		}
+
+		// Display the current timecode
+		{
+			int tcWidth = infoWidth - 2 * spacing;
+			int tcHeight = infoWidth / 6;
+			PhGraphicText tcText(_strip.getHUDFont());
+			tcText.setColor(infoColor);
+			tcText.setRect(x + 4, y, tcWidth, tcHeight);
+			tcText.setContent(PhTimeCode::stringFromTime(clockTime, timeCodeType()));
+			tcText.draw();
+
+			y += tcHeight;
+		}
+
+		// Display the box around current loop number
+		int boxWidth = infoWidth / 4;
+		int boxHeight = infoWidth / 6;
+		int nextTcWidth = infoWidth - boxWidth - 12;
+		int nextTcHeight = nextTcWidth / 6;
+		{
+			int borderWidth = 2;
+			PhGraphicSolidRect outsideLoopRect(x + spacing, y, boxWidth, boxHeight);
+			outsideLoopRect.setColor(infoColor);
+			outsideLoopRect.draw();
+
+			PhGraphicSolidRect insideLoopRect(x + spacing + borderWidth, y + borderWidth, boxWidth - 2 * borderWidth, boxHeight - 2 * borderWidth);
+			insideLoopRect.setColor(Qt::black);
+			insideLoopRect.draw();
+
+			// Display the current loop number
+			QString loopLabel = "0";
+			PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
+			if(currentLoop)
+				loopLabel = currentLoop->label();
+			int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) / 2;
+			int loopHeight = nextTcHeight;
+			int loopX = x + spacing + (boxWidth - loopWidth) / 2;
+			int loopY = y + (boxHeight - loopHeight) / 2;
+
+			PhGraphicText gCurrentLoop(_strip.getHUDFont(), loopLabel);
+
+			gCurrentLoop.setRect(loopX, loopY, loopWidth, loopHeight);
+			gCurrentLoop.setColor(infoColor);
+			gCurrentLoop.draw();
+		}
+
+		// Display the next timecode
+		{
+			/// The next time code will be the next element of the people from the list.
+			PhStripText *nextText = NULL;
+			if(selectedPeoples.count()) {
+				nextText = _strip.doc()->nextText(selectedPeoples, clockTime);
+				if(nextText == NULL)
+					nextText = _strip.doc()->nextText(selectedPeoples, 0);
+			}
+			else {
+				nextText = _strip.doc()->nextText(clockTime);
+				if(nextText == NULL)
+					nextText = _strip.doc()->nextText(0);
+			}
+
+			PhTime nextTextTime = 0;
+			if(nextText != NULL)
+				nextTextTime = nextText->timeIn();
+
+			PhGraphicText nextTCText(_strip.getHUDFont());
+			nextTCText.setColor(infoColor);
+
+			int nextTcX = x + 2 * spacing + boxWidth;
+			int nextTcY = y + (boxHeight - nextTcHeight) / 2;
+			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
+
+			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, timeCodeType()));
+			nextTCText.draw();
+
+			y += boxHeight;
+		}
+	}
+
+	_strip.draw(0, videoHeight, width, stripHeight, x, y, selectedPeoples);
+	foreach(QString info, _strip.infos()) {
+		ui->videoStripView->addInfo(info);
+	}
+
+	if((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000)) {
+		PhGraphicText errorText(_strip.getHUDFont(), tr("No video sync"));
+		errorText.setRect(width / 2 - 100, height / 2 - 25, 200, 50);
+		int red = (_lastVideoSyncElapsed.elapsed() - 1000) / 4;
+		if (red > 255)
+			red = 255;
+		errorText.setColor(QColor(red, 0, 0));
+		errorText.draw();
+	}
+}
+
+void JokerWindow::onVideoSync()
+{
+	_lastVideoSyncElapsed.restart();
+}
+
+void JokerWindow::setCurrentTime(PhTime time)
+{
+	_strip.clock()->setTime(time);
+#ifdef USE_MIDI
+	if(_settings->sendMmcMessage())
+		_mtcWriter.sendMMCGotoFromTime(time);
+#endif
+
+}
+
+void JokerWindow::setCurrentRate(PhRate rate)
+{
+	_strip.clock()->setRate(rate);
+#ifdef USE_MIDI
+	if(_settings->sendMmcMessage()) {
+		_mtcWriter.sendMMCGotoFromTime(currentTime());
+		if(rate == 0.0f)
+			_mtcWriter.sendMMCStop();
+		else if(rate == 1.0f)
+			_mtcWriter.sendMMCPlay();
+	}
+#endif // USE_MIDI
+}
+
 void JokerWindow::on_actionOpen_triggered()
 {
 	hideMediaPanel();
@@ -613,20 +843,6 @@ void JokerWindow::on_actionPreferences_triggered()
 	showMediaPanel();
 }
 
-void JokerWindow::showMediaPanel()
-{
-	// Don't show the mediaPanel if Joker has not thefocus.
-	if(_settings->displayControlPanel() && this->hasFocus()) {
-		_mediaPanel.show();
-	}
-}
-
-void JokerWindow::hideMediaPanel()
-{
-	_mediaPanel.hide();
-}
-
-
 void JokerWindow::on_actionProperties_triggered()
 {
 	_propertyDialog.show();
@@ -806,199 +1022,6 @@ void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
 	_settings->setHideStrip(checked);
 }
 
-void JokerWindow::onPaint(int width, int height)
-{
-#ifdef USE_VIDEO
-	PhClock *clock = _videoEngine.clock();
-#else
-	PhClock *clock = _strip.clock();
-#endif
-	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
-	PhTime clockTime = clock->time() + delay;
-
-	float stripHeightRatio = 0.0f;
-	if(!_settings->hideStrip())
-		stripHeightRatio = _settings->stripHeight();
-
-	int stripHeight = height * stripHeightRatio;
-	int videoHeight = height - stripHeight;
-	int videoWidth = videoHeight * 16 / 9;
-#ifdef USE_VIDEO
-	if(!_doc->forceRatio169() && (_videoEngine.height() > 0))
-		videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
-#endif
-	int videoX = 0;
-	// Center video if no information panel with next text
-	if(!_settings->displayNextText())
-		videoX = (width - videoWidth) / 2;
-
-#ifdef USE_VIDEO
-	// Display the video
-	if((videoHeight > 0)) {
-		if(_videoEngine.height() > 0) {
-
-			int blackStripHeight = 0; // Height of the upper black strip when video is too large
-			int realVideoHeight = videoHeight;
-			if(videoWidth > width) {
-				videoWidth = width;
-				if(_doc->forceRatio169())
-					realVideoHeight = videoWidth  * 9 / 16;
-				else
-					realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
-			}
-			blackStripHeight = (height - stripHeight - realVideoHeight) / 2;
-
-			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight);
-		}
-		else if(_settings->displayLogo()) {
-			// The logo file is 500px in native format
-			int logoHeight = _videoLogo.originalSize().height();
-			int logoWidth = _videoLogo.originalSize().width();
-			if(videoHeight < logoHeight) {
-				logoHeight = videoHeight;
-				logoWidth = _videoLogo.originalSize().width() * logoHeight / _videoLogo.originalSize().height();
-			}
-			if(width < logoWidth) {
-				logoWidth = width;
-				logoHeight = _videoLogo.originalSize().height() * logoWidth / _videoLogo.originalSize().width();
-			}
-			_videoLogo.setRect((width - logoHeight) / 2, (videoHeight - logoHeight) / 2, logoHeight, logoHeight);
-			_videoLogo.draw();
-		}
-	}
-#endif
-
-	// Get the selected people list
-	QList<PhPeople*> selectedPeoples;
-	foreach(QString name, _settings->selectedPeopleNameList()) {
-		PhPeople *people = _strip.doc()->peopleByName(name);
-		if(people)
-			selectedPeoples.append(people);
-	}
-
-	int x = videoX + videoWidth;
-	int y = 0;
-	if(_settings->displayNextText()) {
-		QColor infoColor = _settings->backgroundColorLight();
-		int infoWidth = width - videoWidth;
-		int spacing = 4;
-
-		// Display the title
-		{
-			QString title = _strip.doc()->title().toLower();
-			if(_strip.doc()->episode().length() > 0)
-				title += " #" + _strip.doc()->episode().toLower();
-
-			int titleHeight = height / 40;
-			int titleWidth = _strip.getHUDFont()->getNominalWidth(title) / 2;
-			PhGraphicText titleText(_strip.getHUDFont());
-			titleText.setColor(infoColor);
-			titleText.setRect(x + spacing, y, titleWidth, titleHeight);
-			y += titleHeight;
-			titleText.setContent(title);
-			titleText.setZ(5);
-			titleText.draw();
-		}
-
-		// Display the current timecode
-		{
-			int tcWidth = infoWidth - 2 * spacing;
-			int tcHeight = infoWidth / 6;
-			PhGraphicText tcText(_strip.getHUDFont());
-			tcText.setColor(infoColor);
-			tcText.setRect(x + 4, y, tcWidth, tcHeight);
-			tcText.setContent(PhTimeCode::stringFromTime(clockTime, timeCodeType()));
-			tcText.draw();
-
-			y += tcHeight;
-		}
-
-		// Display the box around current loop number
-		int boxWidth = infoWidth / 4;
-		int boxHeight = infoWidth / 6;
-		int nextTcWidth = infoWidth - boxWidth - 12;
-		int nextTcHeight = nextTcWidth / 6;
-		{
-			int borderWidth = 2;
-			PhGraphicSolidRect outsideLoopRect(x + spacing, y, boxWidth, boxHeight);
-			outsideLoopRect.setColor(infoColor);
-			outsideLoopRect.draw();
-
-			PhGraphicSolidRect insideLoopRect(x + spacing + borderWidth, y + borderWidth, boxWidth - 2 * borderWidth, boxHeight - 2 * borderWidth);
-			insideLoopRect.setColor(Qt::black);
-			insideLoopRect.draw();
-
-			// Display the current loop number
-			QString loopLabel = "0";
-			PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
-			if(currentLoop)
-				loopLabel = currentLoop->label();
-			int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) / 2;
-			int loopHeight = nextTcHeight;
-			int loopX = x + spacing + (boxWidth - loopWidth) / 2;
-			int loopY = y + (boxHeight - loopHeight) / 2;
-
-			PhGraphicText gCurrentLoop(_strip.getHUDFont(), loopLabel);
-
-			gCurrentLoop.setRect(loopX, loopY, loopWidth, loopHeight);
-			gCurrentLoop.setColor(infoColor);
-			gCurrentLoop.draw();
-		}
-
-		// Display the next timecode
-		{
-			/// The next time code will be the next element of the people from the list.
-			PhStripText *nextText = NULL;
-			if(selectedPeoples.count()) {
-				nextText = _strip.doc()->nextText(selectedPeoples, clockTime);
-				if(nextText == NULL)
-					nextText = _strip.doc()->nextText(selectedPeoples, 0);
-			}
-			else {
-				nextText = _strip.doc()->nextText(clockTime);
-				if(nextText == NULL)
-					nextText = _strip.doc()->nextText(0);
-			}
-
-			PhTime nextTextTime = 0;
-			if(nextText != NULL)
-				nextTextTime = nextText->timeIn();
-
-			PhGraphicText nextTCText(_strip.getHUDFont());
-			nextTCText.setColor(infoColor);
-
-			int nextTcX = x + 2 * spacing + boxWidth;
-			int nextTcY = y + (boxHeight - nextTcHeight) / 2;
-			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
-
-			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, timeCodeType()));
-			nextTCText.draw();
-
-			y += boxHeight;
-		}
-	}
-
-	_strip.draw(0, videoHeight, width, stripHeight, x, y, selectedPeoples);
-	foreach(QString info, _strip.infos()) {
-		ui->videoStripView->addInfo(info);
-	}
-
-	if((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000)) {
-		PhGraphicText errorText(_strip.getHUDFont(), tr("No video sync"));
-		errorText.setRect(width / 2 - 100, height / 2 - 25, 200, 50);
-		int red = (_lastVideoSyncElapsed.elapsed() - 1000) / 4;
-		if (red > 255)
-			red = 255;
-		errorText.setColor(QColor(red, 0, 0));
-		errorText.draw();
-	}
-}
-
-void JokerWindow::onVideoSync()
-{
-	_lastVideoSyncElapsed.restart();
-}
-
 void JokerWindow::on_actionPrevious_loop_triggered()
 {
 	PhTime time = _doc->previousLoopTime(currentTime());
@@ -1027,30 +1050,6 @@ void JokerWindow::on_actionSet_distance_between_two_feet_triggered()
 void JokerWindow::on_actionDisplay_the_vertical_scale_triggered(bool checked)
 {
 	_settings->setDisplayVerticalScale(checked);
-}
-
-void JokerWindow::setCurrentTime(PhTime time)
-{
-	_strip.clock()->setTime(time);
-#ifdef USE_MIDI
-	if(_settings->sendMmcMessage())
-		_mtcWriter.sendMMCGotoFromTime(time);
-#endif
-
-}
-
-void JokerWindow::setCurrentRate(PhRate rate)
-{
-	_strip.clock()->setRate(rate);
-#ifdef USE_MIDI
-	if(_settings->sendMmcMessage()) {
-		_mtcWriter.sendMMCGotoFromTime(currentTime());
-		if(rate == 0.0f)
-			_mtcWriter.sendMMCStop();
-		else if(rate == 1.0f)
-			_mtcWriter.sendMMCPlay();
-	}
-#endif // USE_MIDI
 }
 
 PhTime JokerWindow::currentTime()
