@@ -62,6 +62,8 @@ private slots:
 	void updateFpsLabel(PhTimeCodeType tcType);
 	void onTick();
 
+	void on_writerLoopPlaybackCheckBox_toggled(bool checked);
+
 private:
 	void updateWriterInfoLabel();
 
