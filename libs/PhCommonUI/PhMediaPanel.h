@@ -45,11 +45,16 @@ public:
 	PhTimeCodeType timeCodeType() const;
 
 	/**
+	 * @brief Set type timecode type used to display the time.
+	 * @param tcType A timecode type
+	 */
+	void setTimeCodeType(PhTimeCodeType tcType);
+
+	/**
 	 * @brief Set the clock that the panel will display
-	 * @param tcType The timecode type used to display the time.
 	 * @param clock A clock instance.
 	 */
-	void setClock(PhTimeCodeType tcType, PhClock * clock);
+	void setClock(PhClock * clock);
 
 	/**
 	 * @brief Enable the panel slider

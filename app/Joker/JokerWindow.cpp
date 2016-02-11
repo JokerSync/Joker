@@ -77,14 +77,20 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::onVideoSync);
 #endif
 
+#ifdef USE_LTC
+	connect(&_ltcReader, &PhLtcReader::timeCodeTypeChanged, this, &JokerWindow::onTimecodeTypeChanged);
+#endif
+
 #ifdef USE_MIDI
 	_mtcReader.force24as2398(_settings->mtcForce24as2398());
+	connect(&_mtcReader, &PhMidiTimeCodeReader::timeCodeTypeChanged, this, &JokerWindow::onTimecodeTypeChanged);
 #endif // USE_MIDI
 
 	setupSyncProtocol();
 
 	// Setting up the media panel
-	_mediaPanel.setClock(_doc->videoTimeCodeType(), _strip.clock());
+	_mediaPanel.setTimeCodeType(_doc->videoTimeCodeType());
+	_mediaPanel.setClock(_strip.clock());
 	_mediaPanel.setDropdownEnable(false);
 
 	ui->actionDisplay_the_control_panel->setChecked(_settings->displayControlPanel());
@@ -172,6 +178,7 @@ void JokerWindow::setupSyncProtocol()
 		if(_sonySlave.open()) {
 			clock = _sonySlave.clock();
 			_lastVideoSyncElapsed.start();
+			onTimecodeTypeChanged((PhTimeCodeType)_settings->sonySlaveCommunicationTimeCodeType());
 		}
 		else {
 			type = PhSynchronizer::NoSync;
@@ -590,6 +597,33 @@ void JokerWindow::setCurrentRate(PhRate rate)
 			_mtcWriter.sendMMCPlay();
 	}
 #endif // USE_MIDI
+}
+
+void JokerWindow::onTimecodeTypeChanged(PhTimeCodeType tcType)
+{
+	switch (_settings->synchroProtocol()) {
+#ifdef USE_SONY
+	case PhSynchronizer::Sony:
+		tcType = _sonySlave.timeCodeType();
+		break;
+#endif
+#ifdef USE_LTC
+	case PhSynchronizer::LTC:
+		tcType = _ltcReader.timeCodeType();
+		break;
+#endif
+#ifdef USE_MIDI
+	case PhSynchronizer::MTC:
+		tcType = _mtcReader.timeCodeType();
+		break;
+#endif
+	default:
+#ifdef USE_VIDEO
+		tcType = _videoEngine.timeCodeType();
+#endif
+		break;
+	}
+	_mediaPanel.setTimeCodeType(tcType);
 }
 
 void JokerWindow::on_actionOpen_triggered()

@@ -106,12 +106,17 @@ bool PhMediaPanel::isPlaying()
 		return _playing;
 }
 
-void PhMediaPanel::setClock(PhTimeCodeType tcType, PhClock *clock)
+void PhMediaPanel::setTimeCodeType(PhTimeCodeType tcType)
 {
 	onTimeCodeTypeChanged(tcType);
+}
+
+
+void PhMediaPanel::setClock(PhClock *clock)
+{
 	_clock = clock;
 	if(_clock) {
-		ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(_clock->time(), tcType));
+		ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(_clock->time(), this->timeCodeType()));
 		connect(_clock, &PhClock::timeChanged, this, &PhMediaPanel::onTimeChanged);
 		connect(_clock, &PhClock::rateChanged, this, &PhMediaPanel::onRateChanged);
 	}

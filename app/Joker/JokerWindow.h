@@ -168,6 +168,8 @@ private slots:
 
 	void setCurrentRate(PhRate rate);
 
+	void onTimecodeTypeChanged(PhTimeCodeType tcType);
+
 	// Qt Designer slots
 	void on_actionOpen_triggered();
 
