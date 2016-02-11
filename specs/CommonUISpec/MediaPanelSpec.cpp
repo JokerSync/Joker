@@ -21,7 +21,8 @@ go_bandit([](){
 			PhMediaPanel panel;
 			PhClock clock;
 
-			panel.setClock(PhTimeCodeType25, &clock);
+			panel.setTimeCodeType(PhTimeCodeType25);
+			panel.setClock(&clock);
 
 			clock.setRate(1);
 
@@ -36,7 +37,8 @@ go_bandit([](){
 			PhMediaPanel panel;
 			PhClock clock;
 
-			panel.setClock(PhTimeCodeType25, &clock);
+			panel.setTimeCodeType(PhTimeCodeType25);
+			panel.setClock(&clock);
 
 			QTest::keyPress(&panel, Qt::Key_Space);
 

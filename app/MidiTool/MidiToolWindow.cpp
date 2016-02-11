@@ -28,7 +28,8 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	on_writeMtcCheckBox_clicked(_settings->writeMTC());
 
 	_mtcWriter.clock()->setTime(_settings->writerTimeIn());
-	ui->writerMediaPanel->setClock(_mtcWriter.timeCodeType(), _mtcWriter.clock());
+	ui->writerMediaPanel->setTimeCodeType(_mtcWriter.timeCodeType());
+	ui->writerMediaPanel->setClock(_mtcWriter.clock());
 	ui->writerMediaPanel->setTimeIn(_settings->writerTimeIn());
 	ui->writerMediaPanel->setLength(_settings->writerLoopLength());
 	ui->writerLoopPlaybackCheckBox->setChecked(_settings->looping());

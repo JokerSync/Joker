@@ -6,7 +6,8 @@ TimecodePlayerWindow::TimecodePlayerWindow(QWidget *parent) :
 {
 	ui->setupUi(this);
 	ui->mediaController->setLength(PhTimeCode::timeFromString("00:01:00:00", PhTimeCodeType25));
-	ui->mediaController->setClock(PhTimeCodeType25, &_clock);
+	ui->mediaController->setTimeCodeType(PhTimeCodeType25);
+	ui->mediaController->setClock(&_clock);
 	_clock.setTime(PhTimeCode::timeFromString("01:00:00:00", PhTimeCodeType25));
 
 	_timer = new QTimer();

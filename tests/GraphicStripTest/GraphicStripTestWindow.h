@@ -42,7 +42,7 @@ private slots:
 	void on_actionGenerate_triggered();
 
 	// Other
-	void onTimeChanged(PhTime time);
+	void onTimeChanged(PhTime);
 	void onRateChanged(PhRate rate);
 
 	void on_actionPlay_pause_triggered();

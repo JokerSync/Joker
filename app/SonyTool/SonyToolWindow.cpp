@@ -38,11 +38,11 @@ SonyToolWindow::SonyToolWindow() :
 	connect(&_sonyMaster, &PhSonyMasterController::statusData, this, &SonyToolWindow::onStatusData);
 
 	// connect clocks to media panel
-	ui->masterPanel->setClock(_sonyMaster.timeCodeType(), NULL);
+	ui->masterPanel->setTimeCodeType(_sonyMaster.timeCodeType());
 	connect(_sonyMaster.clock(), &PhClock::timeChanged, ui->masterPanel, &PhMediaPanel::onTimeChanged);
 	connect(_sonyMaster.clock(), &PhClock::rateChanged, ui->masterPanel, &PhMediaPanel::onRateChanged);
 
-	ui->slavePanel->setClock(_sonySlave.timeCodeType(), NULL);
+	ui->slavePanel->setTimeCodeType(_sonySlave.timeCodeType());
 	connect(_sonySlave.clock(), &PhClock::timeChanged, ui->slavePanel, &PhMediaPanel::onTimeChanged);
 	connect(_sonySlave.clock(), &PhClock::rateChanged, ui->slavePanel, &PhMediaPanel::onRateChanged);
 
