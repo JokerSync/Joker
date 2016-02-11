@@ -43,8 +43,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mtcReader(PhTimeCodeType25),
 	_mtcWriter(PhTimeCodeType25),
 #endif
-	_mediaPanelState(MediaPanelHidden),
-	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
 	_resizingStrip(false)
 {
@@ -113,11 +111,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->actionDisplay_the_control_panel->setChecked(_settings->displayControlPanel());
 
-	fadeInMediaPanel();
-
-	// Trigger a timer that will fade off the media panel after 3 seconds
-	this->connect(&_mediaPanelTimer, &QTimer::timeout, this, &JokerWindow::fadeOutMediaPanel);
-	_mediaPanelTimer.start(3000);
+	showMediaPanel();
 
 	this->setFocus();
 
@@ -311,8 +305,6 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 	case QEvent::HoverEnter:
 	case QEvent::HoverMove:
 		{
-			fadeInMediaPanel();
-
 			QMouseEvent * mouseEvent = (QMouseEvent*)event;
 			// Check if it is near the video/strip border
 			float stripHeight = this->height() * _settings->stripHeight();
@@ -383,7 +375,7 @@ QAction *JokerWindow::fullScreenAction()
 void JokerWindow::onApplicationActivate()
 {
 	PhDocumentWindow::onApplicationActivate();
-	fadeInMediaPanel();
+	showMediaPanel();
 }
 
 void JokerWindow::onApplicationDeactivate()
@@ -411,7 +403,7 @@ void JokerWindow::on_actionOpen_triggered()
 			openDocument(fileName);
 		}
 	}
-	fadeInMediaPanel();
+	showMediaPanel();
 }
 
 void JokerWindow::on_actionPlay_pause_triggered()
@@ -506,7 +498,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 			setCurrentTime(_doc->videoTimeIn());
 	}
 
-	fadeInMediaPanel();
+	showMediaPanel();
 #endif
 }
 
@@ -586,7 +578,7 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 	}
 #endif
 
-	fadeInMediaPanel();
+	showMediaPanel();
 }
 
 
@@ -599,7 +591,7 @@ void JokerWindow::on_actionAbout_triggered()
 	dlg.setTimePlayed(_settings->timePlayed());
 	dlg.exec();
 
-	fadeInMediaPanel();
+	showMediaPanel();
 }
 
 
@@ -640,57 +632,20 @@ void JokerWindow::on_actionPreferences_triggered()
 #endif // USE_MIDI
 	}
 
-	fadeInMediaPanel();
+	showMediaPanel();
 }
 
-void JokerWindow::fadeInMediaPanel()
+void JokerWindow::showMediaPanel()
 {
 	// Don't show the mediaPanel if Joker has not thefocus.
 	if(_settings->displayControlPanel() && this->hasFocus()) {
 		_mediaPanel.show();
-		_mediaPanelAnimation.stop();
-		_mediaPanelAnimation.setDuration(300);
-		_mediaPanelAnimation.setEndValue(1);
-		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
-		_mediaPanelAnimation.start();
-		_mediaPanelState = MediaPanelVisible;
-		_mediaPanelTimer.start(3000);
-	}
-}
-
-void JokerWindow::fadeOutMediaPanel()
-{
-	// Don't fade out the media panel if the mouse is over it
-	if(_mediaPanel.underMouse() or _mediaPanel.isMousePressed()) {
-		PHDEBUG << "Don't hide";
-		_mediaPanelTimer.start(3000);
-		return;
-	}
-
-//	PHDEBUG << _mediaPanelState;
-	switch(_mediaPanelState) {
-	case MediaPanelVisible:
-		PHDEBUG << "Hiding";
-		_mediaPanelAnimation.setDuration(1000);
-		_mediaPanelAnimation.setEndValue(0);
-		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
-		_mediaPanelAnimation.start();
-		_mediaPanelTimer.start(1000);
-		_mediaPanelState = MediaPanelHidding;
-		break;
-	case MediaPanelHidding:
-		hideMediaPanel();
-		break;
-	default:
-		break;
 	}
 }
 
 void JokerWindow::hideMediaPanel()
 {
 	_mediaPanel.hide();
-	_mediaPanelState = MediaPanelHidden;
-	_mediaPanelTimer.stop();
 }
 
 
@@ -712,7 +667,7 @@ void JokerWindow::on_actionTimecode_triggered()
 	if(dlg.exec() == QDialog::Accepted)
 		setCurrentTime(dlg.time());
 
-	fadeInMediaPanel();
+	showMediaPanel();
 }
 
 void JokerWindow::on_actionNext_element_triggered()
@@ -854,7 +809,7 @@ void JokerWindow::on_actionSend_feedback_triggered()
 	hideMediaPanel();
 	PhFeedbackDialog dlg(_settings, this);
 	dlg.exec();
-	fadeInMediaPanel();
+	showMediaPanel();
 }
 
 void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
@@ -1134,9 +1089,9 @@ void JokerWindow::on_actionDisplay_the_control_panel_triggered(bool checked)
 {
 	_settings->setDisplayControlPanel(checked);
 	if(checked)
-		fadeInMediaPanel();
+		showMediaPanel();
 	else
-		fadeOutMediaPanel();
+		hideMediaPanel();
 }
 
 void JokerWindow::on_actionDisplay_the_information_panel_triggered(bool checked)

@@ -106,18 +106,6 @@ protected:
 	bool eventFilter(QObject *sender, QEvent *event);
 
 	///
-	/// @brief The PhFloatingMediaPanel state enumeration
-	///
-	/// The enumeration is used to handle the different state of the PhFloatingMediaPanel:
-	/// visible, hidding and hidden for a best fade-in and fade-out effect.
-	///
-	enum MediaPanelState {
-		MediaPanelVisible,
-		MediaPanelHidding,
-		MediaPanelHidden
-	};
-
-	///
 	/// @brief Give the ui->menuOpen_recent item to PhDocumentWindow
 	///
 	/// PhDocumentWindow will fill the submenu item with the
@@ -208,9 +196,7 @@ private slots:
 
 	// Custom slots
 
-	void fadeInMediaPanel();
-
-	void fadeOutMediaPanel();
+	void showMediaPanel();
 
 	void hideMediaPanel();
 
@@ -305,9 +291,6 @@ private:
 #endif
 
 	PhFloatingMediaPanel _mediaPanel;
-	QTimer _mediaPanelTimer;
-	MediaPanelState _mediaPanelState;
-	QPropertyAnimation _mediaPanelAnimation;
 
 	PropertyDialog _propertyDialog;
 
