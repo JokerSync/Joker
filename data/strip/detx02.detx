@@ -19,5 +19,12 @@
 			<lipsync timecode="01:00:03:00" type="out_open"/>
 		</line>
 		<shot timecode="01:00:04:00"/>
+		<line role="bob" track="1">
+			<lipsync timecode="01:00:05:00" type="in_open"/>
+			<text>What&apos;s</text>
+			<lipsync timecode="01:00:06:00" type="neutral"/>
+			<text>up?</text>
+			<lipsync timecode="01:00:07:00" type="out_open"/>
+		</line>
 	</body>
 </detx>

@@ -12,3 +12,8 @@ void PhStripSentence::add(PhStripText *text)
 	this->setTimeOut(text->timeOut());
 	this->setContent(this->content() + text->content());
 }
+
+QList<PhStripText *> PhStripSentence::texts()
+{
+	return _texts;
+}

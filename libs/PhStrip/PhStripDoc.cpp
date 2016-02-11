@@ -280,8 +280,8 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	foreach (PhStripCut *cut, this->cuts()) {
 		objectList.append(cut);
 	}
-	foreach (PhStripText *text, this->texts()) {
-		objectList.append(text);
+	foreach (PhStripSentence *sentence, this->sentences()) {
+		objectList.append(sentence);
 	}
 
 	qSort(objectList.begin(), objectList.end(), PhStripObject::dtcomp);
@@ -299,23 +299,36 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 			ptShot.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(cut->timeIn(), _videoTimeCodeType).toStdString());
 			ptBody.push_back(std::make_pair("shot", ptShot));
 		}
-		else if(dynamic_cast<PhStripText*>(obj)) {
-			PhStripText *text = dynamic_cast<PhStripText*>(obj);
+		else if(dynamic_cast<PhStripSentence*>(obj)) {
+			PhStripSentence *sentence = dynamic_cast<PhStripSentence*>(obj);
 			ptree ptLine;
-			ptLine.put("<xmlattr>.role", idMap[text->people()].toStdString());
-			ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(text->y() * 4));
+			ptLine.put("<xmlattr>.role", idMap[sentence->people()].toStdString());
+			ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(sentence->y() * 4));
 
-			ptree lipsync1;
-			lipsync1.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeIn(), _videoTimeCodeType).toStdString());
-			lipsync1.put("<xmlattr>.type", "in_open");
-			ptLine.push_back(std::make_pair("lipsync", lipsync1));
+			ptree lipsyncIn;
+			lipsyncIn.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeIn(), _videoTimeCodeType).toStdString());
+			lipsyncIn.put("<xmlattr>.type", "in_open");
+			ptLine.push_back(std::make_pair("lipsync", lipsyncIn));
 
-			ptLine.put("text", text->content().toStdString());
+			foreach(PhStripText *text, sentence->texts()) {
+				ptree pText;
+				pText.put("", text->content().toStdString());
+				ptLine.push_back(std::make_pair("text", pText));
 
-			ptree lipsync2;
-			lipsync2.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
-			lipsync2.put("<xmlattr>.type", "out_open");
-			ptLine.push_back(std::make_pair("lipsync", lipsync2));
+				if(text->timeOut() != sentence->timeOut()) {
+					ptree lipsync;
+					PHDEBUG << text->timeOut();
+					lipsync.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
+					lipsync.put("<xmlattr>.type", "neutral");
+					ptLine.push_back(std::make_pair("lipsync", lipsync));
+				}
+			}
+
+			PHDEBUG << sentence->timeOut();
+			ptree lipsyncOut;
+			lipsyncOut.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeOut(), _videoTimeCodeType).toStdString());
+			lipsyncOut.put("<xmlattr>.type", "out_open");
+			ptLine.push_back(std::make_pair("lipsync", lipsyncOut));
 
 			ptBody.push_back(std::make_pair("line", ptLine));
 		}

@@ -21,6 +21,12 @@ public:
 	 * @param text A text
 	 */
 	void add(PhStripText *text);
+
+	/**
+	 * @brief List of texts
+	 * @return A list
+	 */
+	QList<PhStripText*> texts();
 private:
 	QList<PhStripText*> _texts;
 };

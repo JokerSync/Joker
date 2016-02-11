@@ -377,6 +377,8 @@ go_bandit([](){
 
 					doc.addCut(new PhStripCut(s2t25("01:00:04:00"), PhStripCut::Simple));
 
+					doc.addText(new PhStripText(s2t25("01:00:05:00"), bob, s2t25("01:00:06:00"), 0.25f, "What's", 0.25f));
+					doc.addText(new PhStripText(s2t25("01:00:06:00"), bob, s2t25("01:00:07:00"), 0.25f, "up?", 0.25f));
 
 					AssertThat(doc.exportDetXFile("detx02save.detx", s2t("01:01:01:01", PhTimeCodeType25)), IsTrue());
 
