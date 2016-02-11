@@ -273,39 +273,52 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	// export <body>
 	ptree ptBody;
 
-	// export <loop> list
-	foreach (const PhStripLoop *loop, this->loops()) {
-		ptree ptLoop;
-		ptLoop.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(loop->timeIn(), _videoTimeCodeType).toStdString());
-		ptBody.push_back(std::make_pair("loop", ptLoop));
+	QList<PhStripObject*> objectList;
+	foreach (PhStripLoop *loop, this->loops()) {
+		objectList.append(loop);
+	}
+	foreach (PhStripCut *cut, this->cuts()) {
+		objectList.append(cut);
+	}
+	foreach (PhStripText *text, this->texts()) {
+		objectList.append(text);
 	}
 
-	// export <cut> list
-	foreach (const PhStripCut *cut, this->cuts()) {
-		ptree ptShot;
-		ptShot.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(cut->timeIn(), _videoTimeCodeType).toStdString());
-		ptBody.push_back(std::make_pair("shot", ptShot));
-	}
+	qSort(objectList.begin(), objectList.end(), PhStripObject::dtcomp);
 
-	// export <line> list
-	foreach(const PhStripText *text, texts()) {
-		ptree ptLine;
-		ptLine.put("<xmlattr>.role", idMap[text->people()].toStdString());
-		ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(text->y() * 4));
+	foreach (PhStripObject *obj, objectList) {
+		if(dynamic_cast<PhStripLoop*>(obj)) {
+			PhStripLoop *loop = dynamic_cast<PhStripLoop*>(obj);
+			ptree ptLoop;
+			ptLoop.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(loop->timeIn(), _videoTimeCodeType).toStdString());
+			ptBody.push_back(std::make_pair("loop", ptLoop));
+		}
+		else if(dynamic_cast<PhStripCut*>(obj)) {
+			PhStripCut *cut = dynamic_cast<PhStripCut*>(obj);
+			ptree ptShot;
+			ptShot.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(cut->timeIn(), _videoTimeCodeType).toStdString());
+			ptBody.push_back(std::make_pair("shot", ptShot));
+		}
+		else if(dynamic_cast<PhStripText*>(obj)) {
+			PhStripText *text = dynamic_cast<PhStripText*>(obj);
+			ptree ptLine;
+			ptLine.put("<xmlattr>.role", idMap[text->people()].toStdString());
+			ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(text->y() * 4));
 
-		ptree lipsync1;
-		lipsync1.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeIn(), _videoTimeCodeType).toStdString());
-		lipsync1.put("<xmlattr>.type", "in_open");
-		ptLine.push_back(std::make_pair("lipsync", lipsync1));
+			ptree lipsync1;
+			lipsync1.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeIn(), _videoTimeCodeType).toStdString());
+			lipsync1.put("<xmlattr>.type", "in_open");
+			ptLine.push_back(std::make_pair("lipsync", lipsync1));
 
-		ptLine.put("text", text->content().toStdString());
+			ptLine.put("text", text->content().toStdString());
 
-		ptree lipsync2;
-		lipsync2.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
-		lipsync2.put("<xmlattr>.type", "out_open");
-		ptLine.push_back(std::make_pair("lipsync", lipsync2));
+			ptree lipsync2;
+			lipsync2.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
+			lipsync2.put("<xmlattr>.type", "out_open");
+			ptLine.push_back(std::make_pair("lipsync", lipsync2));
 
-		ptBody.push_back(std::make_pair("line", ptLine));
+			ptBody.push_back(std::make_pair("line", ptLine));
+		}
 	}
 
 	ptDetX.add_child("detx.body", ptBody);
@@ -1070,10 +1083,6 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 	}
 	PHDEBUG << "database opened: " << db.tables().count() << "tables.";
 
-//	foreach(QString tableName, db.tables()) {
-//		PHDEBUG << tableName;
-//	}
-
 	QSqlQuery query(db);
 
 	PhTimeCodeType tcType = PhTimeCodeType25;
@@ -1083,8 +1092,6 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 	if(query.exec("SELECT * FROM PREFERENCE;")) {
 		PHDEBUG << "PREFERENCE:";
 		while(query.next()) {
-//			for(int i = 0; i < 7; i++)
-//				PHDEBUG << i << query.value(i);
 			switch(query.value(0).toInt()) {
 			case 6:
 				offset = query.value(3).toLongLong();
@@ -1137,8 +1144,6 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 	if(query.exec("SELECT * FROM TEXTE;")) {
 		PHDEBUG << "TEXTE:";
 		while(query.next()) {
-//			for(int i = 0; i < 21; i++)
-//				PHDEBUG << i << query.value(i);
 			int peopleId = query.value(0).toInt();
 			PhPeople* people = (peopleMap.contains(peopleId)) ? peopleMap[peopleId] : NULL;
 #warning /// @todo check text time in/out

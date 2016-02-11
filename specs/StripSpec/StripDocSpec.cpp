@@ -232,7 +232,7 @@ go_bandit([](){
 				});
 			});
 
-			describe("import test01.detx", [&]() {
+			describe("empty doc", [&]() {
 				before_each([&](){
 					doc.reset();
 				});
@@ -361,6 +361,33 @@ go_bandit([](){
 					AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType2398));
 					AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType2398), Equals("01:00:00:00"));
 					AssertThat(t2s(doc.lastTime(), PhTimeCodeType2398), Equals("01:01:01:01"));
+				});
+
+				it("export pretty file", [&](){
+					doc.setTitle("A title");
+					doc.setVideoFilePath("test.mov");
+					doc.setVideoTimeIn(s2t25("01:00:00:00"), PhTimeCodeType25);
+					PhPeople *bob = new PhPeople("Bob", "#FF0000", "picture");
+					doc.addPeople(bob);
+
+					doc.addLoop(new PhStripLoop(s2t25("01:00:00:00"), "1"));
+					doc.addCut(new PhStripCut(s2t25("01:00:01:00"), PhStripCut::Simple));
+
+					doc.addText(new PhStripText(s2t25("01:00:02:00"), bob, s2t25("01:00:03:00"), 0.25f, "Hi!", 0.25f));
+
+					doc.addCut(new PhStripCut(s2t25("01:00:04:00"), PhStripCut::Simple));
+
+
+					AssertThat(doc.exportDetXFile("detx02save.detx", s2t("01:01:01:01", PhTimeCodeType25)), IsTrue());
+
+					QFile expectedFile("detx02.detx");
+					AssertThat(expectedFile.open(QIODevice::ReadOnly), IsTrue());
+					QFile actualFile("detx02save.detx");
+					AssertThat(actualFile.open(QIODevice::ReadOnly), IsTrue());
+					QString expected = QTextStream(&expectedFile).readAll();
+					QString actual = QTextStream(&actualFile).readAll();
+
+					AssertThat(actual, Equals(expected));
 				});
 			});
 		});
