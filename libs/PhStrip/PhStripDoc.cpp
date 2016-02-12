@@ -1187,16 +1187,16 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 	QString extension = QFileInfo(fileName).suffix().toLower();
 	// Try to open the document
 	if(extension == "detx") {
-		return importDetXFile(fileName);
+		result = importDetXFile(fileName);
 	}
 	else if(extension == "mos") {
-		return importMosFile(fileName);
+		result = importMosFile(fileName);
 	}
 	else if(extension == "drb") {
-		return importDrbFile(fileName);
+		result = importDrbFile(fileName);
 	}
 	else if(extension == "syn6") {
-		return importSyn6File(fileName);
+		result = importSyn6File(fileName);
 	}
 	else if(extension == "strip" or extension == "joker") {
 		QFile xmlFile(fileName);
@@ -1266,6 +1266,7 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 		delete domDoc;
 
 	}
+	_modified = false;
 	return result;
 }
 
