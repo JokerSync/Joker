@@ -287,20 +287,17 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	qSort(objectList.begin(), objectList.end(), PhStripObject::dtcomp);
 
 	foreach (PhStripObject *obj, objectList) {
-		if(dynamic_cast<PhStripLoop*>(obj)) {
-			PhStripLoop *loop = dynamic_cast<PhStripLoop*>(obj);
+		if(PhStripLoop *loop = dynamic_cast<PhStripLoop*>(obj)) {
 			ptree ptLoop;
 			ptLoop.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(loop->timeIn(), _videoTimeCodeType).toStdString());
 			ptBody.push_back(std::make_pair("loop", ptLoop));
 		}
-		else if(dynamic_cast<PhStripCut*>(obj)) {
-			PhStripCut *cut = dynamic_cast<PhStripCut*>(obj);
+		else if(PhStripCut *cut = dynamic_cast<PhStripCut*>(obj)) {
 			ptree ptShot;
 			ptShot.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(cut->timeIn(), _videoTimeCodeType).toStdString());
 			ptBody.push_back(std::make_pair("shot", ptShot));
 		}
-		else if(dynamic_cast<PhStripSentence*>(obj)) {
-			PhStripSentence *sentence = dynamic_cast<PhStripSentence*>(obj);
+		else if(PhStripSentence *sentence = dynamic_cast<PhStripSentence*>(obj)) {
 			ptree ptLine;
 			ptLine.put("<xmlattr>.role", idMap[sentence->people()].toStdString());
 			ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(sentence->y() * 4));
