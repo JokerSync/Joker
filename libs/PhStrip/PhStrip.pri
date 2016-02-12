@@ -6,14 +6,15 @@
 QT		+= xml sql
 
 SOURCES += \
-    $$PWD/PhStripDoc.cpp \
+	$$PWD/PhStripDoc.cpp \
 	$$PWD/PhStripObject.cpp \
 	$$PWD/PhStripCut.cpp \
 	$$PWD/PhStripText.cpp \
 	$$PWD/PhStripLoop.cpp \
 	$$PWD/PhPeople.cpp \
     $$PWD/PhStripPeopleObject.cpp \
-    $$PWD/PhStripDetect.cpp
+    $$PWD/PhStripDetect.cpp \
+    $$PWD/PhStripSentence.cpp
 
 HEADERS += \
 	$$PWD/PhStripDoc.h \
@@ -23,5 +24,6 @@ HEADERS += \
 	$$PWD/PhStripLoop.h \
 	$$PWD/PhPeople.h \
     $$PWD/PhStripPeopleObject.h \
-    $$PWD/PhStripDetect.h
+    $$PWD/PhStripDetect.h \
+    $$PWD/PhStripSentence.h
 

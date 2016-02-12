@@ -28,9 +28,11 @@ MidiToolWindow::MidiToolWindow(MidiToolSettings *settings, QWidget *parent) :
 	on_writeMtcCheckBox_clicked(_settings->writeMTC());
 
 	_mtcWriter.clock()->setTime(_settings->writerTimeIn());
-	ui->writerMediaPanel->setClock(_mtcWriter.timeCodeType(), _mtcWriter.clock());
+	ui->writerMediaPanel->setTimeCodeType(_mtcWriter.timeCodeType());
+	ui->writerMediaPanel->setClock(_mtcWriter.clock());
 	ui->writerMediaPanel->setTimeIn(_settings->writerTimeIn());
 	ui->writerMediaPanel->setLength(_settings->writerLoopLength());
+	ui->writerLoopPlaybackCheckBox->setChecked(_settings->looping());
 
 	connect(&_clockTimer, &QTimer::timeout, this, &MidiToolWindow::onTick);
 
@@ -152,6 +154,8 @@ void MidiToolWindow::onGoToTime(PhTime time)
 void MidiToolWindow::onWriterTimeChanged(PhTime time)
 {
 	PHDBG(2) << PhTimeCode::getAverageFps(_mtcWriter.timeCodeType()) << "/" << PhTimeCode::stringFromTime(time, _mtcWriter.timeCodeType());
+	if(_settings->looping() && (time > _settings->writerTimeIn() + _settings->writerLoopLength()))
+		_mtcWriter.clock()->setTime(_settings->writerTimeIn());
 }
 
 void MidiToolWindow::updateTCTypeSetting(PhTimeCodeType tcType)
@@ -200,4 +204,9 @@ void MidiToolWindow::updateWriterInfoLabel()
 	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn(), _mtcWriter.timeCodeType()))
 	               .arg(PhTimeCode::stringFromTime(_settings->writerTimeIn() + _settings->writerLoopLength(), _mtcWriter.timeCodeType()));
 	ui->writerInfoLabel->setText(info);
+}
+
+void MidiToolWindow::on_writerLoopPlaybackCheckBox_toggled(bool checked)
+{
+	_settings->setLooping(checked);
 }

@@ -14,7 +14,32 @@
    <string notr="true">Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QLabel {
+	color: white;
+}
+QPushButton, QComboBox {
+	color: white;
+	background: grey;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 5px;
+	border-color: white;
+}
+
+QComboBox::drop-down {
+	border-style: solid;
+	border-width: 0 0 0 1px;
+	border-color: white;
+}
+
+QComboBox::down-arrow {
+    image: url(:drop);
+	width: 16px;
+}
+
+#PhMediaPanel {
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(60, 60, 60, 255), stop:1 rgba(0, 0, 0, 255));
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -100,25 +125,24 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="_hLayoutBottom">
-     <property name="topMargin">
-      <number>0</number>
+     <property name="spacing">
+      <number>10</number>
      </property>
      <item>
       <widget class="QPushButton" name="_backButton">
        <property name="minimumSize">
         <size>
-         <width>60</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
+         <width>0</width>
          <height>30</height>
         </size>
        </property>
        <property name="text">
-        <string>Back</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/fa-fast-backward_16_0_ffffff_none.png</normalon>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -126,18 +150,17 @@
       <widget class="QPushButton" name="_fastRewindButton">
        <property name="minimumSize">
         <size>
-         <width>60</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
+         <width>0</width>
          <height>30</height>
         </size>
        </property>
        <property name="text">
-        <string>FR</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/fa-backward_16_0_ffffff_none.png</normalon>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -145,18 +168,17 @@
       <widget class="QPushButton" name="_previousFrameButton">
        <property name="minimumSize">
         <size>
-         <width>60</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
+         <width>0</width>
          <height>30</height>
         </size>
        </property>
        <property name="text">
         <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/fa-step-backward_16_0_ffffff_none.png</normalon>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -164,18 +186,17 @@
       <widget class="QPushButton" name="_playButton">
        <property name="minimumSize">
         <size>
-         <width>60</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
+         <width>0</width>
          <height>30</height>
         </size>
        </property>
        <property name="text">
-        <string>Play</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/play</normalon>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -183,18 +204,17 @@
       <widget class="QPushButton" name="_nextFrameButton">
        <property name="minimumSize">
         <size>
-         <width>60</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
+         <width>0</width>
          <height>30</height>
         </size>
        </property>
        <property name="text">
         <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/fa-step-forward_16_0_ffffff_none.png</normalon>
+        </iconset>
        </property>
       </widget>
      </item>
@@ -202,23 +222,28 @@
       <widget class="QPushButton" name="_fastForwardButton">
        <property name="minimumSize">
         <size>
-         <width>60</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
+         <width>0</width>
          <height>30</height>
         </size>
        </property>
        <property name="text">
-        <string>FF</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normalon>:/fa-forward_16_0_ffffff_none.png</normalon>
+        </iconset>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QComboBox" name="timeCodeTypeCombo">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>30</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>100</width>

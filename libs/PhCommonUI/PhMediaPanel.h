@@ -45,17 +45,28 @@ public:
 	PhTimeCodeType timeCodeType() const;
 
 	/**
+	 * @brief Set type timecode type used to display the time.
+	 * @param tcType A timecode type
+	 */
+	void setTimeCodeType(PhTimeCodeType tcType);
+
+	/**
 	 * @brief Set the clock that the panel will display
-	 * @param tcType The timecode type used to display the time.
 	 * @param clock A clock instance.
 	 */
-	void setClock(PhTimeCodeType tcType, PhClock * clock);
+	void setClock(PhClock * clock);
 
 	/**
 	 * @brief Enable the panel slider
-	 * @param isEnabled True if the slider must be enabled, false otherwise.
+	 * @param enabled True if the slider must be enabled, false otherwise.
 	 */
-	void setSliderEnable(bool isEnabled);
+	void setSliderEnable(bool enabled);
+
+	/**
+	 * @brief Enable the dropdown allowing selecting speed
+	 * @param enabled True if the dropdown must be enabled, false otherwise.
+	 */
+	void setDropdownEnable(bool enabled);
 
 	/**
 	 * @brief Get the starting time

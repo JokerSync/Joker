@@ -22,7 +22,8 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	ui->setupUi(this);
 	ui->videoView->setGraphicSettings(settings);
 
-	_mediaPanelDialog.setClock(_videoEngine.timeCodeType(), _videoEngine.clock());
+	_mediaPanelDialog.setTimeCodeType(_videoEngine.timeCodeType());
+	_mediaPanelDialog.setClock(_videoEngine.clock());
 
 	connect(&_videoEngine, &PhVideoEngine::timeCodeTypeChanged, &_mediaPanelDialog, &PhMediaPanel::onTimeCodeTypeChanged);
 

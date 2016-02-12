@@ -88,5 +88,27 @@ go_bandit([](){
 			QString currentFolder = QDir::currentPath();
 			AssertThat(settings->lastDocumentFolder(), Equals(currentFolder));
 		});
+
+		it("recall last geometry", [&](){
+			WindowSpecWindow w1(settings);
+			w1.show();
+
+			AssertThat(w1.width(), Equals(800));
+			AssertThat(w1.height(), Equals(600));
+
+			w1.setGeometry(50, 100, 400, 300);
+
+			AssertThat(w1.width(), Equals(400));
+			AssertThat(w1.height(), Equals(300));
+
+			w1.close();
+
+			WindowSpecWindow w2(settings);
+
+			w2.show();
+
+			AssertThat(w2.width(), Equals(400));
+			AssertThat(w2.height(), Equals(300));
+		});
 	});
 });

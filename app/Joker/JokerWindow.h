@@ -106,18 +106,6 @@ protected:
 	bool eventFilter(QObject *sender, QEvent *event);
 
 	///
-	/// @brief The PhFloatingMediaPanel state enumeration
-	///
-	/// The enumeration is used to handle the different state of the PhFloatingMediaPanel:
-	/// visible, hidding and hidden for a best fade-in and fade-out effect.
-	///
-	enum MediaPanelState {
-		MediaPanelVisible,
-		MediaPanelHidding,
-		MediaPanelHidden
-	};
-
-	///
 	/// @brief Give the ui->menuOpen_recent item to PhDocumentWindow
 	///
 	/// PhDocumentWindow will fill the submenu item with the
@@ -166,6 +154,22 @@ protected:
 	bool isDocumentModified();
 
 private slots:
+	// Custom slots
+
+	void showMediaPanel();
+
+	void hideMediaPanel();
+
+	void onPaint(int width, int height);
+
+	void onVideoSync();
+
+	void setCurrentTime(PhTime time);
+
+	void setCurrentRate(PhRate rate);
+
+	void onTimecodeTypeChanged(PhTimeCodeType tcType);
+
 	// Qt Designer slots
 	void on_actionOpen_triggered();
 
@@ -205,15 +209,6 @@ private slots:
 
 	void on_actionClear_list_triggered();
 
-
-	// Custom slots
-
-	void fadeInMediaPanel();
-
-	void fadeOutMediaPanel();
-
-	void hideMediaPanel();
-
 	void on_actionProperties_triggered();
 
 	void on_actionTest_mode_triggered();
@@ -250,10 +245,6 @@ private slots:
 
 	void on_actionHide_the_rythmo_triggered(bool checked);
 
-	void onPaint(int width, int height);
-
-	void onVideoSync();
-
 	void on_actionPrevious_loop_triggered();
 
 	void on_actionNext_loop_triggered();
@@ -261,10 +252,6 @@ private slots:
 	void on_actionDisplay_the_cuts_toggled(bool checked);
 
 	void on_actionDisplay_the_vertical_scale_triggered(bool checked);
-
-	void setCurrentTime(PhTime time);
-
-	void setCurrentRate(PhRate rate);
 
 	void on_actionDisplay_the_control_panel_triggered(bool checked);
 
@@ -305,9 +292,6 @@ private:
 #endif
 
 	PhFloatingMediaPanel _mediaPanel;
-	QTimer _mediaPanelTimer;
-	MediaPanelState _mediaPanelState;
-	QPropertyAnimation _mediaPanelAnimation;
 
 	PropertyDialog _propertyDialog;
 

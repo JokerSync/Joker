@@ -43,8 +43,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mtcReader(PhTimeCodeType25),
 	_mtcWriter(PhTimeCodeType25),
 #endif
-	_mediaPanelState(MediaPanelHidden),
-	_mediaPanelAnimation(&_mediaPanel, "windowOpacity"),
 	_firstDoc(true),
 	_resizingStrip(false)
 {
@@ -56,6 +54,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	ui->actionAbout->setMenuRole(QAction::AboutRole);
 
 	connect(ui->actionFullscreen, &QAction::triggered, this, &JokerWindow::toggleFullScreen);
+
+	this->restoreGeometry(_settings->windowGeometry());
 
 	ui->videoStripView->setGraphicSettings(_settings);
 
@@ -79,45 +79,25 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::onVideoSync);
 #endif
 
+#ifdef USE_LTC
+	connect(&_ltcReader, &PhLtcReader::timeCodeTypeChanged, this, &JokerWindow::onTimecodeTypeChanged);
+#endif
+
 #ifdef USE_MIDI
 	_mtcReader.force24as2398(_settings->mtcForce24as2398());
+	connect(&_mtcReader, &PhMidiTimeCodeReader::timeCodeTypeChanged, this, &JokerWindow::onTimecodeTypeChanged);
 #endif // USE_MIDI
 
 	setupSyncProtocol();
 
 	// Setting up the media panel
-	_mediaPanel.setClock(_doc->videoTimeCodeType(), _strip.clock());
-#warning /// @todo move to CSS file
-	_mediaPanel.setStyleSheet(
-	    "* {"
-	    "	  color: white;"
-	    "  }"
-	    "  PhMediaPanel { "
-	    "	  background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 0 rgb(40,40,40), stop: 1 black);"
-	    "	  border-style: solid;                                                                          "
-	    "	  border-width: 4px;                                                                            "
-	    "	  border-radius: 3px;                                                                           "
-	    "	  border-color: white;                                                                          "
-	    "  }                                                                                                "
-	    "  QPushButton, QComboBox{                                                                          "
-	    "	  background: grey;                                                                             "
-	    "	  border-style: outset;                                                                         "
-	    "	  border-width: 2px;                                                                            "
-	    "	  border-radius: 5px;                                                                           "
-	    "	  border-color: white;                                                                          "
-	    "  }                                                                                                "
-	    "  QLabel#_timecodeLabel{                                                                           "
-	    "	  padding: 10px;                                                                                "
-	    "  }                                                                                                "
-	    );
+	_mediaPanel.setTimeCodeType(_doc->videoTimeCodeType());
+	_mediaPanel.setClock(_strip.clock());
+	_mediaPanel.setDropdownEnable(false);
 
 	ui->actionDisplay_the_control_panel->setChecked(_settings->displayControlPanel());
 
-	fadeInMediaPanel();
-
-	// Trigger a timer that will fade off the media panel after 3 seconds
-	this->connect(&_mediaPanelTimer, &QTimer::timeout, this, &JokerWindow::fadeOutMediaPanel);
-	_mediaPanelTimer.start(3000);
+	showMediaPanel();
 
 	this->setFocus();
 
@@ -200,6 +180,7 @@ void JokerWindow::setupSyncProtocol()
 		if(_sonySlave.open()) {
 			clock = _sonySlave.clock();
 			_lastVideoSyncElapsed.start();
+			onTimecodeTypeChanged((PhTimeCodeType)_settings->sonySlaveCommunicationTimeCodeType());
 		}
 		else {
 			type = PhSynchronizer::NoSync;
@@ -311,8 +292,6 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 	case QEvent::HoverEnter:
 	case QEvent::HoverMove:
 		{
-			fadeInMediaPanel();
-
 			QMouseEvent * mouseEvent = (QMouseEvent*)event;
 			// Check if it is near the video/strip border
 			float stripHeight = this->height() * _settings->stripHeight();
@@ -383,7 +362,7 @@ QAction *JokerWindow::fullScreenAction()
 void JokerWindow::onApplicationActivate()
 {
 	PhDocumentWindow::onApplicationActivate();
-	fadeInMediaPanel();
+	showMediaPanel();
 }
 
 void JokerWindow::onApplicationDeactivate()
@@ -392,485 +371,17 @@ void JokerWindow::onApplicationDeactivate()
 	hideMediaPanel();
 }
 
-void JokerWindow::on_actionOpen_triggered()
-{
-	hideMediaPanel();
-
-	if(checkDocumentModification()) {
-		QString filter = tr("Rythmo files") + " (";
-		foreach(QString type, _settings->stripFileType())
-			filter += "*." + type + " ";
-		filter += ");";
-		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
-
-		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
-
-		dlg.setFileMode(QFileDialog::ExistingFile);
-		if(dlg.exec()) {
-			QString fileName = dlg.selectedFiles()[0];
-			openDocument(fileName);
-		}
-	}
-	fadeInMediaPanel();
-}
-
-void JokerWindow::on_actionPlay_pause_triggered()
-{
-	if(currentRate() == 0.0) {
-		setCurrentRate(1.0);
-	}
-	else {
-		setCurrentRate(0.0);
-	}
-}
-
-void JokerWindow::on_actionPlay_backward_triggered()
-{
-	setCurrentRate(-1.0);
-}
-
-void JokerWindow::on_actionStep_forward_triggered()
-{
-	setCurrentRate(0.0);
-	setCurrentTime(currentTime() + PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
-}
-
-void JokerWindow::on_actionStep_backward_triggered()
-{
-	setCurrentRate(0.0);
-	setCurrentTime(currentTime() - PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
-}
-
-void JokerWindow::on_actionStep_time_forward_triggered()
-{
-	setCurrentRate(0.0);
-	setCurrentTime(currentTime() + 1);
-}
-
-void JokerWindow::on_actionStep_time_backward_triggered()
-{
-	setCurrentRate(0.0);
-	setCurrentTime(currentTime() - 1);
-}
-
-void JokerWindow::on_action_3_triggered()
-{
-	setCurrentRate(-3.0);
-}
-
-void JokerWindow::on_action_1_triggered()
-{
-	setCurrentRate(-1.0);
-}
-
-void JokerWindow::on_action_0_5_triggered()
-{
-	setCurrentRate(-0.5);
-}
-
-void JokerWindow::on_action0_triggered()
-{
-	setCurrentRate(0.0);
-}
-
-void JokerWindow::on_action0_5_triggered()
-{
-	setCurrentRate(0.5);
-}
-
-void JokerWindow::on_action1_triggered()
-{
-	setCurrentRate(1.0);
-}
-
-void JokerWindow::on_action3_triggered()
-{
-	setCurrentRate(3.0);
-}
-
-void JokerWindow::on_actionOpen_Video_triggered()
-{
-#ifdef USE_VIDEO
-	hideMediaPanel();
-
-	QString lastFolder = _settings->lastVideoFolder();
-	QString filter = tr("Movie files") + " (";
-	foreach(QString type, _settings->videoFileType())
-		filter += "*." + type + " ";
-	filter += ");";
-
-	QFileDialog dlg(this, tr("Open a video..."), lastFolder, filter);
-	if(dlg.exec()) {
-		QString videoFile = dlg.selectedFiles()[0];
-		if(openVideoFile(videoFile))
-			setCurrentTime(_doc->videoTimeIn());
-	}
-
-	fadeInMediaPanel();
-#endif
-}
-
-#ifdef USE_VIDEO
-bool JokerWindow::openVideoFile(QString videoFile)
-{
-	QFileInfo lastFileInfo(_doc->videoFilePath());
-	QFileInfo fileInfo(videoFile);
-	if (fileInfo.exists() && _videoEngine.open(videoFile)) {
-		PhTime videoTimeIn = _videoEngine.timeIn();
-
-		if(videoTimeIn == 0) {
-			/* the video itself has no timestamp, and until now we have not
-			 * propagated the doc videoTimeIn to the videoEngine */
-			videoTimeIn = _doc->videoTimeIn();
-			_videoEngine.setTimeIn(videoTimeIn);
-			_videoEngine.clock()->setTime(videoTimeIn);
-
-			/* ask the user if he wants to change the video time in */
-			if(fileInfo.fileName() != lastFileInfo.fileName()) {
-				on_actionChange_timestamp_triggered();
-				videoTimeIn = _videoEngine.timeIn();
-			}
-		}
-
-		if(videoFile != _doc->videoFilePath()) {
-			_doc->setVideoFilePath(videoFile);
-			_doc->setVideoTimeIn(videoTimeIn, timeCodeType());
-			_doc->setModified(true);
-		}
-
-		_videoEngine.clock()->setTime(videoTimeIn);
-		_mediaPanel.setTimeIn(videoTimeIn);
-		_mediaPanel.setLength(_videoEngine.length());
-
-		_settings->setLastVideoFolder(fileInfo.absolutePath());
-		return true;
-	}
-	return false;
-}
-#endif
-
-void JokerWindow::timeCounter(PhTime elapsedTime)
-{
-	if(currentRate() == 1 && (PhSynchronizer::SyncType)_settings->synchroProtocol() != PhSynchronizer::NoSync) {
-		_settings->setTimePlayed(_settings->timePlayed() + elapsedTime);
-	}
-}
-
-void JokerWindow::on_actionChange_timestamp_triggered()
-{
-	hideMediaPanel();
-	setCurrentRate(0);
-	PhTime time = _synchronizer.videoClock()->time();
-
-#ifdef USE_VIDEO
-	if(_synchronizer.videoClock()->time() < _videoEngine.timeIn())
-		time = _videoEngine.timeIn();
-	else if(_synchronizer.videoClock()->time() > _videoEngine.timeIn() + _videoEngine.length())
-		time = _videoEngine.timeOut();
-
-	PhTimeCodeDialog dlg(_doc->videoTimeCodeType(), time);
-	if(dlg.exec() == QDialog::Accepted) {
-		PhTime timeStamp = 0;
-		if(_synchronizer.videoClock()->time() > _videoEngine.timeIn() + _videoEngine.length())
-			timeStamp = dlg.time() - (_videoEngine.length() - PhTimeCode::timePerFrame(timeCodeType()));
-		else if (_synchronizer.videoClock()->time() < _videoEngine.timeIn())
-			timeStamp =  dlg.time();
-		else
-			timeStamp = _videoEngine.timeIn() + dlg.time() - _synchronizer.videoClock()->time();
-
-		_videoEngine.setTimeIn(timeStamp);
-		setCurrentTime(dlg.time());
-		_doc->setVideoTimeIn(timeStamp, timeCodeType());
-		_mediaPanel.setTimeIn(timeStamp);
-		_doc->setModified(true);
-	}
-#endif
-
-	fadeInMediaPanel();
-}
-
-
-
-void JokerWindow::on_actionAbout_triggered()
-{
-	hideMediaPanel();
-
-	AboutDialog dlg;
-	dlg.setTimePlayed(_settings->timePlayed());
-	dlg.exec();
-
-	fadeInMediaPanel();
-}
-
-
-void JokerWindow::on_actionPreferences_triggered()
-{
-	hideMediaPanel();
-	int oldSynchroProtocol = _settings->synchroProtocol();
-#ifdef USE_LTC
-	QString oldLtcInputPort = _settings->ltcInputPort();
-#endif // USE_LTC
-#ifdef USE_MIDI
-	QString oldMtcInputPort = _settings->mtcInputPort();
-	QString oldMtcVirtualInputPort = _settings->mtcVirtualInputPort();
-	bool oldMtcInputUseExistingPort = _settings->mtcInputUseExistingPort();
-	bool oldSendMmcMessage = _settings->sendMmcMessage();
-	QString oldMmcOutputPort = _settings->mmcOutputPort();
-#endif // USE_MIDI
-
-	PreferencesDialog dlg(_settings);
-	if(dlg.exec() == QDialog::Accepted) {
-		if((oldSynchroProtocol != _settings->synchroProtocol())
-#ifdef USE_LTC
-		   || (oldLtcInputPort  != _settings->ltcInputPort())
-#endif // USE_LTC
-#ifdef USE_MIDI
-		   || (oldMtcInputPort != _settings->mtcInputPort())
-		   || (oldMtcVirtualInputPort != _settings->mtcVirtualInputPort())
-		   || (oldMtcInputUseExistingPort != _settings->mtcInputUseExistingPort())
-		   || (oldSendMmcMessage != _settings->sendMmcMessage())
-		   || (oldMmcOutputPort != _settings->mmcOutputPort())
-#endif // USE_MIDI
-		   ) {
-			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
-			setupSyncProtocol();
-		}
-#ifdef USE_MIDI
-		_mtcReader.force24as2398(_settings->mtcForce24as2398());
-#endif // USE_MIDI
-	}
-
-	fadeInMediaPanel();
-}
-
-void JokerWindow::fadeInMediaPanel()
+void JokerWindow::showMediaPanel()
 {
 	// Don't show the mediaPanel if Joker has not thefocus.
 	if(_settings->displayControlPanel() && this->hasFocus()) {
 		_mediaPanel.show();
-		_mediaPanelAnimation.stop();
-		_mediaPanelAnimation.setDuration(300);
-		_mediaPanelAnimation.setEndValue(1);
-		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
-		_mediaPanelAnimation.start();
-		_mediaPanelState = MediaPanelVisible;
-		_mediaPanelTimer.start(3000);
-	}
-}
-
-void JokerWindow::fadeOutMediaPanel()
-{
-	// Don't fade out the media panel if the mouse is over it
-	if(_mediaPanel.underMouse() or _mediaPanel.isMousePressed()) {
-		PHDEBUG << "Don't hide";
-		_mediaPanelTimer.start(3000);
-		return;
-	}
-
-//	PHDEBUG << _mediaPanelState;
-	switch(_mediaPanelState) {
-	case MediaPanelVisible:
-		PHDEBUG << "Hiding";
-		_mediaPanelAnimation.setDuration(1000);
-		_mediaPanelAnimation.setEndValue(0);
-		_mediaPanelAnimation.setEasingCurve(QEasingCurve::InOutSine);
-		_mediaPanelAnimation.start();
-		_mediaPanelTimer.start(1000);
-		_mediaPanelState = MediaPanelHidding;
-		break;
-	case MediaPanelHidding:
-		hideMediaPanel();
-		break;
-	default:
-		break;
 	}
 }
 
 void JokerWindow::hideMediaPanel()
 {
 	_mediaPanel.hide();
-	_mediaPanelState = MediaPanelHidden;
-	_mediaPanelTimer.stop();
-}
-
-
-void JokerWindow::on_actionProperties_triggered()
-{
-	_propertyDialog.show();
-}
-
-void JokerWindow::on_actionTest_mode_triggered()
-{
-	_settings->setStripTestMode(!_settings->stripTestMode());
-}
-
-void JokerWindow::on_actionTimecode_triggered()
-{
-	hideMediaPanel();
-
-	PhTimeCodeDialog dlg(timeCodeType(), currentTime());
-	if(dlg.exec() == QDialog::Accepted)
-		setCurrentTime(dlg.time());
-
-	fadeInMediaPanel();
-}
-
-void JokerWindow::on_actionNext_element_triggered()
-{
-	PhTime time = _doc->nextElementTime(currentTime());
-	if(time < PHTIMEMAX)
-		setCurrentTime(time);
-}
-
-void JokerWindow::on_actionPrevious_element_triggered()
-{
-	PhTime time = _doc->previousElementTime(currentTime());
-	if(time > PHTIMEMIN)
-		setCurrentTime(time);
-}
-
-void JokerWindow::on_actionClear_list_triggered()
-{
-	//Open the recent group
-	//	_settings->beginGroup("openRecent");
-	//	//List all keys
-	//	QStringList indexes = _settings->allKeys();
-	//	//Remove them from
-	//	foreach(QString index, indexes)
-	//	_settings->remove(index);
-
-	//	//Close the group
-	//	_settings->endGroup();
-
-	//Remove the buttons of the UI, keep the separator and the Clear button
-	foreach(QAction * action, ui->menuOpen_recent->actions()) {
-		// Break if the separator is reached
-		if(action->isSeparator())
-			break;
-		// Remove it
-		ui->menuOpen_recent->removeAction(action);
-		delete action;
-	}
-
-	// Remove all the buttons
-	//	_recentFileButtons.clear();
-	ui->menuOpen_recent->setEnabled(false);
-}
-
-void JokerWindow::on_actionSave_triggered()
-{
-	QString fileName = _settings->currentDocument();
-	QFileInfo info(fileName);
-	if(!info.exists() || (info.suffix() != "detx"))
-		on_actionSave_as_triggered();
-	else if(_doc->exportDetXFile(fileName, currentTime()))
-		_doc->setModified(false);
-	else
-		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
-}
-
-void JokerWindow::on_actionSave_as_triggered()
-{
-	hideMediaPanel();
-
-	QString fileName = _settings->currentDocument();
-	QString lastFolder = _settings->lastDocumentFolder();
-	// If there is no current strip file, ask for a name
-	if(fileName == "")
-		fileName = lastFolder;
-	else {
-		QFileInfo info(fileName);
-		if(info.suffix() != "detx")
-			fileName = lastFolder + "/" + info.completeBaseName() + ".detx";
-	}
-
-	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.detx");
-	if(fileName != "") {
-		if(_doc->exportDetXFile(fileName, currentTime())) {
-			_doc->setModified(false);
-			PhEditableDocumentWindow::saveDocument(fileName);
-		}
-		else
-			QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
-	}
-}
-
-bool JokerWindow::isDocumentModified()
-{
-	return _doc->modified();
-}
-
-void JokerWindow::on_actionSelect_character_triggered()
-{
-	hideMediaPanel();
-
-	PeopleDialog dlg(this, _doc, _settings);
-
-	dlg.restoreGeometry(_settings->peopleDialogGeometry());
-	dlg.exec();
-	_settings->setPeopleDialogGeometry(dlg.saveGeometry());
-}
-
-void JokerWindow::on_actionForce_16_9_ratio_triggered(bool checked)
-{
-	_doc->setForceRatio169(checked);
-	_doc->setModified(true);
-}
-
-void JokerWindow::on_actionInvert_colors_toggled(bool checked)
-{
-	_settings->setInvertColor(checked);
-}
-
-void JokerWindow::on_actionDisplay_feet_triggered(bool checked)
-{
-	_settings->setDisplayFeet(checked);
-}
-
-void JokerWindow::on_actionSet_first_foot_timecode_triggered()
-{
-	PhTimeCodeType tcType = timeCodeType();
-	PhTimeCodeDialog dlg(tcType, _settings->firstFootTime(), this);
-	if(dlg.exec())
-		_settings->setFirstFootTime(dlg.time());
-}
-
-void JokerWindow::on_actionNew_triggered()
-{
-	_doc->reset();
-	on_actionClose_video_triggered();
-	this->resetDocument();
-}
-
-void JokerWindow::on_actionClose_video_triggered()
-{
-#ifdef USE_VIDEO
-	_videoEngine.close();
-#endif
-}
-
-void JokerWindow::on_actionSend_feedback_triggered()
-{
-	hideMediaPanel();
-	PhFeedbackDialog dlg(_settings, this);
-	dlg.exec();
-	fadeInMediaPanel();
-}
-
-void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
-{
-#ifdef USE_VIDEO
-	_videoEngine.setDeinterlace(checked);
-	if(checked != _doc->videoDeinterlace()) {
-		_doc->setVideoDeinterlace(checked);
-		_doc->setModified(true);
-	}
-#endif
-}
-
-void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
-{
-	_settings->setHideStrip(checked);
 }
 
 void JokerWindow::onPaint(int width, int height)
@@ -1066,6 +577,487 @@ void JokerWindow::onVideoSync()
 	_lastVideoSyncElapsed.restart();
 }
 
+void JokerWindow::setCurrentTime(PhTime time)
+{
+	_strip.clock()->setTime(time);
+#ifdef USE_MIDI
+	if(_settings->sendMmcMessage())
+		_mtcWriter.sendMMCGotoFromTime(time);
+#endif
+
+}
+
+void JokerWindow::setCurrentRate(PhRate rate)
+{
+	_strip.clock()->setRate(rate);
+#ifdef USE_MIDI
+	if(_settings->sendMmcMessage()) {
+		_mtcWriter.sendMMCGotoFromTime(currentTime());
+		if(rate == 0.0f)
+			_mtcWriter.sendMMCStop();
+		else if(rate == 1.0f)
+			_mtcWriter.sendMMCPlay();
+	}
+#endif // USE_MIDI
+}
+
+void JokerWindow::onTimecodeTypeChanged(PhTimeCodeType tcType)
+{
+	switch (_settings->synchroProtocol()) {
+#ifdef USE_SONY
+	case PhSynchronizer::Sony:
+		tcType = _sonySlave.timeCodeType();
+		break;
+#endif
+#ifdef USE_LTC
+	case PhSynchronizer::LTC:
+		tcType = _ltcReader.timeCodeType();
+		break;
+#endif
+#ifdef USE_MIDI
+	case PhSynchronizer::MTC:
+		tcType = _mtcReader.timeCodeType();
+		break;
+#endif
+	default:
+#ifdef USE_VIDEO
+		tcType = _videoEngine.timeCodeType();
+#endif
+		break;
+	}
+	_mediaPanel.setTimeCodeType(tcType);
+}
+
+void JokerWindow::on_actionOpen_triggered()
+{
+	hideMediaPanel();
+
+	if(checkDocumentModification()) {
+		QString filter = tr("Rythmo files") + " (";
+		foreach(QString type, _settings->stripFileType())
+			filter += "*." + type + " ";
+		filter += ");";
+		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
+
+		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
+
+		dlg.setFileMode(QFileDialog::ExistingFile);
+		if(dlg.exec()) {
+			QString fileName = dlg.selectedFiles()[0];
+			openDocument(fileName);
+		}
+	}
+	showMediaPanel();
+}
+
+void JokerWindow::on_actionPlay_pause_triggered()
+{
+	if(currentRate() == 0.0) {
+		setCurrentRate(1.0);
+	}
+	else {
+		setCurrentRate(0.0);
+	}
+}
+
+void JokerWindow::on_actionPlay_backward_triggered()
+{
+	setCurrentRate(-1.0);
+}
+
+void JokerWindow::on_actionStep_forward_triggered()
+{
+	setCurrentRate(0.0);
+	setCurrentTime(currentTime() + PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
+}
+
+void JokerWindow::on_actionStep_backward_triggered()
+{
+	setCurrentRate(0.0);
+	setCurrentTime(currentTime() - PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
+}
+
+void JokerWindow::on_actionStep_time_forward_triggered()
+{
+	setCurrentRate(0.0);
+	setCurrentTime(currentTime() + 1);
+}
+
+void JokerWindow::on_actionStep_time_backward_triggered()
+{
+	setCurrentRate(0.0);
+	setCurrentTime(currentTime() - 1);
+}
+
+void JokerWindow::on_action_3_triggered()
+{
+	setCurrentRate(-3.0);
+}
+
+void JokerWindow::on_action_1_triggered()
+{
+	setCurrentRate(-1.0);
+}
+
+void JokerWindow::on_action_0_5_triggered()
+{
+	setCurrentRate(-0.5);
+}
+
+void JokerWindow::on_action0_triggered()
+{
+	setCurrentRate(0.0);
+}
+
+void JokerWindow::on_action0_5_triggered()
+{
+	setCurrentRate(0.5);
+}
+
+void JokerWindow::on_action1_triggered()
+{
+	setCurrentRate(1.0);
+}
+
+void JokerWindow::on_action3_triggered()
+{
+	setCurrentRate(3.0);
+}
+
+void JokerWindow::on_actionOpen_Video_triggered()
+{
+#ifdef USE_VIDEO
+	hideMediaPanel();
+
+	QString lastFolder = _settings->lastVideoFolder();
+	QString filter = tr("Movie files") + " (";
+	foreach(QString type, _settings->videoFileType())
+		filter += "*." + type + " ";
+	filter += ");";
+
+	QFileDialog dlg(this, tr("Open a video..."), lastFolder, filter);
+	if(dlg.exec()) {
+		QString videoFile = dlg.selectedFiles()[0];
+		if(openVideoFile(videoFile))
+			setCurrentTime(_doc->videoTimeIn());
+	}
+
+	showMediaPanel();
+#endif
+}
+
+#ifdef USE_VIDEO
+bool JokerWindow::openVideoFile(QString videoFile)
+{
+	QFileInfo lastFileInfo(_doc->videoFilePath());
+	QFileInfo fileInfo(videoFile);
+	if (fileInfo.exists() && _videoEngine.open(videoFile)) {
+		PhTime videoTimeIn = _videoEngine.timeIn();
+
+		if(videoTimeIn == 0) {
+			/* the video itself has no timestamp, and until now we have not
+			 * propagated the doc videoTimeIn to the videoEngine */
+			videoTimeIn = _doc->videoTimeIn();
+			_videoEngine.setTimeIn(videoTimeIn);
+			_videoEngine.clock()->setTime(videoTimeIn);
+
+			/* ask the user if he wants to change the video time in */
+			if(fileInfo.fileName() != lastFileInfo.fileName()) {
+				on_actionChange_timestamp_triggered();
+				videoTimeIn = _videoEngine.timeIn();
+			}
+		}
+
+		if(videoFile != _doc->videoFilePath()) {
+			_doc->setVideoFilePath(videoFile);
+			_doc->setVideoTimeIn(videoTimeIn, timeCodeType());
+			_doc->setModified(true);
+		}
+
+		_videoEngine.clock()->setTime(videoTimeIn);
+		_mediaPanel.setTimeIn(videoTimeIn);
+		_mediaPanel.setLength(_videoEngine.length());
+
+		_settings->setLastVideoFolder(fileInfo.absolutePath());
+		return true;
+	}
+	return false;
+}
+#endif
+
+void JokerWindow::timeCounter(PhTime elapsedTime)
+{
+	if(currentRate() == 1 && (PhSynchronizer::SyncType)_settings->synchroProtocol() != PhSynchronizer::NoSync) {
+		_settings->setTimePlayed(_settings->timePlayed() + elapsedTime);
+	}
+}
+
+void JokerWindow::on_actionChange_timestamp_triggered()
+{
+	hideMediaPanel();
+	setCurrentRate(0);
+	PhTime time = _synchronizer.videoClock()->time();
+
+#ifdef USE_VIDEO
+	if(_synchronizer.videoClock()->time() < _videoEngine.timeIn())
+		time = _videoEngine.timeIn();
+	else if(_synchronizer.videoClock()->time() > _videoEngine.timeIn() + _videoEngine.length())
+		time = _videoEngine.timeOut();
+
+	PhTimeCodeDialog dlg(_doc->videoTimeCodeType(), time);
+	if(dlg.exec() == QDialog::Accepted) {
+		PhTime timeStamp = 0;
+		if(_synchronizer.videoClock()->time() > _videoEngine.timeIn() + _videoEngine.length())
+			timeStamp = dlg.time() - (_videoEngine.length() - PhTimeCode::timePerFrame(timeCodeType()));
+		else if (_synchronizer.videoClock()->time() < _videoEngine.timeIn())
+			timeStamp =  dlg.time();
+		else
+			timeStamp = _videoEngine.timeIn() + dlg.time() - _synchronizer.videoClock()->time();
+
+		_videoEngine.setTimeIn(timeStamp);
+		setCurrentTime(dlg.time());
+		_doc->setVideoTimeIn(timeStamp, timeCodeType());
+		_mediaPanel.setTimeIn(timeStamp);
+		_doc->setModified(true);
+	}
+#endif
+
+	showMediaPanel();
+}
+
+
+
+void JokerWindow::on_actionAbout_triggered()
+{
+	hideMediaPanel();
+
+	AboutDialog dlg;
+	dlg.setTimePlayed(_settings->timePlayed());
+	dlg.exec();
+
+	showMediaPanel();
+}
+
+
+void JokerWindow::on_actionPreferences_triggered()
+{
+	hideMediaPanel();
+	int oldSynchroProtocol = _settings->synchroProtocol();
+#ifdef USE_LTC
+	QString oldLtcInputPort = _settings->ltcInputPort();
+#endif // USE_LTC
+#ifdef USE_MIDI
+	QString oldMtcInputPort = _settings->mtcInputPort();
+	QString oldMtcVirtualInputPort = _settings->mtcVirtualInputPort();
+	bool oldMtcInputUseExistingPort = _settings->mtcInputUseExistingPort();
+	bool oldSendMmcMessage = _settings->sendMmcMessage();
+	QString oldMmcOutputPort = _settings->mmcOutputPort();
+#endif // USE_MIDI
+
+	PreferencesDialog dlg(_settings);
+	if(dlg.exec() == QDialog::Accepted) {
+		if((oldSynchroProtocol != _settings->synchroProtocol())
+#ifdef USE_LTC
+		   || (oldLtcInputPort  != _settings->ltcInputPort())
+#endif // USE_LTC
+#ifdef USE_MIDI
+		   || (oldMtcInputPort != _settings->mtcInputPort())
+		   || (oldMtcVirtualInputPort != _settings->mtcVirtualInputPort())
+		   || (oldMtcInputUseExistingPort != _settings->mtcInputUseExistingPort())
+		   || (oldSendMmcMessage != _settings->sendMmcMessage())
+		   || (oldMmcOutputPort != _settings->mmcOutputPort())
+#endif // USE_MIDI
+		   ) {
+			PHDEBUG << "Set protocol:" << _settings->synchroProtocol();
+			setupSyncProtocol();
+		}
+#ifdef USE_MIDI
+		_mtcReader.force24as2398(_settings->mtcForce24as2398());
+#endif // USE_MIDI
+	}
+
+	showMediaPanel();
+}
+
+void JokerWindow::on_actionProperties_triggered()
+{
+	_propertyDialog.show();
+}
+
+void JokerWindow::on_actionTest_mode_triggered()
+{
+	_settings->setStripTestMode(!_settings->stripTestMode());
+}
+
+void JokerWindow::on_actionTimecode_triggered()
+{
+	hideMediaPanel();
+
+	PhTimeCodeDialog dlg(timeCodeType(), currentTime());
+	if(dlg.exec() == QDialog::Accepted)
+		setCurrentTime(dlg.time());
+
+	showMediaPanel();
+}
+
+void JokerWindow::on_actionNext_element_triggered()
+{
+	PhTime time = _doc->nextElementTime(currentTime());
+	if(time < PHTIMEMAX)
+		setCurrentTime(time);
+}
+
+void JokerWindow::on_actionPrevious_element_triggered()
+{
+	PhTime time = _doc->previousElementTime(currentTime());
+	if(time > PHTIMEMIN)
+		setCurrentTime(time);
+}
+
+void JokerWindow::on_actionClear_list_triggered()
+{
+	//Open the recent group
+	//	_settings->beginGroup("openRecent");
+	//	//List all keys
+	//	QStringList indexes = _settings->allKeys();
+	//	//Remove them from
+	//	foreach(QString index, indexes)
+	//	_settings->remove(index);
+
+	//	//Close the group
+	//	_settings->endGroup();
+
+	//Remove the buttons of the UI, keep the separator and the Clear button
+	foreach(QAction * action, ui->menuOpen_recent->actions()) {
+		// Break if the separator is reached
+		if(action->isSeparator())
+			break;
+		// Remove it
+		ui->menuOpen_recent->removeAction(action);
+		delete action;
+	}
+
+	// Remove all the buttons
+	//	_recentFileButtons.clear();
+	ui->menuOpen_recent->setEnabled(false);
+}
+
+void JokerWindow::on_actionSave_triggered()
+{
+	QString fileName = _settings->currentDocument();
+	QFileInfo info(fileName);
+	if(!info.exists() || (info.suffix() != "detx"))
+		on_actionSave_as_triggered();
+	else if(_doc->exportDetXFile(fileName, currentTime()))
+		_doc->setModified(false);
+	else
+		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
+}
+
+void JokerWindow::on_actionSave_as_triggered()
+{
+	hideMediaPanel();
+
+	QString fileName = _settings->currentDocument();
+	QString lastFolder = _settings->lastDocumentFolder();
+	// If there is no current strip file, ask for a name
+	if(fileName == "")
+		fileName = lastFolder;
+	else {
+		QFileInfo info(fileName);
+		if(info.suffix() != "detx")
+			fileName = lastFolder + "/" + info.completeBaseName() + ".detx";
+	}
+
+	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.detx");
+	if(fileName != "") {
+		if(_doc->exportDetXFile(fileName, currentTime())) {
+			_doc->setModified(false);
+			PhEditableDocumentWindow::saveDocument(fileName);
+		}
+		else
+			QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
+	}
+}
+
+bool JokerWindow::isDocumentModified()
+{
+	return _doc->modified();
+}
+
+void JokerWindow::on_actionSelect_character_triggered()
+{
+	hideMediaPanel();
+
+	PeopleDialog dlg(this, _doc, _settings);
+
+	dlg.restoreGeometry(_settings->peopleDialogGeometry());
+	dlg.exec();
+	_settings->setPeopleDialogGeometry(dlg.saveGeometry());
+}
+
+void JokerWindow::on_actionForce_16_9_ratio_triggered(bool checked)
+{
+	_doc->setForceRatio169(checked);
+	_doc->setModified(true);
+}
+
+void JokerWindow::on_actionInvert_colors_toggled(bool checked)
+{
+	_settings->setInvertColor(checked);
+}
+
+void JokerWindow::on_actionDisplay_feet_triggered(bool checked)
+{
+	_settings->setDisplayFeet(checked);
+}
+
+void JokerWindow::on_actionSet_first_foot_timecode_triggered()
+{
+	PhTimeCodeType tcType = timeCodeType();
+	PhTimeCodeDialog dlg(tcType, _settings->firstFootTime(), this);
+	if(dlg.exec())
+		_settings->setFirstFootTime(dlg.time());
+}
+
+void JokerWindow::on_actionNew_triggered()
+{
+	_doc->reset();
+	on_actionClose_video_triggered();
+	this->resetDocument();
+}
+
+void JokerWindow::on_actionClose_video_triggered()
+{
+#ifdef USE_VIDEO
+	_videoEngine.close();
+#endif
+}
+
+void JokerWindow::on_actionSend_feedback_triggered()
+{
+	hideMediaPanel();
+	PhFeedbackDialog dlg(_settings, this);
+	dlg.exec();
+	showMediaPanel();
+}
+
+void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
+{
+#ifdef USE_VIDEO
+	_videoEngine.setDeinterlace(checked);
+	if(checked != _doc->videoDeinterlace()) {
+		_doc->setVideoDeinterlace(checked);
+		_doc->setModified(true);
+	}
+#endif
+}
+
+void JokerWindow::on_actionHide_the_rythmo_triggered(bool checked)
+{
+	_settings->setHideStrip(checked);
+}
+
 void JokerWindow::on_actionPrevious_loop_triggered()
 {
 	PhTime time = _doc->previousLoopTime(currentTime());
@@ -1096,30 +1088,6 @@ void JokerWindow::on_actionDisplay_the_vertical_scale_triggered(bool checked)
 	_settings->setDisplayVerticalScale(checked);
 }
 
-void JokerWindow::setCurrentTime(PhTime time)
-{
-	_strip.clock()->setTime(time);
-#ifdef USE_MIDI
-	if(_settings->sendMmcMessage())
-		_mtcWriter.sendMMCGotoFromTime(time);
-#endif
-
-}
-
-void JokerWindow::setCurrentRate(PhRate rate)
-{
-	_strip.clock()->setRate(rate);
-#ifdef USE_MIDI
-	if(_settings->sendMmcMessage()) {
-		_mtcWriter.sendMMCGotoFromTime(currentTime());
-		if(rate == 0.0f)
-			_mtcWriter.sendMMCStop();
-		else if(rate == 1.0f)
-			_mtcWriter.sendMMCPlay();
-	}
-#endif // USE_MIDI
-}
-
 PhTime JokerWindow::currentTime()
 {
 	return _strip.clock()->time();
@@ -1134,9 +1102,9 @@ void JokerWindow::on_actionDisplay_the_control_panel_triggered(bool checked)
 {
 	_settings->setDisplayControlPanel(checked);
 	if(checked)
-		fadeInMediaPanel();
+		showMediaPanel();
 	else
-		fadeOutMediaPanel();
+		hideMediaPanel();
 }
 
 void JokerWindow::on_actionDisplay_the_information_panel_triggered(bool checked)

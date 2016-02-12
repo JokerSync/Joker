@@ -30,7 +30,8 @@ LTCToolWindow::LTCToolWindow(LTCToolSettings *settings, QWidget *parent) :
 	_ltcWriter.clock()->setTime(_settings->writerTimeIn());
 	ui->widgetMaster->setLength(_settings->writerLoopLength());
 	ui->widgetMaster->setTimeIn(_settings->writerTimeIn());
-	ui->widgetMaster->setClock(_writerTimeCodeType, _ltcWriter.clock());
+	ui->widgetMaster->setTimeCodeType(_writerTimeCodeType);
+	ui->widgetMaster->setClock(_ltcWriter.clock());
 
 	connect(ui->widgetMaster, &PhMediaPanel::timeCodeTypeChanged, this, &LTCToolWindow::onWriterTimeCodeTypeChanged);
 	connect(_ltcWriter.clock(), &PhClock::timeChanged, this, &LTCToolWindow::onWriterTimeChanged);

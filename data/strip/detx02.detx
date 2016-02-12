@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<detx>
+	<header>
+		<title>A title</title>
+		<videofile timestamp="01:00:00:00" tctype="25">test.mov</videofile>
+		<last_position timecode="01:01:01:01"/>
+	</header>
+	<roles>
+		<role name="Bob" id="bob" color="#FF0000">
+			<image>picture</image>
+		</role>
+	</roles>
+	<body>
+		<loop timecode="01:00:00:00"/>
+		<shot timecode="01:00:01:00"/>
+		<line role="bob" track="1">
+			<lipsync timecode="01:00:02:00" type="in_open"/>
+			<text>Hi!</text>
+			<lipsync timecode="01:00:03:00" type="out_open"/>
+		</line>
+		<shot timecode="01:00:04:00"/>
+		<line role="bob" track="1">
+			<lipsync timecode="01:00:05:00" type="in_open"/>
+			<text>What&apos;s</text>
+			<lipsync timecode="01:00:06:00" type="neutral"/>
+			<text>up?</text>
+			<lipsync timecode="01:00:07:00" type="out_open"/>
+		</line>
+	</body>
+</detx>

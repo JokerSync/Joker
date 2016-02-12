@@ -31,9 +31,15 @@ public:
 	PhStripText( PhTime timeIn, PhPeople * people, PhTime timeOut, float y,  QString content, float height);
 	/**
 	 * @brief Get the text content
-	 * @return _content
+	 * @return A string
 	 */
 	QString content() const;
+
+	/**
+	 * @brief Set the text content
+	 * @param content A string
+	 */
+	void setContent(QString content);
 
 private:
 

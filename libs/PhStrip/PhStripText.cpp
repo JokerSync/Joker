@@ -18,3 +18,8 @@ QString PhStripText::content() const
 	return _content;
 }
 
+void PhStripText::setContent(QString content)
+{
+	_content = content;
+}
+

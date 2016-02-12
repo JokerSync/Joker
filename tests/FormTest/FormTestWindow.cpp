@@ -21,6 +21,8 @@ FormTestWindow::FormTestWindow(FormTestSettings *settings) :
 {
 	ui->setupUi(this);
 
+	this->restoreGeometry(_settings->windowGeometry());
+
 	connect(ui->actionFull_screen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
 	QScreen *screen = QGuiApplication::primaryScreen();

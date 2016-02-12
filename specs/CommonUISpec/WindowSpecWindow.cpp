@@ -14,6 +14,8 @@ WindowSpecWindow::WindowSpecWindow(PhDocumentWindowSettings *settings) :
 {
 	ui->setupUi(this);
 
+	this->restoreGeometry(settings->windowGeometry());
+
 	connect(ui->actionFull_screen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 }
 

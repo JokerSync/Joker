@@ -23,22 +23,16 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 
 	//Buttons Init
 
-	ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
 	connect(ui->_playButton, &QPushButton::clicked, this, &PhMediaPanel::onPlayPause);
 
-	ui->_fastForwardButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekForward));
 	connect(ui->_fastForwardButton, &QPushButton::clicked, this, &PhMediaPanel::onFastForward);
 
-	ui->_fastRewindButton->setIcon(style()->standardIcon(QStyle::SP_MediaSeekBackward));
 	connect(ui->_fastRewindButton, &QPushButton::clicked, this, &PhMediaPanel::onRewind);
 
-	ui->_backButton->setIcon(style()->standardIcon(QStyle::SP_MediaSkipBackward));
 	connect(ui->_backButton, &QPushButton::clicked, this, &PhMediaPanel::onBack);
 
-	ui->_nextFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowForward));
 	connect(ui->_nextFrameButton, &QPushButton::clicked, this, &PhMediaPanel::onNextFrame);
 
-	ui->_previousFrameButton->setIcon(style()->standardIcon(QStyle::SP_ArrowBack));
 	connect(ui->_previousFrameButton, &QPushButton::clicked, this, &PhMediaPanel::onPreviousFrame);
 
 	connect(ui->_slider, &QSlider::sliderMoved, this, &PhMediaPanel::onSliderChanged);
@@ -72,9 +66,14 @@ PhTimeCodeType PhMediaPanel::timeCodeType() const
 	}
 }
 
-void PhMediaPanel::setSliderEnable(bool isEnabled)
+void PhMediaPanel::setSliderEnable(bool enabled)
 {
-	ui->_slider->setEnabled(isEnabled);
+	ui->_slider->setEnabled(enabled);
+}
+
+void PhMediaPanel::setDropdownEnable(bool enabled)
+{
+	ui->timeCodeTypeCombo->setEnabled(enabled);
 }
 
 PhTime PhMediaPanel::timeIn() const
@@ -107,12 +106,17 @@ bool PhMediaPanel::isPlaying()
 		return _playing;
 }
 
-void PhMediaPanel::setClock(PhTimeCodeType tcType, PhClock *clock)
+void PhMediaPanel::setTimeCodeType(PhTimeCodeType tcType)
 {
 	onTimeCodeTypeChanged(tcType);
+}
+
+
+void PhMediaPanel::setClock(PhClock *clock)
+{
 	_clock = clock;
 	if(_clock) {
-		ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(_clock->time(), tcType));
+		ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(_clock->time(), this->timeCodeType()));
 		connect(_clock, &PhClock::timeChanged, this, &PhMediaPanel::onTimeChanged);
 		connect(_clock, &PhClock::rateChanged, this, &PhMediaPanel::onRateChanged);
 	}
@@ -243,9 +247,9 @@ void PhMediaPanel::updatePlayingState()
 		_playing = (_clock->rate() != 0);
 	PHDEBUG << _playing;
 	if(_playing)
-		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+		ui->_playButton->setIcon(QIcon(":pause"));
 	else
-		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+		ui->_playButton->setIcon(QIcon(":play"));
 }
 
 void PhMediaPanel::onTimeChanged(PhTime time)

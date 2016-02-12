@@ -13,6 +13,26 @@
   <property name="windowTitle">
    <string>Midi Tool</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QGroupBox {
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(60, 60, 60, 255), stop:1 rgba(0, 0, 0, 255));
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 3ex; /* leave space at the top for the title */
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center; /* position at the top center */
+    padding: 0 10px;
+}
+
+
+QLabel {
+	color: white;
+}
+</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -27,6 +47,12 @@
     </item>
     <item>
      <widget class="QGroupBox" name="writerGroupBox">
+      <property name="styleSheet">
+       <string notr="true">QCheckBox {
+	color: white;
+}
+</string>
+      </property>
       <property name="title">
        <string>Writer:</string>
       </property>
