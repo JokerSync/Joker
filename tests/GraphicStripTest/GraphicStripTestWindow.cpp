@@ -300,7 +300,7 @@ void GraphicStripTestWindow::on_actionChange_font_triggered()
 {
 	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
 	if(QFile(fontFile).exists()) {
-		if(PhFont::computeMaxFontSize(fontFile) == 0)
+		if(PhFont::computeMaxFontSize(fontFile, _settings->textBoldness()) == 0)
 			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
 		else
 			_settings->setTextFontFile(fontFile);

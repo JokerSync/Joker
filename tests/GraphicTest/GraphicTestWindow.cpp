@@ -60,7 +60,7 @@ void GraphicTestWindow::on_actionChange_font_triggered()
 {
 	QString fileName = QFileDialog::getOpenFileName();
 	if(QFile(fileName).exists()) {
-		if(PhFont::computeMaxFontSize(fileName) == 0)
+		if(PhFont::computeMaxFontSize(fileName, _settings->textBoldness()) == 0)
 			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
 		else
 			_font1.setFontFile(fileName);
@@ -93,54 +93,56 @@ void GraphicTestWindow::onPaint(int width, int height)
 	_rect.setRect(50, 175, 500, 25);
 	_rect.draw();
 
-	int textCount = 1;
-	int quadCount = 1;
 	QString textContent("Change the text from the settings");
 
-	if(_settings) {
-		quadCount = _settings->quadCount();
-		textCount = _settings->textCount();
-		textContent = _settings->textContent();
+	textContent = _settings->textContent();
+
+	PhGraphicText text1(&_font1, textContent);
+
+	int y = 200;
+	text1.setRect(0, y, 500, 100);
+	text1.setColor(QColor(0, 128, 0));
+	text1.setZ(5);
+	text1.draw();
+
+	PhGraphicText text2(&_font2, textContent);
+	y += 200;
+
+	text2.setRect(0, y, 500, 100);
+	text2.setColor(QColor(0, 128, 0));
+	text2.setZ(5);
+	text2.draw();
+
+	for(int i = 0; i < 16; i++) {
+		for(int j = 0; j < 16; j++) {
+			int w = width / 16;
+			int h = height / 16;
+			PhGraphicSolidRect rect(i * w, j * h, w, h);
+			rect.setColor(QColor(i * 16, j*16, 255 - i * 8 - j * 8));
+			rect.draw();
+		}
 	}
 
-	for(int i = 0; i < textCount; i++) {
-		PhGraphicText text1(&_font1, textContent);
-
-		text1.setRect(i % 200, i / 200, 500, 100);
-		text1.setColor(QColor(128, 255, 0));
-		text1.setZ(5);
-		text1.draw();
-	}
-
-	_font1.setFontFile(_settings->font1File());
+	_font1.setBoldness(_settings->textBoldness());
 	_font1.select();
 
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
-	glColor3f(0, 0, 1);
+	glColor3f(1, 1, 0);
 
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-
 	glBegin(GL_QUADS);  //Begining the cube's drawing
 	{
-		for(int i = 0; i < quadCount; i++) {
-			glTexCoord3f(0, 0, 1);  glVertex3i(0, 0, 0);
-			glTexCoord3f(1, 0, 1);  glVertex3i(width, 0, 0);
-			glTexCoord3f(1, 1, 1);  glVertex3i(width, height, 0);
-			glTexCoord3f(0, 1, 1);  glVertex3i(0,  height, 0);
-		}
+		glTexCoord3f(0, 0, 1);  glVertex3i(0, 0, 0);
+		glTexCoord3f(1, 0, 1);  glVertex3i(width, 0, 0);
+		glTexCoord3f(1, 1, 1);  glVertex3i(width, height, 0);
+		glTexCoord3f(0, 1, 1);  glVertex3i(0,  height, 0);
 	}
 	glEnd();
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
-
-	//	_text.setX(_text.getX() + 4);
-	//	if(_text.getX() > this.width())
-	//		_text.setX(0);
-	//	if((_text.getX()+_text.getWidth()) < 0)
-	//		_text.setX(this.width());
 
 	PhGraphicSolidRect rect3(0, 800, 400, 300);
 	rect3.setColor(Qt::blue);
@@ -191,15 +193,4 @@ void GraphicTestWindow::onPaint(int width, int height)
 
 	_font2.setFontFile(_settings->font2File());
 	_font2.select();
-
-	PhGraphicText text2(&_font2, "eéaàiîoô");
-	int textWidth = 500;
-	text2.setRect(_x, 300, textWidth, 100);
-	text2.setColor(QColor(255, 0, 0));
-	text2.setZ(1);
-	text2.draw();
-
-	_x += 4;
-	if(_x > width)
-		_x = -textWidth;
 }

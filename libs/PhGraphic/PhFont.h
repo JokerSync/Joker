@@ -59,7 +59,7 @@ public:
 	 * This value must be converted proportionaly if the text width is scaled.
 	 * @return A value in pixel.
 	 */
-	int getHeight() {
+	int height() {
 		return _glyphHeight;
 	}
 
@@ -92,12 +92,15 @@ public:
 	/**
 	 * @brief Compute the maximum font size
 	 * @param fileName A font file
+	 * @param boldness The font expected boldness
 	 *
 	 * Compute the maximum font size to initialize the font with
-	 * so the glyph never take more than 128 pixel
+	 * so the glyph (including the boldness effect) never take
+	 * more than 128 pixel
+	 *
 	 * @return A font size.
 	 */
-	static int computeMaxFontSize(QString fileName);
+	static int computeMaxFontSize(QString fileName, int boldness);
 private:
 	/**
 	 * @brief _texture

@@ -49,7 +49,7 @@ void PhGraphicText::draw()
 			totalAdvance += _font->getAdvance(153);
 	}
 
-	if((totalAdvance == 0) || (_font->getHeight() == 0)) {
+	if((totalAdvance == 0) || (_font->height() == 0)) {
 		// empty string or bad font initialization: displaying a rect
 		glBegin(GL_QUADS);
 		{
@@ -85,7 +85,7 @@ void PhGraphicText::draw()
 			float tv2 = tv1 + space;
 
 			// computing quads coordinate;
-			int h = this->height() * 128 / _font->getHeight();
+			int h = this->height();
 			int w = this->width() * 128 / totalAdvance;
 
 			//        (tu1, tv1) --- (tu2, tv1)
