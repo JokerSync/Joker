@@ -55,6 +55,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	connect(ui->actionFullscreen, &QAction::triggered, this, &JokerWindow::toggleFullScreen);
 
+	this->restoreGeometry(_settings->windowGeometry());
+
 	ui->videoStripView->setGraphicSettings(_settings);
 
 	// Initialize the synchronizer

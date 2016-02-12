@@ -23,10 +23,6 @@ PhWindow::PhWindow(PhWindowSettings *settings) :
 		PHDEBUG << "Going fullscreen...";
 		QTimer::singleShot(1000, this, SLOT(showFullScreen()));
 	}
-	else {
-		PHDEBUG << "Restoring geometry...";
-		QMainWindow::restoreGeometry(_settings->windowGeometry());
-	}
 
 	connect(qApp, SIGNAL(applicationStateChanged(Qt::ApplicationState)), this, SLOT(onApplicationStateChange(Qt::ApplicationState)));
 }
