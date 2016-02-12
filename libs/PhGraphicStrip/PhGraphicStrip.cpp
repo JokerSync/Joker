@@ -17,12 +17,8 @@ PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
 	_settings(settings),
 	_maxDrawElapsed(0)
 {
-	// update the  content when the doc changes :
-	this->connect(&_doc, SIGNAL(changed()), this, SLOT(onDocChanged()));
-
 	// This is used to make some time-based test
 	_testTimer.start();
-
 }
 
 PhStripDoc *PhGraphicStrip::doc()
@@ -33,11 +29,6 @@ PhStripDoc *PhGraphicStrip::doc()
 PhClock *PhGraphicStrip::clock()
 {
 	return &_clock;
-}
-
-void PhGraphicStrip::onDocChanged()
-{
-
 }
 
 PhFont *PhGraphicStrip::getTextFont()
