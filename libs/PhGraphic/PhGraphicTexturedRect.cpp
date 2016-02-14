@@ -98,29 +98,6 @@ bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
 	return true;
 }
 
-bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, int height)
-{
-	swapTextures();
-
-	glEnable( GL_TEXTURE_2D );
-
-	if(!initTextures()) {
-		return false;
-	}
-
-	// Bind the texture object
-	glBindTexture( GL_TEXTURE_2D, _currentTexture );
-
-
-	// Edit the texture object's image data using the information SDL_Surface gives us
-	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
-	              GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-	applyTextureSettings();
-
-	return true;
-}
-
 bool PhGraphicTexturedRect::createTextureFromBGRABuffer(void *data, int width, int height)
 {
 	swapTextures();
@@ -241,6 +218,11 @@ void PhGraphicTexturedRect::draw()
 
 	glEnable(GL_TEXTURE_2D);
 
+	if(_transparent) {
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+
 	//        (0,0) ------ (1,0)
 	//          |            |
 	//          |            |
@@ -255,6 +237,8 @@ void PhGraphicTexturedRect::draw()
 	}
 	glEnd();
 
+	if(_transparent)
+		glDisable(GL_BLEND);
 
 	glDisable(GL_TEXTURE_2D);
 }
@@ -297,6 +281,16 @@ void PhGraphicTexturedRect::setBilinearFiltering(bool bilinear)
 bool PhGraphicTexturedRect::bilinearFiltering()
 {
 	return _bilinearFiltering;
+}
+
+void PhGraphicTexturedRect::setTransparent(bool transparent)
+{
+	_transparent = transparent;
+}
+
+bool PhGraphicTexturedRect::transparent()
+{
+	return _transparent;
 }
 
 void PhGraphicTexturedRect::applyTextureSettings()

@@ -24,7 +24,7 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 
 	PHDEBUG << "Initialize _image";
 
-	QString imageFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240.png";
+	QString imageFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png";
 	_image.setFilename(imageFile);
 	_image.setTextureCoordinate(1, 1);
 	_image.setPosition(50, 0, 1);
@@ -77,10 +77,12 @@ void GraphicTestWindow::on_actionSave_triggered()
 
 void GraphicTestWindow::onPaint(int width, int height)
 {
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	_image.setTextureCoordinate(1, 3);
+	_image.setTextureCoordinate(1, 1);
 	_image.setSize(_image.originalSize());
+	_image.setTransparent(true);
 	_image.draw();
 
 	_rect.setColor(QColor(0, 255, 0));

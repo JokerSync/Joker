@@ -128,6 +128,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	this->connect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
 
 	_videoLogo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
+	_videoLogo.setTransparent(true);
 }
 
 JokerWindow::~JokerWindow()
