@@ -256,9 +256,12 @@ go_bandit([](){
 		});
 
 		describe("x264", [&](){
-			it("open", [&](){
-				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
 
+			before_each([&](){
+				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
+			});
+
+			it("read properties", [&](){
 				AssertThat(engine->codecName().toStdString(), Equals("H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10"));
 
 				AssertThat(engine->bilinearFiltering(), IsFalse());
@@ -272,9 +275,7 @@ go_bandit([](){
 
 			it("play x264", [&](){
 				int threshold = 64 * 64 * 32; // allow high threshold due to compression
-				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
 
-				QThread::msleep(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_000.bmp"), IsLessThan(threshold));
 
 				engine->clock()->setRate(1);
