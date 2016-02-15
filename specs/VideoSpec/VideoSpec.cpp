@@ -21,7 +21,7 @@
 using namespace bandit;
 
 go_bandit([](){
-	describe("video", [](){
+	describe("engine", [](){
 		PhGraphicView *view;
 		VideoSpecSettings *settings;
 		PhVideoEngine *engine;
@@ -35,8 +35,8 @@ go_bandit([](){
 			view = new PhGraphicView(64, 64);
 			settings = new VideoSpecSettings();
 			engine = new PhVideoEngine(settings);
-			openSpy = new QSignalSpy(engine, SIGNAL(opened(bool)));
-			paintSpy = new QSignalSpy(engine, SIGNAL(newFrameDisplayed(PhTime)));
+			openSpy = new QSignalSpy(engine, &PhVideoEngine::opened);
+			paintSpy = new QSignalSpy(engine, &PhVideoEngine::newFrameDisplayed);
 
 			view->show();
 
@@ -147,8 +147,6 @@ go_bandit([](){
 
 				engine->clock()->setFrame(99, PhTimeCodeType25);
 
-				PHDEBUG << "second paint";
-
 				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 
@@ -156,8 +154,6 @@ go_bandit([](){
 
 				for(int i = 75; i >= 50; i--) {
 					engine->clock()->setFrame(i, PhTimeCodeType25);
-
-					qDebug() << "Set frame :" << i;
 
 					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 					QTest::qWait(FRAME_WAIT_TIME);
