@@ -18,7 +18,8 @@ PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
 	_textureWidth(0),
 	_textureHeight(0),
 	_repeat(false),
-	_bilinearFiltering(true)
+	_bilinearFiltering(true),
+	_transparent(false)
 {
 
 }
