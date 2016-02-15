@@ -298,11 +298,12 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 	if (time >= this->length())
 		time = this->length();
 
+	PhTime tpf = PhTimeCode::timePerFrame(_tcType);
 	// Stay with the same frame if the time has changed less than the time between two frames
 	// Note that av_seek_frame will seek to the _closest_ frame, sometimes a little bit in the "future",
 	// so it is necessary to use a little margin for the second comparison, otherwise a seek may
 	// be performed on each call to decodeFrame
-	if ((time < _currentTime + PhTimeCode::timePerFrame(_tcType))
+	if ((time < _currentTime + tpf)
 	    && time >= _currentTime) {
 		frameToRgb(_videoFrame, frame);
 		return;
@@ -313,12 +314,12 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 	// 2) after the next keyframe
 	//      how to know when the next keyframe is ??
 	//      -> for now we take a arbitrary threshold of 20 frames
-	if((time >= _currentTime + 20 * PhTimeCode::timePerFrame(_tcType))
+	if((time >= _currentTime + 20 * tpf)
 	   || (time < _currentTime)) {
 		// seek to the closest keyframe in the past
 		int flags = AVSEEK_FLAG_BACKWARD;
 		int64_t timestamp = PhTime_to_AVTimestamp(time);
-		PHDBG(24) << "seek:" << frame << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << PhTimeCode::timePerFrame(_tcType);
+		PHDBG(24) << "seek:" << frame << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << tpf;
 		av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
 
 		avcodec_flush_buffers(_videoStream->codec);
@@ -341,7 +342,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 					// could appear.)
 					_currentTime = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
 
-					PHDBG(24) << time << " " << _currentTime << " " << (time - _currentTime) / PhTimeCode::timePerFrame(_tcType);
+					PHDBG(24) << time << _currentTime << (time - _currentTime) / tpf;
 
 					if (time < _currentTime) {
 						// something went wrong with the seeking
@@ -355,7 +356,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 
 					// convert and emit the frame if this is the one that was requested
 					if (time >= _currentTime
-					    && time < _currentTime + PhTimeCode::timePerFrame(_tcType)) {
+					    && time < _currentTime + tpf) {
 						PHDBG(24) << "decoded!";
 						frameToRgb(_videoFrame, frame);
 						lookingForVideoFrame = false;
