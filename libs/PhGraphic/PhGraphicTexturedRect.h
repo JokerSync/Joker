@@ -93,8 +93,16 @@ public:
 	 */
 	bool bilinearFiltering();
 
+	/**
+	 * @brief Enable or disable the texture transparency
+	 * @param transparent True to enable transparency
+	 */
 	void setTransparent(bool transparent);
 
+	/**
+	 * @brief Retrieve the texture transparency
+	 * @return True if transparency is enabled
+	 */
 	bool transparent();
 protected:
 
