@@ -352,16 +352,28 @@ go_bandit([](){
 				AssertThat(view->compare("interlace_001.bmp", threshold), IsLessThan(threshold));
 
 				// Play 1 second
-				for(int i = 0; i < 24; i++) {
+				for(int frame = 2; frame < 27; frame++) {
 					engine->clock()->elapse(960); // 1 frame at 25 fps
 					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-					view->renderPixmap(64, 64);
+					QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
+					AssertThat(view->compare(name, threshold), IsLessThan(threshold));
 				}
+
+				engine->clock()->setRate(-1);
+
 				engine->clock()->elapse(960); // 1 frame at 25 fps
 
 				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 
-				AssertThat(view->compare("interlace_026.bmp", threshold), IsLessThan(threshold));
+				AssertThat(view->compare("interlace_025.bmp", threshold), IsLessThan(threshold));
+
+				// Play 1 second
+				for(int frame = 24; frame >= 0; frame--) {
+					engine->clock()->elapse(960); // 1 frame at 25 fps
+					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+					QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
+					AssertThat(view->compare(name, threshold), IsLessThan(threshold));
+				}
 			});
 		});
 	});
