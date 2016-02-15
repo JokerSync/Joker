@@ -19,9 +19,8 @@ class PhVideoFrame
 public:
 	/**
 	 * @brief PhVideoFrame constructor
-	 * @param size The size of the rgb buffer
 	 */
-	PhVideoFrame(int size);
+	PhVideoFrame();
 
 	~PhVideoFrame();
 

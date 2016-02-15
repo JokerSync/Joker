@@ -222,7 +222,7 @@ void PhVideoEngine::requestFrame(PhTime time)
 	}
 	else {
 		PHDBG(24) << "creating a new frame";
-		frame = new PhVideoFrame(0);
+		frame = new PhVideoFrame();
 	}
 
 	frame->setTime(0);

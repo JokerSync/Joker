@@ -6,13 +6,13 @@
 
 #include "PhVideoFrame.h"
 
-PhVideoFrame::PhVideoFrame(int size) :
-	_size(size),
+PhVideoFrame::PhVideoFrame() :
+	_rgb(NULL),
+	_size(0),
 	_time(0),
 	_width(0),
 	_height(0)
 {
-	_rgb = new uint8_t[size];
 }
 
 PhVideoFrame::~PhVideoFrame()
