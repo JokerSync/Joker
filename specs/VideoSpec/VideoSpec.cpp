@@ -21,13 +21,6 @@ using namespace bandit;
 go_bandit([](){
 	describe("video", [](){
 		PhGraphicView *view;
-		QString videoFile = "interlace_%03d.bmp";
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-		QString videoCodec = "BMP (Windows and OS/2 bitmap)";
-#else
-		QString videoCodec = "bmp";
-#endif
-
 		VideoSpecSettings *settings;
 		PhVideoEngine *engine;
 		int factor;
@@ -64,9 +57,14 @@ go_bandit([](){
 			AssertThat(engine->width(), Equals(0));
 			AssertThat(engine->height(), Equals(0));
 
-			AssertThat(engine->open(videoFile), IsTrue());
+			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
-			AssertThat(engine->codecName(), Equals(videoCodec));
+#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+		AssertThat(engine->codecName(), Equals("BMP (Windows and OS/2 bitmap)"));
+#else
+			AssertThat(engine->codecName(), Equals("bmp"));
+#endif
+
 			AssertThat(engine->bilinearFiltering(), IsFalse());
 			AssertThat(engine->length(), Equals(192000));
 			AssertThat(engine->width(), Equals(64));
@@ -76,7 +74,7 @@ go_bandit([](){
 		});
 
 		it("default_framerate", [&](){
-			AssertThat(engine->open(videoFile), IsTrue());
+			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
 			QThread::msleep(FRAME_WAIT_TIME);
 
@@ -84,7 +82,7 @@ go_bandit([](){
 		});
 
 		it("go_to_01", [&](){
-			AssertThat(engine->open(videoFile), IsTrue());
+			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
 			QThread::msleep(FRAME_WAIT_TIME);
 
@@ -122,7 +120,7 @@ go_bandit([](){
 		});
 
 		it("go_to_02", [&](){
-			AssertThat(engine->open(videoFile), IsTrue());
+			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
 			engine->clock()->setFrame(100, PhTimeCodeType25);
 
@@ -149,7 +147,7 @@ go_bandit([](){
 
 		// This "stress test" cue the video engine at different random location
 		it("go_to_03", [&](){
-			AssertThat(engine->open(videoFile), IsTrue());
+			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
 			QList<PhFrame> list = QList<PhFrame>() << 183 << 25 << 71 << 59 << 158 << 8 << 137
 												   << 32 << 37 << 53 << 133 << 108 << 166 << 134
@@ -171,7 +169,7 @@ go_bandit([](){
 		});
 
 		it("go to interframe", [&]() {
-			AssertThat(engine->open(videoFile), IsTrue());
+			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
 			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
@@ -187,7 +185,7 @@ go_bandit([](){
 		});
 
 		it("play", [&](){
-			AssertThat(engine->open(videoFile), IsTrue());
+			AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
 			QThread::msleep(FRAME_WAIT_TIME);
 			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
@@ -222,7 +220,7 @@ go_bandit([](){
 
 		it("deinterlace", [&](){
 			// Open the video file in interlaced mode
-			engine->open(videoFile);
+			engine->open("interlace_%03d.bmp");
 			QThread::msleep(FRAME_WAIT_TIME);
 			AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
@@ -244,7 +242,7 @@ go_bandit([](){
 
 		it("scales", [&](){
 			// Open the video file in interlaced mode
-			engine->open(videoFile);
+			engine->open("interlace_%03d.bmp");
 			QThread::msleep(FRAME_WAIT_TIME);
 
 			factor = 2;
@@ -256,7 +254,7 @@ go_bandit([](){
 
 		it("doesn't scale when using native video size", [&](){
 			// Open the video file in interlaced mode
-			engine->open(videoFile);
+			engine->open("interlace_%03d.bmp");
 			QThread::msleep(FRAME_WAIT_TIME);
 
 			factor = 2;
@@ -267,7 +265,7 @@ go_bandit([](){
 		});
 
 		it("handles timestamp", [&](){
-			engine->open(videoFile);
+			engine->open("interlace_%03d.bmp");
 			engine->setTimeIn(240000);
 			QThread::msleep(FRAME_WAIT_TIME);
 
