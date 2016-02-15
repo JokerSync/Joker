@@ -287,20 +287,17 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	qSort(objectList.begin(), objectList.end(), PhStripObject::dtcomp);
 
 	foreach (PhStripObject *obj, objectList) {
-		if(dynamic_cast<PhStripLoop*>(obj)) {
-			PhStripLoop *loop = dynamic_cast<PhStripLoop*>(obj);
+		if(PhStripLoop *loop = dynamic_cast<PhStripLoop*>(obj)) {
 			ptree ptLoop;
 			ptLoop.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(loop->timeIn(), _videoTimeCodeType).toStdString());
 			ptBody.push_back(std::make_pair("loop", ptLoop));
 		}
-		else if(dynamic_cast<PhStripCut*>(obj)) {
-			PhStripCut *cut = dynamic_cast<PhStripCut*>(obj);
+		else if(PhStripCut *cut = dynamic_cast<PhStripCut*>(obj)) {
 			ptree ptShot;
 			ptShot.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(cut->timeIn(), _videoTimeCodeType).toStdString());
 			ptBody.push_back(std::make_pair("shot", ptShot));
 		}
-		else if(dynamic_cast<PhStripSentence*>(obj)) {
-			PhStripSentence *sentence = dynamic_cast<PhStripSentence*>(obj);
+		else if(PhStripSentence *sentence = dynamic_cast<PhStripSentence*>(obj)) {
 			ptree ptLine;
 			ptLine.put("<xmlattr>.role", idMap[sentence->people()].toStdString());
 			ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(sentence->y() * 4));
@@ -931,7 +928,6 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 
 	reset();
 
-#warning /// @todo Handle more drb frame rate
 	PhTimeCodeType tcType = PhTimeCodeType25;
 
 	PhTime offset = 0;
@@ -1061,7 +1057,6 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 					PhTime timeOut = ComputeDrbTime2(offset, textElement.elementsByTagName("X2").at(0).toElement().text().toLongLong() - 150, tcType);
 					int y1 = textElement.elementsByTagName("Y1").at(0).toElement().text().toInt();
 					int y2 = textElement.elementsByTagName("Y2").at(0).toElement().text().toInt();
-#warning /// @todo make sure 150 is the maximum Y value:
 					float y = y1 / 150.0f;
 					float height = (y2 - y1) / 150.0f;
 
@@ -1159,13 +1154,10 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 		while(query.next()) {
 			int peopleId = query.value(0).toInt();
 			PhPeople* people = (peopleMap.contains(peopleId)) ? peopleMap[peopleId] : NULL;
-#warning /// @todo check text time in/out
 			PhTime timeIn = ComputeDrbTime2(offset, query.value(3).toLongLong() - 150, tcType);
 			PhTime timeOut = ComputeDrbTime2(offset, query.value(4).toLongLong() - 150, tcType);
 			int y1 = query.value(6).toInt();
-#warning /// @todo make sure y2 is at the index 6
 			int y2 = query.value(5).toInt();
-#warning /// @todo make sure 150 is the maximum Y value:
 			float y = y1 / 150.0f;
 			float height = (y2 - y1) / 150.0f;
 			QString content = query.value(7).toString();
@@ -1187,16 +1179,16 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 	QString extension = QFileInfo(fileName).suffix().toLower();
 	// Try to open the document
 	if(extension == "detx") {
-		return importDetXFile(fileName);
+		result = importDetXFile(fileName);
 	}
 	else if(extension == "mos") {
-		return importMosFile(fileName);
+		result = importMosFile(fileName);
 	}
 	else if(extension == "drb") {
-		return importDrbFile(fileName);
+		result = importDrbFile(fileName);
 	}
 	else if(extension == "syn6") {
-		return importSyn6File(fileName);
+		result = importSyn6File(fileName);
 	}
 	else if(extension == "strip" or extension == "joker") {
 		QFile xmlFile(fileName);
@@ -1266,6 +1258,7 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 		delete domDoc;
 
 	}
+	_modified = false;
 	return result;
 }
 

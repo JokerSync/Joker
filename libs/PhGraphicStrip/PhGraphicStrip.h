@@ -113,12 +113,6 @@ public:
 		return _infos;
 	}
 
-private slots:
-	/**
-	 * @brief Clear all the graphic strip object related to the PhStripDoc.
-	 */
-	void onDocChanged();
-
 private:
 	PhGraphicStripSettings * _settings;
 

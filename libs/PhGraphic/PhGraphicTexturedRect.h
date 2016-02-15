@@ -47,15 +47,6 @@ public:
 	 * @param height the dimensions
 	 * @return True if succeed, false otherwise
 	 */
-	bool createTextureFromARGBBuffer(void *data, int width, int height);
-
-	/**
-	 * @brief Create a texture from a RGBA Buffer
-	 * @param data the source buffer
-	 * @param width the dimensions
-	 * @param height the dimensions
-	 * @return True if succeed, false otherwise
-	 */
 	bool createTextureFromBGRABuffer(void *data, int width, int height);
 
 	/**
@@ -102,6 +93,17 @@ public:
 	 */
 	bool bilinearFiltering();
 
+	/**
+	 * @brief Enable or disable the texture transparency
+	 * @param transparent True to enable transparency
+	 */
+	void setTransparent(bool transparent);
+
+	/**
+	 * @brief Retrieve the texture transparency
+	 * @return True if transparency is enabled
+	 */
+	bool transparent();
 protected:
 
 	/**
@@ -174,6 +176,8 @@ private:
 	 * Texture bilinear filtering is enabled by default.
 	 */
 	bool _bilinearFiltering;
+
+	bool _transparent;
 };
 
 #endif // PHGRAPHICTEXTUREDSQUARE_H
