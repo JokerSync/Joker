@@ -59,9 +59,12 @@ go_bandit([](){
 		});
 
 		describe("bmp", [&](){
-			it("open", [&](){
-				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 
+			before_each([&](){
+				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
+			});
+
+			it("open", [&](){
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
 				AssertThat(engine->codecName(), Equals("BMP (Windows and OS/2 bitmap)"));
 #else
@@ -78,8 +81,6 @@ go_bandit([](){
 			});
 
 			it("go_to_01", [&](){
-				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
-
 				QThread::msleep(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
@@ -116,8 +117,6 @@ go_bandit([](){
 			});
 
 			it("go_to_02", [&](){
-				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
-
 				engine->clock()->setFrame(100, PhTimeCodeType25);
 
 				QThread::msleep(FRAME_WAIT_TIME);
@@ -143,8 +142,6 @@ go_bandit([](){
 
 			// This "stress test" cue the video engine at different random location
 			it("go_to_03", [&](){
-				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
-
 				QList<PhFrame> list = QList<PhFrame>() << 183 << 25 << 71 << 59 << 158 << 8 << 137
 													   << 32 << 37 << 53 << 133 << 108 << 166 << 134
 													   << 110 << 42 << 54 << 107 << 133 << 100 << 169
@@ -165,8 +162,6 @@ go_bandit([](){
 			});
 
 			it("go to interframe", [&]() {
-				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
-
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setTime(960);
@@ -181,8 +176,6 @@ go_bandit([](){
 			});
 
 			it("play", [&](){
-				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
-
 				QThread::msleep(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
@@ -215,9 +208,6 @@ go_bandit([](){
 			});
 
 			it("deinterlace", [&](){
-				// Open the video file in interlaced mode
-				engine->open("interlace_%03d.bmp");
-				QThread::msleep(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				//Change mode to deinterlaced
@@ -237,10 +227,6 @@ go_bandit([](){
 			});
 
 			it("scales", [&](){
-				// Open the video file in interlaced mode
-				engine->open("interlace_%03d.bmp");
-				QThread::msleep(FRAME_WAIT_TIME);
-
 				factor = 2;
 
 				settings->setUseNativeVideoSize(false);
@@ -249,10 +235,6 @@ go_bandit([](){
 			});
 
 			it("doesn't scale when using native video size", [&](){
-				// Open the video file in interlaced mode
-				engine->open("interlace_%03d.bmp");
-				QThread::msleep(FRAME_WAIT_TIME);
-
 				factor = 2;
 
 				settings->setUseNativeVideoSize(true);
@@ -261,7 +243,6 @@ go_bandit([](){
 			});
 
 			it("handles timestamp", [&](){
-				engine->open("interlace_%03d.bmp");
 				engine->setTimeIn(240000);
 				QThread::msleep(FRAME_WAIT_TIME);
 
