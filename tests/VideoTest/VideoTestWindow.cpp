@@ -33,6 +33,8 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 
 	_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
 
+	connect(&_videoEngine, &PhVideoEngine::opened, this, &VideoTestWindow::videoFileOpened);
+
 	connect(ui->videoView, &PhGraphicView::paint, this, &VideoTestWindow::onPaint);
 	connect(ui->videoView, &PhGraphicView::beforePaint, _videoEngine.clock(), &PhClock::elapse);
 	connect(_videoEngine.clock(), &PhClock::timeChanged, this, &VideoTestWindow::onTimeChanged);
@@ -45,30 +47,37 @@ VideoTestWindow::~VideoTestWindow()
 
 bool VideoTestWindow::openDocument(const QString &fileName)
 {
-	if(!_videoEngine.open(fileName))
-		return false;
+	return _videoEngine.open(fileName);
+}
 
-	_mediaPanelDialog.setLength(_videoEngine.length());
-	PhTime timeStamp = _videoEngine.timeIn();
-	PhTime currentTime = timeStamp;
+void VideoTestWindow::videoFileOpened(bool success)
+{
+	if(success) {
+		_mediaPanelDialog.setLength(_videoEngine.length());
+		PhTime timeStamp = _videoEngine.timeIn();
+		PhTime currentTime = timeStamp;
 
-	if(fileName == _settings->currentDocument()) {
-		timeStamp = _settings->timeStamp();
-		_videoEngine.setTimeIn(timeStamp);
-		currentTime = _settings->currentTime();
+		if(_videoEngine.fileName() == _settings->currentDocument()) {
+			timeStamp = _settings->timeStamp();
+			_videoEngine.setTimeIn(timeStamp);
+			currentTime = _settings->currentTime();
+		}
+		else if(_videoEngine.timeIn() == 0) {
+			on_actionSet_timestamp_triggered();
+			timeStamp = _videoEngine.timeIn();
+			currentTime = timeStamp;
+		}
+		_mediaPanelDialog.setTimeIn(timeStamp);
+
+		_videoEngine.clock()->setTime(currentTime);
+
+		_settings->setTimeStamp(timeStamp);
+
+		PhDocumentWindow::openDocument(_videoEngine.fileName());
 	}
-	else if(_videoEngine.timeIn() == 0) {
-		on_actionSet_timestamp_triggered();
-		timeStamp = _videoEngine.timeIn();
-		currentTime = timeStamp;
+	else {
+		QMessageBox::critical(this, "Error", "Unable to open " + _videoEngine.fileName());
 	}
-	_mediaPanelDialog.setTimeIn(timeStamp);
-
-	_videoEngine.clock()->setTime(currentTime);
-
-	_settings->setTimeStamp(timeStamp);
-
-	return PhDocumentWindow::openDocument(fileName);
 }
 
 void VideoTestWindow::processArg(int argc, char *argv[])
