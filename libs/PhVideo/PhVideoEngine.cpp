@@ -336,6 +336,11 @@ bool PhVideoEngine::isFrameRequested(PhTime time)
 	return false;
 }
 
+const QList<PhVideoFrame *> PhVideoEngine::decodedFramePool()
+{
+	return _decodedFramePool;
+}
+
 void PhVideoEngine::cleanupFramePools()
 {
 	PhTime time = clockTime();

@@ -183,6 +183,12 @@ public:
 	 */
 	bool isFrameRequested(PhTime time);
 
+	/**
+	 * @brief Pool of decoded frames
+	 * @return A read only list of frames
+	 */
+	const QList<PhVideoFrame*> decodedFramePool();
+
 public slots:
 	/**
 	 * @brief Handle a frame that has just been decoded

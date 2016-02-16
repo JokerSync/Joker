@@ -319,25 +319,51 @@ go_bandit([](){
 
 			it("buffer", [&](){
 				// engine decode 5 frames head
-				while (decodeSpy->count() < 5) {
-					AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
-				}
+				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
 				AssertThat(decodeSpy->count(), Equals(5));
 				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsFalse());
 
 				// move one frame head decode one frame more
-				engine->clock()->setFrame(1, PhTimeCodeType25);
+				engine->clock()->setFrame25(1);
 				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
 				AssertThat(decodeSpy->count(), Equals(6));
 				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsFalse());
 
-				engine->clock()->setFrame(100, PhTimeCodeType25);
+				engine->clock()->setFrame25(100);
 				// engine decode 5 frames head
 				while (decodeSpy->count() < 11) {
 					AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
 				}
 				AssertThat(decodeSpy->count(), Equals(11));
 				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsFalse());
+			});
+
+			it("has a frame pool", [&](){
+				// Add 5 first frame to the pool
+				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				AssertThat(decodeSpy->count(), Equals(5));
+
+				AssertThat(engine->decodedFramePool().count(), Equals(5));
+
+				// Add 50 other frame to the pool
+				for(int frame = 1; frame <= 50; frame++) {
+					engine->clock()->setFrame25(frame);
+					AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+					AssertThat(decodeSpy->count(), Equals(frame + 5));
+					AssertThat(engine->decodedFramePool().count(), Equals(frame + 5));
+				}
+
+				// Add another frame without increasing the pool size
+				engine->clock()->setFrame25(51);
+				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				AssertThat(decodeSpy->count(), Equals(56));
+				AssertThat(engine->decodedFramePool().count(), Equals(55));
+
+				// Jump to a far location clear the pool
+				engine->clock()->setFrame25(120);
+				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				AssertThat(decodeSpy->count(), Equals(61));
+				AssertThat(engine->decodedFramePool().count(), Equals(5));
 			});
 		});
 

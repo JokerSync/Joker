@@ -47,6 +47,13 @@ public:
 	 * @param tcType The timecode type the frame is express into.
 	 */
 	void setFrame(PhFrame frame, PhTimeCodeType tcType);
+
+	/**
+	 * @brief Set the clock time with a frame, assuming the timecode type is 25fps
+	 * @param frame A frame value
+	 */
+	void setFrame25(PhFrame frame);
+
 	/**
 	 * @brief Set the clock time with a string
 	 * @param tc A string containing a timecode value (HH:MM:SS:FF).
