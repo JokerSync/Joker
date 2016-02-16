@@ -42,6 +42,7 @@ QStringList PhMidiInput::inputList()
 bool PhMidiInput::open(QString inputPortName)
 {
 	PHDEBUG << inputPortName;
+	close();
 	try {
 		_midiIn = new RtMidiIn();
 		int portIndex = -1;
