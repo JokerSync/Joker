@@ -116,7 +116,7 @@ public:
 	 * @brief Get the list of meta information key
 	 * @return A string list
 	 */
-	QList<QString> metaKeys();
+	const QList<QString> metaKeys();
 
 	/**
 	 * @brief Get the meta information of a given key
@@ -135,54 +135,54 @@ public:
 	 * @brief The list of peoples
 	 * @return A list.
 	 */
-	QList<PhPeople*> peoples() const;
+	const QList<PhPeople*> peoples() const;
 
 	/**
 	 * @brief The whole text list
 	 * @param alternate True in order the get the alternate text list (like original texts)
 	 * @return A list of texts
 	 */
-	QList<PhStripText*> texts(bool alternate = false) const;
+	const QList<PhStripText*> texts(bool alternate = false) const;
 
 	/**
 	 * @brief The list of texts affected to a people
 	 * @param people A people
 	 * @return A list of texts
 	 */
-	QList<PhStripText*> texts(PhPeople *people) const;
+	const QList<PhStripText*> texts(PhPeople *people) const;
 
 	/**
 	 * @brief The whole sentences list
 	 * @param alternate True in order the get the alternate sentences list (like original sentences)
 	 * @return A list of sentences
 	 */
-	QList<PhStripSentence*> sentences(bool alternate = false) const;
+	const QList<PhStripSentence*> sentences(bool alternate = false) const;
 
 	/**
 	 * @brief The list of sentences affected to a people
 	 * @param people A people
 	 * @return A list of sentences
 	 */
-	QList<PhStripSentence*> sentences(PhPeople *people) const;
+	const QList<PhStripSentence*> sentences(PhPeople *people) const;
 
 	/**
 	 * @brief The whole loop list
 	 * @return A list of loops
 	 */
-	QList<PhStripLoop*> loops() const;
+	const QList<PhStripLoop*> loops() const;
 
 	/**
 	 * @brief The whole cut list
 	 * @return A list of cut
 	 */
-	QList<PhStripCut*> cuts() const;
+	const QList<PhStripCut*> cuts() const;
 
 	/**
 	 * @brief The whole detect list
 	 * @todo Implement and test timeIn / timeOut
 	 * @return A list of detects
 	 */
-	QList<PhStripDetect*> detects(PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
+	const QList<PhStripDetect*> detects(PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
 
 	/**
 	 * @brief Get the list of detect affected to a people in a defined range.
@@ -191,7 +191,7 @@ public:
 	 * @param timeOut The range ending time
 	 * @return A list of detects
 	 */
-	QList<PhStripDetect*> peopleDetects(PhPeople *people, PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
+	const QList<PhStripDetect*> peopleDetects(PhPeople *people, PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
 
 	/**
 	 * @brief Set the title property
