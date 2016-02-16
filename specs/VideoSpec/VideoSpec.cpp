@@ -15,6 +15,7 @@
 #define FRAME_WAIT_TIME 40
 #define OPEN_WAIT_TIME 10000
 #define PAINT_WAIT_TIME 500
+#define DECODE_WAIT_TIME 50
 
 #include "CommonSpec.h"
 
@@ -27,6 +28,7 @@ go_bandit([](){
 		PhVideoEngine *engine;
 		QSignalSpy *openSpy;
 		QSignalSpy *paintSpy;
+		QSignalSpy *decodeSpy;
 		int factor;
 
 		before_each([&](){
@@ -37,6 +39,7 @@ go_bandit([](){
 			engine = new PhVideoEngine(settings);
 			openSpy = new QSignalSpy(engine, &PhVideoEngine::opened);
 			paintSpy = new QSignalSpy(engine, &PhVideoEngine::newFrameDisplayed);
+			decodeSpy = new QSignalSpy(engine, &PhVideoEngine::newFrameDecoded);
 
 			view->show();
 
@@ -52,6 +55,7 @@ go_bandit([](){
 		after_each([&](){
 			engine->close();
 
+			delete decodeSpy;
 			delete openSpy;
 			delete paintSpy;
 			delete engine;
@@ -311,6 +315,29 @@ go_bandit([](){
 				QTest::qWait(FRAME_WAIT_TIME);
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 				AssertThat(engine->clock()->time(), Equals(0));
+			});
+
+			it("buffer", [&](){
+				// engine decode 5 frames head
+				while (decodeSpy->count() < 5) {
+					AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				}
+				AssertThat(decodeSpy->count(), Equals(5));
+				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsFalse());
+
+				// move one frame head decode one frame more
+				engine->clock()->setFrame(1, PhTimeCodeType25);
+				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				AssertThat(decodeSpy->count(), Equals(6));
+				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsFalse());
+
+				engine->clock()->setFrame(100, PhTimeCodeType25);
+				// engine decode 5 frames head
+				while (decodeSpy->count() < 11) {
+					AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				}
+				AssertThat(decodeSpy->count(), Equals(11));
+				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsFalse());
 			});
 		});
 

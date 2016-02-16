@@ -187,15 +187,13 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 
 void PhVideoEngine::requestFrames(PhTime time)
 {
-	const int readahead_count = 5;
-
 	bool playingForward = true;
 	if (_clock.rate() < 0) {
 		playingForward = false;
 	}
 
 	// we make sure we have requested "readahead_count" frames
-	for (int i = 0; i < readahead_count; i++) {
+	for (int i = 0; i < _settings->videoReadhead(); i++) {
 		int factor = i;
 		if (!playingForward) {
 			factor *= -1;
@@ -436,6 +434,8 @@ void PhVideoEngine::frameAvailable(PhVideoFrame *frame)
 
 	PhTime time = clockTime();
 	PhTime frameTime = frame->time() + _timeIn;
+
+	emit newFrameDecoded(frameTime);
 
 	if (abs(time - frameTime) <= abs(time - _currentFrameTime)) {
 		// this frame is closer to the current time than the frame that is currently displayed,

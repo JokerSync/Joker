@@ -100,6 +100,8 @@ public:
 #ifdef USE_VIDEO
 	// Video settings:
 	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
+	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 10)
+
 #endif
 
 	// Synchronisation settings:

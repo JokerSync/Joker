@@ -261,6 +261,13 @@ signals:
 	 */
 	void newFrameDisplayed(PhTime frameTime);
 
+	/**
+	 * @brief Signal sent when a new frame is decoded.
+	 * This is used by the tests.
+	 * @param frameTime The time of the frame being decoded
+	 */
+	void newFrameDecoded(PhTime frameTime);
+
 private:
 	void requestFrame(PhTime time);
 	void requestFrames(PhTime time);

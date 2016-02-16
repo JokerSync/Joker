@@ -30,6 +30,12 @@ public:
 	 * @return True if native, false otherwise
 	 */
 	virtual bool useNativeVideoSize() = 0;
+
+	/**
+	 * @brief Number of frame read head by the engine
+	 * @return An amount of frame
+	 */
+	virtual int videoReadhead() = 0;
 };
 
 #endif // PHVIDEOSETTINGS_H
