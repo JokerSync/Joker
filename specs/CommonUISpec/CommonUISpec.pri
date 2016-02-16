@@ -7,16 +7,20 @@
 include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 
 HEADERS += \
-	$$TOP_ROOT/specs/CommonUISpec/WindowSpecWindow.h \
+	$$PWD/WindowSpecSettings.h \
+	$$PWD/WindowSpecWindow.h \
+    $$PWD/DocumentWindowSpecSettings.h \
+    $$PWD/DocumentWindowSpecWindow.h
 
 SOURCES += \
-	$$TOP_ROOT/specs/CommonUISpec/LockableSpinBoxSpec.cpp \
-	$$TOP_ROOT/specs/CommonUISpec/MediaPanelSpec.cpp \
-	$$TOP_ROOT/specs/CommonUISpec/TimeCodeEditSpec.cpp \
-	$$TOP_ROOT/specs/CommonUISpec/WindowSpecWindow.cpp \
-	$$TOP_ROOT/specs/CommonUISpec/WindowSpec.cpp \
+	$$PWD/LockableSpinBoxSpec.cpp \
+	$$PWD/MediaPanelSpec.cpp \
+	$$PWD/TimeCodeEditSpec.cpp \
+	$$PWD/WindowSpecWindow.cpp \
+	$$PWD/WindowSpec.cpp \
+    $$PWD/DocumentWindowSpecWindow.cpp \
+    $$PWD/DocumentWindowSpec.cpp
 
 FORMS += \
-	$$TOP_ROOT/specs/CommonUISpec/WindowSpecWindow.ui \
-
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/text.txt) . $${CS}
+	$$PWD/WindowSpecWindow.ui \
+	$$PWD/DocumentWindowSpecWindow.ui

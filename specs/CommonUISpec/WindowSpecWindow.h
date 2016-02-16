@@ -1,26 +1,21 @@
 #ifndef WINDOWSPECWINDOW_H
 #define WINDOWSPECWINDOW_H
 
-#include "PhCommonUI/PhDocumentWindow.h"
+#include "PhCommonUI/PhWindow.h"
 
 namespace Ui {
 class WindowSpecWindow;
 }
 
-class WindowSpecWindow : public PhDocumentWindow
+class WindowSpecWindow : public PhWindow
 {
 	Q_OBJECT
 
 public:
-	explicit WindowSpecWindow(PhDocumentWindowSettings *settings);
+	explicit WindowSpecWindow(PhWindowSettings *settings);
 	~WindowSpecWindow();
 
 	QAction *fullScreenAction();
-
-	bool openDocument(const QString &fileName);
-	QMenu* recentDocumentMenu();
-
-	QString text();
 private:
 	Ui::WindowSpecWindow *ui;
 };

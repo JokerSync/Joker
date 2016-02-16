@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WindowSpecWindow</class>
- <widget class="QMainWindow" name="WindowSpecWindow">
+ <class>DocumentWindowSpecWindow</class>
+ <widget class="QMainWindow" name="DocumentWindowSpecWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,7 +14,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout"/>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPlainTextEdit" name="plainTextEdit"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -25,12 +29,6 @@
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuView">
-    <property name="title">
-     <string>View</string>
-    </property>
-    <addaction name="actionFull_screen"/>
-   </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
@@ -39,28 +37,18 @@
      <property name="title">
       <string>Open recent</string>
      </property>
-     <addaction name="actionEmpty"/>
+     <addaction name="actionNone"/>
     </widget>
     <addaction name="menuOpen_recent"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuView"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionFull_screen">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Full screen</string>
-   </property>
-  </action>
-  <action name="actionEmpty">
+  <action name="actionNone">
    <property name="enabled">
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Empty</string>
+    <string>None</string>
    </property>
   </action>
  </widget>

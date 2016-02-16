@@ -8,8 +8,8 @@
 #include "WindowSpecWindow.h"
 #include "ui_WindowSpecWindow.h"
 
-WindowSpecWindow::WindowSpecWindow(PhDocumentWindowSettings *settings) :
-	PhDocumentWindow(settings),
+WindowSpecWindow::WindowSpecWindow(PhWindowSettings *settings) :
+	PhWindow(settings),
 	ui(new Ui::WindowSpecWindow)
 {
 	ui->setupUi(this);
@@ -27,27 +27,4 @@ WindowSpecWindow::~WindowSpecWindow()
 QAction *WindowSpecWindow::fullScreenAction()
 {
 	return ui->actionFull_screen;
-}
-
-bool WindowSpecWindow::openDocument(const QString &fileName)
-{
-	PHDEBUG << fileName;
-	QFile file(fileName);
-	if(!file.open(QFile::ReadOnly))
-		return false;
-
-	QTextStream ts(&file);
-	ui->plainTextEdit->setPlainText(ts.readAll());
-
-	return PhDocumentWindow::openDocument(fileName);
-}
-
-QMenu *WindowSpecWindow::recentDocumentMenu()
-{
-	return ui->menuOpen_recent;
-}
-
-QString WindowSpecWindow::text()
-{
-	return ui->plainTextEdit->toPlainText();
 }

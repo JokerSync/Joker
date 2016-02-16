@@ -14,7 +14,7 @@ PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings)
 	: PhWindow(settings),
 	_settings(settings)
 {
-	connect(&_watcher, SIGNAL(fileChanged(QString)), this, SLOT(onExternalChange(QString)));
+	connect(&_watcher, &QFileSystemWatcher::fileChanged, this, &PhDocumentWindow::onExternalChange);
 }
 
 void PhDocumentWindow::processArg(int argc, char *argv[])

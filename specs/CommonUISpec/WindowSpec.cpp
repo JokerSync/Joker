@@ -69,37 +69,17 @@ go_bandit([](){
 			w.close();
 		});
 
-		it("has_current_document", [&](){
-			settings->setCurrentDocument("text.txt");
-
-			WindowSpecWindow w(settings);
-			w.processArg(0, NULL);
-			AssertThat(w.text(), Equals("bonjour"));
-		});
-
-		it("handle_last_folder", [&](){
-			WindowSpecWindow w(settings);
-			w.processArg(0, NULL);
-
-			AssertThat(settings->lastDocumentFolder(), Equals(QDir::homePath()));
-
-			w.openDocument("text.txt");
-
-			QString currentFolder = QDir::currentPath();
-			AssertThat(settings->lastDocumentFolder(), Equals(currentFolder));
-		});
-
 		it("recall last geometry", [&](){
 			WindowSpecWindow w1(settings);
 			w1.show();
 
-			AssertThat(w1.width(), Equals(800));
-			AssertThat(w1.height(), Equals(600));
-
-			w1.setGeometry(50, 100, 400, 300);
-
 			AssertThat(w1.width(), Equals(400));
 			AssertThat(w1.height(), Equals(300));
+
+			w1.setGeometry(50, 100, 600, 450);
+
+			AssertThat(w1.width(), Equals(600));
+			AssertThat(w1.height(), Equals(450));
 
 			w1.close();
 
@@ -107,8 +87,8 @@ go_bandit([](){
 
 			w2.show();
 
-			AssertThat(w2.width(), Equals(400));
-			AssertThat(w2.height(), Equals(300));
+			AssertThat(w2.width(), Equals(600));
+			AssertThat(w2.height(), Equals(450));
 		});
 	});
 });

@@ -7,7 +7,8 @@ if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
 
 brew update
-brew install ffmpeg --without-qtkit
+# Install ffmpeg with qtkit to benefit the bottled keg and speed up the build process
+brew install ffmpeg #--without-qtkit
 
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"
