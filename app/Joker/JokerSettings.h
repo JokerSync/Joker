@@ -101,6 +101,7 @@ public:
 	// Video settings:
 	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
 	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 10)
+	PH_SETTING_TIME2(setVideoPoolWindow, videoPoolWindow, 4 * PHTIMEBASE)
 
 #endif
 

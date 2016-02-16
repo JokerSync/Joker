@@ -339,12 +339,7 @@ bool PhVideoEngine::isFrameRequested(PhTime time)
 void PhVideoEngine::cleanupFramePools()
 {
 	PhTime time = clockTime();
-	PhTime tpf = PhTimeCode::timePerFrame(_tcType);
-
-	bool playingForward = true;
-	if (_clock.rate() < 0) {
-		playingForward = false;
-	}
+	PhTime halfPoolWindow = _settings->videoPoolWindow();
 
 	QMutableListIterator<PhVideoFrame*> i(_decodedFramePool);
 	while (i.hasNext()) {
@@ -352,11 +347,7 @@ void PhVideoEngine::cleanupFramePools()
 
 		PhTime frameTime = frame->time() + _timeIn;
 
-		if ((playingForward && (frameTime < time - 2 * tpf
-		                        || frameTime >= time + 5 * tpf))
-		    || (!playingForward && (frameTime >= time + 2 * tpf
-		                            || frameTime < time - 5 * tpf))
-		    ) {
+		if ((frameTime < time - halfPoolWindow) || (frameTime >= time + halfPoolWindow)) {
 			// Given the current playing direction and position,
 			// this frame is not likely to be shown on screen anytime soon.
 			i.remove();
@@ -373,11 +364,7 @@ void PhVideoEngine::cleanupFramePools()
 
 		PhTime frameTime = frame->requestTime() + _timeIn;
 
-		if ((playingForward && (frameTime < time - 2 * tpf
-		                        || frameTime >= time + 5 * tpf))
-		    || (!playingForward && (frameTime >= time + 2 * tpf
-		                            || frameTime < time - 5 * tpf))
-		    ) {
+		if ((frameTime < time - halfPoolWindow) || (frameTime >= time + halfPoolWindow)) {
 			// Given the current playing direction and position,
 			// this frame is not likely to be shown on screen anytime soon.
 			r.remove();

@@ -304,11 +304,11 @@ go_bandit([](){
 				engine->setTimeIn(240000);
 
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
-				engine->clock()->setTime(240000 + 24000);
+				engine->clock()->setTime(240000 + 96000);
 
 				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
-				AssertThat(view->compare("interlace_025.bmp"), Equals(0));
+				AssertThat(view->compare("interlace_100.bmp"), Equals(0));
 				engine->clock()->setTime(0);
 
 				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());

@@ -36,6 +36,12 @@ public:
 	 * @return An amount of frame
 	 */
 	virtual int videoReadhead() = 0;
+
+	/**
+	 * @brief Time window within which frame are kept in the pool
+	 * @return A duration
+	 */
+	virtual PhTime videoPoolWindow() = 0;
 };
 
 #endif // PHVIDEOSETTINGS_H

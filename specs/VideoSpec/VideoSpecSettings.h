@@ -7,6 +7,7 @@
 #define VIDEOSPECSETTINGS_H
 
 #include "PhTools/PhGenericSettings.h"
+#include "PhSync/PhSyncSettings.h"
 #include "PhVideo/PhVideoSettings.h"
 
 class VideoSpecSettings : protected PhGenericSettings,
@@ -24,6 +25,8 @@ public:
 	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
 
 	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 5)
+
+	PH_SETTING_TIME2(setVideoPoolWindow, videoPoolWindow, 2 * PHTIMEBASE)
 };
 
 #endif // VIDEOSPECSETTINGS_H
