@@ -130,6 +130,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	PHDEBUG << "length:" << this->length();
 	PHDEBUG << "fps:" << this->framePerSecond();
+	PHDEBUG << "timebase:" << _videoStream->time_base.num << "/" << _videoStream->time_base.den;
 
 	if(_audioStream) {
 		AVCodec* audioCodec = avcodec_find_decoder(_audioStream->codec->codec_id);
@@ -214,8 +215,8 @@ void PhVideoEngine::setTimeIn(PhTime timeIn)
 
 PhTime PhVideoEngine::length()
 {
-	if(_videoStream)
-		return AVTimestamp_to_PhTime(_videoStream->duration);
+	if(_formatContext)
+		return _formatContext->duration * 24000 / AV_TIME_BASE;
 	return 0;
 }
 
