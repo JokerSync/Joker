@@ -30,7 +30,7 @@ bool PhMidiObject::canUseVirtualPorts()
 		}
 	}
 	catch(RtMidiError &error) {
-		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
+		PHERR << "Midi error:" << QString::fromStdString(error.getMessage());
 	}
 
 	return result;

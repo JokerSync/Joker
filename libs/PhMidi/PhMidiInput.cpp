@@ -33,7 +33,7 @@ QStringList PhMidiInput::inputList()
 			result.append(convertName(midiIn->getPortName(i)));
 	}
 	catch(RtMidiError &error) {
-		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
+		PHERR << "Midi error:" << QString::fromStdString(error.getMessage());
 	}
 
 	return result;
@@ -48,13 +48,13 @@ bool PhMidiInput::open(QString inputPortName)
 		int portIndex = -1;
 		for(unsigned int i = 0; i < _midiIn->getPortCount(); i++) {
 			QString portName = convertName(_midiIn->getPortName(i));
-			PHDEBUG << "-" << portName;
+			PHDBG(22) << "-" << portName;
 			if(inputPortName == portName) {
 				portIndex = i;
 				break;
 			}
 		}
-		PHDEBUG << "Opening" << inputPortName;
+		PHDBG(22) << "Opening" << inputPortName;
 		if(portIndex >= 0)
 			_midiIn->openPort(portIndex);
 		else
@@ -65,7 +65,7 @@ bool PhMidiInput::open(QString inputPortName)
 		return true;
 	}
 	catch(RtMidiError &error) {
-		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
+		PHERR << "Midi error:" << QString::fromStdString(error.getMessage());
 		close();
 		return false;
 	}
@@ -74,6 +74,7 @@ bool PhMidiInput::open(QString inputPortName)
 void PhMidiInput::close()
 {
 	if(_midiIn) {
+		PHDBG(22);
 		if(_midiIn->isPortOpen()) {
 			_midiIn->closePort();
 		}
@@ -122,7 +123,7 @@ PhTimeCodeType PhMidiInput::computeTimeCodeType(unsigned char data)
 	case 3:
 		return PhTimeCodeType30;
 	default:
-		PHDEBUG << "Unknown tc type (assuming 25):" << data;
+		PHERR << "Unknown tc type (assuming 25):" << data;
 		return PhTimeCodeType25;
 	}
 }
@@ -141,7 +142,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 		// A SysEx message
 		case 0xf0:
 			if(message->size() < 4)
-				PHDEBUG << "Bad SysEx message size:" << message->size() << "/" << messageStr;
+				PHERR << "Bad SysEx message size:" << message->size() << "/" << messageStr;
 			else {
 				unsigned char manufactorId = message->at(1);
 #warning /// @todo Handle midi channel
@@ -152,7 +153,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					// Timecode message type
 					case 0x01:
 						if(message->size() != 10)
-							PHDEBUG << "Bad TC message size:" << message->size();
+							PHERR << "Bad TC message size:" << message->size();
 						else switch(message->at(4)) {
 							case 0x01:
 								_mtcType = computeTimeCodeType(message->at(5) >> 5);
@@ -161,12 +162,12 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 								_ss = message->at(7);
 								_ff = message->at(8);
 								if(message->at(9) != 0xF7)
-									PHDEBUG << "End of SysEx expected:" << QString::number(0xF7);
-								PHDEBUG << "Full TC:" << _hh << _mm << _ss << _ff;
+									PHERR << "End of SysEx expected:" << QString::number(0xF7);
+								PHDBG(22) << "Full TC:" << _hh << _mm << _ss << _ff;
 								onTimeCode(_hh, _mm, _ss, _ff, _mtcType);
 								break;
 							default:
-								PHDEBUG << "Unknown TC type:" << message->at(4) << "/" << messageStr;
+								PHERR << "Unknown TC type:" << message->at(4) << "/" << messageStr;
 								break;
 							}
 						break;
@@ -174,11 +175,11 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 					case 0x06:
 						switch(message->at(4)) {
 						case 0x01:
-							PHDEBUG << "MMC Stop" << messageStr;
+							PHDBG(22) << "MMC Stop" << messageStr;
 							onStop();
 							break;
 						case 0x02:
-							PHDEBUG << "MMC Play" << messageStr;
+							PHDBG(22) << "MMC Play" << messageStr;
 							onPlay();
 							break;
 						case 0x44:
@@ -188,28 +189,28 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 							_ss = message->at(9);
 							// It seems that the some information is sent to the frame byte too (not timecode type)...
 							_ff = message->at(10) & 0x1F;
-							PHDEBUG << "Go To" << _hh << _mm << _ss << _ff;
+							PHDBG(22) << "Go To" << _hh << _mm << _ss << _ff;
 							onTimeCode(_hh, _mm, _ss, _ff, _mtcType);
 							break;
 						default:
-							PHDEBUG << "Unknown MMC message:" << messageStr;
+							PHERR << "Unknown MMC message:" << messageStr;
 							break;
 						}
 
 						break;
 					default:
-						PHDEBUG << "Unknown SysEx type:" << QString::number(type, 16) << "/" << messageStr;
+						PHERR << "Unknown SysEx type:" << QString::number(type, 16) << "/" << messageStr;
 						break;
 					}
 				}
 //				else
-//					PHDEBUG << "Not a MMC message:" << messageStr;
+//					PHERR << "Not a MMC message:" << messageStr;
 			}
 			break;
 		// A quarter frame midi timecode message
 		case 0xf1:
 			if(message->size() != 2)
-				PHDEBUG << "Bad QF MTC message size:" << message->size() << "/" << messageStr;
+				PHERR << "Bad QF MTC message size:" << message->size() << "/" << messageStr;
 			else {
 				unsigned char data = message->at(1);
 				switch (data >> 4) {
@@ -254,7 +255,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 			}
 			break;
 		default:
-			PHDEBUG << "Unknown midi message:" << messageStr;
+			PHERR << "Unknown midi message:" << messageStr;
 			break;
 		}
 	}
@@ -262,7 +263,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 
 void PhMidiInput::onError(RtMidiError::Type type, QString errorText)
 {
-	PHDEBUG << "Error:" << type << errorText;
+	PHERR << "Error:" << type << errorText;
 }
 
 void PhMidiInput::callback(double, std::vector<unsigned char> *message, void *userData)
