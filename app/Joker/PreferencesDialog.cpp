@@ -92,7 +92,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 #endif
 
 	// Adding the default font
-	_fontList["SWENSON"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "SWENSON.TTF";
+	_fontList["Capella"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "Cappella.ttf";
 
 	// _oldFont is : /Path/To/Font.ttf
 	// So split with "/" then take last gives Font.ttf

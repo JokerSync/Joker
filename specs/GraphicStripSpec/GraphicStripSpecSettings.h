@@ -46,7 +46,7 @@ public:
 	}
 
 	QString textFontFile() {
-		return "SWENSON.TTF";
+		return "Cappella.ttf";
 	}
 
 	int textBoldness() {

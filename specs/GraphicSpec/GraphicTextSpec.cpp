@@ -78,6 +78,15 @@ go_bandit([](){
 			delete view;
 		});
 
+		it("draw_cappella_font", [&](){
+			font->setFontFile("Cappella.ttf");
+			AssertThat(font->ready(), IsFalse());
+
+			AssertThat(view->compare("fontTest.Cappella.ttf.expected.bmp", threshold), IsLessThan(776 * 576 * 0.04));
+
+			AssertThat(font->ready(), IsTrue());
+		});
+
 		it("draw_swenson_font", [&](){
 			font->setFontFile("SWENSON.ttf");
 			AssertThat(font->ready(), IsFalse());

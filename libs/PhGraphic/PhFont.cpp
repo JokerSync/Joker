@@ -35,10 +35,10 @@ QString PhFont::fontFile()
 	return _fontFile;
 }
 
-int PhFont::computeMaxFontSize(QString fileName)
+int PhFont::computeMaxFontSize(QString fileName, int boldness)
 {
 	int size = 25;
-	int fontHeight = 128;
+	int expectedFontHeight = 128 - boldness * 2;
 	int low = 0, high = 1000;
 	while (low < high) {
 		size = (low + high) / 2;
@@ -47,16 +47,18 @@ int PhFont::computeMaxFontSize(QString fileName)
 		if(!font)
 			return -1;
 
-		if (fontHeight == TTF_FontHeight(font))
+		int computedFontHeight = TTF_FontHeight(font);
+
+		if (expectedFontHeight == computedFontHeight)
 			break;
-		else if (fontHeight < TTF_FontHeight(font))
+		else if (expectedFontHeight < computedFontHeight)
 			high = size - 1;
 		else
 			low = size + 1;
 		TTF_CloseFont(font);
 	}
 	TTF_Font * font = TTF_OpenFont(fileName.toStdString().c_str(), size);
-	if(fontHeight < TTF_FontHeight(font))
+	if(expectedFontHeight < TTF_FontHeight(font))
 		size--;
 	TTF_CloseFont(font);
 
@@ -66,7 +68,7 @@ int PhFont::computeMaxFontSize(QString fileName)
 // This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
 bool PhFont::init()
 {
-	int size = computeMaxFontSize(_fontFile);
+	int size = computeMaxFontSize(_fontFile, _boldness);
 
 	if(size < 0)
 		return false;
@@ -119,7 +121,6 @@ bool PhFont::init()
 						glyphRect.h = glyphSurface->h;
 						if(glyphRect.h > _glyphHeight)
 							_glyphHeight = glyphRect.h;
-						//PHDEBUG << ch << (char) ch << minx << maxx << miny << maxy << advance << _glyphHeight;
 						// Then blit it to the matrix
 						SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
 
@@ -141,6 +142,7 @@ bool PhFont::init()
 				_glyphAdvance[charIndex] = 0;
 		}
 	}
+	PHDEBUG << TTF_FontFaceFamilyName(font) << ": glyph height" << _glyphHeight;
 
 	glEnable( GL_TEXTURE_2D );
 	// Have OpenGL generate a texture object handle for us
@@ -159,7 +161,9 @@ bool PhFont::init()
 
 	// Once the texture is created, the surface is no longer needed.
 	SDL_FreeSurface(matrixSurface);
+
 	TTF_CloseFont(font);
+
 
 	_ready = true;
 	return _ready;
