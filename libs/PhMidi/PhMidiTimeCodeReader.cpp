@@ -35,7 +35,7 @@ void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 {
 	// Make sure that the last stop occured more than 80ms ago
 	if((_lastStopDateTime.addMSecs(80) < QDateTime::currentDateTime()) && (_clock.rate() != 1)) {
-		PHDEBUG << "Play detected";
+		PHDBG(22) << "Play detected";
 		_clock.setRate(1);
 	}
 	_clock.elapse(PhTimeCode::timePerFrame(_tcType) / 4);
@@ -53,7 +53,7 @@ void PhMidiTimeCodeReader::onQuarterFrame(unsigned char data)
 		   || (hhmmssff[2] != _ss)
 		   || (hhmmssff[1] != _mm)
 		   || (hhmmssff[0] != _hh)) {
-			PHDEBUG << _hh << _mm << _ss << _ff;
+			PHDBG(22) << _hh << _mm << _ss << _ff;
 			_clock.setTime(PhTimeCode::timeFromHhMmSsFf(_hh, _mm, _ss, _ff, _tcType));
 		}
 	}
@@ -74,14 +74,14 @@ void PhMidiTimeCodeReader::onTimeCode(int hh, int mm, int ss, int ff, PhTimeCode
 
 void PhMidiTimeCodeReader::onPlay()
 {
-	PHDEBUG;
+	PHDBG(22);
 	PhMidiInput::onPlay();
 	_clock.setRate(1);
 }
 
 void PhMidiTimeCodeReader::onStop()
 {
-	PHDEBUG;
+	PHDBG(22);
 	PhMidiInput::onStop();
 	_clock.setRate(0);
 	_lastStopDateTime = QDateTime::currentDateTime();
@@ -92,7 +92,7 @@ void PhMidiTimeCodeReader::checkPause()
 	_pauseDetectionCounter++;
 	if(_pauseDetectionCounter >= 4) {
 		if(_clock.rate() != 0) {
-			PHDEBUG << "Pause detected";
+			PHDBG(22) << "Pause detected";
 			_clock.setRate(0);
 		}
 	}

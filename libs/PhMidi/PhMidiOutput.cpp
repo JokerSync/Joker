@@ -26,7 +26,7 @@ QStringList PhMidiOutput::outputList()
 			result.append(convertName(midiOut->getPortName(i)));
 	}
 	catch(RtMidiError &error) {
-		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
+		PHERR << "Midi error:" << QString::fromStdString(error.getMessage());
 	}
 
 	return result;
@@ -35,6 +35,7 @@ QStringList PhMidiOutput::outputList()
 bool PhMidiOutput::open(QString portName)
 {
 	PHDEBUG << "Opening" << portName;
+	close();
 	try {
 		_midiOut = new RtMidiOut();
 		for(unsigned int i = 0; i < _midiOut->getPortCount(); i++) {
@@ -43,10 +44,10 @@ bool PhMidiOutput::open(QString portName)
 				return true;
 			}
 		}
-		PHDEBUG << "Unable to find" << portName;
+		PHERR << "Unable to find" << portName;
 	}
 	catch(RtMidiError &error) {
-		PHDEBUG << "Midi error:" << QString::fromStdString(error.getMessage());
+		PHERR << "Midi error:" << QString::fromStdString(error.getMessage());
 	}
 	close();
 	return false;
@@ -55,6 +56,7 @@ bool PhMidiOutput::open(QString portName)
 void PhMidiOutput::close()
 {
 	if(_midiOut) {
+		PHDBG(22);
 		if(_midiOut->isPortOpen()) {
 			_midiOut->closePort();
 		}
