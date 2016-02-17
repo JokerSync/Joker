@@ -96,7 +96,7 @@ void PhGraphicView::addInfo(QString info)
 	_infos.append(info);
 }
 
-int PhGraphicView::compare(QString imageFile, int width, int height)
+int PhGraphicView::compare(QString imageFile, int threshold, int width, int height)
 {
 	int ratio = this->windowHandle()->devicePixelRatio();
 	if(width == 0)
@@ -135,7 +135,7 @@ int PhGraphicView::compare(QString imageFile, int width, int height)
 		}
 	}
 
-	if(totalDiff > 0) {
+	if(totalDiff > threshold) {
 		QFileInfo info(imageFile);
 		QString resultFile = info.completeBaseName() + ".result.bmp";
 		PHDBG(9) << "saving to " << resultFile;
