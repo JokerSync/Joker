@@ -532,7 +532,7 @@ void JokerWindow::onPaint(int width, int height)
 			PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 			if(currentLoop)
 				loopLabel = currentLoop->label();
-			int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) / 2;
+			int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) * nextTcHeight / 110;
 			int loopHeight = nextTcHeight;
 			int loopX = x + spacing + (boxWidth - loopWidth) / 2;
 			int loopY = y + (boxHeight - loopHeight) / 2;
