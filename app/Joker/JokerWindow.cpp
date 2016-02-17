@@ -488,7 +488,7 @@ void JokerWindow::onPaint(int width, int height)
 			if(_strip.doc()->episode().length() > 0)
 				title += " #" + _strip.doc()->episode().toLower();
 
-			int titleHeight = height / 40;
+			int titleHeight = height / 20;
 			int titleWidth = _strip.getHUDFont()->getNominalWidth(title) / 2;
 			PhGraphicText titleText(_strip.getHUDFont());
 			titleText.setColor(infoColor);
