@@ -368,6 +368,7 @@ go_bandit([](){
 		});
 
 		describe("x264", [&](){
+			int threshold = 64 * 64 * 32; // allow high threshold due to compression
 
 			before_each([&](){
 				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
@@ -387,8 +388,6 @@ go_bandit([](){
 			});
 
 			it("play x264", [&](){
-				int threshold = 64 * 64 * 32; // allow high threshold due to compression
-
 				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 
 				AssertThat(view->compare("interlace_000.bmp", threshold), IsLessThan(threshold));
@@ -423,6 +422,26 @@ go_bandit([](){
 					QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
 					AssertThat(view->compare(name, threshold), IsLessThan(threshold));
 				}
+			});
+
+			it("go to before keyframe", [&](){
+				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+
+				// go to the next key frame
+				engine->clock()->setFrame25(128);
+				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+
+				AssertThat(view->compare("interlace_128.bmp", threshold), IsLessThan(threshold));
+
+				// go to the frame right before the key frame
+				engine->clock()->setFrame25(127);
+				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+				AssertThat(view->compare("interlace_127.bmp", threshold), IsLessThan(threshold));
+
+				// go to two frames before the key frame
+				engine->clock()->setFrame25(126);
+				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+				AssertThat(view->compare("interlace_126.bmp", threshold), IsLessThan(threshold));
 			});
 		});
 	});
