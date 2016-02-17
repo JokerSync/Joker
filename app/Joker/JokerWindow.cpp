@@ -426,10 +426,10 @@ void JokerWindow::onPaint(int width, int height)
 	if(!_doc->forceRatio169() && (_videoEngine.height() > 0))
 		videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
 #endif
-	int videoX = 0;
+	int videoAvailableWidth = width;
 	// Center video if no information panel with next text
-	if(!_settings->displayNextText())
-		videoX = (width - videoWidth) / 2;
+	if(_settings->displayNextText())
+		videoAvailableWidth = width * 0.8f;
 
 #ifdef USE_VIDEO
 	// Display the video
@@ -438,14 +438,16 @@ void JokerWindow::onPaint(int width, int height)
 
 			int blackStripHeight = 0; // Height of the upper black strip when video is too large
 			int realVideoHeight = videoHeight;
-			if(videoWidth > width) {
-				videoWidth = width;
+			if(videoWidth > videoAvailableWidth) {
+				videoWidth = videoAvailableWidth;
 				if(_doc->forceRatio169())
 					realVideoHeight = videoWidth  * 9 / 16;
 				else
 					realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
 			}
 			blackStripHeight = (height - stripHeight - realVideoHeight) / 2;
+
+			int videoX = (videoAvailableWidth - videoWidth) / 2;
 
 			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight);
 		}
@@ -475,11 +477,11 @@ void JokerWindow::onPaint(int width, int height)
 			selectedPeoples.append(people);
 	}
 
-	int x = videoX + videoWidth;
+	int x = videoAvailableWidth;
 	int y = 0;
 	if(_settings->displayNextText()) {
 		QColor infoColor = _settings->backgroundColorLight();
-		int infoWidth = width - videoWidth;
+		int infoWidth = width - videoAvailableWidth;
 		int spacing = 4;
 
 		// Display the title
@@ -488,8 +490,8 @@ void JokerWindow::onPaint(int width, int height)
 			if(_strip.doc()->episode().length() > 0)
 				title += " #" + _strip.doc()->episode().toLower();
 
-			int titleHeight = height / 20;
-			int titleWidth = _strip.getHUDFont()->getNominalWidth(title) / 2;
+			int titleHeight = infoWidth / 12;
+			int titleWidth = _strip.getHUDFont()->getNominalWidth(title) * titleHeight / 110;
 			PhGraphicText titleText(_strip.getHUDFont());
 			titleText.setColor(infoColor);
 			titleText.setRect(x + spacing, y, titleWidth, titleHeight);
@@ -515,7 +517,7 @@ void JokerWindow::onPaint(int width, int height)
 		// Display the box around current loop number
 		int boxWidth = infoWidth / 4;
 		int boxHeight = infoWidth / 6;
-		int nextTcWidth = infoWidth - boxWidth - 12;
+		int nextTcWidth = infoWidth - boxWidth - 3 * spacing;
 		int nextTcHeight = nextTcWidth / 6;
 		{
 			int borderWidth = 2;
