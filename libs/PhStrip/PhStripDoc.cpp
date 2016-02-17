@@ -1662,7 +1662,7 @@ QString PhStripDoc::videoFilePath()
 	return _videoPath;
 }
 
-QList<QString> PhStripDoc::metaKeys()
+const QList<QString> PhStripDoc::metaKeys()
 {
 	return _metaInformation.keys();
 }
@@ -1672,7 +1672,7 @@ QString PhStripDoc::metaInformation(QString key)
 	return _metaInformation[key];
 }
 
-QList<PhPeople *> PhStripDoc::peoples() const
+const QList<PhPeople *> PhStripDoc::peoples() const
 {
 	return _peoples;
 }
@@ -1727,7 +1727,7 @@ bool PhStripDoc::forceRatio169() const
 	return _videoForceRatio169;
 }
 
-QList<PhStripText *> PhStripDoc::texts(bool alternate) const
+const QList<PhStripText *> PhStripDoc::texts(bool alternate) const
 {
 	if(alternate)
 		return _texts2;
@@ -1735,7 +1735,7 @@ QList<PhStripText *> PhStripDoc::texts(bool alternate) const
 		return _texts1;
 }
 
-QList<PhStripText *> PhStripDoc::texts(PhPeople *people) const
+const QList<PhStripText *> PhStripDoc::texts(PhPeople *people) const
 {
 	QList<PhStripText*> result;
 	foreach(PhStripText *text, this->texts()) {
@@ -1745,7 +1745,7 @@ QList<PhStripText *> PhStripDoc::texts(PhPeople *people) const
 	return result;
 }
 
-QList<PhStripSentence *> PhStripDoc::sentences(bool alternate) const
+const QList<PhStripSentence *> PhStripDoc::sentences(bool alternate) const
 {
 	if(alternate)
 		return _sentences2;
@@ -1753,7 +1753,7 @@ QList<PhStripSentence *> PhStripDoc::sentences(bool alternate) const
 		return _sentences1;
 }
 
-QList<PhStripSentence *> PhStripDoc::sentences(PhPeople *people) const
+const QList<PhStripSentence *> PhStripDoc::sentences(PhPeople *people) const
 {
 	QList<PhStripSentence*> result;
 
@@ -1764,12 +1764,12 @@ QList<PhStripSentence *> PhStripDoc::sentences(PhPeople *people) const
 	return result;
 }
 
-QList<PhStripLoop *> PhStripDoc::loops() const
+const QList<PhStripLoop *> PhStripDoc::loops() const
 {
 	return _loops;
 }
 
-QList<PhStripDetect *> PhStripDoc::detects(PhTime timeIn, PhTime timeOut)
+const QList<PhStripDetect *> PhStripDoc::detects(PhTime timeIn, PhTime timeOut)
 {
 	QList<PhStripDetect*> result;
 	foreach(PhStripDetect *detect, _detects) {
@@ -1780,7 +1780,7 @@ QList<PhStripDetect *> PhStripDoc::detects(PhTime timeIn, PhTime timeOut)
 	return result;
 }
 
-QList<PhStripDetect *> PhStripDoc::peopleDetects(PhPeople *people, PhTime timeIn, PhTime timeOut)
+const QList<PhStripDetect *> PhStripDoc::peopleDetects(PhPeople *people, PhTime timeIn, PhTime timeOut)
 {
 	QList<PhStripDetect *> result;
 	foreach(PhStripDetect *detect, this->detects(timeIn, timeOut)) {
@@ -1806,7 +1806,7 @@ void PhStripDoc::setVideoTimeIn(PhTime timeIn, PhTimeCodeType tcType)
 	_videoTimeCodeType = tcType;
 }
 
-QList<PhStripCut *> PhStripDoc::cuts() const
+const QList<PhStripCut *> PhStripDoc::cuts() const
 {
 	return _cuts;
 }

@@ -231,7 +231,7 @@ go_bandit([](){
 
 				settings->setUseNativeVideoSize(false);
 
-				AssertThat(view->compare("interlace_000_scaled.bmp", 128, 128), Equals(0));
+				AssertThat(view->compare("interlace_000_scaled.bmp", 0, 128, 128), Equals(0));
 			});
 
 			it("doesn't scale when using native video size", [&](){
@@ -239,7 +239,7 @@ go_bandit([](){
 
 				settings->setUseNativeVideoSize(true);
 
-				AssertThat(view->compare("interlace_000_native.bmp", 128, 128), Equals(0));
+				AssertThat(view->compare("interlace_000_native.bmp", 0, 128, 128), Equals(0));
 			});
 
 			it("handles timestamp", [&](){
@@ -276,13 +276,13 @@ go_bandit([](){
 			it("play x264", [&](){
 				int threshold = 64 * 64 * 32; // allow high threshold due to compression
 
-				AssertThat(view->compare("interlace_000.bmp"), IsLessThan(threshold));
+				AssertThat(view->compare("interlace_000.bmp", threshold), IsLessThan(threshold));
 
 				engine->clock()->setRate(1);
 				engine->clock()->elapse(960); // 1 frame at 25 fps
 
 				QThread::msleep(FRAME_WAIT_TIME);
-				AssertThat(view->compare("interlace_001.bmp"), IsLessThan(threshold));
+				AssertThat(view->compare("interlace_001.bmp", threshold), IsLessThan(threshold));
 
 				// Play 1 second
 				for(int i = 0; i < 24; i++) {
@@ -293,7 +293,7 @@ go_bandit([](){
 				engine->clock()->elapse(960); // 1 frame at 25 fps
 				QThread::msleep(FRAME_WAIT_TIME);
 
-				AssertThat(view->compare("interlace_026.bmp"), IsLessThan(threshold));
+				AssertThat(view->compare("interlace_026.bmp", threshold), IsLessThan(threshold));
 			});
 		});
 	});

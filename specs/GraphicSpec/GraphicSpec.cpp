@@ -47,7 +47,7 @@ go_bandit([](){
 
 			AssertThat(view.compare("compareTest.64x32.bmp"), Equals(std::numeric_limits<int>::max()));
 
-			AssertThat(view.compare("compareTest.64x32.bmp", 64, 32), Equals(0));
+			AssertThat(view.compare("compareTest.64x32.bmp", 0, 64, 32), Equals(0));
 
 			QFile file("compareTest.smalldiff.result.bmp");
 			if(file.exists()) {
@@ -56,6 +56,10 @@ go_bandit([](){
 			AssertThat(file.exists(), IsFalse());
 			AssertThat(view.compare("compareTest.smalldiff.bmp"), Equals(14));
 			AssertThat(file.exists(), IsTrue());
+			file.remove();
+
+			AssertThat(view.compare("compareTest.smalldiff.bmp", 14), Equals(14));
+			AssertThat(file.exists(), IsFalse());
 
 			AssertThat(view.compare("compareTest.expected.bmp"), Equals(0));
 		});
