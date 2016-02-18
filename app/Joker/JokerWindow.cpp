@@ -314,8 +314,11 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 				QApplication::setOverrideCursor(Qt::ArrowCursor);
 
 			if(_resizingStrip && (mouseEvent->buttons() & Qt::LeftButton)) {
-				PHDEBUG << "resizing strip:" << mouseEvent->pos();
-				_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
+				float newStripHeight = 1.0 - ((float) mouseEvent->pos().y() /(float) this->height());
+				if(newStripHeight < 0)
+					newStripHeight = 0;
+				PHDBG(2) << "resizing strip:" << newStripHeight;
+				_settings->setStripHeight(newStripHeight);
 			}
 			break;
 		}
@@ -568,7 +571,19 @@ void JokerWindow::onPaint(int width, int height)
 		}
 	}
 
-	_strip.draw(0, videoHeight, width, stripHeight, x, y, selectedPeoples);
+	if(stripHeight > 0) {
+		if(_synchronizer.stripClock() == NULL) {
+			PHDEBUG <<  "Reconnect the strip clock";
+			_synchronizer.setStripClock(_strip.clock());
+		}
+
+		_strip.draw(0, videoHeight, width, stripHeight, x, y, selectedPeoples);
+	}
+	else if(_synchronizer.stripClock()) {
+		PHDEBUG << "Disconnect the strip clock";
+		_synchronizer.setStripClock(NULL);
+	}
+
 	foreach(QString info, _strip.infos()) {
 		ui->videoStripView->addInfo(info);
 	}
