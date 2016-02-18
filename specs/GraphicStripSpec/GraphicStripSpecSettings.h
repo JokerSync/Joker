@@ -37,17 +37,25 @@ public:
 		return "motif-240.png";
 	}
 
+	void resetBackgroundImageLight() {}
+
 	QString backgroundImageDark() {
 		return "motif-240_black.png";
 	}
+
+	void resetBackgroundImageDark() {}
 
 	QString hudFontFile() {
 		return "Helvetica.ttf";
 	}
 
+	void resetHudFontFile() {}
+
 	QString textFontFile() {
 		return "Cappella.ttf";
 	}
+
+	void resetTextFontFile() {}
 
 	int textBoldness() {
 		return 1;
