@@ -7,77 +7,77 @@
 /** Implement the integer setter and getter for a PhGenericSettings */
 #define PH_SETTING_INT(setter, getter) \
 public slots: \
-	void setter(int getter) { setIntValue(#getter, getter); } \
+	void setter(int value) { setIntValue(#getter, value); } \
 public: \
 	int getter() {return intValue(#getter); }
 
 /** Implement the integer setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_INT2(setter, getter, defaultValue) \
 public slots: \
-	void setter(int getter) { setIntValue(#getter, getter); } \
+	void setter(int value) { setIntValue(#getter, value); } \
 public: \
 	int getter() {return intValue(#getter, defaultValue); }
 
 /** Implement the integer setter, getter and alias for a PhGenericSettings */
 #define PH_SETTING_INT3(setter, getter, alias) \
 public slots: \
-	void setter(int getter) { setIntValue(#getter, getter); } \
+	void setter(int value) { setIntValue(#getter, value); } \
 public: \
 	int getter() {return intValueWithAlias(#getter, #alias); }
 
 /** Implement the unsigned char setter and getter for a PhGenericSettings */
 #define PH_SETTING_UCHAR(setter, getter) \
 public slots: \
-	void setter(unsigned char getter) { setIntValue(#getter, getter); } \
+	void setter(unsigned char value) { setIntValue(#getter, value); } \
 public: \
 	unsigned char getter() {return intValue(#getter); }
 
 /** Implement the unsigned char setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_UCHAR2(setter, getter, defaultValue) \
 public slots: \
-	void setter(unsigned char getter) { setIntValue(#getter, getter); } \
+	void setter(unsigned char value) { setIntValue(#getter, value); } \
 public: \
 	unsigned char getter() {return intValue(#getter, defaultValue); }
 
 /** Implement the bool setter and getter for a PhGenericSettings */
 #define PH_SETTING_BOOL(setter, getter) \
 public slots: \
-	void setter(bool getter) { setBoolValue(#getter, getter); } \
+	void setter(bool value) { setBoolValue(#getter, value); } \
 public: \
 	bool getter() {return boolValue(#getter); }
 
 /** Implement the bool setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_BOOL2(setter, getter, defaultValue) \
 public slots: \
-	void setter(bool getter) { setBoolValue(#getter, getter); } \
+	void setter(bool value) { setBoolValue(#getter, value); } \
 public: \
 	bool getter() {return boolValue(#getter, defaultValue); }
 
 /** Implement the float setter and getter for a PhGenericSettings */
 #define PH_SETTING_FLOAT(setter, getter) \
 public slots: \
-	void setter(float getter) { setFloatValue(#getter, getter); } \
+	void setter(float value) { setFloatValue(#getter, value); } \
 public: \
 	float getter() {return floatValue(#getter); }
 
 /** Implement the float setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_FLOAT2(setter, getter, defaultValue) \
 public slots: \
-	void setter(float getter) { setFloatValue(#getter, getter); } \
+	void setter(float value) { setFloatValue(#getter, value); } \
 public: \
 	float getter() {return floatValue(#getter, defaultValue); }
 
 /** Implement the string setter and getter for a PhGenericSettings */
 #define PH_SETTING_STRING(setter, getter) \
 public slots: \
-	void setter(QString getter) { setStringValue(#getter, getter); } \
+	void setter(QString value) { setStringValue(#getter, value); } \
 public: \
 	QString getter() {return stringValue(#getter); }
 
 /** Implement the string setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_STRING2(setter, getter, defaultValue) \
 public slots: \
-	void setter(QString getter) { setStringValue(#getter, getter); } \
+	void setter(QString value) { setStringValue(#getter, value); } \
 public: \
 	QString getter() {return stringValue(#getter, defaultValue); }
 
