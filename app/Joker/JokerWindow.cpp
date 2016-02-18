@@ -315,10 +315,16 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 
 			if(_resizingStrip && (mouseEvent->buttons() & Qt::LeftButton)) {
 				float newStripHeight = 1.0 - ((float) mouseEvent->pos().y() /(float) this->height());
-				if(newStripHeight < 0)
-					newStripHeight = 0;
-				PHDBG(2) << "resizing strip:" << newStripHeight;
-				_settings->setStripHeight(newStripHeight);
+				if(newStripHeight <= 0) {
+#warning /// @todo Implement a reset mechanism for settings
+					_settings->setStripHeight(0.25f);
+					ui->actionHide_the_rythmo->setChecked(true);
+					_settings->setHideStrip(true);
+				}
+				else {
+					PHDBG(2) << "resizing strip:" << newStripHeight;
+					_settings->setStripHeight(newStripHeight);
+				}
 			}
 			break;
 		}
