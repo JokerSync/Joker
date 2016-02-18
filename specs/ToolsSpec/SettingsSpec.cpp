@@ -61,7 +61,12 @@ go_bandit([](){
 			settings->setIntTest1(6);
 			AssertThat(settings->intTest1(), Equals(6));
 			AssertThat(settings->intTest2(), Equals(0));
+
 			AssertThat(settings->intTest3(), Equals(4));
+			settings->setIntTest3(21);
+			settings->resetIntTest3();
+			AssertThat(settings->intTest3(), Equals(4));
+
 			AssertThat(settings->intTest4(), Equals(6));
 			settings->setIntTest4(8);
 			AssertThat(settings->intTest1(), Equals(6));
@@ -73,12 +78,18 @@ go_bandit([](){
 			AssertThat(settings->unsignedCharTest1(), Equals(0x11));
 			AssertThat(settings->unsignedCharTest2(), Equals(0x0));
 			AssertThat(settings->unsignedCharTest3(), Equals(0xF0));
+			settings->setUnsignedCharTest3(0xbb);
+			settings->resetUnsignedCharTest3();
+			AssertThat(settings->unsignedCharTest3(), Equals(0xF0));
 		});
 
 		it("handles_bool", [&](){
 			settings->setBoolTest1(true);
 			AssertThat(settings->boolTest1(), IsTrue());
 			AssertThat(settings->boolTest2(), IsFalse());
+			AssertThat(settings->boolTest3(), IsTrue());
+			settings->setBoolTest3(false);
+			settings->resetBoolTest3();
 			AssertThat(settings->boolTest3(), IsTrue());
 		});
 
@@ -87,12 +98,18 @@ go_bandit([](){
 			AssertThat(settings->floatTest1(), Equals(-1.34f));
 			AssertThat(settings->floatTest2(), Equals(0.0f));
 			AssertThat(settings->floatTest3(), Equals(3.14f));
+			settings->setFloatTest3(0);
+			settings->resetFloatTest3();
+			AssertThat(settings->floatTest3(), Equals(3.14f));
 		});
 
 		it("handles_string", [&](){
 			settings->setStringTest1("test setString");
 			AssertThat(settings->stringTest1(), Equals("test setString"));
 			AssertThat(settings->stringTest2(), Equals(""));
+			AssertThat(settings->stringTest3(), Equals("stringTest default value"));
+			settings->setStringTest3("another value");
+			settings->resetStringTest3();
 			AssertThat(settings->stringTest3(), Equals("stringTest default value"));
 		});
 
@@ -103,58 +120,32 @@ go_bandit([](){
 			// Test changing string list settings
 
 			settings->setStringTest4("Check other settings are not affected by string list settings");
-			QStringList list1;
-			list1.append("a");
-			list1.append("b");
-			list1.append("c");
-			list1.append("d");
 
-			settings->setStringListTest2(list1);
+			settings->setStringListTest2({"a", "b", "c", "d"});
 
 			AssertThat(settings->stringTest4(), Equals("Check other settings are not affected by string list settings"));
 
-			QStringList list2 = settings->stringListTest2();
-
-			AssertThat(list2.size(), Equals(list1.size()));
-
-			for(int i = 0; i < list1.size(); i++)
-				AssertThat(list2.at(i), Equals(list1.at(i)));
+			AssertThat(settings->stringListTest2(), Equals(QStringList({"a", "b", "c", "d"})));
 
 			// Test changin an existing list settings
-			QStringList list3;
-			list3.append("e");
-			list3.append("f");
-			list3.append("g");
-
-			settings->setStringListTest2(list3);
+			settings->setStringListTest2({"e", "f", "g"});
 
 			AssertThat(settings->stringTest4(), Equals("Check other settings are not affected by string list settings"));
 
-			QStringList list4 = settings->stringListTest2();
-
-			AssertThat(list3.size(), Equals(list4.size()));
-
-			for(int i = 0; i < list3.size(); i++)
-				AssertThat(list4.at(i), Equals(list3.at(i)));
+			AssertThat(settings->stringListTest2(), Equals(QStringList({"e", "f", "g"})));
 
 			// This is just to make sure that changing string
 			// list settings doesn't affect other settings
 			settings->setIntTest1(33);
 
-			QStringList list5 = settings->stringListTest3();
-
-			AssertThat(list5.size(), Equals(3));
-			AssertThat(list5[0], Equals("a"));
-			AssertThat(list5[1], Equals("b"));
-			AssertThat(list5[2], Equals("c"));
+			AssertThat(settings->stringListTest3(), Equals(QStringList({"a", "b", "c"})));
 
 			settings->setStringListTest3(QStringList({"d", "e"}));
 
-			QStringList list6 = settings->stringListTest3();
+			AssertThat(settings->stringListTest3(), Equals(QStringList({"d", "e"})));
 
-			AssertThat(list6.size(), Equals(2));
-			AssertThat(list6[0], Equals("d"));
-			AssertThat(list6[1], Equals("e"));
+			settings->resetStringListTest3();
+			AssertThat(settings->stringListTest3(), Equals(QStringList({"a", "b", "c"})));
 
 			// Check changing string list settings doesn't affect
 			// other settings

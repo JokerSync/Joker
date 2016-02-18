@@ -4,6 +4,9 @@
 #include <QString>
 #include <QSettings>
 
+// This page was is a great resource that helped construct these useful macro:
+// https://gcc.gnu.org/onlinedocs/cpp/Macros.html#Macros
+
 /** Implement the integer setter and getter for a PhGenericSettings */
 #define PH_SETTING_INT(setter, getter) \
 public slots: \
@@ -15,6 +18,7 @@ public: \
 #define PH_SETTING_INT2(setter, getter, defaultValue) \
 public slots: \
 	void setter(int value) { setIntValue(#getter, value); } \
+	void re ## setter() { setIntValue(#getter, defaultValue); } \
 public: \
 	int getter() {return intValue(#getter, defaultValue); }
 
@@ -36,6 +40,7 @@ public: \
 #define PH_SETTING_UCHAR2(setter, getter, defaultValue) \
 public slots: \
 	void setter(unsigned char value) { setIntValue(#getter, value); } \
+	void re ## setter() { setIntValue(#getter, defaultValue); } \
 public: \
 	unsigned char getter() {return intValue(#getter, defaultValue); }
 
@@ -50,6 +55,7 @@ public: \
 #define PH_SETTING_BOOL2(setter, getter, defaultValue) \
 public slots: \
 	void setter(bool value) { setBoolValue(#getter, value); } \
+	void re ## setter() { setBoolValue(#getter, defaultValue); } \
 public: \
 	bool getter() {return boolValue(#getter, defaultValue); }
 
@@ -64,6 +70,7 @@ public: \
 #define PH_SETTING_FLOAT2(setter, getter, defaultValue) \
 public slots: \
 	void setter(float value) { setFloatValue(#getter, value); } \
+	void re ## setter() { setFloatValue(#getter, defaultValue); } \
 public: \
 	float getter() {return floatValue(#getter, defaultValue); }
 
@@ -78,6 +85,7 @@ public: \
 #define PH_SETTING_STRING2(setter, getter, defaultValue) \
 public slots: \
 	void setter(QString value) { setStringValue(#getter, value); } \
+	void re ## setter() { setStringValue(#getter, defaultValue); } \
 public: \
 	QString getter() {return stringValue(#getter, defaultValue); }
 
@@ -92,6 +100,7 @@ public: \
 #define PH_SETTING_STRINGLIST2(setter, getter, defaultValue) \
 public slots: \
 	void setter(QStringList list) { setStringList(#getter, list); } \
+	void re ## setter() { setStringList(#getter, defaultValue); } \
 public: \
 	QStringList getter() {return stringList(#getter, defaultValue); }
 
