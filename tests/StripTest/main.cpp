@@ -159,6 +159,18 @@ void displayDoc(PhStripDoc* doc)
 	}
 }
 
+bool generate(QString fileName) {
+	PHDEBUG << fileName;
+	PhStripDoc doc;
+
+	doc.setTitle("The man with the golden arms");
+	for(int i = 0; i < 200; i++) {
+		doc.addLoop(new PhStripLoop(i * 960 * 25 * 60, QString::number(i)));
+	}
+
+	return doc.exportDetXFile(fileName, PhTimeCode::timeFromString("01:00:00:00", PhTimeCodeType25));
+}
+
 /**
  * @brief The application main entry point
  * @param argc Command line argument count
@@ -167,6 +179,7 @@ void displayDoc(PhStripDoc* doc)
  */
 int main(int argc, char *argv[])
 {
+	PHDEBUG << "StripTest";
 	PhStripDoc doc;
 
 //	PHDEBUG << doc.computeDetXId("abc");
@@ -176,28 +189,33 @@ int main(int argc, char *argv[])
 //	PHDEBUG << doc.importDetXFile("/Users/martin/dev/builds/StripSpec-Desktop_Qt_5_3_clang_64bit-Debug/save01.detx");
 //	PHDEBUG << doc.title();
 
-	return 0;
+//	return 0;
 
-	StripTestSettings settings;
+//	StripTestSettings settings;
 //	PhDebug::setDisplay(false, false, false, false, false);
-	PhDebug::setLogMask(settings.logMask());
+	//PhDebug::setLogMask(settings.logMask());
 
 	int result = 0;
 
-	for(int i = 1; i < argc; i++) {
-		QString fileName = argv[i];
-		if(QFile::exists(fileName)) {
-			if(doc.openStripFile(fileName)) {
-				displayDoc(&doc);
-			}
-			else {
-				result = 1;
-				PHDEBUG << "-------- FAILED --------";
-				break;
-			}
-		}
-		else
-			PHDEBUG << fileName << "doesn't exists!!!";
+//	for(int i = 1; i < argc; i++) {
+//		QString fileName = argv[i];
+//		if(QFile::exists(fileName)) {
+//			if(doc.openStripFile(fileName)) {
+//				displayDoc(&doc);
+//			}
+//			else {
+//				result = 1;
+//				PHDEBUG << "-------- FAILED --------";
+//				break;
+//			}
+//		}
+//		else
+//			PHDEBUG << fileName << "doesn't exists!!!";
+//	}
+	PHDEBUG << argc;
+	if(argc > 1) {
+		if(!generate(argv[1]))
+			result = 1;
 	}
 
 	return result;
