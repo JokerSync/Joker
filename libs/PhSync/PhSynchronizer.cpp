@@ -77,6 +77,10 @@ void PhSynchronizer::setRate(PhRate value)
 
 void PhSynchronizer::setStripClock(PhClock *clock)
 {
+	if(_stripClock) {
+		disconnect(_stripClock, &PhClock::timeChanged, this, &PhSynchronizer::onStripTimeChanged);
+		disconnect(_stripClock, &PhClock::rateChanged, this, &PhSynchronizer::onStripRateChanged);
+	}
 	_stripClock = clock;
 	if(clock) {
 		connect(_stripClock, &PhClock::timeChanged, this, &PhSynchronizer::onStripTimeChanged);
@@ -86,6 +90,10 @@ void PhSynchronizer::setStripClock(PhClock *clock)
 
 void PhSynchronizer::setVideoClock(PhClock *clock)
 {
+	if(_videoClock) {
+		disconnect(_videoClock, &PhClock::timeChanged, this, &PhSynchronizer::onVideoTimeChanged);
+		disconnect(_videoClock, &PhClock::rateChanged, this, &PhSynchronizer::onVideoRateChanged);
+	}
 	_videoClock = clock;
 	if(clock) {
 		connect(_videoClock, &PhClock::timeChanged, this, &PhSynchronizer::onVideoTimeChanged);
@@ -95,6 +103,10 @@ void PhSynchronizer::setVideoClock(PhClock *clock)
 
 void PhSynchronizer::setSyncClock(PhClock *clock, SyncType type)
 {
+	if(_syncClock) {
+		disconnect(_syncClock, &PhClock::timeChanged, this, &PhSynchronizer::onSyncTimeChanged);
+		disconnect(_syncClock, &PhClock::rateChanged, this, &PhSynchronizer::onSyncRateChanged);
+	}
 	_syncClock = clock;
 	_syncType = type;
 	if(_syncClock) {
