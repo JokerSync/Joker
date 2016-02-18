@@ -516,18 +516,13 @@ void JokerWindow::onPaint(int width, int height)
 
 		// Display the box around current loop number
 		int boxWidth = infoWidth / 4;
-		int boxHeight = infoWidth / 6;
 		int nextTcWidth = infoWidth - boxWidth - 3 * spacing;
 		int nextTcHeight = nextTcWidth / 6;
+		int boxHeight = nextTcHeight + spacing;
 		{
-			int borderWidth = 2;
 			PhGraphicSolidRect outsideLoopRect(x + spacing, y, boxWidth, boxHeight);
 			outsideLoopRect.setColor(infoColor);
 			outsideLoopRect.draw();
-
-			PhGraphicSolidRect insideLoopRect(x + spacing + borderWidth, y + borderWidth, boxWidth - 2 * borderWidth, boxHeight - 2 * borderWidth);
-			insideLoopRect.setColor(Qt::black);
-			insideLoopRect.draw();
 
 			// Display the current loop number
 			QString loopLabel = "0";
@@ -537,12 +532,12 @@ void JokerWindow::onPaint(int width, int height)
 			int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) * nextTcHeight / 110;
 			int loopHeight = nextTcHeight;
 			int loopX = x + spacing + (boxWidth - loopWidth) / 2;
-			int loopY = y + (boxHeight - loopHeight) / 2;
+			int loopY = y + spacing;
 
 			PhGraphicText gCurrentLoop(_strip.getHUDFont(), loopLabel);
 
 			gCurrentLoop.setRect(loopX, loopY, loopWidth, loopHeight);
-			gCurrentLoop.setColor(infoColor);
+			gCurrentLoop.setColor(Qt::black);
 			gCurrentLoop.draw();
 		}
 
@@ -569,7 +564,7 @@ void JokerWindow::onPaint(int width, int height)
 			nextTCText.setColor(infoColor);
 
 			int nextTcX = x + 2 * spacing + boxWidth;
-			int nextTcY = y + (boxHeight - nextTcHeight) / 2;
+			int nextTcY = y + spacing;
 			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
 
 			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, timeCodeType()));
