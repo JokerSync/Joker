@@ -103,12 +103,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->actionDisplay_the_information_panel->setChecked(_settings->displayNextText());
 
-#warning /// @todo do we warn the user that test mode is on?
 	ui->actionTest_mode->setChecked(_settings->stripTestMode());
-
-#warning /// @todo move to PhDocumentWindow
-	// This is for the drag and drop feature
-	setAcceptDrops(true);
 
 	ui->actionLoop->setChecked(_settings->syncLooping());
 
@@ -316,8 +311,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			if(_resizingStrip && (mouseEvent->buttons() & Qt::LeftButton)) {
 				float newStripHeight = 1.0 - ((float) mouseEvent->pos().y() /(float) this->height());
 				if(newStripHeight <= 0) {
-#warning /// @todo Implement a reset mechanism for settings
-					_settings->setStripHeight(0.25f);
+					_settings->resetStripHeight();
 					ui->actionHide_the_rythmo->setChecked(true);
 					_settings->setHideStrip(true);
 				}
@@ -1159,8 +1153,7 @@ PhTimeCodeType JokerWindow::timeCodeType()
 #ifdef USE_VIDEO
 	return _videoEngine.timeCodeType();
 #else
-#warning /// @todo Are we sure to use default 25?
-	return PhTimeCodeType25;
+	return _doc->videoTimeCodeType();
 #endif
 
 }
