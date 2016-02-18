@@ -209,5 +209,54 @@ go_bandit([](){
 			stripClock->elapse(1);
 			AssertThat(sync->time(), Equals(100));
 		});
+
+		it("support disconnecting the strip clock", [&](){
+			sync->setSyncClock(syncClock, PhSynchronizer::MTC);
+			sync->setStripClock(stripClock);
+			sync->setVideoClock(videoClock);
+
+			syncClock->setTime(9600);
+
+			AssertThat(syncClock->time(), Equals(9600));
+			AssertThat(stripClock->time(), Equals(9600));
+			AssertThat(videoClock->time(), Equals(9600));
+
+			syncClock->setRate(1);
+
+			AssertThat(syncClock->rate(), Equals(1));
+			AssertThat(stripClock->rate(), Equals(1));
+			AssertThat(videoClock->rate(), Equals(1));
+
+			// disconnect the strip clock
+			sync->setStripClock(NULL);
+
+			// check changing the time doesn't affect the strip clock time anymore
+			syncClock->setTime(19200);
+
+			AssertThat(syncClock->time(), Equals(19200));
+			AssertThat(stripClock->time(), Equals(9600));
+			AssertThat(videoClock->time(), Equals(19200));
+
+			// check changing the rate doesn't affect the strip clock rate anymore
+			syncClock->setRate(2);
+
+			AssertThat(syncClock->rate(), Equals(2));
+			AssertThat(stripClock->rate(), Equals(1));
+			AssertThat(videoClock->rate(), Equals(2));
+
+			// check changing the strip clock time doesn't affect the other clocks time anymore
+			stripClock->setTime(28800);
+
+			AssertThat(syncClock->time(), Equals(19200));
+			AssertThat(stripClock->time(), Equals(28800));
+			AssertThat(videoClock->time(), Equals(19200));
+
+			// check changing the strip clock rate doesn't affect the other clocks rate anymore
+			stripClock->setRate(0);
+
+			AssertThat(syncClock->rate(), Equals(2));
+			AssertThat(stripClock->rate(), Equals(0));
+			AssertThat(videoClock->rate(), Equals(2));
+		});
 	});
 });
