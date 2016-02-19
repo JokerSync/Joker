@@ -319,7 +319,9 @@ go_bandit([](){
 
 			it("buffer", [&](){
 				// engine decode 5 frames head
-				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				while(decodeSpy->count() < 5) {
+					AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				}
 				AssertThat(decodeSpy->count(), Equals(5));
 				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsFalse());
 
@@ -340,7 +342,9 @@ go_bandit([](){
 
 			it("has a frame pool", [&](){
 				// Add 5 first frame to the pool
-				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				while (decodeSpy->count() < 5) {
+					AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				}
 				AssertThat(decodeSpy->count(), Equals(5));
 
 				AssertThat(engine->decodedFramePool().count(), Equals(5));
@@ -361,7 +365,9 @@ go_bandit([](){
 
 				// Jump to a far location clear the pool
 				engine->clock()->setFrame25(120);
-				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				while(decodeSpy->count() < 61) {
+					AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+				}
 				AssertThat(decodeSpy->count(), Equals(61));
 				AssertThat(engine->decodedFramePool().count(), Equals(5));
 			});
