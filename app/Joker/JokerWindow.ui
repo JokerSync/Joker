@@ -117,7 +117,7 @@
     <addaction name="actionDisplay_the_information_panel"/>
     <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
+   <widget class="PhHelpMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
     </property>
@@ -548,6 +548,11 @@
    <extends>QWidget</extends>
    <header>PhGraphic/PhGraphicView.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PhHelpMenu</class>
+   <extends>QMenu</extends>
+   <header>../../libs/PhCommonUI/PhHelpMenu.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

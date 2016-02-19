@@ -28,6 +28,9 @@ void PhDocumentWindow::processArg(int argc, char *argv[])
 		openDocument(_settings->currentDocument());
 	else
 		updateRecentDocumentMenu();
+
+	// This is for the drag and drop feature
+	setAcceptDrops(true);
 }
 
 void PhDocumentWindow::resetDocument()

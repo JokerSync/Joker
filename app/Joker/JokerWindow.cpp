@@ -103,12 +103,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->actionDisplay_the_information_panel->setChecked(_settings->displayNextText());
 
-#warning /// @todo do we warn the user that test mode is on?
 	ui->actionTest_mode->setChecked(_settings->stripTestMode());
-
-#warning /// @todo move to PhDocumentWindow
-	// This is for the drag and drop feature
-	setAcceptDrops(true);
 
 	ui->actionLoop->setChecked(_settings->syncLooping());
 
@@ -316,8 +311,7 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 			if(_resizingStrip && (mouseEvent->buttons() & Qt::LeftButton)) {
 				float newStripHeight = 1.0 - ((float) mouseEvent->pos().y() /(float) this->height());
 				if(newStripHeight <= 0) {
-#warning /// @todo Implement a reset mechanism for settings
-					_settings->setStripHeight(0.25f);
+					_settings->resetStripHeight();
 					ui->actionHide_the_rythmo->setChecked(true);
 					_settings->setHideStrip(true);
 				}
@@ -426,10 +420,10 @@ void JokerWindow::onPaint(int width, int height)
 	if(!_doc->forceRatio169() && (_videoEngine.height() > 0))
 		videoWidth = videoHeight * _videoEngine.width() / _videoEngine.height();
 #endif
-	int videoX = 0;
+	int videoAvailableWidth = width;
 	// Center video if no information panel with next text
-	if(!_settings->displayNextText())
-		videoX = (width - videoWidth) / 2;
+	if(_settings->displayNextText())
+		videoAvailableWidth = width * 0.8f;
 
 #ifdef USE_VIDEO
 	// Display the video
@@ -438,14 +432,16 @@ void JokerWindow::onPaint(int width, int height)
 
 			int blackStripHeight = 0; // Height of the upper black strip when video is too large
 			int realVideoHeight = videoHeight;
-			if(videoWidth > width) {
-				videoWidth = width;
+			if(videoWidth > videoAvailableWidth) {
+				videoWidth = videoAvailableWidth;
 				if(_doc->forceRatio169())
 					realVideoHeight = videoWidth  * 9 / 16;
 				else
 					realVideoHeight = videoWidth  * _videoEngine.height() / _videoEngine.width();
 			}
 			blackStripHeight = (height - stripHeight - realVideoHeight) / 2;
+
+			int videoX = (videoAvailableWidth - videoWidth) / 2;
 
 			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight);
 		}
@@ -475,11 +471,11 @@ void JokerWindow::onPaint(int width, int height)
 			selectedPeoples.append(people);
 	}
 
-	int x = videoX + videoWidth;
+	int x = videoAvailableWidth;
 	int y = 0;
 	if(_settings->displayNextText()) {
 		QColor infoColor = _settings->backgroundColorLight();
-		int infoWidth = width - videoWidth;
+		int infoWidth = width - videoAvailableWidth;
 		int spacing = 4;
 
 		// Display the title
@@ -488,8 +484,8 @@ void JokerWindow::onPaint(int width, int height)
 			if(_strip.doc()->episode().length() > 0)
 				title += " #" + _strip.doc()->episode().toLower();
 
-			int titleHeight = height / 40;
-			int titleWidth = _strip.getHUDFont()->getNominalWidth(title) / 2;
+			int titleHeight = infoWidth / 12;
+			int titleWidth = _strip.getHUDFont()->getNominalWidth(title) * titleHeight / 110;
 			PhGraphicText titleText(_strip.getHUDFont());
 			titleText.setColor(infoColor);
 			titleText.setRect(x + spacing, y, titleWidth, titleHeight);
@@ -514,33 +510,28 @@ void JokerWindow::onPaint(int width, int height)
 
 		// Display the box around current loop number
 		int boxWidth = infoWidth / 4;
-		int boxHeight = infoWidth / 6;
-		int nextTcWidth = infoWidth - boxWidth - 12;
+		int nextTcWidth = infoWidth - boxWidth - 3 * spacing;
 		int nextTcHeight = nextTcWidth / 6;
+		int boxHeight = nextTcHeight + spacing;
 		{
-			int borderWidth = 2;
 			PhGraphicSolidRect outsideLoopRect(x + spacing, y, boxWidth, boxHeight);
 			outsideLoopRect.setColor(infoColor);
 			outsideLoopRect.draw();
-
-			PhGraphicSolidRect insideLoopRect(x + spacing + borderWidth, y + borderWidth, boxWidth - 2 * borderWidth, boxHeight - 2 * borderWidth);
-			insideLoopRect.setColor(Qt::black);
-			insideLoopRect.draw();
 
 			// Display the current loop number
 			QString loopLabel = "0";
 			PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 			if(currentLoop)
 				loopLabel = currentLoop->label();
-			int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) / 2;
+			int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) * nextTcHeight / 110;
 			int loopHeight = nextTcHeight;
 			int loopX = x + spacing + (boxWidth - loopWidth) / 2;
-			int loopY = y + (boxHeight - loopHeight) / 2;
+			int loopY = y + spacing;
 
 			PhGraphicText gCurrentLoop(_strip.getHUDFont(), loopLabel);
 
 			gCurrentLoop.setRect(loopX, loopY, loopWidth, loopHeight);
-			gCurrentLoop.setColor(infoColor);
+			gCurrentLoop.setColor(Qt::black);
 			gCurrentLoop.draw();
 		}
 
@@ -567,7 +558,7 @@ void JokerWindow::onPaint(int width, int height)
 			nextTCText.setColor(infoColor);
 
 			int nextTcX = x + 2 * spacing + boxWidth;
-			int nextTcY = y + (boxHeight - nextTcHeight) / 2;
+			int nextTcY = y + spacing;
 			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
 
 			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, timeCodeType()));
@@ -1162,8 +1153,7 @@ PhTimeCodeType JokerWindow::timeCodeType()
 #ifdef USE_VIDEO
 	return _videoEngine.timeCodeType();
 #else
-#warning /// @todo Are we sure to use default 25?
-	return PhTimeCodeType25;
+	return _doc->videoTimeCodeType();
 #endif
 
 }

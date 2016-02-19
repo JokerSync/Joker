@@ -17,6 +17,14 @@ PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
 	_settings(settings),
 	_maxDrawElapsed(0)
 {
+	if(!QFile(_settings->textFontFile()).exists())
+		_settings->resetTextFontFile();
+	if(!QFile(_settings->hudFontFile()).exists())
+		_settings->resetHudFontFile();
+	if(!QFile(_settings->backgroundImageDark()).exists())
+		_settings->resetBackgroundImageDark();
+	if(!QFile(_settings->backgroundImageLight()).exists())
+		_settings->resetBackgroundImageLight();
 	// This is used to make some time-based test
 	_testTimer.start();
 }

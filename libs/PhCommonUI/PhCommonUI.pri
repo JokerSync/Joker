@@ -20,6 +20,7 @@ HEADERS += \
 	$$PWD/PhFeedbackDialog.h \
 	$$PWD/PhFeedbackSettings.h \
     $$PWD/PhDialogButtonBox.h \
+    $$PWD/PhHelpMenu.h
 
 SOURCES += \
 #   $$PWD/PhLeap.cpp \
@@ -32,8 +33,7 @@ SOURCES += \
     $$PWD/PhEditableDocumentWindow.cpp \
     $$PWD/PhLockableSpinBox.cpp \
 	$$PWD/PhFeedbackDialog.cpp \
-    $$PWD/PhDialogButtonBox.cpp
-
+	$$PWD/PhDialogButtonBox.cpp
 
 FORMS += $$PWD/PhMediaPanel.ui \
 	$$PWD/PhTimeCodeDialog.ui \
@@ -54,6 +54,13 @@ linux {
 # MacOS specific
 mac {
 #LIBS += -L$$(LEAP_SDK)/lib -lLeap
+
+	LIBS += -framework AppKit
+	OBJECTIVE_SOURCES += $$PWD/PhHelpMenu.mm
+}
+
+!mac {
+	SOURCES += $$PWD/PhHelpMenu.cpp
 }
 
 #	leap.commands += cp -r $$(LEAP_SDK)/lib/libLeap.dylib $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;

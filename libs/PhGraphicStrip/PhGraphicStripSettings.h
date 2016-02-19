@@ -35,20 +35,36 @@ public:
 	 */
 	virtual QString backgroundImageLight() = 0;
 	/**
+	 * @brief Reset the light background image file to its default value
+	 */
+	virtual void resetBackgroundImageLight() = 0;
+	/**
 	 * @brief The dark background image file path
 	 * @return An image file path
 	 */
 	virtual QString backgroundImageDark() = 0;
+	/**
+	 * @brief Reset the dark background image file to its default value
+	 */
+	virtual void resetBackgroundImageDark() = 0;
 	/**
 	 * @brief Get the HUD font file
 	 * @return A font file path
 	 */
 	virtual QString hudFontFile() = 0;
 	/**
+	 * @brief Reset the HUD font file to its default value
+	 */
+	virtual void resetHudFontFile() = 0;
+	/**
 	 * @brief Get the strip text font file
 	 * @return A font file path
 	 */
 	virtual QString textFontFile() = 0;
+	/**
+	 * @brief Reset the text font file to its default value
+	 */
+	virtual void resetTextFontFile() = 0;
 	/**
 	 * @brief Get the strip text boldness
 	 * @return A integer value from 0 to 5
