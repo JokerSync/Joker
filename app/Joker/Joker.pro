@@ -8,7 +8,7 @@ cache()
 
 TARGET = Joker
 
-VERSION = 2.0.5
+VERSION = 2.0.6
 
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
