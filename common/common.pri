@@ -22,6 +22,8 @@ isEmpty(ICON) {
 	ICON = $$TOP_ROOT/data/icon.icns
 }
 
+VERSION = $$system(git describe --tags --dirty)
+
 PH_GIT_BRANCH = $$system(git rev-parse --abbrev-ref HEAD)
 PH_GIT_REVISION = $$system(git rev-parse HEAD)
 
