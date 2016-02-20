@@ -451,6 +451,8 @@ public:
 	void setModified(bool modified);
 
 private:
+	void sort();
+
 	QString _generator;
 	/**
 	 * Title of the corresponding audiovisual content.

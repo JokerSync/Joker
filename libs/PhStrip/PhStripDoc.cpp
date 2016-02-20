@@ -224,6 +224,8 @@ bool PhStripDoc::importDetXFile(QString fileName)
 	xmlFile.close();
 	delete domDoc;
 
+	sort();
+
 	_modified = true;
 
 	return true;
@@ -663,6 +665,15 @@ void PhStripDoc::setModified(bool modified)
 	_modified = modified;
 }
 
+void PhStripDoc::sort()
+{
+	qSort(_texts1.begin(), _texts1.end(), PhStripObject::dtcomp);
+	qSort(_texts2.begin(), _texts2.end(), PhStripObject::dtcomp);
+	qSort(_detects.begin(), _detects.end(), PhStripObject::dtcomp);
+	qSort(_cuts.begin(), _cuts.end(), PhStripObject::dtcomp);
+	qSort(_loops.begin(), _loops.end(), PhStripObject::dtcomp);
+}
+
 bool PhStripDoc::importMosFile(const QString &fileName)
 {
 	PHDEBUG << "===============" << fileName << "===============";
@@ -900,11 +911,7 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 		_texts2.clear();
 	}
 
-	qSort(_texts1.begin(), _texts1.end(), PhStripObject::dtcomp);
-	qSort(_texts2.begin(), _texts2.end(), PhStripObject::dtcomp);
-	qSort(_detects.begin(), _detects.end(), PhStripObject::dtcomp);
-	qSort(_cuts.begin(), _cuts.end(), PhStripObject::dtcomp);
-	qSort(_loops.begin(), _loops.end(), PhStripObject::dtcomp);
+	sort();
 
 	_modified = true;
 
@@ -1077,6 +1084,8 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 		}
 	}
 
+	sort();
+
 	return result;
 }
 
@@ -1167,6 +1176,8 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 	}
 
 	db.close();
+
+	sort();
 
 	return true;
 }
