@@ -6,7 +6,7 @@
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
-	QSettings settings("Phonations", "AVTest");
+	QSettings settings(PH_ORG_NAME, PH_APP_NAME);
 
 	AVTestWindow w(&settings);
 	w.resize(800, 600);

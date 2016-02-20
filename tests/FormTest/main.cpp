@@ -14,11 +14,14 @@
 int main(int argc, char *argv[])
 {
 	FormTestSettings settings;
-	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
+	PHDEBUG << PH_ORG_NAME << PH_APP_NAME << PH_FULL_VERSION;
 	QApplication a(argc, argv);
-	a.setApplicationVersion(APP_VERSION);
-	a.setOrganizationName(ORG_NAME);
-	a.setOrganizationDomain(ORG_NAME);
+	PHDEBUG << a.applicationVersion();
+	a.setApplicationVersion(PH_FULL_VERSION);
+	a.setOrganizationName(PH_ORG_NAME);
+	a.setOrganizationDomain(PH_ORG_NAME);
+
+	PHDEBUG << a.applicationVersion();
 
 	FormTestWindow window(&settings);
 	window.show();

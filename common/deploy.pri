@@ -25,11 +25,7 @@ mac {
 }
 
 CONFIG(release, debug|release) {
-	if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {
-		PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}
-	} else {
-		PH_DEPLOY_TARGET = $${TARGET}_v$${VERSION}_$${PH_GIT_BRANCH}
-	}
+	PH_DEPLOY_TARGET = $${TARGET}_v$$PH_FULL_VERSION
 
 	message($$PH_DEPLOY_LOCATION/$$PH_DEPLOY_TARGET)
 

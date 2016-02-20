@@ -17,7 +17,7 @@
  */
 int main(int argc, char *argv[])
 {
-	QSettings settings("Phonations", APP_NAME);
+	QSettings settings(PH_ORG_NAME, PH_APP_NAME);
 	QSettings::setDefaultFormat(QSettings::NativeFormat);
 
 	QApplication a(argc, argv);
