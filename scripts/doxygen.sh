@@ -14,12 +14,7 @@ mkdir -p doc
 pwd
 echo "Running Doxygen...";
 
-if [ $# -eq 1 ]
-then
-    doxygen
-else
-    doxygen .doxygen
-fi
+doxygen
 
 echo "Done";
 

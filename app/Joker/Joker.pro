@@ -78,10 +78,6 @@ FORMS += \
 	PeopleEditionDialog.ui \
 	TimeBetweenTwoFeetDialog.ui
 
-unix {
-	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${TOP_ROOT}/.doxygen\";
-}
-
 mac{
 	ICON = joker.icns
 
