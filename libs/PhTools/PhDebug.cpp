@@ -129,20 +129,22 @@ PhDebug::PhDebug() : _currentLogLevel(0), _textLog(NULL)
 {
 	qInstallMessageHandler(this->messageOutput);
 
-	QString logDirPath;
-
+	QString logDirPath = QString("%1/%2/")
 #if defined(Q_OS_MAC)
-	logDirPath = QDir::homePath() + "/Library/Logs/Phonations/";
+	                     .arg(QDir::homePath() + "/Library/Logs")
 #elif defined(Q_OS_WIN)
-	logDirPath = QString(qgetenv("APPDATA")) + "/Phonations";
+	                     .arg(QString(qgetenv("APPDATA")))
+#elif defined(Q_OS_LINUX)
+	                     .arg("/var/log")
 #endif
+	                     .arg(PH_ORG_NAME);
 
 	QDir logDir(logDirPath);
 	if(!logDir.exists()) {
 		QDir().mkdir(logDirPath);
 	}
-	_logFileName = QDir(logDirPath).absoluteFilePath(APP_NAME + QString(".log"));
-	QFile * f = new QFile(_logFileName);
+	_logFileName = QDir(logDirPath).absoluteFilePath(PH_APP_NAME + QString(".log"));
+	QFile *f = new QFile(_logFileName);
 	if(f->open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append)) {
 		f->write("\n\n");
 		_textLog = new QTextStream(f);

@@ -22,15 +22,21 @@ isEmpty(ICON) {
 	ICON = $$TOP_ROOT/data/icon.icns
 }
 
+VERSION = $$system(git describe --abbrev=0 --tags)
+
 PH_GIT_BRANCH = $$system(git rev-parse --abbrev-ref HEAD)
 PH_GIT_REVISION = $$system(git rev-parse HEAD)
+if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {
+	PH_FULL_VERSION = $$system(git describe --tags --dirty)
+} else {
+	PH_FULL_VERSION = $$system(git describe --tags --dirty)_$$PH_GIT_BRANCH
+}
 
 # Define the preprocessor macro to get the application version in our application.
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-DEFINES += APP_NAME=\\\"$$TARGET\\\"
-DEFINES += PH_GIT_BRANCH=\\\"$$PH_GIT_BRANCH\\\"
+DEFINES += PH_FULL_VERSION=\\\"$$PH_FULL_VERSION\\\"
+DEFINES += PH_APP_NAME=\\\"$$TARGET\\\"
+DEFINES += PH_ORG_NAME=\\\"Phonations\\\"
 DEFINES += PH_GIT_REVISION=\\\"$$PH_GIT_REVISION\\\"
-DEFINES += ORG_NAME=\\\"Phonations\\\"
 
 INCLUDEPATH += $$TOP_ROOT/libs
 

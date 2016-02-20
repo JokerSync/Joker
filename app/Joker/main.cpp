@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 {
 	JokerSettings settings;
 	int logMask = settings.logMask();
-	PHDEBUG << ORG_NAME << APP_NAME << APP_VERSION;
+	PHDEBUG << PH_ORG_NAME << PH_APP_NAME << PH_FULL_VERSION;
 	PhDebug::setLogMask(logMask);
 	PhDebug::showConsole(true);
 

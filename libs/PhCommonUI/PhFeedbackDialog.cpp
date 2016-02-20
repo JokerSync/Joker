@@ -21,7 +21,7 @@ PhFeedbackDialog::PhFeedbackDialog(PhFeedbackSettings *settings, QWidget *parent
 
 	ui->setupUi(this);
 
-	ui->problemLabel->setText(ui->problemLabel->text().arg(QString(APP_NAME)));
+	ui->problemLabel->setText(ui->problemLabel->text().arg(QString(PH_APP_NAME)));
 
 	if(!_settings->emailList().isEmpty())
 		ui->comboBoxEmails->addItems(_settings->emailList());
@@ -47,7 +47,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	QString appLog;
 	QString crashLog;
 
-	header += "--------Feedback report: " + QString(APP_NAME) + " v" + QString(APP_VERSION) + "--------\n";
+	header += "--------Feedback report: " + QString(PH_APP_NAME) + " v" + QString(PH_FULL_VERSION) + "--------\n";
 	header += "From : " + ui->comboBoxEmails->currentText() + "\n";
 	if(!ui->textEditComment->toPlainText().isEmpty())
 		header += "Message : " + ui->textEditComment->toPlainText() + "\n";
@@ -63,14 +63,19 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 		PHDEBUG << "Error reading the system configuration...";
 
 	PHDEBUG <<  "Get the preferences";
-	process.start(QString("defaults read com.Phonations.%1").arg(QString(APP_NAME)));
+	process.start(QString("defaults read com.%1.%2")
+	              .arg(PH_ORG_NAME)
+	              .arg(QString(PH_APP_NAME)));
 	if(process.waitForFinished())
 		preferences = process.readAllStandardOutput();
 	else
 		PHDEBUG << "Error reading the application preferences...";
 
 	PHDEBUG << "Get the application log";
-	QFile applicationLogFile(QDir::homePath() + "/Library/Logs/Phonations/" + APP_NAME + ".log");
+	QFile applicationLogFile(QString("%1/Library/Logs/%2/%3.log")
+	                         .arg(QDir::homePath())
+	                         .arg(PH_ORG_NAME)
+	                         .arg(PH_APP_NAME));
 	if(!applicationLogFile.open(QIODevice::ReadOnly)) {
 		PHDEBUG << applicationLogFile.errorString();
 	}
@@ -90,7 +95,7 @@ void PhFeedbackDialog::on_buttonBox_accepted()
 	QDir crashDir(crashFolder);
 
 	QStringList crashFilters;
-	crashFilters.append(QString(APP_NAME) + "*.crash" );
+	crashFilters.append(QString("%1*.crash").arg(PH_APP_NAME));
 	crashDir.setNameFilters(crashFilters);
 	QStringList crashFiles = crashDir.entryList();
 	if(!crashFiles.empty()) {

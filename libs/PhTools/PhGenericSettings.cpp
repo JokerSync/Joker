@@ -1,7 +1,7 @@
 #include "PhGenericSettings.h"
 #include "PhDebug.h"
 
-PhGenericSettings::PhGenericSettings(bool clear) : _settings(ORG_NAME, APP_NAME)
+PhGenericSettings::PhGenericSettings(bool clear) : _settings(PH_ORG_NAME, PH_APP_NAME)
 {
 	QSettings::setDefaultFormat(QSettings::NativeFormat);
 	PHDEBUG << "Settings file:" << _settings.fileName();

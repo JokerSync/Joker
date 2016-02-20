@@ -12,9 +12,8 @@ AboutDialog::AboutDialog(QWidget *parent) :
 	ui(new Ui::AboutDialog)
 {
 	ui->setupUi(this);
-	QString version = APP_NAME;
-	version += " v";
-	version += APP_VERSION;
+	QString version = "Joker v";
+	version += PH_FULL_VERSION;
 	ui->labelVersion->setText(version);
 	ui->revisionLabel->setText(tr("Revision:") + QString("<a href='https://github.com/phonations/joker/tree/%1'>%2</a>").arg(PH_GIT_REVISION).arg(QString(PH_GIT_REVISION).left(7)));
 

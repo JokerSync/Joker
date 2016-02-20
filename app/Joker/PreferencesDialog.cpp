@@ -235,7 +235,9 @@ void PreferencesDialog::accept()
 	if(ui->cboBoxLang->currentData() != _settings->language()) {
 		QMessageBox::warning(this, tr("Information"),
 		                     tr("You change the language to \"%1\".\n"
-		                        "You need to restart %2 to apply you changes.").arg(ui->cboBoxLang->currentText(), APP_NAME),
+		                        "You need to restart %2 to apply you changes.")
+		                     .arg(ui->cboBoxLang->currentText())
+		                     .arg(PH_APP_NAME),
 		                     QMessageBox::Ok,
 		                     QMessageBox::Ok);
 		_settings->setLanguage(ui->cboBoxLang->currentData().toString());

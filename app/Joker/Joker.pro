@@ -8,8 +8,6 @@ cache()
 
 TARGET = Joker
 
-VERSION = 2.0.6
-
 TOP_ROOT = $${_PRO_FILE_PWD_}/../..
 
 include($$TOP_ROOT/common/common.pri)
@@ -77,10 +75,6 @@ FORMS += \
 	PeopleDialog.ui \
 	PeopleEditionDialog.ui \
 	TimeBetweenTwoFeetDialog.ui
-
-unix {
-	QMAKE_POST_LINK += sed -E -i \"\" -e \"s/\(PROJECT_NUMBER[ ]*=[ ]*\)[^ ]*/\1$$VERSION/\" \"$${TOP_ROOT}/.doxygen\";
-}
 
 mac{
 	ICON = joker.icns
