@@ -82,7 +82,7 @@ go_bandit([](){
 			font->setFontFile("Cappella.ttf");
 			AssertThat(font->ready(), IsFalse());
 
-			AssertThat(view->compare("fontTest.Cappella.ttf.expected.bmp", threshold), IsLessThan(776 * 576 * 0.04));
+			AssertThat(view->compare("fontTest.Cappella.ttf.bmp", threshold), IsLessThan(776 * 576 * 0.04));
 
 			AssertThat(font->ready(), IsTrue());
 		});
@@ -91,7 +91,7 @@ go_bandit([](){
 			font->setFontFile("SWENSON.ttf");
 			AssertThat(font->ready(), IsFalse());
 
-			AssertThat(view->compare("fontTest.SWENSON.ttf.expected.bmp", threshold), IsLessThan(threshold));
+			AssertThat(view->compare("fontTest.SWENSON.ttf.bmp", threshold), IsLessThan(threshold));
 
 			AssertThat(font->ready(), IsTrue());
 		});
@@ -99,19 +99,19 @@ go_bandit([](){
 		it("draw_arial_font", [&](){
 			font->setFontFile("Arial.ttf");
 
-			AssertThat(view->compare("fontTest.Arial.ttf.expected.bmp", threshold), IsLessThan(threshold));
+			AssertThat(view->compare("fontTest.Arial.ttf.bmp", threshold), IsLessThan(threshold));
 		});
 
 		it("draw_bedizen_font", [&](){
 			font->setFontFile("Bedizen.ttf");
 
-			AssertThat(view->compare("fontTest.Bedizen.ttf.expected.bmp", threshold), IsLessThan(threshold));
+			AssertThat(view->compare("fontTest.Bedizen.ttf.bmp", threshold), IsLessThan(threshold));
 		});
 
 		it("draw_bad_font", [&](){
 			font->setFontFile("bad_font.ttf");
 
-			AssertThat(view->compare("fontTest.bad_font.ttf.expected.bmp", threshold), IsLessThan(threshold));
+			AssertThat(view->compare("fontTest.bad_font.ttf.bmp", threshold), IsLessThan(threshold));
 		});
 	});
 });

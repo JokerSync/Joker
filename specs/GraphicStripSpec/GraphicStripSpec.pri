@@ -9,7 +9,7 @@ include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
 HEADERS += $$TOP_ROOT/specs/GraphicStripSpec/GraphicStripSpecSettings.h
 SOURCES += $$TOP_ROOT/specs/GraphicStripSpec/GraphicStripSpec.cpp
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/specs/drawTest.expected.bmp) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/specs/drawTest.bmp) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/motif-240.png) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Cappella.ttf) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Helvetica.ttf) $${RESOURCES_PATH} $${CS}
