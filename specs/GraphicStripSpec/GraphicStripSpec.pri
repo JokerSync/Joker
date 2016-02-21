@@ -9,6 +9,6 @@ include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
 HEADERS += $$TOP_ROOT/specs/GraphicStripSpec/GraphicStripSpecSettings.h
 SOURCES += $$TOP_ROOT/specs/GraphicStripSpec/GraphicStripSpec.cpp
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/*.bmp) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/*.png) . $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/*) . $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/*.bmp) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/*.png) $${RESOURCES_PATH} $${CS}
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/*) $${RESOURCES_PATH} $${CS}
