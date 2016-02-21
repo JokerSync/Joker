@@ -43,23 +43,37 @@ go_bandit([](){
 		it("compare", [&](){
 			PhGraphicView view(32, 32);
 
+			QFile unexistingResultFile("compareTest.unexisting.result.bmp");
+			if(unexistingResultFile.exists()) {
+				unexistingResultFile.remove();
+			}
+			AssertThat(unexistingResultFile.exists(), IsFalse());
 			AssertThat(view.compare("compareTest.unexisting.bmp"), Equals(std::numeric_limits<int>::max()));
+			AssertThat(unexistingResultFile.exists(), IsTrue());
+			unexistingResultFile.remove();
 
+			QFile badSizeResultFile("compareTest.64x32.result.bmp");
+			if(badSizeResultFile.exists()) {
+				badSizeResultFile.remove();
+			}
+			AssertThat(badSizeResultFile.exists(), IsFalse());
 			AssertThat(view.compare("compareTest.64x32.bmp"), Equals(std::numeric_limits<int>::max()));
+			AssertThat(badSizeResultFile.exists(), IsTrue());
+			badSizeResultFile.remove();
 
 			AssertThat(view.compare("compareTest.64x32.bmp", 0, 64, 32), Equals(0));
 
-			QFile file("compareTest.smalldiff.result.bmp");
-			if(file.exists()) {
-				file.remove();
+			QFile smallDiffResultFile("compareTest.smalldiff.result.bmp");
+			if(smallDiffResultFile.exists()) {
+				smallDiffResultFile.remove();
 			}
-			AssertThat(file.exists(), IsFalse());
+			AssertThat(smallDiffResultFile.exists(), IsFalse());
 			AssertThat(view.compare("compareTest.smalldiff.bmp"), Equals(14));
-			AssertThat(file.exists(), IsTrue());
-			file.remove();
+			AssertThat(smallDiffResultFile.exists(), IsTrue());
+			smallDiffResultFile.remove();
 
 			AssertThat(view.compare("compareTest.smalldiff.bmp", 14), Equals(14));
-			AssertThat(file.exists(), IsFalse());
+			AssertThat(smallDiffResultFile.exists(), IsFalse());
 
 			AssertThat(view.compare("compareTest.expected.bmp"), Equals(0));
 		});
@@ -67,7 +81,15 @@ go_bandit([](){
 		it("compare big difference", [&](){
 			PhGraphicView view(128, 128);
 
+			QFile file("compareTest.bigdiff.result.bmp");
+			if(file.exists()) {
+				file.remove();
+			}
+			AssertThat(file.exists(), IsFalse());
 			AssertThat(view.compare("compareTest.bigdiff.bmp"), Equals(std::numeric_limits<int>::max()));
+
+			AssertThat(file.exists(), IsTrue());
+			file.remove();
 		});
 
 		it("draw_a_rect", [&](){
