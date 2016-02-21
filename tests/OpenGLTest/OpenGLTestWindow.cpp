@@ -29,7 +29,7 @@ void OpenGLTestWindow::initializeGL()
 	glEnable( GL_TEXTURE_2D );
 
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, image1.width(), image1.height(), 0,
-				  GL_BGRA, GL_UNSIGNED_BYTE, image1.bits());
+	              GL_BGRA, GL_UNSIGNED_BYTE, image1.bits());
 
 	int filterSetting = GL_LINEAR;
 
@@ -51,7 +51,7 @@ void OpenGLTestWindow::initializeGL()
 	glEnable( GL_TEXTURE_2D );
 
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, image2.width(), image2.height(), 0,
-				  GL_BGRA, GL_UNSIGNED_BYTE, image2.bits());
+	              GL_BGRA, GL_UNSIGNED_BYTE, image2.bits());
 
 	glDisable(GL_TEXTURE_2D);
 

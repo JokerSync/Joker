@@ -46,8 +46,8 @@ public:
 	PhGraphicView (int width, int height, QWidget *parent = 0);
 
 	/**
-	  * @brief PhGraphicView destructor
-	  */
+	 * @brief PhGraphicView destructor
+	 */
 	~PhGraphicView();
 
 	/**
