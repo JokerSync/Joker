@@ -52,10 +52,3 @@ void PhEditableDocumentWindow::closeEvent(QCloseEvent *event)
 	if(!checkDocumentModification())
 		event->ignore();
 }
-
-void PhEditableDocumentWindow::onOpenRecentDocumentTriggered()
-{
-	QString fileName = sender()->objectName();
-	PHDEBUG << fileName;
-	openDocument(fileName);
-}

@@ -113,7 +113,7 @@ void PhDocumentWindow::updateRecentDocumentMenu()
 			foreach(QString doc, recentDocList) {
 				QAction *action = recentDocumentMenu()->addAction(doc);
 				action->setObjectName(doc);
-				connect(action, SIGNAL(triggered()), this, SLOT(onOpenRecentDocumentTriggered()));
+				connect(action, &QAction::triggered, this, &PhDocumentWindow::onOpenRecentDocumentTriggered);
 			}
 		}
 	}
