@@ -10,6 +10,10 @@
 
 #include "PhDocumentWindow.h"
 
+#if defined(Q_OS_MAC)
+#include "PhSandbox.h"
+#endif
+
 PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings)
 	: PhWindow(settings),
 	_settings(settings)
@@ -24,8 +28,11 @@ void PhDocumentWindow::processArg(int argc, char *argv[])
 		if(QFile::exists(argv[i]))
 			_settings->setCurrentDocument(argv[i]);
 	}
-	if(QFile::exists(_settings->currentDocument()))
-		openDocument(_settings->currentDocument());
+	if(QFile::exists(_settings->currentDocument())) {
+		QString fileName = _settings->currentDocument();
+		checkFilePermission(fileName);
+		openDocument(fileName);
+	}
 	else
 		updateRecentDocumentMenu();
 
@@ -35,7 +42,12 @@ void PhDocumentWindow::processArg(int argc, char *argv[])
 
 void PhDocumentWindow::resetDocument()
 {
-	_settings->setCurrentDocument("");
+	if(!_settings->currentDocument().isEmpty()) {
+#if defined(Q_OS_MAC)
+		stopSecurityScopeBookmark(_settings->currentDocument(), _settings->bookmark(_settings->currentDocument()).toByteArray());
+#endif
+		_settings->setCurrentDocument("");
+	}
 	this->setWindowTitle("");
 	if(!_watcher.files().isEmpty())
 		_watcher.removePaths(_watcher.files());
@@ -43,7 +55,9 @@ void PhDocumentWindow::resetDocument()
 
 bool PhDocumentWindow::openDocument(const QString &fileName)
 {
-	resetDocument();
+	if(fileName != _settings->currentDocument())
+		resetDocument();
+
 	if(_watcher.addPath(fileName))
 		PHDEBUG << "now watching " << fileName;
 	_settings->setCurrentDocument(fileName);
@@ -60,6 +74,8 @@ bool PhDocumentWindow::openDocument(const QString &fileName)
 	_settings->setRecentDocumentList(recentDocList);
 
 	updateRecentDocumentMenu();
+
+	addFilePermission(fileName);
 
 	return true;
 }
@@ -100,6 +116,7 @@ void PhDocumentWindow::onOpenRecentDocumentTriggered()
 {
 	QString fileName = sender()->objectName();
 	PHDEBUG << fileName;
+	checkFilePermission(fileName);
 	openDocument(fileName);
 }
 
@@ -123,4 +140,21 @@ void PhDocumentWindow::onExternalChange(const QString &path)
 {
 	PHDEBUG << "File changed :" << path;
 	openDocument(_settings->currentDocument());
+}
+
+void PhDocumentWindow::checkFilePermission(QString fileName)
+{
+#if defined(Q_OS_MAC)
+	resolveSecurityScopeBookmark(fileName, _settings->bookmark(fileName).toByteArray());
+#endif
+}
+
+void PhDocumentWindow::addFilePermission(QString fileName)
+{
+#if defined(Q_OS_MAC)
+	if(_settings->bookmark(fileName).toByteArray().count() == 0) {
+		_settings->setBookmark(fileName, createSecurityScopeBookmark(fileName));
+		PHDEBUG << fileName << ":" << _settings->bookmark(fileName).toByteArray().length();
+	}
+#endif
 }
