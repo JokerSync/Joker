@@ -10,8 +10,9 @@
     </message>
     <message>
         <location filename="AboutDialog.ui" line="26"/>
-        <source>Copyright 2013-2014 Phonations, All rights reserved.</source>
-        <translation>Copyright 2013-2014 Phonations, Tous droits réservés.</translation>
+        <source>Copyright 2013-2016 Phonations, All rights reserved.</source>
+        <oldsource>Copyright 2013-2014 Phonations, All rights reserved.</oldsource>
+        <translation>Copyright 2013-2016 Phonations, Tous droits réservés.</translation>
     </message>
     <message>
         <location filename="AboutDialog.ui" line="52"/>
@@ -34,12 +35,12 @@
         <translation>Temps de lecture synchrone: </translation>
     </message>
     <message>
-        <location filename="AboutDialog.cpp" line="19"/>
+        <location filename="AboutDialog.cpp" line="18"/>
         <source>Revision:</source>
         <translation>Révision: </translation>
     </message>
     <message>
-        <location filename="AboutDialog.cpp" line="41"/>
+        <location filename="AboutDialog.cpp" line="40"/>
         <source>Synchronous playback time: %1 seconds</source>
         <translation>Temps de lecture synchrone: %1 secondes</translation>
     </message>
@@ -98,7 +99,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="160"/>
-        <location filename="JokerWindow.cpp" line="401"/>
+        <location filename="JokerWindow.cpp" line="664"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -448,57 +449,57 @@
         <translation>Cacher les personnages sélectionnés</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="203"/>
-        <location filename="JokerWindow.cpp" line="212"/>
-        <location filename="JokerWindow.cpp" line="229"/>
-        <location filename="JokerWindow.cpp" line="242"/>
+        <location filename="JokerWindow.cpp" line="183"/>
+        <location filename="JokerWindow.cpp" line="192"/>
+        <location filename="JokerWindow.cpp" line="209"/>
+        <location filename="JokerWindow.cpp" line="222"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="203"/>
+        <location filename="JokerWindow.cpp" line="183"/>
         <source>Unable to connect to USB422v module</source>
         <translation>Impossible de se connecter au module USB422v</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="212"/>
+        <location filename="JokerWindow.cpp" line="192"/>
         <source>Unable to open %0</source>
         <translation>Impossible d&apos;ouvrir %0</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="229"/>
-        <location filename="JokerWindow.cpp" line="242"/>
+        <location filename="JokerWindow.cpp" line="209"/>
+        <location filename="JokerWindow.cpp" line="222"/>
         <source>Unable to open %0 midi port</source>
         <translation>Impossible d&apos;ouvrir le port midi %0</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="397"/>
+        <location filename="JokerWindow.cpp" line="660"/>
         <source>Rythmo files</source>
         <translation>Fichiers rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="494"/>
+        <location filename="JokerWindow.cpp" line="757"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="499"/>
+        <location filename="JokerWindow.cpp" line="762"/>
         <source>Open a video...</source>
         <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="767"/>
-        <location filename="JokerWindow.cpp" line="792"/>
+        <location filename="JokerWindow.cpp" line="978"/>
+        <location filename="JokerWindow.cpp" line="1003"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="785"/>
+        <location filename="JokerWindow.cpp" line="996"/>
         <source>Save...</source>
         <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="1052"/>
+        <location filename="JokerWindow.cpp" line="589"/>
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>
@@ -629,7 +630,7 @@
         <translation>Votre adresse mail si vous souhaitez que nous vous contactions :</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhFeedbackDialog.cpp" line="174"/>
+        <location filename="../../libs/PhCommonUI/PhFeedbackDialog.cpp" line="175"/>
         <source>Thank you for your feedback!</source>
         <translation>Merci pour votre retour !</translation>
     </message>
@@ -637,47 +638,43 @@
 <context>
     <name>PhMediaPanel</name>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="121"/>
         <source>Back</source>
-        <translation>Retour</translation>
+        <translation type="vanished">Retour</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="140"/>
         <source>FR</source>
-        <translation>RR</translation>
+        <translation type="vanished">RR</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="178"/>
         <source>Play</source>
-        <translation>Lecture</translation>
+        <translation type="vanished">Lecture</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="216"/>
         <source>FF</source>
-        <translation>AR</translation>
+        <translation type="vanished">AR</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="230"/>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="255"/>
         <source>23.98 fps</source>
         <translation>23.98 fps</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="235"/>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="260"/>
         <source>24 fps</source>
         <translation>24 fps</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="240"/>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="265"/>
         <source>25 fps</source>
         <translation>25 fps</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="245"/>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="270"/>
         <source>29.97 fps</source>
         <translation>29.97 fps</translation>
     </message>
     <message>
-        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="250"/>
+        <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="275"/>
         <source>30 fps</source>
         <translation>30 fps</translation>
     </message>
