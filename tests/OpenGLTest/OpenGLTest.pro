@@ -19,3 +19,5 @@ HEADERS  += OpenGLTestWindow.h
 
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
 include($$TOP_ROOT/common/deploy.pri)
+
+QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/video/interlace_*.bmp) $${RESOURCES_PATH} $${CS}

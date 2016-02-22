@@ -26,3 +26,6 @@ SOURCES += $$PWD/main.cpp \
 
 HEADERS += \
     $$PWD/CommonSpec.h \
+
+# Common qmake directive
+include($$TOP_ROOT/common/common.pri)

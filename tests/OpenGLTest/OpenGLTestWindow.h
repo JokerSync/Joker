@@ -15,9 +15,12 @@ public:
 	void initializeGL();
 	void paintGL();
 
+	void resizeGL(int width, int height);
+
 private:
 	QTimer _refreshTimer;
 	QTime _timer;
+	unsigned int _texture1, _texture2;
 };
 
 #endif // OPENGLTESTWINDOW_H
