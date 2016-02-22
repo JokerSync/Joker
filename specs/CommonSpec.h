@@ -24,4 +24,6 @@ PhTime s2t25(QString string);
 
 bool operator==(const std::string& str, const QString& qstr);
 
+std::ostream& operator<<(std::ostream& stream, const QString& qstr);
+
 #endif // COMMONSPEC_H

@@ -34,3 +34,9 @@ bool operator==(const std::string &str, const QString &qstr)
 {
 	return str == qstr.toStdString();
 }
+
+std::ostream& operator<<(std::ostream& stream, const QString& qstr)
+{
+	stream << qstr.toStdString();
+	return stream;
+}
