@@ -103,6 +103,8 @@ public:
 	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 50)
 	PH_SETTING_FRAME2(setVideoPoolSize, videoPoolSize, 120)
 
+	PH_SETTING_BOOL(setVideoPictureInPicture, videoPictureInPicture)
+	PH_SETTING_TIME2(setVideoPictureInPictureOffset, videoPictureInPictureOffset, PHTIMEBASE)
 #endif
 
 	// Synchronisation settings:

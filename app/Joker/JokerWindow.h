@@ -275,6 +275,8 @@ private slots:
 	void videoFileOpened(bool success);
 #endif
 
+	void on_actionPicture_in_picture_triggered(bool checked);
+
 private:
 	PhTimeCodeType localTimeCodeType();
 	PhTimeCodeType synchroTimeCodeType();

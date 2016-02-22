@@ -86,6 +86,8 @@ private slots:
 
 	void on_actionUse_native_video_size_triggered(bool checked);
 
+	void on_actionPicture_in_picture_triggered(bool checked);
+
 private:
 
 	Ui::VideoTestWindow *ui;

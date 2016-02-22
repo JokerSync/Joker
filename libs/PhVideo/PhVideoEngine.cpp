@@ -130,9 +130,9 @@ PhFrame PhVideoEngine::clockFrame()
 	return (clockTime() - _timeIn) / PhTimeCode::timePerFrame(_tcType);
 }
 
-void PhVideoEngine::drawVideo(int x, int y, int w, int h)
+void PhVideoEngine::drawVideo(int x, int y, int w, int h, PhTime offset)
 {
-	PhFrame frame = clockFrame();
+	PhFrame frame = clockFrame() + offset / PhTimeCode::timePerFrame(_tcType);
 
 	// 4 possibilities
 	// 1) the frame is currently on screen

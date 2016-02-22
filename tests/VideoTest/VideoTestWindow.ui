@@ -78,6 +78,7 @@
     <addaction name="actionDisplay_media_panel"/>
     <addaction name="actionDeinterlace_video"/>
     <addaction name="actionUse_native_video_size"/>
+    <addaction name="actionPicture_in_picture"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuControl"/>
@@ -181,6 +182,14 @@
    </property>
    <property name="text">
     <string>Use native video size</string>
+   </property>
+  </action>
+  <action name="actionPicture_in_picture">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Picture in picture</string>
    </property>
   </action>
  </widget>

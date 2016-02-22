@@ -22,6 +22,8 @@ public:
 	PH_SETTING_BOOL(setDeinterlaceVideo, deinterlaceVideo)
 	PH_SETTING_INT(setTimeStamp, timeStamp)
 	PH_SETTING_INT(setCurrentTime, currentTime)
+	PH_SETTING_BOOL(setVideoPictureInPicture, videoPictureInPicture)
+	PH_SETTING_TIME2(setVideoPictureInPictureOffset, videoPictureInPictureOffset, PHTIMEBASE)
 
 	// PhGraphicSettings
 	PH_SETTING_BOOL(setDisplayInfo, displayInfo)

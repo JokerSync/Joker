@@ -167,8 +167,9 @@ public:
 	 * @param y Coordinates of the upperleft corner
 	 * @param w Width of the video rectangle (if not native size)
 	 * @param h Height of the video rectangle (if not native size)
+	 * @param offset Time offset relative to the video clock
 	 */
-	void drawVideo(int x, int y, int w, int h);
+	void drawVideo(int x, int y, int w, int h, PhTime offset = 0);
 
 	/**
 	 * @brief Whether the frame corresponds to the frame that we currently have

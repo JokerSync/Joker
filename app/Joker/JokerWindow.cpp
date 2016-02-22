@@ -72,12 +72,14 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_propertyDialog.setVideoEngine(&_videoEngine);
 	_synchronizer.setVideoClock(_videoEngine.clock());
 	connect(&_videoEngine, &PhVideoEngine::timeCodeTypeChanged, this, &JokerWindow::onTimecodeTypeChanged);
+	ui->actionPicture_in_picture->setChecked(_settings->videoPictureInPicture());
 #else
 	ui->actionOpen_Video->setEnabled(false);
 	ui->actionClose_video->setEnabled(false);
 	ui->actionDeinterlace_video->setEnabled(false);
 	ui->actionForce_16_9_ratio->setEnabled(false);
 	ui->actionUse_native_video_size->setEnabled(false);
+	ui->actionPicture_in_picture->setEnabled(false);
 #endif
 
 #ifdef USE_SONY
@@ -453,6 +455,9 @@ void JokerWindow::onPaint(int width, int height)
 			int videoX = (videoAvailableWidth - videoWidth) / 2;
 
 			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight);
+
+			if(_settings->videoPictureInPicture())
+				_videoEngine.drawVideo(0, 0, videoWidth / 4, realVideoHeight / 4, _settings->videoPictureInPictureOffset());
 		}
 		else if(_settings->displayLogo()) {
 			// The logo file is 500px in native format
@@ -1191,6 +1196,13 @@ void JokerWindow::on_actionUse_native_video_size_triggered(bool checked)
 {
 #ifdef USE_VIDEO
 	_settings->setUseNativeVideoSize(checked);
+#endif
+}
+
+void JokerWindow::on_actionPicture_in_picture_triggered(bool checked)
+{
+#ifdef USE_VIDEO
+	_settings->setVideoPictureInPicture(checked);
 #endif
 }
 
