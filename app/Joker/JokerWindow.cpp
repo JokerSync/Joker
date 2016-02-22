@@ -135,19 +135,20 @@ JokerWindow::~JokerWindow()
 
 void JokerWindow::closeEvent(QCloseEvent *event)
 {
-	// the user will be asked if the document has to be saved
+	// The user will be asked if the document has to be saved
 	PhEditableDocumentWindow::closeEvent(event);
 
-	// if the close operation is not cancelled by the user,
-	// the media panel has to be closed manually, or the application
-	// will stay open forever in the background
+	// If the close operation is not cancelled by the user
 	if (event->isAccepted()) {
+		// The media panel has to be closed manually, or the application
+		// will stay open forever in the background
 		_mediaPanel.close();
+
+		// Force doc to unmodified to avoid double confirmation
+		// since closeEvent is called twice
+		// https://bugreports.qt.io/browse/QTBUG-43344
+		_doc->setModified(false);
 	}
-	// Force doc to unmodified to avoid double confirmation
-	// since closeEvent is called twice
-	// https://bugreports.qt.io/browse/QTBUG-43344
-	_doc->setModified(false);
 }
 
 void JokerWindow::setupSyncProtocol()

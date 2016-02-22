@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QTextEdit>
+#include <QCloseEvent>
 
 #include <PhTools/PhDebug.h>
 
@@ -62,6 +63,21 @@ bool TextEditTestWindow::saveDocument(const QString &fileName)
 	_isModified = false;
 
 	return PhEditableDocumentWindow::saveDocument(fileName);
+}
+
+void TextEditTestWindow::closeEvent(QCloseEvent *event)
+{
+	// the user will be asked if the document has to be saved
+	PhEditableDocumentWindow::closeEvent(event);
+
+	// if the close operation is not cancelled by the user,
+	if (event->isAccepted()) {
+		// Force doc to unmodified to avoid double confirmation
+		// since closeEvent is called twice
+		// https://bugreports.qt.io/browse/QTBUG-43344
+		_isModified = false;
+	}
+
 }
 
 QMenu *TextEditTestWindow::recentDocumentMenu()
