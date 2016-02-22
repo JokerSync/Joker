@@ -430,25 +430,25 @@ go_bandit([](){
 				}
 			});
 
-			it("go to before keyframe", [&](){
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+//			it("go to before keyframe", [&](){
+//				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 
-				// go to the next key frame
-				engine->clock()->setFrame25(128);
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+//				// go to the next key frame
+//				engine->clock()->setFrame25(128);
+//				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 
-				AssertThat(view->compare("interlace_128.bmp", threshold), IsLessThan(threshold));
+//				AssertThat(view->compare("interlace_128.bmp", threshold), IsLessThan(threshold));
 
-				// go to the frame right before the key frame
-				engine->clock()->setFrame25(127);
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-				AssertThat(view->compare("interlace_127.bmp", threshold), IsLessThan(threshold));
+//				// go to the frame right before the key frame
+//				engine->clock()->setFrame25(127);
+//				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+//				AssertThat(view->compare("interlace_127.bmp", threshold), IsLessThan(threshold));
 
-				// go to two frames before the key frame
-				engine->clock()->setFrame25(126);
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-				AssertThat(view->compare("interlace_126.bmp", threshold), IsLessThan(threshold));
-			});
+//				// go to two frames before the key frame
+//				engine->clock()->setFrame25(126);
+//				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+//				AssertThat(view->compare("interlace_126.bmp", threshold), IsLessThan(threshold));
+//			});
 		});
 	});
 });
