@@ -38,6 +38,8 @@ public:
 
 	PH_SETTING_BYTEARRAY(setByteArrayTest1, byteArrayTest1)
 	PH_SETTING_BYTEARRAY(setByteArrayTest2, byteArrayTest2)
+
+	PH_SETTING_HASH(setHashTest1, hashTest1)
 };
 
 #endif // SETTINGSSPECSETTINGS_H
