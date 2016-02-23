@@ -94,7 +94,9 @@ protected:
 	///
 	/// @param filePath The file path
 	///
-	bool openDocument(const QString &filePath);
+	bool openDocument(const QString &fileName);
+
+	void saveDocument(const QString &fileName);
 
 	virtual void  onExternalChange(const QString &path);
 

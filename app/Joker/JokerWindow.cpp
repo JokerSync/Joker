@@ -285,6 +285,16 @@ bool JokerWindow::openDocument(const QString &fileName)
 	return true;
 }
 
+void JokerWindow::saveDocument(const QString &fileName)
+{
+	if(_doc->exportDetXFile(fileName, currentTime())) {
+		_doc->setModified(false);
+		PhEditableDocumentWindow::saveDocument(fileName);
+	}
+	else
+		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
+}
+
 void JokerWindow::onExternalChange(const QString &path)
 {
 	PhTime currentTime = _videoEngine.clock()->time();
@@ -973,10 +983,8 @@ void JokerWindow::on_actionSave_triggered()
 	QFileInfo info(fileName);
 	if(!info.exists() || (info.suffix() != "detx"))
 		on_actionSave_as_triggered();
-	else if(_doc->exportDetXFile(fileName, currentTime()))
-		_doc->setModified(false);
 	else
-		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
+		saveDocument(fileName);
 }
 
 void JokerWindow::on_actionSave_as_triggered()
@@ -995,14 +1003,8 @@ void JokerWindow::on_actionSave_as_triggered()
 	}
 
 	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.detx");
-	if(fileName != "") {
-		if(_doc->exportDetXFile(fileName, currentTime())) {
-			_doc->setModified(false);
-			PhEditableDocumentWindow::saveDocument(fileName);
-		}
-		else
-			QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
-	}
+	if(fileName != "")
+		saveDocument(fileName);
 }
 
 bool JokerWindow::isDocumentModified()
