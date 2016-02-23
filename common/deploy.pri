@@ -34,7 +34,10 @@ CONFIG(release, debug|release) {
 			APPLICATION_CERTIFICATE = \"3rd Party Mac Developer Application: Phonations (Y44UPVP368)\"
 			INSTALLER_CERTIFICATE = \"3rd Party Mac Developer Installer: Phonations (Y44UPVP368)\"
 
-#			QMAKE_POST_LINK += codesign -s $$APPLICATION_CERTIFICATE -v --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app;
+			sandbox {
+				message("Using sandbox")
+				QMAKE_POST_LINK += codesign -s $$APPLICATION_CERTIFICATE --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app;
+			}
 
 			QMAKE_POST_LINK += echo "Running macdeployqt";
 			QMAKE_POST_LINK += macdeployqt $${TARGET}.app -always-overwrite -codesign=$$APPLICATION_CERTIFICATE;
