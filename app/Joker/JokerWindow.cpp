@@ -73,6 +73,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_synchronizer.setVideoClock(_videoEngine.clock());
 	connect(&_videoEngine, &PhVideoEngine::timeCodeTypeChanged, this, &JokerWindow::onTimecodeTypeChanged);
 	ui->actionPicture_in_picture->setChecked(_settings->videoPictureInPicture());
+	ui->actionSecond_screen->setChecked(_settings->videoSecondScreen());
 #else
 	ui->actionOpen_Video->setEnabled(false);
 	ui->actionClose_video->setEnabled(false);
@@ -1219,4 +1220,11 @@ void JokerWindow::on_actionSet_TC_out_triggered()
 void JokerWindow::on_actionLoop_triggered(bool checked)
 {
 	_settings->setSyncLooping(checked);
+}
+
+void JokerWindow::on_actionSecond_screen_triggered(bool checked)
+{
+#ifdef USE_VIDEO
+	_settings->setVideoSecondScreen(checked);
+#endif
 }

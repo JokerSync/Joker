@@ -105,6 +105,9 @@ public:
 
 	PH_SETTING_BOOL(setVideoPictureInPicture, videoPictureInPicture)
 	PH_SETTING_TIME2(setVideoPictureInPictureOffset, videoPictureInPictureOffset, PHTIMEBASE)
+
+	PH_SETTING_BOOL(setVideoSecondScreen, videoSecondScreen)
+	PH_SETTING_TIME2(setVideoSecondScreenOffset, videoSecondScreenOffset, PHTIMEBASE)
 #endif
 
 	// Synchronisation settings:

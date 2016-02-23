@@ -132,6 +132,7 @@
     <addaction name="actionDeinterlace_video"/>
     <addaction name="actionUse_native_video_size"/>
     <addaction name="actionPicture_in_picture"/>
+    <addaction name="actionSecond_screen"/>
    </widget>
    <widget class="QMenu" name="menuRythmo">
     <property name="title">
@@ -548,6 +549,14 @@
    </property>
    <property name="text">
     <string>Picture in picture</string>
+   </property>
+  </action>
+  <action name="actionSecond_screen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Second screen</string>
    </property>
   </action>
  </widget>

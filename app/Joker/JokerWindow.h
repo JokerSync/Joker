@@ -277,6 +277,8 @@ private slots:
 
 	void on_actionPicture_in_picture_triggered(bool checked);
 
+	void on_actionSecond_screen_triggered(bool checked);
+
 private:
 	PhTimeCodeType localTimeCodeType();
 	PhTimeCodeType synchroTimeCodeType();
