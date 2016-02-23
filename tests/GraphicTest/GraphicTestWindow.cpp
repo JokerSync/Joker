@@ -108,7 +108,10 @@ void GraphicTestWindow::onPaint(int width, int height)
 	PhGraphicText text2(&_font2, textContent);
 	y += 200;
 
-	text2.setRect(0, y, 500, 100);
+	_x += 4;
+	if(_x > width - 500)
+		_x = 0;
+	text2.setRect(_x, y, 500, 100);
 	text2.setColor(QColor(0, 128, 0));
 	text2.setZ(5);
 	text2.draw();

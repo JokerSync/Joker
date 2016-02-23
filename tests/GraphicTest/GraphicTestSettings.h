@@ -22,7 +22,7 @@ public:
 	PH_SETTING_STRING2(setFontFile, fontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
 
 	PH_SETTING_STRING2(setFont1File, font1File, QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
-	PH_SETTING_STRING2(setFont2File, font2File, QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella-Regular.ttf")
+	PH_SETTING_STRING2(setFont2File, font2File, QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella.ttf")
 	PH_SETTING_INT2(setTextBoldness, textBoldness, 1)
 
 	PH_SETTING_STRING2(setTextContent, textContent, "Change the text from the settings")
