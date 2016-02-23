@@ -92,7 +92,7 @@ protected:
 	///
 	/// @brief Open all supported strip file
 	///
-	/// @param filePath The file path
+	/// @param fileName The file path
 	///
 	bool openDocument(const QString &fileName);
 

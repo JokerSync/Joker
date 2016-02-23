@@ -266,6 +266,7 @@ bool JokerWindow::openDocument(const QString &fileName)
 	/// - Load the deinterlace settings
 	on_actionDeinterlace_video_triggered(_doc->videoDeinterlace());
 	/// - Open the corresponding video file if it exists.
+	this->checkFilePermission(_doc->videoFilePath());
 	if(openVideoFile(_doc->videoFilePath())) {
 		_videoEngine.setTimeIn(_doc->videoTimeIn());
 		_mediaPanel.setTimeIn(_doc->videoTimeIn());
@@ -814,6 +815,8 @@ bool JokerWindow::openVideoFile(QString videoFile)
 		_mediaPanel.setLength(_videoEngine.length());
 
 		_settings->setLastVideoFolder(fileInfo.absolutePath());
+
+		this->addFilePermission(videoFile);
 		return true;
 	}
 	return false;
