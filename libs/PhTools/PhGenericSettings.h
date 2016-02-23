@@ -111,6 +111,13 @@ public slots: \
 public: \
 	QByteArray getter() {return byteArray(#getter); }
 
+/** Implement the hash setter and getter for a PhGenericSettings */
+#define PH_SETTING_HASH(setter, getter) \
+public slots: \
+	void setter(QString key, QVariant value) { setHash(#getter, key, value); } \
+public: \
+	QVariant getter(QString key) {return hash(#getter, key); }
+
 /**
  * @brief A generic implementation of the module settings
  *
@@ -237,6 +244,21 @@ protected:
 	 */
 	QByteArray byteArray(QString name);
 
+	/**
+	 * @brief Set a hash value for a key
+	 * @param name Name of the hash
+	 * @param key Key
+	 * @param value Value
+	 */
+	void setHash(QString name, QString key, QVariant value);
+
+	/**
+	 * @brief Get a hash value for a key
+	 * @param name Name of the hash
+	 * @param key Key
+	 * @return A value
+	 */
+	QVariant hash(QString name, QString key);
 protected:
 	/**
 	 * @brief The QSettings object

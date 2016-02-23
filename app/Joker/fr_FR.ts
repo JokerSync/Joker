@@ -99,7 +99,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="160"/>
-        <location filename="JokerWindow.cpp" line="664"/>
+        <location filename="JokerWindow.cpp" line="675"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -449,57 +449,56 @@
         <translation>Cacher les personnages sélectionnés</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="183"/>
-        <location filename="JokerWindow.cpp" line="192"/>
-        <location filename="JokerWindow.cpp" line="209"/>
-        <location filename="JokerWindow.cpp" line="222"/>
+        <location filename="JokerWindow.cpp" line="184"/>
+        <location filename="JokerWindow.cpp" line="193"/>
+        <location filename="JokerWindow.cpp" line="210"/>
+        <location filename="JokerWindow.cpp" line="223"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="183"/>
+        <location filename="JokerWindow.cpp" line="184"/>
         <source>Unable to connect to USB422v module</source>
         <translation>Impossible de se connecter au module USB422v</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="192"/>
+        <location filename="JokerWindow.cpp" line="193"/>
         <source>Unable to open %0</source>
         <translation>Impossible d&apos;ouvrir %0</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="209"/>
-        <location filename="JokerWindow.cpp" line="222"/>
+        <location filename="JokerWindow.cpp" line="210"/>
+        <location filename="JokerWindow.cpp" line="223"/>
         <source>Unable to open %0 midi port</source>
         <translation>Impossible d&apos;ouvrir le port midi %0</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="660"/>
+        <location filename="JokerWindow.cpp" line="671"/>
         <source>Rythmo files</source>
         <translation>Fichiers rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="757"/>
+        <location filename="JokerWindow.cpp" line="768"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="762"/>
+        <location filename="JokerWindow.cpp" line="773"/>
         <source>Open a video...</source>
         <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="978"/>
-        <location filename="JokerWindow.cpp" line="1003"/>
+        <location filename="JokerWindow.cpp" line="295"/>
         <source>Unable to save </source>
         <translation>Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="996"/>
+        <location filename="JokerWindow.cpp" line="1005"/>
         <source>Save...</source>
         <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="589"/>
+        <location filename="JokerWindow.cpp" line="600"/>
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>
@@ -597,7 +596,7 @@
 <context>
     <name>PhEditableDocumentWindow</name>
     <message>
-        <location filename="../../libs/PhCommonUI/PhEditableDocumentWindow.cpp" line="31"/>
+        <location filename="../../libs/PhCommonUI/PhEditableDocumentWindow.cpp" line="30"/>
         <source>Do you want to save your changes ?</source>
         <translation>Souhaitez vous enregistrer vos changements ?</translation>
     </message>

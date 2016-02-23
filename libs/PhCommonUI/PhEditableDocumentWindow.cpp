@@ -18,11 +18,10 @@ bool PhEditableDocumentWindow::openDocument(const QString &fileName)
 	return false;
 }
 
-bool PhEditableDocumentWindow::saveDocument(const QString &fileName)
+void PhEditableDocumentWindow::saveDocument(const QString &fileName)
 {
 	_settings->setCurrentDocument(fileName);
 	this->setWindowTitle(fileName);
-	return true;
 }
 
 bool PhEditableDocumentWindow::checkDocumentModification()
@@ -51,11 +50,4 @@ void PhEditableDocumentWindow::closeEvent(QCloseEvent *event)
 	/// Check if the current document has to be saved (it might cancel the action).
 	if(!checkDocumentModification())
 		event->ignore();
-}
-
-void PhEditableDocumentWindow::onOpenRecentDocumentTriggered()
-{
-	QString fileName = sender()->objectName();
-	PHDEBUG << fileName;
-	openDocument(fileName);
 }

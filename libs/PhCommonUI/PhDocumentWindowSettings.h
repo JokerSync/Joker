@@ -3,6 +3,9 @@
 
 #include "PhWindowSettings.h"
 
+#include <QByteArray>
+#include <QVariant>
+
 /**
  * @brief The settings for PhDocumentWindow
  */
@@ -54,7 +57,19 @@ public:
 	 */
 	virtual bool autoReload() = 0;
 
+	/**
+	 * @brief Get the security scope bookmark of a file
+	 * @param fileName A file name
+	 * @return A QByteArray containing the bookmark
+	 */
+	virtual QVariant bookmark(QString fileName) = 0;
 
+	/**
+	 * @brief Set the security scope bookmark of a file
+	 * @param fileName A file name
+	 * @param bookmark A QByteArray containing the bookmark
+	 */
+	virtual void setBookmark(QString fileName, QVariant bookmark) = 0;
 };
 
 #endif // PHDOCUMENTWINDOWSETTINGS_H

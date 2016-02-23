@@ -36,7 +36,7 @@ protected:
 	 * @param fileName A string.
 	 * @return Always true.
 	 */
-	virtual bool saveDocument(const QString &fileName);
+	virtual void saveDocument(const QString &fileName);
 
 	bool checkDocumentModification();
 
@@ -56,11 +56,6 @@ protected:
 	 * @param event
 	 */
 	virtual void closeEvent(QCloseEvent *event);
-protected slots:
-	/**
-	 * @brief Check if document has been modified before opening the recent document
-	 */
-	void onOpenRecentDocumentTriggered() override;
 
 private:
 	PhDocumentWindowSettings *_settings;

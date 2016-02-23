@@ -27,6 +27,7 @@ public:
 	PH_SETTING_STRINGLIST(setRecentDocumentList, recentDocumentList)
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 5)
 	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
+	PH_SETTING_HASH(setBookmark, bookmark)
 };
 
 #endif // WINDOWDOCUMENTWINDOWSPECSETTINGS_H

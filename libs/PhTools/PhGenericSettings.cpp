@@ -110,3 +110,15 @@ QByteArray PhGenericSettings::byteArray(QString name)
 {
 	return _settings.value(name).toByteArray();
 }
+
+void PhGenericSettings::setHash(QString name, QString key, QVariant value)
+{
+	QHash<QString, QVariant> hash = _settings.value(name).toHash();
+	hash[key] = value;
+	_settings.setValue(name, hash);
+}
+
+QVariant PhGenericSettings::hash(QString name, QString key)
+{
+	return _settings.value(name).toHash()[key];
+}

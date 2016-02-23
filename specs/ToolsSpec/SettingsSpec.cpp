@@ -172,5 +172,15 @@ go_bandit([](){
 			for(int i = 0; i < array1.size(); i++)
 				AssertThat(array2.at(i), Equals(array1.at(i)));
 		});
+
+		it("handles hash", [&](){
+			AssertThat(settings->hashTest1("test").toString(), Equals(""));
+			settings->setHashTest1("test", "chouette");
+			AssertThat(settings->hashTest1("test").toString(), Equals("chouette"));
+
+			settings->clear();
+
+			AssertThat(settings->hashTest1("test").toString(), Equals(""));
+		});
 	});
 });

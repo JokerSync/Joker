@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QTextEdit>
+#include <QCloseEvent>
 
 #include <PhTools/PhDebug.h>
 
@@ -46,12 +47,14 @@ bool TextEditTestWindow::openDocument(const QString &fileName)
 	return PhEditableDocumentWindow::openDocument(fileName);
 }
 
-bool TextEditTestWindow::saveDocument(const QString &fileName)
+void TextEditTestWindow::saveDocument(const QString &fileName)
 {
 	PHDEBUG << fileName;
 	QFile file(fileName);
-	if(!file.open(QFile::WriteOnly | QFile::Text))
-		return false;
+	if(!file.open(QFile::WriteOnly | QFile::Text)) {
+		QMessageBox::critical(this, "Error", "Unable to save " + fileName);
+		return;
+	}
 
 	QTextStream ts(&file);
 	PHDEBUG << ui->textEdit->toPlainText();
@@ -61,7 +64,22 @@ bool TextEditTestWindow::saveDocument(const QString &fileName)
 
 	_isModified = false;
 
-	return PhEditableDocumentWindow::saveDocument(fileName);
+	PhEditableDocumentWindow::saveDocument(fileName);
+}
+
+void TextEditTestWindow::closeEvent(QCloseEvent *event)
+{
+	// the user will be asked if the document has to be saved
+	PhEditableDocumentWindow::closeEvent(event);
+
+	// if the close operation is not cancelled by the user,
+	if (event->isAccepted()) {
+		// Force doc to unmodified to avoid double confirmation
+		// since closeEvent is called twice
+		// https://bugreports.qt.io/browse/QTBUG-43344
+		_isModified = false;
+	}
+
 }
 
 QMenu *TextEditTestWindow::recentDocumentMenu()
@@ -121,8 +139,7 @@ void TextEditTestWindow::on_actionSave_as_triggered()
 	fileName = QFileDialog::getSaveFileName(this, "Save a text file...", fileName, "Text file (*.txt)");
 	PHDEBUG << fileName;
 	if(!fileName.isEmpty()) {
-		if(!saveDocument(fileName))
-			QMessageBox::critical(this, "Error", "Unable to save " + fileName);
+		saveDocument(fileName);
 	}
 }
 

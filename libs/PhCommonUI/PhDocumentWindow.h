@@ -71,6 +71,17 @@ protected:
 	 */
 	QFileSystemWatcher _watcher;
 
+	/**
+	 * @brief Check file permission regarding to sandboxing limitation
+	 * @param fileName The file name
+	 */
+	void checkFilePermission(QString fileName);
+
+	/**
+	 * @brief Add file permission regarding to sandboxing limitation
+	 * @param fileName The file name
+	 */
+	void addFilePermission(QString fileName);
 public slots:
 	/**
 	 * @brief On external file change

@@ -135,19 +135,20 @@ JokerWindow::~JokerWindow()
 
 void JokerWindow::closeEvent(QCloseEvent *event)
 {
-	// the user will be asked if the document has to be saved
+	// The user will be asked if the document has to be saved
 	PhEditableDocumentWindow::closeEvent(event);
 
-	// if the close operation is not cancelled by the user,
-	// the media panel has to be closed manually, or the application
-	// will stay open forever in the background
+	// If the close operation is not cancelled by the user
 	if (event->isAccepted()) {
+		// The media panel has to be closed manually, or the application
+		// will stay open forever in the background
 		_mediaPanel.close();
+
+		// Force doc to unmodified to avoid double confirmation
+		// since closeEvent is called twice
+		// https://bugreports.qt.io/browse/QTBUG-43344
+		_doc->setModified(false);
 	}
-	// Force doc to unmodified to avoid double confirmation
-	// since closeEvent is called twice
-	// https://bugreports.qt.io/browse/QTBUG-43344
-	_doc->setModified(false);
 }
 
 void JokerWindow::setupSyncProtocol()
@@ -265,6 +266,7 @@ bool JokerWindow::openDocument(const QString &fileName)
 	/// - Load the deinterlace settings
 	on_actionDeinterlace_video_triggered(_doc->videoDeinterlace());
 	/// - Open the corresponding video file if it exists.
+	this->checkFilePermission(_doc->videoFilePath());
 	if(openVideoFile(_doc->videoFilePath())) {
 		_videoEngine.setTimeIn(_doc->videoTimeIn());
 		_mediaPanel.setTimeIn(_doc->videoTimeIn());
@@ -282,6 +284,16 @@ bool JokerWindow::openDocument(const QString &fileName)
 	/// - Disable the need to save flag.
 
 	return true;
+}
+
+void JokerWindow::saveDocument(const QString &fileName)
+{
+	if(_doc->exportDetXFile(fileName, currentTime())) {
+		_doc->setModified(false);
+		PhEditableDocumentWindow::saveDocument(fileName);
+	}
+	else
+		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
 }
 
 void JokerWindow::onExternalChange(const QString &path)
@@ -803,6 +815,8 @@ bool JokerWindow::openVideoFile(QString videoFile)
 		_mediaPanel.setLength(_videoEngine.length());
 
 		_settings->setLastVideoFolder(fileInfo.absolutePath());
+
+		this->addFilePermission(videoFile);
 		return true;
 	}
 	return false;
@@ -972,10 +986,8 @@ void JokerWindow::on_actionSave_triggered()
 	QFileInfo info(fileName);
 	if(!info.exists() || (info.suffix() != "detx"))
 		on_actionSave_as_triggered();
-	else if(_doc->exportDetXFile(fileName, currentTime()))
-		_doc->setModified(false);
 	else
-		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
+		saveDocument(fileName);
 }
 
 void JokerWindow::on_actionSave_as_triggered()
@@ -994,14 +1006,8 @@ void JokerWindow::on_actionSave_as_triggered()
 	}
 
 	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.detx");
-	if(fileName != "") {
-		if(_doc->exportDetXFile(fileName, currentTime())) {
-			_doc->setModified(false);
-			PhEditableDocumentWindow::saveDocument(fileName);
-		}
-		else
-			QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
-	}
+	if(fileName != "")
+		saveDocument(fileName);
 }
 
 bool JokerWindow::isDocumentModified()
