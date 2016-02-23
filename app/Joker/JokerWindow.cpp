@@ -74,6 +74,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	connect(&_videoEngine, &PhVideoEngine::timeCodeTypeChanged, this, &JokerWindow::onTimecodeTypeChanged);
 	ui->actionPicture_in_picture->setChecked(_settings->videoPictureInPicture());
 	ui->actionSecond_screen->setChecked(_settings->videoSecondScreen());
+	if(_settings->videoSecondScreen())
+		on_actionSecond_screen_triggered(true);
 #else
 	ui->actionOpen_Video->setEnabled(false);
 	ui->actionClose_video->setEnabled(false);
@@ -1226,5 +1228,13 @@ void JokerWindow::on_actionSecond_screen_triggered(bool checked)
 {
 #ifdef USE_VIDEO
 	_settings->setVideoSecondScreen(checked);
+	if(checked) {
+		_secondScreenWindow = new SecondScreenWindow(&_videoEngine, ui->videoStripView);
+		_secondScreenWindow->show();
+	}
+	else {
+		_secondScreenWindow->close();
+		delete _secondScreenWindow;
+	}
 #endif
 }

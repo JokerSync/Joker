@@ -14,6 +14,7 @@
 #include "PhCommonUI/PhEditableDocumentWindow.h"
 #ifdef USE_VIDEO
 #include "PhVideo/PhVideoEngine.h"
+#include "SecondScreenWindow.h"
 #endif
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSynchronizer.h"
@@ -291,6 +292,7 @@ private:
 	PhStripDoc *_doc;
 #ifdef USE_VIDEO
 	PhVideoEngine _videoEngine;
+	SecondScreenWindow *_secondScreenWindow;
 #endif
 	PhSynchronizer _synchronizer;
 #ifdef USE_SONY
