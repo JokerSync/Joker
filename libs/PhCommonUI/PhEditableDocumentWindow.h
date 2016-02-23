@@ -36,7 +36,7 @@ protected:
 	 * @param fileName A string.
 	 * @return Always true.
 	 */
-	virtual bool saveDocument(const QString &fileName);
+	virtual void saveDocument(const QString &fileName);
 
 	bool checkDocumentModification();
 
