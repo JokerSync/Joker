@@ -15,6 +15,7 @@
 
 #include "PhVideoSettings.h"
 #include "PhVideoFrame.h"
+#include "PhVideoFramePool.h"
 
 /**
  * @brief The video engine
@@ -177,13 +178,6 @@ public:
 	bool isFrameCurrent(PhTime time);
 
 	/**
-	 * @brief Whether the time corresponds to the frame that we have requested
-	 * @param time The current time
-	 * @return True if the frame has already been requested
-	 */
-	bool isFrameRequested(PhTime time);
-
-	/**
 	 * @brief Pool of decoded frames
 	 * @return A read only list of frames
 	 */
@@ -195,12 +189,6 @@ public slots:
 	 * @param frame the decoded frame
 	 */
 	void frameAvailable(PhVideoFrame *frame);
-
-	/**
-	 * @brief Handle the signal that a frame request has been cancelled in the decoder
-	 * @param frame The frame describing the request
-	 */
-	void frameCancelled(PhVideoFrame *frame);
 
 	/**
 	 * @brief Handle the signal that the video file has been opened in the decoder
@@ -226,12 +214,6 @@ signals:
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 
 	/**
-	 * @brief Signal sent to ask the decoder to decode a video frame
-	 * @param frame the requested frame
-	 */
-	void decodeFrame(PhVideoFrame *frame);
-
-	/**
 	 * @brief Signal sent to the decoder to open a video file
 	 * @param fileName A video file path
 	 */
@@ -247,12 +229,6 @@ signals:
 	 * @param success Whether the video was opened successfully
 	 */
 	void opened(bool success);
-
-	/**
-	 * @brief Signal sent to cancel a frame request
-	 * @param frame The frame describing the request
-	 */
-	void cancelFrameRequest(PhVideoFrame *frame);
 
 	/**
 	 * @brief Signal sent when the deinterlace settings change
@@ -275,11 +251,7 @@ signals:
 	void newFrameDecoded(PhTime frameTime);
 
 private:
-	void requestFrame(PhTime time);
-	void requestFrames(PhTime time);
-	void cleanupFramePools();
 	void showFrame(PhVideoFrame *frame);
-	PhVideoFrame *frameFromPool(PhTime time);
 	PhTime clockTime();
 
 	PhVideoSettings *_settings;
@@ -301,10 +273,7 @@ private:
 
 	bool _deinterlace;
 
-	QList<PhVideoFrame*> _recycledFramePool;
-	QList<PhVideoFrame*> _requestedFramePool;
-	QList<PhVideoFrame*> _cancelledFramePool;
-	QList<PhVideoFrame*> _decodedFramePool;
+	PhVideoFramePool _framePool;
 
 	QThread _decoderThread;
 };

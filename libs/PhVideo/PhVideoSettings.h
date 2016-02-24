@@ -7,6 +7,8 @@
 #ifndef PHVIDEOSETTINGS_H
 #define PHVIDEOSETTINGS_H
 
+#include "PhSync/PhTime.h"
+
 /**
  * @brief The settings for the PhVideoEngine
  */

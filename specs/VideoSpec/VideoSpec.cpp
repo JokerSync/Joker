@@ -32,7 +32,9 @@ go_bandit([](){
 		int factor;
 
 		before_each([&](){
-			PhDebug::setLogMask(PHDEBUG_SPEC_MASK | (1 << 9));
+			PhDebug::setLogMask(PHDEBUG_SPEC_MASK | (1 << 9)
+//								| (1 << 24)
+								);
 
 			view = new PhGraphicView(64, 64);
 			settings = new VideoSpecSettings();
@@ -75,7 +77,8 @@ go_bandit([](){
 			before_each([&](){
 				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+				if(paintSpy->count() == 0)
+					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 			});
 
 			it("open", [&](){
@@ -360,7 +363,8 @@ go_bandit([](){
 			before_each([&](){
 				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
 				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+				if(paintSpy->count() == 0)
+					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 			});
 
 			it("read properties", [&](){

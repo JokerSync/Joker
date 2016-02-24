@@ -23,19 +23,21 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_codecName(""),
 	_ready(false),
 	_currentFrameTime(PHTIMEMIN),
-	_deinterlace(false)
+	_deinterlace(false),
+	_framePool(settings, &_clock)
 {
 	// initialize the decoder that operates in a separate thread
 	PhVideoDecoder *decoder = new PhVideoDecoder();
 	decoder->moveToThread(&_decoderThread);
 	connect(&_decoderThread, &QThread::finished, decoder, &QObject::deleteLater);
-	connect(this, &PhVideoEngine::decodeFrame, decoder, &PhVideoDecoder::decodeFrame);
+	connect(&_framePool, &PhVideoFramePool::decodeFrame, decoder, &PhVideoDecoder::decodeFrame);
 	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
 	connect(this, &PhVideoEngine::closeInDecoder, decoder, &PhVideoDecoder::close);
-	connect(this, &PhVideoEngine::cancelFrameRequest, decoder, &PhVideoDecoder::cancelFrameRequest);
+	connect(&_framePool, &PhVideoFramePool::cancelFrameRequest, decoder, &PhVideoDecoder::cancelFrameRequest);
 	connect(this, &PhVideoEngine::deinterlaceChanged, decoder, &PhVideoDecoder::setDeinterlace);
 	connect(decoder, &PhVideoDecoder::frameAvailable, this, &PhVideoEngine::frameAvailable);
-	connect(decoder, &PhVideoDecoder::frameCancelled, this, &PhVideoEngine::frameCancelled);
+	connect(decoder, &PhVideoDecoder::frameAvailable, &_framePool, &PhVideoFramePool::frameAvailable);
+	connect(decoder, &PhVideoDecoder::frameCancelled, &_framePool, &PhVideoFramePool::frameCancelled);
 	connect(decoder, &PhVideoDecoder::opened, this, &PhVideoEngine::decoderOpened);
 	connect(decoder, &PhVideoDecoder::openFailed, this, &PhVideoEngine::openInDecoderFailed);
 	_decoderThread.start();
@@ -55,17 +57,10 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 
 		emit deinterlaceChanged(_deinterlace);
 
-		foreach(PhVideoFrame * requestedFrame, _requestedFramePool) {
-			emit cancelFrameRequest(requestedFrame);
-		}
-		_cancelledFramePool.append(_requestedFramePool);
-		_requestedFramePool.clear();
-
-		_recycledFramePool.append(_decodedFramePool);
-		_decodedFramePool.clear();
+		_framePool.cancel();
 
 		// request the frames again to apply the new deinterlace setting
-		requestFrames(clockTime());
+		_framePool.requestFrames(clockTime(), _clock.rate() < 0);
 	}
 }
 
@@ -92,16 +87,8 @@ bool PhVideoEngine::open(QString fileName)
 	_clock.setRate(0);
 	_currentFrameTime = PHTIMEMIN;
 
-	// cancel all requested frames
-	foreach(PhVideoFrame * requestedFrame, _requestedFramePool) {
-		emit cancelFrameRequest(requestedFrame);
-	}
-	_cancelledFramePool.append(_requestedFramePool);
-	_requestedFramePool.clear();
-
-	// recycle all decoded frames
-	_recycledFramePool.append(_decodedFramePool);
-	_decodedFramePool.clear();
+	// cancel pool
+	_framePool.cancel();
 
 	_fileName = fileName;
 
@@ -123,18 +110,10 @@ void PhVideoEngine::close()
 	_width = 0;
 	_height = 0;
 	_codecName = "";
-	_ready = false;
 
-	// cancel all requested frames
-	foreach(PhVideoFrame * requestedFrame, _requestedFramePool) {
-		emit cancelFrameRequest(requestedFrame);
-	}
-	_cancelledFramePool.append(_requestedFramePool);
-	_requestedFramePool.clear();
-
-	// recycle all decoded frames
-	_recycledFramePool.append(_decodedFramePool);
-	_decodedFramePool.clear();
+	// cancel pool
+	_framePool.cancel();
+	_framePool.update(0, 0, PhTimeCodeType25);
 }
 
 PhTime PhVideoEngine::clockTime()
@@ -163,7 +142,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	//		=> nothing to do
 
 	if (!isFrameCurrent(time)) {
-		PhVideoFrame *frame = frameFromPool(time);
+		PhVideoFrame *frame = _framePool.frame(time);
 
 		if (frame) {
 			// The time does not correspond to the frame on screen,
@@ -174,7 +153,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		}
 	}
 
-	requestFrames(time);
+	_framePool.requestFrames(time, _clock.rate() < 0);
 
 	// draw whatever frame we currently have
 	if(_settings->useNativeVideoSize())
@@ -185,60 +164,11 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	_videoRect.draw();
 }
 
-void PhVideoEngine::requestFrames(PhTime time)
-{
-	bool playingForward = true;
-	if (_clock.rate() < 0) {
-		playingForward = false;
-	}
-
-	// we make sure we have requested "readahead_count" frames
-	for (int i = 0; i < _settings->videoReadhead(); i++) {
-		int factor = i;
-		if (!playingForward) {
-			factor *= -1;
-		}
-
-		PhTime requestTime = time + factor * PhTimeCode::timePerFrame(_tcType);
-
-		if (!isFrameRequested(requestTime)) {
-			requestFrame(requestTime);
-		}
-	}
-}
-
-void PhVideoEngine::requestFrame(PhTime time)
-{
-	if(!ready()) {
-		return;
-	}
-
-	PhVideoFrame * frame;
-
-	if (!_recycledFramePool.empty()) {
-		frame = _recycledFramePool.takeFirst();
-	}
-	else {
-		PHDBG(24) << "creating a new frame";
-		frame = new PhVideoFrame();
-	}
-
-	frame->setTime(0);
-	frame->setRequestTime(time - _timeIn);
-
-	PHDBG(24) << "request frame " << time - _timeIn;
-
-	// ask the frame to the decoder.
-	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
-	emit decodeFrame(frame);
-
-	_requestedFramePool.append(frame);
-}
-
 void PhVideoEngine::setTimeIn(PhTime timeIn)
 {
 	PHDEBUG << timeIn;
 	_timeIn = timeIn;
+	_framePool.update(_timeIn, _length, _tcType);
 }
 
 PhTime PhVideoEngine::length()
@@ -304,107 +234,9 @@ bool PhVideoEngine::isFrameCurrent(PhTime time)
 	return result;
 }
 
-bool PhVideoEngine::isFrameRequested(PhTime time)
-{
-	if(!ready()) {
-		PHDBG(24) << "not ready";
-		return false;
-	}
-
-	// clip to stream boundaries
-	if(time < _timeIn)
-		time = _timeIn;
-	if (time >= this->timeOut())
-		time = this->timeOut();
-
-	QList<PhVideoFrame *> requestedOrDecodedFrames;
-	requestedOrDecodedFrames.append(_requestedFramePool);
-	requestedOrDecodedFrames.append(_decodedFramePool);
-
-	foreach(PhVideoFrame *requestedFrame, requestedOrDecodedFrames) {
-		PhTime requestedTime = requestedFrame->requestTime() + _timeIn;
-
-		// We consider that we have requested the frame if the time has changed less
-		// than the time between two frames.
-		if ((time < requestedTime + PhTimeCode::timePerFrame(_tcType))
-		    && (time >= requestedTime)) {
-			// we have already requested	that frame
-			return true;
-		}
-	}
-
-	return false;
-}
-
 const QList<PhVideoFrame *> PhVideoEngine::decodedFramePool()
 {
-	return _decodedFramePool;
-}
-
-void PhVideoEngine::cleanupFramePools()
-{
-	PhTime time = clockTime();
-	PhTime halfPoolWindow = _settings->videoPoolWindow();
-
-	QMutableListIterator<PhVideoFrame*> i(_decodedFramePool);
-	while (i.hasNext()) {
-		PhVideoFrame *frame = i.next();
-
-		PhTime frameTime = frame->time() + _timeIn;
-
-		if ((frameTime < time - halfPoolWindow) || (frameTime >= time + halfPoolWindow)) {
-			// Given the current playing direction and position,
-			// this frame is not likely to be shown on screen anytime soon.
-			i.remove();
-
-			_recycledFramePool.append(frame);
-
-			PHDBG(24) << "recycle frame " << frameTime - _timeIn;
-		}
-	}
-
-	QMutableListIterator<PhVideoFrame*> r(_requestedFramePool);
-	while (r.hasNext()) {
-		PhVideoFrame *frame = r.next();
-
-		PhTime frameTime = frame->requestTime() + _timeIn;
-
-		if ((frameTime < time - halfPoolWindow) || (frameTime >= time + halfPoolWindow)) {
-			// Given the current playing direction and position,
-			// this frame is not likely to be shown on screen anytime soon.
-			r.remove();
-
-			_cancelledFramePool.append(frame);
-
-			// tell the decoder we no longer want this frame to be decoded
-			emit cancelFrameRequest(frame);
-
-			PHDBG(24) << "cancel frame request " << frameTime - _timeIn;
-		}
-	}
-
-	// Make sure we do not have too many recycled frames.
-	// They accumulate when seeking, because there is a short time lag
-	// between the time when the engine asks to cancel a frame and the
-	// time when the decoder really does it.
-	while (_recycledFramePool.count() > 10) {
-		PhVideoFrame * frameToDelete = _recycledFramePool.takeFirst();
-		delete frameToDelete;
-	}
-}
-
-PhVideoFrame* PhVideoEngine::frameFromPool(PhTime time)
-{
-	foreach(PhVideoFrame *frame, _decodedFramePool) {
-		PhTime frameTime = frame->time() + _timeIn;
-
-		if ((time < frameTime + PhTimeCode::timePerFrame(_tcType))
-		    && (time >= frameTime)) {
-			return frame;
-		}
-	}
-
-	return NULL;
+	return _framePool.decodedFramePool();
 }
 
 void PhVideoEngine::showFrame(PhVideoFrame *frame)
@@ -438,23 +270,7 @@ void PhVideoEngine::frameAvailable(PhVideoFrame *frame)
 		PHDBG(24) << "showing frame " << frameTime - _timeIn << " " << time - _timeIn;
 	}
 	else {
-		PHDBG(24) << "non-current frame " << frameTime - _timeIn << " " << time - _timeIn;
-	}
-
-	// move from requested to decoded
-	_cancelledFramePool.removeAll(frame);
-	_requestedFramePool.removeAll(frame);
-	_decodedFramePool.append(frame);
-
-	// cleanup
-	cleanupFramePools();
-}
-
-void PhVideoEngine::frameCancelled(PhVideoFrame *frame)
-{
-	if (_cancelledFramePool.contains(frame)) {
-		_cancelledFramePool.removeAll(frame);
-		_recycledFramePool.append(frame);
+		PHDBG(24) << "non-current frame " << frameTime - _timeIn << " " << time - _timeIn << frame->width() << "x" << frame->height();
 	}
 }
 
@@ -470,6 +286,7 @@ void PhVideoEngine::decoderOpened(PhTime length, double framePerSecond, PhTime t
 	// Looking for timecode type
 	_tcType = PhTimeCode::computeTimeCodeType(this->framePerSecond());
 	emit timeCodeTypeChanged(_tcType);
+	_framePool.update(timeIn, length, _tcType);
 
 	_ready = true;
 
