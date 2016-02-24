@@ -75,6 +75,7 @@ go_bandit([](){
 			before_each([&](){
 				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
+				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 			});
 
 			it("open", [&](){
@@ -94,9 +95,6 @@ go_bandit([](){
 			});
 
 			it("go_to_01", [&](){
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-				QTest::qWait(FRAME_WAIT_TIME);
-
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setFrame(20, PhTimeCodeType25);
@@ -190,8 +188,6 @@ go_bandit([](){
 			});
 
 			it("go to interframe", [&]() {
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setTime(960);
@@ -208,9 +204,6 @@ go_bandit([](){
 			});
 
 			it("play", [&](){
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-				QTest::qWait(FRAME_WAIT_TIME);
-
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setRate(1);
@@ -248,9 +241,6 @@ go_bandit([](){
 			});
 
 			it("deinterlace", [&](){
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-				QTest::qWait(FRAME_WAIT_TIME);
-
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				//Change mode to deinterlaced
@@ -276,9 +266,6 @@ go_bandit([](){
 			});
 
 			it("scales", [&](){
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-				QTest::qWait(FRAME_WAIT_TIME);
-
 				factor = 2;
 
 				settings->setUseNativeVideoSize(false);
@@ -287,9 +274,6 @@ go_bandit([](){
 			});
 
 			it("doesn't scale when using native video size", [&](){
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-				QTest::qWait(FRAME_WAIT_TIME);
-
 				factor = 2;
 
 				settings->setUseNativeVideoSize(true);
@@ -298,9 +282,6 @@ go_bandit([](){
 			});
 
 			it("handles timestamp", [&](){
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-				QTest::qWait(FRAME_WAIT_TIME);
-
 				engine->setTimeIn(240000);
 
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
@@ -379,6 +360,7 @@ go_bandit([](){
 			before_each([&](){
 				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
 				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
+				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 			});
 
 			it("read properties", [&](){
@@ -394,8 +376,6 @@ go_bandit([](){
 			});
 
 			it("play x264", [&](){
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-
 				AssertThat(view->compare("interlace_000.bmp", threshold), IsLessThan(threshold));
 
 				engine->clock()->setRate(1);
