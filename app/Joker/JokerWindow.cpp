@@ -830,7 +830,7 @@ void JokerWindow::videoFileOpened(bool success)
 
 		_settings->setLastVideoFolder(fileInfo.absolutePath());
 
-		this->addFilePermission(videoFile);
+		this->addFilePermission(_doc->videoFilePath());
 
 		if (_setCurrentTimeToVideoTimeIn) {
 			setCurrentTime(_doc->videoTimeIn());
