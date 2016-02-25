@@ -38,7 +38,7 @@
     <message>
         <location filename="AboutDialog.cpp" line="18"></location>
         <source>Revision:</source>
-        <translation>Révision: </translation>
+        <translation>Révision :</translation>
     </message>
     <message>
         <location filename="AboutDialog.cpp" line="40"></location>
@@ -660,27 +660,27 @@
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="255"></location>
         <source>23.98 fps</source>
-        <translation>23.98 fps</translation>
+        <translation>23.98 ips</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="260"></location>
         <source>24 fps</source>
-        <translation>24 fps</translation>
+        <translation>24 ips</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="265"></location>
         <source>25 fps</source>
-        <translation>25 fps</translation>
+        <translation>25 ips</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="270"></location>
         <source>29.97 fps</source>
-        <translation>29.97 fps</translation>
+        <translation>29.97 ips</translation>
     </message>
     <message>
         <location filename="../../libs/PhCommonUI/PhMediaPanel.ui" line="275"></location>
         <source>30 fps</source>
-        <translation>30 fps</translation>
+        <translation>30 ips</translation>
     </message>
 </context>
 <context>
@@ -767,7 +767,7 @@
     <message>
         <location filename="PreferencesDialog.ui" line="296"></location>
         <source>Communication framerate:</source>
-        <translation>Vitesse de la communication:</translation>
+        <translation>Vitesse de la communication :</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="304"></location>
@@ -802,7 +802,7 @@
     <message>
         <location filename="PreferencesDialog.ui" line="332"></location>
         <source>Video sync framerate:</source>
-        <translation>Vitesse de la référence vidéo:</translation>
+        <translation>Vitesse de la référence vidéo :</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="371"></location>
@@ -812,7 +812,7 @@
     <message>
         <location filename="PreferencesDialog.ui" line="393"></location>
         <source>Audio input port:</source>
-        <translation>Port audio d'entrée:</translation>
+        <translation>Port audio d'entrée :</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="403"></location>
@@ -827,27 +827,27 @@
     <message>
         <location filename="PreferencesDialog.ui" line="449"></location>
         <source>Midi machine control:</source>
-        <translation>Midi machine control:</translation>
+        <translation>Midi machine control :</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="468"></location>
         <source>Send MMC message to port:</source>
-        <translation>Envoyer des messages MMC au port:</translation>
+        <translation>Envoyer des messages MMC au port :</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="422"></location>
         <source>Read from existing port:</source>
-        <translation>Lire à partir d'un port existant:</translation>
+        <translation>Lire à partir d'un port existant :</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="51"></location>
         <source>Language:</source>
-        <translation>Langue:</translation>
+        <translation>Langue :</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="429"></location>
         <source>Read from virtual port:</source>
-        <translation>Lire à partir d'un port virtuel:</translation>
+        <translation>Lire à partir d'un port virtuel :</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="244"></location>
