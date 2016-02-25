@@ -11,11 +11,11 @@
 
 #include "PhSync/PhClock.h"
 #include "PhTools/PhTickCounter.h"
-#include "PhGraphic/PhGraphicTexturedRect.h"
 
 #include "PhVideoSettings.h"
 #include "PhVideoBuffer.h"
 #include "PhVideoPool.h"
+#include "PhVideoRect.h"
 
 /**
  * @brief The video engine
@@ -263,8 +263,7 @@ private:
 	QString _codecName;
 	bool _ready;
 
-	PhGraphicTexturedRect _videoRect;
-	PhFrame _currentFrame;
+	PhVideoRect _videoRect;
 
 	PhTickCounter _videoFrameTickCounter;
 

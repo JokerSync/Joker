@@ -22,7 +22,6 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_height(0),
 	_codecName(""),
 	_ready(false),
-	_currentFrame(PHFRAMEMIN),
 	_deinterlace(false),
 	_framePool(settings)
 {
@@ -55,7 +54,7 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 
 	if (deinterlace != _deinterlace) {
 		_deinterlace = deinterlace;
-		_currentFrame = PHFRAMEMIN;
+		_videoRect.discard();
 
 		emit deinterlaceChanged(_deinterlace);
 
@@ -87,7 +86,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	_clock.setTime(0);
 	_clock.setRate(0);
-	_currentFrame = PHFRAMEMIN;
+	_videoRect.discard();
 
 	// cancel pool
 	_framePool.cancel();
@@ -210,7 +209,7 @@ bool PhVideoEngine::isFrameCurrent(PhFrame frame)
 		return false;
 	}
 
-	if (_currentFrame == PHFRAMEMIN) {
+	if (_videoRect.currentFrame() == PHFRAMEMIN) {
 		// never got a frame
 		return false;
 	}
@@ -221,7 +220,7 @@ bool PhVideoEngine::isFrameCurrent(PhFrame frame)
 	if (frame >= _frameLength)
 		frame = _frameLength;
 
-	return frame == _currentFrame;
+	return _videoRect.currentFrame() == frame;
 }
 
 const QList<PhVideoBuffer *> PhVideoEngine::decodedFramePool()
@@ -231,11 +230,8 @@ const QList<PhVideoBuffer *> PhVideoEngine::decodedFramePool()
 
 void PhVideoEngine::showFrame(PhVideoBuffer *buffer)
 {
-	_videoRect.createTextureFromBGRABuffer(buffer->rgb(), buffer->width(), buffer->height());
+	_videoRect.update(buffer);
 	_videoFrameTickCounter.tick();
-
-	// update the current time with the true frame time as sent by the decoder
-	_currentFrame = buffer->frame();
 }
 
 void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
@@ -248,7 +244,7 @@ void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
 
 	emit newFrameDecoded(bufferFrame);
 
-	if (abs(frame - bufferFrame) <= abs(frame - _currentFrame)) {
+	if (abs(frame - bufferFrame) <= abs(frame - _videoRect.currentFrame())) {
 		// this frame is closer to the current time than the frame that is currently displayed,
 		// so show it.
 		// Note: we do not wait for the exact frame to be available to improve the responsiveness
