@@ -3,8 +3,6 @@
 
 #include <QObject>
 
-#include "PhSync/PhClock.h"
-
 #include "PhVideoSettings.h"
 #include "PhVideoBuffer.h"
 
@@ -23,7 +21,7 @@ public:
 	 * @param settings The setting
 	 * @param clock The engine clock
 	 */
-	explicit PhVideoPool(PhVideoSettings *settings, PhClock *clock);
+	explicit PhVideoPool(PhVideoSettings *settings);
 
 	/**
 	 * @brief Cancel the whole pool
@@ -73,7 +71,7 @@ public slots:
 	 *
 	 * @param frame Starting frame
 	 */
-	void requestFrames(PhFrame frame);
+	void requestFrames(PhFrame frame, bool backward);
 
 	/**
 	 * @brief Handle a frame that has just been decoded
@@ -97,7 +95,6 @@ private:
 	void requestFrame(PhFrame frame);
 
 	PhVideoSettings *_settings;
-	PhClock *_clock;
 	PhFrame _frameLength;
 	QList<PhVideoBuffer*> _recycledPool;
 	QList<PhVideoBuffer*> _requestedPool;

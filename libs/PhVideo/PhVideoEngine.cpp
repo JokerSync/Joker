@@ -24,7 +24,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_ready(false),
 	_currentFrame(PHFRAMEMIN),
 	_deinterlace(false),
-	_framePool(settings, &_clock)
+	_framePool(settings)
 {
 	// initialize the decoder that operates in a separate thread
 	PhVideoDecoder *decoder = new PhVideoDecoder();
@@ -62,7 +62,7 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 		_framePool.cancel();
 
 		// request the frames again to apply the new deinterlace setting
-		_framePool.requestFrames(clockFrame());
+		_framePool.requestFrames(clockFrame(), _clock.rate() < 0);
 	}
 }
 
@@ -279,7 +279,7 @@ void PhVideoEngine::decoderOpened(PhTimeCodeType tcType, PhFrame frameIn, PhFram
 
 	emit opened(true);
 
-	_framePool.requestFrames(clockFrame());
+	_framePool.requestFrames(clockFrame(), _clock.rate() < 0);
 }
 
 void PhVideoEngine::openInDecoderFailed()
@@ -289,5 +289,5 @@ void PhVideoEngine::openInDecoderFailed()
 
 void PhVideoEngine::onTimeChanged(PhTime)
 {
-	_framePool.requestFrames(clockFrame());
+	_framePool.requestFrames(clockFrame(), _clock.rate() < 0);
 }

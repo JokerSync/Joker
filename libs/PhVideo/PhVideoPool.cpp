@@ -4,8 +4,8 @@
 
 #include "PhVideoPool.h"
 
-PhVideoPool::PhVideoPool(PhVideoSettings *settings, PhClock *clock)
-	: _settings(settings), _clock(clock), _frameLength(0)
+PhVideoPool::PhVideoPool(PhVideoSettings *settings)
+	: _settings(settings), _frameLength(0)
 {
 
 }
@@ -34,7 +34,7 @@ void PhVideoPool::requestFrame(PhFrame frame)
 	_requestedPool.append(buffer);
 }
 
-void PhVideoPool::requestFrames(PhFrame frame)
+void PhVideoPool::requestFrames(PhFrame frame, bool backward)
 {
 	PHDBG(24) << frame;
 	if(_frameLength == 0) {
@@ -51,7 +51,7 @@ void PhVideoPool::requestFrames(PhFrame frame)
 	// we make sure we have requested "readahead_count" frames
 	for (int i = 0; i < _settings->videoReadhead(); i++) {
 		int factor = i;
-		if (_clock->rate() < 0) {
+		if (backward) {
 			factor *= -1;
 		}
 
