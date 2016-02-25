@@ -98,7 +98,9 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Cappella.
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Helvetica.ttf) $${RESOURCES_PATH} $${CS}
 
 
-TRANSLATIONS =	fr_FR.ts \
+TRANSLATIONS =	\
+	fr_FR.ts \
+	pt_PT.ts \
 
 QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
 
