@@ -27,6 +27,8 @@ PhVideoDecoder::PhVideoDecoder() :
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
 	avcodec_register_all();
+
+	qRegisterMetaType<PhVideoFrame>("PhVideoFrame");
 }
 
 bool PhVideoDecoder::ready()
@@ -291,6 +293,10 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 
 	// resize the buffer if needed
 	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
+	if(bufferSize <= 0) {
+		PHERR << "avpicture_get_size() returned" << bufferSize;
+		return;
+	}
 	frame->reuse(bufferSize);
 
 	// clip to stream boundaries

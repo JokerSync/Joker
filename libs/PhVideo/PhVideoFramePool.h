@@ -24,14 +24,6 @@ public:
 	explicit PhVideoFramePool(PhVideoSettings *settings, PhClock *clock);
 
 	/**
-	 * @brief Request the frames starting a given time and further according to the readhead
-	 *
-	 * @param time Starting time
-	 * @param backward True if backward, false if forward
-	 */
-	void requestFrames(PhTime time, bool backward);
-
-	/**
 	 * @brief Cancel the whole frame pool
 	 */
 	void cancel();
@@ -76,6 +68,13 @@ signals:
 	void cancelFrameRequest(PhVideoFrame *frame);
 
 public slots:
+	/**
+	 * @brief Request the frames starting a given time and further according to the readhead
+	 *
+	 * @param time Starting time
+	 */
+	void requestFrames(PhTime time);
+
 	/**
 	 * @brief Handle a frame that has just been decoded
 	 * @param frame the decoded frame

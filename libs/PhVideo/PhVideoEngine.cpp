@@ -29,6 +29,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	// initialize the decoder that operates in a separate thread
 	PhVideoDecoder *decoder = new PhVideoDecoder();
 	decoder->moveToThread(&_decoderThread);
+	connect(&_clock, &PhClock::timeChanged, &_framePool, &PhVideoFramePool::requestFrames);
 	connect(&_decoderThread, &QThread::finished, decoder, &QObject::deleteLater);
 	connect(&_framePool, &PhVideoFramePool::decodeFrame, decoder, &PhVideoDecoder::decodeFrame);
 	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
@@ -54,13 +55,14 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 
 	if (deinterlace != _deinterlace) {
 		_deinterlace = deinterlace;
+		_currentFrameTime = PHTIMEMIN;
 
 		emit deinterlaceChanged(_deinterlace);
 
 		_framePool.cancel();
 
 		// request the frames again to apply the new deinterlace setting
-		_framePool.requestFrames(clockTime(), _clock.rate() < 0);
+		_framePool.requestFrames(clockTime());
 	}
 }
 
@@ -153,8 +155,6 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 		}
 	}
 
-	_framePool.requestFrames(time, _clock.rate() < 0);
-
 	// draw whatever frame we currently have
 	if(_settings->useNativeVideoSize())
 		_videoRect.setRect(x, y, this->width(), this->height());
@@ -246,9 +246,6 @@ void PhVideoEngine::showFrame(PhVideoFrame *frame)
 
 	// update the current time with the true frame time as sent by the decoder
 	_currentFrameTime = frame->time() + _timeIn;
-
-	// this signal is used for tests, where some form of synchronization is needed
-	emit newFrameDisplayed(_currentFrameTime);
 }
 
 void PhVideoEngine::frameAvailable(PhVideoFrame *frame)
@@ -267,10 +264,10 @@ void PhVideoEngine::frameAvailable(PhVideoFrame *frame)
 		// Note: we do not wait for the exact frame to be available to improve the responsiveness
 		// when seeking.
 		showFrame(frame);
-		PHDBG(24) << "showing frame " << frameTime - _timeIn << " " << time - _timeIn;
+		PHDBG(24) << "showing frame " << frameTime;
 	}
 	else {
-		PHDBG(24) << "non-current frame " << frameTime - _timeIn << " " << time - _timeIn << frame->width() << "x" << frame->height();
+		PHDBG(24) << "non-current frame " << frameTime;
 	}
 }
 
@@ -291,6 +288,8 @@ void PhVideoEngine::decoderOpened(PhTime length, double framePerSecond, PhTime t
 	_ready = true;
 
 	emit opened(true);
+
+	_framePool.requestFrames(_clock.time());
 }
 
 void PhVideoEngine::openInDecoderFailed()

@@ -237,13 +237,6 @@ signals:
 	void deinterlaceChanged(bool deinterlace);
 
 	/**
-	 * @brief Signal sent when a new frame is displayed on screen.
-	 * This is used by the tests, where some form of synchronization is required.
-	 * @param frameTime The time of the frame being displayed
-	 */
-	void newFrameDisplayed(PhTime frameTime);
-
-	/**
 	 * @brief Signal sent when a new frame is decoded.
 	 * This is used by the tests.
 	 * @param frameTime The time of the frame being decoded

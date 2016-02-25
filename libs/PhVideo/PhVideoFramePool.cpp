@@ -26,7 +26,7 @@ void PhVideoFramePool::requestFrame(PhTime time)
 	frame->setTime(0);
 	frame->setRequestTime(time - _timeIn);
 
-	PHDBG(24) << "request frame " << time - _timeIn;
+	PHDBG(24) << time - _timeIn;
 
 	// ask the frame to the decoder.
 	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
@@ -35,17 +35,24 @@ void PhVideoFramePool::requestFrame(PhTime time)
 	_requestedFramePool.append(frame);
 }
 
-void PhVideoFramePool::requestFrames(PhTime time, bool backward)
+void PhVideoFramePool::requestFrames(PhTime time)
 {
+	PHDBG(24) << time;
 	if(_length == 0) {
 		PHDBG(24) << "not ready";
 		return;
 	}
 
+	// clip to stream boundaries
+	if(time < _timeIn)
+		time = _timeIn;
+	if (time >= _timeIn + _length)
+		time = _timeIn + _length;
+
 	// we make sure we have requested "readahead_count" frames
 	for (int i = 0; i < _settings->videoReadhead(); i++) {
 		int factor = i;
-		if (backward) {
+		if (_clock->rate() < 0) {
 			factor *= -1;
 		}
 
@@ -85,6 +92,7 @@ void PhVideoFramePool::update(PhTime timeIn, PhTime length, PhTimeCodeType tcTyp
 
 void PhVideoFramePool::frameAvailable(PhVideoFrame *frame)
 {
+	PHDBG(24) << frame->requestTime() << frame->time() << frame->width() << "x" << frame->height();
 	// move from requested to decoded
 	_cancelledFramePool.removeAll(frame);
 	_requestedFramePool.removeAll(frame);
@@ -131,6 +139,12 @@ bool PhVideoFramePool::isFrameRequested(PhTime time)
 
 void PhVideoFramePool::cleanup(PhTime time)
 {
+	// clip to stream boundaries
+	if(time < _timeIn)
+		time = _timeIn;
+	if (time >= _timeIn + _length)
+		time = _timeIn + _length;
+
 	PhTime halfPoolWindow = _settings->videoPoolWindow();
 
 	QMutableListIterator<PhVideoFrame*> i(_decodedFramePool);

@@ -14,7 +14,6 @@
 
 #define FRAME_WAIT_TIME 40
 #define OPEN_WAIT_TIME 10000
-#define PAINT_WAIT_TIME 500
 #define DECODE_WAIT_TIME 50
 
 #include "CommonSpec.h"
@@ -27,23 +26,24 @@ go_bandit([](){
 		VideoSpecSettings *settings;
 		PhVideoEngine *engine;
 		QSignalSpy *openSpy;
-		QSignalSpy *paintSpy;
 		QSignalSpy *decodeSpy;
 		int factor;
 
 		before_each([&](){
 			PhDebug::setLogMask(PHDEBUG_SPEC_MASK | (1 << 9)
 //								| (1 << 24)
+//								| 1
 								);
 
 			view = new PhGraphicView(64, 64);
 			settings = new VideoSpecSettings();
 			engine = new PhVideoEngine(settings);
 			openSpy = new QSignalSpy(engine, &PhVideoEngine::opened);
-			paintSpy = new QSignalSpy(engine, &PhVideoEngine::newFrameDisplayed);
 			decodeSpy = new QSignalSpy(engine, &PhVideoEngine::newFrameDecoded);
 
-			view->show();
+			// This is just for opengl initialization
+//			view->show();
+			view->renderPixmap(64, 64);
 
 			engine->setBilinearFiltering(false);
 
@@ -59,7 +59,6 @@ go_bandit([](){
 
 			delete decodeSpy;
 			delete openSpy;
-			delete paintSpy;
 			delete engine;
 			delete settings;
 			delete view;
@@ -77,8 +76,7 @@ go_bandit([](){
 			before_each([&](){
 				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
 				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
-				if(paintSpy->count() == 0)
-					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+				QTest::qWait(FRAME_WAIT_TIME);
 			});
 
 			it("open", [&](){
@@ -102,41 +100,36 @@ go_bandit([](){
 
 				engine->clock()->setFrame(20, PhTimeCodeType25);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_020.bmp"), Equals(0));
 
 				engine->clock()->setFrame(100, PhTimeCodeType25);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_100.bmp"), Equals(0));
 
 				engine->clock()->setFrame(75, PhTimeCodeType25);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_075.bmp"), Equals(0));
 
 				engine->clock()->setFrame(199, PhTimeCodeType25);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_199.bmp"), Equals(0));
 
 				engine->clock()->setFrame(200, PhTimeCodeType25);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsFalse());
+				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_199.bmp"), Equals(0));
 
 				engine->clock()->setFrame(-1, PhTimeCodeType25);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
@@ -145,14 +138,12 @@ go_bandit([](){
 			it("go_to_02", [&](){
 				engine->clock()->setFrame(100, PhTimeCodeType25);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_100.bmp"), Equals(0));
 
 				engine->clock()->setFrame(99, PhTimeCodeType25);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_099.bmp"), Equals(0));
@@ -160,7 +151,6 @@ go_bandit([](){
 				for(int i = 75; i >= 50; i--) {
 					engine->clock()->setFrame(i, PhTimeCodeType25);
 
-					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 					QTest::qWait(FRAME_WAIT_TIME);
 					QString name = QString("interlace_%1.bmp").arg(i, 3, 10, QChar('0'));
 
@@ -183,7 +173,6 @@ go_bandit([](){
 					PhFrame frame = list[i];
 					engine->clock()->setFrame(frame, PhTimeCodeType25);
 
-					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 					QTest::qWait(FRAME_WAIT_TIME);
 					QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
 					AssertThat(view->compare(name), Equals(0));
@@ -195,13 +184,11 @@ go_bandit([](){
 
 				engine->clock()->setTime(960);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_001.bmp"), Equals(0));
 
 				engine->clock()->setTime(959);
-
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 			});
@@ -212,35 +199,36 @@ go_bandit([](){
 				engine->clock()->setRate(1);
 				engine->clock()->elapse(960); // 1 frame at 25 fps
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_001.bmp"), Equals(0));
 
 
 				// Play 1 second
-				for(int i = 0; i < 25; i++) {
+				for(int i = 2; i <= 26; i++) {
 					engine->clock()->elapse(960); // 1 frame at 25 fps
-					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-					QTest::qWait(FRAME_WAIT_TIME);
-				}
 
-				AssertThat(view->compare("interlace_026.bmp"), Equals(0));
+					QTest::qWait(FRAME_WAIT_TIME);
+
+					QString name = QString("interlace_%1.bmp").arg(i, 3, 10, QChar('0'));
+
+					AssertThat(view->compare(name, 0), Equals(0));
+				}
 
 				engine->clock()->setRate(-1);
 				engine->clock()->elapse(960); // 1 frame at 25 fps
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
-				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_025.bmp"), Equals(0));
 
 				// Play 1 second
 				for(int i = 24; i >= 0; i--) {
 					engine->clock()->elapse(960); // 1 frame at 25 fps
-					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+
 					QTest::qWait(FRAME_WAIT_TIME);
+
+					QString name = QString("interlace_%1.bmp").arg(i, 3, 10, QChar('0'));
+					AssertThat(view->compare(name, 0), Equals(0));
 				}
-				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 			});
 
 			it("deinterlace", [&](){
@@ -248,21 +236,21 @@ go_bandit([](){
 
 				//Change mode to deinterlaced
 				engine->setDeinterlace(true);
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("deinterlace_000.bmp"), Equals(0));
 
 				//Move one picture forward
 				engine->clock()->setFrame(1, PhTimeCodeType25);
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("deinterlace_001.bmp"), Equals(0));
 
 				// Go back to interlaced mode
 				engine->setDeinterlace(false);
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+
 				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_001.bmp"), Equals(0));
@@ -287,16 +275,18 @@ go_bandit([](){
 			it("handles timestamp", [&](){
 				engine->setTimeIn(240000);
 
+				QTest::qWait(FRAME_WAIT_TIME);
+
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 				engine->clock()->setTime(240000 + 96000);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
+
 				AssertThat(view->compare("interlace_100.bmp"), Equals(0));
 				engine->clock()->setTime(0);
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
+
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 				AssertThat(engine->clock()->time(), Equals(0));
 			});
@@ -363,8 +353,7 @@ go_bandit([](){
 			before_each([&](){
 				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
 				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
-				if(paintSpy->count() == 0)
-					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+				QTest::qWait(FRAME_WAIT_TIME);
 			});
 
 			it("read properties", [&](){
@@ -385,14 +374,14 @@ go_bandit([](){
 				engine->clock()->setRate(1);
 				engine->clock()->elapse(960); // 1 frame at 25 fps
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_001.bmp", threshold), IsLessThan(threshold));
 
 				// Play 1 second
 				for(int frame = 2; frame < 27; frame++) {
 					engine->clock()->elapse(960); // 1 frame at 25 fps
-					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+					QTest::qWait(FRAME_WAIT_TIME);
 					QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
 					AssertThat(view->compare(name, threshold), IsLessThan(threshold));
 				}
@@ -401,14 +390,16 @@ go_bandit([](){
 
 				engine->clock()->elapse(960); // 1 frame at 25 fps
 
-				AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+				QTest::qWait(FRAME_WAIT_TIME);
 
 				AssertThat(view->compare("interlace_025.bmp", threshold), IsLessThan(threshold));
 
 				// Play 1 second
 				for(int frame = 24; frame >= 0; frame--) {
 					engine->clock()->elapse(960); // 1 frame at 25 fps
-					AssertThat(paintSpy->wait(PAINT_WAIT_TIME), IsTrue());
+
+					QTest::qWait(FRAME_WAIT_TIME);
+
 					QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
 					AssertThat(view->compare(name, threshold), IsLessThan(threshold));
 				}

@@ -16,7 +16,6 @@ go_bandit([](){
 
 		before_each([&](){
 			qRegisterMetaType<PhTime>("PhTime");
-			qRegisterMetaType<PhVideoFrame>("PhVideoFrame");
 
 			decoder = new PhVideoDecoder();
 			openedSpy = new QSignalSpy(decoder, &PhVideoDecoder::opened);
