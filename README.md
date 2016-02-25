@@ -1,7 +1,13 @@
 Joker
 =====
 
-[![Build Status](https://travis-ci.org/Phonations/Joker.svg?branch=master)](https://travis-ci.org/Phonations/Joker) [![Build status](https://ci.appveyor.com/api/projects/status/4vgrsapqble7rkqi/branch/master?svg=true)](https://ci.appveyor.com/project/MartinDelille/joker/branch/master) [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.svg?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master) [![Coverity](https://img.shields.io/coverity/scan/3341.svg)](https://scan.coverity.com/projects/phonations-joker) [![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Phonations/Joker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/Phonations/Joker.svg?branch=master)](https://travis-ci.org/Phonations/Joker)
+[![Build status](https://ci.appveyor.com/api/projects/status/4vgrsapqble7rkqi/branch/master?svg=true)](https://ci.appveyor.com/project/MartinDelille/joker/branch/master)
+[![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.svg?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master)
+[![Coverity](https://img.shields.io/coverity/scan/3341.svg)](https://scan.coverity.com/projects/phonations-joker)
+[![Weblate](https://hosted.weblate.org/widgets/phonations/-/shields-badge.svg)](https://hosted.weblate.org/engage/phonations/?utm_source=widget)
+[![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille)
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Phonations/Joker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 This repository hosts the Joker projet components:
 
