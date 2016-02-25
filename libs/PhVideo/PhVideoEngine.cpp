@@ -29,16 +29,16 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	// initialize the decoder that operates in a separate thread
 	PhVideoDecoder *decoder = new PhVideoDecoder();
 	decoder->moveToThread(&_decoderThread);
-	connect(&_clock, &PhClock::timeChanged, &_framePool, &PhVideoFramePool::requestFrames);
+	connect(&_clock, &PhClock::timeChanged, &_framePool, &PhVideoPool::requestFrames);
 	connect(&_decoderThread, &QThread::finished, decoder, &QObject::deleteLater);
-	connect(&_framePool, &PhVideoFramePool::decodeFrame, decoder, &PhVideoDecoder::decodeFrame);
+	connect(&_framePool, &PhVideoPool::decodeFrame, decoder, &PhVideoDecoder::decodeFrame);
 	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
 	connect(this, &PhVideoEngine::closeInDecoder, decoder, &PhVideoDecoder::close);
-	connect(&_framePool, &PhVideoFramePool::cancelFrameRequest, decoder, &PhVideoDecoder::cancelFrameRequest);
+	connect(&_framePool, &PhVideoPool::cancelFrameRequest, decoder, &PhVideoDecoder::cancelFrameRequest);
 	connect(this, &PhVideoEngine::deinterlaceChanged, decoder, &PhVideoDecoder::setDeinterlace);
 	connect(decoder, &PhVideoDecoder::frameAvailable, this, &PhVideoEngine::frameAvailable);
-	connect(decoder, &PhVideoDecoder::frameAvailable, &_framePool, &PhVideoFramePool::frameAvailable);
-	connect(decoder, &PhVideoDecoder::frameCancelled, &_framePool, &PhVideoFramePool::frameCancelled);
+	connect(decoder, &PhVideoDecoder::frameAvailable, &_framePool, &PhVideoPool::frameAvailable);
+	connect(decoder, &PhVideoDecoder::frameCancelled, &_framePool, &PhVideoPool::frameCancelled);
 	connect(decoder, &PhVideoDecoder::opened, this, &PhVideoEngine::decoderOpened);
 	connect(decoder, &PhVideoDecoder::openFailed, this, &PhVideoEngine::openInDecoderFailed);
 	_decoderThread.start();
@@ -144,14 +144,14 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	//		=> nothing to do
 
 	if (!isFrameCurrent(time)) {
-		PhVideoFrame *frame = _framePool.frame(time);
+		PhVideoBuffer *buffer = _framePool.decoded(time);
 
-		if (frame) {
+		if (buffer) {
 			// The time does not correspond to the frame on screen,
 			// but the frame is in the pool,
 			// so just show it.
-			PHDBG(24) << "frame found in pool:" << frame->time();
-			showFrame(frame);
+			PHDBG(24) << "frame found in pool:" << buffer->time();
+			showFrame(buffer);
 		}
 	}
 
@@ -234,27 +234,27 @@ bool PhVideoEngine::isFrameCurrent(PhTime time)
 	return result;
 }
 
-const QList<PhVideoFrame *> PhVideoEngine::decodedFramePool()
+const QList<PhVideoBuffer *> PhVideoEngine::decodedFramePool()
 {
-	return _framePool.decodedFramePool();
+	return _framePool.decoded();
 }
 
-void PhVideoEngine::showFrame(PhVideoFrame *frame)
+void PhVideoEngine::showFrame(PhVideoBuffer *buffer)
 {
-	_videoRect.createTextureFromBGRABuffer(frame->rgb(), frame->width(), frame->height());
+	_videoRect.createTextureFromBGRABuffer(buffer->rgb(), buffer->width(), buffer->height());
 	_videoFrameTickCounter.tick();
 
 	// update the current time with the true frame time as sent by the decoder
-	_currentFrameTime = frame->time() + _timeIn;
+	_currentFrameTime = buffer->time() + _timeIn;
 }
 
-void PhVideoEngine::frameAvailable(PhVideoFrame *frame)
+void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
 {
 	// This slot is connected to the decoder thread.
 	// We receive here asynchronously the frame freshly decoded.
 
 	PhTime time = clockTime();
-	PhTime frameTime = frame->time() + _timeIn;
+	PhTime frameTime = buffer->time() + _timeIn;
 
 	emit newFrameDecoded(frameTime);
 
@@ -263,7 +263,7 @@ void PhVideoEngine::frameAvailable(PhVideoFrame *frame)
 		// so show it.
 		// Note: we do not wait for the exact frame to be available to improve the responsiveness
 		// when seeking.
-		showFrame(frame);
+		showFrame(buffer);
 		PHDBG(24) << "showing frame " << frameTime;
 	}
 	else {

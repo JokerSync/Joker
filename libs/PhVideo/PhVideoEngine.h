@@ -14,8 +14,8 @@
 #include "PhGraphic/PhGraphicTexturedRect.h"
 
 #include "PhVideoSettings.h"
-#include "PhVideoFrame.h"
-#include "PhVideoFramePool.h"
+#include "PhVideoBuffer.h"
+#include "PhVideoPool.h"
 
 /**
  * @brief The video engine
@@ -181,14 +181,14 @@ public:
 	 * @brief Pool of decoded frames
 	 * @return A read only list of frames
 	 */
-	const QList<PhVideoFrame*> decodedFramePool();
+	const QList<PhVideoBuffer*> decodedFramePool();
 
 public slots:
 	/**
 	 * @brief Handle a frame that has just been decoded
-	 * @param frame the decoded frame
+	 * @param buffer the decoded frame
 	 */
-	void frameAvailable(PhVideoFrame *frame);
+	void frameAvailable(PhVideoBuffer *buffer);
 
 	/**
 	 * @brief Handle the signal that the video file has been opened in the decoder
@@ -244,7 +244,7 @@ signals:
 	void newFrameDecoded(PhTime frameTime);
 
 private:
-	void showFrame(PhVideoFrame *frame);
+	void showFrame(PhVideoBuffer *buffer);
 	PhTime clockTime();
 
 	PhVideoSettings *_settings;
@@ -266,7 +266,7 @@ private:
 
 	bool _deinterlace;
 
-	PhVideoFramePool _framePool;
+	PhVideoPool _framePool;
 
 	QThread _decoderThread;
 };

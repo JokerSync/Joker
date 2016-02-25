@@ -59,30 +59,30 @@ go_bandit([](){
 		it("decode frame", [&](){
 			decoder->open("interlace_%03d.bmp");
 
-			PhVideoFrame frame0, frame1, frame2;
-			PhVideoFrame *expectedFrame = NULL;
+			PhVideoBuffer buffer0, buffer1, buffer2;
+			PhVideoBuffer *expectedBuffer = NULL;
 			PhTime expectedTime = 0;
 
-			QObject::connect(decoder, &PhVideoDecoder::frameAvailable, [&](PhVideoFrame *frame){
-				AssertThat(frame, Equals(expectedFrame));
-				AssertThat(frame->time(), Equals(expectedTime));
+			QObject::connect(decoder, &PhVideoDecoder::frameAvailable, [&](PhVideoBuffer *frame){
+				AssertThat(buffer, Equals(expectedBuffer));
+				AssertThat(buffer->time(), Equals(expectedTime));
 			});
 
-			expectedFrame = &frame0;
-			frame0.setRequestTime(0);
-			decoder->decodeFrame(&frame0);
+			expectedBuffer = &buffer0;
+			buffer0.setRequestTime(0);
+			decoder->decodeFrame(&buffer0);
 			AssertThat(frameAvailableSpy->count(), Equals(1));
 
-			expectedFrame = &frame1;
-			frame1.setRequestTime(960);
+			expectedBuffer = &buffer1;
+			buffer1.setRequestTime(960);
 			expectedTime = 960;
-			decoder->decodeFrame(&frame1);
+			decoder->decodeFrame(&buffer1);
 			AssertThat(frameAvailableSpy->count(), Equals(2));
 
-			expectedFrame = &frame2;
-			frame2.setRequestTime(2000);
+			expectedBuffer = &buffer2;
+			buffer2.setRequestTime(2000);
 			expectedTime = 1920;
-			decoder->decodeFrame(&frame2);
+			decoder->decodeFrame(&buffer2);
 			AssertThat(frameAvailableSpy->count(), Equals(3));
 		});
 	});

@@ -28,7 +28,7 @@ PhVideoDecoder::PhVideoDecoder() :
 	av_register_all();
 	avcodec_register_all();
 
-	qRegisterMetaType<PhVideoFrame>("PhVideoFrame");
+	qRegisterMetaType<PhVideoBuffer>("PhVideoBuffer");
 }
 
 bool PhVideoDecoder::ready()
@@ -204,7 +204,7 @@ double PhVideoDecoder::framePerSecond()
 	return result;
 }
 
-void PhVideoDecoder::frameToRgb(AVFrame *avFrame, PhVideoFrame *frame)
+void PhVideoDecoder::frameToRgb(AVFrame *avFrame, PhVideoBuffer *buffer)
 {
 	int frameHeight = avFrame->height;
 	if(_deinterlace)
@@ -242,31 +242,31 @@ void PhVideoDecoder::frameToRgb(AVFrame *avFrame, PhVideoFrame *frame)
 
 
 	int linesize = avFrame->width * 4;
-	uint8_t *rgb = frame->rgb();
+	uint8_t *rgb = buffer->rgb();
 	if (0 <= sws_scale(_swsContext, (const uint8_t * const *) avFrame->data,
 	                   avFrame->linesize, 0, _videoStream->codec->height, &rgb,
 	                   &linesize)) {
 
 		PhTime time = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(avFrame));
 
-		frame->setTime(time);
-		frame->setWidth(avFrame->width);
-		frame->setHeight(frameHeight);
+		buffer->setTime(time);
+		buffer->setWidth(avFrame->width);
+		buffer->setHeight(frameHeight);
 
 		// tell the video engine that we have finished decoding!
-		emit frameAvailable(frame);
+		emit frameAvailable(buffer);
 	}
 }
 
-void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
+void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
 {
 	if(!ready()) {
 		PHDEBUG << "not ready";
 		return;
 	}
 
-	if (frame) {
-		_requestedFrames.append(frame);
+	if (buffer) {
+		_requestedFrames.append(buffer);
 	}
 
 	if (_recursive) {
@@ -288,8 +288,8 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 	}
 
 	// now proceed with the first requested frame
-	frame = _requestedFrames.takeFirst();
-	PhTime time = frame->requestTime();
+	buffer = _requestedFrames.takeFirst();
+	PhTime time = buffer->requestTime();
 
 	// resize the buffer if needed
 	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
@@ -297,7 +297,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 		PHERR << "avpicture_get_size() returned" << bufferSize;
 		return;
 	}
-	frame->reuse(bufferSize);
+	buffer->reuse(bufferSize);
 
 	// clip to stream boundaries
 	if(time < 0)
@@ -312,7 +312,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 	// be performed on each call to decodeFrame
 	if ((time < _currentTime + tpf)
 	    && time >= _currentTime) {
-		frameToRgb(_videoFrame, frame);
+		frameToRgb(_videoFrame, buffer);
 		return;
 	}
 
@@ -326,7 +326,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 		// seek to the closest keyframe in the past
 		int flags = AVSEEK_FLAG_BACKWARD;
 		int64_t timestamp = PhTime_to_AVTimestamp(time);
-		PHDBG(24) << "seek:" << frame << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << tpf;
+		PHDBG(24) << "seek:" << buffer << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << tpf;
 		av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
 
 		avcodec_flush_buffers(_videoStream->codec);
@@ -357,7 +357,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 						// the loop will go until the end of the file, which is bad...
 						// So stop here and just return what we have.
 						PHDEBUG << "current video time is larger than requested time... returning current frame!";
-						frameToRgb(_videoFrame, frame);
+						frameToRgb(_videoFrame, buffer);
 						lookingForVideoFrame = false;
 					}
 
@@ -365,7 +365,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 					if (time >= _currentTime
 					    && time < _currentTime + tpf) {
 						PHDBG(24) << "decoded!";
-						frameToRgb(_videoFrame, frame);
+						frameToRgb(_videoFrame, buffer);
 						lookingForVideoFrame = false;
 					}
 				} // if frame decode is not finished, let's read another packet.
@@ -400,7 +400,7 @@ void PhVideoDecoder::decodeFrame(PhVideoFrame *frame)
 	}
 }
 
-void PhVideoDecoder::cancelFrameRequest(PhVideoFrame *frame)
+void PhVideoDecoder::cancelFrameRequest(PhVideoBuffer *frame)
 {
 	int r = _requestedFrames.removeAll(frame);
 	PHDEBUG << "removing requests " << frame->requestTime() << " " << r;

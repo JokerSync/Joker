@@ -1,10 +1,10 @@
-#ifndef PHVIDEOFRAMEPOOL_H
-#define PHVIDEOFRAMEPOOL_H
+#ifndef PHVIDEOPOOL_H
+#define PHVIDEOPOOL_H
 
 #include <QObject>
 
 #include "PhVideoSettings.h"
-#include "PhVideoFrame.h"
+#include "PhVideoBuffer.h"
 
 /**
  * @brief The video frame pool
@@ -12,19 +12,19 @@
  * It is in charge of maintaining the frame pool, communcating with the decoder
  * through signal and slots
  */
-class PhVideoFramePool : public QObject
+class PhVideoPool : public QObject
 {
 	Q_OBJECT
 public:
 	/**
-	 * @brief The PhVideoFramePool constructor
+	 * @brief The PhVideoPool constructor
 	 * @param settings The setting
 	 * @param clock The engine clock
 	 */
-	explicit PhVideoFramePool(PhVideoSettings *settings, PhClock *clock);
+	explicit PhVideoPool(PhVideoSettings *settings, PhClock *clock);
 
 	/**
-	 * @brief Cancel the whole frame pool
+	 * @brief Cancel the whole pool
 	 */
 	void cancel();
 
@@ -35,17 +35,17 @@ public:
 	void cleanup(PhTime time);
 
 	/**
-	 * @brief Retrieve the decoded video frame for a specific time
+	 * @brief Retrieve the decoded video buffer for a specific time
 	 * @param time A time value
-	 * @return A video frame
+	 * @return A video buffer
 	 */
-	PhVideoFrame *frame(PhTime time);
+	PhVideoBuffer *decoded(PhTime time);
 
 	/**
-	 * @brief Pool of decoded frames
-	 * @return A read only list of frames
+	 * @brief Pool of decoded buffers
+	 * @return A read only list of buffers
 	 */
-	const QList<PhVideoFrame *> decodedFramePool();
+	const QList<PhVideoBuffer *> decoded();
 
 	/**
 	 * @brief Update the pool information
@@ -57,15 +57,15 @@ public:
 signals:
 	/**
 	 * @brief Signal sent to ask the decoder to decode a video frame
-	 * @param frame the requested frame
+	 * @param buffer the requested frame
 	 */
-	void decodeFrame(PhVideoFrame *frame);
+	void decodeFrame(PhVideoBuffer *buffer);
 
 	/**
 	 * @brief Signal sent to cancel a frame request
 	 * @param frame The frame describing the request
 	 */
-	void cancelFrameRequest(PhVideoFrame *frame);
+	void cancelFrameRequest(PhVideoBuffer *buffer);
 
 public slots:
 	/**
@@ -79,13 +79,13 @@ public slots:
 	 * @brief Handle a frame that has just been decoded
 	 * @param frame the decoded frame
 	 */
-	void frameAvailable(PhVideoFrame *frame);
+	void frameAvailable(PhVideoBuffer *buffer);
 
 	/**
 	 * @brief Handle the signal that a frame request has been cancelled in the decoder
-	 * @param frame The frame describing the request
+	 * @param buffer The buffer describing the request
 	 */
-	void frameCancelled(PhVideoFrame *frame);
+	void frameCancelled(PhVideoBuffer *buffer);
 private:
 	/**
 	 * @brief Whether the time corresponds to the frame that we have requested
@@ -100,10 +100,10 @@ private:
 	PhClock *_clock;
 	PhTime _timeIn, _length;
 	PhTimeCodeType _tcType;
-	QList<PhVideoFrame*> _recycledFramePool;
-	QList<PhVideoFrame*> _requestedFramePool;
-	QList<PhVideoFrame*> _cancelledFramePool;
-	QList<PhVideoFrame*> _decodedFramePool;
+	QList<PhVideoBuffer*> _recycledPool;
+	QList<PhVideoBuffer*> _requestedPool;
+	QList<PhVideoBuffer*> _cancelledPool;
+	QList<PhVideoBuffer*> _decodedPool;
 };
 
-#endif // PHVIDEOFRAMEPOOL_H
+#endif // PHVIDEOPOOL_H

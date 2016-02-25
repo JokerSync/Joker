@@ -21,7 +21,7 @@ extern "C" {
 #include <libswscale/swscale.h>
 }
 
-#include "PhVideoFrame.h"
+#include "PhVideoBuffer.h"
 
 /**
  * @brief The video decoder
@@ -57,15 +57,15 @@ public slots:
 
 	/**
 	 * @brief decode a video frame
-	 * @param frame the requested frame
+	 * @param buffer the requested frame
 	 */
-	void decodeFrame(PhVideoFrame *frame);
+	void decodeFrame(PhVideoBuffer *buffer);
 
 	/**
 	 * @brief cancel a frame request
 	 * @param frame the frame describing the request
 	 */
-	void cancelFrameRequest(PhVideoFrame *frame);
+	void cancelFrameRequest(PhVideoBuffer *frame);
 
 	/**
 	 * @brief Signal sent when the deinterlace settings change
@@ -76,15 +76,15 @@ public slots:
 signals:
 	/**
 	 * @brief Signal sent when a frame has been decoded
-	 * @param frame The frame where the decoded frame is
+	 * @param buffer The frame where the decoded frame is
 	 */
-	void frameAvailable(PhVideoFrame *frame);
+	void frameAvailable(PhVideoBuffer *buffer);
 
 	/**
 	 * @brief Signal sent when a frame request has been cancelled
 	 * @param frame The frame describing the request
 	 */
-	void frameCancelled(PhVideoFrame *frame);
+	void frameCancelled(PhVideoBuffer *frame);
 
 	/**
 	 * @brief Signal sent when the decoder is ready
@@ -106,7 +106,7 @@ private:
 	bool ready();
 	double framePerSecond();
 	PhTime length();
-	void frameToRgb(AVFrame *avFrame, PhVideoFrame *frame);
+	void frameToRgb(AVFrame *avFrame, PhVideoBuffer *buffer);
 	int width();
 	int height();
 	QString codecName();
@@ -131,7 +131,7 @@ private:
 	bool _deinterlace;
 	bool _recursive;
 
-	QList<PhVideoFrame *> _requestedFrames;
+	QList<PhVideoBuffer *> _requestedFrames;
 };
 
 #endif // PHVIDEODECODER_H
