@@ -226,7 +226,7 @@
       </widget>
       <widget class="QWidget" name="tabSynchro">
        <attribute name="title">
-        <string>Synchronisation</string>
+        <string>Synchronization</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>

@@ -21,8 +21,9 @@
     </message>
     <message>
         <location filename="AboutDialog.ui" line="121"/>
-        <source>Joker is based on the following libraries : </source>
-        <translation>Joker s&apos;appuie sur les bibliothèques suivantes :</translation>
+        <source>Joker is based on the following libraries:</source>
+        <oldsource>Joker is based on the following libraries : </oldsource>
+        <translation type="unfinished">Joker s&apos;appuie sur les bibliothèques suivantes :</translation>
     </message>
     <message>
         <location filename="AboutDialog.ui" line="185"/>
@@ -99,7 +100,7 @@
     </message>
     <message>
         <location filename="JokerWindow.ui" line="160"/>
-        <location filename="JokerWindow.cpp" line="675"/>
+        <location filename="JokerWindow.cpp" line="676"/>
         <source>Open...</source>
         <translation>Ouvrir...</translation>
     </message>
@@ -473,32 +474,36 @@
         <translation>Impossible d&apos;ouvrir le port midi %0</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="671"/>
+        <location filename="JokerWindow.cpp" line="296"/>
+        <source>Unable to save %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="JokerWindow.cpp" line="672"/>
         <source>Rythmo files</source>
         <translation>Fichiers rythmo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="768"/>
+        <location filename="JokerWindow.cpp" line="769"/>
         <source>Movie files</source>
         <translation>Fichiers vidéo</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="773"/>
+        <location filename="JokerWindow.cpp" line="774"/>
         <source>Open a video...</source>
         <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="295"/>
         <source>Unable to save </source>
-        <translation>Impossible d&apos;enregistrer</translation>
+        <translation type="vanished">Impossible d&apos;enregistrer</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="1005"/>
+        <location filename="JokerWindow.cpp" line="1008"/>
         <source>Save...</source>
         <translation>Sauvegarder...</translation>
     </message>
     <message>
-        <location filename="JokerWindow.cpp" line="600"/>
+        <location filename="JokerWindow.cpp" line="601"/>
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>
@@ -740,8 +745,9 @@
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="229"/>
-        <source>Synchronisation</source>
-        <translation>Synchronisation</translation>
+        <source>Synchronization</source>
+        <oldsource>Synchronisation</oldsource>
+        <translation type="unfinished">Synchronisation</translation>
     </message>
     <message>
         <location filename="PreferencesDialog.ui" line="237"/>

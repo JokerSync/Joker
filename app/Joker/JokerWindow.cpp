@@ -293,7 +293,7 @@ void JokerWindow::saveDocument(const QString &fileName)
 		PhEditableDocumentWindow::saveDocument(fileName);
 	}
 	else
-		QMessageBox::critical(this, "", tr("Unable to save ") + fileName);
+		QMessageBox::critical(this, "", QString(tr("Unable to save %1")).arg(fileName));
 }
 
 void JokerWindow::onExternalChange(const QString &path)
