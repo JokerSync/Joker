@@ -23,6 +23,13 @@ public slots: \
 public: \
 	PhTime getter() {return (PhTime)longLongValue(#getter, defaultValue); }
 
+/** Implement the frame setter, getter and default value for a PhSyncSettings */
+#define PH_SETTING_FRAME2(setter, getter, defaultValue) \
+public slots: \
+	void setter(PhFrame getter) { setIntValue(#getter, getter); } \
+public: \
+	PhFrame getter() {return (PhFrame)intValue(#getter, defaultValue); }
+
 
 /**
  * @brief The settings for PhSync

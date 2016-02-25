@@ -26,7 +26,7 @@ public:
 
 	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 5)
 
-	PH_SETTING_TIME2(setVideoPoolWindow, videoPoolWindow, 2 * PHTIMEBASE)
+	PH_SETTING_FRAME2(setVideoPoolSize, videoPoolSize, 50)
 };
 
 #endif // VIDEOSPECSETTINGS_H

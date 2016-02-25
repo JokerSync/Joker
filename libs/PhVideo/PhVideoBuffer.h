@@ -7,7 +7,7 @@
 #ifndef PHVIDEOBUFFER_H
 #define PHVIDEOBUFFER_H
 
-#include "PhSync/PhClock.h"
+#include "PhSync/PhTime.h"
 
 /**
  * @brief A video buffer
@@ -37,16 +37,16 @@ public:
 	uint8_t *rgb();
 
 	/**
-	 * @brief Gets the time of the decoded buffer (with origin at the start of video file)
-	 * @return The time
+	 * @brief Gets the frame number of the decoded buffer (with origin at the start of video file)
+	 * @return The frame number
 	 */
-	PhTime time();
+	PhFrame frame();
 
 	/**
-	 * @brief Gets the request time of the buffer (with origin at the start of video file)
-	 * @return The time
+	 * @brief Gets the request frame number of the buffer (with origin at the start of video file)
+	 * @return The frame number
 	 */
-	PhTime requestTime();
+	PhFrame requestFrame();
 
 	/**
 	 * @brief Gets the width of the buffer
@@ -61,16 +61,16 @@ public:
 	int height();
 
 	/**
-	 * @brief Sets the time of the decoded buffer (with origin at the start of video file)
-	 * @param time The time
+	 * @brief Sets the frame number of the decoded buffer (with origin at the start of video file)
+	 * @param frame The frame number
 	 */
-	void setTime(PhTime time);
+	void setFrame(PhFrame frame);
 
 	/**
-	 * @brief Sets the request time of the buffer (with origin at the start of video file)
-	 * @param requestTime The time
+	 * @brief Sets the request frame number of the buffer (with origin at the start of video file)
+	 * @param requestFrame The frame number
 	 */
-	void setRequestTime(PhTime requestTime);
+	void setRequestFrame(PhFrame requestFrame);
 
 	/**
 	 * @brief Sets the width of the buffer
@@ -87,8 +87,8 @@ public:
 private:
 	uint8_t * _rgb;
 	int _size;
-	PhTime _requestTime;
-	PhTime _time;
+	PhFrame _requestFrame;
+	PhFrame _frame;
 	int _width;
 	int _height;
 };

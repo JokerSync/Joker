@@ -9,7 +9,7 @@
 PhVideoBuffer::PhVideoBuffer() :
 	_rgb(NULL),
 	_size(0),
-	_time(0),
+	_frame(0),
 	_width(0),
 	_height(0)
 {
@@ -34,7 +34,7 @@ void PhVideoBuffer::reuse(int size)
 		_rgb = new uint8_t[_size];
 	}
 
-	_time = 0;
+	_frame = 0;
 }
 
 uint8_t *PhVideoBuffer::rgb()
@@ -42,14 +42,14 @@ uint8_t *PhVideoBuffer::rgb()
 	return _rgb;
 }
 
-PhTime PhVideoBuffer::time()
+PhFrame PhVideoBuffer::frame()
 {
-	return _time;
+	return _frame;
 }
 
-PhTime PhVideoBuffer::requestTime()
+PhFrame PhVideoBuffer::requestFrame()
 {
-	return _requestTime;
+	return _requestFrame;
 }
 
 int PhVideoBuffer::width()
@@ -62,14 +62,14 @@ int PhVideoBuffer::height()
 	return _height;
 }
 
-void PhVideoBuffer::setTime(PhTime time)
+void PhVideoBuffer::setFrame(PhFrame frame)
 {
-	_time = time;
+	_frame = frame;
 }
 
-void PhVideoBuffer::setRequestTime(PhTime requestTime)
+void PhVideoBuffer::setRequestFrame(PhFrame requestFrame)
 {
-	_requestTime = requestTime;
+	_requestFrame = requestFrame;
 }
 
 void PhVideoBuffer::setWidth(int width)

@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "PhSync/PhClock.h"
+
 #include "PhVideoSettings.h"
 #include "PhVideoBuffer.h"
 
@@ -30,16 +32,16 @@ public:
 
 	/**
 	 * @brief Clean up the pool by discarding the frame outside of the pool window
-	 * @param time The middle time window
+	 * @param frame The middle frame window
 	 */
-	void cleanup(PhTime time);
+	void cleanup(PhFrame frame);
 
 	/**
-	 * @brief Retrieve the decoded video buffer for a specific time
-	 * @param time A time value
+	 * @brief Retrieve the decoded video buffer for a specific frame
+	 * @param frame A frame number
 	 * @return A video buffer
 	 */
-	PhVideoBuffer *decoded(PhTime time);
+	PhVideoBuffer *decoded(PhFrame frame);
 
 	/**
 	 * @brief Pool of decoded buffers
@@ -49,11 +51,9 @@ public:
 
 	/**
 	 * @brief Update the pool information
-	 * @param timeIn Video time in
 	 * @param length Video length
-	 * @param tcType Timecode type
 	 */
-	void update(PhTime timeIn, PhTime length, PhTimeCodeType tcType);
+	void update(PhFrame frameLength);
 signals:
 	/**
 	 * @brief Signal sent to ask the decoder to decode a video frame
@@ -71,9 +71,9 @@ public slots:
 	/**
 	 * @brief Request the frames starting a given time and further according to the readhead
 	 *
-	 * @param time Starting time
+	 * @param frame Starting frame
 	 */
-	void requestFrames(PhTime time);
+	void requestFrames(PhFrame frame);
 
 	/**
 	 * @brief Handle a frame that has just been decoded
@@ -89,17 +89,16 @@ public slots:
 private:
 	/**
 	 * @brief Whether the time corresponds to the frame that we have requested
-	 * @param time The current time
+	 * @param frame The current frame
 	 * @return True if the frame has already been requested
 	 */
-	bool isFrameRequested(PhTime time);
+	bool isFrameRequested(PhFrame frame);
 
-	void requestFrame(PhTime time);
+	void requestFrame(PhFrame frame);
 
 	PhVideoSettings *_settings;
 	PhClock *_clock;
-	PhTime _timeIn, _length;
-	PhTimeCodeType _tcType;
+	PhFrame _frameLength;
 	QList<PhVideoBuffer*> _recycledPool;
 	QList<PhVideoBuffer*> _requestedPool;
 	QList<PhVideoBuffer*> _cancelledPool;

@@ -327,6 +327,7 @@ go_bandit([](){
 				for(int frame = 1; frame <= 50; frame++) {
 					engine->clock()->setFrame25(frame);
 					AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
+					QTest::qWait(FRAME_WAIT_TIME);
 					AssertThat(decodeSpy->count(), Equals(frame + 5));
 					AssertThat(engine->decodedFramePool().count(), Equals(frame + 5));
 				}

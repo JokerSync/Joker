@@ -31,10 +31,10 @@ go_bandit([](){
 
 		it("succeed", [&](){
 
-			QObject::connect(decoder, &PhVideoDecoder::opened, [&](PhTime length, double framePerSecond, PhTime timeIn, int width, int height, QString codecName) {
-				AssertThat(length, Equals(192000));
-				AssertThat(framePerSecond, Equals(25.0f));
-				AssertThat(timeIn, Equals(0));
+			QObject::connect(decoder, &PhVideoDecoder::opened, [&](PhTimeCodeType tcType, PhFrame frameIn, PhFrame length, int width, int height, QString codecName) {
+				AssertThat(tcType, Equals(PhTimeCodeType25));
+				AssertThat(frameIn, Equals(0));
+				AssertThat(length, Equals(200));
 				AssertThat(width, Equals(64));
 				AssertThat(height, Equals(64));
 #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
@@ -61,27 +61,27 @@ go_bandit([](){
 
 			PhVideoBuffer buffer0, buffer1, buffer2;
 			PhVideoBuffer *expectedBuffer = NULL;
-			PhTime expectedTime = 0;
+			PhFrame expectedFrame = 0;
 
-			QObject::connect(decoder, &PhVideoDecoder::frameAvailable, [&](PhVideoBuffer *frame){
+			QObject::connect(decoder, &PhVideoDecoder::frameAvailable, [&](PhVideoBuffer *buffer){
 				AssertThat(buffer, Equals(expectedBuffer));
-				AssertThat(buffer->time(), Equals(expectedTime));
+				AssertThat(buffer->frame(), Equals(expectedFrame));
 			});
 
 			expectedBuffer = &buffer0;
-			buffer0.setRequestTime(0);
+			buffer0.setRequestFrame(0);
 			decoder->decodeFrame(&buffer0);
 			AssertThat(frameAvailableSpy->count(), Equals(1));
 
 			expectedBuffer = &buffer1;
-			buffer1.setRequestTime(960);
-			expectedTime = 960;
+			buffer1.setRequestFrame(1);
+			expectedFrame = 1;
 			decoder->decodeFrame(&buffer1);
 			AssertThat(frameAvailableSpy->count(), Equals(2));
 
 			expectedBuffer = &buffer2;
-			buffer2.setRequestTime(2000);
-			expectedTime = 1920;
+			buffer2.setRequestFrame(2);
+			expectedFrame = 2;
 			decoder->decodeFrame(&buffer2);
 			AssertThat(frameAvailableSpy->count(), Equals(3));
 		});

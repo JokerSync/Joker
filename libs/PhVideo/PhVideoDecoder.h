@@ -21,6 +21,10 @@ extern "C" {
 #include <libswscale/swscale.h>
 }
 
+#include <QObject>
+
+#include "PhSync/PhTimeCode.h"
+
 #include "PhVideoBuffer.h"
 
 /**
@@ -88,14 +92,14 @@ signals:
 
 	/**
 	 * @brief Signal sent when the decoder is ready
-	 * @param length The length of the video file
-	 * @param framePerSecond The frame per second
-	 * @param timeIn The time in of the video file
+	 * @param tcType The video file timecode type
+	 * @param frameIn The number of the video file first frame
+	 * @param frameLength The length of the video file
 	 * @param width The width of the frame
 	 * @param height The height of the frame
 	 * @param codecName The codec name
 	 */
-	void opened(PhTime length, double framePerSecond, PhTime timeIn, int width, int height, QString codecName);
+	void opened(PhTimeCodeType tcType, PhFrame frameIn, PhFrame frameLength, int width, int height, QString codecName);
 
 	/**
 	 * @brief Signal sent when the decoder failed to open the file
@@ -105,15 +109,15 @@ signals:
 private:
 	bool ready();
 	double framePerSecond();
-	PhTime length();
+	PhFrame frameLength();
 	void frameToRgb(AVFrame *avFrame, PhVideoBuffer *buffer);
 	int width();
 	int height();
 	QString codecName();
-	PhTime timeIn();
+	PhFrame frameIn();
 
-	int64_t PhTime_to_AVTimestamp(PhTime time);
-	PhTime AVTimestamp_to_PhTime(int64_t timestamp);
+	int64_t PhFrame_to_AVTimestamp(PhFrame frame);
+	PhFrame AVTimestamp_to_PhFrame(int64_t timestamp);
 
 	QString _fileName;
 	PhTimeCodeType _tcType;
@@ -122,7 +126,7 @@ private:
 	AVStream *_videoStream;
 	AVFrame * _videoFrame;
 	struct SwsContext * _swsContext;
-	PhTime _currentTime;
+	PhFrame _currentFrame;
 
 	bool _useAudio;
 	AVStream *_audioStream;

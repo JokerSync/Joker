@@ -40,10 +40,10 @@ public:
 	virtual int videoReadhead() = 0;
 
 	/**
-	 * @brief Time window within which frame are kept in the pool
-	 * @return A duration
+	 * @brief Window (in frame number) within which frame are kept in the pool
+	 * @return A frame number
 	 */
-	virtual PhTime videoPoolWindow() = 0;
+	virtual PhFrame videoPoolSize() = 0;
 };
 
 #endif // PHVIDEOSETTINGS_H

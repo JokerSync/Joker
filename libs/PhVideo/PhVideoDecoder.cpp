@@ -17,7 +17,7 @@ PhVideoDecoder::PhVideoDecoder() :
 	_videoStream(NULL),
 	_videoFrame(NULL),
 	_swsContext(NULL),
-	_currentTime(PHTIMEMIN),
+	_currentFrame(PHFRAMEMIN),
 	_useAudio(false),
 	_audioStream(NULL),
 	_audioFrame(NULL),
@@ -41,7 +41,7 @@ void PhVideoDecoder::open(QString fileName)
 	close();
 	PHDEBUG << fileName;
 
-	_currentTime = PHTIMEMIN;
+	_currentFrame = PHFRAMEMIN;
 
 	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) < 0) {
 		emit openFailed();
@@ -132,7 +132,7 @@ void PhVideoDecoder::open(QString fileName)
 
 	_fileName = fileName;
 
-	emit opened(length(), framePerSecond(), timeIn(), width(), height(), codecName());
+	emit opened(_tcType, frameIn(), frameLength(), width(), height(), codecName());
 }
 
 void PhVideoDecoder::close()
@@ -183,10 +183,10 @@ PhVideoDecoder::~PhVideoDecoder()
 	_requestedFrames.clear();
 }
 
-PhTime PhVideoDecoder::length()
+PhFrame PhVideoDecoder::frameLength()
 {
 	if(_formatContext)
-		return _formatContext->duration * PHTIMEBASE / AV_TIME_BASE;
+		return _formatContext->duration * PHTIMEBASE / AV_TIME_BASE / PhTimeCode::timePerFrame(_tcType);
 	return 0;
 }
 
@@ -247,9 +247,9 @@ void PhVideoDecoder::frameToRgb(AVFrame *avFrame, PhVideoBuffer *buffer)
 	                   avFrame->linesize, 0, _videoStream->codec->height, &rgb,
 	                   &linesize)) {
 
-		PhTime time = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(avFrame));
+		PhFrame frame = AVTimestamp_to_PhFrame(av_frame_get_best_effort_timestamp(avFrame));
 
-		buffer->setTime(time);
+		buffer->setFrame(frame);
 		buffer->setWidth(avFrame->width);
 		buffer->setHeight(frameHeight);
 
@@ -289,7 +289,7 @@ void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
 
 	// now proceed with the first requested frame
 	buffer = _requestedFrames.takeFirst();
-	PhTime time = buffer->requestTime();
+	PhFrame frame = buffer->requestFrame();
 
 	// resize the buffer if needed
 	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
@@ -300,18 +300,16 @@ void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
 	buffer->reuse(bufferSize);
 
 	// clip to stream boundaries
-	if(time < 0)
-		time = 0;
-	if (time >= this->length())
-		time = this->length();
+	if(frame < 0)
+		frame = 0;
+	if (frame >= this->frameLength())
+		frame = this->frameLength();
 
-	PhTime tpf = PhTimeCode::timePerFrame(_tcType);
 	// Stay with the same frame if the time has changed less than the time between two frames
 	// Note that av_seek_frame will seek to the _closest_ frame, sometimes a little bit in the "future",
 	// so it is necessary to use a little margin for the second comparison, otherwise a seek may
 	// be performed on each call to decodeFrame
-	if ((time < _currentTime + tpf)
-	    && time >= _currentTime) {
+	if (frame == _currentFrame) {
 		frameToRgb(_videoFrame, buffer);
 		return;
 	}
@@ -321,12 +319,11 @@ void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
 	// 2) after the next keyframe
 	//      how to know when the next keyframe is ??
 	//      -> for now we take a arbitrary threshold of 20 frames
-	if((time >= _currentTime + 20 * tpf)
-	   || (time < _currentTime)) {
+	if((frame < _currentFrame) || (frame >= _currentFrame + 20)) {
 		// seek to the closest keyframe in the past
 		int flags = AVSEEK_FLAG_BACKWARD;
-		int64_t timestamp = PhTime_to_AVTimestamp(time);
-		PHDBG(24) << "seek:" << buffer << " " << _currentTime << " " << time - _currentTime << " " << timestamp << " " << tpf;
+		int64_t timestamp = PhFrame_to_AVTimestamp(frame);
+		PHDBG(24) << "seek:" << buffer << " " << _currentFrame << " " << frame - _currentFrame << " " << timestamp;
 		av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
 
 		avcodec_flush_buffers(_videoStream->codec);
@@ -347,23 +344,22 @@ void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
 					// (Note that it is best not to do use '_currentTime = time' here, because the seeking operation may
 					// not be 100% accurate: the actual time may be different from the requested time. So a time drift
 					// could appear.)
-					_currentTime = AVTimestamp_to_PhTime(av_frame_get_best_effort_timestamp(_videoFrame));
+					_currentFrame = AVTimestamp_to_PhFrame(av_frame_get_best_effort_timestamp(_videoFrame));
 
-					PHDBG(24) << time << _currentTime << (time - _currentTime) / tpf;
+					PHDBG(24) << frame << _currentFrame;
 
-					if (time < _currentTime) {
+					if (frame < _currentFrame) {
 						// something went wrong with the seeking
 						// this is not going to work! we cannot go backward!
 						// the loop will go until the end of the file, which is bad...
 						// So stop here and just return what we have.
-						PHDEBUG << "current video time is larger than requested time... returning current frame!";
+						PHERR << "current video time is larger than requested time... returning current frame!";
 						frameToRgb(_videoFrame, buffer);
 						lookingForVideoFrame = false;
 					}
 
 					// convert and emit the frame if this is the one that was requested
-					if (time >= _currentTime
-					    && time < _currentTime + tpf) {
+					if (frame == _currentFrame) {
 						PHDBG(24) << "decoded!";
 						frameToRgb(_videoFrame, buffer);
 						lookingForVideoFrame = false;
@@ -403,7 +399,7 @@ void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
 void PhVideoDecoder::cancelFrameRequest(PhVideoBuffer *frame)
 {
 	int r = _requestedFrames.removeAll(frame);
-	PHDEBUG << "removing requests " << frame->requestTime() << " " << r;
+	PHDEBUG << frame->requestFrame() << " " << r;
 
 	if (r > 0) {
 		emit frameCancelled(frame);
@@ -432,9 +428,9 @@ QString PhVideoDecoder::codecName()
 	return "";
 }
 
-PhTime PhVideoDecoder::timeIn()
+PhFrame PhVideoDecoder::frameIn()
 {
-	PhTime timeIn = 0;
+	PhFrame frameIn = 0;
 
 	AVDictionaryEntry *tag = av_dict_get(_formatContext->metadata, "timecode", NULL, AV_DICT_IGNORE_SUFFIX);
 	if(tag == NULL)
@@ -442,25 +438,25 @@ PhTime PhVideoDecoder::timeIn()
 
 	if(tag) {
 		PHDEBUG << "Found timestamp:" << tag->value;
-		timeIn = PhTimeCode::timeFromString(tag->value, _tcType);
+		frameIn = PhTimeCode::frameFromString(tag->value, _tcType);
 	}
 
-	return timeIn;
+	return frameIn;
 }
 
-int64_t PhVideoDecoder::PhTime_to_AVTimestamp(PhTime time)
+int64_t PhVideoDecoder::PhFrame_to_AVTimestamp(PhFrame frame)
 {
 	int64_t timestamp = 0;
 	if(_videoStream) {
-		timestamp = time * _videoStream->time_base.den / _videoStream->time_base.num / PHTIMEBASE + _videoStream->start_time;
+		timestamp = frame * PhTimeCode::timePerFrame(_tcType) * _videoStream->time_base.den / _videoStream->time_base.num / PHTIMEBASE + _videoStream->start_time;
 	}
 	return timestamp;
 }
 
-PhTime PhVideoDecoder::AVTimestamp_to_PhTime(int64_t timestamp)
+PhFrame PhVideoDecoder::AVTimestamp_to_PhFrame(int64_t timestamp)
 {
-	PhTime time = 0;
+	PhFrame frame = 0;
 	if(_videoStream)
-		time = (timestamp -_videoStream->start_time) * PHTIMEBASE * _videoStream->time_base.num / _videoStream->time_base.den;
-	return time;
+		frame = (timestamp -_videoStream->start_time) * PHTIMEBASE * _videoStream->time_base.num / _videoStream->time_base.den / PhTimeCode::timePerFrame(_tcType);
+	return frame;
 }

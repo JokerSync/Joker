@@ -5,13 +5,12 @@
 #include "PhVideoPool.h"
 
 PhVideoPool::PhVideoPool(PhVideoSettings *settings, PhClock *clock)
-	: _settings(settings), _clock(clock),
-	_timeIn(0), _length(0), _tcType(PhTimeCodeType25)
+	: _settings(settings), _clock(clock), _frameLength(0)
 {
 
 }
 
-void PhVideoPool::requestFrame(PhTime time)
+void PhVideoPool::requestFrame(PhFrame frame)
 {
 	PhVideoBuffer * buffer;
 
@@ -23,10 +22,10 @@ void PhVideoPool::requestFrame(PhTime time)
 		buffer = new PhVideoBuffer();
 	}
 
-	buffer->setTime(0);
-	buffer->setRequestTime(time - _timeIn);
+	buffer->setFrame(0);
+	buffer->setRequestFrame(frame);
 
-	PHDBG(24) << time - _timeIn;
+	PHDBG(24) << frame;
 
 	// ask the frame to the decoder.
 	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
@@ -35,19 +34,19 @@ void PhVideoPool::requestFrame(PhTime time)
 	_requestedPool.append(buffer);
 }
 
-void PhVideoPool::requestFrames(PhTime time)
+void PhVideoPool::requestFrames(PhFrame frame)
 {
-	PHDBG(24) << time;
-	if(_length == 0) {
+	PHDBG(24) << frame;
+	if(_frameLength == 0) {
 		PHDBG(24) << "not ready";
 		return;
 	}
 
 	// clip to stream boundaries
-	if(time < _timeIn)
-		time = _timeIn;
-	if (time >= _timeIn + _length)
-		time = _timeIn + _length;
+	if(frame < 0)
+		frame = 0;
+	if (frame >= _frameLength)
+		frame = _frameLength;
 
 	// we make sure we have requested "readahead_count" frames
 	for (int i = 0; i < _settings->videoReadhead(); i++) {
@@ -56,12 +55,14 @@ void PhVideoPool::requestFrames(PhTime time)
 			factor *= -1;
 		}
 
-		PhTime requestTime = time + factor * PhTimeCode::timePerFrame(_tcType);
+		PhFrame requestedFrame = frame + factor;
 
-		if (!isFrameRequested(requestTime)) {
-			requestFrame(requestTime);
+		if (!isFrameRequested(requestedFrame)) {
+			requestFrame(requestedFrame);
 		}
 	}
+
+	cleanup(frame);
 }
 
 void PhVideoPool::cancel()
@@ -83,23 +84,18 @@ const QList<PhVideoBuffer *> PhVideoPool::decoded()
 	return _decodedPool;
 }
 
-void PhVideoPool::update(PhTime timeIn, PhTime length, PhTimeCodeType tcType)
+void PhVideoPool::update(PhFrame frameLength)
 {
-	_timeIn = timeIn;
-	_length = length;
-	_tcType = tcType;
+	_frameLength = frameLength;
 }
 
 void PhVideoPool::frameAvailable(PhVideoBuffer *buffer)
 {
-	PHDBG(24) << buffer->requestTime() << buffer->time() << buffer->width() << "x" << buffer->height();
+	PHDBG(24) << buffer->requestFrame() << buffer->frame() << buffer->width() << "x" << buffer->height();
 	// move from requested to decoded
 	_cancelledPool.removeAll(buffer);
 	_requestedPool.removeAll(buffer);
 	_decodedPool.append(buffer);
-
-	// cleanup
-	cleanup(_clock->time());
 }
 
 void PhVideoPool::frameCancelled(PhVideoBuffer *buffer)
@@ -110,25 +106,24 @@ void PhVideoPool::frameCancelled(PhVideoBuffer *buffer)
 	}
 }
 
-bool PhVideoPool::isFrameRequested(PhTime time)
+bool PhVideoPool::isFrameRequested(PhFrame frame)
 {
 	// clip to stream boundaries
-	if(time < _timeIn)
-		time = _timeIn;
-	if (time >= _timeIn + _length)
-		time = _timeIn + _length;
+	if(frame < 0)
+		frame = 0;
+	if (frame >= _frameLength)
+		frame = _frameLength;
 
 	QList<PhVideoBuffer *> requestedOrDecodedFrames;
 	requestedOrDecodedFrames.append(_requestedPool);
 	requestedOrDecodedFrames.append(_decodedPool);
 
-	foreach(PhVideoBuffer *requestedFrame, requestedOrDecodedFrames) {
-		PhTime requestedTime = requestedFrame->requestTime() + _timeIn;
+	foreach(PhVideoBuffer *requestedBuffer, requestedOrDecodedFrames) {
+		PhFrame requestedFrame = requestedBuffer->requestFrame();
 
 		// We consider that we have requested the frame if the time has changed less
 		// than the time between two frames.
-		if ((time < requestedTime + PhTimeCode::timePerFrame(_tcType))
-		    && (time >= requestedTime)) {
+		if (frame == requestedFrame) {
 			// we have already requested that frame
 			return true;
 		}
@@ -137,30 +132,30 @@ bool PhVideoPool::isFrameRequested(PhTime time)
 	return false;
 }
 
-void PhVideoPool::cleanup(PhTime time)
+void PhVideoPool::cleanup(PhFrame frame)
 {
 	// clip to stream boundaries
-	if(time < _timeIn)
-		time = _timeIn;
-	if (time >= _timeIn + _length)
-		time = _timeIn + _length;
+	if(frame < 0)
+		frame = 0;
+	if (frame >= _frameLength)
+		frame = _frameLength;
 
-	PhTime halfPoolWindow = _settings->videoPoolWindow();
+	PhFrame halfPoolSize = _settings->videoPoolSize();
 
 	QMutableListIterator<PhVideoBuffer*> i(_decodedPool);
 	while (i.hasNext()) {
 		PhVideoBuffer *buffer = i.next();
 
-		PhTime bufferTime = buffer->time() + _timeIn;
+		PhFrame bufferFrame = buffer->frame();
 
-		if ((bufferTime < time - halfPoolWindow) || (bufferTime >= time + halfPoolWindow)) {
+		if ((bufferFrame < frame - halfPoolSize) || (bufferFrame >= frame + halfPoolSize)) {
 			// Given the current playing direction and position,
 			// this buffer is not likely to be shown on screen anytime soon.
 			i.remove();
 
 			_recycledPool.append(buffer);
 
-			PHDBG(24) << "recycle buffer " << bufferTime - _timeIn;
+			PHDBG(24) << "recycle buffer " << bufferFrame;
 		}
 	}
 
@@ -168,10 +163,10 @@ void PhVideoPool::cleanup(PhTime time)
 	while (r.hasNext()) {
 		PhVideoBuffer *buffer = r.next();
 
-		PhTime bufferTime = buffer->requestTime() + _timeIn;
+		PhFrame bufferFrame = buffer->requestFrame();
 
-		if ((bufferTime < time - halfPoolWindow) || (bufferTime >= time + halfPoolWindow)) {
-			// Given the current playing direction and position,
+		if ((bufferFrame < frame - halfPoolSize) || (bufferFrame >= frame + halfPoolSize)) {
+			// Given the current position,
 			// this frame is not likely to be shown on screen anytime soon.
 			r.remove();
 
@@ -180,7 +175,7 @@ void PhVideoPool::cleanup(PhTime time)
 			// tell the decoder we no longer want this frame to be decoded
 			emit cancelFrameRequest(buffer);
 
-			PHDBG(24) << "cancel frame request " << bufferTime - _timeIn;
+			PHDBG(24) << "cancel frame request " << bufferFrame;
 		}
 	}
 
@@ -194,21 +189,17 @@ void PhVideoPool::cleanup(PhTime time)
 	}
 }
 
-PhVideoBuffer *PhVideoPool::decoded(PhTime time)
+PhVideoBuffer *PhVideoPool::decoded(PhFrame frame)
 {
 	// clip to stream boundaries
-	if(time < _timeIn)
-		time = _timeIn;
-	if (time >= _timeIn + _length)
-		time = _timeIn + _length;
+	if(frame < 0)
+		frame = 0;
+	if (frame >= _frameLength)
+		frame = _frameLength;
 
 	foreach(PhVideoBuffer *buffer, _decodedPool) {
-		PhTime bufferTime = buffer->time() + _timeIn;
-
-		if ((time < bufferTime + PhTimeCode::timePerFrame(_tcType))
-			&& (time >= bufferTime)) {
+		if(frame == buffer->frame())
 			return buffer;
-		}
 	}
 
 	return NULL;

@@ -47,8 +47,8 @@ public:
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
-	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 10)
-	PH_SETTING_TIME2(setVideoPoolWindow, videoPoolWindow, 4 * PHTIMEBASE)
+	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 50)
+	PH_SETTING_FRAME2(setVideoPoolSize, videoPoolSize, 120)
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

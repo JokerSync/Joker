@@ -171,11 +171,11 @@ public:
 	void drawVideo(int x, int y, int w, int h);
 
 	/**
-	 * @brief Whether the time corresponds to the frame that we currently have
-	 * @param time The current time
+	 * @brief Whether the frame corresponds to the frame that we currently have
+	 * @param frame The current frame
 	 * @return True if the frame is current
 	 */
-	bool isFrameCurrent(PhTime time);
+	bool isFrameCurrent(PhFrame frame);
 
 	/**
 	 * @brief Pool of decoded frames
@@ -192,14 +192,14 @@ public slots:
 
 	/**
 	 * @brief Handle the signal that the video file has been opened in the decoder
-	 * @param length The length of the video file
-	 * @param framePerSecond The frame per second
-	 * @param timeIn The time in of the video file
+	 * @param tcType The timecode type
+	 * @param frameIn The first frame number of the video file
+	 * @param frameLength The length of the video file
 	 * @param width The width of the frame
 	 * @param height the height of the frame
 	 * @param codecName the codec name
 	 */
-	void decoderOpened(PhTime length, double framePerSecond, PhTime timeIn, int width, int height, QString codecName);
+	void decoderOpened(PhTimeCodeType tcType, PhFrame frameIn, PhFrame frameLength, int width, int height, QString codecName);
 
 	/**
 	 * @brief Handle the signal sent when the decoder failed to open the file
@@ -239,19 +239,23 @@ signals:
 	/**
 	 * @brief Signal sent when a new frame is decoded.
 	 * This is used by the tests.
-	 * @param frameTime The time of the frame being decoded
+	 * @param frame The frame number being decoded
 	 */
-	void newFrameDecoded(PhTime frameTime);
+	void newFrameDecoded(PhFrame frame);
+
+private slots:
+	void onTimeChanged(PhTime);
 
 private:
 	void showFrame(PhVideoBuffer *buffer);
 	PhTime clockTime();
+	PhFrame clockFrame();
 
 	PhVideoSettings *_settings;
 	QString _fileName;
 	PhTimeCodeType _tcType;
 	PhClock _clock;
-	PhTime _length;
+	PhFrame _frameLength;
 	PhTime _timeIn;
 	double _framePerSecond;
 	int _width;
@@ -260,7 +264,7 @@ private:
 	bool _ready;
 
 	PhGraphicTexturedRect _videoRect;
-	PhTime _currentFrameTime;
+	PhFrame _currentFrame;
 
 	PhTickCounter _videoFrameTickCounter;
 

@@ -15,21 +15,21 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_settings(settings),
 	_fileName(""),
 	_tcType(PhTimeCodeType25),
-	_length(0),
+	_frameLength(0),
 	_timeIn(0),
 	_framePerSecond(25.00f),
 	_width(0),
 	_height(0),
 	_codecName(""),
 	_ready(false),
-	_currentFrameTime(PHTIMEMIN),
+	_currentFrame(PHFRAMEMIN),
 	_deinterlace(false),
 	_framePool(settings, &_clock)
 {
 	// initialize the decoder that operates in a separate thread
 	PhVideoDecoder *decoder = new PhVideoDecoder();
 	decoder->moveToThread(&_decoderThread);
-	connect(&_clock, &PhClock::timeChanged, &_framePool, &PhVideoPool::requestFrames);
+	connect(&_clock, &PhClock::timeChanged, this, &PhVideoEngine::onTimeChanged);
 	connect(&_decoderThread, &QThread::finished, decoder, &QObject::deleteLater);
 	connect(&_framePool, &PhVideoPool::decodeFrame, decoder, &PhVideoDecoder::decodeFrame);
 	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
@@ -55,14 +55,14 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 
 	if (deinterlace != _deinterlace) {
 		_deinterlace = deinterlace;
-		_currentFrameTime = PHTIMEMIN;
+		_currentFrame = PHFRAMEMIN;
 
 		emit deinterlaceChanged(_deinterlace);
 
 		_framePool.cancel();
 
 		// request the frames again to apply the new deinterlace setting
-		_framePool.requestFrames(clockTime());
+		_framePool.requestFrames(clockFrame());
 	}
 }
 
@@ -87,7 +87,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	_clock.setTime(0);
 	_clock.setRate(0);
-	_currentFrameTime = PHTIMEMIN;
+	_currentFrame = PHFRAMEMIN;
 
 	// cancel pool
 	_framePool.cancel();
@@ -108,14 +108,14 @@ void PhVideoEngine::close()
 
 	_timeIn = 0;
 	_fileName = "";
-	_length = 0;
+	_frameLength = 0;
 	_width = 0;
 	_height = 0;
 	_codecName = "";
 
 	// cancel pool
 	_framePool.cancel();
-	_framePool.update(0, 0, PhTimeCodeType25);
+	_framePool.update(0);
 }
 
 PhTime PhVideoEngine::clockTime()
@@ -124,14 +124,14 @@ PhTime PhVideoEngine::clockTime()
 	return _clock.time() + delay;
 }
 
+PhFrame PhVideoEngine::clockFrame()
+{
+	return (clockTime() - _timeIn) / PhTimeCode::timePerFrame(_tcType);
+}
+
 void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 {
-	PhTime time = clockTime();
-
-	// Round the time to multiple of timePerFrame
-	// This avoids issues with time comparisons.
-	PhTime tpf = PhTimeCode::timePerFrame(_tcType);
-	time = _timeIn + ((time - _timeIn) / tpf) * tpf;
+	PhFrame frame = clockFrame();
 
 	// 4 possibilities
 	// 1) the frame is currently on screen
@@ -143,14 +143,14 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	// 4) or the frame has already been requested
 	//		=> nothing to do
 
-	if (!isFrameCurrent(time)) {
-		PhVideoBuffer *buffer = _framePool.decoded(time);
+	if (!isFrameCurrent(frame)) {
+		PhVideoBuffer *buffer = _framePool.decoded(frame);
 
 		if (buffer) {
 			// The time does not correspond to the frame on screen,
 			// but the frame is in the pool,
 			// so just show it.
-			PHDBG(24) << "frame found in pool:" << buffer->time();
+			PHDBG(24) << "frame found in pool:" << buffer->frame();
 			showFrame(buffer);
 		}
 	}
@@ -168,12 +168,11 @@ void PhVideoEngine::setTimeIn(PhTime timeIn)
 {
 	PHDEBUG << timeIn;
 	_timeIn = timeIn;
-	_framePool.update(_timeIn, _length, _tcType);
 }
 
 PhTime PhVideoEngine::length()
 {
-	return _length;
+	return _frameLength * PhTimeCode::timePerFrame(_tcType);
 }
 
 PhVideoEngine::~PhVideoEngine()
@@ -204,34 +203,25 @@ QString PhVideoEngine::codecName()
 	return _codecName;
 }
 
-bool PhVideoEngine::isFrameCurrent(PhTime time)
+bool PhVideoEngine::isFrameCurrent(PhFrame frame)
 {
 	if(!ready()) {
 		PHDBG(24) << "not ready";
 		return false;
 	}
 
-	// clip to stream boundaries
-	if(time < _timeIn)
-		time = _timeIn;
-	if (time >= this->timeOut())
-		time = this->timeOut() - tpf;
-
-	if (_currentFrameTime == PHTIMEMIN) {
+	if (_currentFrame == PHFRAMEMIN) {
 		// never got a frame
 		return false;
 	}
 
-	bool result = false;
+	// clip to stream boundaries
+	if(frame < 0)
+		frame = 0;
+	if (frame >= _frameLength)
+		frame = _frameLength;
 
-	// Stay with the same frame if the time has changed less than the time between two frames
-	if ((time < _currentFrameTime + PhTimeCode::timePerFrame(_tcType))
-	    && (time >= _currentFrameTime)) {
-		// we have already that frame
-		result = true;
-	}
-
-	return result;
+	return frame == _currentFrame;
 }
 
 const QList<PhVideoBuffer *> PhVideoEngine::decodedFramePool()
@@ -245,7 +235,7 @@ void PhVideoEngine::showFrame(PhVideoBuffer *buffer)
 	_videoFrameTickCounter.tick();
 
 	// update the current time with the true frame time as sent by the decoder
-	_currentFrameTime = buffer->time() + _timeIn;
+	_currentFrame = buffer->frame();
 }
 
 void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
@@ -253,29 +243,29 @@ void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
 	// This slot is connected to the decoder thread.
 	// We receive here asynchronously the frame freshly decoded.
 
-	PhTime time = clockTime();
-	PhTime frameTime = buffer->time() + _timeIn;
+	PhFrame frame = clockFrame();
+	PhFrame bufferFrame = buffer->frame();
 
-	emit newFrameDecoded(frameTime);
+	emit newFrameDecoded(bufferFrame);
 
-	if (abs(time - frameTime) <= abs(time - _currentFrameTime)) {
+	if (abs(frame - bufferFrame) <= abs(frame - _currentFrame)) {
 		// this frame is closer to the current time than the frame that is currently displayed,
 		// so show it.
 		// Note: we do not wait for the exact frame to be available to improve the responsiveness
 		// when seeking.
 		showFrame(buffer);
-		PHDBG(24) << "showing frame " << frameTime;
+		PHDBG(24) << "showing frame " << bufferFrame;
 	}
 	else {
-		PHDBG(24) << "non-current frame " << frameTime;
+		PHDBG(24) << "non-current frame " << bufferFrame;
 	}
 }
 
-void PhVideoEngine::decoderOpened(PhTime length, double framePerSecond, PhTime timeIn, int width, int height, QString codecName)
+void PhVideoEngine::decoderOpened(PhTimeCodeType tcType, PhFrame frameIn, PhFrame frameLength, int width, int height, QString codecName)
 {
-	_length = length;
-	_framePerSecond = framePerSecond;
-	_timeIn = timeIn;
+	_tcType = tcType;
+	_timeIn = frameIn * PhTimeCode::timePerFrame(tcType);
+	_frameLength = frameLength;
 	_width = width;
 	_height = height;
 	_codecName = codecName;
@@ -283,16 +273,21 @@ void PhVideoEngine::decoderOpened(PhTime length, double framePerSecond, PhTime t
 	// Looking for timecode type
 	_tcType = PhTimeCode::computeTimeCodeType(this->framePerSecond());
 	emit timeCodeTypeChanged(_tcType);
-	_framePool.update(timeIn, length, _tcType);
+	_framePool.update(frameLength);
 
 	_ready = true;
 
 	emit opened(true);
 
-	_framePool.requestFrames(_clock.time());
+	_framePool.requestFrames(clockFrame());
 }
 
 void PhVideoEngine::openInDecoderFailed()
 {
 	emit opened(false);
+}
+
+void PhVideoEngine::onTimeChanged(PhTime)
+{
+	_framePool.requestFrames(clockFrame());
 }
