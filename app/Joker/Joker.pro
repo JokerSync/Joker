@@ -99,7 +99,11 @@ QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Helvetica
 
 
 TRANSLATIONS =	\
+	ar_MA.ts \
+	de_DE.ts \
+	es_ES.ts \
 	fr_FR.ts \
+	it_IT.ts \
 	pt_PT.ts \
 
 QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
