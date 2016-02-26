@@ -420,7 +420,7 @@ void JokerWindow::onPaint(int width, int height)
 #else
 	PhClock *clock = _strip.clock();
 #endif
-	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
+	PhTime delay = (PhTime)(24 * _settings->screenDelay() * clock->rate());
 	PhTime clockTime = clock->time() + delay;
 
 	float stripHeightRatio = 0.0f;
@@ -457,10 +457,10 @@ void JokerWindow::onPaint(int width, int height)
 
 			int videoX = (videoAvailableWidth - videoWidth) / 2;
 
-			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight);
+			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight, delay);
 
 			if(_settings->videoPictureInPicture())
-				_videoEngine.drawVideo(0, 0, videoWidth / 4, realVideoHeight / 4, _settings->videoPictureInPictureOffset());
+				_videoEngine.drawVideo(0, 0, videoWidth / 4, realVideoHeight / 4, delay + _settings->videoPictureInPictureOffset());
 		}
 		else if(_settings->displayLogo()) {
 			// The logo file is 500px in native format

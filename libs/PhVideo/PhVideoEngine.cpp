@@ -127,15 +127,9 @@ void PhVideoEngine::close()
 	_framePool.update(0);
 }
 
-PhTime PhVideoEngine::clockTime()
-{
-	PhTime delay = static_cast<PhTime>(_settings->screenDelay() * _clock.rate() * 24.);
-	return _clock.time() + delay;
-}
-
 PhFrame PhVideoEngine::clockFrame()
 {
-	return (clockTime() - _timeIn) / PhTimeCode::timePerFrame(_tcType);
+	return (_clock.time() - _timeIn) / PhTimeCode::timePerFrame(_tcType);
 }
 
 void PhVideoEngine::drawVideo(int x, int y, int w, int h, PhTime offset)

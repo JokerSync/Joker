@@ -246,7 +246,6 @@ private slots:
 	void onTimeChanged(PhTime);
 
 private:
-	PhTime clockTime();
 	PhFrame clockFrame();
 
 	PhVideoSettings *_settings;

@@ -10,5 +10,6 @@ SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView
 
 void SecondScreenWindow::onPaint(int width, int height)
 {
-	_videoEngine->drawVideo(0, 0, width, height, _jokerSettings->videoSecondScreenOffset());
+	PhTime delay = (PhTime)(24 * _jokerSettings->videoSecondScreenDelay() * _videoEngine->clock()->rate());
+	_videoEngine->drawVideo(0, 0, width, height, delay);
 }
