@@ -587,6 +587,9 @@ void JokerWindow::onPaint(int width, int height)
 		if(_synchronizer.stripClock() == NULL) {
 			PHDEBUG <<  "Reconnect the strip clock";
 			_synchronizer.setStripClock(_strip.clock());
+#ifdef USE_VIDEO
+			_mediaPanel.setClock(_strip.clock());
+#endif
 		}
 
 		_strip.draw(0, videoHeight, width, stripHeight, x, y, selectedPeoples);
@@ -594,6 +597,9 @@ void JokerWindow::onPaint(int width, int height)
 	else if(_synchronizer.stripClock()) {
 		PHDEBUG << "Disconnect the strip clock";
 		_synchronizer.setStripClock(NULL);
+#ifdef USE_VIDEO
+		_mediaPanel.setClock(_videoEngine.clock());
+#endif
 	}
 
 	foreach(QString info, _strip.infos()) {
