@@ -56,6 +56,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	connect(ui->actionFullscreen, &QAction::triggered, this, &JokerWindow::toggleFullScreen);
 
 	this->restoreGeometry(_settings->windowGeometry());
+	_mediaPanel.move(this->x() + this->width() / 2 - _mediaPanel.width() / 2,
+	                 this->y() + this->height() * 2 / 3);
 
 	ui->videoStripView->setGraphicSettings(_settings);
 
