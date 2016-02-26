@@ -69,6 +69,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #ifdef USE_VIDEO
 	_propertyDialog.setVideoEngine(&_videoEngine);
 	_synchronizer.setVideoClock(_videoEngine.clock());
+	connect(&_videoEngine, &PhVideoEngine::timeCodeTypeChanged, this, &JokerWindow::onTimecodeTypeChanged);
 #else
 	ui->actionOpen_Video->setEnabled(false);
 	ui->actionClose_video->setEnabled(false);
@@ -93,9 +94,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	setupSyncProtocol();
 
 	// Setting up the media panel
-	_mediaPanel.setTimeCodeType(_doc->videoTimeCodeType());
 	_mediaPanel.setClock(_strip.clock());
 	_mediaPanel.setDropdownEnable(false);
+	onTimecodeTypeChanged(this->synchroTimeCodeType());
 
 	ui->actionDisplay_the_control_panel->setChecked(_settings->displayControlPanel());
 
@@ -516,7 +517,7 @@ void JokerWindow::onPaint(int width, int height)
 			PhGraphicText tcText(_strip.getHUDFont());
 			tcText.setColor(infoColor);
 			tcText.setRect(x + 4, y, tcWidth, tcHeight);
-			tcText.setContent(PhTimeCode::stringFromTime(clockTime, timeCodeType()));
+			tcText.setContent(PhTimeCode::stringFromTime(clockTime, localTimeCodeType()));
 			tcText.draw();
 
 			y += tcHeight;
@@ -575,7 +576,7 @@ void JokerWindow::onPaint(int width, int height)
 			int nextTcY = y + spacing;
 			nextTCText.setRect(nextTcX, nextTcY, nextTcWidth, nextTcHeight);
 
-			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, timeCodeType()));
+			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, localTimeCodeType()));
 			nextTCText.draw();
 
 			y += boxHeight;
@@ -641,29 +642,38 @@ void JokerWindow::setCurrentRate(PhRate rate)
 
 void JokerWindow::onTimecodeTypeChanged(PhTimeCodeType tcType)
 {
+	PHDEBUG << this->synchroTimeCodeType();
+	_mediaPanel.setTimeCodeType(this->synchroTimeCodeType());
+}
+
+PhTimeCodeType JokerWindow::localTimeCodeType()
+{
+#ifdef USE_VIDEO
+	return _videoEngine.timeCodeType();
+#else
+	return _doc->videoTimeCodeType();
+#endif
+
+}
+
+PhTimeCodeType JokerWindow::synchroTimeCodeType()
+{
 	switch (_settings->synchroProtocol()) {
 #ifdef USE_SONY
 	case PhSynchronizer::Sony:
-		tcType = _sonySlave.timeCodeType();
-		break;
+		return _sonySlave.timeCodeType();
 #endif
 #ifdef USE_LTC
 	case PhSynchronizer::LTC:
-		tcType = _ltcReader.timeCodeType();
-		break;
+		return _ltcReader.timeCodeType();
 #endif
 #ifdef USE_MIDI
 	case PhSynchronizer::MTC:
-		tcType = _mtcReader.timeCodeType();
-		break;
+		return _mtcReader.timeCodeType();
 #endif
 	default:
-#ifdef USE_VIDEO
-		tcType = _videoEngine.timeCodeType();
-#endif
-		break;
+		return localTimeCodeType();
 	}
-	_mediaPanel.setTimeCodeType(tcType);
 }
 
 void JokerWindow::on_actionOpen_triggered()
@@ -706,13 +716,13 @@ void JokerWindow::on_actionPlay_backward_triggered()
 void JokerWindow::on_actionStep_forward_triggered()
 {
 	setCurrentRate(0.0);
-	setCurrentTime(currentTime() + PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
+	setCurrentTime(currentTime() + PhTimeCode::timePerFrame(localTimeCodeType()));
 }
 
 void JokerWindow::on_actionStep_backward_triggered()
 {
 	setCurrentRate(0.0);
-	setCurrentTime(currentTime() - PhTimeCode::timePerFrame(_doc->videoTimeCodeType()));
+	setCurrentTime(currentTime() - PhTimeCode::timePerFrame(localTimeCodeType()));
 }
 
 void JokerWindow::on_actionStep_time_forward_triggered()
@@ -808,7 +818,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 
 		if(videoFile != _doc->videoFilePath()) {
 			_doc->setVideoFilePath(videoFile);
-			_doc->setVideoTimeIn(videoTimeIn, timeCodeType());
+			_doc->setVideoTimeIn(videoTimeIn, localTimeCodeType());
 			_doc->setModified(true);
 		}
 
@@ -844,11 +854,11 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 	else if(_synchronizer.videoClock()->time() > _videoEngine.timeIn() + _videoEngine.length())
 		time = _videoEngine.timeOut();
 
-	PhTimeCodeDialog dlg(_doc->videoTimeCodeType(), time);
+	PhTimeCodeDialog dlg(localTimeCodeType(), time);
 	if(dlg.exec() == QDialog::Accepted) {
 		PhTime timeStamp = 0;
 		if(_synchronizer.videoClock()->time() > _videoEngine.timeIn() + _videoEngine.length())
-			timeStamp = dlg.time() - (_videoEngine.length() - PhTimeCode::timePerFrame(timeCodeType()));
+			timeStamp = dlg.time() - (_videoEngine.length() - PhTimeCode::timePerFrame(localTimeCodeType()));
 		else if (_synchronizer.videoClock()->time() < _videoEngine.timeIn())
 			timeStamp =  dlg.time();
 		else
@@ -856,7 +866,7 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 
 		_videoEngine.setTimeIn(timeStamp);
 		setCurrentTime(dlg.time());
-		_doc->setVideoTimeIn(timeStamp, timeCodeType());
+		_doc->setVideoTimeIn(timeStamp, localTimeCodeType());
 		_mediaPanel.setTimeIn(timeStamp);
 		_doc->setModified(true);
 	}
@@ -933,7 +943,7 @@ void JokerWindow::on_actionTimecode_triggered()
 {
 	hideMediaPanel();
 
-	PhTimeCodeDialog dlg(timeCodeType(), currentTime());
+	PhTimeCodeDialog dlg(localTimeCodeType(), currentTime());
 	if(dlg.exec() == QDialog::Accepted)
 		setCurrentTime(dlg.time());
 
@@ -1046,8 +1056,7 @@ void JokerWindow::on_actionDisplay_feet_triggered(bool checked)
 
 void JokerWindow::on_actionSet_first_foot_timecode_triggered()
 {
-	PhTimeCodeType tcType = timeCodeType();
-	PhTimeCodeDialog dlg(tcType, _settings->firstFootTime(), this);
+	PhTimeCodeDialog dlg(localTimeCodeType(), _settings->firstFootTime(), this);
 	if(dlg.exec())
 		_settings->setFirstFootTime(dlg.time());
 }
@@ -1154,16 +1163,6 @@ void JokerWindow::on_actionUse_native_video_size_triggered(bool checked)
 #ifdef USE_VIDEO
 	_settings->setUseNativeVideoSize(checked);
 #endif
-}
-
-PhTimeCodeType JokerWindow::timeCodeType()
-{
-#ifdef USE_VIDEO
-	return _videoEngine.timeCodeType();
-#else
-	return _doc->videoTimeCodeType();
-#endif
-
 }
 
 void JokerWindow::on_actionSet_TC_in_triggered()
