@@ -404,7 +404,7 @@ void JokerWindow::onApplicationDeactivate()
 void JokerWindow::showMediaPanel()
 {
 	// Don't show the mediaPanel if Joker has not thefocus.
-	if(_settings->displayControlPanel() && this->hasFocus()) {
+	if(_settings->displayControlPanel()) {
 		_mediaPanel.show();
 	}
 }
