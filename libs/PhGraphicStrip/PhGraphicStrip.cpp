@@ -26,6 +26,9 @@ PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
 	if(!QFile(_settings->backgroundImageLight()).exists())
 		_settings->resetBackgroundImageLight();
 	// This is used to make some time-based test
+	_hudFont.setFontFile(_settings->hudFontFile());
+	_textFont.setFontFile(_settings->textFontFile());
+	_textFont.setBoldness(_settings->textBoldness());
 	_testTimer.start();
 }
 
