@@ -1229,7 +1229,7 @@ void JokerWindow::on_actionSecond_screen_triggered(bool checked)
 #ifdef USE_VIDEO
 	_settings->setVideoSecondScreen(checked);
 	if(checked) {
-		_secondScreenWindow = new SecondScreenWindow(&_videoEngine, ui->videoStripView);
+		_secondScreenWindow = new SecondScreenWindow(&_videoEngine, ui->videoStripView, _settings);
 		_secondScreenWindow->show();
 	}
 	else {

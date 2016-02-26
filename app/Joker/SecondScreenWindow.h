@@ -4,11 +4,13 @@
 #include "PhGraphic/PhGraphicView.h"
 #include "PhVideo/PhVideoEngine.h"
 
+#include "JokerSettings.h"
+
 class SecondScreenWindow : public PhGraphicView
 {
 	Q_OBJECT
 public:
-	explicit SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView *shareWidget);
+	explicit SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView *shareWidget, JokerSettings *settings);
 
 signals:
 
@@ -17,6 +19,7 @@ private slots:
 
 private:
 	PhVideoEngine *_videoEngine;
+	JokerSettings *_jokerSettings;
 };
 
 #endif // SECONDSCREENWINDOW_H
