@@ -399,7 +399,7 @@ void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
 void PhVideoDecoder::cancelFrameRequest(PhVideoBuffer *frame)
 {
 	int r = _requestedFrames.removeAll(frame);
-	PHDEBUG << frame->requestFrame() << " " << r;
+	PHDBG(24) << frame->requestFrame() << " " << r;
 
 	if (r > 0) {
 		emit frameCancelled(frame);

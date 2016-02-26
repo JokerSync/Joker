@@ -183,7 +183,7 @@ void PhVideoPool::cleanup(PhFrame frame)
 	// They accumulate when seeking, because there is a short time lag
 	// between the time when the engine asks to cancel a frame and the
 	// time when the decoder really does it.
-	while (_recycledPool.count() > 10) {
+	while (_recycledPool.count() > _settings->videoPoolSize()) {
 		PhVideoBuffer * bufferToDelete = _recycledPool.takeFirst();
 		delete bufferToDelete;
 	}
