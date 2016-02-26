@@ -172,13 +172,6 @@ public:
 	void drawVideo(int x, int y, int w, int h, PhTime offset = 0);
 
 	/**
-	 * @brief Whether the frame corresponds to the frame that we currently have
-	 * @param frame The current frame
-	 * @return True if the frame is current
-	 */
-	bool isFrameCurrent(PhFrame frame);
-
-	/**
 	 * @brief Pool of decoded frames
 	 * @return A read only list of frames
 	 */
@@ -253,7 +246,6 @@ private slots:
 	void onTimeChanged(PhTime);
 
 private:
-	void showFrame(PhVideoBuffer *buffer);
 	PhTime clockTime();
 	PhFrame clockFrame();
 
@@ -269,7 +261,8 @@ private:
 	QString _codecName;
 	bool _ready;
 
-	PhVideoRect _videoRect;
+	QHash<PhFrame, PhVideoRect*> _videoRectList;
+	bool _bilinearFiltering;
 
 	PhTickCounter _videoFrameTickCounter;
 

@@ -1,6 +1,5 @@
 #include "PhVideoRect.h"
 
-
 PhVideoRect::PhVideoRect() : _currentFrame(PHFRAMEMIN)
 {
 }
