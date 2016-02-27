@@ -33,8 +33,9 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	this->setFocus();
 
 	// Save the old settings in case of cancel
-	_oldUseQuarterFrame = _settings->useQuarterFrame();
-	_oldDelay = _settings->screenDelay();
+	_oldScreenDelay = _settings->screenDelay();
+	_oldSecondScreenDelay = _settings->videoSecondScreenDelay();
+	_oldPipOffset = _settings->videoPictureInPictureOffset();
 	_oldStripHeight = _settings->stripHeight();
 	_oldHorizontalTimePerPixel = _settings->horizontalTimePerPixel();
 	_oldBolness = _settings->textBoldness();
@@ -43,16 +44,9 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->sliderBoldness->setValue(_oldBolness);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
 
-	_delayButtonGroup.addButton(ui->radioButtonQF);
-	_delayButtonGroup.addButton(ui->radioButtonMS);
-	if(_oldUseQuarterFrame) {
-		ui->radioButtonQF->setChecked(true);
-		ui->spinBoxDelay->setValue(_oldDelay / 10);
-	}
-	else {
-		ui->radioButtonMS->setChecked(true);
-		ui->spinBoxDelay->setValue(_oldDelay);
-	}
+	ui->mainScreenDelayspinBox->setValue(_oldScreenDelay);
+	ui->secondScreenDelaySpinBox->setValue(_oldSecondScreenDelay);
+	ui->pipOffsetSpinBox->setValue(_oldPipOffset);
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
 
@@ -277,8 +271,7 @@ void PreferencesDialog::accept()
 
 void PreferencesDialog::reject()
 {
-	_settings->setUseQuarterFrame(_oldUseQuarterFrame);
-	_settings->setScreenDelay(_oldDelay);
+	_settings->setScreenDelay(_oldScreenDelay);
 	_settings->setStripHeight(_oldStripHeight);
 	_settings->setHorizontalTimePerPixel(_oldHorizontalTimePerPixel);
 	_settings->setTextBoldness(_oldBolness);
@@ -313,27 +306,9 @@ void PreferencesDialog::updateSynchronisationEnabledControl(int, bool)
 	updateSynchronisationEnabledControl(false);
 }
 
-void PreferencesDialog::on_spinBoxDelay_valueChanged(int delay)
-{
-	if(_settings->useQuarterFrame())
-		_settings->setScreenDelay(delay * 10);
-	else
-		_settings->setScreenDelay(delay);
-}
-
 void PreferencesDialog::on_spinBoxSpeed_valueChanged(int speed)
 {
 	_settings->setHorizontalTimePerPixel(speed);
-}
-
-void PreferencesDialog::on_radioButtonQF_toggled(bool checked)
-{
-	_settings->setUseQuarterFrame(checked);
-	if(checked)
-		ui->spinBoxDelay->setValue(_settings->screenDelay() / 10);
-	else
-		ui->spinBoxDelay->setValue(_settings->screenDelay());
-	ui->spinBoxDelay->selectAll();
 }
 
 void PreferencesDialog::on_sliderStripHeight_valueChanged(int position)
@@ -360,4 +335,19 @@ void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *cu
 	Q_UNUSED(previous);
 	if(current)
 		_settings->setTextFontFile(_fontList[current->text()]);
+}
+
+void PreferencesDialog::on_mainScreenDelayspinBox_valueChanged(int delay)
+{
+	_settings->setScreenDelay(delay);
+}
+
+void PreferencesDialog::on_secondScreenDelaySpinBox_valueChanged(int delay)
+{
+	_settings->setVideoSecondScreenDelay(delay);
+}
+
+void PreferencesDialog::on_pipOffsetSpinBox_valueChanged(int offset)
+{
+	_settings->setVideoPictureInPictureOffset(offset);
 }

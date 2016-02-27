@@ -55,6 +55,60 @@
           <item row="0" column="1">
            <widget class="QComboBox" name="cboBoxLang"/>
           </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="mainDelayLabel">
+            <property name="text">
+             <string>Main screen delay:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="PhLockableSpinBox" name="mainScreenDelayspinBox">
+            <property name="maximum">
+             <number>1000</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Second screen delay:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="PhLockableSpinBox" name="secondScreenDelaySpinBox">
+            <property name="maximum">
+             <number>1000</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="pipOffsetLabel">
+            <property name="text">
+             <string>Picture in picture offset:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="pipOffsetSpinBox">
+            <property name="maximum">
+             <number>1000</number>
+            </property>
+            <property name="singleStep">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>1000</number>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
@@ -229,44 +283,6 @@
         <string>Synchronization</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="lblDelay">
-            <property name="text">
-             <string>Delay</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QRadioButton" name="radioButtonQF">
-            <property name="text">
-             <string>quarter frame</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" alignment="Qt::AlignLeft">
-           <widget class="PhLockableSpinBox" name="spinBoxDelay">
-            <property name="maximum">
-             <number>10000</number>
-            </property>
-            <property name="singleStep">
-             <number>10</number>
-            </property>
-            <property name="wordWrap" stdset="0">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QRadioButton" name="radioButtonMS">
-            <property name="text">
-             <string>millisecond</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
         <item>
          <widget class="QRadioButton" name="noSyncRadioButton">
           <property name="text">

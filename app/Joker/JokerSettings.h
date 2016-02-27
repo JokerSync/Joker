@@ -160,8 +160,6 @@ public:
 
 	PH_SETTING_INT2(setLogMask, logMask, 1)
 
-	PH_SETTING_BOOL(setUseQuarterFrame, useQuarterFrame)
-
 	PH_SETTING_BOOL2(setDisplayLogo, displayLogo, true)
 
 	PH_SETTING_STRING(setLanguage, language)
