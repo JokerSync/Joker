@@ -10,7 +10,7 @@
 
 #include "PhDocumentWindow.h"
 
-#if defined(Q_OS_MAC)
+#if defined(USE_SANDBOX)
 #include "PhSandbox.h"
 #endif
 
@@ -43,7 +43,7 @@ void PhDocumentWindow::processArg(int argc, char *argv[])
 void PhDocumentWindow::resetDocument()
 {
 	if(!_settings->currentDocument().isEmpty()) {
-#if defined(Q_OS_MAC)
+#if defined(USE_SANDBOX)
 		stopSecurityScopeBookmark(_settings->currentDocument(), _settings->bookmark(_settings->currentDocument()).toByteArray());
 #endif
 		_settings->setCurrentDocument("");
@@ -144,14 +144,14 @@ void PhDocumentWindow::onExternalChange(const QString &path)
 
 void PhDocumentWindow::checkFilePermission(QString fileName)
 {
-#if defined(Q_OS_MAC)
+#if defined(USE_SANDBOX)
 	resolveSecurityScopeBookmark(fileName, _settings->bookmark(fileName).toByteArray());
 #endif
 }
 
 void PhDocumentWindow::addFilePermission(QString fileName)
 {
-#if defined(Q_OS_MAC)
+#if defined(USE_SANDBOX)
 	if(_settings->bookmark(fileName).toByteArray().count() == 0) {
 		_settings->setBookmark(fileName, createSecurityScopeBookmark(fileName));
 		PHDEBUG << fileName << ":" << _settings->bookmark(fileName).toByteArray().length();

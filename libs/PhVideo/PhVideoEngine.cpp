@@ -267,15 +267,16 @@ bool PhVideoEngine::decodeFrame(PhTime time)
 		return false;
 	}
 
+	PhTime tpf = PhTimeCode::timePerFrame(_tcType);
+
 	if(time < _timeIn)
 		time = _timeIn;
 	if (time >= this->timeOut())
-		time = this->timeOut();
+		time = this->timeOut() - tpf;
 
 	bool result = false;
 
 	// Stay with the same frame if the time has changed less than the time between two frames
-	PhTime tpf = PhTimeCode::timePerFrame(_tcType);
 	if ((time >= _currentTime) && (time < _currentTime + tpf))
 		result = true;
 	else {

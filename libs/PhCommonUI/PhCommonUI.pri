@@ -20,9 +20,7 @@ HEADERS += \
 	$$PWD/PhFeedbackDialog.h \
 	$$PWD/PhFeedbackSettings.h \
     $$PWD/PhDialogButtonBox.h \
-    $$PWD/PhHelpMenu.h \
-    $$PWD/PhSandbox.h
-
+	$$PWD/PhHelpMenu.h
 SOURCES += \
 #   $$PWD/PhLeap.cpp \
 	$$PWD/PhMediaPanel.cpp \
@@ -56,10 +54,15 @@ linux {
 mac {
 #LIBS += -L$$(LEAP_SDK)/lib -lLeap
 
-	LIBS += -framework AppKit -framework Foundation
-	OBJECTIVE_SOURCES += \
-		$$PWD/PhHelpMenu.mm \
-		$$PWD/PhSandbox.mm
+	LIBS += -framework AppKit
+	OBJECTIVE_SOURCES += $$PWD/PhHelpMenu.mm
+
+	sandbox {
+		DEFINES += USE_SANDBOX
+		LIBS += -framework Foundation
+		HEADERS += $$PWD/PhSandbox.h
+		OBJECTIVE_SOURCES += $$PWD/PhSandbox.mm
+	}
 }
 
 !mac {
@@ -70,6 +73,3 @@ mac {
 
 RESOURCES += \
     $$PWD/PhCommonUI.qrc
-
-OBJECTIVE_SOURCES += \
-    $$PWD/PhSandbox.mm

@@ -272,7 +272,8 @@ private slots:
 	void on_actionLoop_triggered(bool checked);
 
 private:
-	PhTimeCodeType timeCodeType();
+	PhTimeCodeType localTimeCodeType();
+	PhTimeCodeType synchroTimeCodeType();
 	PhTime currentTime();
 	PhRate currentRate();
 
