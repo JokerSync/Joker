@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
 <TS version="2.1" language="it_IT">
 <context>
     <name>AboutDialog</name>
     <message>
         <source>About Joker</source>
-        <translation type="unfinished"></translation>
+        <translation>Riguardo a Joker</translation>
     </message>
     <message>
         <source>Copyright 2013-2016 Phonations, All rights reserved.</source>
@@ -13,7 +13,7 @@
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiudere</translation>
     </message>
     <message>
         <source>Joker is based on the following libraries:</source>
@@ -655,7 +655,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You change the language to &quot;%1&quot;.
+        <source>You change the language to "%1".
 You need to restart %2 to apply you changes.</source>
         <translation type="unfinished"></translation>
     </message>
