@@ -70,12 +70,15 @@ private slots:
 
 	void on_pipRatioSlider_valueChanged(int value);
 
+	void on_pipRightPositionRadioButton_toggled(bool checked);
+
 private:
 	Ui::PreferencesDialog *ui;
 	JokerSettings *_settings;
 	QString _oldFont;
 	int _oldScreenDelay, _oldSecondScreenDelay, _oldPipOffset;
 	float _oldPipRatio;
+	bool _oldPipPositionRight;
 	int _oldHorizontalTimePerPixel;
 	int _oldBolness;
 	float _oldStripHeight;

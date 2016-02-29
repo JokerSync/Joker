@@ -37,6 +37,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldSecondScreenDelay = _settings->videoSecondScreenDelay();
 	_oldPipOffset = _settings->videoPictureInPictureOffset();
 	_oldPipRatio = _settings->videoPictureInPictureRatio();
+	_oldPipPositionRight = _settings->videoPictureInPicturePositionRight();
 	_oldStripHeight = _settings->stripHeight();
 	_oldHorizontalTimePerPixel = _settings->horizontalTimePerPixel();
 	_oldBolness = _settings->textBoldness();
@@ -49,6 +50,10 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->secondScreenDelaySpinBox->setValue(_oldSecondScreenDelay);
 	ui->pipOffsetSpinBox->setValue(_oldPipOffset);
 	ui->pipRatioSlider->setValue(_oldPipRatio * 100);
+	if(_oldPipPositionRight)
+		ui->pipRightPositionRadioButton->setChecked(true);
+	else
+		ui->pipLeftPositionRadioButton->setChecked(true);
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
 
@@ -277,6 +282,7 @@ void PreferencesDialog::reject()
 	_settings->setVideoSecondScreenDelay(_oldSecondScreenDelay);
 	_settings->setVideoPictureInPictureOffset(_oldPipOffset);
 	_settings->setVideoPictureInPictureRatio(_oldPipRatio);
+	_settings->setVideoPictureInPicturePositionRight(_oldPipPositionRight);
 	_settings->setStripHeight(_oldStripHeight);
 	_settings->setHorizontalTimePerPixel(_oldHorizontalTimePerPixel);
 	_settings->setTextBoldness(_oldBolness);
@@ -360,4 +366,9 @@ void PreferencesDialog::on_pipOffsetSpinBox_valueChanged(int offset)
 void PreferencesDialog::on_pipRatioSlider_valueChanged(int value)
 {
 	_settings->setVideoPictureInPictureRatio(value / 100.0f);
+}
+
+void PreferencesDialog::on_pipRightPositionRadioButton_toggled(bool checked)
+{
+	_settings->setVideoPictureInPicturePositionRight(checked);
 }
