@@ -463,7 +463,7 @@ void JokerWindow::onPaint(int width, int height)
 				_videoEngine.drawVideo(0, 0,
 				                       videoWidth * _settings->videoPictureInPictureRatio(),
 				                       realVideoHeight * _settings->videoPictureInPictureRatio(),
-				                       delay + _settings->videoPictureInPictureOffset());
+									   delay + 24 * _settings->videoPictureInPictureOffset());
 		}
 		else if(_settings->displayLogo()) {
 			// The logo file is 500px in native format

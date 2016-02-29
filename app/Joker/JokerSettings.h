@@ -104,7 +104,7 @@ public:
 	PH_SETTING_FRAME2(setVideoPoolSize, videoPoolSize, 120)
 
 	PH_SETTING_BOOL(setVideoPictureInPicture, videoPictureInPicture)
-	PH_SETTING_TIME2(setVideoPictureInPictureOffset, videoPictureInPictureOffset, PHTIMEBASE)
+	PH_SETTING_INT2(setVideoPictureInPictureOffset, videoPictureInPictureOffset, 1000)
 	PH_SETTING_FLOAT2(setVideoPictureInPictureRatio, videoPictureInPictureRatio, 0.3f)
 
 	PH_SETTING_BOOL(setVideoSecondScreen, videoSecondScreen)
