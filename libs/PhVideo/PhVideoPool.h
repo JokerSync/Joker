@@ -19,7 +19,6 @@ public:
 	/**
 	 * @brief The PhVideoPool constructor
 	 * @param settings The setting
-	 * @param clock The engine clock
 	 */
 	explicit PhVideoPool(PhVideoSettings *settings);
 
@@ -49,7 +48,7 @@ public:
 
 	/**
 	 * @brief Update the pool information
-	 * @param length Video length
+	 * @param frameLength Video length
 	 */
 	void update(PhFrame frameLength);
 signals:
@@ -61,7 +60,7 @@ signals:
 
 	/**
 	 * @brief Signal sent to cancel a frame request
-	 * @param frame The frame describing the request
+	 * @param buffer The buffer describing the request
 	 */
 	void cancelFrameRequest(PhVideoBuffer *buffer);
 
@@ -70,12 +69,13 @@ public slots:
 	 * @brief Request the frames starting a given time and further according to the readhead
 	 *
 	 * @param frame Starting frame
+	 * @param backward True if playing backward, false if playing forward
 	 */
 	void requestFrames(PhFrame frame, bool backward);
 
 	/**
 	 * @brief Handle a frame that has just been decoded
-	 * @param frame the decoded frame
+	 * @param buffer the decoded buffer
 	 */
 	void frameAvailable(PhVideoBuffer *buffer);
 
