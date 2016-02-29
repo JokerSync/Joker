@@ -33,83 +33,120 @@
        <attribute name="title">
         <string>General</string>
        </attribute>
-       <layout class="QFormLayout" name="formLayout_6">
-        <item row="0" column="0">
-         <layout class="QFormLayout" name="formLayout">
-          <property name="fieldGrowthPolicy">
-           <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QGroupBox" name="interfaceGroupBox">
+          <property name="title">
+           <string>Interface:</string>
           </property>
-          <property name="formAlignment">
-           <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+          <layout class="QFormLayout" name="formLayout_8">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Language:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="cboBoxLang"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="delayGroupBox">
+          <property name="title">
+           <string>Delay:</string>
           </property>
-          <property name="verticalSpacing">
-           <number>20</number>
+          <layout class="QFormLayout" name="formLayout_7">
+           <item row="0" column="0">
+            <widget class="QLabel" name="mainDelayLabel">
+             <property name="text">
+              <string>Main screen delay (ms):</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="PhLockableSpinBox" name="mainScreenDelayspinBox">
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="singleStep">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Second screen delay (ms):</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="PhLockableSpinBox" name="secondScreenDelaySpinBox">
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="singleStep">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="pipGroupBox">
+          <property name="title">
+           <string>Picture in picture:</string>
           </property>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Language:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="cboBoxLang"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="mainDelayLabel">
-            <property name="text">
-             <string>Main screen delay:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="PhLockableSpinBox" name="mainScreenDelayspinBox">
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-            <property name="singleStep">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Second screen delay:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="PhLockableSpinBox" name="secondScreenDelaySpinBox">
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-            <property name="singleStep">
-             <number>10</number>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="pipOffsetLabel">
-            <property name="text">
-             <string>Picture in picture offset:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QSpinBox" name="pipOffsetSpinBox">
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-            <property name="singleStep">
-             <number>100</number>
-            </property>
-            <property name="value">
-             <number>1000</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
+          <layout class="QFormLayout" name="formLayout_6">
+           <item row="1" column="0">
+            <widget class="QLabel" name="pipRatioLabel">
+             <property name="text">
+              <string>Ratio:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="pipOffsetLabel">
+             <property name="text">
+              <string>Offset (ms):</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QSpinBox" name="pipOffsetSpinBox">
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="singleStep">
+              <number>100</number>
+             </property>
+             <property name="value">
+              <number>1000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSlider" name="pipRatioSlider">
+             <property name="maximum">
+              <number>50</number>
+             </property>
+             <property name="singleStep">
+              <number>10</number>
+             </property>
+             <property name="sliderPosition">
+              <number>30</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </item>
        </layout>
       </widget>
