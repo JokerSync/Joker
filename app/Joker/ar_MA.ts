@@ -398,6 +398,10 @@
         <source>Save...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unable to open %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PeopleDialog</name>

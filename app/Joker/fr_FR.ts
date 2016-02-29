@@ -400,6 +400,10 @@
         <source>No video sync</source>
         <translation>Pas de synchro vidéo</translation>
     </message>
+    <message>
+        <source>Unable to open %1</source>
+        <translation type="unfinished">Impossible d&apos;ouvrir %1</translation>
+    </message>
 </context>
 <context>
     <name>PeopleDialog</name>
