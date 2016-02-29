@@ -690,15 +690,14 @@ void JokerWindow::on_actionOpen_triggered()
 		QString filter = tr("Rythmo files") + " (";
 		foreach(QString type, _settings->stripFileType())
 			filter += "*." + type + " ";
-		filter += ");";
+		filter += ")";
 		QFileDialog dlg(this, tr("Open..."), _settings->lastDocumentFolder(), filter);
-
-		dlg.setOption(QFileDialog::HideNameFilterDetails, false);
 
 		dlg.setFileMode(QFileDialog::ExistingFile);
 		if(dlg.exec()) {
 			QString fileName = dlg.selectedFiles()[0];
-			openDocument(fileName);
+			if(!openDocument(fileName))
+				QMessageBox::critical(this, "", QString(tr("Unable to open %1")).arg(fileName));
 		}
 	}
 	showMediaPanel();

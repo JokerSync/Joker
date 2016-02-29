@@ -1262,7 +1262,9 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 			for(int i = 0; i < chars.count(); i++) {
 				QString color = chars.at(i).toElement().attribute("color");
 				QString name = chars.at(i).toElement().attribute("name");
-				peopleByName(name)->setColor(color);
+				PhPeople *people = peopleByName(name);
+				if(people)
+					people->setColor(color);
 			}
 		}
 
