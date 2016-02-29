@@ -31,6 +31,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_doc(_strip.doc()),
 #ifdef USE_VIDEO
 	_videoEngine(settings),
+	_secondScreenWindow(NULL),
 #endif
 	_synchronizer(settings),
 #ifdef USE_SONY
@@ -157,6 +158,11 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 		// The media panel has to be closed manually, or the application
 		// will stay open forever in the background
 		_mediaPanel.close();
+
+		if(_secondScreenWindow) {
+			_secondScreenWindow->close();
+			delete _secondScreenWindow;
+		}
 
 		// Force doc to unmodified to avoid double confirmation
 		// since closeEvent is called twice
