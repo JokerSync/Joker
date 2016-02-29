@@ -445,6 +445,7 @@ void JokerWindow::onPaint(int width, int height)
 	if(_settings->displayNextText())
 		videoAvailableWidth = width * 0.8f;
 
+	int y = 0;
 #ifdef USE_VIDEO
 	// Display the video
 	if((videoHeight > 0)) {
@@ -465,11 +466,17 @@ void JokerWindow::onPaint(int width, int height)
 
 			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight, delay);
 
-			if(_settings->videoPictureInPicture())
-				_videoEngine.drawVideo(0, 0,
-				                       videoWidth * _settings->videoPictureInPictureRatio(),
-				                       realVideoHeight * _settings->videoPictureInPictureRatio(),
-									   delay + 24 * _settings->videoPictureInPictureOffset());
+			if(_settings->videoPictureInPicture()) {
+				int pipWidth = videoWidth * _settings->videoPictureInPictureRatio();
+				int pipHeight = realVideoHeight * _settings->videoPictureInPictureRatio();
+				int pipX = 0;
+				if(_settings->videoPictureInPicturePositionRight()) {
+					pipX = width - pipWidth;
+					y += pipHeight;
+				}
+				_videoEngine.drawVideo(pipX, 0, pipWidth, pipHeight,
+				                       delay + 24 * _settings->videoPictureInPictureOffset());
+			}
 		}
 		else if(_settings->displayLogo()) {
 			// The logo file is 500px in native format
@@ -498,7 +505,6 @@ void JokerWindow::onPaint(int width, int height)
 	}
 
 	int x = videoAvailableWidth;
-	int y = 0;
 	if(_settings->displayNextText()) {
 		QColor infoColor = _settings->backgroundColorLight();
 		int infoWidth = width - videoAvailableWidth;

@@ -106,6 +106,7 @@ public:
 	PH_SETTING_BOOL(setVideoPictureInPicture, videoPictureInPicture)
 	PH_SETTING_INT2(setVideoPictureInPictureOffset, videoPictureInPictureOffset, 1000)
 	PH_SETTING_FLOAT2(setVideoPictureInPictureRatio, videoPictureInPictureRatio, 0.3f)
+	PH_SETTING_BOOL(setVideoPictureInPicturePositionRight, videoPictureInPicturePositionRight)
 
 	PH_SETTING_BOOL(setVideoSecondScreen, videoSecondScreen)
 	PH_SETTING_INT(setVideoSecondScreenDelay, videoSecondScreenDelay)
