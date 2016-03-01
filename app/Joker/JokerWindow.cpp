@@ -162,6 +162,7 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 		if(_secondScreenWindow) {
 			_secondScreenWindow->close();
 			delete _secondScreenWindow;
+			_secondScreenWindow = NULL;
 		}
 
 		// Force doc to unmodified to avoid double confirmation
@@ -1250,6 +1251,7 @@ void JokerWindow::on_actionSecond_screen_triggered(bool checked)
 	else {
 		_secondScreenWindow->close();
 		delete _secondScreenWindow;
+		_secondScreenWindow = NULL;
 	}
 #endif
 }
