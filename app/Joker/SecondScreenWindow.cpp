@@ -7,11 +7,14 @@ SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView
 {
 	this->installEventFilter(this);
 
+	this->restoreGeometry(_jokerSettings->videoSecondScreenGeometry());
+
 	this->connect(this, &PhGraphicView::paint, this, &SecondScreenWindow::onPaint);
 }
 
 void SecondScreenWindow::closeEvent(QCloseEvent *)
 {
+	_jokerSettings->setVideoSecondScreenGeometry(this->saveGeometry());
 	emit closing();
 }
 
