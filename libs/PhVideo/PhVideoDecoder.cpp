@@ -5,6 +5,7 @@
  */
 
 #include <QCoreApplication>
+#include <QThread>
 
 #include "PhTools/PhDebug.h"
 
@@ -22,7 +23,7 @@ PhVideoDecoder::PhVideoDecoder() :
 	_audioStream(NULL),
 	_audioFrame(NULL),
 	_deinterlace(false),
-	_recursive(false)
+	_processing(false)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
@@ -166,6 +167,27 @@ void PhVideoDecoder::close()
 	_fileName = "";
 }
 
+void PhVideoDecoder::process()
+{
+	_processing = true;
+	while(_processing) {
+//		PHDBG(24);
+		decodeFrame();
+		QThread::msleep(5);
+		QCoreApplication::processEvents();
+	}
+}
+
+void PhVideoDecoder::stop()
+{
+	_processing = false;
+}
+
+void PhVideoDecoder::requestFrame(PhVideoBuffer *buffer)
+{
+	_requestedFrames.append(buffer);
+}
+
 void PhVideoDecoder::setDeinterlace(bool deinterlace)
 {
 	PHDEBUG << deinterlace;
@@ -181,6 +203,7 @@ PhVideoDecoder::~PhVideoDecoder()
 
 	// the engine thread is exiting too, so all the frames can be cleaned.
 	_requestedFrames.clear();
+	_processing = false;
 }
 
 PhFrame PhVideoDecoder::frameLength()
@@ -258,29 +281,12 @@ void PhVideoDecoder::frameToRgb(AVFrame *avFrame, PhVideoBuffer *buffer)
 	}
 }
 
-void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
+void PhVideoDecoder::decodeFrame()
 {
 	if(!ready()) {
-		PHDEBUG << "not ready";
+		PHDBG(24) << "not ready";
 		return;
 	}
-
-	if (buffer) {
-		_requestedFrames.append(buffer);
-	}
-
-	if (_recursive) {
-		// if we are called recursively, just let the top caller handle the rest
-		return;
-	}
-
-	// call processEvents to walk through the queued signals
-	// This makes sure we process the cancelling signals.
-	// We use the _recursive flag to indicate that the child slots
-	// should not actually decode the frame.
-	_recursive = true;
-	QCoreApplication::processEvents();
-	_recursive = false;
 
 	if (_requestedFrames.empty()) {
 		// all pending requests have been cancelled
@@ -288,7 +294,7 @@ void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
 	}
 
 	// now proceed with the first requested frame
-	buffer = _requestedFrames.takeFirst();
+	PhVideoBuffer *buffer = _requestedFrames.takeFirst();
 	PhFrame frame = buffer->requestFrame();
 
 	// resize the buffer if needed
@@ -380,7 +386,7 @@ void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
 			{
 				char errorStr[256];
 				av_strerror(error, errorStr, 256);
-				PHDBG(24) << time << "error:" << errorStr;
+				PHDBG(24) << frame << "error:" << errorStr;
 				lookingForVideoFrame = false;
 				break;
 			}
@@ -388,11 +394,6 @@ void PhVideoDecoder::decodeFrame(PhVideoBuffer *buffer)
 
 		//Avoid memory leak
 		av_free_packet(&packet);
-	}
-
-	// call the same function again to proceed with the other requested frames
-	if (!_requestedFrames.empty()) {
-		decodeFrame(NULL);
 	}
 }
 

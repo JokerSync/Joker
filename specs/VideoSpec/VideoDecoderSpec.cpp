@@ -70,19 +70,23 @@ go_bandit([](){
 
 			expectedBuffer = &buffer0;
 			buffer0.setRequestFrame(0);
-			decoder->decodeFrame(&buffer0);
+			decoder->requestFrame(&buffer0);
+			decoder->decodeFrame();
+
 			AssertThat(frameAvailableSpy->count(), Equals(1));
 
 			expectedBuffer = &buffer1;
 			buffer1.setRequestFrame(1);
 			expectedFrame = 1;
-			decoder->decodeFrame(&buffer1);
+			decoder->requestFrame(&buffer1);
+			decoder->decodeFrame();
 			AssertThat(frameAvailableSpy->count(), Equals(2));
 
 			expectedBuffer = &buffer2;
 			buffer2.setRequestFrame(2);
 			expectedFrame = 2;
-			decoder->decodeFrame(&buffer2);
+			decoder->requestFrame(&buffer2);
+			decoder->decodeFrame();
 			AssertThat(frameAvailableSpy->count(), Equals(3));
 		});
 	});

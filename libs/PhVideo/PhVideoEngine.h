@@ -243,6 +243,11 @@ signals:
 	 */
 	void newFrameDecoded(PhFrame frame);
 
+	/**
+	 * @brief Stop the decoder processing loop
+	 */
+	void stopDecoder();
+
 private slots:
 	void onTimeChanged(PhTime);
 
