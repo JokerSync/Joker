@@ -1,6 +1,9 @@
-#include "SecondScreenWindow.h"
+#include <QTimer>
 
+#include "PhTools/PhDebug.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
+
+#include "SecondScreenWindow.h"
 
 SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView *shareWidget, JokerSettings *settings)
 	: PhGraphicView(NULL, shareWidget), _videoEngine(videoEngine), _jokerSettings(settings)
@@ -9,12 +12,19 @@ SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView
 
 	this->restoreGeometry(_jokerSettings->videoSecondScreenGeometry());
 
+	if(_jokerSettings->videoSecondScreenFullscreen()) {
+		PHDEBUG << "Going fullscreen...";
+		QTimer::singleShot(1000, this, SLOT(showFullScreen()));
+	}
+
 	this->connect(this, &PhGraphicView::paint, this, &SecondScreenWindow::onPaint);
 }
 
 void SecondScreenWindow::closeEvent(QCloseEvent *)
 {
-	_jokerSettings->setVideoSecondScreenGeometry(this->saveGeometry());
+	if(!this->isFullScreen())
+		_jokerSettings->setVideoSecondScreenGeometry(this->saveGeometry());
+	_jokerSettings->setVideoSecondScreenFullscreen(this->isFullScreen());
 	emit closing();
 }
 

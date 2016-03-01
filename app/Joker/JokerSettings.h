@@ -111,6 +111,7 @@ public:
 	PH_SETTING_BOOL(setVideoSecondScreen, videoSecondScreen)
 	PH_SETTING_INT(setVideoSecondScreenDelay, videoSecondScreenDelay)
 	PH_SETTING_BYTEARRAY(setVideoSecondScreenGeometry, videoSecondScreenGeometry)
+	PH_SETTING_BOOL(setVideoSecondScreenFullscreen, videoSecondScreenFullscreen)
 #endif
 
 	// Synchronisation settings:
