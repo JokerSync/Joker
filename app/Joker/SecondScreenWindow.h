@@ -13,6 +13,10 @@ public:
 	explicit SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView *shareWidget, JokerSettings *settings);
 
 signals:
+	void closing();
+
+protected:
+	void closeEvent(QCloseEvent *);
 
 private slots:
 	void onPaint(int width, int height);

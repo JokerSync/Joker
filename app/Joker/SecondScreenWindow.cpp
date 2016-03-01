@@ -8,6 +8,11 @@ SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView
 	this->connect(this, &PhGraphicView::paint, this, &SecondScreenWindow::onPaint);
 }
 
+void SecondScreenWindow::closeEvent(QCloseEvent *)
+{
+	emit closing();
+}
+
 void SecondScreenWindow::onPaint(int width, int height)
 {
 	PhTime delay = (PhTime)(24 * _jokerSettings->videoSecondScreenDelay() * _videoEngine->clock()->rate());

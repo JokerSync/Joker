@@ -1247,6 +1247,7 @@ void JokerWindow::on_actionSecond_screen_triggered(bool checked)
 	if(checked) {
 		_secondScreenWindow = new SecondScreenWindow(&_videoEngine, ui->videoStripView, _settings);
 		_secondScreenWindow->show();
+		connect(_secondScreenWindow, &SecondScreenWindow::closing, this, &JokerWindow::onSecondScreenClosed);
 	}
 	else {
 		_secondScreenWindow->close();
@@ -1254,4 +1255,10 @@ void JokerWindow::on_actionSecond_screen_triggered(bool checked)
 		_secondScreenWindow = NULL;
 	}
 #endif
+}
+
+void JokerWindow::onSecondScreenClosed()
+{
+	ui->actionSecond_screen->setChecked(false);
+	on_actionSecond_screen_triggered(false);
 }
