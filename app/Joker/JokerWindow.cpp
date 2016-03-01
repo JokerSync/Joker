@@ -1260,5 +1260,8 @@ void JokerWindow::on_actionSecond_screen_triggered(bool checked)
 void JokerWindow::onSecondScreenClosed()
 {
 	ui->actionSecond_screen->setChecked(false);
-	on_actionSecond_screen_triggered(false);
+	if(_secondScreenWindow) {
+		delete _secondScreenWindow;
+		_secondScreenWindow = NULL;
+	}
 }
