@@ -17,6 +17,7 @@ signals:
 
 protected:
 	void closeEvent(QCloseEvent *);
+	bool eventFilter(QObject *, QEvent *event);
 
 private slots:
 	void onPaint(int width, int height);

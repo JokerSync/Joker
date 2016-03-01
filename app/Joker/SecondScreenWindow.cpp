@@ -5,12 +5,28 @@
 SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView *shareWidget, JokerSettings *settings)
 	: PhGraphicView(NULL, shareWidget), _videoEngine(videoEngine), _jokerSettings(settings)
 {
+	this->installEventFilter(this);
+
 	this->connect(this, &PhGraphicView::paint, this, &SecondScreenWindow::onPaint);
 }
 
 void SecondScreenWindow::closeEvent(QCloseEvent *)
 {
 	emit closing();
+}
+
+bool SecondScreenWindow::eventFilter(QObject *, QEvent *event)
+{
+	switch (event->type()) {
+	case QEvent::MouseButtonDblClick:
+		if(this->isFullScreen())
+			SecondScreenWindow::showNormal();
+		else
+			SecondScreenWindow::showFullScreen();
+		return true;
+	default:
+		return false;
+	}
 }
 
 void SecondScreenWindow::onPaint(int width, int height)
