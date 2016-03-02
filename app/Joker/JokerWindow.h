@@ -280,7 +280,7 @@ private slots:
 
 	void on_actionSecond_screen_triggered(bool checked);
 
-	void onSecondScreenClosed();
+	void onSecondScreenClosed(bool closedFromUser);
 private:
 	PhTimeCodeType localTimeCodeType();
 	PhTimeCodeType synchroTimeCodeType();

@@ -1,4 +1,5 @@
 #include <QTimer>
+#include <QCloseEvent>
 
 #include "PhTools/PhDebug.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
@@ -20,12 +21,13 @@ SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView
 	this->connect(this, &PhGraphicView::paint, this, &SecondScreenWindow::onPaint);
 }
 
-void SecondScreenWindow::closeEvent(QCloseEvent *)
+void SecondScreenWindow::closeEvent(QCloseEvent *event)
 {
+	PHDBG(1) << event->spontaneous();
 	if(!this->isFullScreen())
 		_jokerSettings->setVideoSecondScreenGeometry(this->saveGeometry());
 	_jokerSettings->setVideoSecondScreenFullscreen(this->isFullScreen());
-	emit closing();
+	emit closing(event->spontaneous());
 }
 
 bool SecondScreenWindow::eventFilter(QObject *, QEvent *event)

@@ -1257,11 +1257,13 @@ void JokerWindow::on_actionSecond_screen_triggered(bool checked)
 #endif
 }
 
-void JokerWindow::onSecondScreenClosed()
+void JokerWindow::onSecondScreenClosed(bool closedFromUser)
 {
 	ui->actionSecond_screen->setChecked(false);
 	if(_secondScreenWindow) {
 		delete _secondScreenWindow;
 		_secondScreenWindow = NULL;
 	}
+	if(closedFromUser)
+		_settings->setVideoSecondScreen(false);
 }

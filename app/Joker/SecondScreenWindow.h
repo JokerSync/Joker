@@ -13,10 +13,10 @@ public:
 	explicit SecondScreenWindow(PhVideoEngine *videoEngine, PhGraphicView *shareWidget, JokerSettings *settings);
 
 signals:
-	void closing();
+	void closing(bool closedFromUser);
 
 protected:
-	void closeEvent(QCloseEvent *);
+	void closeEvent(QCloseEvent *event);
 	bool eventFilter(QObject *, QEvent *event);
 
 private slots:
