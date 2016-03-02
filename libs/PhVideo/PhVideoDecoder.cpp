@@ -249,6 +249,7 @@ void PhVideoDecoder::frameToRgb(AVFrame *avFrame, PhVideoBuffer *buffer)
 		break;
 	case AV_PIX_FMT_YUVJ440P:
 		pixFormat = AV_PIX_FMT_YUV440P;
+		break;
 	default:
 		pixFormat = _videoStream->codec->pix_fmt;
 		break;

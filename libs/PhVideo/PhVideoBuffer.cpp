@@ -9,6 +9,7 @@
 PhVideoBuffer::PhVideoBuffer() :
 	_rgb(NULL),
 	_size(0),
+	_requestFrame(0),
 	_frame(0),
 	_width(0),
 	_height(0)
