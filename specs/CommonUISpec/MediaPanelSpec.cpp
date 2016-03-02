@@ -12,39 +12,42 @@
 using namespace bandit;
 
 go_bandit([](){
-	describe("media_panel_test", []() {
-		before_each([&](){
+	describe("media panel", []() {
+		PhMediaPanel *panel;
+		PhClock *clock;
+
+		before_each([&]() {
 			PhDebug::disable();
+
+			panel = new PhMediaPanel();
+			clock = new PhClock();
+			panel->setTimeCodeType(PhTimeCodeType25);
+			panel->setClock(clock);
+			panel->show();
 		});
 
-		it("set_clock", [&](){
-			PhMediaPanel panel;
-			PhClock clock;
-
-			panel.setTimeCodeType(PhTimeCodeType25);
-			panel.setClock(&clock);
-
-			clock.setRate(1);
-
-			clock.elapse(600);
-			clock.elapse(600);
-			clock.elapse(600);
-			clock.elapse(600);
-			clock.elapse(600);
+		after_each([&]() {
+			panel->close();
+			delete clock;
+			delete panel;
 		});
 
-		it("play_upon_space_bar_pressed", []() {
-			PhMediaPanel panel;
-			PhClock clock;
+		it("handles clock", [&](){
+			AssertThat(panel->isPlaying(), IsFalse());
 
-			panel.setTimeCodeType(PhTimeCodeType25);
-			panel.setClock(&clock);
+			clock->setRate(1);
+			AssertThat(panel->isPlaying(), IsTrue());
 
-			QTest::keyPress(&panel, Qt::Key_Space);
+			clock->setRate(0);
+			AssertThat(panel->isPlaying(), IsFalse());
+		});
+
+		it("play upon space bar pressed", [&]() {
+			QTest::keyPress(panel, Qt::Key_Space);
 
 			QApplication::processEvents();
 
-			AssertThat(clock.rate(), Equals(1));
+			AssertThat(clock->rate(), Equals(1));
 		});
 	});
 });
