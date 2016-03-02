@@ -640,7 +640,7 @@ void JokerWindow::setCurrentRate(PhRate rate)
 #endif // USE_MIDI
 }
 
-void JokerWindow::onTimecodeTypeChanged(PhTimeCodeType tcType)
+void JokerWindow::onTimecodeTypeChanged(PhTimeCodeType)
 {
 	PHDEBUG << this->synchroTimeCodeType();
 	_mediaPanel.setTimeCodeType(this->synchroTimeCodeType());
