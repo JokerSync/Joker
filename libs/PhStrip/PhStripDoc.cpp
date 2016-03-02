@@ -316,14 +316,12 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 
 				if(text->timeOut() != sentence->timeOut()) {
 					ptree lipsync;
-					PHDEBUG << text->timeOut();
 					lipsync.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
 					lipsync.put("<xmlattr>.type", "neutral");
 					ptLine.push_back(std::make_pair("lipsync", lipsync));
 				}
 			}
 
-			PHDEBUG << sentence->timeOut();
 			ptree lipsyncOut;
 			lipsyncOut.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeOut(), _videoTimeCodeType).toStdString());
 			lipsyncOut.put("<xmlattr>.type", "out_open");
