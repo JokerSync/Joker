@@ -36,8 +36,11 @@ PhTime PhSynchronizer::time()
 
 void PhSynchronizer::setTime(PhTime value)
 {
-	if(_videoClock)
+	if(_videoClock) {
+		_settingVideoTime = true;
 		_videoClock->setTime(value);
+		_settingVideoTime = false;
+	}
 	if(_stripClock)
 		_stripClock->setTime(value);
 	if(_syncClock)
@@ -118,9 +121,8 @@ void PhSynchronizer::setSyncClock(PhClock *clock, SyncType type)
 void PhSynchronizer::onStripTimeChanged(PhTime time)
 {
 	if(!_settingStripTime) {
-
-		PHDBG(2) << time;
-		if(_settings->syncLooping() && (time > _settings->syncLoopTimeOut())) {
+		_settingStripTime = true;
+		if(_settings->syncLooping() && (this->rate() != 0) && (time > _settings->syncLoopTimeOut())) {
 			this->setTime(_settings->syncLoopTimeIn());
 		}
 		else {
@@ -131,9 +133,7 @@ void PhSynchronizer::onStripTimeChanged(PhTime time)
 #warning /// @todo Make the error a settings
 				if(qAbs(time - _syncClock->time()) > 2*PhTimeCode::timePerFrame(PhTimeCodeType24)) {
 					PHDEBUG << "correct :" << _stripClock->time() << _syncClock->time();
-					_settingStripTime = true;
 					_stripClock->setTime(_syncClock->time());
-					_settingStripTime = false;
 				}
 			}
 
@@ -143,6 +143,7 @@ void PhSynchronizer::onStripTimeChanged(PhTime time)
 				_settingVideoTime = false;
 			}
 		}
+		_settingStripTime = false;
 	}
 }
 
@@ -176,7 +177,6 @@ void PhSynchronizer::onVideoRateChanged(PhRate)
 void PhSynchronizer::onSyncTimeChanged(PhTime time)
 {
 	if(!_settingSonyTime) {
-		PHDBG(3) << time;
 		if(_settings->syncLooping() && (time > _settings->syncLoopTimeOut())) {
 			this->setTime(_settings->syncLoopTimeIn());
 		}
