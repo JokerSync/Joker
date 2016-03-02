@@ -48,6 +48,11 @@ void PhClock::setFrame(PhFrame frame, PhTimeCodeType tcType)
 	this->setTime(frame * PhTimeCode::timePerFrame(tcType));
 }
 
+void PhClock::setFrame25(PhFrame frame)
+{
+	this->setFrame(frame, PhTimeCodeType25);
+}
+
 PhFrame PhClock::frame(PhTimeCodeType tcType) const
 {
 	return _time / PhTimeCode::timePerFrame(tcType);

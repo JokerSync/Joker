@@ -7,25 +7,15 @@
 #ifndef PHVIDEOENGINE_H
 #define PHVIDEOENGINE_H
 
-extern "C" {
-#ifndef INT64_C
-/** see http://code.google.com/p/ffmpegsource/issues/detail?id=11#c13 */
-#define INT64_C(c) (c ## LL)
-/** and http://code.google.com/p/ffmpegsource/issues/detail?id=11#c23 */
-#define UINT64_C(c) (c ## ULL)
-#endif
-
-#include <libavformat/avformat.h>
-#include <libavutil/avutil.h>
-#include <libavcodec/avcodec.h>
-#include <libswscale/swscale.h>
-}
+#include <QThread>
 
 #include "PhSync/PhClock.h"
 #include "PhTools/PhTickCounter.h"
-#include "PhGraphic/PhGraphicTexturedRect.h"
 
 #include "PhVideoSettings.h"
+#include "PhVideoBuffer.h"
+#include "PhVideoPool.h"
+#include "PhVideoRect.h"
 
 /**
  * @brief The video engine
@@ -63,7 +53,7 @@ public:
 
 	/**
 	 * @brief Get the clock
-	 * @return the clock
+	 * @return The clock
 	 */
 	PhClock* clock() {
 		return &_clock;
@@ -99,17 +89,17 @@ public:
 
 	/**
 	 * @brief Get the codec name
-	 * @return the codec name
+	 * @return The codec name
 	 */
 	QString codecName();
 	/**
 	 * @brief Get the width
-	 * @return the PhVideoEngine width (not necessary the video width)
+	 * @return The video rectangle width (if not using native size)
 	 */
 	int width();
 	/**
 	 * @brief Get the height
-	 * @return the PhVideoEngine height (not necessary the video height)
+	 * @return The video rectangle height (if not using native size)
 	 */
 	int height();
 	/**
@@ -172,13 +162,49 @@ public:
 	void setBilinearFiltering(bool bilinear);
 
 	/**
-	 * @brief draw the video depending on the parameters
-	 * @param x coordinates of the upperleft corner
-	 * @param y coordinates of the upperleft corner
-	 * @param w width
-	 * @param h height
+	 * @brief Draw the video depending on the parameters
+	 * @param x Coordinates of the upperleft corner
+	 * @param y Coordinates of the upperleft corner
+	 * @param w Width of the video rectangle (if not native size)
+	 * @param h Height of the video rectangle (if not native size)
 	 */
 	void drawVideo(int x, int y, int w, int h);
+
+	/**
+	 * @brief Whether the frame corresponds to the frame that we currently have
+	 * @param frame The current frame
+	 * @return True if the frame is current
+	 */
+	bool isFrameCurrent(PhFrame frame);
+
+	/**
+	 * @brief Pool of decoded frames
+	 * @return A read only list of frames
+	 */
+	const QList<PhVideoBuffer*> decodedFramePool();
+
+public slots:
+	/**
+	 * @brief Handle a frame that has just been decoded
+	 * @param buffer the decoded frame
+	 */
+	void frameAvailable(PhVideoBuffer *buffer);
+
+	/**
+	 * @brief Handle the signal that the video file has been opened in the decoder
+	 * @param tcType The timecode type
+	 * @param frameIn The first frame number of the video file
+	 * @param frameLength The length of the video file
+	 * @param width The width of the frame
+	 * @param height the height of the frame
+	 * @param codecName the codec name
+	 */
+	void decoderOpened(PhTimeCodeType tcType, PhFrame frameIn, PhFrame frameLength, int width, int height, QString codecName);
+
+	/**
+	 * @brief Handle the signal sent when the decoder failed to open the file
+	 */
+	void openInDecoderFailed();
 
 signals:
 	/**
@@ -187,33 +213,70 @@ signals:
 	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 
+	/**
+	 * @brief Signal sent to the decoder to open a video file
+	 * @param fileName A video file path
+	 */
+	void openInDecoder(QString fileName);
+
+	/**
+	 * @brief Signal sent to the decoder to close the file
+	 */
+	void closeInDecoder();
+
+	/**
+	 * @brief Signal sent when the engine is ready
+	 * @param success Whether the video was opened successfully
+	 */
+	void opened(bool success);
+
+	/**
+	 * @brief Signal sent when the deinterlace settings change
+	 * @param deinterlace Whether the video should be deinterlaced
+	 */
+	void deinterlaceChanged(bool deinterlace);
+
+	/**
+	 * @brief Signal sent when a new frame is decoded.
+	 * This is used by the tests.
+	 * @param frame The frame number being decoded
+	 */
+	void newFrameDecoded(PhFrame frame);
+
+	/**
+	 * @brief Stop the decoder processing loop
+	 */
+	void stopDecoder();
+
+private slots:
+	void onTimeChanged(PhTime);
+
 private:
-	bool decodeFrame(PhTime time);
-	int64_t PhTime_to_AVTimestamp(PhTime time);
-	PhTime AVTimestamp_to_PhTime(int64_t timestamp);
+	void showFrame(PhVideoBuffer *buffer);
+	PhTime clockTime();
+	PhFrame clockFrame();
 
 	PhVideoSettings *_settings;
 	QString _fileName;
 	PhTimeCodeType _tcType;
 	PhClock _clock;
+	PhFrame _frameLength;
 	PhTime _timeIn;
+	double _framePerSecond;
+	int _width;
+	int _height;
+	QString _codecName;
+	bool _ready;
 
-	AVFormatContext * _formatContext;
-	AVStream *_videoStream;
-	AVFrame * _videoFrame;
-	struct SwsContext * _swsContext;
-	PhGraphicTexturedRect _videoRect;
-	PhTime _currentTime;
+	PhVideoRect _videoRect;
 
 	PhTickCounter _videoFrameTickCounter;
 
-	bool _useAudio;
-	AVStream *_audioStream;
-	AVFrame * _audioFrame;
-
 	bool _deinterlace;
 
-	uint8_t * _rgb;
+	PhVideoPool _framePool;
+
+	QThread _decoderThread;
 };
 
 #endif // PHVIDEOENGINE_H

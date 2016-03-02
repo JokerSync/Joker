@@ -8,6 +8,8 @@ include($$TOP_ROOT/libs/PhVideo/PhVideo.pri)
 
 HEADERS += $$TOP_ROOT/specs/VideoSpec/VideoSpecSettings.h
 
-SOURCES += $$TOP_ROOT/specs/VideoSpec/VideoSpec.cpp
+SOURCES += \
+	$$PWD/VideoSpec.cpp \
+    $$PWD/VideoDecoderSpec.cpp
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/video/*.*) $${RESOURCES_PATH} $${CS}

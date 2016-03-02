@@ -271,6 +271,10 @@ private slots:
 
 	void on_actionLoop_triggered(bool checked);
 
+#ifdef USE_VIDEO
+	void videoFileOpened(bool success);
+#endif
+
 private:
 	PhTimeCodeType localTimeCodeType();
 	PhTimeCodeType synchroTimeCodeType();
@@ -306,6 +310,9 @@ private:
 	PhGraphicImage _videoLogo;
 
 	QTime _lastVideoSyncElapsed;
+
+	bool _setCurrentTimeToVideoTimeIn;
+	bool _syncTimeInToDoc;
 };
 
 #endif // MAINWINDOW_H

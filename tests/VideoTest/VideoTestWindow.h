@@ -59,6 +59,8 @@ protected:
 	void onApplicationDeactivate();
 
 private slots:
+	void videoFileOpened(bool success);
+
 	void on_actionPlay_pause_triggered();
 
 	void on_actionNext_frame_triggered();

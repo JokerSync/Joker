@@ -4,6 +4,7 @@
 #include <QDir>
 
 #include "PhTools/PhGenericSettings.h"
+#include "PhSync/PhSyncSettings.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhVideo/PhVideoSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
@@ -46,6 +47,8 @@ public:
 
 	// PhVideoSettings :
 	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
+	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 50)
+	PH_SETTING_FRAME2(setVideoPoolSize, videoPoolSize, 120)
 
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

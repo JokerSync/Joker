@@ -4,10 +4,18 @@
 #
 
 HEADERS += \
-    $$PWD/PhVideoEngine.h \
-    $$PWD/PhVideoSettings.h
+	$$PWD/PhVideoEngine.h \
+	$$PWD/PhVideoSettings.h \
+	$$PWD/PhVideoDecoder.h \
+    $$PWD/PhVideoBuffer.h \
+    $$PWD/PhVideoPool.h \
+    $$PWD/PhVideoRect.h
 SOURCES += \
-    $$PWD/PhVideoEngine.cpp
+	$$PWD/PhVideoEngine.cpp \
+	$$PWD/PhVideoDecoder.cpp \
+    $$PWD/PhVideoBuffer.cpp \
+    $$PWD/PhVideoPool.cpp \
+    $$PWD/PhVideoRect.cpp
 
 # Windows specific
 win32{

@@ -44,7 +44,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_mtcWriter(PhTimeCodeType25),
 #endif
 	_firstDoc(true),
-	_resizingStrip(false)
+	_resizingStrip(false),
+	_setCurrentTimeToVideoTimeIn(false),
+	_syncTimeInToDoc(false)
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -127,6 +129,10 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	_videoLogo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
 	_videoLogo.setTransparent(true);
+
+#ifdef USE_VIDEO
+	this->connect(&_videoEngine, &PhVideoEngine::opened, this, &JokerWindow::videoFileOpened);
+#endif
 }
 
 JokerWindow::~JokerWindow()
@@ -270,21 +276,9 @@ bool JokerWindow::openDocument(const QString &fileName)
 	on_actionDeinterlace_video_triggered(_doc->videoDeinterlace());
 	/// - Open the corresponding video file if it exists.
 	this->checkFilePermission(_doc->videoFilePath());
-	if(openVideoFile(_doc->videoFilePath())) {
-		_videoEngine.setTimeIn(_doc->videoTimeIn());
-		_mediaPanel.setTimeIn(_doc->videoTimeIn());
-	}
-	else
-		_videoEngine.close();
+	_syncTimeInToDoc = true;
+	openVideoFile(_doc->videoFilePath());
 #endif
-
-	/// - Set the video aspect ratio.
-	ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
-
-	/// - Goto to the document last position.
-	setCurrentTime(_doc->lastTime());
-
-	/// - Disable the need to save flag.
 
 	return true;
 }
@@ -791,8 +785,9 @@ void JokerWindow::on_actionOpen_Video_triggered()
 	QFileDialog dlg(this, tr("Open a video..."), lastFolder, filter);
 	if(dlg.exec()) {
 		QString videoFile = dlg.selectedFiles()[0];
-		if(openVideoFile(videoFile))
-			setCurrentTime(_doc->videoTimeIn());
+
+		_setCurrentTimeToVideoTimeIn = true;
+		openVideoFile(videoFile);
 	}
 
 	showMediaPanel();
@@ -800,12 +795,14 @@ void JokerWindow::on_actionOpen_Video_triggered()
 }
 
 #ifdef USE_VIDEO
-bool JokerWindow::openVideoFile(QString videoFile)
+void JokerWindow::videoFileOpened(bool success)
 {
-	QFileInfo lastFileInfo(_doc->videoFilePath());
-	QFileInfo fileInfo(videoFile);
-	if (fileInfo.exists() && _videoEngine.open(videoFile)) {
+	PHDEBUG << "video file opened";
+
+	if (success) {
 		PhTime videoTimeIn = _videoEngine.timeIn();
+		QFileInfo lastFileInfo(_doc->videoFilePath());
+		QFileInfo fileInfo(_videoEngine.fileName());
 
 		if(videoTimeIn == 0) {
 			/* the video itself has no timestamp, and until now we have not
@@ -821,9 +818,9 @@ bool JokerWindow::openVideoFile(QString videoFile)
 			}
 		}
 
-		if(videoFile != _doc->videoFilePath()) {
-			_doc->setVideoFilePath(videoFile);
-			_doc->setVideoTimeIn(videoTimeIn, localTimeCodeType());
+		if(_videoEngine.fileName() != _doc->videoFilePath()) {
+			_doc->setVideoFilePath(_videoEngine.fileName());
+			_doc->setVideoTimeIn(videoTimeIn, _videoEngine.timeCodeType());
 			_doc->setModified(true);
 		}
 
@@ -833,7 +830,34 @@ bool JokerWindow::openVideoFile(QString videoFile)
 
 		_settings->setLastVideoFolder(fileInfo.absolutePath());
 
-		this->addFilePermission(videoFile);
+		this->addFilePermission(_doc->videoFilePath());
+
+		if (_setCurrentTimeToVideoTimeIn) {
+			setCurrentTime(_doc->videoTimeIn());
+			_setCurrentTimeToVideoTimeIn = false;
+		}
+
+		if (_syncTimeInToDoc) {
+			_videoEngine.setTimeIn(_doc->videoTimeIn());
+			_mediaPanel.setTimeIn(_doc->videoTimeIn());
+		}
+	}
+
+	if (_syncTimeInToDoc) {
+		/// - Set the video aspect ratio.
+		ui->actionForce_16_9_ratio->setChecked(_doc->forceRatio169());
+
+		/// - Goto to the document last position.
+		setCurrentTime(_doc->lastTime());
+
+		_syncTimeInToDoc = false;
+	}
+}
+
+bool JokerWindow::openVideoFile(QString videoFile)
+{
+	QFileInfo fileInfo(videoFile);
+	if (fileInfo.exists() && _videoEngine.open(videoFile)) {
 		return true;
 	}
 	return false;
