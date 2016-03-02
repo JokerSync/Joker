@@ -30,6 +30,7 @@ VideoTestWindow::VideoTestWindow(VideoTestSettings *settings)
 	ui->actionDisplay_media_panel->setChecked(_settings->displayMediaPanel());
 	ui->actionDeinterlace_video->setChecked(_settings->deinterlaceVideo());
 	ui->actionUse_native_video_size->setChecked(_settings->useNativeVideoSize());
+	ui->actionPicture_in_picture->setChecked(_settings->videoPictureInPicture());
 
 	_videoEngine.setDeinterlace(_settings->deinterlaceVideo());
 
@@ -244,6 +245,8 @@ void VideoTestWindow::onPaint(int width, int height)
 	QString info = QString("%1 / %2").arg(videoRate).arg(_maxVideoRate);
 	ui->videoView->addInfo(info);
 	_videoEngine.drawVideo(0, 0, width, height);
+	if(_settings->videoPictureInPicture())
+		_videoEngine.drawVideo(0, 0, width / 4, height / 4, _settings->videoPictureInPictureOffset());
 }
 
 void VideoTestWindow::on_actionProperties_triggered()
@@ -256,4 +259,9 @@ void VideoTestWindow::on_actionProperties_triggered()
 void VideoTestWindow::on_actionUse_native_video_size_triggered(bool checked)
 {
 	_settings->setUseNativeVideoSize(checked);
+}
+
+void VideoTestWindow::on_actionPicture_in_picture_triggered(bool checked)
+{
+	_settings->setVideoPictureInPicture(checked);
 }

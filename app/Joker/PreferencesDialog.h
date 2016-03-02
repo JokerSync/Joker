@@ -54,8 +54,6 @@ private slots:
 	void updateSynchronisationEnabledControl(bool);
 	void updateSynchronisationEnabledControl(int, bool);
 
-	void on_spinBoxDelay_valueChanged(int delay);
-	void on_radioButtonQF_toggled(bool checked);
 	void on_sliderStripHeight_valueChanged(int position);
 	void on_spinBoxSpeed_valueChanged(int speed);
 	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
@@ -64,12 +62,23 @@ private slots:
 
 	void on_lineEditFilter_textEdited(const QString &value);
 
+	void on_mainScreenDelayspinBox_valueChanged(int delay);
+
+	void on_secondScreenDelaySpinBox_valueChanged(int delay);
+
+	void on_pipOffsetSpinBox_valueChanged(int arg1);
+
+	void on_pipRatioSlider_valueChanged(int value);
+
+	void on_pipRightPositionRadioButton_toggled(bool checked);
+
 private:
 	Ui::PreferencesDialog *ui;
 	JokerSettings *_settings;
 	QString _oldFont;
-	bool _oldUseQuarterFrame;
-	int _oldDelay;
+	int _oldScreenDelay, _oldSecondScreenDelay, _oldPipOffset;
+	float _oldPipRatio;
+	bool _oldPipPositionRight;
 	int _oldHorizontalTimePerPixel;
 	int _oldBolness;
 	float _oldStripHeight;
@@ -77,7 +86,7 @@ private:
 	QMap<QString, QString> _fontList;
 	QMap<QString, QString> _langNameMap;
 
-	QButtonGroup _delayButtonGroup, _protocolButtonGroup, _midiPortTypeButtonGroup;
+	QButtonGroup _protocolButtonGroup, _midiPortTypeButtonGroup;
 };
 
 #endif // PREFERENCESDIALOG_H

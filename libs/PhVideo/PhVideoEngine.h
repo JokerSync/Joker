@@ -167,15 +167,9 @@ public:
 	 * @param y Coordinates of the upperleft corner
 	 * @param w Width of the video rectangle (if not native size)
 	 * @param h Height of the video rectangle (if not native size)
+	 * @param offset Time offset relative to the video clock
 	 */
-	void drawVideo(int x, int y, int w, int h);
-
-	/**
-	 * @brief Whether the frame corresponds to the frame that we currently have
-	 * @param frame The current frame
-	 * @return True if the frame is current
-	 */
-	bool isFrameCurrent(PhFrame frame);
+	void drawVideo(int x, int y, int w, int h, PhTime offset = 0);
 
 	/**
 	 * @brief Pool of decoded frames
@@ -252,8 +246,6 @@ private slots:
 	void onTimeChanged(PhTime);
 
 private:
-	void showFrame(PhVideoBuffer *buffer);
-	PhTime clockTime();
 	PhFrame clockFrame();
 
 	PhVideoSettings *_settings;
@@ -268,7 +260,8 @@ private:
 	QString _codecName;
 	bool _ready;
 
-	PhVideoRect _videoRect;
+	QHash<PhFrame, PhVideoRect*> _videoRectList;
+	bool _bilinearFiltering;
 
 	PhTickCounter _videoFrameTickCounter;
 

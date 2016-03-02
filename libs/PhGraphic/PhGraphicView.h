@@ -31,8 +31,9 @@ public:
 	/**
 	 * PhGraphicView constructor.
 	 * @param parent Parent object.
+	 * @param shareWidget Optional view sharing textures
 	 */
-	explicit PhGraphicView(QWidget *parent = 0);
+	explicit PhGraphicView(QWidget *parent = 0, PhGraphicView *shareWidget = 0);
 
 	/**
 	 * @brief PhGraphicView constructor specifying the client area size.

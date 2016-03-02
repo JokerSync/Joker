@@ -31,6 +31,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_doc(_strip.doc()),
 #ifdef USE_VIDEO
 	_videoEngine(settings),
+	_secondScreenWindow(NULL),
 #endif
 	_synchronizer(settings),
 #ifdef USE_SONY
@@ -72,12 +73,17 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_propertyDialog.setVideoEngine(&_videoEngine);
 	_synchronizer.setVideoClock(_videoEngine.clock());
 	connect(&_videoEngine, &PhVideoEngine::timeCodeTypeChanged, this, &JokerWindow::onTimecodeTypeChanged);
+	ui->actionPicture_in_picture->setChecked(_settings->videoPictureInPicture());
+	ui->actionSecond_screen->setChecked(_settings->videoSecondScreen());
+	if(_settings->videoSecondScreen())
+		on_actionSecond_screen_triggered(true);
 #else
 	ui->actionOpen_Video->setEnabled(false);
 	ui->actionClose_video->setEnabled(false);
 	ui->actionDeinterlace_video->setEnabled(false);
 	ui->actionForce_16_9_ratio->setEnabled(false);
 	ui->actionUse_native_video_size->setEnabled(false);
+	ui->actionPicture_in_picture->setEnabled(false);
 #endif
 
 #ifdef USE_SONY
@@ -152,6 +158,12 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 		// The media panel has to be closed manually, or the application
 		// will stay open forever in the background
 		_mediaPanel.close();
+
+		if(_secondScreenWindow) {
+			_secondScreenWindow->close();
+			delete _secondScreenWindow;
+			_secondScreenWindow = NULL;
+		}
 
 		// Force doc to unmodified to avoid double confirmation
 		// since closeEvent is called twice
@@ -415,7 +427,7 @@ void JokerWindow::onPaint(int width, int height)
 #else
 	PhClock *clock = _strip.clock();
 #endif
-	long delay = (int)(24 * _settings->screenDelay() * clock->rate());
+	PhTime delay = (PhTime)(24 * _settings->screenDelay() * clock->rate());
 	PhTime clockTime = clock->time() + delay;
 
 	float stripHeightRatio = 0.0f;
@@ -434,6 +446,7 @@ void JokerWindow::onPaint(int width, int height)
 	if(_settings->displayNextText())
 		videoAvailableWidth = width * 0.8f;
 
+	int y = 0;
 #ifdef USE_VIDEO
 	// Display the video
 	if((videoHeight > 0)) {
@@ -452,7 +465,19 @@ void JokerWindow::onPaint(int width, int height)
 
 			int videoX = (videoAvailableWidth - videoWidth) / 2;
 
-			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight);
+			_videoEngine.drawVideo(videoX, blackStripHeight, videoWidth, realVideoHeight, delay);
+
+			if(_settings->videoPictureInPicture()) {
+				int pipWidth = videoWidth * _settings->videoPictureInPictureRatio();
+				int pipHeight = realVideoHeight * _settings->videoPictureInPictureRatio();
+				int pipX = 0;
+				if(_settings->videoPictureInPicturePositionRight()) {
+					pipX = width - pipWidth;
+					y += pipHeight;
+				}
+				_videoEngine.drawVideo(pipX, 0, pipWidth, pipHeight,
+				                       delay + 24 * _settings->videoPictureInPictureOffset());
+			}
 		}
 		else if(_settings->displayLogo()) {
 			// The logo file is 500px in native format
@@ -481,7 +506,6 @@ void JokerWindow::onPaint(int width, int height)
 	}
 
 	int x = videoAvailableWidth;
-	int y = 0;
 	if(_settings->displayNextText()) {
 		QColor infoColor = _settings->backgroundColorLight();
 		int infoWidth = width - videoAvailableWidth;
@@ -1194,6 +1218,13 @@ void JokerWindow::on_actionUse_native_video_size_triggered(bool checked)
 #endif
 }
 
+void JokerWindow::on_actionPicture_in_picture_triggered(bool checked)
+{
+#ifdef USE_VIDEO
+	_settings->setVideoPictureInPicture(checked);
+#endif
+}
+
 void JokerWindow::on_actionSet_TC_in_triggered()
 {
 	_settings->setSyncLoopTimeIn(_synchronizer.time());
@@ -1207,4 +1238,32 @@ void JokerWindow::on_actionSet_TC_out_triggered()
 void JokerWindow::on_actionLoop_triggered(bool checked)
 {
 	_settings->setSyncLooping(checked);
+}
+
+void JokerWindow::on_actionSecond_screen_triggered(bool checked)
+{
+#ifdef USE_VIDEO
+	_settings->setVideoSecondScreen(checked);
+	if(checked) {
+		_secondScreenWindow = new SecondScreenWindow(&_videoEngine, ui->videoStripView, _settings);
+		_secondScreenWindow->show();
+		connect(_secondScreenWindow, &SecondScreenWindow::closing, this, &JokerWindow::onSecondScreenClosed);
+	}
+	else {
+		_secondScreenWindow->close();
+		delete _secondScreenWindow;
+		_secondScreenWindow = NULL;
+	}
+#endif
+}
+
+void JokerWindow::onSecondScreenClosed(bool closedFromUser)
+{
+	ui->actionSecond_screen->setChecked(false);
+	if(_secondScreenWindow) {
+		delete _secondScreenWindow;
+		_secondScreenWindow = NULL;
+	}
+	if(closedFromUser)
+		_settings->setVideoSecondScreen(false);
 }

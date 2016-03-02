@@ -14,6 +14,7 @@
 #include "PhCommonUI/PhEditableDocumentWindow.h"
 #ifdef USE_VIDEO
 #include "PhVideo/PhVideoEngine.h"
+#include "SecondScreenWindow.h"
 #endif
 #include "PhGraphicStrip/PhGraphicStrip.h"
 #include "PhSync/PhSynchronizer.h"
@@ -275,6 +276,11 @@ private slots:
 	void videoFileOpened(bool success);
 #endif
 
+	void on_actionPicture_in_picture_triggered(bool checked);
+
+	void on_actionSecond_screen_triggered(bool checked);
+
+	void onSecondScreenClosed(bool closedFromUser);
 private:
 	PhTimeCodeType localTimeCodeType();
 	PhTimeCodeType synchroTimeCodeType();
@@ -287,6 +293,7 @@ private:
 	PhStripDoc *_doc;
 #ifdef USE_VIDEO
 	PhVideoEngine _videoEngine;
+	SecondScreenWindow *_secondScreenWindow;
 #endif
 	PhSynchronizer _synchronizer;
 #ifdef USE_SONY

@@ -55,8 +55,8 @@ SOURCES += main.cpp \
 	PropertyDialog.cpp \
 	PeopleDialog.cpp \
 	PeopleEditionDialog.cpp \
-	TimeBetweenTwoFeetDialog.cpp
-
+	TimeBetweenTwoFeetDialog.cpp \
+    SecondScreenWindow.cpp
 HEADERS += \
 	JokerWindow.h \
 	AboutDialog.h \
@@ -65,8 +65,8 @@ HEADERS += \
 	PeopleDialog.h \
 	JokerSettings.h \
 	PeopleEditionDialog.h \
-	TimeBetweenTwoFeetDialog.h
-
+	TimeBetweenTwoFeetDialog.h \
+    SecondScreenWindow.h
 FORMS += \
 	JokerWindow.ui \
 	AboutDialog.ui \

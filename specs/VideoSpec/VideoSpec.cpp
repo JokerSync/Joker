@@ -28,6 +28,7 @@ go_bandit([](){
 		QSignalSpy *openSpy;
 		QSignalSpy *decodeSpy;
 		int factor;
+		PhTime offset;
 
 		before_each([&](){
 			PhDebug::setLogMask(PHDEBUG_SPEC_MASK | (1 << 9)
@@ -48,9 +49,10 @@ go_bandit([](){
 			engine->setBilinearFiltering(false);
 
 			factor = 1;
+			offset = 0;
 
 			QObject::connect(view, &PhGraphicView::paint, [&](int w, int h) {
-				engine->drawVideo(0, 0, factor * w, factor * h);
+				engine->drawVideo(0, 0, factor * w, factor * h, offset);
 			});
 		});
 
@@ -345,6 +347,15 @@ go_bandit([](){
 				}
 				AssertThat(decodeSpy->count(), Equals(61));
 				AssertThat(engine->decodedFramePool().count(), Equals(5));
+			});
+
+			it("handles offset", [&]() {
+				offset = 960 * 2;
+				engine->clock()->setFrame25(10);
+
+				QTest::qWait(FRAME_WAIT_TIME);
+
+				AssertThat(view->compare("interlace_012.bmp"), Equals(0));
 			});
 		});
 

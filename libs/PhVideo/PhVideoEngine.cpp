@@ -22,6 +22,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_height(0),
 	_codecName(""),
 	_ready(false),
+	_bilinearFiltering(true),
 	_deinterlace(false),
 	_framePool(settings)
 {
@@ -56,7 +57,9 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 
 	if (deinterlace != _deinterlace) {
 		_deinterlace = deinterlace;
-		_videoRect.discard();
+		foreach (PhVideoRect *videoRect, _videoRectList.values()) {
+			videoRect->discard();
+		}
 
 		emit deinterlaceChanged(_deinterlace);
 
@@ -69,12 +72,15 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 
 bool PhVideoEngine::bilinearFiltering()
 {
-	return _videoRect.bilinearFiltering();
+	return _bilinearFiltering;
 }
 
 void PhVideoEngine::setBilinearFiltering(bool bilinear)
 {
-	_videoRect.setBilinearFiltering(bilinear);
+	_bilinearFiltering = bilinear;
+	foreach (PhVideoRect *videoRect, _videoRectList.values()) {
+		videoRect->setBilinearFiltering(bilinear);
+	}
 }
 
 bool PhVideoEngine::open(QString fileName)
@@ -88,7 +94,9 @@ bool PhVideoEngine::open(QString fileName)
 
 	_clock.setTime(0);
 	_clock.setRate(0);
-	_videoRect.discard();
+	foreach (PhVideoRect *videoRect, _videoRectList.values()) {
+		videoRect->discard();
+	}
 
 	// cancel pool
 	_framePool.cancel();
@@ -119,20 +127,21 @@ void PhVideoEngine::close()
 	_framePool.update(0);
 }
 
-PhTime PhVideoEngine::clockTime()
-{
-	PhTime delay = static_cast<PhTime>(_settings->screenDelay() * _clock.rate() * 24.);
-	return _clock.time() + delay;
-}
-
 PhFrame PhVideoEngine::clockFrame()
 {
-	return (clockTime() - _timeIn) / PhTimeCode::timePerFrame(_tcType);
+	return (_clock.time() - _timeIn) / PhTimeCode::timePerFrame(_tcType);
 }
 
-void PhVideoEngine::drawVideo(int x, int y, int w, int h)
+void PhVideoEngine::drawVideo(int x, int y, int w, int h, PhTime offset)
 {
-	PhFrame frame = clockFrame();
+	PhFrame frameOffset = offset / PhTimeCode::timePerFrame(_tcType);
+	PhFrame frame = clockFrame() + frameOffset;
+
+	// clip to stream boundaries
+	if(frame < 0)
+		frame = 0;
+	if (frame >= _frameLength)
+		frame = _frameLength;
 
 	// 4 possibilities
 	// 1) the frame is currently on screen
@@ -144,7 +153,13 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 	// 4) or the frame has already been requested
 	//		=> nothing to do
 
-	if (!isFrameCurrent(frame)) {
+
+	PhVideoRect *videoRect = _videoRectList[frameOffset];
+	if(videoRect == NULL) {
+		_videoRectList[frameOffset] = videoRect = new PhVideoRect();
+		videoRect->setBilinearFiltering(_bilinearFiltering);
+	}
+	if (videoRect->currentFrame() != frame) {
 		PhVideoBuffer *buffer = _framePool.decoded(frame);
 
 		if (buffer) {
@@ -152,17 +167,18 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h)
 			// but the frame is in the pool,
 			// so just show it.
 			PHDBG(24) << "frame found in pool:" << buffer->frame();
-			showFrame(buffer);
+			videoRect->update(buffer);
+			_videoFrameTickCounter.tick();
 		}
 	}
 
 	// draw whatever frame we currently have
 	if(_settings->useNativeVideoSize())
-		_videoRect.setRect(x, y, this->width(), this->height());
+		videoRect->setRect(x, y, this->width(), this->height());
 	else
-		_videoRect.setRect(x, y, w, h);
-	_videoRect.setZ(-10);
-	_videoRect.draw();
+		videoRect->setRect(x, y, w, h);
+	videoRect->setZ(-10);
+	videoRect->draw();
 }
 
 void PhVideoEngine::setTimeIn(PhTime timeIn)
@@ -205,36 +221,9 @@ QString PhVideoEngine::codecName()
 	return _codecName;
 }
 
-bool PhVideoEngine::isFrameCurrent(PhFrame frame)
-{
-	if(!ready()) {
-		PHDBG(24) << "not ready";
-		return false;
-	}
-
-	if (_videoRect.currentFrame() == PHFRAMEMIN) {
-		// never got a frame
-		return false;
-	}
-
-	// clip to stream boundaries
-	if(frame < 0)
-		frame = 0;
-	if (frame >= _frameLength)
-		frame = _frameLength;
-
-	return _videoRect.currentFrame() == frame;
-}
-
 const QList<PhVideoBuffer *> PhVideoEngine::decodedFramePool()
 {
 	return _framePool.decoded();
-}
-
-void PhVideoEngine::showFrame(PhVideoBuffer *buffer)
-{
-	_videoRect.update(buffer);
-	_videoFrameTickCounter.tick();
 }
 
 void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
@@ -246,16 +235,20 @@ void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
 	PhFrame bufferFrame = buffer->frame();
 
 	emit newFrameDecoded(bufferFrame);
-
-	if (abs(frame - bufferFrame) <= abs(frame - _videoRect.currentFrame())) {
-		// this frame is closer to the current time than the frame that is currently displayed,
-		// so show it.
-		// Note: we do not wait for the exact frame to be available to improve the responsiveness
-		// when seeking.
-		showFrame(buffer);
-		PHDBG(24) << "showing frame " << bufferFrame;
+	bool shown = false;
+	foreach (PhFrame offset, _videoRectList.keys()) {
+		if (abs(frame + offset - bufferFrame) <= abs(frame + offset - _videoRectList[offset]->currentFrame())) {
+			// this frame is closer to the current time than the frame that is currently displayed,
+			// so show it.
+			// Note: we do not wait for the exact frame to be available to improve the responsiveness
+			// when seeking.
+			_videoRectList[offset]->update(buffer);
+			_videoFrameTickCounter.tick();
+			PHDBG(24) << "showing frame " << bufferFrame;
+			shown = true;
+		}
 	}
-	else {
+	if (!shown) {
 		PHDBG(24) << "non-current frame " << bufferFrame;
 	}
 }

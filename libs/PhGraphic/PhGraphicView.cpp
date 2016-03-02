@@ -19,8 +19,8 @@
 
 #include "PhGraphicView.h"
 
-PhGraphicView::PhGraphicView( QWidget *parent)
-	: QGLWidget(parent),
+PhGraphicView::PhGraphicView(QWidget *parent, PhGraphicView *shareWidget)
+	: QGLWidget(parent, shareWidget),
 	_settings(NULL),
 	_dropDetected(0),
 	_maxRefreshRate(0),

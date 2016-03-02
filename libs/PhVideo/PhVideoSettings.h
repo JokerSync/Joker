@@ -22,12 +22,6 @@ public:
 	}
 
 	/**
-	 * @brief Screen delay compensation
-	 * @return A value in millisecond
-	 */
-	virtual int screenDelay() = 0;
-
-	/**
 	 * @brief Display video in its native size
 	 * @return True if native, false otherwise
 	 */
