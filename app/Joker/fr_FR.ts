@@ -404,6 +404,14 @@
         <source>Unable to open %1</source>
         <translation type="unfinished">Impossible d&apos;ouvrir %1</translation>
     </message>
+    <message>
+        <source>Picture in picture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Second screen</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PeopleDialog</name>
@@ -566,10 +574,6 @@
         <translation>Synchronisation</translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation>Délai</translation>
-    </message>
-    <message>
         <source>No sync</source>
         <translation>Pas de synchronisation</translation>
     </message>
@@ -642,14 +646,6 @@
         <translation>Lire à partir d'un port virtuel :</translation>
     </message>
     <message>
-        <source>quarter frame</source>
-        <translation>Quart d'image</translation>
-    </message>
-    <message>
-        <source>millisecond</source>
-        <translation>millisecondes</translation>
-    </message>
-    <message>
         <source>&lt;System default&gt;</source>
         <translation>&lt;Langue du système&gt;</translation>
     </message>
@@ -666,6 +662,46 @@
 You need to restart %2 to apply you changes.</source>
         <translation>Vous avez changé la langue pour "%1".
 Vous devez relancer %2 pour appliquer ce changement.</translation>
+    </message>
+    <message>
+        <source>Interface:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delay:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main screen delay (ms):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Second screen delay (ms):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Picture in picture:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ratio:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Offset (ms):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished">Left</translation>
+    </message>
+    <message>
+        <source>Position:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished">Right</translation>
     </message>
 </context>
 <context>

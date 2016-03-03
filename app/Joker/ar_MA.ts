@@ -402,6 +402,14 @@
         <source>Unable to open %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Picture in picture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Second screen</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PeopleDialog</name>
@@ -567,18 +575,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Delay</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>quarter frame</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>millisecond</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>No sync</source>
         <translation type="unfinished"></translation>
     </message>
@@ -661,6 +657,46 @@
     <message>
         <source>You change the language to &quot;%1&quot;.
 You need to restart %2 to apply you changes.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Interface:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delay:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main screen delay (ms):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Second screen delay (ms):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Picture in picture:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ratio:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Offset (ms):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Position:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
