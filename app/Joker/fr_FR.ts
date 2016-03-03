@@ -122,7 +122,7 @@
     </message>
     <message>
         <source>Step time forward</source>
-        <translation>Avancer d&apos;une unité de temps</translation>
+        <translation>Avancer d'une unité de temps</translation>
     </message>
     <message>
         <source>Alt+Right</source>
@@ -402,15 +402,15 @@
     </message>
     <message>
         <source>Unable to open %1</source>
-        <translation type="unfinished">Impossible d&apos;ouvrir %1</translation>
+        <translation>Impossible d'ouvrir %1</translation>
     </message>
     <message>
         <source>Picture in picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Vignette vidéo</translation>
     </message>
     <message>
         <source>Second screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Deuxième écran</translation>
     </message>
 </context>
 <context>
@@ -665,43 +665,43 @@ Vous devez relancer %2 pour appliquer ce changement.</translation>
     </message>
     <message>
         <source>Interface:</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface :</translation>
     </message>
     <message>
         <source>Delay:</source>
-        <translation type="unfinished"></translation>
+        <translation>Délai :</translation>
     </message>
     <message>
         <source>Main screen delay (ms):</source>
-        <translation type="unfinished"></translation>
+        <translation>Délai de l'écran principal (ms) :</translation>
     </message>
     <message>
         <source>Second screen delay (ms):</source>
-        <translation type="unfinished"></translation>
+        <translation>Délai de l'écran secondaire (ms) :</translation>
     </message>
     <message>
         <source>Picture in picture:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vignette vidéo :</translation>
     </message>
     <message>
         <source>Ratio:</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille :</translation>
     </message>
     <message>
         <source>Offset (ms):</source>
-        <translation type="unfinished"></translation>
+        <translation>Décalage (ms) :</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished">Left</translation>
+        <translation>Gauche</translation>
     </message>
     <message>
         <source>Position:</source>
-        <translation type="unfinished"></translation>
+        <translation>Position :</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished">Right</translation>
+        <translation>Droite</translation>
     </message>
 </context>
 <context>
