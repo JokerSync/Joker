@@ -761,4 +761,15 @@ You need to restart %2 to apply you changes.</source>
     </message>
     <message>
         <source>Preferences...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quit %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>
