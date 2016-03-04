@@ -58,6 +58,8 @@ win32 {
 
 # MacOS specific
 mac {
+	QMAKE_MAC_SDK = macosx10.11
+
 	app_bundle {
 		RESOURCES_PATH = $${TARGET}.app/Contents/Resources
 		DEFINES -= PATH_TO_RESSOURCES=\\\"\\\"
