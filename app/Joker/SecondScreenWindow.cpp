@@ -27,6 +27,9 @@ void SecondScreenWindow::closeEvent(QCloseEvent *event)
 	if(!this->isFullScreen())
 		_jokerSettings->setVideoSecondScreenGeometry(this->saveGeometry());
 	_jokerSettings->setVideoSecondScreenFullscreen(this->isFullScreen());
+
+	this->disconnect(this, &PhGraphicView::paint, this, &SecondScreenWindow::onPaint);
+
 	emit closing(event->spontaneous());
 }
 

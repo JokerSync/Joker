@@ -165,6 +165,12 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 			_secondScreenWindow = NULL;
 		}
 
+		this->disconnect(ui->videoStripView, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
+		this->disconnect(ui->videoStripView, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
+
+		this->disconnect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
+
+
 		// Force doc to unmodified to avoid double confirmation
 		// since closeEvent is called twice
 		// https://bugreports.qt.io/browse/QTBUG-43344
