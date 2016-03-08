@@ -252,6 +252,8 @@ go_bandit([](){
 					doc.setTitle("Title test for detx");
 					doc.setVideoFilePath("test01.mov");
 					doc.setVideoTimeIn(s2t25("01:01:00:00"), PhTimeCodeType25);
+					doc.setForceRatio169(true);
+
 					PhPeople *bob = new PhPeople("Bob", "#0000ff", "not base64 data, just for test");
 					doc.addPeople(bob);
 					PhPeople *sue = new PhPeople("Sue", "#ff00ff", "bouboubou");
@@ -274,7 +276,7 @@ go_bandit([](){
 					AssertThat(doc.videoFilePath(), Equals("test01.mov"));
 					AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 					AssertThat(t2s25(doc.videoTimeIn()), Equals("01:01:00:00"));
-					AssertThat(doc.forceRatio169(), IsFalse());
+					AssertThat(doc.forceRatio169(), IsTrue());
 					AssertThat(doc.videoDeinterlace(), IsFalse());
 					AssertThat(t2s25(doc.lastTime()), Equals("01:01:01:01"));
 

@@ -108,6 +108,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 			// Reading the video time in
 			_videoTimeCodeType = PhTimeCode::computeTimeCodeType(videoFile.attribute("tctype").toDouble());
 			_videoTimeIn = PhTimeCode::timeFromString(videoFile.attribute("timestamp"), _videoTimeCodeType);
+			_videoForceRatio169 = videoFile.attribute("forceRatio169") == "true";
 		}
 
 		// Reading the last position
@@ -242,6 +243,8 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	ptDetX.put("detx.header.videofile", _videoPath.toStdString());
 	ptDetX.put("detx.header.videofile.<xmlattr>.timestamp", PhTimeCode::stringFromTime(_videoTimeIn, _videoTimeCodeType).toStdString());
 	ptDetX.put("detx.header.videofile.<xmlattr>.tctype", PhTimeCode::getAverageFps(_videoTimeCodeType));
+	if(_videoForceRatio169)
+		ptDetX.put("detx.header.videofile.<xmlattr>.forceRatio169", _videoForceRatio169);
 	ptDetX.put("detx.header.last_position.<xmlattr>.timecode", PhTimeCode::stringFromTime(lastTime, _videoTimeCodeType).toStdString());
 
 	// export <role> list
