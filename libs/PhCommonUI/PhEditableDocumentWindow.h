@@ -55,7 +55,7 @@ protected:
 	 * @brief Check if the document is modified and
 	 * @param event
 	 */
-	virtual void closeEvent(QCloseEvent *event);
+	virtual void closeEvent(QCloseEvent *event) override;
 
 private:
 	PhDocumentWindowSettings *_settings;
