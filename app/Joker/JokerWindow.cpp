@@ -273,7 +273,7 @@ bool JokerWindow::openDocument(const QString &fileName)
 	}
 
 	/// Clear the selected people name list (except for the first document).
-	if(!_firstDoc)
+	if(!_firstDoc && (fileName != _settings->currentDocument()))
 		_settings->setSelectedPeopleNameList(QStringList());
 	else
 		_firstDoc = false;
