@@ -256,7 +256,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 			maxTimeIn = stripTimeIn + verticalScaleDuration;
 
 		QColor selectedPeopleColor(_settings->backgroundColorLight());
-		QColor unselectedPeopleColor(128, 128, 128);
+		QColor unselectedPeopleColor(selectedPeopleColor.red() / 2, selectedPeopleColor.green() / 2, selectedPeopleColor.blue() / 2);
+		int nextPeopleHeight = width / 60;
 
 		// Display the selected people after the vertical scale
 		if(!_settings->hideSelectedPeoples() && selectedPeoples.count()) {
@@ -275,10 +276,11 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 					if(text && text->people()) {
 						QString name = text->people()->name().toLower();
 						PhGraphicText gPeople(&_hudFont, name);
+						gPeople.setColor(selectedPeopleColor);
 						gPeople.setX(nextTextAreaX + spacing);
 						gPeople.setY(nextTextAreaY);
-						gPeople.setWidth(_hudFont.getNominalWidth(name) / 2);
-						gPeople.setHeight(text->height() * height / 2);
+						gPeople.setHeight(nextPeopleHeight);
+						gPeople.setWidth(_hudFont.getNominalWidth(name) * nextPeopleHeight / 110);
 
 						gPeople.draw();
 
@@ -334,7 +336,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 				gPeople.draw();
 			}
 
-			int nextPeopleHeight = width / 60;
 			PhTime timePerPeopleHeight = nextPeopleHeight * verticalTimePerPixel;
 
 			if(displayNextText
