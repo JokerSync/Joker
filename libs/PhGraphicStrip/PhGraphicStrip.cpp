@@ -85,7 +85,7 @@ QColor PhGraphicStrip::computeColor(PhPeople * people, QList<PhPeople*> selected
 	}
 }
 
-void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, int nextTextY, QList<PhPeople *> selectedPeoples)
+void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX, int nextTextAreaY, QList<PhPeople *> selectedPeoples)
 {
 	// Update the resource path if needed
 	_backgroundImageLight.setFilename(_settings->backgroundImageLight());
@@ -251,7 +251,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		bool displayNextText = _settings->displayNextText();
 		PhTime maxTimeIn = stripTimeOut;
 
-		PhTime verticalScaleDuration = (y - nextTextY) * verticalTimePerPixel;
+		PhTime verticalScaleDuration = (y - nextTextAreaY) * verticalTimePerPixel;
 		if(displayNextText && (stripTimeIn + verticalScaleDuration > stripTimeOut))
 			maxTimeIn = stripTimeIn + verticalScaleDuration;
 
@@ -261,7 +261,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		// Display the selected people after the vertical scale
 		if(!_settings->hideSelectedPeoples() && selectedPeoples.count()) {
 			QMap<PhTime, PhStripText*> futureSelectedText;
-			PhTime maxTimeOut = clockTime + (y - nextTextY) * verticalTimePerPixel;
+			PhTime maxTimeOut = clockTime + (y - nextTextAreaY) * verticalTimePerPixel;
 			foreach (PhPeople *people, selectedPeoples) {
 				PhStripText *nextText = _doc.nextText(people, maxTimeOut);
 				if(nextText)
@@ -275,14 +275,14 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 					if(text && text->people()) {
 						QString name = text->people()->name().toLower();
 						PhGraphicText gPeople(&_hudFont, name);
-						gPeople.setX(nextTextX + spacing);
-						gPeople.setY(nextTextY);
+						gPeople.setX(nextTextAreaX + spacing);
+						gPeople.setY(nextTextAreaY);
 						gPeople.setWidth(_hudFont.getNominalWidth(name) / 2);
 						gPeople.setHeight(text->height() * height / 2);
 
 						gPeople.draw();
 
-						nextTextY += gPeople.height();
+						nextTextAreaY += gPeople.height();
 					}
 				}
 			}
@@ -345,8 +345,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
 				PhPeople * people = text->people();
 
-				//This line is used to see which text's name will be displayed
-				gPeople.setX(nextTextX + spacing);
+				gPeople.setX(nextTextAreaX + spacing);
 				gPeople.setY(y - (text->timeIn() - clockTime + timePerPeopleHeight) / verticalTimePerPixel);
 				gPeople.setZ(-3);
 				gPeople.setHeight(nextPeopleHeight);
@@ -430,11 +429,11 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				gLoopPred.setHorizontalLoop(true);
 				gLoopPred.setZ(-3);
 
-				gLoopPred.setX(nextTextX);
+				gLoopPred.setX(nextTextAreaX);
 				gLoopPred.setY(y - (loop->timeIn() - clockTime) / verticalTimePerPixel);
 				gLoopPred.setHeight(30);
 
-				int loopWidth = width - nextTextX;
+				int loopWidth = width - nextTextAreaX;
 				gLoopPred.setThickness(4);
 				gLoopPred.setCrossSize(loopWidth / 10);
 				gLoopPred.setWidth(loopWidth);
