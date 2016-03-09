@@ -334,7 +334,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				gPeople.draw();
 			}
 
-			PhTime timePerPeopleHeight = gPeople.height() * verticalTimePerPixel;
+			int nextPeopleHeight = width / 60;
+			PhTime timePerPeopleHeight = nextPeopleHeight * verticalTimePerPixel;
 
 			if(displayNextText
 			   && (text->timeIn() > clockTime)
@@ -348,7 +349,8 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 				gPeople.setX(nextTextX + spacing);
 				gPeople.setY(y - (text->timeIn() - clockTime + timePerPeopleHeight) / verticalTimePerPixel);
 				gPeople.setZ(-3);
-				gPeople.setHeight(height / 10);
+				gPeople.setHeight(nextPeopleHeight);
+				gPeople.setWidth(_hudFont.getNominalWidth(name) * nextPeopleHeight / 110);
 
 				if(selectedPeoples.size() && !selectedPeoples.contains(people))
 					gPeople.setColor(unselectedPeopleColor);
