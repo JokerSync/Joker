@@ -6,6 +6,7 @@ Joker
 [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.svg?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master)
 [![Coverity](https://img.shields.io/coverity/scan/3341.svg)](https://scan.coverity.com/projects/phonations-joker)
 [![Weblate](https://hosted.weblate.org/widgets/phonations/-/shields-badge.svg)](https://hosted.weblate.org/engage/phonations/?utm_source=widget)
+[![Download](https://img.shields.io/github/downloads/phonations/joker/total.svg)](https://github.com/phonations/joker/releases/latest)
 [![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Phonations/Joker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
