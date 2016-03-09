@@ -251,27 +251,30 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 		bool displayNextText = _settings->displayNextText();
 		PhTime maxTimeIn = stripTimeOut;
 
-		PhTime verticalScaleDuration = (y - nextTextAreaY) * verticalTimePerPixel;
-		if(displayNextText && (stripTimeIn + verticalScaleDuration > stripTimeOut))
-			maxTimeIn = stripTimeIn + verticalScaleDuration;
+		int nextPeopleHeight = width / 60;
+		PhTime verticalScaleDuration = (y - nextTextAreaY - nextPeopleHeight) * verticalTimePerPixel;
+		if(displayNextText && (clockTime + verticalScaleDuration > stripTimeOut))
+			maxTimeIn = clockTime + verticalScaleDuration;
 
 		QColor selectedPeopleColor(_settings->backgroundColorLight());
 		QColor unselectedPeopleColor(selectedPeopleColor.red() / 2, selectedPeopleColor.green() / 2, selectedPeopleColor.blue() / 2);
-		int nextPeopleHeight = width / 60;
 
 		// Display the selected people after the vertical scale
-		if(!_settings->hideSelectedPeoples() && selectedPeoples.count()) {
+		if(_settings->displayNextText() && !_settings->hideSelectedPeoples() && selectedPeoples.count()) {
+			// Compute the next time in for each people
 			QMap<PhTime, PhStripText*> futureSelectedText;
-			PhTime maxTimeOut = clockTime + (y - nextTextAreaY) * verticalTimePerPixel;
+			_infos.append(QString("maxTimeIn: %1").arg(maxTimeIn));
 			foreach (PhPeople *people, selectedPeoples) {
-				PhStripText *nextText = _doc.nextText(people, maxTimeOut);
+				PhStripText *nextText = _doc.nextText(people, maxTimeIn);
 				if(nextText)
-					futureSelectedText[nextText->timeIn() + (int)(10 * nextText->y())] = nextText;
+					futureSelectedText[nextText->timeIn()] = nextText;
 			}
 			if(futureSelectedText.count()) {
+				// Sort so that the next people of the list appear at the bottom of the list
 				QList<PhTime> timeList = futureSelectedText.keys();
 				qSort(timeList.begin(), timeList.end());
-				foreach(PhTime timeIn, timeList) {
+				for(int i = timeList.size() - 1; i >= 0; i--) {
+					PhTime timeIn = timeList[i];
 					PhStripText *text = futureSelectedText[timeIn];
 					if(text && text->people()) {
 						QString name = text->people()->name().toLower();
@@ -284,9 +287,11 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 
 						gPeople.draw();
 
-						nextTextAreaY += gPeople.height();
+						nextTextAreaY += nextPeopleHeight;
+
 					}
 				}
+				_infos.append(QString("end: %1").arg(nextTextAreaY));
 			}
 		}
 
@@ -340,14 +345,19 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 
 			if(displayNextText
 			   && (text->timeIn() > clockTime)
-			   && (text->timeIn() < maxTimeIn - timePerPeopleHeight)
+			   && (text->timeIn() < maxTimeIn)
 			   && ((lastText == NULL)
 			       || (lastText->people() != text->people())
 			       || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))) {
 				PhPeople * people = text->people();
+				int nextTextX = nextTextAreaX + spacing;
+				int nextTextY = y - (text->timeIn() - clockTime) / verticalTimePerPixel - nextPeopleHeight;
 
-				gPeople.setX(nextTextAreaX + spacing);
-				gPeople.setY(y - (text->timeIn() - clockTime + timePerPeopleHeight) / verticalTimePerPixel);
+				_infos.append(QString("scrolling: %1 %2").arg(name).arg(text->timeIn()));
+
+
+				gPeople.setX(nextTextX);
+				gPeople.setY(nextTextY);
 				gPeople.setZ(-3);
 				gPeople.setHeight(nextPeopleHeight);
 				gPeople.setWidth(_hudFont.getNominalWidth(name) * nextPeopleHeight / 110);

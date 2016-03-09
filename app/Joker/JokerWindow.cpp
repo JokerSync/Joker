@@ -603,7 +603,7 @@ void JokerWindow::onPaint(int width, int height)
 			nextTCText.setContent(PhTimeCode::stringFromTime(nextTextTime, localTimeCodeType()));
 			nextTCText.draw();
 
-			y += boxHeight;
+			y += boxHeight + spacing;
 		}
 	}
 
