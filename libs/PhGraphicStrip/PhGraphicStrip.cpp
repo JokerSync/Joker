@@ -269,7 +269,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 			// Compute the next time in for each people
 			QMap<PhTime, PhStripText*> futureSelectedTexts;
 			QList<PhPeople*> notAppearingPeoples;
-			_infos.append(QString("nextTextAreayY: %1").arg(nextTextAreaY));
 			foreach (PhPeople *people, selectedPeoples) {
 				PhStripText *nextText = _doc.nextText(people, maxTimeIn);
 				if(nextText)
@@ -288,8 +287,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 				gPeople.setWidth(_hudFont.getNominalWidth(name) * nextPeopleHeight / 110);
 
 				gPeople.draw();
-
-				_infos.append(QString("not appearing %1: %2").arg(name).arg(nextTextAreaY));
 
 				nextTextAreaY += nextPeopleHeight;
 			}
@@ -317,6 +314,7 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 			}
 		}
 
+		int lastNextTextY = std::numeric_limits<int>::max();
 		// Display the texts
 		foreach(PhStripText * text, _doc.texts()) {
 			if( !((text->timeOut() < stripTimeIn) || (text->timeIn() > stripTimeOut)) ) {
@@ -363,7 +361,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 				gPeople.draw();
 			}
 
-
 			if(displayNextText
 			   && (text->timeIn() > clockTime)
 			   && (text->timeIn() < maxTimeIn)
@@ -374,6 +371,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 				int nextTextX = nextTextAreaX + spacing;
 				int nextTextY = y - (text->timeIn() - clockTime) / verticalTimePerPixel - nextPeopleHeight;
 
+				if (nextTextY > lastNextTextY - nextPeopleHeight) {
+					nextTextY = lastNextTextY - nextPeopleHeight;
+				}
+				lastNextTextY = nextTextY;
 
 				gPeople.setX(nextTextX);
 				gPeople.setY(nextTextY);
