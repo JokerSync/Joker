@@ -452,32 +452,29 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 			if(displayNextText
 			   && (loop->timeIn() > clockTime)
 			   && (loop->timeIn() < maxTimeIn)) {
-				PhGraphicLoop gLoopPred;
+				PhGraphicSolidRect loopDash;
 
-				gLoopPred.setColor(Qt::white);
+				loopDash.setColor(unselectedPeopleColor);
 
-				gLoopPred.setHorizontalLoop(true);
-				gLoopPred.setZ(-3);
+				loopDash.setZ(-3);
 
-				gLoopPred.setX(nextTextAreaX);
-				gLoopPred.setY(y - (loop->timeIn() - clockTime) / verticalTimePerPixel);
-				gLoopPred.setHeight(30);
+				loopDash.setX(nextTextAreaX);
+				loopDash.setY(y - (loop->timeIn() - clockTime) / verticalTimePerPixel);
+				loopDash.setHeight(4);
 
 				int loopWidth = width - nextTextAreaX;
-				gLoopPred.setThickness(4);
-				gLoopPred.setCrossSize(loopWidth / 10);
-				gLoopPred.setWidth(loopWidth);
+				loopDash.setWidth(loopWidth);
 
-				gLoopPred.draw();
+				loopDash.draw();
 
 				// Display the label
 				PhGraphicText gLabel(&_hudFont, loop->label());
-				gLabel.setWidth(_hudFont.getNominalWidth(loop->label()) / 3);
+				gLabel.setHeight(nextPeopleHeight);
+				gLabel.setWidth(_hudFont.getNominalWidth(loop->label()) * nextPeopleHeight / 110);
 #warning /// @todo better loop sizing
-				gLabel.setHeight(height / 20);
 				gLabel.setX(width - gLabel.width() - spacing);
-				gLabel.setY(gLoopPred.y() - gLabel.height() - spacing);
-				gLabel.setColor(Qt::gray);
+				gLabel.setY(loopDash.y() - gLabel.height() - spacing);
+				gLabel.setColor(unselectedPeopleColor);
 				gLabel.draw();
 			}
 			if(loop->timeIn() > maxTimeIn + timePerPixel * height / 4)
