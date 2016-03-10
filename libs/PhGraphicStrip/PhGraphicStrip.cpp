@@ -252,7 +252,12 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 		PhTime maxTimeIn = stripTimeOut;
 
 		int nextPeopleHeight = width / 60;
-		PhTime verticalScaleDuration = (y - nextTextAreaY - nextPeopleHeight) * verticalTimePerPixel;
+		PhTime timePerPeopleHeight = nextPeopleHeight * verticalTimePerPixel;
+
+		PhTime verticalScaleDuration = (y - nextTextAreaY) * verticalTimePerPixel;
+		if(!_settings->hideSelectedPeoples())
+			verticalScaleDuration -= selectedPeoples.count() * timePerPeopleHeight;
+
 		if(displayNextText && (clockTime + verticalScaleDuration > stripTimeOut))
 			maxTimeIn = clockTime + verticalScaleDuration;
 
@@ -260,29 +265,47 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 		QColor unselectedPeopleColor(selectedPeopleColor.red() / 2, selectedPeopleColor.green() / 2, selectedPeopleColor.blue() / 2);
 
 		// Display the selected people after the vertical scale
-		if(_settings->displayNextText() && !_settings->hideSelectedPeoples() && selectedPeoples.count()) {
+		if(displayNextText && !_settings->hideSelectedPeoples() && selectedPeoples.count()) {
 			// Compute the next time in for each people
-			QMap<PhTime, PhStripText*> futureSelectedText;
-			_infos.append(QString("maxTimeIn: %1").arg(maxTimeIn));
+			QMap<PhTime, PhStripText*> futureSelectedTexts;
+			QList<PhPeople*> notAppearingPeoples;
+			_infos.append(QString("nextTextAreayY: %1").arg(nextTextAreaY));
 			foreach (PhPeople *people, selectedPeoples) {
 				PhStripText *nextText = _doc.nextText(people, maxTimeIn);
 				if(nextText)
-					futureSelectedText[nextText->timeIn()] = nextText;
+					futureSelectedTexts[nextText->timeIn()] = nextText;
+				else
+					notAppearingPeoples.append(people);
 			}
-			if(futureSelectedText.count()) {
+			PhGraphicText gPeople(&_hudFont);
+			gPeople.setX(nextTextAreaX + spacing);
+			gPeople.setHeight(nextPeopleHeight);
+			foreach(PhPeople *people, notAppearingPeoples) {
+				QString name = people->name().toLower();
+				gPeople.setContent(name);
+				gPeople.setColor(unselectedPeopleColor);
+				gPeople.setY(nextTextAreaY);
+				gPeople.setWidth(_hudFont.getNominalWidth(name) * nextPeopleHeight / 110);
+
+				gPeople.draw();
+
+				_infos.append(QString("not appearing %1: %2").arg(name).arg(nextTextAreaY));
+
+				nextTextAreaY += nextPeopleHeight;
+			}
+
+			if(futureSelectedTexts.count()) {
 				// Sort so that the next people of the list appear at the bottom of the list
-				QList<PhTime> timeList = futureSelectedText.keys();
+				QList<PhTime> timeList = futureSelectedTexts.keys();
 				qSort(timeList.begin(), timeList.end());
 				for(int i = timeList.size() - 1; i >= 0; i--) {
 					PhTime timeIn = timeList[i];
-					PhStripText *text = futureSelectedText[timeIn];
+					PhStripText *text = futureSelectedTexts[timeIn];
 					if(text && text->people()) {
 						QString name = text->people()->name().toLower();
-						PhGraphicText gPeople(&_hudFont, name);
+						gPeople.setContent(name);
 						gPeople.setColor(selectedPeopleColor);
-						gPeople.setX(nextTextAreaX + spacing);
 						gPeople.setY(nextTextAreaY);
-						gPeople.setHeight(nextPeopleHeight);
 						gPeople.setWidth(_hudFont.getNominalWidth(name) * nextPeopleHeight / 110);
 
 						gPeople.draw();
@@ -291,7 +314,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 
 					}
 				}
-				_infos.append(QString("end: %1").arg(nextTextAreaY));
 			}
 		}
 
@@ -341,7 +363,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 				gPeople.draw();
 			}
 
-			PhTime timePerPeopleHeight = nextPeopleHeight * verticalTimePerPixel;
 
 			if(displayNextText
 			   && (text->timeIn() > clockTime)
@@ -353,12 +374,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 				int nextTextX = nextTextAreaX + spacing;
 				int nextTextY = y - (text->timeIn() - clockTime) / verticalTimePerPixel - nextPeopleHeight;
 
-				_infos.append(QString("scrolling: %1 %2").arg(name).arg(text->timeIn()));
-
 
 				gPeople.setX(nextTextX);
 				gPeople.setY(nextTextY);
-				gPeople.setZ(-3);
 				gPeople.setHeight(nextPeopleHeight);
 				gPeople.setWidth(_hudFont.getNominalWidth(name) * nextPeopleHeight / 110);
 
