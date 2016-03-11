@@ -255,8 +255,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 		PhTime timePerPeopleHeight = nextPeopleHeight * verticalTimePerPixel;
 
 		PhTime verticalScaleDuration = (y - nextTextAreaY) * verticalTimePerPixel;
-		if(!_settings->hideSelectedPeoples())
+		if(!_settings->hideSelectedPeoples() && selectedPeoples.count())
 			verticalScaleDuration -= selectedPeoples.count() * timePerPeopleHeight;
+		else
+			verticalScaleDuration -= timePerPeopleHeight;
 
 		if(displayNextText && (clockTime + verticalScaleDuration > stripTimeOut))
 			maxTimeIn = clockTime + verticalScaleDuration;
