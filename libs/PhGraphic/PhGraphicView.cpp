@@ -167,17 +167,29 @@ void PhGraphicView::paintGL()
 {
 	//PHDEBUG << "PhGraphicView::paintGL" ;
 
-	// Update the clock time according to the time elapsed since the last paint event
+	// Update the clock time taking into account the time elapsed since the last paint event
 	// In the particular case of V-sync enabled and no dropped frames, this is equivalent
 	// to using the screen refresh rate to compute the elapsed time.
 	// If V-sync is not enabled, using the screen refresh rate is plain wrong
 	// (the refreshTimer period would be ok though).
-	// If frames are dropped, only an actual timer can be correct.
-	// Millisecond precision is not enough (60 Hz is 16.6 ms), so we use nanoseconds.
+	// If frames are dropped, it is mandatory to refer to a timer to be correct.
+	// We rasterized the elapsed value to the theorical value
+	// (based on the screen frequency) in order to keep a
+	// constant value in most of the case.
+	// Ex: given a 60Hz screen refresh rate
+	// - 400 ticks / 16.6ms in normal case
+	// - 0 ticks / 0ms if VSYNC is not enabled and the timer
+	// - a multiple of 400 ticks / 16.6ms if frame were dropped
 	qint64 nsecsElapsed = _timer.nsecsElapsed();
-	double elapsedSeconds = static_cast<double>(nsecsElapsed - _previousNsecsElapsed) / 1000000000.0f;
-	emit beforePaint(static_cast<PhTime> (PHTIMEBASE * elapsedSeconds));
-	_previousNsecsElapsed = nsecsElapsed;
+	PhTime trueElapsedTime = (nsecsElapsed - _previousNsecsElapsed) * 24000 / 1000000000;
+	PhTime expectedElapsedTime = 24000 / _screenFrequency;
+	int numberOfScreenRefresh = (trueElapsedTime + expectedElapsedTime / 2) / expectedElapsedTime;
+	PhTime rasterizedElapsedTime =  numberOfScreenRefresh * expectedElapsedTime;
+
+	if(rasterizedElapsedTime > 0)
+		_previousNsecsElapsed = nsecsElapsed;
+
+	emit beforePaint(rasterizedElapsedTime);
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
