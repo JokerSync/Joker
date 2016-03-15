@@ -524,8 +524,8 @@ void JokerWindow::onPaint(int width, int height)
 				title += " #" + _strip.doc()->episode().toLower();
 
 			int titleHeight = infoWidth / 12;
-			int titleWidth = _strip.getHUDFont()->getNominalWidth(title) * titleHeight / 110;
-			PhGraphicText titleText(_strip.getHUDFont());
+			int titleWidth = _strip.hudFont()->getNominalWidth(title) * titleHeight / 110;
+			PhGraphicText titleText(_strip.hudFont());
 			titleText.setColor(infoColor);
 			titleText.setRect(x + spacing, y, titleWidth, titleHeight);
 			y += titleHeight;
@@ -538,7 +538,7 @@ void JokerWindow::onPaint(int width, int height)
 		{
 			int tcWidth = infoWidth - 2 * spacing;
 			int tcHeight = infoWidth / 6;
-			PhGraphicText tcText(_strip.getHUDFont());
+			PhGraphicText tcText(_strip.hudFont());
 			tcText.setColor(infoColor);
 			tcText.setRect(x + 4, y, tcWidth, tcHeight);
 			tcText.setContent(PhTimeCode::stringFromTime(clockTime, localTimeCodeType()));
@@ -562,12 +562,12 @@ void JokerWindow::onPaint(int width, int height)
 			PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 			if(currentLoop)
 				loopLabel = currentLoop->label();
-			int loopWidth = _strip.getHUDFont()->getNominalWidth(loopLabel) * nextTcHeight / 110;
+			int loopWidth = _strip.hudFont()->getNominalWidth(loopLabel) * nextTcHeight / 110;
 			int loopHeight = nextTcHeight;
 			int loopX = x + spacing + (boxWidth - loopWidth) / 2;
 			int loopY = y + spacing;
 
-			PhGraphicText gCurrentLoop(_strip.getHUDFont(), loopLabel);
+			PhGraphicText gCurrentLoop(_strip.hudFont(), loopLabel);
 
 			gCurrentLoop.setRect(loopX, loopY, loopWidth, loopHeight);
 			gCurrentLoop.setColor(Qt::black);
@@ -593,7 +593,7 @@ void JokerWindow::onPaint(int width, int height)
 			if(nextText != NULL)
 				nextTextTime = nextText->timeIn();
 
-			PhGraphicText nextTCText(_strip.getHUDFont());
+			PhGraphicText nextTCText(_strip.hudFont());
 			nextTCText.setColor(infoColor);
 
 			int nextTcX = x + 2 * spacing + boxWidth;
@@ -631,7 +631,7 @@ void JokerWindow::onPaint(int width, int height)
 	}
 
 	if((_settings->synchroProtocol() == PhSynchronizer::Sony) && (_lastVideoSyncElapsed.elapsed() > 1000)) {
-		PhGraphicText errorText(_strip.getHUDFont(), tr("No video sync"));
+		PhGraphicText errorText(_strip.hudFont(), tr("No video sync"));
 		errorText.setRect(width / 2 - 100, height / 2 - 25, 200, 50);
 		int red = (_lastVideoSyncElapsed.elapsed() - 1000) / 4;
 		if (red > 255)

@@ -103,7 +103,7 @@ public:
 	 * - The title of the document...
 	 * @return
 	 */
-	PhFont * getHUDFont();
+	PhFont * hudFont();
 
 	/**
 	 * @brief List of info to be displayed on the screen debug overlay

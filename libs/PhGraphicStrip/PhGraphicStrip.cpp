@@ -47,7 +47,7 @@ PhFont *PhGraphicStrip::getTextFont()
 	return &_textFont;
 }
 
-PhFont *PhGraphicStrip::getHUDFont()
+PhFont *PhGraphicStrip::hudFont()
 {
 	return &_hudFont;
 }
