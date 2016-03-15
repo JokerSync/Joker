@@ -67,8 +67,6 @@ void PhVideoPool::requestFrames(PhFrame frame, bool backward)
 
 void PhVideoPool::cancel()
 {
-	QCoreApplication::processEvents();
-
 	foreach(PhVideoBuffer * requestedFrame, _requestedPool) {
 		emit cancelFrameRequest(requestedFrame);
 	}
