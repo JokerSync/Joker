@@ -451,6 +451,7 @@ void JokerWindow::onPaint(int width, int height)
 	// Center video if no information panel with next text
 	if(_settings->displayNextText())
 		videoAvailableWidth = width * 0.8f;
+	QColor infoColor = _settings->backgroundColorLight();
 
 	int y = 0;
 #ifdef USE_VIDEO
@@ -489,16 +490,36 @@ void JokerWindow::onPaint(int width, int height)
 			// The logo file is 500px in native format
 			int logoHeight = _videoLogo.originalSize().height();
 			int logoWidth = _videoLogo.originalSize().width();
-			if(videoHeight < logoHeight) {
-				logoHeight = videoHeight;
+			int logoMaxHeight = videoHeight * 9 / 10;
+			if(logoHeight > logoMaxHeight) {
+				logoHeight = logoMaxHeight;
 				logoWidth = _videoLogo.originalSize().width() * logoHeight / _videoLogo.originalSize().height();
 			}
-			if(width < logoWidth) {
-				logoWidth = width;
+			if(logoWidth > videoAvailableWidth) {
+				logoWidth = videoAvailableWidth;
 				logoHeight = _videoLogo.originalSize().height() * logoWidth / _videoLogo.originalSize().width();
 			}
-			_videoLogo.setRect((width - logoHeight) / 2, (videoHeight - logoHeight) / 2, logoHeight, logoHeight);
+			_videoLogo.setRect((videoAvailableWidth - logoWidth) / 2, (logoMaxHeight - logoHeight) / 2, logoWidth, logoHeight);
 			_videoLogo.draw();
+
+			QFileInfo videoFileInfo(_doc->videoFilePath());
+			QString videoBaseName = videoFileInfo.baseName();
+			PhGraphicText gVideoFileName(_strip.hudFont(), videoBaseName);
+			int videoBaseHeight = (videoHeight - logoMaxHeight) / 2;
+			int videoBaseNameNominalWidth = _strip.hudFont()->getNominalWidth(videoBaseName);
+			if(videoBaseNameNominalWidth > 0) {
+				int videoBaseWidth = videoBaseNameNominalWidth * videoBaseHeight / 110;
+				if (videoBaseWidth > videoAvailableWidth) {
+					videoBaseWidth = videoAvailableWidth;
+					videoBaseHeight = videoBaseWidth * 110 / videoBaseNameNominalWidth;
+				}
+				gVideoFileName.setColor(infoColor);
+				gVideoFileName.setWidth(videoBaseWidth);
+				gVideoFileName.setHeight(videoBaseHeight);
+				gVideoFileName.setX((videoAvailableWidth - videoBaseWidth) / 2);
+				gVideoFileName.setY(logoMaxHeight + (videoHeight - logoMaxHeight) / 2 - videoBaseHeight / 2);
+				gVideoFileName.draw();
+			}
 		}
 	}
 #endif
@@ -513,7 +534,6 @@ void JokerWindow::onPaint(int width, int height)
 
 	int x = videoAvailableWidth;
 	if(_settings->displayNextText()) {
-		QColor infoColor = _settings->backgroundColorLight();
 		int infoWidth = width - videoAvailableWidth;
 		int spacing = 4;
 
