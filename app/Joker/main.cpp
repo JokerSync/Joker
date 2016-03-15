@@ -56,7 +56,12 @@ int main(int argc, char *argv[])
 
 	JokerWindow w(&settings);
 
+	PHDEBUG << "Processing args:" << argc;
+
 	w.processArg(argc, argv);
+
+	PHDEBUG << "Showing window";
+
 	w.show();
 
 	int result = a.exec();

@@ -171,7 +171,7 @@ void PhVideoDecoder::process()
 {
 	_processing = true;
 	while(_processing) {
-//		PHDBG(24);
+		PHDBG(25);
 		decodeFrame();
 		QThread::msleep(5);
 		QCoreApplication::processEvents();
