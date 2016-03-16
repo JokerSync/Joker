@@ -28,7 +28,7 @@ matrix:
     - PROJECT=app/Joker/Joker.pro
     os: osx
     after_script:
-    - make installer
+    - make prettydmg
     - export RELEASED_PACKAGE_FILENAME=$(ls -1 Joker_v*.dmg)
     - echo "RELEASED_PACKAGE_FILENAME:$RELEASED_PACKAGE_FILENAME"
   - env:

@@ -34,23 +34,22 @@ CONFIG(release, debug|release) {
 			APPLICATION_CERTIFICATE = \"3rd Party Mac Developer Application: Phonations (Y44UPVP368)\"
 			INSTALLER_CERTIFICATE = \"3rd Party Mac Developer Installer: Phonations (Y44UPVP368)\"
 
-			sandbox {
-				message("Using sandbox")
-				QMAKE_POST_LINK += codesign -s $$APPLICATION_CERTIFICATE --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app;
-			}
+			# Target for sandboxing
+			sandbox.commands += echo "Sandboxing $${TARGET}" &&
+			sandbox.commands += codesign -s $$APPLICATION_CERTIFICATE --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app &&
 
-			QMAKE_POST_LINK += echo "Running macdeployqt";
-			QMAKE_POST_LINK += macdeployqt $${TARGET}.app -always-overwrite -codesign=$$APPLICATION_CERTIFICATE;
+			# Target for code signing
+			codesign.commands += echo "Code signing $${TARGET}" &&
+			codesign.commands += macdeployqt $${TARGET}.app -codesign=$$APPLICATION_CERTIFICATE
 
-			# Target for PKG generation
-			buildpkg.commands += echo "Build PKG" &&
-			buildpkg.commands += productbuild --component $${TARGET}.app /Applications --sign $$INSTALLER_CERTIFICATE $${PH_DEPLOY_TARGET}.pkg &&
-			buildpkg.commands += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION} &&
-			buildpkg.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.pkg
+			# Target for quick dmg generation
+			quickdmg.commands += echo "Deploying quick dmg for $${TARGET}" &&
+			quickdmg.commands += macdeployqt $${TARGET}.app -dmg &&
+			quickdmg.commands += mv $${TARGET}.dmg $${PH_DEPLOY_TARGET}.dmg
 
-			# Target for DMG generation
-			installer.commands += echo "Generate $$PH_DEPLOY_TARGET:";
-			installer.commands += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
+			# Target for pretty DMG generation
+			prettydmg.commands += echo "Generate $$PH_DEPLOY_TARGET:";
+			prettydmg.commands += $${_PRO_FILE_PWD_}/../../vendor/create-dmg/create-dmg \
 					--volname $${PH_DEPLOY_TARGET} \
 					--background $${_PRO_FILE_PWD_}/../../data/img/dmg_bg.png \
 					--app-drop-link 450 218 \
@@ -58,25 +57,36 @@ CONFIG(release, debug|release) {
 					--window-size 600 450 \
 					$${PH_DEPLOY_TARGET}.dmg \
 					$${TARGET}.app &&
-			installer.commands += echo Copying to $${PH_DEPLOY_LOCATION} &&
-			installer.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION} &&
-			installer.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.dmg
+			prettydmg.commands += echo Copying to $${PH_DEPLOY_LOCATION} &&
+			prettydmg.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION} &&
+			prettydmg.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.dmg
+
+			# Target for ftp deployement
+			ftpdeploy.commands += echo "Deploying $${PH_DEPLOY_TARGET}.dmg to $$(PH_DEPLOY_FTP_SERVER)" &&
+			ftpdeploy.commands += /usr/local/bin/lftp -u $$(PH_DEPLOY_FTP_USER),$$(PH_DEPLOY_FTP_PASSWORD) $$(PH_DEPLOY_FTP_SERVER) \
+				 -e \"dir;put $${PH_DEPLOY_TARGET}.dmg;quit\";
+
+			# Target for PKG generation
+			buildpkg.commands += echo "Build PKG" &&
+			buildpkg.commands += productbuild --component $${TARGET}.app /Applications --sign $$INSTALLER_CERTIFICATE $${PH_DEPLOY_TARGET}.pkg &&
+			buildpkg.commands += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION} &&
+			buildpkg.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.pkg
 
 			# Target for PKG and DMG cleaning
 			removedmg.commands += rm $${PH_DEPLOY_TARGET}.*
 
-			QMAKE_EXTRA_TARGETS += buildpkg removedmg
+			QMAKE_EXTRA_TARGETS += sandbox codesign quickdmg ftpdeploy prettydmg buildpkg removedmg
 		}
 	}
 
 	win32 {
 		if(exists($${_PRO_FILE_PWD_}/$$TARGET.iss)) {
-			installer.commands += echo "Running Innosetup on $${_PRO_FILE_PWD_}/$${TARGET}.iss" &
-			installer.commands += iscc $${_PRO_FILE_PWD_}/$${TARGET}.iss /DPWD=$$OUT_PWD &
-			installer.commands += echo "Copy to $${PH_DEPLOY_LOCATION}" &
-			installer.commands += copy $${TARGET}_v$${VERSION}.exe $${PH_DEPLOY_LOCATION}\\$${PH_DEPLOY_TARGET}.exe
+			innosetup.commands += echo "Running Innosetup on $${_PRO_FILE_PWD_}/$${TARGET}.iss" &
+			innosetup.commands += iscc $${_PRO_FILE_PWD_}/$${TARGET}.iss /DPWD=$$OUT_PWD &
+			innosetup.commands += echo "Copy to $${PH_DEPLOY_LOCATION}" &
+			innosetup.commands += copy $${TARGET}_v$${VERSION}.exe $${PH_DEPLOY_LOCATION}\\$${PH_DEPLOY_TARGET}.exe
+
+			QMAKE_EXTRA_TARGETS += innosetup
 		}
 	}
 }
-
-QMAKE_EXTRA_TARGETS += installer
