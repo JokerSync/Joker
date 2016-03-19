@@ -36,7 +36,22 @@
     <addaction name="actionSave"/>
     <addaction name="actionChange_font"/>
    </widget>
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <addaction name="actionInfos"/>
+    <addaction name="actionImage"/>
+    <addaction name="actionRectangles"/>
+    <addaction name="actionLoops"/>
+    <addaction name="actionArrows"/>
+    <addaction name="actionDisc"/>
+    <addaction name="actionCharacters"/>
+    <addaction name="actionStatic_text"/>
+    <addaction name="actionMoving_text"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuDisplay"/>
   </widget>
   <action name="actionChange_font">
    <property name="text">
@@ -49,6 +64,78 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionImage">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Image</string>
+   </property>
+  </action>
+  <action name="actionInfos">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Infos</string>
+   </property>
+  </action>
+  <action name="actionLoops">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Loops</string>
+   </property>
+  </action>
+  <action name="actionRectangles">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Rectangles</string>
+   </property>
+  </action>
+  <action name="actionArrows">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Arrows</string>
+   </property>
+  </action>
+  <action name="actionDisc">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Disc</string>
+   </property>
+  </action>
+  <action name="actionCharacters">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Characters</string>
+   </property>
+  </action>
+  <action name="actionStatic_text">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Static text</string>
+   </property>
+  </action>
+  <action name="actionMoving_text">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Moving text</string>
    </property>
   </action>
  </widget>

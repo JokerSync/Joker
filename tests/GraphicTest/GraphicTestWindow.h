@@ -29,6 +29,24 @@ private slots:
 
 	void onPaint(int width, int height);
 
+	void on_actionImage_triggered(bool checked);
+
+	void on_actionInfos_triggered(bool checked);
+
+	void on_actionLoops_triggered(bool checked);
+
+	void on_actionRectangles_triggered(bool checked);
+
+	void on_actionArrows_triggered(bool checked);
+
+	void on_actionDisc_triggered(bool checked);
+
+	void on_actionCharacters_triggered(bool checked);
+
+	void on_actionStatic_text_triggered(bool checked);
+
+	void on_actionMoving_text_triggered(bool checked);
+
 private:
 	Ui::GraphicTestWindow *ui;
 	GraphicTestSettings *_settings;
