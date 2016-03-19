@@ -4,6 +4,8 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include "PhTools/PhDebug.h"
+
 #include "PhGraphicText.h"
 
 PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int w, int h)
@@ -74,10 +76,22 @@ void PhGraphicText::draw()
 	float space = 0.0625f; // all glyph are in a 1/16 x 1/16 box
 	// Display a string
 	for(int i = 0; i < _content.length(); i++) {
-		unsigned char ch = (unsigned char)_content.at(i).toLatin1();
-		if(_content.at(i).unicode() == 339)
-			ch = 153;
-		if(_font->getAdvance(ch) > 0) {
+		QChar qChar = _content.at(i);
+		unsigned char ch = 0;
+		switch (qChar.unicode()) {
+		case 339:
+			ch = 153; // œ
+			break;
+		case 8217:
+			ch = '\'';
+			break;
+		default:
+			ch = (unsigned char)qChar.toLatin1();
+			break;
+		}
+		if (ch == 0)
+			PHERR << "Unhandled character:" << qChar << "/" << qChar.unicode();
+		else if(_font->getAdvance(ch) > 0) {
 			// computing texture coordinates
 			float tu1 = (ch % 16) * space;
 			float tv1 = (ch / 16) * space;
