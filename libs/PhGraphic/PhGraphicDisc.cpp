@@ -12,6 +12,8 @@ PhGraphicDisc::PhGraphicDisc(int x, int y, int radius, int resolution)
 
 void PhGraphicDisc::draw()
 {
+	PhGraphicObject::draw();
+
 	glBegin(GL_TRIANGLE_FAN);
 	{
 		glVertex3f( this->x(), this->y(), this->z());
