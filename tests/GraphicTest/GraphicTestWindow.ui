@@ -49,6 +49,13 @@
     <addaction name="actionCharacters"/>
     <addaction name="actionStatic_text"/>
     <addaction name="actionMoving_text"/>
+    <addaction name="separator"/>
+    <addaction name="actionZoom_in"/>
+    <addaction name="actionZoom_out"/>
+    <addaction name="actionMove_up"/>
+    <addaction name="actionMove_right"/>
+    <addaction name="actionMove_down"/>
+    <addaction name="actionMove_left"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuDisplay"/>
@@ -136,6 +143,54 @@
    </property>
    <property name="text">
     <string>Moving text</string>
+   </property>
+  </action>
+  <action name="actionZoom_in">
+   <property name="text">
+    <string>Zoom in</string>
+   </property>
+   <property name="shortcut">
+    <string>J</string>
+   </property>
+  </action>
+  <action name="actionZoom_out">
+   <property name="text">
+    <string>Zoom out</string>
+   </property>
+   <property name="shortcut">
+    <string>K</string>
+   </property>
+  </action>
+  <action name="actionMove_up">
+   <property name="text">
+    <string>Move up</string>
+   </property>
+   <property name="shortcut">
+    <string>Up</string>
+   </property>
+  </action>
+  <action name="actionMove_right">
+   <property name="text">
+    <string>Move right</string>
+   </property>
+   <property name="shortcut">
+    <string>Right</string>
+   </property>
+  </action>
+  <action name="actionMove_down">
+   <property name="text">
+    <string>Move down</string>
+   </property>
+   <property name="shortcut">
+    <string>Down</string>
+   </property>
+  </action>
+  <action name="actionMove_left">
+   <property name="text">
+    <string>Move left</string>
+   </property>
+   <property name="shortcut">
+    <string>Left</string>
    </property>
   </action>
  </widget>

@@ -15,7 +15,10 @@
 GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 	PhWindow(settings),
 	ui(new Ui::GraphicTestWindow),
-	_settings(settings)
+	_settings(settings),
+	_zoom(1),
+	_xOffset(0),
+	_yOffset(0)
 {
 	ui->setupUi(this);
 	ui->graphicView->setGraphicSettings(_settings);
@@ -135,12 +138,18 @@ void GraphicTestWindow::onPaint(int width, int height)
 	}
 
 	if(_settings->displayCharacters()) {
+		int w = _zoom * width / 16;
+		int h = _zoom * height / 16;
 		for(int i = 0; i < 16; i++) {
 			for(int j = 0; j < 16; j++) {
-				int w = width / 16;
-				int h = height / 16;
 				PhGraphicSolidRect rect(i * w, j * h, w, h);
-				rect.setColor(QColor(i * 16, j*16, 255 - i * 8 - j * 8));
+				if ((i % 2) != (j % 2)) {
+					rect.setColor(Qt::red);
+				}
+				else {
+					rect.setColor(Qt::blue);
+				}
+//				rect.setColor(QColor(i * 16, j*16, 255 - i * 8 - j * 8));
 				rect.draw();
 			}
 		}
@@ -156,10 +165,10 @@ void GraphicTestWindow::onPaint(int width, int height)
 
 		glBegin(GL_QUADS);  //Begining the cube's drawing
 		{
-			glTexCoord3f(0, 0, 1);  glVertex3i(0, 0, 0);
-			glTexCoord3f(1, 0, 1);  glVertex3i(width, 0, 0);
-			glTexCoord3f(1, 1, 1);  glVertex3i(width, height, 0);
-			glTexCoord3f(0, 1, 1);  glVertex3i(0,  height, 0);
+			glTexCoord3f(0, 0, 1);  glVertex3i(_xOffset * w, _yOffset * h, 0);
+			glTexCoord3f(1, 0, 1);  glVertex3i(_xOffset * w + _zoom * width, _yOffset * h, 0);
+			glTexCoord3f(1, 1, 1);  glVertex3i(_xOffset * w + _zoom * width, _yOffset * h + _zoom * height, 0);
+			glTexCoord3f(0, 1, 1);  glVertex3i(_xOffset * w, _yOffset * h + _zoom * height, 0);
 		}
 		glEnd();
 
@@ -222,9 +231,6 @@ void GraphicTestWindow::onPaint(int width, int height)
 		arrow2.setZ(5);
 		arrow2.draw();
 	}
-
-	_font2.setFontFile(_settings->font2File());
-	_font2.select();
 }
 
 void GraphicTestWindow::on_actionInfos_triggered(bool checked)
@@ -270,4 +276,35 @@ void GraphicTestWindow::on_actionStatic_text_triggered(bool checked)
 void GraphicTestWindow::on_actionMoving_text_triggered(bool checked)
 {
 	_settings->setDisplayMovingText(checked);
+}
+
+void GraphicTestWindow::on_actionZoom_in_triggered()
+{
+	_zoom++;
+}
+
+void GraphicTestWindow::on_actionZoom_out_triggered()
+{
+	if(_zoom > 1)
+		_zoom--;
+}
+
+void GraphicTestWindow::on_actionMove_up_triggered()
+{
+	_yOffset--;
+}
+
+void GraphicTestWindow::on_actionMove_right_triggered()
+{
+	_xOffset++;
+}
+
+void GraphicTestWindow::on_actionMove_down_triggered()
+{
+	_yOffset++;
+}
+
+void GraphicTestWindow::on_actionMove_left_triggered()
+{
+	_xOffset--;
 }

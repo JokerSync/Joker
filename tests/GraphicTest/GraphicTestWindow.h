@@ -47,6 +47,18 @@ private slots:
 
 	void on_actionMoving_text_triggered(bool checked);
 
+	void on_actionZoom_in_triggered();
+
+	void on_actionZoom_out_triggered();
+
+	void on_actionMove_up_triggered();
+
+	void on_actionMove_right_triggered();
+
+	void on_actionMove_down_triggered();
+
+	void on_actionMove_left_triggered();
+
 private:
 	Ui::GraphicTestWindow *ui;
 	GraphicTestSettings *_settings;
@@ -55,6 +67,7 @@ private:
 	PhGraphicSolidRect _rect;
 	PhGraphicTexturedRect _yuvRect, _rgbRect;
 	int _x;
+	int _zoom, _xOffset, _yOffset;
 };
 
 #endif // GRAPHICTESTWINDOW_H
