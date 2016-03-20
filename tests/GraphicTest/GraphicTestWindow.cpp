@@ -1,8 +1,12 @@
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QFontDialog>
+#include <QFontDatabase>
 
 #include "GraphicTestWindow.h"
 #include "ui_GraphicTestWindow.h"
+
+#include "ChangeTextDialog.h"
 
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
@@ -35,6 +39,8 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 	ui->actionStatic_text->setChecked(_settings->displayStaticText());
 	ui->actionMoving_text->setChecked(_settings->displayMovingText());
 
+	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella.ttf");
+
 	PHDEBUG << "Initialize _image";
 
 	QString imageFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png";
@@ -44,8 +50,8 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 
 	PHDEBUG << "Initialize _font";
 
-	_font1.setFontFile(_settings->font1File());
-	_font2.setFontFile(_settings->font2File());
+	_font1.setFamily(_settings->font1Family());
+	_font2.setFamily(_settings->font2Family());
 
 	PHDEBUG << "Initialize _rect";
 	_rect.setRect(100, 100, 75, 40);
@@ -71,12 +77,11 @@ GraphicTestWindow::~GraphicTestWindow()
 
 void GraphicTestWindow::on_actionChange_font_triggered()
 {
-	QString fileName = QFileDialog::getOpenFileName();
-	if(QFile(fileName).exists()) {
-		if(PhFont::computeMaxFontSize(fileName, _settings->textBoldness()) == 0)
-			QMessageBox::critical(this, "Error", "Unable to open " + fileName);
-		else
-			_font1.setFontFile(fileName);
+	QFont currentFont(_settings->font1Family());
+	QFontDialog dlg(currentFont, this);
+	connect(&dlg, &QFontDialog::currentFontChanged, this, &GraphicTestWindow::onFontSelected);
+	if(dlg.exec() != QDialog::Accepted) {
+		onFontSelected(currentFont);
 	}
 }
 
@@ -110,33 +115,6 @@ void GraphicTestWindow::onPaint(int width, int height)
 		_rect.draw();
 	}
 
-	QString textContent("Change the text from the settings");
-
-	textContent = _settings->textContent();
-	int y = 200;
-
-	if(_settings->displayStaticText()) {
-		PhGraphicText text1(&_font1, textContent);
-
-		text1.setRect(0, y, 500, 100);
-		text1.setColor(QColor(0, 128, 0));
-		text1.setZ(5);
-		text1.draw();
-	}
-
-	if(_settings->displayMovingText()) {
-		PhGraphicText text2(&_font2, textContent);
-		y += 200;
-
-		_x += 4;
-		if(_x > width - 500)
-			_x = 0;
-		text2.setRect(_x, y, 500, 100);
-		text2.setColor(QColor(0, 128, 0));
-		text2.setZ(5);
-		text2.draw();
-	}
-
 	if(_settings->displayCharacters()) {
 		int w = _zoom * width / 16;
 		int h = _zoom * height / 16;
@@ -154,7 +132,7 @@ void GraphicTestWindow::onPaint(int width, int height)
 			}
 		}
 
-		_font1.setBoldness(_settings->textBoldness());
+		_font1.setWeight(_settings->textWeight());
 		_font1.select();
 
 		glEnable(GL_TEXTURE_2D);
@@ -176,8 +154,36 @@ void GraphicTestWindow::onPaint(int width, int height)
 		glDisable(GL_BLEND);
 	}
 
+	QString textContent("Change the text from the settings");
+
+	textContent = _settings->textContent();
+	int y = 200;
+
+	if(_settings->displayStaticText()) {
+		PhGraphicSolidRect rect1(50, 10, 500, 100);
+		rect1.setColor(Qt::yellow);
+		rect1.draw();
+		PhGraphicText text1(&_font1, textContent);
+
+		text1.setRect(50, 10, 500, 100);
+		text1.setColor(Qt::green);
+		text1.draw();
+	}
+
+	if(_settings->displayMovingText()) {
+		PhGraphicText text2(&_font2, textContent);
+		y += 200;
+
+		_x += 4;
+		if(_x > width - 500)
+			_x = 0;
+		text2.setRect(_x, y, 500, 100);
+		text2.setColor(Qt::green);
+		text2.draw();
+	}
+
 	if(_settings->displayRect()) {
-		PhGraphicSolidRect rect3(0, 800, 400, 300);
+		PhGraphicSolidRect rect3(0, 300, 400, 300);
 		rect3.setColor(Qt::blue);
 		rect3.draw();
 
@@ -316,4 +322,13 @@ void GraphicTestWindow::on_actionChange_text_triggered()
 	connect(&dlg, &ChangeTextDialog::textChanged, _settings, &GraphicTestSettings::setTextContent);
 	if(dlg.exec() != QDialog::Accepted)
 		_settings->setTextContent(oldTextContent);
+}
+
+void GraphicTestWindow::onFontSelected(const QFont &font)
+{
+	PHDEBUG << font.family() << font.weight();
+	_font1.setFamily(font.family());
+	_font1.setWeight(font.weight());
+	_settings->setFont1Family(font.family());
+	_settings->setTextWeight(font.weight());
 }

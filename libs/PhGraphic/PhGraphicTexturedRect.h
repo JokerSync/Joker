@@ -7,8 +7,6 @@
 #ifndef PHGRAPHICTEXTUREDSQUARE_H
 #define PHGRAPHICTEXTUREDSQUARE_H
 
-#include <SDL2/SDL.h>
-
 #include "PhGraphicRect.h"
 
 /**
@@ -25,7 +23,6 @@ public:
 	 * @param h Desired heigth
 	 */
 	PhGraphicTexturedRect(int x = 0, int y = 0, int w = 0, int h = 0);
-	~PhGraphicTexturedRect();
 
 	/**
 	 * @brief draw
@@ -105,14 +102,6 @@ public:
 	 */
 	bool transparent();
 protected:
-
-	/**
-	 * @brief createTextureFromSurface
-	 * @param surface
-	 * create an OpenGL texture form a SDL Surface
-	 */
-	bool createTextureFromSurface(SDL_Surface * surface);
-
 	/**
 	 * @brief initTextures
 	 * initialize the textures objects if then do not exist yet

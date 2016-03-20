@@ -34,7 +34,6 @@
      <string>File</string>
     </property>
     <addaction name="actionSave"/>
-    <addaction name="actionChange_font"/>
    </widget>
    <widget class="QMenu" name="menuDisplay">
     <property name="title">
@@ -62,6 +61,7 @@
      <string>Edit</string>
     </property>
     <addaction name="actionChange_text"/>
+    <addaction name="actionChange_font"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -70,6 +70,9 @@
   <action name="actionChange_font">
    <property name="text">
     <string>Change font...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
   <action name="actionSave">

@@ -13,12 +13,6 @@ PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int w,
 {
 }
 
-PhGraphicText::~PhGraphicText()
-{
-
-}
-
-
 void PhGraphicText::setContent(QString content)
 {
 	_content = content;
@@ -72,7 +66,7 @@ void PhGraphicText::draw()
 	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Set the letter initial horizontal offset
-	int advance = 0;
+	int currentAdvance = 0;
 	float space = 0.0625f; // all glyph are in a 1/16 x 1/16 box
 	// Display a string
 	for(int i = 0; i < _content.length(); i++) {
@@ -89,9 +83,10 @@ void PhGraphicText::draw()
 			ch = (unsigned char)qChar.toLatin1();
 			break;
 		}
+		int glyphAdvance = _font->getAdvance(ch);
 		if (ch == 0)
 			PHERR << "Unhandled character:" << qChar << "/" << qChar.unicode();
-		else if(_font->getAdvance(ch) > 0) {
+		else if(glyphAdvance) {
 			// computing texture coordinates
 			float tu1 = (ch % 16) * space;
 			float tv1 = (ch / 16) * space;
@@ -107,19 +102,21 @@ void PhGraphicText::draw()
 			//            |              |
 			//        (tu1, tv2) --- (tu2, tv2)
 
-			int offset = this->x() + advance * this->width() / totalAdvance;
+
+			int offset = (128 - glyphAdvance) / 2 * this->width() / totalAdvance;
+			int glyphX = this->x() + currentAdvance * this->width() / totalAdvance - offset;
 			glBegin(GL_QUADS);  //Begining the cube's drawing
 			{
-				glTexCoord3f(tu1, tv1, 1);  glVertex3i(offset,      this->y(), this->z());
-				glTexCoord3f(tu2, tv1, 1);  glVertex3i(offset + w,  this->y(), this->z());
-				glTexCoord3f(tu2, tv2, 1);  glVertex3i(offset + w,  this->y() + h,  this->z());
-				glTexCoord3f(tu1, tv2, 1);  glVertex3i(offset,      this->y() + h,  this->z());
+				glTexCoord3f(tu1, tv1, 1);  glVertex3i(glyphX,      this->y(), this->z());
+				glTexCoord3f(tu2, tv1, 1);  glVertex3i(glyphX + w,  this->y(), this->z());
+				glTexCoord3f(tu2, tv2, 1);  glVertex3i(glyphX + w,  this->y() + h,  this->z());
+				glTexCoord3f(tu1, tv2, 1);  glVertex3i(glyphX,      this->y() + h,  this->z());
 			}
 			glEnd();
 
 		}
 		// Inc the advance
-		advance += _font->getAdvance(ch);
+		currentAdvance += glyphAdvance;
 	}
 
 	glDisable(GL_BLEND);

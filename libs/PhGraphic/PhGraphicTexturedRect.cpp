@@ -24,10 +24,6 @@ PhGraphicTexturedRect::PhGraphicTexturedRect(int x, int y, int w, int h)
 
 }
 
-PhGraphicTexturedRect::~PhGraphicTexturedRect()
-{
-}
-
 bool PhGraphicTexturedRect::initTextures() {
 	// Have OpenGL generate a texture object handle for us
 	if(_currentTexture == 0) {
@@ -54,51 +50,6 @@ void PhGraphicTexturedRect::swapTextures()
 	_previousTexture = tempTexture;
 }
 
-bool PhGraphicTexturedRect::createTextureFromSurface(SDL_Surface *surface)
-{
-	swapTextures();
-
-	glEnable( GL_TEXTURE_2D );
-	if(!initTextures()) {
-		return false;
-	}
-
-	// Bind the texture object
-	glBindTexture( GL_TEXTURE_2D, _currentTexture );
-
-	GLenum textureFormat = 0;
-
-	switch (surface->format->BytesPerPixel) {
-	case 1:
-		textureFormat = GL_ALPHA;
-		break;
-	case 3: // no alpha channel
-		if (surface->format->Rmask == 0x000000ff)
-			textureFormat = GL_RGB;
-		else
-			textureFormat = GL_BGR;
-		break;
-	case 4: // contains an alpha channel
-		if (surface->format->Rmask == 0x000000ff)
-			textureFormat = GL_RGBA;
-		else
-			textureFormat = GL_BGRA;
-
-		break;
-	default:
-		PHDEBUG << "Warning: the image is not truecolor...";
-		return false;
-	}
-
-	// Edit the texture object's image data using the information SDL_Surface gives us
-	glTexImage2D( GL_TEXTURE_2D, 0, surface->format->BytesPerPixel, surface->w, surface->h, 0,
-	              textureFormat, GL_UNSIGNED_BYTE, surface->pixels);
-
-	applyTextureSettings();
-
-	return true;
-}
-
 bool PhGraphicTexturedRect::createTextureFromBGRABuffer(void *data, int width, int height)
 {
 	swapTextures();
@@ -118,7 +69,7 @@ bool PhGraphicTexturedRect::createTextureFromBGRABuffer(void *data, int width, i
 		// Bind the texture object
 		glBindTexture( GL_TEXTURE_2D, _previousTexture );
 
-		// Edit the texture object's image data using the information SDL_Surface gives us
+		// Edit the texture object's image data
 		// Note: Store internally in GL_RGBA8, and upload from our buffer which is
 		// GL_BGRA/GL_UNSIGNED_INT_8_8_8_8_REV.
 		// This combination is supposed to be optimal on Windows with both nVidia and AMD,
@@ -133,7 +84,7 @@ bool PhGraphicTexturedRect::createTextureFromBGRABuffer(void *data, int width, i
 		// Bind the texture object
 		glBindTexture( GL_TEXTURE_2D, _currentTexture );
 
-		// Edit the texture object's image data using the information SDL_Surface gives us
+		// Edit the texture object's image data
 		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
 		              GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
 	}
@@ -165,14 +116,14 @@ bool PhGraphicTexturedRect::createTextureFromRGBBuffer(void *data, int width, in
 		// Bind the texture object
 		glBindTexture( GL_TEXTURE_2D, _previousTexture );
 
-		// Edit the texture object's image data using the information SDL_Surface gives us
+		// Edit the texture object's image data
 		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
 		              GL_RGB, GL_UNSIGNED_BYTE, data);
 
 		// Bind the texture object
 		glBindTexture( GL_TEXTURE_2D, _currentTexture );
 
-		// Edit the texture object's image data using the information SDL_Surface gives us
+		// Edit the texture object's image data
 		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
 		              GL_RGB, GL_UNSIGNED_BYTE, data);
 	}
@@ -201,7 +152,7 @@ bool PhGraphicTexturedRect::createTextureFromYUVBuffer(void *data, int width, in
 	// Bind the texture object
 	glBindTexture( GL_TEXTURE_2D, _currentTexture );
 
-	// Edit the texture object's image data using the information SDL_Surface gives us
+	// Edit the texture object's image data
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
 	              GL_YCBCR_422_APPLE, GL_UNSIGNED_SHORT_8_8_APPLE, data);
 

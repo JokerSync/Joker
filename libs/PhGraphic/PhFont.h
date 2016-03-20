@@ -30,17 +30,17 @@ public:
 	bool ready();
 
 	/**
-	 * @brief Set the source font file.
-	 * @param fontFile Path to the new font file
+	 * @brief Set the source family.
+	 * @param family Tthe new font family
 	 * @return true if the font was loaded successfully, false otherwise.
 	 */
-	void setFontFile(QString fontFile);
+	void setFamily(QString family);
 
 	/**
-	 * @brief Get the font file
-	 * @return the path to the font file
+	 * @brief Get the font family
+	 * @return The font family
 	 */
-	QString fontFile();
+	QString family();
 
 	/**
 	 * @brief Get the regular advance offset of a character.
@@ -69,18 +69,16 @@ public:
 	void select();
 
 	/**
-	 * @brief Set the font boldness
-	 * The boldness is created using <a href=http://www.libsdl.org/projects/SDL_ttf/docs/SDL_ttf_24.html#SEC24>TTF_SetFontOutline</a>
-	 * multiple times from 0 to value
-	 * @param value the number of pass
+	 * @brief Set the font weight
+	 * @param weight An int value
 	 */
-	void setBoldness(int value);
+	void setWeight(int weight);
 
 	/**
-	 * @brief Get boldness
-	 * @return the number of outline pass
+	 * @brief Get font weight
+	 * @return An int value
 	 */
-	int getBoldness() const;
+	int weight() const;
 
 	/**
 	 * @brief Get the nominal width of a given string
@@ -91,16 +89,14 @@ public:
 
 	/**
 	 * @brief Compute the maximum font size
-	 * @param fileName A font file
-	 * @param boldness The font expected boldness
+	 * @param family A font family
 	 *
 	 * Compute the maximum font size to initialize the font with
-	 * so the glyph (including the boldness effect) never take
-	 * more than 128 pixel
+	 * so the glyph never take more than 128 pixel
 	 *
 	 * @return A font size.
 	 */
-	static int computeMaxFontSize(QString fileName, int boldness);
+	static int computeMaxFontSize(QString family);
 private:
 	/**
 	 * @brief _texture
@@ -120,9 +116,9 @@ private:
 	 */
 	int _glyphHeight;
 
-	QString _fontFile;
+	QString _family;
 
-	int _boldness;
+	int _weight;
 
 	bool _ready;
 };

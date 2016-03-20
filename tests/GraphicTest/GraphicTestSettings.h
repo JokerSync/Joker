@@ -19,11 +19,9 @@ public:
 	PH_SETTING_BOOL(setResetInfo, resetInfo)
 
 	// Other settings
-	PH_SETTING_STRING2(setFontFile, fontFile, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
-
-	PH_SETTING_STRING2(setFont1File, font1File, QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF")
-	PH_SETTING_STRING2(setFont2File, font2File, QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella.ttf")
-	PH_SETTING_INT2(setTextBoldness, textBoldness, 1)
+	PH_SETTING_STRING2(setFont1Family, font1Family, "SWENSON")
+	PH_SETTING_STRING2(setFont2Family, font2Family, "Cappella")
+	PH_SETTING_INT2(setTextWeight, textWeight, 400)
 
 	PH_SETTING_STRING2(setTextContent, textContent, "Change the text from the settings")
 

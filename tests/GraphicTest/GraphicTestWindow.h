@@ -61,6 +61,7 @@ private slots:
 
 	void on_actionChange_text_triggered();
 
+	void onFontSelected(const QFont &font);
 private:
 	Ui::GraphicTestWindow *ui;
 	GraphicTestSettings *_settings;
