@@ -42,7 +42,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldHorizontalTimePerPixel = _settings->horizontalTimePerPixel();
 	_oldFont= QFont(_settings->textFontFamily());
 
-	ui->fontComboBox->setFont(_oldFont);
+	ui->fontComboBox->setCurrentFont(_oldFont);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
 
 	ui->mainScreenDelayspinBox->setValue(_oldScreenDelay);
