@@ -308,3 +308,12 @@ void GraphicTestWindow::on_actionMove_left_triggered()
 {
 	_xOffset--;
 }
+
+void GraphicTestWindow::on_actionChange_text_triggered()
+{
+	ChangeTextDialog dlg(_settings->textContent(), this);
+	QString oldTextContent = _settings->textContent();
+	connect(&dlg, &ChangeTextDialog::textChanged, _settings, &GraphicTestSettings::setTextContent);
+	if(dlg.exec() != QDialog::Accepted)
+		_settings->setTextContent(oldTextContent);
+}

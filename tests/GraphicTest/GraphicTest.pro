@@ -17,13 +17,16 @@ include($$TOP_ROOT/libs/PhCommonUI/PhCommonUI.pri)
 
 HEADERS  += \
 	GraphicTestWindow.h \
-	GraphicTestSettings.h
+	GraphicTestSettings.h \
+    ChangeTextDialog.h
 
 SOURCES += main.cpp \
-	GraphicTestWindow.cpp
+	GraphicTestWindow.cpp \
+    ChangeTextDialog.cpp
 
 FORMS += \
-	GraphicTestWindow.ui
+	GraphicTestWindow.ui \
+    ChangeTextDialog.ui
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/*.ttf) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/SWENSON.TTF) $${RESOURCES_PATH} $${CS}

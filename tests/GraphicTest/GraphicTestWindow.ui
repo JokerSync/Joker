@@ -57,7 +57,14 @@
     <addaction name="actionMove_down"/>
     <addaction name="actionMove_left"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionChange_text"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuDisplay"/>
   </widget>
   <action name="actionChange_font">
@@ -191,6 +198,14 @@
    </property>
    <property name="shortcut">
     <string>Left</string>
+   </property>
+  </action>
+  <action name="actionChange_text">
+   <property name="text">
+    <string>Change text...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>

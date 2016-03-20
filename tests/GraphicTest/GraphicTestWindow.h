@@ -59,6 +59,8 @@ private slots:
 
 	void on_actionMove_left_triggered();
 
+	void on_actionChange_text_triggered();
+
 private:
 	Ui::GraphicTestWindow *ui;
 	GraphicTestSettings *_settings;

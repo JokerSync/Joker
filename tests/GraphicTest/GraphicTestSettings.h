@@ -7,7 +7,7 @@
 #include "PhCommonUI/PhWindowSettings.h"
 #include "PhGraphic/PhGraphicSettings.h"
 
-class GraphicTestSettings : protected PhGenericSettings, public PhWindowSettings, public PhGraphicSettings
+class GraphicTestSettings : public PhGenericSettings, public PhWindowSettings, public PhGraphicSettings
 {
 public:
 	// PhWindowSettings
