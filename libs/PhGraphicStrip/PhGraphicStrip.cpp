@@ -17,18 +17,14 @@ PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
 	_settings(settings),
 	_maxDrawElapsed(0)
 {
-	if(!QFile(_settings->textFontFile()).exists())
-		_settings->resetTextFontFile();
-	if(!QFile(_settings->hudFontFile()).exists())
-		_settings->resetHudFontFile();
 	if(!QFile(_settings->backgroundImageDark()).exists())
 		_settings->resetBackgroundImageDark();
 	if(!QFile(_settings->backgroundImageLight()).exists())
 		_settings->resetBackgroundImageLight();
 	// This is used to make some time-based test
-	_hudFont.setFontFile(_settings->hudFontFile());
-	_textFont.setFontFile(_settings->textFontFile());
-	_textFont.setBoldness(_settings->textBoldness());
+	_hudFont.setFamily(_settings->hudFontFamily());
+	_textFont.setFamily(_settings->textFontFamily());
+	_textFont.setWeight(_settings->textFontWeight());
 	_testTimer.start();
 }
 
@@ -93,10 +89,10 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 	_backgroundImageLight.setRepeat(true);
 	_backgroundImageDark.setRepeat(true);
 
-	_textFont.setFontFile(_settings->textFontFile());
-	_textFont.setBoldness(_settings->textBoldness());
+	_textFont.setFamily(_settings->textFontFamily());
+	_textFont.setWeight(_settings->textFontWeight());
 
-	_hudFont.setFontFile(_settings->hudFontFile());
+	_hudFont.setFamily(_settings->hudFontFamily());
 
 	// Just to preload the font in order to avoid font loading during playback
 	_textFont.select();
@@ -112,8 +108,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 
 	if(height > 0) {
 		PhTime timePerPixel = (PhTime)_settings->horizontalTimePerPixel();
-		_textFont.setBoldness(_settings->textBoldness());
-		_textFont.setFontFile(_settings->textFontFile());
 
 		long syncBar_X_FromLeft = width / 6;
 		long delay = (int)(24 * _settings->screenDelay() *  _clock.rate());
