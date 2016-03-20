@@ -10,6 +10,8 @@
 #include <QDialog>
 #include <QListWidgetItem>
 #include <QButtonGroup>
+#include <QFontDatabase>
+
 
 #include "JokerSettings.h"
 
@@ -75,15 +77,15 @@ private slots:
 private:
 	Ui::PreferencesDialog *ui;
 	JokerSettings *_settings;
-	QString _oldFont;
+	QString _oldFontFamily;
 	int _oldScreenDelay, _oldSecondScreenDelay, _oldPipOffset;
 	float _oldPipRatio;
 	bool _oldPipPositionRight;
 	int _oldHorizontalTimePerPixel;
-	int _oldBolness;
+	int _oldWeight;
 	float _oldStripHeight;
 
-	QMap<QString, QString> _fontList;
+	QFontDatabase _fontDatabase;
 	QMap<QString, QString> _langNameMap;
 
 	QButtonGroup _protocolButtonGroup, _midiPortTypeButtonGroup;
