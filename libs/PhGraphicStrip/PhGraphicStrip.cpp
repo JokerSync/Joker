@@ -24,7 +24,6 @@ PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
 	// This is used to make some time-based test
 	_hudFont.setFamily(_settings->hudFontFamily());
 	_textFont.setFamily(_settings->textFontFamily());
-	_textFont.setWeight(_settings->textFontWeight());
 	_testTimer.start();
 }
 
@@ -90,7 +89,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 	_backgroundImageDark.setRepeat(true);
 
 	_textFont.setFamily(_settings->textFontFamily());
-	_textFont.setWeight(_settings->textFontWeight());
 
 	_hudFont.setFamily(_settings->hudFontFamily());
 

@@ -40,10 +40,9 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldPipPositionRight = _settings->videoPictureInPicturePositionRight();
 	_oldStripHeight = _settings->stripHeight();
 	_oldHorizontalTimePerPixel = _settings->horizontalTimePerPixel();
-	_oldWeight = _settings->textFontWeight();
-	_oldFontFamily = _settings->textFontFamily();
+	_oldFont= QFont(_settings->textFontFamily());
 
-	ui->sliderBoldness->setValue(_oldWeight);
+	ui->fontComboBox->setFont(_oldFont);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
 
 	ui->mainScreenDelayspinBox->setValue(_oldScreenDelay);
@@ -56,16 +55,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		ui->pipLeftPositionRadioButton->setChecked(true);
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
-
-	// Filling the fonts
-
-	foreach(QString family, _fontDatabase.families()) {
-		ui->listWidgetFont->addItem(family);
-		if(family == _oldFontFamily) {
-			ui->listWidgetFont->item(ui->listWidgetFont->count() - 1)->setSelected(true);
-			ui->listWidgetFont->setCurrentRow(ui->listWidgetFont->count() - 1);
-		}
-	}
 
 	// Initializing the synchronisation tab
 
@@ -245,8 +234,7 @@ void PreferencesDialog::reject()
 	_settings->setVideoPictureInPicturePositionRight(_oldPipPositionRight);
 	_settings->setStripHeight(_oldStripHeight);
 	_settings->setHorizontalTimePerPixel(_oldHorizontalTimePerPixel);
-	_settings->setTextFontWeight(_oldWeight);
-	_settings->setTextFontFamily(_oldFontFamily);
+	_settings->setTextFontFamily(_oldFont.family());
 
 	QDialog::reject();
 }
@@ -287,27 +275,6 @@ void PreferencesDialog::on_sliderStripHeight_valueChanged(int position)
 	_settings->setStripHeight(((float)position / ui->sliderStripHeight->maximum()));
 }
 
-void PreferencesDialog::on_sliderBoldness_valueChanged(int value)
-{
-	_settings->setTextFontWeight(value);
-}
-
-void PreferencesDialog::on_lineEditFilter_textEdited(const QString &value)
-{
-	ui->listWidgetFont->clear();
-	foreach(QString family, _fontDatabase.families()) {
-		if(family.contains(&value, Qt::CaseInsensitive))
-			ui->listWidgetFont->addItem(family);
-	}
-}
-
-void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
-{
-	Q_UNUSED(previous);
-	if(current)
-		_settings->setTextFontFamily(current->text());
-}
-
 void PreferencesDialog::on_mainScreenDelayspinBox_valueChanged(int delay)
 {
 	_settings->setScreenDelay(delay);
@@ -331,4 +298,9 @@ void PreferencesDialog::on_pipRatioSlider_valueChanged(int value)
 void PreferencesDialog::on_pipRightPositionRadioButton_toggled(bool checked)
 {
 	_settings->setVideoPictureInPicturePositionRight(checked);
+}
+
+void PreferencesDialog::on_fontComboBox_currentFontChanged(const QFont &f)
+{
+	_settings->setTextFontFamily(f.family());
 }

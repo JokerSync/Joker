@@ -10,7 +10,7 @@
 #include <QDialog>
 #include <QListWidgetItem>
 #include <QButtonGroup>
-#include <QFontDatabase>
+#include <QFont>
 
 
 #include "JokerSettings.h"
@@ -58,11 +58,6 @@ private slots:
 
 	void on_sliderStripHeight_valueChanged(int position);
 	void on_spinBoxSpeed_valueChanged(int speed);
-	void on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
-
-	void on_sliderBoldness_valueChanged(int value);
-
-	void on_lineEditFilter_textEdited(const QString &value);
 
 	void on_mainScreenDelayspinBox_valueChanged(int delay);
 
@@ -74,18 +69,18 @@ private slots:
 
 	void on_pipRightPositionRadioButton_toggled(bool checked);
 
+	void on_fontComboBox_currentFontChanged(const QFont &f);
+
 private:
 	Ui::PreferencesDialog *ui;
 	JokerSettings *_settings;
-	QString _oldFontFamily;
+	QFont _oldFont;
 	int _oldScreenDelay, _oldSecondScreenDelay, _oldPipOffset;
 	float _oldPipRatio;
 	bool _oldPipPositionRight;
 	int _oldHorizontalTimePerPixel;
-	int _oldWeight;
 	float _oldStripHeight;
 
-	QFontDatabase _fontDatabase;
 	QMap<QString, QString> _langNameMap;
 
 	QButtonGroup _protocolButtonGroup, _midiPortTypeButtonGroup;

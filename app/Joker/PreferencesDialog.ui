@@ -27,7 +27,7 @@
      </property>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabGeneral">
        <attribute name="title">
@@ -175,164 +175,68 @@
        <attribute name="title">
         <string>Strip</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
-        <item>
-         <layout class="QGridLayout" name="layoutStrip">
-          <item row="2" column="0">
-           <layout class="QVBoxLayout" name="layoutFont">
-            <item>
-             <widget class="QLineEdit" name="lineEditFilter">
-              <property name="text">
-               <string/>
-              </property>
-              <property name="placeholderText">
-               <string>Filter</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QListWidget" name="listWidgetFont"/>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="0">
-           <layout class="QFormLayout" name="layoutBoldness">
-            <property name="fieldGrowthPolicy">
-             <enum>QFormLayout::FieldsStayAtSizeHint</enum>
-            </property>
-            <property name="labelAlignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="formAlignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="lblBoldness">
-              <property name="text">
-               <string>Bold :</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QSlider" name="sliderBoldness">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>200</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximum">
-               <number>5</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="tickPosition">
-               <enum>QSlider::TicksBothSides</enum>
-              </property>
-              <property name="tickInterval">
-               <number>1</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="2" column="1" alignment="Qt::AlignHCenter">
-           <widget class="QSlider" name="sliderStripHeight">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>22</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="maximum">
-             <number>100</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="lblStripHeight">
-            <property name="text">
-             <string>Strip Height</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <layout class="QFormLayout" name="layoutItalic">
-            <property name="labelAlignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-            <property name="formAlignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-            <item row="1" column="0">
-             <widget class="QLabel" name="lblItalic">
-              <property name="text">
-               <string>Italic :</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QSlider" name="sliderItalic">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>200</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="1">
-           <layout class="QFormLayout" name="layoutForm">
-            <item row="0" column="0">
-             <widget class="QLabel" name="lblSpeed">
-              <property name="text">
-               <string>Speed:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QSpinBox" name="spinBoxSpeed">
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>100</number>
-              </property>
-              <property name="value">
-               <number>12</number>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="lblSpeed">
+          <property name="text">
+           <string>Speed:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="spinBoxSpeed">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>12</number>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QSlider" name="sliderStripHeight">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>22</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="lblStripHeight">
+          <property name="text">
+           <string>Strip Height</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QFontComboBox" name="fontComboBox"/>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="fontLabel">
+          <property name="text">
+           <string>Font:</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>

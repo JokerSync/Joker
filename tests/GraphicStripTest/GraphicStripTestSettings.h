@@ -28,7 +28,6 @@ public:
 	PH_SETTING_STRING2(setBackgroundImageDark, backgroundImageDark, QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/motif-240_black.png")
 	PH_SETTING_STRING2(setHudFontFamily, hudFontFamily, "Helvetica")
 	PH_SETTING_STRING2(setTextFontFamily, textFontFamily, "Capella")
-	PH_SETTING_INT2(setTextFontWeight, textFontWeight, 1)
 	PH_SETTING_BOOL(setStripTestMode, stripTestMode)
 	PH_SETTING_BOOL2(setDisplayNextText, displayNextText, true)
 	PH_SETTING_BOOL(setHideSelectedPeoples, hideSelectedPeoples)

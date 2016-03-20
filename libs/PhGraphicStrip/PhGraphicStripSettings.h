@@ -58,11 +58,6 @@ public:
 	 */
 	virtual QString textFontFamily() = 0;
 	/**
-	 * @brief Get the strip text font weight
-	 * @return A integer value
-	 */
-	virtual int textFontWeight() = 0;
-	/**
 	 * @brief Display the strip in test mode
 	 *
 	 * During the test mode, the whole strip is black except
