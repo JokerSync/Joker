@@ -16,7 +16,7 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_0">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
@@ -189,6 +189,23 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="fontLabel">
+         <property name="text">
+          <string>Font:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QFontComboBox" name="fontComboBox"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="lblStripHeight">
+         <property name="text">
+          <string>Strip Height</string>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="1">
         <widget class="QSlider" name="sliderStripHeight">
          <property name="sizePolicy">
@@ -211,23 +228,6 @@
          </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lblStripHeight">
-         <property name="text">
-          <string>Strip Height</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QFontComboBox" name="fontComboBox"/>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="fontLabel">
-         <property name="text">
-          <string>Font:</string>
          </property>
         </widget>
        </item>
