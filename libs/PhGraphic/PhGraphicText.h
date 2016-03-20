@@ -51,10 +51,10 @@ public:
 	void setFont(PhFont * font);
 
 	/**
-	 * @brief getContent
-	 * @return _content
+	 * @brief get the text content
+	 * @return A string
 	 */
-	QString getContent();
+	QString content();
 	/**
 	 * @brief getFont
 	 * @return _font
@@ -63,7 +63,7 @@ public:
 
 
 
-private:
+private:	
 	/**
 	 * @brief _font
 	 */

@@ -63,6 +63,31 @@ int PhFont::computeMaxFontSize(QString family)
 	return size;
 }
 
+QString PhFont::filter(QString inputText)
+{
+	QString outputText = "";
+
+	foreach(QChar c, inputText) {
+		switch (c.unicode()) {
+		case 339:
+			outputText += "œ";
+			break;
+		case 8216:
+		case 8217:
+			outputText += "'";
+			break;
+		case 8230:
+			outputText += "...";
+			break;
+		default:
+			outputText += c;
+			break;
+		}
+	}
+
+	return outputText;
+}
+
 bool PhFont::init()
 {
 	int size = computeMaxFontSize(_family);
@@ -143,7 +168,7 @@ int PhFont::getNominalWidth(QString string)
 	if(!_ready)
 		this->init();
 	int width = 0;
-	foreach(QChar c, string) {
+	foreach(QChar c, filter(string)) {
 		width += getAdvance(c.toLatin1());
 	}
 	return width;

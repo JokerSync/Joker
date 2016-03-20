@@ -9,23 +9,26 @@
 #include "PhGraphicText.h"
 
 PhGraphicText::PhGraphicText(PhFont* font, QString content, int x, int y, int w, int h)
-	: PhGraphicRect(x, y, w, h), _font(font), _content(content)
+	: PhGraphicRect(x, y, w, h), _font(font), _content("")
 {
+	setContent(content);
 }
 
 void PhGraphicText::setContent(QString content)
 {
-	_content = content;
+	_content = PhFont::filter(content);
 }
+
 void PhGraphicText::setFont(PhFont * font)
 {
 	_font = font;
 }
 
-QString PhGraphicText::getContent()
+QString PhGraphicText::content()
 {
 	return _content;
 }
+
 PhFont * PhGraphicText::getFont()
 {
 	return _font;
@@ -71,18 +74,7 @@ void PhGraphicText::draw()
 	// Display a string
 	for(int i = 0; i < _content.length(); i++) {
 		QChar qChar = _content.at(i);
-		unsigned char ch = 0;
-		switch (qChar.unicode()) {
-		case 339:
-			ch = 153; // œ
-			break;
-		case 8217:
-			ch = '\'';
-			break;
-		default:
-			ch = (unsigned char)qChar.toLatin1();
-			break;
-		}
+		unsigned char ch = (unsigned char)qChar.toLatin1();
 		int glyphAdvance = _font->getAdvance(ch);
 		if (ch == 0)
 			PHERR << "Unhandled character:" << qChar << "/" << qChar.unicode();

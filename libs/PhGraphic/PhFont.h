@@ -97,6 +97,13 @@ public:
 	 * @return A font size.
 	 */
 	static int computeMaxFontSize(QString family);
+
+	/**
+	 * @brief Filter text for unwanted character
+	 * @param inputText The text to filter
+	 * @return A filtered text string
+	 */
+	static QString filter(QString inputText);
 private:
 	/**
 	 * @brief _texture
