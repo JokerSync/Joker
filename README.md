@@ -42,9 +42,6 @@ In order to compile the  project you will need to follow the instructions depend
 
 The project uses *Qt 5.3.1* available here: http://qt-project.org/downloads
 
-***
-
-
 ## <a name="mac"></a> Mac Os:
 
 You need to have Mac Os 10.8+ installed to make Joker work on your computer. We also recommand you the [5.3.x Qt version](http://download.qt-project.org/official_releases/online_installers/qt-opensource-mac-x64-1.5.0-1-online.dmg).
@@ -71,19 +68,15 @@ Just run the *bootstrap* script:
 
 #### Manual install
 
-You can install most of the dependencies via __brew__:
+You can install most of the dependencies via *brew*:
 
     brew install libav portaudio libltc
 
     brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass --with-libcaca --with-libvo-aacenc --with-libvorbis --with-libvpx --with-openjpeg --with-openssl --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-speex --with-theora --with-tools
-    
-The SDL libraries can be installed with a specific script:
-
-    ./script/install_sdl.sh
 
 ### The Leap SDK _(optionnal)_
 
-Before any download or installation, you must know that the **leap** have been skipped for the moment.
+Before any download or installation, you must know that the *leap* have been skipped for the moment.
 
 Available [here](https://developer.leapmotion.com).
 
@@ -92,25 +85,11 @@ You must then define the following global variable in order to compile with the 
     launchctl setenv LEAP_SDK /path/to/sdk/root
 
 
-***
 ## <a name="linux"></a> Linux:
 
 ![Coming soon](http://openclipart.org/image/300px/svg_to_png/118519/Red_Coming_Soon_Stamp.png)
 
-***
 ## <a name="windows"></a> Windows:
-
-### SDL
-
-Download the following SDL libraries:
-
-* https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz
-* https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.12-mingw.tar.gz
-
-Then create the following environment variable pointing to the *i686-w64-mingw32* subfolder of each folder:
-
-* *SDL_PATH*
-* *SDL_TTF_PATH*
 
 ### FFMPEG
 

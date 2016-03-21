@@ -71,7 +71,6 @@ matrix:
 install:
 - git submodule update --init --recursive
 - ". scripts/install_qt.sh"
-- scripts/install_sdl.sh
 - scripts/install_ltc.sh
 - scripts/install_ffmpeg.sh
 - scripts/install_portaudio.sh

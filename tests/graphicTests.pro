@@ -6,7 +6,6 @@ SUBDIRS += \
 	GraphicSyncTest \
 	GraphicTest \
 	OpenGLTest \
-	SDLTest \
 	VideoStripTest \
 	VideoSyncTest \
 	VideoTest \

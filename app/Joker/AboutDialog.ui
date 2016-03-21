@@ -124,27 +124,11 @@
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
    </property>
   </widget>
-  <widget class="QLabel" name="labelSDL">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>190</y>
-     <width>341</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string notr="true">&lt;a href=&quot;http://www.libsdl.org&quot;&gt;LibSDL&lt;/a&gt;</string>
-   </property>
-   <property name="openExternalLinks">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QLabel" name="labelOpenGL">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>230</y>
+     <y>210</y>
      <width>341</width>
      <height>16</height>
     </rect>
@@ -160,7 +144,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>210</y>
+     <y>190</y>
      <width>341</width>
      <height>16</height>
     </rect>
@@ -192,7 +176,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>260</y>
+     <y>240</y>
      <width>341</width>
      <height>16</height>
     </rect>
