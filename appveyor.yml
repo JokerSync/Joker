@@ -9,7 +9,7 @@ branches:
 install:
   - git submodule update --init --recursive
   # Installing various utilities
-  - choco install -y curl 7zip InnoSetup
+  - choco install -y curl InnoSetup
   - set PATH="C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5";%PATH%
   # Configuring Qt
   - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw491_32\bin;%PATH%
