@@ -29,8 +29,6 @@ FORMS += \
 	$$PWD/VideoTestWindow.ui \
     $$PWD/PropertyDialog.ui
 
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Helvetica.ttf) $${RESOURCES_PATH} $${CS}
-
 PH_DEPLOY_LOCATION = $$(TESTS_RELEASE_PATH)
 include($$TOP_ROOT/common/deploy.pri)
 

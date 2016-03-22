@@ -40,6 +40,7 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 	ui->actionMoving_text->setChecked(_settings->displayMovingText());
 
 	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella.ttf");
+	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF");
 
 	PHDEBUG << "Initialize _image";
 

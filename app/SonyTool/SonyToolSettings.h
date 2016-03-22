@@ -8,10 +8,8 @@
 /**
  * @brief The SonyTool application settings
  */
-class SonyToolSettings : public QObject, PhGenericSettings, public PhSonySettings
+class SonyToolSettings : public PhGenericSettings, public PhSonySettings
 {
-	Q_OBJECT
-
 public:
 	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)

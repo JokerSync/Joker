@@ -312,5 +312,4 @@ void GraphicStripTestWindow::onFontSelected(const QFont &font)
 {
 	PHDEBUG << font.family() << font.weight();
 	_settings->setTextFontFamily(font.family());
-	_settings->setTextFontWeight(font.weight());
 }
