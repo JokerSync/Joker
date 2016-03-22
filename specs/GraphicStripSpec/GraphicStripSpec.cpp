@@ -3,6 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QFontDatabase>
+
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 
@@ -19,6 +21,7 @@ go_bandit([](){
 	describe("graphic_strip_test", []() {
 		before_each([&](){
 			PhDebug::setLogMask((1 << 9) | PHDEBUG_SPEC_MASK);
+			QFontDatabase::addApplicationFont("Cappella.ttf");
 		});
 
 		it("draw_a_graphic_strip", [&](){
