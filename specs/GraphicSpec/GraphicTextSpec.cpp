@@ -3,6 +3,8 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QFontDatabase>
+
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 
@@ -79,7 +81,8 @@ go_bandit([](){
 		});
 
 		it("draw_cappella_font", [&](){
-			font->setFontFile("Cappella.ttf");
+			QFontDatabase::addApplicationFont("Cappella.ttf");
+			font->setFamily("Capella");
 			AssertThat(font->ready(), IsFalse());
 
 			AssertThat(view->compare("fontTest.Cappella.ttf.bmp", threshold), IsLessThan(776 * 576 * 0.04));
@@ -88,7 +91,8 @@ go_bandit([](){
 		});
 
 		it("draw_swenson_font", [&](){
-			font->setFontFile("SWENSON.ttf");
+			QFontDatabase::addApplicationFont("SWENSON.TTF");
+			font->setFamily("Swenson");
 			AssertThat(font->ready(), IsFalse());
 
 			AssertThat(view->compare("fontTest.SWENSON.ttf.bmp", threshold), IsLessThan(threshold));
@@ -97,21 +101,15 @@ go_bandit([](){
 		});
 
 		it("draw_arial_font", [&](){
-			font->setFontFile("Arial.ttf");
+			font->setFamily("Arial");
 
 			AssertThat(view->compare("fontTest.Arial.ttf.bmp", threshold), IsLessThan(threshold));
 		});
 
-		it("draw_bedizen_font", [&](){
-			font->setFontFile("Bedizen.ttf");
+		it("draw_helvetica_font", [&](){
+			font->setFamily("Helvetica");
 
-			AssertThat(view->compare("fontTest.Bedizen.ttf.bmp", threshold), IsLessThan(threshold));
-		});
-
-		it("draw_bad_font", [&](){
-			font->setFontFile("bad_font.ttf");
-
-			AssertThat(view->compare("fontTest.bad_font.ttf.bmp", threshold), IsLessThan(threshold));
+			AssertThat(view->compare("fontTest.Helvetica.ttf.bmp", threshold), IsLessThan(threshold));
 		});
 	});
 });
