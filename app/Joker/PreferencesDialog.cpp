@@ -40,7 +40,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldPipPositionRight = _settings->videoPictureInPicturePositionRight();
 	_oldStripHeight = _settings->stripHeight();
 	_oldHorizontalTimePerPixel = _settings->horizontalTimePerPixel();
-	_oldFont= QFont(_settings->textFontFamily());
+	_oldFont = QFont(_settings->textFontFamily());
 
 	ui->fontComboBox->setCurrentFont(_oldFont);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);

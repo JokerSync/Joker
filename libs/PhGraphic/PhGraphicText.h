@@ -63,7 +63,7 @@ public:
 
 
 
-private:	
+private:
 	/**
 	 * @brief _font
 	 */
