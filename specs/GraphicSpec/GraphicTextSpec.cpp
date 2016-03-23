@@ -91,7 +91,7 @@ go_bandit([](){
 //		});
 
 		it("draw_swenson_font", [&](){
-//			QFontDatabase::addApplicationFont("SWENSON.TTF");
+			QFontDatabase::addApplicationFont("SWENSON.TTF");
 			font->setFamily("Swenson");
 			AssertThat(font->ready(), IsFalse());
 
