@@ -21,7 +21,7 @@ go_bandit([](){
 	describe("graphic_strip_test", []() {
 		before_each([&](){
 			PhDebug::setLogMask((1 << 9) | PHDEBUG_SPEC_MASK);
-			//QFontDatabase::addApplicationFont("Cappella.ttf");
+			QFontDatabase::addApplicationFont("Cappella-Regular.ttf");
 		});
 
 		it("draw_a_graphic_strip", [&](){
