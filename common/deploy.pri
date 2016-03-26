@@ -37,7 +37,7 @@ CONFIG(release, debug|release) {
 
 			# Target for sandboxing
 			sandbox.commands += echo "Sandboxing $${TARGET}" &&
-			sandbox.commands += codesign -s $$APPLICATION_CERTIFICATE --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app &&
+			sandbox.commands += codesign -s $$APPLICATION_CERTIFICATE --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app
 
 			# Target for code signing
 			codesign.commands += echo "Code signing $${TARGET}" &&
