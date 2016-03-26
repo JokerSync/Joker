@@ -506,7 +506,7 @@ void JokerWindow::onPaint(int width, int height)
 			_videoLogo.draw();
 
 			QFileInfo videoFileInfo(_doc->videoFilePath());
-			QString videoBaseName = videoFileInfo.baseName();
+			QString videoBaseName = videoFileInfo.fileName();
 			PhGraphicText gVideoFileName(_strip.hudFont(), videoBaseName);
 			int videoBaseHeight = (videoHeight - logoMaxHeight) / 2;
 			int videoBaseNameNominalWidth = _strip.hudFont()->getNominalWidth(videoBaseName);
