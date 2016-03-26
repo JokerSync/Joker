@@ -45,21 +45,14 @@ public:
 
 	void resetBackgroundImageDark() {}
 
-	QString hudFontFile() {
-		return "Helvetica.ttf";
+	QString hudFontFamily() {
+		return "Helvetica";
 	}
 
-	void resetHudFontFile() {}
-
-	QString textFontFile() {
-		return "Cappella.ttf";
+	QString textFontFamily() {
+		return "Cappella";
 	}
 
-	void resetTextFontFile() {}
-
-	int textBoldness() {
-		return 1;
-	}
 	bool stripTestMode() {
 		return false;
 	}

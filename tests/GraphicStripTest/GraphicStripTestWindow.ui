@@ -224,6 +224,9 @@
    <property name="text">
     <string>Change font...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
   </action>
   <action name="actionPrevious_Element">
    <property name="text">

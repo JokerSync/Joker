@@ -48,28 +48,15 @@ public:
 	 */
 	virtual void resetBackgroundImageDark() = 0;
 	/**
-	 * @brief Get the HUD font file
+	 * @brief Get the HUD font family
 	 * @return A font file path
 	 */
-	virtual QString hudFontFile() = 0;
+	virtual QString hudFontFamily() = 0;
 	/**
-	 * @brief Reset the HUD font file to its default value
-	 */
-	virtual void resetHudFontFile() = 0;
-	/**
-	 * @brief Get the strip text font file
+	 * @brief Get the strip text font family
 	 * @return A font file path
 	 */
-	virtual QString textFontFile() = 0;
-	/**
-	 * @brief Reset the text font file to its default value
-	 */
-	virtual void resetTextFontFile() = 0;
-	/**
-	 * @brief Get the strip text boldness
-	 * @return A integer value from 0 to 5
-	 */
-	virtual int textBoldness() = 0;
+	virtual QString textFontFamily() = 0;
 	/**
 	 * @brief Display the strip in test mode
 	 *

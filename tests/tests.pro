@@ -10,12 +10,10 @@ SUBDIRS += \
 	GraphicTest \
 	GraphicSyncTest \
 	OpenGLTest \
-	SDLTest \
 	SerialTest \
 	StripTest \
 	TextEditTest \
 	TimecodePlayer \
 	VideoStripTest \
 	VideoSyncTest \
-	VideoTest \
-#	VLCTest
+	VideoTest

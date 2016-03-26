@@ -10,9 +10,6 @@
 #include <QWindow>
 #include <QFileInfo>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-
 #include "PhTools/PhDebug.h"
 
 #include "PhGraphicText.h"
@@ -29,9 +26,6 @@ PhGraphicView::PhGraphicView(QWidget *parent, PhGraphicView *shareWidget)
 	_maxUpdateDuration(0),
 	_previousNsecsElapsed(0)
 {
-	PHDEBUG << "SDL_Init(SDL_INIT_VIDEO):" << SDL_Init(SDL_INIT_VIDEO);
-	PHDEBUG << "TTF_Init():" << TTF_Init();
-
 	_refreshTimer = new QTimer(this);
 	connect(_refreshTimer, SIGNAL(timeout()), this, SLOT(onRefresh()));
 
@@ -56,8 +50,6 @@ PhGraphicView::PhGraphicView(int width, int height, QWidget *parent)
 PhGraphicView::~PhGraphicView()
 {
 	_refreshTimer->stop();
-	TTF_Quit();
-	SDL_Quit();
 }
 
 void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
@@ -210,7 +202,7 @@ void PhGraphicView::paintGL()
 			_maxUpdateDuration = 0;
 		}
 		if(_settings->displayInfo()) {
-			_infoFont.setFontFile(_settings->infoFontFile());
+			_infoFont.setFamily(_settings->infoFontFamily());
 			int y = 0;
 			foreach(QString info, _infos) {
 				PhGraphicText gInfo(&_infoFont, info, 0, y);

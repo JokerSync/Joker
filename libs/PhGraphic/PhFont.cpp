@@ -4,17 +4,18 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QtGlobal>
-
-#include <SDL2/SDL_ttf.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPixmap>
+#include <QPainter>
 
 #include "PhGraphicObject.h"
 #include "PhFont.h"
 #include "PhTools/PhDebug.h"
 
-PhFont::PhFont() : _texture(-1), _glyphHeight(0), _boldness(0), _ready(false)
+PhFont::PhFont() : _texture(-1), _glyphHeight(0), _weight(400), _ready(false)
 {
-	for(Uint16 ch = 0; ch < 256; ++ch) {
+	for(int ch = 0; ch < 256; ++ch) {
 		_glyphAdvance[ch] = 0;
 	}
 }
@@ -24,35 +25,32 @@ bool PhFont::ready()
 	return _ready;
 }
 
-void PhFont::setFontFile(QString fontFile)
+void PhFont::setFamily(QString family)
 {
-	if(fontFile != this->_fontFile) {
-		PHDEBUG << fontFile;
-		this->_fontFile = fontFile;
+	if(family != this->_family) {
+		PHDEBUG << family;
+		this->_family = family;
 		_ready = false;
 	}
 }
 
-QString PhFont::fontFile()
+QString PhFont::family()
 {
-	return _fontFile;
+	return _family;
 }
 
-int PhFont::computeMaxFontSize(QString fileName, int boldness)
+int PhFont::computeMaxFontSize(QString family)
 {
 	int size = 25;
-	int expectedFontHeight = 128 - boldness * 2;
+	int expectedFontHeight = 128;
 	int low = 0, high = 1000;
 	while (low < high) {
 		size = (low + high) / 2;
-		TTF_Font * font = TTF_OpenFont(fileName.toStdString().c_str(), size);
-		//Break in case of issue with the file
-		if(!font) {
-			PHDEBUG << "Error opening" << fileName;
-			return -1;
-		}
+		QFont font(family, size);
+		QFontMetrics fm(font);
 
-		int computedFontHeight = TTF_FontHeight(font);
+		PHDEBUG << fm.height() << fm.ascent() << fm.descent() << fm.leading();
+		int computedFontHeight = fm.height();
 
 		if (expectedFontHeight == computedFontHeight)
 			break;
@@ -60,90 +58,75 @@ int PhFont::computeMaxFontSize(QString fileName, int boldness)
 			high = size - 1;
 		else
 			low = size + 1;
-		TTF_CloseFont(font);
 	}
-	TTF_Font * font = TTF_OpenFont(fileName.toStdString().c_str(), size);
-	if(expectedFontHeight < TTF_FontHeight(font))
-		size--;
-	TTF_CloseFont(font);
 
 	return size;
 }
 
-// This will split the setting of the bolness and the fontfile, which allow to change the boldness without reloading a font
+QString PhFont::filter(QString inputText)
+{
+	QString outputText = "";
+
+	foreach(QChar c, inputText) {
+		switch (c.unicode()) {
+		case 339:
+			outputText += "œ";
+			break;
+		case 8216:
+		case 8217:
+			outputText += "'";
+			break;
+		case 8230:
+			outputText += "...";
+			break;
+		default:
+			outputText += c;
+			break;
+		}
+	}
+
+	return outputText;
+}
+
 bool PhFont::init()
 {
-	int size = computeMaxFontSize(_fontFile, _boldness);
+	int size = computeMaxFontSize(_family);
 
 	if(size < 0)
 		return false;
-	PHDEBUG << "Opening" << _fontFile << "at size" << size;
-	TTF_Font * font = TTF_OpenFont(_fontFile.toStdString().c_str(), size);
+	PHDEBUG << "Opening" << _family<< "at size" << size;
+	QFont font(_family);
+	font.setPixelSize(size);
+	font.setWeight(_weight);
+	QFontMetrics fm(font);
+	PHDEBUG << "font height:" << fm.height();
 
-	//Font foreground color is white
-	SDL_Color color = {255, 255, 255, 255};
-
-	// used to set the base surface
-	Uint32 rmask = 0x000000ff;
-	Uint32 gmask = 0x0000ff00;
-	Uint32 bmask = 0x00ff0000;
-	Uint32 amask = 0xff000000;
-	SDL_Surface * matrixSurface = SDL_CreateRGBSurface(0, 2048, 2048, 32, rmask, gmask, bmask, amask);
+	QPixmap pixmap(2048, 2048);
 
 	// Font background color is transparent
-	Uint32 backgroundColor = 0x00000000;
-	SDL_FillRect(matrixSurface, NULL, backgroundColor);
+	pixmap.fill(Qt::transparent);
+
+	QPainter painter(&pixmap);
+	painter.setPen(Qt::white);
+	painter.setFont(font);
 
 	// Space between glyph
 	int space = 128;
-	_glyphHeight = 0;
+	_glyphHeight = fm.height();
 
-	//set the boldness
-	PHDEBUG << "Setting the font boldness to :" << _boldness;
-	for(int boldIndex = 0; boldIndex <= _boldness; boldIndex++) {
-		TTF_SetFontOutline(font, boldIndex);
-		// We get rid of the 32 first useless char
-		for(Uint16 charIndex = 32; charIndex < 256; ++charIndex) {
-			if(TTF_GlyphIsProvided(font, charIndex) or charIndex == 153) {
-				int minx, maxx, miny, maxy, advance;
-				Uint16 charCode = charIndex;
-				if(charCode == 153) {
-					charCode = 339;
-				}
-				TTF_GlyphMetrics(font, charCode, &minx, &maxx, &miny, &maxy, &advance);
-				if(advance > 0) {
-					// First render the glyph to a surface
-					SDL_Surface * glyphSurface = TTF_RenderGlyph_Blended(font, charCode, color);
-					if (glyphSurface) {
-						SDL_Rect glyphRect;
-						glyphRect.x = (charIndex % 16) * space;
-						glyphRect.y = (charIndex / 16) * space;
-						glyphRect.w = glyphSurface->w;
-						glyphRect.h = glyphSurface->h;
-						if(glyphRect.h > _glyphHeight)
-							_glyphHeight = glyphRect.h;
-						// Then blit it to the matrix
-						SDL_BlitSurface( glyphSurface, NULL, matrixSurface, &glyphRect );
-
-						// Store information about the glyph
-						_glyphAdvance[charIndex] = advance;
-					}
-					else {
-						_glyphAdvance[charIndex] = 0;
-						PHDEBUG << "Error during the Render Glyph of " << (char) charIndex << SDL_GetError();
-					}
-					SDL_FreeSurface(glyphSurface);
-				}
-				else {
-					PHDEBUG <<" Error with Glyph of char:" << charIndex << (char) charIndex << minx << maxx << miny << maxy << advance;
-					_glyphAdvance[charIndex] = 0;
-				}
-			}
-			else
-				_glyphAdvance[charIndex] = 0;
-		}
+	// We get rid of the 32 first useless char
+	for(int i = 32; i < 256; i++) {
+		QChar c = QChar::fromLatin1(i);
+		QString charString = c;
+		int width = fm.width(charString);
+		_glyphAdvance[i] = width;
+		int x = (i % 16) * space + space / 2 - width / 2;
+		int y = (i / 16) * space + fm.ascent();
+		// First render the glyph to a surface
+		painter.drawText(x, y, charString);
 	}
-	PHDEBUG << TTF_FontFaceFamilyName(font) << ": glyph height" << _glyphHeight;
+
+	pixmap.save("/Users/martin/Desktop/pixmap.png");
 
 	glEnable( GL_TEXTURE_2D );
 	// Have OpenGL generate a texture object handle for us
@@ -152,19 +135,12 @@ bool PhFont::init()
 	// Bind the texture object
 	glBindTexture( GL_TEXTURE_2D, _texture );
 
-
-	// Edit the texture object's image data using the information SDL_Surface gives us
-	glTexImage2D( GL_TEXTURE_2D, 0, matrixSurface->format->BytesPerPixel, matrixSurface->w, matrixSurface->h, 0,
-	              GL_RGBA, GL_UNSIGNED_BYTE, matrixSurface->pixels);
+	// Edit the texture object's image data
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, pixmap.width(), pixmap.height(), 0,
+	              GL_RGBA, GL_UNSIGNED_BYTE, pixmap.toImage().bits());
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	// Once the texture is created, the surface is no longer needed.
-	SDL_FreeSurface(matrixSurface);
-
-	TTF_CloseFont(font);
-
 
 	_ready = true;
 	return _ready;
@@ -182,9 +158,9 @@ void PhFont::select()
 	glBindTexture(GL_TEXTURE_2D, (GLuint)_texture);
 }
 
-int PhFont::getBoldness() const
+int PhFont::weight() const
 {
-	return _boldness;
+	return _weight;
 }
 
 int PhFont::getNominalWidth(QString string)
@@ -192,16 +168,16 @@ int PhFont::getNominalWidth(QString string)
 	if(!_ready)
 		this->init();
 	int width = 0;
-	foreach(QChar c, string) {
+	foreach(QChar c, filter(string)) {
 		width += getAdvance(c.toLatin1());
 	}
 	return width;
 }
 
-void PhFont::setBoldness(int value)
+void PhFont::setWeight(int weight)
 {
-	if(_boldness != value) {
-		_boldness = value;
+	if(_weight != weight) {
+		_weight = weight;
 		_ready = false;
 	}
 }

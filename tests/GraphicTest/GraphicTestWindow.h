@@ -29,6 +29,39 @@ private slots:
 
 	void onPaint(int width, int height);
 
+	void on_actionImage_triggered(bool checked);
+
+	void on_actionInfos_triggered(bool checked);
+
+	void on_actionLoops_triggered(bool checked);
+
+	void on_actionRectangles_triggered(bool checked);
+
+	void on_actionArrows_triggered(bool checked);
+
+	void on_actionDisc_triggered(bool checked);
+
+	void on_actionCharacters_triggered(bool checked);
+
+	void on_actionStatic_text_triggered(bool checked);
+
+	void on_actionMoving_text_triggered(bool checked);
+
+	void on_actionZoom_in_triggered();
+
+	void on_actionZoom_out_triggered();
+
+	void on_actionMove_up_triggered();
+
+	void on_actionMove_right_triggered();
+
+	void on_actionMove_down_triggered();
+
+	void on_actionMove_left_triggered();
+
+	void on_actionChange_text_triggered();
+
+	void onFontSelected(const QFont &font);
 private:
 	Ui::GraphicTestWindow *ui;
 	GraphicTestSettings *_settings;
@@ -37,6 +70,7 @@ private:
 	PhGraphicSolidRect _rect;
 	PhGraphicTexturedRect _yuvRect, _rgbRect;
 	int _x;
+	int _zoom, _xOffset, _yOffset;
 };
 
 #endif // GRAPHICTESTWINDOW_H

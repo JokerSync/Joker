@@ -65,12 +65,6 @@ public:
 	PhClock * clock();
 
 	/**
-	 * Set the font used to render text on the strip.
-	 * @param fontFile Font file path
-	 */
-	void setFontFile(QString fontFile);
-
-	/**
 	 * @brief draw the strip
 	 *
 	 * It compute all the necessary data for the current frame, skipped

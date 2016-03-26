@@ -89,6 +89,8 @@ private slots:
 
 	void on_actionChange_font_triggered();
 
+	void onFontSelected(const QFont &font);
+
 protected:
 	PhClock *_clock;
 private:

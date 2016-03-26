@@ -40,10 +40,9 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_oldPipPositionRight = _settings->videoPictureInPicturePositionRight();
 	_oldStripHeight = _settings->stripHeight();
 	_oldHorizontalTimePerPixel = _settings->horizontalTimePerPixel();
-	_oldBolness = _settings->textBoldness();
-	_oldFont = _settings->textFontFile();
+	_oldFont = QFont(_settings->textFontFamily());
 
-	ui->sliderBoldness->setValue(_oldBolness);
+	ui->fontComboBox->setCurrentFont(_oldFont);
 	ui->spinBoxSpeed->setValue(_oldHorizontalTimePerPixel);
 
 	ui->mainScreenDelayspinBox->setValue(_oldScreenDelay);
@@ -56,56 +55,6 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 		ui->pipLeftPositionRadioButton->setChecked(true);
 
 	ui->sliderStripHeight->setValue(ui->sliderStripHeight->maximum() * _oldStripHeight);
-
-	//Setting the filters
-	QStringList filters;
-	filters.append("*.ttf");
-	filters.append("*.TTF");
-
-	// Adding the system font
-	QStringList systemFontList;
-	QDir systemFont(QStandardPaths::writableLocation(QStandardPaths::FontsLocation));
-	systemFont.setNameFilters(filters);
-	systemFontList = systemFont.entryList();
-	foreach(QString fontName, systemFontList) {
-		_fontList[fontName.split(".").first()] = systemFont.filePath(fontName);
-	}
-
-#if defined(Q_OS_MAC)
-	//Set the user fonts
-	QStringList userFontList;
-	QString userDirectory = QDir::homePath();
-	QDir userFont(userDirectory + "/Library/Fonts/");
-	userFont.setNameFilters(filters);
-	userFontList = userFont.entryList();
-	foreach(QString fontName, userFontList) {
-		_fontList[fontName.split(".").first()] = userFont.filePath(fontName);
-	}
-
-	//Set the mac fonts
-	QStringList macOSFontList;
-	QDir macOSFont("/Library/Fonts/");
-	macOSFont.setNameFilters(filters);
-	macOSFontList = macOSFont.entryList();
-	foreach(QString fontName, macOSFontList) {
-		_fontList[fontName.split(".").first()] = macOSFont.filePath(fontName);
-	}
-#endif
-
-	// Adding the default font
-	_fontList["Capella"] = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/" + "Cappella.ttf";
-
-	// _oldFont is : /Path/To/Font.ttf
-	// So split with "/" then take last gives Font.ttf
-	// Split with "." then take first, gives the name of the font
-	QString oldFontName = _oldFont.split("/").last().split(".").first();
-	foreach(QString fontName, _fontList.keys()) {
-		ui->listWidgetFont->addItem(fontName);
-		if(fontName == oldFontName) {
-			ui->listWidgetFont->item(ui->listWidgetFont->count() - 1)->setSelected(true);
-			ui->listWidgetFont->setCurrentRow(ui->listWidgetFont->count() - 1);
-		}
-	}
 
 	// Initializing the synchronisation tab
 
@@ -285,8 +234,7 @@ void PreferencesDialog::reject()
 	_settings->setVideoPictureInPicturePositionRight(_oldPipPositionRight);
 	_settings->setStripHeight(_oldStripHeight);
 	_settings->setHorizontalTimePerPixel(_oldHorizontalTimePerPixel);
-	_settings->setTextBoldness(_oldBolness);
-	_settings->setTextFontFile(_oldFont);
+	_settings->setTextFontFamily(_oldFont.family());
 
 	QDialog::reject();
 }
@@ -327,27 +275,6 @@ void PreferencesDialog::on_sliderStripHeight_valueChanged(int position)
 	_settings->setStripHeight(((float)position / ui->sliderStripHeight->maximum()));
 }
 
-void PreferencesDialog::on_sliderBoldness_valueChanged(int value)
-{
-	_settings->setTextBoldness(value);
-}
-
-void PreferencesDialog::on_lineEditFilter_textEdited(const QString &value)
-{
-	ui->listWidgetFont->clear();
-	foreach(QString fontName, _fontList.keys()) {
-		if(fontName.contains(&value, Qt::CaseInsensitive))
-			ui->listWidgetFont->addItem(fontName);
-	}
-}
-
-void PreferencesDialog::on_listWidgetFont_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
-{
-	Q_UNUSED(previous);
-	if(current)
-		_settings->setTextFontFile(_fontList[current->text()]);
-}
-
 void PreferencesDialog::on_mainScreenDelayspinBox_valueChanged(int delay)
 {
 	_settings->setScreenDelay(delay);
@@ -371,4 +298,9 @@ void PreferencesDialog::on_pipRatioSlider_valueChanged(int value)
 void PreferencesDialog::on_pipRightPositionRadioButton_toggled(bool checked)
 {
 	_settings->setVideoPictureInPicturePositionRight(checked);
+}
+
+void PreferencesDialog::on_fontComboBox_currentFontChanged(const QFont &f)
+{
+	_settings->setTextFontFamily(f.family());
 }

@@ -9,21 +9,10 @@ branches:
 install:
   - git submodule update --init --recursive
   # Installing various utilities
-  - choco install -y curl 7zip InnoSetup
+  - choco install -y curl InnoSetup
   - set PATH="C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5";%PATH%
   # Configuring Qt
   - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw491_32\bin;%PATH%
-  # Installing SDL2
-  - curl -kLO https://www.libsdl.org/release/SDL2-devel-2.0.3-mingw.tar.gz
-  - 7z x SDL2-devel-2.0.3-mingw.tar.gz
-  - 7z x SDL2-devel-2.0.3-mingw.tar
-  - set SDL_PATH=%CD%\SDL2-2.0.3\i686-w64-mingw32\
-  - curl -kL https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h -o %SDL_PATH%\include\SDL2\SDL_platform.h
-  # Installing SDL2_ttf
-  - curl -kLO https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.12-mingw.tar.gz
-  - 7z x SDL2_ttf-devel-2.0.12-mingw.tar.gz
-  - 7z x SDL2_ttf-devel-2.0.12-mingw.tar
-  - set SDL_TTF_PATH=%CD%\SDL2_ttf-2.0.12\i686-w64-mingw32\
   # Installing ffmpeg dev
   - curl -kLO http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20151221-git-c0f67e1-win32-dev.7z
   - 7z x ffmpeg-20151221-git-c0f67e1-win32-dev.7z

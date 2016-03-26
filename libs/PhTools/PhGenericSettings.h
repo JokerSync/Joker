@@ -1,6 +1,7 @@
 #ifndef PHGENERICSETTINGS_H
 #define PHGENERICSETTINGS_H
 
+#include <QObject>
 #include <QString>
 #include <QSettings>
 
@@ -127,8 +128,10 @@ public: \
  * The main interest is to centralize the default value of each settings
  * and to insure settings name unicity and homogeneity.
  */
-class PhGenericSettings
+
+class PhGenericSettings : public QObject
 {
+	Q_OBJECT
 public:
 	/**
 	 * @brief PhGenericSettings constructor

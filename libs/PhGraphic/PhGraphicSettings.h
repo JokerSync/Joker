@@ -25,9 +25,9 @@ public:
 	 * @brief The font used for displaying the information
 	 * @return A font file path
 	 */
-	virtual QString infoFontFile()
+	virtual QString infoFontFamily()
 	{
-		return QApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Helvetica.ttf";
+		return "Helvetica";
 	}
 };
 

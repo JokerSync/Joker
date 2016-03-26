@@ -9,6 +9,5 @@ $BASEDIR/install_ffmpeg.sh
 $BASEDIR/install_portaudio.sh
 $BASEDIR/install_rtmidi
 $BASEDIR/install_ltc.sh
-$BASEDIR/install_sdl.sh
 exit 0
 

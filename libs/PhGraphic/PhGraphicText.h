@@ -30,7 +30,7 @@ public:
 	 * @param h The height
 	 */
 	PhGraphicText(PhFont* font, QString content = "", int x = 0, int y = 0, int w = 0, int h = 0);
-	~PhGraphicText();
+
 	/**
 	 * @brief Draw the text on screen
 	 *
@@ -51,10 +51,10 @@ public:
 	void setFont(PhFont * font);
 
 	/**
-	 * @brief getContent
-	 * @return _content
+	 * @brief get the text content
+	 * @return A string
 	 */
-	QString getContent();
+	QString content();
 	/**
 	 * @brief getFont
 	 * @return _font

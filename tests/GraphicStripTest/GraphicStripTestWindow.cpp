@@ -2,8 +2,9 @@
 #include "ui_GraphicStripTestWindow.h"
 
 #include <QFileDialog>
-#include <QFontDialog>
 #include <QFont>
+#include <QFontDatabase>
+#include <QFontDialog>
 #include <QStandardPaths>
 
 #include "PhTools/PhDebug.h"
@@ -16,6 +17,8 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 	_strip(settings)
 {
 	ui->setupUi(this);
+
+	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella-Regular.ttf");
 
 	ui->stripView->setGraphicSettings(settings);
 
@@ -298,11 +301,15 @@ void GraphicStripTestWindow::onPaint(int width, int height)
 
 void GraphicStripTestWindow::on_actionChange_font_triggered()
 {
-	QString fontFile = QFileDialog::getOpenFileName(this, "Change font...", "", "Font files (*.ttf)");
-	if(QFile(fontFile).exists()) {
-		if(PhFont::computeMaxFontSize(fontFile, _settings->textBoldness()) == 0)
-			QMessageBox::critical(this, "Error", "Unable to open " + fontFile);
-		else
-			_settings->setTextFontFile(fontFile);
-	}
+	QFont currentFont(_settings->textFontFamily());
+	QFontDialog dlg(currentFont, this);
+	connect(&dlg, &QFontDialog::currentFontChanged, this, &GraphicStripTestWindow::onFontSelected);
+	if(dlg.exec() != QDialog::Accepted)
+		onFontSelected(currentFont);
+}
+
+void GraphicStripTestWindow::onFontSelected(const QFont &font)
+{
+	PHDEBUG << font.family() << font.weight();
+	_settings->setTextFontFamily(font.family());
 }

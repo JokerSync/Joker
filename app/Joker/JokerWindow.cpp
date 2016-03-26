@@ -7,6 +7,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QFontDatabase>
 
 #include "PhTools/PhDebug.h"
 
@@ -51,6 +52,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 {
 	// Setting up UI
 	ui->setupUi(this);
+
+	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella-Regular.ttf");
 
 	// Due to translation, Qt might not be able to link automatically the menu
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);

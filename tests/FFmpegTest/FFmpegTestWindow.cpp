@@ -92,7 +92,7 @@ bool FFmpegTestWindow::setFrame(int frame)
 				return false;
 
 			int linesize = _image->width() * 3;
-			// Convert the image into YUV format that SDL uses
+			// Convert the image into YUV format
 			if (sws_scale(_pSwsCtx, (const uint8_t * const *) _pFrame->data,
 			              _pFrame->linesize, 0, _pCodecContext->height, &_rgb,
 			              &linesize) < 0)

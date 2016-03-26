@@ -28,7 +28,7 @@ matrix:
     - PROJECT=app/Joker/Joker.pro
     os: osx
     after_script:
-    - make installer
+    - make prettydmg
     - export RELEASED_PACKAGE_FILENAME=$(ls -1 Joker_v*.dmg)
     - echo "RELEASED_PACKAGE_FILENAME:$RELEASED_PACKAGE_FILENAME"
   - env:
@@ -71,7 +71,6 @@ matrix:
 install:
 - git submodule update --init --recursive
 - ". scripts/install_qt.sh"
-- scripts/install_sdl.sh
 - scripts/install_ltc.sh
 - scripts/install_ffmpeg.sh
 - scripts/install_portaudio.sh
@@ -89,12 +88,12 @@ notifications:
     on_success: always
   slack:
     secure: CVzAyvFoT5LFnODOVooG21txFq7B75nER+tLiGr4GFTimKWPb9mdmrqxvaHyJdp0RBtdLFyuWCeA2Gxi1SarPSCstlw0HP0rP0w27gEwVmt2E1xO4RUzHv5JKdbogKNHZJfdTw5VVAgzGNhCRBw2pL33CV0KwJ20lfJUOcg0JY8=
-deploy:
-  provider: releases
-  api_key:
-    secure: DTPxxREDO8+Pi/cnqKr1nce9FxJ3AUY7h4S9gHt3S2vBkrlZM4vD4GLXCVjbZuSpnqkTTAiGhUiYEN8jiF3pjStKKlEl2w537cDpoSl1ZAB5G+G3PKTBxG5MhRMZkTEgYFvtx/VPpvleQ4C8cMosogQk7iBwwuk19FLbcL0/kL4=
-  file: "${RELEASED_PACKAGE_FILENAME}"
-  skip_cleanup: true
-  on:
-    tags: true
-    condition: "$PROJECT = app/Joker/Joker.pro && $TRAVIS_OS_NAME = osx"
+#deploy:
+#  provider: releases
+#  api_key:
+#    secure: DTPxxREDO8+Pi/cnqKr1nce9FxJ3AUY7h4S9gHt3S2vBkrlZM4vD4GLXCVjbZuSpnqkTTAiGhUiYEN8jiF3pjStKKlEl2w537cDpoSl1ZAB5G+G3PKTBxG5MhRMZkTEgYFvtx/VPpvleQ4C8cMosogQk7iBwwuk19FLbcL0/kL4=
+#  file: "${RELEASED_PACKAGE_FILENAME}"
+#  skip_cleanup: true
+#  on:
+#    tags: true
+#    condition: "$PROJECT = app/Joker/Joker.pro && $TRAVIS_OS_NAME = osx"
