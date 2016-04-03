@@ -18,8 +18,8 @@ PhSonyController::PhSonyController(PhSonySettings *settings, QString comSuffix) 
 	_lastCTS(false),
 	_threadRunning(false)
 {
-//	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
-//            SLOT(handleError(QSerialPort::SerialPortError)));
+	//	connect(&_serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
+	//            SLOT(handleError(QSerialPort::SerialPortError)));
 }
 
 PhSonyController::~PhSonyController()
@@ -29,31 +29,24 @@ PhSonyController::~PhSonyController()
 
 bool PhSonyController::open(bool inThread)
 {
-	PHDEBUG << _comSuffix;
-	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts()) {
-		QString name = info.portName();
-		PHDEBUG << name;
+	_serial.setPortName(QString("cu.usbserial.%1").arg(_comSuffix));
+	_serial.setBaudRate(QSerialPort::Baud38400);
+	_serial.setDataBits(QSerialPort::Data8);
+	_serial.setStopBits(QSerialPort::OneStop);
+	_serial.setParity(QSerialPort::OddParity);
 
-		if(name.endsWith(_comSuffix)) {
-			_serial.setPort(info);
+	PHDEBUG << _comSuffix << "Opening " << _serial.portName();
+	if( _serial.open(QSerialPort::ReadWrite)) {
 
-			PHDEBUG << _comSuffix << "Opening " << name << _serial.parent();
-			if( _serial.open(QSerialPort::ReadWrite)) {
-				_serial.setBaudRate(QSerialPort::Baud38400);
-				_serial.setDataBits(QSerialPort::Data8);
-				_serial.setStopBits(QSerialPort::OneStop);
-				_serial.setParity(QSerialPort::OddParity);
-
-				if(inThread)
-					this->start(QThread::HighPriority);
-				else
-					connect(&_serial, SIGNAL(readyRead()), this, SLOT(onData()));
-				return true;
-			}
-		}
+		if(inThread)
+			this->start(QThread::HighPriority);
+		else
+			connect(&_serial, SIGNAL(readyRead()), this, SLOT(onData()));
+		return true;
+	} else {
+		PHDEBUG << _comSuffix << "Unable to find usbserial-XXX" << _comSuffix;
+		return false;
 	}
-	PHDEBUG << _comSuffix << "Unable to find usbserial-XXX" << _comSuffix;
-	return false;
 }
 
 void PhSonyController::close()
@@ -133,7 +126,7 @@ unsigned char PhSonyController::getDataSize(unsigned char cmd1)
 
 void PhSonyController::sendCommandWithData(unsigned char cmd1, unsigned char cmd2, const unsigned char *data, unsigned char dataCount)
 {
-//	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, data);
+	//	PHDEBUG << _comSuffix << stringFromCommand(cmd1, cmd2, data);
 	if(dataCount == getDataSize(cmd1)) {
 		unsigned char checksum = cmd1 + cmd2;
 		for (int i = 0; i < dataCount; i++) {

@@ -26,11 +26,6 @@ QGroupBox::title {
     subcontrol-position: top center; /* position at the top center */
     padding: 0 10px;
 }
-
-
-QLabel {
-	color: white;
-}
 </string>
   </property>
   <widget class="QWidget" name="centralWidget">
