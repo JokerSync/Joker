@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSerialPort>
+
 #include <QTimer>
 
 #include "PhTools/PhTickCounter.h"
@@ -31,14 +32,14 @@ private slots:
 	void checkCTS();
 
 private:
-	bool open(QSerialPort * serial, QString suffix);
+	QSerialPort* open(QString suffix);
 	void closeA();
 	void closeB();
 
 
 	Ui::SerialTestWindow *ui;
 
-	QSerialPort _serialA, _serialB;
+	QSerialPort *_serialA, *_serialB;
 	QTimer _ctsTimer;
 	PhTickCounter _ctsCounter, _timerCounter;
 	bool _lastCTS;

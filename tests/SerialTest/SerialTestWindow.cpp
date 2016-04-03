@@ -7,21 +7,21 @@
 SerialTestWindow::SerialTestWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::SerialTestWindow),
-	_serialA(this),
-	_serialB(this)
+	_serialA(NULL),
+	_serialB(NULL)
 {
 	ui->setupUi(this);
 
 	connect(ui->sendButton1, &QPushButton::clicked, this, &SerialTestWindow::sendTextA);
-	connect(&_serialA, &QSerialPort::readyRead, this, &SerialTestWindow::readTextA);
-	if(open(&_serialA, "A"))
-		_serialA.write("Hello from serial A");
 
+	on_checkA_toggled(true);
 
 	connect(ui->sendButton2, &QPushButton::clicked, this, &SerialTestWindow::sendTextB);
-	connect(&_serialB, &QSerialPort::readyRead, this, &SerialTestWindow::readTextB);
-	if(open(&_serialB, "B"))
-		_serialB.write("Hello from serial B");
+	_serialB = open("B");
+	if(_serialB) {
+		connect(_serialB, &QSerialPort::readyRead, this, &SerialTestWindow::readTextB);
+		_serialB->write("Hello from serial B");
+	}
 
 	connect(&_ctsTimer, &QTimer::timeout, this, &SerialTestWindow::checkCTS);
 	_ctsTimer.start(5);
@@ -36,99 +36,118 @@ SerialTestWindow::~SerialTestWindow()
 
 void SerialTestWindow::sendTextA()
 {
-	_serialA.write(ui->inputA->text().toUtf8().constData());
+	if(_serialA)
+		_serialA->write(ui->inputA->text().toUtf8().constData());
 }
 
 void SerialTestWindow::sendTextB()
 {
-	_serialB.write(ui->inputB->text().toUtf8().constData());
+	if(_serialB)
+		_serialB->write(ui->inputB->text().toUtf8().constData());
 }
 
 void SerialTestWindow::readTextA()
 {
-	char buffer[256];
-	qint64 n = _serialA.read(buffer, 256);
-	buffer[n] = 0;
-	QString s(buffer);
-	ui->receiveA->setText(ui->receiveA->toPlainText() + s);
+	if(_serialA) {
+		char buffer[256];
+		qint64 n = _serialA->read(buffer, 256);
+		buffer[n] = 0;
+		QString s(buffer);
+		ui->receiveA->setText(ui->receiveA->toPlainText() + s);
 
-	checkCTS();
+		checkCTS();
+	}
 }
 
 void SerialTestWindow::readTextB()
 {
-	char buffer[256];
-	qint64 n = _serialB.read(buffer, 256);
-	buffer[n] = 0;
-	QString s(buffer);
-	ui->receiveB->setText(ui->receiveB->toPlainText() + s);
+	if(_serialB) {
+		char buffer[256];
+		qint64 n = _serialB->read(buffer, 256);
+		buffer[n] = 0;
+		QString s(buffer);
+		ui->receiveB->setText(ui->receiveB->toPlainText() + s);
 
-	checkCTS();
+		checkCTS();
+	}
 }
 
 void SerialTestWindow::on_checkA_toggled(bool checked)
 {
-	if(checked)
-		open(&_serialA, "A");
-	else
-		closeA();
+	if(checked) {
+		_serialA = open("A");
+		if(_serialA) {
+			connect(_serialA, &QSerialPort::readyRead, this, &SerialTestWindow::readTextA);
+			_serialA->write("Hello from serial A");
+			return;
+		}
+	}
+	closeA();
 }
 
 void SerialTestWindow::on_checkB_toggled(bool checked)
 {
-	if(checked)
-		open(&_serialB, "B");
-	else
-		closeB();
+	if(checked) {
+		_serialB = open("B");
+		if(_serialB) {
+			connect(_serialB, &QSerialPort::readyRead, this, &SerialTestWindow::readTextB);
+			_serialB->write("Hello from serial B");
+			return;
+		}
+	}
+	closeB();
 }
 
-bool SerialTestWindow::open(QSerialPort * serial, QString suffix)
+QSerialPort *SerialTestWindow::open(QString suffix)
 {
 	PHDEBUG << "open" << suffix;
 
-	foreach(QSerialPortInfo info, QSerialPortInfo::availablePorts()) {
-		QString name = info.portName();
-		if(name.startsWith("usbserial-")) {
-			if(name.endsWith(suffix)) {
-				serial->setPort(info);
-				serial->setBaudRate(QSerialPort::Baud38400);
-				serial->setDataBits(QSerialPort::Data8);
-				serial->setStopBits(QSerialPort::OneStop);
-				serial->setParity(QSerialPort::OddParity);
+	QSerialPort *serial = new QSerialPort(this);
+	serial->setPortName(QString("cu.usbserial.%1").arg(suffix));
+	serial->setBaudRate(QSerialPort::Baud38400);
+	serial->setDataBits(QSerialPort::Data8);
+	serial->setStopBits(QSerialPort::OneStop);
+	serial->setParity(QSerialPort::OddParity);
 
-				PHDEBUG << "Opening " << name;
-				serial->open(QSerialPort::ReadWrite);
-
-				return true;
-			}
-		}
-	}
-	PHDEBUG << "not found";
-	return false;
+	PHDEBUG << "Opening " << serial->portName();
+	if(serial->open(QSerialPort::ReadWrite))
+		return serial;
+	delete serial;
+	return NULL;
 }
 
 void SerialTestWindow::closeA()
 {
-	PHDEBUG << "Closing " << _serialA.objectName();
-	_serialA.close();
+	if(_serialA) {
+		PHDEBUG << "Closing " << _serialA->portName();
+		disconnect(_serialA, &QSerialPort::readyRead, this, &SerialTestWindow::readTextA);
+		_serialA->close();
+		_serialA = NULL;
+	}
 }
 
 void SerialTestWindow::closeB()
 {
-	PHDEBUG << "Closing " << _serialB.objectName();
-	_serialB.close();
+	if(_serialB) {
+		PHDEBUG << "Closing " << _serialB->portName();
+		disconnect(_serialB, &QSerialPort::readyRead, this, &SerialTestWindow::readTextB);
+		_serialB->close();
+		_serialB = NULL;
+	}
 }
 
 void SerialTestWindow::checkCTS()
 {
-	bool cts = _serialA.pinoutSignals() & QSerialPort::ClearToSendSignal;
-	float frequency = _ctsCounter.frequency();
-	if(cts != _lastCTS) {
-		_ctsCounter.tick();
-		ui->ctsLabel->setText("CTS : " + QString::number(frequency));
-		_lastCTS = cts;
-	}
+	if(_serialA) {
+		bool cts = _serialA->pinoutSignals() & QSerialPort::ClearToSendSignal;
+		float frequency = _ctsCounter.frequency();
+		if(cts != _lastCTS) {
+			_ctsCounter.tick();
+			ui->ctsLabel->setText("CTS : " + QString::number(frequency));
+			_lastCTS = cts;
+		}
 
-	_timerCounter.tick();
-	PHDEBUG << _timerCounter.frequency() << frequency << cts;
+		_timerCounter.tick();
+		//	PHDEBUG << _timerCounter.frequency() << frequency << cts;
+	}
 }
