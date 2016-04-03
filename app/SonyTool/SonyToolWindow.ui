@@ -6,19 +6,39 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>447</height>
+    <width>424</width>
+    <height>506</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Sony Tool</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QGroupBox {
+	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(60, 60, 60, 255), stop:1 rgba(0, 0, 0, 255));
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-top: 3ex; /* leave space at the top for the title */
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center; /* position at the top center */
+    padding: 0 10px;
+}
+
+
+QLabel {
+	color: white;
+}
+</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QCheckBox" name="masterActiveCheck">
       <property name="text">
-       <string>Master</string>
+       <string>Send Sony command</string>
       </property>
      </widget>
     </item>
@@ -81,17 +101,39 @@
      </layout>
     </item>
     <item>
-     <widget class="PhMediaPanel" name="masterPanel" native="true"/>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>Master</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="PhMediaPanel" name="masterPanel" native="true"/>
+       </item>
+      </layout>
+     </widget>
     </item>
     <item>
      <widget class="QCheckBox" name="slaveActiveCheck">
       <property name="text">
-       <string>Slave</string>
+       <string>Receive Sony command</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="PhMediaPanel" name="slavePanel" native="true"/>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="title">
+       <string>Slave</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="PhMediaPanel" name="slavePanel" native="true">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -100,7 +142,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>424</width>
      <height>22</height>
     </rect>
    </property>
