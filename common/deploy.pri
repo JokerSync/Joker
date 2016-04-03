@@ -10,8 +10,7 @@ win32 {
 
 mac {
 	app_bundle {
-		OTHER_FILES += ../../common/entitlements.plist
-
+		# Info.plist
 		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string com.phonations.$$lower($${TARGET}) $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
@@ -19,6 +18,7 @@ mac {
 		QMAKE_POST_LINK += plutil -replace LSMinimumSystemVersion -string 10.8 $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist;
 
+		# removeapp target
 		removeapp.commands += rm -rf $${TARGET}.app
 
 		QMAKE_EXTRA_TARGETS += removeapp
@@ -36,6 +36,9 @@ CONFIG(release, debug|release) {
 			INSTALLER_CERTIFICATE = \"3rd Party Mac Developer Installer: Phonations (Y44UPVP368)\"
 
 			# Target for sandboxing
+			# entitlement.plist
+			OTHER_FILES += ../../common/entitlements.plist
+
 			sandbox.commands += echo "Sandboxing $${TARGET}" &&
 			sandbox.commands += codesign -s $$APPLICATION_CERTIFICATE --entitlements $$TOP_ROOT/common/entitlements.plist $${TARGET}.app
 
