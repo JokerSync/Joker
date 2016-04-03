@@ -12,7 +12,6 @@ include($$TOP_ROOT/common/common.pri)
 
 include($$TOP_ROOT/libs/PhTools/PhTools.pri)
 include($$TOP_ROOT/libs//PhCommonUI/PhCommonUI.pri)
-include($$TOP_ROOT/libs/PhAudio/PhAudio.pri)
 include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 include($$TOP_ROOT/libs/PhSony/PhSony.pri)
 
