@@ -40,7 +40,7 @@ In order to compile the  project you will need to follow the instructions depend
 * [Linux](#linux) _(coming soon)_
 * [Windows](#windows)
 
-The project uses *Qt 5.3.1* available here: http://qt-project.org/downloads
+The project uses *Qt 5.5.1* available here: http://www.qt.io/download/
 
 ## <a name="mac"></a> Mac Os:
 
