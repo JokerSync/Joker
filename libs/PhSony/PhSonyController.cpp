@@ -43,7 +43,8 @@ bool PhSonyController::open(bool inThread)
 		else
 			connect(&_serial, SIGNAL(readyRead()), this, SLOT(onData()));
 		return true;
-	} else {
+	}
+	else {
 		PHDEBUG << _comSuffix << "Unable to find usbserial-XXX" << _comSuffix;
 		return false;
 	}
