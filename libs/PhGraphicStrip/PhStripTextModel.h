@@ -10,6 +10,7 @@ class PhStripTextModel : public QAbstractListModel
 public:
 	enum NextPeopleRoles {
 		ContentRole = Qt::UserRole + 1,
+		TrackNumberRole,
 		//ColorRole,
 		TimeInRole,
 		SelectedRole,
@@ -18,16 +19,26 @@ public:
 
 	PhStripTextModel(QObject *parent = 0);
 
-	void addStripText(const PhStripText *stripText);
+	QList<PhStripText*> texts() {
+		return _stripTexts;
+	}
+
+	void append(PhStripText *stripText);
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
 	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+	bool setData(const QModelIndex &index, const QVariant &value, int role);
+	bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
 	void clear();
+
+public slots:
+	void addText(PhTime timeIn, PhTime timeOut, float y);
+	void removeText(int index);
 
 protected:
 	QHash<int, QByteArray> roleNames() const;
 
 private:
-	QList<const PhStripText*> _stripTexts;
+	QList<PhStripText*> _stripTexts;
 };
 
 #endif // PHSTRIPTEXTMODEL_H

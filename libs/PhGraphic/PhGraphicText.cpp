@@ -43,23 +43,23 @@ void PhGraphicText::draw()
 
 	if(_font->getHeight() == 0) {
 		// bad font initialization: displaying a rect
-		glBegin(GL_QUADS);
-		{
-			glVertex3i(this->x(),      this->y(), this->z());
-			glVertex3i(this->x() + this->width(),  this->y(), this->z());
-			glVertex3i(this->x() + this->width(),  this->y() + this->height(),  this->z());
-			glVertex3i(this->x(),      this->y() +this->height(),  this->z());
-		}
-		glEnd();
+//		glBegin(GL_QUADS);
+//		{
+//			glVertex3i(this->x(),      this->y(), this->z());
+//			glVertex3i(this->x() + this->width(),  this->y(), this->z());
+//			glVertex3i(this->x() + this->width(),  this->y() + this->height(),  this->z());
+//			glVertex3i(this->x(),      this->y() +this->height(),  this->z());
+//		}
+//		glEnd();
 
 		return;
 	}
 
-	glEnable(GL_TEXTURE_2D);
+//	glEnable(GL_TEXTURE_2D);
 
-	glEnable(GL_BLEND);
+//	glEnable(GL_BLEND);
 
-	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+//	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 	int totalAdvance = 0;
 	//Compute the natural width of the content to scale it later
@@ -94,22 +94,22 @@ void PhGraphicText::draw()
 			//        (tu1, tv2) --- (tu2, tv2)
 
 			int offset = this->x() + advance * this->width() / totalAdvance;
-			glBegin(GL_QUADS);  //Begining the cube's drawing
-			{
-				glTexCoord3f(tu1, tv1, 1);  glVertex3i(offset,      this->y(), this->z());
-				glTexCoord3f(tu2, tv1, 1);  glVertex3i(offset + w,  this->y(), this->z());
-				glTexCoord3f(tu2, tv2, 1);  glVertex3i(offset + w,  this->y() + h,  this->z());
-				glTexCoord3f(tu1, tv2, 1);  glVertex3i(offset,      this->y() + h,  this->z());
-			}
-			glEnd();
+//			glBegin(GL_QUADS);  //Begining the cube's drawing
+//			{
+//				glTexCoord3f(tu1, tv1, 1);  glVertex3i(offset,      this->y(), this->z());
+//				glTexCoord3f(tu2, tv1, 1);  glVertex3i(offset + w,  this->y(), this->z());
+//				glTexCoord3f(tu2, tv2, 1);  glVertex3i(offset + w,  this->y() + h,  this->z());
+//				glTexCoord3f(tu1, tv2, 1);  glVertex3i(offset,      this->y() + h,  this->z());
+//			}
+//			glEnd();
 
 		}
 		// Inc the advance
 		advance += _font->getAdvance(ch);
 	}
 
-	glDisable(GL_BLEND);
+//	glDisable(GL_BLEND);
 
-	glDisable(GL_TEXTURE_2D);
+//	glDisable(GL_TEXTURE_2D);
 }
 

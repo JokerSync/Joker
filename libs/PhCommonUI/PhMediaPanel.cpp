@@ -14,7 +14,8 @@ PhMediaPanel::PhMediaPanel(QWidget *parent) :
 	ui(new Ui::PhMediaPanel),
 	_clock(NULL),
 	_timeIn(0),
-	_length(0)
+	_length(0),
+	_relativeTime(0)
 {
 	ui->setupUi(this);
 
@@ -81,8 +82,11 @@ PhTime PhMediaPanel::timeIn() const
 
 void PhMediaPanel::setTimeIn(PhTime timeIn)
 {
-	_timeIn = timeIn;
-	updateSlider();
+	if (timeIn != _timeIn) {
+		PHDEBUG << "timeIn: " << timeIn;
+		_timeIn = timeIn;
+		updateSlider();
+	}
 }
 
 PhTime PhMediaPanel::length()
@@ -92,8 +96,29 @@ PhTime PhMediaPanel::length()
 
 void PhMediaPanel::setLength(PhTime length)
 {
-	_length = length;
-	updateSlider();
+	if (length != _length) {
+		PHDEBUG << "length: " << length;
+		_length = length;
+		updateSlider();
+	}
+}
+
+double PhMediaPanel::relativeTime()
+{
+	return _relativeTime;
+}
+
+void PhMediaPanel::setRelativeTime(double relativeTime)
+{
+	if (relativeTime != _relativeTime) {
+		PHDEBUG << "relativeTime: " << relativeTime;
+		_relativeTime = relativeTime;
+
+		PhTime time = _timeIn + relativeTime*_length;
+		_clock->setTime(time);
+
+		emit relativeTimeChanged();
+	}
 }
 
 bool PhMediaPanel::isPlaying()
@@ -227,6 +252,8 @@ void PhMediaPanel::updateSlider()
 	PhFrame frameOut = (_timeIn + _length) / PhTimeCode::timePerFrame(tcType);
 	ui->_slider->setMinimum(frameIn);
 	ui->_slider->setMaximum(frameOut);
+
+	setRelativeTime((double)(_clock->time() - _timeIn)/((double)_length));
 }
 
 void PhMediaPanel::onTCTypeComboChanged()
@@ -250,5 +277,8 @@ void PhMediaPanel::onTimeChanged(PhTime time)
 	PhTimeCodeType tcType = this->timeCodeType();
 	ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(time, tcType));
 	ui->_slider->setSliderPosition(time / PhTimeCode::timePerFrame(tcType));
+	PHDEBUG << "time: " << time;
+
+	setRelativeTime((double)(_clock->time() - _timeIn)/((double)_length));
 }
 

@@ -10,9 +10,10 @@
 
 #include "PhGraphicView.h"
 
-PhGraphicView::PhGraphicView( QWidget *parent)
+PhGraphicView::PhGraphicView(QWidget *parent)
 	//: QQuickWidget(parent),
 	: QQuickView(),
+	//: QQmlApplicationEngine(),
 	_settings(NULL),
 	_dropDetected(0),
 	_maxRefreshRate(0),

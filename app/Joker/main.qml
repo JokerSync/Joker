@@ -9,11 +9,209 @@ import QtQml 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 
+//ApplicationWindow {
 Item {
-    id: item1
-
+    id: window
+//    title: "Test Window with color " + color
     width: 800
     height: 600
+//    visible: true
+
+//    menuBar: MenuBar {
+//        Menu {
+//            title: "File"
+//            MenuItem {
+//                text: "New"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuSeparator { }
+//            MenuItem {
+//                text: "Open"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Open Recent"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuSeparator { }
+//            MenuItem {
+//                text: "Open Video"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Close Video"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuSeparator { }
+//            MenuItem {
+//                text: "Save"
+//                shortcut: "Ctrl+S"
+//                onTriggered: jokerWindow.on_actionSave_triggered()
+//            }
+//            MenuItem {
+//                text: "Save As"
+//                shortcut: "Ctrl+Shift+S"
+//                onTriggered: jokerWindow.on_actionSave_as_triggered()
+//            }
+//            MenuSeparator { }
+//            MenuItem {
+//                text: "Preferences"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Properties"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//        }
+//        Menu {
+//            title: "Control"
+//            MenuItem {
+//                text: "Play / Pause"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Play backward"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Step forward"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Step backward"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Time forward"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Time backward"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Speed"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+
+//            //              <widget class="QMenu" name="menuVarial_Speed">
+//            //               <addaction name="action_3"/>
+//            //               <addaction name="action_1"/>
+//            //               <addaction name="action_0_5"/>
+//            //               <addaction name="action0"/>
+//            //               <addaction name="action0_5"/>
+//            //               <addaction name="action1"/>
+//            //               <addaction name="action3"/>
+//            //              </widget>
+
+//            MenuItem {
+//                text: "Change timestamp"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Go to"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+
+//            //              <widget class="QMenu" name="menuGo_to">
+//            //               <addaction name="actionTimecode"/>
+//            //               <addaction name="actionNext_element"/>
+//            //               <addaction name="actionPrevious_element"/>
+//            //               <addaction name="actionNext_loop"/>
+//            //               <addaction name="actionPrevious_loop"/>
+//            //              </widget>
+
+//            MenuSeparator { }
+//            MenuItem {
+//                text: "Set timecode In"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Set timecode Out"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//            MenuItem {
+//                text: "Loop"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+//        }
+//        Menu {
+//            title: "Rythmo"
+//            MenuItem {
+//                text: "Cut"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+
+//            //              <addaction name="actionSelect_character"/>
+//            //              <addaction name="actionHide_selected_peoples"/>
+//            //              <addaction name="separator"/>
+//            //              <addaction name="actionHide_the_rythmo"/>
+//            //              <addaction name="actionInvert_colors"/>
+//            //              <addaction name="actionDisplay_the_cuts"/>
+//            //              <addaction name="actionDisplay_the_vertical_scale"/>
+//            //              <addaction name="separator"/>
+//            //              <addaction name="actionDisplay_feet"/>
+//            //              <addaction name="actionSet_first_foot_timecode"/>
+//            //              <addaction name="actionSet_distance_between_two_feet"/>
+//        }
+//        Menu {
+//            title: "Video"
+//            MenuItem {
+//                text: "Cut"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+
+//            //              <addaction name="actionForce_16_9_ratio"/>
+//            //              <addaction name="actionDeinterlace_video"/>
+//            //              <addaction name="actionUse_native_video_size"/>
+
+//        }
+//        Menu {
+//            title: "View"
+//            MenuItem {
+//                text: "Cut"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+
+//            //              <addaction name="actionFullscreen"/>
+//            //              <addaction name="actionDisplay_the_control_panel"/>
+//            //              <addaction name="actionDisplay_the_information_panel"/>
+//            //              <addaction name="separator"/>
+//        }
+//        Menu {
+//            title: "Help"
+//            MenuItem {
+//                text: "Cut"
+//                //shortcut: "Ctrl+X"
+//                //onTriggered: ...
+//            }
+
+//            //              <addaction name="actionSend_feedback"/>
+//            //              <addaction name="actionAbout"/>
+//        }
+//    }
 
     Rectangle {
         id: titleRect

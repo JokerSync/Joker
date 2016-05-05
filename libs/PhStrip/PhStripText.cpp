@@ -5,7 +5,7 @@
  */
 
 #include "PhStripText.h"
-
+#include "PhTools/PhDebug.h"
 
 
 PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, float y, QString content, float height, bool selected) :

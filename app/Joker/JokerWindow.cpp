@@ -58,6 +58,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	//_view = ui->videoStripView;
 	_view = new PhGraphicView();
 	_context = _view->engine()->rootContext();
+	//_context = _view->rootContext();
 
 	_context->setContextProperty("doc", _doc);
 	_context->setContextProperty("jokerWindow", this);
@@ -66,7 +67,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("rulerModel", _strip.rulerModel());
 	_context->setContextProperty("cutModel", _strip.cutModel());
 	_context->setContextProperty("loopModel", _strip.loopModel());
-	_context->setContextProperty("trackModel", _strip.trackModel());
 	_context->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
 	_context->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
 	_context->setContextProperty("textFontUrl", QUrl::fromLocalFile(_settings->textFontFile()));
@@ -90,21 +90,18 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("nextTcLabelText", "#");
 	_context->setContextProperty("noSyncLabelVisible", false);
 	_context->setContextProperty("noSyncLabelOpacity", 0);
+	_context->setContextProperty("playbackController", &_mediaPanel);
 
 	connect(_view, &QQuickView::statusChanged, this, &JokerWindow::qmlStatusChanged);
+	//connect(_view, &QQmlApplicationEngine::warnings, this, &JokerWindow::qmlStatusChanged);
 
-	//view->setResizeMode(QQuickWidget::SizeRootObjectToView);
 	_view->setResizeMode(QQuickView::SizeRootObjectToView);
 
 	// in resources or in full path, the qml sub-files are not found if launched from outside Qt Creator !
 	_view->setSource(QUrl("qrc:///main.qml"));
+	//_view->load(QUrl("qrc:///main.qml"));
 	//_view->setSource(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/main.qml"));
 	_view->show();
-
-
-	QObject *button = _view->rootObject()->findChild<QObject *>("PlayButton");
-	// connect QML signal to C++ slot
-	QObject::connect(button, SIGNAL(clicked()), &_mediaPanel, SLOT(onPlayPause()));
 
 	// Due to translation, Qt might not be able to link automatically the menu
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
@@ -113,6 +110,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	connect(ui->actionFullscreen, SIGNAL(triggered()), this, SLOT(toggleFullScreen()));
 
 	connect(&_videoEngine, &PhVideoEngine::newVideoContentProduced, &_videoSurface, &PhVideoSurface::onNewVideoContentReceived);
+	connect(&_videoEngine, &PhVideoEngine::timeCodeTypeChanged, this, &JokerWindow::onVideoTimeCodeTypeChanged);
 
 	_view->setGraphicSettings(_settings);
 
@@ -213,6 +211,23 @@ void JokerWindow::qmlStatusChanged(QQuickView::Status status)
 			msgBox.exec();
 		}
 	}
+}
+
+//void JokerWindow::qmlStatusChanged(QList<QQmlError> warnings)
+//{
+//	foreach (QQmlError error, warnings)
+//	{
+//		PHDEBUG << error.toString();
+
+//		//QMessageBox msgBox;
+//		//msgBox.setText(error.toString());
+//		//msgBox.exec();
+//	}
+//}
+
+void JokerWindow::onVideoTimeCodeTypeChanged(PhTimeCodeType)
+{
+	emit timePerFrameChanged();
 }
 
 JokerWindow::~JokerWindow()
@@ -483,6 +498,11 @@ void JokerWindow::on_actionOpen_triggered()
 		}
 	}
 	fadeInMediaPanel();
+}
+
+void JokerWindow::on_actionStep_start_triggered()
+{
+	setCurrentTime(_doc->videoTimeIn());
 }
 
 void JokerWindow::on_actionPlay_pause_triggered()
@@ -1028,10 +1048,14 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 
 	_strip.draw(0, y, width, stripHeight, x, 0, selectedPeoples);
 
+	//QObject *rootObject = _view->rootObjects().first();
+
 	// prepare the string list that is used to display the infos
 	setRefreshInfo(QString("refresh: %1x%2, %3 / %4")
 				   .arg(_view->width())
 				   .arg(_view->height())
+//				   .arg(rootObject->property("width").toInt())
+//				   .arg(rootObject->property("height").toInt())
 				   .arg(_view->maxRefreshRate())
 				   .arg(_view->refreshRate()));
 	setUpdateInfo(QString("Update : %1 %2").arg(_view->maxUpdateDuration())
@@ -1184,7 +1208,11 @@ PhTimeCodeType JokerWindow::timeCodeType()
 #warning /// @todo Are we sure to use default 25?
 	return PhTimeCodeType25;
 #endif
+}
 
+PhTime JokerWindow::timePerFrame()
+{
+	return PhTimeCode::timePerFrame(timeCodeType());
 }
 
 void JokerWindow::on_actionSet_TC_in_triggered()

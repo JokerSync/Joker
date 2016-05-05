@@ -134,9 +134,9 @@ public:
 		return &_loopModel;
 	}
 
-	PhTrackModel *trackModel() {
-		return &_trackModel;
-	}
+//	PhTrackModel *trackModel() {
+//		return &_trackModel;
+//	}
 
 private slots:
 	/**
@@ -187,7 +187,7 @@ private:
 	PhNextPeopleModel _rulerModel;
 	PhNextPeopleModel _cutModel;
 	PhNextPeopleModel _loopModel;
-	PhTrackModel _trackModel;
+//	PhTrackModel _trackModel;
 };
 
 #endif // PHGRAPHICSTRIP_H

@@ -19,7 +19,7 @@ class PhStripText : public PhStripPeopleObject {
 
 	Q_OBJECT
 
-	Q_PROPERTY(QString content READ content NOTIFY contentChanged)
+	Q_PROPERTY(QString content READ content WRITE setContent NOTIFY contentChanged)
 
 public:
 

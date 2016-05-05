@@ -12,7 +12,8 @@
 
 #include "PhStripDoc.h"
 
-PhStripDoc::PhStripDoc()
+PhStripDoc::PhStripDoc() :
+	_texts(new PhStripTextModel())
 {
 	reset();
 }
@@ -178,7 +179,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 									timeIn = lastTime;
 								if(lineElem.attribute("link") != "off") {
 									if(currentText.length()) {
-										_texts1.append(new PhStripText(lastLinkedTime, people, lastTime, y, currentText, 0.25f));
+										_texts->append(new PhStripText(lastLinkedTime, people, lastTime, y, currentText, 0.25f));
 										currentText = "";
 									}
 									lastLinkedTime = lastTime;
@@ -192,7 +193,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					if(currentText.length()) {
 						PhTime time = lastLinkedTime + currentText.length() * 1000;
 						PHDEBUG << currentText;
-						_texts1.append(new PhStripText(lastLinkedTime, people, time, y, currentText, 0.25f));
+						_texts->append(new PhStripText(lastLinkedTime, people, time, y, currentText, 0.25f));
 						lastTime = lastLinkedTime = time;
 					}
 					PhStripDetect::PhDetectType type = PhStripDetect::On;
@@ -595,14 +596,14 @@ bool PhStripDoc::readMosTrack(QFile &f, PhTimeCodeType tcType, QMap<int, PhPeopl
 	foreach(PhStripText* text, textList1) {
 		text->setPeople(people);
 		text->setY(track / 5.0);
-		_texts1.append(text);
+		_texts->append(text);
 	}
 
 	PHDBG(textLevel) << "Adding" << textList2.count() << "texts in  list 2";
 	foreach(PhStripText* text, textList2) {
 		text->setPeople(people);
 		text->setY(track);
-		_texts2.append(text);
+		_alternateTexts.append(text);
 	}
 
 	foreach(PhStripDetect* detect, detectList) {
@@ -854,14 +855,17 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 
 	f.close();
 
-	if((_texts1.count() == 0) && (_texts2.count())) {
+	if((_texts->rowCount() == 0) && (_alternateTexts.count())) {
 		PHDEBUG << "Switching primary and secondary text lists";
-		_texts1.append(_texts2);
-		_texts2.clear();
+		foreach(PhStripText* text, _alternateTexts) {
+			_texts->append(text);
+		}
+		_alternateTexts.clear();
 	}
 
-	qSort(_texts1.begin(), _texts1.end(), PhStripObject::dtcomp);
-	qSort(_texts2.begin(), _texts2.end(), PhStripObject::dtcomp);
+	// TODO sort proxy
+	//qSort(_texts1.begin(), _texts1.end(), PhStripObject::dtcomp);
+	//qSort(_texts2.begin(), _texts2.end(), PhStripObject::dtcomp);
 	qSort(_detects.begin(), _detects.end(), PhStripObject::dtcomp);
 	qSort(_cuts.begin(), _cuts.end(), PhStripObject::dtcomp);
 	qSort(_loops.begin(), _loops.end(), PhStripObject::dtcomp);
@@ -1025,7 +1029,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 					QString content = textElement.elementsByTagName("VALUE").at(0).toElement().text();
 
 					PHDEBUG << PhTimeCode::stringFromTime(timeIn, tcType) << PhTimeCode::stringFromTime(timeOut, tcType) << content;
-					_texts1.append(new PhStripText(timeIn, people, timeOut, y, content, height));
+					_texts->append(new PhStripText(timeIn, people, timeOut, y, content, height));
 				}
 			}
 			else {
@@ -1134,7 +1138,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 			float y = y1 / 150.0f;
 			float height = (y2 - y1) / 150.0f;
 			QString content = query.value(7).toString();
-			_texts1.append(new PhStripText(timeIn, people, timeOut, y, content, height));
+			_texts->append(new PhStripText(timeIn, people, timeOut, y, content, height));
 			PHDEBUG << timeIn << timeOut << content;
 		}
 	}
@@ -1352,7 +1356,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 		PhTime timeIn = time;
 		PhTime timeOut = timeIn + content.length() * 1000;
 
-		_texts1.append(new PhStripText(timeIn, people, timeOut, i % trackCount / 4, content, 0.25f));
+		_texts->append(new PhStripText(timeIn, people, timeOut, i % trackCount / 4, content, 0.25f));
 
 		// So the texts are all one after the other
 		time += spaceBetweenText;
@@ -1377,10 +1381,9 @@ void PhStripDoc::reset()
 	_lastTime = 0;
 	qDeleteAll(_loops);
 	_loops.clear();
-	qDeleteAll(_texts1);
-	_texts1.clear();
-	qDeleteAll(_texts2);
-	_texts2.clear();
+	_texts->clear();
+	qDeleteAll(_alternateTexts);
+	_alternateTexts.clear();
 
 	_generator = "???";
 	_title = "";
@@ -1415,7 +1418,7 @@ void PhStripDoc::addObject(PhStripObject *object)
 		PHDEBUG << "Added a detect!";
 	}
 	else if(dynamic_cast<PhStripText*>(object)) {
-		this->_texts1.append(dynamic_cast<PhStripText*>(object));
+		_texts->append(dynamic_cast<PhStripText*>(object));
 		PHDEBUG << "Added a text!";
 	}
 	else {
@@ -1695,12 +1698,9 @@ bool PhStripDoc::forceRatio169() const
 	return _videoForceRatio169;
 }
 
-QList<PhStripText *> PhStripDoc::texts(bool alternate)
+QList<PhStripText *> PhStripDoc::texts()
 {
-	if(alternate)
-		return _texts2;
-	else
-		return _texts1;
+	return _texts->texts();
 }
 
 QList<PhStripText *> PhStripDoc::texts(PhPeople *people)
@@ -1711,6 +1711,11 @@ QList<PhStripText *> PhStripDoc::texts(PhPeople *people)
 			result.append(text);
 	}
 	return result;
+}
+
+PhStripTextModel *PhStripDoc::textModel()
+{
+	return _texts;
 }
 
 QList<PhStripLoop *> PhStripDoc::loops()

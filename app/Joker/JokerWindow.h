@@ -57,6 +57,7 @@ class JokerWindow : public PhEditableDocumentWindow
 	Q_PROPERTY(QString updateInfo READ updateInfo WRITE setUpdateInfo NOTIFY updateInfoChanged)
 	Q_PROPERTY(QString dropInfo READ dropInfo WRITE setDropInfo NOTIFY dropInfoChanged)
 	Q_PROPERTY(QString stripInfo READ stripInfo WRITE setStripInfo NOTIFY stripInfoChanged)
+	Q_PROPERTY(PhTime timePerFrame READ timePerFrame NOTIFY timePerFrameChanged)
 
 public:
 	///
@@ -124,6 +125,8 @@ public:
 	}
 	void setStripInfo(QString text);
 
+	PhTime timePerFrame();
+
 public slots:
 	///
 	/// \brief timeCounter Slot used to count the time played on nominal speed
@@ -132,6 +135,38 @@ public slots:
 	/// \param elapsedTime
 	///
 	void timeCounter(PhTime elapsedTime);
+
+	void on_actionStep_start_triggered();
+
+	void on_actionPlay_pause_triggered();
+
+	void on_actionPlay_backward_triggered();
+
+	void on_actionStep_forward_triggered();
+
+	void on_actionStep_backward_triggered();
+
+	void on_actionStep_time_forward_triggered();
+
+	void on_actionStep_time_backward_triggered();
+
+	void on_action_3_triggered();
+
+	void on_action_1_triggered();
+
+	void on_action_0_5_triggered();
+
+	void on_action0_triggered();
+
+	void on_action0_5_triggered();
+
+	void on_action1_triggered();
+
+	void on_action3_triggered();
+
+	void on_actionSave_triggered();
+
+	void on_actionSave_as_triggered();
 
 protected:
 	///
@@ -220,32 +255,6 @@ private slots:
 	// Qt Designer slots
 	void on_actionOpen_triggered();
 
-	void on_actionPlay_pause_triggered();
-
-	void on_actionPlay_backward_triggered();
-
-	void on_actionStep_forward_triggered();
-
-	void on_actionStep_backward_triggered();
-
-	void on_actionStep_time_forward_triggered();
-
-	void on_actionStep_time_backward_triggered();
-
-	void on_action_3_triggered();
-
-	void on_action_1_triggered();
-
-	void on_action_0_5_triggered();
-
-	void on_action0_triggered();
-
-	void on_action0_5_triggered();
-
-	void on_action1_triggered();
-
-	void on_action3_triggered();
-
 	void on_actionOpen_Video_triggered();
 
 	void on_actionChange_timestamp_triggered();
@@ -274,10 +283,6 @@ private slots:
 	void on_actionNext_element_triggered();
 
 	void on_actionPrevious_element_triggered();
-
-	void on_actionSave_triggered();
-
-	void on_actionSave_as_triggered();
 
 	void on_actionSelect_character_triggered();
 
@@ -333,6 +338,9 @@ private slots:
 	void on_actionLoop_triggered(bool checked);
 
 	void qmlStatusChanged(QQuickView::Status status);
+	//void qmlStatusChanged(QList<QQmlError> warnings);
+
+	void onVideoTimeCodeTypeChanged(PhTimeCodeType tcType);
 
 signals:
 	void currentLoopLabelChanged();
@@ -341,6 +349,7 @@ signals:
 	void updateInfoChanged();
 	void dropInfoChanged();
 	void stripInfoChanged();
+	void timePerFrameChanged();
 
 private:
 	PhTimeCodeType timeCodeType();

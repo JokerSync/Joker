@@ -28,6 +28,7 @@ class PhMediaPanel;
 class PhMediaPanel : public QWidget
 {
 	Q_OBJECT
+	Q_PROPERTY(double relativeTime READ relativeTime WRITE setRelativeTime NOTIFY relativeTimeChanged)
 
 public:
 	/**
@@ -86,6 +87,10 @@ public:
 	 */
 	bool isPlaying();
 
+	double relativeTime();
+
+	void setRelativeTime(double relativeTime);
+
 signals:
 
 	/**
@@ -126,6 +131,9 @@ signals:
 	 * @param tcType The new PhTimeCodeType
 	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
+
+	void relativeTimeChanged();
+
 public slots:
 	/**
 	 * @brief Handle a modification of the time
@@ -171,6 +179,7 @@ private:
 	PhTime _timeIn;
 	PhTime _length;
 	bool _playing;
+	double _relativeTime;
 };
 
 #endif // PHMEDIAPANEL_H

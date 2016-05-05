@@ -115,23 +115,23 @@ void PhGraphicStrip::onDocChanged()
 		int previousTimeOut;
 
 		// strip texts
-		previousTimeOut = 0;
+//		previousTimeOut = 0;
 		foreach(PhStripText * text, _doc.texts()) {
 			if (text->y() == y) {
 				text->setSelected(selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
 
-				PhStripText *emptyText = new PhStripText(previousTimeOut,
-														 text->people(),
-														 text->timeIn(),
-														 0,
-														 "", // empty content
-														 0, //height
-														 true);
+//				PhStripText *emptyText = new PhStripText(previousTimeOut,
+//														 text->people(),
+//														 text->timeIn(),
+//														 0,
+//														 "", // empty content
+//														 0, //height
+//														 true);
 
-				track->stripTextModel()->addStripText(emptyText);
-				track->stripTextModel()->addStripText(text);
+//				track->stripTextModel()->addStripText(emptyText);
+				track->stripTextModel()->append(text);
 
-				previousTimeOut = text->timeOut();
+//				previousTimeOut = text->timeOut();
 			}
 		}
 
@@ -155,8 +155,8 @@ void PhGraphicStrip::onDocChanged()
 														  0, //height
 														  true);
 
-				track->stripPeopleModel()->addStripText(peopleText);
-				track->stripPeopleModel()->addStripText(emptyText);
+				track->stripPeopleModel()->append(peopleText);
+				track->stripPeopleModel()->append(emptyText);
 
 				previousTimeOut = text->timeOut();
 			}
@@ -204,7 +204,7 @@ void PhGraphicStrip::onDocChanged()
 			}
 		}
 
-		_trackModel.addTrack(track);
+		//_trackModel.addTrack(track);
 	}
 }
 

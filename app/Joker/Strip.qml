@@ -1,12 +1,14 @@
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick.Layouts 1.1
+import QtQuick.Controls 1.1
 
 Item {
     id: stripContainer
     width: 600
     height: 400
 
-    property int contentX: jokerWindow.stripTime / horizontalTimePerPixel - width / 6
+    property int delayX: width / 6
+    property int contentX: jokerWindow.stripTime / horizontalTimePerPixel - delayX
 
     // the font name is passed from here
     FontLoader { id: stripFont; source: textFontUrl }
@@ -23,6 +25,36 @@ Item {
         width: 2*parent.width
         anchors.bottom: parent.bottom
         transform: Translate { x: (-jokerWindow.stripTime / horizontalTimePerPixel - stripBackground.width/2 / 6) % (stripBackground.width/2) }
+    }
+
+    Menu {
+        id: stripMenu
+        title: "Edit"
+        property int mouseX: 0
+        property int mouseY: 0
+        MenuItem {
+            text: "Add phrase"
+            onTriggered: {
+                var timeIn = (stripMenu.mouseX - delayX) * horizontalTimePerPixel + jokerWindow.stripTime;
+                var timeOut = timeIn + stripContainer.width * horizontalTimePerPixel/4;
+                var trackHeight = stripContainer.height / 4;
+                var textY = Math.round((stripMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
+                console.log("add phrase " + timeIn + " " + timeOut);
+                doc.textModel.addText(timeIn, timeOut, textY);
+            }
+        }
+    }
+
+    MouseArea {
+        id: stripArea
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+        onClicked: {
+            console.log("click " + mouse.x + " " + mouse.y);
+            stripMenu.mouseX = mouse.x;
+            stripMenu.mouseY = mouse.y;
+            stripMenu.popup()
+        }
     }
 
     // ruler
@@ -91,16 +123,208 @@ Item {
                 visible: content.length > 0
             }
 
-            Text {
+            TextInput {
                 id: stripTextItem
-                text: content
+                text: model.content
                 font.pixelSize: parent.height
                 font.family: stripFont.name
                 font.weight: textBoldness * 99/5
                 transform: Scale {  xScale: stripTextContainer.width/stripTextItem.width;
                                     yScale: 1;}
                 smooth: true // smooth scaling
+//                MouseArea {
+//                    anchors.fill: parent
+//                    onClicked: {
+//                        stripTextItem.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+//                    }
+//                }
             }
+
+            Binding { target: model; property: "content"; value: stripTextItem.text }
+        }
+    }
+
+    Menu {
+        id: myContextMenu
+        title: "Edit"
+        property int index: 0
+        MenuItem {
+            text: "Delete phrase"
+            onTriggered: {
+                console.log("cut " + myContextMenu.index);
+                doc.textModel.removeText(myContextMenu.index);
+            }
+        }
+    }
+
+    // FIXME color, font, inverted color are not implemented
+    Component {
+        id: stripTextDelegate2
+        Item {
+            id: stripTextContainer2
+            width: (timeOut - timeIn)/horizontalTimePerPixel
+            height: parent.height/4
+            x: timeIn/horizontalTimePerPixel
+            y: parent.height*trackNumber
+
+            Binding { target: model; property: "timeIn"; value: x*horizontalTimePerPixel }
+            Binding { target: model; property: "timeOut"; value: (x + width)*horizontalTimePerPixel }
+            Binding { target: model; property: "trackNumber"; value: y/stripContainer.height }
+
+            Rectangle {
+                color: "#3000FFFF"
+                anchors.left: parent.left
+                anchors.top: parent.top
+                width:10
+                height: 20
+                visible: content.length > 0
+            }
+
+            Rectangle {
+                border.width: 1
+                border.color: "#30FF0000"
+                color: "#00FFFFFF"
+                anchors.fill: parent
+                visible: content.length > 0
+            }
+
+            TextInput {
+                id: stripTextItem2
+                text: model.content
+                font.pixelSize: parent.height
+                font.family: stripFont.name
+                font.weight: textBoldness * 99/5
+                transform: Scale {  xScale: stripTextContainer2.width/stripTextItem2.width;
+                                    yScale: 1;}
+                smooth: true // smooth scaling
+
+                color: focus ? "slateblue" : "black"
+
+                onEditingFinished: {
+                    console.log("Editing finished")
+                    //dragArea.enabled = true
+                    focus = false
+                }
+
+                Binding { target: model; property: "content"; value: stripTextItem2.text }
+            }
+
+            MouseArea {
+                id: longPressArea
+                anchors.fill: parent
+                acceptedButtons: Qt.RightButton
+                onClicked: {
+                    console.log("index: " + model.index);
+                    myContextMenu.index = model.index;
+                    myContextMenu.popup();
+                }
+            }
+
+            // drag mouse area
+            MouseArea {
+                id: dragArea
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton
+                drag{
+                    target: parent
+                    minimumY: 0
+                    maximumY: stripContainer.height - stripTextContainer2.height
+                    smoothed: true
+                }
+
+                enabled: !stripTextItem2.focus
+
+                onDoubleClicked: {
+                    // give focus to the textinput
+                    stripTextItem2.focus = true
+                    var newPos = stripTextItem2.positionAt(mouseX, mouseY)
+                    stripTextItem2.cursorPosition = newPos
+                }
+
+                onPositionChanged: {
+                    if(drag.active){
+                        // snap x to whole frame
+                        var timePosition = stripTextContainer2.x * horizontalTimePerPixel
+                        var framePosition = Math.round(timePosition / jokerWindow.timePerFrame)
+                        timePosition = framePosition * jokerWindow.timePerFrame
+                        stripTextContainer2.x = timePosition / horizontalTimePerPixel
+
+                        // snap y to track
+                        var trackNumber = Math.round(stripTextContainer2.y / stripContainer.height * 4) / 4
+                        stripTextContainer2.y = stripContainer.height*trackNumber
+                    }
+                }
+
+//                onClicked: {
+//                    stripTextItem2.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
+//                }
+            }
+
+            property int rulersSize: 18
+
+            // left handle
+            Rectangle {
+                width: rulersSize
+                height: rulersSize
+                radius: rulersSize
+                color: "steelblue"
+                anchors.horizontalCenter: parent.left
+                anchors.verticalCenter: parent.verticalCenter
+
+                MouseArea {
+                    anchors.fill: parent
+                    drag{ target: parent; axis: Drag.XAxis }
+                    onMouseXChanged: {
+                        if(drag.active){
+                            console.log("timePerFrame: ", jokerWindow.timePerFrame);
+                            var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
+                            var pixelChange = mouseX
+                            var timeChange = pixelChange * horizontalTimePerPixel
+                            // round to frame
+                            var frameChange = Math.round(timeChange / jokerWindow.timePerFrame)
+                            timeChange = frameChange * jokerWindow.timePerFrame
+                            pixelChange = timeChange / horizontalTimePerPixel
+
+                            if (pixelChange > stripTextContainer2.width - pixelPerFrame) {
+                                pixelChange = stripTextContainer2.width - pixelPerFrame
+                            }
+                            stripTextContainer2.width = stripTextContainer2.width - pixelChange
+                            stripTextContainer2.x = stripTextContainer2.x + pixelChange
+                        }
+                    }
+                }
+            }
+
+            // right handle
+            Rectangle {
+                width: rulersSize
+                height: rulersSize
+                radius: rulersSize
+                color: "steelblue"
+                anchors.horizontalCenter: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+
+                MouseArea {
+                    anchors.fill: parent
+                    drag{ target: parent; axis: Drag.XAxis }
+                    onMouseXChanged: {
+                        if(drag.active){
+                            var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
+                            var pixelChange = mouseX
+                            var timeChange = pixelChange * horizontalTimePerPixel
+                            // round to frame
+                            var frameChange = Math.round(timeChange / jokerWindow.timePerFrame)
+                            timeChange = frameChange * jokerWindow.timePerFrame
+                            pixelChange = timeChange / horizontalTimePerPixel
+
+                            stripTextContainer2.width = stripTextContainer2.width + pixelChange
+                            if(stripTextContainer2.width < pixelPerFrame)
+                                stripTextContainer2.width = pixelPerFrame
+                        }
+                    }
+                }
+            }
+
         }
     }
 
@@ -283,16 +507,16 @@ Item {
                 cacheBuffer: 2*stripContainer.width
             }
 
-            ListView {
-                width: parent.width
-                height: parent.height
-                orientation: ListView.Horizontal
-                contentX: stripContainer.contentX
-                interactive: false
-                model: stripText
-                delegate: stripTextDelegate
-                cacheBuffer: 2*stripContainer.width
-            }
+//            ListView {
+//                width: parent.width
+//                height: parent.height
+//                orientation: ListView.Horizontal
+//                contentX: stripContainer.contentX
+//                interactive: false
+//                model: stripText
+//                delegate: stripTextDelegate
+//                cacheBuffer: 2*stripContainer.width
+//            }
 
             ListView {
                 width: parent.width
@@ -340,13 +564,24 @@ Item {
         }
     }
 
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: 0
+//    ColumnLayout {
+//        anchors.fill: parent
+//        spacing: 0
+
+//        Repeater {
+//            //model: trackModel
+//            model: doc.trackModel
+//            delegate: trackDelegate
+//        }
+//    }
+
+    Item {
+        x: -stripContainer.contentX
+        height: parent.height
 
         Repeater {
-            model: trackModel
-            delegate: trackDelegate
+            model: doc.textModel
+            delegate: stripTextDelegate2
         }
     }
 

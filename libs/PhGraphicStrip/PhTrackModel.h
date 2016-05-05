@@ -19,6 +19,10 @@ public:
 
 	PhTrackModel(QObject *parent = 0);
 
+	const PhTrack *track(int index) {
+		return _tracks[index];
+	}
+
 	void addTrack(const PhTrack *track);
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
 	QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;

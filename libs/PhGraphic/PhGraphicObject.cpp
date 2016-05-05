@@ -25,7 +25,7 @@ void PhGraphicObject::dispose()
 
 void PhGraphicObject::draw()
 {
-	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
+//	glColor3f(_color.redF(), _color.greenF(), _color.blueF());
 }
 
 bool PhGraphicObject::init()

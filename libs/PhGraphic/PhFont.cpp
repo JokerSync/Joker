@@ -137,20 +137,20 @@ bool PhFont::init()
 		}
 	}
 
-	glEnable( GL_TEXTURE_2D );
+//	glEnable( GL_TEXTURE_2D );
 	// Have OpenGL generate a texture object handle for us
-	glGenTextures( 1, &_texture );
+//	glGenTextures( 1, &_texture );
 
 	// Bind the texture object
-	glBindTexture( GL_TEXTURE_2D, _texture );
+//	glBindTexture( GL_TEXTURE_2D, _texture );
 
 
 	// Edit the texture object's image data using the information SDL_Surface gives us
-	glTexImage2D( GL_TEXTURE_2D, 0, matrixSurface->format->BytesPerPixel, matrixSurface->w, matrixSurface->h, 0,
-	              GL_RGBA, GL_UNSIGNED_BYTE, matrixSurface->pixels);
+//	glTexImage2D( GL_TEXTURE_2D, 0, matrixSurface->format->BytesPerPixel, matrixSurface->w, matrixSurface->h, 0,
+//	              GL_RGBA, GL_UNSIGNED_BYTE, matrixSurface->pixels);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Once the texture is created, the surface is no longer needed.
 	SDL_FreeSurface(matrixSurface);
@@ -169,7 +169,7 @@ void PhFont::select()
 {
 	if(!_ready)
 		this->init();
-	glBindTexture(GL_TEXTURE_2D, (GLuint)_texture);
+//	glBindTexture(GL_TEXTURE_2D, (GLuint)_texture);
 }
 
 int PhFont::getBoldness() const

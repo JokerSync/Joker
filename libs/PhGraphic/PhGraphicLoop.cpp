@@ -33,12 +33,12 @@ void PhGraphicLoop::draw()
 	}
 
 	// Draw the main rectangle
-	glBegin(GL_QUADS);  // draw the vertical line
+//	glBegin(GL_QUADS);  // draw the vertical line
 	{
-		glVertex3i(x,     y,     z);
-		glVertex3i(x + w, y,     z);
-		glVertex3i(x + w, y + h, z);
-		glVertex3i(x,     y + h, z);
+//		glVertex3i(x,     y,     z);
+//		glVertex3i(x + w, y,     z);
+//		glVertex3i(x + w, y + h, z);
+//		glVertex3i(x,     y + h, z);
 
 		x = this->x();
 		y = this->y() + this->height() / 2;
@@ -52,18 +52,18 @@ void PhGraphicLoop::draw()
 		int ht = _thickness / 3; // half thickness;
 
 		// draw the fist cross segment
-		glVertex3i(x - hcs + ht, y - hcs - ht, z);
-		glVertex3i(x - hcs - ht, y - hcs + ht, z);
-		glVertex3i(x + hcs - ht, y + hcs + ht, z);
-		glVertex3i(x + hcs + ht, y + hcs - ht, z);
+//		glVertex3i(x - hcs + ht, y - hcs - ht, z);
+//		glVertex3i(x - hcs - ht, y - hcs + ht, z);
+//		glVertex3i(x + hcs - ht, y + hcs + ht, z);
+//		glVertex3i(x + hcs + ht, y + hcs - ht, z);
 
 		// draw the second cross segment
-		glVertex3i(x + hcs - ht, y - hcs - ht, z);
-		glVertex3i(x + hcs + ht, y - hcs + ht, z);
-		glVertex3i(x - hcs + ht, y + hcs + ht, z);
-		glVertex3i(x - hcs - ht, y + hcs - ht, z);
+//		glVertex3i(x + hcs - ht, y - hcs - ht, z);
+//		glVertex3i(x + hcs + ht, y - hcs + ht, z);
+//		glVertex3i(x - hcs + ht, y + hcs + ht, z);
+//		glVertex3i(x - hcs - ht, y + hcs - ht, z);
 	}
-	glEnd();
+//	glEnd();
 }
 
 void PhGraphicLoop::setThickness(int thickness)

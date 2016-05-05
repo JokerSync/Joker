@@ -9,6 +9,7 @@
 
 //#include <QQuickWidget>
 #include <QQuickView>
+//#include <QQmlApplicationEngine>
 #include "PhSync/PhTime.h"
 #include "PhTools/PhTickCounter.h"
 
@@ -25,6 +26,7 @@
  */
 //class PhGraphicView : public QQuickWidget
 class PhGraphicView : public QQuickView
+//class PhGraphicView : public QQmlApplicationEngine
 {
 	Q_OBJECT
 public:

@@ -67,7 +67,28 @@ Item {
         anchors.bottom: videoOverlay.bottom
     }
 
+    // must be defined *before* the MediaPanel so that it ends up *below* in the z-stack
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        onPositionChanged: {
+            if (containsMouse) {
+                timer.restart();
+                mediaPanel.visible = true;
+            }
+        }
+    }
+
+    Timer {
+        id: timer
+        interval: 3000
+        onTriggered: {
+            mediaPanel.visible = false
+        }
+    }
+
     MediaPanel {
+        id: mediaPanel
         anchors.left: videoOverlay.left
         anchors.bottom: videoOverlay.bottom
         anchors.right: videoOverlay.right
