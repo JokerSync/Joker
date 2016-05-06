@@ -99,8 +99,8 @@ public:
 #ifdef USE_VIDEO
 	// Video settings:
 	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
-	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 50)
-	PH_SETTING_FRAME2(setVideoPoolSize, videoPoolSize, 120)
+	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 10)
+	PH_SETTING_FRAME2(setVideoPoolSize, videoPoolSize, 20)
 
 	PH_SETTING_BOOL(setVideoPictureInPicture, videoPictureInPicture)
 	PH_SETTING_INT2(setVideoPictureInPictureOffset, videoPictureInPictureOffset, 1000)
