@@ -60,16 +60,6 @@ public slots:
 	void close();
 
 	/**
-	 * @brief Start the decoder processing loop
-	 */
-	void process();
-
-	/**
-	 * @brief Stop the decoder processing loop
-	 */
-	void stop();
-
-	/**
 	 * @brief Decode the next requested frame
 	 */
 	void decodeFrame();
@@ -147,7 +137,7 @@ private:
 	AVStream *_audioStream;
 	AVFrame * _audioFrame;
 
-	bool _deinterlace, _processing;
+	bool _deinterlace;
 
 	QList<PhVideoBuffer *> _requestedFrames;
 };

@@ -22,8 +22,7 @@ PhVideoDecoder::PhVideoDecoder() :
 	_useAudio(false),
 	_audioStream(NULL),
 	_audioFrame(NULL),
-	_deinterlace(false),
-	_processing(false)
+	_deinterlace(false)
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
@@ -167,25 +166,21 @@ void PhVideoDecoder::close()
 	_fileName = "";
 }
 
-void PhVideoDecoder::process()
-{
-	_processing = true;
-	while(_processing) {
-		PHDBG(25);
-		decodeFrame();
-		QThread::msleep(5);
-		QCoreApplication::processEvents();
-	}
-}
-
-void PhVideoDecoder::stop()
-{
-	_processing = false;
-}
-
 void PhVideoDecoder::requestFrame(PhVideoBuffer *buffer)
 {
+	bool topLevel = _requestedFrames.empty();
+
+	PHDBG(24) << buffer->requestFrame() << " " << topLevel;
+
 	_requestedFrames.append(buffer);
+
+	if (topLevel)
+	{
+		while (!_requestedFrames.empty()) {
+			QCoreApplication::processEvents();
+			decodeFrame();
+		}
+	}
 }
 
 void PhVideoDecoder::setDeinterlace(bool deinterlace)
@@ -203,7 +198,6 @@ PhVideoDecoder::~PhVideoDecoder()
 
 	// the engine thread is exiting too, so all the frames can be cleaned.
 	_requestedFrames.clear();
-	_processing = false;
 }
 
 PhFrame PhVideoDecoder::frameLength()
