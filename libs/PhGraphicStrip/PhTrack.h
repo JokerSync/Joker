@@ -2,7 +2,8 @@
 #define PHTRACK_H
 
 #include "PhGraphicStrip/PhNextPeopleModel.h"
-#include "PhGraphicStrip/PhStripTextModel.h"
+
+#include "PhStrip/PhStripTextModel.h"
 
 class PhTrack
 {

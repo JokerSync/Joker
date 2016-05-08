@@ -16,6 +16,10 @@
  */
 class PhStripDetect : public PhStripPeopleObject
 {
+	Q_OBJECT
+
+	Q_PROPERTY(int position READ position WRITE setPosition NOTIFY positionChanged)
+
 public:
 	/**
 	 * @brief The various type of detect
@@ -57,8 +61,23 @@ public:
 		return _type;
 	}
 
+	int position() {
+		return _position;
+	}
+
+	void setPosition(int position) {
+		if (position != _position) {
+			_position = position;
+			emit positionChanged();
+		}
+	}
+
+signals:
+	void positionChanged();
+
 private:
 	PhDetectType _type;
+	int _position;
 };
 
 #endif // PHSTRIPDETECT_H

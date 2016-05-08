@@ -3,7 +3,7 @@ import QtQml 2.2
 import QtMultimedia 5.0
 
 Item {
-    id: videoOverlay
+    id: videoContainer
     width: 500
     height: 700
 
@@ -67,20 +67,8 @@ Item {
         anchors.bottom: videoOverlay.bottom
     }
 
-    // must be defined *before* the MediaPanel so that it ends up *below* in the z-stack
-    MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-        onPositionChanged: {
-            if (containsMouse) {
-                timer.restart();
-                mediaPanel.visible = true;
-            }
-        }
-    }
-
     Timer {
-        id: timer
+        id: panelTimer
         interval: 3000
         onTriggered: {
             mediaPanel.visible = false
@@ -92,8 +80,10 @@ Item {
         anchors.left: videoOverlay.left
         anchors.bottom: videoOverlay.bottom
         anchors.right: videoOverlay.right
-        anchors.leftMargin: 20
-        anchors.rightMargin: 20
-        anchors.bottomMargin: 20
+    }
+
+    function showPanel() {
+        panelTimer.restart()
+        mediaPanel.visible = true
     }
 }

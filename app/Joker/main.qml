@@ -4,7 +4,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQml 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
@@ -213,6 +213,17 @@ Item {
 //        }
 //    }
 
+    // must be defined *before* the MediaPanel so that it ends up *below* in the z-stack
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        onPositionChanged: {
+            if (containsMouse) {
+                videoOverlay.showPanel()
+            }
+        }
+    }
+
     Rectangle {
         id: titleRect
         objectName: "titleRect"
@@ -243,6 +254,7 @@ Item {
         orientation: Qt.Vertical
 
         Video {
+            id: videoOverlay
             Layout.fillHeight: true
             Layout.minimumHeight: 50
         }
@@ -254,6 +266,51 @@ Item {
             height: 200
             Layout.minimumHeight: 50
         }
+
+        // define a cutom delegate of height 2
+        // otherwise Qt defines a large mousearea by default
+        // that will block the mediapanel input
+        handleDelegate: Rectangle {
+            width: parent.width
+            height: 2
+            color: Qt.darker(pal.window, 1.5)
+        }
+
+        SystemPalette { id: pal }
+    }
+
+    // needs focus for key handling
+//    focus: true
+
+//    Keys.onPressed: {
+//        console.log("key: " + event.key);
+//        if (event.key === Qt.Key_Up) {
+//            playbackController.onPlayPause()
+//            event.accepted = true
+//        }
+//        if (event.key === Qt.Key_Right && (event.modifiers & Qt.AltModifier)) {
+//            playbackController.onNextFrame()
+//            event.accepted = true
+//        }
+//        if (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier)) {
+//            playbackController.onPreviousFrame()
+//            event.accepted = true
+//        }
+//    }
+
+    Shortcut {
+        sequence: "Alt+Right"
+        onActivated: playbackController.onNextFrame()
+    }
+
+    Shortcut {
+        sequence: "Alt+Left"
+        onActivated: playbackController.onPreviousFrame()
+    }
+
+    Shortcut {
+        sequence: "Up"
+        onActivated: playbackController.onPlayPause()
     }
 }
 

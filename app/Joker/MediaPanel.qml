@@ -1,40 +1,41 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
+import QtQuick.Layouts 1.1
 
 Rectangle {
-    //width: 300
-    height: panelColumn.height + 20
+    height: panelRow.height + 2
     color: "#aa0d0d0d"
     radius: 0
     border.width: 0
     border.color: "#aa6d7dff"
 
-    Column {
-        id: panelColumn
-        anchors.bottom: parent.bottom
+    RowLayout {
+        id: panelRow
+
+        anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.margins: 20
-        spacing: 10
+
+        height: 20
 
         Text {
             id: mediaPanelTcLabel
             y: 8
-            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
             color: "#ffffff"
             text: tcLabelText
             horizontalAlignment: Text.AlignHCenter
             font.bold: true
             styleColor: "#ffffff"
-            font.pixelSize: 38
+            font.pixelSize: 12
         }
 
         Slider {
             id: timeSlider
-            height: 40
-            anchors.left: parent.left
-            anchors.right: parent.right
+            height: 20
+            anchors.verticalCenter: parent.verticalCenter
+            Layout.fillWidth: true
             value: playbackController.relativeTime
 
             style: SliderStyle {
@@ -69,61 +70,51 @@ Rectangle {
             Binding { target: playbackController; property: "relativeTime"; value: timeSlider.value }
         }
 
-        Row {
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            Button {
-                objectName: "BackButton"
-                text: "Back"
-                onClicked: {
-                    playbackController.onBack()
-                    timer.restart();
-                }
+        Button {
+            objectName: "BackButton"
+            text: "Back"
+            onClicked: {
+                playbackController.onBack()
             }
+        }
 
-            Button {
-                objectName: "FastRewindButton"
-                text: "FR"
-                onClicked: {
-                    playbackController.onRewind()
-                    timer.restart();
-                }
+        Button {
+            objectName: "FastRewindButton"
+            text: "FR"
+            onClicked: {
+                playbackController.onRewind()
             }
+        }
 
-            Button {
-                objectName: "PreviousFrameButton"
-                text: "<<"
-                onClicked: {
-                    playbackController.onPreviousFrame()
-                    timer.restart();
-                }
+        Button {
+            objectName: "PreviousFrameButton"
+            text: "<<"
+            onClicked: {
+                playbackController.onPreviousFrame()
             }
+        }
 
-            Button {
-                objectName: "PlayButton"
-                text: "Play/Pause"
-                onClicked: {
-                    playbackController.onPlayPause()
-                    timer.restart();
-                }
+        Button {
+            objectName: "PlayButton"
+            text: "Play/Pause"
+            onClicked: {
+                playbackController.onPlayPause()
             }
+        }
 
-            Button {
-                objectName: "NextFrameButton"
-                text: ">>"
-                onClicked: {
-                    playbackController.onNextFrame()
-                    timer.restart();
-                }
+        Button {
+            objectName: "NextFrameButton"
+            text: ">>"
+            onClicked: {
+                playbackController.onNextFrame()
             }
+        }
 
-            Button {
-                objectName: "FastForwardButton"
-                text: "FF"
-                onClicked: {
-                    playbackController.onFastForward()
-                    timer.restart();
-                }
+        Button {
+            objectName: "FastForwardButton"
+            text: "FF"
+            onClicked: {
+                playbackController.onFastForward()
             }
         }
     }

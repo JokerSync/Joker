@@ -13,7 +13,7 @@
 #include "PhStripDoc.h"
 
 PhStripDoc::PhStripDoc() :
-	_texts(new PhStripTextModel())
+	_lines(new PhStripLineModel())
 {
 	reset();
 }
@@ -170,6 +170,8 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					PhPeople *people = peopleMap[elem.attribute("role")];
 					float y = elem.attribute("track").toInt() / 4.0;
 					QString currentText = "";
+					QString lineText = "";
+					QList<PhStripDetect*> detects;
 					for(int j = 0; j < elem.childNodes().length(); j++) {
 						if(elem.childNodes().at(j).isElement()) {
 							QDomElement lineElem = elem.childNodes().at(j).toElement();
@@ -177,29 +179,49 @@ bool PhStripDoc::importDetXFile(QString fileName)
 								lastTime = PhTimeCode::timeFromString(lineElem.attribute("timecode"), tcType);
 								if(timeIn < 0)
 									timeIn = lastTime;
+
+								PhStripDetect *detect = new PhStripDetect(PhStripDetect::Labial, lastTime, people, lastTime, 0);
+
 								if(lineElem.attribute("link") != "off") {
 									if(currentText.length()) {
-										_texts->append(new PhStripText(lastLinkedTime, people, lastTime, y, currentText, 0.25f));
+										// for reference:
+										//_texts->append(new PhStripText(lastLinkedTime, people, lastTime, y, currentText, 0.25f));
 										currentText = "";
+										detect->setPosition(currentText.length());
 									}
 									lastLinkedTime = lastTime;
+								}
+
+								if(		   lineElem.attribute("type") != "in_open"
+										&& lineElem.attribute("type") != "in_close"
+										&& lineElem.attribute("type") != "out_open"
+										&& lineElem.attribute("type") != "out_close") {
+									detects.append(detect);
 								}
 							}
 							else if(lineElem.tagName() == "text")
 								currentText += lineElem.text();
+								lineText += lineElem.text();
 						}
 					}
 					// Handling line with no lipsync out
 					if(currentText.length()) {
 						PhTime time = lastLinkedTime + currentText.length() * 1000;
 						PHDEBUG << currentText;
-						_texts->append(new PhStripText(lastLinkedTime, people, time, y, currentText, 0.25f));
+						_lines->append(new PhStripLine(lastLinkedTime, people, time, y, currentText, 0.25f));
 						lastTime = lastLinkedTime = time;
 					}
 					PhStripDetect::PhDetectType type = PhStripDetect::On;
 					if(elem.attribute("voice") == "off")
 						type = PhStripDetect::Off;
 					_detects.append(new PhStripDetect(type, timeIn, people, lastTime, y));
+
+					PhStripLine *line = new PhStripLine(timeIn, people, lastTime, y, lineText, 0.25f);
+					foreach(PhStripDetect *detect, detects) {
+						line->detectModel()->append(detect);
+					}
+
+					_lines->append(line);
 				}
 			}
 		}
@@ -596,7 +618,8 @@ bool PhStripDoc::readMosTrack(QFile &f, PhTimeCodeType tcType, QMap<int, PhPeopl
 	foreach(PhStripText* text, textList1) {
 		text->setPeople(people);
 		text->setY(track / 5.0);
-		_texts->append(text);
+		//FIXME
+		//_texts->append(text);
 	}
 
 	PHDBG(textLevel) << "Adding" << textList2.count() << "texts in  list 2";
@@ -855,15 +878,17 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 
 	f.close();
 
-	if((_texts->rowCount() == 0) && (_alternateTexts.count())) {
+	if((_lines->rowCount() == 0) && (_alternateTexts.count())) {
 		PHDEBUG << "Switching primary and secondary text lists";
 		foreach(PhStripText* text, _alternateTexts) {
-			_texts->append(text);
+			// FIXME
+			//_texts->append(text);
 		}
 		_alternateTexts.clear();
 	}
 
 	// TODO sort proxy
+	// FIXME
 	//qSort(_texts1.begin(), _texts1.end(), PhStripObject::dtcomp);
 	//qSort(_texts2.begin(), _texts2.end(), PhStripObject::dtcomp);
 	qSort(_detects.begin(), _detects.end(), PhStripObject::dtcomp);
@@ -1029,7 +1054,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 					QString content = textElement.elementsByTagName("VALUE").at(0).toElement().text();
 
 					PHDEBUG << PhTimeCode::stringFromTime(timeIn, tcType) << PhTimeCode::stringFromTime(timeOut, tcType) << content;
-					_texts->append(new PhStripText(timeIn, people, timeOut, y, content, height));
+					_lines->append(new PhStripLine(timeIn, people, timeOut, y, content, height));
 				}
 			}
 			else {
@@ -1138,7 +1163,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 			float y = y1 / 150.0f;
 			float height = (y2 - y1) / 150.0f;
 			QString content = query.value(7).toString();
-			_texts->append(new PhStripText(timeIn, people, timeOut, y, content, height));
+			_lines->append(new PhStripLine(timeIn, people, timeOut, y, content, height));
 			PHDEBUG << timeIn << timeOut << content;
 		}
 	}
@@ -1356,7 +1381,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 		PhTime timeIn = time;
 		PhTime timeOut = timeIn + content.length() * 1000;
 
-		_texts->append(new PhStripText(timeIn, people, timeOut, i % trackCount / 4, content, 0.25f));
+		_lines->append(new PhStripLine(timeIn, people, timeOut, i % trackCount / 4, content, 0.25f));
 
 		// So the texts are all one after the other
 		time += spaceBetweenText;
@@ -1381,7 +1406,7 @@ void PhStripDoc::reset()
 	_lastTime = 0;
 	qDeleteAll(_loops);
 	_loops.clear();
-	_texts->clear();
+	_lines->clear();
 	qDeleteAll(_alternateTexts);
 	_alternateTexts.clear();
 
@@ -1418,7 +1443,8 @@ void PhStripDoc::addObject(PhStripObject *object)
 		PHDEBUG << "Added a detect!";
 	}
 	else if(dynamic_cast<PhStripText*>(object)) {
-		_texts->append(dynamic_cast<PhStripText*>(object));
+		// FIXME
+		//_texts->append(dynamic_cast<PhStripText*>(object));
 		PHDEBUG << "Added a text!";
 	}
 	else {
@@ -1700,7 +1726,10 @@ bool PhStripDoc::forceRatio169() const
 
 QList<PhStripText *> PhStripDoc::texts()
 {
-	return _texts->texts();
+	// FIXME
+	QList<PhStripText *> texts;
+	return texts;
+	//return _texts->texts();
 }
 
 QList<PhStripText *> PhStripDoc::texts(PhPeople *people)
@@ -1713,9 +1742,9 @@ QList<PhStripText *> PhStripDoc::texts(PhPeople *people)
 	return result;
 }
 
-PhStripTextModel *PhStripDoc::textModel()
+PhStripLineModel *PhStripDoc::lineModel()
 {
-	return _texts;
+	return _lines;
 }
 
 QList<PhStripLoop *> PhStripDoc::loops()

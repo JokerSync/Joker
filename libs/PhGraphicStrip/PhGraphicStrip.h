@@ -12,12 +12,12 @@
 #include "PhGraphicStripSettings.h"
 
 #include "PhStrip/PhStripDoc.h"
+#include "PhStrip/PhStripTextModel.h"
 
 #include "PhGraphic/PhFont.h"
 #include "PhGraphic/PhGraphicImage.h"
 #include "PhGraphicStrip/PhNextPeople.h"
 #include "PhGraphicStrip/PhNextPeopleModel.h"
-#include "PhGraphicStrip/PhStripTextModel.h"
 #include "PhGraphicStrip/PhTrackModel.h"
 
 #include "PhSync/PhClock.h"

@@ -10,7 +10,7 @@
 #include "PhTools/PhData.h"
 #include "PhSync/PhTimeCode.h"
 
-#include "PhGraphicStrip/PhStripTextModel.h"
+#include "PhStrip/PhStripLineModel.h"
 
 #include "PhPeople.h"
 #include "PhStripCut.h"
@@ -32,7 +32,7 @@ class PhStripDoc : public QObject
 
 	// make the title available in QML
 	Q_PROPERTY(QString fullTitle READ fullTitle NOTIFY changed)
-	Q_PROPERTY(PhStripTextModel* textModel READ textModel NOTIFY changed)
+	Q_PROPERTY(PhStripLineModel* lineModel READ lineModel NOTIFY changed)
 
 public:
 	/**
@@ -164,7 +164,7 @@ public:
 	 */
 	QList<PhStripText *> texts(PhPeople *people);
 
-	PhStripTextModel *textModel();
+	PhStripLineModel *lineModel();
 
 	/**
 	 * @brief The whole loop list
@@ -476,7 +476,7 @@ private:
 	 */
 	QList<PhPeople *> _peoples;
 
-	PhStripTextModel *_texts;
+	PhStripLineModel *_lines;
 
 	QList<PhStripText *> _alternateTexts;
 

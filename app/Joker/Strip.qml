@@ -159,9 +159,10 @@ Item {
 
     // FIXME color, font, inverted color are not implemented
     Component {
-        id: stripTextDelegate2
+        id: stripLineDelegate
+
         Item {
-            id: stripTextContainer2
+            id: stripLineContainer
             width: (timeOut - timeIn)/horizontalTimePerPixel
             height: parent.height/4
             x: timeIn/horizontalTimePerPixel
@@ -172,15 +173,6 @@ Item {
             Binding { target: model; property: "trackNumber"; value: y/stripContainer.height }
 
             Rectangle {
-                color: "#3000FFFF"
-                anchors.left: parent.left
-                anchors.top: parent.top
-                width:10
-                height: 20
-                visible: content.length > 0
-            }
-
-            Rectangle {
                 border.width: 1
                 border.color: "#30FF0000"
                 color: "#00FFFFFF"
@@ -188,14 +180,35 @@ Item {
                 visible: content.length > 0
             }
 
+            property var lineModel: model
+
+            Repeater {
+                model: lineModel.detects
+                delegate: Rectangle {
+                    color: "#8000FFFF"
+                    width:10
+                    height: 10
+                    x: timeIn/horizontalTimePerPixel - stripLineContainer.x
+                }
+            }
+
+
             TextInput {
                 id: stripTextItem2
                 text: model.content
                 font.pixelSize: parent.height
                 font.family: stripFont.name
                 font.weight: textBoldness * 99/5
-                transform: Scale {  xScale: stripTextContainer2.width/stripTextItem2.width;
+                transform: Scale {  xScale: stripLineContainer.width/stripTextItem2.width;
                                     yScale: 1;}
+
+                cursorDelegate: Rectangle {
+                    // cancel the TextInput scale
+                    width: stripTextItem2.width/stripLineContainer.width
+                    height: stripTextItem2.height
+                    color: stripTextItem2.color
+                }
+
                 smooth: true // smooth scaling
 
                 color: focus ? "slateblue" : "black"
@@ -228,7 +241,7 @@ Item {
                 drag{
                     target: parent
                     minimumY: 0
-                    maximumY: stripContainer.height - stripTextContainer2.height
+                    maximumY: stripContainer.height - stripLineContainer.height
                     smoothed: true
                 }
 
@@ -244,14 +257,14 @@ Item {
                 onPositionChanged: {
                     if(drag.active){
                         // snap x to whole frame
-                        var timePosition = stripTextContainer2.x * horizontalTimePerPixel
+                        var timePosition = stripLineContainer.x * horizontalTimePerPixel
                         var framePosition = Math.round(timePosition / jokerWindow.timePerFrame)
                         timePosition = framePosition * jokerWindow.timePerFrame
-                        stripTextContainer2.x = timePosition / horizontalTimePerPixel
+                        stripLineContainer.x = timePosition / horizontalTimePerPixel
 
                         // snap y to track
-                        var trackNumber = Math.round(stripTextContainer2.y / stripContainer.height * 4) / 4
-                        stripTextContainer2.y = stripContainer.height*trackNumber
+                        var trackNumber = Math.round(stripLineContainer.y / stripContainer.height * 4) / 4
+                        stripLineContainer.y = stripContainer.height*trackNumber
                     }
                 }
 
@@ -285,11 +298,11 @@ Item {
                             timeChange = frameChange * jokerWindow.timePerFrame
                             pixelChange = timeChange / horizontalTimePerPixel
 
-                            if (pixelChange > stripTextContainer2.width - pixelPerFrame) {
-                                pixelChange = stripTextContainer2.width - pixelPerFrame
+                            if (pixelChange > stripLineContainer.width - pixelPerFrame) {
+                                pixelChange = stripLineContainer.width - pixelPerFrame
                             }
-                            stripTextContainer2.width = stripTextContainer2.width - pixelChange
-                            stripTextContainer2.x = stripTextContainer2.x + pixelChange
+                            stripLineContainer.width = stripLineContainer.width - pixelChange
+                            stripLineContainer.x = stripLineContainer.x + pixelChange
                         }
                     }
                 }
@@ -317,9 +330,9 @@ Item {
                             timeChange = frameChange * jokerWindow.timePerFrame
                             pixelChange = timeChange / horizontalTimePerPixel
 
-                            stripTextContainer2.width = stripTextContainer2.width + pixelChange
-                            if(stripTextContainer2.width < pixelPerFrame)
-                                stripTextContainer2.width = pixelPerFrame
+                            stripLineContainer.width = stripLineContainer.width + pixelChange
+                            if(stripLineContainer.width < pixelPerFrame)
+                                stripLineContainer.width = pixelPerFrame
                         }
                     }
                 }
@@ -580,8 +593,8 @@ Item {
         height: parent.height
 
         Repeater {
-            model: doc.textModel
-            delegate: stripTextDelegate2
+            model: doc.lineModel
+            delegate: stripLineDelegate
         }
     }
 
