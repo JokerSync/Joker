@@ -171,6 +171,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					float y = elem.attribute("track").toInt() / 4.0;
 					QString currentText = "";
 					QString lineText = "";
+					int position = 0;
 					QList<PhStripDetect*> detects;
 					for(int j = 0; j < elem.childNodes().length(); j++) {
 						if(elem.childNodes().at(j).isElement()) {
@@ -186,8 +187,9 @@ bool PhStripDoc::importDetXFile(QString fileName)
 									if(currentText.length()) {
 										// for reference:
 										//_texts->append(new PhStripText(lastLinkedTime, people, lastTime, y, currentText, 0.25f));
+										position += currentText.length();
+										detect->setPosition(position);
 										currentText = "";
-										detect->setPosition(currentText.length());
 									}
 									lastLinkedTime = lastTime;
 								}

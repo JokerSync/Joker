@@ -45,6 +45,9 @@ public:
 	 */
 	void setContent(QString content);
 
+public slots:
+	void refreshText();
+
 signals:
 	void contentChanged();
 

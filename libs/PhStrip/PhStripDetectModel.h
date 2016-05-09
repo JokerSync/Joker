@@ -9,7 +9,8 @@ class PhStripDetectModel : public QAbstractListModel
 	Q_OBJECT
 public:
 	enum NextPeopleRoles {
-		TimeInRole = Qt::UserRole + 1
+		TimeInRole = Qt::UserRole + 1,
+		PositionRole
 	};
 
 	PhStripDetectModel(QObject *parent = 0);

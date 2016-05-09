@@ -22,6 +22,8 @@ QVariant PhStripDetectModel::data(const QModelIndex & index, int role) const {
 	PhStripDetect *detect = _detects[index.row()];
 	if (role == TimeInRole)
 		return detect->timeIn();
+	if (role == PositionRole)
+		return detect->position();
 	return QVariant();
 }
 
@@ -33,6 +35,10 @@ bool PhStripDetectModel::setData(const QModelIndex &index, const QVariant &value
 	// TODO emit dataChanged?
 	if (role == TimeInRole) {
 		detect->setTimeIn(value.toInt());
+		return true;
+	}
+	else if (role == PositionRole) {
+		detect->setPosition(value.toInt());
 		return true;
 	}
 
@@ -50,6 +56,7 @@ bool PhStripDetectModel::removeRows(int row, int count, const QModelIndex &paren
 QHash<int, QByteArray> PhStripDetectModel::roleNames() const {
 	QHash<int, QByteArray> roles;
 	roles[TimeInRole] = "timeIn";
+	roles[PositionRole] = "position";
 	return roles;
 }
 

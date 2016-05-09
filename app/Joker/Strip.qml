@@ -192,34 +192,37 @@ Item {
                 }
             }
 
+            Repeater {
+                model: lineModel.texts
+                delegate: TextInput {
+                    id: stripTextItem2
+                    x: timeIn/horizontalTimePerPixel - stripLineContainer.x
+                    text: content
+                    font.pixelSize: stripLineContainer.height
+                    font.family: stripFont.name
+                    font.weight: textBoldness * 99/5
+                    transform: Scale {  xScale: (timeOut - timeIn)/horizontalTimePerPixel/stripTextItem2.width;
+                                        yScale: 1;}
 
-            TextInput {
-                id: stripTextItem2
-                text: model.content
-                font.pixelSize: parent.height
-                font.family: stripFont.name
-                font.weight: textBoldness * 99/5
-                transform: Scale {  xScale: stripLineContainer.width/stripTextItem2.width;
-                                    yScale: 1;}
+                    cursorDelegate: Rectangle {
+                        // cancel the TextInput scale
+                        width: stripTextItem2.width*horizontalTimePerPixel/(timeOut - timeIn)
+                        height: stripTextItem2.height
+                        color: stripTextItem2.color
+                    }
 
-                cursorDelegate: Rectangle {
-                    // cancel the TextInput scale
-                    width: stripTextItem2.width/stripLineContainer.width
-                    height: stripTextItem2.height
-                    color: stripTextItem2.color
+                    smooth: true // smooth scaling
+
+                    color: focus ? "slateblue" : "black"
+
+//                    onEditingFinished: {
+//                        console.log("Editing finished")
+//                        //dragArea.enabled = true
+//                        focus = false
+//                    }
+
+//                    Binding { target: model; property: "content"; value: stripTextItem2.text }
                 }
-
-                smooth: true // smooth scaling
-
-                color: focus ? "slateblue" : "black"
-
-                onEditingFinished: {
-                    console.log("Editing finished")
-                    //dragArea.enabled = true
-                    focus = false
-                }
-
-                Binding { target: model; property: "content"; value: stripTextItem2.text }
             }
 
             MouseArea {
