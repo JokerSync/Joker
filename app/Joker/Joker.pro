@@ -111,7 +111,10 @@ OTHER_FILES += \
     LeftColumn.qml \
     Strip.qml \
     Video.qml \
-    MediaPanel.qml
+	MediaPanel.qml \
+	Line.qml \
+	StripText.qml \
+	Detect.qml
 
 RESOURCES += \
     JokerResources.qrc

@@ -6,5 +6,8 @@
         <file>RightColumn.qml</file>
         <file>Strip.qml</file>
         <file>Video.qml</file>
+        <file>Line.qml</file>
+        <file>StripText.qml</file>
+        <file>Detect.qml</file>
     </qresource>
 </RCC>
