@@ -13,7 +13,7 @@
 #include "PhFont.h"
 #include "PhTools/PhDebug.h"
 
-PhFont::PhFont() : _texture(-1), _glyphHeight(0), _weight(99), _ready(false)
+PhFont::PhFont() : _texture(-1), _glyphHeight(0), _weight(60), _ready(false)
 {
 	for(int ch = 0; ch < 256; ++ch) {
 		_glyphAdvance[ch] = 0;
