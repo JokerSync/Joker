@@ -30,8 +30,6 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	PhVideoDecoder *decoder = new PhVideoDecoder();
 	decoder->moveToThread(&_decoderThread);
 	connect(&_clock, &PhClock::timeChanged, this, &PhVideoEngine::onTimeChanged);
-	connect(&_decoderThread, &QThread::started, decoder, &PhVideoDecoder::process);
-	connect(this, &PhVideoEngine::stopDecoder, decoder, &PhVideoDecoder::stop);
 	connect(&_decoderThread, &QThread::finished, decoder, &QObject::deleteLater);
 	connect(&_framePool, &PhVideoPool::decodeFrame, decoder, &PhVideoDecoder::requestFrame);
 	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
