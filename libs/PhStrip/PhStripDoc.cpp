@@ -216,7 +216,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					PhStripDetect::PhDetectType type = PhStripDetect::On;
 					if(elem.attribute("voice") == "off")
 						type = PhStripDetect::Off;
-					this->addDetect(new PhStripDetect(type, timeIn, people, lastTime, y));
+					this->addDetect(new PhStripDetect(type, timeIn, people, lastTime, y, 0.25f));
 				}
 			}
 		}
@@ -306,6 +306,15 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 			ptree ptLine;
 			ptLine.put("<xmlattr>.role", idMap[sentence->people()].toStdString());
 			ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(sentence->y() * 4));
+
+			// Look if the sentence if off
+			QList<PhStripDetect*> overlappingDetect = this->peopleDetects(sentence->people(), sentence->timeIn() - 1000, sentence->timeOut() + 1000);
+			foreach(PhStripDetect *detect, overlappingDetect) {
+				if ((detect->y() == sentence->y()) && (detect->timeIn() == sentence->timeIn()) && (detect->timeOut() == sentence->timeOut())) {
+					ptLine.put("<xmlattr>.voice", "off");
+					break;
+				}
+			}
 
 			ptree lipsyncIn;
 			lipsyncIn.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeIn(), _videoTimeCodeType).toStdString());
@@ -484,7 +493,7 @@ PhStripDetect *PhStripDoc::readMosDetect(QFile &f, PhTimeCodeType tcType, int de
 	                   << detectType3
 	                   << "type:"
 	                   << type;
-	return new PhStripDetect(type, timeIn, NULL, timeOut, 0);
+	return new PhStripDetect(type, timeIn, NULL, timeOut, 0, 0.2f);
 }
 
 bool PhStripDoc::readMosProperties(QFile &f, int level)
