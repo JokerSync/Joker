@@ -265,6 +265,8 @@ go_bandit([](){
 
 					doc.addText(new PhStripText(s2t25("01:01:00:05"), sue, s2t25("01:01:00:15"), 0.50f, "Hello", 0.25f));
 
+					doc.addDetect(new PhStripDetect(PhStripDetect::Off, s2t25("01:01:00:05"), sue, s2t25("01:01:00:15"), 0.50f, 0.25f));
+
 					AssertThat(doc.exportDetXFile("save01.detx", s2t25("01:01:01:01")), IsTrue());
 
 					doc.reset();
@@ -314,6 +316,15 @@ go_bandit([](){
 					AssertThat(text->people()->name(), Equals("Sue"));
 					AssertThat(t2s25(text->timeOut()), Equals("01:01:00:15"));
 					AssertThat(text->content(), Equals("Hello"));
+
+					// Detects
+					AssertThat(doc.detects().count(), Equals(1));
+
+					PhStripDetect *detect = doc.detects().at(0);
+					AssertThat(t2s25(detect->timeIn()), Equals("01:01:00:05"));
+					AssertThat(detect->people()->name(), Equals("Sue"));
+					AssertThat(t2s25(detect->timeOut()), Equals("01:01:00:15"));
+					AssertThat(detect->type(), Equals(PhStripDetect::Off));
 				});
 
 				it("export and import detx with complex lines", [&](){
@@ -871,7 +882,7 @@ go_bandit([](){
 			AssertThat(doc.texts().count(), Equals(1));
 			doc.addCut(new PhStripCut(5400, PhStripCut::CrossFade));
 			AssertThat(doc.cuts().count(), Equals(1));
-			doc.addDetect(new PhStripDetect(PhStripDetect::Aperture, 10000, doc.peoples().last(), 11000, 1));
+			doc.addDetect(new PhStripDetect(PhStripDetect::Aperture, 10000, doc.peoples().last(), 11000, 0.25f, 0.25f));
 			AssertThat(doc.detects().count(), Equals(1));
 
 			doc.addLoop(new PhStripLoop(22000, "3"));
