@@ -41,10 +41,10 @@ go_bandit([](){
 
 			doc->addText(new PhStripText(0, doc->peoples().first(), 10000, 0.25f, "Hello", 0.25f));
 			doc->addCut(new PhStripCut(5400, PhStripCut::CrossFade));
-			doc->addDetect(new PhStripDetect(PhStripDetect::Off, 0, doc->peoples().first(), 10000, 0.25f));
+			doc->addDetect(new PhStripDetect(PhStripDetect::Off, 0, doc->peoples().first(), 10000, 0.25f, 0.25f));
 			doc->addLoop(new PhStripLoop(22000, "label"));
 			doc->addText(new PhStripText(10000, doc->peoples().last(), 15000, 0.5f, "Hi !", 0.25f));
-			doc->addDetect(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f));
+			doc->addDetect(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f, 0.25f));
 
 			int threshold = 720 * 240 * 4;
 			AssertThat(view.compare("drawTest.bmp", threshold), IsLessThan(threshold));
