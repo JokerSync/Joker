@@ -170,58 +170,57 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					PhPeople *people = peopleMap[elem.attribute("role")];
 					float y = elem.attribute("track").toInt() / 4.0;
 					QString currentText = "";
-					QString lineText = "";
-					int position = 0;
-					QList<PhStripDetect*> detects;
+					PhStripLine *line;
+
 					for(int j = 0; j < elem.childNodes().length(); j++) {
 						if(elem.childNodes().at(j).isElement()) {
 							QDomElement lineElem = elem.childNodes().at(j).toElement();
-							if(lineElem.tagName() == "lipsync") {
-								lastTime = PhTimeCode::timeFromString(lineElem.attribute("timecode"), tcType);
-								if(timeIn < 0)
-									timeIn = lastTime;
 
-								PhStripDetect *detect = new PhStripDetect(PhStripDetect::Labial, lastTime, people, lastTime, 0);
+							if(lineElem.tagName() == "lipsync") {							
+								PhTime linkTime = PhTimeCode::timeFromString(lineElem.attribute("timecode"), tcType);
+
+								if(timeIn < 0) {
+									timeIn = linkTime;
+									lastTime = linkTime;
+									line = new PhStripLine(timeIn, PhStripDetect::On, people, y, 0.25f);
+									continue;
+								}
 
 								if(lineElem.attribute("link") != "off") {
-									if(currentText.length()) {
-										// for reference:
-										//_texts->append(new PhStripText(lastLinkedTime, people, lastTime, y, currentText, 0.25f));
-										position += currentText.length();
-										detect->setPosition(position);
-										currentText = "";
-									}
+									PhTime duration = linkTime - lastTime;
+									PhStripText *text = new PhStripText(currentText, duration, PhStripDetect::Labial);
+									line->append(text);
+									lastTime = linkTime;
+									currentText = "";
 									lastLinkedTime = lastTime;
 								}
-
-								if(		   lineElem.attribute("type") != "in_open"
-										&& lineElem.attribute("type") != "in_close"
-										&& lineElem.attribute("type") != "out_open"
-										&& lineElem.attribute("type") != "out_close") {
-									detects.append(detect);
+								else {
+									PhStripDetect *detect = new PhStripDetect(PhStripDetect::Labial, linkTime - timeIn);
+									line->addUnlinkedDetect(detect);
 								}
 							}
-							else if(lineElem.tagName() == "text")
+							else if(lineElem.tagName() == "text") {
 								currentText += lineElem.text();
-								lineText += lineElem.text();
+							}
 						}
 					}
-					// Handling line with no lipsync out
-					if(currentText.length()) {
-						PhTime time = lastLinkedTime + currentText.length() * 1000;
-						PHDEBUG << currentText;
-						_lines->append(new PhStripLine(lastLinkedTime, people, time, y, currentText, 0.25f));
-						lastTime = lastLinkedTime = time;
-					}
-					PhStripDetect::PhDetectType type = PhStripDetect::On;
-					if(elem.attribute("voice") == "off")
-						type = PhStripDetect::Off;
-					_detects.append(new PhStripDetect(type, timeIn, people, lastTime, y));
 
-					PhStripLine *line = new PhStripLine(timeIn, people, lastTime, y, lineText, 0.25f);
-					foreach(PhStripDetect *detect, detects) {
-						line->detectModel()->append(detect);
+					// Handling line with no lipsync out
+					if(currentText != "") {
+						PhTime duration = currentText.length() * 1000;
+						PHDEBUG << currentText;
+						PhStripText *text = new PhStripText(currentText, duration, PhStripDetect::Labial);
+						line->append(text);
 					}
+
+					// handle the out detect type
+					// TODO
+//					PhStripDetect::PhDetectType type = PhStripDetect::On;
+//					if(elem.attribute("voice") == "off")
+//						type = PhStripDetect::Off;
+//					currentDetect->setType(type);
+
+//					line->setLastDetect(currentDetect);
 
 					_lines->append(line);
 				}
@@ -296,25 +295,26 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	}
 
 	// export <line> list
-	foreach(const PhStripText *text, texts()) {
-		ptree ptLine;
-		ptLine.put("<xmlattr>.role", idMap[text->people()].toStdString());
-		ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(text->y() * 4));
+	// TODO
+//	foreach(const PhStripText *text, texts()) {
+//		ptree ptLine;
+//		ptLine.put("<xmlattr>.role", idMap[text->people()].toStdString());
+//		ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(text->y() * 4));
 
-		ptree lipsync1;
-		lipsync1.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeIn(), _videoTimeCodeType).toStdString());
-		lipsync1.put("<xmlattr>.type", "in_open");
-		ptLine.push_back(std::make_pair("lipsync", lipsync1));
+//		ptree lipsync1;
+//		lipsync1.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeIn(), _videoTimeCodeType).toStdString());
+//		lipsync1.put("<xmlattr>.type", "in_open");
+//		ptLine.push_back(std::make_pair("lipsync", lipsync1));
 
-		ptLine.put("text", text->content().toStdString());
+//		ptLine.put("text", text->content().toStdString());
 
-		ptree lipsync2;
-		lipsync2.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
-		lipsync2.put("<xmlattr>.type", "out_open");
-		ptLine.push_back(std::make_pair("lipsync", lipsync2));
+//		ptree lipsync2;
+//		lipsync2.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
+//		lipsync2.put("<xmlattr>.type", "out_open");
+//		ptLine.push_back(std::make_pair("lipsync", lipsync2));
 
-		ptBody.push_back(std::make_pair("line", ptLine));
-	}
+//		ptBody.push_back(std::make_pair("line", ptLine));
+//	}
 
 	ptDetX.add_child("detx.body", ptBody);
 
@@ -379,7 +379,8 @@ PhStripText* PhStripDoc::readMosText(QFile &f, PhTimeCodeType tcType, int textLe
 	PhTime timeIn = _videoTimeIn + readMosTime(f, tcType, internLevel);
 	PhTime timeOut = _videoTimeIn + readMosTime(f, tcType, internLevel);
 
-	PhStripText* text = new PhStripText(timeIn, NULL, timeOut, 0, content, 0.2f);
+	// TODO
+	PhStripText* text;// = new PhStripText(timeIn, NULL, timeOut, 0, content, 0.2f);
 
 	PhFileTool::readInt(f, internLevel, "text");
 	PhFileTool::readInt(f, internLevel, "text");
@@ -466,7 +467,9 @@ PhStripDetect *PhStripDoc::readMosDetect(QFile &f, PhTimeCodeType tcType, int de
 	                   << detectType3
 	                   << "type:"
 	                   << type;
-	return new PhStripDetect(type, timeIn, NULL, timeOut, 0);
+	// TODO
+	return new PhStripDetect(type, timeIn);
+	//return new PhStripDetect(type, timeIn, NULL, timeOut, 0);
 }
 
 bool PhStripDoc::readMosProperties(QFile &f, int level)
@@ -618,22 +621,24 @@ bool PhStripDoc::readMosTrack(QFile &f, PhTimeCodeType tcType, QMap<int, PhPeopl
 
 	PHDBG(textLevel) << "Adding" << textList1.count() << "texts in list 1";
 	foreach(PhStripText* text, textList1) {
-		text->setPeople(people);
-		text->setY(track / 5.0);
 		//FIXME
+		//text->setPeople(people);
+		//text->setY(track / 5.0);
 		//_texts->append(text);
 	}
 
 	PHDBG(textLevel) << "Adding" << textList2.count() << "texts in  list 2";
 	foreach(PhStripText* text, textList2) {
-		text->setPeople(people);
-		text->setY(track);
+		//FIXME
+		//text->setPeople(people);
+		//text->setY(track);
 		_alternateTexts.append(text);
 	}
 
 	foreach(PhStripDetect* detect, detectList) {
-		detect->setPeople((people));
-		detect->setY(track);
+		//FIXME
+		//detect->setPeople((people));
+		//detect->setY(track);
 		_detects.append(detect);
 	}
 
@@ -893,9 +898,9 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 	// FIXME
 	//qSort(_texts1.begin(), _texts1.end(), PhStripObject::dtcomp);
 	//qSort(_texts2.begin(), _texts2.end(), PhStripObject::dtcomp);
-	qSort(_detects.begin(), _detects.end(), PhStripObject::dtcomp);
-	qSort(_cuts.begin(), _cuts.end(), PhStripObject::dtcomp);
-	qSort(_loops.begin(), _loops.end(), PhStripObject::dtcomp);
+//	qSort(_detects.begin(), _detects.end(), PhStripObject::dtcomp);
+//	qSort(_cuts.begin(), _cuts.end(), PhStripObject::dtcomp);
+//	qSort(_loops.begin(), _loops.end(), PhStripObject::dtcomp);
 
 	emit this->changed();
 
@@ -1056,7 +1061,8 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 					QString content = textElement.elementsByTagName("VALUE").at(0).toElement().text();
 
 					PHDEBUG << PhTimeCode::stringFromTime(timeIn, tcType) << PhTimeCode::stringFromTime(timeOut, tcType) << content;
-					_lines->append(new PhStripLine(timeIn, people, timeOut, y, content, height));
+					//FIXME
+					//_lines->append(new PhStripLine(timeIn, people, timeOut, y, content, height));
 				}
 			}
 			else {
@@ -1165,7 +1171,8 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 			float y = y1 / 150.0f;
 			float height = (y2 - y1) / 150.0f;
 			QString content = query.value(7).toString();
-			_lines->append(new PhStripLine(timeIn, people, timeOut, y, content, height));
+			//FIXME
+			//_lines->append(new PhStripLine(timeIn, people, timeOut, y, content, height));
 			PHDEBUG << timeIn << timeOut << content;
 		}
 	}
@@ -1383,7 +1390,8 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 		PhTime timeIn = time;
 		PhTime timeOut = timeIn + content.length() * 1000;
 
-		_lines->append(new PhStripLine(timeIn, people, timeOut, i % trackCount / 4, content, 0.25f));
+		//FIXME
+		//_lines->append(new PhStripLine(timeIn, people, timeOut, i % trackCount / 4, content, 0.25f));
 
 		// So the texts are all one after the other
 		time += spaceBetweenText;
@@ -1477,10 +1485,11 @@ PhStripText *PhStripDoc::nextText(PhTime time)
 {
 	PhStripText * result = NULL;
 	foreach(PhStripText* text, this->texts()) {
-		if(text->timeIn() > time) {
-			if(!result || (text->timeIn() < result->timeIn()) )
-				result = text;
-		}
+		//FIXME
+		//if(text->timeIn() > time) {
+		//	if(!result || (text->timeIn() < result->timeIn()) )
+		//		result = text;
+		//}
 	}
 	return result;
 }
@@ -1489,10 +1498,11 @@ PhStripText *PhStripDoc::nextText(PhPeople *people, PhTime time)
 {
 	PhStripText * result = NULL;
 	foreach(PhStripText* text, this->texts()) {
-		if((text->people() == people) && (text->timeIn() > time)) {
-			if(!result || (text->timeIn() < result->timeIn()) )
-				result = text;
-		}
+		//FIXME
+		//if((text->people() == people) && (text->timeIn() > time)) {
+		//	if(!result || (text->timeIn() < result->timeIn()) )
+		//		result = text;
+		//}
 	}
 	return result;
 }
@@ -1501,10 +1511,11 @@ PhStripText *PhStripDoc::nextText(QList<PhPeople *> peopleList, PhTime time)
 {
 	PhStripText * result = NULL;
 	foreach(PhStripText* text, this->texts()) {
-		if(peopleList.contains(text->people()) && (text->timeIn() > time)) {
-			if(!result || (text->timeIn() < result->timeIn()) )
-				result = text;
-		}
+		//FIXME
+//		if(peopleList.contains(text->people()) && (text->timeIn() > time)) {
+//			if(!result || (text->timeIn() < result->timeIn()) )
+//				result = text;
+//		}
 	}
 	return result;
 }
@@ -1514,8 +1525,8 @@ PhTime PhStripDoc::previousTextTime(PhTime time)
 	PhTime previousTextTime = PHTIMEMIN;
 
 	foreach(PhStripText* text, this->texts()) {
-		if((text->timeIn() < time) && (text->timeIn() > previousTextTime) )
-			previousTextTime = text->timeIn();
+		//if((text->timeIn() < time) && (text->timeIn() > previousTextTime) )
+		//	previousTextTime = text->timeIn();
 	}
 
 	return previousTextTime;
@@ -1563,10 +1574,11 @@ PhTime PhStripDoc::nextTextTime(PhTime time)
 	PhTime nextTextTime = PHTIMEMAX;
 
 	foreach(PhStripText* text, this->texts()) {
-		if((text->timeIn() > time) && (text->timeIn() < nextTextTime) )
-			nextTextTime = text->timeIn();
-		else if(text->timeIn() > nextTextTime)
-			return nextTextTime;
+		//FIXME
+//		if((text->timeIn() > time) && (text->timeIn() < nextTextTime) )
+//			nextTextTime = text->timeIn();
+//		else if(text->timeIn() > nextTextTime)
+//			return nextTextTime;
 	}
 
 	return nextTextTime;
@@ -1738,8 +1750,9 @@ QList<PhStripText *> PhStripDoc::texts(PhPeople *people)
 {
 	QList<PhStripText*> result;
 	foreach(PhStripText *text, this->texts()) {
-		if(text->people() == people)
-			result.append(text);
+		//FIXME
+//		if(text->people() == people)
+//			result.append(text);
 	}
 	return result;
 }
@@ -1758,8 +1771,9 @@ QList<PhStripDetect *> PhStripDoc::detects(PhTime timeIn, PhTime timeOut)
 {
 	QList<PhStripDetect*> result;
 	foreach(PhStripDetect *detect, this->_detects) {
-		if((detect->timeIn() >= timeIn) && (detect->timeOut() < timeOut))
-			result.append(detect);
+		//FIXME
+//		if((detect->timeIn() >= timeIn) && (detect->timeOut() < timeOut))
+//			result.append(detect);
 	}
 
 	return result;
@@ -1769,8 +1783,9 @@ QList<PhStripDetect *> PhStripDoc::peopleDetects(PhPeople *people, PhTime timeIn
 {
 	QList<PhStripDetect *> result;
 	foreach(PhStripDetect *detect, this->detects(timeIn, timeOut)) {
-		if(detect->people() == people)
-			result.append(detect);
+		//FIXME
+//		if(detect->people() == people)
+//			result.append(detect);
 	}
 	return result;
 }

@@ -10,12 +10,10 @@ class PhStripLineModel : public QAbstractListModel
 
 public:
 	enum NextPeopleRoles {
-		ContentRole = Qt::UserRole + 1,
-		TrackNumberRole,
+		TrackNumberRole = Qt::UserRole + 1,
 		TimeInRole,
-		TimeOutRole,
 		TextsRole,
-		DetectsRole
+		UnlinkedDetectsRole
 	};
 
 	PhStripLineModel(QObject *parent = 0);
@@ -28,7 +26,7 @@ public:
 	void clear();
 
 public slots:
-	void add(PhTime timeIn, PhTime timeOut, float y);
+	void add(PhTime timeIn, PhStripDetect::PhDetectType typeIn, PhPeople * people, float y, float height);
 	void remove(int index);
 
 protected:

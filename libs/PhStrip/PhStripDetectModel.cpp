@@ -1,6 +1,6 @@
 #include "PhStripDetectModel.h"
 
-PhStripDetectModel::PhStripDetectModel(QObject *parent) :
+PhStripDetectModel::PhStripDetectModel(QObject * parent) :
 	QAbstractListModel(parent)
 {
 }
@@ -19,26 +19,26 @@ int PhStripDetectModel::rowCount(const QModelIndex & parent) const {
 QVariant PhStripDetectModel::data(const QModelIndex & index, int role) const {
 	if (index.row() < 0 || index.row() >= _detects.count())
 		return QVariant();
+
 	PhStripDetect *detect = _detects[index.row()];
-	if (role == TimeInRole)
-		return detect->timeIn();
-	if (role == PositionRole)
-		return detect->position();
+
+	if (role == TimeRole)
+		return detect->relativeTime();
+
 	return QVariant();
 }
 
 bool PhStripDetectModel::setData(const QModelIndex &index, const QVariant &value, int role) {
 	if (index.row() < 0 || index.row() >= _detects.count())
 		return false;
+
 	PhStripDetect *detect = _detects[index.row()];
 
-	// TODO emit dataChanged?
-	if (role == TimeInRole) {
-		detect->setTimeIn(value.toInt());
-		return true;
-	}
-	else if (role == PositionRole) {
-		detect->setPosition(value.toInt());
+	if (role == TimeRole) {
+		if (detect->relativeTime() != value.toInt()) {
+			detect->setRelativeTime(value.toInt());
+			emit dataChanged(index, index, QVector<int>(1, role));
+		}
 		return true;
 	}
 
@@ -55,25 +55,14 @@ bool PhStripDetectModel::removeRows(int row, int count, const QModelIndex &paren
 
 QHash<int, QByteArray> PhStripDetectModel::roleNames() const {
 	QHash<int, QByteArray> roles;
-	roles[TimeInRole] = "timeIn";
-	roles[PositionRole] = "position";
+	roles[TimeRole] = "time";
 	return roles;
 }
 
-void PhStripDetectModel::clear() {
-	beginRemoveRows(QModelIndex(), 0, rowCount());
-	qDeleteAll(_detects);
-	_detects.clear();
-	endRemoveRows();
-}
-
-void PhStripDetectModel::add(PhTime timeIn)
+void PhStripDetectModel::add(PhTime time)
 {
 	PhStripDetect::PhDetectType type = PhStripDetect::Labial;
-	PhPeople *people = _detects.first()->people();
-	PhTime timeOut = timeIn;
-	int y = 0;
-	append(new PhStripDetect(type, timeIn, people, timeOut, y));
+	append(new PhStripDetect(type, time));
 }
 
 void PhStripDetectModel::remove(int index)

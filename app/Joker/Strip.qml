@@ -499,4 +499,16 @@ Item {
             }
         }
     }
+
+    function snapToFrame(pixelChange) {
+        var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel;
+        var timeChange = pixelChange * horizontalTimePerPixel;
+        // round to frame
+        var frameChange = Math.round(timeChange / jokerWindow.timePerFrame);
+        timeChange = frameChange * jokerWindow.timePerFrame;
+        pixelChange = timeChange / horizontalTimePerPixel;
+        return pixelChange;
+    }
+
+
 }

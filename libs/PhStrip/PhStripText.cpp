@@ -7,11 +7,10 @@
 #include "PhStripText.h"
 #include "PhTools/PhDebug.h"
 
-
-PhStripText::PhStripText(PhTime timeIn, PhPeople *people, PhTime timeOut, float y, QString content, float height, bool selected) :
-	PhStripPeopleObject(timeIn, people, timeOut, y, height),
+PhStripText::PhStripText(QString content, PhTime duration, PhStripDetect::PhDetectType typeOut) :
 	_content(content),
-	_selected(selected)
+	_duration(duration),
+	_typeOut(typeOut)
 {
 }
 
@@ -28,15 +27,22 @@ void PhStripText::setContent(QString content)
 	}
 }
 
-bool PhStripText::selected() const
+PhStripDetect::PhDetectType PhStripText::typeOut() const
 {
-	return _selected;
+	return _typeOut;
 }
 
-void PhStripText::setSelected(bool selected)
+void PhStripText::setTypeOut(const PhStripDetect::PhDetectType &typeOut)
 {
-	if (selected != _selected) {
-		_selected = selected;
-		emit selectedChanged();
-	}
+	_typeOut = typeOut;
+}
+
+PhTime PhStripText::duration() const
+{
+	return _duration;
+}
+
+void PhStripText::setDuration(const PhTime &duration)
+{
+	_duration = duration;
 }

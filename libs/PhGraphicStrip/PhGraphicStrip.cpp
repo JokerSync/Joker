@@ -47,34 +47,34 @@ void PhGraphicStrip::onDocChanged()
 	if (_doc.texts().isEmpty())
 		return;
 
-	PhNextPeople *nextPeople = new PhNextPeople("",
-												"#000000",
-												0,
-												true,
-												_doc.texts().first()->timeIn());
-	_nextPeopleModel.addNextPeople(nextPeople);
+//	PhNextPeople *nextPeople = new PhNextPeople("",
+//												"#000000",
+//												0,
+//												true,
+//												_doc.texts().first()->timeIn());
+//	_nextPeopleModel.addNextPeople(nextPeople);
 
 	for(int i=0; i<_doc.texts().length() - 1; i++)
 	{
-		PhStripText * text = _doc.texts()[i];
-		PhStripText * nextText = _doc.texts()[i+1];
-		PhPeople * people = text->people();
-		PhNextPeople *nextPeople = new PhNextPeople(people->name(),
-													computeColor(people, selectedPeoples, invertedColor).name(),
-													text->timeIn(),
-													selectedPeoples.size()==0 || selectedPeoples.contains(people),
-													nextText->timeIn() - text->timeIn());
-		_nextPeopleModel.addNextPeople(nextPeople);
+//		PhStripText * text = _doc.texts()[i];
+//		PhStripText * nextText = _doc.texts()[i+1];
+//		PhPeople * people = text->people();
+//		PhNextPeople *nextPeople = new PhNextPeople(people->name(),
+//													computeColor(people, selectedPeoples, invertedColor).name(),
+//													text->timeIn(),
+//													selectedPeoples.size()==0 || selectedPeoples.contains(people),
+//													nextText->timeIn() - text->timeIn());
+//		_nextPeopleModel.addNextPeople(nextPeople);
 	}
 
 	PhStripText * text = _doc.texts().last();
-	PhPeople * people = text->people();
-	nextPeople = new PhNextPeople(people->name(),
-								computeColor(people, selectedPeoples, invertedColor).name(),
-								text->timeIn(),
-								selectedPeoples.size()==0 || selectedPeoples.contains(people),
-								_doc.timeOut() - text->timeIn());
-	_nextPeopleModel.addNextPeople(nextPeople);
+//	PhPeople * people = text->people();
+//	nextPeople = new PhNextPeople(people->name(),
+//								computeColor(people, selectedPeoples, invertedColor).name(),
+//								text->timeIn(),
+//								selectedPeoples.size()==0 || selectedPeoples.contains(people),
+//								_doc.timeOut() - text->timeIn());
+//	_nextPeopleModel.addNextPeople(nextPeople);
 
 	// ruler
 	_rulerModel.clear();
@@ -115,96 +115,81 @@ void PhGraphicStrip::onDocChanged()
 		int previousTimeOut;
 
 		// strip texts
-//		previousTimeOut = 0;
 		foreach(PhStripText * text, _doc.texts()) {
-			if (text->y() == y) {
-				text->setSelected(selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
-
-//				PhStripText *emptyText = new PhStripText(previousTimeOut,
-//														 text->people(),
-//														 text->timeIn(),
-//														 0,
-//														 "", // empty content
-//														 0, //height
-//														 true);
-
-//				track->stripTextModel()->addStripText(emptyText);
-				track->stripTextModel()->append(text);
-
-//				previousTimeOut = text->timeOut();
-			}
+//			if (text->y() == y) {
+//				text->setSelected(selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
+//				track->stripTextModel()->append(text);
+//			}
 		}
 
 		// strip text people
 		previousTimeOut = 0;
 		foreach(PhStripText * text, _doc.texts()) {
-			if (text->y() == y) {
-				PhStripText *peopleText = new PhStripText(previousTimeOut,
-														 text->people(),
-														 text->timeIn(),
-														 0,
-														 text->people()->name(),
-														 0, //height
-														 selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
+//			if (text->y() == y) {
+//				PhStripText *peopleText = new PhStripText(previousTimeOut,
+//														 text->people(),
+//														 text->timeIn(),
+//														 0,
+//														 text->people()->name(),
+//														 0, //height
+//														 selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
 
-				PhStripText *emptyText = new PhStripText(text->timeIn(),
-														  text->people(),
-														  text->timeOut(),
-														  0,
-														  "", //empty content
-														  0, //height
-														  true);
+//				PhStripText *emptyText = new PhStripText(text->timeIn(),
+//														  text->people(),
+//														  text->timeOut(),
+//														  0,
+//														  "", //empty content
+//														  0, //height
+//														  true);
 
-				track->stripPeopleModel()->append(peopleText);
-				track->stripPeopleModel()->append(emptyText);
+//				track->stripPeopleModel()->append(peopleText);
+//				track->stripPeopleModel()->append(emptyText);
 
-				previousTimeOut = text->timeOut();
-			}
+//				previousTimeOut = text->timeOut();
+//			}
 		}
 
 		// off detects
 		previousTimeOut = 0;
 		foreach(PhStripDetect * detect, _doc.detects()) {
-			if (text->y() == y && detect->type() == PhStripDetect::Off) {
-				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
-				track->offDetectModel()->addNextPeople(detectPeople);
-				previousTimeOut = detect->timeIn();
-			}
+//			if (text->y() == y && detect->type() == PhStripDetect::Off) {
+//				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
+//				track->offDetectModel()->addNextPeople(detectPeople);
+//				previousTimeOut = detect->timeIn();
+//			}
 		}
 
 		// semi-off detects
 		previousTimeOut = 0;
 		foreach(PhStripDetect * detect, _doc.detects()) {
-			if (text->y() == y && detect->type() == PhStripDetect::SemiOff) {
-				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
-				track->semiOffDetectModel()->addNextPeople(detectPeople);
-				previousTimeOut = detect->timeIn();
-			}
+//			if (text->y() == y && detect->type() == PhStripDetect::SemiOff) {
+//				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
+//				track->semiOffDetectModel()->addNextPeople(detectPeople);
+//				previousTimeOut = detect->timeIn();
+//			}
 		}
 
 		// arrow-up detects
 		previousTimeOut = 0;
 		foreach(PhStripDetect * detect, _doc.detects()) {
-			if (text->y() == y && detect->type() == PhStripDetect::ArrowUp) {
-				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
-				track->arrowUpDetectModel()->addNextPeople(detectPeople);
-				previousTimeOut = detect->timeIn();
-			}
+//			if (text->y() == y && detect->type() == PhStripDetect::ArrowUp) {
+//				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
+//				track->arrowUpDetectModel()->addNextPeople(detectPeople);
+//				previousTimeOut = detect->timeIn();
+//			}
 		}
 
 		// arrow-down detects
 		previousTimeOut = 0;
 		foreach(PhStripDetect * detect, _doc.detects()) {
-			if (text->y() == y && detect->type() == PhStripDetect::ArrowDown) {
-				PhNextPeople *spacer = new PhNextPeople("spacer", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
-				PhNextPeople *detectPeople = new PhNextPeople("", "", detect->timeIn(), true, detect->timeOut() - detect->timeIn());
-				track->arrowDownDetectModel()->addNextPeople(spacer);
-				track->arrowDownDetectModel()->addNextPeople(detectPeople);
-				previousTimeOut = detect->timeOut();
-			}
+//			if (text->y() == y && detect->type() == PhStripDetect::ArrowDown) {
+//				PhNextPeople *spacer = new PhNextPeople("spacer", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
+//				PhNextPeople *detectPeople = new PhNextPeople("", "", detect->timeIn(), true, detect->timeOut() - detect->timeIn());
+//				track->arrowDownDetectModel()->addNextPeople(spacer);
+//				track->arrowDownDetectModel()->addNextPeople(detectPeople);
+//				previousTimeOut = detect->timeOut();
+//			}
 		}
-
-		//_trackModel.addTrack(track);
 	}
 }
 

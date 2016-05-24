@@ -10,17 +10,14 @@ class PhStripTextModel : public QAbstractListModel
 public:
 	enum NextPeopleRoles {
 		ContentRole = Qt::UserRole + 1,
-		TrackNumberRole,
-		//ColorRole,
-		TimeInRole,
-		SelectedRole,
-		TimeOutRole
+		DurationRole,
+		TypeOutRole
 	};
 
-	PhStripTextModel(QObject *parent = 0);
+	PhStripTextModel(QObject * parent = 0);
 
 	QList<PhStripText*> texts() {
-		return _stripTexts;
+		return _texts;
 	}
 
 	void append(PhStripText *stripText);
@@ -31,14 +28,14 @@ public:
 	void clear();
 
 public slots:
-	void addText(PhTime timeIn, PhTime timeOut, float y);
+	void addText(QString content, PhTime timeOut, PhStripDetect::PhDetectType typeOut);
 	void removeText(int index);
 
 protected:
 	QHash<int, QByteArray> roleNames() const;
 
 private:
-	QList<PhStripText*> _stripTexts;
+	QList<PhStripText*> _texts;
 };
 
 #endif // PHSTRIPTEXTMODEL_H

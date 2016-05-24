@@ -20,19 +20,13 @@ QVariant PhStripLineModel::data(const QModelIndex & index, int role) const {
 	if (index.row() < 0 || index.row() >= _lines.count())
 		return QVariant();
 	PhStripLine *line = _lines[index.row()];
-	if (role == ContentRole)
-		return line->content();
-	else if (role == TrackNumberRole)
+	if (role == TrackNumberRole)
 		return line->y();
-	//else if (role == ColorRole)
-	//	return stripText->color();
 	else if (role == TimeInRole)
 		return line->timeIn();
-	else if (role == TimeOutRole)
-		return line->timeOut();
 	else if (role == TextsRole)
 		return QVariant::fromValue<QObject*>(line->textModel());
-	else if (role == DetectsRole)
+	else if (role == UnlinkedDetectsRole)
 		return QVariant::fromValue<QObject*>(line->detectModel());
 	return QVariant();
 }
@@ -42,21 +36,18 @@ bool PhStripLineModel::setData(const QModelIndex &index, const QVariant &value, 
 		return false;
 	PhStripLine *line = _lines[index.row()];
 
-	// TODO emit dataChanged?
-	if (role == ContentRole) {
-		line->setContent(value.toString());
-		return true;
-	}
-	else if (role == TimeInRole) {
-		line->setTimeIn(value.toInt());
-		return true;
-	}
-	else if (role == TimeOutRole) {
-		line->setTimeOut(value.toInt());
+	if (role == TimeInRole) {
+		if (line->timeIn() != value.toInt()) {
+			line->setTimeIn(value.toInt());
+			emit dataChanged(index, index, QVector<int>(1, role));
+		}
 		return true;
 	}
 	else if (role == TrackNumberRole) {
-		line->setY(value.toFloat());
+		if (line->y() != value.toFloat()) {
+			line->setY(value.toFloat());
+			emit dataChanged(index, index, QVector<int>(1, role));
+		}
 		return true;
 	}
 
@@ -73,12 +64,10 @@ bool PhStripLineModel::removeRows(int row, int count, const QModelIndex &parent)
 
 QHash<int, QByteArray> PhStripLineModel::roleNames() const {
 	QHash<int, QByteArray> roles;
-	roles[ContentRole] = "content";
 	roles[TrackNumberRole] = "trackNumber";
 	roles[TimeInRole] = "timeIn";
-	roles[TimeOutRole] = "timeOut";
 	roles[TextsRole] = "texts";
-	roles[DetectsRole] = "detects";
+	roles[UnlinkedDetectsRole] = "unlinkedDetects";
 	return roles;
 }
 
@@ -89,10 +78,9 @@ void PhStripLineModel::clear() {
 	endRemoveRows();
 }
 
-void PhStripLineModel::add(PhTime timeIn, PhTime timeOut, float y)
+void PhStripLineModel::add(PhTime timeIn, PhStripDetect::PhDetectType typeIn, PhPeople *people, float y, float height)
 {
-	float height = _lines.first()->height();
-	append(new PhStripLine(timeIn, _lines.first()->people(), timeOut, y, "phrase", height));
+	append(new PhStripLine(timeIn, typeIn, people, y, height));
 }
 
 void PhStripLineModel::remove(int index)

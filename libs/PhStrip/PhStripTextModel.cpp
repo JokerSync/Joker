@@ -5,56 +5,57 @@ PhStripTextModel::PhStripTextModel(QObject *parent) :
 {
 }
 
-void PhStripTextModel::append(PhStripText *stripText)
+void PhStripTextModel::append(PhStripText *text)
 {
 	beginInsertRows(QModelIndex(), rowCount(), rowCount());
-	_stripTexts << stripText;
+	_texts << text;
 	endInsertRows();
 }
 
 int PhStripTextModel::rowCount(const QModelIndex & parent) const {
-	return _stripTexts.count();
+	return _texts.count();
 }
 
 QVariant PhStripTextModel::data(const QModelIndex & index, int role) const {
-	if (index.row() < 0 || index.row() >= _stripTexts.count())
+	if (index.row() < 0 || index.row() >= _texts.count())
 		return QVariant();
-	PhStripText *stripText = _stripTexts[index.row()];
+
+	PhStripText *stripText = _texts[index.row()];
+
 	if (role == ContentRole)
 		return stripText->content();
-	else if (role == TrackNumberRole)
-		return stripText->y();
-	//else if (role == ColorRole)
-	//	return stripText->color();
-	else if (role == TimeInRole)
-		return stripText->timeIn();
-	else if (role == SelectedRole)
-		return stripText->selected();
-	else if (role == TimeOutRole)
-		return stripText->timeOut();
+	else if (role == DurationRole)
+		return stripText->duration();
+	else if (role == TypeOutRole)
+		return stripText->typeOut();
 	return QVariant();
 }
 
 bool PhStripTextModel::setData(const QModelIndex &index, const QVariant &value, int role) {
-	if (index.row() < 0 || index.row() >= _stripTexts.count())
+	if (index.row() < 0 || index.row() >= _texts.count())
 		return false;
-	PhStripText *stripText = _stripTexts[index.row()];
 
-	// TODO emit dataChanged?
+	PhStripText *stripText = _texts[index.row()];
+
 	if (role == ContentRole) {
-		stripText->setContent(value.toString());
+		if (stripText->content() != value.toString()) {
+			stripText->setContent(value.toString());
+			emit dataChanged(index, index, QVector<int>(1, role));
+		}
 		return true;
 	}
-	else if (role == TimeInRole) {
-		stripText->setTimeIn(value.toInt());
+	else if (role == DurationRole) {
+		if (stripText->duration() != value.toInt()) {
+			stripText->setDuration(value.toInt());
+			emit dataChanged(index, index, QVector<int>(1, role));
+		}
 		return true;
 	}
-	else if (role == TimeOutRole) {
-		stripText->setTimeOut(value.toInt());
-		return true;
-	}
-	else if (role == TrackNumberRole) {
-		stripText->setY(value.toFloat());
+	else if (role == TypeOutRole) {
+		if (stripText->typeOut() != value.toInt()) {
+			stripText->setTypeOut((PhStripDetect::PhDetectType)value.toInt());
+			emit dataChanged(index, index, QVector<int>(1, role));
+		}
 		return true;
 	}
 
@@ -64,7 +65,7 @@ bool PhStripTextModel::setData(const QModelIndex &index, const QVariant &value, 
 bool PhStripTextModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 	beginRemoveRows(parent, row, row + count - 1);
-	PhStripText *text = _stripTexts.takeAt(row);
+	PhStripText *text = _texts.takeAt(row);
 	delete text;
 	endRemoveRows();
 }
@@ -72,25 +73,21 @@ bool PhStripTextModel::removeRows(int row, int count, const QModelIndex &parent)
 QHash<int, QByteArray> PhStripTextModel::roleNames() const {
 	QHash<int, QByteArray> roles;
 	roles[ContentRole] = "content";
-	roles[TrackNumberRole] = "trackNumber";
-	//roles[ColorRole] = "color";
-	roles[TimeInRole] = "timeIn";
-	roles[SelectedRole] = "selected";
-	roles[TimeOutRole] = "timeOut";
+	roles[DurationRole] = "duration";
+	roles[TypeOutRole] = "typeOut";
 	return roles;
 }
 
 void PhStripTextModel::clear() {
 	beginRemoveRows(QModelIndex(), 0, rowCount());
-	qDeleteAll(_stripTexts);
-	_stripTexts.clear();
+	qDeleteAll(_texts);
+	_texts.clear();
 	endRemoveRows();
 }
 
-void PhStripTextModel::addText(PhTime timeIn, PhTime timeOut, float y)
+void PhStripTextModel::addText(QString content, PhTime timeOut, PhStripDetect::PhDetectType typeOut)
 {
-	float height = _stripTexts.first()->height();
-	append(new PhStripText(timeIn, _stripTexts.first()->people(), timeOut, y, "phrase", height));
+	append(new PhStripText(content, timeOut, typeOut));
 }
 
 void PhStripTextModel::removeText(int index)

@@ -1093,9 +1093,9 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 	_context->setContextProperty("infosVisible", _settings->displayInfo());
 
 	_context->setContextProperty("nextTcLabelVisible", _settings->displayNextText() && nextText != NULL);
-	if (nextText != NULL) {
-		_context->setContextProperty("nextTcLabelText", PhTimeCode::stringFromTime(nextText->timeIn(), _videoEngine.timeCodeType()));
-	}
+//	if (nextText != NULL) {
+//		_context->setContextProperty("nextTcLabelText", PhTimeCode::stringFromTime(nextText->timeIn(), _videoEngine.timeCodeType()));
+//	}
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");

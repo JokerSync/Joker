@@ -5,39 +5,48 @@ import QtQuick.Controls 1.1
 // FIXME color, font, inverted color are not implemented
 Item {
     id: stripLineContainer
-    width: (timeOut - timeIn)/horizontalTimePerPixel
+    // width is arbitray...
+    width: 100
     height: parent.height/4
     x: timeIn/horizontalTimePerPixel
     y: parent.height*trackNumber
 
     Binding { target: model; property: "timeIn"; value: x*horizontalTimePerPixel }
-    Binding { target: model; property: "timeOut"; value: (x + width)*horizontalTimePerPixel }
+    //Binding { target: model; property: "timeOut"; value: (x + width)*horizontalTimePerPixel }
     Binding { target: model; property: "trackNumber"; value: y/stripContainer.height }
-
-    Rectangle {
-        border.width: 1
-        border.color: "#30FF0000"
-        color: "#00FFFFFF"
-        anchors.fill: parent
-        visible: content.length > 0
-    }
 
     property var lineModel: model
     property bool editing: false
 
-    Repeater {
-        id: textRepeater
-        model: lineModel.texts
-        delegate: StripText {}
+    Row {
+        Repeater {
+            id: textRepeater
+            model: lineModel.texts
+            delegate:
+                StripText {
+                id: stripTextDelegate
+                // reversed stack order so that out detect are on top
+                z: -index
+
+                property int textIndex: index
+
+                Binding { target: model; property: "content"; value: text }
+            }
+        }
     }
 
     Repeater {
-        model: lineModel.detects
-        delegate: Detect {}
+        id: detectRepeater
+        model: lineModel.unlinkedDetects
+        delegate: Detect {
+            x: time/horizontalTimePerPixel
+            id: lineDetect
+            property int lineIndex: index
+        }
     }
 
     MouseArea {
-        id: longPressArea
+        id: rightPressArea
         anchors.fill: parent
         acceptedButtons: Qt.RightButton
         onClicked: {
@@ -53,60 +62,24 @@ Item {
     Rectangle {
         width: rulersSize
         height: rulersSize
-        radius: rulersSize
         color: "steelblue"
         anchors.horizontalCenter: parent.left
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.bottom: parent.bottom
 
         MouseArea {
             anchors.fill: parent
             drag{ target: parent; axis: Drag.XAxis }
+
             onMouseXChanged: {
                 if(drag.active){
                     console.log("timePerFrame: ", jokerWindow.timePerFrame);
+                    var pixelChange = snapToFrame(mouseX)
                     var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
-                    var pixelChange = mouseX
-                    var timeChange = pixelChange * horizontalTimePerPixel
-                    // round to frame
-                    var frameChange = Math.round(timeChange / jokerWindow.timePerFrame)
-                    timeChange = frameChange * jokerWindow.timePerFrame
-                    pixelChange = timeChange / horizontalTimePerPixel
-
                     if (pixelChange > stripLineContainer.width - pixelPerFrame) {
                         pixelChange = stripLineContainer.width - pixelPerFrame
                     }
-                    stripLineContainer.width = stripLineContainer.width - pixelChange
                     stripLineContainer.x = stripLineContainer.x + pixelChange
-                }
-            }
-        }
-    }
-
-    // right handle
-    Rectangle {
-        width: rulersSize
-        height: rulersSize
-        radius: rulersSize
-        color: "steelblue"
-        anchors.horizontalCenter: parent.right
-        anchors.verticalCenter: parent.verticalCenter
-
-        MouseArea {
-            anchors.fill: parent
-            drag{ target: parent; axis: Drag.XAxis }
-            onMouseXChanged: {
-                if(drag.active){
-                    var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
-                    var pixelChange = mouseX
-                    var timeChange = pixelChange * horizontalTimePerPixel
-                    // round to frame
-                    var frameChange = Math.round(timeChange / jokerWindow.timePerFrame)
-                    timeChange = frameChange * jokerWindow.timePerFrame
-                    pixelChange = timeChange / horizontalTimePerPixel
-
-                    stripLineContainer.width = stripLineContainer.width + pixelChange
-                    if(stripLineContainer.width < pixelPerFrame)
-                        stripLineContainer.width = pixelPerFrame
+                    textRepeater.itemAt(0).width = textRepeater.itemAt(0).width - pixelChange
                 }
             }
         }

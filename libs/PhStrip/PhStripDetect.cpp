@@ -6,9 +6,24 @@
 
 #include "PhStripDetect.h"
 
-PhStripDetect::PhStripDetect(PhDetectType type, PhTime timeIn, PhPeople *people, PhTime timeOut, float y)
-	: PhStripPeopleObject(timeIn, people, timeOut, y),
-	_type(type)
+PhStripDetect::PhStripDetect(PhDetectType type, PhTime relativeTime)
+	: _type(type),
+	  _relativeTime(relativeTime)
 {
 
+}
+
+PhTime PhStripDetect::relativeTime() const
+{
+	return _relativeTime;
+}
+
+void PhStripDetect::setRelativeTime(const PhTime &time)
+{
+	_relativeTime = time;
+}
+
+void PhStripDetect::setType(const PhDetectType &type)
+{
+	_type = type;
 }

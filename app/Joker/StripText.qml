@@ -1,63 +1,67 @@
 import QtQuick 2.5
 
-TextInput {
+Item {
     id: stripTextItem2
-    x: timeIn/horizontalTimePerPixel - stripLineContainer.x
-    text: content
-    font.pixelSize: stripLineContainer.height
-    font.family: stripFont.name
-    font.weight: textBoldness * 99/5
-    transform: Scale {  xScale: (timeOut - timeIn)/horizontalTimePerPixel/stripTextItem2.width;
-                        yScale: 1;}
+    width: duration/horizontalTimePerPixel
+    height: stripLineContainer.height
 
-    cursorDelegate: Rectangle {
-        // cancel the TextInput scale
-        width: stripTextItem2.width*horizontalTimePerPixel/(timeOut - timeIn)
-        height: stripTextItem2.height
-        color: stripTextItem2.color
-        visible: stripTextItem2.focus
-    }
+    property string text: stripTextInput.text
+    property bool textFocus: stripTextInput.focus
+    property int cursorPosition: stripTextInput.cursorPosition
 
-    smooth: true // smooth scaling
+    TextInput {
+        id: stripTextInput
+        text: content
+        anchors.left: parent.left
+        anchors.top: parent.top
+        font.pixelSize: stripLineContainer.height
+        font.family: stripFont.name
+        font.weight: textBoldness * 99/5
+        transform: Scale {  xScale: stripTextItem2.width/stripTextInput.width;
+                            yScale: 1;}
 
-    color: stripLineContainer.editing ? "slateblue" : "black"
-
-    onEditingFinished: {
-        console.log("Editing finished")
-        focus = false
-        stripLineContainer.editing = false
-    }
-
-//                    Binding { target: model; property: "content"; value: stripTextItem2.text }
-
-    Keys.onRightPressed: {
-        console.log('Right Key was pressed ' + stripTextItem2.cursorPosition + ' ' + stripTextItem2.text.length);
-        if (stripTextItem2.cursorPosition === stripTextItem2.text.length) {
-            // give focus to next item!
-            console.log("I'm item " + index);
-            var nextItem = textRepeater.itemAt(index+1)
-            nextItem.focus = true
-            nextItem.cursorPosition = 1
-            stripLineContainer.editing = true
-        } else {
-            stripTextItem2.cursorPosition = stripTextItem2.cursorPosition + 1
+        cursorDelegate: Rectangle {
+            // cancel the TextInput scale
+            width: stripTextInput.width/stripTextItem2.width
+            height: stripTextInput.height
+            color: stripTextInput.color
+            visible: stripTextInput.focus
         }
-        event.accepted = true;
-    }
 
-    Keys.onLeftPressed: {
-        console.log('Left Key was pressed ' + stripTextItem2.cursorPosition);
-        if (stripTextItem2.cursorPosition == 0) {
-            // give focus to previous item!
-            console.log("I'm item " + index);
-            var previousItem = textRepeater.itemAt(index-1)
-            previousItem.focus = true
-            previousItem.cursorPosition = previousItem.text.length - 1
-            stripLineContainer.editing = true
-        } else {
-            stripTextItem2.cursorPosition = stripTextItem2.cursorPosition - 1
+        smooth: true // smooth scaling
+
+        color: stripLineContainer.editing ? "slateblue" : "black"
+
+        onEditingFinished: {
+            console.log("Editing finished")
+            focus = false
+            stripLineContainer.editing = false
         }
-        event.accepted = true;
+
+        Keys.onRightPressed: {
+            console.log('Right Key was pressed ' + stripTextInput.cursorPosition + ' ' + stripTextInput.text.length);
+            if (stripTextInput.cursorPosition === stripTextItem2.text.length) {
+                giveFocusToNextItem();
+            } else {
+                stripTextInput.cursorPosition = stripTextInput.cursorPosition + 1
+            }
+            event.accepted = true;
+        }
+
+        Keys.onLeftPressed: {
+            console.log('Left Key was pressed ' + stripTextInput.cursorPosition);
+            if (stripTextInput.cursorPosition == 0) {
+                // give focus to previous item!
+                console.log("I'm item " + stripTextDelegate.textIndex);
+                var previousItem = textRepeater.itemAt(stripTextDelegate.textIndex-1)
+                previousItem.textFocus = true
+                previousItem.cursorPosition = previousItem.text.length - 1
+                stripLineContainer.editing = true
+            } else {
+                stripTextInput.cursorPosition = stripTextInput.cursorPosition - 1
+            }
+            event.accepted = true;
+        }
     }
 
     // drag mouse area
@@ -66,38 +70,66 @@ TextInput {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
         drag{
-            target: parent
-            minimumY: 0
-            maximumY: stripContainer.height - stripLineContainer.height
+            target: stripLineContainer
+            minimumY: -stripLineContainer.y
+            maximumY: stripContainer.height - stripLineContainer.height - stripLineContainer.y
             smoothed: true
         }
 
-        enabled: !stripTextItem2.focus
+        enabled: !stripTextInput.focus
 
         onDoubleClicked: {
             // give focus to the textinput
-            stripTextItem2.focus = true
+            stripTextInput.focus = true
             stripLineContainer.editing = true
-            var newPos = stripTextItem2.positionAt(mouseX, mouseY)
-            stripTextItem2.cursorPosition = newPos
+            var newPos = stripTextInput.positionAt(mouseX/stripTextItem2.width*stripTextInput.width, mouseY)
+            console.log(mouseX + " " + mouseY + " " + newPos);
+            stripTextInput.cursorPosition = newPos
         }
 
         onPositionChanged: {
             if(drag.active){
                 // snap x to whole frame
-                var timePosition = stripLineContainer.x * horizontalTimePerPixel
-                var framePosition = Math.round(timePosition / jokerWindow.timePerFrame)
-                timePosition = framePosition * jokerWindow.timePerFrame
-                stripLineContainer.x = timePosition / horizontalTimePerPixel
-
+                stripLineContainer.x = snapToFrame(stripLineContainer.x);
                 // snap y to track
-                var trackNumber = Math.round(stripLineContainer.y / stripContainer.height * 4) / 4
-                stripLineContainer.y = stripContainer.height*trackNumber
+                stripLineContainer.y = Math.round(stripLineContainer.y / height) * height;
             }
         }
 
 //                onClicked: {
 //                    stripTextItem2.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
 //                }
+    }
+
+    // right handle
+    Rectangle {
+        width: 18
+        height: 18
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.right
+        color: "steelblue"
+
+        MouseArea {
+            anchors.fill: parent
+            drag{ target: parent; axis: Drag.XAxis }
+            onMouseXChanged: {
+                if(drag.active){
+                    var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
+                    var pixelChange = snapToFrame(mouseX - parent.width)
+                    stripTextItem2.width = stripTextItem2.width + pixelChange
+                    if(stripTextItem2.width < pixelPerFrame)
+                        stripTextItem2.width = pixelPerFrame
+                }
+            }
+        }
+    }
+
+    function giveFocusToNextItem() {
+        // give focus to next item!
+        console.log("I'm item " + index);
+        var nextItem = textRepeater.itemAt(index + 1)
+        nextItem.textFocus = true
+        nextItem.cursorPosition = 1
+        stripLineContainer.editing = true
     }
 }
