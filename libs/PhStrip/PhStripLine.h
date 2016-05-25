@@ -55,10 +55,13 @@ public:
 	float height() const;
 	void setHeight(float height);
 
-public slots:
-//	void refreshText();
+	PhPeople *people() const;
+	void setPeople(PhPeople *people);
 
-//	void onTimeInChanged();
+public slots:
+	//	void refreshText();
+
+	//	void onTimeInChanged();
 
 //	void onTimeOutChanged();
 

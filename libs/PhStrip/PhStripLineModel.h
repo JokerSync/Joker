@@ -1,6 +1,7 @@
 #ifndef PHSTRIPLINETMODEL_H
 #define PHSTRIPLINETMODEL_H
 
+#include <QListIterator>
 #include <QAbstractListModel>
 #include "PhStrip/PhStripLine.h"
 
@@ -24,6 +25,8 @@ public:
 	bool setData(const QModelIndex &index, const QVariant &value, int role);
 	bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
 	void clear();
+
+	QListIterator<PhStripLine *> iterator();
 
 public slots:
 	void add(PhTime timeIn, PhStripDetect::PhDetectType typeIn, PhPeople * people, float y, float height);

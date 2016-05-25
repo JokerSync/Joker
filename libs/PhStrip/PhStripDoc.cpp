@@ -295,26 +295,37 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	}
 
 	// export <line> list
-	// TODO
-//	foreach(const PhStripText *text, texts()) {
-//		ptree ptLine;
-//		ptLine.put("<xmlattr>.role", idMap[text->people()].toStdString());
-//		ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(text->y() * 4));
+	QListIterator<PhStripLine *> lineIterator = _lines->iterator();
+	while (lineIterator.hasNext()) {
+		PhStripLine *line = lineIterator.next();
+		PhTime timeOut = line->timeIn();
 
-//		ptree lipsync1;
-//		lipsync1.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeIn(), _videoTimeCodeType).toStdString());
-//		lipsync1.put("<xmlattr>.type", "in_open");
-//		ptLine.push_back(std::make_pair("lipsync", lipsync1));
+		ptree ptLine;
+		ptLine.put("<xmlattr>.role", idMap[line->people()].toStdString());
+		ptLine.put("<xmlattr>.track", boost::format("%d") % (int)(line->y() * 4));
 
-//		ptLine.put("text", text->content().toStdString());
+		ptree lipsync1;
+		lipsync1.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(line->timeIn(), _videoTimeCodeType).toStdString());
+		lipsync1.put("<xmlattr>.type", "in_open");
+		ptLine.push_back(std::make_pair("lipsync", lipsync1));
 
-//		ptree lipsync2;
-//		lipsync2.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
-//		lipsync2.put("<xmlattr>.type", "out_open");
-//		ptLine.push_back(std::make_pair("lipsync", lipsync2));
+		QListIterator<PhStripText *> textIterator = line->textModel()->iterator();
+		while (textIterator.hasNext()) {
+			PhStripText *text = textIterator.next();
+			timeOut += text->duration();
 
-//		ptBody.push_back(std::make_pair("line", ptLine));
-//	}
+			ptLine.add("text", text->content().toStdString());
+
+			ptree lipsync2;
+			lipsync2.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(timeOut, _videoTimeCodeType).toStdString());
+			lipsync2.put("<xmlattr>.type", "out_open");
+			ptLine.push_back(std::make_pair("lipsync", lipsync2));
+		}
+
+		ptBody.push_back(std::make_pair("line", ptLine));
+
+		// TODO unlinked detects
+	}
 
 	ptDetX.add_child("detx.body", ptBody);
 

@@ -85,6 +85,11 @@ void PhStripTextModel::clear() {
 	endRemoveRows();
 }
 
+QListIterator<PhStripText *> PhStripTextModel::iterator()
+{
+	return QListIterator<PhStripText *>(_texts);
+}
+
 void PhStripTextModel::addText(QString content, PhTime timeOut, PhStripDetect::PhDetectType typeOut)
 {
 	append(new PhStripText(content, timeOut, typeOut));

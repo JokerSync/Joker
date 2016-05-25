@@ -31,6 +31,7 @@ Item {
                 property int textIndex: index
 
                 Binding { target: model; property: "content"; value: text }
+                Binding { target: model; property: "duration"; value: width*horizontalTimePerPixel }
             }
         }
     }

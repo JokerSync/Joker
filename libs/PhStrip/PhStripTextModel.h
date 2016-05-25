@@ -27,6 +27,8 @@ public:
 	bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
 	void clear();
 
+	QListIterator<PhStripText *> iterator();
+
 public slots:
 	void addText(QString content, PhTime timeOut, PhStripDetect::PhDetectType typeOut);
 	void removeText(int index);

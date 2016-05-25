@@ -312,5 +312,10 @@ Item {
         sequence: "Up"
         onActivated: playbackController.onPlayPause()
     }
+
+    Shortcut {
+        sequence: "Space"
+        onActivated: playbackController.onPlayPause()
+    }
 }
 

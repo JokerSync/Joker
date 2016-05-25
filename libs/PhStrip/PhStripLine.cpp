@@ -267,3 +267,13 @@ void PhStripLine::setHeight(float height)
 {
 	_height = height;
 }
+
+PhPeople *PhStripLine::people() const
+{
+    return _people;
+}
+
+void PhStripLine::setPeople(PhPeople *people)
+{
+    _people = people;
+}

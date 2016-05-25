@@ -78,6 +78,11 @@ void PhStripLineModel::clear() {
 	endRemoveRows();
 }
 
+QListIterator<PhStripLine *> PhStripLineModel::iterator()
+{
+	return QListIterator<PhStripLine *>(_lines);
+}
+
 void PhStripLineModel::add(PhTime timeIn, PhStripDetect::PhDetectType typeIn, PhPeople *people, float y, float height)
 {
 	append(new PhStripLine(timeIn, typeIn, people, y, height));
