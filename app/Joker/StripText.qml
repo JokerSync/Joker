@@ -9,6 +9,13 @@ Item {
     property bool textFocus: stripTextInput.focus
     property int cursorPosition: stripTextInput.cursorPosition
 
+    // appears when we create a new line by adding the ending sign
+    Rectangle {
+        anchors.fill: parent
+        color: stripLineContainer.editing ? "slateblue" : "light gray"
+        visible: content.length === 0
+    }
+
     TextInput {
         id: stripTextInput
         text: content

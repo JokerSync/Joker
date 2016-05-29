@@ -29,7 +29,7 @@ public:
 	QListIterator<PhStripLine *> iterator();
 
 public slots:
-	void add(PhTime timeIn, PhStripDetect::PhDetectType typeIn, PhPeople * people, float y, float height);
+	void addDetect(PhTime timeIn, float y);
 	void remove(int index);
 
 protected:

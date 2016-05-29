@@ -111,7 +111,6 @@ double PhMediaPanel::relativeTime()
 void PhMediaPanel::setRelativeTime(double relativeTime)
 {
 	if (relativeTime != _relativeTime) {
-		PHDEBUG << "relativeTime: " << relativeTime;
 		_relativeTime = relativeTime;
 
 		PhTime time = _timeIn + relativeTime*_length;
@@ -131,6 +130,8 @@ bool PhMediaPanel::isPlaying()
 
 void PhMediaPanel::setClock(PhTimeCodeType tcType, PhClock *clock)
 {
+	setAverageFps(PhTimeCode::getAverageFps(tcType));
+
 	onTimeCodeTypeChanged(tcType);
 	_clock = clock;
 	if(_clock) {
@@ -144,6 +145,8 @@ void PhMediaPanel::onRateChanged(PhRate rate)
 {
 	ui->_rateLabel->setText("x"+QString::number(rate));
 	updatePlayingState();
+
+	emit rateChanged();
 }
 
 void PhMediaPanel::onTimeCodeTypeChanged(PhTimeCodeType tcType)
@@ -237,6 +240,19 @@ void PhMediaPanel::onPreviousFrame()
 	emit previousFrameClicked();
 }
 
+void PhMediaPanel::onPlayPauseBackward()
+{
+	if(_clock) {
+		if(_clock->rate())
+			_clock->setRate(0);
+		else
+			_clock->setRate(-1);
+	}
+	else
+		_playing = !_playing;
+	updatePlayingState();
+}
+
 void PhMediaPanel::onSliderChanged(int position)
 {
 	PhTime time = position * PhTimeCode::timePerFrame(this->timeCodeType());
@@ -272,13 +288,24 @@ void PhMediaPanel::updatePlayingState()
 		ui->_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
 }
 
+void PhMediaPanel::setAverageFps(double averageFps)
+{
+	if (_averageFps != averageFps) {
+		_averageFps = averageFps;
+		emit averageFpsChanged();
+	}
+}
+
+double PhMediaPanel::averageFps()
+{
+	return _averageFps;
+}
+
 void PhMediaPanel::onTimeChanged(PhTime time)
 {
 	PhTimeCodeType tcType = this->timeCodeType();
 	ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(time, tcType));
 	ui->_slider->setSliderPosition(time / PhTimeCode::timePerFrame(tcType));
-	PHDEBUG << "time: " << time;
-
 	setRelativeTime((double)(_clock->time() - _timeIn)/((double)_length));
 }
 

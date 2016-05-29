@@ -9,5 +9,9 @@
         <file>Line.qml</file>
         <file>StripText.qml</file>
         <file>Detect.qml</file>
+        <file>fontawesome.js</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file alias="fontawesome-webfont.ttf">../../data/fonts/fontawesome-webfont.ttf</file>
     </qresource>
 </RCC>

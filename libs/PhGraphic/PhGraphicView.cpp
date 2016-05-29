@@ -11,8 +11,8 @@
 #include "PhGraphicView.h"
 
 PhGraphicView::PhGraphicView(QWidget *parent)
-	//: QQuickWidget(parent),
-	: QQuickView(),
+	: QQuickWidget(parent),
+	//: QQuickView(),
 	//: QQmlApplicationEngine(),
 	_settings(NULL),
 	_dropDetected(0),

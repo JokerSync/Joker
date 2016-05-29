@@ -58,6 +58,11 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	//_view = ui->videoStripView;
 	_view = new PhGraphicView();
 	_context = _view->engine()->rootContext();
+
+	foreach(QString path, _view->engine()->importPathList()) {
+		PHDEBUG << path;
+	}
+
 	//_context = _view->rootContext();
 
 	_context->setContextProperty("doc", _doc);
@@ -92,16 +97,19 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("noSyncLabelOpacity", 0);
 	_context->setContextProperty("playbackController", &_mediaPanel);
 
-	connect(_view, &QQuickView::statusChanged, this, &JokerWindow::qmlStatusChanged);
+	connect(_view, &QQuickWidget::statusChanged, this, &JokerWindow::qmlStatusChanged);
+	//connect(_view, &QQuickView::statusChanged, this, &JokerWindow::qmlStatusChanged);
 	//connect(_view, &QQmlApplicationEngine::warnings, this, &JokerWindow::qmlStatusChanged);
 
-	_view->setResizeMode(QQuickView::SizeRootObjectToView);
+	//_view->setResizeMode(QQuickView::SizeRootObjectToView);
+	_view->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
 	// in resources or in full path, the qml sub-files are not found if launched from outside Qt Creator !
 	_view->setSource(QUrl("qrc:///main.qml"));
 	//_view->load(QUrl("qrc:///main.qml"));
 	//_view->setSource(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/main.qml"));
-	_view->show();
+	//_view->show();
+	ui->verticalLayout->addWidget(_view);
 
 	// Due to translation, Qt might not be able to link automatically the menu
 	ui->actionPreferences->setMenuRole(QAction::PreferencesRole);
@@ -164,11 +172,11 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->actionDisplay_the_control_panel->setChecked(_settings->displayControlPanel());
 
-	fadeInMediaPanel();
+	//fadeInMediaPanel();
 
 	// Trigger a timer that will fade off the media panel after 3 seconds
-	this->connect(&_mediaPanelTimer, &QTimer::timeout, this, &JokerWindow::fadeOutMediaPanel);
-	_mediaPanelTimer.start(3000);
+	//this->connect(&_mediaPanelTimer, &QTimer::timeout, this, &JokerWindow::fadeOutMediaPanel);
+	//_mediaPanelTimer.start(3000);
 
 	this->setFocus();
 
@@ -198,9 +206,11 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	this->connect(_view, &PhGraphicView::beforePaint, this, &JokerWindow::onPaint);
 }
 
-void JokerWindow::qmlStatusChanged(QQuickView::Status status)
+//void JokerWindow::qmlStatusChanged(QQuickView::Status status)
+void JokerWindow::qmlStatusChanged(QQuickWidget::Status status)
 {
-	if (status == QQuickView::Error)
+	//if (status == QQuickView::Error)
+	if (status == QQuickWidget::Error)
 	{
 		foreach (QQmlError error, _view->errors())
 		{
@@ -384,71 +394,61 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 {
 	/// The event filter catch the following event:
 	switch (event->type()) {
-	case QEvent::MouseMove: /// - Mouse move show the media panel
-	case QEvent::HoverEnter:
-	case QEvent::HoverMove:
-		{
-			fadeInMediaPanel();
+//	case QEvent::MouseMove: /// - Mouse move show the media panel
+//	case QEvent::HoverEnter:
+//	case QEvent::HoverMove:
+//		{
+//			fadeInMediaPanel();
 
-			break;
+//			break;
 
-			// FIXME
-			// do this from QML
+//			// FIXME
+//			// do this from QML
 
-			// Check if it is near the video/strip border
-			QMouseEvent * mouseEvent = (QMouseEvent*)event;
-			// Check if it is near the video/strip border
-			float stripHeight = this->height() * _settings->stripHeight();
-			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
-			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10))
-				QApplication::setOverrideCursor(Qt::SizeVerCursor);
-			else
-				QApplication::setOverrideCursor(Qt::ArrowCursor);
+//			// Check if it is near the video/strip border
+//			QMouseEvent * mouseEvent = (QMouseEvent*)event;
+//			// Check if it is near the video/strip border
+//			float stripHeight = this->height() * _settings->stripHeight();
+//			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
+//			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10))
+//				QApplication::setOverrideCursor(Qt::SizeVerCursor);
+//			else
+//				QApplication::setOverrideCursor(Qt::ArrowCursor);
 
-			if(_resizingStrip && (mouseEvent->buttons() & Qt::LeftButton)) {
-				PHDEBUG << "resizing strip:" << mouseEvent->pos();
-				_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
-			}
-			break;
-		}
+//			if(_resizingStrip && (mouseEvent->buttons() & Qt::LeftButton)) {
+//				PHDEBUG << "resizing strip:" << mouseEvent->pos();
+//				_settings->setStripHeight(1.0 - ((float) mouseEvent->pos().y() /(float) this->height()));
+//			}
+//			break;
+//		}
 	case QEvent::MouseButtonDblClick: /// - Double mouse click toggle fullscreen mode
 		if(sender == this)
 			toggleFullScreen();
 		break;
-	case QEvent::MouseButtonRelease:
-		PHDEBUG << "end resizing strip";
-		_resizingStrip = false;
-		break;
 	case QEvent::MouseButtonPress:
 		{
-			QMouseEvent *mouseEvent = (QMouseEvent*)event;
-			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
-				/// - Right mouse click on the video open the video file dialog.
-				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
-					on_actionOpen_Video_triggered();
-				else /// - Left mouse click on the strip open the strip file dialog.
-					on_actionOpen_triggered();
-				return true;
-			}
+		// FIXME
+		// do this from QML
+
+//		QMouseEvent *mouseEvent = (QMouseEvent*)event;
+//			if((sender == this) && (mouseEvent->buttons() & Qt::RightButton)) {
+//				/// - Right mouse click on the video open the video file dialog.
+//				if(mouseEvent->y() < this->height() * (1.0f - _settings->stripHeight()))
+//					on_actionOpen_Video_triggered();
+//				else /// - Left mouse click on the strip open the strip file dialog.
+//					on_actionOpen_triggered();
+//				return true;
+//			}
 
 			break;
-			// FIXME
-			// do this from QML
-
-			float stripHeight = this->height() * _settings->stripHeight();
-			if((mouseEvent->pos().y() > (this->height() - stripHeight) - 10)
-			   && (mouseEvent->pos().y() < (this->height() - stripHeight) + 10)) {
-				PHDEBUG << "start resizing strip";
-				_resizingStrip = true;
-			}
 		}
-	case QEvent::KeyPress:
-		{
-			QKeyEvent *keyEvent = (QKeyEvent*)event;
-			if(keyEvent->key() == Qt::Key_Space) {
-				on_actionPlay_pause_triggered();
-			}
-		}
+//	case QEvent::KeyPress:
+//		{
+//			QKeyEvent *keyEvent = (QKeyEvent*)event;
+//			if(keyEvent->key() == Qt::Key_Space) {
+//				on_actionPlay_pause_triggered();
+//			}
+//		}
 	default:
 		break;
 	}
@@ -469,7 +469,7 @@ QAction *JokerWindow::fullScreenAction()
 void JokerWindow::onApplicationActivate()
 {
 	PhDocumentWindow::onApplicationActivate();
-	fadeInMediaPanel();
+	//fadeInMediaPanel();
 }
 
 void JokerWindow::onApplicationDeactivate()
@@ -497,7 +497,7 @@ void JokerWindow::on_actionOpen_triggered()
 			openDocument(fileName);
 		}
 	}
-	fadeInMediaPanel();
+	//fadeInMediaPanel();
 }
 
 void JokerWindow::on_actionStep_start_triggered()
@@ -597,7 +597,7 @@ void JokerWindow::on_actionOpen_Video_triggered()
 			setCurrentTime(_doc->videoTimeIn());
 	}
 
-	fadeInMediaPanel();
+	//fadeInMediaPanel();
 #endif
 }
 
@@ -683,7 +683,7 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 	}
 #endif
 
-	fadeInMediaPanel();
+	//fadeInMediaPanel();
 }
 
 
@@ -695,7 +695,7 @@ void JokerWindow::on_actionAbout_triggered()
 	AboutDialog menu;
 	menu.exec();
 
-	fadeInMediaPanel();
+	//fadeInMediaPanel();
 }
 
 
@@ -733,7 +733,7 @@ void JokerWindow::on_actionPreferences_triggered()
 		}
 	}
 
-	fadeInMediaPanel();
+	//fadeInMediaPanel();
 }
 
 void JokerWindow::fadeInMediaPanel()
@@ -806,7 +806,7 @@ void JokerWindow::on_actionTimecode_triggered()
 	if(dlg.exec() == QDialog::Accepted)
 		setCurrentTime(dlg.time());
 
-	fadeInMediaPanel();
+	//fadeInMediaPanel();
 }
 
 void JokerWindow::on_actionNext_element_triggered()
@@ -948,7 +948,7 @@ void JokerWindow::on_actionSend_feedback_triggered()
 	hideMediaPanel();
 	PhFeedbackDialog dlg(_settings, this);
 	dlg.exec();
-	fadeInMediaPanel();
+	//fadeInMediaPanel();
 }
 
 void JokerWindow::on_actionDeinterlace_video_triggered(bool checked)
@@ -1177,10 +1177,10 @@ PhRate JokerWindow::currentRate()
 void JokerWindow::on_actionDisplay_the_control_panel_triggered(bool checked)
 {
 	_settings->setDisplayControlPanel(checked);
-	if(checked)
-		fadeInMediaPanel();
-	else
-		fadeOutMediaPanel();
+//	if(checked)
+//		fadeInMediaPanel();
+//	else
+//		fadeOutMediaPanel();
 }
 
 void JokerWindow::on_actionDisplay_the_information_panel_triggered(bool checked)

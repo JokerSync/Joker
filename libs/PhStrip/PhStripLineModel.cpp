@@ -83,9 +83,46 @@ QListIterator<PhStripLine *> PhStripLineModel::iterator()
 	return QListIterator<PhStripLine *>(_lines);
 }
 
-void PhStripLineModel::add(PhTime timeIn, PhStripDetect::PhDetectType typeIn, PhPeople *people, float y, float height)
+void PhStripLineModel::addDetect(PhTime time, float y)
 {
-	append(new PhStripLine(timeIn, typeIn, people, y, height));
+	// this is called to create a new line, unless there is an opened line below the mouse
+
+	PhStripLine *line = NULL;
+
+	foreach (PhStripLine *l, _lines)
+	{
+		if (l->textModel()->rowCount() == 0
+				&& l->timeIn() < time
+				&& l->y() == y) {
+			// found a matching opened line
+			line = l;
+			break;
+		}
+	}
+
+	if (line != NULL) {
+		PhStripDetect::PhDetectType typeOut = PhStripDetect::On;
+		PhStripText *text = new PhStripText("", time - line->timeIn(), typeOut);
+		line->textModel()->append(text);
+		return;
+	}
+
+	PhStripDetect::PhDetectType typeIn = PhStripDetect::On;
+	PhPeople *people;
+	float height = 0.25;
+
+	// FIXME
+	if (_lines.length() > 0)
+	{
+		people = _lines[0]->people();
+	}
+	else
+	{
+		people = new PhPeople();
+	}
+
+	line = new PhStripLine(time, typeIn, people, y, height);
+	append(line);
 }
 
 void PhStripLineModel::remove(int index)

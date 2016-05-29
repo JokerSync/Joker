@@ -33,14 +33,13 @@ Item {
         property int mouseX: 0
         property int mouseY: 0
         MenuItem {
-            text: "Add phrase"
+            text: "Add sign"
             onTriggered: {
-                var timeIn = (stripMenu.mouseX - delayX) * horizontalTimePerPixel + jokerWindow.stripTime;
-                var timeOut = timeIn + stripContainer.width * horizontalTimePerPixel/4;
+                var time = (stripMenu.mouseX - delayX) * horizontalTimePerPixel + jokerWindow.stripTime;
                 var trackHeight = stripContainer.height / 4;
                 var textY = Math.round((stripMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
-                console.log("add phrase " + timeIn + " " + timeOut);
-                doc.textModel.addText(timeIn, timeOut, textY);
+                console.log("add phrase " + time + " " + textY);
+                doc.lineModel.addDetect(time, textY);
             }
         }
     }

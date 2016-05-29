@@ -86,4 +86,9 @@ Item {
         panelTimer.restart()
         mediaPanel.visible = true
     }
+
+    function showPanelPermanent() {
+        panelTimer.stop()
+        mediaPanel.visible = true
+    }
 }

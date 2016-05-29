@@ -6,7 +6,7 @@ import QtQuick.Controls 1.1
 Item {
     id: stripLineContainer
     // width is arbitray...
-    width: 100
+    width: 1
     height: parent.height/4
     x: timeIn/horizontalTimePerPixel
     y: parent.height*trackNumber
@@ -17,6 +17,27 @@ Item {
 
     property var lineModel: model
     property bool editing: false
+
+    // appears when we have just added the opening sign
+    Rectangle {
+        gradient: Gradient {
+            GradientStop {
+                position: 0.00;
+                color: "blue";
+            }
+            GradientStop {
+                position: 1.00;
+                color: "#000000ff";
+            }
+        }
+
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        height: 100
+        width: parent.height
+        rotation: 90
+        visible: textRepeater.count === 0
+    }
 
     Row {
         Repeater {
@@ -76,8 +97,8 @@ Item {
                     console.log("timePerFrame: ", jokerWindow.timePerFrame);
                     var pixelChange = snapToFrame(mouseX)
                     var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
-                    if (pixelChange > stripLineContainer.width - pixelPerFrame) {
-                        pixelChange = stripLineContainer.width - pixelPerFrame
+                    if (pixelChange > textRepeater.itemAt(0).width - pixelPerFrame) {
+                        pixelChange = textRepeater.itemAt(0).width - pixelPerFrame
                     }
                     stripLineContainer.x = stripLineContainer.x + pixelChange
                     textRepeater.itemAt(0).width = textRepeater.itemAt(0).width - pixelChange

@@ -337,7 +337,8 @@ private slots:
 
 	void on_actionLoop_triggered(bool checked);
 
-	void qmlStatusChanged(QQuickView::Status status);
+	//void qmlStatusChanged(QQuickView::Status status);
+	void qmlStatusChanged(QQuickWidget::Status status);
 	//void qmlStatusChanged(QList<QQmlError> warnings);
 
 	void onVideoTimeCodeTypeChanged(PhTimeCodeType tcType);

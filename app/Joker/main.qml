@@ -15,6 +15,7 @@ Item {
 //    title: "Test Window with color " + color
     width: 800
     height: 600
+
 //    visible: true
 
 //    menuBar: MenuBar {
@@ -300,22 +301,60 @@ Item {
 
     Shortcut {
         sequence: "Alt+Right"
+        context: Qt.ApplicationShortcut
         onActivated: playbackController.onNextFrame()
     }
 
     Shortcut {
         sequence: "Alt+Left"
+        context: Qt.ApplicationShortcut
         onActivated: playbackController.onPreviousFrame()
     }
 
     Shortcut {
         sequence: "Up"
+        context: Qt.ApplicationShortcut
         onActivated: playbackController.onPlayPause()
     }
 
     Shortcut {
+        sequence: "Down"
+        context: Qt.ApplicationShortcut
+        onActivated: playbackController.onPlayPauseBackward()
+    }
+
+    Shortcut {
         sequence: "Space"
+        context: Qt.ApplicationShortcut
         onActivated: playbackController.onPlayPause()
+    }
+
+    Shortcut {
+        sequence: "Return"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+
+            // this should check whether there is a line below!
+
+            var time = jokerWindow.stripTime;
+            var textY = 0;
+            console.log("add phrase " + time + " " + textY);
+            doc.lineModel.addDetect(time, textY);
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Left"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            // find the detect that is at the current time and move it one frame to the left
+
+
+//            var time = jokerWindow.stripTime;
+//            var textY = 0;
+//            console.log("add phrase " + time + " " + textY);
+//            doc.lineModel.addDetect(time, textY);
+        }
     }
 }
 

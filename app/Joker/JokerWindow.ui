@@ -14,7 +14,7 @@
    <string>Joker</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
      <number>0</number>
     </property>
@@ -164,48 +164,30 @@
    <property name="text">
     <string>Play/pause</string>
    </property>
-   <property name="shortcut">
-    <string>Space</string>
-   </property>
   </action>
   <action name="actionPlay_backward">
    <property name="text">
     <string>Play backward</string>
-   </property>
-   <property name="shortcut">
-    <string>Down</string>
    </property>
   </action>
   <action name="actionStep_forward">
    <property name="text">
     <string>Step forward</string>
    </property>
-   <property name="shortcut">
-    <string>Right</string>
-   </property>
   </action>
   <action name="actionStep_backward">
    <property name="text">
     <string>Step backward</string>
-   </property>
-   <property name="shortcut">
-    <string>Left</string>
    </property>
   </action>
   <action name="actionStep_time_forward">
    <property name="text">
     <string>Step time forward</string>
    </property>
-   <property name="shortcut">
-    <string>Alt+Right</string>
-   </property>
   </action>
   <action name="actionStep_time_backward">
    <property name="text">
     <string>Step time backward</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+Left</string>
    </property>
   </action>
   <action name="action_3">
@@ -312,16 +294,10 @@
    <property name="text">
     <string>Next element</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+Right</string>
-   </property>
   </action>
   <action name="actionPrevious_element">
    <property name="text">
     <string>Previous element</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Left</string>
    </property>
   </action>
   <action name="actionSave">
