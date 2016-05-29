@@ -13,7 +13,7 @@
 #include "PhStripDoc.h"
 
 PhStripDoc::PhStripDoc() :
-	_lines(new PhStripLineModel())
+	_lineModel(new PhStripLineModel())
 {
 	reset();
 }
@@ -222,7 +222,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 
 //					line->setLastDetect(currentDetect);
 
-					_lines->append(line);
+					_lineModel->append(line);
 				}
 			}
 		}
@@ -295,7 +295,7 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	}
 
 	// export <line> list
-	QListIterator<PhStripLine *> lineIterator = _lines->iterator();
+	QListIterator<PhStripLine *> lineIterator = _lineModel->iterator();
 	while (lineIterator.hasNext()) {
 		PhStripLine *line = lineIterator.next();
 		PhTime timeOut = line->timeIn();
@@ -896,7 +896,7 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 
 	f.close();
 
-	if((_lines->rowCount() == 0) && (_alternateTexts.count())) {
+	if((_lineModel->rowCount() == 0) && (_alternateTexts.count())) {
 		PHDEBUG << "Switching primary and secondary text lists";
 		foreach(PhStripText* text, _alternateTexts) {
 			// FIXME
@@ -1427,7 +1427,7 @@ void PhStripDoc::reset()
 	_lastTime = 0;
 	qDeleteAll(_loops);
 	_loops.clear();
-	_lines->clear();
+	_lineModel->clear();
 	qDeleteAll(_alternateTexts);
 	_alternateTexts.clear();
 
@@ -1492,41 +1492,44 @@ PhPeople *PhStripDoc::peopleByName(QString name)
 	return NULL;
 }
 
-PhStripText *PhStripDoc::nextText(PhTime time)
+PhStripLine *PhStripDoc::nextLine(PhTime time)
 {
-	PhStripText * result = NULL;
-	foreach(PhStripText* text, this->texts()) {
-		//FIXME
-		//if(text->timeIn() > time) {
-		//	if(!result || (text->timeIn() < result->timeIn()) )
-		//		result = text;
-		//}
+	PhStripLine * result = NULL;
+	QListIterator<PhStripLine*> i = _lineModel->iterator();
+	while (i.hasNext()) {
+		PhStripLine *line = i.next();
+		if(line->timeIn() > time) {
+			if(!result || (line->timeIn() < result->timeIn()) )
+				result = line;
+		}
 	}
 	return result;
 }
 
-PhStripText *PhStripDoc::nextText(PhPeople *people, PhTime time)
+PhStripLine *PhStripDoc::nextLine(PhPeople *people, PhTime time)
 {
-	PhStripText * result = NULL;
-	foreach(PhStripText* text, this->texts()) {
-		//FIXME
-		//if((text->people() == people) && (text->timeIn() > time)) {
-		//	if(!result || (text->timeIn() < result->timeIn()) )
-		//		result = text;
-		//}
+	PhStripLine * result = NULL;
+	QListIterator<PhStripLine*> i = _lineModel->iterator();
+	while (i.hasNext()) {
+		PhStripLine *line = i.next();
+		if((line->people() == people) && (line->timeIn() > time)) {
+			if(!result || (line->timeIn() < result->timeIn()) )
+				result = line;
+		}
 	}
 	return result;
 }
 
-PhStripText *PhStripDoc::nextText(QList<PhPeople *> peopleList, PhTime time)
+PhStripLine *PhStripDoc::nextLine(QList<PhPeople *> peopleList, PhTime time)
 {
-	PhStripText * result = NULL;
-	foreach(PhStripText* text, this->texts()) {
-		//FIXME
-//		if(peopleList.contains(text->people()) && (text->timeIn() > time)) {
-//			if(!result || (text->timeIn() < result->timeIn()) )
-//				result = text;
-//		}
+	PhStripLine * result = NULL;
+	QListIterator<PhStripLine*> i = _lineModel->iterator();
+	while (i.hasNext()) {
+		PhStripLine *line = i.next();
+		if(peopleList.contains(line->people()) && (line->timeIn() > time)) {
+			if(!result || (line->timeIn() < result->timeIn()) )
+				result = line;
+		}
 	}
 	return result;
 }
@@ -1535,9 +1538,31 @@ PhTime PhStripDoc::previousTextTime(PhTime time)
 {
 	PhTime previousTextTime = PHTIMEMIN;
 
-	foreach(PhStripText* text, this->texts()) {
-		//if((text->timeIn() < time) && (text->timeIn() > previousTextTime) )
-		//	previousTextTime = text->timeIn();
+	QListIterator<PhStripLine*> i = _lineModel->iterator();
+	while (i.hasNext()) {
+		PhStripLine *line = i.next();
+		PhTime timeIn = line->timeIn();
+		if((timeIn < time) && (timeIn > previousTextTime) ) {
+			previousTextTime = timeIn;
+		}
+
+		QListIterator<PhStripText*> i = line->textModel()->iterator();
+		while(i.hasNext()) {
+			PhStripText *text = i.next();
+			timeIn += text->duration();
+			if((timeIn < time) && (timeIn > previousTextTime) ) {
+				previousTextTime = timeIn;
+			}
+		}
+
+		QListIterator<PhStripDetect *> j = line->detectModel()->iterator();
+		while(j.hasNext()) {
+			PhStripDetect *detect = j.next();
+			PhTime detectTime = line->timeIn() + detect->relativeTime();
+			if((detectTime < time) && (detectTime > previousTextTime) ) {
+				previousTextTime = detectTime;
+			}
+		}
 	}
 
 	return previousTextTime;
@@ -1584,12 +1609,31 @@ PhTime PhStripDoc::nextTextTime(PhTime time)
 {
 	PhTime nextTextTime = PHTIMEMAX;
 
-	foreach(PhStripText* text, this->texts()) {
-		//FIXME
-//		if((text->timeIn() > time) && (text->timeIn() < nextTextTime) )
-//			nextTextTime = text->timeIn();
-//		else if(text->timeIn() > nextTextTime)
-//			return nextTextTime;
+	QListIterator<PhStripLine*> i = _lineModel->iterator();
+	while (i.hasNext()) {
+		PhStripLine *line = i.next();
+		PhTime timeIn = line->timeIn();
+		if((timeIn > time) && (timeIn < nextTextTime) ) {
+			nextTextTime = timeIn;
+		}
+
+		QListIterator<PhStripText*> i = line->textModel()->iterator();
+		while(i.hasNext()) {
+			PhStripText *text = i.next();
+			timeIn += text->duration();
+			if((timeIn > time) && (timeIn < nextTextTime) ) {
+				nextTextTime = timeIn;
+			}
+		}
+
+		QListIterator<PhStripDetect *> j = line->detectModel()->iterator();
+		while(j.hasNext()) {
+			PhStripDetect *detect = j.next();
+			PhTime detectTime = line->timeIn() + detect->relativeTime();
+			if((detectTime > time) && (detectTime < nextTextTime) ) {
+				nextTextTime = detectTime;
+			}
+		}
 	}
 
 	return nextTextTime;
@@ -1749,28 +1793,9 @@ bool PhStripDoc::forceRatio169() const
 	return _videoForceRatio169;
 }
 
-QList<PhStripText *> PhStripDoc::texts()
-{
-	// FIXME
-	QList<PhStripText *> texts;
-	return texts;
-	//return _texts->texts();
-}
-
-QList<PhStripText *> PhStripDoc::texts(PhPeople *people)
-{
-	QList<PhStripText*> result;
-	foreach(PhStripText *text, this->texts()) {
-		//FIXME
-//		if(text->people() == people)
-//			result.append(text);
-	}
-	return result;
-}
-
 PhStripLineModel *PhStripDoc::lineModel()
 {
-	return _lines;
+	return _lineModel;
 }
 
 QList<PhStripLoop *> PhStripDoc::loops()

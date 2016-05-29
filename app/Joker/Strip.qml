@@ -156,26 +156,6 @@ Item {
         }
     }
 
-    // people names
-    // FIXME color, font, inverted color are not implemented
-    Component {
-        id: stripPeopleDelegate
-        Item {
-            width: (timeOut - timeIn)/horizontalTimePerPixel
-            height: parent.height
-
-            Text {
-                anchors.right: parent.right
-                anchors.rightMargin: 4000/horizontalTimePerPixel
-                text: content
-                font.pixelSize: parent.height*2/5
-                font.family: "Arial"
-                color: "blue"
-                smooth: true // smooth scaling
-            }
-        }
-    }
-
     Component {
         id: offDetectDelegate
         Item {
@@ -330,28 +310,6 @@ Item {
                 orientation: ListView.Horizontal
                 contentX: stripContainer.contentX
                 interactive: false
-                model: stripPeople
-                delegate: stripPeopleDelegate
-                cacheBuffer: 2*stripContainer.width
-            }
-
-//            ListView {
-//                width: parent.width
-//                height: parent.height
-//                orientation: ListView.Horizontal
-//                contentX: stripContainer.contentX
-//                interactive: false
-//                model: stripText
-//                delegate: stripTextDelegate
-//                cacheBuffer: 2*stripContainer.width
-//            }
-
-            ListView {
-                width: parent.width
-                height: parent.height
-                orientation: ListView.Horizontal
-                contentX: stripContainer.contentX
-                interactive: false
                 model: offDetect
                 delegate: offDetectDelegate
                 cacheBuffer: 2*stripContainer.width
@@ -391,17 +349,6 @@ Item {
             }
         }
     }
-
-//    ColumnLayout {
-//        anchors.fill: parent
-//        spacing: 0
-
-//        Repeater {
-//            //model: trackModel
-//            model: doc.trackModel
-//            delegate: trackDelegate
-//        }
-//    }
 
     Item {
         x: -stripContainer.contentX

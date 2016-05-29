@@ -1072,18 +1072,18 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 	}
 	setStripInfo(stripInfoText);
 
-	PhStripText *nextText = NULL;
+	PhStripLine *nextLine = NULL;
 	if(_settings->displayNextText()) {
 		/// The next time code will be the next element of the people from the list.
 		if(selectedPeoples.count()) {
-			nextText = _strip.doc()->nextText(selectedPeoples, clockTime);
-			if(nextText == NULL)
-				nextText = _strip.doc()->nextText(selectedPeoples, 0);
+			nextLine = _strip.doc()->nextLine(selectedPeoples, clockTime);
+			if(nextLine == NULL)
+				nextLine = _strip.doc()->nextLine(selectedPeoples, 0);
 		}
 		else {
-			nextText = _strip.doc()->nextText(clockTime);
-			if(nextText == NULL)
-				nextText = _strip.doc()->nextText(0);
+			nextLine = _strip.doc()->nextLine(clockTime);
+			if(nextLine == NULL)
+				nextLine = _strip.doc()->nextLine(0);
 		}
 	}
 
@@ -1092,10 +1092,10 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 	_context->setContextProperty("tcLabelText", PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
 	_context->setContextProperty("infosVisible", _settings->displayInfo());
 
-	_context->setContextProperty("nextTcLabelVisible", _settings->displayNextText() && nextText != NULL);
-//	if (nextText != NULL) {
-//		_context->setContextProperty("nextTcLabelText", PhTimeCode::stringFromTime(nextText->timeIn(), _videoEngine.timeCodeType()));
-//	}
+	_context->setContextProperty("nextTcLabelVisible", _settings->displayNextText() && nextLine != NULL);
+	if (nextLine != NULL) {
+		_context->setContextProperty("nextTcLabelText", PhTimeCode::stringFromTime(nextLine->timeIn(), _videoEngine.timeCodeType()));
+	}
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");

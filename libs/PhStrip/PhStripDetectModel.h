@@ -20,6 +20,8 @@ public:
 	bool setData(const QModelIndex &index, const QVariant &value, int role);
 	bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
 
+	QListIterator<PhStripDetect *> iterator();
+
 public slots:
 	void add(PhTime time);
 	void remove(int index);

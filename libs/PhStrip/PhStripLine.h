@@ -58,6 +58,8 @@ public:
 	PhPeople *people() const;
 	void setPeople(PhPeople *people);
 
+	QString content();
+
 public slots:
 	//	void refreshText();
 

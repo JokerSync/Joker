@@ -28,6 +28,8 @@ QVariant PhStripLineModel::data(const QModelIndex & index, int role) const {
 		return QVariant::fromValue<QObject*>(line->textModel());
 	else if (role == UnlinkedDetectsRole)
 		return QVariant::fromValue<QObject*>(line->detectModel());
+	else if (role == PeopleNameRole)
+		return line->people()->name();
 	return QVariant();
 }
 
@@ -68,6 +70,7 @@ QHash<int, QByteArray> PhStripLineModel::roleNames() const {
 	roles[TimeInRole] = "timeIn";
 	roles[TextsRole] = "texts";
 	roles[UnlinkedDetectsRole] = "unlinkedDetects";
+	roles[PeopleNameRole] = "peopleName";
 	return roles;
 }
 

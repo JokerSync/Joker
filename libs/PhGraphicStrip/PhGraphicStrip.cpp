@@ -44,37 +44,21 @@ void PhGraphicStrip::onDocChanged()
 
 	_nextPeopleModel.clear();
 
-	if (_doc.texts().isEmpty())
+	if (_doc.lineModel()->rowCount() == 0) {
 		return;
-
-//	PhNextPeople *nextPeople = new PhNextPeople("",
-//												"#000000",
-//												0,
-//												true,
-//												_doc.texts().first()->timeIn());
-//	_nextPeopleModel.addNextPeople(nextPeople);
-
-	for(int i=0; i<_doc.texts().length() - 1; i++)
-	{
-//		PhStripText * text = _doc.texts()[i];
-//		PhStripText * nextText = _doc.texts()[i+1];
-//		PhPeople * people = text->people();
-//		PhNextPeople *nextPeople = new PhNextPeople(people->name(),
-//													computeColor(people, selectedPeoples, invertedColor).name(),
-//													text->timeIn(),
-//													selectedPeoples.size()==0 || selectedPeoples.contains(people),
-//													nextText->timeIn() - text->timeIn());
-//		_nextPeopleModel.addNextPeople(nextPeople);
 	}
 
-	PhStripText * text = _doc.texts().last();
-//	PhPeople * people = text->people();
-//	nextPeople = new PhNextPeople(people->name(),
-//								computeColor(people, selectedPeoples, invertedColor).name(),
-//								text->timeIn(),
-//								selectedPeoples.size()==0 || selectedPeoples.contains(people),
-//								_doc.timeOut() - text->timeIn());
-//	_nextPeopleModel.addNextPeople(nextPeople);
+	QListIterator<PhStripLine*> i = _doc.lineModel()->iterator();
+	while (i.hasNext()) {
+		PhStripLine *line = i.next();
+		PhPeople * people = line->people();
+		PhNextPeople *nextPeople = new PhNextPeople(people->name(),
+													computeColor(people, selectedPeoples, invertedColor).name(),
+													line->timeIn(),
+													selectedPeoples.size()==0 || selectedPeoples.contains(people),
+													0);
+		_nextPeopleModel.addNextPeople(nextPeople);
+	}
 
 	// ruler
 	_rulerModel.clear();
@@ -115,16 +99,16 @@ void PhGraphicStrip::onDocChanged()
 		int previousTimeOut;
 
 		// strip texts
-		foreach(PhStripText * text, _doc.texts()) {
+//		foreach(PhStripText * text, _doc.texts()) {
 //			if (text->y() == y) {
 //				text->setSelected(selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
 //				track->stripTextModel()->append(text);
 //			}
-		}
+//		}
 
 		// strip text people
 		previousTimeOut = 0;
-		foreach(PhStripText * text, _doc.texts()) {
+//		foreach(PhStripText * text, _doc.texts()) {
 //			if (text->y() == y) {
 //				PhStripText *peopleText = new PhStripText(previousTimeOut,
 //														 text->people(),
@@ -147,7 +131,7 @@ void PhGraphicStrip::onDocChanged()
 
 //				previousTimeOut = text->timeOut();
 //			}
-		}
+//		}
 
 		// off detects
 		previousTimeOut = 0;

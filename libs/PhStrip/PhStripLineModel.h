@@ -14,7 +14,8 @@ public:
 		TrackNumberRole = Qt::UserRole + 1,
 		TimeInRole,
 		TextsRole,
-		UnlinkedDetectsRole
+		UnlinkedDetectsRole,
+		PeopleNameRole
 	};
 
 	PhStripLineModel(QObject *parent = 0);

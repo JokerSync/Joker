@@ -72,8 +72,10 @@ void PropertyDialog::showEvent(QShowEvent *)
 		ui->peopleNumberLabel->setText(QString::number(peopleNumber));
 
 		int charNumber = 0;
-		foreach(PhStripText * text, _doc->texts())
-			charNumber += text->content().length();
+		QListIterator<PhStripLine*> i = _doc->lineModel()->iterator();
+		while (i.hasNext()) {
+			charNumber += i.next()->content().length();
+		}
 		ui->charNumberLabel->setText(QString::number(charNumber));
 	}
 

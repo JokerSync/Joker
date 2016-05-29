@@ -53,6 +53,11 @@ bool PhStripDetectModel::removeRows(int row, int count, const QModelIndex &paren
 	endRemoveRows();
 }
 
+QListIterator<PhStripDetect *> PhStripDetectModel::iterator()
+{
+	return QListIterator<PhStripDetect *>(_detects);
+}
+
 QHash<int, QByteArray> PhStripDetectModel::roleNames() const {
 	QHash<int, QByteArray> roles;
 	roles[TimeRole] = "time";

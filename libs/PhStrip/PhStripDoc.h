@@ -151,18 +151,6 @@ public:
 	 * @return A list.
 	 */
 	QList<PhPeople *> peoples();
-	/**
-	 * @brief The whole text list
-	 * @return A list of texts
-	 */
-	QList<PhStripText *> texts();
-
-	/**
-	 * @brief The list of texts affected to a people
-	 * @param people A people
-	 * @return A list of texts
-	 */
-	QList<PhStripText *> texts(PhPeople *people);
 
 	PhStripLineModel *lineModel();
 
@@ -302,7 +290,7 @@ public:
 	 * @param time A time value
 	 * @return The next text or NULL if no text after the time value
 	 */
-	PhStripText * nextText(PhTime time);
+	PhStripLine * nextLine(PhTime time);
 
 	/**
 	 * @brief Get the next text affected to a people after a time value
@@ -310,7 +298,7 @@ public:
 	 * @param time A time value
 	 * @return The next text or NULL if no text after the time value
 	 */
-	PhStripText * nextText(PhPeople *people, PhTime time);
+	PhStripLine * nextLine(PhPeople *people, PhTime time);
 	/**
 	 * @brief Get the next text affected to one of a people list after a time value
 	 * @param peopleList A people list
@@ -319,7 +307,7 @@ public:
 	 * have the same timeIn, the text attach to the first PhPeople of
 	 * the list will be returned
 	 */
-	PhStripText * nextText(QList<PhPeople*> peopleList, PhTime time);
+	PhStripLine * nextLine(QList<PhPeople*> peopleList, PhTime time);
 	/**
 	 * @brief Get the previous text before a time value
 	 * @param time A time value
@@ -476,7 +464,7 @@ private:
 	 */
 	QList<PhPeople *> _peoples;
 
-	PhStripLineModel *_lines;
+	PhStripLineModel *_lineModel;
 
 	QList<PhStripText *> _alternateTexts;
 

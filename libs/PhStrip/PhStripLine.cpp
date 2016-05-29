@@ -275,5 +275,15 @@ PhPeople *PhStripLine::people() const
 
 void PhStripLine::setPeople(PhPeople *people)
 {
-    _people = people;
+	_people = people;
+}
+
+QString PhStripLine::content()
+{
+	QString content = "";
+	QListIterator<PhStripText*> i = _textModel->iterator();
+	while (i.hasNext()) {
+		content += i.next()->content();
+	}
+	return content;
 }

@@ -57,6 +57,20 @@ Item {
         }
     }
 
+    // people name
+    // FIXME selection, color, font, inverted color are not implemented
+    Text {
+        anchors.right: parent.left
+        anchors.rightMargin: 15
+        anchors.top: parent.top
+        anchors.topMargin: 2
+        text: peopleName
+        font.pixelSize: stripLineContainer.height/3
+        font.family: "Arial"
+        color: "blue"
+        smooth: true // smooth scaling
+    }
+
     Repeater {
         id: detectRepeater
         model: lineModel.unlinkedDetects
