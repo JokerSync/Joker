@@ -1,11 +1,11 @@
 <RCC>
-    <qresource prefix="/">
-        <file>fa-step-backward_16_0_ffffff_none.png</file>
+    <qresource prefix="/PhCommonUI">
+        <file alias="step-backward">fa-step-backward_16_0_ffffff_none.png</file>
         <file alias="play">fa-play_16_0_ffffff_none.png</file>
-        <file>fa-backward_16_0_ffffff_none.png</file>
-        <file>fa-fast-backward_16_0_ffffff_none.png</file>
-        <file>fa-forward_16_0_ffffff_none.png</file>
-        <file>fa-step-forward_16_0_ffffff_none.png</file>
+        <file alias="backward">fa-backward_16_0_ffffff_none.png</file>
+        <file alias="fast-backward">fa-fast-backward_16_0_ffffff_none.png</file>
+        <file alias="forward">fa-forward_16_0_ffffff_none.png</file>
+        <file alias="step-forward">fa-step-forward_16_0_ffffff_none.png</file>
         <file alias="pause">fa-pause_16_0_ffffff_none.png</file>
         <file alias="drop">fa-caret-down_16_0_ffffff_none.png</file>
     </qresource>

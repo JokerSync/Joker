@@ -136,12 +136,17 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	this->connect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
 
-	_videoLogo.setFilename(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png");
+	_videoLogo.setFilename(":/Joker/phonations");
 	_videoLogo.setTransparent(true);
 
 #ifdef USE_VIDEO
 	this->connect(&_videoEngine, &PhVideoEngine::opened, this, &JokerWindow::videoFileOpened);
 #endif
+
+//	_playButton.setFilename(":/PhCommonUI/play");
+//	_playButton.setTransparent(true);
+//	_forwardButton.setFilename(":/PhCommonUI/forward");
+//	_forwardButton.setTransparent(true);
 }
 
 JokerWindow::~JokerWindow()
@@ -628,6 +633,17 @@ void JokerWindow::onPaint(int width, int height)
 
 			y += boxHeight + spacing;
 		}
+
+		// Display the control button
+#warning /// @todo Add control button to the interface
+//		{
+//			_playButton.setColor(infoColor);
+//			_playButton.setRect(x, y, 16, 16);
+//			_playButton.draw();
+//			_forwardButton.setColor(infoColor);
+//			_forwardButton.setRect(x + 16, y, 16, 16);
+//			_forwardButton.draw();
+//		}
 	}
 
 	if(stripHeight > 0) {

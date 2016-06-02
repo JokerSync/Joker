@@ -141,7 +141,7 @@ QComboBox::down-arrow {
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/fa-fast-backward_16_0_ffffff_none.png</normalon>
+         <normalon>:/PhCommonUI/fast-backward</normalon>
         </iconset>
        </property>
       </widget>
@@ -159,7 +159,7 @@ QComboBox::down-arrow {
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/fa-backward_16_0_ffffff_none.png</normalon>
+         <normalon>:/PhCommonUI/backward</normalon>
         </iconset>
        </property>
       </widget>
@@ -177,7 +177,7 @@ QComboBox::down-arrow {
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/fa-step-backward_16_0_ffffff_none.png</normalon>
+         <normalon>:/PhCommonUI/step-backward</normalon>
         </iconset>
        </property>
       </widget>
@@ -195,7 +195,7 @@ QComboBox::down-arrow {
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/play</normalon>
+         <normalon>:/PhCommonUI/play</normalon>
         </iconset>
        </property>
       </widget>
@@ -213,7 +213,7 @@ QComboBox::down-arrow {
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/fa-step-forward_16_0_ffffff_none.png</normalon>
+         <normalon>:/PhCommonUI/step-forward</normalon>
         </iconset>
        </property>
       </widget>
@@ -231,7 +231,7 @@ QComboBox::down-arrow {
        </property>
        <property name="icon">
         <iconset>
-         <normalon>:/fa-forward_16_0_ffffff_none.png</normalon>
+         <normalon>:/PhCommonUI/forward</normalon>
         </iconset>
        </property>
       </widget>

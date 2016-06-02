@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/Joker">
+        <file alias="phonations">../../data/img/phonations.png</file>
+    </qresource>
+</RCC>

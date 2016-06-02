@@ -29,9 +29,11 @@ private slots:
 
 	void onPaint(int width, int height);
 
-	void on_actionImage_triggered(bool checked);
-
 	void on_actionInfos_triggered(bool checked);
+
+	void on_actionImage_1_triggered(bool checked);
+
+	void on_actionImage_2_triggered(bool checked);
 
 	void on_actionLoops_triggered(bool checked);
 
@@ -62,10 +64,11 @@ private slots:
 	void on_actionChange_text_triggered();
 
 	void onFontSelected(const QFont &font);
+
 private:
 	Ui::GraphicTestWindow *ui;
 	GraphicTestSettings *_settings;
-	PhGraphicImage _image;
+	PhGraphicImage _image1, _image2;
 	PhFont _font1, _font2;
 	PhGraphicSolidRect _rect;
 	PhGraphicTexturedRect _yuvRect, _rgbRect;

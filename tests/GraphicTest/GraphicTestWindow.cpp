@@ -30,7 +30,8 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 	connect(ui->graphicView, &PhGraphicView::paint, this, &GraphicTestWindow::onPaint);
 
 	ui->actionInfos->setChecked(_settings->displayInfo());
-	ui->actionImage->setChecked(_settings->displayImage());
+	ui->actionImage_1->setChecked(_settings->displayImage1());
+	ui->actionImage_2->setChecked(_settings->displayImage2());
 	ui->actionDisc->setChecked(_settings->displayDisc());
 	ui->actionLoops->setChecked(_settings->displayLoops());
 	ui->actionArrows->setChecked(_settings->displayArrows());
@@ -39,15 +40,16 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 	ui->actionStatic_text->setChecked(_settings->displayStaticText());
 	ui->actionMoving_text->setChecked(_settings->displayMovingText());
 
-	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella-Regular.ttf");
-	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF");
+	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "Cappella-Regular.ttf");
+	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "SWENSON.TTF");
 
-	PHDEBUG << "Initialize _image";
+	PHDEBUG << "Initialize _images";
 
-	QString imageFile = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png";
-	_image.setFilename(imageFile);
-	_image.setTextureCoordinate(1, 1);
-	_image.setPosition(50, 0, 1);
+	QString imageFile1 = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "phonations.png";
+	_image1.setFilename(imageFile1);
+
+	QString imageFile2 = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "fa-play_16_0_ffffff_none.png";
+	_image2.setFilename(imageFile2);
 
 	PHDEBUG << "Initialize _font";
 
@@ -96,14 +98,26 @@ void GraphicTestWindow::on_actionSave_triggered()
 
 void GraphicTestWindow::onPaint(int width, int height)
 {
-	glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.5f, 1.0f);
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if(_settings->displayImage()) {
-		_image.setTextureCoordinate(1, 1);
-		_image.setSize(_image.originalSize());
-		_image.setTransparent(true);
-		_image.draw();
+	if(_settings->displayImage1()) {
+		_image1.setTextureCoordinate(1, 1);
+		_image1.setSize(_image1.originalSize());
+		_image1.setTextureCoordinate(1, 1);
+		_image1.setPosition(50, 0, 1);
+		_image1.setTransparent(true);
+		_image1.draw();
+	}
+
+	if(_settings->displayImage2()) {
+		_image2.setColor(Qt::green);
+		_image2.setTextureCoordinate(1, 1);
+		_image2.setSize(300, 300);
+		_image2.setTextureCoordinate(1, 1);
+		_image2.setPosition(700, 300, 1);
+		_image2.setTransparent(true);
+		_image2.draw();
 	}
 
 	if(_settings->displayRect()) {
@@ -161,12 +175,13 @@ void GraphicTestWindow::onPaint(int width, int height)
 	int y = 200;
 
 	if(_settings->displayStaticText()) {
-		PhGraphicSolidRect rect1(50, 10, 500, 100);
+
+		PhGraphicSolidRect rect1(700, 100, 500, 100);
 		rect1.setColor(Qt::yellow);
 		rect1.draw();
 		PhGraphicText text1(&_font1, textContent);
 
-		text1.setRect(50, 10, 500, 100);
+		text1.setRect(700, 100, 500, 100);
 		text1.setColor(Qt::green);
 		text1.draw();
 	}
@@ -245,9 +260,14 @@ void GraphicTestWindow::on_actionInfos_triggered(bool checked)
 	_settings->setDisplayInfo(checked);
 }
 
-void GraphicTestWindow::on_actionImage_triggered(bool checked)
+void GraphicTestWindow::on_actionImage_1_triggered(bool checked)
 {
-	_settings->setDisplayImage(checked);
+	_settings->setDisplayImage1(checked);
+}
+
+void GraphicTestWindow::on_actionImage_2_triggered(bool checked)
+{
+	_settings->setDisplayImage2(checked);
 }
 
 void GraphicTestWindow::on_actionLoops_triggered(bool checked)

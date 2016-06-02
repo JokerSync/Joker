@@ -315,6 +315,7 @@ private:
 	bool _resizingStrip;
 
 	PhGraphicImage _videoLogo;
+//	PhGraphicImage _playButton, _forwardButton;
 
 	QTime _lastVideoSyncElapsed;
 
