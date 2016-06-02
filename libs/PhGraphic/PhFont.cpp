@@ -70,7 +70,7 @@ QString PhFont::filter(QString inputText)
 	foreach(QChar c, inputText) {
 		switch (c.unicode()) {
 		case 339:
-			outputText += "œ";
+			outputText += "oe";
 			break;
 		case 8216:
 		case 8217:
