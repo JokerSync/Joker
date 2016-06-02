@@ -26,10 +26,12 @@ bool PhGraphicImage::init()
 			_originalSize.setWidth(image.width());
 			_originalSize.setHeight(image.height());
 			return PhGraphicTexturedRect::init();
-		} else {
+		}
+		else {
 			PHDEBUG << "Error creating buffer for " << _filename;
 		}
-	} else {
+	}
+	else {
 		PHDEBUG << "Error loading" << _filename;
 	}
 
