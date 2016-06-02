@@ -75,7 +75,7 @@ bool PhGraphicTexturedRect::createTextureFromARGBBuffer(void *data, int width, i
 		// See: http://www.opengl.org/wiki/Common_Mistakes#Slow_pixel_transfer_performance
 		// Also see: http://www.opengl.org/wiki/Common_Mistakes#Image_precision
 		// It is also optimal for MacOS. See 'Optimal Data Formats and Types' in:
-		// https://developer.apple.com/library/mac/documentation/graphicsimaging/conceptual/opengl-macprogguide/opengl_texturedata/opengl_texturedata.html#//apple_ref/doc/uid/TP40001987-CH407-SW1		
+		// https://developer.apple.com/library/mac/documentation/graphicsimaging/conceptual/opengl-macprogguide/opengl_texturedata/opengl_texturedata.html#//apple_ref/doc/uid/TP40001987-CH407-SW1
 		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
 
 		// Bind the texture object
@@ -125,14 +125,14 @@ bool PhGraphicTexturedRect::createTextureFromBGRABuffer(void *data, int width, i
 		// It is also optimal for MacOS. See 'Optimal Data Formats and Types' in:
 		// https://developer.apple.com/library/mac/documentation/graphicsimaging/conceptual/opengl-macprogguide/opengl_texturedata/opengl_texturedata.html#//apple_ref/doc/uid/TP40001987-CH407-SW1
 		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
-					  GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
+		              GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
 
 		// Bind the texture object
 		glBindTexture( GL_TEXTURE_2D, _currentTexture );
 
 		// Edit the texture object's image data
 		glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
-					  GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
+		              GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
 	}
 	else {
 		// Bind the texture object
