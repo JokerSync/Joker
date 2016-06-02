@@ -21,7 +21,7 @@ go_bandit([](){
 	describe("graphic_strip_test", []() {
 		before_each([&](){
 			PhDebug::setLogMask((1 << 9) | PHDEBUG_SPEC_MASK);
-			QFontDatabase::addApplicationFont("Cappella-Regular.ttf");
+//			QFontDatabase::addApplicationFont("Cappella-Regular.ttf");
 		});
 
 		it("draw_a_graphic_strip", [&](){
@@ -43,8 +43,8 @@ go_bandit([](){
 			doc->addCut(new PhStripCut(5400, PhStripCut::CrossFade));
 			doc->addDetect(new PhStripDetect(PhStripDetect::Off, 0, doc->peoples().first(), 10000, 0.25f, 0.25f));
 			doc->addLoop(new PhStripLoop(22000, "label"));
-			doc->addText(new PhStripText(10000, doc->peoples().last(), 15000, 0.5f, "Hi !", 0.25f));
-			doc->addDetect(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 15000, 0.5f, 0.25f));
+			doc->addText(new PhStripText(10000, doc->peoples().last(), 20000, 0.5f, "Mon œil!", 0.25f));
+			doc->addDetect(new PhStripDetect(PhStripDetect::SemiOff, 10000, doc->peoples().last(), 20000, 0.5f, 0.25f));
 
 			int threshold = 720 * 240 * 4;
 			AssertThat(view.compare("drawTest.bmp", threshold), IsLessThan(threshold));

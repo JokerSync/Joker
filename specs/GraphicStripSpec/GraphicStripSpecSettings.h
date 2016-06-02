@@ -50,7 +50,8 @@ public:
 	}
 
 	QString textFontFamily() {
-		return "Cappella";
+//		return "Cappella";
+		return "Arial";
 	}
 
 	bool stripTestMode() {
