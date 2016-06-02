@@ -72,4 +72,4 @@ mac {
 #	leap.commands += cp -r $$(LEAP_SDK)/lib/libLeap.dylib $${DESTDIR}/$${TARGET}.app/Contents/Resources/libs/ ;
 
 RESOURCES += \
-    $$PWD/PhCommonUI.qrc
+	$$PWD/PhCommonUI.qrc

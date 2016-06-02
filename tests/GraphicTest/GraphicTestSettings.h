@@ -25,7 +25,8 @@ public:
 
 	PH_SETTING_STRING2(setTextContent, textContent, "Change the text from the settings")
 
-	PH_SETTING_BOOL2(setDisplayImage, displayImage, true)
+	PH_SETTING_BOOL2(setDisplayImage1, displayImage1, true)
+	PH_SETTING_BOOL2(setDisplayImage2, displayImage2, true)
 	PH_SETTING_BOOL2(setDisplayRects, displayRect, true)
 	PH_SETTING_BOOL2(setDisplayLoops, displayLoops, true)
 	PH_SETTING_BOOL2(setDisplayArrows, displayArrows, true)

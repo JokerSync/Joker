@@ -49,7 +49,7 @@ int PhFont::computeMaxFontSize(QString family)
 		QFont font(family, size);
 		QFontMetrics fm(font);
 
-		PHDEBUG << fm.height() << fm.ascent() << fm.descent() << fm.leading();
+//		PHDEBUG << fm.height() << fm.ascent() << fm.descent() << fm.leading();
 		int computedFontHeight = fm.height();
 
 		if (expectedFontHeight == computedFontHeight)
@@ -125,8 +125,6 @@ bool PhFont::init()
 		// First render the glyph to a surface
 		painter.drawText(x, y, charString);
 	}
-
-	pixmap.save("/Users/martin/Desktop/pixmap.png");
 
 	glEnable( GL_TEXTURE_2D );
 	// Have OpenGL generate a texture object handle for us

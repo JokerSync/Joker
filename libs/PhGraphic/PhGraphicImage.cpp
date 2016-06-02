@@ -18,16 +18,22 @@ bool PhGraphicImage::init()
 {
 	QImage image;
 	if(image.load(_filename)) {
-		if(createTextureFromBGRABuffer(image.bits(), image.width(), image.height())) {
+		if (image.format() == QImage::Format::Format_Indexed8) {
+			image = image.convertToFormat(QImage::Format::Format_ARGB32);
+			PHDEBUG << "Converting to format:" << image.format();
+		}
+		if(createTextureFromARGBBuffer(image.bits(), image.width(), image.height())) {
 			_originalSize.setWidth(image.width());
 			_originalSize.setHeight(image.height());
 			return PhGraphicTexturedRect::init();
+		} else {
+			PHDEBUG << "Error creating buffer for " << _filename;
 		}
+	} else {
+		PHDEBUG << "Error loading" << _filename;
 	}
 
-	PHDEBUG << "Error loading" << _filename;
 	return false;
-
 }
 
 QSize PhGraphicImage::originalSize() const

@@ -149,6 +149,8 @@ void PhDocumentWindow::checkFilePermission(QString fileName)
 {
 #if defined(USE_SANDBOX)
 	resolveSecurityScopeBookmark(fileName, _settings->bookmark(fileName).toByteArray());
+#else
+	Q_UNUSED(fileName);
 #endif
 }
 
@@ -159,5 +161,7 @@ void PhDocumentWindow::addFilePermission(QString fileName)
 		_settings->setBookmark(fileName, createSecurityScopeBookmark(fileName));
 		PHDEBUG << fileName << ":" << _settings->bookmark(fileName).toByteArray().length();
 	}
+#else
+	Q_UNUSED(fileName);
 #endif
 }
