@@ -141,14 +141,13 @@ void GraphicStripTestWindow::on_actionGenerate_triggered()
 			_doc->addPeople(new PhPeople("A people"));
 			_doc->addPeople(new PhPeople("A second people", "red"));
 
-			_doc->addText(new PhStripText(0, _doc->peoples().first(), 10000, 1, "Hello", 0.25f));
+			_doc->addText(new PhStripText(0, _doc->peoples().first(), 10000, 0.25f, "Hello", 0.25f));
 			_doc->addCut(new PhStripCut(5400, PhStripCut::CrossFade));
-			_doc->addDetect(new PhStripDetect(PhStripDetect::Off, 0, _doc->peoples().first(), 10000, 1));
+			_doc->addDetect(new PhStripDetect(PhStripDetect::Off, 0, _doc->peoples().first(), 10000, 0.25f, 0.25f));
 			_doc->addLoop(new PhStripLoop(22000, "3"));
-			_doc->addText(new PhStripText(10000, _doc->peoples().last(), 15000, 2, "Hi !", 0.25f));
-			_doc->addDetect(new PhStripDetect(PhStripDetect::SemiOff, 10000, _doc->peoples().last(), 15000, 2));
-		}
-		else {
+			_doc->addText(new PhStripText(10000, _doc->peoples().last(), 15000, 0.5f, "Hi !", 0.25f));
+			_doc->addDetect(new PhStripDetect(PhStripDetect::SemiOff, 10000, _doc->peoples().last(), 15000, 0.5f, 0.25f));
+		} else {
 			_clock->setTime(_doc->lastTime());
 			_settings->setGenerate(true);
 			openDocument("");
