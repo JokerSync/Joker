@@ -236,16 +236,18 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 {
 	PHDEBUG << fileName;
 
+	PhTimeCodeType tcType = _videoTimeCodeType;
+
 	using boost::property_tree::ptree;
 	ptree ptDetX;
 
 	ptDetX.put("detx.header.title", _title.toStdString());
 	ptDetX.put("detx.header.videofile", _videoPath.toStdString());
-	ptDetX.put("detx.header.videofile.<xmlattr>.timestamp", PhTimeCode::stringFromTime(_videoTimeIn, _videoTimeCodeType).toStdString());
-	ptDetX.put("detx.header.videofile.<xmlattr>.tctype", PhTimeCode::getAverageFps(_videoTimeCodeType));
+	ptDetX.put("detx.header.videofile.<xmlattr>.timestamp", PhTimeCode::stringFromTime(_videoTimeIn, tcType).toStdString());
+	ptDetX.put("detx.header.videofile.<xmlattr>.tctype", PhTimeCode::getAverageFps(tcType));
 	if(_videoForceRatio169)
 		ptDetX.put("detx.header.videofile.<xmlattr>.forceRatio169", _videoForceRatio169);
-	ptDetX.put("detx.header.last_position.<xmlattr>.timecode", PhTimeCode::stringFromTime(lastTime, _videoTimeCodeType).toStdString());
+	ptDetX.put("detx.header.last_position.<xmlattr>.timecode", PhTimeCode::stringFromTime(lastTime, tcType).toStdString());
 
 	// export <role> list
 	ptree roles;
@@ -294,12 +296,12 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	foreach (PhStripObject *obj, objectList) {
 		if(PhStripLoop *loop = dynamic_cast<PhStripLoop*>(obj)) {
 			ptree ptLoop;
-			ptLoop.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(loop->timeIn(), _videoTimeCodeType).toStdString());
+			ptLoop.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(loop->timeIn(), tcType).toStdString());
 			ptBody.push_back(std::make_pair("loop", ptLoop));
 		}
 		else if(PhStripCut *cut = dynamic_cast<PhStripCut*>(obj)) {
 			ptree ptShot;
-			ptShot.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(cut->timeIn(), _videoTimeCodeType).toStdString());
+			ptShot.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(cut->timeIn(), tcType).toStdString());
 			ptBody.push_back(std::make_pair("shot", ptShot));
 		}
 		else if(PhStripSentence *sentence = dynamic_cast<PhStripSentence*>(obj)) {
@@ -310,14 +312,17 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 			// Look if the sentence if off
 			QList<PhStripDetect*> overlappingDetect = this->peopleDetects(sentence->people(), sentence->timeIn() - 1000, sentence->timeOut() + 1000);
 			foreach(PhStripDetect *detect, overlappingDetect) {
-				if ((detect->y() == sentence->y()) && (detect->timeIn() == sentence->timeIn()) && (detect->timeOut() == sentence->timeOut())) {
+				if ((detect->type() == PhStripDetect::Off)
+				    && (detect->y() == sentence->y())
+				    && (detect->timeIn() == sentence->timeIn())
+				    && (detect->timeOut() == sentence->timeOut())) {
 					ptLine.put("<xmlattr>.voice", "off");
 					break;
 				}
 			}
 
 			ptree lipsyncIn;
-			lipsyncIn.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeIn(), _videoTimeCodeType).toStdString());
+			lipsyncIn.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeIn(), tcType).toStdString());
 			lipsyncIn.put("<xmlattr>.type", "in_open");
 			ptLine.push_back(std::make_pair("lipsync", lipsyncIn));
 
@@ -328,14 +333,14 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 
 				if(text->timeOut() != sentence->timeOut()) {
 					ptree lipsync;
-					lipsync.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), _videoTimeCodeType).toStdString());
+					lipsync.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(text->timeOut(), tcType).toStdString());
 					lipsync.put("<xmlattr>.type", "neutral");
 					ptLine.push_back(std::make_pair("lipsync", lipsync));
 				}
 			}
 
 			ptree lipsyncOut;
-			lipsyncOut.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeOut(), _videoTimeCodeType).toStdString());
+			lipsyncOut.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeOut(), tcType).toStdString());
 			lipsyncOut.put("<xmlattr>.type", "out_open");
 			ptLine.push_back(std::make_pair("lipsync", lipsyncOut));
 

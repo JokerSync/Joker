@@ -49,6 +49,14 @@ public:
 	PhTime timeOut() const {
 		return _timeOut;
 	}
+
+	/**
+	 * @brief A tc out string representation
+	 * @param tcType The timecode type use to display
+	 * @return A String
+	 */
+	QString tcOut(PhTimeCodeType tcType);
+
 	/**
 	 * @brief Affect a people
 	 * @param people
@@ -80,6 +88,14 @@ public:
 	 * @param height the fraction desired of the track height
 	 */
 	void setHeight(float height);
+
+protected:
+	/**
+	 * @brief A people object description
+	 * @param tcType The timecode type use to display
+	 * @return A string containing a placeholder for content
+	 */
+	QString peopleObjectDescription(PhTimeCodeType tcType);
 
 private:
 	/**

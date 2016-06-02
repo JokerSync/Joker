@@ -147,7 +147,8 @@ void GraphicStripTestWindow::on_actionGenerate_triggered()
 			_doc->addLoop(new PhStripLoop(22000, "3"));
 			_doc->addText(new PhStripText(10000, _doc->peoples().last(), 15000, 0.5f, "Hi !", 0.25f));
 			_doc->addDetect(new PhStripDetect(PhStripDetect::SemiOff, 10000, _doc->peoples().last(), 15000, 0.5f, 0.25f));
-		} else {
+		}
+		else {
 			_clock->setTime(_doc->lastTime());
 			_settings->setGenerate(true);
 			openDocument("");

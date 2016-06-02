@@ -12,6 +12,11 @@ PhStripPeopleObject::PhStripPeopleObject(PhTime timeIn, PhPeople *people, PhTime
 {
 }
 
+QString PhStripPeopleObject::tcOut(PhTimeCodeType tcType)
+{
+	return PhTimeCode::stringFromTime(this->timeOut(), tcType);
+}
+
 float PhStripPeopleObject::height() const
 {
 	return _height;
@@ -20,6 +25,14 @@ float PhStripPeopleObject::height() const
 void PhStripPeopleObject::setHeight(float height)
 {
 	_height = height;
+}
+
+QString PhStripPeopleObject::peopleObjectDescription(PhTimeCodeType tcType)
+{
+	return QString("%1 %2: %4 %3")
+	       .arg(this->people() ? this->people()->name() : "???")
+	       .arg(this->tcIn(tcType))
+	       .arg(this->tcOut(tcType));
 }
 
 

@@ -37,6 +37,14 @@ public:
 	QString label() {
 		return _label;
 	}
+
+	/**
+	 * @brief Loop description
+	 * @param tcType The timecode type use to display
+	 * @return A string
+	 */
+	QString description(PhTimeCodeType tcType);
+
 private:
 	QString _label;
 };

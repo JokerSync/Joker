@@ -12,3 +12,60 @@ PhStripDetect::PhStripDetect(PhDetectType type, PhTime timeIn, PhPeople *people,
 {
 
 }
+
+QString PhStripDetect::description(PhTimeCodeType tcType)
+{
+	QString typeString = "";
+	switch (this->type()) {
+	case Unknown:
+		typeString = "Unknown";
+		break;
+	case On:
+		typeString = "On";
+		break;
+	case SemiOff:
+		typeString = "SemiOff";
+		break;
+	case Off:
+		typeString = "Off";
+		break;
+	case MouthOpen:
+		typeString = "MouthOpen";
+		break;
+	case MouthClosed:
+		typeString = "MouthClosed";
+		break;
+	case Aperture:
+		typeString = "Aperture";
+		break;
+	case Advance:
+		typeString = "Advance";
+		break;
+	case Labial:
+		typeString = "Labial";
+		break;
+	case SemiLabial:
+		typeString = "SemiLabial";
+		break;
+	case Bowl:
+		typeString = "Bowl";
+		break;
+	case Dental:
+		typeString = "Dental";
+		break;
+	case ArrowUp:
+		typeString = "ArrowUp";
+		break;
+	case ArrowDown:
+		typeString = "ArrowDown";
+		break;
+	case AmbianceStart:
+		typeString = "AmbianceStart";
+		break;
+	case AmbianceEnd:
+		typeString = "AmbianceEnd";
+		break;
+	}
+
+	return this->peopleObjectDescription(tcType).arg(typeString);
+}

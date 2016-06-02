@@ -38,6 +38,13 @@ public:
 	PhCutType type() const {
 		return _type;
 	}
+
+	/**
+	 * @brief Cut description
+	 * @param tcType The timecode type use to display
+	 * @return A string
+	 */
+	QString description(PhTimeCodeType tcType);
 private:
 	/**
 	 * Type of cut.

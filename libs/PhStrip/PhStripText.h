@@ -41,6 +41,12 @@ public:
 	 */
 	void setContent(QString content);
 
+	/**
+	 * @brief Text description
+	 * @param tcType The timecode type use to display
+	 * @return A string
+	 */
+	QString description(PhTimeCodeType tcType);
 private:
 
 /**

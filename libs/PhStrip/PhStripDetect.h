@@ -58,6 +58,7 @@ public:
 		return _type;
 	}
 
+	QString description(PhTimeCodeType tcType);
 private:
 	PhDetectType _type;
 };

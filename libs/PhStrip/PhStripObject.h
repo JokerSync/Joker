@@ -39,6 +39,20 @@ public:
 	PhTime timeIn() const;
 
 	/**
+	 * @brief A tc in string representation
+	 * @param tcType The timecode type use to display
+	 * @return A String
+	 */
+	QString tcIn(PhTimeCodeType tcType);
+
+	/**
+	 * @brief Object description
+	 * @param tcType The timecode type use to display
+	 * @return A string
+	 */
+	virtual QString description(PhTimeCodeType tcType) = 0;
+
+	/**
 	 * @brief Compare two strip object based on the time in
 	 *
 	 * @param a A strip object

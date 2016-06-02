@@ -23,3 +23,8 @@ void PhStripText::setContent(QString content)
 	_content = content;
 }
 
+QString PhStripText::description(PhTimeCodeType tcType)
+{
+	return this->peopleObjectDescription(tcType).arg(this->content());
+}
+
