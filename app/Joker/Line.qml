@@ -69,7 +69,7 @@ Item {
         model: lineModel.unlinkedDetects
         delegate: Detect {
             x: time/horizontalTimePerPixel
-            id: lineDetect
+            anchors.bottom: stripLineContainer.bottom
             property int lineIndex: index
         }
     }
