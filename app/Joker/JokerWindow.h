@@ -168,6 +168,10 @@ public slots:
 
 	void on_actionSave_as_triggered();
 
+	void on_actionNext_element_triggered();
+
+	void on_actionPrevious_element_triggered();
+
 protected:
 	///
 	/// @brief Close event, if accepted by the user, will close the media panel
@@ -279,10 +283,6 @@ private slots:
 	void on_actionTest_mode_triggered();
 
 	void on_actionTimecode_triggered();
-
-	void on_actionNext_element_triggered();
-
-	void on_actionPrevious_element_triggered();
 
 	void on_actionSelect_character_triggered();
 

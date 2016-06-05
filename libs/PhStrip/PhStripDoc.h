@@ -30,8 +30,8 @@ class PhStripDoc : public QObject
 {
 	Q_OBJECT
 
-	// make the title available in QML
 	Q_PROPERTY(QString fullTitle READ fullTitle NOTIFY changed)
+	Q_PROPERTY(PhTime timeOut READ timeOut NOTIFY changed)
 	Q_PROPERTY(PhStripLineModel* lineModel READ lineModel NOTIFY changed)
 
 public:

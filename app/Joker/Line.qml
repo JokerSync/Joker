@@ -5,41 +5,34 @@ import QtQuick.Controls 1.1
 // FIXME color, font, inverted color are not implemented
 Item {
     id: stripLineContainer
-    // width is arbitray...
-    width: 1
+    objectName: "Line" // used to find children of type Line in line repeater
+    width: 1 // width is arbitrary
     height: parent.height/4
     x: timeIn/horizontalTimePerPixel
     y: parent.height*trackNumber
 
     Binding { target: model; property: "timeIn"; value: x*horizontalTimePerPixel }
-    //Binding { target: model; property: "timeOut"; value: (x + width)*horizontalTimePerPixel }
     Binding { target: model; property: "trackNumber"; value: y/stripContainer.height }
 
     property var lineModel: model
     property bool editing: false
 
+    onEditingChanged: {
+        stripContainer.editing = editing
+    }
+
     // appears when we have just added the opening sign
     Rectangle {
-        gradient: Gradient {
-            GradientStop {
-                position: 0.00;
-                color: "blue";
-            }
-            GradientStop {
-                position: 1.00;
-                color: "#000000ff";
-            }
-        }
-
-        anchors.left: parent.left
+        anchors.top: parent.top
         anchors.bottom: parent.bottom
-        height: 100
-        width: parent.height
-        rotation: 90
+        anchors.left: parent.left
+        width: (doc.timeOut - timeIn)/horizontalTimePerPixel
         visible: textRepeater.count === 0
+        color: "#80ff0000"
     }
 
     Row {
+        id: textRow
         Repeater {
             id: textRepeater
             model: lineModel.texts
@@ -119,6 +112,78 @@ Item {
                 }
             }
         }
+    }
+
+    function xOut() {
+        var xOut = stripLineContainer.x
+        for (var i = 0; i < textRepeater.children.length; ++i) {
+            var item = textRepeater.children[i];
+            if (item.x + item.width > xOut) {
+                xOut = item.x + item.width
+            }
+        }
+
+        return xOut;
+    }
+
+    function editTextAt(x, y) {
+        var lineX = x - stripLineContainer.x
+        var lineY = y - stripLineContainer.y
+        var text = textRow.childAt(lineX, lineY);
+        if (text) {
+            console.log("line.stripTextAt found text")
+            console.log(text)
+            var textX = lineX - text.x
+            var textY = lineY - text.y
+            text.editTextAt(textX, textY)
+            return true;
+        }
+        return false;
+    }
+
+    function moveDetectAt(x, y, frameChange) {
+        var lineX = x - stripLineContainer.x
+        var lineY = y - stripLineContainer.y
+        var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
+        var pixelChange = frameChange * pixelPerFrame
+        var timeChange = frameChange * jokerWindow.timePerFrame
+
+        if (lineY !== y) {
+            return false;
+        }
+
+        // is it the line timeIn?
+        if (lineX === 0) {
+            console.log("moving timeIn " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)
+            timeIn += timeChange;
+            textRepeater.itemAt(0).width = textRepeater.itemAt(0).width - pixelChange
+            return true;
+        }
+
+        // is it a text timeOut?
+        for (var i = 0; i < textRow.children.length; ++i) {
+            var text = textRow.children[i];
+            console.log(text.x + " " + text.width + " " + lineX)
+            if (Math.abs(text.x + text.width - lineX) < 1) {
+                console.log("moving text timeOut " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)
+                text.width += pixelChange
+                return true;
+            }
+        }
+
+        // is it an unlinked detect time?
+        var u = detectRepeater.count;
+        for (var j = 0; j < detectRepeater.count; ++j) {
+            var detect = detectRepeater.itemAt(j);
+            console.log(detect.x + " " + lineX)
+            if (Math.abs(detect.x - lineX) < 1) {
+                console.log("moving detect time " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)
+                detect.x += pixelChange
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 

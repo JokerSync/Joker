@@ -88,26 +88,65 @@ QListIterator<PhStripLine *> PhStripLineModel::iterator()
 
 void PhStripLineModel::addDetect(PhTime time, float y)
 {
-	// this is called to create a new line, unless there is an opened line below the mouse
+	// this is called to create a new line, unless there is a line below the mouse
+	// if there is a line below the mouse, and if this line is opened, this adds a closing sign
+	// if that line is already closed, add un unlinked detect inside it
 
-	PhStripLine *line = NULL;
+	foreach (PhStripLine *l, _lines)
+	{
+		if (l->timeIn() == time
+				&& l->y() == y) {
+			// there is a line starting there
+			// return immediately
+			return;
+		}
+	}
 
 	foreach (PhStripLine *l, _lines)
 	{
 		if (l->textModel()->rowCount() == 0
-				&& l->timeIn() < time
+				&& l->timeIn() <= time
 				&& l->y() == y) {
 			// found a matching opened line
-			line = l;
-			break;
+			PhStripDetect::PhDetectType typeOut = PhStripDetect::On;
+			PhStripText *text = new PhStripText("", time - l->timeIn(), typeOut);
+			l->textModel()->append(text);
+			return;
 		}
 	}
 
-	if (line != NULL) {
-		PhStripDetect::PhDetectType typeOut = PhStripDetect::On;
-		PhStripText *text = new PhStripText("", time - line->timeIn(), typeOut);
-		line->textModel()->append(text);
-		return;
+	foreach (PhStripLine *l, _lines)
+	{
+		PhTime timeOut = l->timeIn();
+		QListIterator<PhStripText *> i = l->textModel()->iterator();
+		while(i.hasNext()) {
+			timeOut += i.next()->duration();
+		}
+
+		if (timeOut == time && l->y() == y) {
+			// this is a line closing here
+			// return immediately
+			return;
+		}
+	}
+
+	foreach (PhStripLine *l, _lines)
+	{
+		PhTime timeOut = l->timeIn();
+		QListIterator<PhStripText *> i = l->textModel()->iterator();
+		while(i.hasNext()) {
+			timeOut += i.next()->duration();
+		}
+
+		if (l->timeIn() < time
+				&& timeOut > time
+				&& l->y() == y) {
+			// found a matching closed line
+			PhStripDetect::PhDetectType type = PhStripDetect::On;
+			PhStripDetect *detect = new PhStripDetect(type, time - l->timeIn());
+			l->detectModel()->append(detect);
+			return;
+		}
 	}
 
 	PhStripDetect::PhDetectType typeIn = PhStripDetect::On;
@@ -124,7 +163,7 @@ void PhStripLineModel::addDetect(PhTime time, float y)
 		people = new PhPeople();
 	}
 
-	line = new PhStripLine(time, typeIn, people, y, height);
+	PhStripLine *line = new PhStripLine(time, typeIn, people, y, height);
 	append(line);
 }
 

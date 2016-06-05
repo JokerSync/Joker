@@ -75,20 +75,16 @@ void PhGraphicStrip::onDocChanged()
 
 	// cuts
 	_cutModel.clear();
-	int previousCutTime = 0;
 	foreach(PhStripCut * cut, _doc.cuts()) {
-		PhNextPeople *cutPeople = new PhNextPeople("", "", previousCutTime, true, cut->timeIn() - previousCutTime);
+		PhNextPeople *cutPeople = new PhNextPeople("", "", cut->timeIn(), true, 0);
 		_cutModel.addNextPeople(cutPeople);
-		previousCutTime = cut->timeIn();
 	}
 
 	// loops
 	_loopModel.clear();
-	int previousLoopTime = 0;
 	foreach(PhStripLoop * loop, _doc.loops()) {
-		PhNextPeople *loopPeople = new PhNextPeople(loop->label(), "", previousLoopTime, true, loop->timeIn() - previousLoopTime);
+		PhNextPeople *loopPeople = new PhNextPeople(loop->label(), "", loop->timeIn(), true, 0);
 		_loopModel.addNextPeople(loopPeople);
-		previousLoopTime = loop->timeIn();
 	}
 
 	QList<float> trackY;
@@ -97,41 +93,6 @@ void PhGraphicStrip::onDocChanged()
 	foreach(float y, trackY) {
 		PhTrack * track = new PhTrack();
 		int previousTimeOut;
-
-		// strip texts
-//		foreach(PhStripText * text, _doc.texts()) {
-//			if (text->y() == y) {
-//				text->setSelected(selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
-//				track->stripTextModel()->append(text);
-//			}
-//		}
-
-		// strip text people
-		previousTimeOut = 0;
-//		foreach(PhStripText * text, _doc.texts()) {
-//			if (text->y() == y) {
-//				PhStripText *peopleText = new PhStripText(previousTimeOut,
-//														 text->people(),
-//														 text->timeIn(),
-//														 0,
-//														 text->people()->name(),
-//														 0, //height
-//														 selectedPeoples.size()==0 || selectedPeoples.contains(text->people()));
-
-//				PhStripText *emptyText = new PhStripText(text->timeIn(),
-//														  text->people(),
-//														  text->timeOut(),
-//														  0,
-//														  "", //empty content
-//														  0, //height
-//														  true);
-
-//				track->stripPeopleModel()->append(peopleText);
-//				track->stripPeopleModel()->append(emptyText);
-
-//				previousTimeOut = text->timeOut();
-//			}
-//		}
 
 		// off detects
 		previousTimeOut = 0;

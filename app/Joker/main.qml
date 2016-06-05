@@ -280,24 +280,11 @@ Item {
         SystemPalette { id: pal }
     }
 
-    // needs focus for key handling
-//    focus: true
-
-//    Keys.onPressed: {
-//        console.log("key: " + event.key);
-//        if (event.key === Qt.Key_Up) {
-//            playbackController.onPlayPause()
-//            event.accepted = true
-//        }
-//        if (event.key === Qt.Key_Right && (event.modifiers & Qt.AltModifier)) {
-//            playbackController.onNextFrame()
-//            event.accepted = true
-//        }
-//        if (event.key === Qt.Key_Left && (event.modifiers & Qt.AltModifier)) {
-//            playbackController.onPreviousFrame()
-//            event.accepted = true
-//        }
-//    }
+    Shortcut {
+        sequence: "Alt+Left"
+        context: Qt.ApplicationShortcut
+        onActivated: playbackController.onPreviousFrame()
+    }
 
     Shortcut {
         sequence: "Alt+Right"
@@ -306,9 +293,15 @@ Item {
     }
 
     Shortcut {
-        sequence: "Alt+Left"
+        sequence: "Left"
         context: Qt.ApplicationShortcut
-        onActivated: playbackController.onPreviousFrame()
+        onActivated: jokerWindow.on_actionPrevious_element_triggered()
+    }
+
+    Shortcut {
+        sequence: "Right"
+        context: Qt.ApplicationShortcut
+        onActivated: jokerWindow.on_actionNext_element_triggered()
     }
 
     Shortcut {
@@ -331,15 +324,22 @@ Item {
 
     Shortcut {
         sequence: "Return"
+        enabled: !strip.editing // do not steal the TextInputs event processing
         context: Qt.ApplicationShortcut
         onActivated: {
-
-            // this should check whether there is a line below!
-
             var time = jokerWindow.stripTime;
             var textY = 0;
-            console.log("add phrase " + time + " " + textY);
-            doc.lineModel.addDetect(time, textY);
+            var textX = time / horizontalTimePerPixel
+            console.log("Return shortcut " + time + " " + textX + " " + textY);
+
+            // if there is a line below, this should start editing it
+
+            var success = strip.editTextAt(textX, textY);
+
+            if (!success) {
+                // if there is none, this adds a detect
+                doc.lineModel.addDetect(time, textY);
+            }
         }
     }
 
@@ -347,13 +347,35 @@ Item {
         sequence: "Ctrl+Left"
         context: Qt.ApplicationShortcut
         onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = 0;
+            var textX = time / horizontalTimePerPixel
+            console.log("Ctrl+Left shortcut " + time + " " + textX + " " + textY);
+
             // find the detect that is at the current time and move it one frame to the left
+            var success = strip.moveDetectAt(textX, textY, -1);
 
+            if (success) {
+                playbackController.relativeTime -= jokerWindow.timePerFrame
+            }
+        }
+    }
 
-//            var time = jokerWindow.stripTime;
-//            var textY = 0;
-//            console.log("add phrase " + time + " " + textY);
-//            doc.lineModel.addDetect(time, textY);
+    Shortcut {
+        sequence: "Ctrl+Right"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = 0;
+            var textX = time / horizontalTimePerPixel
+            console.log("Ctrl+Right shortcut " + time + " " + textX + " " + textY);
+
+            // find the detect that is at the current time and move it one frame to the left
+            var success = strip.moveDetectAt(textX, textY, 1);
+
+            if (success) {
+                playbackController.relativeTime += jokerWindow.timePerFrame
+            }
         }
     }
 }

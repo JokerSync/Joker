@@ -1546,18 +1546,18 @@ PhTime PhStripDoc::previousTextTime(PhTime time)
 			previousTextTime = timeIn;
 		}
 
-		QListIterator<PhStripText*> i = line->textModel()->iterator();
-		while(i.hasNext()) {
-			PhStripText *text = i.next();
+		QListIterator<PhStripText*> j = line->textModel()->iterator();
+		while(j.hasNext()) {
+			PhStripText *text = j.next();
 			timeIn += text->duration();
 			if((timeIn < time) && (timeIn > previousTextTime) ) {
 				previousTextTime = timeIn;
 			}
 		}
 
-		QListIterator<PhStripDetect *> j = line->detectModel()->iterator();
-		while(j.hasNext()) {
-			PhStripDetect *detect = j.next();
+		QListIterator<PhStripDetect *> k = line->detectModel()->iterator();
+		while(k.hasNext()) {
+			PhStripDetect *detect = k.next();
 			PhTime detectTime = line->timeIn() + detect->relativeTime();
 			if((detectTime < time) && (detectTime > previousTextTime) ) {
 				previousTextTime = detectTime;
@@ -1617,18 +1617,18 @@ PhTime PhStripDoc::nextTextTime(PhTime time)
 			nextTextTime = timeIn;
 		}
 
-		QListIterator<PhStripText*> i = line->textModel()->iterator();
-		while(i.hasNext()) {
-			PhStripText *text = i.next();
+		QListIterator<PhStripText*> j = line->textModel()->iterator();
+		while(j.hasNext()) {
+			PhStripText *text = j.next();
 			timeIn += text->duration();
 			if((timeIn > time) && (timeIn < nextTextTime) ) {
 				nextTextTime = timeIn;
 			}
 		}
 
-		QListIterator<PhStripDetect *> j = line->detectModel()->iterator();
-		while(j.hasNext()) {
-			PhStripDetect *detect = j.next();
+		QListIterator<PhStripDetect *> k = line->detectModel()->iterator();
+		while(k.hasNext()) {
+			PhStripDetect *detect = k.next();
 			PhTime detectTime = line->timeIn() + detect->relativeTime();
 			if((detectTime > time) && (detectTime < nextTextTime) ) {
 				nextTextTime = detectTime;

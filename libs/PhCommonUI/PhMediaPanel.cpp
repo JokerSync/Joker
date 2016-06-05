@@ -100,20 +100,22 @@ void PhMediaPanel::setLength(PhTime length)
 		PHDEBUG << "length: " << length;
 		_length = length;
 		updateSlider();
+
+		emit lengthChanged();
 	}
 }
 
-double PhMediaPanel::relativeTime()
+PhTime PhMediaPanel::relativeTime()
 {
 	return _relativeTime;
 }
 
-void PhMediaPanel::setRelativeTime(double relativeTime)
+void PhMediaPanel::setRelativeTime(PhTime relativeTime)
 {
 	if (relativeTime != _relativeTime) {
 		_relativeTime = relativeTime;
 
-		PhTime time = _timeIn + relativeTime*_length;
+		PhTime time = _timeIn + relativeTime;
 		_clock->setTime(time);
 
 		emit relativeTimeChanged();
@@ -269,7 +271,7 @@ void PhMediaPanel::updateSlider()
 	ui->_slider->setMinimum(frameIn);
 	ui->_slider->setMaximum(frameOut);
 
-	setRelativeTime((double)(_clock->time() - _timeIn)/((double)_length));
+	setRelativeTime(_clock->time() - _timeIn);
 }
 
 void PhMediaPanel::onTCTypeComboChanged()
@@ -306,6 +308,6 @@ void PhMediaPanel::onTimeChanged(PhTime time)
 	PhTimeCodeType tcType = this->timeCodeType();
 	ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(time, tcType));
 	ui->_slider->setSliderPosition(time / PhTimeCode::timePerFrame(tcType));
-	setRelativeTime((double)(_clock->time() - _timeIn)/((double)_length));
+	setRelativeTime(_clock->time() - _timeIn);
 }
 

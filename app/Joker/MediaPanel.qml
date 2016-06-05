@@ -13,6 +13,7 @@ Rectangle {
     border.color: "#aa6d7dff"
 
     property color controlColor: "white"
+    property int relativeTime: timeSlider.relativeTime
 
     // Load the "FontAwesome" font for the monochrome icons.
     FontLoader {
@@ -25,8 +26,11 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.right: parent.right
+        spacing: 10
 
-        height: 20
+        height: 40
+
+        property int pixelSize: 20
 
         Text {
             anchors.verticalCenter: parent.verticalCenter
@@ -34,7 +38,7 @@ Rectangle {
             color: mediaPanelContainer.controlColor
             styleColor: mediaPanelContainer.controlColor
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: parent.pixelSize
             font.family: "FontAwesome"
             // FIXME this is not really "stop!"
             text: FontAwesome.Icon.stop
@@ -50,7 +54,7 @@ Rectangle {
             color: mediaPanelContainer.controlColor
             styleColor: mediaPanelContainer.controlColor
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: parent.pixelSize
             font.family: "FontAwesome"
             text: FontAwesome.Icon.fast_backward
             MouseArea {
@@ -65,7 +69,7 @@ Rectangle {
             color: mediaPanelContainer.controlColor
             styleColor: mediaPanelContainer.controlColor
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: parent.pixelSize
             font.family: "FontAwesome"
             text: FontAwesome.Icon.step_backward
             MouseArea {
@@ -80,7 +84,7 @@ Rectangle {
             color: mediaPanelContainer.controlColor
             styleColor: mediaPanelContainer.controlColor
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: parent.pixelSize
             font.family: "FontAwesome"
             text: playbackController.rate === 0 ? FontAwesome.Icon.play : FontAwesome.Icon.pause
             MouseArea {
@@ -95,7 +99,7 @@ Rectangle {
             color: mediaPanelContainer.controlColor
             styleColor: mediaPanelContainer.controlColor
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: parent.pixelSize
             font.family: "FontAwesome"
             text: FontAwesome.Icon.step_forward
             MouseArea {
@@ -110,7 +114,7 @@ Rectangle {
             color: mediaPanelContainer.controlColor
             styleColor: mediaPanelContainer.controlColor
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: parent.pixelSize
             font.family: "FontAwesome"
             text: FontAwesome.Icon.fast_forward
             MouseArea {
@@ -127,7 +131,7 @@ Rectangle {
             styleColor: mediaPanelContainer.controlColor
             horizontalAlignment: Text.AlignHCenter
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: parent.pixelSize
         }
 
         Slider {
@@ -135,7 +139,12 @@ Rectangle {
             height: 20
             anchors.verticalCenter: parent.verticalCenter
             Layout.fillWidth: true
+            minimumValue: 0.0
+            maximumValue: playbackController.length*1.0
+            stepSize: 1.0
             value: playbackController.relativeTime
+
+            onValueChanged: console.log(value + " " + playbackController.length + " " + playbackController.relativeTime)
 
             style: SliderStyle {
                 groove: Item {
@@ -166,7 +175,11 @@ Rectangle {
             }
 
             // setup QML->C++ binding
-            Binding { target: playbackController; property: "relativeTime"; value: timeSlider.value }
+            Binding {
+                target: playbackController
+                property: "relativeTime"
+                value: timeSlider.value
+            }
         }
 
         Text {
@@ -177,7 +190,7 @@ Rectangle {
             text: "x" + playbackController.rate
             horizontalAlignment: Text.AlignHCenter
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: parent.pixelSize
         }
 
         Text {
@@ -188,7 +201,7 @@ Rectangle {
             styleColor: mediaPanelContainer.controlColor
             horizontalAlignment: Text.AlignHCenter
             font.bold: true
-            font.pixelSize: 12
+            font.pixelSize: parent.pixelSize
         }
     }
 

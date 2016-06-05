@@ -9,6 +9,7 @@ Item {
 
     property int delayX: width / 6
     property int contentX: jokerWindow.stripTime / horizontalTimePerPixel - delayX
+    property bool editing: false
 
     // the font name is passed from here
     FontLoader { id: stripFont; source: textFontUrl }
@@ -38,7 +39,7 @@ Item {
                 var time = (stripMenu.mouseX - delayX) * horizontalTimePerPixel + jokerWindow.stripTime;
                 var trackHeight = stripContainer.height / 4;
                 var textY = Math.round((stripMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
-                console.log("add phrase " + time + " " + textY);
+                console.log("add sign " + time + " " + textY);
                 doc.lineModel.addDetect(time, textY);
             }
         }
@@ -351,6 +352,7 @@ Item {
     }
 
     Item {
+        id: stripLineRepeater
         x: -stripContainer.contentX
         height: parent.height
 
@@ -366,82 +368,81 @@ Item {
         y: 0
         width: 4
         height: parent.height
-        color: "#FFFF566C"
+        color: "#DDFF566C"
     }
 
-    ListView {
-        anchors.fill: parent
-        orientation: ListView.Horizontal
-        contentX: stripContainer.contentX
-        interactive: false
-        model: cutModel
+    Item {
+        x: -stripContainer.contentX
+        height: parent.height
         visible: displayCuts
-        cacheBuffer: 2*stripContainer.width
 
-        delegate: Item {
-            width: duration/horizontalTimePerPixel
-            height: parent.height
-
-            Rectangle {
-                color: invertColor? "white":"black"
+        Repeater {
+            model: cutModel
+            delegate: Item {
+                x: timeIn/horizontalTimePerPixel
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                x: parent.width
-                width: cutWidth
+
+                Rectangle {
+                    color: invertColor? "white":"black"
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    width: cutWidth
+                }
             }
         }
     }
 
-    ListView {
-        anchors.fill: parent
-        orientation: ListView.Horizontal
-        contentX: stripContainer.contentX
-        interactive: false
-        model: loopModel
-        cacheBuffer: 2*stripContainer.width
+    Item {
+        x: -stripContainer.contentX
+        height: parent.height
 
-        delegate: Item {
-            id: loopContainer
-            width: duration/horizontalTimePerPixel
-            height: parent.height
-
-            Rectangle {
-                color: invertColor? "white":"black"
+        Repeater {
+            model: loopModel
+            delegate: Item {
+                id: loopContainer
+                x: timeIn/horizontalTimePerPixel
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                x: parent.width - width/2
-                width: parent.height / 40
-            }
 
-            Rectangle {
-                color: invertColor? "white":"black"
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.topMargin: parent.height/3
-                anchors.bottomMargin: parent.height/3
-                x: parent.width - width/2
-                width: parent.height / 40
-                rotation: 45
-            }
+                Rectangle {
+                    color: invertColor? "white":"black"
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    x: -width/2
+                    width: parent.height / 40
+                }
 
-            Rectangle {
-                color: invertColor? "white":"black"
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.topMargin: parent.height/3
-                anchors.bottomMargin: parent.height/3
-                x: parent.width - width/2
-                width: parent.height / 40
-                rotation: -45
-            }
+                Rectangle {
+                    color: invertColor? "white":"black"
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.topMargin: parent.height/3
+                    anchors.bottomMargin: parent.height/3
+                    x: -width/2
+                    width: parent.height / 40
+                    rotation: 45
+                }
 
-            Text {
-                text: name
-                color: "gray"
-                font.pixelSize: parent.height/4
-                font.family: "Arial"
-                x: parent.width + 10
-                y: parent.height * 2 / 3
+                Rectangle {
+                    color: invertColor? "white":"black"
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.topMargin: parent.height/3
+                    anchors.bottomMargin: parent.height/3
+                    x: -width/2
+                    width: parent.height / 40
+                    rotation: -45
+                }
+
+                Text {
+                    text: name
+                    color: "gray"
+                    font.pixelSize: parent.height/4
+                    font.family: "Arial"
+                    x: 10
+                    y: parent.height * 2 / 3
+                }
             }
         }
     }
@@ -456,5 +457,32 @@ Item {
         return pixelChange;
     }
 
+    function editTextAt(x, y) {
+        for (var i = 0; i < stripLineRepeater.children.length; ++i) {
+            var line = stripLineRepeater.children[i];
+            if (line.objectName !== "Line") {
+                continue;
+            }
+            var success = line.editTextAt(x, y);
+            if (success) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    function moveDetectAt(x, y, frameChange) {
+        for (var i = 0; i < stripLineRepeater.children.length; ++i) {
+            var line = stripLineRepeater.children[i];
+            if (line.objectName !== "Line") {
+                continue;
+            }
+            var success = line.moveDetectAt(x, y, frameChange);
+            if (success) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -8,11 +8,13 @@ Item {
     property string text: stripTextInput.text
     property bool textFocus: stripTextInput.focus
     property int cursorPosition: stripTextInput.cursorPosition
+    property color emptyEditing: "#A00000FF"
+    property color emptyNonEditing: "#A0AAAAAA"
 
     // appears when we create a new line by adding the ending sign
     Rectangle {
         anchors.fill: parent
-        color: stripLineContainer.editing ? "slateblue" : "light gray"
+        color: stripLineContainer.editing ? emptyEditing : emptyNonEditing
         visible: content.length === 0
     }
 
@@ -86,12 +88,7 @@ Item {
         enabled: !stripTextInput.focus
 
         onDoubleClicked: {
-            // give focus to the textinput
-            stripTextInput.focus = true
-            stripLineContainer.editing = true
-            var newPos = stripTextInput.positionAt(mouseX/stripTextItem2.width*stripTextInput.width, mouseY)
-            console.log(mouseX + " " + mouseY + " " + newPos);
-            stripTextInput.cursorPosition = newPos
+            editTextAt(mouseX, mouseY)
         }
 
         onPositionChanged: {
@@ -138,5 +135,13 @@ Item {
         nextItem.textFocus = true
         nextItem.cursorPosition = 1
         stripLineContainer.editing = true
+    }
+
+    function editTextAt(x, y) {
+        var newPos = stripTextInput.positionAt(x/stripTextItem2.width*stripTextInput.width, y)
+        console.log("text.editTextAt " + newPos)
+        stripTextInput.focus = true
+        stripLineContainer.editing = true
+        stripTextInput.cursorPosition = newPos
     }
 }

@@ -65,49 +65,48 @@ Item {
         }
 
         // loops
-        ListView {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
+        Item {
+            y: -jokerWindow.stripTime / verticalTimePerPixel
+            anchors.left: parent.left
             anchors.right: parent.right
-            width: parent.width/2
-            orientation: ListView.Vertical
-            contentY:  -height -jokerWindow.stripTime / verticalTimePerPixel
-            verticalLayoutDirection: "BottomToTop"
-            interactive: false
-            model: loopModel
-            delegate: Item {
-                id: loopContainer
-                height: duration/verticalTimePerPixel
-                width: parent.width
 
-                Rectangle {
-                    color: "white"
+            Repeater {
+                model: loopModel
+                delegate: Item {
+                    id: loopContainer
+                    y: timeIn/verticalTimePerPixel
                     anchors.left: parent.left
                     anchors.right: parent.right
-                    y: -height/2
-                    height: 3
-                }
 
-                Rectangle {
-                    color: "white"
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: parent.width*2/5
-                    anchors.rightMargin: parent.width*2/5
-                    y: -height/2
-                    height: 3
-                    rotation: 45
-                }
+                    Rectangle {
+                        color: "white"
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        y: -height/2
+                        height: 3
+                    }
 
-                Rectangle {
-                    color: "white"
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.leftMargin: parent.width*2/5
-                    anchors.rightMargin: parent.width*2/5
-                    y: -height/2
-                    height: 3
-                    rotation: -45
+                    Rectangle {
+                        color: "white"
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: parent.width*2/5
+                        anchors.rightMargin: parent.width*2/5
+                        y: -height/2
+                        height: 3
+                        rotation: 45
+                    }
+
+                    Rectangle {
+                        color: "white"
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: parent.width*2/5
+                        anchors.rightMargin: parent.width*2/5
+                        y: -height/2
+                        height: 3
+                        rotation: -45
+                    }
                 }
             }
         }

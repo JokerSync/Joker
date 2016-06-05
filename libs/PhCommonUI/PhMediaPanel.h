@@ -28,7 +28,8 @@ class PhMediaPanel;
 class PhMediaPanel : public QWidget
 {
 	Q_OBJECT
-	Q_PROPERTY(double relativeTime READ relativeTime WRITE setRelativeTime NOTIFY relativeTimeChanged)
+	Q_PROPERTY(PhTime relativeTime READ relativeTime WRITE setRelativeTime NOTIFY relativeTimeChanged)
+	Q_PROPERTY(PhTime length READ length NOTIFY lengthChanged)
 	Q_PROPERTY(double rate READ rate NOTIFY rateChanged)
 	Q_PROPERTY(double averageFps READ averageFps NOTIFY averageFpsChanged)
 
@@ -89,9 +90,9 @@ public:
 	 */
 	bool isPlaying();
 
-	double relativeTime();
+	PhTime relativeTime();
 
-	void setRelativeTime(double relativeTime);
+	void setRelativeTime(PhTime relativeTime);
 
 	double rate() {
 		if (_clock) {
@@ -151,6 +152,8 @@ signals:
 
 	void averageFpsChanged();
 
+	void lengthChanged();
+
 public slots:
 	/**
 	 * @brief Handle a modification of the time
@@ -196,8 +199,8 @@ private:
 	PhClock *_clock;
 	PhTime _timeIn;
 	PhTime _length;
+	PhTime _relativeTime;
 	bool _playing;
-	double _relativeTime;
 	double _averageFps;
 };
 
