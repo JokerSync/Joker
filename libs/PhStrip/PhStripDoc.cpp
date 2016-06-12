@@ -13,7 +13,8 @@
 #include "PhStripDoc.h"
 
 PhStripDoc::PhStripDoc() :
-	_lineModel(new PhStripLineModel())
+	_lineModel(new PhStripLineModel()),
+	_cutModel(new PhStripCutModel())
 {
 	reset();
 }
@@ -162,7 +163,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					_loops.append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
-					_cuts.append(new PhStripCut(timeIn, PhStripCut::Simple));
+					_cutModel->append(new PhStripCut(timeIn, PhStripCut::Simple));
 				else if(elem.tagName() == "line") {
 					timeIn = -1;
 					PhTime lastTime = -1;
@@ -288,7 +289,9 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	}
 
 	// export <cut> list
-	foreach (const PhStripCut *cut, this->cuts()) {
+	QListIterator<PhStripCut*> i = _cutModel->iterator();
+	while(i.hasNext()) {
+		PhStripCut *cut = i.next();
 		ptree ptShot;
 		ptShot.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(cut->timeIn(), _videoTimeCodeType).toStdString());
 		ptBody.push_back(std::make_pair("shot", ptShot));
@@ -665,6 +668,11 @@ void PhStripDoc::setModified(bool modified)
 	_modified = modified;
 }
 
+PhStripCutModel *PhStripDoc::cutModel() const
+{
+	return _cutModel;
+}
+
 bool PhStripDoc::importMosFile(const QString &fileName)
 {
 	PHDEBUG << "===============" << fileName << "===============";
@@ -830,7 +838,7 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 				return false;
 			PhTime cutTime = _videoTimeIn + readMosTime(f, tcType, internLevel);
 			PHDBG(cutLevel) << "cut:" << PhTimeCode::stringFromTime(cutTime, tcType);
-			_cuts.append(new PhStripCut(cutTime, PhStripCut::Simple));
+			_cutModel->append(new PhStripCut(cutTime, PhStripCut::Simple));
 		}
 	}
 
@@ -990,7 +998,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 			_loops.append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
 		}
 		else if (type == "PLAN") {
-			_cuts.append(new PhStripCut(timeIn, PhStripCut::PhCutType::Simple));
+			_cutModel->append(new PhStripCut(timeIn, PhStripCut::Simple));
 		}
 	}
 
@@ -1155,7 +1163,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 			PhTime time = ComputeDrbTime2(offset, query.value(2).toLongLong(), tcType);
 			switch(query.value(1).toInt()) {
 			case 2:
-				_cuts.append(new PhStripCut(time, PhStripCut::Simple));
+				_cutModel->append(new PhStripCut(time, PhStripCut::Simple));
 				break;
 			case 7:
 				_loops.append(new PhStripLoop(time, QString::number(query.value(4).toInt())));
@@ -1420,14 +1428,13 @@ void PhStripDoc::reset()
 	/* Note: clearing a QList does not free its elements. */
 	qDeleteAll(_peoples);
 	_peoples.clear();
-	qDeleteAll(_cuts);
-	_cuts.clear();
 	qDeleteAll(_detects);
 	_detects.clear();
 	_lastTime = 0;
 	qDeleteAll(_loops);
 	_loops.clear();
 	_lineModel->clear();
+	_cutModel->clear();
 	qDeleteAll(_alternateTexts);
 	_alternateTexts.clear();
 
@@ -1452,7 +1459,7 @@ void PhStripDoc::reset()
 void PhStripDoc::addObject(PhStripObject *object)
 {
 	if(dynamic_cast<PhStripCut*>(object)) {
-		this->_cuts.append(dynamic_cast<PhStripCut*>(object));
+		_cutModel->append(dynamic_cast<PhStripCut*>(object));
 		PHDEBUG << "Added a cut";
 	}
 	else if(dynamic_cast<PhStripLoop*>(object)) {
@@ -1584,7 +1591,9 @@ PhTime PhStripDoc::previousCutTime(PhTime time)
 {
 	PhTime previousCutTime = PHTIMEMIN;
 
-	foreach(PhStripCut* cut, _cuts) {
+	QListIterator<PhStripCut*> i = _cutModel->iterator();
+	while(i.hasNext()) {
+		PhStripCut *cut = i.next();
 		if((cut->timeIn() < time) && (cut->timeIn() > previousCutTime) )
 			previousCutTime = cut->timeIn();
 	}
@@ -1657,7 +1666,9 @@ PhTime PhStripDoc::nextCutTime(PhTime time)
 {
 	PhTime nextCutTime = PHTIMEMAX;
 
-	foreach(PhStripCut* cut, _cuts) {
+	QListIterator<PhStripCut*> i = _cutModel->iterator();
+	while(i.hasNext()) {
+		PhStripCut *cut = i.next();
 		if((cut->timeIn() > time) && (cut->timeIn() < nextCutTime) )
 			nextCutTime = cut->timeIn();
 		else if(cut->timeIn() > nextCutTime)
@@ -1841,9 +1852,3 @@ void PhStripDoc::setVideoTimeIn(PhTime timeIn, PhTimeCodeType tcType)
 	_videoTimeIn = timeIn;
 	_videoTimeCodeType = tcType;
 }
-
-QList<PhStripCut *> PhStripDoc::cuts()
-{
-	return _cuts;
-}
-

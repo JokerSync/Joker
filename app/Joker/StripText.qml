@@ -1,6 +1,7 @@
 import QtQuick 2.5
+import QtQuick.Controls 1.1
 
-Item {
+FocusScope {
     id: stripTextItem2
     width: duration/horizontalTimePerPixel
     height: stripLineContainer.height
@@ -31,10 +32,18 @@ Item {
 
         cursorDelegate: Rectangle {
             // cancel the TextInput scale
-            width: stripTextInput.width/stripTextItem2.width
+            width: 2*stripTextInput.width/stripTextItem2.width
             height: stripTextInput.height
             color: stripTextInput.color
-            visible: stripTextInput.focus
+            visible: stripTextInput.activeFocus
+
+            SequentialAnimation on visible {
+                    loops: Animation.Infinite
+                    running: stripTextInput.activeFocus
+                    PropertyAnimation { to: true; duration: 500 }
+                    PropertyAnimation { to: false; duration: 500 }
+                    onStopped: visible = false
+                }
         }
 
         smooth: true // smooth scaling
@@ -44,8 +53,12 @@ Item {
         onEditingFinished: {
             console.log("Editing finished")
             focus = false
+            stripContainer.forceActiveFocus()
             stripLineContainer.editing = false
         }
+
+        onActiveFocusChanged: console.log("active focus changed: ", activeFocus)
+        onFocusChanged: console.log("focus changed: ", focus)
 
         Keys.onRightPressed: {
             console.log('Right Key was pressed ' + stripTextInput.cursorPosition + ' ' + stripTextInput.text.length);
@@ -71,6 +84,15 @@ Item {
             }
             event.accepted = true;
         }
+
+        MouseArea {
+            id: rightPressArea
+            anchors.fill: parent
+            acceptedButtons: Qt.RightButton
+            onClicked: {
+                stripLineContainer.showContextMenu()
+            }
+        }
     }
 
     // drag mouse area
@@ -85,7 +107,7 @@ Item {
             smoothed: true
         }
 
-        enabled: !stripTextInput.focus
+        enabled: !stripTextInput.activeFocus
 
         onDoubleClicked: {
             editTextAt(mouseX, mouseY)
@@ -140,7 +162,8 @@ Item {
     function editTextAt(x, y) {
         var newPos = stripTextInput.positionAt(x/stripTextItem2.width*stripTextInput.width, y)
         console.log("text.editTextAt " + newPos)
-        stripTextInput.focus = true
+        stripContainer.forceActiveFocus()
+        stripTextInput.forceActiveFocus()
         stripLineContainer.editing = true
         stripTextInput.cursorPosition = newPos
     }

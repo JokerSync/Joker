@@ -378,5 +378,33 @@ Item {
             }
         }
     }
+
+    Shortcut {
+        sequence: "0"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = 0;
+            var textX = time / horizontalTimePerPixel
+            console.log("0 shortcut " + time + " " + textX + " " + textY);
+
+            // insert loop
+            doc.insertLoop(time)
+        }
+    }
+
+    Shortcut {
+        sequence: "1"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = 0;
+            var textX = time / horizontalTimePerPixel
+            console.log("1 shortcut " + time + " " + textX + " " + textY);
+
+            // insert cut
+            doc.cutModel.add(time)
+        }
+    }
 }
 

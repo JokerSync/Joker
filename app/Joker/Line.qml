@@ -74,17 +74,6 @@ Item {
         }
     }
 
-    MouseArea {
-        id: rightPressArea
-        anchors.fill: parent
-        acceptedButtons: Qt.RightButton
-        onClicked: {
-            console.log("index: " + model.index);
-            myContextMenu.index = model.index;
-            myContextMenu.popup();
-        }
-    }
-
     property int rulersSize: 18
 
     // left handle
@@ -110,6 +99,19 @@ Item {
                     stripLineContainer.x = stripLineContainer.x + pixelChange
                     textRepeater.itemAt(0).width = textRepeater.itemAt(0).width - pixelChange
                 }
+            }
+        }
+    }
+
+    Menu {
+        id: lineContextMenu
+        title: "Edit"
+        property int index: 0
+        MenuItem {
+            text: "Delete phrase"
+            onTriggered: {
+                console.log("Line " + lineContextMenu.index);
+                doc.lineModel.remove(lineContextMenu.index);
             }
         }
     }
@@ -184,6 +186,12 @@ Item {
         }
 
         return false;
+    }
+
+    function showContextMenu() {
+        console.log("index: " + model.index);
+        lineContextMenu.index = model.index;
+        lineContextMenu.popup();
     }
 }
 

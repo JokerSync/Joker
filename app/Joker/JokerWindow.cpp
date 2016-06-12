@@ -70,7 +70,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
 	_context->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
 	_context->setContextProperty("rulerModel", _strip.rulerModel());
-	_context->setContextProperty("cutModel", _strip.cutModel());
 	_context->setContextProperty("loopModel", _strip.loopModel());
 	_context->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
 	_context->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
@@ -108,6 +107,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_view->setSource(QUrl("qrc:///main.qml"));
 	//_view->load(QUrl("qrc:///main.qml"));
 	//_view->setSource(QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/main.qml"));
+
 	//_view->show();
 	ui->verticalLayout->addWidget(_view);
 
@@ -171,14 +171,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	    );
 
 	ui->actionDisplay_the_control_panel->setChecked(_settings->displayControlPanel());
-
-	//fadeInMediaPanel();
-
-	// Trigger a timer that will fade off the media panel after 3 seconds
-	//this->connect(&_mediaPanelTimer, &QTimer::timeout, this, &JokerWindow::fadeOutMediaPanel);
-	//_mediaPanelTimer.start(3000);
-
-	this->setFocus();
 
 	ui->actionDisplay_the_information_panel->setChecked(_settings->displayNextText());
 

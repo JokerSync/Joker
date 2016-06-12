@@ -73,13 +73,6 @@ void PhGraphicStrip::onDocChanged()
 		rulerTime += timeBetweenRuler;
 	}
 
-	// cuts
-	_cutModel.clear();
-	foreach(PhStripCut * cut, _doc.cuts()) {
-		PhNextPeople *cutPeople = new PhNextPeople("", "", cut->timeIn(), true, 0);
-		_cutModel.addNextPeople(cutPeople);
-	}
-
 	// loops
 	_loopModel.clear();
 	foreach(PhStripLoop * loop, _doc.loops()) {
@@ -212,7 +205,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 		PhTime clockTime = _clock.time() + delay;
 
 		if(_settings->stripTestMode()) {
-			foreach(PhStripCut * cut, _doc.cuts()) {
+			QListIterator<PhStripCut*> i = _doc.cutModel()->iterator();
+			while(i.hasNext()) {
+				PhStripCut *cut = i.next();
 				counter++;
 				if(cut->timeIn() == clockTime) {
 					PhGraphicSolidRect white(x, y, width, height);

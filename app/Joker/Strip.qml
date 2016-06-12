@@ -29,16 +29,16 @@ Item {
     }
 
     Menu {
-        id: stripMenu
+        id: stripContextMenu
         title: "Edit"
         property int mouseX: 0
         property int mouseY: 0
         MenuItem {
             text: "Add sign"
             onTriggered: {
-                var time = (stripMenu.mouseX - delayX) * horizontalTimePerPixel + jokerWindow.stripTime;
+                var time = (stripContextMenu.mouseX - delayX) * horizontalTimePerPixel + jokerWindow.stripTime;
                 var trackHeight = stripContainer.height / 4;
-                var textY = Math.round((stripMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
+                var textY = Math.round((stripContextMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
                 console.log("add sign " + time + " " + textY);
                 doc.lineModel.addDetect(time, textY);
             }
@@ -51,9 +51,9 @@ Item {
         acceptedButtons: Qt.RightButton
         onClicked: {
             console.log("click " + mouse.x + " " + mouse.y);
-            stripMenu.mouseX = mouse.x;
-            stripMenu.mouseY = mouse.y;
-            stripMenu.popup()
+            stripContextMenu.mouseX = mouse.x;
+            stripContextMenu.mouseY = mouse.y;
+            stripContextMenu.popup()
         }
     }
 
@@ -141,19 +141,6 @@ Item {
             }
 
             Binding { target: model; property: "content"; value: stripTextItem.text }
-        }
-    }
-
-    Menu {
-        id: myContextMenu
-        title: "Edit"
-        property int index: 0
-        MenuItem {
-            text: "Delete phrase"
-            onTriggered: {
-                console.log("cut " + myContextMenu.index);
-                doc.textModel.removeText(myContextMenu.index);
-            }
         }
     }
 
@@ -368,7 +355,7 @@ Item {
         y: 0
         width: 4
         height: parent.height
-        color: "#DDFF566C"
+        color: "#AAFF566C"
     }
 
     Item {
@@ -377,9 +364,10 @@ Item {
         visible: displayCuts
 
         Repeater {
-            model: cutModel
+            model: doc.cutModel
             delegate: Item {
-                x: timeIn/horizontalTimePerPixel
+                id: cutDelegate
+                x: time/horizontalTimePerPixel
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
 
@@ -388,6 +376,32 @@ Item {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     width: cutWidth
+
+                    MouseArea {
+                        id: rightPressArea
+                        anchors.fill: parent
+                        acceptedButtons: Qt.RightButton
+                        onClicked: cutDelegate.showContextMenu()
+                    }
+                }
+
+                Menu {
+                    id: cutContextMenu
+                    title: "Edit"
+                    property int index: 0
+                    MenuItem {
+                        text: "Delete cut"
+                        onTriggered: {
+                            console.log("Cut " + cutContextMenu.index);
+                            doc.cutModel.remove(cutContextMenu.index);
+                        }
+                    }
+                }
+
+                function showContextMenu() {
+                    console.log("index: " + model.index);
+                    cutContextMenu.index = model.index;
+                    cutContextMenu.popup();
                 }
             }
         }

@@ -15,7 +15,8 @@ SOURCES += \
     $$PWD/PhStripLine.cpp \
     $$PWD/PhStripLineModel.cpp \
     $$PWD/PhStripTextModel.cpp \
-    $$PWD/PhStripDetectModel.cpp
+    $$PWD/PhStripDetectModel.cpp \
+    $$PWD/PhStripCutModel.cpp
 
 HEADERS += \
 	$$PWD/PhStripDoc.h \
@@ -29,5 +30,6 @@ HEADERS += \
     $$PWD/PhStripLine.h \
     $$PWD/PhStripLineModel.h \
     $$PWD/PhStripTextModel.h \
-    $$PWD/PhStripDetectModel.h
+    $$PWD/PhStripDetectModel.h \
+    $$PWD/PhStripCutModel.h
 

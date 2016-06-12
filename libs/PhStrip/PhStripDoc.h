@@ -11,6 +11,7 @@
 #include "PhSync/PhTimeCode.h"
 
 #include "PhStrip/PhStripLineModel.h"
+#include "PhStrip/PhStripCutModel.h"
 
 #include "PhPeople.h"
 #include "PhStripCut.h"
@@ -33,6 +34,7 @@ class PhStripDoc : public QObject
 	Q_PROPERTY(QString fullTitle READ fullTitle NOTIFY changed)
 	Q_PROPERTY(PhTime timeOut READ timeOut NOTIFY changed)
 	Q_PROPERTY(PhStripLineModel* lineModel READ lineModel NOTIFY changed)
+	Q_PROPERTY(PhStripCutModel* cutModel READ cutModel NOTIFY changed)
 
 public:
 	/**
@@ -159,12 +161,6 @@ public:
 	 * @return A list of loops
 	 */
 	QList<PhStripLoop *> loops();
-
-	/**
-	 * @brief The whole cut list
-	 * @return A list of cut
-	 */
-	QList<PhStripCut *> cuts();
 
 	/**
 	 * @brief The whole detect list
@@ -418,6 +414,8 @@ public:
 	 */
 	void setModified(bool modified);
 
+	PhStripCutModel *cutModel() const;
+
 signals:
 	/**
 	 * @brief Emit a signal when the PhStripDoc changed
@@ -465,6 +463,7 @@ private:
 	QList<PhPeople *> _peoples;
 
 	PhStripLineModel *_lineModel;
+	PhStripCutModel *_cutModel;
 
 	QList<PhStripText *> _alternateTexts;
 
