@@ -1,5 +1,4 @@
-Joker
-=====
+# Joker
 
 [![Build Status](https://travis-ci.org/Phonations/Joker.svg?branch=master)](https://travis-ci.org/Phonations/Joker)
 [![Build status](https://ci.appveyor.com/api/projects/status/4vgrsapqble7rkqi/branch/master?svg=true)](https://ci.appveyor.com/project/MartinDelille/joker/branch/master)
@@ -10,29 +9,42 @@ Joker
 [![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Phonations/Joker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+Welcome to the Joker project!
+
+![Screenshot](data/img/screenshot.jpg)
+
+Joker is available on the *Mac App Store*:
+
+[![Buy](data/img/appstore.svg)](itunes.apple.com/app/joker/id932002433)
+
+For *Windows* installer, go to the [release section](https://github.com/Phonations/joker/releases/latest).
+
+Otherwise, you can try to compile the project yourself using the following instruction:
+
+## Project structure
+
 This repository hosts the Joker projet components:
 
-* Applications
-  * Joker: The main project.
-  * SonyTool: A Sony 9 pin master/slave
-  * LTCTool: A LTC generator/reader.
-  * MidiTool: A midi timecode (MTC) generator/reader.
-* Libraries
-  * PhTools: Common basic utilities.
-  * PhCommonUI: Common user interface component.
-  * PhStrip: The strip document model.
-  * PhGraphic: Basic library for displaying graphical object and texts.
-  * PhGraphicStrip: Specific strip related display routine.
-  * PhAudio: Basic library for audio playback/recording.
-  * PhVideo: Video playback library.
-  * PhSync: Generic sync component.
-  * PhSony: Sony 9 pin synchronisation interface.
-  * PhLtc: LTC synchronisation interface.
-  * PhMidi: Midi synchronisation interface.
+- Applications
+  - *Joker*: The main project.
+  - *SonyTool*: A Sony 9 pin master/slave
+  - *LTCTool*: A LTC generator/reader.
+  - *MidiTool*: A midi timecode (MTC) generator/reader.
+- Libraries
+  - *PhTools*: Common basic utilities.
+  - *PhCommonUI*: Common user interface component.
+  - *PhStrip*: The strip document model.
+  - *PhGraphic*: Basic library for displaying graphical object and texts.
+  - *PhGraphicStrip*: Specific strip related display routine.
+  - *PhAudio*: Basic library for audio playback/recording.
+  - *PhVideo*: Video playback library.
+  - *PhSync*: Generic sync component.
+  - *PhSony*: Sony 9 pin synchronisation interface.
+  - *PhLtc*: LTC synchronisation interface.
+  - *PhMidi*: Midi synchronisation interface.
 * Various test projects for testing the library modules independently or integrated with each others. It contains also unit testing modules in the *specs* directory.
 
-Compilation information:
-------------------------
+## Compilation information
 
 In order to compile the  project you will need to follow the instructions depending on your system:
 
@@ -42,31 +54,31 @@ In order to compile the  project you will need to follow the instructions depend
 
 The project uses *Qt 5.5.1* available here: http://www.qt.io/download/
 
-## <a name="mac"></a> Mac Os:
+### <a name="mac"></a> Mac Os:
 
 You need to have Mac Os 10.8+ installed to make Joker work on your computer. We also recommand you the [5.3.x Qt version](http://download.qt-project.org/official_releases/online_installers/qt-opensource-mac-x64-1.5.0-1-online.dmg).
 
-### Xcode
+#### Xcode
 
 You need to have [Xcode](https://developer.apple.com/xcode/) installed and the command line tools to compile on Mac Os using Qt.
 
-### Homebrew
+#### Homebrew
 
 [Homebrew](http://brew.sh/) is a very powerful package installer. Let's install it:
 
     ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 
-### The dependencies:
+#### The dependencies:
 
 You can install the dependencies automatically or manually:
 
-#### Automatic installation
+##### Automatic installation
 
 Just run the *bootstrap* script:
 
     ./scripts/bootstrap.sh
 
-#### Manual install
+##### Manual install
 
 You can install most of the dependencies via *brew*:
 
@@ -74,60 +86,52 @@ You can install most of the dependencies via *brew*:
 
     brew install ffmpeg --with-fdk-aac --with-ffplay --with-freetype --with-frei0r --with-libass --with-libcaca --with-libvo-aacenc --with-libvorbis --with-libvpx --with-openjpeg --with-openssl --with-opus --with-rtmpdump --with-schroedinger --with-speex --with-speex --with-theora --with-tools
 
-### The Leap SDK _(optionnal)_
 
-Before any download or installation, you must know that the *leap* have been skipped for the moment.
+### <a name="linux"></a> Linux:
 
-Available [here](https://developer.leapmotion.com).
+Just run the *bootstrap* script:
 
-You must then define the following global variable in order to compile with the LEAP:
+    ./scripts/bootstrap.sh
 
-    launchctl setenv LEAP_SDK /path/to/sdk/root
+### <a name="windows"></a> Windows:
 
-
-## <a name="linux"></a> Linux:
-
-![Coming soon](http://openclipart.org/image/300px/svg_to_png/118519/Red_Coming_Soon_Stamp.png)
-
-## <a name="windows"></a> Windows:
-
-### FFMPEG
+#### FFMPEG
 
 There is a *Windows* build of the *FFMPEG* library here: http://ffmpeg.zeranoe.com/builds/
 
 Download the *shared* and *dev* 32 bits library:
 
-* http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20140222-git-44b22bb-win32-shared.7z
-* http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20140222-git-44b22bb-win32-dev.7z
+- [http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20140222-git-44b22bb-win32-shared.7z]()
+- [http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20140222-git-44b22bb-win32-dev.7z]()
 
 Extract it with [7zip](http://www.7-zip.org/) in the folder of your choice and set the following environment variable:
 
-* *FFMPEG_DEV_PATH*
-* *FFMPEG_SHARED_PATH*
+- *FFMPEG_DEV_PATH*
+- *FFMPEG_SHARED_PATH*
 
-### Portaudio
+#### Portaudio
 
 Download *portaudio* precompiled library here: https://github.com/adfernandes/precompiled-portaudio-windows
 
 Extract it with [7zip](http://www.7-zip.org/) in the folder of your choice and set the following environment variable:
 
-* *PORTAUDIO_PATH*
+- *PORTAUDIO_PATH*
 
-### libltc
+#### libltc
 
 Download *libltc* source code from: https://github.com/x42/libltc/releases/download/v1.1.4/libltc-1.1.4.tar.gz
 
 Extract it with [7zip](http://www.7-zip.org/) in the folder of your choice. Create the following environment variable pointing to the *src* subfolder:
 
-* *LTC_PATH*
+- *LTC_PATH*
 
-### Innosetup
+#### Innosetup
 
 Innosetup is required to build an installer for the *release* version of Joker. If you do not want to install Innosetup, choose to build the *debug* version in *Qt Creator*. Otherwise, download it from: http://www.jrsoftware.org/isdl.php
 
 Add Innosetup installation folder to the *PATH* environment variable.
 
-### Qt
+#### Qt
 
 Download a *Qt installer* for Windows built against **MinGW** and for **OpenGL** here: http://qt-project.org/downloads
 
@@ -139,19 +143,7 @@ Then use *Qt Creator* to open and build the Joker project *app.pro*.
 
 Note that you can set all the required environment variables described above directly in the project settings inside Qt Creator.
 
-Test files:
-------------
+# Talk
 
-In order to test *Joker* and its subproject, you'll want to work on an example file: http://www.phonations.com/tmwtga
-
-It contains:
-
-* A *DetX* file containing the english transcription
-* A video file
-* An audio file
-
-Talk:
------
-
-We love talking about this project! I won't let my phone number here but don't hesitate to join our IRC channel: www.phonations.com#joker
+We love talking about this project! Feel free to post an issue or contact us via the [gitter channel](https://gitter.im/Phonations/Joker) !
 
