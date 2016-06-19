@@ -150,6 +150,86 @@ FocusScope {
                 }
             }
         }
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton
+            drag{
+                target: parent
+                axis: Drag.XAxis
+                smoothed: true
+            }
+
+            property int startX: 0
+
+            onPressed: {
+                startX  = mouse.x
+            }
+
+            onPositionChanged: {
+                if (drag.active) {
+                    if (mouse.modifiers & Qt.ControlModifier) {
+                        var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
+                        var pixelChange = snapToFrame(mouseX - parent.width)
+                        stripTextItem2.width = stripTextItem2.width + pixelChange
+                        if(stripTextItem2.width < pixelPerFrame)
+                            stripTextItem2.width = pixelPerFrame
+                    } else {
+                        var movement = mouseX - startX;
+                        console.log("detect dragged without ctrl")
+                        var shift = Math.round(movement/40);
+                        console.log("Shift is " + shift + ", I'm item " + index);
+                        if (shift != 0) {
+                            shiftText(shift)
+                            startX = mouse.x
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function shiftText(shift) {
+        // give focus to next item!
+        console.log("I'm item " + index);
+
+        if (shift === 0) {
+            return
+        }
+
+        if (index === textRepeater.count - 1) {
+            return
+        }
+
+        var nextText = textRepeater.itemAt(index+1)
+        var currentLength = text.length
+        var nextLength = nextText.text.length
+
+        if (shift > 0) {
+            if (shift > currentLength - 1) {
+                shift = currentLength - 1
+            }
+
+            var textMoved = text.substr(currentLength-shift,shift)
+
+            console.log(textMoved + " " + text + " " + nextText.text)
+
+            text = text.substr(0,currentLength-shift)
+            nextText.text = textMoved + nextText.text
+        } else {
+            var absoluteShift = -shift
+
+            if (absoluteShift > nextLength - 1) {
+                absoluteShift = nextLength - 1
+            }
+
+            var nextTextMoved = nextText.text.substr(0, absoluteShift)
+
+            console.log(nextTextMoved + " - " + text + " - " + nextText.text)
+
+            text = text + nextTextMoved
+            nextText.text = nextText.text.substr(absoluteShift,nextLength-absoluteShift)
+        }
     }
 
     function giveFocusToNextItem() {
