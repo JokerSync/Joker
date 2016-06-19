@@ -25,6 +25,11 @@ Item {
                 smoothed: true
             }
 
+            onDoubleClicked: {
+                // attach this detect
+                stripLineContainer.attachDetect(lineDetect.index)
+            }
+
             property int startX: 0
 
             onPressed: {
@@ -34,9 +39,14 @@ Item {
             onPositionChanged: {
                 if (drag.active) {
                     var movement = mouseX - startX;
-                    // snap x to whole frame
-                    console.log("detect dragged with ctrl " + movement)
-                    lineDetect.x = lineDetect.x + snapToFrame(movement)
+                    if (mouse.modifiers & Qt.ControlModifier) {
+                        // snap x to whole frame
+                        console.log("detect dragged with ctrl " + movement)
+                        lineDetect.x = lineDetect.x + snapToFrame(movement)
+                    }
+                    else {
+                        console.log("detect dragged without ctrl " + movement)
+                    }
                 }
             }
         }

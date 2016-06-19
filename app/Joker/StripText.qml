@@ -123,10 +123,6 @@ FocusScope {
                 stripLineContainer.y = Math.round(stripLineContainer.y / height) * height;
             }
         }
-
-//                onClicked: {
-//                    stripTextItem2.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-//                }
     }
 
     // right handle
@@ -190,7 +186,6 @@ FocusScope {
     }
 
     function shiftText(shift) {
-        // give focus to next item!
         console.log("I'm item " + index);
 
         if (shift === 0) {
@@ -248,5 +243,9 @@ FocusScope {
         stripTextInput.forceActiveFocus()
         stripLineContainer.editing = true
         stripTextInput.cursorPosition = newPos
+    }
+
+    function positionAt(x) {
+        return stripTextInput.positionAt(x/stripTextItem2.width*stripTextInput.width, 0)
     }
 }

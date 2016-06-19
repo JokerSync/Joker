@@ -199,6 +199,26 @@ Item {
         return false;
     }
 
+    function attachDetect(detectIndex) {
+        var detect = detectRepeater.itemAt(detectIndex)
+        // find the text below
+        var text = textRow.childAt(detect.x, 0);
+        if (text) {
+            console.log("split found text")
+
+            // find the position and split in 2
+            var pos = text.positionAt(detect.x - text.x)
+            // add the new text
+            var splitTime = (detect.x - text.x) * horizontalTimePerPixel
+
+            console.log("split " + text.textIndex + " " + pos + " " + splitTime)
+
+            stripLineContainer.lineModel.texts.split(text.textIndex, pos, splitTime)
+            // remove the detect
+            stripLineContainer.lineModel.unlinkedDetects.remove(detectIndex)
+        }
+    }
+
     function showContextMenu(mouseX) {
         console.log("index: " + model.index);
         lineContextMenu.index = model.index;
