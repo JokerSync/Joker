@@ -19,12 +19,8 @@ PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
 	_settings(settings),
 	_maxDrawElapsed(0)
 {
-	// update the  content when the doc changes :
-	this->connect(&_doc, SIGNAL(changed()), this, SLOT(onDocChanged()));
-
 	// This is used to make some time-based test
 	_testTimer.start();
-
 }
 
 PhStripDoc *PhGraphicStrip::doc()
@@ -35,26 +31,6 @@ PhStripDoc *PhGraphicStrip::doc()
 PhClock *PhGraphicStrip::clock()
 {
 	return &_clock;
-}
-
-void PhGraphicStrip::onDocChanged()
-{
-	if (_doc.lineModel()->rowCount() == 0) {
-		return;
-	}
-
-	// ruler
-	_rulerModel.clear();
-	PhTime rulerTimeIn = _settings->firstFootTime();
-	PhTime timeBetweenRuler = _settings->timeBetweenTwoFeet();
-	PhTime rulerTime = rulerTimeIn;
-	PhTime docTimeOut = _doc.timeOut();
-	while (rulerTime < docTimeOut + timeBetweenRuler) {
-		int rulerNumber = (rulerTime - rulerTimeIn) / timeBetweenRuler;
-		PhNextPeople *rulerPeople = new PhNextPeople(QString::number(rulerNumber), "", rulerTime, true, timeBetweenRuler);
-		_rulerModel.addNextPeople(rulerPeople);
-		rulerTime += timeBetweenRuler;
-	}
 }
 
 PhFont *PhGraphicStrip::getTextFont()

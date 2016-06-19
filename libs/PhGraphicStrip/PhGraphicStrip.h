@@ -118,16 +118,6 @@ public:
 		return _infos;
 	}
 
-	PhNextPeopleModel *rulerModel() {
-		return &_rulerModel;
-	}
-
-private slots:
-	/**
-	 * @brief Clear all the graphic strip object related to the PhStripDoc.
-	 */
-	void onDocChanged();
-
 private:
 	PhGraphicStripSettings * _settings;
 
@@ -166,8 +156,6 @@ private:
 	QColor computeColor(PhPeople *people, QList<PhPeople *> selectedPeoples, bool invertColor);
 
 	QStringList _infos;
-
-	PhNextPeopleModel _rulerModel;
 };
 
 #endif // PHGRAPHICSTRIP_H

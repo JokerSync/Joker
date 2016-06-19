@@ -68,7 +68,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("doc", _doc);
 	_context->setContextProperty("jokerWindow", this);
 	_context->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
-	_context->setContextProperty("rulerModel", _strip.rulerModel());
 	_context->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
 	_context->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
 	_context->setContextProperty("textFontUrl", QUrl::fromLocalFile(_settings->textFontFile()));
@@ -76,12 +75,14 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("cutWidth", _settings->cutWidth());
 	_context->setContextProperty("displayCuts", _settings->displayCuts());
 	_context->setContextProperty("invertColor", _settings->invertColor());
-	_context->setContextProperty("displayRuler", _settings->displayFeet());
 	_context->setContextProperty("videoLogoUrl", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png"));
 	_context->setContextProperty("stripBackgroundUrl", QUrl::fromLocalFile(_settings->backgroundImageLight()));
 	_context->setContextProperty("videoSource", &_videoSurface);
 
 	// the following are updated in onPaint. They should probably be properties with signals instead
+	_context->setContextProperty("displayRuler", _settings->displayFeet());
+	_context->setContextProperty("rulerTimeIn", _settings->firstFootTime());
+	_context->setContextProperty("timeBetweenRuler", _settings->timeBetweenTwoFeet());
 	_context->setContextProperty("selectedPeopleListVisible", _settings->displayNextText() && _settings->selectedPeopleNameList().count());
 	_context->setContextProperty("titleRectVisible", _settings->displayNextText());
 	_context->setContextProperty("videoLogoVisible", (_videoEngine.height() <= 0) && _settings->displayLogo());
@@ -189,7 +190,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	ui->actionDisplay_the_vertical_scale->setChecked(_settings->displayVerticalScale());
 
-	on_actionDisplay_feet_triggered(_settings->displayFeet());
+	ui->actionDisplay_feet->setChecked(_settings->displayFeet());
 
 	this->connect(_view, &PhGraphicView::beforePaint, this, &JokerWindow::timeCounter);
 	this->connect(_view, &PhGraphicView::beforePaint, _strip.clock(), &PhClock::elapse);
@@ -1093,6 +1094,10 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 	_context->setContextProperty("noSyncLabelVisible", _lastVideoSyncElapsed.elapsed() > 1000);
 	double opacity = (_lastVideoSyncElapsed.elapsed() - 1000.0d) / 1000.0d;
 	_context->setContextProperty("noSyncLabelOpacity", opacity <= 0 ? 0 : opacity >= 1 ? 1 : opacity);
+
+	_context->setContextProperty("displayRuler", _settings->displayFeet());
+	_context->setContextProperty("rulerTimeIn", _settings->firstFootTime());
+	_context->setContextProperty("timeBetweenRuler", _settings->timeBetweenTwoFeet());
 }
 
 void JokerWindow::onVideoSync()

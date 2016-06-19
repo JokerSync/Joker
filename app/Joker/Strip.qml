@@ -16,16 +16,19 @@ Item {
 
     // background image
     // TODO: inverted colors, solid color if background is disabled
-    Image {
-        id: stripBackground
-        objectName: "stripBackground"
-        source: stripBackgroundUrl
-        fillMode: Image.TileHorizontally
+    Item {
+        x: -stripContainer.contentX
         anchors.top: parent.top
-        x: 0
-        width: 2*parent.width
         anchors.bottom: parent.bottom
-        transform: Translate { x: (-jokerWindow.stripTime / horizontalTimePerPixel - stripBackground.width/2 / 6) % (stripBackground.width/2) }
+
+        Image {
+            source: stripBackgroundUrl
+            fillMode: Image.TileHorizontally
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            x: -100
+            width: doc.timeOut / horizontalTimePerPixel + 100
+        }
     }
 
     Menu {
@@ -58,89 +61,56 @@ Item {
     }
 
     // ruler
-    ListView {
-        anchors.fill: parent
-        orientation: ListView.Horizontal
-        contentX: stripContainer.contentX
-        interactive: false
-        model: rulerModel
+    Row {
+        id: stripRulerRepeater
+        x: rulerTimeIn/horizontalTimePerPixel - stripContainer.contentX
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
         visible: displayRuler
-        cacheBuffer: 2*stripContainer.width
 
-        delegate: Item {
-            width: duration/horizontalTimePerPixel
-            height: parent.height
-
-            Rectangle {
-                color: invertColor? "white":"#808080"
+        Repeater {
+            model: (doc.timeOut - rulerTimeIn) / timeBetweenRuler
+            delegate: Item {
+                width: timeBetweenRuler/horizontalTimePerPixel
                 anchors.top: parent.top
-                width: 1000/horizontalTimePerPixel
-                x: -width/2
-                height: parent.height/2
+                anchors.bottom: parent.bottom
+
+                property int rulerIndex: index
+
+                Rectangle {
+                    color: invertColor? "white":"#808080"
+                    anchors.top: parent.top
+                    width: 1000/horizontalTimePerPixel
+                    x: -width/2
+                    height: parent.height/2
+                }
+
+                Rectangle {
+                    color: invertColor? "white":"#808080"
+                    anchors.top: parent.top
+                    width: 1000/horizontalTimePerPixel
+                    x: -width/2 + parent.width/2
+                    height: parent.height/2
+                }
+
+                // ruler disc
+                Rectangle {
+                    width: 4000/horizontalTimePerPixel
+                    height: width
+                    color: invertColor? "white":"#808080"
+                    radius: width*0.5
+                    x: parent.width/2 - width/2
+                    y: parent.height/2 + width/4
+                }
+
+                Text {
+                    color: invertColor? "white":"#808080"
+                    x: -width/2
+                    y: parent.height/2
+                    text: parent.rulerIndex
+                    font.pixelSize: parent.height/3
+                }
             }
-
-            Rectangle {
-                color: invertColor? "white":"#808080"
-                anchors.top: parent.top
-                width: 1000/horizontalTimePerPixel
-                x: -width/2 + parent.width/2
-                height: parent.height/2
-            }
-
-            // ruler disc
-            Rectangle {
-                width: 4000/horizontalTimePerPixel
-                height: width
-                color: invertColor? "white":"#808080"
-                radius: width*0.5
-                x: parent.width/2 - width/2
-                y: parent.height/2 + width/4
-            }
-
-            Text {
-                color: invertColor? "white":"#808080"
-                x: -width/2
-                y: parent.height/2
-                text: name
-                font.pixelSize: parent.height/3
-            }
-        }
-    }
-
-    // FIXME color, font, inverted color are not implemented
-    Component {
-        id: stripTextDelegate
-        Item {
-            id: stripTextContainer
-            width: (timeOut - timeIn)/horizontalTimePerPixel
-            height: parent.height
-
-            Rectangle {
-                border.width: 1
-                border.color: "#30000000"
-                color: "#00FFFFFF"
-                anchors.fill: parent
-                visible: content.length > 0
-            }
-
-            TextInput {
-                id: stripTextItem
-                text: model.content
-                font.pixelSize: parent.height
-                font.family: stripFont.name
-                font.weight: textBoldness * 99/5
-                transform: Scale {  xScale: stripTextContainer.width/stripTextItem.width;
-                                    yScale: 1;}
-                smooth: true // smooth scaling
-//                MouseArea {
-//                    anchors.fill: parent
-//                    onClicked: {
-//                        stripTextItem.color = Qt.rgba(Math.random(), Math.random(), Math.random(), 1);
-//                    }
-//                }
-            }
-
-            Binding { target: model; property: "content"; value: stripTextItem.text }
         }
     }
 
