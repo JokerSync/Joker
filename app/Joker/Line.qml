@@ -214,9 +214,24 @@ Item {
             console.log("split " + text.textIndex + " " + pos + " " + splitTime)
 
             stripLineContainer.lineModel.texts.split(text.textIndex, pos, splitTime)
+
             // remove the detect
             stripLineContainer.lineModel.unlinkedDetects.remove(detectIndex)
         }
+    }
+
+    function detachDetect(textIndex) {
+        var text = textRepeater.itemAt(textIndex)
+        var nextText = textRepeater.itemAt(textIndex+1)
+
+        var time = nextText.x * horizontalTimePerPixel
+
+        console.log("merge " + textIndex + " " + time)
+
+        stripLineContainer.lineModel.texts.merge(textIndex)
+
+        // add a new unlinked detect where the previous text ended
+        stripLineContainer.lineModel.unlinkedDetects.add(time)
     }
 
     function showContextMenu(mouseX) {

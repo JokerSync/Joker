@@ -135,20 +135,6 @@ FocusScope {
 
         MouseArea {
             anchors.fill: parent
-            drag{ target: parent; axis: Drag.XAxis }
-            onMouseXChanged: {
-                if(drag.active){
-                    var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
-                    var pixelChange = snapToFrame(mouseX - parent.width)
-                    stripTextItem2.width = stripTextItem2.width + pixelChange
-                    if(stripTextItem2.width < pixelPerFrame)
-                        stripTextItem2.width = pixelPerFrame
-                }
-            }
-        }
-
-        MouseArea {
-            anchors.fill: parent
             acceptedButtons: Qt.LeftButton
             drag{
                 target: parent
@@ -160,6 +146,10 @@ FocusScope {
 
             onPressed: {
                 startX  = mouse.x
+            }
+
+            onDoubleClicked: {
+                stripLineContainer.detachDetect(stripTextItem2.textIndex)
             }
 
             onPositionChanged: {

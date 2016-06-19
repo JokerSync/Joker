@@ -111,6 +111,18 @@ void PhStripTextModel::split(int splitIndex, int splitCharIndex, PhTime splitTim
 	endInsertRows();
 }
 
+void PhStripTextModel::merge(int mergeIndex)
+{
+	PhStripText *text = _texts[mergeIndex];
+	PhStripText *nextText = _texts[mergeIndex+1];
+
+	setData(index(mergeIndex), text->content() + nextText->content(), ContentRole);
+	setData(index(mergeIndex), text->duration() + nextText->duration(), DurationRole);
+	setData(index(mergeIndex), nextText->typeOut(), TypeOutRole);
+
+	removeRow(mergeIndex + 1);
+}
+
 void PhStripTextModel::removeText(int index)
 {
 	removeRow(index);
