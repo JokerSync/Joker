@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.1
 
 Item {
     id: lineDetect
@@ -67,6 +68,30 @@ Item {
                         lineDetect.x = nextText.x
                     }
                 }
+            }
+        }
+
+        MouseArea {
+            id: rightPressArea
+            anchors.fill: parent
+            acceptedButtons: Qt.RightButton
+            onClicked: {
+                console.log("index: " + model.index);
+                detectContextMenu.index = model.index;
+                detectContextMenu.popup();
+            }
+        }
+    }
+
+    Menu {
+        id: detectContextMenu
+        title: "Edit"
+        property int index: 0
+        MenuItem {
+            text: "Delete detect"
+            onTriggered: {
+                console.log("Detect " + detectContextMenu.index);
+                stripLineContainer.lineModel.unlinkedDetects.remove(detectContextMenu.index);
             }
         }
     }
