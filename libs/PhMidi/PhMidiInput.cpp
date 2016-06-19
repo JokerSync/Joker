@@ -27,7 +27,7 @@ QStringList PhMidiInput::inputList()
 	QStringList result;
 
 	try {
-		QScopedPointer<RtMidiIn> midiIn;
+		QScopedPointer<RtMidiIn> midiIn (new RtMidiIn());
 		for(unsigned int i = 0; i < midiIn->getPortCount(); i++)
 			result.append(QString::fromStdString(midiIn->getPortName(i)));
 	}

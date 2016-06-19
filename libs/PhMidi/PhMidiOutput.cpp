@@ -21,7 +21,7 @@ QStringList PhMidiOutput::outputList()
 {
 	QStringList result;
 	try {
-		QScopedPointer<RtMidiOut> midiOut;
+		QScopedPointer<RtMidiOut> midiOut (new RtMidiOut());
 		for(unsigned int i = 0; i < midiOut->getPortCount(); i++)
 			result.append(QString::fromStdString(midiOut->getPortName(i)));
 	}
