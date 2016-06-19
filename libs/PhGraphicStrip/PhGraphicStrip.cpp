@@ -147,37 +147,6 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextX, in
 			return;
 		}
 
-//		if(_settings->displayBackground()) {
-//			//Draw backgroung picture
-//			int n = width / height + 2; // compute how much background repetition do we need
-//			long leftBG = 0;
-//			if(offset >= 0)
-//				leftBG -= offset % height;
-//			else
-//				leftBG -= height - ((-offset) % height);
-
-//			PhGraphicTexturedRect* backgroundImage = &_backgroundImageLight;
-//			if(_settings->invertColor())
-//				backgroundImage = &_backgroundImageDark;
-
-//			backgroundImage->setX(x + leftBG);
-//			backgroundImage->setY(y);
-//			backgroundImage->setSize(height * n, height);
-//			backgroundImage->setZ(-2);
-//			backgroundImage->setTextureCoordinate(n, 1);
-//			backgroundImage->draw();
-//		}
-//		else {
-//			PhGraphicSolidRect backgroundRect(x, y, width, height);
-//			if(_settings->invertColor())
-//				backgroundRect.setColor(QColor(_settings->backgroundColorDark()));
-//			else
-//				backgroundRect.setColor(QColor(_settings->backgroundColorLight()));
-
-//			backgroundRect.setZ(-2);
-//			backgroundRect.draw();
-//		}
-
 		int verticalTimePerPixel = _settings->verticalTimePerPixel();
 
 		// Change to display the vertical scale via the settings
