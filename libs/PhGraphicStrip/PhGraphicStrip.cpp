@@ -72,56 +72,6 @@ void PhGraphicStrip::onDocChanged()
 		_rulerModel.addNextPeople(rulerPeople);
 		rulerTime += timeBetweenRuler;
 	}
-
-	QList<float> trackY;
-	trackY << 0 << 0.25 << 0.5 << 0.75;
-
-	foreach(float y, trackY) {
-		PhTrack * track = new PhTrack();
-		int previousTimeOut;
-
-		// off detects
-		previousTimeOut = 0;
-		foreach(PhStripDetect * detect, _doc.detects()) {
-//			if (text->y() == y && detect->type() == PhStripDetect::Off) {
-//				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
-//				track->offDetectModel()->addNextPeople(detectPeople);
-//				previousTimeOut = detect->timeIn();
-//			}
-		}
-
-		// semi-off detects
-		previousTimeOut = 0;
-		foreach(PhStripDetect * detect, _doc.detects()) {
-//			if (text->y() == y && detect->type() == PhStripDetect::SemiOff) {
-//				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
-//				track->semiOffDetectModel()->addNextPeople(detectPeople);
-//				previousTimeOut = detect->timeIn();
-//			}
-		}
-
-		// arrow-up detects
-		previousTimeOut = 0;
-		foreach(PhStripDetect * detect, _doc.detects()) {
-//			if (text->y() == y && detect->type() == PhStripDetect::ArrowUp) {
-//				PhNextPeople *detectPeople = new PhNextPeople("", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
-//				track->arrowUpDetectModel()->addNextPeople(detectPeople);
-//				previousTimeOut = detect->timeIn();
-//			}
-		}
-
-		// arrow-down detects
-		previousTimeOut = 0;
-		foreach(PhStripDetect * detect, _doc.detects()) {
-//			if (text->y() == y && detect->type() == PhStripDetect::ArrowDown) {
-//				PhNextPeople *spacer = new PhNextPeople("spacer", "", previousTimeOut, true, detect->timeIn() - previousTimeOut);
-//				PhNextPeople *detectPeople = new PhNextPeople("", "", detect->timeIn(), true, detect->timeOut() - detect->timeIn());
-//				track->arrowDownDetectModel()->addNextPeople(spacer);
-//				track->arrowDownDetectModel()->addNextPeople(detectPeople);
-//				previousTimeOut = detect->timeOut();
-//			}
-		}
-	}
 }
 
 PhFont *PhGraphicStrip::getTextFont()

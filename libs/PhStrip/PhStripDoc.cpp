@@ -656,7 +656,7 @@ bool PhStripDoc::readMosTrack(QFile &f, PhTimeCodeType tcType, QMap<int, PhPeopl
 		//FIXME
 		//detect->setPeople((people));
 		//detect->setY(track);
-		_detects.append(detect);
+		//_detects.append(detect);
 	}
 
 	return true;
@@ -1436,8 +1436,6 @@ void PhStripDoc::reset()
 	/* Note: clearing a QList does not free its elements. */
 	qDeleteAll(_peoples);
 	_peoples.clear();
-	qDeleteAll(_detects);
-	_detects.clear();
 	_lastTime = 0;
 	_lineModel->clear();
 	_cutModel->clear();
@@ -1463,38 +1461,11 @@ void PhStripDoc::reset()
 	emit this->changed();
 }
 
-void PhStripDoc::addObject(PhStripObject *object)
-{
-	if(dynamic_cast<PhStripCut*>(object)) {
-		_cutModel->append(dynamic_cast<PhStripCut*>(object));
-		PHDEBUG << "Added a cut";
-	}
-	else if(dynamic_cast<PhStripLoop*>(object)) {
-		_loopModel->append(dynamic_cast<PhStripLoop*>(object));
-		PHDEBUG << "Added a loop";
-	}
-	else if(dynamic_cast<PhStripDetect*>(object)) {
-		this->_detects.append(dynamic_cast<PhStripDetect*>(object));
-		PHDEBUG << "Added a detect!";
-	}
-	else if(dynamic_cast<PhStripText*>(object)) {
-		// FIXME
-		//_texts->append(dynamic_cast<PhStripText*>(object));
-		PHDEBUG << "Added a text!";
-	}
-	else {
-		PHDEBUG << "You try to add a weird object, which seems to be undefined...";
-	}
-	emit changed();
-
-}
-
 void PhStripDoc::addPeople(PhPeople *people)
 {
 	this->_peoples.append(people);
 	PHDEBUG << "Added a people";
 	emit changed();
-
 }
 
 PhPeople *PhStripDoc::peopleByName(QString name)
@@ -1827,29 +1798,6 @@ bool PhStripDoc::forceRatio169() const
 PhStripLineModel *PhStripDoc::lineModel()
 {
 	return _lineModel;
-}
-
-QList<PhStripDetect *> PhStripDoc::detects(PhTime timeIn, PhTime timeOut)
-{
-	QList<PhStripDetect*> result;
-	foreach(PhStripDetect *detect, this->_detects) {
-		//FIXME
-//		if((detect->timeIn() >= timeIn) && (detect->timeOut() < timeOut))
-//			result.append(detect);
-	}
-
-	return result;
-}
-
-QList<PhStripDetect *> PhStripDoc::peopleDetects(PhPeople *people, PhTime timeIn, PhTime timeOut)
-{
-	QList<PhStripDetect *> result;
-	foreach(PhStripDetect *detect, this->detects(timeIn, timeOut)) {
-		//FIXME
-//		if(detect->people() == people)
-//			result.append(detect);
-	}
-	return result;
 }
 
 void PhStripDoc::setTitle(QString title)

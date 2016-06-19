@@ -159,22 +159,6 @@ public:
 	PhStripLineModel *lineModel();
 
 	/**
-	 * @brief The whole detect list
-	 * @todo Implement and test timeIn / timeOut
-	 * @return A list of detects
-	 */
-	QList<PhStripDetect *> detects(PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
-
-	/**
-	 * @brief Get the list of detect affected to a people in a defined range.
-	 * @param people The people
-	 * @param timeIn The range starting time
-	 * @param timeOut The range ending time
-	 * @return A list of detects
-	 */
-	QList<PhStripDetect *> peopleDetects(PhPeople *people, PhTime timeIn = PHTIMEMIN, PhTime timeOut = PHTIMEMAX);
-
-	/**
 	 * @brief Set the title property
 	 * @param title A string
 	 */
@@ -390,10 +374,6 @@ public:
 	void reset();
 
 	/**
-	 * @brief Add a PhGraphicObjet to the doc
-	 */
-	void addObject(PhStripObject *object);
-	/**
 	 * @brief Add a PhPeople to the doc
 	 * @param people the new poeple
 	 */
@@ -465,11 +445,6 @@ private:
 	PhStripLoopModel *_loopModel;
 
 	QList<PhStripText *> _alternateTexts;
-
-	/**
-	 * List of PhStripOff from the file
-	 */
-	QList<PhStripDetect *> _detects;
 
 	PhTime ComputeDrbTime1(PhTime offset, PhTime value, PhTimeCodeType tcType);
 	PhTime ComputeDrbTime2(PhTime offset, PhTime value, PhTimeCodeType tcType);
