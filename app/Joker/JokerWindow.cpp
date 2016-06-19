@@ -68,7 +68,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("doc", _doc);
 	_context->setContextProperty("jokerWindow", this);
 	_context->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
-	_context->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
 	_context->setContextProperty("rulerModel", _strip.rulerModel());
 	_context->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
 	_context->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());

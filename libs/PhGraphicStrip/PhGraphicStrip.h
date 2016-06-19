@@ -118,25 +118,9 @@ public:
 		return _infos;
 	}
 
-	PhNextPeopleModel *nextPeopleModel() {
-		return &_nextPeopleModel;
-	}
-
 	PhNextPeopleModel *rulerModel() {
 		return &_rulerModel;
 	}
-
-	PhNextPeopleModel *cutModel() {
-		return &_cutModel;
-	}
-
-	PhNextPeopleModel *loopModel() {
-		return &_loopModel;
-	}
-
-//	PhTrackModel *trackModel() {
-//		return &_trackModel;
-//	}
 
 private slots:
 	/**
@@ -183,11 +167,7 @@ private:
 
 	QStringList _infos;
 
-	PhNextPeopleModel _nextPeopleModel;
 	PhNextPeopleModel _rulerModel;
-	PhNextPeopleModel _cutModel;
-	PhNextPeopleModel _loopModel;
-//	PhTrackModel _trackModel;
 };
 
 #endif // PHGRAPHICSTRIP_H

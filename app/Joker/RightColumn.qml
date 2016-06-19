@@ -33,27 +33,27 @@ Item {
             anchors.rightMargin: 2
 
             Repeater {
-                model: nextPeopleModel
+                model: doc.lineModel
 
-                // FIXME inverted colors are not implemented
+                // FIXME selected colors and inverted colors are not implemented
                 delegate: Item {
                     width: parent.width
                     y: timeIn / verticalTimePerPixel
                     x:0
 
                     Rectangle {
-                        color: selected ? "#b0b0b0b0" : "#b0707070"
+                        color: "#b0b0b0b0" // selected ? "#b0b0b0b0" : "#b0707070"
                         height: childText.height + 2
                         width: childText.width + 2
                         anchors.top: parent.top
                         anchors.right: parent.right
 
                         antialiasing: true // without antialiasing the jump from one pixel line to the next is visible
-                        visible: name.length > 0 // do not draw when the name is empty
+                        visible: peopleName.length > 0 // do not draw when the name is empty
 
                         Text {
                             id: childText
-                            text: name
+                            text: peopleName
                             color: color
                             font.pointSize: 15
                             wrapMode: Text.WordWrap

@@ -39,25 +39,8 @@ PhClock *PhGraphicStrip::clock()
 
 void PhGraphicStrip::onDocChanged()
 {
-	QList<PhPeople *> selectedPeoples;
-	bool invertedColor = _settings->invertColor();
-
-	_nextPeopleModel.clear();
-
 	if (_doc.lineModel()->rowCount() == 0) {
 		return;
-	}
-
-	QListIterator<PhStripLine*> i = _doc.lineModel()->iterator();
-	while (i.hasNext()) {
-		PhStripLine *line = i.next();
-		PhPeople * people = line->people();
-		PhNextPeople *nextPeople = new PhNextPeople(people->name(),
-													computeColor(people, selectedPeoples, invertedColor).name(),
-													line->timeIn(),
-													selectedPeoples.size()==0 || selectedPeoples.contains(people),
-													0);
-		_nextPeopleModel.addNextPeople(nextPeople);
 	}
 
 	// ruler

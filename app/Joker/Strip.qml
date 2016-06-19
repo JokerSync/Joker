@@ -286,58 +286,6 @@ Item {
         }
     }
 
-    Component {
-        id: trackDelegate
-        Item {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-
-            ListView {
-                width: parent.width
-                height: parent.height
-                orientation: ListView.Horizontal
-                contentX: stripContainer.contentX
-                interactive: false
-                model: offDetect
-                delegate: offDetectDelegate
-                cacheBuffer: 2*stripContainer.width
-            }
-
-            ListView {
-                width: parent.width
-                height: parent.height
-                orientation: ListView.Horizontal
-                contentX: stripContainer.contentX
-                interactive: false
-                model: semiOffDetect
-                delegate: semiOffDetectDelegate
-                cacheBuffer: 2*stripContainer.width
-            }
-
-            ListView {
-                width: parent.width
-                height: parent.height
-                orientation: ListView.Horizontal
-                contentX: stripContainer.contentX
-                interactive: false
-                model: arrowUpDetect
-                delegate: arrowUpDetectDelegate
-                cacheBuffer: 2*stripContainer.width
-            }
-
-            ListView {
-                width: parent.width
-                height: parent.height
-                orientation: ListView.Horizontal
-                contentX: stripContainer.contentX
-                interactive: false
-                model: arrowDownDetect
-                delegate: arrowDownDetectDelegate
-                cacheBuffer: 2*stripContainer.width
-            }
-        }
-    }
-
     Item {
         x: -stripContainer.contentX
         height: parent.height
