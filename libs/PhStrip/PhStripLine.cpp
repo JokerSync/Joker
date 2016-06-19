@@ -287,3 +287,13 @@ QString PhStripLine::content()
 	}
 	return content;
 }
+
+PhTime PhStripLine::duration() const
+{
+	PhTime duration = 0;
+	QListIterator<PhStripText*> i = _textModel->iterator();
+	while (i.hasNext()) {
+		duration += i.next()->duration();
+	}
+	return duration;
+}

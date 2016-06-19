@@ -60,6 +60,8 @@ public:
 
 	QString content();
 
+	PhTime duration() const;
+
 public slots:
 	//	void refreshText();
 

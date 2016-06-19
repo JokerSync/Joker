@@ -15,7 +15,8 @@ public:
 		TimeInRole,
 		TextsRole,
 		UnlinkedDetectsRole,
-		PeopleNameRole
+		PeopleNameRole,
+		DurationRole
 	};
 
 	PhStripLineModel(QObject *parent = 0);
@@ -30,7 +31,7 @@ public:
 	QListIterator<PhStripLine *> iterator();
 
 public slots:
-	void addDetect(PhTime timeIn, float y);
+	void add(PhTime timeIn, float y);
 	void remove(int index);
 
 protected:

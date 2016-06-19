@@ -36,8 +36,7 @@ Item {
         Repeater {
             id: textRepeater
             model: lineModel.texts
-            delegate:
-                StripText {
+            delegate: StripText {
                 id: stripTextDelegate
                 // reversed stack order so that out detect are on top
                 z: -index
@@ -126,18 +125,6 @@ Item {
         }
     }
 
-    function xOut() {
-        var xOut = stripLineContainer.x
-        for (var i = 0; i < textRepeater.children.length; ++i) {
-            var item = textRepeater.children[i];
-            if (item.x + item.width > xOut) {
-                xOut = item.x + item.width
-            }
-        }
-
-        return xOut;
-    }
-
     function editTextAt(x, y) {
         var lineX = x - stripLineContainer.x
         var lineY = y - stripLineContainer.y
@@ -148,6 +135,20 @@ Item {
             var textX = lineX - text.x
             var textY = lineY - text.y
             text.editTextAt(textX, textY)
+            return true;
+        }
+        return false;
+    }
+
+    function addDetectAt(x, y) {
+        var lineX = x - stripLineContainer.x
+        var lineY = y - stripLineContainer.y
+        var lineWidth = duration/horizontalTimePerPixel
+
+        if (lineX > 0 && lineX < lineWidth && lineY >= 0 && lineY < stripLineContainer.height) {
+            var time = lineX * horizontalTimePerPixel
+            console.log("line.addDetectAt adding detect " + time + " " + lineX + " " + lineY + " " + lineWidth)
+            stripLineContainer.lineModel.unlinkedDetects.add(time)
             return true;
         }
         return false;

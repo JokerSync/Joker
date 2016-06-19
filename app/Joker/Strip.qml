@@ -446,6 +446,20 @@ Item {
         return false;
     }
 
+    function addDetectAt(x, y) {
+        for (var i = 0; i < stripLineRepeater.children.length; ++i) {
+            var line = stripLineRepeater.children[i];
+            if (line.objectName !== "Line") {
+                continue;
+            }
+            var success = line.addDetectAt(x, y);
+            if (success) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function moveDetectAt(x, y, frameChange) {
         for (var i = 0; i < stripLineRepeater.children.length; ++i) {
             var line = stripLineRepeater.children[i];

@@ -30,6 +30,8 @@ QVariant PhStripLineModel::data(const QModelIndex & index, int role) const {
 		return QVariant::fromValue<QObject*>(line->detectModel());
 	else if (role == PeopleNameRole)
 		return line->people()->name();
+	else if (role == DurationRole)
+		return line->duration();
 	return QVariant();
 }
 
@@ -71,6 +73,7 @@ QHash<int, QByteArray> PhStripLineModel::roleNames() const {
 	roles[TextsRole] = "texts";
 	roles[UnlinkedDetectsRole] = "unlinkedDetects";
 	roles[PeopleNameRole] = "peopleName";
+	roles[DurationRole] = "duration";
 	return roles;
 }
 
@@ -86,14 +89,12 @@ QListIterator<PhStripLine *> PhStripLineModel::iterator()
 	return QListIterator<PhStripLine *>(_lines);
 }
 
-void PhStripLineModel::addDetect(PhTime time, float y)
+void PhStripLineModel::add(PhTime time, float y)
 {
 	// this is called to create a new line, unless there is a line below the mouse
 	// if there is a line below the mouse, and if this line is opened, this adds a closing sign
-	// if that line is already closed, add un unlinked detect inside it
 
-	foreach (PhStripLine *l, _lines)
-	{
+	foreach (PhStripLine *l, _lines) {
 		if (l->timeIn() == time
 				&& l->y() == y) {
 			// there is a line starting there
@@ -102,12 +103,12 @@ void PhStripLineModel::addDetect(PhTime time, float y)
 		}
 	}
 
-	foreach (PhStripLine *l, _lines)
-	{
+	foreach (PhStripLine *l, _lines) {
 		if (l->textModel()->rowCount() == 0
 				&& l->timeIn() <= time
 				&& l->y() == y) {
 			// found a matching opened line
+			// add an empty text with the proper timeout
 			PhStripDetect::PhDetectType typeOut = PhStripDetect::On;
 			PhStripText *text = new PhStripText("", time - l->timeIn(), typeOut);
 			l->textModel()->append(text);
@@ -115,8 +116,7 @@ void PhStripLineModel::addDetect(PhTime time, float y)
 		}
 	}
 
-	foreach (PhStripLine *l, _lines)
-	{
+	foreach (PhStripLine *l, _lines) {
 		PhTime timeOut = l->timeIn();
 		QListIterator<PhStripText *> i = l->textModel()->iterator();
 		while(i.hasNext()) {
@@ -130,8 +130,7 @@ void PhStripLineModel::addDetect(PhTime time, float y)
 		}
 	}
 
-	foreach (PhStripLine *l, _lines)
-	{
+	foreach (PhStripLine *l, _lines) {
 		PhTime timeOut = l->timeIn();
 		QListIterator<PhStripText *> i = l->textModel()->iterator();
 		while(i.hasNext()) {
@@ -142,9 +141,7 @@ void PhStripLineModel::addDetect(PhTime time, float y)
 				&& timeOut > time
 				&& l->y() == y) {
 			// found a matching closed line
-			PhStripDetect::PhDetectType type = PhStripDetect::On;
-			PhStripDetect *detect = new PhStripDetect(type, time - l->timeIn());
-			l->detectModel()->append(detect);
+			// cannot add a new one!
 			return;
 		}
 	}

@@ -337,8 +337,8 @@ Item {
             var success = strip.editTextAt(textX, textY);
 
             if (!success) {
-                // if there is none, this adds a detect
-                doc.lineModel.addDetect(time, textY);
+                // if there is none, this adds a line
+                doc.lineModel.add(time, textY);
             }
         }
     }
@@ -404,6 +404,20 @@ Item {
 
             // insert cut
             doc.cutModel.add(time)
+        }
+    }
+
+    Shortcut {
+        sequence: "4"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = 0;
+            var textX = time / horizontalTimePerPixel
+            console.log("4 shortcut " + time + " " + textX + " " + textY);
+
+            // if there is a line below, this should add a detect to it
+            var success = strip.addDetectAt(textX, textY);
         }
     }
 }
