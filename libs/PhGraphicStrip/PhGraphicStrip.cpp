@@ -73,13 +73,6 @@ void PhGraphicStrip::onDocChanged()
 		rulerTime += timeBetweenRuler;
 	}
 
-	// loops
-	_loopModel.clear();
-	foreach(PhStripLoop * loop, _doc.loops()) {
-		PhNextPeople *loopPeople = new PhNextPeople(loop->label(), "", loop->timeIn(), true, 0);
-		_loopModel.addNextPeople(loopPeople);
-	}
-
 	QList<float> trackY;
 	trackY << 0 << 0.25 << 0.5 << 0.75;
 

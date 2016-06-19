@@ -389,7 +389,7 @@ Item {
             console.log("0 shortcut " + time + " " + textX + " " + textY);
 
             // insert loop
-            doc.insertLoop(time)
+            doc.loopModel.add(time)
         }
     }
 

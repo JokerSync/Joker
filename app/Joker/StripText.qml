@@ -90,7 +90,9 @@ FocusScope {
             anchors.fill: parent
             acceptedButtons: Qt.RightButton
             onClicked: {
-                stripLineContainer.showContextMenu()
+                var posX = stripTextDelegate.x + mouse.x
+                console.log("click " + posX);
+                stripLineContainer.showContextMenu(posX)
             }
         }
     }

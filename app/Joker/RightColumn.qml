@@ -71,10 +71,10 @@ Item {
             anchors.right: parent.right
 
             Repeater {
-                model: loopModel
+                model: doc.loopModel
                 delegate: Item {
                     id: loopContainer
-                    y: timeIn/verticalTimePerPixel
+                    y: time/verticalTimePerPixel
                     anchors.left: parent.left
                     anchors.right: parent.right
 

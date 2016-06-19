@@ -34,12 +34,12 @@ Item {
         property int mouseX: 0
         property int mouseY: 0
         MenuItem {
-            text: "Add sign"
+            text: "Add phrase"
             onTriggered: {
                 var time = (stripContextMenu.mouseX - delayX) * horizontalTimePerPixel + jokerWindow.stripTime;
                 var trackHeight = stripContainer.height / 4;
                 var textY = Math.round((stripContextMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
-                console.log("add sign " + time + " " + textY);
+                console.log("add line " + time + " " + textY);
                 doc.lineModel.addDetect(time, textY);
             }
         }
@@ -339,26 +339,6 @@ Item {
     }
 
     Item {
-        id: stripLineRepeater
-        x: -stripContainer.contentX
-        height: parent.height
-
-        Repeater {
-            model: doc.lineModel
-            delegate: Line {}
-        }
-    }
-
-    // sync bar
-    Rectangle {
-        x: parent.width/6
-        y: 0
-        width: 4
-        height: parent.height
-        color: "#AAFF566C"
-    }
-
-    Item {
         x: -stripContainer.contentX
         height: parent.height
         visible: displayCuts
@@ -372,7 +352,7 @@ Item {
                 anchors.bottom: parent.bottom
 
                 Rectangle {
-                    color: invertColor? "white":"black"
+                    color: invertColor? "AAFFFFFF":"#AA000000"
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     width: cutWidth
@@ -412,10 +392,10 @@ Item {
         height: parent.height
 
         Repeater {
-            model: loopModel
+            model: doc.loopModel
             delegate: Item {
-                id: loopContainer
-                x: timeIn/horizontalTimePerPixel
+                id: loopDelegate
+                x: time/horizontalTimePerPixel
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
 
@@ -425,6 +405,12 @@ Item {
                     anchors.bottom: parent.bottom
                     x: -width/2
                     width: parent.height / 40
+
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.RightButton
+                        onClicked: loopDelegate.showContextMenu()
+                    }
                 }
 
                 Rectangle {
@@ -436,6 +422,12 @@ Item {
                     x: -width/2
                     width: parent.height / 40
                     rotation: 45
+
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.RightButton
+                        onClicked: loopDelegate.showContextMenu()
+                    }
                 }
 
                 Rectangle {
@@ -447,18 +439,69 @@ Item {
                     x: -width/2
                     width: parent.height / 40
                     rotation: -45
+
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.RightButton
+                        onClicked: loopDelegate.showContextMenu()
+                    }
                 }
 
                 Text {
-                    text: name
+                    text: label
                     color: "gray"
                     font.pixelSize: parent.height/4
                     font.family: "Arial"
                     x: 10
                     y: parent.height * 2 / 3
+
+                    MouseArea {
+                        anchors.fill: parent
+                        acceptedButtons: Qt.RightButton
+                        onClicked: loopDelegate.showContextMenu()
+                    }
+                }
+
+                Menu {
+                    id: loopContextMenu
+                    title: "Edit"
+                    property int index: 0
+                    MenuItem {
+                        text: "Delete loop"
+                        onTriggered: {
+                            console.log("Loop " + loopContextMenu.index);
+                            doc.loopModel.remove(loopContextMenu.index);
+                        }
+                    }
+                }
+
+                function showContextMenu() {
+                    console.log("index: " + model.index);
+                    loopContextMenu.index = model.index;
+                    loopContextMenu.popup();
                 }
             }
         }
+    }
+
+    Item {
+        id: stripLineRepeater
+        x: -stripContainer.contentX
+        height: parent.height
+
+        Repeater {
+            model: doc.lineModel
+            delegate: Line {}
+        }
+    }
+
+    // sync bar
+    Rectangle {
+        x: parent.width/6
+        y: 0
+        width: 4
+        height: parent.height
+        color: "#AAFF566C"
     }
 
     function snapToFrame(pixelChange) {

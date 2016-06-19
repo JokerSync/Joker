@@ -10,7 +10,7 @@ Item {
         width: 18
         height: 18
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
+        anchors.bottom: parent.bottom
 
         Drag.keys: "Ctrl"
 

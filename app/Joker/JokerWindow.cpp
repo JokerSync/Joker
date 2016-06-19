@@ -70,7 +70,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
 	_context->setContextProperty("nextPeopleModel", _strip.nextPeopleModel());
 	_context->setContextProperty("rulerModel", _strip.rulerModel());
-	_context->setContextProperty("loopModel", _strip.loopModel());
 	_context->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
 	_context->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
 	_context->setContextProperty("textFontUrl", QUrl::fromLocalFile(_settings->textFontFile()));

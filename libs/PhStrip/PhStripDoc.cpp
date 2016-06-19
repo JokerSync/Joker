@@ -14,7 +14,8 @@
 
 PhStripDoc::PhStripDoc() :
 	_lineModel(new PhStripLineModel()),
-	_cutModel(new PhStripCutModel())
+	_cutModel(new PhStripCutModel()),
+	_loopModel(new PhStripLoopModel())
 {
 	reset();
 }
@@ -160,7 +161,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 				PhTime timeIn = PhTimeCode::timeFromString(elem.attribute("timecode"), tcType);
 				// Reading loops
 				if(elem.tagName() == "loop")
-					_loops.append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
+					_loopModel->append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
 				// Reading cuts
 				else if(elem.tagName() == "shot")
 					_cutModel->append(new PhStripCut(timeIn, PhStripCut::Simple));
@@ -282,16 +283,18 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	ptree ptBody;
 
 	// export <loop> list
-	foreach (const PhStripLoop *loop, this->loops()) {
+	QListIterator<PhStripLoop*> i = _loopModel->iterator();
+	while (i.hasNext()) {
+		PhStripLoop *loop = i.next();
 		ptree ptLoop;
 		ptLoop.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(loop->timeIn(), _videoTimeCodeType).toStdString());
 		ptBody.push_back(std::make_pair("loop", ptLoop));
 	}
 
 	// export <cut> list
-	QListIterator<PhStripCut*> i = _cutModel->iterator();
-	while(i.hasNext()) {
-		PhStripCut *cut = i.next();
+	QListIterator<PhStripCut*> j = _cutModel->iterator();
+	while(j.hasNext()) {
+		PhStripCut *cut = j.next();
 		ptree ptShot;
 		ptShot.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(cut->timeIn(), _videoTimeCodeType).toStdString());
 		ptBody.push_back(std::make_pair("shot", ptShot));
@@ -673,6 +676,11 @@ PhStripCutModel *PhStripDoc::cutModel() const
 	return _cutModel;
 }
 
+PhStripLoopModel *PhStripDoc::loopModel() const
+{
+	return _loopModel;
+}
+
 bool PhStripDoc::importMosFile(const QString &fileName)
 {
 	PHDEBUG << "===============" << fileName << "===============";
@@ -882,7 +890,7 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 				label = "off";
 			else if(label.isEmpty())
 				label = QString::number(number);
-			_loops.append(new PhStripLoop(loopTime, label));
+			_loopModel->append(new PhStripLoop(loopTime, label));
 		}
 	}
 
@@ -995,7 +1003,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 		QString type = loopElement.elementsByTagName("Type").at(0).toElement().text();
 		PhTime timeIn = ComputeDrbTime1(offset, loopElement.elementsByTagName("Debut").at(0).toElement().text().toLongLong(), tcType);
 		if(type == "BOUCLE") {
-			_loops.append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
+			_loopModel->append(new PhStripLoop(timeIn, QString::number(loopNumber++)));
 		}
 		else if (type == "PLAN") {
 			_cutModel->append(new PhStripCut(timeIn, PhStripCut::Simple));
@@ -1166,7 +1174,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 				_cutModel->append(new PhStripCut(time, PhStripCut::Simple));
 				break;
 			case 7:
-				_loops.append(new PhStripLoop(time, QString::number(query.value(4).toInt())));
+				_loopModel->append(new PhStripLoop(time, QString::number(query.value(4).toInt())));
 				break;
 			}
 		}
@@ -1418,7 +1426,7 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 
 	// Add a loop per minute
 	for(int i = 0; i < loopCount; i++)
-		_loops.append(new PhStripLoop(_videoTimeIn + i * 24000 * 60, QString::number(i)));
+		_loopModel->append(new PhStripLoop(_videoTimeIn + i * 24000 * 60, QString::number(i)));
 
 	emit changed();
 }
@@ -1431,10 +1439,9 @@ void PhStripDoc::reset()
 	qDeleteAll(_detects);
 	_detects.clear();
 	_lastTime = 0;
-	qDeleteAll(_loops);
-	_loops.clear();
 	_lineModel->clear();
 	_cutModel->clear();
+	_loopModel->clear();
 	qDeleteAll(_alternateTexts);
 	_alternateTexts.clear();
 
@@ -1463,7 +1470,7 @@ void PhStripDoc::addObject(PhStripObject *object)
 		PHDEBUG << "Added a cut";
 	}
 	else if(dynamic_cast<PhStripLoop*>(object)) {
-		this->_loops.append(dynamic_cast<PhStripLoop*>(object));
+		_loopModel->append(dynamic_cast<PhStripLoop*>(object));
 		PHDEBUG << "Added a loop";
 	}
 	else if(dynamic_cast<PhStripDetect*>(object)) {
@@ -1579,7 +1586,9 @@ PhTime PhStripDoc::previousLoopTime(PhTime time)
 {
 	PhTime previousLoopTime = PHTIMEMIN;
 
-	foreach(PhStripLoop* loop, _loops) {
+	QListIterator<PhStripLoop*> i = _loopModel->iterator();
+	while (i.hasNext()) {
+		PhStripLoop *loop = i.next();
 		if((loop->timeIn() < time) && (loop->timeIn() > previousLoopTime) )
 			previousLoopTime = loop->timeIn();
 	}
@@ -1652,7 +1661,9 @@ PhTime PhStripDoc::nextLoopTime(PhTime time)
 {
 	PhTime nextLoopTime = PHTIMEMAX;
 
-	foreach(PhStripLoop* loop, _loops) {
+	QListIterator<PhStripLoop*> i = _loopModel->iterator();
+	while (i.hasNext()) {
+		PhStripLoop *loop = i.next();
 		if((loop->timeIn() > time) && (loop->timeIn() < nextLoopTime) )
 			nextLoopTime = loop->timeIn();
 		else if(loop->timeIn() > nextLoopTime)
@@ -1703,22 +1714,31 @@ PhTime PhStripDoc::timeOut()
 
 PhStripLoop *PhStripDoc::nextLoop(PhTime time)
 {
-	foreach(PhStripLoop* loop, _loops) {
+	QListIterator<PhStripLoop*> i = _loopModel->iterator();
+	while (i.hasNext()) {
+		PhStripLoop *loop = i.next();
 		if(loop->timeIn() > time)
 			return loop;
 	}
+
 	return NULL;
 }
 
 PhStripLoop *PhStripDoc::previousLoop(PhTime time)
 {
-	int i = _loops.count() - 1;
-	while(i >= 0) {
-		if(_loops.at(i)->timeIn() < time)
-			return _loops.at(i);
-		i--;
+	PhTime previousLoopTime = PHTIMEMIN;
+	PhStripLoop *previousLoop = NULL;
+
+	QListIterator<PhStripLoop*> i = _loopModel->iterator();
+	while (i.hasNext()) {
+		PhStripLoop *loop = i.next();
+		if((loop->timeIn() < time) && (loop->timeIn() > previousLoopTime) ) {
+			previousLoopTime = loop->timeIn();
+			previousLoop = loop;
+		}
 	}
-	return NULL;
+
+	return previousLoop;
 }
 
 QString PhStripDoc::filePath()
@@ -1807,11 +1827,6 @@ bool PhStripDoc::forceRatio169() const
 PhStripLineModel *PhStripDoc::lineModel()
 {
 	return _lineModel;
-}
-
-QList<PhStripLoop *> PhStripDoc::loops()
-{
-	return _loops;
 }
 
 QList<PhStripDetect *> PhStripDoc::detects(PhTime timeIn, PhTime timeOut)

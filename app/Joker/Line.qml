@@ -69,7 +69,8 @@ Item {
         model: lineModel.unlinkedDetects
         delegate: Detect {
             x: time/horizontalTimePerPixel
-            anchors.bottom: stripLineContainer.bottom
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
             property int lineIndex: index
         }
     }
@@ -107,11 +108,20 @@ Item {
         id: lineContextMenu
         title: "Edit"
         property int index: 0
+        property int mouseX: 0
         MenuItem {
             text: "Delete phrase"
             onTriggered: {
-                console.log("Line " + lineContextMenu.index);
+                console.log("Line " + lineContextMenu.index + " " + textRow.width);
                 doc.lineModel.remove(lineContextMenu.index);
+            }
+        }
+        MenuItem {
+            text: "Add detect"
+            onTriggered: {
+                var time = lineContextMenu.mouseX * horizontalTimePerPixel;
+                console.log("add detect " + time);
+                lineModel.unlinkedDetects.add(time)
             }
         }
     }
@@ -188,9 +198,10 @@ Item {
         return false;
     }
 
-    function showContextMenu() {
+    function showContextMenu(mouseX) {
         console.log("index: " + model.index);
         lineContextMenu.index = model.index;
+        lineContextMenu.mouseX = mouseX;
         lineContextMenu.popup();
     }
 }

@@ -37,6 +37,9 @@ public:
 	QString label() {
 		return _label;
 	}
+
+	void setLabel(const QString &label);
+
 private:
 	QString _label;
 };
