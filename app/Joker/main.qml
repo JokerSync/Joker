@@ -328,7 +328,7 @@ Item {
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
-            var textY = 0;
+            var textY = strip.currentTextY
             var textX = time / horizontalTimePerPixel
             console.log("Return shortcut " + time + " " + textX + " " + textY);
 
@@ -338,7 +338,8 @@ Item {
 
             if (!success) {
                 // if there is none, this adds a line
-                doc.lineModel.add(time, textY);
+                console.log("Add line " + time + " " + (strip.currentTrackNumber / 4));
+                doc.lineModel.add(time, strip.currentTrackNumber / 4);
             }
         }
     }
@@ -348,7 +349,7 @@ Item {
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
-            var textY = 0;
+            var textY = strip.currentTextY
             var textX = time / horizontalTimePerPixel
             console.log("Ctrl+Left shortcut " + time + " " + textX + " " + textY);
 
@@ -366,7 +367,7 @@ Item {
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
-            var textY = 0;
+            var textY = strip.currentTextY
             var textX = time / horizontalTimePerPixel
             console.log("Ctrl+Right shortcut " + time + " " + textX + " " + textY);
 
@@ -384,7 +385,7 @@ Item {
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
-            var textY = 0;
+            var textY = strip.currentTextY
             var textX = time / horizontalTimePerPixel
             console.log("Ctrl+Alt+Left shortcut " + time + " " + textX + " " + textY);
 
@@ -398,7 +399,7 @@ Item {
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
-            var textY = 0;
+            var textY = strip.currentTextY
             var textX = time / horizontalTimePerPixel
             console.log("Ctrl+Alt+Right shortcut " + time + " " + textX + " " + textY);
 
@@ -412,9 +413,7 @@ Item {
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
-            var textY = 0;
-            var textX = time / horizontalTimePerPixel
-            console.log("0 shortcut " + time + " " + textX + " " + textY);
+            console.log("0 shortcut " + time)
 
             // insert loop
             doc.loopModel.add(time)
@@ -426,9 +425,7 @@ Item {
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
-            var textY = 0;
-            var textX = time / horizontalTimePerPixel
-            console.log("1 shortcut " + time + " " + textX + " " + textY);
+            console.log("1 shortcut " + time);
 
             // insert cut
             doc.cutModel.add(time)
@@ -440,13 +437,34 @@ Item {
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
-            var textY = 0;
+            var textY = strip.currentTextY
             var textX = time / horizontalTimePerPixel
             console.log("4 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it
             var success = strip.addDetectAt(textX, textY);
         }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Up"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            console.log("Ctrl+Up shortcut " + strip.currentTrackNumber);
+            strip.currentTrackNumber = mod(strip.currentTrackNumber - 1, 4)
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Down"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            console.log("Ctrl+Down shortcut " + strip.currentTrackNumber);
+            strip.currentTrackNumber = mod(strip.currentTrackNumber + 1, 4)
+        }
+    }
+    function mod(n, m) {
+            return ((n % m) + m) % m;
     }
 }
 

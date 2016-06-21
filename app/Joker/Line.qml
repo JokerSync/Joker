@@ -128,15 +128,25 @@ Item {
     function editTextAt(x, y) {
         var lineX = x - stripLineContainer.x
         var lineY = y - stripLineContainer.y
-        var text = textRow.childAt(lineX, lineY);
-        if (text) {
-            console.log("line.stripTextAt found text")
-            console.log(text)
-            var textX = lineX - text.x
-            var textY = lineY - text.y
-            text.editTextAt(textX, textY)
-            return true;
+
+        if (lineY !== 0) {
+            return false
         }
+
+        // is it a text timeOut?
+        for (var i = 0; i < textRow.children.length; ++i) {
+            var text = textRow.children[i];
+            console.log(text.x + " " + text.width + " " + lineX)
+            if (lineX >= text.x && lineX <= text.x + text.width) {
+                console.log("line.stripTextAt found text")
+                console.log(text)
+                var textX = lineX - text.x
+                var textY = lineY - text.y
+                text.editTextAt(textX, textY)
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -161,7 +171,7 @@ Item {
         var pixelChange = frameChange * pixelPerFrame
         var timeChange = frameChange * jokerWindow.timePerFrame
 
-        if (lineY !== y) {
+        if (lineY !== 0) {
             return false;
         }
 
@@ -203,7 +213,9 @@ Item {
         var lineX = x - stripLineContainer.x
         var lineY = y - stripLineContainer.y
 
-        if (lineY !== y) {
+        console.log(lineY)
+
+        if (lineY !== 0) {
             return false;
         }
 

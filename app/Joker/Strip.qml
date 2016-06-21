@@ -10,6 +10,8 @@ Item {
     property int delayX: width / 6
     property int contentX: jokerWindow.stripTime / horizontalTimePerPixel - delayX
     property bool editing: false
+    property int currentTrackNumber: 0
+    property double currentTextY: height * currentTrackNumber / 4
 
     // the font name is passed from here
     FontLoader { id: stripFont; source: textFontUrl }
@@ -29,6 +31,22 @@ Item {
             x: -100
             width: doc.timeOut / horizontalTimePerPixel + 100
         }
+    }
+
+    Rectangle {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        color: "#77000000"
+        height: parent.height * parent.currentTrackNumber  / 4
+    }
+
+    Rectangle {
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: parent.height * (3 - parent.currentTrackNumber) / 4
+        color: "#77000000"
     }
 
     Menu {

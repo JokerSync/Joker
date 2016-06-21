@@ -407,18 +407,18 @@
   </action>
   <action name="actionNext_loop">
    <property name="text">
-    <string>Next loop</string>
+	<string>Next loop</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Up</string>
+	<string>Ctrl+Alt+Up</string>
    </property>
   </action>
   <action name="actionPrevious_loop">
    <property name="text">
-    <string>Previous loop</string>
+	<string>Previous loop</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Down</string>
+	<string>Ctrl+Alt+Down</string>
    </property>
   </action>
   <action name="actionDisplay_the_cuts">
