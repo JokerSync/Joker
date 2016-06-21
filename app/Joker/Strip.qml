@@ -474,4 +474,17 @@ Item {
 
         return false;
     }
+
+    function shiftDetectAt(x, y, shift) {
+        for (var i = 0; i < stripLineRepeater.children.length; ++i) {
+            var line = stripLineRepeater.children[i];
+            if (line.objectName !== "Line") {
+                continue;
+            }
+            var success = line.shiftDetectAt(x, y, shift);
+            if (success) {
+                return;
+            }
+        }
+    }
 }

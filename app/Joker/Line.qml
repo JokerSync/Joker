@@ -199,6 +199,41 @@ Item {
         return false;
     }
 
+    function shiftDetectAt(x, y, shift) {
+        var lineX = x - stripLineContainer.x
+        var lineY = y - stripLineContainer.y
+
+        if (lineY !== y) {
+            return false;
+        }
+
+        // is it an unlinked detect time?
+        var u = detectRepeater.count;
+        for (var j = 0; j < detectRepeater.count; ++j) {
+            var detect = detectRepeater.itemAt(j);
+            console.log(detect.x + " " + lineX)
+            if (Math.abs(detect.x - lineX) < 1) {
+                console.log("attaching detect time " + stripLineContainer.x + " " + shift)
+                // this will attach the detect and it will be found as a time out in the next loop
+                attachDetect(j)
+                break;
+            }
+        }
+
+        // is it a text timeOut?
+        for (var i = 0; i < textRow.children.length; ++i) {
+            var text = textRow.children[i];
+            console.log(text.x + " " + text.width + " " + lineX)
+            if (Math.abs(text.x + text.width - lineX) < 1) {
+                console.log("shifting text timeOut " + stripLineContainer.x + " " + shift)
+                text.shiftText(shift)
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     function attachDetect(detectIndex) {
         var detect = detectRepeater.itemAt(detectIndex)
         // find the text below

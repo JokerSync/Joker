@@ -380,6 +380,34 @@ Item {
     }
 
     Shortcut {
+        sequence: "Ctrl+Alt+Left"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = 0;
+            var textX = time / horizontalTimePerPixel
+            console.log("Ctrl+Alt+Left shortcut " + time + " " + textX + " " + textY);
+
+            // find the detect that is at the current time, attach it if it is detached, and shift the text
+            strip.shiftDetectAt(textX, textY, -1);
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+Alt+Right"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = 0;
+            var textX = time / horizontalTimePerPixel
+            console.log("Ctrl+Alt+Right shortcut " + time + " " + textX + " " + textY);
+
+            // find the detect that is at the current time, attach it if it is detached, and shift the text
+            strip.shiftDetectAt(textX, textY, 1);
+        }
+    }
+
+    Shortcut {
         sequence: "0"
         context: Qt.ApplicationShortcut
         onActivated: {
