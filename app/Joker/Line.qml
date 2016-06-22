@@ -179,7 +179,9 @@ Item {
         if (lineX === 0) {
             console.log("moving timeIn " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)
             timeIn += timeChange;
-            textRepeater.itemAt(0).width = textRepeater.itemAt(0).width - pixelChange
+            if (textRepeater.count > 0) {
+                textRepeater.itemAt(0).width = textRepeater.itemAt(0).width - pixelChange
+            }
             return true;
         }
 
@@ -190,6 +192,12 @@ Item {
             if (Math.abs(text.x + text.width - lineX) < 1) {
                 console.log("moving text timeOut " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)
                 text.width += pixelChange
+
+                if (textRepeater.count > i) {
+                    var nextText = textRow.children[i+1]
+                    nextText.width -= pixelChange
+                }
+
                 return true;
             }
         }

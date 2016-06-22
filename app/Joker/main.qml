@@ -283,25 +283,37 @@ Item {
     Shortcut {
         sequence: "Alt+Left"
         context: Qt.ApplicationShortcut
-        onActivated: playbackController.onPreviousFrame()
+        onActivated: {
+            pause()
+            playbackController.onPreviousFrame()
+        }
     }
 
     Shortcut {
         sequence: "Alt+Right"
         context: Qt.ApplicationShortcut
-        onActivated: playbackController.onNextFrame()
+        onActivated: {
+            pause()
+            playbackController.onNextFrame()
+        }
     }
 
     Shortcut {
         sequence: "Left"
         context: Qt.ApplicationShortcut
-        onActivated: jokerWindow.on_actionPrevious_element_triggered()
+        onActivated: {
+            pause()
+            jokerWindow.on_actionPrevious_element_triggered()
+        }
     }
 
     Shortcut {
         sequence: "Right"
         context: Qt.ApplicationShortcut
-        onActivated: jokerWindow.on_actionNext_element_triggered()
+        onActivated: {
+            pause()
+            jokerWindow.on_actionNext_element_triggered()
+        }
     }
 
     Shortcut {
@@ -330,10 +342,11 @@ Item {
             var time = jokerWindow.stripTime;
             var textY = strip.currentTextY
             var textX = time / horizontalTimePerPixel
+
             console.log("Return shortcut " + time + " " + textX + " " + textY);
+            pause()
 
             // if there is a line below, this should start editing it
-
             var success = strip.editTextAt(textX, textY);
 
             if (!success) {
@@ -463,8 +476,15 @@ Item {
             strip.currentTrackNumber = mod(strip.currentTrackNumber + 1, 4)
         }
     }
+
     function mod(n, m) {
             return ((n % m) + m) % m;
+    }
+
+    function pause() {
+        if (playbackController.rate !== 0) {
+            playbackController.onPlayPause()
+        }
     }
 }
 
