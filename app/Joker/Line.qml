@@ -137,7 +137,7 @@ Item {
         for (var i = 0; i < textRow.children.length; ++i) {
             var text = textRow.children[i];
             console.log(text.x + " " + text.width + " " + lineX)
-            if (lineX >= text.x && lineX <= text.x + text.width) {
+            if (lineX >= text.x - 0.1 && lineX <= text.x + text.width + 0.1) {
                 console.log("line.stripTextAt found text")
                 console.log(text)
                 var textX = lineX - text.x
