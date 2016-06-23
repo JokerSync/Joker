@@ -15,7 +15,7 @@ Welcome to the Joker project!
 
 Joker is available on the *Mac App Store*:
 
-[![Buy](data/img/appstore.svg)](https://itunes.apple.com/app/joker/id932002433)
+[![Buy](data/img/appstore.png)](https://itunes.apple.com/app/joker/id932002433)
 
 For *Windows* installer, go to the [release section](https://github.com/Phonations/joker/releases/latest).
 
