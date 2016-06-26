@@ -429,6 +429,17 @@ Item {
             model: doc.lineModel
             delegate: Line {}
         }
+
+//        NumberAnimation {
+//            id: animateOpacity
+//            target: stripLineRepeater
+//            properties: "x"
+//            from: -87202560 / horizontalTimePerPixel
+//            to: -87202560 / horizontalTimePerPixel - 4000
+//            duration: 10000
+//            loops: Animation.Infinite
+//            running: true
+//       }
     }
 
     // sync bar
