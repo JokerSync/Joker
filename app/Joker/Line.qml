@@ -61,6 +61,28 @@ Item {
         font.family: "Arial"
         color: "blue"
         smooth: true // smooth scaling
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: "LeftButton"
+            onDoubleClicked: {
+                peopleConnection.isEnabled = true
+                peopleSelection.show(peopleName)
+            }
+        }
+
+        Connections {
+            id: peopleConnection
+            property bool isEnabled: false
+            target: peopleSelection
+            onSelected: {
+                if (isEnabled) {
+                    console.log("onSelected " + name + " " + index)
+                    doc.assignLineToPeople(index, name)
+                    isEnabled = false
+                }
+            }
+        }
     }
 
     Repeater {

@@ -68,7 +68,7 @@ void PropertyDialog::showEvent(QShowEvent *)
 		if(timeOut > 0)
 			ui->tcOutLabel->setText(PhTimeCode::stringFromTime(timeOut, tcType));
 
-		int peopleNumber = _doc->peoples().count();
+		int peopleNumber = _doc->peopleModel()->rowCount();
 		ui->peopleNumberLabel->setText(QString::number(peopleNumber));
 
 		int charNumber = 0;

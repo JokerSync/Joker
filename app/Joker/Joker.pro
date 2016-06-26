@@ -114,7 +114,8 @@ OTHER_FILES += \
 	MediaPanel.qml \
 	Line.qml \
 	StripText.qml \
-	Detect.qml
+	Detect.qml \
+	PeopleSelection.qml
 
 RESOURCES += \
     JokerResources.qrc

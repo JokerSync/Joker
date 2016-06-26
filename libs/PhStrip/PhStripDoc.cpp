@@ -15,9 +15,11 @@
 PhStripDoc::PhStripDoc() :
 	_lineModel(new PhStripLineModel()),
 	_cutModel(new PhStripCutModel()),
-	_loopModel(new PhStripLoopModel())
+	_loopModel(new PhStripLoopModel()),
+	_peopleModel(new PhStripPeopleModel())
 {
 	reset();
+	connect(_peopleModel, &PhStripPeopleModel::dataChanged, _lineModel, &PhStripLineModel::peopleChanged);
 }
 
 
@@ -145,7 +147,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 			}
 
 			peopleMap[id] = people;
-			_peoples.append(people);
+			_peopleModel->append(people);
 		}
 	}
 
@@ -255,7 +257,10 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 	ptree roles;
 	QMap<const PhPeople*, QString> idMap;
 
-	foreach(const PhPeople *people, _peoples) {
+	QListIterator<PhPeople*> p = _peopleModel->iterator();
+	while (p.hasNext()) {
+		PhPeople *people = p.next();
+
 		// Compute an unic id:
 		QString id = computeDetXId(people->name());
 
@@ -681,6 +686,46 @@ PhStripLoopModel *PhStripDoc::loopModel() const
 	return _loopModel;
 }
 
+void PhStripDoc::assignLineToPeople(int lineIndex, QString peopleName)
+{
+	// find people with that name
+	QListIterator<PhPeople*> i = _peopleModel->iterator();
+	while (i.hasNext()) {
+		PhPeople *people = i.next();
+		if (people->name() == peopleName) {
+			_lineModel->assignLineToPeople(lineIndex, people);
+			return;
+		}
+	}
+
+	PHDEBUG << lineIndex << " " << peopleName << " not found";
+}
+
+int PhStripDoc::deletePeople(int peopleIndex)
+{
+	QString peopleName = _peopleModel->index(peopleIndex).data(PhStripPeopleModel::NameRole).toString();
+
+	int usages = 0;
+	QListIterator<PhStripLine*> i = _lineModel->iterator();
+	while (i.hasNext()) {
+		PhStripLine *line = i.next();
+		if (line->people()->name() == peopleName) {
+			usages += 1;
+		}
+	}
+
+	if (usages == 0) {
+		_peopleModel->remove(peopleIndex);
+	}
+
+	return usages;
+}
+
+PhStripPeopleModel *PhStripDoc::peopleModel() const
+{
+	return _peopleModel;
+}
+
 bool PhStripDoc::importMosFile(const QString &fileName)
 {
 	PHDEBUG << "===============" << fileName << "===============";
@@ -800,7 +845,7 @@ bool PhStripDoc::importMosFile(const QString &fileName)
 		QString name = PhFileTool::readString(f, peopleLevel, "people name");
 		PhPeople *people = new PhPeople(name, "#000000");
 		peopleMap[peopleId] = people;
-		_peoples.append(people);
+		_peopleModel->append(people);
 
 		peopleTrackMap[peopleId] = PhFileTool::readInt(f, peopleLevel, "people track") - 1;
 		for(int j = 0; j < 6; j++)
@@ -1042,7 +1087,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 	peopleFile.close();
 
 	foreach(PhPeople *people, peopleMap.values())
-		_peoples.append(people);
+		_peopleModel->append(people);
 
 	QDir dir(dirName);
 
@@ -1160,7 +1205,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 		PHDEBUG << "query failed";
 
 	foreach(PhPeople *people, peopleMap.values())
-		_peoples.append(people);
+		_peopleModel->append(people);
 
 	// Reading loops
 	if(query.exec("SELECT * FROM OBJET_TC;")) {
@@ -1361,12 +1406,13 @@ bool PhStripDoc::saveStripFile(const QString &fileName, PhTime lastTime)
 
 			xmlWriter->writeStartElement("peoples");
 			{
-				foreach(PhPeople * ppl, peoples()) {
+				QListIterator<PhPeople*> i = _peopleModel->iterator();
+				while (i.hasNext()) {
+					const PhPeople *ppl = i.next();
 					xmlWriter->writeStartElement("people");
 					xmlWriter->writeAttribute("name", ppl->name());
 					xmlWriter->writeAttribute("color", ppl->color());
 					xmlWriter->writeEndElement();
-
 				}
 			}
 			xmlWriter->writeEndElement();
@@ -1405,19 +1451,19 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 	// Creation of the Peoples
 	for (int i = 1; i <= peopleCount; i++) {
 		PhPeople *people = new PhPeople(names.at(i % nbNames) + " " + QString::number(i), "black");
-		_peoples.append(people);
+		_peopleModel->append(people);
 	}
 
 	PhTime time = _videoTimeIn;
 	// Creation of the text
 	for (int i = 0; i < textCount; i++) {
-		//Make people "talk" alternaly
-		PhPeople *people = _peoples[i % peopleCount];
-
 		PhTime timeIn = time;
 		PhTime timeOut = timeIn + content.length() * 1000;
 
 		//FIXME
+
+		//Make people "talk" alternaly
+		//PhPeople *people = _peoples[i % peopleCount];
 		//_lines->append(new PhStripLine(timeIn, people, timeOut, i % trackCount / 4, content, 0.25f));
 
 		// So the texts are all one after the other
@@ -1433,13 +1479,14 @@ void PhStripDoc::generate(QString content, int loopCount, int peopleCount, PhTim
 
 void PhStripDoc::reset()
 {
-	/* Note: clearing a QList does not free its elements. */
-	qDeleteAll(_peoples);
-	_peoples.clear();
 	_lastTime = 0;
+
+	_peopleModel->clear();
 	_lineModel->clear();
 	_cutModel->clear();
 	_loopModel->clear();
+
+	/* Note: clearing a QList does not free its elements. */
 	qDeleteAll(_alternateTexts);
 	_alternateTexts.clear();
 
@@ -1463,14 +1510,16 @@ void PhStripDoc::reset()
 
 void PhStripDoc::addPeople(PhPeople *people)
 {
-	this->_peoples.append(people);
+	_peopleModel->append(people);
 	PHDEBUG << "Added a people";
 	emit changed();
 }
 
 PhPeople *PhStripDoc::peopleByName(QString name)
 {
-	foreach(PhPeople* people, _peoples) {
+	QListIterator<PhPeople*> i = _peopleModel->iterator();
+	while (i.hasNext()) {
+		PhPeople *people = i.next();
 		if(people && people->name() == name)
 			return people;
 	}
@@ -1730,11 +1779,6 @@ QList<QString> PhStripDoc::metaKeys()
 QString PhStripDoc::metaInformation(QString key)
 {
 	return _metaInformation[key];
-}
-
-QList<PhPeople *> PhStripDoc::peoples()
-{
-	return _peoples;
 }
 
 QString PhStripDoc::title()

@@ -10,6 +10,7 @@
         <file>StripText.qml</file>
         <file>Detect.qml</file>
         <file>fontawesome.js</file>
+        <file>PeopleSelection.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file alias="fontawesome-webfont.ttf">../../data/fonts/fontawesome-webfont.ttf</file>

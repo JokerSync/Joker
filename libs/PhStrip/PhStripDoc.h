@@ -13,6 +13,7 @@
 #include "PhStrip/PhStripLineModel.h"
 #include "PhStrip/PhStripCutModel.h"
 #include "PhStrip/PhStripLoopModel.h"
+#include "PhStrip/PhStripPeopleModel.h"
 
 #include "PhPeople.h"
 #include "PhStripCut.h"
@@ -37,6 +38,7 @@ class PhStripDoc : public QObject
 	Q_PROPERTY(PhStripLineModel* lineModel READ lineModel NOTIFY changed)
 	Q_PROPERTY(PhStripCutModel* cutModel READ cutModel NOTIFY changed)
 	Q_PROPERTY(PhStripLoopModel* loopModel READ loopModel NOTIFY changed)
+	Q_PROPERTY(PhStripPeopleModel* peopleModel READ peopleModel NOTIFY changed)
 
 public:
 	/**
@@ -149,12 +151,6 @@ public:
 	 * @return
 	 */
 	int timeScale();
-
-	/**
-	 * @brief The list of peoples
-	 * @return A list.
-	 */
-	QList<PhPeople *> peoples();
 
 	PhStripLineModel *lineModel();
 
@@ -394,6 +390,12 @@ public:
 
 	PhStripLoopModel *loopModel() const;
 
+	PhStripPeopleModel *peopleModel() const;
+
+public slots:
+	void assignLineToPeople(int lineIndex, QString peopleName);
+	int deletePeople(int peopleIndex);
+
 signals:
 	/**
 	 * @brief Emit a signal when the PhStripDoc changed
@@ -435,14 +437,10 @@ private:
 
 	QString _authorName;
 
-	/**
-	 * List of PhPeople from the file
-	 */
-	QList<PhPeople *> _peoples;
-
 	PhStripLineModel *_lineModel;
 	PhStripCutModel *_cutModel;
 	PhStripLoopModel *_loopModel;
+	PhStripPeopleModel *_peopleModel;
 
 	QList<PhStripText *> _alternateTexts;
 

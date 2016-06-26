@@ -30,9 +30,12 @@ public:
 
 	QListIterator<PhStripLine *> iterator();
 
+	void assignLineToPeople(int row, PhPeople *people);
+
 public slots:
 	void add(PhTime timeIn, float y);
 	void remove(int index);
+	void peopleChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
 
 protected:
 	QHash<int, QByteArray> roleNames() const;

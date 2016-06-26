@@ -1,4 +1,7 @@
 #include "PhStripLineModel.h"
+#include "PhStripPeopleModel.h"
+
+#include "PhTools/PhDebug.h"
 
 PhStripLineModel::PhStripLineModel(QObject *parent) :
 	QAbstractListModel(parent)
@@ -56,6 +59,21 @@ bool PhStripLineModel::setData(const QModelIndex &index, const QVariant &value, 
 	}
 
 	return false;
+}
+
+void PhStripLineModel::assignLineToPeople(int row, PhPeople *people)
+{
+	QModelIndex index = this->index(row);
+
+	if (index.row() < 0 || index.row() >= _lines.count())
+		return;
+
+	PhStripLine *line = _lines[index.row()];
+
+	if (line->people() != people) {
+		line->setPeople(people);
+		emit dataChanged(index, index, QVector<int>(1, PeopleNameRole));
+	}
 }
 
 bool PhStripLineModel::removeRows(int row, int count, const QModelIndex &parent)
@@ -167,4 +185,17 @@ void PhStripLineModel::add(PhTime time, float y)
 void PhStripLineModel::remove(int index)
 {
 	removeRow(index);
+}
+
+void PhStripLineModel::peopleChanged(const QModelIndex &topLeftPeople, const QModelIndex &bottomRightPeople, const QVector<int> &roles)
+{
+	if (!roles.contains(PhStripPeopleModel::NameRole)) {
+		return;
+	}
+
+	PHDEBUG << "refreshing names";
+	// one of the name has changed! emit signals to refresh all names
+	QModelIndex topLeft = this->index(0);
+	QModelIndex bottomRight = this->index(_lines.count()-1);
+	emit dataChanged(topLeft, bottomRight, QVector<int>(1, PeopleNameRole));
 }

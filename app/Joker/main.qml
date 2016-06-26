@@ -280,6 +280,12 @@ Item {
         SystemPalette { id: pal }
     }
 
+    PeopleSelection {
+        id: peopleSelection
+        anchors.centerIn: parent
+        opacity: 0 // hide by default
+    }
+
     Shortcut {
         sequence: "Alt+Left"
         context: Qt.ApplicationShortcut
@@ -336,7 +342,7 @@ Item {
 
     Shortcut {
         sequence: "Return"
-        enabled: !strip.editing // do not steal the TextInputs event processing
+        enabled: !strip.editing && !peopleSelection.editing // do not steal the TextInputs event processing
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -485,6 +491,14 @@ Item {
         if (playbackController.rate !== 0) {
             playbackController.onPlayPause()
         }
+    }
+
+    function showPeopleSelection() {
+        peopleSelection.show()
+    }
+
+    function focusOnStrip() {
+        strip.forceActiveFocus()
     }
 }
 
