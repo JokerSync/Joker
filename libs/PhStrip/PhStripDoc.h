@@ -34,6 +34,7 @@ class PhStripDoc : public QObject
 	Q_OBJECT
 
 	Q_PROPERTY(QString fullTitle READ fullTitle NOTIFY changed)
+	Q_PROPERTY(PhTime timeIn READ timeIn NOTIFY changed)
 	Q_PROPERTY(PhTime timeOut READ timeOut NOTIFY changed)
 	Q_PROPERTY(PhStripLineModel* lineModel READ lineModel NOTIFY changed)
 	Q_PROPERTY(PhStripCutModel* cutModel READ cutModel NOTIFY changed)

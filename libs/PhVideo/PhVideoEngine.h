@@ -37,6 +37,9 @@ extern "C" {
 class PhVideoEngine : public QObject
 {
 	Q_OBJECT
+
+	Q_PROPERTY(PhTime timeIn READ timeIn NOTIFY timeInChanged)
+	Q_PROPERTY(PhTime timeOut READ timeOut NOTIFY timeOutChanged)
 public:
 	/**
 	 * @brief PhVideoEngine constructor
@@ -195,6 +198,10 @@ signals:
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
 
 	void newVideoContentProduced(const QVideoFrame &frame);
+
+	void timeInChanged();
+
+	void timeOutChanged();
 
 private:
 	bool decodeFrame(PhTime time);

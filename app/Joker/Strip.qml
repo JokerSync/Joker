@@ -28,8 +28,8 @@ Item {
             fillMode: Image.TileHorizontally
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            x: -100
-            width: doc.timeOut / horizontalTimePerPixel + 100
+            x: Math.min(videoEngine.timeIn, doc.timeIn) / horizontalTimePerPixel
+            width: Math.max(videoEngine.timeOut, doc.timeOut) / horizontalTimePerPixel - x
         }
     }
 

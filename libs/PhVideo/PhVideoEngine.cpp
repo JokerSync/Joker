@@ -110,7 +110,7 @@ bool PhVideoEngine::open(QString fileName)
 
 	if(tag) {
 		PHDEBUG << "Found timestamp:" << tag->value;
-		_timeIn = PhTimeCode::timeFromString(tag->value, _tcType);
+		setTimeIn(PhTimeCode::timeFromString(tag->value, _tcType));
 	}
 
 
@@ -215,7 +215,11 @@ void PhVideoEngine::decodeVideo()
 void PhVideoEngine::setTimeIn(PhTime timeIn)
 {
 	PHDEBUG << timeIn;
-	_timeIn = timeIn;
+	if (timeIn != _timeIn) {
+		_timeIn = timeIn;
+		emit timeInChanged();
+		emit timeOutChanged();
+	}
 }
 
 PhTime PhVideoEngine::length()

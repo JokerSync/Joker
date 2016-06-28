@@ -79,6 +79,10 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("stripBackgroundUrl", QUrl::fromLocalFile(_settings->backgroundImageLight()));
 	_context->setContextProperty("videoSource", &_videoSurface);
 
+#ifdef USE_VIDEO
+	_context->setContextProperty("videoEngine", &_videoEngine);
+#endif
+
 	// the following are updated in onPaint. They should probably be properties with signals instead
 	_context->setContextProperty("displayRuler", _settings->displayFeet());
 	_context->setContextProperty("rulerTimeIn", _settings->firstFootTime());
