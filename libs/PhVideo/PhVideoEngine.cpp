@@ -15,7 +15,7 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_settings(settings),
 	_fileName(""),
 	_tcType(PhTimeCodeType25),
-	_timeIn(0),
+	_timeIn(PHTIMEMAX),
 	_formatContext(NULL),
 	_videoStream(NULL),
 	_videoFrame(NULL),
@@ -226,7 +226,8 @@ PhTime PhVideoEngine::length()
 {
 	if(_videoStream)
 		return AVTimestamp_to_PhTime(_videoStream->duration);
-	return 0;
+
+	return PHTIMEMIN;
 }
 
 PhVideoEngine::~PhVideoEngine()

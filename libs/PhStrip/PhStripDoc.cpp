@@ -20,6 +20,11 @@ PhStripDoc::PhStripDoc() :
 {
 	reset();
 	connect(_peopleModel, &PhStripPeopleModel::dataChanged, _lineModel, &PhStripLineModel::peopleChanged);
+
+	// may eventually update timeIn and timeOut
+	connect(_lineModel, &PhStripLineModel::dataChanged, this, &PhStripDoc::onModelChanged);
+	connect(_cutModel, &PhStripCutModel::dataChanged, this, &PhStripDoc::onModelChanged);
+	connect(_loopModel, &PhStripLoopModel::dataChanged, this, &PhStripDoc::onModelChanged);
 }
 
 
@@ -1858,4 +1863,10 @@ void PhStripDoc::setVideoTimeIn(PhTime timeIn, PhTimeCodeType tcType)
 {
 	_videoTimeIn = timeIn;
 	_videoTimeCodeType = tcType;
+}
+
+void PhStripDoc::onModelChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
+{
+	// FIXME this does not really work!
+	emit changed();
 }

@@ -395,7 +395,8 @@ public:
 
 public slots:
 	void assignLineToPeople(int lineIndex, QString peopleName);
-	int deletePeople(int peopleIndex);
+	int deletePeople(int peopleIndex);	
+	void onModelChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
 
 signals:
 	/**

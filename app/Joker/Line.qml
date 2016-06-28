@@ -26,7 +26,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: (doc.timeOut - timeIn)/horizontalTimePerPixel
+        width: Math.min(videoEngine.timeOut, doc.timeOut) /horizontalTimePerPixel - x
         visible: textRepeater.count === 0
         color: "#80ff0000"
     }
