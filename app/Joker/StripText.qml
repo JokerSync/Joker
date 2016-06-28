@@ -17,6 +17,16 @@ FocusScope {
         anchors.fill: parent
         color: stripLineContainer.editing ? emptyEditing : emptyNonEditing
         visible: content.length === 0
+
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.RightButton
+            onClicked: {
+                var posX = stripTextDelegate.x + mouse.x
+                console.log("click " + posX);
+                stripLineContainer.showContextMenu(posX)
+            }
+        }
     }
 
     TextInput {
@@ -86,7 +96,6 @@ FocusScope {
         }
 
         MouseArea {
-            id: rightPressArea
             anchors.fill: parent
             acceptedButtons: Qt.RightButton
             onClicked: {
