@@ -874,6 +874,11 @@ void JokerWindow::on_actionSave_as_triggered()
 	}
 
 	fileName = QFileDialog::getSaveFileName(this, tr("Save..."), fileName, "*.detx");
+
+	if (!fileName.endsWith(".detx", Qt::CaseInsensitive)) {
+		fileName.append(".detx");
+	}
+
 	if(fileName != "") {
 		if(_doc->exportDetXFile(fileName, currentTime())) {
 			_doc->setModified(false);
