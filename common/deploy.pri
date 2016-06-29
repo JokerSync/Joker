@@ -12,7 +12,7 @@ mac {
 	app_bundle {
 		# Info.plist
 		QMAKE_POST_LINK += plutil -replace CFBundleIdentifier -string com.phonations.$$lower($${TARGET}) $${TARGET}.app/Contents/Info.plist;
-		QMAKE_POST_LINK += plutil -replace CFBundleVersion -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
+		QMAKE_POST_LINK += plutil -replace CFBundleVersion -string $${BUILD} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace LSApplicationCategoryType -string public.app-category.video $${TARGET}.app/Contents/Info.plist;
 		QMAKE_POST_LINK += plutil -replace LSMinimumSystemVersion -string 10.8 $${TARGET}.app/Contents/Info.plist;

@@ -23,6 +23,7 @@ isEmpty(ICON) {
 }
 
 VERSION = $$system(git describe --abbrev=0 --tags)
+BUILD = $$system(git rev-list $${VERSION}.. --count)
 
 PH_GIT_BRANCH = $$system(git rev-parse --abbrev-ref HEAD)
 PH_GIT_REVISION = $$system(git rev-parse HEAD)
@@ -32,7 +33,12 @@ if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {
 	PH_FULL_VERSION = $$system(git describe --tags --dirty)_$$PH_GIT_BRANCH
 }
 
+message("Version: $${VERSION} build $${BUILD} branch: $${PH_GIT_BRANCH}")
+
 # Define the preprocessor macro to get the application version in our application.
+DEFINES += PH_VERSION=\\\"$$VERSION\\\"
+DEFINES += PH_BUILD=\\\"$$BUILD\\\"
+DEFINES += PH_GIT_BRANCH=\\\"$$PH_GIT_BRANCH\\\"
 DEFINES += PH_FULL_VERSION=\\\"$$PH_FULL_VERSION\\\"
 DEFINES += PH_APP_NAME=\\\"$$TARGET\\\"
 DEFINES += PH_ORG_NAME=\\\"Phonations\\\"
