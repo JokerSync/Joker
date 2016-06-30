@@ -80,15 +80,15 @@ go_bandit([](){
 			delete view;
 		});
 
-//		it("draw_cappella_font", [&](){
-//			QFontDatabase::addApplicationFont("Cappella-Regular.ttf");
-//			font->setFamily("Cappella");
-//			AssertThat(font->ready(), IsFalse());
+		it("draw_bookerly_font", [&](){
+			QFontDatabase::addApplicationFont("Bookerly-BoldItalic.ttf");
+			font->setFamily("Bookerly");
+			AssertThat(font->ready(), IsFalse());
 
-//			AssertThat(view->compare("fontTest.Cappella-Regular.ttf.bmp", threshold), IsLessThan(776 * 576 * 0.04));
+			AssertThat(view->compare("fontTest.Bookerly-BoldItalic.ttf.bmp", threshold), IsLessThan(776 * 576 * 0.04));
 
-//			AssertThat(font->ready(), IsTrue());
-//		});
+			AssertThat(font->ready(), IsTrue());
+		});
 
 		it("draw_swenson_font", [&](){
 			QFontDatabase::addApplicationFont("SWENSON.TTF");
