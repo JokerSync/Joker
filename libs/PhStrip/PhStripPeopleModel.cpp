@@ -76,17 +76,20 @@ QHash<int, QByteArray> PhStripPeopleModel::roleNames() const {
 	return roles;
 }
 
-void PhStripPeopleModel::add(QString name)
+PhPeople* PhStripPeopleModel::add(QString name)
 {
 	QString finalName = name;
 	// verify that a people does not already exist at this time
-	int i = 0;
+	int i = 1;
 	while(indexOf(finalName) != -1) {
 		finalName = name + " #" + QString::number(i);
 		i++;
 	}
 
-	append(new PhPeople(finalName));
+	PhPeople *people = new PhPeople(finalName);
+	append(people);
+
+	return people;
 }
 
 void PhStripPeopleModel::remove(int index)
@@ -103,4 +106,15 @@ int PhStripPeopleModel::indexOf(QString name)
 		}
 	}
 	return -1;
+}
+
+PhPeople* PhStripPeopleModel::findByName(QString name)
+{
+	for(int i=0; i<rowCount(); i++) {
+		PhPeople *people = _peoples[i];
+		if (people->name() == name) {
+			return people;
+		}
+	}
+	return NULL;
 }

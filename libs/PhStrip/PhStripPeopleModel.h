@@ -21,10 +21,11 @@ public:
   bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
   void clear();
 
-  QListIterator<PhPeople *> iterator();
+  QListIterator<PhPeople *> iterator();  
+  PhPeople *findByName(QString name);
 
 public slots:
-  void add(QString name);
+  PhPeople *add(QString name);
   void remove(int index);
   int indexOf(QString name);
 

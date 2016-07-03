@@ -16,17 +16,16 @@ PhStripDoc::PhStripDoc() :
 	_lineModel(new PhStripLineModel()),
 	_cutModel(new PhStripCutModel()),
 	_loopModel(new PhStripLoopModel()),
-	_peopleModel(new PhStripPeopleModel())
+	_peopleModel(new PhStripPeopleModel()),
+	_timeIn(PHTIMEMAX),
+	_timeOut(PHTIMEMIN)
 {
 	reset();
 	connect(_peopleModel, &PhStripPeopleModel::dataChanged, _lineModel, &PhStripLineModel::peopleChanged);
 
-	// may eventually update timeIn and timeOut
-	connect(_lineModel, &PhStripLineModel::dataChanged, this, &PhStripDoc::onModelChanged);
-	connect(_cutModel, &PhStripCutModel::dataChanged, this, &PhStripDoc::onModelChanged);
-	connect(_loopModel, &PhStripLoopModel::dataChanged, this, &PhStripDoc::onModelChanged);
+	connect(_lineModel, &PhStripLineModel::timeInChanged, this, &PhStripDoc::updateTimeIn);
+	connect(_lineModel, &PhStripLineModel::timeOutChanged, this, &PhStripDoc::updateTimeOut);
 }
-
 
 bool PhStripDoc::importDetXFile(QString fileName)
 {
@@ -704,6 +703,71 @@ void PhStripDoc::assignLineToPeople(int lineIndex, QString peopleName)
 	}
 
 	PHDEBUG << lineIndex << " " << peopleName << " not found";
+}
+
+void PhStripDoc::addLine(PhTime time, float y)
+{
+	// find the closest line in the past in this track
+	PhTime peopleTime = PHTIMEMIN;
+	PhPeople *people = NULL;
+	QListIterator<PhStripLine *> i = _lineModel->iterator();
+	while (i.hasNext()) {
+		PhStripLine *line = i.next();
+		if (line->y() == y && line->timeOut() < time && line->timeOut() > peopleTime) {
+			peopleTime = line->timeOut();
+			people = line->people();
+		}
+	}
+
+	if (people == NULL) {
+		// find the closest line in the future in this track
+		peopleTime = PHTIMEMAX;
+		QListIterator<PhStripLine *> i = _lineModel->iterator();
+		while (i.hasNext()) {
+			PhStripLine *line = i.next();
+			if (line->y() == y && line->timeIn() > time && line->timeIn() < peopleTime) {
+				peopleTime = line->timeIn();
+				people = line->people();
+			}
+		}
+	}
+
+	if (people == NULL) {
+		people = _peopleModel->add("New");
+	}
+
+	_lineModel->add(time, y, people);
+}
+
+void PhStripDoc::updateTimeIn()
+{
+	PhTime timeIn = _lineModel->timeIn();
+	PHDEBUG << timeIn;
+	setTimeIn(timeIn);
+}
+
+void PhStripDoc::updateTimeOut()
+{
+	PhTime timeOut = _lineModel->timeOut();
+	setTimeOut(timeOut);
+}
+
+void PhStripDoc::setTimeIn(PhTime timeIn)
+{
+	if (_timeIn != timeIn) {
+		PHDEBUG << timeIn;
+		_timeIn = timeIn;
+		emit timeInChanged();
+	}
+}
+
+void PhStripDoc::setTimeOut(PhTime timeOut)
+{
+	if (_timeOut != timeOut) {
+		PHDEBUG << timeOut;
+		_timeOut = timeOut;
+		emit timeOutChanged();
+	}
 }
 
 int PhStripDoc::deletePeople(int peopleIndex)
@@ -1729,12 +1793,12 @@ PhTime PhStripDoc::nextElementTime(PhTime time)
 
 PhTime PhStripDoc::timeIn()
 {
-	return nextElementTime(0);
+	return _timeIn;
 }
 
 PhTime PhStripDoc::timeOut()
 {
-	return previousElementTime(PHTIMEMAX);
+	return _timeOut;
 }
 
 PhStripLoop *PhStripDoc::nextLoop(PhTime time)
@@ -1863,10 +1927,4 @@ void PhStripDoc::setVideoTimeIn(PhTime timeIn, PhTimeCodeType tcType)
 {
 	_videoTimeIn = timeIn;
 	_videoTimeCodeType = tcType;
-}
-
-void PhStripDoc::onModelChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
-{
-	// FIXME this does not really work!
-	emit changed();
 }

@@ -9,7 +9,7 @@
 #include "PhStrip/PhStripDetectModel.h"
 #include "PhStrip/PhStripDetect.h"
 
-class PhStripLine : QObject
+class PhStripLine : public QObject
 {
 	Q_OBJECT
 
@@ -37,9 +37,7 @@ public:
 		return _timeIn;
 	}
 
-	void setTimeIn(PhTime timeIn) {
-		_timeIn = timeIn;
-	}
+	void setTimeIn(PhTime timeIn);
 
 	PhStripDetect::PhDetectType typeIn() const;
 
@@ -62,25 +60,21 @@ public:
 
 	PhTime duration() const;
 
-public slots:
-	//	void refreshText();
+	PhTime timeOut() const;
 
-	//	void onTimeInChanged();
+signals:
+	void timeOutChanged();
 
-//	void onTimeOutChanged();
-
-//	void onDetectInserted(const QModelIndex &parent, int first, int last);
-
-//	void onDetectRemoved(const QModelIndex &parent, int first, int last);
-
-//	void onDetectChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
-
-//	void onTextChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
+private slots:
+	void updateTimeOut();
 
 private:
+	void setTimeOut(PhTime timeOut);
+
 	PhStripDetectModel *_detectModel;
 	PhStripTextModel *_textModel;
 	PhTime _timeIn;
+	PhTime _timeOut;
 	PhStripDetect::PhDetectType _typeIn;
 	PhPeople *_people;
 	float _y;

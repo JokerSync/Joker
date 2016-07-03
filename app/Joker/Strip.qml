@@ -30,6 +30,9 @@ Item {
             anchors.bottom: parent.bottom
             x: Math.min(videoEngine.timeIn, doc.timeIn) / horizontalTimePerPixel
             width: Math.max(videoEngine.timeOut, doc.timeOut) / horizontalTimePerPixel - x
+
+            onXChanged: console.log(videoEngine.timeIn + " " + doc.timeIn)
+            onWidthChanged: console.log(videoEngine.timeOut + " " + doc.timeOut)
         }
     }
 

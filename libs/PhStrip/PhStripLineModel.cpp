@@ -4,7 +4,9 @@
 #include "PhTools/PhDebug.h"
 
 PhStripLineModel::PhStripLineModel(QObject *parent) :
-	QAbstractListModel(parent)
+	QAbstractListModel(parent),
+	_timeIn(PHTIMEMAX),
+	_timeOut(PHTIMEMIN)
 {
 }
 
@@ -13,6 +15,16 @@ void PhStripLineModel::append(PhStripLine *line)
 	beginInsertRows(QModelIndex(), rowCount(), rowCount());
 	_lines << line;
 	endInsertRows();
+
+	if (line->timeIn() < _timeIn) {
+		setTimeIn(line->timeIn());
+	}
+
+	if (line->timeOut() > _timeOut) {
+		setTimeOut(line->timeOut());
+	}
+
+	connect(line, &PhStripLine::timeOutChanged, this, &PhStripLineModel::updateTimeOut);
 }
 
 int PhStripLineModel::rowCount(const QModelIndex & parent) const {
@@ -47,6 +59,8 @@ bool PhStripLineModel::setData(const QModelIndex &index, const QVariant &value, 
 		if (line->timeIn() != value.toInt()) {
 			line->setTimeIn(value.toInt());
 			emit dataChanged(index, index, QVector<int>(1, role));
+			updateTimeIn();
+			updateTimeOut();
 		}
 		return true;
 	}
@@ -76,12 +90,27 @@ void PhStripLineModel::assignLineToPeople(int row, PhPeople *people)
 	}
 }
 
+PhTime PhStripLineModel::timeIn()
+{
+	return _timeIn;
+}
+
+PhTime PhStripLineModel::timeOut()
+{
+	return _timeOut;
+}
+
 bool PhStripLineModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 	beginRemoveRows(parent, row, row + count - 1);
-	PhStripLine *line = _lines.takeAt(row);
-	delete line;
+	for(int i=0; i<count; i++) {
+		PhStripLine *line = _lines.takeAt(row);
+		delete line;
+	}
 	endRemoveRows();
+
+	updateTimeIn();
+	updateTimeOut();
 }
 
 QHash<int, QByteArray> PhStripLineModel::roleNames() const {
@@ -95,11 +124,54 @@ QHash<int, QByteArray> PhStripLineModel::roleNames() const {
 	return roles;
 }
 
+void PhStripLineModel::setTimeIn(const PhTime &timeIn)
+{
+	if (_timeIn != timeIn) {
+		_timeIn = timeIn;
+		emit timeInChanged();
+	}
+}
+
+void PhStripLineModel::setTimeOut(const PhTime &timeOut)
+{
+	if (_timeOut != timeOut) {
+		_timeOut = timeOut;
+		emit timeOutChanged();
+	}
+}
+
+void PhStripLineModel::updateTimeIn()
+{
+	PhTime timeIn = PHTIMEMAX;
+	foreach(PhStripLine *line, _lines) {
+		if (line->timeIn() < timeIn) {
+			timeIn = line->timeIn();
+		}
+	}
+
+	setTimeIn(timeIn);
+}
+
+void PhStripLineModel::updateTimeOut()
+{
+	PhTime timeOut = PHTIMEMIN;
+	foreach(PhStripLine *line, _lines) {
+		if (line->timeOut() > timeOut) {
+			timeOut = line->timeOut();
+		}
+	}
+
+	setTimeOut(timeOut);
+}
+
 void PhStripLineModel::clear() {
 	beginRemoveRows(QModelIndex(), 0, rowCount());
 	qDeleteAll(_lines);
 	_lines.clear();
 	endRemoveRows();
+
+	setTimeIn(PHTIMEMAX);
+	setTimeOut(PHTIMEMIN);
 }
 
 QListIterator<PhStripLine *> PhStripLineModel::iterator()
@@ -107,7 +179,7 @@ QListIterator<PhStripLine *> PhStripLineModel::iterator()
 	return QListIterator<PhStripLine *>(_lines);
 }
 
-void PhStripLineModel::add(PhTime time, float y)
+void PhStripLineModel::add(PhTime time, float y, PhPeople *people)
 {
 	// this is called to create a new line, unless there is a line below the mouse
 	// if there is a line below the mouse, and if this line is opened, this adds a closing sign
@@ -165,18 +237,7 @@ void PhStripLineModel::add(PhTime time, float y)
 	}
 
 	PhStripDetect::PhDetectType typeIn = PhStripDetect::On;
-	PhPeople *people;
 	float height = 0.25;
-
-	// FIXME
-	if (_lines.length() > 0)
-	{
-		people = _lines[0]->people();
-	}
-	else
-	{
-		people = new PhPeople();
-	}
 
 	PhStripLine *line = new PhStripLine(time, typeIn, people, y, height);
 	append(line);

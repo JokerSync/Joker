@@ -34,8 +34,8 @@ class PhStripDoc : public QObject
 	Q_OBJECT
 
 	Q_PROPERTY(QString fullTitle READ fullTitle NOTIFY changed)
-	Q_PROPERTY(PhTime timeIn READ timeIn NOTIFY changed)
-	Q_PROPERTY(PhTime timeOut READ timeOut NOTIFY changed)
+	Q_PROPERTY(PhTime timeIn READ timeIn NOTIFY timeInChanged)
+	Q_PROPERTY(PhTime timeOut READ timeOut NOTIFY timeOutChanged)
 	Q_PROPERTY(PhStripLineModel* lineModel READ lineModel NOTIFY changed)
 	Q_PROPERTY(PhStripCutModel* cutModel READ cutModel NOTIFY changed)
 	Q_PROPERTY(PhStripLoopModel* loopModel READ loopModel NOTIFY changed)
@@ -396,15 +396,24 @@ public:
 public slots:
 	void assignLineToPeople(int lineIndex, QString peopleName);
 	int deletePeople(int peopleIndex);	
-	void onModelChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
+	void addLine(PhTime time, float y);
 
 signals:
 	/**
 	 * @brief Emit a signal when the PhStripDoc changed
 	 */
 	void changed();
+	void timeInChanged();
+	void timeOutChanged();
+
+private slots:
+	void updateTimeIn();
+	void updateTimeOut();
 
 private:
+	void setTimeIn(PhTime timeIn);
+	void setTimeOut(PhTime timeOut);
+
 	QString _generator;
 	/**
 	 * Title of the corresponding audiovisual content.
@@ -443,6 +452,9 @@ private:
 	PhStripCutModel *_cutModel;
 	PhStripLoopModel *_loopModel;
 	PhStripPeopleModel *_peopleModel;
+
+	PhTime _timeIn;
+	PhTime _timeOut;
 
 	QList<PhStripText *> _alternateTexts;
 

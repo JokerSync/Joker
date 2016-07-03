@@ -93,6 +93,10 @@ public:
 	 * @return A time value.
 	 */
 	PhTime timeOut() {
+		if (_timeIn == PHTIMEMAX) {
+			return PHTIMEMIN;
+		}
+
 		return _timeIn + length();
 	}
 

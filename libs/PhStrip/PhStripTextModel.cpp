@@ -1,7 +1,8 @@
 #include "PhStripTextModel.h"
 
 PhStripTextModel::PhStripTextModel(QObject *parent) :
-	QAbstractListModel(parent)
+	QAbstractListModel(parent),
+	_duration(0)
 {
 }
 
@@ -10,6 +11,8 @@ void PhStripTextModel::append(PhStripText *text)
 	beginInsertRows(QModelIndex(), rowCount(), rowCount());
 	_texts << text;
 	endInsertRows();
+
+	updateDuration();
 }
 
 int PhStripTextModel::rowCount(const QModelIndex & parent) const {
@@ -48,6 +51,7 @@ bool PhStripTextModel::setData(const QModelIndex &index, const QVariant &value, 
 		if (stripText->duration() != value.toInt()) {
 			stripText->setDuration(value.toInt());
 			emit dataChanged(index, index, QVector<int>(1, role));
+			updateDuration();
 		}
 		return true;
 	}
@@ -65,9 +69,13 @@ bool PhStripTextModel::setData(const QModelIndex &index, const QVariant &value, 
 bool PhStripTextModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 	beginRemoveRows(parent, row, row + count - 1);
-	PhStripText *text = _texts.takeAt(row);
-	delete text;
+	for(int i=0; i<count; i++) {
+		PhStripText *text = _texts.takeAt(row);
+		delete text;
+	}
 	endRemoveRows();
+
+	updateDuration();
 }
 
 QHash<int, QByteArray> PhStripTextModel::roleNames() const {
@@ -78,16 +86,40 @@ QHash<int, QByteArray> PhStripTextModel::roleNames() const {
 	return roles;
 }
 
+void PhStripTextModel::setDuration(PhTime duration)
+{
+	if (duration != _duration) {
+		_duration = duration;
+		emit durationChanged();
+	}
+}
+
+void PhStripTextModel::updateDuration()
+{
+	PhTime duration = 0;
+	foreach(PhStripText *text, _texts) {
+		duration += text->duration();
+	}
+	setDuration(duration);
+}
+
 void PhStripTextModel::clear() {
 	beginRemoveRows(QModelIndex(), 0, rowCount());
 	qDeleteAll(_texts);
 	_texts.clear();
 	endRemoveRows();
+
+	setDuration(0);
 }
 
 QListIterator<PhStripText *> PhStripTextModel::iterator()
 {
 	return QListIterator<PhStripText *>(_texts);
+}
+
+PhTime PhStripTextModel::duration() const
+{
+	return _duration;
 }
 
 void PhStripTextModel::addText(QString content, PhTime timeOut, PhStripDetect::PhDetectType typeOut)
@@ -109,6 +141,8 @@ void PhStripTextModel::split(int splitIndex, int splitCharIndex, PhTime splitTim
 	beginInsertRows(QModelIndex(), splitIndex+1, splitIndex+1);
 	_texts.insert(splitIndex+1, new PhStripText(splitContent, splitDuration, PhStripDetect::Labial));
 	endInsertRows();
+
+	updateDuration();
 }
 
 void PhStripTextModel::merge(int mergeIndex)

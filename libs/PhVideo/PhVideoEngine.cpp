@@ -183,7 +183,7 @@ void PhVideoEngine::close()
 		_videoFrame = NULL;
 	}
 
-	_timeIn = 0;
+	_timeIn = PHTIMEMAX;
 	_formatContext = NULL;
 	_videoStream = NULL;
 	_audioStream = NULL;

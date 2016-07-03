@@ -26,9 +26,12 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: Math.min(videoEngine.timeOut, doc.timeOut) /horizontalTimePerPixel - x
+        width: Math.max(videoEngine.timeOut, doc.timeOut) /horizontalTimePerPixel - stripLineContainer.x
         visible: textRepeater.count === 0
         color: "#80ff0000"
+
+        onVisibleChanged: console.log(visible)
+        onWidthChanged: console.log(videoEngine.timeOut + " " + doc.timeOut + " " + stripLineContainer.x)
     }
 
     Row {

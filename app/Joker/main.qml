@@ -358,7 +358,7 @@ Item {
             if (!success) {
                 // if there is none, this adds a line
                 console.log("Add line " + time + " " + (strip.currentTrackNumber / 4));
-                doc.lineModel.add(time, strip.currentTrackNumber / 4);
+                doc.addLine(time, strip.currentTrackNumber / 4);
             }
         }
     }

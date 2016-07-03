@@ -29,6 +29,11 @@ public:
 
 	QListIterator<PhStripText *> iterator();
 
+	PhTime duration() const;
+
+signals:
+	void durationChanged();
+
 public slots:
 	void addText(QString content, PhTime timeOut, PhStripDetect::PhDetectType typeOut);
 	void removeText(int index);	
@@ -39,7 +44,11 @@ protected:
 	QHash<int, QByteArray> roleNames() const;
 
 private:
+	void setDuration(PhTime duration);
+	void updateDuration();
+
 	QList<PhStripText*> _texts;
+	PhTime _duration;
 };
 
 #endif // PHSTRIPTEXTMODEL_H
