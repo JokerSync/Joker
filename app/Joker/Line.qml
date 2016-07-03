@@ -29,9 +29,6 @@ Item {
         width: Math.max(videoEngine.timeOut, doc.timeOut) /horizontalTimePerPixel - stripLineContainer.x
         visible: textRepeater.count === 0
         color: "#80ff0000"
-
-        onVisibleChanged: console.log(visible)
-        onWidthChanged: console.log(videoEngine.timeOut + " " + doc.timeOut + " " + stripLineContainer.x)
     }
 
     Row {
@@ -279,25 +276,24 @@ Item {
         return false;
     }
 
-    function attachDetect(detectIndex) {
-        var detect = detectRepeater.itemAt(detectIndex)
+    function attachDetect(detectIndex, detectX) {
         // find the text below
-        var text = textRow.childAt(detect.x, 0);
+        var text = textRow.childAt(detectX, 0);
         if (text) {
             console.log("split found text")
 
             // find the position and split in 2
-            var pos = text.positionAt(detect.x - text.x)
+            var pos = text.positionAt(detectX - text.x)
             // add the new text
-            var splitTime = (detect.x - text.x) * horizontalTimePerPixel
+            var splitTime = (detectX - text.x) * horizontalTimePerPixel
 
-            console.log("split " + text.textIndex + " " + pos + " " + splitTime)
+            console.log("split " + detectIndex + " " + detectX + " " + text.x + " " + text.textIndex + " " + pos + " " + splitTime)
 
             stripLineContainer.lineModel.texts.split(text.textIndex, pos, splitTime)
-
-            // remove the detect
-            stripLineContainer.lineModel.unlinkedDetects.remove(detectIndex)
         }
+
+        // remove the detect
+        stripLineContainer.lineModel.unlinkedDetects.remove(detectIndex)
     }
 
     function detachDetect(textIndex) {

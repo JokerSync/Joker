@@ -26,8 +26,7 @@ Item {
             }
 
             onDoubleClicked: {
-                // attach this detect
-                stripLineContainer.attachDetect(lineDetect.index)
+                attach()
             }
 
             property int startX: 0
@@ -74,5 +73,11 @@ Item {
                 stripLineContainer.lineModel.unlinkedDetects.remove(detectContextMenu.index);
             }
         }
+    }
+
+    function attach() {
+        // attach this detect
+        console.log("attach " + index + " " + x)
+        stripLineContainer.attachDetect(index, x)
     }
 }
