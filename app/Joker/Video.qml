@@ -1,6 +1,7 @@
-import QtQuick 2.0
+import QtQuick 2.6
 import QtQml 2.2
 import QtMultimedia 5.0
+import QtQuick.Controls 1.4
 
 Item {
     id: videoContainer
@@ -65,30 +66,5 @@ Item {
         anchors.right: videoOverlay.right
         anchors.top: videoOverlay.top
         anchors.bottom: videoOverlay.bottom
-    }
-
-    Timer {
-        id: panelTimer
-        interval: 3000
-        onTriggered: {
-            mediaPanel.visible = false
-        }
-    }
-
-    MediaPanel {
-        id: mediaPanel
-        anchors.left: videoOverlay.left
-        anchors.bottom: videoOverlay.bottom
-        anchors.right: videoOverlay.right
-    }
-
-    function showPanel() {
-        panelTimer.restart()
-        mediaPanel.visible = true
-    }
-
-    function showPanelPermanent() {
-        panelTimer.stop()
-        mediaPanel.visible = true
     }
 }

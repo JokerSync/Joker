@@ -7,7 +7,7 @@ Item {
     width: 600
     height: 400
 
-    property int delayX: width / 6
+    property int delayX: window.edition ? width / 2 : width / 6
     property int contentX: jokerWindow.stripTime / horizontalTimePerPixel - delayX
     property bool editing: false
     property int currentTrackNumber: 0
@@ -447,7 +447,7 @@ Item {
 
     // sync bar
     Rectangle {
-        x: parent.width/6
+        x: delayX
         y: 0
         width: 4
         height: parent.height

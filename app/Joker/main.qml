@@ -258,6 +258,37 @@ Item {
             id: videoOverlay
             Layout.fillHeight: true
             Layout.minimumHeight: 50
+
+            MediaPanel {
+                id: mediaPanel
+                anchors.left: videoOverlay.left
+                anchors.bottom: videoOverlay.bottom
+                anchors.right: videoOverlay.right
+            }
+
+            EditionSwitch {
+                id: editionSwitch
+                visible: mediaPanel.visible
+            }
+
+
+            Timer {
+                id: panelTimer
+                interval: 3000
+                onTriggered: {
+                    mediaPanel.visible = false
+                }
+            }
+
+            function showPanel() {
+                panelTimer.restart()
+                mediaPanel.visible = true
+            }
+
+            function showPanelPermanent() {
+                panelTimer.stop()
+                mediaPanel.visible = true
+            }
         }
 
         Strip {
@@ -285,6 +316,8 @@ Item {
         anchors.centerIn: parent
         opacity: 0 // hide by default
     }
+
+    property bool edition: editionSwitch.edition
 
     Shortcut {
         sequence: "Alt+Left"

@@ -11,6 +11,7 @@
         <file>Detect.qml</file>
         <file>fontawesome.js</file>
         <file>PeopleSelection.qml</file>
+        <file>EditionSwitch.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file alias="fontawesome-webfont.ttf">../../data/fonts/fontawesome-webfont.ttf</file>

@@ -115,7 +115,8 @@ OTHER_FILES += \
 	Line.qml \
 	StripText.qml \
 	Detect.qml \
-	PeopleSelection.qml
+	PeopleSelection.qml \
+	EditionSwitch.qml
 
 RESOURCES += \
     JokerResources.qrc
