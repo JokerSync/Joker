@@ -16,7 +16,7 @@ FocusScope {
     Rectangle {
         anchors.fill: parent
         color: stripLineContainer.editing ? emptyEditing : emptyNonEditing
-        visible: content.length === 0
+        visible: content.length === 0 && window.edition
 
         MouseArea {
             anchors.fill: parent
@@ -31,6 +31,7 @@ FocusScope {
 
     TextInput {
         id: stripTextInput
+        readOnly: !window.edition
         text: content
         anchors.left: parent.left
         anchors.top: parent.top
@@ -45,7 +46,7 @@ FocusScope {
             width: 2*stripTextInput.width/stripTextItem2.width
             height: stripTextInput.height
             color: stripTextInput.color
-            visible: stripTextInput.activeFocus
+            visible: stripTextInput.activeFocus && window.edition
 
             SequentialAnimation on visible {
                     loops: Animation.Infinite
@@ -96,6 +97,7 @@ FocusScope {
         }
 
         MouseArea {
+            enabled: window.edition
             anchors.fill: parent
             acceptedButtons: Qt.RightButton
             onClicked: {
@@ -109,6 +111,7 @@ FocusScope {
     // drag mouse area
     MouseArea {
         id: dragArea
+        enabled: window.edition && !stripTextInput.activeFocus
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
         drag{
@@ -118,9 +121,8 @@ FocusScope {
             smoothed: true
         }
 
-        enabled: !stripTextInput.activeFocus
-
         onDoubleClicked: {
+            console.log("double click on text")
             editTextAt(mouseX, mouseY)
         }
 
@@ -141,6 +143,7 @@ FocusScope {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.right
         color: "steelblue"
+        visible: window.edition
 
         MouseArea {
             anchors.fill: parent

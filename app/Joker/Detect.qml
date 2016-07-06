@@ -12,6 +12,7 @@ Item {
         height: 18
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
+        visible: window.edition
 
         Drag.keys: "Ctrl"
 
@@ -54,6 +55,7 @@ Item {
             id: rightPressArea
             anchors.fill: parent
             acceptedButtons: Qt.RightButton
+            enabled: window.edition
             onClicked: {
                 console.log("index: " + model.index);
                 detectContextMenu.index = model.index;

@@ -375,7 +375,7 @@ Item {
 
     Shortcut {
         sequence: "Return"
-        enabled: !strip.editing && !peopleSelection.editing // do not steal the TextInputs event processing
+        enabled: window.edition && !strip.editing && !peopleSelection.editing // do not steal the TextInputs event processing
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -398,6 +398,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+Left"
+        enabled: window.edition
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -416,6 +417,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+Right"
+        enabled: window.edition
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -434,6 +436,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+Alt+Left"
+        enabled: window.edition
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -448,6 +451,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+Alt+Right"
+        enabled: window.edition
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -462,6 +466,7 @@ Item {
 
     Shortcut {
         sequence: "0"
+        enabled: window.edition
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -474,6 +479,7 @@ Item {
 
     Shortcut {
         sequence: "1"
+        enabled: window.edition
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -486,6 +492,7 @@ Item {
 
     Shortcut {
         sequence: "4"
+        enabled: window.edition
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -500,6 +507,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+Up"
+        enabled: window.edition
         context: Qt.ApplicationShortcut
         onActivated: {
             console.log("Ctrl+Up shortcut " + strip.currentTrackNumber);
@@ -509,6 +517,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+Down"
+        enabled: window.edition
         context: Qt.ApplicationShortcut
         onActivated: {
             console.log("Ctrl+Down shortcut " + strip.currentTrackNumber);

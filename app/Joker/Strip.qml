@@ -13,6 +13,12 @@ Item {
     property int currentTrackNumber: 0
     property double currentTextY: height * currentTrackNumber / 4
 
+    Behavior on delayX {
+        NumberAnimation {
+            easing.type: Easing.InOutCubic
+        }
+    }
+
     // the font name is passed from here
     FontLoader { id: stripFont; source: textFontUrl }
 
@@ -42,6 +48,20 @@ Item {
         anchors.right: parent.right
         color: "#77000000"
         height: parent.height * parent.currentTrackNumber  / 4
+        opacity: window.edition
+
+        Behavior on opacity {
+            NumberAnimation {
+                easing.type: Easing.Linear
+            }
+        }
+
+        Behavior on height {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.Linear
+            }
+        }
     }
 
     Rectangle {
@@ -50,6 +70,20 @@ Item {
         anchors.right: parent.right
         height: parent.height * (3 - parent.currentTrackNumber) / 4
         color: "#77000000"
+        opacity: window.edition
+
+        Behavior on opacity {
+            NumberAnimation {
+                easing.type: Easing.Linear
+            }
+        }
+
+        Behavior on height {
+            NumberAnimation {
+                duration: 100
+                easing.type: Easing.Linear
+            }
+        }
     }
 
     Menu {
@@ -73,6 +107,7 @@ Item {
         id: stripArea
         anchors.fill: parent
         acceptedButtons: Qt.RightButton
+        enabled: window.edition
         onClicked: {
             console.log("click " + mouse.x + " " + mouse.y);
             stripContextMenu.mouseX = mouse.x;
@@ -298,6 +333,7 @@ Item {
 
                     MouseArea {
                         id: rightPressArea
+                        enabled: window.edition
                         anchors.fill: parent
                         acceptedButtons: Qt.RightButton
                         onClicked: cutDelegate.showContextMenu()
@@ -346,6 +382,7 @@ Item {
                     width: parent.height / 40
 
                     MouseArea {
+                        enabled: window.edition
                         anchors.fill: parent
                         acceptedButtons: Qt.RightButton
                         onClicked: loopDelegate.showContextMenu()
@@ -363,6 +400,7 @@ Item {
                     rotation: 45
 
                     MouseArea {
+                        enabled: window.edition
                         anchors.fill: parent
                         acceptedButtons: Qt.RightButton
                         onClicked: loopDelegate.showContextMenu()
@@ -380,6 +418,7 @@ Item {
                     rotation: -45
 
                     MouseArea {
+                        enabled: window.edition
                         anchors.fill: parent
                         acceptedButtons: Qt.RightButton
                         onClicked: loopDelegate.showContextMenu()
@@ -395,6 +434,7 @@ Item {
                     y: parent.height * 2 / 3
 
                     MouseArea {
+                        enabled: window.edition
                         anchors.fill: parent
                         acceptedButtons: Qt.RightButton
                         onClicked: loopDelegate.showContextMenu()

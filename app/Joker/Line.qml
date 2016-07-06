@@ -27,7 +27,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         width: Math.max(videoEngine.timeOut, doc.timeOut) /horizontalTimePerPixel - stripLineContainer.x
-        visible: textRepeater.count === 0
+        visible: textRepeater.count === 0 && window.edition
         color: "#80ff0000"
     }
 
@@ -63,6 +63,7 @@ Item {
         smooth: true // smooth scaling
 
         MouseArea {
+            enabled: window.edition
             anchors.fill: parent
             acceptedButtons: "LeftButton"
             onDoubleClicked: {
@@ -105,6 +106,7 @@ Item {
         color: "steelblue"
         anchors.horizontalCenter: parent.left
         anchors.bottom: parent.bottom
+        visible: window.edition
 
         MouseArea {
             anchors.fill: parent
