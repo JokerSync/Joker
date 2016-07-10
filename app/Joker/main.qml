@@ -233,7 +233,7 @@ Item {
         width: parent.width
         anchors.top: parent.top
         anchors.left: parent.left
-        visible: titleRectVisible
+        visible: settings.displayNextText && doc.fullTitle.length > 0
 
         Text {
             id: titleLabel
@@ -380,7 +380,7 @@ Item {
         onActivated: {
             var time = jokerWindow.stripTime;
             var textY = strip.currentTextY
-            var textX = time / horizontalTimePerPixel
+            var textX = time / settings.horizontalTimePerPixel
 
             console.log("Return shortcut " + time + " " + textX + " " + textY);
             pause()
@@ -403,7 +403,7 @@ Item {
         onActivated: {
             var time = jokerWindow.stripTime;
             var textY = strip.currentTextY
-            var textX = time / horizontalTimePerPixel
+            var textX = time / settings.horizontalTimePerPixel
             console.log("Ctrl+Left shortcut " + time + " " + textX + " " + textY);
 
             // find the detect that is at the current time and move it one frame to the left
@@ -422,7 +422,7 @@ Item {
         onActivated: {
             var time = jokerWindow.stripTime;
             var textY = strip.currentTextY
-            var textX = time / horizontalTimePerPixel
+            var textX = time / settings.horizontalTimePerPixel
             console.log("Ctrl+Right shortcut " + time + " " + textX + " " + textY);
 
             // find the detect that is at the current time and move it one frame to the left
@@ -441,7 +441,7 @@ Item {
         onActivated: {
             var time = jokerWindow.stripTime;
             var textY = strip.currentTextY
-            var textX = time / horizontalTimePerPixel
+            var textX = time / settings.horizontalTimePerPixel
             console.log("Ctrl+Alt+Left shortcut " + time + " " + textX + " " + textY);
 
             // find the detect that is at the current time, attach it if it is detached, and shift the text
@@ -456,7 +456,7 @@ Item {
         onActivated: {
             var time = jokerWindow.stripTime;
             var textY = strip.currentTextY
-            var textX = time / horizontalTimePerPixel
+            var textX = time / settings.horizontalTimePerPixel
             console.log("Ctrl+Alt+Right shortcut " + time + " " + textX + " " + textY);
 
             // find the detect that is at the current time, attach it if it is detached, and shift the text
@@ -497,7 +497,7 @@ Item {
         onActivated: {
             var time = jokerWindow.stripTime;
             var textY = strip.currentTextY
-            var textX = time / horizontalTimePerPixel
+            var textX = time / settings.horizontalTimePerPixel
             console.log("4 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it

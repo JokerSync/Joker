@@ -18,11 +18,11 @@
 #include "PhLtc/PhLtcReaderSettings.h"
 #endif
 
-
 /**
  * @brief The Joker application settings
  */
-class JokerSettings : public PhGenericSettings,
+class JokerSettings : public QObject,
+	//public PhGenericSettings,
 	public PhGraphicStripSettings,
 	public PhDocumentWindowSettings,
 	public PhFeedbackSettings,
@@ -37,7 +37,20 @@ class JokerSettings : public PhGenericSettings,
 #endif
 	public PhSyncSettings
 {
+	Q_OBJECT
+
 public:
+	/**
+	 * @brief JokerSettings constructor
+	 * @param clear True if the settings shall be reset
+	 */
+	JokerSettings(bool clear = false);
+
+	/**
+	 * @brief Reset the settings to its default value.
+	 */
+	void clear();
+
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)
 	PH_SETTING_BOOL2(setExitedNormaly, exitedNormaly, true)
@@ -159,6 +172,118 @@ public:
 	PH_SETTING_BOOL(setHideStrip, hideStrip)
 
 	PH_SETTING_INT(setLastPreferencesTab, lastPreferencesTab)
+
+signals:
+	void changed();
+
+private:
+	/**
+	 * @brief Set an integer value
+	 * @param name The settings name
+	 * @param value The integer value
+	 */
+	void setIntValue(QString name, int value);
+	/**
+	 * @brief Get an integer value
+	 * @param name The settings name
+	 * @param defaultValue The default value
+	 * @return The integer value
+	 */
+	int intValue(QString name, int defaultValue = 0);
+	/**
+	 * @brief Set a long long value (64 bit)
+	 * @param name The settings name
+	 * @param value The long long value
+	 */
+	void setLongLongValue(QString name, qlonglong value);
+	/**
+	 * @brief Get a long long value (64 bit)
+	 * @param name The settings name
+	 * @param defaultValue The default value
+	 * @return The long long value
+	 */
+	qlonglong longLongValue(QString name, qlonglong defaultValue = 0);
+	/**
+	 * @brief Get an integer value with alias
+	 *
+	 * @param name The settings name
+	 * @param alias An alias
+	 * @return The integer value
+	 */
+	int intValueWithAlias(QString name, QString alias);
+
+	/**
+	 * @brief Set a bool value
+	 * @param name The settings name
+	 * @param value The bool value
+	 */
+	void setBoolValue(QString name, bool value);
+	/**
+	 * @brief Get a bool value
+	 * @param name The settings name
+	 * @param defaultValue The default value
+	 * @return The bool value
+	 */
+	bool boolValue(QString name, bool defaultValue = false);
+
+	/**
+	 * @brief Set a float value
+	 * @param name The settings name
+	 * @param value The float value
+	 */
+	void setFloatValue(QString name, float value);
+	/**
+	 * @brief Get a float value
+	 * @param name The settings name
+	 * @param defaultValue The default value
+	 * @return The float value
+	 */
+	float floatValue(QString name, float defaultValue = 0);
+	/**
+	 * @brief Set a string value
+	 * @param name The settings name
+	 * @param value The string value
+	 */
+	void setStringValue(QString name, QString value);
+	/**
+	 * @brief Get a string value
+	 * @param name The settings name
+	 * @param defaultValue The default value
+	 * @return The string value
+	 */
+	QString stringValue(QString name, QString defaultValue = "");
+	/**
+	 * @brief Set a string list
+	 * @param name The settings name
+	 * @param list The string list
+	 */
+	void setStringList(QString name, QStringList list);
+	/**
+	 * @brief Get a string list
+	 * @param name The settings name
+	 * @param defaultValue The default value
+	 * @return The string list
+	 */
+	QStringList stringList(QString name, QStringList defaultValue = QStringList());
+
+	/**
+	 * @brief Set a byte array
+	 * @param name The settings name
+	 * @param array The byte array
+	 */
+	void setByteArray(QString name, QByteArray array);
+	/**
+	 * @brief Get a byte array
+	 * @param name The settings name
+	 * @return The byte array
+	 */
+	QByteArray byteArray(QString name);
+
+protected:
+	/**
+	 * @brief The QSettings object
+	 */
+	QSettings _settings;
 };
 
 #endif // JOKERSETTINGS_H

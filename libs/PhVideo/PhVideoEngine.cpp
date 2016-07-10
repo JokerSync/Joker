@@ -183,12 +183,13 @@ void PhVideoEngine::close()
 		_videoFrame = NULL;
 	}
 
-	_timeIn = PHTIMEMAX;
 	_formatContext = NULL;
 	_videoStream = NULL;
 	_audioStream = NULL;
-	PHDEBUG << _fileName << "closed";
 
+	setTimeIn(PHTIMEMAX);
+
+	PHDEBUG << _fileName << "closed";
 	_fileName = "";
 }
 

@@ -46,6 +46,7 @@ SOURCES += main.cpp \
 	PreferencesDialog.cpp \
 	PropertyDialog.cpp \
 	PeopleDialog.cpp \
+	JokerSettings.cpp \
 	PeopleEditionDialog.cpp \
 	TimeBetweenTwoFeetDialog.cpp
 

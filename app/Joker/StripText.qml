@@ -3,7 +3,7 @@ import QtQuick.Controls 1.1
 
 FocusScope {
     id: stripTextItem2
-    width: duration/horizontalTimePerPixel
+    width: duration/settings.horizontalTimePerPixel
     height: stripLineContainer.height
 
     property string text: stripTextInput.text
@@ -37,7 +37,7 @@ FocusScope {
         anchors.top: parent.top
         font.pixelSize: stripLineContainer.height
         font.family: stripFont.name
-        font.weight: textBoldness * 99/5
+        font.weight: settings.textBoldness * 99/5
         transform: Scale {  xScale: stripTextItem2.width/stripTextInput.width;
                             yScale: 1;}
 
@@ -167,7 +167,7 @@ FocusScope {
             onPositionChanged: {
                 if (drag.active) {
                     if (mouse.modifiers & Qt.ControlModifier) {
-                        var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
+                        var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel
                         var pixelChange = snapToFrame(mouseX - parent.width)
                         stripTextItem2.width = stripTextItem2.width + pixelChange
                         if(stripTextItem2.width < pixelPerFrame)

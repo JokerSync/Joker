@@ -3,7 +3,7 @@ import QtQuick.Controls 1.1
 
 Item {
     id: lineDetect
-    Binding { target: model; property: "time"; value: x*horizontalTimePerPixel }
+    Binding { target: model; property: "time"; value: x*settings.horizontalTimePerPixel }
 
     Rectangle {
         id: detectRectangle

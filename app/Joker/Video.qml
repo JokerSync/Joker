@@ -19,7 +19,7 @@ Item {
         source: videoLogoUrl
         fillMode: Image.PreserveAspectFit
         anchors.fill: parent
-        visible: videoLogoVisible
+        visible: settings.displayLogo && (videoEngine.timeIn >= videoEngine.timeOut)
     }
 
     VideoOutput {

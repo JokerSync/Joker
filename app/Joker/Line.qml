@@ -8,10 +8,10 @@ Item {
     objectName: "Line" // used to find children of type Line in line repeater
     width: 1 // width is arbitrary
     height: parent.height/4
-    x: timeIn/horizontalTimePerPixel
+    x: timeIn/settings.horizontalTimePerPixel
     y: parent.height*trackNumber
 
-    Binding { target: model; property: "timeIn"; value: x*horizontalTimePerPixel }
+    Binding { target: model; property: "timeIn"; value: x*settings.horizontalTimePerPixel }
     Binding { target: model; property: "trackNumber"; value: y/stripContainer.height }
 
     property var lineModel: model
@@ -26,7 +26,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        width: Math.max(videoEngine.timeOut, doc.timeOut) /horizontalTimePerPixel - stripLineContainer.x
+        width: Math.max(videoEngine.timeOut, doc.timeOut) /settings.horizontalTimePerPixel - stripLineContainer.x
         visible: textRepeater.count === 0 && window.edition
         color: "#80ff0000"
     }
@@ -44,7 +44,7 @@ Item {
                 property int textIndex: index
 
                 Binding { target: model; property: "content"; value: text }
-                Binding { target: model; property: "duration"; value: width*horizontalTimePerPixel }
+                Binding { target: model; property: "duration"; value: width*settings.horizontalTimePerPixel }
             }
         }
     }
@@ -90,7 +90,7 @@ Item {
         id: detectRepeater
         model: lineModel.unlinkedDetects
         delegate: Detect {
-            x: time/horizontalTimePerPixel
+            x: time/settings.horizontalTimePerPixel
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             property int lineIndex: index
@@ -116,7 +116,7 @@ Item {
                 if(drag.active){
                     console.log("timePerFrame: ", jokerWindow.timePerFrame);
                     var pixelChange = snapToFrame(mouseX)
-                    var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
+                    var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel
                     if (pixelChange > textRepeater.itemAt(0).width - pixelPerFrame) {
                         pixelChange = textRepeater.itemAt(0).width - pixelPerFrame
                     }
@@ -142,7 +142,7 @@ Item {
         MenuItem {
             text: "Add detect"
             onTriggered: {
-                var time = lineContextMenu.mouseX * horizontalTimePerPixel;
+                var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
                 console.log("add detect " + time);
                 lineModel.unlinkedDetects.add(time)
             }
@@ -177,10 +177,10 @@ Item {
     function addDetectAt(x, y) {
         var lineX = x - stripLineContainer.x
         var lineY = y - stripLineContainer.y
-        var lineWidth = duration/horizontalTimePerPixel
+        var lineWidth = duration/settings.horizontalTimePerPixel
 
         if (lineX > 0 && lineX < lineWidth && lineY >= 0 && lineY < stripLineContainer.height) {
-            var time = lineX * horizontalTimePerPixel
+            var time = lineX * settings.horizontalTimePerPixel
             console.log("line.addDetectAt adding detect " + time + " " + lineX + " " + lineY + " " + lineWidth)
             stripLineContainer.lineModel.unlinkedDetects.add(time)
             return true;
@@ -191,7 +191,7 @@ Item {
     function moveDetectAt(x, y, frameChange) {
         var lineX = x - stripLineContainer.x
         var lineY = y - stripLineContainer.y
-        var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel
+        var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel
         var pixelChange = frameChange * pixelPerFrame
         var timeChange = frameChange * jokerWindow.timePerFrame
 
@@ -287,7 +287,7 @@ Item {
             // find the position and split in 2
             var pos = text.positionAt(detectX - text.x)
             // add the new text
-            var splitTime = (detectX - text.x) * horizontalTimePerPixel
+            var splitTime = (detectX - text.x) * settings.horizontalTimePerPixel
 
             console.log("split " + detectIndex + " " + detectX + " " + text.x + " " + text.textIndex + " " + pos + " " + splitTime)
 
@@ -302,7 +302,7 @@ Item {
         var text = textRepeater.itemAt(textIndex)
         var nextText = textRepeater.itemAt(textIndex+1)
 
-        var time = nextText.x * horizontalTimePerPixel
+        var time = nextText.x * settings.horizontalTimePerPixel
 
         console.log("merge " + textIndex + " " + time)
 

@@ -8,7 +8,7 @@ Item {
     height: 400
 
     property int delayX: window.edition ? width / 2 : width / 6
-    property int contentX: jokerWindow.stripTime / horizontalTimePerPixel - delayX
+    property int contentX: jokerWindow.stripTime / settings.horizontalTimePerPixel - delayX
     property bool editing: false
     property int currentTrackNumber: 0
     property double currentTextY: height * currentTrackNumber / 4
@@ -34,8 +34,8 @@ Item {
             fillMode: Image.TileHorizontally
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            x: Math.min(videoEngine.timeIn, doc.timeIn) / horizontalTimePerPixel
-            width: Math.max(videoEngine.timeOut, doc.timeOut) / horizontalTimePerPixel - x
+            x: Math.min(videoEngine.timeIn, doc.timeIn) / settings.horizontalTimePerPixel
+            width: Math.max(videoEngine.timeOut, doc.timeOut) / settings.horizontalTimePerPixel - x
 
             onXChanged: console.log(videoEngine.timeIn + " " + doc.timeIn)
             onWidthChanged: console.log(videoEngine.timeOut + " " + doc.timeOut)
@@ -94,7 +94,7 @@ Item {
         MenuItem {
             text: "Add phrase"
             onTriggered: {
-                var time = (stripContextMenu.mouseX - delayX) * horizontalTimePerPixel + jokerWindow.stripTime;
+                var time = (stripContextMenu.mouseX - delayX) * settings.horizontalTimePerPixel + jokerWindow.stripTime;
                 var trackHeight = stripContainer.height / 4;
                 var textY = Math.round((stripContextMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
                 console.log("add line " + time + " " + textY);
@@ -119,48 +119,48 @@ Item {
     // ruler
     Row {
         id: stripRulerRepeater
-        x: rulerTimeIn/horizontalTimePerPixel - stripContainer.contentX
+        x: settings.firstFootTime/settings.horizontalTimePerPixel - stripContainer.contentX
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        visible: displayRuler
+        visible: settings.displayFeet
 
         Repeater {
-            model: (doc.timeOut - rulerTimeIn) / timeBetweenRuler
+            model: (doc.timeOut - settings.firstFootTime) / settings.timeBetweenTwoFeet
             delegate: Item {
-                width: timeBetweenRuler/horizontalTimePerPixel
+                width: settings.timeBetweenTwoFeet/settings.horizontalTimePerPixel
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
 
                 property int rulerIndex: index
 
                 Rectangle {
-                    color: invertColor? "white":"#808080"
+                    color: settings.invertColor? "white":"#808080"
                     anchors.top: parent.top
-                    width: 1000/horizontalTimePerPixel
+                    width: 1000/settings.horizontalTimePerPixel
                     x: -width/2
                     height: parent.height/2
                 }
 
                 Rectangle {
-                    color: invertColor? "white":"#808080"
+                    color: settings.invertColor? "white":"#808080"
                     anchors.top: parent.top
-                    width: 1000/horizontalTimePerPixel
+                    width: 1000/settings.horizontalTimePerPixel
                     x: -width/2 + parent.width/2
                     height: parent.height/2
                 }
 
                 // ruler disc
                 Rectangle {
-                    width: 4000/horizontalTimePerPixel
+                    width: 4000/settings.horizontalTimePerPixel
                     height: width
-                    color: invertColor? "white":"#808080"
+                    color: settings.invertColor? "white":"#808080"
                     radius: width*0.5
                     x: parent.width/2 - width/2
                     y: parent.height/2 + width/4
                 }
 
                 Text {
-                    color: invertColor? "white":"#808080"
+                    color: settings.invertColor? "white":"#808080"
                     x: -width/2
                     y: parent.height/2
                     text: parent.rulerIndex
@@ -173,7 +173,7 @@ Item {
     Component {
         id: offDetectDelegate
         Item {
-            width: duration/horizontalTimePerPixel
+            width: duration/settings.horizontalTimePerPixel
             height: parent.height
 
             Canvas {
@@ -199,7 +199,7 @@ Item {
     Component {
         id: semiOffDetectDelegate
         Item {
-            width: duration/horizontalTimePerPixel
+            width: duration/settings.horizontalTimePerPixel
             height: parent.height
 
             Canvas {
@@ -225,7 +225,7 @@ Item {
     Component {
         id: arrowUpDetectDelegate
         Item {
-            width: duration/horizontalTimePerPixel
+            width: duration/settings.horizontalTimePerPixel
             height: parent.height
 
             Canvas {
@@ -270,7 +270,7 @@ Item {
     Component {
         id: arrowDownDetectDelegate
         Item {
-            width: duration/horizontalTimePerPixel
+            width: duration/settings.horizontalTimePerPixel
             height: parent.height
 
             Canvas {
@@ -315,21 +315,21 @@ Item {
     Item {
         x: -stripContainer.contentX
         height: parent.height
-        visible: displayCuts
+        visible: settings.displayCuts
 
         Repeater {
             model: doc.cutModel
             delegate: Item {
                 id: cutDelegate
-                x: time/horizontalTimePerPixel
+                x: time/settings.horizontalTimePerPixel
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
 
                 Rectangle {
-                    color: invertColor? "AAFFFFFF":"#AA000000"
+                    color: settings.invertColor? "AAFFFFFF":"#AA000000"
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
-                    width: cutWidth
+                    width: settings.cutWidth
 
                     MouseArea {
                         id: rightPressArea
@@ -370,12 +370,12 @@ Item {
             model: doc.loopModel
             delegate: Item {
                 id: loopDelegate
-                x: time/horizontalTimePerPixel
+                x: time/settings.horizontalTimePerPixel
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
 
                 Rectangle {
-                    color: invertColor? "white":"black"
+                    color: settings.invertColor? "white":"black"
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     x: -width/2
@@ -390,7 +390,7 @@ Item {
                 }
 
                 Rectangle {
-                    color: invertColor? "white":"black"
+                    color: settings.invertColor? "white":"black"
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.topMargin: parent.height/3
@@ -408,7 +408,7 @@ Item {
                 }
 
                 Rectangle {
-                    color: invertColor? "white":"black"
+                    color: settings.invertColor? "white":"black"
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     anchors.topMargin: parent.height/3
@@ -477,8 +477,8 @@ Item {
 //            id: animateOpacity
 //            target: stripLineRepeater
 //            properties: "x"
-//            from: -87202560 / horizontalTimePerPixel
-//            to: -87202560 / horizontalTimePerPixel - 4000
+//            from: -87202560 / settings.horizontalTimePerPixel
+//            to: -87202560 / settings.horizontalTimePerPixel - 4000
 //            duration: 10000
 //            loops: Animation.Infinite
 //            running: true
@@ -495,12 +495,12 @@ Item {
     }
 
     function snapToFrame(pixelChange) {
-        var pixelPerFrame = jokerWindow.timePerFrame / horizontalTimePerPixel;
-        var timeChange = pixelChange * horizontalTimePerPixel;
+        var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel;
+        var timeChange = pixelChange * settings.horizontalTimePerPixel;
         // round to frame
         var frameChange = Math.round(timeChange / jokerWindow.timePerFrame);
         timeChange = frameChange * jokerWindow.timePerFrame;
-        pixelChange = timeChange / horizontalTimePerPixel;
+        pixelChange = timeChange / settings.horizontalTimePerPixel;
         return pixelChange;
     }
 

@@ -48,7 +48,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_firstDoc(true),
 	_resizingStrip(false),
 	_numberOfDraw(0),
-	_stripTime(0)
+	_stripTime(0),
+	_tcLabelText(""),
+	_nextTcLabelText("")
 {
 	qApp->installEventFilter(this);
 
@@ -68,36 +70,20 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("doc", _doc);
 	_context->setContextProperty("jokerWindow", this);
 	_context->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
-	_context->setContextProperty("verticalTimePerPixel", _settings->verticalTimePerPixel());
-	_context->setContextProperty("horizontalTimePerPixel", _settings->horizontalTimePerPixel());
 	_context->setContextProperty("textFontUrl", QUrl::fromLocalFile(_settings->textFontFile()));
-	_context->setContextProperty("textBoldness", _settings->textBoldness());
-	_context->setContextProperty("cutWidth", _settings->cutWidth());
-	_context->setContextProperty("displayCuts", _settings->displayCuts());
-	_context->setContextProperty("invertColor", _settings->invertColor());
 	_context->setContextProperty("videoLogoUrl", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/phonations.png"));
 	_context->setContextProperty("stripBackgroundUrl", QUrl::fromLocalFile(_settings->backgroundImageLight()));
 	_context->setContextProperty("videoSource", &_videoSurface);
+	_context->setContextProperty("settings", _settings);
+	_context->setContextProperty("playbackController", &_mediaPanel);
 
 #ifdef USE_VIDEO
 	_context->setContextProperty("videoEngine", &_videoEngine);
 #endif
 
-	// the following are updated in onPaint. They should probably be properties with signals instead
-	_context->setContextProperty("displayRuler", _settings->displayFeet());
-	_context->setContextProperty("rulerTimeIn", _settings->firstFootTime());
-	_context->setContextProperty("timeBetweenRuler", _settings->timeBetweenTwoFeet());
-	_context->setContextProperty("selectedPeopleListVisible", _settings->displayNextText() && _settings->selectedPeopleNameList().count());
-	_context->setContextProperty("titleRectVisible", _settings->displayNextText());
-	_context->setContextProperty("videoLogoVisible", (_videoEngine.height() <= 0) && _settings->displayLogo());
-	_context->setContextProperty("tcLabelVisible", _settings->displayNextText());
-	_context->setContextProperty("tcLabelText", "#");
-	_context->setContextProperty("infosVisible", _settings->displayInfo());
-	_context->setContextProperty("nextTcLabelVisible", _settings->displayNextText());
-	_context->setContextProperty("nextTcLabelText", "#");
+	// the following are updated in onPaint. They should probably be properties with signals instead);
 	_context->setContextProperty("noSyncLabelVisible", false);
 	_context->setContextProperty("noSyncLabelOpacity", 0);
-	_context->setContextProperty("playbackController", &_mediaPanel);
 
 	connect(_view, &QQuickWidget::statusChanged, this, &JokerWindow::qmlStatusChanged);
 	//connect(_view, &QQuickView::statusChanged, this, &JokerWindow::qmlStatusChanged);
@@ -987,8 +973,6 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 	}
 
 	// FIXME the font size for the list of selected peoples is fixed, whereas it depended on the window size before
-	_context->setContextProperty("selectedPeopleListVisible", _settings->displayNextText() && _settings->selectedPeopleNameList().count());
-	_context->setContextProperty("titleRectVisible", _settings->displayNextText() && (_strip.doc()->fullTitle().length() > 0));
 
 	// FIXME
 	float stripHeightRatio = 0.0f;
@@ -1048,29 +1032,27 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 
 	_strip.draw(0, y, width, stripHeight, x, 0, selectedPeoples);
 
-	//QObject *rootObject = _view->rootObjects().first();
+	if (_settings->displayInfo()) {
+		// prepare the string list that is used to display the infos
+		setRefreshInfo(QString("refresh: %1x%2, %3 / %4")
+					   .arg(_view->width())
+					   .arg(_view->height())
+					   .arg(_view->maxRefreshRate())
+					   .arg(_view->refreshRate()));
+		setUpdateInfo(QString("Update : %1 %2").arg(_view->maxUpdateDuration())
+											.arg(_view->lastUpdateDuration()));
+		setDropInfo(QString("drop: %1 %2").arg(_view->dropDetected()).arg(_view->secondsSinceLastDrop()));
+		#warning /// @todo measure fps with a custom QML element
+		// The actual painting duration should be measured using a custom QML element.
+		// See: http://developer.nokia.com/community/wiki/QML_Performance_Meter
+		// (anyway, the QML profiler will provide much more details to the developer.)
 
-	// prepare the string list that is used to display the infos
-	setRefreshInfo(QString("refresh: %1x%2, %3 / %4")
-				   .arg(_view->width())
-				   .arg(_view->height())
-//				   .arg(rootObject->property("width").toInt())
-//				   .arg(rootObject->property("height").toInt())
-				   .arg(_view->maxRefreshRate())
-				   .arg(_view->refreshRate()));
-	setUpdateInfo(QString("Update : %1 %2").arg(_view->maxUpdateDuration())
-										.arg(_view->lastUpdateDuration()));
-	setDropInfo(QString("drop: %1 %2").arg(_view->dropDetected()).arg(_view->secondsSinceLastDrop()));
-	#warning /// @todo measure fps with a custom QML element
-	// The actual painting duration should be measured using a custom QML element.
-	// See: http://developer.nokia.com/community/wiki/QML_Performance_Meter
-	// (anyway, the QML profiler will provide much more details to the developer.)
-
-	QString stripInfoText;
-	foreach(QString info, _strip.infos()) {
-		stripInfoText.append(info);
+		QString stripInfoText;
+		foreach(QString info, _strip.infos()) {
+			stripInfoText.append(info);
+		}
+		setStripInfo(stripInfoText);
 	}
-	setStripInfo(stripInfoText);
 
 	PhStripLine *nextLine = NULL;
 	if(_settings->displayNextText()) {
@@ -1087,14 +1069,13 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 		}
 	}
 
-	_context->setContextProperty("videoLogoVisible", (_videoEngine.height() <= 0) && _settings->displayLogo());
-	_context->setContextProperty("tcLabelVisible", _settings->displayNextText());
-	_context->setContextProperty("tcLabelText", PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
-	_context->setContextProperty("infosVisible", _settings->displayInfo());
+	setTcLabelText(PhTimeCode::stringFromTime(clockTime, _videoEngine.timeCodeType()));
 
-	_context->setContextProperty("nextTcLabelVisible", _settings->displayNextText() && nextLine != NULL);
 	if (nextLine != NULL) {
-		_context->setContextProperty("nextTcLabelText", PhTimeCode::stringFromTime(nextLine->timeIn(), _videoEngine.timeCodeType()));
+		setNextTcLabelText(PhTimeCode::stringFromTime(nextLine->timeIn(), _videoEngine.timeCodeType()));
+	}
+	else {
+		setNextTcLabelText("");
 	}
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
@@ -1103,10 +1084,6 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 	_context->setContextProperty("noSyncLabelVisible", _lastVideoSyncElapsed.elapsed() > 1000);
 	double opacity = (_lastVideoSyncElapsed.elapsed() - 1000.0d) / 1000.0d;
 	_context->setContextProperty("noSyncLabelOpacity", opacity <= 0 ? 0 : opacity >= 1 ? 1 : opacity);
-
-	_context->setContextProperty("displayRuler", _settings->displayFeet());
-	_context->setContextProperty("rulerTimeIn", _settings->firstFootTime());
-	_context->setContextProperty("timeBetweenRuler", _settings->timeBetweenTwoFeet());
 }
 
 void JokerWindow::onVideoSync()
@@ -1178,11 +1155,42 @@ PhRate JokerWindow::currentRate()
 	return _strip.clock()->rate();
 }
 
+QString JokerWindow::nextTcLabelText() const
+{
+	return _nextTcLabelText;
+}
+
+void JokerWindow::setNextTcLabelText(const QString &nextTcLabelText)
+{
+	if (_nextTcLabelText != nextTcLabelText) {
+		_nextTcLabelText = nextTcLabelText;
+		emit nextTcLabelTextChanged();
+	}
+}
+
+QString JokerWindow::tcLabelText() const
+{
+	return _tcLabelText;
+}
+
+void JokerWindow::setTcLabelText(const QString &tcLabelText)
+{
+	if (_tcLabelText != tcLabelText) {
+		_tcLabelText = tcLabelText;
+		emit tcLabelTextChanged();
+	}
+}
+
+JokerSettings *JokerWindow::settings() const
+{
+	return _settings;
+}
+
 void JokerWindow::on_actionDisplay_the_control_panel_triggered(bool checked)
 {
 	_settings->setDisplayControlPanel(checked);
-//	if(checked)
-//		fadeInMediaPanel();
+	//	if(checked)
+	//		fadeInMediaPanel();
 //	else
 //		fadeOutMediaPanel();
 }

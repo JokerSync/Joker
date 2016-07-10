@@ -8,13 +8,13 @@ Item {
         id: nextTcLabel
         objectName: "nextTcLabel"
         color: "red"
-        text: nextTcLabelText
+        text: jokerWindow.nextTcLabelText
         wrapMode: Text.WordWrap
         font.pointSize: 29
         anchors.top: parent.top
         anchors.right: parent.right
         horizontalAlignment: Text.AlignRight
-        visible: nextTcLabelVisible
+        visible: settings.displayNextText
     }
 
     Item {
@@ -27,7 +27,7 @@ Item {
         Item {
             id: nextPeopleList
             objectName: "nextPeopleList"
-            y: -jokerWindow.stripTime / verticalTimePerPixel
+            y: -jokerWindow.stripTime / settings.verticalTimePerPixel
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.rightMargin: 2
@@ -38,7 +38,7 @@ Item {
                 // FIXME selected colors and inverted colors are not implemented
                 delegate: Item {
                     width: parent.width
-                    y: timeIn / verticalTimePerPixel
+                    y: timeIn / settings.verticalTimePerPixel
                     x:0
 
                     Rectangle {
@@ -66,7 +66,7 @@ Item {
 
         // loops
         Item {
-            y: -jokerWindow.stripTime / verticalTimePerPixel
+            y: -jokerWindow.stripTime / settings.verticalTimePerPixel
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -74,7 +74,7 @@ Item {
                 model: doc.loopModel
                 delegate: Item {
                     id: loopContainer
-                    y: time/verticalTimePerPixel
+                    y: time/settings.verticalTimePerPixel
                     anchors.left: parent.left
                     anchors.right: parent.right
 

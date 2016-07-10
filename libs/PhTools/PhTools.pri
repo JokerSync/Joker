@@ -26,5 +26,4 @@ SOURCES += \
 	$$PWD/PhTickCounter.cpp \
 	$$PWD/PhPictureTools.cpp \
 	$$PWD/PhFileTool.cpp \
-	$$PWD/PhGenericSettings.cpp \
-	$$PWD/PhTestTools.cpp \
+	$$PWD/PhTestTools.cpp

@@ -58,6 +58,9 @@ class JokerWindow : public PhEditableDocumentWindow
 	Q_PROPERTY(QString dropInfo READ dropInfo WRITE setDropInfo NOTIFY dropInfoChanged)
 	Q_PROPERTY(QString stripInfo READ stripInfo WRITE setStripInfo NOTIFY stripInfoChanged)
 	Q_PROPERTY(PhTime timePerFrame READ timePerFrame NOTIFY timePerFrameChanged)
+	Q_PROPERTY(QString tcLabelText READ tcLabelText WRITE setTcLabelText NOTIFY tcLabelTextChanged)
+	Q_PROPERTY(QString nextTcLabelText READ nextTcLabelText WRITE setNextTcLabelText NOTIFY nextTcLabelTextChanged)
+	Q_PROPERTY(JokerSettings settings READ settings)
 
 public:
 	///
@@ -126,6 +129,14 @@ public:
 	void setStripInfo(QString text);
 
 	PhTime timePerFrame();
+
+	JokerSettings *settings() const;
+
+	QString tcLabelText() const;
+	void setTcLabelText(const QString &tcLabelText);
+
+	QString nextTcLabelText() const;
+	void setNextTcLabelText(const QString &nextTcLabelText);
 
 public slots:
 	///
@@ -351,6 +362,8 @@ signals:
 	void dropInfoChanged();
 	void stripInfoChanged();
 	void timePerFrameChanged();
+	void tcLabelTextChanged();
+	void nextTcLabelTextChanged();
 
 private:
 	PhTimeCodeType timeCodeType();
@@ -397,6 +410,9 @@ private:
 	QString _updateInfo;
 	QString _dropInfo;
 	QString _stripInfo;
+
+	QString _tcLabelText;
+	QString _nextTcLabelText;
 
 	PhFont _infoFont;
 

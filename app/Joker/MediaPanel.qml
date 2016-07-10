@@ -126,7 +126,7 @@ Rectangle {
         Text {
             id: mediaPanelTcLabel
             anchors.verticalCenter: parent.verticalCenter
-            text: tcLabelText
+            text: jokerWindow.tcLabelText
             color: mediaPanelContainer.controlColor
             styleColor: mediaPanelContainer.controlColor
             horizontalAlignment: Text.AlignHCenter
