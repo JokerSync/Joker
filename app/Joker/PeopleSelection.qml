@@ -153,15 +153,15 @@ Item {
         }
     }
 
-
-
     function hide() {
         opacity = 0
+        visible = false
     }
 
     function show(peopleName) {
         grid.currentIndex = doc.peopleModel.indexOf(peopleName)
         opacity = 1
+        visible = true
         forceActiveFocus()
     }
 }

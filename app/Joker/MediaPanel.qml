@@ -13,7 +13,6 @@ Rectangle {
     border.color: "#aa6d7dff"
 
     property color controlColor: "white"
-    property int relativeTime: timeSlider.relativeTime
 
     // Load the "FontAwesome" font for the monochrome icons.
     FontLoader {
@@ -143,8 +142,6 @@ Rectangle {
             maximumValue: playbackController.length*1.0
             stepSize: 1.0
             value: playbackController.relativeTime
-
-            onValueChanged: console.log(value + " " + playbackController.length + " " + playbackController.relativeTime)
 
             style: SliderStyle {
                 groove: Item {

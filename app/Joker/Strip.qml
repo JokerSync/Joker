@@ -4,8 +4,6 @@ import QtQuick.Controls 1.1
 
 Item {
     id: stripContainer
-    width: 600
-    height: 400
 
     property int delayX: window.edition ? width / 2 : width / 6
     property int contentX: jokerWindow.stripTime / settings.horizontalTimePerPixel - delayX

@@ -271,7 +271,6 @@ Item {
                 visible: mediaPanel.visible
             }
 
-
             Timer {
                 id: panelTimer
                 interval: 3000
@@ -307,14 +306,15 @@ Item {
             height: 2
             color: Qt.darker(pal.window, 1.5)
         }
-
-        SystemPalette { id: pal }
     }
+
+    SystemPalette { id: pal }
 
     PeopleSelection {
         id: peopleSelection
         anchors.centerIn: parent
         opacity: 0 // hide by default
+        visible: false
     }
 
     property bool edition: editionSwitch.edition
