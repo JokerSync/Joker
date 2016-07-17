@@ -418,6 +418,8 @@ private:
 	QQmlContext *_context;
 
 	PhGraphicView *_view = new PhGraphicView();
+
+	void setVideoTimeInToOneHour();
 };
 
 #endif // MAINWINDOW_H

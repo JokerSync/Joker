@@ -586,7 +586,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 	if (fileInfo.exists() && _videoEngine.open(videoFile)) {
 		PhTime videoTimeIn = _videoEngine.timeIn();
 
-		if(videoTimeIn == 0) {
+		if(videoTimeIn == PHTIMEMAX) {
 			/* the video itself has no timestamp, and until now we have not
 			 * propagated the doc videoTimeIn to the videoEngine */
 			videoTimeIn = _doc->videoTimeIn();
@@ -594,10 +594,12 @@ bool JokerWindow::openVideoFile(QString videoFile)
 			_videoEngine.clock()->setTime(videoTimeIn);
 
 			/* ask the user if he wants to change the video time in */
-			if(fileInfo.fileName() != lastFileInfo.fileName()) {
-				on_actionChange_timestamp_triggered();
-				videoTimeIn = _videoEngine.timeIn();
-			}
+//			if(fileInfo.fileName() != lastFileInfo.fileName()) {
+//				on_actionChange_timestamp_triggered();
+//				videoTimeIn = _videoEngine.timeIn();
+//			}
+			setVideoTimeInToOneHour();
+			videoTimeIn = _videoEngine.timeIn();
 		}
 
 		if(videoFile != _doc->videoFilePath()) {
@@ -663,7 +665,20 @@ void JokerWindow::on_actionChange_timestamp_triggered()
 	//fadeInMediaPanel();
 }
 
+void JokerWindow::setVideoTimeInToOneHour()
+{
+	setCurrentRate(0);
 
+	PhTime timeStamp = PhTimeCode::timeFromHhMmSsFf(1, 0, 0, 0, timeCodeType());
+
+	PHDEBUG << timeStamp;
+
+	_videoEngine.setTimeIn(timeStamp);
+	setCurrentTime(timeStamp);
+	_doc->setVideoTimeIn(timeStamp, timeCodeType());
+	_mediaPanel.setTimeIn(timeStamp);
+	_doc->setModified(true);
+}
 
 void JokerWindow::on_actionAbout_triggered()
 {

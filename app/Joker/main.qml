@@ -542,5 +542,9 @@ Item {
     function focusOnStrip() {
         strip.forceActiveFocus()
     }
+
+    function showVideoTimeInSelection() {
+        videoTimeInSelection.show()
+    }
 }
 
