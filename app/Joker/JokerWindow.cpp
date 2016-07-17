@@ -81,10 +81,6 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("videoEngine", &_videoEngine);
 #endif
 
-	// the following are updated in onPaint. They should probably be properties with signals instead);
-	_context->setContextProperty("noSyncLabelVisible", false);
-	_context->setContextProperty("noSyncLabelOpacity", 0);
-
 	connect(_view, &QQuickWidget::statusChanged, this, &JokerWindow::qmlStatusChanged);
 	//connect(_view, &QQuickView::statusChanged, this, &JokerWindow::qmlStatusChanged);
 	//connect(_view, &QQmlApplicationEngine::warnings, this, &JokerWindow::qmlStatusChanged);
@@ -128,7 +124,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #endif
 
 #ifdef USE_SONY
-	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::onVideoSync);
+	connect(&_sonySlave, &PhSonySlaveController::videoSync, this, &JokerWindow::videoSync);
 #endif
 
 	setupSyncProtocol();
@@ -266,7 +262,7 @@ void JokerWindow::setupSyncProtocol()
 		// Initialize the sony module
 		if(_sonySlave.open()) {
 			clock = _sonySlave.clock();
-			_lastVideoSyncElapsed.start();
+			emit videoSync();
 		}
 		else {
 			type = PhSynchronizer::NoSync;
@@ -1080,15 +1076,6 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
 	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
-
-	_context->setContextProperty("noSyncLabelVisible", _lastVideoSyncElapsed.elapsed() > 1000);
-	double opacity = (_lastVideoSyncElapsed.elapsed() - 1000.0d) / 1000.0d;
-	_context->setContextProperty("noSyncLabelOpacity", opacity <= 0 ? 0 : opacity >= 1 ? 1 : opacity);
-}
-
-void JokerWindow::onVideoSync()
-{
-	_lastVideoSyncElapsed.restart();
 }
 
 void JokerWindow::on_actionPrevious_loop_triggered()

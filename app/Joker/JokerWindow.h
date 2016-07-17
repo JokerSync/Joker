@@ -320,8 +320,6 @@ private slots:
 	//void onPaint(int width, int height);
 	void onPaint(PhTime elapsedTime);
 
-	void onVideoSync();
-
 	void on_actionPrevious_loop_triggered();
 
 	void on_actionNext_loop_triggered();
@@ -364,6 +362,7 @@ signals:
 	void timePerFrameChanged();
 	void tcLabelTextChanged();
 	void nextTcLabelTextChanged();
+	void videoSync();
 
 private:
 	PhTimeCodeType timeCodeType();
@@ -399,8 +398,6 @@ private:
 	bool _firstDoc;
 	bool _resizingStrip;
 	int _numberOfDraw;
-
-	QTime _lastVideoSyncElapsed;
 
 	PhTime _stripTime;
 	QString _currentLoopLabel;
