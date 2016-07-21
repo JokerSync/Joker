@@ -51,38 +51,7 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "{#QtDir}\bin\Qt5Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\Qt5Gui.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\Qt5OpenGL.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\Qt5Network.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\Qt5SerialPort.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\Qt5Test.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\Qt5Widgets.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\Qt5Xml.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\icuin53.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\icuuc53.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\bin\icudt53.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#QtDir}\plugins\platforms\*"; DestDir: "{app}\platforms"; Flags: ignoreversion
-
-Source: "release\Joker.exe"; DestDir: "{app}"; Flags: ignoreversion
-; dlls (PortAudio, SDL, etc.)
-Source: "release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
-; Qt dlls (windeployqt needs to be run first)
-;Source: "release\accessible\*.dll"; DestDir: "{app}\accessible"; Flags: ignoreversion
-Source: "release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
-Source: "release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
-Source: "release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
-Source: "release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion
-; translations
-Source: "release\*.qm"; DestDir: "{app}"; Flags: ignoreversion
-; images
-Source: "release\*.png"; DestDir: "{app}"; Flags: ignoreversion
-; fonts
-Source: "release\*.ttf"; DestDir: "{app}"; Flags: ignoreversion
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: "release\*"; Excludes: "*.o,*.cpp"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

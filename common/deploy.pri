@@ -1,5 +1,5 @@
 win32 {
-	QMAKE_POST_LINK += windeployqt --qmldir $$shell_path($${JOKER_ROOT}/app/Joker/) $$shell_path($${RESOURCES_PATH}/Joker.exe) $${CS}
+	QMAKE_POST_LINK += windeployqt --qmldir $$shell_path($$_PRO_FILE_PWD_) $$shell_path($${RESOURCES_PATH}/Joker.exe) -multimediaquick $${CS}
 }
 
 CONFIG(release, debug|release) {
@@ -34,10 +34,10 @@ CONFIG(release, debug|release) {
 			message("Processing $$TARGET")
 			QMAKE_POST_LINK += echo "Deploying $${_PRO_FILE_PWD_}/$${TARGET}.iss" $${CS}
 			QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${_PRO_FILE_PWD_}/$${TARGET}.iss) . $${CS}
-#			QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/LICENSE.TXT) . $${CS}
-#			QMAKE_POST_LINK += echo $$(PATH) $${CS}
-#			QMAKE_POST_LINK += iscc "$${TARGET}.iss" $${CS}
-#			QMAKE_POST_LINK += dir
+			QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/LICENSE.TXT) . $${CS}
+			QMAKE_POST_LINK += echo $$(PATH) $${CS}
+			QMAKE_POST_LINK += iscc "$${TARGET}.iss" $${CS}
+			QMAKE_POST_LINK += dir
 
 		}
 	}
