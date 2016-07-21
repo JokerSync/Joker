@@ -268,25 +268,29 @@ Item {
 
             EditionSwitch {
                 id: editionSwitch
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
                 visible: mediaPanel.visible
+                opacity: mediaPanel.opacity
             }
 
             Timer {
                 id: panelTimer
                 interval: 3000
                 onTriggered: {
-                    mediaPanel.visible = false
+                    mediaPanel.opacity = 0
                 }
             }
 
             function showPanel() {
                 panelTimer.restart()
-                mediaPanel.visible = true
+                mediaPanel.opacity = 1
             }
 
             function showPanelPermanent() {
                 panelTimer.stop()
-                mediaPanel.visible = true
+                mediaPanel.opacity = 1
             }
         }
 

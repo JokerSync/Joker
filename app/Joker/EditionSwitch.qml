@@ -2,23 +2,17 @@ import QtQuick 2.6
 import QtQuick.Controls 1.4
 
 Rectangle {
-    visible: mediaPanel.visible
+    height: 1.5*childrenRect.height
 
     property bool edition: editionSwitch.checked
 
-    anchors.horizontalCenter: videoOverlay.horizontalCenter
-    anchors.top: videoOverlay.top
-    anchors.topMargin: 2
-
-    width: childrenRect.width
-    height: childrenRect.height
-
-    color: "black"
-    border.color: "white"
-
-    radius: 3
+    gradient: Gradient {
+        GradientStop { position: 0.0; color: "#aa0d0d0d" }
+        GradientStop { position: 1.0; color: "#000d0d0d" }
+    }
 
     Row {
+        anchors.horizontalCenter: parent.horizontalCenter
         leftPadding: 10
         rightPadding: 10
         topPadding: 4
