@@ -91,6 +91,8 @@ Rectangle {
             id: panelRow
             anchors.left: parent.left
             anchors.right: parent.right
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
             height: 40
             spacing: 15
 

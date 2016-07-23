@@ -225,33 +225,8 @@ Item {
         }
     }
 
-    Rectangle {
-        id: titleRect
-        objectName: "titleRect"
-        color: "#000080"
-        height: childrenRect.height
-        width: parent.width
-        anchors.top: parent.top
-        anchors.left: parent.left
-        visible: settings.displayNextText && doc.fullTitle.length > 0
-
-        Text {
-            id: titleLabel
-            color: "white"
-            wrapMode: Text.WordWrap
-            text: doc.fullTitle
-            font.pointSize: 8
-            horizontalAlignment: Text.AlignHCenter
-            width: parent.width
-        }
-    }
-
     SplitView {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: titleRect.visible ? titleRect.bottom : parent.top
-        anchors.bottom: parent.bottom
-
+        anchors.fill: parent
         orientation: Qt.Vertical
 
         Video {
