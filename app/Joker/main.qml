@@ -445,7 +445,7 @@ Item {
 
     Shortcut {
         sequence: "Del"
-        enabled: window.edition
+        enabled: window.edition && !strip.editing && !peopleSelection.editing // do not steal the TextInputs event processing
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
