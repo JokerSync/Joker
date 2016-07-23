@@ -444,6 +444,21 @@ Item {
     }
 
     Shortcut {
+        sequence: "Del"
+        enabled: window.edition
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            console.log("Del " + time + " " + textX + " " + textY);
+
+            // find the detect or the line that is at the current time, delete it
+            strip.deleteAt(textX, textY);
+        }
+    }
+
+    Shortcut {
         sequence: "0"
         enabled: window.edition
         context: Qt.ApplicationShortcut

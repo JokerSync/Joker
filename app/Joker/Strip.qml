@@ -545,6 +545,28 @@ Item {
         return false;
     }
 
+    function deleteAt(x, y) {
+        for (var i = 0; i < stripLineRepeater.children.length; ++i) {
+            var line = stripLineRepeater.children[i];
+            if (line.objectName !== "Line") {
+                continue;
+            }
+            var lineSuccess = line.isAt(x, y);
+            if (lineSuccess) {
+                var success = line.deleteDetectAt(x, y);
+                if (success) {
+                    return true;
+                }
+
+                console.log("deleting line " + i)
+                doc.lineModel.remove(i)
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     function shiftDetectAt(x, y, shift) {
         for (var i = 0; i < stripLineRepeater.children.length; ++i) {
             var line = stripLineRepeater.children[i];

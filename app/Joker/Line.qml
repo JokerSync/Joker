@@ -6,7 +6,7 @@ import QtQuick.Controls 1.1
 Item {
     id: stripLineContainer
     objectName: "Line" // used to find children of type Line in line repeater
-    width: 1 // width is arbitrary
+    width: duration/settings.horizontalTimePerPixel
     height: parent.height/4
     x: timeIn/settings.horizontalTimePerPixel
     y: parent.height*trackNumber
@@ -153,8 +153,8 @@ Item {
         var lineX = x - stripLineContainer.x
         var lineY = y - stripLineContainer.y
 
-        if (lineY !== 0) {
-            return false
+        if (lineY !== 0 || lineX <= 0 || lineX >= stripLineContainer.width) {
+            return false;
         }
 
         // is it a text timeOut?
@@ -195,7 +195,7 @@ Item {
         var pixelChange = frameChange * pixelPerFrame
         var timeChange = frameChange * jokerWindow.timePerFrame
 
-        if (lineY !== 0) {
+        if (lineY !== 0 || lineX <= 0 || lineX >= stripLineContainer.width) {
             return false;
         }
 
@@ -247,7 +247,7 @@ Item {
 
         console.log(lineY)
 
-        if (lineY !== 0) {
+        if (lineY !== 0 || lineX <= 0 || lineX >= stripLineContainer.width) {
             return false;
         }
 
@@ -271,6 +271,53 @@ Item {
             if (Math.abs(text.x + text.width - lineX) < 1) {
                 console.log("shifting text timeOut " + stripLineContainer.x + " " + shift)
                 text.shiftText(shift)
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function isAt(x, y) {
+        var lineX = x - stripLineContainer.x
+        var lineY = y - stripLineContainer.y
+
+        if (lineY !== 0 || lineX < 0 || lineX > stripLineContainer.width) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function deleteDetectAt(x, y) {
+        var lineX = x - stripLineContainer.x
+        var lineY = y - stripLineContainer.y
+
+        if (lineY !== 0 || lineX <= 0 || lineX >= stripLineContainer.width) {
+            return false;
+        }
+
+        // is it a text timeOut?
+        // exclude the last text
+        for (var i = 0; i < textRepeater.count - 1; ++i) {
+            var text = textRepeater.itemAt(i);
+            console.log("textOut " + text.x + " " + text.width + " " + lineX)
+            if (Math.abs(text.x + text.width - lineX) < 1) {
+                // detach this timeout
+                // it will appear as an unlinked detect in the next loop
+                console.log("detaching text timeOut " + stripLineContainer.x)
+                stripLineContainer.detachDetect(i)
+                break;
+            }
+        }
+
+        // is it an unlinked detect time?
+        for (var j = 0; j < detectRepeater.count; ++j) {
+            var detect = detectRepeater.itemAt(j);
+            console.log("detect " + detect.x + " " + lineX)
+            if (Math.abs(detect.x - lineX) < 1) {
+                console.log("deleting detect time " + stripLineContainer.x)
+                stripLineContainer.lineModel.unlinkedDetects.remove(j)
                 return true;
             }
         }
