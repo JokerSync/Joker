@@ -579,4 +579,17 @@ Item {
             }
         }
     }
+
+    function toggleAttachDetectAt(x, y) {
+        for (var i = 0; i < stripLineRepeater.children.length; ++i) {
+            var line = stripLineRepeater.children[i];
+            if (line.objectName !== "Line") {
+                continue;
+            }
+            var success = line.toggleAttachDetectAt(x, y);
+            if (success) {
+                return;
+            }
+        }
+    }
 }

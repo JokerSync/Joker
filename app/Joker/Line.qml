@@ -278,6 +278,40 @@ Item {
         return false;
     }
 
+    function toggleAttachDetectAt(x, y) {
+        var lineX = x - stripLineContainer.x
+        var lineY = y - stripLineContainer.y
+
+        if (lineY !== 0 || lineX <= 0 || lineX >= stripLineContainer.width) {
+            return false;
+        }
+
+        // is it an unlinked detect time?
+        var u = detectRepeater.count;
+        for (var j = 0; j < detectRepeater.count; ++j) {
+            var detect = detectRepeater.itemAt(j);
+            console.log(detect.x + " " + lineX)
+            if (Math.abs(detect.x - lineX) < 1) {
+                console.log("attaching detect time " + stripLineContainer.x)
+                attachDetect(j, detect.x)
+                return true;
+            }
+        }
+
+        // is it a text timeOut?
+        for (var i = 0; i < textRow.children.length; ++i) {
+            var text = textRow.children[i];
+            console.log(text.x + " " + text.width + " " + lineX)
+            if (Math.abs(text.x + text.width - lineX) < 1) {
+                console.log("detaching text timeOut " + stripLineContainer.x)
+                detachDetect(i)
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     function isAt(x, y) {
         var lineX = x - stripLineContainer.x
         var lineY = y - stripLineContainer.y

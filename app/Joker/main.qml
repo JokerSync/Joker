@@ -459,6 +459,21 @@ Item {
     }
 
     Shortcut {
+        sequence: "Ctrl+D"
+        enabled: window.edition
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            console.log("Ctrl+D shortcut " + time + " " + textX + " " + textY);
+
+            // find the detect that is at the current time, attach it if it is detached, or vice-versa
+            strip.toggleAttachDetectAt(textX, textY);
+        }
+    }
+
+    Shortcut {
         sequence: "0"
         enabled: window.edition
         context: Qt.ApplicationShortcut
