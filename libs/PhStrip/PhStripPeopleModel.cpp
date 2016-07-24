@@ -76,7 +76,12 @@ QHash<int, QByteArray> PhStripPeopleModel::roleNames() const {
 	return roles;
 }
 
-PhPeople* PhStripPeopleModel::add(QString name)
+void PhStripPeopleModel::add(QString name)
+{
+	create(name);
+}
+
+PhPeople* PhStripPeopleModel::create(QString name)
 {
 	QString finalName = name;
 	// verify that a people does not already exist at this time

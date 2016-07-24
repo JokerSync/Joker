@@ -733,7 +733,7 @@ void PhStripDoc::addLine(PhTime time, float y)
 	}
 
 	if (people == NULL) {
-		people = _peopleModel->add("New");
+		people = _peopleModel->create("New");
 	}
 
 	_lineModel->add(time, y, people);

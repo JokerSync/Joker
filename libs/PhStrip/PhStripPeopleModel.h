@@ -24,8 +24,9 @@ public:
   QListIterator<PhPeople *> iterator();  
   PhPeople *findByName(QString name);
 
+  PhPeople *create(QString name);
 public slots:
-  PhPeople *add(QString name);
+  void add(QString name);
   void remove(int index);
   int indexOf(QString name);
 
