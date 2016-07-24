@@ -194,7 +194,7 @@ Item {
         var pixelChange = frameChange * pixelPerFrame
         var timeChange = frameChange * jokerWindow.timePerFrame
 
-        if (lineY !== 0 || lineX <= 0 || lineX >= stripLineContainer.width) {
+        if (lineY !== 0 || lineX < -0.5 || lineX > stripLineContainer.width + 0.5) {
             return false;
         }
 
@@ -216,7 +216,7 @@ Item {
                 console.log("moving text timeOut " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)
                 text.width += pixelChange
 
-                if (textRepeater.count > i) {
+                if (textRepeater.count > i+1) {
                     var nextText = textRow.children[i+1]
                     nextText.width -= pixelChange
                 }

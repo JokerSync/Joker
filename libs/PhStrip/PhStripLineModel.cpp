@@ -154,6 +154,9 @@ void PhStripLineModel::updateTimeIn()
 
 void PhStripLineModel::updateTimeOut()
 {
+	QModelIndex index = this->index(_lines.indexOf((PhStripLine*)sender()));
+	emit dataChanged(index, index, QVector<int>(1, DurationRole));
+
 	PhTime timeOut = PHTIMEMIN;
 	foreach(PhStripLine *line, _lines) {
 		if (line->timeOut() > timeOut) {

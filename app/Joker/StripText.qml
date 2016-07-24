@@ -192,6 +192,7 @@ FocusScope {
         }
     }
 
+    // move 'shift' characters to the next item (or previous if 'shift' is negative)
     function shiftText(shift) {
         console.log("I'm item " + index);
 
