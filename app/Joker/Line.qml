@@ -157,7 +157,6 @@ Item {
             return false;
         }
 
-        // is it a text timeOut?
         for (var i = 0; i < textRow.children.length; ++i) {
             var text = textRow.children[i];
             console.log(text.x + " " + text.width + " " + lineX)

@@ -75,25 +75,28 @@ FocusScope {
             console.log('Right Key was pressed ' + stripTextInput.cursorPosition + ' ' + stripTextInput.text.length);
             if (stripTextInput.cursorPosition === stripTextItem2.text.length) {
                 giveFocusToNextItem();
+                event.accepted = true;
             } else {
-                stripTextInput.cursorPosition = stripTextInput.cursorPosition + 1
+                event.accepted = false;
             }
-            event.accepted = true;
         }
 
         Keys.onLeftPressed: {
             console.log('Left Key was pressed ' + stripTextInput.cursorPosition);
             if (stripTextInput.cursorPosition == 0) {
-                // give focus to previous item!
-                console.log("I'm item " + stripTextDelegate.textIndex);
-                var previousItem = textRepeater.itemAt(stripTextDelegate.textIndex-1)
-                previousItem.textFocus = true
-                previousItem.cursorPosition = previousItem.text.length - 1
-                stripLineContainer.editing = true
+                giveFocusToPreviousItem();
+                event.accepted = true;
             } else {
-                stripTextInput.cursorPosition = stripTextInput.cursorPosition - 1
+                event.accepted = false;
             }
-            event.accepted = true;
+        }
+
+        Keys.onEscapePressed: {
+            console.log('Escape pressed');
+            while (canUndo) {
+                undo()
+            }
+            editingFinished();
         }
 
         MouseArea {
@@ -114,6 +117,8 @@ FocusScope {
         enabled: window.edition && !stripTextInput.activeFocus
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
+        propagateComposedEvents: true
+
         drag{
             target: stripLineContainer
             minimumY: -stripLineContainer.y
@@ -230,21 +235,28 @@ FocusScope {
     }
 
     function giveFocusToNextItem() {
-        // give focus to next item!
         console.log("I'm item " + index);
         var nextItem = textRepeater.itemAt(index + 1)
-        nextItem.textFocus = true
-        nextItem.cursorPosition = 1
-        stripLineContainer.editing = true
+        nextItem.editTextAtPos(1)
+    }
+
+    function giveFocusToPreviousItem() {
+        console.log("I'm item " + index);
+        var previousItem = textRepeater.itemAt(index - 1)
+        previousItem.editTextAtPos(previousItem.text.length - 1)
     }
 
     function editTextAt(x, y) {
         var newPos = stripTextInput.positionAt(x/stripTextItem2.width*stripTextInput.width, y)
-        console.log("text.editTextAt " + newPos)
+        editTextAtPos(newPos)
+    }
+
+    function editTextAtPos(pos) {
+        console.log("text.editTextAt " + pos)
         stripContainer.forceActiveFocus()
         stripTextInput.forceActiveFocus()
         stripLineContainer.editing = true
-        stripTextInput.cursorPosition = newPos
+        stripTextInput.cursorPosition = pos
     }
 
     function positionAt(x) {
