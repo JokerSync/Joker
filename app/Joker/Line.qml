@@ -153,7 +153,7 @@ Item {
         var lineX = x - stripLineContainer.x
         var lineY = y - stripLineContainer.y
 
-        if (lineY !== 0 || lineX <= 0 || lineX >= stripLineContainer.width) {
+        if (lineY !== 0 || lineX < -0.1 || lineX > stripLineContainer.width + 0.1) {
             return false;
         }
 
