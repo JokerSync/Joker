@@ -3,8 +3,12 @@ import QtQuick.Controls 1.1
 
 FocusScope {
     id: stripTextItem2
-    width: duration/settings.horizontalTimePerPixel
     height: stripLineContainer.height
+
+    width: duration/settings.horizontalTimePerPixel
+    // maintain the binding even after width is statistically reassigned during a drag
+    property int modelDuration: duration
+    onModelDurationChanged: width = duration/settings.horizontalTimePerPixel
 
     property string text: stripTextInput.text
     property bool textFocus: stripTextInput.focus
