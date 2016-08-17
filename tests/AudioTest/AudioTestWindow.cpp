@@ -20,7 +20,7 @@ AudioTestWindow::AudioTestWindow(QSettings *settings, QWidget *parent) :
 	on_generateCheckBox_clicked(_settings->value("generate", true).toBool());
 	on_readCheckBox_clicked(_settings->value("read", true).toBool());
 
-	connect(&_audioReader, SIGNAL(audioProcessed(int, int)), this, SLOT(onAudioProcessed(int, int)));
+	connect(&_audioReader, SIGNAL(audioProcessed(int,int)), this, SLOT(onAudioProcessed(int,int)));
 }
 
 AudioTestWindow::~AudioTestWindow()

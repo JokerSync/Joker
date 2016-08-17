@@ -14,14 +14,14 @@ AboutDialog::AboutDialog(QWidget *parent) :
 	ui->setupUi(this);
 	QString branch = PH_GIT_BRANCH;
 	QString version = QString("Joker v%1 (build %2%3%4)")
-			.arg(PH_VERSION)
-			.arg(PH_BUILD)
-			.arg(QString(PH_FULL_VERSION).contains("dirty") ? "*" : "")
-			.arg(branch == "master" ? "" : " " + branch);
+	                  .arg(PH_VERSION)
+	                  .arg(PH_BUILD)
+	                  .arg(QString(PH_FULL_VERSION).contains("dirty") ? "*" : "")
+	                  .arg(branch == "master" ? "" : " " + branch);
 	ui->labelVersion->setText(version);
 	ui->revisionLabel->setText(tr("Revision:") + QString("<a href='https://github.com/phonations/joker/tree/%1'>%2</a>")
-							   .arg(PH_GIT_REVISION)
-							   .arg(QString(PH_GIT_REVISION).left(7)));
+	                           .arg(PH_GIT_REVISION)
+	                           .arg(QString(PH_GIT_REVISION).left(7)));
 
 	ui->labelContact->setText("<a href=\"mailto:support@phonations.com\">support@phonations.com</a>");
 	ui->labelContact->setTextInteractionFlags(Qt::TextSelectableByMouse);

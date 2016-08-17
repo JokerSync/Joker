@@ -341,9 +341,9 @@ void PhGraphicStrip::draw(int x, int y, int width, int height, int nextTextAreaX
 			if( x0 < width
 			    && x0 + gPeople.width() > 0
 			    && (
-			        (lastText == NULL)
-			        || (lastText->people() != text->people())
-			        || (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
+					(lastText == NULL)
+					|| (lastText->people() != text->people())
+					|| (text->timeIn() - lastText->timeOut() > minTimeBetweenPeople))
 			    ) {
 
 				gPeople.setX(x0);
