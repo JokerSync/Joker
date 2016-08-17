@@ -101,6 +101,7 @@ TRANSLATIONS =	\
 	de_DE.ts \
 	es_ES.ts \
 	fr_FR.ts \
+	fr_AG.ts \
 	it_IT.ts \
 	pt_PT.ts \
 
