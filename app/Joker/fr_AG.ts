@@ -5,19 +5,19 @@
     <name>AboutDialog</name>
     <message>
         <source>About Joker</source>
-        <translation type="unfinished"></translation>
+        <translation>Mais... A propos?!</translation>
     </message>
     <message>
         <source>Copyright 2013-2016 Phonations, All rights reserved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright 2013-2016 Phonations, Tous les droits sont... peu importe on ne voit plus ce qui est marqué.</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir</translation>
     </message>
     <message>
         <source>Joker is based on the following libraries:</source>
-        <translation type="unfinished"></translation>
+        <translation>Joker est basé sur :</translation>
     </message>
     <message>
         <source>Revision: </source>
@@ -40,27 +40,27 @@
     <name>JokerWindow</name>
     <message>
         <source>Joker</source>
-        <translation type="unfinished"></translation>
+        <translation>Joker (peu importe la langue Joker ça ne change pas!)</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Faichier</translation>
     </message>
     <message>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Récemment ouvert</translation>
     </message>
     <message>
         <source>Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous avez 4 heures : Contrôle !</translation>
     </message>
     <message>
         <source>Varispeed</source>
-        <translation type="unfinished"></translation>
+        <translation>Variation de la vitesse</translation>
     </message>
     <message>
         <source>Go to</source>
-        <translation type="unfinished"></translation>
+        <translation>Aller à</translation>
     </message>
     <message>
         <source>View</source>
@@ -68,47 +68,47 @@
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>A L'AIDE !!! SOS !!!</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier</translation>
     </message>
     <message>
         <source>Rythmo</source>
-        <translation type="unfinished"></translation>
+        <translation>Vidéo</translation>
     </message>
     <message>
         <source>Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer...</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Contrôle+O</translation>
     </message>
     <message>
         <source>Play/pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Marche/Marche pas</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Espace</translation>
     </message>
     <message>
         <source>Play backward</source>
-        <translation type="unfinished"></translation>
+        <translation>sɹǝʌuǝ,ן ɐ ǝɹnʇɔǝ⅂</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Bas</translation>
     </message>
     <message>
         <source>Step forward</source>
-        <translation type="unfinished"></translation>
+        <translation>Aller de l'avant</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>RPR-UMP-LR</translation>
     </message>
     <message>
         <source>Step backward</source>
@@ -116,7 +116,7 @@
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>PS... euh pas sur que ça traduise bien "gauche"</translation>
     </message>
     <message>
         <source>Step time forward</source>
@@ -124,7 +124,7 @@
     </message>
     <message>
         <source>Alt+Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+(RPR-UMP-LR)</translation>
     </message>
     <message>
         <source>Step time backward</source>
@@ -132,15 +132,15 @@
     </message>
     <message>
         <source>Alt+Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+PS</translation>
     </message>
     <message>
         <source>Open video file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir un ficher vidéo</translation>
     </message>
     <message>
         <source>Ctrl+Shift+O</source>
-        <translation type="unfinished"></translation>
+        <translation>ContrôleplusShiftplusO</translation>
     </message>
     <message>
         <source>Change timestamp...</source>
@@ -152,19 +152,19 @@
     </message>
     <message>
         <source>About...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mais... A propos?!</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Préférences... déjà marre du mode Armageddon? non</translation>
     </message>
     <message>
         <source>Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriété privée.</translation>
     </message>
     <message>
         <source>Test mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode pour tester</translation>
     </message>
     <message>
         <source>Set Joker on Test mode for syncheck</source>
@@ -172,7 +172,7 @@
     </message>
     <message>
         <source>Ctrl+Shift+T</source>
-        <translation type="unfinished"></translation>
+        <translation>T+Ctrl+Shift</translation>
     </message>
     <message>
         <source>Timecode...</source>
@@ -180,55 +180,55 @@
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation type="unfinished"></translation>
+        <translation>G+lrtC</translation>
     </message>
     <message>
         <source>Next text</source>
-        <translation type="unfinished"></translation>
+        <translation>Au suivant</translation>
     </message>
     <message>
         <source>Previous text</source>
-        <translation type="unfinished"></translation>
+        <translation>Texte, reviens</translation>
     </message>
     <message>
         <source>Next element</source>
-        <translation type="unfinished"></translation>
+        <translation>Au suivant (éléments)</translation>
     </message>
     <message>
         <source>Ctrl+Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+RPR</translation>
     </message>
     <message>
         <source>Previous element</source>
-        <translation type="unfinished"></translation>
+        <translation>Elément précédent</translation>
     </message>
     <message>
         <source>Ctrl+Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Gauche</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+S</translation>
     </message>
     <message>
         <source>Save as...</source>
-        <translation type="unfinished"></translation>
+        <translation>REC sous...</translation>
     </message>
     <message>
         <source>Ctrl+Shift+S</source>
-        <translation type="unfinished"></translation>
+        <translation>CTRL+S (piège)</translation>
     </message>
     <message>
         <source>Select character...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionne ton perso..</translation>
     </message>
     <message>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R (atata)</translation>
     </message>
     <message>
         <source>Force 16/9 ratio</source>
@@ -236,19 +236,19 @@
     </message>
     <message>
         <source>F8</source>
-        <translation type="unfinished"></translation>
+        <translation>F16/2</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Plein écran</translation>
     </message>
     <message>
         <source>F10</source>
-        <translation type="unfinished"></translation>
+        <translation>F16-6</translation>
     </message>
     <message>
         <source>Empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Il n'y a rien ici</translation>
     </message>
     <message>
         <source>Invert colors</source>
@@ -256,15 +256,15 @@
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Néophyte</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+N(idoran)</translation>
     </message>
     <message>
         <source>Close video</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir la vidéo</translation>
     </message>
     <message>
         <source>Send feedback...</source>
@@ -655,7 +655,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You change the language to &quot;%1&quot;.
+        <source>You change the language to "%1".
 You need to restart %2 to apply you changes.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -769,7 +769,7 @@ You need to restart %2 to apply you changes.</source>
     </message>
     <message>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Mais... à propos... %1</translation>
     </message>
 </context>
 </TS>
