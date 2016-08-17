@@ -21,15 +21,15 @@
     </message>
     <message>
         <source>Revision: </source>
-        <translation type="unfinished"></translation>
+        <translation>Révision: </translation>
     </message>
     <message>
         <source>Synchronous playback time: </source>
-        <translation type="unfinished"></translation>
+        <translation>Synchroniser le playback time </translation>
     </message>
     <message>
         <source>Revision:</source>
-        <translation type="unfinished"></translation>
+        <translation>Révision:</translation>
     </message>
     <message>
         <source>Synchronous playback time: %1 seconds</source>
@@ -272,7 +272,7 @@
     </message>
     <message>
         <source>Deinterlace video</source>
-        <translation type="unfinished"></translation>
+        <translation>Virer une ligne sur deux de la vidéo (mais il y a un côté charcutage... on vous aura prévenu)</translation>
     </message>
     <message>
         <source>Hide the rythmo</source>
@@ -280,7 +280,7 @@
     </message>
     <message>
         <source>F9</source>
-        <translation type="unfinished"></translation>
+        <translation>Fneuf</translation>
     </message>
     <message>
         <source>Next loop</source>
@@ -288,7 +288,7 @@
     </message>
     <message>
         <source>Ctrl+Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Bas (hum..)</translation>
     </message>
     <message>
         <source>Previous loop</source>
@@ -296,7 +296,7 @@
     </message>
     <message>
         <source>Ctrl+Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Bas (encore?!)</translation>
     </message>
     <message>
         <source>Display the cuts</source>
@@ -316,11 +316,11 @@
     </message>
     <message>
         <source>Hide selected peoples</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacher les gens</translation>
     </message>
     <message>
         <source>Display feet</source>
-        <translation type="unfinished"></translation>
+        <translation>Les pieds de l'écran</translation>
     </message>
     <message>
         <source>Set first foot timecode...</source>
@@ -340,7 +340,7 @@
     </message>
     <message>
         <source>Ctrl+J</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+J</translation>
     </message>
     <message>
         <source>Set TC out</source>
@@ -360,23 +360,23 @@
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout va bien :) (FATAL ERROR)</translation>
     </message>
     <message>
         <source>Unable to connect to USB422v module</source>
-        <translation type="unfinished"></translation>
+        <translation>Je ne peux pas me connecter au module USB422v</translation>
     </message>
     <message>
         <source>Unable to open %0</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d'ouvrir %0</translation>
     </message>
     <message>
         <source>Unable to open %0 midi port</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d'ouvrir %0 midi port</translation>
     </message>
     <message>
         <source>Unable to save %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Peut pas sauvegarder %1</translation>
     </message>
     <message>
         <source>No video sync</source>
@@ -392,78 +392,78 @@
     </message>
     <message>
         <source>Open a video...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir une vidéo...</translation>
     </message>
     <message>
         <source>Save...</source>
-        <translation type="unfinished"></translation>
+        <translation>REC...</translation>
     </message>
 </context>
 <context>
     <name>PeopleDialog</name>
     <message>
         <source>Select a character</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisi ton perso</translation>
     </message>
     <message>
         <source>Use command key to select multiple character:</source>
-        <translation type="unfinished"></translation>
+        <translation>:Plusieurs perso:</translation>
     </message>
     <message>
         <source>Unselect all</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner tout (ou pas)</translation>
     </message>
     <message>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>OGModifier</translation>
     </message>
     <message>
         <source>The list is empty...</source>
-        <translation type="unfinished"></translation>
+        <translation>C'est vide ici...</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>OK !</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
     <name>PhColorPickerDialog</name>
     <message>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>OGModifier</translation>
     </message>
 </context>
 <context>
     <name>PhDialogButtonBox</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>OK!</translation>
     </message>
 </context>
 <context>
     <name>PhEditableDocumentWindow</name>
     <message>
         <source>Do you want to save your changes ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Veux-tu vraiment annuler tout ?</translation>
     </message>
 </context>
 <context>
     <name>PhFeedbackDialog</name>
     <message>
         <source>Feedback report</source>
-        <translation type="unfinished"></translation>
+        <translation>retour sur le logiciel</translation>
     </message>
     <message>
         <source>Having problem with %1 ?</source>
-        <translation type="unfinished"></translation>
+        <translation>C'est quoi ton problème avec %1 ?!!?</translation>
     </message>
     <message>
         <source>To help us improve this software, please send us this feedback report:</source>
