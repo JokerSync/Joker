@@ -8,14 +8,14 @@ SonyStripSynchronizer::SonyStripSynchronizer()
 void SonyStripSynchronizer::setSonyClock(PhClock *clock)
 {
 	_sonyClock = clock;
-	connect(_sonyClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onSonyTimeChanged(PhFrame, PhTimeCodeType)));
+	connect(_sonyClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onSonyTimeChanged(PhFrame,PhTimeCodeType)));
 	connect(_sonyClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onSonyRateChanged(PhRate)));
 }
 
 void SonyStripSynchronizer::setStripClock(PhClock *clock)
 {
 	_stripClock = clock;
-	connect(_stripClock, SIGNAL(frameChanged(PhFrame, PhTimeCodeType)), this, SLOT(onStripTimeChanged(PhFrame, PhTimeCodeType)));
+	connect(_stripClock, SIGNAL(frameChanged(PhFrame,PhTimeCodeType)), this, SLOT(onStripTimeChanged(PhFrame,PhTimeCodeType)));
 	connect(_stripClock, SIGNAL(rateChanged(PhRate)), this, SLOT(onStripRateChanged(PhRate)));
 }
 

@@ -6,19 +6,20 @@ echo "Install libltc"
 if [ "$(uname)" == "Darwin" ]; then
 echo "Mac OS X detected"
 
-git clone https://github.com/x42/libltc.git
-cd libltc
-aclocal
-autoheader
-glibtoolize --copy
-autoconf
-automake --gnu --add-missing --copy
-./configure
-make
-sudo make install
-cd ..
-echo "Removing libltc..."
-rm -rf libltc
+brew install libltc
+#git clone https://github.com/x42/libltc.git
+#cd libltc
+#aclocal
+#autoheader
+#glibtoolize --copy
+#autoconf
+#automake --gnu --add-missing --copy
+#./configure
+#make
+#sudo make install
+#cd ..
+#echo "Removing libltc..."
+#rm -rf libltc
 
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"

@@ -78,7 +78,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_protocolButtonGroup.addButton(ui->ltcRadioButton);
 	_protocolButtonGroup.addButton(ui->mtcRadioButton);
 
-	connect(&_protocolButtonGroup, SIGNAL(buttonToggled(int, bool)), this, SLOT(updateSynchronisationEnabledControl(int, bool)));
+	connect(&_protocolButtonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(updateSynchronisationEnabledControl(int,bool)));
 	connect(ui->mmcCheckBox, SIGNAL(toggled(bool)), this, SLOT(updateSynchronisationEnabledControl(bool)));
 
 #ifdef USE_SONY
@@ -136,7 +136,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	_midiPortTypeButtonGroup.addButton(ui->mtcExistingInputPortRadioButton);
 	_midiPortTypeButtonGroup.addButton(ui->mtcVirtualInputPortRadioButton);
 
-	connect(&_midiPortTypeButtonGroup, SIGNAL(buttonToggled(int, bool)), this, SLOT(updateSynchronisationEnabledControl(int, bool)));
+	connect(&_midiPortTypeButtonGroup, SIGNAL(buttonToggled(int,bool)), this, SLOT(updateSynchronisationEnabledControl(int,bool)));
 #else
 	ui->mtcRadioButton->setEnabled(false);
 	ui->mtcForce24as2398CheckBox->setEnabled(false);
