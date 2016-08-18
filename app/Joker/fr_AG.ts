@@ -33,14 +33,14 @@
     </message>
     <message>
         <source>Synchronous playback time: %1 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchroniser le temps playback: %1 secondes</translation>
     </message>
 </context>
 <context>
     <name>JokerWindow</name>
     <message>
         <source>Joker</source>
-        <translation>Joker (peu importe la langue Joker ça ne change pas!)</translation>
+        <translation>Joker \[ಠ_ಠ]/</translation>
     </message>
     <message>
         <source>File</source>
@@ -64,7 +64,7 @@
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Vu</translation>
     </message>
     <message>
         <source>Help</source>
@@ -112,7 +112,7 @@
     </message>
     <message>
         <source>Step backward</source>
-        <translation type="unfinished"></translation>
+        <translation>Un pas en arrière</translation>
     </message>
     <message>
         <source>Left</source>
@@ -120,7 +120,7 @@
     </message>
     <message>
         <source>Step time forward</source>
-        <translation type="unfinished"></translation>
+        <translation>Un temps en avant</translation>
     </message>
     <message>
         <source>Alt+Right</source>
@@ -128,7 +128,7 @@
     </message>
     <message>
         <source>Step time backward</source>
-        <translation type="unfinished"></translation>
+        <translation>Un temps en arrière</translation>
     </message>
     <message>
         <source>Alt+Left</source>
@@ -144,11 +144,11 @@
     </message>
     <message>
         <source>Change timestamp...</source>
-        <translation type="unfinished"></translation>
+        <translation>Changer le temps timbre (google trad...)...</translation>
     </message>
     <message>
         <source>Change font...</source>
-        <translation type="unfinished"></translation>
+        <translation>changer le fonds d'écran...</translation>
     </message>
     <message>
         <source>About...</source>
@@ -168,7 +168,7 @@
     </message>
     <message>
         <source>Set Joker on Test mode for syncheck</source>
-        <translation type="unfinished"></translation>
+        <translation>Mettre Joker en mode test pour vérifier la syncro</translation>
     </message>
     <message>
         <source>Ctrl+Shift+T</source>
@@ -176,7 +176,7 @@
     </message>
     <message>
         <source>Timecode...</source>
-        <translation type="unfinished"></translation>
+        <translation>Timecode (avec Salma Hayek &lt;3)...</translation>
     </message>
     <message>
         <source>Ctrl+G</source>
@@ -232,7 +232,7 @@
     </message>
     <message>
         <source>Force 16/9 ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Force 1,7778 ratio</translation>
     </message>
     <message>
         <source>F8</source>
@@ -252,7 +252,7 @@
     </message>
     <message>
         <source>Invert colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode bizarre</translation>
     </message>
     <message>
         <source>New</source>
@@ -268,7 +268,7 @@
     </message>
     <message>
         <source>Send feedback...</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer un rat porc...</translation>
     </message>
     <message>
         <source>Deinterlace video</source>
@@ -276,7 +276,7 @@
     </message>
     <message>
         <source>Hide the rythmo</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacher la bande</translation>
     </message>
     <message>
         <source>F9</source>
@@ -284,7 +284,7 @@
     </message>
     <message>
         <source>Next loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Prochaine boucle</translation>
     </message>
     <message>
         <source>Ctrl+Up</source>
@@ -292,7 +292,7 @@
     </message>
     <message>
         <source>Previous loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Précédente boucle</translation>
     </message>
     <message>
         <source>Ctrl+Down</source>
@@ -300,19 +300,19 @@
     </message>
     <message>
         <source>Display the cuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Changement de plans</translation>
     </message>
     <message>
         <source>Display the vertical scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher l'échelle horizontale</translation>
     </message>
     <message>
         <source>Display the information panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Display the information pan3l</translation>
     </message>
     <message>
         <source>Display the control panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le panneau de contrôle (4 heures!!!)</translation>
     </message>
     <message>
         <source>Hide selected peoples</source>
@@ -324,19 +324,19 @@
     </message>
     <message>
         <source>Set first foot timecode...</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler le premier pas du code temporel..</translation>
     </message>
     <message>
         <source>Set distance between two feet...</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler la distance entre deux pieds...</translation>
     </message>
     <message>
         <source>Use native video size</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser la taille originelle</translation>
     </message>
     <message>
         <source>Set TC in</source>
-        <translation type="unfinished"></translation>
+        <translation>--&gt;TC ouvert</translation>
     </message>
     <message>
         <source>Ctrl+J</source>
@@ -344,19 +344,19 @@
     </message>
     <message>
         <source>Set TC out</source>
-        <translation type="unfinished"></translation>
+        <translation>--&gt; DTC</translation>
     </message>
     <message>
         <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Kaka</translation>
     </message>
     <message>
         <source>Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Boucle</translation>
     </message>
     <message>
         <source>Ctrl+L</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+elle</translation>
     </message>
     <message>
         <source>Error</source>
@@ -380,15 +380,15 @@
     </message>
     <message>
         <source>No video sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Vidéo non syncro</translation>
     </message>
     <message>
         <source>Rythmo files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier en rythme</translation>
     </message>
     <message>
         <source>Movie files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de film</translation>
     </message>
     <message>
         <source>Open a video...</source>
@@ -467,305 +467,306 @@
     </message>
     <message>
         <source>To help us improve this software, please send us this feedback report:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pour nous aider à améliorer la traduction, le logiciel, donne nous ton avis :</translation>
     </message>
     <message>
         <source>Any information or idea is valuable !</source>
-        <translation type="unfinished"></translation>
+        <translation>On est tellement dans la merde que toutes idées est bonne à prendre !</translation>
     </message>
     <message>
         <source>Your email address if you would like us to get in touch with you :</source>
-        <translation type="unfinished"></translation>
+        <translation>Ton adresse mél pour qu'on se parle :</translation>
     </message>
     <message>
         <source>Thank you for your feedback!</source>
-        <translation type="unfinished"></translation>
+        <translation>Merci pour ton aide, bisou sur la fesse (gauche) !</translation>
     </message>
 </context>
 <context>
     <name>PhMediaPanel</name>
     <message>
         <source>23.98 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>23,98 fps et pas un de plus</translation>
     </message>
     <message>
         <source>24 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>24fps</translation>
     </message>
     <message>
         <source>25 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>25 fpppps</translation>
     </message>
     <message>
         <source>29.97 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>30-0,03fps</translation>
     </message>
     <message>
         <source>30 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>30 fps pile poil</translation>
     </message>
 </context>
 <context>
     <name>PhTimeCodeDialog</name>
     <message>
         <source>Go To</source>
-        <translation type="unfinished"></translation>
+        <translation>hjfkdshjfk</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>OK !</translation>
     </message>
 </context>
 <context>
     <name>PreferencesDialog</name>
     <message>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Tu préfères quoi ?</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Général Leclerc</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Langue :</translation>
     </message>
     <message>
         <source>Strip</source>
-        <translation type="unfinished"></translation>
+        <translation>Strip tease</translation>
     </message>
     <message>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre</translation>
     </message>
     <message>
         <source>Bold :</source>
-        <translation type="unfinished"></translation>
+        <translation>Osé :</translation>
     </message>
     <message>
         <source>Strip Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Strip tease en hauteur</translation>
     </message>
     <message>
         <source>Italic :</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouffeur de spaggheti :</translation>
     </message>
     <message>
         <source>Speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Need for Speeeeeeed (underground déconne pas) :</translation>
     </message>
     <message>
         <source>Synchronization</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronizatiiiiiionnnnnnn</translation>
     </message>
     <message>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>retard</translation>
     </message>
     <message>
         <source>quarter frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Un quart de cadre</translation>
     </message>
     <message>
         <source>millisecond</source>
-        <translation type="unfinished"></translation>
+        <translation>Milliardième de seconde</translation>
     </message>
     <message>
         <source>No sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de syncrooooo</translation>
     </message>
     <message>
         <source>Sony 9 pin</source>
-        <translation type="unfinished"></translation>
+        <translation>Sony 9 pains</translation>
     </message>
     <message>
         <source>Communication framerate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Communication avec le fréquence d'image:</translation>
     </message>
     <message>
         <source>23.98 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>23,98 fp.s</translation>
     </message>
     <message>
         <source>24 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>24 FPS</translation>
     </message>
     <message>
         <source>25 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>25FPS</translation>
     </message>
     <message>
         <source>29.97 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>29,9700fps</translation>
     </message>
     <message>
         <source>30 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>30,00fps</translation>
     </message>
     <message>
         <source>Video sync framerate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Video sync frame-rate :</translation>
     </message>
     <message>
         <source>LTC</source>
-        <translation type="unfinished"></translation>
+        <translation>DTC</translation>
     </message>
     <message>
         <source>Audio input port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Porc d'entrée pour le son (groin, groin) :</translation>
     </message>
     <message>
         <source>Midi timecode</source>
-        <translation type="unfinished"></translation>
+        <translation>Midi c'est l'heure du repas</translation>
     </message>
     <message>
         <source>Read from existing port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lire depuis le port existent :</translation>
     </message>
     <message>
         <source>Read from virtual port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lire depuis le port virtuel :</translation>
     </message>
     <message>
         <source>Force 24 fps as 23.98 when reading MTC</source>
-        <translation type="unfinished"></translation>
+        <translation>Forcer les fps à se travestir de 24 à 23,98 quand on lit en MTC</translation>
     </message>
     <message>
         <source>Midi machine control:</source>
-        <translation type="unfinished"></translation>
+        <translation>Contrôle de la machine à midi :</translation>
     </message>
     <message>
         <source>Send MMC message to port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer le message YMCA au port :</translation>
     </message>
     <message>
         <source>&lt;System default&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;Défaut du système&gt;</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Frenchies</translation>
     </message>
     <message>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>BFM TV... euh non Information</translation>
     </message>
     <message>
         <source>You change the language to "%1".
 You need to restart %2 to apply you changes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tu changes la langue de "%1".
+Tu dois redémarrer ton ordi pour appliquer les changements %2.</translation>
     </message>
 </context>
 <context>
     <name>PropertyDialog</name>
     <message>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés de Joker</translation>
     </message>
     <message>
         <source>Title:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gros titre :</translation>
     </message>
     <message>
         <source>-</source>
-        <translation type="unfinished"></translation>
+        <translation>8====3</translation>
     </message>
     <message>
         <source>Author:</source>
-        <translation type="unfinished"></translation>
+        <translation>Acteur, auteur, compositeur :</translation>
     </message>
     <message>
         <source>TC In:</source>
-        <translation type="unfinished"></translation>
+        <translation>THC in or out :</translation>
     </message>
     <message>
         <source>TC Out:</source>
-        <translation type="unfinished"></translation>
+        <translation>TC out :</translation>
     </message>
     <message>
         <source>People number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre de personnes :</translation>
     </message>
     <message>
         <source>Text character number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Texte du perso numéro :</translation>
     </message>
     <message>
         <source>Strip:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tease (Strip) :</translation>
     </message>
     <message>
         <source>Video:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hentaï :</translation>
     </message>
     <message>
         <source>Video file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier Hentaï :</translation>
     </message>
     <message>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pour la nouvelle année on fait des bonnes ... :</translation>
     </message>
     <message>
         <source>Codec name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du codec :</translation>
     </message>
     <message>
         <source>FPS:</source>
-        <translation type="unfinished"></translation>
+        <translation>First-person shooter :</translation>
     </message>
 </context>
 <context>
     <name>QTranslator</name>
     <message>
         <source>Reset the settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton rouge</translation>
     </message>
     <message>
         <source>Would you like to reset your settings ?</source>
-        <translation type="unfinished"></translation>
+        <translation>NE JAMAIS APPUYER SUR LE BOUTON ROUGE !! ?</translation>
     </message>
 </context>
 <context>
     <name>TimeBetweenTwoFeetDialog</name>
     <message>
         <source>Time between two feet</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps entre deux pattes</translation>
     </message>
     <message>
         <source>Current time :</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps qui court :</translation>
     </message>
 </context>
 <context>
     <name>MAC_APPLICATION_MENU</name>
     <message>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Services.</translation>
     </message>
     <message>
         <source>Hide %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Casher %1</translation>
     </message>
     <message>
         <source>Hide Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Cacher autres</translation>
     </message>
     <message>
         <source>Show All</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer tout</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Préférences ...</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir %1</translation>
     </message>
     <message>
         <source>About %1</source>
