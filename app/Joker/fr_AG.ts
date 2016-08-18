@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Revision:</source>
-        <translation>Révision:</translation>
+        <translation>Révision :</translation>
     </message>
     <message>
         <source>Synchronous playback time: %1 seconds</source>
@@ -136,7 +136,7 @@
     </message>
     <message>
         <source>Open video file...</source>
-        <translation>Ouvrir un ficher vidéo</translation>
+        <translation>Ouvrir un ficher vidéo ...</translation>
     </message>
     <message>
         <source>Ctrl+Shift+O</source>
@@ -152,11 +152,11 @@
     </message>
     <message>
         <source>About...</source>
-        <translation>Mais... A propos?!</translation>
+        <translation>Mais... A propos?! ..</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation>Préférences... déjà marre du mode Armageddon? non</translation>
+        <translation>Préférences... déjà marre du mode Armageddon? ...</translation>
     </message>
     <message>
         <source>Properties...</source>
@@ -407,7 +407,7 @@
     </message>
     <message>
         <source>Use command key to select multiple character:</source>
-        <translation>:Plusieurs perso:</translation>
+        <translation>:Plusieurs perso :</translation>
     </message>
     <message>
         <source>Unselect all</source>
@@ -463,7 +463,7 @@
     </message>
     <message>
         <source>Having problem with %1 ?</source>
-        <translation>C'est quoi ton problème avec %1 ?!!?</translation>
+        <translation>C'est quoi ton problème avec %1 ?!! ?</translation>
     </message>
     <message>
         <source>To help us improve this software, please send us this feedback report:</source>
@@ -584,7 +584,7 @@
     </message>
     <message>
         <source>Communication framerate:</source>
-        <translation>Communication avec le fréquence d'image:</translation>
+        <translation>Communication avec le fréquence d'image :</translation>
     </message>
     <message>
         <source>23.98 fps</source>
@@ -746,7 +746,7 @@ Tu dois redémarrer ton ordi pour appliquer les changements %2.</translation>
     <name>MAC_APPLICATION_MENU</name>
     <message>
         <source>Services</source>
-        <translation>Services.</translation>
+        <translation>Service s</translation>
     </message>
     <message>
         <source>Hide %1</source>
