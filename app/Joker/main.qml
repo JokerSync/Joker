@@ -473,6 +473,7 @@ Item {
         }
     }
 
+    // add loop
     Shortcut {
         sequence: "0"
         enabled: window.edition
@@ -486,6 +487,7 @@ Item {
         }
     }
 
+    // add cut
     Shortcut {
         sequence: "1"
         enabled: window.edition
@@ -499,6 +501,39 @@ Item {
         }
     }
 
+    // start/end of a line with open mouth
+    Shortcut {
+        sequence: "2"
+        enabled: window.edition
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            console.log("2 shortcut " + time + " " + textX + " " + textY);
+
+            // if there is a line below, this should add a detect to it
+            var success = strip.addDetectAt(textX, textY);
+        }
+    }
+
+    // start/end of a line with closed mouth
+    Shortcut {
+        sequence: "3"
+        enabled: window.edition
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            console.log("3 shortcut " + time + " " + textX + " " + textY);
+
+            // if there is a line below, this should add a detect to it
+            var success = strip.addDetectAt(textX, textY);
+        }
+    }
+
+    // labial
     Shortcut {
         sequence: "4"
         enabled: window.edition
@@ -508,6 +543,86 @@ Item {
             var textY = strip.currentTextY
             var textX = time / settings.horizontalTimePerPixel
             console.log("4 shortcut " + time + " " + textX + " " + textY);
+
+            // if there is a line below, this should add a detect to it
+            var success = strip.addDetectAt(textX, textY);
+        }
+    }
+
+    // dental
+    Shortcut {
+        sequence: "5"
+        enabled: window.edition
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            console.log("5 shortcut " + time + " " + textX + " " + textY);
+
+            // if there is a line below, this should add a detect to it
+            var success = strip.addDetectAt(textX, textY);
+        }
+    }
+
+    // neutral
+    Shortcut {
+        sequence: "6"
+        enabled: window.edition
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            console.log("6 shortcut " + time + " " + textX + " " + textY);
+
+            // if there is a line below, this should add a detect to it
+            var success = strip.addDetectAt(textX, textY);
+        }
+    }
+
+    // aperture
+    Shortcut {
+        sequence: "7"
+        enabled: window.edition
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            console.log("7 shortcut " + time + " " + textX + " " + textY);
+
+            // if there is a line below, this should add a detect to it
+            var success = strip.addDetectAt(textX, textY);
+        }
+    }
+
+    // bowl
+    Shortcut {
+        sequence: "8"
+        enabled: window.edition
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            console.log("8 shortcut " + time + " " + textX + " " + textY);
+
+            // if there is a line below, this should add a detect to it
+            var success = strip.addDetectAt(textX, textY);
+        }
+    }
+
+    // advance / "weque"
+    Shortcut {
+        sequence: "9"
+        enabled: window.edition
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            console.log("9 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it
             var success = strip.addDetectAt(textX, textY);
