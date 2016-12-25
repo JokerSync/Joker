@@ -96,7 +96,7 @@ Item {
                 var trackHeight = stripContainer.height / 4;
                 var textY = Math.round((stripContextMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
                 console.log("add line " + time + " " + textY);
-                doc.lineModel.addDetect(time, textY);
+                doc.addLine(time, textY);
             }
         }
     }
