@@ -414,14 +414,14 @@ Item {
     }
 
     Shortcut {
-        sequence: "Ctrl+Alt+Left"
-        enabled: window.edition
+        sequence: "Shift+Left"
+        enabled: window.edition && !strip.editing && !peopleSelection.editing // do not steal the TextInputs event processing
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
             var textY = strip.currentTextY
             var textX = time / settings.horizontalTimePerPixel
-            console.log("Ctrl+Alt+Left shortcut " + time + " " + textX + " " + textY);
+            console.log("Shift+Left shortcut " + time + " " + textX + " " + textY);
 
             // find the detect that is at the current time, attach it if it is detached, and shift the text
             strip.shiftDetectAt(textX, textY, -1);
@@ -429,14 +429,14 @@ Item {
     }
 
     Shortcut {
-        sequence: "Ctrl+Alt+Right"
-        enabled: window.edition
+        sequence: "Shift+Right"
+        enabled: window.edition && !strip.editing && !peopleSelection.editing // do not steal the TextInputs event processing
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
             var textY = strip.currentTextY
             var textX = time / settings.horizontalTimePerPixel
-            console.log("Ctrl+Alt+Right shortcut " + time + " " + textX + " " + textY);
+            console.log("Shift+Right shortcut " + time + " " + textX + " " + textY);
 
             // find the detect that is at the current time, attach it if it is detached, and shift the text
             strip.shiftDetectAt(textX, textY, 1);
