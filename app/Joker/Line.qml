@@ -258,7 +258,7 @@ Item {
             if (Math.abs(detect.x - lineX) < 1) {
                 console.log("attaching detect time " + stripLineContainer.x + " " + shift)
                 // this will attach the detect and it will be found as a time out in the next loop
-                attachDetect(j)
+                attachDetect(j, detect.x)
                 break;
             }
         }
