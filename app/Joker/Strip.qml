@@ -114,6 +114,17 @@ Item {
         }
     }
 
+    MouseArea {
+        id: scrollStripArea
+        anchors.fill: parent
+        onWheel: {
+            console.log("wheel " + wheel.angleDelta.x + " " + wheel.angleDelta.y + " " + wheel.pixelDelta.x + " " + wheel.pixelDelta.y);
+            var wheelStepSize = 120;
+            var frameChange = wheel.angleDelta.y/wheelStepSize;
+            playbackController.onFrameScroll(frameChange);
+        }
+    }
+
     // ruler
     Row {
         id: stripRulerRepeater

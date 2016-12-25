@@ -189,6 +189,7 @@ public slots:
 	void onNextFrame();
 	void onPreviousFrame();
 	void onPlayPauseBackward();
+	void onFrameScroll(int frameDelta);
 
 protected:
 	/**

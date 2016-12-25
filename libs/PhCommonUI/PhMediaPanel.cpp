@@ -260,6 +260,14 @@ void PhMediaPanel::onPlayPauseBackward()
 	updatePlayingState();
 }
 
+void PhMediaPanel::onFrameScroll(int frameDelta)
+{
+	if(_clock && frameDelta != 0) {
+		_clock->setRate(0);
+		_clock->setTime(_clock->time() + frameDelta*PhTimeCode::timePerFrame(this->timeCodeType()));
+	}
+}
+
 void PhMediaPanel::onSliderChanged(int position)
 {
 	PhTime time = position * PhTimeCode::timePerFrame(this->timeCodeType());
