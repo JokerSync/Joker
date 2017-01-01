@@ -174,15 +174,15 @@ Item {
         return false;
     }
 
-    function addDetectAt(x, y) {
+    function addDetectAt(x, y, type) {
         var lineX = x - stripLineContainer.x
         var lineY = y - stripLineContainer.y
         var lineWidth = duration/settings.horizontalTimePerPixel
 
         if (lineX > 0 && lineX < lineWidth && lineY >= 0 && lineY < stripLineContainer.height) {
             var time = lineX * settings.horizontalTimePerPixel
-            console.log("line.addDetectAt adding detect " + time + " " + lineX + " " + lineY + " " + lineWidth)
-            stripLineContainer.lineModel.unlinkedDetects.add(time)
+            console.log("line.addDetectAt adding detect " + time + " " + lineX + " " + lineY + " " + lineWidth + " " + type)
+            stripLineContainer.lineModel.unlinkedDetects.add(time, type)
             return true;
         }
         return false;

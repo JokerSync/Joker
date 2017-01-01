@@ -528,13 +528,13 @@ Item {
         return false;
     }
 
-    function addDetectAt(x, y) {
+    function addDetectAt(x, y, type) {
         for (var i = 0; i < stripLineRepeater.children.length; ++i) {
             var line = stripLineRepeater.children[i];
             if (line.objectName !== "Line") {
                 continue;
             }
-            var success = line.addDetectAt(x, y);
+            var success = line.addDetectAt(x, y, type);
             if (success) {
                 return true;
             }

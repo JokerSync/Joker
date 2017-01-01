@@ -8,6 +8,7 @@ import QtQuick 2.5
 import QtQml 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
+import PhImport 1.0
 
 //ApplicationWindow {
 Item {
@@ -513,7 +514,7 @@ Item {
             console.log("2 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it
-            var success = strip.addDetectAt(textX, textY);
+            var success = strip.addDetectAt(textX, textY, PhStripDetect.MouthOpen);
         }
     }
 
@@ -529,7 +530,7 @@ Item {
             console.log("3 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it
-            var success = strip.addDetectAt(textX, textY);
+            var success = strip.addDetectAt(textX, textY, PhStripDetect.MouthClosed);
         }
     }
 
@@ -545,7 +546,7 @@ Item {
             console.log("4 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it
-            var success = strip.addDetectAt(textX, textY);
+            var success = strip.addDetectAt(textX, textY, PhStripDetect.Labial);
         }
     }
 
@@ -561,7 +562,7 @@ Item {
             console.log("5 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it
-            var success = strip.addDetectAt(textX, textY);
+            var success = strip.addDetectAt(textX, textY, PhStripDetect.Dental);
         }
     }
 
@@ -577,7 +578,7 @@ Item {
             console.log("6 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it
-            var success = strip.addDetectAt(textX, textY);
+            var success = strip.addDetectAt(textX, textY, PhStripDetect.Unknown);
         }
     }
 
@@ -593,7 +594,7 @@ Item {
             console.log("7 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it
-            var success = strip.addDetectAt(textX, textY);
+            var success = strip.addDetectAt(textX, textY, PhStripDetect.Aperture);
         }
     }
 
@@ -609,7 +610,7 @@ Item {
             console.log("8 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it
-            var success = strip.addDetectAt(textX, textY);
+            var success = strip.addDetectAt(textX, textY, PhStripDetect.Bowl);
         }
     }
 
@@ -625,7 +626,7 @@ Item {
             console.log("9 shortcut " + time + " " + textX + " " + textY);
 
             // if there is a line below, this should add a detect to it
-            var success = strip.addDetectAt(textX, textY);
+            var success = strip.addDetectAt(textX, textY, PhStripDetect.Advance);
         }
     }
 
