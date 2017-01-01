@@ -367,7 +367,17 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 
 			ptree lipsyncIn;
 			lipsyncIn.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeIn(), tcType).toStdString());
-			lipsyncIn.put("<xmlattr>.type", "in_open");
+
+			if (sentence->typeIn() == PhStripDetect::MouthOpen) {
+				lipsyncIn.put("<xmlattr>.type", "in_open");
+			}
+			else if (sentence->typeIn() == PhStripDetect::MouthClosed) {
+				lipsyncIn.put("<xmlattr>.type", "in_close");
+			}
+			else {
+				lipsyncIn.put("<xmlattr>.type", "in_close");
+			}
+
 			ptLine.push_back(std::make_pair("lipsync", lipsyncIn));
 
 			QListIterator<PhStripText *> textIterator = sentence->textModel()->iterator();
@@ -375,15 +385,51 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 				PhStripText *text = textIterator.next();
 				timeOut += text->duration();
 
-				ptLine.add("text", text->content().toStdString());
-
 				ptree pText;
 				pText.put("", text->content().toStdString());
 				ptLine.push_back(std::make_pair("text", pText));
 
 				ptree lipsyncOut;
 				lipsyncOut.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(timeOut, tcType).toStdString());
-				lipsyncOut.put("<xmlattr>.type", "neutral");
+
+				if (!textIterator.hasNext()) {
+					if (text->typeOut() == PhStripDetect::MouthOpen) {
+						lipsyncOut.put("<xmlattr>.type", "out_open");
+					}
+					else if (text->typeOut() == PhStripDetect::MouthClosed) {
+						lipsyncOut.put("<xmlattr>.type", "out_close");
+					}
+					else {
+						lipsyncOut.put("<xmlattr>.type", "out_close");
+					}
+				}
+				else {
+					if (text->typeOut() == PhStripDetect::Labial) {
+						lipsyncOut.put("<xmlattr>.type", "mpb");
+					}
+					else if (text->typeOut() == PhStripDetect::Dental) {
+						lipsyncOut.put("<xmlattr>.type", "fvr");
+					}
+					else if (text->typeOut() == PhStripDetect::Unknown) {
+						lipsyncOut.put("<xmlattr>.type", "neutral");
+					}
+					else if (text->typeOut() == PhStripDetect::Aperture) {
+						lipsyncOut.put("<xmlattr>.type", "a");
+					}
+					else if (text->typeOut() == PhStripDetect::SemiLabial) {
+						lipsyncOut.put("<xmlattr>.type", "i");
+					}
+					else if (text->typeOut() == PhStripDetect::Bowl) {
+						lipsyncOut.put("<xmlattr>.type", "o");
+					}
+					else if (text->typeOut() == PhStripDetect::Advance) {
+						lipsyncOut.put("<xmlattr>.type", "weuque");
+					}
+					else {
+						lipsyncOut.put("<xmlattr>.type", "neutral");
+					}
+				}
+
 				ptLine.push_back(std::make_pair("lipsync", lipsyncOut));
 			}
 
