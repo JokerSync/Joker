@@ -650,6 +650,15 @@ Item {
         }
     }
 
+    Shortcut {
+        sequence: "Ctrl+E"
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            console.log("Ctrl+E shortcut " + window.edition);
+            editionSwitch.toggle()
+        }
+    }
+
     function mod(n, m) {
             return ((n % m) + m) % m;
     }

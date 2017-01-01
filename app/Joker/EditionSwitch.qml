@@ -12,6 +12,10 @@ Rectangle {
         GradientStop { position: 1.0; color: "#000d0d0d" }
     }
 
+    function toggle() {
+        editionSwitch.checked = !editionSwitch.checked
+    }
+
     RowLayout  {
         anchors.left: parent.left
         anchors.right: parent.right
