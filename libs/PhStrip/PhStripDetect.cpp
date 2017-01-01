@@ -13,6 +13,13 @@ PhStripDetect::PhStripDetect(PhDetectType type, PhTime relativeTime)
 
 }
 
+PhStripDetect::PhStripDetect()
+	: _type(PhStripDetect::Unknown),
+	  _relativeTime(0)
+{
+
+}
+
 PhTime PhStripDetect::relativeTime() const
 {
 	return _relativeTime;

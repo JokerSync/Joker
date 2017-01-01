@@ -9,7 +9,8 @@ class PhStripDetectModel : public QAbstractListModel
 	Q_OBJECT
 public:
 	enum DetectRoles {
-		TimeRole = Qt::UserRole + 1
+		TimeRole = Qt::UserRole + 1,
+		TypeRole
 	};
 
 	PhStripDetectModel(QObject * parent = 0);
@@ -23,7 +24,7 @@ public:
 	QListIterator<PhStripDetect *> iterator();
 
 public slots:
-	void add(PhTime time);
+	void add(PhTime time, PhStripDetect::PhDetectType type);
 	void remove(int index);
 
 protected:

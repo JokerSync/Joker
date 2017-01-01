@@ -14,7 +14,7 @@
  *
  * The block can be off (out of the picture) or not.
  */
-class PhStripDetect : QObject
+class PhStripDetect : public QObject
 {
 	Q_OBJECT
 
@@ -40,6 +40,7 @@ public:
 		AmbianceStart,
 		AmbianceEnd,
 	};
+	Q_ENUMS(PhDetectType)
 
 	/**
 	 * @brief PhStripDetect constructor
@@ -47,6 +48,8 @@ public:
 	 * @param relativeTime The starting time of the detect, relative to the line start
 	 */
 	PhStripDetect(PhDetectType type, PhTime relativeTime);
+
+	PhStripDetect();
 
 	/**
 	 * @brief If the people is out of the picture

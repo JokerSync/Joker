@@ -25,6 +25,9 @@ QVariant PhStripDetectModel::data(const QModelIndex & index, int role) const {
 	if (role == TimeRole)
 		return detect->relativeTime();
 
+	if (role == TypeRole)
+		return detect->type();
+
 	return QVariant();
 }
 
@@ -37,6 +40,13 @@ bool PhStripDetectModel::setData(const QModelIndex &index, const QVariant &value
 	if (role == TimeRole) {
 		if (detect->relativeTime() != value.toInt()) {
 			detect->setRelativeTime(value.toInt());
+			emit dataChanged(index, index, QVector<int>(1, role));
+		}
+		return true;
+	}
+	else if (role == TypeRole) {
+		if (detect->type() != value.toInt()) {
+			detect->setType((PhStripDetect::PhDetectType)value.toInt());
 			emit dataChanged(index, index, QVector<int>(1, role));
 		}
 		return true;
@@ -61,12 +71,12 @@ QListIterator<PhStripDetect *> PhStripDetectModel::iterator()
 QHash<int, QByteArray> PhStripDetectModel::roleNames() const {
 	QHash<int, QByteArray> roles;
 	roles[TimeRole] = "time";
+	roles[TypeRole] = "type";
 	return roles;
 }
 
-void PhStripDetectModel::add(PhTime time)
+void PhStripDetectModel::add(PhTime time, PhStripDetect::PhDetectType type)
 {
-	PhStripDetect::PhDetectType type = PhStripDetect::Labial;
 	append(new PhStripDetect(type, time));
 }
 

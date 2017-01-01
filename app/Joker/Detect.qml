@@ -1,13 +1,15 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
+import "qrc:/qml/colors.js" as Colors
 
 Item {
     id: lineDetect
     Binding { target: model; property: "time"; value: x*settings.horizontalTimePerPixel }
+    property int modelType: type
 
     Rectangle {
         id: detectRectangle
-        color: "#8000FFFF"
+        color: Qt.lighter(Colors.colorFromDetectType(type))
         width: 18
         height: 18
         anchors.horizontalCenter: parent.horizontalCenter

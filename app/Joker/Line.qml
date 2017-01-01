@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.1
+import "qrc:/qml/colors.js" as Colors
 
 // FIXME color, font, inverted color are not implemented
 Item {
@@ -103,7 +104,7 @@ Item {
     Rectangle {
         width: rulersSize
         height: rulersSize
-        color: "steelblue"
+        color: Colors.colorFromDetectType(typeIn)
         anchors.horizontalCenter: parent.left
         anchors.bottom: parent.bottom
         visible: window.edition
@@ -359,6 +360,8 @@ Item {
     }
 
     function attachDetect(detectIndex, detectX) {
+        var detect = detectRepeater.itemAt(detectIndex);
+
         // find the text below
         var text = textRow.childAt(detectX, 0);
         if (text) {
@@ -369,9 +372,9 @@ Item {
             // add the new text
             var splitTime = (detectX - text.x) * settings.horizontalTimePerPixel
 
-            console.log("split " + detectIndex + " " + detectX + " " + text.x + " " + text.textIndex + " " + pos + " " + splitTime)
+            console.log("split " + detectIndex + " " + detectX + " " + text.x + " " + text.textIndex + " " + pos + " " + splitTime + " " + detect.modelType)
 
-            stripLineContainer.lineModel.texts.split(text.textIndex, pos, splitTime)
+            stripLineContainer.lineModel.texts.split(text.textIndex, pos, splitTime, detect.modelType)
         }
 
         // remove the detect
@@ -381,15 +384,16 @@ Item {
     function detachDetect(textIndex) {
         var text = textRepeater.itemAt(textIndex)
         var nextText = textRepeater.itemAt(textIndex+1)
+        var firstTypeOut = text.modelTypeOut;
 
         var time = nextText.x * settings.horizontalTimePerPixel
 
-        console.log("merge " + textIndex + " " + time)
+        console.log("merge " + textIndex + " " + time + " " + firstTypeOut)
 
         stripLineContainer.lineModel.texts.merge(textIndex)
 
         // add a new unlinked detect where the previous text ended
-        stripLineContainer.lineModel.unlinkedDetects.add(time)
+        stripLineContainer.lineModel.unlinkedDetects.add(time, firstTypeOut)
     }
 
     function showContextMenu(mouseX) {

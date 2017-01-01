@@ -54,6 +54,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_syncTimeInToDoc(false),
 	_timePlayed(settings->timePlayed())
 {
+	qmlRegisterType<PhStripDetect>("PhImport", 1, 0, "PhStripDetect");
+	qRegisterMetaType<PhStripDetect::PhDetectType>("PhStripDetect::PhDetectType");
+
 	qApp->installEventFilter(this);
 
 	// Setting up UI

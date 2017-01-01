@@ -13,6 +13,7 @@ public:
 	enum NextPeopleRoles {
 		TrackNumberRole = Qt::UserRole + 1,
 		TimeInRole,
+		TypeInRole,
 		TextsRole,
 		UnlinkedDetectsRole,
 		PeopleNameRole,

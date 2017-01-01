@@ -39,6 +39,8 @@ QVariant PhStripLineModel::data(const QModelIndex & index, int role) const {
 		return line->y();
 	else if (role == TimeInRole)
 		return line->timeIn();
+	else if (role == TypeInRole)
+		return line->typeIn();
 	else if (role == TextsRole)
 		return QVariant::fromValue<QObject*>(line->textModel());
 	else if (role == UnlinkedDetectsRole)
@@ -61,6 +63,13 @@ bool PhStripLineModel::setData(const QModelIndex &index, const QVariant &value, 
 			emit dataChanged(index, index, QVector<int>(1, role));
 			updateTimeIn();
 			updateTimeOut();
+		}
+		return true;
+	}
+	else if (role == TypeInRole) {
+		if (line->typeIn() != value.toInt()) {
+			line->setTypeIn((PhStripDetect::PhDetectType)value.toInt());
+			emit dataChanged(index, index, QVector<int>(1, role));
 		}
 		return true;
 	}
@@ -117,6 +126,7 @@ QHash<int, QByteArray> PhStripLineModel::roleNames() const {
 	QHash<int, QByteArray> roles;
 	roles[TrackNumberRole] = "trackNumber";
 	roles[TimeInRole] = "timeIn";
+	roles[TypeInRole] = "typeIn";
 	roles[TextsRole] = "texts";
 	roles[UnlinkedDetectsRole] = "unlinkedDetects";
 	roles[PeopleNameRole] = "peopleName";
@@ -202,7 +212,7 @@ void PhStripLineModel::add(PhTime time, float y, PhPeople *people)
 				&& l->y() == y) {
 			// found a matching opened line
 			// add an empty text with the proper timeout
-			PhStripDetect::PhDetectType typeOut = PhStripDetect::On;
+			PhStripDetect::PhDetectType typeOut = PhStripDetect::MouthClosed;
 			PhStripText *text = new PhStripText("", time - l->timeIn(), typeOut);
 			l->textModel()->append(text);
 			return;
@@ -239,7 +249,7 @@ void PhStripLineModel::add(PhTime time, float y, PhPeople *people)
 		}
 	}
 
-	PhStripDetect::PhDetectType typeIn = PhStripDetect::On;
+	PhStripDetect::PhDetectType typeIn = PhStripDetect::MouthOpen;
 	float height = 0.25;
 
 	PhStripLine *line = new PhStripLine(time, typeIn, people, y, height);

@@ -1,5 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.1
+import "qrc:/qml/colors.js" as Colors
 
 FocusScope {
     id: stripTextItem2
@@ -15,6 +16,8 @@ FocusScope {
     property int cursorPosition: stripTextInput.cursorPosition
     property color emptyEditing: "#A00000FF"
     property color emptyNonEditing: "#A0AAAAAA"
+
+    property int modelTypeOut: typeOut
 
     // appears when we create a new line by adding the ending sign
     Rectangle {
@@ -151,7 +154,7 @@ FocusScope {
         height: 18
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.right
-        color: "steelblue"
+        color: Colors.colorFromDetectType(typeOut)
         visible: window.edition
 
         MouseArea {
