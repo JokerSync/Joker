@@ -19,6 +19,10 @@ FocusScope {
 
     property int modelTypeOut: typeOut
 
+    function setText(text) {
+        content = text;
+    }
+
     // appears when we create a new line by adding the ending sign
     Rectangle {
         anchors.fill: parent
@@ -224,8 +228,8 @@ FocusScope {
 
             console.log(textMoved + " " + text + " " + nextText.text)
 
-            text = text.substr(0,currentLength-shift)
-            nextText.text = textMoved + nextText.text
+            setText(text.substr(0,currentLength-shift))
+            nextText.setText(textMoved + nextText.text)
         } else {
             var absoluteShift = -shift
 
@@ -237,8 +241,8 @@ FocusScope {
 
             console.log(nextTextMoved + " - " + text + " - " + nextText.text)
 
-            text = text + nextTextMoved
-            nextText.text = nextText.text.substr(absoluteShift,nextLength-absoluteShift)
+            setText(text + nextTextMoved)
+            nextText.setText(nextText.text.substr(absoluteShift,nextLength-absoluteShift))
         }
     }
 
