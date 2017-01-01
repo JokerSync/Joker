@@ -47,6 +47,114 @@ PhStripDoc::PhStripDoc() :
 	connect(_lineModel, &PhStripLineModel::timeOutChanged, this, &PhStripDoc::updateTimeOut);
 }
 
+PhStripDetect::PhDetectType openingDetectFromString(QString type)
+{
+	if (type == "in_open") {
+		return PhStripDetect::MouthOpen;
+	}
+	else if (type == "in_close") {
+		return PhStripDetect::MouthClosed;
+	}
+	else {
+		return PhStripDetect::MouthClosed;
+	}
+}
+
+QString openingDetectToString(PhStripDetect::PhDetectType type)
+{
+	if (type == PhStripDetect::MouthOpen) {
+		return "in_open";
+	}
+	else if (type == PhStripDetect::MouthClosed) {
+		return "in_close";
+	}
+	else {
+		return "in_close";
+	}
+}
+
+PhStripDetect::PhDetectType closingDetectFromString(QString type)
+{
+	if (type == "out_open") {
+		return PhStripDetect::MouthOpen;
+	}
+	else if (type == "out_close") {
+		return PhStripDetect::MouthClosed;
+	}
+	else {
+		return PhStripDetect::MouthClosed;
+	}
+}
+
+QString closingDetectToString(PhStripDetect::PhDetectType type)
+{
+	if (type == PhStripDetect::MouthOpen) {
+		return "out_open";
+	}
+	else if (type == PhStripDetect::MouthClosed) {
+		return "out_close";
+	}
+	else {
+		return "out_close";
+	}
+}
+
+PhStripDetect::PhDetectType innerDetectFromString(QString type)
+{
+	if (type == "mpb") {
+		return PhStripDetect::Labial;
+	}
+	else if (type == "fvr") {
+		return PhStripDetect::Dental;
+	}
+	else if (type == "neutral") {
+		return PhStripDetect::Unknown;
+	}
+	else if (type == "a") {
+		return PhStripDetect::Aperture;
+	}
+	else if (type == "i") {
+		return PhStripDetect::SemiLabial;
+	}
+	else if (type == "o") {
+		return PhStripDetect::Bowl;
+	}
+	else if (type == "weuque") {
+		return PhStripDetect::Advance;
+	}
+	else {
+		return PhStripDetect::Unknown;
+	}
+}
+
+QString innerDetectToString(PhStripDetect::PhDetectType type)
+{
+	if (type == PhStripDetect::Labial) {
+		return "mpb";
+	}
+	else if (type == PhStripDetect::Dental) {
+		return "fvr";
+	}
+	else if (type == PhStripDetect::Unknown) {
+		return "neutral";
+	}
+	else if (type == PhStripDetect::Aperture) {
+		return "a";
+	}
+	else if (type == PhStripDetect::SemiLabial) {
+		return "i";
+	}
+	else if (type == PhStripDetect::Bowl) {
+		return "o";
+	}
+	else if (type == PhStripDetect::Advance) {
+		return "weuque";
+	}
+	else {
+		return "neutral";
+	}
+}
+
 bool PhStripDoc::importDetXFile(QString fileName)
 {
 	PHDEBUG << fileName;
@@ -210,20 +318,30 @@ bool PhStripDoc::importDetXFile(QString fileName)
 								if(timeIn < 0) {
 									timeIn = linkTime;
 									lastTime = linkTime;
-									line = new PhStripLine(timeIn, PhStripDetect::On, people, y, 0.25f);
+									line = new PhStripLine(timeIn, openingDetectFromString(lineElem.attribute("type")), people, y, 0.25f);
 									continue;
 								}
 
 								if(lineElem.attribute("link") != "off") {
 									PhTime duration = linkTime - lastTime;
-									PhStripText *text = new PhStripText(currentText, duration, PhStripDetect::Labial);
+
+									PhStripDetect::PhDetectType type;
+									if (j == elem.childNodes().length() - 1)
+									{
+										type = closingDetectFromString(lineElem.attribute("type"));
+									}
+									else {
+										type = innerDetectFromString(lineElem.attribute("type"));
+									}
+
+									PhStripText *text = new PhStripText(currentText, duration, type);
 									line->append(text);
 									lastTime = linkTime;
 									currentText = "";
 									lastLinkedTime = lastTime;
 								}
 								else {
-									PhStripDetect *detect = new PhStripDetect(PhStripDetect::Labial, linkTime - timeIn);
+									PhStripDetect *detect = new PhStripDetect(innerDetectFromString(lineElem.attribute("type")), linkTime - timeIn);
 									line->addUnlinkedDetect(detect);
 								}
 							}
@@ -237,7 +355,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					if(currentText != "") {
 						PhTime duration = currentText.length() * 1000;
 						PHDEBUG << currentText;
-						PhStripText *text = new PhStripText(currentText, duration, PhStripDetect::Labial);
+						PhStripText *text = new PhStripText(currentText, duration, PhStripDetect::MouthClosed);
 						line->append(text);
 					}
 
@@ -367,18 +485,18 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 
 			ptree lipsyncIn;
 			lipsyncIn.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeIn(), tcType).toStdString());
-
-			if (sentence->typeIn() == PhStripDetect::MouthOpen) {
-				lipsyncIn.put("<xmlattr>.type", "in_open");
-			}
-			else if (sentence->typeIn() == PhStripDetect::MouthClosed) {
-				lipsyncIn.put("<xmlattr>.type", "in_close");
-			}
-			else {
-				lipsyncIn.put("<xmlattr>.type", "in_close");
-			}
-
+			lipsyncIn.put("<xmlattr>.type", openingDetectToString(sentence->typeIn()).toStdString());
 			ptLine.push_back(std::make_pair("lipsync", lipsyncIn));
+
+			QListIterator<PhStripDetect *> unlinkedDetectIterator = sentence->detectModel()->iterator();
+			while (unlinkedDetectIterator.hasNext()) {
+				PhStripDetect *unlinkedDetect = unlinkedDetectIterator.next();
+				ptree lipsyncOut;
+				lipsyncOut.put("<xmlattr>.link", "off");
+				lipsyncOut.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(sentence->timeIn() + unlinkedDetect->relativeTime(), tcType).toStdString());
+				lipsyncOut.put("<xmlattr>.type", innerDetectToString(unlinkedDetect->type()).toStdString());
+				ptLine.push_back(std::make_pair("lipsync", lipsyncOut));
+			}
 
 			QListIterator<PhStripText *> textIterator = sentence->textModel()->iterator();
 			while (textIterator.hasNext()) {
@@ -393,49 +511,16 @@ bool PhStripDoc::exportDetXFile(QString fileName, PhTime lastTime)
 				lipsyncOut.put("<xmlattr>.timecode", PhTimeCode::stringFromTime(timeOut, tcType).toStdString());
 
 				if (!textIterator.hasNext()) {
-					if (text->typeOut() == PhStripDetect::MouthOpen) {
-						lipsyncOut.put("<xmlattr>.type", "out_open");
-					}
-					else if (text->typeOut() == PhStripDetect::MouthClosed) {
-						lipsyncOut.put("<xmlattr>.type", "out_close");
-					}
-					else {
-						lipsyncOut.put("<xmlattr>.type", "out_close");
-					}
+					lipsyncOut.put("<xmlattr>.type", closingDetectToString(text->typeOut()).toStdString());
 				}
 				else {
-					if (text->typeOut() == PhStripDetect::Labial) {
-						lipsyncOut.put("<xmlattr>.type", "mpb");
-					}
-					else if (text->typeOut() == PhStripDetect::Dental) {
-						lipsyncOut.put("<xmlattr>.type", "fvr");
-					}
-					else if (text->typeOut() == PhStripDetect::Unknown) {
-						lipsyncOut.put("<xmlattr>.type", "neutral");
-					}
-					else if (text->typeOut() == PhStripDetect::Aperture) {
-						lipsyncOut.put("<xmlattr>.type", "a");
-					}
-					else if (text->typeOut() == PhStripDetect::SemiLabial) {
-						lipsyncOut.put("<xmlattr>.type", "i");
-					}
-					else if (text->typeOut() == PhStripDetect::Bowl) {
-						lipsyncOut.put("<xmlattr>.type", "o");
-					}
-					else if (text->typeOut() == PhStripDetect::Advance) {
-						lipsyncOut.put("<xmlattr>.type", "weuque");
-					}
-					else {
-						lipsyncOut.put("<xmlattr>.type", "neutral");
-					}
+					lipsyncOut.put("<xmlattr>.type", innerDetectToString(text->typeOut()).toStdString());
 				}
 
 				ptLine.push_back(std::make_pair("lipsync", lipsyncOut));
 			}
 
 			ptBody.push_back(std::make_pair("line", ptLine));
-
-			// TODO unlinked detects
 		}
 	}
 
