@@ -1,6 +1,8 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.1
 import "qrc:/qml/colors.js" as Colors
+import "qrc:/qml/symbols.js" as Symbols
+import "qrc:/fonts/fontawesome.js" as FontAwesome
 
 FocusScope {
     id: stripTextItem2
@@ -19,6 +21,11 @@ FocusScope {
 
     property int modelTypeOut: typeOut
 
+    // Load the "FontAwesome" font for the detection icons.
+    FontLoader {
+        source: "qrc:/fonts/fontawesome-webfont.ttf"
+    }
+
     function setText(text) {
         content = text;
     }
@@ -33,9 +40,8 @@ FocusScope {
             anchors.fill: parent
             acceptedButtons: Qt.RightButton
             onClicked: {
-                var posX = stripTextDelegate.x + mouse.x
-                console.log("click " + posX);
-                stripLineContainer.showContextMenu(posX)
+                console.log("click " + mouse.x + " " + model.index);
+                stripLineContainer.showContextMenu(mouse.x, model.index)
             }
         }
     }
@@ -46,7 +52,7 @@ FocusScope {
         text: content
         anchors.left: parent.left
         anchors.top: parent.top
-        font.pixelSize: stripLineContainer.height
+        font.pixelSize: stripLineContainer.height * 0.8
         font.family: stripFont.name
         font.weight: Font.Bold //settings.textBoldness * 99/5
         transform: Scale {  xScale: stripTextItem2.width/stripTextInput.width;
@@ -109,16 +115,15 @@ FocusScope {
             }
             editingFinished();
         }
+    }
 
-        MouseArea {
-            enabled: window.edition
-            anchors.fill: parent
-            acceptedButtons: Qt.RightButton
-            onClicked: {
-                var posX = stripTextDelegate.x + mouse.x
-                console.log("click " + posX);
-                stripLineContainer.showContextMenu(posX)
-            }
+    MouseArea {
+        enabled: window.edition
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+        onClicked: {
+            console.log("click " + mouse.x + " " + model.index);
+            stripLineContainer.showContextMenu(mouse.x, model.index)
         }
     }
 
@@ -161,6 +166,18 @@ FocusScope {
         color: Colors.colorFromDetectType(typeOut)
         visible: window.edition
 
+        Text {
+            anchors.fill: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: "black"
+            styleColor: "black"
+            font.bold: true
+            font.pixelSize: parent.width - 2
+            font.family: "FontAwesome"
+            text: Symbols.symbolFromDetectType(typeOut)
+        }
+
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton
@@ -177,7 +194,7 @@ FocusScope {
             }
 
             onDoubleClicked: {
-                stripLineContainer.detachDetect(stripTextItem2.textIndex)
+                detach()
             }
 
             onPositionChanged: {
@@ -201,6 +218,38 @@ FocusScope {
                 }
             }
         }
+
+        MouseArea {
+            id: rightPressArea
+            anchors.fill: parent
+            acceptedButtons: Qt.RightButton
+            enabled: window.edition
+            onClicked: {
+                console.log("index: " + model.index);
+                detectContextMenu.index = model.index;
+                detectContextMenu.popup();
+            }
+        }
+    }
+
+    Menu {
+        id: detectContextMenu
+        title: "Edit"
+        property int index: 0
+        MenuItem {
+            text: FontAwesome.Icon.unlink + " Detach detect"
+            onTriggered: {
+                console.log("Detach " + detectContextMenu.index);
+                detach()
+            }
+        }
+//        MenuItem {
+//            text: "Delete detect"
+//            onTriggered: {
+//                console.log("Detect " + detectContextMenu.index);
+//                stripLineContainer.lineModel.unlinkedDetects.remove(detectContextMenu.index);
+//            }
+//        }
     }
 
     // move 'shift' characters to the next item (or previous if 'shift' is negative)
@@ -273,5 +322,9 @@ FocusScope {
 
     function positionAt(x) {
         return stripTextInput.positionAt(x/stripTextItem2.width*stripTextInput.width, 0)
+    }
+
+    function detach() {
+        stripLineContainer.detachDetect(stripTextItem2.textIndex)
     }
 }

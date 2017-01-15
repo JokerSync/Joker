@@ -369,6 +369,7 @@ var Icon = {
     paragraph: "\uf1dd",
     paste: "\uf0ea",
     pause: "\uf04c",
+    pause_circle_o: "\uf28c",
     paw: "\uf1b0",
     paypal: "\uf1ed",
     pencil: "\uf040",

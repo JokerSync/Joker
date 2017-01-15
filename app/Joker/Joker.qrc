@@ -16,6 +16,7 @@
         <file>EditionSwitch.qml</file>
         <file>SecondScreen.qml</file>
         <file>colors.js</file>
+        <file>symbols.js</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>fontawesome.js</file>

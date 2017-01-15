@@ -1,6 +1,8 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
 import "qrc:/qml/colors.js" as Colors
+import "qrc:/qml/symbols.js" as Symbols
+import "qrc:/fonts/fontawesome.js" as FontAwesome
 import PhImport 1.0
 
 Item {
@@ -8,14 +10,40 @@ Item {
     Binding { target: model; property: "time"; value: x*settings.horizontalTimePerPixel }
     property int modelType: type
 
+    // Load the "FontAwesome" font for the detection icons.
+    FontLoader {
+        source: "qrc:/fonts/fontawesome-webfont.ttf"
+    }
+
     Rectangle {
         id: detectRectangle
-        color: Qt.lighter(Colors.colorFromDetectType(type))
+        color: Colors.colorFromDetectType(type)
+        opacity: 0.8
         width: 18
         height: 18
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         visible: window.edition
+
+        Text {
+            anchors.fill: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: "black"
+            styleColor: "black"
+            font.bold: true
+            font.pixelSize: parent.width - 2
+            font.family: "FontAwesome"
+            text: Symbols.symbolFromDetectType(type)
+        }
+
+        Rectangle {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.bottom
+            height: 2
+            color: "crimson"
+        }
 
         Drag.keys: "Ctrl"
 
@@ -42,14 +70,9 @@ Item {
             onPositionChanged: {
                 if (drag.active) {
                     var movement = mouseX - startX;
-                    if (mouse.modifiers & Qt.ControlModifier) {
-                        // snap x to whole frame
-                        console.log("detect dragged with ctrl " + movement)
-                        lineDetect.x = lineDetect.x + snapToFrame(movement)
-                    }
-                    else {
-                        console.log("detect dragged without ctrl " + movement)
-                    }
+                    // snap x to whole frame
+                    console.log("detect dragged " + movement)
+                    lineDetect.x = lineDetect.x + snapToFrame(movement)
                 }
             }
         }
@@ -71,6 +94,13 @@ Item {
         id: detectContextMenu
         title: "Edit"
         property int index: 0
+        MenuItem {
+            text: FontAwesome.Icon.link + " Attach detect"
+            onTriggered: {
+                console.log("Attach " + detectContextMenu.index);
+                attach()
+            }
+        }
         MenuItem {
             text: "Delete detect"
             onTriggered: {

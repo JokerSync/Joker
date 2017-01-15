@@ -1,7 +1,10 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.1
+import PhImport 1.0 as Ph
 import "qrc:/qml/colors.js" as Colors
+import "qrc:/qml/symbols.js" as Symbols
+import "qrc:/fonts/fontawesome.js" as FontAwesome
 
 // FIXME color, font, inverted color are not implemented
 Item {
@@ -17,6 +20,11 @@ Item {
 
     property var lineModel: model
     property bool editing: false
+
+    // Load the "FontAwesome" font for the detection icons.
+    FontLoader {
+        source: "qrc:/fonts/fontawesome-webfont.ttf"
+    }
 
     onEditingChanged: {
         stripContainer.editing = editing
@@ -109,6 +117,18 @@ Item {
         anchors.bottom: parent.bottom
         visible: window.edition
 
+        Text {
+            anchors.fill: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: "black"
+            styleColor: "black"
+            font.bold: true
+            font.pixelSize: parent.width - 2
+            font.family: "FontAwesome"
+            text: Symbols.symbolFromDetectType(typeIn)
+        }
+
         MouseArea {
             anchors.fill: parent
             drag{ target: parent; axis: Drag.XAxis }
@@ -132,20 +152,72 @@ Item {
         id: lineContextMenu
         title: "Edit"
         property int index: 0
-        property int mouseX: 0
+        property double mouseX: 0
+
         MenuItem {
-            text: "Delete phrase"
+            text: FontAwesome.Icon.trash + " Delete phrase"
             onTriggered: {
                 console.log("Line " + lineContextMenu.index + " " + textRow.width);
                 doc.lineModel.remove(lineContextMenu.index);
             }
         }
-        MenuItem {
-            text: "Add detect"
-            onTriggered: {
-                var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
-                console.log("add detect " + time);
-                lineModel.unlinkedDetects.add(time)
+
+        Menu {
+            title: "Add detect"
+
+            MenuItem {
+                text: "Labial"
+                shortcut: "4"
+                onTriggered: {
+                    var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
+                    console.log("add detect " + time);
+                    lineModel.unlinkedDetects.add(time, Ph.PhStripDetect.Labial)
+                }
+            }
+            MenuItem {
+                text: "Dental"
+                shortcut: "5"
+                onTriggered: {
+                    var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
+                    console.log("add detect " + time);
+                    lineModel.unlinkedDetects.add(time, Ph.PhStripDetect.Dental)
+                }
+            }
+            MenuItem {
+                text: "Neutral"
+                shortcut: "6"
+                onTriggered: {
+                    var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
+                    console.log("add detect " + time);
+                    lineModel.unlinkedDetects.add(time, Ph.PhStripDetect.Unknown)
+                }
+            }
+            MenuItem {
+                text: "Aperture"
+                shortcut: "7"
+                onTriggered: {
+                    var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
+                    console.log("add detect " + time);
+                    lineModel.unlinkedDetects.add(time, Ph.PhStripDetect.Aperture)
+                }
+            }
+            MenuItem {
+                text: "Bowl"
+                shortcut: "8"
+                onTriggered: {
+                    var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
+                    console.log("add detect " + time);
+                    lineModel.unlinkedDetects.add(time, Ph.PhStripDetect.Bowl)
+                }
+            }
+            MenuItem {
+                text: "Advance"
+                shortcut: "9"
+                onTriggered: {
+                    var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
+                    console.log("add detect " + time);
+                    lineModel.unlinkedDetects.add(time, Ph.PhStripDetect.Advance)
+                }
             }
         }
     }
@@ -396,10 +468,13 @@ Item {
         stripLineContainer.lineModel.unlinkedDetects.add(time, firstTypeOut)
     }
 
-    function showContextMenu(mouseX) {
-        console.log("index: " + model.index);
+    function showContextMenu(mouseX, textIndex) {
+        var text = textRow.children[textIndex];
+
+        console.log("line index: " + model.index + ", text index: " + textIndex + " text.x: " + text.x + " mouseX:" + mouseX);
+
         lineContextMenu.index = model.index;
-        lineContextMenu.mouseX = mouseX;
+        lineContextMenu.mouseX = mouseX + text.x;
         lineContextMenu.popup();
     }
 }
