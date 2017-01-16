@@ -89,14 +89,31 @@ Item {
         title: "Edit"
         property int mouseX: 0
         property int mouseY: 0
+        property int time: (mouseX - stripContainer.delayX) * settings.horizontalTimePerPixel + jokerWindow.stripTime
         MenuItem {
             text: "Add phrase"
+            shortcut: "Return"
             onTriggered: {
-                var time = (stripContextMenu.mouseX - delayX) * settings.horizontalTimePerPixel + jokerWindow.stripTime;
                 var trackHeight = stripContainer.height / 4;
                 var textY = Math.round((stripContextMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
-                console.log("add line " + time + " " + textY);
-                doc.addLine(time, textY);
+                console.log("add line " + stripContextMenu.time + " " + textY);
+                doc.addLine(stripContextMenu.time, textY);
+            }
+        }
+        MenuItem {
+            text: "Add loop"
+            shortcut: "0"
+            onTriggered: {
+                console.log("add loop " + stripContextMenu.time);
+                doc.loopModel.add(stripContextMenu.time)
+            }
+        }
+        MenuItem {
+            text: "Add cut"
+            shortcut: "1"
+            onTriggered: {
+                console.log("add cut " + stripContextMenu.time);
+                doc.cutModel.add(stripContextMenu.time)
             }
         }
     }

@@ -4,7 +4,7 @@ function colorFromDetectType(type)
 {
     console.log("color from type " + type)
     if (type === Ph.PhStripDetect.Unknown) {
-        return "gray";
+        return "lightgrey";
     } else if (type === Ph.PhStripDetect.Advance) {
         return "thistle";
     } else if (type === Ph.PhStripDetect.Aperture) {
@@ -12,11 +12,11 @@ function colorFromDetectType(type)
     } else if (type === Ph.PhStripDetect.Bowl) {
         return "salmon";
     } else if (type === Ph.PhStripDetect.Dental) {
-        return "white";
+        return "ivory";
     } else if (type === Ph.PhStripDetect.Labial) {
         return "skyblue";
     } else if (type === Ph.PhStripDetect.MouthClosed) {
-        return "tan";
+        return "lightpink";
     } else if (type === Ph.PhStripDetect.MouthOpen) {
         return "darkorchid";
     } else {

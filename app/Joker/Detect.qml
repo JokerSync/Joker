@@ -3,7 +3,7 @@ import QtQuick.Controls 1.1
 import "qrc:/qml/colors.js" as Colors
 import "qrc:/qml/symbols.js" as Symbols
 import "qrc:/fonts/fontawesome.js" as FontAwesome
-import PhImport 1.0
+import PhImport 1.0 as Ph
 
 Item {
     id: lineDetect
@@ -106,6 +106,46 @@ Item {
             onTriggered: {
                 console.log("Detect " + detectContextMenu.index);
                 stripLineContainer.lineModel.unlinkedDetects.remove(detectContextMenu.index);
+            }
+        }
+        Menu {
+            title: "Change type"
+
+            MenuItem {
+                text: "Labial"
+                onTriggered: {
+                    model.type = Ph.PhStripDetect.Labial
+                }
+            }
+            MenuItem {
+                text: "Dental"
+                onTriggered: {
+                    model.type = Ph.PhStripDetect.Dental
+                }
+            }
+            MenuItem {
+                text: "Neutral"
+                onTriggered: {
+                    model.type = Ph.PhStripDetect.Unknown
+                }
+            }
+            MenuItem {
+                text: "Aperture"
+                onTriggered: {
+                    model.type = Ph.PhStripDetect.Aperture
+                }
+            }
+            MenuItem {
+                text: "Bowl"
+                onTriggered: {
+                    model.type = Ph.PhStripDetect.Bowl
+                }
+            }
+            MenuItem {
+                text: "Advance"
+                onTriggered: {
+                    model.type = Ph.PhStripDetect.Advance
+                }
             }
         }
     }

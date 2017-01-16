@@ -51,6 +51,7 @@ Item {
                 z: -index
 
                 property int textIndex: index
+                property bool last: index === textRepeater.count - 1
 
                 Binding { target: model; property: "content"; value: text }
                 Binding { target: model; property: "duration"; value: width*settings.horizontalTimePerPixel }
@@ -143,6 +144,45 @@ Item {
                     }
                     stripLineContainer.x = stripLineContainer.x + pixelChange
                     textRepeater.itemAt(0).width = textRepeater.itemAt(0).width - pixelChange
+                }
+            }
+        }
+
+        MouseArea {
+            enabled: window.edition
+            anchors.fill: parent
+            acceptedButtons: Qt.RightButton
+            onClicked: {
+                leftHandleContextMenu.popup();
+            }
+        }
+    }
+
+    Menu {
+        id: leftHandleContextMenu
+        title: "Edit"
+        MenuItem {
+            text: FontAwesome.Icon.trash + " Delete phrase"
+            onTriggered: {
+                console.log("Line " + model.index);
+                doc.lineModel.remove(model.index);
+            }
+        }
+        Menu {
+            title: "Change type"
+
+            MenuItem {
+                text: "Mouth opened"
+                enabled: model.typeIn !== Ph.PhStripDetect.MouthOpen
+                onTriggered: {
+                    model.typeIn = Ph.PhStripDetect.MouthOpen
+                }
+            }
+            MenuItem {
+                text: "Mouth closed"
+                enabled: model.typeIn !== Ph.PhStripDetect.MouthClosed
+                onTriggered: {
+                    model.typeIn = Ph.PhStripDetect.MouthClosed
                 }
             }
         }

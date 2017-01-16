@@ -1,5 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.1
+import PhImport 1.0 as Ph
 import "qrc:/qml/colors.js" as Colors
 import "qrc:/qml/symbols.js" as Symbols
 import "qrc:/fonts/fontawesome.js" as FontAwesome
@@ -199,7 +200,7 @@ FocusScope {
 
             onPositionChanged: {
                 if (drag.active) {
-                    if (mouse.modifiers & Qt.ControlModifier) {
+                    if (mouse.modifiers & Qt.ControlModifier || stripTextDelegate.last) {
                         var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel
                         var pixelChange = snapToFrame(mouseX - parent.width)
                         stripTextItem2.width = stripTextItem2.width + pixelChange
@@ -238,18 +239,81 @@ FocusScope {
         property int index: 0
         MenuItem {
             text: FontAwesome.Icon.unlink + " Detach detect"
+            visible: !stripTextDelegate.last
             onTriggered: {
                 console.log("Detach " + detectContextMenu.index);
                 detach()
             }
         }
 //        MenuItem {
-//            text: "Delete detect"
+//            text: "Delete phrase"
 //            onTriggered: {
 //                console.log("Detect " + detectContextMenu.index);
 //                stripLineContainer.lineModel.unlinkedDetects.remove(detectContextMenu.index);
 //            }
 //        }
+        Menu {
+            title: "Change type"
+
+            MenuItem {
+                text: "Mouth opened"
+                enabled: model.typeOut !== Ph.PhStripDetect.MouthOpen
+                visible: stripTextDelegate.last
+                onTriggered: {
+                    model.typeOut = Ph.PhStripDetect.MouthOpen
+                }
+            }
+            MenuItem {
+                text: "Mouth closed"
+                enabled: model.typeOut !== Ph.PhStripDetect.MouthClosed
+                visible: stripTextDelegate.last
+                onTriggered: {
+                    model.typeOut = Ph.PhStripDetect.MouthClosed
+                }
+            }
+            MenuItem {
+                text: "Labial"
+                visible: !stripTextDelegate.last
+                onTriggered: {
+                    model.typeOut = Ph.PhStripDetect.Labial
+                }
+            }
+            MenuItem {
+                text: "Dental"
+                visible: !stripTextDelegate.last
+                onTriggered: {
+                    model.typeOut = Ph.PhStripDetect.Dental
+                }
+            }
+            MenuItem {
+                text: "Neutral"
+                visible: !stripTextDelegate.last
+                onTriggered: {
+                    model.typeOut = Ph.PhStripDetect.Unknown
+                }
+            }
+            MenuItem {
+                text: "Aperture"
+                visible: !stripTextDelegate.last
+                onTriggered: {
+                    model.typeOut = Ph.PhStripDetect.Aperture
+                }
+            }
+            MenuItem {
+                text: "Bowl"
+                visible: !stripTextDelegate.last
+                onTriggered: {
+                    model.typeOut = Ph.PhStripDetect.Bowl
+                }
+            }
+            MenuItem {
+                text: "Advance"
+                visible: !stripTextDelegate.last
+                onTriggered: {
+                    model.typeOut = Ph.PhStripDetect.Advance
+                }
+            }
+        }
     }
 
     // move 'shift' characters to the next item (or previous if 'shift' is negative)
