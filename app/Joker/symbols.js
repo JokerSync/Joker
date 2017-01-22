@@ -3,7 +3,6 @@
 
 function symbolFromDetectType(type)
 {
-    console.log("symbol from type " + type)
     if (type === Ph.PhStripDetect.Unknown) {
         return FontAwesome.Icon.bookmark; // or tag ? question ? map_marker ?
     } else if (type === Ph.PhStripDetect.Advance) {

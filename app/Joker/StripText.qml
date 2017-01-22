@@ -47,6 +47,16 @@ FocusScope {
         }
     }
 
+    // vertical line to indicate the detect link
+    Rectangle {
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.right
+        width: 2
+        visible: window.edition && !stripTextDelegate.last
+        color: "darkblue"
+    }
+
     TextInput {
         id: stripTextInput
         readOnly: !window.edition
@@ -162,7 +172,8 @@ FocusScope {
     Rectangle {
         width: 18
         height: 18
-        anchors.bottom: parent.bottom
+        anchors.verticalCenter: parent.bottom
+        anchors.verticalCenterOffset: -4
         anchors.horizontalCenter: parent.right
         color: Colors.colorFromDetectType(typeOut)
         visible: window.edition

@@ -115,7 +115,8 @@ Item {
         height: rulersSize
         color: Colors.colorFromDetectType(typeIn)
         anchors.horizontalCenter: parent.left
-        anchors.bottom: parent.bottom
+        anchors.verticalCenter: parent.bottom
+        anchors.verticalCenterOffset: -4
         visible: window.edition
 
         Text {

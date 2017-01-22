@@ -17,6 +17,9 @@
         <file>SecondScreen.qml</file>
         <file>colors.js</file>
         <file>symbols.js</file>
+        <file>Loop.qml</file>
+        <file>Cut.qml</file>
+        <file>RulerTick.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>fontawesome.js</file>

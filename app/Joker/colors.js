@@ -2,7 +2,6 @@
 
 function colorFromDetectType(type)
 {
-    console.log("color from type " + type)
     if (type === Ph.PhStripDetect.Unknown) {
         return "lightgrey";
     } else if (type === Ph.PhStripDetect.Advance) {

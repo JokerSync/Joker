@@ -22,7 +22,8 @@ Item {
         width: 18
         height: 18
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
+        anchors.verticalCenter: parent.bottom
+        anchors.verticalCenterOffset: -4
         visible: window.edition
 
         Text {
