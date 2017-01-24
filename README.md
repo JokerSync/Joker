@@ -9,7 +9,7 @@
 [![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille)
 [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Phonations/Joker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Welcome to the Joker project!
+Welcome to the *Joker* project.
 
 ![Screenshot](data/img/screenshot.jpg)
 
