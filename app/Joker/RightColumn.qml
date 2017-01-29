@@ -1,7 +1,8 @@
 import QtQuick 2.0
+import "qrc:/fonts/fontawesome.js" as FontAwesome
 
 Item {
-    width: 300
+    width: 200
     height: 500
 
     Text {
@@ -77,35 +78,24 @@ Item {
                     y: time/settings.verticalTimePerPixel
                     anchors.left: parent.left
                     anchors.right: parent.right
+                    property color loopColor: "gray"
 
                     Rectangle {
-                        color: "white"
+                        color: parent.loopColor
                         anchors.left: parent.left
                         anchors.right: parent.right
                         y: -height/2
                         height: 3
                     }
 
-                    Rectangle {
-                        color: "white"
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.leftMargin: parent.width*2/5
-                        anchors.rightMargin: parent.width*2/5
-                        y: -height/2
-                        height: 3
-                        rotation: 45
-                    }
-
-                    Rectangle {
-                        color: "white"
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.leftMargin: parent.width*2/5
-                        anchors.rightMargin: parent.width*2/5
-                        y: -height/2
-                        height: 3
-                        rotation: -45
+                    Text {
+                        color: parent.loopColor
+                        font.pixelSize: 30
+                        anchors.centerIn: parent
+                        font.family: "FontAwesome"
+                        text: FontAwesome.Icon.repeat
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                     }
                 }
             }

@@ -421,7 +421,7 @@ public:
 public slots:
 	void assignLineToPeople(int lineIndex, QString peopleName);
 	int deletePeople(int peopleIndex);	
-	void addLine(PhTime time, float y);
+	void addLine(PhTime time, float y, PhStripDetect::PhDetectType typeIn);
 
 signals:
 	void changed();

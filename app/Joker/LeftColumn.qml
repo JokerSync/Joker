@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "qrc:/fonts/fontawesome.js" as FontAwesome
 
 Item {
     id: leftColumn
@@ -73,6 +74,17 @@ Item {
             lineHeight: 0.75
             wrapMode: Text.WordWrap
         }
+    }
+
+    Text {
+        id: loopIcon
+        color: "blue"
+        font.family: "FontAwesome"
+        text: FontAwesome.Icon.repeat
+        font.pointSize: 15
+        anchors.bottom: currentLoopLabel.top
+        anchors.left: currentLoopLabel.left
+        visible: settings.displayNextText && jokerWindow.currentLoopLabel
     }
 
     Text {

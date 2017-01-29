@@ -39,11 +39,20 @@ Item {
         }
 
         Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.top
             height: 2
+            width: 0
             color: "crimson"
+
+            NumberAnimation on width {
+                id: createAnimation
+                from: 0
+                to: detectRectangle.width
+                duration: 250
+            }
+
+            Component.onCompleted: createAnimation.start()
         }
 
         Drag.keys: "Ctrl"

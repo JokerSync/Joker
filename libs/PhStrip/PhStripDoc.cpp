@@ -890,7 +890,7 @@ void PhStripDoc::assignLineToPeople(int lineIndex, QString peopleName)
 	PHDEBUG << lineIndex << " " << peopleName << " not found";
 }
 
-void PhStripDoc::addLine(PhTime time, float y)
+void PhStripDoc::addLine(PhTime time, float y, PhStripDetect::PhDetectType typeIn)
 {
 	// find the closest line in the past in this track
 	PhTime peopleTime = PHTIMEMIN;
@@ -921,7 +921,7 @@ void PhStripDoc::addLine(PhTime time, float y)
 		people = _peopleModel->create("New");
 	}
 
-	_lineModel->add(time, y, people);
+	_lineModel->add(time, y, people, typeIn);
 }
 
 void PhStripDoc::updateTimeIn()

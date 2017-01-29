@@ -20,6 +20,7 @@ Item {
 
     property var lineModel: model
     property bool editing: false
+    property bool empty: textRepeater.count === 0
 
     // Load the "FontAwesome" font for the detection icons.
     FontLoader {
@@ -36,7 +37,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         width: Math.max(videoEngine.timeOut, doc.timeOut) /settings.horizontalTimePerPixel - stripLineContainer.x
-        visible: textRepeater.count === 0 && window.edition
+        visible: parent.empty && window.edition
         color: "#80ff0000"
     }
 
@@ -263,7 +264,26 @@ Item {
         }
     }
 
-    function editTextAt(x, y) {
+    function findTextAt(x, y) {
+        var lineX = x - stripLineContainer.x
+        var lineY = y - stripLineContainer.y
+
+        if (lineY !== 0 || lineX < -0.1 || lineX > stripLineContainer.width + 0.1) {
+            return 0;
+        }
+
+        for (var i = 0; i < textRow.children.length; ++i) {
+            var text = textRow.children[i];
+            console.log(text.x + " " + text.width + " " + lineX)
+            if (lineX >= text.x - 0.1 && lineX <= text.x + text.width + 0.1) {
+                return text;
+            }
+        }
+
+        return 0;
+    }
+
+    function editTextAt(x) {
         var lineX = x - stripLineContainer.x
         var lineY = y - stripLineContainer.y
 
@@ -278,8 +298,7 @@ Item {
                 console.log("line.stripTextAt found text")
                 console.log(text)
                 var textX = lineX - text.x
-                var textY = lineY - text.y
-                text.editTextAt(textX, textY)
+                text.editTextAt(textX)
                 return true;
             }
         }
@@ -517,6 +536,12 @@ Item {
         lineContextMenu.index = model.index;
         lineContextMenu.mouseX = mouseX + text.x;
         lineContextMenu.popup();
+    }
+
+    function close(x, typeOut) {
+        var lineX = x - stripLineContainer.x
+        var time = lineX * settings.horizontalTimePerPixel;
+        stripLineContainer.lineModel.texts.addText("", time, typeOut);
     }
 }
 

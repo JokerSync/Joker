@@ -49,12 +49,20 @@ FocusScope {
 
     // vertical line to indicate the detect link
     Rectangle {
-        anchors.top: parent.top
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.right
         width: 2
+        height: 0
         visible: window.edition && !stripTextDelegate.last
         color: "darkblue"
+
+        NumberAnimation on height {
+            id: createAnimation
+            to: stripTextItem2.height
+            duration: 250
+        }
+
+        Component.onCompleted: createAnimation.start()
     }
 
     TextInput {
@@ -155,7 +163,7 @@ FocusScope {
 
         onDoubleClicked: {
             console.log("double click on text")
-            editTextAt(mouseX, mouseY)
+            editTextAt(mouseX)
         }
 
         onPositionChanged: {
@@ -382,8 +390,8 @@ FocusScope {
         previousItem.editTextAtPos(previousItem.text.length - 1)
     }
 
-    function editTextAt(x, y) {
-        var newPos = stripTextInput.positionAt(x/stripTextItem2.width*stripTextInput.width, y)
+    function editTextAt(x) {
+        var newPos = stripTextInput.positionAt(x/stripTextItem2.width*stripTextInput.width)
         editTextAtPos(newPos)
     }
 

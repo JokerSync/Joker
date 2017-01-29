@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.1
+import PhImport 1.0
 
 Item {
     id: stripContainer
@@ -40,48 +41,9 @@ Item {
         }
     }
 
-    Rectangle {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        color: "#77000000"
-        height: parent.height * parent.currentTrackNumber  / 4
-        opacity: window.edition
-
-        Behavior on opacity {
-            NumberAnimation {
-                easing.type: Easing.Linear
-            }
-        }
-
-        Behavior on height {
-            NumberAnimation {
-                duration: 100
-                easing.type: Easing.Linear
-            }
-        }
-    }
-
-    Rectangle {
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: parent.height * (3 - parent.currentTrackNumber) / 4
-        color: "#77000000"
-        opacity: window.edition
-
-        Behavior on opacity {
-            NumberAnimation {
-                easing.type: Easing.Linear
-            }
-        }
-
-        Behavior on height {
-            NumberAnimation {
-                duration: 100
-                easing.type: Easing.Linear
-            }
-        }
+    EditionMask {
+        anchors.fill: parent
+        currentTrackNumber: parent.currentTrackNumber
     }
 
     Menu {
@@ -97,7 +59,7 @@ Item {
                 var trackHeight = stripContainer.height / 4;
                 var textY = Math.round((stripContextMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
                 console.log("add line " + stripContextMenu.time + " " + textY);
-                doc.addLine(stripContextMenu.time, textY);
+                doc.addLine(stripContextMenu.time, textY, PhStripDetect.MouthOpen);
             }
         }
         MenuItem {
@@ -214,11 +176,11 @@ Item {
 
     // sync bar
     Rectangle {
-        x: delayX
+        x: delayX - width/2
         y: 0
         width: 4
         height: parent.height
-        color: "#AAFF566C"
+        color: window.edition ? "#77FF566C" : "#AAFF566C"
     }
 
     function snapToFrame(pixelChange) {
@@ -231,18 +193,26 @@ Item {
         return pixelChange;
     }
 
-    function editTextAt(x, y) {
+    function findLineAt(x, y) {
         for (var i = 0; i < stripLineRepeater.children.length; ++i) {
             var line = stripLineRepeater.children[i];
             if (line.objectName !== "Line") {
                 continue;
             }
-            var success = line.editTextAt(x, y);
-            if (success) {
-                return true;
+
+            var lineX = x - line.x
+            var lineY = y - line.y
+
+            if (lineY === 0 && lineX >= -0.1 && lineX <= line.width + 0.1) {
+                return line
+            }
+
+            // empty line
+            if (lineY === 0 && lineX >= -0.1 && line.empty) {
+                return line
             }
         }
-        return false;
+        return 0
     }
 
     function addDetectAt(x, y, type) {
@@ -319,6 +289,26 @@ Item {
             if (success) {
                 return;
             }
+        }
+    }
+
+    function addOrEditOrClose(textX, textY, type) {
+        var line = findLineAt(textX, textY);
+        console.log(line);
+
+        if (line) {
+            if (line.empty) {
+                // close
+                line.close(textX, type)
+            }
+            else {
+                line.editTextAt(textX)
+            }
+        }
+        else {
+            var time = textX * settings.horizontalTimePerPixel
+            console.log("Add line " + time + " " + (strip.currentTrackNumber / 4));
+            doc.addLine(time, strip.currentTrackNumber / 4, type);
         }
     }
 }

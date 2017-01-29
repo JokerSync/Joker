@@ -132,17 +132,15 @@ void PhStripTextModel::split(int splitIndex, int splitCharIndex, PhTime splitTim
 	PhStripText *text = _texts[splitIndex];
 	QString splitContent = text->content().mid(splitCharIndex);
 	PhTime splitDuration = text->duration() - splitTime;
-	PhStripDetect::PhDetectType originalTypeOut = text->typeOut();
-
-	// update the current text
-	setData(index(splitIndex), text->content().left(splitCharIndex), ContentRole);
-	setData(index(splitIndex), splitTime, DurationRole);
-	setData(index(splitIndex), splitType, TypeOutRole);
 
 	// add a new text with the split content
-	beginInsertRows(QModelIndex(), splitIndex+1, splitIndex+1);
-	_texts.insert(splitIndex+1, new PhStripText(splitContent, splitDuration, originalTypeOut));
+	beginInsertRows(QModelIndex(), splitIndex, splitIndex);
+	_texts.insert(splitIndex, new PhStripText(text->content().left(splitCharIndex), splitTime, splitType));
 	endInsertRows();
+
+	// update the current text
+	setData(index(splitIndex+1), splitContent, ContentRole);
+	setData(index(splitIndex+1), splitDuration, DurationRole);
 
 	updateDuration();
 }

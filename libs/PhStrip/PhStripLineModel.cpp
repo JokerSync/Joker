@@ -192,66 +192,9 @@ QListIterator<PhStripLine *> PhStripLineModel::iterator()
 	return QListIterator<PhStripLine *>(_lines);
 }
 
-void PhStripLineModel::add(PhTime time, float y, PhPeople *people)
+void PhStripLineModel::add(PhTime time, float y, PhPeople *people, PhStripDetect::PhDetectType typeIn)
 {
-	// this is called to create a new line, unless there is a line below the mouse
-	// if there is a line below the mouse, and if this line is opened, this adds a closing sign
-
-	foreach (PhStripLine *l, _lines) {
-		if (l->timeIn() == time
-				&& l->y() == y) {
-			// there is a line starting there
-			// return immediately
-			return;
-		}
-	}
-
-	foreach (PhStripLine *l, _lines) {
-		if (l->textModel()->rowCount() == 0
-				&& l->timeIn() <= time
-				&& l->y() == y) {
-			// found a matching opened line
-			// add an empty text with the proper timeout
-			PhStripDetect::PhDetectType typeOut = PhStripDetect::MouthClosed;
-			PhStripText *text = new PhStripText("", time - l->timeIn(), typeOut);
-			l->textModel()->append(text);
-			return;
-		}
-	}
-
-	foreach (PhStripLine *l, _lines) {
-		PhTime timeOut = l->timeIn();
-		QListIterator<PhStripText *> i = l->textModel()->iterator();
-		while(i.hasNext()) {
-			timeOut += i.next()->duration();
-		}
-
-		if (timeOut == time && l->y() == y) {
-			// this is a line closing here
-			// return immediately
-			return;
-		}
-	}
-
-	foreach (PhStripLine *l, _lines) {
-		PhTime timeOut = l->timeIn();
-		QListIterator<PhStripText *> i = l->textModel()->iterator();
-		while(i.hasNext()) {
-			timeOut += i.next()->duration();
-		}
-
-		if (l->timeIn() < time
-				&& timeOut > time
-				&& l->y() == y) {
-			// found a matching closed line
-			// cannot add a new one!
-			return;
-		}
-	}
-
-	PhStripDetect::PhDetectType typeIn = PhStripDetect::MouthOpen;
 	float height = 0.25;
-
 	PhStripLine *line = new PhStripLine(time, typeIn, people, y, height);
 	append(line);
 }

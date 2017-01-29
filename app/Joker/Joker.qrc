@@ -20,6 +20,8 @@
         <file>Loop.qml</file>
         <file>Cut.qml</file>
         <file>RulerTick.qml</file>
+        <file>Shortcuts.qml</file>
+        <file>EditionMask.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>fontawesome.js</file>

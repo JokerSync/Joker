@@ -9,6 +9,7 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         width: settings.cutWidth
+        x: -width/2
 
         MouseArea {
             id: rightPressArea
