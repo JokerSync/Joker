@@ -21,6 +21,7 @@ Item {
     property var lineModel: model
     property bool editing: false
     property bool empty: textRepeater.count === 0
+    property bool dragged: false
 
     // Load the "FontAwesome" font for the detection icons.
     FontLoader {
@@ -158,6 +159,39 @@ Item {
                 leftHandleContextMenu.popup();
             }
         }
+    }
+
+    Item {
+        id: lineDragTarget
+        visible: true
+        width: parent.width
+        height: parent.height
+    }
+
+    Rectangle {
+        id: snappedLineDragTarget
+        visible: parent.dragged
+        width: parent.width
+        height: parent.height
+        color: "green"
+        border.color: "black"
+        border.width: 1
+        opacity: 0.2
+        x: snapToFrame(lineDragTarget.x)
+        y: Math.round(lineDragTarget.y / height) * height;
+    }
+
+    function startDrag() {
+        dragged = true;
+    }
+
+    function endDrag() {
+        // apply the position of snappedLineDragTarget to the line itself
+        dragged = false;
+        model.timeIn = model.timeIn + snappedLineDragTarget.x * settings.horizontalTimePerPixel;
+        model.trackNumber = model.trackNumber + snappedLineDragTarget.y / stripContainer.height;
+        lineDragTarget.x = 0;
+        lineDragTarget.y = 0;
     }
 
     Menu {

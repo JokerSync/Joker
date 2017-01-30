@@ -155,24 +155,23 @@ FocusScope {
         propagateComposedEvents: true
 
         drag{
-            target: stripLineContainer
+            target: lineDragTarget
             minimumY: -stripLineContainer.y
             maximumY: stripContainer.height - stripLineContainer.height - stripLineContainer.y
             smoothed: true
+
+            onActiveChanged: {
+                if (dragArea.drag.active) {
+                    stripLineContainer.startDrag()
+                } else {
+                    stripLineContainer.endDrag()
+                }
+            }
         }
 
         onDoubleClicked: {
             console.log("double click on text")
             editTextAt(mouseX)
-        }
-
-        onPositionChanged: {
-            if(drag.active){
-                // snap x to whole frame
-                stripLineContainer.x = snapToFrame(stripLineContainer.x);
-                // snap y to track
-                stripLineContainer.y = Math.round(stripLineContainer.y / height) * height;
-            }
         }
     }
 
