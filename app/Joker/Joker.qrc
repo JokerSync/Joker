@@ -22,6 +22,7 @@
         <file>RulerTick.qml</file>
         <file>Shortcuts.qml</file>
         <file>EditionMask.qml</file>
+        <file>SnapDragTarget.qml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>fontawesome.js</file>

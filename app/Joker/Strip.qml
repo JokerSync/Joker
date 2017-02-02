@@ -183,6 +183,22 @@ Item {
         color: window.edition ? "#77FF566C" : "#AAFF566C"
     }
 
+    function initDrag() {
+        console.debug("init drag");
+        var component = Qt.createComponent("SnapDragTarget.qml");
+        var object = component.createObject(stripContainer);
+        object.lineHeight = height/4
+        return object
+    }
+
+    function finishDrag(object) {
+        console.log("finish drag");
+        if (object) {
+            object.destroy();
+            object = undefined
+        }
+    }
+
     function snapToFrame(pixelChange) {
         var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel;
         var timeChange = pixelChange * settings.horizontalTimePerPixel;

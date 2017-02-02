@@ -55,35 +55,43 @@ Item {
             Component.onCompleted: createAnimation.start()
         }
 
-        Drag.keys: "Ctrl"
-
         MouseArea {
             id: detectMouseArea
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton
+
+            property int startX: 0
+            property var mouseDragTarget
+
+            onPressed: {
+                startX = lineDetect.x
+                mouseDragTarget = stripContainer.initDrag()
+            }
+
+            onReleased: {
+                stripContainer.finishDrag(mouseDragTarget)
+            }
+
             drag{
-                target: parent
+                target: detectMouseArea.mouseDragTarget
                 axis: Drag.XAxis
                 smoothed: true
+
+                onActiveChanged: {
+                    if (detectMouseArea.drag.active) {
+                        console.log("active")
+                        detectMouseArea.mouseDragTarget.onDragged.connect(onDragged)
+                    }
+                }
+            }
+
+            function onDragged(dragX, dragY) {
+                console.log(dragX)
+                setTime((startX + dragX) * settings.horizontalTimePerPixel)
             }
 
             onDoubleClicked: {
                 attach()
-            }
-
-            property int startX: 0
-
-            onPressed: {
-                startX  = mouse.x
-            }
-
-            onPositionChanged: {
-                if (drag.active) {
-                    var movement = mouseX - startX;
-                    // snap x to whole frame
-                    console.log("detect dragged " + movement)
-                    lineDetect.x = lineDetect.x + snapToFrame(movement)
-                }
             }
         }
 
@@ -164,5 +172,9 @@ Item {
         // attach this detect
         console.log("attach " + index + " " + x)
         stripLineContainer.attachDetect(index, x)
+    }
+
+    function setTime(time) {
+        model.time = time
     }
 }

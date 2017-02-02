@@ -20,6 +20,7 @@ FocusScope {
     property color emptyEditing: "#A00000FF"
     property color emptyNonEditing: "#A0AAAAAA"
 
+    property int modelIndex: index
     property int modelTypeOut: typeOut
 
     // Load the "FontAwesome" font for the detection icons.
@@ -29,6 +30,10 @@ FocusScope {
 
     function setText(text) {
         content = text;
+    }
+
+    function setDuration(d) {
+        duration = d;
     }
 
     // appears when we create a new line by adding the ending sign
@@ -154,19 +159,37 @@ FocusScope {
         acceptedButtons: Qt.LeftButton
         propagateComposedEvents: true
 
+        property int startX: 0
+        property int startY: 0
+        property var mouseDragTarget
+
+        onPressed: {
+            startX = stripLineContainer.x
+            startY = stripLineContainer.y
+            mouseDragTarget = stripContainer.initDrag()
+        }
+
+        onReleased: {
+            stripContainer.finishDrag(mouseDragTarget)
+        }
+
         drag{
-            target: lineDragTarget
-            minimumY: -stripLineContainer.y
-            maximumY: stripContainer.height - stripLineContainer.height - stripLineContainer.y
+            target: dragArea.mouseDragTarget
             smoothed: true
 
             onActiveChanged: {
                 if (dragArea.drag.active) {
-                    stripLineContainer.startDrag()
-                } else {
-                    stripLineContainer.endDrag()
+                    console.log("active")
+                    dragArea.mouseDragTarget.onDragged.connect(onDragged)
                 }
             }
+        }
+
+        function onDragged(dragX, dragY) {
+            console.log(dragX + " " + dragY)
+            // apply the position of snappedLineDragTarget to the line itself
+            stripLineContainer.moveToX(startX + dragX);
+            stripLineContainer.moveToY(startY + dragY);
         }
 
         onDoubleClicked: {
@@ -177,6 +200,7 @@ FocusScope {
 
     // right handle
     Rectangle {
+        id: rightHandle
         width: 18
         height: 18
         anchors.verticalCenter: parent.bottom
@@ -198,18 +222,43 @@ FocusScope {
         }
 
         MouseArea {
+            id: rightDragArea
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton
-            drag{
-                target: parent
-                axis: Drag.XAxis
-                smoothed: true
-            }
 
+            property var mouseDragTarget
             property int startX: 0
+            property int startWidth: 0
+            property bool ctrl: false
 
             onPressed: {
-                startX  = mouse.x
+                startX = mouse.x;
+                ctrl = mouse.modifiers & Qt.ControlModifier;
+                startWidth = stripTextItem2.width
+                mouseDragTarget = stripContainer.initDrag()
+            }
+
+            onReleased: {
+                stripContainer.finishDrag(mouseDragTarget)
+            }
+
+            drag {
+                target: rightDragArea.mouseDragTarget
+                axis: Drag.XAxis
+                smoothed: true
+
+                onActiveChanged: {
+                    if (rightDragArea.drag.active && (rightDragArea.ctrl || stripTextDelegate.last)) {
+                        console.log("active")
+                        rightDragArea.mouseDragTarget.onDragged.connect(onDragged)
+                    }
+                }
+            }
+
+            function onDragged(dragX, dragY) {
+                console.log(dragX)
+                var desiredWidth = startWidth + dragX
+                stripLineContainer.setTextWidth(stripTextItem2.modelIndex, desiredWidth)
             }
 
             onDoubleClicked: {
@@ -219,11 +268,7 @@ FocusScope {
             onPositionChanged: {
                 if (drag.active) {
                     if (mouse.modifiers & Qt.ControlModifier || stripTextDelegate.last) {
-                        var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel
-                        var pixelChange = snapToFrame(mouseX - parent.width)
-                        stripTextItem2.width = stripTextItem2.width + pixelChange
-                        if(stripTextItem2.width < pixelPerFrame)
-                            stripTextItem2.width = pixelPerFrame
+                        //stripTextItem2.setDuration(snappedDragTarget.x * settings.horizontalTimePerPixel)
                     } else {
                         var movement = mouseX - startX;
                         console.log("detect dragged without ctrl")

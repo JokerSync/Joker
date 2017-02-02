@@ -22,6 +22,7 @@ Item {
     property bool editing: false
     property bool empty: textRepeater.count === 0
     property bool dragged: false
+    property int rulersSize: 18
 
     // Load the "FontAwesome" font for the detection icons.
     FontLoader {
@@ -109,8 +110,6 @@ Item {
         }
     }
 
-    property int rulersSize: 18
-
     // left handle
     Rectangle {
         width: rulersSize
@@ -134,20 +133,38 @@ Item {
         }
 
         MouseArea {
+            id: leftDragArea
             anchors.fill: parent
-            drag{ target: parent; axis: Drag.XAxis }
+            acceptedButtons: Qt.LeftButton
 
-            onMouseXChanged: {
-                if(drag.active){
-                    console.log("timePerFrame: ", jokerWindow.timePerFrame);
-                    var pixelChange = snapToFrame(mouseX)
-                    var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel
-                    if (pixelChange > textRepeater.itemAt(0).width - pixelPerFrame) {
-                        pixelChange = textRepeater.itemAt(0).width - pixelPerFrame
+            property var mouseDragTarget
+            property int startX: 0
+
+            onPressed: {
+                startX = stripLineContainer.x
+                mouseDragTarget = stripContainer.initDrag()
+            }
+
+            onReleased: {
+                stripContainer.finishDrag(mouseDragTarget)
+            }
+
+            drag{
+                target: leftDragArea.mouseDragTarget
+                axis: Drag.XAxis
+                smoothed: true
+
+                onActiveChanged: {
+                    if (leftDragArea.drag.active) {
+                        console.log("active")
+                        leftDragArea.mouseDragTarget.onDragged.connect(onDragged)
                     }
-                    stripLineContainer.x = stripLineContainer.x + pixelChange
-                    textRepeater.itemAt(0).width = textRepeater.itemAt(0).width - pixelChange
                 }
+            }
+
+            function onDragged(dragX, dragY) {
+                console.log(dragX)
+                stripLineContainer.setTextDesiredX(startX + dragX)
             }
         }
 
@@ -159,39 +176,6 @@ Item {
                 leftHandleContextMenu.popup();
             }
         }
-    }
-
-    Item {
-        id: lineDragTarget
-        visible: true
-        width: parent.width
-        height: parent.height
-    }
-
-    Rectangle {
-        id: snappedLineDragTarget
-        visible: parent.dragged
-        width: parent.width
-        height: parent.height
-        color: "green"
-        border.color: "black"
-        border.width: 1
-        opacity: 0.2
-        x: snapToFrame(lineDragTarget.x)
-        y: Math.round(lineDragTarget.y / height) * height;
-    }
-
-    function startDrag() {
-        dragged = true;
-    }
-
-    function endDrag() {
-        // apply the position of snappedLineDragTarget to the line itself
-        dragged = false;
-        model.timeIn = model.timeIn + snappedLineDragTarget.x * settings.horizontalTimePerPixel;
-        model.trackNumber = model.trackNumber + snappedLineDragTarget.y / stripContainer.height;
-        lineDragTarget.x = 0;
-        lineDragTarget.y = 0;
     }
 
     Menu {
@@ -576,6 +560,63 @@ Item {
         var lineX = x - stripLineContainer.x
         var time = lineX * settings.horizontalTimePerPixel;
         stripLineContainer.lineModel.texts.addText("", time, typeOut);
+    }
+
+    // change the width of a text item, while compensating with the next item width
+    function setTextWidth(textIndex, desiredWidth) {
+        var text = textRepeater.itemAt(textIndex)
+        var nextText = textRepeater.itemAt(textIndex+1)
+        var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel;
+        var textWidth = text.width;
+        var minChange = -(textWidth - pixelPerFrame);
+        var change = desiredWidth - textWidth;
+
+        change = Math.max(change, minChange);
+
+        if (nextText) {
+            var maxChange = nextText.width - pixelPerFrame;
+            change = Math.min(change, maxChange);
+            nextText.setDuration((nextText.width - change) * settings.horizontalTimePerPixel)
+        }
+
+        text.setDuration((text.width + change) * settings.horizontalTimePerPixel)
+    }
+
+    // change the position of the first text, compensate by changing its width, and also compensate
+    // for the unlinked detect positions
+    function setTextDesiredX(desiredX) {
+        var firstText = textRepeater.itemAt(0);
+        var change = desiredX - x;
+        var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel;
+
+        if (firstText) {
+            change = Math.min(change, firstText.width - pixelPerFrame);
+        }
+
+        for (var j = 0; j < detectRepeater.count; ++j) {
+            var detect = detectRepeater.itemAt(j);
+            change = Math.min(change, detect.x - pixelPerFrame);
+        }
+
+        timeIn = timeIn + change * settings.horizontalTimePerPixel
+
+        if (firstText) {
+            firstText.setDuration((firstText.width - change) * settings.horizontalTimePerPixel);
+        }
+
+        for (j = 0; j < detectRepeater.count; ++j) {
+            detect = detectRepeater.itemAt(j);
+            detect.setTime((detect.x - change) * settings.horizontalTimePerPixel);
+        }
+    }
+
+    function moveToX(desiredX) {
+        model.timeIn = desiredX * settings.horizontalTimePerPixel;
+    }
+
+    function moveToY(desiredY) {
+        console.log(desiredY / parent.height)
+        model.trackNumber = Math.min(0.75, Math.max(0, desiredY / parent.height));
     }
 }
 
