@@ -14,6 +14,16 @@ Item {
         source: "qrc:/fonts/fontawesome-webfont.ttf"
     }
 
+    Rectangle {
+        anchors.fill: parent
+        color: "#AA000000"
+
+        MouseArea {
+            // block mouse events below
+            anchors.fill: parent
+        }
+    }
+
     Component {
         id: contactDelegate
 
@@ -106,13 +116,16 @@ Item {
 
     Row {
         anchors.centerIn: parent
-        spacing: 2
+        width: childrenRect.width
+        height: childrenRect.height
+        spacing: 10
 
         Rectangle {
-            color: "#aa000000"
+            color: "#aa005500"
             width: grid.cellWidth-2
             height: grid.cellHeight-2
             radius: 5
+            anchors.verticalCenter: parent.verticalCenter
 
             Column {
                 anchors.fill: parent
@@ -142,14 +155,23 @@ Item {
 
         GridView {
             id: grid
-            cellWidth: 120; cellHeight: 120
-            width: 600
-            height: 400
+            cellWidth: 120
+            cellHeight: 120
+//            width: 300
+//            height: 300
+            property int maxColumns: 5
+            property int maxRows: 5
+            property int columnCount: Math.min(count, maxColumns)
+            property int rowCount: Math.min(Math.ceil(count / maxColumns), maxRows)
+            width: columnCount * cellWidth
+            height: rowCount * cellHeight
 
             model: doc.peopleModel
             delegate: contactDelegate
             highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
             focus: true
+
+            onCountChanged: { console.log(count) }
         }
     }
 

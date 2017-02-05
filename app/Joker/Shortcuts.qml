@@ -4,8 +4,13 @@ import QtQuick.Controls 1.2
 import PhImport 1.0
 
 Item {
+    // do not steal the TextInputs event processing
+    property bool allShortcutEnabled: !strip.editing && !peopleSelection.editing
+    property bool editionShortcutEnabled: window.edition && allShortcutEnabled
+
     Shortcut {
         sequence: "Alt+Left"
+        enabled: allShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             pause()
@@ -15,6 +20,7 @@ Item {
 
     Shortcut {
         sequence: "Alt+Right"
+        enabled: allShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             pause()
@@ -24,6 +30,7 @@ Item {
 
     Shortcut {
         sequence: "Left"
+        enabled: allShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             pause()
@@ -33,6 +40,7 @@ Item {
 
     Shortcut {
         sequence: "Right"
+        enabled: allShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             pause()
@@ -42,25 +50,28 @@ Item {
 
     Shortcut {
         sequence: "Up"
+        enabled: allShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: playbackController.onPlayPause()
     }
 
     Shortcut {
         sequence: "Down"
+        enabled: allShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: playbackController.onPlayPauseBackward()
     }
 
     Shortcut {
         sequence: "Space"
+        enabled: allShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: playbackController.onPlayPause()
     }
 
     Shortcut {
         sequence: "Return"
-        enabled: window.edition && !strip.editing && !peopleSelection.editing // do not steal the TextInputs event processing
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -76,7 +87,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+Left"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -95,7 +106,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+Right"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -114,7 +125,7 @@ Item {
 
     Shortcut {
         sequence: "Shift+Left"
-        enabled: window.edition && !strip.editing && !peopleSelection.editing // do not steal the TextInputs event processing
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -129,7 +140,7 @@ Item {
 
     Shortcut {
         sequence: "Shift+Right"
-        enabled: window.edition && !strip.editing && !peopleSelection.editing // do not steal the TextInputs event processing
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -144,7 +155,7 @@ Item {
 
     Shortcut {
         sequence: "Del"
-        enabled: window.edition && !strip.editing && !peopleSelection.editing // do not steal the TextInputs event processing
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -159,7 +170,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+D"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -175,7 +186,7 @@ Item {
     // add loop
     Shortcut {
         sequence: "0"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -189,7 +200,7 @@ Item {
     // add cut
     Shortcut {
         sequence: "1"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -203,7 +214,7 @@ Item {
     // start/end of a line with open mouth
     Shortcut {
         sequence: "2"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -218,7 +229,7 @@ Item {
     // start/end of a line with closed mouth
     Shortcut {
         sequence: "3"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -233,7 +244,7 @@ Item {
     // labial
     Shortcut {
         sequence: "4"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -249,7 +260,7 @@ Item {
     // dental
     Shortcut {
         sequence: "5"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -265,7 +276,7 @@ Item {
     // neutral
     Shortcut {
         sequence: "6"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -281,7 +292,7 @@ Item {
     // aperture
     Shortcut {
         sequence: "7"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -297,7 +308,7 @@ Item {
     // bowl
     Shortcut {
         sequence: "8"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -313,7 +324,7 @@ Item {
     // advance / "weque"
     Shortcut {
         sequence: "9"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             var time = jokerWindow.stripTime;
@@ -328,7 +339,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+Up"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             console.log("Ctrl+Up shortcut " + strip.currentTrackNumber);
@@ -338,7 +349,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+Down"
-        enabled: window.edition
+        enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             console.log("Ctrl+Down shortcut " + strip.currentTrackNumber);
@@ -348,6 +359,7 @@ Item {
 
     Shortcut {
         sequence: "Ctrl+E"
+        enabled: allShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             console.log("Ctrl+E shortcut " + window.edition);

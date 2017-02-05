@@ -292,7 +292,7 @@ Item {
 
     PeopleSelection {
         id: peopleSelection
-        anchors.centerIn: parent
+        anchors.fill: parent
         opacity: 0 // hide by default
         visible: false
     }

@@ -62,40 +62,13 @@ Item {
         }
     }
 
-    // people name
-    // FIXME selection, color, font, inverted color are not implemented
-    Text {
-        anchors.right: parent.left
-        anchors.rightMargin: 15
-        anchors.top: parent.top
-        anchors.topMargin: 2
-        text: peopleName
-        font.pixelSize: stripLineContainer.height/3
-        font.family: "Arial"
-        color: "blue"
-        smooth: true // smooth scaling
-
-        MouseArea {
-            enabled: window.edition
-            anchors.fill: parent
-            acceptedButtons: "LeftButton"
-            onDoubleClicked: {
-                peopleConnection.isEnabled = true
-                peopleSelection.show(peopleName)
-            }
-        }
-
-        Connections {
-            id: peopleConnection
-            property bool isEnabled: false
-            target: peopleSelection
-            onSelected: {
-                if (isEnabled) {
-                    console.log("onSelected " + name + " " + index)
-                    doc.assignLineToPeople(index, name)
-                    isEnabled = false
-                }
-            }
+    LinePeople {
+        name: peopleName
+        anchors {
+            right: parent.left
+            rightMargin: 15
+            top: parent.top
+            topMargin: 2
         }
     }
 
