@@ -116,11 +116,12 @@ Item {
 
     Row {
         anchors.centerIn: parent
-        width: childrenRect.width
-        height: childrenRect.height
+        width: newRectangle.width + grid.width
+        height: grid.height
         spacing: 10
 
         Rectangle {
+            id: newRectangle
             color: "#aa005500"
             width: grid.cellWidth-2
             height: grid.cellHeight-2
@@ -172,6 +173,34 @@ Item {
             focus: true
 
             onCountChanged: { console.log(count) }
+
+            Rectangle {
+                anchors.left: grid.right
+                anchors.bottom: grid.top
+                anchors.leftMargin: 5
+                anchors.bottomMargin: 5
+                width: Math.max(closeText.width, closeText.height)
+                height: width
+                color: "firebrick"
+                radius: 5
+
+                Text {
+                    anchors.centerIn: parent
+                    id: closeText
+                    font.family: "FontAwesome";
+                    text: FontAwesome.Icon.close;
+                    font.pixelSize: 40
+                    color: "white"
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: "LeftButton"
+                    onDoubleClicked: {
+                        hide()
+                    }
+                }
+            }
         }
     }
 
