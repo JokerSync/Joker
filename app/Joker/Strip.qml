@@ -302,7 +302,7 @@ Item {
                 }
 
                 console.log("deleting line " + i)
-                doc.lineModel.remove(i)
+                line.remove()
                 return true;
             }
         }

@@ -68,14 +68,16 @@ bool PhStripTextModel::setData(const QModelIndex &index, const QVariant &value, 
 
 bool PhStripTextModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-	beginRemoveRows(parent, row, row + count - 1);
-	for(int i=0; i<count; i++) {
-		PhStripText *text = _texts.takeAt(row);
-		delete text;
-	}
-	endRemoveRows();
+	if (count > 0) {
+		beginRemoveRows(parent, row, row + count - 1);
+		for(int i=0; i<count; i++) {
+			PhStripText *text = _texts.takeAt(row);
+			delete text;
+		}
+		endRemoveRows();
 
-	updateDuration();
+		updateDuration();
+	}
 }
 
 QHash<int, QByteArray> PhStripTextModel::roleNames() const {

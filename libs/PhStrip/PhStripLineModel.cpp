@@ -111,15 +111,17 @@ PhTime PhStripLineModel::timeOut()
 
 bool PhStripLineModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-	beginRemoveRows(parent, row, row + count - 1);
-	for(int i=0; i<count; i++) {
-		PhStripLine *line = _lines.takeAt(row);
-		delete line;
-	}
-	endRemoveRows();
+	if (count > 0) {
+		beginRemoveRows(parent, row, row + count - 1);
+		for(int i=0; i<count; i++) {
+			PhStripLine *line = _lines.takeAt(row);
+			delete line;
+		}
+		endRemoveRows();
 
-	updateTimeIn();
-	updateTimeOut();
+		updateTimeIn();
+		updateTimeOut();
+	}
 }
 
 QHash<int, QByteArray> PhStripLineModel::roleNames() const {

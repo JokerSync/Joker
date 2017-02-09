@@ -190,8 +190,8 @@ Item {
         MenuItem {
             text: FontAwesome.Icon.trash + " Delete phrase"
             onTriggered: {
-                console.log("Line " + lineContextMenu.index + " " + textRow.width);
-                doc.lineModel.remove(lineContextMenu.index);
+                console.log("Delete line");
+                remove();
             }
         }
 
@@ -531,6 +531,8 @@ Item {
 
     function close(x, typeOut) {
         var lineX = x - stripLineContainer.x
+        var pixelPerFrame = jokerWindow.timePerFrame / settings.horizontalTimePerPixel;
+        lineX = Math.max(lineX, pixelPerFrame)
         var time = lineX * settings.horizontalTimePerPixel;
         stripLineContainer.lineModel.texts.addText("", time, typeOut);
     }
@@ -590,6 +592,10 @@ Item {
     function moveToY(desiredY) {
         console.log(desiredY / parent.height)
         model.trackNumber = Math.min(0.75, Math.max(0, desiredY / parent.height));
+    }
+
+    function remove() {
+        doc.lineModel.remove(model.index);
     }
 }
 

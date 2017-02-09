@@ -16,6 +16,12 @@ PhStripLine::PhStripLine(PhTime timeIn, PhStripDetect::PhDetectType typeIn, PhPe
 	connect(_textModel, &PhStripTextModel::durationChanged, this, &PhStripLine::updateTimeOut);
 }
 
+PhStripLine::~PhStripLine()
+{
+	_detectModel->removeRows(0, _detectModel->rowCount());
+	_textModel->clear();
+}
+
 void PhStripLine::setTimeIn(PhTime timeIn)
 {
 	if (timeIn != _timeIn) {

@@ -57,10 +57,12 @@ bool PhStripDetectModel::setData(const QModelIndex &index, const QVariant &value
 
 bool PhStripDetectModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-	beginRemoveRows(parent, row, row + count - 1);
-	PhStripDetect *detect = _detects.takeAt(row);
-	delete detect;
-	endRemoveRows();
+	if (count > 0) {
+		beginRemoveRows(parent, row, row + count - 1);
+		PhStripDetect *detect = _detects.takeAt(row);
+		delete detect;
+		endRemoveRows();
+	}
 }
 
 QListIterator<PhStripDetect *> PhStripDetectModel::iterator()

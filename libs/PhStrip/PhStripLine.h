@@ -25,6 +25,8 @@ public:
 	 */
 	PhStripLine(PhTime timeIn, PhStripDetect::PhDetectType typeIn, PhPeople * people, float y, float height);
 
+	~PhStripLine();
+
 	PhStripTextModel* textModel() {
 		return _textModel;
 	}
