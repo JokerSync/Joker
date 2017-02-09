@@ -129,6 +129,7 @@ Item {
         visible: settings.displayCuts
 
         Repeater {
+            id: stripCutRepeater
             model: doc.cutModel
             delegate: Cut {
                 x: time/settings.horizontalTimePerPixel
@@ -143,6 +144,7 @@ Item {
         height: parent.height
 
         Repeater {
+            id: stripLoopRepeater
             model: doc.loopModel
             delegate: Loop {
                 x: time/settings.horizontalTimePerPixel
@@ -231,6 +233,32 @@ Item {
         return 0
     }
 
+    function findLoopAt(x) {
+        for (var i = 0; i < stripLoopRepeater.count; ++i) {
+            var loop = stripLoopRepeater.itemAt(i);
+            var loopX = x - loop.x
+            console.log("loop " + loopX)
+
+            if (loopX >= -0.1 && loopX <= 0.1) {
+                return loop
+            }
+        }
+        return 0
+    }
+
+    function findCutAt(x) {
+        for (var i = 0; i < stripCutRepeater.count; ++i) {
+            var cut = stripCutRepeater.itemAt(i);
+            var cutX = x - cut.x
+            console.log("cut " + cutX)
+
+            if (cutX >= -0.1 && cutX <= 0.1) {
+                return cut
+            }
+        }
+        return 0
+    }
+
     function addDetectAt(x, y, type) {
         for (var i = 0; i < stripLineRepeater.children.length; ++i) {
             var line = stripLineRepeater.children[i];
@@ -277,6 +305,20 @@ Item {
                 doc.lineModel.remove(i)
                 return true;
             }
+        }
+
+        // find loop
+        var loop = findLoopAt(x)
+        if (loop) {
+            loop.remove();
+            return true;
+        }
+
+        // find cut
+        var cut = findCutAt(x)
+        if (cut) {
+            cut.remove();
+            return true;
         }
 
         return false;

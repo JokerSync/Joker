@@ -58,19 +58,20 @@ Item {
     Menu {
         id: loopContextMenu
         title: "Edit"
-        property int index: 0
         MenuItem {
             text: "Delete loop"
             onTriggered: {
-                console.log("Loop " + loopContextMenu.index);
-                doc.loopModel.remove(loopDelegate.model.index);
+                console.log("Deelte loop");
+                loopDelegate.remove()
             }
         }
     }
 
+    function remove() {
+        doc.loopModel.remove(model.index);
+    }
+
     function showContextMenu() {
-        console.log("index: " + model.index);
-        loopContextMenu.index = model.index;
         loopContextMenu.popup();
     }
 }

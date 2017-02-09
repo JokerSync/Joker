@@ -23,19 +23,20 @@ Item {
     Menu {
         id: cutContextMenu
         title: "Edit"
-        property int index: 0
         MenuItem {
             text: "Delete cut"
             onTriggered: {
-                console.log("Cut " + cutContextMenu.index);
-                doc.cutModel.remove(cutContextMenu.index);
+                console.log("Delete cut");
+                remove();
             }
         }
     }
 
+    function remove() {
+        doc.cutModel.remove(model.index);
+    }
+
     function showContextMenu() {
-        console.log("index: " + model.index);
-        cutContextMenu.index = model.index;
         cutContextMenu.popup();
     }
 }
