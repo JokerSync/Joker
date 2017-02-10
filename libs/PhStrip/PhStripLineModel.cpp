@@ -121,7 +121,11 @@ bool PhStripLineModel::removeRows(int row, int count, const QModelIndex &parent)
 
 		updateTimeIn();
 		updateTimeOut();
+
+		return true;
 	}
+
+	return false;
 }
 
 QHash<int, QByteArray> PhStripLineModel::roleNames() const {
@@ -167,7 +171,10 @@ void PhStripLineModel::updateTimeIn()
 void PhStripLineModel::updateTimeOut()
 {
 	QModelIndex index = this->index(_lines.indexOf((PhStripLine*)sender()));
-	emit dataChanged(index, index, QVector<int>(1, DurationRole));
+	// index might not be valid if this is a line deletion
+	if (index.isValid()) {
+		emit dataChanged(index, index, QVector<int>(1, DurationRole));
+	}
 
 	PhTime timeOut = PHTIMEMIN;
 	foreach(PhStripLine *line, _lines) {

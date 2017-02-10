@@ -7,7 +7,6 @@ import PhImport 1.0 as Ph
 
 Item {
     id: lineDetect
-    Binding { target: model; property: "time"; value: x*settings.horizontalTimePerPixel }
     property int modelType: type
 
     // Load the "FontAwesome" font for the detection icons.

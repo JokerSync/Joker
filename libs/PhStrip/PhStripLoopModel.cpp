@@ -58,10 +58,17 @@ bool PhStripLoopModel::setData(const QModelIndex &index, const QVariant &value, 
 
 bool PhStripLoopModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-	beginRemoveRows(parent, row, row + count - 1);
-	PhStripLoop *loop = _loops.takeAt(row);
-	delete loop;
-	endRemoveRows();
+	if (count > 0)
+	{
+		beginRemoveRows(parent, row, row + count - 1);
+		PhStripLoop *loop = _loops.takeAt(row);
+		delete loop;
+		endRemoveRows();
+
+		return true;
+	}
+
+	return false;
 }
 
 void PhStripLoopModel::clear()

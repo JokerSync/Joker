@@ -8,11 +8,7 @@ import "qrc:/fonts/fontawesome.js" as FontAwesome
 FocusScope {
     id: stripTextItem2
     height: stripLineContainer.height
-
     width: duration/settings.horizontalTimePerPixel
-    // maintain the binding even after width is statistically reassigned during a drag
-    property int modelDuration: duration
-    onModelDurationChanged: width = duration/settings.horizontalTimePerPixel
 
     property string text: stripTextInput.text
     property bool textFocus: stripTextInput.focus
@@ -40,7 +36,7 @@ FocusScope {
     Rectangle {
         anchors.fill: parent
         color: stripLineContainer.editing ? emptyEditing : emptyNonEditing
-        visible: content.length === 0 && window.edition
+        visible: stripTextInput.text.length === 0 && window.edition
 
         MouseArea {
             anchors.fill: parent
@@ -104,8 +100,10 @@ FocusScope {
 
         onEditingFinished: {
             console.log("Editing finished")
+            stripTextItem2.setText(text)
             focus = false
-            stripContainer.forceActiveFocus()
+            // giving the active focus to the stripContainer ends up with a segfault because it has no input method
+            // but it is useless anyway. Settings focus to false is enough.
             stripLineContainer.editing = false
         }
 
@@ -268,7 +266,7 @@ FocusScope {
             onPositionChanged: {
                 if (drag.active) {
                     if (mouse.modifiers & Qt.ControlModifier || stripTextDelegate.last) {
-                        //stripTextItem2.setDuration(snappedDragTarget.x * settings.horizontalTimePerPixel)
+                        // handled elsewhere
                     } else {
                         var movement = mouseX - startX;
                         console.log("detect dragged without ctrl")

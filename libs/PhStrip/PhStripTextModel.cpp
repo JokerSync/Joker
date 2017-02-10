@@ -77,7 +77,11 @@ bool PhStripTextModel::removeRows(int row, int count, const QModelIndex &parent)
 		endRemoveRows();
 
 		updateDuration();
+
+		return true;
 	}
+
+	return false;
 }
 
 QHash<int, QByteArray> PhStripTextModel::roleNames() const {

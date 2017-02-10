@@ -15,9 +15,6 @@ Item {
     x: timeIn/settings.horizontalTimePerPixel
     y: parent.height*trackNumber
 
-    Binding { target: model; property: "timeIn"; value: x*settings.horizontalTimePerPixel }
-    Binding { target: model; property: "trackNumber"; value: y/stripContainer.height }
-
     property var lineModel: model
     property bool editing: false
     property bool empty: textRepeater.count === 0
@@ -55,9 +52,6 @@ Item {
 
                 property int textIndex: index
                 property bool last: index === textRepeater.count - 1
-
-                Binding { target: model; property: "content"; value: text }
-                Binding { target: model; property: "duration"; value: width*settings.horizontalTimePerPixel }
             }
         }
     }
