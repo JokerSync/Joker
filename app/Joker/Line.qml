@@ -321,7 +321,8 @@ Item {
             console.log("moving timeIn " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)
             timeIn += timeChange;
             if (textRepeater.count > 0) {
-                textRepeater.itemAt(0).width = textRepeater.itemAt(0).width - pixelChange
+                var firstText = textRepeater.itemAt(0);
+                firstText.setDuration((firstText.width - pixelChange)*settings.horizontalTimePerPixel)
             }
             return true;
         }
@@ -332,11 +333,11 @@ Item {
             console.log(text.x + " " + text.width + " " + lineX)
             if (Math.abs(text.x + text.width - lineX) < 1) {
                 console.log("moving text timeOut " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)
-                text.width += pixelChange
+                text.setDuration((text.width + pixelChange)*settings.horizontalTimePerPixel)
 
                 if (textRepeater.count > i+1) {
                     var nextText = textRow.children[i+1]
-                    nextText.width -= pixelChange
+                    nextText.setDuration((nextText.width - pixelChange)*settings.horizontalTimePerPixel)
                 }
 
                 return true;
@@ -350,7 +351,7 @@ Item {
             console.log(detect.x + " " + lineX)
             if (Math.abs(detect.x - lineX) < 1) {
                 console.log("moving detect time " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)
-                detect.x += pixelChange
+                detect.setTime((detect.x + pixelChange) * settings.horizontalTimePerPixel)
                 return true;
             }
         }
@@ -580,12 +581,12 @@ Item {
     }
 
     function moveToX(desiredX) {
-        model.timeIn = desiredX * settings.horizontalTimePerPixel;
+        timeIn = desiredX * settings.horizontalTimePerPixel;
     }
 
     function moveToY(desiredY) {
         console.log(desiredY / parent.height)
-        model.trackNumber = Math.min(0.75, Math.max(0, desiredY / parent.height));
+        trackNumber = Math.min(0.75, Math.max(0, desiredY / parent.height));
     }
 
     function remove() {

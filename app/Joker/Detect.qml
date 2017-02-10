@@ -173,7 +173,7 @@ Item {
         stripLineContainer.attachDetect(index, x)
     }
 
-    function setTime(time) {
-        model.time = time
+    function setTime(newTime) {
+        time = newTime
     }
 }
