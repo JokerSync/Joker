@@ -21,25 +21,101 @@ Item {
     // the font name is passed from here
     FontLoader { id: stripFont; name: settings.textFontFamily }
 
-    // background image
-    // TODO: inverted colors, solid color if background is disabled
     Item {
         x: -stripContainer.contentX
         anchors.top: parent.top
         anchors.bottom: parent.bottom
 
-        Image {
-            source: stripBackgroundUrl
-            fillMode: Image.TileHorizontally
+        // background image
+        // TODO: inverted colors, solid color if background is disabled
+        Item {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            x: Math.min(videoEngine.timeIn, doc.timeIn) / settings.horizontalTimePerPixel
-            width: Math.max(videoEngine.timeOut, doc.timeOut) / settings.horizontalTimePerPixel - x
 
-            onXChanged: console.log(videoEngine.timeIn + " " + doc.timeIn)
-            onWidthChanged: console.log(videoEngine.timeOut + " " + doc.timeOut)
+            Image {
+                source: stripBackgroundUrl
+                fillMode: Image.TileHorizontally
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                x: Math.min(videoEngine.timeIn, doc.timeIn) / settings.horizontalTimePerPixel
+                width: Math.max(videoEngine.timeOut, doc.timeOut) / settings.horizontalTimePerPixel - x
+
+                onXChanged: console.log(videoEngine.timeIn + " " + doc.timeIn)
+                onWidthChanged: console.log(videoEngine.timeOut + " " + doc.timeOut)
+            }
+        }
+
+        // ruler
+        Row {
+            id: stripRulerRepeater
+            x: settings.firstFootTime/settings.horizontalTimePerPixel //- stripContainer.contentX
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            visible: settings.displayFeet
+
+            Repeater {
+                // try to avoid updating the model when it is not visible
+                model: settings.displayFeet * (doc.timeOut - settings.firstFootTime) / settings.timeBetweenTwoFeet
+                delegate: RulerTick {
+                    width: settings.timeBetweenTwoFeet/settings.horizontalTimePerPixel
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                }
+            }
+        }
+
+        Item {
+            height: parent.height
+            visible: settings.displayCuts
+
+            Repeater {
+                id: stripCutRepeater
+                model: doc.cutModel
+                delegate: Cut {
+                    x: time/settings.horizontalTimePerPixel
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                }
+            }
+        }
+
+        Item {
+            height: parent.height
+
+            Repeater {
+                id: stripLoopRepeater
+                model: doc.loopModel
+                delegate: Loop {
+                    x: time/settings.horizontalTimePerPixel
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                }
+            }
+        }
+
+        Item {
+            id: stripLineRepeater
+            height: parent.height
+
+            Repeater {
+                model: doc.lineModel
+                delegate: Line {}
+            }
+
+    //        NumberAnimation {
+    //            id: animateOpacity
+    //            target: stripLineRepeater
+    //            properties: "x"
+    //            from: -87202560 / settings.horizontalTimePerPixel
+    //            to: -87202560 / settings.horizontalTimePerPixel - 4000
+    //            duration: 10000
+    //            loops: Animation.Infinite
+    //            running: true
+    //       }
         }
     }
+
+
 
     EditionMask {
         anchors.fill: parent
@@ -102,78 +178,6 @@ Item {
             var frameChange = wheel.angleDelta.y/wheelStepSize;
             playbackController.onFrameScroll(frameChange);
         }
-    }
-
-    // ruler
-    Row {
-        id: stripRulerRepeater
-        x: settings.firstFootTime/settings.horizontalTimePerPixel - stripContainer.contentX
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        visible: settings.displayFeet
-
-        Repeater {
-            // try to avoid updating the model when it is not visible
-            model: settings.displayFeet * (doc.timeOut - settings.firstFootTime) / settings.timeBetweenTwoFeet
-            delegate: RulerTick {
-                width: settings.timeBetweenTwoFeet/settings.horizontalTimePerPixel
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-            }
-        }
-    }
-
-    Item {
-        x: -stripContainer.contentX
-        height: parent.height
-        visible: settings.displayCuts
-
-        Repeater {
-            id: stripCutRepeater
-            model: doc.cutModel
-            delegate: Cut {
-                x: time/settings.horizontalTimePerPixel
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-            }
-        }
-    }
-
-    Item {
-        x: -stripContainer.contentX
-        height: parent.height
-
-        Repeater {
-            id: stripLoopRepeater
-            model: doc.loopModel
-            delegate: Loop {
-                x: time/settings.horizontalTimePerPixel
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-            }
-        }
-    }
-
-    Item {
-        id: stripLineRepeater
-        x: -stripContainer.contentX
-        height: parent.height
-
-        Repeater {
-            model: doc.lineModel
-            delegate: Line {}
-        }
-
-//        NumberAnimation {
-//            id: animateOpacity
-//            target: stripLineRepeater
-//            properties: "x"
-//            from: -87202560 / settings.horizontalTimePerPixel
-//            to: -87202560 / settings.horizontalTimePerPixel - 4000
-//            duration: 10000
-//            loops: Animation.Infinite
-//            running: true
-//       }
     }
 
     // sync bar
