@@ -22,9 +22,21 @@ Item {
     FontLoader { id: stripFont; name: settings.textFontFamily }
 
     Item {
+        id: c
         x: -stripContainer.contentX
         anchors.top: parent.top
         anchors.bottom: parent.bottom
+
+//        NumberAnimation {
+//            id: xAnimation
+//            target: c
+//            properties: "x"
+//            from: -86400000 / settings.horizontalTimePerPixel
+//            to: -86400000 / settings.horizontalTimePerPixel -1000*10
+//            duration: 2000*10
+//            loops: Animation.Infinite
+//            running: true
+//       }
 
         // background image
         // TODO: inverted colors, solid color if background is disabled
@@ -99,19 +111,10 @@ Item {
 
             Repeater {
                 model: doc.lineModel
-                delegate: Line {}
+                delegate: Line {
+                    //visible: (x - stripContainer.contentX - stripContainer.width) < 0 && (x + width - stripContainer.contentX) > 0
+                }
             }
-
-    //        NumberAnimation {
-    //            id: animateOpacity
-    //            target: stripLineRepeater
-    //            properties: "x"
-    //            from: -87202560 / settings.horizontalTimePerPixel
-    //            to: -87202560 / settings.horizontalTimePerPixel - 4000
-    //            duration: 10000
-    //            loops: Animation.Infinite
-    //            running: true
-    //       }
         }
     }
 
