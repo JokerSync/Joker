@@ -29,25 +29,20 @@ void PhVideoSurface::update(PhVideoBuffer *buffer)
 {
 	_currentFrame = buffer->frame();
 
-	QImage image(buffer->rgb(),
-				 buffer->width(),
-				 buffer->height(),
-				 QImage::Format_RGB32);
-
-	QVideoFrame *frame = new QVideoFrame(image);
+	QVideoFrame *videoFrame = buffer->videoFrame();
 
 	// should set the format
-	if ((m_format.frameSize() != frame->size())
-			|| (m_format.pixelFormat() != frame->pixelFormat()))
-	{
-		m_format = QVideoSurfaceFormat(frame->size(), frame->pixelFormat());
+	if ((m_format.frameSize() != videoFrame->size())
+			|| (m_format.pixelFormat() != videoFrame->pixelFormat())) {
+		m_format = QVideoSurfaceFormat(videoFrame->size(), videoFrame->pixelFormat());
 
 		if (m_surface && m_format.isValid())
 			m_surface->start(m_format);
 	}
 
-	if (m_surface)
-		m_surface->present(*frame);
+	if (m_surface) {
+		m_surface->present(*videoFrame);
+	}
 }
 
 PhFrame PhVideoSurface::currentFrame() const

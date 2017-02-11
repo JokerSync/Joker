@@ -7,6 +7,10 @@
 #ifndef PHVIDEODECODER_H
 #define PHVIDEODECODER_H
 
+// PhVideoBuffer needs to be included before libav
+// because of PixelFormat conflicting declarations
+#include "PhVideoBuffer.h"
+
 extern "C" {
 #ifndef INT64_C
 /** see http://code.google.com/p/ffmpegsource/issues/detail?id=11#c13 */
@@ -25,8 +29,6 @@ extern "C" {
 
 #include "PhSync/PhTimeCode.h"
 #include "PhVideoSettings.h"
-
-#include "PhVideoBuffer.h"
 
 /**
  * @brief The video decoder

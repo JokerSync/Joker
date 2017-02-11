@@ -7,6 +7,7 @@
 #ifndef PHVIDEOBUFFER_H
 #define PHVIDEOBUFFER_H
 
+#include <QVideoFrame>
 #include "PhSync/PhTime.h"
 
 /**
@@ -28,13 +29,14 @@ public:
 	 * @brief Reuse an existing buffer, recreating the rgb buffer if the new size is different.
 	 * @param size The new size
 	 */
-	void reuse(int size);
+	//void reuse(int size);
+	void reuse(int size, int width, int height, int linesize, QVideoFrame::PixelFormat format);
 
 	/**
-	 * @brief Gets the rgb buffer
-	 * @return The rgb buffer
+	 * @brief Gets the video buffer
+	 * @return The video frame
 	 */
-	uint8_t *rgb();
+	QVideoFrame * videoFrame();
 
 	/**
 	 * @brief Gets the frame number of the decoded buffer (with origin at the start of video file)
@@ -60,24 +62,9 @@ public:
 	 */
 	void setFrame(PhFrame frame);
 
-	/**
-	 * @brief Sets the width of the buffer
-	 * @param width The width of the buffer
-	 */
-	void setWidth(int width);
-
-	/**
-	 * @brief Sets the height of the buffer
-	 * @param height The height of the buffer
-	 */
-	void setHeight(int height);
-
 private:
-	uint8_t * _rgb;
-	int _size;
 	PhFrame _frame;
-	int _width;
-	int _height;
+	QVideoFrame * _videoFrame;
 };
 
 #endif // PHVIDEOBUFFER_H

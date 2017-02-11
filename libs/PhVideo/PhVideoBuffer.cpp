@@ -9,40 +9,42 @@
 #include "PhTools/PhDebug.h"
 
 PhVideoBuffer::PhVideoBuffer() :
-	_rgb(NULL),
-	_size(0),
 	_frame(0),
-	_width(0),
-	_height(0)
+	_videoFrame(0)
 {
 }
 
 PhVideoBuffer::~PhVideoBuffer()
 {
-	if (_rgb != NULL) {
-		delete[] _rgb;
-		_rgb = NULL;
+	if (_videoFrame != NULL) {
+		delete _videoFrame;
+		_videoFrame = NULL;
 	}
 }
 
-void PhVideoBuffer::reuse(int size)
+void PhVideoBuffer::reuse(int size, int width, int height, int linesize, QVideoFrame::PixelFormat format)
 {
-	if (_size != size) {
-		// the size has changed, update the buffer
-		if (_rgb != NULL) {
-			delete[] _rgb;
+	if (_videoFrame == NULL
+			|| _videoFrame->width() != width
+			|| _videoFrame->height() != height
+			|| _videoFrame->bytesPerLine() != linesize
+			|| _videoFrame->pixelFormat() != format) {
+
+		// the parameters have changed, update the video frame
+		if (_videoFrame != NULL) {
+			delete _videoFrame;
 		}
+
 		PHDBG(24) << "PhVideoBuffer alloc" << size;
-		_size = size;
-		_rgb = new uint8_t[_size];
+		_videoFrame = new QVideoFrame(size, QSize(width, height), linesize, format);
 	}
 
 	_frame = 0;
 }
 
-uint8_t *PhVideoBuffer::rgb()
+QVideoFrame *PhVideoBuffer::videoFrame()
 {
-	return _rgb;
+	return _videoFrame;
 }
 
 PhFrame PhVideoBuffer::frame()
@@ -52,25 +54,23 @@ PhFrame PhVideoBuffer::frame()
 
 int PhVideoBuffer::width()
 {
-	return _width;
+	if (_videoFrame == NULL) {
+		return 0;
+	}
+
+	return _videoFrame->width();
 }
 
 int PhVideoBuffer::height()
 {
-	return _height;
+	if (_videoFrame == NULL) {
+		return 0;
+	}
+
+	return _videoFrame->height();
 }
 
 void PhVideoBuffer::setFrame(PhFrame frame)
 {
 	_frame = frame;
-}
-
-void PhVideoBuffer::setWidth(int width)
-{
-	_width = width;
-}
-
-void PhVideoBuffer::setHeight(int height)
-{
-	_height = height;
 }

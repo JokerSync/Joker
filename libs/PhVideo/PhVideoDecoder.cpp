@@ -351,22 +351,11 @@ double PhVideoDecoder::framePerSecond()
 
 void PhVideoDecoder::frameToRgb(AVFrame *avFrame)
 {
-	// resize the buffer if needed
-	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
-	if(bufferSize <= 0) {
-		PHERR << "avpicture_get_size() returned" << bufferSize;
-		return;
-	}
-
 	int frameHeight = avFrame->height;
 	if(_deinterlace)
 		frameHeight = avFrame->height / 2;
 
 	PhVideoBuffer *buffer = getAvailableFrame();
-	buffer->reuse(bufferSize);
-	buffer->setFrame(_currentFrame);
-	buffer->setWidth(avFrame->width);
-	buffer->setHeight(frameHeight);
 
 	// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
 	// we replace its with the new ones recommended by LibAv
@@ -390,20 +379,36 @@ void PhVideoDecoder::frameToRgb(AVFrame *avFrame)
 		break;
 	}
 
+	// resize the buffer if needed
+	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
+	if(bufferSize <= 0) {
+		PHERR << "avpicture_get_size() returned" << bufferSize;
+		return;
+	}
+
+	int linesize = avFrame->width * 4;
+	buffer->reuse(bufferSize, avFrame->width, frameHeight, linesize, QVideoFrame::Format_RGB32);
+	buffer->setFrame(_currentFrame);
+
+	QVideoFrame *videoFrame = buffer->videoFrame();
+
+	if(!videoFrame->map(QAbstractVideoBuffer::WriteOnly)) {
+		PHERR << "map returned false";
+		return;
+	}
+
 	/* Note: we output the frames in AV_PIX_FMT_BGRA rather than AV_PIX_FMT_RGB24,
 	 * because this format is native to most video cards and will avoid a conversion
 	 * in the video driver */
 	/* sws_getCachedContext will check if the context is valid for the given parameters. It the context is not valid,
 	 * it will be freed and a new one will be allocated. */
 	_swsContext = sws_getCachedContext(_swsContext, avFrame->width, _videoStream->codec->height, pixFormat,
-	                                   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
+									   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
 	                                   SWS_POINT, NULL, NULL, NULL);
 
-
-	int linesize = avFrame->width * 4;
-	uint8_t *rgb = buffer->rgb();
+	uint8_t* rgb = videoFrame->bits();
 	if (0 <= sws_scale(_swsContext, (const uint8_t * const *) avFrame->data,
-	                   avFrame->linesize, 0, _videoStream->codec->height, &rgb,
+					   avFrame->linesize, 0, _videoStream->codec->height, &rgb,
 	                   &linesize)) {
 		// tell the video engine that we have finished decoding!
 		emit frameAvailable(buffer);
@@ -411,6 +416,8 @@ void PhVideoDecoder::frameToRgb(AVFrame *avFrame)
 	else {
 		recycleFrame(buffer);
 	}
+
+	videoFrame->unmap();
 }
 
 void PhVideoDecoder::decodeFrame()
