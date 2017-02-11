@@ -249,18 +249,18 @@ Item {
         }
     }
 
-    function findTextAt(x, y) {
+    function findTextAt(x) {
         var lineX = x - stripLineContainer.x
-        var lineY = y - stripLineContainer.y
 
-        if (lineY !== 0 || lineX < -0.1 || lineX > stripLineContainer.width + 0.1) {
+        if (lineX < -0.1 || lineX > stripLineContainer.width + 0.1) {
             return 0;
         }
 
-        for (var i = 0; i < textRow.children.length; ++i) {
-            var text = textRow.children[i];
+        for (var i = 0; i < textRepeater.count; ++i) {
+            var text = textRepeater.itemAt(i);
             console.log(text.x + " " + text.width + " " + lineX)
-            if (lineX >= text.x - 0.1 && lineX <= text.x + text.width + 0.1) {
+            var textX = text.x - lineX
+            if (textX <= 0.1 && textX + text.width >= -0.1) {
                 return text;
             }
         }
@@ -269,23 +269,12 @@ Item {
     }
 
     function editTextAt(x) {
-        var lineX = x - stripLineContainer.x
-        var lineY = y - stripLineContainer.y
+        var text = findTextAt(x)
 
-        if (lineY !== 0 || lineX < -0.1 || lineX > stripLineContainer.width + 0.1) {
-            return false;
-        }
-
-        for (var i = 0; i < textRow.children.length; ++i) {
-            var text = textRow.children[i];
-            console.log(text.x + " " + text.width + " " + lineX)
-            if (lineX >= text.x - 0.1 && lineX <= text.x + text.width + 0.1) {
-                console.log("line.stripTextAt found text")
-                console.log(text)
-                var textX = lineX - text.x
-                text.editTextAt(textX)
-                return true;
-            }
+        if (text) {
+            var lineX = x - stripLineContainer.x
+            text.editTextAt(lineX - text.x)
+            return true;
         }
 
         return false;

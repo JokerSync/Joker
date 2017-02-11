@@ -24,8 +24,8 @@ FocusScope {
         source: "qrc:/fonts/fontawesome-webfont.ttf"
     }
 
-    function setText(text) {
-        content = text;
+    function setContent(newContent) {
+        content = newContent;
     }
 
     function setDuration(d) {
@@ -100,10 +100,16 @@ FocusScope {
 
         onEditingFinished: {
             console.log("Editing finished")
-            stripTextItem2.setText(text)
+            // apply change to model
+            stripTextItem2.setContent(text)
+            // restore binding
+            text = Qt.binding(function() { return content })
+            // disable focus
+            // (Note: giving the active focus to the stripContainer ends up
+            // with a segfault because it has no input method.
+            // But it is useless to try do that anyway. Settings focus to false is enough.)
             focus = false
-            // giving the active focus to the stripContainer ends up with a segfault because it has no input method
-            // but it is useless anyway. Settings focus to false is enough.
+            //
             stripLineContainer.editing = false
         }
 
@@ -131,10 +137,9 @@ FocusScope {
         }
 
         Keys.onEscapePressed: {
-            console.log('Escape pressed');
-            while (canUndo) {
-                undo()
-            }
+            console.log('Escape pressed ' + content + " " + text);
+            // restore the binding (this also resets the text)
+            text = Qt.binding(function() { return content })
             editingFinished();
         }
     }
@@ -402,8 +407,8 @@ FocusScope {
 
             console.log(textMoved + " " + text + " " + nextText.text)
 
-            setText(text.substr(0,currentLength-shift))
-            nextText.setText(textMoved + nextText.text)
+            setContent(text.substr(0,currentLength-shift))
+            nextText.setContent(textMoved + nextText.text)
         } else {
             var absoluteShift = -shift
 
@@ -415,8 +420,8 @@ FocusScope {
 
             console.log(nextTextMoved + " - " + text + " - " + nextText.text)
 
-            setText(text + nextTextMoved)
-            nextText.setText(nextText.text.substr(absoluteShift,nextLength-absoluteShift))
+            setContent(text + nextTextMoved)
+            nextText.setContent(nextText.text.substr(absoluteShift,nextLength-absoluteShift))
         }
     }
 
