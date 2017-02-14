@@ -5,104 +5,104 @@
     <name>AboutDialog</name>
     <message>
         <source>About Joker</source>
-        <translation type="unfinished"></translation>
+        <translation>Over Joker</translation>
     </message>
     <message>
         <source>Copyright 2013-2016 Phonations, All rights reserved.</source>
         <oldsource>Copyright 2013-2014 Phonations, All rights reserved.</oldsource>
-        <translation type="unfinished"></translation>
+        <translation>Copyright 2013-2016 Phonations, Alle rechten voorbehouden.</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Sluiten</translation>
     </message>
     <message>
         <source>Joker is based on the following libraries:</source>
         <oldsource>Joker is based on the following libraries : </oldsource>
-        <translation type="unfinished"></translation>
+        <translation>Joker is gebaseerd op de volgende bibliotheken:</translation>
     </message>
     <message>
         <source>Revision: </source>
-        <translation type="unfinished"></translation>
+        <translation>Revisie: </translation>
     </message>
     <message>
         <source>Synchronous playback time: </source>
-        <translation type="unfinished"></translation>
+        <translation>Synchrone afspeeltijd: </translation>
     </message>
     <message>
         <source>Revision:</source>
-        <translation type="unfinished"></translation>
+        <translation>Revisie:</translation>
     </message>
     <message>
         <source>Synchronous playback time: %1 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchrone afspeeltijd: %1 seconden</translation>
     </message>
 </context>
 <context>
     <name>JokerWindow</name>
     <message>
         <source>Joker</source>
-        <translation type="unfinished"></translation>
+        <translation>Joker</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestand</translation>
     </message>
     <message>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Recent bestand openen</translation>
     </message>
     <message>
         <source>Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Beheer</translation>
     </message>
     <message>
         <source>Varispeed</source>
-        <translation type="unfinished"></translation>
+        <translation>Variabele snelheid</translation>
     </message>
     <message>
         <source>Go to</source>
-        <translation type="unfinished"></translation>
+        <translation>Ga naar</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Weergeven</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hulp</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"></translation>
+        <translation>Video</translation>
     </message>
     <message>
         <source>Rythmo</source>
-        <translation type="unfinished"></translation>
+        <translation>Ritme</translation>
     </message>
     <message>
         <source>Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>Openen...</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <source>Play/pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Afspelen/pauzeren</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Spatie</translation>
     </message>
     <message>
         <source>Play backward</source>
-        <translation type="unfinished"></translation>
+        <translation>Achterwaarts afspelen</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Beneden</translation>
     </message>
     <message>
         <source>Step forward</source>
