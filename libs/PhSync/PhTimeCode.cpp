@@ -160,7 +160,8 @@ PhTime PhTimeCode::timeFromString(QString string, PhTimeCodeType type)
 
 QString PhTimeCode::stringFromTime(PhTime time, PhTimeCodeType type)
 {
-	return stringFromFrame(time / timePerFrame(type), type);
+	PhFrame roundFrame = (PhFrame)round(((float) time)/((float) timePerFrame(type)));
+	return stringFromFrame(roundFrame, type);
 }
 
 void PhTimeCode::ComputeHhMmSsFf(unsigned int *hhmmssff, PhFrame frame, PhTimeCodeType type) {
