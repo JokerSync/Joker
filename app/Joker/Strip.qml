@@ -21,6 +21,31 @@ Item {
     // the font name is passed from here
     FontLoader { id: stripFont; name: settings.textFontFamily }
 
+    // background image
+    // TODO: inverted colors, solid color if background is disabled
+    Item {
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        x: -stripContainer.contentX
+
+        Image {
+            source: stripBackgroundUrl
+            fillMode: Image.TileHorizontally
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            x: Math.min(videoEngine.timeIn, doc.timeIn) / settings.horizontalTimePerPixel
+            width: Math.max(videoEngine.timeOut, doc.timeOut) / settings.horizontalTimePerPixel - x
+
+            onXChanged: console.log(videoEngine.timeIn + " " + doc.timeIn)
+            onWidthChanged: console.log(videoEngine.timeOut + " " + doc.timeOut)
+        }
+    }
+
+    EditionMask {
+        anchors.fill: parent
+        currentTrackNumber: parent.currentTrackNumber
+    }
+
     Item {
         id: c
         x: -stripContainer.contentX
@@ -37,25 +62,6 @@ Item {
 //            loops: Animation.Infinite
 //            running: true
 //       }
-
-        // background image
-        // TODO: inverted colors, solid color if background is disabled
-        Item {
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-
-            Image {
-                source: stripBackgroundUrl
-                fillMode: Image.TileHorizontally
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                x: Math.min(videoEngine.timeIn, doc.timeIn) / settings.horizontalTimePerPixel
-                width: Math.max(videoEngine.timeOut, doc.timeOut) / settings.horizontalTimePerPixel - x
-
-                onXChanged: console.log(videoEngine.timeIn + " " + doc.timeIn)
-                onWidthChanged: console.log(videoEngine.timeOut + " " + doc.timeOut)
-            }
-        }
 
         // ruler
         Row {
@@ -118,13 +124,6 @@ Item {
         }
     }
 
-
-
-    EditionMask {
-        anchors.fill: parent
-        currentTrackNumber: parent.currentTrackNumber
-    }
-
     Menu {
         id: stripContextMenu
         title: "Edit"
@@ -175,12 +174,22 @@ Item {
     MouseArea {
         id: scrollStripArea
         anchors.fill: parent
+        propagateComposedEvents: true
+
         onWheel: {
             console.log("wheel " + wheel.angleDelta.x + " " + wheel.angleDelta.y + " " + wheel.pixelDelta.x + " " + wheel.pixelDelta.y);
             var wheelStepSize = 120;
             var frameChange = wheel.angleDelta.y/wheelStepSize;
             playbackController.onFrameScroll(frameChange);
         }
+
+        // pass other events to the items below in the z-stack
+        onClicked: mouse.accepted = false;
+        onPressed: mouse.accepted = false;
+        onReleased: mouse.accepted = false;
+        onDoubleClicked: mouse.accepted = false;
+        onPositionChanged: mouse.accepted = false;
+        onPressAndHold: mouse.accepted = false;
     }
 
     // sync bar
