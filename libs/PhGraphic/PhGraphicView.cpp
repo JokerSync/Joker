@@ -49,7 +49,9 @@ PhGraphicView::PhGraphicView(int width, int height, QWidget *parent)
 
 PhGraphicView::~PhGraphicView()
 {
-	_refreshTimer->stop();
+	if (_refreshTimer) {
+		_refreshTimer->stop();
+	}
 }
 
 void PhGraphicView::setGraphicSettings(PhGraphicSettings *settings)
