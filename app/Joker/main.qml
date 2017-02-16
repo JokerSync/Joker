@@ -9,6 +9,7 @@ import QtQml 2.2
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 import PhImport 1.0
+import "qrc:/fonts/fontawesome.js" as FontAwesome
 
 //ApplicationWindow {
 Item {
@@ -295,6 +296,47 @@ Item {
         anchors.fill: parent
         opacity: 0 // hide by default
         visible: false
+    }
+
+    Rectangle {
+        id: savingItem
+        anchors.fill: parent
+        color: "black"
+        visible: false
+        opacity: 0
+        property bool saving: jokerWindow.saving
+
+        Text {
+            anchors.centerIn: parent
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: "white"
+            styleColor: "white"
+            font.bold: true
+            font.pixelSize: 150
+            font.family: "FontAwesome"
+            text: FontAwesome.Icon.save
+        }
+
+        onSavingChanged: {
+            console.log(saving)
+            if(jokerWindow.saving) {
+                visible = true
+                opacity = 0.6
+            } else {
+                animateOpacity.start()
+            }
+        }
+
+        NumberAnimation {
+            id: animateOpacity
+            target: savingItem
+            properties: "opacity"
+            from: 0.6
+            to: 0
+            duration: 1000
+            easing.type: Easing.InCubic
+       }
     }
 
     property bool edition: editionSwitch.edition

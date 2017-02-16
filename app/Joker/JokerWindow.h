@@ -65,6 +65,7 @@ class JokerWindow : public PhEditableDocumentWindow
 	Q_PROPERTY(QString tcLabelText READ tcLabelText WRITE setTcLabelText NOTIFY tcLabelTextChanged)
 	Q_PROPERTY(QString nextTcLabelText READ nextTcLabelText WRITE setNextTcLabelText NOTIFY nextTcLabelTextChanged)
 	Q_PROPERTY(JokerSettings settings READ settings)
+	Q_PROPERTY(bool saving READ saving NOTIFY savingChanged)
 
 public:
 	///
@@ -141,6 +142,8 @@ public:
 
 	QString nextTcLabelText() const;
 	void setNextTcLabelText(const QString &nextTcLabelText);
+
+	bool saving() const;
 
 public slots:
 	///
@@ -363,6 +366,7 @@ signals:
 	void timePerFrameChanged();
 	void tcLabelTextChanged();
 	void nextTcLabelTextChanged();
+	void savingChanged();
 
 	// used in the GUI to display a warning when the last sync is too old
 	void videoSync();
@@ -372,6 +376,7 @@ private:
 	PhTimeCodeType synchroTimeCodeType();
 	PhTime currentTime();
 	PhRate currentRate();
+	void setSaving(bool saving);
 
 	Ui::JokerWindow *ui;
 	JokerSettings *_settings;
@@ -426,6 +431,8 @@ private:
 	bool _syncTimeInToDoc;
 
 	PhTime _timePlayed;
+
+	bool _saving;
 };
 
 #endif // MAINWINDOW_H

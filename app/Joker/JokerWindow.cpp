@@ -52,7 +52,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_nextTcLabelText(""),
 	_setCurrentTimeToVideoTimeIn(false),
 	_syncTimeInToDoc(false),
-	_timePlayed(settings->timePlayed())
+	_timePlayed(settings->timePlayed()),
+	_saving(false)
 {
 	qmlRegisterType<PhStripDetect>("PhImport", 1, 0, "PhStripDetect");
 	qRegisterMetaType<PhStripDetect::PhDetectType>("PhStripDetect::PhDetectType");
@@ -368,6 +369,8 @@ bool JokerWindow::openDocument(const QString &fileName)
 
 void JokerWindow::saveDocument(const QString &fileName)
 {
+	setSaving(true);
+
 	// prevent from reloading the document when we are the ones changing it
 	bool updateWatcher;
 	if (_watcher.files().contains(fileName)) {
@@ -382,12 +385,15 @@ void JokerWindow::saveDocument(const QString &fileName)
 		if (updateWatcher) {
 			_watcher.addPath(fileName);
 		}
+
+		setSaving(false);
 	}
 	else {
 		if (updateWatcher) {
 			_watcher.addPath(fileName);
 		}
 
+		setSaving(false);
 		QMessageBox::critical(this, "", QString(tr("Unable to save %1")).arg(fileName));
 	}
 }
@@ -760,6 +766,19 @@ void JokerWindow::setVideoTimeInToOneHour()
 	_doc->setVideoTimeIn(timeStamp, localTimeCodeType());
 	_mediaPanel.setTimeIn(timeStamp);
 	_doc->setModified(true);
+}
+
+bool JokerWindow::saving() const
+{
+	return _saving;
+}
+
+void JokerWindow::setSaving(bool saving)
+{
+	if (saving != _saving) {
+		_saving = saving;
+		emit savingChanged();
+	}
 }
 
 void JokerWindow::on_actionAbout_triggered()
