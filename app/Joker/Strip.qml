@@ -305,24 +305,6 @@ Item {
     }
 
     function deleteAt(x, y) {
-        for (var i = 0; i < stripLineRepeater.children.length; ++i) {
-            var line = stripLineRepeater.children[i];
-            if (line.objectName !== "Line") {
-                continue;
-            }
-            var lineSuccess = line.isAt(x, y);
-            if (lineSuccess) {
-                var success = line.deleteDetectAt(x, y);
-                if (success) {
-                    return true;
-                }
-
-                console.log("deleting line " + i)
-                line.remove()
-                return true;
-            }
-        }
-
         // find loop
         var loop = findLoopAt(x)
         if (loop) {
@@ -334,6 +316,19 @@ Item {
         var cut = findCutAt(x)
         if (cut) {
             cut.remove();
+            return true;
+        }
+
+        // find line
+        var line = findLineAt(x, y);
+        console.log(line);
+        if (line) {
+            if (line.deleteDetectAt(x, y)) {
+                return true;
+            }
+
+            console.log("deleting line")
+            line.remove()
             return true;
         }
 
