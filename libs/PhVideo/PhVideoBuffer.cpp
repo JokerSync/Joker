@@ -9,7 +9,6 @@
 PhVideoBuffer::PhVideoBuffer() :
 	_rgb(NULL),
 	_size(0),
-	_requestFrame(0),
 	_frame(0),
 	_width(0),
 	_height(0)
@@ -48,11 +47,6 @@ PhFrame PhVideoBuffer::frame()
 	return _frame;
 }
 
-PhFrame PhVideoBuffer::requestFrame()
-{
-	return _requestFrame;
-}
-
 int PhVideoBuffer::width()
 {
 	return _width;
@@ -66,11 +60,6 @@ int PhVideoBuffer::height()
 void PhVideoBuffer::setFrame(PhFrame frame)
 {
 	_frame = frame;
-}
-
-void PhVideoBuffer::setRequestFrame(PhFrame requestFrame)
-{
-	_requestFrame = requestFrame;
 }
 
 void PhVideoBuffer::setWidth(int width)

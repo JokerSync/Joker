@@ -24,6 +24,7 @@ extern "C" {
 #include <QObject>
 
 #include "PhSync/PhTimeCode.h"
+#include "PhVideoSettings.h"
 
 #include "PhVideoBuffer.h"
 
@@ -41,7 +42,7 @@ public:
 	/**
 	 * @brief PhVideoEngine constructor
 	 */
-	explicit PhVideoDecoder();
+	explicit PhVideoDecoder(PhVideoSettings *settings);
 
 	~PhVideoDecoder();
 
@@ -65,35 +66,37 @@ public slots:
 	void decodeFrame();
 
 	/**
-	 * @brief Request a video frame
-	 * @param buffer The requested frame
-	 */
-	void requestFrame(PhVideoBuffer *buffer);
-
-	/**
-	 * @brief cancel a frame request
-	 * @param frame the frame describing the request
-	 */
-	void cancelFrameRequest(PhVideoBuffer *frame);
-
-	/**
 	 * @brief Signal sent when the deinterlace settings change
 	 * @param deinterlace Whether the video should be deinterlaced
 	 */
 	void setDeinterlace(bool deinterlace);
 
+	/**
+	 * @brief inform the decoder that the strip time has changed
+	 * @param stripFrame the new strip frame
+	 * @param backward true if the strip is being played backward
+	 * @param stripFrameIsInPool true if the frame was found in the decoded frame pool
+	 */
+	void stripTimeChanged(PhFrame stripFrame, bool backward, bool stripFrameIsInPool);
+
+	/**
+	 * @brief Stop
+	 *
+	 * Stop the decoder, prevents further decoding (including read-ahead)
+	 */
+	void stop();
+
+	/**
+	 * @brief transfer an unused frame buffer
+	 * @param frame the unused frame buffer
+	 */
+	void recycleFrame(PhVideoBuffer *frame);
 signals:
 	/**
 	 * @brief Signal sent when a frame has been decoded
 	 * @param buffer The frame where the decoded frame is
 	 */
 	void frameAvailable(PhVideoBuffer *buffer);
-
-	/**
-	 * @brief Signal sent when a frame request has been cancelled
-	 * @param frame The frame describing the request
-	 */
-	void frameCancelled(PhVideoBuffer *frame);
 
 	/**
 	 * @brief Signal sent when the decoder is ready
@@ -115,7 +118,7 @@ private:
 	bool ready();
 	double framePerSecond();
 	PhFrame frameLength();
-	void frameToRgb(AVFrame *avFrame, PhVideoBuffer *buffer);
+	void frameToRgb(AVFrame *avFrame);
 	int width();
 	int height();
 	QString codecName();
@@ -132,6 +135,15 @@ private:
 	AVFrame * _videoFrame;
 	struct SwsContext * _swsContext;
 	PhFrame _currentFrame;
+	PhFrame _stripFrame;
+	PhFrame _seekFrame;
+	bool _backward;
+	bool _processing;
+	bool _seek;
+	bool _fastSeek;
+	int _readAheadCount;
+	int _recycledCount;
+	int _seekThreshold;
 
 	bool _useAudio;
 	AVStream *_audioStream;
@@ -139,7 +151,12 @@ private:
 
 	bool _deinterlace;
 
-	QList<PhVideoBuffer *> _requestedFrames;
+	QList<PhVideoBuffer *> _recycledFrames;
+	PhVideoBuffer *getAvailableFrame();
+	PhFrame readAheadFrame();
+	bool canDecode();
+	PhFrame clip(PhFrame frame);
+	void fastForwardToFrame(PhFrame frame);
 };
 
 #endif // PHVIDEODECODER_H

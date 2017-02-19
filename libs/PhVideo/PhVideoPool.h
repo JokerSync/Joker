@@ -2,6 +2,7 @@
 #define PHVIDEOPOOL_H
 
 #include <QObject>
+#include <QMap>
 
 #include "PhVideoSettings.h"
 #include "PhVideoBuffer.h"
@@ -36,15 +37,15 @@ public:
 	/**
 	 * @brief Retrieve the decoded video buffer for a specific frame
 	 * @param frame A frame number
-	 * @return A video buffer
+	 * @return A video buffer, or NULL if there is none for that frame number
 	 */
-	PhVideoBuffer *decoded(PhFrame frame);
+	PhVideoBuffer *tryGetFrame(PhFrame frame);
 
 	/**
 	 * @brief Pool of decoded buffers
-	 * @return A read only list of buffers
+	 * @return A read-only map of buffers
 	 */
-	const QList<PhVideoBuffer *> decoded();
+	const QMap<PhFrame, PhVideoBuffer *> decoded();
 
 	/**
 	 * @brief Update the pool information
@@ -53,53 +54,44 @@ public:
 	void update(PhFrame frameLength);
 signals:
 	/**
-	 * @brief Signal sent to ask the decoder to decode a video frame
-	 * @param buffer the requested frame
+	 * @brief Signal sent when a frame can be recycled
+	 * @param buffer the frame to recycle
 	 */
-	void decodeFrame(PhVideoBuffer *buffer);
+	void recycledFrame(PhVideoBuffer *buffer);
 
 	/**
-	 * @brief Signal sent to cancel a frame request
-	 * @param buffer The buffer describing the request
+	 * @brief Signal sent when the decoding should stop
 	 */
-	void cancelFrameRequest(PhVideoBuffer *buffer);
+	void stop();
+
+	/**
+	 * @brief signal sent when the strip time has changed
+	 * @param stripFrame the new strip frame
+	 * @param backward true if the strip is being played backward
+	 * @param stripFrameIsInPool true if the frame was found in the decoded frame pool
+	 */
+	void poolTimeChanged(PhFrame stripFrame, bool backward, bool stripFrameIsInPool);
 
 public slots:
 	/**
-	 * @brief Request the frames starting a given time and further according to the readhead
-	 *
-	 * @param frame Starting frame
+	 * @brief Handle a change in strip time
+	 * @param stripFrame Starting frame
 	 * @param backward True if playing backward, false if playing forward
 	 */
-	void requestFrames(PhFrame frame, bool backward);
+	void stripTimeChanged(PhFrame stripFrame, bool backward);
 
 	/**
 	 * @brief Handle a frame that has just been decoded
 	 * @param buffer the decoded buffer
 	 */
 	void frameAvailable(PhVideoBuffer *buffer);
-
-	/**
-	 * @brief Handle the signal that a frame request has been cancelled in the decoder
-	 * @param buffer The buffer describing the request
-	 */
-	void frameCancelled(PhVideoBuffer *buffer);
 private:
-	/**
-	 * @brief Whether the time corresponds to the frame that we have requested
-	 * @param frame The current frame
-	 * @return True if the frame has already been requested
-	 */
-	bool isFrameRequested(PhFrame frame);
-
-	void requestFrame(PhFrame frame);
-
 	PhVideoSettings *_settings;
 	PhFrame _frameLength;
-	QList<PhVideoBuffer*> _recycledPool;
-	QList<PhVideoBuffer*> _requestedPool;
-	QList<PhVideoBuffer*> _cancelledPool;
-	QList<PhVideoBuffer*> _decodedPool;
+	QMap<PhFrame, PhVideoBuffer*> _decodedPool;
+	PhFrame clip(PhFrame frame);
+	bool _backward;
+	PhFrame _stripFrame;
 };
 
 #endif // PHVIDEOPOOL_H

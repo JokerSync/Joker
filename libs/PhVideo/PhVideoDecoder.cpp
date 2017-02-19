@@ -11,7 +11,7 @@
 
 #include "PhVideoDecoder.h"
 
-PhVideoDecoder::PhVideoDecoder() :
+PhVideoDecoder::PhVideoDecoder(PhVideoSettings *settings) :
 	_fileName(""),
 	_tcType(PhTimeCodeType25),
 	_formatContext(NULL),
@@ -19,10 +19,18 @@ PhVideoDecoder::PhVideoDecoder() :
 	_videoFrame(NULL),
 	_swsContext(NULL),
 	_currentFrame(PHFRAMEMIN),
+	_stripFrame(PHFRAMEMIN),
+	_seekFrame(PHFRAMEMIN),
 	_useAudio(false),
 	_audioStream(NULL),
 	_audioFrame(NULL),
-	_deinterlace(false)
+	_deinterlace(false),
+	_processing(false),
+	_seek(false),
+	_fastSeek(false),
+	_readAheadCount(settings->videoReadhead()),
+	_recycledCount(settings->videoPoolSize()/4),
+	_seekThreshold(settings->videoReadhead())
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
 	av_register_all();
@@ -42,6 +50,7 @@ void PhVideoDecoder::open(QString fileName)
 	PHDEBUG << fileName;
 
 	_currentFrame = PHFRAMEMIN;
+	_seekFrame = PHFRAMEMIN;
 
 	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) < 0) {
 		emit openFailed();
@@ -101,6 +110,14 @@ void PhVideoDecoder::open(QString fileName)
 		emit openFailed();
 		close();
 		return;
+	}
+
+	// for MJPEG, seeking is efficient because all frames are key-frames
+	if (videoCodec->id == AV_CODEC_ID_MJPEG) {
+		_seekThreshold = 2;
+	}
+	else {
+		_seekThreshold = _readAheadCount;
 	}
 
 	if (avcodec_open2(_videoStream->codec, videoCodec, NULL) < 0) {
@@ -166,20 +183,109 @@ void PhVideoDecoder::close()
 	_fileName = "";
 }
 
-void PhVideoDecoder::requestFrame(PhVideoBuffer *buffer)
+PhFrame PhVideoDecoder::clip(PhFrame frame)
 {
-	bool topLevel = _requestedFrames.empty();
+	// clip to video boundaries
+	if(frame < 0)
+		frame = 0;
+	if (frame >= this->frameLength())
+		frame = this->frameLength() - 1;
 
-	PHDBG(24) << buffer->requestFrame() << " " << topLevel;
+	return frame;
+}
 
-	_requestedFrames.append(buffer);
+void PhVideoDecoder::stripTimeChanged(PhFrame stripFrame, bool backward, bool stripFrameIsInPool)
+{
+	_backward = backward;
 
-	if (topLevel && ready()) {
-		while (!_requestedFrames.empty()) {
+	stripFrame = clip(stripFrame);
+
+	bool backwardChange = stripFrame < _currentFrame;
+	bool largeForwardChange =
+		stripFrame > _currentFrame + _seekThreshold
+		&& stripFrame > _stripFrame + _seekThreshold;
+
+	if (!stripFrameIsInPool) {
+		if (largeForwardChange) {
+			// scenario 1: seeking forward (independently of playing direction)
+			PHDEBUG << "fast forward seek";
+			if (!backward) {
+				// when playing forward, go faster by not decoding in-between frames
+				_fastSeek = true;
+			}
+			else {
+				_seek = true;
+			}
+
+			_seekFrame = stripFrame;
+		}
+		else if (!backward && backwardChange) {
+			// scenario 2: seeking backward while paused or playing forward
+			PHDEBUG << "forward seek to the past";
+			_seek = true;
+			_seekFrame = stripFrame;
+		}
+		else if (backward && backwardChange) {
+			// scenario 3: playing backward and stripFrame is in the past compared to decoder position
+			PHDEBUG << "backward seek to the past";
+			_seek = true;
+			// the trick is here:
+			// it is necessary to go further back in time
+			// because the decoder can only decode forward
+			_seekFrame = clip(stripFrame - _readAheadCount);
+		}
+	}
+	else {
+		if (backward
+		    && backwardChange
+		    && stripFrame >= _seekFrame
+		    && stripFrame < _seekFrame + _readAheadCount) {
+			// scenario 4: similar to scenario 3 but anticipated
+			PHDEBUG << "backward seek to the past - anticipated";
+			_seek = true;
+			// the trick is here:
+			// it is necessary to go further back in time
+			// because the decoder can only decode forward
+			_seekFrame = clip(stripFrame - _readAheadCount);
+		}
+	}
+
+	_stripFrame = stripFrame;
+
+	if (!_processing) {
+		_processing = true;
+
+		// process events recursively
+		while (canDecode()) {
 			QCoreApplication::processEvents();
 			decodeFrame();
 		}
+
+		_processing = false;
 	}
+}
+
+void PhVideoDecoder::stop()
+{
+	_stripFrame = PHFRAMEMIN;
+}
+
+bool PhVideoDecoder::canDecode()
+{
+	if (_stripFrame == PHFRAMEMIN) {
+		return false;
+	}
+
+	if (_seek || (_currentFrame == PHFRAMEMIN)) {
+		return true;
+	}
+
+	return readAheadFrame() > _currentFrame;
+}
+
+PhFrame PhVideoDecoder::readAheadFrame()
+{
+	return clip(_stripFrame + _readAheadCount);
 }
 
 void PhVideoDecoder::setDeinterlace(bool deinterlace)
@@ -196,7 +302,7 @@ PhVideoDecoder::~PhVideoDecoder()
 	close();
 
 	// the engine thread is exiting too, so all the frames can be cleaned.
-	_requestedFrames.clear();
+	_recycledFrames.clear();
 }
 
 PhFrame PhVideoDecoder::frameLength()
@@ -220,11 +326,24 @@ double PhVideoDecoder::framePerSecond()
 	return result;
 }
 
-void PhVideoDecoder::frameToRgb(AVFrame *avFrame, PhVideoBuffer *buffer)
+void PhVideoDecoder::frameToRgb(AVFrame *avFrame)
 {
+	// resize the buffer if needed
+	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
+	if(bufferSize <= 0) {
+		PHERR << "avpicture_get_size() returned" << bufferSize;
+		return;
+	}
+
 	int frameHeight = avFrame->height;
 	if(_deinterlace)
 		frameHeight = avFrame->height / 2;
+
+	PhVideoBuffer *buffer = getAvailableFrame();
+	buffer->reuse(bufferSize);
+	buffer->setFrame(_currentFrame);
+	buffer->setWidth(avFrame->width);
+	buffer->setHeight(frameHeight);
 
 	// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
 	// we replace its with the new ones recommended by LibAv
@@ -263,15 +382,11 @@ void PhVideoDecoder::frameToRgb(AVFrame *avFrame, PhVideoBuffer *buffer)
 	if (0 <= sws_scale(_swsContext, (const uint8_t * const *) avFrame->data,
 	                   avFrame->linesize, 0, _videoStream->codec->height, &rgb,
 	                   &linesize)) {
-
-		PhFrame frame = AVTimestamp_to_PhFrame(av_frame_get_best_effort_timestamp(avFrame));
-
-		buffer->setFrame(frame);
-		buffer->setWidth(avFrame->width);
-		buffer->setHeight(frameHeight);
-
 		// tell the video engine that we have finished decoding!
 		emit frameAvailable(buffer);
+	}
+	else {
+		recycleFrame(buffer);
 	}
 }
 
@@ -282,62 +397,43 @@ void PhVideoDecoder::decodeFrame()
 		return;
 	}
 
-	if (_requestedFrames.empty()) {
-		// all pending requests have been cancelled
+	if (!canDecode()) {
+		// readahead position is already reached
 		return;
 	}
 
-	// now proceed with the first requested frame
-	PhVideoBuffer *buffer = _requestedFrames.takeFirst();
-	PhFrame frame = buffer->requestFrame();
+	PhFrame frame;
+	if(_seek || _fastSeek) {
+		frame = _seekFrame;
 
-	// resize the buffer if needed
-	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
-	if(bufferSize <= 0) {
-		PHERR << "avpicture_get_size() returned" << bufferSize;
-		return;
-	}
-	buffer->reuse(bufferSize);
-
-	// clip to stream boundaries
-	if(frame < 0)
-		frame = 0;
-	if (frame >= this->frameLength())
-		frame = this->frameLength();
-
-	// Stay with the same frame if the time has changed less than the time between two frames
-	// Note that av_seek_frame will seek to the _closest_ frame, sometimes a little bit in the "future",
-	// so it is necessary to use a little margin for the second comparison, otherwise a seek may
-	// be performed on each call to decodeFrame
-	if (frame == _currentFrame) {
-		frameToRgb(_videoFrame, buffer);
-		return;
-	}
-
-	// we need to perform a frame seek if the requested frame is:
-	// 1) in the past
-	// 2) after the next keyframe
-	//      how to know when the next keyframe is ??
-	//      -> for now we take a arbitrary threshold of 20 frames
-	if((frame < _currentFrame) || (frame >= _currentFrame + 20)) {
 		// seek to the closest keyframe in the past
 		int flags = AVSEEK_FLAG_BACKWARD;
-		int64_t timestamp = PhFrame_to_AVTimestamp(frame);
-		PHDBG(24) << "seek:" << buffer << " " << _currentFrame << " " << frame - _currentFrame << " " << timestamp;
+		int64_t timestamp = PhFrame_to_AVTimestamp(_seekFrame);
+		PHDEBUG << "seek:" << frame << _seekFrame << _currentFrame << " " << frame - _currentFrame << " " << timestamp;
 		av_seek_frame(_formatContext, _videoStream->index, timestamp, flags);
 
 		avcodec_flush_buffers(_videoStream->codec);
 	}
+	else {
+		// just go on with the next frame in the stream
+		frame = _currentFrame + 1;
+	}
+
+	// fast-forward to the desired frame
+	// without fully decoding all in-between frames
+	if (_fastSeek) {
+		fastForwardToFrame(_seekFrame);
+		return;
+	}
 
 	AVPacket packet;
 
-	bool lookingForVideoFrame = true;
-	while(lookingForVideoFrame) {
+	int frameFinished = 0;
+	while (!frameFinished) {
 		int error = av_read_frame(_formatContext, &packet);
-		switch(error) {
-		case 0:
-			if(packet.stream_index == _videoStream->index) {
-				int frameFinished = 0;
+		if (error == 0) {
+			if (packet.stream_index == _videoStream->index) {
+
 				avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
 				if(frameFinished) {
 					// update the current position of the engine
@@ -347,22 +443,60 @@ void PhVideoDecoder::decodeFrame()
 					_currentFrame = AVTimestamp_to_PhFrame(av_frame_get_best_effort_timestamp(_videoFrame));
 
 					PHDBG(24) << frame << _currentFrame;
+					frameToRgb(_videoFrame);
 
-					if (frame < _currentFrame) {
-						// something went wrong with the seeking
-						// this is not going to work! we cannot go backward!
-						// the loop will go until the end of the file, which is bad...
-						// So stop here and just return what we have.
-						PHERR << "current video time is larger than requested time... returning current frame!";
-						frameToRgb(_videoFrame, buffer);
-						lookingForVideoFrame = false;
+					if (_seek) {
+						_seek = false;
+						_seekFrame = _currentFrame;
 					}
 
-					// convert and emit the frame if this is the one that was requested
+				} // if frame decode is not finished, let's read another packet.
+			}
+			else if(_audioStream && (packet.stream_index == _audioStream->index)) {
+				int ok = 0;
+				avcodec_decode_audio4(_audioStream->codec, _audioFrame, &ok, &packet);
+				if(ok) {
+					PHDBG(24) << "audio:" << _audioFrame->nb_samples;
+				}
+			}
+		}
+		else {
+			char errorStr[256];
+			av_strerror(error, errorStr, 256);
+			PHDBG(24) << frame << "error:" << errorStr;
+			frameFinished = true;
+		}
+
+		//Avoid memory leak
+		av_free_packet(&packet);
+	}
+}
+
+void PhVideoDecoder::fastForwardToFrame(PhFrame frame)
+{
+	AVPacket packet;
+
+	// let the loop start even if seeking backwards in time
+	_currentFrame = PHFRAMEMIN;
+
+	while (_currentFrame < frame) {
+		int error = av_read_frame(_formatContext, &packet);
+		int frameFinished = 0;
+		if (error == 0) {
+			if(packet.stream_index == _videoStream->index) {
+				avcodec_decode_video2(_videoStream->codec, _videoFrame, &frameFinished, &packet);
+				if(frameFinished) {
+					// update the current position of the engine
+					// (Note that it is best not to do use '_currentTime = time' here, because the seeking operation may
+					// not be 100% accurate: the actual time may be different from the requested time. So a time drift
+					// could appear.)
+					_currentFrame = AVTimestamp_to_PhFrame(av_frame_get_best_effort_timestamp(_videoFrame));
+
 					if (frame == _currentFrame) {
-						PHDBG(24) << "decoded!";
-						frameToRgb(_videoFrame, buffer);
-						lookingForVideoFrame = false;
+						frameToRgb(_videoFrame);
+
+						_fastSeek = false;
+						_seekFrame = _currentFrame;
 					}
 				} // if frame decode is not finished, let's read another packet.
 			}
@@ -373,17 +507,15 @@ void PhVideoDecoder::decodeFrame()
 					PHDBG(24) << "audio:" << _audioFrame->nb_samples;
 				}
 			}
+		}
+		else {
+			char errorStr[256];
+			av_strerror(error, errorStr, 256);
+			PHDBG(24) << frame << "error:" << errorStr;
+
+			//Avoid memory leak
+			av_free_packet(&packet);
 			break;
-		case AVERROR_INVALIDDATA:
-		case AVERROR_EOF:
-		default:
-			{
-				char errorStr[256];
-				av_strerror(error, errorStr, 256);
-				PHDBG(24) << frame << "error:" << errorStr;
-				lookingForVideoFrame = false;
-				break;
-			}
 		}
 
 		//Avoid memory leak
@@ -391,14 +523,29 @@ void PhVideoDecoder::decodeFrame()
 	}
 }
 
-void PhVideoDecoder::cancelFrameRequest(PhVideoBuffer *frame)
+void PhVideoDecoder::recycleFrame(PhVideoBuffer *frame)
 {
-	int r = _requestedFrames.removeAll(frame);
-	PHDBG(24) << frame->requestFrame() << " " << r;
-
-	if (r > 0) {
-		emit frameCancelled(frame);
+	if (_recycledFrames.count() < _recycledCount) {
+		_recycledFrames.append(frame);
 	}
+	else {
+		delete frame;
+	}
+}
+
+PhVideoBuffer* PhVideoDecoder::getAvailableFrame()
+{
+	PhVideoBuffer * buffer;
+
+	if (!_recycledFrames.empty()) {
+		buffer = _recycledFrames.takeFirst();
+	}
+	else {
+		PHDBG(24) << "creating a new buffer";
+		buffer = new PhVideoBuffer();
+	}
+
+	return buffer;
 }
 
 int PhVideoDecoder::width()

@@ -173,9 +173,9 @@ public:
 
 	/**
 	 * @brief Pool of decoded frames
-	 * @return A read only list of frames
+	 * @return A read-only map of frames
 	 */
-	const QList<PhVideoBuffer*> decodedFramePool();
+	const QMap<PhFrame, PhVideoBuffer *> decodedFramePool();
 
 public slots:
 	/**
@@ -241,6 +241,13 @@ signals:
 	 * @brief Stop the decoder processing loop
 	 */
 	void stopDecoder();
+
+	/**
+	 * @brief signal sent when the strip time has changed
+	 * @param stripFrame the new strip frame
+	 * @param backward true if the strip is being played backward
+	 */
+	void stripTimeChanged(PhFrame stripFrame, bool backward);
 
 private slots:
 	void onTimeChanged(PhTime);
