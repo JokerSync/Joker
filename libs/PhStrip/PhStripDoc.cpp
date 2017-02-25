@@ -1798,12 +1798,17 @@ PhPeople *PhStripDoc::peopleByName(QString name) const
 PhStripLine *PhStripDoc::nextLine(PhTime time) const
 {
 	PhStripLine * result = NULL;
+	PhTime resultTimeIn = PHTIMEMAX;
+	PhStripLine * line;
+	PhTime lineTimeIn;
+
 	QListIterator<PhStripLine*> i = _lineModel->iterator();
 	while (i.hasNext()) {
-		PhStripLine *line = i.next();
-		if(line->timeIn() > time) {
-			if(!result || (line->timeIn() < result->timeIn()) )
-				result = line;
+		line = i.next();
+		lineTimeIn = line->timeIn();
+		if(lineTimeIn > time && lineTimeIn < resultTimeIn) {
+			result = line;
+			resultTimeIn = lineTimeIn;
 		}
 	}
 	return result;
