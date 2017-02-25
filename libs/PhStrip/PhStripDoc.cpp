@@ -269,9 +269,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 			//Currently using id as key instead of name
 			QString id = role.attribute("id");
 			if(id.isEmpty()) {
-				PHDEBUG << "empty id";
-				reset();
-				return false;
+				id = "defaultJokerRole";
 			}
 
 			peopleMap[id] = people;
@@ -304,7 +302,13 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					timeIn = -1;
 					PhTime lastTime = -1;
 					PhTime lastLinkedTime = -1;
-					PhPeople *people = peopleMap[elem.attribute("role")];
+
+					QString id = elem.attribute("role", "");
+					if (id.isEmpty()) {
+						id = "defaultJokerRole";
+					}
+
+					PhPeople *people = peopleMap[id];
 					float y = elem.attribute("track").toInt() / 4.0;
 					QString currentText = "";
 					PhStripLine *line;
