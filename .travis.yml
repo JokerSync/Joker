@@ -39,11 +39,11 @@ matrix:
     - COVERITY_SCAN_NOTIFICATION_EMAIL=martin@phonations.com
     - COVERITY_SCAN_BRANCH_PATTERN=master
     - COVERITY_SCAN_BUILD_COMMAND=make
-    - COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --comptype clangcxx --compiler
-      clang++"
+    - COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --comptype clangcxx --compiler clang++"
+    # COVERITY_SCAN_TOKEN:
     - secure: YlyaETwveWXOT1wpOz68Vp8Pj1zZ5u44ppOabNw/Xe4M8ZHdPy3QkmyB7wTeUgNjlHzkW23aOOzTk8bm5wxS1iQRxHsQ/DnZd0TcULPuTY9+yO2L/Wkwk6quFBqGlkT8h2v4xkRDyshG8OxF6eqeeq5Cflt/LOhx+MnJqse9EzQ=
     os: linux
-    script: if [[ "$TRAVIS_BRANCH" == "$COVERITY_SCAN_BRANCH_PATTERN" ]]; then curl
+    script: if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]] && [[ "$TRAVIS_BRANCH" == "$COVERITY_SCAN_BRANCH_PATTERN" ]]; then curl
       -s "$COVERITY_SCAN_SCRIPT" | bash; fi
   - env:
     - QTVER=551
@@ -75,7 +75,7 @@ install:
 - scripts/install_ffmpeg.sh
 - scripts/install_portaudio.sh
 - scripts/install_rtmidi.sh
-- if [[ "$TRAVIS_OS_NAME" == osx ]]; then scripts/add_key.sh; fi
+- if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]]; then scripts/add_key.sh; fi
 before_script: qmake $PROJECT
 script: make
 notifications:
