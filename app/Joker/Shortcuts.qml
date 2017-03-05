@@ -338,12 +338,42 @@ Item {
     }
 
     Shortcut {
+        sequence: "Alt+Up"
+        enabled: editionShortcutEnabled
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            console.log("Alt+Up shortcut " + strip.currentTrackNumber);
+            strip.currentTrackNumber = mod(strip.currentTrackNumber - 1, 4)
+        }
+    }
+
+    Shortcut {
+        sequence: "Alt+Down"
+        enabled: editionShortcutEnabled
+        context: Qt.ApplicationShortcut
+        onActivated: {
+            console.log("Alt+Down shortcut " + strip.currentTrackNumber);
+            strip.currentTrackNumber = mod(strip.currentTrackNumber + 1, 4)
+        }
+    }
+
+    Shortcut {
         sequence: "Ctrl+Up"
         enabled: editionShortcutEnabled
         context: Qt.ApplicationShortcut
         onActivated: {
             console.log("Ctrl+Up shortcut " + strip.currentTrackNumber);
-            strip.currentTrackNumber = mod(strip.currentTrackNumber - 1, 4)
+
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            var line = strip.findLineAt(textX, textY)
+
+            if (line) {
+                var newTrackNumber = mod(strip.currentTrackNumber - 1, 4)
+                line.moveToTrackNumber(newTrackNumber)
+                strip.currentTrackNumber = newTrackNumber
+            }
         }
     }
 
@@ -353,7 +383,17 @@ Item {
         context: Qt.ApplicationShortcut
         onActivated: {
             console.log("Ctrl+Down shortcut " + strip.currentTrackNumber);
-            strip.currentTrackNumber = mod(strip.currentTrackNumber + 1, 4)
+
+            var time = jokerWindow.stripTime;
+            var textY = strip.currentTextY
+            var textX = time / settings.horizontalTimePerPixel
+            var line = strip.findLineAt(textX, textY)
+
+            if (line) {
+                var newTrackNumber = mod(strip.currentTrackNumber + 1, 4)
+                line.moveToTrackNumber(newTrackNumber)
+                strip.currentTrackNumber = newTrackNumber
+            }
         }
     }
 

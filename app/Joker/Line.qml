@@ -578,6 +578,11 @@ Item {
         trackNumber = Math.min(0.75, Math.max(0, desiredY / parent.height));
     }
 
+    function moveToTrackNumber(desiredTrackNumber) {
+        // trackNumber is not really the trackNumber...
+        trackNumber = desiredTrackNumber/4;
+    }
+
     function remove() {
         doc.lineModel.remove(model.index);
     }
