@@ -116,10 +116,8 @@ Item {
             height: parent.height
 
             Repeater {
-                model: doc.lineModel
-                delegate: Line {
-                    //visible: (x - stripContainer.contentX - stripContainer.width) < 0 && (x + width - stripContainer.contentX) > 0
-                }
+                model: jokerWindow.filteredLineModel
+                delegate: Line { }
             }
         }
     }

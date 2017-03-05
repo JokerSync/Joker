@@ -34,7 +34,7 @@ Item {
             anchors.rightMargin: 2
 
             Repeater {
-                model: doc.lineModel
+                model: jokerWindow.filteredLineModel
 
                 // FIXME selected colors and inverted colors are not implemented
                 delegate: Item {

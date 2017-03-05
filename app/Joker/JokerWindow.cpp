@@ -63,6 +63,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	// Setting up UI
 	ui->setupUi(this);
 
+	_filteredLineModel = new PhStripFilteredLineModel(this);
+	_filteredLineModel->setSourceModel(_doc->lineModel());
+
 	//_view = ui->videoStripView;
 	_view = new PhGraphicView();
 	_context = _view->engine()->rootContext();
@@ -1020,6 +1023,9 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 	PhTime delay = (PhTime)(24 * _settings->screenDelay() * clock->rate());
 	PhTime clockTime = clock->time() + delay;
 	setStripTime(clockTime);
+
+	PhTime second = 24000;
+	_filteredLineModel->setFilterTimeBoundaries(clockTime - 5*second, clockTime + 20*second);
 
 	QList<PhPeople*> selectedPeoples;
 	foreach(QString name, _settings->selectedPeopleNameList()) {

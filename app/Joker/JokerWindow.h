@@ -36,6 +36,7 @@
 #include "PropertyDialog.h"
 #include "JokerSettings.h"
 #include "TimeBetweenTwoFeetDialog.h"
+#include "PhStrip/PhStripFilteredLineModel.h"
 
 namespace Ui {
 class JokerWindow;
@@ -66,6 +67,7 @@ class JokerWindow : public PhEditableDocumentWindow
 	Q_PROPERTY(QString nextTcLabelText READ nextTcLabelText WRITE setNextTcLabelText NOTIFY nextTcLabelTextChanged)
 	Q_PROPERTY(JokerSettings settings READ settings)
 	Q_PROPERTY(bool saving READ saving NOTIFY savingChanged)
+	Q_PROPERTY(PhStripFilteredLineModel* filteredLineModel READ filteredLineModel)
 
 public:
 	///
@@ -144,6 +146,11 @@ public:
 	void setNextTcLabelText(const QString &nextTcLabelText);
 
 	bool saving() const;
+
+	PhStripFilteredLineModel * filteredLineModel()
+	{
+		return _filteredLineModel;
+	}
 
 public slots:
 	///
@@ -382,6 +389,7 @@ private:
 	JokerSettings *_settings;
 	PhGraphicStrip _strip;
 	PhStripDoc *_doc;
+	PhStripFilteredLineModel *_filteredLineModel;
 #ifdef USE_VIDEO
 	PhVideoEngine _videoEngine;
 	SecondScreenWindow *_secondScreenWindow;
