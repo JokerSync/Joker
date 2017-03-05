@@ -76,6 +76,14 @@ public:
 	static PhTime timePerFrame(PhTimeCodeType type);
 
 	/**
+	 * @brief Get the frame number for a given time according to a type of TC. This rounds to the nearest frame number.
+	 * @param time A time value
+	 * @param type A timecode type
+	 * @return A frame number
+	 */
+	static PhFrame frameFromTime(PhTime time, PhTimeCodeType type);
+
+	/**
 	 * @brief Compute the time value from a timecode string representation and a type.
 	 * @param string A string
 	 * @param type A timecode type

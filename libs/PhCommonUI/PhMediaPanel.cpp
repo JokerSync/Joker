@@ -279,8 +279,8 @@ void PhMediaPanel::onSliderChanged(int position)
 void PhMediaPanel::updateSlider()
 {
 	PhTimeCodeType tcType = this->timeCodeType();
-	PhFrame frameIn = _timeIn / PhTimeCode::timePerFrame(tcType);
-	PhFrame frameOut = (_timeIn + _length) / PhTimeCode::timePerFrame(tcType);
+	PhFrame frameIn = PhTimeCode::frameFromTime(_timeIn, tcType);
+	PhFrame frameOut = PhTimeCode::frameFromTime(_timeIn + _length, tcType);
 	ui->_slider->setMinimum(frameIn);
 	ui->_slider->setMaximum(frameOut);
 
@@ -320,7 +320,7 @@ void PhMediaPanel::onTimeChanged(PhTime time)
 {
 	PhTimeCodeType tcType = this->timeCodeType();
 	ui->_timecodeLabel->setText(PhTimeCode::stringFromTime(time, tcType));
-	ui->_slider->setSliderPosition(time / PhTimeCode::timePerFrame(tcType));
+	ui->_slider->setSliderPosition(PhTimeCode::frameFromTime(time, tcType));
 	setRelativeTime(_clock->time() - _timeIn);
 }
 

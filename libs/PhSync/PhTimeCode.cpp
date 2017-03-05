@@ -56,7 +56,7 @@ unsigned int PhTimeCode::bcdFromFrame(PhFrame frame, PhTimeCodeType type) {
 
 unsigned int PhTimeCode::bcdFromTime(PhTime time, PhTimeCodeType type)
 {
-	return bcdFromFrame(time / PhTimeCode::timePerFrame(type), type);
+	return bcdFromFrame(frameFromTime(time, type), type);
 }
 
 PhFrame PhTimeCode::frameFromBcd(unsigned int bcd, PhTimeCodeType type) {
@@ -153,6 +153,11 @@ PhTime PhTimeCode::timePerFrame(PhTimeCodeType type)
 	return 0;
 }
 
+PhFrame PhTimeCode::frameFromTime(PhTime time, PhTimeCodeType type)
+{
+	return (PhFrame)round(((float) time)/((float) timePerFrame(type)));
+}
+
 PhTime PhTimeCode::timeFromString(QString string, PhTimeCodeType type)
 {
 	return frameFromString(string, type) * timePerFrame(type);
@@ -160,8 +165,7 @@ PhTime PhTimeCode::timeFromString(QString string, PhTimeCodeType type)
 
 QString PhTimeCode::stringFromTime(PhTime time, PhTimeCodeType type)
 {
-	PhFrame roundFrame = (PhFrame)round(((float) time)/((float) timePerFrame(type)));
-	return stringFromFrame(roundFrame, type);
+	return stringFromFrame(frameFromTime(time, type), type);
 }
 
 void PhTimeCode::ComputeHhMmSsFf(unsigned int *hhmmssff, PhFrame frame, PhTimeCodeType type) {
@@ -219,7 +223,7 @@ void PhTimeCode::ComputeHhMmSsFf(unsigned int *hhmmssff, PhFrame frame, PhTimeCo
 
 void PhTimeCode::ComputeHhMmSsFfFromTime(unsigned int *hhmmssff, PhTime time, PhTimeCodeType type)
 {
-	ComputeHhMmSsFf(hhmmssff, time / timePerFrame(type), type);
+	ComputeHhMmSsFf(hhmmssff, frameFromTime(time, type), type);
 }
 
 PhFrame PhTimeCode::frameFromHhMmSsFf(unsigned int hh, unsigned int mm, unsigned int ss, unsigned int ff, PhTimeCodeType type)

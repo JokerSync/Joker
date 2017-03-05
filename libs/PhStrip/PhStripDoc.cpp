@@ -2099,7 +2099,7 @@ PhTime PhStripDoc::videoTimeIn()
 
 PhTime PhStripDoc::videoFrameIn()
 {
-	return _videoTimeIn / PhTimeCode::timePerFrame(_videoTimeCodeType);
+	return PhTimeCode::frameFromTime(_videoTimeIn, _videoTimeCodeType);
 }
 
 PhTime PhStripDoc::lastTime() const

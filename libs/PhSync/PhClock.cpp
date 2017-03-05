@@ -55,7 +55,7 @@ void PhClock::setFrame25(PhFrame frame)
 
 PhFrame PhClock::frame(PhTimeCodeType tcType) const
 {
-	return _time / PhTimeCode::timePerFrame(tcType);
+	return PhTimeCode::frameFromTime(_time, tcType);
 }
 
 void PhClock::setTimeCode(QString tc, PhTimeCodeType tcType)
