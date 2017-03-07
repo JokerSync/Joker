@@ -583,6 +583,10 @@ Item {
         trackNumber = desiredTrackNumber/4;
     }
 
+    function assignToPeople(desiredPeopleName) {
+        peopleName = desiredPeopleName;
+    }
+
     function remove() {
         doc.lineModel.remove(model.index);
     }

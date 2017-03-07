@@ -4,6 +4,7 @@
 #include <QListIterator>
 #include <QAbstractListModel>
 #include "PhStrip/PhStripLine.h"
+#include "PhStrip/PhStripPeopleModel.h"
 
 class PhStripLineModel : public QAbstractListModel
 {
@@ -20,7 +21,7 @@ public:
 		DurationRole
 	};
 
-	PhStripLineModel(QObject *parent = 0);
+	PhStripLineModel(QObject *parent, PhStripPeopleModel *peopleModel);
 
 	void append(PhStripLine *line);
 	int rowCount(const QModelIndex & parent = QModelIndex()) const;
@@ -30,8 +31,6 @@ public:
 	void clear();
 
 	QListIterator<PhStripLine *> iterator();
-
-	void assignLineToPeople(int row, PhPeople *people);
 
 	PhTime timeIn();
 	PhTime timeOut();
@@ -59,6 +58,7 @@ private:
 	QList<PhStripLine*> _lines;
 	PhTime _timeIn;
 	PhTime _timeOut;
+	PhStripPeopleModel *_peopleModel;
 };
 
 #endif // PHSTRIPLINEMODEL_H

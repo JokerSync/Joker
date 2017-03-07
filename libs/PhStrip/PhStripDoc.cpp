@@ -33,13 +33,14 @@
 #include "PhStripDoc.h"
 
 PhStripDoc::PhStripDoc() :
-	_lineModel(new PhStripLineModel()),
 	_cutModel(new PhStripCutModel()),
 	_loopModel(new PhStripLoopModel()),
 	_peopleModel(new PhStripPeopleModel()),
 	_timeIn(PHTIMEMAX),
 	_timeOut(PHTIMEMIN)
 {
+	_lineModel = new PhStripLineModel(this, _peopleModel);
+
 	reset();
 	connect(_peopleModel, &PhStripPeopleModel::dataChanged, _lineModel, &PhStripLineModel::peopleChanged);
 
@@ -877,21 +878,6 @@ PhStripCutModel *PhStripDoc::cutModel() const
 PhStripLoopModel *PhStripDoc::loopModel() const
 {
 	return _loopModel;
-}
-
-void PhStripDoc::assignLineToPeople(int lineIndex, QString peopleName)
-{
-	// find people with that name
-	QListIterator<PhPeople*> i = _peopleModel->iterator();
-	while (i.hasNext()) {
-		PhPeople *people = i.next();
-		if (people->name() == peopleName) {
-			_lineModel->assignLineToPeople(lineIndex, people);
-			return;
-		}
-	}
-
-	PHDEBUG << lineIndex << " " << peopleName << " not found";
 }
 
 void PhStripDoc::addLine(PhTime time, float y, PhStripDetect::PhDetectType typeIn)

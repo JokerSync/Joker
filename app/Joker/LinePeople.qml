@@ -42,7 +42,7 @@ Item {
         onSelected: {
             if (isEnabled) {
                 console.log("onSelected " + name + " " + index)
-                doc.assignLineToPeople(index, name)
+                stripLineContainer.assignToPeople(name)
                 isEnabled = false
             }
         }

@@ -3,8 +3,9 @@
 
 #include "PhTools/PhDebug.h"
 
-PhStripLineModel::PhStripLineModel(QObject *parent) :
+PhStripLineModel::PhStripLineModel(QObject *parent, PhStripPeopleModel *peopleModel) :
 	QAbstractListModel(parent),
+	_peopleModel(peopleModel),
 	_timeIn(PHTIMEMAX),
 	_timeOut(PHTIMEMIN)
 {
@@ -80,23 +81,22 @@ bool PhStripLineModel::setData(const QModelIndex &index, const QVariant &value, 
 		}
 		return true;
 	}
+	else if (role == PeopleNameRole) {
+		if (line->people()->name() != value.toString()) {
+			PhPeople *people = _peopleModel->findByName(value.toString());
+			if (people != NULL) {
+				line->setPeople(people);
+				emit dataChanged(index, index, QVector<int>(1, role));
+			}
+			else {
+				PHDEBUG << value.toString() << " not found";
+				return false;
+			}
+		}
+		return true;
+	}
 
 	return false;
-}
-
-void PhStripLineModel::assignLineToPeople(int row, PhPeople *people)
-{
-	QModelIndex index = this->index(row);
-
-	if (index.row() < 0 || index.row() >= _lines.count())
-		return;
-
-	PhStripLine *line = _lines[index.row()];
-
-	if (line->people() != people) {
-		line->setPeople(people);
-		emit dataChanged(index, index, QVector<int>(1, PeopleNameRole));
-	}
 }
 
 PhTime PhStripLineModel::timeIn()
