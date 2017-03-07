@@ -1,6 +1,6 @@
 # Joker
 
-[![Build Status](https://travis-ci.org/Phonations/Joker.svg?branch=master)](https://travis-ci.org/Phonations/Joker)
+[![Build Status](https://travis-ci.org/Phonations/joker.svg?branch=master)](https://travis-ci.org/Phonations/joker)
 [![Build status](https://ci.appveyor.com/api/projects/status/4vgrsapqble7rkqi/branch/master?svg=true)](https://ci.appveyor.com/project/MartinDelille/joker/branch/master)
 [![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.svg?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master)
 [![Coverity](https://img.shields.io/coverity/scan/3341.svg)](https://scan.coverity.com/projects/phonations-joker)
