@@ -155,7 +155,9 @@ PhTime PhTimeCode::timePerFrame(PhTimeCodeType type)
 
 PhFrame PhTimeCode::frameFromTime(PhTime time, PhTimeCodeType type)
 {
-	return (PhFrame)round(((float) time)/((float) timePerFrame(type)));
+	// Note: rounding to tbe nearest frame is not the correct option here.
+	// This produces unexpected visual result when the higher frame is chosen.
+	return time / timePerFrame(type);
 }
 
 PhTime PhTimeCode::timeFromString(QString string, PhTimeCodeType type)
