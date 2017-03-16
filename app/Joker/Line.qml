@@ -307,12 +307,8 @@ Item {
 
         // is it the line timeIn?
         if (lineX === 0) {
-            console.log("moving timeIn " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)
-            timeIn += timeChange;
-            if (textRepeater.count > 0) {
-                var firstText = textRepeater.itemAt(0);
-                firstText.setDuration((firstText.width - pixelChange)*settings.horizontalTimePerPixel)
-            }
+            console.log("moving timeIn " + stripLineContainer.x + " " + frameChange + " " + pixelPerFrame + " " + timeChange)               
+            setTextDesiredX(stripLineContainer.x + pixelChange)
             return true;
         }
 
