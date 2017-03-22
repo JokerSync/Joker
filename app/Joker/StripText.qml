@@ -32,7 +32,7 @@ FocusScope {
         duration = d;
     }
 
-    // appears when we create a new line by adding the ending sign
+    // appears when we create a new line by adding the starting sign
     Rectangle {
         anchors.fill: parent
         color: stripLineContainer.editing ? emptyEditing : emptyNonEditing

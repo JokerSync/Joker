@@ -151,8 +151,7 @@ Item {
         MenuItem {
             text: FontAwesome.Icon.trash + " Delete phrase"
             onTriggered: {
-                console.log("Line " + model.index);
-                doc.lineModel.remove(model.index);
+                remove();
             }
         }
         Menu {
@@ -178,7 +177,6 @@ Item {
     Menu {
         id: lineContextMenu
         title: "Edit"
-        property int index: 0
         property double mouseX: 0
 
         MenuItem {
@@ -504,7 +502,6 @@ Item {
 
         console.log("line index: " + model.index + ", text index: " + textIndex + " text.x: " + text.x + " mouseX:" + mouseX);
 
-        lineContextMenu.index = model.index;
         lineContextMenu.mouseX = mouseX + text.x;
         lineContextMenu.popup();
     }
@@ -584,7 +581,7 @@ Item {
     }
 
     function remove() {
-        doc.lineModel.remove(model.index);
+        jokerWindow.filteredLineModel.remove(model.index);
     }
 }
 

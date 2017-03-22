@@ -208,11 +208,6 @@ void PhStripLineModel::add(PhTime time, float y, PhPeople *people, PhStripDetect
 	append(line);
 }
 
-void PhStripLineModel::remove(int index)
-{
-	removeRow(index);
-}
-
 void PhStripLineModel::peopleChanged(const QModelIndex &topLeftPeople, const QModelIndex &bottomRightPeople, const QVector<int> &roles)
 {
 	if (!roles.contains(PhStripPeopleModel::NameRole)) {

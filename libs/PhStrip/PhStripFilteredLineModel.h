@@ -16,6 +16,9 @@ public:
 
 	void setFilterTimeBoundaries(const PhTime &minTime, const PhTime &maxTime);
 
+public slots:
+	void remove(int index);
+
 protected:
 	bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 

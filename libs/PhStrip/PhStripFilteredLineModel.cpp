@@ -18,6 +18,11 @@ void PhStripFilteredLineModel::setFilterTimeBoundaries(const PhTime &minTime, co
 	}
 }
 
+void PhStripFilteredLineModel::remove(int index)
+{
+	removeRow(index);
+}
+
 bool PhStripFilteredLineModel::filterAcceptsRow(int sourceRow,
 		const QModelIndex &sourceParent) const
 {
