@@ -41,6 +41,19 @@ Item {
         }
     }
 
+    MouseArea {
+        id: stripArea
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+        enabled: window.edition
+        onClicked: {
+            console.log("click " + mouse.x + " " + mouse.y);
+            stripContextMenu.mouseX = mouse.x;
+            stripContextMenu.mouseY = mouse.y;
+            stripContextMenu.popup()
+        }
+    }
+
     EditionMask {
         anchors.fill: parent
         currentTrackNumber: parent.currentTrackNumber
@@ -153,19 +166,6 @@ Item {
                 console.log("add cut " + stripContextMenu.time);
                 doc.cutModel.add(stripContextMenu.time)
             }
-        }
-    }
-
-    MouseArea {
-        id: stripArea
-        anchors.fill: parent
-        acceptedButtons: Qt.RightButton
-        enabled: window.edition
-        onClicked: {
-            console.log("click " + mouse.x + " " + mouse.y);
-            stripContextMenu.mouseX = mouse.x;
-            stripContextMenu.mouseY = mouse.y;
-            stripContextMenu.popup()
         }
     }
 
