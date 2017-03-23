@@ -59,7 +59,7 @@ DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 
 # Windows specific
 win32 {
-	CS = &
+	CS = &&
 	CONFIG(release, debug|release) {
 		RESOURCES_PATH = $$shell_path(./release/)
 	}
