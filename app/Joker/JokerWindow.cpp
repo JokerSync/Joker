@@ -226,6 +226,7 @@ void JokerWindow::setupSyncProtocol()
 #endif
 	case PhSynchronizer::LTC:
 #ifdef USE_LTC
+		_ltcReader.setTimeCodeType((PhTimeCodeType)_settings->ltcReaderTimeCodeType());
 		if(_ltcReader.init(_settings->ltcInputPort()))
 			clock = _ltcReader.clock();
 		else {
@@ -1013,6 +1014,7 @@ void JokerWindow::on_actionPreferences_triggered()
 	int oldSynchroProtocol = _settings->synchroProtocol();
 #ifdef USE_LTC
 	QString oldLtcInputPort = _settings->ltcInputPort();
+	PhTimeCodeType oldLtcTimeCodeType = (PhTimeCodeType)_settings->ltcReaderTimeCodeType();
 #endif // USE_LTC
 #ifdef USE_MIDI
 	QString oldMtcInputPort = _settings->mtcInputPort();
@@ -1026,7 +1028,8 @@ void JokerWindow::on_actionPreferences_triggered()
 	if(dlg.exec() == QDialog::Accepted) {
 		if((oldSynchroProtocol != _settings->synchroProtocol())
 #ifdef USE_LTC
-		   || (oldLtcInputPort  != _settings->ltcInputPort())
+		   || (oldLtcInputPort != _settings->ltcInputPort())
+		   || (oldLtcTimeCodeType != (PhTimeCodeType)_settings->ltcReaderTimeCodeType())
 #endif // USE_LTC
 #ifdef USE_MIDI
 		   || (oldMtcInputPort != _settings->mtcInputPort())

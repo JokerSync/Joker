@@ -48,6 +48,9 @@ public:
 	 */
 	PhTimeCodeType timeCodeType();
 
+public slots:
+	void setTimeCodeType(PhTimeCodeType tcType);
+
 signals:
 	/**
 	 * @brief Emit a signal when the timecodeType change

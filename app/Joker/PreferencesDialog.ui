@@ -20,7 +20,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -352,16 +352,49 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
-          <property name="fieldGrowthPolicy">
-           <enum>QFormLayout::FieldsStayAtSizeHint</enum>
-          </property>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="ltcInputPortComboBox"/>
-          </item>
-          <item row="0" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="ltcInputPortLabel">
             <property name="text">
              <string>Audio input port:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QComboBox" name="ltcInputPortComboBox"/>
+          </item>
+          <item row="4" column="1">
+           <widget class="QComboBox" name="ltcTimeCodeTypeComboBox">
+            <item>
+             <property name="text">
+              <string>23.98 fps</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>24 fps</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>25 fps</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>29.97 fps</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>30 fps</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="ltcTimeCodeTypeLabel">
+            <property name="text">
+             <string>Timecode type:</string>
             </property>
            </widget>
           </item>

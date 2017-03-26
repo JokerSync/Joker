@@ -37,6 +37,10 @@ PhTimeCodeType PhLtcReader::timeCodeType()
 	return _tcType;
 }
 
+void PhLtcReader::setTimeCodeType(PhTimeCodeType tcType) {
+	updateTCType(tcType);
+}
+
 int PhLtcReader::processAudio(const void *inputBuffer, void *, unsigned long framesPerBuffer)
 {
 	ltc_decoder_write_s16(_decoder, (short*)inputBuffer, framesPerBuffer, _position);
