@@ -6,6 +6,8 @@
 
 #include "PhVideoBuffer.h"
 
+#include "PhTools/PhDebug.h"
+
 PhVideoBuffer::PhVideoBuffer() :
 	_rgb(NULL),
 	_size(0),
@@ -30,6 +32,7 @@ void PhVideoBuffer::reuse(int size)
 		if (_rgb != NULL) {
 			delete[] _rgb;
 		}
+		PHDBG(24) << "PhVideoBuffer alloc" << size;
 		_size = size;
 		_rgb = new uint8_t[_size];
 	}

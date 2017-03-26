@@ -138,8 +138,9 @@ private:
 	bool _seek;
 	bool _fastSeek;
 	int _readAheadCount;
-	int _recycledCount;
+	int _maxAllocatedCount;
 	int _seekThreshold;
+	int _allocatedCount;
 
 	bool _useAudio;
 	AVStream *_audioStream;
@@ -149,6 +150,7 @@ private:
 
 	QList<PhVideoBuffer *> _recycledFrames;
 	PhVideoBuffer *getAvailableFrame();
+	bool hasAvailableFrame();
 	PhFrame readAheadFrame();
 	bool canDecode();
 	PhFrame clip(PhFrame frame);

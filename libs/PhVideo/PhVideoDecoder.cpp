@@ -29,7 +29,8 @@ PhVideoDecoder::PhVideoDecoder(PhVideoSettings *settings) :
 	_seek(false),
 	_fastSeek(false),
 	_readAheadCount(settings->videoReadhead()),
-	_recycledCount(settings->videoPoolSize()/4),
+	_maxAllocatedCount(2*settings->videoPoolSize() + settings->videoReadhead()),
+	_allocatedCount(0),
 	_seekThreshold(settings->videoReadhead())
 {
 	PHDEBUG << "Using FFMpeg widget for video playback.";
@@ -273,6 +274,11 @@ void PhVideoDecoder::stop()
 bool PhVideoDecoder::canDecode()
 {
 	if (_stripFrame == PHFRAMEMIN) {
+		return false;
+	}
+
+	if (!hasAvailableFrame()) {
+		PHDBG(24) << "no frame buffer available";
 		return false;
 	}
 
@@ -525,27 +531,28 @@ void PhVideoDecoder::fastForwardToFrame(PhFrame frame)
 
 void PhVideoDecoder::recycleFrame(PhVideoBuffer *frame)
 {
-	if (_recycledFrames.count() < _recycledCount) {
-		_recycledFrames.append(frame);
-	}
-	else {
-		delete frame;
-	}
+	_recycledFrames.append(frame);
 }
 
 PhVideoBuffer* PhVideoDecoder::getAvailableFrame()
 {
-	PhVideoBuffer * buffer;
+	PhVideoBuffer * buffer = NULL;
 
 	if (!_recycledFrames.empty()) {
 		buffer = _recycledFrames.takeFirst();
 	}
-	else {
-		PHDBG(24) << "creating a new buffer";
+	else if (_allocatedCount < _maxAllocatedCount) {
+		PHDBG(24) << "creating a new frame buffer";
 		buffer = new PhVideoBuffer();
+		_allocatedCount += 1;
 	}
 
 	return buffer;
+}
+
+bool PhVideoDecoder::hasAvailableFrame()
+{
+	return !_recycledFrames.empty() || _allocatedCount < _maxAllocatedCount;
 }
 
 int PhVideoDecoder::width()

@@ -23,6 +23,8 @@ void PhVideoPool::stripTimeChanged(PhFrame stripFrame, bool backward)
 	_backward = backward;
 	_stripFrame = stripFrame;
 
+	cleanup(_stripFrame);
+
 	bool isFrameInPool = _decodedPool.contains(stripFrame);
 	emit poolTimeChanged(stripFrame, backward, isFrameInPool);
 }
