@@ -10,7 +10,9 @@
 
 PhVideoBuffer::PhVideoBuffer() :
 	_frame(0),
-	_videoFrame(0)
+	_videoFrame(0),
+	_bits(0),
+	_bytesPerLine(0)
 {
 }
 
@@ -25,9 +27,12 @@ PhVideoBuffer::~PhVideoBuffer()
 void PhVideoBuffer::reuse(int size, int width, int height, int linesize, QVideoFrame::PixelFormat format)
 {
 	if (_videoFrame == NULL
+			// bits cannot be read from QVideoFrame
+			|| _bits != size
 			|| _videoFrame->width() != width
 			|| _videoFrame->height() != height
-			|| _videoFrame->bytesPerLine() != linesize
+			// bytesPerLine cannot be read from QVideoFrame (unless mapped)
+			|| _bytesPerLine != linesize
 			|| _videoFrame->pixelFormat() != format) {
 
 		// the parameters have changed, update the video frame
@@ -37,6 +42,8 @@ void PhVideoBuffer::reuse(int size, int width, int height, int linesize, QVideoF
 
 		PHDBG(24) << "PhVideoBuffer alloc" << size;
 		_videoFrame = new QVideoFrame(size, QSize(width, height), linesize, format);
+		_bits = size;
+		_bytesPerLine = linesize;
 	}
 
 	_frame = 0;

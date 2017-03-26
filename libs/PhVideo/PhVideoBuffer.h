@@ -65,6 +65,8 @@ public:
 private:
 	PhFrame _frame;
 	QVideoFrame * _videoFrame;
+	int _bits;
+	int _bytesPerLine;
 };
 
 #endif // PHVIDEOBUFFER_H
