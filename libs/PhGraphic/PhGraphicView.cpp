@@ -15,9 +15,7 @@
 #include "PhGraphicView.h"
 
 PhGraphicView::PhGraphicView(QWidget *parent)
-	: QQuickWidget(parent),
-	//: QQuickView(),
-	//: QQmlApplicationEngine(),
+	: QQuickView(),
 	_settings(NULL),
 	_dropDetected(0),
 	_maxRefreshRate(0),
@@ -81,14 +79,14 @@ int PhGraphicView::lastUpdateDuration()
 
 int64_t PhGraphicView::compare(QString imageFile, int threshold, int width, int height)
 {
-	int ratio = this->windowHandle()->devicePixelRatio();
+	int ratio = this->devicePixelRatio();
 	if(width == 0)
 		width = this->width() * ratio;
 	if(height == 0)
 		height = this->height() * ratio;
 	int64_t totalDiff = 0;
 
-	QImage result = this->grabFramebuffer();
+	QImage result = this->grabWindow();
 	QImage expected(imageFile);
 	if((expected.width() == 0) || (expected.height() == 0)) {
 		PHDBG(9) << QString("Bad expected file: %1").arg(imageFile);

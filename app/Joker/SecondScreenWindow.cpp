@@ -10,7 +10,8 @@ SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, JokerSettings
 {
 	this->installEventFilter(this);
 
-	this->restoreGeometry(_jokerSettings->videoSecondScreenGeometry());
+	// FIXME
+	//this->restoreGeometry(_jokerSettings->videoSecondScreenGeometry());
 
 	if(_jokerSettings->videoSecondScreenFullscreen()) {
 		PHDEBUG << "Going fullscreen...";
@@ -23,9 +24,10 @@ SecondScreenWindow::SecondScreenWindow(PhVideoEngine *videoEngine, JokerSettings
 void SecondScreenWindow::closeEvent(QCloseEvent *event)
 {
 	PHDBG(1) << event->spontaneous();
-	if(!this->isFullScreen())
-		_jokerSettings->setVideoSecondScreenGeometry(this->saveGeometry());
-	_jokerSettings->setVideoSecondScreenFullscreen(this->isFullScreen());
+// FIXME
+//	if(!this->isFullScreen())
+//		_jokerSettings->setVideoSecondScreenGeometry(this->saveGeometry());
+//	_jokerSettings->setVideoSecondScreenFullscreen(this->isFullScreen());
 
 	this->disconnect(this, &PhGraphicView::paint, this, &SecondScreenWindow::onPaint);
 
@@ -36,9 +38,10 @@ bool SecondScreenWindow::eventFilter(QObject *, QEvent *event)
 {
 	switch (event->type()) {
 	case QEvent::MouseButtonDblClick:
-		if(this->isFullScreen())
-			SecondScreenWindow::showNormal();
-		else
+// FIXME
+//		if(this->isFullScreen())
+//			SecondScreenWindow::showNormal();
+//		else
 			SecondScreenWindow::showFullScreen();
 		return true;
 	default:

@@ -66,15 +66,12 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_filteredLineModel = new PhStripFilteredLineModel(this);
 	_filteredLineModel->setSourceModel(_doc->lineModel());
 
-	//_view = ui->videoStripView;
 	_view = new PhGraphicView();
 	_context = _view->engine()->rootContext();
 
 	foreach(QString path, _view->engine()->importPathList()) {
 		PHDEBUG << path;
 	}
-
-	//_context = _view->rootContext();
 
 	_context->setContextProperty("doc", _doc);
 	_context->setContextProperty("jokerWindow", this);
@@ -91,13 +88,14 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("videoEngine", &_videoEngine);
 #endif
 
-	connect(_view, &QQuickWidget::statusChanged, this, &JokerWindow::qmlStatusChanged);
+	connect(_view, &QQuickView::statusChanged, this, &JokerWindow::qmlStatusChanged);
 
-	_view->setResizeMode(QQuickWidget::SizeRootObjectToView);
+	_view->setResizeMode(QQuickView::SizeRootObjectToView);
 
 	_view->setSource(QUrl("qrc:///qml/main.qml"));
 
-	ui->verticalLayout->addWidget(_view);
+	QWidget *container = QWidget::createWindowContainer(_view);
+	ui->verticalLayout->addWidget(container);
 
 	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Bookerly-BoldItalic.ttf");
 	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Cappella-Regular.ttf");
@@ -188,9 +186,9 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 #endif
 }
 
-void JokerWindow::qmlStatusChanged(QQuickWidget::Status status)
+void JokerWindow::qmlStatusChanged(QQuickView::Status status)
 {
-	if (status == QQuickWidget::Error)
+	if (status == QQuickView::Error)
 	{
 		foreach (QQmlError error, _view->errors())
 		{
@@ -1324,12 +1322,10 @@ void JokerWindow::on_actionSecond_screen_triggered(bool checked)
 		context->setContextProperty("videoEngine", &_videoEngine);
 #endif
 
-		connect(_secondScreenWindow, &QQuickWidget::statusChanged, this, &JokerWindow::qmlStatusChanged);
+		connect(_secondScreenWindow, &QQuickView::statusChanged, this, &JokerWindow::qmlStatusChanged);
 
-		_secondScreenWindow->setResizeMode(QQuickWidget::SizeRootObjectToView);
-
+		_secondScreenWindow->setResizeMode(QQuickView::SizeRootObjectToView);
 		_secondScreenWindow->setSource(QUrl("qrc:///qml/SecondScreen.qml"));
-
 		_secondScreenWindow->show();
 		connect(_secondScreenWindow, &SecondScreenWindow::closing, this, &JokerWindow::onSecondScreenClosed);
 	}

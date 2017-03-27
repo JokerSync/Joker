@@ -7,9 +7,7 @@
 #ifndef PHGRAPHICVIEW_H
 #define PHGRAPHICVIEW_H
 
-#include <QQuickWidget>
-//#include <QQuickView>
-//#include <QQmlApplicationEngine>
+#include <QQuickView>
 #include <QElapsedTimer>
 
 #include "PhSync/PhTime.h"
@@ -25,9 +23,7 @@
  * These methods are called automatically after the view creation and during all
  * its lifetime.
  */
-class PhGraphicView : public QQuickWidget
-//class PhGraphicView : public QQuickView
-//class PhGraphicView : public QQmlApplicationEngine
+class PhGraphicView : public QQuickView
 {
 	Q_OBJECT
 public:

@@ -292,7 +292,7 @@ private slots:
 
 	void onSecondScreenClosed(bool closedFromUser);
 
-	void qmlStatusChanged(QQuickWidget::Status status);
+	void qmlStatusChanged(QQuickView::Status status);
 
 	void onVideoTimeCodeTypeChanged(PhTimeCodeType tcType);
 
