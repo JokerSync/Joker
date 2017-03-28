@@ -142,8 +142,7 @@ Item {
         property int mouseY: 0
         property int time: (mouseX - stripContainer.delayX) * settings.horizontalTimePerPixel + jokerWindow.stripTime
         MenuItem {
-            text: "Add phrase"
-            shortcut: "Return"
+            text: "Add phrase (Return)"
             onTriggered: {
                 var trackHeight = stripContainer.height / 4;
                 var textY = Math.round((stripContextMenu.mouseY - trackHeight / 2) / stripContainer.height * 4) / 4;
@@ -152,16 +151,14 @@ Item {
             }
         }
         MenuItem {
-            text: "Add loop"
-            shortcut: "0"
+            text: "Add loop (0)"
             onTriggered: {
                 console.log("add loop " + stripContextMenu.time);
                 doc.loopModel.add(stripContextMenu.time)
             }
         }
         MenuItem {
-            text: "Add cut"
-            shortcut: "1"
+            text: "Add cut (1)"
             onTriggered: {
                 console.log("add cut " + stripContextMenu.time);
                 doc.cutModel.add(stripContextMenu.time)

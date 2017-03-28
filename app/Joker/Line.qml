@@ -191,8 +191,7 @@ Item {
             title: "Add detect"
 
             MenuItem {
-                text: "Labial"
-                shortcut: "4"
+                text: "Labial (4)"
                 onTriggered: {
                     var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
                     console.log("add detect " + time);
@@ -200,8 +199,7 @@ Item {
                 }
             }
             MenuItem {
-                text: "Dental"
-                shortcut: "5"
+                text: "Dental (5)"
                 onTriggered: {
                     var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
                     console.log("add detect " + time);
@@ -209,8 +207,7 @@ Item {
                 }
             }
             MenuItem {
-                text: "Neutral"
-                shortcut: "6"
+                text: "Neutral (6)"
                 onTriggered: {
                     var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
                     console.log("add detect " + time);
@@ -218,8 +215,7 @@ Item {
                 }
             }
             MenuItem {
-                text: "Aperture"
-                shortcut: "7"
+                text: "Aperture (7)"
                 onTriggered: {
                     var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
                     console.log("add detect " + time);
@@ -227,8 +223,7 @@ Item {
                 }
             }
             MenuItem {
-                text: "Bowl"
-                shortcut: "8"
+                text: "Bowl (8)"
                 onTriggered: {
                     var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
                     console.log("add detect " + time);
@@ -236,8 +231,7 @@ Item {
                 }
             }
             MenuItem {
-                text: "Advance"
-                shortcut: "9"
+                text: "Advance (9)"
                 onTriggered: {
                     var time = lineContextMenu.mouseX * settings.horizontalTimePerPixel;
                     console.log("add detect " + time);
