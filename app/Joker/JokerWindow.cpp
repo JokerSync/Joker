@@ -95,6 +95,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_view->setSource(QUrl("qrc:///qml/main.qml"));
 
 	QWidget *container = QWidget::createWindowContainer(_view);
+	container->setFocusPolicy(Qt::StrongFocus);
 	ui->verticalLayout->addWidget(container);
 
 	QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Bookerly-BoldItalic.ttf");
@@ -417,6 +418,14 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		// TODO
 		// Right mouse click on the video open the video file dialog.
 		// Left mouse click on the strip open the strip file dialog
+	// Make sure the QML view always gets focus back
+	case QEvent::ActivationChange:
+	case QEvent::WindowUnblocked:
+		if(_view->isActive()) {
+			window()->activateWindow();
+			return true;
+		}
+		break;
 	default:
 		break;
 	}
