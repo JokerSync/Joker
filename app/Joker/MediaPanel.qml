@@ -175,6 +175,7 @@ Rectangle {
             }
 
             Text {
+                id: fastForwardLabel
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter
                 color: mediaPanelContainer.controlColor
@@ -187,17 +188,20 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: playbackController.onFastForward()
                 }
-            }
 
-            Text {
-                id: mediaPanelTcLabel
-                anchors.verticalCenter: parent.verticalCenter
-                text: jokerWindow.tcLabelText
-                color: mediaPanelContainer.controlColor
-                styleColor: mediaPanelContainer.controlColor
-                horizontalAlignment: Text.AlignHCenter
-                font.bold: true
-                font.pixelSize: parent.pixelSize
+                // this label is refreshed on every frame
+                // exclude it from the layout for performance
+                Text {
+                    id: mediaPanelTcLabel
+                    anchors.verticalCenter: fastForwardLabel.verticalCenter
+                    anchors.left: fastForwardLabel.right
+                    anchors.leftMargin: panelRow.spacing
+                    text: jokerWindow.tcLabelText
+                    color: mediaPanelContainer.controlColor
+                    styleColor: mediaPanelContainer.controlColor
+                    font.bold: true
+                    font.pixelSize: panelRow.pixelSize
+                }
             }
 
             Rectangle {
