@@ -20,7 +20,7 @@ Item {
 
     Column {
         objectName: "infos"
-        anchors.top: tcLabel.bottom
+        y: 50
         anchors.left: parent.left
         anchors.leftMargin: 10
         visible: settings.displayInfo
@@ -62,7 +62,7 @@ Item {
         objectName: "selectedPeopleList"
         anchors.left: parent.left
         anchors.leftMargin: 10
-        anchors.top: tcLabel.bottom
+        y: 50
         height: childrenRect.height
         visible: settings.displayNextText
 

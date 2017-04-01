@@ -19,8 +19,8 @@ Item {
     }
 
     Item {
-        anchors.top: nextTcLabel.bottom
-        anchors.bottom: parent.bottom
+        y: 50
+        height: parent.height - y
         anchors.left: parent.left
         anchors.right: parent.right
         clip: true
