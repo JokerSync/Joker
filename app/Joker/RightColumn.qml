@@ -10,7 +10,6 @@ Item {
         objectName: "nextTcLabel"
         color: "red"
         text: jokerWindow.nextTcLabelText
-        wrapMode: Text.WordWrap
         font.pointSize: 29
         anchors.top: parent.top
         anchors.right: parent.right
@@ -57,7 +56,6 @@ Item {
                             text: peopleName
                             color: color
                             font.pointSize: 15
-                            wrapMode: Text.WordWrap
                             horizontalAlignment: Text.AlignHCenter // FIXME does not work
                         }
                     }

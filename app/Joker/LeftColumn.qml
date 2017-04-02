@@ -11,7 +11,6 @@ Item {
         objectName: "tcLabel"
         color: "#00ff00"
         text: jokerWindow.tcLabelText
-        wrapMode: Text.WordWrap
         font.pointSize: 29
         anchors.top: parent.top
         anchors.left: parent.left
@@ -30,7 +29,6 @@ Item {
             color: "red"
             font.pointSize: tcLabel.font.pointSize
             lineHeight: 0.75
-            wrapMode: Text.WordWrap
         }
 
         Text {
@@ -38,7 +36,6 @@ Item {
             color: "red"
             font.pointSize: tcLabel.font.pointSize
             lineHeight: 0.75
-            wrapMode: Text.WordWrap
         }
 
         Text {
@@ -46,7 +43,6 @@ Item {
             color: "red"
             font.pointSize: tcLabel.font.pointSize
             lineHeight: 0.75
-            wrapMode: Text.WordWrap
         }
 
         Text {
@@ -54,7 +50,6 @@ Item {
             color: "red"
             font.pointSize: tcLabel.font.pointSize
             lineHeight: 0.75
-            wrapMode: Text.WordWrap
         }
     }
 
@@ -72,7 +67,6 @@ Item {
             color: "grey"
             font.pointSize: 15
             lineHeight: 0.75
-            wrapMode: Text.WordWrap
         }
     }
 
@@ -92,7 +86,6 @@ Item {
         objectName: "currentLoopLabel"
         color: "blue"
         text: jokerWindow.currentLoopLabel
-        wrapMode: Text.WordWrap
         font.pointSize: 50
         anchors.bottom: leftColumn.bottom
         anchors.left: leftColumn.left
