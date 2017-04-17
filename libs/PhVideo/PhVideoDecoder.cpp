@@ -174,7 +174,7 @@ void PhVideoDecoder::requestFrame(PhVideoBuffer *buffer)
 
 	_requestedFrames.append(buffer);
 
-	if (topLevel) {
+	if (topLevel && ready()) {
 		while (!_requestedFrames.empty()) {
 			QCoreApplication::processEvents();
 			decodeFrame();
