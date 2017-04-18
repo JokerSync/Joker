@@ -3,7 +3,7 @@
 	url = https://github.com/MartinDelille/rtmidi.git
 [submodule "vendor/bandit"]
 	path = vendor/bandit
-	url = https://github.com/joakimkarlsson/bandit
+	url = https://github.com/banditcpp/bandit
 [submodule "vendor/create-dmg"]
 	path = vendor/create-dmg
 	url = https://github.com/andreyvit/create-dmg.git
