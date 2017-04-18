@@ -59,12 +59,12 @@ go_bandit([](){
 			PhVideoBuffer buffer0, buffer1, buffer2;
 			PhVideoBuffer *expectedBuffer = NULL;
 			PhFrame expectedFrame = 0;
-			int callCount = 0;
+			int openedCallCount = 0;
 
 			QObject::connect(decoder, &PhVideoDecoder::frameAvailable, [&](PhVideoBuffer *buffer){
 				AssertThat(buffer, Equals(expectedBuffer));
 				AssertThat(buffer->frame(), Equals(expectedFrame));
-				callCount += 1;
+				openedCallCount += 1;
 			});
 
 			expectedBuffer = &buffer0;
@@ -72,21 +72,21 @@ go_bandit([](){
 			decoder->requestFrame(&buffer0);
 			decoder->decodeFrame();
 
-			AssertThat(callCount, Equals(1));
+			AssertThat(openedCallCount, Equals(1));
 
 			expectedBuffer = &buffer1;
 			buffer1.setRequestFrame(1);
 			expectedFrame = 1;
 			decoder->requestFrame(&buffer1);
 			decoder->decodeFrame();
-			AssertThat(callCount, Equals(2));
+			AssertThat(openedCallCount, Equals(2));
 
 			expectedBuffer = &buffer2;
 			buffer2.setRequestFrame(2);
 			expectedFrame = 2;
 			decoder->requestFrame(&buffer2);
 			decoder->decodeFrame();
-			AssertThat(callCount, Equals(3));
+			AssertThat(openedCallCount, Equals(3));
 		});
 	});
 });
