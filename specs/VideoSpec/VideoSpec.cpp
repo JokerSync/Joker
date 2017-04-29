@@ -82,7 +82,7 @@ go_bandit([](){
 
 			before_each([&](){
 				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
-				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
+				AssertThat(openSpy->count() == 1 || openSpy->wait(OPEN_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 			});
 
@@ -369,7 +369,7 @@ go_bandit([](){
 
 			before_each([&](){
 				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
-				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
+				AssertThat(openSpy->count() == 1 || openSpy->wait(OPEN_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 			});
 
