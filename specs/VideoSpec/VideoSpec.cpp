@@ -42,8 +42,13 @@ go_bandit([](){
 			openSpy = new QSignalSpy(engine, &PhVideoEngine::opened);
 			decodeSpy = new QSignalSpy(engine, &PhVideoEngine::newFrameDecoded);
 
-			// This is just for opengl initialization
-//			view->show();
+			// make sure the 64x64 window size will be preserved (required on Windows)
+			view->setWindowFlags(Qt::FramelessWindowHint);
+
+			// the widget needs to be shown for paint signals to be received (at least on Windows)
+			view->show();
+
+			// OpenGL initialization
 			view->renderPixmap(64, 64);
 
 			engine->setBilinearFiltering(false);
