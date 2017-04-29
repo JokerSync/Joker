@@ -8,4 +8,11 @@ include($$TOP_ROOT/libs/PhStrip/PhStrip.pri)
 
 SOURCES += $$TOP_ROOT/specs/StripSpec/StripDocSpec.cpp
 
-QMAKE_POST_LINK += $${QMAKE_COPY} -r $$shell_path($${TOP_ROOT}/data/strip/) $${RESOURCES_PATH} $${CS}
+win32 {
+	STRIPTESTFILES = $${TOP_ROOT}/data/strip
+}
+else {
+	STRIPTESTFILES = $${TOP_ROOT}/data/strip/
+}
+
+QMAKE_POST_LINK += $${QMAKE_COPY_DIR} $$shell_path($${STRIPTESTFILES}) $${RESOURCES_PATH} $${CS}
