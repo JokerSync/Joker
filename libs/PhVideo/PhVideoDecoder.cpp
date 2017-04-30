@@ -113,9 +113,15 @@ void PhVideoDecoder::open(QString fileName)
 		return;
 	}
 
-	// for MJPEG, seeking is efficient because all frames are key-frames
-	if (videoCodec->id == AV_CODEC_ID_MJPEG) {
-		_seekThreshold = 2;
+	const AVCodecDescriptor *videoCodecDescriptor = avcodec_descriptor_get(videoCodec->id);
+	if (videoCodecDescriptor
+	    && videoCodecDescriptor->type == AVMEDIA_TYPE_VIDEO
+	    && (videoCodecDescriptor->props & AV_CODEC_PROP_INTRA_ONLY)) {
+		// Seeking is efficient for codecs which have only intra-frame compression.
+		// With these codecs, all frames are key-frames.
+		// This includes MJPEG.
+		// In that case, choose a very low seek threshold.
+		_seekThreshold = 1;
 	}
 	else {
 		_seekThreshold = _readAheadCount;
