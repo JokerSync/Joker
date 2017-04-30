@@ -61,11 +61,6 @@ public slots:
 	void close();
 
 	/**
-	 * @brief Decode the next requested frame
-	 */
-	void decodeFrame();
-
-	/**
 	 * @brief Signal sent when the deinterlace settings change
 	 * @param deinterlace Whether the video should be deinterlaced
 	 */
@@ -123,6 +118,7 @@ private:
 	int height();
 	QString codecName();
 	PhFrame frameIn();
+	void decodeFrame();
 
 	int64_t PhFrame_to_AVTimestamp(PhFrame frame);
 	PhFrame AVTimestamp_to_PhFrame(int64_t timestamp);
