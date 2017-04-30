@@ -329,6 +329,11 @@ go_bandit([](){
 				AssertThat(decodeSpy->count(), Equals(5));
 
 				AssertThat(engine->decodedFramePool().count(), Equals(5));
+				AssertThat(engine->decodedFramePool().contains(0), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(1), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(2), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(3), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(4), IsTrue());
 
 				// Add 50 other frame to the pool
 				for(int frame = 1; frame <= 50; frame++) {
@@ -344,14 +349,41 @@ go_bandit([](){
 				AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
 				AssertThat(decodeSpy->count(), Equals(56));
 				AssertThat(engine->decodedFramePool().count(), Equals(55));
+				AssertThat(engine->decodedFramePool().contains(51), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(52), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(53), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(54), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(55), IsTrue());
+				// pool has discarded the oldest frame
+				AssertThat(engine->decodedFramePool().contains(0), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(1), IsTrue());
 
-				// Jump to a far location clear the pool
+				// Jump to a far location
 				engine->clock()->setFrame25(120);
 				while(decodeSpy->count() < 61) {
 					AssertThat(decodeSpy->wait(DECODE_WAIT_TIME), IsTrue());
 				}
 				AssertThat(decodeSpy->count(), Equals(61));
-				AssertThat(engine->decodedFramePool().count(), Equals(5));
+				// pool is not full anymore, it has discarded the readahead frames
+				AssertThat(engine->decodedFramePool().count(), Equals(51));
+				// pool contains the new frames
+				AssertThat(engine->decodedFramePool().contains(120), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(121), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(122), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(123), IsTrue());
+				AssertThat(engine->decodedFramePool().contains(124), IsTrue());
+				// pool has discarded the oldest frames
+				AssertThat(engine->decodedFramePool().contains(0), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(1), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(2), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(3), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(4), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(5), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(6), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(7), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(8), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(9), IsFalse());
+				AssertThat(engine->decodedFramePool().contains(10), IsTrue());
 			});
 
 			it("handles offset", [&]() {

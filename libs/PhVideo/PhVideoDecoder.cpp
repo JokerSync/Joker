@@ -29,7 +29,7 @@ PhVideoDecoder::PhVideoDecoder(PhVideoSettings *settings) :
 	_seek(false),
 	_fastSeek(false),
 	_readAheadCount(settings->videoReadhead()),
-	_maxAllocatedCount(2*settings->videoPoolSize() + settings->videoReadhead()),
+	_maxAllocatedCount(settings->videoPoolSize() + settings->videoReadhead()),
 	_allocatedCount(0),
 	_seekThreshold(settings->videoReadhead())
 {
