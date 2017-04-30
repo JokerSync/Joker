@@ -280,7 +280,7 @@ bool PhVideoDecoder::canDecode()
 		return true;
 	}
 
-	return readAheadFrame() > _currentFrame;
+	return readAheadFrame() > _currentFrame + 1;
 }
 
 PhFrame PhVideoDecoder::readAheadFrame()
