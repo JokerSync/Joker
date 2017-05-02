@@ -27,21 +27,24 @@ PhVideoEngine::PhVideoEngine(PhVideoSettings *settings) :
 	_framePool(settings)
 {
 	// initialize the decoder that operates in a separate thread
-	PhVideoDecoder *decoder = new PhVideoDecoder();
+	PhVideoDecoder *decoder = new PhVideoDecoder(settings);
 	decoder->moveToThread(&_decoderThread);
 	connect(&_clock, &PhClock::timeChanged, this, &PhVideoEngine::onTimeChanged);
+	connect(this, &PhVideoEngine::stripTimeChanged, &_framePool, &PhVideoPool::stripTimeChanged);
 	connect(&_decoderThread, &QThread::finished, decoder, &QObject::deleteLater);
-	connect(&_framePool, &PhVideoPool::decodeFrame, decoder, &PhVideoDecoder::requestFrame);
 	connect(this, &PhVideoEngine::openInDecoder, decoder, &PhVideoDecoder::open);
 	connect(this, &PhVideoEngine::closeInDecoder, decoder, &PhVideoDecoder::close);
-	connect(&_framePool, &PhVideoPool::cancelFrameRequest, decoder, &PhVideoDecoder::cancelFrameRequest);
+	connect(&_framePool, &PhVideoPool::recycledFrame, decoder, &PhVideoDecoder::recycleFrame);
+	connect(&_framePool, &PhVideoPool::stop, decoder, &PhVideoDecoder::stop);
+	connect(&_framePool, &PhVideoPool::poolTimeChanged, decoder, &PhVideoDecoder::stripTimeChanged);
 	connect(this, &PhVideoEngine::deinterlaceChanged, decoder, &PhVideoDecoder::setDeinterlace);
 	connect(decoder, &PhVideoDecoder::frameAvailable, this, &PhVideoEngine::frameAvailable);
 	connect(decoder, &PhVideoDecoder::frameAvailable, &_framePool, &PhVideoPool::frameAvailable);
-	connect(decoder, &PhVideoDecoder::frameCancelled, &_framePool, &PhVideoPool::frameCancelled);
 	connect(decoder, &PhVideoDecoder::opened, this, &PhVideoEngine::decoderOpened);
 	connect(decoder, &PhVideoDecoder::openFailed, this, &PhVideoEngine::openInDecoderFailed);
-	_decoderThread.start();
+
+	// decoder has lower priority that the UI
+	_decoderThread.start(QThread::LowPriority);
 }
 
 bool PhVideoEngine::ready()
@@ -64,7 +67,7 @@ void PhVideoEngine::setDeinterlace(bool deinterlace)
 		_framePool.cancel();
 
 		// request the frames again to apply the new deinterlace setting
-		_framePool.requestFrames(clockFrame(), _clock.rate() < 0);
+		emit stripTimeChanged(clockFrame(), _clock.rate() < 0);
 	}
 }
 
@@ -141,16 +144,12 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h, PhTime offset)
 	if (frame >= _frameLength)
 		frame = _frameLength;
 
-	// 4 possibilities
+	// 2 possibilities
 	// 1) the frame is currently on screen
 	//		=> nothing to do
 	// 2) or the frame is in the frame pool
 	//		=> refresh the texture with the frame that is the pool
-	// 3) or the frame has never been requested
-	//		=> request the frame
-	// 4) or the frame has already been requested
-	//		=> nothing to do
-
+	// in any case, transmit the current time to the decoder so that it can read ahead
 
 	PhVideoRect *videoRect = _videoRectList[frameOffset];
 	if(videoRect == NULL) {
@@ -158,7 +157,7 @@ void PhVideoEngine::drawVideo(int x, int y, int w, int h, PhTime offset)
 		videoRect->setBilinearFiltering(_bilinearFiltering);
 	}
 	if (videoRect->currentFrame() != frame) {
-		PhVideoBuffer *buffer = _framePool.decoded(frame);
+		PhVideoBuffer *buffer = _framePool.tryGetFrame(frame);
 
 		if (buffer) {
 			// The time does not correspond to the frame on screen,
@@ -219,7 +218,7 @@ QString PhVideoEngine::codecName()
 	return _codecName;
 }
 
-const QList<PhVideoBuffer *> PhVideoEngine::decodedFramePool()
+const QMap<PhFrame, PhVideoBuffer *> PhVideoEngine::decodedFramePool()
 {
 	return _framePool.decoded();
 }
@@ -235,7 +234,9 @@ void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
 	emit newFrameDecoded(bufferFrame);
 	bool shown = false;
 	foreach (PhFrame offset, _videoRectList.keys()) {
-		if (abs(frame + offset - bufferFrame) <= abs(frame + offset - _videoRectList[offset]->currentFrame())) {
+		if ((abs(frame + offset - bufferFrame) <= abs(frame + offset - _videoRectList[offset]->currentFrame())
+		     && abs(frame + offset - bufferFrame) < 3)
+		    || abs(frame + offset - bufferFrame) + 50 <= abs(frame + offset - _videoRectList[offset]->currentFrame())) {
 			// this frame is closer to the current time than the frame that is currently displayed,
 			// so show it.
 			// Note: we do not wait for the exact frame to be available to improve the responsiveness
@@ -269,7 +270,7 @@ void PhVideoEngine::decoderOpened(PhTimeCodeType tcType, PhFrame frameIn, PhFram
 
 	emit opened(true);
 
-	_framePool.requestFrames(clockFrame(), _clock.rate() < 0);
+	emit stripTimeChanged(clockFrame(), _clock.rate() < 0);
 }
 
 void PhVideoEngine::openInDecoderFailed()
@@ -279,5 +280,6 @@ void PhVideoEngine::openInDecoderFailed()
 
 void PhVideoEngine::onTimeChanged(PhTime)
 {
-	_framePool.requestFrames(clockFrame(), _clock.rate() < 0);
+	PHDBG(24) << clockFrame() << " " << (_clock.rate() < 0);
+	emit stripTimeChanged(clockFrame(), _clock.rate() < 0);
 }

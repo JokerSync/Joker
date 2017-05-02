@@ -100,7 +100,7 @@ public:
 	// Video settings:
 	PH_SETTING_BOOL(setUseNativeVideoSize, useNativeVideoSize)
 	PH_SETTING_INT2(setVideoReadhead, videoReadhead, 50)
-	PH_SETTING_FRAME2(setVideoPoolSize, videoPoolSize, 120)
+	PH_SETTING_FRAME2(setVideoPoolSize, videoPoolSize, 240)
 
 	PH_SETTING_BOOL(setVideoPictureInPicture, videoPictureInPicture)
 	PH_SETTING_INT2(setVideoPictureInPictureOffset, videoPictureInPictureOffset, 1000)

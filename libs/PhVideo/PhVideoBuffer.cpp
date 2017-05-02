@@ -6,10 +6,11 @@
 
 #include "PhVideoBuffer.h"
 
+#include "PhTools/PhDebug.h"
+
 PhVideoBuffer::PhVideoBuffer() :
 	_rgb(NULL),
 	_size(0),
-	_requestFrame(0),
 	_frame(0),
 	_width(0),
 	_height(0)
@@ -31,6 +32,7 @@ void PhVideoBuffer::reuse(int size)
 		if (_rgb != NULL) {
 			delete[] _rgb;
 		}
+		PHDBG(24) << "PhVideoBuffer alloc" << size;
 		_size = size;
 		_rgb = new uint8_t[_size];
 	}
@@ -48,11 +50,6 @@ PhFrame PhVideoBuffer::frame()
 	return _frame;
 }
 
-PhFrame PhVideoBuffer::requestFrame()
-{
-	return _requestFrame;
-}
-
 int PhVideoBuffer::width()
 {
 	return _width;
@@ -66,11 +63,6 @@ int PhVideoBuffer::height()
 void PhVideoBuffer::setFrame(PhFrame frame)
 {
 	_frame = frame;
-}
-
-void PhVideoBuffer::setRequestFrame(PhFrame requestFrame)
-{
-	_requestFrame = requestFrame;
 }
 
 void PhVideoBuffer::setWidth(int width)
