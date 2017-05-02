@@ -3,33 +3,19 @@
 #include "PhTools/PhDebug.h"
 #include "PhVideo/PhVideoDecoder.h"
 
-#include <QSignalSpy>
-
-#define OPEN_WAIT_TIME 10000
-
 using namespace bandit;
 
 go_bandit([](){
 	describe("decoder", [](){
 		PhVideoDecoder *decoder;
-		QSignalSpy *openedSpy, *openFailedSpy, *frameAvailableSpy;
 
 		before_each([&](){
-			qRegisterMetaType<PhTime>("PhTime");
-
 			decoder = new PhVideoDecoder();
-			openedSpy = new QSignalSpy(decoder, &PhVideoDecoder::opened);
-			openFailedSpy = new QSignalSpy(decoder, &PhVideoDecoder::openFailed);
-			frameAvailableSpy = new QSignalSpy(decoder, &PhVideoDecoder::frameAvailable);
-		});
-
-		after_each([&](){
-			delete openedSpy;
-			delete openFailedSpy;
-			delete decoder;
 		});
 
 		it("succeed", [&](){
+			int openedCallCount = 0;
+			int openFailedCallCount = 0;
 
 			QObject::connect(decoder, &PhVideoDecoder::opened, [&](PhTimeCodeType tcType, PhFrame frameIn, PhFrame length, int width, int height, QString codecName) {
 				AssertThat(tcType, Equals(PhTimeCodeType25));
@@ -42,18 +28,29 @@ go_bandit([](){
 #else
 				AssertThat(codecName, Equals("bmp"));
 #endif
+				openedCallCount += 1;
 			});
 
-			AssertThat(openedSpy->count(), Equals(0));
+			QObject::connect(decoder, &PhVideoDecoder::openFailed, [&]() {
+				openFailedCallCount += 1;
+			});
+
+			AssertThat(openedCallCount, Equals(0));
 			decoder->open("interlace_%03d.bmp");
-			AssertThat(openedSpy->count(), Equals(1));
-			AssertThat(openFailedSpy->count(), Equals(0));
+			AssertThat(openedCallCount, Equals(1));
+			AssertThat(openFailedCallCount, Equals(0));
 
 		});
 
 		it("fails", [&](){
+			int callCount = 0;
+
+			QObject::connect(decoder, &PhVideoDecoder::opened, [&](PhTimeCodeType tcType, PhFrame frameIn, PhFrame length, int width, int height, QString codecName) {
+				callCount += 1;
+			});
+
 			decoder->open("unexistingfile.mkv");
-			AssertThat(openedSpy->count(), Equals(0));
+			AssertThat(callCount, Equals(0));
 		});
 
 		it("decode frame", [&](){
@@ -62,10 +59,12 @@ go_bandit([](){
 			PhVideoBuffer buffer0, buffer1, buffer2;
 			PhVideoBuffer *expectedBuffer = NULL;
 			PhFrame expectedFrame = 0;
+			int frameAvailableCallCount = 0;
 
 			QObject::connect(decoder, &PhVideoDecoder::frameAvailable, [&](PhVideoBuffer *buffer){
 				AssertThat(buffer, Equals(expectedBuffer));
 				AssertThat(buffer->frame(), Equals(expectedFrame));
+				frameAvailableCallCount += 1;
 			});
 
 			expectedBuffer = &buffer0;
@@ -73,21 +72,21 @@ go_bandit([](){
 			decoder->requestFrame(&buffer0);
 			decoder->decodeFrame();
 
-			AssertThat(frameAvailableSpy->count(), Equals(1));
+			AssertThat(frameAvailableCallCount, Equals(1));
 
 			expectedBuffer = &buffer1;
 			buffer1.setRequestFrame(1);
 			expectedFrame = 1;
 			decoder->requestFrame(&buffer1);
 			decoder->decodeFrame();
-			AssertThat(frameAvailableSpy->count(), Equals(2));
+			AssertThat(frameAvailableCallCount, Equals(2));
 
 			expectedBuffer = &buffer2;
 			buffer2.setRequestFrame(2);
 			expectedFrame = 2;
 			decoder->requestFrame(&buffer2);
 			decoder->decodeFrame();
-			AssertThat(frameAvailableSpy->count(), Equals(3));
+			AssertThat(frameAvailableCallCount, Equals(3));
 		});
 	});
 });

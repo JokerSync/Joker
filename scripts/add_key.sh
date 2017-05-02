@@ -2,10 +2,11 @@
 
 # Taken from https://www.objc.io/issues/6-build-tools/travis-ci/#add-scripts
 
+# Exit immediately if a command exits with a non-zero status.
 set -e
 
 # Decrypt certificates
-openssl aes-256-cbc -K $encrypted_5acf05a46408_key -iv $encrypted_5acf05a46408_iv -in scripts/certs/certs.tar.enc -out scripts/certs/certs.tar -d
+openssl aes-256-cbc -K "${encrypted_5acf05a46408_key}" -iv "${encrypted_5acf05a46408_iv}" -in scripts/certs/certs.tar.enc -out scripts/certs/certs.tar -d
 tar xvf scripts/certs/certs.tar
 
 # Create a custom keychain

@@ -42,8 +42,13 @@ go_bandit([](){
 			openSpy = new QSignalSpy(engine, &PhVideoEngine::opened);
 			decodeSpy = new QSignalSpy(engine, &PhVideoEngine::newFrameDecoded);
 
-			// This is just for opengl initialization
-//			view->show();
+			// make sure the 64x64 window size will be preserved (required on Windows)
+			view->setWindowFlags(Qt::FramelessWindowHint);
+
+			// the widget needs to be shown for paint signals to be received (at least on Windows)
+			view->show();
+
+			// OpenGL initialization
 			view->renderPixmap(64, 64);
 
 			engine->setBilinearFiltering(false);
@@ -77,7 +82,7 @@ go_bandit([](){
 
 			before_each([&](){
 				AssertThat(engine->open("interlace_%03d.bmp"), IsTrue());
-				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
+				AssertThat(openSpy->count() == 1 || openSpy->wait(OPEN_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 			});
 
@@ -364,7 +369,7 @@ go_bandit([](){
 
 			before_each([&](){
 				AssertThat(engine->open("interlace_x264_25fps.mkv"), IsTrue());
-				AssertThat(openSpy->wait(OPEN_WAIT_TIME), IsTrue());
+				AssertThat(openSpy->count() == 1 || openSpy->wait(OPEN_WAIT_TIME), IsTrue());
 				QTest::qWait(FRAME_WAIT_TIME);
 			});
 
