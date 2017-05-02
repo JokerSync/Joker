@@ -6,6 +6,7 @@
 
 #include <QDate>
 #include <QDir>
+#include <QStandardPaths>
 
 #include <iostream>
 
@@ -133,7 +134,7 @@ PhDebug::PhDebug() : _currentLogLevel(0), _textLog(NULL)
 #if defined(Q_OS_MAC)
 	                     .arg(QDir::homePath() + "/Library/Logs")
 #elif defined(Q_OS_WIN)
-	                     .arg(QString(qgetenv("APPDATA")))
+	                     .arg(QString::fromLocal8Bit(qgetenv("APPDATA")))
 #elif defined(Q_OS_LINUX)
 	                     .arg("/var/log")
 #endif
