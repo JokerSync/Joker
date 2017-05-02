@@ -43,12 +43,6 @@ public:
 	PhFrame frame();
 
 	/**
-	 * @brief Gets the request frame number of the buffer (with origin at the start of video file)
-	 * @return The frame number
-	 */
-	PhFrame requestFrame();
-
-	/**
 	 * @brief Gets the width of the buffer
 	 * @return The width of the buffer
 	 */
@@ -67,12 +61,6 @@ public:
 	void setFrame(PhFrame frame);
 
 	/**
-	 * @brief Sets the request frame number of the buffer (with origin at the start of video file)
-	 * @param requestFrame The frame number
-	 */
-	void setRequestFrame(PhFrame requestFrame);
-
-	/**
 	 * @brief Sets the width of the buffer
 	 * @param width The width of the buffer
 	 */
@@ -87,7 +75,6 @@ public:
 private:
 	uint8_t * _rgb;
 	int _size;
-	PhFrame _requestFrame;
 	PhFrame _frame;
 	int _width;
 	int _height;

@@ -5,79 +5,43 @@
 #include "PhVideoPool.h"
 
 PhVideoPool::PhVideoPool(PhVideoSettings *settings)
-	: _settings(settings), _frameLength(0)
+	: _settings(settings),
+	_frameLength(0),
+	_backward(false),
+	_stripFrame(PHFRAMEMIN)
 {
 
 }
 
-void PhVideoPool::requestFrame(PhFrame frame)
+void PhVideoPool::stripTimeChanged(PhFrame stripFrame, bool backward)
 {
-	PhVideoBuffer * buffer;
-
-	if (!_recycledPool.empty()) {
-		buffer = _recycledPool.takeFirst();
-	}
-	else {
-		PHDBG(24) << "creating a new buffer";
-		buffer = new PhVideoBuffer();
-	}
-
-	buffer->setFrame(0);
-	buffer->setRequestFrame(frame);
-
-	PHDBG(24) << frame;
-
-	// ask the frame to the decoder.
-	// Notice that the time origin for the decoder is 0 at the start of the file, it's not timeIn.
-	emit decodeFrame(buffer);
-
-	_requestedPool.append(buffer);
-}
-
-void PhVideoPool::requestFrames(PhFrame frame, bool backward)
-{
-	PHDBG(24) << frame;
 	if(_frameLength == 0) {
 		PHDBG(24) << "not ready";
 		return;
 	}
 
-	// clip to stream boundaries
-	if(frame < 0)
-		frame = 0;
-	if (frame >= _frameLength)
-		frame = _frameLength;
+	_backward = backward;
+	_stripFrame = stripFrame;
 
-	// we make sure we have requested "readahead_count" frames
-	for (int i = 0; i < _settings->videoReadhead(); i++) {
-		int factor = i;
-		if (backward) {
-			factor *= -1;
-		}
+	cleanup(_stripFrame);
 
-		PhFrame requestedFrame = frame + factor;
-
-		if (!isFrameRequested(requestedFrame)) {
-			requestFrame(requestedFrame);
-		}
-	}
-
-	cleanup(frame);
+	bool isFrameInPool = _decodedPool.contains(stripFrame);
+	emit poolTimeChanged(stripFrame, backward, isFrameInPool);
 }
 
 void PhVideoPool::cancel()
 {
-	foreach(PhVideoBuffer * requestedFrame, _requestedPool) {
-		emit cancelFrameRequest(requestedFrame);
-	}
-	_cancelledPool.append(_requestedPool);
-	_requestedPool.clear();
+	emit stop();
 
-	_recycledPool.append(_decodedPool);
+	foreach(PhVideoBuffer * frame, _decodedPool.values()) {
+		emit recycledFrame(frame);
+	}
+
 	_decodedPool.clear();
+	_stripFrame = PHFRAMEMIN;
 }
 
-const QList<PhVideoBuffer *> PhVideoPool::decoded()
+const QMap<PhFrame, PhVideoBuffer *> PhVideoPool::decoded()
 {
 	return _decodedPool;
 }
@@ -89,105 +53,89 @@ void PhVideoPool::update(PhFrame frameLength)
 
 void PhVideoPool::frameAvailable(PhVideoBuffer *buffer)
 {
-	PHDBG(24) << buffer->requestFrame() << buffer->frame() << buffer->width() << "x" << buffer->height();
-	// move from requested to decoded
-	_cancelledPool.removeAll(buffer);
-	_requestedPool.removeAll(buffer);
-	_decodedPool.append(buffer);
-}
+	PHDBG(24) << buffer->frame() << buffer->width() << "x" << buffer->height();
 
-void PhVideoPool::frameCancelled(PhVideoBuffer *buffer)
-{
-	if (_cancelledPool.contains(buffer)) {
-		_cancelledPool.removeAll(buffer);
-		_recycledPool.append(buffer);
-	}
-}
+	cleanup(_stripFrame);
 
-bool PhVideoPool::isFrameRequested(PhFrame frame)
-{
-	// clip to stream boundaries
-	if(frame < 0)
-		frame = 0;
-	if (frame >= _frameLength)
-		frame = _frameLength;
-
-	QList<PhVideoBuffer *> requestedOrDecodedFrames;
-	requestedOrDecodedFrames.append(_requestedPool);
-	requestedOrDecodedFrames.append(_decodedPool);
-
-	foreach(PhVideoBuffer *requestedBuffer, requestedOrDecodedFrames) {
-		PhFrame requestedFrame = requestedBuffer->requestFrame();
-
-		// We consider that we have requested the frame if the time has changed less
-		// than the time between two frames.
-		if (frame == requestedFrame) {
-			// we have already requested that frame
-			return true;
-		}
+	// remove any existing buffer at that position
+	if (_decodedPool.contains(buffer->frame())) {
+		emit recycledFrame(_decodedPool.take(buffer->frame()));
 	}
 
-	return false;
+	_decodedPool.insert(buffer->frame(), buffer);
 }
 
 void PhVideoPool::cleanup(PhFrame frame)
 {
-	// clip to stream boundaries
-	if(frame < 0)
-		frame = 0;
-	if (frame >= _frameLength)
-		frame = _frameLength;
+	PhFrame poolSize = _settings->videoPoolSize();
 
-	PhFrame halfPoolSize = _settings->videoPoolSize();
+	if (!_decodedPool.empty()) {
+		PhVideoBuffer * firstFrame = _decodedPool.first();
+		int frameBytes = firstFrame->width()*firstFrame->height()*4;
 
-	QMutableListIterator<PhVideoBuffer*> i(_decodedPool);
-	while (i.hasNext()) {
-		PhVideoBuffer *buffer = i.next();
-
-		PhFrame bufferFrame = buffer->frame();
-
-		if ((bufferFrame < frame - halfPoolSize) || (bufferFrame >= frame + halfPoolSize)) {
-			// Given the current playing direction and position,
-			// this buffer is not likely to be shown on screen anytime soon.
-			i.remove();
-
-			_recycledPool.append(buffer);
-
-			PHDBG(24) << "recycle buffer " << bufferFrame;
-		}
+		// limit to 1 GB of frames
+		poolSize = std::min((int)poolSize, 1000000000 / frameBytes);
 	}
 
-	QMutableListIterator<PhVideoBuffer*> r(_requestedPool);
-	while (r.hasNext()) {
-		PhVideoBuffer *buffer = r.next();
+	int cleanupCount = _decodedPool.size() - poolSize;
 
-		PhFrame bufferFrame = buffer->requestFrame();
-
-		if ((bufferFrame < frame - halfPoolSize) || (bufferFrame >= frame + halfPoolSize)) {
-			// Given the current position,
-			// this frame is not likely to be shown on screen anytime soon.
-			r.remove();
-
-			_cancelledPool.append(buffer);
-
-			// tell the decoder we no longer want this frame to be decoded
-			emit cancelFrameRequest(buffer);
-
-			PHDBG(24) << "cancel frame request " << bufferFrame;
-		}
+	if (cleanupCount <= 0) {
+		// no need to cleanup
+		return;
 	}
 
-	// Make sure we do not have too many recycled frames.
-	// They accumulate when seeking, because there is a short time lag
-	// between the time when the engine asks to cancel a frame and the
-	// time when the decoder really does it.
-	while (_recycledPool.count() > _settings->videoPoolSize()) {
-		PhVideoBuffer * bufferToDelete = _recycledPool.takeFirst();
-		delete bufferToDelete;
+	frame = clip(frame);
+
+	QMutableMapIterator<PhFrame, PhVideoBuffer *> i(_decodedPool);
+
+	if (!_backward) {
+		// QMap.keys is ordered. So, when playing forward, this iterator will work on the older frames first.
+		// So it is likely to clean up enough with the very first iterations
+		while (i.hasNext() && cleanupCount > 0) {
+			i.next();
+			PhFrame bufferFrame = i.key();
+
+			if ((bufferFrame < frame - poolSize) || (bufferFrame >= frame + poolSize)) {
+				// Given the current playing direction and position,
+				// this buffer is not likely to be shown on screen anytime soon.
+				PhVideoBuffer *buffer = i.value();
+				i.remove();
+
+				PHDBG(24) << "recycle buffer " << bufferFrame;
+				emit recycledFrame(buffer);
+
+				cleanupCount--;
+			}
+		}
+	}
+	else {
+		i.toBack();
+		while (i.hasPrevious() && cleanupCount > 0) {
+			i.previous();
+			PhFrame bufferFrame = i.key();
+
+			if ((bufferFrame < frame - poolSize) || (bufferFrame >= frame + poolSize)) {
+				// Given the current playing direction and position,
+				// this buffer is not likely to be shown on screen anytime soon.
+				PhVideoBuffer *buffer = i.value();
+				i.remove();
+
+				PHDBG(24) << "recycle buffer " << bufferFrame;
+				emit recycledFrame(buffer);
+
+				cleanupCount--;
+			}
+		}
 	}
 }
 
-PhVideoBuffer *PhVideoPool::decoded(PhFrame frame)
+PhVideoBuffer *PhVideoPool::tryGetFrame(PhFrame frame)
+{
+	frame = clip(frame);
+	return _decodedPool.value(frame, NULL);
+}
+
+PhFrame PhVideoPool::clip(PhFrame frame)
 {
 	// clip to stream boundaries
 	if(frame < 0)
@@ -195,12 +143,7 @@ PhVideoBuffer *PhVideoPool::decoded(PhFrame frame)
 	if (frame >= _frameLength)
 		frame = _frameLength;
 
-	foreach(PhVideoBuffer *buffer, _decodedPool) {
-		if(frame == buffer->frame())
-			return buffer;
-	}
-
-	return NULL;
+	return frame;
 }
 
 

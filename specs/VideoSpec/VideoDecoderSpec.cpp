@@ -3,14 +3,17 @@
 #include "PhTools/PhDebug.h"
 #include "PhVideo/PhVideoDecoder.h"
 
+#include "VideoSpecSettings.h"
+
 using namespace bandit;
 
 go_bandit([](){
 	describe("decoder", [](){
 		PhVideoDecoder *decoder;
+		VideoSpecSettings *settings = new VideoSpecSettings();
 
 		before_each([&](){
-			decoder = new PhVideoDecoder();
+			decoder = new PhVideoDecoder(settings);
 		});
 
 		it("succeed", [&](){
@@ -56,37 +59,52 @@ go_bandit([](){
 		it("decode frame", [&](){
 			decoder->open("interlace_%03d.bmp");
 
-			PhVideoBuffer buffer0, buffer1, buffer2;
-			PhVideoBuffer *expectedBuffer = NULL;
-			PhFrame expectedFrame = 0;
-			int frameAvailableCallCount = 0;
+			QList<PhFrame> decodedFrames;
 
 			QObject::connect(decoder, &PhVideoDecoder::frameAvailable, [&](PhVideoBuffer *buffer){
-				AssertThat(buffer, Equals(expectedBuffer));
-				AssertThat(buffer->frame(), Equals(expectedFrame));
-				frameAvailableCallCount += 1;
+				AssertThat(buffer->frame(), Is().GreaterThanOrEqualTo(0));
+				AssertThat(buffer->height(), Equals(64));
+				AssertThat(buffer->width(), Equals(64));
+				decodedFrames.append(buffer->frame());
 			});
 
-			expectedBuffer = &buffer0;
-			buffer0.setRequestFrame(0);
-			decoder->requestFrame(&buffer0);
-			decoder->decodeFrame();
+			// decode 5 frames ahead
+			decoder->stripTimeChanged(0, false, false);
+			AssertThat(decodedFrames.contains(0), IsTrue());
+			AssertThat(decodedFrames.contains(1), IsTrue());
+			AssertThat(decodedFrames.contains(2), IsTrue());
+			AssertThat(decodedFrames.contains(3), IsTrue());
+			AssertThat(decodedFrames.contains(4), IsTrue());
+			AssertThat(decodedFrames.count(), Equals(5));
 
-			AssertThat(frameAvailableCallCount, Equals(1));
+			decodedFrames.clear();
+			decoder->stripTimeChanged(1, false, false);
+			AssertThat(decodedFrames.contains(1), IsTrue());
+			AssertThat(decodedFrames.contains(2), IsTrue());
+			AssertThat(decodedFrames.contains(3), IsTrue());
+			AssertThat(decodedFrames.contains(4), IsTrue());
+			AssertThat(decodedFrames.contains(5), IsTrue());
+			AssertThat(decodedFrames.count(), Equals(5));
 
-			expectedBuffer = &buffer1;
-			buffer1.setRequestFrame(1);
-			expectedFrame = 1;
-			decoder->requestFrame(&buffer1);
-			decoder->decodeFrame();
-			AssertThat(frameAvailableCallCount, Equals(2));
+			decodedFrames.clear();
+			decoder->stripTimeChanged(2, false, false);
+			AssertThat(decodedFrames.contains(2), IsTrue());
+			AssertThat(decodedFrames.contains(2), IsTrue());
+			AssertThat(decodedFrames.contains(3), IsTrue());
+			AssertThat(decodedFrames.contains(4), IsTrue());
+			AssertThat(decodedFrames.contains(6), IsTrue());
+			AssertThat(decodedFrames.count(), Equals(5));
 
-			expectedBuffer = &buffer2;
-			buffer2.setRequestFrame(2);
-			expectedFrame = 2;
-			decoder->requestFrame(&buffer2);
-			decoder->decodeFrame();
-			AssertThat(frameAvailableCallCount, Equals(3));
+			// if frame is already in pool, do not decode it again
+			decodedFrames.clear();
+			decoder->stripTimeChanged(2, false, true);
+			AssertThat(decodedFrames.count(), Equals(0));
+
+			// end of file
+			decodedFrames.clear();
+			decoder->stripTimeChanged(199, false, false);
+			AssertThat(decodedFrames.contains(199), IsTrue());
+			AssertThat(decodedFrames.count(), Equals(1));
 		});
 	});
 });
