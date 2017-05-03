@@ -25,6 +25,7 @@ PhVideoDecoder::PhVideoDecoder(PhVideoSettings *settings) :
 	_audioStream(NULL),
 	_audioFrame(NULL),
 	_deinterlace(false),
+	_backward(false),
 	_processing(false),
 	_seek(false),
 	_fastSeek(false),
