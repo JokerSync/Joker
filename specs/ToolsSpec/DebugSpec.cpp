@@ -66,11 +66,17 @@ go_bandit([](){
 		});
 
 		it("log_in_file", []() {
-			QString expected = QString("%1/Library/Logs/%2/%3.log")
-					.arg(QDir::homePath())
+			QString expected = QString("%1/%2/%3.log")
+#if defined(Q_OS_MAC)
+					.arg(QDir::homePath() + "/Library/Logs")
+#elif defined(Q_OS_WIN)
+					.arg(QString::fromLocal8Bit(qgetenv("APPDATA")))
+#elif defined(Q_OS_LINUX)
+					.arg("/var/log")
+#endif
 					.arg(PH_ORG_NAME)
 					.arg(PH_APP_NAME);
-			AssertThat(PhDebug::logLocation(), Equals(expected));
+			AssertThat(QDir::cleanPath(PhDebug::logLocation()), Equals(QDir::cleanPath(expected)));
 		});
 
 		it("display_in_the_debug", []() {
