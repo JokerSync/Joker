@@ -6,9 +6,12 @@
 
 #include <QDomDocument>
 #include <QXmlStreamWriter>
+
+#ifdef USE_SYN6
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#endif
 
 #include <boost/version.hpp>
 #if defined(__clang__)
@@ -1104,6 +1107,7 @@ bool PhStripDoc::importDrbFile(const QString &fileName)
 	return result;
 }
 
+#ifdef USE_SYN6
 bool PhStripDoc::importSyn6File(const QString &fileName)
 {
 	QSqlDatabase db;
@@ -1196,6 +1200,7 @@ bool PhStripDoc::importSyn6File(const QString &fileName)
 
 	return true;
 }
+#endif
 
 bool PhStripDoc::openStripFile(const QString &fileName)
 {
@@ -1213,9 +1218,11 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 	else if(extension == "drb") {
 		result = importDrbFile(fileName);
 	}
+#ifdef USE_SYN6
 	else if(extension == "syn6") {
 		result = importSyn6File(fileName);
 	}
+#endif
 	else if(extension == "strip" or extension == "joker") {
 		QFile xmlFile(fileName);
 		if(!xmlFile.open(QIODevice::ReadOnly)) {

@@ -258,12 +258,16 @@ public:
 	 * @return True if the doc opened well, false otherwise
 	 */
 	bool importDrbFile(const QString &fileName);
+
+#ifdef USE_SYN6
 	/**
 	 * @brief Import a Syn6 file
 	 * @param fileName The path to the Syn6 file
 	 * @return True if the doc opened well, false otherwise
 	 */
 	bool importSyn6File(const QString &fileName);
+#endif
+
 	/**
 	 * @brief Open a strip file
 	 * @param fileName The path to the DetX file

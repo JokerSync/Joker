@@ -20,6 +20,8 @@ include($$TOP_ROOT/libs/PhGraphicStrip/PhGraphicStrip.pri)
 include($$TOP_ROOT/libs/PhSync/PhSync.pri)
 
 CONFIG += video ltc midi
+# Add syn6 if you want to support Synchronos 6 file import
+# CONFIG += syn6
 
 win {
 CONFIG += sony

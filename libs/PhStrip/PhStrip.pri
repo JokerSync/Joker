@@ -3,7 +3,12 @@
 # License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
 #
 
-QT		+= xml sql
+QT		+= xml
+
+syn6 {
+	DEFINES += USE_SYN6
+	QT += sql
+}
 
 SOURCES += \
 	$$PWD/PhStripDoc.cpp \
