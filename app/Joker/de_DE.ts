@@ -5,118 +5,118 @@
     <name>AboutDialog</name>
     <message>
         <source>About Joker</source>
-        <translation type="unfinished"></translation>
+        <translation>Über Joker</translation>
     </message>
     <message>
         <source>Copyright 2013-2016 Phonations, All rights reserved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright 2013-2016 Phonations, Alle Rechte vorbehalten.</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <source>Joker is based on the following libraries:</source>
-        <translation type="unfinished"></translation>
+        <translation>Joker basiert auf den folgenden Bibliotheken:</translation>
     </message>
     <message>
         <source>Revision: </source>
-        <translation type="unfinished"></translation>
+        <translation>Revision: </translation>
     </message>
     <message>
         <source>Synchronous playback time: </source>
-        <translation type="unfinished"></translation>
+        <translation>Synchrone Wiedergabezeit: </translation>
     </message>
     <message>
         <source>Revision:</source>
-        <translation type="unfinished"></translation>
+        <translation>Änderung:</translation>
     </message>
     <message>
         <source>Synchronous playback time: %1 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchrone Wiedergabezeit:% 1 Sekunden</translation>
     </message>
 </context>
 <context>
     <name>JokerWindow</name>
     <message>
         <source>Joker</source>
-        <translation type="unfinished"></translation>
+        <translation>Joker</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei</translation>
     </message>
     <message>
         <source>Open recent</source>
-        <translation type="unfinished"></translation>
+        <translation>Zuletzt verwendete öffnen</translation>
     </message>
     <message>
         <source>Control</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kontrolle</translation>
     </message>
     <message>
         <source>Varispeed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Varispeed</translation>
     </message>
     <message>
         <source>Go to</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehe zu</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Anzeigen</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hilfe</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation type="unfinished"></translation>
+        <translation>Video</translation>
     </message>
     <message>
         <source>Rythmo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rythmo</translation>
     </message>
     <message>
         <source>Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnen...</translation>
     </message>
     <message>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+O</translation>
     </message>
     <message>
         <source>Play/pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Abspielen/Pause</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Raum</translation>
     </message>
     <message>
         <source>Play backward</source>
-        <translation type="unfinished"></translation>
+        <translation>Rückwärts abspielen</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Runter</translation>
     </message>
     <message>
         <source>Step forward</source>
-        <translation type="unfinished"></translation>
+        <translation>Schritt vor</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rechts</translation>
     </message>
     <message>
         <source>Step backward</source>
-        <translation type="unfinished"></translation>
+        <translation>Schritt rückwärts</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Links</translation>
     </message>
     <message>
         <source>Step time forward</source>
@@ -124,7 +124,7 @@
     </message>
     <message>
         <source>Alt+Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Rechts</translation>
     </message>
     <message>
         <source>Step time backward</source>
@@ -132,195 +132,195 @@
     </message>
     <message>
         <source>Alt+Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+Links</translation>
     </message>
     <message>
         <source>Open video file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Videodatei öffnen ...</translation>
     </message>
     <message>
         <source>Ctrl+Shift+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+Shift+O</translation>
     </message>
     <message>
         <source>Change timestamp...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändere Zeitstempel...</translation>
     </message>
     <message>
         <source>Change font...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändere Schriftart...</translation>
     </message>
     <message>
         <source>About...</source>
-        <translation type="unfinished"></translation>
+        <translation>Über...</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen...</translation>
     </message>
     <message>
         <source>Properties...</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaften...</translation>
     </message>
     <message>
         <source>Test mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Testmodus</translation>
     </message>
     <message>
         <source>Set Joker on Test mode for syncheck</source>
-        <translation type="unfinished"></translation>
+        <translation>Setze Joker auf Testmodus für syncheck</translation>
     </message>
     <message>
         <source>Ctrl+Shift+T</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+Umschalt+T</translation>
     </message>
     <message>
         <source>Timecode...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeitcode...</translation>
     </message>
     <message>
         <source>Ctrl+G</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+G</translation>
     </message>
     <message>
         <source>Next text</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächster Text</translation>
     </message>
     <message>
         <source>Previous text</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorheriger Text</translation>
     </message>
     <message>
         <source>Next element</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächstes Element</translation>
     </message>
     <message>
         <source>Ctrl+Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+Rechts</translation>
     </message>
     <message>
         <source>Previous element</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorheriges Element</translation>
     </message>
     <message>
         <source>Ctrl+Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+Links</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+S</translation>
     </message>
     <message>
         <source>Save as...</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern als...</translation>
     </message>
     <message>
         <source>Ctrl+Shift+S</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+Umschalt+S</translation>
     </message>
     <message>
         <source>Select character...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wähle Charakter...</translation>
     </message>
     <message>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+R</translation>
     </message>
     <message>
         <source>Force 16/9 ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>16:9 Verhältnis erzwingen</translation>
     </message>
     <message>
         <source>F8</source>
-        <translation type="unfinished"></translation>
+        <translation>F8</translation>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Vollbild</translation>
     </message>
     <message>
         <source>F10</source>
-        <translation type="unfinished"></translation>
+        <translation>F10</translation>
     </message>
     <message>
         <source>Empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Leer</translation>
     </message>
     <message>
         <source>Invert colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Farben invertieren</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+N</translation>
     </message>
     <message>
         <source>Close video</source>
-        <translation type="unfinished"></translation>
+        <translation>Video schließen</translation>
     </message>
     <message>
         <source>Send feedback...</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback senden...</translation>
     </message>
     <message>
         <source>Deinterlace video</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Deinterlace Video</translation>
     </message>
     <message>
         <source>Hide the rythmo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">rythmo ausblenden</translation>
     </message>
     <message>
         <source>F9</source>
-        <translation type="unfinished"></translation>
+        <translation>F9</translation>
     </message>
     <message>
         <source>Next loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächste Schleife</translation>
     </message>
     <message>
         <source>Ctrl+Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+Nach-Oben</translation>
     </message>
     <message>
         <source>Previous loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorherige Schleife</translation>
     </message>
     <message>
         <source>Ctrl+Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+Nach-Unten</translation>
     </message>
     <message>
         <source>Display the cuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnitte anzeigen</translation>
     </message>
     <message>
         <source>Display the vertical scale</source>
-        <translation type="unfinished"></translation>
+        <translation>Vertikale Skala anzeigen</translation>
     </message>
     <message>
         <source>Display the information panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Informationsfenster anzeigen</translation>
     </message>
     <message>
         <source>Display the control panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Systemsteuerung anzeigen</translation>
     </message>
     <message>
         <source>Hide selected peoples</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ausgewählte Völker ausblenden</translation>
     </message>
     <message>
         <source>Display feet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Füße anzeigen</translation>
     </message>
     <message>
         <source>Set first foot timecode...</source>
@@ -328,11 +328,11 @@
     </message>
     <message>
         <source>Set distance between two feet...</source>
-        <translation type="unfinished"></translation>
+        <translation>Setze Abstand zwischen zwei Füßen...</translation>
     </message>
     <message>
         <source>Use native video size</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende native Video-Größe</translation>
     </message>
     <message>
         <source>Set TC in</source>
@@ -340,7 +340,7 @@
     </message>
     <message>
         <source>Ctrl+J</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+J</translation>
     </message>
     <message>
         <source>Set TC out</source>
@@ -348,39 +348,39 @@
     </message>
     <message>
         <source>Ctrl+K</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+K</translation>
     </message>
     <message>
         <source>Loop</source>
-        <translation type="unfinished"></translation>
+        <translation>Schleife</translation>
     </message>
     <message>
         <source>Ctrl+L</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg+L</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <source>Unable to connect to USB422v module</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Verbindung zu USB422v Modul</translation>
     </message>
     <message>
         <source>Unable to open %0</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann %0 nicht öffnen</translation>
     </message>
     <message>
         <source>Unable to open %0 midi port</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kann MIDI-Port %0 nicht öffnen</translation>
     </message>
     <message>
         <source>Unable to save %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann %1 nicht speichern</translation>
     </message>
     <message>
         <source>No video sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Videosynchronisierung</translation>
     </message>
     <message>
         <source>Rythmo files</source>
@@ -388,27 +388,27 @@
     </message>
     <message>
         <source>Movie files</source>
-        <translation type="unfinished"></translation>
+        <translation>Filmdateien</translation>
     </message>
     <message>
         <source>Open a video...</source>
-        <translation type="unfinished"></translation>
+        <translation>Video öffnen ...</translation>
     </message>
     <message>
         <source>Save...</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern...</translation>
     </message>
     <message>
         <source>Unable to open %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kann nicht geöffnet werden</translation>
     </message>
     <message>
         <source>Picture in picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Bild-in-Bild</translation>
     </message>
     <message>
         <source>Second screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Zweiter Bildschirm</translation>
     </message>
 </context>
 <context>
@@ -419,132 +419,132 @@
     </message>
     <message>
         <source>Use command key to select multiple character:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwenden Sie Befehlstaste, um mehrere Zeichen auszuwählen:</translation>
     </message>
     <message>
         <source>Unselect all</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles abwählen</translation>
     </message>
     <message>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändern</translation>
     </message>
     <message>
         <source>The list is empty...</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Liste ist leer...</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
     <name>PhColorPickerDialog</name>
     <message>
         <source>Modify</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändern</translation>
     </message>
 </context>
 <context>
     <name>PhDialogButtonBox</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
 </context>
 <context>
     <name>PhEditableDocumentWindow</name>
     <message>
         <source>Do you want to save your changes ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie Ihre Änderungen speichern?</translation>
     </message>
 </context>
 <context>
     <name>PhFeedbackDialog</name>
     <message>
         <source>Feedback report</source>
-        <translation type="unfinished"></translation>
+        <translation>Feedback-Bericht</translation>
     </message>
     <message>
         <source>Having problem with %1 ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Probleme mit %1 ?</translation>
     </message>
     <message>
         <source>To help us improve this software, please send us this feedback report:</source>
-        <translation type="unfinished"></translation>
+        <translation>Um uns zu helfen, diese Software zu verbessern, schicken Sie uns bitte diesen Feedback-Bericht:</translation>
     </message>
     <message>
         <source>Any information or idea is valuable !</source>
-        <translation type="unfinished"></translation>
+        <translation>Jede Information oder Idee ist wertvoll!</translation>
     </message>
     <message>
         <source>Your email address if you would like us to get in touch with you :</source>
-        <translation type="unfinished"></translation>
+        <translation>Ihre E-Mail-Adresse, wenn Sie möchten, dass wir mit Ihnen in Kontakt treten:</translation>
     </message>
     <message>
         <source>Thank you for your feedback!</source>
-        <translation type="unfinished"></translation>
+        <translation>Vielen Dank für Ihr Feedback!</translation>
     </message>
 </context>
 <context>
     <name>PhMediaPanel</name>
     <message>
         <source>23.98 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>23,98 fps</translation>
     </message>
     <message>
         <source>24 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>24 fps</translation>
     </message>
     <message>
         <source>25 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>25 fps</translation>
     </message>
     <message>
         <source>29.97 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>29,97 fps</translation>
     </message>
     <message>
         <source>30 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>30 fps</translation>
     </message>
 </context>
 <context>
     <name>PhTimeCodeDialog</name>
     <message>
         <source>Go To</source>
-        <translation type="unfinished"></translation>
+        <translation>Gehe zu</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
 </context>
 <context>
     <name>PreferencesDialog</name>
     <message>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache:</translation>
     </message>
     <message>
         <source>Strip</source>
@@ -552,11 +552,11 @@
     </message>
     <message>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <source>Bold :</source>
-        <translation type="unfinished"></translation>
+        <translation>Fett:</translation>
     </message>
     <message>
         <source>Strip Height</source>
@@ -564,75 +564,75 @@
     </message>
     <message>
         <source>Italic :</source>
-        <translation type="unfinished"></translation>
+        <translation>Kursiv:</translation>
     </message>
     <message>
         <source>Speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschwindigkeit:</translation>
     </message>
     <message>
         <source>Synchronization</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchronisierung</translation>
     </message>
     <message>
         <source>No sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Sync</translation>
     </message>
     <message>
         <source>Sony 9 pin</source>
-        <translation type="unfinished"></translation>
+        <translation>Sony 9-polig</translation>
     </message>
     <message>
         <source>Communication framerate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kommunikationsframerate:</translation>
     </message>
     <message>
         <source>23.98 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>23,98 fps</translation>
     </message>
     <message>
         <source>24 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>24 fps</translation>
     </message>
     <message>
         <source>25 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>25 fps</translation>
     </message>
     <message>
         <source>29.97 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>29,97 fps</translation>
     </message>
     <message>
         <source>30 fps</source>
-        <translation type="unfinished"></translation>
+        <translation>30 fps</translation>
     </message>
     <message>
         <source>Video sync framerate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Video-Sync-Framerate:</translation>
     </message>
     <message>
         <source>LTC</source>
-        <translation type="unfinished"></translation>
+        <translation>LTC</translation>
     </message>
     <message>
         <source>Audio input port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Port des Audioeingangs:</translation>
     </message>
     <message>
         <source>Midi timecode</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-Timecode</translation>
     </message>
     <message>
         <source>Read from existing port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lese von vorhandenem Port:</translation>
     </message>
     <message>
         <source>Read from virtual port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lese von virtuellem Port:</translation>
     </message>
     <message>
         <source>Force 24 fps as 23.98 when reading MTC</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Erzwingen Sie 24 fps als 23.98, beim Lesen von MTC</translation>
     </message>
     <message>
         <source>Midi machine control:</source>
@@ -640,83 +640,84 @@
     </message>
     <message>
         <source>Send MMC message to port:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sende MMC-Nachricht an Port:</translation>
     </message>
     <message>
         <source>&lt;System default&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;Systemstandard&gt;</translation>
     </message>
     <message>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Französisch</translation>
     </message>
     <message>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Information</translation>
     </message>
     <message>
-        <source>You change the language to &quot;%1&quot;.
+        <source>You change the language to "%1".
 You need to restart %2 to apply you changes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie ändern die Sprache auf "%1".
+Sie müssen %2 neu starten um Änderungen zu übernehmen.</translation>
     </message>
     <message>
         <source>Interface:</source>
-        <translation type="unfinished"></translation>
+        <translation>Schnittstelle:</translation>
     </message>
     <message>
         <source>Delay:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzögerung:</translation>
     </message>
     <message>
         <source>Main screen delay (ms):</source>
-        <translation type="unfinished"></translation>
+        <translation>Hauptbildschirmverzögerung (ms):</translation>
     </message>
     <message>
         <source>Second screen delay (ms):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zweitbildschirmverzögerung (ms):</translation>
     </message>
     <message>
         <source>Picture in picture:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bild-in-Bild:</translation>
     </message>
     <message>
         <source>Ratio:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verhältnis:</translation>
     </message>
     <message>
         <source>Offset (ms):</source>
-        <translation type="unfinished"></translation>
+        <translation>Versatz (ms):</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Links</translation>
     </message>
     <message>
         <source>Position:</source>
-        <translation type="unfinished"></translation>
+        <translation>Position:</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechts</translation>
     </message>
 </context>
 <context>
     <name>PropertyDialog</name>
     <message>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaften</translation>
     </message>
     <message>
         <source>Title:</source>
-        <translation type="unfinished"></translation>
+        <translation>Titel:</translation>
     </message>
     <message>
         <source>-</source>
-        <translation type="unfinished"></translation>
+        <translation>-</translation>
     </message>
     <message>
         <source>Author:</source>
-        <translation type="unfinished"></translation>
+        <translation>Autor:</translation>
     </message>
     <message>
         <source>TC In:</source>
@@ -740,76 +741,76 @@ You need to restart %2 to apply you changes.</source>
     </message>
     <message>
         <source>Video:</source>
-        <translation type="unfinished"></translation>
+        <translation>Video:</translation>
     </message>
     <message>
         <source>Video file:</source>
-        <translation type="unfinished"></translation>
+        <translation>Video-Datei:</translation>
     </message>
     <message>
         <source>Resolution:</source>
-        <translation type="unfinished"></translation>
+        <translation>Auflösung:</translation>
     </message>
     <message>
         <source>Codec name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec-Name:</translation>
     </message>
     <message>
         <source>FPS:</source>
-        <translation type="unfinished"></translation>
+        <translation>FPS:</translation>
     </message>
 </context>
 <context>
     <name>QTranslator</name>
     <message>
         <source>Reset the settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen zurücksetzen</translation>
     </message>
     <message>
         <source>Would you like to reset your settings ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Möchten Sie Ihre Einstellungen zurücksetzen?</translation>
     </message>
 </context>
 <context>
     <name>TimeBetweenTwoFeetDialog</name>
     <message>
         <source>Time between two feet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zeit zwischen zwei Füßen</translation>
     </message>
     <message>
         <source>Current time :</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktuelle Zeit:</translation>
     </message>
 </context>
 <context>
     <name>MAC_APPLICATION_MENU</name>
     <message>
         <source>Services</source>
-        <translation type="unfinished"></translation>
+        <translation>Dienstleistungen</translation>
     </message>
     <message>
         <source>Hide %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ausblenden</translation>
     </message>
     <message>
         <source>Hide Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Andere ausblenden</translation>
     </message>
     <message>
         <source>Show All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle anzeigen</translation>
     </message>
     <message>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen...</translation>
     </message>
     <message>
         <source>Quit %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 beenden</translation>
     </message>
     <message>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Über %1</translation>
     </message>
 </context>
 </TS>
