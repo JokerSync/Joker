@@ -25,6 +25,9 @@ isEmpty(ICON) {
 VERSION = $$system(git describe --abbrev=0 --tags)
 BUILD = $$system(git rev-list $${VERSION}.. --count)
 
+# append build number to version tag
+VERSION = $${VERSION}.$${BUILD}
+
 PH_GIT_BRANCH = $$system(git rev-parse --abbrev-ref HEAD)
 PH_GIT_REVISION = $$system(git rev-parse HEAD)
 if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {

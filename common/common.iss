@@ -18,15 +18,11 @@
 #endif
 
 #define FileVerStr GetFileVersion(MyAppSrc)
-#define StripBuild(str VerStr) Copy(VerStr, 1, RPos(".", VerStr)-1)
-#define MyAppVerStr StripBuild(FileVerStr)
-#define MyAppVerName MyAppName + " v" + MyAppVerStr
-
 #define QtDir GetEnv('QTDIR')
 
 [Setup]
 AppName={#MyAppName}
-AppVersion={#MyAppVerStr}
+AppVersion={#FileVerStr}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
@@ -36,7 +32,7 @@ DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir={#PWD}
-OutputBaseFilename={#MyAppName}_v{#MyAppVerStr}
+OutputBaseFilename={#MyAppName}_v{#FileVerStr}
 Compression=lzma
 SolidCompression=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}
