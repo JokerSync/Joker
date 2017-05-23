@@ -725,6 +725,7 @@ go_bandit([](){
 				});
 			});
 
+#ifdef USE_SYN6
 			describe("v6", [&]() {
 				it("import_test01", [&]() {
 					AssertThat(doc.openStripFile("test01.syn6"), IsTrue());
@@ -779,6 +780,7 @@ go_bandit([](){
 					AssertThat(t2s(doc.cuts()[0]->timeIn(), PhTimeCodeType25), Equals("01:00:05:00"));
 				});
 			});
+#endif
 
 		});
 
