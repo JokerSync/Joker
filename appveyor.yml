@@ -3,9 +3,9 @@ environment:
   QTDIR: C:\Qt\5.4\mingw491_32
   BOOST_PATH: C:\Libraries\boost
 
-branches:
-  except:
-    - /^skipthisbranch$/
+  #branches:
+  #  except:
+  #    - /^skipthisbranch$/
 install:
   - git submodule update --init --recursive
   # Installing various utilities
