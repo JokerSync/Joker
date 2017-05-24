@@ -109,6 +109,7 @@
     <property name="title">
      <string>Display</string>
     </property>
+    <addaction name="actionInformations"/>
     <addaction name="actionInvert_colors"/>
     <addaction name="actionChange_font"/>
     <addaction name="actionFull_screen"/>
@@ -318,6 +319,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionInformations">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Informations</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
    </property>
   </action>
  </widget>

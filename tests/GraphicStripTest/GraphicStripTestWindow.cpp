@@ -24,6 +24,8 @@ GraphicStripTestWindow::GraphicStripTestWindow(GraphicStripTestSettings * settin
 
 	_doc = _strip.doc();
 	_clock = _strip.clock();
+
+	ui->actionInformations->setChecked(_settings->displayInfo());
 	ui->actionInvert_colors->setChecked(_settings->invertColor());
 
 	on_actionRuler_triggered(_settings->displayFeet());
@@ -267,11 +269,15 @@ void GraphicStripTestWindow::on_actionStrip_Properties_triggered()
 	dlg->show();
 }
 
+void GraphicStripTestWindow::on_actionInformations_triggered(bool checked)
+{
+	_settings->setDisplayInfo(checked);
+}
+
 void GraphicStripTestWindow::on_actionInvert_colors_triggered(bool checked)
 {
 	_settings->setInvertColor(checked);
 }
-
 
 void GraphicStripTestWindow::on_actionRuler_triggered(bool checked)
 {

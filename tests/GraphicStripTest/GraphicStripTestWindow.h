@@ -79,6 +79,8 @@ private slots:
 
 	void on_actionStrip_Properties_triggered();
 
+	void on_actionInformations_triggered(bool checked);
+
 	void on_actionInvert_colors_triggered(bool checked);
 
 	void on_actionRuler_triggered(bool checked);
