@@ -277,6 +277,7 @@ Item {
             // TODO save and restore height on startup
             height: 200
             Layout.minimumHeight: 50
+            visible: !settings.hideStrip
         }
 
         // define a cutom delegate of height 2
