@@ -43,7 +43,6 @@
     <addaction name="actionImage_1"/>
     <addaction name="actionImage_2"/>
     <addaction name="actionRectangles"/>
-    <addaction name="actionLoops"/>
     <addaction name="actionArrows"/>
     <addaction name="actionDisc"/>
     <addaction name="actionCharacters"/>
@@ -98,14 +97,6 @@
    </property>
    <property name="text">
     <string>Infos</string>
-   </property>
-  </action>
-  <action name="actionLoops">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Loops</string>
    </property>
   </action>
   <action name="actionRectangles">

@@ -15,7 +15,6 @@ HEADERS += \
 	$$PWD/PhGraphicObject.h \
 	$$PWD/PhGraphicRect.h \
 	$$PWD/PhGraphicSolidRect.h \
-	$$PWD/PhGraphicLoop.h \
 	$$PWD/PhGraphicDisc.h \
 	$$PWD/PhGraphicDashedLine.h \
 	$$PWD/PhGraphicArrow.h \
@@ -29,7 +28,6 @@ SOURCES += \
 	$$PWD/PhGraphicObject.cpp \
 	$$PWD/PhGraphicRect.cpp \
 	$$PWD/PhGraphicSolidRect.cpp \
-	$$PWD/PhGraphicLoop.cpp \
 	$$PWD/PhGraphicDisc.cpp \
 	$$PWD/PhGraphicDashedLine.cpp \
 	$$PWD/PhGraphicArrow.cpp

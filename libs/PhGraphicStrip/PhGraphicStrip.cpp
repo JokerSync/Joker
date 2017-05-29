@@ -11,7 +11,8 @@
 #include "PhGraphic/PhGraphicArrow.h"
 #include "PhGraphicStrip.h"
 #include "PhGraphic/PhGraphicSolidRect.h"
-#include "PhGraphic/PhGraphicLoop.h"
+
+#include "PhGraphicLoop.h"
 
 PhGraphicStrip::PhGraphicStrip(PhGraphicStripSettings *settings) :
 	_settings(settings),
