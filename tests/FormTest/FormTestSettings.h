@@ -7,6 +7,8 @@
 
 class FormTestSettings : protected PhGenericSettings, public PhWindowSettings, public PhFeedbackSettings
 {
+	Q_OBJECT
+
 public:
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

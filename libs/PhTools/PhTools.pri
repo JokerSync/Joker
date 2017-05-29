@@ -10,11 +10,11 @@ HEADERS += \
 	$$PWD/PhTickCounter.h \
 	$$PWD/PhPictureTools.h \
 	$$PWD/PhFileTool.h \
-    $$PWD/PhGenericSettings.h
+	$$PWD/PhGenericSettings.h
 
 SOURCES += \
 	$$PWD/PhDebug.cpp \
 	$$PWD/PhTickCounter.cpp \
 	$$PWD/PhPictureTools.cpp \
 	$$PWD/PhFileTool.cpp \
-    $$PWD/PhGenericSettings.cpp
+	$$PWD/PhGenericSettings.cpp

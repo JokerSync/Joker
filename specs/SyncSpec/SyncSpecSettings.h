@@ -14,6 +14,8 @@
 class SyncSpecSettings : protected PhGenericSettings,
 		public PhSyncSettings
 {
+	Q_OBJECT
+
 public:
 	SyncSpecSettings() : PhGenericSettings(true) {
 	}

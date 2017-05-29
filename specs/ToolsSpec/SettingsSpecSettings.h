@@ -9,6 +9,8 @@
  */
 class SettingsSpecSettings : public PhGenericSettings
 {
+	Q_OBJECT
+
 public:
 	PH_SETTING_INT(setIntTest1, intTest1)
 	PH_SETTING_INT(setIntTest2, intTest2)
