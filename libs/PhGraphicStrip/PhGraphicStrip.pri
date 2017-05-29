@@ -4,9 +4,11 @@
 #
 
 HEADERS += \
+	$$PWD/PhGraphicStripSettings.h \
 	$$PWD/PhGraphicStrip.h \
-	$$PWD/PhGraphicStripSettings.h
+	$$PWD/PhGraphicLoop.h
+
 
 SOURCES += \
-	$$PWD/PhGraphicStrip.cpp
-
+	$$PWD/PhGraphicStrip.cpp \
+	$$PWD/PhGraphicLoop.cpp

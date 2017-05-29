@@ -11,7 +11,6 @@
 #include "PhTools/PhDebug.h"
 #include "PhTools/PhPictureTools.h"
 #include "PhGraphic/PhGraphicText.h"
-#include "PhGraphic/PhGraphicLoop.h"
 #include "PhGraphic/PhGraphicDisc.h"
 #include "PhGraphic/PhGraphicDashedLine.h"
 #include "PhGraphic/PhGraphicArrow.h"
@@ -33,7 +32,6 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 	ui->actionImage_1->setChecked(_settings->displayImage1());
 	ui->actionImage_2->setChecked(_settings->displayImage2());
 	ui->actionDisc->setChecked(_settings->displayDisc());
-	ui->actionLoops->setChecked(_settings->displayLoops());
 	ui->actionArrows->setChecked(_settings->displayArrows());
 	ui->actionRectangles->setChecked(_settings->displayRect());
 	ui->actionCharacters->setChecked(_settings->displayCharacters());
@@ -207,26 +205,6 @@ void GraphicTestWindow::onPaint(int width, int height)
 		_rgbRect.draw();
 	}
 
-
-	if(_settings->displayLoops()) {
-		PhGraphicLoop vLoop;
-		vLoop.setPosition(100, 500, 3);
-		vLoop.setSize(220, 200);
-		vLoop.setThickness(30);
-		vLoop.setCrossSize(100);
-		vLoop.setColor(QColor(255, 0, 255));
-		vLoop.draw();
-
-		PhGraphicLoop hLoop;
-		hLoop.setHorizontalLoop(true);
-		hLoop.setPosition(0, 800, 3);
-		hLoop.setSize(300, 50);
-		hLoop.setThickness(20);
-		hLoop.setCrossSize(60);
-		hLoop.setColor(QColor(255, 0, 255));
-		hLoop.draw();
-	}
-
 	//_yuvRect.draw();
 
 	if(_settings->displayDisc()) {
@@ -268,11 +246,6 @@ void GraphicTestWindow::on_actionImage_1_triggered(bool checked)
 void GraphicTestWindow::on_actionImage_2_triggered(bool checked)
 {
 	_settings->setDisplayImage2(checked);
-}
-
-void GraphicTestWindow::on_actionLoops_triggered(bool checked)
-{
-	_settings->setDisplayLoops(checked);
 }
 
 void GraphicTestWindow::on_actionRectangles_triggered(bool checked)

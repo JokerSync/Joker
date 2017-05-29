@@ -7,7 +7,7 @@
 #ifndef PHGRAPHICLOOP_H
 #define PHGRAPHICLOOP_H
 
-#include "PhGraphicRect.h"
+#include "PhGraphic/PhGraphicRect.h"
 
 /**
  * @brief Draw the loop symbol (a cross)

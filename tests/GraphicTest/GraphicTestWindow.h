@@ -35,8 +35,6 @@ private slots:
 
 	void on_actionImage_2_triggered(bool checked);
 
-	void on_actionLoops_triggered(bool checked);
-
 	void on_actionRectangles_triggered(bool checked);
 
 	void on_actionArrows_triggered(bool checked);
