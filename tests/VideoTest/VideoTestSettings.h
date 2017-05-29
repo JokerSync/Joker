@@ -15,6 +15,8 @@ class VideoTestSettings : protected PhGenericSettings,
 	public PhVideoSettings,
 	public PhDocumentWindowSettings
 {
+	Q_OBJECT
+
 public:
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 	PH_SETTING_INT2(setLogMask, logMask, 1)
