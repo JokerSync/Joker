@@ -329,14 +329,44 @@ protected:
 	 */
 	QSettings _settings;
 
-	// caches
+	/**
+	 * @brief The cache for int settings.
+	 */
 	QMap<QString, int> _intValues;
+
+	/**
+	 * @brief The cache for long long settings.
+	 */
 	QMap<QString, qlonglong> _longLongValues;
+
+	/**
+	 * @brief The cache for float settings.
+	 */
 	QMap<QString, float> _floatValues;
+
+	/**
+	 * @brief The cache for bool settings.
+	 */
 	QMap<QString, bool> _boolValues;
+
+	/**
+	 * @brief The cache for string settings.
+	 */
 	QMap<QString, QString> _stringValues;
+
+	/**
+	 * @brief The cache for byte array settings.
+	 */
 	QMap<QString, QByteArray> _byteArrayValues;
+
+	/**
+	 * @brief The cache for string list settings.
+	 */
 	QMap<QString, QStringList> _stringListValues;
+
+	/**
+	 * @brief The cache for hash settings.
+	 */
 	QMap<QString, QHash<QString, QVariant>> _hashValues;
 };
 
