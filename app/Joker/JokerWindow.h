@@ -321,6 +321,8 @@ private:
 
 	bool _setCurrentTimeToVideoTimeIn;
 	bool _syncTimeInToDoc;
+
+	PhTime _timePlayed;
 };
 
 #endif // MAINWINDOW_H

@@ -48,7 +48,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_firstDoc(true),
 	_resizingStrip(false),
 	_setCurrentTimeToVideoTimeIn(false),
-	_syncTimeInToDoc(false)
+	_syncTimeInToDoc(false),
+	_timePlayed(settings->timePlayed())
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -184,6 +185,8 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 		// since closeEvent is called twice
 		// https://bugreports.qt.io/browse/QTBUG-43344
 		_doc->setModified(false);
+
+		_settings->setTimePlayed(_timePlayed);
 	}
 }
 
@@ -937,7 +940,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 void JokerWindow::timeCounter(PhTime elapsedTime)
 {
 	if(currentRate() == 1 && (PhSynchronizer::SyncType)_settings->synchroProtocol() != PhSynchronizer::NoSync) {
-		_settings->setTimePlayed(_settings->timePlayed() + elapsedTime);
+		_timePlayed += elapsedTime;
 	}
 }
 
@@ -981,7 +984,7 @@ void JokerWindow::on_actionAbout_triggered()
 	hideMediaPanel();
 
 	AboutDialog dlg;
-	dlg.setTimePlayed(_settings->timePlayed());
+	dlg.setTimePlayed(_timePlayed);
 	dlg.exec();
 
 	showMediaPanel();
