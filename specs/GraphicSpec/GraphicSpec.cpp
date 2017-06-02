@@ -12,7 +12,6 @@
 #include "PhGraphic/PhGraphicSolidRect.h"
 #include "PhGraphic/PhGraphicTexturedRect.h"
 #include "PhGraphic/PhGraphicImage.h"
-#include "PhGraphic/PhGraphicLoop.h"
 
 #include "CommonSpec.h"
 
@@ -132,44 +131,6 @@ go_bandit([](){
 			});
 
 			AssertThat(view.compare("rgbPatternTest.bmp"), Equals(0));
-		});
-
-		it("draw a loop", [&]() {
-			PhGraphicView view(64, 64);
-
-			PhGraphicLoop loop(32, 0, 32, 64);
-
-			loop.setCrossSize(16);
-			loop.setThickness(4);
-			loop.setHorizontalLoop(false);
-
-			AssertThat(loop.crossSize(), Equals(16));
-			AssertThat(loop.thickness(), Equals(4));
-
-			QObject::connect(&view, &PhGraphicView::paint, [&](int, int) {
-				loop.draw();
-			});
-
-			AssertThat(view.compare("loopTest.bmp"), Equals(0));
-		});
-
-		it("draw an horizontal loop", [&]() {
-			PhGraphicView view(64, 64);
-
-			PhGraphicLoop loop(0, 32, 64, 32);
-
-			loop.setCrossSize(16);
-			loop.setThickness(4);
-			loop.setHorizontalLoop(true);
-
-			AssertThat(loop.crossSize(), Equals(16));
-			AssertThat(loop.thickness(), Equals(4));
-
-			QObject::connect(&view, &PhGraphicView::paint, [&](int, int) {
-				loop.draw();
-			});
-
-			AssertThat(view.compare("loopHorizontalTest.bmp"), Equals(0));
 		});
 	});
 });
