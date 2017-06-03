@@ -6,6 +6,7 @@
 #ifndef GRAPHICSYNCTESTSETTINGS_H
 #define GRAPHICSYNCTESTSETTINGS_H
 
+#include "PhSync/PhTimeCode.h"
 #include "PhTools/PhGenericSettings.h"
 #include "PhSony/PhSonySettings.h"
 

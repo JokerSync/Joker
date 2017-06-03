@@ -3,6 +3,7 @@
 
 #include <QDir>
 
+#include "PhSync/PhTimeCode.h"
 #include "PhSony/PhSonySettings.h"
 
 #include "../GraphicStripTest/GraphicStripTestSettings.h"

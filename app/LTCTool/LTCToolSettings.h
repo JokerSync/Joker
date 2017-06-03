@@ -11,6 +11,8 @@
 class LTCToolSettings : protected PhGenericSettings,
 	public PhLtcReaderSettings
 {
+	Q_OBJECT
+
 public:
 	PH_SETTING_BOOL2(setGenerate, generate, true)
 	PH_SETTING_BOOL2(setRead, read, true)
