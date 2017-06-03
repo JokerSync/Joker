@@ -10,147 +10,147 @@
 
 /** Implement the integer setter and getter for a PhGenericSettings */
 #define PH_SETTING_INT(setter, getter) \
-Q_PROPERTY(int getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(int getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(int value) { if (setIntValue(#getter, value)) { emit getter##Changed(); } } \
+	void setter(int value) { if (setIntValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	int getter() {return intValue(#getter); }
 
 /** Implement the integer setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_INT2(setter, getter, defaultValue) \
-Q_PROPERTY(int getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(int getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(int value) { if (setIntValue(#getter, value)) { emit getter##Changed(); } } \
-	void re ## setter() { if (setIntValue(#getter, defaultValue)) { emit getter##Changed(); } } \
+	void setter(int value) { if (setIntValue(#getter, value)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setIntValue(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	int getter() {return intValue(#getter, defaultValue); }
 
 /** Implement the integer setter, getter and alias for a PhGenericSettings */
 #define PH_SETTING_INT3(setter, getter, alias) \
-Q_PROPERTY(int getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(int getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(int value) { if (setIntValue(#getter, value)) { emit getter##Changed(); } } \
+	void setter(int value) { if (setIntValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	int getter() {return intValueWithAlias(#getter, #alias); }
 
 /** Implement the unsigned char setter and getter for a PhGenericSettings */
 #define PH_SETTING_UCHAR(setter, getter) \
-Q_PROPERTY(unsigned char getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(unsigned char getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(unsigned char value) { if (setIntValue(#getter, value)) { emit getter##Changed(); } } \
+	void setter(unsigned char value) { if (setIntValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	unsigned char getter() {return intValue(#getter); }
 
 /** Implement the unsigned char setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_UCHAR2(setter, getter, defaultValue) \
-Q_PROPERTY(unsigned char getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(unsigned char getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(unsigned char value) { if (setIntValue(#getter, value)) { emit getter##Changed(); } } \
-	void re ## setter() { if (setIntValue(#getter, defaultValue)) { emit getter##Changed(); } } \
+	void setter(unsigned char value) { if (setIntValue(#getter, value)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setIntValue(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	unsigned char getter() {return intValue(#getter, defaultValue); }
 
 /** Implement the bool setter and getter for a PhGenericSettings */
 #define PH_SETTING_BOOL(setter, getter) \
-Q_PROPERTY(bool getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(bool getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(bool value) { if (setBoolValue(#getter, value)) { emit getter##Changed(); } } \
+	void setter(bool value) { if (setBoolValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	bool getter() {return boolValue(#getter); }
 
 /** Implement the bool setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_BOOL2(setter, getter, defaultValue) \
-Q_PROPERTY(bool getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(bool getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-   void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(bool value) { if (setBoolValue(#getter, value)) { emit getter##Changed(); } } \
-	void re ## setter() { if (setBoolValue(#getter, defaultValue)) { emit getter##Changed(); } } \
+	void setter(bool value) { if (setBoolValue(#getter, value)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setBoolValue(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	bool getter() {return boolValue(#getter, defaultValue); } \
 
 /** Implement the float setter and getter for a PhGenericSettings */
 #define PH_SETTING_FLOAT(setter, getter) \
-Q_PROPERTY(float getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(float getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(float value) { if (setFloatValue(#getter, value)) { emit getter##Changed(); } } \
+	void setter(float value) { if (setFloatValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	float getter() {return floatValue(#getter); }
 
 /** Implement the float setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_FLOAT2(setter, getter, defaultValue) \
-Q_PROPERTY(float getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(float getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(float value) { if (setFloatValue(#getter, value)) { emit getter##Changed(); } } \
-	void re ## setter() { if (setFloatValue(#getter, defaultValue)) { emit getter##Changed(); } } \
+	void setter(float value) { if (setFloatValue(#getter, value)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setFloatValue(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	float getter() {return floatValue(#getter, defaultValue); }
 
 /** Implement the string setter and getter for a PhGenericSettings */
 #define PH_SETTING_STRING(setter, getter) \
-Q_PROPERTY(QString getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(QString getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QString value) { if (setStringValue(#getter, value)) { emit getter##Changed(); } } \
+	void setter(QString value) { if (setStringValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	QString getter() {return stringValue(#getter); }
 
 /** Implement the string setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_STRING2(setter, getter, defaultValue) \
-Q_PROPERTY(QString getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(QString getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QString value) { if (setStringValue(#getter, value)) { emit getter##Changed(); } } \
-	void re ## setter() { if (setStringValue(#getter, defaultValue)) { emit getter##Changed(); } } \
+	void setter(QString value) { if (setStringValue(#getter, value)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setStringValue(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	QString getter() {return stringValue(#getter, defaultValue); }
 
 /** Implement the string list setter and getter for a PhGenericSettings */
 #define PH_SETTING_STRINGLIST(setter, getter) \
-Q_PROPERTY(QStringList getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(QStringList getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QStringList list) { if (setStringList(#getter, list)) { emit getter##Changed(); } } \
+	void setter(QStringList list) { if (setStringList(#getter, list)) { emit getter ## Changed(); } } \
 public: \
 	QStringList getter() {return stringList(#getter); }
 
 /** Implement the string list setter and getter qnd default value for a PhGenericSettings */
 #define PH_SETTING_STRINGLIST2(setter, getter, defaultValue) \
-Q_PROPERTY(QStringList getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(QStringList getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QStringList list) { if (setStringList(#getter, list)) { emit getter##Changed(); } } \
-	void re ## setter() { if (setStringList(#getter, defaultValue)) { emit getter##Changed(); } } \
+	void setter(QStringList list) { if (setStringList(#getter, list)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setStringList(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	QStringList getter() {return stringList(#getter, defaultValue); }
 
 /** Implement the byte array setter and getter for a PhGenericSettings */
 #define PH_SETTING_BYTEARRAY(setter, getter) \
-Q_PROPERTY(QByteArray getter READ getter WRITE setter NOTIFY getter##Changed) \
+	Q_PROPERTY(QByteArray getter READ getter WRITE setter NOTIFY getter ## Changed) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QByteArray array) { if (setByteArray(#getter, array)) { emit getter##Changed(); } } \
+	void setter(QByteArray array) { if (setByteArray(#getter, array)) { emit getter ## Changed(); } } \
 public: \
 	QByteArray getter() {return byteArray(#getter); }
 
@@ -158,9 +158,9 @@ public: \
 //	Q_PROPERTY does not work here, there is no single-argument setter
 #define PH_SETTING_HASH(setter, getter) \
 Q_SIGNALS: \
-	void getter##Changed(); \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QString key, QVariant value) { if (setHash(#getter, key, value)) { emit getter##Changed(); } } \
+	void setter(QString key, QVariant value) { if (setHash(#getter, key, value)) { emit getter ## Changed(); } } \
 public: \
 	QVariant getter(QString key) {return hash(#getter, key); }
 
@@ -367,7 +367,7 @@ protected:
 	/**
 	 * @brief The cache for hash settings.
 	 */
-	QMap<QString, QHash<QString, QVariant>> _hashValues;
+	QMap<QString, QHash<QString, QVariant> > _hashValues;
 };
 
 #endif // PHGENERICSETTINGS_H
