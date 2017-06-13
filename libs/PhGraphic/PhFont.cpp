@@ -44,9 +44,10 @@ int PhFont::computeMaxFontSize(QString family)
 	int size = 25;
 	int expectedFontHeight = 128;
 	int low = 0, high = 1000;
+	QFont font(family);
 	while (low < high) {
 		size = (low + high) / 2;
-		QFont font(family, size);
+		font.setPixelSize(size);
 		QFontMetrics fm(font);
 
 //		PHDEBUG << fm.height() << fm.ascent() << fm.descent() << fm.leading();
