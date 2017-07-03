@@ -14,6 +14,8 @@
 
 class DocumentWindowSpecSettings : public PhGenericSettings, public PhDocumentWindowSettings
 {
+	Q_OBJECT
+
 public:
 	DocumentWindowSpecSettings() : PhGenericSettings(true) {
 	}

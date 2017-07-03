@@ -10,6 +10,8 @@
 class VideoSyncTestSettings : public VideoTestSettings,
 	public PhSonySettings
 {
+	Q_OBJECT
+
 public:
 	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)

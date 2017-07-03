@@ -3,6 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QCoreApplication>
 #include <QFontDatabase>
 
 #include "PhTools/PhDebug.h"
@@ -81,7 +82,9 @@ go_bandit([](){
 		});
 
 		it("draw_bookerly_font", [&](){
-			QFontDatabase::addApplicationFont("Bookerly-BoldItalic.ttf");
+			int fontId = QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/Bookerly-BoldItalic.ttf");
+			AssertThat(fontId, IsGreaterThanOrEqualTo(0));
+
 			font->setFamily("Bookerly");
 			AssertThat(font->ready(), IsFalse());
 
@@ -91,8 +94,11 @@ go_bandit([](){
 		});
 
 		it("draw_swenson_font", [&](){
-			QFontDatabase::addApplicationFont("SWENSON.TTF");
+			int fontId = QFontDatabase::addApplicationFont(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/SWENSON.TTF");
+			AssertThat(fontId, IsGreaterThanOrEqualTo(0));
+
 			font->setFamily("Swenson");
+
 			AssertThat(font->ready(), IsFalse());
 
 			AssertThat(view->compare("fontTest.SWENSON.ttf.bmp", threshold), IsLessThan(threshold));

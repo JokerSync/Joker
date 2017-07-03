@@ -14,6 +14,8 @@ class VideoStripTestSettings : PhGenericSettings,
 	public PhVideoSettings,
 	public PhDocumentWindowSettings
 {
+	Q_OBJECT
+
 public:
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 

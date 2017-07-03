@@ -6,11 +6,14 @@
 #ifndef GRAPHICSYNCTESTSETTINGS_H
 #define GRAPHICSYNCTESTSETTINGS_H
 
+#include "PhSync/PhTimeCode.h"
 #include "PhTools/PhGenericSettings.h"
 #include "PhSony/PhSonySettings.h"
 
 class GraphicSyncTestSettings : PhGenericSettings, public PhSonySettings
 {
+	Q_OBJECT
+
 public:
 	// PhSonySettings:
 	PH_SETTING_BOOL2(setVideoSyncUp, videoSyncUp, true)

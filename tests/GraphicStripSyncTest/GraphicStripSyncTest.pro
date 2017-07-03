@@ -29,6 +29,7 @@ SOURCES += main.cpp \
 
 HEADERS += \
 	../GraphicStripTest/GraphicStripTestWindow.h \
+	../GraphicStripTest/GraphicStripTestSettings.h \
 	../GraphicStripTest/StripPropertiesDialog.h \
 	../GraphicStripTest/GenerateDialog.h \
 	GraphicStripSyncTestWindow.h \
