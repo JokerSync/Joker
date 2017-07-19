@@ -315,12 +315,28 @@ bool JokerWindow::openDocument(const QString &fileName)
 
 void JokerWindow::saveDocument(const QString &fileName)
 {
+	// prevent from reloading the document when we are the ones changing it
+	bool updateWatcher;
+	if (_watcher.files().contains(fileName)) {
+		_watcher.removePath(_doc->filePath());
+		updateWatcher = true;
+	}
+
 	if(_doc->exportDetXFile(fileName, currentTime())) {
 		_doc->setModified(false);
 		PhEditableDocumentWindow::saveDocument(fileName);
+
+		if (updateWatcher) {
+			_watcher.addPath(fileName);
+		}
 	}
-	else
+	else {
+		if (updateWatcher) {
+			_watcher.addPath(fileName);
+		}
+
 		QMessageBox::critical(this, "", QString(tr("Unable to save %1")).arg(fileName));
+	}
 }
 
 void JokerWindow::onExternalChange(const QString &path)
