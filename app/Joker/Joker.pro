@@ -115,7 +115,7 @@ include($$TOP_ROOT/common/deploy.pri)
 
 cache()
 
-QMAKE_POST_LINK += echo "Joker build ok" $${CS}
+QMAKE_POST_LINK += echo "Joker build ok"
 
 RESOURCES += \
 	Joker.qrc
