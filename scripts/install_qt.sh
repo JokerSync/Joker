@@ -17,7 +17,7 @@ export QMAKESPEC=macx-clang
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"
 
-sudo add-apt-repository -y ppa:beineri/opt-qt${QTVER}
+sudo add-apt-repository -y ppa:beineri/opt-qt${QTVER}-trusty
 sudo apt-get -qy update
 
 sudo apt-get -qy install qt${SHORT_VER}base qt${SHORT_VER}xmlpatterns libboost-all-dev
