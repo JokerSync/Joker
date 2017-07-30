@@ -280,6 +280,10 @@ void PhVideoDecoder::stop()
 
 bool PhVideoDecoder::canDecode()
 {
+	if (_videoStream == NULL) {
+		return false;
+	}
+
 	if (_stripFrame == PHFRAMEMIN) {
 		return false;
 	}
