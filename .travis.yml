@@ -34,7 +34,14 @@ matrix:
     - QTVER=551
     - PROJECT=specs/AllSpecs/AllSpecs.pro
     os: osx
-    before_install: sudo pip install cpp-coveralls
+    before_install:
+    - brew update
+    - eval "$(pyenv init -)"
+    - pyenv install 2.7.6
+    - pyenv global 2.7.6
+    - pyenv rehash
+    - pip install cpp-coveralls
+    - pyenv rehash
     script:
     - make
     - travis_wait "./AllSpecs --reporter=spec"
