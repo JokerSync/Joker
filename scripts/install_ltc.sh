@@ -34,7 +34,7 @@ echo "==> make"
 make
 
 echo "==> make install"
-sudo make install
+make install
 
 echo "==> cleanup"
 cd ..
