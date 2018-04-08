@@ -59,8 +59,6 @@ install:
 - scripts/install_ffmpeg.sh
 - scripts/install_portaudio.sh
 - scripts/install_rtmidi.sh
-- if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]] && [[ "${TRAVIS_OS_NAME}" == "osx"
-  ]]; then scripts/add_key.sh; fi
 before_script: qmake $PROJECT
 script: make
 deploy:
