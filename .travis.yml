@@ -6,7 +6,6 @@ env:
   global:
   - JOKER_RELEASE_PATH=$HOME
   - TESTS_RELEASE_PATH=$HOME
-  - secure: PtkXntkuVwLiSWejZCEiyF/7jzVz4uD6lROei/4I/obqAdWliGoEWuH04HYLto4Vyzu97dbDi5EgHuP9NwpQPYhYblzGZwm09mRz2gQkpXXBVbiIV7EQEm7PDeuWAHpIJ07ufOaQG8w40meHT631CBhkbHPwJ7TVwfLzK9nOxBU=
 matrix:
   include:
   - env: UNCRUSTIFY
@@ -31,20 +30,6 @@ matrix:
     - make prettydmg
     - export RELEASED_PACKAGE_FILENAME=$(ls -1 Joker_v*.dmg)
     - echo "RELEASED_PACKAGE_FILENAME:$RELEASED_PACKAGE_FILENAME"
-  - env:
-    - QTVER=532
-    - PROJECT=app/Joker/Joker.pro
-    - COVERITY_SCAN_PROJECT_NAME=Phonations/Joker
-    - COVERITY_SCAN_SCRIPT=https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh
-    - COVERITY_SCAN_NOTIFICATION_EMAIL=martin@phonations.com
-    - COVERITY_SCAN_BRANCH_PATTERN=master
-    - COVERITY_SCAN_BUILD_COMMAND=make
-    - COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --comptype clangcxx --compiler clang++"
-    # COVERITY_SCAN_TOKEN:
-    - secure: YlyaETwveWXOT1wpOz68Vp8Pj1zZ5u44ppOabNw/Xe4M8ZHdPy3QkmyB7wTeUgNjlHzkW23aOOzTk8bm5wxS1iQRxHsQ/DnZd0TcULPuTY9+yO2L/Wkwk6quFBqGlkT8h2v4xkRDyshG8OxF6eqeeq5Cflt/LOhx+MnJqse9EzQ=
-    os: linux
-    script: if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]] && [[ "$TRAVIS_BRANCH" == "$COVERITY_SCAN_BRANCH_PATTERN" ]]; then curl
-      -s "$COVERITY_SCAN_SCRIPT" | bash; fi
   - env:
     - QTVER=551
     - PROJECT=specs/AllSpecs/AllSpecs.pro
@@ -75,25 +60,7 @@ install:
 - scripts/install_ffmpeg.sh
 - scripts/install_portaudio.sh
 - scripts/install_rtmidi.sh
-- if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]] && [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then scripts/add_key.sh; fi
+- if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]] && [[ "${TRAVIS_OS_NAME}" == "osx"
+  ]]; then scripts/add_key.sh; fi
 before_script: qmake $PROJECT
 script: make
-notifications:
-  email: false
-  irc:
-    channels: phonations.com#joker
-    on_success: always
-  webhooks:
-    urls: https://webhooks.gitter.im/e/9e468ed6125989020262
-    on_success: always
-  slack:
-    secure: CVzAyvFoT5LFnODOVooG21txFq7B75nER+tLiGr4GFTimKWPb9mdmrqxvaHyJdp0RBtdLFyuWCeA2Gxi1SarPSCstlw0HP0rP0w27gEwVmt2E1xO4RUzHv5JKdbogKNHZJfdTw5VVAgzGNhCRBw2pL33CV0KwJ20lfJUOcg0JY8=
-#deploy:
-#  provider: releases
-#  api_key:
-#    secure: DTPxxREDO8+Pi/cnqKr1nce9FxJ3AUY7h4S9gHt3S2vBkrlZM4vD4GLXCVjbZuSpnqkTTAiGhUiYEN8jiF3pjStKKlEl2w537cDpoSl1ZAB5G+G3PKTBxG5MhRMZkTEgYFvtx/VPpvleQ4C8cMosogQk7iBwwuk19FLbcL0/kL4=
-#  file: "${RELEASED_PACKAGE_FILENAME}"
-#  skip_cleanup: true
-#  on:
-#    tags: true
-#    condition: "$PROJECT = app/Joker/Joker.pro && $TRAVIS_OS_NAME = osx"
