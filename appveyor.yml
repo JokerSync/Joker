@@ -42,15 +42,9 @@ artifacts:
 deploy:
   provider: GitHub
   auth_token:
-    secure: 9bMCGL2D0e/GK3MGOJu7Ma1hNb6sxAOyEftuonF/tV31LoLLM77+hitI6T3snyCM
+    secure: WS7goPPWg5dvoNANAQlkpoRAcjxXKiBgDSxdNqVUz56fZbVBpzTt/jn1+baLfXAJ
   artifact: /Joker_v[0-9]+\.[0-9]+\.[0-9]+\.exe/
-  draft: false
-  prerelease: true
+  draft: true
+  prerelease: false
   on:
-    appveyor_repo_tag: true
-
-notifications:
-  - provider: Slack
-    channel: joker
-    auth_token:
-      secure: QY4pTvHSFOMIlArGDqQLwE6nE4oPBkWaAGUuFEK2RXWNejGxGy6huwPLN1l0yPCEfrCD9W/3yw9FDxuuFiNLhA==
+    branch: master
