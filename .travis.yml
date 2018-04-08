@@ -40,7 +40,6 @@ matrix:
     - travis_wait "./AllSpecs --reporter=spec"
     after_success: coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E
       .+/app/.+ -E .+/specs/.+
-    after_failure: "./scripts/upload.sh *.result.bmp"
   - env:
     - QTVER=551
     - PROJECT=app/LTCTool/LTCTool.pro
