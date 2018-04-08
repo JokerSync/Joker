@@ -1,25 +1,17 @@
 # Joker
 
-[![Build Status](https://travis-ci.org/Phonations/joker.svg?branch=master)](https://travis-ci.org/Phonations/joker)
-[![Build status](https://ci.appveyor.com/api/projects/status/4vgrsapqble7rkqi/branch/master?svg=true)](https://ci.appveyor.com/project/MartinDelille/joker/branch/master)
-[![Coverage Status](https://coveralls.io/repos/Phonations/Joker/badge.svg?branch=master)](https://coveralls.io/r/Phonations/Joker?branch=master)
-[![Coverity](https://img.shields.io/coverity/scan/3341.svg)](https://scan.coverity.com/projects/phonations-joker)
-[![Weblate](https://hosted.weblate.org/widgets/phonations/-/shields-badge.svg)](https://hosted.weblate.org/engage/phonations/?utm_source=widget)
-[![Download](https://img.shields.io/github/downloads/phonations/joker/total.svg)](https://github.com/phonations/joker/releases/latest)
-[![Gratipay](https://img.shields.io/gratipay/MartinDelille.svg)](https://gratipay.com/MartinDelille)
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Phonations/Joker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/JokerSync/Joker.svg?branch=master)](https://travis-ci.org/JokerSync/Joker)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/JokerSync/Joker/branch/master?svg=true)](https://ci.appveyor.com/project/JokerSync/Joker/branch/master)
+[![Coverage Status](https://coveralls.io/repos/JokerSync/Joker/badge.svg?branch=master)](https://coveralls.io/r/JokerSync/Joker?branch=master)
+[![Download](https://img.shields.io/github/downloads/JokerSync/Joker/total.svg)](https://github.com/JokerSync/Joker/releases/latest)
 
 Welcome to the *Joker* project.
 
 ![Screenshot](data/img/screenshot.jpg)
 
-Joker is available on the *Mac App Store*:
+Joker installers are available for *macos* and *Windows* in the [release section](https://github.com/JokerSync/Joker/releases/latest).
 
-[![Buy](data/img/appstore.png)](https://itunes.apple.com/app/joker/id932002433)
-
-For *Windows* installer, go to the [release section](https://github.com/Phonations/joker/releases/latest).
-
-Otherwise, you can try to compile the project yourself using the following instruction:
+Manual build instructions can be found below.
 
 ## Project structure
 
@@ -49,8 +41,8 @@ This repository hosts the Joker projet components:
 In order to compile the  project you will need to follow the instructions depending on your system:
 
 * [Mac OS](#mac)
-* [Linux](#linux) _(coming soon)_
 * [Windows](#windows)
+* [Linux](#linux) _(to do)_
 
 The project uses *Qt 5.5.1* available here: http://www.qt.io/download/
 
@@ -142,8 +134,3 @@ Install to the folder of your choice.
 Then use *Qt Creator* to open and build the Joker project *app.pro*.
 
 Note that you can set all the required environment variables described above directly in the project settings inside Qt Creator.
-
-# Talk
-
-We love talking about this project! Feel free to post an issue or contact us via the [gitter channel](https://gitter.im/Phonations/Joker) !
-
