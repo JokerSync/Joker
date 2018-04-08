@@ -32,7 +32,7 @@ tar -xvzf libltc-1.1.3.tar.gz
 
 echo "==> configure"
 cd libltc-1.1.3
-./configure --prefix=~/usr/local
+./configure --prefix=$HOME/usr/local
 
 echo "==> make"
 make
