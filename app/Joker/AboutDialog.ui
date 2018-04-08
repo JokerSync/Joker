@@ -99,7 +99,7 @@
     </rect>
    </property>
    <property name="text">
-    <string notr="true">support@phonations.com</string>
+    <string notr="true">https://github.com/JokerSync/Joker/issues</string>
    </property>
    <property name="openExternalLinks">
     <bool>true</bool>
