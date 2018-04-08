@@ -24,12 +24,19 @@ brew install libltc
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"
 
+echo "==> download"
 curl -L https://github.com/x42/libltc/releases/download/v1.1.3/libltc-1.1.3.tar.gz -o libltc-1.1.3.tar.gz 
 tar -xvzf libltc-1.1.3.tar.gz
 cd libltc-1.1.3
 ./configure
+
+echo "==> make"
 make
+
+echo "==> make install"
 sudo make install
+
+echo "==> cleanup"
 cd ..
 rm libltc-1.1.3.tar.gz
 rm -rf libltc-1.1.3
