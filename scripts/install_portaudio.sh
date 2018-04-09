@@ -10,6 +10,7 @@ brew install portaudio
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"
 
+# this requires yasm, installed as an apt addon in .travis.yml
 curl -L http://portaudio.com/archives/pa_stable_v19_20140130.tgz -o pa_stable_v19_20140130.tgz
 tar -xvzf pa_stable_v19_20140130.tgz
 cd portaudio

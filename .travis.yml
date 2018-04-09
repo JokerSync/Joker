@@ -59,6 +59,12 @@ matrix:
     - QTVER=551
     - PROJECT=tests/tests.pro
     os: osx
+addons:
+  # apt packages for linux
+  apt:
+    packages:
+    - yasm # to build portaudio
+    - libasound2-dev # to build rtmidi
 install:
 - git submodule update --init --recursive
 - ". scripts/install_qt.sh"
