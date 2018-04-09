@@ -14,13 +14,13 @@ install:
   # Configuring Qt
   - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw491_32\bin;%PATH%
   # Installing ffmpeg dev
-  - curl -kLO https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-20160622-e0faad8-win32-dev.zip
-  - 7z x ffmpeg-20160622-e0faad8-win32-dev.zip
-  - set FFMPEG_DEV_PATH=%CD%\ffmpeg-20160622-e0faad8-win32-dev
+  - curl -kLO https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-3.4.2-win32-dev.zip
+  - 7z x ffmpeg-3.4.2-win32-dev.zip
+  - set FFMPEG_DEV_PATH=%CD%\ffmpeg-3.4.2-win32-dev
   # Installing ffmpeg shared
-  - curl -kLO https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-20160622-e0faad8-win32-shared.zip
-  - 7z x ffmpeg-20160622-e0faad8-win32-shared.zip
-  - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-20160622-e0faad8-win32-shared
+  - curl -kLO https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-3.4.2-win32-shared.zip
+  - 7z x ffmpeg-3.4.2-win32-shared.zip
+  - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-3.4.2-win32-shared
   # Installing PortAudio
   - curl -kLO https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip
   - 7z x portaudio-r1891-build.zip
@@ -42,15 +42,9 @@ artifacts:
 deploy:
   provider: GitHub
   auth_token:
-    secure: 9bMCGL2D0e/GK3MGOJu7Ma1hNb6sxAOyEftuonF/tV31LoLLM77+hitI6T3snyCM
+    secure: WS7goPPWg5dvoNANAQlkpoRAcjxXKiBgDSxdNqVUz56fZbVBpzTt/jn1+baLfXAJ
   artifact: /Joker_v[0-9]+\.[0-9]+\.[0-9]+\.exe/
-  draft: false
-  prerelease: true
+  draft: true
+  prerelease: false
   on:
-    appveyor_repo_tag: true
-
-notifications:
-  - provider: Slack
-    channel: joker
-    auth_token:
-      secure: QY4pTvHSFOMIlArGDqQLwE6nE4oPBkWaAGUuFEK2RXWNejGxGy6huwPLN1l0yPCEfrCD9W/3yw9FDxuuFiNLhA==
+    branch: master

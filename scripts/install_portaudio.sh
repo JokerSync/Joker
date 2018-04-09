@@ -10,13 +10,13 @@ brew install portaudio
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 echo "Linux detected"
 
-sudo apt-get -y install yasm
+# this requires yasm, installed as an apt addon in .travis.yml
 curl -L http://portaudio.com/archives/pa_stable_v19_20140130.tgz -o pa_stable_v19_20140130.tgz
 tar -xvzf pa_stable_v19_20140130.tgz
 cd portaudio
-./configure
+./configure --prefix=$HOME/usr/local
 make
-sudo make install
+make install
 cd ..
 rm pa_stable_v19_20140130.tgz
 rm -rf portaudio

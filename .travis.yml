@@ -6,7 +6,6 @@ env:
   global:
   - JOKER_RELEASE_PATH=$HOME
   - TESTS_RELEASE_PATH=$HOME
-  - secure: PtkXntkuVwLiSWejZCEiyF/7jzVz4uD6lROei/4I/obqAdWliGoEWuH04HYLto4Vyzu97dbDi5EgHuP9NwpQPYhYblzGZwm09mRz2gQkpXXBVbiIV7EQEm7PDeuWAHpIJ07ufOaQG8w40meHT631CBhkbHPwJ7TVwfLzK9nOxBU=
 matrix:
   include:
   - env: UNCRUSTIFY
@@ -20,8 +19,9 @@ matrix:
     before_script: echo N/A
     script: scripts/doxygen.sh
   - env:
-    - QTVER=551
+    - QTVER=591
     - PROJECT=app/Joker/Joker.pro
+    - FFMPEG_DEV_PATH=/home/travis/usr/local
     os: linux
   - env:
     - QTVER=551
@@ -32,30 +32,22 @@ matrix:
     - export RELEASED_PACKAGE_FILENAME=$(ls -1 Joker_v*.dmg)
     - echo "RELEASED_PACKAGE_FILENAME:$RELEASED_PACKAGE_FILENAME"
   - env:
-    - QTVER=532
-    - PROJECT=app/Joker/Joker.pro
-    - COVERITY_SCAN_PROJECT_NAME=Phonations/Joker
-    - COVERITY_SCAN_SCRIPT=https://scan.coverity.com/scripts/travisci_build_coverity_scan.sh
-    - COVERITY_SCAN_NOTIFICATION_EMAIL=martin@phonations.com
-    - COVERITY_SCAN_BRANCH_PATTERN=master
-    - COVERITY_SCAN_BUILD_COMMAND=make
-    - COVERITY_SCAN_BUILD_COMMAND_PREPEND="cov-configure --comptype clangcxx --compiler clang++"
-    # COVERITY_SCAN_TOKEN:
-    - secure: YlyaETwveWXOT1wpOz68Vp8Pj1zZ5u44ppOabNw/Xe4M8ZHdPy3QkmyB7wTeUgNjlHzkW23aOOzTk8bm5wxS1iQRxHsQ/DnZd0TcULPuTY9+yO2L/Wkwk6quFBqGlkT8h2v4xkRDyshG8OxF6eqeeq5Cflt/LOhx+MnJqse9EzQ=
-    os: linux
-    script: if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]] && [[ "$TRAVIS_BRANCH" == "$COVERITY_SCAN_BRANCH_PATTERN" ]]; then curl
-      -s "$COVERITY_SCAN_SCRIPT" | bash; fi
-  - env:
     - QTVER=551
     - PROJECT=specs/AllSpecs/AllSpecs.pro
     os: osx
-    before_install: sudo pip install cpp-coveralls
+    before_install:
+    - brew update
+    - eval "$(pyenv init -)"
+    - pyenv install 2.7.6
+    - pyenv global 2.7.6
+    - pyenv rehash
+    - pip install cpp-coveralls
+    - pyenv rehash
     script:
     - make
     - travis_wait "./AllSpecs --reporter=spec"
     after_success: coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E
       .+/app/.+ -E .+/specs/.+
-    after_failure: "./scripts/upload.sh *.result.bmp"
   - env:
     - QTVER=551
     - PROJECT=app/LTCTool/LTCTool.pro
@@ -68,6 +60,17 @@ matrix:
     - QTVER=551
     - PROJECT=tests/tests.pro
     os: osx
+addons:
+  # apt packages for linux
+  apt:
+    sources:
+      - sourceline: ppa:beineri/opt-qt591-trusty
+    packages:
+      - yasm # to build portaudio
+      - libasound2-dev # to build rtmidi
+      - qt59base
+      - qt59xmlpatterns
+      - libboost-all-dev
 install:
 - git submodule update --init --recursive
 - ". scripts/install_qt.sh"
@@ -75,25 +78,14 @@ install:
 - scripts/install_ffmpeg.sh
 - scripts/install_portaudio.sh
 - scripts/install_rtmidi.sh
-- if [[ "${TRAVIS_PULL_REQUEST}" == "false" ]] && [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then scripts/add_key.sh; fi
 before_script: qmake $PROJECT
 script: make
-notifications:
-  email: false
-  irc:
-    channels: phonations.com#joker
-    on_success: always
-  webhooks:
-    urls: https://webhooks.gitter.im/e/9e468ed6125989020262
-    on_success: always
-  slack:
-    secure: CVzAyvFoT5LFnODOVooG21txFq7B75nER+tLiGr4GFTimKWPb9mdmrqxvaHyJdp0RBtdLFyuWCeA2Gxi1SarPSCstlw0HP0rP0w27gEwVmt2E1xO4RUzHv5JKdbogKNHZJfdTw5VVAgzGNhCRBw2pL33CV0KwJ20lfJUOcg0JY8=
-#deploy:
-#  provider: releases
-#  api_key:
-#    secure: DTPxxREDO8+Pi/cnqKr1nce9FxJ3AUY7h4S9gHt3S2vBkrlZM4vD4GLXCVjbZuSpnqkTTAiGhUiYEN8jiF3pjStKKlEl2w537cDpoSl1ZAB5G+G3PKTBxG5MhRMZkTEgYFvtx/VPpvleQ4C8cMosogQk7iBwwuk19FLbcL0/kL4=
-#  file: "${RELEASED_PACKAGE_FILENAME}"
-#  skip_cleanup: true
-#  on:
-#    tags: true
-#    condition: "$PROJECT = app/Joker/Joker.pro && $TRAVIS_OS_NAME = osx"
+deploy:
+  provider: releases
+  draft: true # needs manual publishing
+  api_key:
+    secure: cdrgrIUhFJmyQhNdGzSvvF9Zgqr+nfVE6xy1W86CiRkfNJLugVSYcs3kCu9V9rFTBvB/hp3YqcvnAc9TdxCE9nGclMEgBfkZwXj24n4wH2j1C+3bDDj/PG5BQiQnAhrFnYZDN1D6bXDE+NDbFN2smaIniaVVIwEos4Fx4MbsnSLr6u3iBzPCvjHMobDVkpYf7xY0DaMbWswRLMCHEQEfskS0mfsuqetWw81I4x+p1qhfdw6jDUmvttaYBo4xge1niyfH9K+/74QYhM4IWrM3SJr9T8zgt/9+pUhcpCY+J5yxFzp+qbMFJGG0AIy5A0qpiUllq+8wRLnoOmQRsEqUywKk2ue7UCJuYfQGTsXA15WBE5rFF0iBwoVttP6hNW61qLjlKyO0Xi8q/SrLdJolBWiI8wzPS7BPlOFCKjeMssh/jd5P4Ato8Tb/gyZSXxC1cD8xzXIL8Ldu9j/tEpm1fn8zoYB9Kqaw1eOObstXtAcT5GE6x1/0HI8dqAQ0iFC0q2zfZtx6+4qdUsdjK7gdTdT1OpSwyeCmf5vpwL17+FlVlSeS4IqElPKmSzHLYP3KM0yQCjBwd8oTOyS2fEZ4eCLsBjFY/yAZVz03R+Elsln8pcyk5ETvzcns1Mfi40p1JxWg2t5ZeOgXnZqBRQQ2K4+aZNpc7gpomaQiz5YgvJM=
+  file: "${RELEASED_PACKAGE_FILENAME}"
+  skip_cleanup: true
+  on:
+    repo: JokerSync/Joker

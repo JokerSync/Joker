@@ -22,8 +22,11 @@ isEmpty(ICON) {
 	ICON = $$TOP_ROOT/data/icon.icns
 }
 
-VERSION = $$system(git describe --abbrev=0 --tags)
-BUILD = $$system(git rev-list $${VERSION}.. --count)
+LAST_TAG = $$system(git describe --abbrev=0 --tags)
+
+VERSION = $$system(echo $${LAST_TAG} | cut -c2-)
+
+BUILD = $$system(git rev-list $${LAST_TAG}.. --count)
 
 # append build number to version tag
 VERSION = $${VERSION}.$${BUILD}

@@ -28,9 +28,9 @@ int computeLoopLength(PhStripDoc *doc, int loopNumber)
 	PhTime timeIn = PHTIMEMIN;
 	PhTime timeOut = PHTIMEMAX;
 	if(loopNumber > 0)
-		timeIn = doc->loops()[loopNumber - 1]->timeIn();
+		timeIn = doc->loops()[loopNumber - 1] -> timeIn();
 	if(loopNumber + 1 < doc->loops().count())
-		timeOut = doc->loops()[loopNumber]->timeIn();
+		timeOut = doc->loops()[loopNumber] -> timeIn();
 	return timeOut - timeIn;
 }
 
@@ -41,9 +41,9 @@ int countLoopDetectLength(PhStripDoc *doc, int loopNumber)
 	PhTime timeIn = PHTIMEMIN;
 	PhTime timeOut = PHTIMEMAX;
 	if(loopNumber > 0)
-		timeIn = doc->loops()[loopNumber - 1]->timeIn();
+		timeIn = doc->loops()[loopNumber - 1] -> timeIn();
 	if(loopNumber + 1 < doc->loops().count())
-		timeOut = doc->loops()[loopNumber]->timeIn();
+		timeOut = doc->loops()[loopNumber] -> timeIn();
 
 	int loopLength = 0;
 	foreach(PhStripDetect *detect, doc->detects(timeIn, timeOut)) {
@@ -70,7 +70,7 @@ int displayDetectCountPerLoop(PhStripDoc *doc)
 	int totalLength = 0;
 	PHDBG(3) << doc->title();
 
-	for(int loop = 0; loop <= doc->loops().count(); loop++) {
+	for(int loop = 0; loop <= doc->loops().count(); loop ++) {
 		int detectLength = countLoopDetectLength(doc, loop);
 		int loopLength = computeLoopLength(doc, loop);
 		//				PHDEBUG << loop << "\t:" << PHNQ(PhTimeCode::stringFromTime(loopLength, doc->getTCType()));

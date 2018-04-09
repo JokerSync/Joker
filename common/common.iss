@@ -2,8 +2,8 @@
 #error "You must define MyAppName"
 #endif
 
-#define MyAppPublisher "Phonations"
-#define MyAppURL "http://www.phonations.com/"
+#define MyAppPublisher "JokerSync"
+#define MyAppURL "https://github.com/JokerSync/Joker"
 #define MyAppExeName MyAppName + ".exe"
 
 #if !Defined(PWD)
