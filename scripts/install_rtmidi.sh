@@ -15,11 +15,11 @@ wget http://www.music.mcgill.ca/~gary/rtmidi/release/rtmidi-2.1.0.tar.gz
 tar -xvzf rtmidi-2.1.0.tar.gz
 cd rtmidi-2.1.0
 
-./configure
+./configure --prefix=$HOME/usr/local
 make
 # allow error for make install
 set +e
-sudo make install
+make install
 
 cd ..
 

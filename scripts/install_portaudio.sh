@@ -14,9 +14,9 @@ sudo apt-get -y install yasm
 curl -L http://portaudio.com/archives/pa_stable_v19_20140130.tgz -o pa_stable_v19_20140130.tgz
 tar -xvzf pa_stable_v19_20140130.tgz
 cd portaudio
-./configure
+./configure --prefix=$HOME/usr/local
 make
-sudo make install
+make install
 cd ..
 rm pa_stable_v19_20140130.tgz
 rm -rf portaudio
