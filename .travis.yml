@@ -21,6 +21,7 @@ matrix:
   - env:
     - QTVER=591
     - PROJECT=app/Joker/Joker.pro
+    - FFMPEG_DEV_PATH=/home/travis/usr/local
     os: linux
   - env:
     - QTVER=551
