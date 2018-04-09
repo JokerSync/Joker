@@ -19,7 +19,7 @@ matrix:
     before_script: echo N/A
     script: scripts/doxygen.sh
   - env:
-    - QTVER=551
+    - QTVER=591
     - PROJECT=app/Joker/Joker.pro
     os: linux
   - env:
@@ -62,9 +62,14 @@ matrix:
 addons:
   # apt packages for linux
   apt:
+    sources:
+      - sourceline: ppa:beineri/opt-qt591-trusty
     packages:
-    - yasm # to build portaudio
-    - libasound2-dev # to build rtmidi
+      - yasm # to build portaudio
+      - libasound2-dev # to build rtmidi
+      - qt59base
+      - qt59xmlpatterns
+      - libboost-all-dev
 install:
 - git submodule update --init --recursive
 - ". scripts/install_qt.sh"
