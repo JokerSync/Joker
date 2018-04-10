@@ -42,7 +42,7 @@ artifacts:
 deploy:
   provider: GitHub
   auth_token:
-    secure: WS7goPPWg5dvoNANAQlkpoRAcjxXKiBgDSxdNqVUz56fZbVBpzTt/jn1+baLfXAJ
+    secure: Kg4Co6bJ5WJmeM0Gw33qbWylubqcGQga0kkGmVScP8XNzfxYUsLUAA4g5qO4Htjo
   artifact: /Joker_v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.exe/
   draft: true
   prerelease: false
