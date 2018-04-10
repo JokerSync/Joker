@@ -27,7 +27,8 @@ matrix:
     - QTVER=551
     - PROJECT=app/Joker/Joker.pro
     os: osx
-    after_script:
+    script:
+    - make
     - make prettydmg
   - env:
     - QTVER=551
