@@ -62,8 +62,7 @@ CONFIG(release, debug|release) {
 					$${PH_DEPLOY_TARGET}.dmg \
 					$${TARGET}.app &&
 			prettydmg.commands += echo Copying to $${PH_DEPLOY_LOCATION} &&
-			prettydmg.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION} &&
-			prettydmg.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.dmg
+			prettydmg.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION}
 
 			# Target for ftp deployement
 			ftpdeploy.commands += echo "Deploying $${PH_DEPLOY_TARGET}.dmg to $$(PH_DEPLOY_FTP_SERVER)" &&

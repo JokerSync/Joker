@@ -30,6 +30,7 @@ matrix:
     script:
     - make
     - make prettydmg
+    - ls -l .
   - env:
     - QTVER=551
     - PROJECT=specs/AllSpecs/AllSpecs.pro
