@@ -1,7 +1,7 @@
 # Joker
 
 [![Build Status](https://travis-ci.org/JokerSync/Joker.svg?branch=master)](https://travis-ci.org/JokerSync/Joker)
-[![Build Status](https://ci.appveyor.com/api/projects/status/github/JokerSync/Joker/branch/master?svg=true)](https://ci.appveyor.com/project/JokerSync/Joker/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/6w22uq5t7hwwaj8n/branch/master?svg=true)](https://ci.appveyor.com/project/JokerSync/joker/branch/master)
 [![Coverage Status](https://coveralls.io/repos/JokerSync/Joker/badge.svg?branch=master)](https://coveralls.io/r/JokerSync/Joker?branch=master)
 [![Download](https://img.shields.io/github/downloads/JokerSync/Joker/total.svg)](https://github.com/JokerSync/Joker/releases/latest)
 
