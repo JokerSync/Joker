@@ -29,8 +29,6 @@ matrix:
     os: osx
     after_script:
     - make prettydmg
-    - export RELEASED_PACKAGE_FILENAME=$(ls -1 Joker_v*.dmg)
-    - echo "RELEASED_PACKAGE_FILENAME:$RELEASED_PACKAGE_FILENAME"
   - env:
     - QTVER=551
     - PROJECT=specs/AllSpecs/AllSpecs.pro
@@ -85,7 +83,8 @@ deploy:
   draft: true # needs manual publishing
   api_key:
     secure: cdrgrIUhFJmyQhNdGzSvvF9Zgqr+nfVE6xy1W86CiRkfNJLugVSYcs3kCu9V9rFTBvB/hp3YqcvnAc9TdxCE9nGclMEgBfkZwXj24n4wH2j1C+3bDDj/PG5BQiQnAhrFnYZDN1D6bXDE+NDbFN2smaIniaVVIwEos4Fx4MbsnSLr6u3iBzPCvjHMobDVkpYf7xY0DaMbWswRLMCHEQEfskS0mfsuqetWw81I4x+p1qhfdw6jDUmvttaYBo4xge1niyfH9K+/74QYhM4IWrM3SJr9T8zgt/9+pUhcpCY+J5yxFzp+qbMFJGG0AIy5A0qpiUllq+8wRLnoOmQRsEqUywKk2ue7UCJuYfQGTsXA15WBE5rFF0iBwoVttP6hNW61qLjlKyO0Xi8q/SrLdJolBWiI8wzPS7BPlOFCKjeMssh/jd5P4Ato8Tb/gyZSXxC1cD8xzXIL8Ldu9j/tEpm1fn8zoYB9Kqaw1eOObstXtAcT5GE6x1/0HI8dqAQ0iFC0q2zfZtx6+4qdUsdjK7gdTdT1OpSwyeCmf5vpwL17+FlVlSeS4IqElPKmSzHLYP3KM0yQCjBwd8oTOyS2fEZ4eCLsBjFY/yAZVz03R+Elsln8pcyk5ETvzcns1Mfi40p1JxWg2t5ZeOgXnZqBRQQ2K4+aZNpc7gpomaQiz5YgvJM=
-  file: "${RELEASED_PACKAGE_FILENAME}"
+  file_glob: true
+  file: "Joker_v*.dmg"
   skip_cleanup: true
   on:
     repo: JokerSync/Joker
