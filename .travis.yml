@@ -29,8 +29,9 @@ matrix:
     os: osx
     script:
     - make
-    - make prettydmg
+    - make quickdmg
     - ls -l .
+    - du -sh *.app
   - env:
     - QTVER=551
     - PROJECT=specs/AllSpecs/AllSpecs.pro

@@ -48,7 +48,7 @@ CONFIG(release, debug|release) {
 
 			# Target for quick dmg generation
 			quickdmg.commands += echo "Deploying quick dmg for $${TARGET}" &&
-			quickdmg.commands += macdeployqt $${TARGET}.app -dmg &&
+			quickdmg.commands += macdeployqt $${TARGET}.app -dmg -verbose=3&&
 			quickdmg.commands += mv $${TARGET}.dmg $${PH_DEPLOY_TARGET}.dmg
 
 			# Target for pretty DMG generation
@@ -60,9 +60,7 @@ CONFIG(release, debug|release) {
 					--icon $${TARGET}.app 150 218 \
 					--window-size 600 450 \
 					$${PH_DEPLOY_TARGET}.dmg \
-					$${TARGET}.app &&
-			prettydmg.commands += echo Copying to $${PH_DEPLOY_LOCATION} &&
-			prettydmg.commands += cp $${PH_DEPLOY_TARGET}.dmg $${PH_DEPLOY_LOCATION}
+					$${TARGET}.app
 
 			# Target for ftp deployement
 			ftpdeploy.commands += echo "Deploying $${PH_DEPLOY_TARGET}.dmg to $$(PH_DEPLOY_FTP_SERVER)" &&
@@ -71,9 +69,7 @@ CONFIG(release, debug|release) {
 
 			# Target for PKG generation
 			buildpkg.commands += echo "Build PKG" &&
-			buildpkg.commands += productbuild --component $${TARGET}.app /Applications --sign $$INSTALLER_CERTIFICATE $${PH_DEPLOY_TARGET}.pkg &&
-			buildpkg.commands += cp $${PH_DEPLOY_TARGET}.pkg $${PH_DEPLOY_LOCATION} &&
-			buildpkg.commands += open -R $${PH_DEPLOY_LOCATION}/$${PH_DEPLOY_TARGET}.pkg
+			buildpkg.commands += productbuild --component $${TARGET}.app /Applications --sign $$INSTALLER_CERTIFICATE $${PH_DEPLOY_TARGET}.pkg
 
 			# Target for PKG and DMG cleaning
 			removedmg.commands += rm $${PH_DEPLOY_TARGET}.*
