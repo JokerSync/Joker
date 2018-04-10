@@ -16,7 +16,7 @@ mac {
 		QMAKE_POST_LINK += plutil -replace CFBundleShortVersionString -string $${VERSION} $${TARGET}.app/Contents/Info.plist &&
 		QMAKE_POST_LINK += plutil -replace LSApplicationCategoryType -string public.app-category.video $${TARGET}.app/Contents/Info.plist &&
 		QMAKE_POST_LINK += plutil -replace LSMinimumSystemVersion -string 10.8 $${TARGET}.app/Contents/Info.plist &&
-		QMAKE_POST_LINK += plutil -replace NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist
+		QMAKE_POST_LINK += plutil -replace NSHighResolutionCapable -string True $${TARGET}.app/Contents/Info.plist &&
 
 		# removeapp target
 		removeapp.commands += rm -rf $${TARGET}.app
