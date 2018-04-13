@@ -23,8 +23,10 @@ isEmpty(ICON) {
 }
 
 LAST_TAG = $$system(git describe --abbrev=0 --tags)
+VERSION = $${LAST_TAG}
 
-VERSION = $$system(echo $${LAST_TAG} | cut -c2-)
+# remove the leading v
+VERSION ~= s/^v//
 
 BUILD = $$system(git rev-list $${LAST_TAG}.. --count)
 
