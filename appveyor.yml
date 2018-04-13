@@ -12,7 +12,7 @@ install:
   - choco install -y curl innosetup
   - set PATH="C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5";%PATH%
   # Configuring Qt
-  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw491_32\bin;%PATH%
+  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
   # Installing ffmpeg dev
   - curl -kLO https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-3.4.2-win32-dev.zip
   - 7z x ffmpeg-3.4.2-win32-dev.zip
