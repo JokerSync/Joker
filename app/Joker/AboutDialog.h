@@ -34,11 +34,12 @@ public:
 	 * @param timePlayed A time value
 	 */
 	void setTimePlayed(PhTime timePlayed);
-
 private slots:
 	void on_pushButton_clicked();
 
 private:
+	void setText(PhTime timePlayed);
+
 	Ui::AboutDialog *ui;
 };
 
