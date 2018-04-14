@@ -20,7 +20,6 @@
 #include "PhLtc/PhLtcReaderSettings.h"
 #endif
 
-
 /**
  * @brief The Joker application settings
  */
@@ -39,6 +38,8 @@ class JokerSettings : public PhGenericSettings,
 #endif
 	public PhSyncSettings
 {
+	Q_OBJECT
+
 public:
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

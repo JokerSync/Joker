@@ -13,6 +13,8 @@
 class VideoSpecSettings : protected PhGenericSettings,
 		public PhVideoSettings
 {
+	Q_OBJECT
+
 public:
 	VideoSpecSettings() : PhGenericSettings(true) {
 	}

@@ -12,26 +12,54 @@ PhGenericSettings::PhGenericSettings(bool clear) : _settings(PH_ORG_NAME, PH_APP
 void PhGenericSettings::clear()
 {
 	_settings.clear();
+
+	// clear caches
+	_intValues.clear();
+	_longLongValues.clear();
+	_floatValues.clear();
+	_boolValues.clear();
+	_stringValues.clear();
+	_byteArrayValues.clear();
+	_stringListValues.clear();
+	_hashValues.clear();
 }
 
-void PhGenericSettings::setIntValue(QString name, int value)
+bool PhGenericSettings::setIntValue(QString name, int value)
 {
-	_settings.setValue(name, value);
+	if (intValue(name) != value) {
+		_intValues[name] = value;
+		_settings.setValue(name, value);
+		return true;
+	}
+	return false;
 }
 
 int PhGenericSettings::intValue(QString name, int defaultValue)
 {
-	return _settings.value(name, defaultValue).toInt();
+	if (!_intValues.contains(name)) {
+		_intValues[name] = _settings.value(name, defaultValue).toInt();
+	}
+
+	return _intValues[name];
 }
 
-void PhGenericSettings::setLongLongValue(QString name, qlonglong value)
+bool PhGenericSettings::setLongLongValue(QString name, qlonglong value)
 {
-	_settings.setValue(name, value);
+	if (longLongValue(name) != value) {
+		_longLongValues[name] = value;
+		_settings.setValue(name, value);
+		return true;
+	}
+	return false;
 }
 
 qlonglong PhGenericSettings::longLongValue(QString name, qlonglong defaultValue)
 {
-	return _settings.value(name, defaultValue).toLongLong();
+	if (!_longLongValues.contains(name)) {
+		_longLongValues[name] = _settings.value(name, defaultValue).toLongLong();
+	}
+
+	return _longLongValues[name];
 }
 
 int PhGenericSettings::intValueWithAlias(QString name, QString alias)
@@ -43,38 +71,67 @@ int PhGenericSettings::intValueWithAlias(QString name, QString alias)
 	return result;
 }
 
-void PhGenericSettings::setBoolValue(QString name, bool value)
+bool PhGenericSettings::setBoolValue(QString name, bool value)
 {
-	_settings.setValue(name, value);
+	if (boolValue(name) != value) {
+		_boolValues[name] = value;
+		_settings.setValue(name, value);
+		return true;
+	}
+	return false;
 }
 
 bool PhGenericSettings::boolValue(QString name, bool defaultValue)
 {
-	return _settings.value(name, defaultValue).toBool();
+	if (!_boolValues.contains(name)) {
+		_boolValues[name] = _settings.value(name, defaultValue).toBool();
+	}
+
+	return _boolValues[name];
 }
 
-void PhGenericSettings::setFloatValue(QString name, float value)
+bool PhGenericSettings::setFloatValue(QString name, float value)
 {
-	_settings.setValue(name, value);
+	if (floatValue(name) != value) {
+		_floatValues[name] = value;
+		_settings.setValue(name, value);
+		return true;
+	}
+	return false;
 }
 
 float PhGenericSettings::floatValue(QString name, float defaultValue)
 {
-	return _settings.value(name, defaultValue).toFloat();
+	if (!_floatValues.contains(name)) {
+		_floatValues[name] = _settings.value(name, defaultValue).toFloat();
+	}
+
+	return _floatValues[name];
 }
 
-void PhGenericSettings::setStringValue(QString name, QString value)
+bool PhGenericSettings::setStringValue(QString name, QString value)
 {
-	_settings.setValue(name, value);
+	if (stringValue(name) != value) {
+		_stringValues[name] = value;
+		_settings.setValue(name, value);
+		return true;
+	}
+	return false;
 }
 
 QString PhGenericSettings::stringValue(QString name, QString defaultValue)
 {
-	return _settings.value(name, defaultValue).toString();
+	if (!_stringValues.contains(name)) {
+		_stringValues[name] = _settings.value(name, defaultValue).toString();
+	}
+
+	return _stringValues[name];
 }
 
-void PhGenericSettings::setStringList(QString name, QStringList list)
+bool PhGenericSettings::setStringList(QString name, QStringList list)
 {
+	_stringListValues[name] = list;
+
 	_settings.remove(name);
 	_settings.beginWriteArray(name);
 	for(int i = 0; i < list.size(); i++) {
@@ -82,43 +139,73 @@ void PhGenericSettings::setStringList(QString name, QStringList list)
 		_settings.setValue("listItem", list.at(i));
 	}
 	_settings.endArray();
+
+	// always return that a change occured. Actually comparing values is overkill.
+	return true;
 }
 
 QStringList PhGenericSettings::stringList(QString name, QStringList defaultValue)
 {
-	QStringList list;
-	int size = _settings.beginReadArray(name);
-	if(size == 0)
-		list = defaultValue;
-	else {
-		for(int i = 0; i < size; i++) {
-			_settings.setArrayIndex(i);
-			list.append(_settings.value("listItem").toString());
+	if (!_stringListValues.contains(name)) {
+		QStringList list;
+		int size = _settings.beginReadArray(name);
+		if(size == 0)
+			list = defaultValue;
+		else {
+			for(int i = 0; i < size; i++) {
+				_settings.setArrayIndex(i);
+				list.append(_settings.value("listItem").toString());
+			}
 		}
-	}
-	_settings.endArray();
+		_settings.endArray();
 
-	return list;
+		_stringListValues[name] = list;
+	}
+
+	return _stringListValues[name];
 }
 
-void PhGenericSettings::setByteArray(QString name, QByteArray array)
+bool PhGenericSettings::setByteArray(QString name, QByteArray array)
 {
-	_settings.setValue(name, array);
+	if (byteArray(name) != array) {
+		_byteArrayValues[name] = array;
+		_settings.setValue(name, array);
+		return true;
+	}
+	return false;
 }
 
 QByteArray PhGenericSettings::byteArray(QString name)
 {
-	return _settings.value(name).toByteArray();
+	if (!_byteArrayValues.contains(name)) {
+		_byteArrayValues[name] = _settings.value(name).toByteArray();
+	}
+
+	return _byteArrayValues[name];
 }
 
-void PhGenericSettings::setHash(QString name, QString key, QVariant value)
+QHash<QString, QVariant> PhGenericSettings::fullHash(QString name)
 {
-	QHash<QString, QVariant> hash = _settings.value(name).toHash();
-	hash[key] = value;
-	_settings.setValue(name, hash);
+	if (!_hashValues.contains(name)) {
+		_hashValues[name] = _settings.value(name).toHash();
+	}
+
+	return _hashValues[name];
+}
+
+bool PhGenericSettings::setHash(QString name, QString key, QVariant value)
+{
+	QHash<QString, QVariant> hash = fullHash(name);
+	if (hash[key] != value) {
+		hash[key] = value;
+		_hashValues[name] = hash;
+		_settings.setValue(name, hash);
+		return true;
+	}
+	return false;
 }
 
 QVariant PhGenericSettings::hash(QString name, QString key)
 {
-	return _settings.value(name).toHash()[key];
+	return fullHash(name)[key];
 }

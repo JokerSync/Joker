@@ -10,112 +10,157 @@
 
 /** Implement the integer setter and getter for a PhGenericSettings */
 #define PH_SETTING_INT(setter, getter) \
+	Q_PROPERTY(int getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(int value) { setIntValue(#getter, value); } \
+	void setter(int value) { if (setIntValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	int getter() {return intValue(#getter); }
 
 /** Implement the integer setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_INT2(setter, getter, defaultValue) \
+	Q_PROPERTY(int getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(int value) { setIntValue(#getter, value); } \
-	void re ## setter() { setIntValue(#getter, defaultValue); } \
+	void setter(int value) { if (setIntValue(#getter, value)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setIntValue(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	int getter() {return intValue(#getter, defaultValue); }
 
 /** Implement the integer setter, getter and alias for a PhGenericSettings */
 #define PH_SETTING_INT3(setter, getter, alias) \
+	Q_PROPERTY(int getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(int value) { setIntValue(#getter, value); } \
+	void setter(int value) { if (setIntValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	int getter() {return intValueWithAlias(#getter, #alias); }
 
 /** Implement the unsigned char setter and getter for a PhGenericSettings */
 #define PH_SETTING_UCHAR(setter, getter) \
+	Q_PROPERTY(unsigned char getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(unsigned char value) { setIntValue(#getter, value); } \
+	void setter(unsigned char value) { if (setIntValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	unsigned char getter() {return intValue(#getter); }
 
 /** Implement the unsigned char setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_UCHAR2(setter, getter, defaultValue) \
+	Q_PROPERTY(unsigned char getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(unsigned char value) { setIntValue(#getter, value); } \
-	void re ## setter() { setIntValue(#getter, defaultValue); } \
+	void setter(unsigned char value) { if (setIntValue(#getter, value)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setIntValue(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	unsigned char getter() {return intValue(#getter, defaultValue); }
 
 /** Implement the bool setter and getter for a PhGenericSettings */
 #define PH_SETTING_BOOL(setter, getter) \
+	Q_PROPERTY(bool getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(bool value) { setBoolValue(#getter, value); } \
+	void setter(bool value) { if (setBoolValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	bool getter() {return boolValue(#getter); }
 
 /** Implement the bool setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_BOOL2(setter, getter, defaultValue) \
+	Q_PROPERTY(bool getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(bool value) { setBoolValue(#getter, value); } \
-	void re ## setter() { setBoolValue(#getter, defaultValue); } \
+	void setter(bool value) { if (setBoolValue(#getter, value)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setBoolValue(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
-	bool getter() {return boolValue(#getter, defaultValue); }
+	bool getter() {return boolValue(#getter, defaultValue); } \
 
 /** Implement the float setter and getter for a PhGenericSettings */
 #define PH_SETTING_FLOAT(setter, getter) \
+	Q_PROPERTY(float getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(float value) { setFloatValue(#getter, value); } \
+	void setter(float value) { if (setFloatValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	float getter() {return floatValue(#getter); }
 
 /** Implement the float setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_FLOAT2(setter, getter, defaultValue) \
+	Q_PROPERTY(float getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(float value) { setFloatValue(#getter, value); } \
-	void re ## setter() { setFloatValue(#getter, defaultValue); } \
+	void setter(float value) { if (setFloatValue(#getter, value)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setFloatValue(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	float getter() {return floatValue(#getter, defaultValue); }
 
 /** Implement the string setter and getter for a PhGenericSettings */
 #define PH_SETTING_STRING(setter, getter) \
+	Q_PROPERTY(QString getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QString value) { setStringValue(#getter, value); } \
+	void setter(QString value) { if (setStringValue(#getter, value)) { emit getter ## Changed(); } } \
 public: \
 	QString getter() {return stringValue(#getter); }
 
 /** Implement the string setter, getter and default value for a PhGenericSettings */
 #define PH_SETTING_STRING2(setter, getter, defaultValue) \
+	Q_PROPERTY(QString getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QString value) { setStringValue(#getter, value); } \
-	void re ## setter() { setStringValue(#getter, defaultValue); } \
+	void setter(QString value) { if (setStringValue(#getter, value)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setStringValue(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	QString getter() {return stringValue(#getter, defaultValue); }
 
 /** Implement the string list setter and getter for a PhGenericSettings */
 #define PH_SETTING_STRINGLIST(setter, getter) \
+	Q_PROPERTY(QStringList getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QStringList list) { setStringList(#getter, list); } \
+	void setter(QStringList list) { if (setStringList(#getter, list)) { emit getter ## Changed(); } } \
 public: \
 	QStringList getter() {return stringList(#getter); }
 
 /** Implement the string list setter and getter qnd default value for a PhGenericSettings */
 #define PH_SETTING_STRINGLIST2(setter, getter, defaultValue) \
+	Q_PROPERTY(QStringList getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QStringList list) { setStringList(#getter, list); } \
-	void re ## setter() { setStringList(#getter, defaultValue); } \
+	void setter(QStringList list) { if (setStringList(#getter, list)) { emit getter ## Changed(); } } \
+	void re ## setter() { if (setStringList(#getter, defaultValue)) { emit getter ## Changed(); } } \
 public: \
 	QStringList getter() {return stringList(#getter, defaultValue); }
 
 /** Implement the byte array setter and getter for a PhGenericSettings */
 #define PH_SETTING_BYTEARRAY(setter, getter) \
+	Q_PROPERTY(QByteArray getter READ getter WRITE setter NOTIFY getter ## Changed) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QByteArray array) { setByteArray(#getter, array); } \
+	void setter(QByteArray array) { if (setByteArray(#getter, array)) { emit getter ## Changed(); } } \
 public: \
 	QByteArray getter() {return byteArray(#getter); }
 
 /** Implement the hash setter and getter for a PhGenericSettings */
+//	Q_PROPERTY does not work here, there is no single-argument setter
 #define PH_SETTING_HASH(setter, getter) \
+Q_SIGNALS: \
+	void getter ## Changed(); \
 public slots: \
-	void setter(QString key, QVariant value) { setHash(#getter, key, value); } \
+	void setter(QString key, QVariant value) { if (setHash(#getter, key, value)) { emit getter ## Changed(); } } \
 public: \
 	QVariant getter(QString key) {return hash(#getter, key); }
 
@@ -149,8 +194,9 @@ protected:
 	 * @brief Set an integer value
 	 * @param name The settings name
 	 * @param value The integer value
+	 * @return Whether the value has changed
 	 */
-	void setIntValue(QString name, int value);
+	bool setIntValue(QString name, int value);
 	/**
 	 * @brief Get an integer value
 	 * @param name The settings name
@@ -162,8 +208,9 @@ protected:
 	 * @brief Set a long long value (64 bit)
 	 * @param name The settings name
 	 * @param value The long long value
+	 * @return Whether the value has changed
 	 */
-	void setLongLongValue(QString name, qlonglong value);
+	bool setLongLongValue(QString name, qlonglong value);
 	/**
 	 * @brief Get a long long value (64 bit)
 	 * @param name The settings name
@@ -184,8 +231,9 @@ protected:
 	 * @brief Set a bool value
 	 * @param name The settings name
 	 * @param value The bool value
+	 * @return Whether the value has changed
 	 */
-	void setBoolValue(QString name, bool value);
+	bool setBoolValue(QString name, bool value);
 	/**
 	 * @brief Get a bool value
 	 * @param name The settings name
@@ -198,8 +246,9 @@ protected:
 	 * @brief Set a float value
 	 * @param name The settings name
 	 * @param value The float value
+	 * @return Whether the value has changed
 	 */
-	void setFloatValue(QString name, float value);
+	bool setFloatValue(QString name, float value);
 	/**
 	 * @brief Get a float value
 	 * @param name The settings name
@@ -211,8 +260,9 @@ protected:
 	 * @brief Set a string value
 	 * @param name The settings name
 	 * @param value The string value
+	 * @return Whether the value has changed
 	 */
-	void setStringValue(QString name, QString value);
+	bool setStringValue(QString name, QString value);
 	/**
 	 * @brief Get a string value
 	 * @param name The settings name
@@ -224,8 +274,9 @@ protected:
 	 * @brief Set a string list
 	 * @param name The settings name
 	 * @param list The string list
+	 * @return Whether the value has changed
 	 */
-	void setStringList(QString name, QStringList list);
+	bool setStringList(QString name, QStringList list);
 	/**
 	 * @brief Get a string list
 	 * @param name The settings name
@@ -238,8 +289,9 @@ protected:
 	 * @brief Set a byte array
 	 * @param name The settings name
 	 * @param array The byte array
+	 * @return Whether the value has changed
 	 */
-	void setByteArray(QString name, QByteArray array);
+	bool setByteArray(QString name, QByteArray array);
 	/**
 	 * @brief Get a byte array
 	 * @param name The settings name
@@ -252,8 +304,9 @@ protected:
 	 * @param name Name of the hash
 	 * @param key Key
 	 * @param value Value
+	 * @return Whether the value has changed
 	 */
-	void setHash(QString name, QString key, QVariant value);
+	bool setHash(QString name, QString key, QVariant value);
 
 	/**
 	 * @brief Get a hash value for a key
@@ -262,11 +315,59 @@ protected:
 	 * @return A value
 	 */
 	QVariant hash(QString name, QString key);
+
+	/**
+	 * @brief Get a full hash (containing multiple values)
+	 * @param name The settings name
+	 * @return The hash
+	 */
+	QHash<QString, QVariant> fullHash(QString name);
+
 protected:
 	/**
 	 * @brief The QSettings object
 	 */
 	QSettings _settings;
+
+	/**
+	 * @brief The cache for int settings.
+	 */
+	QMap<QString, int> _intValues;
+
+	/**
+	 * @brief The cache for long long settings.
+	 */
+	QMap<QString, qlonglong> _longLongValues;
+
+	/**
+	 * @brief The cache for float settings.
+	 */
+	QMap<QString, float> _floatValues;
+
+	/**
+	 * @brief The cache for bool settings.
+	 */
+	QMap<QString, bool> _boolValues;
+
+	/**
+	 * @brief The cache for string settings.
+	 */
+	QMap<QString, QString> _stringValues;
+
+	/**
+	 * @brief The cache for byte array settings.
+	 */
+	QMap<QString, QByteArray> _byteArrayValues;
+
+	/**
+	 * @brief The cache for string list settings.
+	 */
+	QMap<QString, QStringList> _stringListValues;
+
+	/**
+	 * @brief The cache for hash settings.
+	 */
+	QMap<QString, QHash<QString, QVariant> > _hashValues;
 };
 
 #endif // PHGENERICSETTINGS_H

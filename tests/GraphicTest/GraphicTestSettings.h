@@ -9,6 +9,8 @@
 
 class GraphicTestSettings : public PhGenericSettings, public PhWindowSettings, public PhGraphicSettings
 {
+	Q_OBJECT
+
 public:
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)
@@ -28,7 +30,6 @@ public:
 	PH_SETTING_BOOL2(setDisplayImage1, displayImage1, true)
 	PH_SETTING_BOOL2(setDisplayImage2, displayImage2, true)
 	PH_SETTING_BOOL2(setDisplayRects, displayRect, true)
-	PH_SETTING_BOOL2(setDisplayLoops, displayLoops, true)
 	PH_SETTING_BOOL2(setDisplayArrows, displayArrows, true)
 	PH_SETTING_BOOL2(setDisplayDisc, displayDisc, true)
 	PH_SETTING_BOOL2(setDisplayCharacters, displayCharacters, true)

@@ -8,6 +8,8 @@
 
 class TextEditTestSettings : protected PhGenericSettings, public PhDocumentWindowSettings
 {
+	Q_OBJECT
+
 public:
 	// PhWindowSettings
 	PH_SETTING_BOOL(setFullScreen, fullScreen)

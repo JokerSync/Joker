@@ -8,6 +8,8 @@
 
 class WindowSpecSettings : public PhGenericSettings, public PhWindowSettings
 {
+	Q_OBJECT
+
 public:
 	WindowSpecSettings() : PhGenericSettings(true) {
 	}

@@ -95,6 +95,7 @@ PreferencesDialog::PreferencesDialog(JokerSettings *settings, QWidget *parent) :
 	ui->ltcInputPortComboBox->addItems(ltcInputPorts);
 	if(ltcInputPorts.contains(_settings->ltcInputPort()))
 		ui->ltcInputPortComboBox->setCurrentText(_settings->ltcInputPort());
+	ui->ltcTimeCodeTypeComboBox->setCurrentIndex(_settings->ltcReaderTimeCodeType());
 #else
 	ui->ltcRadioButton->setEnabled(false);
 #endif
@@ -208,6 +209,7 @@ void PreferencesDialog::accept()
 #endif
 #ifdef USE_LTC
 	_settings->setLtcInputPort(ui->ltcInputPortComboBox->currentText());
+	_settings->setLtcReaderTimeCodeType(ui->ltcTimeCodeTypeComboBox->currentIndex());
 #endif
 
 #ifdef USE_MIDI

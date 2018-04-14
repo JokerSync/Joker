@@ -9,6 +9,8 @@
  */
 class MidiToolSettings : protected PhGenericSettings
 {
+	Q_OBJECT
+
 public:
 	PH_SETTING_BOOL2(setWriteMTC, writeMTC, true)
 	PH_SETTING_BOOL2(setReadMTC, readMTC, true)

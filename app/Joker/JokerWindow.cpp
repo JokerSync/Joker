@@ -48,7 +48,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_firstDoc(true),
 	_resizingStrip(false),
 	_setCurrentTimeToVideoTimeIn(false),
-	_syncTimeInToDoc(false)
+	_syncTimeInToDoc(false),
+	_timePlayed(settings->timePlayed())
 {
 	// Setting up UI
 	ui->setupUi(this);
@@ -184,6 +185,8 @@ void JokerWindow::closeEvent(QCloseEvent *event)
 		// since closeEvent is called twice
 		// https://bugreports.qt.io/browse/QTBUG-43344
 		_doc->setModified(false);
+
+		_settings->setTimePlayed(_timePlayed);
 	}
 }
 
@@ -223,6 +226,7 @@ void JokerWindow::setupSyncProtocol()
 #endif
 	case PhSynchronizer::LTC:
 #ifdef USE_LTC
+		_ltcReader.setTimeCodeType((PhTimeCodeType)_settings->ltcReaderTimeCodeType());
 		if(_ltcReader.init(_settings->ltcInputPort()))
 			clock = _ltcReader.clock();
 		else {
@@ -312,12 +316,28 @@ bool JokerWindow::openDocument(const QString &fileName)
 
 void JokerWindow::saveDocument(const QString &fileName)
 {
+	// prevent from reloading the document when we are the ones changing it
+	bool updateWatcher;
+	if (_watcher.files().contains(fileName)) {
+		_watcher.removePath(_doc->filePath());
+		updateWatcher = true;
+	}
+
 	if(_doc->exportDetXFile(fileName, currentTime())) {
 		_doc->setModified(false);
 		PhEditableDocumentWindow::saveDocument(fileName);
+
+		if (updateWatcher) {
+			_watcher.addPath(fileName);
+		}
 	}
-	else
+	else {
+		if (updateWatcher) {
+			_watcher.addPath(fileName);
+		}
+
 		QMessageBox::critical(this, "", QString(tr("Unable to save %1")).arg(fileName));
+	}
 }
 
 void JokerWindow::onExternalChange(const QString &path)
@@ -937,7 +957,7 @@ bool JokerWindow::openVideoFile(QString videoFile)
 void JokerWindow::timeCounter(PhTime elapsedTime)
 {
 	if(currentRate() == 1 && (PhSynchronizer::SyncType)_settings->synchroProtocol() != PhSynchronizer::NoSync) {
-		_settings->setTimePlayed(_settings->timePlayed() + elapsedTime);
+		_timePlayed += elapsedTime;
 	}
 }
 
@@ -981,7 +1001,7 @@ void JokerWindow::on_actionAbout_triggered()
 	hideMediaPanel();
 
 	AboutDialog dlg;
-	dlg.setTimePlayed(_settings->timePlayed());
+	dlg.setTimePlayed(_timePlayed);
 	dlg.exec();
 
 	showMediaPanel();
@@ -994,6 +1014,7 @@ void JokerWindow::on_actionPreferences_triggered()
 	int oldSynchroProtocol = _settings->synchroProtocol();
 #ifdef USE_LTC
 	QString oldLtcInputPort = _settings->ltcInputPort();
+	PhTimeCodeType oldLtcTimeCodeType = (PhTimeCodeType)_settings->ltcReaderTimeCodeType();
 #endif // USE_LTC
 #ifdef USE_MIDI
 	QString oldMtcInputPort = _settings->mtcInputPort();
@@ -1007,7 +1028,8 @@ void JokerWindow::on_actionPreferences_triggered()
 	if(dlg.exec() == QDialog::Accepted) {
 		if((oldSynchroProtocol != _settings->synchroProtocol())
 #ifdef USE_LTC
-		   || (oldLtcInputPort  != _settings->ltcInputPort())
+		   || (oldLtcInputPort != _settings->ltcInputPort())
+		   || (oldLtcTimeCodeType != (PhTimeCodeType)_settings->ltcReaderTimeCodeType())
 #endif // USE_LTC
 #ifdef USE_MIDI
 		   || (oldMtcInputPort != _settings->mtcInputPort())

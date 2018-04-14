@@ -13,6 +13,8 @@ class GraphicStripTestSettings : protected PhGenericSettings,
 	public PhDocumentWindowSettings
 
 {
+	Q_OBJECT
+
 public:
 	PH_SETTING_INT(setScreenDelay, screenDelay)
 
