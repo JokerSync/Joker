@@ -49,11 +49,15 @@ public:
 	PhTimeCodeType timeCodeType();
 
 public slots:
+	/**
+	 * @brief Set the LTC tiemcode type
+	 * @param tcType the new timecode type
+	 */
 	void setTimeCodeType(PhTimeCodeType tcType);
 
 signals:
 	/**
-	 * @brief Emit a signal when the timecodeType change
+	 * @brief Emit a signal when the timecodeType changes
 	 * @param tcType the new timecode type
 	 */
 	void timeCodeTypeChanged(PhTimeCodeType tcType);
