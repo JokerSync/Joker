@@ -7,12 +7,8 @@
 #define FEEDBACKDIALOG_H
 
 #include <QDialog>
-#include <QNetworkReply>
 
 #include "PhTools/PhDebug.h"
-
-#include "PhFeedbackSettings.h"
-
 
 
 namespace Ui {
@@ -22,9 +18,9 @@ class PhFeedbackDialog;
 /**
  * @brief The FeedbackDialog class
  *
- * This class allow the user to send crash
+ * This class guides the user to send crash
  * report, logs and informations about the
- * machine configuration.
+ * machine configuration to the GitHub issues.
  */
 class PhFeedbackDialog : public QDialog
 {
@@ -32,28 +28,14 @@ class PhFeedbackDialog : public QDialog
 
 public:
 	/**
-	 * @brief FeedbackDialog
-	 *
-	 * Default constructor of the feedback module,
-	 * You MUST provide settings to make it work
-	 * normally.
-	 *
-	 * @param settings
+	 * @brief Feedback dialog
 	 * @param parent
 	 */
-	explicit PhFeedbackDialog(PhFeedbackSettings *settings, QWidget *parent = 0);
+	explicit PhFeedbackDialog(QWidget *parent = 0);
 	~PhFeedbackDialog();
-
-private slots:
-	void on_buttonBox_accepted();
-
-	void on_buttonBox_rejected();
-
-	void onSyncRequestFinished(QNetworkReply*reply);
 
 private:
 	Ui::PhFeedbackDialog *ui;
-	PhFeedbackSettings *_settings;
 };
 
 #endif // FEEDBACKDIALOG_H

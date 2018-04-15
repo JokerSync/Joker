@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 	a.installTranslator(&translator);
 
 	if(!settings.exitedNormaly()) {
-		PhFeedbackDialog dlg(&settings);
+		PhFeedbackDialog dlg;
 		dlg.exec();
 	}
 

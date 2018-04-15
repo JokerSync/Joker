@@ -1199,7 +1199,7 @@ void JokerWindow::on_actionClose_video_triggered()
 void JokerWindow::on_actionSend_feedback_triggered()
 {
 	hideMediaPanel();
-	PhFeedbackDialog dlg(_settings, this);
+	PhFeedbackDialog dlg(this);
 	dlg.exec();
 	showMediaPanel();
 }
