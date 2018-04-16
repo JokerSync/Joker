@@ -138,7 +138,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	this->connect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
 
-	_videoLogo.setFilename(":/Joker/phonations");
+	_videoLogo.setFilename(":/Joker/joker_gray");
 	_videoLogo.setTransparent(true);
 
 #ifdef USE_VIDEO

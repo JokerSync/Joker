@@ -43,7 +43,7 @@ GraphicTestWindow::GraphicTestWindow(GraphicTestSettings *settings) :
 
 	PHDEBUG << "Initialize _images";
 
-	QString imageFile1 = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "phonations.png";
+	QString imageFile1 = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "joker_gray.png";
 	_image1.setFilename(imageFile1);
 
 	QString imageFile2 = QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "fa-play_16_0_ffffff_none.png";
