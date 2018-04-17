@@ -57,9 +57,10 @@ INCLUDEPATH += $$TOP_ROOT/libs
 RESOURCES_PATH = ./
 DEFINES += PATH_TO_RESSOURCES=\\\"\\\"
 
+CS = $$escape_expand(\\n\\t)
+
 # Windows specific
 win32 {
-	CS = &&
 	CONFIG(release, debug|release) {
 		RESOURCES_PATH = $$shell_path(./release/)
 	}
@@ -81,7 +82,6 @@ mac {
 
 # MacOS and linux specific
 unix {
-	CS = ;
 	INCLUDEPATH += /usr/local/include
 	LIBS += -L/usr/local/lib
 }

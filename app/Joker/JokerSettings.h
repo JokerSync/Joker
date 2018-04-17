@@ -9,7 +9,6 @@
 #include "PhSync/PhTimeCode.h"
 #include "PhGraphicStrip/PhGraphicStripSettings.h"
 #include "PhCommonUI/PhDocumentWindowSettings.h"
-#include "PhCommonUI/PhFeedbackSettings.h"
 #ifdef USE_VIDEO
 #include "PhVideo/PhVideoSettings.h"
 #endif
@@ -26,7 +25,6 @@
 class JokerSettings : public PhGenericSettings,
 	public PhGraphicStripSettings,
 	public PhDocumentWindowSettings,
-	public PhFeedbackSettings,
 #ifdef USE_VIDEO
 	public PhVideoSettings,
 #endif
@@ -53,13 +51,6 @@ public:
 	PH_SETTING_INT2(setMaxRecentDocument, maxRecentDocument, 10)
 	PH_SETTING_BOOL2(setAutoReload, autoReload, true)
 	PH_SETTING_HASH(setBookmark, bookmark)
-
-	// PhFeedbackSettings
-	QString settingsFileName() {
-		return _settings.fileName();
-	}
-	PH_SETTING_STRINGLIST(setEmailList, emailList)
-
 
 	PH_SETTING_INT3(setScreenDelay, screenDelay, delay)
 

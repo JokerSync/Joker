@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/Joker">
-        <file alias="phonations">../../data/img/phonations.png</file>
+        <file alias="joker_gray">../../data/img/joker_gray.png</file>
     </qresource>
 </RCC>

@@ -48,7 +48,6 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "{#MyAppSrc}"; DestDir: "{app}"; Flags: ignoreversion
 
 Source: "{#PWD}\release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#PWD}\release\bearer\*.dll"; DestDir: "{app}\bearer"; Flags: ignoreversion
 Source: "{#PWD}\release\iconengines\*.dll"; DestDir: "{app}\iconengines"; Flags: ignoreversion
 Source: "{#PWD}\release\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
 Source: "{#PWD}\release\platforms\*.dll"; DestDir: "{app}\platforms"; Flags: ignoreversion

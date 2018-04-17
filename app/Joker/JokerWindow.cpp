@@ -138,7 +138,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 	this->connect(ui->videoStripView, &PhGraphicView::paint, this, &JokerWindow::onPaint);
 
-	_videoLogo.setFilename(":/Joker/phonations");
+	_videoLogo.setFilename(":/Joker/joker_gray");
 	_videoLogo.setTransparent(true);
 
 #ifdef USE_VIDEO
@@ -1199,7 +1199,7 @@ void JokerWindow::on_actionClose_video_triggered()
 void JokerWindow::on_actionSend_feedback_triggered()
 {
 	hideMediaPanel();
-	PhFeedbackDialog dlg(_settings, this);
+	PhFeedbackDialog dlg(this);
 	dlg.exec();
 	showMediaPanel();
 }

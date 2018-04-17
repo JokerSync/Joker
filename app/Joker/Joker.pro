@@ -92,7 +92,6 @@ win32 {
 }
 
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/joker.png) $${RESOURCES_PATH} $${CS}
-QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/phonationsBlack.png) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/motif-240.png) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/img/motif-240_black.png) $${RESOURCES_PATH} $${CS}
 QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($${TOP_ROOT}/data/fonts/Cappella-Regular.ttf) $${RESOURCES_PATH} $${CS}
@@ -107,7 +106,7 @@ TRANSLATIONS =	\
 	it_IT.ts \
 	pt_PT.ts \
 
-QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}/fr_FR.qm $${CS}
+QMAKE_POST_LINK += lrelease $${_PRO_FILE_PWD_}/fr_FR.ts -qm $${RESOURCES_PATH}fr_FR.qm $${CS}
 
 QMAKE_POST_LINK += echo "Translation ok" $${CS}
 PH_DEPLOY_LOCATION = $$(JOKER_RELEASE_PATH)
@@ -115,7 +114,7 @@ include($$TOP_ROOT/common/deploy.pri)
 
 cache()
 
-QMAKE_POST_LINK += echo "Joker build ok"
+QMAKE_POST_LINK += echo "Joker build ok" $${CS}
 
 RESOURCES += \
 	Joker.qrc

@@ -53,6 +53,6 @@ void FormTestWindow::on_actionDocumentation_triggered()
 
 void FormTestWindow::on_pushButton_clicked()
 {
-	PhFeedbackDialog dlg(_settings);
+	PhFeedbackDialog dlg;
 	dlg.exec();
 }

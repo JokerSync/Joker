@@ -18,7 +18,6 @@ HEADERS += \
     $$PWD/PhEditableDocumentWindow.h \
     $$PWD/PhLockableSpinBox.h \
 	$$PWD/PhFeedbackDialog.h \
-	$$PWD/PhFeedbackSettings.h \
     $$PWD/PhDialogButtonBox.h \
 	$$PWD/PhHelpMenu.h
 SOURCES += \
