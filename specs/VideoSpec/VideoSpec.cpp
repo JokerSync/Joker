@@ -31,10 +31,11 @@ go_bandit([](){
 		PhTime offset;
 
 		before_each([&](){
-			PhDebug::setLogMask(PHDEBUG_SPEC_MASK | (1 << 9)
+            PhDebug::setLogMask(0xFFFFFFFF);
+//                    PHDEBUG_SPEC_MASK | (1 << 9)
 //								| (1 << 24)
 //								| 1
-								);
+//								);
 
 			view = new PhGraphicView(64, 64);
 			settings = new VideoSpecSettings();
