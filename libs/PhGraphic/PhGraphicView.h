@@ -86,7 +86,7 @@ public:
 	 * @param height Force the output height
 	 * @return The distance between both image expressed in squared RGB difference
 	 */
-	int compare(QString imageFile, int threshold = 0, int width = 0, int height = 0);
+	int64_t compare(QString imageFile, int threshold = 0, int width = 0, int height = 0);
 signals:
 	/**
 	 * @brief emit a signal just before the paint

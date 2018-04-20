@@ -47,7 +47,7 @@ go_bandit([](){
 				unexistingResultFile.remove();
 			}
 			AssertThat(unexistingResultFile.exists(), IsFalse());
-			AssertThat(view.compare("compareTest.unexisting.bmp"), Equals(std::numeric_limits<int>::max()));
+            AssertThat(view.compare("compareTest.unexisting.bmp"), Equals(-10));
 			AssertThat(unexistingResultFile.exists(), IsTrue());
 			unexistingResultFile.remove();
 
@@ -56,7 +56,7 @@ go_bandit([](){
 				badSizeResultFile.remove();
 			}
 			AssertThat(badSizeResultFile.exists(), IsFalse());
-			AssertThat(view.compare("compareTest.64x32.bmp"), Equals(std::numeric_limits<int>::max()));
+            AssertThat(view.compare("compareTest.64x32.bmp"), Equals(-20));
 			AssertThat(badSizeResultFile.exists(), IsTrue());
 			badSizeResultFile.remove();
 
@@ -80,12 +80,13 @@ go_bandit([](){
 		it("compare big difference", [&](){
 			PhGraphicView view(128, 128);
 
+            // an image where the pixel difference is more than the maximum of a 32 bits integer
 			QFile file("compareTest.bigdiff.result.bmp");
 			if(file.exists()) {
 				file.remove();
 			}
 			AssertThat(file.exists(), IsFalse());
-			AssertThat(view.compare("compareTest.bigdiff.bmp"), Equals(std::numeric_limits<int>::max()));
+            AssertThat(view.compare("compareTest.bigdiff.bmp"), Equals(3196108800));
 
 			AssertThat(file.exists(), IsTrue());
 			file.remove();
