@@ -999,7 +999,9 @@ void JokerWindow::on_actionClose_video_triggered()
 void JokerWindow::on_actionSend_feedback_triggered()
 {
 	hideMediaPanel();
-	PhFeedbackDialog dlg(this);
+
+	// do not pass the parent here, it causes a sort of focus loop between the dialog and the parent
+	PhFeedbackDialog dlg;
 	dlg.exec();
 	//showMediaPanel();
 }
