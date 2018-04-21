@@ -30,7 +30,6 @@ matrix:
     script:
     - make
     - make quickdmg
-    - ls -l .
     - du -sh *.app
   - env:
     - QTVER=551
