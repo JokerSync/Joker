@@ -4,6 +4,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QThread>
 #include "PhVideoBuffer.h"
 
 #include "PhTools/PhDebug.h"
@@ -40,8 +41,16 @@ void PhVideoBuffer::reuse(int size, int width, int height, int linesize, QVideoF
 			delete _videoFrame;
 		}
 
-		PHDBG(24) << "PhVideoBuffer alloc" << size;
-		_videoFrame = new QVideoFrame(size, QSize(width, height), linesize, format);
+		PHDBG(24) << "PhVideoBuffer alloc" << size << width << height << linesize << format;
+		try {
+		  _videoFrame = new QVideoFrame(size, QSize(width, height), linesize, format);
+		}
+		catch (const std::bad_alloc&) {
+			PHDEBUG << "Failed to allocate, Joker will crash after 120 seconds (to have time for a dump)";
+			QThread::sleep(120);
+			std::abort();
+		}
+
 		_bits = size;
 		_bytesPerLine = linesize;
 	}
