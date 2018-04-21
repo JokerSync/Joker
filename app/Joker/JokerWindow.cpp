@@ -76,7 +76,7 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 	_context->setContextProperty("doc", _doc);
 	_context->setContextProperty("jokerWindow", this);
 	_context->setContextProperty("selectedPeopleModel", &_selectedPeopleModel);
-	_context->setContextProperty("videoLogoUrl", QUrl::fromLocalFile(QCoreApplication::applicationDirPath() + PATH_TO_RESSOURCES + "/joker_gray.png"));
+	_context->setContextProperty("videoLogoUrl", "/Joker/joker_gray");
 	_context->setContextProperty("stripBackgroundUrl", QUrl::fromLocalFile(_settings->backgroundImageLight()));
 	_context->setContextProperty("videoSource", &_videoSurface);
 	_context->setContextProperty("pipVideoSource", &_pipVideoSurface);
