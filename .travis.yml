@@ -46,7 +46,11 @@ matrix:
     - pyenv rehash
     script:
     - make
-    - travis_wait "./AllSpecs --reporter=spec"
+    # Output something every 10 minutes or Travis kills the job
+    - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
+    - ./AllSpecs --reporter=spec
+    # Killing background sleep loop
+    - kill %1
     after_success: coveralls -E .+/moc_.+ -E .+/ui_.+ -E .+\.app -E .+/tests/.+ -E
       .+/app/.+ -E .+/specs/.+
   - env:

@@ -54,7 +54,11 @@ void PhVideoDecoder::open(QString fileName)
 	_currentFrame = PHFRAMEMIN;
 	_seekFrame = PHFRAMEMIN;
 
-	if(avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL) < 0) {
+	int openErrorCode = avformat_open_input(&_formatContext, fileName.toStdString().c_str(), NULL, NULL);
+	if(openErrorCode < 0) {
+		char errorString[AV_ERROR_MAX_STRING_SIZE];
+		av_strerror(openErrorCode, errorString, AV_ERROR_MAX_STRING_SIZE);
+		PHDEBUG << errorString;
 		emit openFailed();
 		close();
 		return;
@@ -194,10 +198,10 @@ void PhVideoDecoder::close()
 PhFrame PhVideoDecoder::clip(PhFrame frame)
 {
 	// clip to video boundaries
-	if(frame < 0)
-		frame = 0;
 	if (frame >= this->frameLength())
 		frame = this->frameLength() - 1;
+	if(frame < 0)
+		frame = 0;
 
 	return frame;
 }
@@ -280,6 +284,10 @@ void PhVideoDecoder::stop()
 
 bool PhVideoDecoder::canDecode()
 {
+	if (!ready()) {
+		return false;
+	}
+
 	if (_stripFrame == PHFRAMEMIN) {
 		return false;
 	}

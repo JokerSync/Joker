@@ -3,6 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QMainWindow>
 #include <QSignalSpy>
 
 #include "PhTools/PhDebug.h"
@@ -22,6 +23,7 @@ using namespace bandit;
 
 go_bandit([](){
 	describe("engine", [](){
+        QMainWindow *parent;
 		PhGraphicView *view;
 		VideoSpecSettings *settings;
 		PhVideoEngine *engine;
@@ -31,22 +33,23 @@ go_bandit([](){
 		PhTime offset;
 
 		before_each([&](){
-			PhDebug::setLogMask(PHDEBUG_SPEC_MASK | (1 << 9)
+            PhDebug::setLogMask(0xFFFFFFFF);
+//                    PHDEBUG_SPEC_MASK | (1 << 9)
 //								| (1 << 24)
 //								| 1
-								);
+//								);
 
-			view = new PhGraphicView(64, 64);
+            // the size of the main window may be enforced by the window manager,
+            // so use a main window of arbitrary size, containing a PhGraphicView of controlled size
+            parent = new QMainWindow();
+            view = new PhGraphicView(64, 64, parent);
 			settings = new VideoSpecSettings();
 			engine = new PhVideoEngine(settings);
 			openSpy = new QSignalSpy(engine, &PhVideoEngine::opened);
 			decodeSpy = new QSignalSpy(engine, &PhVideoEngine::newFrameDecoded);
 
-			// make sure the 64x64 window size will be preserved (required on Windows)
-			view->setWindowFlags(Qt::FramelessWindowHint);
-
 			// the widget needs to be shown for paint signals to be received (at least on Windows)
-			view->show();
+            parent->show();
 
 			// OpenGL initialization
 			view->renderPixmap(64, 64);
@@ -69,6 +72,7 @@ go_bandit([](){
 			delete engine;
 			delete settings;
 			delete view;
+            delete parent;
 		});
 
 		it("is empty", [&](){
@@ -103,6 +107,8 @@ go_bandit([](){
 			});
 
 			it("go_to_01", [&](){
+                AssertThat(view->width(), Equals(64));
+                AssertThat(view->height(), Equals(64));
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setFrame(20, PhTimeCodeType25);
@@ -143,6 +149,8 @@ go_bandit([](){
 			});
 
 			it("go_to_02", [&](){
+                AssertThat(view->width(), Equals(64));
+                AssertThat(view->height(), Equals(64));
 				engine->clock()->setFrame(100, PhTimeCodeType25);
 
 				QTest::qWait(FRAME_WAIT_TIME);
@@ -182,11 +190,16 @@ go_bandit([](){
 
 					QTest::qWait(FRAME_WAIT_TIME);
 					QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
+
+                    AssertThat(view->width(), Equals(64));
+                    AssertThat(view->height(), Equals(64));
 					AssertThat(view->compare(name), Equals(0));
 				}
 			});
 
 			it("go to interframe", [&]() {
+                AssertThat(view->width(), Equals(64));
+                AssertThat(view->height(), Equals(64));
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setTime(960);
@@ -201,6 +214,8 @@ go_bandit([](){
 			});
 
 			it("play", [&](){
+                AssertThat(view->width(), Equals(64));
+                AssertThat(view->height(), Equals(64));
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setRate(1);
@@ -239,6 +254,8 @@ go_bandit([](){
 			});
 
 			it("deinterlace", [&](){
+                AssertThat(view->width(), Equals(64));
+                AssertThat(view->height(), Equals(64));
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				//Change mode to deinterlaced
