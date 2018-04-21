@@ -48,7 +48,7 @@ CONFIG(release, debug|release) {
 
 			# Target for quick dmg generation
 			quickdmg.commands += echo "Deploying quick dmg for $${TARGET}" $${CS}
-			quickdmg.commands += macdeployqt $${TARGET}.app -dmg -verbose=3 $${CS}
+			quickdmg.commands += macdeployqt $${TARGET}.app -dmg -verbose=2 $${CS}
 			quickdmg.commands += mv $${TARGET}.dmg $${PH_DEPLOY_TARGET}.dmg $${CS}
 
 			# Target for pretty DMG generation
