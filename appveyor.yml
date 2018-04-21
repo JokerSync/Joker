@@ -31,6 +31,10 @@ install:
   - 7z x libltc-1.1.4.tar
   - set LTC_PATH=%CD%\libltc-1.1.4\src
 
+  # prepare a commit descriptor and the source branch to define the release name
+  - ps: $env:COMMIT_DESCRIPTOR = git describe --tags
+  - ps: if(Test-Path env:APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH) { $env:BRANCH = $env:APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH } else { $env:BRANCH = $env:APPVEYOR_REPO_BRANCH }
+
 build_script:
   - qmake app/Joker/Joker.pro
   - mingw32-make -j 8
@@ -38,13 +42,14 @@ build_script:
   - dir
 
 artifacts:
-  - path: Joker_v*.exe
+  - path: Joker_*.exe
 deploy:
   provider: GitHub
   auth_token:
     secure: Kg4Co6bJ5WJmeM0Gw33qbWylubqcGQga0kkGmVScP8XNzfxYUsLUAA4g5qO4Htjo
   artifact: /Joker_v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.exe/
-  draft: true
+  draft: true # needs manual publishing
   prerelease: false
+  release: "Joker $(COMMIT_DESCRIPTOR) $(BRANCH)"
   on:
-    branch: master
+    branch: master # unlike Travis, it is possible to retrieve the build artefacts from AppVeyor web interface, so publishing from master only is fine
