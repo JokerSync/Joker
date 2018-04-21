@@ -104,6 +104,8 @@ go_bandit([](){
 			});
 
 			it("go_to_01", [&](){
+                AssertThat(view->width(), Equals(64));
+                AssertThat(view->height(), Equals(64));
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setFrame(20, PhTimeCodeType25);
@@ -144,6 +146,8 @@ go_bandit([](){
 			});
 
 			it("go_to_02", [&](){
+                AssertThat(view->width(), Equals(64));
+                AssertThat(view->height(), Equals(64));
 				engine->clock()->setFrame(100, PhTimeCodeType25);
 
 				QTest::qWait(FRAME_WAIT_TIME);
@@ -183,11 +187,16 @@ go_bandit([](){
 
 					QTest::qWait(FRAME_WAIT_TIME);
 					QString name = QString("interlace_%1.bmp").arg(frame, 3, 10, QChar('0'));
+
+                    AssertThat(view->width(), Equals(64));
+                    AssertThat(view->height(), Equals(64));
 					AssertThat(view->compare(name), Equals(0));
 				}
 			});
 
 			it("go to interframe", [&]() {
+                AssertThat(view->width(), Equals(64));
+                AssertThat(view->height(), Equals(64));
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setTime(960);
@@ -202,6 +211,8 @@ go_bandit([](){
 			});
 
 			it("play", [&](){
+                AssertThat(view->width(), Equals(64));
+                AssertThat(view->height(), Equals(64));
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				engine->clock()->setRate(1);
@@ -240,6 +251,8 @@ go_bandit([](){
 			});
 
 			it("deinterlace", [&](){
+                AssertThat(view->width(), Equals(64));
+                AssertThat(view->height(), Equals(64));
 				AssertThat(view->compare("interlace_000.bmp"), Equals(0));
 
 				//Change mode to deinterlaced
