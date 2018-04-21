@@ -3,6 +3,7 @@
  * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
+#include <QMainWindow>
 #include <QSignalSpy>
 
 #include "PhTools/PhDebug.h"
@@ -22,6 +23,7 @@ using namespace bandit;
 
 go_bandit([](){
 	describe("engine", [](){
+        QMainWindow *parent;
 		PhGraphicView *view;
 		VideoSpecSettings *settings;
 		PhVideoEngine *engine;
@@ -37,17 +39,17 @@ go_bandit([](){
 //								| 1
 //								);
 
-			view = new PhGraphicView(64, 64);
+            // the size of the main window may be enforced by the window manager,
+            // so use a main window of arbitrary size, containing a PhGraphicView of controlled size
+            parent = new QMainWindow();
+            view = new PhGraphicView(64, 64, parent);
 			settings = new VideoSpecSettings();
 			engine = new PhVideoEngine(settings);
 			openSpy = new QSignalSpy(engine, &PhVideoEngine::opened);
 			decodeSpy = new QSignalSpy(engine, &PhVideoEngine::newFrameDecoded);
 
-			// make sure the 64x64 window size will be preserved (required on Windows)
-			view->setWindowFlags(Qt::FramelessWindowHint);
-
 			// the widget needs to be shown for paint signals to be received (at least on Windows)
-			view->show();
+            parent->show();
 
 			// OpenGL initialization
 			view->renderPixmap(64, 64);
@@ -70,6 +72,7 @@ go_bandit([](){
 			delete engine;
 			delete settings;
 			delete view;
+            delete parent;
 		});
 
 		it("is empty", [&](){
