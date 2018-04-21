@@ -33,7 +33,7 @@ install:
 
   # prepare a commit descriptor and the source branch to define the release name
   - ps: $env:COMMIT_DESCRIPTOR = git describe --tags
-  - ps: if(Test-Path $env:APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH) { $env:BRANCH = $env:APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH } else { $env:BRANCH = $env:APPVEYOR_REPO_BRANCH }
+  - ps: if(Test-Path env:APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH) { $env:BRANCH = $env:APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH } else { $env:BRANCH = $env:APPVEYOR_REPO_BRANCH }
 
 build_script:
   - qmake app/Joker/Joker.pro
