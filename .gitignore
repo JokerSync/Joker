@@ -36,3 +36,6 @@ out.html
 payload.json
 
 .qmake.stash
+
+# build folders
+build-*
