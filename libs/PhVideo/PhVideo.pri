@@ -29,7 +29,7 @@ win32{
 	}
 
 	INCLUDEPATH += $$(FFMPEG_DEV_PATH)\include
-	LIBS += -L$$(FFMPEG_DEV_PATH)\lib -lavformat -lavcodec -lavutil -lswscale -liconv
+    LIBS += -L$$(FFMPEG_DEV_PATH)\lib -lavformat -lavcodec -lavutil -lswscale
 
 	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(FFMPEG_SHARED_PATH)/bin/*.dll) $${RESOURCES_PATH} $${CS}
 }
