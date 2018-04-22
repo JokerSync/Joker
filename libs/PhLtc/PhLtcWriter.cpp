@@ -14,7 +14,7 @@ PhLtcWriter::PhLtcWriter(PhTimeCodeType tcType) :
 	_encoder(NULL)
 {
 	_encoder = ltc_encoder_create(1, 1, LTC_TV_625_50, LTC_USE_DATE);
-#warning /// @todo fix this in the settings
+	// TODO fix this in the settings
 	switch (tcType) {
 	case PhTimeCodeType25:
 		ltc_encoder_set_bufsize(_encoder, 48000, 25.0);

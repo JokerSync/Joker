@@ -178,7 +178,7 @@ go_bandit([](){
 
 			QTest::mouseRelease(&tcEdit, Qt::LeftButton, Qt::NoModifier, QPoint(x, 200));
 
-#warning /// @todo do more mouse test
+			// TODO do more mouse test
 		});
 	});
 });

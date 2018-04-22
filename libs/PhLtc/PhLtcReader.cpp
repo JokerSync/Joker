@@ -17,7 +17,7 @@ PhLtcReader::PhLtcReader(PhLtcReaderSettings *settings) :
 	_oldLastFrameDigit(0),
 	_badTimeCodeGapCounter(0)
 {
-#warning /// @todo autodetect tc type
+	// TODO autodetect tc type
 	_decoder = ltc_decoder_create(1920, 1920 * 2);
 	PHDBG(21) << "LTC Reader created";
 }

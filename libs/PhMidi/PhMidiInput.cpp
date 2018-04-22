@@ -145,7 +145,7 @@ void PhMidiInput::onMessage(std::vector<unsigned char> *message)
 				PHERR << "Bad SysEx message size:" << message->size() << "/" << messageStr;
 			else {
 				unsigned char manufactorId = message->at(1);
-#warning /// @todo Handle midi channel
+				// TODO Handle midi channel
 //				unsigned char channel = message->at(2);
 				unsigned char type = message->at(3);
 				if(manufactorId == 0x7F) {

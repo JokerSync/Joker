@@ -41,12 +41,12 @@ bool PhAudioOutput::init(QString deviceName)
 		PHDBG(0) << "No output device";
 		return false;
 	}
-	if(deviceName.length() and !deviceFound) {
+	if(deviceName.length() && !deviceFound) {
 		PHDBG(0) << "Desired output not found :" << deviceName;
 		return false;
 	}
 
-#warning /// @todo use the settings for sample rate and frame per buffer
+	// TODO use the settings for sample rate and frame per buffer
 	PaError err = Pa_OpenStream(&_stream, NULL, &streamParameters, 48000, 1920, paNoFlag, audioCallback, this);
 
 	if(err != paNoError) {

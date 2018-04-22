@@ -380,7 +380,7 @@ go_bandit([](){
 			AssertThat(t2s(mtcReader.clock()->time(), PhTimeCodeType25), Equals("10:04:00:04"));
 
 			// Stop sending quarter frame MTC message should stop the reader after one frame:
-#warning /// @todo QThread::msleep block the pause detector timer and QTest::qWait crashes...
+			// TODO QThread::msleep block the pause detector timer and QTest::qWait crashes...
 			//	QThread::msleep(30);
 			//	AssertThat(mtcReader.clock()->rate(), EqualsWithDelta(1, 0.0001f));
 			//	QThread::msleep(200);

@@ -32,7 +32,7 @@ void VideoStripSynchronizer::onVideoTimeChanged(PhTime time)
 {
 	if(_stripClock->time() != time)
 		PHDEBUG << "error :" << _stripClock->time() << time;
-#warning TODO handle time difference error
+	// TODO handle time difference error
 }
 
 void VideoStripSynchronizer::onVideoRateChanged(PhRate rate)

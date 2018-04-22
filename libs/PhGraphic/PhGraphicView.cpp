@@ -181,7 +181,7 @@ void PhGraphicView::onRefresh()
 
 	// Note: the update duration may not be interesting at all, since it only *schedules*
 	// the paint request, but does not repaint immediately
-	#warning /// @todo measure time between two updates instead of update time
+	// TODO measure time between two updates instead of update time
 	// the time between two updates may be more significant.
 	_lastUpdateDuration = t.elapsed();
 	if(_lastUpdateDuration > _maxUpdateDuration)

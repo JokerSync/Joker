@@ -40,7 +40,7 @@ void SonyStripSynchronizer::onStripTimeChanged(PhTime time)
 	if(!_settingStripTime) {
 		if(qAbs(_sonyClock->time() - time) > 1000) {
 			PHDEBUG << "error :" << _sonyClock->time() - time;
-	#warning TODO handle frame difference error
+			// TODO handle frame difference error
 			_settingSonyTime = true;
 			_sonyClock->setTime(time);
 			_settingSonyTime = false;

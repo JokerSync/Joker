@@ -23,7 +23,7 @@ PhDocumentWindow::PhDocumentWindow(PhDocumentWindowSettings *settings)
 
 void PhDocumentWindow::processArg(int argc, char *argv[])
 {
-#warning /// @todo move to PhApplication
+	// TODO move to PhApplication
 	for(int i = 1; i < argc; i++) {
 		if(QFile::exists(argv[i])) {
 			PHDEBUG << "Using document from the command line:" << argv[i];

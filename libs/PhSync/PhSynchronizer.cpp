@@ -130,7 +130,7 @@ void PhSynchronizer::onStripTimeChanged(PhTime time)
 				// Apply precise correction.
 				// We use a 2-frame error margin, which is consistent with LTC needs
 				// We don't change sony clock because this would desynchronize the sony master.
-#warning /// @todo Make the error a settings
+				// TODO Make the error a settings
 				if(qAbs(time - _syncClock->time()) > 2*PhTimeCode::timePerFrame(PhTimeCodeType24)) {
 					PHDEBUG << "correct :" << _stripClock->time() << _syncClock->time();
 					_stripClock->setTime(_syncClock->time());

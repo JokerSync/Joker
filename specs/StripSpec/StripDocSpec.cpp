@@ -71,7 +71,7 @@ go_bandit([](){
 				AssertThat(doc.openStripFile("empty_meta.joker"), IsTrue());
 			});
 
-			#warning /// @todo Test video frame rate
+			// TODO Test video frame rate
 
 			it("open and save with detx", [&](){
 				AssertThat(doc.openStripFile("test01.joker"), IsTrue());
@@ -450,7 +450,7 @@ go_bandit([](){
 				AssertThat(t2s(doc.texts()[2]->timeOut(), PhTimeCodeType25), Equals("00:00:02:03"));
 
 				// Detect test
-				//#warning TODO more test on detect
+				// TODO more test on detect
 				AssertThat(doc.detects().count(), Equals(4));
 			});
 
@@ -459,7 +459,7 @@ go_bandit([](){
 				AssertThat(doc.importMosFile("test02.mos"), IsTrue());
 
 				AssertThat(doc.videoFilePath(), Equals("C:\\Users\\Matthhou\\Desktop\\Burn Notice\\710\\BurnNotice_BCI710_VOVI.mov"));
-#warning TODO Matthias told me that the timestamp was in fact 00:58:00:00...
+				// TODO Matthias told me that the timestamp was in fact 00:58:00:00...
 				AssertThat(doc.videoTimeCodeType(), Equals(PhTimeCodeType25));
 				AssertThat(t2s(doc.videoTimeIn(), PhTimeCodeType25), Equals("00:58:24:00"));
 
@@ -570,7 +570,7 @@ go_bandit([](){
 
 				// Detect test
 				AssertThat(doc.detects().count(), Equals(24));
-				//#warning TODO more test on detect
+				// TODO more test on detect
 			});
 
 			it("import_test04", [&]() {
@@ -653,7 +653,7 @@ go_bandit([](){
 					AssertThat(doc.texts()[0]->y(), Equals(0.36f));
 					AssertThat(doc.texts()[0]->height(), EqualsWithDelta(0.22666667f, 0.00001f));
 
-#warning /// @todo should be the same than syn6
+					// TODO should be the same than syn6
 					AssertThat(t2s(doc.texts()[0]->timeIn(), PhTimeCodeType25), Equals("00:02:12:10"));
 					AssertThat(t2s(doc.texts()[0]->timeOut(), PhTimeCodeType25), Equals("00:02:44:07"));
 				});

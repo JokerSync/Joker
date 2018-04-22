@@ -1090,7 +1090,8 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 		setUpdateInfo(QString("Update : %1 %2").arg(_view->maxUpdateDuration())
 											.arg(_view->lastUpdateDuration()));
 		setDropInfo(QString("drop: %1 %2").arg(_view->dropDetected()).arg(_view->secondsSinceLastDrop()));
-		#warning /// @todo measure fps with a custom QML element
+
+		// TODO measure fps with a custom QML element
 		// The actual painting duration could be measured using a custom QML element.
 		// See: http://developer.nokia.com/community/wiki/QML_Performance_Meter
 		// (anyway, the QML profiler will provide much more details to the developer.)

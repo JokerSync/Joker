@@ -1516,7 +1516,7 @@ bool PhStripDoc::openStripFile(const QString &fileName)
 		result = importSyn6File(fileName);
 	}
 #endif
-	else if(extension == "strip" or extension == "joker") {
+	else if(extension == "strip" || extension == "joker") {
 		QFile xmlFile(fileName);
 		if(!xmlFile.open(QIODevice::ReadOnly)) {
 			PHDEBUG << "Unable to open" << fileName << xmlFile.errorString();
