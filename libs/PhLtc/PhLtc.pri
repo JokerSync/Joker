@@ -32,6 +32,9 @@ win32 {
 		$$(LTC_PATH)\encoder.c \
 		$$(LTC_PATH)\decoder.c \
 		$$(LTC_PATH)\timecode.c
+
+    # win32 is always little-endian - this is needed so that ltc.h does not look for endian.h which is not provided by msvc
+    DEFINES += __LITTLE_ENDIAN__
 }
 
 
