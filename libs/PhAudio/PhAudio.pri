@@ -13,9 +13,14 @@ win32 {
 	}
 
 	INCLUDEPATH += $$(PORTAUDIO_PATH)\include
-	LIBS += -L$$(PORTAUDIO_PATH)\lib\Win32\ReleaseMinDependency -lportaudio_x86
 
-	QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(PORTAUDIO_PATH)/lib/Win32/ReleaseMinDependency/portaudio_x86.dll) $${RESOURCES_PATH} $${CS}
+    contains(QT_ARCH, i386) {
+        LIBS += -L$$(PORTAUDIO_PATH)\lib\Win32\ReleaseMinDependency -lportaudio_x86
+        QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(PORTAUDIO_PATH)/lib/Win32/ReleaseMinDependency/portaudio_x86.dll) $${RESOURCES_PATH} $${CS}
+    } else {
+        LIBS += -L$$(PORTAUDIO_PATH)\lib\x64\ReleaseMinDependency -lportaudio_x64
+        QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$(PORTAUDIO_PATH)/lib/x64/ReleaseMinDependency/portaudio_x64.dll) $${RESOURCES_PATH} $${CS}
+    }
 }
 
 HEADERS += \
