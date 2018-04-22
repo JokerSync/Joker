@@ -177,7 +177,6 @@ void PhGraphicView::onRefresh()
 	t.start();
 
 	emit beforePaint(rasterizedElapsedTime);
-	update();
 
 	// Note: the update duration may not be interesting at all, since it only *schedules*
 	// the paint request, but does not repaint immediately
