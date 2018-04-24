@@ -34,7 +34,7 @@ void PhVideoPool::cancel()
 	emit stop();
 
 	foreach(PhVideoBuffer * frame, _decodedPool.values()) {
-		emit recycledFrame(frame);
+		delete frame;
 	}
 
 	_decodedPool.clear();

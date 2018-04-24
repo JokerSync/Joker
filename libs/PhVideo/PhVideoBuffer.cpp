@@ -9,12 +9,19 @@
 
 #include "PhTools/PhDebug.h"
 
-PhVideoBuffer::PhVideoBuffer() :
+PhVideoBuffer::PhVideoBuffer(int size, int width, int height, int linesize, QVideoFrame::PixelFormat format) :
 	_frame(0),
-	_videoFrame(0),
-	_bits(0),
-	_bytesPerLine(0)
+	_videoFrame(NULL)
 {
+	PHDBG(24) << "PhVideoBuffer alloc" << size << width << height << linesize << format;
+	try {
+	  _videoFrame = new QVideoFrame(size, QSize(width, height), linesize, format);
+	}
+	catch (const std::bad_alloc&) {
+		PHDEBUG << "Failed to allocate, Joker will crash after 120 seconds (to have time for a dump)";
+		QThread::sleep(120);
+		std::abort();
+	}
 }
 
 PhVideoBuffer::~PhVideoBuffer()
@@ -23,39 +30,6 @@ PhVideoBuffer::~PhVideoBuffer()
 		delete _videoFrame;
 		_videoFrame = NULL;
 	}
-}
-
-void PhVideoBuffer::reuse(int size, int width, int height, int linesize, QVideoFrame::PixelFormat format)
-{
-	if (_videoFrame == NULL
-			// bits cannot be read from QVideoFrame
-			|| _bits != size
-			|| _videoFrame->width() != width
-			|| _videoFrame->height() != height
-			// bytesPerLine cannot be read from QVideoFrame (unless mapped)
-			|| _bytesPerLine != linesize
-			|| _videoFrame->pixelFormat() != format) {
-
-		// the parameters have changed, update the video frame
-		if (_videoFrame != NULL) {
-			delete _videoFrame;
-		}
-
-		PHDBG(24) << "PhVideoBuffer alloc" << size << width << height << linesize << format;
-		try {
-		  _videoFrame = new QVideoFrame(size, QSize(width, height), linesize, format);
-		}
-		catch (const std::bad_alloc&) {
-			PHDEBUG << "Failed to allocate, Joker will crash after 120 seconds (to have time for a dump)";
-			QThread::sleep(120);
-			std::abort();
-		}
-
-		_bits = size;
-		_bytesPerLine = linesize;
-	}
-
-	_frame = 0;
 }
 
 QVideoFrame *PhVideoBuffer::videoFrame()

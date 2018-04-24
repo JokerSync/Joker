@@ -20,17 +20,15 @@ class PhVideoBuffer
 public:
 	/**
 	 * @brief PhVideoBuffer constructor
+	 * @param size The size in bytes
+	 * @param width The width
+	 * @param height The height
+	 * @param linesize The line size
+	 * @param format The pixel format
 	 */
-	PhVideoBuffer();
+	PhVideoBuffer(int size, int width, int height, int linesize, QVideoFrame::PixelFormat format);
 
 	~PhVideoBuffer();
-
-	/**
-	 * @brief Reuse an existing buffer, recreating the rgb buffer if the new size is different.
-	 * @param size The new size
-	 */
-	//void reuse(int size);
-	void reuse(int size, int width, int height, int linesize, QVideoFrame::PixelFormat format);
 
 	/**
 	 * @brief Gets the video buffer
@@ -65,8 +63,8 @@ public:
 private:
 	PhFrame _frame;
 	QVideoFrame * _videoFrame;
-	int _bits;
-	int _bytesPerLine;
 };
+
+Q_DECLARE_METATYPE(PhVideoBuffer*)
 
 #endif // PHVIDEOBUFFER_H

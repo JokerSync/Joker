@@ -38,7 +38,8 @@ PhVideoDecoder::PhVideoDecoder(PhVideoSettings *settings) :
 	av_register_all();
 	avcodec_register_all();
 
-	qRegisterMetaType<PhVideoBuffer>("PhVideoBuffer");
+	// register PhVideoBuffer* so that it can be used in signals/slots
+	qRegisterMetaType<PhVideoBuffer*>();
 }
 
 bool PhVideoDecoder::ready()
@@ -193,6 +194,13 @@ void PhVideoDecoder::close()
 	PHDEBUG << _fileName << "closed";
 
 	_fileName = "";
+
+	foreach(PhVideoBuffer * frame, _recycledFrames) {
+		delete frame;
+	}
+	_recycledFrames.clear();
+
+	_allocatedCount = 0;
 }
 
 PhFrame PhVideoDecoder::clip(PhFrame frame)
@@ -321,9 +329,6 @@ void PhVideoDecoder::setDeinterlace(bool deinterlace)
 PhVideoDecoder::~PhVideoDecoder()
 {
 	close();
-
-	// the engine thread is exiting too, so all the frames can be cleaned.
-	_recycledFrames.clear();
 }
 
 PhFrame PhVideoDecoder::frameLength()
@@ -387,7 +392,7 @@ void PhVideoDecoder::frameToRgb(AVFrame *avFrame)
 	}
 
 	int linesize = avFrame->width * 4;
-	buffer->reuse(bufferSize, avFrame->width, frameHeight, linesize, QVideoFrame::Format_RGB32);
+
 	buffer->setFrame(_currentFrame);
 
 	QVideoFrame *videoFrame = buffer->videoFrame();
@@ -564,7 +569,17 @@ PhVideoBuffer* PhVideoDecoder::getAvailableFrame()
 
 	if (_allocatedCount < _maxAllocatedCount) {
 		PHDBG(24) << "creating a new PhVideoBuffer " << _allocatedCount + 1 << _maxAllocatedCount;
-		buffer = new PhVideoBuffer();
+
+		// resize the buffer if needed
+		int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
+		if(bufferSize <= 0) {
+			PHERR << "avpicture_get_size() returned" << bufferSize;
+			return NULL;
+		}
+
+		int linesize = width() * 4;
+
+		buffer = new PhVideoBuffer(bufferSize, width(), height(), linesize, QVideoFrame::Format_RGB32);
 		_allocatedCount += 1;
 	} else if (!_recycledFrames.empty()) {
 		PHDBG(24) << "recycling a PhVideoBuffer";

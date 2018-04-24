@@ -97,13 +97,6 @@ bool PhVideoEngine::open(QString fileName)
 
 	_clock.setTime(0);
 	_clock.setRate(0);
-	foreach (PhVideoSurface *videoSurface, _videoSurfaceList) {
-		videoSurface->discard();
-	}
-
-	// cancel pool
-	_framePool.cancel();
-
 	_fileName = fileName;
 
 	return true;
@@ -113,15 +106,8 @@ void PhVideoEngine::close()
 {
 	PHDEBUG << _fileName;
 
-	// tell the decoder thread to close the file too
-	emit closeInDecoder();
-
-	PHDEBUG << _fileName << "closed";
-
 	setTimeIn(PHTIMEMAX);
 	setFrameLength(0);
-
-	_fileName = "";
 	_width = 0;
 	_height = 0;
 	_codecName = "";
@@ -129,6 +115,17 @@ void PhVideoEngine::close()
 	// cancel pool
 	_framePool.cancel();
 	_framePool.update(0);
+
+	foreach (PhVideoSurface *videoSurface, _videoSurfaceList) {
+		videoSurface->discard();
+	}
+
+	// tell the decoder thread to close the file too
+	emit closeInDecoder();
+
+	PHDEBUG << _fileName << "closed";
+
+	_fileName = "";
 }
 
 PhFrame PhVideoEngine::clockFrame()
