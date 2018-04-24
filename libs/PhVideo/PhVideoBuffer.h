@@ -9,6 +9,7 @@
 
 #include <QVideoFrame>
 #include "PhSync/PhTime.h"
+#include "PhPlanarVideoBuffer.h"
 
 /**
  * @brief A video buffer
@@ -20,13 +21,12 @@ class PhVideoBuffer
 public:
 	/**
 	 * @brief PhVideoBuffer constructor
-	 * @param size The size in bytes
 	 * @param width The width
 	 * @param height The height
-	 * @param linesize The line size
 	 * @param format The pixel format
+	 * @param pix_format The ffmpeg pixel format
 	 */
-	PhVideoBuffer(int size, int width, int height, int linesize, QVideoFrame::PixelFormat format);
+	PhVideoBuffer(int width, int height, QVideoFrame::PixelFormat format, AVPixelFormat pix_format);
 
 	~PhVideoBuffer();
 
@@ -60,9 +60,12 @@ public:
 	 */
 	void setFrame(PhFrame frame);
 
+	void setAvFrame(AVFrame *avFrame);
+
 private:
 	PhFrame _frame;
 	QVideoFrame * _videoFrame;
+	PhPlanarVideoBuffer * _planarVideoBuffer;
 };
 
 Q_DECLARE_METATYPE(PhVideoBuffer*)

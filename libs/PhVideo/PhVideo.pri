@@ -9,14 +9,16 @@ HEADERS += \
 	$$PWD/PhVideoSurface.h \
 	$$PWD/PhVideoDecoder.h \
     $$PWD/PhVideoBuffer.h \
-    $$PWD/PhVideoPool.h
+    $$PWD/PhVideoPool.h \
+    $$PWD/PhPlanarVideoBuffer.h
 
 SOURCES += \
 	$$PWD/PhVideoEngine.cpp \
 	$$PWD/PhVideoSurface.cpp \
 	$$PWD/PhVideoDecoder.cpp \
     $$PWD/PhVideoBuffer.cpp \
-    $$PWD/PhVideoPool.cpp
+    $$PWD/PhVideoPool.cpp \
+    $$PWD/PhPlanarVideoBuffer.cpp
 
 # Windows specific
 win32{

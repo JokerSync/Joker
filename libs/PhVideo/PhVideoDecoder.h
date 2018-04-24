@@ -115,7 +115,7 @@ private:
 	bool ready();
 	double framePerSecond();
 	PhFrame frameLength();
-	void frameToRgb(AVFrame *avFrame);
+	void emitFrame(AVFrame *avFrame);
 	int width();
 	int height();
 	QString codecName();
@@ -157,6 +157,7 @@ private:
 	bool canDecode();
 	PhFrame clip(PhFrame frame);
 	void fastForwardToFrame(PhFrame frame);
+	QVideoFrame::PixelFormat toQVideoFramePixelFormat(enum AVPixelFormat pix_format);
 };
 
 #endif // PHVIDEODECODER_H

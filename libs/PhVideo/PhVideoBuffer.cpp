@@ -4,32 +4,30 @@
  * @license http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
  */
 
-#include <QThread>
 #include "PhVideoBuffer.h"
 
 #include "PhTools/PhDebug.h"
 
-PhVideoBuffer::PhVideoBuffer(int size, int width, int height, int linesize, QVideoFrame::PixelFormat format) :
-	_frame(0),
-	_videoFrame(NULL)
+PhVideoBuffer::PhVideoBuffer(int width, int height, QVideoFrame::PixelFormat format, AVPixelFormat pix_format)
+	: _frame(0)
 {
-	PHDBG(24) << "PhVideoBuffer alloc" << size << width << height << linesize << format;
-	try {
-	  _videoFrame = new QVideoFrame(size, QSize(width, height), linesize, format);
-	}
-	catch (const std::bad_alloc&) {
-		PHDEBUG << "Failed to allocate, Joker will crash after 120 seconds (to have time for a dump)";
-		QThread::sleep(120);
-		std::abort();
-	}
+	PHDBG(24) << "PhVideoBuffer alloc" << width << height << format;
+	_planarVideoBuffer = new PhPlanarVideoBuffer(pix_format, width, height);
+	_videoFrame = new QVideoFrame(_planarVideoBuffer, QSize(width, height), format);
 }
 
 PhVideoBuffer::~PhVideoBuffer()
 {
 	if (_videoFrame != NULL) {
+		// this also deletes _planarVideoBuffer
 		delete _videoFrame;
 		_videoFrame = NULL;
 	}
+}
+
+void PhVideoBuffer::setAvFrame(AVFrame *avFrame)
+{
+	_planarVideoBuffer->setAvFrame(avFrame);
 }
 
 QVideoFrame *PhVideoBuffer::videoFrame()

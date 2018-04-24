@@ -52,6 +52,10 @@ PhFrame PhVideoSurface::currentFrame() const
 
 void PhVideoSurface::discard()
 {
+	if (m_surface) {
+		m_surface->stop();
+	}
+
 	_currentFrame = PHFRAMEMIN;
 }
 

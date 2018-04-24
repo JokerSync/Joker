@@ -9,6 +9,7 @@
 
 #include "PhTools/PhDebug.h"
 
+#include "PhPlanarVideoBuffer.h"
 #include "PhVideoDecoder.h"
 
 PhVideoDecoder::PhVideoDecoder(PhVideoSettings *settings) :
@@ -354,75 +355,14 @@ double PhVideoDecoder::framePerSecond()
 	return result;
 }
 
-void PhVideoDecoder::frameToRgb(AVFrame *avFrame)
+void PhVideoDecoder::emitFrame(AVFrame *avFrame)
 {
-	int frameHeight = avFrame->height;
-	if(_deinterlace)
-		frameHeight = avFrame->height / 2;
-
 	PhVideoBuffer *buffer = getAvailableFrame();
-
-	// As the following formats are deprecated (see https://libav.org/doxygen/master/pixfmt_8h.html#a9a8e335cf3be472042bc9f0cf80cd4c5)
-	// we replace its with the new ones recommended by LibAv
-	// in order to get ride of the warnings
-	AVPixelFormat pixFormat;
-	switch (_videoStream->codec->pix_fmt) {
-	case AV_PIX_FMT_YUVJ420P:
-		pixFormat = AV_PIX_FMT_YUV420P;
-		break;
-	case AV_PIX_FMT_YUVJ422P:
-		pixFormat = AV_PIX_FMT_YUV422P;
-		break;
-	case AV_PIX_FMT_YUVJ444P:
-		pixFormat = AV_PIX_FMT_YUV444P;
-		break;
-	case AV_PIX_FMT_YUVJ440P:
-		pixFormat = AV_PIX_FMT_YUV440P;
-		break;
-	default:
-		pixFormat = _videoStream->codec->pix_fmt;
-		break;
-	}
-
-	// resize the buffer if needed
-	int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
-	if(bufferSize <= 0) {
-		PHERR << "avpicture_get_size() returned" << bufferSize;
-		return;
-	}
-
-	int linesize = avFrame->width * 4;
-
+	buffer->setAvFrame(avFrame);
 	buffer->setFrame(_currentFrame);
 
-	QVideoFrame *videoFrame = buffer->videoFrame();
-
-	if(!videoFrame->map(QAbstractVideoBuffer::WriteOnly)) {
-		PHERR << "map returned false";
-		return;
-	}
-
-	/* Note: we output the frames in AV_PIX_FMT_BGRA rather than AV_PIX_FMT_RGB24,
-	 * because this format is native to most video cards and will avoid a conversion
-	 * in the video driver */
-	/* sws_getCachedContext will check if the context is valid for the given parameters. It the context is not valid,
-	 * it will be freed and a new one will be allocated. */
-	_swsContext = sws_getCachedContext(_swsContext, avFrame->width, _videoStream->codec->height, pixFormat,
-									   _videoStream->codec->width, frameHeight, AV_PIX_FMT_BGRA,
-	                                   SWS_POINT, NULL, NULL, NULL);
-
-	uint8_t* rgb = videoFrame->bits();
-	if (0 <= sws_scale(_swsContext, (const uint8_t * const *) avFrame->data,
-					   avFrame->linesize, 0, _videoStream->codec->height, &rgb,
-	                   &linesize)) {
-		// tell the video engine that we have finished decoding!
-		emit frameAvailable(buffer);
-	}
-	else {
-		recycleFrame(buffer);
-	}
-
-	videoFrame->unmap();
+	// tell the video engine that we have finished decoding!
+	emit frameAvailable(buffer);
 }
 
 void PhVideoDecoder::decodeFrame()
@@ -478,7 +418,7 @@ void PhVideoDecoder::decodeFrame()
 					_currentFrame = AVTimestamp_to_PhFrame(av_frame_get_best_effort_timestamp(_videoFrame));
 
 					PHDBG(24) << frame << _currentFrame;
-					frameToRgb(_videoFrame);
+					emitFrame(_videoFrame);
 
 					if (_seek) {
 						_seek = false;
@@ -528,7 +468,7 @@ void PhVideoDecoder::fastForwardToFrame(PhFrame frame)
 					_currentFrame = AVTimestamp_to_PhFrame(av_frame_get_best_effort_timestamp(_videoFrame));
 
 					if (frame == _currentFrame) {
-						frameToRgb(_videoFrame);
+						emitFrame(_videoFrame);
 
 						_fastSeek = false;
 						_seekFrame = _currentFrame;
@@ -569,17 +509,8 @@ PhVideoBuffer* PhVideoDecoder::getAvailableFrame()
 
 	if (_allocatedCount < _maxAllocatedCount) {
 		PHDBG(24) << "creating a new PhVideoBuffer " << _allocatedCount + 1 << _maxAllocatedCount;
-
-		// resize the buffer if needed
-		int bufferSize = avpicture_get_size(AV_PIX_FMT_BGRA, width(), height());
-		if(bufferSize <= 0) {
-			PHERR << "avpicture_get_size() returned" << bufferSize;
-			return NULL;
-		}
-
-		int linesize = width() * 4;
-
-		buffer = new PhVideoBuffer(bufferSize, width(), height(), linesize, QVideoFrame::Format_RGB32);
+		QVideoFrame::PixelFormat q_pixel_format = toQVideoFramePixelFormat(_videoStream->codec->pix_fmt);
+		buffer = new PhVideoBuffer(width(), height(), q_pixel_format, _videoStream->codec->pix_fmt);
 		_allocatedCount += 1;
 	} else if (!_recycledFrames.empty()) {
 		PHDBG(24) << "recycling a PhVideoBuffer";
@@ -647,4 +578,65 @@ PhFrame PhVideoDecoder::AVTimestamp_to_PhFrame(int64_t timestamp)
 	if(_videoStream)
 		frame = (timestamp -_videoStream->start_time) * PHTIMEBASE * _videoStream->time_base.num / _videoStream->time_base.den / PhTimeCode::timePerFrame(_tcType);
 	return frame;
+}
+
+QVideoFrame::PixelFormat PhVideoDecoder::toQVideoFramePixelFormat(enum AVPixelFormat pix_format)
+{
+	// the following values for QVideoFrame::PixelFormat have no corresponding AVPixelFormat:
+	//	Format_ARGB8565_Premultiplied,
+	//	Format_BGRA5658_Premultiplied,
+	//	Format_AYUV444,
+	//	Format_AYUV444_Premultiplied,
+	//	Format_YUV444,
+	//	Format_YV12
+	//	Format_IMC1,
+	//	Format_IMC2,
+	//	Format_IMC3,
+	//	Format_IMC4,
+	//	Format_Jpeg,
+	//	Format_CameraRaw,
+	//	Format_AdobeDng
+	switch (pix_format) {
+	case AV_PIX_FMT_ARGB:
+		return QVideoFrame::Format_ARGB32;
+	case AV_PIX_FMT_BGRA:
+		return QVideoFrame::Format_BGRA32;
+	case AV_PIX_FMT_0RGB:
+		return QVideoFrame::Format_RGB32;
+	case AV_PIX_FMT_BGR0:
+		return QVideoFrame::Format_BGR32;
+	case AV_PIX_FMT_RGB24:
+		return QVideoFrame::Format_RGB24;
+	case AV_PIX_FMT_BGR24:
+		return QVideoFrame::Format_BGR24;
+	case AV_PIX_FMT_RGB565LE:
+	case AV_PIX_FMT_RGB565BE:
+		return QVideoFrame::Format_RGB565;
+	case AV_PIX_FMT_BGR565LE:
+	case AV_PIX_FMT_BGR565BE:
+		return QVideoFrame::Format_BGR565;
+	case AV_PIX_FMT_RGB555LE:
+	case AV_PIX_FMT_RGB555BE:
+		return QVideoFrame::Format_RGB555;
+	case AV_PIX_FMT_BGR555LE:
+	case AV_PIX_FMT_BGR555BE:
+		return QVideoFrame::Format_BGR555;
+	case AV_PIX_FMT_YUVJ420P:
+	case AV_PIX_FMT_YUV420P:
+		return QVideoFrame::Format_YUV420P;
+	case AV_PIX_FMT_YUYV422:
+		return QVideoFrame::Format_YUYV;
+	case AV_PIX_FMT_UYVY422:
+		return QVideoFrame::Format_UYVY;
+	case AV_PIX_FMT_NV12:
+		return QVideoFrame::Format_NV12;
+	case AV_PIX_FMT_NV21:
+		return QVideoFrame::Format_NV21;
+	case AV_PIX_FMT_GRAY8:
+		return QVideoFrame::Format_Y8;
+	case AV_PIX_FMT_GRAY16:
+		return QVideoFrame::Format_Y16;
+	default:
+		return QVideoFrame::Format_Invalid;
+	}
 }
