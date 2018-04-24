@@ -562,13 +562,13 @@ PhVideoBuffer* PhVideoDecoder::getAvailableFrame()
 {
 	PhVideoBuffer * buffer = NULL;
 
-	if (!_recycledFrames.empty()) {
-		buffer = _recycledFrames.takeFirst();
-	}
-	else if (_allocatedCount < _maxAllocatedCount) {
-		PHDBG(24) << "creating a new frame buffer " << _allocatedCount + 1 << _maxAllocatedCount;
+	if (_allocatedCount < _maxAllocatedCount) {
+		PHDBG(24) << "creating a new PhVideoBuffer " << _allocatedCount + 1 << _maxAllocatedCount;
 		buffer = new PhVideoBuffer();
 		_allocatedCount += 1;
+	} else if (!_recycledFrames.empty()) {
+		PHDBG(24) << "recycling a PhVideoBuffer";
+		buffer = _recycledFrames.takeFirst();
 	}
 
 	return buffer;

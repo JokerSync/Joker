@@ -68,6 +68,7 @@ void PhVideoPool::frameAvailable(PhVideoBuffer *buffer)
 void PhVideoPool::cleanup(PhFrame frame)
 {
 	PhFrame poolSize = _settings->videoPoolSize();
+	PhFrame readAhead = _settings->videoReadhead();
 
 	if (!_decodedPool.empty()) {
 		PhVideoBuffer * firstFrame = _decodedPool.first();
@@ -75,6 +76,7 @@ void PhVideoPool::cleanup(PhFrame frame)
 
 		// limit to 1 GB of frames
 		poolSize = std::min((int)poolSize, 1000000000 / frameBytes);
+		//poolSize = std::min((int)poolSize, 1000000000 / frameBytes);
 	}
 
 	int cleanupCount = _decodedPool.size() - poolSize;
@@ -95,7 +97,7 @@ void PhVideoPool::cleanup(PhFrame frame)
 			i.next();
 			PhFrame bufferFrame = i.key();
 
-			if ((bufferFrame < frame - poolSize) || (bufferFrame >= frame + poolSize)) {
+			if ((bufferFrame < frame - poolSize - readAhead) || (bufferFrame >= frame + poolSize)) {
 				// Given the current playing direction and position,
 				// this buffer is not likely to be shown on screen anytime soon.
 				PhVideoBuffer *buffer = i.value();
@@ -114,7 +116,7 @@ void PhVideoPool::cleanup(PhFrame frame)
 			i.previous();
 			PhFrame bufferFrame = i.key();
 
-			if ((bufferFrame < frame - poolSize) || (bufferFrame >= frame + poolSize)) {
+			if ((bufferFrame < frame - poolSize) || (bufferFrame >= frame + poolSize + readAhead)) {
 				// Given the current playing direction and position,
 				// this buffer is not likely to be shown on screen anytime soon.
 				PhVideoBuffer *buffer = i.value();
