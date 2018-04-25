@@ -19,6 +19,11 @@
 
 #define FileVerStr GetFileVersion(MyAppSrc)
 #define QtDir GetEnv('QTDIR')
+#define Arch GetEnv('ARCH')
+
+#if !Defined(Arch)
+#define Arch "UnknowArch"
+#endif
 
 [Setup]
 AppName={#MyAppName}
@@ -32,7 +37,7 @@ DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir={#PWD}
-OutputBaseFilename={#MyAppName}_v{#FileVerStr}
+OutputBaseFilename={#MyAppName}_{#FileVerStr}_{#Arch}
 Compression=lzma
 SolidCompression=yes
 UninstallDisplayIcon={app}\{#MyAppExeName}

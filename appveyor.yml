@@ -1,26 +1,43 @@
 environment:
   JOKER_RELEASE_PATH: .
-  QTDIR: C:\Qt\5.10.1\mingw53_32
   BOOST_PATH: C:\Libraries\boost
+  FFMPEG_VERSION: 3.4.2
 
-  #branches:
-  #  except:
-  #    - /^skipthisbranch$/
+  matrix:
+    # 64-bits MSVC build
+    - QTDIR: C:\Qt\5.10.1\msvc2015_64
+      FFMPEG_ARCH: win64
+
+    # 32-bits Mingw build
+    - QTDIR: C:\Qt\5.10.1\mingw53_32
+      FFMPEG_ARCH: win32
+
 install:
   - git submodule update --init --recursive
   # Installing various utilities
-  - choco install -y curl innosetup
+  - appveyor-retry choco install -y curl
+  - appveyor-retry choco install -y innosetup
   - set PATH="C:\Program Files\7-Zip";"C:\Program Files (x86)\Inno Setup 5";%PATH%
   # Configuring Qt
-  - set PATH=%QTDIR%\bin;C:\Qt\Tools\mingw530_32\bin;%PATH%
+  - '%QTDIR%\bin\qtenv2.bat'
+  - qmake -v
+  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
+  - if %QTDIR:msvc=%==%QTDIR% g++ --version
+  - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
+  - if %QTDIR:msvc=%==%QTDIR% %make% --version
+  - if not %QTDIR:msvc2013=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %ARCH%
+  - if not %QTDIR:msvc2015=%==%QTDIR% call "%ProgramFiles(x86)%\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %ARCH%
+  - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
+  - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
+  - cd %APPVEYOR_BUILD_FOLDER% # go back to build folder - qtenv2 moved out of it
   # Installing ffmpeg dev
-  - curl -kLO https://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-3.4.2-win32-dev.zip
-  - 7z x ffmpeg-3.4.2-win32-dev.zip
-  - set FFMPEG_DEV_PATH=%CD%\ffmpeg-3.4.2-win32-dev
+  - ps: wget https://ffmpeg.zeranoe.com/builds/$env:FFMPEG_ARCH/dev/ffmpeg-$env:FFMPEG_VERSION-$env:FFMPEG_ARCH-dev.zip -outfile ffmpeg_dev.zip
+  - 7z x ffmpeg_dev.zip
+  - set FFMPEG_DEV_PATH=%CD%\ffmpeg-%FFMPEG_VERSION%-%FFMPEG_ARCH%-dev
   # Installing ffmpeg shared
-  - curl -kLO https://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-3.4.2-win32-shared.zip
-  - 7z x ffmpeg-3.4.2-win32-shared.zip
-  - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-3.4.2-win32-shared
+  - ps: wget https://ffmpeg.zeranoe.com/builds/$env:FFMPEG_ARCH/shared/ffmpeg-$env:FFMPEG_VERSION-$env:FFMPEG_ARCH-shared.zip -outfile ffmpeg_shared.zip
+  - 7z x ffmpeg_shared.zip
+  - set FFMPEG_SHARED_PATH=%CD%\ffmpeg-%FFMPEG_VERSION%-%FFMPEG_ARCH%-shared
   # Installing PortAudio
   - curl -kLO https://github.com/adfernandes/precompiled-portaudio-windows/raw/master/portaudio-r1891-build.zip
   - 7z x portaudio-r1891-build.zip
@@ -37,7 +54,7 @@ install:
 
 build_script:
   - qmake app/Joker/Joker.pro
-  - mingw32-make -j 8
+  - '%make%'
   - iscc app/Joker/Joker.iss /DPWD=%CD% /O%JOKER_RELEASE_PATH%
   - dir
 
@@ -47,7 +64,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: Kg4Co6bJ5WJmeM0Gw33qbWylubqcGQga0kkGmVScP8XNzfxYUsLUAA4g5qO4Htjo
-  artifact: /Joker_v[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\.exe/
+  artifact: /Joker_[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+_*\.exe/
   draft: true # needs manual publishing
   prerelease: false
   release: "Joker $(COMMIT_DESCRIPTOR) $(BRANCH)"
