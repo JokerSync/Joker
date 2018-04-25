@@ -10,7 +10,7 @@ echo "Mac OS X detected"
 
 if [[ $QTVER != 532 ]]; then brew update; fi
 
-brew install qt5
+brew install qt5 --force-bottle
 brew link --force qt5
 export QMAKESPEC=macx-clang
 
