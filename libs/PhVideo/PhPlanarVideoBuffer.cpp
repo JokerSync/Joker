@@ -20,7 +20,7 @@ PhPlanarVideoBuffer::PhPlanarVideoBuffer(enum AVPixelFormat pix_format, int widt
 	if (result <= 0) {
 		PHDEBUG << "Failed to allocate, Joker will crash after 120 seconds (to have time for a dump)";
 		QThread::sleep(120);
-		std::abort();
+		abort();
 	}
 }
 
