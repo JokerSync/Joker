@@ -41,6 +41,13 @@ if(equals(PH_GIT_BRANCH, "master") || equals(PH_GIT_BRANCH, "HEAD")) {
 	PH_FULL_VERSION = $$system(git describe --tags --dirty)_$$PH_GIT_BRANCH
 }
 
+if(equals(LAST_TAG, "")) {
+    LAST_TAG = "v0.0"
+    VERSION = "0.0.0"
+    BUILD = "0"
+    PH_FULL_VERSION = "v0.0.0.0-unknowtag"
+}
+
 message("Last tag: $${LAST_TAG}, Version: $${VERSION}, build: $${BUILD}, branch: $${PH_GIT_BRANCH}, revision: $${PH_GIT_REVISION}, full version: $${PH_FULL_VERSION}")
 
 # Define the preprocessor macro to get the application version in our application.
