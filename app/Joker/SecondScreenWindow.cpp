@@ -42,7 +42,7 @@ bool SecondScreenWindow::eventFilter(QObject *, QEvent *event)
 //		if(this->isFullScreen())
 //			SecondScreenWindow::showNormal();
 //		else
-			SecondScreenWindow::showFullScreen();
+		SecondScreenWindow::showFullScreen();
 		return true;
 	default:
 		return false;

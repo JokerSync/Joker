@@ -11,8 +11,12 @@ class PhStripFilteredLineModel : public QSortFilterProxyModel
 public:
 	PhStripFilteredLineModel(QObject *parent = 0);
 
-	PhTime filterMinimumTime() const { return _minTime; }
-	PhTime filterMaximumTime() const { return _maxTime; }
+	PhTime filterMinimumTime() const {
+		return _minTime;
+	}
+	PhTime filterMaximumTime() const {
+		return _maxTime;
+	}
 
 	void setFilterTimeBoundaries(const PhTime &minTime, const PhTime &maxTime);
 

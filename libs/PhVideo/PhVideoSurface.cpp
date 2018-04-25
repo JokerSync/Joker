@@ -2,8 +2,8 @@
 
 PhVideoSurface::PhVideoSurface()
 	: m_surface(NULL),
-	  _currentFrame(PHFRAMEMIN),
-	  _offset(0)
+	_currentFrame(PHFRAMEMIN),
+	_offset(0)
 {
 	m_format = QVideoSurfaceFormat();
 }
@@ -33,7 +33,7 @@ void PhVideoSurface::update(PhVideoBuffer *buffer)
 
 	// should set the format
 	if ((m_format.frameSize() != videoFrame->size())
-			|| (m_format.pixelFormat() != videoFrame->pixelFormat())) {
+	    || (m_format.pixelFormat() != videoFrame->pixelFormat())) {
 		m_format = QVideoSurfaceFormat(videoFrame->size(), videoFrame->pixelFormat());
 
 		if (m_surface && m_format.isValid())

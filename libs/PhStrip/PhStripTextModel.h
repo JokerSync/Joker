@@ -36,7 +36,7 @@ signals:
 
 public slots:
 	void addText(QString content, PhTime timeOut, PhStripDetect::PhDetectType typeOut);
-	void removeText(int index);	
+	void removeText(int index);
 	void split(int index, int splitCharIndex, PhTime splitTime, PhStripDetect::PhDetectType splitType);
 	void merge(int mergeIndex);
 

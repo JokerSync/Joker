@@ -45,13 +45,13 @@ int PhPlanarVideoBuffer::map(MapMode mode, int *numBytes, int bytesPerLine[4], u
 		*numBytes = _numBytes;
 
 	if (bytesPerLine != NULL) {
-		for (int i=0; i<_plane_nb; i++) {
+		for (int i = 0; i < _plane_nb; i++) {
 			bytesPerLine[i] = _linesizes[i];
 		}
 	}
 
 	if (data != NULL) {
-		for (int i=0; i<_plane_nb; i++) {
+		for (int i = 0; i < _plane_nb; i++) {
 			data[i] = _data[i];
 		}
 	}

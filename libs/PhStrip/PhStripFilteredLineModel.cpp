@@ -24,7 +24,7 @@ void PhStripFilteredLineModel::remove(int index)
 }
 
 bool PhStripFilteredLineModel::filterAcceptsRow(int sourceRow,
-		const QModelIndex &sourceParent) const
+                                                const QModelIndex &sourceParent) const
 {
 	QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
 

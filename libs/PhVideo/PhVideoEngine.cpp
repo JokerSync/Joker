@@ -244,7 +244,7 @@ void PhVideoEngine::frameAvailable(PhVideoBuffer *buffer)
 		PhFrame offset = videoSurface->offset();
 		if ((abs(frame + offset - bufferFrame) <= abs(frame + offset - videoSurface->currentFrame())
 		     && abs(frame + offset - bufferFrame) < 3)
-			|| abs(frame + offset - bufferFrame) + 50 <= abs(frame + offset - videoSurface->currentFrame())) {
+		    || abs(frame + offset - bufferFrame) + 50 <= abs(frame + offset - videoSurface->currentFrame())) {
 			// this frame is closer to the current time than the frame that is currently displayed,
 			// so show it.
 			// Note: we do not wait for the exact frame to be available to improve the responsiveness

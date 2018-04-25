@@ -512,7 +512,8 @@ PhVideoBuffer* PhVideoDecoder::getAvailableFrame()
 		QVideoFrame::PixelFormat q_pixel_format = toQVideoFramePixelFormat(_videoStream->codec->pix_fmt);
 		buffer = new PhVideoBuffer(width(), height(), q_pixel_format, _videoStream->codec->pix_fmt);
 		_allocatedCount += 1;
-	} else if (!_recycledFrames.empty()) {
+	}
+	else if (!_recycledFrames.empty()) {
 		PHDBG(24) << "recycling a PhVideoBuffer";
 		buffer = _recycledFrames.takeFirst();
 	}

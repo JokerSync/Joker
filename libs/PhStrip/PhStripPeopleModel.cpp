@@ -51,8 +51,7 @@ bool PhStripPeopleModel::setData(const QModelIndex &index, const QVariant &value
 
 bool PhStripPeopleModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-	if (count > 0)
-	{
+	if (count > 0) {
 		beginRemoveRows(parent, row, row + count - 1);
 		PhPeople *people = _peoples.takeAt(row);
 		delete people;
@@ -111,7 +110,7 @@ void PhStripPeopleModel::remove(int index)
 
 int PhStripPeopleModel::indexOf(QString name)
 {
-	for(int i=0; i<rowCount(); i++) {
+	for(int i = 0; i < rowCount(); i++) {
 		PhPeople *people = _peoples[i];
 		if (people->name() == name) {
 			return i;
@@ -122,7 +121,7 @@ int PhStripPeopleModel::indexOf(QString name)
 
 PhPeople* PhStripPeopleModel::findByName(QString name)
 {
-	for(int i=0; i<rowCount(); i++) {
+	for(int i = 0; i < rowCount(); i++) {
 		PhPeople *people = _peoples[i];
 		if (people->name() == name) {
 			return people;

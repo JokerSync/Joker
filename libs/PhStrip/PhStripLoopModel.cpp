@@ -58,8 +58,7 @@ bool PhStripLoopModel::setData(const QModelIndex &index, const QVariant &value, 
 
 bool PhStripLoopModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-	if (count > 0)
-	{
+	if (count > 0) {
 		beginRemoveRows(parent, row, row + count - 1);
 		PhStripLoop *loop = _loops.takeAt(row);
 		delete loop;
@@ -109,8 +108,7 @@ void PhStripLoopModel::add(PhTime time, QString label)
 			if (loop->timeIn() < time) {
 				i += 1;
 			}
-			else
-			{
+			else {
 				break;
 			}
 		}
@@ -127,8 +125,7 @@ void PhStripLoopModel::add(PhTime time, QString label)
 			i += 1;
 		}
 	}
-	else
-	{
+	else {
 		// TODO: custom labelling
 		append(new PhStripLoop(time, label));
 	}

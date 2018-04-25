@@ -8,14 +8,14 @@
 
 PhStripDetect::PhStripDetect(PhDetectType type, PhTime relativeTime)
 	: _type(type),
-	  _relativeTime(relativeTime)
+	_relativeTime(relativeTime)
 {
 
 }
 
 PhStripDetect::PhStripDetect()
 	: _type(PhStripDetect::Unknown),
-	  _relativeTime(0)
+	_relativeTime(0)
 {
 
 }

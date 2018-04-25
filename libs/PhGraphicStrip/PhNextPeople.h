@@ -12,12 +12,12 @@ class PhNextPeople : public PhPeople
 	Q_PROPERTY(PhTime duration READ duration WRITE setDuration NOTIFY durationChanged)
 
 public:
-   /*
-	* @brief PhNextPeople
-	* @param name
-	* @param color
-	*/
-   PhNextPeople(QString name = "???", QString color = "#000000", PhTime timeIn = 0, bool selected = true, PhTime duration = 0);
+	/*
+	 * @brief PhNextPeople
+	 * @param name
+	 * @param color
+	 */
+	PhNextPeople(QString name = "???", QString color = "#000000", PhTime timeIn = 0, bool selected = true, PhTime duration = 0);
 
 	/**
 	 * @brief Get the time in

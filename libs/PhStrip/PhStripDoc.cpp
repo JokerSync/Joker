@@ -317,7 +317,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 					for(int j = 0; j < elem.childNodes().length(); j++) {
 						if(elem.childNodes().at(j).isElement()) {
 							QDomElement lineElem = elem.childNodes().at(j).toElement();
-							if(lineElem.tagName() == "lipsync") {							
+							if(lineElem.tagName() == "lipsync") {
 								PhTime linkTime = PhTimeCode::timeFromString(lineElem.attribute("timecode"), _videoTimeCodeType);
 
 								if(timeIn < 0) {
@@ -331,8 +331,7 @@ bool PhStripDoc::importDetXFile(QString fileName)
 									PhTime duration = linkTime - lastTime;
 
 									PhStripDetect::PhDetectType type;
-									if (j == elem.childNodes().length() - 1)
-									{
+									if (j == elem.childNodes().length() - 1) {
 										type = closingDetectFromString(lineElem.attribute("type"));
 									}
 									else {

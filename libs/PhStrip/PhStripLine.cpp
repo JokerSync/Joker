@@ -72,7 +72,7 @@ void PhStripLine::setHeight(float height)
 
 PhPeople *PhStripLine::people() const
 {
-    return _people;
+	return _people;
 }
 
 void PhStripLine::setPeople(PhPeople *people)
@@ -117,7 +117,7 @@ void PhStripLine::updateTimeOut()
 QString PhStripLine::description(PhTimeCodeType tcType)
 {
 	return QString("%1 %2: %3")
-		   .arg(this->people() ? this->people()->name() : "???")
-		   .arg(this->tcIn(tcType))
-		   .arg(this->content());
+	       .arg(this->people() ? this->people()->name() : "???")
+	       .arg(this->tcIn(tcType))
+	       .arg(this->content());
 }

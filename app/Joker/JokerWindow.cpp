@@ -189,10 +189,8 @@ JokerWindow::JokerWindow(JokerSettings *settings) :
 
 void JokerWindow::qmlStatusChanged(QQuickView::Status status)
 {
-	if (status == QQuickView::Error)
-	{
-		foreach (QQmlError error, _view->errors())
-		{
+	if (status == QQuickView::Error) {
+		foreach (QQmlError error, _view->errors()) {
 			PHDEBUG << error.toString();
 
 			QMessageBox msgBox;
@@ -343,7 +341,8 @@ bool JokerWindow::openDocument(const QString &fileName)
 	if(!_firstDoc && (fileName != _settings->currentDocument())) {
 		_settings->setSelectedPeopleNameList(QStringList());
 		_selectedPeopleModel.setStringList(_settings->selectedPeopleNameList());
-	} else
+	}
+	else
 		_firstDoc = false;
 
 	if(!_doc->openStripFile(fileName))
@@ -415,9 +414,9 @@ bool JokerWindow::eventFilter(QObject * sender, QEvent *event)
 		if(sender == this)
 			toggleFullScreen();
 		break;
-		// TODO
-		// Right mouse click on the video open the video file dialog.
-		// Left mouse click on the strip open the strip file dialog
+	// TODO
+	// Right mouse click on the video open the video file dialog.
+	// Left mouse click on the strip open the strip file dialog
 	// Make sure the QML view always gets focus back
 	case QEvent::ActivationChange:
 	case QEvent::WindowUnblocked:
@@ -1083,12 +1082,12 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 	if (_settings->displayInfo()) {
 		// prepare the string list that is used to display the infos
 		setRefreshInfo(QString("refresh: %1x%2, %3 / %4")
-					   .arg(_view->width())
-					   .arg(_view->height())
-					   .arg(_view->maxRefreshRate())
-					   .arg(_view->refreshRate()));
+		               .arg(_view->width())
+		               .arg(_view->height())
+		               .arg(_view->maxRefreshRate())
+		               .arg(_view->refreshRate()));
 		setUpdateInfo(QString("Update : %1 %2").arg(_view->maxUpdateDuration())
-											.arg(_view->lastUpdateDuration()));
+		              .arg(_view->lastUpdateDuration()));
 		setDropInfo(QString("drop: %1 %2").arg(_view->dropDetected()).arg(_view->secondsSinceLastDrop()));
 
 		// TODO measure fps with a custom QML element
@@ -1128,7 +1127,7 @@ void JokerWindow::onPaint(PhTime elapsedTime)
 	}
 
 	PhStripLoop * currentLoop = _strip.doc()->previousLoop(clockTime);
-	setCurrentLoopLabel(currentLoop ? currentLoop->label(): "");
+	setCurrentLoopLabel(currentLoop ? currentLoop->label() : "");
 }
 
 void JokerWindow::on_actionPrevious_loop_triggered()

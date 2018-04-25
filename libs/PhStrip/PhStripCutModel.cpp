@@ -50,8 +50,7 @@ bool PhStripCutModel::setData(const QModelIndex &index, const QVariant &value, i
 
 bool PhStripCutModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-	if (count > 0)
-	{
+	if (count > 0) {
 		beginRemoveRows(parent, row, row + count - 1);
 		PhStripCut *cut = _cuts.takeAt(row);
 		delete cut;

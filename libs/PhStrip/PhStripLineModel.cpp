@@ -113,7 +113,7 @@ bool PhStripLineModel::removeRows(int row, int count, const QModelIndex &parent)
 {
 	if (count > 0) {
 		beginRemoveRows(parent, row, row + count - 1);
-		for(int i=0; i<count; i++) {
+		for(int i = 0; i < count; i++) {
 			PhStripLine *line = _lines.takeAt(row);
 			delete line;
 		}

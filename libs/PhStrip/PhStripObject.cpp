@@ -8,7 +8,7 @@
 #include "PhStripObject.h"
 
 PhStripObject::PhStripObject(PhTime timeIn)
-  : QObject(),
+	: QObject(),
 	_timeIn(timeIn)
 {
 }

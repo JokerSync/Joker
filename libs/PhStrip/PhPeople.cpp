@@ -8,9 +8,9 @@
 
 PhPeople::PhPeople(QString name, QString color, QString picture)
 	: QObject(),
-	  _name(name),
-	  _color(color),
-	  _picture(picture)
+	_name(name),
+	_color(color),
+	_picture(picture)
 {
 }
 

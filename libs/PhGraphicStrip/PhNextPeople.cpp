@@ -1,10 +1,10 @@
 #include "PhGraphicStrip/PhNextPeople.h"
 
 PhNextPeople::PhNextPeople(QString name, QString color, PhTime timeIn, bool selected, PhTime duration)
- : PhPeople(name, color),
-   _timeIn(timeIn),
-   _selected(selected),
-   _duration(duration)
+	: PhPeople(name, color),
+	_timeIn(timeIn),
+	_selected(selected),
+	_duration(duration)
 {
 }
 

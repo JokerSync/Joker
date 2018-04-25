@@ -419,7 +419,7 @@ public:
 	PhStripPeopleModel *peopleModel() const;
 
 public slots:
-	int deletePeople(int peopleIndex);	
+	int deletePeople(int peopleIndex);
 	void addLine(PhTime time, float y, PhStripDetect::PhDetectType typeIn);
 
 signals:
